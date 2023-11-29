@@ -1,267 +1,81 @@
-Return-Path: <linux-pm+bounces-485-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-487-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB5257FD87B
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 14:44:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11D8D7FD891
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 14:47:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6205FB2105B
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 13:43:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 427D91C20ACF
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 13:47:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32B79208B5;
-	Wed, 29 Nov 2023 13:43:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21197208D9;
+	Wed, 29 Nov 2023 13:47:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="SdQJ6oTh"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="hUbws6al"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7961FCA;
-	Wed, 29 Nov 2023 05:43:48 -0800 (PST)
-Received: from [100.107.97.3] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id B472466022D0;
-	Wed, 29 Nov 2023 13:43:46 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1701265427;
-	bh=Qx1vYwqqALIMO0kYY+0aLrVwdR4HsTKzy74g4n4aZoA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=SdQJ6oThfYBOar+LGKuOV0dLA/9NRMpX2MfKup7jyxn6DzXJck8PTzbN5I0ZPMt2Z
-	 2CwdkATvaAf+P3ZOeHmWOlX5yqzu2yEMUdf+NOyEmmrNEwgXSPOwgeTKWJvUEHIQ59
-	 aua1RLyg95paI7Vev4rmP/2T7xf/LXm3dEU4fa0n/QWbY+RtuZq7sOgYz+hoS78jSi
-	 RE2U07NnhO/VCKmZ49MqwlghdNb2Dm7lXSBBjzwY8usHj0M0A3w83YijSrt2IJrzpb
-	 QSwVbIJ2GeDvUgE30yV/nOYFQaKHIAXYd9wgTLEYdp0y2w+CvlJ9OvArrCv8iEVNvh
-	 uZy7dYXTkF6PQ==
-Message-ID: <8d43c1a8-9c92-4ea0-be1d-2a92a6cf3941@collabora.com>
-Date: Wed, 29 Nov 2023 14:43:43 +0100
+Received: from m15.mail.163.com (m15.mail.163.com [45.254.50.220])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0239B19A;
+	Wed, 29 Nov 2023 05:47:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id; bh=JYC5B10TWRchyHN96t
+	T3YdbL8clZjtk6DHRMYsmi0FU=; b=hUbws6al1txBXOAkqAlg5bnYsvI364QoXN
+	IfYGq7lJj3BGPXzQWwpy2Xfbok1hfV7Ig4amVik8uo6dBcOVYx5j1QX37ZCQTzaR
+	NcCRs0HTglMB2buZmsEhfaSEregIS7JUJ5RVfUfk2L9hpl8x4Oi6CtE5at+nnnuM
+	8ny92SM8k=
+Received: from localhost.localdomain (unknown [39.144.190.126])
+	by zwqz-smtp-mta-g0-2 (Coremail) with SMTP id _____wDXnxTnQGdlILsMCg--.42572S2;
+	Wed, 29 Nov 2023 21:47:21 +0800 (CST)
+From: Haoran Liu <liuhaoran14@163.com>
+To: sre@kernel.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Haoran Liu <liuhaoran14@163.com>
+Subject: [PATCH] [power/reset] qnap-poweroff: Add error handling
+Date: Wed, 29 Nov 2023 05:47:16 -0800
+Message-Id: <20231129134716.34161-1-liuhaoran14@163.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID:_____wDXnxTnQGdlILsMCg--.42572S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKw4UAr13Zw4rCrWfXr1xuFg_yoWDurc_W3
+	4fX34xXan7Kr1kCFsakF47ZrWxCF92vFn3Xr4IqFyfC345Ww1DJrWqqr17Ja4kX34UCrWD
+	GFZ8Xr43CF1fZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRK73kUUUUUU==
+X-CM-SenderInfo: xolxxtxrud0iqu6rljoofrz/xtbBcgc3gletj5TR4QABsQ
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] thermal: Add support for device tree thermal zones
- consumers
-Content-Language: en-US
-To: rafael@kernel.org
-Cc: daniel.lezcano@linaro.org, rui.zhang@intel.com, lukasz.luba@arm.com,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- kernel@collabora.com, wenst@chromium.org
-References: <20231115144857.424005-1-angelogioacchino.delregno@collabora.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20231115144857.424005-1-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-Il 15/11/23 15:48, AngeloGioacchino Del Regno ha scritto:
-> Add helpers to support retrieving thermal zones from device tree nodes:
-> this will allow a device tree consumer to specify phandles to specific
-> thermal zone(s), including support for specifying thermal-zone-names.
-> This is useful, for example, for smart voltage scaling drivers that
-> need to adjust CPU/GPU/other voltages based on temperature, and for
-> battery charging drivers that need to scale current based on various
-> aggregated temperature sensor readings which are board-dependant.
-> 
-> Example:
-> smart-scaling-driver@10000000 {
-> 	[...]
-> 
-> 	thermal-zones = <&cluster_big_tz>, <&gpu_tz>, <&vpu_tz>;
-> 	thermal-zone-names = "cpu", "gpu", "vpu";
-> 
-> 	[...]
-> }
-> 
-> battery-charger@20000000 {
-> 	[...]
-> 
-> 	thermal-zones = <&battery_temp>, <&device_skin_temp>;
-> 	thermal-zone-names = "batt-ext-sensor", "skin";
-> 
-> 	[...]
-> }
-> 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
-> 
+This patch introduces error handling for the of_match_node call
+in the qnap_power_off_probe function within
+drivers/power/reset/qnap-poweroff.c. Previously, there was no
+check for a null return value from of_match_node, which could
+lead to improper behavior if the device tree matching failed.
 
-Hello,
+Signed-off-by: Haoran Liu <liuhaoran14@163.com>
+---
+ drivers/power/reset/qnap-poweroff.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-just notifying that the dtschema for thermal consumers was merged[1], hence
-totally unblocking this patch.
-
-[1]: 
-https://github.com/devicetree-org/dt-schema/commit/414a9f792ff7ae20a54a560bd2e2160b70f7d566
-
-Cheers,
-Angelo
-
-> Changes in v2:
->   - Added missing static inline for !CONFIG_OF fallback functions
-> 
-> Background story: while I was cleaning up the MediaTek Smart Voltage Scaling
-> (SVS) driver, I've found out that there's a lot of commonization to be done.
-> After a rewrite of "this and that" in that driver, I came across a barrier
-> that didn't allow me to remove another ~100 lines of code, and that was also
-> anyway breaking the driver, because the thermal zone names are different
-> from what was originally intended.
-> 
-> I've been looking for thermal zone handle retrieval around the kernel and
-> found that there currently are at least four other drivers that could make
-> use this as a cleanup: charger-manager, which is retrieving a thermal zone
-> to look for with a "cm-thermal-zone" string property, gpu/drm/tiny/repaper.c
-> that does the same by checking a "pervasive,thermal-zone" string property,
-> and ab8500_temp and sdhci-omap which are simply hardcoding a "cpu_thermal"
-> and "battery-thermal" thermal zone names respectively.
-> 
-> There are a number of other devices (mostly embedded, mostly smartphones)
-> that don't have an upstream driver and that could make use of this as well.
-> 
-> Cheers!
-> 
-> 
->   drivers/thermal/thermal_of.c | 91 ++++++++++++++++++++++++++++++++++++
->   include/linux/thermal.h      | 15 ++++++
->   2 files changed, 106 insertions(+)
-> 
-> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-> index 1e0655b63259..d8ead456993e 100644
-> --- a/drivers/thermal/thermal_of.c
-> +++ b/drivers/thermal/thermal_of.c
-> @@ -538,6 +538,97 @@ static struct thermal_zone_device *thermal_of_zone_register(struct device_node *
->   	return ERR_PTR(ret);
->   }
->   
-> +/**
-> + * __thermal_of_get_zone_by_index() - Get thermal zone handle from the DT
-> + *				      thermal-zones index
-> + * @dev:   Pointer to the consumer device
-> + * @index: Index of thermal-zones
-> + *
-> + * This function will search for a thermal zone in the thermal-zones phandle
-> + * array corresponding to the specified index, then will search for its name
-> + * into the registered thermal zones through thermal_zone_get_zone_by_name()
-> + *
-> + * Please note that this function is for internal use only and expects that
-> + * all of the sanity checks are performed by its caller.
-> + *
-> + * Return: thermal_zone_device pointer on success, ERR_PTR() on error or NULL
-> + * when the API is disabled or the "thermal-zones" DT property is missing.
-> + */
-> +static struct thermal_zone_device
-> +*__thermal_of_get_zone_by_index(struct device *dev, int index)
-> +{
-> +	struct thermal_zone_device *tzd;
-> +	struct device_node *np;
-> +
-> +	np = of_parse_phandle(dev->of_node, "thermal-zones", index);
-> +	if (!np)
-> +		return NULL;
-> +
-> +	tzd = thermal_zone_get_zone_by_name(np->name);
-> +	of_node_put(np);
-> +
-> +	return tzd;
-> +}
-> +
-> +/**
-> + * thermal_of_get_zone_by_index() - Get thermal zone handle from a DT node
-> + *				    based on index
-> + * @dev:   Pointer to the consumer device
-> + * @index: Index of thermal-zones
-> + *
-> + * Return: thermal_zone_device pointer on success, ERR_PTR() on error or NULL
-> + * when the API is disabled or the "thermal-zones" DT property is missing.
-> + */
-> +struct thermal_zone_device *thermal_of_get_zone_by_index(struct device *dev, int index)
-> +{
-> +	if (!dev || !dev->of_node)
-> +		return ERR_PTR(-ENODEV);
-> +
-> +	if (!of_property_present(dev->of_node, "thermal-zones"))
-> +		return NULL;
-> +
-> +	return __thermal_of_get_zone_by_index(dev, index);
-> +}
-> +
-> +/**
-> + * thermal_of_get_zone() - Get thermal zone handle from a DT node based
-> + *			   on name, or the first handle in list
-> + * @dev:   Pointer to the consumer device
-> + * @name:  Name as found in thermal-zone-names or NULL
-> + *
-> + * This function will search for a thermal zone in the thermal-zones phandle
-> + * array corresponding to the index of that in the thermal-zone-names array.
-> + * If the name is not specified (NULL), it will return the first thermal zone
-> + * in the thermal-zones phandle array.
-> + *
-> + * Return: thermal_zone_device pointer on success, ERR_PTR() on error or NULL
-> + * when the API is disabled or the "thermal-zones" DT property is missing.
-> + */
-> +struct thermal_zone_device *thermal_of_get_zone(struct device *dev, const char *name)
-> +{
-> +	int index;
-> +
-> +	if (!dev || !dev->of_node)
-> +		return ERR_PTR(-ENODEV);
-> +
-> +	if (!of_property_present(dev->of_node, "thermal-zones")) {
-> +		pr_err("thermal zones property not present\n");
-> +		return NULL;
-> +	}
-> +
-> +	if (name) {
-> +		index = of_property_match_string(dev->of_node, "thermal-zone-names", name);
-> +		if (index < 0) {
-> +			pr_err("thermal zone names property not present\n");
-> +			return ERR_PTR(index);
-> +		}
-> +	} else {
-> +		index = 0;
-> +	}
-> +
-> +	return __thermal_of_get_zone_by_index(dev, index);
-> +}
-> +
->   static void devm_thermal_of_zone_release(struct device *dev, void *res)
->   {
->   	thermal_of_zone_unregister(*(struct thermal_zone_device **)res);
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index cee814d5d1ac..0fceeb7ed08a 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -261,6 +261,9 @@ struct thermal_zone_device *devm_thermal_of_zone_register(struct device *dev, in
->   
->   void devm_thermal_of_zone_unregister(struct device *dev, struct thermal_zone_device *tz);
->   
-> +struct thermal_zone_device *thermal_of_get_zone_by_index(struct device *dev, int index);
-> +struct thermal_zone_device *thermal_of_get_zone(struct device *dev, const char *name);
-> +
->   #else
->   
->   static inline
-> @@ -274,6 +277,18 @@ static inline void devm_thermal_of_zone_unregister(struct device *dev,
->   						   struct thermal_zone_device *tz)
->   {
->   }
-> +
-> +static inline
-> +struct thermal_zone_device *thermal_of_get_zone_by_index(struct device *dev, int index)
-> +{
-> +	return ERR_PTR(-ENOTSUPP);
-> +}
-> +
-> +static inline
-> +struct thermal_zone_device *thermal_of_get_zone(struct device *dev, const char *name)
-> +{
-> +	return ERR_PTR(-ENOTSUPP);
-> +}
->   #endif
->   
->   int __thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
+diff --git a/drivers/power/reset/qnap-poweroff.c b/drivers/power/reset/qnap-poweroff.c
+index 0ddf7f25f7b8..bc0b547211d6 100644
+--- a/drivers/power/reset/qnap-poweroff.c
++++ b/drivers/power/reset/qnap-poweroff.c
+@@ -77,6 +77,11 @@ static int qnap_power_off_probe(struct platform_device *pdev)
+ 
+ 	const struct of_device_id *match =
+ 		of_match_node(qnap_power_off_of_match_table, np);
++	if (!match) {
++		dev_err(&pdev->dev, "No matching device found\n");
++		return -ENODEV;
++	}
++
+ 	cfg = match->data;
+ 
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-- 
+2.17.1
 
 
