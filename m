@@ -1,60 +1,60 @@
-Return-Path: <linux-pm+bounces-464-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-465-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6A157FD647
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 13:06:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F3AB7FD65E
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 13:14:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70B80282FF7
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 12:06:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 102F9B214EC
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 12:14:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B9D71D6B1;
-	Wed, 29 Nov 2023 12:06:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F09A1DA26;
+	Wed, 29 Nov 2023 12:14:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FCj+KUmJ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gTNSr+Hr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56D6D7E
-	for <linux-pm@vger.kernel.org>; Wed, 29 Nov 2023 04:06:14 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-40b4c2ef584so15508165e9.3
-        for <linux-pm@vger.kernel.org>; Wed, 29 Nov 2023 04:06:14 -0800 (PST)
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0C2C1
+	for <linux-pm@vger.kernel.org>; Wed, 29 Nov 2023 04:14:22 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-332e40322f0so4166132f8f.3
+        for <linux-pm@vger.kernel.org>; Wed, 29 Nov 2023 04:14:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701259573; x=1701864373; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1701260060; x=1701864860; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=0K4x5/3z5HBN3+ypyyGTbuqxNkiu5uT0EWvOU6MU1RY=;
-        b=FCj+KUmJ43j5zfjYslLPt8In2wnyHaj5fqIl2m3k6cHetK7/jUaNyDZ2zdvhN/A6Vn
-         A04nRNU9R+qeACsG8dQvoD9td/MP1iNV94jZEIxdhGRq2K8EkZYt25EfhhsxcTcaDCgg
-         50xRpo0CVztoJWMNFP/arLioL72sV9jmv5i02Phhbk9LOC+ixLKtxBPO5Lp1d8NIK+q8
-         CQ93mA9QhdysWwmQEFvq260j6CzneOSW6OXH6848xR6wk3WWNVlpcqHTrausH3MF4M9j
-         73mjN8zp9lYfaAZEO4JjZuG4to8Q23RrN1v8WOxwBA5svq2aDVLPauOeCO5TiZeDoM8H
-         EnJw==
+        bh=AsQvimBOnTjXGdKhEAnGYzR8KiGWDUYPadmCZZ7TXho=;
+        b=gTNSr+HrG/QwEBmtDbp+q7SRM8xQA21O1oKOnkYyaUBRGrY7GEtgbqeasLBtHHTRBz
+         +SuoISl4aCzbwy0LTxBRLdO7F8n86VnbZYLQcx5VSoeRK9TfX7/sn5GSCgwksIdYYRfv
+         aoi+fHMmv1oFjUARbFl+lKCZ/5REIBR/gj9UvJsoWmKqwNT7+QpPUoJP4AWtCQObxM8x
+         wNqZkMSKh7H4jP+7Tp34TneLO6fPtq0MKJb0/4a+J4Kqok2q4Pb9RTjAinigsUAmTmCW
+         7zVNdYNtg4hM8IPLAsu45cQvqzrANVcX+ljV63Y5qkn5o4Grd2mpcalWH3gGCbRY9cuU
+         yGMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701259573; x=1701864373;
+        d=1e100.net; s=20230601; t=1701260060; x=1701864860;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0K4x5/3z5HBN3+ypyyGTbuqxNkiu5uT0EWvOU6MU1RY=;
-        b=qmWlTS+lk/70fD5xPbPE/4wAZH7w2ouZkx0NhAAuh5Bj2Hn6Q9Z1JimcsCL6srq44A
-         UWc5pcdP+XRTtMA/nt2OJdteDEPLJDgRiLtISkN5jnOgsb+Y5Oqqf1r5N53rQC7fxH7X
-         NmJmh+J7LeANnzNUHnfRxwtUBhhU+k9p+/zJfCDEKeMFUjGiQKQ+q3lS0RsYwMObMJ85
-         qorT1JAhP0k4fim4e3vus+MTiQXqisrBnnqKMmnfq+qK3+0JDLMq9a9ZoZsgQNIRQMEk
-         Q7Z6kZ5/O6CgoXiPCu6v7cwM8FCKD4bup/j9PCZGHpjr4BneUreL0dVPn5aSOLaPEFg0
-         Y92w==
-X-Gm-Message-State: AOJu0Ywt0IKHk9OgKFRZq5ThJxxWzw9ocS/sA7gRlYTEn+XqTd6LWQeQ
-	c4xX3OOm9UlD4LUzsRAzwKBsQQ==
-X-Google-Smtp-Source: AGHT+IEavg7sg+S7jrYdKqWtEn3Im15kJntLpiPxKsrgDiaRvPVfxkIybp2af2B44ez/Hh5OE/pXYw==
-X-Received: by 2002:a05:600c:3595:b0:40b:36e6:7940 with SMTP id p21-20020a05600c359500b0040b36e67940mr13885625wmq.35.1701259573212;
-        Wed, 29 Nov 2023 04:06:13 -0800 (PST)
+        bh=AsQvimBOnTjXGdKhEAnGYzR8KiGWDUYPadmCZZ7TXho=;
+        b=I14IYeHK1C4fWg425Y7f/Dfg5dljUNufCcFH6dqdIXpsIz1ftsin4xR4V9bKWI4nrn
+         qo59/KyWWHVnQyOPMoMsM5/2RJY+gSySjDNNQxNfEIQfATox1RQQzZFzbMhjMn8Q4qhy
+         dhf8Uu1VCMCJ+lnsxucKm1AKkPTXcEUj8Y+P4koDj650EG4R3nCN3Fo0Vr85DlGvGSBG
+         o1cMjVs+Y545bD7Uz0+BItFdDp8xcAMwAEEJy42Rp8ehde4m/v0G4iLwnlwCYsa9Zqq/
+         e1qpT0hG6ifSk/Dn6fqhNaBNLUfH4lFzkBg57DpSWCm8HMvO886dIT+K5KE1arRR3mlO
+         jWfg==
+X-Gm-Message-State: AOJu0YzI+ov+8HO5JGMN20zenf0aSo8BMhrezFRSp+62T3H+f993z8NQ
+	hYCksUf1f+0JgDDF6FmsDLQYfA==
+X-Google-Smtp-Source: AGHT+IH4VTkrd6SDnt/sTDh9R9XPApG7O61ItmfuFh5MunMzdqfZlrOGpBMpkKqBpf907RBXyT1V9A==
+X-Received: by 2002:adf:eb41:0:b0:333:727:2ff5 with SMTP id u1-20020adfeb41000000b0033307272ff5mr5299207wrn.9.1701260059703;
+        Wed, 29 Nov 2023 04:14:19 -0800 (PST)
 Received: from ?IPV6:2a05:6e02:1041:c10:38f1:13b7:9b7a:2d6b? ([2a05:6e02:1041:c10:38f1:13b7:9b7a:2d6b])
-        by smtp.googlemail.com with ESMTPSA id j35-20020a05600c1c2300b004076f522058sm2048368wms.0.2023.11.29.04.06.12
+        by smtp.googlemail.com with ESMTPSA id f5-20020adffcc5000000b003313a1e0ba1sm14998254wrs.89.2023.11.29.04.14.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 29 Nov 2023 04:06:12 -0800 (PST)
-Message-ID: <9d86cac8-3654-43ca-84cd-fa9ea8e91772@linaro.org>
-Date: Wed, 29 Nov 2023 13:06:12 +0100
+        Wed, 29 Nov 2023 04:14:19 -0800 (PST)
+Message-ID: <673c06e7-61a8-450f-96c9-35bb0e1fe111@linaro.org>
+Date: Wed, 29 Nov 2023 13:14:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -62,52 +62,40 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v11 3/4] reboot: Introduce
- thermal_zone_device_critical_reboot()
+Subject: Re: [PATCH V3] dt-bindings: thermal: convert Mediatek Thermal to the
+ json-schema
 Content-Language: en-US
-To: Fabio Estevam <festevam@gmail.com>
-Cc: rafael@kernel.org, krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
- conor+dt@kernel.org, mazziesaccount@gmail.com, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, Fabio Estevam <festevam@denx.de>
-References: <20231119130551.2416869-1-festevam@gmail.com>
- <20231119130551.2416869-3-festevam@gmail.com>
+To: =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
+ <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Zhang Rui
+ <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+ Sascha Hauer <s.hauer@pengutronix.de>, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20231117052214.24554-1-zajec5@gmail.com>
 From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20231119130551.2416869-3-festevam@gmail.com>
+In-Reply-To: <20231117052214.24554-1-zajec5@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 19/11/2023 14:05, Fabio Estevam wrote:
-> From: Fabio Estevam <festevam@denx.de>
+On 17/11/2023 06:22, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
 > 
-> Introduce thermal_zone_device_critical_reboot() to trigger an
-> emergency reboot.
+> This helps validating DTS files. Introduced changes:
+> 1. Improved title
+> 2. Simplified description (dropped "This describes the device tree...")
+> 3. Dropped undocumented "reset-names" from example
 > 
-> It is a counterpart of thermal_zone_device_critical() with the
-> difference that it will force a reboot instead of shutdown.
-> 
-> The motivation for doing this is to allow the thermal subystem
-> to trigger a reboot when the temperature reaches the critical
-> temperature.
-> 
-> Signed-off-by: Fabio Estevam <festevam@denx.de>
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 > ---
 
-[ ... ]
+Applied, thanks
 
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index cee814d5d1ac..3644326b18ac 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -361,6 +361,7 @@ int thermal_zone_get_offset(struct thermal_zone_device *tz);
->   int thermal_zone_device_enable(struct thermal_zone_device *tz);
->   int thermal_zone_device_disable(struct thermal_zone_device *tz);
->   void thermal_zone_device_critical(struct thermal_zone_device *tz);
-> +void thermal_zone_device_critical_reboot(struct thermal_zone_device *tz);
-
-It is more relevant to keep it private to the thermal core as there is 
-no user of it except in the thermal-of. IOW in thermal_core.h
-
-[ ... ]
 
 
 -- 
