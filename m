@@ -1,106 +1,88 @@
-Return-Path: <linux-pm+bounces-509-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-510-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C52357FDAC0
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 16:05:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEDEE7FDB01
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 16:19:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7031CB210D8
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 15:05:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 328FE282A8E
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 15:19:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EE6D37171;
-	Wed, 29 Nov 2023 15:05:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JMY33eFM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A948D374EE;
+	Wed, 29 Nov 2023 15:19:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDF7D66;
-	Wed, 29 Nov 2023 07:05:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701270345; x=1732806345;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=fuBRJoZc8zYA4dA1/vrdLgmtDN9b8lrYs3XPfP7VKUY=;
-  b=JMY33eFMy0Rhe4IsJiRejHdrcz5bdURd+g2rKsypW/bMw5Gh1Ke/Jn12
-   j/LeT/+cahKQUVc+5AJ4tHDblsFxlGoIIVnswi7VMt0fKdYN0Tl3ZCZET
-   wrdm16ju23cFbkSbxEMwO/gFj3TtWkmUqxTIUUX8dxDMFsUs1CsXOZAX8
-   hBKqz8ff4TzZ2W5jlOhEesL8ipvYb6yoWeikqyVIcFYSh/JNSvhRenDhQ
-   wTCGi4G0WL35Hu5Z2gRdL9Cg+7VAO/JenixsjPboEeBBh8ztpZehSgZnE
-   RhoYHt5dJPzelbBg402P8UNJJwDpoTm1qWnZ3N0OQLBvAjHfAwW2eByjS
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="378207311"
-X-IronPort-AV: E=Sophos;i="6.04,235,1695711600"; 
-   d="scan'208";a="378207311"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2023 07:05:45 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="892479673"
-X-IronPort-AV: E=Sophos;i="6.04,235,1695711600"; 
-   d="scan'208";a="892479673"
-Received: from besamani-mobl2.amr.corp.intel.com (HELO [10.212.113.90]) ([10.212.113.90])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2023 07:05:43 -0800
-Message-ID: <a106fb4733d0a3f0d6d5792705cdb5cee13731f8.camel@linux.intel.com>
-Subject: Re: Fwd: Intel hybrid CPU scheduler always prefers E cores
-From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To: Tim Chen <tim.c.chen@linux.intel.com>, Ramses <ramses@well-founded.dev>
-Cc: Bagas Sanjaya <bagasdotme@gmail.com>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Regressions
- <regressions@lists.linux.dev>,  Linux Power Management
- <linux-pm@vger.kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, Viresh
- Kumar <viresh.kumar@linaro.org>,  Ingo Molnar <mingo@redhat.com>, Peter
- Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
- Vincent Guittot <vincent.guittot@linaro.org>, Yu Chen <yu.c.chen@intel.com>
-Date: Wed, 29 Nov 2023 10:05:42 -0500
-In-Reply-To: <c2a9ceb3d7b1f384ad94d10b7058bb1cebea3d07.camel@linux.intel.com>
-References: <01df8329-06d7-4fd1-9c7a-05296f33231e@gmail.com>
-	 <b2b9121c6d2003b45f7fde6a97bb479a1ed634c7.camel@linux.intel.com>
-	 <NkN3JYx--3-9@well-founded.dev>
-	 <c2a9ceb3d7b1f384ad94d10b7058bb1cebea3d07.camel@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B2184;
+	Wed, 29 Nov 2023 07:19:37 -0800 (PST)
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-58ddc32f43fso45357eaf.1;
+        Wed, 29 Nov 2023 07:19:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701271176; x=1701875976;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=B32ouiV8wszxl16Z6gCKREM70b4o5qFAT461SnSNo7o=;
+        b=TlxHxhAIwdNEuZYUWHvIZE2VZ00NMBWcoXu6+bV0nF/qF9UpyatLDo7NbbU/OsiQrS
+         hnUlHkkKAaVBcB745QZXUXU28ffYOzoIkovcDkxFSmP3sjcSnE3DeLKnNXLd/oTwq+u2
+         HgwiuDciP7G1tiQBX/aFt8IaiA3gkNrUG5uZ+17tQa1qalULuN14hlpWdKi0lSlgfVNE
+         CyfLUT/qtDlj7SvrdBvVbreuamUGxFHSqVUA2Fx4Edf6t4JfEAOkKAR7S3JMgsyxcT8J
+         gNJFpk0TXEaZoS/PRjqbiJBHPmfaGJGXtQz/sFKtAUisBO6KQAjocaa9BeuSSi6dqB6P
+         mZIw==
+X-Gm-Message-State: AOJu0Yz0iKDb0PS4A/KAZamSbq9qXJviewsiSM0pBb0IAN0/JtSAXfyV
+	RcWUHeWytBpsPp3BSqKy5gEeMtSj1DcxfGJm67/hJScw
+X-Google-Smtp-Source: AGHT+IFa8cTbrlNJ3lT+phgQUqELtwivOPydjg9FhDEZN5wTKs8RyH7qoecg8XkV6fJiNp3gFg71oWlIV0SmOvSa7RE=
+X-Received: by 2002:a05:6820:34b:b0:58d:a761:5f88 with SMTP id
+ m11-20020a056820034b00b0058da7615f88mr6729983ooe.0.1701271176098; Wed, 29 Nov
+ 2023 07:19:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20231129143132.32155-1-jiangyihe042@gmail.com>
+In-Reply-To: <20231129143132.32155-1-jiangyihe042@gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 29 Nov 2023 16:19:25 +0100
+Message-ID: <CAJZ5v0jfEsNVu=fg+Xa118F=hCGGB33U5SbiqWeCMaVMqNpUEA@mail.gmail.com>
+Subject: Re: [PATCH] intel_idle: add Cometlake support
+To: Jiang Yihe <jiangyihe042@gmail.com>
+Cc: Jacob Pan <jacob.jun.pan@linux.intel.com>, Len Brown <lenb@kernel.org>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	"Zhang, Rui" <rui.zhang@intel.com>, Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2023-11-28 at 15:10 -0800, Tim Chen wrote:
-> On Tue, 2023-11-28 at 23:33 +0100, Ramses wrote:
->=20
-> > I applied the patch on top of 6.6.2, but unfortunately I see more
-> > or less the same behaviour as before, with single-threaded CPU-
-> > bound tasks running almost exclusively on E cores.
-> >=20
-> > Ramses
->=20
-> I suspect that you may have other issues. I wonder if CPU priorities
-> are getting
-> assigned properly on your system.
->=20
-> Saw in the original bugzilla=20
-> https://bugzilla.kernel.org/show_bug.cgi?id=3D218195
-> that you don't see /proc/sys/kernel/sched_itmt_enabled which
-> may be a symptom of such a problem.
->=20
-> +Srinivas, is there something Ramses can do to help
-> find out if there are issues with cppc?
-I have updated the bugzilla with the findings. The ACPI config on this
-system is telling us that CPPC v2 is not supported. Current
-implementation depends on CPPC v2.
++Rui and Artem
 
-Even in 6.4 kernel, ITMT is not enabled.
-
-Thanks,
-Srinivas
-
-
->=20
-> Tim
->=20
-
+On Wed, Nov 29, 2023 at 3:32=E2=80=AFPM Jiang Yihe <jiangyihe042@gmail.com>=
+ wrote:
+>
+> Since the Cometlake C-State is supported, support for Cometlake should
+> be added to intel_idle. Just use Kabylake C-State table for Cometlake
+> because they share the same table in intel_cstate.
+>
+> Signed-off-by: Jiang Yihe <jiangyihe042@gmail.com>
+> ---
+>  drivers/idle/intel_idle.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> index dcda0afec..f83f78037 100644
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -1418,6 +1418,8 @@ static const struct x86_cpu_id intel_idle_ids[] __i=
+nitconst =3D {
+>         X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE,             &idle_cpu_skl),
+>         X86_MATCH_INTEL_FAM6_MODEL(KABYLAKE_L,          &idle_cpu_skl),
+>         X86_MATCH_INTEL_FAM6_MODEL(KABYLAKE,            &idle_cpu_skl),
+> +       X86_MATCH_INTEL_FAM6_MODEL(COMETLAKE_L,         &idle_cpu_skl),
+> +       X86_MATCH_INTEL_FAM6_MODEL(COMETLAKE,           &idle_cpu_skl),
+>         X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE_X,           &idle_cpu_skx),
+>         X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X,           &idle_cpu_icx),
+>         X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,           &idle_cpu_icx),
+> --
 
