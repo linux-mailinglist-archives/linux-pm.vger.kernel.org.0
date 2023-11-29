@@ -1,61 +1,62 @@
-Return-Path: <linux-pm+bounces-499-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-500-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 295ED7FDA06
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 15:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B84C7FDA0B
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 15:44:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BA441C20DAC
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 14:44:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD6171C2032B
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 14:44:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 332FC321A1;
-	Wed, 29 Nov 2023 14:44:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C870F32C92;
+	Wed, 29 Nov 2023 14:44:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="E30oDYhM"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WtGlSdAv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F578D67
-	for <linux-pm@vger.kernel.org>; Wed, 29 Nov 2023 06:44:26 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-50a6ff9881fso10210215e87.1
-        for <linux-pm@vger.kernel.org>; Wed, 29 Nov 2023 06:44:26 -0800 (PST)
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3812110F4
+	for <linux-pm@vger.kernel.org>; Wed, 29 Nov 2023 06:44:29 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9fffa4c4f43so931257966b.3
+        for <linux-pm@vger.kernel.org>; Wed, 29 Nov 2023 06:44:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701269064; x=1701873864; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1701269068; x=1701873868; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wo1sJJZHw7KBTaKmEN30ScvrIwX30d4f2jOhkPUqxBM=;
-        b=E30oDYhMTwfJgxyu8vzz07F+Pfth/PKq7buzGFo8wmOy9eQ5ayRV/a6IjfXOzTasaa
-         A8OwZyTwoZ1jthwxAUWxZ+cu4weRiNk/CYNTrzEHXN5SzYQ5CqZKMmA2kIyGvVOf3GMS
-         mUT21ZiUBtjgWePPZIN1SSPYgXrDxqFy60wDiVCweIOBKLrEpK/ljILOW4S/XIyjylYR
-         PEZ3nMvfl1h71eGz2bRonLG5pbWjiu868OKp6rcizogawgv5swyOy89KmUliJJjHaz6B
-         ehv9JOraSnkeGc7iiMWQBxK0Sir0HdbZhYHLFpyjynVEH3BGjgaqRfWrzsyga+awseGZ
-         6mFg==
+        bh=3WME6ubitd3vxaAOMdHVezdwhed8qbighnDEBO169Ec=;
+        b=WtGlSdAvYS2KDuvldE8lVt2M9SryXBG3ShZAMXg8gCUJF8BnBIfj/eZlyVnF904vO+
+         q/aAYUUsPlbEp4UToSnxM8Xw5WEQMAl5vsh+T9VKFAxTaxLZm2TWq6VvdEVGT1GdbJrH
+         YZ3xbyVcAqc/S6QNuJL3HO1AOJxL8/2nP5ZHhbne2adaSoPqcNUr5po06oEad0XC7FGp
+         +kWYwW9OgXdZYpsY2BY4At4e4B1XbrDnrWjYXO3s6KVySqb0yucyfxm40Kp75W6o1oTt
+         AzezSFS5BCFISbQfpeMDDj4OSEMQN+bEd2Sc4JlY8OLKNJLLd911j6YqJdL4x3auGyLs
+         hNgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701269064; x=1701873864;
+        d=1e100.net; s=20230601; t=1701269068; x=1701873868;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wo1sJJZHw7KBTaKmEN30ScvrIwX30d4f2jOhkPUqxBM=;
-        b=gHnDW6nkszE4mZCnyWgSBqkJ0n5VIIXlc2C/gTwBbJPE71+oojg6Dm8ZBvvfKNeaK4
-         YVYAlqXMBSEEWgL2wEX6lQtl14a/Rk3PhJS6mEcX3XBrpCSzslR7R5cqek3SjLB06Nhh
-         sjLp9mZQZgphBK0wGWDxyFal6CBaQMOYo29xwWv45cycdn5jBp8khzsevPvRQ+qspvQv
-         yZzd4AbxEW9RnVdiE/n5aq3kR7yg9EMlMJyUt4PLZ7oOEMIE97nXz1XIJHuBDkbRtNKk
-         7vJVySfyAnk1JFohuAu7E6K4hEEE0sBkGmzZeuB428Mpwb7EPjZuV0CVHqhBJR1udJ7K
-         TwWg==
-X-Gm-Message-State: AOJu0YwW5RnMKaWDxlysj9A3TNvcJg2RnDCHc0lFlSSbgytVuHcfMfiV
-	ygLtEmi/tBDC87Lu29JbGfLj7g==
-X-Google-Smtp-Source: AGHT+IHIFF7EvttkvKqxTdo7EUCkiD1rO8UjhJ/NykBDp9vXAQKIDUWYvgiQY1lP0nrgP7lsgpW8vw==
-X-Received: by 2002:a05:6512:3d94:b0:507:9a66:3577 with SMTP id k20-20020a0565123d9400b005079a663577mr11819960lfv.5.1701269064766;
-        Wed, 29 Nov 2023 06:44:24 -0800 (PST)
+        bh=3WME6ubitd3vxaAOMdHVezdwhed8qbighnDEBO169Ec=;
+        b=nFKngEvbXbzN1nUrwxcVrJB0XEV+ulP+j9GcHZPs0Ue2kXt1akqyWZiqTf02arokRt
+         DJqvhjT0sW2cc/X7keLza/2Ejcvm7Dw8eAbgJ7w8+YrtPr9x1X4n8RzeERVUSEdzaJSb
+         RC8b59qMl8rdZEXQzGTobHXiT1h4b8T1rmgnueHITccPmNYRuDb0EFzJEhm/gcdZQ5n8
+         kvs/4lu8Yz0Bgw1HOz/NK9GAYVgvV/zqeRrIuYKg63rmje/xV9ZORgAnv65d+ITa+rfB
+         eNAltnKBJccDhx8VyaGns5MF09F/KLAMGPbPaWKjZtjMK6rXbC6p4MsFo8MpR+LXyCPm
+         O2bw==
+X-Gm-Message-State: AOJu0Yxe9UQJeyxcngP4YdedhyhQeYICTVtoe3pqWlB3BrQWnNrzisCS
+	E3n3hozozr5sZtDiyQHSNdqIYA==
+X-Google-Smtp-Source: AGHT+IH+RwsuXNKo7mRRSs5QfH4RQDMAsxgT6mJOUDi04ruodSJZaS3PyYqxW9aAR+nUNX0ZJcUxXA==
+X-Received: by 2002:a17:906:fcce:b0:9f8:2b44:7b7f with SMTP id qx14-20020a170906fcce00b009f82b447b7fmr13038742ejb.70.1701269068288;
+        Wed, 29 Nov 2023 06:44:28 -0800 (PST)
 Received: from [10.167.154.1] (178235187166.dynamic-4-waw-k-2-3-0.vectranet.pl. [178.235.187.166])
-        by smtp.gmail.com with ESMTPSA id e27-20020a1709062c1b00b009fda627abd9sm7913738ejh.79.2023.11.29.06.44.21
+        by smtp.gmail.com with ESMTPSA id e27-20020a1709062c1b00b009fda627abd9sm7913738ejh.79.2023.11.29.06.44.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Nov 2023 06:44:24 -0800 (PST)
+        Wed, 29 Nov 2023 06:44:27 -0800 (PST)
 From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Date: Wed, 29 Nov 2023 15:44:02 +0100
-Subject: [PATCH v3 05/12] iommu/arm-smmu-qcom: Add QCM2290 MDSS compatible
+Date: Wed, 29 Nov 2023 15:44:03 +0100
+Subject: [PATCH v3 06/12] arm64: dts: qcom: sc7180: Add the missing MDSS
+ icc path
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -64,7 +65,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231125-topic-rb1_feat-v3-5-4cbb567743bb@linaro.org>
+Message-Id: <20231125-topic-rb1_feat-v3-6-4cbb567743bb@linaro.org>
 References: <20231125-topic-rb1_feat-v3-0-4cbb567743bb@linaro.org>
 In-Reply-To: <20231125-topic-rb1_feat-v3-0-4cbb567743bb@linaro.org>
 To: Rob Clark <robdclark@gmail.com>, 
@@ -91,35 +92,44 @@ Cc: Marijn Suijten <marijn.suijten@somainline.org>,
  linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
  iommu@lists.linux.dev, Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1701269042; l=938;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1701269042; l=1145;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=ZKnU1eVaZSjTBiyHSPh2Tjy7o0Kv51jXq1kQ7e4q0JU=;
- b=0+UJnE/UFmA357lPZt/AVpOt+TH32uQu3LcDEhl3VCvws5BJst6hotge8OV/5/cQmoLRQIEVm
- h3sFcW4Ar/GDlhsMpOlDPsgg2azmr+u1A/lG/dy/MwcPNnwfEdJT2bg
+ bh=QxbVxThi6gj4JqQP8V9LpJsjR/myuVOnIJbwHX7amYU=;
+ b=sYPUfm+T2CO9HyMoVEn+/8/AzljQnlW0jC9XeZnrz01woxrBDGuDswi+m+bEgPSkuiCtZLp8N
+ BR3hZTS03LmDYMTViL/cCS/WJooBooB/al2zibrNvM1dONg09omgSvQ
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
-Add the QCM2290 MDSS compatible to clients compatible list, as it also
-needs the workarounds.
+MDSS, aside from the MDP-MEM path, also requires the CPU-DISP_CFG one.
+Failing to provide it may result in register accesses failing and that's
+never good.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Add the missing path.
+
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/qcom/sc7180.dtsi | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-index 549ae4dba3a6..aea5e85b20ff 100644
---- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-+++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-@@ -245,6 +245,7 @@ static const struct of_device_id qcom_smmu_client_of_match[] __maybe_unused = {
- 	{ .compatible = "qcom,adreno" },
- 	{ .compatible = "qcom,mdp4" },
- 	{ .compatible = "qcom,mdss" },
-+	{ .compatible = "qcom,qcm2290-mdss" },
- 	{ .compatible = "qcom,sc7180-mdss" },
- 	{ .compatible = "qcom,sc7180-mss-pil" },
- 	{ .compatible = "qcom,sc7280-mdss" },
+diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+index 11f353d416b4..9664e42faeb1 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+@@ -3100,8 +3100,12 @@ mdss: display-subsystem@ae00000 {
+ 			interrupt-controller;
+ 			#interrupt-cells = <1>;
+ 
+-			interconnects = <&mmss_noc MASTER_MDP0 0 &mc_virt SLAVE_EBI1 0>;
+-			interconnect-names = "mdp0-mem";
++			interconnects = <&mmss_noc MASTER_MDP0 QCOM_ICC_TAG_ALWAYS
++					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ALWAYS>,
++					<&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ALWAYS
++					 &config_noc SLAVE_DISPLAY_CFG QCOM_ICC_TAG_ALWAYS>;
++			interconnect-names = "mdp0-mem",
++					     "cpu-cfg";
+ 
+ 			iommus = <&apps_smmu 0x800 0x2>;
+ 
 
 -- 
 2.43.0
