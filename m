@@ -1,133 +1,290 @@
-Return-Path: <linux-pm+bounces-513-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-514-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A33C7FDC13
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 16:58:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A692E7FDD76
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 17:42:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BDF0BB20F7A
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 15:58:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C9FCE1C20A31
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 16:42:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFCD439860;
-	Wed, 29 Nov 2023 15:58:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b="EHLykenN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 228F218658;
+	Wed, 29 Nov 2023 16:42:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7B1D54
-	for <linux-pm@vger.kernel.org>; Wed, 29 Nov 2023 07:58:21 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1cc9b626a96so53570965ad.2
-        for <linux-pm@vger.kernel.org>; Wed, 29 Nov 2023 07:58:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google; t=1701273500; x=1701878300; darn=vger.kernel.org;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UfaOOrbpJ7lrOL49Zhqqje49MqZuDPKdRWdRlAyDs3I=;
-        b=EHLykenNTJ4PkUX2q8mVPRIyDeF41WJ0W0rwu+kq3uMYt0NFxcq1IeShOeXfyCO0c2
-         +r1IvkldVpdO0LFSkQIwiddj3AznS/GqMuaKTQhmcFRnZMSR2E14IknywwXPLfsV+8eI
-         MiJk1QpjhCfl8IROpIggAzOch4npGnQYQqjK+C0ge2OO2nJoNBih+r5w59dPqBi0wE/A
-         BopUIsB2u31XIavHhUw+bKMjhVuFhurg855nMzoFuBzrzIRs7Ki2CcNFf7qbYoMShbey
-         YGEk0fV0PiJXVbCGV8iXbkKjROn2KF2iEdK2PrLRPlIqTHgTDUyHNFR8+ST6iaFmrLxT
-         D2bg==
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52ECA8;
+	Wed, 29 Nov 2023 08:42:16 -0800 (PST)
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-6d815062598so2535a34.0;
+        Wed, 29 Nov 2023 08:42:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701273500; x=1701878300;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UfaOOrbpJ7lrOL49Zhqqje49MqZuDPKdRWdRlAyDs3I=;
-        b=PNqahEEzrj+8TEQIxbCfIR0Qmjim7r1LdVswFMCWqn6xACoKWuIMsz3lKTt3V3h+m8
-         0bpJn4ctGjkaFTjyJ4bRv3WZdTfgVysPMnYaT0UffOqEwwoZxGZ/MkcO+hIqJkxgLVV2
-         lRO8KyD5gMzlIVdm+j+65CFTIQUOgH96p6HoNP0+CorVGZFsMjUwGwob1RxW3SOaJDHW
-         mr+9YSpRUqd7SxF220iRVWm9OFW+JDk8pypJygN74gcJSaNMe8BkynUk2G3m4YS27FTW
-         x2XLBgegH3+UOgrKDlfSqw+XhtdVI27qp/ySi4z5doNJ2pgq/PvgaC5FOLUKmW+3Pf8W
-         qiGA==
-X-Gm-Message-State: AOJu0YzmgDsLYT12Xb/E9FcuxPVrTwszrio23e08d70T9JpEWCcycZBL
-	A2MvC78I57EVjdGBtWwIXQh26g==
-X-Google-Smtp-Source: AGHT+IEKUfx7RYN1QCWBGNy2jZYmiMw5PjdOZmyHn5DRbJh/h/0wYl3A7xX/97gwiFtu+VQrJjxRBQ==
-X-Received: by 2002:a17:902:db06:b0:1cf:c376:6d8d with SMTP id m6-20020a170902db0600b001cfc3766d8dmr13097406plx.32.1701273500603;
-        Wed, 29 Nov 2023 07:58:20 -0800 (PST)
-Received: from DougS18 (s66-183-142-209.bc.hsia.telus.net. [66.183.142.209])
-        by smtp.gmail.com with ESMTPSA id jc11-20020a17090325cb00b001bc6e6069a6sm12423481plb.122.2023.11.29.07.58.19
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 29 Nov 2023 07:58:20 -0800 (PST)
-From: "Doug Smythies" <dsmythies@telus.net>
-To: "'Len Brown'" <lenb@kernel.org>
-Cc: <linux-pm@vger.kernel.org>,
-	"'Rafael J. Wysocki'" <rafael@kernel.org>,
-	"Doug Smythies" <dsmythies@telus.net>
-References: <00d201d96670$e15ab9d0$a4102d70$@telus.net> <CAJvTdKmv-6rp=z=emS1VGdWgTmRfhSUrmUPLk8Hj+5=CvH0+nw@mail.gmail.com> <CAJvTdKmG2JkJBy4UNc101JZUHzUaC=a=U9Xwg9MgQs7wcDvYrA@mail.gmail.com>
-In-Reply-To: <CAJvTdKmG2JkJBy4UNc101JZUHzUaC=a=U9Xwg9MgQs7wcDvYrA@mail.gmail.com>
-Subject: RE: [PATCH] tools/power/x86/turbostat: Fix added raw MSR output
-Date: Wed, 29 Nov 2023 07:58:21 -0800
-Message-ID: <001b01da22dc$e0f764b0$a2e62e10$@telus.net>
+        d=1e100.net; s=20230601; t=1701276136; x=1701880936;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=N5kT24XoL9AcqmNQ3sMUkwK1uUxYMSl+VGTViMsnVOU=;
+        b=FuiY10wMfiZl29tseLBvMcuDaC61JC4R9xIFImx7VUjGFUi6S1elKihnWLVq+Lqp/e
+         BNchzmI0MzuNS5KxjVsztePSoPT9TyJM+Q6BLCiyVA1pY/uaytgWMeYT4FZ8mHMlUMAe
+         kgdYLqlkGpsFd3a6jZJzODaqVe8GrI0av1O8Ptp/jELVdVBdv0fbmzFVg1A38X3Hntgj
+         wOGBF1Apt3GfPdOzp8rVgJUht4HdTw2Hdf5piO2uwXIux+KoIM3rIxNQXqzIGABolbpo
+         RpgX0O3ij3bYiG8RLog1N45YOOioqxqu1zxh86LKwASQUbXBlfwRSJRB2q14VkBvrOqX
+         1eLw==
+X-Gm-Message-State: AOJu0YzZx43TkshHTfahEN8JbeMO6CIDJraSAIQBU0DSpXy+C24fuiO1
+	NzPlUQfjP+CAk0TdgrvC1Tk4JDPMQ+3ASCSKObA=
+X-Google-Smtp-Source: AGHT+IFiBrxfEJDXSB4leLTaPctaykM6TLdA8N7tYcpl+NToxTP/8Jpu+FHPe5hshOn7lWovTKg2Dk3f42bagZoWw1g=
+X-Received: by 2002:a4a:eb86:0:b0:58d:5302:5b18 with SMTP id
+ d6-20020a4aeb86000000b0058d53025b18mr14706916ooj.1.1701276135794; Wed, 29 Nov
+ 2023 08:42:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="utf-8"
+References: <20231117063839.17465-1-wyes.karny@amd.com>
+In-Reply-To: <20231117063839.17465-1-wyes.karny@amd.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 29 Nov 2023 17:42:04 +0100
+Message-ID: <CAJZ5v0jNSoL0ke1eT9PDQKqJ0qkVNsowaU5mrgGj2seSL654aA@mail.gmail.com>
+Subject: Re: [PATCH v2] cpufreq/amd-pstate: Fix scaling_min_freq and
+ scaling_max_freq update
+To: Wyes Karny <wyes.karny@amd.com>
+Cc: rafael@kernel.org, ray.huang@amd.com, viresh.kumar@linaro.org, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, perry.yuan@amd.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-ca
-Thread-Index: AQJigUPX+JE/C/rArcKUKaY8eOCGfwDAEwE5AhpcgS+vaeDLUA==
 
-Hi Len,
-
-Thank you for having a look at this.
-
-On 2023.11.27 18:44 Len wrote:
-> On Mon, Nov 27, 2023 at 9:31=E2=80=AFPM Len Brown <lenb@kernel.org> =
-wrote:
->>
->> Hi Doug,
->>
->> I recall puzzling what to do for the system summary row for a RAW =
-added MSR.
->> In your example 1-package system with a package-scope MSR your patch
->> does the trick.
->>
->> But if there are N packages, the summary will ignore all but the last
->> one, which it prints.
->>
->> Similarly, if the MSR is core or CPU scope, the system summary =
-ignores
->> all but the last one, which is prints.
->>
->> So I concluded that printing nothing, er, zero that is, on the system
->> summary row for a RAW MSR was the least likely to confuse somebody.
->>
->> I'm thinking that the first two hunks of your patch for thread and
->> core don't make sense because of this.
->> I'm thinking that the last hunk, for package, makes sense, but only =
-on
->> a single package system?
-
-I played around with it, and simply can not recall why I did the first 2 =
-hunks.
-The 3rd hunk seems good enough, but I have yet to figure out how
-to determine if it is a one package system.
-
+On Fri, Nov 17, 2023 at 7:39=E2=80=AFAM Wyes Karny <wyes.karny@amd.com> wro=
+te:
 >
-> Oh, one more bit...
-> "turbostat --cpu cpu-set" can accept "package" as the cpu-set.  This
-> will print out one row per package, and will give you the information
-> that you really want -- even on a multi-package system.  However, it
-> isn't as pretty as the system summary that you printed, because it
-> pre-prints the headers (and the system summary) every interval.
+> When amd_pstate is running, writing to scaling_min_freq and
+> scaling_max_freq has no effect. These values are only passed to the
+> policy level, but not to the platform level. This means that the
+> platform does not know about the frequency limits set by the user. To
+> fix this, update the min_perf and max_perf values at the platform level
+> whenever the user changes the scaling_min_freq and scaling_max_freq
+> values.
 >
-> It may make more sense to tweak (or simply filter) the output of
-> "--cpu package" to produce the output you are looking for....
+> Fixes: ffa5096a7c33 ("cpufreq: amd-pstate: implement Pstate EPP support f=
+or the AMD processors")
+> Acked-by: Huang Rui <ray.huang@amd.com>
+> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+> ---
+> Changelog:
+> v1 -> v2:
+> - Rebase
+> - Pick up ack from Ray
+> - Add fixes tag
+>
+>  drivers/cpufreq/amd-pstate.c | 60 ++++++++++++++++++++++++++++--------
+>  include/linux/amd-pstate.h   |  4 +++
+>  2 files changed, 51 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 9a1e194d5cf8..4839cdd2715e 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -307,11 +307,11 @@ static int pstate_init_perf(struct amd_cpudata *cpu=
+data)
+>                 highest_perf =3D AMD_CPPC_HIGHEST_PERF(cap1);
+>
+>         WRITE_ONCE(cpudata->highest_perf, highest_perf);
+> -
+> +       WRITE_ONCE(cpudata->max_limit_perf, highest_perf);
+>         WRITE_ONCE(cpudata->nominal_perf, AMD_CPPC_NOMINAL_PERF(cap1));
+>         WRITE_ONCE(cpudata->lowest_nonlinear_perf, AMD_CPPC_LOWNONLIN_PER=
+F(cap1));
+>         WRITE_ONCE(cpudata->lowest_perf, AMD_CPPC_LOWEST_PERF(cap1));
+> -
+> +       WRITE_ONCE(cpudata->min_limit_perf, AMD_CPPC_LOWEST_PERF(cap1));
+>         return 0;
+>  }
+>
+> @@ -329,11 +329,12 @@ static int cppc_init_perf(struct amd_cpudata *cpuda=
+ta)
+>                 highest_perf =3D cppc_perf.highest_perf;
+>
+>         WRITE_ONCE(cpudata->highest_perf, highest_perf);
+> -
+> +       WRITE_ONCE(cpudata->max_limit_perf, highest_perf);
+>         WRITE_ONCE(cpudata->nominal_perf, cppc_perf.nominal_perf);
+>         WRITE_ONCE(cpudata->lowest_nonlinear_perf,
+>                    cppc_perf.lowest_nonlinear_perf);
+>         WRITE_ONCE(cpudata->lowest_perf, cppc_perf.lowest_perf);
+> +       WRITE_ONCE(cpudata->min_limit_perf, cppc_perf.lowest_perf);
+>
+>         if (cppc_state =3D=3D AMD_PSTATE_ACTIVE)
+>                 return 0;
+> @@ -432,6 +433,10 @@ static void amd_pstate_update(struct amd_cpudata *cp=
+udata, u32 min_perf,
+>         u64 prev =3D READ_ONCE(cpudata->cppc_req_cached);
+>         u64 value =3D prev;
+>
+> +       min_perf =3D clamp_t(unsigned long, min_perf, cpudata->min_limit_=
+perf,
+> +                       cpudata->max_limit_perf);
+> +       max_perf =3D clamp_t(unsigned long, max_perf, cpudata->min_limit_=
+perf,
+> +                       cpudata->max_limit_perf);
+>         des_perf =3D clamp_t(unsigned long, des_perf, min_perf, max_perf)=
+;
+>
+>         if ((cppc_state =3D=3D AMD_PSTATE_GUIDED) && (gov_flags & CPUFREQ=
+_GOV_DYNAMIC_SWITCHING)) {
+> @@ -470,6 +475,22 @@ static int amd_pstate_verify(struct cpufreq_policy_d=
+ata *policy)
+>         return 0;
+>  }
+>
+> +static int amd_pstate_update_min_max_limit(struct cpufreq_policy *policy=
+)
+> +{
+> +       u32 max_limit_perf, min_limit_perf;
+> +       struct amd_cpudata *cpudata =3D policy->driver_data;
+> +
+> +       max_limit_perf =3D div_u64(policy->max * cpudata->highest_perf, c=
+pudata->max_freq);
+> +       min_limit_perf =3D div_u64(policy->min * cpudata->highest_perf, c=
+pudata->max_freq);
+> +
+> +       WRITE_ONCE(cpudata->max_limit_perf, max_limit_perf);
+> +       WRITE_ONCE(cpudata->min_limit_perf, min_limit_perf);
+> +       WRITE_ONCE(cpudata->max_limit_freq, policy->max);
+> +       WRITE_ONCE(cpudata->min_limit_freq, policy->min);
+> +
+> +       return 0;
+> +}
+> +
+>  static int amd_pstate_update_freq(struct cpufreq_policy *policy,
+>                                   unsigned int target_freq, bool fast_swi=
+tch)
+>  {
+> @@ -480,6 +501,9 @@ static int amd_pstate_update_freq(struct cpufreq_poli=
+cy *policy,
+>         if (!cpudata->max_freq)
+>                 return -ENODEV;
+>
+> +       if (policy->min !=3D cpudata->min_limit_freq || policy->max !=3D =
+cpudata->max_limit_freq)
+> +               amd_pstate_update_min_max_limit(policy);
+> +
+>         cap_perf =3D READ_ONCE(cpudata->highest_perf);
+>         min_perf =3D READ_ONCE(cpudata->lowest_perf);
+>         max_perf =3D cap_perf;
+> @@ -532,6 +556,10 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
+>         struct amd_cpudata *cpudata =3D policy->driver_data;
+>         unsigned int target_freq;
+>
+> +       if (policy->min !=3D cpudata->min_limit_freq || policy->max !=3D =
+cpudata->max_limit_freq)
+> +               amd_pstate_update_min_max_limit(policy);
+> +
+> +
+>         cap_perf =3D READ_ONCE(cpudata->highest_perf);
+>         lowest_nonlinear_perf =3D READ_ONCE(cpudata->lowest_nonlinear_per=
+f);
+>         max_freq =3D READ_ONCE(cpudata->max_freq);
+> @@ -745,6 +773,8 @@ static int amd_pstate_cpu_init(struct cpufreq_policy =
+*policy)
+>         /* Initial processor data capability frequencies */
+>         cpudata->max_freq =3D max_freq;
+>         cpudata->min_freq =3D min_freq;
+> +       cpudata->max_limit_freq =3D max_freq;
+> +       cpudata->min_limit_freq =3D min_freq;
+>         cpudata->nominal_freq =3D nominal_freq;
+>         cpudata->lowest_nonlinear_freq =3D lowest_nonlinear_freq;
+>
+> @@ -1183,16 +1213,25 @@ static int amd_pstate_epp_cpu_exit(struct cpufreq=
+_policy *policy)
+>         return 0;
+>  }
+>
+> -static void amd_pstate_epp_init(unsigned int cpu)
+> +static void amd_pstate_epp_update_limit(struct cpufreq_policy *policy)
+>  {
+> -       struct cpufreq_policy *policy =3D cpufreq_cpu_get(cpu);
+>         struct amd_cpudata *cpudata =3D policy->driver_data;
+> -       u32 max_perf, min_perf;
+> +       u32 max_perf, min_perf, min_limit_perf, max_limit_perf;
+>         u64 value;
+>         s16 epp;
+>
+>         max_perf =3D READ_ONCE(cpudata->highest_perf);
+>         min_perf =3D READ_ONCE(cpudata->lowest_perf);
+> +       max_limit_perf =3D div_u64(policy->max * cpudata->highest_perf, c=
+pudata->max_freq);
+> +       min_limit_perf =3D div_u64(policy->min * cpudata->highest_perf, c=
+pudata->max_freq);
+> +
+> +       max_perf =3D clamp_t(unsigned long, max_perf, cpudata->min_limit_=
+perf,
+> +                       cpudata->max_limit_perf);
+> +       min_perf =3D clamp_t(unsigned long, min_perf, cpudata->min_limit_=
+perf,
+> +                       cpudata->max_limit_perf);
+> +
+> +       WRITE_ONCE(cpudata->max_limit_perf, max_limit_perf);
+> +       WRITE_ONCE(cpudata->min_limit_perf, min_limit_perf);
+>
+>         value =3D READ_ONCE(cpudata->cppc_req_cached);
+>
+> @@ -1210,9 +1249,6 @@ static void amd_pstate_epp_init(unsigned int cpu)
+>         value &=3D ~AMD_CPPC_DES_PERF(~0L);
+>         value |=3D AMD_CPPC_DES_PERF(0);
+>
+> -       if (cpudata->epp_policy =3D=3D cpudata->policy)
+> -               goto skip_epp;
+> -
+>         cpudata->epp_policy =3D cpudata->policy;
+>
+>         /* Get BIOS pre-defined epp value */
+> @@ -1222,7 +1258,7 @@ static void amd_pstate_epp_init(unsigned int cpu)
+>                  * This return value can only be negative for shared_memo=
+ry
+>                  * systems where EPP register read/write not supported.
+>                  */
+> -               goto skip_epp;
+> +               return;
+>         }
+>
+>         if (cpudata->policy =3D=3D CPUFREQ_POLICY_PERFORMANCE)
+> @@ -1236,8 +1272,6 @@ static void amd_pstate_epp_init(unsigned int cpu)
+>
+>         WRITE_ONCE(cpudata->cppc_req_cached, value);
+>         amd_pstate_set_epp(cpudata, epp);
+> -skip_epp:
+> -       cpufreq_cpu_put(policy);
+>  }
+>
+>  static int amd_pstate_epp_set_policy(struct cpufreq_policy *policy)
+> @@ -1252,7 +1286,7 @@ static int amd_pstate_epp_set_policy(struct cpufreq=
+_policy *policy)
+>
+>         cpudata->policy =3D policy->policy;
+>
+> -       amd_pstate_epp_init(policy->cpu);
+> +       amd_pstate_epp_update_limit(policy);
+>
+>         return 0;
+>  }
+> diff --git a/include/linux/amd-pstate.h b/include/linux/amd-pstate.h
+> index 446394f84606..6ad02ad9c7b4 100644
+> --- a/include/linux/amd-pstate.h
+> +++ b/include/linux/amd-pstate.h
+> @@ -70,6 +70,10 @@ struct amd_cpudata {
+>         u32     nominal_perf;
+>         u32     lowest_nonlinear_perf;
+>         u32     lowest_perf;
+> +       u32     min_limit_perf;
+> +       u32     max_limit_perf;
+> +       u32     min_limit_freq;
+> +       u32     max_limit_freq;
+>
+>         u32     max_freq;
+>         u32     min_freq;
+> --
 
-Thanks for that.
-Yes, the format of the information isn't pretty but it is probably
-good enough. I use --add MSRs rarely.
-
-... Doug
-
-
+Applied as 6.7-rc material, thanks!
 
