@@ -1,290 +1,331 @@
-Return-Path: <linux-pm+bounces-514-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-515-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A692E7FDD76
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 17:42:22 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFBDF7FDDAA
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 17:54:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C9FCE1C20A31
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 16:42:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5B9FAB20E62
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 16:54:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 228F218658;
-	Wed, 29 Nov 2023 16:42:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C002B39848;
+	Wed, 29 Nov 2023 16:54:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jfG8X4mf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52ECA8;
-	Wed, 29 Nov 2023 08:42:16 -0800 (PST)
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-6d815062598so2535a34.0;
-        Wed, 29 Nov 2023 08:42:16 -0800 (PST)
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09251BA
+	for <linux-pm@vger.kernel.org>; Wed, 29 Nov 2023 08:53:57 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-3331974c2d2so5592f8f.2
+        for <linux-pm@vger.kernel.org>; Wed, 29 Nov 2023 08:53:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1701276835; x=1701881635; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KzCsfdBE7WkJbZOrYaWER7MpwPAWaQ/409ygwrMaF7U=;
+        b=jfG8X4mfovjdLYdd1+OXNyAjqIo5Zcxf1Fi6hkebiR955zw5vDDv+W41rktDnlLU11
+         AMOsg+h9yUxZQaMMz00ALtoWKnOt5CR0Uf6kW6VaRIGHIeEr1NzUWLqnIpgkr0yXVpn8
+         9P1QczoBC9u8/aUdOoXMM0BnDRVyrNw3KB78HrxAiUjjUb3Abmvmydd9S05O+JNNPOhF
+         FyyNtvTLWTXbf24z4Gs4ZFcMRF4Rj8f6ABwpuna04KLr4vi62cYbM9scgRr7hUffanMc
+         5ffnHgMDh9qhioxMgfNPk6DoN/dh+NUVO63t6bebjMnoHedkT9Cd2akBVU1Wu0kI3ghX
+         wdQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701276136; x=1701880936;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N5kT24XoL9AcqmNQ3sMUkwK1uUxYMSl+VGTViMsnVOU=;
-        b=FuiY10wMfiZl29tseLBvMcuDaC61JC4R9xIFImx7VUjGFUi6S1elKihnWLVq+Lqp/e
-         BNchzmI0MzuNS5KxjVsztePSoPT9TyJM+Q6BLCiyVA1pY/uaytgWMeYT4FZ8mHMlUMAe
-         kgdYLqlkGpsFd3a6jZJzODaqVe8GrI0av1O8Ptp/jELVdVBdv0fbmzFVg1A38X3Hntgj
-         wOGBF1Apt3GfPdOzp8rVgJUht4HdTw2Hdf5piO2uwXIux+KoIM3rIxNQXqzIGABolbpo
-         RpgX0O3ij3bYiG8RLog1N45YOOioqxqu1zxh86LKwASQUbXBlfwRSJRB2q14VkBvrOqX
-         1eLw==
-X-Gm-Message-State: AOJu0YzZx43TkshHTfahEN8JbeMO6CIDJraSAIQBU0DSpXy+C24fuiO1
-	NzPlUQfjP+CAk0TdgrvC1Tk4JDPMQ+3ASCSKObA=
-X-Google-Smtp-Source: AGHT+IFiBrxfEJDXSB4leLTaPctaykM6TLdA8N7tYcpl+NToxTP/8Jpu+FHPe5hshOn7lWovTKg2Dk3f42bagZoWw1g=
-X-Received: by 2002:a4a:eb86:0:b0:58d:5302:5b18 with SMTP id
- d6-20020a4aeb86000000b0058d53025b18mr14706916ooj.1.1701276135794; Wed, 29 Nov
- 2023 08:42:15 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701276835; x=1701881635;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KzCsfdBE7WkJbZOrYaWER7MpwPAWaQ/409ygwrMaF7U=;
+        b=tTPfXenPhBTcUWcfGaBIKxB5juswPKAhHRgNfRLyUi+8fjs2IsvrEY1p+6/P7CiGVc
+         0Y3UnXWNiCktbs1HWLoDYXOAYNBHGm8oBX7Yg/zUgXq1Ii+r9uFEj3Hg6M7AykpEoG8H
+         f1os+4ZnUxgFBiTboa5Yvltu2iRfHKGQkob6ioHwA2oYxMu8ye2B1ob6uBMH0uMPc22a
+         3nQRZ5P67LzG6Fu7cFNp6KZMT4srM1A0Ey1YFP9vrNPKERsBARzqlpaqne+ZJDtl5ee/
+         FdgqJ9TPtGwmXXYtexYIC2eEU4PBpzpX75/APo9kK/ir0sZvfyZnpbX2bWc1IJetFecP
+         gv9w==
+X-Gm-Message-State: AOJu0Ywp/euImEfiNoMuicgvIlLCgKemjx89EAl3NgvZE0E4KJumoL3u
+	BzC5UI7ZTMo5lcgxHvr5465lqQ==
+X-Google-Smtp-Source: AGHT+IEPWyjXiaZUzZ1MrsR0HEwWzcJjiTw6tWwlLLD/S1yLhTsREN8om50ndJRKuEVRPHad5oCR8w==
+X-Received: by 2002:a05:6000:c12:b0:332:ffcc:861b with SMTP id dn18-20020a0560000c1200b00332ffcc861bmr8104628wrb.1.1701276835407;
+        Wed, 29 Nov 2023 08:53:55 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:38f1:13b7:9b7a:2d6b? ([2a05:6e02:1041:c10:38f1:13b7:9b7a:2d6b])
+        by smtp.googlemail.com with ESMTPSA id x1-20020adfec01000000b003313e4dddecsm18374499wrn.108.2023.11.29.08.53.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 29 Nov 2023 08:53:55 -0800 (PST)
+Message-ID: <ce9297d4-db9f-44c7-a590-2b9d4600be42@linaro.org>
+Date: Wed, 29 Nov 2023 17:53:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231117063839.17465-1-wyes.karny@amd.com>
-In-Reply-To: <20231117063839.17465-1-wyes.karny@amd.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 29 Nov 2023 17:42:04 +0100
-Message-ID: <CAJZ5v0jNSoL0ke1eT9PDQKqJ0qkVNsowaU5mrgGj2seSL654aA@mail.gmail.com>
-Subject: Re: [PATCH v2] cpufreq/amd-pstate: Fix scaling_min_freq and
- scaling_max_freq update
-To: Wyes Karny <wyes.karny@amd.com>
-Cc: rafael@kernel.org, ray.huang@amd.com, viresh.kumar@linaro.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, perry.yuan@amd.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/2] thermal: trip: Rework thermal_zone_set_trip() and
+ its callers
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>
+References: <12350772.O9o76ZdvQC@kreacher> <4869676.GXAFRqVoOG@kreacher>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <4869676.GXAFRqVoOG@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Nov 17, 2023 at 7:39=E2=80=AFAM Wyes Karny <wyes.karny@amd.com> wro=
-te:
->
-> When amd_pstate is running, writing to scaling_min_freq and
-> scaling_max_freq has no effect. These values are only passed to the
-> policy level, but not to the platform level. This means that the
-> platform does not know about the frequency limits set by the user. To
-> fix this, update the min_perf and max_perf values at the platform level
-> whenever the user changes the scaling_min_freq and scaling_max_freq
-> values.
->
-> Fixes: ffa5096a7c33 ("cpufreq: amd-pstate: implement Pstate EPP support f=
-or the AMD processors")
-> Acked-by: Huang Rui <ray.huang@amd.com>
-> Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+
+Hi Rafael,
+
+On 29/11/2023 14:38, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Both trip_point_temp_store() and trip_point_hyst_store() use
+> thermal_zone_set_trip() to update a given trip point, but none of them
+> actually needs to change more than one field in struct thermal_trip
+> representing it.  However, each of them effectively calls
+> __thermal_zone_get_trip() twice in a row for the same trip index value,
+> once directly and once via thermal_zone_set_trip(), which is not
+> particularly efficient, and the way in which thermal_zone_set_trip()
+> carries out the update is not particularly straightforward.
+> 
+> Moreover, some checks done by them both need not go under the thermal
+> zone lock and code duplication between them can be reduced quite a bit
+> by moving the majority of logic into thermal_zone_set_trip().
+> 
+> Rework all of the above functions to address the above.
+
+Please hold on before merging this change. I've some comment about it 
+but I have to double check a couple of things before
+
+
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
-> Changelog:
+> 
+> v2 -> v3: Fix missing return statement in thermal_zone_set_trip() (Lukasz).
+> 
 > v1 -> v2:
-> - Rebase
-> - Pick up ack from Ray
-> - Add fixes tag
->
->  drivers/cpufreq/amd-pstate.c | 60 ++++++++++++++++++++++++++++--------
->  include/linux/amd-pstate.h   |  4 +++
->  2 files changed, 51 insertions(+), 13 deletions(-)
->
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 9a1e194d5cf8..4839cdd2715e 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -307,11 +307,11 @@ static int pstate_init_perf(struct amd_cpudata *cpu=
-data)
->                 highest_perf =3D AMD_CPPC_HIGHEST_PERF(cap1);
->
->         WRITE_ONCE(cpudata->highest_perf, highest_perf);
+>     * Fix 2 typos in the changelog (Lukasz).
+>     * Split one change into the [1/2].
+> 
+> ---
+>   drivers/thermal/thermal_core.h  |    9 ++++++
+>   drivers/thermal/thermal_sysfs.c |   52 ++++++++--------------------------
+>   drivers/thermal/thermal_trip.c  |   60 +++++++++++++++++++++++++++-------------
+>   include/linux/thermal.h         |    3 --
+>   4 files changed, 62 insertions(+), 62 deletions(-)
+> 
+> Index: linux-pm/drivers/thermal/thermal_core.h
+> ===================================================================
+> --- linux-pm.orig/drivers/thermal/thermal_core.h
+> +++ linux-pm/drivers/thermal/thermal_core.h
+> @@ -122,6 +122,15 @@ void __thermal_zone_device_update(struct
+>   void __thermal_zone_set_trips(struct thermal_zone_device *tz);
+>   int __thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
+>   			    struct thermal_trip *trip);
+> +
+> +enum thermal_set_trip_target {
+> +	THERMAL_TRIP_SET_TEMP,
+> +	THERMAL_TRIP_SET_HYST,
+> +};
+> +
+> +int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
+> +			  enum thermal_set_trip_target what, const char *buf);
+> +
+>   int thermal_zone_trip_id(struct thermal_zone_device *tz,
+>   			 const struct thermal_trip *trip);
+>   int __thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp);
+> Index: linux-pm/drivers/thermal/thermal_sysfs.c
+> ===================================================================
+> --- linux-pm.orig/drivers/thermal/thermal_sysfs.c
+> +++ linux-pm/drivers/thermal/thermal_sysfs.c
+> @@ -120,31 +120,17 @@ trip_point_temp_store(struct device *dev
+>   		      const char *buf, size_t count)
+>   {
+>   	struct thermal_zone_device *tz = to_thermal_zone(dev);
+> -	struct thermal_trip trip;
+> -	int trip_id, ret;
+> +	int trip_id;
+> +	int ret;
+> +
+> +	if (!device_is_registered(dev))
+> +		return -ENODEV;
+>   
+>   	if (sscanf(attr->attr.name, "trip_point_%d_temp", &trip_id) != 1)
+>   		return -EINVAL;
+>   
+> -	mutex_lock(&tz->lock);
 > -
-> +       WRITE_ONCE(cpudata->max_limit_perf, highest_perf);
->         WRITE_ONCE(cpudata->nominal_perf, AMD_CPPC_NOMINAL_PERF(cap1));
->         WRITE_ONCE(cpudata->lowest_nonlinear_perf, AMD_CPPC_LOWNONLIN_PER=
-F(cap1));
->         WRITE_ONCE(cpudata->lowest_perf, AMD_CPPC_LOWEST_PERF(cap1));
+> -	if (!device_is_registered(dev)) {
+> -		ret = -ENODEV;
+> -		goto unlock;
+> -	}
 > -
-> +       WRITE_ONCE(cpudata->min_limit_perf, AMD_CPPC_LOWEST_PERF(cap1));
->         return 0;
->  }
->
-> @@ -329,11 +329,12 @@ static int cppc_init_perf(struct amd_cpudata *cpuda=
-ta)
->                 highest_perf =3D cppc_perf.highest_perf;
->
->         WRITE_ONCE(cpudata->highest_perf, highest_perf);
+> -	ret = __thermal_zone_get_trip(tz, trip_id, &trip);
+> -	if (ret)
+> -		goto unlock;
 > -
-> +       WRITE_ONCE(cpudata->max_limit_perf, highest_perf);
->         WRITE_ONCE(cpudata->nominal_perf, cppc_perf.nominal_perf);
->         WRITE_ONCE(cpudata->lowest_nonlinear_perf,
->                    cppc_perf.lowest_nonlinear_perf);
->         WRITE_ONCE(cpudata->lowest_perf, cppc_perf.lowest_perf);
-> +       WRITE_ONCE(cpudata->min_limit_perf, cppc_perf.lowest_perf);
->
->         if (cppc_state =3D=3D AMD_PSTATE_ACTIVE)
->                 return 0;
-> @@ -432,6 +433,10 @@ static void amd_pstate_update(struct amd_cpudata *cp=
-udata, u32 min_perf,
->         u64 prev =3D READ_ONCE(cpudata->cppc_req_cached);
->         u64 value =3D prev;
->
-> +       min_perf =3D clamp_t(unsigned long, min_perf, cpudata->min_limit_=
-perf,
-> +                       cpudata->max_limit_perf);
-> +       max_perf =3D clamp_t(unsigned long, max_perf, cpudata->min_limit_=
-perf,
-> +                       cpudata->max_limit_perf);
->         des_perf =3D clamp_t(unsigned long, des_perf, min_perf, max_perf)=
-;
->
->         if ((cppc_state =3D=3D AMD_PSTATE_GUIDED) && (gov_flags & CPUFREQ=
-_GOV_DYNAMIC_SWITCHING)) {
-> @@ -470,6 +475,22 @@ static int amd_pstate_verify(struct cpufreq_policy_d=
-ata *policy)
->         return 0;
->  }
->
-> +static int amd_pstate_update_min_max_limit(struct cpufreq_policy *policy=
-)
-> +{
-> +       u32 max_limit_perf, min_limit_perf;
-> +       struct amd_cpudata *cpudata =3D policy->driver_data;
+> -	ret = kstrtoint(buf, 10, &trip.temperature);
+> -	if (ret)
+> -		goto unlock;
+> +	ret = thermal_zone_set_trip(tz, trip_id, THERMAL_TRIP_SET_TEMP, buf);
+>   
+> -	ret = thermal_zone_set_trip(tz, trip_id, &trip);
+> -unlock:
+> -	mutex_unlock(&tz->lock);
+> -	
+>   	return ret ? ret : count;
+>   }
+>   
+> @@ -179,30 +165,16 @@ trip_point_hyst_store(struct device *dev
+>   		      const char *buf, size_t count)
+>   {
+>   	struct thermal_zone_device *tz = to_thermal_zone(dev);
+> -	struct thermal_trip trip;
+> -	int trip_id, ret;
+> +	int trip_id;
+> +	int ret;
 > +
-> +       max_limit_perf =3D div_u64(policy->max * cpudata->highest_perf, c=
-pudata->max_freq);
-> +       min_limit_perf =3D div_u64(policy->min * cpudata->highest_perf, c=
-pudata->max_freq);
-> +
-> +       WRITE_ONCE(cpudata->max_limit_perf, max_limit_perf);
-> +       WRITE_ONCE(cpudata->min_limit_perf, min_limit_perf);
-> +       WRITE_ONCE(cpudata->max_limit_freq, policy->max);
-> +       WRITE_ONCE(cpudata->min_limit_freq, policy->min);
-> +
-> +       return 0;
-> +}
-> +
->  static int amd_pstate_update_freq(struct cpufreq_policy *policy,
->                                   unsigned int target_freq, bool fast_swi=
-tch)
->  {
-> @@ -480,6 +501,9 @@ static int amd_pstate_update_freq(struct cpufreq_poli=
-cy *policy,
->         if (!cpudata->max_freq)
->                 return -ENODEV;
->
-> +       if (policy->min !=3D cpudata->min_limit_freq || policy->max !=3D =
-cpudata->max_limit_freq)
-> +               amd_pstate_update_min_max_limit(policy);
-> +
->         cap_perf =3D READ_ONCE(cpudata->highest_perf);
->         min_perf =3D READ_ONCE(cpudata->lowest_perf);
->         max_perf =3D cap_perf;
-> @@ -532,6 +556,10 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
->         struct amd_cpudata *cpudata =3D policy->driver_data;
->         unsigned int target_freq;
->
-> +       if (policy->min !=3D cpudata->min_limit_freq || policy->max !=3D =
-cpudata->max_limit_freq)
-> +               amd_pstate_update_min_max_limit(policy);
-> +
-> +
->         cap_perf =3D READ_ONCE(cpudata->highest_perf);
->         lowest_nonlinear_perf =3D READ_ONCE(cpudata->lowest_nonlinear_per=
-f);
->         max_freq =3D READ_ONCE(cpudata->max_freq);
-> @@ -745,6 +773,8 @@ static int amd_pstate_cpu_init(struct cpufreq_policy =
-*policy)
->         /* Initial processor data capability frequencies */
->         cpudata->max_freq =3D max_freq;
->         cpudata->min_freq =3D min_freq;
-> +       cpudata->max_limit_freq =3D max_freq;
-> +       cpudata->min_limit_freq =3D min_freq;
->         cpudata->nominal_freq =3D nominal_freq;
->         cpudata->lowest_nonlinear_freq =3D lowest_nonlinear_freq;
->
-> @@ -1183,16 +1213,25 @@ static int amd_pstate_epp_cpu_exit(struct cpufreq=
-_policy *policy)
->         return 0;
->  }
->
-> -static void amd_pstate_epp_init(unsigned int cpu)
-> +static void amd_pstate_epp_update_limit(struct cpufreq_policy *policy)
->  {
-> -       struct cpufreq_policy *policy =3D cpufreq_cpu_get(cpu);
->         struct amd_cpudata *cpudata =3D policy->driver_data;
-> -       u32 max_perf, min_perf;
-> +       u32 max_perf, min_perf, min_limit_perf, max_limit_perf;
->         u64 value;
->         s16 epp;
->
->         max_perf =3D READ_ONCE(cpudata->highest_perf);
->         min_perf =3D READ_ONCE(cpudata->lowest_perf);
-> +       max_limit_perf =3D div_u64(policy->max * cpudata->highest_perf, c=
-pudata->max_freq);
-> +       min_limit_perf =3D div_u64(policy->min * cpudata->highest_perf, c=
-pudata->max_freq);
-> +
-> +       max_perf =3D clamp_t(unsigned long, max_perf, cpudata->min_limit_=
-perf,
-> +                       cpudata->max_limit_perf);
-> +       min_perf =3D clamp_t(unsigned long, min_perf, cpudata->min_limit_=
-perf,
-> +                       cpudata->max_limit_perf);
-> +
-> +       WRITE_ONCE(cpudata->max_limit_perf, max_limit_perf);
-> +       WRITE_ONCE(cpudata->min_limit_perf, min_limit_perf);
->
->         value =3D READ_ONCE(cpudata->cppc_req_cached);
->
-> @@ -1210,9 +1249,6 @@ static void amd_pstate_epp_init(unsigned int cpu)
->         value &=3D ~AMD_CPPC_DES_PERF(~0L);
->         value |=3D AMD_CPPC_DES_PERF(0);
->
-> -       if (cpudata->epp_policy =3D=3D cpudata->policy)
-> -               goto skip_epp;
+> +	if (!device_is_registered(dev))
+> +		return -ENODEV;
+>   
+>   	if (sscanf(attr->attr.name, "trip_point_%d_hyst", &trip_id) != 1)
+>   		return -EINVAL;
+>   
+> -	mutex_lock(&tz->lock);
 > -
->         cpudata->epp_policy =3D cpudata->policy;
->
->         /* Get BIOS pre-defined epp value */
-> @@ -1222,7 +1258,7 @@ static void amd_pstate_epp_init(unsigned int cpu)
->                  * This return value can only be negative for shared_memo=
-ry
->                  * systems where EPP register read/write not supported.
->                  */
-> -               goto skip_epp;
-> +               return;
->         }
->
->         if (cpudata->policy =3D=3D CPUFREQ_POLICY_PERFORMANCE)
-> @@ -1236,8 +1272,6 @@ static void amd_pstate_epp_init(unsigned int cpu)
->
->         WRITE_ONCE(cpudata->cppc_req_cached, value);
->         amd_pstate_set_epp(cpudata, epp);
-> -skip_epp:
-> -       cpufreq_cpu_put(policy);
->  }
->
->  static int amd_pstate_epp_set_policy(struct cpufreq_policy *policy)
-> @@ -1252,7 +1286,7 @@ static int amd_pstate_epp_set_policy(struct cpufreq=
-_policy *policy)
->
->         cpudata->policy =3D policy->policy;
->
-> -       amd_pstate_epp_init(policy->cpu);
-> +       amd_pstate_epp_update_limit(policy);
->
->         return 0;
->  }
-> diff --git a/include/linux/amd-pstate.h b/include/linux/amd-pstate.h
-> index 446394f84606..6ad02ad9c7b4 100644
-> --- a/include/linux/amd-pstate.h
-> +++ b/include/linux/amd-pstate.h
-> @@ -70,6 +70,10 @@ struct amd_cpudata {
->         u32     nominal_perf;
->         u32     lowest_nonlinear_perf;
->         u32     lowest_perf;
-> +       u32     min_limit_perf;
-> +       u32     max_limit_perf;
-> +       u32     min_limit_freq;
-> +       u32     max_limit_freq;
->
->         u32     max_freq;
->         u32     min_freq;
-> --
+> -	if (!device_is_registered(dev)) {
+> -		ret = -ENODEV;
+> -		goto unlock;
+> -	}
+> -
+> -	ret = __thermal_zone_get_trip(tz, trip_id, &trip);
+> -	if (ret)
+> -		goto unlock;
+> -
+> -	ret = kstrtoint(buf, 10, &trip.hysteresis);
+> -	if (ret)
+> -		goto unlock;
+> -
+> -	ret = thermal_zone_set_trip(tz, trip_id, &trip);
+> -unlock:
+> -	mutex_unlock(&tz->lock);
+> +	ret = thermal_zone_set_trip(tz, trip_id, THERMAL_TRIP_SET_HYST, buf);
+>   
+>   	return ret ? ret : count;
+>   }
+> Index: linux-pm/drivers/thermal/thermal_trip.c
+> ===================================================================
+> --- linux-pm.orig/drivers/thermal/thermal_trip.c
+> +++ linux-pm/drivers/thermal/thermal_trip.c
+> @@ -148,39 +148,61 @@ int thermal_zone_get_trip(struct thermal
+>   EXPORT_SYMBOL_GPL(thermal_zone_get_trip);
+>   
+>   int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
+> -			  const struct thermal_trip *trip)
+> +			  enum thermal_set_trip_target what, const char *buf)
+>   {
+> -	struct thermal_trip t;
+> -	int ret;
+> +	struct thermal_trip *trip;
+> +	int val, ret = 0;
+>   
+> -	ret = __thermal_zone_get_trip(tz, trip_id, &t);
+> +	if (trip_id < 0 || trip_id >= tz->num_trips)
+> +		return -EINVAL;
+> +
+> +	ret = kstrtoint(buf, 10, &val);
+>   	if (ret)
+>   		return ret;
+>   
+> -	if (t.type != trip->type)
+> -		return -EINVAL;
+> +	mutex_lock(&tz->lock);
+>   
+> -	if (t.temperature != trip->temperature && tz->ops->set_trip_temp) {
+> -		ret = tz->ops->set_trip_temp(tz, trip_id, trip->temperature);
+> -		if (ret)
+> -			return ret;
+> -	}
+> +	trip = &tz->trips[trip_id];
+>   
+> -	if (t.hysteresis != trip->hysteresis && tz->ops->set_trip_hyst) {
+> -		ret = tz->ops->set_trip_hyst(tz, trip_id, trip->hysteresis);
+> -		if (ret)
+> -			return ret;
+> +	switch (what) {
+> +	case THERMAL_TRIP_SET_TEMP:
+> +		if (val == trip->temperature)
+> +			goto unlock;
+> +
+> +		if (tz->ops->set_trip_temp) {
+> +			ret = tz->ops->set_trip_temp(tz, trip_id, val);
+> +			if (ret)
+> +				goto unlock;
+> +		}
+> +		trip->temperature = val;
+> +		break;
+> +
+> +	case THERMAL_TRIP_SET_HYST:
+> +		if (val == trip->hysteresis)
+> +			goto unlock;
+> +
+> +		if (tz->ops->set_trip_hyst) {
+> +			ret = tz->ops->set_trip_hyst(tz, trip_id, val);
+> +			if (ret)
+> +				goto unlock;
+> +		}
+> +		trip->hysteresis = val;
+> +		break;
+> +
+> +	default:
+> +		ret = -EINVAL;
+> +		goto unlock;
+>   	}
+>   
+> -	if (tz->trips && (t.temperature != trip->temperature || t.hysteresis != trip->hysteresis))
+> -		tz->trips[trip_id] = *trip;
+> -
+>   	thermal_notify_tz_trip_change(tz->id, trip_id, trip->type,
+>   				      trip->temperature, trip->hysteresis);
+>   
+>   	__thermal_zone_device_update(tz, THERMAL_TRIP_CHANGED);
+>   
+> -	return 0;
+> +unlock:
+> +	mutex_unlock(&tz->lock);
+> +
+> +	return ret;
+>   }
+>   
+>   int thermal_zone_trip_id(struct thermal_zone_device *tz,
+> Index: linux-pm/include/linux/thermal.h
+> ===================================================================
+> --- linux-pm.orig/include/linux/thermal.h
+> +++ linux-pm/include/linux/thermal.h
+> @@ -283,9 +283,6 @@ int __thermal_zone_get_trip(struct therm
+>   int thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
+>   			  struct thermal_trip *trip);
+>   
+> -int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
+> -			  const struct thermal_trip *trip);
+> -
+>   int for_each_thermal_trip(struct thermal_zone_device *tz,
+>   			  int (*cb)(struct thermal_trip *, void *),
+>   			  void *data);
+> 
+> 
+> 
 
-Applied as 6.7-rc material, thanks!
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
 
