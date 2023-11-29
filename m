@@ -1,143 +1,236 @@
-Return-Path: <linux-pm+bounces-437-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-438-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADD697FD39D
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 11:10:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69BCE7FD3F9
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 11:20:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 19E01B213F1
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 10:10:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C84E3B20A95
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 10:20:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 302AC18E20;
-	Wed, 29 Nov 2023 10:10:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFED31A5BC;
+	Wed, 29 Nov 2023 10:20:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gD9xgGfa"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="J8KfmemK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676B6E1;
-	Wed, 29 Nov 2023 02:10:00 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-da37522a363so6117726276.0;
-        Wed, 29 Nov 2023 02:10:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701252599; x=1701857399; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=11gO8SgbQj4fdCNrsT7TiPo7u2IjmF6eevG42IvsRSM=;
-        b=gD9xgGfa1nhSE1fTGyYS+2Ke3MudRLuWlgMtZUUvUXahd8Ohaf2CoIa4A5GN4exgAH
-         LN76bOLS0zLP1bU05SmQ3VsIvCuAzSqcbBcaG5qMEqZXjUCLfTP2ZOiggSXTRp33LtUD
-         4xMGnpcy71d5GB9cT6/vT6388iYh1TQZ1TIp1TPLVqCpsrJ0mGd7KV07LPcNmuq1XIhY
-         SjhXIunwyfbIbFFCuEKTM1gdSZsIhzd3QKDPTwrpx2nN0AvwscfCgCS9JpVNHf47JXKP
-         eKc5bOUKaYlOaUqWmhPXjXGbMlOdcivh54GqrR7qWc8z+XOGnkqjONhzxY2atIAvWvQ0
-         AvWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701252599; x=1701857399;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=11gO8SgbQj4fdCNrsT7TiPo7u2IjmF6eevG42IvsRSM=;
-        b=Aio4I9BqkmLipIdINaGCE3iZHVgMmo+ql5qiwlMvxB+NxhGCk0nn1Yt1LDVcgc29ol
-         5zj0Xt6s+QWUUDrB1EAOC/bAtaEcELVkXj/kotG2DJJCtFAt1gPwdN42abWvfXa4r8nA
-         l8826Vf4z3ioyb7sWZQ0PgKUzB/eyO9r5HYo03ZMKO/PKbnK1WTxcXMXaOb9dPFcon8I
-         /D5hC9mIEAVKSWaqemnrWYQLMIBNnNDyDI16pmLY5PaStoP4bWq/dzZF3RdOdDCt5oYt
-         XyLQurXbeMnI6jDrfBufuGFpgwIgrhU+2WB1IUx1z2AY8XG0EfsHpWeWf+54p6ZI2ZFQ
-         Fm2g==
-X-Gm-Message-State: AOJu0Yy8YE9G3qj1jCnfp9NG5W54M5vzY0ehQMH++vOpz0toR1QaVBDD
-	EAW3j/XioxdafBi2mNlNkec=
-X-Google-Smtp-Source: AGHT+IHcuevKlD173p6VD/EwXmSKKTLMuUCitNteEbY7uJePXtNhhdHSs2NQVaKH3lVhmxpJmK8Udg==
-X-Received: by 2002:a05:6902:3cd:b0:dae:e8f2:b7dd with SMTP id g13-20020a05690203cd00b00daee8f2b7ddmr19125498ybs.13.1701252599530;
-        Wed, 29 Nov 2023 02:09:59 -0800 (PST)
-Received: from errol.ini.cmu.edu ([72.95.245.133])
-        by smtp.gmail.com with ESMTPSA id ec12-20020ad44e6c000000b0067a2b09278esm4110035qvb.7.2023.11.29.02.09.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Nov 2023 02:09:59 -0800 (PST)
-Date: Wed, 29 Nov 2023 05:09:57 -0500
-From: "Gabriel L. Somlo" <gsomlo@gmail.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Karol Gugala <kgugala@antmicro.com>,
-	Mateusz Holenko <mholenko@antmicro.com>,
-	Joel Stanley <joel@jms.id.au>, Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>, Lee Jones <lee@kernel.org>,
-	Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-	Andrew Davis <afd@ti.com>, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-spi@vger.kernel.org
-Subject: Re: (subset) [PATCH RFC 0/5] Deprecate register_restart_handler()
-Message-ID: <ZWcN9RNlk4+SB7CO@errol.ini.cmu.edu>
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ACCED6C;
+	Wed, 29 Nov 2023 02:20:07 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3AT4pp4H024125;
+	Wed, 29 Nov 2023 10:19:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=ofNrLaFHuTHD21qgrZ0jFGb9u6mJ9w59ETMZ/XgMEeQ=;
+ b=J8KfmemKXBfJxdBtQ67t+ToRjfYg/+/5qR+rbi/2uGMoE40sei1OoXA0BmfQAwTOs39X
+ B/c5dCYyiDxd58gU7Q8G8ctElmJnkrDf2c6nMt3hMB6XSSD9BzYKjqDqV/vknEe4JdAz
+ JJXQqsKPTsFslQpt7NwvHtYBx4Yh4o8ygMGV3R1LiqCeRrEohdQILualLehqVHrsn/xR
+ juzh4wLv1lA2t19mt70wxgiFpmWiyol3t8T3uETzi8gQBRaOl/+1yRT09afBYWbfIp+m
+ uWjq1GmpJUZZAoVO10rVThqruwKkHeagCEeWQvS8E3pqWcFRLVPbX0Xy6Nfs0DxmDbiG Og== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ungruay6f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 29 Nov 2023 10:19:47 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3ATAJkBV008994
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 29 Nov 2023 10:19:46 GMT
+Received: from [10.216.19.148] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 29 Nov
+ 2023 02:19:39 -0800
+Message-ID: <2153c549-2a45-3d1d-a407-e175a34b77bf@quicinc.com>
+Date: Wed, 29 Nov 2023 15:49:34 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <170110370952.2695179.559211126183016709.b4-ty@kernel.org>
-X-Clacks-Overhead: GNU Terry Pratchett
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Subject: Re: [PATCH RESEND v2 0/4] PM: hibernate: LZ4 compression support
+To: Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        "Rafael J.
+ Wysocki" <rafael@kernel.org>
+CC: Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Steven Rostedt (Google)"
+	<rostedt@goodmis.org>,
+        Tejun Heo <tj@kernel.org>, "Paul E. McKenney"
+	<paulmck@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>, <linux-pm@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_pkondeti@quicinc.com>, <quic_kprasan@quicinc.com>,
+        <quic_mpilaniy@quicinc.com>, <quic_shrekk@quicinc.com>,
+        <mpleshivenkov@google.com>, <ericyin@google.com>
+References: <cover.1700048610.git.quic_nprakash@quicinc.com>
+Content-Language: en-US
+From: Nikhil V <quic_nprakash@quicinc.com>
+In-Reply-To: <cover.1700048610.git.quic_nprakash@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: D2UV9IUTVY72oSXmHAhNleX6Qw4PO4VD
+X-Proofpoint-ORIG-GUID: D2UV9IUTVY72oSXmHAhNleX6Qw4PO4VD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-29_07,2023-11-29_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
+ malwarescore=0 bulkscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501
+ lowpriorityscore=0 clxscore=1015 adultscore=0 impostorscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311060000 definitions=main-2311290077
 
-Hi Mark,
 
-On Mon, Nov 27, 2023 at 04:48:29PM +0000, Mark Brown wrote:
-> On Fri, 17 Nov 2023 10:10:01 -0600, Andrew Davis wrote:
-> > Explanation is in patch #1.
-> > 
-> > The rest of this series is a set of representative examples of converting
-> > away from the old API. They should be valid and can be taken by their
-> > respective maintainers even if patch #1 doesn't find acceptance.
-> > 
-> > Thanks,
-> > Andrew
-> > 
-> > [...]
-> 
-> Applied to
-> 
->    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-> 
-> Thanks!
-> 
-> [4/5] spi: sprd: adi: Use devm_register_restart_handler()
->       commit: 8e6a43961f24cf841d3c0d199521d0b284d948b9
 
-Any chance you can also pick up
-
-[2/5] drivers/soc/litex: Use devm_register_restart_handler()
-
-from this series?
-
-I'm maintaining the LiteX (FPGA SoC) related drivers, but we don't as of
-yet have a dedicated "path to upstream" of our own -- we've been mostly
-going through specific subsystem trees (e.g. mmc, block, networking, etc.),
-for mostly device drivers, up until now...
-
-If not, no worries, I need to dedicate some time to figuring this out
-eventually anyway :)
-
-Thanks much,
---Gabriel
-
-> All being well this means that it will be integrated into the linux-next
-> tree (usually sometime in the next 24 hours) and sent to Linus during
-> the next merge window (or sooner if it is a bug fix), however if
-> problems are discovered then the patch may be dropped or reverted.
+On 11/15/2023 5:52 PM, Nikhil V wrote:
+> This patch series covers the following:
+> 1. Renaming lzo* to generic names, except for lzo_xxx() APIs. This is
+> used in the next patch where we move to crypto based APIs for
+> compression. There are no functional changes introduced by this
+> approach.
 > 
-> You may get further e-mails resulting from automated or manual testing
-> and review of the tree, please engage with people reporting problems and
-> send followup patches addressing any issues that are reported if needed.
 > 
-> If any updates are required or you are submitting further changes they
-> should be sent as incremental updates against current git, existing
-> patches will not be replaced.
+> 2. Replace LZO library calls with crypto generic APIs
 > 
-> Please add any relevant lists and maintainers to the CCs when replying
-> to this mail.
+> Currently for hibernation, LZO is the only compression algorithm
+> available and uses the existing LZO library calls. However, there
+> is no flexibility to switch to other algorithms which provides better
+> results. The main idea is that different compression algorithms have
+> different characteristics and hibernation may benefit when it uses
+> alternate algorithms.
 > 
-> Thanks,
-> Mark
+> By moving to crypto based APIs, it lays a foundation to use other
+> compression algorithms for hibernation.
 > 
+> 
+> 3. LZ4 compression
+> 
+> Extend the support for LZ4 compression to be used with hibernation.
+> The main idea is that different compression algorithms have different
+> characteristics and hibernation may benefit when it uses any of these
+> algorithms: a default algorithm, having higher compression rate but is
+> slower(compression/decompression) and a secondary algorithm, that is
+> faster(compression/decompression) but has lower compression rate.
+> 
+> LZ4 algorithm has better decompression speeds over LZO. This reduces
+> the hibernation image restore time.
+> As per test results:
+>                                      LZO             LZ4
+> Size before Compression(bytes)   682696704       682393600
+> Size after Compression(bytes)    146502402       155993547
+> Decompression Rate               335.02 MB/s     501.05 MB/s
+> Restore time                       4.4s             3.8s
+> 
+> LZO is the default compression algorithm used for hibernation. Enable
+> CONFIG_HIBERNATION_DEF_COMP_LZ4 to set the default compressor as LZ4.
+> 
+> Compression Benchmarks: https://github.com/lz4/lz4
+> 
+> 
+> 4. Support to select compression algorithm
+> 
+> Currently the default compression algorithm is selected based on
+> Kconfig. Introduce a kernel command line parameter "hib_compression" to
+> override this behaviour.
+> 
+> Users can set "hib_compression" command line parameter to specify
+> the algorithm.
+> Usage:
+>      LZO: hib_compression=lzo
+>      LZ4: hib_compression=lz4
+> LZO is the default compression algorithm used with hibernation.
+> 
+> 
+> Changes in v2:
+>   - Fixed build issues reported by kernel test robot for ARCH=sh, [1].
+> [1] https://lore.kernel.org/oe-kbuild-all/202310171226.pLUPeuC7-lkp@intel.com/
+> 
+> Nikhil V (4):
+>    PM: hibernate: Rename lzo* to make it generic
+>    PM: hibernate: Move to crypto APIs for LZO compression
+>    PM: hibernate: Add support for LZ4 compression for hibernation
+>    PM: hibernate: Support to select compression algorithm
+> 
+>   .../admin-guide/kernel-parameters.txt         |   6 +
+>   kernel/power/Kconfig                          |  26 ++-
+>   kernel/power/hibernate.c                      |  85 +++++++-
+>   kernel/power/power.h                          |  19 ++
+>   kernel/power/swap.c                           | 189 +++++++++++-------
+>   5 files changed, 251 insertions(+), 74 deletions(-)
+> 
+> 
+> base-commit: b85ea95d086471afb4ad062012a4d73cd328fa86
+
+Hi @Rafael/@Pavel/@Len,
+
+Could you please let me know if you have any concerns on this approach?
+
+FYI: We have tested this on QEMU and its working fine.
+
+Logs(suspend):
+[   75.242227] PM: Using 3 thread(s) for lz4 compression
+[   75.243043] PM: Compressing and saving image data (17495 pages)...
+[   75.243917] PM: Image saving progress:   0%
+[   75.261727] PM: Image saving progress:  10%
+[   75.277968] PM: Image saving progress:  20%
+[   75.290927] PM: Image saving progress:  30%
+[   75.305186] PM: Image saving progress:  40%
+[   75.318252] PM: Image saving progress:  50%
+[   75.330310] PM: Image saving progress:  60%
+[   75.345906] PM: Image saving progress:  70%
+[   75.359054] PM: Image saving progress:  80%
+[   75.372176] PM: Image saving progress:  90%
+[   75.388411] PM: Image saving progress: 100%
+[   75.389775] PM: Image saving done
+[   75.390397] PM: hibernation: Wrote 69980 kbytes in 0.14 seconds 
+(499.85 MB/s)
+[   75.391591] PM: Image size after compression: 28242 kbytes
+[   75.393089] PM: S|
+[   75.399784] sd 0:0:0:0: [sda] Synchronizing SCSI cache
+[   75.439170] sd 0:0:0:0: [sda] Stopping disk
+[   75.501461] ACPI: PM: Preparing to enter system sleep state S5
+[   75.502766] reboot: Power down
+
+
+
+Logs(resume):
+[    1.063248] PM: hibernation: resume from hibernation
+[    1.072868] Freezing user space processes
+[    1.073707] Freezing user space processes completed (elapsed 0.000 
+seconds)
+[    1.075192] OOM killer disabled.
+[    1.075837] Freezing remaining freezable tasks
+[    1.078010] Freezing remaining freezable tasks completed (elapsed 
+0.001 seconds)
+[    1.087489] PM: Using 3 thread(s) for lz4 decompression
+[    1.088570] PM: Loading and decompressing image data (17495 pages)...
+[    1.125549] PM: Image loading progress:   0%
+[    1.190380] PM: Image loading progress:  10%
+[    1.204963] PM: Image loading progress:  20%
+[    1.218988] PM: Image loading progress:  30%
+[    1.233697] PM: Image loading progress:  40%
+[    1.248658] PM: Image loading progress:  50%
+[    1.262910] PM: Image loading progress:  60%
+[    1.276966] PM: Image loading progress:  70%
+[    1.290517] PM: Image loading progress:  80%
+[    1.305427] PM: Image loading progress:  90%
+[    1.320666] PM: Image loading progress: 100%
+[    1.321866] PM: Image loading done
+[    1.322599] PM: hibernation: Read 69980 kbytes in 0.23 seconds 
+(304.26 MB/s)
+[    1.324795] printk: Suspending console(s) (use no_console_suspend to 
+debug)
+[   74.943801] ata1.00: Entering standby power mode
+
+
+Thanks,
+Nikhil V
 
