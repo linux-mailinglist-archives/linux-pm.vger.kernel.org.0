@@ -1,91 +1,160 @@
-Return-Path: <linux-pm+bounces-435-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-436-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BDAF7FD09D
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 09:23:36 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEB377FD377
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 11:03:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47FE6282514
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 08:23:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 37105B21430
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 10:03:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9297C11C91;
-	Wed, 29 Nov 2023 08:23:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2BF418E38;
+	Wed, 29 Nov 2023 10:03:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PgI0UJEy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAAB1BC1
-	for <linux-pm@vger.kernel.org>; Wed, 29 Nov 2023 00:23:26 -0800 (PST)
-Received: from mail.maildlp.com (unknown [172.19.93.142])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4SgC5557Qgz4f3l6l
-	for <linux-pm@vger.kernel.org>; Wed, 29 Nov 2023 16:23:21 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id A44961A08D5
-	for <linux-pm@vger.kernel.org>; Wed, 29 Nov 2023 16:23:23 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.103.91])
-	by APP1 (Coremail) with SMTP id cCh0CgDX2xHt9GZl0vn+CA--.33992S4;
-	Wed, 29 Nov 2023 16:23:23 +0800 (CST)
-From: yangyingliang@huaweicloud.com
-To: linux-pm@vger.kernel.org
-Cc: zhuyinbo@loongson.cn,
-	liupeibao@loongson.cn,
-	liuyun@loongson.cn,
-	arnd@arndb.de,
-	yangyingliang@huawei.com
-Subject: [PATCH] soc: loongson2_pm: fix wrong pointer check in loongson2_power_button_init()
-Date: Wed, 29 Nov 2023 16:27:20 +0800
-Message-Id: <20231129082720.656172-1-yangyingliang@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA808D6C;
+	Wed, 29 Nov 2023 02:03:06 -0800 (PST)
+Received: by mail-vs1-xe35.google.com with SMTP id ada2fe7eead31-4644b1b7257so120436137.2;
+        Wed, 29 Nov 2023 02:03:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701252186; x=1701856986; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0NkQ2/KZticKUcAethtV75Vrkh/D13iFQcdW3PKfqEo=;
+        b=PgI0UJEyNCzhpHZSNMionxkfw+w6W5zJ8pbxPRelwPrNavQBE0BdLUz0m0tiByLHEg
+         OjyC34zp14jGLqZ3X60csaoUSXAnVuOpFNbBWIfkaA5N/RswwTkraXbS/rHuVKggNrkf
+         jxo5qlHPR05vfen/qCnfqHwIY+WzjA1GmNSwd5peS4D17kAbUNcPM/2xgFZKcrm3am6c
+         fi1IQ0Xp95qbnOwHhZ2RxsNdEV5DyImMyQqi2j310653Fqi3wXwVHPvMp8uR8o0Wtfra
+         9CYGTFtoXwzFqiZDRQNfeo5Hk6u8RRSdK4si48TpiTVcWt1cj7tGRoLSqgH9pEMZeW6P
+         Xybg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701252186; x=1701856986;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0NkQ2/KZticKUcAethtV75Vrkh/D13iFQcdW3PKfqEo=;
+        b=WK2zg7Wp9UCo3sk4L3EO8b1+xPX8YC2a5//KL+w2Ownj8t7Sdf34A+/1g3uD3RIQS+
+         iM8Gb8ozOKQYyqPf17eECE6IYFSk3K6gkKUcMMVcr9W+EMlqo24rpnndqeA8h0MjdTgZ
+         Vc0u7N4KEiiWVapYeNayW+mrHYOJhDsoLTqKcSDSE/MDEhV8T4A0aRxNab5wdkGOTFHE
+         TMRqijz0AzQDSd4HjLn72z97nxO18CGDwOyOXXCc/bSUg6FqKviTG8G8rk8qqLFbwgyI
+         6URTyAsfDsKykwRwyjR/Szb2C/PGB2zotZFyN+274mNuDJN24WRDxi3gQpE2o1aI2keb
+         Nmxw==
+X-Gm-Message-State: AOJu0YwUs4qQZt5fwysvmYH7SoiP+141B9uXGWEt0p1NdAStmZBLZEUo
+	kRUylygF+kEGdTq9MFmjQ38=
+X-Google-Smtp-Source: AGHT+IHxRg+hseQ9m+VDBMWpd29R6DnEZh0jR3dYtIRR4zK3JNSKqAJmz9rYeo9KxrCM9hqG8NLpRw==
+X-Received: by 2002:a05:6102:4423:b0:464:4a3f:dc43 with SMTP id df35-20020a056102442300b004644a3fdc43mr980739vsb.24.1701252185458;
+        Wed, 29 Nov 2023 02:03:05 -0800 (PST)
+Received: from errol.ini.cmu.edu ([72.95.245.133])
+        by smtp.gmail.com with ESMTPSA id n1-20020a0ce941000000b0067a2b91f969sm4052028qvo.117.2023.11.29.02.03.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Nov 2023 02:03:05 -0800 (PST)
+Date: Wed, 29 Nov 2023 05:03:03 -0500
+From: "Gabriel L. Somlo" <gsomlo@gmail.com>
+To: Andrew Davis <afd@ti.com>
+Cc: Mark Rutland <mark.rutland@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Karol Gugala <kgugala@antmicro.com>,
+	Mateusz Holenko <mholenko@antmicro.com>,
+	Joel Stanley <joel@jms.id.au>, Mark Brown <broonie@kernel.org>,
+	Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>, Lee Jones <lee@kernel.org>,
+	Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH RFC 2/5] drivers/soc/litex: Use
+ devm_register_restart_handler()
+Message-ID: <ZWcMVyTCfmkjMQpU@errol.ini.cmu.edu>
+References: <20231117161006.87734-1-afd@ti.com>
+ <20231117161006.87734-3-afd@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgDX2xHt9GZl0vn+CA--.33992S4
-X-Coremail-Antispam: 1UD129KBjvdXoWrur1rXry8ZryfZw4UCFWUXFb_yoWfJrb_Wa
-	yIvF4xuryrGF13t3s8Ww4avr9F9FyFq3Z5CF47AryfXay2vw1fXw1jvr43GF13XrWjqF9I
-	qw48Wr10yr1xCjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbwkYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-	67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lw4CEc2x0rVAKj4xxMxAIw28IcxkI7VAKI48J
-	MxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
-	AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
-	0xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
-	v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAF
-	wI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1co7tUUUUU==
-X-CM-SenderInfo: 51dqw5xlqjzxhdqjqx5xdzvxpfor3voofrz/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231117161006.87734-3-afd@ti.com>
+X-Clacks-Overhead: GNU Terry Pratchett
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+On Fri, Nov 17, 2023 at 10:10:03AM -0600, Andrew Davis wrote:
+> Use device life-cycle managed register function to simplify probe error
+> path and eliminate need for explicit remove function.
+> 
+> Signed-off-by: Andrew Davis <afd@ti.com>
 
-It should check 'button' after calling input_allocate_device().
+Reviewed-by: Gabriel Somlo <gsomlo@gmail.com>
 
-Fixes: 67694c076bd7 ("soc: loongson2_pm: add power management support")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/soc/loongson/loongson2_pm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/soc/loongson/loongson2_pm.c b/drivers/soc/loongson/loongson2_pm.c
-index b8e5e1e3528a..76181330696b 100644
---- a/drivers/soc/loongson/loongson2_pm.c
-+++ b/drivers/soc/loongson/loongson2_pm.c
-@@ -100,7 +100,7 @@ static int loongson2_power_button_init(struct device *dev, int irq)
- 	struct input_dev *button;
- 
- 	button = input_allocate_device();
--	if (!dev)
-+	if (!button)
- 		return -ENOMEM;
- 
- 	button->name = "Power Button";
--- 
-2.25.1
-
+Thanks much,
+--Gabriel
+> ---
+>  drivers/soc/litex/litex_soc_ctrl.c | 23 +++++------------------
+>  1 file changed, 5 insertions(+), 18 deletions(-)
+> 
+> diff --git a/drivers/soc/litex/litex_soc_ctrl.c b/drivers/soc/litex/litex_soc_ctrl.c
+> index 10813299aa106..7a0096d93c73d 100644
+> --- a/drivers/soc/litex/litex_soc_ctrl.c
+> +++ b/drivers/soc/litex/litex_soc_ctrl.c
+> @@ -69,14 +69,11 @@ static int litex_check_csr_access(void __iomem *reg_addr)
+>  
+>  struct litex_soc_ctrl_device {
+>  	void __iomem *base;
+> -	struct notifier_block reset_nb;
+>  };
+>  
+> -static int litex_reset_handler(struct notifier_block *this, unsigned long mode,
+> -			       void *cmd)
+> +static int litex_reset_handler(struct sys_off_data *data)
+>  {
+> -	struct litex_soc_ctrl_device *soc_ctrl_dev =
+> -		container_of(this, struct litex_soc_ctrl_device, reset_nb);
+> +	struct litex_soc_ctrl_device *soc_ctrl_dev = data->cb_data;
+>  
+>  	litex_write32(soc_ctrl_dev->base + RESET_REG_OFF, RESET_REG_VALUE);
+>  	return NOTIFY_DONE;
+> @@ -107,11 +104,9 @@ static int litex_soc_ctrl_probe(struct platform_device *pdev)
+>  	if (error)
+>  		return error;
+>  
+> -	platform_set_drvdata(pdev, soc_ctrl_dev);
+> -
+> -	soc_ctrl_dev->reset_nb.notifier_call = litex_reset_handler;
+> -	soc_ctrl_dev->reset_nb.priority = 128;
+> -	error = register_restart_handler(&soc_ctrl_dev->reset_nb);
+> +	error = devm_register_restart_handler(&pdev->dev,
+> +					      litex_reset_handler,
+> +					      soc_ctrl_dev);
+>  	if (error) {
+>  		dev_warn(&pdev->dev, "cannot register restart handler: %d\n",
+>  			 error);
+> @@ -120,20 +115,12 @@ static int litex_soc_ctrl_probe(struct platform_device *pdev)
+>  	return 0;
+>  }
+>  
+> -static void litex_soc_ctrl_remove(struct platform_device *pdev)
+> -{
+> -	struct litex_soc_ctrl_device *soc_ctrl_dev = platform_get_drvdata(pdev);
+> -
+> -	unregister_restart_handler(&soc_ctrl_dev->reset_nb);
+> -}
+> -
+>  static struct platform_driver litex_soc_ctrl_driver = {
+>  	.driver = {
+>  		.name = "litex-soc-controller",
+>  		.of_match_table = of_match_ptr(litex_soc_ctrl_of_match)
+>  	},
+>  	.probe = litex_soc_ctrl_probe,
+> -	.remove_new = litex_soc_ctrl_remove,
+>  };
+>  
+>  module_platform_driver(litex_soc_ctrl_driver);
+> -- 
+> 2.39.2
+> 
 
