@@ -1,85 +1,64 @@
-Return-Path: <linux-pm+bounces-480-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-484-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D386F7FD820
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 14:30:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94FCD7FD852
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 14:39:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89BDE1F20F9B
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 13:30:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3624EB21228
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 13:39:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B787020327;
-	Wed, 29 Nov 2023 13:30:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="lCt70qak"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A4B3208BC;
+	Wed, 29 Nov 2023 13:39:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-pm@vger.kernel.org
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.198])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F236A8;
-	Wed, 29 Nov 2023 05:30:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id; bh=JmdW2UbTrTOnM62ANw
-	uP4zK8vG4e8luOaqLCxOa+6iE=; b=lCt70qak/pKxGklw11WVuUaz8mDHx0oBkJ
-	ITlE86LnkPfuf9V+QHYKWn6+FS7HHy6m9KaWQYPc0BAoOizXwFAy6ecjzfG6MYvD
-	+sexrsV0sNZWil+pRJh8+/RefVIBy55LoAnJM6woHtqC1EwGXkeUO9hSjb0FsIZs
-	nBV3nd+IA=
-Received: from localhost.localdomain (unknown [39.144.190.126])
-	by zwqz-smtp-mta-g3-4 (Coremail) with SMTP id _____wDXnx3FPGdlfoIgBQ--.49480S2;
-	Wed, 29 Nov 2023 21:29:43 +0800 (CST)
-From: Haoran Liu <liuhaoran14@163.com>
-To: claudiu.beznea@tuxon.dev
-Cc: sre@kernel.org,
-	nicolas.ferre@microchip.com,
-	alexandre.belloni@bootlin.com,
-	linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Haoran Liu <liuhaoran14@163.com>
-Subject: [PATCH] [power/reset] at91-sama5d2: Add error handling in at91_shdwc_probe
-Date: Wed, 29 Nov 2023 05:29:39 -0800
-Message-Id: <20231129132939.34047-1-liuhaoran14@163.com>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID:_____wDXnx3FPGdlfoIgBQ--.49480S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrtr4xCw15uF4UWFW3WFWruFg_yoWkGFc_Xw
-	47AFWIya47KF1v9FnavwnIvrZ7CrnrXryDXF18tr93uryDWw4DtrsFvr4DXFs5Xa4UCrs8
-	tF4DtF4rZF1xXjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRMGYLJUUUUU==
-X-CM-SenderInfo: xolxxtxrud0iqu6rljoofrz/1tbiZQs3gl8ZaQ8awgABsi
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1097DC6;
+	Wed, 29 Nov 2023 05:39:12 -0800 (PST)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
+ id 8a63a62f0f2ca9f9; Wed, 29 Nov 2023 14:39:11 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 0E1FC6685D8;
+	Wed, 29 Nov 2023 14:39:11 +0100 (CET)
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>
+Subject: [PATCH v3 0/2] thermal: trip: Rework thermal_zone_set_trip() and its callers
+Date: Wed, 29 Nov 2023 14:33:29 +0100
+Message-ID: <12350772.O9o76ZdvQC@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrudeihedghedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgeffhfdujeelhfdtgeffkeetudfhtefhhfeiteethfekvefgvdfgfeeikeeigfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgu
+ rhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
 
-This patch adds error handling to the at91_shdwc_probe function
-in drivers/power/reset/at91-sama5d2_shdwc.c. The function
-previously did not handle the case where of_match_node could fail,
-potentially leading to unexpected behavior if the device tree match
-was unsuccessful.
+Hi Everyone,
 
-Signed-off-by: Haoran Liu <liuhaoran14@163.com>
----
- drivers/power/reset/at91-sama5d2_shdwc.c | 5 +++++
- 1 file changed, 5 insertions(+)
+This is the third iteration of
 
-diff --git a/drivers/power/reset/at91-sama5d2_shdwc.c b/drivers/power/reset/at91-sama5d2_shdwc.c
-index e76b102b57b1..2ac566c83aec 100644
---- a/drivers/power/reset/at91-sama5d2_shdwc.c
-+++ b/drivers/power/reset/at91-sama5d2_shdwc.c
-@@ -353,6 +353,11 @@ static int __init at91_shdwc_probe(struct platform_device *pdev)
- 		return PTR_ERR(at91_shdwc->shdwc_base);
- 
- 	match = of_match_node(at91_shdwc_of_match, pdev->dev.of_node);
-+	if (!match) {
-+		dev_err(&pdev->dev, "No matching device found\n");
-+		return -ENODEV;
-+	}
-+
- 	at91_shdwc->rcfg = match->data;
- 
- 	at91_shdwc->sclk = devm_clk_get(&pdev->dev, NULL);
--- 
-2.17.1
+https://patchwork.kernel.org/project/linux-pm/patch/4892163.31r3eYUQgx@kreacher/
+
+which fixes one issue found in the second iteration:
+
+https://lore.kernel.org/linux-pm/6010559.lOV4Wx5bFT@kreacher/
+
+Thanks!
+
+
 
 
