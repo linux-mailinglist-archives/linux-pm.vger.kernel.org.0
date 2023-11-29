@@ -1,266 +1,172 @@
-Return-Path: <linux-pm+bounces-424-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-425-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E4D87FCC9B
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 03:12:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF7907FCDBF
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 05:14:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 808941C2103F
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 02:12:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E0F801C20EF9
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 04:14:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E78AE1FD7;
-	Wed, 29 Nov 2023 02:12:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9286C63DB;
+	Wed, 29 Nov 2023 04:14:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J9uzGQx+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F9E172E;
-	Tue, 28 Nov 2023 18:12:10 -0800 (PST)
-X-SpamFilter-By: ArmorX SpamTrap 5.78 with qID 3AT2BcGeA2448448, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-	by rtits2.realtek.com.tw (8.15.2/2.95/5.92) with ESMTPS id 3AT2BcGeA2448448
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 29 Nov 2023 10:11:38 +0800
-Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Wed, 29 Nov 2023 10:11:38 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Wed, 29 Nov 2023 10:11:37 +0800
-Received: from RTEXMBS01.realtek.com.tw ([fe80::540c:c8d6:1d0f:ab9f]) by
- RTEXMBS01.realtek.com.tw ([fe80::540c:c8d6:1d0f:ab9f%5]) with mapi id
- 15.01.2507.034; Wed, 29 Nov 2023 10:11:37 +0800
-From: Ricky WU <ricky_wu@realtek.com>
-To: Kai-Heng Feng <kai.heng.feng@canonical.com>
-CC: Lukas Wunner <lukas@wunner.de>,
-        "bhelgaas@google.com"
-	<bhelgaas@google.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Kees Cook
-	<keescook@chromium.org>, Tony Luck <tony.luck@intel.com>,
-        "Guilherme G.
- Piccoli" <gpiccoli@igalia.com>,
-        "linux-pci@vger.kernel.org"
-	<linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] PCI: pciehp: Prevent child devices from doing RPM on PCIe Link Down
-Thread-Topic: [PATCH] PCI: pciehp: Prevent child devices from doing RPM on
- PCIe Link Down
-Thread-Index: AQHZ/+WX29Sx+yjN7keHtkFSV38Z/LBLoV4AgAIjnlCAAQSEgIABkvFwgABQjQCAHyoJAIADJpPQgAkWL4CAFL2HsA==
-Date: Wed, 29 Nov 2023 02:11:37 +0000
-Message-ID: <339db482672e4291b4204cf101e3ea39@realtek.com>
-References: <20231016040132.23824-1-kai.heng.feng@canonical.com>
- <20231016093210.GA22952@wunner.de>
- <263982e90fc046cf977ecb8727003690@realtek.com>
- <20231018094435.GA21090@wunner.de>
- <02ee7e47166a463d8d4e491b61cdd33f@realtek.com>
- <20231019143504.GA25140@wunner.de>
- <CAAd53p7jx=_Yh8sPwdsu-6Bc-hNgiExscMNGhgcbH=rzOBMOXQ@mail.gmail.com>
- <d7cc9e658b114da7a9c32b383f06adc9@realtek.com>
- <CAAd53p6bRnhGOfLHBz4WyTQVKocZPK0d5m4oRdeLhWxkx-5tLw@mail.gmail.com>
-In-Reply-To: <CAAd53p6bRnhGOfLHBz4WyTQVKocZPK0d5m4oRdeLhWxkx-5tLw@mail.gmail.com>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EEA1AE;
+	Tue, 28 Nov 2023 20:14:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701231285; x=1732767285;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YIvS4LQS2PhkCaZ4Tm+YeCL2w5fycapLbYdyhJloM5U=;
+  b=J9uzGQx+hmJ8aEANUYc5BNRzvdyGgjtEoFqZHd7tu856txYS9HJVS+Cj
+   vrxBrE5ZIhiBg9pvfEie5O0yodYQXIxStxHN16PMN+Hz4qvzkFeFt5lIT
+   Jm7zTwTczkrEBGU5uHOhZKVj9riSgoJZfm+UNYRUdST/NFB05Yxio7N32
+   Wk5gfyz8H+1D7xabVsOO8NPptT/Gn8+x8CycARBsVk9nWXLLwOiq33oub
+   sJYduCWw4MwbrWRbLa8V212dKrZOaw20LQ8rAMA7OlCuFUJOrtt40kw2J
+   m5lEROFyt94LMQ2VsF7zrJlJNDRDeGlLEvKSnKk1M0uZRRUfI+SWffU48
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="383483240"
+X-IronPort-AV: E=Sophos;i="6.04,234,1695711600"; 
+   d="scan'208";a="383483240"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2023 20:14:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10908"; a="892314394"
+X-IronPort-AV: E=Sophos;i="6.04,234,1695711600"; 
+   d="scan'208";a="892314394"
+Received: from lkp-server01.sh.intel.com (HELO d584ee6ebdcc) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 28 Nov 2023 20:14:41 -0800
+Received: from kbuild by d584ee6ebdcc with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r8ByA-0008Xk-24;
+	Wed, 29 Nov 2023 04:14:38 +0000
+Date: Wed, 29 Nov 2023 12:13:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Thomas Richard <thomas.richard@bootlin.com>, rafael@kernel.org,
+	daniel.lezcano@linaro.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	rui.zhang@intel.com, lukasz.luba@arm.com, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
+	gregory.clement@bootlin.com, theo.lebrun@bootlin.com,
+	u-kumar1@ti.com, Thomas Richard <thomas.richard@bootlin.com>
+Subject: Re: [PATCH] thermal: k3_j72xx_bandgap: implement suspend/resume
+ support
+Message-ID: <202311291148.HMS1dKk0-lkp@intel.com>
+References: <20231128130332.584127-1-thomas.richard@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231128130332.584127-1-thomas.richard@bootlin.com>
 
-PiBIaSBSaWNreSwNCj4gDQo+IE9uIEZyaSwgTm92IDEwLCAyMDIzIGF0IDEwOjQx4oCvQU0gUmlj
-a3kgV1UgPHJpY2t5X3d1QHJlYWx0ZWsuY29tPiB3cm90ZToNCj4gPg0KPiA+ID4gSGkgTHVrYXMg
-YW5kIFJpY2t5LA0KPiA+ID4NCj4gPiA+IEkgdGhpbmsgdGhlIGZvbGxvd2luZyBhcHByb2FjaCBz
-aG91bGQgY292ZXIgYWxsIHRoZSBjYXNlcz8NCj4gPiA+IFJpY2t5LCBjYW4geW91IHBsZWFzZSBn
-aXZlIGl0IGEgdHJ5Pw0KPiA+ID4NCj4gPg0KPiA+IFRoaXMgcGF0Y2ggaXMgaW52YWxpZCBmb3Ig
-dGhpcyBpc3N1ZSwNCj4gPiBQcm9ibGVtIHJlYXBwZWFycyBhZnRlciBwbHVnZ2luZyBhbmQgdW5w
-bHVnZ2luZyB0d2ljZSBEbWVzZyBhcyBiZWxvdywNCj4gDQo+IE15IGJhZC4gVGhlIHBtX3J1bnRp
-bWVfYmFycmllcigpIHNob3VsZCBiZSBjYWxsZWQgZWFybGllci4NCj4gQ2FuIHlvdSBwbGVhc2Ug
-Z2l2ZSB0aGUgZm9sbG93aW5nIGEgdHJ5Og0KPiANCg0KSGkgS2FpLWhlbmfvvIwNCg0KU29ycnkg
-Zm9yIGxhdGUsDQpUaGlzIHBhdGNoIGlzIHdvcmsgYW5kIGZpbmUgZm9yIG1lLi4uLg0KSSB0cmll
-ZCB0byBwbHVnaW4vb3V0IG1hbnkgdGltZXMgYW5kIGRpZG4ndCBzZWUgdGhlIGlzc3VlIGhhcHBl
-bg0KDQpUaGFuayB5b3UNCg0KDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3BjaS9yZW1vdmUuYyBi
-L2RyaXZlcnMvcGNpL3JlbW92ZS5jIGluZGV4DQo+IGQ3NDllYTgyNTBkNi4uYzY5YjRjZTVkYmZk
-IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3BjaS9yZW1vdmUuYw0KPiArKysgYi9kcml2ZXJzL3Bj
-aS9yZW1vdmUuYw0KPiBAQCAtMSw2ICsxLDcgQEANCj4gIC8vIFNQRFgtTGljZW5zZS1JZGVudGlm
-aWVyOiBHUEwtMi4wDQo+ICAjaW5jbHVkZSA8bGludXgvcGNpLmg+DQo+ICAjaW5jbHVkZSA8bGlu
-dXgvbW9kdWxlLmg+DQo+ICsjaW5jbHVkZSA8bGludXgvcG1fcnVudGltZS5oPg0KPiAgI2luY2x1
-ZGUgInBjaS5oIg0KPiANCj4gIHN0YXRpYyB2b2lkIHBjaV9mcmVlX3Jlc291cmNlcyhzdHJ1Y3Qg
-cGNpX2RldiAqZGV2KSBAQCAtMTgsNiArMTksNyBAQA0KPiBzdGF0aWMgdm9pZCBwY2lfc3RvcF9k
-ZXYoc3RydWN0IHBjaV9kZXYgKmRldikNCj4gICBwY2lfcG1lX2FjdGl2ZShkZXYsIGZhbHNlKTsN
-Cj4gDQo+ICAgaWYgKHBjaV9kZXZfaXNfYWRkZWQoZGV2KSkgew0KPiArIHBtX3J1bnRpbWVfYmFy
-cmllcigmZGV2LT5kZXYpOw0KPiANCj4gICBkZXZpY2VfcmVsZWFzZV9kcml2ZXIoJmRldi0+ZGV2
-KTsNCj4gICBwY2lfcHJvY19kZXRhY2hfZGV2aWNlKGRldik7DQo+IA0KPiANCj4gPiBbLi4uXQ0K
-PiA+IFsgIDM2MC43NzExNjFdIHBjaWVwb3J0IDAwMDA6MDA6MWMuMDogcGNpZWhwOiBTbG90KDgp
-OiBMaW5rIERvd24gWw0KPiA+IDM2MC43NzExNjVdIHBjaWVwb3J0IDAwMDA6MDA6MWMuMDogcGNp
-ZWhwOiBTbG90KDgpOiBDYXJkIG5vdCBwcmVzZW50IFsNCj4gPiAzNjEuOTg2OTMyXSBwY2llcG9y
-dCAwMDAwOjAwOjFjLjA6IHBjaWVocDogU2xvdCg4KTogQ2FyZCBwcmVzZW50IFsNCj4gPiAzNjEu
-OTg2OTM3XSBwY2llcG9ydCAwMDAwOjAwOjFjLjA6IHBjaWVocDogU2xvdCg4KTogTGluayBVcCBb
-DQo+ID4gMzYyLjEyMDYzNV0gcGNpIDAwMDA6MDE6MDAuMDogWzE1Yjc6NTAwN10gdHlwZSAwMCBj
-bGFzcyAweDAxMDgwMiBbDQo+ID4gMzYyLjEyMDY5MV0gcGNpIDAwMDA6MDE6MDAuMDogcmVnIDB4
-MTA6IFttZW0gMHgwMDAwMDAwMC0weDAwMDAzZmZmDQo+ID4gNjRiaXRdIFsgIDM2Mi4xMjA3NDdd
-IHBjaSAwMDAwOjAxOjAwLjA6IHJlZyAweDIwOiBbbWVtDQo+ID4gMHgwMDAwMDAwMC0weDAwMDAw
-MGZmIDY0Yml0XSBbICAzNjIuMTIxNjA2XSBwY2kgMDAwMDowMTowMC4wOiBCQVIgMDoNCj4gPiBh
-c3NpZ25lZCBbbWVtIDB4YTNiMDAwMDAtMHhhM2IwM2ZmZiA2NGJpdF0gWyAgMzYyLjEyMTY0Nl0g
-cGNpDQo+ID4gMDAwMDowMTowMC4wOiBCQVIgNDogYXNzaWduZWQgW21lbSAweGEzYjA0MDAwLTB4
-YTNiMDQwZmYgNjRiaXRdDQo+IFsgIDM2Mi4xMjE2ODZdIHBjaWVwb3J0IDAwMDA6MDA6MWMuMDog
-UENJIGJyaWRnZSB0byBbYnVzIDAxXQ0KPiA+IFsgIDM2Mi4xMjE3MDJdIHBjaWVwb3J0IDAwMDA6
-MDA6MWMuMDogICBicmlkZ2Ugd2luZG93IFtpbw0KPiAweDQwMDAtMHg0ZmZmXQ0KPiA+IFsgIDM2
-Mi4xMjE3NDNdIHBjaWVwb3J0IDAwMDA6MDA6MWMuMDogICBicmlkZ2Ugd2luZG93IFttZW0NCj4g
-MHhhM2IwMDAwMC0weGE0NGZmZmZmXQ0KPiA+IFsgIDM2Mi4xMjE3NjFdIHBjaWVwb3J0IDAwMDA6
-MDA6MWMuMDogICBicmlkZ2Ugd2luZG93IFttZW0NCj4gMHhhMGEwMDAwMC0weGExM2ZmZmZmIDY0
-Yml0IHByZWZdDQo+ID4gWyAgMzYyLjE3MTcwOV0gbnZtZSBudm1lMDogcGNpIGZ1bmN0aW9uIDAw
-MDA6MDE6MDAuMCBbICAzNjIuMTcxNzI2XQ0KPiA+IG52bWUgMDAwMDowMTowMC4wOiBlbmFibGlu
-ZyBkZXZpY2UgKDAwMDAgLT4gMDAwMikgWyAgMzYyLjI1NjcyNF0gbnZtZQ0KPiA+IG52bWUwOiA0
-LzAvMCBkZWZhdWx0L3JlYWQvcG9sbCBxdWV1ZXMgWyAgMzYyLjI2MTY1Nl0gIG52bWUwbjE6IHAx
-IHAyIFsNCj4gPiAzNjkuMzQzMjQ2XSBwY2llcG9ydCAwMDAwOjAwOjFjLjA6IHBjaWVocDogU2xv
-dCg4KTogTGluayBEb3duIFsNCj4gPiAzNjkuNDU3NDUwXSBwY2llcG9ydCAwMDAwOjAwOjFjLjA6
-IHBjaWVocDogU2xvdCg4KTogQ2FyZCBwcmVzZW50IFsNCj4gPiAzNjkuNDU3NDYyXSBwY2llcG9y
-dCAwMDAwOjAwOjFjLjA6IHBjaWVocDogU2xvdCg4KTogTGluayBVcCBbDQo+ID4gMzY5LjU5MjYw
-MF0gcGNpIDAwMDA6MDE6MDAuMDogWzEwZWM6NTI2MV0gdHlwZSAwMCBjbGFzcyAweGZmMDAwMCBb
-DQo+ID4gMzY5LjU5MjY1NF0gcGNpIDAwMDA6MDE6MDAuMDogcmVnIDB4MTA6IFttZW0gMHhhM2Iw
-MDAwMC0weGEzYjAwZmZmXSBbDQo+ID4gMzY5LjU5Mjc3Nl0gcGNpIDAwMDA6MDE6MDAuMDogVXBz
-dHJlYW0gYnJpZGdlJ3MgTWF4IFBheWxvYWQgU2l6ZSBzZXQNCj4gPiB0byAxMjggKHdhcyAyNTYs
-IG1heCAyNTYpIFsgIDM2OS41OTI3OTddIHBjaSAwMDAwOjAxOjAwLjA6IE1heCBQYXlsb2FkDQo+
-ID4gU2l6ZSBzZXQgdG8gMTI4ICh3YXMgMTI4LCBtYXggMTI4KSBbICAzNjkuNTkyOTY0XSBwY2kg
-MDAwMDowMTowMC4wOg0KPiA+IHN1cHBvcnRzIEQxIEQyIFsgIDM2OS41OTI5NzBdIHBjaSAwMDAw
-OjAxOjAwLjA6IFBNRSMgc3VwcG9ydGVkIGZyb20gRDENCj4gPiBEMiBEM2hvdCBEM2NvbGQgWyAg
-MzY5LjU5MzY0Ml0gcGNpIDAwMDA6MDE6MDAuMDogQkFSIDA6IGFzc2lnbmVkIFttZW0NCj4gPiAw
-eGEzYjAwMDAwLTB4YTNiMDBmZmZdIFsgIDM2OS41OTM2NjJdIHBjaWVwb3J0IDAwMDA6MDA6MWMu
-MDogUENJIGJyaWRnZSB0bw0KPiBbYnVzIDAxXQ0KPiA+IFsgIDM2OS41OTM2NzldIHBjaWVwb3J0
-IDAwMDA6MDA6MWMuMDogICBicmlkZ2Ugd2luZG93IFtpbw0KPiAweDQwMDAtMHg0ZmZmXQ0KPiA+
-IFsgIDM2OS41OTM2OTJdIHBjaWVwb3J0IDAwMDA6MDA6MWMuMDogICBicmlkZ2Ugd2luZG93IFtt
-ZW0NCj4gMHhhM2IwMDAwMC0weGE0NGZmZmZmXQ0KPiA+IFsgIDM2OS41OTM3MDNdIHBjaWVwb3J0
-IDAwMDA6MDA6MWMuMDogICBicmlkZ2Ugd2luZG93IFttZW0NCj4gMHhhMGEwMDAwMC0weGExM2Zm
-ZmZmIDY0Yml0IHByZWZdDQo+ID4gWyAgMzcyLjU3Mzc1N10gcGNpZXBvcnQgMDAwMDowMDoxYy4w
-OiBwY2llaHA6IFNsb3QoOCk6IExpbmsgRG93biBbDQo+ID4gMzcyLjU4NjYyMF0gQlVHOiB1bmFi
-bGUgdG8gaGFuZGxlIHBhZ2UgZmF1bHQgZm9yIGFkZHJlc3M6DQo+ID4gZmZmZmM5MDAwMDA4OTAx
-MCBbICAzNzIuNTg2NjI0XSAjUEY6IHN1cGVydmlzb3IgcmVhZCBhY2Nlc3MgaW4ga2VybmVsDQo+
-ID4gbW9kZSBbICAzNzIuNTg2NjI2XSAjUEY6IGVycm9yX2NvZGUoMHgwMDAwKSAtIG5vdC1wcmVz
-ZW50IHBhZ2UgWw0KPiA+IDM3Mi41ODY2MjddIFBHRCAxMDAwMDAwNjcgUDREIDEwMDAwMDA2NyBQ
-VUQgMTAwMjBhMDY3IFBNRA0KPiAxMDAyMGIwNjcNCj4gPiBQVEUgMCBbICAzNzIuNTg2NjMyXSBP
-b3BzOiAwMDAwIFsjMV0gUFJFRU1QVCBTTVAgUFRJIFsgIDM3Mi41ODY2MzRdDQo+ID4gQ1BVOiAy
-IFBJRDogMTU3IENvbW06IGt3b3JrZXIvMjoyIE5vdCB0YWludGVkIDYuNi4wLXJjNCAjMTIgWw0K
-PiA+IDM3Mi41ODY2MzddIEhhcmR3YXJlIG5hbWU6IFRvIEJlIEZpbGxlZCBCeSBPLkUuTS4gVG8g
-QmUgRmlsbGVkIEJ5DQo+ID4gTy5FLk0uL0gzNzBNIFBybzQsIEJJT1MgUDMuNDAgMTAvMjUvMjAx
-OCBbICAzNzIuNTg2NjM5XSBXb3JrcXVldWU6DQo+IHBtDQo+ID4gcG1fcnVudGltZV93b3JrIFsg
-IDM3Mi41ODY2NDRdIFJJUDogMDAxMDppb3JlYWQzMisweDJlLzB4NzAgWw0KPiA+IDM3Mi41ODY2
-NDddIENvZGU6IGZmIDAzIDAwIDc3IDI1IDQ4IDgxIGZmIDAwIDAwIDAxIDAwIDc3IDE0IDhiIDE1
-IDk4DQo+ID4gYWMgNTIgMDEgYjggZmYgZmYgZmYgZmYgODUgZDIgNzUgMTQgYzMgY2MgY2MgY2Mg
-Y2MgODkgZmEgZWQgYzMgY2MgY2MNCj4gPiBjYyBjYyA8OGI+IDA3IGMzIGNjIGNjIGNjIGNjIDU1
-IDgzIGVhIDAxIDQ4IDg5IGZlIDQ4IGM3IGM3IGY4IDk3IDU3IDg2DQo+ID4gNDggWyAgMzcyLjU4
-NjY0OV0gUlNQOiAwMDE4OmZmZmZjOTAwMDA1NDNkNTAgRUZMQUdTOiAwMDAxMDI5NiBbDQo+ID4g
-MzcyLjU4NjY1Ml0gUkFYOiBmZmZmYzkwMDAwMDg5MDAwIFJCWDogMDAwMDAwMDAwMDAwMDMyZiBS
-Q1g6DQo+ID4gMDAwMDAwMDAwMDAwMDA3ZiBbICAzNzIuNTg2NjUzXSBSRFg6IDAwMDAwMDAwMDAw
-MGZmMDAgUlNJOg0KPiA+IGZmZmZjOTAwMDAwODkwMTAgUkRJOiBmZmZmYzkwMDAwMDg5MDEwIFsg
-IDM3Mi41ODY2NTVdIFJCUDoNCj4gPiBmZmZmYzkwMDAwNTQzZDcwIFIwODogZmZmZmM5MDAwMDA4
-OTAxMCBSMDk6IGZmZmY4ODgxNmExMzIzNjggWw0KPiA+IDM3Mi41ODY2NTZdIFIxMDogMDAwMDAw
-MDAwMDAwMDAwMCBSMTE6IDAwMDAwMDAwMDAwMDAwMDMgUjEyOg0KPiA+IDAwMDAwMDAwMDAwMDAw
-N2YgWyAgMzcyLjU4NjY1N10gUjEzOiBmZmZmODg4MTA2MGVkMDAwIFIxNDoNCj4gPiBmZmZmODg4
-MTA2MGVkMTAwIFIxNTogMDAwMDAwMDAwMDAwOTAwMyBbICAzNzIuNTg2NjU5XSBGUzoNCj4gMDAw
-MDAwMDAwMDAwMDAwMCgwMDAwKSBHUzpmZmZmODg4MTZhMTAwMDAwKDAwMDApDQo+IGtubEdTOjAw
-MDAwMDAwMDAwMDAwMDAgWyAgMzcyLjU4NjY2MV0gQ1M6ICAwMDEwIERTOiAwMDAwIEVTOiAwMDAw
-IENSMDoNCj4gMDAwMDAwMDA4MDA1MDAzMyBbICAzNzIuNTg2NjYyXSBDUjI6IGZmZmZjOTAwMDAw
-ODkwMTAgQ1IzOg0KPiAwMDAwMDAwMDQzMDMyMDA2IENSNDogMDAwMDAwMDAwMDM3MDZlMCBbICAz
-NzIuNTg2NjY0XSBDYWxsIFRyYWNlOg0KPiA+IFsgIDM3Mi41ODY2NjVdICA8VEFTSz4NCj4gPiBb
-ICAzNzIuNTg2NjY3XSAgPyBzaG93X3JlZ3MrMHg2OC8weDcwDQo+ID4gWyAgMzcyLjU4NjY3MV0g
-ID8gX19kaWVfYm9keSsweDIwLzB4NzAgWyAgMzcyLjU4NjY3NF0gID8NCj4gPiBfX2RpZSsweDJi
-LzB4NDAgWyAgMzcyLjU4NjY3N10gID8gcGFnZV9mYXVsdF9vb3BzKzB4MTYwLzB4NDgwIFsNCj4g
-PiAzNzIuNTg2NjgwXSAgPyBzZWFyY2hfYnBmX2V4dGFibGVzKzB4NjMvMHg5MCBbICAzNzIuNTg2
-Njg0XSAgPw0KPiA+IGlvcmVhZDMyKzB4MmUvMHg3MCBbICAzNzIuNTg2Njg2XSAgPyBzZWFyY2hf
-ZXhjZXB0aW9uX3RhYmxlcysweDVmLzB4NzANCj4gPiBbICAzNzIuNTg2Njg5XSAgPyBrZXJuZWxt
-b2RlX2ZpeHVwX29yX29vcHMrMHhhMi8weDEyMA0KPiA+IFsgIDM3Mi41ODY2OTJdICA/IF9fYmFk
-X2FyZWFfbm9zZW1hcGhvcmUrMHgxNzkvMHgyMzANCj4gPiBbICAzNzIuNTg2Njk2XSAgPyBiYWRf
-YXJlYV9ub3NlbWFwaG9yZSsweDE2LzB4MjAgWyAgMzcyLjU4NjY5OF0gID8NCj4gPiBkb19rZXJu
-X2FkZHJfZmF1bHQrMHg4Yi8weGEwIFsgIDM3Mi41ODY3MDFdICA/DQo+ID4gZXhjX3BhZ2VfZmF1
-bHQrMHhlNS8weDE4MCBbICAzNzIuNTg2NzA1XSAgPw0KPiA+IGFzbV9leGNfcGFnZV9mYXVsdCsw
-eDI3LzB4MzAgWyAgMzcyLjU4NjcxMF0gID8gaW9yZWFkMzIrMHgyZS8weDcwIFsNCj4gPiAzNzIu
-NTg2NzE0XSAgPyBydHN4X3BjaV93cml0ZV9yZWdpc3RlcisweDViLzB4OTAgW3J0c3hfcGNpXSBb
-DQo+ID4gMzcyLjU4NjcyM10gIHJ0c3hfc2V0X2wxb2ZmX3N1YisweDFjLzB4MzAgW3J0c3hfcGNp
-XSBbICAzNzIuNTg2NzMxXQ0KPiA+IHJ0czUyNjFfc2V0X2wxb2ZmX2NmZ19zdWJfZDArMHgzNi8w
-eDQwIFtydHN4X3BjaV0gWyAgMzcyLjU4Njc0MF0NCj4gPiBydHN4X3BjaV9ydW50aW1lX2lkbGUr
-MHhjNy8weDE2MCBbcnRzeF9wY2ldIFsgIDM3Mi41ODY3NDhdICA/DQo+ID4gX19wZnhfcGNpX3Bt
-X3J1bnRpbWVfaWRsZSsweDEwLzB4MTANCj4gPiBbICAzNzIuNTg2NzUxXSAgcGNpX3BtX3J1bnRp
-bWVfaWRsZSsweDM0LzB4NzAgWyAgMzcyLjU4Njc1M10NCj4gPiBycG1faWRsZSsweGM0LzB4MmIw
-IFsgIDM3Mi41ODY3NTZdICBwbV9ydW50aW1lX3dvcmsrMHg5My8weGMwIFsNCj4gPiAzNzIuNTg2
-NzU5XSAgcHJvY2Vzc19zY2hlZHVsZWRfd29ya3MrMHg5YS8weDM5MA0KPiA+IFsgIDM3Mi41ODY3
-NjJdICA/IF9fcGZ4X3dvcmtlcl90aHJlYWQrMHgxMC8weDEwIFsgIDM3Mi41ODY3NjRdDQo+ID4g
-d29ya2VyX3RocmVhZCsweDE1Yi8weDJkMCBbICAzNzIuNTg2NzY3XSAgPw0KPiA+IF9fcGZ4X3dv
-cmtlcl90aHJlYWQrMHgxMC8weDEwIFsgIDM3Mi41ODY3NjldICBrdGhyZWFkKzB4MTA2LzB4MTQw
-IFsNCj4gPiAzNzIuNTg2NzcxXSAgPyBfX3BmeF9rdGhyZWFkKzB4MTAvMHgxMCBbICAzNzIuNTg2
-Nzc0XQ0KPiA+IHJldF9mcm9tX2ZvcmsrMHgzOS8weDYwIFsgIDM3Mi41ODY3NzZdICA/IF9fcGZ4
-X2t0aHJlYWQrMHgxMC8weDEwIFsNCj4gPiAzNzIuNTg2Nzc4XSAgcmV0X2Zyb21fZm9ya19hc20r
-MHgxYi8weDMwIFsgIDM3Mi41ODY3ODNdICA8L1RBU0s+IFsNCj4gPiAzNzIuNTg2Nzg0XSBNb2R1
-bGVzIGxpbmtlZCBpbjogbnZtZSBudm1lX2NvcmUgc25kX2hkYV9jb2RlY19oZG1pDQo+ID4gc25k
-X2hkYV9jb2RlY19yZWFsdGVrIHNuZF9oZGFfY29kZWNfZ2VuZXJpYyBsZWR0cmlnX2F1ZGlvDQo+
-ID4gbmxzX2lzbzg4NTlfMSBzbmRfc29mX3BjaV9pbnRlbF9jbmwgc25kX3NvZl9pbnRlbF9oZGFf
-Y29tbW9uDQo+ID4gc25kX3NvY19oZGFjX2hkYSBzb3VuZHdpcmVfaW50ZWwgc291bmR3aXJlX2dl
-bmVyaWNfYWxsb2NhdGlvbg0KPiA+IHNuZF9zb2ZfaW50ZWxfaGRhX21saW5rIHNvdW5kd2lyZV9j
-YWRlbmNlIHNuZF9zb2ZfaW50ZWxfaGRhDQo+ID4gc25kX3NvZl9wY2kgc25kX3NvZl94dGVuc2Ff
-ZHNwIHNuZF9zb2Ygc25kX3NvZl91dGlscyBzbmRfaGRhX2V4dF9jb3JlDQo+ID4gc25kX3NvY19h
-Y3BpX2ludGVsX21hdGNoIHNuZF9zb2NfYWNwaSBzb3VuZHdpcmVfYnVzIGludGVsX3JhcGxfbXNy
-DQo+ID4gaW50ZWxfcmFwbF9jb21tb24gc25kX3NvY19jb3JlIHg4Nl9wa2dfdGVtcF90aGVybWFs
-IGludGVsX3Bvd2VyY2xhbXANCj4gPiBjb3JldGVtcCBzbmRfY29tcHJlc3MgYWM5N19idXMga3Zt
-X2ludGVsIHNuZF9wY21fZG1hZW5naW5lIGk5MTUNCj4gPiBzbmRfaGRhX2ludGVsIHNuZF9pbnRl
-bF9kc3BjZmcgc25kX2ludGVsX3Nkd19hY3BpIGt2bSBzbmRfaGRhX2NvZGVjDQo+ID4gc25kX2hk
-YV9jb3JlIG1laV9oZGNwIGNyY3QxMGRpZl9wY2xtdWwgZ2hhc2hfY2xtdWxuaV9pbnRlbCBzbmRf
-aHdkZXANCj4gPiBzbmRfcGNtIHNoYTUxMl9zc3NlMyBhZXNuaV9pbnRlbCBzbmRfc2VxX21pZGkg
-Y3J5cHRvX3NpbWQNCj4gPiBzbmRfc2VxX21pZGlfZXZlbnQgY3J5cHRkIHJhcGwgc25kX3Jhd21p
-ZGkgaW50ZWxfY3N0YXRlIGRybV9idWRkeQ0KPiA+IGJpbmZtdF9taXNjIHR0bSBzbmRfc2VxIGRy
-bV9kaXNwbGF5X2hlbHBlciBqb3lkZXYgaW5wdXRfbGVkcyBjZWMNCj4gPiBzbmRfc2VxX2Rldmlj
-ZSB3bWlfYm1vZiBzbmRfdGltZXIgZWUxMDA0IG1laV9tZSByY19jb3JlIHNuZA0KPiA+IGRybV9r
-bXNfaGVscGVyIG1laSBpbnRlbF9wY2hfdGhlcm1hbCBpMmNfYWxnb19iaXQgc291bmRjb3JlIG1h
-Y19oaWQgWw0KPiA+IDM3Mi41ODY4MzRdICBhY3BpX3RhZCBhY3BpX3BhZCBzY2hfZnFfY29kZWwg
-bXNyIHBhcnBvcnRfcGMgcHBkZXYgbHANCj4gPiBwYXJwb3J0IGRybSByYW1vb3BzIHJlZWRfc29s
-b21vbiBlZmlfcHN0b3JlIGlwX3RhYmxlcyB4X3RhYmxlcyBhdXRvZnM0DQo+ID4gaGlkX2dlbmVy
-aWMgdXNiaGlkIGhpZCBydHN4X3BjaV9zZG1tYyBhaGNpIGkyY19pODAxIGUxMDAwZQ0KPiA+IGNy
-YzMyX3BjbG11bCBydHN4X3BjaSBpMmNfc21idXMgeGhjaV9wY2kgbGliYWhjaSB4aGNpX3BjaV9y
-ZW5lc2FzDQo+ID4gdmlkZW8gd21pIFsgIDM3Mi41ODY4NTZdIENSMjogZmZmZmM5MDAwMDA4OTAx
-MCBbICAzNzIuNTg2ODU4XSAtLS1bIGVuZA0KPiA+IHRyYWNlIDAwMDAwMDAwMDAwMDAwMDAgXS0t
-LSBbICAzNzIuNzQ2ODA4XSBSSVA6DQo+ID4gMDAxMDppb3JlYWQzMisweDJlLzB4NzAgWyAgMzcy
-Ljc0NjgxNl0gQ29kZTogZmYgMDMgMDAgNzcgMjUgNDggODEgZmYNCj4gPiAwMCAwMCAwMSAwMCA3
-NyAxNCA4YiAxNSA5OCBhYyA1MiAwMSBiOCBmZiBmZiBmZiBmZiA4NSBkMiA3NSAxNCBjMyBjYw0K
-PiA+IGNjIGNjIGNjIDg5IGZhIGVkIGMzIGNjIGNjIGNjIGNjIDw4Yj4gMDcgYzMgY2MgY2MgY2Mg
-Y2MgNTUgODMgZWEgMDEgNDgNCj4gPiA4OSBmZSA0OCBjNyBjNyBmOCA5NyA1NyA4NiA0OCBbICAz
-NzIuNzQ2ODE4XSBSU1A6DQo+ID4gMDAxODpmZmZmYzkwMDAwNTQzZDUwIEVGTEFHUzogMDAwMTAy
-OTYgWyAgMzcyLjc0NjgyMV0gUkFYOg0KPiA+IGZmZmZjOTAwMDAwODkwMDAgUkJYOiAwMDAwMDAw
-MDAwMDAwMzJmIFJDWDogMDAwMDAwMDAwMDAwMDA3ZiBbDQo+ID4gMzcyLjc0NjgyM10gUkRYOiAw
-MDAwMDAwMDAwMDBmZjAwIFJTSTogZmZmZmM5MDAwMDA4OTAxMCBSREk6DQo+ID4gZmZmZmM5MDAw
-MDA4OTAxMCBbICAzNzIuNzQ2ODI1XSBSQlA6IGZmZmZjOTAwMDA1NDNkNzAgUjA4Og0KPiA+IGZm
-ZmZjOTAwMDAwODkwMTAgUjA5OiBmZmZmODg4MTZhMTMyMzY4IFsgIDM3Mi43NDY4MjZdIFIxMDoN
-Cj4gPiAwMDAwMDAwMDAwMDAwMDAwIFIxMTogMDAwMDAwMDAwMDAwMDAwMyBSMTI6IDAwMDAwMDAw
-MDAwMDAwN2YgWw0KPiA+IDM3Mi43NDY4MjhdIFIxMzogZmZmZjg4ODEwNjBlZDAwMCBSMTQ6IGZm
-ZmY4ODgxMDYwZWQxMDAgUjE1Og0KPiA+IDAwMDAwMDAwMDAwMDkwMDMgWyAgMzcyLjc0NjgzMF0g
-RlM6ICAwMDAwMDAwMDAwMDAwMDAwKDAwMDApDQo+ID4gR1M6ZmZmZjg4ODE2YTEwMDAwMCgwMDAw
-KSBrbmxHUzowMDAwMDAwMDAwMDAwMDAwIFsgIDM3Mi43NDY4MzJdIENTOg0KPiA+IDAwMTAgRFM6
-IDAwMDAgRVM6IDAwMDAgQ1IwOiAwMDAwMDAwMDgwMDUwMDMzIFsgIDM3Mi43NDY4MzNdIENSMjoN
-Cj4gPiBmZmZmYzkwMDAwMDg5MDEwIENSMzogMDAwMDAwMDEwYTU2NDAwNCBDUjQ6IDAwMDAwMDAw
-MDAzNzA2ZTAgWw0KPiA+IDM3Mi43NDY4MzVdIG5vdGU6IGt3b3JrZXIvMjoyWzE1N10gZXhpdGVk
-IHdpdGggaXJxcyBkaXNhYmxlZA0KPiA+DQo+ID4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9wY2kv
-cmVtb3ZlLmMgYi9kcml2ZXJzL3BjaS9yZW1vdmUuYyBpbmRleA0KPiA+ID4gZDc0OWVhODI1MGQ2
-Li45MDdkNjA1ODcyMjcgMTAwNjQ0DQo+ID4gPiAtLS0gYS9kcml2ZXJzL3BjaS9yZW1vdmUuYw0K
-PiA+ID4gKysrIGIvZHJpdmVycy9wY2kvcmVtb3ZlLmMNCj4gPiA+IEBAIC0xLDYgKzEsNyBAQA0K
-PiA+ID4gIC8vIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wICAjaW5jbHVkZSA8bGlu
-dXgvcGNpLmg+DQo+ID4gPiAjaW5jbHVkZSA8bGludXgvbW9kdWxlLmg+DQo+ID4gPiArI2luY2x1
-ZGUgPGxpbnV4L3BtX3J1bnRpbWUuaD4NCj4gPiA+ICAjaW5jbHVkZSAicGNpLmgiDQo+ID4gPg0K
-PiA+ID4gIHN0YXRpYyB2b2lkIHBjaV9mcmVlX3Jlc291cmNlcyhzdHJ1Y3QgcGNpX2RldiAqZGV2
-KSBAQCAtODksNiArOTAsOA0KPiA+ID4gQEAgc3RhdGljIHZvaWQgcGNpX3JlbW92ZV9idXNfZGV2
-aWNlKHN0cnVjdCBwY2lfZGV2ICpkZXYpDQo+ID4gPiAgICAgICAgIHN0cnVjdCBwY2lfYnVzICpi
-dXMgPSBkZXYtPnN1Ym9yZGluYXRlOw0KPiA+ID4gICAgICAgICBzdHJ1Y3QgcGNpX2RldiAqY2hp
-bGQsICp0bXA7DQo+ID4gPg0KPiA+ID4gKyAgICAgICBwbV9ydW50aW1lX2JhcnJpZXIoJmRldi0+
-ZGV2KTsNCj4gPiA+ICsNCj4gPiA+ICAgICAgICAgaWYgKGJ1cykgew0KPiA+ID4gICAgICAgICAg
-ICAgICAgIGxpc3RfZm9yX2VhY2hfZW50cnlfc2FmZShjaGlsZCwgdG1wLA0KPiA+ID4gICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAmYnVzLT5kZXZpY2VzLCBidXNfbGlz
-dCkNCj4gPiA+DQo+ID4gPg0KPiA+DQo=
+Hi Thomas,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on rafael-pm/thermal]
+[also build test ERROR on linus/master v6.7-rc3 next-20231128]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Thomas-Richard/thermal-k3_j72xx_bandgap-implement-suspend-resume-support/20231128-211217
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/20231128130332.584127-1-thomas.richard%40bootlin.com
+patch subject: [PATCH] thermal: k3_j72xx_bandgap: implement suspend/resume support
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20231129/202311291148.HMS1dKk0-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231129/202311291148.HMS1dKk0-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311291148.HMS1dKk0-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from drivers/thermal/k3_j72xx_bandgap.c:17:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     547 |         val = __raw_readb(PCI_IOBASE + addr);
+         |                           ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     560 |         val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+         |                                                   ^
+   In file included from drivers/thermal/k3_j72xx_bandgap.c:17:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     573 |         val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+         |                                                         ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+      35 | #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+         |                                                   ^
+   In file included from drivers/thermal/k3_j72xx_bandgap.c:17:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:337:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     584 |         __raw_writeb(value, PCI_IOBASE + addr);
+         |                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     594 |         __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+     604 |         __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+         |                                                       ~~~~~~~~~~ ^
+>> drivers/thermal/k3_j72xx_bandgap.c:604:17: error: use of undeclared identifier 'k3_j72xx_bandgap_pm_ops'; did you mean 'k3_j72xx_bandgap_probe'?
+     604 |                 .pm = pm_ptr(&k3_j72xx_bandgap_pm_ops),
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~
+         |                               k3_j72xx_bandgap_probe
+   include/linux/pm.h:475:53: note: expanded from macro 'pm_ptr'
+     475 | #define pm_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM), (_ptr))
+         |                                                     ^
+   include/linux/kernel.h:54:38: note: expanded from macro 'PTR_IF'
+      54 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^
+   drivers/thermal/k3_j72xx_bandgap.c:376:12: note: 'k3_j72xx_bandgap_probe' declared here
+     376 | static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
+         |            ^
+>> drivers/thermal/k3_j72xx_bandgap.c:604:9: error: incompatible pointer types initializing 'const struct dev_pm_ops *' with an expression of type 'int (*)(struct platform_device *)' [-Werror,-Wincompatible-pointer-types]
+     604 |                 .pm = pm_ptr(&k3_j72xx_bandgap_pm_ops),
+         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/pm.h:475:22: note: expanded from macro 'pm_ptr'
+     475 | #define pm_ptr(_ptr) PTR_IF(IS_ENABLED(CONFIG_PM), (_ptr))
+         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:54:27: note: expanded from macro 'PTR_IF'
+      54 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~
+   6 warnings and 2 errors generated.
+
+
+vim +604 drivers/thermal/k3_j72xx_bandgap.c
+
+   597	
+   598	static struct platform_driver k3_j72xx_bandgap_sensor_driver = {
+   599		.probe = k3_j72xx_bandgap_probe,
+   600		.remove_new = k3_j72xx_bandgap_remove,
+   601		.driver = {
+   602			.name = "k3-j72xx-soc-thermal",
+   603			.of_match_table	= of_k3_j72xx_bandgap_match,
+ > 604			.pm = pm_ptr(&k3_j72xx_bandgap_pm_ops),
+   605		},
+   606	};
+   607	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
