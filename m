@@ -1,144 +1,147 @@
-Return-Path: <linux-pm+bounces-544-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-545-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB8EC7FEDEE
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 12:31:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E23EB7FEDF3
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 12:31:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3A3C9B21321
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 11:31:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1EA971C210C3
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 11:31:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 031D03D972;
-	Thu, 30 Nov 2023 11:31:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F8B93EA99;
+	Thu, 30 Nov 2023 11:31:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uJLEf+HZ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PtI5AB0y"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D413D173E
-	for <linux-pm@vger.kernel.org>; Thu, 30 Nov 2023 03:31:07 -0800 (PST)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-5c08c47c055so8467507b3.1
-        for <linux-pm@vger.kernel.org>; Thu, 30 Nov 2023 03:31:07 -0800 (PST)
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7879710F2
+	for <linux-pm@vger.kernel.org>; Thu, 30 Nov 2023 03:31:14 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-5cd0af4a7d3so9523867b3.0
+        for <linux-pm@vger.kernel.org>; Thu, 30 Nov 2023 03:31:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701343867; x=1701948667; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ds7ABFYrMMycv745Smb8RwddOGN4IRIdlcfUsv1PeZg=;
-        b=uJLEf+HZUTpkUYhyMEKBjM1Z8TCvMmvF+arIHSiMSEwCJArUOzcrABTy/0jSXaWi8d
-         wrPmJNMyPSaRJ8QdpRNzXVtmP3j/l8HZdqIIJ6vA8T9h7A7d3Otv0eJ2xL2OLEJGvp5/
-         nmwc14Ok0rHEMkSLsn5i77lB0oQ7BHuPnaAU3VQGZ+FDSlDH5UnvBjMzbexAJtKAIGh5
-         hxodA9wIoWRYWF4VYNIQJ0SSh+OEg23wnxxEQaW8LqoeNWs7WqoEJHU3KbDsqBvys+6j
-         j1J1JhzigWQoP2N5lDcGcc3i6ZPG2DLJ2FepuWIf86LgboovAX8QOX779spqesaqq2O4
-         v2mQ==
+        d=linaro.org; s=google; t=1701343873; x=1701948673; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F/HclVvX4CFRsOl+VZSwxHOAlC8On+bnCgFx4qFVgaY=;
+        b=PtI5AB0ySw7fT/Q3ZOC06OG/RtVCFSMpVJpHRk+3ViHKe4K4J1fsxUbruQyUFTUqIs
+         uYUA2YaRe7wqiXP/HkqSpIQiamxMBIUiqwq8B95S+PA8M9HH+JgmuBmFOHZI5g1y3OuT
+         3BR4B/nDvkpNuM7SH+8WCOXM0gABIgyEO1x9SZ0kOVADazaHj+nTXvbauC55IezBpMdl
+         MlQab81dPErFfeOxWHwPeUM+G5SiYhwz1ClKRH/+Mq85aUgMkCc+tx3N24Uk5ERU6cs2
+         tAPe2moWG0t+FTbEfjhcsNlA5YCa60KtZsITNWcJHkmSGrVgEnhI3u1HgN5wFP56deHE
+         BiGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701343867; x=1701948667;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ds7ABFYrMMycv745Smb8RwddOGN4IRIdlcfUsv1PeZg=;
-        b=NvorbLQL/II9myhjbTYOVTfU5p7+DR+Gk+u54GbcZViY5+HJtEG73bvkKVl4yzmU+m
-         awCrtWboVbxTiOXf5NI6icpBNMTW1PN8IqBMvqdgm+fmiS2fdCGeCj3PL5iaMgFy+pN8
-         ReLTAz0NscjK+SqnBh8xUUj5uZRwnFuZvRTjmqldtjRWytNWcC45iVtoJ8JOqjyrpeXA
-         y20hQKutG6tt8j5euKRm2zCEMJFvIe+QM27MWJ2qRqzoPI514gIDIq2LDdeNHp/0dpOP
-         qTAUxg5xCmNZAQt930D75Z+BEzk6/0ESNsL9JEa7wOc90j9TnhNHXV9FoL7x+GQ7gk3m
-         jsbw==
-X-Gm-Message-State: AOJu0Yw5OS13hlYMNuOsnD9OQ7pPbUNNnGFhuFQCCEbbDUZXPDnCUXCj
-	Uvfqng72rZRKY2O7RRddeuGooJaeoxZ7SCVSUG31JhgIltPzWjkJ
-X-Google-Smtp-Source: AGHT+IGAESo71TcDtp4PhAumypPzLOYsMlreSo9KOtjEUiXzZQ5yHW7O4gv5AvPrsbQWkUO+3HKTXPu2yghcVpnpeDA=
-X-Received: by 2002:a0d:ca93:0:b0:5c5:a04c:5eb2 with SMTP id
- m141-20020a0dca93000000b005c5a04c5eb2mr23685462ywd.33.1701343866889; Thu, 30
- Nov 2023 03:31:06 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701343873; x=1701948673;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=F/HclVvX4CFRsOl+VZSwxHOAlC8On+bnCgFx4qFVgaY=;
+        b=HZc+erhgysxFW/bkIP0gEe6TudBh3YHG3pXesjYhqHWXWffkr2DPDaaTiNAXlq9dCB
+         7xKbnMIQDZ9uZEQhQ+Z+ub6+fexFs8QemfKapu2e4T54LiaU4R8dymPtYr4QWLqFKbAt
+         kSwsF+hqZoEfORqitqvtKvB0hOhi7Ih7y0laBBPpCybizG20NqV1n5Z4K8f52u07emw/
+         OtMLyl6cqgWDpcrYc5CTWCKkwBFqw3xbki+053nEllbHah+5wy/YrKM1t4KGMjjcKzEj
+         O5bks5nhh7TugHU8x4tEGwVFedfOBul89oTljtxQmIxoRkRC85ucz/jmXZewvERNDNlA
+         dS9w==
+X-Gm-Message-State: AOJu0YzBKEx0SCZJme48dWlsWd7fmAlR3OqIzu9Ouc/dbZjrR2tsEpQL
+	/NX874vcw4T1vfgUAzF8xnJvowwlWVgi/3hVF33dmg==
+X-Google-Smtp-Source: AGHT+IH1CnGwV597j2be6JXJ7H1sH3FUOqbojh7QGEEjE4QkfLLaWQrU1Lc/ACiw78MzsxK6+qZrL30ouvAAFN/Wn1g=
+X-Received: by 2002:a0d:dec2:0:b0:5cd:c7a3:6cb3 with SMTP id
+ h185-20020a0ddec2000000b005cdc7a36cb3mr21398845ywe.37.1701343873628; Thu, 30
+ Nov 2023 03:31:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231123-topic-amlogic-upstream-isp-pmdomain-v2-0-61f2fcf709e5@linaro.org>
- <20231123-topic-amlogic-upstream-isp-pmdomain-v2-2-61f2fcf709e5@linaro.org>
-In-Reply-To: <20231123-topic-amlogic-upstream-isp-pmdomain-v2-2-61f2fcf709e5@linaro.org>
+References: <20231124080623.564924-1-u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20231124080623.564924-1-u.kleine-koenig@pengutronix.de>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 30 Nov 2023 12:30:31 +0100
-Message-ID: <CAPDyKFq7-sGF+obKXOYHaox=Ak29HuJ1=ZMfGiBHrMOQqiiH4A@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] pmdomain: amlogic: meson-ee-pwrc: add support for
- G12A ISP power domain
-To: Neil Armstrong <neil.armstrong@linaro.org>
-Cc: Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
-	Daniel Scally <dan.scally@ideasonboard.com>, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Date: Thu, 30 Nov 2023 12:30:37 +0100
+Message-ID: <CAPDyKFqQeUsyHf4RC_FQTpm9G_LMYNAaC6EXtOmb_h_6rhUcfA@mail.gmail.com>
+Subject: Re: [PATCH 0/9] pmdomain: Convert to platform remove callback
+ returning void
+To: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Linus Walleij <linus.walleij@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Pengfei Li <pengfei.li_1@nxp.com>, Rob Herring <robh@kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Saravana Kannan <saravanak@google.com>, 
+	Marco Felsch <m.felsch@pengutronix.de>, Peng Fan <peng.fan@nxp.com>, 
+	Jindong Yue <jindong.yue@nxp.com>, Lucas Stach <l.stach@pengutronix.de>, 
+	Marek Vasut <marex@denx.de>, Deepak R Varma <drv@mailo.com>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konrad.dybcio@linaro.org>, Andy Gross <agross@kernel.org>, 
+	Michal Simek <michal.simek@amd.com>, Heiko Stuebner <heiko@sntech.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 23 Nov 2023 at 17:17, Neil Armstrong <neil.armstrong@linaro.org> wrote:
+On Fri, 24 Nov 2023 at 09:10, Uwe Kleine-K=C3=B6nig
+<u.kleine-koenig@pengutronix.de> wrote:
 >
-> Add entries for the ISP power domain found in the Amlogic G12B SoC
+> Hello,
 >
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> this patch set converts all drivers below drivers/pmdomain to use struct
+> platform_driver::remove_new(). See commit 5c5a7680e67b ("platform:
+> Provide a remove callback that returns no value") for an extended
+> explanation and the eventual goal.
+>
+> While working on drivers/pmdomain/imx/gpc.c I noticed three issues, but
+> didn't address them:
+>
+>  - The driver uses builtin_platform_driver twice. The documentation
+>    however mandates that "Each driver may only use this macro once".
+>    I don't know if the documentation is wrong and using it twice works
+>    as intended.
+>
+>  - imx_gpc_remove() only removes two PDs, but there might be up to four?!
+>
+>  - In imx_gpc_remove() if
+>    pm_genpd_remove(&imx_gpc_domains[GPC_PGC_DOMAIN_PU].base) fails,
+>    removing the ARM PD is skipped. So together with the previous item
+>    the driver leaks up to three genpd instances.
+>
+> Maybe someone caring for this driver will pick these up and prepare
+> patches? Ideally pm_genpd_remove() should return void caring for still
+> existing providers, parents and devices in generic code. I think that
+> erroring out in genpd_remove() before the PM domain is removed from the
+> various lists might result in use-after-free errors.
+>
+> Best regards
+> Uwe
+>
+> Uwe Kleine-K=C3=B6nig (9):
+>   pmdomain: imx-pgc: Convert to platform remove callback returning void
+>   pmdomain: imx-gpc: Convert to platform remove callback returning void
+>   pmdomain: imx-gpcv2: Convert to platform remove callback returning
+>     void
+>   pmdomain: imx8m-blk-ctrl: Convert to platform remove callback
+>     returning void
+>   pmdomain: imx8mp-blk-ctrl: Convert to platform remove callback
+>     returning void
+>   pmdomain: imx93-blk-ctrl: Convert to platform remove callback
+>     returning void
+>   pmdomain: imx93-pd: Convert to platform remove callback returning void
+>   pmdomain: qcom-cpr: Convert to platform remove callback returning void
+>   pmdomain: xilinx/zynqmp: Convert to platform remove callback returning
+>     void
+>
+>  drivers/pmdomain/imx/gpc.c                  | 28 +++++++++++----------
+>  drivers/pmdomain/imx/gpcv2.c                |  6 ++---
+>  drivers/pmdomain/imx/imx8m-blk-ctrl.c       |  6 ++---
+>  drivers/pmdomain/imx/imx8mp-blk-ctrl.c      |  6 ++---
+>  drivers/pmdomain/imx/imx93-blk-ctrl.c       |  6 ++---
+>  drivers/pmdomain/imx/imx93-pd.c             |  6 ++---
+>  drivers/pmdomain/qcom/cpr.c                 |  6 ++---
+>  drivers/pmdomain/xilinx/zynqmp-pm-domains.c |  6 ++---
+>  8 files changed, 29 insertions(+), 41 deletions(-)
+>
 
-Applied for next, thanks!
+The series applied for next, thanks!
 
 Kind regards
 Uffe
-
-
-> ---
->  drivers/pmdomain/amlogic/meson-ee-pwrc.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
->
-> diff --git a/drivers/pmdomain/amlogic/meson-ee-pwrc.c b/drivers/pmdomain/amlogic/meson-ee-pwrc.c
-> index 0dd71cd814c5..fcec6eb610e4 100644
-> --- a/drivers/pmdomain/amlogic/meson-ee-pwrc.c
-> +++ b/drivers/pmdomain/amlogic/meson-ee-pwrc.c
-> @@ -47,6 +47,8 @@
->
->  #define G12A_HHI_NANOQ_MEM_PD_REG0     (0x43 << 2)
->  #define G12A_HHI_NANOQ_MEM_PD_REG1     (0x44 << 2)
-> +#define G12A_HHI_ISP_MEM_PD_REG0       (0x45 << 2)
-> +#define G12A_HHI_ISP_MEM_PD_REG1       (0x46 << 2)
->
->  struct meson_ee_pwrc;
->  struct meson_ee_pwrc_domain;
-> @@ -115,6 +117,13 @@ static struct meson_ee_pwrc_top_domain g12a_pwrc_nna = {
->         .iso_mask = BIT(16) | BIT(17),
->  };
->
-> +static struct meson_ee_pwrc_top_domain g12a_pwrc_isp = {
-> +       .sleep_reg = GX_AO_RTI_GEN_PWR_SLEEP0,
-> +       .sleep_mask = BIT(18) | BIT(19),
-> +       .iso_reg = GX_AO_RTI_GEN_PWR_ISO0,
-> +       .iso_mask = BIT(18) | BIT(19),
-> +};
-> +
->  /* Memory PD Domains */
->
->  #define VPU_MEMPD(__reg)                                       \
-> @@ -231,6 +240,11 @@ static struct meson_ee_pwrc_mem_domain g12a_pwrc_mem_nna[] = {
->         { G12A_HHI_NANOQ_MEM_PD_REG1, GENMASK(31, 0) },
->  };
->
-> +static struct meson_ee_pwrc_mem_domain g12a_pwrc_mem_isp[] = {
-> +       { G12A_HHI_ISP_MEM_PD_REG0, GENMASK(31, 0) },
-> +       { G12A_HHI_ISP_MEM_PD_REG1, GENMASK(31, 0) },
-> +};
-> +
->  #define VPU_PD(__name, __top_pd, __mem, __is_pwr_off, __resets, __clks)        \
->         {                                                               \
->                 .name = __name,                                         \
-> @@ -269,6 +283,8 @@ static struct meson_ee_pwrc_domain_desc g12a_pwrc_domains[] = {
->         [PWRC_G12A_ETH_ID] = MEM_PD("ETH", meson_pwrc_mem_eth),
->         [PWRC_G12A_NNA_ID] = TOP_PD("NNA", &g12a_pwrc_nna, g12a_pwrc_mem_nna,
->                                     pwrc_ee_is_powered_off),
-> +       [PWRC_G12A_ISP_ID] = TOP_PD("ISP", &g12a_pwrc_isp, g12a_pwrc_mem_isp,
-> +                                   pwrc_ee_is_powered_off),
->  };
->
->  static struct meson_ee_pwrc_domain_desc gxbb_pwrc_domains[] = {
->
-> --
-> 2.34.1
->
 
