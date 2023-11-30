@@ -1,340 +1,110 @@
-Return-Path: <linux-pm+bounces-540-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-541-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DEC67FED07
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 11:40:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A09E67FED82
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 12:07:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 11ED8281E94
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 10:40:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3719FB20C2A
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 11:07:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E3C818E01;
-	Thu, 30 Nov 2023 10:40:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A97B63B7BF;
+	Thu, 30 Nov 2023 11:07:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="d12tJu7a"
+	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="upgVrcnc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90890D6C
-	for <linux-pm@vger.kernel.org>; Thu, 30 Nov 2023 02:40:01 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-332ed02ccd9so521659f8f.0
-        for <linux-pm@vger.kernel.org>; Thu, 30 Nov 2023 02:40:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701340800; x=1701945600; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uTOLZJakU9gN6Im+DyUzEgXZxdixZJwPR7HjKovGFk8=;
-        b=d12tJu7alWkeD09cOmi+3U2zfRgI0lUST+f37oRMOi/TvkIr5egWU7jnYZL6Id36lV
-         U4GRqszk99o6HtlO9SgSrbJ54fGBVZ+L/pLPpShBBkz3Mmxjs6Kurt/HkSxFeYd0PJ8N
-         E/xJ6GO03o/VHZqPi7QEv0k/9BSU+X3KXbbRWjkUMVixF3Y96J77hPQ8/g+/P9+TpXBJ
-         PSpqo5I8YHi7XBnU/UYI4QJFtSVNxrdPSqrI4kXqKtPVILHc7zguqkQju6x+HiUxxhTR
-         jUHAtWUHpOIVSocvziogQNm4MtRq/UoYrAzRx8SrpNne3lDZmCEqo1Y3mn6PTLxwF4lc
-         vaNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701340800; x=1701945600;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uTOLZJakU9gN6Im+DyUzEgXZxdixZJwPR7HjKovGFk8=;
-        b=LbZwriunW4QAX78vTCWPoeN/JctulWunN05hiNHnbrW3zXDGAiE74AmTcvMHF8W4nd
-         jvPU82sc2k3x8nm+yoSwA4g2t/o5HBDmItH9XNN0Tplunz/Kct8yjcujYe2n04MIJGnr
-         WmniV4QOijVVPhKTFPtuokhA/yTO9Drbzk8zmb0pCM4BUiJ5uXyCko/SXjkofF0NpM4V
-         GLR0nNfqVk2epKTZ9ar19YYnE+qyWDK3HyVpFK7KDEiqU1zZ7NzEX+TkNZLWWxhLeokg
-         roVZB+InqSVJHhezNOvObVSCDlu5Q62PYPpuI+AD3/wQ64EoFa3qgbYDRGI6ABx8k10f
-         RzXw==
-X-Gm-Message-State: AOJu0Yz+c+9lHLhoIjPQupRLceuQwNtIUVeC86iH3pUFrubhytGTADlP
-	4V2k/8mLOpYCLvbs15w1EjntXA==
-X-Google-Smtp-Source: AGHT+IHQHK/h76SXGtY2D/c0GjznZZDGZ5j5bQtjbsp/YOT1bu7c8bK+P9YzavuyRZR4RJbAmbk6+w==
-X-Received: by 2002:adf:fa8d:0:b0:333:12f9:d381 with SMTP id h13-20020adffa8d000000b0033312f9d381mr4440388wrr.36.1701340799879;
-        Thu, 30 Nov 2023 02:39:59 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:3992:5718:8297:bc86? ([2a05:6e02:1041:c10:3992:5718:8297:bc86])
-        by smtp.googlemail.com with ESMTPSA id f9-20020a5d50c9000000b00332c6c5ce82sm1147492wrt.94.2023.11.30.02.39.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Nov 2023 02:39:59 -0800 (PST)
-Message-ID: <d83a54db-4dc8-483e-9f4e-4c7d853f4c46@linaro.org>
-Date: Thu, 30 Nov 2023 11:39:58 +0100
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:242:246e::2])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918E3D50;
+	Thu, 30 Nov 2023 03:07:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+	Resent-Cc:Resent-Message-ID; bh=uGytFMxpGI7JlPQDKfJO8ZqFvcljBnOYCH7721H3cm4=;
+	t=1701342459; x=1702552059; b=upgVrcncB/P1AnThEmhWcQ5qmw/5lcdWsM8Q/+HR+lDfuth
+	1axLLMx9eFyuNyeCDJZx1T1RSZFhh7HQqk+X9UXcpjTHy5PBh3K4ivPYzWh5WyjH+baCune07N64U
+	dzCG1dkGPSSmHHabAj1ScYJsCqKUJps1hHKWHyCpbn+JraKav5xrZPlheCICkyUMa/hNDIZFeq/r+
+	u8meKphWIzyc7199GrAiEWg5cAO/aroMwnici28GV/xsiUdlBweCN3ejO5KAkf9sSXi2k1rCXfRxj
+	B857vFUJVIHV9SzrhiVc9jG0BedgYo3HivSuxy4wfjjERw+iOPMBXvueUIt9iTcA==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.97)
+	(envelope-from <benjamin@sipsolutions.net>)
+	id 1r8etL-00000009v1D-3DAG;
+	Thu, 30 Nov 2023 12:07:36 +0100
+Message-ID: <b5d672096829cb9645205c3803e9471cef98643f.camel@sipsolutions.net>
+Subject: Re: iwlwifi: WRT: Invalid buffer destination
+From: Benjamin Berg <benjamin@sipsolutions.net>
+To: Len Brown <lenb@kernel.org>, Johannes Berg <johannes.berg@intel.com>, 
+ Miri Korenblit <miriam.rachel.korenblit@intel.com>, Gregory Greenman
+ <gregory.greenman@intel.com>
+Cc: Linux PM list <linux-pm@vger.kernel.org>, "open list:NETWORKING
+	DRIVERS (WIRELESS)" <linux-wireless@vger.kernel.org>
+Date: Thu, 30 Nov 2023 12:07:32 +0100
+In-Reply-To: <CAJvTdKkcxJss=DM2sxgv_MR5BeZ4_OC-3ad6tA40TYH2yqHCWw@mail.gmail.com>
+References: 
+	<CAJvTdKkcxJss=DM2sxgv_MR5BeZ4_OC-3ad6tA40TYH2yqHCWw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] thermal: trip: Rework thermal_zone_set_trip() and
- its callers
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>
-References: <12350772.O9o76ZdvQC@kreacher> <4869676.GXAFRqVoOG@kreacher>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <4869676.GXAFRqVoOG@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-malware-bazaar: not-scanned
+
+On Wed, 2023-11-29 at 21:03 -0500, Len Brown wrote:
+> Automated suspend/resume testing is grumpy about iwlwifi, because
+> iwlwifi dmesg's with the words "Invalid" and "Failed", which our
+> heuristics highlight as issues a human should review.
+>=20
+> If this is normal, can you delete the messages?=C2=A0 If this is a
+> failure, can we fix it?
+
+I had been looking a bit at either removing messages with level
+KERN_ERR or or fixing the underlying issue. With the plan to get clean
+runs with regard to kernel log level at least. I didn't look for
+specific keywords like "invalid" or "failed" though.
+
+I believe The debugfs one is an actual bug (harmless though) for which
+a patch should be posted soon.
+
+I don't remember seeing the "WRT: Invalid buffer destination" message.
+Will need to take a closer look, but quite likely it should just be
+hidden unless the IWL_DL_FW debug flag is set (i.e. use IWL_DEBUG_FW).
+
+Benjamin
+
+>=20
+> thanks,
+> -Len
+>=20
+> [20168.810433] iwlwifi 0000:00:14.3: WRT: Invalid buffer destination
+> [20168.967756] iwlwifi 0000:00:14.3: WFPM_UMAC_PD_NOTIFICATION: 0x20
+> [20168.967806] iwlwifi 0000:00:14.3: WFPM_LMAC2_PD_NOTIFICATION: 0x1f
+> [20168.967857] iwlwifi 0000:00:14.3: WFPM_AUTH_KEY_0: 0x90
+> [20168.967919] iwlwifi 0000:00:14.3: CNVI_SCU_SEQ_DATA_DW9: 0x0
+> [20168.969387] iwlwifi 0000:00:14.3: RFIm is deactivated, reason =3D 4
+> [20169.074918] iwlwifi 0000:00:14.3: Failed to create debugfs
+> directory under netdev:wlp0s20f3
+> [20169.076354] iwlwifi 0000:00:14.3: Failed to create debugfs
+> directory under netdev:p2p-dev-wlp0s20
 
 
-Hi Rafael,
-
-
-On 29/11/2023 14:38, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Both trip_point_temp_store() and trip_point_hyst_store() use
-> thermal_zone_set_trip() to update a given trip point, but none of them
-> actually needs to change more than one field in struct thermal_trip
-> representing it.  However, each of them effectively calls
-> __thermal_zone_get_trip() twice in a row for the same trip index value,
-> once directly and once via thermal_zone_set_trip(), which is not
-> particularly efficient, and the way in which thermal_zone_set_trip()
-> carries out the update is not particularly straightforward.
-> 
-> Moreover, some checks done by them both need not go under the thermal
-> zone lock and code duplication between them can be reduced quite a bit
-> by moving the majority of logic into thermal_zone_set_trip().
-> 
-> Rework all of the above functions to address the above.
-
-The resulting change looks to me over complicate for the code it is 
-supposed to improve. One new function, one enum and leaking the sysfs 
-buffer to a function located outside of thermal-sysfs.c. That does not 
-improve the readability IMO.
-
-The function thermal_zone_set_trip is only called from thermal_syfs.c
-
-Why not directly change the trip point temp/hyst value in the array in 
-the thermal_sysfs functions and remove the function 
-thermal_zone_set_trip() ?
-
-
-> No intentional functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-> 
-> v2 -> v3: Fix missing return statement in thermal_zone_set_trip() (Lukasz).
-> 
-> v1 -> v2:
->     * Fix 2 typos in the changelog (Lukasz).
->     * Split one change into the [1/2].
-> 
-> ---
->   drivers/thermal/thermal_core.h  |    9 ++++++
->   drivers/thermal/thermal_sysfs.c |   52 ++++++++--------------------------
->   drivers/thermal/thermal_trip.c  |   60 +++++++++++++++++++++++++++-------------
->   include/linux/thermal.h         |    3 --
->   4 files changed, 62 insertions(+), 62 deletions(-)
-> 
-> Index: linux-pm/drivers/thermal/thermal_core.h
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_core.h
-> +++ linux-pm/drivers/thermal/thermal_core.h
-> @@ -122,6 +122,15 @@ void __thermal_zone_device_update(struct
->   void __thermal_zone_set_trips(struct thermal_zone_device *tz);
->   int __thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
->   			    struct thermal_trip *trip);
-> +
-> +enum thermal_set_trip_target {
-> +	THERMAL_TRIP_SET_TEMP,
-> +	THERMAL_TRIP_SET_HYST,
-> +};
-> +
-> +int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
-> +			  enum thermal_set_trip_target what, const char *buf);
-> +
->   int thermal_zone_trip_id(struct thermal_zone_device *tz,
->   			 const struct thermal_trip *trip);
->   int __thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp);
-> Index: linux-pm/drivers/thermal/thermal_sysfs.c
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_sysfs.c
-> +++ linux-pm/drivers/thermal/thermal_sysfs.c
-> @@ -120,31 +120,17 @@ trip_point_temp_store(struct device *dev
->   		      const char *buf, size_t count)
->   {
->   	struct thermal_zone_device *tz = to_thermal_zone(dev);
-> -	struct thermal_trip trip;
-> -	int trip_id, ret;
-> +	int trip_id;
-> +	int ret;
-> +
-> +	if (!device_is_registered(dev))
-> +		return -ENODEV;
->   
->   	if (sscanf(attr->attr.name, "trip_point_%d_temp", &trip_id) != 1)
->   		return -EINVAL;
->   
-> -	mutex_lock(&tz->lock);
-> -
-> -	if (!device_is_registered(dev)) {
-> -		ret = -ENODEV;
-> -		goto unlock;
-> -	}
-> -
-> -	ret = __thermal_zone_get_trip(tz, trip_id, &trip);
-> -	if (ret)
-> -		goto unlock;
-> -
-> -	ret = kstrtoint(buf, 10, &trip.temperature);
-> -	if (ret)
-> -		goto unlock;
-> +	ret = thermal_zone_set_trip(tz, trip_id, THERMAL_TRIP_SET_TEMP, buf);
->   
-> -	ret = thermal_zone_set_trip(tz, trip_id, &trip);
-> -unlock:
-> -	mutex_unlock(&tz->lock);
-> -	
->   	return ret ? ret : count;
->   }
->   
-> @@ -179,30 +165,16 @@ trip_point_hyst_store(struct device *dev
->   		      const char *buf, size_t count)
->   {
->   	struct thermal_zone_device *tz = to_thermal_zone(dev);
-> -	struct thermal_trip trip;
-> -	int trip_id, ret;
-> +	int trip_id;
-> +	int ret;
-> +
-> +	if (!device_is_registered(dev))
-> +		return -ENODEV;
->   
->   	if (sscanf(attr->attr.name, "trip_point_%d_hyst", &trip_id) != 1)
->   		return -EINVAL;
->   
-> -	mutex_lock(&tz->lock);
-> -
-> -	if (!device_is_registered(dev)) {
-> -		ret = -ENODEV;
-> -		goto unlock;
-> -	}
-> -
-> -	ret = __thermal_zone_get_trip(tz, trip_id, &trip);
-> -	if (ret)
-> -		goto unlock;
-> -
-> -	ret = kstrtoint(buf, 10, &trip.hysteresis);
-> -	if (ret)
-> -		goto unlock;
-> -
-> -	ret = thermal_zone_set_trip(tz, trip_id, &trip);
-> -unlock:
-> -	mutex_unlock(&tz->lock);
-> +	ret = thermal_zone_set_trip(tz, trip_id, THERMAL_TRIP_SET_HYST, buf);
->   
->   	return ret ? ret : count;
->   }
-> Index: linux-pm/drivers/thermal/thermal_trip.c
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_trip.c
-> +++ linux-pm/drivers/thermal/thermal_trip.c
-> @@ -148,39 +148,61 @@ int thermal_zone_get_trip(struct thermal
->   EXPORT_SYMBOL_GPL(thermal_zone_get_trip);
->   
->   int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
-> -			  const struct thermal_trip *trip)
-> +			  enum thermal_set_trip_target what, const char *buf)
->   {
-> -	struct thermal_trip t;
-> -	int ret;
-> +	struct thermal_trip *trip;
-> +	int val, ret = 0;
->   
-> -	ret = __thermal_zone_get_trip(tz, trip_id, &t);
-> +	if (trip_id < 0 || trip_id >= tz->num_trips)
-> +		return -EINVAL;
-> +
-> +	ret = kstrtoint(buf, 10, &val);
->   	if (ret)
->   		return ret;
->   
-> -	if (t.type != trip->type)
-> -		return -EINVAL;
-> +	mutex_lock(&tz->lock);
->   
-> -	if (t.temperature != trip->temperature && tz->ops->set_trip_temp) {
-> -		ret = tz->ops->set_trip_temp(tz, trip_id, trip->temperature);
-> -		if (ret)
-> -			return ret;
-> -	}
-> +	trip = &tz->trips[trip_id];
->   
-> -	if (t.hysteresis != trip->hysteresis && tz->ops->set_trip_hyst) {
-> -		ret = tz->ops->set_trip_hyst(tz, trip_id, trip->hysteresis);
-> -		if (ret)
-> -			return ret;
-> +	switch (what) {
-> +	case THERMAL_TRIP_SET_TEMP:
-> +		if (val == trip->temperature)
-> +			goto unlock;
-> +
-> +		if (tz->ops->set_trip_temp) {
-> +			ret = tz->ops->set_trip_temp(tz, trip_id, val);
-> +			if (ret)
-> +				goto unlock;
-> +		}
-> +		trip->temperature = val;
-> +		break;
-> +
-> +	case THERMAL_TRIP_SET_HYST:
-> +		if (val == trip->hysteresis)
-> +			goto unlock;
-> +
-> +		if (tz->ops->set_trip_hyst) {
-> +			ret = tz->ops->set_trip_hyst(tz, trip_id, val);
-> +			if (ret)
-> +				goto unlock;
-> +		}
-> +		trip->hysteresis = val;
-> +		break;
-> +
-> +	default:
-> +		ret = -EINVAL;
-> +		goto unlock;
->   	}
->   
-> -	if (tz->trips && (t.temperature != trip->temperature || t.hysteresis != trip->hysteresis))
-> -		tz->trips[trip_id] = *trip;
-> -
->   	thermal_notify_tz_trip_change(tz->id, trip_id, trip->type,
->   				      trip->temperature, trip->hysteresis);
->   
->   	__thermal_zone_device_update(tz, THERMAL_TRIP_CHANGED);
->   
-> -	return 0;
-> +unlock:
-> +	mutex_unlock(&tz->lock);
-> +
-> +	return ret;
->   }
->   
->   int thermal_zone_trip_id(struct thermal_zone_device *tz,
-> Index: linux-pm/include/linux/thermal.h
-> ===================================================================
-> --- linux-pm.orig/include/linux/thermal.h
-> +++ linux-pm/include/linux/thermal.h
-> @@ -283,9 +283,6 @@ int __thermal_zone_get_trip(struct therm
->   int thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
->   			  struct thermal_trip *trip);
->   
-> -int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
-> -			  const struct thermal_trip *trip);
-> -
->   int for_each_thermal_trip(struct thermal_zone_device *tz,
->   			  int (*cb)(struct thermal_trip *, void *),
->   			  void *data);
-> 
-> 
-> 
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+>=20
+> ps.
+>=20
+> lenb@lenb-Dell-XPS-13-9315:~/src/linux$ grep IWLWIFI .config
+> CONFIG_IWLWIFI=3Dm
+> CONFIG_IWLWIFI_LEDS=3Dy
+> CONFIG_IWLWIFI_OPMODE_MODULAR=3Dy
+> # CONFIG_IWLWIFI_DEBUG is not set
+> CONFIG_IWLWIFI_DEBUGFS=3Dy
+> CONFIG_IWLWIFI_DEVICE_TRACING=3Dy
+>=20
+>=20
 
 
