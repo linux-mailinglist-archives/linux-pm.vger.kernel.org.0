@@ -1,110 +1,105 @@
-Return-Path: <linux-pm+bounces-541-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-542-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A09E67FED82
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 12:07:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32DCF7FEDDB
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 12:29:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3719FB20C2A
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 11:07:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6340C1C20DC7
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 11:29:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A97B63B7BF;
-	Thu, 30 Nov 2023 11:07:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD53F3A29C;
+	Thu, 30 Nov 2023 11:29:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="upgVrcnc"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xrqFx3vg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:242:246e::2])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918E3D50;
-	Thu, 30 Nov 2023 03:07:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=uGytFMxpGI7JlPQDKfJO8ZqFvcljBnOYCH7721H3cm4=;
-	t=1701342459; x=1702552059; b=upgVrcncB/P1AnThEmhWcQ5qmw/5lcdWsM8Q/+HR+lDfuth
-	1axLLMx9eFyuNyeCDJZx1T1RSZFhh7HQqk+X9UXcpjTHy5PBh3K4ivPYzWh5WyjH+baCune07N64U
-	dzCG1dkGPSSmHHabAj1ScYJsCqKUJps1hHKWHyCpbn+JraKav5xrZPlheCICkyUMa/hNDIZFeq/r+
-	u8meKphWIzyc7199GrAiEWg5cAO/aroMwnici28GV/xsiUdlBweCN3ejO5KAkf9sSXi2k1rCXfRxj
-	B857vFUJVIHV9SzrhiVc9jG0BedgYo3HivSuxy4wfjjERw+iOPMBXvueUIt9iTcA==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.97)
-	(envelope-from <benjamin@sipsolutions.net>)
-	id 1r8etL-00000009v1D-3DAG;
-	Thu, 30 Nov 2023 12:07:36 +0100
-Message-ID: <b5d672096829cb9645205c3803e9471cef98643f.camel@sipsolutions.net>
-Subject: Re: iwlwifi: WRT: Invalid buffer destination
-From: Benjamin Berg <benjamin@sipsolutions.net>
-To: Len Brown <lenb@kernel.org>, Johannes Berg <johannes.berg@intel.com>, 
- Miri Korenblit <miriam.rachel.korenblit@intel.com>, Gregory Greenman
- <gregory.greenman@intel.com>
-Cc: Linux PM list <linux-pm@vger.kernel.org>, "open list:NETWORKING
-	DRIVERS (WIRELESS)" <linux-wireless@vger.kernel.org>
-Date: Thu, 30 Nov 2023 12:07:32 +0100
-In-Reply-To: <CAJvTdKkcxJss=DM2sxgv_MR5BeZ4_OC-3ad6tA40TYH2yqHCWw@mail.gmail.com>
-References: 
-	<CAJvTdKkcxJss=DM2sxgv_MR5BeZ4_OC-3ad6tA40TYH2yqHCWw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15AF1737
+	for <linux-pm@vger.kernel.org>; Thu, 30 Nov 2023 03:29:31 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2c9cb021d5bso6284471fa.0
+        for <linux-pm@vger.kernel.org>; Thu, 30 Nov 2023 03:29:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1701343770; x=1701948570; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7b0ctZB3CE38lmBqwtgKLVcx66/DGir1aEMPMaEabH0=;
+        b=xrqFx3vg3Ibx4bpkv7/4/C1d1Dt0mS7SqaOnUHzLukJ2OzMaxnyARUQInMuncrHi0K
+         bw/8tSG2M7dnbay1ZXEWWD9jrYFH07aFyMxb0iyai8XN8gHbkisDQm4CSaFMgA+NF/hp
+         JG04UEpy92iabPWXEE29rGH0crCv2eZ4WeAhNVloEjAvVTMjv3+eh/s3wmInwlc1lmUq
+         C8Q1rPsal2DemFMDE9R5J4tjnBLfntvML/nRfrFZPw7lV0W9ujyY/M3+5c+jQgjtPwS1
+         REvrWSt7Aw/5q8Zdk5xQYHDV6QUMJxDYCPJuwpjRwtYlwzj15DgYq9Y3OLCQkHddTwRb
+         XxqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701343770; x=1701948570;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7b0ctZB3CE38lmBqwtgKLVcx66/DGir1aEMPMaEabH0=;
+        b=hQEf1MRTHkUBXP+/VcOQRN2AxssBqKzMNTwXV0y0XlFpFsdbHbmI2R5Gy6amWFlmDN
+         txKGmp0qkzrVxoSn+Hm3aaS3l8EyjIN8TfqTKHmjgwbRf3idtodhkqiKJNf9qFe526oD
+         /k7IEXrpTEiT5IAbf8mYOLq/yeCDRb/QOcFNZ1ORMc0cISw1hZpl3S99TG/UAJp634F2
+         tXCNM4DjToJE8dq0j8oiItK7eDHFrZSVo6FG+Jcuvm5eC3NSqbxehritQ0udBvKb81+z
+         GAcYwsRncYvD1fDrqRq0bXePiGfcDI+MUblomW6hdNKa+fgFvB0vAOkEwcQUcWNP6mVY
+         /uQg==
+X-Gm-Message-State: AOJu0Yxaf+xqcF7n7ZM8M93h7EzMCptySEl6emWiv52blZ1jurznFjUZ
+	fnh1H42TdmBK7XD6+Mlnb0mMjw==
+X-Google-Smtp-Source: AGHT+IH6IbA/kyxQtBUcbHuHxAbxWUMG9Zg32mPrWbotuU2rIkBPL9Lmpdf737cOWxT8yoLNLJ/fEA==
+X-Received: by 2002:a2e:9e55:0:b0:2c9:cf5d:af56 with SMTP id g21-20020a2e9e55000000b002c9cf5daf56mr714828ljk.31.1701343769906;
+        Thu, 30 Nov 2023 03:29:29 -0800 (PST)
+Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
+        by smtp.gmail.com with ESMTPSA id f15-20020a2e6a0f000000b002c871393f61sm118960ljc.72.2023.11.30.03.29.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Nov 2023 03:29:29 -0800 (PST)
+From: Ulf Hansson <ulf.hansson@linaro.org>
+To: Linus <torvalds@linux-foundation.org>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] pmdomain fixes for v6.7-rc4
+Date: Thu, 30 Nov 2023 12:29:28 +0100
+Message-Id: <20231130112928.64992-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+Content-Transfer-Encoding: 8bit
 
-On Wed, 2023-11-29 at 21:03 -0500, Len Brown wrote:
-> Automated suspend/resume testing is grumpy about iwlwifi, because
-> iwlwifi dmesg's with the words "Invalid" and "Failed", which our
-> heuristics highlight as issues a human should review.
->=20
-> If this is normal, can you delete the messages?=C2=A0 If this is a
-> failure, can we fix it?
+Hi Linus,
 
-I had been looking a bit at either removing messages with level
-KERN_ERR or or fixing the underlying issue. With the plan to get clean
-runs with regard to kernel log level at least. I didn't look for
-specific keywords like "invalid" or "failed" though.
+Here's a PR with a pmdomain fix intended for v6.7-rc4. Details about the
+highlights are as usual found in the signed tag.
 
-I believe The debugfs one is an actual bug (harmless though) for which
-a patch should be posted soon.
+Please pull this in!
 
-I don't remember seeing the "WRT: Invalid buffer destination" message.
-Will need to take a closer look, but quite likely it should just be
-hidden unless the IWL_DL_FW debug flag is set (i.e. use IWL_DEBUG_FW).
-
-Benjamin
-
->=20
-> thanks,
-> -Len
->=20
-> [20168.810433] iwlwifi 0000:00:14.3: WRT: Invalid buffer destination
-> [20168.967756] iwlwifi 0000:00:14.3: WFPM_UMAC_PD_NOTIFICATION: 0x20
-> [20168.967806] iwlwifi 0000:00:14.3: WFPM_LMAC2_PD_NOTIFICATION: 0x1f
-> [20168.967857] iwlwifi 0000:00:14.3: WFPM_AUTH_KEY_0: 0x90
-> [20168.967919] iwlwifi 0000:00:14.3: CNVI_SCU_SEQ_DATA_DW9: 0x0
-> [20168.969387] iwlwifi 0000:00:14.3: RFIm is deactivated, reason =3D 4
-> [20169.074918] iwlwifi 0000:00:14.3: Failed to create debugfs
-> directory under netdev:wlp0s20f3
-> [20169.076354] iwlwifi 0000:00:14.3: Failed to create debugfs
-> directory under netdev:p2p-dev-wlp0s20
+Kind regards
+Ulf Hansson
 
 
->=20
-> ps.
->=20
-> lenb@lenb-Dell-XPS-13-9315:~/src/linux$ grep IWLWIFI .config
-> CONFIG_IWLWIFI=3Dm
-> CONFIG_IWLWIFI_LEDS=3Dy
-> CONFIG_IWLWIFI_OPMODE_MODULAR=3Dy
-> # CONFIG_IWLWIFI_DEBUG is not set
-> CONFIG_IWLWIFI_DEBUGFS=3Dy
-> CONFIG_IWLWIFI_DEVICE_TRACING=3Dy
->=20
->=20
+The following changes since commit 98b1cc82c4affc16f5598d4fa14b1858671b2263:
 
+  Linux 6.7-rc2 (2023-11-19 15:02:14 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.7-rc2
+
+for you to fetch changes up to 0cb19e50a911aaadf49eed120392e429d6e1fa0c:
+
+  pmdomain: arm: Avoid polling for scmi_perf_domain (2023-11-27 16:28:20 +0100)
+
+----------------------------------------------------------------
+ - arm: Avoid polling for the scmi_perf_domain
+
+----------------------------------------------------------------
+Ulf Hansson (1):
+      pmdomain: arm: Avoid polling for scmi_perf_domain
+
+ drivers/pmdomain/arm/scmi_perf_domain.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
