@@ -1,142 +1,151 @@
-Return-Path: <linux-pm+bounces-537-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-538-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05F767FEB29
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 09:51:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB3717FEB69
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 10:07:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 36E8F1C20A71
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 08:51:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4285AB20EC4
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 09:07:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF8C2C84A;
-	Thu, 30 Nov 2023 08:51:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3C3A35895;
+	Thu, 30 Nov 2023 09:07:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Hn10JkKB"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="N9gY6RXD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E8C10D0
-	for <linux-pm@vger.kernel.org>; Thu, 30 Nov 2023 00:51:03 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-a00a9c6f1e9so89524166b.3
-        for <linux-pm@vger.kernel.org>; Thu, 30 Nov 2023 00:51:03 -0800 (PST)
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9328110FC
+	for <linux-pm@vger.kernel.org>; Thu, 30 Nov 2023 01:07:01 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-dafe04717baso599393276.1
+        for <linux-pm@vger.kernel.org>; Thu, 30 Nov 2023 01:07:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701334262; x=1701939062; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bfirJcDdbvd/fROPuvQ/hHvBL7U147hTFUn+CLwD0sY=;
-        b=Hn10JkKBrZfBSgKXB5X4reAi1KQfBXQhmrMeakDhpkqzKVoB733vzN5lN3sSAD0iku
-         1Cya6/SXZ9jLqzWE8/LvjLmV+25mpKeB6HQmSrCgoDUPucgZ9SSP0a8HzFfZIiAiwDUm
-         vDbIo+hXXIaBKp3TGN+6xu7zTCffCrFocioPuIYppUeslxFt1RfcL6RZHoqh4HY4jcKI
-         Tsyw1t20THS3RJhUVXgusoGr2k0z6FdmCxMt18KWZxHExFz0IXY6x3FbGm6hFxtmXBxn
-         0d3Ts6K1zSIoJYhiQ5B3Edy5a81s8SJHfmJ/De9mjtuQhwT9JIg0UzmhI6eXqzy8ksp8
-         D30A==
+        d=linaro.org; s=google; t=1701335221; x=1701940021; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qzc3U7sFDdtHUadGGzprUKVhVLAwC/gLPx8U/sb5Ft4=;
+        b=N9gY6RXDkWumRhx9vouBV3yMPGyw5jXA5XNERq4YTreF8GmSxntyHyj3hPmREWT/hl
+         nu2C0hSaOUHSpifnj7szzpFC/3+jXfFN4qG/K4h+wm/iRWXOqqqnjRmXiO5XNQegRHma
+         03UWSvFUFOO6wNcBmeUub42q46ldRWwDyWYWwQ1Z1tWSbwvbiUS5KlHH7spR64ikt8ne
+         iPGoEuMg6Xke9wL5Znb5tr9BXxMFjUUa8/l5UKSkXxwWNQwMrpQDzcTnhT+oOEZ5gyVc
+         cHx/uoccDvP+WzPldhqcvw3Bxj6VJj5o008JBTqD2+iw+Qm7/fVYJJGX/fnkAYPm8vKQ
+         nRWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701334262; x=1701939062;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bfirJcDdbvd/fROPuvQ/hHvBL7U147hTFUn+CLwD0sY=;
-        b=gbkOLH7jJvGDnjSWZFhbbw2bqkXFsU9OMwBVr6/knRY0R4dmhH9ZmS5X1qtF1QAg2l
-         zI2V400ET/PqH/L4d2RfHIC0TTdWeZvWMSagXkybYe2ozOloDdIwx8x6Rx7CFLF9CchW
-         oj/ct+EypcdDOi1VTFryXJz6R7lxWAH73k0wudZ3KKwUW1+GWQ5dwCWUsqeQqZA05SwL
-         EOhABxnGv11Fq6AFEYfVFD/ygQ4QiHMpZlk7Ks+R6p5mxvzvtpXM280JJI+uHrD84AeJ
-         zr7agi4S+tqFP1Bi8eI1Ur6DA90kEj057wldCtWa0YoMtaD0IiJeEyaV9cICJ+fabU5n
-         tUzg==
-X-Gm-Message-State: AOJu0YzfBTbXeTxG3LslHHrjz1kOrp0OC/X/cS2HJm37xoKMP9lpIWrZ
-	pFrSaNKMwmg/MGMgLUqv5lcS9Q==
-X-Google-Smtp-Source: AGHT+IH418nmy5rSk2mr6TF1pMJ9GgCUjSZRNpfe61bmlqehpOWyfPKC2N9NSQcSEj8SVzKNUhBi5A==
-X-Received: by 2002:a17:907:1c82:b0:9b2:cf77:a105 with SMTP id nb2-20020a1709071c8200b009b2cf77a105mr18280093ejc.15.1701334261879;
-        Thu, 30 Nov 2023 00:51:01 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.223.109])
-        by smtp.gmail.com with ESMTPSA id v20-20020a170906489400b009adc77fe164sm437639ejq.66.2023.11.30.00.51.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Nov 2023 00:51:01 -0800 (PST)
-Message-ID: <66d74137-1537-448f-b742-a3c25db6f4dc@linaro.org>
-Date: Thu, 30 Nov 2023 09:50:59 +0100
+        d=1e100.net; s=20230601; t=1701335221; x=1701940021;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qzc3U7sFDdtHUadGGzprUKVhVLAwC/gLPx8U/sb5Ft4=;
+        b=RwRAmzH0q3niKrAfnXXrc/qk/NURnZUkaBGrz09rp4lV1XltBnOqS2gYqgyXfxYXdR
+         7GV7Rd6qJy6DtauqlXifcAYsBgtvscBQ8/yxJcrQrYwRgllQcvvwznJ7itFjpyl8NaR8
+         Bn6uunsJmG7ZY8iyn4E2st0QhbkRHwDScxAPVkHza/Mppuwy7rh54sVHADkTDU1EobKx
+         +UzmH54sTZ9iGjpU79blscgZGfO171U2OvI+PV5dG9fA2VSRo9Pfmo7W16jZcuYNsYBG
+         zs/xbgdCMwTctM700zp7krkRz0zqB5h0AnSwa+ttZkB2iLIoR9H1xwlvpUDsiLsRnDcD
+         qDGQ==
+X-Gm-Message-State: AOJu0YxmkqP2T2EqOnEafqNDcQzqzxYvqNRg1e4pFwUFNgSOHlJ3lx1O
+	PU+CKjV5Ap+11eNlnjsdJl163ruwjRt5nbsOS3QICA==
+X-Google-Smtp-Source: AGHT+IE2wHsXYey5GhKupzNswCMwI47ajmC1v7kGHta1ytzdpied8STHZJJIrUpWGsQJNpPuJQDIl8OPjlw4XfG8Ydk=
+X-Received: by 2002:a25:ce0e:0:b0:db5:4196:8125 with SMTP id
+ x14-20020a25ce0e000000b00db541968125mr311366ybe.17.1701335220510; Thu, 30 Nov
+ 2023 01:07:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] dt-bindings: interconnect: Add Qualcomm SM6115 NoC
-Content-Language: en-US
-To: Konrad Dybcio <konrad.dybcio@linaro.org>, Andy Gross <agross@kernel.org>,
- Bjorn Andersson <andersson@kernel.org>, Georgi Djakov <djakov@kernel.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>
-Cc: Marijn Suijten <marijn.suijten@somainline.org>,
- linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- Konrad Dybcio <konradybcio@kernel.org>
-References: <20231125-topic-6115icc-v3-0-bd8907b8cfd7@linaro.org>
- <20231125-topic-6115icc-v3-1-bd8907b8cfd7@linaro.org>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231125-topic-6115icc-v3-1-bd8907b8cfd7@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20230929130028.GB2825985@pengutronix.de> <CAPDyKFqUtNEbK2tzD+qOK+dFcDyBxvcNwOHWPJDLhTWGGkoHQw@mail.gmail.com>
+ <20231122112212.GA783262@pengutronix.de>
+In-Reply-To: <20231122112212.GA783262@pengutronix.de>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 30 Nov 2023 10:06:24 +0100
+Message-ID: <CAPDyKFpWL0aVH0pfUbDiSmu=dr1NjO+wVHcTyxbQqfb52mMq2g@mail.gmail.com>
+Subject: Re: mmc: handling of Under-Voltage Events in eMMC
+To: Oleksij Rempel <o.rempel@pengutronix.de>
+Cc: Mark Brown <broonie@kernel.org>, Yang Yingliang <yangyingliang@huawei.com>, 
+	linux-mmc@vger.kernel.org, kernel@pengutronix.de, Ye Bin <yebin10@huawei.com>, 
+	Heiner Kallweit <hkallweit1@gmail.com>, Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, Naresh Solanki <naresh.solanki@9elements.com>, 
+	zev@bewilderbeest.net, Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org, 
+	=?UTF-8?Q?S=C3=B8ren_Andersen?= <san@skov.dk>
+Content-Type: text/plain; charset="UTF-8"
 
-On 29/11/2023 15:41, Konrad Dybcio wrote:
-> Add bindings for Qualcomm SM6115 Network-On-Chip interconnect.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  .../bindings/interconnect/qcom,sm6115.yaml         | 152 +++++++++++++++++++++
->  include/dt-bindings/interconnect/qcom,sm6115.h     | 111 +++++++++++++++
->  2 files changed, 263 insertions(+)
+On Wed, 22 Nov 2023 at 12:22, Oleksij Rempel <o.rempel@pengutronix.de> wrote:
+>
+> Hi Ulf, Hi Mark,
+>
+> On Tue, Oct 10, 2023 at 04:48:24PM +0200, Ulf Hansson wrote:
+> > On Fri, 29 Sept 2023 at 15:00, Oleksij Rempel <o.rempel@pengutronix.de> wrote:
+> > >
+> > > Hi,
+> > >
+> > > I'm working on a project aiming to protect eMMC during power loss. Our
+> > > hardware setup includes an under-voltage detector, circuits to disable
+> > > non-critical components, and enough capacitance to allow the CPU to run
+> > > for 100ms.
+> > >
+> > > I've added an interrupt handler to the fixed regulator to emit
+> > > REGULATOR_EVENT_UNDER_VOLTAGE events, and modified
+> > > drivers/mmc/host/sdhci.c to receive these events. Currently, the handler
+> > > only produces debug output.
+> > >
+> > > What is the recommended approach for handling under-voltage situations?
+> > > Should the driver finish ongoing write commands, block new ones, and
+> > > shut down the eMMC? I'm looking for direction here.
+> >
+> > That's indeed a very good question. From a general point of view, I
+> > think the best we can do is to stop any new I/O requests from being
+> > managed - and try to complete only the last ongoing one, if any.
+> > Exactly how to do that can be a bit tricky though.
+> >
+> > Beyond that, we should probably try to send the eMMC specific commands
+> > that allow us to inform the eMMC that it's about to be powered-off.
+> > Although, I am not sure that we actually will be able to complete
+> > these operations within 100ms, so maybe it's not really worth trying?
+> > See mmc_poweroff_notify(), for example.
+>
+> Some puzzle parts are now mainline, for example regulator framework
+> can be configured to detect under-voltage events and execute
+> hw_protection_shutdown(). So far it worked good enough to complete
+> mmc_poweroff_notify() withing 100ms window. The problem is, the chance to
+> execute mmc_poweroff_notify() depends on kernel configuration. If there are too
+> many drivers and devices, mmc_poweroff_notify() will be not executed in time.
 
+Right. I have been monitoring the discussions around the series
+"[PATCH v1 0/3] introduce priority-based shutdown support", but wanted
+to give a reply to $subject patch first.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I think the point here is not to *always make it*, but rather try our
+best to improve the situation.
 
-Best regards,
-Krzysztof
+>
+> For now, I workaround it by registering a reboot notifier for mmc shutdown.
+> It works, because kernel_power_off() is executing all registered reboot
+> notifiers at first place and there are no other slow reboot notifiers.
+> But, it seems to be not reliable enough. Probably notifier prioritization
+> is needed to make it more predictable.
 
+I think I need to have a closer look at the code for such an approach,
+to tell if that would work.
+
+My main concern with this, is that we need to make sure the block
+device queue needs to be flushed or made quiescent
+(mmc_blk_shutdown()) first, so we don't end up processing I/O requests
+beyond calling mmc_poweroff_notify().
+
+>
+> So far, I have two variants to implement it in more predictable way:
+> variant 1 - forward the under-voltage notification to the mmc framework and
+>   execute mmc_poweroff_notify() or bus shutdown.
+> variant 2 - use reboot notifier and introduce reboot notifier prioritization.
+>
+> Are there other options? What are your preferences?
+
+Something along the variant2 seems to make most sense to me, but I
+will continue to look at your other series in this regard.
+
+Kind regards
+Uffe
 
