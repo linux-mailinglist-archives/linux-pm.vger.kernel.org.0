@@ -1,105 +1,107 @@
-Return-Path: <linux-pm+bounces-542-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-543-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32DCF7FEDDB
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 12:29:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79D217FEDE3
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 12:31:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6340C1C20DC7
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 11:29:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8600BB20E23
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 11:31:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD53F3A29C;
-	Thu, 30 Nov 2023 11:29:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48ADF3C081;
+	Thu, 30 Nov 2023 11:31:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xrqFx3vg"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sv/PdGSf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15AF1737
-	for <linux-pm@vger.kernel.org>; Thu, 30 Nov 2023 03:29:31 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2c9cb021d5bso6284471fa.0
-        for <linux-pm@vger.kernel.org>; Thu, 30 Nov 2023 03:29:31 -0800 (PST)
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA82172C
+	for <linux-pm@vger.kernel.org>; Thu, 30 Nov 2023 03:31:02 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-db3fa47c2f7so704999276.0
+        for <linux-pm@vger.kernel.org>; Thu, 30 Nov 2023 03:31:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701343770; x=1701948570; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7b0ctZB3CE38lmBqwtgKLVcx66/DGir1aEMPMaEabH0=;
-        b=xrqFx3vg3Ibx4bpkv7/4/C1d1Dt0mS7SqaOnUHzLukJ2OzMaxnyARUQInMuncrHi0K
-         bw/8tSG2M7dnbay1ZXEWWD9jrYFH07aFyMxb0iyai8XN8gHbkisDQm4CSaFMgA+NF/hp
-         JG04UEpy92iabPWXEE29rGH0crCv2eZ4WeAhNVloEjAvVTMjv3+eh/s3wmInwlc1lmUq
-         C8Q1rPsal2DemFMDE9R5J4tjnBLfntvML/nRfrFZPw7lV0W9ujyY/M3+5c+jQgjtPwS1
-         REvrWSt7Aw/5q8Zdk5xQYHDV6QUMJxDYCPJuwpjRwtYlwzj15DgYq9Y3OLCQkHddTwRb
-         XxqA==
+        d=linaro.org; s=google; t=1701343861; x=1701948661; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=r7OU53fGBOPG6Pf4dr1TYI+8Sj5e49OX70Q1sOZhEyk=;
+        b=sv/PdGSfE9Z5FdcY3EK45zoWKbMNLrwNd5bsAsu2RU4pTxMjEpom1hkjOi5f7IsD6t
+         0orvMN81PS4fNiX0ULxOb1NGGZ2nL6T9g/8h7sgyiY7P557nMf3Oo/7dvX8rbLsxNsIj
+         n0yHsK6B3m7uHYB2+ovIArGitkaf3DN79bB9yBBbu3KyN59vLUf+5rp6ngKg3WJUjBbU
+         s+hKadHLVHBZe1287puHKUzMQ3hJIm/DbLwEMejgbm11XHkS2/Cjck7Uorqkvr4yRYS3
+         tAUBCeOvgug5mWeYMnw44HrUjOMWHfhWmyReDDXwKziWn6TqegxjTpdFIAJHhb0DmxyQ
+         wjnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701343770; x=1701948570;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1701343861; x=1701948661;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7b0ctZB3CE38lmBqwtgKLVcx66/DGir1aEMPMaEabH0=;
-        b=hQEf1MRTHkUBXP+/VcOQRN2AxssBqKzMNTwXV0y0XlFpFsdbHbmI2R5Gy6amWFlmDN
-         txKGmp0qkzrVxoSn+Hm3aaS3l8EyjIN8TfqTKHmjgwbRf3idtodhkqiKJNf9qFe526oD
-         /k7IEXrpTEiT5IAbf8mYOLq/yeCDRb/QOcFNZ1ORMc0cISw1hZpl3S99TG/UAJp634F2
-         tXCNM4DjToJE8dq0j8oiItK7eDHFrZSVo6FG+Jcuvm5eC3NSqbxehritQ0udBvKb81+z
-         GAcYwsRncYvD1fDrqRq0bXePiGfcDI+MUblomW6hdNKa+fgFvB0vAOkEwcQUcWNP6mVY
-         /uQg==
-X-Gm-Message-State: AOJu0Yxaf+xqcF7n7ZM8M93h7EzMCptySEl6emWiv52blZ1jurznFjUZ
-	fnh1H42TdmBK7XD6+Mlnb0mMjw==
-X-Google-Smtp-Source: AGHT+IH6IbA/kyxQtBUcbHuHxAbxWUMG9Zg32mPrWbotuU2rIkBPL9Lmpdf737cOWxT8yoLNLJ/fEA==
-X-Received: by 2002:a2e:9e55:0:b0:2c9:cf5d:af56 with SMTP id g21-20020a2e9e55000000b002c9cf5daf56mr714828ljk.31.1701343769906;
-        Thu, 30 Nov 2023 03:29:29 -0800 (PST)
-Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id f15-20020a2e6a0f000000b002c871393f61sm118960ljc.72.2023.11.30.03.29.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Nov 2023 03:29:29 -0800 (PST)
-From: Ulf Hansson <ulf.hansson@linaro.org>
-To: Linus <torvalds@linux-foundation.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] pmdomain fixes for v6.7-rc4
-Date: Thu, 30 Nov 2023 12:29:28 +0100
-Message-Id: <20231130112928.64992-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        bh=r7OU53fGBOPG6Pf4dr1TYI+8Sj5e49OX70Q1sOZhEyk=;
+        b=kCHTOeaaC1vtu/athvYXkleiSitoXnz0QkY3pT0ZT9TlgpSoA4+5sLYivzkCnM6QDP
+         aUk6wmOV5Zmug/S15S9fi7Kaa2FKIgiGh8iodAFLOdZ5vOy4VFq91qdZ3vdWC4x6Bung
+         RluTEmKZxXUohm3O4nMfun4JauJVLiVpeVv3p0UkQ3aBmlV+lp9QsyX8cXE2iF2x8lpy
+         L+4ojXty/QWZTRq29xc/ynYciAmMHzfG+urv49X48LOphjJOFfMLA0Tcc7UIDwfGrHRI
+         6C6XuX0G8Ro61x+Rj3ZxQ0KZnUYvbM4BLwdSpCiAlN+B4CpRLXrBmqMrd8WCO5jeLIHq
+         vAWQ==
+X-Gm-Message-State: AOJu0Yx9RsaSQ6TVvFzmMV2rIvaNpStIEPEXPY+Sx5ibuE1416tPfv4g
+	heb6FQjmqs/kSvGdtFJH+RbiUIg4Hsvzqfp0cHqerA==
+X-Google-Smtp-Source: AGHT+IGLBA9cAvCW/BlFwViZaJGDvVrjeHv8nYpm9n0xFyqiDsBqoa/xFpj/b8u0mPKQS3ZU6c/jj0h4qWRRrKDRbwY=
+X-Received: by 2002:a25:ab0b:0:b0:da0:76eb:3d31 with SMTP id
+ u11-20020a25ab0b000000b00da076eb3d31mr19895548ybi.15.1701343861311; Thu, 30
+ Nov 2023 03:31:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20231123-topic-amlogic-upstream-isp-pmdomain-v2-0-61f2fcf709e5@linaro.org>
+ <20231123-topic-amlogic-upstream-isp-pmdomain-v2-1-61f2fcf709e5@linaro.org>
+In-Reply-To: <20231123-topic-amlogic-upstream-isp-pmdomain-v2-1-61f2fcf709e5@linaro.org>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 30 Nov 2023 12:30:25 +0100
+Message-ID: <CAPDyKFr9jtg8rf2bs1N3zR146TvCmHgTwqWRr=LJNjervpfOkQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: power: meson-g12a-power: document ISP
+ power domain
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+	Daniel Scally <dan.scally@ideasonboard.com>, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Linus,
+On Thu, 23 Nov 2023 at 17:17, Neil Armstrong <neil.armstrong@linaro.org> wrote:
+>
+> Add MIPI ISP power domain ID to the G12A Power domains bindings header
+>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 
-Here's a PR with a pmdomain fix intended for v6.7-rc4. Details about the
-highlights are as usual found in the signed tag.
-
-Please pull this in!
+Applied for next and the immutable dt branch, thanks!
 
 Kind regards
-Ulf Hansson
+Uffe
 
 
-The following changes since commit 98b1cc82c4affc16f5598d4fa14b1858671b2263:
-
-  Linux 6.7-rc2 (2023-11-19 15:02:14 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.7-rc2
-
-for you to fetch changes up to 0cb19e50a911aaadf49eed120392e429d6e1fa0c:
-
-  pmdomain: arm: Avoid polling for scmi_perf_domain (2023-11-27 16:28:20 +0100)
-
-----------------------------------------------------------------
- - arm: Avoid polling for the scmi_perf_domain
-
-----------------------------------------------------------------
-Ulf Hansson (1):
-      pmdomain: arm: Avoid polling for scmi_perf_domain
-
- drivers/pmdomain/arm/scmi_perf_domain.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> ---
+>  include/dt-bindings/power/meson-g12a-power.h | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/include/dt-bindings/power/meson-g12a-power.h b/include/dt-bindings/power/meson-g12a-power.h
+> index 44ec0c50e340..01fd0ac4dd08 100644
+> --- a/include/dt-bindings/power/meson-g12a-power.h
+> +++ b/include/dt-bindings/power/meson-g12a-power.h
+> @@ -10,5 +10,6 @@
+>  #define PWRC_G12A_VPU_ID               0
+>  #define PWRC_G12A_ETH_ID               1
+>  #define PWRC_G12A_NNA_ID               2
+> +#define PWRC_G12A_ISP_ID               3
+>
+>  #endif
+>
+> --
+> 2.34.1
+>
 
