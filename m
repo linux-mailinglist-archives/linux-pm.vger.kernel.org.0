@@ -1,134 +1,95 @@
-Return-Path: <linux-pm+bounces-535-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-536-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEBB97FE956
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 07:51:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 588607FEA69
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 09:24:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D03BD1C20A1E
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 06:51:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A2061C20BD3
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 08:24:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E17A154B8;
-	Thu, 30 Nov 2023 06:51:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 867CC2208F;
+	Thu, 30 Nov 2023 08:24:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="cfgos/gf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Dra6CPBS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1D491AD
-	for <linux-pm@vger.kernel.org>; Wed, 29 Nov 2023 22:51:24 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-5c230c79c0bso514441a12.1
-        for <linux-pm@vger.kernel.org>; Wed, 29 Nov 2023 22:51:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1701327084; x=1701931884; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=pwqcjaCKqdwJDrSE6ACpo1UwGj3tGCYG+RW8or856Uw=;
-        b=cfgos/gfsFUKl2Uyw52aRDYyHNpkyAURoMdkZeQfDesuIdlZIaDx57AfFnfaWYmV9b
-         Vb16aeB+Fl2Tj1oyjxCIQ0mGi7Qx5jRyMf0llGXxUHtUDEY52FFASNyUd6N0JWx1PHTz
-         KHe2Q2fmM359YdYXM0tVBy4DbBrgADvom+TNsCH9RtH0iaFkSa7U5mmy3AgWvaIMrlV2
-         XDLcG01qkq3u9HP434VkznlobrxL0S8x7VrJ3Z9vm1pfPFPIaf1peKzVNJDFdTzaWso1
-         E5Lyw/1k2v/JTlQkrvb8MBPss8HMdu2FskG4XLeO0WZJVnh7rq31yqwi2EY6lLXEbw/i
-         VLqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701327084; x=1701931884;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pwqcjaCKqdwJDrSE6ACpo1UwGj3tGCYG+RW8or856Uw=;
-        b=K4r0mS9mucP9bkg8w691UvTubeXNJqNtKHRobsIWjQKYt1tdBQTw0WKHpGh1Aaw9ie
-         tZH3XnKTUxKbDBKNwiUfHeEmKqeeVB7QhmsVEOVpOyLToD3B94CDHDtFg8TW1+673ZzQ
-         +FvvV92+FvN8q2dBclXrN9BweHcO73tINNoMJPQz/XdUMPrayMPA1bNG/d/+D6zz1X+p
-         dyFEdTuy2VtX0yGphtTCQt7mxCwrSqqSK37ZLCBITbjfZg/wwSDEWUgC9zsI+Fe2xsok
-         M47we+7lUpfPOl8CACTanN036GHsJYux05agnjyapkIRmu+5cezIZb12ddNKNrHThZP2
-         LNjw==
-X-Gm-Message-State: AOJu0YyOv7V91DtuBeF+uL3xjfrc4mTE5zxuXi1UiX4k7Ui/7/CD3/+z
-	GZHKK95PjACYi+YGduxmOTPKp5mX2LGxdaLyaRsvuQ==
-X-Google-Smtp-Source: AGHT+IFgXMmeDEcjRz5tFsxdRnVhTL7LDEyg+nRorxIbQl4YWre5xl45fYkBOSDjvNNNpxSWTGqHIw==
-X-Received: by 2002:a05:6a20:3d84:b0:18c:41cd:c74d with SMTP id s4-20020a056a203d8400b0018c41cdc74dmr16421021pzi.5.1701327084223;
-        Wed, 29 Nov 2023 22:51:24 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id a18-20020a17090acb9200b002839d7d8bf3sm2459504pju.55.2023.11.29.22.51.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Nov 2023 22:51:23 -0800 (PST)
-Message-ID: <656830eb.170a0220.ca1e3.7bde@mx.google.com>
-Date: Wed, 29 Nov 2023 22:51:23 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3BA10FD;
+	Thu, 30 Nov 2023 00:24:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701332664; x=1732868664;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=YfW6il/Qm5tA+b+HtgoPr45j9dfu7F6OdxtpEIAdKRg=;
+  b=Dra6CPBSvAlHivSeJSrt5POiac/YFPVFT6upY1j3+6D81X7CI1O+MybV
+   yFdEAg/h6h9tBvEgLIbC8CnaO67q1QRaeyZDmaqPR6J/ITToHXc7K9nr6
+   z/gsedbymgJL5/7L97yxsPsDVi+mzafw1xXWY/Dpf08CHuSqQUeJPxpzU
+   L2et2N1xLtkOaIPdOswo0Fk79zYHF6awY6K8YpdwXHX1BOB+DhjLzmpMQ
+   Fj6BIXGDDcwZWppf1n+5hIz0SR2xvufkc1Tl7SP8RP7txTSCStvdOq6LQ
+   kYkC31Lm4nuezjAiERH8lPkOV4YFY0USGChY8j+JKsSzFZuTwRNBDoYrg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="6510140"
+X-IronPort-AV: E=Sophos;i="6.04,237,1695711600"; 
+   d="scan'208";a="6510140"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2023 00:24:23 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="798201928"
+X-IronPort-AV: E=Sophos;i="6.04,237,1695711600"; 
+   d="scan'208";a="798201928"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2023 00:24:23 -0800
+Received: from abityuts-desk1.ger.corp.intel.com (abityuts-desk1.fi.intel.com [10.237.68.150])
+	by linux.intel.com (Postfix) with ESMTP id AD3BA580109;
+	Thu, 30 Nov 2023 00:24:20 -0800 (PST)
+Message-ID: <a9db1de5ab4d2c8fc289654053615a53b9ffc20d.camel@linux.intel.com>
+Subject: Re: [PATCH] intel_idle: add Cometlake support
+From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+To: Doug Smythies <dsmythies@telus.net>, "'Rafael J. Wysocki'"
+	 <rafael@kernel.org>, 'Jiang Yihe' <jiangyihe042@gmail.com>
+Cc: 'Jacob Pan' <jacob.jun.pan@linux.intel.com>, 'Len Brown'
+ <lenb@kernel.org>,  linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ "'Zhang, Rui'" <rui.zhang@intel.com>
+Date: Thu, 30 Nov 2023 10:24:19 +0200
+In-Reply-To: <001701da22db$180872c0$48195840$@telus.net>
+References: <20231129143132.32155-1-jiangyihe042@gmail.com>
+	 <CAJZ5v0jfEsNVu=fg+Xa118F=hCGGB33U5SbiqWeCMaVMqNpUEA@mail.gmail.com>
+	 <001701da22db$180872c0$48195840$@telus.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: v6.7-rc3-56-gd9670e2b27245
-Subject: pm/testing baseline: 60 runs,
- 1 regressions (v6.7-rc3-56-gd9670e2b27245)
-To: rafael@kernel.org, linux-pm@vger.kernel.org,
- kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
 
-pm/testing baseline: 60 runs, 1 regressions (v6.7-rc3-56-gd9670e2b27245)
+On Wed, 2023-11-29 at 07:45 -0800, Doug Smythies wrote:
+> Hi All,
+>=20
+> This proposed patch has been submitted at least once before.
+> (I think more than once, but only found 1)
+> Reference:
+> https://lore.kernel.org/linux-pm/20200227013411.1.Ica3bb9fa898499d94e0b0a=
+2bfa08ec46c89d84fa@changeid/
+>=20
+> I have a Cometlake processor and am not in favor of this patch.
+> Reference at to why not:
+> https://bugzilla.kernel.org/show_bug.cgi?id=3D210741
 
-Regressions Summary
--------------------
+CometLake is a platform from 2020, so I'd classified it as "legacy" and wou=
+ld
+not apply this patch without a plausible justification in form of measureme=
+nt
+data.
 
-platform           | arch  | lab         | compiler | defconfig | regressio=
-ns
--------------------+-------+-------------+----------+-----------+----------=
---
-kontron-pitx-imx8m | arm64 | lab-kontron | gcc-10   | defconfig | 1        =
-  =
+Comet lake has been used with ACPI C-states for quite a long time, and swit=
+ching
+it to intel_idle now may cause unwelcome changes in user workloads.
 
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.7-rc3=
--56-gd9670e2b27245/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v6.7-rc3-56-gd9670e2b27245
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      d9670e2b27245a223eb61a1636e87b169570786c =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform           | arch  | lab         | compiler | defconfig | regressio=
-ns
--------------------+-------+-------------+----------+-----------+----------=
---
-kontron-pitx-imx8m | arm64 | lab-kontron | gcc-10   | defconfig | 1        =
-  =
-
-
-  Details:     https://kernelci.org/test/plan/id/656827a77cef7d9d147e4ac0
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.7-rc3-56-gd9670e=
-2b27245/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-imx8m.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.7-rc3-56-gd9670e=
-2b27245/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-imx8m.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/656827a77cef7d9d147e4=
-ac1
-        new failure (last pass: v6.7-rc3-43-g3f96bebf018e) =
-
- =20
+Artem.=20
 
