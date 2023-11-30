@@ -1,426 +1,137 @@
-Return-Path: <linux-pm+bounces-525-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-526-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DF5F7FE460
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 00:57:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB1937FE5F8
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 02:24:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 302B41C208FF
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Nov 2023 23:57:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 364D02821BD
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Nov 2023 01:24:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB99347A6A;
-	Wed, 29 Nov 2023 23:57:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jJMGtfYF"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E70F290D;
+	Thu, 30 Nov 2023 01:24:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB25B2
-	for <linux-pm@vger.kernel.org>; Wed, 29 Nov 2023 15:56:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701302216; x=1732838216;
-  h=date:from:to:cc:subject:message-id;
-  bh=hIo3Osw9+03N1VH/mwI7RN2IxmEGiSRPIi1c7kIqJds=;
-  b=jJMGtfYFnZ5NKHMc6mfAMGAHZT36IkhC9MmZEKpcaiMu/Z4hybCLrQkr
-   abdjlOIhzoqXa1vikxjv6ZgBaPhwGnQVHoDwG0wDbNcLc7XnGiLtPLFcf
-   u/aNb9aB51xBbZd25KGudVfwwqi0I3QN+hkO1XpOZn8Z+esWk00e31+sg
-   syqk7MIdNcvzEuUN0TVZX/2JA48wS6lf/IgA0A5YZrKjKzAIxvtRcpfUr
-   zWzdkgn4d5UYrN2iuuu8r0Y4DW2BzyXMn2+0fSmUGyms2t+hWogxbfWkf
-   RsFLrxGsJNe/9MpA2gAULkwJMgXvm9bWawKzUtTjZJdTBcqvotW5gJlBZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="424393819"
-X-IronPort-AV: E=Sophos;i="6.04,237,1695711600"; 
-   d="scan'208";a="424393819"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2023 15:56:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="839613317"
-X-IronPort-AV: E=Sophos;i="6.04,237,1695711600"; 
-   d="scan'208";a="839613317"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 29 Nov 2023 15:56:54 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1r8UQF-000171-2E;
-	Wed, 29 Nov 2023 23:56:51 +0000
-Date: Thu, 30 Nov 2023 07:55:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Linux Memory Management List <linux-mm@kvack.org>,
- apparmor@lists.ubuntu.com, linux-pm@vger.kernel.org
-Subject: [linux-next:pending-fixes] BUILD SUCCESS
- 1618cb8f574175a196b0e8926c62efc45760e856
-Message-ID: <202311300746.zOJcaNAw-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3130910C6
+	for <linux-pm@vger.kernel.org>; Wed, 29 Nov 2023 17:24:08 -0800 (PST)
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-1f9efd5303cso204042fac.0
+        for <linux-pm@vger.kernel.org>; Wed, 29 Nov 2023 17:24:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701307447; x=1701912247;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=050/UY4g1ikE72OZsbvqHGx2pf2Zpp3yEwnvu2jt/ag=;
+        b=XFuu/Ya+49ym+lCfKG7NmehHRtPvXBuaJ71LfzxPZPtXbvt6afqXgjjsoG4heeYvg/
+         6yu0hG9IjIpMvpt0IYbP4gx+vMBElzzgmFBvEfBO9fcN9hEoGT41RAfDol0s6r50/efo
+         17E32MUKc4fqqSk2C2B2mt8ZGGtwn+6e1erzuW4WGhzX8E+YSjfs+N1KadlZsVLVwDJ5
+         2Pu4w86aqksIARU5G6DEEFj+dGEgZRddFkssW7Kh65nk/G8IHKOfnpfega/Xccdd5/JF
+         89c0dT3i+E/AlRyC6p6w41/t0T9MP1gEETSdYwRxtc6SQSUCObkeWquqKDtOhP/8e5rY
+         XS3Q==
+X-Gm-Message-State: AOJu0Yy7GK+OSBHmAIjqgGRDsAkZJ49RcFMUn9/IEHmhszz0xAEXnei6
+	c+N3cweF0RifH4hOajByJL9zh0sN29a9amRVqVc=
+X-Google-Smtp-Source: AGHT+IFn2MVLZZuZ5jnh7Vus0Yhy7ghnmrwgoDVg2VrmBjqYAMNJ87o7RizHr3+wcdE+JjxnvjTu7Jbwr61P9npwCBg=
+X-Received: by 2002:a05:6870:a9aa:b0:1fa:3dee:ec38 with SMTP id
+ ep42-20020a056870a9aa00b001fa3deeec38mr16682053oab.12.1701307447489; Wed, 29
+ Nov 2023 17:24:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <00d201d96670$e15ab9d0$a4102d70$@telus.net> <CAJvTdKmv-6rp=z=emS1VGdWgTmRfhSUrmUPLk8Hj+5=CvH0+nw@mail.gmail.com>
+ <CAJvTdKmG2JkJBy4UNc101JZUHzUaC=a=U9Xwg9MgQs7wcDvYrA@mail.gmail.com>
+ <001b01da22dc$e0f764b0$a2e62e10$@telus.net> <CAJvTdK=Bvkw+ro_quJ3y=+GAf1MHv5AiBu2kAY+V3Wn259maAg@mail.gmail.com>
+In-Reply-To: <CAJvTdK=Bvkw+ro_quJ3y=+GAf1MHv5AiBu2kAY+V3Wn259maAg@mail.gmail.com>
+From: Len Brown <lenb@kernel.org>
+Date: Wed, 29 Nov 2023 20:23:56 -0500
+Message-ID: <CAJvTdK=rJfjgyRdg4-=xecEmcYnP86R4-K98KBgwa_6THitcPA@mail.gmail.com>
+Subject: Re: [PATCH] tools/power/x86/turbostat: Fix added raw MSR output
+To: Doug Smythies <dsmythies@telus.net>
+Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: multipart/mixed; boundary="00000000000010061f060b5482a3"
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git pending-fixes
-branch HEAD: 1618cb8f574175a196b0e8926c62efc45760e856  Merge branch 'for-linux-next-fixes' of git://anongit.freedesktop.org/drm/drm-misc
+--00000000000010061f060b5482a3
+Content-Type: text/plain; charset="UTF-8"
 
-Warning ids grouped by kconfigs:
+> if (topo.num_packages == 1)
 
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   |-- security-apparmor-lsm.c:warning:Function-parameter-or-member-flags-not-described-in-apparmor_sk_alloc_security
-|   `-- security-apparmor-lsm.c:warning:Function-parameter-or-member-sk-not-described-in-apparmor_sk_free_security
-|-- arc-allyesconfig
-|   |-- security-apparmor-lsm.c:warning:Function-parameter-or-member-flags-not-described-in-apparmor_sk_alloc_security
-|   `-- security-apparmor-lsm.c:warning:Function-parameter-or-member-sk-not-described-in-apparmor_sk_free_security
-|-- i386-buildonly-randconfig-002-20231129
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-num_var-not-described-in-mtrr_overwrite_state
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-start-not-described-in-mtrr_type_lookup
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-uniform-not-described-in-mtrr_type_lookup
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-var-not-described-in-mtrr_overwrite_state
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-end-not-described-in-create_zone_bm_rtree
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-gfp_mask-not-described-in-add_rtree_block
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-gfp_mask-not-described-in-create_zone_bm_rtree
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-add_rtree_block
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-create_zone_bm_rtree
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start-not-described-in-create_zone_bm_rtree
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-add_rtree_block
-|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-free_zone_bm_rtree
-|-- i386-buildonly-randconfig-005-20231129
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-num_var-not-described-in-mtrr_overwrite_state
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-start-not-described-in-mtrr_type_lookup
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-uniform-not-described-in-mtrr_type_lookup
-|   `-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-var-not-described-in-mtrr_overwrite_state
-|-- i386-buildonly-randconfig-006-20231129
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-num_var-not-described-in-mtrr_overwrite_state
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-start-not-described-in-mtrr_type_lookup
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-uniform-not-described-in-mtrr_type_lookup
-|   `-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-var-not-described-in-mtrr_overwrite_state
-|-- i386-randconfig-001-20231129
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-num_var-not-described-in-mtrr_overwrite_state
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-start-not-described-in-mtrr_type_lookup
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-uniform-not-described-in-mtrr_type_lookup
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-var-not-described-in-mtrr_overwrite_state
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-end-not-described-in-create_zone_bm_rtree
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-gfp_mask-not-described-in-add_rtree_block
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-gfp_mask-not-described-in-create_zone_bm_rtree
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-add_rtree_block
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-create_zone_bm_rtree
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start-not-described-in-create_zone_bm_rtree
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-add_rtree_block
-|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-free_zone_bm_rtree
-|-- i386-randconfig-002-20231129
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-num_var-not-described-in-mtrr_overwrite_state
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-start-not-described-in-mtrr_type_lookup
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-uniform-not-described-in-mtrr_type_lookup
-|   `-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-var-not-described-in-mtrr_overwrite_state
-|-- i386-randconfig-005-20231129
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-num_var-not-described-in-mtrr_overwrite_state
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-start-not-described-in-mtrr_type_lookup
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-uniform-not-described-in-mtrr_type_lookup
-|   `-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-var-not-described-in-mtrr_overwrite_state
-|-- i386-randconfig-006-20231129
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-num_var-not-described-in-mtrr_overwrite_state
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-start-not-described-in-mtrr_type_lookup
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-uniform-not-described-in-mtrr_type_lookup
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-var-not-described-in-mtrr_overwrite_state
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-end-not-described-in-create_zone_bm_rtree
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-gfp_mask-not-described-in-add_rtree_block
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-gfp_mask-not-described-in-create_zone_bm_rtree
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-add_rtree_block
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-create_zone_bm_rtree
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start-not-described-in-create_zone_bm_rtree
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-add_rtree_block
-|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-free_zone_bm_rtree
-`-- x86_64-alldefconfig
-    |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-num_var-not-described-in-mtrr_overwrite_state
-    |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-start-not-described-in-mtrr_type_lookup
-    |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-uniform-not-described-in-mtrr_type_lookup
-    `-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-var-not-described-in-mtrr_overwrite_state
-clang_recent_errors
-|-- i386-randconfig-011-20231129
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-num_var-not-described-in-mtrr_overwrite_state
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-start-not-described-in-mtrr_type_lookup
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-uniform-not-described-in-mtrr_type_lookup
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-var-not-described-in-mtrr_overwrite_state
-|   |-- security-apparmor-lsm.c:warning:Function-parameter-or-member-flags-not-described-in-apparmor_sk_alloc_security
-|   `-- security-apparmor-lsm.c:warning:Function-parameter-or-member-sk-not-described-in-apparmor_sk_free_security
-|-- i386-randconfig-012-20231129
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-num_var-not-described-in-mtrr_overwrite_state
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-start-not-described-in-mtrr_type_lookup
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-uniform-not-described-in-mtrr_type_lookup
-|   `-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-var-not-described-in-mtrr_overwrite_state
-|-- i386-randconfig-013-20231129
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-num_var-not-described-in-mtrr_overwrite_state
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-start-not-described-in-mtrr_type_lookup
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-uniform-not-described-in-mtrr_type_lookup
-|   `-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-var-not-described-in-mtrr_overwrite_state
-|-- i386-randconfig-014-20231129
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-num_var-not-described-in-mtrr_overwrite_state
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-start-not-described-in-mtrr_type_lookup
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-uniform-not-described-in-mtrr_type_lookup
-|   `-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-var-not-described-in-mtrr_overwrite_state
-|-- i386-randconfig-015-20231129
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-num_var-not-described-in-mtrr_overwrite_state
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-start-not-described-in-mtrr_type_lookup
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-uniform-not-described-in-mtrr_type_lookup
-|   |-- arch-x86-kernel-cpu-mtrr-generic.c:warning:Function-parameter-or-member-var-not-described-in-mtrr_overwrite_state
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-end-not-described-in-create_zone_bm_rtree
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-gfp_mask-not-described-in-add_rtree_block
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-gfp_mask-not-described-in-create_zone_bm_rtree
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-add_rtree_block
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-create_zone_bm_rtree
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start-not-described-in-create_zone_bm_rtree
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-add_rtree_block
-|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-free_zone_bm_rtree
-|-- powerpc-allmodconfig
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-end-not-described-in-create_zone_bm_rtree
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-gfp_mask-not-described-in-add_rtree_block
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-gfp_mask-not-described-in-create_zone_bm_rtree
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-add_rtree_block
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-create_zone_bm_rtree
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start-not-described-in-create_zone_bm_rtree
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-add_rtree_block
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-free_zone_bm_rtree
-|   |-- security-apparmor-lsm.c:warning:Function-parameter-or-member-flags-not-described-in-apparmor_sk_alloc_security
-|   `-- security-apparmor-lsm.c:warning:Function-parameter-or-member-sk-not-described-in-apparmor_sk_free_security
-|-- powerpc-allyesconfig
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-end-not-described-in-create_zone_bm_rtree
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-gfp_mask-not-described-in-add_rtree_block
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-gfp_mask-not-described-in-create_zone_bm_rtree
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-add_rtree_block
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-create_zone_bm_rtree
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start-not-described-in-create_zone_bm_rtree
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-add_rtree_block
-|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-free_zone_bm_rtree
-|   |-- security-apparmor-lsm.c:warning:Function-parameter-or-member-flags-not-described-in-apparmor_sk_alloc_security
-|   `-- security-apparmor-lsm.c:warning:Function-parameter-or-member-sk-not-described-in-apparmor_sk_free_security
-`-- riscv-rv32_defconfig
-    |-- security-apparmor-lsm.c:warning:Function-parameter-or-member-flags-not-described-in-apparmor_sk_alloc_security
-    `-- security-apparmor-lsm.c:warning:Function-parameter-or-member-sk-not-described-in-apparmor_sk_free_security
+turns out that is topo.num_packages == 0...
 
-elapsed time: 1535m
+Doug,
+Let me know if this tweak to your patch doesn't do the trick.
 
-configs tested: 212
-configs skipped: 4
+thanks,
+-Len
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+--00000000000010061f060b5482a3
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0004-tools-power-turbostat-Fix-added-raw-MSR-output.patch"
+Content-Disposition: attachment; 
+	filename="0004-tools-power-turbostat-Fix-added-raw-MSR-output.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_lpkigz1p0>
+X-Attachment-Id: f_lpkigz1p0
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20231129   gcc  
-arc                   randconfig-002-20231129   gcc  
-arm                               allnoconfig   gcc  
-arm                         at91_dt_defconfig   gcc  
-arm                        clps711x_defconfig   gcc  
-arm                                 defconfig   clang
-arm                          exynos_defconfig   gcc  
-arm                           imxrt_defconfig   gcc  
-arm                      integrator_defconfig   gcc  
-arm                        multi_v7_defconfig   gcc  
-arm                         nhk8815_defconfig   gcc  
-arm                       omap2plus_defconfig   gcc  
-arm                          pxa3xx_defconfig   gcc  
-arm                            qcom_defconfig   gcc  
-arm                   randconfig-001-20231129   gcc  
-arm                   randconfig-002-20231129   gcc  
-arm                   randconfig-003-20231129   gcc  
-arm                   randconfig-004-20231129   gcc  
-arm                             rpc_defconfig   gcc  
-arm                         s3c6400_defconfig   gcc  
-arm                       spear13xx_defconfig   clang
-arm                        spear6xx_defconfig   gcc  
-arm                           stm32_defconfig   gcc  
-arm                           u8500_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20231129   gcc  
-arm64                 randconfig-002-20231129   gcc  
-arm64                 randconfig-003-20231129   gcc  
-arm64                 randconfig-004-20231129   gcc  
-csky                              allnoconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20231129   gcc  
-csky                  randconfig-002-20231129   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-i386                             allmodconfig   clang
-i386                              allnoconfig   clang
-i386                             allyesconfig   clang
-i386         buildonly-randconfig-001-20231129   gcc  
-i386         buildonly-randconfig-002-20231129   gcc  
-i386         buildonly-randconfig-003-20231129   gcc  
-i386         buildonly-randconfig-004-20231129   gcc  
-i386         buildonly-randconfig-005-20231129   gcc  
-i386         buildonly-randconfig-006-20231129   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20231129   gcc  
-i386                  randconfig-002-20231129   gcc  
-i386                  randconfig-003-20231129   gcc  
-i386                  randconfig-004-20231129   gcc  
-i386                  randconfig-005-20231129   gcc  
-i386                  randconfig-006-20231129   gcc  
-i386                  randconfig-011-20231129   clang
-i386                  randconfig-012-20231129   clang
-i386                  randconfig-013-20231129   clang
-i386                  randconfig-014-20231129   clang
-i386                  randconfig-015-20231129   clang
-i386                  randconfig-016-20231129   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20231129   gcc  
-loongarch             randconfig-002-20231129   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                          amiga_defconfig   gcc  
-m68k                         apollo_defconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                       m5208evb_defconfig   gcc  
-m68k                       m5275evb_defconfig   gcc  
-m68k                        m5307c3_defconfig   gcc  
-m68k                        m5407c3_defconfig   gcc  
-m68k                        mvme147_defconfig   gcc  
-m68k                          sun3x_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   clang
-mips                             allyesconfig   gcc  
-mips                        bcm47xx_defconfig   gcc  
-mips                         bigsur_defconfig   gcc  
-mips                         cobalt_defconfig   gcc  
-mips                         db1xxx_defconfig   gcc  
-mips                      fuloong2e_defconfig   gcc  
-mips                           ip32_defconfig   gcc  
-mips                     loongson1c_defconfig   clang
-mips                           rs90_defconfig   clang
-mips                        vocore2_defconfig   gcc  
-mips                           xway_defconfig   gcc  
-nios2                         3c120_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20231129   gcc  
-nios2                 randconfig-002-20231129   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-openrisc                    or1ksim_defconfig   gcc  
-openrisc                       virt_defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                generic-32bit_defconfig   gcc  
-parisc                randconfig-001-20231129   gcc  
-parisc                randconfig-002-20231129   gcc  
-parisc64                            defconfig   gcc  
-powerpc                      acadia_defconfig   clang
-powerpc                          allmodconfig   clang
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                      bamboo_defconfig   gcc  
-powerpc                   currituck_defconfig   gcc  
-powerpc                    klondike_defconfig   gcc  
-powerpc                      mgcoge_defconfig   gcc  
-powerpc               mpc834x_itxgp_defconfig   clang
-powerpc                      pcm030_defconfig   gcc  
-powerpc                     powernv_defconfig   clang
-powerpc               randconfig-001-20231129   gcc  
-powerpc               randconfig-002-20231129   gcc  
-powerpc               randconfig-003-20231129   gcc  
-powerpc64             randconfig-001-20231129   gcc  
-powerpc64             randconfig-002-20231129   gcc  
-powerpc64             randconfig-003-20231129   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   clang
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                 randconfig-001-20231129   gcc  
-riscv                 randconfig-002-20231129   gcc  
-riscv                          rv32_defconfig   clang
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                       zfcpdump_defconfig   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                          r7785rp_defconfig   gcc  
-sh                    randconfig-001-20231129   gcc  
-sh                    randconfig-002-20231129   gcc  
-sh                           se7206_defconfig   gcc  
-sh                           se7721_defconfig   gcc  
-sh                     sh7710voipgw_defconfig   gcc  
-sh                        sh7763rdp_defconfig   gcc  
-sparc                            alldefconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc                       sparc64_defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20231129   gcc  
-sparc64               randconfig-002-20231129   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20231129   gcc  
-um                    randconfig-002-20231129   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                           alldefconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20231129   gcc  
-x86_64       buildonly-randconfig-002-20231129   gcc  
-x86_64       buildonly-randconfig-003-20231129   gcc  
-x86_64       buildonly-randconfig-004-20231129   gcc  
-x86_64       buildonly-randconfig-005-20231129   gcc  
-x86_64       buildonly-randconfig-006-20231129   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                randconfig-011-20231129   gcc  
-x86_64                randconfig-012-20231129   gcc  
-x86_64                randconfig-013-20231129   gcc  
-x86_64                randconfig-014-20231129   gcc  
-x86_64                randconfig-015-20231129   gcc  
-x86_64                randconfig-016-20231129   gcc  
-x86_64                randconfig-071-20231129   gcc  
-x86_64                randconfig-072-20231129   gcc  
-x86_64                randconfig-073-20231129   gcc  
-x86_64                randconfig-074-20231129   gcc  
-x86_64                randconfig-075-20231129   gcc  
-x86_64                randconfig-076-20231129   gcc  
-x86_64                          rhel-8.3-func   gcc  
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                  cadence_csp_defconfig   gcc  
-xtensa                       common_defconfig   gcc  
-xtensa                  nommu_kc705_defconfig   gcc  
-xtensa                randconfig-001-20231129   gcc  
-xtensa                randconfig-002-20231129   gcc  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+RnJvbSA0ZGI2Mjk2NjVkODUyNGY3MDViODZjODUyOWM2OWY3NTg5YjM5YzdiIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpNZXNzYWdlLUlkOiA8NGRiNjI5NjY1ZDg1MjRmNzA1Yjg2Yzg1MjljNjlm
+NzU4OWIzOWM3Yi4xNzAxMzA3MjI1LmdpdC5sZW4uYnJvd25AaW50ZWwuY29tPgpJbi1SZXBseS1U
+bzogPDdmOTMxMDAyNTdlZDlmNDI2YzVjMzY1NjY4NmE1ZjU3ZDdkOTgwMGUuMTcwMTMwNzIyNS5n
+aXQubGVuLmJyb3duQGludGVsLmNvbT4KUmVmZXJlbmNlczogPDdmOTMxMDAyNTdlZDlmNDI2YzVj
+MzY1NjY4NmE1ZjU3ZDdkOTgwMGUuMTcwMTMwNzIyNS5naXQubGVuLmJyb3duQGludGVsLmNvbT4K
+RnJvbTogRG91ZyBTbXl0aGllcyA8ZHNteXRoaWVzQHRlbHVzLm5ldD4KRGF0ZTogTW9uLCAzIEFw
+ciAyMDIzIDE0OjExOjM4IC0wNzAwClN1YmplY3Q6IFtQQVRDSCA0LzRdIHRvb2xzL3Bvd2VyIHR1
+cmJvc3RhdDogRml4IGFkZGVkIHJhdyBNU1Igb3V0cHV0ClJlcGx5LVRvOiBMZW4gQnJvd24gPGxl
+bmJAa2VybmVsLm9yZz4KT3JnYW5pemF0aW9uOiBJbnRlbCBPcGVuIFNvdXJjZSBUZWNobm9sb2d5
+IENlbnRlcgoKV2hlbiB1c2luZyAtLVN1bW1hcnkgbW9kZSwgYWRkZWQgTVNScyBpbiByYXcgbW9k
+ZSBhbHdheXMKcHJpbnQgemVyb3MuIFByaW50IHRoZSBhY3R1YWwgcmVnaXN0ZXIgY29udGVudHMu
+CgpFeGFtcGxlLCB3aXRoIHBhdGNoOgoKbm90ZSB0aGUgYWRkZWQgY29sdW1uOgotLWFkZCBtc3Iw
+eDY0Zix1MzIscGFja2FnZSxyYXcsUkVBU09OCgpXaGVyZToKCjB4NjRGIGlzIE1TUl9DT1JFX1BF
+UkZfTElNSVRfUkVBU09OUwoKQnVzeSUgICBCenlfTUh6IFBrZ1RtcCAgUGtnV2F0dCBDb3JXYXR0
+ICAgICBSRUFTT04KMC4wMCAgICA0ODAwICAgIDM1ICAgICAgMS40MiAgICAwLjc2ICAgIDB4MDAw
+MDAwMDAKMC4wMCAgICA0ODAxICAgIDM0ICAgICAgMS40MiAgICAwLjc2ICAgIDB4MDAwMDAwMDAK
+ODAuMDggICA0NTMxICAgIDY2ICAgICAgMTA4LjE3ICAxMDcuNTIgIDB4MDgwMDAwMDAKOTguNjkg
+ICA0NTMwICAgIDY2ICAgICAgMTMzLjIxICAxMzIuNTQgIDB4MDgwMDAwMDAKOTkuMjggICA0NTA1
+ICAgIDY2ICAgICAgMTI4LjI2ICAxMjcuNjAgIDB4MGMwMDA0MDAKOTkuNjUgICA0NDg2ICAgIDY4
+ICAgICAgMTI0LjkxICAxMjQuMjUgIDB4MGMwMDA0MDAKOTkuNjMgICA0NDgzICAgIDY4ICAgICAg
+MTI0LjkwICAxMjQuMjUgIDB4MGMwMDA0MDAKNzkuMzQgICA0NDgxICAgIDQxICAgICAgOTkuODAg
+ICA5OS4xMyAgIDB4MGMwMDAwMDAKMC4wMCAgICA0ODAxICAgIDQxICAgICAgMS40MCAgICAwLjcz
+ICAgIDB4MGMwMDAwMDAKCldoZXJlLCBmb3IgdGhlIHRlc3QgcHJvY2Vzc29yIChpNS0xMDYwMEsp
+OgoKUEtHIExpbWl0ICMxOiAxMjUuMDAwIFdhdHRzLCA4LjAwMDAwMCBzZWMKTVNSIGJpdCAyNiA9
+IGxvZzsgYml0IDEwID0gc3RhdHVzCgpQS0cgTGltaXQgIzI6IDEzNi4wMDAgV2F0dHMsIDAuMDAy
+NDQxIHNlYwpNU1IgYml0IDI3ID0gbG9nOyBiaXQgMTEgPSBzdGF0dXMKCkV4YW1wbGUsIHdpdGhv
+dXQgcGF0Y2g6CgpCdXN5JSAgIEJ6eV9NSHogUGtnVG1wICBQa2dXYXR0IENvcldhdHQgICAgIFJF
+QVNPTgowLjAxICAgIDQ4MDAgICAgMzUgICAgICAxLjQzICAgIDAuNzcgICAgMHgwMDAwMDAwMAow
+LjAwICAgIDQ4MDEgICAgMzUgICAgICAxLjM5ICAgIDAuNzMgICAgMHgwMDAwMDAwMAo4My40OSAg
+IDQ1MzEgICAgNjYgICAgICAxMTIuNzEgIDExMi4wNiAgMHgwMDAwMDAwMAo5OC42OSAgIDQ1MzAg
+ICAgNjggICAgICAxMzMuMzUgIDEzMi42OSAgMHgwMDAwMDAwMAo5OS4zMSAgIDQ1MDAgICAgNjcg
+ICAgICAxMjcuOTYgIDEyNy4zMCAgMHgwMDAwMDAwMAo5OS42MyAgIDQ0ODMgICAgNjkgICAgICAx
+MjQuOTEgIDEyNC4yNSAgMHgwMDAwMDAwMAo5OS42MSAgIDQ0ODEgICAgNjkgICAgICAxMjQuOTAg
+IDEyNC4yNSAgMHgwMDAwMDAwMAo5OS42MSAgIDQ0ODEgICAgNzEgICAgICAxMjQuOTIgIDEyNC4y
+NSAgMHgwMDAwMDAwMAo1OS4zNSAgIDQ0NzkgICAgNDIgICAgICA3NS4wMyAgIDc0LjM3ICAgMHgw
+MDAwMDAwMAowLjAwICAgIDQ4MDAgICAgNDIgICAgICAxLjM5ICAgIDAuNzMgICAgMHgwMDAwMDAw
+MAowLjAwICAgIDQ4MDEgICAgNDIgICAgICAxLjQyICAgIDAuNzYgICAgMHgwMDAwMDAwMAoKYzAw
+MDAwMAoKU2lnbmVkLW9mZi1ieTogRG91ZyBTbXl0aGllcyA8ZHNteXRoaWVzQHRlbHVzLm5ldD4K
+U2lnbmVkLW9mZi1ieTogTGVuIEJyb3duIDxsZW4uYnJvd25AaW50ZWwuY29tPiAoc2ltcGxpZmll
+ZCBEb3VnJ3MgcGF0Y2gpCi0tLQogdG9vbHMvcG93ZXIveDg2L3R1cmJvc3RhdC90dXJib3N0YXQu
+YyB8IDcgKysrKy0tLQogMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlv
+bnMoLSkKCmRpZmYgLS1naXQgYS90b29scy9wb3dlci94ODYvdHVyYm9zdGF0L3R1cmJvc3RhdC5j
+IGIvdG9vbHMvcG93ZXIveDg2L3R1cmJvc3RhdC90dXJib3N0YXQuYwppbmRleCBjNWJkOWRlMjVh
+YzcuLmVkNDM4NzJhZmNjMiAxMDA2NDQKLS0tIGEvdG9vbHMvcG93ZXIveDg2L3R1cmJvc3RhdC90
+dXJib3N0YXQuYworKysgYi90b29scy9wb3dlci94ODYvdHVyYm9zdGF0L3R1cmJvc3RhdC5jCkBA
+IC0yNDU0LDkgKzI0NTQsMTAgQEAgaW50IHN1bV9jb3VudGVycyhzdHJ1Y3QgdGhyZWFkX2RhdGEg
+KnQsIHN0cnVjdCBjb3JlX2RhdGEgKmMsIHN0cnVjdCBwa2dfZGF0YSAqcCkKIAlhdmVyYWdlLnBh
+Y2thZ2VzLnJhcGxfZHJhbV9wZXJmX3N0YXR1cyArPSBwLT5yYXBsX2RyYW1fcGVyZl9zdGF0dXM7
+CiAKIAlmb3IgKGkgPSAwLCBtcCA9IHN5cy5wcDsgbXA7IGkrKywgbXAgPSBtcC0+bmV4dCkgewot
+CQlpZiAobXAtPmZvcm1hdCA9PSBGT1JNQVRfUkFXKQotCQkJY29udGludWU7Ci0JCWF2ZXJhZ2Uu
+cGFja2FnZXMuY291bnRlcltpXSArPSBwLT5jb3VudGVyW2ldOworCQlpZiAoKG1wLT5mb3JtYXQg
+PT0gRk9STUFUX1JBVykgJiYgKHRvcG8ubnVtX3BhY2thZ2VzID09IDApKQorCQkJYXZlcmFnZS5w
+YWNrYWdlcy5jb3VudGVyW2ldID0gcC0+Y291bnRlcltpXTsKKwkJZWxzZQorCQkJYXZlcmFnZS5w
+YWNrYWdlcy5jb3VudGVyW2ldICs9IHAtPmNvdW50ZXJbaV07CiAJfQogCXJldHVybiAwOwogfQot
+LSAKMi4zOS4yCgo=
+--00000000000010061f060b5482a3--
 
