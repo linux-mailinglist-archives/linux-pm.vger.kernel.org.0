@@ -1,122 +1,109 @@
-Return-Path: <linux-pm+bounces-587-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-588-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58D5F80024F
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Dec 2023 04:49:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B1E7800382
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Dec 2023 07:06:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 89CD01C20DA1
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Dec 2023 03:49:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B45612814DD
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Dec 2023 06:06:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02F885380;
-	Fri,  1 Dec 2023 03:49:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12963BE5C;
+	Fri,  1 Dec 2023 06:06:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i4LnTo51"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MseYhNtR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AEFD173E
-	for <linux-pm@vger.kernel.org>; Thu, 30 Nov 2023 19:49:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1701402562;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IO8CL2qjeIUr0LsYwreVkjK8516DQtyOeewHK7H786o=;
-	b=i4LnTo51Pm5Frz4eam4yVcE8E9Z40TGzafHRPgZRKoYs7GnJHP8AiGiFTiVryXkyop58Ig
-	lYcKWLV40Kph959wTS5hX0bfJt5IkGiMrrLQuR9+8VKayx7v2GHolV7Dvwt8C0K8SbFKMg
-	l/OT8rvQjfyGlq+k3Dx3sYrjoe74PTk=
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
- [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-663-5IS6gnVBMUyMlqUsp2iChQ-1; Thu, 30 Nov 2023 22:49:13 -0500
-X-MC-Unique: 5IS6gnVBMUyMlqUsp2iChQ-1
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-1cfcf1e9442so1556185ad.3
-        for <linux-pm@vger.kernel.org>; Thu, 30 Nov 2023 19:49:13 -0800 (PST)
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25076193
+	for <linux-pm@vger.kernel.org>; Thu, 30 Nov 2023 22:06:07 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id 98e67ed59e1d1-286447abfbeso899308a91.1
+        for <linux-pm@vger.kernel.org>; Thu, 30 Nov 2023 22:06:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1701410766; x=1702015566; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uYvqfpip/7tjf7a0T470OB2s3N6lg3+olHWW3HxMKLI=;
+        b=MseYhNtR/m+0m4P0qByblws9UWYRClINp/lGqdaIlEFkPrmV6p15MByjIFGR5OZ+VQ
+         oMEGDUmG6UCtxoz4cXGGAGMH90az3ZfED5/LrM9btPwcT15eXRcqHn1sdg4dXr9Z+SPo
+         qslJ4BcIaoiWsbNGIxqdMz0DOEkT4izXWcuQLGdX8hGfmUPWZB6LW1MM++fAh4uxz2fC
+         VCiKVRwDIXJ4r5iHXwPXoZtiHXTjL5Mck/RhH6qtj5pQCiunD5QOKXwFllES/EpEtZot
+         RpeUnArgk3xdor4LtxhF2ydSXvnwhxJUQtsiu+FlkHDRHw/EesmubDXu0z7kHr1WTM6x
+         4KWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701402552; x=1702007352;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1701410766; x=1702015566;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IO8CL2qjeIUr0LsYwreVkjK8516DQtyOeewHK7H786o=;
-        b=Kv0hvNonwiIre5TKzHJPBEP1M8XsyPP2GcKGav1Hw7UwaBoAHHxBW+Ru7/X/m1wVHf
-         h25Hq/SgpPD0iOwkjr4saGqi/P03PlNV8PIz/E/icyJQZqOnmnhoqajg/4pQ3xO5ZdO5
-         6x37lDsxg8EEra4L6sayA7UAMYxdbEriObXCnn3uQd0ZowjsW3FU9oBpmg5kcgZVDdcf
-         tAv0Q4JVMXUlD/Y9XOQ00WJ8dFjai82aqUOxWNepqZIXnGYooRKfUpOWxG9uREubqMQy
-         6wB/a8bZklT08zizy9wWeVYgcu5wsbLZdkKTr8w92M38AqEFIY/W7oXOUL/uZaIiNkw7
-         BiUg==
-X-Gm-Message-State: AOJu0Yxf9e7vMQi26Aqs79M1uwspihJBa6YVZGNx42Yu6dgeGmmsrXlG
-	9HmH1ieA418BsDdmp1yDu96jhtGxFG66qcKdB4+TL86ZZW38Be1OteFq4KnDPKSptQP0pQ3XxgT
-	6fOZ6BfdYP4Yx0UCoH+4=
-X-Received: by 2002:a17:902:e80e:b0:1cf:daca:2b5e with SMTP id u14-20020a170902e80e00b001cfdaca2b5emr17322853plg.38.1701402552344;
-        Thu, 30 Nov 2023 19:49:12 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHVVbr2zUe8qqYTBkmHgB1fO8oP/OS0GFEHLzxacC4remFDnJNuIkfv1IWdcQ4cpeu8xrZWrg==
-X-Received: by 2002:a17:902:e80e:b0:1cf:daca:2b5e with SMTP id u14-20020a170902e80e00b001cfdaca2b5emr17322834plg.38.1701402551963;
-        Thu, 30 Nov 2023 19:49:11 -0800 (PST)
-Received: from [192.168.68.51] ([43.252.115.3])
-        by smtp.gmail.com with ESMTPSA id p5-20020a170902e74500b001cfc1a593f7sm2185691plf.217.2023.11.30.19.49.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 30 Nov 2023 19:49:11 -0800 (PST)
-Message-ID: <e0b38120-8b09-4695-974c-f3c3ef226f22@redhat.com>
-Date: Fri, 1 Dec 2023 14:49:03 +1100
+        bh=uYvqfpip/7tjf7a0T470OB2s3N6lg3+olHWW3HxMKLI=;
+        b=MPPa38KYbJhh07YFRlCXV1oNkYqVYHTU3yatKo/LIXbikkmjdVG1dEbfGIax6WgMn8
+         5lfifhQwC73zJNzIO5vRkLfNwQ2hu5J2UuqdqrBycTehoZYr4SYk5jxBfmCFwrSW4aNo
+         ChRHoah2lW4jtdYBZpPzgA5FUkxdoF9LNiUr043NtwvoqAB2Ic3CPNNeYz1sZDW7I3H8
+         ZS5OoMUHZUiHLiWq4508nZyWeD2gcvuT1SRMKaH7ftGgFP5GXj5zHe2X0vKEDsqOJCTK
+         VfoIxoHeF4rK+CW8Mru3sDGcD6pSPgV5p98GxxKnaHXFkl4rV4JdlfEzfvTk8OKAJ1cn
+         urag==
+X-Gm-Message-State: AOJu0YxZMr1KO+ilwSSlMtu8uwQmSdLwXIz94lFkdBGqhxfUgJfsZzib
+	p65AYAn2yjMCLY/PLSfySdRqeA==
+X-Google-Smtp-Source: AGHT+IHMHRgjNA+riSKx/LyeestHqu5449BJw68CWUaBswo+1/jxcf5fYHStpMmWA/migrCxEF8BSg==
+X-Received: by 2002:a17:90a:f48c:b0:285:490d:10cd with SMTP id bx12-20020a17090af48c00b00285490d10cdmr37691368pjb.3.1701410766260;
+        Thu, 30 Nov 2023 22:06:06 -0800 (PST)
+Received: from google.com (218.180.124.34.bc.googleusercontent.com. [34.124.180.218])
+        by smtp.gmail.com with ESMTPSA id o10-20020a170902d4ca00b001cfba9dac6esm2439258plg.115.2023.11.30.22.06.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Nov 2023 22:06:05 -0800 (PST)
+Date: Fri, 1 Dec 2023 11:35:57 +0530
+From: Ajay Agarwal <ajayagarwal@google.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Kevin Hilman <khilman@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>, Pavel Machek <pavel@ucw.cz>,
+	Len Brown <len.brown@intel.com>,
+	Leonard Crestez <leonard.crestez@nxp.com>
+Cc: linux-pm@vger.kernel.org, manugautam@google.com, mshavit@google.com,
+	quangh@google.com, vamshigajjela@google.com
+Subject: Lets not expect domains marked as `RPM_ALWAYS_ON`/`ALWAYS_ON` to be
+ ON at boot
+Message-ID: <ZWl3xd7lc5pnnIcz@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 11/21] drivers: base: Print a warning instead of panic()
- when register_cpu() fails
-Content-Language: en-US
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
- linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
- linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org,
- linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org
-Cc: Salil Mehta <salil.mehta@huawei.com>,
- Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com,
- justin.he@arm.com, James Morse <james.morse@arm.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
-References: <ZVyz/Ve5pPu8AWoA@shell.armlinux.org.uk>
- <E1r5R3W-00CszU-GM@rmk-PC.armlinux.org.uk>
-From: Gavin Shan <gshan@redhat.com>
-In-Reply-To: <E1r5R3W-00CszU-GM@rmk-PC.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+Hello Linux PM experts
 
-On 11/22/23 00:44, Russell King (Oracle) wrote:
-> From: James Morse <james.morse@arm.com>
-> 
-> loongarch, mips, parisc, riscv and sh all print a warning if
-> register_cpu() returns an error. Architectures that use
-> GENERIC_CPU_DEVICES call panic() instead.
-> 
-> Errors in this path indicate something is wrong with the firmware
-> description of the platform, but the kernel is able to keep running.
-> 
-> Downgrade this to a warning to make it easier to debug this issue.
-> 
-> This will allow architectures that switching over to GENERIC_CPU_DEVICES
-> to drop their warning, but keep the existing behaviour.
-> 
-> Signed-off-by: James Morse <james.morse@arm.com>
-> Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
-> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> ---
->   drivers/base/cpu.c | 7 ++++---
->   1 file changed, 4 insertions(+), 3 deletions(-)
-> 
+For a given power domain, if the `genpd->flags` has the GENPD_FLAG_RPM_ALWAYS_ON
+flag set, then pm_genpd_init expects that domain to be ON:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/base/power/domain.c?h=v6.7-rc3#n2102
 
-Reviewed-by: Gavin Shan <gshan@redhat.com>
+I have a usecase where the power domain is not ON by default on kernel boot,
+but I also want it to stay ON during RPM. But the current logic fails the
+`pm_genpd_init` for me.
 
+IMO, the kernel should not force a PD which needs to stay ON during RPM to be ON
+at boot also. It is quite possible that the PD will be turned ON for the very
+first time by a client driver in the kernel itself.
+
+Additionally, I think the kernel as well should not enforce this for PDs which 
+do not want to turn OFF ever, i.e., the ones which have `GENPD_FLAG_ALWAYS_ON`
+flag set. Let the kernel turn ON these PDs when it wants and only then prevent
+the RPM or system suspend from turning these domains OFF.
+
+Proposed patch in pm_genpd_init:
+```
+-       /* Always-on domains must be powered on at initialization. */
+-       if ((genpd_is_always_on(genpd) || genpd_is_rpm_always_on(genpd)) &&
+-                       !genpd_status_on(genpd)) {
+-               pr_err("always-on PM domain %s is not on\n", genpd->name);
+-               return -EINVAL;
+-       }
+-
+```
+
+Looking for your views here.
+
+Thanks
+Ajay
 
