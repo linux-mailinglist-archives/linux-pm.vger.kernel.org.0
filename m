@@ -1,843 +1,881 @@
-Return-Path: <linux-pm+bounces-621-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-622-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24D2E80135F
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Dec 2023 20:08:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F9878014AF
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Dec 2023 21:41:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 467A91C20BC2
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Dec 2023 19:08:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2EB54281D66
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Dec 2023 20:41:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 001EE4E60C;
-	Fri,  1 Dec 2023 19:08:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE2F956B87;
+	Fri,  1 Dec 2023 20:41:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JkxO2EBj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jhdCiN+P"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625F310DA
-	for <linux-pm@vger.kernel.org>; Fri,  1 Dec 2023 11:08:10 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-40bda47b7c1so479795e9.1
-        for <linux-pm@vger.kernel.org>; Fri, 01 Dec 2023 11:08:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701457689; x=1702062489; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xH0Tn+Jkb1LWg9O7QRnPZhrrS4mm1pK/Ifv/3W8Ymu8=;
-        b=JkxO2EBjH8e0ogai3pks0h+2EZExDA5HSTqXg+7xaJFEBCocc/jdak4710fd665YWe
-         qfWr2+3a7JMKfxhom/Sr7xXZ88vyRqd3nU5nLXF8z4pQFWiM3jZU9mfwS5SnVj0597Vl
-         4zhQ8GtAT8omZLegoEFx5gCm8pFjI/TPrpZ0GkLur5xBP08dBT1YCHfyOqQkUbSCFaHV
-         vfJnqstavGICtzMzJQOKZgxzIGlaJBlETbg0a5t7PEsqDWmf3pGiV6Hrha6dcBOUm/Ik
-         DXHpPmTD7gbpixd4qo3ponuCdCfQTEIK6eUZ98MDxVX7J4IRtSmSCgyLRP2O8opYTydB
-         iarQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701457689; x=1702062489;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xH0Tn+Jkb1LWg9O7QRnPZhrrS4mm1pK/Ifv/3W8Ymu8=;
-        b=FTqIubVcTe069Fsl8FBdCx4ukdH2uH8L0XZrOZuWZqyAC9LJAACkWYdYb+49r8bTFA
-         hds2ekkzt2MANpDip6F+CsdHcLWiLFh8x+GcLG9DTIOUl9SLY2vMtHY/ZaqbOIiYpQkC
-         uwey+kMzEFLBSbb5uXPCuQuVtObxF1dDlPTMGuTN7qt3jIC6OqXX3oBcSFqDi9qI1X2k
-         wxtmWSEYH/NUDhHqeTeXbql16JVxMv8Uw8G9KDs5X9TmMd4gjITuJYAcj+BxW3iYcskr
-         WpHQ/7yl33MFh4Gd9VILy6xCVmie11ZIA6AQNo8b3cf8feBH5iw4R9iZO0phEzcarSIB
-         RY5A==
-X-Gm-Message-State: AOJu0YxObt11BsTZMUdtbXTscaUjMjBTQHva/xQWCTm/yIXsAQjPiIHi
-	xsUrSa3HTQtErz8l9/I/waiVjVAD2HfkPlzyoy4=
-X-Google-Smtp-Source: AGHT+IHbaeaZ9LtnV4xzGIyLK/2XhKgzW0o+U1ix7Sgpe3g6w3WW3ilv05TpiWWLtk1j0cIKGFBWhA==
-X-Received: by 2002:a05:600c:204c:b0:40b:5f03:b43d with SMTP id p12-20020a05600c204c00b0040b5f03b43dmr264700wmg.351.1701457688682;
-        Fri, 01 Dec 2023 11:08:08 -0800 (PST)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:e7a7:a382:dc2f:bb93])
-        by smtp.gmail.com with ESMTPSA id dr6-20020a5d5f86000000b003316b38c625sm4911828wrb.99.2023.12.01.11.08.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Dec 2023 11:08:08 -0800 (PST)
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-To: rjw@rjwysocki.net
-Cc: caleb.connolly@linaro.org,
-	lina.iyer@linaro.org,
-	linux-pm@vger.kernel.org,
-	mani@kernel.org,
-	linux-kernel@vger.kernel.org,
-	lukasz.luba@arm.com
-Subject: [RFC PATCH 2/2] PM: QoS: Add a performance QoS
-Date: Fri,  1 Dec 2023 20:07:57 +0100
-Message-Id: <20231201190757.144741-2-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231201190757.144741-1-daniel.lezcano@linaro.org>
-References: <20231201190757.144741-1-daniel.lezcano@linaro.org>
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC441F1;
+	Fri,  1 Dec 2023 12:41:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701463264; x=1732999264;
+  h=date:from:to:cc:subject:message-id;
+  bh=eysuvSwfArXAoZIw5373vtX98VH6jduhvKyIAw83bJM=;
+  b=jhdCiN+P93aRE3HLBzo+xRETehYiDyaLjWCKhxlMo1Ui2Yxl/fzt6Suh
+   lZaqQFtlUp3TAnqvRq3oeQr3BUVFAoLPUetyXrgPpPMQ70o6UGqGmmODZ
+   fXgYPy2iQ/FCLOZjTxAzeYf5eSS+op09NW0TLmxXDX/DUxjtQr6FqUiti
+   51jVxiCnIRidkIqjd+7ykGDxDSLPxpisSNLcCe3/3uRkIh+miqMDds/Q6
+   33Jf+vJr1Zh7+08u/w6stdgQ4wOue24PrGM/R+oFn0hZ2ODkjnTUN94LD
+   AfQ8LuUKXbuOEq1PKk+pFAQxv0gkQqHCqH6r7MftvlWLQvqAEhG6PjkE6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10911"; a="396352657"
+X-IronPort-AV: E=Sophos;i="6.04,242,1695711600"; 
+   d="scan'208";a="396352657"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2023 12:41:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10911"; a="804183193"
+X-IronPort-AV: E=Sophos;i="6.04,242,1695711600"; 
+   d="scan'208";a="804183193"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 01 Dec 2023 12:41:02 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r9AJn-0004Gs-21;
+	Fri, 01 Dec 2023 20:40:59 +0000
+Date: Sat, 02 Dec 2023 04:40:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 6e8a583bdee5da9bc9eb72d08ee2348dfff36f27
+Message-ID: <202312020455.nUAcWLw7-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Currently cpufreq and devfreq are using the freq QoS to aggregate the
-requests for frequency minimum and maximum limits.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 6e8a583bdee5da9bc9eb72d08ee2348dfff36f27  Merge branch 'thermal-core' into bleeding-edge
 
-However, there are new devices wanting to act not on a frequency limit
-but on a performance index limit. Those need also to export to
-userspace the knob to act on their performance limits.
+Warning ids grouped by kconfigs:
 
-This change provides a performance limiter QoS based on a minimum /
-maximum performance values. At init time, the limits of the interval
-are 0 / 1024. It is up to the backend to convert the 1024 to the
-maximum performance state. So if the performance must be limited to
-50%, it should set to maximum limit to 512 where the backend will end
-up by converting (max performance index / 2). The same applies for the
-minimum. Obviously, the min can not be greater than the max.
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- arm-allmodconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   |-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- arm-allyesconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   |-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- arm64-defconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   |-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- arm64-randconfig-001-20231201
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- arm64-randconfig-002-20231201
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- arm64-randconfig-003-20231201
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- csky-allmodconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- csky-allyesconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- csky-randconfig-002-20231201
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- i386-buildonly-randconfig-002-20231201
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- i386-buildonly-randconfig-005-20231201
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- i386-buildonly-randconfig-006-20231201
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- i386-defconfig
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- i386-randconfig-001-20231201
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- i386-randconfig-052-20231201
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- i386-randconfig-r111-20231201
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- loongarch-allmodconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   |-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- loongarch-defconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   |-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- loongarch-loongson3_defconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   |-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- loongarch-randconfig-002-20231201
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- loongarch-randconfig-r062-20231201
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- microblaze-allmodconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- microblaze-allyesconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- mips-allyesconfig
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- openrisc-allyesconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- parisc-allmodconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- parisc-allyesconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- parisc-defconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- parisc-generic-64bit_defconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- parisc-randconfig-002-20231201
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- parisc64-defconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- powerpc-randconfig-001-20231201
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   |-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- powerpc-randconfig-002-20231201
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- powerpc-sam440ep_defconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- powerpc64-randconfig-001-20231201
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- powerpc64-randconfig-002-20231201
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   |-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- powerpc64-randconfig-003-20231201
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- riscv-allmodconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   |-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- riscv-allyesconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   |-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- riscv-defconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- riscv-randconfig-r063-20231201
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- s390-allmodconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- s390-allyesconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- sparc-allmodconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   |-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- sparc64-allmodconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   |-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- sparc64-allyesconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   |-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- sparc64-defconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- sparc64-randconfig-002-20231201
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- x86_64-buildonly-randconfig-001-20231201
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- x86_64-buildonly-randconfig-002-20231201
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   |-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- x86_64-buildonly-randconfig-003-20231201
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- x86_64-buildonly-randconfig-006-20231201
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- x86_64-defconfig
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   |-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- x86_64-randconfig-011-20231201
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- x86_64-randconfig-012-20231201
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- x86_64-randconfig-013-20231201
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- x86_64-randconfig-015-20231201
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- x86_64-randconfig-073-20231201
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- x86_64-randconfig-075-20231201
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- x86_64-randconfig-101-20231201
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   |-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- x86_64-randconfig-102-20231201
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+|-- x86_64-randconfig-104-20231201
+|   |-- drivers-usb-core-hcd.c:warning:s-directive-output-may-be-truncated-writing-up-to-bytes-into-a-region-of-size-between-and
+|   `-- drivers-usb-core-usb.c:warning:d-directive-output-may-be-truncated-writing-between-and-bytes-into-a-region-of-size-between-and
+`-- xtensa-randconfig-r061-20231201
+    |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+    |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+    |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+    |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+    |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+    |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+    |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+    |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+    |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+    |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+    `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+clang_recent_errors
+|-- arm64-allmodconfig
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- arm64-allyesconfig
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- i386-allmodconfig
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- i386-allyesconfig
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- i386-randconfig-011-20231201
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- i386-randconfig-014-20231201
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- i386-randconfig-016-20231201
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- powerpc-allmodconfig
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- powerpc-allyesconfig
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- x86_64-allmodconfig
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+|-- x86_64-allyesconfig
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+|   |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+|   `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
+`-- x86_64-rhel-8.3-rust
+    |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-addr-not-described-in-memory_bm_find_bit
+    |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-base-not-described-in-__fraction
+    |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-multiplier-not-described-in-__fraction
+    |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_highmem-not-described-in-enough_free_mem
+    |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-nr_pages-not-described-in-enough_free_mem
+    |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_highmem_page
+    |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-pfn-not-described-in-saveable_page
+    |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-safe_needed-not-described-in-get_highmem_buffer
+    |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-start_pfn-not-described-in-register_nosave_region
+    |-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_highmem_page
+    `-- kernel-power-snapshot.c:warning:Function-parameter-or-member-zone-not-described-in-saveable_page
 
-There are a couple of things making this change a RFC:
+elapsed time: 1458m
 
- 1. With the example above, if there is a odd number like 5 for the
- number of performance indexes and we ask for 512 (so 50%), what would
- be the performance index computed? (5/2=2 or 5/2=3)? (I would say the
- minimum otherwise we end up with a performance limit greater than
- what we actually asked for).
+configs tested: 177
+configs skipped: 3
 
- 2. The conversion from 1024 to a performance index will inevatibly
- end up to a state above or below the percentage given. Shall it be
- reflected in the value set? eg. We want to apply a performance limit
- to be 33% maximum. So it is, 1024 x 0.333333 = 314. If there are 20
- performance indexes, that will be (20 x 314) / 1024 = 6.13, so index
- 6. Shall we convert this index back to the requested performance
- limit to (6.13 x 1024) / 20 = 307 ? (So requested is 314 but it is
- actually 307).
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-The end goal is to make the freq QoS and perf QoS to co-exist together
-in the next changes in the different backends. A change of one of the
-QoS impacts the other. For instance if there are 5 performance states
-and we set a performance limit to 80%, then the maximum state will 4.
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                            hsdk_defconfig   gcc  
+arc                   randconfig-001-20231201   gcc  
+arc                   randconfig-002-20231201   gcc  
+arc                           tb10x_defconfig   gcc  
+arc                        vdk_hs38_defconfig   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                         mv78xx0_defconfig   clang
+arm                        neponset_defconfig   clang
+arm                   randconfig-001-20231201   gcc  
+arm                   randconfig-002-20231201   gcc  
+arm                   randconfig-003-20231201   gcc  
+arm                   randconfig-004-20231201   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20231201   gcc  
+arm64                 randconfig-002-20231201   gcc  
+arm64                 randconfig-003-20231201   gcc  
+arm64                 randconfig-004-20231201   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20231201   gcc  
+csky                  randconfig-002-20231201   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20231201   clang
+hexagon               randconfig-002-20231201   clang
+i386                             allmodconfig   clang
+i386                              allnoconfig   clang
+i386                             allyesconfig   clang
+i386         buildonly-randconfig-001-20231201   gcc  
+i386         buildonly-randconfig-002-20231201   gcc  
+i386         buildonly-randconfig-003-20231201   gcc  
+i386         buildonly-randconfig-004-20231201   gcc  
+i386         buildonly-randconfig-005-20231201   gcc  
+i386         buildonly-randconfig-006-20231201   gcc  
+i386                                defconfig   gcc  
+i386                  randconfig-001-20231201   gcc  
+i386                  randconfig-002-20231201   gcc  
+i386                  randconfig-003-20231201   gcc  
+i386                  randconfig-004-20231201   gcc  
+i386                  randconfig-005-20231201   gcc  
+i386                  randconfig-006-20231201   gcc  
+i386                  randconfig-011-20231201   clang
+i386                  randconfig-012-20231201   clang
+i386                  randconfig-013-20231201   clang
+i386                  randconfig-014-20231201   clang
+i386                  randconfig-015-20231201   clang
+i386                  randconfig-016-20231201   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch                 loongson3_defconfig   gcc  
+loongarch             randconfig-001-20231201   gcc  
+loongarch             randconfig-002-20231201   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   clang
+mips                             allyesconfig   gcc  
+mips                     loongson1b_defconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20231201   gcc  
+nios2                 randconfig-002-20231201   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                generic-64bit_defconfig   gcc  
+parisc                randconfig-001-20231201   gcc  
+parisc                randconfig-002-20231201   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   clang
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                       eiger_defconfig   gcc  
+powerpc                     rainier_defconfig   gcc  
+powerpc               randconfig-001-20231201   gcc  
+powerpc               randconfig-002-20231201   gcc  
+powerpc               randconfig-003-20231201   gcc  
+powerpc                    sam440ep_defconfig   gcc  
+powerpc64                        alldefconfig   gcc  
+powerpc64             randconfig-001-20231201   gcc  
+powerpc64             randconfig-002-20231201   gcc  
+powerpc64             randconfig-003-20231201   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   clang
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                 randconfig-001-20231201   gcc  
+riscv                 randconfig-002-20231201   gcc  
+riscv                          rv32_defconfig   clang
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                  randconfig-001-20231201   clang
+s390                  randconfig-002-20231201   clang
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                 kfr2r09-romimage_defconfig   gcc  
+sh                          r7785rp_defconfig   gcc  
+sh                    randconfig-001-20231201   gcc  
+sh                    randconfig-002-20231201   gcc  
+sh                          rsk7201_defconfig   gcc  
+sh                          urquell_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20231201   gcc  
+sparc64               randconfig-002-20231201   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20231201   gcc  
+um                    randconfig-002-20231201   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64       buildonly-randconfig-001-20231201   gcc  
+x86_64       buildonly-randconfig-002-20231201   gcc  
+x86_64       buildonly-randconfig-003-20231201   gcc  
+x86_64       buildonly-randconfig-004-20231201   gcc  
+x86_64       buildonly-randconfig-005-20231201   gcc  
+x86_64       buildonly-randconfig-006-20231201   gcc  
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20231201   clang
+x86_64                randconfig-002-20231201   clang
+x86_64                randconfig-003-20231201   clang
+x86_64                randconfig-004-20231201   clang
+x86_64                randconfig-005-20231201   clang
+x86_64                randconfig-006-20231201   clang
+x86_64                randconfig-011-20231201   gcc  
+x86_64                randconfig-012-20231201   gcc  
+x86_64                randconfig-013-20231201   gcc  
+x86_64                randconfig-014-20231201   gcc  
+x86_64                randconfig-015-20231201   gcc  
+x86_64                randconfig-016-20231201   gcc  
+x86_64                randconfig-071-20231201   gcc  
+x86_64                randconfig-072-20231201   gcc  
+x86_64                randconfig-073-20231201   gcc  
+x86_64                randconfig-074-20231201   gcc  
+x86_64                randconfig-075-20231201   gcc  
+x86_64                randconfig-076-20231201   gcc  
+x86_64                          rhel-8.3-rust   clang
+xtensa                            allnoconfig   gcc  
+xtensa                randconfig-001-20231201   gcc  
+xtensa                randconfig-002-20231201   gcc  
 
-For the long term, when those can co-exist, then we can implement a
-cooling device based on the performance Qos which will be generic for
-all devices using this QoS. That will imply the CPUs, the GPUs and any
-devfreq devices. So devfreq and cpufreq cooling devices can be merged
-into a single performance cooling device which will be generic for all
-devices with a performance limit QoS.
-
-In a similar way, in the future, a power QoS could be added also and a
-power based cooling device. So any device with the energy model can
-become a cooling device and the power computation part in the cooling
-devices will move to the back ends. We will end up with a generic
-power cooling device compatible with all power capable devices.
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/base/power/power.h |   2 +
- drivers/base/power/qos.c   | 158 +++++++++++++++++++++++++-
- drivers/base/power/sysfs.c |  92 +++++++++++++++
- include/linux/cpufreq.h    |   2 +
- include/linux/pm_qos.h     |  42 +++++++
- kernel/power/qos.c         | 225 +++++++++++++++++++++++++++++++++++++
- 6 files changed, 517 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/base/power/power.h b/drivers/base/power/power.h
-index 922ed457db19..eb1a77a7a0f4 100644
---- a/drivers/base/power/power.h
-+++ b/drivers/base/power/power.h
-@@ -78,6 +78,8 @@ extern int pm_qos_sysfs_add_flags(struct device *dev);
- extern void pm_qos_sysfs_remove_flags(struct device *dev);
- extern int pm_qos_sysfs_add_latency_tolerance(struct device *dev);
- extern void pm_qos_sysfs_remove_latency_tolerance(struct device *dev);
-+extern int pm_qos_sysfs_add_perf_limit(struct device *dev);
-+extern void pm_qos_sysfs_remove_perf_limit(struct device *dev);
- extern int dpm_sysfs_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid);
- 
- #else /* CONFIG_PM */
-diff --git a/drivers/base/power/qos.c b/drivers/base/power/qos.c
-index 561d2a0e106c..efc5b3d88d8d 100644
---- a/drivers/base/power/qos.c
-+++ b/drivers/base/power/qos.c
-@@ -128,6 +128,14 @@ s32 dev_pm_qos_read_value(struct device *dev, enum dev_pm_qos_req_type type)
- 		ret = IS_ERR_OR_NULL(qos) ? PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE
- 			: freq_qos_read_value(&qos->freq, FREQ_QOS_MAX);
- 		break;
-+	case DEV_PM_QOS_MIN_PERF:
-+		ret =  IS_ERR_OR_NULL(qos) ? PM_QOS_MIN_PERF_DEFAULT_VALUE
-+			: perf_qos_read_value(&qos->perf, INTERVAL_QOS_MIN);
-+		break;
-+	case DEV_PM_QOS_MAX_PERF:
-+		ret =  IS_ERR_OR_NULL(qos) ? PM_QOS_MAX_PERF_DEFAULT_VALUE
-+			: perf_qos_read_value(&qos->perf, INTERVAL_QOS_MAX);
-+		break;
- 	default:
- 		WARN_ON(1);
- 		ret = 0;
-@@ -177,6 +185,10 @@ static int apply_constraint(struct dev_pm_qos_request *req,
- 		ret = pm_qos_update_flags(&qos->flags, &req->data.flr,
- 					  action, value);
- 		break;
-+	case DEV_PM_QOS_MIN_PERF:
-+	case DEV_PM_QOS_MAX_PERF:
-+		ret = perf_qos_apply(&req->data.perf, action, value);
-+		break;
- 	default:
- 		ret = -EINVAL;
- 	}
-@@ -223,6 +235,20 @@ static int dev_pm_qos_constraints_allocate(struct device *dev)
- 	c->no_constraint_value = PM_QOS_LATENCY_TOLERANCE_NO_CONSTRAINT;
- 	c->type = PM_QOS_MIN;
- 
-+	c = &qos->perf.min;
-+	plist_head_init(&c->list);
-+	c->target_value = PM_QOS_MIN_PERF_DEFAULT_VALUE;
-+	c->default_value = PM_QOS_MIN_PERF_DEFAULT_VALUE;
-+	c->no_constraint_value = PM_QOS_MIN_PERF_DEFAULT_VALUE;
-+	c->type = PM_QOS_MAX;
-+
-+	c = &qos->perf.max;
-+	plist_head_init(&c->list);
-+	c->target_value = PM_QOS_MAX_PERF_DEFAULT_VALUE;
-+	c->default_value = PM_QOS_MAX_PERF_DEFAULT_VALUE;
-+	c->no_constraint_value = PM_QOS_MAX_PERF_DEFAULT_VALUE;
-+	c->type = PM_QOS_MIN;
-+
- 	freq_constraints_init(&qos->freq);
- 
- 	INIT_LIST_HEAD(&qos->flags.list);
-@@ -299,6 +325,20 @@ void dev_pm_qos_constraints_destroy(struct device *dev)
- 		memset(req, 0, sizeof(*req));
- 	}
- 
-+	c = &qos->perf.min;
-+	plist_for_each_entry_safe(req, tmp, &c->list, data.freq.pnode) {
-+		apply_constraint(req, PM_QOS_REMOVE_REQ,
-+				 PM_QOS_MIN_PERF_DEFAULT_VALUE);
-+		memset(req, 0, sizeof(*req));
-+	}
-+
-+	c = &qos->perf.max;
-+	plist_for_each_entry_safe(req, tmp, &c->list, data.freq.pnode) {
-+		apply_constraint(req, PM_QOS_REMOVE_REQ,
-+				 PM_QOS_MAX_PERF_DEFAULT_VALUE);
-+		memset(req, 0, sizeof(*req));
-+	}
-+	
- 	f = &qos->flags;
- 	list_for_each_entry_safe(req, tmp, &f->list, data.flr.node) {
- 		apply_constraint(req, PM_QOS_REMOVE_REQ, PM_QOS_DEFAULT_VALUE);
-@@ -349,17 +389,32 @@ static int __dev_pm_qos_add_request(struct device *dev,
- 
- 	req->dev = dev;
- 	req->type = type;
--	if (req->type == DEV_PM_QOS_MIN_FREQUENCY)
-+
-+	switch (type) {
-+	case DEV_PM_QOS_MIN_FREQUENCY:
- 		ret = freq_qos_add_request(&dev->power.qos->freq,
- 					   &req->data.freq,
- 					   FREQ_QOS_MIN, value);
--	else if (req->type == DEV_PM_QOS_MAX_FREQUENCY)
-+		break;
-+	case DEV_PM_QOS_MAX_FREQUENCY:
- 		ret = freq_qos_add_request(&dev->power.qos->freq,
- 					   &req->data.freq,
- 					   FREQ_QOS_MAX, value);
--	else
-+		break;
-+	case DEV_PM_QOS_MIN_PERF:
-+		ret = perf_qos_add_request(&dev->power.qos->perf,
-+					   &req->data.perf,
-+					   INTERVAL_QOS_MIN, value);
-+		break;
-+	case DEV_PM_QOS_MAX_PERF:
-+		ret = perf_qos_add_request(&dev->power.qos->perf,
-+					   &req->data.perf,
-+					   INTERVAL_QOS_MAX, value);
-+		break;
-+	default:
- 		ret = apply_constraint(req, PM_QOS_ADD_REQ, value);
--
-+		break;
-+	}
- 	return ret;
- }
- 
-@@ -427,6 +482,10 @@ static int __dev_pm_qos_update_request(struct dev_pm_qos_request *req,
- 	case DEV_PM_QOS_MAX_FREQUENCY:
- 		curr_value = req->data.freq.pnode.prio;
- 		break;
-+	case DEV_PM_QOS_MIN_PERF:
-+	case DEV_PM_QOS_MAX_PERF:
-+		curr_value = req->data.perf.pnode.prio;
-+		break;
- 	case DEV_PM_QOS_FLAGS:
- 		curr_value = req->data.flr.flags;
- 		break;
-@@ -674,6 +733,14 @@ static void __dev_pm_qos_drop_user_request(struct device *dev,
- 		req = dev->power.qos->flags_req;
- 		dev->power.qos->flags_req = NULL;
- 		break;
-+	case DEV_PM_QOS_MIN_PERF:
-+		req = dev->power.qos->perf_min_req;
-+		dev->power.qos->perf_min_req = NULL;
-+		break;
-+	case DEV_PM_QOS_MAX_PERF:
-+		req = dev->power.qos->perf_max_req;
-+		dev->power.qos->perf_max_req = NULL;
-+		break;
- 	default:
- 		WARN_ON(1);
- 		return;
-@@ -980,3 +1047,86 @@ void dev_pm_qos_hide_latency_tolerance(struct device *dev)
- 	pm_runtime_put(dev);
- }
- EXPORT_SYMBOL_GPL(dev_pm_qos_hide_latency_tolerance);
-+
-+int dev_pm_qos_expose_perf_limit(struct device *dev)
-+{
-+	struct dev_pm_qos_request *req_min;
-+	struct dev_pm_qos_request *req_max;
-+	int ret;
-+
-+	if (!device_is_registered(dev))
-+		return -EINVAL;
-+
-+	req_min = kzalloc(sizeof(*req_min), GFP_KERNEL);
-+	if (!req_min)
-+		return -ENOMEM;
-+
-+	req_max = kzalloc(sizeof(*req_max), GFP_KERNEL);
-+	if (!req_max) {
-+		kfree(req_min);
-+		return -ENOMEM;
-+	}
-+	
-+	ret = dev_pm_qos_add_request(dev, req_min, DEV_PM_QOS_MIN_PERF,
-+				     PM_QOS_MIN_PERF_DEFAULT_VALUE);
-+	if (ret < 0) {
-+		kfree(req_min);
-+		kfree(req_max);
-+		return ret;
-+	}
-+
-+	ret = dev_pm_qos_add_request(dev, req_max, DEV_PM_QOS_MAX_PERF,
-+				     PM_QOS_MAX_PERF_DEFAULT_VALUE);
-+	if (ret < 0) {
-+		dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_MIN_PERF);
-+		return ret;
-+	}
-+
-+	mutex_lock(&dev_pm_qos_sysfs_mtx);
-+
-+	mutex_lock(&dev_pm_qos_mtx);
-+
-+	if (IS_ERR_OR_NULL(dev->power.qos))
-+		ret = -ENODEV;
-+	else if (dev->power.qos->perf_min_req || dev->power.qos->perf_max_req)
-+		ret = -EEXIST;
-+
-+	if (ret < 0) {
-+		__dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_MIN_PERF);
-+		__dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_MAX_PERF);
-+		mutex_unlock(&dev_pm_qos_mtx);
-+		goto out;
-+	}
-+
-+	dev->power.qos->perf_min_req = req_min;
-+	dev->power.qos->perf_max_req = req_max;
-+
-+	mutex_unlock(&dev_pm_qos_mtx);
-+
-+	ret = pm_qos_sysfs_add_perf_limit(dev);
-+	if (ret) {
-+		dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_MIN_PERF);
-+		dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_MAX_PERF);
-+	}
-+out:
-+	mutex_unlock(&dev_pm_qos_sysfs_mtx);
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(dev_pm_qos_expose_perf_limit);
-+
-+void dev_pm_qos_hide_perf_limit(struct device *dev)
-+{
-+	mutex_lock(&dev_pm_qos_sysfs_mtx);
-+
-+	pm_qos_sysfs_remove_perf_limit(dev);
-+
-+	mutex_lock(&dev_pm_qos_mtx);
-+
-+	__dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_MIN_PERF);
-+	__dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_MAX_PERF);
-+	
-+	mutex_unlock(&dev_pm_qos_mtx);
-+
-+	mutex_unlock(&dev_pm_qos_sysfs_mtx);
-+}
-+EXPORT_SYMBOL_GPL(dev_pm_qos_hide_perf_limit);
-diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
-index a1474fb67db9..5a45191006c1 100644
---- a/drivers/base/power/sysfs.c
-+++ b/drivers/base/power/sysfs.c
-@@ -317,6 +317,76 @@ static ssize_t pm_qos_no_power_off_store(struct device *dev,
- 
- static DEVICE_ATTR_RW(pm_qos_no_power_off);
- 
-+
-+static ssize_t pm_qos_perf_limit_min_max_show(struct device *dev,
-+					      struct device_attribute *attr,
-+					      char *buf, bool max)
-+{
-+	s32 value = dev_pm_qos_read_value(dev, max ? DEV_PM_QOS_MAX_PERF :
-+					  DEV_PM_QOS_MIN_PERF);
-+
-+	return sysfs_emit(buf, "%d\n", value);
-+}
-+
-+static ssize_t pm_qos_perf_limit_min_max_store(struct device *dev,
-+					       struct device_attribute *attr,
-+					       const char *buf, size_t n, bool max)
-+{
-+	int ret;
-+	s32 min_value = dev_pm_qos_read_value(dev, DEV_PM_QOS_MIN_PERF);
-+	s32 max_value = dev_pm_qos_read_value(dev, DEV_PM_QOS_MAX_PERF);
-+	s32 new_value;
-+
-+	if (kstrtoint(buf, 0, &new_value))
-+		return -EINVAL;
-+
-+	if (new_value < PM_QOS_MIN_PERF_DEFAULT_VALUE ||
-+	    new_value > PM_QOS_MAX_PERF_DEFAULT_VALUE)
-+		return -EINVAL;
-+
-+	if (max && (new_value < min_value))
-+		return -EINVAL;
-+
-+	if (!max && (new_value > max_value))
-+		return -EINVAL;
-+
-+	ret = dev_pm_qos_update_request(max ? dev->power.qos->perf_max_req :
-+					dev->power.qos->perf_min_req, new_value);
-+
-+	return ret < 0 ? ret : n;
-+}
-+
-+static ssize_t pm_qos_perf_limit_min_show(struct device *dev,
-+						 struct device_attribute *attr,
-+						 char *buf)
-+{
-+	return pm_qos_perf_limit_min_max_show(dev, attr, buf, false);
-+}
-+
-+static ssize_t pm_qos_perf_limit_min_store(struct device *dev,
-+						  struct device_attribute *attr,
-+						  const char *buf, size_t n)
-+{
-+	return pm_qos_perf_limit_min_max_store(dev, attr, buf, n, false);
-+}
-+
-+static ssize_t pm_qos_perf_limit_max_show(struct device *dev,
-+						 struct device_attribute *attr,
-+						 char *buf)
-+{
-+	return pm_qos_perf_limit_min_max_show(dev, attr, buf, true);
-+}
-+
-+static ssize_t pm_qos_perf_limit_max_store(struct device *dev,
-+						  struct device_attribute *attr,
-+						  const char *buf, size_t n)
-+{
-+	return pm_qos_perf_limit_min_max_store(dev, attr, buf, n, true);
-+}
-+
-+static DEVICE_ATTR_RW(pm_qos_perf_limit_min);
-+static DEVICE_ATTR_RW(pm_qos_perf_limit_max);
-+
- #ifdef CONFIG_PM_SLEEP
- static const char _enabled[] = "enabled";
- static const char _disabled[] = "disabled";
-@@ -686,6 +756,17 @@ static struct attribute *pm_qos_flags_attrs[] = {
- 	&dev_attr_pm_qos_no_power_off.attr,
- 	NULL,
- };
-+
-+static struct attribute *pm_qos_perf_limit_attrs[] = {
-+	&dev_attr_pm_qos_perf_limit_min.attr,
-+	&dev_attr_pm_qos_perf_limit_max.attr,
-+	NULL,
-+};
-+static const struct attribute_group pm_qos_perf_limit_attr_group = {
-+	.name	= power_group_name,
-+	.attrs	= pm_qos_perf_limit_attrs,
-+};
-+
- static const struct attribute_group pm_qos_flags_attr_group = {
- 	.name	= power_group_name,
- 	.attrs	= pm_qos_flags_attrs,
-@@ -821,6 +902,17 @@ void pm_qos_sysfs_remove_latency_tolerance(struct device *dev)
- 	sysfs_unmerge_group(&dev->kobj, &pm_qos_latency_tolerance_attr_group);
- }
- 
-+int pm_qos_sysfs_add_perf_limit(struct device *dev)
-+{
-+	return sysfs_merge_group(&dev->kobj,
-+				 &pm_qos_perf_limit_attr_group);
-+}
-+
-+void pm_qos_sysfs_remove_perf_limit(struct device *dev)
-+{
-+	sysfs_unmerge_group(&dev->kobj, &pm_qos_perf_limit_attr_group);
-+}
-+
- void rpm_sysfs_remove(struct device *dev)
- {
- 	sysfs_unmerge_group(&dev->kobj, &pm_runtime_attr_group);
-diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-index 7e2d66c37535..21baf28d750c 100644
---- a/include/linux/cpufreq.h
-+++ b/include/linux/cpufreq.h
-@@ -83,6 +83,8 @@ struct cpufreq_policy {
- 	struct interval_constraints	constraints;
- 	struct interval_qos_request	*min_freq_req;
- 	struct interval_qos_request	*max_freq_req;
-+	struct interval_qos_request	*min_perf_req;
-+	struct interval_qos_request	*max_perf_req;
- 
- 	struct cpufreq_frequency_table	*freq_table;
- 	enum cpufreq_table_sorting freq_table_sorted;
-diff --git a/include/linux/pm_qos.h b/include/linux/pm_qos.h
-index a662ac918e3e..8c5b84b640f5 100644
---- a/include/linux/pm_qos.h
-+++ b/include/linux/pm_qos.h
-@@ -34,6 +34,8 @@ enum pm_qos_flags_status {
- #define PM_QOS_LATENCY_TOLERANCE_DEFAULT_VALUE	0
- #define PM_QOS_MIN_FREQUENCY_DEFAULT_VALUE	0
- #define PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE	FREQ_QOS_MAX_DEFAULT_VALUE
-+#define PM_QOS_MIN_PERF_DEFAULT_VALUE	0
-+#define PM_QOS_MAX_PERF_DEFAULT_VALUE	1024
- #define PM_QOS_LATENCY_TOLERANCE_NO_CONSTRAINT	(-1)
- 
- #define PM_QOS_FLAG_NO_POWER_OFF	(1 << 0)
-@@ -102,6 +104,8 @@ enum dev_pm_qos_req_type {
- 	DEV_PM_QOS_LATENCY_TOLERANCE,
- 	DEV_PM_QOS_MIN_FREQUENCY,
- 	DEV_PM_QOS_MAX_FREQUENCY,
-+	DEV_PM_QOS_MIN_PERF,
-+	DEV_PM_QOS_MAX_PERF,
- 	DEV_PM_QOS_FLAGS,
- };
- 
-@@ -111,6 +115,7 @@ struct dev_pm_qos_request {
- 		struct plist_node pnode;
- 		struct pm_qos_flags_request flr;
- 		struct interval_qos_request freq;
-+		struct interval_qos_request perf;
- 	} data;
- 	struct device *dev;
- };
-@@ -119,10 +124,13 @@ struct dev_pm_qos {
- 	struct pm_qos_constraints resume_latency;
- 	struct pm_qos_constraints latency_tolerance;
- 	struct interval_constraints freq;
-+	struct interval_constraints perf;
- 	struct pm_qos_flags flags;
- 	struct dev_pm_qos_request *resume_latency_req;
- 	struct dev_pm_qos_request *latency_tolerance_req;
- 	struct dev_pm_qos_request *flags_req;
-+	struct dev_pm_qos_request *perf_min_req;
-+	struct dev_pm_qos_request *perf_max_req;
- };
- 
- /* Action requested to pm_qos_update_target */
-@@ -192,6 +200,8 @@ s32 dev_pm_qos_get_user_latency_tolerance(struct device *dev);
- int dev_pm_qos_update_user_latency_tolerance(struct device *dev, s32 val);
- int dev_pm_qos_expose_latency_tolerance(struct device *dev);
- void dev_pm_qos_hide_latency_tolerance(struct device *dev);
-+int dev_pm_qos_expose_perf_limit(struct device *dev);
-+void dev_pm_qos_hide_perf_limit(struct device *dev);
- 
- static inline s32 dev_pm_qos_requested_resume_latency(struct device *dev)
- {
-@@ -228,6 +238,10 @@ static inline s32 dev_pm_qos_read_value(struct device *dev,
- 		return PM_QOS_MIN_FREQUENCY_DEFAULT_VALUE;
- 	case DEV_PM_QOS_MAX_FREQUENCY:
- 		return PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE;
-+	case DEV_PM_QOS_MIN_PERF:
-+		return PM_QOS_MIN_PERF_DEFAULT_VALUE;
-+	case DEV_PM_QOS_MAX_PERF:
-+		return PM_QOS_MAX_PERF_DEFAULT_VALUE;
- 	default:
- 		WARN_ON(1);
- 		return 0;
-@@ -281,6 +295,10 @@ static inline int dev_pm_qos_expose_latency_tolerance(struct device *dev)
- 			{ return 0; }
- static inline void dev_pm_qos_hide_latency_tolerance(struct device *dev) {}
- 
-+static inline int dev_pm_qos_expose_perf_limit(struct device *dev)
-+			{ return 0; }
-+void dev_pm_qos_hide_perf_limit(struct device *dev) {}
-+
- static inline s32 dev_pm_qos_requested_resume_latency(struct device *dev)
- {
- 	return PM_QOS_RESUME_LATENCY_NO_CONSTRAINT;
-@@ -317,4 +335,28 @@ int freq_qos_remove_notifier(struct interval_constraints *qos,
- 			     enum interval_qos_req_type type,
- 			     struct notifier_block *notifier);
- 
-+static inline int perf_qos_request_active(struct interval_qos_request *req)
-+{
-+	return !IS_ERR_OR_NULL(req->qos);
-+}
-+
-+s32 perf_qos_read_value(struct interval_constraints *qos,
-+			enum interval_qos_req_type type);
-+
-+int perf_qos_apply(struct interval_qos_request *req,
-+		   enum pm_qos_req_action action, s32 value);
-+
-+int perf_qos_add_request(struct interval_constraints *qos,
-+			 struct interval_qos_request *req,
-+			 enum interval_qos_req_type type, s32 value);
-+int perf_qos_update_request(struct interval_qos_request *req, s32 new_value);
-+int perf_qos_remove_request(struct interval_qos_request *req);
-+
-+int perf_qos_add_notifier(struct interval_constraints *qos,
-+			  enum interval_qos_req_type type,
-+			  struct notifier_block *notifier);
-+int perf_qos_remove_notifier(struct interval_constraints *qos,
-+			     enum interval_qos_req_type type,
-+			     struct notifier_block *notifier);
-+
- #endif
-diff --git a/kernel/power/qos.c b/kernel/power/qos.c
-index 6ff6c494f84d..736cd712839a 100644
---- a/kernel/power/qos.c
-+++ b/kernel/power/qos.c
-@@ -680,3 +680,228 @@ int freq_qos_remove_notifier(struct interval_constraints *qos,
- 	return ret;
- }
- EXPORT_SYMBOL_GPL(freq_qos_remove_notifier);
-+
-+static inline bool perf_qos_value_invalid(s32 value)
-+{
-+	return value < 0 && value != PM_QOS_DEFAULT_VALUE;
-+}
-+
-+/**
-+ * perf_qos_apply - Add/modify/remove performance QoS request.
-+ * @req: Constraint request to apply.
-+ * @action: Action to perform (add/update/remove).
-+ * @value: Value to assign to the QoS request.
-+ *
-+ * This is only meant to be called from inside pm_qos, not drivers.
-+ */
-+int perf_qos_apply(struct interval_qos_request *req,
-+		   enum pm_qos_req_action action, s32 value)
-+{
-+	int ret;
-+
-+	switch(req->type) {
-+	case INTERVAL_QOS_MIN:
-+		ret = pm_qos_update_target(&req->qos->min, &req->pnode,
-+					   action, value);
-+		break;
-+	case INTERVAL_QOS_MAX:
-+		ret = pm_qos_update_target(&req->qos->max, &req->pnode,
-+					   action, value);
-+		break;
-+	default:
-+		ret = -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+
-+/**
-+ * perf_qos_read_value - Get performance QoS constraint for a given list.
-+ * @qos: Constraints to evaluate.
-+ * @type: QoS request type.
-+ */
-+s32 perf_qos_read_value(struct interval_constraints *qos,
-+			enum interval_qos_req_type type)
-+{
-+	s32 ret;
-+
-+	switch (type) {
-+	case INTERVAL_QOS_MIN:
-+		ret = IS_ERR_OR_NULL(qos) ?
-+			PM_QOS_MIN_PERF_DEFAULT_VALUE :
-+			pm_qos_read_value(&qos->min);
-+		break;
-+	case INTERVAL_QOS_MAX:
-+		ret = IS_ERR_OR_NULL(qos) ?
-+			PM_QOS_MAX_PERF_DEFAULT_VALUE :
-+			pm_qos_read_value(&qos->max);
-+		break;
-+	default:
-+		ret = 0;
-+	}
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(perf_qos_read_value);
-+
-+/**
-+ * perf_qos_add_request - Insert new performance QoS request into a given list.
-+ * @qos: Constraints to update.
-+ * @req: Preallocated request object.
-+ * @type: Request type.
-+ * @value: Request value.
-+ *
-+ * Insert a new entry into the @qos list of requests, recompute the effective
-+ * QoS constraint value for that list and initialize the @req object.  The
-+ * caller needs to save that object for later use in updates and removal.
-+ *
-+ * Return 1 if the effective constraint value has changed, 0 if the effective
-+ * constraint value has not changed, or a negative error code on failures.
-+ */
-+int perf_qos_add_request(struct interval_constraints *qos,
-+			 struct interval_qos_request *req,
-+			 enum interval_qos_req_type type, s32 value)
-+{
-+	int ret;
-+
-+	if (IS_ERR_OR_NULL(qos) || !req || perf_qos_value_invalid(value))
-+		return -EINVAL;
-+
-+	if (WARN(perf_qos_request_active(req),
-+		 "%s() called for active request\n", __func__))
-+		return -EINVAL;
-+
-+	req->qos = qos;
-+	req->type = type;
-+	ret = perf_qos_apply(req, PM_QOS_ADD_REQ, value);
-+	if (ret < 0) {
-+		req->qos = NULL;
-+		req->type = 0;
-+	}
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(perf_qos_add_request);
-+
-+/**
-+ * perf_qos_update_request - Modify existing performance QoS request.
-+ * @req: Request to modify.
-+ * @new_value: New request value.
-+ *
-+ * Update an existing performance QoS request along with the effective
-+ * constraint value for the list of requests it belongs to.
-+ *
-+ * Return 1 if the effective constraint value has changed, 0 if the effective
-+ * constraint value has not changed, or a negative error code on failures.
-+ */
-+int perf_qos_update_request(struct interval_qos_request *req, s32 new_value)
-+{
-+	if (!req || perf_qos_value_invalid(new_value))
-+		return -EINVAL;
-+
-+	if (WARN(!perf_qos_request_active(req),
-+		 "%s() called for unknown object\n", __func__))
-+		return -EINVAL;
-+
-+	if (req->pnode.prio == new_value)
-+		return 0;
-+
-+	return perf_qos_apply(req, PM_QOS_UPDATE_REQ, new_value);
-+}
-+EXPORT_SYMBOL_GPL(perf_qos_update_request);
-+
-+/**
-+ * perf_qos_remove_request - Remove performance QoS request from its list.
-+ * @req: Request to remove.
-+ *
-+ * Remove the given performance QoS request from the list of
-+ * constraints it belongs to and recompute the effective constraint
-+ * value for that list.
-+ *
-+ * Return 1 if the effective constraint value has changed, 0 if the effective
-+ * constraint value has not changed, or a negative error code on failures.
-+ */
-+int perf_qos_remove_request(struct interval_qos_request *req)
-+{
-+	int ret;
-+
-+	if (!req)
-+		return -EINVAL;
-+
-+	if (WARN(!perf_qos_request_active(req),
-+		 "%s() called for unknown object\n", __func__))
-+		return -EINVAL;
-+
-+	ret = perf_qos_apply(req, PM_QOS_REMOVE_REQ, PM_QOS_DEFAULT_VALUE);
-+	req->qos = NULL;
-+	req->type = 0;
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(perf_qos_remove_request);
-+
-+/**
-+ * perf_qos_add_notifier - Add performance QoS change notifier.
-+ * @qos: List of requests to add the notifier to.
-+ * @type: Request type.
-+ * @notifier: Notifier block to add.
-+ */
-+int perf_qos_add_notifier(struct interval_constraints *qos,
-+			  enum interval_qos_req_type type,
-+			  struct notifier_block *notifier)
-+{
-+	int ret;
-+
-+	if (IS_ERR_OR_NULL(qos) || !notifier)
-+		return -EINVAL;
-+
-+	switch (type) {
-+	case INTERVAL_QOS_MIN:
-+		ret = blocking_notifier_chain_register(qos->min.notifiers,
-+						       notifier);
-+		break;
-+	case INTERVAL_QOS_MAX:
-+		ret = blocking_notifier_chain_register(qos->max.notifiers,
-+						       notifier);
-+		break;
-+	default:
-+		WARN_ON(1);
-+		ret = -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(perf_qos_add_notifier);
-+
-+/**
-+ * perf_qos_remove_notifier - Remove performance QoS change notifier.
-+ * @qos: List of requests to remove the notifier from.
-+ * @type: Request type.
-+ * @notifier: Notifier block to remove.
-+ */
-+int perf_qos_remove_notifier(struct interval_constraints *qos,
-+			     enum interval_qos_req_type type,
-+			     struct notifier_block *notifier)
-+{
-+	int ret;
-+
-+	if (IS_ERR_OR_NULL(qos) || !notifier)
-+		return -EINVAL;
-+
-+	switch (type) {
-+	case INTERVAL_QOS_MIN:
-+		ret = blocking_notifier_chain_unregister(qos->min.notifiers,
-+							 notifier);
-+		break;
-+	case INTERVAL_QOS_MAX:
-+		ret = blocking_notifier_chain_unregister(qos->max.notifiers,
-+							 notifier);
-+		break;
-+	default:
-+		WARN_ON(1);
-+		ret = -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(perf_qos_remove_notifier);
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
