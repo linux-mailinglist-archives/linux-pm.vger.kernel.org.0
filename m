@@ -1,109 +1,136 @@
-Return-Path: <linux-pm+bounces-588-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-589-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B1E7800382
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Dec 2023 07:06:16 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1A1180038A
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Dec 2023 07:08:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B45612814DD
-	for <lists+linux-pm@lfdr.de>; Fri,  1 Dec 2023 06:06:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 82310B20D42
+	for <lists+linux-pm@lfdr.de>; Fri,  1 Dec 2023 06:08:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12963BE5C;
-	Fri,  1 Dec 2023 06:06:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69079BE7C;
+	Fri,  1 Dec 2023 06:08:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MseYhNtR"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hw3a/Iiu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25076193
-	for <linux-pm@vger.kernel.org>; Thu, 30 Nov 2023 22:06:07 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id 98e67ed59e1d1-286447abfbeso899308a91.1
-        for <linux-pm@vger.kernel.org>; Thu, 30 Nov 2023 22:06:07 -0800 (PST)
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5A61703
+	for <linux-pm@vger.kernel.org>; Thu, 30 Nov 2023 22:08:50 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-54c11430624so2279666a12.1
+        for <linux-pm@vger.kernel.org>; Thu, 30 Nov 2023 22:08:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701410766; x=1702015566; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uYvqfpip/7tjf7a0T470OB2s3N6lg3+olHWW3HxMKLI=;
-        b=MseYhNtR/m+0m4P0qByblws9UWYRClINp/lGqdaIlEFkPrmV6p15MByjIFGR5OZ+VQ
-         oMEGDUmG6UCtxoz4cXGGAGMH90az3ZfED5/LrM9btPwcT15eXRcqHn1sdg4dXr9Z+SPo
-         qslJ4BcIaoiWsbNGIxqdMz0DOEkT4izXWcuQLGdX8hGfmUPWZB6LW1MM++fAh4uxz2fC
-         VCiKVRwDIXJ4r5iHXwPXoZtiHXTjL5Mck/RhH6qtj5pQCiunD5QOKXwFllES/EpEtZot
-         RpeUnArgk3xdor4LtxhF2ydSXvnwhxJUQtsiu+FlkHDRHw/EesmubDXu0z7kHr1WTM6x
-         4KWQ==
+        d=google.com; s=20230601; t=1701410929; x=1702015729; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VLKk6oTrF6fAB77fJv+EXNaWWOWxqJcPWfPyun45kVU=;
+        b=hw3a/IiuNAnC+jktLUMQwxMJJxSsuhtheUQy/QDLOtazclZckiUTw+X2XAr1zNv8Vz
+         +PwbJ+MZGlWvjF3KJCVA/pL9fF97vLJX3ZbCNxFT1IrjrKcSIBN+1VUvbxI2+j/FFI9e
+         y7HGsjc/Rv8YcPEeOfKY5S7RrEt7KT5JJQZ4wXDfOGWCuKkt56aJ861wxNgKsjMGjw8U
+         MhNIA5v70TMLViCmFKoId+Exmp5FyIosp2jIeCBf/VlLzV0gJKUCG7vOx8mihueVVGqr
+         Q2g+Y+/VJ53geb3c1dJBuUas63dqCzDi2j2/QFTlA1azWEIE/cH4j2Kv7rjmGrupvfaL
+         40Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701410766; x=1702015566;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uYvqfpip/7tjf7a0T470OB2s3N6lg3+olHWW3HxMKLI=;
-        b=MPPa38KYbJhh07YFRlCXV1oNkYqVYHTU3yatKo/LIXbikkmjdVG1dEbfGIax6WgMn8
-         5lfifhQwC73zJNzIO5vRkLfNwQ2hu5J2UuqdqrBycTehoZYr4SYk5jxBfmCFwrSW4aNo
-         ChRHoah2lW4jtdYBZpPzgA5FUkxdoF9LNiUr043NtwvoqAB2Ic3CPNNeYz1sZDW7I3H8
-         ZS5OoMUHZUiHLiWq4508nZyWeD2gcvuT1SRMKaH7ftGgFP5GXj5zHe2X0vKEDsqOJCTK
-         VfoIxoHeF4rK+CW8Mru3sDGcD6pSPgV5p98GxxKnaHXFkl4rV4JdlfEzfvTk8OKAJ1cn
-         urag==
-X-Gm-Message-State: AOJu0YxZMr1KO+ilwSSlMtu8uwQmSdLwXIz94lFkdBGqhxfUgJfsZzib
-	p65AYAn2yjMCLY/PLSfySdRqeA==
-X-Google-Smtp-Source: AGHT+IHMHRgjNA+riSKx/LyeestHqu5449BJw68CWUaBswo+1/jxcf5fYHStpMmWA/migrCxEF8BSg==
-X-Received: by 2002:a17:90a:f48c:b0:285:490d:10cd with SMTP id bx12-20020a17090af48c00b00285490d10cdmr37691368pjb.3.1701410766260;
-        Thu, 30 Nov 2023 22:06:06 -0800 (PST)
-Received: from google.com (218.180.124.34.bc.googleusercontent.com. [34.124.180.218])
-        by smtp.gmail.com with ESMTPSA id o10-20020a170902d4ca00b001cfba9dac6esm2439258plg.115.2023.11.30.22.06.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Nov 2023 22:06:05 -0800 (PST)
-Date: Fri, 1 Dec 2023 11:35:57 +0530
-From: Ajay Agarwal <ajayagarwal@google.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Kevin Hilman <khilman@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>, Pavel Machek <pavel@ucw.cz>,
-	Len Brown <len.brown@intel.com>,
-	Leonard Crestez <leonard.crestez@nxp.com>
-Cc: linux-pm@vger.kernel.org, manugautam@google.com, mshavit@google.com,
-	quangh@google.com, vamshigajjela@google.com
-Subject: Lets not expect domains marked as `RPM_ALWAYS_ON`/`ALWAYS_ON` to be
- ON at boot
-Message-ID: <ZWl3xd7lc5pnnIcz@google.com>
+        d=1e100.net; s=20230601; t=1701410929; x=1702015729;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VLKk6oTrF6fAB77fJv+EXNaWWOWxqJcPWfPyun45kVU=;
+        b=NH86zPFb8SVLYlizv+K6n2+i5Oyy2/ZTotf2DBv1FVERG9nZyn8m+ik6xqmuxCvbDd
+         C1ocd1iWQNmBPmWuvseMSRBRiholBBetF43/NzZL7LVrNBtZt7qVLXhq3XNDm9ZJQ2Fy
+         O6fGDkjhNWpqNih2RdKWEWb6n2qWMbJVkCZnM3Y0S2xkInb9HvZrtJV4cH74iyg6uZnE
+         RK4gZdHoOuGoFXxTeqw4UFkCGtjCi86eCUj0luGCQO6Q5I0iXXk7VaDpQyej5OfDSiM5
+         qqKZ9clUq5d5tTWHheZlsruquAd6XUVO261xUhi6cUyQbhj/fRrvTTRj+tqZ7xqrNB8E
+         X1tg==
+X-Gm-Message-State: AOJu0YzdcoFdufJgXHnskLE/NnMeMAbcOQYOLjD8TLmzxEzPymDdmgF/
+	wSXq7AzdK7RvuQLVapTLBD+6qmM0crPDlkCpCUoU6g==
+X-Google-Smtp-Source: AGHT+IEzyszR763EpzzyaSNEQ3HbEzdWwIzjFHJIxSWdGQpefK5Y/sMDWH53RjR7RUG4YRs1uqkUSBiJJIziU8PqkuU=
+X-Received: by 2002:a17:906:738f:b0:a18:5ec7:b8af with SMTP id
+ f15-20020a170906738f00b00a185ec7b8afmr702085ejl.29.1701410928802; Thu, 30 Nov
+ 2023 22:08:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20231110102054.1393570-1-joychakr@google.com> <CACRpkdZ9RHcHh4o5g62ywK0eQHpLZuGUF0Ud6jogk9Sfqe4krA@mail.gmail.com>
+ <ZVQkLqDB3KtOlIpK@surfacebook.localdomain> <CAOSNQF3QeFd857RCJE8wfJ=__-K7Bi4vfMeTVP-+O+LJ7y9SmQ@mail.gmail.com>
+ <CACRpkdZ+UMOqatH4oOusdaX1ieeH2TtpC7VbX1wf+tzGDSfR3A@mail.gmail.com>
+In-Reply-To: <CACRpkdZ+UMOqatH4oOusdaX1ieeH2TtpC7VbX1wf+tzGDSfR3A@mail.gmail.com>
+From: Joy Chakraborty <joychakr@google.com>
+Date: Fri, 1 Dec 2023 11:38:36 +0530
+Message-ID: <CAOSNQF1cwCa9hPNQjN3g5b+nMs2qx+H8057aypH+GHaVn29NQw@mail.gmail.com>
+Subject: Re: [RFC PATCH] PM: runtime: Apply pinctrl settings if defined
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: andy.shevchenko@gmail.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, manugautam@google.com, aniketmaurya@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello Linux PM experts
+On Fri, Nov 17, 2023 at 1:30=E2=80=AFAM Linus Walleij <linus.walleij@linaro=
+.org> wrote:
+>
+> On Thu, Nov 16, 2023 at 4:34=E2=80=AFPM Joy Chakraborty <joychakr@google.=
+com> wrote:
+>
+> > I tried to place the calls to set the pinctrl states after driver/user
+> > callback  based on my understanding of runtime code so that existing
+> > users do get a chance to set the state with any special sequence that
+> > needs to be performed post which doing another call to set the state
+> > would be ignored in the pinctrl framework.
+>
+> This makes sense. (And also is in the original commit.)
+>
+> I think you should actually over-document this by also mentioning
+> this in the kerneldoc above each of the *_try_* callbacks so
+> users simply can't miss this point.
+>
+> > But this only would be possible with the assumption that even in any
+> > special sequences executed by users they set nothing but "default"
+> > state in runtime_resume, "idle" state in runtime_idle and "'sleep"
+> > state in their runtime suspend callbacks.
+> > And like Andy mentions about "->prepare callback", if there are
+> > drivers that are setting pinctrl state "default", "sleep" or "idle"
+> > from any callback but
+> > ...
+> > int (*runtime_suspend)(struct device *dev);
+> > int (*runtime_resume)(struct device *dev);
+> > int (*runtime_idle)(struct device *dev);
+> > ...
+> > it could indeed be a problem.
+> > I'll dig into users of pinctrl_select_sleep/default/idle and see if
+> > there are such cases or if it could be done in some other way.
+>
+> It's worth a check but I doubt much will turn up. The "idle" and
+> "sleep" states are simply not used much in the kernel.
+>
 
-For a given power domain, if the `genpd->flags` has the GENPD_FLAG_RPM_ALWAYS_ON
-flag set, then pm_genpd_init expects that domain to be ON:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/base/power/domain.c?h=v6.7-rc3#n2102
+Right, I will look into this.
 
-I have a usecase where the power domain is not ON by default on kernel boot,
-but I also want it to stay ON during RPM. But the current logic fails the
-`pm_genpd_init` for me.
+> Your users will likely be the first.
+>
+> So which hardware target will use this?
+> It's immensely useful to have a good example to point at:
+> that device use "defaul", "sleep", "idle" the idiomatic way.
 
-IMO, the kernel should not force a PD which needs to stay ON during RPM to be ON
-at boot also. It is quite possible that the PD will be turned ON for the very
-first time by a client driver in the kernel itself.
+I see some upstreaming activity on gs101 SOC.
+I think gs101 and follow on SOCs could use this, I will find that out
+and get back.
 
-Additionally, I think the kernel as well should not enforce this for PDs which 
-do not want to turn OFF ever, i.e., the ones which have `GENPD_FLAG_ALWAYS_ON`
-flag set. Let the kernel turn ON these PDs when it wants and only then prevent
-the RPM or system suspend from turning these domains OFF.
+>
+> Yours,
+> Linus Walleij
 
-Proposed patch in pm_genpd_init:
-```
--       /* Always-on domains must be powered on at initialization. */
--       if ((genpd_is_always_on(genpd) || genpd_is_rpm_always_on(genpd)) &&
--                       !genpd_status_on(genpd)) {
--               pr_err("always-on PM domain %s is not on\n", genpd->name);
--               return -EINVAL;
--       }
--
-```
+Thanks a lot for your feedback
+Joy
 
-Looking for your views here.
 
-Thanks
-Ajay
+
+
+Joy
 
