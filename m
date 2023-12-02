@@ -1,58 +1,58 @@
-Return-Path: <linux-pm+bounces-634-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-635-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C84DE801CBB
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Dec 2023 13:52:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF405801CC0
+	for <lists+linux-pm@lfdr.de>; Sat,  2 Dec 2023 13:52:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 050D41C209A8
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Dec 2023 12:52:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F1FB1F21186
+	for <lists+linux-pm@lfdr.de>; Sat,  2 Dec 2023 12:52:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86F6B179B6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B70B8182C0;
 	Sat,  2 Dec 2023 12:52:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DvzB+4SV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JHzXUTJb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96959184;
-	Sat,  2 Dec 2023 04:52:03 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-a1915034144so343829166b.0;
-        Sat, 02 Dec 2023 04:52:03 -0800 (PST)
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82DBF0;
+	Sat,  2 Dec 2023 04:52:04 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-548f853fc9eso3994173a12.1;
+        Sat, 02 Dec 2023 04:52:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701521522; x=1702126322; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1701521523; x=1702126323; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5TpM4rIE4qqT65pAaY9eqEHRHauyEUGalgmDwr8uKk4=;
-        b=DvzB+4SVvaZ5E7kgZq/vNnIrEy7ZKY1oIecH8mwiuMSBafsNMYf8C/8SPTd8e6gCHO
-         W686GAE2pYDYdj7Y7XO00+4TsjmVUthBfuWdYmoXch4GXhMrIBc3EjxeuVUI/EMQM3Xv
-         OCG9ogq4RZFyPoDX4qw3NTss7qFo8/ZYlbRE7T6oYk68wH63r+QSDDYMoF/hhIHH1d30
-         bPYVTPE+iyRqaGxPrjVa18J6bu1GBFp9gsmt5Tqu0bXKyZkf5FGyU2dumFe4dZXcMga1
-         l54PUu3uyfgX3yaRjSJ4jWlZ0sZZPmiNm6XcTnqenPcqcIkc1UgtlxNJZnBoHInHubxY
-         ja0g==
+        bh=HR4GQ7+5atR3ar2YrCztGhjSeU/LO6OVqwoc3hEbrC0=;
+        b=JHzXUTJbiNd69oDg7MX0RyDjAE16AQiOxixZLk1Pd7r8N2fsJErw+AQaPoyTWEe9NS
+         p863rOeQqq6wBS9Odv52pmIhOeQ4Pfj7pntvH5JWiaY1cfJ1aLqCgf3TudMEIeWuTTfO
+         V1Hj0Ie55zClqmiuk93Y8VkhHoamU+mvWzgKKcQ5BouxE7IWq7GFck3W/lU8Iaq8O5dG
+         R+llIpOZ3I37VNDCPD8O9iERFP51vS83LidtJuZBFkC+sBGKXp6TmXuslWWY3cPM+Kr4
+         vdOF33yGOFEkMZwiYPvi2tEbOYO3gLOFLm2duJQ/1RIbnF5OX5lb4xmL7slOYj6U/Y2M
+         ZBRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701521522; x=1702126322;
+        d=1e100.net; s=20230601; t=1701521523; x=1702126323;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5TpM4rIE4qqT65pAaY9eqEHRHauyEUGalgmDwr8uKk4=;
-        b=nPk3HkSMg7+1xTS1nnWztwXE/TSmfEjMJCLJ3yz4oXoyrDf0HqIu7/zQmQWecnzqsf
-         bSVYGQ4deXZ03OTIRcZCjqGivuggr0lbmQkUqWJ3nprl2gr6dn+KcVDrRnte9ifLgA/Q
-         mOqxvCFyKqOE58bqmuqWW2d5oDeJ8PfS9JJAd/+O5xkA4tEoEbh5I1aw9jijIeAj2Bsq
-         BA81wbji/07e/SxfwoV8wK1i+QJkQFzI9B5JwYEwiyQZSx/c6wSXC6Bp6AmMWVn40Hel
-         nZfoCQw8DWiI82BLP+PmpfIeW6ks1S+LXd9WQtTfafuXR51GClah0OASa2nJCzs4iPLd
-         YtjA==
-X-Gm-Message-State: AOJu0YzTcR93AN9jRRVR2d4hnB5YUxnxl+mgR0jgKhoom1xz/Dmy6Ex2
-	xM4AmqNqvujgh9nAra4Ty8oFniz8yQ==
-X-Google-Smtp-Source: AGHT+IEyleq1fwiEbFjEWs4F50ggLLxGB/KOmVoOHqA2365tzKaQw281kj2swtpYsUJqACRktkUtTA==
-X-Received: by 2002:a17:906:3b43:b0:a16:92f1:2f47 with SMTP id h3-20020a1709063b4300b00a1692f12f47mr1536630ejf.57.1701521522024;
-        Sat, 02 Dec 2023 04:52:02 -0800 (PST)
+        bh=HR4GQ7+5atR3ar2YrCztGhjSeU/LO6OVqwoc3hEbrC0=;
+        b=oWvFvl1Qo6Hgh5jNCjCdBFCVkwSlGf71rQmz/WCm7wRxyg78JezdILtKSEuNv6cAZ/
+         yVwBT62v2BCKtNYh+0zfC2WUnxKsi/60JoH5KN9NvpwUTPnJq5V1GM3DxtQf6IFp35Y1
+         Vqs7HtBG875he/JiZM/gxwXojjkl7/+rV9Z81tLhUC6vHvIkLuyiIlIXj2ZL6tv/AY9b
+         TOMQVxThVujxM4y6fkEGdH+k470mN7sgARGYAU7PwpnyWnoSpp7n66J/96Lk7ENVcdVc
+         JmXvRIoIWvnxXKALOuTchTLuK3/mi6K4Iv78hqDiK1HKOB07B2ILrV0kKXc4cVYpbUdx
+         yRGg==
+X-Gm-Message-State: AOJu0YyekrVK7hxqguICiYkSgJb480gOpjStUuE1Km5IodVzhBjL5gHz
+	rD8c4Ht117A82pjSk3Q3qA==
+X-Google-Smtp-Source: AGHT+IFsV7yIlBBzkDPIYNDCqw3wEkc8AQ/SUwRG3frSQ5X+KzW+68Zbs/ntALcZcfg6t9TIXCXl8g==
+X-Received: by 2002:a17:906:35ca:b0:a19:a1ba:bacb with SMTP id p10-20020a17090635ca00b00a19a1babacbmr891820ejb.113.1701521523169;
+        Sat, 02 Dec 2023 04:52:03 -0800 (PST)
 Received: from U4.lan ([2a02:810b:f40:4300:908e:b829:354b:f8ee])
-        by smtp.gmail.com with ESMTPSA id g5-20020a170906198500b009c5c5c2c5a4sm3018161ejd.219.2023.12.02.04.52.01
+        by smtp.gmail.com with ESMTPSA id g5-20020a170906198500b009c5c5c2c5a4sm3018161ejd.219.2023.12.02.04.52.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 02 Dec 2023 04:52:01 -0800 (PST)
+        Sat, 02 Dec 2023 04:52:02 -0800 (PST)
 From: Alex Bee <knaerzche@gmail.com>
 To: Heiko Stuebner <heiko@sntech.de>,
 	Conor Dooley <conor+dt@kernel.org>,
@@ -69,11 +69,10 @@ Cc: Daniel Vetter <daniel@ffwll.ch>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-rockchip@lists.infradead.org,
 	linux-pm@vger.kernel.org,
-	Alex Bee <knaerzche@gmail.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 3/5] dt-bindings: gpu: mali-utgard: Add Rockchip RK3128 compatible
-Date: Sat,  2 Dec 2023 13:51:42 +0100
-Message-ID: <20231202125144.66052-4-knaerzche@gmail.com>
+	Alex Bee <knaerzche@gmail.com>
+Subject: [PATCH v2 4/5] ARM: dts: rockchip: Add GPU node for RK3128
+Date: Sat,  2 Dec 2023 13:51:43 +0100
+Message-ID: <20231202125144.66052-5-knaerzche@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231202125144.66052-1-knaerzche@gmail.com>
 References: <20231202125144.66052-1-knaerzche@gmail.com>
@@ -85,27 +84,79 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Rockchip RK312x SoC family has a Mali400 MP2.
-Add a compatible for it.
+RK3128 SoCs have Mali400 MP2 GPU.
+Add the respective device tree node and the correspondending opp-table.
+
+The frequencies and voltages of the opp-table have been taken from
+downstream kernel.
 
 Signed-off-by: Alex Bee <knaerzche@gmail.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- Documentation/devicetree/bindings/gpu/arm,mali-utgard.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/boot/dts/rockchip/rk3128.dtsi | 44 ++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/gpu/arm,mali-utgard.yaml b/Documentation/devicetree/bindings/gpu/arm,mali-utgard.yaml
-index 0fae1ef013be..abd4aa335fbc 100644
---- a/Documentation/devicetree/bindings/gpu/arm,mali-utgard.yaml
-+++ b/Documentation/devicetree/bindings/gpu/arm,mali-utgard.yaml
-@@ -29,6 +29,7 @@ properties:
-               - allwinner,sun50i-a64-mali
-               - rockchip,rk3036-mali
-               - rockchip,rk3066-mali
-+              - rockchip,rk3128-mali
-               - rockchip,rk3188-mali
-               - rockchip,rk3228-mali
-               - samsung,exynos4210-mali
+diff --git a/arch/arm/boot/dts/rockchip/rk3128.dtsi b/arch/arm/boot/dts/rockchip/rk3128.dtsi
+index b72905db04f7..b05ee3d926aa 100644
+--- a/arch/arm/boot/dts/rockchip/rk3128.dtsi
++++ b/arch/arm/boot/dts/rockchip/rk3128.dtsi
+@@ -101,6 +101,27 @@ opp-1200000000 {
+ 		};
+ 	};
+ 
++	gpu_opp_table: opp-table-1 {
++		compatible = "operating-points-v2";
++
++		opp-200000000 {
++			opp-hz = /bits/ 64 <200000000>;
++			opp-microvolt = <975000 975000 1250000>;
++		};
++		opp-300000000 {
++			opp-hz = /bits/ 64 <300000000>;
++			opp-microvolt = <1050000 1050000 1250000>;
++		};
++		opp-400000000 {
++			opp-hz = /bits/ 64 <400000000>;
++			opp-microvolt = <1150000 1150000 1250000>;
++		};
++		opp-480000000 {
++			opp-hz = /bits/ 64 <480000000>;
++			opp-microvolt = <1250000 1250000 1250000>;
++		};
++	};
++
+ 	timer {
+ 		compatible = "arm,armv7-timer";
+ 		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>,
+@@ -131,6 +152,29 @@ smp-sram@0 {
+ 		};
+ 	};
+ 
++	gpu: gpu@10090000 {
++		compatible = "rockchip,rk3128-mali", "arm,mali-400";
++		reg = <0x10090000 0x10000>;
++		interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
++			     <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>;
++		interrupt-names = "gp",
++				  "gpmmu",
++				  "pp0",
++				  "ppmmu0",
++				  "pp1",
++				  "ppmmu1";
++		clocks = <&cru ACLK_GPU>, <&cru ACLK_GPU>;
++		clock-names = "bus", "core";
++		power-domains = <&power RK3128_PD_GPU>;
++		resets = <&cru SRST_GPU>;
++		operating-points-v2 = <&gpu_opp_table>;
++		status = "disabled";
++	};
++
+ 	pmu: syscon@100a0000 {
+ 		compatible = "rockchip,rk3128-pmu", "syscon", "simple-mfd";
+ 		reg = <0x100a0000 0x1000>;
 -- 
 2.43.0
 
