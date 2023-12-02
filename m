@@ -1,41 +1,34 @@
-Return-Path: <linux-pm+bounces-642-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-643-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45B58801E3C
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Dec 2023 20:26:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E9D0801E47
+	for <lists+linux-pm@lfdr.de>; Sat,  2 Dec 2023 20:26:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4E8B5B20B74
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Dec 2023 19:26:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A879D280F99
+	for <lists+linux-pm@lfdr.de>; Sat,  2 Dec 2023 19:26:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9AB9208A3;
-	Sat,  2 Dec 2023 19:25:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC41820B2D;
+	Sat,  2 Dec 2023 19:26:14 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FA6811A;
-	Sat,  2 Dec 2023 11:25:51 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 26E14124;
+	Sat,  2 Dec 2023 11:26:11 -0800 (PST)
 X-IronPort-AV: E=Sophos;i="6.04,246,1695654000"; 
-   d="scan'208";a="185089874"
+   d="scan'208";a="185089896"
 Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie5.idc.renesas.com with ESMTP; 03 Dec 2023 04:25:49 +0900
+  by relmlie5.idc.renesas.com with ESMTP; 03 Dec 2023 04:26:10 +0900
 Received: from localhost.localdomain (unknown [10.226.92.28])
-	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 2369340764EE;
-	Sun,  3 Dec 2023 04:25:40 +0900 (JST)
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 582F340764EE;
+	Sun,  3 Dec 2023 04:26:04 +0900 (JST)
 From: Biju Das <biju.das.jz@bp.renesas.com>
-To: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Lee Jones <lee@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
+To: Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>
 Cc: Biju Das <biju.das.jz@bp.renesas.com>,
-	Steve Twiss <stwiss.opensource@diasemi.com>,
 	Support Opensource <support.opensource@diasemi.com>,
-	linux-watchdog@vger.kernel.org,
-	linux-input@vger.kernel.org,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
 	Daniel Lezcano <daniel.lezcano@linaro.org>,
 	Zhang Rui <rui.zhang@intel.com>,
@@ -46,10 +39,12 @@ Cc: Biju Das <biju.das.jz@bp.renesas.com>,
 	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
 	Biju Das <biju.das.au@gmail.com>,
 	linux-renesas-soc@vger.kernel.org
-Subject: [PATCH v2 00/11] Convert DA906{1,2} bindings to json-schema
-Date: Sat,  2 Dec 2023 19:25:24 +0000
-Message-Id: <20231202192536.266885-1-biju.das.jz@bp.renesas.com>
+Subject: [PATCH v2 04/11] dt-bindings: thermal: Convert da906{1,2} thermal to json-schema
+Date: Sat,  2 Dec 2023 19:25:28 +0000
+Message-Id: <20231202192536.266885-5-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231202192536.266885-1-biju.das.jz@bp.renesas.com>
+References: <20231202192536.266885-1-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -58,49 +53,123 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Convert the below bindings to json-schema
-1) DA906{1,2} mfd bindings
-2) DA906{1,2,3} onkey bindings
-3) DA906{1,2,3} thermal bindings
+Convert the da906{1,2} thermal device tree binding documentation to
+json-schema.
 
-Also add fallback for DA9061 watchdog device and document
-DA9063 watchdog device.
-
-v1->v2:
- Ref : https://lore.kernel.org/all/20231201110840.37408-5-biju.das.jz@bp.renesas.com/
- * Made as a separate series
- * DA9062 and DA9061 merged with DA9063
- * Sorted the child devices
- * mfd,onkey and thermal are pointing to child bindings
- 
-Biju Das (11):
-  dt-bindings: watchdog: dlg,da9062-watchdog: Add fallback for DA9061
-    watchdog
-  dt-bindings: watchdog: dlg,da9062-watchdog: Document DA9063 watchdog
-  dt-bindings: input: Convert da906{1,2,3} onkey to json-schema
-  dt-bindings: thermal: Convert da906{1,2} thermal to json-schema
-  dt-bindings: mfd: dlg,da9063: Update watchdog property
-  dt-bindings: mfd: dlg,da9063: Update onkey property
-  dt-bindings: mfd: dlg,da9063: Sort child devices
-  dt-bindings: mfd: da9062: Update watchdog description
-  dt-bindings: mfd: da9062: Update onkey description
-  dt-bindings: mfd: da9062: Update thermal description
-  dt-bindings: mfd: dlg,da9063: Convert da9062 to json-schema
-
- .../bindings/input/da9062-onkey.txt           |  47 ----
- .../bindings/input/dlg,da9062-onkey.yaml      |  61 +++++
- .../devicetree/bindings/mfd/da9062.txt        | 124 ----------
- .../devicetree/bindings/mfd/dlg,da9063.yaml   | 220 +++++++++++++++---
- .../bindings/thermal/da9062-thermal.txt       |  36 ---
- .../bindings/thermal/dlg,da9062-thermal.yaml  |  58 +++++
- .../watchdog/dlg,da9062-watchdog.yaml         |  12 +-
- 7 files changed, 313 insertions(+), 245 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/input/da9062-onkey.txt
- create mode 100644 Documentation/devicetree/bindings/input/dlg,da9062-onkey.yaml
- delete mode 100644 Documentation/devicetree/bindings/mfd/da9062.txt
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+---
+ .../bindings/thermal/da9062-thermal.txt       | 36 ------------
+ .../bindings/thermal/dlg,da9062-thermal.yaml  | 58 +++++++++++++++++++
+ 2 files changed, 58 insertions(+), 36 deletions(-)
  delete mode 100644 Documentation/devicetree/bindings/thermal/da9062-thermal.txt
  create mode 100644 Documentation/devicetree/bindings/thermal/dlg,da9062-thermal.yaml
 
+diff --git a/Documentation/devicetree/bindings/thermal/da9062-thermal.txt b/Documentation/devicetree/bindings/thermal/da9062-thermal.txt
+deleted file mode 100644
+index e241bb5a5584..000000000000
+--- a/Documentation/devicetree/bindings/thermal/da9062-thermal.txt
++++ /dev/null
+@@ -1,36 +0,0 @@
+-* Dialog DA9062/61 TJUNC Thermal Module
+-
+-This module is part of the DA9061/DA9062. For more details about entire
+-DA9062 and DA9061 chips see Documentation/devicetree/bindings/mfd/da9062.txt
+-
+-Junction temperature thermal module uses an interrupt signal to identify
+-high THERMAL_TRIP_HOT temperatures for the PMIC device.
+-
+-Required properties:
+-
+-- compatible: should be one of the following valid compatible string lines:
+-        "dlg,da9061-thermal", "dlg,da9062-thermal"
+-        "dlg,da9062-thermal"
+-
+-Optional properties:
+-
+-- polling-delay-passive : Specify the polling period, measured in
+-    milliseconds, between thermal zone device update checks.
+-
+-Example: DA9062
+-
+-	pmic0: da9062@58 {
+-		thermal {
+-			compatible = "dlg,da9062-thermal";
+-			polling-delay-passive = <3000>;
+-		};
+-	};
+-
+-Example: DA9061 using a fall-back compatible for the DA9062 onkey driver
+-
+-	pmic0: da9061@58 {
+-		thermal {
+-			compatible = "dlg,da9061-thermal", "dlg,da9062-thermal";
+-			polling-delay-passive = <3000>;
+-		};
+-	};
+diff --git a/Documentation/devicetree/bindings/thermal/dlg,da9062-thermal.yaml b/Documentation/devicetree/bindings/thermal/dlg,da9062-thermal.yaml
+new file mode 100644
+index 000000000000..0021ebdd83a0
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/dlg,da9062-thermal.yaml
+@@ -0,0 +1,58 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thermal/dlg,da9062-thermal.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Dialog DA9062/61 TJUNC Thermal Module
++
++description:
++  This module is part of the DA9061/DA9062. For more details about entire
++  DA9062 and DA9061 chips see Documentation/devicetree/bindings/mfd/da9062.txt
++
++  Junction temperature thermal module uses an interrupt signal to identify
++  high THERMAL_TRIP_HOT temperatures for the PMIC device.
++
++maintainers:
++  - Biju Das <biju.das.jz@bp.renesas.com>
++
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - enum:
++              - dlg,da9062-thermal
++      - items:
++          - enum:
++              - dlg,da9061-thermal
++          - const: dlg,da9062-thermal # da9062-thermal fallback
++
++  polling-delay-passive:
++    description:
++      Specify the polling period, measured in milliseconds, between
++      thermal zone device update checks.
++
++required:
++  - compatible
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++      pmic@58 {
++        compatible = "dlg,da9062";
++        reg = <0x58>;
++        interrupt-parent = <&gpio6>;
++        interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
++        interrupt-controller;
++
++        thermal {
++          compatible = "dlg,da9062-thermal";
++          polling-delay-passive = <3000>;
++        };
++      };
++    };
 -- 
 2.39.2
 
