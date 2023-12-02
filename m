@@ -1,76 +1,254 @@
-Return-Path: <linux-pm+bounces-639-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-640-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D875E801D9B
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Dec 2023 16:57:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5FA2801DC6
+	for <lists+linux-pm@lfdr.de>; Sat,  2 Dec 2023 17:36:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88C3B2814EE
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Dec 2023 15:57:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F2F11F2109D
+	for <lists+linux-pm@lfdr.de>; Sat,  2 Dec 2023 16:36:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99DC61A5A6;
-	Sat,  2 Dec 2023 15:57:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51549D29F;
+	Sat,  2 Dec 2023 16:36:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SX9D6PA3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A58F11F;
-	Sat,  2 Dec 2023 07:57:28 -0800 (PST)
-Received: from i53875b61.versanet.de ([83.135.91.97] helo=phil.lan)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1r9SMq-0002DL-9W; Sat, 02 Dec 2023 16:57:20 +0100
-From: Heiko Stuebner <heiko@sntech.de>
-To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Alex Bee <knaerzche@gmail.com>
-Cc: Heiko Stuebner <heiko@sntech.de>,
-	Maxime Ripard <mripard@kernel.org>,
-	David Airlie <airlied@gmail.com>,
-	linux-pm@vger.kernel.org,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	dri-devel@lists.freedesktop.org,
-	linux-rockchip@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	devicetree@vger.kernel.org,
-	Daniel Vetter <daniel@ffwll.ch>,
-	linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH v2 0/5] Add power-controller and gpu for RK3128
-Date: Sat,  2 Dec 2023 16:57:18 +0100
-Message-Id: <170153263025.376455.12737085983971621612.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20231202125144.66052-1-knaerzche@gmail.com>
-References: <20231202125144.66052-1-knaerzche@gmail.com>
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3EB2102;
+	Sat,  2 Dec 2023 08:36:18 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-50aab20e828so4290640e87.2;
+        Sat, 02 Dec 2023 08:36:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701534977; x=1702139777; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=v0V2pKk4+4aA81N20X6iKRNTg+2H72cbN/toxwCkNhk=;
+        b=SX9D6PA3tIHRR4KkFTlZwi27U9blNDCtK6BYa2hMFeAM1yS02SX+QMYABlUBDd9ft4
+         bqreMp5vUTPzKmhcjusJ6DjGr39r3IcDaL3HZ0/CGxKXgUt7LEa43A+Fyttd0ytFu16T
+         0nnLnahz4zyELdrPUjEUOESAJCmOC7fNNHFDQPuRBAekaeKkm9Z7oQ3DlNeaQPMgS94v
+         imhC90lrRtXutZsTbUDNnpK6l8AvNN0SS4Fe7KQxbRATyKoAzN3zzJdFfc1IGxfM3YYr
+         wAevnayMvLBKLizWagOj66N3AW+srUG5CiBszuMkq+RB6t0KP5JmXqiflJS821Wzsy+y
+         +Nuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701534977; x=1702139777;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v0V2pKk4+4aA81N20X6iKRNTg+2H72cbN/toxwCkNhk=;
+        b=ZLHrtPiKbE/xQmyzkaCxkEGWL20cdrwDkaQjCC9+JWHdg4rmJ5WnkB0BHIvGLled6O
+         vNjJX/XqNOl+iEW1CfuacijCzKYsHpmhyYflVDCPt6RSydRpr9sZN1LADr5atDHKtOBE
+         pHfmaMlPQVqpm436G1Fe9pp351tC4iRLTtITATLHDmdlhy0TmPIDyI8o8hIR8gM1sIS1
+         5tIT5onBnNPJS89pEY49z2HyRBmoONmsEscfY/LH3nHyXKJRta+zIsuvzDM1NaSHlDHX
+         MWK5C/bHI+OBUyqLULDi/+KH2WJWxlsKooiXNFjUUIFwazxITb/uZ5WCzVga82nRrfKs
+         ROOQ==
+X-Gm-Message-State: AOJu0YxnNXpcEkulWKhVlN/yOIFMBgdPl4KhFCw+WRxVPmlhsSyrCmix
+	/h0uEjY3kBQ2vfvVbZOjMg==
+X-Google-Smtp-Source: AGHT+IF33HnUEXqWEy4B+lQlMo7S3GPuLcKmlqPCjVR7Kz4ZLcX9FlrrJcRavP6xP748jt47pbec1g==
+X-Received: by 2002:a05:6512:e98:b0:50b:bfaa:317b with SMTP id bi24-20020a0565120e9800b0050bbfaa317bmr1710184lfb.11.1701534976526;
+        Sat, 02 Dec 2023 08:36:16 -0800 (PST)
+Received: from ?IPV6:2a02:810b:f40:4300:b6b5:9b26:a823:2f2d? ([2a02:810b:f40:4300:b6b5:9b26:a823:2f2d])
+        by smtp.gmail.com with ESMTPSA id eh4-20020a0564020f8400b0054c9b0bd576sm314474edb.26.2023.12.02.08.36.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Dec 2023 08:36:16 -0800 (PST)
+Message-ID: <7a6eed43-477a-48a4-bd64-4528da920ffd@gmail.com>
+Date: Sat, 2 Dec 2023 17:36:15 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/5] ARM: dts: rockchip: Add power-controller for
+ RK3128
+To: =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Rob Herring <robh+dt@kernel.org>
+Cc: Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>, Maxime Ripard <mripard@kernel.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, linux-pm@vger.kernel.org
+References: <20231202125144.66052-1-knaerzche@gmail.com>
+ <20231202125144.66052-3-knaerzche@gmail.com> <6926340.F8r316W7xa@diego>
+Content-Language: en-US
+From: Alex Bee <knaerzche@gmail.com>
+In-Reply-To: <6926340.F8r316W7xa@diego>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On Sat, 2 Dec 2023 13:51:39 +0100, Alex Bee wrote:
-> The first patch in this series fixes the pm-domain driver and adds
-> power-domains which are currently missing. This touches the ABI which is
-> not and was never used until now. Not all of them are used yet, but when
-> the power-controller is added to the DT in patch 2 the ABI should not
-> be changed again.
-> Patch 3-5 are adding the the gpu compatible to dt-bindings, adding the gpu
-> node and the respective operating points to SoC DT and finally enabling it
-> for XPI-3128 board.
-> 
-> [...]
+Hi Heiko,
 
-Applied, thanks!
+Am 02.12.23 um 16:51 schrieb Heiko Stübner:
+> Hi Alex,
+>
+> Am Samstag, 2. Dezember 2023, 13:51:41 CET schrieb Alex Bee:
+>> Add power controller and qos nodes for RK3128 in order to use
+>> them as powerdomains.
+> does the power-domain controller work with the incomplete set of
+> pm-domains too?
 
-[3/5] dt-bindings: gpu: mali-utgard: Add Rockchip RK3128 compatible
-      commit: 5d86c15c3171c3ecebd84d53e30d9812b5591c84
+Yes, it does - the missing domains can request idle only and can't be 
+powered on/off - if no one requests idle they are just up all the time.
 
-Best regards,
--- 
-Heiko Stuebner <heiko@sntech.de>
+> What I have in mind is
+> - adding the power-controller node with the existing set of power-domains
+> - the gpu pm-domain is in there
+> - adding the gpu parts
+
+My main concern about adding them later was the change of the ABI after 
+they've been exposed in the SoC DT. If that's not an issue - sure: I can 
+add them in a separate series.
+
+>
+>
+> And a second series with
+> - patch1 from here
+> - a dts patch adding the additional pm-domains to rk3128.dtsi
+> - I guess patch1 also should be split into a patch adding the binding-ids
+>    and a separate patch for the code addition.
+
+Yeah, I noticed this also :)
+
+Regards,
+
+Alex
+
+>
+>
+> Heiko
+>
+>> Signed-off-by: Alex Bee <knaerzche@gmail.com>
+>> ---
+>>   arch/arm/boot/dts/rockchip/rk3128.dtsi | 101 +++++++++++++++++++++++++
+>>   1 file changed, 101 insertions(+)
+>>
+>> diff --git a/arch/arm/boot/dts/rockchip/rk3128.dtsi b/arch/arm/boot/dts/rockchip/rk3128.dtsi
+>> index 4e8b38604ecd..b72905db04f7 100644
+>> --- a/arch/arm/boot/dts/rockchip/rk3128.dtsi
+>> +++ b/arch/arm/boot/dts/rockchip/rk3128.dtsi
+>> @@ -8,6 +8,7 @@
+>>   #include <dt-bindings/interrupt-controller/arm-gic.h>
+>>   #include <dt-bindings/interrupt-controller/irq.h>
+>>   #include <dt-bindings/pinctrl/rockchip.h>
+>> +#include <dt-bindings/power/rk3128-power.h>
+>>   
+>>   / {
+>>   	compatible = "rockchip,rk3128";
+>> @@ -133,6 +134,106 @@ smp-sram@0 {
+>>   	pmu: syscon@100a0000 {
+>>   		compatible = "rockchip,rk3128-pmu", "syscon", "simple-mfd";
+>>   		reg = <0x100a0000 0x1000>;
+>> +
+>> +		power: power-controller {
+>> +			compatible = "rockchip,rk3128-power-controller";
+>> +			#power-domain-cells = <1>;
+>> +			#address-cells = <1>;
+>> +			#size-cells = <0>;
+>> +
+>> +			power-domain@RK3128_PD_VIO {
+>> +				reg = <RK3128_PD_VIO>;
+>> +				clocks = <&cru ACLK_CIF>,
+>> +					 <&cru HCLK_CIF>,
+>> +					 <&cru DCLK_EBC>,
+>> +					 <&cru HCLK_EBC>,
+>> +					 <&cru ACLK_IEP>,
+>> +					 <&cru HCLK_IEP>,
+>> +					 <&cru ACLK_LCDC0>,
+>> +					 <&cru HCLK_LCDC0>,
+>> +					 <&cru PCLK_MIPI>,
+>> +					 <&cru ACLK_RGA>,
+>> +					 <&cru HCLK_RGA>,
+>> +					 <&cru ACLK_VIO0>,
+>> +					 <&cru ACLK_VIO1>,
+>> +					 <&cru HCLK_VIO>,
+>> +					 <&cru HCLK_VIO_H2P>,
+>> +					 <&cru DCLK_VOP>,
+>> +					 <&cru SCLK_VOP>;
+>> +				pm_qos = <&qos_ebc>,
+>> +					 <&qos_iep>,
+>> +					 <&qos_lcdc>,
+>> +					 <&qos_rga>,
+>> +					 <&qos_vip>;
+>> +				#power-domain-cells = <0>;
+>> +			};
+>> +
+>> +			power-domain@RK3128_PD_VIDEO {
+>> +				reg = <RK3128_PD_VIDEO>;
+>> +				clocks = <&cru ACLK_VDPU>,
+>> +					 <&cru HCLK_VDPU>,
+>> +					 <&cru ACLK_VEPU>,
+>> +					 <&cru HCLK_VEPU>,
+>> +					 <&cru SCLK_HEVC_CORE>;
+>> +				pm_qos = <&qos_vpu>;
+>> +				#power-domain-cells = <0>;
+>> +			};
+>> +
+>> +			power-domain@RK3128_PD_GPU {
+>> +				reg = <RK3128_PD_GPU>;
+>> +				clocks = <&cru ACLK_GPU>;
+>> +				pm_qos = <&qos_gpu>;
+>> +				#power-domain-cells = <0>;
+>> +			};
+>> +
+>> +			power-domain@RK3128_PD_CRYPTO {
+>> +				reg = <RK3128_PD_CRYPTO>;
+>> +				clocks = <&cru HCLK_CRYPTO>,
+>> +					 <&cru SCLK_CRYPTO>;
+>> +				pm_qos = <&qos_crypto>;
+>> +				#power-domain-cells = <0>;
+>> +			};
+>> +		};
+>> +	};
+>> +
+>> +	qos_crypto: qos@10128080 {
+>> +		compatible = "rockchip,rk3128-qos", "syscon";
+>> +		reg = <0x10128080 0x20>;
+>> +	};
+>> +
+>> +	qos_gpu: qos@1012d000 {
+>> +		compatible = "rockchip,rk3128-qos", "syscon";
+>> +		reg = <0x1012d000 0x20>;
+>> +	};
+>> +
+>> +	qos_vpu: qos@1012e000 {
+>> +		compatible = "rockchip,rk3128-qos", "syscon";
+>> +		reg = <0x1012e000 0x20>;
+>> +	};
+>> +
+>> +	qos_rga: qos@1012f000 {
+>> +		compatible = "rockchip,rk3128-qos", "syscon";
+>> +		reg = <0x1012f000 0x20>;
+>> +	};
+>> +
+>> +	qos_ebc: qos@1012f080 {
+>> +		compatible = "rockchip,rk3128-qos", "syscon";
+>> +		reg = <0x1012f080 0x20>;
+>> +	};
+>> +
+>> +	qos_iep: qos@1012f100 {
+>> +		compatible = "rockchip,rk3128-qos", "syscon";
+>> +		reg = <0x1012f100 0x20>;
+>> +	};
+>> +
+>> +	qos_lcdc: qos@1012f180 {
+>> +		compatible = "rockchip,rk3128-qos", "syscon";
+>> +		reg = <0x1012f180 0x20>;
+>> +	};
+>> +
+>> +	qos_vip: qos@1012f200 {
+>> +		compatible = "rockchip,rk3128-qos", "syscon";
+>> +		reg = <0x1012f200 0x20>;
+>>   	};
+>>   
+>>   	gic: interrupt-controller@10139000 {
+>>
+>
+>
+>
 
