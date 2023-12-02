@@ -1,237 +1,107 @@
-Return-Path: <linux-pm+bounces-641-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-642-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A5B6801DFA
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Dec 2023 18:47:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45B58801E3C
+	for <lists+linux-pm@lfdr.de>; Sat,  2 Dec 2023 20:26:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1240B2811A1
-	for <lists+linux-pm@lfdr.de>; Sat,  2 Dec 2023 17:47:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4E8B5B20B74
+	for <lists+linux-pm@lfdr.de>; Sat,  2 Dec 2023 19:26:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76B571CA93;
-	Sat,  2 Dec 2023 17:47:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9AB9208A3;
+	Sat,  2 Dec 2023 19:25:55 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA1D124;
-	Sat,  2 Dec 2023 09:47:11 -0800 (PST)
-Received: from i53875b61.versanet.de ([83.135.91.97] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1r9U4v-0003Lc-Qz; Sat, 02 Dec 2023 18:46:57 +0100
-From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To: Conor Dooley <conor+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Rob Herring <robh+dt@kernel.org>, Alex Bee <knaerzche@gmail.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, Maxime Ripard <mripard@kernel.org>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-pm@vger.kernel.org
-Subject:
- Re: [PATCH v2 2/5] ARM: dts: rockchip: Add power-controller for RK3128
-Date: Sat, 02 Dec 2023 18:46:56 +0100
-Message-ID: <4891026.6YUMPnJmAY@diego>
-In-Reply-To: <7a6eed43-477a-48a4-bd64-4528da920ffd@gmail.com>
-References:
- <20231202125144.66052-1-knaerzche@gmail.com> <6926340.F8r316W7xa@diego>
- <7a6eed43-477a-48a4-bd64-4528da920ffd@gmail.com>
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3FA6811A;
+	Sat,  2 Dec 2023 11:25:51 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="6.04,246,1695654000"; 
+   d="scan'208";a="185089874"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 03 Dec 2023 04:25:49 +0900
+Received: from localhost.localdomain (unknown [10.226.92.28])
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 2369340764EE;
+	Sun,  3 Dec 2023 04:25:40 +0900 (JST)
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Lee Jones <lee@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	Steve Twiss <stwiss.opensource@diasemi.com>,
+	Support Opensource <support.opensource@diasemi.com>,
+	linux-watchdog@vger.kernel.org,
+	linux-input@vger.kernel.org,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>,
+	linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v2 00/11] Convert DA906{1,2} bindings to json-schema
+Date: Sat,  2 Dec 2023 19:25:24 +0000
+Message-Id: <20231202192536.266885-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8bit
 
-Hi Alex,
+Convert the below bindings to json-schema
+1) DA906{1,2} mfd bindings
+2) DA906{1,2,3} onkey bindings
+3) DA906{1,2,3} thermal bindings
 
-Am Samstag, 2. Dezember 2023, 17:36:15 CET schrieb Alex Bee:
-> Am 02.12.23 um 16:51 schrieb Heiko St=FCbner:
-> > Am Samstag, 2. Dezember 2023, 13:51:41 CET schrieb Alex Bee:
-> >> Add power controller and qos nodes for RK3128 in order to use
-> >> them as powerdomains.
-> > does the power-domain controller work with the incomplete set of
-> > pm-domains too?
->=20
-> Yes, it does - the missing domains can request idle only and can't be=20
-> powered on/off - if no one requests idle they are just up all the time.
->=20
-> > What I have in mind is
-> > - adding the power-controller node with the existing set of power-domai=
-ns
-> > - the gpu pm-domain is in there
-> > - adding the gpu parts
->=20
-> My main concern about adding them later was the change of the ABI after=20
-> they've been exposed in the SoC DT. If that's not an issue - sure: I can=
-=20
-> add them in a separate series.
+Also add fallback for DA9061 watchdog device and document
+DA9063 watchdog device.
 
-An ABI change would be _changing_ the domain-ids in the rk3128-power.h
-I think :-) .
+v1->v2:
+ Ref : https://lore.kernel.org/all/20231201110840.37408-5-biju.das.jz@bp.renesas.com/
+ * Made as a separate series
+ * DA9062 and DA9061 merged with DA9063
+ * Sorted the child devices
+ * mfd,onkey and thermal are pointing to child bindings
+ 
+Biju Das (11):
+  dt-bindings: watchdog: dlg,da9062-watchdog: Add fallback for DA9061
+    watchdog
+  dt-bindings: watchdog: dlg,da9062-watchdog: Document DA9063 watchdog
+  dt-bindings: input: Convert da906{1,2,3} onkey to json-schema
+  dt-bindings: thermal: Convert da906{1,2} thermal to json-schema
+  dt-bindings: mfd: dlg,da9063: Update watchdog property
+  dt-bindings: mfd: dlg,da9063: Update onkey property
+  dt-bindings: mfd: dlg,da9063: Sort child devices
+  dt-bindings: mfd: da9062: Update watchdog description
+  dt-bindings: mfd: da9062: Update onkey description
+  dt-bindings: mfd: da9062: Update thermal description
+  dt-bindings: mfd: dlg,da9063: Convert da9062 to json-schema
 
-Right now the existing domain ids in the header are already exposed to the
-world, so someone could already use them, but not the new ones.
+ .../bindings/input/da9062-onkey.txt           |  47 ----
+ .../bindings/input/dlg,da9062-onkey.yaml      |  61 +++++
+ .../devicetree/bindings/mfd/da9062.txt        | 124 ----------
+ .../devicetree/bindings/mfd/dlg,da9063.yaml   | 220 +++++++++++++++---
+ .../bindings/thermal/da9062-thermal.txt       |  36 ---
+ .../bindings/thermal/dlg,da9062-thermal.yaml  |  58 +++++
+ .../watchdog/dlg,da9062-watchdog.yaml         |  12 +-
+ 7 files changed, 313 insertions(+), 245 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/input/da9062-onkey.txt
+ create mode 100644 Documentation/devicetree/bindings/input/dlg,da9062-onkey.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mfd/da9062.txt
+ delete mode 100644 Documentation/devicetree/bindings/thermal/da9062-thermal.txt
+ create mode 100644 Documentation/devicetree/bindings/thermal/dlg,da9062-thermal.yaml
 
-
-
-Heiko
-
-> > And a second series with
-> > - patch1 from here
-> > - a dts patch adding the additional pm-domains to rk3128.dtsi
-> > - I guess patch1 also should be split into a patch adding the binding-i=
-ds
-> >    and a separate patch for the code addition.
->=20
-> Yeah, I noticed this also :)
->=20
-> Regards,
->=20
-> Alex
->=20
-> >
-> >
-> > Heiko
-> >
-> >> Signed-off-by: Alex Bee <knaerzche@gmail.com>
-> >> ---
-> >>   arch/arm/boot/dts/rockchip/rk3128.dtsi | 101 +++++++++++++++++++++++=
-++
-> >>   1 file changed, 101 insertions(+)
-> >>
-> >> diff --git a/arch/arm/boot/dts/rockchip/rk3128.dtsi b/arch/arm/boot/dt=
-s/rockchip/rk3128.dtsi
-> >> index 4e8b38604ecd..b72905db04f7 100644
-> >> --- a/arch/arm/boot/dts/rockchip/rk3128.dtsi
-> >> +++ b/arch/arm/boot/dts/rockchip/rk3128.dtsi
-> >> @@ -8,6 +8,7 @@
-> >>   #include <dt-bindings/interrupt-controller/arm-gic.h>
-> >>   #include <dt-bindings/interrupt-controller/irq.h>
-> >>   #include <dt-bindings/pinctrl/rockchip.h>
-> >> +#include <dt-bindings/power/rk3128-power.h>
-> >>  =20
-> >>   / {
-> >>   	compatible =3D "rockchip,rk3128";
-> >> @@ -133,6 +134,106 @@ smp-sram@0 {
-> >>   	pmu: syscon@100a0000 {
-> >>   		compatible =3D "rockchip,rk3128-pmu", "syscon", "simple-mfd";
-> >>   		reg =3D <0x100a0000 0x1000>;
-> >> +
-> >> +		power: power-controller {
-> >> +			compatible =3D "rockchip,rk3128-power-controller";
-> >> +			#power-domain-cells =3D <1>;
-> >> +			#address-cells =3D <1>;
-> >> +			#size-cells =3D <0>;
-> >> +
-> >> +			power-domain@RK3128_PD_VIO {
-> >> +				reg =3D <RK3128_PD_VIO>;
-> >> +				clocks =3D <&cru ACLK_CIF>,
-> >> +					 <&cru HCLK_CIF>,
-> >> +					 <&cru DCLK_EBC>,
-> >> +					 <&cru HCLK_EBC>,
-> >> +					 <&cru ACLK_IEP>,
-> >> +					 <&cru HCLK_IEP>,
-> >> +					 <&cru ACLK_LCDC0>,
-> >> +					 <&cru HCLK_LCDC0>,
-> >> +					 <&cru PCLK_MIPI>,
-> >> +					 <&cru ACLK_RGA>,
-> >> +					 <&cru HCLK_RGA>,
-> >> +					 <&cru ACLK_VIO0>,
-> >> +					 <&cru ACLK_VIO1>,
-> >> +					 <&cru HCLK_VIO>,
-> >> +					 <&cru HCLK_VIO_H2P>,
-> >> +					 <&cru DCLK_VOP>,
-> >> +					 <&cru SCLK_VOP>;
-> >> +				pm_qos =3D <&qos_ebc>,
-> >> +					 <&qos_iep>,
-> >> +					 <&qos_lcdc>,
-> >> +					 <&qos_rga>,
-> >> +					 <&qos_vip>;
-> >> +				#power-domain-cells =3D <0>;
-> >> +			};
-> >> +
-> >> +			power-domain@RK3128_PD_VIDEO {
-> >> +				reg =3D <RK3128_PD_VIDEO>;
-> >> +				clocks =3D <&cru ACLK_VDPU>,
-> >> +					 <&cru HCLK_VDPU>,
-> >> +					 <&cru ACLK_VEPU>,
-> >> +					 <&cru HCLK_VEPU>,
-> >> +					 <&cru SCLK_HEVC_CORE>;
-> >> +				pm_qos =3D <&qos_vpu>;
-> >> +				#power-domain-cells =3D <0>;
-> >> +			};
-> >> +
-> >> +			power-domain@RK3128_PD_GPU {
-> >> +				reg =3D <RK3128_PD_GPU>;
-> >> +				clocks =3D <&cru ACLK_GPU>;
-> >> +				pm_qos =3D <&qos_gpu>;
-> >> +				#power-domain-cells =3D <0>;
-> >> +			};
-> >> +
-> >> +			power-domain@RK3128_PD_CRYPTO {
-> >> +				reg =3D <RK3128_PD_CRYPTO>;
-> >> +				clocks =3D <&cru HCLK_CRYPTO>,
-> >> +					 <&cru SCLK_CRYPTO>;
-> >> +				pm_qos =3D <&qos_crypto>;
-> >> +				#power-domain-cells =3D <0>;
-> >> +			};
-> >> +		};
-> >> +	};
-> >> +
-> >> +	qos_crypto: qos@10128080 {
-> >> +		compatible =3D "rockchip,rk3128-qos", "syscon";
-> >> +		reg =3D <0x10128080 0x20>;
-> >> +	};
-> >> +
-> >> +	qos_gpu: qos@1012d000 {
-> >> +		compatible =3D "rockchip,rk3128-qos", "syscon";
-> >> +		reg =3D <0x1012d000 0x20>;
-> >> +	};
-> >> +
-> >> +	qos_vpu: qos@1012e000 {
-> >> +		compatible =3D "rockchip,rk3128-qos", "syscon";
-> >> +		reg =3D <0x1012e000 0x20>;
-> >> +	};
-> >> +
-> >> +	qos_rga: qos@1012f000 {
-> >> +		compatible =3D "rockchip,rk3128-qos", "syscon";
-> >> +		reg =3D <0x1012f000 0x20>;
-> >> +	};
-> >> +
-> >> +	qos_ebc: qos@1012f080 {
-> >> +		compatible =3D "rockchip,rk3128-qos", "syscon";
-> >> +		reg =3D <0x1012f080 0x20>;
-> >> +	};
-> >> +
-> >> +	qos_iep: qos@1012f100 {
-> >> +		compatible =3D "rockchip,rk3128-qos", "syscon";
-> >> +		reg =3D <0x1012f100 0x20>;
-> >> +	};
-> >> +
-> >> +	qos_lcdc: qos@1012f180 {
-> >> +		compatible =3D "rockchip,rk3128-qos", "syscon";
-> >> +		reg =3D <0x1012f180 0x20>;
-> >> +	};
-> >> +
-> >> +	qos_vip: qos@1012f200 {
-> >> +		compatible =3D "rockchip,rk3128-qos", "syscon";
-> >> +		reg =3D <0x1012f200 0x20>;
-> >>   	};
-> >>  =20
-> >>   	gic: interrupt-controller@10139000 {
-> >>
-> >
-> >
-> >
->=20
-
-
-
+-- 
+2.39.2
 
 
