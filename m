@@ -1,231 +1,220 @@
-Return-Path: <linux-pm+bounces-652-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-653-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3D2F8023BE
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Dec 2023 13:31:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A37128023D4
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Dec 2023 13:43:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98965280E99
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Dec 2023 12:31:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D631C1F2110C
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Dec 2023 12:43:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36F458828;
-	Sun,  3 Dec 2023 12:31:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99096D510;
+	Sun,  3 Dec 2023 12:43:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="csWxtsQJ"
+	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="mv1Orx4q"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33022FF;
-	Sun,  3 Dec 2023 04:31:39 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-6cddb35ef8bso2838817b3a.2;
-        Sun, 03 Dec 2023 04:31:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701606698; x=1702211498; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0MUy55F2F+wgLbUaq7AQf9HgfhTQk1XTmdlJL+JJNEo=;
-        b=csWxtsQJ8fK86xkEg0slWx6LRfFx3RCeURlAO7jzi9IkkIrS6kvUJzS5ebdxgL0O0t
-         W7QRC+qqSXlDDME50ZO+qr7U4BiiuAi6sjbvwgBIjqGPrCESPGG9Bqv1Hm3RfaYVud/i
-         OPk1vDUweobowDYGK6tqC/sqBkQeAEjgwv0OX1KP25gS6nubzyT32cRgyVo8A+d5QeZu
-         FW6pnqAWuDZpbQ1XYpMDdyxo3/mH4aD+RNbLFdA0GqhRNCJJnRl9DktWSgjX6EoEZXgY
-         wje/WwyXWIS5nYhsjZSF0fkHIqTHl2eRje/N/FAFxGZkbxRqYJJy87cxwzt6HwyIfGPR
-         fPkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701606698; x=1702211498;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0MUy55F2F+wgLbUaq7AQf9HgfhTQk1XTmdlJL+JJNEo=;
-        b=Uf1tltgz8IT/iAbZ2tT4vHv4h7zeH4w9zisQpk0Sev4TqSyq/ZmSAxypxjCiw0j1iP
-         qmoiuNT8pwpYbWVYK4e3ebYeDA2Gv3jnU/LlyLTnUDiG6F1zoVSbir149OJHw5jSc4Iu
-         zpuEVfEvypv9OHkylMetYYm41CWjpMA+HB49hkQHxMSvVal8xeDIkGVllVCMXzEUwttj
-         8Sio2c8LWRoa4v1uXsa5lhb8uOBqiJbRIx/Ef2uOdAEgOGs8HfEBl9XkXfh4UKiTOSPi
-         XDGty3yUiER+zvPCPRNkM8DmRXBw3itJzh0VFN5BQdhA03hT1XIAo1OlfkfQ20o+YlO9
-         Fv7w==
-X-Gm-Message-State: AOJu0Ywsz0EQNvBV8NjxpaSWqdQy1HbA1bwjxeNvrndhPICI3uh4Jhlw
-	LQPT283/ESf344DEX0wfgiPJwQYm04WhUw==
-X-Google-Smtp-Source: AGHT+IHmLadSlZkgkEbu7BCMhHy54Dhejaw4nkpOT9L4Al3PzBof4xcJ8kA+G2XiA2o5lw1MMiqVvg==
-X-Received: by 2002:a05:6a21:81a9:b0:18b:cd15:b832 with SMTP id pd41-20020a056a2181a900b0018bcd15b832mr777612pzb.42.1701606698415;
-        Sun, 03 Dec 2023 04:31:38 -0800 (PST)
-Received: from archie.me ([103.131.18.64])
-        by smtp.gmail.com with ESMTPSA id h12-20020a170902b94c00b001c613b4aa33sm6529854pls.287.2023.12.03.04.31.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Dec 2023 04:31:37 -0800 (PST)
-Received: by archie.me (Postfix, from userid 1000)
-	id 8AE2D1033EDE8; Sun,  3 Dec 2023 19:31:28 +0700 (WIB)
-Date: Sun, 3 Dec 2023 19:31:28 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Regressions <regressions@lists.linux.dev>,
-	Linux IOMMU <iommu@lists.linux.dev>,
-	Linux Power Management <linux-pm@vger.kernel.org>
-Cc: David Woodhouse <dwmw2@infradead.org>,
-	Lu Baolu <baolu.lu@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Michael Kelley <mikelley@microsoft.com>,
-	Oleksandr Natalenko <oleksandr@natalenko.name>,
-	Helge Deller <deller@gmx.de>,
-	"Guilherme G. Piccoli" <gpiccoli@igalia.com>, kbugreports@proton.me
-Subject: Re: Fwd: Kernels v6.5 and v6.6 break resume from standby (s3) on
- some Intel systems if VT-d is enabled
-Message-ID: <ZWx1IHBE9KCk6rWj@archie.me>
-References: <4b3c624a-f114-4e39-9e1c-0df18f307e8c@gmail.com>
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2138.outbound.protection.outlook.com [40.107.114.138])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77516C2;
+	Sun,  3 Dec 2023 04:43:25 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iLp+lEHMxNOvxV6XsXty1uWAILXzpDG3SQLGNTYnzYP6jlRm2jGwD3OaYIR2NZ2D+XlM8Hj6TQ1rwpQeAEy1wBd7PfJeiNvZW7udSvHAbrZTCt1v9mA2E6ziia3CjGmNqh/OI1dF4+F63HI67Dn1k/UcIs5jGBTdDhGtvprgoDQObrJDJuxaV9opGnEmSmMOKkhZEMJkoZjZTCRnLE7N+39UAvaHbWthQdGXYlTDyvd3ka+jT9Dw3SKI+b227UHE7H2AMIlJUQWAQs11rRkzYCgB1+Fo8ms/24Ax3cZSMMStu5Bu/FOQQTecIcdP2RRkl9PerdDE3Eb2LwAkpuIBeA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OewW07s704/QN7kO32Q1fI4NKw2OutVSDVmxlVHvj6o=;
+ b=UlME4RibCJR9u69z3RZdiB1cRS3pGT8HRQlvpwy2uWetKyi9jkiIz/tj+ZOqQLf9txAKHa2rcyB7JAQkYQxj2kpbe6ZCOTCe2pO21VaFdBk7lMr7/XLnbYowud7PGdZj42FfNk8ntIDyM+ABIG6yh5UfVNIO8AvVTRYiILjnAeqXLYAHMlZJJ1O4jWTD+jxh3zC+X0eVwe7A/lqpI/XQEbtTW3KTUeeDC0sqfOH7B3gCQmQOOwpdRdY9oHlPtOpX5w1GGpTuHsXC0RtMJfLN36/uRVWSIDAwOVslTN2N7W1PkSsIxWrvDCtt73bT5zaRZBTa7mDBTL6smCuMViBOuQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OewW07s704/QN7kO32Q1fI4NKw2OutVSDVmxlVHvj6o=;
+ b=mv1Orx4q7Ba9IhXtxZjvl+kXJdqmdY2VdGjhuZ9/RY4LyFvOLfxjC2yJzMjk1/hs4rl0Qds1v1nicHo9ID6XKHeSBEu2DY6FqTLM9vgXMm5CMU8b+U8j+9NRn2WLF5Kng95XPo7IdJ3fvXuSPKjFuevXJsQRuAb2xuRlr6dkmxY=
+Received: from TYCPR01MB11269.jpnprd01.prod.outlook.com
+ (2603:1096:400:3c0::10) by TYCPR01MB8310.jpnprd01.prod.outlook.com
+ (2603:1096:400:15a::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.32; Sun, 3 Dec
+ 2023 12:43:22 +0000
+Received: from TYCPR01MB11269.jpnprd01.prod.outlook.com
+ ([fe80::4af6:b31a:8826:51ac]) by TYCPR01MB11269.jpnprd01.prod.outlook.com
+ ([fe80::4af6:b31a:8826:51ac%6]) with mapi id 15.20.7046.032; Sun, 3 Dec 2023
+ 12:43:22 +0000
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Conor Dooley <conor@kernel.org>
+CC: Dmitry Torokhov <dmitry.torokhov@gmail.com>, Rob Herring
+	<robh+dt@kernel.org>, Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Lee
+ Jones <lee@kernel.org>, Support Opensource <support.opensource@diasemi.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
+	<daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
+	<lukasz.luba@arm.com>, Steve Twiss <stwiss.opensource@diasemi.com>,
+	"linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, Geert Uytterhoeven
+	<geert+renesas@glider.be>, Prabhakar Mahadev Lad
+	<prabhakar.mahadev-lad.rj@bp.renesas.com>, biju.das.au
+	<biju.das.au@gmail.com>, "linux-renesas-soc@vger.kernel.org"
+	<linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH v3 00/11] Convert DA906{1,2} bindings to json-schema
+Thread-Topic: [PATCH v3 00/11] Convert DA906{1,2} bindings to json-schema
+Thread-Index: AQHaJdxbj+OyhL1dmkKdDES8WnOFSrCXcAiAgAAQK7A=
+Date: Sun, 3 Dec 2023 12:43:22 +0000
+Message-ID:
+ <TYCPR01MB11269AD9696A6FF35FD5254688687A@TYCPR01MB11269.jpnprd01.prod.outlook.com>
+References: <20231203113159.92316-1-biju.das.jz@bp.renesas.com>
+ <20231203-unthread-suffering-411df4cb0f4c@spud>
+In-Reply-To: <20231203-unthread-suffering-411df4cb0f4c@spud>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYCPR01MB11269:EE_|TYCPR01MB8310:EE_
+x-ms-office365-filtering-correlation-id: 75d9dfb5-3f34-4007-0e53-08dbf3fd6f2b
+x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ abSc7QNSRI8oQ2VcKvuCUuqxGn3zMBNm//olYT2VZZKrXqy973pfLhiBrqSWC+QCXnPfUjnmzF7XavNoJcarP3XVFxxF8jhcRxuMewtwcDugH1Y7GWghUswUQyi066EGx9drFTtbZQsg5P+GW0XBQEcWHLPdRIskvFwhig+TM8xgwWKrgbERJ1mbQuRWSMgj+S6MTyQBBmazwrW044yAAiRazmaC0jOA70g9g+B09WbPyHacxl4WoxD4Jz8WrGQNVH//U7hIS0zYISlx4og4f/WCMYxh1zr+5yFGfCWJJytw4V3PcMc8nbQuDLoP27kCHqZgp9ZxQt5l3QnfPAomqmNQT7B5eALIcYHOibljq7H1wM8lFyL/vV7f0YKAhsOqkzmGRpBSly70KMx2hgQmKLeCOK/Jpq8T8yo87FSxmk2zZJxRKNpdcVp4Ix0ijgE7MLHMECHuUhuTQN6d18fbymvnH3ejWcXNN1RsMKMNWvq+SNYoGv6zLkNQVxzege2yBXB/dlXQ2rvEkfRjndY3K9d+KU/8HOF24ylxH+gjgJsozXmkaBEN9LLXMRMAQtcQSdWZZ3EdJ5FMPage0kPUplY8D+s27AFKVKCCZEomaOE=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB11269.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(39860400002)(136003)(396003)(376002)(346002)(230922051799003)(1800799012)(186009)(64100799003)(451199024)(54906003)(6916009)(66556008)(66476007)(66446008)(64756008)(66946007)(76116006)(4326008)(8676002)(8936002)(316002)(478600001)(966005)(71200400001)(7416002)(5660300002)(38070700009)(41300700001)(33656002)(2906002)(86362001)(52536014)(83380400001)(26005)(122000001)(38100700002)(55016003)(6506007)(9686003)(7696005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?5zPLx/v8HUTeTlujcrkVHLXUn6um9cF+TuDrE+Cotojmi2vH2rMYALNgOB1s?=
+ =?us-ascii?Q?+Ej19Z6zrH18bw+sk3wR3pcmevnyhAJL9PMktBpvrN5ZTi1a0ApfeKfhboFA?=
+ =?us-ascii?Q?RGUmtGhfOk2tZ+0j2N3LYmGjxJAcb/E9hWigi+1DH0EnTxHxZgh655SdLWQu?=
+ =?us-ascii?Q?dDSVOpXSyzF6F4Iw40MAwyFUIufK4xf5+PmixkQu17ster/y2wBhdN/uNwOp?=
+ =?us-ascii?Q?JJgA9F8Oz69LHzIisl74ndNqIf/ml8tZlqGv4kFY0hTg74a5f4Wev1XODEdo?=
+ =?us-ascii?Q?RRqx3n71OxPMXjQDE7Bnts5g6YLCYEI8aQnu8or4zQ+Zin1UXCj/uI0HnhHN?=
+ =?us-ascii?Q?6DJyWzaboJ89HfqsUrgQTxLtunX/GsyG7Oqecc58egpaRd/vzxJ0tyvJT7RU?=
+ =?us-ascii?Q?0k1e+McLdgA9X6G1/gVvyaBdoo454lDYuokvGcmecqOpuKB++kOj8SEp+AI0?=
+ =?us-ascii?Q?xDVRuWy/2i40sO6L9NXVGYb3hqaLVxhub4xp2DQAEwILAUly/08fBtVXgFtE?=
+ =?us-ascii?Q?zLI1+G8XEWKvjE/kGqcOuRzYzTAx//GoY7OoqowAO1nOX3JkNHHy/T7TFJ9R?=
+ =?us-ascii?Q?0JRK2R5VcD6Lv5Wz0RYGGcgPqJ5rb8arIJJu2dvgKhEOS3++/lF+xFLoP31K?=
+ =?us-ascii?Q?TG5XU8LgHq/Zy6/cHKoKuypglKTzYTq0Oexy9lSiOjO9bA96nwjcdDM0o85N?=
+ =?us-ascii?Q?BuIpMeXMD7DEN/q7XB2hORSTpxY5eA8DUuGXdM1Z4I9sfHK9D+BMYmfmYiui?=
+ =?us-ascii?Q?CuCiEAnkwA8kbg+JpmmaRO9TgehPleCV3KGWdXtHz9LmaSjm6C9si9k1iITI?=
+ =?us-ascii?Q?/9r17hY6MFDhSmQ9+oGWcGPQ6strFPAWnKgKqNB3KnlfMa2D6+dIGBIQwNc/?=
+ =?us-ascii?Q?cTCM6WmjWLRRKaJnEeV4PoRDG6R/zcn6kITku5LJF26LCtL5+jTS1G+I2KYJ?=
+ =?us-ascii?Q?OmZBVjr9TjApCdoAaQthec4qiZ/1aLMcnHBbcbXasN0/7fdFD2LW8QoAPA7k?=
+ =?us-ascii?Q?6qPlNjqBpMZXTo8WIkpyfHrGEmR3eerxc/iQqGD72cO8JWK8EJKhybwoy/sW?=
+ =?us-ascii?Q?DbXJqdtTJ7JihGyOX4xEiFmF0Z4+WpGKHBx0iZDfujim5Cn1JQ7cfJzx4dk/?=
+ =?us-ascii?Q?QS4TMfo6So2Y47Ftf5XJNqUJTrx0swgxabDsglvtGfeHyd/A5HpkaSa89KzB?=
+ =?us-ascii?Q?NuaFZleO6ou+XTnA4UQ8T76qitZxZBf9LJtFCBTvFk8wol05k5QKPxMgi7J7?=
+ =?us-ascii?Q?KRjCvYKHWneM58XCkthS+QS+XGUbQTMMz8FhJVPirKzO3J4reM7hjHKdQc+K?=
+ =?us-ascii?Q?D5JmMUn8P6FLDJECqxQ1u31/9FOXhXVFRIILEQv6JXkZIOuAY3WSJ7+3FImb?=
+ =?us-ascii?Q?GG2VH9cBAdYt0DGWDjV2iR4g4OySLt/5DAee0wodDNWnZTlMSl661H8UHd43?=
+ =?us-ascii?Q?MmtWJyKYYPRlcxlP3+W/XRbHEcm0ouqZV24GV/SiT86p43dF2PlIACEw3c8/?=
+ =?us-ascii?Q?objrkO0dbvum4zZ/BAHGhiG4ZOnnP5Z5V4CLX0JEvkDwjAUa0U6S/MWd8zsc?=
+ =?us-ascii?Q?mUi7bnqMm8tVFEnrMR2LvDdr0mi2nH0J41dLxwZUZVIUUUoubUgK8ZcgZBN4?=
+ =?us-ascii?Q?SQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="dO/hfGGfuReF84Ss"
-Content-Disposition: inline
-In-Reply-To: <4b3c624a-f114-4e39-9e1c-0df18f307e8c@gmail.com>
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB11269.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 75d9dfb5-3f34-4007-0e53-08dbf3fd6f2b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Dec 2023 12:43:22.0195
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jNflrnqpk5gVwR7EwqCCZ0zPaiK4XWGlpbVmqu7fF82/B/G9j9a2gxHHDQpVe6F3KjOk4b6rifzWAhJS4elgvFMLlJL+MbePOcb704g80fc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB8310
 
+Hi Conor,
 
---dO/hfGGfuReF84Ss
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for the feedback.
 
-On Tue, Nov 28, 2023 at 08:09:24PM +0700, Bagas Sanjaya wrote:
-> Hi,
+> Subject: Re: [PATCH v3 00/11] Convert DA906{1,2} bindings to json-schema
 >=20
-> I notice a regression report on Bugzilla [1]. Quoting from it:
+> On Sun, Dec 03, 2023 at 11:31:48AM +0000, Biju Das wrote:
+> > Convert the below bindings to json-schema
+> > 1) DA906{1,2} mfd bindings
+> > 2) DA906{1,2,3} onkey bindings
+> > 3) DA906{1,2,3} thermal bindings
+> >
+> > Also add fallback for DA9061 watchdog device and document
+> > DA9063 watchdog device.
 >=20
-> > Note:
-> >=20
-> > I'm just a Linux user, I don't work in IT or even write code, so, I'm p=
-robably using terms to describe the issue that are not the ones someone who=
- knows code and what the system does under the hood would use.
-> >=20
-> > Affected system:
-> >=20
-> > Thinkpad, Intel Kaby Lake (i7-7600U) chipset / cpu and onboard gpu (Int=
-el HD 620), no separate graphics card, current bios firmware; running Void =
-Linux, xfce / lightdm
-> >=20
-> > Symptom / problem:
-> >=20
-> > Since the upgrade to kernel v6.5.5 (from v6.3.13) my system doesn't wak=
-e up from standby, i.e. resume from s3 fails 100% of the time.
-> > When pressing a key or the power button nothing happens. The LED that i=
-ndicates different states of the system, keeps indicating standby mode.
-> > The only way to use the system again is hard reset by pressing the powe=
-r button for a few seconds.
-> >=20
-> > So, there is no crashing on resume or incomplete resume or only sometim=
-es failing to resume or failing to go into standby in the first place.
-> >=20
-> > Granted, this issue was present with kernels before v6.5, but only occa=
-sionally and it would not re-appear for many many boot cycles. So, I never =
-had any lead as to why it would happen.
-> >=20
-> > I installed kernel v6.4.16 to test for the bug - it's not in there.
-> >=20
-> > For further testing I also installed kernel v6.5.2, as this was the fir=
-st kernel of the 6.5 series available on void linux, (and because the kerne=
-l logs mention VT-d for kernel v6.5.5 and v6.5.3, see below). Result: The b=
-ug is already in v6.5.2, too.
-> >=20
-> > There's only one thing I noticed from comparing logs between kernels v6=
-=2E5/6.6 vs v6.1/6.3/6.4. In the moment the system goes into standby, if ru=
-nning one of the latter three kernel versions the system would print the fo=
-llowing messages:
-> >=20
-> > [elogind-daemon] Entering sleep state 'suspend'...
-> > [kernel] PM: suspend entry (deep)
-> >=20
-> >=20
-> > But with kernels v6.5/6.6, the kernel message is missing, only the elog=
-ind-daemon message shows up in the logs. As if the kernel didn't get the me=
-mo and thus didn't prepare and didn't listen for the wake-up call to resume.
-> >=20
-> >=20
-> > To see, if this is a bug that might be tight to a certain chipset / cpu=
- generation, I tested kernel v6.5 on my old Thinkpad (Intel Sandy Bridge ch=
-ipset / cpu, and also onboard graphics only). Its BIOS also has VT-d enable=
-d. Interestingly, on that system, resume from standby with kernel v6.5 is n=
-o problem, even though its system is set up the same as the current Thinkpa=
-d.
-> >=20
-> > So, this bug seems to be limited to certain set of chipset / cpu. Which=
- seems feasible, as I couldn't find a bug report on this - not too many see=
-m to be affected.
-> >=20
-> >=20
-> >=20
-> > There's an older bug report on similar symptoms, but the cure doesn't w=
-ork on my system:
-> >=20
-> > "intel_iommu=3Don breaks resume from suspend on several Thinkpad models"
-> > https://bugzilla.kernel.org/show_bug.cgi?id=3D197029
-> >=20
-> >=20
-> > Although it sounds just like what my system is experiencing - apart fro=
-m the fact that term suspend being sometimes also used to describe hibernat=
-ion and it is not specified which one is meant in the bug report.
-> >=20
-> > So, I was hopeful on the one hand that the (workaround) fix (adding int=
-el_iommu=3Doff to the kernel parameters) would work on my system, too - on =
-the other hand, this bug report was for kernel v4.13, so it's probably not =
-necessarily relevant to similar symptoms with kernel v6.5 and v6.6, respect=
-ively.
-> >=20
-> > Anyway, adding intel_iommu=3Doff to the kernel parameters didn't change=
- anything on my system. I made, of course, sure once the system was running=
-, that intel_iommu=3Doff was in indeed used as one of the kernel parameters.
-> >=20
-> >=20
-> > With this information in mind I did a regular internet search and found=
- some information that in case intel_iommu=3Doff in the kernel parameters d=
-oesn't help, disabling VT-d in BIOS might.
-> > And in my case it does indeed help avoiding the bug - for both kernel v=
-ersions, v6.5 and v6.6.
-> >=20
-> > Reading some other bug reports and some changelogs, I noticed that iomm=
-u and vt-s are connected, to I posted this bug report in drivers/iommu. If =
-it is misplaced here, please feel free to move it to the correct category.
-> >=20
-> >=20
-> > I attached a file with the output of some commands I found being used i=
-n several other bug reports on here, just in case they might be needed / he=
-lpful.
-> >=20
-> >=20
-> > Thank you very much for your help in advance!
+> Horrible timing, you sent this after I started looking at the previous
+> revision of the patchset :( I left some comments and tags on the previous
+> version which I would imagine that some of them also apply here.
+
+
+I missed some checks which is pointed out by bot. So I thought of sending v=
+3
+Before anyone started reviewing it.
+
+Sure, I will take care you review comments in v2 when sending new version.
+
+Cheers,
+Biju
+
+
+
 >=20
-> See Bugzilla for the full thread.
->=20
-> Anyway, I'm adding this regression to regzbot:
->=20
-> #regzbot introduced: v6.3..v6.5 https://bugzilla.kernel.org/show_bug.cgi?=
-id=3D218191
-> #regzbot title: resume from standby fails on Thinkpad with Kaby Lake CPU
->=20
-
-The reporter had done bisection (see Bugzilla for details), so telling
-regzbot:
-
-#regzbot introduced: 0c7ffa32dbd6b0
-
-Thanks.
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---dO/hfGGfuReF84Ss
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZWx1HAAKCRD2uYlJVVFO
-o9tkAQD39PHo7FdONECmYZXrv+d6mV48M232+oW13+R1CiakrgEA1d/iKH+VFtPl
-UK+NIN72mc22rpkszIA/Br5ww/0w0gw=
-=tabU
------END PGP SIGNATURE-----
-
---dO/hfGGfuReF84Ss--
+> >
+> > v2->v3:
+> >  * Updated Maintainer entries for watchdog,onkey and thermal bindings
+> >  * Fixed bot errors related to MAINTAINERS entry, invalid doc
+> >    references and thermal examples by merging patch#4.
+> >
+> > v1->v2:
+> >  Ref:
+> > https://lore.kernel.org/all/20231201110840.37408-5-biju.das.jz@bp.rene
+> > sas.com/
+> >  * DA9062 and DA9061 merged with DA9063
+> >  * Sorted the child devices
+> >  * mfd,onkey and thermal are pointing to child bindings
+> >
+> >
+> >
+> > Biju Das (11):
+> >   MAINTAINERS: Update da9062-watchdog bindings
+> >   dt-bindings: watchdog: dlg,da9062-watchdog: Add fallback for DA9061
+> >     watchdog
+> >   dt-bindings: watchdog: dlg,da9062-watchdog: Document DA9063 watchdog
+> >   dt-bindings: input: Convert da906{1,2,3} onkey to json-schema
+> >   dt-bindings: mfd: dlg,da9063: Update watchdog property
+> >   dt-bindings: mfd: dlg,da9063: Update onkey property
+> >   dt-bindings: mfd: dlg,da9063: Sort child devices
+> >   dt-bindings: mfd: da9062: Update watchdog description
+> >   dt-bindings: mfd: da9062: Update onkey description
+> >   dt-bindings: mfd: da9062: Update thermal description
+> >   dt-bindings: mfd: dlg,da9063: Convert da9062 to json-schema
+> >
+> >  .../bindings/input/da9062-onkey.txt           |  47 ----
+> >  .../bindings/input/dlg,da9062-onkey.yaml      |  60 +++++
+> >  .../devicetree/bindings/mfd/da9062.txt        | 124 ----------
+> >  .../devicetree/bindings/mfd/dlg,da9063.yaml   | 221 +++++++++++++++---
+> >  .../bindings/thermal/da9062-thermal.txt       |  36 ---
+> >  .../bindings/thermal/dlg,da9062-thermal.yaml  |  78 +++++++
+> >  .../watchdog/dlg,da9062-watchdog.yaml         |  12 +-
+> >  MAINTAINERS                                   |   6 +-
+> >  8 files changed, 336 insertions(+), 248 deletions(-)  delete mode
+> > 100644 Documentation/devicetree/bindings/input/da9062-onkey.txt
+> >  create mode 100644
+> > Documentation/devicetree/bindings/input/dlg,da9062-onkey.yaml
+> >  delete mode 100644 Documentation/devicetree/bindings/mfd/da9062.txt
+> >  delete mode 100644
+> > Documentation/devicetree/bindings/thermal/da9062-thermal.txt
+> >  create mode 100644
+> > Documentation/devicetree/bindings/thermal/dlg,da9062-thermal.yaml
+> >
+> > --
+> > 2.39.2
+> >
 
