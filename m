@@ -1,150 +1,231 @@
-Return-Path: <linux-pm+bounces-651-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-652-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 167F3802348
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Dec 2023 12:43:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3D2F8023BE
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Dec 2023 13:31:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 921D31F2110C
-	for <lists+linux-pm@lfdr.de>; Sun,  3 Dec 2023 11:43:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98965280E99
+	for <lists+linux-pm@lfdr.de>; Sun,  3 Dec 2023 12:31:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16B91BE60;
-	Sun,  3 Dec 2023 11:43:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36F458828;
+	Sun,  3 Dec 2023 12:31:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gi/JfyVy"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="csWxtsQJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0D9D9473;
-	Sun,  3 Dec 2023 11:43:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18C47C433C7;
-	Sun,  3 Dec 2023 11:43:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701603791;
-	bh=9AmAExZTT0E8gSkeYl4/8vj3YGEGHEeebEe4KpaBne4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Gi/JfyVyzJ0rE4i9QOSZe/dUMF56zu89IKsDD7ODQJX2KSWMl5CpEqydezQmqsBc7
-	 Vty5xatyeZdoz+KlDZQnsBWeSjMTVInIU4TzC7gCD3mWnl84MlrGE7lmQ/e73Ad3Ug
-	 ZJr0cEr2eCKB0QtCArIcTGijUzkfEjtlVbAfI6wH+FC3bz9HUazAWkfo7h58LBdwd+
-	 f/iET0uMKW9Ff6Vlv7Oee5c4BMeoAiDg4a6bOdhgp2tUvLC4MwthxWsshLyZ3mXv44
-	 5x1I0+v2EQpdFUxrT028TSh/yv0GzPU5BlvZrXYuxKzBbSvfo7qKkEbhK/YlJLCkX3
-	 dRHMzegQmfdkw==
-Date: Sun, 3 Dec 2023 11:43:05 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Biju Das <biju.das.jz@bp.renesas.com>
-Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
-	Support Opensource <support.opensource@diasemi.com>,
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33022FF;
+	Sun,  3 Dec 2023 04:31:39 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-6cddb35ef8bso2838817b3a.2;
+        Sun, 03 Dec 2023 04:31:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701606698; x=1702211498; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0MUy55F2F+wgLbUaq7AQf9HgfhTQk1XTmdlJL+JJNEo=;
+        b=csWxtsQJ8fK86xkEg0slWx6LRfFx3RCeURlAO7jzi9IkkIrS6kvUJzS5ebdxgL0O0t
+         W7QRC+qqSXlDDME50ZO+qr7U4BiiuAi6sjbvwgBIjqGPrCESPGG9Bqv1Hm3RfaYVud/i
+         OPk1vDUweobowDYGK6tqC/sqBkQeAEjgwv0OX1KP25gS6nubzyT32cRgyVo8A+d5QeZu
+         FW6pnqAWuDZpbQ1XYpMDdyxo3/mH4aD+RNbLFdA0GqhRNCJJnRl9DktWSgjX6EoEZXgY
+         wje/WwyXWIS5nYhsjZSF0fkHIqTHl2eRje/N/FAFxGZkbxRqYJJy87cxwzt6HwyIfGPR
+         fPkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701606698; x=1702211498;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0MUy55F2F+wgLbUaq7AQf9HgfhTQk1XTmdlJL+JJNEo=;
+        b=Uf1tltgz8IT/iAbZ2tT4vHv4h7zeH4w9zisQpk0Sev4TqSyq/ZmSAxypxjCiw0j1iP
+         qmoiuNT8pwpYbWVYK4e3ebYeDA2Gv3jnU/LlyLTnUDiG6F1zoVSbir149OJHw5jSc4Iu
+         zpuEVfEvypv9OHkylMetYYm41CWjpMA+HB49hkQHxMSvVal8xeDIkGVllVCMXzEUwttj
+         8Sio2c8LWRoa4v1uXsa5lhb8uOBqiJbRIx/Ef2uOdAEgOGs8HfEBl9XkXfh4UKiTOSPi
+         XDGty3yUiER+zvPCPRNkM8DmRXBw3itJzh0VFN5BQdhA03hT1XIAo1OlfkfQ20o+YlO9
+         Fv7w==
+X-Gm-Message-State: AOJu0Ywsz0EQNvBV8NjxpaSWqdQy1HbA1bwjxeNvrndhPICI3uh4Jhlw
+	LQPT283/ESf344DEX0wfgiPJwQYm04WhUw==
+X-Google-Smtp-Source: AGHT+IHmLadSlZkgkEbu7BCMhHy54Dhejaw4nkpOT9L4Al3PzBof4xcJ8kA+G2XiA2o5lw1MMiqVvg==
+X-Received: by 2002:a05:6a21:81a9:b0:18b:cd15:b832 with SMTP id pd41-20020a056a2181a900b0018bcd15b832mr777612pzb.42.1701606698415;
+        Sun, 03 Dec 2023 04:31:38 -0800 (PST)
+Received: from archie.me ([103.131.18.64])
+        by smtp.gmail.com with ESMTPSA id h12-20020a170902b94c00b001c613b4aa33sm6529854pls.287.2023.12.03.04.31.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Dec 2023 04:31:37 -0800 (PST)
+Received: by archie.me (Postfix, from userid 1000)
+	id 8AE2D1033EDE8; Sun,  3 Dec 2023 19:31:28 +0700 (WIB)
+Date: Sun, 3 Dec 2023 19:31:28 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Regressions <regressions@lists.linux.dev>,
+	Linux IOMMU <iommu@lists.linux.dev>,
+	Linux Power Management <linux-pm@vger.kernel.org>
+Cc: David Woodhouse <dwmw2@infradead.org>,
+	Lu Baolu <baolu.lu@linux.intel.com>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Steve Twiss <stwiss.opensource@diasemi.com>,
-	linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Biju Das <biju.das.au@gmail.com>, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH v3 00/11] Convert DA906{1,2} bindings to json-schema
-Message-ID: <20231203-unthread-suffering-411df4cb0f4c@spud>
-References: <20231203113159.92316-1-biju.das.jz@bp.renesas.com>
+	Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Michael Kelley <mikelley@microsoft.com>,
+	Oleksandr Natalenko <oleksandr@natalenko.name>,
+	Helge Deller <deller@gmx.de>,
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>, kbugreports@proton.me
+Subject: Re: Fwd: Kernels v6.5 and v6.6 break resume from standby (s3) on
+ some Intel systems if VT-d is enabled
+Message-ID: <ZWx1IHBE9KCk6rWj@archie.me>
+References: <4b3c624a-f114-4e39-9e1c-0df18f307e8c@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="zzVAK3BzRdnge7Et"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="dO/hfGGfuReF84Ss"
 Content-Disposition: inline
-In-Reply-To: <20231203113159.92316-1-biju.das.jz@bp.renesas.com>
+In-Reply-To: <4b3c624a-f114-4e39-9e1c-0df18f307e8c@gmail.com>
 
 
---zzVAK3BzRdnge7Et
-Content-Type: text/plain; charset=us-ascii
+--dO/hfGGfuReF84Ss
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Dec 03, 2023 at 11:31:48AM +0000, Biju Das wrote:
-> Convert the below bindings to json-schema
-> 1) DA906{1,2} mfd bindings
-> 2) DA906{1,2,3} onkey bindings
-> 3) DA906{1,2,3} thermal bindings
+On Tue, Nov 28, 2023 at 08:09:24PM +0700, Bagas Sanjaya wrote:
+> Hi,
 >=20
-> Also add fallback for DA9061 watchdog device and document
-> DA9063 watchdog device.
+> I notice a regression report on Bugzilla [1]. Quoting from it:
+>=20
+> > Note:
+> >=20
+> > I'm just a Linux user, I don't work in IT or even write code, so, I'm p=
+robably using terms to describe the issue that are not the ones someone who=
+ knows code and what the system does under the hood would use.
+> >=20
+> > Affected system:
+> >=20
+> > Thinkpad, Intel Kaby Lake (i7-7600U) chipset / cpu and onboard gpu (Int=
+el HD 620), no separate graphics card, current bios firmware; running Void =
+Linux, xfce / lightdm
+> >=20
+> > Symptom / problem:
+> >=20
+> > Since the upgrade to kernel v6.5.5 (from v6.3.13) my system doesn't wak=
+e up from standby, i.e. resume from s3 fails 100% of the time.
+> > When pressing a key or the power button nothing happens. The LED that i=
+ndicates different states of the system, keeps indicating standby mode.
+> > The only way to use the system again is hard reset by pressing the powe=
+r button for a few seconds.
+> >=20
+> > So, there is no crashing on resume or incomplete resume or only sometim=
+es failing to resume or failing to go into standby in the first place.
+> >=20
+> > Granted, this issue was present with kernels before v6.5, but only occa=
+sionally and it would not re-appear for many many boot cycles. So, I never =
+had any lead as to why it would happen.
+> >=20
+> > I installed kernel v6.4.16 to test for the bug - it's not in there.
+> >=20
+> > For further testing I also installed kernel v6.5.2, as this was the fir=
+st kernel of the 6.5 series available on void linux, (and because the kerne=
+l logs mention VT-d for kernel v6.5.5 and v6.5.3, see below). Result: The b=
+ug is already in v6.5.2, too.
+> >=20
+> > There's only one thing I noticed from comparing logs between kernels v6=
+=2E5/6.6 vs v6.1/6.3/6.4. In the moment the system goes into standby, if ru=
+nning one of the latter three kernel versions the system would print the fo=
+llowing messages:
+> >=20
+> > [elogind-daemon] Entering sleep state 'suspend'...
+> > [kernel] PM: suspend entry (deep)
+> >=20
+> >=20
+> > But with kernels v6.5/6.6, the kernel message is missing, only the elog=
+ind-daemon message shows up in the logs. As if the kernel didn't get the me=
+mo and thus didn't prepare and didn't listen for the wake-up call to resume.
+> >=20
+> >=20
+> > To see, if this is a bug that might be tight to a certain chipset / cpu=
+ generation, I tested kernel v6.5 on my old Thinkpad (Intel Sandy Bridge ch=
+ipset / cpu, and also onboard graphics only). Its BIOS also has VT-d enable=
+d. Interestingly, on that system, resume from standby with kernel v6.5 is n=
+o problem, even though its system is set up the same as the current Thinkpa=
+d.
+> >=20
+> > So, this bug seems to be limited to certain set of chipset / cpu. Which=
+ seems feasible, as I couldn't find a bug report on this - not too many see=
+m to be affected.
+> >=20
+> >=20
+> >=20
+> > There's an older bug report on similar symptoms, but the cure doesn't w=
+ork on my system:
+> >=20
+> > "intel_iommu=3Don breaks resume from suspend on several Thinkpad models"
+> > https://bugzilla.kernel.org/show_bug.cgi?id=3D197029
+> >=20
+> >=20
+> > Although it sounds just like what my system is experiencing - apart fro=
+m the fact that term suspend being sometimes also used to describe hibernat=
+ion and it is not specified which one is meant in the bug report.
+> >=20
+> > So, I was hopeful on the one hand that the (workaround) fix (adding int=
+el_iommu=3Doff to the kernel parameters) would work on my system, too - on =
+the other hand, this bug report was for kernel v4.13, so it's probably not =
+necessarily relevant to similar symptoms with kernel v6.5 and v6.6, respect=
+ively.
+> >=20
+> > Anyway, adding intel_iommu=3Doff to the kernel parameters didn't change=
+ anything on my system. I made, of course, sure once the system was running=
+, that intel_iommu=3Doff was in indeed used as one of the kernel parameters.
+> >=20
+> >=20
+> > With this information in mind I did a regular internet search and found=
+ some information that in case intel_iommu=3Doff in the kernel parameters d=
+oesn't help, disabling VT-d in BIOS might.
+> > And in my case it does indeed help avoiding the bug - for both kernel v=
+ersions, v6.5 and v6.6.
+> >=20
+> > Reading some other bug reports and some changelogs, I noticed that iomm=
+u and vt-s are connected, to I posted this bug report in drivers/iommu. If =
+it is misplaced here, please feel free to move it to the correct category.
+> >=20
+> >=20
+> > I attached a file with the output of some commands I found being used i=
+n several other bug reports on here, just in case they might be needed / he=
+lpful.
+> >=20
+> >=20
+> > Thank you very much for your help in advance!
+>=20
+> See Bugzilla for the full thread.
+>=20
+> Anyway, I'm adding this regression to regzbot:
+>=20
+> #regzbot introduced: v6.3..v6.5 https://bugzilla.kernel.org/show_bug.cgi?=
+id=3D218191
+> #regzbot title: resume from standby fails on Thinkpad with Kaby Lake CPU
+>=20
 
-Horrible timing, you sent this after I started looking at the previous
-revision of the patchset :( I left some comments and tags on the
-previous version which I would imagine that some of them also apply
-here.
+The reporter had done bisection (see Bugzilla for details), so telling
+regzbot:
 
->=20
-> v2->v3:
->  * Updated Maintainer entries for watchdog,onkey and thermal bindings
->  * Fixed bot errors related to MAINTAINERS entry, invalid doc
->    references and thermal examples by merging patch#4.=20
->=20
-> v1->v2:
->  Ref: https://lore.kernel.org/all/20231201110840.37408-5-biju.das.jz@bp.r=
-enesas.com/
->  * DA9062 and DA9061 merged with DA9063
->  * Sorted the child devices
->  * mfd,onkey and thermal are pointing to child bindings
->=20
->=20
->=20
-> Biju Das (11):
->   MAINTAINERS: Update da9062-watchdog bindings
->   dt-bindings: watchdog: dlg,da9062-watchdog: Add fallback for DA9061
->     watchdog
->   dt-bindings: watchdog: dlg,da9062-watchdog: Document DA9063 watchdog
->   dt-bindings: input: Convert da906{1,2,3} onkey to json-schema
->   dt-bindings: mfd: dlg,da9063: Update watchdog property
->   dt-bindings: mfd: dlg,da9063: Update onkey property
->   dt-bindings: mfd: dlg,da9063: Sort child devices
->   dt-bindings: mfd: da9062: Update watchdog description
->   dt-bindings: mfd: da9062: Update onkey description
->   dt-bindings: mfd: da9062: Update thermal description
->   dt-bindings: mfd: dlg,da9063: Convert da9062 to json-schema
->=20
->  .../bindings/input/da9062-onkey.txt           |  47 ----
->  .../bindings/input/dlg,da9062-onkey.yaml      |  60 +++++
->  .../devicetree/bindings/mfd/da9062.txt        | 124 ----------
->  .../devicetree/bindings/mfd/dlg,da9063.yaml   | 221 +++++++++++++++---
->  .../bindings/thermal/da9062-thermal.txt       |  36 ---
->  .../bindings/thermal/dlg,da9062-thermal.yaml  |  78 +++++++
->  .../watchdog/dlg,da9062-watchdog.yaml         |  12 +-
->  MAINTAINERS                                   |   6 +-
->  8 files changed, 336 insertions(+), 248 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/input/da9062-onkey.=
-txt
->  create mode 100644 Documentation/devicetree/bindings/input/dlg,da9062-on=
-key.yaml
->  delete mode 100644 Documentation/devicetree/bindings/mfd/da9062.txt
->  delete mode 100644 Documentation/devicetree/bindings/thermal/da9062-ther=
-mal.txt
->  create mode 100644 Documentation/devicetree/bindings/thermal/dlg,da9062-=
-thermal.yaml
->=20
-> --=20
-> 2.39.2
->=20
+#regzbot introduced: 0c7ffa32dbd6b0
 
---zzVAK3BzRdnge7Et
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--dO/hfGGfuReF84Ss
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZWxpyQAKCRB4tDGHoIJi
-0l42AQDnWMEWPdUfCAwhRas6WCnOuUPuc6ZtX0mWYXUe/vuD/wD8DgLeHrMNFJEd
-AJaeOfdEOnoTE0oR2tHjToYrOumSjAM=
-=PJLz
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZWx1HAAKCRD2uYlJVVFO
+o9tkAQD39PHo7FdONECmYZXrv+d6mV48M232+oW13+R1CiakrgEA1d/iKH+VFtPl
+UK+NIN72mc22rpkszIA/Br5ww/0w0gw=
+=tabU
 -----END PGP SIGNATURE-----
 
---zzVAK3BzRdnge7Et--
+--dO/hfGGfuReF84Ss--
 
