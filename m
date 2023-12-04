@@ -1,295 +1,290 @@
-Return-Path: <linux-pm+bounces-682-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-683-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AD1B8038AB
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Dec 2023 16:23:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 758A580392A
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Dec 2023 16:49:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8FF7CB20B81
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Dec 2023 15:23:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA4F11F21178
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Dec 2023 15:49:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FA7B2C1B9;
-	Mon,  4 Dec 2023 15:23:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00B012CCB0;
+	Mon,  4 Dec 2023 15:49:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jOWQ+NVg"
+	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="j/bi3yMO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CEDF0;
-	Mon,  4 Dec 2023 07:23:29 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-54bfa9b3ffaso5891059a12.1;
-        Mon, 04 Dec 2023 07:23:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701703408; x=1702308208; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mxYp/TPj2SDljkx7akhBocUojf/1bHbrDV2kmdKcuiw=;
-        b=jOWQ+NVgcA55mkrS1YmqfA6St67vuu1Sci23Ov0LAmtm7JCw3n72rwwNXa1QH8xBu2
-         6zH+DW9Psuo44vmLIEjCxVl94tGIwYrhUMq4n79IUflTELifgWsckVZ2eVLpiuE/vICK
-         V1jbzkp2UTv6d+KtgxOrqgWKk30LMQs6o2/6L6GyeMh1A88KwMKzLdV9mzh6gBvYWkYN
-         HR+3BUbI/uLUv8SN+qZ847+oaoF81p11naoaaxlwCELmNuwAxfvGoaIfflaEU4d8hbB1
-         O4hvsywb/8yXENsAEQG1H/pwFp4g10uObgB8qHaXTltCyL2/piFfDW8pxo+EF3yMhKa7
-         4dlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701703408; x=1702308208;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mxYp/TPj2SDljkx7akhBocUojf/1bHbrDV2kmdKcuiw=;
-        b=gNFTfbx8mZfS3eZM7Hw3RHYQ370c/gBhOlcrBWCKSndsW56mLpY7Pri+02MwatpIAs
-         WNjNu4P118zuS6hzG5bSdeUvzX90wE3Yp9+OAvZokp0XKUUsPf1vGGjpaG7/C1/HKctv
-         xC1iLHTFnzFRt6fivFrcs+o0LHfJkth09yZGF+ZF9bHA2gC2vXjely69C3vHIcm7k4pO
-         bZxPrGcdmk8cfXswaf2wb5TrNqRenNbxoH62kZWeLmyEeSMyufokEGB/xPrkHK4LYjEW
-         mynRkBNKflfaj8X+SrFEzvJ5yz48DGLHrBvbzsRbImBbBOKna9yDEg8w9jIBkQcmyM2Y
-         1qhA==
-X-Gm-Message-State: AOJu0YyqhSpimtX6YCV+T8Tkrh27bo0CcdwJ2kUCjHdvTezZ8jEqI/Hv
-	WrrPHigh00mo3VxWuoGTzA==
-X-Google-Smtp-Source: AGHT+IH6NaMxB0hD8p+w4THyQqPHgLUhFhYRDIhCfbDi49ieB3DqkYaAbCCN/8DRLm52i+pnC1Tesg==
-X-Received: by 2002:a17:907:2daa:b0:a19:a1ba:8cc2 with SMTP id gt42-20020a1709072daa00b00a19a1ba8cc2mr3994784ejc.96.1701703407956;
-        Mon, 04 Dec 2023 07:23:27 -0800 (PST)
-Received: from ?IPV6:2a02:810b:f40:4300:55ff:210b:5393:c9d7? ([2a02:810b:f40:4300:55ff:210b:5393:c9d7])
-        by smtp.gmail.com with ESMTPSA id s7-20020a170906bc4700b00a0f78db91c3sm5416316ejv.95.2023.12.04.07.23.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Dec 2023 07:23:27 -0800 (PST)
-Message-ID: <e58f5aa5-a4d4-4334-a7ff-aa139ec7166f@gmail.com>
-Date: Mon, 4 Dec 2023 16:23:26 +0100
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2126.outbound.protection.outlook.com [40.107.113.126])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB43A4;
+	Mon,  4 Dec 2023 07:49:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C+CS6FxYQc36/FBcD/38MoDyU6H3mIoXm/4EwQWQspVFWWUQ/TrxrSOPhVa0iY6J91NRBQXP9ImdgZirMNYj4U7hqA6ToX+doVUoxjG0kXXkXJIsJC87YE4Ex9AY02jwZHZN1sCgj0ZoSRjTZ46eLu6Kgv7XFcwYG+egAZ9Qu3ZBRteCHE0LJXK3TtJ2Hp/5BU80bDlJeB31/RTlH+WGqIitrSivWgdh/1Y91Rrzy9W/dE3Wbf4Ae9zA6akPu9jkecVpeCcYOajjvN+H92Im4lXnhvL1b/1/ASemg/Xnzn6ptDA7ElnXjdLslYNuuC+adliDrvOxTDIthWlFxM3QVw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JTOGB/erSm+V2kgc7ZuCC9stsKP89Wz+i6n/C6RUKUE=;
+ b=mRs1C1ihfpKreQAR4pYljmZKK9yjvLGvH6UK5sNe/7DBY8P49qdlTvvB6Z+qYNdpBnjNbaVHqmrrzpRJ3rmJL9ylXmWbjRZHLAM3gZzB4rRAF3ZKe7RKCdU4OohI5x88ojmEo7fmPvUET7XcdQqr7tZlp2fYPVKb83E4AQLDMiKEYSpeyAyvJDOFG+uourSx/TOGFDcQxnqyfQWGDmh/chcT7mHIcuibwrDpkxRxaibqG10s2UKrN/qiRxLl/gawoT1YYXrMLZap0vFJZtcK8gQyWX1D+QS0+JYh0xQlYlo++xoQxJ8wpVM6Fg0sF9jnQHagUCMu5Zv6v563NxCXcA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
+ header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JTOGB/erSm+V2kgc7ZuCC9stsKP89Wz+i6n/C6RUKUE=;
+ b=j/bi3yMOb7mRyE/bNxubNC2qj+Hq4oQsx9pBqum4R46crb/fDCASWYQ3nlx6bKaZJuUnbaTUOQV8Q1uJeprueyyqEc7MsqcajHDiZr1CPeJOE5KdBcKuSZN1sdlWb4eQZBorM/nFmJhJAasMZilQLFs2/9WxECALXa5JpD65GUY=
+Received: from TYCPR01MB11269.jpnprd01.prod.outlook.com
+ (2603:1096:400:3c0::10) by TYCPR01MB6144.jpnprd01.prod.outlook.com
+ (2603:1096:400:4c::5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.34; Mon, 4 Dec
+ 2023 15:49:44 +0000
+Received: from TYCPR01MB11269.jpnprd01.prod.outlook.com
+ ([fe80::4af6:b31a:8826:51ac]) by TYCPR01MB11269.jpnprd01.prod.outlook.com
+ ([fe80::4af6:b31a:8826:51ac%6]) with mapi id 15.20.7046.033; Mon, 4 Dec 2023
+ 15:49:44 +0000
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Rob Herring <robh@kernel.org>
+CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
+	<conor+dt@kernel.org>, Support Opensource <support.opensource@diasemi.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
+	<daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
+	<lukasz.luba@arm.com>, "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, Geert Uytterhoeven
+	<geert+renesas@glider.be>, Prabhakar Mahadev Lad
+	<prabhakar.mahadev-lad.rj@bp.renesas.com>, biju.das.au
+	<biju.das.au@gmail.com>, "linux-renesas-soc@vger.kernel.org"
+	<linux-renesas-soc@vger.kernel.org>
+Subject: RE: [PATCH v2 04/11] dt-bindings: thermal: Convert da906{1,2} thermal
+ to json-schema
+Thread-Topic: [PATCH v2 04/11] dt-bindings: thermal: Convert da906{1,2}
+ thermal to json-schema
+Thread-Index: AQHaJVVpNr8VVPZoO0mAS8LwJgirUrCZPhWAgAAJ6TA=
+Date: Mon, 4 Dec 2023 15:49:44 +0000
+Message-ID:
+ <TYCPR01MB1126965FC215410679E8DD3D88686A@TYCPR01MB11269.jpnprd01.prod.outlook.com>
+References: <20231202192536.266885-1-biju.das.jz@bp.renesas.com>
+ <20231202192536.266885-5-biju.das.jz@bp.renesas.com>
+ <20231204151303.GB1260709-robh@kernel.org>
+In-Reply-To: <20231204151303.GB1260709-robh@kernel.org>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=bp.renesas.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYCPR01MB11269:EE_|TYCPR01MB6144:EE_
+x-ms-office365-filtering-correlation-id: 20fce9f4-edb2-4e68-3aaa-08dbf4e0a2bf
+x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ HDcS1HlWs+OgUne44zbalJTXZI7gW8lFhaW3pSjUqPqBgJutmM6HFnEo52RAK4qsCGzL321ODSwZdXEdxvqOhjcR8dRhE8iEH80xR4bOJnMkvml6FaMKRfLuWNfl27Vp4tp/nsqdhqn76dP4zbDUy8qv9J8ANMVWUc8ttGu9PLnR8Xs/Oem7k49rDoIJNopqnPw1uJCkkwc/HuEZoDOZWQU7PqDBFYXq8xiPFRNz9nPnQw4XtmPbdjTxMU4J5B+3BwdG57PFYfKQ6RN2W9vjrilmKdxleh/zRp1bgkLNjhKXyTG6RHApXVjiQeVvMcCDmd69P2zn2IVIfbB2Pt47h5RhiOo9bzXI+KDlw0iQZvwMlODsFLuhupwjPB+sJ1ccKPQK8YBaej6E4qnPLrtS9/o4P47aL0RNS0LcWA1pAalygCH3IdJcHAaP4HZKhNOYa6KrMXd61NI/fbvYU5Ib1MJAbsy5XMZfVXaqwYApNsJ7QQA9C7p/znPGW/ilUTmK7aERDqFW5RAwZrBdbh55noWzz7iIpzWi5Hu+fEQVGfI+4mMJ/FeWVzMS/6SsyOVG2duC0n9oGflfHuHv3maLs5EbrczZXbSY+GBAiwDZV3+OL/JsMrbcOsUwD230b/5k
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB11269.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(39860400002)(366004)(376002)(346002)(136003)(230922051799003)(64100799003)(451199024)(186009)(1800799012)(52536014)(5660300002)(7416002)(2906002)(38070700009)(33656002)(86362001)(41300700001)(6506007)(7696005)(71200400001)(9686003)(53546011)(478600001)(55016003)(38100700002)(83380400001)(26005)(66446008)(76116006)(66946007)(66556008)(316002)(66476007)(6916009)(54906003)(64756008)(4326008)(8676002)(8936002)(122000001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?mD5y7K4P4skoDzXHLgPKmOVATgOPq6j//p/wtvsoN47V+W1Gf6G9xDB3oyX1?=
+ =?us-ascii?Q?iuUFAv7kcDc49Db3uipb3QtiSxRMscNDVlHcBxQZ1O5z78QuceJyNjPbD1kL?=
+ =?us-ascii?Q?wZfjP86rGFiVN4UCNkR2YVL9DKMAgcn1dzjYW2iDrrS6045XUqzBM4qfFQd3?=
+ =?us-ascii?Q?n3I0Tz5pmE0vLs1HZ6s54NCTG88PrFxVeW1WAd5TWInDhTaaJT3/DOq1Ngkx?=
+ =?us-ascii?Q?rJ4Li/X5SfdaYqafPf44acZxFDJp4CSoGVX+wPSbCB0yEUGVCSk+VQHQxgzC?=
+ =?us-ascii?Q?HzO09QIRZXvQDTrBtE5YjrsDVHNDNnUUpBRfbv5I7n3QULXjQJ/txez/epGg?=
+ =?us-ascii?Q?E6zR2czYcReuObrgAPUDjBaFnLTQTIvoiY6mYOjMGd/g9dJyoChVqv5mhiI3?=
+ =?us-ascii?Q?BZwGp1Xh+1CyBhrf/KTd7Y5fUlyQrIjjPlMGFtEWwT0FleVvtF/vD7pMF61E?=
+ =?us-ascii?Q?pAypBIYltvzghRRcQOcWetiCf+Xl6UUGflVJEsB4qAt2QEJQbc7mCgQDJZLW?=
+ =?us-ascii?Q?5v43kqPvH4kC1S6epu5DU6eWppNOjOk1zfuyfVqJ5zTNXCpUHc18qg7fxwK3?=
+ =?us-ascii?Q?oZcIilZ7BbOXLEcyboE/PN2SpTOoeJWFy+TPm3+Ij8W//74W2jx2+bnnZVLB?=
+ =?us-ascii?Q?DY3oYfiZFvd3r+5cNidD4AH8IXiuh/yd96MdWHq2jfrdA43QlP0ZgEmIXuSK?=
+ =?us-ascii?Q?Q1fMt+VT47FSqdht/1B8LplM5o5dLHRNo5GcZZ+Of1ETiV8D5F1uHZZ72htA?=
+ =?us-ascii?Q?L/mDHH+MwTD5x32HzKbGIHDFi/3NQpwrmErCd9h2xHp4tST2/308dkTBuvoQ?=
+ =?us-ascii?Q?ayr++mHMPjeBxoBbTmuQaP8UpbedfknznFM1ZqSE6oa5G/GEg5ep0wk/WgMa?=
+ =?us-ascii?Q?nMw0Me5WjPw7FSR3idhM49zNXXmGEMDnjhMo7aa2xuwyxFgj3kI2pvObjpu4?=
+ =?us-ascii?Q?fRsuixYicDkGhtlGXLrYJGoWL7KPNiozApjGQ5IeENLI7Zgcfv9+aL+/dj0t?=
+ =?us-ascii?Q?OSu/SIYhqLhDovB7sLR3TwVeffFO/OKuNGDcfqqPwUmwwS7XAsUO2+cxprlA?=
+ =?us-ascii?Q?BDfx2oNmrlPbYOfJ7RBLzNOjWhNbMVh2a5adicAXMlZnc6Prd88vqtIixOl+?=
+ =?us-ascii?Q?6u7oKDTf20LgjAeO8fAMhkpNf+LVddQ6MKFPWENYKNyZzJHzAdUQrYhb0cl9?=
+ =?us-ascii?Q?9xXutTJH19IYtFHvX0KY3K+2LXz5FoGBbvWk7q+hDADJze3tGz9zbpZDk4rG?=
+ =?us-ascii?Q?3NO5YF5NiWPTHnTkC37mexXuBb2Ue+xiCKFXf7TEl+YceGyL4OODcNtH93yA?=
+ =?us-ascii?Q?II4zZUx3sj3uPaPN7JjPDgrU0Z2aXSCPVup2tIEgJXzoodFgICPEpOZLj8re?=
+ =?us-ascii?Q?VqqA+sQjXkE0NrwCsLd8FOJkYRE7mOxHYPprNyJwbdgVbTab6IN+oEp9C9Y2?=
+ =?us-ascii?Q?RK3BhmtHmlZ8rYh8qgnktC5oCt6dLCqjvWLCHZi6MERgXPnXFlNEzQOkYdJT?=
+ =?us-ascii?Q?uicBFNt2LnbVCEMOh20BAo0K/dVVQR0ndgxXplczcLhgkCdDn98HIKZafchx?=
+ =?us-ascii?Q?naNEJdEIEwZnXullGcJc5D+/apnh38T36x/uadLb7xhL2TLi65Wf+jYM1IQt?=
+ =?us-ascii?Q?+w=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/5] ARM: dts: rockchip: Add power-controller for
- RK3128
-To: =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
- Conor Dooley <conor+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Rob Herring <robh+dt@kernel.org>
-Cc: Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, Maxime Ripard <mripard@kernel.org>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-rockchip@lists.infradead.org, linux-pm@vger.kernel.org
-References: <20231202125144.66052-1-knaerzche@gmail.com>
- <4891026.6YUMPnJmAY@diego> <4dec2316-f840-44ab-a07a-3d7f0e5e6d8f@gmail.com>
- <9588573.jRhZ6ZUK3Y@diego>
-Content-Language: en-US
-From: Alex Bee <knaerzche@gmail.com>
-In-Reply-To: <9588573.jRhZ6ZUK3Y@diego>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: bp.renesas.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB11269.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 20fce9f4-edb2-4e68-3aaa-08dbf4e0a2bf
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Dec 2023 15:49:44.2863
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: YoA5jc3pShH5hwDC1ijkzoPGqZwkjto7HgbQS3d5nJRy4kJHF6FLtL6sA4HeOnj1+Zca2u7pSRkGuYWi1JzBskjWDWiB7SzU3FIJNCOOe6I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB6144
 
-Hi Heiko,
+Hi Rob Herring,
 
-Am 03.12.23 um 17:42 schrieb Heiko Stübner:
-> Hi Alex,
->
-> Am Sonntag, 3. Dezember 2023, 17:05:47 CET schrieb Alex Bee:
->> Am 02.12.23 um 18:46 schrieb Heiko Stübner:
->>> Am Samstag, 2. Dezember 2023, 17:36:15 CET schrieb Alex Bee:
->>>> Am 02.12.23 um 16:51 schrieb Heiko Stübner:
->>>>> Am Samstag, 2. Dezember 2023, 13:51:41 CET schrieb Alex Bee:
->>>>>> Add power controller and qos nodes for RK3128 in order to use
->>>>>> them as powerdomains.
->>>>> does the power-domain controller work with the incomplete set of
->>>>> pm-domains too?
->>>> Yes, it does - the missing domains can request idle only and can't be
->>>> powered on/off - if no one requests idle they are just up all the time.
->>>>
->>>>> What I have in mind is
->>>>> - adding the power-controller node with the existing set of power-domains
->>>>> - the gpu pm-domain is in there
->>>>> - adding the gpu parts
->>>> My main concern about adding them later was the change of the ABI after
->>>> they've been exposed in the SoC DT. If that's not an issue - sure: I can
->>>> add them in a separate series.
->>> An ABI change would be _changing_ the domain-ids in the rk3128-power.h
->>> I think :-) .
->> Well, an addition is still a change.
->>> Right now the existing domain ids in the header are already exposed to the
->>> world, so someone could already use them, but not the new ones.
->> I'm fully aware that nothing would ever hard fail anywhere if the new
->> domain ids get added later.
->>
->> Nevertheless we start using here an ABI which is known to be incomplete.
->> For no reason, as the patches (which I am now asked to remove from this
->> series) for completion are already there (here).
->>
->> Anyway, if you prefer it this way: I'm pleased to do so.
-> I was more thinking of accelerating the gpu-part of the series, as that
-> really is just waiting for the power-domain node that already has driver
-> support and domain-ids present.
->
-> It looks like you're feeling more strongly about that though, so I'll
-> definitly not pressure you ;-) .
+Thanks for the feedback.
 
-I'm really not insisting on this - I just didn't understand why you 
-would want this. And honestly I haven't considered merging timeline as 
-an argument.
+> -----Original Message-----
+> From: Rob Herring <robh@kernel.org>
+> Sent: Monday, December 4, 2023 3:13 PM
+> Subject: Re: [PATCH v2 04/11] dt-bindings: thermal: Convert da906{1,2}
+> thermal to json-schema
+>=20
+> On Sat, Dec 02, 2023 at 07:25:28PM +0000, Biju Das wrote:
+> > Convert the da906{1,2} thermal device tree binding documentation to
+> > json-schema.
+> >
+> > Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+> > ---
+> >  .../bindings/thermal/da9062-thermal.txt       | 36 ------------
+> >  .../bindings/thermal/dlg,da9062-thermal.yaml  | 58
+> > +++++++++++++++++++
+> >  2 files changed, 58 insertions(+), 36 deletions(-)  delete mode
+> > 100644 Documentation/devicetree/bindings/thermal/da9062-thermal.txt
+> >  create mode 100644
+> > Documentation/devicetree/bindings/thermal/dlg,da9062-thermal.yaml
+> >
+> > diff --git
+> > a/Documentation/devicetree/bindings/thermal/da9062-thermal.txt
+> > b/Documentation/devicetree/bindings/thermal/da9062-thermal.txt
+> > deleted file mode 100644
+> > index e241bb5a5584..000000000000
+> > --- a/Documentation/devicetree/bindings/thermal/da9062-thermal.txt
+> > +++ /dev/null
+> > @@ -1,36 +0,0 @@
+> > -* Dialog DA9062/61 TJUNC Thermal Module
+> > -
+> > -This module is part of the DA9061/DA9062. For more details about
+> > entire
+> > -DA9062 and DA9061 chips see
+> > Documentation/devicetree/bindings/mfd/da9062.txt
+> > -
+> > -Junction temperature thermal module uses an interrupt signal to
+> > identify -high THERMAL_TRIP_HOT temperatures for the PMIC device.
+> > -
+> > -Required properties:
+> > -
+> > -- compatible: should be one of the following valid compatible string
+> lines:
+> > -        "dlg,da9061-thermal", "dlg,da9062-thermal"
+> > -        "dlg,da9062-thermal"
+> > -
+> > -Optional properties:
+> > -
+> > -- polling-delay-passive : Specify the polling period, measured in
+> > -    milliseconds, between thermal zone device update checks.
+> > -
+> > -Example: DA9062
+> > -
+> > -	pmic0: da9062@58 {
+> > -		thermal {
+> > -			compatible =3D "dlg,da9062-thermal";
+> > -			polling-delay-passive =3D <3000>;
+> > -		};
+> > -	};
+> > -
+> > -Example: DA9061 using a fall-back compatible for the DA9062 onkey
+> > driver
+> > -
+> > -	pmic0: da9061@58 {
+> > -		thermal {
+> > -			compatible =3D "dlg,da9061-thermal", "dlg,da9062-thermal";
+> > -			polling-delay-passive =3D <3000>;
+> > -		};
+> > -	};
+> > diff --git
+> > a/Documentation/devicetree/bindings/thermal/dlg,da9062-thermal.yaml
+> > b/Documentation/devicetree/bindings/thermal/dlg,da9062-thermal.yaml
+> > new file mode 100644
+> > index 000000000000..0021ebdd83a0
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/thermal/dlg,da9062-thermal.yam
+> > +++ l
+> > @@ -0,0 +1,58 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) %YAML 1.2
+> > +---
+> > +$id:
+> > +
+> > +title: Dialog DA9062/61 TJUNC Thermal Module
+> > +
+> > +description:
+> > +  This module is part of the DA9061/DA9062. For more details about
+> > +entire
+> > +  DA9062 and DA9061 chips see
+> > +Documentation/devicetree/bindings/mfd/da9062.txt
+> > +
+> > +  Junction temperature thermal module uses an interrupt signal to
+> > + identify  high THERMAL_TRIP_HOT temperatures for the PMIC device.
+> > +
+> > +maintainers:
+> > +  - Biju Das <biju.das.jz@bp.renesas.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    oneOf:
+> > +      - items:
+> > +          - enum:
+> > +              - dlg,da9062-thermal
+> > +      - items:
+> > +          - enum:
+> > +              - dlg,da9061-thermal
+> > +          - const: dlg,da9062-thermal # da9062-thermal fallback
+> > +
+> > +  polling-delay-passive:
+> > +    description:
+> > +      Specify the polling period, measured in milliseconds, between
+> > +      thermal zone device update checks.
+> > +
+> > +required:
+> > +  - compatible
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > +    i2c {
+> > +      #address-cells =3D <1>;
+> > +      #size-cells =3D <0>;
+> > +      pmic@58 {
+> > +        compatible =3D "dlg,da9062";
+> > +        reg =3D <0x58>;
+> > +        interrupt-parent =3D <&gpio6>;
+> > +        interrupts =3D <11 IRQ_TYPE_LEVEL_LOW>;
+> > +        interrupt-controller;
+> > +
+> > +        thermal {
+> > +          compatible =3D "dlg,da9062-thermal";
+> > +          polling-delay-passive =3D <3000>;
+> > +        };
+> > +      };
+> > +    };
+>=20
+> Just drop the example here. No need for 2 examples, just provide 1
+> complete example in the MFD schema.
+>=20
+> With that,
 
-So sure: Let's get the low hanging fruits merged for 6.8. Having the 
-power domains in the DT will also help for my upcoming hdmi / vop series.
+OK, will drop example in the next version.
 
-Alex
+Cheers,
+Biju
 
->
-> But I guess the split into IDs and driver change should still be
-> done, especially as the dt-binding-header likely will want an Ack
-> from the DT maintainers.
->
-> And the power-domain change will go through the new pmdomain
-> subsystem.
->
->
-> Heiko
->
->
->>>>> And a second series with
->>>>> - patch1 from here
->>>>> - a dts patch adding the additional pm-domains to rk3128.dtsi
->>>>> - I guess patch1 also should be split into a patch adding the binding-ids
->>>>>      and a separate patch for the code addition.
->>>> Yeah, I noticed this also :)
->>>>
->>>> Regards,
->>>>
->>>> Alex
->>>>
->>>>> Heiko
->>>>>
->>>>>> Signed-off-by: Alex Bee <knaerzche@gmail.com>
->>>>>> ---
->>>>>>     arch/arm/boot/dts/rockchip/rk3128.dtsi | 101 +++++++++++++++++++++++++
->>>>>>     1 file changed, 101 insertions(+)
->>>>>>
->>>>>> diff --git a/arch/arm/boot/dts/rockchip/rk3128.dtsi b/arch/arm/boot/dts/rockchip/rk3128.dtsi
->>>>>> index 4e8b38604ecd..b72905db04f7 100644
->>>>>> --- a/arch/arm/boot/dts/rockchip/rk3128.dtsi
->>>>>> +++ b/arch/arm/boot/dts/rockchip/rk3128.dtsi
->>>>>> @@ -8,6 +8,7 @@
->>>>>>     #include <dt-bindings/interrupt-controller/arm-gic.h>
->>>>>>     #include <dt-bindings/interrupt-controller/irq.h>
->>>>>>     #include <dt-bindings/pinctrl/rockchip.h>
->>>>>> +#include <dt-bindings/power/rk3128-power.h>
->>>>>>     
->>>>>>     / {
->>>>>>     	compatible = "rockchip,rk3128";
->>>>>> @@ -133,6 +134,106 @@ smp-sram@0 {
->>>>>>     	pmu: syscon@100a0000 {
->>>>>>     		compatible = "rockchip,rk3128-pmu", "syscon", "simple-mfd";
->>>>>>     		reg = <0x100a0000 0x1000>;
->>>>>> +
->>>>>> +		power: power-controller {
->>>>>> +			compatible = "rockchip,rk3128-power-controller";
->>>>>> +			#power-domain-cells = <1>;
->>>>>> +			#address-cells = <1>;
->>>>>> +			#size-cells = <0>;
->>>>>> +
->>>>>> +			power-domain@RK3128_PD_VIO {
->>>>>> +				reg = <RK3128_PD_VIO>;
->>>>>> +				clocks = <&cru ACLK_CIF>,
->>>>>> +					 <&cru HCLK_CIF>,
->>>>>> +					 <&cru DCLK_EBC>,
->>>>>> +					 <&cru HCLK_EBC>,
->>>>>> +					 <&cru ACLK_IEP>,
->>>>>> +					 <&cru HCLK_IEP>,
->>>>>> +					 <&cru ACLK_LCDC0>,
->>>>>> +					 <&cru HCLK_LCDC0>,
->>>>>> +					 <&cru PCLK_MIPI>,
->>>>>> +					 <&cru ACLK_RGA>,
->>>>>> +					 <&cru HCLK_RGA>,
->>>>>> +					 <&cru ACLK_VIO0>,
->>>>>> +					 <&cru ACLK_VIO1>,
->>>>>> +					 <&cru HCLK_VIO>,
->>>>>> +					 <&cru HCLK_VIO_H2P>,
->>>>>> +					 <&cru DCLK_VOP>,
->>>>>> +					 <&cru SCLK_VOP>;
->>>>>> +				pm_qos = <&qos_ebc>,
->>>>>> +					 <&qos_iep>,
->>>>>> +					 <&qos_lcdc>,
->>>>>> +					 <&qos_rga>,
->>>>>> +					 <&qos_vip>;
->>>>>> +				#power-domain-cells = <0>;
->>>>>> +			};
->>>>>> +
->>>>>> +			power-domain@RK3128_PD_VIDEO {
->>>>>> +				reg = <RK3128_PD_VIDEO>;
->>>>>> +				clocks = <&cru ACLK_VDPU>,
->>>>>> +					 <&cru HCLK_VDPU>,
->>>>>> +					 <&cru ACLK_VEPU>,
->>>>>> +					 <&cru HCLK_VEPU>,
->>>>>> +					 <&cru SCLK_HEVC_CORE>;
->>>>>> +				pm_qos = <&qos_vpu>;
->>>>>> +				#power-domain-cells = <0>;
->>>>>> +			};
->>>>>> +
->>>>>> +			power-domain@RK3128_PD_GPU {
->>>>>> +				reg = <RK3128_PD_GPU>;
->>>>>> +				clocks = <&cru ACLK_GPU>;
->>>>>> +				pm_qos = <&qos_gpu>;
->>>>>> +				#power-domain-cells = <0>;
->>>>>> +			};
->>>>>> +
->>>>>> +			power-domain@RK3128_PD_CRYPTO {
->>>>>> +				reg = <RK3128_PD_CRYPTO>;
->>>>>> +				clocks = <&cru HCLK_CRYPTO>,
->>>>>> +					 <&cru SCLK_CRYPTO>;
->>>>>> +				pm_qos = <&qos_crypto>;
->>>>>> +				#power-domain-cells = <0>;
->>>>>> +			};
->>>>>> +		};
->>>>>> +	};
->>>>>> +
->>>>>> +	qos_crypto: qos@10128080 {
->>>>>> +		compatible = "rockchip,rk3128-qos", "syscon";
->>>>>> +		reg = <0x10128080 0x20>;
->>>>>> +	};
->>>>>> +
->>>>>> +	qos_gpu: qos@1012d000 {
->>>>>> +		compatible = "rockchip,rk3128-qos", "syscon";
->>>>>> +		reg = <0x1012d000 0x20>;
->>>>>> +	};
->>>>>> +
->>>>>> +	qos_vpu: qos@1012e000 {
->>>>>> +		compatible = "rockchip,rk3128-qos", "syscon";
->>>>>> +		reg = <0x1012e000 0x20>;
->>>>>> +	};
->>>>>> +
->>>>>> +	qos_rga: qos@1012f000 {
->>>>>> +		compatible = "rockchip,rk3128-qos", "syscon";
->>>>>> +		reg = <0x1012f000 0x20>;
->>>>>> +	};
->>>>>> +
->>>>>> +	qos_ebc: qos@1012f080 {
->>>>>> +		compatible = "rockchip,rk3128-qos", "syscon";
->>>>>> +		reg = <0x1012f080 0x20>;
->>>>>> +	};
->>>>>> +
->>>>>> +	qos_iep: qos@1012f100 {
->>>>>> +		compatible = "rockchip,rk3128-qos", "syscon";
->>>>>> +		reg = <0x1012f100 0x20>;
->>>>>> +	};
->>>>>> +
->>>>>> +	qos_lcdc: qos@1012f180 {
->>>>>> +		compatible = "rockchip,rk3128-qos", "syscon";
->>>>>> +		reg = <0x1012f180 0x20>;
->>>>>> +	};
->>>>>> +
->>>>>> +	qos_vip: qos@1012f200 {
->>>>>> +		compatible = "rockchip,rk3128-qos", "syscon";
->>>>>> +		reg = <0x1012f200 0x20>;
->>>>>>     	};
->>>>>>     
->>>>>>     	gic: interrupt-controller@10139000 {
->>>>>>
->>>>>
->>>
->>>
->
->
->
+>=20
+> Reviewed-by: Rob Herring <robh@kernel.org>
+>=20
+> Rob
 
