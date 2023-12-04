@@ -1,151 +1,126 @@
-Return-Path: <linux-pm+bounces-685-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-686-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15ADE803AF2
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Dec 2023 17:55:37 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21475803B60
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Dec 2023 18:25:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B947B1F211B6
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Dec 2023 16:55:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B17FBB20A36
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Dec 2023 17:25:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63E1228E0B;
-	Mon,  4 Dec 2023 16:55:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="H24e38KD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CB652E822;
+	Mon,  4 Dec 2023 17:25:24 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEAF7C6
-	for <linux-pm@vger.kernel.org>; Mon,  4 Dec 2023 08:55:27 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-40c05ce04a8so23871755e9.0
-        for <linux-pm@vger.kernel.org>; Mon, 04 Dec 2023 08:55:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701708926; x=1702313726; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3gdwaTpLNBr7sA7AwFQ/+pGFdvl9soWUtB8Z1U9cjJk=;
-        b=H24e38KDCSflSRDhe/MKHM50QJuvaWyLD7eewxK7UTV9jsIiyrLyBxLsN4ujkLbTY0
-         x9qS/rwx0/lchdnATxx0TzmKD2Ci0jkb3cdzmAdkwTivkh7RK2bl8jFxeBART0rO4M/X
-         VFrlpEc4qvAl6RUi6vuT20CwrmPGUOkM1fln/IEqMkx3GJSiCAWUHGns5JmjXUyN/ZPY
-         NnHVyJ7qzde9WgzrfdVnRcKkApLjRUO3I4PDmM468zUomHYA0EFFMEZWGa9LzSOIIaTE
-         EIAFF9AA1kbiJY4t96afrcaIPkZ9BplJaA+7wUHtcEkATtq3KfaAAVkJvTXpgWpW0SY8
-         9VwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701708926; x=1702313726;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3gdwaTpLNBr7sA7AwFQ/+pGFdvl9soWUtB8Z1U9cjJk=;
-        b=fTi8ZHpUftqyxNgC1Rd3/2S60Sc9RGTtpkVVxXWByqwHlPd75csHNBzQyqHHajtDfI
-         NDtBb/zIyYeVIjj4iUMrA56MG4ZV2VifbEQZlN3okCjFeRyOveH1jHetNGqHnSTGyKfg
-         ouzLs6G4a/jZHxY1Nig940jfT0QyB+Ft9wx2whrDOEQdzfnHNF/2Bgt86ol/hyb7I2wF
-         yLDyW9iJ6ZAf2SkctTYVBTAkccjJOMF0NvolW6VpL4zgfGALxgqAVoMxv3gzoeOPWs3j
-         AYx1ZoejYOUbQU8FU9GeIRJI5F4o5qWCb0TyUvILbvm3crbtXU2y95c3FMHOuKz7UHk3
-         RnzA==
-X-Gm-Message-State: AOJu0YyHV8jB/8+mCyPc6a7iBkBHOjEWGR1Obnbezyjt5gan1ymnoIHS
-	nKby58UWx1tjHFDfmxojsfAuEg==
-X-Google-Smtp-Source: AGHT+IEDltZ3Re0khBvM5AY2nz+sa1kkygHRHGWkxzz9Jb4ph4xPFgeiPbj9o7n9hM3b8YiuI+TXzw==
-X-Received: by 2002:a05:600c:851a:b0:40b:5392:7ee9 with SMTP id gw26-20020a05600c851a00b0040b53927ee9mr1258612wmb.0.1701708925944;
-        Mon, 04 Dec 2023 08:55:25 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:c831:1e47:2:5b96? ([2a05:6e02:1041:c10:c831:1e47:2:5b96])
-        by smtp.googlemail.com with ESMTPSA id o15-20020a05600c510f00b004064cd71aa8sm14340224wms.34.2023.12.04.08.55.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Dec 2023 08:55:25 -0800 (PST)
-Message-ID: <b3c86caf-635d-416b-af98-9e26f2a68948@linaro.org>
-Date: Mon, 4 Dec 2023 17:55:24 +0100
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27BD8A1;
+	Mon,  4 Dec 2023 09:25:19 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="6.04,250,1695654000"; 
+   d="scan'208";a="185273244"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 05 Dec 2023 02:25:18 +0900
+Received: from localhost.localdomain (unknown [10.226.93.142])
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 46F144031BE0;
+	Tue,  5 Dec 2023 02:25:13 +0900 (JST)
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Lee Jones <lee@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	Support Opensource <support.opensource@diasemi.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Steve Twiss <stwiss.opensource@diasemi.com>,
+	linux-input@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>,
+	linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v3.1 0/8] Convert DA906{1,2} bindings to json-schema
+Date: Mon,  4 Dec 2023 17:25:02 +0000
+Message-Id: <20231204172510.35041-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] thermal: sysfs: Rework the handling of trip point
- updates
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Lukasz Luba <lukasz.luba@arm.com>
-Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Zhang Rui <rui.zhang@intel.com>
-References: <12338384.O9o76ZdvQC@kreacher> <4883151.31r3eYUQgx@kreacher>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <4883151.31r3eYUQgx@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+Convert the below bindings to json-schema
+1) DA906{1,2} mfd bindings
+2) DA906{1,2,3} onkey bindings
+3) DA906{1,2,3} thermal bindings
 
-Hi Rafael,
+Also add fallback for DA9061 watchdog device and document
+DA9063 watchdog device.
 
-On 04/12/2023 15:50, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Both trip_point_temp_store() and trip_point_hyst_store() use
-> thermal_zone_set_trip() to update a given trip point, but none of them
-> actually needs to change more than one field in struct thermal_trip
-> representing it.  However, each of them effectively calls
-> __thermal_zone_get_trip() twice in a row for the same trip index value,
-> once directly and once via thermal_zone_set_trip(), which is not
-> particularly efficient, and the way in which thermal_zone_set_trip()
-> carries out the update is not particularly straightforward.
-> 
-> Moreover, input processing need not be done under the thermal zone lock
-> in any of these functions.
-> 
-> Rework trip_point_temp_store() and trip_point_hyst_store() to address
-> the above, move the part of thermal_zone_set_trip() that is still
-> useful to a new function called thermal_zone_trip_updated() and drop
-> the rest of it.
-> 
-> While at it, make trip_point_hyst_store() reject negative hysteresis
-> values.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-> 
-> v2 -> v3: No changes
-> 
-> v1 -> v2: Still check device_is_registered() under the zone lock
-> 
-> ---
->   drivers/thermal/thermal_core.h  |    2 +
->   drivers/thermal/thermal_sysfs.c |   75 ++++++++++++++++++++++++++++------------
->   drivers/thermal/thermal_trip.c  |   45 ++++--------------------
->   include/linux/thermal.h         |    4 --
->   4 files changed, 64 insertions(+), 62 deletions(-)
-> 
-> Index: linux-pm/drivers/thermal/thermal_sysfs.c
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_sysfs.c
-> +++ linux-pm/drivers/thermal/thermal_sysfs.c
-> @@ -78,6 +78,19 @@ mode_store(struct device *dev, struct de
->   	return count;
->   }
->   
-> +static int check_thermal_zone_and_trip_id(struct device *dev,
-> +					  struct thermal_zone_device *tz,
-> +					  int trip_id)
-> +{
-> +	if (!device_is_registered(dev))
-> +		return -ENODEV;
-> +
-> +	if (trip_id < 0 || trip_id >= tz->num_trips)
-> +		return -EINVAL;
+v3->v3.1:
+ * Patch#1 is merge of patch#1 from v2 + patch#8 from v2.
+ * Dropped comment for d9061 watchdog fallback
+ * Replaced enum->const for dlg,da9061-watchdog and its fallback.
+ * Restored patch#4 in series 1 and dropped the thermal example
+ * Added Ack from Conor Dooley for da9063 watchdog binding support.
+ * Updated title DA9062/61->DA906{1,2,3} as it supports DA9063.
+ * Retained Rb tag since the changes are trivial.
+ * Added Ack from Conor for updating watchdog property
+ * Dropped link to product information.
+ * Patch#5(onkey) is squashed with patch#6 and patch#9 from v2.
+ * Replaced enum->const for dlg,da9061-onkey and its fallback.
+ * Dropped example
+ * Restored the thermal binding patch from v2.
+ * Dropped example
+ * Replaced enum->const for compatible property.
+ * Added Rb tag from Rob and retained Rb tag as changes are trivial.
+ * Added Ack from Conor Dooley for patch#7.
+ * Split the thermal binding patch separate
+ * Updated the description
+v2->v3:
+ * Updated Maintainer entries for watchdog,onkey and thermal bindings
+ * Fixed bot errors related to MAINTAINERS entry, invalid doc
+   references and thermal examples by merging patch#4. 
 
-I'm not sure if this check is useful. The function is called from 
-trip_point_*_store() which is providing the trip id from the file name 
-parsing which is in turn built from an existing trip id. There is no 
-reason the trip id is going to be wrong.
+v1->v2:
+ Link: https://lore.kernel.org/all/20231201110840.37408-5-biju.das.jz@bp.renesas.com/
+ * DA9062 and DA9061 merged with DA9063
+ * Sorted the child devices
+ * mfd,onkey and thermal are pointing to child bindings
 
-[ ... ]
+Biju Das (8):
+  dt-bindings: mfd: da9062: Update watchdog description
+  dt-bindings: watchdog: dlg,da9062-watchdog: Add fallback for DA9061
+    watchdog
+  dt-bindings: watchdog: dlg,da9062-watchdog: Document DA9063 watchdog
+  dt-bindings: mfd: dlg,da9063: Update watchdog property
+  dt-bindings: input: Convert da906{1,2,3} onkey to json-schema
+  dt-bindings: thermal: Convert da906{1,2} thermal to json-schema
+  dt-bindings: mfd: dlg,da9063: Sort child devices
+  dt-bindings: mfd: dlg,da9063: Convert da9062 to json-schema
 
+ .../bindings/input/da9062-onkey.txt           |  47 ----
+ .../bindings/input/dlg,da9062-onkey.yaml      |  39 ++++
+ .../devicetree/bindings/mfd/da9062.txt        | 124 ----------
+ .../devicetree/bindings/mfd/dlg,da9063.yaml   | 221 +++++++++++++++---
+ .../bindings/thermal/da9062-thermal.txt       |  36 ---
+ .../bindings/thermal/dlg,da9062-thermal.yaml  |  35 +++
+ .../watchdog/dlg,da9062-watchdog.yaml         |  13 +-
+ MAINTAINERS                                   |   6 +-
+ 8 files changed, 272 insertions(+), 249 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/input/da9062-onkey.txt
+ create mode 100644 Documentation/devicetree/bindings/input/dlg,da9062-onkey.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mfd/da9062.txt
+ delete mode 100644 Documentation/devicetree/bindings/thermal/da9062-thermal.txt
+ create mode 100644 Documentation/devicetree/bindings/thermal/dlg,da9062-thermal.yaml
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.39.2
 
 
