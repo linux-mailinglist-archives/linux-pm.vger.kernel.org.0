@@ -1,156 +1,77 @@
-Return-Path: <linux-pm+bounces-691-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-692-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C476F803CB9
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Dec 2023 19:23:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF455803E81
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Dec 2023 20:36:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4AA96B20A6E
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Dec 2023 18:23:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C6B81C20954
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Dec 2023 19:36:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 147192F84C;
-	Mon,  4 Dec 2023 18:23:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="yocSKJDC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7F8D31748;
+	Mon,  4 Dec 2023 19:36:20 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F7DD5;
-	Mon,  4 Dec 2023 10:23:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=OVfC8HmVSUtxQSExvUxbBU1pNZlzr2LJhw+rAKbX5PE=; b=yocSKJDCG9Uq3lu3L6Vrl+Aa1r
-	hRWP9mRlH8sq12iLzchSEn00N5gmtrXOrFxLBNbR5mZygwpfm35B6cyE+GVr+/PzVFYlmkHqrAwvr
-	iIE5YHq2YvOTv8yWAuDG1g2luAQ9ig0vVnSn7XLSMu+D7/SPDmP2V78Fe3cj5XQug/dcyZ2X+MlNr
-	pLAJlYa5DIv3yhIoRvY18doA0PBzavkAmkkl8VLUKq+nG7ker/GZ8/nnZqdFecoAx0X10dVEH0AW0
-	6cGst5/hVpu9tiNV+37ht5O02SqHfmN5alCAKSWBmod/hT3V7vYe9wq3qzhqKiISEDdpBQBQZbYTI
-	w96wF+BQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:49384)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1rADay-0005sX-2j;
-	Mon, 04 Dec 2023 18:23:06 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1rADaw-0000tZ-LP; Mon, 04 Dec 2023 18:23:02 +0000
-Date: Mon, 4 Dec 2023 18:23:02 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-	x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
-	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	jianyong.wu@arm.com, justin.he@arm.com,
-	James Morse <james.morse@arm.com>
-Subject: Re: [RFC PATCH v3 00/39] ACPI/arm64: add support for virtual
- cpuhotplug
-Message-ID: <ZW4ZBkj2oCmxv55T@shell.armlinux.org.uk>
-References: <ZTffkAdOqL2pI2la@shell.armlinux.org.uk>
- <CAJZ5v0j-73_+9U3ngDAf9w1ADDhBTKctJdWboqUk-okH2TQGyg@mail.gmail.com>
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56CF9CE;
+	Mon,  4 Dec 2023 11:36:17 -0800 (PST)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
+ id 76e4f80ac110b6ab; Mon, 4 Dec 2023 20:36:15 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 8F438668764;
+	Mon,  4 Dec 2023 20:36:14 +0100 (CET)
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Lukasz Luba <lukasz.luba@arm.com>, LKML <linux-kernel@vger.kernel.org>, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>
+Subject: [PATCH v1] thermal: trip: Drop redundant __thermal_zone_get_trip() header
+Date: Mon, 04 Dec 2023 20:36:14 +0100
+Message-ID: <2709306.mvXUDI8C0e@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0j-73_+9U3ngDAf9w1ADDhBTKctJdWboqUk-okH2TQGyg@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrudejiedguddvjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhn
+ ihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
 
-On Tue, Oct 24, 2023 at 08:26:58PM +0200, Rafael J. Wysocki wrote:
-> On Tue, Oct 24, 2023 at 5:15 PM Russell King (Oracle)
-> <linux@armlinux.org.uk> wrote:
-> >
-> > Hi,
-> >
-> > I'm posting James' patch set updated with most of the review comments
-> > from his RFC v2 series back in September. Individual patches have a
-> > changelog attached at the bottom of the commit message. Those which
-> > I have finished updating have my S-o-b on them, those which still have
-> > outstanding review comments from RFC v2 do not. In some of these cases
-> > I've asked questions and am waiting for responses.
-> >
-> > I'm posting this as RFC v3 because there's still some unaddressed
-> > comments and it's clearly not ready for merging. Even if it was ready
-> > to be merged, it is too late in this development cycle to be taking
-> > this change in, so there would be little point posting it non-RFC.
-> > Also James stated that he's waiting for confirmation from the
-> > Kubernetes/Kata folk - I have no idea what the status is there.
-> >
-> > I will be sending each patch individually to a wider audience
-> > appropriate for that patch - apologies to those missing out on this
-> > cover message. I have added more mailing lists to the series with the
-> > exception of the acpica list in a hope of this cover message also
-> > reaching those folk.
-> >
-> > The changes that aren't included are:
-> >
-> > 1. Updates for my patch that was merged via Thomas (thanks!):
-> >    c4dd854f740c cpu-hotplug: Provide prototypes for arch CPU registration
-> >    rather than having this change spread through James' patches.
-> >
-> > 2. New patch - simplification of PA-RISC's smp_prepare_boot_cpu()
-> >
-> > 3. Moved "ACPI: Use the acpi_device_is_present() helper in more places"
-> >    and "ACPI: Rename acpi_scan_device_not_present() to be about
-> >    enumeration" to the beginning of the series - these two patches are
-> >    already queued up for merging into 6.7.
-> >
-> > 4. Moved "arm64, irqchip/gic-v3, ACPI: Move MADT GICC enabled check into
-> >    a helper" to the beginning of the series, which has been submitted,
-> >    but as yet the fate of that posting isn't known.
-> >
-> > The first four patches in this series are provided for completness only.
-> >
-> > There is an additional patch in James' git tree that isn't in the set
-> > of patches that James posted: "ACPI: processor: Only call
-> > arch_unregister_cpu() if HOTPLUG_CPU is selected" which looks to me to
-> > be a workaround for arch_unregister_cpu() being under the ifdef. I've
-> > commented on this on the RFC v2 posting making a suggestion, but as yet
-> > haven't had any response.
-> >
-> > I've included almost all of James' original covering body below the
-> > diffstat.
-> >
-> > The reason that I'm doing this is to help move this code forward so
-> > hopefully it can be merged - which is why I have been keen to dig out
-> > from James' patches anything that can be merged and submit it
-> > separately, since this is a feature for which some users have a
-> > definite need for.
-> 
-> I've gone through the series and there is at least one thing in it
-> that concerns me a lot and some others that at least appear to be
-> really questionable.
-> 
-> I need more time to send comments which I'm not going to do before the
-> 6.7 merge window (sorry), but from what I can say right now, this is
-> not looking good.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Hi Rafael,
+The __thermal_zone_get_trip() header in drivers/thermal/thermal_core.h
+is redundant, because there is one already in thermal.h, so drop it.
 
-Will you be able to send your comments, so that we can find out what
-your other concerns are please? I'm getting questions from interested
-parties who want to know what your concerns are.
+No functional impact.
 
-Nothing much has changed to the ACPI changes, so I think it's still
-valid to have the comments back for this.
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/thermal/thermal_core.h |    2 --
+ 1 file changed, 2 deletions(-)
 
-Thanks.
+Index: linux-pm/drivers/thermal/thermal_core.h
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_core.h
++++ linux-pm/drivers/thermal/thermal_core.h
+@@ -120,8 +120,6 @@ void __thermal_zone_device_update(struct
+ 	for (__trip = __tz->trips; __trip - __tz->trips < __tz->num_trips; __trip++)
+ 
+ void __thermal_zone_set_trips(struct thermal_zone_device *tz);
+-int __thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
+-			    struct thermal_trip *trip);
+ int thermal_zone_trip_id(struct thermal_zone_device *tz,
+ 			 const struct thermal_trip *trip);
+ void thermal_zone_trip_updated(struct thermal_zone_device *tz,
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+
+
 
