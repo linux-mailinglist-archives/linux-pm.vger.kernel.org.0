@@ -1,113 +1,445 @@
-Return-Path: <linux-pm+bounces-668-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-669-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1436802F01
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Dec 2023 10:43:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAA1080311D
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Dec 2023 12:00:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 563FD1F2029D
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Dec 2023 09:43:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B581F1C20A2F
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Dec 2023 11:00:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D13431C6B0;
-	Mon,  4 Dec 2023 09:43:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA4B1224FD;
+	Mon,  4 Dec 2023 10:59:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="djDx0jvO"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SU7IpRlb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B53471C6A5
-	for <linux-pm@vger.kernel.org>; Mon,  4 Dec 2023 09:43:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4180BC433C9
-	for <linux-pm@vger.kernel.org>; Mon,  4 Dec 2023 09:43:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701683008;
-	bh=ED6vo/IzLoo0vmwDoIj3V9POeixeZQvnI0KOKUA2Av8=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=djDx0jvOJqIZ92hzvzQM5qSU+0vThVcZxaQF43yYbQ/Fe9f0smQpZphANuyo/blWl
-	 Lg3rpBVCZf7MuB51aqsEr1Xb7zggzGQzCxdYtXNTY0H18dpXTyGAJqWaA/gr1T7FGD
-	 Ud5RNXo6YdJ99j+ChsAZ7Qg8AjmuSZBa925wM1C3laKoQkxUdfMkD/nXfgAvg5B5DT
-	 x50Dy2z9oT4xX3j3mH6MC+9e8iZM3QOox85M/cA+19HjsNtEdDxkeqCB5RbYSlh7rw
-	 7lgHeMh/iqxyTs6P5WGw3SjG11UmskgfZ+bzoU7bZ3oBI+8antD8rfvJrCM/XYZKlD
-	 7no570GRtnX6Q==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 2D659C53BD2; Mon,  4 Dec 2023 09:43:28 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 218171] amd-pstate not loading on zen2 threadripper 3960x
- (trx40
-Date: Mon, 04 Dec 2023 09:43:27 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: Perry.Yuan@amd.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218171-137361-6bZsKcnQNw@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218171-137361@https.bugzilla.kernel.org/>
-References: <bug-218171-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8688103
+	for <linux-pm@vger.kernel.org>; Mon,  4 Dec 2023 02:59:51 -0800 (PST)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-5b383b4184fso46377697b3.1
+        for <linux-pm@vger.kernel.org>; Mon, 04 Dec 2023 02:59:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1701687591; x=1702292391; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y8dkNJZmgkudX4QZPlv1ILHsvPj3tnDoTM3txLJEL3E=;
+        b=SU7IpRlbhdN8Wgc4Ys8AcHegI+wyxhO1ibtTVNwpfiGgdHsjasiqd8kMMDyHGcAnk7
+         U/4bsF78TofFKBTN4z3sNygVG52rjSHGq8n42aONh85EMb3ZU+1O7tdjtqA+gai75svC
+         lHCjTTxdRkZe1Jyp/KcLS9ajhr2tuMphq+eGDnKPQFAP0XiCcvzBbkR7JCGYCrb1BSue
+         lOjImL3Da+pPM5NKV172FVKh4Ta3AZmr2Ok4dKKj+bhpxyEkIIj75kDCl7AjYgGd1xB5
+         TNIy/q3B2aed7h83CbSaVJ0G+CxAzZOeuXyP0B9LmnEdjZ0A8QsjBgy7T6v93MGiuXb5
+         9dLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701687591; x=1702292391;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y8dkNJZmgkudX4QZPlv1ILHsvPj3tnDoTM3txLJEL3E=;
+        b=QZRbzjojO6IYDdUm/KlwjA502W1TqwWHps5oVnBu9aCMzp4++hJ5/1ne2W810K10V0
+         tsIqEN9gto1SOFbZt5+s6Kr5ORiG8Mtysk4djeclWCMPeM3uLix5zBBiUUelUhpa4+ru
+         Y4Qosxr/7kcnOStpYWw6+1gyzr5pZyQg1aRfqfWA4oo6ZUYj9uhceoZ2KQFgRRBXWYZm
+         VuCgON1OhkI/RiKUlyigZquiFs1BcSBYOnSYEgQ9vUPjdB7OoyXdyQr28wBjW7Xxgt0Q
+         qX00Ys8fcg9n66z6M2F3r9oPdANtwRT69X3RaUAdrQXzU/eqgeMp6MdC89Tx6jrwhKGt
+         mQ+g==
+X-Gm-Message-State: AOJu0Yx3vFk7LIciffYAZ/Dozd4yTGksgIZmKFthrr9vUb3UpqkmR9Oz
+	JNkEBJ22AGftraRPr9v6oodct7URH+LIekXtsiwWVQ==
+X-Google-Smtp-Source: AGHT+IFgOWlc6uLr3ABma0Ztx6ruoa8pJKHw5PH4Q3fPtSjH4+YzgEy91ioUAfZzGo3eslogg8aJ09lISiVh3tDeShk=
+X-Received: by 2002:a81:bd4a:0:b0:5d7:545e:3bd3 with SMTP id
+ n10-20020a81bd4a000000b005d7545e3bd3mr2365817ywk.25.1701687590977; Mon, 04
+ Dec 2023 02:59:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20230912-msm8909-cpufreq-v1-0-767ce66b544b@kernkonzept.com>
+ <20230912-msm8909-cpufreq-v1-1-767ce66b544b@kernkonzept.com>
+ <CAPDyKFq6U-MR4Bd+GmixYseRECDh142RhydtKbiPd3NHV2g6aw@mail.gmail.com>
+ <ZQGqfMigCFZP_HLA@gerhold.net> <CAPDyKFppdXe1AZo1jm2Bc_ZR18hw5Bmh1x+2P7Obhb_rJ2gc4Q@mail.gmail.com>
+ <ZRcC2IRRv6dtKY65@gerhold.net> <CAPDyKFoiup8KNv=1LFGKDdDLA1pHsdJUgTTWMdgxnikEmReXzg@mail.gmail.com>
+ <ZSg-XtwMxg3_fWxc@gerhold.net> <CAPDyKFoH5EOvRRKy-Bgp_B9B3rf=PUKK5N45s5PNgfBi55PaOQ@mail.gmail.com>
+ <ZWXgFNKgm9QaFuzx@gerhold.net>
+In-Reply-To: <ZWXgFNKgm9QaFuzx@gerhold.net>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Mon, 4 Dec 2023 11:59:15 +0100
+Message-ID: <CAPDyKFr3WMZQxFgzn7E7mOtecu-mnfoZ-D051pgGhPV5Eeb5BQ@mail.gmail.com>
+Subject: Re: [PATCH 1/4] cpufreq: qcom-nvmem: Handling multiple power domains
+To: Stephan Gerhold <stephan@gerhold.net>
+Cc: Stephan Gerhold <stephan.gerhold@kernkonzept.com>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konrad.dybcio@linaro.org>, Ilia Lin <ilia.lin@kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218171
+On Tue, 28 Nov 2023 at 13:42, Stephan Gerhold <stephan@gerhold.net> wrote:
+>
+> Hi Uffe,
+>
+> On Mon, Oct 16, 2023 at 04:47:52PM +0200, Ulf Hansson wrote:
+> > [...]
+> > > > >   - MSM8916 (CPR+RPMPD):
+> > > > >     https://github.com/msm8916-mainline/linux/commit/8880f39108206d7a60a0a8351c0373bddf58657c
+> > > >
+> > > > This looks a bit odd to me. Does a CPU really have four different
+> > > > power-domains, where three of them are performance-domains?
+> > > >
+> > >
+> > > Good question. I think we're largely entering "uncharted territory" with
+> > > these questions, I can just try to answer it the best I can from the
+> > > limited documentation and knowledge I have. :)
+> > >
+> > > The CPU does indeed use four different power domains. There also seem to
+> > > be additional power switches that gate power for some components without
+> > > having to turn off the entire supply.
+> > >
+> > > I'll list them twice from two points of view: Once mapping component ->
+> > > power domain, then again showing each power domain separately to make it
+> > > more clear. At the end I also want to make clear that MSM8909 (with the
+> > > "single" power domain) is actually exactly the same SoC design, just
+> > > with different regulators supplying the power domains.
+> > >
+> > > It's totally fine if you just skim over it. I'm listing it in detail
+> > > also as reference for myself. :D
+> > >
+> > > # Components
+> > >  - SoC
+> > >    - CPU subsystem ("APPS")
+> > >      - CPU cluster
+> > >        - 4x CPU core (logic and L1 cache) -> VDD_APC
+> > >        - Shared L2 cache
+> > >          - Logic -> VDD_APC
+> > >          - Memory -> VDD_MX
+> > >      - CPU clock controller (logic) -> VDD_CX
+> > >        - Provides CPU frequency from different clock sources
+> > >        - L2 cache runs at 1/2 of CPU frequency
+> > >        => Both VDD_APC and VDD_MX must be scaled based on frequency
+> > >      - CPU PLL clock source
+> > >        - Generates the higher (GHz) CPU frequencies
+> > >        - Logic (?, unsure) -> VDD_CX
+> > >        - ??? -> VDD_SR2_APPS_PLL
+> > >        => VDD_CX must be scaled based on PLL frequency
+> > >
+> > > # Power Domains
+> > > ## VDD_APC
+> > >  - dedicated for CPU
+> > >  - powered off completely in deepest cluster cpuidle state
+> > >
+> > >  - per-core power switch (per-core cpuidle)
+> > >    - CPU logic
+> > >    - L1 cache controller/logic and maybe memory(?, unsure)
+> > >  - shared L2 cache controller/logic
+> > >
+> > >  => must be scaled based on CPU frequency
+> > >
+> > > ## VDD_MX
+> > >  - global SoC power domain for "on-chip memories"
+> > >  - always on, reduced to minimal voltage when entire SoC is idle
+> > >
+> > >  - power switch (controlled by deepest cluster cpuidle state?, unsure)
+> > >    - L2 cache memory
+> > >
+> > >  => must be scaled based on L2 frequency (=> 1/2 CPU frequency)
+> > >
+> > > ## VDD_CX
+> > >  - global SoC power domain for "digital logic"
+> > >  - always on, reduced to minimal voltage when entire SoC is idle
+> > >  - voting for VDD_CX in the RPM firmware also affects VDD_MX performance
+> > >    state (firmware implicitly sets VDD_MX >= VDD_CX)
+> > >
+> > >  - CPU clock controller logic, CPU PLL logic(?, unsure)
+> > >
+> > >  => must be scaled based on CPU PLL frequency
+> > >
+> > > ## VDD_SR2_APPS_PLL
+> > >  - global SoC power domain for CPU clock PLLs
+> > >  - on MSM8916: always on with constant voltage
+> > >
+> > >  => ignored in Linux at the moment
+> > >
+> > > # Power Domain Regulators
+> > > These power domains are literally input pins on the SoC chip. In theory
+> > > one could connect any suitable regulator to each of those. In practice
+> > > there are just a couple of standard reference designs that everyone
+> > > uses:
+> > >
+> > > ## MSM8916 (SoC) + PM8916 (PMIC)
+> > > We need to scale 3 power domains together with cpufreq:
+> > >
+> > >  - VDD_APC (CPU logic) = &pm8916_spmi_s2 (via CPR)
+> > >  - VDD_MX  (L2 memory) = &pm8916_l3 (via RPMPD: MSM8916_VDDMX)
+> > >  - VDD_CX  (CPU PLL)   = &pm8916_s1 (via RPMPD: MSM8916_VDDCX)
+> > >
+> > > ## MSM8909 (SoC) + PM8909 (PMIC)
+> > > We need to scale 1 power domain together with cpufreq:
+> > >
+> > >  - VDD_APC = VDD_CX    = &pm8909_s1 (via RPMPD: MSM8909_VDDCX)
+> > >    (CPU logic, L2 logic and CPU PLL)
+> > > (- VDD_MX  (L2 memory) = &pm8909_l3 (RPM firmware enforces VDD_MX >= VDD_CX))
+> > >
+> > > There is implicit magic in the RPM firmware here that saves us from
+> > > scaling VDD_MX. VDD_CX/APC are the same power rail.
+> > >
+> > > ## MSM8909 (SoC) + PM8916 (PMIC)
+> > > When MSM8909 is paired with PM8916 instead of PM8909, the setup is
+> > > identical to MSM8916+PM8916. We need to scale 3 power domains.
+> > >
+> > > > In a way it sounds like an option could be to hook up the cpr to the
+> > > > rpmpd:s instead (possibly even set it as a child-domains to the
+> > > > rpmpd:s), assuming that is a better description of the HW, which it
+> > > > may not be, of course.
+> > >
+> > > Hm. It's definitely an option. I must admit I haven't really looked
+> > > much at child-domains so far, so spontaneously I'm not sure about
+> > > the implications, for both the abstract hardware description and
+> > > the implementation.
+> > >
+> > > There seems to be indeed some kind of relation between MX <=> CX/APC:
+> > >
+> > >  - When voting for CX in the RPM firmware, it will always implicitly
+> > >    adjust the MX performance state to be MX >= CX.
+> > >
+> > >  - When scaling APC up, we must increase MX before APC.
+> > >  - When scaling APC down, we must decrease MX after APC.
+> > >  => Clearly MX >= APC. Not in terms of raw voltage, but at least for the
+> > >     abstract performance state.
+> > >
+> > > Is this some kind of parent-child relationship between MX <=> CX and
+> > > MX <=> APC?
+> >
+> > Thanks for sharing the above. Yes, to me, it looks like there is a
+> > parent/child-domain relationship that could be worth describing/using.
+> >
+> > >
+> > > If yes, maybe we could indeed bind MX to the CPR genpd somehow. They use
+> > > different performance state numbering, so we need some kind of
+> > > translation. I'm not entirely sure how that would be described.
+> >
+> > Both the power-domain and the required-opps DT bindings
+> > (Documentation/devicetree/bindings/opp/opp-v2-base.yaml) are already
+> > allowing us to describe these kinds of hierarchical
+> > dependencies/layouts.
+> >
+> > In other words, to scale performance for a child domain, the child may
+> > rely on that we scale performance for the parent domain too. This is
+> > already supported by genpd and through the opp library - so it should
+> > just work. :-)
+> >
+>
+> I'm getting back to the "multiple power domains" case of MSM8916 now, as
+> discussed above. I've tried modelling MX as parent genpd of CPR, to
+> avoid having to scale multiple power domains as part of cpufreq.
+>
+> Basically, it looks like the following:
+>
+>         cpr: power-controller@b018000 {
+>                 compatible = "qcom,msm8916-cpr", "qcom,cpr";
+>                 reg = <0x0b018000 0x1000>;
+>                 /* ... */
+>                 #power-domain-cells = <0>;
+>                 operating-points-v2 = <&cpr_opp_table>;
+>                 /* Supposed to be parent domain, not consumer */
+>                 power-domains = <&rpmpd MSM8916_VDDMX_AO>;
+>
+>                 cpr_opp_table: opp-table {
+>                         compatible = "operating-points-v2-qcom-level";
+>
+>                         cpr_opp1: opp1 {
+>                                 opp-level = <1>;
+>                                 qcom,opp-fuse-level = <1>;
+>                                 required-opps = <&rpmpd_opp_svs_soc>;
+>                         };
+>                         cpr_opp2: opp2 {
+>                                 opp-level = <2>;
+>                                 qcom,opp-fuse-level = <2>;
+>                                 required-opps = <&rpmpd_opp_nom>;
+>                         };
+>                         cpr_opp3: opp3 {
+>                                 opp-level = <3>;
+>                                 qcom,opp-fuse-level = <3>;
+>                                 required-opps = <&rpmpd_opp_super_turbo>;
+>                         };
+>                 };
+>         };
+>
+> As already discussed [1] it's a bit annoying that the genpd core
+> attaches the power domain as consumer by default, but I work around this
+> by calling of_genpd_add_subdomain() followed by dev_pm_domain_detach()
+> in the CPR driver.
 
---- Comment #18 from Perry Yuan(AMD) (Perry.Yuan@amd.com) ---
- (In reply to Gino Badouri from comment #17)
-> Thank you Perry,
->=20
-> I'll contact Asus support and see if they can do anything about it.
-> For other users having the same issue.
-> Please make sure you have CPPC and CPPC Preferred Cores enabled in the bi=
-os
-> settings.
-> You should be able to find it somewhere in the advanced settings under:
-> AMD CBS > NBIO Common Options > SMU
->=20
-> Also please share your ACPI tables, so the developers can verify them:
->=20
-> fedora/redhat:
-> dnf install acpica-tools
->=20
-> debian/ubuntu:
-> apt update
-> apt install acpica-tools
->=20
-> how to dump your tables:
-> acpidump > acpidump.out
-> acpixtract -a acpidump.out
-> iasl *.dat
-> zip -9 acpi_tables.zip *.dsl
->=20
-> Then please attach your acpi_tables.zip to this bug report and share your
-> mainboard vendor/model and bios version.
+Yep, that seems reasonable to me.
 
-thank you Gino as well, let's know if you have any questions on this.=20
-You can check the CPPC table with vendor if they confirm the CPPC is suppor=
-ted
-on the board.
+>
+> The actual scaling works fine, performance states of the MX power domain
+> are updated when CPR performance state. I added some debug prints and it
+> looks e.g. as follows (CPR is the power-controller@):
+>
+>     [   24.498218] PM: mx_ao set performance state 6
+>     [   24.498788] PM: power-controller@b018000 set performance state 3
+>     [   24.511025] PM: mx_ao set performance state 3
+>     [   24.511526] PM: power-controller@b018000 set performance state 1
+>     [   24.521189] PM: mx_ao set performance state 4
+>     [   24.521660] PM: power-controller@b018000 set performance state 2
+>     [   24.533183] PM: mx_ao set performance state 6
+>     [   24.533535] PM: power-controller@b018000 set performance state 3
+>
+> There is one remaining problem here: Consider e.g. the switch from CPR
+> performance state 3 -> 1. In both cases the parent genpd state is set
+> *before* the child genpd. When scaling down, the parent genpd state must
+> be reduced *after* the child genpd. Otherwise, we can't guarantee that
+> the parent genpd state is always >= of the child state.
 
---=20
-You may reply to this email to add a comment.
+Good point!
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+>
+> In the OPP core, the order of such operations is always chosen based on
+> whether we are scaling up or down. When scaling up, power domain states
+> are set before the frequency is changed, and the other way around for
+> scaling down.
+>
+> Is this something you could imagine changing in the GENPD core, either
+> unconditionally for everyone, or as an option?
+
+This sounds like a generic problem that we need to fix for genpd. So
+for everyone.
+
+>
+> I tried to hack this in for a quick test and came up with the following
+> (the diff is unreadable so I'll just post the entire changed
+> (_genpd_set_performance_state() function). Admittedly it's a bit ugly.
+>
+> With these changes the sequence from above looks more like:
+>
+>     [   22.374555] PM: mx_ao set performance state 6
+>     [   22.375175] PM: power-controller@b018000 set performance state 3
+>     [   22.424661] PM: power-controller@b018000 set performance state 1
+>     [   22.425169] PM: mx_ao set performance state 3
+>     [   22.434932] PM: mx_ao set performance state 4
+>     [   22.435331] PM: power-controller@b018000 set performance state 2
+>     [   22.461197] PM: mx_ao set performance state 6
+>     [   22.461968] PM: power-controller@b018000 set performance state 3
+>
+> Which is correct now.
+>
+> Let me know if you have any thoughts about this. :-)
+
+Makes sense! Please post the below as a formal patch so I can review
+and test it!
+
+Kind regards
+Uffe
+
+>
+> Thanks for taking the time to discuss this!
+> Stephan
+>
+> [1]: https://lore.kernel.org/linux-pm/CAPDyKFq+zsoeF-4h5TfT4Z+S46a501_pUq8y2c1x==Tt6EKBGA@mail.gmail.com/
+>
+> static int _genpd_set_performance_state(struct generic_pm_domain *genpd,
+>                                         unsigned int state, int depth);
+>
+> static void _genpd_rollback_parent_state(struct gpd_link *link, int depth)
+> {
+>         struct generic_pm_domain *parent = link->parent;
+>         int parent_state;
+>
+>         genpd_lock_nested(parent, depth + 1);
+>
+>         parent_state = link->prev_performance_state;
+>         link->performance_state = parent_state;
+>
+>         parent_state = _genpd_reeval_performance_state(parent, parent_state);
+>         if (_genpd_set_performance_state(parent, parent_state, depth + 1)) {
+>                 pr_err("%s: Failed to roll back to %d performance state\n",
+>                        parent->name, parent_state);
+>         }
+>
+>         genpd_unlock(parent);
+> }
+>
+> static int _genpd_set_parent_state(struct generic_pm_domain *genpd,
+>                                    struct gpd_link *link,
+>                                    unsigned int state, int depth)
+> {
+>         struct generic_pm_domain *parent = link->parent;
+>         int parent_state, ret;
+>
+>         /* Find parent's performance state */
+>         ret = genpd_xlate_performance_state(genpd, parent, state);
+>         if (unlikely(ret < 0))
+>                 return ret;
+>
+>         parent_state = ret;
+>
+>         genpd_lock_nested(parent, depth + 1);
+>
+>         link->prev_performance_state = link->performance_state;
+>         link->performance_state = parent_state;
+>         parent_state = _genpd_reeval_performance_state(parent,
+>                                                 parent_state);
+>         ret = _genpd_set_performance_state(parent, parent_state, depth + 1);
+>         if (ret)
+>                 link->performance_state = link->prev_performance_state;
+>
+>         genpd_unlock(parent);
+>
+>         return ret;
+> }
+>
+> static int _genpd_set_performance_state(struct generic_pm_domain *genpd,
+>                                         unsigned int state, int depth)
+> {
+>         struct gpd_link *link = NULL;
+>         int ret;
+>
+>         if (state == genpd->performance_state)
+>                 return 0;
+>
+>         /* When scaling up, propagate to parents first in normal order */
+>         if (state > genpd->performance_state) {
+>                 list_for_each_entry(link, &genpd->child_links, child_node) {
+>                         ret = _genpd_set_parent_state(genpd, link, state, depth);
+>                         if (ret)
+>                                 goto rollback_parents_up;
+>                 }
+>         }
+>
+>         if (genpd->set_performance_state) {
+>                 pr_err("%s set performance state %d\n", genpd->name, state);
+>                 ret = genpd->set_performance_state(genpd, state);
+>                 if (ret) {
+>                         if (link)
+>                                 goto rollback_parents_up;
+>                         return ret;
+>                 }
+>         }
+>
+>         /* When scaling down, propagate to parents after in reverse order */
+>         if (state < genpd->performance_state) {
+>                 list_for_each_entry_reverse(link, &genpd->child_links, child_node) {
+>                         ret = _genpd_set_parent_state(genpd, link, state, depth);
+>                         if (ret)
+>                                 goto rollback_parents_down;
+>                 }
+>         }
+>
+>         genpd->performance_state = state;
+>         return 0;
+>
+> rollback_parents_up:
+>         list_for_each_entry_continue_reverse(link, &genpd->child_links, child_node)
+>                 _genpd_rollback_parent_state(link, depth);
+>         return ret;
+> rollback_parents_down:
+>         list_for_each_entry_continue(link, &genpd->child_links, child_node)
+>                 _genpd_rollback_parent_state(link, depth);
+>         return ret;
+> }
+>
 
