@@ -1,141 +1,112 @@
-Return-Path: <linux-pm+bounces-675-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-676-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B94CE803607
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Dec 2023 15:08:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 250178036BF
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Dec 2023 15:31:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 62E731F211D1
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Dec 2023 14:08:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D37282811A2
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Dec 2023 14:31:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EFCD2837F;
-	Mon,  4 Dec 2023 14:08:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AlRHXT90"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84CCB288D8;
+	Mon,  4 Dec 2023 14:31:24 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD6C83
-	for <linux-pm@vger.kernel.org>; Mon,  4 Dec 2023 06:08:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1701698917;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1Kb4oTInntwbSX0qj4UGW/Dx8KPLHw46unRh3eh5fbw=;
-	b=AlRHXT90ADhdINpxixpLozaAJ/nmYtGaLn4UikzkFwzF1pzEjWvV+5vynS3NDAx4uJBRrq
-	WobkZyJotZpMRtuQWvZFHwUzea+MAC3mGqGH63IT1TMNDTQlnqEc+2ocPy8EtskgqFJGoA
-	83NzMBdElDDBXcrXjG/hM58v1Ce0zW0=
-Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
- [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-634-1-xAUazsN_qunzF2bWxunw-1; Mon, 04 Dec 2023 09:08:36 -0500
-X-MC-Unique: 1-xAUazsN_qunzF2bWxunw-1
-Received: by mail-lj1-f197.google.com with SMTP id 38308e7fff4ca-2c9b97a391bso44396541fa.0
-        for <linux-pm@vger.kernel.org>; Mon, 04 Dec 2023 06:08:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701698915; x=1702303715;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1Kb4oTInntwbSX0qj4UGW/Dx8KPLHw46unRh3eh5fbw=;
-        b=ZlWT/iHUQsegIsQ8aoZfo6ZNZvS79meIzusJFFbeLzOfsHU+Jy3WIkaPOAT6b/gUF/
-         OYSclU1XVPvhr/ilUQUXKH406x0lNOE0D4MiUkYSp/0e/nM6t5PYNd8EdkbQ3A7QcuUz
-         uratWT+6rvLpQkw+0dq4Q23udOqpO8lMJd2cPfXED1evPuuI0CDfAmNgJ7x9QUCiWTJ9
-         OyZmhdWQ9FV2Xb+fSrLsyWRHYl8Av+VBn8+EeZB2r3mQRN3pdvJIeVF7pEafx57/2ri2
-         6vGtUweNIrqt4MOBdohjkTyZDISWb5T6AC3tw8KrI0rwCJVTQfX8zfhdWV4H5xxD0QQn
-         p6PQ==
-X-Gm-Message-State: AOJu0YwsaqOAEAfsvT7kxFJorB5TVPLoR/Ux8VvhJr2qqkXfuRqaHSX2
-	s/3ij2YTfSDxZQga2DyOUcJGhoyFp9MQ8Ls7vemSSjNE/zsYMZ58zzyGgqrKEIeVlutuO8YaoHY
-	JLGDA9iwcEStU3UdMiLA=
-X-Received: by 2002:a2e:9455:0:b0:2c9:d862:ff1e with SMTP id o21-20020a2e9455000000b002c9d862ff1emr1187150ljh.63.1701698914834;
-        Mon, 04 Dec 2023 06:08:34 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGuDuHVEhq5/ojLzeJsU0hmxb0pvTe47HU9fNdyKYAlhHcsSAPuGmoe6SCFyLBmVdV96WPYNg==
-X-Received: by 2002:a2e:9455:0:b0:2c9:d862:ff1e with SMTP id o21-20020a2e9455000000b002c9d862ff1emr1187145ljh.63.1701698914516;
-        Mon, 04 Dec 2023 06:08:34 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id r19-20020a1709067fd300b009fd50aa6984sm5285299ejs.83.2023.12.04.06.08.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Dec 2023 06:08:34 -0800 (PST)
-Message-ID: <4f8b7b2d-0f37-420f-adaa-15a88f0f51ea@redhat.com>
-Date: Mon, 4 Dec 2023 15:08:32 +0100
+X-Greylist: delayed 1048 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 04 Dec 2023 06:31:18 PST
+Received: from mxout70.expurgate.net (mxout70.expurgate.net [194.37.255.70])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3EB7107
+	for <linux-pm@vger.kernel.org>; Mon,  4 Dec 2023 06:31:18 -0800 (PST)
+Received: from [127.0.0.1] (helo=localhost)
+	by relay.expurgate.net with smtp (Exim 4.92)
+	(envelope-from <prvs=171688d2d9=fe@dev.tdt.de>)
+	id 1rA9hf-008Cav-0Y; Mon, 04 Dec 2023 15:13:43 +0100
+Received: from [195.243.126.94] (helo=securemail.tdt.de)
+	by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <fe@dev.tdt.de>)
+	id 1rA9he-00FI99-06; Mon, 04 Dec 2023 15:13:42 +0100
+Received: from securemail.tdt.de (localhost [127.0.0.1])
+	by securemail.tdt.de (Postfix) with ESMTP id A2C0E240049;
+	Mon,  4 Dec 2023 15:13:41 +0100 (CET)
+Received: from mail.dev.tdt.de (unknown [10.2.4.42])
+	by securemail.tdt.de (Postfix) with ESMTP id 21C7C240040;
+	Mon,  4 Dec 2023 15:13:41 +0100 (CET)
+Received: from localhost.localdomain (unknown [10.2.3.40])
+	by mail.dev.tdt.de (Postfix) with ESMTPSA id 70C0821439;
+	Mon,  4 Dec 2023 15:13:40 +0100 (CET)
+From: Florian Eckert <fe@dev.tdt.de>
+To: Eckert.Florian@googlemail.com,
+	rafael@kernel.org,
+	daniel.lezcano@linaro.org,
+	rui.zhang@intel.com,
+	lukasz.luba@arm.com
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] tools/thermal/tmon: Fix compilation warning for wrong format
+Date: Mon,  4 Dec 2023 15:13:35 +0100
+Message-ID: <20231204141335.2798194-1-fe@dev.tdt.de>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/4] Add support for drivers to decide bridge D3 policy
-Content-Language: en-US
-To: Mario Limonciello <mario.limonciello@amd.com>,
- Bjorn Helgaas <bhelgaas@google.com>
-Cc: "Rafael J . Wysocki" <rjw@rjwysocki.net>,
- Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
- "open list:PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
- "open list:X86 PLATFORM DRIVERS" <platform-driver-x86@vger.kernel.org>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Lukas Wunner <lukas@wunner.de>, Kai-Heng Feng <kai.heng.feng@canonical.com>,
- linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20231203041046.38655-1-mario.limonciello@amd.com>
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20231203041046.38655-1-mario.limonciello@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-purgate-ID: 151534::1701699222-9A6DADE9-07D521F6/0/0
+X-purgate-type: clean
+X-purgate: clean
 
-Hi all,
+The following warnings are shown during compilation:
 
-On 12/3/23 05:10, Mario Limonciello wrote:
-> The policy for whether PCI bridges are allowed to select D3 is dictated
-> by empirical results that are enumerated into pci_bridge_d3_possible().
-> 
-> In Windows this behaves differently in that Windows internal policy is
-> not used for devices when a power engine plugin driver provided by the
-> SOC vendor is installed.  This driver is used to decide the policy in
-> those cases.
-> 
-> This series implements a system that lets drivers register such a policy
-> control as well. It isn't activated for any SOCs by default.
-> 
-> This is heavily leveraged from the work in [1]
-> 
-> [1] https://lore.kernel.org/platform-driver-x86/20230906184354.45846-1-mario.limonciello@amd.com/
+tui.c: In function 'show_cooling_device':
+ tui.c:216:40: warning: format '%d' expects argument of type 'int', but
+argument 7 has type 'long unsigned int' [-Wformat=3D]
+   216 |                         "%02d %12.12s%6d %6d",
+       |                                      ~~^
+       |                                        |
+       |                                        int
+       |                                      %6ld
+ ......
+   219 |                         ptdata.cdi[j].cur_state,
+       |                         ~~~~~~~~~~~~~~~~~~~~~~~
+       |                                      |
+       |                                      long unsigned int
+ tui.c:216:44: warning: format '%d' expects argument of type 'int', but
+argument 8 has type 'long unsigned int' [-Wformat=3D]
+   216 |                         "%02d %12.12s%6d %6d",
+       |                                          ~~^
+       |                                            |
+       |                                            int
+       |                                          %6ld
+ ......
+   220 |                         ptdata.cdi[j].max_state);
+       |                         ~~~~~~~~~~~~~~~~~~~~~~~
+       |                                      |
+       |                                      long unsigned int
 
-As I mentioned in the v1 thread, I expect this entire series to
-go upstream through the PCI or ACPI trees, so I'm dropping this
-from my queue.
+To fix this, the correct string format must be used for printing.
 
-Regards,
+Signed-off-by: Florian Eckert <fe@dev.tdt.de>
+---
+ tools/thermal/tmon/tui.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hans
-
-
-
-> 
-> v1->v2:
->  * Pick up tags
->  * Rebase on v6.7-rc4
-> 
-> Mario Limonciello (4):
->   PCI: Make d3cold_allowed sysfs attribute read only
->   PCI: Refresh root ports in pci_bridge_d3_update()
->   ACPI: x86: s2idle: Export symbol for fetching constraints for module
->     use
->   platform/x86/amd: pmc: Add support for using constraints to decide D3
->     policy
-> 
->  Documentation/ABI/testing/sysfs-bus-pci |  4 +-
->  drivers/acpi/x86/s2idle.c               |  1 +
->  drivers/pci/pci-acpi.c                  |  2 +-
->  drivers/pci/pci-sysfs.c                 | 14 +-----
->  drivers/pci/pci.c                       | 12 ++++--
->  drivers/platform/x86/amd/pmc/pmc.c      | 57 +++++++++++++++++++++++++
->  include/linux/pci.h                     |  1 -
->  7 files changed, 72 insertions(+), 19 deletions(-)
-> 
-> 
-> base-commit: 33cc938e65a98f1d29d0a18403dbbee050dcad9a
+diff --git a/tools/thermal/tmon/tui.c b/tools/thermal/tmon/tui.c
+index 031b258667d8..7f5dd2b87f15 100644
+--- a/tools/thermal/tmon/tui.c
++++ b/tools/thermal/tmon/tui.c
+@@ -213,7 +213,7 @@ void show_cooling_device(void)
+ 		 * cooling device instances. skip unused idr.
+ 		 */
+ 		mvwprintw(cooling_device_window, j + 2, 1,
+-			"%02d %12.12s%6d %6d",
++			"%02d %12.12s%6lu %6lu",
+ 			ptdata.cdi[j].instance,
+ 			ptdata.cdi[j].type,
+ 			ptdata.cdi[j].cur_state,
+--=20
+2.30.2
 
 
