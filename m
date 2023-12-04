@@ -1,132 +1,156 @@
-Return-Path: <linux-pm+bounces-689-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-690-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73D74803BEF
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Dec 2023 18:47:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C235803C01
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Dec 2023 18:50:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A16651C20A40
-	for <lists+linux-pm@lfdr.de>; Mon,  4 Dec 2023 17:47:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E84CA28111B
+	for <lists+linux-pm@lfdr.de>; Mon,  4 Dec 2023 17:50:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2054E2510C;
-	Mon,  4 Dec 2023 17:47:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B350D2EAE0;
+	Mon,  4 Dec 2023 17:50:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jDde/L8V"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702D4F3;
-	Mon,  4 Dec 2023 09:47:16 -0800 (PST)
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1fb1620a00eso575917fac.1;
-        Mon, 04 Dec 2023 09:47:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701712035; x=1702316835;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YLxhbHxHs0yyW58U+USrAp9QZYXyCCBbOT0f2qo1Lmw=;
-        b=Scj0c0/PQKWNuW9DfEoB5V+mrGtkuR4dZzpmVETXHLKLjFJF1PPr8XqdzpVqMgY5Aa
-         06kStxIrvvqdhBjyRmwS4AAFj36+wvlIbkC+5k1LqD2pnaWSNlPkbV9xKweLqeQIaFCz
-         cq8lptJ1/cbwzOyrgg+Msl2vCqTA61MOOkoNik0cW7+Kb+39y/oVPFKCJ5f1YmrmcHPB
-         zSwuFEI46FaypSqsGkn85hsuuBmMA/s5/EofjX0plNbCfhw0NX54UwP3AwEHTfjzgHp/
-         jAgUtOOTvePyhFkwOeXmEYU3wnpjfr3iB0gFOGikx+mKpwhLluhpZgd/fgCXKkqz69u+
-         hF+A==
-X-Gm-Message-State: AOJu0YzK0oFP9HK8vvp+/IJ6GcfUU+TkgX4Ra/qv3kw2hk7vjoNDi5CM
-	Zfj0aRoW55ME1tjzWvGYeNym4Sf3e7KNs3MigzA=
-X-Google-Smtp-Source: AGHT+IG9XswzgrLgYJtdTDaf8gWSyrFBQ4WCE+EubF3UY9rkdQ4XYJYZxIhR3tHSoqMCUpWcXa3k1oTkJ3kzQk8MkcY=
-X-Received: by 2002:a05:6870:e38a:b0:1fb:25fb:fabc with SMTP id
- x10-20020a056870e38a00b001fb25fbfabcmr6338860oad.5.1701712035690; Mon, 04 Dec
- 2023 09:47:15 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9768FA;
+	Mon,  4 Dec 2023 09:50:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701712240; x=1733248240;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=dP2gqvhdyuIc7UuUZhxvKqlHMQ8j8ifDZkXZKxj+rq8=;
+  b=jDde/L8VrkDjiH31O7yXkYy0yL2bwrlhrtRuTDH/Us0YEqEVoWYKbeJN
+   yqwrY2HMv4PSYmAGl6QDnm2poaGxmEPpqejOLMdOhlGD3AwW3Iy49Ogn9
+   AJpHNeBFkXCQvpLOE7ZQwu2ryzOnunZRCWo5zPCHE/Ns67Qfsic0qurTW
+   hFFBS5CEOoJgTC34T1EzGED0xKq+4qhUOfgiUJotLcEzsNYmoLzkrs8VH
+   s60qP7z+1tBHol6ZWJ8HegoJMdj2BFFq/AfSTRsKlGQ6/9LwFoJ0lMwhk
+   hAJCCzanITYHFiNdzykiyFq5u7zRnUp1Rs7NUN8T9s+aVA7MeBOGVZ1FH
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="458092331"
+X-IronPort-AV: E=Sophos;i="6.04,250,1695711600"; 
+   d="scan'208";a="458092331"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2023 09:50:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="894076328"
+X-IronPort-AV: E=Sophos;i="6.04,250,1695711600"; 
+   d="scan'208";a="894076328"
+Received: from jjstacey-mobl2.amr.corp.intel.com (HELO [10.213.160.16]) ([10.213.160.16])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2023 09:50:37 -0800
+Message-ID: <cc6c162407c69c53ec256bf887a0384361dd0516.camel@linux.intel.com>
+Subject: Re: [PATCH v2] HID: intel-ish-hid: ipc: Rework EHL OOB wakeup
+From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To: Kai-Heng Feng <kai.heng.feng@canonical.com>, jikos@kernel.org, 
+	benjamin.tissoires@redhat.com
+Cc: linux-pm@vger.kernel.org, linux-pci@vger.kernel.org, Jian Hui Lee
+	 <jianhui.lee@canonical.com>, Even Xu <even.xu@intel.com>, 
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Mon, 04 Dec 2023 12:50:35 -0500
+In-Reply-To: <20231108121940.288005-1-kai.heng.feng@canonical.com>
+References: <20231108121940.288005-1-kai.heng.feng@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <12338384.O9o76ZdvQC@kreacher> <4883151.31r3eYUQgx@kreacher> <b3c86caf-635d-416b-af98-9e26f2a68948@linaro.org>
-In-Reply-To: <b3c86caf-635d-416b-af98-9e26f2a68948@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 4 Dec 2023 18:47:04 +0100
-Message-ID: <CAJZ5v0hEo_HPMR=wVsHDTjPrEBLXgBHwom491rEiLJfapg6Rhg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] thermal: sysfs: Rework the handling of trip point updates
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Daniel,
+SGkgS2FpLAoKU29ycnkgZm9yIGhlIGRlbGF5IGluIGdldHRpbmcgYmFjayBvbiB0aGlzLiBJIGhh
+dmUgYSBxdWVzdGlvbiBiZWxvdzoKCk9uIFdlZCwgMjAyMy0xMS0wOCBhdCAxNDoxOSArMDIwMCwg
+S2FpLUhlbmcgRmVuZyB3cm90ZToKPiBTaW5jZSBQQ0kgY29yZSBhbmQgQUNQSSBjb3JlIGFscmVh
+ZHkgaGFuZGxlcyBQQ0kgUE1FIHdha2UgYW5kIEdQRQo+IHdha2UKPiB3aGVuIHRoZSBkZXZpY2Ug
+aGFzIHdha2V1cCBjYXBhYmlsaXR5LCB1c2UgZGV2aWNlX2luaXRfd2FrZXVwKCkgdG8KPiBsZXQK
+PiB0aGVtIGRvIHRoZSB3YWtldXAgc2V0dGluZyB3b3JrLgo+IAo+IEFsc28gYWRkIGEgc2h1dGRv
+d24gY2FsbGJhY2sgd2hpY2ggdXNlcyBwY2lfcHJlcGFyZV90b19zbGVlcCgpIHRvIGxldAo+IFBD
+SSBhbmQgQUNQSSBzZXQgT09CIHdha2V1cCBmb3IgUzUuCj4gCj4gQ2M6IEppYW4gSHVpIExlZSA8
+amlhbmh1aS5sZWVAY2Fub25pY2FsLmNvbT4KPiBTaWduZWQtb2ZmLWJ5OiBLYWktSGVuZyBGZW5n
+IDxrYWkuaGVuZy5mZW5nQGNhbm9uaWNhbC5jb20+Cj4gLS0tCj4gdjI6Cj4gwqBSZWJhc2Ugb24g
+KCJISUQ6IGludGVsLWlzaC1oaWQ6IGlwYzogRGlzYWJsZSBhbmQgcmVlbmFibGUgQUNQSSBHUEUK
+PiBiaXQiKQo+IAo+IMKgZHJpdmVycy9oaWQvaW50ZWwtaXNoLWhpZC9pcGMvcGNpLWlzaC5jIHwg
+NjcgKysrKysrLS0tLS0tLS0tLS0tLS0tLS0KPiAtLQo+IMKgMSBmaWxlIGNoYW5nZWQsIDE1IGlu
+c2VydGlvbnMoKyksIDUyIGRlbGV0aW9ucygtKQo+IAo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2hp
+ZC9pbnRlbC1pc2gtaGlkL2lwYy9wY2ktaXNoLmMKPiBiL2RyaXZlcnMvaGlkL2ludGVsLWlzaC1o
+aWQvaXBjL3BjaS1pc2guYwo+IGluZGV4IDcxMGZkYTVmMTllMS4uNjVlN2VlYjJmYTY0IDEwMDY0
+NAo+IC0tLSBhL2RyaXZlcnMvaGlkL2ludGVsLWlzaC1oaWQvaXBjL3BjaS1pc2guYwo+ICsrKyBi
+L2RyaXZlcnMvaGlkL2ludGVsLWlzaC1oaWQvaXBjL3BjaS1pc2guYwo+IEBAIC0xMTksNTAgKzEx
+OSw2IEBAIHN0YXRpYyBpbmxpbmUgYm9vbCBpc2hfc2hvdWxkX2xlYXZlX2QwaTMoc3RydWN0Cj4g
+cGNpX2RldiAqcGRldikKPiDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuICFwbV9yZXN1bWVfdmlhX2Zp
+cm13YXJlKCkgfHwgcGRldi0+ZGV2aWNlID09Cj4gQ0hWX0RFVklDRV9JRDsKPiDCoH0KPiDCoAo+
+IC1zdGF0aWMgaW50IGVuYWJsZV9ncGUoc3RydWN0IGRldmljZSAqZGV2KQo+IC17Cj4gLSNpZmRl
+ZiBDT05GSUdfQUNQSQo+IC3CoMKgwqDCoMKgwqDCoGFjcGlfc3RhdHVzIGFjcGlfc3RzOwo+IC3C
+oMKgwqDCoMKgwqDCoHN0cnVjdCBhY3BpX2RldmljZSAqYWRldjsKPiAtwqDCoMKgwqDCoMKgwqBz
+dHJ1Y3QgYWNwaV9kZXZpY2Vfd2FrZXVwICp3YWtldXA7Cj4gLQo+IC3CoMKgwqDCoMKgwqDCoGFk
+ZXYgPSBBQ1BJX0NPTVBBTklPTihkZXYpOwo+IC3CoMKgwqDCoMKgwqDCoGlmICghYWRldikgewo+
+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBkZXZfZXJyKGRldiwgImdldCBhY3BpIGhh
+bmRsZSBmYWlsZWRcbiIpOwo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4g
+LUVOT0RFVjsKPiAtwqDCoMKgwqDCoMKgwqB9Cj4gLcKgwqDCoMKgwqDCoMKgd2FrZXVwID0gJmFk
+ZXYtPndha2V1cDsKPiAtCj4gLcKgwqDCoMKgwqDCoMKgLyoKPiAtwqDCoMKgwqDCoMKgwqAgKiBD
+YWxsIGFjcGlfZGlzYWJsZV9ncGUoKSwgc28gdGhhdCByZWZlcmVuY2UgY291bnQKPiAtwqDCoMKg
+wqDCoMKgwqAgKiBncGVfZXZlbnRfaW5mby0+cnVudGltZV9jb3VudCBkb2Vzbid0IG92ZXJmbG93
+Lgo+IC3CoMKgwqDCoMKgwqDCoCAqIFdoZW4gZ3BlX2V2ZW50X2luZm8tPnJ1bnRpbWVfY291bnQg
+PSAwLCB0aGUgY2FsbAo+IC3CoMKgwqDCoMKgwqDCoCAqIHRvIGFjcGlfZGlzYWJsZV9ncGUoKSBz
+aW1wbHkgcmV0dXJuLgo+IC3CoMKgwqDCoMKgwqDCoCAqLwo+IC3CoMKgwqDCoMKgwqDCoGFjcGlf
+ZGlzYWJsZV9ncGUod2FrZXVwLT5ncGVfZGV2aWNlLCB3YWtldXAtPmdwZV9udW1iZXIpOwo+IC0K
+PiAtwqDCoMKgwqDCoMKgwqBhY3BpX3N0cyA9IGFjcGlfZW5hYmxlX2dwZSh3YWtldXAtPmdwZV9k
+ZXZpY2UsIHdha2V1cC0KPiA+Z3BlX251bWJlcik7Cj4gLcKgwqDCoMKgwqDCoMKgaWYgKEFDUElf
+RkFJTFVSRShhY3BpX3N0cykpIHsKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGV2
+X2VycihkZXYsICJlbmFibGUgb3NlX2dwZSBmYWlsZWRcbiIpOwo+IC3CoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqByZXR1cm4gLUVJTzsKPiAtwqDCoMKgwqDCoMKgwqB9Cj4gLQo+IC3CoMKg
+wqDCoMKgwqDCoHJldHVybiAwOwo+IC0jZWxzZQo+IC3CoMKgwqDCoMKgwqDCoHJldHVybiAtRU5P
+REVWOwo+IC0jZW5kaWYKPiAtfQo+IC0KPiAtc3RhdGljIHZvaWQgZW5hYmxlX3BtZV93YWtlKHN0
+cnVjdCBwY2lfZGV2ICpwZGV2KQo+IC17Cj4gLcKgwqDCoMKgwqDCoMKgaWYgKChwY2lfcG1lX2Nh
+cGFibGUocGRldiwgUENJX0QwKSB8fAo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHBjaV9wbWVf
+Y2FwYWJsZShwZGV2LCBQQ0lfRDNob3QpIHx8Cj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcGNp
+X3BtZV9jYXBhYmxlKHBkZXYsIFBDSV9EM2NvbGQpKSAmJiAhZW5hYmxlX2dwZSgmcGRldi0KPiA+
+ZGV2KSkgewo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBwY2lfcG1lX2FjdGl2ZShw
+ZGV2LCB0cnVlKTsKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZGV2X2RiZygmcGRl
+di0+ZGV2LCAiaXNoIGlwYyBkcml2ZXIgcG1lIHdha2UKPiBlbmFibGVkXG4iKTsKPiAtwqDCoMKg
+wqDCoMKgwqB9Cj4gLX0KPiAtCj4gwqAvKioKPiDCoCAqIGlzaF9wcm9iZSgpIC0gUENJIGRyaXZl
+ciBwcm9iZSBjYWxsYmFjawo+IMKgICogQHBkZXY6wqDCoMKgwqDCoMKgcGNpIGRldmljZQo+IEBA
+IC0yMzMsNyArMTg5LDcgQEAgc3RhdGljIGludCBpc2hfcHJvYmUoc3RydWN0IHBjaV9kZXYgKnBk
+ZXYsIGNvbnN0Cj4gc3RydWN0IHBjaV9kZXZpY2VfaWQgKmVudCkKPiDCoAo+IMKgwqDCoMKgwqDC
+oMKgwqAvKiBFbmFibGUgUE1FIGZvciBFSEwgKi8KPiDCoMKgwqDCoMKgwqDCoMKgaWYgKHBkZXYt
+PmRldmljZSA9PSBFSExfQXhfREVWSUNFX0lEKQo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqBlbmFibGVfcG1lX3dha2UocGRldik7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoGRldmljZV9pbml0X3dha2V1cChkZXYsIHRydWUpOwoKRm9yIGFwcGxlIHRvIGFwcGxlIGNv
+bXBhcmlzb24sIHdoaWNoIHBhdGggd2lsbCBjYWxsCmh0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29t
+L2xpbnV4L2xhdGVzdC9DL2lkZW50L19fcGNpX2VuYWJsZV93YWtlCndoaWNoIHdpbGwgY2FsbCBw
+Y2lfcG1lX2FjdGl2ZSgpPwoKVGhhbmtzLApTcmluaXZhcwoKPiDCoAo+IMKgwqDCoMKgwqDCoMKg
+wqByZXQgPSBpc2hfaW5pdChpc2h0cCk7Cj4gwqDCoMKgwqDCoMKgwqDCoGlmIChyZXQpCj4gQEAg
+LTI1Niw2ICsyMTIsMTkgQEAgc3RhdGljIHZvaWQgaXNoX3JlbW92ZShzdHJ1Y3QgcGNpX2RldiAq
+cGRldikKPiDCoMKgwqDCoMKgwqDCoMKgaXNoX2RldmljZV9kaXNhYmxlKGlzaHRwX2Rldik7Cj4g
+wqB9Cj4gwqAKPiArCj4gKy8qKgo+ICsgKiBpc2hfc2h1dGRvd24oKSAtIFBDSSBkcml2ZXIgc2h1
+dGRvd24gY2FsbGJhY2sKPiArICogQHBkZXY6wqDCoMKgwqDCoMKgcGNpIGRldmljZQo+ICsgKgo+
+ICsgKiBUaGlzIGZ1bmN0aW9uIHNldHMgdXAgd2FrZXVwIGZvciBTNQo+ICsgKi8KPiArc3RhdGlj
+IHZvaWQgaXNoX3NodXRkb3duKHN0cnVjdCBwY2lfZGV2ICpwZGV2KQo+ICt7Cj4gK8KgwqDCoMKg
+wqDCoMKgaWYgKHBkZXYtPmRldmljZSA9PSBFSExfQXhfREVWSUNFX0lEKQo+ICvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqBwY2lfcHJlcGFyZV90b19zbGVlcChwZGV2KTsKPiArfQo+ICsK
+PiDCoHN0YXRpYyBzdHJ1Y3QgZGV2aWNlIF9fbWF5YmVfdW51c2VkICppc2hfcmVzdW1lX2Rldmlj
+ZTsKPiDCoAo+IMKgLyogNTBtcyB0byBnZXQgcmVzdW1lIHJlc3BvbnNlICovCj4gQEAgLTM3OCwx
+MyArMzQ3LDYgQEAgc3RhdGljIGludCBfX21heWJlX3VudXNlZCBpc2hfcmVzdW1lKHN0cnVjdAo+
+IGRldmljZSAqZGV2aWNlKQo+IMKgwqDCoMKgwqDCoMKgwqBzdHJ1Y3QgcGNpX2RldiAqcGRldiA9
+IHRvX3BjaV9kZXYoZGV2aWNlKTsKPiDCoMKgwqDCoMKgwqDCoMKgc3RydWN0IGlzaHRwX2Rldmlj
+ZSAqZGV2ID0gcGNpX2dldF9kcnZkYXRhKHBkZXYpOwo+IMKgCj4gLcKgwqDCoMKgwqDCoMKgLyog
+YWRkIHRoaXMgdG8gZmluaXNoIHBvd2VyIGZsb3cgZm9yIEVITCAqLwo+IC3CoMKgwqDCoMKgwqDC
+oGlmIChkZXYtPnBkZXYtPmRldmljZSA9PSBFSExfQXhfREVWSUNFX0lEKSB7Cj4gLcKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoHBjaV9zZXRfcG93ZXJfc3RhdGUocGRldiwgUENJX0QwKTsK
+PiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZW5hYmxlX3BtZV93YWtlKHBkZXYpOwo+
+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBkZXZfZGJnKGRldi0+ZGV2YywgInNldCBw
+b3dlciBzdGF0ZSB0byBEMCBmb3IKPiBlaGxcbiIpOwo+IC3CoMKgwqDCoMKgwqDCoH0KPiAtCj4g
+wqDCoMKgwqDCoMKgwqDCoGlzaF9yZXN1bWVfZGV2aWNlID0gZGV2aWNlOwo+IMKgwqDCoMKgwqDC
+oMKgwqBkZXYtPnJlc3VtZV9mbGFnID0gMTsKPiDCoAo+IEBAIC00MDAsNiArMzYyLDcgQEAgc3Rh
+dGljIHN0cnVjdCBwY2lfZHJpdmVyIGlzaF9kcml2ZXIgPSB7Cj4gwqDCoMKgwqDCoMKgwqDCoC5p
+ZF90YWJsZSA9IGlzaF9wY2lfdGJsLAo+IMKgwqDCoMKgwqDCoMKgwqAucHJvYmUgPSBpc2hfcHJv
+YmUsCj4gwqDCoMKgwqDCoMKgwqDCoC5yZW1vdmUgPSBpc2hfcmVtb3ZlLAo+ICvCoMKgwqDCoMKg
+wqDCoC5zaHV0ZG93biA9IGlzaF9zaHV0ZG93biwKPiDCoMKgwqDCoMKgwqDCoMKgLmRyaXZlci5w
+bSA9ICZpc2hfcG1fb3BzLAo+IMKgfTsKPiDCoAoK
 
-On Mon, Dec 4, 2023 at 5:55=E2=80=AFPM Daniel Lezcano <daniel.lezcano@linar=
-o.org> wrote:
->
->
-> Hi Rafael,
->
-> On 04/12/2023 15:50, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Both trip_point_temp_store() and trip_point_hyst_store() use
-> > thermal_zone_set_trip() to update a given trip point, but none of them
-> > actually needs to change more than one field in struct thermal_trip
-> > representing it.  However, each of them effectively calls
-> > __thermal_zone_get_trip() twice in a row for the same trip index value,
-> > once directly and once via thermal_zone_set_trip(), which is not
-> > particularly efficient, and the way in which thermal_zone_set_trip()
-> > carries out the update is not particularly straightforward.
-> >
-> > Moreover, input processing need not be done under the thermal zone lock
-> > in any of these functions.
-> >
-> > Rework trip_point_temp_store() and trip_point_hyst_store() to address
-> > the above, move the part of thermal_zone_set_trip() that is still
-> > useful to a new function called thermal_zone_trip_updated() and drop
-> > the rest of it.
-> >
-> > While at it, make trip_point_hyst_store() reject negative hysteresis
-> > values.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >
-> > v2 -> v3: No changes
-> >
-> > v1 -> v2: Still check device_is_registered() under the zone lock
-> >
-> > ---
-> >   drivers/thermal/thermal_core.h  |    2 +
-> >   drivers/thermal/thermal_sysfs.c |   75 ++++++++++++++++++++++++++++--=
-----------
-> >   drivers/thermal/thermal_trip.c  |   45 ++++--------------------
-> >   include/linux/thermal.h         |    4 --
-> >   4 files changed, 64 insertions(+), 62 deletions(-)
-> >
-> > Index: linux-pm/drivers/thermal/thermal_sysfs.c
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > --- linux-pm.orig/drivers/thermal/thermal_sysfs.c
-> > +++ linux-pm/drivers/thermal/thermal_sysfs.c
-> > @@ -78,6 +78,19 @@ mode_store(struct device *dev, struct de
-> >       return count;
-> >   }
-> >
-> > +static int check_thermal_zone_and_trip_id(struct device *dev,
-> > +                                       struct thermal_zone_device *tz,
-> > +                                       int trip_id)
-> > +{
-> > +     if (!device_is_registered(dev))
-> > +             return -ENODEV;
-> > +
-> > +     if (trip_id < 0 || trip_id >=3D tz->num_trips)
-> > +             return -EINVAL;
->
-> I'm not sure if this check is useful. The function is called from
-> trip_point_*_store() which is providing the trip id from the file name
-> parsing which is in turn built from an existing trip id. There is no
-> reason the trip id is going to be wrong.
-
-I can drop the check just fine.
-
-Do you have any other comments on this patch?
 
