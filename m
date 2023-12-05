@@ -1,100 +1,97 @@
-Return-Path: <linux-pm+bounces-712-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-713-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB9F980580B
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Dec 2023 15:58:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8BD2805852
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Dec 2023 16:13:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 63619B20B59
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Dec 2023 14:58:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 66B38B20EC7
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Dec 2023 15:13:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C034467E6F;
-	Tue,  5 Dec 2023 14:58:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32D7D67E9E;
+	Tue,  5 Dec 2023 15:13:21 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 612FA183;
-	Tue,  5 Dec 2023 06:58:02 -0800 (PST)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	id 1rAWrq-0005mA-Tn; Tue, 05 Dec 2023 15:57:46 +0100
-Message-ID: <01210f0e-9340-41bb-bb41-e3ca0774faa9@leemhuis.info>
-Date: Tue, 5 Dec 2023 15:57:46 +0100
+Received: from mail.astralinux.ru (mail.astralinux.ru [217.74.38.119])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E616A9;
+	Tue,  5 Dec 2023 07:13:16 -0800 (PST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.astralinux.ru (Postfix) with ESMTP id DC2D9186C6E6;
+	Tue,  5 Dec 2023 18:13:11 +0300 (MSK)
+Received: from mail.astralinux.ru ([127.0.0.1])
+	by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10032)
+	with ESMTP id 9eDwiS4dHQIg; Tue,  5 Dec 2023 18:13:11 +0300 (MSK)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.astralinux.ru (Postfix) with ESMTP id 8F803186C626;
+	Tue,  5 Dec 2023 18:13:11 +0300 (MSK)
+X-Virus-Scanned: amavisd-new at astralinux.ru
+Received: from mail.astralinux.ru ([127.0.0.1])
+	by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id DwjuzGuN3um3; Tue,  5 Dec 2023 18:13:11 +0300 (MSK)
+Received: from rbta-msk-lt-302690.astralinux.ru (unknown [10.177.232.79])
+	by mail.astralinux.ru (Postfix) with ESMTPSA id B6151186C6DF;
+	Tue,  5 Dec 2023 18:13:09 +0300 (MSK)
+From: Alexandra Diupina <adiupina@astralinux.ru>
+To: Sudeep Holla <sudeep.holla@arm.com>
+Cc: Alexandra Diupina <adiupina@astralinux.ru>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	lvc-project@linuxtesting.org
+Subject: [PATCH v2] cpufreq: scmi: process the result of devm_of_clk_add_hw_provider()
+Date: Tue,  5 Dec 2023 18:12:20 +0300
+Message-Id: <20231205151220.18463-1-adiupina@astralinux.ru>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <2e919694-e124-4864-aa02-01d47495032b@wanadoo.fr>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Re: Fwd: Kernels v6.5 and v6.6 break resume from standby (s3) on some
- Intel systems if VT-d is enabled
-To: Linux Regressions <regressions@lists.linux.dev>
-Cc: Lu Baolu <baolu.lu@linux.intel.com>, "Rafael J. Wysocki"
- <rafael@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Michael Kelley <mikelley@microsoft.com>,
- Oleksandr Natalenko <oleksandr@natalenko.name>, Helge Deller
- <deller@gmx.de>, "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
- kbugreports@proton.me, Linux IOMMU <iommu@lists.linux.dev>,
- Linux Power Management <linux-pm@vger.kernel.org>,
- Bagas Sanjaya <bagasdotme@gmail.com>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Mario Limonciello <mario.limonciello@amd.com>,
- David Woodhouse <dwmw2@infradead.org>, Thomas Gleixner <tglx@linutronix.de>
-References: <4b3c624a-f114-4e39-9e1c-0df18f307e8c@gmail.com>
- <ZWx1IHBE9KCk6rWj@archie.me>
-Content-Language: en-US, de-DE
-In-Reply-To: <ZWx1IHBE9KCk6rWj@archie.me>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1701788282;af276d30;
-X-HE-SMSGID: 1rAWrq-0005mA-Tn
+Content-Transfer-Encoding: quoted-printable
 
-[CCing Mario, as he might be interested]
+devm_of_clk_add_hw_provider() may return an errno, so
+add a return value check
 
-On 03.12.23 13:31, Bagas Sanjaya wrote:
-> On Tue, Nov 28, 2023 at 08:09:24PM +0700, Bagas Sanjaya wrote:
->> I notice a regression report on Bugzilla [1]. Quoting from it:
->>> 
->>> Affected system:
->>> 
->>> Thinkpad, Intel Kaby Lake (i7-7600U) chipset / cpu and onboard
->>> gpu (Intel HD 620), no separate graphics card, current bios
->>> firmware; running Void Linux, xfce / lightdm
->>> 
->>> Symptom / problem:
->>> 
->>> Since the upgrade to kernel v6.5.5 (from v6.3.13) my system
->>> doesn't wake up from standby, i.e. resume from s3 fails 100% of
->>> the time.
->
->> https://bugzilla.kernel.org/show_bug.cgi?id=218191 
-> 
-> The reporter had done bisection (see Bugzilla for details),
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-Turns out the kernel used by the reporter is not vanilla, as zfs is
-involved -- and due to that the reporter is not even able to check if
-mainline is still affected. I'll thus remove this from the tracking.
-Sorry for the noise.
+Fixes: 8410e7f3b31e ("cpufreq: scmi: Fix OPP addition failure with a dumm=
+y clock provider")
+Signed-off-by: Alexandra Diupina <adiupina@astralinux.ru>
+---
+v2: replace dev_err() with dev_err_probe() as=20
+Christophe JAILLET <christophe.jaillet@wanadoo.fr> suggested
+ drivers/cpufreq/scmi-cpufreq.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-In case anyone nevertheless cares: The bisection result from the report
-was 0c7ffa32dbd6b0 ("x86/smpboot/64: Implement
-arch_cpuhp_init_parallel_bringup() and enable it") [v6.5-rc1].
-This time on a Intel machine. Mario's "Fixes for s3 with parallel
-bootup" patch-series[1] (the one were abandoned because things turned
-out to be a BIOS bug affecting some AMD systems) apparently resolved the
-problem for the reporter.
+diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufre=
+q.c
+index c8a7ccc42c16..4ee23f4ebf4a 100644
+--- a/drivers/cpufreq/scmi-cpufreq.c
++++ b/drivers/cpufreq/scmi-cpufreq.c
+@@ -334,8 +334,11 @@ static int scmi_cpufreq_probe(struct scmi_device *sd=
+ev)
+=20
+ #ifdef CONFIG_COMMON_CLK
+ 	/* dummy clock provider as needed by OPP if clocks property is used */
+-	if (of_property_present(dev->of_node, "#clock-cells"))
+-		devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get, NULL);
++	if (of_property_present(dev->of_node, "#clock-cells")) {
++		ret =3D devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get, NULL);
++		if (ret)
++			return dev_err_probe(dev, ret, "%s: registering clock provider failed=
+\n", __func__);
++	}
+ #endif
+=20
+ 	ret =3D cpufreq_register_driver(&scmi_cpufreq_driver);
+--=20
+2.30.2
 
-[1]
-https://lore.kernel.org/all/20231026170330.4657-1-mario.limonciello@amd.com/
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
-
-#regzbot inconclusive: kernel used by the reporter is not vanilla
 
