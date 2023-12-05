@@ -1,125 +1,69 @@
-Return-Path: <linux-pm+bounces-707-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-708-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21410805180
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Dec 2023 12:05:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F15B80541E
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Dec 2023 13:27:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD7491F21530
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Dec 2023 11:05:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 13E301F21373
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Dec 2023 12:27:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D2D953818;
-	Tue,  5 Dec 2023 11:05:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40FA25B5A1;
+	Tue,  5 Dec 2023 12:27:38 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48A0912C;
-	Tue,  5 Dec 2023 03:05:11 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A48AE139F;
-	Tue,  5 Dec 2023 03:05:57 -0800 (PST)
-Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.2.78.69])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ACC663F5A1;
-	Tue,  5 Dec 2023 03:05:10 -0800 (PST)
-Date: Tue, 5 Dec 2023 11:05:09 +0000
-From: Ionela Voinescu <ionela.voinescu@arm.com>
-To: Sumit Gupta <sumitg@nvidia.com>
-Cc: Beata Michalska <beata.michalska@arm.com>, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-	sudeep.holla@arm.covm, will@kernel.org, catalin.marinas@arm.com,
-	viresh.kumar@linaro.org, rafael@kernel.org,
-	yang@os.amperecomputing.com, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] cpufreq: Wire-up arch-flavored freq info into
- cpufreq_verify_current_freq
-Message-ID: <ZW8D5TfSwuJfdYeD@arm.com>
-References: <20231127160838.1403404-1-beata.michalska@arm.com>
- <20231127160838.1403404-3-beata.michalska@arm.com>
- <ZWXy0h/fFfQh+Rhy@arm.com>
- <3e6077bb-907c-057f-0896-d0a5814a4229@nvidia.com>
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BC7109;
+	Tue,  5 Dec 2023 04:27:17 -0800 (PST)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
+ id ca3ab68370342929; Tue, 5 Dec 2023 13:27:15 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 280FE6687D1;
+	Tue,  5 Dec 2023 13:27:15 +0100 (CET)
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>, Lukasz Luba <lukasz.luba@arm.com>
+Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>
+Subject: [PATCH v4 0/2] thermal: sysfs: Simplifications of trip point attribute callbacks
+Date: Tue, 05 Dec 2023 13:20:33 +0100
+Message-ID: <12337662.O9o76ZdvQC@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3e6077bb-907c-057f-0896-d0a5814a4229@nvidia.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrudejkedggedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgeffhfdujeelhfdtgeffkeetudfhtefhhfeiteethfekvefgvdfgfeeikeeigfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhn
+ vghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
 
-Hi Sumit,
+Hi,
 
-On Friday 01 Dec 2023 at 18:32:10 (+0530), Sumit Gupta wrote:
-> Hi Ionela,
-> 
-> > > --- a/drivers/cpufreq/cpufreq.c
-> > > +++ b/drivers/cpufreq/cpufreq.c
-> > > @@ -1756,7 +1756,8 @@ static unsigned int cpufreq_verify_current_freq(struct cpufreq_policy *policy, b
-> > >   {
-> > >        unsigned int new_freq;
-> > > 
-> > > -     new_freq = cpufreq_driver->get(policy->cpu);
-> > > +     new_freq = arch_freq_get_on_cpu(policy->cpu);
-> > > +     new_freq = new_freq ?: cpufreq_driver->get(policy->cpu);
-> > 
-> > Given that arch_freq_get_on_cpu() is an average frequency, it does not
-> > seem right to me to trigger the sync & update process of
-> > cpufreq_verify_current_freq() based on it.
-> > 
-> > cpufreq_verify_current_freq() will at least modify the internal state of
-> > the policy and send PRE and POST notifications, if not do a full frequency
-> > update, based on this average frequency, which is likely different from
-> > the current frequency, even beyond the 1MHz threshold.
-> > 
-> > While I believe it's okay to return this average frequency in
-> > cpuinfo_cur_freq, I don't think it should be used as an indication of
-> > an accurate current frequency, which is what
-> > cpufreq_verify_current_freq() expects.
-> > 
-> > Sumit, can you give more details on the issue at [1] and why this change
-> > fixes it?
-> > 
-> > [1] https://lore.kernel.org/lkml/6a5710f6-bfbb-5dfd-11cd-0cd02220cee7@nvidia.com/
-> > 
-> > Thank you,
-> > Ionela.
-> > 
-> cpufreq_verify_current_freq() also updates 'policy->cur' in POST
-> notification if the frequency from hardware has more delta (out of sync).
-> 
-> As the value from 'cpufreq_driver->get()' is not reliable due to [1],
-> calling the 'get' hook can update the 'policy->cur' with a wrong value when
-> governor starts in cpufreq_start_governor().
-> And if the frequency is never changed after the governor starts during
-> boot e.g. when performance governor is set as default, then
-> 'scaling_cur_freq' always returns wrong value.
-> 
-> Instead, the arch_freq_get_on_cpu() API updates 'policy->cur' with a more
-> stable freq value.
-> 
-> [1] https://lore.kernel.org/lkml/20230418113459.12860-7-sumitg@nvidia.com/
+This is the 4th iteration of
 
-Got it, many thanks! 
+https://lore.kernel.org/linux-pm/5754079.DvuYhMxLoT@kreacher/
 
-As the code is right now in v2, arch_freq_get_on_cpu() is called on
-show_scaling_cur_freq(), so the problem you describe would not show up.
-policy->cur would still be incorrect, but 'scaling_cur_freq' would
-return the value from arch_freq_get_on_cpu().
+The difference between it and the 3rd iteration:
 
-Would it be enough if arch_freq_get_on_cpu() gets also called from
-show_cpuinfo_cur_freq() instead of cpufreq_verify_current_freq()?
+https://lore.kernel.org/linux-pm/12338384.O9o76ZdvQC@kreacher/
 
-Thanks,
-Ionela.
+is the lack of trip ID validation checks in the _store and _show
+callback routines modified by it.
 
-> 
-> Best regards,
-> Sumit Gupta
-> 
-> > >        if (!new_freq)
-> > >                return 0;
-> > > 
-> > > --
-> > > 2.25.1
-> > > 
+Please refer to the individual patch changelogs for details.
+
+Thanks!
+
+
+
+
 
