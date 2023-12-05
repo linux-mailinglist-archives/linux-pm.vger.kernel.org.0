@@ -1,293 +1,125 @@
-Return-Path: <linux-pm+bounces-706-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-707-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E2C5804E0A
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Dec 2023 10:37:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21410805180
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Dec 2023 12:05:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1909D28161D
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Dec 2023 09:37:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD7491F21530
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Dec 2023 11:05:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EE433FB38;
-	Tue,  5 Dec 2023 09:37:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gerhold.net header.i=@gerhold.net header.b="Bgv8N5oF";
-	dkim=permerror (0-bit key) header.d=gerhold.net header.i=@gerhold.net header.b="4Ez/HqE+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D2D953818;
+	Tue,  5 Dec 2023 11:05:15 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-X-Greylist: delayed 150 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 05 Dec 2023 01:37:39 PST
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D594EA7
-	for <linux-pm@vger.kernel.org>; Tue,  5 Dec 2023 01:37:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1701768874; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=BoiPah8NRxCrAdiYri1nVhyc+cpVw40uHdjwyg+ciZUazBmRPls3Gw0g70xf8omYcy
-    jqSY/2ejnHsQilqIEEuHfOnsZ5OHCMR09WCLy3fRFQTMI4vncZkNMnDofZokDhn25V3F
-    k4Pq9lhMi6smT6Ixqc6x9eSu/GhwDBkCOwVbSOgE6tVzIJfatlqdE53jbwjh53kz6rd7
-    yCFtcxDey7jOKYTfoiy2X3HjY8YkPJIlw9R5HRKSCeahxyPvmGHm8CdDN60ikoxkRXtG
-    BodqNcu5hbWy7lBKyRM+puQv1GxOcoPLEewsR3v5bUdQIEJ4CnVIGXRV2AbZWF/LkXMh
-    idlg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1701768874;
-    s=strato-dkim-0002; d=strato.com;
-    h=Cc:To:Message-Id:Subject:Date:From:Cc:Date:From:Subject:Sender;
-    bh=nAhG3zzPZDlzgwt6owfONL2uwCo4WkjbvcQVuDCcSS4=;
-    b=Vctx6kH3WWiZ7OgDOXvlxFCxvNA5t1k88acmo5aFUnc1izBdor+UrlnqWHgYwyZNy/
-    7opvocHyOUCBhhkvHZOy2oGSdNt90xE6/bCtw8O57bsHBxJkWnEct8fD7puF7crQ1Xra
-    GqRhbyxxa09teoQ8Z8l88ypXNdoB5bFfs2/7QhC4CFvW8p6XrILGTkKEqer7MZR8PuQi
-    tJqfTVVvhuS10FwecKyA8MiOjY+IQbdxzseuy3QtdWFhlcz891Pr+eGUiUsYH7HKDdY4
-    /lIk7DrNx/2DRo5nyp4HKd/OLe3uZ1ZaLCc4SEV1rl44yyGSx8Ri2Z18hgcpAYgTVmYI
-    HYSQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1701768874;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=Cc:To:Message-Id:Subject:Date:From:Cc:Date:From:Subject:Sender;
-    bh=nAhG3zzPZDlzgwt6owfONL2uwCo4WkjbvcQVuDCcSS4=;
-    b=Bgv8N5oFugrcHMo1TfrxKRZlFKsnYAMUr+fDSjI2fADtJOo8EYjIxxijjARzW+WDPQ
-    hF2o7IYyKVoOPrHwn37u+WGfjovWteZ03+MKeQcmQdXLnAEniNn3MjSmcLRjNnjSS/ey
-    T0zRiAjj2VG3PNjaml5YPBACHrbHpiP87H9+P4RC+iEjIS0nyeqb0mFfJ64D5B5susZl
-    hvqIevyPVb7RR3epVs3juAfGNGKpwMnopNwMEWXsWTxN7gvEnEb7mzQOc2KMIWkEvI7P
-    qMAdxEUgqBOezcq44eHNWXD7K61wjlqlaW1EqPXhYUWsVhU29sM7fj+5i2Cov83Lbnx2
-    4QVw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1701768874;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=Cc:To:Message-Id:Subject:Date:From:Cc:Date:From:Subject:Sender;
-    bh=nAhG3zzPZDlzgwt6owfONL2uwCo4WkjbvcQVuDCcSS4=;
-    b=4Ez/HqE+l3KjR6jZsBMlI+u/GbaJH6d0EQeLI60oYCtlyW5KSfg/GZrbcwmZE9vTEi
-    r+EGTzhdl4mJb0aoM1Dg==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQjVd4CteZ/7jYgS+mLFY+H0JAn8u4l+/zY="
-Received: from [192.168.244.3]
-    by smtp.strato.de (RZmta 49.10.0 DYNA|AUTH)
-    with ESMTPSA id 58bb61zB59YX0GG
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Tue, 5 Dec 2023 10:34:33 +0100 (CET)
-From: Stephan Gerhold <stephan@gerhold.net>
-Date: Tue, 05 Dec 2023 10:34:05 +0100
-Subject: [PATCH] PM: domains: Scale down parent performance states in
- reverse order
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48A0912C;
+	Tue,  5 Dec 2023 03:05:11 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A48AE139F;
+	Tue,  5 Dec 2023 03:05:57 -0800 (PST)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.2.78.69])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ACC663F5A1;
+	Tue,  5 Dec 2023 03:05:10 -0800 (PST)
+Date: Tue, 5 Dec 2023 11:05:09 +0000
+From: Ionela Voinescu <ionela.voinescu@arm.com>
+To: Sumit Gupta <sumitg@nvidia.com>
+Cc: Beata Michalska <beata.michalska@arm.com>, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+	sudeep.holla@arm.covm, will@kernel.org, catalin.marinas@arm.com,
+	viresh.kumar@linaro.org, rafael@kernel.org,
+	yang@os.amperecomputing.com, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] cpufreq: Wire-up arch-flavored freq info into
+ cpufreq_verify_current_freq
+Message-ID: <ZW8D5TfSwuJfdYeD@arm.com>
+References: <20231127160838.1403404-1-beata.michalska@arm.com>
+ <20231127160838.1403404-3-beata.michalska@arm.com>
+ <ZWXy0h/fFfQh+Rhy@arm.com>
+ <3e6077bb-907c-057f-0896-d0a5814a4229@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231205-genpd-perf-order-v1-1-6597cc69a729@gerhold.net>
-X-B4-Tracking: v=1; b=H4sIAIzubmUC/x3MMQqAMAxA0atIZgM1pYNeRRy0TWuWtqQggnh3i
- +Mb/n+gsQo3WIYHlC9pUnLHNA7gzz0nRgndQIbsRMZh4lwDVtaIRQMrHtFaQ7Mnt3voWVWOcv/
- LdXvfD/SyGxViAAAA
-To: "Rafael J. Wysocki" <rafael@kernel.org>, 
- Kevin Hilman <khilman@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-pm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Viresh Kumar <viresh.kumar@linaro.org>, 
- Stephan Gerhold <stephan@gerhold.net>
-X-Mailer: b4 0.12.4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3e6077bb-907c-057f-0896-d0a5814a4229@nvidia.com>
 
-Power domains might have parent domains assigned that are automatically
-managed by the PM domain core. In particular, parent domains are
-automatically powered on/off and setting performance states on child
-domains is translated to parent domains (e.g. using an OPP table from
-the device tree).
+Hi Sumit,
 
-Currently parent performance states are always adjusted before the
-performance state of the child domain is changed.
+On Friday 01 Dec 2023 at 18:32:10 (+0530), Sumit Gupta wrote:
+> Hi Ionela,
+> 
+> > > --- a/drivers/cpufreq/cpufreq.c
+> > > +++ b/drivers/cpufreq/cpufreq.c
+> > > @@ -1756,7 +1756,8 @@ static unsigned int cpufreq_verify_current_freq(struct cpufreq_policy *policy, b
+> > >   {
+> > >        unsigned int new_freq;
+> > > 
+> > > -     new_freq = cpufreq_driver->get(policy->cpu);
+> > > +     new_freq = arch_freq_get_on_cpu(policy->cpu);
+> > > +     new_freq = new_freq ?: cpufreq_driver->get(policy->cpu);
+> > 
+> > Given that arch_freq_get_on_cpu() is an average frequency, it does not
+> > seem right to me to trigger the sync & update process of
+> > cpufreq_verify_current_freq() based on it.
+> > 
+> > cpufreq_verify_current_freq() will at least modify the internal state of
+> > the policy and send PRE and POST notifications, if not do a full frequency
+> > update, based on this average frequency, which is likely different from
+> > the current frequency, even beyond the 1MHz threshold.
+> > 
+> > While I believe it's okay to return this average frequency in
+> > cpuinfo_cur_freq, I don't think it should be used as an indication of
+> > an accurate current frequency, which is what
+> > cpufreq_verify_current_freq() expects.
+> > 
+> > Sumit, can you give more details on the issue at [1] and why this change
+> > fixes it?
+> > 
+> > [1] https://lore.kernel.org/lkml/6a5710f6-bfbb-5dfd-11cd-0cd02220cee7@nvidia.com/
+> > 
+> > Thank you,
+> > Ionela.
+> > 
+> cpufreq_verify_current_freq() also updates 'policy->cur' in POST
+> notification if the frequency from hardware has more delta (out of sync).
+> 
+> As the value from 'cpufreq_driver->get()' is not reliable due to [1],
+> calling the 'get' hook can update the 'policy->cur' with a wrong value when
+> governor starts in cpufreq_start_governor().
+> And if the frequency is never changed after the governor starts during
+> boot e.g. when performance governor is set as default, then
+> 'scaling_cur_freq' always returns wrong value.
+> 
+> Instead, the arch_freq_get_on_cpu() API updates 'policy->cur' with a more
+> stable freq value.
+> 
+> [1] https://lore.kernel.org/lkml/20230418113459.12860-7-sumitg@nvidia.com/
 
-However, typically a parent/child relationship between two power
-domains with performance states models the requirement to keep the
-parent domain at a performance state equal or higher to the child
-domain. When scaling down there is a brief moment where the parent
-domain will end up having a lower performance state than required by
-the child domain.
+Got it, many thanks! 
 
-To avoid this, we need to differentiate between scaling up/down and
-adjust the order of operations:
+As the code is right now in v2, arch_freq_get_on_cpu() is called on
+show_scaling_cur_freq(), so the problem you describe would not show up.
+policy->cur would still be incorrect, but 'scaling_cur_freq' would
+return the value from arch_freq_get_on_cpu().
 
- - When scaling up, parent domains should be adjusted before the child
-   domain. In case of an error, the rollback happens in reverse order.
+Would it be enough if arch_freq_get_on_cpu() gets also called from
+show_cpuinfo_cur_freq() instead of cpufreq_verify_current_freq()?
 
- - When scaling down, parent domains should be adjusted after the child
-   domain, in reverse order, just as if we would rollback scaling up.
-   In case of an error, the rollback happens in normal order (just as
-   if we would normally scale up).
+Thanks,
+Ionela.
 
-Implement this by moving the existing functionality of
-_genpd_set_performance_state() to two separate functions that are
-called in the proper iteration order.
-
-Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
----
-Related discussion: https://lore.kernel.org/linux-pm/ZWXgFNKgm9QaFuzx@gerhold.net/
----
- drivers/base/power/domain.c | 124 +++++++++++++++++++++++++++-----------------
- 1 file changed, 77 insertions(+), 47 deletions(-)
-
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index da1777e39eaa..830dfef2c880 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -313,72 +313,102 @@ static int genpd_xlate_performance_state(struct generic_pm_domain *genpd,
- }
- 
- static int _genpd_set_performance_state(struct generic_pm_domain *genpd,
--					unsigned int state, int depth)
-+					unsigned int state, int depth);
-+
-+static void _genpd_rollback_parent_state(struct gpd_link *link, int depth)
- {
--	struct generic_pm_domain *parent;
--	struct gpd_link *link;
--	int parent_state, ret;
-+	struct generic_pm_domain *parent = link->parent;
-+	int parent_state;
- 
--	if (state == genpd->performance_state)
--		return 0;
-+	genpd_lock_nested(parent, depth + 1);
- 
--	/* Propagate to parents of genpd */
--	list_for_each_entry(link, &genpd->child_links, child_node) {
--		parent = link->parent;
-+	parent_state = link->prev_performance_state;
-+	link->performance_state = parent_state;
- 
--		/* Find parent's performance state */
--		ret = genpd_xlate_performance_state(genpd, parent, state);
--		if (unlikely(ret < 0))
--			goto err;
-+	parent_state = _genpd_reeval_performance_state(parent, parent_state);
-+	if (_genpd_set_performance_state(parent, parent_state, depth + 1)) {
-+		pr_err("%s: Failed to roll back to %d performance state\n",
-+		       parent->name, parent_state);
-+	}
- 
--		parent_state = ret;
-+	genpd_unlock(parent);
-+}
- 
--		genpd_lock_nested(parent, depth + 1);
-+static int _genpd_set_parent_state(struct generic_pm_domain *genpd,
-+				   struct gpd_link *link,
-+				   unsigned int state, int depth)
-+{
-+	struct generic_pm_domain *parent = link->parent;
-+	int parent_state, ret;
- 
--		link->prev_performance_state = link->performance_state;
--		link->performance_state = parent_state;
--		parent_state = _genpd_reeval_performance_state(parent,
--						parent_state);
--		ret = _genpd_set_performance_state(parent, parent_state, depth + 1);
--		if (ret)
--			link->performance_state = link->prev_performance_state;
-+	/* Find parent's performance state */
-+	ret = genpd_xlate_performance_state(genpd, parent, state);
-+	if (unlikely(ret < 0))
-+		return ret;
- 
--		genpd_unlock(parent);
-+	parent_state = ret;
- 
--		if (ret)
--			goto err;
--	}
-+	genpd_lock_nested(parent, depth + 1);
- 
--	if (genpd->set_performance_state) {
--		ret = genpd->set_performance_state(genpd, state);
--		if (ret)
--			goto err;
--	}
-+	link->prev_performance_state = link->performance_state;
-+	link->performance_state = parent_state;
- 
--	genpd->performance_state = state;
--	return 0;
-+	parent_state = _genpd_reeval_performance_state(parent, parent_state);
-+	ret = _genpd_set_performance_state(parent, parent_state, depth + 1);
-+	if (ret)
-+		link->performance_state = link->prev_performance_state;
- 
--err:
--	/* Encountered an error, lets rollback */
--	list_for_each_entry_continue_reverse(link, &genpd->child_links,
--					     child_node) {
--		parent = link->parent;
-+	genpd_unlock(parent);
- 
--		genpd_lock_nested(parent, depth + 1);
-+	return ret;
-+}
-+
-+static int _genpd_set_performance_state(struct generic_pm_domain *genpd,
-+					unsigned int state, int depth)
-+{
-+	struct gpd_link *link = NULL;
-+	int ret;
-+
-+	if (state == genpd->performance_state)
-+		return 0;
- 
--		parent_state = link->prev_performance_state;
--		link->performance_state = parent_state;
-+	/* When scaling up, propagate to parents first in normal order */
-+	if (state > genpd->performance_state) {
-+		list_for_each_entry(link, &genpd->child_links, child_node) {
-+			ret = _genpd_set_parent_state(genpd, link, state, depth);
-+			if (ret)
-+				goto rollback_parents_up;
-+		}
-+	}
- 
--		parent_state = _genpd_reeval_performance_state(parent,
--						parent_state);
--		if (_genpd_set_performance_state(parent, parent_state, depth + 1)) {
--			pr_err("%s: Failed to roll back to %d performance state\n",
--			       parent->name, parent_state);
-+	if (genpd->set_performance_state) {
-+		ret = genpd->set_performance_state(genpd, state);
-+		if (ret) {
-+			if (link)
-+				goto rollback_parents_up;
-+			return ret;
- 		}
-+	}
- 
--		genpd_unlock(parent);
-+	/* When scaling down, propagate to parents last in reverse order */
-+	if (state < genpd->performance_state) {
-+		list_for_each_entry_reverse(link, &genpd->child_links, child_node) {
-+			ret = _genpd_set_parent_state(genpd, link, state, depth);
-+			if (ret)
-+				goto rollback_parents_down;
-+		}
- 	}
- 
-+	genpd->performance_state = state;
-+	return 0;
-+
-+rollback_parents_up:
-+	list_for_each_entry_continue_reverse(link, &genpd->child_links, child_node)
-+		_genpd_rollback_parent_state(link, depth);
-+	return ret;
-+rollback_parents_down:
-+	list_for_each_entry_continue(link, &genpd->child_links, child_node)
-+		_genpd_rollback_parent_state(link, depth);
- 	return ret;
- }
- 
-
----
-base-commit: 0f5f12ac05f36f117e793656c3f560625e927f1b
-change-id: 20231205-genpd-perf-order-bf33029c25ac
-
-Best regards,
--- 
-Stephan Gerhold <stephan@gerhold.net>
-
+> 
+> Best regards,
+> Sumit Gupta
+> 
+> > >        if (!new_freq)
+> > >                return 0;
+> > > 
+> > > --
+> > > 2.25.1
+> > > 
 
