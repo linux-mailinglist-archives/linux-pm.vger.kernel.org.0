@@ -1,128 +1,105 @@
-Return-Path: <linux-pm+bounces-724-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-725-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7E1B80617D
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Dec 2023 23:14:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D798806231
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Dec 2023 23:59:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 651D6B2110C
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Dec 2023 22:14:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BFB6E1F215E2
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Dec 2023 22:59:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECED16E2A6;
-	Tue,  5 Dec 2023 22:14:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D25A3FE59;
+	Tue,  5 Dec 2023 22:59:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ZBf3v6nh"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="SyeWcAiT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C254B137;
-	Tue,  5 Dec 2023 14:14:15 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B5Lp4sT018700;
-	Tue, 5 Dec 2023 22:14:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : date :
- subject : mime-version : content-type : content-transfer-encoding :
- message-id : to : cc; s=qcppdkim1;
- bh=qHf8U2nrlOqnmtlM/j+8/wfCbRl6t44vzQQ63+6e53Q=;
- b=ZBf3v6nhsdgTawJHYhiGf3LoAQ8cxSf8jrz0H0fyR6+vxjQyRr3r/fBvYGxspU446qTh
- hCYh1ddCbfddPX6BeDFogPSzgiMZZ10z0nH6KsKUXL7urnrUycm7uwS3wycnLadcDPhr
- y6dzoiqW2UlBUkMILZJ8vyzTjH0Ag1SF+vfVYDFXXydCiLfVIE8v1GLf+yl9nek45d88
- XeDBfPCDL/pS7MIFv36107NharPwFy09HG8s97fdg2V6Jrkb5YUzam9VWFvjW6/GcwV5
- iiHKyDv/sPxDhUulYeI/nDlNdauDFZFNh3t3+InJ+nVUcVLwMTnKo9SthR5pNWgMQ4vl Qw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3utaq6r7gt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 05 Dec 2023 22:14:11 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3B5MEALE029675
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 5 Dec 2023 22:14:10 GMT
-Received: from [169.254.0.1] (10.49.16.6) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 5 Dec
- 2023 14:14:10 -0800
-From: Bjorn Andersson <quic_bjorande@quicinc.com>
-Date: Tue, 5 Dec 2023 14:14:00 -0800
-Subject: [PATCH RFT] interconnect: qcom: icc-rpm: Fix peak rate calculation
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B800DB5;
+	Tue,  5 Dec 2023 14:58:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=+wPQgMtfP3e+4Wk8NNsQzADS8z91J+KBS6ktKYz5c3k=; b=SyeWcAiTZWnRR5UdV+pQOksTQV
+	j/lgXABiUbfdSoeR0tkqA9lDLIYgGvkUceaJK8glrdHDycjTE6zuLCo15Giyt/MLgsCmu1hqRoAvs
+	Ft2OCuPEkm/Z98RqKalBfmQJIfEcpvfsF6DLY3GnSwy4yNNYAfqbAY88SaRHTjq8pKcoVzp76aWJZ
+	I+rUK5LL2bI44mLfOcaftgkqKe77YyZrfgcv3mR1xle87Qbg5JUN/FCc3oWlv3xnsRN5dUhAXw4ka
+	TPz/GBNZ6LCYB4JN5RTdYtE+0lzjxKObsW6vG673UFgDibCdI42a1+DrdRHOsogx2JRInA+2nh1Fn
+	nzWrp4+w==;
+Received: from [50.53.46.231] (helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1rAeNU-008Z1T-2S;
+	Tue, 05 Dec 2023 22:58:57 +0000
+From: Randy Dunlap <rdunlap@infradead.org>
+To: linux-kernel@vger.kernel.org
+Cc: Randy Dunlap <rdunlap@infradead.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>,
+	Kevin Hilman <khilman@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-pm@vger.kernel.org
+Subject: [PATCH] PM: domains: fix domain_governor kernel-doc warnings
+Date: Tue,  5 Dec 2023 14:58:56 -0800
+Message-ID: <20231205225856.32739-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20231205-qcom_icc_calc_rate-typo-v1-1-9d4378dcf53e@quicinc.com>
-X-B4-Tracking: v=1; b=H4sIAKegb2UC/x2NQQrCMBAAv1L2bKBZ24sP8AHiTSRstxu7EJM2q
- aKU/t3gcQaG2aBIVilwajbI8taiKVawhwZ4ovgQo2NlwBaPFtveLJyeTpkdU2CXaRWzfudkyPY
- djr7ziAi1HqiIGTJFnmofXyFUOWfx+vnvbnA5X+G+7z8MoLTvgwAAAA==
-To: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
-        Bjorn Andersson
-	<quic_bjorande@quicinc.com>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1701814450; l=1406;
- i=quic_bjorande@quicinc.com; s=20230915; h=from:subject:message-id;
- bh=IOiUqa5MIxZI2ZQuYicHMxdfvzg1T0CI18L5cTZyuSs=;
- b=TFtFYGhlEV2KqgcMa0undO9RfnVIsMY9h4Wm2eEncSDVe9bj0eGuLsRmbp/O8Kt7NN7gn4PrN39E
- zEcHcZnqAeaiZaWR+vm2ruP7fyDlQ6KOFK8SarfcvzjgLnLSnpSa
-X-Developer-Key: i=quic_bjorande@quicinc.com; a=ed25519;
- pk=VkhObtljigy9k0ZUIE1Mvr0Y+E1dgBEH9WoLQnUtbIM=
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 5HaCI60Er8S7KpgSfKcEGcesPQx7zYLk
-X-Proofpoint-ORIG-GUID: 5HaCI60Er8S7KpgSfKcEGcesPQx7zYLk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-05_18,2023-12-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- suspectscore=0 mlxlogscore=906 bulkscore=0 adultscore=0 priorityscore=1501
- spamscore=0 clxscore=1011 phishscore=0 impostorscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2312050172
+Content-Transfer-Encoding: 8bit
 
-Per the commit message of commit 'dd014803f260 ("interconnect: qcom:
-icc-rpm: Add AB/IB calculations coefficients")', the peak rate should be
-100/ib_percent. But, in what looks like a typical typo, the numerator
-value is discarded in the calculation.
+Fix kernel-doc warnings found when using "W=1".
 
-Update the implementation to match the described intention.
+domain_governor.c:54: warning: No description found for return value of 'default_suspend_ok'
+domain_governor.c:266: warning: No description found for return value of '_default_power_down_ok'
+domain_governor.c:412: warning: cannot understand function prototype: 'struct dev_power_governor pm_domain_always_on_gov = '
 
-Fixes: dd014803f260 ("interconnect: qcom: icc-rpm: Add AB/IB calculations coefficients")
-Cc: stable@vger.kernel.org
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Kevin Hilman <khilman@kernel.org>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-pm@vger.kernel.org
 ---
-Spotted while reading the code, patch is untested.
----
- drivers/interconnect/qcom/icc-rpm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/base/power/domain_governor.c |    8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-index fb54e78f8fd7..a8ed435f696c 100644
---- a/drivers/interconnect/qcom/icc-rpm.c
-+++ b/drivers/interconnect/qcom/icc-rpm.c
-@@ -307,7 +307,7 @@ static u64 qcom_icc_calc_rate(struct qcom_icc_provider *qp, struct qcom_icc_node
+diff -- a/drivers/base/power/domain_governor.c b/drivers/base/power/domain_governor.c
+--- a/drivers/base/power/domain_governor.c
++++ b/drivers/base/power/domain_governor.c
+@@ -49,6 +49,8 @@ static int dev_update_qos_constraint(str
+ /**
+  * default_suspend_ok - Default PM domain governor routine to suspend devices.
+  * @dev: Device to check.
++ *
++ * Returns: true if OK to suspend, false if not OK to suspend
+  */
+ static bool default_suspend_ok(struct device *dev)
+ {
+@@ -261,6 +263,8 @@ static bool __default_power_down_ok(stru
+  * @now: current ktime.
+  *
+  * This routine must be executed under the PM domain's lock.
++ *
++ * Returns: true if OK to power down, false if not OK to power down
+  */
+ static bool _default_power_down_ok(struct dev_pm_domain *pd, ktime_t now)
+ {
+@@ -406,8 +410,8 @@ struct dev_power_governor simple_qos_gov
+ 	.power_down_ok = default_power_down_ok,
+ };
  
- 	if (qn->ib_coeff) {
- 		agg_peak_rate = qn->max_peak[ctx] * 100;
--		agg_peak_rate = div_u64(qn->max_peak[ctx], qn->ib_coeff);
-+		agg_peak_rate = div_u64(agg_peak_rate, qn->ib_coeff);
- 	} else {
- 		agg_peak_rate = qn->max_peak[ctx];
- 	}
-
----
-base-commit: 0f5f12ac05f36f117e793656c3f560625e927f1b
-change-id: 20231205-qcom_icc_calc_rate-typo-a1542df4f222
-
-Best regards,
--- 
-Bjorn Andersson <quic_bjorande@quicinc.com>
-
+-/**
+- * pm_genpd_gov_always_on - A governor implementing an always-on policy
++/*
++ * pm_domain_always_on_gov - A governor implementing an always-on policy
+  */
+ struct dev_power_governor pm_domain_always_on_gov = {
+ 	.suspend_ok = default_suspend_ok,
 
