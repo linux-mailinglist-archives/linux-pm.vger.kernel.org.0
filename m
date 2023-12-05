@@ -1,197 +1,135 @@
-Return-Path: <linux-pm+bounces-719-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-720-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B330805E7B
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Dec 2023 20:18:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CB04805EDE
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Dec 2023 20:54:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 203F4B2109B
-	for <lists+linux-pm@lfdr.de>; Tue,  5 Dec 2023 19:18:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 829CE1C20F22
+	for <lists+linux-pm@lfdr.de>; Tue,  5 Dec 2023 19:54:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AD7A6D1CD;
-	Tue,  5 Dec 2023 19:18:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18AAD6ABAA;
+	Tue,  5 Dec 2023 19:54:53 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304EA135;
-	Tue,  5 Dec 2023 11:18:41 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id d4c9c53a51f2fd46; Tue, 5 Dec 2023 20:18:39 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 71BA06687D9;
-	Tue,  5 Dec 2023 20:18:39 +0100 (CET)
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Linux ACPI <linux-acpi@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>
-Subject: [PATCH v1] thermal: trip: Send trip change notifications on all trip updates
-Date: Tue, 05 Dec 2023 20:18:39 +0100
-Message-ID: <5737811.DvuYhMxLoT@kreacher>
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD7FA5;
+	Tue,  5 Dec 2023 11:54:49 -0800 (PST)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1fb155ca04bso581560fac.0;
+        Tue, 05 Dec 2023 11:54:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701806089; x=1702410889;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MPGxsQoxPpHlL6Ppz0lS+ug6RWxWQAf1JLFDoILOKxk=;
+        b=lv+OiBl5zo7w3ILusbHF0+pFabQAoBIz+oIC4vI4lR3hfRiD5QV9fBr1Ka5VYlRnNv
+         cQIYZdV59OeMXaUSaZawvGN8qWlTLk3nMpca4XGDj1I3Sgi9jHlTS++76lIc6A4idwcJ
+         iWKrCUrCdOFf7Srek8tc8Hsni1b950FcifPKCasDDs2tZZPGPguj4lbgmTjoXApDb1Yh
+         q4l/uwguMBUK7dG9ZEDvYaHQZ1ZnjwPPE0xqhHFMVnB5rEl8g4kewPEqGIvZGjlp9T1z
+         cOBUmJL5GkEMZ3fhcpgGDzLj9kFaBSAD41jNundsQU6NguUHTN5mzOEVy1XBFLRFRqdg
+         EVdA==
+X-Gm-Message-State: AOJu0YyuxJS9BJ8oq2r3+bPKmDI373ykWk27iog9SW24mfyoYeOix6tD
+	jd+m7GG5oFI4dODi4dd+DCYWEX5pwQPAnSvsFFg=
+X-Google-Smtp-Source: AGHT+IEhx6WPaNGbt7d2ljM1iILKgZIiYOO/438XhxCPllpYfT29IloMq+viVAgZzWlXPNQOIxlPEfgR0ONDceOMJoA=
+X-Received: by 2002:a05:6870:75cd:b0:1fb:136e:fa93 with SMTP id
+ de13-20020a05687075cd00b001fb136efa93mr12559032oab.0.1701806089143; Tue, 05
+ Dec 2023 11:54:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <20231201123205.1996790-1-lukasz.luba@arm.com>
+In-Reply-To: <20231201123205.1996790-1-lukasz.luba@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 5 Dec 2023 20:54:38 +0100
+Message-ID: <CAJZ5v0gYfvJCQ6Tk2Jh8ZYtaJM=sq3Qb6dq28rjYjMNPfJBT_Q@mail.gmail.com>
+Subject: Re: [PATCH] powercap: DTPM: Fix the missing cpufreq_cpu_put() calls
+To: Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	daniel.lezcano@linaro.org, rafael@kernel.org, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrudejkedguddvvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegfffhudejlefhtdegffekteduhfethffhieettefhkeevgfdvgfefieekiefgheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepjedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehruhhirdii
- hhgrnhhgsehinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+Content-Transfer-Encoding: quoted-printable
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Fri, Dec 1, 2023 at 1:31=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> wr=
+ote:
+>
+> The policy returned by cpufreq_cpu_get() has to be released with
+> the help of cpufreq_cpu_put() to balance its kobject reference counter
+> properly.
+>
+> Add the missing calls to cpufreq_cpu_put() in the code.
+>
+> Fixes: 0aea2e4ec2a2 ("powercap/dtpm_cpu: Reset per_cpu variable in the re=
+lease function")
+> Fixes: 0e8f68d7f048 ("powercap/drivers/dtpm: Add CPU energy model based s=
+upport")
+> Cc: <stable@vger.kernel.org> # v5.10+
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>  drivers/powercap/dtpm_cpu.c | 17 +++++++++++++----
+>  1 file changed, 13 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
+> index 45bb7e2849d7..aac278e162d9 100644
+> --- a/drivers/powercap/dtpm_cpu.c
+> +++ b/drivers/powercap/dtpm_cpu.c
+> @@ -152,6 +152,8 @@ static void pd_release(struct dtpm *dtpm)
+>         if (policy) {
+>                 for_each_cpu(dtpm_cpu->cpu, policy->related_cpus)
+>                         per_cpu(dtpm_per_cpu, dtpm_cpu->cpu) =3D NULL;
+> +
+> +               cpufreq_cpu_put(policy);
+>         }
+>
+>         kfree(dtpm_cpu);
+> @@ -204,12 +206,16 @@ static int __dtpm_cpu_setup(int cpu, struct dtpm *p=
+arent)
+>                 return 0;
+>
+>         pd =3D em_cpu_get(cpu);
+> -       if (!pd || em_is_artificial(pd))
+> -               return -EINVAL;
+> +       if (!pd || em_is_artificial(pd)) {
+> +               ret =3D -EINVAL;
+> +               goto release_policy;
+> +       }
+>
+>         dtpm_cpu =3D kzalloc(sizeof(*dtpm_cpu), GFP_KERNEL);
+> -       if (!dtpm_cpu)
+> -               return -ENOMEM;
+> +       if (!dtpm_cpu) {
+> +               ret =3D -ENOMEM;
+> +               goto release_policy;
+> +       }
+>
+>         dtpm_init(&dtpm_cpu->dtpm, &dtpm_ops);
+>         dtpm_cpu->cpu =3D cpu;
+> @@ -231,6 +237,7 @@ static int __dtpm_cpu_setup(int cpu, struct dtpm *par=
+ent)
+>         if (ret)
+>                 goto out_dtpm_unregister;
+>
+> +       cpufreq_cpu_put(policy);
+>         return 0;
+>
+>  out_dtpm_unregister:
+> @@ -242,6 +249,8 @@ static int __dtpm_cpu_setup(int cpu, struct dtpm *par=
+ent)
+>                 per_cpu(dtpm_per_cpu, cpu) =3D NULL;
+>         kfree(dtpm_cpu);
+>
+> +release_policy:
+> +       cpufreq_cpu_put(policy);
+>         return ret;
+>  }
+>
+> --
 
-The _store callbacks of the trip point temperature and hysteresis sysfs
-attributes invoke thermal_notify_tz_trip_change() to send a notification
-regarding the trip point change, but when trip points are updated by the
-platform firmware, trip point change notifications are not sent.
+Applied as 6.7-rc material with the Cc: stable tag fixed.
 
-To make the behavior after a trip point change more consistent,
-modify all of the 3 places where trip point temperature is updated
-to use a new function called thermal_zone_set_trip_temp() for this
-purpose and make that function call thermal_notify_tz_trip_change().
-
-Note that trip point hysteresis can only be updated via sysfs and
-trip_point_hyst_store() calls thermal_notify_tz_trip_change() already,
-so this code path need not be changed.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-Depends on https://lore.kernel.org/linux-pm/12337662.O9o76ZdvQC@kreacher/
-
----
- drivers/acpi/thermal.c                                       |    7 +++--
- drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c |    8 +++---
- drivers/thermal/thermal_sysfs.c                              |    4 +--
- drivers/thermal/thermal_trip.c                               |   14 ++++++++++-
- include/linux/thermal.h                                      |    2 +
- 5 files changed, 27 insertions(+), 8 deletions(-)
-
-Index: linux-pm/drivers/thermal/thermal_sysfs.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_sysfs.c
-+++ linux-pm/drivers/thermal/thermal_sysfs.c
-@@ -146,9 +146,9 @@ trip_point_temp_store(struct device *dev
- 				goto unlock;
- 		}
- 
--		trip->temperature = temp;
-+		thermal_zone_set_trip_temp(tz, trip, temp);
- 
--		thermal_zone_trip_updated(tz, trip);
-+		__thermal_zone_device_update(tz, THERMAL_TRIP_CHANGED);
- 	}
- 
- unlock:
-Index: linux-pm/drivers/thermal/thermal_trip.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_trip.c
-+++ linux-pm/drivers/thermal/thermal_trip.c
-@@ -152,7 +152,6 @@ int thermal_zone_trip_id(struct thermal_
- 	 */
- 	return trip - tz->trips;
- }
--
- void thermal_zone_trip_updated(struct thermal_zone_device *tz,
- 			       const struct thermal_trip *trip)
- {
-@@ -161,3 +160,16 @@ void thermal_zone_trip_updated(struct th
- 				      trip->hysteresis);
- 	__thermal_zone_device_update(tz, THERMAL_TRIP_CHANGED);
- }
-+
-+void thermal_zone_set_trip_temp(struct thermal_zone_device *tz,
-+				struct thermal_trip *trip, int temp)
-+{
-+	if (trip->temperature == temp)
-+		return;
-+
-+	trip->temperature = temp;
-+	thermal_notify_tz_trip_change(tz->id, thermal_zone_trip_id(tz, trip),
-+				      trip->type, trip->temperature,
-+				      trip->hysteresis);
-+}
-+EXPORT_SYMBOL_GPL(thermal_zone_set_trip_temp);
-Index: linux-pm/include/linux/thermal.h
-===================================================================
---- linux-pm.orig/include/linux/thermal.h
-+++ linux-pm/include/linux/thermal.h
-@@ -289,6 +289,8 @@ int thermal_zone_for_each_trip(struct th
- 			       int (*cb)(struct thermal_trip *, void *),
- 			       void *data);
- int thermal_zone_get_num_trips(struct thermal_zone_device *tz);
-+void thermal_zone_set_trip_temp(struct thermal_zone_device *tz,
-+				struct thermal_trip *trip, int temp);
- 
- int thermal_zone_get_crit_temp(struct thermal_zone_device *tz, int *temp);
- 
-Index: linux-pm/drivers/acpi/thermal.c
-===================================================================
---- linux-pm.orig/drivers/acpi/thermal.c
-+++ linux-pm/drivers/acpi/thermal.c
-@@ -294,6 +294,7 @@ static int acpi_thermal_adjust_trip(stru
- 	struct acpi_thermal_trip *acpi_trip = trip->priv;
- 	struct adjust_trip_data *atd = data;
- 	struct acpi_thermal *tz = atd->tz;
-+	int temp;
- 
- 	if (!acpi_trip || !acpi_thermal_trip_valid(acpi_trip))
- 		return 0;
-@@ -304,9 +305,11 @@ static int acpi_thermal_adjust_trip(stru
- 		acpi_thermal_update_trip_devices(tz, trip);
- 
- 	if (acpi_thermal_trip_valid(acpi_trip))
--		trip->temperature = acpi_thermal_temp(tz, acpi_trip->temp_dk);
-+		temp = acpi_thermal_temp(tz, acpi_trip->temp_dk);
- 	else
--		trip->temperature = THERMAL_TEMP_INVALID;
-+		temp = THERMAL_TEMP_INVALID;
-+
-+	thermal_zone_set_trip_temp(tz->thermal_zone, trip, temp);
- 
- 	return 0;
- }
-Index: linux-pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-+++ linux-pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-@@ -225,7 +225,8 @@ EXPORT_SYMBOL_GPL(int340x_thermal_zone_r
- 
- static int int340x_update_one_trip(struct thermal_trip *trip, void *arg)
- {
--	struct acpi_device *zone_adev = arg;
-+	struct int34x_thermal_zone *int34x_zone = arg;
-+	struct acpi_device *zone_adev = int34x_zone->adev;
- 	int temp, err;
- 
- 	switch (trip->type) {
-@@ -249,14 +250,15 @@ static int int340x_update_one_trip(struc
- 	if (err)
- 		temp = THERMAL_TEMP_INVALID;
- 
--	trip->temperature = temp;
-+	thermal_zone_set_trip_temp(int34x_zone->zone, trip, temp);
-+
- 	return 0;
- }
- 
- void int340x_thermal_update_trips(struct int34x_thermal_zone *int34x_zone)
- {
- 	thermal_zone_for_each_trip(int34x_zone->zone, int340x_update_one_trip,
--				   int34x_zone->adev);
-+				   int34x_zone);
- }
- EXPORT_SYMBOL_GPL(int340x_thermal_update_trips);
- 
-
-
-
+Thanks!
 
