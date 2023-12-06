@@ -1,168 +1,380 @@
-Return-Path: <linux-pm+bounces-732-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-733-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5306D806ADB
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 10:37:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DC9B806B31
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 11:01:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0B1E1F211B9
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 09:37:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6607281B23
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 10:01:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42D541A71C;
-	Wed,  6 Dec 2023 09:37:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DF2D1DFF4;
+	Wed,  6 Dec 2023 10:01:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="PvFnQ/gT"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="FfkEpWEt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2119.outbound.protection.outlook.com [40.107.114.119])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76EB5A4;
-	Wed,  6 Dec 2023 01:37:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UTcdDsWr7LivYd8mPDz3XSzjLnwuSmPtq86T4TW+YLpRioXGCpSn+f6xIFb/Y06NCiVQPoWcfAZREY4bctbgYI7NzFWZRm5eyQun2+VxmO6k2fEbT+wAi72W7qhw6GWdJ0Mnr+/IAaLNJfwgQTdyibUzj1A34IqlnQFUrex/hHXLSJ36xFxPmPdvhpGD/6Aeyo1Dke//vNHG9/v+t1Z3oq/ou8jR73HU9YNwoSmuLfNQjQgNAgspL0aThp7n00dyfjG02xSg/ZBjx8d551rWrFkD6mC2gdrY2kAc98L4Q5bACgJk6bl+ROsYahTDbgsiCwjw1IcNpo3K9pxQkoSlRw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Wm5dHkBTbJ6mR6oLrfPFZ9rJEYBiBTvr3jPNiqgqUXY=;
- b=Z6i/MXt9usPBE7VPQpnI1XrubZPpUH+viciBQZo+/lrM5mFZC/whDwOPe2bAT0btIVAy4IDyK9oUFeD5asYJfOkfKho5Qk/TLslA5CkQsVCI6t2teJ04NW5gAiG9WU1Y0r7vNmbYlrg03UgCZftaEixVHS6e4Nh0x8PMEDDodFJHXJFndrHW/ig+zFlaf3DYyCDSYAUTXYfEUPUXCCIekeQ7NCpO1sHvQfUelhu/wTSTHPvu+XKYSfz+10vGkjBgDRRa4z0YUYaZWIipekAwJZpMMom4qXgSNdVqhc7kWf0F/NyIiXQKPwb9CwvxJz3hgZ6Mr6rQRJAeI7rIPWjzbw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Wm5dHkBTbJ6mR6oLrfPFZ9rJEYBiBTvr3jPNiqgqUXY=;
- b=PvFnQ/gToLJ2coDfsZhxGHoFG+pWBT89Euhbq8lTgDInpknCz9rqjFmPGalZK46I4smtaPMiooGJN3bG/kngvbDLG5p0HqIPT/ed/+pYBTkdOunqrNim5VtybTz3DgyX0mtqezDJwtSrs166GqCvjYW4Glxlkur97n4WLGKOWpQ=
-Received: from TYVPR01MB11279.jpnprd01.prod.outlook.com
- (2603:1096:400:366::13) by TYCPR01MB9959.jpnprd01.prod.outlook.com
- (2603:1096:400:1d7::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.25; Wed, 6 Dec
- 2023 09:37:36 +0000
-Received: from TYVPR01MB11279.jpnprd01.prod.outlook.com
- ([fe80::db2e:9e88:68f8:486b]) by TYVPR01MB11279.jpnprd01.prod.outlook.com
- ([fe80::db2e:9e88:68f8:486b%4]) with mapi id 15.20.7068.025; Wed, 6 Dec 2023
- 09:37:35 +0000
-From: Biju Das <biju.das.jz@bp.renesas.com>
-To: kernel test robot <lkp@intel.com>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-CC: "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>, Support
- Opensource <support.opensource@diasemi.com>, "Rafael J. Wysocki"
-	<rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui
-	<rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, Geert Uytterhoeven
-	<geert+renesas@glider.be>, Prabhakar Mahadev Lad
-	<prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
-Subject: RE: [PATCH v2 04/11] dt-bindings: thermal: Convert da906{1,2} thermal
- to json-schema
-Thread-Topic: [PATCH v2 04/11] dt-bindings: thermal: Convert da906{1,2}
- thermal to json-schema
-Thread-Index: AQHaJVVpNr8VVPZoO0mAS8LwJgirUrCbsDaAgABT9HA=
-Date: Wed, 6 Dec 2023 09:37:35 +0000
-Message-ID:
- <TYVPR01MB11279035E0EB1AF11C78453178684A@TYVPR01MB11279.jpnprd01.prod.outlook.com>
-References: <20231202192536.266885-5-biju.das.jz@bp.renesas.com>
- <202312061242.lKDoAY9g-lkp@intel.com>
-In-Reply-To: <202312061242.lKDoAY9g-lkp@intel.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYVPR01MB11279:EE_|TYCPR01MB9959:EE_
-x-ms-office365-filtering-correlation-id: 34fe1763-6844-472f-31a8-08dbf63efad3
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- euYQcf2KIKO7EocaWdsgZ2Qn7vjHZWAb4C1YcO0yU7ieDUJBFP2y/LupW7a+dWjm4lf3mmd0xuZ8AAuhJy0LBHT1YxUSze3/7sJc+ptriYTU3Gp7GnyZ3awIMJIYuio/j+7Cddz+OIsQcVdhQqx1bL/7c6ooFFVj1SpvpltIkzVGAF6KBi3Jz0Ts+BaNO4mVPEEKFvYMkpbq6g+VwKvTnN95D1UNbWNyY2bE2FV4uOim6rxmCIkjtSCaxY28kAc+LQBtNbSDfJur/1w+4PANiOXnGbNRLJSBecHWDrlq78RXNi9OLR2b9UzCPRx2Ik31hctrPp8ZmoXO+oKGbGOrFSQjhMP2sL2+SRVsxGluK8xo0nRnl58nBJn6d1gKDEpxl5sGtZJjGAXla30nlWWKgK1w1ecQBjkB6HWMfkiTyKIs+TCi/cG+MzKwzYhScqdt20yO8/FYYtNbeVhQ2r7eKcJNDUN+jCX2aoNsQWK4A7apvTuG1XZDNjLvQ+Fi0D0HTmVO8XnT99R6e5estE4qmYU90X3PDvMxKsexd+Vs+5FhyKMilkswA/Gf8lGlyb6bS+u3e6nrVY2ogliATzPpcwmlOZ2VI6/b4BIOGUY2enVwtaz9bcukGdGLP5MKTXgSjU8IaevTa4wir+sd7wZfdQ==
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYVPR01MB11279.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(396003)(39860400002)(346002)(366004)(136003)(230922051799003)(230273577357003)(230173577357003)(451199024)(64100799003)(1800799012)(186009)(55016003)(478600001)(71200400001)(7696005)(966005)(122000001)(38100700002)(83380400001)(6506007)(53546011)(9686003)(33656002)(8676002)(8936002)(4326008)(64756008)(2906002)(7416002)(5660300002)(4744005)(86362001)(41300700001)(52536014)(54906003)(66446008)(38070700009)(66556008)(66476007)(76116006)(66946007)(110136005)(316002)(26005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?EQySvE2cpHxzDGpdhGLuLarKYwvk9Fl09F/DJMMUi87n+osODfx51pr1kTGu?=
- =?us-ascii?Q?JXNrhamJi3gENe5nNsIBmvxtdDRrvRavksS7vLWMbqiQVvdJcoMVlypkPL+m?=
- =?us-ascii?Q?J4TDxxrxsi12kbyihYYzI8l8iNW48+0HtDF5DkUHF/YRX3olvvSnIU+1W7Io?=
- =?us-ascii?Q?2ReUHUd4UOK7iVL9Ne2P4l1PZ9D/JwoILpRzyEQdDTop6/Og1FfOGR81T64Z?=
- =?us-ascii?Q?7yYovFO3l8ylgCpaFPpYf7LU/QpAxBDfO13JPeb3t7LtCEYYZ41Oa2LdRd2C?=
- =?us-ascii?Q?j1vvjgOUuvMDwOqG+AG5b2ebGRBZU5z/HNEKer3ra2GOMi0PmmP2ZkobgnZF?=
- =?us-ascii?Q?pIL2JjveFwFQERRRkheyQYWB9Ra0qn2eoacPjflBxgVcwJnrHtGVfxX/HKDm?=
- =?us-ascii?Q?wSysFc7jewmPXVaubYvJY89hXg2lXZho1voIdCdtJRpWfhx+1eRcSWXFK19i?=
- =?us-ascii?Q?kWDgTeZETQQ4PQ4MIN3Am3Ov3rr9pPhRaBgJII3erpk4GoDyUfDwDQ1Z6Mid?=
- =?us-ascii?Q?utDO4xAJ6dmEBKRnT/eic9cmHaTwNVwhtPjKj4BtW6RacQNzmYMJWBsaRYQK?=
- =?us-ascii?Q?wwFembM0uFgiQghUyXGcRzt4w5lrZ4Iy1JmS1yMTc/kYfk6QerxsXRq71n/+?=
- =?us-ascii?Q?d+lK0zQ17us3IQ4V7/LD8Vrqv/vDochcKX6WUHpXTLPnGQEIFb2OhMP3OLqR?=
- =?us-ascii?Q?pS4+RabIZ4TCWVi9i/f8qbr7vgIdKmKJU1yT+evA+MyOikOO0C5cjb9uJYeA?=
- =?us-ascii?Q?ba2ur5Ci0VRDx0yyg/+yWLOHS/281dWLq1N/GFFLekUB+xbIFT9W2WSU1Hc7?=
- =?us-ascii?Q?RcujB9mMCUFswu3GjJ6u1VPbk3pcuNc59EKdczPd5qfOJtMTphxeojxOxL/A?=
- =?us-ascii?Q?WVDtPNyPOe84EIiWsgSo44xsueFAP2mslt7rFTjAV6GTy2/IrYT3kceImjBx?=
- =?us-ascii?Q?ofJ6ENvL1H0PjgxiETrLIn38Q66rziA8odQmI73h6BpvsGwgp9zMBtPlG/CG?=
- =?us-ascii?Q?7FxgKAFJ0w+fjABqU6ybaewiM0zYhn7ote2nPfJufmDZHXHd+0CAmDfGyziC?=
- =?us-ascii?Q?84Ag1OuWj0X+1OrmeK7Mc910gwaw/FaInBZe0Lr2HQbM9PZcAeldTYEq6D2J?=
- =?us-ascii?Q?M/RLdUOPEL8UdPhMlYn2Nj6ocmeOW8Q3HofciavLEX1oLYoM1MJ9iMTeTh34?=
- =?us-ascii?Q?iPxZ8wxq3TO7O24lJ7+nENcSb/toDlv489BYPnx3yjEuRZmtrfqK9auleC/E?=
- =?us-ascii?Q?jNip9dKCYTg17sUuWlqUsSXYPqYv+2qRusst4pCMzYV7H3b3NTNS5JZ5zAsV?=
- =?us-ascii?Q?4J6vfdgoDjmStYlg0XzWnOY+Uwq4d+OdpAR0rZoArXtKML7ejFPMZfgTq/BA?=
- =?us-ascii?Q?Fm8H3v2cT0gEYgEaUpEqUCrmAO8cCWDDuQY48N661f7nvUUQYw2agwh/y2TG?=
- =?us-ascii?Q?GW/6bNpb6mG73cCHuZ2a3YUhOG9aGTloSQhOuOBkjd/6ErvGhgCwNOUGXwEc?=
- =?us-ascii?Q?ombl5grzmKpfxbY2yhg7pjv+fIqQr/Adin3MN8/G/XmZisjBg0lsdrMRwNfu?=
- =?us-ascii?Q?b/RrkQO30Xk+YAtVK21lg+EOEePr1DjYPR/UhzCPLC202k0E4XR66/TRME/h?=
- =?us-ascii?Q?/Q=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B96120;
+	Wed,  6 Dec 2023 02:00:59 -0800 (PST)
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id ABD9C6607325;
+	Wed,  6 Dec 2023 10:00:57 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1701856858;
+	bh=MrYPk0HrDzQScYwh49Au6CEiQ3KVyyzskdfW4ZzJvR8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=FfkEpWEtvCpIaTqJXxSFjhF7WbvrCriQQBpQYmYW6qutLIHr7DbTk6gp/Oa3aDKcc
+	 D9us//HtSRQ6UAClM+JHRFW31HCR/1FCg6L0VJuot5EDAj7wreJpuEQD0nxYPIFObc
+	 hCJxzHiz73SQCTxigD0vrqjHVDDBqtH4tnEFJJRKsv4pBYOKOu60cMxblrGn2DR+ze
+	 PPePYA/0hvYEDFhZHFsEMXeZdbsiGCE4mic3B8SOxcUcXdH/BdDwFvrOZ+AxZMpvGf
+	 peInj0BHkC+4MCE91P2bQy6oaNGQ1vlAJCyTvwEcI6u78fYH823FmUDwC2MCS/2NNz
+	 hp27F1Rzc+csQ==
+Message-ID: <8d42e0f5-b2d2-471b-ada9-79f76c637abe@collabora.com>
+Date: Wed, 6 Dec 2023 11:00:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYVPR01MB11279.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 34fe1763-6844-472f-31a8-08dbf63efad3
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Dec 2023 09:37:35.9503
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: I+PvTgXvPifyQHVbbM1TOJr+F0xLk6mF7ECh0d814C21N7H/ofwbz69XwUU7IzrccW0zj9DzwGb1iWPVXvk7MYv6h+mnvVGIs117p09ydFQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB9959
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] thermal: Add support for device tree thermal zones
+ consumers
+To: Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc: rui.zhang@intel.com, lukasz.luba@arm.com, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel@collabora.com, wenst@chromium.org
+References: <20231115144857.424005-1-angelogioacchino.delregno@collabora.com>
+ <09de3b1b-b725-46b8-97a6-55776fd5ca45@linaro.org>
+ <99c1fd8f-4b17-4d4a-87a5-6a65745632fe@collabora.com>
+ <ce110f25-5431-4c80-b037-add7fd7461bd@linaro.org>
+ <03e950a1-0334-40ab-aa77-ac8175877172@collabora.com>
+ <3428b2af-5522-4090-995a-10eaee90c28e@linaro.org>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <3428b2af-5522-4090-995a-10eaee90c28e@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi kernel test robot,
+Il 05/12/23 19:47, Daniel Lezcano ha scritto:
+> 
+> Hi Angelo,
+> 
+> On 05/12/2023 14:48, AngeloGioacchino Del Regno wrote:
+>> Il 01/12/23 15:18, Daniel Lezcano ha scritto:
+> 
+> [ ... ]
+> 
+>>> Putting apart the fact the change you propose is not relevant as there is 
+>>> already everything in. My comment is about the current state of the thermal 
+>>> framework.
+>>>
+>>
+>> I don't really understand this assertion, and I'm afraid that I'm underestimating
+>> something so, in case, please help me to understand what am I missing here.
+> 
+> Sure. Let me clarify my understanding of you proposal and my assertion.
+> 
+>   - A driver needs a thermal zone device structure pointer in order to read its 
+> temperature. But as it is not the creator, it does not have this pointer.
+> 
+>   - As a solution, several drivers are using a specific DT bindings to map a 
+> thermal zone "name/type' with a string to refer from the driver a specific thermal 
+> zone node name. Then the function thermal_zone_device_get_by_name() is used to 
+> retrieve the pointer.
+> 
+>   - Your proposal is to provide that mechanism in the thermal_of code directly, so 
+> the code can be factored out for all these drivers.
+> 
+> Is my understanding correct?
+> 
+
+I think that your understanding is 95% correct....
+
+> My point is:
+> 
+>   - The driver are mapping a thermal zone with a name but a node name is supposed 
+> to be unique on DT (but that is implicit)
+> 
+>   - A phandle is enough to get the node name, no need to add a thermal zone name to 
+> get the node and then get the thermal zone. It is duplicate information as the DT 
+> uses the node name as a thermal zone name.
+> 
+> We could have:
+> 
+>          thermal-zones {
+>                  display {
+>                          polling-delay-passive = <0>;
+>                          polling-delay = <0>;
+>                          thermal-sensors = <&display_temp>;
+>                  };
+>          };
+> 
+>          papirus27@0{
+> 
+>          [ ... ]
+> 
+> ---             pervasive,thermal-zone = "display";
+> +++             pervasive,thermal-zone = <&display>;
+>          };
+> 
+> The ux500 is directly calling thermal_zone_device_get_by_name() with the thermal 
+> zone node name.
+> 
+
+.... but as for the remaining 5%, I'm not sure, so I'll put one full-of-fantasy
+example here to make sure that you get my point:
 
 
-> -----Original Message-----
-> From: kernel test robot <lkp@intel.com>
-> Sent: Wednesday, December 6, 2023 4:34 AM
-> To: Biju Das <biju.das.jz@bp.renesas.com>; Rob Herring
-> Subject: Re: [PATCH v2 04/11] dt-bindings: thermal: Convert da906{1,2}
-> thermal to json-schema
->=20
-> Hi Biju,
->=20
-> kernel test robot noticed the following build warnings:
->=20
->=20
-> If you fix the issue in a separate patch/commit (i.e. not just a new
-> version of the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes:
->=20
-> All warnings (new ones prefixed by >>):
->=20
-> >> Warning: MAINTAINERS references a file that doesn't exist:
-> >> Documentation/devicetree/bindings/thermal/da90??-thermal.txt
->=20
+************************************
+fantasy soc/board 1:
 
-There is an updated patch series available[1] and Please retest and provide=
- feedback if any?
+thermal-zones {
+	/*
+	 * The type (or name, whatever) of this zone is "dsi-disp-thermal"
+	 * and not "display" - this is on purpose. Can be changed to "display"
+	 * without any concerns in this fantasy soc/board.
+	 */
+	display: dsi-disp-thermal {
+		polling-delay ....
+		thermal-sensors ...
+	}
 
-[1] https://lore.kernel.org/all/20231204172510.35041-1-biju.das.jz@bp.renes=
-as.com/
+	something_else: some-other-zone {
+		stuff ...
+	}
+}
 
-Cheers,
-Biju
+************************************
+fantasy soc/board 2 (qcom vs mtk vs rockchip vs...):
+
+thermal-zones {
+	/*
+	 * The type (or name, whatever) of this zone is "edp-disp-thermal"
+	 * and not "display" - this is on purpose. Can be changed to "display"
+	 * without any concerns in this fantasy soc/board.
+	 */
+	display: edp-disp-thermal {
+		polling-delay ....
+		thermal-sensors ...
+	}
+
+	.....
+}
+
+************************************
+fantasy soc/board 3 (qcom vs mtk vs rockchip vs...):
+
+thermal-zones {
+	/*
+	 * The type (or name, whatever) of this zone is "skin-sense-left-thermal"
+	 * and not "display" - this is on purpose: on this device the display temp
+	 * zone is retrieved from the "bottom" skin temperature zone, because the
+	 * display's driver ic is 0.01mm far from that physical zone, so they have
+	 * placed a sensor there.
+	 *
+	 * Lots of fantasy here, but it's just to show why a thermal zone may have
+	 * a different name on different boards, and why it is more descriptive to
+	 * keep the board-specific TZ name instead of changing them all to have a
+	 * driver specific "display" name.
+	 */
+	display: skin-sense-bottom-thermal {
+		polling-delay ....
+		thermal-sensors ...
+	}
+
+	skin_zone: skin-sense-left-right-top-thermal {
+		.....
+	}
+
+	.....
+}
+
+************************************
+whatever dtsi/dts for whatever device based on whatever soc:
+
+device@0 {
+	....
+
+	interrupts = <this that blah>
+	interrupt-names = "some";
+
+	clocks = <&clkcontroller 22>;
+	clock-names = "main";
+
+	dmas = ....
+	dma-names = ....
+
+	pwms = ...
+	pwm-names = ....
+
+	.... likewise, for thermal zones ....
+
+	thermal-zones = <&display>, <&skin_zone_a>, <&batt_therm>;
+	thermal-zone-names = "disp-therm", "skin-temp", "battery-top";
+}
+************************************
+
+driver code:
+
+device-driver.c:
+
+/* This driver wants disp, batt, skin because it tries to calculate an
+  * optimal battery charging current while trying to not burn users' hands
+  * or something like that.
+  */
+enum therm_to_watch {
+	THERM_DISPLAY,
+	THERM_BATT_TOP,
+	THERM_SKIN_TEMP,
+	THERM_MAX
+}
+
+static const char * const device_therm_to_watch[THERM_MAX] = {
+	"disp-therm", "battery-top", "skin-temp", [...]
+};
+
+
+
+int some_function(params) {
+	[... stuff ...]
+
+	/*
+	 * Get the zones associated to the thermal-zone-names in device tree
+	 *
+	 * ------> This is the main reason why I proposed this commit! :-) <------
+	 */
+	for (i = 0; i < THERM_MAX; i++) {
+		ret = thermal_of_get_zone(dev, device_therm_to_watch[i]);
+		if (ret)
+			return ret;
+	}
+
+	[...]
+}
+************************************
+
+...my target is currently the MediaTek Smart Voltage Scaling driver, where we have
+rather huge platform data (similarly to Qualcomm CPR) for [a / an increasing number
+of] SoC(s): we have different SoC thermal zones for CPU big(0/1/2/3/all) and
+little(0123all), and GPU, which have got different names (currently "types" in the
+thermal framework).
+
+The reason why the zone names are different across those SoCs is that those are
+actually somewhat defined in the datasheets, so the names in device tree do reflect
+those of the datasheet.
+The driver would need cpu-big, cpu-little, or cpu, and gpu thermal zones.
+
+But again, there are other cases apart from MTK SVS.
+
+>> For how I see it, in the thermal framewoek I don't see any "somewhat standardized"
+>> helper like the one(s) that I'm introducing with this patch (thermal_of_get_zone(),
+>> thermal_of_get_zone_by_index()), and this is the exact reason why I'm proposing
+>> this patch.
+>>
+>> Then again - I mean no disrespect - it's just that I don't understand (yet) why you
+>> are saying that "everything is already available", because I really don't see it.
+> 
+> Ok said differently, thermal zone name and type are messy.
+> 
+> Let's clarify that and then let's see with the result if adding this thermal zone 
+> node/name mapping still makes sense.
+> 
+
+Yes, I think that it's sensible at this point to just clarify that in the framework
+first, and then go on with the rest.
+
+>>>   - A thermal zone does not have a name but a type
+>>>
+>>>   - We use the thermal zone DT node name to register as a name but it is a type 
+>>> from the thermal framework point of view
+>>
+>> This is something that I didn't realize before. Thanks for that.
+>>
+>> ...and yes, we're registering a "name" from DT as a "type" in the framework, this
+>> is highly confusing and needs to be cleaned up.
+>>
+>>>
+>>>   - We can register several thermal zones with the same type (so we can have 
+>>> duplicate names if we use type as name)
+>>>
+>>
+>> ...which makes sense, after realizing that we're registering a TYPE and not a NAME,
+>> and I agree about the logic for which that multiple zones can be of the same type.
+>>
+>>>   - We use thermal_zone_device_get_by_name() but actually it checks against the 
+>>> type and as we can have multiple identical types, the function returns the first 
+>>> one found
+>>>
+>>
+>> The first thing that comes to mind is to rename thermal_zone_device_get_by_name()
+>> to thermal_zone_device_get_by_type(), but then I'd be reintroducing the former and
+>> this gives me concerns about OOT drivers using that and developers getting highly
+>> confused (name->type, but name exists again, so they might erroneously just fix the
+>> call to xxx_by_name() instead of changing it to xxx_by_type()).
+> 
+> 
+>> Should I *not* be concerned about that?
+> 
+> Not really :)
+> 
+> TBH, OOT drivers do not exist from upstream POV.
+> 
+
+Happy to see this answer.
+
+>  > Any suggestion?
+> 
+> Yes, let's introduce a thermal zone name in the tzd.
+> 
+
+Let's go! I'll start this work ASAP.
+
+>   - There are now too many parameters to the function 
+> thermal_zone_device_register*(), so we can't add a new 'name' parameter. Introduce 
+> a thermal_zone_device_parameters structure. This structure will contain all 
+> thermal_zone_device_register_* parameter function. There won't be any functional 
+> changes, just how the parameters are passed. Perhaps, you should use an 
+> intermediate function to not have the change impacting everywhere.
+> 
+>   - then add a const char *name field in this structure and in the 
+> thermal_zone_device structure. So we can assign the name to the thermal zone. The 
+> name must be checked against duplicate. If no name is specified when creating a 
+> thermal zone, then name = type.
+> 
+>   - In thermal_of, use the node name for the type and the name, that will be 
+> duplicate but we will sort it out later.
+> 
+>   - Add the name in sysfs
+> 
+
+I didn't expect a detailed guidance like that! Even though we seem to think alike,
+as in, I was imagining to do exactly that -  thank you, this reduces the actual
+brainstorming from my side as makes me sure that we want to do the same thing, and
+also makes me able to "make my hands dirty with code" sooner than later.
+
+Speeds up the whole process.
+
+> Second step, track down users of thermal_zone_device_get_by_name() and check if 
+> they can use the name instead of the type. I'm pretty sure it is the case for most 
+> of the callers.
+> 
+> With that, there will be a nice clarification IMHO.
+> 
+> Then we will be able to restate the 'type' with something different without 
+> breaking the existing ABI.
+> 
+
+Yes, I totally agree with that.
+
+Okay - it looks like we have at least 95% of a plan - it's enough for me to start
+writing the cleanup.
+
+Cheers!
+Angelo
 
