@@ -1,60 +1,60 @@
-Return-Path: <linux-pm+bounces-748-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-749-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E792A806E19
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 12:35:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C44F3806F91
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 13:20:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D55A1F215D9
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 11:35:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 760601F2157E
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 12:20:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACA9A321AD;
-	Wed,  6 Dec 2023 11:35:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C51F364B2;
+	Wed,  6 Dec 2023 12:20:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qTEqmaQl"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PF1ziB2S"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4E1DE
-	for <linux-pm@vger.kernel.org>; Wed,  6 Dec 2023 03:35:33 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-33338c67d20so628073f8f.0
-        for <linux-pm@vger.kernel.org>; Wed, 06 Dec 2023 03:35:33 -0800 (PST)
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B846B12F
+	for <linux-pm@vger.kernel.org>; Wed,  6 Dec 2023 04:20:01 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2c9f62fca3bso53474941fa.0
+        for <linux-pm@vger.kernel.org>; Wed, 06 Dec 2023 04:20:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701862532; x=1702467332; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1701865200; x=1702470000; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=YFi3RIKaDzGCbVA6KICHAZ/fzez2DnzNL78+4AOaMUg=;
-        b=qTEqmaQl4jQyV1WEhUon5myflgy8sP2JOUSQ6KuBtPZkZ+M5SRZLG1dAkN+1RI8M3a
-         rNn1R9eB53QSvSYt5eG/ESGyOTDkGs4UyWf88zocXArcpjjgDLx+PvqMkRHParzXLOSf
-         ECDF3iPULQvsthKH9zsAzHSHRtrhVWQKm2KLIRPEi56K8d1idqS7SpRIp5F8Qz4rJNOS
-         stFERw5W/XfGslakE7wblcBg5CO22HNgh3N/EKBYvJ905hJ/rBTOO7vPf3EdckG9LfWM
-         3Qjgx/MtZq05kFBNPJU9KaHnflTue0JZpQHK79VOTsK49qWYf919vjBRQCoAOv0aQaBf
-         d4NA==
+        bh=+i4Ygk68LEIXvF8ovwCDnUeBvBPCrOF9ltM3kyzBELs=;
+        b=PF1ziB2SIg4qc/OE5MV0auQAj/lWiY3/ZBafxRKxFSVH/WUD9JzLLdMy8jDb9/DnMB
+         5MADX6vbvWyhfx1It6PvZJe+qhOp4apenPvNou5cm1WnhCHAgz8GptVOxlPD85FK1n+K
+         ptDipsmIuNCrM8f1BH0wh7XiMM1VlkdkAsw5jVfcMmP0akwDye0CXlcfZdhbA1bkxHFK
+         /bcRZuB+/9UtwphSDtzxTGd/mvkrgilmrBmwe76Rk7u0bKT7TP2Q8USQzz/eh1S6+m2L
+         nYlsfnBnfTyBRQA3MWRH1i1pfXJNmILB3LZ3yxq21FZcQdMT6i8VAA/Oa4fdnh1/xa9M
+         ezWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701862532; x=1702467332;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1701865200; x=1702470000;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YFi3RIKaDzGCbVA6KICHAZ/fzez2DnzNL78+4AOaMUg=;
-        b=aPO/k/KUt49Me9f0tP2oDEShGRJ4e0QuoEU1F89MCY4MZaoRcGUqYF0erwfMNOetEU
-         fep2X+MRMYaGT78SPSvM9pkQKbMczav2YABaqpLPWJTXIun7VoPQ4tXEpbTMU+JuNj5V
-         6KfAH5CsUAUJt/TIviTHwsNZ72KXWmCPJW+SXVrJFIm8cgNqLRnKXtVK210Rti4BXpqA
-         OSD8ybFD3O9DmTG45s7CnE6rRcSFGVDrNriKzDPLyEcg0/rTB6z2sYuXXjUDYersgjwN
-         /SLBErh7H+EGLl85maE8IqXKq2LPaTL5gXq+LXBXrW+t3q1VzY3q5vy9fGu5cJ7k2u76
-         sgWQ==
-X-Gm-Message-State: AOJu0Yx84A7F8V+RCQNGbFBL8G1UfE8XqE+m9I0qj4KTl+QAycGcZlqA
-	EM0sl4yvAvpYeh1zVO31Fx2x8A==
-X-Google-Smtp-Source: AGHT+IG1WDr950Oeo2ODHgV1WggcJ9DJetRbXRF39Itxtkz7EB5G09m3ExKEKMIjKUuFuvii6q+nHw==
-X-Received: by 2002:adf:f686:0:b0:333:5446:922a with SMTP id v6-20020adff686000000b003335446922amr432257wrp.32.1701862531641;
-        Wed, 06 Dec 2023 03:35:31 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
-        by smtp.googlemail.com with ESMTPSA id q18-20020a05600000d200b003334041c3edsm9983744wrx.41.2023.12.06.03.35.31
+        bh=+i4Ygk68LEIXvF8ovwCDnUeBvBPCrOF9ltM3kyzBELs=;
+        b=XhMCj7XaGgC1bGwRiiwibosAgZYBGSg/yq/eRb/T0dO2YBIyBEIjB4fkuzZY//YwQ4
+         o+8d99fyIARmuZM+AAizvVssohTc2tCM0XhWBxxJYmA2eVSaULq6OvBZnTztgFwHrHgy
+         vBjMW9tB4phFp4WEVAf06VvBdl553wDt4gEAYxuvXYGtG+ejrQyxcc+b4XSqR9OTKwky
+         DgfYMOFdJApM4LrB8SvpfKYvyxm3Ovy30pkNDV0NCGU8iRNe/OUkUU8QNkx+KP0H4DDm
+         gR3L83TcxLFegxLxqgBBGaRPeouct+f7Mn6BapCwFVWBnTfb56rMPMojpZThPqWeYGqS
+         310w==
+X-Gm-Message-State: AOJu0YxyUD8TWkerNc3pDgKG6s8jb/g9Rme1aWXsA9lxe5bzm2Ap6TeD
+	4VCwhl9dZ5Axj9tS8F2ysWaL0A==
+X-Google-Smtp-Source: AGHT+IGDUAakGvSrTeFgi2nx9gIOE1y209ymR5Qb+p1nSlHQs/zqcKybiK8Xz1Q0AbYMBjC+NnL+xQ==
+X-Received: by 2002:a2e:3514:0:b0:2ca:18de:5c63 with SMTP id z20-20020a2e3514000000b002ca18de5c63mr553729ljz.72.1701865199839;
+        Wed, 06 Dec 2023 04:19:59 -0800 (PST)
+Received: from [172.30.205.186] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
+        by smtp.gmail.com with ESMTPSA id z23-20020a05651c023700b002c9f8d8e5f4sm1209955ljn.41.2023.12.06.04.19.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Dec 2023 03:35:31 -0800 (PST)
-Message-ID: <54af71bb-60e8-4f9c-84d5-0d741e6964c8@linaro.org>
-Date: Wed, 6 Dec 2023 12:35:30 +0100
+        Wed, 06 Dec 2023 04:19:59 -0800 (PST)
+Message-ID: <81b4f158-41e7-43b6-a762-1a05a0994d6e@linaro.org>
+Date: Wed, 6 Dec 2023 13:19:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -62,48 +62,53 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/2] thermal: sysfs: Rework the reading of trip point
- attributes
+Subject: Re: [PATCH RFT] interconnect: qcom: icc-rpm: Fix peak rate
+ calculation
+To: Bjorn Andersson <quic_bjorande@quicinc.com>,
+ Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Georgi Djakov <djakov@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20231205-qcom_icc_calc_rate-typo-v1-1-9d4378dcf53e@quicinc.com>
 Content-Language: en-US
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Lukasz Luba <lukasz.luba@arm.com>
-Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Zhang Rui <rui.zhang@intel.com>
-References: <12337662.O9o76ZdvQC@kreacher> <4854305.GXAFRqVoOG@kreacher>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <4854305.GXAFRqVoOG@kreacher>
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20231205-qcom_icc_calc_rate-typo-v1-1-9d4378dcf53e@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Spam-Level: *
 
-On 05/12/2023 13:26, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+
+On 12/5/23 23:14, Bjorn Andersson wrote:
+> Per the commit message of commit 'dd014803f260 ("interconnect: qcom:
+> icc-rpm: Add AB/IB calculations coefficients")', the peak rate should be
+> 100/ib_percent. But, in what looks like a typical typo, the numerator
+> value is discarded in the calculation.
 > 
-> Rework the _show() callback functions for the trip point temperature,
-> hysteresis and type attributes to avoid copying the values of struct
-> thermal_trip fields that they do not use and make them carry out the
-> same validation checks as the corresponding _store() callback functions.
+> Update the implementation to match the described intention.
 > 
-> No intentional functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Fixes: dd014803f260 ("interconnect: qcom: icc-rpm: Add AB/IB calculations coefficients")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 > ---
-> 
-> v3 -> v4: Don't check trip_id against boundaries in the _show routines
->            for trip type, temperature and hysteresis (Daniel).
-> 
-> v2 -> v3: Drop a redundant 'ret' check at the end of trip_point_hyst_show.
-> 
-> v1 -> v2: Do not drop thermal zone locking from the _store() callback functions.
-> 
+> Spotted while reading the code, patch is untested.
 > ---
+>   drivers/interconnect/qcom/icc-rpm.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+> index fb54e78f8fd7..a8ed435f696c 100644
+> --- a/drivers/interconnect/qcom/icc-rpm.c
+> +++ b/drivers/interconnect/qcom/icc-rpm.c
+> @@ -307,7 +307,7 @@ static u64 qcom_icc_calc_rate(struct qcom_icc_provider *qp, struct qcom_icc_node
+>   
+>   	if (qn->ib_coeff) {
+>   		agg_peak_rate = qn->max_peak[ctx] * 100;
+> -		agg_peak_rate = div_u64(qn->max_peak[ctx], qn->ib_coeff);
+> +		agg_peak_rate = div_u64(agg_peak_rate, qn->ib_coeff);
+Oh fun.. I'dve assumed the compiler is smart enough to catch this
 
-Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Konrad
 
