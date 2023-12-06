@@ -1,128 +1,380 @@
-Return-Path: <linux-pm+bounces-769-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-770-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23B07807A31
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 22:13:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D907D807AB1
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 22:43:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D19C62824A3
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 21:13:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8ED2B28230B
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 21:43:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEC316EB64;
-	Wed,  6 Dec 2023 21:13:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58C817098C;
+	Wed,  6 Dec 2023 21:43:29 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760AFD5B;
-	Wed,  6 Dec 2023 13:13:12 -0800 (PST)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-1fae54afb66so36735fac.1;
-        Wed, 06 Dec 2023 13:13:12 -0800 (PST)
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC21D3;
+	Wed,  6 Dec 2023 13:43:24 -0800 (PST)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-1fb00ea5e5fso43360fac.1;
+        Wed, 06 Dec 2023 13:43:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701897191; x=1702501991;
+        d=1e100.net; s=20230601; t=1701899004; x=1702503804;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=oFsoZNpkyJn47ZwKMdi9sP3iJ2LR9kBDxH0bVwrrCjc=;
-        b=maRjG98B8KQRJS70V1MajVCuW0Kh0srSeE2lVBEp0ET2q27fLzvNUX1AU3Y+u3WwF5
-         dzHwB5ratd61/MkBLpqmxX21BUPmCU4XG+ERGVpO5Om+NqVjxYOc3/c+dW+NIDck04TX
-         u0yV6TbIEG6/gTj+PmHtUv5kaoKS8YTXF2qMAbYhnkdPuteVZrRgUNkpZjCjDIc5NsVd
-         QiZbz4rwdTLbs8PCJEhPBKBhO+S05Hkr9QARsHsi3CJ5FNZ3O/oCWFceHDhiMFxV1ReR
-         Vhx35BVSIUYeBf+SkT24IPucb4rBhYQhFBFULJUEtgObu3GSQn7pCEDv8dNioKvEf42g
-         w+UQ==
-X-Gm-Message-State: AOJu0YyAvDBV4FGEHE1WcudOEWHrWe6Abxbl6ibqAzCM7dp5C701WxFX
-	i4Dhl2JYHZp1foBV+hI4tSSA1JwE4uKglxAz29g=
-X-Google-Smtp-Source: AGHT+IEOX8vI91Uo/xk0HohK4105WhBHzaTXQyrb9EaDx76RReLo4RomS8An2VWI2SUe0jhfQIceSuilyjwuCIl73TQ=
-X-Received: by 2002:a05:6870:944d:b0:1fa:df87:4eba with SMTP id
- e13-20020a056870944d00b001fadf874ebamr2694804oal.5.1701897191604; Wed, 06 Dec
- 2023 13:13:11 -0800 (PST)
+        bh=SAy8WXK1y/31ZcmDbDHvravRz16tZjNVV5jZfuVw9MU=;
+        b=sLHm/jJgT6oxCuqinKO2dc+uq2hnVYPvIbnoxtROIyRuNyczckm+JaaOQ94arphigK
+         n2rzvcOu3L1OyzzmaQYIab69c+0s+icEbwgeS6VQR8OuWNGOwnsVq3YSacz7opWLljfW
+         SdnVg1wnzX0/LV5+TFDuTeWAyzrI2DIl/enpsYU6K3erUgkJ0aygHyT52PBgISbJf/wf
+         RwDoOLENZC38CQ0Pwp96SlPzl4s9HTGBEm7zzNsxiSMjG8+WVo0xPygkf8QNDA7+Imqi
+         bplabhKt+nk4LD6O4iUTXQRWkF5XufjQoC0LQY3dlNcXoXBvF5IgejhN/3GXkkujuRoL
+         QcWw==
+X-Gm-Message-State: AOJu0Yx3L6kvezf85Xj2DumCVxDqlf0Sj9GJxkbmvkajwHjsA71O+WEA
+	2ZoMAy+oJDuR4RYLcGf0RUa+7gGcpEiB3WxBCxGyseWQ
+X-Google-Smtp-Source: AGHT+IGX2SjeOPKr1wRijnA9TN18mHSGLHqXZ3IQkI3BDTgkcXhuM3GPNRv3zCMC0LUMS0RrAQU5jlMdb+rUCGv5z0Q=
+X-Received: by 2002:a05:6870:b4a0:b0:1fb:5e42:5096 with SMTP id
+ y32-20020a056870b4a000b001fb5e425096mr2731765oap.5.1701899004068; Wed, 06 Dec
+ 2023 13:43:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231205063537.872834-1-li.meng@amd.com> <20231205063537.872834-5-li.meng@amd.com>
- <CAJZ5v0ju-Thhz2_rQVbTosTsBaRoyQW2kjtPWWTsiT_Yi2DbsQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0ju-Thhz2_rQVbTosTsBaRoyQW2kjtPWWTsiT_Yi2DbsQ@mail.gmail.com>
+References: <20231110181123.2389186-1-daniel.lezcano@linaro.org>
+In-Reply-To: <20231110181123.2389186-1-daniel.lezcano@linaro.org>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 6 Dec 2023 22:13:00 +0100
-Message-ID: <CAJZ5v0hMAZxvuMWK3dNeOL9FRTrVW7j7PzCFwcp9+0K87y-L0A@mail.gmail.com>
-Subject: Re: [PATCH V12 4/7] cpufreq: Add a notification message that the
- highest perf has changed
-To: Meng Li <li.meng@amd.com>
-Cc: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, Huang Rui <ray.huang@amd.com>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org, 
-	linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>, 
-	linux-kselftest@vger.kernel.org, Nathan Fontenot <nathan.fontenot@amd.com>, 
-	Deepak Sharma <deepak.sharma@amd.com>, Alex Deucher <alexander.deucher@amd.com>, 
-	Mario Limonciello <mario.limonciello@amd.com>, Shimmer Huang <shimmer.huang@amd.com>, 
-	Perry Yuan <Perry.Yuan@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Borislav Petkov <bp@alien8.de>, 
-	Oleksandr Natalenko <oleksandr@natalenko.name>
+Date: Wed, 6 Dec 2023 22:43:13 +0100
+Message-ID: <CAJZ5v0h8CTbDrq1wUOMpKpnKs6Ey7H1onkfKGRS15Gj_AnepAg@mail.gmail.com>
+Subject: Re: [RFC PATCH] thermal/debugfs: Add thermal debugfs information
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: rjw@rjwysocki.net, lukasz.luba@arm.com, rui.zhang@intel.com, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 6, 2023 at 9:58=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.org=
-> wrote:
+On Fri, Nov 10, 2023 at 8:37=E2=80=AFPM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
-> On Tue, Dec 5, 2023 at 7:38=E2=80=AFAM Meng Li <li.meng@amd.com> wrote:
-> >
-> > ACPI 6.5 section 8.4.6.1.1.1 specifies that Notify event 0x85 can be
-> > emmitted to cause the the OSPM to re-evaluate the highest performance
+> The thermal framework does not have any debug information except a
+> sysfs stat which is a bit controversial. This one allocates big chunks
+> of memory for every cooling devices with a high number of states and
+> could represent on some systems in production several megabytes of
+> memory for just a portion of it. As the syfs is limited to a page
+> size, the output is not exploitable with large data array and gets
+> truncated.
 >
-> Typos above.  Given the number of iterations of this patch, this is
-> kind of disappointing.
->
-> > register. Add support for this event.
->
-> Also it would be nice to describe how this is supposed to work at
-> least roughly, so it is not necessary to reverse-engineer the patch to
-> find out that.
->
-> > Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-> > Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-> > Reviewed-by: Huang Rui <ray.huang@amd.com>
-> > Reviewed-by: Perry Yuan <perry.yuan@amd.com>
-> > Signed-off-by: Meng Li <li.meng@amd.com>
-> > Link: https://uefi.org/specs/ACPI/6.5/05_ACPI_Software_Programming_Mode=
-l.html#processor-device-notification-values
-> > ---
-> >  drivers/acpi/processor_driver.c |  6 ++++++
-> >  drivers/cpufreq/cpufreq.c       | 13 +++++++++++++
-> >  include/linux/cpufreq.h         |  5 +++++
-> >  3 files changed, 24 insertions(+)
-> >
-> > diff --git a/drivers/acpi/processor_driver.c b/drivers/acpi/processor_d=
-river.c
-> > index 4bd16b3f0781..29b2fb68a35d 100644
-> > --- a/drivers/acpi/processor_driver.c
-> > +++ b/drivers/acpi/processor_driver.c
-> > @@ -27,6 +27,7 @@
-> >  #define ACPI_PROCESSOR_NOTIFY_PERFORMANCE 0x80
-> >  #define ACPI_PROCESSOR_NOTIFY_POWER    0x81
-> >  #define ACPI_PROCESSOR_NOTIFY_THROTTLING       0x82
-> > +#define ACPI_PROCESSOR_NOTIFY_HIGEST_PERF_CHANGED      0x85
-> >
-> >  MODULE_AUTHOR("Paul Diefenbaugh");
-> >  MODULE_DESCRIPTION("ACPI Processor Driver");
-> > @@ -83,6 +84,11 @@ static void acpi_processor_notify(acpi_handle handle=
-, u32 event, void *data)
-> >                 acpi_bus_generate_netlink_event(device->pnp.device_clas=
-s,
-> >                                                   dev_name(&device->dev=
-), event, 0);
-> >                 break;
-> > +       case ACPI_PROCESSOR_NOTIFY_HIGEST_PERF_CHANGED:
-> > +               cpufreq_update_highest_perf(pr->id);
->
-> And the design appears to be a bit ad-hoc here.
->
-> Because why does it have anything to do with cpufreq?
+> The patch provides the same information than sysfs except the
+> transitions are dynamically allocated, thus they won't show more
+> events than the ones which actually occured. There is no longer a size
 
-Well, clearly, cpufreq can be affected by this, but why would it be
-not affected the same way as in the ACPI_PROCESSOR_NOTIFY_PERFORMANCE
-case?
+occurred
 
-That is, why isn't cpufreq_update_limits() the right thing to do?
+> limitation and it opens the field for more debugging information where
+> the debugfs is designed for, not sysfs.
+>
+> On the thermal zone temperature side, the mitigation episodes are
+> recorded. A mitigation episode happens when the first trip point is
+> crossed the way up and then the way down. During this episode other
+> trip points can be crossed also and are accounted for this mitigation
+> episode. The interesting information is the average temperature at the
+> trip point, the undershot and the overshot. The standard deviation of
+> the mitigated temperature will be added later.
+>
+> The thermal debugfs directory structure tries to stay consistent with
+> the sysfs one but in a very simplified way:
+>
+> thermal/
+> |-- cooling_devices
+> |   |-- 0
+> |   |   |-- reset
+> |   |   |-- time_in_state_ms
+> |   |   |-- total_trans
+> |   |   `-- trans_table
+> |   |-- 1
+> |   |   |-- reset
+> |   |   |-- time_in_state_ms
+> |   |   |-- total_trans
+> |   |   `-- trans_table
+> |   |-- 2
+> |   |   |-- reset
+> |   |   |-- time_in_state_ms
+> |   |   |-- total_trans
+> |   |   `-- trans_table
+> |   |-- 3
+> |   |   |-- reset
+> |   |   |-- time_in_state_ms
+> |   |   |-- total_trans
+> |   |   `-- trans_table
+> |   `-- 4
+> |       |-- reset
+> |       |-- time_in_state_ms
+> |       |-- total_trans
+> |       `-- trans_table
+> `-- thermal_zones
+>     |-- 0
+>     |   `-- mitigations
+>     `-- 1
+>         `-- mitigations
+>
+> The content of the files in the cooling devices directory is the same
+> as the sysfs one except for the trans_table which has the following
+> format:
+>
+> Transition      Hits
+> 1->0            246
+> 0->1            246
+> 2->1            632
+> 1->2            632
+> 3->2            98
+> 2->3            98
+>
+> And finally the content of the mitigations file has the following
+> format:
+>
+> ,-Mitigation at 349988258us, duration=3D130136ms
+> | trip |     type | temp(=C2=B0mC) | hyst(=C2=B0mC) |  duration  |  avg(=
+=C2=B0mC) |  min(=C2=B0mC) |  max(=C2=B0mC) |
+> |    0 |  passive |     65000 |      2000 |     130136 |     68227 |     =
+62500 |     75625 |
+> |    1 |  passive |     75000 |      2000 |     104209 |     74857 |     =
+71666 |     77500 |
+> ,-Mitigation at 272451637us, duration=3D75000ms
+> | trip |     type | temp(=C2=B0mC) | hyst(=C2=B0mC) |  duration  |  avg(=
+=C2=B0mC) |  min(=C2=B0mC) |  max(=C2=B0mC) |
+> |    0 |  passive |     65000 |      2000 |      75000 |     68561 |     =
+62500 |     75000 |
+> |    1 |  passive |     75000 |      2000 |      60714 |     74820 |     =
+70555 |     77500 |
+> ,-Mitigation at 238184119us, duration=3D27316ms
+> | trip |     type | temp(=C2=B0mC) | hyst(=C2=B0mC) |  duration  |  avg(=
+=C2=B0mC) |  min(=C2=B0mC) |  max(=C2=B0mC) |
+> |    0 |  passive |     65000 |      2000 |      27316 |     73377 |     =
+62500 |     75000 |
+> |    1 |  passive |     75000 |      2000 |      19468 |     75284 |     =
+69444 |     77500 |
+> ,-Mitigation at 39863713us, duration=3D136196ms
+> | trip |     type | temp(=C2=B0mC) | hyst(=C2=B0mC) |  duration  |  avg(=
+=C2=B0mC) |  min(=C2=B0mC) |  max(=C2=B0mC) |
+> |    0 |  passive |     65000 |      2000 |     136196 |     73922 |     =
+62500 |     75000 |
+> |    1 |  passive |     75000 |      2000 |      91721 |     74386 |     =
+69444 |     78125 |
+>
+> More information for a better understanding of the thermal behavior
+> will be added after. The idea is to give detailed statistics
+> information about the undershots and overshots, the temperature speed,
+> etc... As all the information in a single file is too much, the idea
+> would be to create a directory named with the mitigation timestamp
+> where all data could be added.
+>
+> Please note this code is immune against trip ordering.
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/thermal/Kconfig           |   7 +
+>  drivers/thermal/Makefile          |   3 +
+>  drivers/thermal/thermal_core.c    |  23 +-
+>  drivers/thermal/thermal_core.h    |   1 +
+>  drivers/thermal/thermal_debugfs.c | 679 ++++++++++++++++++++++++++++++
+>  drivers/thermal/thermal_debugfs.h |  23 +
+>  drivers/thermal/thermal_helpers.c |  27 +-
+>  include/linux/thermal.h           |   7 +
+>  8 files changed, 758 insertions(+), 12 deletions(-)
+>  create mode 100644 drivers/thermal/thermal_debugfs.c
+>  create mode 100644 drivers/thermal/thermal_debugfs.h
+>
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index c81a00fbca7d..b78800e512a8 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -33,6 +33,13 @@ config THERMAL_STATISTICS
+>
+>           If in doubt, say N.
+>
+> +config THERMAL_DEBUGFS
+> +       bool "Thermal debugging file system"
+
+This isn't really a file system
+
+I'd just say "Thermal subsystem debug support"
+
+> +       depends on DEBUG_FS
+> +       help
+> +         This option provides a debugfs entry giving useful
+> +         information about the thermal framework internals.
+
+And here "Say Y to allow the thermal subsystem to collect diagnostic
+information that can be accessed via debugfs."
+
+> +
+>  config THERMAL_EMERGENCY_POWEROFF_DELAY_MS
+>         int "Emergency poweroff delay in milli-seconds"
+>         default 0
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index c934cab309ae..234f19f7efe3 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -10,6 +10,9 @@ thermal_sys-y                 +=3D thermal_trip.o therm=
+al_helpers.o
+>  # netlink interface to manage the thermal framework
+>  thermal_sys-$(CONFIG_THERMAL_NETLINK)          +=3D thermal_netlink.o
+>
+> +# debugfs interface to investigate the behavior and statistics
+
+I'm not sure about the value of this comment.
+
+> +thermal_sys-$(CONFIG_THERMAL_DEBUGFS)  +=3D thermal_debugfs.o
+> +
+>  # interface to/from other layers providing sensors
+>  thermal_sys-$(CONFIG_THERMAL_HWMON)            +=3D thermal_hwmon.o
+>  thermal_sys-$(CONFIG_THERMAL_OF)               +=3D thermal_of.o
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_cor=
+e.c
+> index 3fe9232e355d..635cd08882c8 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -355,17 +355,17 @@ static void handle_thermal_trip(struct thermal_zone=
+_device *tz,
+>                 if (tz->temperature >=3D trip->temperature)
+>                         trip->threshold -=3D trip->hysteresis;
+>         } else {
+> +               int trip_id =3D thermal_zone_trip_id(tz, trip);
+> +
+>                 if (tz->last_temperature < trip->threshold &&
+>                     tz->temperature >=3D trip->threshold) {
+> -                       thermal_notify_tz_trip_up(tz->id,
+> -                                                 thermal_zone_trip_id(tz=
+, trip),
+> -                                                 tz->temperature);
+> +                       thermal_notify_tz_trip_up(tz->id, trip_id, tz->te=
+mperature);
+> +                       thermal_debugfs_handle_way_up(tz, trip_id, tz->te=
+mperature);
+
+I would prefer to pass trip here (I have a similar change for
+thermal_notify_tz_trip_up() in the works) and why not just call it
+thermal_debug_tz_trip_up()?  And _tz_trip_down() for consistency
+below?
+
+Also if tz is passed, tz->temperature can be retrieved by the function
+itself, so no need to pass it.
+
+>                         trip->threshold =3D trip->temperature - trip->hys=
+teresis;
+>                 } else if (tz->last_temperature >=3D trip->threshold &&
+>                            tz->temperature < trip->threshold) {
+> -                       thermal_notify_tz_trip_down(tz->id,
+> -                                                   thermal_zone_trip_id(=
+tz, trip),
+> -                                                   tz->temperature);
+> +                       thermal_notify_tz_trip_down(tz->id, trip_id, tz->=
+temperature);
+> +                       thermal_debugfs_handle_way_down(tz, trip_id, tz->=
+temperature);
+
+Same here.
+
+>                         trip->threshold =3D trip->temperature;
+>                 }
+>         }
+> @@ -395,6 +395,7 @@ static void update_temperature(struct thermal_zone_de=
+vice *tz)
+>         trace_thermal_temperature(tz);
+>
+>         thermal_genl_sampling_temp(tz->id, temp);
+> +       thermal_debugfs_update_temp(tz);
+
+thermal_debug_update_temp()?
+
+>  }
+>
+>  static void thermal_zone_device_init(struct thermal_zone_device *tz)
+> @@ -923,6 +924,8 @@ __thermal_cooling_device_register(struct device_node =
+*np,
+>
+>         mutex_unlock(&thermal_list_lock);
+>
+> +       thermal_debugfs_cdev_register(cdev);
+
+I'd call this thermal_debug_cdev_add(), and the one below analogously.
+
+> +
+>         return cdev;
+>
+>  out_cooling_dev:
+> @@ -1129,6 +1132,8 @@ void thermal_cooling_device_unregister(struct therm=
+al_cooling_device *cdev)
+>         if (!cdev)
+>                 return;
+>
+> +       thermal_debugfs_cdev_unregister(cdev);
+> +
+>         mutex_lock(&thermal_list_lock);
+>
+>         if (!thermal_cooling_device_present(cdev)) {
+> @@ -1370,6 +1375,8 @@ thermal_zone_device_register_with_trips(const char =
+*type, struct thermal_trip *t
+>
+>         thermal_notify_tz_create(tz->id, tz->type);
+>
+> +       thermal_debugfs_tz_register(tz);
+
+thermal_debug_tz_add() ?  And __debug_tz_remove() below?
+
+> +
+>         return tz;
+>
+>  unregister:
+> @@ -1435,6 +1442,8 @@ void thermal_zone_device_unregister(struct thermal_=
+zone_device *tz)
+>         if (!tz)
+>                 return;
+>
+> +       thermal_debugfs_tz_unregister(tz);
+> +
+>         tz_id =3D tz->id;
+>
+>         mutex_lock(&thermal_list_lock);
+> @@ -1548,6 +1557,8 @@ static int __init thermal_init(void)
+>  {
+>         int result;
+>
+> +       thermal_debugfs_init();
+> +
+>         result =3D thermal_netlink_init();
+>         if (result)
+>                 goto error;
+> diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_cor=
+e.h
+> index 0a3b3ec5120b..809d37d0aa28 100644
+> --- a/drivers/thermal/thermal_core.h
+> +++ b/drivers/thermal/thermal_core.h
+> @@ -13,6 +13,7 @@
+>  #include <linux/thermal.h>
+>
+>  #include "thermal_netlink.h"
+> +#include "thermal_debugfs.h"
+>
+>  /* Default Thermal Governor */
+>  #if defined(CONFIG_THERMAL_DEFAULT_GOV_STEP_WISE)
+
+The change below is large and rather hard to grasp as a whole.
+
+It would be easier to process if it is split into a few smaller
+changes building on top of each other IMO.
+
+Personally, I would start with stubs of the functions that are called
+from the core and subsequently add more and more code to them.
+
+> diff --git a/drivers/thermal/thermal_debugfs.c b/drivers/thermal/thermal_=
+debugfs.c
+> new file mode 100644
+> index 000000000000..4053fd2fe16f
+> --- /dev/null
+> +++ b/drivers/thermal/thermal_debugfs.c
+> @@ -0,0 +1,679 @@
+
+[cut]
 
