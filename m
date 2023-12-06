@@ -1,262 +1,177 @@
-Return-Path: <linux-pm+bounces-735-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-736-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CBF3806CA5
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 11:50:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B65D9806D58
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 12:06:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C2B3C1C20D21
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 10:50:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E019DB20C8B
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 11:06:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F5873032F;
-	Wed,  6 Dec 2023 10:50:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27EFC22069;
+	Wed,  6 Dec 2023 11:06:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="mlth7RhV"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Wrs6mYs9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6294ED45;
-	Wed,  6 Dec 2023 02:50:23 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B66wMVf032210;
-	Wed, 6 Dec 2023 10:50:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=wx7I4Q/ahI52IqB1mE9VrV2DOdMksjwilFVcGZF+YJg=;
- b=mlth7RhV0x6n3mFFWwYLmsV2f4f4cYJWiWbCnlO/DZuX8c8veI+N2MPzy39hKoLEi8Hy
- ZHW7qWVIPB5vdQxhFJERdagjeNKPIxAWpUANhLJAtEK7H8sfUC+e4/xVAjOQC2QcD9DB
- hO/haYIgja2GckUtbAoM6pvUbwv0BUigKwBWx+Urt6EsQRw3WhgrUxN/EeyYBV29s4nL
- ketTkRbHt0pxeHSSOBrCoNTVTOAlj8q9kC26GjXZ1ngWPZku7rjhkN6VoqdBdSGaZqjA
- qhz7+VoDrPt/cJje9fEVlnrUcy8jvwtUvxPhCYf+9JJvTBq2ET0sL4b39Hz/quOMnziM VA== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3utdcas8yw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 06 Dec 2023 10:50:15 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3B6AoFEg006011
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 6 Dec 2023 10:50:15 GMT
-Received: from [10.214.66.81] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 6 Dec
- 2023 02:40:12 -0800
-Message-ID: <75e59a18-5d23-332e-c5f6-0690a918fa46@quicinc.com>
-Date: Wed, 6 Dec 2023 16:10:09 +0530
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA63181
+	for <linux-pm@vger.kernel.org>; Wed,  6 Dec 2023 03:06:20 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-40c09f5a7cfso38696285e9.0
+        for <linux-pm@vger.kernel.org>; Wed, 06 Dec 2023 03:06:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1701860778; x=1702465578; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jClcqTKkEdlh/0n7GUFJamNERw69d7IUU8YIMDhi+mA=;
+        b=Wrs6mYs9AEL6tIA5ntG7olO4OAA+eBadszsc7d5gZeNW+0+X6R8Wt1s4Eja2DY6Ym+
+         6YJyGClcon6llEifVlGeBdq7p3U477c2tf0aDpJvzYuMwx1hkjkCaLUsSzf5cIMWTUgs
+         Lxr0E0CEp6tdYyUxkJ5e+F2Ffiyy9cGEbxeyYRrWVPH6+cLzXU9YUonRTO8TWqNriDpV
+         nGXvSvUh/kgqAnD7nO2dxVPTw9B9c4U8pwsLDAN/ghegY5n6g8NLphmclHt2ZCN+SlTi
+         BPQLB3d65E1jWJ9RwDvk39+qVixHH25DgBsvarheXLsyzPG3p2nb9nnqDLJRF0jnVLIJ
+         fIJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701860778; x=1702465578;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jClcqTKkEdlh/0n7GUFJamNERw69d7IUU8YIMDhi+mA=;
+        b=DEFxDxYwXQpnOWCmKcZJFl/6MirfDNo+AhydAHN+sgGe4tzk3aQXQLZ8IXZjPweP42
+         134X138T+fLlS0eBNz9T2Qs48MZoOcmF63GuV1X35oSENF6T8HHKStPQYT88IvDq0V+X
+         imsWwy8L4CJSQ9jIq1OPOVDYDobLJGfPz5d4jnV9xngEAnrDL1RQv4dlVvtORL6RJQVF
+         jw5EVrjnVLb+x2HOCazvxayM1cYlLt6woRDY93g5fr3ADEC1S4sNyfcrJjg271aIEQWq
+         WN7qphPBI9i8/qKJabFXzDEkn4fiGA1qd101S5IzqrHYSnSSiYwA3BdkbHB9hyiQ9eNT
+         EcWA==
+X-Gm-Message-State: AOJu0YwaZJgsE1Rr8OqprXGDKRyOKqDbYKyV4Arxk0j6SNbEdbvG/ECO
+	rW+In42EVJZFVV+EMS8paTrHHw==
+X-Google-Smtp-Source: AGHT+IH0VuWe5InqREqifmqooyinWBx+yfuLzH9q5QbfammxeOLg8AeNYOhYqj0HtNtgF1CVmZH67A==
+X-Received: by 2002:a7b:c447:0:b0:40b:5e59:e9df with SMTP id l7-20020a7bc447000000b0040b5e59e9dfmr489123wmi.126.1701860778670;
+        Wed, 06 Dec 2023 03:06:18 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.218.27])
+        by smtp.gmail.com with ESMTPSA id je18-20020a05600c1f9200b003feea62440bsm21897673wmb.43.2023.12.06.03.06.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Dec 2023 03:06:18 -0800 (PST)
+Message-ID: <332dfce5-f2a8-421a-878e-85f95aa64d10@linaro.org>
+Date: Wed, 6 Dec 2023 12:06:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v4] PM / devfreq: Synchronize device_monitor_[start/stop]
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3.1 0/8] Convert DA906{1,2} bindings to json-schema
 Content-Language: en-US
-To: <myungjoo.ham@samsung.com>, <kyungmin.park@samsung.com>,
-        <cw00.choi@samsung.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <huangzaiyang@oppo.com>
-References: <1700860318-4025-1-git-send-email-quic_mojha@quicinc.com>
-From: Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <1700860318-4025-1-git-send-email-quic_mojha@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To: Biju Das <biju.das.jz@bp.renesas.com>, Lee Jones <lee@kernel.org>,
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Rob Herring
+ <robh+dt@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: Support Opensource <support.opensource@diasemi.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>,
+ Steve Twiss <stwiss.opensource@diasemi.com>, linux-input@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+ Biju Das <biju.das.au@gmail.com>, linux-renesas-soc@vger.kernel.org
+References: <20231204172510.35041-1-biju.das.jz@bp.renesas.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20231204172510.35041-1-biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: uaWSN-36L6oEmPEREvz_Aso1N54JENQt
-X-Proofpoint-ORIG-GUID: uaWSN-36L6oEmPEREvz_Aso1N54JENQt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-06_06,2023-12-06_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 suspectscore=0 spamscore=0 malwarescore=0 priorityscore=1501
- mlxscore=0 impostorscore=0 mlxlogscore=999 clxscore=1015 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2312060089
 
-Friendly reminder..
+On 04/12/2023 18:25, Biju Das wrote:
+> Convert the below bindings to json-schema
+> 1) DA906{1,2} mfd bindings
+> 2) DA906{1,2,3} onkey bindings
+> 3) DA906{1,2,3} thermal bindings
+> 
+> Also add fallback for DA9061 watchdog device and document
+> DA9063 watchdog device.
+> 
+> v3->v3.1:
+>  * Patch#1 is merge of patch#1 from v2 + patch#8 from v2.
+>  * Dropped comment for d9061 watchdog fallback
+>  * Replaced enum->const for dlg,da9061-watchdog and its fallback.
+>  * Restored patch#4 in series 1 and dropped the thermal example
+>  * Added Ack from Conor Dooley for da9063 watchdog binding support.
+>  * Updated title DA9062/61->DA906{1,2,3} as it supports DA9063.
+>  * Retained Rb tag since the changes are trivial.
+>  * Added Ack from Conor for updating watchdog property
+>  * Dropped link to product information.
+>  * Patch#5(onkey) is squashed with patch#6 and patch#9 from v2.
+>  * Replaced enum->const for dlg,da9061-onkey and its fallback.
+>  * Dropped example
+>  * Restored the thermal binding patch from v2.
+>  * Dropped example
+>  * Replaced enum->const for compatible property.
+>  * Added Rb tag from Rob and retained Rb tag as changes are trivial.
+>  * Added Ack from Conor Dooley for patch#7.
+>  * Split the thermal binding patch separate
+>  * Updated the description
 
--Mukesh
 
-On 11/25/2023 2:41 AM, Mukesh Ojha wrote:
-> There is a chance if a frequent switch of the governor
-> done in a loop result in timer list corruption where
-> timer cancel being done from two place one from
-> cancel_delayed_work_sync() and followed by expire_timers()
-> can be seen from the traces[1].
-> 
-> while true
-> do
->          echo "simple_ondemand" > /sys/class/devfreq/1d84000.ufshc/governor
->          echo "performance" > /sys/class/devfreq/1d84000.ufshc/governor
-> done
-> 
-> It looks to be issue with devfreq driver where
-> device_monitor_[start/stop] need to synchronized so that
-> delayed work should get corrupted while it is either
-> being queued or running or being cancelled.
-> 
-> Let's use polling flag and devfreq lock to synchronize the
-> queueing the timer instance twice and work data being
-> corrupted.
-> 
-> [1]
-> ...
-> ..
-> <idle>-0    [003]   9436.209662:  timer_cancel   timer=0xffffff80444f0428
-> <idle>-0    [003]   9436.209664:  timer_expire_entry   timer=0xffffff80444f0428  now=0x10022da1c  function=__typeid__ZTSFvP10timer_listE_global_addr  baseclk=0x10022da1c
-> <idle>-0    [003]   9436.209718:  timer_expire_exit   timer=0xffffff80444f0428
-> kworker/u16:6-14217    [003]   9436.209863:  timer_start   timer=0xffffff80444f0428  function=__typeid__ZTSFvP10timer_listE_global_addr  expires=0x10022da2b  now=0x10022da1c  flags=182452227
-> vendor.xxxyyy.ha-1593    [004]   9436.209888:  timer_cancel   timer=0xffffff80444f0428
-> vendor.xxxyyy.ha-1593    [004]   9436.216390:  timer_init   timer=0xffffff80444f0428
-> vendor.xxxyyy.ha-1593    [004]   9436.216392:  timer_start   timer=0xffffff80444f0428  function=__typeid__ZTSFvP10timer_listE_global_addr  expires=0x10022da2c  now=0x10022da1d  flags=186646532
-> vendor.xxxyyy.ha-1593    [005]   9436.220992:  timer_cancel   timer=0xffffff80444f0428
-> xxxyyyTraceManag-7795    [004]   9436.261641:  timer_cancel   timer=0xffffff80444f0428
-> 
-> [2]
-> 
->   9436.261653][    C4] Unable to handle kernel paging request at virtual address dead00000000012a
-> [ 9436.261664][    C4] Mem abort info:
-> [ 9436.261666][    C4]   ESR = 0x96000044
-> [ 9436.261669][    C4]   EC = 0x25: DABT (current EL), IL = 32 bits
-> [ 9436.261671][    C4]   SET = 0, FnV = 0
-> [ 9436.261673][    C4]   EA = 0, S1PTW = 0
-> [ 9436.261675][    C4] Data abort info:
-> [ 9436.261677][    C4]   ISV = 0, ISS = 0x00000044
-> [ 9436.261680][    C4]   CM = 0, WnR = 1
-> [ 9436.261682][    C4] [dead00000000012a] address between user and kernel address ranges
-> [ 9436.261685][    C4] Internal error: Oops: 96000044 [#1] PREEMPT SMP
-> [ 9436.261701][    C4] Skip md ftrace buffer dump for: 0x3a982d0
-> ...
-> 
-> [ 9436.262138][    C4] CPU: 4 PID: 7795 Comm: TraceManag Tainted: G S      W  O      5.10.149-android12-9-o-g17f915d29d0c #1
-> [ 9436.262141][    C4] Hardware name: Qualcomm Technologies, Inc.  (DT)
-> [ 9436.262144][    C4] pstate: 22400085 (nzCv daIf +PAN -UAO +TCO BTYPE=--)
-> [ 9436.262161][    C4] pc : expire_timers+0x9c/0x438
-> [ 9436.262164][    C4] lr : expire_timers+0x2a4/0x438
-> [ 9436.262168][    C4] sp : ffffffc010023dd0
-> [ 9436.262171][    C4] x29: ffffffc010023df0 x28: ffffffd0636fdc18
-> [ 9436.262178][    C4] x27: ffffffd063569dd0 x26: ffffffd063536008
-> [ 9436.262182][    C4] x25: 0000000000000001 x24: ffffff88f7c69280
-> [ 9436.262185][    C4] x23: 00000000000000e0 x22: dead000000000122
-> [ 9436.262188][    C4] x21: 000000010022da29 x20: ffffff8af72b4e80
-> [ 9436.262191][    C4] x19: ffffffc010023e50 x18: ffffffc010025038
-> [ 9436.262195][    C4] x17: 0000000000000240 x16: 0000000000000201
-> [ 9436.262199][    C4] x15: ffffffffffffffff x14: ffffff889f3c3100
-> [ 9436.262203][    C4] x13: ffffff889f3c3100 x12: 00000000049f56b8
-> [ 9436.262207][    C4] x11: 00000000049f56b8 x10: 00000000ffffffff
-> [ 9436.262212][    C4] x9 : ffffffc010023e50 x8 : dead000000000122
-> [ 9436.262216][    C4] x7 : ffffffffffffffff x6 : ffffffc0100239d8
-> [ 9436.262220][    C4] x5 : 0000000000000000 x4 : 0000000000000101
-> [ 9436.262223][    C4] x3 : 0000000000000080 x2 : ffffff889edc155c
-> [ 9436.262227][    C4] x1 : ffffff8001005200 x0 : ffffff80444f0428
-> [ 9436.262232][    C4] Call trace:
-> [ 9436.262236][    C4]  expire_timers+0x9c/0x438
-> [ 9436.262240][    C4]  __run_timers+0x1f0/0x330
-> [ 9436.262245][    C4]  run_timer_softirq+0x28/0x58
-> [ 9436.262255][    C4]  efi_header_end+0x168/0x5ec
-> [ 9436.262265][    C4]  __irq_exit_rcu+0x108/0x124
-> [ 9436.262274][    C4]  __handle_domain_irq+0x118/0x1e4
-> [ 9436.262282][    C4]  gic_handle_irq.30369+0x6c/0x2bc
-> [ 9436.262286][    C4]  el0_irq_naked+0x60/0x6c
-> 
-> Reported-by: Joyyoung Huang <huangzaiyang@oppo.com>
-> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> ---
-> Huang,
-> 
-> Would be looking for your tested-by..
-> 
-> -Mukesh
-> 
-> 
-> Changes in v4: https://lore.kernel.org/lkml/1700238027-20518-1-git-send-email-quic_mojha@quicinc.com/
->   - Mistakenly put cancel work under devfreq lock which could result in deadlock
->     reported by [Joyyoung Huang]
->     https://lore.kernel.org/lkml/KL1PR02MB8141D1A307457AF69EBB6AFBA3B8A@KL1PR02MB8141.apcprd02.prod.outlook.com/
-> 
-> Changes in v3: https://lore.kernel.org/lkml/1700235522-31105-1-git-send-email-quic_mojha@quicinc.com/
->   - Remove the unexpected 'twice' from the subject.
-> 
-> Changes in v2: https://lore.kernel.org/lkml/1699957648-31299-1-git-send-email-quic_mojha@quicinc.com/
->   - Changed subject.
->   - Added lock to avoid work data corruption due to
->     parallel calls to devfreq_monitor_start while work
->     is queued in flight.
->   - Added lock to cover the same as above case while the
->     work is being cancelled.
->   - Added Reported-by for similar issue reported at
->     https://lore.kernel.org/lkml/SEYPR02MB565398175FA093AC3E63EE7BA3B0A@SEYPR02MB5653.apcprd02.prod.outlook.com/
-> 
->   drivers/devfreq/devfreq.c | 24 ++++++++++++++++++++++--
->   1 file changed, 22 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-> index b3a68d5833bd..cb1c24721a37 100644
-> --- a/drivers/devfreq/devfreq.c
-> +++ b/drivers/devfreq/devfreq.c
-> @@ -461,10 +461,14 @@ static void devfreq_monitor(struct work_struct *work)
->   	if (err)
->   		dev_err(&devfreq->dev, "dvfs failed with (%d) error\n", err);
->   
-> +	if (devfreq->stop_polling)
-> +		goto out;
-> +
->   	queue_delayed_work(devfreq_wq, &devfreq->work,
->   				msecs_to_jiffies(devfreq->profile->polling_ms));
-> -	mutex_unlock(&devfreq->lock);
->   
-> +out:
-> +	mutex_unlock(&devfreq->lock);
->   	trace_devfreq_monitor(devfreq);
->   }
->   
-> @@ -483,6 +487,10 @@ void devfreq_monitor_start(struct devfreq *devfreq)
->   	if (IS_SUPPORTED_FLAG(devfreq->governor->flags, IRQ_DRIVEN))
->   		return;
->   
-> +	mutex_lock(&devfreq->lock);
-> +	if (delayed_work_pending(&devfreq->work))
-> +		goto out;
-> +
->   	switch (devfreq->profile->timer) {
->   	case DEVFREQ_TIMER_DEFERRABLE:
->   		INIT_DEFERRABLE_WORK(&devfreq->work, devfreq_monitor);
-> @@ -491,12 +499,16 @@ void devfreq_monitor_start(struct devfreq *devfreq)
->   		INIT_DELAYED_WORK(&devfreq->work, devfreq_monitor);
->   		break;
->   	default:
-> -		return;
-> +		goto out;
->   	}
->   
->   	if (devfreq->profile->polling_ms)
->   		queue_delayed_work(devfreq_wq, &devfreq->work,
->   			msecs_to_jiffies(devfreq->profile->polling_ms));
-> +
-> +out:
-> +	devfreq->stop_polling = false;
-> +	mutex_unlock(&devfreq->lock);
->   }
->   EXPORT_SYMBOL(devfreq_monitor_start);
->   
-> @@ -513,6 +525,14 @@ void devfreq_monitor_stop(struct devfreq *devfreq)
->   	if (IS_SUPPORTED_FLAG(devfreq->governor->flags, IRQ_DRIVEN))
->   		return;
->   
-> +	mutex_lock(&devfreq->lock);
-> +	if (devfreq->stop_polling) {
-> +		mutex_unlock(&devfreq->lock);
-> +		return;
-> +	}
-> +
-> +	devfreq->stop_polling = true;
-> +	mutex_unlock(&devfreq->lock);
->   	cancel_delayed_work_sync(&devfreq->work);
->   }
->   EXPORT_SYMBOL(devfreq_monitor_stop);
+Hundreds of changes and just "3 -> 3.1"? This does not make sense.
+
+Also, use normal versioning:
+
+b4 diff '<20231204172510.35041-9-biju.das.jz@bp.renesas.com>'
+Grabbing thread from
+lore.kernel.org/all/20231204172510.35041-9-biju.das.jz@bp.renesas.com/t.mbox.gz
+---
+Analyzing 21 messages in the thread
+ERROR: Could not auto-find previous revision
+       Run "b4 am -T" manually, then "b4 diff -m mbx1 mbx2"
+
+
+Best regards,
+Krzysztof
+
 
