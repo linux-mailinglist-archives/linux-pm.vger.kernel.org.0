@@ -1,123 +1,138 @@
-Return-Path: <linux-pm+bounces-726-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-727-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98089806402
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 02:20:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B27E806428
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 02:31:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48B4A282078
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 01:20:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B546E1F21725
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 01:31:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51FF5807;
-	Wed,  6 Dec 2023 01:20:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABF24EBC;
+	Wed,  6 Dec 2023 01:31:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="G1MLO4n3"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qxr5YYqf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44EBB194
-	for <linux-pm@vger.kernel.org>; Tue,  5 Dec 2023 17:20:28 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-548ae9a5eeaso2997a12.1
-        for <linux-pm@vger.kernel.org>; Tue, 05 Dec 2023 17:20:28 -0800 (PST)
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B6C109
+	for <linux-pm@vger.kernel.org>; Tue,  5 Dec 2023 17:31:19 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-54c79cca895so5729a12.0
+        for <linux-pm@vger.kernel.org>; Tue, 05 Dec 2023 17:31:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701825627; x=1702430427; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1701826277; x=1702431077; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5e6HKJAOBlM7RBaBxZJTZJBR5HIXv1/xwkFWn2KvL2U=;
-        b=G1MLO4n3We5ST7XVyVRQH5l7kPVb+PNi3SMITT1ejHZ2LFkrXlASh1bSEkdRm2X4Ft
-         YngynDBIWZFW+avHn7VBs1aO7P10RpeScweooDZ5SDzqX0dqj7tX/3Pnjul8mlwGj0Zw
-         kckHnNm5K0NK/IYCO82+m2AfwuSs1hPDTkotiZoajJdIcjsDmKQJ3CAzKTvke5oZH6sV
-         JhgfLrNrOS1L2U/yE78IPgnN1lkd/piNtKuX4nXBaIjmtbB4BXjHcJz37mRilTa/3EE6
-         cYKjaPcQuavHKfujEPuxLFr6sho9JyP1hIs2+664z1JAng667sWtC6fMCpfZXpfUItnR
-         vWaw==
+        bh=41Rwl3x/2TllNeIxmSP3STbN+r6kbYcCTNLj/gCvstc=;
+        b=qxr5YYqfneLIGrNBGgvvNbn3hLvjav3P97Io/83AQNonAtkz9na7fMq7WrD3W4Ds7g
+         SnyNPZAh7OtiqL3DlURQfL6qLAZb+53QEtXl9845Nkwsi1NdwjvMfn2+CPeZmyIDmJZ/
+         DdficFvcVS0vFpuZio2injfCdCuJt4/M0EriUPHuWZ0s2NAT6zC15qceUNdQVQn0UFQC
+         uyFqfRT1QZscAsEbgoFmV7nR/4JfeMX9Q6MKd292T3UfDPvhyMZbumjvO2u0uG5kcq6y
+         sSi7wnF3gcbG8L57BvuanBFm8c2g0+JEISz5JWgyvNVK1telHwd6CXfigyxWi4yg3TS9
+         bQ4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701825627; x=1702430427;
+        d=1e100.net; s=20230601; t=1701826277; x=1702431077;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5e6HKJAOBlM7RBaBxZJTZJBR5HIXv1/xwkFWn2KvL2U=;
-        b=OibCzX4bJWDcRWNEdgDjBc5Up0A4ojM8y/ojyHTohB4SWlumZbU0HllU/hhzo2kjoL
-         hQVOUzfHgLcuQP2WClWVUX36XpajDUdDCgU7B0t3L7j2jGvA/TlRwMyJDIwV248Rbw3k
-         XLeVLM202Pp07y9sOEp6S8CyCOoEKutX6t9k9Ggd06+j7celKK2zMAb7HY1VKUFEtG62
-         4OSp9lFNwp7+XxTSkHSOx8FNWkOAVoclTx3MODm0b9OfbtUC0+C/UKQhct9wlD5w6Rs1
-         MBE/Rk6fYhvkrrUNp+1k9jARWZYqYyfATLcE8SQwyj6hphSYr/zdHml3EjnMZSPodpZm
-         M0kQ==
-X-Gm-Message-State: AOJu0YzjoTD7bycD9kRyw7tmEufst1YPCz1xmxKR/1xFzyJHW8PuaBKI
-	/rggahVoQi7TVBqyW7SfKD5K7f4EO1LIogDJXT5Isg==
-X-Google-Smtp-Source: AGHT+IH6ze5+GrRW43I2juEb9LY8A3zNcTx1dV7WkAhnVYtpXJuIlWRKuZksEimpHZUhS75quQcqnccdAB0vavQnjIM=
-X-Received: by 2002:a50:9f89:0:b0:54b:bf08:a95f with SMTP id
- c9-20020a509f89000000b0054bbf08a95fmr42502edf.6.1701825626583; Tue, 05 Dec
- 2023 17:20:26 -0800 (PST)
+        bh=41Rwl3x/2TllNeIxmSP3STbN+r6kbYcCTNLj/gCvstc=;
+        b=snv8yWVdvR4zjHHIOrw+enxxrULzm3F0aMDgqv/hJAkmEGNc0qso5xxLoJJBnpR+7H
+         fcHjjQ6KZt2CVGRM6AJ+aBamsq5Ujl+JfxL8OcSl/tvqJaM8HFeqZydy1l3viy3Q9FY8
+         ZO/DCUicMOjO78j1EYeBhslE7p9FNNceyTL1RtVvCjvn2MYIy/eV1GpnNoy4zZbk27vc
+         jejnJvKa4GbMKqxMTmyZHJX4oJtvUDZ/r3pttJ3XtK53t6jgyTFlHIMx0N1Pj48hWIIy
+         FcHbnGIGiryU1djHbLdxpRH+fG49y7YMxdtTrT6PZsSFsbkAJJceEYxccAGycDk00Ilh
+         Dzjg==
+X-Gm-Message-State: AOJu0YzHNboZxdl5eFkVWyR03P+IDpt+qPOUw3ZgQZAqj0F54xa+gfRl
+	zOMs6sQOb9IdpP5k+Wt6kkfaINdGWQka3ucQLNdmXg==
+X-Google-Smtp-Source: AGHT+IHPUyyKIOpIh4hKlOlmwKZ2CgeUY/dRodSUu49fZ4S2tGD6hSYp+sdKAY51i16SDBrJgseIWz3gUmlFd7pzrQg=
+X-Received: by 2002:a50:bb03:0:b0:544:466b:3b20 with SMTP id
+ y3-20020a50bb03000000b00544466b3b20mr28726ede.5.1701826277296; Tue, 05 Dec
+ 2023 17:31:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231120234015.3273143-1-radusolea@google.com> <9d1009d9-b95b-4152-841f-19470a17ba97@linaro.org>
-In-Reply-To: <9d1009d9-b95b-4152-841f-19470a17ba97@linaro.org>
+References: <20231120234015.3273143-1-radusolea@google.com> <CAJZ5v0jB9ObOWR5xWme--DZxFdjCYpdf9K6=KpywYxuq6F2c3Q@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jB9ObOWR5xWme--DZxFdjCYpdf9K6=KpywYxuq6F2c3Q@mail.gmail.com>
 From: Radu Solea <radusolea@google.com>
-Date: Tue, 5 Dec 2023 17:20:14 -0800
-Message-ID: <CAPpbzyhEkqjA0Kv=f_O1hy-dT8o-O4tPB_KpQqbE9b7vwC+2NA@mail.gmail.com>
+Date: Tue, 5 Dec 2023 17:31:06 -0800
+Message-ID: <CAPpbzygvYSR6grEzwmKY3ebCRJr4aURf2zeBFhLG3F035Z4=-w@mail.gmail.com>
 Subject: Re: [PATCH v2 RESEND] thermal core: add option to run PM_POST_SUSPEND asynchronously
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: linux-pm@vger.kernel.org, rafael@kernel.org
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 29, 2023 at 4:20=E2=80=AFAM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
+On Wed, Nov 29, 2023 at 5:09=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.or=
+g> wrote:
 >
-> On 21/11/2023 00:40, Radu Solea wrote:
+> On Tue, Nov 21, 2023 at 12:40=E2=80=AFAM Radu Solea <radusolea@google.com=
+> wrote:
+> >
 > > Some thermal zones are bus connected and slow to resume, thus
 > > delaying actions which depend on completion of PM_POST_SUSPEND.
+>
+> What actions in particular?
+Anything in the PM_POST_SUSPEND chain coming after this sequence and
+the completion of the write() to /sys/power/state.
+
+>
 > > Add optional execution path to resume thermal zones on the system
 > > unbounded workqueue.
-> >
+>
+> Why optional?
+I proposed the change as optional because I'm not certain I can
+account for all possible system loads.
+However, in the specific context of embedded devices, custom kernel
+configurations are the norm and it is expected that the integration
+team validates system assumptions (such as system unbounded queue
+load).
+
+>
+> This is only useful for people building their own custom kernels.
+>
 > > Signed-off-by: Radu Solea <radusolea@google.com>
 > > ---
+> >  drivers/thermal/Kconfig        | 11 +++++++
+> >  drivers/thermal/thermal_core.c | 58 ++++++++++++++++++++++++++++++----
+> >  2 files changed, 62 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> > index c81a00fbca7d..148d6e9734c6 100644
+> > --- a/drivers/thermal/Kconfig
+> > +++ b/drivers/thermal/Kconfig
+> > @@ -91,6 +91,17 @@ config THERMAL_WRITABLE_TRIPS
+> >           Say 'Y' here if you would like to allow userspace tools to
+> >           change trip temperatures.
+> >
+> > +config THERMAL_ASYNC_RESUME
+> > +       bool "Thermal async init zones on system resume"
+> > +       default n
+> > +       help
+> > +         Re-initialize thermal zones asynchronously on system resume.
+> > +         Thermal zone sensors may be attached on slow buses, impacting
 >
-> This async change may have a lot of hidden implications.
+> "Slow" relative to what?  How can it be determined?
 >
-> Could you elaborate more the issue and how the async will fix the problem=
-?
+> > +         the duration of PM_POST_SUSPEND. If that is a concern enable
+> > +         this switch.
+> > +
+> > +         If in doubt, say N.
+> > +
+> >  choice
+> >         prompt "Default Thermal governor"
+> >         default THERMAL_DEFAULT_GOV_STEP_WISE
 >
-> If you have a platform being slow to resume, can you provide numbers
-> with and without this option?
->
-> Thanks
->    -- D.
->
-> --
-> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
-M SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
->
-
-In multicore systems PM_POST_SUSPEND is executed on a single core.
-Any work done in the notification chain delays all subsequent actions
-in the chain with respect to system time, including the completion of
-the write() to /sys/power/state.
-I didn't include numbers from my system since they are likely
-irrelevant for other systems out there. The particular number I'm
-chasing is ~50ms.
-This comes from having on-board peripherals as thermal zones, they
-execute async and significantly slower than the main core, add a/d
-conversions and bus delays to that and it's easy to see those numbers.
-Making the entire sequence synchronous to itself and async to
-PM_POST_SUSPEND isn't that much of a change, it allows the sequence to
-run on any core with spare cycles delayed with whatever the system
-unbounded queue load is at the time.
-(on my target system) I've seen consistent time gains (those same
-50ms) to PM_POST_SUSPEND completion with this sequence actually
-completing before the chain finishes, this will vary from integration
-to integration.
-
-Thank you,
-Radu.
+> In the first place, I would like to know the exact motivation for this ch=
+ange.
+Immediate value to me is a significant reduction(within my particular
+system context) in the time it takes to complete the write() to
+/sys/power/state.
+In general this would move the execution to the next available core
+when the queue gets to the work item spreading (some of) the resume
+load across cores.
 
