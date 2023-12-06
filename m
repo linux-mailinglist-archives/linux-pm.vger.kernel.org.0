@@ -1,380 +1,262 @@
-Return-Path: <linux-pm+bounces-733-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-734-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DC9B806B31
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 11:01:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EAE68806C52
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 11:40:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6607281B23
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 10:01:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9F6FF281AE1
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 10:40:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DF2D1DFF4;
-	Wed,  6 Dec 2023 10:01:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33CD91DFC1;
+	Wed,  6 Dec 2023 10:40:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="FfkEpWEt"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="YRT7CHjO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B96120;
-	Wed,  6 Dec 2023 02:00:59 -0800 (PST)
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id ABD9C6607325;
-	Wed,  6 Dec 2023 10:00:57 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1701856858;
-	bh=MrYPk0HrDzQScYwh49Au6CEiQ3KVyyzskdfW4ZzJvR8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=FfkEpWEtvCpIaTqJXxSFjhF7WbvrCriQQBpQYmYW6qutLIHr7DbTk6gp/Oa3aDKcc
-	 D9us//HtSRQ6UAClM+JHRFW31HCR/1FCg6L0VJuot5EDAj7wreJpuEQD0nxYPIFObc
-	 hCJxzHiz73SQCTxigD0vrqjHVDDBqtH4tnEFJJRKsv4pBYOKOu60cMxblrGn2DR+ze
-	 PPePYA/0hvYEDFhZHFsEMXeZdbsiGCE4mic3B8SOxcUcXdH/BdDwFvrOZ+AxZMpvGf
-	 peInj0BHkC+4MCE91P2bQy6oaNGQ1vlAJCyTvwEcI6u78fYH823FmUDwC2MCS/2NNz
-	 hp27F1Rzc+csQ==
-Message-ID: <8d42e0f5-b2d2-471b-ada9-79f76c637abe@collabora.com>
-Date: Wed, 6 Dec 2023 11:00:54 +0100
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E06A6D45;
+	Wed,  6 Dec 2023 02:40:12 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3B67uskL023735;
+	Wed, 6 Dec 2023 10:40:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=yv4DBGc+tbpkWvzCMU3OJ92GavYlVxoKi15dx20+z+o=;
+ b=YRT7CHjONfi17iGYqE0fwH3oz598x7cZANj7taQ1sYDDEXp1n8npJBxWW/+3tyWLhRN9
+ 8cb92BpVfMFX+fic4sCALlYBnwSCKeUeiWoOwExxPDoJbJJAdO81WJ3JXDAjLupHZYlf
+ bJLecVos3RxgvOHXBlORVhmlLq44JPZ0RWxdNPMhyUi+BwIdIEJZCB4ty7hIHR65yPbp
+ h+F2XaBXyQc2nWO80Zdp07SiIWC74WNvIU7F+IYofC3PboP1J5nKXXuMUmmAoXRur8Dk
+ e6c0bEl2FggxqNzFwQBQI6Uz9dp3oX/ggMMgaBjYOTdLOJv7y5Hjq82Xw73lcz21VmQ6 Rg== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3utd1wh953-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 06 Dec 2023 10:40:03 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+	by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3B6Ae2Za010869
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 6 Dec 2023 10:40:02 GMT
+Received: from [10.214.66.81] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 6 Dec
+ 2023 02:39:59 -0800
+Message-ID: <486d6d25-77e6-5fe4-4110-7256c20ba742@quicinc.com>
+Date: Wed, 6 Dec 2023 16:09:56 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] thermal: Add support for device tree thermal zones
- consumers
-To: Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc: rui.zhang@intel.com, lukasz.luba@arm.com, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel@collabora.com, wenst@chromium.org
-References: <20231115144857.424005-1-angelogioacchino.delregno@collabora.com>
- <09de3b1b-b725-46b8-97a6-55776fd5ca45@linaro.org>
- <99c1fd8f-4b17-4d4a-87a5-6a65745632fe@collabora.com>
- <ce110f25-5431-4c80-b037-add7fd7461bd@linaro.org>
- <03e950a1-0334-40ab-aa77-ac8175877172@collabora.com>
- <3428b2af-5522-4090-995a-10eaee90c28e@linaro.org>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v4] PM / devfreq: Synchronize device_monitor_[start/stop]
 Content-Language: en-US
-In-Reply-To: <3428b2af-5522-4090-995a-10eaee90c28e@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To: <myungjoo.ham@samsung.com>, <kyungmin.park@samsung.com>,
+        <cw00.choi@samsung.com>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <huangzaiyang@oppo.com>
+References: <1700860318-4025-1-git-send-email-quic_mojha@quicinc.com>
+From: Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <1700860318-4025-1-git-send-email-quic_mojha@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: jYwQoNc9aNaATkIEFM4QwysUXicozOFq
+X-Proofpoint-ORIG-GUID: jYwQoNc9aNaATkIEFM4QwysUXicozOFq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-06_06,2023-12-06_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 mlxscore=0 phishscore=0 clxscore=1011 impostorscore=0
+ adultscore=0 mlxlogscore=999 suspectscore=0 spamscore=0 malwarescore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2312060087
 
-Il 05/12/23 19:47, Daniel Lezcano ha scritto:
+Gentle reminder..
+
+-Mukesh
+
+On 11/25/2023 2:41 AM, Mukesh Ojha wrote:
+> There is a chance if a frequent switch of the governor
+> done in a loop result in timer list corruption where
+> timer cancel being done from two place one from
+> cancel_delayed_work_sync() and followed by expire_timers()
+> can be seen from the traces[1].
 > 
-> Hi Angelo,
+> while true
+> do
+>          echo "simple_ondemand" > /sys/class/devfreq/1d84000.ufshc/governor
+>          echo "performance" > /sys/class/devfreq/1d84000.ufshc/governor
+> done
 > 
-> On 05/12/2023 14:48, AngeloGioacchino Del Regno wrote:
->> Il 01/12/23 15:18, Daniel Lezcano ha scritto:
+> It looks to be issue with devfreq driver where
+> device_monitor_[start/stop] need to synchronized so that
+> delayed work should get corrupted while it is either
+> being queued or running or being cancelled.
 > 
-> [ ... ]
+> Let's use polling flag and devfreq lock to synchronize the
+> queueing the timer instance twice and work data being
+> corrupted.
 > 
->>> Putting apart the fact the change you propose is not relevant as there is 
->>> already everything in. My comment is about the current state of the thermal 
->>> framework.
->>>
->>
->> I don't really understand this assertion, and I'm afraid that I'm underestimating
->> something so, in case, please help me to understand what am I missing here.
+> [1]
+> ...
+> ..
+> <idle>-0    [003]   9436.209662:  timer_cancel   timer=0xffffff80444f0428
+> <idle>-0    [003]   9436.209664:  timer_expire_entry   timer=0xffffff80444f0428  now=0x10022da1c  function=__typeid__ZTSFvP10timer_listE_global_addr  baseclk=0x10022da1c
+> <idle>-0    [003]   9436.209718:  timer_expire_exit   timer=0xffffff80444f0428
+> kworker/u16:6-14217    [003]   9436.209863:  timer_start   timer=0xffffff80444f0428  function=__typeid__ZTSFvP10timer_listE_global_addr  expires=0x10022da2b  now=0x10022da1c  flags=182452227
+> vendor.xxxyyy.ha-1593    [004]   9436.209888:  timer_cancel   timer=0xffffff80444f0428
+> vendor.xxxyyy.ha-1593    [004]   9436.216390:  timer_init   timer=0xffffff80444f0428
+> vendor.xxxyyy.ha-1593    [004]   9436.216392:  timer_start   timer=0xffffff80444f0428  function=__typeid__ZTSFvP10timer_listE_global_addr  expires=0x10022da2c  now=0x10022da1d  flags=186646532
+> vendor.xxxyyy.ha-1593    [005]   9436.220992:  timer_cancel   timer=0xffffff80444f0428
+> xxxyyyTraceManag-7795    [004]   9436.261641:  timer_cancel   timer=0xffffff80444f0428
 > 
-> Sure. Let me clarify my understanding of you proposal and my assertion.
+> [2]
 > 
->   - A driver needs a thermal zone device structure pointer in order to read its 
-> temperature. But as it is not the creator, it does not have this pointer.
+>   9436.261653][    C4] Unable to handle kernel paging request at virtual address dead00000000012a
+> [ 9436.261664][    C4] Mem abort info:
+> [ 9436.261666][    C4]   ESR = 0x96000044
+> [ 9436.261669][    C4]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [ 9436.261671][    C4]   SET = 0, FnV = 0
+> [ 9436.261673][    C4]   EA = 0, S1PTW = 0
+> [ 9436.261675][    C4] Data abort info:
+> [ 9436.261677][    C4]   ISV = 0, ISS = 0x00000044
+> [ 9436.261680][    C4]   CM = 0, WnR = 1
+> [ 9436.261682][    C4] [dead00000000012a] address between user and kernel address ranges
+> [ 9436.261685][    C4] Internal error: Oops: 96000044 [#1] PREEMPT SMP
+> [ 9436.261701][    C4] Skip md ftrace buffer dump for: 0x3a982d0
+> ...
 > 
->   - As a solution, several drivers are using a specific DT bindings to map a 
-> thermal zone "name/type' with a string to refer from the driver a specific thermal 
-> zone node name. Then the function thermal_zone_device_get_by_name() is used to 
-> retrieve the pointer.
+> [ 9436.262138][    C4] CPU: 4 PID: 7795 Comm: TraceManag Tainted: G S      W  O      5.10.149-android12-9-o-g17f915d29d0c #1
+> [ 9436.262141][    C4] Hardware name: Qualcomm Technologies, Inc.  (DT)
+> [ 9436.262144][    C4] pstate: 22400085 (nzCv daIf +PAN -UAO +TCO BTYPE=--)
+> [ 9436.262161][    C4] pc : expire_timers+0x9c/0x438
+> [ 9436.262164][    C4] lr : expire_timers+0x2a4/0x438
+> [ 9436.262168][    C4] sp : ffffffc010023dd0
+> [ 9436.262171][    C4] x29: ffffffc010023df0 x28: ffffffd0636fdc18
+> [ 9436.262178][    C4] x27: ffffffd063569dd0 x26: ffffffd063536008
+> [ 9436.262182][    C4] x25: 0000000000000001 x24: ffffff88f7c69280
+> [ 9436.262185][    C4] x23: 00000000000000e0 x22: dead000000000122
+> [ 9436.262188][    C4] x21: 000000010022da29 x20: ffffff8af72b4e80
+> [ 9436.262191][    C4] x19: ffffffc010023e50 x18: ffffffc010025038
+> [ 9436.262195][    C4] x17: 0000000000000240 x16: 0000000000000201
+> [ 9436.262199][    C4] x15: ffffffffffffffff x14: ffffff889f3c3100
+> [ 9436.262203][    C4] x13: ffffff889f3c3100 x12: 00000000049f56b8
+> [ 9436.262207][    C4] x11: 00000000049f56b8 x10: 00000000ffffffff
+> [ 9436.262212][    C4] x9 : ffffffc010023e50 x8 : dead000000000122
+> [ 9436.262216][    C4] x7 : ffffffffffffffff x6 : ffffffc0100239d8
+> [ 9436.262220][    C4] x5 : 0000000000000000 x4 : 0000000000000101
+> [ 9436.262223][    C4] x3 : 0000000000000080 x2 : ffffff889edc155c
+> [ 9436.262227][    C4] x1 : ffffff8001005200 x0 : ffffff80444f0428
+> [ 9436.262232][    C4] Call trace:
+> [ 9436.262236][    C4]  expire_timers+0x9c/0x438
+> [ 9436.262240][    C4]  __run_timers+0x1f0/0x330
+> [ 9436.262245][    C4]  run_timer_softirq+0x28/0x58
+> [ 9436.262255][    C4]  efi_header_end+0x168/0x5ec
+> [ 9436.262265][    C4]  __irq_exit_rcu+0x108/0x124
+> [ 9436.262274][    C4]  __handle_domain_irq+0x118/0x1e4
+> [ 9436.262282][    C4]  gic_handle_irq.30369+0x6c/0x2bc
+> [ 9436.262286][    C4]  el0_irq_naked+0x60/0x6c
 > 
->   - Your proposal is to provide that mechanism in the thermal_of code directly, so 
-> the code can be factored out for all these drivers.
+> Reported-by: Joyyoung Huang <huangzaiyang@oppo.com>
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> ---
+> Huang,
 > 
-> Is my understanding correct?
+> Would be looking for your tested-by..
 > 
-
-I think that your understanding is 95% correct....
-
-> My point is:
-> 
->   - The driver are mapping a thermal zone with a name but a node name is supposed 
-> to be unique on DT (but that is implicit)
-> 
->   - A phandle is enough to get the node name, no need to add a thermal zone name to 
-> get the node and then get the thermal zone. It is duplicate information as the DT 
-> uses the node name as a thermal zone name.
-> 
-> We could have:
-> 
->          thermal-zones {
->                  display {
->                          polling-delay-passive = <0>;
->                          polling-delay = <0>;
->                          thermal-sensors = <&display_temp>;
->                  };
->          };
-> 
->          papirus27@0{
-> 
->          [ ... ]
-> 
-> ---             pervasive,thermal-zone = "display";
-> +++             pervasive,thermal-zone = <&display>;
->          };
-> 
-> The ux500 is directly calling thermal_zone_device_get_by_name() with the thermal 
-> zone node name.
-> 
-
-.... but as for the remaining 5%, I'm not sure, so I'll put one full-of-fantasy
-example here to make sure that you get my point:
-
-
-************************************
-fantasy soc/board 1:
-
-thermal-zones {
-	/*
-	 * The type (or name, whatever) of this zone is "dsi-disp-thermal"
-	 * and not "display" - this is on purpose. Can be changed to "display"
-	 * without any concerns in this fantasy soc/board.
-	 */
-	display: dsi-disp-thermal {
-		polling-delay ....
-		thermal-sensors ...
-	}
-
-	something_else: some-other-zone {
-		stuff ...
-	}
-}
-
-************************************
-fantasy soc/board 2 (qcom vs mtk vs rockchip vs...):
-
-thermal-zones {
-	/*
-	 * The type (or name, whatever) of this zone is "edp-disp-thermal"
-	 * and not "display" - this is on purpose. Can be changed to "display"
-	 * without any concerns in this fantasy soc/board.
-	 */
-	display: edp-disp-thermal {
-		polling-delay ....
-		thermal-sensors ...
-	}
-
-	.....
-}
-
-************************************
-fantasy soc/board 3 (qcom vs mtk vs rockchip vs...):
-
-thermal-zones {
-	/*
-	 * The type (or name, whatever) of this zone is "skin-sense-left-thermal"
-	 * and not "display" - this is on purpose: on this device the display temp
-	 * zone is retrieved from the "bottom" skin temperature zone, because the
-	 * display's driver ic is 0.01mm far from that physical zone, so they have
-	 * placed a sensor there.
-	 *
-	 * Lots of fantasy here, but it's just to show why a thermal zone may have
-	 * a different name on different boards, and why it is more descriptive to
-	 * keep the board-specific TZ name instead of changing them all to have a
-	 * driver specific "display" name.
-	 */
-	display: skin-sense-bottom-thermal {
-		polling-delay ....
-		thermal-sensors ...
-	}
-
-	skin_zone: skin-sense-left-right-top-thermal {
-		.....
-	}
-
-	.....
-}
-
-************************************
-whatever dtsi/dts for whatever device based on whatever soc:
-
-device@0 {
-	....
-
-	interrupts = <this that blah>
-	interrupt-names = "some";
-
-	clocks = <&clkcontroller 22>;
-	clock-names = "main";
-
-	dmas = ....
-	dma-names = ....
-
-	pwms = ...
-	pwm-names = ....
-
-	.... likewise, for thermal zones ....
-
-	thermal-zones = <&display>, <&skin_zone_a>, <&batt_therm>;
-	thermal-zone-names = "disp-therm", "skin-temp", "battery-top";
-}
-************************************
-
-driver code:
-
-device-driver.c:
-
-/* This driver wants disp, batt, skin because it tries to calculate an
-  * optimal battery charging current while trying to not burn users' hands
-  * or something like that.
-  */
-enum therm_to_watch {
-	THERM_DISPLAY,
-	THERM_BATT_TOP,
-	THERM_SKIN_TEMP,
-	THERM_MAX
-}
-
-static const char * const device_therm_to_watch[THERM_MAX] = {
-	"disp-therm", "battery-top", "skin-temp", [...]
-};
-
-
-
-int some_function(params) {
-	[... stuff ...]
-
-	/*
-	 * Get the zones associated to the thermal-zone-names in device tree
-	 *
-	 * ------> This is the main reason why I proposed this commit! :-) <------
-	 */
-	for (i = 0; i < THERM_MAX; i++) {
-		ret = thermal_of_get_zone(dev, device_therm_to_watch[i]);
-		if (ret)
-			return ret;
-	}
-
-	[...]
-}
-************************************
-
-...my target is currently the MediaTek Smart Voltage Scaling driver, where we have
-rather huge platform data (similarly to Qualcomm CPR) for [a / an increasing number
-of] SoC(s): we have different SoC thermal zones for CPU big(0/1/2/3/all) and
-little(0123all), and GPU, which have got different names (currently "types" in the
-thermal framework).
-
-The reason why the zone names are different across those SoCs is that those are
-actually somewhat defined in the datasheets, so the names in device tree do reflect
-those of the datasheet.
-The driver would need cpu-big, cpu-little, or cpu, and gpu thermal zones.
-
-But again, there are other cases apart from MTK SVS.
-
->> For how I see it, in the thermal framewoek I don't see any "somewhat standardized"
->> helper like the one(s) that I'm introducing with this patch (thermal_of_get_zone(),
->> thermal_of_get_zone_by_index()), and this is the exact reason why I'm proposing
->> this patch.
->>
->> Then again - I mean no disrespect - it's just that I don't understand (yet) why you
->> are saying that "everything is already available", because I really don't see it.
-> 
-> Ok said differently, thermal zone name and type are messy.
-> 
-> Let's clarify that and then let's see with the result if adding this thermal zone 
-> node/name mapping still makes sense.
-> 
-
-Yes, I think that it's sensible at this point to just clarify that in the framework
-first, and then go on with the rest.
-
->>>   - A thermal zone does not have a name but a type
->>>
->>>   - We use the thermal zone DT node name to register as a name but it is a type 
->>> from the thermal framework point of view
->>
->> This is something that I didn't realize before. Thanks for that.
->>
->> ...and yes, we're registering a "name" from DT as a "type" in the framework, this
->> is highly confusing and needs to be cleaned up.
->>
->>>
->>>   - We can register several thermal zones with the same type (so we can have 
->>> duplicate names if we use type as name)
->>>
->>
->> ...which makes sense, after realizing that we're registering a TYPE and not a NAME,
->> and I agree about the logic for which that multiple zones can be of the same type.
->>
->>>   - We use thermal_zone_device_get_by_name() but actually it checks against the 
->>> type and as we can have multiple identical types, the function returns the first 
->>> one found
->>>
->>
->> The first thing that comes to mind is to rename thermal_zone_device_get_by_name()
->> to thermal_zone_device_get_by_type(), but then I'd be reintroducing the former and
->> this gives me concerns about OOT drivers using that and developers getting highly
->> confused (name->type, but name exists again, so they might erroneously just fix the
->> call to xxx_by_name() instead of changing it to xxx_by_type()).
+> -Mukesh
 > 
 > 
->> Should I *not* be concerned about that?
+> Changes in v4: https://lore.kernel.org/lkml/1700238027-20518-1-git-send-email-quic_mojha@quicinc.com/
+>   - Mistakenly put cancel work under devfreq lock which could result in deadlock
+>     reported by [Joyyoung Huang]
+>     https://lore.kernel.org/lkml/KL1PR02MB8141D1A307457AF69EBB6AFBA3B8A@KL1PR02MB8141.apcprd02.prod.outlook.com/
 > 
-> Not really :)
+> Changes in v3: https://lore.kernel.org/lkml/1700235522-31105-1-git-send-email-quic_mojha@quicinc.com/
+>   - Remove the unexpected 'twice' from the subject.
 > 
-> TBH, OOT drivers do not exist from upstream POV.
+> Changes in v2: https://lore.kernel.org/lkml/1699957648-31299-1-git-send-email-quic_mojha@quicinc.com/
+>   - Changed subject.
+>   - Added lock to avoid work data corruption due to
+>     parallel calls to devfreq_monitor_start while work
+>     is queued in flight.
+>   - Added lock to cover the same as above case while the
+>     work is being cancelled.
+>   - Added Reported-by for similar issue reported at
+>     https://lore.kernel.org/lkml/SEYPR02MB565398175FA093AC3E63EE7BA3B0A@SEYPR02MB5653.apcprd02.prod.outlook.com/
 > 
-
-Happy to see this answer.
-
->  > Any suggestion?
+>   drivers/devfreq/devfreq.c | 24 ++++++++++++++++++++++--
+>   1 file changed, 22 insertions(+), 2 deletions(-)
 > 
-> Yes, let's introduce a thermal zone name in the tzd.
-> 
-
-Let's go! I'll start this work ASAP.
-
->   - There are now too many parameters to the function 
-> thermal_zone_device_register*(), so we can't add a new 'name' parameter. Introduce 
-> a thermal_zone_device_parameters structure. This structure will contain all 
-> thermal_zone_device_register_* parameter function. There won't be any functional 
-> changes, just how the parameters are passed. Perhaps, you should use an 
-> intermediate function to not have the change impacting everywhere.
-> 
->   - then add a const char *name field in this structure and in the 
-> thermal_zone_device structure. So we can assign the name to the thermal zone. The 
-> name must be checked against duplicate. If no name is specified when creating a 
-> thermal zone, then name = type.
-> 
->   - In thermal_of, use the node name for the type and the name, that will be 
-> duplicate but we will sort it out later.
-> 
->   - Add the name in sysfs
-> 
-
-I didn't expect a detailed guidance like that! Even though we seem to think alike,
-as in, I was imagining to do exactly that -  thank you, this reduces the actual
-brainstorming from my side as makes me sure that we want to do the same thing, and
-also makes me able to "make my hands dirty with code" sooner than later.
-
-Speeds up the whole process.
-
-> Second step, track down users of thermal_zone_device_get_by_name() and check if 
-> they can use the name instead of the type. I'm pretty sure it is the case for most 
-> of the callers.
-> 
-> With that, there will be a nice clarification IMHO.
-> 
-> Then we will be able to restate the 'type' with something different without 
-> breaking the existing ABI.
-> 
-
-Yes, I totally agree with that.
-
-Okay - it looks like we have at least 95% of a plan - it's enough for me to start
-writing the cleanup.
-
-Cheers!
-Angelo
+> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+> index b3a68d5833bd..cb1c24721a37 100644
+> --- a/drivers/devfreq/devfreq.c
+> +++ b/drivers/devfreq/devfreq.c
+> @@ -461,10 +461,14 @@ static void devfreq_monitor(struct work_struct *work)
+>   	if (err)
+>   		dev_err(&devfreq->dev, "dvfs failed with (%d) error\n", err);
+>   
+> +	if (devfreq->stop_polling)
+> +		goto out;
+> +
+>   	queue_delayed_work(devfreq_wq, &devfreq->work,
+>   				msecs_to_jiffies(devfreq->profile->polling_ms));
+> -	mutex_unlock(&devfreq->lock);
+>   
+> +out:
+> +	mutex_unlock(&devfreq->lock);
+>   	trace_devfreq_monitor(devfreq);
+>   }
+>   
+> @@ -483,6 +487,10 @@ void devfreq_monitor_start(struct devfreq *devfreq)
+>   	if (IS_SUPPORTED_FLAG(devfreq->governor->flags, IRQ_DRIVEN))
+>   		return;
+>   
+> +	mutex_lock(&devfreq->lock);
+> +	if (delayed_work_pending(&devfreq->work))
+> +		goto out;
+> +
+>   	switch (devfreq->profile->timer) {
+>   	case DEVFREQ_TIMER_DEFERRABLE:
+>   		INIT_DEFERRABLE_WORK(&devfreq->work, devfreq_monitor);
+> @@ -491,12 +499,16 @@ void devfreq_monitor_start(struct devfreq *devfreq)
+>   		INIT_DELAYED_WORK(&devfreq->work, devfreq_monitor);
+>   		break;
+>   	default:
+> -		return;
+> +		goto out;
+>   	}
+>   
+>   	if (devfreq->profile->polling_ms)
+>   		queue_delayed_work(devfreq_wq, &devfreq->work,
+>   			msecs_to_jiffies(devfreq->profile->polling_ms));
+> +
+> +out:
+> +	devfreq->stop_polling = false;
+> +	mutex_unlock(&devfreq->lock);
+>   }
+>   EXPORT_SYMBOL(devfreq_monitor_start);
+>   
+> @@ -513,6 +525,14 @@ void devfreq_monitor_stop(struct devfreq *devfreq)
+>   	if (IS_SUPPORTED_FLAG(devfreq->governor->flags, IRQ_DRIVEN))
+>   		return;
+>   
+> +	mutex_lock(&devfreq->lock);
+> +	if (devfreq->stop_polling) {
+> +		mutex_unlock(&devfreq->lock);
+> +		return;
+> +	}
+> +
+> +	devfreq->stop_polling = true;
+> +	mutex_unlock(&devfreq->lock);
+>   	cancel_delayed_work_sync(&devfreq->work);
+>   }
+>   EXPORT_SYMBOL(devfreq_monitor_stop);
 
