@@ -1,113 +1,188 @@
-Return-Path: <linux-pm+bounces-767-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-768-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 615088079A1
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 21:41:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E37A8079E5
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 21:58:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A27328227B
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 20:41:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D314A1F219CD
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 20:58:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6E7DD286;
-	Wed,  6 Dec 2023 20:41:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ECE747F6A;
+	Wed,  6 Dec 2023 20:58:47 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964B3135;
-	Wed,  6 Dec 2023 12:41:17 -0800 (PST)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-1fb00ea5e5fso36422fac.1;
-        Wed, 06 Dec 2023 12:41:17 -0800 (PST)
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A628DC;
+	Wed,  6 Dec 2023 12:58:44 -0800 (PST)
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-58de9deec94so21994eaf.0;
+        Wed, 06 Dec 2023 12:58:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701895277; x=1702500077;
+        d=1e100.net; s=20230601; t=1701896323; x=1702501123;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FlhVPOODXTOWxGwKg9e3DDYoZLed8F9HR5wooT/tC2c=;
-        b=QLC4wXqyj/T8ERSCaT7olfK+3lA8UwpoXB7yz0AAwp9s41jtJEIZ0nGNDNqkf9IKaX
-         pO3DYMFWoN/hEYFHyxxsxn70XMsvBAewB85IPXIkiGG6HsDQBxyouDKpANkE8mG/e01z
-         F9UZoa186LfyntFwwBseS4ZLUyI4Tgl2H8sYOXmY/Icn/dXAtxPfcx6Vpar6/snBLd/9
-         EXghDuJcMZUaMRdow4CBWUDhevVBzJ5L7RXdTn/xd0sFhZwxq+PqerIUYOi7RVDcDj6Q
-         YBu5M469OzMmEuVSMVjo6G0BTlPOKjKhYNPWPPVP24aB3yhSAYVbkGZDozU53PFSIUar
-         qCtA==
-X-Gm-Message-State: AOJu0YyC/X50n+EwCgqqu/iNslLDPh4wo3dUVPTCzL8KXtxzKldPFF2Z
-	gzcURKA5Dz9s8ldd9QO4yGjlnJ5z/MfxR/SJ5gs=
-X-Google-Smtp-Source: AGHT+IH29a0cqz8yIEZIWDtTFVH9l0IVy1IzNJ+5GfLNckU6RPGEogazu+hpKFXH3CqXxC153jfnqv5q+7dvgNmnksA=
-X-Received: by 2002:a05:6870:b4a0:b0:1fb:5e42:5096 with SMTP id
- y32-20020a056870b4a000b001fb5e425096mr2586685oap.5.1701895276869; Wed, 06 Dec
- 2023 12:41:16 -0800 (PST)
+        bh=VteboLc0PuWVvYglmZVfyeUmWI8ColgUVaYDoWTMUuk=;
+        b=IEAciPc5rtiIfN024Ww/2B0YoAxwZcs8rycx7ueswpPW2tUMNsKbJZm8NAZeAVskzm
+         Qm9Ssy7s81GKMhVmm9xgzwcnBUzQLYyw5TypPWMUoK4LwS/huI/364XpKyAxOEg24LW/
+         lmvUjniR3e4tYdyDFJf+Dwd1lMqlVFE20kgsRG7YeRbykPQqb9yTIZ3rbZ1PnDjr/7Z0
+         +xgU4GvKbBtxtNMleUdLNcb+KVsmIcqhIX1/llWn8zsZa7meEywDYHn3mIENjRL2hjEO
+         b+EbmWcCTMZHgJb/aRDBkKHP3L1JjGh1Ueq9H7+gBgBgnN/arNGgoBAFL8jZWgrdia1V
+         XYVw==
+X-Gm-Message-State: AOJu0YyRnFEFXs9fkfN03t2Dd0gGkqwK4bbjnvNr6e9BOWchCUXBL9Hg
+	6ofylTTLsCMAM4odkhWH6U8+EQuSJzcuLOZTFpE=
+X-Google-Smtp-Source: AGHT+IFo94aQzIA1juguyuAHtJCCdYflVfUEjabXs6GmVmLiIxNMiKEEABWlyYvFUGS5UrmDXUsjl2IIqLYbp7pTkqo=
+X-Received: by 2002:a05:6870:9e84:b0:1fa:f195:e3b4 with SMTP id
+ pu4-20020a0568709e8400b001faf195e3b4mr3122262oab.2.1701896323415; Wed, 06 Dec
+ 2023 12:58:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231127160838.1403404-1-beata.michalska@arm.com> <20231127160838.1403404-3-beata.michalska@arm.com>
-In-Reply-To: <20231127160838.1403404-3-beata.michalska@arm.com>
+References: <20231205063537.872834-1-li.meng@amd.com> <20231205063537.872834-5-li.meng@amd.com>
+In-Reply-To: <20231205063537.872834-5-li.meng@amd.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 6 Dec 2023 21:41:05 +0100
-Message-ID: <CAJZ5v0jh3mG3hyFS6war=0bk3PvsVtTwZ1_YwwWov36Bmz7q0w@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] cpufreq: Wire-up arch-flavored freq info into cpufreq_verify_current_freq
-To: Beata Michalska <beata.michalska@arm.com>
-Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-pm@vger.kernel.org, sumitg@nvidia.com, sudeep.holla@arm.covm, 
-	will@kernel.org, catalin.marinas@arm.com, viresh.kumar@linaro.org, 
-	rafael@kernel.org, ionela.voinescu@arm.com, yang@os.amperecomputing.com, 
-	linux-tegra@vger.kernel.org
+Date: Wed, 6 Dec 2023 21:58:32 +0100
+Message-ID: <CAJZ5v0ju-Thhz2_rQVbTosTsBaRoyQW2kjtPWWTsiT_Yi2DbsQ@mail.gmail.com>
+Subject: Re: [PATCH V12 4/7] cpufreq: Add a notification message that the
+ highest perf has changed
+To: Meng Li <li.meng@amd.com>
+Cc: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, Huang Rui <ray.huang@amd.com>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org, 
+	linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>, 
+	linux-kselftest@vger.kernel.org, Nathan Fontenot <nathan.fontenot@amd.com>, 
+	Deepak Sharma <deepak.sharma@amd.com>, Alex Deucher <alexander.deucher@amd.com>, 
+	Mario Limonciello <mario.limonciello@amd.com>, Shimmer Huang <shimmer.huang@amd.com>, 
+	Perry Yuan <Perry.Yuan@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Borislav Petkov <bp@alien8.de>, 
+	Oleksandr Natalenko <oleksandr@natalenko.name>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 27, 2023 at 5:09=E2=80=AFPM Beata Michalska <beata.michalska@ar=
-m.com> wrote:
+On Tue, Dec 5, 2023 at 7:38=E2=80=AFAM Meng Li <li.meng@amd.com> wrote:
 >
-> From: Sumit Gupta <sumitg@nvidia.com>
->
-> When available, use arch_freq_get_on_cpu to obtain current frequency
-> (usually an average reported over given period of time)
-> to better align the cpufreq's view on the current state of affairs.
+> ACPI 6.5 section 8.4.6.1.1.1 specifies that Notify event 0x85 can be
+> emmitted to cause the the OSPM to re-evaluate the highest performance
 
-And why is this a good idea?
+Typos above.  Given the number of iterations of this patch, this is
+kind of disappointing.
 
-Any problem statement?
+> register. Add support for this event.
 
-> This also automatically pulls in the update for cpuinfo_cur_freq sysfs
-> attribute, aligning it with the scaling_cur_freq one, and thus providing
-> consistent view on relevant platforms.
+Also it would be nice to describe how this is supposed to work at
+least roughly, so it is not necessary to reverse-engineer the patch to
+find out that.
 
-I have no idea what the above is supposed to mean, sorry.
-
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> [BM: Subject & commit msg]
-> Signed-off-by: Beata Michalska <beata.michalska@arm.com>
+> Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+> Reviewed-by: Huang Rui <ray.huang@amd.com>
+> Reviewed-by: Perry Yuan <perry.yuan@amd.com>
+> Signed-off-by: Meng Li <li.meng@amd.com>
+> Link: https://uefi.org/specs/ACPI/6.5/05_ACPI_Software_Programming_Model.=
+html#processor-device-notification-values
 > ---
->  drivers/cpufreq/cpufreq.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  drivers/acpi/processor_driver.c |  6 ++++++
+>  drivers/cpufreq/cpufreq.c       | 13 +++++++++++++
+>  include/linux/cpufreq.h         |  5 +++++
+>  3 files changed, 24 insertions(+)
 >
+> diff --git a/drivers/acpi/processor_driver.c b/drivers/acpi/processor_dri=
+ver.c
+> index 4bd16b3f0781..29b2fb68a35d 100644
+> --- a/drivers/acpi/processor_driver.c
+> +++ b/drivers/acpi/processor_driver.c
+> @@ -27,6 +27,7 @@
+>  #define ACPI_PROCESSOR_NOTIFY_PERFORMANCE 0x80
+>  #define ACPI_PROCESSOR_NOTIFY_POWER    0x81
+>  #define ACPI_PROCESSOR_NOTIFY_THROTTLING       0x82
+> +#define ACPI_PROCESSOR_NOTIFY_HIGEST_PERF_CHANGED      0x85
+>
+>  MODULE_AUTHOR("Paul Diefenbaugh");
+>  MODULE_DESCRIPTION("ACPI Processor Driver");
+> @@ -83,6 +84,11 @@ static void acpi_processor_notify(acpi_handle handle, =
+u32 event, void *data)
+>                 acpi_bus_generate_netlink_event(device->pnp.device_class,
+>                                                   dev_name(&device->dev),=
+ event, 0);
+>                 break;
+> +       case ACPI_PROCESSOR_NOTIFY_HIGEST_PERF_CHANGED:
+> +               cpufreq_update_highest_perf(pr->id);
+
+And the design appears to be a bit ad-hoc here.
+
+Because why does it have anything to do with cpufreq?
+
+> +               acpi_bus_generate_netlink_event(device->pnp.device_class,
+> +                                                 dev_name(&device->dev),=
+ event, 0);
+> +               break;
+>         default:
+>                 acpi_handle_debug(handle, "Unsupported event [0x%x]\n", e=
+vent);
+>                 break;
 > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 8c4f9c2f9c44..109559438f45 100644
+> index 934d35f570b7..14a4cbc6dd05 100644
 > --- a/drivers/cpufreq/cpufreq.c
 > +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1756,7 +1756,8 @@ static unsigned int cpufreq_verify_current_freq(str=
-uct cpufreq_policy *policy, b
->  {
->         unsigned int new_freq;
+> @@ -2717,6 +2717,19 @@ void cpufreq_update_limits(unsigned int cpu)
+>  }
+>  EXPORT_SYMBOL_GPL(cpufreq_update_limits);
 >
-> -       new_freq =3D cpufreq_driver->get(policy->cpu);
-> +       new_freq =3D arch_freq_get_on_cpu(policy->cpu);
-> +       new_freq =3D new_freq ?: cpufreq_driver->get(policy->cpu);
-
-Please don't use ?: in general and it is not even useful here AFAICS.
-
-What would be wrong with
-
-new_freq =3D arch_freq_get_on_cpu(policy->cpu);
-if (!new_freq)
-        new_freq =3D cpufreq_driver->get(policy->cpu);
-
-?
-
->         if (!new_freq)
->                 return 0;
+> +/**
+> + * cpufreq_update_highest_perf - Update highest performance for a given =
+CPU.
+> + * @cpu: CPU to update the highest performance for.
+> + *
+> + * Invoke the driver's ->update_highest_perf callback if present
+> + */
+> +void cpufreq_update_highest_perf(unsigned int cpu)
+> +{
+> +       if (cpufreq_driver->update_highest_perf)
+> +               cpufreq_driver->update_highest_perf(cpu);
+> +}
+> +EXPORT_SYMBOL_GPL(cpufreq_update_highest_perf);
+> +
+>  /*********************************************************************
+>   *               BOOST                                              *
+>   *********************************************************************/
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index 1c5ca92a0555..f62257b2a42f 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -235,6 +235,7 @@ int cpufreq_get_policy(struct cpufreq_policy *policy,=
+ unsigned int cpu);
+>  void refresh_frequency_limits(struct cpufreq_policy *policy);
+>  void cpufreq_update_policy(unsigned int cpu);
+>  void cpufreq_update_limits(unsigned int cpu);
+> +void cpufreq_update_highest_perf(unsigned int cpu);
+>  bool have_governor_per_policy(void);
+>  bool cpufreq_supports_freq_invariance(void);
+>  struct kobject *get_governor_parent_kobj(struct cpufreq_policy *policy);
+> @@ -263,6 +264,7 @@ static inline bool cpufreq_supports_freq_invariance(v=
+oid)
+>         return false;
+>  }
+>  static inline void disable_cpufreq(void) { }
+> +static inline void cpufreq_update_highest_perf(unsigned int cpu) { }
+>  #endif
+>
+>  #ifdef CONFIG_CPU_FREQ_STAT
+> @@ -380,6 +382,9 @@ struct cpufreq_driver {
+>         /* Called to update policy limits on firmware notifications. */
+>         void            (*update_limits)(unsigned int cpu);
+>
+> +       /* Called to update highest performance on firmware notifications=
+. */
+> +       void            (*update_highest_perf)(unsigned int cpu);
+> +
+>         /* optional */
+>         int             (*bios_limit)(int cpu, unsigned int *limit);
 >
 > --
+> 2.34.1
+>
+>
 
