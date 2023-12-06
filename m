@@ -1,116 +1,133 @@
-Return-Path: <linux-pm+bounces-730-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-731-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E039580672E
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 07:11:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B05B806AAC
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 10:25:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6FCBFB21D5C
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 06:11:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2BE5C1F210EA
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 09:25:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7C5F107A4;
-	Wed,  6 Dec 2023 06:11:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DB93EED4;
+	Wed,  6 Dec 2023 09:25:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="T1GRMpKo"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="B/jrOwNx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927011A5
-	for <linux-pm@vger.kernel.org>; Tue,  5 Dec 2023 22:11:15 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1d0538d9bbcso44399385ad.3
-        for <linux-pm@vger.kernel.org>; Tue, 05 Dec 2023 22:11:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701843075; x=1702447875; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LKYZoWEFRs5dUVHYwgV/qy/EKtszPIUY4QdRgNvnJVU=;
-        b=T1GRMpKojs0Dl4SDXSY3bYlk2QcssiMWR4Gx8x+SlVlehoejrOU8X/7c3pXEu4e1Cc
-         wNlCnEOGkn4r0iWrZWnj5PWZO/97jC55fTflOC9bF0dnAs/dyi+uoKK6nm4oxApebsmK
-         aemj1c1dlL4vtd+Bt7hEH/Z9UnbVCQOvBqXd96+kKsQUC2EdVNOYunCvXpL3D1F2eHN8
-         qA+ZSKe4cs/3c/kbQie3jvHZgWZJSuLtRyzRSjDFDW/05y0yPvxKL+e7wYx03uFaY9qK
-         fypDlh3v3RGff5pnPH+VZCRLCMwp0DmQTMMaRbJDcBIb3oAc24CgZzIuqZnU7faEA5s9
-         g45Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701843075; x=1702447875;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LKYZoWEFRs5dUVHYwgV/qy/EKtszPIUY4QdRgNvnJVU=;
-        b=LUsXIxHAKsSznEIIOttsD2rC6wSe7GsHX/QI70yyrTIlbM7n1pxoJ3iwGWzezL9E7t
-         N0CUMxUy956LH4xOsgXkSykViB+5+HBKcMkm43GnEPUWKE7qP7i8FmQxt3Gx7N5EpqlJ
-         e9upW1Zf2uVnk3LnTus6G1AFZXMcgu4prPbrr3ZEFE2pF2fzU8KNrxHesR1uXK0QG3d5
-         HHagVK1wckC1HCZy6bwZG+OahFoqVHsNnL1cBzYAEQTtrqs7XeLYOrHLYyKiv46ZMYY0
-         bClDfsdyvKsg+k2iZCgAp9+DeHj+cT1Q9KYJGU4fQbPjpx1PI8TYFno9bsICb6qHBsZS
-         K4CA==
-X-Gm-Message-State: AOJu0YxqxXTCXSqTgHl3iKFDQgjSBOifo9hzWDcrliBrDMNUKMCA5V+p
-	9H6lEnqcqGcp7xC5uRr6zX/SjA==
-X-Google-Smtp-Source: AGHT+IEp5WARRfM1tPRtLayT9Eiln2oWucgWr5UerTnbv6+ix/Zqq7At6XJ0dwkVcZFV1u/taFf+bw==
-X-Received: by 2002:a17:903:18a:b0:1d0:969b:4c0b with SMTP id z10-20020a170903018a00b001d0969b4c0bmr445601plg.101.1701843074923;
-        Tue, 05 Dec 2023 22:11:14 -0800 (PST)
-Received: from localhost ([122.172.82.6])
-        by smtp.gmail.com with ESMTPSA id l7-20020a170902f68700b001cc2ebd2c2csm8512372plg.256.2023.12.05.22.11.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Dec 2023 22:11:14 -0800 (PST)
-Date: Wed, 6 Dec 2023 11:41:11 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Alexandra Diupina <adiupina@astralinux.ru>
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: Re: [PATCH v2] cpufreq: scmi: process the result of
- devm_of_clk_add_hw_provider()
-Message-ID: <20231206061111.yim5ahpwdovirtzu@vireshk-i7>
-References: <2e919694-e124-4864-aa02-01d47495032b@wanadoo.fr>
- <20231205151220.18463-1-adiupina@astralinux.ru>
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05489A4
+	for <linux-pm@vger.kernel.org>; Wed,  6 Dec 2023 01:25:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1701854745; x=1733390745;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=XHy/s7usIh2uxCmLk5HoCb1I1blqNWn/YNuTf1NuEXs=;
+  b=B/jrOwNx6bFLg6j3JnXRqj0b3JLvvefd24Lts+XPKwAEfnaUjOKCiV8X
+   MeChJX1eabsdQFUyQKApZbquFEEACJABCrWzDVDfqWdUXV6mDyW1n2jxc
+   WYNJc110NnMrMOZiYS/lvMqM9iDyywFvH5kzsQTVkf1ZGsf/QJHMkOQ2v
+   3G/QBaEkVAqGcwle6vyHj+N6GcaehsbHQDtmu87amfsfXr2UcC79xQrMe
+   lR6bKFB35xUWoRJLUiTkQOgnYXE85L81IOCMB7KhOKpx+nHVUswGmlggT
+   m6hHAECCR7A8s9v7QYoEmXQBxLxhQwltsEdCA8av3w5raUMaSBRVXfVjI
+   g==;
+X-CSE-ConnectionGUID: O1O4e9wQSgiVhtaltz5BaA==
+X-CSE-MsgGUID: 2MFCeDcoTHqb0Vo2lm1HFg==
+X-ThreatScanner-Verdict: Negative
+X-IronPort-AV: E=Sophos;i="6.04,254,1695711600"; 
+   d="scan'208";a="13697268"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 06 Dec 2023 02:25:44 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Wed, 6 Dec 2023 02:25:33 -0700
+Received: from [10.171.248.78] (10.10.85.11) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
+ Transport; Wed, 6 Dec 2023 02:25:31 -0700
+Message-ID: <62b3cd0f-e71c-4d53-be87-388809b42dcc@microchip.com>
+Date: Wed, 6 Dec 2023 10:24:51 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231205151220.18463-1-adiupina@astralinux.ru>
-X-Spam-Level: *
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] power: reset: at91: Drop '__init' from
+ at91_wakeup_status()
+To: Nathan Chancellor <nathan@kernel.org>, <sre@kernel.org>
+CC: <alexandre.belloni@bootlin.com>, <claudiu.beznea@tuxon.dev>,
+	<u.kleine-koenig@pengutronix.de>, <linux-pm@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <llvm@lists.linux.dev>,
+	<patches@lists.linux.dev>
+References: <20231120-fix-at91-modpost-warnings-v1-1-813671933863@kernel.org>
+Content-Language: en-US, fr-FR
+From: Nicolas Ferre <nicolas.ferre@microchip.com>
+Organization: microchip
+In-Reply-To: <20231120-fix-at91-modpost-warnings-v1-1-813671933863@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 05-12-23, 18:12, Alexandra Diupina wrote:
-> devm_of_clk_add_hw_provider() may return an errno, so
-> add a return value check
+On 20/11/2023 at 23:35, Nathan Chancellor wrote:
+> When building with clang, there are two section mismatch warnings:
 > 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+>    WARNING: modpost: vmlinux: section mismatch in reference: at91_poweroff_probe+0x7c (section: .text) -> at91_wakeup_status (section: .init.text)
+>    WARNING: modpost: vmlinux: section mismatch in reference: at91_shdwc_probe+0xcc (section: .text) -> at91_wakeup_status (section: .init.text)
 > 
-> Fixes: 8410e7f3b31e ("cpufreq: scmi: Fix OPP addition failure with a dummy clock provider")
-> Signed-off-by: Alexandra Diupina <adiupina@astralinux.ru>
+> Drop '__init' from at91_wakeup_status() to clear up the mismatch.
+> 
+> Fixes: dde74a5de817 ("power: reset: at91-sama5d2_shdwc: Stop using module_platform_driver_probe()")
+> Fixes: 099806de68b7 ("power: reset: at91-poweroff: Stop using module_platform_driver_probe()")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+
+Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+Thanks, best regards,
+   Nicolas
+
 > ---
-> v2: replace dev_err() with dev_err_probe() as 
-> Christophe JAILLET <christophe.jaillet@wanadoo.fr> suggested
->  drivers/cpufreq/scmi-cpufreq.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
+> I suspect this is not visible for GCC due to inlining
+> at91_wakeup_status() but I did not actually check.
+> ---
+>   drivers/power/reset/at91-poweroff.c      | 2 +-
+>   drivers/power/reset/at91-sama5d2_shdwc.c | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-> index c8a7ccc42c16..4ee23f4ebf4a 100644
-> --- a/drivers/cpufreq/scmi-cpufreq.c
-> +++ b/drivers/cpufreq/scmi-cpufreq.c
-> @@ -334,8 +334,11 @@ static int scmi_cpufreq_probe(struct scmi_device *sdev)
->  
->  #ifdef CONFIG_COMMON_CLK
->  	/* dummy clock provider as needed by OPP if clocks property is used */
-> -	if (of_property_present(dev->of_node, "#clock-cells"))
-> -		devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get, NULL);
-> +	if (of_property_present(dev->of_node, "#clock-cells")) {
-> +		ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get, NULL);
-> +		if (ret)
-> +			return dev_err_probe(dev, ret, "%s: registering clock provider failed\n", __func__);
-> +	}
->  #endif
->  
->  	ret = cpufreq_register_driver(&scmi_cpufreq_driver);
+> diff --git a/drivers/power/reset/at91-poweroff.c b/drivers/power/reset/at91-poweroff.c
+> index 126e774e210c..93eece027865 100644
+> --- a/drivers/power/reset/at91-poweroff.c
+> +++ b/drivers/power/reset/at91-poweroff.c
+> @@ -57,7 +57,7 @@ static struct shdwc {
+>          void __iomem *mpddrc_base;
+>   } at91_shdwc;
+> 
+> -static void __init at91_wakeup_status(struct platform_device *pdev)
+> +static void at91_wakeup_status(struct platform_device *pdev)
+>   {
+>          const char *reason;
+>          u32 reg = readl(at91_shdwc.shdwc_base + AT91_SHDW_SR);
+> diff --git a/drivers/power/reset/at91-sama5d2_shdwc.c b/drivers/power/reset/at91-sama5d2_shdwc.c
+> index af95c7b39cb3..959ce0dbe91d 100644
+> --- a/drivers/power/reset/at91-sama5d2_shdwc.c
+> +++ b/drivers/power/reset/at91-sama5d2_shdwc.c
+> @@ -107,7 +107,7 @@ static const unsigned long long sdwc_dbc_period[] = {
+>          0, 3, 32, 512, 4096, 32768,
+>   };
+> 
+> -static void __init at91_wakeup_status(struct platform_device *pdev)
+> +static void at91_wakeup_status(struct platform_device *pdev)
+>   {
+>          struct shdwc *shdw = platform_get_drvdata(pdev);
+>          const struct reg_config *rcfg = shdw->rcfg;
+> 
+> ---
+> base-commit: b55d073e6501dc6077edaa945a6dad8ac5c8bbab
+> change-id: 20231120-fix-at91-modpost-warnings-beabd2bac722
+> 
+> Best regards,
+> --
+> Nathan Chancellor <nathan@kernel.org>
+> 
 
-Applied. Thanks.
-
--- 
-viresh
 
