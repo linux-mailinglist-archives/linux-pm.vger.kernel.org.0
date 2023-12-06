@@ -1,98 +1,172 @@
-Return-Path: <linux-pm+bounces-765-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-766-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E51680745E
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 17:02:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 979EA807963
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 21:32:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37DAC281D20
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 16:02:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CEF5F2821DB
+	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 20:32:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3212146423;
-	Wed,  6 Dec 2023 16:02:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 416EE365;
+	Wed,  6 Dec 2023 20:32:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="lG/jWEvq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD41A10E6;
-	Wed,  6 Dec 2023 08:01:51 -0800 (PST)
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-58e255472daso590164eaf.0;
-        Wed, 06 Dec 2023 08:01:51 -0800 (PST)
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C58512F
+	for <linux-pm@vger.kernel.org>; Wed,  6 Dec 2023 12:32:04 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-28865456abbso211284a91.1
+        for <linux-pm@vger.kernel.org>; Wed, 06 Dec 2023 12:32:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1701894723; x=1702499523; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=K8Rucb/OpNefoDF1HnIbCZ/OCdftI/NIFudtH2jW+zI=;
+        b=lG/jWEvqlwu3lb/Ps7F6Rb72ZldvEy+mbq6vfSEgVMKJLOe1Fhiuc0nRdDdDFWO6nm
+         z3/zcY799RZpcQgoFq7Ymz9Zii82xyJYi6DJKYMoRq/hwgyVwpy1k1A0oUqfq48oZ6ho
+         7oXDINLeBoKt2kivtq0Psb4OtiXZsjUNnqJ7CCOJ1xA6SjyWwnF6DJP9TLnm7aydNWXi
+         7lQrGd3bfMPPfaqb+ZC/h4zJ9u27j2kRSyiwXMnPu1eaUe/DQea6708qPPAzeEaiL7QC
+         i/KRZ/GrppLmMVcgqxXLbbPHj1GN0CyCzozaVBlG2ACrg8lxG2cGCyYilStsuP9dF50D
+         Bmfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701878511; x=1702483311;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vEEyO8kikl4P6RL0mPnSeAdcpM6MtvSyVyxaRRF7VNY=;
-        b=VQzPEcqwMuA+CeKWUe9yDY8z4PFOaCvBrkDWl4AfhvHQbkcQ59EE2BrjS3Y95Kj0wx
-         SIDZax4xCbgvv3Zw59QVsk6eTcWuckzQ5sKph4SxqZoGvonnwMt39a8yyqkG7tBk/nG/
-         vRXKzpcYXVOVFVa3hlzNU4e66d+aNXX/vIgiRSF2lBdekNXrCN4g24xkM7YHRCZdNn14
-         6Jan8FgyV1LVseUL4Gj8bbGSNq7bber+/RyYSQcT2WdqVhq/zxTJhuOmK290XqE3BeUd
-         IJPgG3M/OhH8uc9J+46FesI87B5ojy73dsOZbCXOWYhMFrY+CY51INBl6wBoYIpDEgi4
-         ktRQ==
-X-Gm-Message-State: AOJu0YyLPY9Py3rplwqzxXiygZyb94JV81CFWtf5VVS/PRXBF2Dr61F+
-	Inp3qeeBehjXt0J7E0N3zM13dS6IMKWFZVENDe8=
-X-Google-Smtp-Source: AGHT+IEAHE7OJjtEAogCgEEZ9GRILiRF6QyLYVUjsRiDSNkN92dMVyczpBLHXe88+1cVDz+mrZiVedUNOXUj19XN6P0=
-X-Received: by 2002:a05:6870:40c9:b0:1e9:8ab9:11ca with SMTP id
- l9-20020a05687040c900b001e98ab911camr2028604oal.3.1701878510776; Wed, 06 Dec
- 2023 08:01:50 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701894723; x=1702499523;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K8Rucb/OpNefoDF1HnIbCZ/OCdftI/NIFudtH2jW+zI=;
+        b=RP99laRKcxEDoRBDpzPIkTybi8AslmNIfZHUtMeCzYQEkVBpY43HcYYEQJsviLSPKx
+         RyXXLOOi1/YJI9qeP6EAG8oJEB8VcRX1Pxp4o32smmm17YDYdwLeSdRnLQQkBy1qtYbp
+         I9AQ2kpbVuK8ZIDzlitxfPcmWp/IU1x6eBHzlbcDZjggHK8JDMUDkWYawfhRhSCpk1xT
+         ljaO3nDOfk8s5w+qESava3VAfUcjjRZSzbl8U3ng8XrDiI7v/vq/6aF8ZOCmWIN70g5v
+         CAMLQI4tHSjuiP8wvrQoJtShChrqqftMUtNkT6F15NoMajDhEC9sHGnLThJqVu5wUcE7
+         6hIw==
+X-Gm-Message-State: AOJu0YzbMzCEGo5DYEPMOwVenrCY9zjaYYJXr996ZSAo3HjKUPu/SB59
+	JQnRhuSI3HA7nciD+COAS+rrvA==
+X-Google-Smtp-Source: AGHT+IE4Wf93J0BKTZwH85H/Ptx1fzY8K5NllvtNAdeGuiLclaXoj/cCY2NFE3D0JCo2g331DdJX0A==
+X-Received: by 2002:a17:90b:310b:b0:286:bff2:c41b with SMTP id gc11-20020a17090b310b00b00286bff2c41bmr1394549pjb.23.1701894723504;
+        Wed, 06 Dec 2023 12:32:03 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id rs11-20020a17090b2b8b00b00286e0c91d73sm226822pjb.55.2023.12.06.12.32.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Dec 2023 12:32:02 -0800 (PST)
+Message-ID: <6570da42.170a0220.5243e.1413@mx.google.com>
+Date: Wed, 06 Dec 2023 12:32:02 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <5737811.DvuYhMxLoT@kreacher> <cf055d45-8970-4657-ab86-d28636645c81@linaro.org>
-In-Reply-To: <cf055d45-8970-4657-ab86-d28636645c81@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 6 Dec 2023 17:01:37 +0100
-Message-ID: <CAJZ5v0ic_=2wvge1T7YmGe5icR5dPxrvKy2N4gXP+KMievobmA@mail.gmail.com>
-Subject: Re: [PATCH v1] thermal: trip: Send trip change notifications on all
- trip updates
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>, 
-	Linux ACPI <linux-acpi@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Lukasz Luba <lukasz.luba@arm.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.7-rc4-46-g358f5a2a7f791
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.7-rc4-46-g358f5a2a7f791)
+To: rafael@kernel.org, linux-pm@vger.kernel.org,
+ kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Hi Daniel,
+pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.7-rc4-46-g35=
+8f5a2a7f791)
 
-On Wed, Dec 6, 2023 at 3:38=E2=80=AFPM Daniel Lezcano <daniel.lezcano@linar=
-o.org> wrote:
->
->
-> Hi Rafael,
->
-> On 05/12/2023 20:18, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > The _store callbacks of the trip point temperature and hysteresis sysfs
-> > attributes invoke thermal_notify_tz_trip_change() to send a notificatio=
-n
-> > regarding the trip point change, but when trip points are updated by th=
-e
-> > platform firmware, trip point change notifications are not sent.
-> >
-> > To make the behavior after a trip point change more consistent,
-> > modify all of the 3 places where trip point temperature is updated
-> > to use a new function called thermal_zone_set_trip_temp() for this
-> > purpose and make that function call thermal_notify_tz_trip_change().
-> >
-> > Note that trip point hysteresis can only be updated via sysfs and
-> > trip_point_hyst_store() calls thermal_notify_tz_trip_change() already,
-> > so this code path need not be changed.
->
-> Why the ACPI driver is not calling thermal_zone_device_update() after
-> changing the trip point like the other drivers?
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+7-rc4-46-g358f5a2a7f791/
 
-It calls that function, but because it may update multiple trips in
-one go, it does that after all of the updates are done, via
-acpi_thermal_check_fn().
+Tree: pm
+Branch: testing
+Git Describe: v6.7-rc4-46-g358f5a2a7f791
+Git Commit: 358f5a2a7f7911f1eff8eee8d1b593ffdca14eba
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-> It would make sense to have the thermal framework to be notified about
-> this change and check if there is a trip violation, no ?
+Warnings Detected:
 
-It is notified as noted above, but not synchronously.
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
 
