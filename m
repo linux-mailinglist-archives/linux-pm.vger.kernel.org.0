@@ -1,380 +1,245 @@
-Return-Path: <linux-pm+bounces-770-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-771-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D907D807AB1
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 22:43:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 856AD807EDC
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Dec 2023 03:45:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8ED2B28230B
-	for <lists+linux-pm@lfdr.de>; Wed,  6 Dec 2023 21:43:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ADB89B20D12
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Dec 2023 02:45:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58C817098C;
-	Wed,  6 Dec 2023 21:43:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E62F2A51;
+	Thu,  7 Dec 2023 02:45:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="IX96ERYa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC21D3;
-	Wed,  6 Dec 2023 13:43:24 -0800 (PST)
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-1fb00ea5e5fso43360fac.1;
-        Wed, 06 Dec 2023 13:43:24 -0800 (PST)
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927AFD63
+	for <linux-pm@vger.kernel.org>; Wed,  6 Dec 2023 18:45:04 -0800 (PST)
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8B7693FAE7
+	for <linux-pm@vger.kernel.org>; Thu,  7 Dec 2023 02:45:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1701917100;
+	bh=a0FiCBQ5zRlPvqo0KD1dys1aMCjFnIg1vx4iclYQmRk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type;
+	b=IX96ERYa5NqOch6Isax4xPnh1vPTM1mpRReV8I+1krmeTdT+ToQRqeiQzUAsrRSfh
+	 x924clIOf4uYzNa3+lnDOBmvZexh5vZGDCDr1+3M/s/aSag9cSN7Q0yabNVx4QL2sf
+	 qfLePSS1HV9wj9r+STE1V3NwhAhTmHpN55P6eZPEVAOfseEmySPdkyt7yEM+O2Th7e
+	 J4/HX3sUOamOjT9A5YIRd0B9Aa1IW2wQ/yp5S8FXoUZb6cmAwIYfi9yMNye1AAW2Ol
+	 iKDzzKzFjkJMi4QbKtvMzbr48JbENGe31kec95LuHdiqA7EIlZc41K4Hf/sm/8bB1W
+	 TMCSibyFJjqSg==
+Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-5c68fc4928fso224348a12.2
+        for <linux-pm@vger.kernel.org>; Wed, 06 Dec 2023 18:45:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701899004; x=1702503804;
+        d=1e100.net; s=20230601; t=1701917099; x=1702521899;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SAy8WXK1y/31ZcmDbDHvravRz16tZjNVV5jZfuVw9MU=;
-        b=sLHm/jJgT6oxCuqinKO2dc+uq2hnVYPvIbnoxtROIyRuNyczckm+JaaOQ94arphigK
-         n2rzvcOu3L1OyzzmaQYIab69c+0s+icEbwgeS6VQR8OuWNGOwnsVq3YSacz7opWLljfW
-         SdnVg1wnzX0/LV5+TFDuTeWAyzrI2DIl/enpsYU6K3erUgkJ0aygHyT52PBgISbJf/wf
-         RwDoOLENZC38CQ0Pwp96SlPzl4s9HTGBEm7zzNsxiSMjG8+WVo0xPygkf8QNDA7+Imqi
-         bplabhKt+nk4LD6O4iUTXQRWkF5XufjQoC0LQY3dlNcXoXBvF5IgejhN/3GXkkujuRoL
-         QcWw==
-X-Gm-Message-State: AOJu0Yx3L6kvezf85Xj2DumCVxDqlf0Sj9GJxkbmvkajwHjsA71O+WEA
-	2ZoMAy+oJDuR4RYLcGf0RUa+7gGcpEiB3WxBCxGyseWQ
-X-Google-Smtp-Source: AGHT+IGX2SjeOPKr1wRijnA9TN18mHSGLHqXZ3IQkI3BDTgkcXhuM3GPNRv3zCMC0LUMS0RrAQU5jlMdb+rUCGv5z0Q=
-X-Received: by 2002:a05:6870:b4a0:b0:1fb:5e42:5096 with SMTP id
- y32-20020a056870b4a000b001fb5e425096mr2731765oap.5.1701899004068; Wed, 06 Dec
- 2023 13:43:24 -0800 (PST)
+        bh=a0FiCBQ5zRlPvqo0KD1dys1aMCjFnIg1vx4iclYQmRk=;
+        b=Tg4mjHfVP9lQf3RZJsdNiwPETwyPvRxlsHEJOlZ1BOIxCaoOvxNMzGzJTZ8Vdt0JnC
+         LkE2D5jTIsYAQITAIS0OsabMzBoRhv/qNOIQpXCnF02LimHfkQ1SKfLxv/z/tQfT+UWQ
+         hMOeDU+TgpQUQWZ0FR4RR2Anf+lguembr8600rJXor5XAQomsLgbsP+IMzAcMCctrr8/
+         TZ0/5SD01MQuC5GC/4VgFIGhgMxPFAfiUZxQAga03GnzTDsJ4SUbeHRdZSRgGfcds2rI
+         Poep2bQaEiZRVfYT8812Z7EmP2M3vQ82QM8JBZxknNgFpPzwz4sYqt+pgSo1GEBu77fZ
+         sg1Q==
+X-Gm-Message-State: AOJu0YxJQlULbY9fkzlJUPlLSbQtiLjgFlWcgf8qCReP+DaEIkLSFLFJ
+	gDIPyhj2CWuX+Zx3P195aH39ugFRp+EKz6VgNZISyiTLHFLWtWa8Lyzs9GYy64riNCpA9H5f7uB
+	+Kg54JCO9I22KxbMHJC9q8rzihtmXRjf1oX0hRSGx3h8Jyh7BKPRM3fAF88qg1Ko=
+X-Received: by 2002:a05:6a21:188:b0:187:a581:cc4e with SMTP id le8-20020a056a21018800b00187a581cc4emr1937414pzb.29.1701917099023;
+        Wed, 06 Dec 2023 18:44:59 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGJuq6Px8ETG4vq115qTLsAI+oHErFQds0ZcKptoR6sQ0x3lkYVrsYu9YAZ9p9nPIFyjh313U5hVSE+M4UX2Q8=
+X-Received: by 2002:a05:6a21:188:b0:187:a581:cc4e with SMTP id
+ le8-20020a056a21018800b00187a581cc4emr1937404pzb.29.1701917098657; Wed, 06
+ Dec 2023 18:44:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231110181123.2389186-1-daniel.lezcano@linaro.org>
-In-Reply-To: <20231110181123.2389186-1-daniel.lezcano@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 6 Dec 2023 22:43:13 +0100
-Message-ID: <CAJZ5v0h8CTbDrq1wUOMpKpnKs6Ey7H1onkfKGRS15Gj_AnepAg@mail.gmail.com>
-Subject: Re: [RFC PATCH] thermal/debugfs: Add thermal debugfs information
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: rjw@rjwysocki.net, lukasz.luba@arm.com, rui.zhang@intel.com, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20231108121940.288005-1-kai.heng.feng@canonical.com> <cc6c162407c69c53ec256bf887a0384361dd0516.camel@linux.intel.com>
+In-Reply-To: <cc6c162407c69c53ec256bf887a0384361dd0516.camel@linux.intel.com>
+From: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date: Thu, 7 Dec 2023 10:44:47 +0800
+Message-ID: <CAAd53p7do2rrB=qbpWKbNCWB_qfZ2YZPtB_55VcfGjDYXgLfzA@mail.gmail.com>
+Subject: Re: [PATCH v2] HID: intel-ish-hid: ipc: Rework EHL OOB wakeup
+To: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: jikos@kernel.org, benjamin.tissoires@redhat.com, linux-pm@vger.kernel.org, 
+	linux-pci@vger.kernel.org, Jian Hui Lee <jianhui.lee@canonical.com>, 
+	Even Xu <even.xu@intel.com>, linux-input@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 10, 2023 at 8:37=E2=80=AFPM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
+On Tue, Dec 5, 2023 at 1:50=E2=80=AFAM srinivas pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
 >
-> The thermal framework does not have any debug information except a
-> sysfs stat which is a bit controversial. This one allocates big chunks
-> of memory for every cooling devices with a high number of states and
-> could represent on some systems in production several megabytes of
-> memory for just a portion of it. As the syfs is limited to a page
-> size, the output is not exploitable with large data array and gets
-> truncated.
+> Hi Kai,
 >
-> The patch provides the same information than sysfs except the
-> transitions are dynamically allocated, thus they won't show more
-> events than the ones which actually occured. There is no longer a size
+> Sorry for he delay in getting back on this. I have a question below:
+>
+> On Wed, 2023-11-08 at 14:19 +0200, Kai-Heng Feng wrote:
+> > Since PCI core and ACPI core already handles PCI PME wake and GPE
+> > wake
+> > when the device has wakeup capability, use device_init_wakeup() to
+> > let
+> > them do the wakeup setting work.
+> >
+> > Also add a shutdown callback which uses pci_prepare_to_sleep() to let
+> > PCI and ACPI set OOB wakeup for S5.
+> >
+> > Cc: Jian Hui Lee <jianhui.lee@canonical.com>
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > ---
+> > v2:
+> >  Rebase on ("HID: intel-ish-hid: ipc: Disable and reenable ACPI GPE
+> > bit")
+> >
+> >  drivers/hid/intel-ish-hid/ipc/pci-ish.c | 67 ++++++-----------------
+> > --
+> >  1 file changed, 15 insertions(+), 52 deletions(-)
+> >
+> > diff --git a/drivers/hid/intel-ish-hid/ipc/pci-ish.c
+> > b/drivers/hid/intel-ish-hid/ipc/pci-ish.c
+> > index 710fda5f19e1..65e7eeb2fa64 100644
+> > --- a/drivers/hid/intel-ish-hid/ipc/pci-ish.c
+> > +++ b/drivers/hid/intel-ish-hid/ipc/pci-ish.c
+> > @@ -119,50 +119,6 @@ static inline bool ish_should_leave_d0i3(struct
+> > pci_dev *pdev)
+> >         return !pm_resume_via_firmware() || pdev->device =3D=3D
+> > CHV_DEVICE_ID;
+> >  }
+> >
+> > -static int enable_gpe(struct device *dev)
+> > -{
+> > -#ifdef CONFIG_ACPI
+> > -       acpi_status acpi_sts;
+> > -       struct acpi_device *adev;
+> > -       struct acpi_device_wakeup *wakeup;
+> > -
+> > -       adev =3D ACPI_COMPANION(dev);
+> > -       if (!adev) {
+> > -               dev_err(dev, "get acpi handle failed\n");
+> > -               return -ENODEV;
+> > -       }
+> > -       wakeup =3D &adev->wakeup;
+> > -
+> > -       /*
+> > -        * Call acpi_disable_gpe(), so that reference count
+> > -        * gpe_event_info->runtime_count doesn't overflow.
+> > -        * When gpe_event_info->runtime_count =3D 0, the call
+> > -        * to acpi_disable_gpe() simply return.
+> > -        */
+> > -       acpi_disable_gpe(wakeup->gpe_device, wakeup->gpe_number);
+> > -
+> > -       acpi_sts =3D acpi_enable_gpe(wakeup->gpe_device, wakeup-
+> > >gpe_number);
+> > -       if (ACPI_FAILURE(acpi_sts)) {
+> > -               dev_err(dev, "enable ose_gpe failed\n");
+> > -               return -EIO;
+> > -       }
+> > -
+> > -       return 0;
+> > -#else
+> > -       return -ENODEV;
+> > -#endif
+> > -}
+> > -
+> > -static void enable_pme_wake(struct pci_dev *pdev)
+> > -{
+> > -       if ((pci_pme_capable(pdev, PCI_D0) ||
+> > -            pci_pme_capable(pdev, PCI_D3hot) ||
+> > -            pci_pme_capable(pdev, PCI_D3cold)) && !enable_gpe(&pdev-
+> > >dev)) {
+> > -               pci_pme_active(pdev, true);
+> > -               dev_dbg(&pdev->dev, "ish ipc driver pme wake
+> > enabled\n");
+> > -       }
+> > -}
+> > -
+> >  /**
+> >   * ish_probe() - PCI driver probe callback
+> >   * @pdev:      pci device
+> > @@ -233,7 +189,7 @@ static int ish_probe(struct pci_dev *pdev, const
+> > struct pci_device_id *ent)
+> >
+> >         /* Enable PME for EHL */
+> >         if (pdev->device =3D=3D EHL_Ax_DEVICE_ID)
+> > -               enable_pme_wake(pdev);
+> > +               device_init_wakeup(dev, true);
+>
+> For apple to apple comparison, which path will call
+> https://elixir.bootlin.com/linux/latest/C/ident/__pci_enable_wake
+> which will call pci_pme_active()?
 
-occurred
+Here's the flow:
+device_shutdown()
+  pci_device_shutdown()
+    ish_shutdown()
+      pci_prepare_to_sleep()
+        __pci_enable_wake()
+          pci_pme_active()
+            __pci_pme_active()
 
-> limitation and it opens the field for more debugging information where
-> the debugfs is designed for, not sysfs.
->
-> On the thermal zone temperature side, the mitigation episodes are
-> recorded. A mitigation episode happens when the first trip point is
-> crossed the way up and then the way down. During this episode other
-> trip points can be crossed also and are accounted for this mitigation
-> episode. The interesting information is the average temperature at the
-> trip point, the undershot and the overshot. The standard deviation of
-> the mitigated temperature will be added later.
->
-> The thermal debugfs directory structure tries to stay consistent with
-> the sysfs one but in a very simplified way:
->
-> thermal/
-> |-- cooling_devices
-> |   |-- 0
-> |   |   |-- reset
-> |   |   |-- time_in_state_ms
-> |   |   |-- total_trans
-> |   |   `-- trans_table
-> |   |-- 1
-> |   |   |-- reset
-> |   |   |-- time_in_state_ms
-> |   |   |-- total_trans
-> |   |   `-- trans_table
-> |   |-- 2
-> |   |   |-- reset
-> |   |   |-- time_in_state_ms
-> |   |   |-- total_trans
-> |   |   `-- trans_table
-> |   |-- 3
-> |   |   |-- reset
-> |   |   |-- time_in_state_ms
-> |   |   |-- total_trans
-> |   |   `-- trans_table
-> |   `-- 4
-> |       |-- reset
-> |       |-- time_in_state_ms
-> |       |-- total_trans
-> |       `-- trans_table
-> `-- thermal_zones
->     |-- 0
->     |   `-- mitigations
->     `-- 1
->         `-- mitigations
->
-> The content of the files in the cooling devices directory is the same
-> as the sysfs one except for the trans_table which has the following
-> format:
->
-> Transition      Hits
-> 1->0            246
-> 0->1            246
-> 2->1            632
-> 1->2            632
-> 3->2            98
-> 2->3            98
->
-> And finally the content of the mitigations file has the following
-> format:
->
-> ,-Mitigation at 349988258us, duration=3D130136ms
-> | trip |     type | temp(=C2=B0mC) | hyst(=C2=B0mC) |  duration  |  avg(=
-=C2=B0mC) |  min(=C2=B0mC) |  max(=C2=B0mC) |
-> |    0 |  passive |     65000 |      2000 |     130136 |     68227 |     =
-62500 |     75625 |
-> |    1 |  passive |     75000 |      2000 |     104209 |     74857 |     =
-71666 |     77500 |
-> ,-Mitigation at 272451637us, duration=3D75000ms
-> | trip |     type | temp(=C2=B0mC) | hyst(=C2=B0mC) |  duration  |  avg(=
-=C2=B0mC) |  min(=C2=B0mC) |  max(=C2=B0mC) |
-> |    0 |  passive |     65000 |      2000 |      75000 |     68561 |     =
-62500 |     75000 |
-> |    1 |  passive |     75000 |      2000 |      60714 |     74820 |     =
-70555 |     77500 |
-> ,-Mitigation at 238184119us, duration=3D27316ms
-> | trip |     type | temp(=C2=B0mC) | hyst(=C2=B0mC) |  duration  |  avg(=
-=C2=B0mC) |  min(=C2=B0mC) |  max(=C2=B0mC) |
-> |    0 |  passive |     65000 |      2000 |      27316 |     73377 |     =
-62500 |     75000 |
-> |    1 |  passive |     75000 |      2000 |      19468 |     75284 |     =
-69444 |     77500 |
-> ,-Mitigation at 39863713us, duration=3D136196ms
-> | trip |     type | temp(=C2=B0mC) | hyst(=C2=B0mC) |  duration  |  avg(=
-=C2=B0mC) |  min(=C2=B0mC) |  max(=C2=B0mC) |
-> |    0 |  passive |     65000 |      2000 |     136196 |     73922 |     =
-62500 |     75000 |
-> |    1 |  passive |     75000 |      2000 |      91721 |     74386 |     =
-69444 |     78125 |
->
-> More information for a better understanding of the thermal behavior
-> will be added after. The idea is to give detailed statistics
-> information about the undershots and overshots, the temperature speed,
-> etc... As all the information in a single file is too much, the idea
-> would be to create a directory named with the mitigation timestamp
-> where all data could be added.
->
-> Please note this code is immune against trip ordering.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  drivers/thermal/Kconfig           |   7 +
->  drivers/thermal/Makefile          |   3 +
->  drivers/thermal/thermal_core.c    |  23 +-
->  drivers/thermal/thermal_core.h    |   1 +
->  drivers/thermal/thermal_debugfs.c | 679 ++++++++++++++++++++++++++++++
->  drivers/thermal/thermal_debugfs.h |  23 +
->  drivers/thermal/thermal_helpers.c |  27 +-
->  include/linux/thermal.h           |   7 +
->  8 files changed, 758 insertions(+), 12 deletions(-)
->  create mode 100644 drivers/thermal/thermal_debugfs.c
->  create mode 100644 drivers/thermal/thermal_debugfs.h
->
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index c81a00fbca7d..b78800e512a8 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -33,6 +33,13 @@ config THERMAL_STATISTICS
->
->           If in doubt, say N.
->
-> +config THERMAL_DEBUGFS
-> +       bool "Thermal debugging file system"
+Kai-Heng
 
-This isn't really a file system
-
-I'd just say "Thermal subsystem debug support"
-
-> +       depends on DEBUG_FS
-> +       help
-> +         This option provides a debugfs entry giving useful
-> +         information about the thermal framework internals.
-
-And here "Say Y to allow the thermal subsystem to collect diagnostic
-information that can be accessed via debugfs."
-
-> +
->  config THERMAL_EMERGENCY_POWEROFF_DELAY_MS
->         int "Emergency poweroff delay in milli-seconds"
->         default 0
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index c934cab309ae..234f19f7efe3 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -10,6 +10,9 @@ thermal_sys-y                 +=3D thermal_trip.o therm=
-al_helpers.o
->  # netlink interface to manage the thermal framework
->  thermal_sys-$(CONFIG_THERMAL_NETLINK)          +=3D thermal_netlink.o
 >
-> +# debugfs interface to investigate the behavior and statistics
-
-I'm not sure about the value of this comment.
-
-> +thermal_sys-$(CONFIG_THERMAL_DEBUGFS)  +=3D thermal_debugfs.o
-> +
->  # interface to/from other layers providing sensors
->  thermal_sys-$(CONFIG_THERMAL_HWMON)            +=3D thermal_hwmon.o
->  thermal_sys-$(CONFIG_THERMAL_OF)               +=3D thermal_of.o
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_cor=
-e.c
-> index 3fe9232e355d..635cd08882c8 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -355,17 +355,17 @@ static void handle_thermal_trip(struct thermal_zone=
-_device *tz,
->                 if (tz->temperature >=3D trip->temperature)
->                         trip->threshold -=3D trip->hysteresis;
->         } else {
-> +               int trip_id =3D thermal_zone_trip_id(tz, trip);
-> +
->                 if (tz->last_temperature < trip->threshold &&
->                     tz->temperature >=3D trip->threshold) {
-> -                       thermal_notify_tz_trip_up(tz->id,
-> -                                                 thermal_zone_trip_id(tz=
-, trip),
-> -                                                 tz->temperature);
-> +                       thermal_notify_tz_trip_up(tz->id, trip_id, tz->te=
-mperature);
-> +                       thermal_debugfs_handle_way_up(tz, trip_id, tz->te=
-mperature);
-
-I would prefer to pass trip here (I have a similar change for
-thermal_notify_tz_trip_up() in the works) and why not just call it
-thermal_debug_tz_trip_up()?  And _tz_trip_down() for consistency
-below?
-
-Also if tz is passed, tz->temperature can be retrieved by the function
-itself, so no need to pass it.
-
->                         trip->threshold =3D trip->temperature - trip->hys=
-teresis;
->                 } else if (tz->last_temperature >=3D trip->threshold &&
->                            tz->temperature < trip->threshold) {
-> -                       thermal_notify_tz_trip_down(tz->id,
-> -                                                   thermal_zone_trip_id(=
-tz, trip),
-> -                                                   tz->temperature);
-> +                       thermal_notify_tz_trip_down(tz->id, trip_id, tz->=
-temperature);
-> +                       thermal_debugfs_handle_way_down(tz, trip_id, tz->=
-temperature);
-
-Same here.
-
->                         trip->threshold =3D trip->temperature;
->                 }
->         }
-> @@ -395,6 +395,7 @@ static void update_temperature(struct thermal_zone_de=
-vice *tz)
->         trace_thermal_temperature(tz);
+> Thanks,
+> Srinivas
 >
->         thermal_genl_sampling_temp(tz->id, temp);
-> +       thermal_debugfs_update_temp(tz);
-
-thermal_debug_update_temp()?
-
->  }
+> >
+> >         ret =3D ish_init(ishtp);
+> >         if (ret)
+> > @@ -256,6 +212,19 @@ static void ish_remove(struct pci_dev *pdev)
+> >         ish_device_disable(ishtp_dev);
+> >  }
+> >
+> > +
+> > +/**
+> > + * ish_shutdown() - PCI driver shutdown callback
+> > + * @pdev:      pci device
+> > + *
+> > + * This function sets up wakeup for S5
+> > + */
+> > +static void ish_shutdown(struct pci_dev *pdev)
+> > +{
+> > +       if (pdev->device =3D=3D EHL_Ax_DEVICE_ID)
+> > +               pci_prepare_to_sleep(pdev);
+> > +}
+> > +
+> >  static struct device __maybe_unused *ish_resume_device;
+> >
+> >  /* 50ms to get resume response */
+> > @@ -378,13 +347,6 @@ static int __maybe_unused ish_resume(struct
+> > device *device)
+> >         struct pci_dev *pdev =3D to_pci_dev(device);
+> >         struct ishtp_device *dev =3D pci_get_drvdata(pdev);
+> >
+> > -       /* add this to finish power flow for EHL */
+> > -       if (dev->pdev->device =3D=3D EHL_Ax_DEVICE_ID) {
+> > -               pci_set_power_state(pdev, PCI_D0);
+> > -               enable_pme_wake(pdev);
+> > -               dev_dbg(dev->devc, "set power state to D0 for
+> > ehl\n");
+> > -       }
+> > -
+> >         ish_resume_device =3D device;
+> >         dev->resume_flag =3D 1;
+> >
+> > @@ -400,6 +362,7 @@ static struct pci_driver ish_driver =3D {
+> >         .id_table =3D ish_pci_tbl,
+> >         .probe =3D ish_probe,
+> >         .remove =3D ish_remove,
+> > +       .shutdown =3D ish_shutdown,
+> >         .driver.pm =3D &ish_pm_ops,
+> >  };
+> >
 >
->  static void thermal_zone_device_init(struct thermal_zone_device *tz)
-> @@ -923,6 +924,8 @@ __thermal_cooling_device_register(struct device_node =
-*np,
->
->         mutex_unlock(&thermal_list_lock);
->
-> +       thermal_debugfs_cdev_register(cdev);
-
-I'd call this thermal_debug_cdev_add(), and the one below analogously.
-
-> +
->         return cdev;
->
->  out_cooling_dev:
-> @@ -1129,6 +1132,8 @@ void thermal_cooling_device_unregister(struct therm=
-al_cooling_device *cdev)
->         if (!cdev)
->                 return;
->
-> +       thermal_debugfs_cdev_unregister(cdev);
-> +
->         mutex_lock(&thermal_list_lock);
->
->         if (!thermal_cooling_device_present(cdev)) {
-> @@ -1370,6 +1375,8 @@ thermal_zone_device_register_with_trips(const char =
-*type, struct thermal_trip *t
->
->         thermal_notify_tz_create(tz->id, tz->type);
->
-> +       thermal_debugfs_tz_register(tz);
-
-thermal_debug_tz_add() ?  And __debug_tz_remove() below?
-
-> +
->         return tz;
->
->  unregister:
-> @@ -1435,6 +1442,8 @@ void thermal_zone_device_unregister(struct thermal_=
-zone_device *tz)
->         if (!tz)
->                 return;
->
-> +       thermal_debugfs_tz_unregister(tz);
-> +
->         tz_id =3D tz->id;
->
->         mutex_lock(&thermal_list_lock);
-> @@ -1548,6 +1557,8 @@ static int __init thermal_init(void)
->  {
->         int result;
->
-> +       thermal_debugfs_init();
-> +
->         result =3D thermal_netlink_init();
->         if (result)
->                 goto error;
-> diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_cor=
-e.h
-> index 0a3b3ec5120b..809d37d0aa28 100644
-> --- a/drivers/thermal/thermal_core.h
-> +++ b/drivers/thermal/thermal_core.h
-> @@ -13,6 +13,7 @@
->  #include <linux/thermal.h>
->
->  #include "thermal_netlink.h"
-> +#include "thermal_debugfs.h"
->
->  /* Default Thermal Governor */
->  #if defined(CONFIG_THERMAL_DEFAULT_GOV_STEP_WISE)
-
-The change below is large and rather hard to grasp as a whole.
-
-It would be easier to process if it is split into a few smaller
-changes building on top of each other IMO.
-
-Personally, I would start with stubs of the functions that are called
-from the core and subsequently add more and more code to them.
-
-> diff --git a/drivers/thermal/thermal_debugfs.c b/drivers/thermal/thermal_=
-debugfs.c
-> new file mode 100644
-> index 000000000000..4053fd2fe16f
-> --- /dev/null
-> +++ b/drivers/thermal/thermal_debugfs.c
-> @@ -0,0 +1,679 @@
-
-[cut]
 
