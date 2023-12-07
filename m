@@ -1,494 +1,240 @@
-Return-Path: <linux-pm+bounces-778-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-779-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D322E808366
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Dec 2023 09:43:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FC6A808396
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Dec 2023 09:54:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F36751C21D4E
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Dec 2023 08:43:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB60E284396
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Dec 2023 08:54:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7931C19447;
-	Thu,  7 Dec 2023 08:43:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC1D91E4B3;
+	Thu,  7 Dec 2023 08:54:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="c+HI7W2z"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="fnLyhPMX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFB2DD4A
-	for <linux-pm@vger.kernel.org>; Thu,  7 Dec 2023 00:43:48 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-54dcfca54e0so320092a12.1
-        for <linux-pm@vger.kernel.org>; Thu, 07 Dec 2023 00:43:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701938627; x=1702543427; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RJsI1iyVrzkD4HE017Pl+ikJ/8c50MiFk/XRDKW8Bao=;
-        b=c+HI7W2zzxmytyoUq6ghNTdussr0A8hv0aNNUyS9xjcbLNMhtSymK6FiOWIh2B8PS0
-         V5QLlrQoHBep2kbkbjSpT5PqNnOzcU54qaMFFmlYSGA5pQNgHW8YjanPIjZ0Zag1tEMD
-         tqFoWeJnMs/apRn7viDE0ZFspWpmZt8HhSliW4eHxnp+jtNI17RNvcVWG7rsnj3bAo4A
-         tjNV7h5idKXM9yKac8VqTGPiizlxDXQhW7irDOdRSEXcyFekLIA6qM94VqVWve0H2pCA
-         AFoXFWZ3lDYai2iGdm0/q/xxxzOHNdsiwS+loALs0NZbmRbT3xglk9XSorN0mpd9Air+
-         mIsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701938627; x=1702543427;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RJsI1iyVrzkD4HE017Pl+ikJ/8c50MiFk/XRDKW8Bao=;
-        b=w3Lzsy/8drqRh90B3rmF7alDeHQheZQKeMQluSuPVZbUnLbr6WwtLXIcdIpC9zN4Cx
-         AEAg24yZcp+b4iwH/7Y23lzu1MOrtMJmWt8HRuOemr8CqVLBpI/uSdnGaxn0G7vVPwys
-         tif9xFTNbGQLfkP1aVrGPtT4uvD1B9q34CgSrsfXrC9DqO1ELdECaDzkQY9w5BhSM3wO
-         vIpoCtNYzVTNWmw3UpyDtvL10oFlF3s6K3X0uEFOzJroCp4RjuO8oyi/PbA4sdLuYLp6
-         dXV5/cNvM06TkOYGze0I/XSAfcztgl5XBIeBe0bed1HSaoGeSJvxbPtso5i7gUJjrYx/
-         XDtQ==
-X-Gm-Message-State: AOJu0YzB7SbUfCAzjOdLMPDXhai02ptJPMrkZh533XHWyzXktCKzDKf0
-	5hxxdh8wtsoMrv5vIf5tECV9SQ==
-X-Google-Smtp-Source: AGHT+IGXAZfmHKuPnV3Z3Iqo8Tq3e9H4qHa638hZCzYhQXfJC2C4Gu3E0ImYKDSx09n2Ncmvvb3rnQ==
-X-Received: by 2002:a17:906:81c2:b0:a19:a1ba:da49 with SMTP id e2-20020a17090681c200b00a19a1bada49mr1467077ejx.112.1701938627315;
-        Thu, 07 Dec 2023 00:43:47 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id ov3-20020a170906fc0300b00a1c76114fcesm516299ejb.218.2023.12.07.00.43.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Dec 2023 00:43:46 -0800 (PST)
-Message-ID: <114c9baf-66d1-4055-a47c-916642b6dedd@linaro.org>
-Date: Thu, 7 Dec 2023 09:43:44 +0100
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2067.outbound.protection.outlook.com [40.107.244.67])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B877919A;
+	Thu,  7 Dec 2023 00:54:02 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Rf/giGn2s+UJ3GMlQHj6Zy11pPeOiumwjj0OKMLaRKaE22lxIsGJ2DQgGob36gjrXrqIXFOJI+4DM3tnteMboXUvnpl2O2b29OqVLugCrvPvQuh+mEeZDpiJHNCobm8WhxM/8/bbH+srGbt24AUWdwe8nB+6CSgv4XrKIDxFj0Kkuin79/9Mpd9VJ6TpTA11MFmazuxho9/0eBxgPu1LxrykxmPIT98JVQPznXaBR3ONGKFqpzwoy4N2K9Mw6cbHR+m8MbE52VCjDOaNmkHK7QfDfkqty5BjK6hPfWnhAISs7H3OFEE5w6lLx6VA66n2iMf4xRlylQj1XwpUIUgzfg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fBnslKr4yNfFWfUez7V2Hfhm2rt61a1WmyK4DD1Qx6w=;
+ b=WgdCrjgh2LDKKETTQgp6i1NUxx9tyafZA7CNSo2//P9IiFxmqle6MXT8RelpM1uv57XJCAsoTX3l+IC0pVZWl6KCfeyouXXEbZhTXT/38TMYSxlfpQGlQlYmyIYi8V4uH3kzm8++ho+C5XlSDPJ1aBixhe8WqQCSc6UGrGED2LoSUzegD7qBAG7uVGouluekVq/11krWKqwUOAKMTGF3oy8LrLmVQeAHi9SQqdSWN21QduFD8z9u7asWDsAqAbFCpnjgy3AL6swfANdi/cFCVNFEbDwEqZWdj7ITDXr2RXwag343Ldr2D17Yw1zKCZ8OXYd4VEWHsnb6wsQO5PdapQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fBnslKr4yNfFWfUez7V2Hfhm2rt61a1WmyK4DD1Qx6w=;
+ b=fnLyhPMXdlwDzeMc1ALhORYsRT9pex3vd6vCGmj16VQilyKdjBEljJ9ux/rC0OohJRh6ZWR2finuknQUtBYozbbNpXoodM8MEdgZ80kbbq6N8Doi58znLeuKO7X/edpi4YQlEXt3ZuZ+TLoot+tBPRLurUekrsOjA3PIAaMN1U3B/fp35K6ghotbX3A4QoL7EbQOpAKn/NrsI2brDGWh/RP8J3pygHe/3xMMfJJXLE/bZCRexSv/QJUKw9fJ1wc2oEVRHo+p2jfkaQR+oI5gsQjPBriSl+cdWYzVC2M5nEXewQk408g6g+E3Dhn92v94jT5QYdOq0L8imiy1Qj111g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM6PR12MB3356.namprd12.prod.outlook.com (2603:10b6:5:38::11) by
+ SJ2PR12MB8649.namprd12.prod.outlook.com (2603:10b6:a03:53c::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.34; Thu, 7 Dec
+ 2023 08:53:59 +0000
+Received: from DM6PR12MB3356.namprd12.prod.outlook.com
+ ([fe80::1a50:8e27:5f8f:7c4d]) by DM6PR12MB3356.namprd12.prod.outlook.com
+ ([fe80::1a50:8e27:5f8f:7c4d%5]) with mapi id 15.20.7068.025; Thu, 7 Dec 2023
+ 08:53:59 +0000
+Message-ID: <6e282e1b-39d2-4a08-bdd4-a9d02b2b7f74@nvidia.com>
+Date: Thu, 7 Dec 2023 14:23:46 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC,v14 4/5] arm64: tegra: Add PCIe port node with PCIe WAKE#
+ for C1 controller
+To: Manivannan Sadhasivam <mani@kernel.org>
+Cc: bhelgaas@google.com, thierry.reding@gmail.com, petlozup@nvidia.com,
+ rafael.j.wysocki@intel.com, lpieralisi@kernel.org, robh@kernel.org,
+ jeffy.chen@rock-chips.com, krzysztof.kozlowski+dt@linaro.org,
+ jonathanh@nvidia.com, dmitry.osipenko@collabora.com,
+ viresh.kumar@linaro.org, gregkh@linuxfoundation.org, steven.price@arm.com,
+ kw@linux.com, linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+ linux-pm@vger.kernel.org, vidyas@nvidia.com
+References: <20230208111645.3863534-1-mmaddireddy@nvidia.com>
+ <20230208111645.3863534-5-mmaddireddy@nvidia.com>
+ <20231206153627.GJ12802@thinkpad>
+ <c86e8f75-f74a-491e-9ac0-2431a6ec4b80@nvidia.com>
+ <20231207075952.GG2932@thinkpad>
+Content-Language: en-US
+From: Manikanta Maddireddy <mmaddireddy@nvidia.com>
+X-Nvconfidentiality: public
+In-Reply-To: <20231207075952.GG2932@thinkpad>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MA1PR01CA0180.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:d::18) To DM6PR12MB3356.namprd12.prod.outlook.com
+ (2603:10b6:5:38::11)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 8/8] dt-bindings: mfd: dlg,da9063: Convert da9062 to
- json-schema
-Content-Language: en-US
-To: Biju Das <biju.das.jz@bp.renesas.com>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
- Lee Jones <lee@kernel.org>
-Cc: Support Opensource <support.opensource@diasemi.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Steve Twiss <stwiss.opensource@diasemi.com>, linux-input@vger.kernel.org,
- devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
- Geert Uytterhoeven <geert+renesas@glider.be>,
- Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
- Biju Das <biju.das.au@gmail.com>, linux-renesas-soc@vger.kernel.org
-References: <20231206155740.5278-1-biju.das.jz@bp.renesas.com>
- <20231206155740.5278-9-biju.das.jz@bp.renesas.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231206155740.5278-9-biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-On 06/12/2023 16:57, Biju Das wrote:
-> Convert the da9062 PMIC device tree binding documentation to json-schema.
-> 
-> Update the example to match reality.
-> 
-> While at it, update description with link to product information.
-> 
-> Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-> ---
-> v3->v4:
->  * Split the thermal binding patch separate.
->  * Updated the description.
-> v2->v3:
->  * Fixed bot errors related to MAINTAINERS entry, invalid doc
->    references and thermal examples by merging patch#4.
-> v2:
->  * New patch
-> ---
->  .../bindings/input/dlg,da9062-onkey.yaml      |   3 +-
->  .../devicetree/bindings/mfd/da9062.txt        | 124 ------------
->  .../devicetree/bindings/mfd/dlg,da9063.yaml   | 186 +++++++++++++++++-
->  .../bindings/thermal/dlg,da9062-thermal.yaml  |   2 +-
->  4 files changed, 183 insertions(+), 132 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/mfd/da9062.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/input/dlg,da9062-onkey.yaml b/Documentation/devicetree/bindings/input/dlg,da9062-onkey.yaml
-> index 4cff91f4bd34..18b6a3f02c07 100644
-> --- a/Documentation/devicetree/bindings/input/dlg,da9062-onkey.yaml
-> +++ b/Documentation/devicetree/bindings/input/dlg,da9062-onkey.yaml
-> @@ -11,8 +11,7 @@ maintainers:
->  
->  description: |
->    This module is part of the DA9061/DA9062/DA9063. For more details about entire
-> -  DA9062 and DA9061 chips see Documentation/devicetree/bindings/mfd/da9062.txt
-> -  For DA9063 see Documentation/devicetree/bindings/mfd/dlg,da9063.yaml
-> +  DA906{1,2,3} chips see Documentation/devicetree/bindings/mfd/dlg,da9063.yaml
->  
->    This module provides the KEY_POWER event.
->  
-> diff --git a/Documentation/devicetree/bindings/mfd/da9062.txt b/Documentation/devicetree/bindings/mfd/da9062.txt
-> deleted file mode 100644
-> index c8a7f119ac84..000000000000
-> --- a/Documentation/devicetree/bindings/mfd/da9062.txt
-> +++ /dev/null
-> @@ -1,124 +0,0 @@
-> -* Dialog DA9062 Power Management Integrated Circuit (PMIC)
-> -
-> -Product information for the DA9062 and DA9061 devices can be found here:
-> -- https://www.dialog-semiconductor.com/products/da9062
-> -- https://www.dialog-semiconductor.com/products/da9061
-> -
-> -The DA9062 PMIC consists of:
-> -
-> -Device                   Supply Names    Description
-> -------                   ------------    -----------
-> -da9062-regulator        :               : LDOs & BUCKs
-> -da9062-rtc              :               : Real-Time Clock
-> -da9062-onkey            :               : On Key
-> -da9062-watchdog         :               : Watchdog Timer
-> -da9062-thermal          :               : Thermal
-> -da9062-gpio             :               : GPIOs
-> -
-> -The DA9061 PMIC consists of:
-> -
-> -Device                   Supply Names    Description
-> -------                   ------------    -----------
-> -da9062-regulator        :               : LDOs & BUCKs
-> -da9062-onkey            :               : On Key
-> -da9062-watchdog         :               : Watchdog Timer
-> -da9062-thermal          :               : Thermal
-> -
-> -======
-> -
-> -Required properties:
-> -
-> -- compatible : Should be
-> -    "dlg,da9062" for DA9062
-> -    "dlg,da9061" for DA9061
-> -- reg : Specifies the I2C slave address (this defaults to 0x58 but it can be
-> -  modified to match the chip's OTP settings).
-> -
-> -Optional properties:
-> -
-> -- gpio-controller : Marks the device as a gpio controller.
-> -- #gpio-cells     : Should be two. The first cell is the pin number and the
-> -                    second cell is used to specify the gpio polarity.
-> -
-> -See Documentation/devicetree/bindings/gpio/gpio.txt for further information on
-> -GPIO bindings.
-> -
-> -- interrupts : IRQ line information.
-> -- interrupt-controller
-> -
-> -See Documentation/devicetree/bindings/interrupt-controller/interrupts.txt for
-> -further information on IRQ bindings.
-> -
-> -Sub-nodes:
-> -
-> -- regulators : This node defines the settings for the LDOs and BUCKs.
-> -  The DA9062 regulators are bound using their names listed below:
-> -
-> -    buck1    : BUCK_1
-> -    buck2    : BUCK_2
-> -    buck3    : BUCK_3
-> -    buck4    : BUCK_4
-> -    ldo1     : LDO_1
-> -    ldo2     : LDO_2
-> -    ldo3     : LDO_3
-> -    ldo4     : LDO_4
-> -
-> -  The DA9061 regulators are bound using their names listed below:
-> -
-> -    buck1    : BUCK_1
-> -    buck2    : BUCK_2
-> -    buck3    : BUCK_3
-> -    ldo1     : LDO_1
-> -    ldo2     : LDO_2
-> -    ldo3     : LDO_3
-> -    ldo4     : LDO_4
-> -
-> -  The component follows the standard regulator framework and the bindings
-> -  details of individual regulator device can be found in:
-> -  Documentation/devicetree/bindings/regulator/regulator.txt
-> -
-> -  regulator-initial-mode may be specified for buck regulators using mode values
-> -  from include/dt-bindings/regulator/dlg,da9063-regulator.h.
-> -
-> -- rtc : This node defines settings required for the Real-Time Clock associated
-> -  with the DA9062. There are currently no entries in this binding, however
-> -  compatible = "dlg,da9062-rtc" should be added if a node is created.
-> -
-> -- onkey : See ../input/dlg,da9062-onkey.yaml
-> -
-> -- watchdog: See ../watchdog/dlg,da9062-watchdog.yaml
-> -
-> -- thermal : See ../thermal/dlg,da9062-thermal.yaml
-> -
-> -Example:
-> -
-> -	pmic0: da9062@58 {
-> -		compatible = "dlg,da9062";
-> -		reg = <0x58>;
-> -		interrupt-parent = <&gpio6>;
-> -		interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
-> -		interrupt-controller;
-> -
-> -		rtc {
-> -			compatible = "dlg,da9062-rtc";
-> -		};
-> -
-> -		regulators {
-> -			DA9062_BUCK1: buck1 {
-> -				regulator-name = "BUCK1";
-> -				regulator-min-microvolt = <300000>;
-> -				regulator-max-microvolt = <1570000>;
-> -				regulator-min-microamp = <500000>;
-> -				regulator-max-microamp = <2000000>;
-> -				regulator-initial-mode = <DA9063_BUCK_MODE_SYNC>;
-> -				regulator-boot-on;
-> -			};
-> -			DA9062_LDO1: ldo1 {
-> -				regulator-name = "LDO_1";
-> -				regulator-min-microvolt = <900000>;
-> -				regulator-max-microvolt = <3600000>;
-> -				regulator-boot-on;
-> -			};
-> -		};
-> -	};
-> -
-> diff --git a/Documentation/devicetree/bindings/mfd/dlg,da9063.yaml b/Documentation/devicetree/bindings/mfd/dlg,da9063.yaml
-> index 676b4f2566ae..54bb23dbc73f 100644
-> --- a/Documentation/devicetree/bindings/mfd/dlg,da9063.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/dlg,da9063.yaml
-> @@ -4,7 +4,7 @@
->  $id: http://devicetree.org/schemas/mfd/dlg,da9063.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: Dialog DA9063/DA9063L Power Management Integrated Circuit (PMIC)
-> +title: Dialog DA906{3L,3,2,1} Power Management Integrated Circuit (PMIC)
->  
->  maintainers:
->    - Steve Twiss <stwiss.opensource@diasemi.com>
-> @@ -17,10 +17,17 @@ description: |
->    moment where all voltage monitors are disabled. Next, as da9063 only supports
->    UV *and* OV monitoring, both must be set to the same severity and value
->    (0: disable, 1: enable).
-> +  Product information for the DA906{3L,3,2,1} devices can be found here:
-> +  - https://www.dialog-semiconductor.com/products/da9063l
-> +  - https://www.dialog-semiconductor.com/products/da9063
-> +  - https://www.dialog-semiconductor.com/products/da9062
-> +  - https://www.dialog-semiconductor.com/products/da9061
->  
->  properties:
->    compatible:
->      enum:
-> +      - dlg,da9061
-> +      - dlg,da9062
->        - dlg,da9063
->        - dlg,da9063l
->  
-> @@ -35,6 +42,19 @@ properties:
->    "#interrupt-cells":
->      const: 2
->  
-> +  gpio:
-
-Old binding did not have such node and nothing in commit msg explained
-changes from pure conversion.
-
-> +    type: object
-> +    $ref: /schemas/gpio/gpio.yaml#
-
-?!? Why? First: It's always selected. Second, so you have two gpio
-controllers? And original binding had 0? Why this is not explained at
-all? Open the binding and look at its properties.
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3356:EE_|SJ2PR12MB8649:EE_
+X-MS-Office365-Filtering-Correlation-Id: c18e7d28-c0a7-4709-9b55-08dbf7020d7a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	uFc066SYW4OedTJuTeidad6wvRF2shd7cAuFmT5SXsFM71+NrbTmLDxDsV71/b8QhgMbV2BN44GfIindhojLX549gWFA9gqXkVva9qKn15pyb7tAcYoXQbk1QYSkrY2H9C1oN3wVoeoP5x1eLiLFoMRQGSxtvIyxTa6RfYKsnBOEfl4Ib2RwVKGPxIJLrFA55Zd408bO6yeX/URWSClrcbgg/nJYb6irk4QLupVQ88ngz/rkCTn6y4qZG1wQL59kbMeacF6mNvfWVw7CVWNtLSCh3U1owRizPo33VhQvWui5LAqhbnYcW/cQeFxnyTkGY7g21+2poGeB315veOBtT0slygkZbe0+iCfRfLDYCAWC2VJysJAVCIdzF4TFxo+vnp1soZn8ca7VyI/H6XIiatKcxW6oSW8qWNzgOcbf/MBm2fmK+wMFG1Bz7mzwj7TgFE9XXUCmXzZBWqd7SpTv0nkUPXoSce5gqcc8WBDmJCKpgQRq8SygYa71gXUPJnE1fUavV3nY7ZCIR+kMdLQvSkUJ3BUEeDhYniI3FvVeDlqR9ZT1uRA7I1TTuITfJmmvnN5VjJTpsRx62TGQNGWfkbH05D6RLgFGSnw0ab27TRz4WG335LL+OY4Rq6AeDSXSIOaVHYEmMbULeiMqnGGh/0S1+8GSLfjypfGLMgAWgVK4M1HN9/ozbzf4IBwDrfL1evMJjBdDCoEc7KtUEtyhxCFtUDTg0TuOwyFGMWPh4+4=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3356.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(346002)(396003)(366004)(39860400002)(136003)(230273577357003)(230922051799003)(230173577357003)(451199024)(64100799003)(1800799012)(186009)(6486002)(966005)(478600001)(5660300002)(53546011)(6666004)(66946007)(66476007)(316002)(6916009)(66556008)(8936002)(8676002)(4326008)(6506007)(86362001)(31696002)(38100700002)(36756003)(41300700001)(31686004)(2616005)(7416002)(107886003)(2906002)(26005)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?TTA3T1NQU01CTXRIaVF0TmhsLzlDaXRZRDBsS1ZFTTNGQ2dXeVpiOVJsa3U1?=
+ =?utf-8?B?WGlTNGw2YWNLU2FtM3llU3RjSVh6SnE2M3RjaGNDQ2QvYUhGTXRhakQ2by9p?=
+ =?utf-8?B?MUNNaDVhbHJYQ1VWVjNOWklZS3U0b2RsSzFteExJTzNUWERkZEdXeksxV0d6?=
+ =?utf-8?B?Q0tMeVdZVTVDMzRuQWNWZ2Z5aW5OcVF1MmVzdk5QRm1DOXZGTHZneXBkb1Ay?=
+ =?utf-8?B?aFpVNUliZjFrUm5lVFpGOTdPL3ArNFVCV2VLVFZZZWhQOTlja2VQZkNzZW9D?=
+ =?utf-8?B?YkhhTTZwK05jb2YxRzJ3NG03aWtJbnJIalcvYVQxbHIvS3hOeTM1ZXlNckxJ?=
+ =?utf-8?B?U2xyK3l5ZS9CL0I2dUNJOVRJb2N3UmJuNGtwQ2QvK1cxcXB4aEIxckNvM0l0?=
+ =?utf-8?B?Ny83Y2tkRW9jN3dPTU1sVUJhblVjcFFod1cwTnNvN3lnS1R3ZXZUVklwekY5?=
+ =?utf-8?B?MHNVN2pteGZoRWZtS3BVNGhsenYrcTdTVk1HUWd6OEpoWVAzN0ZNUEFpdGw1?=
+ =?utf-8?B?elAxUS9DUjJNaDdoVVhMWmpzaXZvVExsbWpReDc4dkVEbEs5UE5mbW9rS3dQ?=
+ =?utf-8?B?Y1VNNFlNUE0vb016T0pFcFJ0dWM2RWdpQ25ZYkwyRWRzcVdFVm9YcDRQUmRY?=
+ =?utf-8?B?VmFweVZjaUx1M1BIV3dka0VvMFNUbGJ4V2FpclNpS0JlYlBPOE5wMzZIU3Js?=
+ =?utf-8?B?WTFEMjQvcWlJRlVmWURlSHJIbGVhdEJtby9UMjU2cTRXdWo4Q3hDVkx6NWVL?=
+ =?utf-8?B?ZW9YL1N4cFZoTTFXOXZPTUFNVHBNVTFYRmlDSWorck54ejV6eHhuNnZDbEMr?=
+ =?utf-8?B?YlJkZ1V6MTNqQm5sRUt1dWdKNXNjOXpnenp0Zm5HY3VmOVVPY29jR3BFU2F2?=
+ =?utf-8?B?bjJCUWpxSHVpYnJIN1ZNck5zNlI2eTBNL3RJTk15a3pzb09VNHF4WEk3Z2VY?=
+ =?utf-8?B?WkxKbTJCUTZVckkxelMvc01QTnBhOFZxZ2tGeUpDSFZCUnIvNXI3RGtRMi9u?=
+ =?utf-8?B?M3htb2VFRG9XaldhU0ZXa0NZZHJCZ0JoakEvMU1aMGpBVUI2OVlkVDU5SitB?=
+ =?utf-8?B?Ump6dXNOLzlkRUJLNWIrZGJSNHR2ZzhHTWwwZWd3L2ZoN2dMREVJU2I5SkJ5?=
+ =?utf-8?B?ZzlHbmg3NzByNGc5T1ZaRnIxamlmTXkrODhmWUZ0VkJSYUJMMGdSdmhBL0hM?=
+ =?utf-8?B?dmFsYnVaY1JIRFRjcUVlR2IvK09KQ1QzcmtRd1liTlZFa0xBZmdEenVRY0FW?=
+ =?utf-8?B?cGJJellGeGJIOXdNanRIQ3h1ZFdyR2ZWbTJrTEV3TjFYdGk5WGVBVjNkUU5t?=
+ =?utf-8?B?Q0REdHoxYllwRWpkanpJQW9iWW1zclNjL0ptM25Na1NuOC9UYUQwR3BiMjBB?=
+ =?utf-8?B?Q3U5YTlTNTdSeGNMWUgwSWJvZHZBWE5nUmtPenEvQTZvTG5BUm9kYXF2Ukxv?=
+ =?utf-8?B?aGJ2M2ZxdVlBQ1MxRUwwd0JOdGk1SnN2ajh5Vi9UdjRtVS83VWsxMXNNbmJW?=
+ =?utf-8?B?UzZrRjBJVm45TFE4M2dOMCtFemlTOVBHZmpsVS9GMk8zdjFoZjR0eG12Q01K?=
+ =?utf-8?B?bllYZ3hzVVBZb3RBVFZTS012SDI5ejlkSzE1QmNKOXcvSTcrbm9STlhNVGVO?=
+ =?utf-8?B?SHpvRU1Vd24wcjRtTmJQMnlSbkphYWoxYjg4YjRmQ0JtWDRFNDNuYnFNSmg5?=
+ =?utf-8?B?WmxTbzQrcy8wa0g1OFF3S3Q3MlFTR2YyQ0x2emhTWkhVS1ROeW4rTFFEVlpz?=
+ =?utf-8?B?L1BVZmpMQkd5Zi9lbDlLbUd5Mnl1Y1FsNXZoQzJtRk54OUpieTJ1TEpMODMr?=
+ =?utf-8?B?ZXBtZGgrOGd1MnpRZmF5cDlZaEtvZGpMdDVrTDdTMGpiWFNoVWRLRUNudklk?=
+ =?utf-8?B?dVlKUUMxZkMzcFo4MjBJZHFCVENLc2UySEtOYkdhWS9ZRkFXWDVyMXhlTW9n?=
+ =?utf-8?B?cVdSK1JPSXd5ejVLUDYyNmtxL1lCb0V3MGpRUlBrQTA4cmZqY1pBMzlyNlQy?=
+ =?utf-8?B?K3FxWkxxSFpGbkN0VGpPZGJuZkJzeEl6cVB6WHB0ODhWSEJiTUU1KzVsdU8w?=
+ =?utf-8?B?ZEdjaWpNNzc0VnhvSlF5OTRQa3ZxY1lSbERmS3FKbUNEbXBHNlZIRFRtY2d0?=
+ =?utf-8?B?UjJabFR2dzhBaWZwdS9WY2VCaXp3SVpHcHhDamN0Y2FHWG02OUtiV2c0MUtQ?=
+ =?utf-8?B?Ymc9PQ==?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c18e7d28-c0a7-4709-9b55-08dbf7020d7a
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3356.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2023 08:53:59.4940
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /m/wAy0N+cOo+S/HNyw4PB3o7wgycu949FgU4hRHx9Q/fsCXuTTuxWXI/frFASmyHmKjrU0Vh8KqYum4RL3xLg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8649
 
 
-> +    unevaluatedProperties: false
-> +    properties:
-> +      compatible:
-> +        const: dlg,da9062-gpio
-> +
-> +  gpio-controller: true
+On 07-12-2023 13:29, Manivannan Sadhasivam wrote:
+> External email: Use caution opening links or attachments
+>
+>
+> On Thu, Dec 07, 2023 at 12:54:04PM +0530, Manikanta Maddireddy wrote:
+>> On 06-12-2023 21:06, Manivannan Sadhasivam wrote:
+>>> External email: Use caution opening links or attachments
+>>>
+>>>
+>>> On Wed, Feb 08, 2023 at 04:46:44PM +0530, Manikanta Maddireddy wrote:
+>>>> Add PCIe port node under the PCIe controller-1 device tree node to support
+>>>> PCIe WAKE# interrupt for WiFi.
+>>>>
+>>>> Signed-off-by: Manikanta Maddireddy <mmaddireddy@nvidia.com>
+>>>> ---
+>>>>
+>>>> Changes in v14:
+>>>> New patch in the series to support PCIe WAKE# in NVIDIA Jetson AGX Orin.
+>>>>
+>>>>    .../dts/nvidia/tegra234-p3737-0000+p3701-0000.dts     | 11 +++++++++++
+>>>>    1 file changed, 11 insertions(+)
+>>>>
+>>>> diff --git a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+>>>> index 8a9747855d6b..9c89be263141 100644
+>>>> --- a/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+>>>> +++ b/arch/arm64/boot/dts/nvidia/tegra234-p3737-0000+p3701-0000.dts
+>>>> @@ -2147,6 +2147,17 @@ pcie@14100000 {
+>>>>
+>>>>                         phys = <&p2u_hsio_3>;
+>>>>                         phy-names = "p2u-0";
+>>>> +
+>>>> +                     pci@0,0 {
+>>>> +                             reg = <0x0000 0 0 0 0>;
+>>>> +                             #address-cells = <3>;
+>>>> +                             #size-cells = <2>;
+>>>> +                             ranges;
+>>>> +
+>>>> +                             interrupt-parent = <&gpio>;
+>>>> +                             interrupts = <TEGRA234_MAIN_GPIO(L, 2) IRQ_TYPE_LEVEL_LOW>;
+>>>> +                             interrupt-names = "wakeup";
+>>> WAKE# should be part of the PCIe controller, not device. And the interrupt name
+>>> should be "wake".
+>>>
+>>> - Mani
+>> Hi,
+>>
+>> Please refer to the discussion in below link, WAKE# is per PCI bridge.
+>> https://patchwork.ozlabs.org/project/linux-pci/patch/20171226020806.32710-2-jeffy.chen@rock-chips.com/
+>>
+> PCIe Host controller (RC) usually represents host bridge + PCI-PCI bridge. We do
+> not represent the PCI-PCI bridge in devicetree for any platforms, but only RC as
+> a whole.
+>
+> Moreover, PERST# is already defined in RC node. So it becomes confusing if
+> WAKE# is defined in a child node representing bridge.
+>
+> So please move WAKE# to RC node.
+>
+> - Mani
 
-And here is the second gpio-controller...
+Hi,
 
-> +
-> +  "#gpio-cells":
-> +    const: 2
-> +
->    onkey:
->      $ref: /schemas/input/dlg,da9062-onkey.yaml
->  
-> @@ -42,7 +62,7 @@ properties:
->      type: object
->      additionalProperties: false
->      patternProperties:
-> -      "^(ldo([1-9]|1[01])|bcore([1-2]|s-merged)|b(pro|mem|io|peri)|bmem-bio-merged)$":
-> +      "^(ldo([1-9]|1[01])|bcore([1-2]|s-merged)|b(pro|mem|io|peri)|bmem-bio-merged|buck[1-4])$":
->          $ref: /schemas/regulator/regulator.yaml
->          unevaluatedProperties: false
->  
-> @@ -52,7 +72,12 @@ properties:
->      unevaluatedProperties: false
->      properties:
->        compatible:
-> -        const: dlg,da9063-rtc
-> +        enum:
-> +          - dlg,da9063-rtc
-> +          - dlg,da9062-rtc
-> +
-> +  thermal:
-> +    $ref: /schemas/thermal/dlg,da9062-thermal.yaml
->  
->    watchdog:
->      $ref: /schemas/watchdog/dlg,da9062-watchdog.yaml
-> @@ -60,8 +85,65 @@ properties:
->  required:
->    - compatible
->    - reg
-> -  - interrupts
-> -  - interrupt-controller
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - dlg,da9063
-> +              - dlg,da9063l
-> +    then:
-> +      properties:
-> +        thermal: false
-> +        gpio: false
-> +        gpio-controller: false
-> +        "#gpio-cells": false
-> +        regulators:
-> +          patternProperties:
-> +            "^buck[1-4]$": false
-> +      required:
-> +        - interrupts
-> +        - interrupt-controller
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - dlg,da9062
-> +    then:
-> +      properties:
-> +        regulators:
-> +          patternProperties:
-> +            "^(ldo([5-9]|10|11)|bcore([1-2]|s-merged)|b(pro|mem|io|peri)|bmem-bio-merged)$": false
-> +      required:
-> +        - gpio
-> +        - onkey
-> +        - rtc
-> +        - thermal
-> +        - watchdog
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - dlg,da9061
-> +    then:
-> +      properties:
-> +        gpio: false
-> +        gpio-controller: false
-> +        "#gpio-cells": false
-> +        regulators:
-> +          patternProperties:
-> +            "^(ldo([5-9]|10|11)|bcore([1-2]|s-merged)|b(pro|mem|io|peri)|bmem-bio-merged|buck4)$": false
-> +        rtc: false
-> +      required:
-> +        - onkey
-> +        - thermal
-> +        - watchdog
->  
->  additionalProperties: false
->  
-> @@ -118,4 +200,98 @@ examples:
->          };
->        };
->      };
-> +
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    #include <dt-bindings/regulator/dlg,da9063-regulator.h>
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      pmic@58 {
-> +        compatible = "dlg,da9062";
-> +        reg = <0x58>;
-> +        #interrupt-cells = <2>;
-> +        interrupt-parent = <&gpio1>;
-> +        interrupts = <2 IRQ_TYPE_LEVEL_LOW>;
-> +        interrupt-controller;
-> +
-> +        gpio {
-> +          compatible = "dlg,da9062-gpio";
-> +          status = "disabled";
+We can define PCI-PCI bridge in device tree, refer to below device tree 
+which has 3 ports under a controller,
+with PERST#(reset-gpios) defined per port.
 
-Why?
-Where are gpio-controller and cells? For this node and for parent? Why
-this example is incomplete?
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/arch/arm64/boot/dts/apple/t8103.dtsi#n749
 
-> +        };
-> +
-> +        onkey {
-> +          compatible = "dlg,da9062-onkey";
-> +        };
+Also, of_pci_setup_wake_irq() in below patch is parsing "wakeup" from 
+PCI bridge, not from the host bridge.
+https://patchwork.ozlabs.org/project/linux-pci/patch/20230208111645.3863534-4-mmaddireddy@nvidia.com/
 
+If a controller has only one port it has to define a PCI bridge under 
+controller device tree node and
+add wakeup interrupt property, refer to below patch from original author.
 
-Best regards,
-Krzysztof
+https://www.spinics.net/lists/linux-pci/msg135569.html
 
+Thanks,
+Manikanta
+>
+>> I carried wakeup name defined in previous version, but wake seems to be
+>> sufficient.
+>>
+>> Thanks,
+>> Manikanta
+>>>> +                     };
+>>>>                 };
+>>>>
+>>>>                 pcie@14160000 {
+>>>> --
+>>>> 2.25.1
+>>>>
+>>> --
+>>> மணிவண்ணன் சதாசிவம்
+> --
+> மணிவண்ணன் சதாசிவம்
 
