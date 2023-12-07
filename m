@@ -1,98 +1,165 @@
-Return-Path: <linux-pm+bounces-797-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-798-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C85880898D
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Dec 2023 14:53:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64E73808B94
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Dec 2023 16:18:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB4582829A1
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Dec 2023 13:53:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A6C41C2099C
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Dec 2023 15:18:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53AF23FB19;
-	Thu,  7 Dec 2023 13:53:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 139CE4439A;
+	Thu,  7 Dec 2023 15:18:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="fEQmh4R4"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="JMv3t4WH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D96F10CB
-	for <linux-pm@vger.kernel.org>; Thu,  7 Dec 2023 05:53:44 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-332f90a375eso962666f8f.3
-        for <linux-pm@vger.kernel.org>; Thu, 07 Dec 2023 05:53:43 -0800 (PST)
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED30219A
+	for <linux-pm@vger.kernel.org>; Thu,  7 Dec 2023 07:18:06 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1d0ccda19eeso8299055ad.1
+        for <linux-pm@vger.kernel.org>; Thu, 07 Dec 2023 07:18:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1701957222; x=1702562022; darn=vger.kernel.org;
-        h=mime-version:user-agent:references:message-id:in-reply-to:subject
-         :cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VCfngSAlIwqEXssY2pmSdDNSAL/XaZG/lzXesXtgYIo=;
-        b=fEQmh4R4RmIcaXkrvGb81zl9JmU+y4xrzTgeCBuXAIkdHKWin9WLJB/n/viKDwg3dP
-         bIUXx3ckTE2mJsUklM5rh+7o0JQ59CezeOXIRXAIkfZ7P7+UmPUcTFVRqdHGUS4W8L8z
-         2ISyf15P8mOFav6Ua5AFQBUXsSyWs8iYH53kPOyjPYZPVMYL9OXZt/iAPxxHM9o/zgQ7
-         l7YqiJ/0s9tVIJTMlTWW361NuOYBYCBVfP13wFODVPw+nQH3njnplGvuAXDp9Z4aw2pc
-         CQUM8LgzQe996Rb0F6R2/M4lNRlaxT2lgznJiiCmSEIR8JCAQdtlKWHZg6BnwuhUH1M7
-         M0Kg==
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1701962286; x=1702567086; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=2lHnNYpRPFPbaU3AAmoDTQDjfRG+7SXwnb/QDYdCrzg=;
+        b=JMv3t4WHqyZy5MIEA9exk/TjswfMt0DIASxPADHzTq7pVzYhQasQeanOV+/fok3q2s
+         yKvvDnaCaINs1t9JzY+msObOqrY8D7Pe9PUo7G3xfxp4QhYnd6vzWDudXiMs2uH51ix/
+         HOOINKoQiDliixc5mvaAMjVnkwWvZrVuvd+sThIKu8/vgjmebSGuR9eIrrjMG5HMNXn2
+         2DPLV4oqe6CJ1a6FDJHSGwWiNbB2Q3ZyS6UiE9RAk89vO8wGMSiP+jvJkCkypwriM/ke
+         aMnp3Q3h8b3Qr1gbGMXT7Pduqr/IkwlqZPRRBCuOeCVROA55f4X9ZxboEBh3+qJj6beU
+         t/kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701957222; x=1702562022;
-        h=mime-version:user-agent:references:message-id:in-reply-to:subject
-         :cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VCfngSAlIwqEXssY2pmSdDNSAL/XaZG/lzXesXtgYIo=;
-        b=X6cBrkJDNI7LgVcOFTfX5Uqo/ZcFRbD0v9nMfwZaNB0XW0T1hyZF2DnOb8OCChMqAL
-         rR31U8DRD5a+uRaGuJG9MU5WiS/M371EuUi3EYZ2ov7INWaEZPrW7TzzmfuzmIbBIQtd
-         qQ2ZBt4c00LoLShT6S0E0lUSbYFtjfWc1vHl68xiFbLfaVw1BgaaIZRNa+wj9wHl4PZR
-         rJNrv3HpowhPyLKs3fYhsle7TOWQbYajygXeJr12FmY0tGve/GJR6xBSPY8JGemGtM2G
-         Onz4wo10t9x1UGJKjl5GWOBLgsjVl02w+2XonRbaBicOvBaJY6J8ZABIPnZt7dxUm8Ac
-         FHeA==
-X-Gm-Message-State: AOJu0Yzf/WAhxODqqV6++S/8FnLqSV63mZs/Nj+rH4nh/VtnVJKuSLbG
-	Rt2dZ5kNQTE0TUj+Z4DqIJoJHQ==
-X-Google-Smtp-Source: AGHT+IHfIhZ9GGAZ8MfZ3L3Ia3csFxydF02wtcAFIuRc7oZemDBZE6mMuWwcwbCzPvAhz1n0wfu+/A==
-X-Received: by 2002:adf:f50d:0:b0:333:6435:a0e9 with SMTP id q13-20020adff50d000000b003336435a0e9mr1633119wro.79.1701957222529;
-        Thu, 07 Dec 2023 05:53:42 -0800 (PST)
-Received: from localhost ([193.86.92.180])
-        by smtp.gmail.com with ESMTPSA id w8-20020adfcd08000000b003334675634bsm1509505wrm.29.2023.12.07.05.53.42
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 07 Dec 2023 05:53:42 -0800 (PST)
-From: Jiri Kosina <jkosina@suse.com>
-X-Google-Original-From: Jiri Kosina <jikos@kernel.org>
-Date: Thu, 7 Dec 2023 14:53:43 +0100 (CET)
-To: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-cc: Kai-Heng Feng <kai.heng.feng@canonical.com>, benjamin.tissoires@redhat.com, 
-    linux-pm@vger.kernel.org, linux-pci@vger.kernel.org, 
-    Jian Hui Lee <jianhui.lee@canonical.com>, Even Xu <even.xu@intel.com>, 
-    linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] HID: intel-ish-hid: ipc: Rework EHL OOB wakeup
-In-Reply-To: <6776742e5aba8f9f10c661a7876eb252f4ac7745.camel@linux.intel.com>
-Message-ID: <nycvar.YFH.7.76.2312071453340.29220@cbobk.fhfr.pm>
-References: <20231108121940.288005-1-kai.heng.feng@canonical.com> <6776742e5aba8f9f10c661a7876eb252f4ac7745.camel@linux.intel.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        d=1e100.net; s=20230601; t=1701962286; x=1702567086;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2lHnNYpRPFPbaU3AAmoDTQDjfRG+7SXwnb/QDYdCrzg=;
+        b=Kp4rnmAt3GzUZ3ANJMsUWLB7QTRc4Z9xyuabx2nXP4G1GkJbJ9ylEykUyVlqZ3rEO8
+         Fj8HbGEfo8SSo8gpOA1z8aVwZ5lLZqmB/lKn8aZAF894JAz4q8UvykVq+5M8P6vS+prJ
+         6iB6RpZRzGB8/1cPcgeQPs0bMJFi9o7d6KsvUbI6PrmgbkjVpX898ZInEKZ1Tfbv61Rg
+         tHHAUZXCjsAKAn9N/RlXAUGE3Gt3FchJ6OpXg4Vt8+sYQ21mG4Ga5dgzCgRn16Z0dXs7
+         dCB2stpvOjrLhsBVJt+z/bCmWw2mlI7nkQhl65EfpHOJ46o3E7h0SdyJFrIL8UAO9NrL
+         r5IQ==
+X-Gm-Message-State: AOJu0Yx9DNIHJdkExZNFYC2Ab+E6Y6Ree9Uh0e05Yhc5ySBiFfNwvn7E
+	yFFO0s7a1fOT9EXkvQ5eWQow1f2usCawXs/Ty7UksA==
+X-Google-Smtp-Source: AGHT+IGb1g0ebah1zliNKGF/CyOovOzerHffMsM8V/1MHyjwsl3q1c+MFs1uaMc/pdS6dzXYzy9rDg==
+X-Received: by 2002:a17:902:8bc8:b0:1d0:6ffe:1ea7 with SMTP id r8-20020a1709028bc800b001d06ffe1ea7mr2251154plo.138.1701962286350;
+        Thu, 07 Dec 2023 07:18:06 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id f14-20020a170902ce8e00b001cc52ca2dfbsm1553086plg.120.2023.12.07.07.18.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Dec 2023 07:18:05 -0800 (PST)
+Message-ID: <6571e22d.170a0220.f5646.3a59@mx.google.com>
+Date: Thu, 07 Dec 2023 07:18:05 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.7-rc4-65-g4a0bf67f43421
+Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
+ 4 warnings (v6.7-rc4-65-g4a0bf67f43421)
+To: rafael@kernel.org, linux-pm@vger.kernel.org,
+ kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On Thu, 7 Dec 2023, srinivas pandruvada wrote:
+pm/testing build: 7 builds: 0 failed, 7 passed, 4 warnings (v6.7-rc4-65-g4a=
+0bf67f43421)
 
-> On Wed, 2023-11-08 at 14:19 +0200, Kai-Heng Feng wrote:
-> > Since PCI core and ACPI core already handles PCI PME wake and GPE
-> > wake
-> > when the device has wakeup capability, use device_init_wakeup() to
-> > let
-> > them do the wakeup setting work.
-> > 
-> > Also add a shutdown callback which uses pci_prepare_to_sleep() to let
-> > PCI and ACPI set OOB wakeup for S5.
-> > 
-> > Cc: Jian Hui Lee <jianhui.lee@canonical.com>
-> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+7-rc4-65-g4a0bf67f43421/
 
-Thanks, applied.
+Tree: pm
+Branch: testing
+Git Describe: v6.7-rc4-65-g4a0bf67f43421
+Git Commit: 4a0bf67f43421e410b2c3c7471ce01f263033ee2
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 7 unique architectures
 
--- 
-Jiri Kosina
-SUSE Labs
+Warnings Detected:
 
+arc:
+
+arm64:
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
 
