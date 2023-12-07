@@ -1,41 +1,40 @@
-Return-Path: <linux-pm+bounces-788-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-789-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17AE5808694
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Dec 2023 12:21:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3AFE5808699
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Dec 2023 12:21:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6274283D27
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Dec 2023 11:21:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C07D1C21F61
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Dec 2023 11:21:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F04AB37D23;
-	Thu,  7 Dec 2023 11:21:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B8E537D33;
+	Thu,  7 Dec 2023 11:21:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=trvn.ru header.i=@trvn.ru header.b="qy97RFNi"
+	dkim=pass (2048-bit key) header.d=trvn.ru header.i=@trvn.ru header.b="AFiJP5ce"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16936D53;
-	Thu,  7 Dec 2023 03:21:43 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B1CFA;
+	Thu,  7 Dec 2023 03:21:44 -0800 (PST)
 Received: from authenticated-user (box.trvn.ru [194.87.146.52])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
 	(No client certificate requested)
-	by box.trvn.ru (Postfix) with ESMTPSA id 7E428424C3;
-	Thu,  7 Dec 2023 16:21:29 +0500 (+05)
+	by box.trvn.ru (Postfix) with ESMTPSA id 3273242BF5;
+	Thu,  7 Dec 2023 16:21:31 +0500 (+05)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-	t=1701948091; bh=NWJtr7kzBoRvfVEhC5JLv6r30+F1NZiQl3K456rgTJ0=;
-	h=From:Subject:Date:To:Cc:From;
-	b=qy97RFNiUK+xBU0kc5rZbXZzxxU8gFN3WkA4k/q3Ibovkes3pbIyUoI9fed8IIKht
-	 a2QlxMlduromOxfuH37RYg+zaKeKc+Nmxer0UvC6HXkZo6g7O4fJfjXBS8PMNvnXtS
-	 TC3T5Pj5Z7CGEUZ2I+xVnCoWb178Lrwu+dLhLSyA3iLzfpQBImF5dpDL1SvGB6JorX
-	 0dEEQqjl+RAtf7Y1deddSwFyfB8UUwA46qSkaql4ThXBNi5ZOMTozab4dz2fO0Fj8a
-	 g+/xL+6Qjh7FVHksox0IK4NmR1GUEN+UbOPMLoZHGkuTEacHDQAC+KBHE9dy1KgFUI
-	 hERxo30JzL6WQ==
+	t=1701948091; bh=OVug0fcHzBuiMohyozxqFLLN6RaBpXIu8wb22geRV3k=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=AFiJP5cesn6C0ry0Vs93cSIjOwvMQcr7q+77X71CT35XVWok2Tf8pn14LSUocbdRI
+	 qHm2rR2h4gr5tVoDk0GbSBCl64Ovkc/BiScBEtrIgfSj9ze3mbws0PwXJYlzSWF2IF
+	 Qa4t6NWZY9XgL7ilDD0IKpc86o1qjfTGZ6sCfDe0yXGWAIAjOmIgvD+73+SZ2hjcp9
+	 oxgn+hgPq5PEzmd6CywNQyWtnEuv2ZTL39Zd57tWGVhhiADcjxDra9L+rpHA4Vakk+
+	 8k6wn3Rsvs2TPieBLccbjCPBAQ3BbIXyTKk2LsW5RrMnAwfXb2rA9bu2E0bjvYuvUM
+	 zsn+lp+L7UKtQ==
 From: Nikita Travkin <nikita@trvn.ru>
-Subject: [PATCH 0/3] power: supply: Acer Aspire 1 embedded controller
-Date: Thu, 07 Dec 2023 16:20:13 +0500
-Message-Id: <20231207-aspire1-ec-v1-0-ba9e1c227007@trvn.ru>
+Date: Thu, 07 Dec 2023 16:20:14 +0500
+Subject: [PATCH 1/3] dt-bindings: power: supply: Add Acer Aspire 1 EC
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -44,9 +43,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAG6qcWUC/x3MQQqAIBBA0avIrBN0BIOuEi0mnWo2JgoRiHdPW
- r7F/w0qF+EKi2pQ+JEqdxqwk4JwUTpZSxwGNOgsGq+pZilsNQftdxcxULA0I4wgFz7k/Wfr1vs
- Hx71oGVwAAAA=
+Message-Id: <20231207-aspire1-ec-v1-1-ba9e1c227007@trvn.ru>
+References: <20231207-aspire1-ec-v1-0-ba9e1c227007@trvn.ru>
+In-Reply-To: <20231207-aspire1-ec-v1-0-ba9e1c227007@trvn.ru>
 To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
  Conor Dooley <conor+dt@kernel.org>, cros-qcom-dts-watchers@chromium.org, 
@@ -55,67 +54,111 @@ To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh+dt@kernel.org>,
 Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
  linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
  Nikita Travkin <nikita@trvn.ru>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1770; i=nikita@trvn.ru;
- h=from:subject:message-id; bh=NWJtr7kzBoRvfVEhC5JLv6r30+F1NZiQl3K456rgTJ0=;
- b=owEBbQKS/ZANAwAIAUMc7O4oGb91AcsmYgBlcaq2nghH4p1eqZEvL3jh3DJvQO6g8ExZyIJrf
- LKhX6L7OBKJAjMEAAEIAB0WIQTAhK9UUj+qg34uxUdDHOzuKBm/dQUCZXGqtgAKCRBDHOzuKBm/
- dYGxD/48x9znuN8PzVFtbY0rZABh0hwZxrDbpGtOG5NBg1R1384jBiTESdVtGz4mY96ckUtXSFv
- IZA97baN1DSRL5+gOU07yZu3wxO6qokDAS8a0ufGxEK1JiZMuxynCxrVrEuB5/oT6/zID0SNC5I
- t+vTeDsia7TJ56L0Em0NiS5m0Z49+GLH8K3T66oOH23XC3w6D/idiV+gQgwg5ITljYOJACXa6m1
- uSeWCt/xnNbeM9pgEaHZtWG7lzfoTCKqbQbBtjhppYHa9S+HyDiK8YbbAutqaZKkTNvb0MyUzzB
- cL83r24lda5VsVsO5x7KOhE37DNi7dYkELljdrG7DCP3C/AQch3Tm/2JDfk7pOMAaKHY5Y6lNut
- 2k5JSrJXxbMUcXHFkfTIo3fUkVutQ8ISarZRtCZ6AO9vwXQeyb8nOc+leZoc5uMXatmmrR8YC6F
- R6X+frURlHyVdV0DMW6stbVoNpxgYdmmn96hd9JJ8i/va5wBe9Ejw/49IEK4fEuw7P38ZInN4M8
- WZYWwtWjn5FaD0gXgE92nf9kNMXyl9Y46Uy1L91Wa/BJC08tUlJbg+MZJQT0bg6aI3OqxvBmlcs
- Hc8w23Eli3MxDx5Hiqe/jkMQsehSyotLcSoNlz/lHZ1W+mbkWPkn9KGC/KQUu6CNeHqYXBJEVNp
- c4nptiTCmLNOD2Q==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2421; i=nikita@trvn.ru;
+ h=from:subject:message-id; bh=OVug0fcHzBuiMohyozxqFLLN6RaBpXIu8wb22geRV3k=;
+ b=owEBbQKS/ZANAwAIAUMc7O4oGb91AcsmYgBlcaq409/BVxOnfWYZ+z1ZJYYE8Xc6MJ6xU1cIP
+ lBvSsE9U5GJAjMEAAEIAB0WIQTAhK9UUj+qg34uxUdDHOzuKBm/dQUCZXGquAAKCRBDHOzuKBm/
+ df6zEACse1aIpU1mRX3tSoIe5Y7M3NMqOpxe8iJhp1i0mB0m2vom80/IwOYuNMp4MmMxwFhh7H0
+ yKC2PsrMXliSFKX/50RruA7mealm3XHgGoI3L+t3ZOSo3HCbiOTGgqUH4HTe/uqzsX/N0HoY07q
+ QRwLTlFXppYc1+cCw1b2175ICR3Al1qvSBOJRm0YeyVW0A3XabyrwbC3PbjGEXt6rL+SWIt+7Hl
+ 9q8+z++PhgP2RNJq3KeY02CrrFqViPCgabDzjWXWlcDHkgc/pSSlKWge+WGi9Smr8tfBqb/2rir
+ JkGAPwr6ocvAMctcWXgxLz6ZbEqQsiaMY3Ns7OF5T/XyUTPNWpaeY7ray5JMpiBhUPw70yVzJrs
+ e4pZtwwcZq9iECrHG4piUUvncMBA/JlrGuxRsrr94dX5Io3hKqk3xvI3+T7oHMB/f769d24R+SG
+ cxLcEzrMfRPf3mPstaIOy+sb/A2CN+WkZnOY6PtTP+E94O2TekkSZW+IzxtX6SsNJ149yqoqeZS
+ 8YTfLdRSa9gAXpW1+NxhpjabNBn/OC1Iy9W3xSkmU3i85fPR67LTli8AwDDx3CW3HLpPiFkc5lL
+ yv+/vJ2IUcT0Zw4p5cMho9ANgYebeGhX/K98Po+6flMdUX7AgB+W27Dgj/aigHF4q7u6+Atxo5O
+ WpbpKiiEWMUnqcQ==
 X-Developer-Key: i=nikita@trvn.ru; a=openpgp;
  fpr=C084AF54523FAA837E2EC547431CECEE2819BF75
 
-The laptop contains an embedded controller that provides a set of
-features:
-
-- Battery and charger monitoring
-- USB Type-C DP alt mode HPD monitoring
-- Lid status detection
-- Small amount of keyboard configuration*
-
-[*] The keyboard is handled by the same EC but it has a dedicated i2c
-bus and is already enabled. This port only provides fn key behavior
-configuration.
-
-Unfortunately, while all this functionality is implemented in ACPI, it's
-currently not possible to use ACPI to boot Linux on such Qualcomm
-devices. Thus this series implements and enables a new driver that
-provides support for the EC features.
-
-The EC would be one of the last pieces to get almost full support for the
-Acer Aspire 1 laptop in the upstream Linux kernel.
-
-This series is similar to the EC driver for Lenovo Yoga C630, proposed
-in [1] but seemingly never followed up...
-
-[1] https://lore.kernel.org/all/20230205152809.2233436-1-dmitry.baryshkov@linaro.org/
+Add binding for the EC found in the Acer Aspire 1 laptop.
 
 Signed-off-by: Nikita Travkin <nikita@trvn.ru>
 ---
-Nikita Travkin (3):
-      dt-bindings: power: supply: Add Acer Aspire 1 EC
-      power: supply: Add Acer Aspire 1 embedded controller driver
-      arm64: dts: qcom: acer-aspire1: Add embedded controller
+ .../bindings/power/supply/acer,aspire1-ec.yaml     | 73 ++++++++++++++++++++++
+ 1 file changed, 73 insertions(+)
 
- .../bindings/power/supply/acer,aspire1-ec.yaml     |  73 ++++
- arch/arm64/boot/dts/qcom/sc7180-acer-aspire1.dts   |  40 +-
- drivers/power/supply/Kconfig                       |  14 +
- drivers/power/supply/Makefile                      |   1 +
- drivers/power/supply/acer-aspire1-ec.c             | 432 +++++++++++++++++++++
- 5 files changed, 559 insertions(+), 1 deletion(-)
----
-base-commit: 8e00ce02066e8f6f1ad5eab49a2ede7bf7a5ef64
-change-id: 20231206-aspire1-ec-6b3d2cac1a72
+diff --git a/Documentation/devicetree/bindings/power/supply/acer,aspire1-ec.yaml b/Documentation/devicetree/bindings/power/supply/acer,aspire1-ec.yaml
+new file mode 100644
+index 000000000000..3fc6dea7fa5c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/supply/acer,aspire1-ec.yaml
+@@ -0,0 +1,73 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/power/supply/acer,aspire1-ec.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Acer Aspire 1 Embedded Controller
++
++maintainers:
++  - Nikita Travkin <nikita@trvn.ru>
++
++description:
++  The Acer Aspire 1 laptop uses an embedded controller to control battery
++  and charging as well as to provide a set of misc features such as the
++  laptop lid status and HPD events for the USB Type-C DP alt mode.
++
++properties:
++  compatible:
++    const: acer,aspire1-ec
++
++  reg:
++    const: 0x76
++
++  interrupts:
++    maxItems: 1
++
++  acer,media-keys-on-top:
++    description: Configure the keyboard layout to use media features of
++      the fn row when the fn key is not pressed. The firmware may choose
++      to add this property when user selects the fn mode in the firmware
++      setup utility.
++    type: boolean
++
++  connector:
++    $ref: /schemas/connector/usb-connector.yaml#
++
++    properties:
++      reg:
++        maxItems: 1
++
++    unevaluatedProperties: false
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |+
++    #include <dt-bindings/interrupt-controller/irq.h>
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        embedded-controller@76 {
++            compatible = "acer,aspire1-ec";
++            reg = <0x76>;
++
++            interrupts-extended = <&tlmm 30 IRQ_TYPE_LEVEL_LOW>;
++
++            connector {
++                compatible = "usb-c-connector";
++
++                port {
++                    ec_dp_in: endpoint {
++                        remote-endpoint = <&mdss_dp_out>;
++                    };
++                };
++            };
++        };
++    };
 
-Best regards,
 -- 
-Nikita Travkin <nikita@trvn.ru>
+2.43.0
 
 
