@@ -1,60 +1,60 @@
-Return-Path: <linux-pm+bounces-806-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-807-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA521809160
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Dec 2023 20:31:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4964F809309
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Dec 2023 22:07:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C4B78B20BE9
-	for <lists+linux-pm@lfdr.de>; Thu,  7 Dec 2023 19:31:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7ADC01C20A17
+	for <lists+linux-pm@lfdr.de>; Thu,  7 Dec 2023 21:07:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD4774F890;
-	Thu,  7 Dec 2023 19:30:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3BF2524D8;
+	Thu,  7 Dec 2023 21:07:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CcmqXiTC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g8xtsn4M"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8989D93;
-	Thu,  7 Dec 2023 11:30:48 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D2F1716;
+	Thu,  7 Dec 2023 13:06:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701977448; x=1733513448;
+  t=1701983218; x=1733519218;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=dQJzpPCJi2DcWLmi+tpSUDnGySOo5HoMcMdxmPpeqDs=;
-  b=CcmqXiTC8Jerk1COxG9X1EsFD3q4V9+rzuJw/TmMGfOBmQU9fqVtjy5N
-   bibyck4y0DG98jQtMqiQ+gR9P5Tn1k/x0JiXEu/8lWSLwkwbm2EPe2yud
-   hLL1iT7rYoz5Pl+UtZpysxU+ETIiuUZyTU5tmM6hUzVtnijY3nKCILvfC
-   QzabwrX1vJT3zk39hUjP2wLM3UKhLDh98S0dFQ/eV6KAjYnCZmja7g/L9
-   S6yWvG5HqtFvOiZamUtv/rwBOpgFQtsVY01Y6MEa2LTsYYV9nsa1hDDUJ
-   NtgXqfGE9MXb47wc79f6IYhCcpBuxwf/2J2ZkZfK+qZ517xk2vdpGQ/nd
+  bh=dT5XsiaCZuIH5AbEKio7zI1H/A2Yq9DciOqCzZLbQFY=;
+  b=g8xtsn4MBaLNBvmn7Zkm0XHzHGG5O0XKYQwwWzrXBkRBkPvcHSY3eTJw
+   YZpPdcDJVa/PXmhzGsZf0AwPYrUOHILQF/5JoiID/BWsN6CsM4sKipx+3
+   xn/hpydgj1Pw+i9jdncSwkmJxSb6qS7rlHTplkHBUXok81EncfIuYVH3n
+   WcZSH53oDgV9YVHKk6olxspHfm6IUJN6xHxRYjhmTglitc7Ae1lWJU/Ou
+   HPi/OQd5vpr7DaAoketBIrnnfiYn6I+XTclKoxWLMC44t3AWysl7rjLn0
+   1cJA4PvPE7Qv4qe2IQWGQxabjNobn7pF2krtbpsQTpkDi+YR0MPtGWhgV
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="373791322"
+X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="1184015"
 X-IronPort-AV: E=Sophos;i="6.04,258,1695711600"; 
-   d="scan'208";a="373791322"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 11:30:48 -0800
+   d="scan'208";a="1184015"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 13:06:57 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.04,258,1695711600"; 
-   d="scan'208";a="13216355"
+   d="scan'208";a="19848139"
 Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 07 Dec 2023 11:30:45 -0800
+  by orviesa001.jf.intel.com with ESMTP; 07 Dec 2023 13:06:55 -0800
 Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rBK54-000Cjl-2R;
-	Thu, 07 Dec 2023 19:30:42 +0000
-Date: Fri, 8 Dec 2023 03:30:04 +0800
+	id 1rBLa8-000CpJ-1m;
+	Thu, 07 Dec 2023 21:06:52 +0000
+Date: Fri, 8 Dec 2023 05:06:02 +0800
 From: kernel test robot <lkp@intel.com>
 To: Xiaolei Wang <xiaolei.wang@windriver.com>, rafael@kernel.org,
 	pavel@ucw.cz, len.brown@intel.com, peterz@infradead.org,
 	mingo@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] freezer,sched: Move state information judgment outside
  task_call_func
-Message-ID: <202312080347.yJvIjGb3-lkp@intel.com>
+Message-ID: <202312080436.VRc5l7Yc-lkp@intel.com>
 References: <20231207111634.667057-1-xiaolei.wang@windriver.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -80,21 +80,21 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Xiaolei-Wang/freezer-sche
 base:   linus/master
 patch link:    https://lore.kernel.org/r/20231207111634.667057-1-xiaolei.wang%40windriver.com
 patch subject: [PATCH] freezer,sched: Move state information judgment outside task_call_func
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20231208/202312080347.yJvIjGb3-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231208/202312080347.yJvIjGb3-lkp@intel.com/reproduce)
+config: arm64-defconfig (https://download.01.org/0day-ci/archive/20231208/202312080436.VRc5l7Yc-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231208/202312080436.VRc5l7Yc-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312080347.yJvIjGb3-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312080436.VRc5l7Yc-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/freezer.c:125:30: error: no member named 'lockdep_depth' in 'struct task_struct'
-           p_check->lockdep_depth = p->lockdep_depth;
-                                    ~  ^
-   1 error generated.
+   kernel/freezer.c: In function '__set_task_frozen':
+>> kernel/freezer.c:125:35: error: 'struct task_struct' has no member named 'lockdep_depth'
+     125 |         p_check->lockdep_depth = p->lockdep_depth;
+         |                                   ^~
 
 
 vim +125 kernel/freezer.c
