@@ -1,148 +1,71 @@
-Return-Path: <linux-pm+bounces-841-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-845-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9052580ACCA
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Dec 2023 20:20:53 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 025A080AD70
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Dec 2023 21:00:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C18761C2091C
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Dec 2023 19:20:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7EAADB20A39
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Dec 2023 20:00:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 474114B129;
-	Fri,  8 Dec 2023 19:20:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 712D0563B1;
+	Fri,  8 Dec 2023 20:00:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eGlhotFH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B70C10E7;
-	Fri,  8 Dec 2023 11:20:45 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id 150833a18591e4b8; Fri, 8 Dec 2023 20:20:43 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 9A3BF6688FC;
-	Fri,  8 Dec 2023 20:20:42 +0100 (CET)
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Linux ACPI <linux-acpi@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>
-Subject: [PATCH v1 3/3] thermal: core: Rework thermal zone availability check
-Date: Fri, 08 Dec 2023 20:20:00 +0100
-Message-ID: <2258035.iZASKD2KPV@kreacher>
-In-Reply-To: <1880915.tdWV9SEqCh@kreacher>
-References: <1880915.tdWV9SEqCh@kreacher>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 552B850242
+	for <linux-pm@vger.kernel.org>; Fri,  8 Dec 2023 20:00:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BC5F4C433C8;
+	Fri,  8 Dec 2023 20:00:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702065608;
+	bh=rX6tGxo4i0Ik6CWIlwVrEXD15N5tEyMXB+vw8iZnK68=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=eGlhotFH1s0DyvFFypEDzgxX2r2FsoYfZPIaRIVNmyX6GIs0RatBIMGSUbjTlCiCh
+	 H2PU0GKQFFR6eFvrLIAWLIQAoFKG5+8iR9y63QG90kqcTqZ/SpVoE4su2SBOXOdYyo
+	 bvvUUZHz9+pnsSe5+Dm1f/LO0haS6ofUWjwSb8u/skKu5AXTiBf5nSa5VjhhC4IG5e
+	 J+jb5eK7JnsyanpwsTNFyH2CNROuoo2G0a5871wPV6WlY6+uOdx7VwEM8rqw5xUVrq
+	 AV+geGDgBMavLEWhoVCXCh8zfe65BION9oJDvnCgs6wAdQa8EYKmh4XztKD4G4Bf8B
+	 hyBugIy1b/a1g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9702FC04DD9;
+	Fri,  8 Dec 2023 20:00:08 +0000 (UTC)
+Subject: Re: [GIT PULL] Power management fix for v6.7-rc5
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0guGojjx9qzhz_hNM0f2o4uevm2p7Pq3E=oUo+L1aVW5w@mail.gmail.com>
+References: <CAJZ5v0guGojjx9qzhz_hNM0f2o4uevm2p7Pq3E=oUo+L1aVW5w@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0guGojjx9qzhz_hNM0f2o4uevm2p7Pq3E=oUo+L1aVW5w@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-6.7-rc5
+X-PR-Tracked-Commit-Id: bdefd9913bdd453991ef756b6f7176e8ad80d786
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 081ed90a8c662455a79843add14857b356de37a4
+Message-Id: <170206560854.12654.10751453620853004735.pr-tracker-bot@kernel.org>
+Date: Fri, 08 Dec 2023 20:00:08 +0000
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Linux PM <linux-pm@vger.kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrudekiedguddvgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgt
- phhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+The pull request you sent on Fri, 8 Dec 2023 18:56:22 +0100:
 
-In order to avoid running __thermal_zone_device_update() for thermal
-zones going away, the thermal zone lock is held around device_del()
-in thermal_zone_device_unregister() and thermal_zone_device_update()
-passes the given thermal zone device to device_is_registered().
-This allows thermal_zone_device_update() to skip the
-__thermal_zone_device_update() if device_del() has already run for
-the thermal zone at hand.
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-6.7-rc5
 
-However, instead of looking at driver core internals, the thermal
-subsystem may as well rely on its own data structures for this
-purpose.  Namely, if the thermal zone is not present in
-thermal_tz_list, it can be regarded as unavailable, which in fact is
-already the case in thermal_zone_device_unregister().  Accordingly,
-the device_is_registered() check in thermal_zone_device_update() can
-be replaced with checking whether or not the node list_head in struct
-thermal_zone_device is empty, in which case it is not there in
-thermal_tz_list.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/081ed90a8c662455a79843add14857b356de37a4
 
-To make this work, though, it is necessary to initialize tz->node
-in thermal_zone_device_register_with_trips() before registering the
-thermal zone device and it needs to be added to thermal_tz_list and
-deleted from it under its zone lock.
+Thank you!
 
-After the above modifications, the zone lock does not need to be
-held around device_del() in thermal_zone_device_unregister() any more.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/thermal_core.c |   15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
-
-Index: linux-pm/drivers/thermal/thermal_core.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_core.c
-+++ linux-pm/drivers/thermal/thermal_core.c
-@@ -505,11 +505,16 @@ int thermal_zone_device_is_enabled(struc
- 	return tz->mode == THERMAL_DEVICE_ENABLED;
- }
- 
-+static bool thermal_zone_is_present(struct thermal_zone_device *tz)
-+{
-+	return !list_empty(&tz->node);
-+}
-+
- void thermal_zone_device_update(struct thermal_zone_device *tz,
- 				enum thermal_notify_event event)
- {
- 	mutex_lock(&tz->lock);
--	if (device_is_registered(&tz->device))
-+	if (thermal_zone_is_present(tz))
- 		__thermal_zone_device_update(tz, event);
- 	mutex_unlock(&tz->lock);
- }
-@@ -1304,6 +1309,7 @@ thermal_zone_device_register_with_trips(
- 	}
- 
- 	INIT_LIST_HEAD(&tz->thermal_instances);
-+	INIT_LIST_HEAD(&tz->node);
- 	ida_init(&tz->ida);
- 	mutex_init(&tz->lock);
- 	init_completion(&tz->removal);
-@@ -1369,7 +1375,9 @@ thermal_zone_device_register_with_trips(
- 	}
- 
- 	mutex_lock(&thermal_list_lock);
-+	mutex_lock(&tz->lock);
- 	list_add_tail(&tz->node, &thermal_tz_list);
-+	mutex_unlock(&tz->lock);
- 	mutex_unlock(&thermal_list_lock);
- 
- 	/* Bind cooling devices for this zone */
-@@ -1460,7 +1468,10 @@ void thermal_zone_device_unregister(stru
- 		mutex_unlock(&thermal_list_lock);
- 		return;
- 	}
-+
-+	mutex_lock(&tz->lock);
- 	list_del(&tz->node);
-+	mutex_unlock(&tz->lock);
- 
- 	/* Unbind all cdevs associated with 'this' thermal zone */
- 	list_for_each_entry(cdev, &thermal_cdev_list, node)
-@@ -1477,9 +1488,7 @@ void thermal_zone_device_unregister(stru
- 	ida_free(&thermal_tz_ida, tz->id);
- 	ida_destroy(&tz->ida);
- 
--	mutex_lock(&tz->lock);
- 	device_del(&tz->device);
--	mutex_unlock(&tz->lock);
- 
- 	kfree(tz->tzp);
- 
-
-
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
