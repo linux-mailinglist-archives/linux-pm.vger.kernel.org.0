@@ -1,106 +1,198 @@
-Return-Path: <linux-pm+bounces-834-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-835-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 948EB80A15D
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Dec 2023 11:42:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 051D580A3C3
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Dec 2023 13:47:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C202D1C208D2
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Dec 2023 10:42:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 282341C2093B
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Dec 2023 12:47:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6870C7464;
-	Fri,  8 Dec 2023 10:42:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9516118E2D;
+	Fri,  8 Dec 2023 12:47:13 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3475EC3;
-	Fri,  8 Dec 2023 02:42:50 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2B8BE1997;
+	Fri,  8 Dec 2023 04:47:09 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9CE8911FB;
-	Fri,  8 Dec 2023 02:43:35 -0800 (PST)
-Received: from [10.57.84.184] (unknown [10.57.84.184])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 37B363F762;
-	Fri,  8 Dec 2023 02:42:48 -0800 (PST)
-Message-ID: <f61a3329-4223-4995-8732-030430d19ea4@arm.com>
-Date: Fri, 8 Dec 2023 10:42:46 +0000
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5DE6D1063;
+	Fri,  8 Dec 2023 04:47:54 -0800 (PST)
+Received: from bogus (unknown [10.57.42.162])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B4BCE3F762;
+	Fri,  8 Dec 2023 04:47:04 -0800 (PST)
+Date: Fri, 8 Dec 2023 12:45:03 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: David Dai <davidai@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Quentin Perret <qperret@google.com>,
+	Masami Hiramatsu <mhiramat@google.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Pavan Kondeti <quic_pkondeti@quicinc.com>,
+	Gupta Pankaj <pankaj.gupta@amd.com>, Mel Gorman <mgorman@suse.de>,
+	kernel-team@android.com, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] dt-bindings: cpufreq: add virtual cpufreq device
+Message-ID: <20231208124503.unhka7c6ihzrrwhu@bogus>
+References: <20231111014933.1934562-1-davidai@google.com>
+ <20231111014933.1934562-2-davidai@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] sched/schedutil: Ignore update requests for short
- running tasks
-To: Qais Yousef <qyousef@layalina.io>,
- Vincent Guittot <vincent.guittot@linaro.org>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
- Rick Yiu <rickyiu@google.com>, Chung-Kai Mei <chungkai@google.com>,
- Ingo Molnar <mingo@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Viresh Kumar
- <viresh.kumar@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>
-References: <20231208015242.385103-1-qyousef@layalina.io>
- <20231208015242.385103-4-qyousef@layalina.io>
-Content-Language: en-US
-From: Hongyan Xia <hongyan.xia2@arm.com>
-In-Reply-To: <20231208015242.385103-4-qyousef@layalina.io>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231111014933.1934562-2-davidai@google.com>
 
-Hi Qais,
-
-On 08/12/2023 01:52, Qais Yousef wrote:
-> Ignore freq updates to honour uclamp requests if the task is short
-> running. It won't run long enough to see the changes, so avoid the
-> unnecessary work and noise.
+On Fri, Nov 10, 2023 at 05:49:29PM -0800, David Dai wrote:
+> Adding bindings to represent a virtual cpufreq device.
 > 
-> Make sure SCHED_CPUFREQ_PERF_HINTS flag is set in task_tick_fair() so
-> that we can do correction action if the task continued to run such that
-> it is no longer considered a short task.
+> Virtual machines may expose MMIO regions for a virtual cpufreq device
+> for guests to read frequency information or to request frequency
+> selection. The virtual cpufreq device has an individual controller for
+> each frequency domain.
 > 
-> Should address the problem of noisy short running tasks unnecessary
-> causing frequency spikes when waking up on a CPU that is running a busy
-> task capped by UCLAMP_MAX.
-
-Actually, an occasional spike is not a big problem to me.
-
-What is a big concern is a normal task and a uclamp_max task running on 
-the same rq. If the uclamp_max task is 1024 but capped by uclamp_max at 
-the lowest OPP, and the normal task has no uclamp but a duty cycle, then 
-when the normal task wakes up on the rq, it'll be the highest OPP. When 
-it sleeps, the ulamp_max is back and at the lowest OPP. This square-wave 
-problem to me is a much bigger concern than an infrequent spike. If 
-CONFIG_HZ is 1000, this square wave's frequency is 500 switching between 
-highest and lowest OPP, which is definitely unacceptable.
-
-The problem I think with filtering is, under this condition, should we 
-filter out the lowest OPP or the highest? Neither sounds like a good 
-answer because neither is a short-running task and the correct answer 
-might be somewhere in between.
-
-Sorry to ramble on this again and again, but I think filtering is 
-addressing the symptom, not the cause. The cause is we have no idea 
-under what condition a util_avg was achieved. The 1024 task in the 
-previous example would be much better if we extend it into
-
-[1024, achieved at uclamp_min 0, achieved at uclamp_max 300]
-
-If we know 1024 was done under uclamp_max of 300, then we know we don't 
-need to raise to the max OPP. So far, we carry around a lot of different 
-new variables but not these two which we really need.
-
-> 
-> Move helper functions to access task_util_est() and related attributes
-> to sched.h to enable using it from cpufreq_schedutil.c
-> 
-> Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
+> Co-developed-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: David Dai <davidai@google.com>
 > ---
->   kernel/sched/cpufreq_schedutil.c | 59 ++++++++++++++++++++++++++++++++
->   kernel/sched/fair.c              | 24 +------------
->   kernel/sched/sched.h             | 22 ++++++++++++
->   3 files changed, 82 insertions(+), 23 deletions(-)
+>  .../cpufreq/qemu,cpufreq-virtual.yaml         | 99 +++++++++++++++++++
+>  1 file changed, 99 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/cpufreq/qemu,cpufreq-virtual.yaml
 > 
-> [...]
+> diff --git a/Documentation/devicetree/bindings/cpufreq/qemu,cpufreq-virtual.yaml b/Documentation/devicetree/bindings/cpufreq/qemu,cpufreq-virtual.yaml
+> new file mode 100644
+> index 000000000000..16606cf1fd1a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/cpufreq/qemu,cpufreq-virtual.yaml
+> @@ -0,0 +1,99 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/cpufreq/qemu,cpufreq-virtual.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Virtual CPUFreq
+> +
+> +maintainers:
+> +  - David Dai <davidai@google.com>
+> +  - Saravana Kannan <saravanak@google.com>
+> +
+> +description:
+> +  Virtual CPUFreq is a virtualized driver in guest kernels that sends frequency
+> +  selection of its vCPUs as a hint to the host through MMIO regions. Each vCPU
+> +  is associated with a frequency domain which can be shared with other vCPUs.
+> +  Each frequency domain has its own set of registers for frequency controls.
+> +
+
+Are these register controls described somewhere ? The reason I ask is we
+should be able to have single implementation of this virtual cpufreq
+irrespective of the firmware used(DT vs ACPI) IMO.
+
+> +properties:
+> +  compatible:
+> +    const: qemu,virtual-cpufreq
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description:
+> +      Address and size of region containing frequency controls for each of the
+> +      frequency domains. Regions for each frequency domain is placed
+> +      contiugously and contain registers for controlling DVFS(Dynamic Frequency
+> +      and Voltage) characteristics. The size of the region is proportional to
+> +      total number of frequency domains.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    // This example shows a two CPU configuration with a frequency domain
+> +    // for each CPU.
+> +    cpus {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      cpu@0 {
+> +        compatible = "arm,armv8";
+> +        device_type = "cpu";
+> +        reg = <0x0>;
+> +        operating-points-v2 = <&opp_table0>;
+> +      };
+> +
+> +      cpu@1 {
+> +        compatible = "arm,armv8";
+> +        device_type = "cpu";
+> +        reg = <0x0>;
+> +        operating-points-v2 = <&opp_table1>;
+> +      };
+> +    };
+> +
+> +    opp_table0: opp-table-0 {
+> +      compatible = "operating-points-v2";
+> +      opp-shared;
+> +
+> +      opp1098000000 {
+> +        opp-hz = /bits/ 64 <1098000000>;
+> +        opp-level = <1>;
+> +      };
+> +
+> +      opp1197000000 {
+> +        opp-hz = /bits/ 64 <1197000000>;
+> +        opp-level = <2>;
+> +      };
+> +    };
+> +
+> +    opp_table1: opp-table-1 {
+> +      compatible = "operating-points-v2";
+> +      opp-shared;
+> +
+> +      opp1106000000 {
+> +        opp-hz = /bits/ 64 <1106000000>;
+> +        opp-level = <1>;
+> +      };
+> +
+> +      opp1277000000 {
+> +        opp-hz = /bits/ 64 <1277000000>;
+> +        opp-level = <2>;
+> +      };
+> +    };
+>
+
+I think using OPP with absolute frequencies seems not appropriate here.
+Why can't these fetched from the registers and have some abstract values
+instead ?
+
+> +    soc {
+> +      #address-cells = <1>;
+> +      #size-cells = <1>;
+> +
+> +      cpufreq@1040000 {
+> +        compatible = "qemu,virtual-cpufreq";
+> +        reg = <0x1040000 0x10>;
+
+So just 16bytes for 2 CPU system ? How does the register layout look like ?
+I assume just 4 x 32bit registers: 2 for reading and 2 for setting the
+frequencies ?
+
+--
+Regards,
+Sudeep
 
