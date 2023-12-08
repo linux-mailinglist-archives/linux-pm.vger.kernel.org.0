@@ -1,141 +1,145 @@
-Return-Path: <linux-pm+bounces-830-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-831-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60126809EA0
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Dec 2023 09:52:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73611809FEF
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Dec 2023 10:51:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15A8F1F217E3
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Dec 2023 08:52:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BACCB281B39
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Dec 2023 09:51:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2E4B10A3F;
-	Fri,  8 Dec 2023 08:52:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0898512B83;
+	Fri,  8 Dec 2023 09:51:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O43+9heA"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kqfpZ4ok"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 811A4DDB2;
-	Fri,  8 Dec 2023 08:52:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FDAFC433C8;
-	Fri,  8 Dec 2023 08:52:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702025574;
-	bh=GGin+ffmFsAIIYI0+FuoqvMAJCTZtM17ET3mTliENQE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=O43+9heARsbU18XvLBdff7nNufEQual/uVGCvfWn6gumNvg2tSX5iQ14tOUctWqw6
-	 0MsQb/OHgBknXG0VWJ8j/WasCDxrhCGMH2yXu9wm7kOoX1sPXN+s23icXnBXwIw0z/
-	 H3oH7obvoR0UewEZYV2LTQGA0S60B11l8xjWKreoTdgtd+8UW+L1N3ESCRtYNltpFJ
-	 yVrLt90uWCL39G/veTh62fC4/Rv9mJLxpHJ9ba0WRh9xkSk2Xn8eIIvIXjWJ6mN9Th
-	 Q4eZif+jciBgg27H4h8balCwgMGgZH6zeOjnrp+8ICemZ14rpCS3mwTCikTZeqeuPf
-	 8oHw/B1Gf3ZCQ==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1rBWbL-002THO-BF;
-	Fri, 08 Dec 2023 08:52:51 +0000
-Date: Fri, 08 Dec 2023 08:52:50 +0000
-Message-ID: <867clpaxel.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Saravana Kannan <saravanak@google.com>
-Cc: David Dai <davidai@google.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
+Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D801FD9
+	for <linux-pm@vger.kernel.org>; Fri,  8 Dec 2023 01:51:11 -0800 (PST)
+Received: by mail-oo1-xc2f.google.com with SMTP id 006d021491bc7-58d9dcdf201so850180eaf.2
+        for <linux-pm@vger.kernel.org>; Fri, 08 Dec 2023 01:51:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702029071; x=1702633871; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=6L21h7YTzNvrxPdnkHfqtungBWb9rqotOm7akioWdJE=;
+        b=kqfpZ4ok6qdf9ukhOUygjkCeUyFj/G/WP1Mv9nFTkUAqwdRhi56g/dflJhljw/pPbC
+         aReJ5eBSblSqiPbEnoOXnNuBdYb6kbRPDUAkabxJd2hn7Pcg46i0vcBUBOfWQygL7qPS
+         96Kn5ZnIyuDRx7OSmH2ceQM/dxGI3nOXyd7skS5RrCLpOq732jeZ3aX/CyeFGZCJ5yTf
+         0cY7u907A2eYNfcBw8IK4xXi1DXUHxzWovBkr7oXEuAOJ1z9mD2oJxZsYm43vdGOAg6i
+         iFPeAACzVU5yXPHtKviYNolj0VzBjLgK1bpwukHajYpGSW+w2AgFNr/faBP+PO6zNDsy
+         qvqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702029071; x=1702633871;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6L21h7YTzNvrxPdnkHfqtungBWb9rqotOm7akioWdJE=;
+        b=Dryohd5wOfnILLCUQ9xCnAl348sOphSKXJg/7NDHjxamvNRgcwP558kjBnXmFx4yXs
+         sbb6iTtif5rzDRfV5ZyKMD09soUq5XqsackQ2EsaQTZ2Nl2ul13sk+eBtWR6C8/di107
+         PVGNv744ROfkt4QupbJfkpJJMMZ+CFROXvZtLpH6yf9E0n+IJUOPQUZ4MNw0p8CIeH8Z
+         KiPd7pKdxTwourGeKH5D3c8NRcFVn50exMW5ysW3sKNGz0yVnitXSPcERB6qvb2akrGw
+         HcfRjwDGq50TlvDgBlO/r0GvmjLI3bVySbZZLB3WNMQyV/hhZAJJVo5ph6eUb77CfwQM
+         AINg==
+X-Gm-Message-State: AOJu0YwhFvYNvLXf9v8fwkFqn5rxJEfVBF4znIsaF0v0zlwYzqnST9uY
+	AuuNasyrE9loHj7Cl40jVhmCZw==
+X-Google-Smtp-Source: AGHT+IG3yrBJKShrn9bFMJhh1fczhfYyM+n5aSw+UE1/5hPNj+hMXwBAbyt34COA/L/kuAqdCT5VXw==
+X-Received: by 2002:a05:6359:6609:b0:170:1cd9:b2a2 with SMTP id sm9-20020a056359660900b001701cd9b2a2mr3472117rwb.37.1702029071139;
+        Fri, 08 Dec 2023 01:51:11 -0800 (PST)
+Received: from localhost ([122.172.82.6])
+        by smtp.gmail.com with ESMTPSA id q14-20020a170902dace00b001d08e08003esm1273016plx.174.2023.12.08.01.51.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Dec 2023 01:51:10 -0800 (PST)
+Date: Fri, 8 Dec 2023 15:21:08 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: David Dai <davidai@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Sudeep Holla <sudeep.holla@arm.com>,
+	Saravana Kannan <saravanak@google.com>,
 	Quentin Perret <qperret@google.com>,
 	Masami Hiramatsu <mhiramat@google.com>,
 	Will Deacon <will@kernel.org>,
 	Peter Zijlstra <peterz@infradead.org>,
 	Vincent Guittot <vincent.guittot@linaro.org>,
+	Marc Zyngier <maz@kernel.org>,
 	Oliver Upton <oliver.upton@linux.dev>,
 	Dietmar Eggemann <dietmar.eggemann@arm.com>,
 	Pavan Kondeti <quic_pkondeti@quicinc.com>,
-	Gupta Pankaj <pankaj.gupta@amd.com>,
-	Mel Gorman <mgorman@suse.de>,
-	kernel-team@android.com,
-	linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] dt-bindings: cpufreq: add virtual cpufreq device
-In-Reply-To: <CAGETcx9-n0z5buWgtLZ+6VxW2jEko1GWzkGtGhFiZEq-x_G4nw@mail.gmail.com>
+	Gupta Pankaj <pankaj.gupta@amd.com>, Mel Gorman <mgorman@suse.de>,
+	kernel-team@android.com, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/2] cpufreq: add virtual-cpufreq driver
+Message-ID: <20231208095108.mg5bz7yjvla6syk2@vireshk-i7>
 References: <20231111014933.1934562-1-davidai@google.com>
-	<20231111014933.1934562-2-davidai@google.com>
-	<865y231jvj.wl-maz@kernel.org>
-	<CAGETcx9-n0z5buWgtLZ+6VxW2jEko1GWzkGtGhFiZEq-x_G4nw@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+ <20231111014933.1934562-3-davidai@google.com>
+ <20231115062932.vz2tyg6wgux5lx6t@vireshk-i7>
+ <CABN1KCKfCWB6fVAuMSN9AdJOe-zueNMPFUdDnKLcq-uetz2ZFQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: saravanak@google.com, davidai@google.com, rafael@kernel.org, viresh.kumar@linaro.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, sudeep.holla@arm.com, qperret@google.com, mhiramat@google.com, will@kernel.org, peterz@infradead.org, vincent.guittot@linaro.org, oliver.upton@linux.dev, dietmar.eggemann@arm.com, quic_pkondeti@quicinc.com, pankaj.gupta@amd.com, mgorman@suse.de, kernel-team@android.com, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABN1KCKfCWB6fVAuMSN9AdJOe-zueNMPFUdDnKLcq-uetz2ZFQ@mail.gmail.com>
+X-Spam-Level: *
 
-On Thu, 07 Dec 2023 22:44:36 +0000,
-Saravana Kannan <saravanak@google.com> wrote:
->=20
-> On Wed, Nov 15, 2023 at 12:49=E2=80=AFAM Marc Zyngier <maz@kernel.org> wr=
-ote:
+On 08-12-23, 10:18, David Dai wrote:
+> Hi Viresh,
+> 
+> Apologies for the late reply,
+> 
+> On Wed, Nov 15, 2023 at 3:29 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 > >
-> > On Sat, 11 Nov 2023 01:49:29 +0000,
-> > David Dai <davidai@google.com> wrote:
-> > >
-> > > Adding bindings to represent a virtual cpufreq device.
-> > >
-> > > Virtual machines may expose MMIO regions for a virtual cpufreq device
-> > > for guests to read frequency information or to request frequency
-> > > selection. The virtual cpufreq device has an individual controller for
-> > > each frequency domain.
+> > On 10-11-23, 17:49, David Dai wrote:
+> > > diff --git a/drivers/cpufreq/virtual-cpufreq.c b/drivers/cpufreq/virtual-cpufreq.c
+> > > +static unsigned int virt_cpufreq_set_perf(struct cpufreq_policy *policy)
+> > > +{
+> > > +     writel_relaxed(policy->cached_target_freq,
 > >
-> > I would really refrain form having absolute frequencies here. A
-> > virtual machine can be migrated, and there are *zero* guarantees that
-> > the target system has the same clock range as the source.
+> > Drivers shouldn't be using the cached_target_freq directly. Use the target freq
+> > or index passed from cpufreq core.
+> 
+> We were trying to avoid rounding to frequency table entries to provide
+> more accurate frequency requests. However, we didn't find any
+> significant power or performance regressions using the frequencies
+> from the table, so I'll send another patch series using your
+> suggestion.
+> 
 > >
-> > This really should be a relative number, much like the capacity. That,
-> > at least, can be migrated across systems.
->=20
-> There's nothing in this patch that mandates absolute frequency.
-> In true KVM philosophy, we leave it to the VMM to decide.
+> > > +static int virt_cpufreq_cpu_exit(struct cpufreq_policy *policy)
+> > > +{
+> > > +     topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_VIRT, policy->related_cpus);
+> > > +     kfree(policy->freq_table);
 
-This has nothing to do with KVM. It would apply to any execution
-environment, including QEMU in TCG mode.
+This becomes a dangling pointer for a very short amount of time. There may or
+may not be a actual race here and so I said the ordering must be just the
+opposite anyway.
 
-To quote the original patch:
+> > > +     policy->freq_table = NULL;
 
-+    description:
-+      Address and size of region containing frequency controls for each of=
- the
-+      frequency domains. Regions for each frequency domain is placed
-+      contiugously and contain registers for controlling DVFS(Dynamic Freq=
-uency
-+      and Voltage) characteristics. The size of the region is proportional=
- to
-+      total number of frequency domains.
+And I thought this isn't required too since the core is going the free the
+policy structure right after returning from here. But maybe it is not a
+guarantee that the core provides (the code can change in future) and so be
+better to unset it anyway.
 
-What part of that indicates that *relative* frequencies are
-acceptable? The example explicitly uses the opp-v2 binding, which
-clearly is about absolute frequency.
+> > No need of doing this. Also the order of above two calls is wrong anyway.
+> 
+> Can you clarify this point a bit more? Are you suggesting to just
+> remove setting policy->freq_table to NULL and swap the ordering
+> freeing the freq_table vs clearing the topology source? I can
+> alternatively use dev_pm_opp_free_cpufreq_table to mirror the init.
 
-To reiterate: absolute frequencies are not the right tool for the job,
-and they should explicitly be described as relative in the spec. Not
-left as a "whatev'" option for the execution environment to interpret.
+That would be better actually, to let a single piece of code manage this :)
 
-	M.
-
---=20
-Without deviation from the norm, progress is not possible.
+-- 
+viresh
 
