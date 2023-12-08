@@ -1,327 +1,126 @@
-Return-Path: <linux-pm+bounces-819-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-820-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0584809727
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Dec 2023 01:24:36 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D96A1809887
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Dec 2023 02:19:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 45698B20E68
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Dec 2023 00:24:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 54D07B20A0E
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Dec 2023 01:19:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5D1E374;
-	Fri,  8 Dec 2023 00:24:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0E5E110A;
+	Fri,  8 Dec 2023 01:19:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="Plhi8pdn"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="E9thBKFL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B2519A1
-	for <linux-pm@vger.kernel.org>; Thu,  7 Dec 2023 16:24:20 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-33348e711e0so1597327f8f.1
-        for <linux-pm@vger.kernel.org>; Thu, 07 Dec 2023 16:24:20 -0800 (PST)
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDB51706
+	for <linux-pm@vger.kernel.org>; Thu,  7 Dec 2023 17:19:04 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-40c09f4bea8so17091805e9.1
+        for <linux-pm@vger.kernel.org>; Thu, 07 Dec 2023 17:19:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1701995059; x=1702599859; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1701998342; x=1702603142; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WhR18T0pl795l1uokayZxS7knBKykZG2R0Wh7Y1uyRw=;
-        b=Plhi8pdnebPMWe8kgb9+o9Pz1IuoMKY0oZcZmNT4Bw7kDfx01XCrudolutc3wYM39p
-         SULrJT4zhXQ3wKWImyLraQRHi9eWRegPaKXb8GbgpVSO+4U5jNHdWEcJ0qsUN3JPjxVQ
-         DE1Zr6o3BES+hBF1e4cWPoi1vjXGCae/tvz8z2c1LHTHPrWHVpn83X61v6oVnjKqnGC3
-         MMeBWO+hixdQztAmWsw0KXVvlKhm+qxg9e1he8f3cGKcE8r6FFr6wDHB5gli+zc2uzVk
-         skv1igsi/pCaw4EqP6neufD+ewKC9P93V+fJGNtERq3f5SjZImh0gqkxyMMkC/n50Kx+
-         9kQw==
+        bh=NYzwSCPqiLl7k8qbCaz0m1NIvdf+DIxXUY3+wg3ee94=;
+        b=E9thBKFL18i+pJ5L25jNA6tVkGftyHb3+sNN/BHAu5MicLbZH0Xpc1hYWF4o/aXbUX
+         oNlO1TDm3jroN6PodcwQqAeVhHItH2IOFrkGaDzoG1OhRfKZulOtNMsVAbyIoRXwT/Yg
+         7SoCeTZvOMWKhVpLn52ot2it0o3pd9p00BzaRmU3rliZMCPmN+Iq2QAUGnDLLrOWJRq4
+         ie+brBLyJ8i4rHoDqoqzll9+tEhIZ+/O9GHQs6T6dygsIzAVav5cRg2+whSkDr1y1cLM
+         9UwN3VW6hGrigR48VGkM+J2CYQP18eVlfKQEnVrPPQPM3/QtYvM3jb6pJceTNYbQ/ZTn
+         FQRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701995059; x=1702599859;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1701998342; x=1702603142;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WhR18T0pl795l1uokayZxS7knBKykZG2R0Wh7Y1uyRw=;
-        b=C/nB3OtDozDucMBnAUFAfZZ8QAA0JK9lrpf6sM/lsMpORk43loE0z8xYDEBt6pI36q
-         oWdKTQ9DBcyiOwALu/O/jnwfBwLV2Bjh+3G2uA0+6vh4shDg4DNzGldeJvYKJLID/2lZ
-         2o1XWD5X2F09hmPIOxgqZYJSH00kD9ECBgQgAvGnOiD7oFeODeU6OZogdOEbJsX/7xdA
-         4/X13sIJXl7/9H9MFGRPBFqcpO46NyZKa1rLtSMhHwkw9yZKdtrMdb58FJt0xED55Ozl
-         OFLxqTU62Uz5VjJ9PANyTrfzjSnRQH8QdsMmR86CX5VGp746X47Gak2ewcREPV2HUK+T
-         vf1Q==
-X-Gm-Message-State: AOJu0Ywz381CpZuqDwJbhyS4bq8NVeelKdPq/2JUJOdNW01dCVtC+M4C
-	IQIgY9aDV/GVhIMkTAvsqh/uQg==
-X-Google-Smtp-Source: AGHT+IHGV+dihn4V479bZq9OG6SLrPXcDvTxVqEsxDxJhTAT29NPCNJcjozrDlu2bVsOek2GebRGZw==
-X-Received: by 2002:a05:600c:4b27:b0:40c:22b6:ce9d with SMTP id i39-20020a05600c4b2700b0040c22b6ce9dmr1891284wmp.141.1701995059146;
-        Thu, 07 Dec 2023 16:24:19 -0800 (PST)
-Received: from airbuntu.. (host109-153-232-45.range109-153.btcentralplus.com. [109.153.232.45])
-        by smtp.gmail.com with ESMTPSA id u17-20020a05600c19d100b0040c1c269264sm3339653wmq.40.2023.12.07.16.24.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Dec 2023 16:24:18 -0800 (PST)
-From: Qais Yousef <qyousef@layalina.io>
-To: Ingo Molnar <mingo@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Wei Wang <wvw@google.com>,
-	Rick Yiu <rickyiu@google.com>,
-	Chung-Kai Mei <chungkai@google.com>,
-	Qais Yousef <qyousef@layalina.io>
-Subject: [PATCH v2 8/8] sched/pelt: Introduce PELT multiplier
-Date: Fri,  8 Dec 2023 00:23:42 +0000
-Message-Id: <20231208002342.367117-9-qyousef@layalina.io>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231208002342.367117-1-qyousef@layalina.io>
-References: <20231208002342.367117-1-qyousef@layalina.io>
+        bh=NYzwSCPqiLl7k8qbCaz0m1NIvdf+DIxXUY3+wg3ee94=;
+        b=SLflWbrx8hnHgLk/HpZR5LKdck7hb594CTFOzvbSh4LSkUFVtv+GyXT3iC3fQOr5Me
+         6VzBw5/w/UIn9fs7+Ut1mkv/zpTSiBKzBiHlo60ZVzMwiA/ks/kYc9ACiE/PzdkfDVoS
+         1F59IfmnJc/50hwWkCagvXytjG04ADqpIyHDiIaLeRz/B7s8IuKkOLNKYmdVeiv0SAiq
+         a60EWUo+/SAJg2635+nj3LETZqN+XGV2vTI81Ix9VkTu7CWCIHp2DPDISapa1C3x2N4S
+         TfdTtQ6ft0AcTy8dulXcWrW+M/UJbZKhYz0D4D2z6rFHNM9opA0sX+Rqj76wHQ5VZn95
+         vz8Q==
+X-Gm-Message-State: AOJu0Yz0deRTYT9FFOh3oWHz38DU4yAnKxvDuH7xZArQNG9rUwG56SWu
+	t4jRCCvUf3OFxRjmLfDWBR5VvqWRp9rOEnQkW3B7zw==
+X-Google-Smtp-Source: AGHT+IG+m5ndDrZYwAjGiJo+XbvTuXbn4cv9JA7hIaiio0HiC93zA6LGU2W0vDdt642q9QLDRGH9i6qmYPagNCY64U4=
+X-Received: by 2002:a05:600c:246:b0:40b:5e59:da8d with SMTP id
+ 6-20020a05600c024600b0040b5e59da8dmr2133389wmj.160.1701998342457; Thu, 07 Dec
+ 2023 17:19:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20231111014933.1934562-1-davidai@google.com> <20231111014933.1934562-3-davidai@google.com>
+ <20231115062932.vz2tyg6wgux5lx6t@vireshk-i7>
+In-Reply-To: <20231115062932.vz2tyg6wgux5lx6t@vireshk-i7>
+From: David Dai <davidai@google.com>
+Date: Fri, 8 Dec 2023 10:18:51 +0900
+Message-ID: <CABN1KCKfCWB6fVAuMSN9AdJOe-zueNMPFUdDnKLcq-uetz2ZFQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] cpufreq: add virtual-cpufreq driver
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Sudeep Holla <sudeep.holla@arm.com>, Saravana Kannan <saravanak@google.com>, 
+	Quentin Perret <qperret@google.com>, Masami Hiramatsu <mhiramat@google.com>, Will Deacon <will@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Pavan Kondeti <quic_pkondeti@quicinc.com>, 
+	Gupta Pankaj <pankaj.gupta@amd.com>, Mel Gorman <mgorman@suse.de>, kernel-team@android.com, 
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Vincent Donnefort <vincent.donnefort@arm.com>
+Hi Viresh,
 
-The new sched_pelt_multiplier boot param allows a user to set a clock
-multiplier to x2 or x4 (x1 being the default). This clock multiplier
-artificially speeds up PELT ramp up/down similarly to use a faster
-half-life than the default 32ms.
+Apologies for the late reply,
 
-  - x1: 32ms half-life
-  - x2: 16ms half-life
-  - x4: 8ms  half-life
+On Wed, Nov 15, 2023 at 3:29=E2=80=AFPM Viresh Kumar <viresh.kumar@linaro.o=
+rg> wrote:
+>
+> On 10-11-23, 17:49, David Dai wrote:
+> > diff --git a/drivers/cpufreq/virtual-cpufreq.c b/drivers/cpufreq/virtua=
+l-cpufreq.c
+> > +static unsigned int virt_cpufreq_set_perf(struct cpufreq_policy *polic=
+y)
+> > +{
+> > +     writel_relaxed(policy->cached_target_freq,
+>
+> Drivers shouldn't be using the cached_target_freq directly. Use the targe=
+t freq
+> or index passed from cpufreq core.
 
-Internally, a new clock is created: rq->clock_task_mult. It sits in the
-clock hierarchy between rq->clock_task and rq->clock_pelt.
+We were trying to avoid rounding to frequency table entries to provide
+more accurate frequency requests. However, we didn't find any
+significant power or performance regressions using the frequencies
+from the table, so I'll send another patch series using your
+suggestion.
 
-The param is set as read only and can only be changed at boot time via
+>
+> > +static int virt_cpufreq_cpu_exit(struct cpufreq_policy *policy)
+> > +{
+> > +     topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_VIRT, policy->=
+related_cpus);
+> > +     kfree(policy->freq_table);
+> > +     policy->freq_table =3D NULL;
+>
+> No need of doing this. Also the order of above two calls is wrong anyway.
 
-	kernel.sched_pelt_multiplier=[1, 2, 4]
+Can you clarify this point a bit more? Are you suggesting to just
+remove setting policy->freq_table to NULL and swap the ordering
+freeing the freq_table vs clearing the topology source? I can
+alternatively use dev_pm_opp_free_cpufreq_table to mirror the init.
 
-PELT has a big impact on the overall system response and reactiveness to
-change. Smaller PELT HF means it'll require less time to reach the
-maximum performance point of the system when the system become fully
-busy; and equally shorter time to go back to lowest performance point
-when the system goes back to idle.
+Thanks,
+David
 
-This faster reaction impacts both dvfs response and migration time
-between clusters in HMP system.
-
-Smaller PELT values are expected to give better performance at the cost
-of more power. Under powered systems can particularly benefit from
-smaller values. Powerful systems can still benefit from smaller values
-if they want to be tuned towards perf more and power is not the major
-concern for them.
-
-This combined with respone_time_ms from schedutil should give the user
-and sysadmin a deterministic way to control the triangular power, perf
-and thermals for their system. The default response_time_ms will half
-as PELT HF halves.
-
-Update approximate_{util_avg, runtime}() to take into account the PELT
-HALFLIFE multiplier.
-
-Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
-Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-[Converted from sysctl to boot param and updated commit message]
-Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
----
- kernel/sched/core.c  |  2 +-
- kernel/sched/pelt.c  | 52 ++++++++++++++++++++++++++++++++++++++++++--
- kernel/sched/pelt.h  | 42 +++++++++++++++++++++++++++++++----
- kernel/sched/sched.h |  1 +
- 4 files changed, 90 insertions(+), 7 deletions(-)
-
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index b4a1c8ea9e12..9c8626b4ddff 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -745,7 +745,7 @@ static void update_rq_clock_task(struct rq *rq, s64 delta)
- 	if ((irq_delta + steal) && sched_feat(NONTASK_CAPACITY))
- 		update_irq_load_avg(rq, irq_delta + steal);
- #endif
--	update_rq_clock_pelt(rq, delta);
-+	update_rq_clock_task_mult(rq, delta);
- }
- 
- void update_rq_clock(struct rq *rq)
-diff --git a/kernel/sched/pelt.c b/kernel/sched/pelt.c
-index 00a1b9c1bf16..0a10e56f76c7 100644
---- a/kernel/sched/pelt.c
-+++ b/kernel/sched/pelt.c
-@@ -468,6 +468,54 @@ int update_irq_load_avg(struct rq *rq, u64 running)
- }
- #endif /* CONFIG_HAVE_SCHED_AVG_IRQ */
- 
-+__read_mostly unsigned int sched_pelt_lshift;
-+static unsigned int sched_pelt_multiplier = 1;
-+
-+static int set_sched_pelt_multiplier(const char *val, const struct kernel_param *kp)
-+{
-+	int ret;
-+
-+	ret = param_set_int(val, kp);
-+	if (ret)
-+		goto error;
-+
-+	switch (sched_pelt_multiplier)  {
-+	case 1:
-+		fallthrough;
-+	case 2:
-+		fallthrough;
-+	case 4:
-+		WRITE_ONCE(sched_pelt_lshift,
-+			   sched_pelt_multiplier >> 1);
-+		break;
-+	default:
-+		ret = -EINVAL;
-+		goto error;
-+	}
-+
-+	return 0;
-+
-+error:
-+	sched_pelt_multiplier = 1;
-+	return ret;
-+}
-+
-+static const struct kernel_param_ops sched_pelt_multiplier_ops = {
-+	.set = set_sched_pelt_multiplier,
-+	.get = param_get_int,
-+};
-+
-+#ifdef MODULE_PARAM_PREFIX
-+#undef MODULE_PARAM_PREFIX
-+#endif
-+/* XXX: should we use sched as prefix? */
-+#define MODULE_PARAM_PREFIX "kernel."
-+module_param_cb(sched_pelt_multiplier, &sched_pelt_multiplier_ops, &sched_pelt_multiplier, 0444);
-+MODULE_PARM_DESC(sched_pelt_multiplier, "PELT HALFLIFE helps control the responsiveness of the system.");
-+MODULE_PARM_DESC(sched_pelt_multiplier, "Accepted value: 1 32ms PELT HALIFE - roughly 200ms to go from 0 to max performance point (default).");
-+MODULE_PARM_DESC(sched_pelt_multiplier, "                2 16ms PELT HALIFE - roughly 100ms to go from 0 to max performance point.");
-+MODULE_PARM_DESC(sched_pelt_multiplier, "                4  8ms PELT HALIFE - roughly  50ms to go from 0 to max performance point.");
-+
- /*
-  * Approximate the new util_avg value assuming an entity has continued to run
-  * for @delta us.
-@@ -482,7 +530,7 @@ unsigned long approximate_util_avg(unsigned long util, u64 delta)
- 	if (unlikely(!delta))
- 		return util;
- 
--	accumulate_sum(delta, &sa, 1, 0, 1);
-+	accumulate_sum(delta << sched_pelt_lshift, &sa, 1, 0, 1);
- 	___update_load_avg(&sa, 0);
- 
- 	return sa.util_avg;
-@@ -494,7 +542,7 @@ unsigned long approximate_util_avg(unsigned long util, u64 delta)
- u64 approximate_runtime(unsigned long util)
- {
- 	struct sched_avg sa = {};
--	u64 delta = 1024; // period = 1024 = ~1ms
-+	u64 delta = 1024 << sched_pelt_lshift; // period = 1024 = ~1ms
- 	u64 runtime = 0;
- 
- 	if (unlikely(!util))
-diff --git a/kernel/sched/pelt.h b/kernel/sched/pelt.h
-index 3a0e0dc28721..9b35b5072bae 100644
---- a/kernel/sched/pelt.h
-+++ b/kernel/sched/pelt.h
-@@ -61,6 +61,14 @@ static inline void cfs_se_util_change(struct sched_avg *avg)
- 	WRITE_ONCE(avg->util_est.enqueued, enqueued);
- }
- 
-+static inline u64 rq_clock_task_mult(struct rq *rq)
-+{
-+	lockdep_assert_rq_held(rq);
-+	assert_clock_updated(rq);
-+
-+	return rq->clock_task_mult;
-+}
-+
- static inline u64 rq_clock_pelt(struct rq *rq)
- {
- 	lockdep_assert_rq_held(rq);
-@@ -72,7 +80,7 @@ static inline u64 rq_clock_pelt(struct rq *rq)
- /* The rq is idle, we can sync to clock_task */
- static inline void _update_idle_rq_clock_pelt(struct rq *rq)
- {
--	rq->clock_pelt  = rq_clock_task(rq);
-+	rq->clock_pelt = rq_clock_task_mult(rq);
- 
- 	u64_u32_store(rq->clock_idle, rq_clock(rq));
- 	/* Paired with smp_rmb in migrate_se_pelt_lag() */
-@@ -121,6 +129,27 @@ static inline void update_rq_clock_pelt(struct rq *rq, s64 delta)
- 	rq->clock_pelt += delta;
- }
- 
-+extern unsigned int sched_pelt_lshift;
-+
-+/*
-+ * absolute time   |1      |2      |3      |4      |5      |6      |
-+ * @ mult = 1      --------****************--------****************-
-+ * @ mult = 2      --------********----------------********---------
-+ * @ mult = 4      --------****--------------------****-------------
-+ * clock task mult
-+ * @ mult = 2      |   |   |2  |3  |   |   |   |   |5  |6  |   |   |
-+ * @ mult = 4      | | | | |2|3| | | | | | | | | | |5|6| | | | | | |
-+ *
-+ */
-+static inline void update_rq_clock_task_mult(struct rq *rq, s64 delta)
-+{
-+	delta <<= READ_ONCE(sched_pelt_lshift);
-+
-+	rq->clock_task_mult += delta;
-+
-+	update_rq_clock_pelt(rq, delta);
-+}
-+
- /*
-  * When rq becomes idle, we have to check if it has lost idle time
-  * because it was fully busy. A rq is fully used when the /Sum util_sum
-@@ -147,7 +176,7 @@ static inline void update_idle_rq_clock_pelt(struct rq *rq)
- 	 * rq's clock_task.
- 	 */
- 	if (util_sum >= divider)
--		rq->lost_idle_time += rq_clock_task(rq) - rq->clock_pelt;
-+		rq->lost_idle_time += rq_clock_task_mult(rq) - rq->clock_pelt;
- 
- 	_update_idle_rq_clock_pelt(rq);
- }
-@@ -218,13 +247,18 @@ update_irq_load_avg(struct rq *rq, u64 running)
- 	return 0;
- }
- 
--static inline u64 rq_clock_pelt(struct rq *rq)
-+static inline u64 rq_clock_task_mult(struct rq *rq)
- {
- 	return rq_clock_task(rq);
- }
- 
-+static inline u64 rq_clock_pelt(struct rq *rq)
-+{
-+	return rq_clock_task_mult(rq);
-+}
-+
- static inline void
--update_rq_clock_pelt(struct rq *rq, s64 delta) { }
-+update_rq_clock_task_mult(struct rq *rq, s64 delta) { }
- 
- static inline void
- update_idle_rq_clock_pelt(struct rq *rq) { }
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index bbece0eb053a..a7c89c623250 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1029,6 +1029,7 @@ struct rq {
- 	u64			clock;
- 	/* Ensure that all clocks are in the same cache line */
- 	u64			clock_task ____cacheline_aligned;
-+	u64			clock_task_mult;
- 	u64			clock_pelt;
- 	unsigned long		lost_idle_time;
- 	u64			clock_pelt_idle;
--- 
-2.34.1
-
+>
+> --
+> viresh
 
