@@ -1,86 +1,154 @@
-Return-Path: <linux-pm+bounces-826-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-827-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F4031809A1A
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Dec 2023 04:14:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E6BE809AA7
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Dec 2023 04:47:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9E7DE1F21306
-	for <lists+linux-pm@lfdr.de>; Fri,  8 Dec 2023 03:14:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F5D71C20ADE
+	for <lists+linux-pm@lfdr.de>; Fri,  8 Dec 2023 03:47:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A46A6210F;
-	Fri,  8 Dec 2023 03:14:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DDD0442E;
+	Fri,  8 Dec 2023 03:47:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oB/Kt1MU"
+	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="YbNpisDT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 702BF3C3F;
-	Fri,  8 Dec 2023 03:14:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEF22C433C7;
-	Fri,  8 Dec 2023 03:14:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702005272;
-	bh=i6QahoY2i38BfqMi3CMYz8694XkKFslWp28QY+7R8so=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oB/Kt1MUzpve4cuyWfLwcdPfWPjfKd1brAJqAdcmDB45PNmSarB7vHpg2mc1nFKaS
-	 C/Ei/enQhoa6E1+VoLGO4tIkdDJ7U3oS+HgTwN6jNdpuMEEdwylL3aI6U8DhFqyd2u
-	 Xs7nMqoUpvY+qAgCO/Si4DR9LkaqwKM0j3nBAtxSMzq/17Fg6diykAjusr/E047o7+
-	 vQpbsDL+yPW7fsACxlY2ljO7IB00BlPYZDLUpSzhC2AExFHx3z/hBha7cxNH1pW4xP
-	 /Biy1XyydK/9QGic6jAkKlM3nDPPfSNwJyi7Y9UUOZFoDZY1UQA/SWrEky7IHbfesb
-	 Sc17wN/CHXqyw==
-Date: Thu, 7 Dec 2023 19:19:08 -0800
-From: Bjorn Andersson <andersson@kernel.org>
-To: Georgi Djakov <djakov@kernel.org>
-Cc: Neil Armstrong <neil.armstrong@linaro.org>, 
-	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Rob Herring <robh+dt@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Abel Vesa <abel.vesa@linaro.org>
-Subject: Re: [PATCH v2 0/2] interconnect: qcom: Introduce support for SM8650
-Message-ID: <36ip3gmodvx2afl2lbdphyevzmo2nwcujnlie3njj5d36kwdeh@qzo43f5g3a52>
-References: <20231123-topic-sm8650-upstream-interconnect-v2-0-7e050874f59b@linaro.org>
- <7fbe4090-94cd-4aaf-98b6-07f2a089d51a@kernel.org>
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2081.outbound.protection.outlook.com [40.107.6.81])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCD51723;
+	Thu,  7 Dec 2023 19:47:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=egAclo4BGutUuMl/t9XeM0wUSRzmQpLjj1eBtKQiLoeXD0J0jSFRN2+t9A5rQVjDqAcz+kSxYNG+MlwP7EjdtGTN7T4cL5ccmVkNk3i3pPif7qmtvvefAsCQ4qkIi6PZGPuJmQwvmYqpakHp55yWrUa1ZjMzg9SITuM0hJaW8IuROOtfXQVmJ/MXY3c1UmNQHSbbg9fRk1IQlwGpei58e9cxivf1gAst+miuavZDTMqVl8jmqWWqLXy6GVqXNZAz0Um8YtJd37ImlIP4poXXAtDLGORMyWD0s4a1TIQqAQXB4Qd2vWs2zicxpVyoyS9JUtl2EIDx5wrmhV2Kpoz44g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zFsYfTI9dLdrSKC/yXcw0xxtxQedhy79RqMmoNrgj1Q=;
+ b=b8GJaX54HERXfyl3Sqoi4SoNO1FiBQmiax/lCWKuBCwt9ikOJv1oxXo2OmL/TnueK/dHcqRgnsVWllKUMbKUL8AeyyAwDcvpe/JLPK3tLvEe4yr6exEL5+u643VUkxT6gBJ9Zp76y0N2LQ0rKhPSgFobCY0f3KXO3Qp8vAl/g0OJVjbWGGzPuwb6BsiUD3fJuAJcRm9rSEKQH+dXA8ybuRvBIdTcEljSxuGTPFuYAhuRxaMTqAdfpvf3e63eYDF2o8Bpv16pR03r73WGyAthABCUIRacWn7zI1TTfd2YxMT8j30+quckPyyw8LCOHUPsQuo5V2AEUkFVcNyOxNtY2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 195.60.68.100) smtp.rcpttodomain=kernel.org smtp.mailfrom=axis.com;
+ dmarc=fail (p=none sp=none pct=100) action=none header.from=axis.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zFsYfTI9dLdrSKC/yXcw0xxtxQedhy79RqMmoNrgj1Q=;
+ b=YbNpisDTO1tFpC+6h+/yKPJA+YXZpVeaeu16I14w4iRjBvnmhlpb9+KGx8jPJ3Du7EgjaAfSWsL36Vzhha4CMheiCphyedaOgJjV4EwuQvH2LniMstpxK6oBtaDAfDe2JOXWpsdXnYtEzKPLuP6WHu8sINlKbEIa8jnRtAeDlDo=
+Received: from AS9PR06CA0581.eurprd06.prod.outlook.com (2603:10a6:20b:486::21)
+ by VI1PR02MB5760.eurprd02.prod.outlook.com (2603:10a6:803:131::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.28; Fri, 8 Dec
+ 2023 03:47:19 +0000
+Received: from AMS0EPF0000019C.eurprd05.prod.outlook.com
+ (2603:10a6:20b:486:cafe::ea) by AS9PR06CA0581.outlook.office365.com
+ (2603:10a6:20b:486::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.34 via Frontend
+ Transport; Fri, 8 Dec 2023 03:47:19 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 195.60.68.100)
+ smtp.mailfrom=axis.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=axis.com;
+Received-SPF: Fail (protection.outlook.com: domain of axis.com does not
+ designate 195.60.68.100 as permitted sender) receiver=protection.outlook.com;
+ client-ip=195.60.68.100; helo=mail.axis.com;
+Received: from mail.axis.com (195.60.68.100) by
+ AMS0EPF0000019C.mail.protection.outlook.com (10.167.16.248) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7068.20 via Frontend Transport; Fri, 8 Dec 2023 03:47:18 +0000
+Received: from SE-MAILARCH01W.axis.com (10.20.40.15) by se-mail02w.axis.com
+ (10.20.40.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 8 Dec
+ 2023 04:47:18 +0100
+Received: from se-mail01w.axis.com (10.20.40.7) by SE-MAILARCH01W.axis.com
+ (10.20.40.15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 8 Dec
+ 2023 04:47:18 +0100
+Received: from se-intmail01x.se.axis.com (10.0.5.60) by se-mail01w.axis.com
+ (10.20.40.7) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Fri, 8 Dec 2023 04:47:18 +0100
+Received: from lnxchenhuiz2.sh.cn.axis.com (lnxchenhuiz2.sh.cn.axis.com [192.168.77.59])
+	by se-intmail01x.se.axis.com (Postfix) with ESMTP id B43BCF7F3;
+	Fri,  8 Dec 2023 04:47:17 +0100 (CET)
+Received: from lnxchenhuiz2.sh.cn.axis.com (localhost [127.0.0.1])
+	by lnxchenhuiz2.sh.cn.axis.com (8.17.1.9/8.17.1.9/Debian-2) with ESMTP id 3B83lGg41248431;
+	Fri, 8 Dec 2023 11:47:16 +0800
+Received: (from chenhuiz@localhost)
+	by lnxchenhuiz2.sh.cn.axis.com (8.17.1.9/8.17.1.9/Submit) id 3B83lGOi1248430;
+	Fri, 8 Dec 2023 11:47:16 +0800
+From: Hermes Zhang <Hermes.Zhang@axis.com>
+To: <sre@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+	<robh+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <kernel@axis.com>, Hermes Zhang
+	<chenhuiz@axis.com>, Conor Dooley <conor.dooley@microchip.com>,
+	<linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH v4 1/2] dt-bindings: power: supply: bq24190: Add BQ24296 compatible
+Date: Fri, 8 Dec 2023 11:47:07 +0800
+Message-ID: <20231208034708.1248389-2-Hermes.Zhang@axis.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20231208034708.1248389-1-Hermes.Zhang@axis.com>
+References: <20231208034708.1248389-1-Hermes.Zhang@axis.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7fbe4090-94cd-4aaf-98b6-07f2a089d51a@kernel.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AMS0EPF0000019C:EE_|VI1PR02MB5760:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6e5013e6-8c89-4ab0-f0f4-08dbf7a0605d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	tEYsRW0a/BfTTl4Huut7A1xTRDi+vIp/NPSPSbyf0ZbpXR0MPxz/kq8w1s1qIlhehWmaF94Uq1L1YqCCOiST/yfbZ4IemPHX4qkPYNEQWlYA6GZHETRY8/FQi8o3gscoWNpRdSgk8mDY0DFSqfHdkAh8lnMvEV2OXWXuiA9SWiY6wbRpaoS42sQT+XOWnwTVRVMqb7/7RuLx24zv4kwMg7/K0TIv5Lypz3LiKcQnBT4Zm2s7AnbTGCizRmvaOFkRZ+XTbXDJtzmiE1fQ9EqhTuM17GVFLV1Xp3/gopIfcqRK5tt4Z/A4jWRyI2mJrIk1iqRhoEjL3rLnXgwZob0RV3wQHnaCfkv28YucaVvnq4pmguRFMUZI/+zgvkZksMExcHpVeWInHLkoltFN34JowKaoj10+tQpungkbLdu4VAS4n8q5/D57j5hunl0baf9pnz1z6VlnJ+vbNtAaeBGanNaqm7A+L2bk2PQawrpce/LuLWG8jgxBkDV78upI1XesNKaugMoFq73rHdevDDqk73OrkfAw4LPA3vDD/eqZwx2/tXQxIox98hweCo9tlsn743nGih0JYSTlMVJRw9C+QLonE/BJNwiPvanQwsYm7jIZNzvoveYJQt5iKzW/oNIQu9J/HX/6lg5kUQcysmpHMUFe3fWgBtcocQ448Idb2JpLCpve/1i1wbPx+Afhv3vmhBgs3IU1C/b5JybJF6VJ5nA7PJDPdB+bQ4WUC4P6OPp/G0nB2pQAyOX+xJjBBF4Jch7eBb7l8WvQOJhe038hmQ==
+X-Forefront-Antispam-Report:
+	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(376002)(136003)(39850400004)(396003)(346002)(230922051799003)(186009)(82310400011)(64100799003)(451199024)(1800799012)(40470700004)(46966006)(36840700001)(40460700003)(54906003)(42186006)(86362001)(4326008)(8936002)(8676002)(316002)(110136005)(478600001)(70586007)(70206006)(36756003)(41300700001)(2906002)(36860700001)(81166007)(47076005)(356005)(5660300002)(2616005)(26005)(6666004)(1076003)(83380400001)(82740400003)(426003)(336012)(40480700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: axis.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2023 03:47:18.6341
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6e5013e6-8c89-4ab0-f0f4-08dbf7a0605d
+X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AMS0EPF0000019C.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR02MB5760
 
-On Mon, Nov 27, 2023 at 04:08:37PM +0200, Georgi Djakov wrote:
-> On 23.11.23 15:32, Neil Armstrong wrote:
-> > This covers the RPMh Network-On-Chip Interconnect bindings
-> > and driver for the interconnect framework.
-> 
-> Thanks Neil!
-> 
-> > As reported for earlier Interconnect drivers, the IDs
-> > for multi-rsc voting has been removed from this driver
-> > so the proper solution can be developed without having
-> > to remove entries later on.
-> > 
-> > To easy Bjorn into merging the DT bits, would it be possible
-> > to have an immutable branch with bindings shared with Bjorn once
-> > this patchset have been properly reviewed and accepted ?
-> 
-> Hi Bjorn,
-> 
-> Here is a stable branch with the DT bindings header that might be needed
-> for SM8650 dts patches.
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git/log/?h=icc-sm8650
-> 
+From: Hermes Zhang <chenhuiz@axis.com>
 
-Very nice, thank you Georgi
+The BQ24296 is most similar to the BQ24196, but the:
+1. OTG config is split from CHG config (REG01)
+2. ICHG (Fast Charge Current limit) range is smaller (<=3008mA)
+3. NTC fault is simplified to 2 bits
 
-Regards,
-Bjorn
+Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+---
+
+Notes:
+    v2: restructured the code to support bq24296 and add Acked-by tag
+        from Conor
+    v3: handle the match_info in the modern way
+    v4: fix compile errors
+
+ Documentation/devicetree/bindings/power/supply/bq24190.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/power/supply/bq24190.yaml b/Documentation/devicetree/bindings/power/supply/bq24190.yaml
+index d3ebc9de8c0b..131b7e57d22f 100644
+--- a/Documentation/devicetree/bindings/power/supply/bq24190.yaml
++++ b/Documentation/devicetree/bindings/power/supply/bq24190.yaml
+@@ -20,6 +20,7 @@ properties:
+       - ti,bq24192
+       - ti,bq24192i
+       - ti,bq24196
++      - ti,bq24296
+ 
+   reg:
+     maxItems: 1
+-- 
+2.39.2
+
 
