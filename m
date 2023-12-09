@@ -1,157 +1,174 @@
-Return-Path: <linux-pm+bounces-860-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-861-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5461C80B5C5
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Dec 2023 18:54:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35EAC80B605
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Dec 2023 20:22:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85F7F1C208D1
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Dec 2023 17:54:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A91A2B20BD0
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Dec 2023 19:22:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DA8D1944E;
-	Sat,  9 Dec 2023 17:54:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1949E1A279;
+	Sat,  9 Dec 2023 19:22:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="I4xr/Iv6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RFRBIXcf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C48511F
-	for <linux-pm@vger.kernel.org>; Sat,  9 Dec 2023 09:54:20 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-54c64316a22so4196815a12.0
-        for <linux-pm@vger.kernel.org>; Sat, 09 Dec 2023 09:54:20 -0800 (PST)
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596D9AC;
+	Sat,  9 Dec 2023 11:22:44 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-286f3e0d010so886471a91.0;
+        Sat, 09 Dec 2023 11:22:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702144459; x=1702749259; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HvHND4P/HoZ0eN5ekFdH68Ldcd5nj6SfIoXhqMddDPY=;
-        b=I4xr/Iv6SLgHHpwdkZtQCtK4UjSqyVe1HwfXmM7YRkjlRRrcSunBkhcVCzgj/gQt4c
-         ZGxal6YgS+6Y8oPmPvGTSilrUfyQJgD1uHTQ5CtzxLYLH/iBLg77ny/zvSnjSC3XwdaS
-         NqTJ1rphqOhZ8449ZshDQLWin1gOejFml1n7SQxBswVY7S145nrkI3hN9JVth6AF8dCh
-         RIUzSByM+R2gyiQ473lGLr9AzPmrSLyH1879BpUvsYmWkWvDe33FIhrFi+rUUKQsLlpW
-         3UMNvbtXi2Z9x9fmjv0YEzCNKNaw2sOul/2/+TahAdC6MAprQDidhE+hrtLDM/MXoogP
-         +aLw==
+        d=gmail.com; s=20230601; t=1702149764; x=1702754564; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8jJkDKWbLv2FIBDpQN/BsF6DzATvUZpOfdreFTxN8aM=;
+        b=RFRBIXcfxwb65YKnV5ii+7i4aIn2mf3lCU443qTInflj870RGijwiauRFAfUdn59zQ
+         KIVLDskJaBUBLgqHF0L3/0sHQf9Cc37gRSHN8l80G1ZWXmFb6HYMWejpO1tV4EXs0gv+
+         Q1ERw6s/l9mDMdwtgvhytWiaiWBsJYTstL6/nVm8GGyBGW/vVFv+Cs739NpNVGOO3lju
+         jzHTzZHwI+TS8fLkQS7Z+A68G+rCG+uy/TXOdCjqYgNMpqq5XsNbE1hsgbnpkq/KGUjF
+         6WoxK2tk8nliLsAzx9ud8coIFQxFQymq0vnad9YGqF6WNKU2COT+s10VCADXQoXMg8vQ
+         h3Sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702144459; x=1702749259;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HvHND4P/HoZ0eN5ekFdH68Ldcd5nj6SfIoXhqMddDPY=;
-        b=JCrD2ll6cHspwoiIFpkFn8/dayNUxKKzxYf8ed/J0kUnLHCG/+ESv25WHrxWnXul6V
-         kD+i8jtUUDXDGiKlkSzP4mNLEt6Mo12es/fMMhWscng387qR0/cDDTdMXwYZdYqOPdl8
-         M47Ag1GatVkj3tFHzKzyKrAT3bnrGyjVlOdCmgGZwaJHKiAo4LCJ8Fi2U6wRl8SG5Zlf
-         X3nHnaO08xYtuqsw8YlDx+3dPds4UPbR+d3r+4Fpqf5PEOBZVksh+JmpMncbPu6zVO3U
-         2Ql/gG3yAWRvI7cqzsqLuFBKY//ZoNWyu2WKEpJsy3RW7LYe8p7IHRappdjp4GteKnoE
-         bDPw==
-X-Gm-Message-State: AOJu0YwUzyxlXELjSrltLvhA91m6Ph3N++V5ouj/F9t59Vs3VbvXDWoY
-	HzT29rc+z8YI0Qtygnj59O8dqRnrE3UvyalBk2A=
-X-Google-Smtp-Source: AGHT+IFbUBIScunhp/10BaKOKvxkgMMwaF3LauB+6T2wH4SVYcWBBxfmq1CkdZ3cs0JM9TjOOGO9cQ==
-X-Received: by 2002:a17:907:6190:b0:a1f:6761:c8dc with SMTP id mt16-20020a170907619000b00a1f6761c8dcmr796454ejc.124.1702144458937;
-        Sat, 09 Dec 2023 09:54:18 -0800 (PST)
-Received: from [192.168.36.128] (178235179179.dynamic-4-waw-k-1-3-0.vectranet.pl. [178.235.179.179])
-        by smtp.gmail.com with ESMTPSA id rm6-20020a1709076b0600b00a1bec12448csm2457107ejc.150.2023.12.09.09.54.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 09 Dec 2023 09:54:18 -0800 (PST)
-Message-ID: <3f921a53-8eac-48e6-be17-43c07a0313d0@linaro.org>
-Date: Sat, 9 Dec 2023 18:54:16 +0100
+        d=1e100.net; s=20230601; t=1702149764; x=1702754564;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8jJkDKWbLv2FIBDpQN/BsF6DzATvUZpOfdreFTxN8aM=;
+        b=LeVUMIq5z5xhZj1PUjZyYQ0VfUXAS6YSXDI28IUMjMx0ogi+ot+xgcjhRLyXps1Fgv
+         sLdjxPW4PEwBsHJQJtSV3Fso9VYT4QKco5K2aG1QQGQd5DmkhcACysku346XE0bjRKvM
+         rBak0yr6TF12XoubZkwZSriNBHdvAwC3qQNOvGWceIijyNQ8wxGtw6hi8g/v5Q9/XeOs
+         CJUhppLei8LsZqA3cMk5M+3KsxrScbkN2bSXKDWp5jkSu8JfzIJKUg+fJAx47BbUqWJ8
+         2MqZJ5r3CwZEsulQd+6P7RlL85ToX9U/uPWODIgmHKPnGjzjVEPbJq8/DFzv6AC1Gims
+         +QGw==
+X-Gm-Message-State: AOJu0YxB2I0143Y33Ai3NaRAsTK5zvJpSkbAxcUKdXZPoZMar3zK9L2S
+	m49AJaWFDqTHxd50mwLdZ/1iFVSTqMT1X/7vzAg=
+X-Google-Smtp-Source: AGHT+IGBpR1wprhPk7ZEmewk26/xx6kB/0TkbNILSN+bOdYBAWVaE9AV8jUx/6ZYbCTEEk3C5Vb5QGb/K83YJdxIWeA=
+X-Received: by 2002:a17:90a:7e8b:b0:286:8fa5:7bc7 with SMTP id
+ j11-20020a17090a7e8b00b002868fa57bc7mr3569872pjl.2.1702149763703; Sat, 09 Dec
+ 2023 11:22:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] interconnect: qcom: Add MSM8909 interconnect provider
- driver
-Content-Language: en-US
-To: Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
- Georgi Djakov <djakov@kernel.org>
-Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, Adam Skladowski <a39.skl@gmail.com>
-References: <20231206-icc-msm8909-v1-0-fe0dd632beff@kernkonzept.com>
- <20231206-icc-msm8909-v1-2-fe0dd632beff@kernkonzept.com>
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <20231206-icc-msm8909-v1-2-fe0dd632beff@kernkonzept.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20230928222130.580487-1-festevam@gmail.com> <20231002-unheard-copy-f9dceb6498a9@spud>
+In-Reply-To: <20231002-unheard-copy-f9dceb6498a9@spud>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Sat, 9 Dec 2023 16:22:31 -0300
+Message-ID: <CAOMZO5Di6Saq_r2k8AkGeANRvXwwx26U=Vf5-Eu-_2Qhu5sDCw@mail.gmail.com>
+Subject: Re: [PATCH v3] dt-bindings: thermal: qoriq-thermal: Adjust
+ fsl,tmu-range min/maxItems
+To: Conor Dooley <conor@kernel.org>
+Cc: daniel.lezcano@linaro.org, rafael@kernel.org, 
+	krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org, conor+dt@kernel.org, 
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	Fabio Estevam <festevam@denx.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 6.12.2023 15:35, Stephan Gerhold wrote:
-> From: Adam Skladowski <a39.skl@gmail.com>
-> 
-> Add driver for interconnect busses found in MSM8909 based platforms.
-> The topology consists of three NoCs that are partially controlled by a
-> RPM processor.
-> 
-> In the downstream/vendor kernel from Qualcomm there is an additional
-> "mm-snoc". However, it doesn't have a separate RPM clock assigned. It
-> looks like this is actually the same NoC in hardware and the "mm-snoc"
-> was only defined to assign a different "qcom,util-fact". In mainline we
-> can represent this by assigning the equivalent "ab_coeff" to all the
-> nodes that are part of "mm-snoc" downstream.
-Worth mentioning that snoc_mm used the same clock as snoc, which is not
-obvious with some of these older designs:
+Hi Conor,
 
-static DEFINE_CLK_VOTER(snoc_msmbus_a_clk,  &snoc_a_clk.c,  LONG_MAX);
-static DEFINE_CLK_VOTER(snoc_mm_msmbus_a_clk,  &snoc_a_clk.c,  LONG_MAX);
+On Mon, Oct 2, 2023 at 9:27=E2=80=AFAM Conor Dooley <conor@kernel.org> wrot=
+e:
 
-[...]
+> tbh, this seems like a situation where per compatible constraints should
+> be added, since each of the devices listed above has different
+> requirements.
 
-> +
-> +static struct platform_driver msm8909_noc_driver = {
-> +	.probe = qnoc_probe,
-> +	.remove = qnoc_remove,
-> +	.driver = {
-> +		.name = "qnoc-msm8909",
-> +		.of_match_table = msm8909_noc_of_match,
-> +		.sync_state = icc_sync_state,
-> +	},
-> +};
-> +module_platform_driver(msm8909_noc_driver);
-And you may want this to be a bit higher up in the food chain!
+Ok, I am trying to add the device constraints as suggested.
 
-Otherwise I don't see anything obviously wrong, I assume you tested
-this without clk/pd_ignore_unused, with rpmcc cleanup and can confirm
-the QoS programming went through without angry resets.
+For example: I am trying to describe that imx93 has 7 items for fsl,tmu-ran=
+ge:
 
-Konrad
+--- a/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
++++ b/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
+@@ -21,6 +21,7 @@ properties:
+     enum:
+       - fsl,qoriq-tmu
+       - fsl,imx8mq-tmu
++      - fsl,imx93-tmu
+
+   reg:
+     maxItems: 1
+@@ -33,7 +34,15 @@ properties:
+     description: |
+       The values to be programmed into TTRnCR, as specified by the SoC
+       reference manual. The first cell is TTR0CR, the second is TTR1CR, et=
+c.
+-    maxItems: 4
++    items:
++      - description: TTR0CR
++      - description: TTR1CR
++      - description: TTR2CR
++      - description: TTR3CR
++      - description: TTR4CR
++      - description: TTR5CR
++      - description: TTR6CR
++    minItems: 4
+
+   fsl,tmu-calibration:
+     $ref: /schemas/types.yaml#/definitions/uint32-matrix
+@@ -69,15 +78,33 @@ required:
+   - fsl,tmu-calibration
+   - '#thermal-sensor-cells'
+
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - fsl,imx93-tmu
++    then:
++      properties:
++        fsl,tmu-range:
++          minItems: 7
++          maxItems: 7
++    else:
++      properties:
++        fsl,tmu-range:
++          maxItems: 4
++
+ additionalProperties: false
+
+ examples:
+   - |
+     tmu@f0000 {
+-        compatible =3D "fsl,qoriq-tmu";
++        compatible =3D "fsl,imx93-tmu";
+         reg =3D <0xf0000 0x1000>;
+         interrupts =3D <18 2 0 0>;
+-        fsl,tmu-range =3D <0x000a0000 0x00090026 0x0008004a 0x0001006a>;
++        fsl,tmu-range =3D <0x000a0000 0x00090026 0x0008004a 0x0001006a 0 0=
+ 0>;
+         fsl,tmu-calibration =3D <0x00000000 0x00000025>,
+                               <0x00000001 0x00000028>,
+                               <0x00000002 0x0000002d>,
+
+but dt_binding_check fails:
+
+$ make dt_binding_check DT_SCHEMA_FILES=3Dqoriq-thermal.yaml -j12
+  LINT    Documentation/devicetree/bindings
+  DTEX    Documentation/devicetree/bindings/thermal/qoriq-thermal.example.d=
+ts
+  CHKDT   Documentation/devicetree/bindings/processed-schema.json
+  SCHEMA  Documentation/devicetree/bindings/processed-schema.json
+  DTC_CHK Documentation/devicetree/bindings/thermal/qoriq-thermal.example.d=
+tb
+/home/fabio/linux-next/Documentation/devicetree/bindings/thermal/qoriq-ther=
+mal.example.dtb:
+tmu@f0000: fsl,tmu-range: [[655360, 589862, 524362, 65642, 0, 0, 0]]
+is too short
+from schema $id: http://devicetree.org/schemas/thermal/qoriq-thermal.yaml#
+
+What is wrong with the yaml changes to tell that imx93 has 7 items for
+fsl,tmu-range?
+
+Thanks
 
