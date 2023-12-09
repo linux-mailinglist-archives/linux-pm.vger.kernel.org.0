@@ -1,164 +1,157 @@
-Return-Path: <linux-pm+bounces-859-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-860-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C843880B5C1
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Dec 2023 18:53:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5461C80B5C5
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Dec 2023 18:54:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 726D11F211E4
-	for <lists+linux-pm@lfdr.de>; Sat,  9 Dec 2023 17:53:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85F7F1C208D1
+	for <lists+linux-pm@lfdr.de>; Sat,  9 Dec 2023 17:54:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3172918E04;
-	Sat,  9 Dec 2023 17:53:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DA8D1944E;
+	Sat,  9 Dec 2023 17:54:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MrXri8uU"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="I4xr/Iv6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE1910CF;
-	Sat,  9 Dec 2023 09:53:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702144388; x=1733680388;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xTBJuGW7OnJL/FllZh5+SkyJa/3/rDNej9zo2XlGCwo=;
-  b=MrXri8uUIafjYhPFgQMep8herFiirO92yQ/Nx49dFAf4BZNMU3Tihu4f
-   pJehGYbV4ES0u2vExX/zrMZIdl3XqtqL/4XbpZTEdqOqY9e8LNQYL67gl
-   HaTrxx77OCv0MbDbWbxcLtvfFYJu6xJUVAKxy/gzFoI8nmSRD2TZLuJJV
-   sCO6QXDFYG/JBGj92GCxGzXMo92eTKUBJhsPxUzgWGnGUTzEAtdoPEhl1
-   ZaQEN3mLcbPLztCabRsHkDJQCsrXb37mQPGWxxNuGOdLdvkI2i6eUe5fg
-   hdLDYTaU7yUqG5x3ubYU4hGR2aZIHpdjmT/9270Q3D/kbIA/+m6EMCDVk
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10919"; a="1643513"
-X-IronPort-AV: E=Sophos;i="6.04,264,1695711600"; 
-   d="scan'208";a="1643513"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2023 09:53:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10919"; a="895873982"
-X-IronPort-AV: E=Sophos;i="6.04,264,1695711600"; 
-   d="scan'208";a="895873982"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 09 Dec 2023 09:53:02 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rC1Vc-000FiD-1s;
-	Sat, 09 Dec 2023 17:53:00 +0000
-Date: Sun, 10 Dec 2023 01:52:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Vimal Kumar <vimal.kumar32@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, chinmoyghosh2001@gmail.com,
-	badolevishal1116@gmail.com, mintupatel89@gmail.com,
-	Vimal Kumar <vimal.kumar32@gmail.com>
-Subject: Re: [PATCH] PM / sleep: Mechanism to find source aborting kernel
- suspend transition
-Message-ID: <202312100106.hPaGgy7C-lkp@intel.com>
-References: <20231209081056.1497-1-vimal.kumar32@gmail.com>
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C48511F
+	for <linux-pm@vger.kernel.org>; Sat,  9 Dec 2023 09:54:20 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-54c64316a22so4196815a12.0
+        for <linux-pm@vger.kernel.org>; Sat, 09 Dec 2023 09:54:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702144459; x=1702749259; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HvHND4P/HoZ0eN5ekFdH68Ldcd5nj6SfIoXhqMddDPY=;
+        b=I4xr/Iv6SLgHHpwdkZtQCtK4UjSqyVe1HwfXmM7YRkjlRRrcSunBkhcVCzgj/gQt4c
+         ZGxal6YgS+6Y8oPmPvGTSilrUfyQJgD1uHTQ5CtzxLYLH/iBLg77ny/zvSnjSC3XwdaS
+         NqTJ1rphqOhZ8449ZshDQLWin1gOejFml1n7SQxBswVY7S145nrkI3hN9JVth6AF8dCh
+         RIUzSByM+R2gyiQ473lGLr9AzPmrSLyH1879BpUvsYmWkWvDe33FIhrFi+rUUKQsLlpW
+         3UMNvbtXi2Z9x9fmjv0YEzCNKNaw2sOul/2/+TahAdC6MAprQDidhE+hrtLDM/MXoogP
+         +aLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702144459; x=1702749259;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HvHND4P/HoZ0eN5ekFdH68Ldcd5nj6SfIoXhqMddDPY=;
+        b=JCrD2ll6cHspwoiIFpkFn8/dayNUxKKzxYf8ed/J0kUnLHCG/+ESv25WHrxWnXul6V
+         kD+i8jtUUDXDGiKlkSzP4mNLEt6Mo12es/fMMhWscng387qR0/cDDTdMXwYZdYqOPdl8
+         M47Ag1GatVkj3tFHzKzyKrAT3bnrGyjVlOdCmgGZwaJHKiAo4LCJ8Fi2U6wRl8SG5Zlf
+         X3nHnaO08xYtuqsw8YlDx+3dPds4UPbR+d3r+4Fpqf5PEOBZVksh+JmpMncbPu6zVO3U
+         2Ql/gG3yAWRvI7cqzsqLuFBKY//ZoNWyu2WKEpJsy3RW7LYe8p7IHRappdjp4GteKnoE
+         bDPw==
+X-Gm-Message-State: AOJu0YwUzyxlXELjSrltLvhA91m6Ph3N++V5ouj/F9t59Vs3VbvXDWoY
+	HzT29rc+z8YI0Qtygnj59O8dqRnrE3UvyalBk2A=
+X-Google-Smtp-Source: AGHT+IFbUBIScunhp/10BaKOKvxkgMMwaF3LauB+6T2wH4SVYcWBBxfmq1CkdZ3cs0JM9TjOOGO9cQ==
+X-Received: by 2002:a17:907:6190:b0:a1f:6761:c8dc with SMTP id mt16-20020a170907619000b00a1f6761c8dcmr796454ejc.124.1702144458937;
+        Sat, 09 Dec 2023 09:54:18 -0800 (PST)
+Received: from [192.168.36.128] (178235179179.dynamic-4-waw-k-1-3-0.vectranet.pl. [178.235.179.179])
+        by smtp.gmail.com with ESMTPSA id rm6-20020a1709076b0600b00a1bec12448csm2457107ejc.150.2023.12.09.09.54.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 09 Dec 2023 09:54:18 -0800 (PST)
+Message-ID: <3f921a53-8eac-48e6-be17-43c07a0313d0@linaro.org>
+Date: Sat, 9 Dec 2023 18:54:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231209081056.1497-1-vimal.kumar32@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] interconnect: qcom: Add MSM8909 interconnect provider
+ driver
+Content-Language: en-US
+To: Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+ Georgi Djakov <djakov@kernel.org>
+Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Adam Skladowski <a39.skl@gmail.com>
+References: <20231206-icc-msm8909-v1-0-fe0dd632beff@kernkonzept.com>
+ <20231206-icc-msm8909-v1-2-fe0dd632beff@kernkonzept.com>
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
+ BB/OmIWU6X+LZW6P88ZmHe+KeyABLMP5s1tJNK1j4ntT7mECcWZDzafPWF4F6m4WJOG27kTJ
+ HGWdmtO+RvadOVi6CoUDqALsmfS3MUG5Pj2Ne9+0jRg4hEnB92AyF9rW2G3qisFcwPgvatt7
+ TXD5E38mLyOPOUyXNj9XpDbt1hNwKQfiidmPh5e7VNAWRnW1iCMMoKqzM1Anzq7e5Afyeifz
+ zRcQPLaqrPjnKqZGL2BKQSZDh6NkI5ZLRhhHQf61fkWcUpTp1oDC6jWVfT7hwRVIQLrrNj9G
+ MpPzrlN4YuAqKeIer1FMt8cq64ifgTzxHzXsMcUdclzq2LTk2RXaPl6Jg/IXWqUClJHbamSk
+ t1bfif3SnmhA6TiNvEpDKPiT3IDs42THU6ygslrBxyROQPWLI9IL1y8S6RtEh8H+NZQWZNzm
+ UQ3imZirlPjxZtvz1BtnnBWS06e7x/UEAguj7VHCuymVgpl2Za17d1jj81YN5Rp5L9GXxkV1
+ aUEwONM3eCI3qcYm5JNc5X+JthZOWsbIPSC1Rhxz3JmWIwP1udr5E3oNRe9u2LIEq+wH/toH
+ kpPDhTeMkvt4KfE5m5ercid9+ZXAqoaYLUL4HCEw+HW0DXcKDwARAQABzShLb25yYWQgRHli
+ Y2lvIDxrb25yYWQuZHliY2lvQGxpbmFyby5vcmc+wsGOBBMBCAA4FiEEU24if9oCL2zdAAQV
+ R4cBcg5dfFgFAmQ5bqwCGwMFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AACgkQR4cBcg5dfFjO
+ BQ//YQV6fkbqQCceYebGg6TiisWCy8LG77zV7DB0VMIWJv7Km7Sz0QQrHQVzhEr3trNenZrf
+ yy+o2tQOF2biICzbLM8oyQPY8B///KJTWI2khoB8IJSJq3kNG68NjPg2vkP6CMltC/X3ohAo
+ xL2UgwN5vj74QnlNneOjc0vGbtA7zURNhTz5P/YuTudCqcAbxJkbqZM4WymjQhe0XgwHLkiH
+ 5LHSZ31MRKp/+4Kqs4DTXMctc7vFhtUdmatAExDKw8oEz5NbskKbW+qHjW1XUcUIrxRr667V
+ GWH6MkVceT9ZBrtLoSzMLYaQXvi3sSAup0qiJiBYszc/VOu3RbIpNLRcXN3KYuxdQAptacTE
+ mA+5+4Y4DfC3rUSun+hWLDeac9z9jjHm5rE998OqZnOU9aztbd6zQG5VL6EKgsVXAZD4D3RP
+ x1NaAjdA3MD06eyvbOWiA5NSzIcC8UIQvgx09xm7dThCuQYJR4Yxjd+9JPJHI6apzNZpDGvQ
+ BBZzvwxV6L1CojUEpnilmMG1ZOTstktWpNzw3G2Gis0XihDUef0MWVsQYJAl0wfiv/0By+XK
+ mm2zRR+l/dnzxnlbgJ5pO0imC2w0TVxLkAp0eo0LHw619finad2u6UPQAkZ4oj++iIGrJkt5
+ Lkn2XgB+IW8ESflz6nDY3b5KQRF8Z6XLP0+IEdLOOARkOW7yEgorBgEEAZdVAQUBAQdAwmUx
+ xrbSCx2ksDxz7rFFGX1KmTkdRtcgC6F3NfuNYkYDAQgHwsF2BBgBCAAgFiEEU24if9oCL2zd
+ AAQVR4cBcg5dfFgFAmQ5bvICGwwACgkQR4cBcg5dfFju1Q//Xta1ShwL0MLSC1KL1lXGXeRM
+ 8arzfyiB5wJ9tb9U/nZvhhdfilEDLe0jKJY0RJErbdRHsalwQCrtq/1ewQpMpsRxXzAjgfRN
+ jc4tgxRWmI+aVTzSRpywNahzZBT695hMz81cVZJoZzaV0KaMTlSnBkrviPz1nIGHYCHJxF9r
+ cIu0GSIyUjZ/7xslxdvjpLth16H27JCWDzDqIQMtg61063gNyEyWgt1qRSaK14JIH/DoYRfn
+ jfFQSC8bffFjat7BQGFz4ZpRavkMUFuDirn5Tf28oc5ebe2cIHp4/kajTx/7JOxWZ80U70mA
+ cBgEeYSrYYnX+UJsSxpzLc/0sT1eRJDEhI4XIQM4ClIzpsCIN5HnVF76UQXh3a9zpwh3dk8i
+ bhN/URmCOTH+LHNJYN/MxY8wuukq877DWB7k86pBs5IDLAXmW8v3gIDWyIcgYqb2v8QO2Mqx
+ YMqL7UZxVLul4/JbllsQB8F/fNI8AfttmAQL9cwo6C8yDTXKdho920W4WUR9k8NT/OBqWSyk
+ bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
+ nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
+ izWDgYvmBE8=
+In-Reply-To: <20231206-icc-msm8909-v1-2-fe0dd632beff@kernkonzept.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Vimal,
+On 6.12.2023 15:35, Stephan Gerhold wrote:
+> From: Adam Skladowski <a39.skl@gmail.com>
+> 
+> Add driver for interconnect busses found in MSM8909 based platforms.
+> The topology consists of three NoCs that are partially controlled by a
+> RPM processor.
+> 
+> In the downstream/vendor kernel from Qualcomm there is an additional
+> "mm-snoc". However, it doesn't have a separate RPM clock assigned. It
+> looks like this is actually the same NoC in hardware and the "mm-snoc"
+> was only defined to assign a different "qcom,util-fact". In mainline we
+> can represent this by assigning the equivalent "ab_coeff" to all the
+> nodes that are part of "mm-snoc" downstream.
+Worth mentioning that snoc_mm used the same clock as snoc, which is not
+obvious with some of these older designs:
 
-kernel test robot noticed the following build warnings:
+static DEFINE_CLK_VOTER(snoc_msmbus_a_clk,  &snoc_a_clk.c,  LONG_MAX);
+static DEFINE_CLK_VOTER(snoc_mm_msmbus_a_clk,  &snoc_a_clk.c,  LONG_MAX);
 
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on rafael-pm/acpi-bus linus/master rafael-pm/devprop v6.7-rc4 next-20231208]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[...]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vimal-Kumar/PM-sleep-Mechanism-to-find-source-aborting-kernel-suspend-transition/20231209-161237
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20231209081056.1497-1-vimal.kumar32%40gmail.com
-patch subject: [PATCH] PM / sleep: Mechanism to find source aborting kernel suspend transition
-config: powerpc-randconfig-r071-20231209 (https://download.01.org/0day-ci/archive/20231210/202312100106.hPaGgy7C-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231210/202312100106.hPaGgy7C-lkp@intel.com/reproduce)
+> +
+> +static struct platform_driver msm8909_noc_driver = {
+> +	.probe = qnoc_probe,
+> +	.remove = qnoc_remove,
+> +	.driver = {
+> +		.name = "qnoc-msm8909",
+> +		.of_match_table = msm8909_noc_of_match,
+> +		.sync_state = icc_sync_state,
+> +	},
+> +};
+> +module_platform_driver(msm8909_noc_driver);
+And you may want this to be a bit higher up in the food chain!
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312100106.hPaGgy7C-lkp@intel.com/
+Otherwise I don't see anything obviously wrong, I assume you tested
+this without clk/pd_ignore_unused, with rpmcc cleanup and can confirm
+the QoS programming went through without angry resets.
 
-All warnings (new ones prefixed by >>):
-
->> drivers/base/power/wakeup.c:607:6: warning: no previous prototype for function 'pm_add_abort_suspend_source' [-Wmissing-prototypes]
-     607 | void pm_add_abort_suspend_source(const char *source_name)
-         |      ^
-   drivers/base/power/wakeup.c:607:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     607 | void pm_add_abort_suspend_source(const char *source_name)
-         | ^
-         | static 
-   drivers/base/power/wakeup.c:955:24: error: use of undeclared identifier 'info'
-     955 |                         list_for_each_entry(info, &pm_abort_suspend_list, list) {
-         |                                             ^
-   drivers/base/power/wakeup.c:955:24: error: use of undeclared identifier 'info'
-   drivers/base/power/wakeup.c:955:24: error: use of undeclared identifier 'info'
-   drivers/base/power/wakeup.c:955:24: error: use of undeclared identifier 'info'
-   drivers/base/power/wakeup.c:955:24: error: use of undeclared identifier 'info'
-   drivers/base/power/wakeup.c:955:24: error: use of undeclared identifier 'info'
-   drivers/base/power/wakeup.c:955:24: error: use of undeclared identifier 'info'
-   drivers/base/power/wakeup.c:955:24: error: use of undeclared identifier 'info'
-   drivers/base/power/wakeup.c:955:24: error: use of undeclared identifier 'info'
-   drivers/base/power/wakeup.c:956:5: error: call to undeclared function 'log_suspend_abort_reason'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     956 |                                 log_suspend_abort_reason("ws or subsystem %s aborted suspend\n",
-         |                                 ^
-   drivers/base/power/wakeup.c:957:7: error: use of undeclared identifier 'info'
-     957 |                                                 info->source_triggering_abort_suspend);
-         |                                                 ^
-   drivers/base/power/wakeup.c:967:11: error: use of undeclared identifier 'MAX_SUSPEND_ABORT_LEN'
-     967 |         char buf[MAX_SUSPEND_ABORT_LEN];
-         |                  ^
-   1 warning and 12 errors generated.
-
-
-vim +/pm_add_abort_suspend_source +607 drivers/base/power/wakeup.c
-
-   602	
-   603	/**
-   604	 * pm_add_abort_suspend_source: add sources who aborted system suspend transitions.
-   605	 * @func_name: Name of the WS or subsystem which needs to added in the list
-   606	 */
- > 607	void pm_add_abort_suspend_source(const char *source_name)
-   608	{
-   609		struct pm_abort_suspend_source *info = NULL;
-   610	
-   611		info = kmalloc(sizeof(struct pm_abort_suspend_source), GFP_KERNEL);
-   612		if (unlikely(!info)) {
-   613			pr_err("Failed to alloc memory for pm_abort_suspend_source info\n");
-   614			return;
-   615		}
-   616	
-   617		/* Initialize the list within the struct if it's not already initialized */
-   618		if (list_empty(&info->list))
-   619			INIT_LIST_HEAD(&info->list);
-   620	
-   621		info->source_triggering_abort_suspend = kstrdup(source_name, GFP_KERNEL);
-   622		if (unlikely(!info->source_triggering_abort_suspend)) {
-   623			pr_err("Failed to get abort_suspend source_name\n");
-   624			kfree(info);
-   625			return;
-   626		}
-   627	
-   628		list_add_tail(&info->list, &pm_abort_suspend_list);
-   629	}
-   630	EXPORT_SYMBOL_GPL(pm_add_abort_suspend_source);
-   631	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Konrad
 
