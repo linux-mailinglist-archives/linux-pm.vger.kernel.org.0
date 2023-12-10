@@ -1,199 +1,170 @@
-Return-Path: <linux-pm+bounces-868-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-869-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F76080BA2E
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Dec 2023 11:35:11 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6847480BB2F
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Dec 2023 14:47:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F9F41F20FB9
-	for <lists+linux-pm@lfdr.de>; Sun, 10 Dec 2023 10:35:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E43CFB20AC0
+	for <lists+linux-pm@lfdr.de>; Sun, 10 Dec 2023 13:47:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FC7279C6;
-	Sun, 10 Dec 2023 10:35:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="mPZ/FFga"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FAC5F9E5;
+	Sun, 10 Dec 2023 13:47:34 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01154749D
-	for <linux-pm@vger.kernel.org>; Sun, 10 Dec 2023 10:35:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD13BC433C7;
-	Sun, 10 Dec 2023 10:35:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1702204505;
-	bh=kWjoRMAFe6f0i1po6kYqlLe9wp8VQklHs8gl4ogzYKI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mPZ/FFgahWdiTEo5htUEqFWGr1LrNeTLuV6uXOZ4g3wMBbekBwxI4pXlAROerwmum
-	 DXYlBNgFKTqLIaekdF7ktBlBMCrOBtPFOlSV5Nilf56Ce4ahgC70CtmF1WhHe0uRHs
-	 4RP9/ihAuxXIsXMJMGYx6MhvO6VPBpLrIZnJvGEE=
-Date: Sun, 10 Dec 2023 11:35:02 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Vimal Kumar <vimal.kumar32@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	chinmoyghosh2001@gmail.com, badolevishal1116@gmail.com,
-	mintupatel89@gmail.com
-Subject: Re: [PATCH v2] PM / sleep: Mechanism to find source aborting kernel
- suspend transition
-Message-ID: <2023121037-unroasted-gradation-a47f@gregkh>
-References: <20231210100303.491-1-vimal.kumar32@gmail.com>
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22CFEB3;
+	Sun, 10 Dec 2023 05:47:28 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="6.04,265,1695654000"; 
+   d="scan'208";a="189797746"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie6.idc.renesas.com with ESMTP; 10 Dec 2023 22:47:26 +0900
+Received: from localhost.localdomain (unknown [10.226.92.40])
+	by relmlir5.idc.renesas.com (Postfix) with ESMTP id 6CDEB4003EBC;
+	Sun, 10 Dec 2023 22:47:20 +0900 (JST)
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Lee Jones <lee@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	Support Opensource <support.opensource@diasemi.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Steve Twiss <stwiss.opensource@diasemi.com>,
+	linux-input@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>,
+	linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v5 0/8] Convert DA906{1,2} bindings to json-schema
+Date: Sun, 10 Dec 2023 13:47:09 +0000
+Message-Id: <20231210134717.94020-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231210100303.491-1-vimal.kumar32@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Sun, Dec 10, 2023 at 03:33:01PM +0530, Vimal Kumar wrote:
-> +#define MAX_SUSPEND_ABORT_LEN 256
+Convert the below bindings to json-schema
+1) DA906{1,2} mfd bindings
+2) DA906{1,2,3} onkey bindings
+3) DA906{1,2,3} thermal bindings
 
-What does this number mean?
+Also add fallback for DA9061 watchdog device and document
+DA9063 watchdog device.
 
-> +static DEFINE_RAW_SPINLOCK(abort_suspend_lock);
+Document missing gpio child node for da9062 and update MAINTAINERS entries.
 
-Why is this a "raw" spinlock?  What requires this?
+Merge strategy:
+Since there is binding dependency between input, thermal, watchdog and MFD
+subsystem. it is decided that this series will go through the MFD tree.
+So once the respective subsystem maintainers, DT and Renesas are happy
+with the patch they can give an ack/rb tag, so that it can be applied to
+MFD tree.
 
-> +
-> +struct pm_abort_suspend_source {
-> +	struct list_head list;
-> +	char *source_triggering_abort_suspend;
-> +};
-> +static LIST_HEAD(pm_abort_suspend_list);
-> +
->  /**
->   * wakeup_source_create - Create a struct wakeup_source object.
->   * @name: Name of the new wakeup source.
-> @@ -575,6 +584,56 @@ static void wakeup_source_activate(struct wakeup_source *ws)
->  	trace_wakeup_source_activate(ws->name, cec);
->  }
->  
-> +/**
-> + * abort_suspend_list_clear - Clear pm_abort_suspend_list.
-> + *
-> + * The pm_abort_suspend_list will be cleared when system PM exits.
-> + */
-> +void abort_suspend_list_clear(void)
-> +{
-> +	struct pm_abort_suspend_source *info, *tmp;
-> +	unsigned long flags;
-> +
-> +	raw_spin_lock_irqsave(&abort_suspend_lock, flags);
-> +	list_for_each_entry_safe(info, tmp, &pm_abort_suspend_list, list) {
-> +		list_del(&info->list);
-> +		kfree(info);
-> +	}
-> +	raw_spin_unlock_irqrestore(&abort_suspend_lock, flags);
-> +}
-> +EXPORT_SYMBOL_GPL(abort_suspend_list_clear);
-> +
-> +/**
-> + * pm_abort_suspend_source_add - Update pm_abort_suspend_list
-> + * @source_name: Wakeup_source or function aborting suspend transitions.
-> + *
-> + * Add the source name responsible for updating the abort_suspend flag in the
-> + * pm_abort_suspend_list.
-> + */
-> +static void pm_abort_suspend_source_add(const char *source_name)
-> +{
-> +	struct pm_abort_suspend_source *info;
-> +	unsigned long flags;
-> +
-> +	info = kmalloc(sizeof(*info), GFP_KERNEL);
-> +	if (!info)
-> +		return;
-> +
-> +	/* Initialize the list within the struct if it's not already initialized */
-> +	if (list_empty(&info->list))
-> +		INIT_LIST_HEAD(&info->list);
+Note:
 
-How can this list head not be initialized already?
+This patch series is same as v3.1 as it allows the tools (PW, b4)
+to compare against previous versions.
 
-> +
-> +	info->source_triggering_abort_suspend = kstrdup(source_name, GFP_KERNEL);
-> +	if (!info->source_triggering_abort_suspend) {
-> +		kfree(info);
-> +		return;
-> +	}
-> +
-> +	raw_spin_lock_irqsave(&abort_suspend_lock, flags);
-> +	list_add_tail(&info->list, &pm_abort_suspend_list);
-> +	raw_spin_unlock_irqrestore(&abort_suspend_lock, flags);
-> +}
-> +
->  /**
->   * wakeup_source_report_event - Report wakeup event using the given source.
->   * @ws: Wakeup source to report the event for.
-> @@ -590,8 +649,11 @@ static void wakeup_source_report_event(struct wakeup_source *ws, bool hard)
->  	if (!ws->active)
->  		wakeup_source_activate(ws);
->  
-> -	if (hard)
-> +	if (hard) {
-> +		if (pm_suspend_target_state != PM_SUSPEND_ON)
-> +			pm_abort_suspend_source_add(ws->name);
->  		pm_system_wakeup();
-> +	}
->  }
->  
->  /**
-> @@ -877,6 +939,7 @@ bool pm_wakeup_pending(void)
->  {
->  	unsigned long flags;
->  	bool ret = false;
-> +	struct pm_abort_suspend_source *info;
->  
->  	raw_spin_lock_irqsave(&events_lock, flags);
->  	if (events_check_enabled) {
-> @@ -893,12 +956,29 @@ bool pm_wakeup_pending(void)
->  		pm_print_active_wakeup_sources();
->  	}
->  
-> +	if (atomic_read(&pm_abort_suspend) > 0) {
-> +		raw_spin_lock_irqsave(&abort_suspend_lock, flags);
-> +		list_for_each_entry(info, &pm_abort_suspend_list, list) {
-> +			pm_pr_dbg("wakeup source or subsystem %s aborted suspend\n",
-> +					info->source_triggering_abort_suspend);
-> +		}
-> +		raw_spin_unlock_irqrestore(&abort_suspend_lock, flags);
-> +	}
+The review comments/tags received for v4 + (a.k.a v3.1) will be
+addressed in the next version(v5).
 
-After you print them all out, why not remove them from the list now?
-Why wait until later?
+Link to v3.1: https://lore.kernel.org/all/20231204172510.35041-1-biju.das.jz@bp.renesas.com/
 
-> +
->  	return ret || atomic_read(&pm_abort_suspend) > 0;
->  }
->  EXPORT_SYMBOL_GPL(pm_wakeup_pending);
->  
->  void pm_system_wakeup(void)
->  {
-> +	char buf[MAX_SUSPEND_ABORT_LEN];
+v4->v5:
+ * Updated cover letter with merging strategy.
+ * Added fixes tag for patch#1
+ * Added Rb tags from Geert and Krzysztof for patch#1
+ * Added Ack from Conor for patch#1
+ * Added Rb tag from Geert and Ack from Conor for patch#2
+ * Drop items and just use enum as it is easier to read for compatibles.
+ * Retained the tags for patch#2 as it is trivial change.
+ * Added Rb tag from Geert for patch#3
+ * Updated commit header and description by replacing
+   'watchdog property'->'watchdog child node'
+ * Added Rb tag from Geert for patch#4.
+ * Added Rb tag from Krzysztof and Conor for patch#5
+ * Dropped Items, Just enum as it is easier to read compatibles.
+ * Retained tags for patch#5 as the changes are trivial.
+ * Updated commit description for patch#8
+ * Dropped unnecessary ref from gpio child node.
+ * Added gpio-hog pattern property
+ * Moved gpio-controller,gpio-cells above child nodes
+ * Sorted compatible in rtc child node.
+ * Dropped status from example.
+ * Updated the example.
+v3->v4:
+ * Patch#1 is merge of patch#1 from v2 + patch#8 from v2.
+ * Dropped comment for d9061 watchdog fallback
+ * Replaced enum->const for dlg,da9061-watchdog and its fallback.
+ * Restored patch#4 in series 1 and dropped the thermal example
+ * Added Ack from Conor Dooley for da9063 watchdog binding support.
+ * Updated title DA9062/61->DA906{1,2,3} as it supports DA9063.
+ * Retained Rb tag since the changes are trivial.
+ * Added Ack from Conor for updating watchdog property
+ * Dropped link to product information.
+ * Patch#5(onkey) is squashed with patch#6 and patch#9 from v2.
+ * Replaced enum->const for dlg,da9061-onkey and its fallback.
+ * Dropped example
+ * Restored the thermal binding patch from v2.
+ * Dropped example
+ * Replaced enum->const for compatible property.
+ * Added Rb tag from Rob and retained Rb tag as changes are trivial.
+ * Added Ack from Conor Dooley for patch#7.
+ * Split the thermal binding patch separate
+ * Updated the description
+v2->v3:
+ * Updated Maintainer entries for watchdog,onkey and thermal bindings
+ * Fixed bot errors related to MAINTAINERS entry, invalid doc
+   references and thermal examples by merging patch#4. 
 
-You never actually check to ensure that you do not overflow this value,
-right?  And are you _SURE_ you can put a string this big on the stack?
+v1->v2:
+ Link: https://lore.kernel.org/all/20231201110840.37408-5-biju.das.jz@bp.renesas.com/
+ * DA9062 and DA9061 merged with DA9063
+ * Sorted the child devices
+ * mfd,onkey and thermal are pointing to child bindings
 
-> +
-> +	if (pm_suspend_target_state != PM_SUSPEND_ON) {
-> +		sprintf(buf, "%ps", __builtin_return_address(0));
-> +		if (strcmp(buf, "pm_wakeup_ws_event"))
+Biju Das (8):
+  dt-bindings: mfd: da9062: Update watchdog description
+  dt-bindings: watchdog: dlg,da9062-watchdog: Add fallback for DA9061
+    watchdog
+  dt-bindings: watchdog: dlg,da9062-watchdog: Document DA9063 watchdog
+  dt-bindings: mfd: dlg,da9063: Update watchdog child node
+  dt-bindings: input: Convert da906{1,2,3} onkey to json-schema
+  dt-bindings: thermal: Convert da906{1,2} thermal to json-schema
+  dt-bindings: mfd: dlg,da9063: Sort child devices
+  dt-bindings: mfd: dlg,da9063: Convert da9062 to json-schema
 
-This is _VERY_ fragile, you are relying on a specific symbol to never
-change its name, which is not going to work in the long run, AND this
-will not work if you don't have symbols in your kernel, right?
+ .../bindings/input/da9062-onkey.txt           |  47 ----
+ .../bindings/input/dlg,da9062-onkey.yaml      |  38 +++
+ .../devicetree/bindings/mfd/da9062.txt        | 124 ---------
+ .../devicetree/bindings/mfd/dlg,da9063.yaml   | 248 +++++++++++++++---
+ .../bindings/thermal/da9062-thermal.txt       |  36 ---
+ .../bindings/thermal/dlg,da9062-thermal.yaml  |  35 +++
+ .../watchdog/dlg,da9062-watchdog.yaml         |  12 +-
+ MAINTAINERS                                   |   6 +-
+ 8 files changed, 298 insertions(+), 248 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/input/da9062-onkey.txt
+ create mode 100644 Documentation/devicetree/bindings/input/dlg,da9062-onkey.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mfd/da9062.txt
+ delete mode 100644 Documentation/devicetree/bindings/thermal/da9062-thermal.txt
+ create mode 100644 Documentation/devicetree/bindings/thermal/dlg,da9062-thermal.yaml
 
-How was this tested?
+-- 
+2.39.2
 
-And again, why is this even needed, who will use it?  What tools will
-consume it?  Who will rely on it?
-
-thanks,
-
-greg k-h
 
