@@ -1,556 +1,139 @@
-Return-Path: <linux-pm+bounces-882-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-883-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3706F80C474
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 10:24:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92F2980C565
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 10:59:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE8932816E2
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 09:24:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C128D1C20D94
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 09:59:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C537D21367;
-	Mon, 11 Dec 2023 09:24:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2006421A1D;
+	Mon, 11 Dec 2023 09:59:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YyeZwqEU"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cbG3JN1V"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263ACFD
-	for <linux-pm@vger.kernel.org>; Mon, 11 Dec 2023 01:24:09 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-54dca2a3f16so7682036a12.0
-        for <linux-pm@vger.kernel.org>; Mon, 11 Dec 2023 01:24:09 -0800 (PST)
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21672C5
+	for <linux-pm@vger.kernel.org>; Mon, 11 Dec 2023 01:59:43 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-50c02628291so4376930e87.0
+        for <linux-pm@vger.kernel.org>; Mon, 11 Dec 2023 01:59:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702286647; x=1702891447; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OlzMUmhsyKNf1q8VUR4N4Gm82nDqgZTBtt+Z1AFBz7c=;
-        b=YyeZwqEUwgEf4yBB8VaZuajdqBASvXFJbAbo0eQh1lUYtmFaMkQ3vK1wTv1JyAvXj4
-         himzfqt9TXodQY0BUsvGn/7wG45FS4Labn7gqoTKP1xH0KjW688GX383jE127AbU9hYX
-         i6eTHA4TrFBMu0YfdMo7fvyEq0hscQah6u9OuPErdPBiMXjzjob4vrmpE8hcycmxc1wC
-         XFyU94A6hyq5KCIqAshVeI9bTYKUabl9JQwe0N0XxfU4+mqL28rMtvHnIoM4oC0XgVrZ
-         krjKsTZmncF/x+hcGRXUk+N1EDxxtVtimudC5b1qy46YVam2t6MVd7zTS8ZyEH/Pwxyh
-         LtKA==
+        d=linaro.org; s=google; t=1702288781; x=1702893581; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TrsCqshSjsTSdy6d+qAdh426B28GZvtLzocuNRs4ZKY=;
+        b=cbG3JN1VVAc568X1tmHXgXLFTCpqAonE+cgYsvgUlTBCQ7GgQKREhT1vMq81gwFzOz
+         DnsG6XFdn8ipuvC5TFNHrGlNBx5j5QvBXYbkBzcT+mYRF/4h+icJBSlnp+5oavGDiPgR
+         KAj2OriYcN83DkktKRFpyraC6QKwKR94tQlkBk9Fs0AXoJNeyBLjBIQ1+iKC8Z82cFIv
+         Z0WfhcPb6HlpMbObQixbD8U6XWCa6lJleNQrEiW/PY+vrYpjZ1Ckb514EZgA3UrLkwRH
+         3STd4HGmqcpFBuJB3ym7m54Xo2Bj2CIJhXmzJTXOLJ/ZDWzdWZmNoUtS0CpL8sFDc+JA
+         qQvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702286647; x=1702891447;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OlzMUmhsyKNf1q8VUR4N4Gm82nDqgZTBtt+Z1AFBz7c=;
-        b=rdg3lFtz6H95JN0khDZwr6652kjuw9w0UT3WFzfuqlQcYCCqcgc8KmwlKpda0JPYuD
-         FDFN1aLlO78/bGdC1pKMSzUEDVQVB6wgDfgDAlJkE966If64BU3jzHm0txr24o6rjoC/
-         DrHmjMjgUOA18WSIWblSqa0xoBF+y3ryQVnX14cAGigHNSg6jh3ZaMgEon06hAs3rvuY
-         CHrsCx3ZPVRRNMStbeFZAQbfXNOPMLyyuIy7S+2nR+sW/JeG03RM4txvoUlOmH/0SH9h
-         QZqhD+1tnaPHe1FsjwYz5l1HqIbGt6UROaCQcliHavKdmK71AnoHxTsQIjSqD7A7HRV1
-         xGBQ==
-X-Gm-Message-State: AOJu0Yx9aIZA5WJcQXdN5d36AplNjYWwU1yuNV5kzyIiO4JGSUkOsvHh
-	Yl1tORPeE7WpbVm5t1bLIbITyg==
-X-Google-Smtp-Source: AGHT+IGQzLiJqUtRZ1u8bB5gfeZzdhm5C5c729LvKqIQglQ6X8HsBlb1LOes9Jie4+rPSGUJrcT2Cg==
-X-Received: by 2002:a17:907:60c7:b0:a1c:4c3e:99e2 with SMTP id hv7-20020a17090760c700b00a1c4c3e99e2mr4571252ejc.22.1702286647460;
-        Mon, 11 Dec 2023 01:24:07 -0800 (PST)
-Received: from [10.167.154.1] (178235179179.dynamic-4-waw-k-1-3-0.vectranet.pl. [178.235.179.179])
-        by smtp.gmail.com with ESMTPSA id tb21-20020a1709078b9500b009ad89697c86sm4570248ejc.144.2023.12.11.01.24.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Dec 2023 01:24:07 -0800 (PST)
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Date: Mon, 11 Dec 2023 10:23:59 +0100
-Subject: [PATCH 2/2] arm64: dts: qcom: sm6115: Hook up interconnects
+        d=1e100.net; s=20230601; t=1702288781; x=1702893581;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TrsCqshSjsTSdy6d+qAdh426B28GZvtLzocuNRs4ZKY=;
+        b=v64rMTFI0ipw7nOOEZjr9/thYnHFxS3/DHZ60oJJv+kkCcEwNnfe9KWsk4ewcMl98w
+         43VZUQpy4cro5NEV87Ga2Lj/JfCx0GPrZ5FxhpwV/qclBXe5YxIj4ZYdAJFCi+UwpjlO
+         YeDMXmDpF7P95PDvMLekhrhHUOspYAjwcsrZl0XtJUBL7kj7oMmO8T0kzWLYMszbmOpW
+         0UyG2v7Thh6YkgCzy63lN7OzmsyVFe/w+HOf5hDps8pup29s/Zt/pk9hwlNLYvBFtJog
+         Dz2FYwIgpwlpa/99N6w4VLixUE1DV4MkGaEz2ERZV9OcdTklh5CZ8omIQPUTzmt26MCM
+         MnEQ==
+X-Gm-Message-State: AOJu0YyVsevHt9TOShMejQE1Ku+x+6p02PVN2euKYDADSrTrk8zBjyYf
+	YLWJ3AEiBty1EKpS3aYwu7QJkw==
+X-Google-Smtp-Source: AGHT+IEeSWH47eB906OxPP0nBv3rfdTdiDsUUutsxojiPGhTO2R0zX7h3zvgDxFnNDaERE8MCMMgeQ==
+X-Received: by 2002:a05:6512:10ce:b0:50c:e4c:2f5a with SMTP id k14-20020a05651210ce00b0050c0e4c2f5amr2335551lfg.96.1702288781347;
+        Mon, 11 Dec 2023 01:59:41 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.218.27])
+        by smtp.gmail.com with ESMTPSA id g12-20020adfa48c000000b003335eded7f5sm8206605wrb.68.2023.12.11.01.59.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Dec 2023 01:59:40 -0800 (PST)
+Message-ID: <d432c419-3622-47b5-aa2e-2eea18e4eee5@linaro.org>
+Date: Mon, 11 Dec 2023 10:59:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231209-topic-6115iccdt-v1-2-f62da62b7276@linaro.org>
-References: <20231209-topic-6115iccdt-v1-0-f62da62b7276@linaro.org>
-In-Reply-To: <20231209-topic-6115iccdt-v1-0-f62da62b7276@linaro.org>
-To: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
- Georgi Djakov <djakov@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: interconnect: qcom,msm8998-bwmon: Add
+ SM6115 bwmon instance
+Content-Language: en-US
+To: Konrad Dybcio <konrad.dybcio@linaro.org>, Andy Gross <agross@kernel.org>,
+ Bjorn Andersson <andersson@kernel.org>, Georgi Djakov <djakov@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Marijn Suijten <marijn.suijten@somainline.org>, 
- linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1702286641; l=15799;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=iyJo6muvTqLp7qMnu1eOAdvK5x3AsOqOc+C5OuLYQmk=;
- b=hCaM3j/znTLFYaQ+prjvLaa46LJYnMtFakJHCESsQu6Z5+8rxRxylEehMrUdVBKBA69kUt7IQ
- uK6KZiUp6hUCgToz0Quibb74VPl4ibCcJFIjaxiO6WXL092cWZwqt1Q
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+Cc: Marijn Suijten <marijn.suijten@somainline.org>,
+ linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20231209-topic-6115iccdt-v1-0-f62da62b7276@linaro.org>
+ <20231209-topic-6115iccdt-v1-1-f62da62b7276@linaro.org>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20231209-topic-6115iccdt-v1-1-f62da62b7276@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add interconnect provider nodes and hook up interconnects to consumer
-devices, including bwmon.
+On 11/12/2023 10:23, Konrad Dybcio wrote:
+> SM6115 has a single BWMONv4 intance for CPU. Document it.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm6115.dtsi | 277 +++++++++++++++++++++++++++++++++++
- 1 file changed, 277 insertions(+)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-index 70a06249b130..dc78757a1ebb 100644
---- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-@@ -10,6 +10,8 @@
- #include <dt-bindings/dma/qcom-gpi.h>
- #include <dt-bindings/firmware/qcom,scm.h>
- #include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/interconnect/qcom,rpm-icc.h>
-+#include <dt-bindings/interconnect/qcom,sm6115.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/power/qcom-rpmpd.h>
- 
-@@ -264,6 +266,8 @@ firmware {
- 		scm: scm {
- 			compatible = "qcom,scm-sm6115", "qcom,scm";
- 			#reset-cells = <1>;
-+			interconnects = <&system_noc MASTER_CRYPTO_CORE0 RPM_ALWAYS_TAG
-+					 &bimc SLAVE_EBI_CH0 RPM_ALWAYS_TAG>;
- 		};
- 	};
- 
-@@ -878,6 +882,43 @@ usb_qmpphy: phy@1615000 {
- 			status = "disabled";
- 		};
- 
-+		system_noc: interconnect@1880000 {
-+			compatible = "qcom,sm6115-snoc";
-+			reg = <0x0 0x01880000 0x0 0x5f080>;
-+			clocks = <&gcc GCC_SYS_NOC_CPUSS_AHB_CLK>,
-+				 <&gcc GCC_SYS_NOC_UFS_PHY_AXI_CLK>,
-+				 <&gcc GCC_SYS_NOC_USB3_PRIM_AXI_CLK>,
-+				 <&rpmcc RPM_SMD_IPA_CLK>;
-+			clock-names = "cpu_axi",
-+				      "ufs_axi",
-+				      "usb_axi",
-+				      "ipa";
-+			#interconnect-cells = <2>;
-+
-+			clk_virt: interconnect-clk {
-+				compatible = "qcom,sm6115-clk-virt";
-+				#interconnect-cells = <2>;
-+			};
-+
-+			mmrt_virt: interconnect-mmrt {
-+				compatible = "qcom,sm6115-mmrt-virt";
-+				#interconnect-cells = <2>;
-+			};
-+
-+			mmnrt_virt: interconnect-mmnrt {
-+				compatible = "qcom,sm6115-mmnrt-virt";
-+				#interconnect-cells = <2>;
-+			};
-+		};
-+
-+		config_noc: interconnect@1900000 {
-+			compatible = "qcom,sm6115-cnoc";
-+			reg = <0x0 0x01900000 0x0 0x6200>;
-+			clocks = <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>;
-+			clock-names = "usb_axi";
-+			#interconnect-cells = <2>;
-+		};
-+
- 		qfprom@1b40000 {
- 			compatible = "qcom,sm6115-qfprom", "qcom,qfprom";
- 			reg = <0x0 0x01b40000 0x0 0x7000>;
-@@ -902,6 +943,60 @@ rng: rng@1b53000 {
- 			clock-names = "core";
- 		};
- 
-+		pmu@1b8e300 {
-+			compatible = "qcom,sm6115-cpu-bwmon", "qcom,sdm845-bwmon";
-+			reg = <0x0 0x01b8e300 0x0 0x600>;
-+			interrupts = <GIC_SPI 421 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			operating-points-v2 = <&cpu_bwmon_opp_table>;
-+			interconnects = <&bimc MASTER_AMPSS_M0 RPM_ACTIVE_TAG
-+					 &bimc SLAVE_EBI_CH0 RPM_ACTIVE_TAG>;
-+
-+			cpu_bwmon_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-0 {
-+					opp-peak-kBps = <(200 * 4 * 1000)>;
-+				};
-+
-+				opp-1 {
-+					opp-peak-kBps = <(300 * 4 * 1000)>;
-+				};
-+
-+				opp-2 {
-+					opp-peak-kBps = <(451 * 4 * 1000)>;
-+				};
-+
-+				opp-3 {
-+					opp-peak-kBps = <(547 * 4 * 1000)>;
-+				};
-+
-+				opp-4 {
-+					opp-peak-kBps = <(681 * 4 * 1000)>;
-+				};
-+
-+				opp-5 {
-+					opp-peak-kBps = <(768 * 4 * 1000)>;
-+				};
-+
-+				opp-6 {
-+					opp-peak-kBps = <(1017 * 4 * 1000)>;
-+				};
-+
-+				opp-7 {
-+					opp-peak-kBps = <(1353 * 4 * 1000)>;
-+				};
-+
-+				opp-8 {
-+					opp-peak-kBps = <(1555 * 4 * 1000)>;
-+				};
-+
-+				opp-9 {
-+					opp-peak-kBps = <(1804 * 4 * 1000)>;
-+				};
-+			};
-+		};
-+
- 		spmi_bus: spmi@1c40000 {
- 			compatible = "qcom,spmi-pmic-arb";
- 			reg = <0x0 0x01c40000 0x0 0x1100>,
-@@ -931,6 +1026,12 @@ tsens0: thermal-sensor@4411000 {
- 			#thermal-sensor-cells = <1>;
- 		};
- 
-+		bimc: interconnect@4480000 {
-+			compatible = "qcom,sm6115-bimc";
-+			reg = <0x0 0x04480000 0x0 0x80000>;
-+			#interconnect-cells = <2>;
-+		};
-+
- 		rpm_msg_ram: sram@45f0000 {
- 			compatible = "qcom,rpm-msg-ram";
- 			reg = <0x0 0x045f0000 0x0 0x7000>;
-@@ -958,8 +1059,42 @@ sdhc_1: mmc@4744000 {
- 				 <&gcc GCC_SDCC1_ICE_CORE_CLK>;
- 			clock-names = "iface", "core", "xo", "ice";
- 
-+			power-domains = <&rpmpd SM6115_VDDCX>;
-+			operating-points-v2 = <&sdhc1_opp_table>;
-+			interconnects = <&system_noc MASTER_SDCC_1 RPM_ALWAYS_TAG
-+					 &bimc SLAVE_EBI_CH0 RPM_ALWAYS_TAG>,
-+					<&bimc MASTER_AMPSS_M0 RPM_ALWAYS_TAG
-+					 &config_noc SLAVE_SDCC_1 RPM_ALWAYS_TAG>;
-+			interconnect-names = "sdhc-ddr",
-+					     "cpu-sdhc";
-+
- 			bus-width = <8>;
- 			status = "disabled";
-+
-+			sdhc1_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-100000000 {
-+					opp-hz = /bits/ 64 <100000000>;
-+					required-opps = <&rpmpd_opp_low_svs>;
-+					opp-peak-kBps = <250000 133320>;
-+					opp-avg-kBps = <102400 65000>;
-+				};
-+
-+				opp-192000000 {
-+					opp-hz = /bits/ 64 <192000000>;
-+					required-opps = <&rpmpd_opp_low_svs>;
-+					opp-peak-kBps = <800000 300000>;
-+					opp-avg-kBps = <204800 200000>;
-+				};
-+
-+				opp-384000000 {
-+					opp-hz = /bits/ 64 <384000000>;
-+					required-opps = <&rpmpd_opp_svs_plus>;
-+					opp-peak-kBps = <800000 300000>;
-+					opp-avg-kBps = <204800 200000>;
-+				};
-+			};
- 		};
- 
- 		sdhc_2: mmc@4784000 {
-@@ -980,6 +1115,12 @@ sdhc_2: mmc@4784000 {
- 			operating-points-v2 = <&sdhc2_opp_table>;
- 			iommus = <&apps_smmu 0x00a0 0x0>;
- 			resets = <&gcc GCC_SDCC2_BCR>;
-+			interconnects = <&system_noc MASTER_SDCC_2 RPM_ALWAYS_TAG
-+					 &bimc SLAVE_EBI_CH0 RPM_ALWAYS_TAG>,
-+					<&bimc MASTER_AMPSS_M0 RPM_ALWAYS_TAG
-+					 &config_noc SLAVE_SDCC_2 RPM_ALWAYS_TAG>;
-+			interconnect-names = "sdhc-ddr",
-+					     "cpu-sdhc";
- 
- 			bus-width = <4>;
- 			qcom,dll-config = <0x0007642c>;
-@@ -992,11 +1133,15 @@ sdhc2_opp_table: opp-table {
- 				opp-100000000 {
- 					opp-hz = /bits/ 64 <100000000>;
- 					required-opps = <&rpmpd_opp_low_svs>;
-+					opp-peak-kBps = <250000 133320>;
-+					opp-avg-kBps = <261438 150000>;
- 				};
- 
- 				opp-202000000 {
- 					opp-hz = /bits/ 64 <202000000>;
- 					required-opps = <&rpmpd_opp_nom>;
-+					opp-peak-kBps = <800000 300000>;
-+					opp-avg-kBps = <261438 300000>;
- 				};
- 			};
- 		};
-@@ -1110,6 +1255,15 @@ i2c0: i2c@4a80000 {
- 				dmas = <&gpi_dma0 0 0 QCOM_GPI_I2C>,
- 				       <&gpi_dma0 1 0 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				interconnects = <&clk_virt MASTER_QUP_CORE_0 RPM_ALWAYS_TAG
-+						 &clk_virt SLAVE_QUP_CORE_0 RPM_ALWAYS_TAG>,
-+						<&bimc MASTER_AMPSS_M0 RPM_ALWAYS_TAG
-+						 &config_noc SLAVE_QUP_0 RPM_ALWAYS_TAG>,
-+						<&system_noc MASTER_QUP_0 RPM_ALWAYS_TAG
-+						 &bimc SLAVE_EBI_CH0 RPM_ALWAYS_TAG>;
-+				interconnect-names = "qup-core",
-+						     "qup-config",
-+						     "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1126,6 +1280,15 @@ spi0: spi@4a80000 {
- 				dmas = <&gpi_dma0 0 0 QCOM_GPI_SPI>,
- 				       <&gpi_dma0 1 0 QCOM_GPI_SPI>;
- 				dma-names = "tx", "rx";
-+				interconnects = <&clk_virt MASTER_QUP_CORE_0 RPM_ALWAYS_TAG
-+						 &clk_virt SLAVE_QUP_CORE_0 RPM_ALWAYS_TAG>,
-+						<&bimc MASTER_AMPSS_M0 RPM_ALWAYS_TAG
-+						 &config_noc SLAVE_QUP_0 RPM_ALWAYS_TAG>,
-+						<&system_noc MASTER_QUP_0 RPM_ALWAYS_TAG
-+						 &bimc SLAVE_EBI_CH0 RPM_ALWAYS_TAG>;
-+				interconnect-names = "qup-core",
-+						     "qup-config",
-+						     "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1142,6 +1305,12 @@ i2c1: i2c@4a84000 {
- 				dmas = <&gpi_dma0 0 1 QCOM_GPI_I2C>,
- 				       <&gpi_dma0 1 1 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				interconnects = <&clk_virt MASTER_QUP_CORE_0 RPM_ALWAYS_TAG
-+						 &clk_virt SLAVE_QUP_CORE_0 RPM_ALWAYS_TAG>,
-+						<&bimc MASTER_AMPSS_M0 RPM_ALWAYS_TAG
-+						 &config_noc SLAVE_QUP_0 RPM_ALWAYS_TAG>,
-+						<&system_noc MASTER_QUP_0 RPM_ALWAYS_TAG
-+						 &bimc SLAVE_EBI_CH0 RPM_ALWAYS_TAG>;
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1158,6 +1327,15 @@ spi1: spi@4a84000 {
- 				dmas = <&gpi_dma0 0 1 QCOM_GPI_SPI>,
- 				       <&gpi_dma0 1 1 QCOM_GPI_SPI>;
- 				dma-names = "tx", "rx";
-+				interconnects = <&clk_virt MASTER_QUP_CORE_0 RPM_ALWAYS_TAG
-+						 &clk_virt SLAVE_QUP_CORE_0 RPM_ALWAYS_TAG>,
-+						<&bimc MASTER_AMPSS_M0 RPM_ALWAYS_TAG
-+						 &config_noc SLAVE_QUP_0 RPM_ALWAYS_TAG>,
-+						<&system_noc MASTER_QUP_0 RPM_ALWAYS_TAG
-+						 &bimc SLAVE_EBI_CH0 RPM_ALWAYS_TAG>;
-+				interconnect-names = "qup-core",
-+						     "qup-config",
-+						     "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1174,6 +1352,15 @@ i2c2: i2c@4a88000 {
- 				dmas = <&gpi_dma0 0 2 QCOM_GPI_I2C>,
- 				       <&gpi_dma0 1 2 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				interconnects = <&clk_virt MASTER_QUP_CORE_0 RPM_ALWAYS_TAG
-+						 &clk_virt SLAVE_QUP_CORE_0 RPM_ALWAYS_TAG>,
-+						<&bimc MASTER_AMPSS_M0 RPM_ALWAYS_TAG
-+						 &config_noc SLAVE_QUP_0 RPM_ALWAYS_TAG>,
-+						<&system_noc MASTER_QUP_0 RPM_ALWAYS_TAG
-+						 &bimc SLAVE_EBI_CH0 RPM_ALWAYS_TAG>;
-+				interconnect-names = "qup-core",
-+						     "qup-config",
-+						     "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1190,6 +1377,15 @@ spi2: spi@4a88000 {
- 				dmas = <&gpi_dma0 0 2 QCOM_GPI_SPI>,
- 				       <&gpi_dma0 1 2 QCOM_GPI_SPI>;
- 				dma-names = "tx", "rx";
-+				interconnects = <&clk_virt MASTER_QUP_CORE_0 RPM_ALWAYS_TAG
-+						 &clk_virt SLAVE_QUP_CORE_0 RPM_ALWAYS_TAG>,
-+						<&bimc MASTER_AMPSS_M0 RPM_ALWAYS_TAG
-+						 &config_noc SLAVE_QUP_0 RPM_ALWAYS_TAG>,
-+						<&system_noc MASTER_QUP_0 RPM_ALWAYS_TAG
-+						 &bimc SLAVE_EBI_CH0 RPM_ALWAYS_TAG>;
-+				interconnect-names = "qup-core",
-+						     "qup-config",
-+						     "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1206,6 +1402,15 @@ i2c3: i2c@4a8c000 {
- 				dmas = <&gpi_dma0 0 3 QCOM_GPI_I2C>,
- 				       <&gpi_dma0 1 3 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				interconnects = <&clk_virt MASTER_QUP_CORE_0 RPM_ALWAYS_TAG
-+						 &clk_virt SLAVE_QUP_CORE_0 RPM_ALWAYS_TAG>,
-+						<&bimc MASTER_AMPSS_M0 RPM_ALWAYS_TAG
-+						 &config_noc SLAVE_QUP_0 RPM_ALWAYS_TAG>,
-+						<&system_noc MASTER_QUP_0 RPM_ALWAYS_TAG
-+						 &bimc SLAVE_EBI_CH0 RPM_ALWAYS_TAG>;
-+				interconnect-names = "qup-core",
-+						     "qup-config",
-+						     "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1222,6 +1427,15 @@ spi3: spi@4a8c000 {
- 				dmas = <&gpi_dma0 0 3 QCOM_GPI_SPI>,
- 				       <&gpi_dma0 1 3 QCOM_GPI_SPI>;
- 				dma-names = "tx", "rx";
-+				interconnects = <&clk_virt MASTER_QUP_CORE_0 RPM_ALWAYS_TAG
-+						 &clk_virt SLAVE_QUP_CORE_0 RPM_ALWAYS_TAG>,
-+						<&bimc MASTER_AMPSS_M0 RPM_ALWAYS_TAG
-+						 &config_noc SLAVE_QUP_0 RPM_ALWAYS_TAG>,
-+						<&system_noc MASTER_QUP_0 RPM_ALWAYS_TAG
-+						 &bimc SLAVE_EBI_CH0 RPM_ALWAYS_TAG>;
-+				interconnect-names = "qup-core",
-+						     "qup-config",
-+						     "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1235,6 +1449,12 @@ uart3: serial@4a8c000 {
- 				clock-names = "se";
- 				power-domains = <&rpmpd SM6115_VDDCX>;
- 				operating-points-v2 = <&qup_opp_table>;
-+				interconnects = <&clk_virt MASTER_QUP_CORE_0 RPM_ALWAYS_TAG
-+						 &clk_virt SLAVE_QUP_CORE_0 RPM_ALWAYS_TAG>,
-+						<&bimc MASTER_AMPSS_M0 RPM_ALWAYS_TAG
-+						 &config_noc SLAVE_QUP_0 RPM_ALWAYS_TAG>;
-+				interconnect-names = "qup-core",
-+						     "qup-config";
- 				status = "disabled";
- 			};
- 
-@@ -1249,6 +1469,15 @@ i2c4: i2c@4a90000 {
- 				dmas = <&gpi_dma0 0 4 QCOM_GPI_I2C>,
- 				       <&gpi_dma0 1 4 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				interconnects = <&clk_virt MASTER_QUP_CORE_0 RPM_ALWAYS_TAG
-+						 &clk_virt SLAVE_QUP_CORE_0 RPM_ALWAYS_TAG>,
-+						<&bimc MASTER_AMPSS_M0 RPM_ALWAYS_TAG
-+						 &config_noc SLAVE_QUP_0 RPM_ALWAYS_TAG>,
-+						<&system_noc MASTER_QUP_0 RPM_ALWAYS_TAG
-+						 &bimc SLAVE_EBI_CH0 RPM_ALWAYS_TAG>;
-+				interconnect-names = "qup-core",
-+						     "qup-config",
-+						     "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1265,6 +1494,15 @@ spi4: spi@4a90000 {
- 				dmas = <&gpi_dma0 0 4 QCOM_GPI_SPI>,
- 				       <&gpi_dma0 1 4 QCOM_GPI_SPI>;
- 				dma-names = "tx", "rx";
-+				interconnects = <&clk_virt MASTER_QUP_CORE_0 RPM_ALWAYS_TAG
-+						 &clk_virt SLAVE_QUP_CORE_0 RPM_ALWAYS_TAG>,
-+						<&bimc MASTER_AMPSS_M0 RPM_ALWAYS_TAG
-+						 &config_noc SLAVE_QUP_0 RPM_ALWAYS_TAG>,
-+						<&system_noc MASTER_QUP_0 RPM_ALWAYS_TAG
-+						 &bimc SLAVE_EBI_CH0 RPM_ALWAYS_TAG>;
-+				interconnect-names = "qup-core",
-+						     "qup-config",
-+						     "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1276,6 +1514,12 @@ uart4: serial@4a90000 {
- 				clock-names = "se";
- 				clocks = <&gcc GCC_QUPV3_WRAP0_S4_CLK>;
- 				interrupts = <GIC_SPI 331 IRQ_TYPE_LEVEL_HIGH>;
-+				interconnects = <&clk_virt MASTER_QUP_CORE_0 RPM_ALWAYS_TAG
-+						 &clk_virt SLAVE_QUP_CORE_0 RPM_ALWAYS_TAG>,
-+						<&bimc MASTER_AMPSS_M0 RPM_ALWAYS_TAG
-+						 &config_noc SLAVE_QUP_0 RPM_ALWAYS_TAG>;
-+				interconnect-names = "qup-core",
-+						     "qup-config";
- 				status = "disabled";
- 			};
- 
-@@ -1290,6 +1534,15 @@ i2c5: i2c@4a94000 {
- 				dmas = <&gpi_dma0 0 5 QCOM_GPI_I2C>,
- 				       <&gpi_dma0 1 5 QCOM_GPI_I2C>;
- 				dma-names = "tx", "rx";
-+				interconnects = <&clk_virt MASTER_QUP_CORE_0 RPM_ALWAYS_TAG
-+						 &clk_virt SLAVE_QUP_CORE_0 RPM_ALWAYS_TAG>,
-+						<&bimc MASTER_AMPSS_M0 RPM_ALWAYS_TAG
-+						 &config_noc SLAVE_QUP_0 RPM_ALWAYS_TAG>,
-+						<&system_noc MASTER_QUP_0 RPM_ALWAYS_TAG
-+						 &bimc SLAVE_EBI_CH0 RPM_ALWAYS_TAG>;
-+				interconnect-names = "qup-core",
-+						     "qup-config",
-+						     "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1306,6 +1559,15 @@ spi5: spi@4a94000 {
- 				dmas = <&gpi_dma0 0 5 QCOM_GPI_SPI>,
- 				       <&gpi_dma0 1 5 QCOM_GPI_SPI>;
- 				dma-names = "tx", "rx";
-+				interconnects = <&clk_virt MASTER_QUP_CORE_0 RPM_ALWAYS_TAG
-+						 &clk_virt SLAVE_QUP_CORE_0 RPM_ALWAYS_TAG>,
-+						<&bimc MASTER_AMPSS_M0 RPM_ALWAYS_TAG
-+						 &config_noc SLAVE_QUP_0 RPM_ALWAYS_TAG>,
-+						<&system_noc MASTER_QUP_0 RPM_ALWAYS_TAG
-+						 &bimc SLAVE_EBI_CH0 RPM_ALWAYS_TAG>;
-+				interconnect-names = "qup-core",
-+						     "qup-config",
-+						     "qup-memory";
- 				#address-cells = <1>;
- 				#size-cells = <0>;
- 				status = "disabled";
-@@ -1337,6 +1599,14 @@ usb: usb@4ef8800 {
- 
- 			resets = <&gcc GCC_USB30_PRIM_BCR>;
- 			power-domains = <&gcc GCC_USB30_PRIM_GDSC>;
-+			 /* TODO: USB<->IPA path */
-+			interconnects = <&system_noc MASTER_USB3 RPM_ALWAYS_TAG
-+					 &bimc SLAVE_EBI_CH0 RPM_ALWAYS_TAG>,
-+					<&bimc MASTER_AMPSS_M0 RPM_ALWAYS_TAG
-+					 &config_noc SLAVE_USB3 RPM_ALWAYS_TAG>;
-+			interconnect-names = "usb-ddr",
-+					     "apps-usb";
-+
- 			qcom,select-utmi-as-pipe-clk;
- 			status = "disabled";
- 
-@@ -1508,6 +1778,13 @@ mdss: display-subsystem@5e00000 {
- 			iommus = <&apps_smmu 0x420 0x2>,
- 				 <&apps_smmu 0x421 0x0>;
- 
-+			interconnects = <&mmrt_virt MASTER_MDP_PORT0 RPM_ALWAYS_TAG
-+					 &bimc SLAVE_EBI_CH0 RPM_ALWAYS_TAG>,
-+					<&bimc MASTER_AMPSS_M0 RPM_ALWAYS_TAG
-+					 &config_noc SLAVE_DISPLAY_CFG RPM_ALWAYS_TAG>;
-+			interconnect-names = "mdp0-mem",
-+					     "cpu-cfg";
-+
- 			#address-cells = <2>;
- 			#size-cells = <2>;
- 			ranges;
-
--- 
-2.43.0
+Best regards,
+Krzysztof
 
 
