@@ -1,143 +1,146 @@
-Return-Path: <linux-pm+bounces-913-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-914-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C43D80DB2F
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 20:59:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36E3480DB87
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 21:21:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9A9A1F21937
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 19:59:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E67B62824A2
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 20:21:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2256537F8;
-	Mon, 11 Dec 2023 19:59:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0637153E37;
+	Mon, 11 Dec 2023 20:21:10 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A017C4;
-	Mon, 11 Dec 2023 11:59:45 -0800 (PST)
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-6d9d6f8485eso699993a34.0;
-        Mon, 11 Dec 2023 11:59:45 -0800 (PST)
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D68C4;
+	Mon, 11 Dec 2023 12:20:58 -0800 (PST)
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-5907b9c3fd6so407938eaf.0;
+        Mon, 11 Dec 2023 12:20:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702324784; x=1702929584;
+        d=1e100.net; s=20230601; t=1702326057; x=1702930857;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yc04vqyrnhop0pBe3eCtDLiJ9h8DibF83HgUEMbY2Wc=;
-        b=iW7Su+O7rASe/HwPnYPvXv5DRztGZgaF0MwNyPSDmmmbmdnJRAMKKB46zh2z1XOw4y
-         HmhR/T6Yslr4QlR0MrF+/lgKQpDPJLF4gB0WXFljFxc0mMAYxrM5FLASARZTcgvxw/ov
-         R2oQW95of2QAVjlNxVgHjMtIG0UV5MtFFykiWlCxatGUvb+YWMNXXJux52OyWQEUg/oC
-         fmB56GZCFx+/TaV4xfOn4nPQSEeKk1yE5lNXhIkBsQ1sNyWjx8qGrick9Ye4/q8oI984
-         OWKLWKEFJH9L52RdbGkqwBmveXkNtRNYvhYoAQhJrPJS5BYkeG7HSoO9gJEsiwjXaYMw
-         kVvg==
-X-Gm-Message-State: AOJu0YxDTSf1xvMo08G0KEaP+2N/y5kqt1AAhi8DZ/HY0DyiXn6tlgz8
-	NFjzjNzxMo3CZEcgymvGoMu1q6j1Q8wNpd9CfPE=
-X-Google-Smtp-Source: AGHT+IFXgx+RCFxRcduPkE9r49zGB6B48p+EDnkwaP9OK6Rnam7VZNdLeLvTornfpGf9ymMChDN4oes/NRXMyCdzFVs=
-X-Received: by 2002:a05:6870:f6aa:b0:1fa:f404:b958 with SMTP id
- el42-20020a056870f6aa00b001faf404b958mr9641994oab.3.1702324784232; Mon, 11
- Dec 2023 11:59:44 -0800 (PST)
+        bh=KdR2OSdlfkd+7aN8MdL4iIUqAicY4t8Ra3rktJ3z8SE=;
+        b=tJRUYbsXOW31TXaf6p1jCDSBV56XVDINPMmvMkAFpy8+EyMeuDKAEPM0E7Dab+GTu5
+         93GRqxXv/0BwXCXOnLsSKd1Gy32m3GGx95wslMqvcbqdoAt6KLVyxUnyK5G7QqMlgoJB
+         KTHh8m5y24oepm17LsJcJRoiSJ9EWhXXjUDf9woiDtWcsqkF8wThcKyCqlpJ/W4viW1P
+         /AnjaCPYsb97q6ixNGzJ1AEI6V4gIx5t5o4cCnRMjfCO1hm+KUdE/MA9DBlOPKeTwTA0
+         mHBGoRcc0jP7ZHfBeF2UW0PqvOy8dbOJ4f7Qz+SpyeT2NeBJ66W+sMCgkBs5hXMu08sN
+         XRrw==
+X-Gm-Message-State: AOJu0Yx0aVLnqSuOwW6sogzy7LIVnl5QGqxuQ7VDIOi2kCrzxhWfS+L9
+	dOjUUzoQu1AHy1VNkd8H+1rfzI1RMfpmnRNs0es=
+X-Google-Smtp-Source: AGHT+IEQRGRF5nvWrjxXfEGtm15kh9H0lNY8Rthoy64xk0jPRWIg20xykSPP6T/ww8c2kWzq33udXAnpjkj7vrW2OME=
+X-Received: by 2002:a05:6820:220d:b0:58d:5302:5b18 with SMTP id
+ cj13-20020a056820220d00b0058d53025b18mr10519759oob.1.1702326057573; Mon, 11
+ Dec 2023 12:20:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231201180928.1103797-1-rui.zhang@intel.com>
-In-Reply-To: <20231201180928.1103797-1-rui.zhang@intel.com>
+References: <20231208002342.367117-1-qyousef@layalina.io> <20231208002342.367117-8-qyousef@layalina.io>
+ <CAJZ5v0iYUY-LrL3LNdMqxyMntBij_pkpETB2esYPraPekqtbhw@mail.gmail.com> <20231210204032.fficzltp2gq66pne@airbuntu>
+In-Reply-To: <20231210204032.fficzltp2gq66pne@airbuntu>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 11 Dec 2023 20:59:33 +0100
-Message-ID: <CAJZ5v0hJbmzBzf9NdUpDB+qhY_uSVaExi=o=1F7X-Y_V5RRmmA@mail.gmail.com>
-Subject: Re: [PATCH] intel_idle: Add Meteorlake support
-To: Zhang Rui <rui.zhang@intel.com>
-Cc: rafael.j.wysocki@intel.com, lenb@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org
+Date: Mon, 11 Dec 2023 21:20:46 +0100
+Message-ID: <CAJZ5v0iKwcwkUBYaKkSkz0sPoHxrG_5pD295v_Z0jFDhR4FRFA@mail.gmail.com>
+Subject: Re: [PATCH v2 7/8] sched/schedutil: Add a new tunable to dictate
+ response time
+To: Qais Yousef <qyousef@layalina.io>, Peter Zijlstra <peterz@infradead.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Ingo Molnar <mingo@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>, 
+	Rick Yiu <rickyiu@google.com>, Chung-Kai Mei <chungkai@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 1, 2023 at 7:10=E2=80=AFPM Zhang Rui <rui.zhang@intel.com> wrot=
-e:
+On Sun, Dec 10, 2023 at 9:40=E2=80=AFPM Qais Yousef <qyousef@layalina.io> w=
+rote:
 >
-> Add intel_idle support for MeteorLake.
+> On 12/08/23 19:06, Rafael J. Wysocki wrote:
+> > On Fri, Dec 8, 2023 at 1:24=E2=80=AFAM Qais Yousef <qyousef@layalina.io=
+> wrote:
+> > >
+> > > The new tunable, response_time_ms,  allow us to speed up or slow down
+> > > the response time of the policy to meet the perf, power and thermal
+> > > characteristic desired by the user/sysadmin. There's no single univer=
+sal
+> > > trade-off that we can apply for all systems even if they use the same
+> > > SoC. The form factor of the system, the dominant use case, and in cas=
+e
+> > > of battery powered systems, the size of the battery and presence or
+> > > absence of active cooling can play a big role on what would be best t=
+o
+> > > use.
+> > >
+> > > The new tunable provides sensible defaults, but yet gives the power t=
+o
+> > > control the response time to the user/sysadmin, if they wish to.
+> > >
+> > > This tunable is applied before we apply the DVFS headroom.
+> > >
+> > > The default behavior of applying 1.25 headroom can be re-instated eas=
+ily
+> > > now. But we continue to keep the min required headroom to overcome
+> > > hardware limitation in its speed to change DVFS. And any additional
+> > > headroom to speed things up must be applied by userspace to match the=
+ir
+> > > expectation for best perf/watt as it dictates a type of policy that w=
+ill
+> > > be better for some systems, but worse for others.
+> > >
+> > > There's a whitespace clean up included in sugov_start().
+> > >
+> > > Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
+> >
+> > I thought that there was an agreement to avoid adding any new tunables
+> > to schedutil.
 >
-> C1 and C1E states on Meteorlake are mutually exclusive like Alderlake
-> and Raptorlake, but they have little latency difference with measureable
-> power difference. Thus always enable "C1E promotion" bit and expose C1E
-> only.
+> Oh. I didn't know that.
 >
-> Expose C6 because it has less power compared with C1E, and smaller
-> latency compared with C8/C10.
+> What alternatives do we have? I couldn't see how can we universally make =
+the
+> response work for every possible system (not just SoC, but different plat=
+forms
+> with same SoC even) and workloads. We see big power saving with no or lit=
+tle
+> perf impact on many workloads when not applying the current 125%. Others =
+want
+> to push it faster under gaming scenarios etc to get more stable FPS.
 >
-> Ignore C8 and expose C10 because C8 does not show latency advantage
-> compared with C10.
+> Hopefully uclamp will make the need for this tuning obsolete over time. B=
+ut
+> until userspace gains critical mass; I can't see how we can know best
+> trade-offs for all myriads of use cases/systems.
 >
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> ---
->  drivers/idle/intel_idle.c | 34 ++++++++++++++++++++++++++++++++++
->  1 file changed, 34 insertions(+)
->
-> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> index dcda0afecfc5..cfd0b24fd7f1 100644
-> --- a/drivers/idle/intel_idle.c
-> +++ b/drivers/idle/intel_idle.c
-> @@ -923,6 +923,35 @@ static struct cpuidle_state adl_l_cstates[] __initda=
-ta =3D {
->                 .enter =3D NULL }
->  };
->
-> +static struct cpuidle_state mtl_l_cstates[] __initdata =3D {
-> +       {
-> +               .name =3D "C1E",
-> +               .desc =3D "MWAIT 0x01",
-> +               .flags =3D MWAIT2flg(0x01) | CPUIDLE_FLAG_ALWAYS_ENABLE,
-> +               .exit_latency =3D 1,
-> +               .target_residency =3D 1,
-> +               .enter =3D &intel_idle,
-> +               .enter_s2idle =3D intel_idle_s2idle, },
-> +       {
-> +               .name =3D "C6",
-> +               .desc =3D "MWAIT 0x20",
-> +               .flags =3D MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED,
-> +               .exit_latency =3D 140,
-> +               .target_residency =3D 420,
-> +               .enter =3D &intel_idle,
-> +               .enter_s2idle =3D intel_idle_s2idle, },
-> +       {
-> +               .name =3D "C10",
-> +               .desc =3D "MWAIT 0x60",
-> +               .flags =3D MWAIT2flg(0x60) | CPUIDLE_FLAG_TLB_FLUSHED,
-> +               .exit_latency =3D 310,
-> +               .target_residency =3D 930,
-> +               .enter =3D &intel_idle,
-> +               .enter_s2idle =3D intel_idle_s2idle, },
-> +       {
-> +               .enter =3D NULL }
-> +};
-> +
->  static struct cpuidle_state gmt_cstates[] __initdata =3D {
->         {
->                 .name =3D "C1",
-> @@ -1349,6 +1378,10 @@ static const struct idle_cpu idle_cpu_adl_l __init=
-const =3D {
->         .state_table =3D adl_l_cstates,
->  };
->
-> +static const struct idle_cpu idle_cpu_mtl_l __initconst =3D {
-> +       .state_table =3D mtl_l_cstates,
-> +};
-> +
->  static const struct idle_cpu idle_cpu_gmt __initconst =3D {
->         .state_table =3D gmt_cstates,
->  };
-> @@ -1423,6 +1456,7 @@ static const struct x86_cpu_id intel_idle_ids[] __i=
-nitconst =3D {
->         X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,           &idle_cpu_icx),
->         X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE,           &idle_cpu_adl),
->         X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,         &idle_cpu_adl_l),
-> +       X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE_L,        &idle_cpu_mtl_l),
->         X86_MATCH_INTEL_FAM6_MODEL(ATOM_GRACEMONT,      &idle_cpu_gmt),
->         X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,    &idle_cpu_spr),
->         X86_MATCH_INTEL_FAM6_MODEL(EMERALDRAPIDS_X,     &idle_cpu_spr),
-> --
+> Some are happy to gain more perf and lose power. Others prefer to save po=
+wer
+> over perf. DVFS response time plays a critical role in this trade-off and=
+ I'm
+> not sure how we can crystal ball it without delegating.
 
-Applied as 6.8 material, thanks!
+I understand the motivation, but counter-arguments are based on the
+experience with the cpufreq governors predating schedutil, especially
+ondemand.  Namely, at one point people focused on adjusting all of the
+governor tunables to their needs without contributing any code or even
+insights back, so when schedutil was introduced, a decision was made
+to reduce the tunability to a minimum (preferably no tunables at all,
+but it turned out to be hard to avoid the one tunable existing today).
+Peter was involved in those discussions and I think that the point
+made then is still valid.
+
+The headroom formula was based on the observation that it would be a
+good idea to have some headroom in the majority of cases and on the
+balance between the simplicity of computation and general suitability.
+
+Of course, it is hard to devise a single value that will work for
+everyone, but tunables complicate things from the maintenance
+perspective.  For example, the more tunables there are, the harder it
+is to make changes without altering the behavior in ways that will
+break someone's setup.
 
