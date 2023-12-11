@@ -1,108 +1,157 @@
-Return-Path: <linux-pm+bounces-905-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-906-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 893CB80D4BA
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 18:55:13 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B20C80D4C0
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 18:56:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3F8451F210DA
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 17:55:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A75ACB2154A
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 17:55:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D05774EB4C;
-	Mon, 11 Dec 2023 17:55:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 661B04EB5A;
+	Mon, 11 Dec 2023 17:55:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wy+XZfm/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5BC139;
-	Mon, 11 Dec 2023 09:55:06 -0800 (PST)
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-6d9db92bd71so599770a34.1;
-        Mon, 11 Dec 2023 09:55:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702317305; x=1702922105;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n5DEOgtWQGmkZPDn7q8GGAWjC29BJ9Cak4Iie+5uKU4=;
-        b=MYsuzVVtoHz6N5IK8rbqy4BQ2+ZyNMx6lsm5bXiHGUnNftMoli6PyjFSJkDSAOePni
-         IH0G1j8oCXRiHIT6f5Uj1NQdEMen4k/T//RS9rUx34nN0J6Djdi6tYqCPPcAJAOHTbd5
-         FHpk7itV97O8llPlCoMm6FoHCm9zxlmhn3wV1YxwjpNaogLijTScTh2kOvJ1sDkvr/TA
-         EdxKDhDtguhsJ0SNiYHfEXqxIFCo4e53toUB1MnlzEBcI9MqdAeSA5cjuGSa6o2Hu/Fu
-         49/MtUsXRuJRPUostZ43sGW5psAZEOmCITxbKznFZ9kxUbpJAKHY+Y8WpUHksp5nAxii
-         4Srg==
-X-Gm-Message-State: AOJu0Yxh0Ujjq4NfIUk77IpMmx/a3UL64GqwIrnDrJU3SPp8y8T7WIn7
-	nJtiiXKILqGDbltEBOojtdAh+4cNMl7MvkLCVY4=
-X-Google-Smtp-Source: AGHT+IET71n0JJ2tueY9OJljlWzKGRyqqLWCLUFMrm8MKmbmYZ0jyJuvpQjW8E8xN6iFZjazIAM6wlyajDazJ34JV3I=
-X-Received: by 2002:a05:6871:2284:b0:1fb:648:5207 with SMTP id
- sd4-20020a056871228400b001fb06485207mr9535232oab.2.1702317305527; Mon, 11 Dec
- 2023 09:55:05 -0800 (PST)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42B824EB34;
+	Mon, 11 Dec 2023 17:55:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCCD5C433CA;
+	Mon, 11 Dec 2023 17:55:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702317350;
+	bh=TDsZZcW//Yjkn4AZvJmsYsqi1Yqt03hg0vEJ8F1Khno=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Wy+XZfm/xBwdGjaMO0iafORqU7AYUAKBrpmfPhZnS63W2LD+9lIUmmY85M7iDotZV
+	 RUUIwg0POXN4Tkdavv6UXUiOqqIzFni8VQZhDxQXeupY9UVawI9v08XKg2gq0caO+p
+	 bb/oY/p81QaSRDsWLnEdSbbaXi5FUQWA3fN2rcUuikHcWh1dLUY3aINV97NKCubO1y
+	 l1tEo9YR5UB1hVIpFdg/ivykxGAYb0eRvemLSdGk5XfxND1zVPvoEgRkS3FVf/9l7S
+	 zVh3HSiOyx1yr1oE8BoiPzfD3sQ8wFq0jjsCHcAeefrs846eDBoTAiVYXqLGpWcnwo
+	 b9f2qqc7TPtxw==
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-50bdec453c8so5633504e87.3;
+        Mon, 11 Dec 2023 09:55:50 -0800 (PST)
+X-Gm-Message-State: AOJu0YyLwFCyWuctzlW9fzX+J6DSrjCi45cu081ACeOFixmvpNgPC2AV
+	KKcTdsOTobn3vI5bNHtGG82xlRREQ9jGiF+fcA==
+X-Google-Smtp-Source: AGHT+IEv/8aN3PfaLGZ9JYm4t5UMDrJAklhI4W9r08evSljkXdLA6kO7mL8YfS3YKHyNIbwwq6+C5bGH+jkLyGQVaN8=
+X-Received: by 2002:a05:6512:2242:b0:50b:f812:b313 with SMTP id
+ i2-20020a056512224200b0050bf812b313mr2431265lfu.77.1702317348971; Mon, 11 Dec
+ 2023 09:55:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1880915.tdWV9SEqCh@kreacher> <13414639.uLZWGnKmhe@kreacher>
- <0a0d5dd4-6b7a-428b-8ef1-bb6aff76fb51@linaro.org> <CAJZ5v0jebeWzUb-q-_xThRwZgUzaUfqS4YTGmsvbsOPrqFcYTQ@mail.gmail.com>
- <535558f8-096b-4917-92d2-b0defed42b15@linaro.org>
-In-Reply-To: <535558f8-096b-4917-92d2-b0defed42b15@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 11 Dec 2023 18:54:54 +0100
-Message-ID: <CAJZ5v0heWWM8Jt-8ksVDF8R4Uc6FvsspEOAEeN-nQDgwPfHU8Q@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] thermal: core: Make thermal_zone_device_unregister()
- return after freeing the zone
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	Linux PM <linux-pm@vger.kernel.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>, 
-	Linux ACPI <linux-acpi@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Lukasz Luba <lukasz.luba@arm.com>
+References: <20231125-topic-6115icc-v3-0-bd8907b8cfd7@linaro.org> <20231125-topic-6115icc-v3-2-bd8907b8cfd7@linaro.org>
+In-Reply-To: <20231125-topic-6115icc-v3-2-bd8907b8cfd7@linaro.org>
+From: Rob Herring <robh+dt@kernel.org>
+Date: Mon, 11 Dec 2023 11:55:36 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+FNYS-Ue1NQgDW_0D_NgONfsJj4Q-nzFWHHXpm0Ka=_Q@mail.gmail.com>
+Message-ID: <CAL_Jsq+FNYS-Ue1NQgDW_0D_NgONfsJj4Q-nzFWHHXpm0Ka=_Q@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] interconnect: qcom: Add SM6115 interconnect
+ provider driver
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Georgi Djakov <djakov@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Marijn Suijten <marijn.suijten@somainline.org>, 
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	Konrad Dybcio <konradybcio@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 11, 2023 at 6:35=E2=80=AFPM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
+On Wed, Nov 29, 2023 at 8:41=E2=80=AFAM Konrad Dybcio <konrad.dybcio@linaro=
+.org> wrote:
 >
-> On 11/12/2023 17:42, Rafael J. Wysocki wrote:
-> > On Mon, Dec 11, 2023 at 5:28=E2=80=AFPM Daniel Lezcano
-> > <daniel.lezcano@linaro.org> wrote:
-> >>
-> >> On 08/12/2023 20:13, Rafael J. Wysocki wrote:
-> >>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >>>
-> >>> Make thermal_zone_device_unregister() wait until all of the reference=
-s
-> >>> to the given thermal zone object have been dropped and free it before
-> >>> returning.
-> >>>
-> >>> This guarantees that when thermal_zone_device_unregister() returns,
-> >>> there is no leftover activity regarding the thermal zone in question
-> >>> which is required by some of its callers (for instance, modular drive=
-r
-> >>> code that wants to know when it is safe to let the module go away).
-> >>>
-> >>> Subsequently, this will allow some confusing device_is_registered()
-> >>> checks to be dropped from the thermal sysfs and core code.
-> >>>
-> >>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >>> ---
-> >>
-> >> Definitively agree on the change
-> >>
-> >> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> >
-> > Thanks!
-> >
-> >> Would it make sense to use kref_get/put ?
-> >
-> > Why and where?
+> Add a driver for managing NoC providers on SM6115.
 >
-> Well it is a general question. Usually this kind of removal is tied with
-> a refcount
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  drivers/interconnect/qcom/Kconfig  |    9 +
+>  drivers/interconnect/qcom/Makefile |    2 +
+>  drivers/interconnect/qcom/sm6115.c | 1427 ++++++++++++++++++++++++++++++=
+++++++
+>  3 files changed, 1438 insertions(+)
+>
+> diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qco=
+m/Kconfig
+> index 4d15ce2dab16..697f96c49f6f 100644
+> --- a/drivers/interconnect/qcom/Kconfig
+> +++ b/drivers/interconnect/qcom/Kconfig
+> @@ -191,6 +191,15 @@ config INTERCONNECT_QCOM_SDX75
+>           This is a driver for the Qualcomm Network-on-Chip on sdx75-base=
+d
+>           platforms.
+>
+> +config INTERCONNECT_QCOM_SM6115
+> +       tristate "Qualcomm SM6115 interconnect driver"
+> +       depends on INTERCONNECT_QCOM
+> +       depends on QCOM_SMD_RPM
+> +       select INTERCONNECT_QCOM_SMD_RPM
+> +       help
+> +         This is a driver for the Qualcomm Network-on-Chip on sm6115-bas=
+ed
+> +         platforms.
+> +
+>  config INTERCONNECT_QCOM_SM6350
+>         tristate "Qualcomm SM6350 interconnect driver"
+>         depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
+> diff --git a/drivers/interconnect/qcom/Makefile b/drivers/interconnect/qc=
+om/Makefile
+> index 3a8a6ef67543..704846165022 100644
+> --- a/drivers/interconnect/qcom/Makefile
+> +++ b/drivers/interconnect/qcom/Makefile
+> @@ -24,6 +24,7 @@ qnoc-sdm845-objs                      :=3D sdm845.o
+>  qnoc-sdx55-objs                                :=3D sdx55.o
+>  qnoc-sdx65-objs                                :=3D sdx65.o
+>  qnoc-sdx75-objs                                :=3D sdx75.o
+> +qnoc-sm6115-objs                       :=3D sm6115.o
+>  qnoc-sm6350-objs                       :=3D sm6350.o
+>  qnoc-sm8150-objs                       :=3D sm8150.o
+>  qnoc-sm8250-objs                       :=3D sm8250.o
+> @@ -55,6 +56,7 @@ obj-$(CONFIG_INTERCONNECT_QCOM_SDM845) +=3D qnoc-sdm845=
+.o
+>  obj-$(CONFIG_INTERCONNECT_QCOM_SDX55) +=3D qnoc-sdx55.o
+>  obj-$(CONFIG_INTERCONNECT_QCOM_SDX65) +=3D qnoc-sdx65.o
+>  obj-$(CONFIG_INTERCONNECT_QCOM_SDX75) +=3D qnoc-sdx75.o
+> +obj-$(CONFIG_INTERCONNECT_QCOM_SM6115) +=3D qnoc-sm6115.o
+>  obj-$(CONFIG_INTERCONNECT_QCOM_SM6350) +=3D qnoc-sm6350.o
+>  obj-$(CONFIG_INTERCONNECT_QCOM_SM8150) +=3D qnoc-sm8150.o
+>  obj-$(CONFIG_INTERCONNECT_QCOM_SM8250) +=3D qnoc-sm8250.o
+> diff --git a/drivers/interconnect/qcom/sm6115.c b/drivers/interconnect/qc=
+om/sm6115.c
+> new file mode 100644
+> index 000000000000..c49a83c87739
+> --- /dev/null
+> +++ b/drivers/interconnect/qcom/sm6115.c
+> @@ -0,0 +1,1427 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reser=
+ved.
+> + * Copyright (c) 2023, Linaro Limited
+> + */
+> +
+> +#include <dt-bindings/interconnect/qcom,sm6115.h>
+> +#include <linux/clk.h>
+> +#include <linux/device.h>
+> +#include <linux/interconnect-provider.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
 
-It is tied to a refcount already, but the problem is that the last
-reference can be dropped from a thread concurrent to the removal one.
+You probably don't need this header and the implicit includes it makes
+are dropped now in linux-next. Please check what you actually need and
+make them explicit.
 
-The completion effectively causes the removal thread to wait for the
-refcont to become 0.
+> +#include <linux/of_platform.h>
+
+Also probably not needed. Please double check.
+
+Rob
 
