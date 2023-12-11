@@ -1,99 +1,105 @@
-Return-Path: <linux-pm+bounces-895-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-896-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67AB780CACB
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 14:21:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B982780CB22
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 14:37:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2371D281DE2
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 13:21:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E5E51F21608
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 13:37:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A65D3E47A;
-	Mon, 11 Dec 2023 13:21:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eIX+Piq0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C956C3F8D1;
+	Mon, 11 Dec 2023 13:37:17 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D07A83D96A;
-	Mon, 11 Dec 2023 13:21:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4D26C433C7;
-	Mon, 11 Dec 2023 13:21:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702300894;
-	bh=pdOjaPV9Jsg2+hufBUTJoin1FtJ4JLo5gH1YiEsQ8lI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=eIX+Piq0oQQdGn8TD0Edg+vyONGxOr1LGqK2bq6Dsi6ovtOvnWpT/rIpQOFhBlA3b
-	 RD+M0Y9olHV8bbTdPocbTzZZmSuQtM3wSgOKRufOCXeKAdrG2YkwpRzI1hwx19gfpd
-	 R8J7br7NfDKSsDo3Ubfz/IzHwRPxRpH0UZXsDmakCZQtxs8yx3CHcht0dAUUySZ72W
-	 7ezqAlqh/1/ULVq4w52iqG1vo6pwpmtsxVWD0ybb3R5KpAvHOys51oI1D1oLC2d49W
-	 kbq2skXfspeTVUkdhvgV61N5n4rZQ8glL+SZEddbiQ/dbTg34ryLGY2yDr7oygKcuA
-	 WwZRQbf9JcgXw==
-Date: Mon, 11 Dec 2023 13:21:27 +0000
-From: Will Deacon <will@kernel.org>
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-	x86@kernel.org, linux-csky@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org,
-	linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	jianyong.wu@arm.com, justin.he@arm.com,
-	James Morse <james.morse@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>
-Subject: Re: [PATCH 13/21] arm64: convert to arch_cpu_is_hotpluggable()
-Message-ID: <20231211132127.GD25681@willie-the-truck>
-References: <ZVyz/Ve5pPu8AWoA@shell.armlinux.org.uk>
- <E1r5R3g-00Cszg-PP@rmk-PC.armlinux.org.uk>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id B0854CF;
+	Mon, 11 Dec 2023 05:37:14 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D3116FEC;
+	Mon, 11 Dec 2023 05:38:00 -0800 (PST)
+Received: from [10.57.84.143] (unknown [10.57.84.143])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 21ECB3F762;
+	Mon, 11 Dec 2023 05:37:12 -0800 (PST)
+Message-ID: <a317fd5b-85df-409f-96e2-8123eea6ca73@arm.com>
+Date: Mon, 11 Dec 2023 13:38:16 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <E1r5R3g-00Cszg-PP@rmk-PC.armlinux.org.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 0/3] thermal: core: Remove thermal zones during
+ unregistration
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Linux PM <linux-pm@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Linux ACPI <linux-acpi@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+References: <1880915.tdWV9SEqCh@kreacher>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <1880915.tdWV9SEqCh@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 21, 2023 at 01:44:56PM +0000, Russell King (Oracle) wrote:
-> Convert arm64 to use the arch_cpu_is_hotpluggable() helper rather than
-> arch_register_cpu().
+Hi Rafael,
+
+On 12/8/23 19:11, Rafael J. Wysocki wrote:
+> Hi All,
 > 
-> Reviewed-by: Shaoqin Huang <shahuang@redhat.com>
-> Reviewed-by: Gavin Shan <gshan@redhat.com>
-> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> ---
->  arch/arm64/kernel/setup.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
+> This patch series adds a mechanism to guarantee that
+> thermal_zone_device_unregister() will not return until all of the active
+> references to the thermal zone device object in question have been dropped
+> and it has been deleted (patch [1/3]).
 > 
-> diff --git a/arch/arm64/kernel/setup.c b/arch/arm64/kernel/setup.c
-> index 165bd2c0dd5a..42c690bb2d60 100644
-> --- a/arch/arm64/kernel/setup.c
-> +++ b/arch/arm64/kernel/setup.c
-> @@ -402,13 +402,9 @@ static inline bool cpu_can_disable(unsigned int cpu)
->  	return false;
->  }
->  
-> -int arch_register_cpu(int num)
-> +bool arch_cpu_is_hotpluggable(int num)
->  {
-> -	struct cpu *cpu = &per_cpu(cpu_devices, num);
-> -
-> -	cpu->hotpluggable = cpu_can_disable(num);
-> -
-> -	return register_cpu(cpu, num);
-> +	return cpu_can_disable(num);
->  }
->  
->  static void dump_kernel_offset(void)
+> This supersedes the approach used so far in which all thermal zone sysfs
+> attribute callbacks check if the zone device is still registered under the
+> zone lock, so as to return early if that is not the case, as it means that
+> device_del() has been called for the thermal zone in question (and returned).
+> It is not necessary to do that any more after patch [1/3], so patch [2/3]
+> removes those checks from the code and drops zone locking that is not
+> necessary any more either.
+> 
+> Patch [3/3] uses the observation that the thermal subsystem does not need to
+> check if a thermal zone device is registered at all, because it can use its
+> own data to determine whether or not the thermal zone is going away and so
+> it may not be worth updating it, for example.
+> 
+> Please refer to the patch changelogs for details.
+> 
+> The series depends on new thermal material in linux-next, but it should not
+> substantially depend on any changes that have not made it into linux-next yet.
+> 
+> Thanks!
+> 
+> 
+> 
 
-Acked-by: Will Deacon <will@kernel.org>
+I like the concept with completion thing for this.
+I have tired to stress test these patches with my mock
+thermal zone module load/unload and it works good.
 
-Will
+The test was doing the these bits:
+for i in $(seq 1 1000000) ; do cat 
+/sys/class/thermal/thermal_zone2/trip_point_0_temp > /dev/null 2>&1 ; done &
+for i in $(seq 1 10000) ; do insmod /data/selftest_ipa.ko ; rmmod 
+selftest_ipa ; done &
+
+I couldn't trigger any issues in reading from this
+trip temp file in background, which should go now w/o the
+locking. I thought it would be nice test, since we have
+direct call to trips array 'tz->trips[trip_id].temperature'.
+Let me know if you think about other scenario for stress testing it.
+(I have also checked the 'temp' sysfs read, where the mutex for
+tz is used - also no issues).
+
+Feel free to add to all patches:
+
+Reviewed-and-tested-by: Lukasz Luba <lukasz.luba@arm.com>
+
+Regards,
+Lukasz
 
