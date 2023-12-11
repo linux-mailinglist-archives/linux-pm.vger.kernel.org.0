@@ -1,198 +1,104 @@
-Return-Path: <linux-pm+bounces-892-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-893-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5522B80C7C2
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 12:15:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 172EE80C86A
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 12:46:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 752451C209CF
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 11:15:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46F5D1C210D3
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 11:46:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2539F34CFB;
-	Mon, 11 Dec 2023 11:15:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F3EB38DD3;
+	Mon, 11 Dec 2023 11:46:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FiUP88yS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 510E2D1;
-	Mon, 11 Dec 2023 03:15:39 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4841EFEC;
-	Mon, 11 Dec 2023 03:16:25 -0800 (PST)
-Received: from [10.57.85.15] (unknown [10.57.85.15])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2D2FD3F762;
-	Mon, 11 Dec 2023 03:15:37 -0800 (PST)
-Message-ID: <a6c13b56-3ad9-419d-a22c-5a2e302200e0@arm.com>
-Date: Mon, 11 Dec 2023 11:15:35 +0000
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B2A6358A9;
+	Mon, 11 Dec 2023 11:46:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DC84C433C8;
+	Mon, 11 Dec 2023 11:46:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702295210;
+	bh=zok5xX1OP1JBLwsks2rLDSP5o/dPlt9Lm7Y9BmkQ62A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FiUP88yS3tXlhk0c6uic6GYAqPRUcdiOZXIxG5NviwR4WPsfbfbMNCID1WZrbmUBu
+	 Hw6w25nX8M+90iRumlsy28NYhfnur0gRbhZ3s+2YpVc4yBqPS/sXcBuzVpzKlbnBJk
+	 +vm4d7cPgNGWlYPpufsiZQSN2RSC6l85eSZEi9Ky/SzwvhGdhaQQWiIA60smARCyBO
+	 JKw1guoblFXi58hVzWP0n3bhpNQPjXMGDGRSuNh/l5MRQ51UAD842SrrCUy8x6uZ8u
+	 qr4ACm81qJipMkLCLS0byuFnDFak92M7zAdEFBZfk49IHLQgIjm3ASwBoOTqIct+NZ
+	 5GGBsIFYhOp8A==
+Date: Mon, 11 Dec 2023 11:46:42 +0000
+From: Will Deacon <will@kernel.org>
+To: Mihai Carabas <mihai.carabas@oracle.com>
+Cc: linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	catalin.marinas@arm.com, tglx@linutronix.de, mingo@redhat.com,
+	bp@alien8.de, x86@kernel.org, hpa@zytor.com, pbonzini@redhat.com,
+	wanpengli@tencent.com, vkuznets@redhat.com, rafael@kernel.org,
+	daniel.lezcano@linaro.org, akpm@linux-foundation.org,
+	pmladek@suse.com, peterz@infradead.org, dianders@chromium.org,
+	npiggin@gmail.com, rick.p.edgecombe@intel.com,
+	joao.m.martins@oracle.com, juerg.haefliger@canonical.com,
+	mic@digikod.net, arnd@arndb.de, ankur.a.arora@oracle.com
+Subject: Re: [PATCH 7/7] cpuidle/poll_state: replace cpu_relax with
+ smp_cond_load_relaxed
+Message-ID: <20231211114642.GB24899@willie-the-truck>
+References: <1700488898-12431-1-git-send-email-mihai.carabas@oracle.com>
+ <1700488898-12431-8-git-send-email-mihai.carabas@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] sched/schedutil: Ignore update requests for short
- running tasks
-To: Qais Yousef <qyousef@layalina.io>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
- Rick Yiu <rickyiu@google.com>, Chung-Kai Mei <chungkai@google.com>,
- Ingo Molnar <mingo@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Viresh Kumar
- <viresh.kumar@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>
-References: <20231208015242.385103-1-qyousef@layalina.io>
- <20231208015242.385103-4-qyousef@layalina.io>
- <f61a3329-4223-4995-8732-030430d19ea4@arm.com>
- <20231210222225.ukocvimws6ecgsmy@airbuntu>
-Content-Language: en-US
-From: Hongyan Xia <hongyan.xia2@arm.com>
-In-Reply-To: <20231210222225.ukocvimws6ecgsmy@airbuntu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1700488898-12431-8-git-send-email-mihai.carabas@oracle.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On 10/12/2023 22:22, Qais Yousef wrote:
-> Hi Hongyan
+On Mon, Nov 20, 2023 at 04:01:38PM +0200, Mihai Carabas wrote:
+> cpu_relax on ARM64 does a simple "yield". Thus we replace it with
+> smp_cond_load_relaxed which basically does a "wfe".
 > 
-> On 12/08/23 10:42, Hongyan Xia wrote:
+> Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Mihai Carabas <mihai.carabas@oracle.com>
+> ---
+>  drivers/cpuidle/poll_state.c | 14 +++++++++-----
+>  1 file changed, 9 insertions(+), 5 deletions(-)
 > 
->> What is a big concern is a normal task and a uclamp_max task running on the
->> same rq. If the uclamp_max task is 1024 but capped by uclamp_max at the
->> lowest OPP, and the normal task has no uclamp but a duty cycle, then when
-> 
-> You mean util_avg is 1024 but capped to lowest OPP? uclamp_max is repeated but
-> couldn't decipher what you meant to write instead.
-> 
->> the normal task wakes up on the rq, it'll be the highest OPP. When it
->> sleeps, the ulamp_max is back and at the lowest OPP. This square-wave
->> problem to me is a much bigger concern than an infrequent spike. If
->> CONFIG_HZ is 1000, this square wave's frequency is 500 switching between
-> 
-> If the rq->util_avg is 1024, then for any task that is running, the requested
-> frequency should be max. If there's a task that is capped by uclamp_max, then
-> this task should not run at max.
-> 
-> So other tasks should have run at max; why you don't want them to run at max?
+> diff --git a/drivers/cpuidle/poll_state.c b/drivers/cpuidle/poll_state.c
+> index 9b6d90a72601..440cd713e39a 100644
+> --- a/drivers/cpuidle/poll_state.c
+> +++ b/drivers/cpuidle/poll_state.c
+> @@ -26,12 +26,16 @@ static int __cpuidle poll_idle(struct cpuidle_device *dev,
+>  
+>  		limit = cpuidle_poll_time(drv, dev);
+>  
+> -		while (!need_resched()) {
+> -			cpu_relax();
+> -			if (loop_count++ < POLL_IDLE_RELAX_COUNT)
+> -				continue;
+> -
+> +		for (;;) {
+>  			loop_count = 0;
+> +
+> +			smp_cond_load_relaxed(&current_thread_info()->flags,
+> +					      (VAL & _TIF_NEED_RESCHED) ||
+> +					      (loop_count++ >= POLL_IDLE_RELAX_COUNT));
+> +
+> +			if (loop_count < POLL_IDLE_RELAX_COUNT)
+> +				break;
+> +
+>  			if (local_clock_noinstr() - time_start > limit) {
+>  				dev->poll_time_limit = true;
+>  				break;
 
-Because it saves power. If there's a 1024 task capped at 300 and a true 
-300 task without uclamp on the same rq, there's no need to run the CPU 
-at more than 600. Running it at 1024 ignores the uclamp_max and burns 
-battery when it's not needed.
+Doesn't this make ARCH_HAS_CPU_RELAX a complete misnomer?
 
->> highest and lowest OPP, which is definitely unacceptable.
-> 
-> How come so definitive? How did you reach this definitive conclusion?
-
-You are right. After talking to our firmware and silicon engineers they 
-don't think switching between the highest and lowest OPP 500 times a 
-second can have damaging effects, so I retract the 'unacceptable' comment.
-
->> The problem I think with filtering is, under this condition, should we
->> filter out the lowest OPP or the highest? Neither sounds like a good answer
->> because neither is a short-running task and the correct answer might be
->> somewhere in between.
-> 
-> We only ignore uclamp requirement with the filter. schedutil is drive by the rq
-> utilization signal as normal. It is only the fact should we apply
-> uclamp_min/max or not.
-> 
-> It seems you think we need to modify the rq->util_avg. And this should not be
-> the case. uclamp should not change how PELT accounting works; just modify how
-> some decisions based on it are taken.
-
-I agree, uclamp shouldn't change PELT, but my series doesn't. Just like 
-util_est which boosts util_avg, my patches don't touch util_avg but 
-simply introduces util_min, util_max on the side of util_avg. I fail to 
-see why it's okay for util_est to bias util_avg but not okay for me to 
-do so. If this is the case, then the 'util_guest' proposal should also 
-be right out rejected on the same ground.
-
-> It is true there's a corner case where util_avg could be wrong under the
-> documented limitation. But this is not related to max-aggregation and its
-> solution needs some creativity in handling pelt accounting under these
-> conditions.
-> 
-> Generally; capping that hard stirs question why userspace is doing this. We
-> don't want to cripple tasks, but prevent them from consuming inefficient energy
-> points. Otherwise they should make adequate progress. I'd expect uclamp_max to
-> be more meaningful for tasks that actually need to run at those higher
-> expensive frequencies.
-> 
-> So the corner case warrants fixing, but it is not a nuance in practice yet. And
-> it is a problem of failing to calculate the stolen idle time as we don't have
-> any under these corner conditions (Vincent can make a more accurate statement
-> than me here). It has nothing to do with how to handle performance requirements
-> of multiple RUNNABLE tasks.
-> 
->> Sorry to ramble on this again and again, but I think filtering is addressing
->> the symptom, not the cause. The cause is we have no idea under what
->> condition a util_avg was achieved. The 1024 task in the previous example
->> would be much better if we extend it into
-> 
-> I think the other way around :-) I think you're mixing the root cause of that
-> limitation with how uclamp hints for multiple tasks should be handled - which
-> is what is being fixed here.
-> 
-> I wrote the documentation and did the experiments to see how PELT behaves under
-> extreme conditions. And it says *it can break PELT*.
-> 
->> [1024, achieved at uclamp_min 0, achieved at uclamp_max 300]
-> 
-> Why you think this is the dominant use case? And why do you think this is
-> caused by max-aggregation? This is a limitation of PELT accounting and has
-> nothing to do with max-aggregation which is how multiple uclamp hints for
-> RUNNABLE tasks are handled.
-> 
-> Have you actually seen it practice? We haven't come across this problem yet. We
-> just want to avoid using expensive OPPs, but capping too had is actually
-> a problem as it can cause starvation for those tasks.
-> 
-> Is it only the documentation what triggered this concern about this corner
-> case? I'm curious what have you seen.
-
-This is not a corner case. Having a uclamp_max task and a normal task on 
-the same rq is fairly common. My concern isn't the 'frequency spike' 
-problem from documentation. My concern comes from benchmarks, which is 
-high-frequency square waves. An occasional spike isn't worrying, but the 
-square waves are.
-
->> If we know 1024 was done under uclamp_max of 300, then we know we don't need
->> to raise to the max OPP. So far, we carry around a lot of different new
->> variables but not these two which we really need.
-> 
-> This problem is independent of how uclamp hint of multiple tasks should be
-> accounted for by the governor. This is a limitation of how PELT accounting
-> works. And to be honest, if you think more about it, this 300 tasks is already
-> a 1024 on current littles that has a capacity of 200 or less. And the capacity
-> of the mids at lowest OPP usually starts at a capacity around 100 or something.
-> Can't see it hit this problem while running on middle.  I think this 300 tasks
-> will already run near lowest OPP at the big even without uclamp_max being
-> 0 - it is that small for it.
-> 
-> So not sure on what systems you saw this problem on, and whether at all this is
-> a problem in practice. Like priority/nice and other sched attributes; you can
-> pick a wrong combination and shoot your self in the foot.
-> 
-> As I put in the documentation, this limitation will only hit if the actual task
-> capacity reaches some magical ratio. I'd expect practically these tasks to
-> still see idle time and get their util_avg corrected eventually.
-
-Like in the previous comment, it's square waves that happen 500 times a 
-second I saw in benchmarks that's worrying, not the occasional spike in 
-documentation. I doubt we can say that a uclamp_max task and a normal 
-task running on the same rq is a corner case.
-
-> So worth a fix, not related to handling performance requests for multiple
-> tasks, and not urgently needed as nothing is falling apart because of it for
-> the time being at least.
-
-Also, I think there's still an unanswered question. If there's a 1024 
-task with a uclamp_min of 300 and a 300-util task with default uclamp on 
-the same rq, which currently under max aggregation switches between 
-highest and lowest OPP, should we filter out the high OPP or the low 
-one? Neither is a short-running task. We could designate this as a 
-corner case (though I don't think so), but wouldn't it be nice if we 
-don't have any of these problems in the first place?
-
-Hongyan
+Will
 
