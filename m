@@ -1,130 +1,140 @@
-Return-Path: <linux-pm+bounces-907-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-908-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3296180D4CB
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 18:58:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C29080D789
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 19:39:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 63A841C21461
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 17:58:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD2B5280FDA
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 18:39:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 143684F1E6;
-	Mon, 11 Dec 2023 17:58:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E4C154F8B;
+	Mon, 11 Dec 2023 18:37:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HXyZDnu2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB5193;
-	Mon, 11 Dec 2023 09:58:12 -0800 (PST)
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6d9db92bd71so600219a34.1;
-        Mon, 11 Dec 2023 09:58:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702317491; x=1702922291;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OXbiTpVzJfHRl7QZFMGmf1sW13oDT9FBF5f3B7KPSvc=;
-        b=AZLuqQHAZbxrleryKoiCa7ycnnmw1g7zBi3m56KgedN562h66X4iIHoeDHcreTH3L7
-         naAPTlkORp5uZxqi3KijuaFI1dJbRokHtO70Rom/mxKxEyJUgrZSxcejxdkvPbFDfeC/
-         uz78wbaPSfHc+vWdFt1ZMlHyT/eOX6aIhN3lxPeTHNBImwxclVlcyT+eL5NfHTsl2+pM
-         Ky8KUIHhkPwsoS0wOi98seZFvjSSs/hAkb1I9Rwwgf5EKMUmRGbn6ICITAtZdRsIzsAH
-         p3Dikz61fe51hM8p2RSBkKmpzeZt7R23po+EPt/biQXQpP5fsY04xkLkKXssXdxmJ+7C
-         tFLA==
-X-Gm-Message-State: AOJu0YzZLDV5C6xY0Y7FwDaYknR0tqSxHkxWjFKi9Q6Qok9pNTnnkvDY
-	fRK5sO4z9OM2gqNRNHeDUamcI27p6wynd3wRBlE=
-X-Google-Smtp-Source: AGHT+IEB8tbPHG0hpmSXtZbQPu9rCKTmgzM9oTofWHtCzQfwuRW4mAEhOhvFbMf7e2/laCNphcPlfM/B7FB2AK0pBlo=
-X-Received: by 2002:a05:6871:2284:b0:1fb:648:5207 with SMTP id
- sd4-20020a056871228400b001fb06485207mr9545202oab.2.1702317491331; Mon, 11 Dec
- 2023 09:58:11 -0800 (PST)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 761E753E13;
+	Mon, 11 Dec 2023 18:37:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97000C433C8;
+	Mon, 11 Dec 2023 18:37:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702319865;
+	bh=i7f2h372frnquYOlIfxX2lsm1eHXYw5UJ8UdHu+pUYk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HXyZDnu275hYShBpLNwHtHQRPLdzWRlC8tK2NfEv6Yohynuhr5D4I/2ZZ+HsHumMK
+	 20ZZP6YrzehHWiWuJ4/vCo7qtMejMZlI2wxsq2TkZUma+q/SPxeDiU4Z0+s5ybXX5q
+	 /Nq35FdKIwpCWc2VjWW7YOhRfF/chG1+mPqqxfKLsXv66OIGMXbPUXFZJYovF0nnKf
+	 sJIbSRXvZ0Lr6y8wbo4+WV3qlDfWACFbwHRKNMZuhCvdbkJ2nRbzdSxSwzMPTz90de
+	 5Z9nNREs21GI7TS2oY7ZY9IuI3+e3jyVSDhkDK2gxzLKWtmBAIGuweNrm9tAITo1Tm
+	 kis+/zCMfoENQ==
+Date: Mon, 11 Dec 2023 18:37:39 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+	Support Opensource <support.opensource@diasemi.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Steve Twiss <stwiss.opensource@diasemi.com>,
+	linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH v5 8/8] dt-bindings: mfd: dlg,da9063: Convert da9062 to
+ json-schema
+Message-ID: <20231211-dissuade-skirt-5961ef525497@spud>
+References: <20231210134717.94020-1-biju.das.jz@bp.renesas.com>
+ <20231210134717.94020-9-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1880915.tdWV9SEqCh@kreacher> <8315317.T7Z3S40VBb@kreacher> <03944e4e-d57d-4442-b38d-e36e20cb5ae3@linaro.org>
-In-Reply-To: <03944e4e-d57d-4442-b38d-e36e20cb5ae3@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 11 Dec 2023 18:58:00 +0100
-Message-ID: <CAJZ5v0hwLcL9UKQs7WA=hb2v31eEY83rv-bQVgSv_EV9AidYZA@mail.gmail.com>
-Subject: Re: [PATCH v1 2/3] thermal: Drop redundant and confusing
- device_is_registered() checks
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>, 
-	Linux ACPI <linux-acpi@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Lukasz Luba <lukasz.luba@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="jm1o6il1/fMjzFQV"
+Content-Disposition: inline
+In-Reply-To: <20231210134717.94020-9-biju.das.jz@bp.renesas.com>
+
+
+--jm1o6il1/fMjzFQV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 11, 2023 at 6:39=E2=80=AFPM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 08/12/2023 20:19, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Multiple places in the thermal subsystem (most importantly, sysfs
-> > attribute callback functions) check if the given thermal zone device is
-> > still registered in order to return early in case the device_del() in
-> > thermal_zone_device_unregister() has run already.
-> >
-> > However, after thermal_zone_device_unregister() has been made wait for
-> > all of the zone-related activity to complete before returning, it is
-> > not necessary to do that any more, because all of the code holding a
-> > reference to the thermal zone device object will be waited for even if
-> > it does not do anything special to enforce this.
-> >
-> > Accordingly, drop all of the device_is_registered() checks that are now
-> > redundant and get rid of the zone locking that is not necessary any mor=
-e
-> > after dropping them.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
->
-> [ ... ]
->
-> > @@ -132,11 +120,6 @@ trip_point_temp_store(struct device *dev
-> >
-> >       mutex_lock(&tz->lock);
-> >
-> > -     if (!device_is_registered(dev)) {
-> > -             ret =3D -ENODEV;
-> > -             goto unlock;
-> > -     }
-> > -
-> >       trip =3D &tz->trips[trip_id];
-> >
-> >       if (temp !=3D trip->temperature) {
-> > @@ -162,23 +145,12 @@ trip_point_temp_show(struct device *dev,
-> >                    char *buf)
-> >   {
-> >       struct thermal_zone_device *tz =3D to_thermal_zone(dev);
-> > -     int trip_id, temp;
-> > +     int trip_id;
-> >
-> >       if (sscanf(attr->attr.name, "trip_point_%d_temp", &trip_id) !=3D =
-1)
-> >               return -EINVAL;
-> >
-> > -     mutex_lock(&tz->lock);
-> > -
-> > -     if (!device_is_registered(dev)) {
-> > -             mutex_unlock(&tz->lock);
-> > -             return -ENODEV;
-> > -     }
-> > -
-> > -     temp =3D tz->trips[trip_id].temperature;
-> > -
-> > -     mutex_unlock(&tz->lock);
-> > -
-> > -     return sprintf(buf, "%d\n", temp);
-> > +     return sprintf(buf, "%d\n", tz->trips[trip_id].temperature);
->
-> Without the lock, could the trip_temp_store() make the value change
-> while we read it?
+On Sun, Dec 10, 2023 at 01:47:17PM +0000, Biju Das wrote:
+> Convert the da9062 PMIC device tree binding documentation to json-schema.
+>=20
+> Document the missing gpio child node for da9062.
+>=20
+> While at it, update description with link to product information and
+> example.
+>=20
+> The missing child node with of_compatible defined in MFD_CELL_OF is
+> causing the below warning message:
+> da9062-gpio: Failed to locate of_node [id: -1]
+>=20
+> So, make all child nodes with of_compatible defined in struct mfd_cell
+> as required property for da906{1,2} devices.
 
-The lock doesn't change that, because the write can occur before
-dropping the lock and the printf() and reading an int is atomic on all
-architectures supported by Linux.
+> +  gpio-controller: true
+> +
+> +  "#gpio-cells":
+> +    const: 2
+> +
+> +  gpio:
+> +    type: object
+> +    additionalProperties: false
+> +    properties:
+> +      compatible:
+> +        const: dlg,da9062-gpio
+
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/regulator/dlg,da9063-regulator.h>
+> +    i2c {
+> +      #address-cells =3D <1>;
+> +      #size-cells =3D <0>;
+> +      pmic@58 {
+> +        compatible =3D "dlg,da9062";
+> +        reg =3D <0x58>;
+> +        gpio-controller;
+> +        #gpio-cells =3D <2>;
+
+> +        gpio {
+> +          compatible =3D "dlg,da9062-gpio";
+> +        };
+
+I know you had some conversation with Krzysztof, but I still don;t
+really follow this. Why is the parent, rather than the child, the one
+that gets the "gpio-controller" and "#gpio-cells" properties? The commit
+message just mentions why missing child node was added, but not the
+reason for the gpio properties being added at what appears to be the
+"wrong" level.
+
+Cheers,
+Conor.
+
+
+--jm1o6il1/fMjzFQV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZXdW8wAKCRB4tDGHoIJi
+0s/hAQCcpeg0Ix+zrZd8Cf70zuqtbsWdTGdhWRWP8v1wdghxAAEAqmct8je5QquP
+eVk0NNNvZnXr8dpON8vw+X10erxBBgQ=
+=C8uT
+-----END PGP SIGNATURE-----
+
+--jm1o6il1/fMjzFQV--
 
