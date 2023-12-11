@@ -1,143 +1,143 @@
-Return-Path: <linux-pm+bounces-912-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-913-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF1DB80DB22
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 20:52:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C43D80DB2F
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 20:59:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7955028245B
-	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 19:52:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9A9A1F21937
+	for <lists+linux-pm@lfdr.de>; Mon, 11 Dec 2023 19:59:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8B0D537F1;
-	Mon, 11 Dec 2023 19:52:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2256537F8;
+	Mon, 11 Dec 2023 19:59:47 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CD73D2;
-	Mon, 11 Dec 2023 11:52:49 -0800 (PST)
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-6d9f4682c7bso404565a34.1;
-        Mon, 11 Dec 2023 11:52:49 -0800 (PST)
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A017C4;
+	Mon, 11 Dec 2023 11:59:45 -0800 (PST)
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-6d9d6f8485eso699993a34.0;
+        Mon, 11 Dec 2023 11:59:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702324368; x=1702929168;
+        d=1e100.net; s=20230601; t=1702324784; x=1702929584;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=shxc1fqYRYQGn0MQr4gOJAnY5PC0ECh8gGcd5gbYepM=;
-        b=PjbSw0vv51/y19nexWN70ndxFKOOMoNqhRLg65WjyFTVfQ+/CL4WYXiajnEBHKt8Pa
-         kOhzOFdT8XuFhJuYArj0x0fOjb6qiH1lakXlq81W/BdbmH7x0QGzzPp2+wS/9jduUQFx
-         1UeW0E7UhRKei+vqYIVEd+ofXdsh8wj3eHQmQDKvYGMB0UdkqF0n965RfWrMIsdhpiXc
-         PFlerj41b4zHNFxdgSGmAca9MjOsOX+x2aYvQ8finIZjy0uQ1VgVO+KO6oFeWkLmImVr
-         qXtSETW0C8G8rEVxC0QjxjYtBx/iOp5TVFwCRtsPLqpFXoD7i64qLC3eEdmoQdzMAksn
-         PINg==
-X-Gm-Message-State: AOJu0Yxu/abKvJmzQJUv6KQ7P1t3O5cqc6hN2M825dGUj3ARI8r4XDs4
-	TlUUANmcxIRCFtio8cpVQVN28xuDsgmum3imxeg=
-X-Google-Smtp-Source: AGHT+IGjJ9dqMdEvqbPS4C+aNBObN65m/Uv+AIgbHvjx5d2sI4uQBJx39nF2HMC2W+Wq43gY2UcNwwiDLRyn45Z6BNI=
-X-Received: by 2002:a05:6820:2a18:b0:590:9027:7ab0 with SMTP id
- dr24-20020a0568202a1800b0059090277ab0mr7447038oob.0.1702324368365; Mon, 11
- Dec 2023 11:52:48 -0800 (PST)
+        bh=yc04vqyrnhop0pBe3eCtDLiJ9h8DibF83HgUEMbY2Wc=;
+        b=iW7Su+O7rASe/HwPnYPvXv5DRztGZgaF0MwNyPSDmmmbmdnJRAMKKB46zh2z1XOw4y
+         HmhR/T6Yslr4QlR0MrF+/lgKQpDPJLF4gB0WXFljFxc0mMAYxrM5FLASARZTcgvxw/ov
+         R2oQW95of2QAVjlNxVgHjMtIG0UV5MtFFykiWlCxatGUvb+YWMNXXJux52OyWQEUg/oC
+         fmB56GZCFx+/TaV4xfOn4nPQSEeKk1yE5lNXhIkBsQ1sNyWjx8qGrick9Ye4/q8oI984
+         OWKLWKEFJH9L52RdbGkqwBmveXkNtRNYvhYoAQhJrPJS5BYkeG7HSoO9gJEsiwjXaYMw
+         kVvg==
+X-Gm-Message-State: AOJu0YxDTSf1xvMo08G0KEaP+2N/y5kqt1AAhi8DZ/HY0DyiXn6tlgz8
+	NFjzjNzxMo3CZEcgymvGoMu1q6j1Q8wNpd9CfPE=
+X-Google-Smtp-Source: AGHT+IFXgx+RCFxRcduPkE9r49zGB6B48p+EDnkwaP9OK6Rnam7VZNdLeLvTornfpGf9ymMChDN4oes/NRXMyCdzFVs=
+X-Received: by 2002:a05:6870:f6aa:b0:1fa:f404:b958 with SMTP id
+ el42-20020a056870f6aa00b001faf404b958mr9641994oab.3.1702324784232; Mon, 11
+ Dec 2023 11:59:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231211104855.558096-1-vincent.guittot@linaro.org>
-In-Reply-To: <20231211104855.558096-1-vincent.guittot@linaro.org>
+References: <20231201180928.1103797-1-rui.zhang@intel.com>
+In-Reply-To: <20231201180928.1103797-1-rui.zhang@intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 11 Dec 2023 20:52:37 +0100
-Message-ID: <CAJZ5v0i37gGqt=oGC4BxJ4hT5pxhAdL7dPxGf7w3D8THqwAOwQ@mail.gmail.com>
-Subject: Re: [PATCH v7 0/7] consolidate and cleanup CPU capacity
-To: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org, 
-	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
-	sudeep.holla@arm.com, gregkh@linuxfoundation.org, rafael@kernel.org, 
-	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com, 
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com, 
-	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com, 
-	viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com, 
-	lukasz.luba@arm.com, ionela.voinescu@arm.com, pierre.gondois@arm.com, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org, 
-	linux-acpi@vger.kernel.org, conor.dooley@microchip.com, suagrfillet@gmail.com, 
-	ajones@ventanamicro.com, lftan@kernel.org, beata.michalska@arm.com
+Date: Mon, 11 Dec 2023 20:59:33 +0100
+Message-ID: <CAJZ5v0hJbmzBzf9NdUpDB+qhY_uSVaExi=o=1F7X-Y_V5RRmmA@mail.gmail.com>
+Subject: Re: [PATCH] intel_idle: Add Meteorlake support
+To: Zhang Rui <rui.zhang@intel.com>
+Cc: rafael.j.wysocki@intel.com, lenb@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 11, 2023 at 11:49=E2=80=AFAM Vincent Guittot
-<vincent.guittot@linaro.org> wrote:
+On Fri, Dec 1, 2023 at 7:10=E2=80=AFPM Zhang Rui <rui.zhang@intel.com> wrot=
+e:
 >
-> This is the 1st part of consolidating how the max compute capacity is
-> used in the scheduler and how we calculate the frequency for a level of
-> utilization.
+> Add intel_idle support for MeteorLake.
 >
-> Fix some unconsistancy when computing frequency for an utilization. There
-> can be a mismatch between energy model and schedutil.
+> C1 and C1E states on Meteorlake are mutually exclusive like Alderlake
+> and Raptorlake, but they have little latency difference with measureable
+> power difference. Thus always enable "C1E promotion" bit and expose C1E
+> only.
 >
-> Next step will be to make a difference between the original
-> max compute capacity of a CPU and what is currently available when
-> there is a capping applying forever (i.e. seconds or more).
+> Expose C6 because it has less power compared with C1E, and smaller
+> latency compared with C8/C10.
 >
-> Changes since v6:
-> - Rebase on tip/sched/core and fix a conflict
-> - Add tags
+> Ignore C8 and expose C10 because C8 does not show latency advantage
+> compared with C10.
 >
-> Changes since v5:
-> - Remove useless return in freq_inv_set_max_ratio()
-> - Add tags
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> ---
+>  drivers/idle/intel_idle.c | 34 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
 >
-> Changes since v4:
-> - Capitalize the verb in subject
-> - Remove usless parentheses in cppc_get_dmi_max_khz()
-> - Use freq_ref pattern everywhere
-> - Fix MHz / kHz units conversion for cppc_cpufreq
-> - Move default definition of arch_scale_freq_ref() in
->   include/linux/sched/topology.h beside arch_scale_cpu_capacity
->   which faces similar default declaration behavior. This location covers
->   all cases with arch and CONFIG_* which was not the case with previous
->   attempts.
+> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> index dcda0afecfc5..cfd0b24fd7f1 100644
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -923,6 +923,35 @@ static struct cpuidle_state adl_l_cstates[] __initda=
+ta =3D {
+>                 .enter =3D NULL }
+>  };
 >
-> Changes since v3:
-> - Split patch 5 cpufreq/cppc
-> - Fix topology_init_cpu_capacity_cppc()
-> - Fix init if AMU ratio
-> - Added some tags
+> +static struct cpuidle_state mtl_l_cstates[] __initdata =3D {
+> +       {
+> +               .name =3D "C1E",
+> +               .desc =3D "MWAIT 0x01",
+> +               .flags =3D MWAIT2flg(0x01) | CPUIDLE_FLAG_ALWAYS_ENABLE,
+> +               .exit_latency =3D 1,
+> +               .target_residency =3D 1,
+> +               .enter =3D &intel_idle,
+> +               .enter_s2idle =3D intel_idle_s2idle, },
+> +       {
+> +               .name =3D "C6",
+> +               .desc =3D "MWAIT 0x20",
+> +               .flags =3D MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED,
+> +               .exit_latency =3D 140,
+> +               .target_residency =3D 420,
+> +               .enter =3D &intel_idle,
+> +               .enter_s2idle =3D intel_idle_s2idle, },
+> +       {
+> +               .name =3D "C10",
+> +               .desc =3D "MWAIT 0x60",
+> +               .flags =3D MWAIT2flg(0x60) | CPUIDLE_FLAG_TLB_FLUSHED,
+> +               .exit_latency =3D 310,
+> +               .target_residency =3D 930,
+> +               .enter =3D &intel_idle,
+> +               .enter_s2idle =3D intel_idle_s2idle, },
+> +       {
+> +               .enter =3D NULL }
+> +};
+> +
+>  static struct cpuidle_state gmt_cstates[] __initdata =3D {
+>         {
+>                 .name =3D "C1",
+> @@ -1349,6 +1378,10 @@ static const struct idle_cpu idle_cpu_adl_l __init=
+const =3D {
+>         .state_table =3D adl_l_cstates,
+>  };
 >
-> Changes since v2:
-> - Remove the 1st patch which has been queued in tip
-> - Rework how to initialize the reference frequency for cppc_cpufreq and
->   change topology_init_cpu_capacity_cppc() to also set capacity_ref_freq
-> - Add a RFC to convert AMU to use arch_scale_freq_ref and move the config
->   of the AMU ratio to be done when intializing cpu capacity and
->   capacity_ref_freq
-> - Added some tags
->
-> Changes since v1:
-> - Fix typos
-> - Added changes in cpufreq to use arch_scale_freq_ref() when calling
->   arch_set_freq_scale (patch 3).
-> - arch_scale_freq_ref() is always defined and returns 0 (as proposed
->   by Ionela) when not defined by the arch. This simplifies the code with
->   the addition of patch 3.
-> - Simplify Energy Model which always uses arch_scale_freq_ref(). The
->   latter returns 0 when not defined by arch instead of last item of the
->   perf domain. This is not a problem because the function is only defined
->   for compilation purpose in this case and we don't care about the
->   returned value. (patch 5)
-> - Added changes in cppc cpufreq to set capacity_ref_freq (patch 6)
-> - Added reviewed tag for patch 1 which got a minor change but not for
->   others as I did some changes which could make previous reviewed tag
->   no more relevant.
->
-> Vincent Guittot (7):
->   topology: Add a new arch_scale_freq_reference
->   cpufreq: Use the fixed and coherent frequency for scaling capacity
->   cpufreq/schedutil: Use a fixed reference frequency
->   energy_model: Use a fixed reference frequency
->   cpufreq/cppc: Move and rename cppc_cpufreq_{perf_to_khz|khz_to_perf}
->   cpufreq/cppc: Set the frequency used for computing the capacity
->   arm64/amu: Use capacity_ref_freq to set AMU ratio
+> +static const struct idle_cpu idle_cpu_mtl_l __initconst =3D {
+> +       .state_table =3D mtl_l_cstates,
+> +};
+> +
+>  static const struct idle_cpu idle_cpu_gmt __initconst =3D {
+>         .state_table =3D gmt_cstates,
+>  };
+> @@ -1423,6 +1456,7 @@ static const struct x86_cpu_id intel_idle_ids[] __i=
+nitconst =3D {
+>         X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,           &idle_cpu_icx),
+>         X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE,           &idle_cpu_adl),
+>         X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,         &idle_cpu_adl_l),
+> +       X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE_L,        &idle_cpu_mtl_l),
+>         X86_MATCH_INTEL_FAM6_MODEL(ATOM_GRACEMONT,      &idle_cpu_gmt),
+>         X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,    &idle_cpu_spr),
+>         X86_MATCH_INTEL_FAM6_MODEL(EMERALDRAPIDS_X,     &idle_cpu_spr),
+> --
 
-This series touches multiple places, but mostly schedutil, cpufreq and
-the EM, so please let me know if you want me to pick it up.
+Applied as 6.8 material, thanks!
 
