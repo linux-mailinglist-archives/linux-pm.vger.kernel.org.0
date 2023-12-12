@@ -1,110 +1,80 @@
-Return-Path: <linux-pm+bounces-1000-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1001-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30F7D80F556
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 19:17:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07C4980F56C
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 19:22:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DBEBC1F214D8
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 18:17:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 256B51C20C90
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 18:22:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA2627E780;
-	Tue, 12 Dec 2023 18:17:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 991A97E78D;
+	Tue, 12 Dec 2023 18:22:30 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 44210A1;
-	Tue, 12 Dec 2023 10:17:00 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 39BFEA7;
+	Tue, 12 Dec 2023 10:22:28 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 538B0FEC;
-	Tue, 12 Dec 2023 10:17:46 -0800 (PST)
-Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 36D963F762;
-	Tue, 12 Dec 2023 10:16:58 -0800 (PST)
-Date: Tue, 12 Dec 2023 18:16:55 +0000
-From: Andre Przywara <andre.przywara@arm.com>
-To: Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <u.kleine-koenig@pengutronix.de>
-Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Russell King <linux@armlinux.org.uk>,
- linux-clk@vger.kernel.org, MyungJoo Ham <myungjoo.ham@samsung.com>,
- Kyungmin Park <kyungmin.park@samsung.com>, Chanwoo Choi
- <cw00.choi@samsung.com>, Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec
- <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>,
- linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-sunxi@lists.linux.dev, kernel@pengutronix.de
-Subject: Re: [PATCH 1/5] PM / devfreq: sun8i-a33-mbus: Simplify usage of
- clk_rate_exclusive_get()
-Message-ID: <20231212181655.1a0d5971@donnerap.manchester.arm.com>
-In-Reply-To: <5ef585a3d7bee42bac5be0e40efcfbc6e75adfff.1702400947.git.u.kleine-koenig@pengutronix.de>
-References: <cover.1702400947.git.u.kleine-koenig@pengutronix.de>
-	<5ef585a3d7bee42bac5be0e40efcfbc6e75adfff.1702400947.git.u.kleine-koenig@pengutronix.de>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D329FEC;
+	Tue, 12 Dec 2023 10:23:14 -0800 (PST)
+Received: from [10.1.35.59] (e133649.arm.com [10.1.35.59])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7F72A3F762;
+	Tue, 12 Dec 2023 10:22:25 -0800 (PST)
+Message-ID: <e1c7edc6-440b-467e-9552-afa40cf4ed67@arm.com>
+Date: Tue, 12 Dec 2023 18:22:23 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/4] sched/fair: Be less aggressive in calling
+ cpufreq_update_util()
+To: Qais Yousef <qyousef@layalina.io>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: Ingo Molnar <mingo@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>,
+ Vincent Guittot <vincent.guittot@linaro.org>, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
+ Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
+ Chung-Kai Mei <chungkai@google.com>
+References: <20231208015242.385103-1-qyousef@layalina.io>
+ <20231208015242.385103-2-qyousef@layalina.io>
+ <47ef274b-d9cc-4f4f-8134-2dced46005fa@arm.com>
+ <20231212123535.3yns5f4b6awiuesk@airbuntu>
+Content-Language: en-US
+From: Hongyan Xia <hongyan.xia2@arm.com>
+In-Reply-To: <20231212123535.3yns5f4b6awiuesk@airbuntu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, 12 Dec 2023 18:26:38 +0100
-Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de> wrote:
+On 12/12/2023 12:35, Qais Yousef wrote:
+> On 12/12/23 11:46, Dietmar Eggemann wrote:
+>> On 08/12/2023 02:52, Qais Yousef wrote:
+>>> Due to the way code is structured, it makes a lot of sense to trigger
+>>> cpufreq_update_util() from update_load_avg(). But this is too aggressive
+>>> as in most cases we are iterating through entities in a loop to
+>>> update_load_avg() in the hierarchy. So we end up sending too many
+>>> request in an loop as we're updating the hierarchy.
+>>
+>> But update_load_avg() calls cfs_rq_util_change() which only issues a
+>> cpufreq_update_util() call for the root cfs_rq?
+> 
+> Yes I've noticed that and wondered. Maybe my analysis was flawed and I was just
+> hitting the issue of iowait boost request conflicting with update_load_avg()
+> request.
+> 
+> Let me have another look. I think we'll still end up needing to take the update
+> out of util_avg to be able to combine the two calls.
 
-> clk_rate_exclusive_get() returns 0 unconditionally. So remove error
-> handling. This prepares making clk_rate_exclusive_get() return void.
->=20
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+I agree. Currently it does not express the intention clearly. We only 
+want to update the root CFS but the code was written in a misleading way 
+that suggests we want to update for every cfs_rq. A single update at the 
+end looks much nicer and makes other patches easier.
 
-Looks alright to me:
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
-
-Cheers,
-Andre
-
-> ---
->  drivers/devfreq/sun8i-a33-mbus.c | 14 ++------------
->  1 file changed, 2 insertions(+), 12 deletions(-)
->=20
-> diff --git a/drivers/devfreq/sun8i-a33-mbus.c b/drivers/devfreq/sun8i-a33=
--mbus.c
-> index 13d32213139f..bbc577556944 100644
-> --- a/drivers/devfreq/sun8i-a33-mbus.c
-> +++ b/drivers/devfreq/sun8i-a33-mbus.c
-> @@ -381,18 +381,10 @@ static int sun8i_a33_mbus_probe(struct platform_dev=
-ice *pdev)
->  				     "failed to enable bus clock\n");
-> =20
->  	/* Lock the DRAM clock rate to keep priv->nominal_bw in sync. */
-> -	ret =3D clk_rate_exclusive_get(priv->clk_dram);
-> -	if (ret) {
-> -		err =3D "failed to lock dram clock rate\n";
-> -		goto err_disable_bus;
-> -	}
-> +	clk_rate_exclusive_get(priv->clk_dram);
-> =20
->  	/* Lock the MBUS clock rate to keep MBUS_TMR_PERIOD in sync. */
-> -	ret =3D clk_rate_exclusive_get(priv->clk_mbus);
-> -	if (ret) {
-> -		err =3D "failed to lock mbus clock rate\n";
-> -		goto err_unlock_dram;
-> -	}
-> +	clk_rate_exclusive_get(priv->clk_mbus);
-> =20
->  	priv->gov_data.upthreshold	=3D 10;
->  	priv->gov_data.downdifferential	=3D  5;
-> @@ -450,9 +442,7 @@ static int sun8i_a33_mbus_probe(struct platform_devic=
-e *pdev)
->  	dev_pm_opp_remove_all_dynamic(dev);
->  err_unlock_mbus:
->  	clk_rate_exclusive_put(priv->clk_mbus);
-> -err_unlock_dram:
->  	clk_rate_exclusive_put(priv->clk_dram);
-> -err_disable_bus:
->  	clk_disable_unprepare(priv->clk_bus);
-> =20
->  	return dev_err_probe(dev, ret, err);
-
+Hongyan
 
