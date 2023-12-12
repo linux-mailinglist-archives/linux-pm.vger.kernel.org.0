@@ -1,126 +1,231 @@
-Return-Path: <linux-pm+bounces-1024-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1025-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE29880F9C0
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 22:50:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84E9A80FA1C
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 23:17:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A8B5428211B
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 21:50:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DEFCD2822A4
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 22:17:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA19A64CC1;
-	Tue, 12 Dec 2023 21:50:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F5056611D;
+	Tue, 12 Dec 2023 22:17:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rzsvwnlo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XBEqpIys"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A892A65A98;
-	Tue, 12 Dec 2023 21:50:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9FF1C433C7;
-	Tue, 12 Dec 2023 21:50:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702417805;
-	bh=6ogrBXo4J5g4zBXsQOlW0y4FIDZEwSmJ8vaSdXm00eE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rzsvwnlo32fqTtf3/7LvOn0kX55GFA+RKbr8qR84zmtyBxBr8Z27rXb4U/6Pub9MR
-	 SZPALCeQvn2083UU6DzF9G7YUneqS+diLCLU8LotEsI+v9qPOxZhj11odGxvk5n6Iu
-	 yYJwm5kUuY6Vy6D9LYgAhKLUqWGU9OnXxgbB18lXh+hcvu9SPljiZMuBhOwujYPV8b
-	 x5LlP7Gs6hZTDH8OmivofNGvAtf7K8ZIEwfbXCbp83wdffTbNJmxqjofNZEOFXBNyK
-	 0sZ4swf7yt8LFaX5CAqYXb07ZoIeMFPXObopMU3OU3jhLSRBwnsDhIjjrrajdlI1xP
-	 MnbKaOMp5BiWw==
-Date: Tue, 12 Dec 2023 14:50:02 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Sebastian Reichel <sre@kernel.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Yangtao Li <frank.li@vivo.com>, linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] power: reset: at91: mark at91_wakeup_status non-__init
-Message-ID: <20231212215002.GA3300655@dev-arch.thelio-3990X>
-References: <20231212214658.213510-1-arnd@kernel.org>
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA6F5AC;
+	Tue, 12 Dec 2023 14:17:00 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-40c3984f0cdso47326275e9.1;
+        Tue, 12 Dec 2023 14:17:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702419419; x=1703024219; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mMdH27R0nN/kULVb9qDYym6teaR7gKvUH7s4Uj8Xhzk=;
+        b=XBEqpIysjMlPITg+9VrSdvec9/FPZFZQS2POFtZ4LQJNJHbcvM/NwWnqP+Z+LY8gYR
+         VMLMXMV7qhavqanbvEFLF5odbenSTaHxaGc781lRB2nABjXqJodNruNOuWwcRHx0UZLa
+         ppc+YKw9tzEbcOziaGbf+p6mN4/DbbziV/ntngRbyQgjJWG3CDv0XLtXqW2plFDnpSqT
+         alSrIxo/8jG7ZHJkqNTa7bnY/KSXp9sEkM0ovkyktnb5wJick8jA9LK1G6UVmxjwKDkN
+         CtgD2x9GdIBjgezQewPk1i4mmPVmmsfBVfK3wj4ZT9kNzX0gTnyCBymdTiqxgyTB9sxp
+         tG0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702419419; x=1703024219;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mMdH27R0nN/kULVb9qDYym6teaR7gKvUH7s4Uj8Xhzk=;
+        b=izs6Q++Md9Ry4nwbyB6ey/r01jk/3FS/uxLWswLcywGMS5NAjiSuJxZaudzLqLox4r
+         Y7QX1m1IDfvpKdM4BsvAsTNSSgPM+Kgjolb9sh0h8VOl2ppDee4WFEocari02vrUMNHv
+         phefhhfckqIlsL00awEyqpx4pCKWytGwjKGveCqS1VhAhd3jhm0mMYxA35o5pAmhmfNa
+         50FtW4oToTLET441PbHbEv/1iV4j3g8DOOBR++nZyX+S7xdCdGRCvVwGZJ5h2/N8VEue
+         x1TegDGSfENQ3eJAZu0fbL7KGKDt6AxtIIkiJeI+19rK6ktqy723yFEPqk8LU76hDiL2
+         iXeQ==
+X-Gm-Message-State: AOJu0YzgwxneTUWHmcm1PCxzz2IXBbRZIx1i/vlZWY7xowayqS6NTjYk
+	N+4IbWEfJoXR62kRsqH20MM=
+X-Google-Smtp-Source: AGHT+IGpWMvk3w2WBsjvLTwqd8+znDQJoZvzBhblaodMLhpprF0VQCaW10TN1H0hYQMf1FSfjnzhbQ==
+X-Received: by 2002:a7b:ce13:0:b0:40c:311d:c676 with SMTP id m19-20020a7bce13000000b0040c311dc676mr3727486wmc.137.1702419418813;
+        Tue, 12 Dec 2023 14:16:58 -0800 (PST)
+Received: from localhost.localdomain (93-34-89-13.ip49.fastwebnet.it. [93.34.89.13])
+        by smtp.googlemail.com with ESMTPSA id m11-20020a056000008b00b0033332524235sm11669113wrx.82.2023.12.12.14.16.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Dec 2023 14:16:58 -0800 (PST)
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] thermal: core: add initial support for cold and critical_cold trip point
+Date: Tue, 12 Dec 2023 23:13:00 +0100
+Message-Id: <20231212221301.12581-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231212214658.213510-1-arnd@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Dec 12, 2023 at 10:46:49PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Two copies of the at91_wakeup_status() function are called by the
-> respective probe() callbacks and are marked __init, but the probe
-> functions are no longer annotated that way. This works with gcc because
-> the functions always get inlined, but clang keeps them separate, which
-> can lead to executing freed memory:
-> 
-> WARNING: modpost: vmlinux: section mismatch in reference: at91_poweroff_probe+0x80 (section: .text) -> at91_wakeup_status (section: .init.text)
-> WARNING: modpost: vmlinux: section mismatch in reference: at91_shdwc_probe+0xcc (section: .text) -> at91_wakeup_status (section: .init.text)
-> 
-> Drop the incorrect annotation on these.
-> 
-> Fixes: 099806de68b7 ("power: reset: at91-poweroff: Stop using module_platform_driver_probe()")
-> Fixes: dde74a5de817 ("power: reset: at91-sama5d2_shdwc: Stop using module_platform_driver_probe()")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Add initial support for cold and critical_cold trip point. Many if not
+all hwmon and thermal device have normally trip point for hot
+temperature and for cold temperature.
 
-Thanks, I sent the same change three weeks ago at this point:
+Till now only hot temperature were supported. Add support for also cold
+temperature to permit complete definition of cold trip point in DT.
 
-https://lore.kernel.org/20231120-fix-at91-modpost-warnings-v1-1-813671933863@kernel.org/
+Thermal driver may use these additional trip point to correctly set
+interrupt for cold temperature values and react based on that with
+various measure like enabling attached heater, forcing higher voltage
+and other specialaized peripherals.
 
-Your commit message is a little better than mine and I don't really care
-which one goes in but it would be good if this could get cleared up
-soon...
+For hwmon drivers this is needed as currently there is a problem with
+setting the full operating range of the device for thermal devices
+defined with hwmon. To better describe the problem, the following
+example is needed:
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+In the scenario of a simple hwmon with an active trip point declared
+and a cooling device attached, the hwmon subsystem currently set the
+min and max trip point based on the single active trip point.
+Thermal subsystem parse all the trip points and calculate the lowest and
+the highest trip point and calls the .set_trip of hwmon to setup the
+trip points.
 
-> ---
->  drivers/power/reset/at91-poweroff.c      | 2 +-
->  drivers/power/reset/at91-sama5d2_shdwc.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/power/reset/at91-poweroff.c b/drivers/power/reset/at91-poweroff.c
-> index 126e774e210c..93eece027865 100644
-> --- a/drivers/power/reset/at91-poweroff.c
-> +++ b/drivers/power/reset/at91-poweroff.c
-> @@ -57,7 +57,7 @@ static struct shdwc {
->  	void __iomem *mpddrc_base;
->  } at91_shdwc;
->  
-> -static void __init at91_wakeup_status(struct platform_device *pdev)
-> +static void at91_wakeup_status(struct platform_device *pdev)
->  {
->  	const char *reason;
->  	u32 reg = readl(at91_shdwc.shdwc_base + AT91_SHDW_SR);
-> diff --git a/drivers/power/reset/at91-sama5d2_shdwc.c b/drivers/power/reset/at91-sama5d2_shdwc.c
-> index af95c7b39cb3..959ce0dbe91d 100644
-> --- a/drivers/power/reset/at91-sama5d2_shdwc.c
-> +++ b/drivers/power/reset/at91-sama5d2_shdwc.c
-> @@ -107,7 +107,7 @@ static const unsigned long long sdwc_dbc_period[] = {
->  	0, 3, 32, 512, 4096, 32768,
->  };
->  
-> -static void __init at91_wakeup_status(struct platform_device *pdev)
-> +static void at91_wakeup_status(struct platform_device *pdev)
->  {
->  	struct shdwc *shdw = platform_get_drvdata(pdev);
->  	const struct reg_config *rcfg = shdw->rcfg;
-> -- 
-> 2.39.2
-> 
-> 
+The fact that we currently don't have a way to declare the cold/min
+temperature values, makes the thermal subsystem to set the low value as
+-INT_MAX.
+For hwmon drivers that doesn't use clamp_value and actually reject
+invalid values for the trip point, this results in the hwmon settings to
+be rejected.
+
+To permit to pass the correct range of trip point, permit to set in DT
+also cold and critical_cold trip point.
+
+Thermal driver may also define .cold and .critical_cold to act on these
+trip point tripped and apply the required measure.
+
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+ drivers/thermal/thermal_core.c  | 13 +++++++++++++
+ drivers/thermal/thermal_of.c    |  2 ++
+ drivers/thermal/thermal_sysfs.c |  4 ++++
+ drivers/thermal/thermal_trace.h |  4 ++++
+ include/linux/thermal.h         |  2 ++
+ include/uapi/linux/thermal.h    |  2 ++
+ 6 files changed, 27 insertions(+)
+
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 9c17d35ccbbd..3c5ab560e72f 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -344,6 +344,17 @@ static void handle_critical_trips(struct thermal_zone_device *tz,
+ 		tz->ops->hot(tz);
+ }
+ 
++static void handle_critical_cold_trips(struct thermal_zone_device *tz,
++				       const struct thermal_trip *trip)
++{
++	trace_thermal_zone_trip(tz, thermal_zone_trip_id(tz, trip), trip->type);
++
++	if (trip->type == THERMAL_TRIP_CRITICAL_COLD && tz->ops->critical_cold)
++		tz->ops->critical_cold(tz);
++	else if (trip->type == THERMAL_TRIP_COLD && tz->ops->cold)
++		tz->ops->cold(tz);
++}
++
+ static void handle_thermal_trip(struct thermal_zone_device *tz,
+ 				const struct thermal_trip *trip)
+ {
+@@ -365,6 +376,8 @@ static void handle_thermal_trip(struct thermal_zone_device *tz,
+ 
+ 	if (trip->type == THERMAL_TRIP_CRITICAL || trip->type == THERMAL_TRIP_HOT)
+ 		handle_critical_trips(tz, trip);
++	else if (trip->type == THERMAL_TRIP_CRITICAL_COLD || trip->type == THERMAL_TRIP_COLD)
++		handle_critical_cold_trips(tz, trip);
+ 	else
+ 		handle_non_critical_trips(tz, trip);
+ }
+diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+index 1e0655b63259..95bc600bb4b8 100644
+--- a/drivers/thermal/thermal_of.c
++++ b/drivers/thermal/thermal_of.c
+@@ -60,6 +60,8 @@ static const char * const trip_types[] = {
+ 	[THERMAL_TRIP_PASSIVE]	= "passive",
+ 	[THERMAL_TRIP_HOT]	= "hot",
+ 	[THERMAL_TRIP_CRITICAL]	= "critical",
++	[THERMAL_TRIP_COLD]	= "cold",
++	[THERMAL_TRIP_CRITICAL_COLD] = "critical_cold",
+ };
+ 
+ /**
+diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+index eef40d4f3063..e1e69e0991c2 100644
+--- a/drivers/thermal/thermal_sysfs.c
++++ b/drivers/thermal/thermal_sysfs.c
+@@ -106,6 +106,10 @@ trip_point_type_show(struct device *dev, struct device_attribute *attr,
+ 		return sprintf(buf, "critical\n");
+ 	case THERMAL_TRIP_HOT:
+ 		return sprintf(buf, "hot\n");
++	case THERMAL_TRIP_COLD:
++		return sprintf(buf, "cold\n");
++	case THERMAL_TRIP_CRITICAL_COLD:
++		return sprintf(buf, "critical_cold\n");
+ 	case THERMAL_TRIP_PASSIVE:
+ 		return sprintf(buf, "passive\n");
+ 	case THERMAL_TRIP_ACTIVE:
+diff --git a/drivers/thermal/thermal_trace.h b/drivers/thermal/thermal_trace.h
+index 459c8ce6cf3b..0a4f96075d7d 100644
+--- a/drivers/thermal/thermal_trace.h
++++ b/drivers/thermal/thermal_trace.h
+@@ -11,6 +11,8 @@
+ 
+ TRACE_DEFINE_ENUM(THERMAL_TRIP_CRITICAL);
+ TRACE_DEFINE_ENUM(THERMAL_TRIP_HOT);
++TRACE_DEFINE_ENUM(THERMAL_TRIP_COLD);
++TRACE_DEFINE_ENUM(THERMAL_TRIP_CRITICAL_COLD);
+ TRACE_DEFINE_ENUM(THERMAL_TRIP_PASSIVE);
+ TRACE_DEFINE_ENUM(THERMAL_TRIP_ACTIVE);
+ 
+@@ -18,6 +20,8 @@ TRACE_DEFINE_ENUM(THERMAL_TRIP_ACTIVE);
+ 	__print_symbolic(type,					\
+ 			 { THERMAL_TRIP_CRITICAL, "CRITICAL"},	\
+ 			 { THERMAL_TRIP_HOT,      "HOT"},	\
++			 { THERMAL_TRIP_COLD,      "COLD"},	\
++			 { THERMAL_TRIP_CRITICAL_COLD, "CRITICAL_COLD"}, \
+ 			 { THERMAL_TRIP_PASSIVE,  "PASSIVE"},	\
+ 			 { THERMAL_TRIP_ACTIVE,   "ACTIVE"})
+ 
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index cee814d5d1ac..d6345c9ec50d 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -84,6 +84,8 @@ struct thermal_zone_device_ops {
+ 			  const struct thermal_trip *, enum thermal_trend *);
+ 	void (*hot)(struct thermal_zone_device *);
+ 	void (*critical)(struct thermal_zone_device *);
++	void (*cold)(struct thermal_zone_device *);
++	void (*critical_cold)(struct thermal_zone_device *);
+ };
+ 
+ struct thermal_cooling_device_ops {
+diff --git a/include/uapi/linux/thermal.h b/include/uapi/linux/thermal.h
+index fc78bf3aead7..7fa1ba0dff05 100644
+--- a/include/uapi/linux/thermal.h
++++ b/include/uapi/linux/thermal.h
+@@ -14,6 +14,8 @@ enum thermal_trip_type {
+ 	THERMAL_TRIP_PASSIVE,
+ 	THERMAL_TRIP_HOT,
+ 	THERMAL_TRIP_CRITICAL,
++	THERMAL_TRIP_COLD,
++	THERMAL_TRIP_CRITICAL_COLD,
+ };
+ 
+ /* Adding event notification support elements */
+-- 
+2.40.1
+
 
