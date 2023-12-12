@@ -1,70 +1,107 @@
-Return-Path: <linux-pm+bounces-1014-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1015-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4244380F5EA
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 20:00:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2290480F5F7
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 20:05:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 73F9F1C20CE7
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 19:00:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8AB791F217C4
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 19:05:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C96C68003D;
-	Tue, 12 Dec 2023 19:00:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41A7080048;
+	Tue, 12 Dec 2023 19:05:26 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60148F4;
-	Tue, 12 Dec 2023 10:59:54 -0800 (PST)
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-590b52645d3so80906eaf.0;
-        Tue, 12 Dec 2023 10:59:54 -0800 (PST)
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19310D2;
+	Tue, 12 Dec 2023 11:05:23 -0800 (PST)
+Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-3b8652c0bd2so476252b6e.1;
+        Tue, 12 Dec 2023 11:05:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702407593; x=1703012393;
+        d=1e100.net; s=20230601; t=1702407909; x=1703012709;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Mzj61VxAkYjMa9ZFW6YfnczRS8Kp04ye+pxOmrS4Wck=;
-        b=kymreGUkZMBKxcS9ZFJq3lxgDEcF5s6w6ItL7VR9l6EK0cSxz/tkcUSu/W3yC14LW0
-         5PCqM6A8MiAyW3BD3WxZ/zjuDnNK4lD+ySwoEbgwvED2EPFGR7/r/KqAiDyFMtaWLyb2
-         TV8NpsR1i5todjpoS748zpZST+f+pa87SInbOtzd39SxCqvv1l2uAgLepq30CTulCg6m
-         nvkigTlhrcfe6aSEb0fvK8VlFKPvQmgpUwMou7dhJ3HJBkR9PcsjuW5oQWb+qBrCvkYb
-         BjLhhf57k+eV55LeW6ySS2YieuVpLljbms+t/XzEgZwtpHxAmAMOa8mvVIpMLL1rgG7a
-         r0CQ==
-X-Gm-Message-State: AOJu0YzEhHR4orwp0VfkIO8oPRxS/3dQubL2cyzVEuDlnYOBH3oWnu7U
-	j4tN1QCkl9ix7Jq1ywXI54RZH+/gawqx8WcdwighnkGSagE=
-X-Google-Smtp-Source: AGHT+IGR21o+E/mrahk2CQTuo0IxxmmtbVfzTqcPdrNk0J10ZFZPNZnPCI4f2/pVhYHgJQBNjWMSJv3Xkft3hKgVb/Y=
-X-Received: by 2002:a05:6820:2a18:b0:590:9027:7ab0 with SMTP id
- dr24-20020a0568202a1800b0059090277ab0mr10040026oob.0.1702407593440; Tue, 12
- Dec 2023 10:59:53 -0800 (PST)
+        bh=acI53ybdHT2Ybz8qt+m1BvwwM9zmui8Iu0a8RDnCHxk=;
+        b=SlhSFn2bKYKv0v+sGQveSqnRWymzPtVFgumTRPWhI3qM8GAGQSeV19ZnSs4cp2+0ts
+         qeH4PevC8r4pYuXZBZSqVCppEabeF6nTCyYenN2GUFtXBFot1h6rMGYPvNvq8Z1sfYc2
+         LEMUU+vaD3YBifKYYM7lZ57HSg3cOQaXBMYULdGENtzjNYHF4AOWMfAT1J9c6W1aHeaf
+         tp2ZXjpwjgB2YMFKGRzkugMjmvJZD7ZBIY3CkMu3uttxdT1EzfDvmOkJMtj+kr5egHmp
+         UUildqRqlq0WSn5LFQIp350a2yEPUx1RbQaQSZ1/B6AO3JkEjsD0MaCXzqidzW+9G9hP
+         nijw==
+X-Gm-Message-State: AOJu0YwqwmO75MFah4O7lNoJTvDjxGK4H7SKQEoJBAol/PK6H8dQtmwI
+	5zMmcDOxfzzntkcfLCcv+F52DrALHJHffy9QJgQ=
+X-Google-Smtp-Source: AGHT+IHA5aPq73KlqjHsWJe8UGDHVApy8ClQPEGpXkcVl3Yaj8XAdN3OGN+Mn2ZiVnLPVAe8J1MXkUfUG6cgn1J2gsM=
+X-Received: by 2002:a4a:a7c4:0:b0:590:6585:5c41 with SMTP id
+ n4-20020a4aa7c4000000b0059065855c41mr10944482oom.0.1702407909102; Tue, 12 Dec
+ 2023 11:05:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <5733564.DvuYhMxLoT@kreacher>
-In-Reply-To: <5733564.DvuYhMxLoT@kreacher>
+References: <5737811.DvuYhMxLoT@kreacher> <cf055d45-8970-4657-ab86-d28636645c81@linaro.org>
+ <CAJZ5v0ic_=2wvge1T7YmGe5icR5dPxrvKy2N4gXP+KMievobmA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0ic_=2wvge1T7YmGe5icR5dPxrvKy2N4gXP+KMievobmA@mail.gmail.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 12 Dec 2023 19:59:42 +0100
-Message-ID: <CAJZ5v0hU12yWQstAFuDkid0iWxdh7biPy33BA8XfhczFWCVX5Q@mail.gmail.com>
-Subject: Re: [PATCH v1 0/3] thermal: Use for_each_trip() in some places
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Lukasz Luba <lukasz.luba@arm.com>, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>
+Date: Tue, 12 Dec 2023 20:04:58 +0100
+Message-ID: <CAJZ5v0gkBZh42obB-g95T2DBFntYrnidjAeUoFN+e-CqGrSQCw@mail.gmail.com>
+Subject: Re: [PATCH v1] thermal: trip: Send trip change notifications on all
+ trip updates
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>, 
+	Linux ACPI <linux-acpi@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Lukasz Luba <lukasz.luba@arm.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 4, 2023 at 8:49=E2=80=AFPM Rafael J. Wysocki <rjw@rjwysocki.net=
+On Wed, Dec 6, 2023 at 5:01=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.org=
 > wrote:
 >
-> Hi,
+> Hi Daniel,
 >
-> This series changes the code to use the for_each_trip() macro in a few
-> places instead of open-coded loops over trip indices.
+> On Wed, Dec 6, 2023 at 3:38=E2=80=AFPM Daniel Lezcano <daniel.lezcano@lin=
+aro.org> wrote:
+> >
+> >
+> > Hi Rafael,
+> >
+> > On 05/12/2023 20:18, Rafael J. Wysocki wrote:
+> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > > The _store callbacks of the trip point temperature and hysteresis sys=
+fs
+> > > attributes invoke thermal_notify_tz_trip_change() to send a notificat=
+ion
+> > > regarding the trip point change, but when trip points are updated by =
+the
+> > > platform firmware, trip point change notifications are not sent.
+> > >
+> > > To make the behavior after a trip point change more consistent,
+> > > modify all of the 3 places where trip point temperature is updated
+> > > to use a new function called thermal_zone_set_trip_temp() for this
+> > > purpose and make that function call thermal_notify_tz_trip_change().
+> > >
+> > > Note that trip point hysteresis can only be updated via sysfs and
+> > > trip_point_hyst_store() calls thermal_notify_tz_trip_change() already=
+,
+> > > so this code path need not be changed.
+> >
+> > Why the ACPI driver is not calling thermal_zone_device_update() after
+> > changing the trip point like the other drivers?
+>
+> It calls that function, but because it may update multiple trips in
+> one go, it does that after all of the updates are done, via
+> acpi_thermal_check_fn().
+>
+> > It would make sense to have the thermal framework to be notified about
+> > this change and check if there is a trip violation, no ?
+>
+> It is notified as noted above, but not synchronously.
 
-From the lack of comments I gather that the changes in this series are
-fine with everyone, so I'm going to queue it up for 6.8.
-
-Thanks!
+I believe that the question above has been answered, so are there any
+other comments or concerns regarding this patch?
 
