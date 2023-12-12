@@ -1,125 +1,69 @@
-Return-Path: <linux-pm+bounces-984-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-985-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0183E80EF71
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 15:58:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1B7A80EF85
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 16:01:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B02C6281AC7
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 14:58:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ECA3B1C20ADE
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 15:01:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C70B3745E3;
-	Tue, 12 Dec 2023 14:58:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66FF0745EB;
+	Tue, 12 Dec 2023 15:01:37 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1210C3;
-	Tue, 12 Dec 2023 06:58:03 -0800 (PST)
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-6da09f8ce35so710475a34.0;
-        Tue, 12 Dec 2023 06:58:03 -0800 (PST)
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92650D3;
+	Tue, 12 Dec 2023 07:01:34 -0800 (PST)
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-590b52645d3so50974eaf.0;
+        Tue, 12 Dec 2023 07:01:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702393083; x=1702997883;
+        d=1e100.net; s=20230601; t=1702393294; x=1702998094;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uI7/niVPwJXrqn+aODJkyH9Zg/KMSJ6EEIEaKjbnNpY=;
-        b=otyzK4LO7asNGssByl2eJz5+J44qgQgCNdAd5TrA2L3M/S0fbh600e12HlDcnlbg96
-         9uy94ntnzniIb3QZl05FwmsoVGkUJxEDz/GsxdmnvRIPla7moqOLp4VXuZWbN6CdQoxr
-         Az41+V9xyI24qV/emrdw7dzlTt7rgick4LS6pDZCi98tSnKv/15SkOE2xp21ZoUYQj06
-         +fXdYKyrtSQugGVQ7p4UJymMIQ+vGdcKwjwbseWqirmfwun+L/0VjebFDaldlj4qJu/d
-         7ynEClg90t5NeOMj3LDy88v/CLMw6zDPuFpq+LdQTg1Ikrncgiub6CGwKVZywbmgE5X9
-         IZpg==
-X-Gm-Message-State: AOJu0YwPzQ2jSKrNnylq083/NetHKuvIYgnJ6I2XoRoxh2+6XwjCKfDc
-	0ntlgR6aSDJKhKWPjOD0jp0S/pG7ZCIf+mQERGw=
-X-Google-Smtp-Source: AGHT+IFX85hOWBf/RrXFpoD9jaXzKOGxn2HXgJByjv/5kq8gOM68c2U1NhKQYr3oCRj/lN3h7WobxtedVxKE9Of+nJU=
-X-Received: by 2002:a4a:da02:0:b0:590:8a57:8012 with SMTP id
- e2-20020a4ada02000000b005908a578012mr10635729oou.0.1702393083230; Tue, 12 Dec
- 2023 06:58:03 -0800 (PST)
+        bh=EGu92SUJ9J01LWRjxiuDNZ6kwGOV4bXKbE++KcfIYPI=;
+        b=lRThk79ee60x/Pw+aSoTOikWXJ9ey43Mt4YSCDloaYGiLssMADm49ad69KNy4+dIVz
+         uBGZaAhQ/yLX8GxzUDUGKL9JNrAHEBPKx1xCSvXgQfeUaIcmnokOybi0fxMq+LSAbzkH
+         kd53CmYgS1Dm4U+3i8hURgb2AgEE5kH68RJBj9ya09rqMIIj5+YRQN5WDqxMhrsL6/t6
+         a6FIfHMO/xQZnMBa4Syef9hsKkv8g3Sj6LmnUdfYd/XdbyCkN8G1VnD3qJnNtQWY07PE
+         mLXuX0/xdcsO0B6CCI/x/acUoq/O1Dg9uX8Gt7nirEMlLGbSo3QVDU/AujoBZRIUD3iZ
+         2RRQ==
+X-Gm-Message-State: AOJu0YxUbyS7xBNqeKJ9VYf/xnQlPBVI6Z6tDLnMQJ9NPGXRFX6vnrp4
+	azN49kvIktlz60W68qXMzsFufmokf+IkBVHrv5A=
+X-Google-Smtp-Source: AGHT+IEK9mFOYuIlQR0ZF+LZaAGnMACZ1Zxp6SUgMMbIxZ+hs8/dzveeTAGg6RvzfCXvs6aLuIivTmNxAuPSwBqrLDQ=
+X-Received: by 2002:a05:6820:2a18:b0:590:9027:7ab0 with SMTP id
+ dr24-20020a0568202a1800b0059090277ab0mr9351530oob.0.1702393293843; Tue, 12
+ Dec 2023 07:01:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <170108151076.780347.2482745314490930894.stgit@mhiramat.roam.corp.google.com>
- <170108152012.780347.6355289232990337333.stgit@mhiramat.roam.corp.google.com>
- <CAJZ5v0j8x_hzKg4RHx-xyd6Mye9=xj7MgACcWa7R1PcagFLzwQ@mail.gmail.com> <20231212233245.14ae64258bdf07ae1d2f2ff9@kernel.org>
-In-Reply-To: <20231212233245.14ae64258bdf07ae1d2f2ff9@kernel.org>
+References: <CAJZ5v0jZAOmnccbEUsBNw3f-Uh6TmO-6JGgU+PJazmjFASczHQ@mail.gmail.com>
+ <20231212143804.3887-1-chenguanxi11234@163.com>
+In-Reply-To: <20231212143804.3887-1-chenguanxi11234@163.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 12 Dec 2023 15:57:52 +0100
-Message-ID: <CAJZ5v0gObpUYXBydJG-JA5Ew=gScFMEdp6Xu=viv5FT0xyLQQQ@mail.gmail.com>
-Subject: Re: [PATCH v5] PM: sleep: Expose last succeeded resumed timestamp in sysfs
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
-	Randy Dunlap <rdunlap@infradead.org>, suleiman@google.com, briannorris@google.com, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Date: Tue, 12 Dec 2023 16:01:22 +0100
+Message-ID: <CAJZ5v0gLswRMBR1-b_TQTau7KMpuBbR5hYJyat6pMOD5zYSi7Q@mail.gmail.com>
+Subject: Re: [PATCH linux-next] kernel/power: Use kmap_local_page() in snapshot.c
+To: chenguanxi11234@163.com
+Cc: rafael@kernel.org, chen.haonan2@zte.com.cn, len.brown@intel.com, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, pavel@ucw.cz
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 12, 2023 at 3:32=E2=80=AFPM Masami Hiramatsu <mhiramat@kernel.o=
-rg> wrote:
+On Tue, Dec 12, 2023 at 3:38=E2=80=AFPM <chenguanxi11234@163.com> wrote:
 >
-> Hi Rafael,
->
-> On Tue, 12 Dec 2023 14:39:17 +0100
-> "Rafael J. Wysocki" <rafael@kernel.org> wrote:
->
-> > On Mon, Nov 27, 2023 at 11:38=E2=80=AFAM Masami Hiramatsu (Google)
-> > <mhiramat@kernel.org> wrote:
-> > >
-> > > From: Masami Hiramatsu <mhiramat@kernel.org>
-> > >
-> > > Expose last succeeded resumed timestamp as last_success_resume_time
-> > > attribute of suspend_stats in sysfs.
-> > >
-> > > There are some printk()s for printing the similar resume timing to
-> > > dmesg, but those are recorded with local_clock(), and user can not
-> > > compare it with current time. We also have tracing events but it
-> > > requires CAP_SYS_ADMIN to use it.
-> > >
-> > > This suspend_stats attribute is easy to access and only expose the
-> > > timestamp in CLOCK_MONOTONIC.
-> >
-> > Why CLOCK_MONOTONIC?
->
-> CLOCK_MONOTONIC is the simplest clock which can be used in both user
-> space and kernel space. If we use the CLOCK_LOCAL here, user can not
-> know the actual time delta from the succeeded resume.
+> What I've learned is that kmap_atomic() disables page-faults and
+> preemption (the latter only for !PREEMPT_RT kernels).In my opinion,
+> the code between the mapping and un-mapping in this patch does not
+> depend on the above-mentioned side effects.So I simply replaced
+> kmap_atomic() with kmap_local_page(). If I'm wrong, please explain it to =
+me.
 
-So what does user space need to do to use this value?
-
-> >
-> > > So user can find the actual resumed
-> > > time and measure the elapsed time from the time when the kernel
-> > > finished the resume to the user-space action (e.g. display the UI).
-> >
-> > Can you please say a bit more about why this is useful?
->
-> This is a reference timestamp from the user space to measure their
-> processing time for resuming. The kernel side is OK to just trace
-> or printk the each component or subsystem internally. But the user
-> space needs to know when the kernel resume has been done for measuring
-> its component or processes done.
-
-Why does it need to know that?
-
-> Actually this is obscure because the
-> end of resuming in userspace is defined by the user-space application
-> or desktop systems. But anyway if there is a reference point, user
-> process can calculate the delta at any point from that.
->
-> >
-> > The time stamp is taken at the point when user space has been already
-> > running for some time, so what's the exact benefit of it?
->
-> Yes, but that timestamp can be scheduled afterwards so it may not
-> be so accurate. This can provide the accurate time of the kernel
-> resume.
-
-I'm talking about the timestamp added by this patch, that is
-/sys/power/suspend_stats/last_success_resume_time.
-
-By the time ktime_get_ts64() in pm_suspend() is called, user space has
-already been thawed and is running, so why is this useful?
+You are right, but why don't you say the above in the patch changelog
+instead of the irrelevant information that is there now?
 
