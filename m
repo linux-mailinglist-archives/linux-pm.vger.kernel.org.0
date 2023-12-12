@@ -1,184 +1,249 @@
-Return-Path: <linux-pm+bounces-928-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-929-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 700CE80E496
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 08:00:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9375B80E4FB
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 08:42:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E0DB3282D22
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 07:00:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3418CB21E43
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 07:42:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D489B15AFE;
-	Tue, 12 Dec 2023 07:00:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SCxTAmru"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89EED168DA;
+	Tue, 12 Dec 2023 07:42:21 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B0BBF
-	for <linux-pm@vger.kernel.org>; Mon, 11 Dec 2023 23:00:18 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-40c339d2b88so39398595e9.3
-        for <linux-pm@vger.kernel.org>; Mon, 11 Dec 2023 23:00:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702364417; x=1702969217; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1mOODffkcSbhJnVPc2Mb/toFoQFGDkXS7uLIm7BDUjg=;
-        b=SCxTAmruNCIjpBBnghjAK5Yeloxu27P928Jwi6seTPgaCE3P5dAXxMlg8tSqu7UJa8
-         yjVPM8eFL4M/y1HOSTqsDWXCS1i174E7/5aUKciNKhFYyXvhqc/E0Ft3xBPjf8e4PgU9
-         P1btKpnzy9RHdh3DJDNcJhKHbHsT/foV7gYwimKjKpKjJS8mmwAZVY39EUazwnykuRkt
-         X1g6dHIOeo7cevi7twHkVyZaZZ1xVt9lkHwc8XDRAVDhP+TtXCx/3nq46ueusDgCrjOa
-         Jelk9kFoTKW8oWLSLI5tv4YOe4i5s0ZVQJ5hRf63pPjSQDednrbmCZIvZMnnSETeGvS6
-         kgEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702364417; x=1702969217;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1mOODffkcSbhJnVPc2Mb/toFoQFGDkXS7uLIm7BDUjg=;
-        b=c0Iiv493siDWjsl2IKxkfce2cfbfGrmZyuhy9hNO6L/2+uGKxW8u7Zh9mz/8dUUqdM
-         npeuB5A2MLi36IAy+A73rwlyOO9iH9qtv/DTQi4sNGddxD6o4mmF4DdorO2msbsYcXl/
-         Q5bZzOZGjaeLo6mzK70cdwumTCndTwMMsWg5vHr6KOB3USqx8exaArS0mRlLE+7jXLwb
-         j4QRONHchOOaEdXvCjT23u8VpGhpDRAWBWy88Its8fpNeY3eUO7RDPss1rFDCy8Kt9GY
-         hiUZG3Z66h6yyX3GPByavLab62cc2UiZqWLa7s8kIT4moHqJCVnD1CcoRCtKICQ6kWP/
-         rJ4w==
-X-Gm-Message-State: AOJu0YwrVsI0q66935tZ+LcV+87ASMKdIgmJXsupi55W7cc+gqx+Uzal
-	zdnJsdJFmexgzdADWjQ1vXUUbw==
-X-Google-Smtp-Source: AGHT+IECt3W+daTiMhSj0c0XMVScV+jjtFofyVZBCA6jzm9q9Q9q029jz9wRUp9vJ7a5+Xd3fCZXSw==
-X-Received: by 2002:a05:600c:444a:b0:40c:4857:e000 with SMTP id v10-20020a05600c444a00b0040c4857e000mr1426731wmn.46.1702364416805;
-        Mon, 11 Dec 2023 23:00:16 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
-        by smtp.googlemail.com with ESMTPSA id g20-20020a05600c4ed400b0040c31bb66dcsm15132225wmq.20.2023.12.11.23.00.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Dec 2023 23:00:16 -0800 (PST)
-Message-ID: <0412fada-037d-47ea-bc3a-4634d134232c@linaro.org>
-Date: Tue, 12 Dec 2023 08:00:15 +0100
+X-Greylist: delayed 946 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 11 Dec 2023 23:42:16 PST
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FECFBE;
+	Mon, 11 Dec 2023 23:42:16 -0800 (PST)
+Received: from mail.maildlp.com (unknown [172.19.163.17])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4Sq9B93gsTz1fyVL;
+	Tue, 12 Dec 2023 15:25:21 +0800 (CST)
+Received: from kwepemm000004.china.huawei.com (unknown [7.193.23.18])
+	by mail.maildlp.com (Postfix) with ESMTPS id C5E5B1A017F;
+	Tue, 12 Dec 2023 15:26:27 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ kwepemm000004.china.huawei.com (7.193.23.18) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 12 Dec 2023 15:26:27 +0800
+From: Huisong Li <lihuisong@huawei.com>
+To: <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <rafael@kernel.org>
+CC: <beata.michalska@arm.com>, <sumitg@nvidia.com>, <ionela.voinescu@arm.com>,
+	<zengheng4@huawei.com>, <yang@os.amperecomputing.com>, <will@kernel.org>,
+	<sudeep.holla@arm.com>, <liuyonglong@huawei.com>, <zhanjie9@hisilicon.com>,
+	<lihuisong@huawei.com>
+Subject: [PATCH] cpufreq: CPPC: Resolve the large frequency discrepancy from cpuinfo_cur_freq
+Date: Tue, 12 Dec 2023 15:26:17 +0800
+Message-ID: <20231212072617.14756-1-lihuisong@huawei.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 RESEND] thermal core: add option to run PM_POST_SUSPEND
- asynchronously
-Content-Language: en-US
-To: Radu Solea <radusolea@google.com>
-Cc: linux-pm@vger.kernel.org, rafael@kernel.org
-References: <20231120234015.3273143-1-radusolea@google.com>
- <9d1009d9-b95b-4152-841f-19470a17ba97@linaro.org>
- <CAPpbzyhEkqjA0Kv=f_O1hy-dT8o-O4tPB_KpQqbE9b7vwC+2NA@mail.gmail.com>
- <570c9777-3d89-4f3c-b856-3e821883a7e2@linaro.org>
- <CAPpbzyiZmxhfQDOukEeuDv+B6j3CH43ugx_WyAvR3B-riRZChQ@mail.gmail.com>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAPpbzyiZmxhfQDOukEeuDv+B6j3CH43ugx_WyAvR3B-riRZChQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm000004.china.huawei.com (7.193.23.18)
 
-On 12/12/2023 00:25, Radu Solea wrote:
-> On Wed, Dec 6, 2023 at 3:23 AM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>
->>
->> Hi Radu,
->>
->> On 06/12/2023 02:20, Radu Solea wrote:
->>> On Wed, Nov 29, 2023 at 4:20 AM Daniel Lezcano
->>> <daniel.lezcano@linaro.org> wrote:
->>>>
->>>> On 21/11/2023 00:40, Radu Solea wrote:
->>>>> Some thermal zones are bus connected and slow to resume, thus
->>>>> delaying actions which depend on completion of PM_POST_SUSPEND.
->>>>> Add optional execution path to resume thermal zones on the system
->>>>> unbounded workqueue.
->>>>>
->>>>> Signed-off-by: Radu Solea <radusolea@google.com>
->>>>> ---
->>>>
->>>> This async change may have a lot of hidden implications.
->>>>
->>>> Could you elaborate more the issue and how the async will fix the problem?
->>>>
->>>> If you have a platform being slow to resume, can you provide numbers
->>>> with and without this option?
->>>>
->>>> Thanks
->>>>      -- D.
->>>>
->>>> --
->>>> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
->>>>
->>>> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
->>>> <http://twitter.com/#!/linaroorg> Twitter |
->>>> <http://www.linaro.org/linaro-blog/> Blog
->>>>
->>>
->>> In multicore systems PM_POST_SUSPEND is executed on a single core.
->>> Any work done in the notification chain delays all subsequent actions
->>> in the chain with respect to system time, including the completion of
->>> the write() to /sys/power/state.
->>> I didn't include numbers from my system since they are likely
->>> irrelevant for other systems out there. The particular number I'm
->>> chasing is ~50ms.
->>> This comes from having on-board peripherals as thermal zones, they
->>> execute async and significantly slower than the main core, add a/d
->>> conversions and bus delays to that and it's easy to see those numbers.
->>> Making the entire sequence synchronous to itself and async to
->>> PM_POST_SUSPEND isn't that much of a change, it allows the sequence to
->>> run on any core with spare cycles delayed with whatever the system
->>> unbounded queue load is at the time.
->>> (on my target system) I've seen consistent time gains (those same
->>> 50ms) to PM_POST_SUSPEND completion with this sequence actually
->>> completing before the chain finishes, this will vary from integration
->>> to integration.
->>
->> Sorry but I don't see how you can have a gain of 50ms by doing the
->> restore asynchronously.
->>
->> Can you give a more detailed description of the hardware? How many
->> thermal zones?
->>
->>
-> I can't go into much detail about the hardware. But let's put it this
-> way, if thermal_zone_device_update() takes 5 ms for each device (read
-> temp, get trips, set trips, etc). Assume 5 onboard thermal zones, on a
-> good day, ignoring system churn you'd get to around 25ms (already
-> significant).
-> Now on top of that add that these devices have multiple functions,
-> like a PMIC for example. The resume sequence is the perfect time frame
-> where you'd encounter more than one operation aimed at any one of
-> these devices. Unless you have uncommonly smart drivers and devices,
-> these will be queued.
-> The driver in most cases will spin (hardly ideal, but realistic), even
-> if they would yield the effect on the completion of the chain is at
-> least the same or, likely, worse.
-> 
-> To the patch itself, I realized I've been somewhat hamfisted.
-> thermal_zone_device_init() should not be deferred, and likely should
-> execute for all zones before the in_suspend lock-out is released. I'll
-> correct that once we've landed on something.
-> 
-> To my 50ms, it's almost the worst-case, but it happens way more often
-> than would be comfortable.
+Many developers found that the cpu current frequency is greater than
+the maximum frequency of the platform, please see [1], [2] and [3].
 
-If you call monitor_thermal_zone() instead of 
-thermal_zone_device_update(), does it speed up the resume time ?
+In the scenarios with high memory access pressure, the patch [1] has
+proved the significant latency of cpc_read() which is used to obtain
+delivered and reference performance counter cause an absurd frequency.
+The sampling interval for this counters is very critical and is expected
+to be equal. However, the different latency of cpc_read() has a direct
+impact on their sampling interval.
 
+This patch adds a interface, cpc_read_arch_counters_on_cpu, to read
+delivered and reference performance counter together. According to my
+test[4], the discrepancy of cpu current frequency in the scenarios with
+high memory access pressure is lower than 0.2% by stress-ng application.
 
->> --
->> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
->>
->> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
->> <http://twitter.com/#!/linaroorg> Twitter |
->> <http://www.linaro.org/linaro-blog/> Blog
->>
+[1] https://lore.kernel.org/all/20231025093847.3740104-4-zengheng4@huawei.com/
+[2] https://lore.kernel.org/all/20230328193846.8757-1-yang@os.amperecomputing.com/
+[3] https://lore.kernel.org/all/20230418113459.12860-7-sumitg@nvidia.com/
 
+[4] My local test:
+The testing platform enable SMT and include 128 logical CPU in total,
+and CPU base frequency is 2.7GHz. Reading "cpuinfo_cur_freq" for each
+physical core on platform during the high memory access pressure from
+stress-ng, and the output is as follows:
+  0: 2699133     2: 2699942     4: 2698189     6: 2704347
+  8: 2704009    10: 2696277    12: 2702016    14: 2701388
+ 16: 2700358    18: 2696741    20: 2700091    22: 2700122
+ 24: 2701713    26: 2702025    28: 2699816    30: 2700121
+ 32: 2700000    34: 2699788    36: 2698884    38: 2699109
+ 40: 2704494    42: 2698350    44: 2699997    46: 2701023
+ 48: 2703448    50: 2699501    52: 2700000    54: 2699999
+ 56: 2702645    58: 2696923    60: 2697718    62: 2700547
+ 64: 2700313    66: 2700000    68: 2699904    70: 2699259
+ 72: 2699511    74: 2700644    76: 2702201    78: 2700000
+ 80: 2700776    82: 2700364    84: 2702674    86: 2700255
+ 88: 2699886    90: 2700359    92: 2699662    94: 2696188
+ 96: 2705454    98: 2699260   100: 2701097   102: 2699630
+104: 2700463   106: 2698408   108: 2697766   110: 2701181
+112: 2699166   114: 2701804   116: 2701907   118: 2701973
+120: 2699584   122: 2700474   124: 2700768   126: 2701963
+
+Signed-off-by: Huisong Li <lihuisong@huawei.com>
+---
+ arch/arm64/kernel/topology.c | 43 ++++++++++++++++++++++++++++++++++--
+ drivers/acpi/cppc_acpi.c     | 22 +++++++++++++++---
+ include/acpi/cppc_acpi.h     |  5 +++++
+ 3 files changed, 65 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+index 7d37e458e2f5..c3122154d738 100644
+--- a/arch/arm64/kernel/topology.c
++++ b/arch/arm64/kernel/topology.c
+@@ -299,6 +299,11 @@ core_initcall(init_amu_fie);
+ #ifdef CONFIG_ACPI_CPPC_LIB
+ #include <acpi/cppc_acpi.h>
+ 
++struct amu_counters {
++	u64 corecnt;
++	u64 constcnt;
++};
++
+ static void cpu_read_corecnt(void *val)
+ {
+ 	/*
+@@ -322,8 +327,27 @@ static void cpu_read_constcnt(void *val)
+ 		      0UL : read_constcnt();
+ }
+ 
++static void cpu_read_amu_counters(void *data)
++{
++	struct amu_counters *cnt = (struct amu_counters *)data;
++
++	/*
++	 * The running time of the this_cpu_has_cap() might have a couple of
++	 * microseconds and is significantly increased to tens of microseconds.
++	 * But AMU core and constant counter need to be read togeter without any
++	 * time interval to reduce the calculation discrepancy using this counters.
++	 */
++	if (this_cpu_has_cap(ARM64_WORKAROUND_2457168)) {
++		cnt->corecnt = read_corecnt();
++		cnt->constcnt = 0;
++	} else {
++		cnt->corecnt = read_corecnt();
++		cnt->constcnt = read_constcnt();
++	}
++}
++
+ static inline
+-int counters_read_on_cpu(int cpu, smp_call_func_t func, u64 *val)
++int counters_read_on_cpu(int cpu, smp_call_func_t func, void *data)
+ {
+ 	/*
+ 	 * Abort call on counterless CPU or when interrupts are
+@@ -335,7 +359,7 @@ int counters_read_on_cpu(int cpu, smp_call_func_t func, u64 *val)
+ 	if (WARN_ON_ONCE(irqs_disabled()))
+ 		return -EPERM;
+ 
+-	smp_call_function_single(cpu, func, val, 1);
++	smp_call_function_single(cpu, func, data, 1);
+ 
+ 	return 0;
+ }
+@@ -364,6 +388,21 @@ bool cpc_ffh_supported(void)
+ 	return true;
+ }
+ 
++int cpc_read_arch_counters_on_cpu(int cpu, u64 *delivered, u64 *reference)
++{
++	struct amu_counters cnts = {0};
++	int ret;
++
++	ret = counters_read_on_cpu(cpu, cpu_read_amu_counters, &cnts);
++	if (ret)
++		return ret;
++
++	*delivered = cnts.corecnt;
++	*reference = cnts.constcnt;
++
++	return 0;
++}
++
+ int cpc_read_ffh(int cpu, struct cpc_reg *reg, u64 *val)
+ {
+ 	int ret = -EOPNOTSUPP;
+diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+index 7ff269a78c20..f303fabd7cfe 100644
+--- a/drivers/acpi/cppc_acpi.c
++++ b/drivers/acpi/cppc_acpi.c
+@@ -1299,6 +1299,11 @@ bool cppc_perf_ctrs_in_pcc(void)
+ }
+ EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
+ 
++int __weak cpc_read_arch_counters_on_cpu(int cpu, u64 *delivered, u64 *reference)
++{
++	return 0;
++}
++
+ /**
+  * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
+  * @cpunum: CPU from which to read counters.
+@@ -1313,7 +1318,8 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
+ 		*ref_perf_reg, *ctr_wrap_reg;
+ 	int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpunum);
+ 	struct cppc_pcc_data *pcc_ss_data = NULL;
+-	u64 delivered, reference, ref_perf, ctr_wrap_time;
++	u64 delivered = 0, reference = 0;
++	u64 ref_perf, ctr_wrap_time;
+ 	int ret = 0, regs_in_pcc = 0;
+ 
+ 	if (!cpc_desc) {
+@@ -1350,8 +1356,18 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
+ 		}
+ 	}
+ 
+-	cpc_read(cpunum, delivered_reg, &delivered);
+-	cpc_read(cpunum, reference_reg, &reference);
++	if (cpc_ffh_supported()) {
++		ret = cpc_read_arch_counters_on_cpu(cpunum, &delivered, &reference);
++		if (ret) {
++			pr_debug("read arch counters failed, ret=%d.\n", ret);
++			ret = 0;
++		}
++	}
++	if (!delivered || !reference) {
++		cpc_read(cpunum, delivered_reg, &delivered);
++		cpc_read(cpunum, reference_reg, &reference);
++	}
++
+ 	cpc_read(cpunum, ref_perf_reg, &ref_perf);
+ 
+ 	/*
+diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
+index 6126c977ece0..07d4fd82d499 100644
+--- a/include/acpi/cppc_acpi.h
++++ b/include/acpi/cppc_acpi.h
+@@ -152,6 +152,7 @@ extern bool cpc_ffh_supported(void);
+ extern bool cpc_supported_by_cpu(void);
+ extern int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val);
+ extern int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val);
++extern int cpc_read_arch_counters_on_cpu(int cpu, u64 *delivered, u64 *reference);
+ extern int cppc_get_epp_perf(int cpunum, u64 *epp_perf);
+ extern int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls, bool enable);
+ extern int cppc_get_auto_sel_caps(int cpunum, struct cppc_perf_caps *perf_caps);
+@@ -209,6 +210,10 @@ static inline int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val)
+ {
+ 	return -ENOTSUPP;
+ }
++static inline int cpc_read_arch_counters_on_cpu(int cpu, u64 *delivered, u64 *reference)
++{
++	return -EOPNOTSUPP;
++}
+ static inline int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls, bool enable)
+ {
+ 	return -ENOTSUPP;
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.33.0
 
 
