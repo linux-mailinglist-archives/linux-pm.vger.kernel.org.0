@@ -1,249 +1,459 @@
-Return-Path: <linux-pm+bounces-929-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-930-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9375B80E4FB
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 08:42:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C04FD80E5C0
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 09:22:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3418CB21E43
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 07:42:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B086A1C208FF
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 08:22:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89EED168DA;
-	Tue, 12 Dec 2023 07:42:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 944E91A584;
+	Tue, 12 Dec 2023 08:22:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fblb9imS"
 X-Original-To: linux-pm@vger.kernel.org
-X-Greylist: delayed 946 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 11 Dec 2023 23:42:16 PST
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FECFBE;
-	Mon, 11 Dec 2023 23:42:16 -0800 (PST)
-Received: from mail.maildlp.com (unknown [172.19.163.17])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4Sq9B93gsTz1fyVL;
-	Tue, 12 Dec 2023 15:25:21 +0800 (CST)
-Received: from kwepemm000004.china.huawei.com (unknown [7.193.23.18])
-	by mail.maildlp.com (Postfix) with ESMTPS id C5E5B1A017F;
-	Tue, 12 Dec 2023 15:26:27 +0800 (CST)
-Received: from localhost.localdomain (10.69.192.56) by
- kwepemm000004.china.huawei.com (7.193.23.18) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 12 Dec 2023 15:26:27 +0800
-From: Huisong Li <lihuisong@huawei.com>
-To: <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <rafael@kernel.org>
-CC: <beata.michalska@arm.com>, <sumitg@nvidia.com>, <ionela.voinescu@arm.com>,
-	<zengheng4@huawei.com>, <yang@os.amperecomputing.com>, <will@kernel.org>,
-	<sudeep.holla@arm.com>, <liuyonglong@huawei.com>, <zhanjie9@hisilicon.com>,
-	<lihuisong@huawei.com>
-Subject: [PATCH] cpufreq: CPPC: Resolve the large frequency discrepancy from cpuinfo_cur_freq
-Date: Tue, 12 Dec 2023 15:26:17 +0800
-Message-ID: <20231212072617.14756-1-lihuisong@huawei.com>
-X-Mailer: git-send-email 2.33.0
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20CCB182BF;
+	Tue, 12 Dec 2023 08:22:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 991DDC433C7;
+	Tue, 12 Dec 2023 08:22:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702369324;
+	bh=S88d1ebtqGg4xz5WnYtvxaH0uGbhNBOGhgdRNivQD0c=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=Fblb9imSxCN01/ZExaIf6hSCDT0vAbnMA8VJg5a/VtFygHUag1wqW59TnAmH19VaP
+	 jmIn/3bD78ID9ljmbvm2BazcsTJFhbLVXbbDs82BUZd1BktupI3MMtg0Pn3XjK/qkI
+	 IiMYolua8jBtesy9o6znrAdPeJBTbVmwsMYvYM17cPtPXH2EfG3ZtGAAA+QSKPk4M1
+	 2tmp2Tb6QySAOd0YHsCGNJZz4MZFEwnjjnrlPUNZpgPL4wU7g8hdqGBfrFsWT0S+B4
+	 NpX3oDdz3MJZfJDeqAAv8tU0O2jpPvyV8NDwxQ/+czjVWwQTXDQFbsDEr2qepxbpYZ
+	 bjL2JDgXAxxsg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 78CF4C4332F;
+	Tue, 12 Dec 2023 08:22:04 +0000 (UTC)
+From:
+ Nikita Shubin via B4 Relay <devnull+nikita.shubin.maquefel.me@kernel.org>
+Subject: [PATCH v6 00/40] ep93xx device tree conversion
+Date: Tue, 12 Dec 2023 11:20:17 +0300
+Message-Id: <20231212-ep93xx-v6-0-c307b8ac9aa8@maquefel.me>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm000004.china.huawei.com (7.193.23.18)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAMEXeGUC/2WOQW6DMBBFrxJ5XSPPDLZLV71H1YXBQ7FaTGoTR
+ BVx95osgqIsv+a/N/8qMqfAWbydriLxEnKYYgnm5SS6wcUvlsGXLFAhKaO05HND6yoVdNYQWEa
+ PopRbl1m2ycVu2OujyzOn/XBO3If19uHjs+Q+TaOch8Tu8NZYA5JGrOCVFEqQMXyH2VV5uLQhv
+ o/u98I9/1Qj78oh5HlKf7fNC+3ip3kLSSXJG3K6B1DED459x1IfYAMHWBfQgbe28R13oJ5BfQc
+ BEO+gLqDXjbPGa99j8whu2/YPK2/242wBAAA=
+To: Hartley Sweeten <hsweeten@visionengravers.com>, 
+ Alexander Sverdlin <alexander.sverdlin@gmail.com>, 
+ Russell King <linux@armlinux.org.uk>, Lukasz Majewski <lukma@denx.de>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, Andy Shevchenko <andy@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
+ Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Nikita Shubin <nikita.shubin@maquefel.me>, Vinod Koul <vkoul@kernel.org>, 
+ Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Guenter Roeck <linux@roeck-us.net>, 
+ Thierry Reding <thierry.reding@gmail.com>, 
+ =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
+ Mark Brown <broonie@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Miquel Raynal <miquel.raynal@bootlin.com>, 
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
+ Damien Le Moal <dlemoal@kernel.org>, Sergey Shtylyov <s.shtylyov@omp.ru>, 
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, 
+ Takashi Iwai <tiwai@suse.com>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org, 
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+ dmaengine@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+ linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org, 
+ netdev@vger.kernel.org, linux-mtd@lists.infradead.org, 
+ linux-ide@vger.kernel.org, linux-input@vger.kernel.org, 
+ linux-sound@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, 
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Andrew Lunn <andrew@lunn.ch>, Andy Shevchenko <andy.shevchenko@gmail.com>, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+X-Mailer: b4 0.13-dev-e3e53
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1702369322; l=14444;
+ i=nikita.shubin@maquefel.me; s=20230718; h=from:subject:message-id;
+ bh=S88d1ebtqGg4xz5WnYtvxaH0uGbhNBOGhgdRNivQD0c=; =?utf-8?q?b=3D+xp65JGOWQTf?=
+ =?utf-8?q?Fz1ftk6zScJiUl0daUmI7W6bV36hejIPsX8O1zuAcDFKF2/bFdVDWEYKVY4phEoF?=
+ 7Hw2RcrxBQwiiCCiLLCHiB+u0Y6Oxml3ttezMDv3QRSfizy57WRK
+X-Developer-Key: i=nikita.shubin@maquefel.me; a=ed25519;
+ pk=vqf5YIUJ7BJv3EJFaNNxWZgGuMgDH6rwufTLflwU9ac=
+X-Endpoint-Received:
+ by B4 Relay for nikita.shubin@maquefel.me/20230718 with auth_id=65
+X-Original-From: Nikita Shubin <nikita.shubin@maquefel.me>
+Reply-To: <nikita.shubin@maquefel.me>
 
-Many developers found that the cpu current frequency is greater than
-the maximum frequency of the platform, please see [1], [2] and [3].
+No major changes since last version all changes are cometic.
 
-In the scenarios with high memory access pressure, the patch [1] has
-proved the significant latency of cpc_read() which is used to obtain
-delivered and reference performance counter cause an absurd frequency.
-The sampling interval for this counters is very critical and is expected
-to be equal. However, the different latency of cpc_read() has a direct
-impact on their sampling interval.
+Following patches require attention from Stephen Boyd, as they were converted to aux_dev as suggested:
 
-This patch adds a interface, cpc_read_arch_counters_on_cpu, to read
-delivered and reference performance counter together. According to my
-test[4], the discrepancy of cpu current frequency in the scenarios with
-high memory access pressure is lower than 0.2% by stress-ng application.
+- ARM: ep93xx: add regmap aux_dev
+- clk: ep93xx: add DT support for Cirrus EP93xx
 
-[1] https://lore.kernel.org/all/20231025093847.3740104-4-zengheng4@huawei.com/
-[2] https://lore.kernel.org/all/20230328193846.8757-1-yang@os.amperecomputing.com/
-[3] https://lore.kernel.org/all/20230418113459.12860-7-sumitg@nvidia.com/
+DMA related patches still require Acked or Reviewed tags.
 
-[4] My local test:
-The testing platform enable SMT and include 128 logical CPU in total,
-and CPU base frequency is 2.7GHz. Reading "cpuinfo_cur_freq" for each
-physical core on platform during the high memory access pressure from
-stress-ng, and the output is as follows:
-  0: 2699133     2: 2699942     4: 2698189     6: 2704347
-  8: 2704009    10: 2696277    12: 2702016    14: 2701388
- 16: 2700358    18: 2696741    20: 2700091    22: 2700122
- 24: 2701713    26: 2702025    28: 2699816    30: 2700121
- 32: 2700000    34: 2699788    36: 2698884    38: 2699109
- 40: 2704494    42: 2698350    44: 2699997    46: 2701023
- 48: 2703448    50: 2699501    52: 2700000    54: 2699999
- 56: 2702645    58: 2696923    60: 2697718    62: 2700547
- 64: 2700313    66: 2700000    68: 2699904    70: 2699259
- 72: 2699511    74: 2700644    76: 2702201    78: 2700000
- 80: 2700776    82: 2700364    84: 2702674    86: 2700255
- 88: 2699886    90: 2700359    92: 2699662    94: 2696188
- 96: 2705454    98: 2699260   100: 2701097   102: 2699630
-104: 2700463   106: 2698408   108: 2697766   110: 2701181
-112: 2699166   114: 2701804   116: 2701907   118: 2701973
-120: 2699584   122: 2700474   124: 2700768   126: 2701963
+got approval LGTM from Miquel:
+- mtd: rawnand: add support for ts72xx
+Link: https://lore.kernel.org/lkml/20231004103911.2aa65354@xps-13/
 
-Signed-off-by: Huisong Li <lihuisong@huawei.com>
+new patches:
+
+ARM: ep93xx:  Add terminator to gpiod_lookup_table
+  - fixed terminator in gpiod_lockup_table
+
+So mostly all patches got approval.
+
+Patches should be now formated with '--histogram'
+
 ---
- arch/arm64/kernel/topology.c | 43 ++++++++++++++++++++++++++++++++++--
- drivers/acpi/cppc_acpi.c     | 22 +++++++++++++++---
- include/acpi/cppc_acpi.h     |  5 +++++
- 3 files changed, 65 insertions(+), 5 deletions(-)
+Changes in v6:
 
-diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-index 7d37e458e2f5..c3122154d738 100644
---- a/arch/arm64/kernel/topology.c
-+++ b/arch/arm64/kernel/topology.c
-@@ -299,6 +299,11 @@ core_initcall(init_amu_fie);
- #ifdef CONFIG_ACPI_CPPC_LIB
- #include <acpi/cppc_acpi.h>
+- clk: ep93xx: add DT support for Cirrus EP93xx
+  - s/spin_lock_irqsave()/guard()/
+  - refactor index check in ep93xx_mux_set_parent_lock() to something more readable
+  - use in_range in ep93xx_mux_set_parent_lock()/ep93xx_ddiv_set_rate()
+  - use GENMASK() in ep93xx_ddiv_recalc_rate()
+  - comment reserved bit in ep93xx_ddiv_set_rate()
+  - move out from loop ClkDiv value assigment
+  - some style fixes
+
+Andy, i was i asked to set index of XTALI explicitly, i am not setting ddiv_pdata 
+there becouse only XTALI is jnown in advance, and i think setting them in one place is more convenient.
+
+- pinctrl: add a Cirrus ep93xx SoC pin controller
+  - drop OF from Kconfig
+  - droped linux/of.h include
+  - add space to */ where it is applicable
+  - add coma in multiline assigment
+  - "return NULL" as default case in ep93xx_get_group_name()
+  - fixed casting id->driver_data
+  - use device_set_of_node_from_dev()
+  - use dev_err_probe()
+
+- power: reset: Add a driver for the ep93xx reset
+  - drop linux/of.h include
+
+- soc: Add SoC driver for Cirrus ep93xx
+  - s/GPL-2.0/GPL-2.0-only/
+  - drop linux/kernel.h include
+  - + blank line before linux/soc/cirrus/ep93xx.h
+  - + blank line after ep93xx_get_soc_rev()
+  - + coma for pinctrl_names
+  - valid casting to int for of_device_get_match_data() return value
+
+- mtd: rawnand: add support for ts72xx
+  - return as part of switch case
+  - s/iowrite8/iowrite8_rep/
+
+- net: cirrus: add DT support for Cirrus EP93xx
+  - fix header sorting
+
+- dma: cirrus: Convert to DT for Cirrus EP93xx
+  - use devm_clk_get
+  - use is_slave_direction
+
+Changes in v5:
+
+- gpio: ep93xx: split device in multiple
+  - ordered headers
+  - use irqd_to_hwirq()
+  - s/platform_get_irq()/platform_get_irq_optional()/
  
-+struct amu_counters {
-+	u64 corecnt;
-+	u64 constcnt;
-+};
-+
- static void cpu_read_corecnt(void *val)
- {
- 	/*
-@@ -322,8 +327,27 @@ static void cpu_read_constcnt(void *val)
- 		      0UL : read_constcnt();
- }
+- [PATCH v4 02/42] ARM: ep93xx: add swlocked prototypes
+  - replaced with ARM: ep93xx: add regmap aux_dev
+
+- [PATCH v4 03/42] dt-bindings: clock: Add Cirrus EP93xx
+  - fixed identation
+  - removed EP93XX_CLK_END
+  - and dropped it
+  - clock bindings moved to syscon with renaming to cirrus,ep9301-syscon.h
+
+- clk: ep93xx: add DT support for Cirrus EP93xx
+  - convert to auxiliary and use parent device tree node
+  - moved all clocks except XTALI here
+  - used devm version everywhere and *_parent_hw() instead of passing name where it's possible
+  - unfortunately devm_clk_hw_register_fixed_rate doesn't have a parent index version
+
+- [PATCH v4 05/42] dt-bindings: pinctrl: Add Cirrus EP93xx
+  - "unevaluatedProperties: false" for pins
+  - returned "additionalProperties: false" where it was
+  - and dropped it
+
+- pinctrl: add a Cirrus ep93xx SoC pin controller
+  - sorted includes
+  - convert to auxiliary and use parent device tree node
+
+- power: reset: Add a driver for the ep93xx reset
+  - convert to auxiliary device
+
+- dt-bindings: soc: Add Cirrus EP93xx
+  - dropped all ref to reboot, clk, pinctrl subnodes
+  - added pins, as it's now used for pinctrl
+  - added #clock-cells, as it's now used for clk
+
+- dt-bindings: pwm: Add Cirrus EP93xx
+  - $ref to pwm.yaml
+  - fixed 'pwm-cells'
+  - s/additionalProperties/unevaluatedProperties/
+
+- soc: Add SoC driver for Cirrus ep93xx
+  - removed clocks, they are moved to clk auxiliary driver, as we dropped the clk dt node
+  - removed all swlocked exported functions
+  - dropped static spinlock
+  - added instantiating auxiliary reboot, clk, pinctrl
+
+- dt-bindings: spi: Add Cirrus EP93xx
+  - Document DMA support
+
+- spi: ep93xx: add DT support for Cirrus EP93xx
+  - dropped CONFIG_OF and SPI/DMA platform data entirely
+  - s/master/host/
+  - reworked DMA setup so we can use probe defer
+
+- dt-bindings: dma: Add Cirrus EP93xx
+  - dropped bindings header (moved ports description to YAML)
+  - changed '#dma-cells' to 2, we use port, direction in cells so we can drop platform code completely
+
+- dma: cirrus: add DT support for Cirrus EP93xx
+  - dropped platform probing completely
+  - dropped struct ep93xx_dma_data replaced with internal struct ep93xx_dma_chan_cfg with port/direction
+  - added xlate functions for m2m/m2p
+  - we require filters to set dma_cfg before hw_setup
+
+- dt-bindings: ata: Add Cirrus EP93xx
+  - Document DMA support 
+
+- ata: pata_ep93xx: add device tree support
+  - drop DMA platform header with data
+  - use DMA OF so we can defer probing until DMA is up
+
+- ARM: dts: add Cirrus EP93XX SoC .dtsi
+- ARM: dts: ep93xx: add ts7250 board
+- ARM: dts: ep93xx: Add EDB9302 DT
+  - replaced "eclk: clock-controller" to syscon reference
+  - replaced "pinctrl: pinctrl" to syscon reference
+  - gpios are now "enabled" by default
+  - reworked i2s node
+  - change all dma nodes and refs
+
+- new additions to I2S
+  - Document DMA
+  - Document Audio Port usage
+  - drop legacy DMA support
+
+- Link to v4: https://lore.kernel.org/r/20230915-ep93xx-v4-0-a1d779dcec10@maquefel.me
+
+Changes in v4:
+
+- gpio: ep93xx: split device in multiple
+  - s/generic_handle_irq/generic_handle_domain_irq/
+  - s/int offset/irq_hw_number_t offset/ though now it looks a bit odd to me
+  - drop i = 0
+  - drop 'error'
+  - use dev_err_probe withour printing devname once again
+
+dt-bindings: clock: Add Cirrus EP93xx
+  - renamed cirrus,ep93xx-clock.h -> cirrus,ep9301-clk.h
+
+clk: ep93xx: add DT support for Cirrus EP93xx
+  - drop unused includes
+  - use .name only for xtali, pll1, pll2 parents
+  - convert // to /*
+  - pass clk_parent_data instead of char* clock name
+
+dt-bindings: pinctrl: Add Cirrus EP93xx
+  - s/additionalProperties/unevaluatedProperties/
+
+dt-bindings: soc: Add Cirrus EP93xx
+  - move syscon to soc directory
+  - add vendor prefix
+  - make reboot same style as pinctrl, clk
+  - use absolute path for ref
+  - expand example
+
+soc: Add SoC driver for Cirrus ep93xx
+  - s/0xf0000000/GENMASK(31, 28)/
+  - s/ret/ep93xx_chip_revision(map)/
+  - drop symbol exports
+  - convert to platform driver
+
+dt-bindings: rtc: Add Cirrus EP93xx
+  - allOf: with $ref to rtc.yaml
+  - s/additionalProperties/unevaluatedProperties/
+
+dt-bindings: watchdog: Add Cirrus EP93x
+  - drop description
+  - reword
+
+power: reset: Add a driver for the ep93xx reset
+  - lets use 'GPL-2.0+' instead of '(GPL-2.0)'
+  - s/of_device/of/
+  - drop mdelay with warning
+  - return 0 at the end
+
+net: cirrus: add DT support for Cirrus EP93xx
+  - fix leaking np
+
+mtd: nand: add support for ts72xx
+  - +bits.h
+  - drop comment
+  - ok to fwnode_get_next_child_node
+  - use goto to put handle and nand and report error
+
+ARM: dts: add Cirrus EP93XX SoC .dtsi
+  - add simple-bus for ebi, as we don't require to setup anything
+  - add arm,pl011 compatible to uart nodes
+  - drop i2c-gpio, as it's isn't used anywhere
+
+ARM: dts: ep93xx: add ts7250 board
+  - generic node name for temperature-sensor
+  - drop i2c
+  - move nand, rtc, watchdog to ebi node
  
-+static void cpu_read_amu_counters(void *data)
-+{
-+	struct amu_counters *cnt = (struct amu_counters *)data;
-+
-+	/*
-+	 * The running time of the this_cpu_has_cap() might have a couple of
-+	 * microseconds and is significantly increased to tens of microseconds.
-+	 * But AMU core and constant counter need to be read togeter without any
-+	 * time interval to reduce the calculation discrepancy using this counters.
-+	 */
-+	if (this_cpu_has_cap(ARM64_WORKAROUND_2457168)) {
-+		cnt->corecnt = read_corecnt();
-+		cnt->constcnt = 0;
-+	} else {
-+		cnt->corecnt = read_corecnt();
-+		cnt->constcnt = read_constcnt();
-+	}
-+}
-+
- static inline
--int counters_read_on_cpu(int cpu, smp_call_func_t func, u64 *val)
-+int counters_read_on_cpu(int cpu, smp_call_func_t func, void *data)
- {
- 	/*
- 	 * Abort call on counterless CPU or when interrupts are
-@@ -335,7 +359,7 @@ int counters_read_on_cpu(int cpu, smp_call_func_t func, u64 *val)
- 	if (WARN_ON_ONCE(irqs_disabled()))
- 		return -EPERM;
- 
--	smp_call_function_single(cpu, func, val, 1);
-+	smp_call_function_single(cpu, func, data, 1);
- 
- 	return 0;
- }
-@@ -364,6 +388,21 @@ bool cpc_ffh_supported(void)
- 	return true;
- }
- 
-+int cpc_read_arch_counters_on_cpu(int cpu, u64 *delivered, u64 *reference)
-+{
-+	struct amu_counters cnts = {0};
-+	int ret;
-+
-+	ret = counters_read_on_cpu(cpu, cpu_read_amu_counters, &cnts);
-+	if (ret)
-+		return ret;
-+
-+	*delivered = cnts.corecnt;
-+	*reference = cnts.constcnt;
-+
-+	return 0;
-+}
-+
- int cpc_read_ffh(int cpu, struct cpc_reg *reg, u64 *val)
- {
- 	int ret = -EOPNOTSUPP;
-diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-index 7ff269a78c20..f303fabd7cfe 100644
---- a/drivers/acpi/cppc_acpi.c
-+++ b/drivers/acpi/cppc_acpi.c
-@@ -1299,6 +1299,11 @@ bool cppc_perf_ctrs_in_pcc(void)
- }
- EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
- 
-+int __weak cpc_read_arch_counters_on_cpu(int cpu, u64 *delivered, u64 *reference)
-+{
-+	return 0;
-+}
-+
- /**
-  * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
-  * @cpunum: CPU from which to read counters.
-@@ -1313,7 +1318,8 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
- 		*ref_perf_reg, *ctr_wrap_reg;
- 	int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpunum);
- 	struct cppc_pcc_data *pcc_ss_data = NULL;
--	u64 delivered, reference, ref_perf, ctr_wrap_time;
-+	u64 delivered = 0, reference = 0;
-+	u64 ref_perf, ctr_wrap_time;
- 	int ret = 0, regs_in_pcc = 0;
- 
- 	if (!cpc_desc) {
-@@ -1350,8 +1356,18 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
- 		}
- 	}
- 
--	cpc_read(cpunum, delivered_reg, &delivered);
--	cpc_read(cpunum, reference_reg, &reference);
-+	if (cpc_ffh_supported()) {
-+		ret = cpc_read_arch_counters_on_cpu(cpunum, &delivered, &reference);
-+		if (ret) {
-+			pr_debug("read arch counters failed, ret=%d.\n", ret);
-+			ret = 0;
-+		}
-+	}
-+	if (!delivered || !reference) {
-+		cpc_read(cpunum, delivered_reg, &delivered);
-+		cpc_read(cpunum, reference_reg, &reference);
-+	}
-+
- 	cpc_read(cpunum, ref_perf_reg, &ref_perf);
- 
- 	/*
-diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
-index 6126c977ece0..07d4fd82d499 100644
---- a/include/acpi/cppc_acpi.h
-+++ b/include/acpi/cppc_acpi.h
-@@ -152,6 +152,7 @@ extern bool cpc_ffh_supported(void);
- extern bool cpc_supported_by_cpu(void);
- extern int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val);
- extern int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val);
-+extern int cpc_read_arch_counters_on_cpu(int cpu, u64 *delivered, u64 *reference);
- extern int cppc_get_epp_perf(int cpunum, u64 *epp_perf);
- extern int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls, bool enable);
- extern int cppc_get_auto_sel_caps(int cpunum, struct cppc_perf_caps *perf_caps);
-@@ -209,6 +210,10 @@ static inline int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val)
- {
- 	return -ENOTSUPP;
- }
-+static inline int cpc_read_arch_counters_on_cpu(int cpu, u64 *delivered, u64 *reference)
-+{
-+	return -EOPNOTSUPP;
-+}
- static inline int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls, bool enable)
- {
- 	return -ENOTSUPP;
+- Link to v3: https://lore.kernel.org/r/20230605-ep93xx-v3-0-3d63a5f1103e@maquefel.me
+
+---
+Alexander Sverdlin (3):
+      ASoC: ep93xx: Drop legacy DMA support
+      ARM: dts: ep93xx: Add EDB9302 DT
+      ASoC: cirrus: edb93xx: Delete driver
+
+Nikita Shubin (37):
+      ARM: ep93xx:  Add terminator to gpiod_lookup_table
+      gpio: ep93xx: split device in multiple
+      ARM: ep93xx: add regmap aux_dev
+      clk: ep93xx: add DT support for Cirrus EP93xx
+      pinctrl: add a Cirrus ep93xx SoC pin controller
+      power: reset: Add a driver for the ep93xx reset
+      dt-bindings: soc: Add Cirrus EP93xx
+      soc: Add SoC driver for Cirrus ep93xx
+      dt-bindings: dma: Add Cirrus EP93xx
+      dma: cirrus: Convert to DT for Cirrus EP93xx
+      dt-bindings: watchdog: Add Cirrus EP93x
+      watchdog: ep93xx: add DT support for Cirrus EP93xx
+      dt-bindings: pwm: Add Cirrus EP93xx
+      pwm: ep93xx: add DT support for Cirrus EP93xx
+      dt-bindings: spi: Add Cirrus EP93xx
+      spi: ep93xx: add DT support for Cirrus EP93xx
+      dt-bindings: net: Add Cirrus EP93xx
+      net: cirrus: add DT support for Cirrus EP93xx
+      dt-bindings: mtd: Add ts7200 nand-controller
+      mtd: rawnand: add support for ts72xx
+      dt-bindings: ata: Add Cirrus EP93xx
+      ata: pata_ep93xx: add device tree support
+      dt-bindings: input: Add Cirrus EP93xx keypad
+      input: keypad: ep93xx: add DT support for Cirrus EP93xx
+      dt-bindings: wdt: Add ts72xx
+      wdt: ts72xx: add DT support for ts72xx
+      gpio: ep93xx: add DT support for gpio-ep93xx
+      ASoC: dt-bindings: ep93xx: Document DMA support
+      ASoC: dt-bindings: ep93xx: Document Audio Port support
+      ARM: dts: add Cirrus EP93XX SoC .dtsi
+      ARM: dts: ep93xx: add ts7250 board
+      ARM: ep93xx: DT for the Cirrus ep93xx SoC platforms
+      pwm: ep93xx: drop legacy pinctrl
+      ata: pata_ep93xx: remove legacy pinctrl use
+      ARM: ep93xx: delete all boardfiles
+      ARM: ep93xx: soc: drop defines
+      dma: cirrus: remove platform code
+
+ .../bindings/arm/cirrus/cirrus,ep9301.yaml         |   38 +
+ .../bindings/ata/cirrus,ep9312-pata.yaml           |   42 +
+ .../bindings/dma/cirrus,ep9301-dma-m2m.yaml        |   84 ++
+ .../bindings/dma/cirrus,ep9301-dma-m2p.yaml        |  144 ++
+ .../bindings/input/cirrus,ep9307-keypad.yaml       |   87 ++
+ .../devicetree/bindings/mtd/technologic,nand.yaml  |   45 +
+ .../devicetree/bindings/net/cirrus,ep9301-eth.yaml |   59 +
+ .../devicetree/bindings/pwm/cirrus,ep9301-pwm.yaml |   53 +
+ .../bindings/soc/cirrus/cirrus,ep9301-syscon.yaml  |   94 ++
+ .../bindings/sound/cirrus,ep9301-i2s.yaml          |   16 +
+ .../devicetree/bindings/spi/cirrus,ep9301-spi.yaml |   70 +
+ .../bindings/watchdog/cirrus,ep9301-wdt.yaml       |   42 +
+ .../bindings/watchdog/technologic,ts7200-wdt.yaml  |   45 +
+ arch/arm/Makefile                                  |    1 -
+ arch/arm/boot/dts/cirrus/Makefile                  |    4 +
+ arch/arm/boot/dts/cirrus/ep93xx-bk3.dts            |  126 ++
+ arch/arm/boot/dts/cirrus/ep93xx-edb9302.dts        |  182 +++
+ arch/arm/boot/dts/cirrus/ep93xx-ts7250.dts         |  145 ++
+ arch/arm/boot/dts/cirrus/ep93xx.dtsi               |  441 ++++++
+ arch/arm/mach-ep93xx/Kconfig                       |   20 +-
+ arch/arm/mach-ep93xx/Makefile                      |   11 -
+ arch/arm/mach-ep93xx/clock.c                       |  733 ----------
+ arch/arm/mach-ep93xx/core.c                        | 1017 --------------
+ arch/arm/mach-ep93xx/dma.c                         |  114 --
+ arch/arm/mach-ep93xx/edb93xx.c                     |  344 -----
+ arch/arm/mach-ep93xx/ep93xx-regs.h                 |   38 -
+ arch/arm/mach-ep93xx/gpio-ep93xx.h                 |  111 --
+ arch/arm/mach-ep93xx/hardware.h                    |   25 -
+ arch/arm/mach-ep93xx/irqs.h                        |   76 --
+ arch/arm/mach-ep93xx/platform.h                    |   42 -
+ arch/arm/mach-ep93xx/soc.h                         |  212 ---
+ arch/arm/mach-ep93xx/timer-ep93xx.c                |  143 --
+ arch/arm/mach-ep93xx/ts72xx.c                      |  422 ------
+ arch/arm/mach-ep93xx/ts72xx.h                      |   94 --
+ arch/arm/mach-ep93xx/vision_ep9307.c               |  311 -----
+ drivers/ata/pata_ep93xx.c                          |  106 +-
+ drivers/clk/Kconfig                                |    8 +
+ drivers/clk/Makefile                               |    1 +
+ drivers/clk/clk-ep93xx.c                           |  849 ++++++++++++
+ drivers/dma/ep93xx_dma.c                           |  286 +++-
+ drivers/gpio/gpio-ep93xx.c                         |  345 ++---
+ drivers/input/keyboard/ep93xx_keypad.c             |   74 +-
+ drivers/mtd/nand/raw/Kconfig                       |    7 +
+ drivers/mtd/nand/raw/Makefile                      |    1 +
+ drivers/mtd/nand/raw/technologic-nand-controller.c |  220 +++
+ drivers/net/ethernet/cirrus/ep93xx_eth.c           |   63 +-
+ drivers/pinctrl/Kconfig                            |    7 +
+ drivers/pinctrl/Makefile                           |    1 +
+ drivers/pinctrl/pinctrl-ep93xx.c                   | 1430 ++++++++++++++++++++
+ drivers/power/reset/Kconfig                        |   10 +
+ drivers/power/reset/Makefile                       |    1 +
+ drivers/power/reset/ep93xx-restart.c               |   80 ++
+ drivers/pwm/pwm-ep93xx.c                           |   26 +-
+ drivers/soc/Kconfig                                |    1 +
+ drivers/soc/Makefile                               |    1 +
+ drivers/soc/cirrus/Kconfig                         |   13 +
+ drivers/soc/cirrus/Makefile                        |    2 +
+ drivers/soc/cirrus/soc-ep93xx.c                    |  247 ++++
+ drivers/spi/spi-ep93xx.c                           |   68 +-
+ drivers/watchdog/ep93xx_wdt.c                      |    8 +
+ drivers/watchdog/ts72xx_wdt.c                      |    8 +
+ include/dt-bindings/clock/cirrus,ep9301-syscon.h   |   46 +
+ include/linux/platform_data/dma-ep93xx.h           |   94 --
+ include/linux/platform_data/eth-ep93xx.h           |   10 -
+ include/linux/platform_data/keypad-ep93xx.h        |   32 -
+ include/linux/platform_data/spi-ep93xx.h           |   15 -
+ include/linux/soc/cirrus/ep93xx.h                  |   47 +-
+ sound/soc/cirrus/Kconfig                           |    9 -
+ sound/soc/cirrus/Makefile                          |    4 -
+ sound/soc/cirrus/edb93xx.c                         |  117 --
+ sound/soc/cirrus/ep93xx-i2s.c                      |   19 -
+ sound/soc/cirrus/ep93xx-pcm.c                      |   19 +-
+ 72 files changed, 5192 insertions(+), 4514 deletions(-)
+---
+base-commit: 26aff849438cebcd05f1a647390c4aa700d5c0f1
+change-id: 20230605-ep93xx-01c76317e2d2
+
+Best regards,
 -- 
-2.33.0
+Nikita Shubin <nikita.shubin@maquefel.me>
 
 
