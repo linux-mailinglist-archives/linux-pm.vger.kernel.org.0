@@ -1,137 +1,113 @@
-Return-Path: <linux-pm+bounces-1022-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1023-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC26F80F8D5
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 22:02:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6B9080F9AD
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 22:47:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8810128158C
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 21:02:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7074F1F2140D
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 21:47:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A759665A7F;
-	Tue, 12 Dec 2023 21:02:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7095064157;
+	Tue, 12 Dec 2023 21:47:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="J0zWqfWH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="raybKYX8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31E29C
-	for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 13:02:36 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-3333fbbeab9so5335335f8f.2
-        for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 13:02:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702414955; x=1703019755; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fP3PBbkg+dGDRbq07rpkl3oLoeUyahhiYf75aZTkbF0=;
-        b=J0zWqfWHzdG+QeTl4U+QZKt5y8Efwcr4V31Lrl3e2GJf9dHb9GaTPdMyz9JWAq6VFf
-         qwjugv9cp6cXnOKMsJX4dkdYNwVtyK3ihlzxWykY+6lv6lX0XKlUcaoc4LQhxOk03BSE
-         Z2lq3HU73JzInRDo6yWRUEOzljFsx8PuopvbtC5DJL9L/BZNYSCx9zeMcOeWeHcIyCIJ
-         RUHOSlo9YUfIiee931XMpbikEp5vt0vESB+XgtxVNRJDmWW4G5rrBkErAcjZO2btQqE0
-         tm2DiZrPWCTb17j9l1YEpMknlNafOFe5rbY3r5fpnwEfqpC2oXfgwlyOUHI5NnQcZHSM
-         CliQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702414955; x=1703019755;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fP3PBbkg+dGDRbq07rpkl3oLoeUyahhiYf75aZTkbF0=;
-        b=Yz1OmUdne8pGzcuPKgsiWPLs1jh7Jup4AAsH46r/T3k5RsTlHX1sZ65X8fGa3P4C2S
-         6OaIQsIArheUXAhkispMaiSSMmHysDuYkcUbzcAkxC8nwWKOGIabf516D4gby63za7MP
-         S38KZzVBE7HDMoepVXGYJjoSkSHfS9a27krvaNWHIpG6dHs0zDWrNMbL8z3t4i+kxFBu
-         4LCQkaTqhgapbPEkIzdxcMi5lmQae+ajuRKLf9rRftplySvIa3c1SSc9qdhIjlH86ucU
-         3k3OsbV/0S1MHZizi3nX9tgrwICCXPqYB+JgZI7BDlym8xEzTRjUtE/bLxwpToZMfsJo
-         e5dA==
-X-Gm-Message-State: AOJu0YwCMA5RfKibyBJ/snZ1KqNF8WqQ/jzOPqneX4OeN416wNfY9pwL
-	FqA0bFGkIkcNXDS1a4v1qceTlA==
-X-Google-Smtp-Source: AGHT+IGzx824ZUtMwg2ZMXI/wufgirctkBfjm6aqgGXizgPzjydfwsIPAaND7CNMU2RbzjzhH/Jlzw==
-X-Received: by 2002:adf:e34a:0:b0:332:de0f:d7be with SMTP id n10-20020adfe34a000000b00332de0fd7bemr3284238wrj.18.1702414955022;
-        Tue, 12 Dec 2023 13:02:35 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
-        by smtp.googlemail.com with ESMTPSA id n4-20020a5d6b84000000b0033634aef014sm1746153wrx.104.2023.12.12.13.02.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Dec 2023 13:02:34 -0800 (PST)
-Message-ID: <1e2b5100-f40d-47f2-880b-121704c0c8e2@linaro.org>
-Date: Tue, 12 Dec 2023 22:02:33 +0100
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E95D63BE5;
+	Tue, 12 Dec 2023 21:47:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4C01C433C7;
+	Tue, 12 Dec 2023 21:47:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702417624;
+	bh=GEbphLNtH08LYd0Afzr3nGiRgbiKfgbz66e9KqMpUhU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=raybKYX8pD28eWvS9kJTUl17VqcRAmZWstq0aEf1C5YsyMLoc/U6BK4UMr4to8xgu
+	 Py/EVmYq86jMuQpfTSQrmFfU0X10fGjEVGaklTTf4buECe/CUdzkkYlAJAjNdoyNrt
+	 amBFsljgtiA0eQQQKmFzf/W+n+ILhvvBUUBTNazhzkjSnnxCHnGTXqnuUXaf+M+znV
+	 y0Z39pyNU1P+BdG9XIzmUUjYufwwvnAaT8yYxL5Vtps3Omv25TLyRfLvuEr2OE9gNS
+	 R+eOyk6olNvcyMhMsioZHrRdYAhvLmPEeGTMhc2vGQ3HSjPkaVbWeztI2suV8rejIY
+	 ITWUOrZ8Vc+aA==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Sebastian Reichel <sre@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Nathan Chancellor <nathan@kernel.org>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Yangtao Li <frank.li@vivo.com>,
+	linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] power: reset: at91: mark at91_wakeup_status non-__init
+Date: Tue, 12 Dec 2023 22:46:49 +0100
+Message-Id: <20231212214658.213510-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] thermal: trip: Send trip change notifications on all
- trip updates
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux PM <linux-pm@vger.kernel.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Zhang Rui <rui.zhang@intel.com>, Linux ACPI <linux-acpi@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>
-References: <5737811.DvuYhMxLoT@kreacher>
- <cf055d45-8970-4657-ab86-d28636645c81@linaro.org>
- <CAJZ5v0ic_=2wvge1T7YmGe5icR5dPxrvKy2N4gXP+KMievobmA@mail.gmail.com>
- <CAJZ5v0gkBZh42obB-g95T2DBFntYrnidjAeUoFN+e-CqGrSQCw@mail.gmail.com>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0gkBZh42obB-g95T2DBFntYrnidjAeUoFN+e-CqGrSQCw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 12/12/2023 20:04, Rafael J. Wysocki wrote:
-> On Wed, Dec 6, 2023 at 5:01 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->>
->> Hi Daniel,
->>
->> On Wed, Dec 6, 2023 at 3:38 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
->>>
->>>
->>> Hi Rafael,
->>>
->>> On 05/12/2023 20:18, Rafael J. Wysocki wrote:
->>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>>
->>>> The _store callbacks of the trip point temperature and hysteresis sysfs
->>>> attributes invoke thermal_notify_tz_trip_change() to send a notification
->>>> regarding the trip point change, but when trip points are updated by the
->>>> platform firmware, trip point change notifications are not sent.
->>>>
->>>> To make the behavior after a trip point change more consistent,
->>>> modify all of the 3 places where trip point temperature is updated
->>>> to use a new function called thermal_zone_set_trip_temp() for this
->>>> purpose and make that function call thermal_notify_tz_trip_change().
->>>>
->>>> Note that trip point hysteresis can only be updated via sysfs and
->>>> trip_point_hyst_store() calls thermal_notify_tz_trip_change() already,
->>>> so this code path need not be changed.
->>>
->>> Why the ACPI driver is not calling thermal_zone_device_update() after
->>> changing the trip point like the other drivers?
->>
->> It calls that function, but because it may update multiple trips in
->> one go, it does that after all of the updates are done, via
->> acpi_thermal_check_fn().
->>
->>> It would make sense to have the thermal framework to be notified about
->>> this change and check if there is a trip violation, no ?
->>
->> It is notified as noted above, but not synchronously.
-> 
-> I believe that the question above has been answered, so are there any
-> other comments or concerns regarding this patch?
+From: Arnd Bergmann <arnd@arndb.de>
 
-No, it is fine. Thanks for the clarification
+Two copies of the at91_wakeup_status() function are called by the
+respective probe() callbacks and are marked __init, but the probe
+functions are no longer annotated that way. This works with gcc because
+the functions always get inlined, but clang keeps them separate, which
+can lead to executing freed memory:
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+WARNING: modpost: vmlinux: section mismatch in reference: at91_poweroff_probe+0x80 (section: .text) -> at91_wakeup_status (section: .init.text)
+WARNING: modpost: vmlinux: section mismatch in reference: at91_shdwc_probe+0xcc (section: .text) -> at91_wakeup_status (section: .init.text)
 
+Drop the incorrect annotation on these.
 
+Fixes: 099806de68b7 ("power: reset: at91-poweroff: Stop using module_platform_driver_probe()")
+Fixes: dde74a5de817 ("power: reset: at91-sama5d2_shdwc: Stop using module_platform_driver_probe()")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ drivers/power/reset/at91-poweroff.c      | 2 +-
+ drivers/power/reset/at91-sama5d2_shdwc.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/power/reset/at91-poweroff.c b/drivers/power/reset/at91-poweroff.c
+index 126e774e210c..93eece027865 100644
+--- a/drivers/power/reset/at91-poweroff.c
++++ b/drivers/power/reset/at91-poweroff.c
+@@ -57,7 +57,7 @@ static struct shdwc {
+ 	void __iomem *mpddrc_base;
+ } at91_shdwc;
+ 
+-static void __init at91_wakeup_status(struct platform_device *pdev)
++static void at91_wakeup_status(struct platform_device *pdev)
+ {
+ 	const char *reason;
+ 	u32 reg = readl(at91_shdwc.shdwc_base + AT91_SHDW_SR);
+diff --git a/drivers/power/reset/at91-sama5d2_shdwc.c b/drivers/power/reset/at91-sama5d2_shdwc.c
+index af95c7b39cb3..959ce0dbe91d 100644
+--- a/drivers/power/reset/at91-sama5d2_shdwc.c
++++ b/drivers/power/reset/at91-sama5d2_shdwc.c
+@@ -107,7 +107,7 @@ static const unsigned long long sdwc_dbc_period[] = {
+ 	0, 3, 32, 512, 4096, 32768,
+ };
+ 
+-static void __init at91_wakeup_status(struct platform_device *pdev)
++static void at91_wakeup_status(struct platform_device *pdev)
+ {
+ 	struct shdwc *shdw = platform_get_drvdata(pdev);
+ 	const struct reg_config *rcfg = shdw->rcfg;
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.39.2
 
 
