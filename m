@@ -1,78 +1,77 @@
-Return-Path: <linux-pm+bounces-944-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-945-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F73280EB46
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 13:10:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96FB980EB9F
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 13:23:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BCC2E28200F
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 12:10:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 977041C20A5A
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 12:23:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 924155DF3F;
-	Tue, 12 Dec 2023 12:10:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 756E05E0D4;
+	Tue, 12 Dec 2023 12:23:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="j50qnq5n"
+	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="a+EPx4/8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CFBC7
-	for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 04:10:27 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-40c46d6784eso19639885e9.3
-        for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 04:10:27 -0800 (PST)
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA2483
+	for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 04:23:44 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-33340c50af9so5627351f8f.3
+        for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 04:23:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1702383025; x=1702987825; darn=vger.kernel.org;
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1702383822; x=1702988622; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kqFH+oXtPJzwgBpoVNZnokoMTw6/cExkaaGTM4d3Nbo=;
-        b=j50qnq5nisbWIKeqe1aq7yLm2vNU1xy410j0lUxXYgqGMPGOUJ7fsSTgMerVLKpja6
-         LEMOr5WDwt6OWUKQNG8Dg2y9zOIb8bRFEHD/1Z4YWUvOaSZfAeeHNJ+jOWPtsgGNh9w/
-         EXFtWRKzF0SOX6/iiYc3D8T1sDBsF8ZLtXD684GA2nln+fKMj3HrYZPhvLU3wK3IfL/M
-         UlIhk040co+Vcs91Uq0ueUCL84D5jJsBZby+yzlLviZBlBXGL1CsHeQMjBIViHTV73C7
-         I++MoAkOXs5cd7BvjG8lOyCy4mV4yGigmL/GfNMHWCgCKUY/vAZQQn5RChr80xslzP6W
-         AH7Q==
+        bh=dYhz0XOUOt14gyC7LrC7D+c8iRf0ZpwsoryRayowx4U=;
+        b=a+EPx4/8v4diSab3QuQ7HeW6b/f8rr98gwP9e8dZqXZya5mR91zlQTCp0bLoksgi2j
+         R8g7HAqfmkRhHzXAjvcjhPj0u89hAXdJJkzHtGWqwO0vAAH1oOTCySV/fkLa6Jm7ZAY/
+         cw31TvheEDD6LUuDfWHspta3oLKifnEQKHZ/5FsfEP3HBf/QTW4Sp7StZBLck1fkvvqw
+         Qc7Mhb0howN6vWOJ3XYepCG7VNxx1sIrJkE3RIr0lluygpLpXMkUG+jYlJmAevBrZ0PG
+         7M8Bnwemn7WOlpskdY1dDPvdzwsNgoLmdArj/4/jIRHRHjuviv4VFDMU6Yt65EmQsSuF
+         +EFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702383025; x=1702987825;
+        d=1e100.net; s=20230601; t=1702383822; x=1702988622;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kqFH+oXtPJzwgBpoVNZnokoMTw6/cExkaaGTM4d3Nbo=;
-        b=sJeCBEa9DQqi3UH+ETwQZBGBc0azDLq9RPDZV2CWwwmrOHYwHsy5mttYo2dFeEj/5h
-         7lmXxyn1OxpJpZH+uaLLDv2/jiuQ4kLu4zedJgWBYEkKKAA2jU6cdnIGIt8p25C/9Ejb
-         V0XVDQJ8CJQrzvv2pzak6T2P2xnnpCYIg81trMBx9U2cY+km25T610B4cNWpa2UXSeFV
-         3hW7ylPcb6z3vWQODx23e1CnJR22lV5zF6frigG1HmzzqlnNVLowLO3CE+NkO19FmDeg
-         Lvg+LCrVUl3UbPYLLohrXVIdAol+C48TWMUKkrKQzPuSo8z2L/wMS1gffyKT8Y+oXhmU
-         GscA==
-X-Gm-Message-State: AOJu0Yzq9QmF5Qrh3faa2rHpJKVRtNwABFf/Trmmn8LHSVYS1z7S2gEW
-	/gPN1RYCjYLkF4BWCfpANMtV9A==
-X-Google-Smtp-Source: AGHT+IHxmkHsB45t4kksg3Zado7hMjvNhUr6X3TbSiIUJKXCu+mzV9EE0v5THi7znuGCo+8wAgNE0w==
-X-Received: by 2002:a05:600c:4447:b0:40c:46eb:e6ae with SMTP id v7-20020a05600c444700b0040c46ebe6aemr1789965wmn.116.1702383025472;
-        Tue, 12 Dec 2023 04:10:25 -0800 (PST)
+        bh=dYhz0XOUOt14gyC7LrC7D+c8iRf0ZpwsoryRayowx4U=;
+        b=Adnd2QIpPyfLTiQXSl+AmPpGLz/PEPWdPXNBC5GHPUQ5qUc5oBc9x9axRjhVi5K3BL
+         pm1JHQ9FpaDj5Tb1WU4xaxkzprV7JHmNf8ZubqxSGJZ5qluPinf60uJacwA1xpzoGA2W
+         dbL84uaT6jFJp7KU1E3EXl0Iz/QCQHaf2i8ND+HgDIym4YmFMLCjz63e/1xBwoO4vW7n
+         14jNdnxq8XqcVkQXFkyo6YJV+AOvdZ5zN6qrC4vJ4mud3qeQjjmRFSWaANNO0Qxu8cKx
+         EYf+3HQnMm4tsrH25k17UAJ0A/yktpUFmu8DF1u243Rjr+3m0o3zXLwrIgh+GxKqGN2q
+         quqg==
+X-Gm-Message-State: AOJu0YzvTiJkd50DJLbOj1XLWNjXiFnH0gIkYfJ3PvkYMhzmfvh+Ndia
+	i5zbLZ2xGumHBYVLSaocWGz4Kw==
+X-Google-Smtp-Source: AGHT+IEFxpriRDEi0v9aK9vmbk6+8njH5MaiygNoFKJAEbbjiErInjS6wX7ry9vE8PTEf4UTC3huIA==
+X-Received: by 2002:adf:e2d1:0:b0:336:170f:9048 with SMTP id d17-20020adfe2d1000000b00336170f9048mr1565747wrj.16.1702383822412;
+        Tue, 12 Dec 2023 04:23:42 -0800 (PST)
 Received: from airbuntu ([104.132.45.98])
-        by smtp.gmail.com with ESMTPSA id g17-20020a05600c311100b0040c4535f1a2sm8432400wmo.39.2023.12.12.04.10.24
+        by smtp.gmail.com with ESMTPSA id m11-20020a056000008b00b0033332524235sm10672453wrx.82.2023.12.12.04.23.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Dec 2023 04:10:25 -0800 (PST)
-Date: Tue, 12 Dec 2023 12:10:23 +0000
+        Tue, 12 Dec 2023 04:23:42 -0800 (PST)
+Date: Tue, 12 Dec 2023 12:23:40 +0000
 From: Qais Yousef <qyousef@layalina.io>
-To: Lukasz Luba <lukasz.luba@arm.com>
-Cc: linux-kernel@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
+To: Hongyan Xia <hongyan.xia2@arm.com>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
+	Rick Yiu <rickyiu@google.com>, Chung-Kai Mei <chungkai@google.com>,
+	Ingo Molnar <mingo@kernel.org>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	linux-pm@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-	Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-	Chung-Kai Mei <chungkai@google.com>,
-	Hongyan Xia <hongyan.xia2@arm.com>,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH 1/4] sched/fair: Be less aggressive in calling
- cpufreq_update_util()
-Message-ID: <20231212121023.mehtligcuwcmjtz4@airbuntu>
+	Peter Zijlstra <peterz@infradead.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>
+Subject: Re: [PATCH 3/4] sched/schedutil: Ignore update requests for short
+ running tasks
+Message-ID: <20231212122340.sus7sbfqqkd4dxoh@airbuntu>
 References: <20231208015242.385103-1-qyousef@layalina.io>
- <20231208015242.385103-2-qyousef@layalina.io>
- <bc525124-da79-45af-a99b-ec4616b3fa6b@arm.com>
- <20231210205156.kausxdcwsydggwie@airbuntu>
- <8ee6425a-0a0e-4391-9fd3-8fe74c809772@arm.com>
+ <20231208015242.385103-4-qyousef@layalina.io>
+ <f61a3329-4223-4995-8732-030430d19ea4@arm.com>
+ <20231210222225.ukocvimws6ecgsmy@airbuntu>
+ <a6c13b56-3ad9-419d-a22c-5a2e302200e0@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -81,79 +80,64 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <8ee6425a-0a0e-4391-9fd3-8fe74c809772@arm.com>
+In-Reply-To: <a6c13b56-3ad9-419d-a22c-5a2e302200e0@arm.com>
 
-On 12/11/23 07:56, Lukasz Luba wrote:
-> 
-> 
-> On 12/10/23 20:51, Qais Yousef wrote:
-> > On 12/08/23 10:05, Lukasz Luba wrote:
-> > > Hi Qais,
-> > > 
-> > > On 12/8/23 01:52, Qais Yousef wrote:
-> > > 
-> > > [snip]
-> > > 
-> > > > @@ -6704,14 +6677,6 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
-> > > >    	 */
-> > > >    	util_est_enqueue(&rq->cfs, p);
-> > > > -	/*
-> > > > -	 * If in_iowait is set, the code below may not trigger any cpufreq
-> > > > -	 * utilization updates, so do it here explicitly with the IOWAIT flag
-> > > > -	 * passed.
-> > > > -	 */
-> > > > -	if (p->in_iowait)
-> > > > -		cpufreq_update_util(rq, SCHED_CPUFREQ_IOWAIT);
-> > > > -
-> > > 
-> > > Why this io wait boost is considered as the $subject says 'aggressive'
-> > > calling?
+On 12/11/23 11:15, Hongyan Xia wrote:
+> > If the rq->util_avg is 1024, then for any task that is running, the requested
+> > frequency should be max. If there's a task that is capped by uclamp_max, then
+> > this task should not run at max.
 > > 
-> > This will trigger a frequency update along with the iowait boost. Did I miss
-> > something?
+> > So other tasks should have run at max; why you don't want them to run at max?
 > 
-> Yes, it will change CPU freq and it was the main goal for this code
-> path. We have tests which check how that works on different memory
-> types.
+> Because it saves power. If there's a 1024 task capped at 300 and a true 300
+> task without uclamp on the same rq, there's no need to run the CPU at more
+> than 600. Running it at 1024 ignores the uclamp_max and burns battery when
+> it's not needed.
+
+To fix this problem of tasks that are not 1024 but appearing 1024 the solution
+doesn't lie on how the combined tasks perf hints are treated.
+
+Note that tasks stuck on a CPU with small capacity (due to affinity or
+extremely long balance_interval) can still appear as 1024 the same way
+UCLAMP_MAX induces.
+
+> > Is it only the documentation what triggered this concern about this corner
+> > case? I'm curious what have you seen.
 > 
-> Why do you want to remove it?
+> This is not a corner case. Having a uclamp_max task and a normal task on the
+> same rq is fairly common. My concern isn't the 'frequency spike' problem
+> from documentation. My concern comes from benchmarks, which is
+> high-frequency square waves. An occasional spike isn't worrying, but the
+> square waves are.
 
-It seems you missed this hunk? I of course didn't remove it altogether if
-that's what you mean :)
+Fairly common in practice or you synthetic test setup to trigger it? We haven't
+hit this problem in practice. Again, the solution is not related to how the
+performance hints are applied.
 
-	@@ -6772,6 +6737,8 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
-	 enqueue_throttle:
-		assert_list_leaf_cfs_rq(rq);
-
-	+       cpufreq_update_util(rq, p->in_iowait ? SCHED_CPUFREQ_IOWAIT : 0);
-	+
-		hrtick_update(rq);
-	 }
+Note if you have busy tasks running and sharing the CPU, the CPU should run at
+max for non capped tasks. Please differentiate between the two problems.
 
 > 
-> Did you run some tests (e.g. fio, gallery, etc) to check if you still
-> have a decent performance out some new ufs/nvme memories?
+> > So worth a fix, not related to handling performance requests for multiple
+> > tasks, and not urgently needed as nothing is falling apart because of it for
+> > the time being at least.
+> 
+> Also, I think there's still an unanswered question. If there's a 1024 task
 
-PCMark storage gives
-
-before*: 29681
-after: 30014
-
-* no patches applied including remove-margins one
-
+If there's a 1024 tasks on the rq then it'd run at max frequency and the system
+will be overutilized and EAS disabled and work is spread according to load.
 
 Cheers
 
 --
 Qais Yousef
 
+> with a uclamp_min of 300 and a 300-util task with default uclamp on the same
+> rq, which currently under max aggregation switches between highest and
+> lowest OPP, should we filter out the high OPP or the low one? Neither is a
+> short-running task. We could designate this as a corner case (though I don't
+> think so), but wouldn't it be nice if we don't have any of these problems in
+> the first place?
 > 
-> Beata & Dietmar have presented at LPC2021 a proposal to have a per-task
-> io boost, with a bit more controllable way of the trade off power vs.
-> performance [1]. IMO the io wait boost could evolve, not simply die.
-> 
-> Regards,
-> Lukasz
-> 
-> [1] https://lpc.events/event/11/contributions/1042/
+> Hongyan
 
