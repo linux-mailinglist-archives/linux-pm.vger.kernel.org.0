@@ -1,116 +1,134 @@
-Return-Path: <linux-pm+bounces-963-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-964-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8627280EDD9
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 14:43:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C952480EDE3
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 14:44:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C2C21B20C88
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 13:43:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6A2DBB20D04
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 13:44:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 046F761FDE;
-	Tue, 12 Dec 2023 13:43:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aHPFE7nE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94CF36D1C7;
+	Tue, 12 Dec 2023 13:43:56 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DEEB3
-	for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 05:43:00 -0800 (PST)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-5cece20f006so57291897b3.3
-        for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 05:43:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702388580; x=1702993380; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mAQFb+6ron76LUgdpTUJdx32df8simBAK0E2prt6OcE=;
-        b=aHPFE7nESu5i/mqtkdu6aRJrm0wAys7lpXwZq/CMQOHv1PPG8h+aGOFRxI6xlKSZtP
-         FwMceeo6+RouBRWmT4KwrtfudYLJGAwEOKyJzdNHY4WrRAcFTVzvt2IzEuD8ZROTA8Wq
-         Od0MUAtn0q3va7CJIcUkggMLioHzGG0lVP+Ii3/VMOnYAfi9p2cL/B9pEyVx/jySdSfV
-         Dn3u47GZPYwf4HEReeIh/gwjengXjXSY04kB9BQ1V1/zGIDuGAYu3IXpCsBY7giVxA7B
-         ETy52oblViDI82IKzS3gOdvLu43jzzXNs0WiH3SHednniVbM2hsulJ1x4MT59xsWcrTo
-         Wl5g==
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6CAAFD;
+	Tue, 12 Dec 2023 05:43:53 -0800 (PST)
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-590a21e977aso139156eaf.1;
+        Tue, 12 Dec 2023 05:43:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702388580; x=1702993380;
+        d=1e100.net; s=20230601; t=1702388633; x=1702993433;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mAQFb+6ron76LUgdpTUJdx32df8simBAK0E2prt6OcE=;
-        b=YNTwg+u1wyo844EBY0fahLZkLde16Q6J4sB3KmtDCPpm2FTfWK08JMuU33zzcAWHY9
-         0io6WH6LsIBGQkiXOzyyv6z0YbAfO12jv6jHuiPCLlwBCt99B8GGAbf0ddQFTXkD1CJ0
-         /kppMtYS7jkbne7f6+qKxFdePRpptD4XpaYy8WrwbeZfqqbT8UMF7nHYoLH8Zn9cWejm
-         zra0gwcuDqJd2q1vgeBHY9wcWC2R5aJW4h/BmwL5oo7yCl3sKExvkd9q7MG7F5I3Jp+3
-         UXaJTBesxuq5+nE9CJpuGQtOxVi6rjnW9GOsZEobYhQuPxhLexpuhqUuxk0aNjKNlmbr
-         oBeQ==
-X-Gm-Message-State: AOJu0YwDs2ruzl29TvrEJ0v9EQ1Bm7VabplIRF9fLqtCnPIeamNfSIZ4
-	kOA2FNE2xo3FnWnwPDOwJkD1Xcqhb3LM6NPVTTJPqA==
-X-Google-Smtp-Source: AGHT+IGXI8MTlNXqp44K40z930LaIgojX2yvlOPjKoe0EJGLkACdmwfiHtJzUo62FGKni7DyMbfQiKk9Ir0r32fZwYk=
-X-Received: by 2002:a05:690c:318d:b0:5df:2830:967b with SMTP id
- fd13-20020a05690c318d00b005df2830967bmr3728505ywb.54.1702388579889; Tue, 12
- Dec 2023 05:42:59 -0800 (PST)
+        bh=9+kkVTreOL3w+OZGcOfK3FYPANHbgoXJuOH1K8tFH4g=;
+        b=iigb1OZrH2QZ9p4i4fu9i9YQBUVcZHlB5z0g6vpa5kAGmppjJ/D3EVslvujVKVcpgq
+         HzE7AXULnv2rQ6ELFzjdHW1lzspj3Ael8VzPB1ARA7nxzaxEr76SliB9SCVuqaOPw/Qv
+         L5r6QGYhdxRVXbfL5FwTI+kZcOv1qTzXtdh9UQUIRnzhLyZMO8x1FT1DtseBxAtjbVp4
+         LPSPLsRYf9KAq/H4dUm2s3PcYTMbP0YqhEHESdl8vR4rHf8bNhWe0n67TrrMfUxwt5vy
+         gadOxtpsrT8gBXVNccXvCfRVck7Q1Pc1SWUST/pTfG7zZLippDCZe4EuxU0LgA36cOaB
+         t6nw==
+X-Gm-Message-State: AOJu0YzA4dT3h8N9PHw8q7Lro/KxOB04OD1Vjeds4KQsQOAkC9eIOoma
+	pAa/HZMAo3jVGxXa55lxjmmQQqYVzB2xxs6jzE4=
+X-Google-Smtp-Source: AGHT+IGUqXNEdQXxBJDrx70lgBxugTVgc/vHxJshrpTuCUW1HytFQm132e4bZb55zISGfBUjiTzP1pULdprZDX/oFgo=
+X-Received: by 2002:a4a:c487:0:b0:58d:ddcb:db1a with SMTP id
+ f7-20020a4ac487000000b0058dddcbdb1amr10175400ooq.1.1702388633020; Tue, 12 Dec
+ 2023 05:43:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231127151931.47055-1-ulf.hansson@linaro.org>
- <CAJZ5v0jXRNDV7AhZPkrDvMtrk6cYeMJ+HuUs0kJ=kjbQ-YiyVA@mail.gmail.com>
- <CAPDyKFpJ6_+nF8q3L4Tg1E9St3stgJ06se0t=FLHkx4_36OJNA@mail.gmail.com> <CAJZ5v0jxMjb-bUbJiHgehe5xJ6cwspvsRp5P_2N6FyvRFshJQA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jxMjb-bUbJiHgehe5xJ6cwspvsRp5P_2N6FyvRFshJQA@mail.gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 12 Dec 2023 14:42:23 +0100
-Message-ID: <CAPDyKFobQ7dYb6SBD5tmxcK-u0w1mdQxBhY10GVNVgHj3aYNGA@mail.gmail.com>
-Subject: Re: [PATCH] PM: domains: Drop the unused pm_genpd_opp_to_performance_state()
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org, Kevin Hilman <khilman@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20231205063537.872834-1-li.meng@amd.com> <20231205063537.872834-5-li.meng@amd.com>
+ <CAJZ5v0ju-Thhz2_rQVbTosTsBaRoyQW2kjtPWWTsiT_Yi2DbsQ@mail.gmail.com> <CAJZ5v0hMAZxvuMWK3dNeOL9FRTrVW7j7PzCFwcp9+0K87y-L0A@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hMAZxvuMWK3dNeOL9FRTrVW7j7PzCFwcp9+0K87y-L0A@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 12 Dec 2023 14:43:42 +0100
+Message-ID: <CAJZ5v0gYj6C_-m7dD_aN-FWiuLn6bG9MRTe_c7SryTtJJN7FKA@mail.gmail.com>
+Subject: Re: [PATCH V12 4/7] cpufreq: Add a notification message that the
+ highest perf has changed
+To: Meng Li <li.meng@amd.com>
+Cc: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, Huang Rui <ray.huang@amd.com>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org, 
+	linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>, 
+	linux-kselftest@vger.kernel.org, Nathan Fontenot <nathan.fontenot@amd.com>, 
+	Deepak Sharma <deepak.sharma@amd.com>, Alex Deucher <alexander.deucher@amd.com>, 
+	Mario Limonciello <mario.limonciello@amd.com>, Shimmer Huang <shimmer.huang@amd.com>, 
+	Perry Yuan <Perry.Yuan@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Borislav Petkov <bp@alien8.de>, 
+	Oleksandr Natalenko <oleksandr@natalenko.name>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, 12 Dec 2023 at 12:59, Rafael J. Wysocki <rafael@kernel.org> wrote:
+On Wed, Dec 6, 2023 at 10:13=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
+g> wrote:
 >
-> On Tue, Dec 12, 2023 at 11:37=E2=80=AFAM Ulf Hansson <ulf.hansson@linaro.=
-org> wrote:
+> On Wed, Dec 6, 2023 at 9:58=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.o=
+rg> wrote:
 > >
-> > On Mon, 11 Dec 2023 at 21:44, Rafael J. Wysocki <rafael@kernel.org> wro=
-te:
+> > On Tue, Dec 5, 2023 at 7:38=E2=80=AFAM Meng Li <li.meng@amd.com> wrote:
 > > >
-> > > On Mon, Nov 27, 2023 at 4:19=E2=80=AFPM Ulf Hansson <ulf.hansson@lina=
-ro.org> wrote:
-> > > >
-> > > > Since commit 7c41cdcd3bbe ("OPP: Simplify the over-designed pstate =
-<->
-> > > > level dance"), there is no longer any users of the
-> > > > pm_genpd_opp_to_performance_state() API. Let's therefore drop it an=
-d its
-> > > > corresponding ->opp_to_performance_state() callback, which also no =
-longer
-> > > > has any users.
-> > > >
-> > > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > > ACPI 6.5 section 8.4.6.1.1.1 specifies that Notify event 0x85 can be
+> > > emmitted to cause the the OSPM to re-evaluate the highest performance
+> >
+> > Typos above.  Given the number of iterations of this patch, this is
+> > kind of disappointing.
+> >
+> > > register. Add support for this event.
+> >
+> > Also it would be nice to describe how this is supposed to work at
+> > least roughly, so it is not necessary to reverse-engineer the patch to
+> > find out that.
+> >
+> > > Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+> > > Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+> > > Reviewed-by: Huang Rui <ray.huang@amd.com>
+> > > Reviewed-by: Perry Yuan <perry.yuan@amd.com>
+> > > Signed-off-by: Meng Li <li.meng@amd.com>
+> > > Link: https://uefi.org/specs/ACPI/6.5/05_ACPI_Software_Programming_Mo=
+del.html#processor-device-notification-values
+> > > ---
+> > >  drivers/acpi/processor_driver.c |  6 ++++++
+> > >  drivers/cpufreq/cpufreq.c       | 13 +++++++++++++
+> > >  include/linux/cpufreq.h         |  5 +++++
+> > >  3 files changed, 24 insertions(+)
 > > >
-> > > I can take this in principle, but I'm wondering if you'd prefer to
-> > > apply patches modifying domain.c yourself?  They are definitely
-> > > related to the pmdomain tree.
+> > > diff --git a/drivers/acpi/processor_driver.c b/drivers/acpi/processor=
+_driver.c
+> > > index 4bd16b3f0781..29b2fb68a35d 100644
+> > > --- a/drivers/acpi/processor_driver.c
+> > > +++ b/drivers/acpi/processor_driver.c
+> > > @@ -27,6 +27,7 @@
+> > >  #define ACPI_PROCESSOR_NOTIFY_PERFORMANCE 0x80
+> > >  #define ACPI_PROCESSOR_NOTIFY_POWER    0x81
+> > >  #define ACPI_PROCESSOR_NOTIFY_THROTTLING       0x82
+> > > +#define ACPI_PROCESSOR_NOTIFY_HIGEST_PERF_CHANGED      0x85
+> > >
+> > >  MODULE_AUTHOR("Paul Diefenbaugh");
+> > >  MODULE_DESCRIPTION("ACPI Processor Driver");
+> > > @@ -83,6 +84,11 @@ static void acpi_processor_notify(acpi_handle hand=
+le, u32 event, void *data)
+> > >                 acpi_bus_generate_netlink_event(device->pnp.device_cl=
+ass,
+> > >                                                   dev_name(&device->d=
+ev), event, 0);
+> > >                 break;
+> > > +       case ACPI_PROCESSOR_NOTIFY_HIGEST_PERF_CHANGED:
+> > > +               cpufreq_update_highest_perf(pr->id);
 > >
-> > Yes, it makes sense for me to pick the genpd core patches through the
-> > pmdomain tree. In some cases there may be overlapping patches that are
-> > more generic and not only limited to genpd, but I guess we can decide
-> > on a case by case basis for those ones.
+> > And the design appears to be a bit ad-hoc here.
 > >
-> > I can add the pmdomain tree to the GENERIC PM DOMAINS section in the
-> > MAINTAINERS file to reflect this, if you think this is a good idea?
+> > Because why does it have anything to do with cpufreq?
 >
-> Yes, please.
+> Well, clearly, cpufreq can be affected by this, but why would it be
+> not affected the same way as in the ACPI_PROCESSOR_NOTIFY_PERFORMANCE
+> case?
 >
-> What about moving drivers/base/power/domain.c to drivers/pmdomain/ ?
+> That is, why isn't cpufreq_update_limits() the right thing to do?
 
-Yes, it seems reasonable to do that too. I will send a patch for you
-to have a look at shortly.
-
-Kind regards
-Uffe
+Seriously, I'm not going to apply this patch so long as my comments
+above are not addressed.
 
