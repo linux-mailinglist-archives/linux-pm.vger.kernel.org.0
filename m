@@ -1,114 +1,186 @@
-Return-Path: <linux-pm+bounces-993-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-994-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8210580F459
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 18:21:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE1B280F479
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 18:24:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DD52281EA4
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 17:21:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2AC731C20D1C
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 17:24:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEA1A7B3D9;
-	Tue, 12 Dec 2023 17:21:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FB4E7D88E;
+	Tue, 12 Dec 2023 17:24:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NjNBK6p0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aRTnT2RJ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C04E47B3CC;
-	Tue, 12 Dec 2023 17:21:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 121F8C433C9;
-	Tue, 12 Dec 2023 17:21:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5268B335A5;
+	Tue, 12 Dec 2023 17:24:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D831C433C7;
+	Tue, 12 Dec 2023 17:24:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702401688;
-	bh=iJbsCCsQPExgoBlXs13IszghcdhAlE8CqVmzx5/6CUw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NjNBK6p0cc6mZk7B3InU4ICb7IP8uBhF+KNLoACi3S+7zVAKgZH0b4X9E9LQy9kMZ
-	 ITnv4OYQg+erUKTrk1aeZ+z+pit1r0iUPHhFCjKFPbYyC2Obok34R0/U9ZG4NLIv+2
-	 7DcaScI78W4tvHyFDsQuTQ4V0gkWACMGbK/PuI/iSscysuZjFqbo0R8k0ko/JfW8KM
-	 tRyB4SCg6BmzBDnDt1tQtJXeNrc2LKWW/mj8JeArHn120+W4epFDm5cAbtHJlqgeJE
-	 lBqjabQH3m6Wd/qKL4NGv3UnTyP4rZmK45YWaPn2q7xOQBYFLHjUU9gWn7sXx5PyAf
-	 vCLa5e4BJUQkg==
-From: Will Deacon <will@kernel.org>
-To: Thomas Zimmermann <tzimmermann@suse.de>,
-	Andy Gross <agross@kernel.org>,
-	Maxime Ripard <mripard@kernel.org>,
-	Abhinav Kumar <quic_abhinavk@quicinc.com>,
-	David Airlie <airlied@gmail.com>,
-	Robert Marko <robimarko@gmail.com>,
-	Rob Clark <robdclark@gmail.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Joerg Roedel <joro@8bytes.org>,
-	cros-qcom-dts-watchers@chromium.org,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Das Srinagesh <quic_gurus@quicinc.com>,
-	Loic Poulain <loic.poulain@linaro.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	s=k20201202; t=1702401858;
+	bh=rDuk06UFj+x10x2yOrR2Yw2smog/Z6v+r6xCt2jZ1mE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aRTnT2RJ4z5ruNRLOUofw9+WQdnSrkggJm0isOmzLUOGkT5wdzIMh0H9CuAzSKP2T
+	 GatMB+0LbdsZuv7X5ao+i+INVXqQCrjl9/LQ2gaOsm1aKwAXOxevA9uBeCKkCxM/v2
+	 YLHnSBUJf25igBY7o2PK7rv1jBri+vBqjS206Q0dIEylwm7+Pm07R6U00TV/ErFY5Z
+	 /ljmR/aLs7KkwOj0cqGz2GClrH8tftfcA4vTwbQsD9K4rirUzQXbq75Vud5zFr1Ulq
+	 cZvrOcvteNw0KudEvlxEkLxT7dj6PfZDDF8oIU0EcXsD02+UwDIV8ID/vFbDMBB1zr
+	 /Yzir11UK2ZcA==
+Date: Tue, 12 Dec 2023 17:24:13 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Nikita Travkin <nikita@trvn.ru>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Georgi Djakov <djakov@kernel.org>,
-	Sean Paul <sean@poorly.run>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	cros-qcom-dts-watchers@chromium.org, Andy Gross <agross@kernel.org>,
 	Bjorn Andersson <andersson@kernel.org>,
-	Krishna Manikandan <quic_mkrishn@quicinc.com>,
-	Rob Herring <robh+dt@kernel.org>
-Cc: catalin.marinas@arm.com,
-	kernel-team@android.com,
-	Will Deacon <will@kernel.org>,
-	linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,
-	Rob Herring <robh@kernel.org>,
-	freedreno@lists.freedesktop.org,
-	linux-arm-kernel@lists.infradead.org,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	iommu@lists.linux.dev
-Subject: Re: [PATCH v3 00/12] RB1/QCM2290 features
-Date: Tue, 12 Dec 2023 17:20:55 +0000
-Message-Id: <170238433491.3098250.94876533885104502.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20231125-topic-rb1_feat-v3-0-4cbb567743bb@linaro.org>
-References: <20231125-topic-rb1_feat-v3-0-4cbb567743bb@linaro.org>
+	Konrad Dybcio <konrad.dybcio@linaro.org>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: power: supply: Add Acer Aspire 1 EC
+Message-ID: <20231212-wasp-overcoat-cf2bd1383670@spud>
+References: <20231212-aspire1-ec-v2-0-ca495ea0a7ac@trvn.ru>
+ <20231212-aspire1-ec-v2-1-ca495ea0a7ac@trvn.ru>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="4leilgzQXZRNyqIi"
+Content-Disposition: inline
+In-Reply-To: <20231212-aspire1-ec-v2-1-ca495ea0a7ac@trvn.ru>
 
-On Wed, 29 Nov 2023 15:43:57 +0100, Konrad Dybcio wrote:
-> This series brings:
-> - interconnect plumbing
-> - display setup
-> 
-> for QCM2290/QRB2210 and
-> 
-> - CAN bus controller
-> - HDMI display
-> - wifi fw variant name
-> 
-> [...]
 
-Applied SMMU update to will (for-joerg/arm-smmu/updates), thanks!
+--4leilgzQXZRNyqIi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[05/12] iommu/arm-smmu-qcom: Add QCM2290 MDSS compatible
-        https://git.kernel.org/will/c/28af105cb650
+Hey,
 
-Cheers,
--- 
-Will
+On Tue, Dec 12, 2023 at 05:49:09PM +0500, Nikita Travkin wrote:
+> Add binding for the EC found in the Acer Aspire 1 laptop.
+>=20
+> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+> ---
+>  .../bindings/power/supply/acer,aspire1-ec.yaml     | 67 ++++++++++++++++=
+++++++
+>  1 file changed, 67 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/power/supply/acer,aspire1-=
+ec.yaml b/Documentation/devicetree/bindings/power/supply/acer,aspire1-ec.ya=
+ml
+> new file mode 100644
+> index 000000000000..1fbf1272a00f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/acer,aspire1-ec.yaml
+> @@ -0,0 +1,67 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/acer,aspire1-ec.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Acer Aspire 1 Embedded Controller
+> +
+> +maintainers:
+> +  - Nikita Travkin <nikita@trvn.ru>
+> +
+> +description:
+> +  The Acer Aspire 1 laptop uses an embedded controller to control battery
+> +  and charging as well as to provide a set of misc features such as the
+> +  laptop lid status and HPD events for the USB Type-C DP alt mode.
+> +
+> +properties:
+> +  compatible:
+> +    const: acer,aspire1-ec
+> +
+> +  reg:
+> +    const: 0x76
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  acer,media-keys-on-top:
+> +    description: Configure the keyboard layout to use media features of
+> +      the fn row when the fn key is not pressed. The firmware may choose
+> +      to add this property when user selects the fn mode in the firmware
+> +      setup utility.
 
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
+I'm not a huge fan of the property name/description here.
+For the description, I'm not sure from reading this what the default
+behaviour is and how the fn row works when the fn key is pressed.
+Is the default behaviour that pressing the fn key enables the media keys
+and the row by default provides the fn functionality? And then when this
+option is set in firmware the behaviour is inverted?
+
+For the name, the "on-top" bit seems a bit weird. I would prefer it to
+be reworded in terms of the behavioural change of the fn key. The media
+keys are physically at the top of the keyboard whether or not this
+option is enabled, hence the "on-top" seeming a bit weird to me.
+
+Thanks,
+Conor.
+
+> +    type: boolean
+> +
+> +  connector:
+> +    $ref: /schemas/connector/usb-connector.yaml#
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |+
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +
+> +        embedded-controller@76 {
+> +            compatible =3D "acer,aspire1-ec";
+> +            reg =3D <0x76>;
+> +
+> +            interrupts-extended =3D <&tlmm 30 IRQ_TYPE_LEVEL_LOW>;
+> +
+> +            connector {
+> +                compatible =3D "usb-c-connector";
+> +
+> +                port {
+> +                    ec_dp_in: endpoint {
+> +                        remote-endpoint =3D <&mdss_dp_out>;
+> +                    };
+> +                };
+> +            };
+> +        };
+> +    };
+>=20
+> --=20
+> 2.43.0
+>=20
+
+--4leilgzQXZRNyqIi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZXiXPQAKCRB4tDGHoIJi
+0tbFAPsFB4v8D4/CrNJc5OEMtbgD8w9V6aVE42qxbYP46NCIIAEA+0JqzZR2zwZd
+QNDHTcu404dq3FOkXD7TeMmOGj2OqAw=
+=3o5i
+-----END PGP SIGNATURE-----
+
+--4leilgzQXZRNyqIi--
 
