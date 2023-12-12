@@ -1,29 +1,29 @@
-Return-Path: <linux-pm+bounces-1001-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1002-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07C4980F56C
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 19:22:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEFF080F5B0
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 19:49:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 256B51C20C90
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 18:22:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 64A05281DFD
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 18:49:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 991A97E78D;
-	Tue, 12 Dec 2023 18:22:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AE7E7F549;
+	Tue, 12 Dec 2023 18:49:12 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 39BFEA7;
-	Tue, 12 Dec 2023 10:22:28 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E22FD3;
+	Tue, 12 Dec 2023 10:49:08 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4D329FEC;
-	Tue, 12 Dec 2023 10:23:14 -0800 (PST)
-Received: from [10.1.35.59] (e133649.arm.com [10.1.35.59])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7F72A3F762;
-	Tue, 12 Dec 2023 10:22:25 -0800 (PST)
-Message-ID: <e1c7edc6-440b-467e-9552-afa40cf4ed67@arm.com>
-Date: Tue, 12 Dec 2023 18:22:23 +0000
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 764321FB;
+	Tue, 12 Dec 2023 10:49:54 -0800 (PST)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CCB6D3F762;
+	Tue, 12 Dec 2023 10:49:05 -0800 (PST)
+Message-ID: <d920867d-5572-48c3-bd54-b9e989ab6bd5@arm.com>
+Date: Tue, 12 Dec 2023 19:48:57 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -31,50 +31,153 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] sched/fair: Be less aggressive in calling
- cpufreq_update_util()
-To: Qais Yousef <qyousef@layalina.io>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Ingo Molnar <mingo@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Vincent Guittot <vincent.guittot@linaro.org>, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>,
- Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
- Chung-Kai Mei <chungkai@google.com>
-References: <20231208015242.385103-1-qyousef@layalina.io>
- <20231208015242.385103-2-qyousef@layalina.io>
- <47ef274b-d9cc-4f4f-8134-2dced46005fa@arm.com>
- <20231212123535.3yns5f4b6awiuesk@airbuntu>
+Subject: Re: [PATCH v5 00/23] Introduce runtime modifiable Energy Model
 Content-Language: en-US
-From: Hongyan Xia <hongyan.xia2@arm.com>
-In-Reply-To: <20231212123535.3yns5f4b6awiuesk@airbuntu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To: Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, rafael@kernel.org
+Cc: rui.zhang@intel.com, amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
+ daniel.lezcano@linaro.org, viresh.kumar@linaro.org, len.brown@intel.com,
+ pavel@ucw.cz, mhiramat@kernel.org, qyousef@layalina.io, wvw@google.com
+References: <20231129110853.94344-1-lukasz.luba@arm.com>
+From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20231129110853.94344-1-lukasz.luba@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 12/12/2023 12:35, Qais Yousef wrote:
-> On 12/12/23 11:46, Dietmar Eggemann wrote:
->> On 08/12/2023 02:52, Qais Yousef wrote:
->>> Due to the way code is structured, it makes a lot of sense to trigger
->>> cpufreq_update_util() from update_load_avg(). But this is too aggressive
->>> as in most cases we are iterating through entities in a loop to
->>> update_load_avg() in the hierarchy. So we end up sending too many
->>> request in an loop as we're updating the hierarchy.
->>
->> But update_load_avg() calls cfs_rq_util_change() which only issues a
->> cpufreq_update_util() call for the root cfs_rq?
+On 29/11/2023 12:08, Lukasz Luba wrote:
+> Hi all,
 > 
-> Yes I've noticed that and wondered. Maybe my analysis was flawed and I was just
-> hitting the issue of iowait boost request conflicting with update_load_avg()
-> request.
+> This patch set adds a new feature which allows to modify Energy Model (EM)
+> power values at runtime. It will allow to better reflect power model of
+> a recent SoCs and silicon. Different characteristics of the power usage
+> can be leveraged and thus better decisions made during task placement in EAS.
 > 
-> Let me have another look. I think we'll still end up needing to take the update
-> out of util_avg to be able to combine the two calls.
+> It's part of feature set know as Dynamic Energy Model. It has been presented
+> and discussed recently at OSPM2023 [3]. This patch set implements the 1st
+> improvement for the EM.
+> 
+> The concepts:
+> 1. The CPU power usage can vary due to the workload that it's running or due
+> to the temperature of the SoC. The same workload can use more power when the
+> temperature of the silicon has increased (e.g. due to hot GPU or ISP).
+> In such situation the EM can be adjusted and reflect the fact of increased
+> power usage. That power increase is due to static power
+> (sometimes called simply: leakage). The CPUs in recent SoCs are different.
+> We have heterogeneous SoCs with 3 (or even 4) different microarchitectures.
+> They are also built differently with High Performance (HP) cells or
+> Low Power (LP) cells. They are affected by the temperature increase
+> differently: HP cells have bigger leakage. The SW model can leverage that
+> knowledge.
+> 
+> 2. It is also possible to change the EM to better reflect the currently
+> running workload. Usually the EM is derived from some average power values
+> taken from experiments with benchmark (e.g. Dhrystone). The model derived
+> from such scenario might not represent properly the workloads usually running
+> on the device. Therefore, runtime modification of the EM allows to switch to
+> a different model, when there is a need.
+> 
+> 3. The EM can be adjusted after boot, when all the modules are loaded and
+> more information about the SoC is available e.g. chip binning. This would help
+> to better reflect the silicon characteristics. Thus, this EM modification
+> API allows it now. It wasn't possible in the past and the EM had to be
+> 'set in stone'.
+> 
+> More detailed explanation and background can be found in presentations
+> during LPC2022 [1][2] or in the documentation patches.
+> 
+> Some test results.
+> The EM can be updated to fit better the workload type. In the case below the EM
+> has been updated for the Jankbench test on Pixel6 (running v5.18 w/ mainline backports
+> for the scheduler bits). The Jankbench was run 10 times for those two configurations,
+> to get more reliable data.
+> 
+> 1. Janky frames percentage
+> +--------+-----------------+---------------------+-------+-----------+
+> | metric |    variable     |       kernel        | value | perc_diff |
+> +--------+-----------------+---------------------+-------+-----------+
+> | gmean  | jank_percentage | EM_default          |  2.0  |   0.0%    |
+> | gmean  | jank_percentage | EM_modified_runtime |  1.3  |  -35.33%  |
+> +--------+-----------------+---------------------+-------+-----------+
+> 
+> 2. Avg frame render time duration
+> +--------+---------------------+---------------------+-------+-----------+
+> | metric |      variable       |       kernel        | value | perc_diff |
+> +--------+---------------------+---------------------+-------+-----------+
+> | gmean  | mean_frame_duration | EM_default          | 10.5  |   0.0%    |
+> | gmean  | mean_frame_duration | EM_modified_runtime |  9.6  |  -8.52%   |
+> +--------+---------------------+---------------------+-------+-----------+
+> 
+> 3. Max frame render time duration
+> +--------+--------------------+---------------------+-------+-----------+
+> | metric |      variable      |       kernel        | value | perc_diff |
+> +--------+--------------------+---------------------+-------+-----------+
+> | gmean  | max_frame_duration | EM_default          | 251.6 |   0.0%    |
+> | gmean  | max_frame_duration | EM_modified_runtime | 115.5 |  -54.09%  |
+> +--------+--------------------+---------------------+-------+-----------+
+> 
+> 4. OS overutilized state percentage (when EAS is not working)
+> +--------------+---------------------+------+------------+------------+
+> |    metric    |       wa_path       | time | total_time | percentage |
+> +--------------+---------------------+------+------------+------------+
+> | overutilized | EM_default          | 1.65 |   253.38   |    0.65    |
+> | overutilized | EM_modified_runtime | 1.4  |   277.5    |    0.51    |
+> +--------------+---------------------+------+------------+------------+
+> 
+> 5. All CPUs (Little+Mid+Big) power values in mW
+> +------------+--------+---------------------+-------+-----------+
+> |  channel   | metric |       kernel        | value | perc_diff |
+> +------------+--------+---------------------+-------+-----------+
+> |    CPU     | gmean  | EM_default          | 142.1 |   0.0%    |
+> |    CPU     | gmean  | EM_modified_runtime | 131.8 |  -7.27%   |
+> +------------+--------+---------------------+-------+-----------+
+> 
+> The time cost to update the EM decreased in this v5 vs v4:
+> big: 5us vs 2us -> 2.6x faster
+> mid: 9us vs 3us -> 3x faster
+> little: 16us vs 16us -> no change
 
-I agree. Currently it does not express the intention clearly. We only 
-want to update the root CFS but the code was written in a misleading way 
-that suggests we want to update for every cfs_rq. A single update at the 
-end looks much nicer and makes other patches easier.
+I guess this is entirely due to the changes in
+em_dev_update_perf_domain()? Moving from per-OPP em_update_callback to
+switching the entire table (pd->runtime_table) inside
+em_dev_update_perf_domain()?
 
-Hongyan
+> We still have to update the inefficiency in the cpufreq framework, thus
+> a bit of overhead will be there.
+> 
+> Changelog:
+> v5:
+> - removed 2 tables design
+> - have only one table (runtime_table) used also in thermal (Wei, Rafael)
+
+Until v4 you had 2 EM's, the static and the modifiable (runtime). Now in
+v5 this changed to only have one, the modifiable. IMHO it would be
+better to change the existing table to be modifiable rather than staring
+with two EM's and then removing the static one. I assume you end up with
+way less code changes and the patch-set will become easier to digest for
+reviewers.
+
+I would mention that 14/23 "PM: EM: Support late CPUs booting and
+capacity adjustment" is a testcase for the modifiable EM build-in into
+the code changes. This relies on the table being modifiable.
+
+> - refactored update function and removed callback call for each opp
+> - added faster EM table swap, using only the RCU pointer update
+> - added memory allocation API and tracking with kref
+> - avoid overhead for computing 'cost' for each OPP in update, it can be
+>   pre-computed in device drivers EM earlier
+> - add support for device drivers providing EM table
+> - added API for computing 'cost' values in EM for EAS
+> - added API for thermal/powercap to use EM (using RCU wrappers) 
+> - switched to single allocation and 'state[]' array (Rafael)
+> - changed documentation to align with current design
+> - added helper API for computing cost values
+> - simplified EM free in unregister path (thanks to kref)
+> - split patch updating EM clients and changed them separetly
+> - added seperate patch removing old static EM table
+> - added EM debugfs change patch to dump the runtime_table
+> - addressed comments in v4 for spelling/comments/headers
+> - added review tags
+
+[...]
+
 
