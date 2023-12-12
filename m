@@ -1,67 +1,90 @@
-Return-Path: <linux-pm+bounces-976-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-977-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8F2080EE39
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 15:01:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4687C80EEB3
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 15:27:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 16690B20CDC
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 14:01:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DBEF11F211CF
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 14:27:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 337DE70971;
-	Tue, 12 Dec 2023 14:01:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B5B77318C;
+	Tue, 12 Dec 2023 14:27:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NfjL41Q0"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="md5jkMNp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04D1CD
-	for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 06:01:03 -0800 (PST)
-Received: by mail-oo1-xc2d.google.com with SMTP id 006d021491bc7-59091e4a0f9so1612037eaf.1
-        for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 06:01:03 -0800 (PST)
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13E6CD
+	for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 06:27:37 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-50bf69afa99so7349247e87.3
+        for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 06:27:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702389663; x=1702994463; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1702391256; x=1702996056; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6m07btQHPWV2ctZksBMNHS2v6G8bOJynKLcHM3wDkKo=;
-        b=NfjL41Q0byMQMLx34vRLUf6YwkjZhP5L4jiHwNDAIE7YgKuKNN9dSNU3rk1kbKmBWl
-         oADgLw0EidgeckjvWMcS/oJHpjZro/4COi50qOUBhRWHsqHnRX8tWqlBVrSKgy5ljg85
-         R+grO52Ly0IhdqvGouOmWJjNyB1H9+R8+uru9SsAWgOCt7PAWFckXLMTkQZ2SgT9qKx1
-         Xf1DwgeaQFeTKzfe1BYw1m+4AsPnt0/jtSBUrca+gL9WbfUM2t43FWcZt5gL+XqnZiw4
-         6g4yvvBL5FboVrqHN8/uqRnYAC0YsbnRW9gcF+sgMuC0NsqZi7VpbE+GPLbADzlQco1f
-         sYpA==
+        bh=oi89GvlAHEHZg03UHqAC2QcBZtFXzQljGaUkYEpdYRQ=;
+        b=md5jkMNpMSFt0c3//Hc+vHwemgL/u0RoKjbdEOW9c9g9HkXXfDVf25KBq1h9ZttbHI
+         vkDq6Z+nLffOYg3cJj5Kb7hCDiXC1H32oLVT482XNQy93E85ylok1FNSfdrDRQlUff95
+         rlKB5XLlIDlpuQ9LnW0Hnu0P75HO0LNid3m3AN+TF2EWuIHZeHu/IyX9ic/00lumnlVf
+         VHencOhvLRD5KDGeDhrpsSRQH7zbvRBUsD+9Wdy344RnqhCZpv0ZV4W2PTnelSheSTHw
+         irCQVNW+61s7TyEIesbvHcSZQyE6I4m7Pv/Hnz441BTHUhOkjKHMLdiI3o5YQ96uaAed
+         OFSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702389663; x=1702994463;
+        d=1e100.net; s=20230601; t=1702391256; x=1702996056;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6m07btQHPWV2ctZksBMNHS2v6G8bOJynKLcHM3wDkKo=;
-        b=ARcZhrjiaXVCvDH0cRIzMbBJi7QebWRjGHavUDvXlCJGL0UqCNyYrKjiOadrRo+ZFV
-         DYk4PFJrE1lC13oZNTyV9WZOeLa8Tp/JGuLB+6XOpWJ68ROn/r/ljpNFD7rWbxRHcVuc
-         f4YNV0h51qOQUGJFrd2dQX2Ch9agIVGgAX8o5rXlAbyIOQwSzyAzrf6WresJp5Vgg2vG
-         3zZSt91MzlPR9i5QnXEi000rwUA+noTbeav7DJTBwPam10pxUIhAibGhfUrzG4NzrS2M
-         lHy7JqUv/2TIkssQhOpnKalTC3Y2Rob/3JpZjMgx72m5wrNMiJaHfWgLxIcpoBoQEUyr
-         wJRQ==
-X-Gm-Message-State: AOJu0YwnAwX40VzP20FezCDOBfmahdflscXVFvtEVBvHQBzE+aYj27Ig
-	aWGGlNmw8BsShhA1MmWzu8R+LkBoPXUoJw==
-X-Google-Smtp-Source: AGHT+IGmmJryFQNnerXVd4/lAEuNHPq987BJ8TfTynzYgurFLYd1ILcZNBiLLsFcnOi0O3fcOiEx8g==
-X-Received: by 2002:a05:6358:78e:b0:170:17eb:2fac with SMTP id n14-20020a056358078e00b0017017eb2facmr2021658rwj.37.1702389662687;
-        Tue, 12 Dec 2023 06:01:02 -0800 (PST)
-Received: from pek-lpggp6.wrs.com (unknown-105-121.windriver.com. [147.11.105.121])
-        by smtp.gmail.com with ESMTPSA id pz12-20020ad4550c000000b0067a95ef3a8dsm4227778qvb.50.2023.12.12.06.00.57
+        bh=oi89GvlAHEHZg03UHqAC2QcBZtFXzQljGaUkYEpdYRQ=;
+        b=UkhG47LjNRfLoi4UmFwF5XSicRZNTmvxL8SQU07Wi1Uhe7S3kFSJxOiFoM/Gn2fvpw
+         RkTp/k8V1DDOX9VXBPP/tRpsF8MeV5X9+14BQV0DtZI99XzXQZf1f1nXwgUSry7OSsSJ
+         nlssYs4ugXxvklN/Lk4oAGaDnS7KK+77W3lO21gIOYgj2SKmIUZa9ZNbjSVE1we12dUS
+         6nyhAYYesCiUpM6LbedV2qhAbk23end3ue8yESLUbLrOPTzH+xzYAvUKmPZLNvf4lssX
+         KHXbZrPOb3qT0lYN5ltVhTUy3SqnmbEs2ZIdCb2MgaA+fqc214p/CqzC9wjfIxPTj2V2
+         HWTw==
+X-Gm-Message-State: AOJu0Yw6niu9wCIdLQV4Di4b5vJXmyqVq8oHHfeEjCtTHq+clgXRz9nF
+	kc7QDAOmz+Jx4eEg1RujbTVR7g==
+X-Google-Smtp-Source: AGHT+IHyo1axms+ckhodl2KbZ/1My7NcqxxzmO0EEcz3ZK+X3IOJxW78U3l56AhQYBvpEUAbefnwcQ==
+X-Received: by 2002:a05:6512:a8c:b0:50b:f84b:9b0f with SMTP id m12-20020a0565120a8c00b0050bf84b9b0fmr4113837lfu.25.1702391256066;
+        Tue, 12 Dec 2023 06:27:36 -0800 (PST)
+Received: from vingu-book.. ([2a01:e0a:f:6020:a004:6e24:43ee:dd81])
+        by smtp.gmail.com with ESMTPSA id fc7-20020a05600c524700b0040c44cb251dsm9078291wmb.46.2023.12.12.06.27.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Dec 2023 06:00:59 -0800 (PST)
-From: Kevin Hao <haokexin@gmail.com>
-To: linux-pm@vger.kernel.org
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>,
-	Len Brown <len.brown@intel.com>
-Subject: [PATCH] docs: power: Adjust freezing-of-tasks.rst due to the freezer logic changes
-Date: Tue, 12 Dec 2023 22:00:43 +0800
-Message-Id: <20231212140043.714303-1-haokexin@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Tue, 12 Dec 2023 06:27:35 -0800 (PST)
+From: Vincent Guittot <vincent.guittot@linaro.org>
+To: catalin.marinas@arm.com,
+	will@kernel.org,
+	sudeep.holla@arm.com,
+	rafael@kernel.org,
+	viresh.kumar@linaro.org,
+	agross@kernel.org,
+	andersson@kernel.org,
+	konrad.dybcio@linaro.org,
+	mingo@redhat.com,
+	peterz@infradead.org,
+	juri.lelli@redhat.com,
+	dietmar.eggemann@arm.com,
+	rostedt@goodmis.org,
+	bsegall@google.com,
+	mgorman@suse.de,
+	bristot@redhat.com,
+	vschneid@redhat.com,
+	lukasz.luba@arm.com,
+	rui.zhang@intel.com,
+	mhiramat@kernel.org,
+	daniel.lezcano@linaro.org,
+	amit.kachhap@gmail.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Subject: [PATCH 0/5] Rework system pressure interface to the scheduler
+Date: Tue, 12 Dec 2023 15:27:26 +0100
+Message-Id: <20231212142730.998913-1-vincent.guittot@linaro.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -70,145 +93,50 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Peter has rewritten core freezer logic in commit f5d39b020809
-("freezer,sched: Rewrite core freezer logic"), adjust the
-freezing-of-tasks.rst according to this commit. The main changes
-include:
-- Drop the mention of PF_FROZEN and PF_FREEZER_SKIP
-- Introduce TASK_FROZEN, TASK_FREEZABLE and __TASK_FREEZABLE_UNSAFE
-- Replace system_freezing_cnt with freezer_active
-- Use another example for the loop of a freezable kernel thread since
-  the old codes are already gone
+Following the consolidation and cleanup of CPU capacity in [1], this serie
+reworks how the scheduler gets the pressures on CPUs. We need to take into
+account all pressures applied by cpufreq on the compute capacity of a CPU
+for dozens of ms or more and not only cpufreq cooling device or HW
+mitigiations. we split the pressure applied on CPU's capacity in 2 parts:
+- one from cpufreq and freq_qos
+- one from HW high freq mitigiation.
 
-Signed-off-by: Kevin Hao <haokexin@gmail.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Len Brown <len.brown@intel.com>
----
- Documentation/power/freezing-of-tasks.rst | 83 +++++++++++++----------
- 1 file changed, 47 insertions(+), 36 deletions(-)
+The next step will be to add a dedicated interface for long standing
+capping of the CPU capacity (i.e. for seconds or more) like the
+scaling_max_freq of cpufreq sysfs. The latter is already taken into
+account by this serie but as a temporary pressure which is not always the
+best choice when we know that it will happen for seconds or more.
 
-diff --git a/Documentation/power/freezing-of-tasks.rst b/Documentation/power/freezing-of-tasks.rst
-index 53b6a56c4635..8969ed244b20 100644
---- a/Documentation/power/freezing-of-tasks.rst
-+++ b/Documentation/power/freezing-of-tasks.rst
-@@ -14,27 +14,28 @@ architectures).
- II. How does it work?
- =====================
- 
--There are three per-task flags used for that, PF_NOFREEZE, PF_FROZEN
--and PF_FREEZER_SKIP (the last one is auxiliary).  The tasks that have
--PF_NOFREEZE unset (all user space processes and some kernel threads) are
--regarded as 'freezable' and treated in a special way before the system enters a
--suspend state as well as before a hibernation image is created (in what follows
--we only consider hibernation, but the description also applies to suspend).
-+There are one per-task flag (PF_NOFREEZE) and three per-task states
-+(TASK_FROZEN, TASK_FREEZABLE and __TASK_FREEZABLE_UNSAFE) used for that.
-+The tasks that have PF_NOFREEZE unset (all user space processes and some kernel
-+threads) are regarded as 'freezable' and treated in a special way before the
-+system enters a suspend state as well as before a hibernation image is created
-+(in what follows we only consider hibernation, but the description also applies
-+to suspend).
- 
- Namely, as the first step of the hibernation procedure the function
- freeze_processes() (defined in kernel/power/process.c) is called.  A system-wide
--variable system_freezing_cnt (as opposed to a per-task flag) is used to indicate
--whether the system is to undergo a freezing operation. And freeze_processes()
--sets this variable.  After this, it executes try_to_freeze_tasks() that sends a
--fake signal to all user space processes, and wakes up all the kernel threads.
--All freezable tasks must react to that by calling try_to_freeze(), which
--results in a call to __refrigerator() (defined in kernel/freezer.c), which sets
--the task's PF_FROZEN flag, changes its state to TASK_UNINTERRUPTIBLE and makes
--it loop until PF_FROZEN is cleared for it. Then, we say that the task is
--'frozen' and therefore the set of functions handling this mechanism is referred
--to as 'the freezer' (these functions are defined in kernel/power/process.c,
--kernel/freezer.c & include/linux/freezer.h). User space processes are generally
--frozen before kernel threads.
-+static key freezer_active (as opposed to a per-task flag or state) is used to
-+indicate whether the system is to undergo a freezing operation. And
-+freeze_processes() sets this variable.  After this, it executes
-+try_to_freeze_tasks() that sends a fake signal to all user space processes, and
-+wakes up all the kernel threads. All freezable tasks must react to that by
-+calling try_to_freeze(), which results in a call to __refrigerator() (defined
-+in kernel/freezer.c), which sets the task's state to TASK_FROZEN, and makes it
-+loop until it is woken by an explicit TASK_FROZEN wakeup. Then, we say that the
-+task is 'frozen' and therefore the set of functions handling this mechanism is
-+referred to as 'the freezer' (these functions are defined in
-+kernel/power/process.c, kernel/freezer.c & include/linux/freezer.h). User space
-+processes are generally frozen before kernel threads.
- 
- __refrigerator() must not be called directly.  Instead, use the
- try_to_freeze() function (defined in include/linux/freezer.h), that checks
-@@ -43,31 +44,40 @@ if the task is to be frozen and makes the task enter __refrigerator().
- For user space processes try_to_freeze() is called automatically from the
- signal-handling code, but the freezable kernel threads need to call it
- explicitly in suitable places or use the wait_event_freezable() or
--wait_event_freezable_timeout() macros (defined in include/linux/freezer.h)
--that combine interruptible sleep with checking if the task is to be frozen and
--calling try_to_freeze().  The main loop of a freezable kernel thread may look
--like the following one::
-+wait_event_freezable_timeout() macros (defined in include/linux/wait.h)
-+that puts the task to sleep (TASK_INTERRUPTIBLE) or frozen (TASK_FROZEN) if the
-+task is freezing. The main loop of a freezable kernel thread may look like the
-+following one::
- 
- 	set_freezable();
--	do {
--		hub_events();
--		wait_event_freezable(khubd_wait,
--				!list_empty(&hub_event_list) ||
--				kthread_should_stop());
--	} while (!kthread_should_stop() || !list_empty(&hub_event_list));
- 
--(from drivers/usb/core/hub.c::hub_thread()).
-+	while (true) {
-+		struct task_struct *tsk = NULL;
- 
--If a freezable kernel thread fails to call try_to_freeze() after the freezer has
--initiated a freezing operation, the freezing of tasks will fail and the entire
--hibernation operation will be cancelled.  For this reason, freezable kernel
--threads must call try_to_freeze() somewhere or use one of the
-+		wait_event_freezable(oom_reaper_wait, oom_reaper_list != NULL);
-+		spin_lock_irq(&oom_reaper_lock);
-+		if (oom_reaper_list != NULL) {
-+			tsk = oom_reaper_list;
-+			oom_reaper_list = tsk->oom_reaper_list;
-+		}
-+		spin_unlock_irq(&oom_reaper_lock);
-+
-+		if (tsk)
-+			oom_reap_task(tsk);
-+	}
-+
-+(from mm/oom_kill.c::oom_reaper()).
-+
-+If a freezable kernel thread fails to be put to frozen state after the freezer
-+has initiated a freezing operation, the freezing of tasks will fail and the
-+entire hibernation operation will be cancelled.  For this reason, freezable
-+kernel threads must call try_to_freeze() somewhere or use one of the
- wait_event_freezable() and wait_event_freezable_timeout() macros.
- 
- After the system memory state has been restored from a hibernation image and
- devices have been reinitialized, the function thaw_processes() is called in
--order to clear the PF_FROZEN flag for each frozen task.  Then, the tasks that
--have been frozen leave __refrigerator() and continue running.
-+order to wake up each frozen task.  Then, the tasks that have been frozen leave
-+__refrigerator() and continue running.
- 
- 
- Rationale behind the functions dealing with freezing and thawing of tasks
-@@ -96,7 +106,8 @@ III. Which kernel threads are freezable?
- Kernel threads are not freezable by default.  However, a kernel thread may clear
- PF_NOFREEZE for itself by calling set_freezable() (the resetting of PF_NOFREEZE
- directly is not allowed).  From this point it is regarded as freezable
--and must call try_to_freeze() in a suitable place.
-+and must call try_to_freeze() or variants of wait_event_freezable() in a
-+suitable place.
- 
- IV. Why do we do that?
- ======================
+[1] https://lore.kernel.org/lkml/20231211104855.558096-1-vincent.guittot@linaro.org/
+
+Vincent Guittot (4):
+  cpufreq: Add a cpufreq pressure feedback for the scheduler
+  sched: Take cpufreq feedback into account
+  thermal/cpufreq: Remove arch_update_thermal_pressure()
+  sched: Rename arch_update_thermal_pressure into
+    arch_update_hw_pressure
+
+ arch/arm/include/asm/topology.h               |  6 +--
+ arch/arm64/include/asm/topology.h             |  6 +--
+ drivers/base/arch_topology.c                  | 26 ++++-----
+ drivers/cpufreq/cpufreq.c                     | 48 +++++++++++++++++
+ drivers/cpufreq/qcom-cpufreq-hw.c             |  4 +-
+ drivers/thermal/cpufreq_cooling.c             |  3 --
+ include/linux/arch_topology.h                 |  8 +--
+ include/linux/cpufreq.h                       | 10 ++++
+ include/linux/sched/topology.h                |  8 +--
+ .../{thermal_pressure.h => hw_pressure.h}     | 14 ++---
+ include/trace/events/sched.h                  |  2 +-
+ init/Kconfig                                  | 12 ++---
+ kernel/sched/core.c                           |  8 +--
+ kernel/sched/fair.c                           | 53 ++++++++++---------
+ kernel/sched/pelt.c                           | 18 +++----
+ kernel/sched/pelt.h                           | 16 +++---
+ kernel/sched/sched.h                          |  4 +-
+ 17 files changed, 152 insertions(+), 94 deletions(-)
+ rename include/trace/events/{thermal_pressure.h => hw_pressure.h} (55%)
+
 -- 
-2.39.2
-
+2.34.1
+ 
 
