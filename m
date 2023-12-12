@@ -1,216 +1,116 @@
-Return-Path: <linux-pm+bounces-962-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-963-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C8C080EDD0
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 14:39:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8627280EDD9
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 14:43:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CCCAB281B5C
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 13:39:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C2C21B20C88
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 13:43:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89A6A65EB6;
-	Tue, 12 Dec 2023 13:39:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 046F761FDE;
+	Tue, 12 Dec 2023 13:43:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="aHPFE7nE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338E5AF;
-	Tue, 12 Dec 2023 05:39:29 -0800 (PST)
-Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-6d9db2f1ddfso767875a34.0;
-        Tue, 12 Dec 2023 05:39:29 -0800 (PST)
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DEEB3
+	for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 05:43:00 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-5cece20f006so57291897b3.3
+        for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 05:43:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702388580; x=1702993380; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mAQFb+6ron76LUgdpTUJdx32df8simBAK0E2prt6OcE=;
+        b=aHPFE7nESu5i/mqtkdu6aRJrm0wAys7lpXwZq/CMQOHv1PPG8h+aGOFRxI6xlKSZtP
+         FwMceeo6+RouBRWmT4KwrtfudYLJGAwEOKyJzdNHY4WrRAcFTVzvt2IzEuD8ZROTA8Wq
+         Od0MUAtn0q3va7CJIcUkggMLioHzGG0lVP+Ii3/VMOnYAfi9p2cL/B9pEyVx/jySdSfV
+         Dn3u47GZPYwf4HEReeIh/gwjengXjXSY04kB9BQ1V1/zGIDuGAYu3IXpCsBY7giVxA7B
+         ETy52oblViDI82IKzS3gOdvLu43jzzXNs0WiH3SHednniVbM2hsulJ1x4MT59xsWcrTo
+         Wl5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702388368; x=1702993168;
+        d=1e100.net; s=20230601; t=1702388580; x=1702993380;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MQMvVmO3VAcrbLQKmWUJkKzG1H3oPWijGjJxXq7r9mI=;
-        b=VuG+1jRloJ8cPjxg1LuEzJSYbK9k/yXXbOc0AeS33b4L91ydv6oJ2ZSmJlaGiTIzw1
-         Sj6DFF3I/oc4fx2/ujqKdrtbj+D8YMLDsLcj7XnUoutn+/ZkOdVZFBfNOorCs/XA0NiB
-         GlagtpK55zBc+RHzr3DKsMwY3kZuBPw0AZmYETREiyDE2WfjGg+tNrF8rml7uIu68FH7
-         m0QWOaofi5UFToK26EDSGugfw3TqHNkrAgT+5qQVi36CPOtaP3K7SfRxVbTPRAZI4gKZ
-         60K0gjiBCXrnmT8YYMvc+3xT4R0W68xk+eh6bMusMdimFAz3TDSorRcyHi6p16TOx/+0
-         r03g==
-X-Gm-Message-State: AOJu0YwzEdeIXlpMANEkkVVlFxqf1OCHlAhZTUcGQ7j9JCXUWbAxyKLT
-	QDyvGvD/lvKAHKlM2ZZqCrTWAcshFf44sR/R3Ro=
-X-Google-Smtp-Source: AGHT+IFV2pnIGekDy1xzSYBDM1Vz6D5VhfIhXjUh1uF61cWXZYdG6L/VvUyAWZPGYbNMlWEI6JXEGXdYB66FjeczORM=
-X-Received: by 2002:a05:6820:220d:b0:58d:5302:5b18 with SMTP id
- cj13-20020a056820220d00b0058d53025b18mr12599520oob.1.1702388368434; Tue, 12
- Dec 2023 05:39:28 -0800 (PST)
+        bh=mAQFb+6ron76LUgdpTUJdx32df8simBAK0E2prt6OcE=;
+        b=YNTwg+u1wyo844EBY0fahLZkLde16Q6J4sB3KmtDCPpm2FTfWK08JMuU33zzcAWHY9
+         0io6WH6LsIBGQkiXOzyyv6z0YbAfO12jv6jHuiPCLlwBCt99B8GGAbf0ddQFTXkD1CJ0
+         /kppMtYS7jkbne7f6+qKxFdePRpptD4XpaYy8WrwbeZfqqbT8UMF7nHYoLH8Zn9cWejm
+         zra0gwcuDqJd2q1vgeBHY9wcWC2R5aJW4h/BmwL5oo7yCl3sKExvkd9q7MG7F5I3Jp+3
+         UXaJTBesxuq5+nE9CJpuGQtOxVi6rjnW9GOsZEobYhQuPxhLexpuhqUuxk0aNjKNlmbr
+         oBeQ==
+X-Gm-Message-State: AOJu0YwDs2ruzl29TvrEJ0v9EQ1Bm7VabplIRF9fLqtCnPIeamNfSIZ4
+	kOA2FNE2xo3FnWnwPDOwJkD1Xcqhb3LM6NPVTTJPqA==
+X-Google-Smtp-Source: AGHT+IGXI8MTlNXqp44K40z930LaIgojX2yvlOPjKoe0EJGLkACdmwfiHtJzUo62FGKni7DyMbfQiKk9Ir0r32fZwYk=
+X-Received: by 2002:a05:690c:318d:b0:5df:2830:967b with SMTP id
+ fd13-20020a05690c318d00b005df2830967bmr3728505ywb.54.1702388579889; Tue, 12
+ Dec 2023 05:42:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <170108151076.780347.2482745314490930894.stgit@mhiramat.roam.corp.google.com>
- <170108152012.780347.6355289232990337333.stgit@mhiramat.roam.corp.google.com>
-In-Reply-To: <170108152012.780347.6355289232990337333.stgit@mhiramat.roam.corp.google.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 12 Dec 2023 14:39:17 +0100
-Message-ID: <CAJZ5v0j8x_hzKg4RHx-xyd6Mye9=xj7MgACcWa7R1PcagFLzwQ@mail.gmail.com>
-Subject: Re: [PATCH v5] PM: sleep: Expose last succeeded resumed timestamp in sysfs
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
-	Randy Dunlap <rdunlap@infradead.org>, suleiman@google.com, briannorris@google.com, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20231127151931.47055-1-ulf.hansson@linaro.org>
+ <CAJZ5v0jXRNDV7AhZPkrDvMtrk6cYeMJ+HuUs0kJ=kjbQ-YiyVA@mail.gmail.com>
+ <CAPDyKFpJ6_+nF8q3L4Tg1E9St3stgJ06se0t=FLHkx4_36OJNA@mail.gmail.com> <CAJZ5v0jxMjb-bUbJiHgehe5xJ6cwspvsRp5P_2N6FyvRFshJQA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jxMjb-bUbJiHgehe5xJ6cwspvsRp5P_2N6FyvRFshJQA@mail.gmail.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 12 Dec 2023 14:42:23 +0100
+Message-ID: <CAPDyKFobQ7dYb6SBD5tmxcK-u0w1mdQxBhY10GVNVgHj3aYNGA@mail.gmail.com>
+Subject: Re: [PATCH] PM: domains: Drop the unused pm_genpd_opp_to_performance_state()
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-pm@vger.kernel.org, Kevin Hilman <khilman@kernel.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 27, 2023 at 11:38=E2=80=AFAM Masami Hiramatsu (Google)
-<mhiramat@kernel.org> wrote:
+On Tue, 12 Dec 2023 at 12:59, Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> From: Masami Hiramatsu <mhiramat@kernel.org>
+> On Tue, Dec 12, 2023 at 11:37=E2=80=AFAM Ulf Hansson <ulf.hansson@linaro.=
+org> wrote:
+> >
+> > On Mon, 11 Dec 2023 at 21:44, Rafael J. Wysocki <rafael@kernel.org> wro=
+te:
+> > >
+> > > On Mon, Nov 27, 2023 at 4:19=E2=80=AFPM Ulf Hansson <ulf.hansson@lina=
+ro.org> wrote:
+> > > >
+> > > > Since commit 7c41cdcd3bbe ("OPP: Simplify the over-designed pstate =
+<->
+> > > > level dance"), there is no longer any users of the
+> > > > pm_genpd_opp_to_performance_state() API. Let's therefore drop it an=
+d its
+> > > > corresponding ->opp_to_performance_state() callback, which also no =
+longer
+> > > > has any users.
+> > > >
+> > > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > >
+> > > I can take this in principle, but I'm wondering if you'd prefer to
+> > > apply patches modifying domain.c yourself?  They are definitely
+> > > related to the pmdomain tree.
+> >
+> > Yes, it makes sense for me to pick the genpd core patches through the
+> > pmdomain tree. In some cases there may be overlapping patches that are
+> > more generic and not only limited to genpd, but I guess we can decide
+> > on a case by case basis for those ones.
+> >
+> > I can add the pmdomain tree to the GENERIC PM DOMAINS section in the
+> > MAINTAINERS file to reflect this, if you think this is a good idea?
 >
-> Expose last succeeded resumed timestamp as last_success_resume_time
-> attribute of suspend_stats in sysfs.
+> Yes, please.
 >
-> There are some printk()s for printing the similar resume timing to
-> dmesg, but those are recorded with local_clock(), and user can not
-> compare it with current time. We also have tracing events but it
-> requires CAP_SYS_ADMIN to use it.
->
-> This suspend_stats attribute is easy to access and only expose the
-> timestamp in CLOCK_MONOTONIC.
+> What about moving drivers/base/power/domain.c to drivers/pmdomain/ ?
 
-Why CLOCK_MONOTONIC?
+Yes, it seems reasonable to do that too. I will send a patch for you
+to have a look at shortly.
 
-> So user can find the actual resumed
-> time and measure the elapsed time from the time when the kernel
-> finished the resume to the user-space action (e.g. display the UI).
-
-Can you please say a bit more about why this is useful?
-
-The time stamp is taken at the point when user space has been already
-running for some time, so what's the exact benefit of it?
-
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> ---
->  Changes in v5:
->   - Just updated for v6.7-rc3.
->  Changes in v4.1:
->   - Fix document typo (again).
->  Changes in v4:
->   - Update description to add why.
->   - Fix document typo.
->  Changes in v3:
->   - Add (unsigned long long) casting for %llu.
->   - Add a line after last_success_resume_time_show().
->  Changes in v2:
->   - Use %llu instead of %lu for printing u64 value.
->   - Remove unneeded indent spaces from the last_success_resume_time
->     line in the debugfs suspend_stat file.
-> ---
->  Documentation/ABI/testing/sysfs-power |   10 ++++++++++
->  include/linux/suspend.h               |    2 ++
->  kernel/power/main.c                   |   15 +++++++++++++++
->  kernel/power/suspend.c                |    1 +
->  4 files changed, 28 insertions(+)
->
-> diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/te=
-sting/sysfs-power
-> index a3942b1036e2..e14975859766 100644
-> --- a/Documentation/ABI/testing/sysfs-power
-> +++ b/Documentation/ABI/testing/sysfs-power
-> @@ -442,6 +442,16 @@ Description:
->                 'total_hw_sleep' and 'last_hw_sleep' may not be accurate.
->                 This number is measured in microseconds.
->
-> +What:          /sys/power/suspend_stats/last_success_resume_time
-> +Date:          Oct 2023
-> +Contact:       Masami Hiramatsu <mhiramat@kernel.org>
-> +Description:
-> +               The /sys/power/suspend_stats/last_success_resume_time fil=
-e
-> +               contains the timestamp of when the kernel successfully
-> +               resumed from suspend/hibernate.
-> +               This floating point number is measured in seconds by mono=
-tonic
-> +               clock.
-> +
->  What:          /sys/power/sync_on_suspend
->  Date:          October 2019
->  Contact:       Jonas Meurer <jonas@freesources.org>
-> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> index ef503088942d..ddd789044960 100644
-> --- a/include/linux/suspend.h
-> +++ b/include/linux/suspend.h
-> @@ -8,6 +8,7 @@
->  #include <linux/pm.h>
->  #include <linux/mm.h>
->  #include <linux/freezer.h>
-> +#include <linux/timekeeping.h>
->  #include <asm/errno.h>
->
->  #ifdef CONFIG_VT
-> @@ -71,6 +72,7 @@ struct suspend_stats {
->         u64     last_hw_sleep;
->         u64     total_hw_sleep;
->         u64     max_hw_sleep;
-> +       struct timespec64 last_success_resume_time;
->         enum suspend_stat_step  failed_steps[REC_FAILED_NUM];
->  };
->
-> diff --git a/kernel/power/main.c b/kernel/power/main.c
-> index f6425ae3e8b0..2ab23fd3daac 100644
-> --- a/kernel/power/main.c
-> +++ b/kernel/power/main.c
-> @@ -421,6 +421,17 @@ static ssize_t last_failed_step_show(struct kobject =
-*kobj,
->  }
->  static struct kobj_attribute last_failed_step =3D __ATTR_RO(last_failed_=
-step);
->
-> +static ssize_t last_success_resume_time_show(struct kobject *kobj,
-> +               struct kobj_attribute *attr, char *buf)
-> +{
-> +       return sprintf(buf, "%llu.%llu\n",
-> +               (unsigned long long)suspend_stats.last_success_resume_tim=
-e.tv_sec,
-> +               (unsigned long long)suspend_stats.last_success_resume_tim=
-e.tv_nsec);
-> +}
-> +
-> +static struct kobj_attribute last_success_resume_time =3D
-> +                       __ATTR_RO(last_success_resume_time);
-> +
->  static struct attribute *suspend_attrs[] =3D {
->         &success.attr,
->         &fail.attr,
-> @@ -438,6 +449,7 @@ static struct attribute *suspend_attrs[] =3D {
->         &last_hw_sleep.attr,
->         &total_hw_sleep.attr,
->         &max_hw_sleep.attr,
-> +       &last_success_resume_time.attr,
->         NULL,
->  };
->
-> @@ -514,6 +526,9 @@ static int suspend_stats_show(struct seq_file *s, voi=
-d *unused)
->                         suspend_step_name(
->                                 suspend_stats.failed_steps[index]));
->         }
-> +       seq_printf(s,   "last_success_resume_time:\t%-llu.%llu\n",
-> +                  (unsigned long long)suspend_stats.last_success_resume_=
-time.tv_sec,
-> +                  (unsigned long long)suspend_stats.last_success_resume_=
-time.tv_nsec);
->
->         return 0;
->  }
-> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> index fa3bf161d13f..33334565d5a6 100644
-> --- a/kernel/power/suspend.c
-> +++ b/kernel/power/suspend.c
-> @@ -622,6 +622,7 @@ int pm_suspend(suspend_state_t state)
->                 dpm_save_failed_errno(error);
->         } else {
->                 suspend_stats.success++;
-> +               ktime_get_ts64(&suspend_stats.last_success_resume_time);
-
-And so hibernation is not really covered.
-
->         }
->         pr_info("suspend exit\n");
->         return error;
->
+Kind regards
+Uffe
 
