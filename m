@@ -1,103 +1,159 @@
-Return-Path: <linux-pm+bounces-932-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-933-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89DAE80E62B
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 09:32:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0646480E64C
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 09:35:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C8487282276
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 08:32:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF099282292
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 08:35:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6476915AFD;
-	Tue, 12 Dec 2023 08:32:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ohaMR0vs"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1F7415AD5;
+	Tue, 12 Dec 2023 08:35:37 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2ED2FD
-	for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 00:32:19 -0800 (PST)
-Received: by mail-qv1-xf2c.google.com with SMTP id 6a1803df08f44-67ab5e015aaso35886096d6.0
-        for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 00:32:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702369939; x=1702974739; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I4kqMN+HbgK8h0LRfiST0/gaIQ4yUhlUvwCL2KbU+eI=;
-        b=ohaMR0vso/xbPTodlA9davmFnr6Wk8qwVFrDd3oymXW1n0MjDY+dLUIx6j3mTwKq15
-         6quMuRTWo8Rkgnv63ObkHSRfVuFpOCnF2VVmk+Hfg647kW1rYBf52yUNbw12fTb7fAiI
-         C1LY2Wc0r+B60Parv06z9G9IyptP9l7q+29+wCJjMKsUKQ6Scy/F21uOXzuVcvT86SdT
-         fKnc44KtKdXJ7BIs5m4E939lphbz/bC8Gj1nl5JXoP+gh+hyttBasQtAZ8DY0Lx4xdCA
-         PcsuI1xRX4fs+zqt+FKo9CU8DqC365fTbDgHOUUPr9LI8Xn1jNq1LPAmYnv/KYfu8GVn
-         GEdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702369939; x=1702974739;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=I4kqMN+HbgK8h0LRfiST0/gaIQ4yUhlUvwCL2KbU+eI=;
-        b=odsqwakGSZv+3HfRVJUBIOhVKMnDKaCuWLzTL2rHUIcWhNHejBud7pCrjJZV1ILTXk
-         NbVswQymL9vo6UjN1xUE29+6EzQQLDLAbjV8VVTquwuI7/Q8IwjfBorjCRrBAbXF2SOr
-         xm84IeMLetDNZHekilG0wOgh7ojRfkKQQn3EjVPbzd5SqOyiZYOD7vqV9/mN9fAI5vnF
-         6VseSeVsQjkX3FzM4Da2jzSTzOc4c9S90jiq7+7XmLYV7qrwDKlCJeYWBNpIHIIWYyoW
-         fC8sCjHToxlcizNwoZ9M8rT5rvnWVZFNAnVdD1pJxnnSF8SPgzgKZy26R7BCVllwQ2f1
-         NerA==
-X-Gm-Message-State: AOJu0YxyW+ztODf3pgOxkGeYUNdRZBJEr+Usd4WYYOpX3BxLwdrGhY+r
-	dmyW1fIzRi8SBF99z6PqCnAoHmOwrBdYVYed11WCsA==
-X-Google-Smtp-Source: AGHT+IG0V6b2w6UWHUlW9pxYWTaS0uDQUzxhZQ4B06wFrRKsghNDJX6XvOe1qtLzaxB+JBeOLMSozUSB2UxByYZ/7u8=
-X-Received: by 2002:a0c:be89:0:b0:67a:a721:7850 with SMTP id
- n9-20020a0cbe89000000b0067aa7217850mr5392942qvi.117.1702369938818; Tue, 12
- Dec 2023 00:32:18 -0800 (PST)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1423530D6;
+	Tue, 12 Dec 2023 00:35:33 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8A70F143D;
+	Tue, 12 Dec 2023 00:36:19 -0800 (PST)
+Received: from [10.57.82.227] (unknown [10.57.82.227])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 380B53F5A1;
+	Tue, 12 Dec 2023 00:35:32 -0800 (PST)
+Message-ID: <d644820d-7d00-4e52-88bf-dd86aceb1544@arm.com>
+Date: Tue, 12 Dec 2023 08:36:36 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231211104855.558096-1-vincent.guittot@linaro.org> <CAJZ5v0i37gGqt=oGC4BxJ4hT5pxhAdL7dPxGf7w3D8THqwAOwQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0i37gGqt=oGC4BxJ4hT5pxhAdL7dPxGf7w3D8THqwAOwQ@mail.gmail.com>
-From: Vincent Guittot <vincent.guittot@linaro.org>
-Date: Tue, 12 Dec 2023 09:32:06 +0100
-Message-ID: <CAKfTPtDXLDpGChy7UXVsV75NHK1OPGHaGYf5G663HWnau4kAHg@mail.gmail.com>
-Subject: Re: [PATCH v7 0/7] consolidate and cleanup CPU capacity
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/5] thermal: core: Add callback for governors with
+ cooling instances change
+Content-Language: en-US
 To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org, 
-	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
-	sudeep.holla@arm.com, gregkh@linuxfoundation.org, mingo@redhat.com, 
-	peterz@infradead.org, juri.lelli@redhat.com, dietmar.eggemann@arm.com, 
-	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de, bristot@redhat.com, 
-	vschneid@redhat.com, viresh.kumar@linaro.org, lenb@kernel.org, 
-	robert.moore@intel.com, lukasz.luba@arm.com, ionela.voinescu@arm.com, 
-	pierre.gondois@arm.com, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org, 
-	conor.dooley@microchip.com, suagrfillet@gmail.com, ajones@ventanamicro.com, 
-	lftan@kernel.org, beata.michalska@arm.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Cc: linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
+ linux-pm@vger.kernel.org, rui.zhang@intel.com
+References: <20231206113138.3576492-1-lukasz.luba@arm.com>
+ <20231206113138.3576492-2-lukasz.luba@arm.com>
+ <CAJZ5v0goUEmvK57VEB6wdvubssLtzYBnb2HSJsed7VWWLs0s2w@mail.gmail.com>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAJZ5v0goUEmvK57VEB6wdvubssLtzYBnb2HSJsed7VWWLs0s2w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, 11 Dec 2023 at 20:52, Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Mon, Dec 11, 2023 at 11:49=E2=80=AFAM Vincent Guittot
-> <vincent.guittot@linaro.org> wrote:
 
-[..]
 
-> >
-> > Vincent Guittot (7):
-> >   topology: Add a new arch_scale_freq_reference
-> >   cpufreq: Use the fixed and coherent frequency for scaling capacity
-> >   cpufreq/schedutil: Use a fixed reference frequency
-> >   energy_model: Use a fixed reference frequency
-> >   cpufreq/cppc: Move and rename cppc_cpufreq_{perf_to_khz|khz_to_perf}
-> >   cpufreq/cppc: Set the frequency used for computing the capacity
-> >   arm64/amu: Use capacity_ref_freq to set AMU ratio
->
-> This series touches multiple places, but mostly schedutil, cpufreq and
-> the EM, so please let me know if you want me to pick it up.
+On 12/11/23 20:41, Rafael J. Wysocki wrote:
+> On Wed, Dec 6, 2023 at 12:30 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>> Allow governors to react to the changes in the cooling instances list.
+>> That makes possible to move memory allocations related to the number of
+>> cooling instances out of the throttle() callback. The throttle() callback
+>> is called much more often thus the cost of managing allocations there is
+>> an extra overhead. The list of cooling instances is not changed that often
+>> and it can be handled in dedicated callback. That will save CPU cycles
+>> in the throttle() code path.  Both callbacks code paths are protected with
+>> the same thermal zone lock, which guaranties the list of cooling instances
+>> is consistent.
+>>
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> 
+> I agree with the direction, but I'm wondering if changes of the
+> bindings between trip points and cooling devices are the only type of
+> changes which can affect the IPA.  For instance, what if the trip
+> point temperatures are updated?
 
-This serie has been rebased on top of tip/ched/core to fix a conflict
-with another change already queued in kernel/sched/cpufreq_schedutil.c
+Yes, that example sounds also interesting for a callback. The trip
+temperature update won't affect the allocation/free code, though.
+
+> 
+> If it needs to react to other types of changes in general, it may be
+> good to introduce a more general callback that can be made handle them
+> in the future.
+
+Fair enough.
+
+> 
+>> ---
+>>   drivers/thermal/thermal_core.c | 14 ++++++++++++++
+>>   include/linux/thermal.h        |  4 ++++
+>>   2 files changed, 18 insertions(+)
+>>
+>> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+>> index 625ba07cbe2f..c993b86f7fb5 100644
+>> --- a/drivers/thermal/thermal_core.c
+>> +++ b/drivers/thermal/thermal_core.c
+>> @@ -314,6 +314,15 @@ static void handle_non_critical_trips(struct thermal_zone_device *tz,
+>>                         def_governor->throttle(tz, trip);
+>>   }
+>>
+>> +static void handle_instances_list_update(struct thermal_zone_device *tz)
+>> +{
+>> +
+>> +       if (!tz->governor || !tz->governor->instances_update)
+>> +               return;
+>> +
+>> +       tz->governor->instances_update(tz);
+>> +}
+>> +
+>>   void thermal_zone_device_critical(struct thermal_zone_device *tz)
+>>   {
+>>          /*
+>> @@ -723,6 +732,8 @@ int thermal_bind_cdev_to_trip(struct thermal_zone_device *tz,
+>>                  list_add_tail(&dev->tz_node, &tz->thermal_instances);
+>>                  list_add_tail(&dev->cdev_node, &cdev->thermal_instances);
+>>                  atomic_set(&tz->need_update, 1);
+>> +
+>> +               handle_instances_list_update(tz);
+>>          }
+>>          mutex_unlock(&cdev->lock);
+>>          mutex_unlock(&tz->lock);
+>> @@ -781,6 +792,9 @@ int thermal_unbind_cdev_from_trip(struct thermal_zone_device *tz,
+>>                  if (pos->tz == tz && pos->trip == trip && pos->cdev == cdev) {
+>>                          list_del(&pos->tz_node);
+>>                          list_del(&pos->cdev_node);
+>> +
+>> +                       handle_instances_list_update(tz);
+>> +
+>>                          mutex_unlock(&cdev->lock);
+>>                          mutex_unlock(&tz->lock);
+>>                          goto unbind;
+>> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+>> index c7190e2dfcb4..e7b2a1f4bab0 100644
+>> --- a/include/linux/thermal.h
+>> +++ b/include/linux/thermal.h
+>> @@ -195,6 +195,9 @@ struct thermal_zone_device {
+>>    *                     thermal zone.
+>>    * @throttle:  callback called for every trip point even if temperature is
+>>    *             below the trip point temperature
+>> + * @instances_update:  callback called when thermal zone instances list
+>> + *     i               has changed (e.g. added new or removed), which
+>> + *                     may help to offload work for governor like allocations
+>>    * @governor_list:     node in thermal_governor_list (in thermal_core.c)
+>>    */
+>>   struct thermal_governor {
+>> @@ -203,6 +206,7 @@ struct thermal_governor {
+>>          void (*unbind_from_tz)(struct thermal_zone_device *tz);
+>>          int (*throttle)(struct thermal_zone_device *tz,
+>>                          const struct thermal_trip *trip);
+>> +       void (*instances_update)(struct thermal_zone_device *tz);
+> 
+> So this could be more general I think, something like (*update_tz)(),
+> and it may take an additional argument representing the type of the
+> change.
+
+I agree. I'll send next version.
+
+There is one candidate which could instantly be added to this
+update reasons list:
+cooling devices weight change via sysfs [1]
+
+Thanks for the review comments!
+
+[1] 
+https://elixir.bootlin.com/linux/latest/source/drivers/thermal/thermal_sysfs.c#L959
 
