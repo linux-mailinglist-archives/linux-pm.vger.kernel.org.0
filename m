@@ -1,582 +1,237 @@
-Return-Path: <linux-pm+bounces-981-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-982-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1ABA380EEBD
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 15:27:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3206E80EEDD
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 15:32:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C29F1F213AA
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 14:27:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB69B1F211B4
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 14:32:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2711873191;
-	Tue, 12 Dec 2023 14:27:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6937053808;
+	Tue, 12 Dec 2023 14:32:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HLH7yBAb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a4YeL02O"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D11ED
-	for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 06:27:44 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-40c256ffdbcso59191135e9.2
-        for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 06:27:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702391263; x=1702996063; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BsjgZ0JvZ8GCTDV26oBHnpMmwL1Wngf7WqLuUrOgCDA=;
-        b=HLH7yBAbIPnc9NdDk4JcN9/kHcPLx6WOeANY328ZSHc69d+nHOmUT3AXQkSpY49h5w
-         wgv497rMbN3DBUfu54bJqNTd8vbPjUT7KAeNJDkQsBuA1LtVOn/ePiFL+vS3qCgwg4B4
-         tO5+2ze3nx0gE1zpkWQ9exzSYASeydLKrFx3mWsXne+454Q2bbbNo0LufBjP2GGTUDqE
-         Lo4A5tEgR7LOoC+9ndRtD8ZlVNdleerj78ZSCtp0dToBF3SxmXdnsmSxkEMc2G9UZgNS
-         QPmkOUoPSNbfGLbwdp+Z9CrLyXcoQIKNhcrHddwBZKyzOxIsgkZOigOpaGJicdQBwnCC
-         /13g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702391263; x=1702996063;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BsjgZ0JvZ8GCTDV26oBHnpMmwL1Wngf7WqLuUrOgCDA=;
-        b=YDKlQfzxl0C5ugpL1bb/iLYMj2HmvNP4XoYLcis2TzqAMIf8yK+a1Ba8N62D0N7LdQ
-         HSdFTf51yqbGRHmeCGBhbn0EVJBJbTWK3PHYBsNN7lOpawc/0dxFyx+350/jGtMB/+G2
-         Gqv6jRgFr+u0U84v51TCQ/XsmCL069m11P67WipUTnJ2bBoVL7kBOEAg0RrdzMhagSBo
-         0R+1ddf9ZLcCj3vATU3EnDDSWlpfQD48zs8GRDitai9JyyaBXHE4KetY6e0awpcIQY8M
-         fyh3g/XRzhoPPFbopJtMlyYNJAZcYv7yOcTuTkRXv/7SQASXS2mnghMDnqwJqbTQa2gH
-         2Y3w==
-X-Gm-Message-State: AOJu0Yx8QzgoKUw2fuBVEKv49mMvHWn+To1TEHJB0xmZoytcE0k3oGyg
-	5BA6D8fO7bNBUvJv4KhIW8d5jQ==
-X-Google-Smtp-Source: AGHT+IEo88jh9qZzPOPKVsJ6GoVR9cmsillDCsffTZCEreD9WMVfvAWva+toRAdY6Grhz4nFuaVcNA==
-X-Received: by 2002:a1c:4b05:0:b0:40c:2dd8:3a18 with SMTP id y5-20020a1c4b05000000b0040c2dd83a18mr2744182wma.6.1702391262602;
-        Tue, 12 Dec 2023 06:27:42 -0800 (PST)
-Received: from vingu-book.. ([2a01:e0a:f:6020:a004:6e24:43ee:dd81])
-        by smtp.gmail.com with ESMTPSA id fc7-20020a05600c524700b0040c44cb251dsm9078291wmb.46.2023.12.12.06.27.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Dec 2023 06:27:41 -0800 (PST)
-From: Vincent Guittot <vincent.guittot@linaro.org>
-To: catalin.marinas@arm.com,
-	will@kernel.org,
-	sudeep.holla@arm.com,
-	rafael@kernel.org,
-	viresh.kumar@linaro.org,
-	agross@kernel.org,
-	andersson@kernel.org,
-	konrad.dybcio@linaro.org,
-	mingo@redhat.com,
-	peterz@infradead.org,
-	juri.lelli@redhat.com,
-	dietmar.eggemann@arm.com,
-	rostedt@goodmis.org,
-	bsegall@google.com,
-	mgorman@suse.de,
-	bristot@redhat.com,
-	vschneid@redhat.com,
-	lukasz.luba@arm.com,
-	rui.zhang@intel.com,
-	mhiramat@kernel.org,
-	daniel.lezcano@linaro.org,
-	amit.kachhap@gmail.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH 4/4] sched: Rename arch_update_thermal_pressure into arch_update_hw_pressure
-Date: Tue, 12 Dec 2023 15:27:30 +0100
-Message-Id: <20231212142730.998913-5-vincent.guittot@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231212142730.998913-1-vincent.guittot@linaro.org>
-References: <20231212142730.998913-1-vincent.guittot@linaro.org>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E04B20DC1
+	for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 14:32:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B542C433C7;
+	Tue, 12 Dec 2023 14:32:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702391570;
+	bh=oQeIY0/NbQ+/b83NZh3B7cSvnMbTCOaDgXBmhNQFe1U=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=a4YeL02O34nwnGWtxg6OaanurEIkQk93VEKFbsjHaCshzVwbg2Vs8DoRN+pM4ofNt
+	 tLVgCDBBHDAPBXpq61SbK5AfmwDTSGFwVNmOL7BvP/WONF7RIh5D5q4jHVkcdpPaHJ
+	 g0IElvW5JiIJbukRo6TYt8zRsLdR/aSdiQJzawLBv9retwMDk+VJkiqEs3XUbKGo9e
+	 WGAc8d0VfcJNKUBWPe57i2k+6k/afMrEUd2F71DNvfND3Mn7XdxTH/vxJ+nYuBrDkd
+	 QKi0ewEmsNA+ai5FQCGsTtSG/G/GcMyUWjKBDB9nM4PUuYJKgcUQSOjJooZG90TBYn
+	 73bDC8RzEHqAQ==
+Date: Tue, 12 Dec 2023 23:32:45 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, Randy
+ Dunlap <rdunlap@infradead.org>, suleiman@google.com,
+ briannorris@google.com, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+Subject: Re: [PATCH v5] PM: sleep: Expose last succeeded resumed timestamp
+ in sysfs
+Message-Id: <20231212233245.14ae64258bdf07ae1d2f2ff9@kernel.org>
+In-Reply-To: <CAJZ5v0j8x_hzKg4RHx-xyd6Mye9=xj7MgACcWa7R1PcagFLzwQ@mail.gmail.com>
+References: <170108151076.780347.2482745314490930894.stgit@mhiramat.roam.corp.google.com>
+	<170108152012.780347.6355289232990337333.stgit@mhiramat.roam.corp.google.com>
+	<CAJZ5v0j8x_hzKg4RHx-xyd6Mye9=xj7MgACcWa7R1PcagFLzwQ@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Now that cpufreq provides a pressure value to the scheduler, rename
-arch_update_thermal_pressure into hw pressure to reflect that it returns
-a pressure applied by HW with a high frequency and which needs filtering.
-This pressure is not always related to thermal mitigation but can also be
-generated by max current limitation as an example.
+Hi Rafael,
 
-Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
----
- arch/arm/include/asm/topology.h               |  6 ++---
- arch/arm64/include/asm/topology.h             |  6 ++---
- drivers/base/arch_topology.c                  | 26 +++++++++----------
- drivers/cpufreq/qcom-cpufreq-hw.c             |  4 +--
- include/linux/arch_topology.h                 |  8 +++---
- include/linux/sched/topology.h                |  8 +++---
- .../{thermal_pressure.h => hw_pressure.h}     | 14 +++++-----
- include/trace/events/sched.h                  |  2 +-
- init/Kconfig                                  | 12 ++++-----
- kernel/sched/core.c                           |  8 +++---
- kernel/sched/fair.c                           | 12 ++++-----
- kernel/sched/pelt.c                           | 18 ++++++-------
- kernel/sched/pelt.h                           | 16 ++++++------
- kernel/sched/sched.h                          |  4 +--
- 14 files changed, 72 insertions(+), 72 deletions(-)
- rename include/trace/events/{thermal_pressure.h => hw_pressure.h} (55%)
+On Tue, 12 Dec 2023 14:39:17 +0100
+"Rafael J. Wysocki" <rafael@kernel.org> wrote:
 
-diff --git a/arch/arm/include/asm/topology.h b/arch/arm/include/asm/topology.h
-index 853c4f81ba4a..e175e8596b5d 100644
---- a/arch/arm/include/asm/topology.h
-+++ b/arch/arm/include/asm/topology.h
-@@ -22,9 +22,9 @@
- /* Enable topology flag updates */
- #define arch_update_cpu_topology topology_update_cpu_topology
- 
--/* Replace task scheduler's default thermal pressure API */
--#define arch_scale_thermal_pressure topology_get_thermal_pressure
--#define arch_update_thermal_pressure	topology_update_thermal_pressure
-+/* Replace task scheduler's default hw pressure API */
-+#define arch_scale_hw_pressure topology_get_hw_pressure
-+#define arch_update_hw_pressure	topology_update_hw_pressure
- 
- #else
- 
-diff --git a/arch/arm64/include/asm/topology.h b/arch/arm64/include/asm/topology.h
-index a323b109b9c4..a427650bdfba 100644
---- a/arch/arm64/include/asm/topology.h
-+++ b/arch/arm64/include/asm/topology.h
-@@ -35,9 +35,9 @@ void update_freq_counters_refs(void);
- /* Enable topology flag updates */
- #define arch_update_cpu_topology topology_update_cpu_topology
- 
--/* Replace task scheduler's default thermal pressure API */
--#define arch_scale_thermal_pressure topology_get_thermal_pressure
--#define arch_update_thermal_pressure	topology_update_thermal_pressure
-+/* Replace task scheduler's default hw pressure API */
-+#define arch_scale_hw_pressure topology_get_hw_pressure
-+#define arch_update_hw_pressure	topology_update_hw_pressure
- 
- #include <asm-generic/topology.h>
- 
-diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index 0906114963ff..3d8dc9d5c3ad 100644
---- a/drivers/base/arch_topology.c
-+++ b/drivers/base/arch_topology.c
-@@ -22,7 +22,7 @@
- #include <linux/units.h>
- 
- #define CREATE_TRACE_POINTS
--#include <trace/events/thermal_pressure.h>
-+#include <trace/events/hw_pressure.h>
- 
- static DEFINE_PER_CPU(struct scale_freq_data __rcu *, sft_data);
- static struct cpumask scale_freq_counters_mask;
-@@ -160,26 +160,26 @@ void topology_set_cpu_scale(unsigned int cpu, unsigned long capacity)
- 	per_cpu(cpu_scale, cpu) = capacity;
- }
- 
--DEFINE_PER_CPU(unsigned long, thermal_pressure);
-+DEFINE_PER_CPU(unsigned long, hw_pressure);
- 
- /**
-- * topology_update_thermal_pressure() - Update thermal pressure for CPUs
-+ * topology_update_hw_pressure() - Update hw pressure for CPUs
-  * @cpus        : The related CPUs for which capacity has been reduced
-  * @capped_freq : The maximum allowed frequency that CPUs can run at
-  *
-- * Update the value of thermal pressure for all @cpus in the mask. The
-+ * Update the value of hw pressure for all @cpus in the mask. The
-  * cpumask should include all (online+offline) affected CPUs, to avoid
-  * operating on stale data when hot-plug is used for some CPUs. The
-  * @capped_freq reflects the currently allowed max CPUs frequency due to
-- * thermal capping. It might be also a boost frequency value, which is bigger
-+ * hw capping. It might be also a boost frequency value, which is bigger
-  * than the internal 'capacity_freq_ref' max frequency. In such case the
-  * pressure value should simply be removed, since this is an indication that
-- * there is no thermal throttling. The @capped_freq must be provided in kHz.
-+ * there is no hw throttling. The @capped_freq must be provided in kHz.
-  */
--void topology_update_thermal_pressure(const struct cpumask *cpus,
-+void topology_update_hw_pressure(const struct cpumask *cpus,
- 				      unsigned long capped_freq)
- {
--	unsigned long max_capacity, capacity, th_pressure;
-+	unsigned long max_capacity, capacity, hw_pressure;
- 	u32 max_freq;
- 	int cpu;
- 
-@@ -189,21 +189,21 @@ void topology_update_thermal_pressure(const struct cpumask *cpus,
- 
- 	/*
- 	 * Handle properly the boost frequencies, which should simply clean
--	 * the thermal pressure value.
-+	 * the hw pressure value.
- 	 */
- 	if (max_freq <= capped_freq)
- 		capacity = max_capacity;
- 	else
- 		capacity = mult_frac(max_capacity, capped_freq, max_freq);
- 
--	th_pressure = max_capacity - capacity;
-+	hw_pressure = max_capacity - capacity;
- 
--	trace_thermal_pressure_update(cpu, th_pressure);
-+	trace_hw_pressure_update(cpu, hw_pressure);
- 
- 	for_each_cpu(cpu, cpus)
--		WRITE_ONCE(per_cpu(thermal_pressure, cpu), th_pressure);
-+		WRITE_ONCE(per_cpu(hw_pressure, cpu), hw_pressure);
- }
--EXPORT_SYMBOL_GPL(topology_update_thermal_pressure);
-+EXPORT_SYMBOL_GPL(topology_update_hw_pressure);
- 
- static ssize_t cpu_capacity_show(struct device *dev,
- 				 struct device_attribute *attr,
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 70b0f21968a0..a619202ba81d 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -347,8 +347,8 @@ static void qcom_lmh_dcvs_notify(struct qcom_cpufreq_data *data)
- 
- 	throttled_freq = freq_hz / HZ_PER_KHZ;
- 
--	/* Update thermal pressure (the boost frequencies are accepted) */
--	arch_update_thermal_pressure(policy->related_cpus, throttled_freq);
-+	/* Update hw pressure (the boost frequencies are accepted) */
-+	arch_update_hw_pressure(policy->related_cpus, throttled_freq);
- 
- 	/*
- 	 * In the unlikely case policy is unregistered do not enable
-diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-index a63d61ca55af..b721f360d759 100644
---- a/include/linux/arch_topology.h
-+++ b/include/linux/arch_topology.h
-@@ -60,14 +60,14 @@ void topology_scale_freq_tick(void);
- void topology_set_scale_freq_source(struct scale_freq_data *data, const struct cpumask *cpus);
- void topology_clear_scale_freq_source(enum scale_freq_source source, const struct cpumask *cpus);
- 
--DECLARE_PER_CPU(unsigned long, thermal_pressure);
-+DECLARE_PER_CPU(unsigned long, hw_pressure);
- 
--static inline unsigned long topology_get_thermal_pressure(int cpu)
-+static inline unsigned long topology_get_hw_pressure(int cpu)
- {
--	return per_cpu(thermal_pressure, cpu);
-+	return per_cpu(hw_pressure, cpu);
- }
- 
--void topology_update_thermal_pressure(const struct cpumask *cpus,
-+void topology_update_hw_pressure(const struct cpumask *cpus,
- 				      unsigned long capped_freq);
- 
- struct cpu_topology {
-diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
-index a6e04b4a21d7..e3b2cf7de018 100644
---- a/include/linux/sched/topology.h
-+++ b/include/linux/sched/topology.h
-@@ -264,17 +264,17 @@ unsigned long arch_scale_cpu_capacity(int cpu)
- }
- #endif
- 
--#ifndef arch_scale_thermal_pressure
-+#ifndef arch_scale_hw_pressure
- static __always_inline
--unsigned long arch_scale_thermal_pressure(int cpu)
-+unsigned long arch_scale_hw_pressure(int cpu)
- {
- 	return 0;
- }
- #endif
- 
--#ifndef arch_update_thermal_pressure
-+#ifndef arch_update_hw_pressure
- static __always_inline
--void arch_update_thermal_pressure(const struct cpumask *cpus,
-+void arch_update_hw_pressure(const struct cpumask *cpus,
- 				  unsigned long capped_frequency)
- { }
- #endif
-diff --git a/include/trace/events/thermal_pressure.h b/include/trace/events/hw_pressure.h
-similarity index 55%
-rename from include/trace/events/thermal_pressure.h
-rename to include/trace/events/hw_pressure.h
-index b68680201360..b9cd68854128 100644
---- a/include/trace/events/thermal_pressure.h
-+++ b/include/trace/events/hw_pressure.h
-@@ -1,27 +1,27 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- #undef TRACE_SYSTEM
--#define TRACE_SYSTEM thermal_pressure
-+#define TRACE_SYSTEM hw_pressure
- 
- #if !defined(_TRACE_THERMAL_PRESSURE_H) || defined(TRACE_HEADER_MULTI_READ)
- #define _TRACE_THERMAL_PRESSURE_H
- 
- #include <linux/tracepoint.h>
- 
--TRACE_EVENT(thermal_pressure_update,
--	TP_PROTO(int cpu, unsigned long thermal_pressure),
--	TP_ARGS(cpu, thermal_pressure),
-+TRACE_EVENT(hw_pressure_update,
-+	TP_PROTO(int cpu, unsigned long hw_pressure),
-+	TP_ARGS(cpu, hw_pressure),
- 
- 	TP_STRUCT__entry(
--		__field(unsigned long, thermal_pressure)
-+		__field(unsigned long, hw_pressure)
- 		__field(int, cpu)
- 	),
- 
- 	TP_fast_assign(
--		__entry->thermal_pressure = thermal_pressure;
-+		__entry->hw_pressure = hw_pressure;
- 		__entry->cpu = cpu;
- 	),
- 
--	TP_printk("cpu=%d thermal_pressure=%lu", __entry->cpu, __entry->thermal_pressure)
-+	TP_printk("cpu=%d hw_pressure=%lu", __entry->cpu, __entry->hw_pressure)
- );
- #endif /* _TRACE_THERMAL_PRESSURE_H */
- 
-diff --git a/include/trace/events/sched.h b/include/trace/events/sched.h
-index dbb01b4b7451..d115d64c4011 100644
---- a/include/trace/events/sched.h
-+++ b/include/trace/events/sched.h
-@@ -752,7 +752,7 @@ DECLARE_TRACE(pelt_dl_tp,
- 	TP_PROTO(struct rq *rq),
- 	TP_ARGS(rq));
- 
--DECLARE_TRACE(pelt_thermal_tp,
-+DECLARE_TRACE(pelt_hw_tp,
- 	TP_PROTO(struct rq *rq),
- 	TP_ARGS(rq));
- 
-diff --git a/init/Kconfig b/init/Kconfig
-index 9ffb103fc927..37ceeb67e01c 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -538,24 +538,24 @@ config HAVE_SCHED_AVG_IRQ
- 	depends on IRQ_TIME_ACCOUNTING || PARAVIRT_TIME_ACCOUNTING
- 	depends on SMP
- 
--config SCHED_THERMAL_PRESSURE
-+config SCHED_HW_PRESSURE
- 	bool
- 	default y if ARM && ARM_CPU_TOPOLOGY
- 	default y if ARM64
- 	depends on SMP
- 	depends on CPU_FREQ_THERMAL
- 	help
--	  Select this option to enable thermal pressure accounting in the
--	  scheduler. Thermal pressure is the value conveyed to the scheduler
-+	  Select this option to enable HW pressure accounting in the
-+	  scheduler. HW pressure is the value conveyed to the scheduler
- 	  that reflects the reduction in CPU compute capacity resulted from
--	  thermal throttling. Thermal throttling occurs when the performance of
--	  a CPU is capped due to high operating temperatures.
-+	  HW throttling. HW throttling occurs when the performance of
-+	  a CPU is capped due to high operating temperatures as an example.
- 
- 	  If selected, the scheduler will be able to balance tasks accordingly,
- 	  i.e. put less load on throttled CPUs than on non/less throttled ones.
- 
- 	  This requires the architecture to implement
--	  arch_update_thermal_pressure() and arch_scale_thermal_pressure().
-+	  arch_update_hw_pressure() and arch_scale_thermal_pressure().
- 
- config BSD_PROCESS_ACCT
- 	bool "BSD Process Accounting"
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index db4be4921e7f..c68e47bfd5ae 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -107,7 +107,7 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(pelt_rt_tp);
- EXPORT_TRACEPOINT_SYMBOL_GPL(pelt_dl_tp);
- EXPORT_TRACEPOINT_SYMBOL_GPL(pelt_irq_tp);
- EXPORT_TRACEPOINT_SYMBOL_GPL(pelt_se_tp);
--EXPORT_TRACEPOINT_SYMBOL_GPL(pelt_thermal_tp);
-+EXPORT_TRACEPOINT_SYMBOL_GPL(pelt_hw_tp);
- EXPORT_TRACEPOINT_SYMBOL_GPL(sched_cpu_capacity_tp);
- EXPORT_TRACEPOINT_SYMBOL_GPL(sched_overutilized_tp);
- EXPORT_TRACEPOINT_SYMBOL_GPL(sched_util_est_cfs_tp);
-@@ -5658,7 +5658,7 @@ void scheduler_tick(void)
- 	struct rq *rq = cpu_rq(cpu);
- 	struct task_struct *curr = rq->curr;
- 	struct rq_flags rf;
--	unsigned long thermal_pressure;
-+	unsigned long hw_pressure;
- 	u64 resched_latency;
- 
- 	if (housekeeping_cpu(cpu, HK_TYPE_TICK))
-@@ -5669,8 +5669,8 @@ void scheduler_tick(void)
- 	rq_lock(rq, &rf);
- 
- 	update_rq_clock(rq);
--	thermal_pressure = arch_scale_thermal_pressure(cpu_of(rq));
--	update_thermal_load_avg(rq_clock_thermal(rq), rq, thermal_pressure);
-+	hw_pressure = arch_scale_hw_pressure(cpu_of(rq));
-+	update_hw_load_avg(rq_clock_task(rq), rq, hw_pressure);
- 	curr->sched_class->task_tick(rq, curr, 0);
- 	if (sched_feat(LATENCY_WARN))
- 		resched_latency = cpu_resched_latency(rq);
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 11d3be829302..07050955d6e0 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -4936,7 +4936,7 @@ static inline unsigned long get_actual_cpu_capacity(int cpu)
- {
- 	unsigned long capacity = arch_scale_cpu_capacity(cpu);
- 
--	capacity -= max(thermal_load_avg(cpu_rq(cpu)), cpufreq_get_pressure(cpu));
-+	capacity -= max(hw_load_avg(cpu_rq(cpu)), cpufreq_get_pressure(cpu));
- 
- 	return capacity;
- }
-@@ -4968,7 +4968,7 @@ static inline int util_fits_cpu(unsigned long util,
- 	 * Similarly if a task is capped to arch_scale_cpu_capacity(little_cpu), it
- 	 * should fit a little cpu even if there's some pressure.
- 	 *
--	 * Only exception is for thermal pressure since it has a direct impact
-+	 * Only exception is for hw or cpufreq pressure since it has a direct impact
- 	 * on available OPP of the system.
- 	 *
- 	 * We honour it for uclamp_min only as a drop in performance level
-@@ -9224,7 +9224,7 @@ static inline bool others_have_blocked(struct rq *rq)
- 	if (READ_ONCE(rq->avg_dl.util_avg))
- 		return true;
- 
--	if (thermal_load_avg(rq))
-+	if (hw_load_avg(rq))
- 		return true;
- 
- #ifdef CONFIG_HAVE_SCHED_AVG_IRQ
-@@ -9256,7 +9256,7 @@ static bool __update_blocked_others(struct rq *rq, bool *done)
- {
- 	const struct sched_class *curr_class;
- 	u64 now = rq_clock_pelt(rq);
--	unsigned long thermal_pressure;
-+	unsigned long hw_pressure;
- 	bool decayed;
- 
- 	/*
-@@ -9265,11 +9265,11 @@ static bool __update_blocked_others(struct rq *rq, bool *done)
- 	 */
- 	curr_class = rq->curr->sched_class;
- 
--	thermal_pressure = arch_scale_thermal_pressure(cpu_of(rq));
-+	hw_pressure = arch_scale_hw_pressure(cpu_of(rq));
- 
- 	decayed = update_rt_rq_load_avg(now, rq, curr_class == &rt_sched_class) |
- 		  update_dl_rq_load_avg(now, rq, curr_class == &dl_sched_class) |
--		  update_thermal_load_avg(rq_clock_thermal(rq), rq, thermal_pressure) |
-+		  update_hw_load_avg(now, rq, hw_pressure) |
- 		  update_irq_load_avg(rq, 0);
- 
- 	if (others_have_blocked(rq))
-diff --git a/kernel/sched/pelt.c b/kernel/sched/pelt.c
-index 63b6cf898220..cd599a5185c4 100644
---- a/kernel/sched/pelt.c
-+++ b/kernel/sched/pelt.c
-@@ -384,30 +384,30 @@ int update_dl_rq_load_avg(u64 now, struct rq *rq, int running)
- 	return 0;
- }
- 
--#ifdef CONFIG_SCHED_THERMAL_PRESSURE
-+#ifdef CONFIG_SCHED_HW_PRESSURE
- /*
-- * thermal:
-+ * hardware:
-  *
-  *   load_sum = \Sum se->avg.load_sum but se->avg.load_sum is not tracked
-  *
-  *   util_avg and runnable_load_avg are not supported and meaningless.
-  *
-  * Unlike rt/dl utilization tracking that track time spent by a cpu
-- * running a rt/dl task through util_avg, the average thermal pressure is
-- * tracked through load_avg. This is because thermal pressure signal is
-+ * running a rt/dl task through util_avg, the average hw pressure is
-+ * tracked through load_avg. This is because hw pressure signal is
-  * time weighted "delta" capacity unlike util_avg which is binary.
-  * "delta capacity" =  actual capacity  -
-- *			capped capacity a cpu due to a thermal event.
-+ *			capped capacity a cpu due to a hw event.
-  */
- 
--int update_thermal_load_avg(u64 now, struct rq *rq, u64 capacity)
-+int update_hw_load_avg(u64 now, struct rq *rq, u64 capacity)
- {
--	if (___update_load_sum(now, &rq->avg_thermal,
-+	if (___update_load_sum(now, &rq->avg_hw,
- 			       capacity,
- 			       capacity,
- 			       capacity)) {
--		___update_load_avg(&rq->avg_thermal, 1);
--		trace_pelt_thermal_tp(rq);
-+		___update_load_avg(&rq->avg_hw, 1);
-+		trace_pelt_hw_tp(rq);
- 		return 1;
- 	}
- 
-diff --git a/kernel/sched/pelt.h b/kernel/sched/pelt.h
-index 3a0e0dc28721..e3ab44c4a2ef 100644
---- a/kernel/sched/pelt.h
-+++ b/kernel/sched/pelt.h
-@@ -7,21 +7,21 @@ int __update_load_avg_cfs_rq(u64 now, struct cfs_rq *cfs_rq);
- int update_rt_rq_load_avg(u64 now, struct rq *rq, int running);
- int update_dl_rq_load_avg(u64 now, struct rq *rq, int running);
- 
--#ifdef CONFIG_SCHED_THERMAL_PRESSURE
--int update_thermal_load_avg(u64 now, struct rq *rq, u64 capacity);
-+#ifdef CONFIG_SCHED_HW_PRESSURE
-+int update_hw_load_avg(u64 now, struct rq *rq, u64 capacity);
- 
--static inline u64 thermal_load_avg(struct rq *rq)
-+static inline u64 hw_load_avg(struct rq *rq)
- {
--	return READ_ONCE(rq->avg_thermal.load_avg);
-+	return READ_ONCE(rq->avg_hw.load_avg);
- }
- #else
- static inline int
--update_thermal_load_avg(u64 now, struct rq *rq, u64 capacity)
-+update_hw_load_avg(u64 now, struct rq *rq, u64 capacity)
- {
- 	return 0;
- }
- 
--static inline u64 thermal_load_avg(struct rq *rq)
-+static inline u64 hw_load_avg(struct rq *rq)
- {
- 	return 0;
- }
-@@ -202,12 +202,12 @@ update_dl_rq_load_avg(u64 now, struct rq *rq, int running)
- }
- 
- static inline int
--update_thermal_load_avg(u64 now, struct rq *rq, u64 capacity)
-+update_hw_load_avg(u64 now, struct rq *rq, u64 capacity)
- {
- 	return 0;
- }
- 
--static inline u64 thermal_load_avg(struct rq *rq)
-+static inline u64 hw_load_avg(struct rq *rq)
- {
- 	return 0;
- }
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index e58a54bda77d..7eaf186d071e 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1078,8 +1078,8 @@ struct rq {
- #ifdef CONFIG_HAVE_SCHED_AVG_IRQ
- 	struct sched_avg	avg_irq;
- #endif
--#ifdef CONFIG_SCHED_THERMAL_PRESSURE
--	struct sched_avg	avg_thermal;
-+#ifdef CONFIG_SCHED_HW_PRESSURE
-+	struct sched_avg	avg_hw;
- #endif
- 	u64			idle_stamp;
- 	u64			avg_idle;
+> On Mon, Nov 27, 2023 at 11:38 AM Masami Hiramatsu (Google)
+> <mhiramat@kernel.org> wrote:
+> >
+> > From: Masami Hiramatsu <mhiramat@kernel.org>
+> >
+> > Expose last succeeded resumed timestamp as last_success_resume_time
+> > attribute of suspend_stats in sysfs.
+> >
+> > There are some printk()s for printing the similar resume timing to
+> > dmesg, but those are recorded with local_clock(), and user can not
+> > compare it with current time. We also have tracing events but it
+> > requires CAP_SYS_ADMIN to use it.
+> >
+> > This suspend_stats attribute is easy to access and only expose the
+> > timestamp in CLOCK_MONOTONIC.
+> 
+> Why CLOCK_MONOTONIC?
+
+CLOCK_MONOTONIC is the simplest clock which can be used in both user
+space and kernel space. If we use the CLOCK_LOCAL here, user can not
+know the actual time delta from the succeeded resume.
+
+> 
+> > So user can find the actual resumed
+> > time and measure the elapsed time from the time when the kernel
+> > finished the resume to the user-space action (e.g. display the UI).
+> 
+> Can you please say a bit more about why this is useful?
+
+This is a reference timestamp from the user space to measure their
+processing time for resuming. The kernel side is OK to just trace
+or printk the each component or subsystem internally. But the user
+space needs to know when the kernel resume has been done for measuring
+its component or processes done. Actually this is obscure because the
+end of resuming in userspace is defined by the user-space application
+or desktop systems. But anyway if there is a reference point, user
+process can calculate the delta at any point from that.
+
+> 
+> The time stamp is taken at the point when user space has been already
+> running for some time, so what's the exact benefit of it?
+
+Yes, but that timestamp can be scheduled afterwards so it may not
+be so accurate. This can provide the accurate time of the kernel
+resume.
+
+Thank you,
+
+> 
+> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > ---
+> >  Changes in v5:
+> >   - Just updated for v6.7-rc3.
+> >  Changes in v4.1:
+> >   - Fix document typo (again).
+> >  Changes in v4:
+> >   - Update description to add why.
+> >   - Fix document typo.
+> >  Changes in v3:
+> >   - Add (unsigned long long) casting for %llu.
+> >   - Add a line after last_success_resume_time_show().
+> >  Changes in v2:
+> >   - Use %llu instead of %lu for printing u64 value.
+> >   - Remove unneeded indent spaces from the last_success_resume_time
+> >     line in the debugfs suspend_stat file.
+> > ---
+> >  Documentation/ABI/testing/sysfs-power |   10 ++++++++++
+> >  include/linux/suspend.h               |    2 ++
+> >  kernel/power/main.c                   |   15 +++++++++++++++
+> >  kernel/power/suspend.c                |    1 +
+> >  4 files changed, 28 insertions(+)
+> >
+> > diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/testing/sysfs-power
+> > index a3942b1036e2..e14975859766 100644
+> > --- a/Documentation/ABI/testing/sysfs-power
+> > +++ b/Documentation/ABI/testing/sysfs-power
+> > @@ -442,6 +442,16 @@ Description:
+> >                 'total_hw_sleep' and 'last_hw_sleep' may not be accurate.
+> >                 This number is measured in microseconds.
+> >
+> > +What:          /sys/power/suspend_stats/last_success_resume_time
+> > +Date:          Oct 2023
+> > +Contact:       Masami Hiramatsu <mhiramat@kernel.org>
+> > +Description:
+> > +               The /sys/power/suspend_stats/last_success_resume_time file
+> > +               contains the timestamp of when the kernel successfully
+> > +               resumed from suspend/hibernate.
+> > +               This floating point number is measured in seconds by monotonic
+> > +               clock.
+> > +
+> >  What:          /sys/power/sync_on_suspend
+> >  Date:          October 2019
+> >  Contact:       Jonas Meurer <jonas@freesources.org>
+> > diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> > index ef503088942d..ddd789044960 100644
+> > --- a/include/linux/suspend.h
+> > +++ b/include/linux/suspend.h
+> > @@ -8,6 +8,7 @@
+> >  #include <linux/pm.h>
+> >  #include <linux/mm.h>
+> >  #include <linux/freezer.h>
+> > +#include <linux/timekeeping.h>
+> >  #include <asm/errno.h>
+> >
+> >  #ifdef CONFIG_VT
+> > @@ -71,6 +72,7 @@ struct suspend_stats {
+> >         u64     last_hw_sleep;
+> >         u64     total_hw_sleep;
+> >         u64     max_hw_sleep;
+> > +       struct timespec64 last_success_resume_time;
+> >         enum suspend_stat_step  failed_steps[REC_FAILED_NUM];
+> >  };
+> >
+> > diff --git a/kernel/power/main.c b/kernel/power/main.c
+> > index f6425ae3e8b0..2ab23fd3daac 100644
+> > --- a/kernel/power/main.c
+> > +++ b/kernel/power/main.c
+> > @@ -421,6 +421,17 @@ static ssize_t last_failed_step_show(struct kobject *kobj,
+> >  }
+> >  static struct kobj_attribute last_failed_step = __ATTR_RO(last_failed_step);
+> >
+> > +static ssize_t last_success_resume_time_show(struct kobject *kobj,
+> > +               struct kobj_attribute *attr, char *buf)
+> > +{
+> > +       return sprintf(buf, "%llu.%llu\n",
+> > +               (unsigned long long)suspend_stats.last_success_resume_time.tv_sec,
+> > +               (unsigned long long)suspend_stats.last_success_resume_time.tv_nsec);
+> > +}
+> > +
+> > +static struct kobj_attribute last_success_resume_time =
+> > +                       __ATTR_RO(last_success_resume_time);
+> > +
+> >  static struct attribute *suspend_attrs[] = {
+> >         &success.attr,
+> >         &fail.attr,
+> > @@ -438,6 +449,7 @@ static struct attribute *suspend_attrs[] = {
+> >         &last_hw_sleep.attr,
+> >         &total_hw_sleep.attr,
+> >         &max_hw_sleep.attr,
+> > +       &last_success_resume_time.attr,
+> >         NULL,
+> >  };
+> >
+> > @@ -514,6 +526,9 @@ static int suspend_stats_show(struct seq_file *s, void *unused)
+> >                         suspend_step_name(
+> >                                 suspend_stats.failed_steps[index]));
+> >         }
+> > +       seq_printf(s,   "last_success_resume_time:\t%-llu.%llu\n",
+> > +                  (unsigned long long)suspend_stats.last_success_resume_time.tv_sec,
+> > +                  (unsigned long long)suspend_stats.last_success_resume_time.tv_nsec);
+> >
+> >         return 0;
+> >  }
+> > diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> > index fa3bf161d13f..33334565d5a6 100644
+> > --- a/kernel/power/suspend.c
+> > +++ b/kernel/power/suspend.c
+> > @@ -622,6 +622,7 @@ int pm_suspend(suspend_state_t state)
+> >                 dpm_save_failed_errno(error);
+> >         } else {
+> >                 suspend_stats.success++;
+> > +               ktime_get_ts64(&suspend_stats.last_success_resume_time);
+> 
+> And so hibernation is not really covered.
+> 
+> >         }
+> >         pr_info("suspend exit\n");
+> >         return error;
+> >
+
+
 -- 
-2.34.1
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
