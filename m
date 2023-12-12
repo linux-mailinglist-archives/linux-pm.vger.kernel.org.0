@@ -1,172 +1,166 @@
-Return-Path: <linux-pm+bounces-990-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-991-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FEA680F364
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 17:42:44 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2285780F3A9
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 17:54:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC0EC28142B
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 16:42:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A722BB20E1B
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 16:54:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D311278E98;
-	Tue, 12 Dec 2023 16:42:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 164727B3A4;
+	Tue, 12 Dec 2023 16:54:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="U8lqp5tZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BMFKjM8e"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2FC112
-	for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 08:42:29 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-5c6ce4dffb5so2948932a12.0
-        for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 08:42:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1702399348; x=1703004148; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=TmSuMwW9z0NfQ/MRD27NLKc5SsZ6f4CUuZJ/fdf42bw=;
-        b=U8lqp5tZ5r/A0fA2rxNbqXQvFSE+FEsC2pDoVrtdeRJlfgeIa6awswyt66Tmp7xhoW
-         bpNjPzNtj6Gzpk7rho+lTw0kNiZNu4G9PGaNYI//rAlMWPwkV6B/Y9rYDMKZIJrV4l67
-         yACth5MbS6nVFRw5pSj8nBEE+b3yzN2wj7gDQCB8hFoHx3L8FO5koQ1IDEkS9GQJY2ow
-         kGYGymiFaaC4Pl9YTgsljvVjT6RSbwWZgMcYWtx4dRnoOm9mKjvtkIAXN5MKwj3y2iX3
-         22c4z43v7oORDkGUU/aRrwyvCF6R+Tmi1uwn0tZLCoVq7oTXl4f1C4URuKjIMB5FCxbF
-         AqYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702399348; x=1703004148;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TmSuMwW9z0NfQ/MRD27NLKc5SsZ6f4CUuZJ/fdf42bw=;
-        b=o0IOIIVQH2LKsNHmbhpj4F18BlQ5y3ekWe1S6sGzMtpoNqPga7GSBNZlcekxs2YWnk
-         foXNUyY6Cr+WgJ62TyPNvLI4cUILdR1yoFFzApjDNK67wEocACLeJWGn/D9ZfnzlMWRI
-         ziEKfFc24itSorbhSKfyGeOcb4+MuY8a332uJhzCBa5hBA48SrzsRHZ/9xapxXQQs2fc
-         F4DwWGgi2XavxopnVCzlvIm4leMdSpfl+FCmPlvtMAG0saKrQ0Cdj6QO2h/diBSJH5MS
-         MF7RSaUxh/vvCVEQ93LMDSuOe/wclpYIVgDS6c2yxRQpelRZMWQmSgfaWZM0W/Ap1/9Z
-         p8Nw==
-X-Gm-Message-State: AOJu0YxJJsipv7n2p9BaliPwJrnMbunrd/05poUA5crBoU5GJ4gGU7sw
-	npmvgE46U9qCYoAenqPuE6cccg==
-X-Google-Smtp-Source: AGHT+IH703I1+pVrSHQREopqFOHplH0sPVMX3uNv1UDMJeBA6vXsaXDSPL9a4r1LEWyHIp7irwgnuQ==
-X-Received: by 2002:a17:90a:6607:b0:285:a163:c25b with SMTP id l7-20020a17090a660700b00285a163c25bmr3374854pjj.5.1702399348318;
-        Tue, 12 Dec 2023 08:42:28 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id pa8-20020a17090b264800b0027df6ff00eesm9349353pjb.19.2023.12.12.08.42.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Dec 2023 08:42:27 -0800 (PST)
-Message-ID: <65788d73.170a0220.dcd24.bafc@mx.google.com>
-Date: Tue, 12 Dec 2023 08:42:27 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA5357A221;
+	Tue, 12 Dec 2023 16:54:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2221C433C7;
+	Tue, 12 Dec 2023 16:54:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702400063;
+	bh=h1eNwF1ukAZwGMPIsPczsxbRoYecqddxkA6L6AgPQ40=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BMFKjM8eqWRvgFjaSMtjvAgNnbCdSjJ5AL09SNEdeNnKdGEiFZHRNQFcY4Cle8CM0
+	 xMVLCvmHkXv0+75ziNGrHpkotS1vIivnxNmrl1cIRskaXBIB/Nyv4+ZBI89kfc3SJn
+	 CpMtXmMaR2aKMT9AzanuKoR4flQNcHnLlVnRUx6Qn65lU05s7+nLvAhBZx4pVlOIp9
+	 AjJhN+dy9SoCkaq9JBISMucJqxz0YNj95guhsLpYJZHPYQVUhEcLwitBFxFhFGtr4j
+	 HBlUka5Vws4HkuMZhZn8gM2B3AnOMwXl4R8hMhDLosVTCe03UWw78dZ49/LsBnReeJ
+	 toAdT3vgidNPw==
+Date: Tue, 12 Dec 2023 16:54:17 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+	Support Opensource <support.opensource@diasemi.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Steve Twiss <stwiss.opensource@diasemi.com>,
+	"linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	"biju.das.au" <biju.das.au@gmail.com>,
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH v5 8/8] dt-bindings: mfd: dlg,da9063: Convert da9062 to
+ json-schema
+Message-ID: <20231212-enrich-borax-7943611e2586@spud>
+References: <20231210134717.94020-1-biju.das.jz@bp.renesas.com>
+ <20231210134717.94020-9-biju.das.jz@bp.renesas.com>
+ <20231211-dissuade-skirt-5961ef525497@spud>
+ <TYCPR01MB112697AA2A3BC9F58C7BF4B67868FA@TYCPR01MB11269.jpnprd01.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="AApjMWf173swIuM7"
+Content-Disposition: inline
+In-Reply-To: <TYCPR01MB112697AA2A3BC9F58C7BF4B67868FA@TYCPR01MB11269.jpnprd01.prod.outlook.com>
+
+
+--AApjMWf173swIuM7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.7-rc5-71-g15c1f7c6e0578
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.7-rc5-71-g15c1f7c6e0578)
-To: rafael@kernel.org, linux-pm@vger.kernel.org,
- kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.7-rc5-71-g15=
-c1f7c6e0578)
+On Mon, Dec 11, 2023 at 06:51:14PM +0000, Biju Das wrote:
+> Hi Conor Dooley,
+>=20
+> Thanks for the feedback.
+>=20
+> > -----Original Message-----
+> > From: Conor Dooley <conor@kernel.org>
+> > Sent: Monday, December 11, 2023 6:38 PM
+> > Subject: Re: [PATCH v5 8/8] dt-bindings: mfd: dlg,da9063: Convert da9062
+> > to json-schema
+> >=20
+> > On Sun, Dec 10, 2023 at 01:47:17PM +0000, Biju Das wrote:
+> > > Convert the da9062 PMIC device tree binding documentation to json-
+> > schema.
+> > >
+> > > Document the missing gpio child node for da9062.
+> > >
+> > > While at it, update description with link to product information and
+> > > example.
+> > >
+> > > The missing child node with of_compatible defined in MFD_CELL_OF is
+> > > causing the below warning message:
+> > > da9062-gpio: Failed to locate of_node [id: -1]
+> > >
+> > > So, make all child nodes with of_compatible defined in struct mfd_cell
+> > > as required property for da906{1,2} devices.
+> >=20
+> > > +  gpio-controller: true
+> > > +
+> > > +  "#gpio-cells":
+> > > +    const: 2
+> > > +
+> > > +  gpio:
+> > > +    type: object
+> > > +    additionalProperties: false
+> > > +    properties:
+> > > +      compatible:
+> > > +        const: dlg,da9062-gpio
+> >=20
+> > > +  - |
+> > > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > > +    #include <dt-bindings/regulator/dlg,da9063-regulator.h>
+> > > +    i2c {
+> > > +      #address-cells =3D <1>;
+> > > +      #size-cells =3D <0>;
+> > > +      pmic@58 {
+> > > +        compatible =3D "dlg,da9062";
+> > > +        reg =3D <0x58>;
+> > > +        gpio-controller;
+> > > +        #gpio-cells =3D <2>;
+> >=20
+> > > +        gpio {
+> > > +          compatible =3D "dlg,da9062-gpio";
+> > > +        };
+> >=20
+> > I know you had some conversation with Krzysztof, but I still don;t real=
+ly
+> > follow this. Why is the parent, rather than the child, the one that gets
+> > the "gpio-controller" and "#gpio-cells" properties? The commit message
+> > just mentions why missing child node was added, but not the reason for =
+the
+> > gpio properties being added at what appears to be the "wrong" level.
+>=20
+>=20
+> Please see [1], The driver is checking against parent "gpio-controller"
+>=20
+> [1] https://elixir.bootlin.com/linux/v6.0-rc4/source/drivers/pinctrl/pinc=
+trl-da9062.c#L270
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-7-rc5-71-g15c1f7c6e0578/
+I would appreciate if you could note in your commit message the
+rationale behind the strange setup. Citing the existing driver users etc
+would be helpful.
 
-Tree: pm
-Branch: testing
-Git Describe: v6.7-rc5-71-g15c1f7c6e0578
-Git Commit: 15c1f7c6e0578df001fc5972e1cb64a6b306c3a1
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+Thanks,
+Conor.
 
-Warnings Detected:
+--AApjMWf173swIuM7
+Content-Type: application/pgp-signature; name="signature.asc"
 
-arc:
+-----BEGIN PGP SIGNATURE-----
 
-arm64:
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZXiQOQAKCRB4tDGHoIJi
+0rh4AP9s+Bmcr/KyPluXcEi2EtRA6eePFmH6Mq5j3SFKasEY5gEAlGa4LQlVue+w
+FEKTSM6GPxE3wSMv7j6CkqL8+egPXgM=
+=G9hA
+-----END PGP SIGNATURE-----
 
-arm:
-
-i386:
-
-mips:
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+--AApjMWf173swIuM7--
 
