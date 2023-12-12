@@ -1,40 +1,67 @@
-Return-Path: <linux-pm+bounces-975-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-976-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDE6D80EE0D
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 14:48:22 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8F2080EE39
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 15:01:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1AC2F1C20C10
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 13:48:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 16690B20CDC
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 14:01:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 669436F61D;
-	Tue, 12 Dec 2023 13:48:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 337DE70971;
+	Tue, 12 Dec 2023 14:01:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NfjL41Q0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2DCC5194;
-	Tue, 12 Dec 2023 05:48:08 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C6DAB1474;
-	Tue, 12 Dec 2023 05:48:54 -0800 (PST)
-Received: from e129166.arm.com (unknown [10.57.82.227])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 43EB03F738;
-	Tue, 12 Dec 2023 05:48:07 -0800 (PST)
-From: Lukasz Luba <lukasz.luba@arm.com>
-To: linux-kernel@vger.kernel.org,
-	daniel.lezcano@linaro.org,
-	rafael@kernel.org
-Cc: linux-pm@vger.kernel.org,
-	rui.zhang@intel.com,
-	lukasz.luba@arm.com
-Subject: [PATCH v2 8/8] thermal: gov_power_allocator: Support new update callback of weights
-Date: Tue, 12 Dec 2023 13:48:44 +0000
-Message-Id: <20231212134844.1213381-9-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231212134844.1213381-1-lukasz.luba@arm.com>
-References: <20231212134844.1213381-1-lukasz.luba@arm.com>
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F04D1CD
+	for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 06:01:03 -0800 (PST)
+Received: by mail-oo1-xc2d.google.com with SMTP id 006d021491bc7-59091e4a0f9so1612037eaf.1
+        for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 06:01:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702389663; x=1702994463; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6m07btQHPWV2ctZksBMNHS2v6G8bOJynKLcHM3wDkKo=;
+        b=NfjL41Q0byMQMLx34vRLUf6YwkjZhP5L4jiHwNDAIE7YgKuKNN9dSNU3rk1kbKmBWl
+         oADgLw0EidgeckjvWMcS/oJHpjZro/4COi50qOUBhRWHsqHnRX8tWqlBVrSKgy5ljg85
+         R+grO52Ly0IhdqvGouOmWJjNyB1H9+R8+uru9SsAWgOCt7PAWFckXLMTkQZ2SgT9qKx1
+         Xf1DwgeaQFeTKzfe1BYw1m+4AsPnt0/jtSBUrca+gL9WbfUM2t43FWcZt5gL+XqnZiw4
+         6g4yvvBL5FboVrqHN8/uqRnYAC0YsbnRW9gcF+sgMuC0NsqZi7VpbE+GPLbADzlQco1f
+         sYpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702389663; x=1702994463;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6m07btQHPWV2ctZksBMNHS2v6G8bOJynKLcHM3wDkKo=;
+        b=ARcZhrjiaXVCvDH0cRIzMbBJi7QebWRjGHavUDvXlCJGL0UqCNyYrKjiOadrRo+ZFV
+         DYk4PFJrE1lC13oZNTyV9WZOeLa8Tp/JGuLB+6XOpWJ68ROn/r/ljpNFD7rWbxRHcVuc
+         f4YNV0h51qOQUGJFrd2dQX2Ch9agIVGgAX8o5rXlAbyIOQwSzyAzrf6WresJp5Vgg2vG
+         3zZSt91MzlPR9i5QnXEi000rwUA+noTbeav7DJTBwPam10pxUIhAibGhfUrzG4NzrS2M
+         lHy7JqUv/2TIkssQhOpnKalTC3Y2Rob/3JpZjMgx72m5wrNMiJaHfWgLxIcpoBoQEUyr
+         wJRQ==
+X-Gm-Message-State: AOJu0YwnAwX40VzP20FezCDOBfmahdflscXVFvtEVBvHQBzE+aYj27Ig
+	aWGGlNmw8BsShhA1MmWzu8R+LkBoPXUoJw==
+X-Google-Smtp-Source: AGHT+IGmmJryFQNnerXVd4/lAEuNHPq987BJ8TfTynzYgurFLYd1ILcZNBiLLsFcnOi0O3fcOiEx8g==
+X-Received: by 2002:a05:6358:78e:b0:170:17eb:2fac with SMTP id n14-20020a056358078e00b0017017eb2facmr2021658rwj.37.1702389662687;
+        Tue, 12 Dec 2023 06:01:02 -0800 (PST)
+Received: from pek-lpggp6.wrs.com (unknown-105-121.windriver.com. [147.11.105.121])
+        by smtp.gmail.com with ESMTPSA id pz12-20020ad4550c000000b0067a95ef3a8dsm4227778qvb.50.2023.12.12.06.00.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Dec 2023 06:00:59 -0800 (PST)
+From: Kevin Hao <haokexin@gmail.com>
+To: linux-pm@vger.kernel.org
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>,
+	Len Brown <len.brown@intel.com>
+Subject: [PATCH] docs: power: Adjust freezing-of-tasks.rst due to the freezer logic changes
+Date: Tue, 12 Dec 2023 22:00:43 +0800
+Message-Id: <20231212140043.714303-1-haokexin@gmail.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -43,77 +70,145 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When the thermal instance's weight is updated from the sysfs the governor
-update_tz() callback is triggered. Implement proper reaction to this
-event in the IPA, which would save CPU cycles spent in throttle().
-This will speed-up the main throttle() IPA function and clean it up
-a bit.
+Peter has rewritten core freezer logic in commit f5d39b020809
+("freezer,sched: Rewrite core freezer logic"), adjust the
+freezing-of-tasks.rst according to this commit. The main changes
+include:
+- Drop the mention of PF_FROZEN and PF_FREEZER_SKIP
+- Introduce TASK_FROZEN, TASK_FREEZABLE and __TASK_FREEZABLE_UNSAFE
+- Replace system_freezing_cnt with freezer_active
+- Use another example for the loop of a freezable kernel thread since
+  the old codes are already gone
 
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+Signed-off-by: Kevin Hao <haokexin@gmail.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Len Brown <len.brown@intel.com>
 ---
- drivers/thermal/gov_power_allocator.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+ Documentation/power/freezing-of-tasks.rst | 83 +++++++++++++----------
+ 1 file changed, 47 insertions(+), 36 deletions(-)
 
-diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-index 574aa5822112..a9f1549e6355 100644
---- a/drivers/thermal/gov_power_allocator.c
-+++ b/drivers/thermal/gov_power_allocator.c
-@@ -61,6 +61,7 @@ static inline s64 div_frac(s64 x, s64 y)
-  *			@trip_switch_on should be NULL.
-  * @trip_max:		last passive trip point of the thermal zone. The
-  *			temperature we are controlling for.
-+ * @total_weight:	Sum of all thermal instances weights
-  * @num_actors:		number of cooling devices supporting IPA callbacks
-  * @buffer_size:	IPA internal buffer size
-  * @req_power:		IPA buffer for requested power
-@@ -76,6 +77,7 @@ struct power_allocator_params {
- 	u32 sustainable_power;
- 	const struct thermal_trip *trip_switch_on;
- 	const struct thermal_trip *trip_max;
-+	int total_weight;
- 	int num_actors;
- 	int buffer_size;
- 	u32 *req_power;
-@@ -403,16 +405,11 @@ static int allocate_power(struct thermal_zone_device *tz, int control_temp)
- 	u32 total_req_power = 0;
- 	u32 *weighted_req_power;
- 	u32 power_range, weight;
--	int total_weight = 0;
- 	int i = 0;
+diff --git a/Documentation/power/freezing-of-tasks.rst b/Documentation/power/freezing-of-tasks.rst
+index 53b6a56c4635..8969ed244b20 100644
+--- a/Documentation/power/freezing-of-tasks.rst
++++ b/Documentation/power/freezing-of-tasks.rst
+@@ -14,27 +14,28 @@ architectures).
+ II. How does it work?
+ =====================
  
- 	if (!params->num_actors)
- 		return -ENODEV;
+-There are three per-task flags used for that, PF_NOFREEZE, PF_FROZEN
+-and PF_FREEZER_SKIP (the last one is auxiliary).  The tasks that have
+-PF_NOFREEZE unset (all user space processes and some kernel threads) are
+-regarded as 'freezable' and treated in a special way before the system enters a
+-suspend state as well as before a hibernation image is created (in what follows
+-we only consider hibernation, but the description also applies to suspend).
++There are one per-task flag (PF_NOFREEZE) and three per-task states
++(TASK_FROZEN, TASK_FREEZABLE and __TASK_FREEZABLE_UNSAFE) used for that.
++The tasks that have PF_NOFREEZE unset (all user space processes and some kernel
++threads) are regarded as 'freezable' and treated in a special way before the
++system enters a suspend state as well as before a hibernation image is created
++(in what follows we only consider hibernation, but the description also applies
++to suspend).
  
--	list_for_each_entry(instance, &tz->thermal_instances, tz_node)
--		if (power_actor_is_valid(params, instance))
--			total_weight += instance->weight;
--
- 	/* Clean all buffers for new power estimations */
- 	memset(params->req_power, 0, params->buffer_size);
+ Namely, as the first step of the hibernation procedure the function
+ freeze_processes() (defined in kernel/power/process.c) is called.  A system-wide
+-variable system_freezing_cnt (as opposed to a per-task flag) is used to indicate
+-whether the system is to undergo a freezing operation. And freeze_processes()
+-sets this variable.  After this, it executes try_to_freeze_tasks() that sends a
+-fake signal to all user space processes, and wakes up all the kernel threads.
+-All freezable tasks must react to that by calling try_to_freeze(), which
+-results in a call to __refrigerator() (defined in kernel/freezer.c), which sets
+-the task's PF_FROZEN flag, changes its state to TASK_UNINTERRUPTIBLE and makes
+-it loop until PF_FROZEN is cleared for it. Then, we say that the task is
+-'frozen' and therefore the set of functions handling this mechanism is referred
+-to as 'the freezer' (these functions are defined in kernel/power/process.c,
+-kernel/freezer.c & include/linux/freezer.h). User space processes are generally
+-frozen before kernel threads.
++static key freezer_active (as opposed to a per-task flag or state) is used to
++indicate whether the system is to undergo a freezing operation. And
++freeze_processes() sets this variable.  After this, it executes
++try_to_freeze_tasks() that sends a fake signal to all user space processes, and
++wakes up all the kernel threads. All freezable tasks must react to that by
++calling try_to_freeze(), which results in a call to __refrigerator() (defined
++in kernel/freezer.c), which sets the task's state to TASK_FROZEN, and makes it
++loop until it is woken by an explicit TASK_FROZEN wakeup. Then, we say that the
++task is 'frozen' and therefore the set of functions handling this mechanism is
++referred to as 'the freezer' (these functions are defined in
++kernel/power/process.c, kernel/freezer.c & include/linux/freezer.h). User space
++processes are generally frozen before kernel threads.
  
-@@ -430,7 +427,7 @@ static int allocate_power(struct thermal_zone_device *tz, int control_temp)
- 		if (cdev->ops->get_requested_power(cdev, &req_power[i]))
- 			continue;
+ __refrigerator() must not be called directly.  Instead, use the
+ try_to_freeze() function (defined in include/linux/freezer.h), that checks
+@@ -43,31 +44,40 @@ if the task is to be frozen and makes the task enter __refrigerator().
+ For user space processes try_to_freeze() is called automatically from the
+ signal-handling code, but the freezable kernel threads need to call it
+ explicitly in suitable places or use the wait_event_freezable() or
+-wait_event_freezable_timeout() macros (defined in include/linux/freezer.h)
+-that combine interruptible sleep with checking if the task is to be frozen and
+-calling try_to_freeze().  The main loop of a freezable kernel thread may look
+-like the following one::
++wait_event_freezable_timeout() macros (defined in include/linux/wait.h)
++that puts the task to sleep (TASK_INTERRUPTIBLE) or frozen (TASK_FROZEN) if the
++task is freezing. The main loop of a freezable kernel thread may look like the
++following one::
  
--		if (!total_weight)
-+		if (!params->total_weight)
- 			weight = 1 << FRAC_BITS;
- 		else
- 			weight = instance->weight;
-@@ -666,6 +663,12 @@ static void power_allocator_update_tz(struct thermal_zone_device *tz,
+ 	set_freezable();
+-	do {
+-		hub_events();
+-		wait_event_freezable(khubd_wait,
+-				!list_empty(&hub_event_list) ||
+-				kthread_should_stop());
+-	} while (!kthread_should_stop() || !list_empty(&hub_event_list));
  
- 		allocate_actors_buffer(params, num_actors);
- 		break;
-+	case THERMAL_INSTANCE_WEIGHT_UPDATE:
-+		params->total_weight = 0;
-+		list_for_each_entry(instance, &tz->thermal_instances, tz_node)
-+			if (power_actor_is_valid(params, instance))
-+				params->total_weight += instance->weight;
-+		break;
- 	default:
- 		break;
- 	}
+-(from drivers/usb/core/hub.c::hub_thread()).
++	while (true) {
++		struct task_struct *tsk = NULL;
+ 
+-If a freezable kernel thread fails to call try_to_freeze() after the freezer has
+-initiated a freezing operation, the freezing of tasks will fail and the entire
+-hibernation operation will be cancelled.  For this reason, freezable kernel
+-threads must call try_to_freeze() somewhere or use one of the
++		wait_event_freezable(oom_reaper_wait, oom_reaper_list != NULL);
++		spin_lock_irq(&oom_reaper_lock);
++		if (oom_reaper_list != NULL) {
++			tsk = oom_reaper_list;
++			oom_reaper_list = tsk->oom_reaper_list;
++		}
++		spin_unlock_irq(&oom_reaper_lock);
++
++		if (tsk)
++			oom_reap_task(tsk);
++	}
++
++(from mm/oom_kill.c::oom_reaper()).
++
++If a freezable kernel thread fails to be put to frozen state after the freezer
++has initiated a freezing operation, the freezing of tasks will fail and the
++entire hibernation operation will be cancelled.  For this reason, freezable
++kernel threads must call try_to_freeze() somewhere or use one of the
+ wait_event_freezable() and wait_event_freezable_timeout() macros.
+ 
+ After the system memory state has been restored from a hibernation image and
+ devices have been reinitialized, the function thaw_processes() is called in
+-order to clear the PF_FROZEN flag for each frozen task.  Then, the tasks that
+-have been frozen leave __refrigerator() and continue running.
++order to wake up each frozen task.  Then, the tasks that have been frozen leave
++__refrigerator() and continue running.
+ 
+ 
+ Rationale behind the functions dealing with freezing and thawing of tasks
+@@ -96,7 +106,8 @@ III. Which kernel threads are freezable?
+ Kernel threads are not freezable by default.  However, a kernel thread may clear
+ PF_NOFREEZE for itself by calling set_freezable() (the resetting of PF_NOFREEZE
+ directly is not allowed).  From this point it is regarded as freezable
+-and must call try_to_freeze() in a suitable place.
++and must call try_to_freeze() or variants of wait_event_freezable() in a
++suitable place.
+ 
+ IV. Why do we do that?
+ ======================
 -- 
-2.25.1
+2.39.2
 
 
