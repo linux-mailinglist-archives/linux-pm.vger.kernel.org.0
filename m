@@ -1,164 +1,285 @@
-Return-Path: <linux-pm+bounces-951-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-954-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79BF580EC78
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 13:49:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A85E880ECC1
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 14:04:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C8C91F21594
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 12:49:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 154C9B20AA6
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 13:04:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 398B460ED0;
-	Tue, 12 Dec 2023 12:49:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=trvn.ru header.i=@trvn.ru header.b="Dq2QeZSt"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD25060EF7;
+	Tue, 12 Dec 2023 13:04:07 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C729B7;
-	Tue, 12 Dec 2023 04:49:25 -0800 (PST)
-Received: from authenticated-user (box.trvn.ru [194.87.146.52])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(No client certificate requested)
-	by box.trvn.ru (Postfix) with ESMTPSA id A5FFD41BE2;
-	Tue, 12 Dec 2023 17:49:23 +0500 (+05)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-	t=1702385364; bh=DBs7WSTRsWsDILHndJynPWxZbqbs68OouyDKWJNsV3g=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Dq2QeZStRsBgvXeNeOCBYrOodf6o3G4/jWun3ZOswapINve/6C0SyHFDbuNzpqEVM
-	 v4AQPR/+lua6VXyzOUwYxd1rVaq26KVzXVf+c+kwGTAo4zDrDAohG6mC53Gc2Rw2Ki
-	 63XD0vZSqCozO/1uOFFOSKkFPfzEhxwZCapeJKGABTqfWMjDXSae3LFDz8U8lhq35I
-	 B+saGvq1iokb7/MAeaVh2w9lXJ19fFGvfJaN5ikXQ5zgFDc0c1QqvO7f4YHvd/HhlK
-	 KzHIB6RIfYvJ6mKO8yjnxe/fy++Dz68oRfzdV0jccR5jhSs7MHxfKG6+nPUf9XnYKa
-	 FYl1A6UB+c1Lw==
-From: Nikita Travkin <nikita@trvn.ru>
-Date: Tue, 12 Dec 2023 17:49:11 +0500
-Subject: [PATCH v2 3/3] arm64: dts: qcom: acer-aspire1: Add embedded
- controller
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893C7B3;
+	Tue, 12 Dec 2023 05:04:04 -0800 (PST)
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-5907e590360so220473eaf.0;
+        Tue, 12 Dec 2023 05:04:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702386244; x=1702991044;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+zlCPTSk6JdN6595sPJPnN+KjNdsVVraWML48xr0EUg=;
+        b=OIfXr3F2S6HNnSJjVC02GFGZT46aLMwjCDD2Bo3Ad+jF7uiEmLOh4Dg2Tmk/Qoilj4
+         mkuVZvJzNUQ9/VD2btsZnPMvzBuJ3jcP7zIDOAHbXPPW9wj8CErW5l7SPtvH4Y436YE3
+         TbW1lIyVSXaiWi4NDJY/f8mNHGP9KuEC/DQdRV0ee0iaBzjk8w/PxicJovk/RV77MIwt
+         Yatx0587W89eviBcghTWkg7ZlXCVAMHevv5A1RihgrfUkUA/hR5uaupIIWeEq6lObdqQ
+         bra6M/2IGt9blgkBvIE+7oUtVhnzin4SpJ6e3KWSuCriDw9BaoeYshTMv+jSkaB8UmDx
+         8Nbw==
+X-Gm-Message-State: AOJu0YyLmEo1m0MTuvGZ/tGFm+F4xDMaRhKkyKWttMtl0trEXN4Gu1q0
+	YY91iUTWNReZqLubxkBojr3N0a5BP5jLTVIqq7OfbDJ1yEI=
+X-Google-Smtp-Source: AGHT+IGHKSRwC7w0Pqpkxwxhr4hPN9Fyc5P2OWkS0+6K2iUEG88BT1M8zq/bChC78Qo0Q7PAR8XvMk6mRNWiJQh0vbI=
+X-Received: by 2002:a4a:c487:0:b0:58d:ddcb:db1a with SMTP id
+ f7-20020a4ac487000000b0058dddcbdb1amr10067925ooq.1.1702386243642; Tue, 12 Dec
+ 2023 05:04:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231212-aspire1-ec-v2-3-ca495ea0a7ac@trvn.ru>
-References: <20231212-aspire1-ec-v2-0-ca495ea0a7ac@trvn.ru>
-In-Reply-To: <20231212-aspire1-ec-v2-0-ca495ea0a7ac@trvn.ru>
-To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, cros-qcom-dts-watchers@chromium.org, 
- Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
- Nikita Travkin <nikita@trvn.ru>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2154; i=nikita@trvn.ru;
- h=from:subject:message-id; bh=DBs7WSTRsWsDILHndJynPWxZbqbs68OouyDKWJNsV3g=;
- b=owEBbQKS/ZANAwAIAUMc7O4oGb91AcsmYgBleFbO4BMOxnuKYg8prK0BAmEHO7knOBgU1+LtD
- sxVx2hHg0CJAjMEAAEIAB0WIQTAhK9UUj+qg34uxUdDHOzuKBm/dQUCZXhWzgAKCRBDHOzuKBm/
- dYeOEACYbgi/Lw+ut86oYgWpI1M/DR7uk3HEOarerIFdTww9LgdSJudP/wlTc7DX4Ppq1THDSr7
- uXsY4W//1+MFSXb70CA0al9vI1UJb6g1ld9FJmvyg+GCNWnCSeDNbCLlobhcXRTUhqK6hFDAh+2
- z9DExuys0gsX4loOqeRU8SgpJidN28k1XHH+9N8uVi59HmbtB/0mf3Wdr4qSYKbRy9WzxIYzjF/
- 97GhkqEbKT0NT9kWO5uj286rftE9ygxo1HwBTfjSdf3ljE++d6gZDN7jlUtXhrM7bdL12IbFse+
- nXrtMXjzfmscWLJgett7AcMykrIMTMaXDioz6d7o7TCFPF1scsQ8iSl/KiMEGHLw3hu4Ywgrozl
- F+Pkbwfl6Exv/xThaL2BRYr8iE8ZYarhfAyjMAj1LHJk3dZ5JkiNQgdhwp8UNKEYzxki9t8KtaA
- x5b7SFukBWjdw9uBNGkqLb7DE/YRyPWmq/uwhGdbk6PnywBsCIeyIGN6/HsL8DVl962G56GPBvS
- 7wM83YLn29BTkIyfjeFsOaurID0ykyXNMDj2hoDbIj6AE3hQ0eHrIzfJz7ZWCXe4+9mJ3D1pffo
- wLLm4KhNN3kYHe6vheFQCbgJ+CfZMcE3M+QIPEQbbjm6DHfR62IFGZ2Pn9Oeg6KF9ztr4MFHT1h
- yJ/wacIWwonjODg==
-X-Developer-Key: i=nikita@trvn.ru; a=openpgp;
- fpr=C084AF54523FAA837E2EC547431CECEE2819BF75
+References: <20231116005609.1583858-1-zhanghongchen@loongson.cn>
+In-Reply-To: <20231116005609.1583858-1-zhanghongchen@loongson.cn>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 12 Dec 2023 14:03:52 +0100
+Message-ID: <CAJZ5v0gTcntizfqKMa0YxHbOhNsLf=nAEoOBf2f9fFt-uzzgsg@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: hibernate: use acquire/release ordering when
+ compress/decompress image
+To: Hongchen Zhang <zhanghongchen@loongson.cn>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
+	Bojan Smojver <bojan@rexursive.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn, 
+	stable@vger.kernel.org, Weihao Li <liweihao@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The laptop contains an embedded controller that provides a set of
-features:
+On Thu, Nov 16, 2023 at 1:56=E2=80=AFAM Hongchen Zhang
+<zhanghongchen@loongson.cn> wrote:
+>
+> When we test S4(suspend to disk) on LoongArch 3A6000 platform, the
+> test case sometimes fails. The dmesg log shows the following error:
+>         Invalid LZO compressed length
+> After we dig into the code, we find out that:
+> When compress/decompress the image, the synchronization operation
+> between the control thread and the compress/decompress/crc thread
+> uses relaxed ordering interface, which is unreliable, and the
+> following situation may occur:
+> CPU 0                                   CPU 1
+> save_image_lzo                          lzo_compress_threadfn
+>                                           atomic_set(&d->stop, 1);
+>   atomic_read(&data[thr].stop)
+>   data[thr].cmp =3D data[thr].cmp_len;
+>                                           WRITE data[thr].cmp_len
+> Then CPU0 get a old cmp_len and write to disk. When cpu resume from S4,
+> wrong cmp_len is loaded.
+>
+> To maintain data consistency between two threads, we should use the
+> acquire/release ordering interface. So we change atomic_read/atomic_set
+> to atomic_read_acquire/atomic_set_release.
+>
+> Fixes: 081a9d043c98 ("PM / Hibernate: Improve performance of LZO/plain hi=
+bernation, checksum image")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
+> Signed-off-by: Weihao Li <liweihao@loongson.cn>
 
-- Battery and charger monitoring
-- USB Type-C DP alt mode HPD monitoring
-- Lid status detection
-- Small amount of keyboard configuration*
+I was about to apply this patch when I noticed the S-o-b confusion.
 
-[*] The keyboard is handled by the same EC but it has a dedicated i2c
-bus and is already enabled. This port only provides fn key behavior
-configuration.
+Either a From: header pointing to Weihao Li <liweihao@loongson.cn> is
+missing and the Hongchen Zhang <zhanghongchen@loongson.cn> sign-off
+means that the patch is sent on behalf of Weihao Li, or you both
+worked on the patch together and a Co-developed-by: tag pointing to
+Weihao Li <liweihao@loongson.cn> is missing.
 
-Add the EC to the device tree and describe the relationship between the
-EC-managed type-c port and the SoC DisplayPort.
+Which of the above is the case?
 
-Signed-off-by: Nikita Travkin <nikita@trvn.ru>
----
- arch/arm64/boot/dts/qcom/sc7180-acer-aspire1.dts | 40 +++++++++++++++++++++++-
- 1 file changed, 39 insertions(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-acer-aspire1.dts b/arch/arm64/boot/dts/qcom/sc7180-acer-aspire1.dts
-index dbb48934d499..a29f542fa612 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-acer-aspire1.dts
-+++ b/arch/arm64/boot/dts/qcom/sc7180-acer-aspire1.dts
-@@ -147,7 +147,25 @@ &i2c2 {
- 	clock-frequency = <400000>;
- 	status = "okay";
- 
--	/* embedded-controller@76 */
-+	embedded-controller@76 {
-+		compatible = "acer,aspire1-ec";
-+		reg = <0x76>;
-+
-+		interrupts-extended = <&tlmm 30 IRQ_TYPE_LEVEL_LOW>;
-+
-+		pinctrl-0 = <&ec_int_default>;
-+		pinctrl-names = "default";
-+
-+		connector {
-+			compatible = "usb-c-connector";
-+
-+			port {
-+				ec_dp_in: endpoint {
-+					remote-endpoint = <&mdss_dp_out>;
-+				};
-+			};
-+		};
-+	};
- };
- 
- &i2c4 {
-@@ -298,6 +316,19 @@ &mdss {
- 	status = "okay";
- };
- 
-+&mdss_dp {
-+	data-lanes = <0 1>;
-+
-+	vdda-1p2-supply = <&vreg_l3c_1p2>;
-+	vdda-0p9-supply = <&vreg_l4a_0p8>;
-+
-+	status = "okay";
-+};
-+
-+&mdss_dp_out {
-+	remote-endpoint = <&ec_dp_in>;
-+};
-+
- &mdss_dsi0 {
- 	vdda-supply = <&vreg_l3c_1p2>;
- 	status = "okay";
-@@ -687,6 +718,13 @@ codec_irq_default: codec-irq-deault-state {
- 		bias-disable;
- 	};
- 
-+	ec_int_default: ec-int-default-state {
-+		pins = "gpio30";
-+		function = "gpio";
-+		drive-strength = <2>;
-+		bias-disable;
-+	};
-+
- 	edp_bridge_irq_default: edp-bridge-irq-default-state {
- 		pins = "gpio11";
- 		function = "gpio";
-
--- 
-2.43.0
-
+> ---
+> v1 -> v2:
+>         1. add Cc: stable@vger.kernel.org in commit log
+>         2. add Fixes: line in commit log
+> ---
+>  kernel/power/swap.c | 38 +++++++++++++++++++-------------------
+>  1 file changed, 19 insertions(+), 19 deletions(-)
+>
+> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
+> index a2cb0babb5ec..d44f5937f1e5 100644
+> --- a/kernel/power/swap.c
+> +++ b/kernel/power/swap.c
+> @@ -606,11 +606,11 @@ static int crc32_threadfn(void *data)
+>         unsigned i;
+>
+>         while (1) {
+> -               wait_event(d->go, atomic_read(&d->ready) ||
+> +               wait_event(d->go, atomic_read_acquire(&d->ready) ||
+>                                   kthread_should_stop());
+>                 if (kthread_should_stop()) {
+>                         d->thr =3D NULL;
+> -                       atomic_set(&d->stop, 1);
+> +                       atomic_set_release(&d->stop, 1);
+>                         wake_up(&d->done);
+>                         break;
+>                 }
+> @@ -619,7 +619,7 @@ static int crc32_threadfn(void *data)
+>                 for (i =3D 0; i < d->run_threads; i++)
+>                         *d->crc32 =3D crc32_le(*d->crc32,
+>                                              d->unc[i], *d->unc_len[i]);
+> -               atomic_set(&d->stop, 1);
+> +               atomic_set_release(&d->stop, 1);
+>                 wake_up(&d->done);
+>         }
+>         return 0;
+> @@ -649,12 +649,12 @@ static int lzo_compress_threadfn(void *data)
+>         struct cmp_data *d =3D data;
+>
+>         while (1) {
+> -               wait_event(d->go, atomic_read(&d->ready) ||
+> +               wait_event(d->go, atomic_read_acquire(&d->ready) ||
+>                                   kthread_should_stop());
+>                 if (kthread_should_stop()) {
+>                         d->thr =3D NULL;
+>                         d->ret =3D -1;
+> -                       atomic_set(&d->stop, 1);
+> +                       atomic_set_release(&d->stop, 1);
+>                         wake_up(&d->done);
+>                         break;
+>                 }
+> @@ -663,7 +663,7 @@ static int lzo_compress_threadfn(void *data)
+>                 d->ret =3D lzo1x_1_compress(d->unc, d->unc_len,
+>                                           d->cmp + LZO_HEADER, &d->cmp_le=
+n,
+>                                           d->wrk);
+> -               atomic_set(&d->stop, 1);
+> +               atomic_set_release(&d->stop, 1);
+>                 wake_up(&d->done);
+>         }
+>         return 0;
+> @@ -798,7 +798,7 @@ static int save_image_lzo(struct swap_map_handle *han=
+dle,
+>
+>                         data[thr].unc_len =3D off;
+>
+> -                       atomic_set(&data[thr].ready, 1);
+> +                       atomic_set_release(&data[thr].ready, 1);
+>                         wake_up(&data[thr].go);
+>                 }
+>
+> @@ -806,12 +806,12 @@ static int save_image_lzo(struct swap_map_handle *h=
+andle,
+>                         break;
+>
+>                 crc->run_threads =3D thr;
+> -               atomic_set(&crc->ready, 1);
+> +               atomic_set_release(&crc->ready, 1);
+>                 wake_up(&crc->go);
+>
+>                 for (run_threads =3D thr, thr =3D 0; thr < run_threads; t=
+hr++) {
+>                         wait_event(data[thr].done,
+> -                                  atomic_read(&data[thr].stop));
+> +                               atomic_read_acquire(&data[thr].stop));
+>                         atomic_set(&data[thr].stop, 0);
+>
+>                         ret =3D data[thr].ret;
+> @@ -850,7 +850,7 @@ static int save_image_lzo(struct swap_map_handle *han=
+dle,
+>                         }
+>                 }
+>
+> -               wait_event(crc->done, atomic_read(&crc->stop));
+> +               wait_event(crc->done, atomic_read_acquire(&crc->stop));
+>                 atomic_set(&crc->stop, 0);
+>         }
+>
+> @@ -1132,12 +1132,12 @@ static int lzo_decompress_threadfn(void *data)
+>         struct dec_data *d =3D data;
+>
+>         while (1) {
+> -               wait_event(d->go, atomic_read(&d->ready) ||
+> +               wait_event(d->go, atomic_read_acquire(&d->ready) ||
+>                                   kthread_should_stop());
+>                 if (kthread_should_stop()) {
+>                         d->thr =3D NULL;
+>                         d->ret =3D -1;
+> -                       atomic_set(&d->stop, 1);
+> +                       atomic_set_release(&d->stop, 1);
+>                         wake_up(&d->done);
+>                         break;
+>                 }
+> @@ -1150,7 +1150,7 @@ static int lzo_decompress_threadfn(void *data)
+>                         flush_icache_range((unsigned long)d->unc,
+>                                            (unsigned long)d->unc + d->unc=
+_len);
+>
+> -               atomic_set(&d->stop, 1);
+> +               atomic_set_release(&d->stop, 1);
+>                 wake_up(&d->done);
+>         }
+>         return 0;
+> @@ -1335,7 +1335,7 @@ static int load_image_lzo(struct swap_map_handle *h=
+andle,
+>                 }
+>
+>                 if (crc->run_threads) {
+> -                       wait_event(crc->done, atomic_read(&crc->stop));
+> +                       wait_event(crc->done, atomic_read_acquire(&crc->s=
+top));
+>                         atomic_set(&crc->stop, 0);
+>                         crc->run_threads =3D 0;
+>                 }
+> @@ -1371,7 +1371,7 @@ static int load_image_lzo(struct swap_map_handle *h=
+andle,
+>                                         pg =3D 0;
+>                         }
+>
+> -                       atomic_set(&data[thr].ready, 1);
+> +                       atomic_set_release(&data[thr].ready, 1);
+>                         wake_up(&data[thr].go);
+>                 }
+>
+> @@ -1390,7 +1390,7 @@ static int load_image_lzo(struct swap_map_handle *h=
+andle,
+>
+>                 for (run_threads =3D thr, thr =3D 0; thr < run_threads; t=
+hr++) {
+>                         wait_event(data[thr].done,
+> -                                  atomic_read(&data[thr].stop));
+> +                               atomic_read_acquire(&data[thr].stop));
+>                         atomic_set(&data[thr].stop, 0);
+>
+>                         ret =3D data[thr].ret;
+> @@ -1421,7 +1421,7 @@ static int load_image_lzo(struct swap_map_handle *h=
+andle,
+>                                 ret =3D snapshot_write_next(snapshot);
+>                                 if (ret <=3D 0) {
+>                                         crc->run_threads =3D thr + 1;
+> -                                       atomic_set(&crc->ready, 1);
+> +                                       atomic_set_release(&crc->ready, 1=
+);
+>                                         wake_up(&crc->go);
+>                                         goto out_finish;
+>                                 }
+> @@ -1429,13 +1429,13 @@ static int load_image_lzo(struct swap_map_handle =
+*handle,
+>                 }
+>
+>                 crc->run_threads =3D thr;
+> -               atomic_set(&crc->ready, 1);
+> +               atomic_set_release(&crc->ready, 1);
+>                 wake_up(&crc->go);
+>         }
+>
+>  out_finish:
+>         if (crc->run_threads) {
+> -               wait_event(crc->done, atomic_read(&crc->stop));
+> +               wait_event(crc->done, atomic_read_acquire(&crc->stop));
+>                 atomic_set(&crc->stop, 0);
+>         }
+>         stop =3D ktime_get();
+> --
+> 2.33.0
+>
 
