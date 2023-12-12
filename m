@@ -1,142 +1,84 @@
-Return-Path: <linux-pm+bounces-966-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-967-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9988C80EDF9
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 14:47:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59C3A80EE03
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 14:48:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3DF7F1F2166B
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 13:47:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D7732B20D85
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 13:48:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B7786EB75;
-	Tue, 12 Dec 2023 13:47:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03EF16DD02;
+	Tue, 12 Dec 2023 13:48:00 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277E1A1;
-	Tue, 12 Dec 2023 05:47:48 -0800 (PST)
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-6d9db92bd71so769625a34.1;
-        Tue, 12 Dec 2023 05:47:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702388867; x=1702993667;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=C/X6R0HR+xbXGN5qRhO2As3RreYVAwdxii2KLmKVXIM=;
-        b=Rkhj3hXQDzoRFr4vvAVaxTx7RzPnw16rqj8UMh4FHUqntPxjMt6iwQQ6tCgoQktUfm
-         y7rW6YOmn2JXyocc5Y0qUnQ9yJEsI1UbB2K/ytZzlC3ZkBekIc76uxCc7jw/9vdb/Iaw
-         GUgUn3ZxdFuxaJGRZZWaZIlmYJhhXiqjWHARy4edRxo/RPE8QumFJc+HzST3WNMNwaFc
-         vmCkLcfysfxHJs2gYF0e1lBERWPm0yTYnLrkW0343E+cZ5oWUa3cys0Euz2LjjmtbQHH
-         ZwTqq4mctDhFfW+wwQsFROzHEaQnwcul+xpmfo9Vr2TtP4KV/AINzJhqsCue7PeSaqNp
-         PS7Q==
-X-Gm-Message-State: AOJu0YwUIew1EEw7PsdYpO2rGd0AS9b6qmqYOcjXBlhdtdx1Pf8SOUBR
-	EiVeWKYuYUTxr8Wy2ybbC27DIxNUecNSRcD+KyeT7G88
-X-Google-Smtp-Source: AGHT+IEJhakpYW3S8EY4DMqvhznErmMox7oe1ZX5qPrH5Xkhs4aGDo5Bbnh5X9aUH+1+IG1hagao25A13pcgEloq/4s=
-X-Received: by 2002:a05:6870:b028:b0:1fb:e5f:c530 with SMTP id
- y40-20020a056870b02800b001fb0e5fc530mr11532372oae.4.1702388867382; Tue, 12
- Dec 2023 05:47:47 -0800 (PST)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D058100;
+	Tue, 12 Dec 2023 05:47:57 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 42004143D;
+	Tue, 12 Dec 2023 05:48:43 -0800 (PST)
+Received: from e129166.arm.com (unknown [10.57.82.227])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B0E613F738;
+	Tue, 12 Dec 2023 05:47:55 -0800 (PST)
+From: Lukasz Luba <lukasz.luba@arm.com>
+To: linux-kernel@vger.kernel.org,
+	daniel.lezcano@linaro.org,
+	rafael@kernel.org
+Cc: linux-pm@vger.kernel.org,
+	rui.zhang@intel.com,
+	lukasz.luba@arm.com
+Subject: [PATCH v2 0/8] Add callback for cooling list update to speed-up IPA
+Date: Tue, 12 Dec 2023 13:48:36 +0000
+Message-Id: <20231212134844.1213381-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231205063537.872834-1-li.meng@amd.com> <20231205063537.872834-3-li.meng@amd.com>
-In-Reply-To: <20231205063537.872834-3-li.meng@amd.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 12 Dec 2023 14:47:36 +0100
-Message-ID: <CAJZ5v0ghO8A2co6tK6-kM-1NdjVggM-_26hj+oiv8hTGQGg1mw@mail.gmail.com>
-Subject: Re: [PATCH V12 2/7] acpi: cppc: Add get the highest performance cppc control
-To: Meng Li <li.meng@amd.com>
-Cc: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, Huang Rui <ray.huang@amd.com>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org, 
-	linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>, 
-	linux-kselftest@vger.kernel.org, Nathan Fontenot <nathan.fontenot@amd.com>, 
-	Deepak Sharma <deepak.sharma@amd.com>, Alex Deucher <alexander.deucher@amd.com>, 
-	Mario Limonciello <mario.limonciello@amd.com>, Shimmer Huang <shimmer.huang@amd.com>, 
-	Perry Yuan <Perry.Yuan@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Borislav Petkov <bp@alien8.de>, 
-	Oleksandr Natalenko <oleksandr@natalenko.name>, Wyes Karny <wyes.karny@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Please spell ACPI and CPPC in capitals in the subject.
+Hi all,
 
-On Tue, Dec 5, 2023 at 7:38=E2=80=AFAM Meng Li <li.meng@amd.com> wrote:
->
-> Add support for getting the highest performance to the
-> generic CPPC driver. This enables downstream drivers
-> such as amd-pstate to discover and use these values.
->
-> Please refer to the ACPI_Spec for details on continuous
-> performance control of CPPC.
+The patch set a new callback for thermal governors and implementation for
+Intelligent Power Allocator.
 
-So which section of the spec is the reader supposed to refer to?
+The goal is to move some heavy operarions like the memory allocations and heavy
+computations (multiplications) out of throttle() callback hot path.
 
-> Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-> Reviewed-by: Wyes Karny <wyes.karny@amd.com>
-> Reviewed-by: Perry Yuan <perry.yuan@amd.com>
-> Acked-by: Huang Rui <ray.huang@amd.com>
-> Signed-off-by: Meng Li <li.meng@amd.com>
-> Link: https://uefi.org/specs/ACPI/6.5/08_Processor_Configuration_and_Cont=
-rol.html?highlight=3Dcppc#highest-performance
-> ---
->  drivers/acpi/cppc_acpi.c | 13 +++++++++++++
->  include/acpi/cppc_acpi.h |  5 +++++
->  2 files changed, 18 insertions(+)
->
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index 7ff269a78c20..ad388a0e8484 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -1154,6 +1154,19 @@ int cppc_get_nominal_perf(int cpunum, u64 *nominal=
-_perf)
->         return cppc_get_perf(cpunum, NOMINAL_PERF, nominal_perf);
->  }
->
-> +/**
-> + * cppc_get_highest_perf - Get the highest performance register value.
-> + * @cpunum: CPU from which to get highest performance.
-> + * @highest_perf: Return address.
-> + *
-> + * Return: 0 for success, -EIO otherwise.
-> + */
-> +int cppc_get_highest_perf(int cpunum, u64 *highest_perf)
-> +{
-> +       return cppc_get_perf(cpunum, HIGHEST_PERF, highest_perf);
-> +}
-> +EXPORT_SYMBOL_GPL(cppc_get_highest_perf);
-> +
->  /**
->   * cppc_get_epp_perf - Get the epp register value.
->   * @cpunum: CPU from which to get epp preference value.
-> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
-> index 6126c977ece0..c0b69ffe7bdb 100644
-> --- a/include/acpi/cppc_acpi.h
-> +++ b/include/acpi/cppc_acpi.h
-> @@ -139,6 +139,7 @@ struct cppc_cpudata {
->  #ifdef CONFIG_ACPI_CPPC_LIB
->  extern int cppc_get_desired_perf(int cpunum, u64 *desired_perf);
->  extern int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf);
-> +extern int cppc_get_highest_perf(int cpunum, u64 *highest_perf);
->  extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb=
-_ctrs);
->  extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
->  extern int cppc_set_enable(int cpu, bool enable);
-> @@ -165,6 +166,10 @@ static inline int cppc_get_nominal_perf(int cpunum, =
-u64 *nominal_perf)
->  {
->         return -ENOTSUPP;
->  }
-> +static inline int cppc_get_highest_perf(int cpunum, u64 *highest_perf)
-> +{
-> +       return -ENOTSUPP;
-> +}
->  static inline int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *=
-perf_fb_ctrs)
->  {
->         return -ENOTSUPP;
-> --
+The new callback is generic enough to handle other imporants update events.
+It re-uses existing thermal_notify_event definitions.
+
+In addition there are some small clean-ups for IPA code.
+
+changes:
+v2:
+- change callback name to update_tz() and add parameter (Rafael)
+- added new event to trigger this callback - instance 'weight' update
+
+Regards,
+Lukasz
+
+Lukasz Luba (8):
+  thermal: core: Add governor callback for thermal zone change
+  thermal: gov_power_allocator: Refactor check_power_actors()
+  thermal: gov_power_allocator: Move memory allocation out of throttle()
+  thermal: gov_power_allocator: Simplify checks for valid power actor
+  thermal: gov_power_allocator: Refactor checks in divvy_up_power()
+  thermal/sysfs: Update instance->weight under tz lock
+  thermal/sysfs: Update governors when the 'weight' has changed
+  thermal: gov_power_allocator: Support new update callback of weights
+
+ drivers/thermal/gov_power_allocator.c | 216 ++++++++++++++++++--------
+ drivers/thermal/thermal_core.c        |  13 ++
+ drivers/thermal/thermal_sysfs.c       |  15 ++
+ include/linux/thermal.h               |   6 +
+ 4 files changed, 182 insertions(+), 68 deletions(-)
+
+-- 
+2.25.1
+
 
