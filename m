@@ -1,297 +1,152 @@
-Return-Path: <linux-pm+bounces-940-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-941-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A91E80E99F
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 12:06:56 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA3C080EAF2
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 12:55:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D13F1C20A4E
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 11:06:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 704E8B20D44
+	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 11:55:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F4845CD18;
-	Tue, 12 Dec 2023 11:06:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lskCaD5x"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC9F85DF1D;
+	Tue, 12 Dec 2023 11:55:11 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03134AB
-	for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 03:06:47 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id 5614622812f47-3ba0dfc9001so722000b6e.2
-        for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 03:06:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702379206; x=1702984006; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dNxF7QXliSE92DNXgeY61a9nlDcm8BgNVtHOlvR8QXg=;
-        b=lskCaD5xq9Kt2OFx1ULEtynGD+FaRQ5Dfv5sSKaR+fhuTWSyhs1vXWszeDjVNjnULL
-         C5xWFRzXyjvP/AXIKlebUJhSPQ8+VO6uu/jJLLnUs4SrYtOdvWFV8hn86f2jCRUBBK5Z
-         T3Ixrf+7iGVxVgJyOwcIh9oe7ZGCEqjmzpwwLN3ZEOqMEhqZkNCwuYFvuYLounVK20rH
-         BweM7NZMjjxO7uApMVnL1xEVvc2VfW4E7J5SD8nsfYDhOaUzrc9kL48itMg+wIx3WFkj
-         X9EvsChxHNoo8eWwjhfrCnioNXxLtmsjFI6xPm6uMVmWeSPpsFiWPbH4ksihtzwPwcAa
-         GRrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702379206; x=1702984006;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dNxF7QXliSE92DNXgeY61a9nlDcm8BgNVtHOlvR8QXg=;
-        b=Jz0stve1jisD2O2Qi2pWmX9s11LIa0JL1JLtoNG5zDYghd/l0Sgg7XumRPA2Akodpz
-         KhUAusDn6/PUXxCt3OSeDBe+KKQLSKHR4Y3U0gsOTB5ddNprVfqjGs1RLFrSJSsIaYs2
-         3K4Ci0ZydWHRjYmMOsXsk0DyNsgxf0279vE9dX1RMEklmpB4pGzqIY+JIOxZkCX28dsf
-         BwwcRcfswJxf9Gh+qRyjtdQ6iL31xhr+sl1icTzaH9KZYZu8yWmARPmcLIRQaUcCZZ6i
-         Jj4yRpt3alWnmAerMeDDrGKgCsnlE8ZdaXmVe6HBkPR2mgpo4CNH36URoH0mpw3oGMrF
-         p9qQ==
-X-Gm-Message-State: AOJu0YxgS2K9AXGZcU4XHOCW9C9BJs986IR52OcYuFzYLdbPTn/lxFgq
-	9OHccqNaagJWfVbj6n2hpaU8nqMm/wYbpATFaDww/Q==
-X-Google-Smtp-Source: AGHT+IG9VsGCBbFb71zjlG6HiglE/1G6CAxNkD5Lw3EuI8Ai5PbeHso86ikiUCm9LTYCj3UWUX926IkgL86FRkRwkPM=
-X-Received: by 2002:a05:6808:6506:b0:3ba:b1f:f468 with SMTP id
- fm6-20020a056808650600b003ba0b1ff468mr2183045oib.103.1702379206210; Tue, 12
- Dec 2023 03:06:46 -0800 (PST)
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87AFAC7
+	for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 03:55:09 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rD1KL-0007kg-9r; Tue, 12 Dec 2023 12:53:29 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rD1KH-00FKLk-Ov; Tue, 12 Dec 2023 12:53:25 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rD1KH-001bPz-E7; Tue, 12 Dec 2023 12:53:25 +0100
+Date: Tue, 12 Dec 2023 12:53:25 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: nikita.shubin@maquefel.me
+Cc: Hartley Sweeten <hsweeten@visionengravers.com>,
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Lukasz Majewski <lukma@denx.de>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andy Shevchenko <andy@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Sergey Shtylyov <s.shtylyov@omp.ru>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+	netdev@vger.kernel.org, linux-mtd@lists.infradead.org,
+	linux-ide@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-sound@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v6 00/40] ep93xx device tree conversion
+Message-ID: <20231212115325.m4w6cg4ttdispkvm@pengutronix.de>
+References: <20231212-ep93xx-v6-0-c307b8ac9aa8@maquefel.me>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231208015242.385103-1-qyousef@layalina.io> <20231208015242.385103-2-qyousef@layalina.io>
-In-Reply-To: <20231208015242.385103-2-qyousef@layalina.io>
-From: Vincent Guittot <vincent.guittot@linaro.org>
-Date: Tue, 12 Dec 2023 12:06:33 +0100
-Message-ID: <CAKfTPtAKainBfpPOKTJ21zQmmYw7O0Z0v8utfg=QTBtE1L5O_w@mail.gmail.com>
-Subject: Re: [PATCH 1/4] sched/fair: Be less aggressive in calling cpufreq_update_util()
-To: Qais Yousef <qyousef@layalina.io>
-Cc: Ingo Molnar <mingo@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>, 
-	Rick Yiu <rickyiu@google.com>, Chung-Kai Mei <chungkai@google.com>, 
-	Hongyan Xia <hongyan.xia2@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-
-On Fri, 8 Dec 2023 at 02:52, Qais Yousef <qyousef@layalina.io> wrote:
->
-> Due to the way code is structured, it makes a lot of sense to trigger
-> cpufreq_update_util() from update_load_avg(). But this is too aggressive
-> as in most cases we are iterating through entities in a loop to
-> update_load_avg() in the hierarchy. So we end up sending too many
-> request in an loop as we're updating the hierarchy.
->
-> Combine this with the rate limit in schedutil, we could end up
-> prematurely send up a wrong frequency update before we have actually
-> updated all entities appropriately.
->
-> Be smarter about it by limiting the trigger to perform frequency updates
-> after all accounting logic has done. This ended up being in the
-> following points:
->
-> 1. enqueue/dequeue_task_fair()
-> 2. throttle/unthrottle_cfs_rq()
-> 3. attach/detach_task_cfs_rq()
-> 4. task_tick_fair()
-> 5. __sched_group_set_shares()
->
-> This is not 100% ideal still due to other limitations that might be
-> a bit harder to handle. Namely we can end up with premature update
-> request in the following situations:
->
-> a. Simultaneous task enqueue on the CPU where 2nd task is bigger and
->    requires higher freq. The trigger to cpufreq_update_util() by the
->    first task will lead to dropping the 2nd request until tick. Or
->    another CPU in the same policy trigger a freq update.
->
-> b. CPUs sharing a policy can end up with the same race in a but the
->    simultaneous enqueue happens on different CPUs in the same policy.
->
-> The above though are limitations in the governor/hardware, and from
-> scheduler point of view at least that's the best we can do. The
-> governor might consider smarter logic to aggregate near simultaneous
-> request and honour the higher one.
->
-> Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
-> ---
->  kernel/sched/fair.c | 55 ++++++++++++---------------------------------
->  1 file changed, 14 insertions(+), 41 deletions(-)
->
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index b83448be3f79..f99910fc6705 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -3997,29 +3997,6 @@ static inline void update_cfs_group(struct sched_entity *se)
->  }
->  #endif /* CONFIG_FAIR_GROUP_SCHED */
->
-> -static inline void cfs_rq_util_change(struct cfs_rq *cfs_rq, int flags)
-> -{
-> -       struct rq *rq = rq_of(cfs_rq);
-> -
-> -       if (&rq->cfs == cfs_rq) {
-> -               /*
-> -                * There are a few boundary cases this might miss but it should
-> -                * get called often enough that that should (hopefully) not be
-> -                * a real problem.
-> -                *
-> -                * It will not get called when we go idle, because the idle
-> -                * thread is a different class (!fair), nor will the utilization
-> -                * number include things like RT tasks.
-> -                *
-> -                * As is, the util number is not freq-invariant (we'd have to
-> -                * implement arch_scale_freq_capacity() for that).
-> -                *
-> -                * See cpu_util_cfs().
-> -                */
-> -               cpufreq_update_util(rq, flags);
-> -       }
-> -}
-> -
->  #ifdef CONFIG_SMP
->  static inline bool load_avg_is_decayed(struct sched_avg *sa)
->  {
-> @@ -4648,8 +4625,6 @@ static void attach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
->
->         add_tg_cfs_propagate(cfs_rq, se->avg.load_sum);
->
-> -       cfs_rq_util_change(cfs_rq, 0);
-> -
->         trace_pelt_cfs_tp(cfs_rq);
->  }
->
-> @@ -4678,8 +4653,6 @@ static void detach_entity_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
->
->         add_tg_cfs_propagate(cfs_rq, -se->avg.load_sum);
->
-> -       cfs_rq_util_change(cfs_rq, 0);
-> -
->         trace_pelt_cfs_tp(cfs_rq);
->  }
->
-> @@ -4726,11 +4699,8 @@ static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *s
->                  */
->                 detach_entity_load_avg(cfs_rq, se);
->                 update_tg_load_avg(cfs_rq);
-> -       } else if (decayed) {
-> -               cfs_rq_util_change(cfs_rq, 0);
-> -
-> -               if (flags & UPDATE_TG)
-> -                       update_tg_load_avg(cfs_rq);
-> +       } else if (decayed && (flags & UPDATE_TG)) {
-> +               update_tg_load_avg(cfs_rq);
->         }
->  }
->
-> @@ -5114,7 +5084,6 @@ static inline bool cfs_rq_is_decayed(struct cfs_rq *cfs_rq)
->
->  static inline void update_load_avg(struct cfs_rq *cfs_rq, struct sched_entity *se, int not_used1)
->  {
-> -       cfs_rq_util_change(cfs_rq, 0);
->  }
->
->  static inline void remove_entity_load_avg(struct sched_entity *se) {}
-> @@ -5807,6 +5776,8 @@ static bool throttle_cfs_rq(struct cfs_rq *cfs_rq)
->         sub_nr_running(rq, task_delta);
->
->  done:
-> +       cpufreq_update_util(rq, 0);
-> +
->         /*
->          * Note: distribution will already see us throttled via the
->          * throttled-list.  rq->lock protects completion.
-> @@ -5899,6 +5870,8 @@ void unthrottle_cfs_rq(struct cfs_rq *cfs_rq)
->  unthrottle_throttle:
->         assert_list_leaf_cfs_rq(rq);
->
-> +       cpufreq_update_util(rq, 0);
-> +
->         /* Determine whether we need to wake up potentially idle CPU: */
->         if (rq->curr == rq->idle && rq->cfs.nr_running)
->                 resched_curr(rq);
-> @@ -6704,14 +6677,6 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
->          */
->         util_est_enqueue(&rq->cfs, p);
->
-> -       /*
-> -        * If in_iowait is set, the code below may not trigger any cpufreq
-> -        * utilization updates, so do it here explicitly with the IOWAIT flag
-> -        * passed.
-> -        */
-> -       if (p->in_iowait)
-> -               cpufreq_update_util(rq, SCHED_CPUFREQ_IOWAIT);
-> -
->         for_each_sched_entity(se) {
->                 if (se->on_rq)
->                         break;
-> @@ -6772,6 +6737,8 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
->  enqueue_throttle:
->         assert_list_leaf_cfs_rq(rq);
->
-
-Here and in the other places below,  you lose :
-
- -       } else if (decayed) {
-
-The decayed condition ensures a rate limit (~1ms) in the number of
-calls to cpufreq_update_util.
-
-enqueue/dequeue/tick don't create any sudden change in the PELT
-signals that would require to update cpufreq of the change unlike
-attach/detach
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="aamqyrxtxz2kjjms"
+Content-Disposition: inline
+In-Reply-To: <20231212-ep93xx-v6-0-c307b8ac9aa8@maquefel.me>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
 
-> +       cpufreq_update_util(rq, p->in_iowait ? SCHED_CPUFREQ_IOWAIT : 0);
-> +
->         hrtick_update(rq);
->  }
->
-> @@ -6849,6 +6816,7 @@ static void dequeue_task_fair(struct rq *rq, struct task_struct *p, int flags)
->
->  dequeue_throttle:
->         util_est_update(&rq->cfs, p, task_sleep);
-> +       cpufreq_update_util(rq, 0);
->         hrtick_update(rq);
->  }
->
-> @@ -8482,6 +8450,7 @@ done: __maybe_unused;
->
->         update_misfit_status(p, rq);
->         sched_fair_update_stop_tick(rq, p);
-> +       cpufreq_update_util(rq, 0);
->
->         return p;
->
-> @@ -12615,6 +12584,7 @@ static void task_tick_fair(struct rq *rq, struct task_struct *curr, int queued)
->
->         update_misfit_status(curr, rq);
->         update_overutilized_status(task_rq(curr));
-> +       cpufreq_update_util(rq, 0);
->
->         task_tick_core(rq, curr);
->  }
-> @@ -12739,6 +12709,7 @@ static void detach_task_cfs_rq(struct task_struct *p)
->         struct sched_entity *se = &p->se;
->
->         detach_entity_cfs_rq(se);
-> +       cpufreq_update_util(task_rq(p), 0);
->  }
->
->  static void attach_task_cfs_rq(struct task_struct *p)
-> @@ -12746,6 +12717,7 @@ static void attach_task_cfs_rq(struct task_struct *p)
->         struct sched_entity *se = &p->se;
->
->         attach_entity_cfs_rq(se);
-> +       cpufreq_update_util(task_rq(p), 0);
->  }
->
->  static void switched_from_fair(struct rq *rq, struct task_struct *p)
-> @@ -12991,6 +12963,7 @@ static int __sched_group_set_shares(struct task_group *tg, unsigned long shares)
->                         update_load_avg(cfs_rq_of(se), se, UPDATE_TG);
->                         update_cfs_group(se);
->                 }
-> +               cpufreq_update_util(rq, 0);
->                 rq_unlock_irqrestore(rq, &rf);
->         }
->
-> --
-> 2.34.1
->
+--aamqyrxtxz2kjjms
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hello,
+
+On Tue, Dec 12, 2023 at 11:20:17AM +0300, Nikita Shubin via B4 Relay wrote:
+> No major changes since last version all changes are cometic.
+>=20
+> Following patches require attention from Stephen Boyd, as they were conve=
+rted to aux_dev as suggested:
+>=20
+> - ARM: ep93xx: add regmap aux_dev
+> - clk: ep93xx: add DT support for Cirrus EP93xx
+>=20
+> DMA related patches still require Acked or Reviewed tags.
+>=20
+> got approval LGTM from Miquel:
+> - mtd: rawnand: add support for ts72xx
+> Link: https://lore.kernel.org/lkml/20231004103911.2aa65354@xps-13/
+>=20
+> new patches:
+>=20
+> ARM: ep93xx:  Add terminator to gpiod_lookup_table
+>   - fixed terminator in gpiod_lockup_table
+>=20
+> So mostly all patches got approval.
+>=20
+> Patches should be now formated with '--histogram'
+
+You didn't mention how this should be merged. IIRC for the earlier
+rounds the idea was to merge it all together via arm-soc when all
+necessary agreement is reached. I assume that's still the case here?
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--aamqyrxtxz2kjjms
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmV4SbQACgkQj4D7WH0S
+/k4PhAf9FUkX+fzsz5zB6lrl7lgCvYm5ZVb3B7jDw5VKDO3L/jcpIQBnKW28hqdN
+fjyiqoG4kcqJrqfSN7RxYVHnxPmPMREuU5dkbLnXs4nakNuG6kYOLoWYRW6g7LHA
+2aJAqNPA3r1vRHwgyLaSlwVy4TxsWEJoU/Wa7pnN5VGjjyA22i9iruZRGzbsfSbG
+b4TPtncg2+HG5Z2NtBTY2w2wy/0XOTgO40vcUbW+gfh+ktRpJl5quupeZdYByknj
+l9QU3yt6tCJoKvAXYc2/jykymWajShXD0UJhcLTTYcWnQYEgfLWypFNR4YXJmJGC
+SbVz5vPzsa56pT4BPvsUI7alw9v79g==
+=T2K5
+-----END PGP SIGNATURE-----
+
+--aamqyrxtxz2kjjms--
 
