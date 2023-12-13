@@ -1,147 +1,215 @@
-Return-Path: <linux-pm+bounces-1041-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1042-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7287A810C80
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 09:33:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5551810C87
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 09:36:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 02B6F2819C1
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 08:33:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 20FB41C2099A
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 08:36:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F5E515AC6;
-	Wed, 13 Dec 2023 08:33:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A3F51CF94;
+	Wed, 13 Dec 2023 08:36:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="C8Zdd2zz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="avoISUBP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB4E91;
-	Wed, 13 Dec 2023 00:33:35 -0800 (PST)
-X-UUID: 367675bc999211eeba30773df0976c77-20231213
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=bthngp9NZZd+Z5B1xZYM4wQP5YpwvjWmR3hQEkz4Usc=;
-	b=C8Zdd2zzqoPX8s0XCzcEWPWLD8MGntgRBVlJ/fxAQayBTKGTKIYUqXp/SGVP6F9NeemVJ6hdE+fu+fwoPYxBjpCsgZe3nuN0OJJ6F+WlEGDntFLqz/N98Lu6PMNrLnKRKKDtGFhFo0GGAjvsvD+SegOn+Hkq9Z1nw3bff8HUT90=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.35,REQID:e3eff924-14af-458d-908e-9801c629abc2,IP:0,U
-	RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:-25
-X-CID-META: VersionHash:5d391d7,CLOUDID:e202bd73-1bd3-4f48-b671-ada88705968c,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
-	DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
-X-UUID: 367675bc999211eeba30773df0976c77-20231213
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
-	(envelope-from <chris.feng@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 391054060; Wed, 13 Dec 2023 16:32:55 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 13 Dec 2023 16:32:54 +0800
-Received: from mcddlt001.gcn.mediatek.inc (10.19.240.15) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 13 Dec 2023 16:32:53 +0800
-From: Chris Feng <chris.feng@mediatek.com>
-To: <rafael@kernel.org>, <pavel@ucw.cz>, <len.brown@intel.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<stable@kernel.org>, <hua.yang@mediatek.com>, <ting.wang@mediatek.com>,
-	<liang.lu@mediatek.com>, <chetan.kumar@mediatek.com>, Chris Feng
-	<chris.feng@mediatek.com>
-Subject: [PATCH v4] PM: hibernate: Avoid missing wakeup events during hibernation
-Date: Wed, 13 Dec 2023 16:32:51 +0800
-Message-ID: <20231213083251.186935-1-chris.feng@mediatek.com>
-X-Mailer: git-send-email 2.17.0
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21BC72F44;
+	Wed, 13 Dec 2023 08:36:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18385C433C7;
+	Wed, 13 Dec 2023 08:36:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702456612;
+	bh=CiIBmvqhvhMAh8ZXlMaK2fWPYP5wC1YNvSEZRMY1RKs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=avoISUBPqyE6owTM5E74LjlMs6Q+1IhUpBwlR2gEU49013lofFUDms/OAhOakD9VD
+	 8ycMof3UhNS8QZNHTwRhq46ZGd5bmZS2hzYthKXf0zAR4zcvixXSqO8Ap+F+1s7LkF
+	 XLfFVuVSgSuqd9OHOvDuxlvWT6Hk/o6RSZl9yVgEsPdNCAuTFhOMNbEjL9xKSP212S
+	 YhSoeiiSdAfqClqBMTpWzvFnynBafXXuWUIBT7e1EE50mMFacsinbEXNeGqXJFjtv6
+	 YexjKFLyv46GI6vGF6uYKPQW+0ZtGlJeX8mSxWbMYWIaXgtoJVB+yxEwRkamZedB3U
+	 vRXuAVpsmVkjQ==
+Date: Wed, 13 Dec 2023 09:36:49 +0100
+From: Maxime Ripard <mripard@kernel.org>
+To: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Michael Turquette <mturquette@baylibre.com>, 
+	dri-devel@lists.freedesktop.org, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+	Thierry Reding <thierry.reding@gmail.com>, David Airlie <airlied@gmail.com>, linux-clk@vger.kernel.org, 
+	Jerome Brunet <jbrunet@baylibre.com>, Rob Herring <robh@kernel.org>, 
+	Samuel Holland <samuel@sholland.org>, Kevin Hilman <khilman@baylibre.com>, 
+	Russell King <linux@armlinux.org.uk>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
+	Chen-Yu Tsai <wens@csie.org>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
+	Johan Hovold <johan+linaro@kernel.org>, linux-sunxi@lists.linux.dev, 
+	Thomas Zimmermann <tzimmermann@suse.de>, linux-pm@vger.kernel.org, 
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	linux-tegra@vger.kernel.org, linux-amlogic@lists.infradead.org, kernel@pengutronix.de, 
+	linux-arm-kernel@lists.infradead.org, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Stephen Boyd <sboyd@kernel.org>, Kyungmin Park <kyungmin.park@samsung.com>, 
+	Daniel Vetter <daniel@ffwll.ch>, Georgi Djakov <djakov@kernel.org>
+Subject: Re: [PATCH 0/5] clk: Make clk_rate_exclusive_get() return void
+Message-ID: <2nvbag657mlniqwq7fbilapc6vfw5qumab3yd6bqul25ot6wcn@wdlkh5az2fgs>
+References: <cover.1702400947.git.u.kleine-koenig@pengutronix.de>
+ <ki5n3rz5n4oxj2hhc3rj6xpn3e2tdi7fcp2q7exjbzilrlqflp@przautvhuy4g>
+ <20231213074300.4bq7wkfqd4jhhcr4@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK: N
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="x53dnxxvipfwjdrs"
+Content-Disposition: inline
+In-Reply-To: <20231213074300.4bq7wkfqd4jhhcr4@pengutronix.de>
 
-Wakeup events that occur in the hibernation process's
-hibernation_platform_enter() cannot wake up the system. Although the
-current hibernation framework will execute part of the recovery process
-after a wakeup event occurs, it ultimately performs a shutdown operation
-because the system does not check the return value of
-hibernation_platform_enter(). In short, if a wakeup event occurs before
-putting the system into the final low-power state, it will be missed.
 
-To solve this problem, check the return value of
-hibernation_platform_enter(). When it returns -EAGAIN or -EBUSY (indicate
-the occurrence of a wakeup event), execute the hibernation recovery
-process, discard the previously saved image, and ultimately return to the
-working state.
+--x53dnxxvipfwjdrs
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Chris Feng <chris.feng@mediatek.com>
----
-[PATCH v2]:
- - Optimize the "if" condition logic.
- - Link to v1: https://lore.kernel.org/all/20231024091447.108072-1-chris.feng@mediatek.com
-[PATCH v3]:
- - Use pr_info instead of pr_err.
- - Fix undeclared function 'swsusp_unmark' build error.
- - Refine commit and printing message.
- - Change the subject.
- - Link to v2: https://lore.kernel.org/all/20231120081516.55172-1-chris.feng@mediatek.com
-[PATCH v4]:
- - Define an empty swsusp_unmark() function for scenarios where
-   CONFIG_SUSPEND is not defined.
- - Link to v3: https://lore.kernel.org/all/20231204021155.10434-1-chris.feng@mediatek.com
----
- kernel/power/hibernate.c | 10 ++++++++--
- kernel/power/power.h     |  2 ++
- 2 files changed, 10 insertions(+), 2 deletions(-)
+Hi,
 
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index dee341ae4ace..621326b3e679 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -642,9 +642,9 @@ int hibernation_platform_enter(void)
-  */
- static void power_down(void)
- {
--#ifdef CONFIG_SUSPEND
- 	int error;
- 
-+#ifdef CONFIG_SUSPEND
- 	if (hibernation_mode == HIBERNATION_SUSPEND) {
- 		error = suspend_devices_and_enter(mem_sleep_current);
- 		if (error) {
-@@ -667,7 +667,13 @@ static void power_down(void)
- 		kernel_restart(NULL);
- 		break;
- 	case HIBERNATION_PLATFORM:
--		hibernation_platform_enter();
-+		error = hibernation_platform_enter();
-+		if (error == -EAGAIN || error == -EBUSY) {
-+			swsusp_unmark();
-+			events_check_enabled = false;
-+			pr_info("Hibernation process aborted due to detected wakeup event.\n");
-+			return;
-+		}
- 		fallthrough;
- 	case HIBERNATION_SHUTDOWN:
- 		if (kernel_can_power_off())
-diff --git a/kernel/power/power.h b/kernel/power/power.h
-index 17fd9aaaf084..8499a39c62f4 100644
---- a/kernel/power/power.h
-+++ b/kernel/power/power.h
-@@ -175,6 +175,8 @@ extern int swsusp_write(unsigned int flags);
- void swsusp_close(void);
- #ifdef CONFIG_SUSPEND
- extern int swsusp_unmark(void);
-+#else
-+static inline int swsusp_unmark(void) { return 0; }
- #endif
- 
- struct __kernel_old_timeval;
--- 
-2.17.0
+On Wed, Dec 13, 2023 at 08:43:00AM +0100, Uwe Kleine-K=F6nig wrote:
+> On Wed, Dec 13, 2023 at 08:16:04AM +0100, Maxime Ripard wrote:
+> > On Tue, Dec 12, 2023 at 06:26:37PM +0100, Uwe Kleine-K=F6nig wrote:
+> > > clk_rate_exclusive_get() returns zero unconditionally. Most users "kn=
+ow"
+> > > that and don't check the return value. This series fixes the four use=
+rs
+> > > that do error checking on the returned value and then makes function
+> > > return void.
+> > >=20
+> > > Given that the changes to the drivers are simple and so merge conflic=
+ts
+> > > (if any) should be easy to handle, I suggest to merge this complete
+> > > series via the clk tree.
+> >=20
+> > I don't think it's the right way to go about it.
+> >=20
+> > clk_rate_exclusive_get() should be expected to fail. For example if
+> > there's another user getting an exclusive rate on the same clock.
+> >=20
+> > If we're not checking for it right now, then it should probably be
+> > fixed, but the callers checking for the error are right to do so if they
+> > rely on an exclusive rate. It's the ones that don't that should be
+> > modified.
+>=20
+> If some other consumer has already "locked" a clock that I call
+> clk_rate_exclusive_get() for, this isn't an error. In my bubble I call
+> this function because I don't want the rate to change e.g. because I
+> setup some registers in the consuming device to provide a fixed UART
+> baud rate or i2c bus frequency (and that works as expected).
 
+I guess it's a larger conversation, but I don't see how that can
+possibly work.
+
+The way the API is designed, you have no guarantee (outside of
+clk_rate_exclusive_*) that the rate is going to change.
+
+And clk_rate_exclusive_get() doesn't allow the rate to change while in
+the "critical section".
+
+So the only possible thing to do is clk_set_rate() +
+clk_rate_exclusive_get().
+
+So there's a window where the clock can indeed be changed, and the
+consumer that is about to lock its rate wouldn't be aware of it.
+
+I guess it would work if you don't care about the rate at all, you just
+want to make sure it doesn't change.
+
+Out of the 7 users of that function, 3 are in that situation, so I guess
+it's fair.
+
+3 are open to that race condition I mentioned above.
+
+1 is calling clk_set_rate while in the critical section, which works if
+there's a single user but not if there's multiple, so it should be
+discouraged.
+
+> In this case I won't be able to change the rate of the clock, but that
+> is signalled by clk_set_rate() failing (iff and when I need awother
+> rate) which also seems the right place to fail to me.
+
+Which is ignored by like half the callers, including the one odd case I
+mentioned above.
+
+And that's super confusing still: you can *always* get exclusivity, but
+not always do whatever you want with the rate when you have it? How are
+drivers supposed to recover from that? You can handle failing to get
+exclusivity, but certainly not working around variable guarantees.
+
+> It's like that since clk_rate_exclusive_get() was introduced in 2017
+> (commit 55e9b8b7b806ec3f9a8817e13596682a5981c19c).
+
+Right, but "it's always been that way" surely can't be an argument,
+otherwise you wouldn't have done that series in the first place.
+
+> BTW, I just noticed that my assertion "Most users \"know\" that
+> [clk_rate_exclusive_get() returns zero unconditionally]" is wrong. As of
+> next-20231213 there are 3 callers ignoring the return value of
+> clk_rate_exclusive_get() and 4 that handle (imaginary) returned errors.
+> I expected this function to be used more extensively. (In fact I think
+> it should be used more as several drivers rely on the clk rate not
+> changing.)
+
+Yes, but also it's super difficult to use in practice, and most devices
+don't care.
+
+The current situation is something like this:
+
+  * Only a handful of devices really care about their clock rate, and
+    often only for one of their clock if they have several. You would
+    probably get all the devices that create an analog signal somehow
+    there, so audio, display, i2c, spi, uarts, etc. Plus the ones doing
+    frequency scaling so CPU and GPUs.
+
+  * CPUs and GPUs are very likely to have a dedicated clock, so we can
+    rule the "another user is going to mess with my clock" case.
+
+  * UARTs/i2c/etc. are usually taking their clock from the bus interface
+    directly which is pretty much never going to change (for good
+    reason). And the rate of the bus is not really likely to change.
+
+  * SPI/NAND/MMC usually have their dedicated clock too, and the bus
+    rate is not likely to change after the initial setup either.
+
+So, the only affected devices are the ones generating external signals,
+with the rate changing during the life of the system. Even for audio or
+video devices, that's fairly unlikely to happen. And you need to have
+multiple devices sharing the same clock tree for that issue to occur,
+which is further reducing the chances it happens.
+
+Realistically speaking, this only occurs with multi-head display outputs
+where it's somewhat likely to have all the display controllers feeding
+=66rom the same clock, and the power up of the various output is done in
+sequence which creates that situation.
+
+And even then, the clk_rate_exclusive_* interface effectively locks the
+entire clock subtree to its current rate, so the effect on the rest of
+the devices can be significant.
+
+So... yeah. Even though you're right, it's trying to address a problem
+that is super unlikely to happen with a pretty big hammer that might be
+too much for most. So it's not really surprising it's not used more.
+
+Maxime
+
+--x53dnxxvipfwjdrs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZXltIQAKCRDj7w1vZxhR
+xQ4nAQCBBLx3VnYsE9S8sZc3wgJurUaw630uZ9Q/w4XBCEwZEgD+If/VH1UlIu50
+NxjLsx/MhDEaTfAwEDKFRFBDw4NApwM=
+=4bbu
+-----END PGP SIGNATURE-----
+
+--x53dnxxvipfwjdrs--
 
