@@ -1,165 +1,199 @@
-Return-Path: <linux-pm+bounces-1030-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1031-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B7B58107E0
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 02:52:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 854FB810984
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 06:44:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D522928237E
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 01:52:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3646A1F21829
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 05:44:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EFD8ECE;
-	Wed, 13 Dec 2023 01:52:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C0CBC8F7;
+	Wed, 13 Dec 2023 05:44:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HuWgsYjq"
+	dkim=pass (2048-bit key) header.d=trvn.ru header.i=@trvn.ru header.b="byiPWoGT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25751AD;
-	Tue, 12 Dec 2023 17:52:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702432368; x=1733968368;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ooWOO96PMnesatUTdbVVnvwmOIWOsYIyqsD//zdqSlQ=;
-  b=HuWgsYjqUmaaeyJhQY8wmHVRzXXB65E0qoyOT8499g9jkd69V8YMYLsF
-   XpEIIuurGEviEjH5+9m5x7mYzYWnKjrqKdFcrDxGDgdothkOPIhcKS/+v
-   grvyCelLJeNMgRxYIsMJxST3/7Zub47oYbRu4iiQeb5TV4pjAuV8jgC1D
-   ObCY65bQp0SDogyIg7WVNKLfN0ZROEbnsWVnLryv8hVvOfF20kRUWCbez
-   eLn2SPRahCzibulHtt+1G6WxJHyDgp9QjntgWRAYe5NTH4Y2QHwdS75TV
-   8cGksgU8jGQVp0MAV35etxnOc8s/kwbZdqWVQHzl4asOg42rfM758nF63
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="461374968"
-X-IronPort-AV: E=Sophos;i="6.04,271,1695711600"; 
-   d="scan'208";a="461374968"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2023 17:52:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,271,1695711600"; 
-   d="scan'208";a="15247229"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 12 Dec 2023 17:52:45 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rDEQV-000Jyv-0j;
-	Wed, 13 Dec 2023 01:52:43 +0000
-Date: Wed, 13 Dec 2023 09:52:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Daniel Lezcano <daniel.lezcano@linaro.org>, rjw@rjwysocki.net,
-	lukasz.luba@arm.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	rui.zhang@intel.com, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] thermal/debugfs: Add thermal cooling device
- debugfs information
-Message-ID: <202312130936.rLIRgZBE-lkp@intel.com>
-References: <20231212161047.1631077-1-daniel.lezcano@linaro.org>
+Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90D90D3;
+	Tue, 12 Dec 2023 21:44:13 -0800 (PST)
+Received: from authenticated-user (box.trvn.ru [194.87.146.52])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+	(No client certificate requested)
+	by box.trvn.ru (Postfix) with ESMTPSA id 79749401B5;
+	Wed, 13 Dec 2023 10:44:10 +0500 (+05)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
+	t=1702446250; bh=vMUS9nUEC9yE8MKSq7Q13xga7SNG1itLZJttw52Z/VA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=byiPWoGTBddnLJgT1lIYVljWak+C42MLwkWPAfbknpNISrJiKc0FfQK4+b6vNWQwc
+	 rsIkFQLik/EdiCeNu39VqF7OI2SWevr4sjoxdGG5wns1RshCoo8WWy/7n76Y8ecC4Y
+	 85+nuPKsESb2AH7oDkhA/y2TGcaF9AcF7G0n98hqHu+EyxV4hQET7LroLeQeQnWexB
+	 dNwpVN3nBB9sLV3hkO9z4I/f4hdQLO7eWsYSXD7gJkgBV0ms+FV8gGfMAkFuttx6hz
+	 rCxvPcpQ7nKwkw1UZI7RvcqqVc1p84oNLlVU6WIEwoeIyolpxa3vwuT63dWTU8zp7X
+	 dHOecFLC9Hg4Q==
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231212161047.1631077-1-daniel.lezcano@linaro.org>
+Date: Wed, 13 Dec 2023 10:44:09 +0500
+From: Nikita Travkin <nikita@trvn.ru>
+To: Conor Dooley <conor@kernel.org>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
+ <conor+dt@kernel.org>, cros-qcom-dts-watchers@chromium.org, Andy Gross
+ <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio
+ <konrad.dybcio@linaro.org>, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: power: supply: Add Acer Aspire 1 EC
+In-Reply-To: <20231212-wasp-overcoat-cf2bd1383670@spud>
+References: <20231212-aspire1-ec-v2-0-ca495ea0a7ac@trvn.ru>
+ <20231212-aspire1-ec-v2-1-ca495ea0a7ac@trvn.ru>
+ <20231212-wasp-overcoat-cf2bd1383670@spud>
+Message-ID: <d79b9a017644004f6d6a3e182935b0f5@trvn.ru>
+X-Sender: nikita@trvn.ru
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Daniel,
+Conor Dooley писал(а) 12.12.2023 22:24:
+> Hey,
+> 
+> On Tue, Dec 12, 2023 at 05:49:09PM +0500, Nikita Travkin wrote:
+>> Add binding for the EC found in the Acer Aspire 1 laptop.
+>>
+>> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+>> ---
+>>  .../bindings/power/supply/acer,aspire1-ec.yaml     | 67 ++++++++++++++++++++++
+>>  1 file changed, 67 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/power/supply/acer,aspire1-ec.yaml b/Documentation/devicetree/bindings/power/supply/acer,aspire1-ec.yaml
+>> new file mode 100644
+>> index 000000000000..1fbf1272a00f
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/power/supply/acer,aspire1-ec.yaml
+>> @@ -0,0 +1,67 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/power/supply/acer,aspire1-ec.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Acer Aspire 1 Embedded Controller
+>> +
+>> +maintainers:
+>> +  - Nikita Travkin <nikita@trvn.ru>
+>> +
+>> +description:
+>> +  The Acer Aspire 1 laptop uses an embedded controller to control battery
+>> +  and charging as well as to provide a set of misc features such as the
+>> +  laptop lid status and HPD events for the USB Type-C DP alt mode.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: acer,aspire1-ec
+>> +
+>> +  reg:
+>> +    const: 0x76
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  acer,media-keys-on-top:
+>> +    description: Configure the keyboard layout to use media features of
+>> +      the fn row when the fn key is not pressed. The firmware may choose
+>> +      to add this property when user selects the fn mode in the firmware
+>> +      setup utility.
+> 
+> I'm not a huge fan of the property name/description here.
+> For the description, I'm not sure from reading this what the default
+> behaviour is and how the fn row works when the fn key is pressed.
+> Is the default behaviour that pressing the fn key enables the media keys
+> and the row by default provides the fn functionality? And then when this
+> option is set in firmware the behaviour is inverted?
+> 
 
-kernel test robot noticed the following build warnings:
+Yes. By default pressing i.e. F11 would create F11, Fn+F11 would be vol+.
+With this option set, the default for F11 would be vol+ and Fn+f11 would
+be F11.
 
-[auto build test WARNING on rafael-pm/thermal]
-[also build test WARNING on linus/master v6.7-rc5 next-20231212]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Perhaps this description would be better?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-debugfs-Add-thermal-debugfs-information-for-mitigation-episodes/20231213-001321
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
-patch link:    https://lore.kernel.org/r/20231212161047.1631077-1-daniel.lezcano%40linaro.org
-patch subject: [PATCH v1 1/2] thermal/debugfs: Add thermal cooling device debugfs information
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20231213/202312130936.rLIRgZBE-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231213/202312130936.rLIRgZBE-lkp@intel.com/reproduce)
+  Configure the keyboard layout to invert the Fn key. By default the
+  function row of the keyboard inputs function keys (i.e F11) when
+  Fn is not pressed. With this option set, pressing the key without
+  Fn would input media keys (i.e. Vol-Up). Firmware may (...) 
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312130936.rLIRgZBE-lkp@intel.com/
+> For the name, the "on-top" bit seems a bit weird. I would prefer it to
+> be reworded in terms of the behavioural change of the fn key. The media
+> keys are physically at the top of the keyboard whether or not this
+> option is enabled, hence the "on-top" seeming a bit weird to me.
+> 
 
-All warnings (new ones prefixed by >>):
+I was trying to be unambiguous with this name without making
+it too long. The implied meaning of "on-top" was "On the top
+keyboard layer" (in the opposition of the "Fn" layer). Perhaps
+"acer,media-keys-on-top-layer" would have been better then?
 
-   In file included from drivers/thermal/thermal_core.c:27:
-   In file included from drivers/thermal/thermal_core.h:16:
->> drivers/thermal/thermal_debugfs.h:10:74: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline void thermal_debug_cdev_add(struct thermal_cooling_device *) {}
-                                                                            ^
-   drivers/thermal/thermal_debugfs.h:11:77: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline void thermal_debug_cdev_remove(struct thermal_cooling_device *) {}
-                                                                               ^
-   drivers/thermal/thermal_debugfs.h:12:81: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline void thermal_debug_cdev_transition(struct thermal_cooling_device *, int) {}
-                                                                                   ^
-   drivers/thermal/thermal_debugfs.h:12:86: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline void thermal_debug_cdev_transition(struct thermal_cooling_device *, int) {}
-                                                                                        ^
-   4 warnings generated.
---
-   In file included from drivers/thermal/thermal_helpers.c:22:
-   In file included from drivers/thermal/thermal_core.h:16:
->> drivers/thermal/thermal_debugfs.h:10:74: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline void thermal_debug_cdev_add(struct thermal_cooling_device *) {}
-                                                                            ^
-   drivers/thermal/thermal_debugfs.h:11:77: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline void thermal_debug_cdev_remove(struct thermal_cooling_device *) {}
-                                                                               ^
-   drivers/thermal/thermal_debugfs.h:12:81: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline void thermal_debug_cdev_transition(struct thermal_cooling_device *, int) {}
-                                                                                   ^
-   drivers/thermal/thermal_debugfs.h:12:86: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline void thermal_debug_cdev_transition(struct thermal_cooling_device *, int) {}
-                                                                                        ^
->> drivers/thermal/thermal_helpers.c:154:6: warning: no previous prototype for function 'thermal_set_delay_jiffies' [-Wmissing-prototypes]
-   void thermal_set_delay_jiffies(unsigned long *delay_jiffies, int delay_ms)
-        ^
-   drivers/thermal/thermal_helpers.c:154:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void thermal_set_delay_jiffies(unsigned long *delay_jiffies, int delay_ms)
-   ^
-   static 
-   5 warnings generated.
---
-   In file included from drivers/thermal/tegra/soctherm.c:36:
-   In file included from drivers/thermal/tegra/../thermal_core.h:16:
->> drivers/thermal/tegra/../thermal_debugfs.h:10:74: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline void thermal_debug_cdev_add(struct thermal_cooling_device *) {}
-                                                                            ^
-   drivers/thermal/tegra/../thermal_debugfs.h:11:77: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline void thermal_debug_cdev_remove(struct thermal_cooling_device *) {}
-                                                                               ^
-   drivers/thermal/tegra/../thermal_debugfs.h:12:81: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline void thermal_debug_cdev_transition(struct thermal_cooling_device *, int) {}
-                                                                                   ^
-   drivers/thermal/tegra/../thermal_debugfs.h:12:86: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
-   static inline void thermal_debug_cdev_transition(struct thermal_cooling_device *, int) {}
-                                                                                        ^
-   4 warnings generated.
+I was trying to define this property via the word "media"
+since using "fn" is somewhat ambiguous (fn row key vs F(1..12) key
+vs Fn key), and something like `inverted-fn-key" would not reflect
+what is the impact on the layout. Using "fn-selects-function-keys"
+also felt a bit ambiguous to me.
 
+FWIW I can also invert the default and make it
+"fn-selects-media-keys" which would be clear. I haven't yet
+written the firmware that would pass this property from the
+setup so it shouldn't be a problem from the DT POV, but this
+is not the "reset" default for the EC.
 
-vim +10 drivers/thermal/thermal_debugfs.h
+Do any of those suggestions sound better to you?
 
-     2	
-     3	#ifdef CONFIG_THERMAL_DEBUGFS
-     4	void thermal_debug_init(void);
-     5	void thermal_debug_cdev_add(struct thermal_cooling_device *cdev);
-     6	void thermal_debug_cdev_remove(struct thermal_cooling_device *cdev);
-     7	void thermal_debug_cdev_transition(struct thermal_cooling_device *cdev, int state);
-     8	#else
-     9	static inline void thermal_debug_init(void) {}
-  > 10	static inline void thermal_debug_cdev_add(struct thermal_cooling_device *) {}
+Nikita
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> Thanks,
+> Conor.
+> 
+>> +    type: boolean
+>> +
+>> +  connector:
+>> +    $ref: /schemas/connector/usb-connector.yaml#
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - interrupts
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |+
+>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>> +    i2c {
+>> +        #address-cells = <1>;
+>> +        #size-cells = <0>;
+>> +
+>> +        embedded-controller@76 {
+>> +            compatible = "acer,aspire1-ec";
+>> +            reg = <0x76>;
+>> +
+>> +            interrupts-extended = <&tlmm 30 IRQ_TYPE_LEVEL_LOW>;
+>> +
+>> +            connector {
+>> +                compatible = "usb-c-connector";
+>> +
+>> +                port {
+>> +                    ec_dp_in: endpoint {
+>> +                        remote-endpoint = <&mdss_dp_out>;
+>> +                    };
+>> +                };
+>> +            };
+>> +        };
+>> +    };
+>>
+>> --
+>> 2.43.0
+>>
 
