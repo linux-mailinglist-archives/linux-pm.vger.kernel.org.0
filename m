@@ -1,121 +1,110 @@
-Return-Path: <linux-pm+bounces-1065-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1066-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C35AC8110EE
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 13:19:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3060D81114B
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 13:46:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 54B3CB20B62
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 12:19:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA65B1F2126E
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 12:46:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E03E428E0B;
-	Wed, 13 Dec 2023 12:19:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A62228E2D;
+	Wed, 13 Dec 2023 12:46:20 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 95844CD;
-	Wed, 13 Dec 2023 04:19:19 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5F73EC15;
-	Wed, 13 Dec 2023 04:20:05 -0800 (PST)
-Received: from [10.57.85.168] (unknown [10.57.85.168])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9F9123F762;
-	Wed, 13 Dec 2023 04:19:15 -0800 (PST)
-Message-ID: <ccca81be-eb3e-4f52-a973-22f128ca07ba@arm.com>
-Date: Wed, 13 Dec 2023 12:20:19 +0000
+Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05174D5;
+	Wed, 13 Dec 2023 04:46:17 -0800 (PST)
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-58dd5193db4so346352eaf.1;
+        Wed, 13 Dec 2023 04:46:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702471576; x=1703076376;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zD8byS1JULjmdSbCzkHqrAIpOJ6RD2E9VW7j6VSKX6g=;
+        b=RNlxx8ey3UeQDnpPUz5ScDB5ghImVO2eLc4s620rSrKIXseGI0aZZL+j2HBzArMgPg
+         MlZSmr9UTRbFi6/kHLst8tF+S0fucaHaeNpvIUIOt9p56Fg9VOCeAnM7OaKVCL83595a
+         xxPJDifqopg4QF58hTmf/t2hFHXbyab687prb+BwzDQYjUMSMiAB6k5VS0YlWfZGdUE+
+         jOLiYnUkidk+HjqPUChSrkv2czYrOORo2gjOyZGTmGVsXWNFk3RQ69G9V1mIdbXw8dnn
+         KwdsEMv51V8T8hk0PxoO3jA7iH4sB2BNCMmDmPLDaFX0llHcQJiqe2094iqhBbM9uhDg
+         Xa/g==
+X-Gm-Message-State: AOJu0Yzyeofj4XuHAZb7GSmdOCvQ97VTfc4m3gleY2mTR7dr2fMYKAEj
+	OYyuvD/3DznX2iVPyzJmjrllhk30NqSzaU4ZZGw=
+X-Google-Smtp-Source: AGHT+IGqGtz3Jerh1T6ksy3Gv7YxPgmwyPCpLZH5x2imrIO71zFVIKKYfZpZRXccRHbVMHhL65ezIAbsSWWyUkh21SE=
+X-Received: by 2002:a05:6871:3749:b0:1fb:9b:3d4c with SMTP id
+ np9-20020a056871374900b001fb009b3d4cmr14098480oac.0.1702471576170; Wed, 13
+ Dec 2023 04:46:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 00/23] Introduce runtime modifiable Energy Model
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: rui.zhang@intel.com, amit.kucheria@verdurent.com,
- linux-pm@vger.kernel.org, amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
- viresh.kumar@linaro.org, len.brown@intel.com, pavel@ucw.cz,
- mhiramat@kernel.org, qyousef@layalina.io, wvw@google.com,
- linux-kernel@vger.kernel.org
-References: <20231129110853.94344-1-lukasz.luba@arm.com>
- <d920867d-5572-48c3-bd54-b9e989ab6bd5@arm.com>
- <ec8dc77f-364c-443b-a63d-35a2e37d2ccc@arm.com>
- <0640a9bf-b864-45ef-ab39-14b0e85ff9ad@arm.com>
- <CAJZ5v0g7u3uQOBeKbinut58GO64NBe=y2Zojn0tow3_KWg_4iQ@mail.gmail.com>
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0g7u3uQOBeKbinut58GO64NBe=y2Zojn0tow3_KWg_4iQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20231213121322.2486967-1-daniel.lezcano@linaro.org>
+In-Reply-To: <20231213121322.2486967-1-daniel.lezcano@linaro.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 13 Dec 2023 13:46:05 +0100
+Message-ID: <CAJZ5v0gjeiCb9wBjdG+yWp5E_g2SPUMNNf-Stm_xkGau0Cbr2g@mail.gmail.com>
+Subject: Re: [PATCH] thermal/core: Check get_temp ops is present when
+ registering a tz
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: rafael@kernel.org, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, "open list:THERMAL" <linux-pm@vger.kernel.org>, 
+	open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Dec 13, 2023 at 1:13=E2=80=AFPM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> Initially the check against the get_temp ops in the
+> thermal_zone_device_update() was put in there in order to catch
+> drivers not providing this method.
+>
+> Instead of checking again and again the function if the ops exists in
+> the update function, let's do the check at registration time, so it is
+> checked one time and for all.
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
+Looks good.  Do you want me to pick it up?
 
-On 12/13/23 11:45, Rafael J. Wysocki wrote:
-> On Wed, Dec 13, 2023 at 12:34 PM Dietmar Eggemann
-> <dietmar.eggemann@arm.com> wrote:
->>
->> On 13/12/2023 10:23, Lukasz Luba wrote:
->>> Hi Dietmar,
->>>
->>> Thank you for the review, I will go one-by-one to respond
->>> your comments in patches as well. First comments are below.
->>>
->>> On 12/12/23 18:48, Dietmar Eggemann wrote:
->>>> On 29/11/2023 12:08, Lukasz Luba wrote:
->>
->> [...]
->>
->>>>> Changelog:
->>>>> v5:
->>>>> - removed 2 tables design
->>>>> - have only one table (runtime_table) used also in thermal (Wei, Rafael)
->>>>
->>>> Until v4 you had 2 EM's, the static and the modifiable (runtime). Now in
->>>> v5 this changed to only have one, the modifiable. IMHO it would be
->>>> better to change the existing table to be modifiable rather than staring
->>>> with two EM's and then removing the static one. I assume you end up with
->>>> way less code changes and the patch-set will become easier to digest for
->>>> reviewers.
->>>
->>> The patches are structured in this way following Daniel's recommendation
->>> I got when I was adding similar big changes to EM in 2020 (support all
->>> devices in kernel). The approach is as follows:
->>> 0. Do some basic clean-up/refactoring if needed for a new feature, to
->>>     re-use some code if possible in future
->>> 1. Introduce new feature next to the existing one
->>> 2. Add API and all needed infrastructure (structures, fields) for
->>>     drivers
->>> 3. Re-wire the existing drivers/frameworks to the new feature via new
->>>     API; ideally keep 1 patch per driver so the maintainer can easily
->>>     grasp the changes and ACK it, because it will go via different tree
->>>     (Rafael's tree); in case of some code clash in the driver's code
->>>     during merge - it will be a single driver so easier to handle
->>> 4. when all drivers and frameworks are wired up with the new feature
->>>     remove the old feature (structures, fields, APIs, etc)
->>> 5. Update the documentation with new latest state of desing
->>>
->>> In this approach the patches are less convoluted. Because if I remove
->>> the old feature and add new in a single patch (e.g. the main structure)
->>> that patch will have to modify all drivers to still compile. It
->>> would be a big messy patch for this re-design.
->>>
->>> I can see in some later comment from Rafael that he is OK with current
->>> patch set structure.
->>
->> OK, in case Rafael and Daniel prefer this, then it's fine.
->>
->> I just find it weird that we now have
->>
->> 70 struct em_perf_domain {
->> 71         struct em_perf_table __rcu *runtime_table;
->>                                         ^^^^^^^^^^^^^
->>
->> as the only EM table.
-> 
-> I agree that it would be better to call it something like em_table.
-> 
-
-OK, I'll change that. Thanks Rafael and Dietmar!
+> ---
+>  drivers/thermal/thermal_core.c | 7 +------
+>  1 file changed, 1 insertion(+), 6 deletions(-)
+>
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_cor=
+e.c
+> index 625ba07cbe2f..964f26e517f4 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -437,11 +437,6 @@ void __thermal_zone_device_update(struct thermal_zon=
+e_device *tz,
+>         if (atomic_read(&in_suspend))
+>                 return;
+>
+> -       if (WARN_ONCE(!tz->ops->get_temp,
+> -                     "'%s' must not be called without 'get_temp' ops set=
+\n",
+> -                     __func__))
+> -               return;
+> -
+>         if (!thermal_zone_device_is_enabled(tz))
+>                 return;
+>
+> @@ -1289,7 +1284,7 @@ thermal_zone_device_register_with_trips(const char =
+*type, struct thermal_trip *t
+>                 return ERR_PTR(-EINVAL);
+>         }
+>
+> -       if (!ops) {
+> +       if (!ops || !ops->get_temp) {
+>                 pr_err("Thermal zone device ops not defined\n");
+>                 return ERR_PTR(-EINVAL);
+>         }
+> --
+> 2.34.1
+>
 
