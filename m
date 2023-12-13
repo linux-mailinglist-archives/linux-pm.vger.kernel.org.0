@@ -1,280 +1,260 @@
-Return-Path: <linux-pm+bounces-1098-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1099-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B68CD8113B3
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 14:53:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8208B81145E
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 15:12:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 32B7EB20958
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 13:53:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D4C51F20FDD
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 14:12:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 458452E41A;
-	Wed, 13 Dec 2023 13:52:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 373E22E836;
+	Wed, 13 Dec 2023 14:12:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NxdZqJE3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF1E3581;
-	Wed, 13 Dec 2023 05:52:21 -0800 (PST)
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-1fae54afb66so845510fac.1;
-        Wed, 13 Dec 2023 05:52:21 -0800 (PST)
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1246DD
+	for <linux-pm@vger.kernel.org>; Wed, 13 Dec 2023 06:12:43 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-3363653e180so1324004f8f.0
+        for <linux-pm@vger.kernel.org>; Wed, 13 Dec 2023 06:12:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702476762; x=1703081562; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=06FHqisy8Q874wPn0JJPGt4cD6Hfyyr+nGOhZNcN+cg=;
+        b=NxdZqJE3ACIWpoCi5DPiABNPfFaUsrx1Kh5x4S1pPjxsiNoCPvyKhFzl036Wnpntqo
+         R2R1ziz6/IDqSXLlmRa1ZnrHMokM2l3zcyXcCe48Y//D0Z8pxkP9Jlbevxk3wnzV2gUX
+         80xtJzNDN5k7jpmJ3jXwXzEacPVs3d37nl118EvlCfErTIqSDI1IkIZU2kdtI8akZmnt
+         Ilx0APvPjkWxqNY6Z2gZtghNufeUQeD0l3n66CH786YzBBYxiApY9cnDrURFAdyYO51s
+         IYl94aXqwb0LMl5T9t7zV76M96iGzwnOPGOhcGn3u+jKK9jdVlcXwEWFHGGdfFZZtwBx
+         PYKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702475535; x=1703080335;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ns4LGXhzsELqeFy5cKH0B3W9wewJJdmQ50HMk4RT/LI=;
-        b=bRRbDVGdR45B3UgsLLZMPd4HxzW2pfjT5KirfiDkwlQEYjKTE3Kwlp2YTCZaadNsK3
-         baS1ES58NuCtdTyqI6icbQZH45H67eF/qCBkQ7Rx9FZ2dFoqrZEn+ZcGYxq+t8Tw+SAu
-         xadh4iQDHuIE+ZjmY0Bd3Qjn9FUX6btRA0THi9Q/MJ+38iAqyIQ7Cc3m3fd2ydNWyXmd
-         JiDPwUtJZtRRAnn83m/HQycRLk+e0444WKafoad3oMZ/D6gyQOawlbHPqypP9EsG3QMf
-         4EfBtvWwDrRwnc8+DgUqPexQ/6/QBq4v69uII1d/R8I5vDncZVOt8Xrnnl0/K/AW0Rol
-         8+0Q==
-X-Gm-Message-State: AOJu0Yw7d93kG/1hp0i/x0p0caxfCmS9rD5vcOviZ9NX6py4Yt1mgLfi
-	HVQL34657z6u1CLFvYPGeBKc0cC+2YRhbLmuec0=
-X-Google-Smtp-Source: AGHT+IFklC2+2yx5+/6px6dm4plrZumhRqC32TtxPC7w0lY9NXF5sm33JROV1+LfS+a7VWPf8xUrG2EjBMfksHgaVsY=
-X-Received: by 2002:a05:6871:208c:b0:1fb:19d6:8715 with SMTP id
- ry12-20020a056871208c00b001fb19d68715mr14383677oab.4.1702475534692; Wed, 13
- Dec 2023 05:52:14 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702476762; x=1703081562;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=06FHqisy8Q874wPn0JJPGt4cD6Hfyyr+nGOhZNcN+cg=;
+        b=vEJ7w1fJ4ccOJOEEVWM74b0yzLqItI47ck2t/HQEJD7GOMih3Y0vQCD0y75XkNWHVY
+         oVHEPSlH9Pq7QKEnPW815hYmLSX241HsQgUllXXOTXZDyNIXumExfV4WrNOh6fTe6gek
+         UL6ra6ZnjajrdBGP/C0/OIXwPV9WaEY1I82ayZ7VHPJEULH+N4fc9A9iQt19ZU4JIBzK
+         gr3VFYB38UV636ZVculClc5Q1G7j+4GP2mEIaI846AV+lgUvVdnVOQJuKcU08VDhZRRV
+         PWgqACLGAXzy1o9Vjwv1KyetCrbB6TDEWWbgwGgspSeN2ccymd5xRdD2Nv+6Cs2ztPu/
+         Wmeg==
+X-Gm-Message-State: AOJu0YzXXmq9rMEV3a6u2wxbeMuQn3OtC4/WvlKPJianCl5JYUpfuQWo
+	v3EfAq1/eTagJCNjPsZDVcxlbxyEl/j2Xdr/nug=
+X-Google-Smtp-Source: AGHT+IFNYLcYw2g3H5xktn1x+on4mTJW+OofM3g1HpZSiD/dnbu76uzoI61YCIDggefX8rEoG94VCA==
+X-Received: by 2002:a05:600c:1ca9:b0:40c:325b:6360 with SMTP id k41-20020a05600c1ca900b0040c325b6360mr3703319wms.130.1702476762047;
+        Wed, 13 Dec 2023 06:12:42 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
+        by smtp.googlemail.com with ESMTPSA id bd19-20020a05600c1f1300b0040839fcb217sm20804513wmb.8.2023.12.13.06.12.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Dec 2023 06:12:41 -0800 (PST)
+Message-ID: <0e4cee10-4aa4-4979-9841-f1dbd207e0b7@linaro.org>
+Date: Wed, 13 Dec 2023 15:12:41 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231213011103.1491414-1-zhanghongchen@loongson.cn>
-In-Reply-To: <20231213011103.1491414-1-zhanghongchen@loongson.cn>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 13 Dec 2023 14:52:03 +0100
-Message-ID: <CAJZ5v0iTfpo9EH3bCAwJ+E8W67uJyy_9wFBOucJVWmmGV_-XpA@mail.gmail.com>
-Subject: Re: [PATCH v3] PM: hibernate: use acquire/release ordering when
- compress/decompress image
-To: Hongchen Zhang <zhanghongchen@loongson.cn>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
-	Bojan Smojver <bojan@rexursive.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn, 
-	stable@vger.kernel.org, Weihao Li <liweihao@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] thermal: core: add initial support for cold and
+ critical_cold trip point
+Content-Language: en-US
+To: Christian Marangi <ansuelsmth@gmail.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20231212221301.12581-1-ansuelsmth@gmail.com>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20231212221301.12581-1-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Dec 13, 2023 at 2:11=E2=80=AFAM Hongchen Zhang
-<zhanghongchen@loongson.cn> wrote:
->
-> When we test S4(suspend to disk) on LoongArch 3A6000 platform, the
-> test case sometimes fails. The dmesg log shows the following error:
->         Invalid LZO compressed length
-> After we dig into the code, we find out that:
-> When compress/decompress the image, the synchronization operation
-> between the control thread and the compress/decompress/crc thread
-> uses relaxed ordering interface, which is unreliable, and the
-> following situation may occur:
-> CPU 0                                   CPU 1
-> save_image_lzo                          lzo_compress_threadfn
->                                           atomic_set(&d->stop, 1);
->   atomic_read(&data[thr].stop)
->   data[thr].cmp =3D data[thr].cmp_len;
->                                           WRITE data[thr].cmp_len
-> Then CPU0 get a old cmp_len and write to disk. When cpu resume from S4,
-> wrong cmp_len is loaded.
->
-> To maintain data consistency between two threads, we should use the
-> acquire/release ordering interface. So we change atomic_read/atomic_set
-> to atomic_read_acquire/atomic_set_release.
->
-> Fixes: 081a9d043c98 ("PM / Hibernate: Improve performance of LZO/plain hi=
-bernation, checksum image")
-> Cc: stable@vger.kernel.org
-> Co-developed-by: Weihao Li <liweihao@loongson.cn>
+On 12/12/2023 23:13, Christian Marangi wrote:
+> Add initial support for cold and critical_cold trip point. Many if not
+> all hwmon and thermal device have normally trip point for hot
+> temperature and for cold temperature.
+> 
+> Till now only hot temperature were supported. Add support for also cold
+> temperature to permit complete definition of cold trip point in DT.
+> 
+> Thermal driver may use these additional trip point to correctly set
+> interrupt for cold temperature values and react based on that with
+> various measure like enabling attached heater, forcing higher voltage
+> and other specialaized peripherals.
+> 
+> For hwmon drivers this is needed as currently there is a problem with
+> setting the full operating range of the device for thermal devices
+> defined with hwmon. To better describe the problem, the following
+> example is needed:
+> 
+> In the scenario of a simple hwmon with an active trip point declared
+> and a cooling device attached, the hwmon subsystem currently set the
+> min and max trip point based on the single active trip point.
+> Thermal subsystem parse all the trip points and calculate the lowest and
+> the highest trip point and calls the .set_trip of hwmon to setup the
+> trip points.
+> 
+> The fact that we currently don't have a way to declare the cold/min
+> temperature values, makes the thermal subsystem to set the low value as
+> -INT_MAX.
+> For hwmon drivers that doesn't use clamp_value and actually reject
+> invalid values for the trip point, this results in the hwmon settings to
+> be rejected.
+> 
+> To permit to pass the correct range of trip point, permit to set in DT
+> also cold and critical_cold trip point.
+> 
+> Thermal driver may also define .cold and .critical_cold to act on these
+> trip point tripped and apply the required measure.
 
-I gather that the tag above is the only difference between this
-version of the patch and the previous one.
+Agree with the feature but we need to clarify the semantic of the trip 
+points first. What actions do we expect for them in order to have like a 
+mirror reflection of the existing hot trip points.
 
-It is always better to list the changes made between consecutive
-versions of a patch.
+What action do you expect with:
 
-> Signed-off-by: Weihao Li <liweihao@loongson.cn>
-> Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
+  - 'cold' ?
+
+  - 'critical_cold' ?
+
+
+
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+
+Why are there two different names for the same email address?
+
+  - Christian Marangi <ansuelsmth@gmail.com>
+  - Ansuel Smith <ansuelsmth@gmail.com>
+
+
 > ---
->  kernel/power/swap.c | 38 +++++++++++++++++++-------------------
->  1 file changed, 19 insertions(+), 19 deletions(-)
->
-> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-> index a2cb0babb5ec..d44f5937f1e5 100644
-> --- a/kernel/power/swap.c
-> +++ b/kernel/power/swap.c
-> @@ -606,11 +606,11 @@ static int crc32_threadfn(void *data)
->         unsigned i;
->
->         while (1) {
-> -               wait_event(d->go, atomic_read(&d->ready) ||
-> +               wait_event(d->go, atomic_read_acquire(&d->ready) ||
->                                   kthread_should_stop());
->                 if (kthread_should_stop()) {
->                         d->thr =3D NULL;
-> -                       atomic_set(&d->stop, 1);
-> +                       atomic_set_release(&d->stop, 1);
->                         wake_up(&d->done);
->                         break;
->                 }
-> @@ -619,7 +619,7 @@ static int crc32_threadfn(void *data)
->                 for (i =3D 0; i < d->run_threads; i++)
->                         *d->crc32 =3D crc32_le(*d->crc32,
->                                              d->unc[i], *d->unc_len[i]);
-> -               atomic_set(&d->stop, 1);
-> +               atomic_set_release(&d->stop, 1);
->                 wake_up(&d->done);
->         }
->         return 0;
-> @@ -649,12 +649,12 @@ static int lzo_compress_threadfn(void *data)
->         struct cmp_data *d =3D data;
->
->         while (1) {
-> -               wait_event(d->go, atomic_read(&d->ready) ||
-> +               wait_event(d->go, atomic_read_acquire(&d->ready) ||
->                                   kthread_should_stop());
->                 if (kthread_should_stop()) {
->                         d->thr =3D NULL;
->                         d->ret =3D -1;
-> -                       atomic_set(&d->stop, 1);
-> +                       atomic_set_release(&d->stop, 1);
->                         wake_up(&d->done);
->                         break;
->                 }
-> @@ -663,7 +663,7 @@ static int lzo_compress_threadfn(void *data)
->                 d->ret =3D lzo1x_1_compress(d->unc, d->unc_len,
->                                           d->cmp + LZO_HEADER, &d->cmp_le=
-n,
->                                           d->wrk);
-> -               atomic_set(&d->stop, 1);
-> +               atomic_set_release(&d->stop, 1);
->                 wake_up(&d->done);
->         }
->         return 0;
-> @@ -798,7 +798,7 @@ static int save_image_lzo(struct swap_map_handle *han=
-dle,
->
->                         data[thr].unc_len =3D off;
->
-> -                       atomic_set(&data[thr].ready, 1);
-> +                       atomic_set_release(&data[thr].ready, 1);
->                         wake_up(&data[thr].go);
->                 }
->
-> @@ -806,12 +806,12 @@ static int save_image_lzo(struct swap_map_handle *h=
-andle,
->                         break;
->
->                 crc->run_threads =3D thr;
-> -               atomic_set(&crc->ready, 1);
-> +               atomic_set_release(&crc->ready, 1);
->                 wake_up(&crc->go);
->
->                 for (run_threads =3D thr, thr =3D 0; thr < run_threads; t=
-hr++) {
->                         wait_event(data[thr].done,
-> -                                  atomic_read(&data[thr].stop));
-> +                               atomic_read_acquire(&data[thr].stop));
->                         atomic_set(&data[thr].stop, 0);
->
->                         ret =3D data[thr].ret;
-> @@ -850,7 +850,7 @@ static int save_image_lzo(struct swap_map_handle *han=
-dle,
->                         }
->                 }
->
-> -               wait_event(crc->done, atomic_read(&crc->stop));
-> +               wait_event(crc->done, atomic_read_acquire(&crc->stop));
->                 atomic_set(&crc->stop, 0);
->         }
->
-> @@ -1132,12 +1132,12 @@ static int lzo_decompress_threadfn(void *data)
->         struct dec_data *d =3D data;
->
->         while (1) {
-> -               wait_event(d->go, atomic_read(&d->ready) ||
-> +               wait_event(d->go, atomic_read_acquire(&d->ready) ||
->                                   kthread_should_stop());
->                 if (kthread_should_stop()) {
->                         d->thr =3D NULL;
->                         d->ret =3D -1;
-> -                       atomic_set(&d->stop, 1);
-> +                       atomic_set_release(&d->stop, 1);
->                         wake_up(&d->done);
->                         break;
->                 }
-> @@ -1150,7 +1150,7 @@ static int lzo_decompress_threadfn(void *data)
->                         flush_icache_range((unsigned long)d->unc,
->                                            (unsigned long)d->unc + d->unc=
-_len);
->
-> -               atomic_set(&d->stop, 1);
-> +               atomic_set_release(&d->stop, 1);
->                 wake_up(&d->done);
->         }
->         return 0;
-> @@ -1335,7 +1335,7 @@ static int load_image_lzo(struct swap_map_handle *h=
-andle,
->                 }
->
->                 if (crc->run_threads) {
-> -                       wait_event(crc->done, atomic_read(&crc->stop));
-> +                       wait_event(crc->done, atomic_read_acquire(&crc->s=
-top));
->                         atomic_set(&crc->stop, 0);
->                         crc->run_threads =3D 0;
->                 }
-> @@ -1371,7 +1371,7 @@ static int load_image_lzo(struct swap_map_handle *h=
-andle,
->                                         pg =3D 0;
->                         }
->
-> -                       atomic_set(&data[thr].ready, 1);
-> +                       atomic_set_release(&data[thr].ready, 1);
->                         wake_up(&data[thr].go);
->                 }
->
-> @@ -1390,7 +1390,7 @@ static int load_image_lzo(struct swap_map_handle *h=
-andle,
->
->                 for (run_threads =3D thr, thr =3D 0; thr < run_threads; t=
-hr++) {
->                         wait_event(data[thr].done,
-> -                                  atomic_read(&data[thr].stop));
-> +                               atomic_read_acquire(&data[thr].stop));
->                         atomic_set(&data[thr].stop, 0);
->
->                         ret =3D data[thr].ret;
-> @@ -1421,7 +1421,7 @@ static int load_image_lzo(struct swap_map_handle *h=
-andle,
->                                 ret =3D snapshot_write_next(snapshot);
->                                 if (ret <=3D 0) {
->                                         crc->run_threads =3D thr + 1;
-> -                                       atomic_set(&crc->ready, 1);
-> +                                       atomic_set_release(&crc->ready, 1=
-);
->                                         wake_up(&crc->go);
->                                         goto out_finish;
->                                 }
-> @@ -1429,13 +1429,13 @@ static int load_image_lzo(struct swap_map_handle =
-*handle,
->                 }
->
->                 crc->run_threads =3D thr;
-> -               atomic_set(&crc->ready, 1);
-> +               atomic_set_release(&crc->ready, 1);
->                 wake_up(&crc->go);
->         }
->
->  out_finish:
->         if (crc->run_threads) {
-> -               wait_event(crc->done, atomic_read(&crc->stop));
-> +               wait_event(crc->done, atomic_read_acquire(&crc->stop));
->                 atomic_set(&crc->stop, 0);
->         }
->         stop =3D ktime_get();
-> --
+>   drivers/thermal/thermal_core.c  | 13 +++++++++++++
+>   drivers/thermal/thermal_of.c    |  2 ++
+>   drivers/thermal/thermal_sysfs.c |  4 ++++
+>   drivers/thermal/thermal_trace.h |  4 ++++
+>   include/linux/thermal.h         |  2 ++
+>   include/uapi/linux/thermal.h    |  2 ++
+>   6 files changed, 27 insertions(+)
+> 
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 9c17d35ccbbd..3c5ab560e72f 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -344,6 +344,17 @@ static void handle_critical_trips(struct thermal_zone_device *tz,
+>   		tz->ops->hot(tz);
+>   }
+>   
+> +static void handle_critical_cold_trips(struct thermal_zone_device *tz,
+> +				       const struct thermal_trip *trip)
+> +{
+> +	trace_thermal_zone_trip(tz, thermal_zone_trip_id(tz, trip), trip->type);
+> +
+> +	if (trip->type == THERMAL_TRIP_CRITICAL_COLD && tz->ops->critical_cold)
+> +		tz->ops->critical_cold(tz);
+> +	else if (trip->type == THERMAL_TRIP_COLD && tz->ops->cold)
+> +		tz->ops->cold(tz);
+> +}
+> +
+>   static void handle_thermal_trip(struct thermal_zone_device *tz,
+>   				const struct thermal_trip *trip)
+>   {
+> @@ -365,6 +376,8 @@ static void handle_thermal_trip(struct thermal_zone_device *tz,
+>   
+>   	if (trip->type == THERMAL_TRIP_CRITICAL || trip->type == THERMAL_TRIP_HOT)
+>   		handle_critical_trips(tz, trip);
+> +	else if (trip->type == THERMAL_TRIP_CRITICAL_COLD || trip->type == THERMAL_TRIP_COLD)
+> +		handle_critical_cold_trips(tz, trip);
+>   	else
+>   		handle_non_critical_trips(tz, trip);
+>   }
+> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> index 1e0655b63259..95bc600bb4b8 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -60,6 +60,8 @@ static const char * const trip_types[] = {
+>   	[THERMAL_TRIP_PASSIVE]	= "passive",
+>   	[THERMAL_TRIP_HOT]	= "hot",
+>   	[THERMAL_TRIP_CRITICAL]	= "critical",
+> +	[THERMAL_TRIP_COLD]	= "cold",
+> +	[THERMAL_TRIP_CRITICAL_COLD] = "critical_cold",
+>   };
+>   
+>   /**
+> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+> index eef40d4f3063..e1e69e0991c2 100644
+> --- a/drivers/thermal/thermal_sysfs.c
+> +++ b/drivers/thermal/thermal_sysfs.c
+> @@ -106,6 +106,10 @@ trip_point_type_show(struct device *dev, struct device_attribute *attr,
+>   		return sprintf(buf, "critical\n");
+>   	case THERMAL_TRIP_HOT:
+>   		return sprintf(buf, "hot\n");
+> +	case THERMAL_TRIP_COLD:
+> +		return sprintf(buf, "cold\n");
+> +	case THERMAL_TRIP_CRITICAL_COLD:
+> +		return sprintf(buf, "critical_cold\n");
+>   	case THERMAL_TRIP_PASSIVE:
+>   		return sprintf(buf, "passive\n");
+>   	case THERMAL_TRIP_ACTIVE:
+> diff --git a/drivers/thermal/thermal_trace.h b/drivers/thermal/thermal_trace.h
+> index 459c8ce6cf3b..0a4f96075d7d 100644
+> --- a/drivers/thermal/thermal_trace.h
+> +++ b/drivers/thermal/thermal_trace.h
+> @@ -11,6 +11,8 @@
+>   
+>   TRACE_DEFINE_ENUM(THERMAL_TRIP_CRITICAL);
+>   TRACE_DEFINE_ENUM(THERMAL_TRIP_HOT);
+> +TRACE_DEFINE_ENUM(THERMAL_TRIP_COLD);
+> +TRACE_DEFINE_ENUM(THERMAL_TRIP_CRITICAL_COLD);
+>   TRACE_DEFINE_ENUM(THERMAL_TRIP_PASSIVE);
+>   TRACE_DEFINE_ENUM(THERMAL_TRIP_ACTIVE);
+>   
+> @@ -18,6 +20,8 @@ TRACE_DEFINE_ENUM(THERMAL_TRIP_ACTIVE);
+>   	__print_symbolic(type,					\
+>   			 { THERMAL_TRIP_CRITICAL, "CRITICAL"},	\
+>   			 { THERMAL_TRIP_HOT,      "HOT"},	\
+> +			 { THERMAL_TRIP_COLD,      "COLD"},	\
+> +			 { THERMAL_TRIP_CRITICAL_COLD, "CRITICAL_COLD"}, \
+>   			 { THERMAL_TRIP_PASSIVE,  "PASSIVE"},	\
+>   			 { THERMAL_TRIP_ACTIVE,   "ACTIVE"})
+>   
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index cee814d5d1ac..d6345c9ec50d 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -84,6 +84,8 @@ struct thermal_zone_device_ops {
+>   			  const struct thermal_trip *, enum thermal_trend *);
+>   	void (*hot)(struct thermal_zone_device *);
+>   	void (*critical)(struct thermal_zone_device *);
+> +	void (*cold)(struct thermal_zone_device *);
+> +	void (*critical_cold)(struct thermal_zone_device *);
+>   };
+>   
+>   struct thermal_cooling_device_ops {
+> diff --git a/include/uapi/linux/thermal.h b/include/uapi/linux/thermal.h
+> index fc78bf3aead7..7fa1ba0dff05 100644
+> --- a/include/uapi/linux/thermal.h
+> +++ b/include/uapi/linux/thermal.h
+> @@ -14,6 +14,8 @@ enum thermal_trip_type {
+>   	THERMAL_TRIP_PASSIVE,
+>   	THERMAL_TRIP_HOT,
+>   	THERMAL_TRIP_CRITICAL,
+> +	THERMAL_TRIP_COLD,
+> +	THERMAL_TRIP_CRITICAL_COLD,
+>   };
+>   
+>   /* Adding event notification support elements */
 
-Applied as 6.8 material with some edits in the subject and changelog.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Thanks!
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
 
