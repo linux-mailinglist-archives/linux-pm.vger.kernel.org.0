@@ -1,29 +1,29 @@
-Return-Path: <linux-pm+bounces-1044-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1045-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 813DC810D40
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 10:22:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B13F4810D78
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 10:31:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A6E591C208F5
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 09:22:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CCA8281682
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 09:31:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D5261EB37;
-	Wed, 13 Dec 2023 09:22:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E11D21EB5A;
+	Wed, 13 Dec 2023 09:31:17 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id EE245B7;
-	Wed, 13 Dec 2023 01:22:15 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5FA0F10D;
+	Wed, 13 Dec 2023 01:31:13 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C812EC15;
-	Wed, 13 Dec 2023 01:23:01 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 346A0C15;
+	Wed, 13 Dec 2023 01:31:59 -0800 (PST)
 Received: from [10.57.85.168] (unknown [10.57.85.168])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6E6E73F762;
-	Wed, 13 Dec 2023 01:22:13 -0800 (PST)
-Message-ID: <ec8dc77f-364c-443b-a63d-35a2e37d2ccc@arm.com>
-Date: Wed, 13 Dec 2023 09:23:17 +0000
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8B8D43F762;
+	Wed, 13 Dec 2023 01:31:10 -0800 (PST)
+Message-ID: <0c3f04cd-ea37-4308-b3f4-511562fa539e@arm.com>
+Date: Wed, 13 Dec 2023 09:32:14 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -33,26 +33,30 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v5 00/23] Introduce runtime modifiable Energy Model
 Content-Language: en-US
-To: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: rui.zhang@intel.com, amit.kucheria@verdurent.com,
- linux-pm@vger.kernel.org, amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
- viresh.kumar@linaro.org, len.brown@intel.com, pavel@ucw.cz,
- mhiramat@kernel.org, qyousef@layalina.io, wvw@google.com,
- linux-kernel@vger.kernel.org, rafael@kernel.org
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ dietmar.eggemann@arm.com, amit.kucheria@verdurent.com,
+ amit.kachhap@gmail.com, daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
+ pavel@ucw.cz, mhiramat@kernel.org, qyousef@layalina.io, wvw@google.com,
+ Morten Rasmussen <morten.rasmussen@arm.com>,
+ Ionela Voinescu <ionela.voinescu@arm.com>,
+ Beata Michalska <Beata.Michalska@arm.com>, Sumit Gupta <sumitg@nvidia.com>
 References: <20231129110853.94344-1-lukasz.luba@arm.com>
- <d920867d-5572-48c3-bd54-b9e989ab6bd5@arm.com>
+ <CAJZ5v0gqAGv50MK9oAVW=+w+7unavQ86cHF6zmyJjmVvNYjzUg@mail.gmail.com>
 From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <d920867d-5572-48c3-bd54-b9e989ab6bd5@arm.com>
+In-Reply-To: <CAJZ5v0gqAGv50MK9oAVW=+w+7unavQ86cHF6zmyJjmVvNYjzUg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Dietmar,
+Hi Rafael,
 
-Thank you for the review, I will go one-by-one to respond
-your comments in patches as well. First comments are below.
+Thank you for having a loot at the series.
 
-On 12/12/23 18:48, Dietmar Eggemann wrote:
-> On 29/11/2023 12:08, Lukasz Luba wrote:
+On 12/12/23 18:49, Rafael J. Wysocki wrote:
+> Hi Lukasz,
+> 
+> On Wed, Nov 29, 2023 at 12:08 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
 >> Hi all,
 >>
 >> This patch set adds a new feature which allows to modify Energy Model (EM)
@@ -143,15 +147,7 @@ On 12/12/23 18:48, Dietmar Eggemann wrote:
 >> big: 5us vs 2us -> 2.6x faster
 >> mid: 9us vs 3us -> 3x faster
 >> little: 16us vs 16us -> no change
-> 
-> I guess this is entirely due to the changes in
-> em_dev_update_perf_domain()? Moving from per-OPP em_update_callback to
-> switching the entire table (pd->runtime_table) inside
-> em_dev_update_perf_domain()?
-
-Yes correct, it's due to that design change.
-
-> 
+>>
 >> We still have to update the inefficiency in the cpufreq framework, thus
 >> a bit of overhead will be there.
 >>
@@ -159,47 +155,34 @@ Yes correct, it's due to that design change.
 >> v5:
 >> - removed 2 tables design
 >> - have only one table (runtime_table) used also in thermal (Wei, Rafael)
+>> - refactored update function and removed callback call for each opp
+>> - added faster EM table swap, using only the RCU pointer update
+>> - added memory allocation API and tracking with kref
+>> - avoid overhead for computing 'cost' for each OPP in update, it can be
+>>    pre-computed in device drivers EM earlier
+>> - add support for device drivers providing EM table
+>> - added API for computing 'cost' values in EM for EAS
+>> - added API for thermal/powercap to use EM (using RCU wrappers)
+>> - switched to single allocation and 'state[]' array (Rafael)
+>> - changed documentation to align with current design
+>> - added helper API for computing cost values
+>> - simplified EM free in unregister path (thanks to kref)
+>> - split patch updating EM clients and changed them separetly
+>> - added seperate patch removing old static EM table
+>> - added EM debugfs change patch to dump the runtime_table
+>> - addressed comments in v4 for spelling/comments/headers
+>> - added review tags
 > 
-> Until v4 you had 2 EM's, the static and the modifiable (runtime). Now in
-> v5 this changed to only have one, the modifiable. IMHO it would be
-> better to change the existing table to be modifiable rather than staring
-> with two EM's and then removing the static one. I assume you end up with
-> way less code changes and the patch-set will become easier to digest for
-> reviewers.
-
-The patches are structured in this way following Daniel's recommendation
-I got when I was adding similar big changes to EM in 2020 (support all
-devices in kernel). The approach is as follows:
-0. Do some basic clean-up/refactoring if needed for a new feature, to
-    re-use some code if possible in future
-1. Introduce new feature next to the existing one
-2. Add API and all needed infrastructure (structures, fields) for
-    drivers
-3. Re-wire the existing drivers/frameworks to the new feature via new
-    API; ideally keep 1 patch per driver so the maintainer can easily
-    grasp the changes and ACK it, because it will go via different tree
-    (Rafael's tree); in case of some code clash in the driver's code
-    during merge - it will be a single driver so easier to handle
-4. when all drivers and frameworks are wired up with the new feature
-    remove the old feature (structures, fields, APIs, etc)
-5. Update the documentation with new latest state of desing
-
-In this approach the patches are less convoluted. Because if I remove
-the old feature and add new in a single patch (e.g. the main structure)
-that patch will have to modify all drivers to still compile. It
-would be a big messy patch for this re-design.
-
-I can see in some later comment from Rafael that he is OK with current
-patch set structure.
-
+> I like this one more than the previous one and thanks for taking my
+> feedback into account.
 > 
-> I would mention that 14/23 "PM: EM: Support late CPUs booting and
-> capacity adjustment" is a testcase for the modifiable EM build-in into
-> the code changes. This relies on the table being modifiable.
-> 
+> I would still like other people having a vested interest in the EM to
+> look at it and give feedback (or just tags), so I'm not inclined to
+> apply it just yet.  However, I don't have any specific comments on it.
 
-Correct, that the 1st user on runtime modifiable EM, which is actually
-also build-in. I could add that to the cover letter.
+Let me contact offline some of the partners who were keen to have this
+in mainline (when I presented some first implementation in 2021 at
+Android kernel review systems).
 
 Regards,
 Lukasz
