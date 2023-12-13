@@ -1,142 +1,292 @@
-Return-Path: <linux-pm+bounces-1027-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1028-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60AC180FA23
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 23:19:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9315181073A
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 02:04:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17E981F218B8
-	for <lists+linux-pm@lfdr.de>; Tue, 12 Dec 2023 22:19:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 52842281C0F
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 01:04:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DD86660E5;
-	Tue, 12 Dec 2023 22:19:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H/kDWIJ/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4A9AA50;
+	Wed, 13 Dec 2023 01:04:04 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51F88660E3
-	for <linux-pm@vger.kernel.org>; Tue, 12 Dec 2023 22:19:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E254C433C9;
-	Tue, 12 Dec 2023 22:19:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702419549;
-	bh=DIQcaPKuaymhD7B2Ud9Fhf3u0xd2DS9jqqZCj0jIqJU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=H/kDWIJ/MGPcXG58F38GqOruqiolfunk087bx8xzx9mNA/BNlFg4KI+5ldrxsGVQK
-	 z3D+Hj2NM1rrahKwTnw1hBpbDwNd7dEbuLbA0wjcImx/XoOtHdI3N14llKgKm/uS+p
-	 xHfL/CHEPVspOmxqMhIddyD0nrvlDw+tKwNEfGaNTXamRg1YwIwqs9qgwp4qQlBONH
-	 opWnYumzBfReu/Q2Er9atvwSWPw6eXyIz4cOQ0l9YqNiGWz/vd2UqAvbnGEdSAECu1
-	 Y3Ie7RSdOKtgj25Knq2wvUR6UfEHh7MKBhm/tudZh+fbkcncPXpUtY48s88pc0NxD2
-	 C5bu8mzHtpk/w==
-Date: Wed, 13 Dec 2023 07:19:04 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F67799;
+	Tue, 12 Dec 2023 17:03:58 -0800 (PST)
+Received: from loongson.cn (unknown [111.207.111.194])
+	by gateway (Coremail) with SMTP id _____8DxS+n6Anll6H4AAA--.3111S3;
+	Wed, 13 Dec 2023 09:03:54 +0800 (CST)
+Received: from [10.180.13.176] (unknown [111.207.111.194])
+	by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx73PyAnllSIoBAA--.10143S3;
+	Wed, 13 Dec 2023 09:03:47 +0800 (CST)
+Subject: Re: [PATCH v2] PM: hibernate: use acquire/release ordering when
+ compress/decompress image
 To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, Randy
- Dunlap <rdunlap@infradead.org>, suleiman@google.com,
- briannorris@google.com, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5] PM: sleep: Expose last succeeded resumed timestamp
- in sysfs
-Message-Id: <20231213071904.c466432fcf085b71d6bd97da@kernel.org>
-In-Reply-To: <CAJZ5v0gObpUYXBydJG-JA5Ew=gScFMEdp6Xu=viv5FT0xyLQQQ@mail.gmail.com>
-References: <170108151076.780347.2482745314490930894.stgit@mhiramat.roam.corp.google.com>
-	<170108152012.780347.6355289232990337333.stgit@mhiramat.roam.corp.google.com>
-	<CAJZ5v0j8x_hzKg4RHx-xyd6Mye9=xj7MgACcWa7R1PcagFLzwQ@mail.gmail.com>
-	<20231212233245.14ae64258bdf07ae1d2f2ff9@kernel.org>
-	<CAJZ5v0gObpUYXBydJG-JA5Ew=gScFMEdp6Xu=viv5FT0xyLQQQ@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Cc: Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+ Bojan Smojver <bojan@rexursive.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+ stable@vger.kernel.org, Weihao Li <liweihao@loongson.cn>
+References: <20231116005609.1583858-1-zhanghongchen@loongson.cn>
+ <CAJZ5v0gTcntizfqKMa0YxHbOhNsLf=nAEoOBf2f9fFt-uzzgsg@mail.gmail.com>
+From: Hongchen Zhang <zhanghongchen@loongson.cn>
+Message-ID: <ee169c10-7c49-898a-caee-124ec3254330@loongson.cn>
+Date: Wed, 13 Dec 2023 09:02:57 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+MIME-Version: 1.0
+In-Reply-To: <CAJZ5v0gTcntizfqKMa0YxHbOhNsLf=nAEoOBf2f9fFt-uzzgsg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:AQAAf8Cx73PyAnllSIoBAA--.10143S3
+X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/1tbiAQAEB2V3wy0JQgABs0
+X-Coremail-Antispam: 1Uk129KBj93XoW3Ar15Ar47KrWruFyktr1DArc_yoWxKw15pF
+	Z5Xan0kF4UJFW5AwsFva10v345AwnYyFZrGrs3Ja4fuasIgws5ta40gF9Yvr1YyF1xKa40
+	9a1Utr90gryqvFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUPYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	Gr0_Gr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
+	twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
+	k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l
+	4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxV
+	WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
+	7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+	1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+	42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j5o7tUUUUU=
 
-On Tue, 12 Dec 2023 15:57:52 +0100
-"Rafael J. Wysocki" <rafael@kernel.org> wrote:
-
-> On Tue, Dec 12, 2023 at 3:32 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > Hi Rafael,
-> >
-> > On Tue, 12 Dec 2023 14:39:17 +0100
-> > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> >
-> > > On Mon, Nov 27, 2023 at 11:38 AM Masami Hiramatsu (Google)
-> > > <mhiramat@kernel.org> wrote:
-> > > >
-> > > > From: Masami Hiramatsu <mhiramat@kernel.org>
-> > > >
-> > > > Expose last succeeded resumed timestamp as last_success_resume_time
-> > > > attribute of suspend_stats in sysfs.
-> > > >
-> > > > There are some printk()s for printing the similar resume timing to
-> > > > dmesg, but those are recorded with local_clock(), and user can not
-> > > > compare it with current time. We also have tracing events but it
-> > > > requires CAP_SYS_ADMIN to use it.
-> > > >
-> > > > This suspend_stats attribute is easy to access and only expose the
-> > > > timestamp in CLOCK_MONOTONIC.
-> > >
-> > > Why CLOCK_MONOTONIC?
-> >
-> > CLOCK_MONOTONIC is the simplest clock which can be used in both user
-> > space and kernel space. If we use the CLOCK_LOCAL here, user can not
-> > know the actual time delta from the succeeded resume.
+Hi Rafael,
+    Thanks for your review.
+On 2023/12/12 下午9:03, Rafael J. Wysocki wrote:
+> On Thu, Nov 16, 2023 at 1:56 AM Hongchen Zhang
+> <zhanghongchen@loongson.cn> wrote:
+>>
+>> When we test S4(suspend to disk) on LoongArch 3A6000 platform, the
+>> test case sometimes fails. The dmesg log shows the following error:
+>>          Invalid LZO compressed length
+>> After we dig into the code, we find out that:
+>> When compress/decompress the image, the synchronization operation
+>> between the control thread and the compress/decompress/crc thread
+>> uses relaxed ordering interface, which is unreliable, and the
+>> following situation may occur:
+>> CPU 0                                   CPU 1
+>> save_image_lzo                          lzo_compress_threadfn
+>>                                            atomic_set(&d->stop, 1);
+>>    atomic_read(&data[thr].stop)
+>>    data[thr].cmp = data[thr].cmp_len;
+>>                                            WRITE data[thr].cmp_len
+>> Then CPU0 get a old cmp_len and write to disk. When cpu resume from S4,
+>> wrong cmp_len is loaded.
+>>
+>> To maintain data consistency between two threads, we should use the
+>> acquire/release ordering interface. So we change atomic_read/atomic_set
+>> to atomic_read_acquire/atomic_set_release.
+>>
+>> Fixes: 081a9d043c98 ("PM / Hibernate: Improve performance of LZO/plain hibernation, checksum image")
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
+>> Signed-off-by: Weihao Li <liweihao@loongson.cn>
 > 
-> So what does user space need to do to use this value?
-
-This will be used to measure the delay of the user-space resuming as a
-metric of system health.
-
-> > >
-> > > > So user can find the actual resumed
-> > > > time and measure the elapsed time from the time when the kernel
-> > > > finished the resume to the user-space action (e.g. display the UI).
-> > >
-> > > Can you please say a bit more about why this is useful?
-> >
-> > This is a reference timestamp from the user space to measure their
-> > processing time for resuming. The kernel side is OK to just trace
-> > or printk the each component or subsystem internally. But the user
-> > space needs to know when the kernel resume has been done for measuring
-> > its component or processes done.
+> I was about to apply this patch when I noticed the S-o-b confusion.
 > 
-> Why does it need to know that?
-
-For the metrics, the kernel side resume time and user-side resume time are
-important to know if any update caused regressions and separate the issue.
+> Either a From: header pointing to Weihao Li <liweihao@loongson.cn> is
+> missing and the Hongchen Zhang <zhanghongchen@loongson.cn> sign-off
+> means that the patch is sent on behalf of Weihao Li, or you both
+> worked on the patch together and a Co-developed-by: tag pointing to
+> Weihao Li <liweihao@loongson.cn> is missing.
+> 
+> Which of the above is the case?
+Yes, we both worked on this patch,let me add
+Co-developed-by: Weihao Li <liweihao@loongson.cn>
+and send V3.
 
 > 
-> > Actually this is obscure because the
-> > end of resuming in userspace is defined by the user-space application
-> > or desktop systems. But anyway if there is a reference point, user
-> > process can calculate the delta at any point from that.
-> >
-> > >
-> > > The time stamp is taken at the point when user space has been already
-> > > running for some time, so what's the exact benefit of it?
-> >
-> > Yes, but that timestamp can be scheduled afterwards so it may not
-> > be so accurate. This can provide the accurate time of the kernel
-> > resume.
-> 
-> I'm talking about the timestamp added by this patch, that is
-> /sys/power/suspend_stats/last_success_resume_time.
-> 
-> By the time ktime_get_ts64() in pm_suspend() is called, user space has
-> already been thawed and is running, so why is this useful?
+>> ---
+>> v1 -> v2:
+>>          1. add Cc: stable@vger.kernel.org in commit log
+>>          2. add Fixes: line in commit log
+>> ---
+>>   kernel/power/swap.c | 38 +++++++++++++++++++-------------------
+>>   1 file changed, 19 insertions(+), 19 deletions(-)
+>>
+>> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
+>> index a2cb0babb5ec..d44f5937f1e5 100644
+>> --- a/kernel/power/swap.c
+>> +++ b/kernel/power/swap.c
+>> @@ -606,11 +606,11 @@ static int crc32_threadfn(void *data)
+>>          unsigned i;
+>>
+>>          while (1) {
+>> -               wait_event(d->go, atomic_read(&d->ready) ||
+>> +               wait_event(d->go, atomic_read_acquire(&d->ready) ||
+>>                                    kthread_should_stop());
+>>                  if (kthread_should_stop()) {
+>>                          d->thr = NULL;
+>> -                       atomic_set(&d->stop, 1);
+>> +                       atomic_set_release(&d->stop, 1);
+>>                          wake_up(&d->done);
+>>                          break;
+>>                  }
+>> @@ -619,7 +619,7 @@ static int crc32_threadfn(void *data)
+>>                  for (i = 0; i < d->run_threads; i++)
+>>                          *d->crc32 = crc32_le(*d->crc32,
+>>                                               d->unc[i], *d->unc_len[i]);
+>> -               atomic_set(&d->stop, 1);
+>> +               atomic_set_release(&d->stop, 1);
+>>                  wake_up(&d->done);
+>>          }
+>>          return 0;
+>> @@ -649,12 +649,12 @@ static int lzo_compress_threadfn(void *data)
+>>          struct cmp_data *d = data;
+>>
+>>          while (1) {
+>> -               wait_event(d->go, atomic_read(&d->ready) ||
+>> +               wait_event(d->go, atomic_read_acquire(&d->ready) ||
+>>                                    kthread_should_stop());
+>>                  if (kthread_should_stop()) {
+>>                          d->thr = NULL;
+>>                          d->ret = -1;
+>> -                       atomic_set(&d->stop, 1);
+>> +                       atomic_set_release(&d->stop, 1);
+>>                          wake_up(&d->done);
+>>                          break;
+>>                  }
+>> @@ -663,7 +663,7 @@ static int lzo_compress_threadfn(void *data)
+>>                  d->ret = lzo1x_1_compress(d->unc, d->unc_len,
+>>                                            d->cmp + LZO_HEADER, &d->cmp_len,
+>>                                            d->wrk);
+>> -               atomic_set(&d->stop, 1);
+>> +               atomic_set_release(&d->stop, 1);
+>>                  wake_up(&d->done);
+>>          }
+>>          return 0;
+>> @@ -798,7 +798,7 @@ static int save_image_lzo(struct swap_map_handle *handle,
+>>
+>>                          data[thr].unc_len = off;
+>>
+>> -                       atomic_set(&data[thr].ready, 1);
+>> +                       atomic_set_release(&data[thr].ready, 1);
+>>                          wake_up(&data[thr].go);
+>>                  }
+>>
+>> @@ -806,12 +806,12 @@ static int save_image_lzo(struct swap_map_handle *handle,
+>>                          break;
+>>
+>>                  crc->run_threads = thr;
+>> -               atomic_set(&crc->ready, 1);
+>> +               atomic_set_release(&crc->ready, 1);
+>>                  wake_up(&crc->go);
+>>
+>>                  for (run_threads = thr, thr = 0; thr < run_threads; thr++) {
+>>                          wait_event(data[thr].done,
+>> -                                  atomic_read(&data[thr].stop));
+>> +                               atomic_read_acquire(&data[thr].stop));
+>>                          atomic_set(&data[thr].stop, 0);
+>>
+>>                          ret = data[thr].ret;
+>> @@ -850,7 +850,7 @@ static int save_image_lzo(struct swap_map_handle *handle,
+>>                          }
+>>                  }
+>>
+>> -               wait_event(crc->done, atomic_read(&crc->stop));
+>> +               wait_event(crc->done, atomic_read_acquire(&crc->stop));
+>>                  atomic_set(&crc->stop, 0);
+>>          }
+>>
+>> @@ -1132,12 +1132,12 @@ static int lzo_decompress_threadfn(void *data)
+>>          struct dec_data *d = data;
+>>
+>>          while (1) {
+>> -               wait_event(d->go, atomic_read(&d->ready) ||
+>> +               wait_event(d->go, atomic_read_acquire(&d->ready) ||
+>>                                    kthread_should_stop());
+>>                  if (kthread_should_stop()) {
+>>                          d->thr = NULL;
+>>                          d->ret = -1;
+>> -                       atomic_set(&d->stop, 1);
+>> +                       atomic_set_release(&d->stop, 1);
+>>                          wake_up(&d->done);
+>>                          break;
+>>                  }
+>> @@ -1150,7 +1150,7 @@ static int lzo_decompress_threadfn(void *data)
+>>                          flush_icache_range((unsigned long)d->unc,
+>>                                             (unsigned long)d->unc + d->unc_len);
+>>
+>> -               atomic_set(&d->stop, 1);
+>> +               atomic_set_release(&d->stop, 1);
+>>                  wake_up(&d->done);
+>>          }
+>>          return 0;
+>> @@ -1335,7 +1335,7 @@ static int load_image_lzo(struct swap_map_handle *handle,
+>>                  }
+>>
+>>                  if (crc->run_threads) {
+>> -                       wait_event(crc->done, atomic_read(&crc->stop));
+>> +                       wait_event(crc->done, atomic_read_acquire(&crc->stop));
+>>                          atomic_set(&crc->stop, 0);
+>>                          crc->run_threads = 0;
+>>                  }
+>> @@ -1371,7 +1371,7 @@ static int load_image_lzo(struct swap_map_handle *handle,
+>>                                          pg = 0;
+>>                          }
+>>
+>> -                       atomic_set(&data[thr].ready, 1);
+>> +                       atomic_set_release(&data[thr].ready, 1);
+>>                          wake_up(&data[thr].go);
+>>                  }
+>>
+>> @@ -1390,7 +1390,7 @@ static int load_image_lzo(struct swap_map_handle *handle,
+>>
+>>                  for (run_threads = thr, thr = 0; thr < run_threads; thr++) {
+>>                          wait_event(data[thr].done,
+>> -                                  atomic_read(&data[thr].stop));
+>> +                               atomic_read_acquire(&data[thr].stop));
+>>                          atomic_set(&data[thr].stop, 0);
+>>
+>>                          ret = data[thr].ret;
+>> @@ -1421,7 +1421,7 @@ static int load_image_lzo(struct swap_map_handle *handle,
+>>                                  ret = snapshot_write_next(snapshot);
+>>                                  if (ret <= 0) {
+>>                                          crc->run_threads = thr + 1;
+>> -                                       atomic_set(&crc->ready, 1);
+>> +                                       atomic_set_release(&crc->ready, 1);
+>>                                          wake_up(&crc->go);
+>>                                          goto out_finish;
+>>                                  }
+>> @@ -1429,13 +1429,13 @@ static int load_image_lzo(struct swap_map_handle *handle,
+>>                  }
+>>
+>>                  crc->run_threads = thr;
+>> -               atomic_set(&crc->ready, 1);
+>> +               atomic_set_release(&crc->ready, 1);
+>>                  wake_up(&crc->go);
+>>          }
+>>
+>>   out_finish:
+>>          if (crc->run_threads) {
+>> -               wait_event(crc->done, atomic_read(&crc->stop));
+>> +               wait_event(crc->done, atomic_read_acquire(&crc->stop));
+>>                  atomic_set(&crc->stop, 0);
+>>          }
+>>          stop = ktime_get();
+>> --
+>> 2.33.0
+>>
 
-Aaah, good catch! It should be right before thawing process, right?
-
-Thank you,
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Best Regards
+Hongchen Zhang
+
 
