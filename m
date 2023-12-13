@@ -1,242 +1,226 @@
-Return-Path: <linux-pm+bounces-1109-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1110-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9633C811866
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 16:53:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78489811884
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 17:00:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 29CDCB209E4
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 15:53:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F7C11C209CE
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 16:00:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 972D985364;
-	Wed, 13 Dec 2023 15:53:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A47085374;
+	Wed, 13 Dec 2023 16:00:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XJBsjoyz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC73B7
-	for <linux-pm@vger.kernel.org>; Wed, 13 Dec 2023 07:53:46 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rDRXd-0000t5-N4; Wed, 13 Dec 2023 16:52:57 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rDRXZ-00FbSV-8h; Wed, 13 Dec 2023 16:52:53 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rDRXY-002Mb8-UB; Wed, 13 Dec 2023 16:52:52 +0100
-Date: Wed, 13 Dec 2023 16:52:52 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Maxime Ripard <mripard@kernel.org>
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	dri-devel@lists.freedesktop.org,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	David Airlie <airlied@gmail.com>, linux-clk@vger.kernel.org,
-	Jerome Brunet <jbrunet@baylibre.com>, Rob Herring <robh@kernel.org>,
-	Samuel Holland <samuel@sholland.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>, Chen-Yu Tsai <wens@csie.org>,
-	MyungJoo Ham <myungjoo.ham@samsung.com>,
-	Johan Hovold <johan+linaro@kernel.org>, linux-sunxi@lists.linux.dev,
-	Daniel Vetter <daniel@ffwll.ch>, linux-pm@vger.kernel.org,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	linux-tegra@vger.kernel.org, linux-amlogic@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Kyungmin Park <kyungmin.park@samsung.com>, kernel@pengutronix.de,
-	Georgi Djakov <djakov@kernel.org>
-Subject: Re: [PATCH 0/5] clk: Make clk_rate_exclusive_get() return void
-Message-ID: <20231213155252.eq6cdzk2vuwllzdu@pengutronix.de>
-References: <cover.1702400947.git.u.kleine-koenig@pengutronix.de>
- <ki5n3rz5n4oxj2hhc3rj6xpn3e2tdi7fcp2q7exjbzilrlqflp@przautvhuy4g>
- <20231213074300.4bq7wkfqd4jhhcr4@pengutronix.de>
- <2nvbag657mlniqwq7fbilapc6vfw5qumab3yd6bqul25ot6wcn@wdlkh5az2fgs>
- <20231213110829.bjaxjjiyy4ug7o67@pengutronix.de>
- <6wnsxbi27xdxjtaqaaaq5wtwwilp4jfw4mg5y2ctdl7xrs44ry@ns6y36pf7hge>
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF749AC
+	for <linux-pm@vger.kernel.org>; Wed, 13 Dec 2023 08:00:28 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-40c3fe6c08fso47108185e9.1
+        for <linux-pm@vger.kernel.org>; Wed, 13 Dec 2023 08:00:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702483227; x=1703088027; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6wQgJVXTbrMMfThGWjtIRWTD7vVL6atDUhY4Ep1StLs=;
+        b=XJBsjoyztyuO8UoyE9qdylknvKliNODQgRo87KgJkZ/DgKz5qJsdV2cQLiH0406bq7
+         yAQ2bU39xsajKqu7Vj3FicLci9l+gepYKMBsEa+B4dykczWEOMPO5KSFbNOa0NNmNSBD
+         ERVxKJ7px9RS0HjkiMMW906EpHvbf8+0ifNwY6bECGxonz5+b2tp65jCWdhCSfG+OLnL
+         2zFFAu6/6VyiF1iyDSu5UeWwg2d9YsOpB4r4BgsgluwgdWs7vOtD7iGSo+phoOQwBOJr
+         bzSQUmUOfsm8uoDsB2hgIekTPBfcG3CxtzN/sZLGMyZCR2LQ6U7lfB9EwJLivXXhGDL6
+         oYvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702483227; x=1703088027;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6wQgJVXTbrMMfThGWjtIRWTD7vVL6atDUhY4Ep1StLs=;
+        b=MUIAtXq6blcbvPh+q0cdayCMzyZ5CUjZe2WoqdIFZrHclJdWZDASEYirFxdHVSriEd
+         PjGDeLG6yMpLpvS0B13Mp6o0ATjhSy3WwwzukGlfT8l9lkXHdN1J3o74rRNIP4uKWRhD
+         lZJWZtCwO6LAOqSfMNnuZWrt5anuYjk4WxtWII1Ze+RRmVIkmpXl3pm915uskzNaeCC4
+         lRlMPjFza+Ixu0DPGAbEGCHo+rv2klrMQKsTHM54F08DcCqXA0pdJhkiga6RKxDIAUow
+         jfQjBpcVJMJUH/5fCfdksU9jQVbRbwTSSOkUA6Se5CiJVKBtllpiRpc/R7J6DA+TlP3P
+         CGdA==
+X-Gm-Message-State: AOJu0Ywmu6UHJRt9WNikOnrTw3qTJ5CUNQrRJdLNuVrmFBZnvVfYilMT
+	Ea1TYjiOvZZUXDA/KUcWJk6PvdmYTV8hJRjbGh4=
+X-Google-Smtp-Source: AGHT+IHbdOR4+AKZ8GxKN19778YZkvtVfp1xfJFhP4NykzxaNPbc/ujq9Iouol0pUbKfYOOqdCI9PA==
+X-Received: by 2002:a05:6000:90c:b0:334:b174:9a14 with SMTP id cw12-20020a056000090c00b00334b1749a14mr2721396wrb.50.1702483227055;
+        Wed, 13 Dec 2023 08:00:27 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
+        by smtp.googlemail.com with ESMTPSA id n10-20020a5d4c4a000000b003333abf3edfsm13647343wrt.47.2023.12.13.08.00.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Dec 2023 08:00:26 -0800 (PST)
+Message-ID: <327458e6-de96-460f-8ec6-a1c31fcf6b5e@linaro.org>
+Date: Wed, 13 Dec 2023 17:00:26 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4rnwsmpqrmgwol6u"
-Content-Disposition: inline
-In-Reply-To: <6wnsxbi27xdxjtaqaaaq5wtwwilp4jfw4mg5y2ctdl7xrs44ry@ns6y36pf7hge>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] thermal: core: add initial support for cold and
+ critical_cold trip point
+Content-Language: en-US
+To: Christian Marangi <ansuelsmth@gmail.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20231212221301.12581-1-ansuelsmth@gmail.com>
+ <0e4cee10-4aa4-4979-9841-f1dbd207e0b7@linaro.org>
+ <6579bdb2.5d0a0220.1ae22.1f92@mx.google.com>
+ <CAJZ5v0gdLXBziENtZ9qmvntmaq6gNSXvGHq1eq8_o+xz0V_A0Q@mail.gmail.com>
+ <6579c604.050a0220.8fe5c.d191@mx.google.com>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <6579c604.050a0220.8fe5c.d191@mx.google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+On 13/12/2023 15:56, Christian Marangi wrote:
+> On Wed, Dec 13, 2023 at 03:43:54PM +0100, Rafael J. Wysocki wrote:
+>> On Wed, Dec 13, 2023 at 3:20 PM Christian Marangi <ansuelsmth@gmail.com> wrote:
+>>>
+>>> On Wed, Dec 13, 2023 at 03:12:41PM +0100, Daniel Lezcano wrote:
+>>>> On 12/12/2023 23:13, Christian Marangi wrote:
+>>>>> Add initial support for cold and critical_cold trip point. Many if not
+>>>>> all hwmon and thermal device have normally trip point for hot
+>>>>> temperature and for cold temperature.
+>>>>>
+>>>>> Till now only hot temperature were supported. Add support for also cold
+>>>>> temperature to permit complete definition of cold trip point in DT.
+>>>>>
+>>>>> Thermal driver may use these additional trip point to correctly set
+>>>>> interrupt for cold temperature values and react based on that with
+>>>>> various measure like enabling attached heater, forcing higher voltage
+>>>>> and other specialaized peripherals.
+>>>>>
+>>>>> For hwmon drivers this is needed as currently there is a problem with
+>>>>> setting the full operating range of the device for thermal devices
+>>>>> defined with hwmon. To better describe the problem, the following
+>>>>> example is needed:
+>>>>>
+>>>>> In the scenario of a simple hwmon with an active trip point declared
+>>>>> and a cooling device attached, the hwmon subsystem currently set the
+>>>>> min and max trip point based on the single active trip point.
+>>>>> Thermal subsystem parse all the trip points and calculate the lowest and
+>>>>> the highest trip point and calls the .set_trip of hwmon to setup the
+>>>>> trip points.
+>>>>>
+>>>>> The fact that we currently don't have a way to declare the cold/min
+>>>>> temperature values, makes the thermal subsystem to set the low value as
+>>>>> -INT_MAX.
+>>>>> For hwmon drivers that doesn't use clamp_value and actually reject
+>>>>> invalid values for the trip point, this results in the hwmon settings to
+>>>>> be rejected.
+>>>>>
+>>>>> To permit to pass the correct range of trip point, permit to set in DT
+>>>>> also cold and critical_cold trip point.
+>>>>>
+>>>>> Thermal driver may also define .cold and .critical_cold to act on these
+>>>>> trip point tripped and apply the required measure.
+>>>>
+>>>> Agree with the feature but we need to clarify the semantic of the trip
+>>>> points first. What actions do we expect for them in order to have like a
+>>>> mirror reflection of the existing hot trip points.
+>>>>
+>>>> What action do you expect with:
+>>>>
+>>>>   - 'cold' ?
+>>>>
+>>>>   - 'critical_cold' ?
+>>>>
+>>>>
+>>>
+>>> This is more of a sensible topic but I think it's the thermal driver
+>>> that needs to implement these. As said in the commit description,
+>>> examples are setting higher voltage from the attached regulator,
+>>> enabling some hardware heater.
+>>
+>> So how is it different from an active trip point?  There are heating
+>> rather than cooling devices associated with it, but other than this??
+>>
+> 
+>  From what I read from documentation, active trip point are used to
+> trigger cooling-device. Cold (and crit_cold) are to setup trip point to
+> the device. The device will normally trigger an interrupt (or even
+> internally with the correct register set autonomously apply some measure
+> to handle the problem)
+
+Actually what specifies an active cooling device is it requires energy 
+in order to operate. More precisely, the goal of an active cooling 
+device is too move the heat from one place to another place. So the 
+system, instead of relying on the natural convection thermal transfer, 
+will force this transfer. So the "active" means external system + energy.
+
+> In theory it's possible to have passive trip point for cold condition
+> but still we lack any definition of the lower spectrum of the trip
+> point.
+
+Yes, absolutely :) And that is why I think we should clarify that to 
+conform to the general semantic of the thermal management. If we define 
+things in the thermal framework but having a different meaning in the 
+thermal management vocabulary. That will be really odd and look amateur 
+work :)
+
+In the lower spectrum, an external warming device where we use energy to 
+provide some heat is active. But if we use some kind of software 
+solution (like what suggested before), we indeed use energy, but the 
+solution is internal to the system, so I do believe we can consider it 
+as passive.
+
+IMO, we should see, especially on mobile, passive trip point for too 
+hot, and active trip point for too cold. That would not surprising as 
+the former has too much energy generated and the latter not enough energy.
+
+(BTW, as a side note, active or passive trip points do not really make 
+sense to me. It is the mitigation devices which are active or passive).
+
+For the systems which do not have a dedicated warming up hardware, we 
+should implement a "warming device" as a passive one (which is a 
+different story from your proposal I agree).
 
 
---4rnwsmpqrmgwol6u
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+>>> Maybe with critical cold bigger measure can be applied. Currently for
+>>> critical trip point we shutdown the system (if the critical ops is not
+>>> declared) but with critical_cold condition I think it won't work... I
+>>> expect a system in -40°C would just lock up/glitch so rebooting in that
+>>> condition won't change a thing...
+>>>
+>>> Anyway yes we can define a shutdown by default for that but IMHO it
+>>> wouldn't make much sense.
+>>
+>> So why do you want to add it at all?
+> 
+> Again it's really to fill a hole we have from a long time... One example
+> is the qcom tsens driver that have trip point for cold and crit_cold.
+> Those in theory can be set in DT with the trip point but we lack any
+> definition for them. (using passive trip point would be confusing IMHO)
+> 
+> Another example is an Aquantia PHY that have register for the cold and
+> critical_cold trip point.
+> 
+> Currently defining a critical trip point for the negative temp results
+> in the system shutdown.
 
-On Wed, Dec 13, 2023 at 12:54:14PM +0100, Maxime Ripard wrote:
-> On Wed, Dec 13, 2023 at 12:08:29PM +0100, Uwe Kleine-K=F6nig wrote:
-> > On Wed, Dec 13, 2023 at 09:36:49AM +0100, Maxime Ripard wrote:
-> > > On Wed, Dec 13, 2023 at 08:43:00AM +0100, Uwe Kleine-K=F6nig wrote:
-> > > > On Wed, Dec 13, 2023 at 08:16:04AM +0100, Maxime Ripard wrote:
-> > > > > On Tue, Dec 12, 2023 at 06:26:37PM +0100, Uwe Kleine-K=F6nig wrot=
-e:
-> > > > > > clk_rate_exclusive_get() returns zero unconditionally. Most use=
-rs "know"
-> > > > > > that and don't check the return value. This series fixes the fo=
-ur users
-> > > > > > that do error checking on the returned value and then makes fun=
-ction
-> > > > > > return void.
-> > > > > >=20
-> > > > > > Given that the changes to the drivers are simple and so merge c=
-onflicts
-> > > > > > (if any) should be easy to handle, I suggest to merge this comp=
-lete
-> > > > > > series via the clk tree.
-> > > > >=20
-> > > > > I don't think it's the right way to go about it.
-> > > > >=20
-> > > > > clk_rate_exclusive_get() should be expected to fail. For example =
-if
-> > > > > there's another user getting an exclusive rate on the same clock.
-> > > > >=20
-> > > > > If we're not checking for it right now, then it should probably be
-> > > > > fixed, but the callers checking for the error are right to do so =
-if they
-> > > > > rely on an exclusive rate. It's the ones that don't that should be
-> > > > > modified.
-> > > >=20
-> > > > If some other consumer has already "locked" a clock that I call
-> > > > clk_rate_exclusive_get() for, this isn't an error. In my bubble I c=
-all
-> > > > this function because I don't want the rate to change e.g. because I
-> > > > setup some registers in the consuming device to provide a fixed UART
-> > > > baud rate or i2c bus frequency (and that works as expected).
-> > >=20
-> > > [a long text of mostly right things (Uwe's interpretation) that are
-> > > however totally unrelated to the patches under discussion.]
->=20
-> I'm glad you consider it "mostly" right.
+Yes, and the more I think about it, the more I'm inclined to have:
 
-there was no offense intended. I didn't agree to all points, but didn't
-think it was helpful to discuss that given that I considered them
-orthogonal to my suggested modifications.
-=20
-> > The clk API works with and without my patches in exactly the same way.
-> > It just makes more explicit that clk_rate_exclusive_get() cannot fail
-> > today and removes the error handling from consumers that is never used.
->=20
-> Not really, no.
+  * trip (active|passive) + hot|cold
+  * trip cold (meaning "really too cold")
+  * trip hot (meaning "really too hot")
+  * trip critical (meaning "I'm about to collapse")
 
-What exactly do you oppose here? Both of my sentences are correct?!
-=20
-> An API is an interface, meant to provide an abstraction. The only
-> relevant thing is whether or not that function, from an abstract point
-> of view, can fail.
+We may have also active devices with multiple level of warm up, so it 
+will need to be managed by a governor like the step wise.
 
-What is the ideal API that you imagine? For me the ideal API is:
 
-A consumer might call clk_rate_exclusive_get() and after that returns
-all other consumers are prohibited to change the rate of the clock
-(directly and indirectly) until clk_rate_exclusive_put() is called. If
-this ends in a double lock (i.e. two different consumers locked the
-clock), then I cannot change the rate (and neither can anybody else).
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-That is fine iff I don't need to change the rate and just want to rely
-on it to keep its current value (which is a valid use case). And if I
-want to change the rate but another consumer prevents that, I handle
-that in the same away as I handle all other failures to set the rate to
-the value I need. I have to prepare for that anyhow even if I have
-ensured that I'm the only one having exclusivity on that clock.
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
-Letting clk_rate_exclusive_get() fail in the assumption that the
-consumer also wants to modify the rate is wrong. The obvious point where
-to stop such consumers is when they call clk_rate_set(). And those who
-don't modify the rate then continue without interruption even if there
-are two lockers.
-
-This can easily be implemented without clk_rate_exclusive_get() ever
-failing.
-
-> Can you fail to get the exclusivity? Yes. On a theoretical basis, you
-> can, and the function was explicitly documented as such.
-
-Sure, you could modify the clk internals such that
-clk_rate_exclusive_get() needs to allocate memory. Or that it fails if
-another consumer already has called it. At least the latter is a change
-in semantics that requires to review (and maybe fix) all users. Also
-note that calling clk_rate_exclusive_get() essentially locks all parent
-clocks up to the root clock. So if clk_rate_exclusive_get() fails in the
-presence of another locker, you can only have one locker per clock
-hierarchy because it's impossible that both grab the lock on the root
-clock.
-
-> > Is there anyone working on improving the clk framework regarding how clk
-> > rate exclusivity works? I'd probably not notice, but I guess there is
-> > noone that I need to consider for.
->=20
-> I started working on it.
-
-That is indeed a reason to postpone my patches. Feel free to Cc: me when
-you're done. And please mention if you need longer than (say) 6 months,
-then I'd argue that applying my patches now without caring for
-out-of-tree users is the way to go.
-
-My demand for such a rework would be that there is a function for=20
-consumers to call that don't have the requirement for a certain rate but
-only any fixed rate that results in locking the clock's rate to whatever
-it currently is. Today that function exists and is called
-clk_rate_exclusive_get(); this might not be the best name, so maybe
-rename it to something that you consider more sensible at the start of
-your rework?!
-
-Semantically that is similar to read_lock() (which never fails and
-still prevents any writers). And clk_set_rate() is like=20
-
-	try_upgrade_read_lock_to_write_lock();
-	actually_change_the_rate()
-	downgrade_write_lock_to_read_lock();
-
-where try_upgrade_read_lock_to_write_lock() fails if there are other
-readers. So maybe a sensible name for today's clk_rate_exclusive_get()
-is clk_rate_read_lock()?
-
-If your variant of clk_rate_exclusive_get() might fail, you can already
-prepare for me questioning why this is sensible and needed.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---4rnwsmpqrmgwol6u
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmV501MACgkQj4D7WH0S
-/k51hQf8CRNymicQ4BgKO3Qz+szmXEUKIg8qmLZG6f+sJ77H3mvg7zlbvpI/W/hI
-rscYS06UjEHJM9ec8XTYACyQ1nJy98D8BxhawVTn+wrJa2z0tBDSg01HHBXZkVLe
-xG6BYa5Dx94GTfhTXr9H4zwiLgchRz6/FFp4H49wHQ8rHLX6YYwLBUMq258vYNN8
-Df1WULIGmruvRCkwWFyfhVC2OPyUy0FagJ5xsjJyRIavDaiFmuLEGg0avrbfEjN3
-CMcsnDtQD1pALNhIWwvovcLint4Iap8vDz6O3+MyEDj65AZf8DzO8TJZjTYwGnoI
-zj1/dV/j2h1+TK5lvLFOTKPzSD3u1Q==
-=Nnb7
------END PGP SIGNATURE-----
-
---4rnwsmpqrmgwol6u--
 
