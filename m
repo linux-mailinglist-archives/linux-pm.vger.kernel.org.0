@@ -1,149 +1,280 @@
-Return-Path: <linux-pm+bounces-1097-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1098-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B4B3811338
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 14:46:13 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B68CD8113B3
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 14:53:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 06E3728243C
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 13:46:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 32B7EB20958
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 13:53:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA67B2D624;
-	Wed, 13 Dec 2023 13:46:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 458452E41A;
+	Wed, 13 Dec 2023 13:52:24 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810B7B2;
-	Wed, 13 Dec 2023 05:46:05 -0800 (PST)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-203223f3299so16224fac.0;
-        Wed, 13 Dec 2023 05:46:05 -0800 (PST)
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCF1E3581;
+	Wed, 13 Dec 2023 05:52:21 -0800 (PST)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-1fae54afb66so845510fac.1;
+        Wed, 13 Dec 2023 05:52:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702475165; x=1703079965;
+        d=1e100.net; s=20230601; t=1702475535; x=1703080335;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9aBnUrw2auNmCR4JylYCwXdWoHJEVE3iA2QJaSTM4hc=;
-        b=POzbZFz9i2zHRpTD0Zqi30aSg8GWH+eP1LFs+QbnROgKJGl/KPjWEg2GoB99YuvpzA
-         TWhwTzXZ3aQckzomUhD21HlQwRKAiE1eM79ii1vrNvg0NBx1DDmcjlnVHnkk8wJcUAvB
-         lIvVgGWsZ7ZY4JDTDa6yP/SXl1FQ07hZuE5Wt1l7qF3fuk0FX2s90446WpZB7Cem2Y33
-         BSaim1tygk2hTHKSCkXuUU/F6fvUjr6fXpZyGKk78B9GBGsFPWbJPgQFz8ZPa5q4CnTq
-         sanUpExtjf6L5EqIYC3cJXw0u3EcWZR0SXBqMB6RP8+Wby1SUgBFhr7ylDiH/hz6EIkZ
-         uUpw==
-X-Gm-Message-State: AOJu0YyWqsX9BxfQtRxjNMuGn9QPkGHcP85oCA3qAEoFfwDb2LY7bcof
-	nOLLBqeWsOmIPx1j0SJ478cf4B6D/gsnNh19v6I=
-X-Google-Smtp-Source: AGHT+IFF1OU+JaCmlcPBJbNEsSUHPZJuxNB/1NU04QyHKBRsKos5UWHlHLDlzxP1EQZKrj0x9KfkOm85RsELDq0nhAY=
+        bh=Ns4LGXhzsELqeFy5cKH0B3W9wewJJdmQ50HMk4RT/LI=;
+        b=bRRbDVGdR45B3UgsLLZMPd4HxzW2pfjT5KirfiDkwlQEYjKTE3Kwlp2YTCZaadNsK3
+         baS1ES58NuCtdTyqI6icbQZH45H67eF/qCBkQ7Rx9FZ2dFoqrZEn+ZcGYxq+t8Tw+SAu
+         xadh4iQDHuIE+ZjmY0Bd3Qjn9FUX6btRA0THi9Q/MJ+38iAqyIQ7Cc3m3fd2ydNWyXmd
+         JiDPwUtJZtRRAnn83m/HQycRLk+e0444WKafoad3oMZ/D6gyQOawlbHPqypP9EsG3QMf
+         4EfBtvWwDrRwnc8+DgUqPexQ/6/QBq4v69uII1d/R8I5vDncZVOt8Xrnnl0/K/AW0Rol
+         8+0Q==
+X-Gm-Message-State: AOJu0Yw7d93kG/1hp0i/x0p0caxfCmS9rD5vcOviZ9NX6py4Yt1mgLfi
+	HVQL34657z6u1CLFvYPGeBKc0cC+2YRhbLmuec0=
+X-Google-Smtp-Source: AGHT+IFklC2+2yx5+/6px6dm4plrZumhRqC32TtxPC7w0lY9NXF5sm33JROV1+LfS+a7VWPf8xUrG2EjBMfksHgaVsY=
 X-Received: by 2002:a05:6871:208c:b0:1fb:19d6:8715 with SMTP id
- ry12-20020a056871208c00b001fb19d68715mr14367276oab.4.1702475164701; Wed, 13
- Dec 2023 05:46:04 -0800 (PST)
+ ry12-20020a056871208c00b001fb19d68715mr14383677oab.4.1702475534692; Wed, 13
+ Dec 2023 05:52:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231213083251.186935-1-chris.feng@mediatek.com>
-In-Reply-To: <20231213083251.186935-1-chris.feng@mediatek.com>
+References: <20231213011103.1491414-1-zhanghongchen@loongson.cn>
+In-Reply-To: <20231213011103.1491414-1-zhanghongchen@loongson.cn>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 13 Dec 2023 14:45:53 +0100
-Message-ID: <CAJZ5v0jfEDYkDRPrqb0KirDG+o8W7aRUP9vqGBOiFOV-gHBDGg@mail.gmail.com>
-Subject: Re: [PATCH v4] PM: hibernate: Avoid missing wakeup events during hibernation
-To: Chris Feng <chris.feng@mediatek.com>
-Cc: rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, stable@kernel.org, 
-	hua.yang@mediatek.com, ting.wang@mediatek.com, liang.lu@mediatek.com, 
-	chetan.kumar@mediatek.com
+Date: Wed, 13 Dec 2023 14:52:03 +0100
+Message-ID: <CAJZ5v0iTfpo9EH3bCAwJ+E8W67uJyy_9wFBOucJVWmmGV_-XpA@mail.gmail.com>
+Subject: Re: [PATCH v3] PM: hibernate: use acquire/release ordering when
+ compress/decompress image
+To: Hongchen Zhang <zhanghongchen@loongson.cn>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
+	Bojan Smojver <bojan@rexursive.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn, 
+	stable@vger.kernel.org, Weihao Li <liweihao@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 13, 2023 at 9:33=E2=80=AFAM Chris Feng <chris.feng@mediatek.com=
-> wrote:
+On Wed, Dec 13, 2023 at 2:11=E2=80=AFAM Hongchen Zhang
+<zhanghongchen@loongson.cn> wrote:
 >
-> Wakeup events that occur in the hibernation process's
-> hibernation_platform_enter() cannot wake up the system. Although the
-> current hibernation framework will execute part of the recovery process
-> after a wakeup event occurs, it ultimately performs a shutdown operation
-> because the system does not check the return value of
-> hibernation_platform_enter(). In short, if a wakeup event occurs before
-> putting the system into the final low-power state, it will be missed.
+> When we test S4(suspend to disk) on LoongArch 3A6000 platform, the
+> test case sometimes fails. The dmesg log shows the following error:
+>         Invalid LZO compressed length
+> After we dig into the code, we find out that:
+> When compress/decompress the image, the synchronization operation
+> between the control thread and the compress/decompress/crc thread
+> uses relaxed ordering interface, which is unreliable, and the
+> following situation may occur:
+> CPU 0                                   CPU 1
+> save_image_lzo                          lzo_compress_threadfn
+>                                           atomic_set(&d->stop, 1);
+>   atomic_read(&data[thr].stop)
+>   data[thr].cmp =3D data[thr].cmp_len;
+>                                           WRITE data[thr].cmp_len
+> Then CPU0 get a old cmp_len and write to disk. When cpu resume from S4,
+> wrong cmp_len is loaded.
 >
-> To solve this problem, check the return value of
-> hibernation_platform_enter(). When it returns -EAGAIN or -EBUSY (indicate
-> the occurrence of a wakeup event), execute the hibernation recovery
-> process, discard the previously saved image, and ultimately return to the
-> working state.
+> To maintain data consistency between two threads, we should use the
+> acquire/release ordering interface. So we change atomic_read/atomic_set
+> to atomic_read_acquire/atomic_set_release.
 >
-> Signed-off-by: Chris Feng <chris.feng@mediatek.com>
+> Fixes: 081a9d043c98 ("PM / Hibernate: Improve performance of LZO/plain hi=
+bernation, checksum image")
+> Cc: stable@vger.kernel.org
+> Co-developed-by: Weihao Li <liweihao@loongson.cn>
+
+I gather that the tag above is the only difference between this
+version of the patch and the previous one.
+
+It is always better to list the changes made between consecutive
+versions of a patch.
+
+> Signed-off-by: Weihao Li <liweihao@loongson.cn>
+> Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
 > ---
-> [PATCH v2]:
->  - Optimize the "if" condition logic.
->  - Link to v1: https://lore.kernel.org/all/20231024091447.108072-1-chris.=
-feng@mediatek.com
-> [PATCH v3]:
->  - Use pr_info instead of pr_err.
->  - Fix undeclared function 'swsusp_unmark' build error.
->  - Refine commit and printing message.
->  - Change the subject.
->  - Link to v2: https://lore.kernel.org/all/20231120081516.55172-1-chris.f=
-eng@mediatek.com
-> [PATCH v4]:
->  - Define an empty swsusp_unmark() function for scenarios where
->    CONFIG_SUSPEND is not defined.
->  - Link to v3: https://lore.kernel.org/all/20231204021155.10434-1-chris.f=
-eng@mediatek.com
-> ---
->  kernel/power/hibernate.c | 10 ++++++++--
->  kernel/power/power.h     |  2 ++
->  2 files changed, 10 insertions(+), 2 deletions(-)
+>  kernel/power/swap.c | 38 +++++++++++++++++++-------------------
+>  1 file changed, 19 insertions(+), 19 deletions(-)
 >
-> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> index dee341ae4ace..621326b3e679 100644
-> --- a/kernel/power/hibernate.c
-> +++ b/kernel/power/hibernate.c
-> @@ -642,9 +642,9 @@ int hibernation_platform_enter(void)
->   */
->  static void power_down(void)
->  {
-> -#ifdef CONFIG_SUSPEND
->         int error;
+> diff --git a/kernel/power/swap.c b/kernel/power/swap.c
+> index a2cb0babb5ec..d44f5937f1e5 100644
+> --- a/kernel/power/swap.c
+> +++ b/kernel/power/swap.c
+> @@ -606,11 +606,11 @@ static int crc32_threadfn(void *data)
+>         unsigned i;
 >
-> +#ifdef CONFIG_SUSPEND
->         if (hibernation_mode =3D=3D HIBERNATION_SUSPEND) {
->                 error =3D suspend_devices_and_enter(mem_sleep_current);
->                 if (error) {
-> @@ -667,7 +667,13 @@ static void power_down(void)
->                 kernel_restart(NULL);
->                 break;
->         case HIBERNATION_PLATFORM:
-> -               hibernation_platform_enter();
-> +               error =3D hibernation_platform_enter();
-> +               if (error =3D=3D -EAGAIN || error =3D=3D -EBUSY) {
-> +                       swsusp_unmark();
-> +                       events_check_enabled =3D false;
-> +                       pr_info("Hibernation process aborted due to detec=
-ted wakeup event.\n");
-> +                       return;
-> +               }
->                 fallthrough;
->         case HIBERNATION_SHUTDOWN:
->                 if (kernel_can_power_off())
-> diff --git a/kernel/power/power.h b/kernel/power/power.h
-> index 17fd9aaaf084..8499a39c62f4 100644
-> --- a/kernel/power/power.h
-> +++ b/kernel/power/power.h
-> @@ -175,6 +175,8 @@ extern int swsusp_write(unsigned int flags);
->  void swsusp_close(void);
->  #ifdef CONFIG_SUSPEND
->  extern int swsusp_unmark(void);
-> +#else
-> +static inline int swsusp_unmark(void) { return 0; }
->  #endif
+>         while (1) {
+> -               wait_event(d->go, atomic_read(&d->ready) ||
+> +               wait_event(d->go, atomic_read_acquire(&d->ready) ||
+>                                   kthread_should_stop());
+>                 if (kthread_should_stop()) {
+>                         d->thr =3D NULL;
+> -                       atomic_set(&d->stop, 1);
+> +                       atomic_set_release(&d->stop, 1);
+>                         wake_up(&d->done);
+>                         break;
+>                 }
+> @@ -619,7 +619,7 @@ static int crc32_threadfn(void *data)
+>                 for (i =3D 0; i < d->run_threads; i++)
+>                         *d->crc32 =3D crc32_le(*d->crc32,
+>                                              d->unc[i], *d->unc_len[i]);
+> -               atomic_set(&d->stop, 1);
+> +               atomic_set_release(&d->stop, 1);
+>                 wake_up(&d->done);
+>         }
+>         return 0;
+> @@ -649,12 +649,12 @@ static int lzo_compress_threadfn(void *data)
+>         struct cmp_data *d =3D data;
 >
->  struct __kernel_old_timeval;
+>         while (1) {
+> -               wait_event(d->go, atomic_read(&d->ready) ||
+> +               wait_event(d->go, atomic_read_acquire(&d->ready) ||
+>                                   kthread_should_stop());
+>                 if (kthread_should_stop()) {
+>                         d->thr =3D NULL;
+>                         d->ret =3D -1;
+> -                       atomic_set(&d->stop, 1);
+> +                       atomic_set_release(&d->stop, 1);
+>                         wake_up(&d->done);
+>                         break;
+>                 }
+> @@ -663,7 +663,7 @@ static int lzo_compress_threadfn(void *data)
+>                 d->ret =3D lzo1x_1_compress(d->unc, d->unc_len,
+>                                           d->cmp + LZO_HEADER, &d->cmp_le=
+n,
+>                                           d->wrk);
+> -               atomic_set(&d->stop, 1);
+> +               atomic_set_release(&d->stop, 1);
+>                 wake_up(&d->done);
+>         }
+>         return 0;
+> @@ -798,7 +798,7 @@ static int save_image_lzo(struct swap_map_handle *han=
+dle,
+>
+>                         data[thr].unc_len =3D off;
+>
+> -                       atomic_set(&data[thr].ready, 1);
+> +                       atomic_set_release(&data[thr].ready, 1);
+>                         wake_up(&data[thr].go);
+>                 }
+>
+> @@ -806,12 +806,12 @@ static int save_image_lzo(struct swap_map_handle *h=
+andle,
+>                         break;
+>
+>                 crc->run_threads =3D thr;
+> -               atomic_set(&crc->ready, 1);
+> +               atomic_set_release(&crc->ready, 1);
+>                 wake_up(&crc->go);
+>
+>                 for (run_threads =3D thr, thr =3D 0; thr < run_threads; t=
+hr++) {
+>                         wait_event(data[thr].done,
+> -                                  atomic_read(&data[thr].stop));
+> +                               atomic_read_acquire(&data[thr].stop));
+>                         atomic_set(&data[thr].stop, 0);
+>
+>                         ret =3D data[thr].ret;
+> @@ -850,7 +850,7 @@ static int save_image_lzo(struct swap_map_handle *han=
+dle,
+>                         }
+>                 }
+>
+> -               wait_event(crc->done, atomic_read(&crc->stop));
+> +               wait_event(crc->done, atomic_read_acquire(&crc->stop));
+>                 atomic_set(&crc->stop, 0);
+>         }
+>
+> @@ -1132,12 +1132,12 @@ static int lzo_decompress_threadfn(void *data)
+>         struct dec_data *d =3D data;
+>
+>         while (1) {
+> -               wait_event(d->go, atomic_read(&d->ready) ||
+> +               wait_event(d->go, atomic_read_acquire(&d->ready) ||
+>                                   kthread_should_stop());
+>                 if (kthread_should_stop()) {
+>                         d->thr =3D NULL;
+>                         d->ret =3D -1;
+> -                       atomic_set(&d->stop, 1);
+> +                       atomic_set_release(&d->stop, 1);
+>                         wake_up(&d->done);
+>                         break;
+>                 }
+> @@ -1150,7 +1150,7 @@ static int lzo_decompress_threadfn(void *data)
+>                         flush_icache_range((unsigned long)d->unc,
+>                                            (unsigned long)d->unc + d->unc=
+_len);
+>
+> -               atomic_set(&d->stop, 1);
+> +               atomic_set_release(&d->stop, 1);
+>                 wake_up(&d->done);
+>         }
+>         return 0;
+> @@ -1335,7 +1335,7 @@ static int load_image_lzo(struct swap_map_handle *h=
+andle,
+>                 }
+>
+>                 if (crc->run_threads) {
+> -                       wait_event(crc->done, atomic_read(&crc->stop));
+> +                       wait_event(crc->done, atomic_read_acquire(&crc->s=
+top));
+>                         atomic_set(&crc->stop, 0);
+>                         crc->run_threads =3D 0;
+>                 }
+> @@ -1371,7 +1371,7 @@ static int load_image_lzo(struct swap_map_handle *h=
+andle,
+>                                         pg =3D 0;
+>                         }
+>
+> -                       atomic_set(&data[thr].ready, 1);
+> +                       atomic_set_release(&data[thr].ready, 1);
+>                         wake_up(&data[thr].go);
+>                 }
+>
+> @@ -1390,7 +1390,7 @@ static int load_image_lzo(struct swap_map_handle *h=
+andle,
+>
+>                 for (run_threads =3D thr, thr =3D 0; thr < run_threads; t=
+hr++) {
+>                         wait_event(data[thr].done,
+> -                                  atomic_read(&data[thr].stop));
+> +                               atomic_read_acquire(&data[thr].stop));
+>                         atomic_set(&data[thr].stop, 0);
+>
+>                         ret =3D data[thr].ret;
+> @@ -1421,7 +1421,7 @@ static int load_image_lzo(struct swap_map_handle *h=
+andle,
+>                                 ret =3D snapshot_write_next(snapshot);
+>                                 if (ret <=3D 0) {
+>                                         crc->run_threads =3D thr + 1;
+> -                                       atomic_set(&crc->ready, 1);
+> +                                       atomic_set_release(&crc->ready, 1=
+);
+>                                         wake_up(&crc->go);
+>                                         goto out_finish;
+>                                 }
+> @@ -1429,13 +1429,13 @@ static int load_image_lzo(struct swap_map_handle =
+*handle,
+>                 }
+>
+>                 crc->run_threads =3D thr;
+> -               atomic_set(&crc->ready, 1);
+> +               atomic_set_release(&crc->ready, 1);
+>                 wake_up(&crc->go);
+>         }
+>
+>  out_finish:
+>         if (crc->run_threads) {
+> -               wait_event(crc->done, atomic_read(&crc->stop));
+> +               wait_event(crc->done, atomic_read_acquire(&crc->stop));
+>                 atomic_set(&crc->stop, 0);
+>         }
+>         stop =3D ktime_get();
 > --
 
-Applied as 6.8 material, but I have rephrased the pr_info() message
-added by this patch.
+Applied as 6.8 material with some edits in the subject and changelog.
 
 Thanks!
 
