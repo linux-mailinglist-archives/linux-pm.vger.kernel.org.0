@@ -1,60 +1,60 @@
-Return-Path: <linux-pm+bounces-1110-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1111-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78489811884
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 17:00:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 46BF98119E3
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 17:44:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F7C11C209CE
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 16:00:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB7AD1C211AE
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 16:44:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A47085374;
-	Wed, 13 Dec 2023 16:00:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 269D2364D4;
+	Wed, 13 Dec 2023 16:44:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XJBsjoyz"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="te6aMkCG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF749AC
-	for <linux-pm@vger.kernel.org>; Wed, 13 Dec 2023 08:00:28 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-40c3fe6c08fso47108185e9.1
-        for <linux-pm@vger.kernel.org>; Wed, 13 Dec 2023 08:00:28 -0800 (PST)
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0005219B
+	for <linux-pm@vger.kernel.org>; Wed, 13 Dec 2023 08:44:32 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-40c2d50bfbfso36162095e9.0
+        for <linux-pm@vger.kernel.org>; Wed, 13 Dec 2023 08:44:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702483227; x=1703088027; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1702485871; x=1703090671; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=6wQgJVXTbrMMfThGWjtIRWTD7vVL6atDUhY4Ep1StLs=;
-        b=XJBsjoyztyuO8UoyE9qdylknvKliNODQgRo87KgJkZ/DgKz5qJsdV2cQLiH0406bq7
-         yAQ2bU39xsajKqu7Vj3FicLci9l+gepYKMBsEa+B4dykczWEOMPO5KSFbNOa0NNmNSBD
-         ERVxKJ7px9RS0HjkiMMW906EpHvbf8+0ifNwY6bECGxonz5+b2tp65jCWdhCSfG+OLnL
-         2zFFAu6/6VyiF1iyDSu5UeWwg2d9YsOpB4r4BgsgluwgdWs7vOtD7iGSo+phoOQwBOJr
-         bzSQUmUOfsm8uoDsB2hgIekTPBfcG3CxtzN/sZLGMyZCR2LQ6U7lfB9EwJLivXXhGDL6
-         oYvg==
+        bh=xr6toAXCsIC/bmSJ5B/sgzDjMz3Z0Uajw+zCN70ZLA8=;
+        b=te6aMkCGNKekPIOONKwcqy+m4Q/3GWoRKKb7EGXkY8WQMlJvIPLXJJ7TrzasovU384
+         8OOXRaL4jJUkGLibwOB3xu2sgFaQPrcumTA43j3GD+l11OfBJ08c1g2Yu7LVw1AX4qgI
+         naV8vU4VyrLVXyTVi99B+nd+XBH7wtrXDcSa558pgIrinjn7QCm9K8oNjDixzdnEFaBE
+         IunS8m7NRbTfBD88cEBl9Eysbp7FhlKylra+M0WWl3BVx0BVG+Ij8gtCwmqbBptqrwHH
+         BWWKnWV43z17nkUJpYKK7AeqA4hxW0LejiyeKt4F40A2zLX38qaZb18vlELGZSNeul/i
+         AIqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702483227; x=1703088027;
+        d=1e100.net; s=20230601; t=1702485871; x=1703090671;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6wQgJVXTbrMMfThGWjtIRWTD7vVL6atDUhY4Ep1StLs=;
-        b=MUIAtXq6blcbvPh+q0cdayCMzyZ5CUjZe2WoqdIFZrHclJdWZDASEYirFxdHVSriEd
-         PjGDeLG6yMpLpvS0B13Mp6o0ATjhSy3WwwzukGlfT8l9lkXHdN1J3o74rRNIP4uKWRhD
-         lZJWZtCwO6LAOqSfMNnuZWrt5anuYjk4WxtWII1Ze+RRmVIkmpXl3pm915uskzNaeCC4
-         lRlMPjFza+Ixu0DPGAbEGCHo+rv2klrMQKsTHM54F08DcCqXA0pdJhkiga6RKxDIAUow
-         jfQjBpcVJMJUH/5fCfdksU9jQVbRbwTSSOkUA6Se5CiJVKBtllpiRpc/R7J6DA+TlP3P
-         CGdA==
-X-Gm-Message-State: AOJu0Ywmu6UHJRt9WNikOnrTw3qTJ5CUNQrRJdLNuVrmFBZnvVfYilMT
-	Ea1TYjiOvZZUXDA/KUcWJk6PvdmYTV8hJRjbGh4=
-X-Google-Smtp-Source: AGHT+IHbdOR4+AKZ8GxKN19778YZkvtVfp1xfJFhP4NykzxaNPbc/ujq9Iouol0pUbKfYOOqdCI9PA==
-X-Received: by 2002:a05:6000:90c:b0:334:b174:9a14 with SMTP id cw12-20020a056000090c00b00334b1749a14mr2721396wrb.50.1702483227055;
-        Wed, 13 Dec 2023 08:00:27 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
-        by smtp.googlemail.com with ESMTPSA id n10-20020a5d4c4a000000b003333abf3edfsm13647343wrt.47.2023.12.13.08.00.26
+        bh=xr6toAXCsIC/bmSJ5B/sgzDjMz3Z0Uajw+zCN70ZLA8=;
+        b=wfqvf/hR9pYEXoEbZhMvHOuvvG9HXjYAxMKljxQrHQGq7SKRCGw4BrzWfyFmNWOORu
+         +9mONJJvo088FVhr419i60r3Al9N6EOJYAidP25gvXph0nzchKE5P+cSO2cEzo9krZk6
+         fWtlTJXsHXUn1ld06YG4uMfdH8R+IVNj7TYY6LhlsHljgvDXXsJp9zKoXygnr8xWVSws
+         w/MvuueXWBxOhAzm99Zt3xJGHFTG/jhMF7khcq2alZC54wk/z7V8/kvw6tnOZ/G2H6AB
+         MsP7tSU+RnDcmn/SI4+rozrJDHn1t4uo37fcrJdNJoYd7d/sEtZbAyEwldC3yGKBygDe
+         w5PA==
+X-Gm-Message-State: AOJu0Yy7UBy94BrXC0TXB0EGwU5ZeGPNpIlsUgT0RG0VF/jNlDMfeCKN
+	2yYp2wPwTdRYY9QBXJpgQ1SDrQ==
+X-Google-Smtp-Source: AGHT+IHmb8ewYnbRlq6v/5rMQRoMcMWRfLl01skabFTAXrcQx6eTujOz4Paqf/1jHchf7eivqMmEQQ==
+X-Received: by 2002:a05:600c:2246:b0:40b:2a46:6f1 with SMTP id a6-20020a05600c224600b0040b2a4606f1mr4313509wmm.2.1702485870981;
+        Wed, 13 Dec 2023 08:44:30 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:ac4e:a5fe:7f71:8d59? ([2a01:e0a:982:cbb0:ac4e:a5fe:7f71:8d59])
+        by smtp.gmail.com with ESMTPSA id o4-20020a5d58c4000000b0033333bee379sm13767115wrf.107.2023.12.13.08.44.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Dec 2023 08:00:26 -0800 (PST)
-Message-ID: <327458e6-de96-460f-8ec6-a1c31fcf6b5e@linaro.org>
-Date: Wed, 13 Dec 2023 17:00:26 +0100
+        Wed, 13 Dec 2023 08:44:30 -0800 (PST)
+Message-ID: <212239ae-60ab-46f3-a838-39a4d61091fe@linaro.org>
+Date: Wed, 13 Dec 2023 17:44:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -62,165 +62,183 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] thermal: core: add initial support for cold and
- critical_cold trip point
-Content-Language: en-US
-To: Christian Marangi <ansuelsmth@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20231212221301.12581-1-ansuelsmth@gmail.com>
- <0e4cee10-4aa4-4979-9841-f1dbd207e0b7@linaro.org>
- <6579bdb2.5d0a0220.1ae22.1f92@mx.google.com>
- <CAJZ5v0gdLXBziENtZ9qmvntmaq6gNSXvGHq1eq8_o+xz0V_A0Q@mail.gmail.com>
- <6579c604.050a0220.8fe5c.d191@mx.google.com>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <6579c604.050a0220.8fe5c.d191@mx.google.com>
+Subject: Re: [PATCH 0/5] clk: Make clk_rate_exclusive_get() return void
+Content-Language: en-GB
+To: Maxime Ripard <mripard@kernel.org>,
+ =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+ dri-devel@lists.freedesktop.org,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Thierry Reding <thierry.reding@gmail.com>, David Airlie <airlied@gmail.com>,
+ linux-clk@vger.kernel.org, Jerome Brunet <jbrunet@baylibre.com>,
+ Rob Herring <robh@kernel.org>, Samuel Holland <samuel@sholland.org>,
+ Kevin Hilman <khilman@baylibre.com>, Russell King <linux@armlinux.org.uk>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>, Chanwoo Choi
+ <cw00.choi@samsung.com>, Chen-Yu Tsai <wens@csie.org>,
+ MyungJoo Ham <myungjoo.ham@samsung.com>,
+ Johan Hovold <johan+linaro@kernel.org>, linux-sunxi@lists.linux.dev,
+ Thomas Zimmermann <tzimmermann@suse.de>, linux-pm@vger.kernel.org,
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ linux-tegra@vger.kernel.org, linux-amlogic@lists.infradead.org,
+ kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
+ Stephen Boyd <sboyd@kernel.org>, Kyungmin Park <kyungmin.park@samsung.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Georgi Djakov <djakov@kernel.org>
+References: <cover.1702400947.git.u.kleine-koenig@pengutronix.de>
+ <ki5n3rz5n4oxj2hhc3rj6xpn3e2tdi7fcp2q7exjbzilrlqflp@przautvhuy4g>
+ <20231213074300.4bq7wkfqd4jhhcr4@pengutronix.de>
+ <2nvbag657mlniqwq7fbilapc6vfw5qumab3yd6bqul25ot6wcn@wdlkh5az2fgs>
+From: Neil Armstrong <neil.armstrong@linaro.org>
+In-Reply-To: <2nvbag657mlniqwq7fbilapc6vfw5qumab3yd6bqul25ot6wcn@wdlkh5az2fgs>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 13/12/2023 15:56, Christian Marangi wrote:
-> On Wed, Dec 13, 2023 at 03:43:54PM +0100, Rafael J. Wysocki wrote:
->> On Wed, Dec 13, 2023 at 3:20 PM Christian Marangi <ansuelsmth@gmail.com> wrote:
+Hi Maxime,
+
+Le 13/12/2023 à 09:36, Maxime Ripard a écrit :
+> Hi,
+> 
+> On Wed, Dec 13, 2023 at 08:43:00AM +0100, Uwe Kleine-König wrote:
+>> On Wed, Dec 13, 2023 at 08:16:04AM +0100, Maxime Ripard wrote:
+>>> On Tue, Dec 12, 2023 at 06:26:37PM +0100, Uwe Kleine-König wrote:
+>>>> clk_rate_exclusive_get() returns zero unconditionally. Most users "know"
+>>>> that and don't check the return value. This series fixes the four users
+>>>> that do error checking on the returned value and then makes function
+>>>> return void.
+>>>>
+>>>> Given that the changes to the drivers are simple and so merge conflicts
+>>>> (if any) should be easy to handle, I suggest to merge this complete
+>>>> series via the clk tree.
 >>>
->>> On Wed, Dec 13, 2023 at 03:12:41PM +0100, Daniel Lezcano wrote:
->>>> On 12/12/2023 23:13, Christian Marangi wrote:
->>>>> Add initial support for cold and critical_cold trip point. Many if not
->>>>> all hwmon and thermal device have normally trip point for hot
->>>>> temperature and for cold temperature.
->>>>>
->>>>> Till now only hot temperature were supported. Add support for also cold
->>>>> temperature to permit complete definition of cold trip point in DT.
->>>>>
->>>>> Thermal driver may use these additional trip point to correctly set
->>>>> interrupt for cold temperature values and react based on that with
->>>>> various measure like enabling attached heater, forcing higher voltage
->>>>> and other specialaized peripherals.
->>>>>
->>>>> For hwmon drivers this is needed as currently there is a problem with
->>>>> setting the full operating range of the device for thermal devices
->>>>> defined with hwmon. To better describe the problem, the following
->>>>> example is needed:
->>>>>
->>>>> In the scenario of a simple hwmon with an active trip point declared
->>>>> and a cooling device attached, the hwmon subsystem currently set the
->>>>> min and max trip point based on the single active trip point.
->>>>> Thermal subsystem parse all the trip points and calculate the lowest and
->>>>> the highest trip point and calls the .set_trip of hwmon to setup the
->>>>> trip points.
->>>>>
->>>>> The fact that we currently don't have a way to declare the cold/min
->>>>> temperature values, makes the thermal subsystem to set the low value as
->>>>> -INT_MAX.
->>>>> For hwmon drivers that doesn't use clamp_value and actually reject
->>>>> invalid values for the trip point, this results in the hwmon settings to
->>>>> be rejected.
->>>>>
->>>>> To permit to pass the correct range of trip point, permit to set in DT
->>>>> also cold and critical_cold trip point.
->>>>>
->>>>> Thermal driver may also define .cold and .critical_cold to act on these
->>>>> trip point tripped and apply the required measure.
->>>>
->>>> Agree with the feature but we need to clarify the semantic of the trip
->>>> points first. What actions do we expect for them in order to have like a
->>>> mirror reflection of the existing hot trip points.
->>>>
->>>> What action do you expect with:
->>>>
->>>>   - 'cold' ?
->>>>
->>>>   - 'critical_cold' ?
->>>>
->>>>
+>>> I don't think it's the right way to go about it.
 >>>
->>> This is more of a sensible topic but I think it's the thermal driver
->>> that needs to implement these. As said in the commit description,
->>> examples are setting higher voltage from the attached regulator,
->>> enabling some hardware heater.
->>
->> So how is it different from an active trip point?  There are heating
->> rather than cooling devices associated with it, but other than this??
->>
-> 
->  From what I read from documentation, active trip point are used to
-> trigger cooling-device. Cold (and crit_cold) are to setup trip point to
-> the device. The device will normally trigger an interrupt (or even
-> internally with the correct register set autonomously apply some measure
-> to handle the problem)
-
-Actually what specifies an active cooling device is it requires energy 
-in order to operate. More precisely, the goal of an active cooling 
-device is too move the heat from one place to another place. So the 
-system, instead of relying on the natural convection thermal transfer, 
-will force this transfer. So the "active" means external system + energy.
-
-> In theory it's possible to have passive trip point for cold condition
-> but still we lack any definition of the lower spectrum of the trip
-> point.
-
-Yes, absolutely :) And that is why I think we should clarify that to 
-conform to the general semantic of the thermal management. If we define 
-things in the thermal framework but having a different meaning in the 
-thermal management vocabulary. That will be really odd and look amateur 
-work :)
-
-In the lower spectrum, an external warming device where we use energy to 
-provide some heat is active. But if we use some kind of software 
-solution (like what suggested before), we indeed use energy, but the 
-solution is internal to the system, so I do believe we can consider it 
-as passive.
-
-IMO, we should see, especially on mobile, passive trip point for too 
-hot, and active trip point for too cold. That would not surprising as 
-the former has too much energy generated and the latter not enough energy.
-
-(BTW, as a side note, active or passive trip points do not really make 
-sense to me. It is the mitigation devices which are active or passive).
-
-For the systems which do not have a dedicated warming up hardware, we 
-should implement a "warming device" as a passive one (which is a 
-different story from your proposal I agree).
-
-
->>> Maybe with critical cold bigger measure can be applied. Currently for
->>> critical trip point we shutdown the system (if the critical ops is not
->>> declared) but with critical_cold condition I think it won't work... I
->>> expect a system in -40°C would just lock up/glitch so rebooting in that
->>> condition won't change a thing...
+>>> clk_rate_exclusive_get() should be expected to fail. For example if
+>>> there's another user getting an exclusive rate on the same clock.
 >>>
->>> Anyway yes we can define a shutdown by default for that but IMHO it
->>> wouldn't make much sense.
+>>> If we're not checking for it right now, then it should probably be
+>>> fixed, but the callers checking for the error are right to do so if they
+>>> rely on an exclusive rate. It's the ones that don't that should be
+>>> modified.
 >>
->> So why do you want to add it at all?
+>> If some other consumer has already "locked" a clock that I call
+>> clk_rate_exclusive_get() for, this isn't an error. In my bubble I call
+>> this function because I don't want the rate to change e.g. because I
+>> setup some registers in the consuming device to provide a fixed UART
+>> baud rate or i2c bus frequency (and that works as expected).
 > 
-> Again it's really to fill a hole we have from a long time... One example
-> is the qcom tsens driver that have trip point for cold and crit_cold.
-> Those in theory can be set in DT with the trip point but we lack any
-> definition for them. (using passive trip point would be confusing IMHO)
+> I guess it's a larger conversation, but I don't see how that can
+> possibly work.
 > 
-> Another example is an Aquantia PHY that have register for the cold and
-> critical_cold trip point.
+> The way the API is designed, you have no guarantee (outside of
+> clk_rate_exclusive_*) that the rate is going to change.
 > 
-> Currently defining a critical trip point for the negative temp results
-> in the system shutdown.
+> And clk_rate_exclusive_get() doesn't allow the rate to change while in
+> the "critical section".
+> 
+> So the only possible thing to do is clk_set_rate() +
+> clk_rate_exclusive_get().
 
-Yes, and the more I think about it, the more I'm inclined to have:
+There's clk_set_rate_exclusive() for this purpose.
 
-  * trip (active|passive) + hot|cold
-  * trip cold (meaning "really too cold")
-  * trip hot (meaning "really too hot")
-  * trip critical (meaning "I'm about to collapse")
+> 
+> So there's a window where the clock can indeed be changed, and the
+> consumer that is about to lock its rate wouldn't be aware of it.
+> 
+> I guess it would work if you don't care about the rate at all, you just
+> want to make sure it doesn't change.
+> 
+> Out of the 7 users of that function, 3 are in that situation, so I guess
+> it's fair.
+> 
+> 3 are open to that race condition I mentioned above.
+> 
+> 1 is calling clk_set_rate while in the critical section, which works if
+> there's a single user but not if there's multiple, so it should be
+> discouraged.
+> 
+>> In this case I won't be able to change the rate of the clock, but that
+>> is signalled by clk_set_rate() failing (iff and when I need awother
+>> rate) which also seems the right place to fail to me.
+> 
+> Which is ignored by like half the callers, including the one odd case I
+> mentioned above.
+> 
+> And that's super confusing still: you can *always* get exclusivity, but
+> not always do whatever you want with the rate when you have it? How are
+> drivers supposed to recover from that? You can handle failing to get
+> exclusivity, but certainly not working around variable guarantees.
+> 
+>> It's like that since clk_rate_exclusive_get() was introduced in 2017
+>> (commit 55e9b8b7b806ec3f9a8817e13596682a5981c19c).
+> 
+> Right, but "it's always been that way" surely can't be an argument,
+> otherwise you wouldn't have done that series in the first place.
+> 
+>> BTW, I just noticed that my assertion "Most users \"know\" that
+>> [clk_rate_exclusive_get() returns zero unconditionally]" is wrong. As of
+>> next-20231213 there are 3 callers ignoring the return value of
+>> clk_rate_exclusive_get() and 4 that handle (imaginary) returned errors.
+>> I expected this function to be used more extensively. (In fact I think
+>> it should be used more as several drivers rely on the clk rate not
+>> changing.)
+> 
+> Yes, but also it's super difficult to use in practice, and most devices
+> don't care.
+> 
+> The current situation is something like this:
+> 
+>    * Only a handful of devices really care about their clock rate, and
+>      often only for one of their clock if they have several. You would
+>      probably get all the devices that create an analog signal somehow
+>      there, so audio, display, i2c, spi, uarts, etc. Plus the ones doing
+>      frequency scaling so CPU and GPUs.
+> 
+>    * CPUs and GPUs are very likely to have a dedicated clock, so we can
+>      rule the "another user is going to mess with my clock" case.
+> 
+>    * UARTs/i2c/etc. are usually taking their clock from the bus interface
+>      directly which is pretty much never going to change (for good
+>      reason). And the rate of the bus is not really likely to change.
+> 
+>    * SPI/NAND/MMC usually have their dedicated clock too, and the bus
+>      rate is not likely to change after the initial setup either.
+> 
+> So, the only affected devices are the ones generating external signals,
+> with the rate changing during the life of the system. Even for audio or
+> video devices, that's fairly unlikely to happen. And you need to have
+> multiple devices sharing the same clock tree for that issue to occur,
+> which is further reducing the chances it happens.
 
-We may have also active devices with multiple level of warm up, so it 
-will need to be managed by a governor like the step wise.
+Well, thanks for HW designers, this exists and some SoCs has less PLLs than
+needed, and they can't be dedicated for some hw blocks.
 
+> 
+> Realistically speaking, this only occurs with multi-head display outputs
+> where it's somewhat likely to have all the display controllers feeding
+> from the same clock, and the power up of the various output is done in
+> sequence which creates that situation.
+> 
+> And even then, the clk_rate_exclusive_* interface effectively locks the
+> entire clock subtree to its current rate, so the effect on the rest of
+> the devices can be significant.
+> 
+> So... yeah. Even though you're right, it's trying to address a problem
+> that is super unlikely to happen with a pretty big hammer that might be
+> too much for most. So it's not really surprising it's not used more.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Honestly I tried my best to find a smart way to set the DSI clock tree
+with only 2 endpoints of the tree, but CCF will explore all possibilities
+and since you cannot set constraints, locking a sub-tree is the smartest
+way I found.
+In this case, the PLL is common between the DSI controller and video generator,
+so to keep the expected clock ratio, the smart way is to set the freq on
+one side, lock the subtree and set the rate on the other side.
+An API permitting to set multiple rates to multiple clocks in a single call
+would be the solution, but not sure if we could possibly write such algorithm.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> 
+> Maxime
 
+Neil
 
