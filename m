@@ -1,29 +1,60 @@
-Return-Path: <linux-pm+bounces-1091-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1092-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 209F8811297
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 14:15:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C62F8112E5
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 14:31:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B701D1F21493
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 13:15:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 32B741F2147F
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 13:31:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE7E22C85A;
-	Wed, 13 Dec 2023 13:15:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05C1E2CCDD;
+	Wed, 13 Dec 2023 13:31:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qamF2V5P"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A8438E;
-	Wed, 13 Dec 2023 05:15:17 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C796FC15;
-	Wed, 13 Dec 2023 05:16:02 -0800 (PST)
-Received: from [10.57.85.168] (unknown [10.57.85.168])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 566D13F762;
-	Wed, 13 Dec 2023 05:15:14 -0800 (PST)
-Message-ID: <bc813916-664f-4197-9378-b1663a209a76@arm.com>
-Date: Wed, 13 Dec 2023 13:16:18 +0000
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6F55DD
+	for <linux-pm@vger.kernel.org>; Wed, 13 Dec 2023 05:31:23 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-40c31f18274so64808085e9.0
+        for <linux-pm@vger.kernel.org>; Wed, 13 Dec 2023 05:31:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702474282; x=1703079082; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gT1+x2jNVKALOWKjd6FkOQOQNIpKL6HodGq+cYC6MoM=;
+        b=qamF2V5PuQKFeC4U/9RO4DQ5g1CTlQrC9LpLjwo5ZY51pPFIUWO1gKuWWXFb55DxWh
+         DWQcEnTZW8qg+yM/moCYvmu/+GnrWk5Db4WKmR6IEelFjmt9USwwzp1b9gG3PQ4QQJcQ
+         h67wU+vlQnTmrOXQKqa0VSknRlL/Z5x+zn8RjC4jxTXgxBvWItd3jTI5j8YAj5ymHPmy
+         Si/ZJCGye5VqS5Vi84PvJaCdF+c2dG/obaJ99biIRNt31hxZPXahuhEBob6Qx239uR08
+         Mot+GhV/S8ZbLjvS72jtaBBCO4NuM55fa9+dNelWD9CrZ6eNBrtZBsdI2rYXOmF5KNIF
+         o27g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702474282; x=1703079082;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gT1+x2jNVKALOWKjd6FkOQOQNIpKL6HodGq+cYC6MoM=;
+        b=JI3jLdaAURC754au19CzyJduk1gidGJDLx7ycUkJLJwj5xpuuVhJdFgzw0jDJd53rb
+         FaGuhrnrWQVz5BK34qChUyGSLRP+Tf33LzlzHP3D2w+pWz7L/ip76L1ChExuNtn8arHI
+         iFGa4h+cbMGPJFBlrxc9DX4bqNeODxQ8OHDCYl/UgHI/jlTJfd84TxDN8GLWM5nwvDOn
+         N+jCK43Yjdz/KjixBH+9yi8J44+HgHyXJRUlD/TKi6c69AIqNY/MuTvfJmAk7Rx4VA1d
+         Whlk+aRr3wrVHJQ29mApgOTEI6ZMWFJcYxh9/zEMhXQX+xxfmlEuEPc34VFLLJPyBm1h
+         Mf2w==
+X-Gm-Message-State: AOJu0YwjcY4wmWcoMC1IP+nKhFrBz2+5LNwHpnYyCTSYfLy252ZouMWF
+	Zw/b6wKpFUkZ4sZhMpBRNlhWNA==
+X-Google-Smtp-Source: AGHT+IE+E11nyqtn0hlYZuSK8aM31EzC/BzujBRteSYaLrs3lmlbx+QqDB2/JYVsDQYVeP2ePPFp+Q==
+X-Received: by 2002:a05:600c:43d4:b0:40b:5e21:bde9 with SMTP id f20-20020a05600c43d400b0040b5e21bde9mr3652331wmn.120.1702474282158;
+        Wed, 13 Dec 2023 05:31:22 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
+        by smtp.googlemail.com with ESMTPSA id fc7-20020a05600c524700b0040c44cb251dsm12863860wmb.46.2023.12.13.05.31.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Dec 2023 05:31:21 -0800 (PST)
+Message-ID: <c7e4a344-ef15-4316-ac41-6ec9c062eabe@linaro.org>
+Date: Wed, 13 Dec 2023 14:31:21 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -31,199 +62,46 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 00/23] Introduce runtime modifiable Energy Model
+Subject: Re: [PATCH] thermal/core: Check get_temp ops is present when
+ registering a tz
 Content-Language: en-US
-To: adharmap@quicinc.com
-Cc: dietmar.eggemann@arm.com, rui.zhang@intel.com,
- amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
- daniel.lezcano@linaro.org, viresh.kumar@linaro.org, len.brown@intel.com,
- pavel@ucw.cz, mhiramat@kernel.org, qyousef@layalina.io, wvw@google.com,
- rafael@kernel.org, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20231129110853.94344-1-lukasz.luba@arm.com>
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20231129110853.94344-1-lukasz.luba@arm.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+ "open list:THERMAL" <linux-pm@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>
+References: <20231213121322.2486967-1-daniel.lezcano@linaro.org>
+ <CAJZ5v0gjeiCb9wBjdG+yWp5E_g2SPUMNNf-Stm_xkGau0Cbr2g@mail.gmail.com>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0gjeiCb9wBjdG+yWp5E_g2SPUMNNf-Stm_xkGau0Cbr2g@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Abhijeet,
+On 13/12/2023 13:46, Rafael J. Wysocki wrote:
+> On Wed, Dec 13, 2023 at 1:13 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>> Initially the check against the get_temp ops in the
+>> thermal_zone_device_update() was put in there in order to catch
+>> drivers not providing this method.
+>>
+>> Instead of checking again and again the function if the ops exists in
+>> the update function, let's do the check at registration time, so it is
+>> checked one time and for all.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> 
+> Looks good.  Do you want me to pick it up?
 
-It's been a while when we discussed an EM feature presented on some
-Android common kernel Gerrit (Nov 2021).
+Yes please
 
-On 11/29/23 11:08, Lukasz Luba wrote:
-> Hi all,
-> 
-> This patch set adds a new feature which allows to modify Energy Model (EM)
-> power values at runtime. It will allow to better reflect power model of
-> a recent SoCs and silicon. Different characteristics of the power usage
-> can be leveraged and thus better decisions made during task placement in EAS.
-> 
-> It's part of feature set know as Dynamic Energy Model. It has been presented
-> and discussed recently at OSPM2023 [3]. This patch set implements the 1st
-> improvement for the EM.
-> 
-> The concepts:
-> 1. The CPU power usage can vary due to the workload that it's running or due
-> to the temperature of the SoC. The same workload can use more power when the
-> temperature of the silicon has increased (e.g. due to hot GPU or ISP).
-> In such situation the EM can be adjusted and reflect the fact of increased
-> power usage. That power increase is due to static power
-> (sometimes called simply: leakage). The CPUs in recent SoCs are different.
-> We have heterogeneous SoCs with 3 (or even 4) different microarchitectures.
-> They are also built differently with High Performance (HP) cells or
-> Low Power (LP) cells. They are affected by the temperature increase
-> differently: HP cells have bigger leakage. The SW model can leverage that
-> knowledge.
-> 
-> 2. It is also possible to change the EM to better reflect the currently
-> running workload. Usually the EM is derived from some average power values
-> taken from experiments with benchmark (e.g. Dhrystone). The model derived
-> from such scenario might not represent properly the workloads usually running
-> on the device. Therefore, runtime modification of the EM allows to switch to
-> a different model, when there is a need.
-> 
-> 3. The EM can be adjusted after boot, when all the modules are loaded and
-> more information about the SoC is available e.g. chip binning. This would help
-> to better reflect the silicon characteristics. Thus, this EM modification
-> API allows it now. It wasn't possible in the past and the EM had to be
-> 'set in stone'.
-> 
-> More detailed explanation and background can be found in presentations
-> during LPC2022 [1][2] or in the documentation patches.
-> 
-> Some test results.
-> The EM can be updated to fit better the workload type. In the case below the EM
-> has been updated for the Jankbench test on Pixel6 (running v5.18 w/ mainline backports
-> for the scheduler bits). The Jankbench was run 10 times for those two configurations,
-> to get more reliable data.
-> 
-> 1. Janky frames percentage
-> +--------+-----------------+---------------------+-------+-----------+
-> | metric |    variable     |       kernel        | value | perc_diff |
-> +--------+-----------------+---------------------+-------+-----------+
-> | gmean  | jank_percentage | EM_default          |  2.0  |   0.0%    |
-> | gmean  | jank_percentage | EM_modified_runtime |  1.3  |  -35.33%  |
-> +--------+-----------------+---------------------+-------+-----------+
-> 
-> 2. Avg frame render time duration
-> +--------+---------------------+---------------------+-------+-----------+
-> | metric |      variable       |       kernel        | value | perc_diff |
-> +--------+---------------------+---------------------+-------+-----------+
-> | gmean  | mean_frame_duration | EM_default          | 10.5  |   0.0%    |
-> | gmean  | mean_frame_duration | EM_modified_runtime |  9.6  |  -8.52%   |
-> +--------+---------------------+---------------------+-------+-----------+
-> 
-> 3. Max frame render time duration
-> +--------+--------------------+---------------------+-------+-----------+
-> | metric |      variable      |       kernel        | value | perc_diff |
-> +--------+--------------------+---------------------+-------+-----------+
-> | gmean  | max_frame_duration | EM_default          | 251.6 |   0.0%    |
-> | gmean  | max_frame_duration | EM_modified_runtime | 115.5 |  -54.09%  |
-> +--------+--------------------+---------------------+-------+-----------+
-> 
-> 4. OS overutilized state percentage (when EAS is not working)
-> +--------------+---------------------+------+------------+------------+
-> |    metric    |       wa_path       | time | total_time | percentage |
-> +--------------+---------------------+------+------------+------------+
-> | overutilized | EM_default          | 1.65 |   253.38   |    0.65    |
-> | overutilized | EM_modified_runtime | 1.4  |   277.5    |    0.51    |
-> +--------------+---------------------+------+------------+------------+
-> 
-> 5. All CPUs (Little+Mid+Big) power values in mW
-> +------------+--------+---------------------+-------+-----------+
-> |  channel   | metric |       kernel        | value | perc_diff |
-> +------------+--------+---------------------+-------+-----------+
-> |    CPU     | gmean  | EM_default          | 142.1 |   0.0%    |
-> |    CPU     | gmean  | EM_modified_runtime | 131.8 |  -7.27%   |
-> +------------+--------+---------------------+-------+-----------+
-> 
-> The time cost to update the EM decreased in this v5 vs v4:
-> big: 5us vs 2us -> 2.6x faster
-> mid: 9us vs 3us -> 3x faster
-> little: 16us vs 16us -> no change
-> 
-> We still have to update the inefficiency in the cpufreq framework, thus
-> a bit of overhead will be there.
-> 
-> Changelog:
-> v5:
-> - removed 2 tables design
-> - have only one table (runtime_table) used also in thermal (Wei, Rafael)
-> - refactored update function and removed callback call for each opp
-> - added faster EM table swap, using only the RCU pointer update
-> - added memory allocation API and tracking with kref
-> - avoid overhead for computing 'cost' for each OPP in update, it can be
->    pre-computed in device drivers EM earlier
-> - add support for device drivers providing EM table
-> - added API for computing 'cost' values in EM for EAS
-> - added API for thermal/powercap to use EM (using RCU wrappers)
-> - switched to single allocation and 'state[]' array (Rafael)
-> - changed documentation to align with current design
-> - added helper API for computing cost values
-> - simplified EM free in unregister path (thanks to kref)
-> - split patch updating EM clients and changed them separetly
-> - added seperate patch removing old static EM table
-> - added EM debugfs change patch to dump the runtime_table
-> - addressed comments in v4 for spelling/comments/headers
-> - added review tags
-> v4 changes are here [4]
-> 
-> Regards,
-> Lukasz Luba
-> 
-> [1] https://lpc.events/event/16/contributions/1341/attachments/955/1873/Dynamic_Energy_Model_to_handle_leakage_power.pdf
-> [2] https://lpc.events/event/16/contributions/1194/attachments/1114/2139/LPC2022_Energy_model_accuracy.pdf
-> [3] https://www.youtube.com/watch?v=2C-5uikSbtM&list=PL0fKordpLTjKsBOUcZqnzlHShri4YBL1H
-> [4] https://lore.kernel.org/lkml/20230925081139.1305766-1-lukasz.luba@arm.com/
-> 
-> 
-> Lukasz Luba (23):
->    PM: EM: Add missing newline for the message log
->    PM: EM: Refactor em_cpufreq_update_efficiencies() arguments
->    PM: EM: Find first CPU active while updating OPP efficiency
->    PM: EM: Refactor em_pd_get_efficient_state() to be more flexible
->    PM: EM: Refactor a new function em_compute_costs()
->    PM: EM: Check if the get_cost() callback is present in
->      em_compute_costs()
->    PM: EM: Refactor how the EM table is allocated and populated
->    PM: EM: Introduce runtime modifiable table
->    PM: EM: Use runtime modified EM for CPUs energy estimation in EAS
->    PM: EM: Add API for memory allocations for new tables
->    PM: EM: Add API for updating the runtime modifiable EM
->    PM: EM: Add helpers to read under RCU lock the EM table
->    PM: EM: Add performance field to struct em_perf_state
->    PM: EM: Support late CPUs booting and capacity adjustment
->    PM: EM: Optimize em_cpu_energy() and remove division
->    powercap/dtpm_cpu: Use new Energy Model interface to get table
->    powercap/dtpm_devfreq: Use new Energy Model interface to get table
->    drivers/thermal/cpufreq_cooling: Use new Energy Model interface
->    drivers/thermal/devfreq_cooling: Use new Energy Model interface
->    PM: EM: Change debugfs configuration to use runtime EM table data
->    PM: EM: Remove old table
->    PM: EM: Add em_dev_compute_costs() as API for device drivers
->    Documentation: EM: Update with runtime modification design
-> 
->   Documentation/power/energy-model.rst | 206 +++++++++++-
->   drivers/powercap/dtpm_cpu.c          |  35 +-
->   drivers/powercap/dtpm_devfreq.c      |  31 +-
->   drivers/thermal/cpufreq_cooling.c    |  40 ++-
->   drivers/thermal/devfreq_cooling.c    |  43 ++-
->   include/linux/energy_model.h         | 163 +++++----
->   kernel/power/energy_model.c          | 479 +++++++++++++++++++++++----
->   7 files changed, 813 insertions(+), 184 deletions(-)
-> 
+Thanks
 
-You've been interested in this feature back then.
 
-I have a gentle ask, if you are still interested in. It would be nice if
-you (or some other Qcom engineer) could leave a feedback comment
-(similar what you have made for the Gerrit original series). I will be
-really grateful.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-In this cover letter, there are some power saving numbers from
-a real phone, with also performance metrics (janky frames). You might
-be interested in those scenarios as well.
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
-Regards,
-Lukasz
 
