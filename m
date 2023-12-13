@@ -1,255 +1,115 @@
-Return-Path: <linux-pm+bounces-1088-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1089-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1479C811215
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 13:52:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 929FF811226
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 13:54:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1D81281DD2
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 12:52:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C649E1C20C45
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 12:54:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B07A62C1B6;
-	Wed, 13 Dec 2023 12:51:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AC6D2C193;
+	Wed, 13 Dec 2023 12:54:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="FTxlsm7n"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="onZlDTA2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE0F198;
-	Wed, 13 Dec 2023 04:51:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
-	Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
-	In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=4ff4rMpb4e8+j2FVzHVtwCCPXNpYraqqrJVEXYQ7zus=; b=FTxlsm7nMbZ2auwIoWztzjGrLr
-	eJ/+UAL4mRlb+xzpeos7afUrQbA793swTrEBkQs15e6/U2pZQzuZK+w+1AHJpkI3HfUJGZEjFm/Kp
-	W9jVCjZgcW9jZXNT7d7yYBD6uXj3FP+JGLZOMl2DiqfJobHMrn+f2Rn1YL+OviAx4TvVtCo8v3NhG
-	ha0rLs1UNyB4oOrGfMvPk8nj7AxLUehHcXG4csWrXQ+KZWl07iCkmqKO7r4ZhGqDaej9rOshtXdE9
-	mIEiNCaE7QZ92nAimpN8JuMZiod0x/DZEKdfe4Kl4qSvzrc78tI8xR7PubiPehT6ssECE39vdnOjp
-	zzmnovvQ==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:33330 helo=rmk-PC.armlinux.org.uk)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <rmk@armlinux.org.uk>)
-	id 1rDOhV-0008IF-1A;
-	Wed, 13 Dec 2023 12:50:57 +0000
-Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-	id 1rDOhX-00Dvlg-Ci; Wed, 13 Dec 2023 12:50:59 +0000
-In-Reply-To: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
-References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
-From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-To: linux-pm@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linux-acpi@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	x86@kernel.org,
-	acpica-devel@lists.linuxfoundation.org,
-	linux-csky@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-ia64@vger.kernel.org,
-	linux-parisc@vger.kernel.org
-Cc: Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	jianyong.wu@arm.com,
-	justin.he@arm.com,
-	James Morse <james.morse@arm.com>
-Subject: [PATCH RFC v3 21/21] cpumask: Add enabled cpumask for present CPUs
- that can be brought online
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76621130
+	for <linux-pm@vger.kernel.org>; Wed, 13 Dec 2023 04:54:39 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-40c2c65e6aaso70830735e9.2
+        for <linux-pm@vger.kernel.org>; Wed, 13 Dec 2023 04:54:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702472078; x=1703076878; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=k0T+A6SRa9G6oV07TV0BevTGZT6++0no4uJCEiRG1HQ=;
+        b=onZlDTA28DDwtZGIb+SIGlapV7GUIgUx8zHiMtRZS5XYYOz5HWeTdhy4gwhOD8n814
+         LmlJGEKuqHmW2ajdHhd/TS4rq9VaxguJQLJW470Y4pLHawpFZwDSOova5IlDcn0ylIqS
+         5e30DUIVCqf0rQEICOY1TQ5QyfYHPNErHhJu1DDKaAhWjxvsOc+HVGvjFS5powo1y7Cw
+         D5IIfocUBM4AhCJ/GLhcP8dUEmEo8ciOUmJN3IiPFFDglhYgYvNqOPm9kTbq1IoxtRth
+         r0ihUcs8Z2XNCbMv4G4GBPj72J8JXIMDYuU5IehXbbYrfU8lk4SkWDA7Yl7s+5P1llGG
+         Jalg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702472078; x=1703076878;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=k0T+A6SRa9G6oV07TV0BevTGZT6++0no4uJCEiRG1HQ=;
+        b=o9hiffFSg9G16nTP+LprPvWXXCQ6iVgIJHZJk3a6ue3N+RS5SkdXDawvzC0q1Nnv/2
+         fXQS5G+IDNoI1QBQXXcGnKD+omu+lz1Ezll44IiUk9lsp/i8PkjjUouWLtdMSXRCqF0E
+         KFV43Q5oF/Quxjn5aJadPPIRS5QqFDpbNmCvr4l/kqobRBxFth6IwyQaMBhYo+HrU9ni
+         5U16uMjtkiDa56ywj4Ka66/Adfb0mVlR5YBmFPC327NEaOGRT8ix0Rwp79CAY3T5Gnpc
+         XsOORrr5nCNJQp8uyRvGt0zbtJiQ6bRR93LtYQaGKtvk/GHqNNc2ipSUNmSDwDOGmqcb
+         UWxg==
+X-Gm-Message-State: AOJu0YyH7/MkHDPwGaj+pZIyGMJdpTnIk1tdGk4Sf+dquF77aI4PRbEk
+	IRY/81APLlPPcSE6H3RbkrMHlQ==
+X-Google-Smtp-Source: AGHT+IGfK+6t200n7Uf79+mFIVcnbySb7ZZ/Zv9J0qH1I2C1ziTS7sBTa5sZAA0q/aUz6AB2R57PGQ==
+X-Received: by 2002:a1c:4b10:0:b0:40c:32d5:18df with SMTP id y16-20020a1c4b10000000b0040c32d518dfmr3912612wma.182.1702472077776;
+        Wed, 13 Dec 2023 04:54:37 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0? ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
+        by smtp.googlemail.com with ESMTPSA id bi8-20020a05600c3d8800b0040c43be2e52sm12903853wmb.40.2023.12.13.04.54.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Dec 2023 04:54:37 -0800 (PST)
+Message-ID: <47523014-1ed6-4644-8099-52fe785bef13@linaro.org>
+Date: Wed, 13 Dec 2023 13:54:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v12 1/4] dt-bindings: thermal-zones: Document
+ critical-action
+Content-Language: en-US
+To: Fabio Estevam <festevam@gmail.com>, rafael@kernel.org
+Cc: krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+ conor+dt@kernel.org, mazziesaccount@gmail.com, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, Fabio Estevam <festevam@denx.de>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20231129124330.519423-1-festevam@gmail.com>
+ <e0b9c0c1-eae5-4664-bddb-56515e9fee56@linaro.org>
+ <CAOMZO5CTBkT+T+wevFRYyBJuwMCiUoFuDKGSyYNNZQ9CWsEJrQ@mail.gmail.com>
+ <CAOMZO5AhP1Jhjte2dncWbmWzJ0ZHK9PrOC=pQt8YANTU+B076Q@mail.gmail.com>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAOMZO5AhP1Jhjte2dncWbmWzJ0ZHK9PrOC=pQt8YANTU+B076Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1rDOhX-00Dvlg-Ci@rmk-PC.armlinux.org.uk>
-Sender: Russell King <rmk@armlinux.org.uk>
-Date: Wed, 13 Dec 2023 12:50:59 +0000
 
-From: James Morse <james.morse@arm.com>
+On 13/12/2023 12:39, Fabio Estevam wrote:
+> Rafael, Daniel,
+> 
+> On Wed, Dec 6, 2023 at 9:59 AM Fabio Estevam <festevam@gmail.com> wrote:
+>>
+>> Hi Rafael,
+>>
+>> On Wed, Nov 29, 2023 at 10:13 AM Daniel Lezcano
+>> <daniel.lezcano@linaro.org> wrote:
+>>
+>>> Rafael, ok for you if I pick this series ?
+>>
+>> Please let us know if Daniel could pick this series.
+> 
+> Can this be applied for 6.8, please?
 
-The 'offline' file in sysfs shows all offline CPUs, including those
-that aren't present. User-space is expected to remove not-present CPUs
-from this list to learn which CPUs could be brought online.
+I have applied this series on my bleeding-edge branch, this one will be 
+merged with the PM's bleeding branch. After a few days it will migrate 
+to linux-next.
 
-CPUs can be present but not-enabled. These CPUs can't be brought online
-until the firmware policy changes, which comes with an ACPI notification
-that will register the CPUs.
+If no obvious regression happen it will end up for v6.8
 
-With only the offline and present files, user-space is unable to
-determine which CPUs it can try to bring online. Add a new CPU mask
-that shows this based on all the registered CPUs.
+Thank you
 
-Signed-off-by: James Morse <james.morse@arm.com>
-Tested-by: Miguel Luis <miguel.luis@oracle.com>
-Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
-Tested-by: Jianyong Wu <jianyong.wu@arm.com>
----
-Outstanding comment:
- https://lore.kernel.org/r/20230914175443.000038f6@Huawei.com
----
- drivers/base/cpu.c      | 10 ++++++++++
- include/linux/cpumask.h | 25 +++++++++++++++++++++++++
- kernel/cpu.c            |  3 +++
- 3 files changed, 38 insertions(+)
+   -- Daniel
 
-diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-index 13d052bf13f4..a6e96a0a92b7 100644
---- a/drivers/base/cpu.c
-+++ b/drivers/base/cpu.c
-@@ -95,6 +95,7 @@ void unregister_cpu(struct cpu *cpu)
- {
- 	int logical_cpu = cpu->dev.id;
- 
-+	set_cpu_enabled(logical_cpu, false);
- 	unregister_cpu_under_node(logical_cpu, cpu_to_node(logical_cpu));
- 
- 	device_unregister(&cpu->dev);
-@@ -273,6 +274,13 @@ static ssize_t print_cpus_offline(struct device *dev,
- }
- static DEVICE_ATTR(offline, 0444, print_cpus_offline, NULL);
- 
-+static ssize_t print_cpus_enabled(struct device *dev,
-+				  struct device_attribute *attr, char *buf)
-+{
-+	return sysfs_emit(buf, "%*pbl\n", cpumask_pr_args(cpu_enabled_mask));
-+}
-+static DEVICE_ATTR(enabled, 0444, print_cpus_enabled, NULL);
-+
- static ssize_t print_cpus_isolated(struct device *dev,
- 				  struct device_attribute *attr, char *buf)
- {
-@@ -413,6 +421,7 @@ int register_cpu(struct cpu *cpu, int num)
- 	register_cpu_under_node(num, cpu_to_node(num));
- 	dev_pm_qos_expose_latency_limit(&cpu->dev,
- 					PM_QOS_RESUME_LATENCY_NO_CONSTRAINT);
-+	set_cpu_enabled(num, true);
- 
- 	return 0;
- }
-@@ -494,6 +503,7 @@ static struct attribute *cpu_root_attrs[] = {
- 	&cpu_attrs[2].attr.attr,
- 	&dev_attr_kernel_max.attr,
- 	&dev_attr_offline.attr,
-+	&dev_attr_enabled.attr,
- 	&dev_attr_isolated.attr,
- #ifdef CONFIG_NO_HZ_FULL
- 	&dev_attr_nohz_full.attr,
-diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-index cfb545841a2c..cc72a0887f04 100644
---- a/include/linux/cpumask.h
-+++ b/include/linux/cpumask.h
-@@ -92,6 +92,7 @@ static inline void set_nr_cpu_ids(unsigned int nr)
-  *
-  *     cpu_possible_mask- has bit 'cpu' set iff cpu is populatable
-  *     cpu_present_mask - has bit 'cpu' set iff cpu is populated
-+ *     cpu_enabled_mask  - has bit 'cpu' set iff cpu can be brought online
-  *     cpu_online_mask  - has bit 'cpu' set iff cpu available to scheduler
-  *     cpu_active_mask  - has bit 'cpu' set iff cpu available to migration
-  *
-@@ -124,11 +125,13 @@ static inline void set_nr_cpu_ids(unsigned int nr)
- 
- extern struct cpumask __cpu_possible_mask;
- extern struct cpumask __cpu_online_mask;
-+extern struct cpumask __cpu_enabled_mask;
- extern struct cpumask __cpu_present_mask;
- extern struct cpumask __cpu_active_mask;
- extern struct cpumask __cpu_dying_mask;
- #define cpu_possible_mask ((const struct cpumask *)&__cpu_possible_mask)
- #define cpu_online_mask   ((const struct cpumask *)&__cpu_online_mask)
-+#define cpu_enabled_mask   ((const struct cpumask *)&__cpu_enabled_mask)
- #define cpu_present_mask  ((const struct cpumask *)&__cpu_present_mask)
- #define cpu_active_mask   ((const struct cpumask *)&__cpu_active_mask)
- #define cpu_dying_mask    ((const struct cpumask *)&__cpu_dying_mask)
-@@ -993,6 +996,7 @@ extern const DECLARE_BITMAP(cpu_all_bits, NR_CPUS);
- #else
- #define for_each_possible_cpu(cpu) for_each_cpu((cpu), cpu_possible_mask)
- #define for_each_online_cpu(cpu)   for_each_cpu((cpu), cpu_online_mask)
-+#define for_each_enabled_cpu(cpu)   for_each_cpu((cpu), cpu_enabled_mask)
- #define for_each_present_cpu(cpu)  for_each_cpu((cpu), cpu_present_mask)
- #endif
- 
-@@ -1015,6 +1019,15 @@ set_cpu_possible(unsigned int cpu, bool possible)
- 		cpumask_clear_cpu(cpu, &__cpu_possible_mask);
- }
- 
-+static inline void
-+set_cpu_enabled(unsigned int cpu, bool can_be_onlined)
-+{
-+	if (can_be_onlined)
-+		cpumask_set_cpu(cpu, &__cpu_enabled_mask);
-+	else
-+		cpumask_clear_cpu(cpu, &__cpu_enabled_mask);
-+}
-+
- static inline void
- set_cpu_present(unsigned int cpu, bool present)
- {
-@@ -1096,6 +1109,7 @@ static __always_inline unsigned int num_online_cpus(void)
- 	return raw_atomic_read(&__num_online_cpus);
- }
- #define num_possible_cpus()	cpumask_weight(cpu_possible_mask)
-+#define num_enabled_cpus()	cpumask_weight(cpu_enabled_mask)
- #define num_present_cpus()	cpumask_weight(cpu_present_mask)
- #define num_active_cpus()	cpumask_weight(cpu_active_mask)
- 
-@@ -1104,6 +1118,11 @@ static inline bool cpu_online(unsigned int cpu)
- 	return cpumask_test_cpu(cpu, cpu_online_mask);
- }
- 
-+static inline bool cpu_enabled(unsigned int cpu)
-+{
-+	return cpumask_test_cpu(cpu, cpu_enabled_mask);
-+}
-+
- static inline bool cpu_possible(unsigned int cpu)
- {
- 	return cpumask_test_cpu(cpu, cpu_possible_mask);
-@@ -1128,6 +1147,7 @@ static inline bool cpu_dying(unsigned int cpu)
- 
- #define num_online_cpus()	1U
- #define num_possible_cpus()	1U
-+#define num_enabled_cpus()	1U
- #define num_present_cpus()	1U
- #define num_active_cpus()	1U
- 
-@@ -1141,6 +1161,11 @@ static inline bool cpu_possible(unsigned int cpu)
- 	return cpu == 0;
- }
- 
-+static inline bool cpu_enabled(unsigned int cpu)
-+{
-+	return cpu == 0;
-+}
-+
- static inline bool cpu_present(unsigned int cpu)
- {
- 	return cpu == 0;
-diff --git a/kernel/cpu.c b/kernel/cpu.c
-index a86972a91991..fe0a5189f8ae 100644
---- a/kernel/cpu.c
-+++ b/kernel/cpu.c
-@@ -3122,6 +3122,9 @@ EXPORT_SYMBOL(__cpu_possible_mask);
- struct cpumask __cpu_online_mask __read_mostly;
- EXPORT_SYMBOL(__cpu_online_mask);
- 
-+struct cpumask __cpu_enabled_mask __read_mostly;
-+EXPORT_SYMBOL(__cpu_enabled_mask);
-+
- struct cpumask __cpu_present_mask __read_mostly;
- EXPORT_SYMBOL(__cpu_present_mask);
- 
 -- 
-2.30.2
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
 
