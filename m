@@ -1,260 +1,165 @@
-Return-Path: <linux-pm+bounces-1029-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1030-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A6E481076E
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 02:11:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B7B58107E0
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 02:52:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8830F1F2163F
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 01:11:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D522928237E
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 01:52:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB655A50;
-	Wed, 13 Dec 2023 01:11:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EFD8ECE;
+	Wed, 13 Dec 2023 01:52:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HuWgsYjq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F842A7;
-	Tue, 12 Dec 2023 17:11:16 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.129.93])
-	by gateway (Coremail) with SMTP id _____8DxE_CsBHlldYIAAA--.3183S3;
-	Wed, 13 Dec 2023 09:11:08 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.129.93])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8DxkuOpBHllxY8BAA--.10748S2;
-	Wed, 13 Dec 2023 09:11:05 +0800 (CST)
-From: Hongchen Zhang <zhanghongchen@loongson.cn>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <len.brown@intel.com>,
-	Pavel Machek <pavel@ucw.cz>,
-	Bojan Smojver <bojan@rexursive.com>
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	loongson-kernel@lists.loongnix.cn,
-	Hongchen Zhang <zhanghongchen@loongson.cn>,
-	stable@vger.kernel.org,
-	Weihao Li <liweihao@loongson.cn>
-Subject: [PATCH v3] PM: hibernate: use acquire/release ordering when compress/decompress image
-Date: Wed, 13 Dec 2023 09:11:03 +0800
-Message-Id: <20231213011103.1491414-1-zhanghongchen@loongson.cn>
-X-Mailer: git-send-email 2.33.0
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25751AD;
+	Tue, 12 Dec 2023 17:52:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702432368; x=1733968368;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ooWOO96PMnesatUTdbVVnvwmOIWOsYIyqsD//zdqSlQ=;
+  b=HuWgsYjqUmaaeyJhQY8wmHVRzXXB65E0qoyOT8499g9jkd69V8YMYLsF
+   XpEIIuurGEviEjH5+9m5x7mYzYWnKjrqKdFcrDxGDgdothkOPIhcKS/+v
+   grvyCelLJeNMgRxYIsMJxST3/7Zub47oYbRu4iiQeb5TV4pjAuV8jgC1D
+   ObCY65bQp0SDogyIg7WVNKLfN0ZROEbnsWVnLryv8hVvOfF20kRUWCbez
+   eLn2SPRahCzibulHtt+1G6WxJHyDgp9QjntgWRAYe5NTH4Y2QHwdS75TV
+   8cGksgU8jGQVp0MAV35etxnOc8s/kwbZdqWVQHzl4asOg42rfM758nF63
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="461374968"
+X-IronPort-AV: E=Sophos;i="6.04,271,1695711600"; 
+   d="scan'208";a="461374968"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2023 17:52:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,271,1695711600"; 
+   d="scan'208";a="15247229"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 12 Dec 2023 17:52:45 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rDEQV-000Jyv-0j;
+	Wed, 13 Dec 2023 01:52:43 +0000
+Date: Wed, 13 Dec 2023 09:52:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>, rjw@rjwysocki.net,
+	lukasz.luba@arm.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	rui.zhang@intel.com, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] thermal/debugfs: Add thermal cooling device
+ debugfs information
+Message-ID: <202312130936.rLIRgZBE-lkp@intel.com>
+References: <20231212161047.1631077-1-daniel.lezcano@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8DxkuOpBHllxY8BAA--.10748S2
-X-CM-SenderInfo: x2kd0w5krqwupkhqwqxorr0wxvrqhubq/1tbiAQAEB2V3wy0JUgABsk
-X-Coremail-Antispam: 1Uk129KBj93XoW3Gw47uFWkJrW7ZFyrXFWkGrX_yoW7KrW8pF
-	W8Xan0kr4UXrs8Z39rAay8Z345AFnYyFZrGrsxC34fuasIgrsYya40gF9Yvr1YyFy8t34v
-	9a17K34qgryqqFXCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-	kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
-	twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
-	8JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
-	6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
-	AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
-	0xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4
-	v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AK
-	xVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Dl1DUUUUU==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231212161047.1631077-1-daniel.lezcano@linaro.org>
 
-When we test S4(suspend to disk) on LoongArch 3A6000 platform, the
-test case sometimes fails. The dmesg log shows the following error:
-	Invalid LZO compressed length
-After we dig into the code, we find out that:
-When compress/decompress the image, the synchronization operation
-between the control thread and the compress/decompress/crc thread
-uses relaxed ordering interface, which is unreliable, and the
-following situation may occur:
-CPU 0					CPU 1
-save_image_lzo				lzo_compress_threadfn
-					  atomic_set(&d->stop, 1);
-  atomic_read(&data[thr].stop)
-  data[thr].cmp = data[thr].cmp_len;
-	  				  WRITE data[thr].cmp_len
-Then CPU0 get a old cmp_len and write to disk. When cpu resume from S4,
-wrong cmp_len is loaded.
+Hi Daniel,
 
-To maintain data consistency between two threads, we should use the
-acquire/release ordering interface. So we change atomic_read/atomic_set
-to atomic_read_acquire/atomic_set_release.
+kernel test robot noticed the following build warnings:
 
-Fixes: 081a9d043c98 ("PM / Hibernate: Improve performance of LZO/plain hibernation, checksum image")
-Cc: stable@vger.kernel.org
-Co-developed-by: Weihao Li <liweihao@loongson.cn>
-Signed-off-by: Weihao Li <liweihao@loongson.cn>
-Signed-off-by: Hongchen Zhang <zhanghongchen@loongson.cn>
----
- kernel/power/swap.c | 38 +++++++++++++++++++-------------------
- 1 file changed, 19 insertions(+), 19 deletions(-)
+[auto build test WARNING on rafael-pm/thermal]
+[also build test WARNING on linus/master v6.7-rc5 next-20231212]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index a2cb0babb5ec..d44f5937f1e5 100644
---- a/kernel/power/swap.c
-+++ b/kernel/power/swap.c
-@@ -606,11 +606,11 @@ static int crc32_threadfn(void *data)
- 	unsigned i;
- 
- 	while (1) {
--		wait_event(d->go, atomic_read(&d->ready) ||
-+		wait_event(d->go, atomic_read_acquire(&d->ready) ||
- 		                  kthread_should_stop());
- 		if (kthread_should_stop()) {
- 			d->thr = NULL;
--			atomic_set(&d->stop, 1);
-+			atomic_set_release(&d->stop, 1);
- 			wake_up(&d->done);
- 			break;
- 		}
-@@ -619,7 +619,7 @@ static int crc32_threadfn(void *data)
- 		for (i = 0; i < d->run_threads; i++)
- 			*d->crc32 = crc32_le(*d->crc32,
- 			                     d->unc[i], *d->unc_len[i]);
--		atomic_set(&d->stop, 1);
-+		atomic_set_release(&d->stop, 1);
- 		wake_up(&d->done);
- 	}
- 	return 0;
-@@ -649,12 +649,12 @@ static int lzo_compress_threadfn(void *data)
- 	struct cmp_data *d = data;
- 
- 	while (1) {
--		wait_event(d->go, atomic_read(&d->ready) ||
-+		wait_event(d->go, atomic_read_acquire(&d->ready) ||
- 		                  kthread_should_stop());
- 		if (kthread_should_stop()) {
- 			d->thr = NULL;
- 			d->ret = -1;
--			atomic_set(&d->stop, 1);
-+			atomic_set_release(&d->stop, 1);
- 			wake_up(&d->done);
- 			break;
- 		}
-@@ -663,7 +663,7 @@ static int lzo_compress_threadfn(void *data)
- 		d->ret = lzo1x_1_compress(d->unc, d->unc_len,
- 		                          d->cmp + LZO_HEADER, &d->cmp_len,
- 		                          d->wrk);
--		atomic_set(&d->stop, 1);
-+		atomic_set_release(&d->stop, 1);
- 		wake_up(&d->done);
- 	}
- 	return 0;
-@@ -798,7 +798,7 @@ static int save_image_lzo(struct swap_map_handle *handle,
- 
- 			data[thr].unc_len = off;
- 
--			atomic_set(&data[thr].ready, 1);
-+			atomic_set_release(&data[thr].ready, 1);
- 			wake_up(&data[thr].go);
- 		}
- 
-@@ -806,12 +806,12 @@ static int save_image_lzo(struct swap_map_handle *handle,
- 			break;
- 
- 		crc->run_threads = thr;
--		atomic_set(&crc->ready, 1);
-+		atomic_set_release(&crc->ready, 1);
- 		wake_up(&crc->go);
- 
- 		for (run_threads = thr, thr = 0; thr < run_threads; thr++) {
- 			wait_event(data[thr].done,
--			           atomic_read(&data[thr].stop));
-+				atomic_read_acquire(&data[thr].stop));
- 			atomic_set(&data[thr].stop, 0);
- 
- 			ret = data[thr].ret;
-@@ -850,7 +850,7 @@ static int save_image_lzo(struct swap_map_handle *handle,
- 			}
- 		}
- 
--		wait_event(crc->done, atomic_read(&crc->stop));
-+		wait_event(crc->done, atomic_read_acquire(&crc->stop));
- 		atomic_set(&crc->stop, 0);
- 	}
- 
-@@ -1132,12 +1132,12 @@ static int lzo_decompress_threadfn(void *data)
- 	struct dec_data *d = data;
- 
- 	while (1) {
--		wait_event(d->go, atomic_read(&d->ready) ||
-+		wait_event(d->go, atomic_read_acquire(&d->ready) ||
- 		                  kthread_should_stop());
- 		if (kthread_should_stop()) {
- 			d->thr = NULL;
- 			d->ret = -1;
--			atomic_set(&d->stop, 1);
-+			atomic_set_release(&d->stop, 1);
- 			wake_up(&d->done);
- 			break;
- 		}
-@@ -1150,7 +1150,7 @@ static int lzo_decompress_threadfn(void *data)
- 			flush_icache_range((unsigned long)d->unc,
- 					   (unsigned long)d->unc + d->unc_len);
- 
--		atomic_set(&d->stop, 1);
-+		atomic_set_release(&d->stop, 1);
- 		wake_up(&d->done);
- 	}
- 	return 0;
-@@ -1335,7 +1335,7 @@ static int load_image_lzo(struct swap_map_handle *handle,
- 		}
- 
- 		if (crc->run_threads) {
--			wait_event(crc->done, atomic_read(&crc->stop));
-+			wait_event(crc->done, atomic_read_acquire(&crc->stop));
- 			atomic_set(&crc->stop, 0);
- 			crc->run_threads = 0;
- 		}
-@@ -1371,7 +1371,7 @@ static int load_image_lzo(struct swap_map_handle *handle,
- 					pg = 0;
- 			}
- 
--			atomic_set(&data[thr].ready, 1);
-+			atomic_set_release(&data[thr].ready, 1);
- 			wake_up(&data[thr].go);
- 		}
- 
-@@ -1390,7 +1390,7 @@ static int load_image_lzo(struct swap_map_handle *handle,
- 
- 		for (run_threads = thr, thr = 0; thr < run_threads; thr++) {
- 			wait_event(data[thr].done,
--			           atomic_read(&data[thr].stop));
-+				atomic_read_acquire(&data[thr].stop));
- 			atomic_set(&data[thr].stop, 0);
- 
- 			ret = data[thr].ret;
-@@ -1421,7 +1421,7 @@ static int load_image_lzo(struct swap_map_handle *handle,
- 				ret = snapshot_write_next(snapshot);
- 				if (ret <= 0) {
- 					crc->run_threads = thr + 1;
--					atomic_set(&crc->ready, 1);
-+					atomic_set_release(&crc->ready, 1);
- 					wake_up(&crc->go);
- 					goto out_finish;
- 				}
-@@ -1429,13 +1429,13 @@ static int load_image_lzo(struct swap_map_handle *handle,
- 		}
- 
- 		crc->run_threads = thr;
--		atomic_set(&crc->ready, 1);
-+		atomic_set_release(&crc->ready, 1);
- 		wake_up(&crc->go);
- 	}
- 
- out_finish:
- 	if (crc->run_threads) {
--		wait_event(crc->done, atomic_read(&crc->stop));
-+		wait_event(crc->done, atomic_read_acquire(&crc->stop));
- 		atomic_set(&crc->stop, 0);
- 	}
- 	stop = ktime_get();
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-debugfs-Add-thermal-debugfs-information-for-mitigation-episodes/20231213-001321
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/20231212161047.1631077-1-daniel.lezcano%40linaro.org
+patch subject: [PATCH v1 1/2] thermal/debugfs: Add thermal cooling device debugfs information
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20231213/202312130936.rLIRgZBE-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231213/202312130936.rLIRgZBE-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312130936.rLIRgZBE-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/thermal/thermal_core.c:27:
+   In file included from drivers/thermal/thermal_core.h:16:
+>> drivers/thermal/thermal_debugfs.h:10:74: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+   static inline void thermal_debug_cdev_add(struct thermal_cooling_device *) {}
+                                                                            ^
+   drivers/thermal/thermal_debugfs.h:11:77: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+   static inline void thermal_debug_cdev_remove(struct thermal_cooling_device *) {}
+                                                                               ^
+   drivers/thermal/thermal_debugfs.h:12:81: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+   static inline void thermal_debug_cdev_transition(struct thermal_cooling_device *, int) {}
+                                                                                   ^
+   drivers/thermal/thermal_debugfs.h:12:86: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+   static inline void thermal_debug_cdev_transition(struct thermal_cooling_device *, int) {}
+                                                                                        ^
+   4 warnings generated.
+--
+   In file included from drivers/thermal/thermal_helpers.c:22:
+   In file included from drivers/thermal/thermal_core.h:16:
+>> drivers/thermal/thermal_debugfs.h:10:74: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+   static inline void thermal_debug_cdev_add(struct thermal_cooling_device *) {}
+                                                                            ^
+   drivers/thermal/thermal_debugfs.h:11:77: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+   static inline void thermal_debug_cdev_remove(struct thermal_cooling_device *) {}
+                                                                               ^
+   drivers/thermal/thermal_debugfs.h:12:81: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+   static inline void thermal_debug_cdev_transition(struct thermal_cooling_device *, int) {}
+                                                                                   ^
+   drivers/thermal/thermal_debugfs.h:12:86: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+   static inline void thermal_debug_cdev_transition(struct thermal_cooling_device *, int) {}
+                                                                                        ^
+>> drivers/thermal/thermal_helpers.c:154:6: warning: no previous prototype for function 'thermal_set_delay_jiffies' [-Wmissing-prototypes]
+   void thermal_set_delay_jiffies(unsigned long *delay_jiffies, int delay_ms)
+        ^
+   drivers/thermal/thermal_helpers.c:154:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void thermal_set_delay_jiffies(unsigned long *delay_jiffies, int delay_ms)
+   ^
+   static 
+   5 warnings generated.
+--
+   In file included from drivers/thermal/tegra/soctherm.c:36:
+   In file included from drivers/thermal/tegra/../thermal_core.h:16:
+>> drivers/thermal/tegra/../thermal_debugfs.h:10:74: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+   static inline void thermal_debug_cdev_add(struct thermal_cooling_device *) {}
+                                                                            ^
+   drivers/thermal/tegra/../thermal_debugfs.h:11:77: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+   static inline void thermal_debug_cdev_remove(struct thermal_cooling_device *) {}
+                                                                               ^
+   drivers/thermal/tegra/../thermal_debugfs.h:12:81: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+   static inline void thermal_debug_cdev_transition(struct thermal_cooling_device *, int) {}
+                                                                                   ^
+   drivers/thermal/tegra/../thermal_debugfs.h:12:86: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+   static inline void thermal_debug_cdev_transition(struct thermal_cooling_device *, int) {}
+                                                                                        ^
+   4 warnings generated.
+
+
+vim +10 drivers/thermal/thermal_debugfs.h
+
+     2	
+     3	#ifdef CONFIG_THERMAL_DEBUGFS
+     4	void thermal_debug_init(void);
+     5	void thermal_debug_cdev_add(struct thermal_cooling_device *cdev);
+     6	void thermal_debug_cdev_remove(struct thermal_cooling_device *cdev);
+     7	void thermal_debug_cdev_transition(struct thermal_cooling_device *cdev, int state);
+     8	#else
+     9	static inline void thermal_debug_init(void) {}
+  > 10	static inline void thermal_debug_cdev_add(struct thermal_cooling_device *) {}
+
 -- 
-2.33.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
