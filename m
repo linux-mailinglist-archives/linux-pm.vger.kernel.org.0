@@ -1,107 +1,89 @@
-Return-Path: <linux-pm+bounces-1057-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1058-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46BC4811042
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 12:36:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E4B981104E
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 12:39:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 04DB1282313
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 11:36:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B28628150D
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 11:39:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B53F524212;
-	Wed, 13 Dec 2023 11:36:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F7A624212;
+	Wed, 13 Dec 2023 11:39:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="em6RKa4A"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD3DC26A1;
-	Wed, 13 Dec 2023 03:34:18 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DFF58C15;
-	Wed, 13 Dec 2023 03:35:03 -0800 (PST)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CBA133F738;
-	Wed, 13 Dec 2023 03:34:15 -0800 (PST)
-Message-ID: <0640a9bf-b864-45ef-ab39-14b0e85ff9ad@arm.com>
-Date: Wed, 13 Dec 2023 12:34:10 +0100
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACF0B0;
+	Wed, 13 Dec 2023 03:39:40 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-55b5a37acb6so1085707a12.0;
+        Wed, 13 Dec 2023 03:39:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702467579; x=1703072379; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=alNPeiad4BuLGwYFjx6kIyBiG7mdOHQ/bq1v+yhyPSA=;
+        b=em6RKa4APQGbbc+VYcQlhadCs+KnHDsiMmGSPxSR2lkPnfhY+jw2Goqta9cTDCVlDA
+         5NSTl7A2/1u8c3JF6EmQRWsrU/UyOCq1OpChRRZdzU1V5IM98u9CqRSW+vZ5wM7c6UEJ
+         0Gv72yrwXczcGxgPuN3ldhjFonlEk4rcE4ojHmzmJtSvLAsgXDS4Ynb9IVlo3J4DSY2t
+         /r/oSH1NaWBALv7wWS2b23L9tKZWA/W0aoD0EQ2+j5W10nbv8NM44pgorfFy/MPA1jot
+         bFNpSBSxsXngF8RS+dgIY0MNh2I6YljGi8dyPnIhu0zm9A8Q6NjP1xicfLxxf291JUUR
+         ax0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702467579; x=1703072379;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=alNPeiad4BuLGwYFjx6kIyBiG7mdOHQ/bq1v+yhyPSA=;
+        b=EF+ABzp6Iec5U91RSx3tHNJuhYeuMkxsdsbkATXFji5swRsnM6M8pJqh26C02zC6is
+         txNe16C4ikhrd7oENnfCCsa7dk0C8FsLBG9yk7JXcd2G6pMV+/xSSq8C8b22ZNzkAh+L
+         agu7thvmycTi+RBhidEq58XnMR2JeYOUs4TtE9mIqTQTj9m2iyu7RtxrvPQTFyZvpBxC
+         BTNrhBHr1bE1JCCIYhvMuu9t/oj0XQSvs6K+IhFsSxgS3RcwBgtaM+zMScIe083IE5KZ
+         hfJJaN5KyQV/JE/lw36aKrhk3I0zb777iLHYKM3zOMUGD9EYdfKhzA9G4Zfgw6z/o46G
+         xCMg==
+X-Gm-Message-State: AOJu0Yz1/G6ta8xea4UbwGitL2//bGTpvF0xLcAVD130fH6HXXFkjx6y
+	qcFrjpN1iYStV69/87OvWMcimbrJ04ZQnFuPKoAFXw9l
+X-Google-Smtp-Source: AGHT+IH17UC80f37r0NrHK3zD/k6V0R1hl39Dt2UcSCeCPsh5PX9idprVzXpuwP7c6N942RpzhN2fPeJ6WqtZNX7PQU=
+X-Received: by 2002:a05:6a21:78a3:b0:18b:a1d7:a736 with SMTP id
+ bf35-20020a056a2178a300b0018ba1d7a736mr17570455pzc.6.1702467579444; Wed, 13
+ Dec 2023 03:39:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 00/23] Introduce runtime modifiable Energy Model
-Content-Language: en-US
-To: Lukasz Luba <lukasz.luba@arm.com>
-Cc: rui.zhang@intel.com, amit.kucheria@verdurent.com,
- linux-pm@vger.kernel.org, amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
- viresh.kumar@linaro.org, len.brown@intel.com, pavel@ucw.cz,
- mhiramat@kernel.org, qyousef@layalina.io, wvw@google.com,
- linux-kernel@vger.kernel.org, rafael@kernel.org
-References: <20231129110853.94344-1-lukasz.luba@arm.com>
- <d920867d-5572-48c3-bd54-b9e989ab6bd5@arm.com>
- <ec8dc77f-364c-443b-a63d-35a2e37d2ccc@arm.com>
-From: Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <ec8dc77f-364c-443b-a63d-35a2e37d2ccc@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20231129124330.519423-1-festevam@gmail.com> <e0b9c0c1-eae5-4664-bddb-56515e9fee56@linaro.org>
+ <CAOMZO5CTBkT+T+wevFRYyBJuwMCiUoFuDKGSyYNNZQ9CWsEJrQ@mail.gmail.com>
+In-Reply-To: <CAOMZO5CTBkT+T+wevFRYyBJuwMCiUoFuDKGSyYNNZQ9CWsEJrQ@mail.gmail.com>
+From: Fabio Estevam <festevam@gmail.com>
+Date: Wed, 13 Dec 2023 08:39:26 -0300
+Message-ID: <CAOMZO5AhP1Jhjte2dncWbmWzJ0ZHK9PrOC=pQt8YANTU+B076Q@mail.gmail.com>
+Subject: Re: [PATCH v12 1/4] dt-bindings: thermal-zones: Document critical-action
+To: rafael@kernel.org
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, krzysztof.kozlowski+dt@linaro.org, 
+	robh+dt@kernel.org, conor+dt@kernel.org, mazziesaccount@gmail.com, 
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	Fabio Estevam <festevam@denx.de>, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 13/12/2023 10:23, Lukasz Luba wrote:
-> Hi Dietmar,
-> 
-> Thank you for the review, I will go one-by-one to respond
-> your comments in patches as well. First comments are below.
-> 
-> On 12/12/23 18:48, Dietmar Eggemann wrote:
->> On 29/11/2023 12:08, Lukasz Luba wrote:
+Rafael, Daniel,
 
-[...]
+On Wed, Dec 6, 2023 at 9:59=E2=80=AFAM Fabio Estevam <festevam@gmail.com> w=
+rote:
+>
+> Hi Rafael,
+>
+> On Wed, Nov 29, 2023 at 10:13=E2=80=AFAM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>
+> > Rafael, ok for you if I pick this series ?
+>
+> Please let us know if Daniel could pick this series.
 
->>> Changelog:
->>> v5:
->>> - removed 2 tables design
->>> - have only one table (runtime_table) used also in thermal (Wei, Rafael)
->>
->> Until v4 you had 2 EM's, the static and the modifiable (runtime). Now in
->> v5 this changed to only have one, the modifiable. IMHO it would be
->> better to change the existing table to be modifiable rather than staring
->> with two EM's and then removing the static one. I assume you end up with
->> way less code changes and the patch-set will become easier to digest for
->> reviewers.
-> 
-> The patches are structured in this way following Daniel's recommendation
-> I got when I was adding similar big changes to EM in 2020 (support all
-> devices in kernel). The approach is as follows:
-> 0. Do some basic clean-up/refactoring if needed for a new feature, to
->    re-use some code if possible in future
-> 1. Introduce new feature next to the existing one
-> 2. Add API and all needed infrastructure (structures, fields) for
->    drivers
-> 3. Re-wire the existing drivers/frameworks to the new feature via new
->    API; ideally keep 1 patch per driver so the maintainer can easily
->    grasp the changes and ACK it, because it will go via different tree
->    (Rafael's tree); in case of some code clash in the driver's code
->    during merge - it will be a single driver so easier to handle
-> 4. when all drivers and frameworks are wired up with the new feature
->    remove the old feature (structures, fields, APIs, etc)
-> 5. Update the documentation with new latest state of desing
-> 
-> In this approach the patches are less convoluted. Because if I remove
-> the old feature and add new in a single patch (e.g. the main structure)
-> that patch will have to modify all drivers to still compile. It
-> would be a big messy patch for this re-design.
-> 
-> I can see in some later comment from Rafael that he is OK with current
-> patch set structure.
-
-OK, in case Rafael and Daniel prefer this, then it's fine.
-
-I just find it weird that we now have
-
-70 struct em_perf_domain {
-71         struct em_perf_table __rcu *runtime_table;
-                                       ^^^^^^^^^^^^^
-
-as the only EM table.
+Can this be applied for 6.8, please?
 
