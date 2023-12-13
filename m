@@ -1,278 +1,132 @@
-Return-Path: <linux-pm+bounces-1100-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1101-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EF8681147E
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 15:20:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 919258114DF
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 15:40:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6E04CB20C01
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 14:20:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6113A1F216B7
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 14:40:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39B622E849;
-	Wed, 13 Dec 2023 14:20:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iaCIfZYJ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A8B92EAE0;
+	Wed, 13 Dec 2023 14:40:10 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6748CD0;
-	Wed, 13 Dec 2023 06:20:37 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-3333fbbeab9so5947645f8f.2;
-        Wed, 13 Dec 2023 06:20:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702477236; x=1703082036; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=bVm8QFJMd6O/w77sQyOURR/hVbb6OBIbMzpfk2XfCKA=;
-        b=iaCIfZYJEM6iHH/Gex+KNGrTSpQ66L8R26gAoHPNCCb4+S0Ru+IhR8lMUzQHvw/6Im
-         5trenvRUt9LkV4m9JtkMfBw+HnpkQsAumLUvWzc4GHpGzLe682Bh+BPp1IetzRtmL72v
-         kqYRlEU7f7loXO4GlPRc+E5H67+Ft51Enetl2eeNOxZtrSJSB4HY3dOO7Vta8a3pR23p
-         liE2Gpj03Pq+dBuEJBsbUqItgzq8kW/ospSMWsE50ORHYljteEjl2R9IC7NFMggaH3xk
-         nBGBXn/8TsrfCaVTAggFVswflYymDz7dOd1V3V8qG1vqc7do9+hOFAA8ySOmxlT2kQpV
-         ShiQ==
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76D6B0;
+	Wed, 13 Dec 2023 06:40:06 -0800 (PST)
+Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-3b9f11fee25so956151b6e.1;
+        Wed, 13 Dec 2023 06:40:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702477236; x=1703082036;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bVm8QFJMd6O/w77sQyOURR/hVbb6OBIbMzpfk2XfCKA=;
-        b=ikhui0XNSiwNWhw0X529vCTZC8b3WX19J60oYV7XYiDDD0ROmwfSxdqWQ8bS+R1Rkm
-         WqYNTik+2E21E0YVbMQ6JkmawTztptU70Kdh7Knt9GIBOJDG5vgiC4b3Eeo1sVxmHvgj
-         Lw6CvF8Dvokbk/0AL/LhxJMjf5ZTSNg1jMpLNqFN6NhfxA5SQKH6WjHgkDFJzuqfXJr8
-         pcYsiQQp56uK847hWHlndfTswkDAl9L8glbQ6s/KDZysCFVPyXAQv0HtXZGnVYE/0nw/
-         kLQ1EAHcO2yVIrcKW75xJ8ITbdoNWxRr5SLei2xsRrW0oF0QPnKpG91mhNhVSx8BvAny
-         4ufA==
-X-Gm-Message-State: AOJu0YyxXiJpUUxn/kQuISPaJ44H6NDDrNg8yukfvfB4jy07s7y2nqS2
-	5ita/Hiw58H+0MMYT+GK9khgObrRFhs=
-X-Google-Smtp-Source: AGHT+IFSzyGZ3pXTadX5aHXgeOylNklh8Xe1FtNE4P6Ya10WfyyioEkSJWI2TERiCKIoyTlhOXKPrg==
-X-Received: by 2002:a5d:620c:0:b0:332:e75b:7f5a with SMTP id y12-20020a5d620c000000b00332e75b7f5amr4135660wru.11.1702477235347;
-        Wed, 13 Dec 2023 06:20:35 -0800 (PST)
-Received: from Ansuel-xps. (93-34-89-13.ip49.fastwebnet.it. [93.34.89.13])
-        by smtp.gmail.com with ESMTPSA id k14-20020a5d524e000000b00333479734a7sm13412163wrc.99.2023.12.13.06.20.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Dec 2023 06:20:34 -0800 (PST)
-Message-ID: <6579bdb2.5d0a0220.1ae22.1f92@mx.google.com>
-X-Google-Original-Message-ID: <ZXm9sApBerVJuhQ2@Ansuel-xps.>
-Date: Wed, 13 Dec 2023 15:20:32 +0100
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] thermal: core: add initial support for cold and
- critical_cold trip point
-References: <20231212221301.12581-1-ansuelsmth@gmail.com>
- <0e4cee10-4aa4-4979-9841-f1dbd207e0b7@linaro.org>
+        d=1e100.net; s=20230601; t=1702478406; x=1703083206;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+4eH5b/kNXZStKUJz1yn8GPS9DlhIeI1Sb7ArxAFFJU=;
+        b=rmnbOOuC3W/OH0jY8RkhyLCwFFP9hdi9aHLivIr8VijujsenKVCwpFyw3E6otXcacn
+         GZ121dxNhAAxA+GY+K7DEGBKKuYS3MDLF70SSYPUhl+LVWv8SR7lP3vdFgMtXqAgMjCy
+         jhFoLbyDvqE0UCAiOwdydEzgWRUUBIyzLynIjJ2UuzDgqV7G+cnJZTxr4nbQ0hzcPe5s
+         ClAj6NwbK0nFnG17T4hd3ptT5/ERI04Y6icPV5qA7UMiSM+90/y+daDKdLr6G6NtPZwc
+         wLNiy8wQx3MxP8iagDQjozWxTNmR1yMuC1WfbHnMGmB2uurHucVBx3N/+XidD6kaD980
+         lu6Q==
+X-Gm-Message-State: AOJu0YxRpLWo8oxNgRT169rIdUms44JwKvY/hROOByyuhxpAk/+5HkZh
+	nvKL2I06Jqysw2ruZXdopVyS05fg/wB+kzzSovE=
+X-Google-Smtp-Source: AGHT+IEWCL1swIbdKHuvU+v+B6tzQMhrEngFyp0/3LEj35AoUP93VH/Qv+B8zMUA0pRfKlqOP5f2KL+PwbKAyXxI3xQ=
+X-Received: by 2002:a05:6870:79d:b0:1fa:60b0:9d9 with SMTP id
+ en29-20020a056870079d00b001fa60b009d9mr13969984oab.1.1702478405945; Wed, 13
+ Dec 2023 06:40:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0e4cee10-4aa4-4979-9841-f1dbd207e0b7@linaro.org>
+References: <20231212221301.12581-1-ansuelsmth@gmail.com> <CAJZ5v0gTUSFeR=8ov_CgMzkPF7hJ4_MXYZNvsONC8wMxyhiu=A@mail.gmail.com>
+ <65799e2f.5d0a0220.1213a.f035@mx.google.com>
+In-Reply-To: <65799e2f.5d0a0220.1213a.f035@mx.google.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 13 Dec 2023 15:39:54 +0100
+Message-ID: <CAJZ5v0iBx3+BY8960C-GG2EdfUdt_E_o4KjKZ5gmx_f73BJGuQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] thermal: core: add initial support for cold and
+ critical_cold trip point
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 13, 2023 at 03:12:41PM +0100, Daniel Lezcano wrote:
-> On 12/12/2023 23:13, Christian Marangi wrote:
-> > Add initial support for cold and critical_cold trip point. Many if not
-> > all hwmon and thermal device have normally trip point for hot
-> > temperature and for cold temperature.
-> > 
-> > Till now only hot temperature were supported. Add support for also cold
-> > temperature to permit complete definition of cold trip point in DT.
-> > 
-> > Thermal driver may use these additional trip point to correctly set
-> > interrupt for cold temperature values and react based on that with
-> > various measure like enabling attached heater, forcing higher voltage
-> > and other specialaized peripherals.
-> > 
-> > For hwmon drivers this is needed as currently there is a problem with
-> > setting the full operating range of the device for thermal devices
-> > defined with hwmon. To better describe the problem, the following
-> > example is needed:
-> > 
-> > In the scenario of a simple hwmon with an active trip point declared
-> > and a cooling device attached, the hwmon subsystem currently set the
-> > min and max trip point based on the single active trip point.
-> > Thermal subsystem parse all the trip points and calculate the lowest and
-> > the highest trip point and calls the .set_trip of hwmon to setup the
-> > trip points.
-> > 
-> > The fact that we currently don't have a way to declare the cold/min
-> > temperature values, makes the thermal subsystem to set the low value as
-> > -INT_MAX.
-> > For hwmon drivers that doesn't use clamp_value and actually reject
-> > invalid values for the trip point, this results in the hwmon settings to
-> > be rejected.
-> > 
-> > To permit to pass the correct range of trip point, permit to set in DT
-> > also cold and critical_cold trip point.
-> > 
-> > Thermal driver may also define .cold and .critical_cold to act on these
-> > trip point tripped and apply the required measure.
-> 
-> Agree with the feature but we need to clarify the semantic of the trip
-> points first. What actions do we expect for them in order to have like a
-> mirror reflection of the existing hot trip points.
-> 
-> What action do you expect with:
-> 
->  - 'cold' ?
-> 
->  - 'critical_cold' ?
-> 
+On Wed, Dec 13, 2023 at 1:06=E2=80=AFPM Christian Marangi <ansuelsmth@gmail=
+.com> wrote:
 >
+> On Wed, Dec 13, 2023 at 01:01:51PM +0100, Rafael J. Wysocki wrote:
+> > On Tue, Dec 12, 2023 at 11:17=E2=80=AFPM Christian Marangi <ansuelsmth@=
+gmail.com> wrote:
+> > >
+> > > Add initial support for cold and critical_cold trip point. Many if no=
+t
+> > > all hwmon and thermal device have normally trip point for hot
+> > > temperature and for cold temperature.
+> > >
+> > > Till now only hot temperature were supported. Add support for also co=
+ld
+> > > temperature to permit complete definition of cold trip point in DT.
+> > >
+> > > Thermal driver may use these additional trip point to correctly set
+> > > interrupt for cold temperature values and react based on that with
+> > > various measure like enabling attached heater, forcing higher voltage
+> > > and other specialaized peripherals.
+> > >
+> > > For hwmon drivers this is needed as currently there is a problem with
+> > > setting the full operating range of the device for thermal devices
+> > > defined with hwmon. To better describe the problem, the following
+> > > example is needed:
+> > >
+> > > In the scenario of a simple hwmon with an active trip point declared
+> > > and a cooling device attached, the hwmon subsystem currently set the
+> > > min and max trip point based on the single active trip point.
+> > > Thermal subsystem parse all the trip points and calculate the lowest =
+and
+> > > the highest trip point and calls the .set_trip of hwmon to setup the
+> > > trip points.
+> > >
+> > > The fact that we currently don't have a way to declare the cold/min
+> > > temperature values, makes the thermal subsystem to set the low value =
+as
+> > > -INT_MAX.
+> > > For hwmon drivers that doesn't use clamp_value and actually reject
+> > > invalid values for the trip point, this results in the hwmon settings=
+ to
+> > > be rejected.
+> > >
+> > > To permit to pass the correct range of trip point, permit to set in D=
+T
+> > > also cold and critical_cold trip point.
+> > >
+> > > Thermal driver may also define .cold and .critical_cold to act on the=
+se
+> > > trip point tripped and apply the required measure.
+> > >
+> > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> >
+> > Generally speaking, it is kind of late in the cycle for adding
+> > significant new features like this.  We can get to it when 6.8-rc1 is
+> > out, so please resend then.
+> >
+>
+> Ok no problem.
+>
+> > Also it would be nice to define/document the cold and crtitical_cold
+> > trip points somewhere and is there a better name for critical_cold?
+> >
+>
+> Ehhh I think critical_cold is the only correct one.
+> Thermal device normally have lowest low high and highest trip point. I
+> think the lowest has to match what we use for highest (critical). Using
+> coldest might be confusing and wouldn't display a critical condition of
+> low temp where the device can't work and immediate actions has to be
+> taken.
 
-This is more of a sensible topic but I think it's the thermal driver
-that needs to implement these. As said in the commit description,
-examples are setting higher voltage from the attached regulator,
-enabling some hardware heater.
-
-Maybe with critical cold bigger measure can be applied. Currently for
-critical trip point we shutdown the system (if the critical ops is not
-declared) but with critical_cold condition I think it won't work... I
-expect a system in -40°C would just lock up/glitch so rebooting in that
-condition won't change a thing...
-
-Anyway yes we can define a shutdown by default for that but IMHO it
-wouldn't make much sense.
-
-> 
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> 
-> Why are there two different names for the same email address?
-> 
->  - Christian Marangi <ansuelsmth@gmail.com>
->  - Ansuel Smith <ansuelsmth@gmail.com>
-> 
-
-Stupid mistake in my ""childhood"". Ansuel it's my second name, when I
-understood things have started to become more serious I fixed the very
-stupid thing and started using correct naming. I'm extremely sorry for
-the mistake I did and I know all the problems it does cause doing that.
-
-> 
-> > ---
-> >   drivers/thermal/thermal_core.c  | 13 +++++++++++++
-> >   drivers/thermal/thermal_of.c    |  2 ++
-> >   drivers/thermal/thermal_sysfs.c |  4 ++++
-> >   drivers/thermal/thermal_trace.h |  4 ++++
-> >   include/linux/thermal.h         |  2 ++
-> >   include/uapi/linux/thermal.h    |  2 ++
-> >   6 files changed, 27 insertions(+)
-> > 
-> > diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> > index 9c17d35ccbbd..3c5ab560e72f 100644
-> > --- a/drivers/thermal/thermal_core.c
-> > +++ b/drivers/thermal/thermal_core.c
-> > @@ -344,6 +344,17 @@ static void handle_critical_trips(struct thermal_zone_device *tz,
-> >   		tz->ops->hot(tz);
-> >   }
-> > +static void handle_critical_cold_trips(struct thermal_zone_device *tz,
-> > +				       const struct thermal_trip *trip)
-> > +{
-> > +	trace_thermal_zone_trip(tz, thermal_zone_trip_id(tz, trip), trip->type);
-> > +
-> > +	if (trip->type == THERMAL_TRIP_CRITICAL_COLD && tz->ops->critical_cold)
-> > +		tz->ops->critical_cold(tz);
-> > +	else if (trip->type == THERMAL_TRIP_COLD && tz->ops->cold)
-> > +		tz->ops->cold(tz);
-> > +}
-> > +
-> >   static void handle_thermal_trip(struct thermal_zone_device *tz,
-> >   				const struct thermal_trip *trip)
-> >   {
-> > @@ -365,6 +376,8 @@ static void handle_thermal_trip(struct thermal_zone_device *tz,
-> >   	if (trip->type == THERMAL_TRIP_CRITICAL || trip->type == THERMAL_TRIP_HOT)
-> >   		handle_critical_trips(tz, trip);
-> > +	else if (trip->type == THERMAL_TRIP_CRITICAL_COLD || trip->type == THERMAL_TRIP_COLD)
-> > +		handle_critical_cold_trips(tz, trip);
-> >   	else
-> >   		handle_non_critical_trips(tz, trip);
-> >   }
-> > diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-> > index 1e0655b63259..95bc600bb4b8 100644
-> > --- a/drivers/thermal/thermal_of.c
-> > +++ b/drivers/thermal/thermal_of.c
-> > @@ -60,6 +60,8 @@ static const char * const trip_types[] = {
-> >   	[THERMAL_TRIP_PASSIVE]	= "passive",
-> >   	[THERMAL_TRIP_HOT]	= "hot",
-> >   	[THERMAL_TRIP_CRITICAL]	= "critical",
-> > +	[THERMAL_TRIP_COLD]	= "cold",
-> > +	[THERMAL_TRIP_CRITICAL_COLD] = "critical_cold",
-> >   };
-> >   /**
-> > diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-> > index eef40d4f3063..e1e69e0991c2 100644
-> > --- a/drivers/thermal/thermal_sysfs.c
-> > +++ b/drivers/thermal/thermal_sysfs.c
-> > @@ -106,6 +106,10 @@ trip_point_type_show(struct device *dev, struct device_attribute *attr,
-> >   		return sprintf(buf, "critical\n");
-> >   	case THERMAL_TRIP_HOT:
-> >   		return sprintf(buf, "hot\n");
-> > +	case THERMAL_TRIP_COLD:
-> > +		return sprintf(buf, "cold\n");
-> > +	case THERMAL_TRIP_CRITICAL_COLD:
-> > +		return sprintf(buf, "critical_cold\n");
-> >   	case THERMAL_TRIP_PASSIVE:
-> >   		return sprintf(buf, "passive\n");
-> >   	case THERMAL_TRIP_ACTIVE:
-> > diff --git a/drivers/thermal/thermal_trace.h b/drivers/thermal/thermal_trace.h
-> > index 459c8ce6cf3b..0a4f96075d7d 100644
-> > --- a/drivers/thermal/thermal_trace.h
-> > +++ b/drivers/thermal/thermal_trace.h
-> > @@ -11,6 +11,8 @@
-> >   TRACE_DEFINE_ENUM(THERMAL_TRIP_CRITICAL);
-> >   TRACE_DEFINE_ENUM(THERMAL_TRIP_HOT);
-> > +TRACE_DEFINE_ENUM(THERMAL_TRIP_COLD);
-> > +TRACE_DEFINE_ENUM(THERMAL_TRIP_CRITICAL_COLD);
-> >   TRACE_DEFINE_ENUM(THERMAL_TRIP_PASSIVE);
-> >   TRACE_DEFINE_ENUM(THERMAL_TRIP_ACTIVE);
-> > @@ -18,6 +20,8 @@ TRACE_DEFINE_ENUM(THERMAL_TRIP_ACTIVE);
-> >   	__print_symbolic(type,					\
-> >   			 { THERMAL_TRIP_CRITICAL, "CRITICAL"},	\
-> >   			 { THERMAL_TRIP_HOT,      "HOT"},	\
-> > +			 { THERMAL_TRIP_COLD,      "COLD"},	\
-> > +			 { THERMAL_TRIP_CRITICAL_COLD, "CRITICAL_COLD"}, \
-> >   			 { THERMAL_TRIP_PASSIVE,  "PASSIVE"},	\
-> >   			 { THERMAL_TRIP_ACTIVE,   "ACTIVE"})
-> > diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> > index cee814d5d1ac..d6345c9ec50d 100644
-> > --- a/include/linux/thermal.h
-> > +++ b/include/linux/thermal.h
-> > @@ -84,6 +84,8 @@ struct thermal_zone_device_ops {
-> >   			  const struct thermal_trip *, enum thermal_trend *);
-> >   	void (*hot)(struct thermal_zone_device *);
-> >   	void (*critical)(struct thermal_zone_device *);
-> > +	void (*cold)(struct thermal_zone_device *);
-> > +	void (*critical_cold)(struct thermal_zone_device *);
-> >   };
-> >   struct thermal_cooling_device_ops {
-> > diff --git a/include/uapi/linux/thermal.h b/include/uapi/linux/thermal.h
-> > index fc78bf3aead7..7fa1ba0dff05 100644
-> > --- a/include/uapi/linux/thermal.h
-> > +++ b/include/uapi/linux/thermal.h
-> > @@ -14,6 +14,8 @@ enum thermal_trip_type {
-> >   	THERMAL_TRIP_PASSIVE,
-> >   	THERMAL_TRIP_HOT,
-> >   	THERMAL_TRIP_CRITICAL,
-> > +	THERMAL_TRIP_COLD,
-> > +	THERMAL_TRIP_CRITICAL_COLD,
-> >   };
-> >   /* Adding event notification support elements */
-> 
-> -- 
-> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-> 
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
-> 
-
--- 
-	Ansuel
+So at least make it shorter, like crit_cold?
 
