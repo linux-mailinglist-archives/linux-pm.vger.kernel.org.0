@@ -1,115 +1,121 @@
-Return-Path: <linux-pm+bounces-1064-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1065-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A11A8110CB
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 13:13:42 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C35AC8110EE
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 13:19:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24DA12815DB
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 12:13:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 54B3CB20B62
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 12:19:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBAE028DCB;
-	Wed, 13 Dec 2023 12:13:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TzxUdnVc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E03E428E0B;
+	Wed, 13 Dec 2023 12:19:23 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674F7CF
-	for <linux-pm@vger.kernel.org>; Wed, 13 Dec 2023 04:13:34 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-336417c565eso279080f8f.3
-        for <linux-pm@vger.kernel.org>; Wed, 13 Dec 2023 04:13:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702469613; x=1703074413; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=itOaiy93IE/Oi6dMo6HICWXrGEv+UyQ/qj9qyPZPCTI=;
-        b=TzxUdnVcAGZyDE7aYTDCJG6I8+hoohg1CWfT+OuwxYD+lLWez8DqiQWBWq8Fm8Cga8
-         BF+fPu9Ayu9HbMn6ESP3ptoFaGytSlZBXiyqAWBKbwT51IR+EEKuzPrwg/OSYY+oaZ77
-         pJ2poqy/X+86bC74YxVada1+EzRNe9A5P9JunjWmmFos+V6IHTiPoCVGVePRxFJqDLCh
-         pVCKRjxP0viH4yhWz6w7IlYDSeTdbdNLG+bvKcivxoMJqTtBe2asFK/HbWBPRtJ1eAa3
-         PBS1CXF7aO38vQuXBh8ZVbLGO4x8uQqFJJSCGB+ApYmqraeqxSro4hT+IKhrcf3giyju
-         JsvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702469613; x=1703074413;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=itOaiy93IE/Oi6dMo6HICWXrGEv+UyQ/qj9qyPZPCTI=;
-        b=W8H4Q1XMPGuIXduOnqtwzQ5p1C+7PvWfbGT/E1WAtcIZB3cTGOfMrpBihsm9t7avNE
-         pMvyMp74K/YvCTyWmdtE3fCvRl36ll3+bNYNcVCW+ZHfM8WhkJ1A8Ib4xxFZK81Qhjxg
-         jwVr//7OR5RXU+1Y1FgQWcfm52nMQSxnpauU02zAHDwu5aSj3KahA2eMUuGveqKirpgp
-         DMGZQAWrJu+tRGF9/vNHfBXJI1I8QxIFEEzwEwXRwDhLT8XNyLooVkOFBqUcRMo4P//J
-         kyNH6Lm8yODaMZViYQxovuSMn/dnZzMxLV06/uawo+PXA+a/+MWPQBuJxOhJqArW4Nrb
-         xudA==
-X-Gm-Message-State: AOJu0YxLRuwMQtfAzzu2rfJV1mcuq/HYXwMW8DqAKHZv/KmI5grlU9sa
-	B5TvlcNiELM1cD8eJXdtcHTmOTRilW4P5co84yE=
-X-Google-Smtp-Source: AGHT+IHBVhZ856MZTBC5mOJutrT1OZrSe6h1yPpkPxqc4M4ZwxuWH5d46WF0/Hk0NPQHpI9BVcoRzQ==
-X-Received: by 2002:adf:fc0b:0:b0:336:3843:ab7a with SMTP id i11-20020adffc0b000000b003363843ab7amr395500wrr.115.1702469612760;
-        Wed, 13 Dec 2023 04:13:32 -0800 (PST)
-Received: from mai.box.freepro.com ([2a05:6e02:1041:c10:c49e:e1a5:3210:b8c0])
-        by smtp.gmail.com with ESMTPSA id g3-20020adff403000000b003335ddce799sm13224614wro.103.2023.12.13.04.13.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Dec 2023 04:13:32 -0800 (PST)
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-To: rafael@kernel.org,
-	daniel.lezcano@linaro.org
-Cc: Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org (open list:THERMAL),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] thermal/core: Check get_temp ops is present when registering a tz
-Date: Wed, 13 Dec 2023 13:13:22 +0100
-Message-Id: <20231213121322.2486967-1-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 95844CD;
+	Wed, 13 Dec 2023 04:19:19 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5F73EC15;
+	Wed, 13 Dec 2023 04:20:05 -0800 (PST)
+Received: from [10.57.85.168] (unknown [10.57.85.168])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9F9123F762;
+	Wed, 13 Dec 2023 04:19:15 -0800 (PST)
+Message-ID: <ccca81be-eb3e-4f52-a973-22f128ca07ba@arm.com>
+Date: Wed, 13 Dec 2023 12:20:19 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 00/23] Introduce runtime modifiable Energy Model
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: rui.zhang@intel.com, amit.kucheria@verdurent.com,
+ linux-pm@vger.kernel.org, amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
+ viresh.kumar@linaro.org, len.brown@intel.com, pavel@ucw.cz,
+ mhiramat@kernel.org, qyousef@layalina.io, wvw@google.com,
+ linux-kernel@vger.kernel.org
+References: <20231129110853.94344-1-lukasz.luba@arm.com>
+ <d920867d-5572-48c3-bd54-b9e989ab6bd5@arm.com>
+ <ec8dc77f-364c-443b-a63d-35a2e37d2ccc@arm.com>
+ <0640a9bf-b864-45ef-ab39-14b0e85ff9ad@arm.com>
+ <CAJZ5v0g7u3uQOBeKbinut58GO64NBe=y2Zojn0tow3_KWg_4iQ@mail.gmail.com>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAJZ5v0g7u3uQOBeKbinut58GO64NBe=y2Zojn0tow3_KWg_4iQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Initially the check against the get_temp ops in the
-thermal_zone_device_update() was put in there in order to catch
-drivers not providing this method.
 
-Instead of checking again and again the function if the ops exists in
-the update function, let's do the check at registration time, so it is
-checked one time and for all.
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/thermal_core.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+On 12/13/23 11:45, Rafael J. Wysocki wrote:
+> On Wed, Dec 13, 2023 at 12:34 PM Dietmar Eggemann
+> <dietmar.eggemann@arm.com> wrote:
+>>
+>> On 13/12/2023 10:23, Lukasz Luba wrote:
+>>> Hi Dietmar,
+>>>
+>>> Thank you for the review, I will go one-by-one to respond
+>>> your comments in patches as well. First comments are below.
+>>>
+>>> On 12/12/23 18:48, Dietmar Eggemann wrote:
+>>>> On 29/11/2023 12:08, Lukasz Luba wrote:
+>>
+>> [...]
+>>
+>>>>> Changelog:
+>>>>> v5:
+>>>>> - removed 2 tables design
+>>>>> - have only one table (runtime_table) used also in thermal (Wei, Rafael)
+>>>>
+>>>> Until v4 you had 2 EM's, the static and the modifiable (runtime). Now in
+>>>> v5 this changed to only have one, the modifiable. IMHO it would be
+>>>> better to change the existing table to be modifiable rather than staring
+>>>> with two EM's and then removing the static one. I assume you end up with
+>>>> way less code changes and the patch-set will become easier to digest for
+>>>> reviewers.
+>>>
+>>> The patches are structured in this way following Daniel's recommendation
+>>> I got when I was adding similar big changes to EM in 2020 (support all
+>>> devices in kernel). The approach is as follows:
+>>> 0. Do some basic clean-up/refactoring if needed for a new feature, to
+>>>     re-use some code if possible in future
+>>> 1. Introduce new feature next to the existing one
+>>> 2. Add API and all needed infrastructure (structures, fields) for
+>>>     drivers
+>>> 3. Re-wire the existing drivers/frameworks to the new feature via new
+>>>     API; ideally keep 1 patch per driver so the maintainer can easily
+>>>     grasp the changes and ACK it, because it will go via different tree
+>>>     (Rafael's tree); in case of some code clash in the driver's code
+>>>     during merge - it will be a single driver so easier to handle
+>>> 4. when all drivers and frameworks are wired up with the new feature
+>>>     remove the old feature (structures, fields, APIs, etc)
+>>> 5. Update the documentation with new latest state of desing
+>>>
+>>> In this approach the patches are less convoluted. Because if I remove
+>>> the old feature and add new in a single patch (e.g. the main structure)
+>>> that patch will have to modify all drivers to still compile. It
+>>> would be a big messy patch for this re-design.
+>>>
+>>> I can see in some later comment from Rafael that he is OK with current
+>>> patch set structure.
+>>
+>> OK, in case Rafael and Daniel prefer this, then it's fine.
+>>
+>> I just find it weird that we now have
+>>
+>> 70 struct em_perf_domain {
+>> 71         struct em_perf_table __rcu *runtime_table;
+>>                                         ^^^^^^^^^^^^^
+>>
+>> as the only EM table.
+> 
+> I agree that it would be better to call it something like em_table.
+> 
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 625ba07cbe2f..964f26e517f4 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -437,11 +437,6 @@ void __thermal_zone_device_update(struct thermal_zone_device *tz,
- 	if (atomic_read(&in_suspend))
- 		return;
- 
--	if (WARN_ONCE(!tz->ops->get_temp,
--		      "'%s' must not be called without 'get_temp' ops set\n",
--		      __func__))
--		return;
--
- 	if (!thermal_zone_device_is_enabled(tz))
- 		return;
- 
-@@ -1289,7 +1284,7 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
- 		return ERR_PTR(-EINVAL);
- 	}
- 
--	if (!ops) {
-+	if (!ops || !ops->get_temp) {
- 		pr_err("Thermal zone device ops not defined\n");
- 		return ERR_PTR(-EINVAL);
- 	}
--- 
-2.34.1
-
+OK, I'll change that. Thanks Rafael and Dietmar!
 
