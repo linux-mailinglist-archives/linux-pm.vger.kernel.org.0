@@ -1,172 +1,98 @@
-Return-Path: <linux-pm+bounces-1054-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1055-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 968A1810F7B
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 12:09:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54F9181100E
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 12:33:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1ECBDB20C31
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 11:09:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00C621F212AA
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 11:33:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC06D23746;
-	Wed, 13 Dec 2023 11:09:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBC23241F7;
+	Wed, 13 Dec 2023 11:33:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="p1z2MXIG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF2E199A
-	for <linux-pm@vger.kernel.org>; Wed, 13 Dec 2023 03:09:00 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rDN6O-0002aF-Kp; Wed, 13 Dec 2023 12:08:32 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rDN6M-00FYCV-Ag; Wed, 13 Dec 2023 12:08:30 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rDN6M-002FTL-0C; Wed, 13 Dec 2023 12:08:30 +0100
-Date: Wed, 13 Dec 2023 12:08:29 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Maxime Ripard <mripard@kernel.org>
-Cc: Daniel Vetter <daniel@ffwll.ch>,
-	Michael Turquette <mturquette@baylibre.com>,
-	dri-devel@lists.freedesktop.org,
-	Thierry Reding <thierry.reding@gmail.com>,
-	David Airlie <airlied@gmail.com>, linux-clk@vger.kernel.org,
-	Jerome Brunet <jbrunet@baylibre.com>, Rob Herring <robh@kernel.org>,
-	Samuel Holland <samuel@sholland.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>, Chen-Yu Tsai <wens@csie.org>,
-	MyungJoo Ham <myungjoo.ham@samsung.com>,
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF541A7
+	for <linux-pm@vger.kernel.org>; Wed, 13 Dec 2023 03:33:02 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2c9f7fe6623so85966731fa.3
+        for <linux-pm@vger.kernel.org>; Wed, 13 Dec 2023 03:33:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702467181; x=1703071981; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mSuSsAGCz1bsucla0R6QxbX9WoW2LywF9inDSTsLob4=;
+        b=p1z2MXIGnOqP1TPTOq3yDs7kb75pDyyvPmg581vNx78x1TlTqNcb+oVWfmi9eNzuyD
+         FOwgu+6pooiqC+fLlFmmVRUNDnhnK696T4n8QBD66TX4BMBN71MXMzvqtGB5Hx6RzPU3
+         z1a8t6EVP9wQ3wSfrRznDx1i/2QWiiTe9ucDaZpJxzLstBfJ2tr6+hjVZZU4pj7PyrTx
+         Z3ab2zSdSFDxOBqqeWgZaM3ttjlU0wt580nIZRyRB4p6b+af9GBmPuSOwW+8v3Q95+o8
+         xURJwliApXsx37Tezhc5rNY+vpOdhYUZzOPcP3Ct6TwbW9LiMcw3Tuvih+d9pW8w2qnY
+         CKVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702467181; x=1703071981;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mSuSsAGCz1bsucla0R6QxbX9WoW2LywF9inDSTsLob4=;
+        b=veDadsaBxMS3RBZpRJwAEwUNnDeLjUcIVRYcuj4/8mdIPIrTfogTPCj3M8SHlJ5T60
+         6k8XybvZEQ9of/2X+l4AJ7mFRa3X7RlMbIZj3jPoBLNo57iWcWhwn2stcoZO7NBwMOMy
+         OlS5dteUBejxngjQcIFHMHx+fLplPchKj0nTmom88hQvy+zlPM9ZyaJveUnV9Q7pO2re
+         zj9Cj/J7LIwSZdBy1OJC4ElD4qLopGPf4H2yhhg6efmZEeYLsgq2AyDOTgNOcdL8nxX9
+         v4UgIe0dcbyEXipFG3NE/tMZZROxxadqB51RajonNfUm5W17BE+pCsQXivMWEHdVpjz4
+         PQ/w==
+X-Gm-Message-State: AOJu0YxtAc7rST7foj609fB/8EIPlxGVPU/xhAZ4W1yKq4GAmmn1NeLL
+	yz6gjTtHbZtnA6dOCnGgXn/MFQ==
+X-Google-Smtp-Source: AGHT+IFfjiu96YZAhVw8RGb9KnLHzIXPeGt+cwOiHP2URRoBPSCcNNJIUlGsZdw4q0wcKrg5WYPNmw==
+X-Received: by 2002:a05:651c:1a24:b0:2cb:28f3:244d with SMTP id by36-20020a05651c1a2400b002cb28f3244dmr2529901ljb.6.1702467181130;
+        Wed, 13 Dec 2023 03:33:01 -0800 (PST)
+Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
+        by smtp.gmail.com with ESMTPSA id r6-20020a2e9946000000b002c9f71e61f3sm1812273ljj.6.2023.12.13.03.32.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Dec 2023 03:33:00 -0800 (PST)
+From: Ulf Hansson <ulf.hansson@linaro.org>
+To: "Rafael J . Wysocki" <rafael@kernel.org>,
+	linux-pm@vger.kernel.org
+Cc: Kevin Hilman <khilman@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
 	linux-arm-kernel@lists.infradead.org,
-	Kyungmin Park <kyungmin.park@samsung.com>,
-	linux-sunxi@lists.linux.dev, kernel@pengutronix.de,
-	linux-pm@vger.kernel.org,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	linux-tegra@vger.kernel.org, linux-amlogic@lists.infradead.org,
-	Johan Hovold <johan+linaro@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Georgi Djakov <djakov@kernel.org>
-Subject: Re: [PATCH 0/5] clk: Make clk_rate_exclusive_get() return void
-Message-ID: <20231213110829.bjaxjjiyy4ug7o67@pengutronix.de>
-References: <cover.1702400947.git.u.kleine-koenig@pengutronix.de>
- <ki5n3rz5n4oxj2hhc3rj6xpn3e2tdi7fcp2q7exjbzilrlqflp@przautvhuy4g>
- <20231213074300.4bq7wkfqd4jhhcr4@pengutronix.de>
- <2nvbag657mlniqwq7fbilapc6vfw5qumab3yd6bqul25ot6wcn@wdlkh5az2fgs>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] PM: domains: Drop redundant header for genpd
+Date: Wed, 13 Dec 2023 12:32:45 +0100
+Message-Id: <20231213113245.29075-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="kl2l3xgmnlmlkt4p"
-Content-Disposition: inline
-In-Reply-To: <2nvbag657mlniqwq7fbilapc6vfw5qumab3yd6bqul25ot6wcn@wdlkh5az2fgs>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 
+The "power.h" is no longer needed by genpd, so let's simply drop the
+include of it.
 
---kl2l3xgmnlmlkt4p
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+ drivers/base/power/domain.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Hello Maxime,
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index cf65b5a9783c..9ee1bf2ece10 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -23,8 +23,6 @@
+ #include <linux/cpu.h>
+ #include <linux/debugfs.h>
+ 
+-#include "power.h"
+-
+ #define GENPD_RETRY_MAX_MS	250		/* Approximate */
+ 
+ #define GENPD_DEV_CALLBACK(genpd, type, callback, dev)		\
+-- 
+2.34.1
 
-On Wed, Dec 13, 2023 at 09:36:49AM +0100, Maxime Ripard wrote:
-> On Wed, Dec 13, 2023 at 08:43:00AM +0100, Uwe Kleine-K=F6nig wrote:
-> > On Wed, Dec 13, 2023 at 08:16:04AM +0100, Maxime Ripard wrote:
-> > > On Tue, Dec 12, 2023 at 06:26:37PM +0100, Uwe Kleine-K=F6nig wrote:
-> > > > clk_rate_exclusive_get() returns zero unconditionally. Most users "=
-know"
-> > > > that and don't check the return value. This series fixes the four u=
-sers
-> > > > that do error checking on the returned value and then makes function
-> > > > return void.
-> > > >=20
-> > > > Given that the changes to the drivers are simple and so merge confl=
-icts
-> > > > (if any) should be easy to handle, I suggest to merge this complete
-> > > > series via the clk tree.
-> > >=20
-> > > I don't think it's the right way to go about it.
-> > >=20
-> > > clk_rate_exclusive_get() should be expected to fail. For example if
-> > > there's another user getting an exclusive rate on the same clock.
-> > >=20
-> > > If we're not checking for it right now, then it should probably be
-> > > fixed, but the callers checking for the error are right to do so if t=
-hey
-> > > rely on an exclusive rate. It's the ones that don't that should be
-> > > modified.
-> >=20
-> > If some other consumer has already "locked" a clock that I call
-> > clk_rate_exclusive_get() for, this isn't an error. In my bubble I call
-> > this function because I don't want the rate to change e.g. because I
-> > setup some registers in the consuming device to provide a fixed UART
-> > baud rate or i2c bus frequency (and that works as expected).
->=20
-> [a long text of mostly right things (Uwe's interpretation) that are
-> however totally unrelated to the patches under discussion.]
-
-The clk API works with and without my patches in exactly the same way.
-It just makes more explicit that clk_rate_exclusive_get() cannot fail
-today and removes the error handling from consumers that is never used.
-
-Yes, my series doesn't fix any race conditions that are there without
-doubt in some consumers. It also doesn't make the situation any worse.
-It also doesn't fix other problems that are orthogonal to the intention
-of this patch series (neither makes it any of them any worse).
-
-It's just dead code removal and making sure no new dead code of the same
-type is introduced in the future.
-
-Is there anyone working on improving the clk framework regarding how clk
-rate exclusivity works? I'd probably not notice, but I guess there is
-noone that I need to consider for. And if in the future someone
-redesigns how all that works *and* clk_rate_exclusive_get() stays around
-*and* that makes it possible that clk_rate_exclusive_get() fails (and
-thus breaking all consumers that don't care for the actual clk rate and
-only want it to not change), then they'll have to review all users
-anyhow and reintroduce error handling. I can live with that and suggest
-until then we're happy that we have a few drivers with less dead code
-than before.
-
-Cheers!
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---kl2l3xgmnlmlkt4p
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmV5kK0ACgkQj4D7WH0S
-/k4Eugf/TStPMZiYghA+qeYfwNXsEudTquLXEPqhja/JKNv9WiKYrt43bIE6RaeZ
-uqnkw/3MfPy9251IlDl8hjB/hahPAVFA1/FP1n1+q+G4fWTLeEHj8+SErxvfZyrv
-QHRLnpLc5OFul0s5WRLBUR6S7Vnu22YiZ0fWFGsakm5CS/BsVxJ/IDsZdss7XBTp
-Auy00X3wur3dEdwcVZin6favSPTHv/pLecde0Jh7GsTUmenaP74HE5jWnutVqPRh
-D/YfxJz4FVfe8iaFR02v9z7oBlnGuZyCQU9vyebyVNVV6orHYSXgFN8WhdZ1WuBT
-RxqsIej1c9x4ergK7wRTHJUz6ZP3Lg==
-=b9cr
------END PGP SIGNATURE-----
-
---kl2l3xgmnlmlkt4p--
 
