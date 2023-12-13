@@ -1,69 +1,67 @@
-Return-Path: <linux-pm+bounces-1101-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1102-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 919258114DF
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 15:40:16 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1031E811515
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 15:44:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6113A1F216B7
-	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 14:40:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 732C1B2101F
+	for <lists+linux-pm@lfdr.de>; Wed, 13 Dec 2023 14:44:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A8B92EAE0;
-	Wed, 13 Dec 2023 14:40:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED7872EAF2;
+	Wed, 13 Dec 2023 14:44:31 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76D6B0;
-	Wed, 13 Dec 2023 06:40:06 -0800 (PST)
-Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-3b9f11fee25so956151b6e.1;
-        Wed, 13 Dec 2023 06:40:06 -0800 (PST)
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D9D41A5;
+	Wed, 13 Dec 2023 06:44:07 -0800 (PST)
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-6da09f8ce35so973953a34.0;
+        Wed, 13 Dec 2023 06:44:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702478406; x=1703083206;
+        d=1e100.net; s=20230601; t=1702478646; x=1703083446;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+4eH5b/kNXZStKUJz1yn8GPS9DlhIeI1Sb7ArxAFFJU=;
-        b=rmnbOOuC3W/OH0jY8RkhyLCwFFP9hdi9aHLivIr8VijujsenKVCwpFyw3E6otXcacn
-         GZ121dxNhAAxA+GY+K7DEGBKKuYS3MDLF70SSYPUhl+LVWv8SR7lP3vdFgMtXqAgMjCy
-         jhFoLbyDvqE0UCAiOwdydEzgWRUUBIyzLynIjJ2UuzDgqV7G+cnJZTxr4nbQ0hzcPe5s
-         ClAj6NwbK0nFnG17T4hd3ptT5/ERI04Y6icPV5qA7UMiSM+90/y+daDKdLr6G6NtPZwc
-         wLNiy8wQx3MxP8iagDQjozWxTNmR1yMuC1WfbHnMGmB2uurHucVBx3N/+XidD6kaD980
-         lu6Q==
-X-Gm-Message-State: AOJu0YxRpLWo8oxNgRT169rIdUms44JwKvY/hROOByyuhxpAk/+5HkZh
-	nvKL2I06Jqysw2ruZXdopVyS05fg/wB+kzzSovE=
-X-Google-Smtp-Source: AGHT+IEWCL1swIbdKHuvU+v+B6tzQMhrEngFyp0/3LEj35AoUP93VH/Qv+B8zMUA0pRfKlqOP5f2KL+PwbKAyXxI3xQ=
-X-Received: by 2002:a05:6870:79d:b0:1fa:60b0:9d9 with SMTP id
- en29-20020a056870079d00b001fa60b009d9mr13969984oab.1.1702478405945; Wed, 13
- Dec 2023 06:40:05 -0800 (PST)
+        bh=BrMvvn49L6A1ecr+WgkAgMRVfZjFMImbqMy0wJWQpTA=;
+        b=ppqeeUV/8DSgCao+IF4zcsyZji6TdNIRCFCYNO5w6cc65lMkFR/eOKczFpJ5n2NHRe
+         zTjM7U4oxkcum8TcF+2bWUMvEKFFHIqr6XIH9jyZwvvIEEl7un742Sk733avTyVtnm9k
+         EwD+W3CBXp3Yg9p2BDj686zPqisBGEnwFkXYYvDwGmpJYolQuvC71CzG8qPdr51/5Juh
+         0xOgAZlx30N70q//7GePPDpGgmIzWT83WDiSRLkazOPlwRNoDstw9fzNoYM8F2bxX1ON
+         QYionq8y2lIYMH6fD2ym4bMPLoawer/9VbZESZs0XMe6pNi2ZYJFT3bh3mqYPMlHuB6T
+         lBPA==
+X-Gm-Message-State: AOJu0YxeNsMMXD3qiWrY1bz2IRmDFqKPSDoOjvLlK5U2jBGTa10tx7YY
+	8kh8OlsNWUSbVj/P/KR0j5Q98/T5jRKHPQf8g/s=
+X-Google-Smtp-Source: AGHT+IGPX5+mGS38O4fRWmfbsDU7CQdzXQC4+Vn2QMG5Z6qnEERa5c1Wl/XCOERwmpUEJ8wRKvefIPoyGD1ZMoFh/Wk=
+X-Received: by 2002:a05:6870:9607:b0:1fb:23ec:3318 with SMTP id
+ d7-20020a056870960700b001fb23ec3318mr15061199oaq.0.1702478645569; Wed, 13 Dec
+ 2023 06:44:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231212221301.12581-1-ansuelsmth@gmail.com> <CAJZ5v0gTUSFeR=8ov_CgMzkPF7hJ4_MXYZNvsONC8wMxyhiu=A@mail.gmail.com>
- <65799e2f.5d0a0220.1213a.f035@mx.google.com>
-In-Reply-To: <65799e2f.5d0a0220.1213a.f035@mx.google.com>
+References: <20231212221301.12581-1-ansuelsmth@gmail.com> <0e4cee10-4aa4-4979-9841-f1dbd207e0b7@linaro.org>
+ <6579bdb2.5d0a0220.1ae22.1f92@mx.google.com>
+In-Reply-To: <6579bdb2.5d0a0220.1ae22.1f92@mx.google.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 13 Dec 2023 15:39:54 +0100
-Message-ID: <CAJZ5v0iBx3+BY8960C-GG2EdfUdt_E_o4KjKZ5gmx_f73BJGuQ@mail.gmail.com>
+Date: Wed, 13 Dec 2023 15:43:54 +0100
+Message-ID: <CAJZ5v0gdLXBziENtZ9qmvntmaq6gNSXvGHq1eq8_o+xz0V_A0Q@mail.gmail.com>
 Subject: Re: [PATCH 1/2] thermal: core: add initial support for cold and
  critical_cold trip point
 To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
 	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 13, 2023 at 1:06=E2=80=AFPM Christian Marangi <ansuelsmth@gmail=
+On Wed, Dec 13, 2023 at 3:20=E2=80=AFPM Christian Marangi <ansuelsmth@gmail=
 .com> wrote:
 >
-> On Wed, Dec 13, 2023 at 01:01:51PM +0100, Rafael J. Wysocki wrote:
-> > On Tue, Dec 12, 2023 at 11:17=E2=80=AFPM Christian Marangi <ansuelsmth@=
-gmail.com> wrote:
-> > >
+> On Wed, Dec 13, 2023 at 03:12:41PM +0100, Daniel Lezcano wrote:
+> > On 12/12/2023 23:13, Christian Marangi wrote:
 > > > Add initial support for cold and critical_cold trip point. Many if no=
 t
 > > > all hwmon and thermal device have normally trip point for hot
@@ -107,26 +105,37 @@ T
 > > > Thermal driver may also define .cold and .critical_cold to act on the=
 se
 > > > trip point tripped and apply the required measure.
-> > >
-> > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 > >
-> > Generally speaking, it is kind of late in the cycle for adding
-> > significant new features like this.  We can get to it when 6.8-rc1 is
-> > out, so please resend then.
+> > Agree with the feature but we need to clarify the semantic of the trip
+> > points first. What actions do we expect for them in order to have like =
+a
+> > mirror reflection of the existing hot trip points.
+> >
+> > What action do you expect with:
+> >
+> >  - 'cold' ?
+> >
+> >  - 'critical_cold' ?
+> >
 > >
 >
-> Ok no problem.
->
-> > Also it would be nice to define/document the cold and crtitical_cold
-> > trip points somewhere and is there a better name for critical_cold?
-> >
->
-> Ehhh I think critical_cold is the only correct one.
-> Thermal device normally have lowest low high and highest trip point. I
-> think the lowest has to match what we use for highest (critical). Using
-> coldest might be confusing and wouldn't display a critical condition of
-> low temp where the device can't work and immediate actions has to be
-> taken.
+> This is more of a sensible topic but I think it's the thermal driver
+> that needs to implement these. As said in the commit description,
+> examples are setting higher voltage from the attached regulator,
+> enabling some hardware heater.
 
-So at least make it shorter, like crit_cold?
+So how is it different from an active trip point?  There are heating
+rather than cooling devices associated with it, but other than this??
+
+> Maybe with critical cold bigger measure can be applied. Currently for
+> critical trip point we shutdown the system (if the critical ops is not
+> declared) but with critical_cold condition I think it won't work... I
+> expect a system in -40=C2=B0C would just lock up/glitch so rebooting in t=
+hat
+> condition won't change a thing...
+>
+> Anyway yes we can define a shutdown by default for that but IMHO it
+> wouldn't make much sense.
+
+So why do you want to add it at all?
 
