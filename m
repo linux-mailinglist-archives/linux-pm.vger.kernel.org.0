@@ -1,137 +1,106 @@
-Return-Path: <linux-pm+bounces-1150-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1151-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01BE9812D1A
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 11:36:05 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BCB7812D36
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 11:40:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7ED22B2108B
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 10:36:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0F185B20D0A
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 10:40:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 036E63C067;
-	Thu, 14 Dec 2023 10:35:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DfwPS7L0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFB9B3C463;
+	Thu, 14 Dec 2023 10:40:11 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278BD138;
-	Thu, 14 Dec 2023 02:35:54 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-33621d443a7so4223002f8f.3;
-        Thu, 14 Dec 2023 02:35:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702550152; x=1703154952; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/bSH5LSThTrH8jKZ5V0W7uU2b3lxsQ8a/FvDmGfwzlA=;
-        b=DfwPS7L06Jc+pulUiwgpRofSxbwTOshNLSMK1u1CQ6vNuzaDyX4Dv+Zeav1x1y8LC4
-         hEW+dghmdMkpWneT83aOBK8UAxA97xhl6Cneb6pj35q9gNlcWsQdfb21aXnPb9TZ6LMo
-         J/7zKE44LmjY7Kz0eUUaQ08orOjNd5L5UZxB58kVbwkUO45D1S8nuKSzOnDC2rApRVTH
-         3jb+C6V5k7gxtuQ5fytlZdoEXCAoW3qU+lz5qFLTX4T2pYeBhOAhKbJ56aJF4TftvLmO
-         wbZu8uBISlpkTkw8vPA8v6AVGtXM3etLx/GOXOjzP+3jTwUxYpg+qrdk5NI3DSYDuhlu
-         18Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702550152; x=1703154952;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/bSH5LSThTrH8jKZ5V0W7uU2b3lxsQ8a/FvDmGfwzlA=;
-        b=R7lVjrh/D6w9aTN0Yi/Wm2ZVSLy8hQv3maofl63MeD+ySqYAbWg0PB2oWTUkuJo3Cj
-         AkKAMpqtrkH9Z5UIyh/aE0HnRQzGkdyHIPbDPUKB6y+SWqUSVU2d1hNqUZYtD1hrxh4z
-         YlV+Sq6X9gLlJ2KywR+rXyPug+lwBi+qRfL8iktK/E+q64yCTESO8IA+OsAkP83hO140
-         KDOzLR31gQG35pVQenWVCl9WLXv0VyM8dhqVFkSdUIzyMyV28AHOJdSbb7mEZFnpioy0
-         mXDjEUCGuODK//aT1zQo12GB+7/w4p3bFJX7OB3gGhryeDzsQDi5t+ZTsedNypyaJHZn
-         mTqQ==
-X-Gm-Message-State: AOJu0YxXcAjKZbcZ+xvljAt6T26I82AwBUNUW+LBQRU1vc7zjzEHa933
-	SuSZxuGhH0N3bQV3xZ9crBU=
-X-Google-Smtp-Source: AGHT+IEbki3k5FnEaNVZtWRBuhOkVOwOnKsRmJW5T9tQx+eZlX6USeTgoCxh9UtIGcxFBYXudVg1vw==
-X-Received: by 2002:a5d:4bd2:0:b0:333:4940:dd1a with SMTP id l18-20020a5d4bd2000000b003334940dd1amr4977407wrt.23.1702550152438;
-        Thu, 14 Dec 2023 02:35:52 -0800 (PST)
-Received: from localhost.localdomain ([129.0.226.240])
-        by smtp.gmail.com with ESMTPSA id e4-20020a5d65c4000000b003333ed23356sm15849623wrw.4.2023.12.14.02.35.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Dec 2023 02:35:51 -0800 (PST)
-From: Brandon Cheo Fusi <fusibrandon13@gmail.com>
-To: Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Yangtao Li <tiny.windzz@gmail.com>
-Cc: devicetree@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Brandon Cheo Fusi <fusibrandon13@gmail.com>
-Subject: [PATCH 5/5] cpufreq: Make sun50i h6 cpufreq Kconfig option generic
-Date: Thu, 14 Dec 2023 11:33:42 +0100
-Message-Id: <20231214103342.30775-6-fusibrandon13@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20231214103342.30775-1-fusibrandon13@gmail.com>
-References: <20231214103342.30775-1-fusibrandon13@gmail.com>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8FBAC11B;
+	Thu, 14 Dec 2023 02:40:07 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B5180C15;
+	Thu, 14 Dec 2023 02:40:52 -0800 (PST)
+Received: from [10.57.85.242] (unknown [10.57.85.242])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B810C3F738;
+	Thu, 14 Dec 2023 02:40:02 -0800 (PST)
+Message-ID: <fe8f8d00-1720-4a47-83ae-1aa4c005c4f5@arm.com>
+Date: Thu, 14 Dec 2023 10:41:05 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/4] cpufreq: Add a cpufreq pressure feedback for the
+ scheduler
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, catalin.marinas@arm.com,
+ will@kernel.org, sudeep.holla@arm.com, agross@kernel.org,
+ andersson@kernel.org, konrad.dybcio@linaro.org, mingo@redhat.com,
+ peterz@infradead.org, juri.lelli@redhat.com, dietmar.eggemann@arm.com,
+ rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+ bristot@redhat.com, vschneid@redhat.com, rui.zhang@intel.com,
+ mhiramat@kernel.org, daniel.lezcano@linaro.org, amit.kachhap@gmail.com,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org
+References: <20231212142730.998913-1-vincent.guittot@linaro.org>
+ <20231212142730.998913-2-vincent.guittot@linaro.org>
+ <20231214054307.axl33gagxacidjbn@vireshk-i7>
+ <CAKfTPtDam5eQO1DHxALsCaU53Rtawbfrvswy+z2unnV_eXeVLA@mail.gmail.com>
+ <54f3b98c-1f7d-4205-9e3c-a4a19ad3d941@arm.com>
+ <CAJZ5v0gD-utGhM3vN7JmPia1CVcSQa6RPnk2xMBXXc6asRTn=g@mail.gmail.com>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAJZ5v0gD-utGhM3vN7JmPia1CVcSQa6RPnk2xMBXXc6asRTn=g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Remove the 'ARM_' prefix from the Allwinner SUN50I cpufreq driver
-Kconfig.arm option as that driver can support the D1, a RISC-V
-chip.
 
-Signed-off-by: Brandon Cheo Fusi <fusibrandon13@gmail.com>
----
- drivers/cpufreq/Kconfig.arm | 4 ++--
- drivers/cpufreq/Makefile    | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-index f91160689..510604781 100644
---- a/drivers/cpufreq/Kconfig.arm
-+++ b/drivers/cpufreq/Kconfig.arm
-@@ -29,14 +29,14 @@ config ACPI_CPPC_CPUFREQ_FIE
- 
- 	  If in doubt, say N.
- 
--config ARM_ALLWINNER_SUN50I_CPUFREQ_NVMEM
-+config ALLWINNER_SUN50I_CPUFREQ_NVMEM
- 	tristate "Allwinner nvmem based SUN50I CPUFreq driver"
- 	depends on ARCH_SUNXI
- 	depends on NVMEM_SUNXI_SID
- 	select PM_OPP
- 	help
- 	  This adds the nvmem based CPUFreq driver for Allwinner
--	  h6 SoC.
-+	  H6/D1 SoCs.
- 
- 	  To compile this driver as a module, choose M here: the
- 	  module will be called sun50i-cpufreq-nvmem.
-diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
-index 8d141c71b..110b676d2 100644
---- a/drivers/cpufreq/Makefile
-+++ b/drivers/cpufreq/Makefile
-@@ -78,7 +78,7 @@ obj-$(CONFIG_ARM_SCMI_CPUFREQ)		+= scmi-cpufreq.o
- obj-$(CONFIG_ARM_SCPI_CPUFREQ)		+= scpi-cpufreq.o
- obj-$(CONFIG_ARM_SPEAR_CPUFREQ)		+= spear-cpufreq.o
- obj-$(CONFIG_ARM_STI_CPUFREQ)		+= sti-cpufreq.o
--obj-$(CONFIG_ARM_ALLWINNER_SUN50I_CPUFREQ_NVMEM) += sun50i-cpufreq-nvmem.o
-+obj-$(CONFIG_ALLWINNER_SUN50I_CPUFREQ_NVMEM) += sun50i-cpufreq-nvmem.o
- obj-$(CONFIG_ARM_TEGRA20_CPUFREQ)	+= tegra20-cpufreq.o
- obj-$(CONFIG_ARM_TEGRA124_CPUFREQ)	+= tegra124-cpufreq.o
- obj-$(CONFIG_ARM_TEGRA186_CPUFREQ)	+= tegra186-cpufreq.o
--- 
-2.30.2
+On 12/14/23 09:40, Rafael J. Wysocki wrote:
+> On Thu, Dec 14, 2023 at 10:07 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>> On 12/14/23 07:57, Vincent Guittot wrote:
+>>> On Thu, 14 Dec 2023 at 06:43, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>>>>
+>>>> On 12-12-23, 15:27, Vincent Guittot wrote:
+>>>>> @@ -2618,6 +2663,9 @@ static int cpufreq_set_policy(struct cpufreq_policy *policy,
+>>>>>         policy->max = __resolve_freq(policy, policy->max, CPUFREQ_RELATION_H);
+>>>>>         trace_cpu_frequency_limits(policy);
+>>>>>
+>>>>> +     cpus = policy->related_cpus;
+>>>>> +     cpufreq_update_pressure(cpus, policy->max);
+>>>>> +
+>>>>>         policy->cached_target_freq = UINT_MAX;
+>>>>
+>>>> One more question, why are you doing this from cpufreq_set_policy ? If
+>>>> due to cpufreq cooling or from userspace, we end up limiting the
+>>>> maximum possible frequency, will this routine always get called ?
+>>>
+>>> Yes, any update of a FREQ_QOS_MAX ends up calling cpufreq_set_policy()
+>>> to update the policy->max
+>>>
+>>
+>> Agree, cpufreq sysfs scaling_max_freq is also important to handle
+>> in this new design. Currently we don't reflect that as reduced CPU
+>> capacity in the scheduler. There was discussion when I proposed to feed
+>> that CPU frequency reduction into thermal_pressure [1].
+>>
+>> The same applies for the DTPM which is missing currently the proper
+>> impact to the CPU reduced capacity in the scheduler.
+>>
+>> IMHO any limit set into FREQ_QOS_MAX should be visible in this
+>> new design of capacity reduction signaling.
+>>
+>> [1] https://lore.kernel.org/lkml/20220930094821.31665-2-lukasz.luba@arm.com/
+> 
+> Actually, freq_qos_read_value(&policy->constraints, FREQ_QOS_MAX) will
+> return the requisite limit.
 
+Yes, but we need to translate that information from freq domain
+into capacity domain and plumb ii into scheduler as stolen CPU capacity.
+Ideally, w/o any 'smoothing' but just instant value.
+That's the hope of this patch set re-design.
 
