@@ -1,120 +1,142 @@
-Return-Path: <linux-pm+bounces-1186-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1187-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D56938139AA
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 19:14:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2F3F8139C5
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 19:17:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 43FDCB21069
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 18:14:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 685181F21E42
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 18:17:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27EBE68B90;
-	Thu, 14 Dec 2023 18:14:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rypMenmu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF16468EAF;
+	Thu, 14 Dec 2023 18:16:17 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A79131
-	for <linux-pm@vger.kernel.org>; Thu, 14 Dec 2023 10:14:01 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-50c05ea5805so9957461e87.0
-        for <linux-pm@vger.kernel.org>; Thu, 14 Dec 2023 10:14:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702577640; x=1703182440; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Jeq677NEMB1IsnQAjs4/+yBvpQgDXfs4klZEe8r6nwY=;
-        b=rypMenmuMdO1QbcrihnIVf2JXPhpJGZC0ibYEr6hPjfqhNVsru9owGy6iOLu+yWQZL
-         6YzMN7WOwW1eoSfh/nzVhcIHwvdVc+LzkGmE9/+PtO6s8Tet+9a7HJ8DOH9Wt89Vco6R
-         x2vXDNlr2A6pinNEripZvIn2kBch+KxLIqTlxBuDKMqiAmfKtoaBoa/0LK1eu+wpa1/5
-         fwpYE1DeQ4yc4jrGiaDL4ppnA2wxA7ikfnNZU5Fi+SzyTf8UU5ZoJZbYRUm20l8s384y
-         r0MKAW+DxWsUi+BfQM+O/mH4y73+XHEscyElcWqMo5IM8VyhoEfCRb+plNMIKHvBvclt
-         Js4A==
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC710A6;
+	Thu, 14 Dec 2023 10:16:14 -0800 (PST)
+Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-3b9fb227545so688621b6e.1;
+        Thu, 14 Dec 2023 10:16:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702577640; x=1703182440;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1702577774; x=1703182574;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Jeq677NEMB1IsnQAjs4/+yBvpQgDXfs4klZEe8r6nwY=;
-        b=LWVRvFyTWshGZfC6V15wQHBRTQSbVokakY6kfMkwivGmE2GBWhzs7CvQFPEiPw1Mrc
-         nCk1v7iQAXs/KLcmYyjdEs2tvebLCgXeG2OnJ1TxUj8wVbJC/XLoRg6qS/GulgI3ETOJ
-         wlKbuHx7iQKkbPldaBfgJ4t3L+HmhIcKO7J2hAdWnsedDZzTW/ESNndiYk7WSriXKLtu
-         ydWIrbH7bA1aIohXGZd1CV8n1c6qDK/f9TgshR17ata6DTDdb2S67+dY9adqVwyRapq7
-         VKW86QwaDZ+r1sWou6Uc53QoWXWEEGmR0CUZj7aACpWvMRjj2qT/MLszKKSVnxdjxUeP
-         XTew==
-X-Gm-Message-State: AOJu0YylDUpUIQv9HZUP3hq8DtqkwHjfjWQAxzjTqELHaoq78odQuJq4
-	13T/Dmurdx75gsQGWB/G7xmzYg==
-X-Google-Smtp-Source: AGHT+IH+63IBJ9rieYmdKRPNhHxIM+WiKLHtfWsJ9OIE/+7mq19A5B8k4ZmO4Euqa6cdaiIKAp6nLg==
-X-Received: by 2002:a19:e043:0:b0:50e:17df:a992 with SMTP id g3-20020a19e043000000b0050e17dfa992mr815321lfj.33.1702577640041;
-        Thu, 14 Dec 2023 10:14:00 -0800 (PST)
-Received: from [127.0.1.1] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
-        by smtp.gmail.com with ESMTPSA id n11-20020a0565120acb00b0050be6038170sm1928838lfu.48.2023.12.14.10.13.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Dec 2023 10:13:59 -0800 (PST)
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Date: Thu, 14 Dec 2023 19:13:43 +0100
-Subject: [PATCH 6/6] arm64: dts: qcom: sc8180x-primus: Allow UFS regulators
- load/mode setting
+        bh=8fVrLLiv/CD23rD47e8kGnLhnnuQbRgVTt+cM3Cov5A=;
+        b=ENG+GXthL/SA75mRfhxCaaWTQVIZcYD81czKsMwRHjHZij23ng/ehK6ulS+QSeLWjd
+         mzOt2STAO69+23gZMUx2bkyrgQOQ2Maw0gse1VWFLI8geX6q/pO5pVnMHeC8v8tN3mvl
+         E3b8nFiiTdwWoFrkz4QvATVkQ+P568fVqquODZdxdOd2aFLt7tKbQXGRPse+0yLw09dy
+         1r22OU+Q8eDo8qCP32fOvReL+8KmK3DijBH+JACCYb2hANprogXvdUV+hldAzdXT6ktr
+         dEPp4Z4GeNRU1mMvY9iVMcP6w2DV3hvlSrRuYGOoMoZzdsuE0afoogagvZe+g1tKCu01
+         Oulw==
+X-Gm-Message-State: AOJu0YzO+TDxeAIrWOBiBY8krLz4ZD434tAwBiNvBtxRT8fyh6eUs1xx
+	aBwbTPoe7kQ3nbccH1QfOOxSNPaTAc8HaspvWOE=
+X-Google-Smtp-Source: AGHT+IHJijZImnPNUIIOWv84OL2w1tGUmgZPvXQ1Drc8dHZAkuSK99fCqBUWsD+7YUkvDs3ihxHUMSQwP8kpLp8yZOg=
+X-Received: by 2002:a05:6870:9a8a:b0:203:36fc:6c8a with SMTP id
+ hp10-20020a0568709a8a00b0020336fc6c8amr4450470oab.4.1702577773953; Thu, 14
+ Dec 2023 10:16:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231214-topic-sc8180_fixes-v1-6-421904863006@linaro.org>
-References: <20231214-topic-sc8180_fixes-v1-0-421904863006@linaro.org>
-In-Reply-To: <20231214-topic-sc8180_fixes-v1-0-421904863006@linaro.org>
-To: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
- Georgi Djakov <djakov@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
- Maximilian Luz <luzmaximilian@gmail.com>, 
- Gustave Monce <gustave.monce@outlook.com>, 
- Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.13-dev-0438c
-X-Spam-Level: *
+References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk> <E1rDOfs-00DvjY-HQ@rmk-PC.armlinux.org.uk>
+ <20231214173241.0000260f@Huawei.com> <CAJZ5v0jymOtZ0y65K9wE8FJk+ZKwP+FoGm4AKHXcYVfQJL9MVw@mail.gmail.com>
+ <ZXtFBYJEX2RrFrwj@shell.armlinux.org.uk>
+In-Reply-To: <ZXtFBYJEX2RrFrwj@shell.armlinux.org.uk>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 14 Dec 2023 19:16:02 +0100
+Message-ID: <CAJZ5v0h2Keyb-gFWFuPsKtwqjXvM2snyGpo6MMfFzaXKbfEpgw@mail.gmail.com>
+Subject: Re: [PATCH RFC v3 01/21] ACPI: Only enumerate enabled (or functional) devices
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
+	linux-pm@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, 
+	acpica-devel@lists.linuxfoundation.org, linux-csky@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>, 
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com, justin.he@arm.com, 
+	James Morse <james.morse@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The UFS driver expects to be able to set load (and by extension, mode)
-on the supplied regulators. Add the necessary properties to make that
-possible.
+On Thu, Dec 14, 2023 at 7:10=E2=80=AFPM Russell King (Oracle)
+<linux@armlinux.org.uk> wrote:
+>
+> On Thu, Dec 14, 2023 at 06:47:00PM +0100, Rafael J. Wysocki wrote:
+> > On Thu, Dec 14, 2023 at 6:32=E2=80=AFPM Jonathan Cameron
+> > <Jonathan.Cameron@huawei.com> wrote:
+> > >
+> > > On Wed, 13 Dec 2023 12:49:16 +0000
+> > > Russell King (Oracle) <rmk+kernel@armlinux.org.uk> wrote:
+> > >
+> > > > From: James Morse <james.morse@arm.com>
+> > > >
+> > > > Today the ACPI enumeration code 'visits' all devices that are prese=
+nt.
+> > > >
+> > > > This is a problem for arm64, where CPUs are always present, but not
+> > > > always enabled. When a device-check occurs because the firmware-pol=
+icy
+> > > > has changed and a CPU is now enabled, the following error occurs:
+> > > > | acpi ACPI0007:48: Enumeration failure
+> > > >
+> > > > This is ultimately because acpi_dev_ready_for_enumeration() returns
+> > > > true for a device that is not enabled. The ACPI Processor driver
+> > > > will not register such CPUs as they are not 'decoding their resourc=
+es'.
+> > > >
+> > > > Change acpi_dev_ready_for_enumeration() to also check the enabled b=
+it.
+> > > > ACPI allows a device to be functional instead of maintaining the
+> > > > present and enabled bit. Make this behaviour an explicit check with
+> > > > a reference to the spec, and then check the present and enabled bit=
+s.
+> > > > This is needed to avoid enumerating present && functional devices t=
+hat
+> > > > are not enabled.
+> > > >
+> > > > Signed-off-by: James Morse <james.morse@arm.com>
+> > > > Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> > > > Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
+> > > > Tested-by: Jianyong Wu <jianyong.wu@arm.com>
+> > > > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> > > > ---
+> > > > If this change causes problems on deployed hardware, I suggest an
+> > > > arch opt-in: ACPI_IGNORE_STA_ENABLED, that causes
+> > > > acpi_dev_ready_for_enumeration() to only check the present bit.
+> > >
+> > > My gut feeling (having made ACPI 'fixes' in the past that ran into
+> > > horribly broken firmware and had to be reverted) is reduce the blast
+> > > radius preemptively from the start. I'd love to live in a world were
+> > > that wasn't necessary but I don't trust all the generators of ACPI ta=
+bles.
+> > > I'll leave it to Rafael and other ACPI experts suggest how narrow we =
+should
+> > > make it though - arch opt in might be narrow enough.
+> >
+> > A chicken bit wouldn't help much IMO, especially in the cases when
+> > working setups get broken.
+> >
+> > I would very much prefer to limit the scope of it, say to processors
+> > only, in the first place.
+>
+> Thanks for the feedback and the idea.
+>
+> I guess we need something like:
+>
+>         if (device->status.present)
+>                 return device->device_type !=3D ACPI_BUS_TYPE_PROCESSOR |=
+|
+>                        device->status.enabled;
+>         else
+>                 return device->status.functional;
+>
+> so we only check device->status.enabled for processor-type devices?
 
-Fixes: 2ce38cc1e8fe ("arm64: dts: qcom: sc8180x: Introduce Primus")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sc8180x-primus.dts | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc8180x-primus.dts b/arch/arm64/boot/dts/qcom/sc8180x-primus.dts
-index adddf360c7fc..bfee60c93ccc 100644
---- a/arch/arm64/boot/dts/qcom/sc8180x-primus.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8180x-primus.dts
-@@ -386,12 +386,18 @@ vreg_l7e_1p8: ldo7 {
- 			regulator-min-microvolt = <1800000>;
- 			regulator-max-microvolt = <1800000>;
- 			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM
-+						   RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
- 		};
- 
- 		vreg_l10e_2p9: ldo10 {
- 			regulator-min-microvolt = <2904000>;
- 			regulator-max-microvolt = <2904000>;
- 			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM
-+						   RPMH_REGULATOR_MODE_HPM>;
-+			regulator-allow-set-load;
- 		};
- 
- 		vreg_l12e: ldo12 {
-
--- 
-2.40.1
-
+Yes, something like this.
 
