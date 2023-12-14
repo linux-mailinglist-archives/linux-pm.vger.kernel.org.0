@@ -1,556 +1,130 @@
-Return-Path: <linux-pm+bounces-1192-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1193-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27348813CA7
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 22:33:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31F89813D01
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 23:02:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF5C2281E25
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 21:33:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A3421C21D68
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 22:02:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27E752BCF9;
-	Thu, 14 Dec 2023 21:33:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1A25671F3;
+	Thu, 14 Dec 2023 22:02:15 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF2E5282E7;
-	Thu, 14 Dec 2023 21:33:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC70F2C682;
+	Thu, 14 Dec 2023 22:02:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-6d9d6f8485eso10987a34.0;
-        Thu, 14 Dec 2023 13:33:24 -0800 (PST)
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-6d9f879f784so47022a34.2;
+        Thu, 14 Dec 2023 14:02:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702589604; x=1703194404;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PyiITulSGJ6z0yR6WmJOtdmQHG8M3ey/V4bXZitn1js=;
-        b=ku8kQDF4rCl78gIiQzfo/OO+sph5mmXtSXxNNBPsNCFK0WVlibdnwOSi/13Z1iuYJv
-         e33jlrQexIrI33Gviy8O8whwc/jwoX2c0VacHeNod8+vgJw9fLMaqHkz3DwSqjQXiR23
-         eXXtO5pAgQIFvmOiYQi/AeIMieJGl6drnZlPLzOTNrysaNrnmVttAnrg6TueNg9MBc7F
-         Fxw4ipNLNOD9HrzcX952svIF+u/eRAkOU0okknkgu2tfZxr8IoocNW/OfNVP2t3gEWkB
-         VY/NXvPQK0R4HKB7uhNF8Ou+HAPwCAWLs1Tva6UAo3EtL70pKCYK+NhtFEviLZyySiyl
-         Wosw==
-X-Gm-Message-State: AOJu0YzcnSXNkSH6Wp1blyJHe41+aJZYODmUX/+2Yk/Tm8O//8+zuHx1
-	JtrjndURBLkOWEWNcrjG7jXrsxzLVunezXsuMzQ=
-X-Google-Smtp-Source: AGHT+IH5hsr/q+yqI92mtvLZskqC4J0sikSyA8d7LTGeebgrgl9f42TfOGlJP4Gb1oDUUYtiRJTibxb7QEgTopashrc=
-X-Received: by 2002:a05:6871:7589:b0:1fa:db26:78a6 with SMTP id
- nz9-20020a056871758900b001fadb2678a6mr19687793oac.1.1702589603714; Thu, 14
- Dec 2023 13:33:23 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702591333; x=1703196133;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BPemIXHsGC2pL7OrGhnuYvM+owbrAtZjLeJGA6HoXBA=;
+        b=QNlEn0B49sH5JPtWTNLKwVzVSTAh7+9a4l6kEoIm+kAg6yk9pxddBn+6Wb3jNahfUN
+         JU0TAS/GzCA6vYyMSfA+/qDEPmfospNgzCs+q6Qs+ks5X9qA8X8g15FPkKMbrHNxLCD1
+         ij6CpledXq56WX5y45xa3UM7+KFk+wVasXELVTmTqamyJdCF3aswa9ie4ygQb9JluhWN
+         oLJlAlISS82f1RCQqlGu45CMbsUTevJ0SR4GUv7ZoMX9gCU0Q/POjkcuFaRnxfCY4Ygg
+         rdXOHv31Qdt69UChmuYK73Jy6104vkc7GZdszgLI9m03mrYSogpG2PtqWoa60OP1YFCJ
+         HPyQ==
+X-Gm-Message-State: AOJu0Yy3DVWeDRdIAbYLU/mKygxYzonXx8rw2dseqMbqW5dRC4KF5MI3
+	U+9GaV2GRWW2dF1sWb9nPg==
+X-Google-Smtp-Source: AGHT+IFGjLR/Dd71l08mKUXouThqmEzNjRN83l0fPFsgqUBgmgfA06a/1ja4cfFBCwGsEI4kItxgcA==
+X-Received: by 2002:a05:6830:2081:b0:6d9:f68e:3c77 with SMTP id y1-20020a056830208100b006d9f68e3c77mr10021326otq.11.1702591332732;
+        Thu, 14 Dec 2023 14:02:12 -0800 (PST)
+Received: from herring.priv (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t21-20020a9d7f95000000b006d9214c03f2sm3337212otp.80.2023.12.14.14.02.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Dec 2023 14:02:12 -0800 (PST)
+Received: (nullmailer pid 1010455 invoked by uid 1000);
+	Thu, 14 Dec 2023 22:02:10 -0000
+Date: Thu, 14 Dec 2023 16:02:10 -0600
+From: Rob Herring <robh@kernel.org>
+To: Nikita Travkin <nikita@trvn.ru>
+Cc: Sebastian Reichel <sre@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, cros-qcom-dts-watchers@chromium.org, Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: power: supply: Add Acer Aspire 1 EC
+Message-ID: <20231214220210.GA988134-robh@kernel.org>
+References: <20231212-aspire1-ec-v2-0-ca495ea0a7ac@trvn.ru>
+ <20231212-aspire1-ec-v2-1-ca495ea0a7ac@trvn.ru>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231212161047.1631077-1-daniel.lezcano@linaro.org>
-In-Reply-To: <20231212161047.1631077-1-daniel.lezcano@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 14 Dec 2023 22:33:12 +0100
-Message-ID: <CAJZ5v0gy+DGnsCQRaHVpvuASLytp9E+v-sDhRgrXvi6nPi2Ukg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] thermal/debugfs: Add thermal cooling device
- debugfs information
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: rjw@rjwysocki.net, lukasz.luba@arm.com, rui.zhang@intel.com, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231212-aspire1-ec-v2-1-ca495ea0a7ac@trvn.ru>
 
-On Tue, Dec 12, 2023 at 5:11=E2=80=AFPM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> The thermal framework does not have any debug information except a
-> sysfs stat which is a bit controversial. This one allocates big chunks
-> of memory for every cooling devices with a high number of states and
-> could represent on some systems in production several megabytes of
-> memory for just a portion of it. As the syfs is limited to a page
-> size, the output is not exploitable with large data array and gets
-> truncated.
->
-> The patch provides the same information than sysfs except the
-> transitions are dynamically allocated, thus they won't show more
-> events than the ones which actually occurred. There is no longer a
-> size limitation and it opens the field for more debugging information
-> where the debugfs is designed for, not sysfs.
-
-Note: My comments are aside from the 0-day reports.
-
-> The thermal debugfs directory structure tries to stay consistent with
-> the sysfs one but in a very simplified way:
->
-> thermal/
->  -- cooling_devices
->     |-- 0
->     |   |-- reset
-
-This may be confused with a device reset.  I would call it "clear" or simil=
-ar.
-
->     |   |-- time_in_state_ms
->     |   |-- total_trans
->     |   `-- trans_table
->     |-- 1
->     |   |-- reset
->     |   |-- time_in_state_ms
->     |   |-- total_trans
->     |   `-- trans_table
->     |-- 2
->     |   |-- reset
->     |   |-- time_in_state_ms
->     |   |-- total_trans
->     |   `-- trans_table
->     |-- 3
->     |   |-- reset
->     |   |-- time_in_state_ms
->     |   |-- total_trans
->     |   `-- trans_table
->     `-- 4
->         |-- reset
->         |-- time_in_state_ms
->         |-- total_trans
->         `-- trans_table
->
-> The content of the files in the cooling devices directory is the same
-> as the sysfs one except for the trans_table which has the following
-> format:
->
-> Transition      Hits
-> 1->0            246
-> 0->1            246
-> 2->1            632
-> 1->2            632
-> 3->2            98
-> 2->3            98
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+On Tue, Dec 12, 2023 at 05:49:09PM +0500, Nikita Travkin wrote:
+> Add binding for the EC found in the Acer Aspire 1 laptop.
+> 
+> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
 > ---
-> Changelog:
->   - v1 (from RFC):
->     - Fixed typo "occurred"
->     - Changed Kconfig option name and description
->     - Removed comment in the Makefile
->     - Renamed exported function name s/debugfs/debug/
->     - Replaced thermal_debug_cdev_[unregister|register] by [add|remove]
-> ---
->  drivers/thermal/Kconfig           |   7 +
->  drivers/thermal/Makefile          |   2 +
->  drivers/thermal/thermal_core.c    |   6 +
->  drivers/thermal/thermal_core.h    |   1 +
->  drivers/thermal/thermal_debugfs.c | 354 ++++++++++++++++++++++++++++++
->  drivers/thermal/thermal_debugfs.h |  13 ++
->  drivers/thermal/thermal_helpers.c |  27 ++-
->  include/linux/thermal.h           |   7 +
->  8 files changed, 411 insertions(+), 6 deletions(-)
->  create mode 100644 drivers/thermal/thermal_debugfs.c
->  create mode 100644 drivers/thermal/thermal_debugfs.h
-
-[ cut - part looking good ]
-
-> diff --git a/drivers/thermal/thermal_debugfs.c b/drivers/thermal/thermal_=
-debugfs.c
+>  .../bindings/power/supply/acer,aspire1-ec.yaml     | 67 ++++++++++++++++++++++
+>  1 file changed, 67 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/power/supply/acer,aspire1-ec.yaml b/Documentation/devicetree/bindings/power/supply/acer,aspire1-ec.yaml
 > new file mode 100644
-> index 000000000000..295f7a2a7d0d
+> index 000000000000..1fbf1272a00f
 > --- /dev/null
-> +++ b/drivers/thermal/thermal_debugfs.c
-> @@ -0,0 +1,354 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright 2023 Linaro Limited
-> + *
-> + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
-> + *
-> + * Debug filesystem for the thermal framework
+> +++ b/Documentation/devicetree/bindings/power/supply/acer,aspire1-ec.yaml
+> @@ -0,0 +1,67 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/acer,aspire1-ec.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Acer Aspire 1 Embedded Controller
+> +
+> +maintainers:
+> +  - Nikita Travkin <nikita@trvn.ru>
+> +
+> +description:
+> +  The Acer Aspire 1 laptop uses an embedded controller to control battery
+> +  and charging as well as to provide a set of misc features such as the
+> +  laptop lid status and HPD events for the USB Type-C DP alt mode.
+> +
+> +properties:
+> +  compatible:
+> +    const: acer,aspire1-ec
+> +
+> +  reg:
+> +    const: 0x76
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  acer,media-keys-on-top:
+> +    description: Configure the keyboard layout to use media features of
+> +      the fn row when the fn key is not pressed. The firmware may choose
+> +      to add this property when user selects the fn mode in the firmware
+> +      setup utility.
+> +    type: boolean
 
-I would say "Thermal subsystem debug support" here.
+Besides the naming, this isn't really a property of the EC, but really 
+part of the keyboard layout. It seems you just stuck it here because 
+this is part of the specific device.
 
-> + */
-> +#include <linux/debugfs.h>
-> +#include <linux/ktime.h>
-> +#include <linux/list.h>
-> +#include <linux/minmax.h>
-> +#include <linux/mutex.h>
-> +#include <linux/thermal.h>
-> +
-> +static struct dentry *d_root;
-> +static struct dentry *d_cdev;
-> +
-> +/*
-> + * Length of the string containing the thermal zone id, including the
-> + * ending null character.
+It is also hardly a feature unique to this device. I'm typing this from 
+a device with the exact same thing (M1 Macbook Pro). Actually, all 3 
+laptops I have in front of me have the same thing. The other 2 have 
+a Fnlock (Fn+ESC) though.  On the M1, it's just a module param which I 
+set as persistent. Though I now wonder if the Fnlock could be 
+implemented on it too. Being able to switch whenever I want would be 
+nice. That would probably have to be in Linux where as these other 
+laptops probably implement this in their EC/firmware?
 
-This would be "nul", not "null".  Also it also applies to cdev IDs AFAICS.
+What I'm getting at is controlling changing this in firmware is not a 
+great experience and this should all be common.
 
-> We can reasonably assume there won't be more
-> + * than 256 thermal zones as the maximum observed today is around 32.
-> + */
-> +#define IDSLENGTH 4
-> +
-> +/*
-> + * The cooling device transition list is stored in a hash table where
-> + * the size is CDEVSTATS_HASH_SIZE. The majority of cooling devices
-> + * have dozen of states but some can have much more, so a hash table
-> + * is more adequate in this case because browsing the entire list when
-> + * storing the transitions could have a non neglictible cost
-
-"... in this case, because the cost of browsing the entire list when
-storing the transitions may not be negligible".
-
-But it really depends on which IDs come into play.  Due to the way the
-hash table is implemented, you may end up with having all of them in
-one list anyway.
-
-> + */
-> +#define CDEVSTATS_HASH_SIZE 16
-> +
-> +struct cdev_value {
-> +       struct list_head list;
-
-This is used for adding the entry to the list, so I would call it
-"node", for instance.  Otherwise it is easily confused with other
-entities that really are lists.
-
-> +       int id;
-> +       u64 value;
-> +};
-
-The above could be described.  I had to reverse-engineer the patch to
-figure this out.
-
-> +
-> +/*
-> + * A cooling device can have a high number of states. Showing the
-> + * transitions on a matrix based representation can be overkill given
-> + * most of the transitions won't happen and we end up with a matrix
-> + * filled with zero. Instead, we show the transitions which actually
-> + * happened.
-
-This could be a proper kerneldoc comment with the struct members
-documented.  It would help quite a bit to understand the code.
-
-> + */
-> +struct cdev_debugfs {
-> +       u32 total;
-> +       int current_state;
-> +       ktime_t timestamp;
-> +       struct list_head trans_list[CDEVSTATS_HASH_SIZE];
-> +       struct list_head duration_list[CDEVSTATS_HASH_SIZE];
-
-I would call the above "transitions" and "durations", respectively.
-IMO the "list" part doesn't add any value and is a bit confusing.
-
-> +};
-> +
-> +/*
-> + * The thermal_debugfs structure is the common structure used by the
-> + * cooling device to compute the statistics and the thermal to measure
-> + * the temperature at mitigation time.
-
-This also could be a proper kerneldoc comment with the struct members
-documented.
-
-> + */
-> +struct thermal_debugfs {
-> +       struct dentry *d_top;
-> +       struct mutex lock;
-> +       union {
-> +               struct cdev_debugfs cdev;
-> +       };
-> +};
-> +
-> +void thermal_debug_init(void)
-> +{
-> +       d_root =3D debugfs_create_dir("thermal", NULL);
-> +       if (!d_root)
-> +               return;
-> +
-> +       d_cdev =3D debugfs_create_dir("cooling_devices", d_root);
-> +}
-> +
-> +static struct thermal_debugfs *thermal_debugfs_add_id(struct dentry *d, =
-int id)
-> +{
-> +       struct thermal_debugfs *dfs;
-> +       char ids[IDSLENGTH];
-> +
-> +       dfs =3D kzalloc(sizeof(*dfs), GFP_KERNEL);
-> +       if (!dfs)
-> +               return NULL;
-> +
-> +       mutex_init(&dfs->lock);
-> +
-> +       snprintf(ids, IDSLENGTH, "%d", id);
-> +
-> +       dfs->d_top =3D debugfs_create_dir(ids, d);
-> +       if (!dfs->d_top) {
-> +               kfree(dfs);
-> +               return NULL;
-> +       }
-> +
-> +       return dfs;
-> +}
-> +
-> +static void thermal_debugfs_remove_id(struct thermal_debugfs *dfs)
-> +{
-> +       if (!dfs)
-> +               return;
-> +
-> +       debugfs_remove(dfs->d_top);
-> +
-> +       kfree(dfs);
-> +}
-> +
-> +static struct cdev_value *thermal_debugfs_cdev_value_alloc(int id)
-> +{
-> +       struct cdev_value *cdev_value;
-> +
-> +       cdev_value =3D kzalloc(sizeof(*cdev_value), GFP_KERNEL);
-> +       if (cdev_value) {
-> +               cdev_value->id =3D id;
-> +               INIT_LIST_HEAD(&cdev_value->list);
-> +       }
-> +
-> +       return cdev_value;
-> +}
-
-"alloc" and "insert" (below) can be done in one function I suppose?
-Especially given that the latter is a one-liner and they are only
-called back-to-back in one place.
-
-> +
-> +static struct cdev_value *thermal_debugfs_cdev_value_find(struct thermal=
-_debugfs *dfs,
-> +                                                         struct list_hea=
-d *list, int id)
-
-The "list" argument here doesn't really represent a list.  It is an
-array of lists, or a hash table if you will.  I would call it
-something less confusing like "lists".
-
-> +{
-> +       struct cdev_value *pos;
-
-Why not "entry"?
-
-> +
-> +       list_for_each_entry(pos, &list[id % CDEVSTATS_HASH_SIZE], list)
-> +               if (pos->id =3D=3D id)
-> +                       return pos;
-> +
-> +       return NULL;
-> +}
-> +
-> +static void thermal_debugfs_cdev_value_insert(struct thermal_debugfs *df=
-s,
-> +                                             struct list_head *list,
-> +                                             struct cdev_value *cdev_val=
-ue)
-> +{
-> +       list_add_tail(&cdev_value->list, &list[cdev_value->id % CDEVSTATS=
-_HASH_SIZE]);
-> +}
-> +
-> +struct cdev_value *thermal_debugfs_cdev_value_get(struct thermal_debugfs=
- *dfs,
-> +                                                 struct list_head *list,=
- int id)
-> +{
-> +       struct cdev_value *cdev_value;
-> +
-> +       cdev_value =3D thermal_debugfs_cdev_value_find(dfs, list, id);
-> +       if (cdev_value)
-> +               return cdev_value;
-> +
-> +       cdev_value =3D thermal_debugfs_cdev_value_alloc(id);
-> +       if (cdev_value)
-> +               thermal_debugfs_cdev_value_insert(dfs, list, cdev_value);
-> +
-> +       return cdev_value;
-> +}
-> +
-> +static void thermal_debugfs_cdev_reset(struct cdev_debugfs *cfs)
-> +{
-> +       int i;
-> +       struct cdev_value *pos, *tmp;
-> +
-> +       for (i =3D 0; i < CDEVSTATS_HASH_SIZE; i++) {
-> +
-> +               list_for_each_entry_safe(pos, tmp, &cfs->trans_list[i], l=
-ist) {
-> +                       list_del(&pos->list);
-> +                       kfree(pos);
-> +               }
-> +
-> +               list_for_each_entry_safe(pos, tmp, &cfs->duration_list[i]=
-, list) {
-> +                       list_del(&pos->list);
-> +                       kfree(pos);
-> +               }
-> +       }
-
-Does this need to be synchronized with the file operations below?
-What if someone triggers it while a transitions file read is in
-progress, for instance?
-
-> +
-> +       cfs->total =3D 0;
-> +}
-> +
-> +void thermal_debug_cdev_transition(struct thermal_cooling_device *cdev, =
-int to)
-
-to -> new_state ?
-
-> +{
-> +       struct thermal_debugfs *dfs =3D cdev->debugfs;
-> +       struct cdev_debugfs *cfs;
-> +       struct cdev_value *cdev_value;
-> +       ktime_t now =3D ktime_get();
-> +       int transition, from;
-
-from -> old_state ?
-
-> +
-> +       if (!dfs || (dfs->cdev.current_state =3D=3D to))
-> +               return;
-> +
-> +       mutex_lock(&dfs->lock);
-> +
-> +       cfs =3D &dfs->cdev;
-> +
-> +       from =3D cfs->current_state;
-> +       cfs->current_state =3D to;
-> +       transition =3D (from << 16) | to;
-> +
-> +       cdev_value =3D thermal_debugfs_cdev_value_get(dfs, cfs->duration_=
-list, from);
-> +       if (cdev_value) {
-> +               cdev_value->value +=3D ktime_ms_delta(now, cfs->timestamp=
-);
-> +               cfs->timestamp =3D now;
-> +       }
-> +
-> +       cdev_value =3D thermal_debugfs_cdev_value_get(dfs, cfs->trans_lis=
-t, transition);
-> +       if (cdev_value)
-> +               cdev_value->value++;
-
-Some concise comments describing what is going on here wouldn't hurt.
-
-> +
-> +       cfs->total++;
-> +
-> +       mutex_unlock(&dfs->lock);
-> +}
-> +
-> +static void *cdev_seq_start(struct seq_file *s, loff_t *pos)
-> +{
-> +       struct thermal_debugfs *dfs =3D s->private;
-> +
-> +       mutex_lock(&dfs->lock);
-> +
-> +       return (*pos < CDEVSTATS_HASH_SIZE) ? pos : NULL;
-> +}
-> +
-> +static void *cdev_seq_next(struct seq_file *s, void *v, loff_t *pos)
-> +{
-> +       (*pos)++;
-> +
-> +       return (*pos < CDEVSTATS_HASH_SIZE) ? pos : NULL;
-> +}
-> +
-> +static void cdev_seq_stop(struct seq_file *s, void *v)
-> +{
-> +       struct thermal_debugfs *dfs =3D s->private;
-> +
-> +       mutex_unlock(&dfs->lock);
-> +}
-> +
-> +static int cdev_tt_seq_show(struct seq_file *s, void *v)
-> +{
-> +       struct thermal_debugfs *dfs =3D s->private;
-> +       struct cdev_debugfs *cfs =3D &dfs->cdev;
-> +       struct list_head *trans_list =3D cfs->trans_list;
-> +       struct cdev_value *pos;
-
-pos -> entry? (and elsewhere too)
-
-> +       char buffer[11];
-
-Why 11?
-
-> +       int i =3D *(loff_t *)v;
-> +
-> +       if (!i)
-> +               seq_puts(s, "Transition\tHits\n");
-
-I think that the "Hits" column represents the number of times the
-given transition has occurred, so I would rather call it
-"Occurrences".
-
-> +
-> +       list_for_each_entry(pos, &trans_list[i], list) {
-> +
-> +               snprintf(buffer, ARRAY_SIZE(buffer), "%d->%d",
-> +                        pos->id >> 16, pos->id & 0xFFFF);
-> +
-> +               seq_printf(s, "%-10s\t%-10llu\n", buffer, pos->value);
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct seq_operations tt_sops =3D {
-> +       .start =3D cdev_seq_start,
-> +       .next =3D cdev_seq_next,
-> +       .stop =3D cdev_seq_stop,
-> +       .show =3D cdev_tt_seq_show,
-> +};
-> +
-> +DEFINE_SEQ_ATTRIBUTE(tt);
-> +
-> +static int cdev_dt_seq_show(struct seq_file *s, void *v)
-> +{
-> +       struct cdev_debugfs *cfs =3D s->private;
-> +       struct list_head *duration_list =3D cfs->duration_list;
-> +       struct cdev_value *pos;
-
-pos -> entry ?
-
-> +       int i =3D *(loff_t *)v;
-> +
-> +       if (!i)
-> +               seq_puts(s, "State\tTime\n");
-
-I think that the "Time" column will contain state residencies, so why
-not label it as "Residency"?
-
-> +
-> +       list_for_each_entry(pos, &duration_list[i], list) {
-> +               s64 duration =3D pos->value;
-> +
-> +               if (pos->id =3D=3D cfs->current_state)
-> +                       duration +=3D ktime_ms_delta(ktime_get(), cfs->ti=
-mestamp);
-> +
-> +               seq_printf(s, "%-5d\t%-10llu\n", pos->id, duration);
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct seq_operations dt_sops =3D {
-> +       .start =3D cdev_seq_start,
-> +       .next =3D cdev_seq_next,
-> +       .stop =3D cdev_seq_stop,
-> +       .show =3D cdev_dt_seq_show,
-> +};
-> +
-> +DEFINE_SEQ_ATTRIBUTE(dt);
-
-And I have no comments on the part below.
-
-Thanks!
+Rob
 
