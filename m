@@ -1,297 +1,556 @@
-Return-Path: <linux-pm+bounces-1191-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1192-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 959FB813AC6
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 20:31:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27348813CA7
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 22:33:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 738F7B2116D
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 19:31:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF5C2281E25
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 21:33:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67B3769798;
-	Thu, 14 Dec 2023 19:31:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27E752BCF9;
+	Thu, 14 Dec 2023 21:33:27 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59C0F69790;
-	Thu, 14 Dec 2023 19:31:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF2E5282E7;
+	Thu, 14 Dec 2023 21:33:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-6d9d6f8485eso1180153a34.0;
-        Thu, 14 Dec 2023 11:31:29 -0800 (PST)
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-6d9d6f8485eso10987a34.0;
+        Thu, 14 Dec 2023 13:33:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702582288; x=1703187088;
+        d=1e100.net; s=20230601; t=1702589604; x=1703194404;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=T2HZk8v/RsD0JKPft+UxXNVM6N+oiGp8mnW19Rl92ho=;
-        b=DXf9X6O+pspD4oXYlP9G8nfNejpJYNdzJcCRNc4EQX4XvJ88axQCTn4YuW+g4BCDFo
-         L0shO8fDA8NKySVqncIAv80ZTaLdvmz8k+uylBwIX+GxY02ZOXC37mXGqSUv3SuZeKx0
-         iz8DuPJ3rTxvRlU21PoeudLG2lCN6/mhcm+y/7Ao2y9FnlYjnOdFLEP3Q4vTSzAfejXJ
-         NPefy3jHb7u6gOuXeNQ9PY63rJyol4+LI7JHXGnanHbT0b+cRxuTzXYmc7kmlGFi+A8g
-         iLIDRAhl/da6MfWi5vr/5asMowjJ//UasOj8N3kIb7j2F1XjrVGYNcIOXyEhWTG14pjS
-         OFYA==
-X-Gm-Message-State: AOJu0YxBVTFcTzGwvORMITTXJR84So7FpT5D+5sn1IcrCskRzsWYUV/k
-	pCVOfGsaMcpYRJkT5AU1MPWXhx0ffxfevSDP+pg=
-X-Google-Smtp-Source: AGHT+IEC0xVxvkwc5escb+tNQvJB+H0lUpyobal4AjpzQyhi/i4Oq0kFUcNVb0yFJDpAGV5WCcMkznODVDUeWCwECvo=
-X-Received: by 2002:a05:6871:d287:b0:1fb:790:72fa with SMTP id
- pl7-20020a056871d28700b001fb079072famr17624418oac.0.1702582288292; Thu, 14
- Dec 2023 11:31:28 -0800 (PST)
+        bh=PyiITulSGJ6z0yR6WmJOtdmQHG8M3ey/V4bXZitn1js=;
+        b=ku8kQDF4rCl78gIiQzfo/OO+sph5mmXtSXxNNBPsNCFK0WVlibdnwOSi/13Z1iuYJv
+         e33jlrQexIrI33Gviy8O8whwc/jwoX2c0VacHeNod8+vgJw9fLMaqHkz3DwSqjQXiR23
+         eXXtO5pAgQIFvmOiYQi/AeIMieJGl6drnZlPLzOTNrysaNrnmVttAnrg6TueNg9MBc7F
+         Fxw4ipNLNOD9HrzcX952svIF+u/eRAkOU0okknkgu2tfZxr8IoocNW/OfNVP2t3gEWkB
+         VY/NXvPQK0R4HKB7uhNF8Ou+HAPwCAWLs1Tva6UAo3EtL70pKCYK+NhtFEviLZyySiyl
+         Wosw==
+X-Gm-Message-State: AOJu0YzcnSXNkSH6Wp1blyJHe41+aJZYODmUX/+2Yk/Tm8O//8+zuHx1
+	JtrjndURBLkOWEWNcrjG7jXrsxzLVunezXsuMzQ=
+X-Google-Smtp-Source: AGHT+IH5hsr/q+yqI92mtvLZskqC4J0sikSyA8d7LTGeebgrgl9f42TfOGlJP4Gb1oDUUYtiRJTibxb7QEgTopashrc=
+X-Received: by 2002:a05:6871:7589:b0:1fa:db26:78a6 with SMTP id
+ nz9-20020a056871758900b001fadb2678a6mr19687793oac.1.1702589603714; Thu, 14
+ Dec 2023 13:33:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231212072617.14756-1-lihuisong@huawei.com>
-In-Reply-To: <20231212072617.14756-1-lihuisong@huawei.com>
+References: <20231212161047.1631077-1-daniel.lezcano@linaro.org>
+In-Reply-To: <20231212161047.1631077-1-daniel.lezcano@linaro.org>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 14 Dec 2023 20:31:17 +0100
-Message-ID: <CAJZ5v0jwW0=8cNvC-Vu_o+pEHFpN9nrPD4LXCpmSTgQBTHODgg@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: CPPC: Resolve the large frequency discrepancy
- from cpuinfo_cur_freq
-To: Huisong Li <lihuisong@huawei.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, rafael@kernel.org, 
-	beata.michalska@arm.com, sumitg@nvidia.com, ionela.voinescu@arm.com, 
-	zengheng4@huawei.com, yang@os.amperecomputing.com, will@kernel.org, 
-	sudeep.holla@arm.com, liuyonglong@huawei.com, zhanjie9@hisilicon.com
+Date: Thu, 14 Dec 2023 22:33:12 +0100
+Message-ID: <CAJZ5v0gy+DGnsCQRaHVpvuASLytp9E+v-sDhRgrXvi6nPi2Ukg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] thermal/debugfs: Add thermal cooling device
+ debugfs information
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: rjw@rjwysocki.net, lukasz.luba@arm.com, rui.zhang@intel.com, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 12, 2023 at 8:26=E2=80=AFAM Huisong Li <lihuisong@huawei.com> w=
-rote:
+On Tue, Dec 12, 2023 at 5:11=E2=80=AFPM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
-> Many developers found that the cpu current frequency is greater than
-> the maximum frequency of the platform, please see [1], [2] and [3].
+> The thermal framework does not have any debug information except a
+> sysfs stat which is a bit controversial. This one allocates big chunks
+> of memory for every cooling devices with a high number of states and
+> could represent on some systems in production several megabytes of
+> memory for just a portion of it. As the syfs is limited to a page
+> size, the output is not exploitable with large data array and gets
+> truncated.
 >
-> In the scenarios with high memory access pressure, the patch [1] has
-> proved the significant latency of cpc_read() which is used to obtain
-> delivered and reference performance counter cause an absurd frequency.
-> The sampling interval for this counters is very critical and is expected
-> to be equal. However, the different latency of cpc_read() has a direct
-> impact on their sampling interval.
->
-> This patch adds a interface, cpc_read_arch_counters_on_cpu, to read
-> delivered and reference performance counter together. According to my
-> test[4], the discrepancy of cpu current frequency in the scenarios with
-> high memory access pressure is lower than 0.2% by stress-ng application.
->
-> [1] https://lore.kernel.org/all/20231025093847.3740104-4-zengheng4@huawei=
-.com/
-> [2] https://lore.kernel.org/all/20230328193846.8757-1-yang@os.amperecompu=
-ting.com/
-> [3] https://lore.kernel.org/all/20230418113459.12860-7-sumitg@nvidia.com/
->
-> [4] My local test:
-> The testing platform enable SMT and include 128 logical CPU in total,
-> and CPU base frequency is 2.7GHz. Reading "cpuinfo_cur_freq" for each
-> physical core on platform during the high memory access pressure from
-> stress-ng, and the output is as follows:
->   0: 2699133     2: 2699942     4: 2698189     6: 2704347
->   8: 2704009    10: 2696277    12: 2702016    14: 2701388
->  16: 2700358    18: 2696741    20: 2700091    22: 2700122
->  24: 2701713    26: 2702025    28: 2699816    30: 2700121
->  32: 2700000    34: 2699788    36: 2698884    38: 2699109
->  40: 2704494    42: 2698350    44: 2699997    46: 2701023
->  48: 2703448    50: 2699501    52: 2700000    54: 2699999
->  56: 2702645    58: 2696923    60: 2697718    62: 2700547
->  64: 2700313    66: 2700000    68: 2699904    70: 2699259
->  72: 2699511    74: 2700644    76: 2702201    78: 2700000
->  80: 2700776    82: 2700364    84: 2702674    86: 2700255
->  88: 2699886    90: 2700359    92: 2699662    94: 2696188
->  96: 2705454    98: 2699260   100: 2701097   102: 2699630
-> 104: 2700463   106: 2698408   108: 2697766   110: 2701181
-> 112: 2699166   114: 2701804   116: 2701907   118: 2701973
-> 120: 2699584   122: 2700474   124: 2700768   126: 2701963
->
-> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+> The patch provides the same information than sysfs except the
+> transitions are dynamically allocated, thus they won't show more
+> events than the ones which actually occurred. There is no longer a
+> size limitation and it opens the field for more debugging information
+> where the debugfs is designed for, not sysfs.
 
-First off, please Cc ACPI-related patches to linux-acpi.
+Note: My comments are aside from the 0-day reports.
 
+> The thermal debugfs directory structure tries to stay consistent with
+> the sysfs one but in a very simplified way:
+>
+> thermal/
+>  -- cooling_devices
+>     |-- 0
+>     |   |-- reset
+
+This may be confused with a device reset.  I would call it "clear" or simil=
+ar.
+
+>     |   |-- time_in_state_ms
+>     |   |-- total_trans
+>     |   `-- trans_table
+>     |-- 1
+>     |   |-- reset
+>     |   |-- time_in_state_ms
+>     |   |-- total_trans
+>     |   `-- trans_table
+>     |-- 2
+>     |   |-- reset
+>     |   |-- time_in_state_ms
+>     |   |-- total_trans
+>     |   `-- trans_table
+>     |-- 3
+>     |   |-- reset
+>     |   |-- time_in_state_ms
+>     |   |-- total_trans
+>     |   `-- trans_table
+>     `-- 4
+>         |-- reset
+>         |-- time_in_state_ms
+>         |-- total_trans
+>         `-- trans_table
+>
+> The content of the files in the cooling devices directory is the same
+> as the sysfs one except for the trans_table which has the following
+> format:
+>
+> Transition      Hits
+> 1->0            246
+> 0->1            246
+> 2->1            632
+> 1->2            632
+> 3->2            98
+> 2->3            98
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 > ---
->  arch/arm64/kernel/topology.c | 43 ++++++++++++++++++++++++++++++++++--
->  drivers/acpi/cppc_acpi.c     | 22 +++++++++++++++---
->  include/acpi/cppc_acpi.h     |  5 +++++
->  3 files changed, 65 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-> index 7d37e458e2f5..c3122154d738 100644
-> --- a/arch/arm64/kernel/topology.c
-> +++ b/arch/arm64/kernel/topology.c
-> @@ -299,6 +299,11 @@ core_initcall(init_amu_fie);
->  #ifdef CONFIG_ACPI_CPPC_LIB
->  #include <acpi/cppc_acpi.h>
->
-> +struct amu_counters {
-> +       u64 corecnt;
-> +       u64 constcnt;
+> Changelog:
+>   - v1 (from RFC):
+>     - Fixed typo "occurred"
+>     - Changed Kconfig option name and description
+>     - Removed comment in the Makefile
+>     - Renamed exported function name s/debugfs/debug/
+>     - Replaced thermal_debug_cdev_[unregister|register] by [add|remove]
+> ---
+>  drivers/thermal/Kconfig           |   7 +
+>  drivers/thermal/Makefile          |   2 +
+>  drivers/thermal/thermal_core.c    |   6 +
+>  drivers/thermal/thermal_core.h    |   1 +
+>  drivers/thermal/thermal_debugfs.c | 354 ++++++++++++++++++++++++++++++
+>  drivers/thermal/thermal_debugfs.h |  13 ++
+>  drivers/thermal/thermal_helpers.c |  27 ++-
+>  include/linux/thermal.h           |   7 +
+>  8 files changed, 411 insertions(+), 6 deletions(-)
+>  create mode 100644 drivers/thermal/thermal_debugfs.c
+>  create mode 100644 drivers/thermal/thermal_debugfs.h
+
+[ cut - part looking good ]
+
+> diff --git a/drivers/thermal/thermal_debugfs.c b/drivers/thermal/thermal_=
+debugfs.c
+> new file mode 100644
+> index 000000000000..295f7a2a7d0d
+> --- /dev/null
+> +++ b/drivers/thermal/thermal_debugfs.c
+> @@ -0,0 +1,354 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright 2023 Linaro Limited
+> + *
+> + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
+> + *
+> + * Debug filesystem for the thermal framework
+
+I would say "Thermal subsystem debug support" here.
+
+> + */
+> +#include <linux/debugfs.h>
+> +#include <linux/ktime.h>
+> +#include <linux/list.h>
+> +#include <linux/minmax.h>
+> +#include <linux/mutex.h>
+> +#include <linux/thermal.h>
+> +
+> +static struct dentry *d_root;
+> +static struct dentry *d_cdev;
+> +
+> +/*
+> + * Length of the string containing the thermal zone id, including the
+> + * ending null character.
+
+This would be "nul", not "null".  Also it also applies to cdev IDs AFAICS.
+
+> We can reasonably assume there won't be more
+> + * than 256 thermal zones as the maximum observed today is around 32.
+> + */
+> +#define IDSLENGTH 4
+> +
+> +/*
+> + * The cooling device transition list is stored in a hash table where
+> + * the size is CDEVSTATS_HASH_SIZE. The majority of cooling devices
+> + * have dozen of states but some can have much more, so a hash table
+> + * is more adequate in this case because browsing the entire list when
+> + * storing the transitions could have a non neglictible cost
+
+"... in this case, because the cost of browsing the entire list when
+storing the transitions may not be negligible".
+
+But it really depends on which IDs come into play.  Due to the way the
+hash table is implemented, you may end up with having all of them in
+one list anyway.
+
+> + */
+> +#define CDEVSTATS_HASH_SIZE 16
+> +
+> +struct cdev_value {
+> +       struct list_head list;
+
+This is used for adding the entry to the list, so I would call it
+"node", for instance.  Otherwise it is easily confused with other
+entities that really are lists.
+
+> +       int id;
+> +       u64 value;
+> +};
+
+The above could be described.  I had to reverse-engineer the patch to
+figure this out.
+
+> +
+> +/*
+> + * A cooling device can have a high number of states. Showing the
+> + * transitions on a matrix based representation can be overkill given
+> + * most of the transitions won't happen and we end up with a matrix
+> + * filled with zero. Instead, we show the transitions which actually
+> + * happened.
+
+This could be a proper kerneldoc comment with the struct members
+documented.  It would help quite a bit to understand the code.
+
+> + */
+> +struct cdev_debugfs {
+> +       u32 total;
+> +       int current_state;
+> +       ktime_t timestamp;
+> +       struct list_head trans_list[CDEVSTATS_HASH_SIZE];
+> +       struct list_head duration_list[CDEVSTATS_HASH_SIZE];
+
+I would call the above "transitions" and "durations", respectively.
+IMO the "list" part doesn't add any value and is a bit confusing.
+
 > +};
 > +
->  static void cpu_read_corecnt(void *val)
->  {
->         /*
-> @@ -322,8 +327,27 @@ static void cpu_read_constcnt(void *val)
->                       0UL : read_constcnt();
->  }
->
-> +static void cpu_read_amu_counters(void *data)
-> +{
-> +       struct amu_counters *cnt =3D (struct amu_counters *)data;
+> +/*
+> + * The thermal_debugfs structure is the common structure used by the
+> + * cooling device to compute the statistics and the thermal to measure
+> + * the temperature at mitigation time.
+
+This also could be a proper kerneldoc comment with the struct members
+documented.
+
+> + */
+> +struct thermal_debugfs {
+> +       struct dentry *d_top;
+> +       struct mutex lock;
+> +       union {
+> +               struct cdev_debugfs cdev;
+> +       };
+> +};
 > +
-> +       /*
-> +        * The running time of the this_cpu_has_cap() might have a couple=
- of
-> +        * microseconds and is significantly increased to tens of microse=
-conds.
-> +        * But AMU core and constant counter need to be read togeter with=
-out any
-> +        * time interval to reduce the calculation discrepancy using this=
- counters.
-> +        */
-> +       if (this_cpu_has_cap(ARM64_WORKAROUND_2457168)) {
-> +               cnt->corecnt =3D read_corecnt();
-
-This statement is present in both branches, so can it be moved before the i=
-f ()?
-
-> +               cnt->constcnt =3D 0;
-> +       } else {
-> +               cnt->corecnt =3D read_corecnt();
-> +               cnt->constcnt =3D read_constcnt();
+> +void thermal_debug_init(void)
+> +{
+> +       d_root =3D debugfs_create_dir("thermal", NULL);
+> +       if (!d_root)
+> +               return;
+> +
+> +       d_cdev =3D debugfs_create_dir("cooling_devices", d_root);
+> +}
+> +
+> +static struct thermal_debugfs *thermal_debugfs_add_id(struct dentry *d, =
+int id)
+> +{
+> +       struct thermal_debugfs *dfs;
+> +       char ids[IDSLENGTH];
+> +
+> +       dfs =3D kzalloc(sizeof(*dfs), GFP_KERNEL);
+> +       if (!dfs)
+> +               return NULL;
+> +
+> +       mutex_init(&dfs->lock);
+> +
+> +       snprintf(ids, IDSLENGTH, "%d", id);
+> +
+> +       dfs->d_top =3D debugfs_create_dir(ids, d);
+> +       if (!dfs->d_top) {
+> +               kfree(dfs);
+> +               return NULL;
 > +       }
+> +
+> +       return dfs;
 > +}
 > +
->  static inline
-> -int counters_read_on_cpu(int cpu, smp_call_func_t func, u64 *val)
-> +int counters_read_on_cpu(int cpu, smp_call_func_t func, void *data)
->  {
->         /*
->          * Abort call on counterless CPU or when interrupts are
-> @@ -335,7 +359,7 @@ int counters_read_on_cpu(int cpu, smp_call_func_t fun=
-c, u64 *val)
->         if (WARN_ON_ONCE(irqs_disabled()))
->                 return -EPERM;
->
-> -       smp_call_function_single(cpu, func, val, 1);
-> +       smp_call_function_single(cpu, func, data, 1);
->
->         return 0;
->  }
-> @@ -364,6 +388,21 @@ bool cpc_ffh_supported(void)
->         return true;
->  }
->
-> +int cpc_read_arch_counters_on_cpu(int cpu, u64 *delivered, u64 *referenc=
-e)
+> +static void thermal_debugfs_remove_id(struct thermal_debugfs *dfs)
 > +{
-> +       struct amu_counters cnts =3D {0};
-> +       int ret;
+> +       if (!dfs)
+> +               return;
 > +
-> +       ret =3D counters_read_on_cpu(cpu, cpu_read_amu_counters, &cnts);
-> +       if (ret)
-> +               return ret;
+> +       debugfs_remove(dfs->d_top);
 > +
-> +       *delivered =3D cnts.corecnt;
-> +       *reference =3D cnts.constcnt;
-> +
-> +       return 0;
+> +       kfree(dfs);
 > +}
 > +
->  int cpc_read_ffh(int cpu, struct cpc_reg *reg, u64 *val)
->  {
->         int ret =3D -EOPNOTSUPP;
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index 7ff269a78c20..f303fabd7cfe 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -1299,6 +1299,11 @@ bool cppc_perf_ctrs_in_pcc(void)
->  }
->  EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
->
-> +int __weak cpc_read_arch_counters_on_cpu(int cpu, u64 *delivered, u64 *r=
-eference)
+> +static struct cdev_value *thermal_debugfs_cdev_value_alloc(int id)
 > +{
-> +       return 0;
+> +       struct cdev_value *cdev_value;
+> +
+> +       cdev_value =3D kzalloc(sizeof(*cdev_value), GFP_KERNEL);
+> +       if (cdev_value) {
+> +               cdev_value->id =3D id;
+> +               INIT_LIST_HEAD(&cdev_value->list);
+> +       }
+> +
+> +       return cdev_value;
+> +}
+
+"alloc" and "insert" (below) can be done in one function I suppose?
+Especially given that the latter is a one-liner and they are only
+called back-to-back in one place.
+
+> +
+> +static struct cdev_value *thermal_debugfs_cdev_value_find(struct thermal=
+_debugfs *dfs,
+> +                                                         struct list_hea=
+d *list, int id)
+
+The "list" argument here doesn't really represent a list.  It is an
+array of lists, or a hash table if you will.  I would call it
+something less confusing like "lists".
+
+> +{
+> +       struct cdev_value *pos;
+
+Why not "entry"?
+
+> +
+> +       list_for_each_entry(pos, &list[id % CDEVSTATS_HASH_SIZE], list)
+> +               if (pos->id =3D=3D id)
+> +                       return pos;
+> +
+> +       return NULL;
 > +}
 > +
->  /**
->   * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
->   * @cpunum: CPU from which to read counters.
-> @@ -1313,7 +1318,8 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf=
-_fb_ctrs *perf_fb_ctrs)
->                 *ref_perf_reg, *ctr_wrap_reg;
->         int pcc_ss_id =3D per_cpu(cpu_pcc_subspace_idx, cpunum);
->         struct cppc_pcc_data *pcc_ss_data =3D NULL;
-> -       u64 delivered, reference, ref_perf, ctr_wrap_time;
-> +       u64 delivered =3D 0, reference =3D 0;
-> +       u64 ref_perf, ctr_wrap_time;
->         int ret =3D 0, regs_in_pcc =3D 0;
->
->         if (!cpc_desc) {
-> @@ -1350,8 +1356,18 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_per=
-f_fb_ctrs *perf_fb_ctrs)
->                 }
->         }
->
-> -       cpc_read(cpunum, delivered_reg, &delivered);
-> -       cpc_read(cpunum, reference_reg, &reference);
-> +       if (cpc_ffh_supported()) {
-> +               ret =3D cpc_read_arch_counters_on_cpu(cpunum, &delivered,=
- &reference);
-> +               if (ret) {
-> +                       pr_debug("read arch counters failed, ret=3D%d.\n"=
-, ret);
-> +                       ret =3D 0;
+> +static void thermal_debugfs_cdev_value_insert(struct thermal_debugfs *df=
+s,
+> +                                             struct list_head *list,
+> +                                             struct cdev_value *cdev_val=
+ue)
+> +{
+> +       list_add_tail(&cdev_value->list, &list[cdev_value->id % CDEVSTATS=
+_HASH_SIZE]);
+> +}
+> +
+> +struct cdev_value *thermal_debugfs_cdev_value_get(struct thermal_debugfs=
+ *dfs,
+> +                                                 struct list_head *list,=
+ int id)
+> +{
+> +       struct cdev_value *cdev_value;
+> +
+> +       cdev_value =3D thermal_debugfs_cdev_value_find(dfs, list, id);
+> +       if (cdev_value)
+> +               return cdev_value;
+> +
+> +       cdev_value =3D thermal_debugfs_cdev_value_alloc(id);
+> +       if (cdev_value)
+> +               thermal_debugfs_cdev_value_insert(dfs, list, cdev_value);
+> +
+> +       return cdev_value;
+> +}
+> +
+> +static void thermal_debugfs_cdev_reset(struct cdev_debugfs *cfs)
+> +{
+> +       int i;
+> +       struct cdev_value *pos, *tmp;
+> +
+> +       for (i =3D 0; i < CDEVSTATS_HASH_SIZE; i++) {
+> +
+> +               list_for_each_entry_safe(pos, tmp, &cfs->trans_list[i], l=
+ist) {
+> +                       list_del(&pos->list);
+> +                       kfree(pos);
+> +               }
+> +
+> +               list_for_each_entry_safe(pos, tmp, &cfs->duration_list[i]=
+, list) {
+> +                       list_del(&pos->list);
+> +                       kfree(pos);
 > +               }
 > +       }
 
-The above is surely not applicable to every platform using CPPC.  Also
-it looks like in the ARM64_WORKAROUND_2457168 enabled case it is just
-pointless overhead, because "reference" is always going to be 0 here
-then.
+Does this need to be synchronized with the file operations below?
+What if someone triggers it while a transitions file read is in
+progress, for instance?
 
-Please clean that up.
+> +
+> +       cfs->total =3D 0;
+> +}
+> +
+> +void thermal_debug_cdev_transition(struct thermal_cooling_device *cdev, =
+int to)
 
-> +       if (!delivered || !reference) {
-> +               cpc_read(cpunum, delivered_reg, &delivered);
-> +               cpc_read(cpunum, reference_reg, &reference);
+to -> new_state ?
+
+> +{
+> +       struct thermal_debugfs *dfs =3D cdev->debugfs;
+> +       struct cdev_debugfs *cfs;
+> +       struct cdev_value *cdev_value;
+> +       ktime_t now =3D ktime_get();
+> +       int transition, from;
+
+from -> old_state ?
+
+> +
+> +       if (!dfs || (dfs->cdev.current_state =3D=3D to))
+> +               return;
+> +
+> +       mutex_lock(&dfs->lock);
+> +
+> +       cfs =3D &dfs->cdev;
+> +
+> +       from =3D cfs->current_state;
+> +       cfs->current_state =3D to;
+> +       transition =3D (from << 16) | to;
+> +
+> +       cdev_value =3D thermal_debugfs_cdev_value_get(dfs, cfs->duration_=
+list, from);
+> +       if (cdev_value) {
+> +               cdev_value->value +=3D ktime_ms_delta(now, cfs->timestamp=
+);
+> +               cfs->timestamp =3D now;
 > +       }
 > +
->         cpc_read(cpunum, ref_perf_reg, &ref_perf);
->
->         /*
-> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
-> index 6126c977ece0..07d4fd82d499 100644
-> --- a/include/acpi/cppc_acpi.h
-> +++ b/include/acpi/cppc_acpi.h
-> @@ -152,6 +152,7 @@ extern bool cpc_ffh_supported(void);
->  extern bool cpc_supported_by_cpu(void);
->  extern int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val);
->  extern int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val);
-> +extern int cpc_read_arch_counters_on_cpu(int cpu, u64 *delivered, u64 *r=
-eference);
->  extern int cppc_get_epp_perf(int cpunum, u64 *epp_perf);
->  extern int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls=
-, bool enable);
->  extern int cppc_get_auto_sel_caps(int cpunum, struct cppc_perf_caps *per=
-f_caps);
-> @@ -209,6 +210,10 @@ static inline int cpc_write_ffh(int cpunum, struct c=
-pc_reg *reg, u64 val)
->  {
->         return -ENOTSUPP;
->  }
-> +static inline int cpc_read_arch_counters_on_cpu(int cpu, u64 *delivered,=
- u64 *reference)
-> +{
-> +       return -EOPNOTSUPP;
+> +       cdev_value =3D thermal_debugfs_cdev_value_get(dfs, cfs->trans_lis=
+t, transition);
+> +       if (cdev_value)
+> +               cdev_value->value++;
+
+Some concise comments describing what is going on here wouldn't hurt.
+
+> +
+> +       cfs->total++;
+> +
+> +       mutex_unlock(&dfs->lock);
 > +}
->  static inline int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *per=
-f_ctrls, bool enable)
->  {
->         return -ENOTSUPP;
-> --
+> +
+> +static void *cdev_seq_start(struct seq_file *s, loff_t *pos)
+> +{
+> +       struct thermal_debugfs *dfs =3D s->private;
+> +
+> +       mutex_lock(&dfs->lock);
+> +
+> +       return (*pos < CDEVSTATS_HASH_SIZE) ? pos : NULL;
+> +}
+> +
+> +static void *cdev_seq_next(struct seq_file *s, void *v, loff_t *pos)
+> +{
+> +       (*pos)++;
+> +
+> +       return (*pos < CDEVSTATS_HASH_SIZE) ? pos : NULL;
+> +}
+> +
+> +static void cdev_seq_stop(struct seq_file *s, void *v)
+> +{
+> +       struct thermal_debugfs *dfs =3D s->private;
+> +
+> +       mutex_unlock(&dfs->lock);
+> +}
+> +
+> +static int cdev_tt_seq_show(struct seq_file *s, void *v)
+> +{
+> +       struct thermal_debugfs *dfs =3D s->private;
+> +       struct cdev_debugfs *cfs =3D &dfs->cdev;
+> +       struct list_head *trans_list =3D cfs->trans_list;
+> +       struct cdev_value *pos;
+
+pos -> entry? (and elsewhere too)
+
+> +       char buffer[11];
+
+Why 11?
+
+> +       int i =3D *(loff_t *)v;
+> +
+> +       if (!i)
+> +               seq_puts(s, "Transition\tHits\n");
+
+I think that the "Hits" column represents the number of times the
+given transition has occurred, so I would rather call it
+"Occurrences".
+
+> +
+> +       list_for_each_entry(pos, &trans_list[i], list) {
+> +
+> +               snprintf(buffer, ARRAY_SIZE(buffer), "%d->%d",
+> +                        pos->id >> 16, pos->id & 0xFFFF);
+> +
+> +               seq_printf(s, "%-10s\t%-10llu\n", buffer, pos->value);
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct seq_operations tt_sops =3D {
+> +       .start =3D cdev_seq_start,
+> +       .next =3D cdev_seq_next,
+> +       .stop =3D cdev_seq_stop,
+> +       .show =3D cdev_tt_seq_show,
+> +};
+> +
+> +DEFINE_SEQ_ATTRIBUTE(tt);
+> +
+> +static int cdev_dt_seq_show(struct seq_file *s, void *v)
+> +{
+> +       struct cdev_debugfs *cfs =3D s->private;
+> +       struct list_head *duration_list =3D cfs->duration_list;
+> +       struct cdev_value *pos;
+
+pos -> entry ?
+
+> +       int i =3D *(loff_t *)v;
+> +
+> +       if (!i)
+> +               seq_puts(s, "State\tTime\n");
+
+I think that the "Time" column will contain state residencies, so why
+not label it as "Residency"?
+
+> +
+> +       list_for_each_entry(pos, &duration_list[i], list) {
+> +               s64 duration =3D pos->value;
+> +
+> +               if (pos->id =3D=3D cfs->current_state)
+> +                       duration +=3D ktime_ms_delta(ktime_get(), cfs->ti=
+mestamp);
+> +
+> +               seq_printf(s, "%-5d\t%-10llu\n", pos->id, duration);
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct seq_operations dt_sops =3D {
+> +       .start =3D cdev_seq_start,
+> +       .next =3D cdev_seq_next,
+> +       .stop =3D cdev_seq_stop,
+> +       .show =3D cdev_dt_seq_show,
+> +};
+> +
+> +DEFINE_SEQ_ATTRIBUTE(dt);
+
+And I have no comments on the part below.
+
+Thanks!
 
