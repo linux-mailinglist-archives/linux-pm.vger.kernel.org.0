@@ -1,189 +1,146 @@
-Return-Path: <linux-pm+bounces-1117-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1118-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15D8A8123D6
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 01:21:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 577C28123FD
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 01:41:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 090301C20F78
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 00:21:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C9C01C2140A
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 00:41:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6DDA377;
-	Thu, 14 Dec 2023 00:21:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B58B39C;
+	Thu, 14 Dec 2023 00:41:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WtsnaCHo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i9JAIAzv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2B1DD
-	for <linux-pm@vger.kernel.org>; Wed, 13 Dec 2023 16:21:25 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-548ae9a5eeaso2654a12.1
-        for <linux-pm@vger.kernel.org>; Wed, 13 Dec 2023 16:21:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702513284; x=1703118084; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1Dk44llL5frLVzJ7EOB7jUdTH7K6htN00csZRzwZRwE=;
-        b=WtsnaCHoTyReGu2bxDzxyW6L5s1tBTROuBtPlG+f+j25NZTYn03J9fsoLlxDLtyaon
-         9tDfqZLnB4m3PMpKFFTvnsTALweVwNNRwKsFkc/A/7SADMD/YGvaulIMgz06tOiXh8IF
-         +ZQLVEIBLgr96WcWNnRs2pz5Dw0l4jRxM+8SDQMTseQELC2/TPEP/AS1d+vU3F+zHt21
-         YdysYfL4QoGW1BuIYE0MnOwgEFFbtecx1jMXgImBEz+1jyKCB42jjHNUv2SWrKCe9C0H
-         NfnDc4WG7c28w3KyAYpy91A5NCco/xerIj/sru1Mzcg5yjcKpZji2egSlGDSSlxv/bOw
-         9MSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702513284; x=1703118084;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1Dk44llL5frLVzJ7EOB7jUdTH7K6htN00csZRzwZRwE=;
-        b=wln0k7sWExtEPl2PjrW+wRUv3YT9INxDkLgvrGlKpW4ZnFit/rO38jK6PDzX5ipdlA
-         itpquWH9hElw2aV3UrWGlOGhHhoQRFVoCDh7+NJa0qe4URmYVt4+/BN7mkdVOe/O/EV3
-         VmeqjkG+OiC8Vur/wcwqXbgLqPr5agaUWU14wFivy3Xg6K4ArBn+vWvU7618vEA8t5pM
-         935FlVs15QaaM1p6EzRis+fEPY2oqzKnSI6GWo7DF9u4XIU64jZLdVWCv6IBuwTzF2s4
-         unlpsBIRFahKZ8NZxMNE33k4i49RxJiypoN5oZf+x7V9ucVOqRE3CUZk9VmJJk/pcvDX
-         925w==
-X-Gm-Message-State: AOJu0Yz8JS8pfqqVT658hdOXRIfZXkUuYqqg8pPPzmPRL+ch+3uQ4+no
-	/P0VEWEfCUo1pqM1Ww/wRiDscmxw/5D1Km+Ijf3o2A==
-X-Google-Smtp-Source: AGHT+IEIT2VmjyL/LDfNdthG/hfkLrrnyXPBdJ6+AXpBgT/UA/QT5nlYmVafbKBZNmUv0L3OFNrnwWuuiDbgcsUr894=
-X-Received: by 2002:a50:ccde:0:b0:54c:384b:e423 with SMTP id
- b30-20020a50ccde000000b0054c384be423mr543462edj.5.1702513284297; Wed, 13 Dec
- 2023 16:21:24 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E214FAC;
+	Wed, 13 Dec 2023 16:41:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702514465; x=1734050465;
+  h=message-id:subject:from:to:date:in-reply-to:references:
+   content-transfer-encoding:mime-version;
+  bh=k1qSf+lV25zr0Dwp3/EooJ11sf1fNhwipYU+ucC77pE=;
+  b=i9JAIAzv7k0/yolUo9D3yjzKN8Tb2IqPrKxATvzlLGablmQ2QVp+7aqM
+   mLHUS5KTWWsgMSf631dVv3BE31FN7YLtum+Zr/RqUY62f0ZyjF2ED4Md2
+   0Def/5Lx5lJ/ha/lEVj1tl4db2HAY+amMIemgAbf2RcexZzBlSNbvELne
+   k/MRyvz3uUx1pzrAffEr6Tq4la+gnU2X17V3i6vmXTqn3N/e5PhJxCe72
+   y4L87nJoAGgC/6JaAt0ebcuRdVmtn1jdBRTKbVW45gHwUNrEJyyV4CbEN
+   KRjcThqyvyre/38Fh3QaOU78JSNRCq+nqQ1f4A8nKXb0ZC8hzzYszu1Rb
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="426180857"
+X-IronPort-AV: E=Sophos;i="6.04,274,1695711600"; 
+   d="scan'208";a="426180857"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 16:41:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="947367819"
+X-IronPort-AV: E=Sophos;i="6.04,274,1695711600"; 
+   d="scan'208";a="947367819"
+Received: from wanghuan-mobl1.amr.corp.intel.com (HELO [10.212.178.119]) ([10.212.178.119])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 16:41:04 -0800
+Message-ID: <2e8807b68133f4b3a72227122a9d9a05f3fbf9d8.camel@linux.intel.com>
+Subject: Re: [PATCH 1/4] cpufreq: Add a cpufreq pressure feedback for the
+ scheduler
+From: Tim Chen <tim.c.chen@linux.intel.com>
+To: Vincent Guittot <vincent.guittot@linaro.org>, catalin.marinas@arm.com, 
+ will@kernel.org, sudeep.holla@arm.com, rafael@kernel.org,
+ viresh.kumar@linaro.org,  agross@kernel.org, andersson@kernel.org,
+ konrad.dybcio@linaro.org,  mingo@redhat.com, peterz@infradead.org,
+ juri.lelli@redhat.com,  dietmar.eggemann@arm.com, rostedt@goodmis.org,
+ bsegall@google.com, mgorman@suse.de,  bristot@redhat.com,
+ vschneid@redhat.com, lukasz.luba@arm.com, rui.zhang@intel.com, 
+ mhiramat@kernel.org, daniel.lezcano@linaro.org, amit.kachhap@gmail.com, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+ linux-trace-kernel@vger.kernel.org
+Date: Wed, 13 Dec 2023 16:41:04 -0800
+In-Reply-To: <20231212142730.998913-2-vincent.guittot@linaro.org>
+References: <20231212142730.998913-1-vincent.guittot@linaro.org>
+	 <20231212142730.998913-2-vincent.guittot@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231120234015.3273143-1-radusolea@google.com>
- <9d1009d9-b95b-4152-841f-19470a17ba97@linaro.org> <CAPpbzyhEkqjA0Kv=f_O1hy-dT8o-O4tPB_KpQqbE9b7vwC+2NA@mail.gmail.com>
- <570c9777-3d89-4f3c-b856-3e821883a7e2@linaro.org> <CAPpbzyiZmxhfQDOukEeuDv+B6j3CH43ugx_WyAvR3B-riRZChQ@mail.gmail.com>
- <0412fada-037d-47ea-bc3a-4634d134232c@linaro.org>
-In-Reply-To: <0412fada-037d-47ea-bc3a-4634d134232c@linaro.org>
-From: Radu Solea <radusolea@google.com>
-Date: Wed, 13 Dec 2023 16:21:13 -0800
-Message-ID: <CAPpbzyiUEc0_5mDOWGQyXGbN4J4x8PHHBVRRUq4bSmqFdp4XtQ@mail.gmail.com>
-Subject: Re: [PATCH v2 RESEND] thermal core: add option to run PM_POST_SUSPEND asynchronously
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: linux-pm@vger.kernel.org, rafael@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 11, 2023 at 11:00=E2=80=AFPM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 12/12/2023 00:25, Radu Solea wrote:
-> > On Wed, Dec 6, 2023 at 3:23=E2=80=AFAM Daniel Lezcano <daniel.lezcano@l=
-inaro.org> wrote:
-> >>
-> >>
-> >> Hi Radu,
-> >>
-> >> On 06/12/2023 02:20, Radu Solea wrote:
-> >>> On Wed, Nov 29, 2023 at 4:20=E2=80=AFAM Daniel Lezcano
-> >>> <daniel.lezcano@linaro.org> wrote:
-> >>>>
-> >>>> On 21/11/2023 00:40, Radu Solea wrote:
-> >>>>> Some thermal zones are bus connected and slow to resume, thus
-> >>>>> delaying actions which depend on completion of PM_POST_SUSPEND.
-> >>>>> Add optional execution path to resume thermal zones on the system
-> >>>>> unbounded workqueue.
-> >>>>>
-> >>>>> Signed-off-by: Radu Solea <radusolea@google.com>
-> >>>>> ---
-> >>>>
-> >>>> This async change may have a lot of hidden implications.
-> >>>>
-> >>>> Could you elaborate more the issue and how the async will fix the pr=
-oblem?
-> >>>>
-> >>>> If you have a platform being slow to resume, can you provide numbers
-> >>>> with and without this option?
-> >>>>
-> >>>> Thanks
-> >>>>      -- D.
-> >>>>
-> >>>> --
-> >>>> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software f=
-or ARM SoCs
-> >>>>
-> >>>> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> >>>> <http://twitter.com/#!/linaroorg> Twitter |
-> >>>> <http://www.linaro.org/linaro-blog/> Blog
-> >>>>
-> >>>
-> >>> In multicore systems PM_POST_SUSPEND is executed on a single core.
-> >>> Any work done in the notification chain delays all subsequent actions
-> >>> in the chain with respect to system time, including the completion of
-> >>> the write() to /sys/power/state.
-> >>> I didn't include numbers from my system since they are likely
-> >>> irrelevant for other systems out there. The particular number I'm
-> >>> chasing is ~50ms.
-> >>> This comes from having on-board peripherals as thermal zones, they
-> >>> execute async and significantly slower than the main core, add a/d
-> >>> conversions and bus delays to that and it's easy to see those numbers=
-.
-> >>> Making the entire sequence synchronous to itself and async to
-> >>> PM_POST_SUSPEND isn't that much of a change, it allows the sequence t=
-o
-> >>> run on any core with spare cycles delayed with whatever the system
-> >>> unbounded queue load is at the time.
-> >>> (on my target system) I've seen consistent time gains (those same
-> >>> 50ms) to PM_POST_SUSPEND completion with this sequence actually
-> >>> completing before the chain finishes, this will vary from integration
-> >>> to integration.
-> >>
-> >> Sorry but I don't see how you can have a gain of 50ms by doing the
-> >> restore asynchronously.
-> >>
-> >> Can you give a more detailed description of the hardware? How many
-> >> thermal zones?
-> >>
-> >>
-> > I can't go into much detail about the hardware. But let's put it this
-> > way, if thermal_zone_device_update() takes 5 ms for each device (read
-> > temp, get trips, set trips, etc). Assume 5 onboard thermal zones, on a
-> > good day, ignoring system churn you'd get to around 25ms (already
-> > significant).
-> > Now on top of that add that these devices have multiple functions,
-> > like a PMIC for example. The resume sequence is the perfect time frame
-> > where you'd encounter more than one operation aimed at any one of
-> > these devices. Unless you have uncommonly smart drivers and devices,
-> > these will be queued.
-> > The driver in most cases will spin (hardly ideal, but realistic), even
-> > if they would yield the effect on the completion of the chain is at
-> > least the same or, likely, worse.
-> >
-> > To the patch itself, I realized I've been somewhat hamfisted.
-> > thermal_zone_device_init() should not be deferred, and likely should
-> > execute for all zones before the in_suspend lock-out is released. I'll
-> > correct that once we've landed on something.
-> >
-> > To my 50ms, it's almost the worst-case, but it happens way more often
-> > than would be comfortable.
->
-> If you call monitor_thermal_zone() instead of
-> thermal_zone_device_update(), does it speed up the resume time ?
->
-Looks like it does, I'll rework the patch. Don't think the config
-switch is useful anymore.
->
-> >> --
-> >> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for=
- ARM SoCs
-> >>
-> >> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> >> <http://twitter.com/#!/linaroorg> Twitter |
-> >> <http://www.linaro.org/linaro-blog/> Blog
-> >>
->
-> --
-> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
-M SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
->
+On Tue, 2023-12-12 at 15:27 +0100, Vincent Guittot wrote:
+> Provide to the scheduler a feedback about the temporary max available
+> capacity. Unlike arch_update_thermal_pressure, this doesn't need to be
+> filtered as the pressure will happen for dozens ms or more.
+>=20
+> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> ---
+>  drivers/cpufreq/cpufreq.c | 48 +++++++++++++++++++++++++++++++++++++++
+>  include/linux/cpufreq.h   | 10 ++++++++
+>  2 files changed, 58 insertions(+)
+>=20
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 44db4f59c4cc..7d5f71be8d29 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -2563,6 +2563,50 @@ int cpufreq_get_policy(struct cpufreq_policy *poli=
+cy, unsigned int cpu)
+>  }
+>  EXPORT_SYMBOL(cpufreq_get_policy);
+> =20
+> +DEFINE_PER_CPU(unsigned long, cpufreq_pressure);
+> +EXPORT_PER_CPU_SYMBOL_GPL(cpufreq_pressure);
+> +
+> +/**
+> + * cpufreq_update_pressure() - Update cpufreq pressure for CPUs
+> + * @cpus        : The related CPUs for which max capacity has been reduc=
+ed
+> + * @capped_freq : The maximum allowed frequency that CPUs can run at
+> + *
+> + * Update the value of cpufreq pressure for all @cpus in the mask. The
+> + * cpumask should include all (online+offline) affected CPUs, to avoid
+> + * operating on stale data when hot-plug is used for some CPUs. The
+> + * @capped_freq reflects the currently allowed max CPUs frequency due to
+> + * freq_qos capping. It might be also a boost frequency value, which is =
+bigger
+> + * than the internal 'capacity_freq_ref' max frequency. In such case the
+> + * pressure value should simply be removed, since this is an indication =
+that
+> + * there is no capping. The @capped_freq must be provided in kHz.
+> + */
+> +static void cpufreq_update_pressure(const struct cpumask *cpus,
+> +				      unsigned long capped_freq)
+> +{
+> +	unsigned long max_capacity, capacity, pressure;
+> +	u32 max_freq;
+> +	int cpu;
+> +
+> +	cpu =3D cpumask_first(cpus);
+> +	max_capacity =3D arch_scale_cpu_capacity(cpu);
+> +	max_freq =3D arch_scale_freq_ref(cpu);
+> +
+> +	/*
+> +	 * Handle properly the boost frequencies, which should simply clean
+> +	 * the thermal pressure value.
+> +	 */
+> +	if (max_freq <=3D capped_freq)
+> +		capacity =3D max_capacity;
+> +	else
+> +		capacity =3D mult_frac(max_capacity, capped_freq, max_freq);
+> +
+> +	pressure =3D max_capacity - capacity;
+> +
+> +
+> +	for_each_cpu(cpu, cpus)
+> +		WRITE_ONCE(per_cpu(cpufreq_pressure, cpu), pressure);
+
+Seems like the pressure value computed from the first CPU applies to all CP=
+U.
+Will this be valid for non-homogeneous CPUs that could have different
+max_freq and max_capacity?
+
+Tim
 
