@@ -1,149 +1,113 @@
-Return-Path: <linux-pm+bounces-1144-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1145-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D472E812CC4
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 11:19:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5753A812CFE
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 11:34:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 11FB11C21495
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 10:19:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B7001F21898
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 10:34:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C0AA3B789;
-	Thu, 14 Dec 2023 10:19:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7461F3BB2A;
+	Thu, 14 Dec 2023 10:34:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nQaKIJ/P"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FE210C
-	for <linux-pm@vger.kernel.org>; Thu, 14 Dec 2023 02:19:18 -0800 (PST)
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-5908b15f43eso721045eaf.1
-        for <linux-pm@vger.kernel.org>; Thu, 14 Dec 2023 02:19:17 -0800 (PST)
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980D2E3;
+	Thu, 14 Dec 2023 02:34:12 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-336353782efso2008381f8f.0;
+        Thu, 14 Dec 2023 02:34:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702550051; x=1703154851; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=d9Bav5GT9+DiIlOayf2xo0fOPFAMpMbevtPaUgb/OCo=;
+        b=nQaKIJ/P/Ugz4s7qKSZc/YfLwNHCSF9O5XHwLccAEDkVb9f+j9oaNGRpTQ0u68ftgc
+         BZFQAs134IMIxTLn247Vk2zKNv+KVz+diTr0yByYzZ2XNZljeZ4aDEHAjhSoyiYJl7K+
+         dQ3wyjdi52wnt9R2XwhmUyOz7iT1B62ALqeAi3+bGfRyFtbc1xoum+QGsmpMj1+cF9mr
+         aN5bPUT9E0cRfBmtzE+WJZzS1qMy1pUlHfrlJMTnLRubEjxhiNHNmxjWFvrNqxehNVLT
+         R4yMXV8puqeXhNAnY8m/KATU0bdJwpKWD0TNuerNxie6T2LMzgWXDLLWhrpekmPWasce
+         EKOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702549157; x=1703153957;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zoXse5YBaFwQxkCnJIWRSI/ahMpccvmtkfbYOx8YuKM=;
-        b=WAfMHL3NrgaTnPODQ+kzTEFcquRBBSgYzchf1BWr/eQ5LoCkxW/M0NrWKBymYmdvfI
-         0LuIHG0U6ygfZaWzpOdEem7CJQjHnMjb1zDNil6Dt81xE5AEDswSoXjav0rX9s99/OFt
-         fvAAMNop2riY+wrnAM/lnCbdycBYF+XwKZRHnhBvf22pKDwlCLQTc0QlX/QsaIktljDy
-         eYs+s2Yq6GcJe5oABMvn64nPww2HwI9fjGAmAmPqFxEbbdXAwzkUeidUs5AaNBmRqo/W
-         xhR9T3TLmUfTsFXcY7tLUOEGK194n3It3gTHBUXVxyzLGGIUENfw5c0VSyg2QqA2AxvN
-         UWQg==
-X-Gm-Message-State: AOJu0YxSePajF0ltG2zjqgD9oY2B7wvGPAME7xVQ3pidZLF3P6/y72R5
-	swfCHuUJ+pMXtP0LTweIjfnAm/grg2cVhEZH1I0=
-X-Google-Smtp-Source: AGHT+IHlBxJm3KtCgnTA4kA7Est1vT6+BY/SBQrc2vDFbbYUx+tWKqAIKeC+dXjeMxhKYJM4O4Fg9B6Zgx35izRBpiE=
-X-Received: by 2002:a05:6870:b028:b0:1fb:e5f:c530 with SMTP id
- y40-20020a056870b02800b001fb0e5fc530mr17532127oae.4.1702549156727; Thu, 14
- Dec 2023 02:19:16 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702550051; x=1703154851;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d9Bav5GT9+DiIlOayf2xo0fOPFAMpMbevtPaUgb/OCo=;
+        b=VfB2Y8sYNyqFvqjVronyaMbwlPa08nQg9+0HnqgrgYnreMTCJfq38HbywptWOvnWKw
+         mTNcBc2uNx5+umZHOjX3bgfEISW4uf6AGY4geuHZLdu8TLwv+9Y2txY7uhym8/l0G07d
+         8S2Hzn3wQPUWXXr7n62R6+eQd068zmeC5G89yJEJbTGebbTWO95sBJ5a9fV2VWbNie0O
+         +8wFLWwla1HRtn63q7GgoUPDzwWo9bjO7khpaiQzyWSLyZizCN/+bGJPyfZfEYjHnEjp
+         yHYADLKobJd/kNnuztqKfGLe6jyFBH6Ga+6UF6DmJu3KtHKneBmpiIJGAsdyxZo7oD4I
+         BeAw==
+X-Gm-Message-State: AOJu0Yxlt+X1dehB7q6cNHTLaG8yBzp89Sn1aLzIVmFmOvRS1HthX3k6
+	kR2cpAXm8+YibGhBqBWRdaM=
+X-Google-Smtp-Source: AGHT+IHU8zAZ+E9+PZta62TwukgImvaSq5gWkMu2b2zX9JqnUFdExGM5t+FRMov8SdJb0wP4JxqGjg==
+X-Received: by 2002:adf:ec8e:0:b0:333:2fd2:51d1 with SMTP id z14-20020adfec8e000000b003332fd251d1mr5060094wrn.74.1702550050755;
+        Thu, 14 Dec 2023 02:34:10 -0800 (PST)
+Received: from localhost.localdomain ([129.0.226.240])
+        by smtp.gmail.com with ESMTPSA id e4-20020a5d65c4000000b003333ed23356sm15849623wrw.4.2023.12.14.02.34.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Dec 2023 02:34:09 -0800 (PST)
+From: Brandon Cheo Fusi <fusibrandon13@gmail.com>
+To: Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Yangtao Li <tiny.windzz@gmail.com>
+Cc: devicetree@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Brandon Cheo Fusi <fusibrandon13@gmail.com>
+Subject: [PATCH 0/5] cpufreq support for the D1
+Date: Thu, 14 Dec 2023 11:33:37 +0100
+Message-Id: <20231214103342.30775-1-fusibrandon13@gmail.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <b8e0ffcf-a09a-4f60-8d93-95e3fa086f3f@moroto.mountain>
-In-Reply-To: <b8e0ffcf-a09a-4f60-8d93-95e3fa086f3f@moroto.mountain>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 14 Dec 2023 11:19:05 +0100
-Message-ID: <CAJZ5v0jomya=Qe3AjJinOgFvLzJB2u+98dN4FM2hTU8q85qSvg@mail.gmail.com>
-Subject: Re: [bug report] thermal: core: Make thermal_zone_device_unregister()
- return after freeing the zone
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: rafael.j.wysocki@intel.com, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Dec 14, 2023 at 11:05=E2=80=AFAM Dan Carpenter <dan.carpenter@linar=
-o.org> wrote:
->
-> Hello Rafael J. Wysocki,
->
-> The patch 4649620d9404: "thermal: core: Make
-> thermal_zone_device_unregister() return after freeing the zone" from
-> Dec 8, 2023 (linux-next), leads to the following Smatch static
-> checker warning:
->
->         drivers/thermal/thermal_core.c:1500 thermal_zone_device_unregiste=
-r()
->         warn: freeing device managed memory (UAF): 'tz'
->
-> drivers/thermal/thermal_core.c
->     1490
->     1491         device_del(&tz->device);
->     1492
->     1493         kfree(tz->tzp);
->     1494
->     1495         put_device(&tz->device);
->                  ^^^^^^^^^^^^^^^^^^^^^^^
-> This check is based on the rule of thumb that probably this put_device()
-> frees tz.
+This patch series adds support for cpufreq on the D1 SoC, and a new
+Kconfig.riscv file to cater to cpufreq drivers that support RISC-V
+SoCs.
 
-It doesn't do that.
+The changes have been tested on a Lichee RV module.
 
-> I tried to read the code to see if that was true, but ended
-> up with even more questions.
->
->     1496
->     1497         thermal_notify_tz_delete(tz_id);
->     1498
->     1499         wait_for_completion(&tz->removal);
->                                      ^^^^^^^^^^^^
-> Use after free?
+Brandon Cheo Fusi (5):
+  riscv: dts: allwinner: Update opp table to allow CPU frequency scaling
+  cpufreq: sun50i: Add D1 support
+  cpufreq: dt-platdev: Blocklist allwinner,sun20i-d1 SoC
+  cpufreq: Add support for RISC-V CPU Frequency scaling drivers
+  cpufreq: Make sun50i h6 cpufreq Kconfig option generic
 
-Nope.
+ arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi | 18 +++++++++++++++---
+ drivers/cpufreq/Kconfig                       |  4 ++++
+ drivers/cpufreq/Kconfig.arm                   |  4 ++--
+ drivers/cpufreq/Kconfig.riscv                 | 16 ++++++++++++++++
+ drivers/cpufreq/Makefile                      |  2 +-
+ drivers/cpufreq/cpufreq-dt-platdev.c          |  1 +
+ drivers/cpufreq/sun50i-cpufreq-nvmem.c        |  1 +
+ 7 files changed, 40 insertions(+), 6 deletions(-)
+ create mode 100644 drivers/cpufreq/Kconfig.riscv
 
-> --> 1500         kfree(tz);
->     1501 }
->
-> tz is allocated in thermal_zone_device_register_with_trips().  Here is
-> what the clean up looks like in that function:
->
-> drivers/thermal/thermal_core.c
->   1389          /* Update the new thermal zone and mark it as already upd=
-ated. */
->   1390          if (atomic_cmpxchg(&tz->need_update, 1, 0))
->   1391                  thermal_zone_device_update(tz, THERMAL_EVENT_UNSP=
-ECIFIED);
->   1392
->   1393          thermal_notify_tz_create(tz->id, tz->type);
->   1394
->   1395          return tz;
->   1396
->   1397  unregister:
->   1398          device_del(&tz->device);
->   1399  release_device:
->   1400          put_device(&tz->device);
->   1401          tz =3D NULL;
->
-> I couldn't find the release() function.
+-- 
+2.30.2
 
-See the commit in question.  It's thermal_release().
-
->  But this code assumes that the put_device() does free tz.
-
-No, it doesn't do that.  It completes the removal completion instead.
-
->   1402  remove_id:
->   1403          ida_free(&thermal_tz_ida, id);
->   1404  free_tzp:
->   1405          kfree(tz->tzp);
->                       ^^^^^^^
-> This should have a NULL check.
-
-Not really.
-
->         if (tz)
->                 kfree(tz->tzp);
->
->   1406  free_tz:
->   1407          kfree(tz);
->   1408          return ERR_PTR(result);
->   1409  }
->
-
-But there is a bug in thermal_zone_device_register_with_trips() which
-does tz =3D NULL before dereferencing tz in kfree(tz->tzp) below.
-
-Thanks!
 
