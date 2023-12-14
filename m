@@ -1,29 +1,29 @@
-Return-Path: <linux-pm+bounces-1128-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1129-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F04F812A26
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 09:18:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10C95812A35
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 09:21:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A12F2281D3A
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 08:18:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF1A8281D05
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 08:21:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D725168A8;
-	Thu, 14 Dec 2023 08:18:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3906171A7;
+	Thu, 14 Dec 2023 08:21:20 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id BB847F5;
-	Thu, 14 Dec 2023 00:18:15 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id A3AA8E0;
+	Thu, 14 Dec 2023 00:21:12 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BEFC1C15;
-	Thu, 14 Dec 2023 00:19:00 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0371CC15;
+	Thu, 14 Dec 2023 00:21:58 -0800 (PST)
 Received: from [10.57.85.242] (unknown [10.57.85.242])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E4A303F5A1;
-	Thu, 14 Dec 2023 00:18:12 -0800 (PST)
-Message-ID: <777b1258-eae2-4f57-9abc-326d1c456c47@arm.com>
-Date: Thu, 14 Dec 2023 08:19:15 +0000
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EF95D3F5A1;
+	Thu, 14 Dec 2023 00:21:07 -0800 (PST)
+Message-ID: <47b4cbcb-d33d-4699-a148-0108cf734e23@arm.com>
+Date: Thu, 14 Dec 2023 08:22:10 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -31,94 +31,80 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] sched/fair: Be less aggressive in calling
- cpufreq_update_util()
+Subject: Re: [PATCH 0/5] Rework system pressure interface to the scheduler
 Content-Language: en-US
-To: Qais Yousef <qyousef@layalina.io>
-Cc: linux-kernel@vger.kernel.org, Vincent Guittot
- <vincent.guittot@linaro.org>, Viresh Kumar <viresh.kumar@linaro.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>, linux-pm@vger.kernel.org,
- Ingo Molnar <mingo@kernel.org>, Wei Wang <wvw@google.com>,
- Rick Yiu <rickyiu@google.com>, Chung-Kai Mei <chungkai@google.com>,
- Hongyan Xia <hongyan.xia2@arm.com>, Peter Zijlstra <peterz@infradead.org>
-References: <20231208015242.385103-1-qyousef@layalina.io>
- <20231208015242.385103-2-qyousef@layalina.io>
- <bc525124-da79-45af-a99b-ec4616b3fa6b@arm.com>
- <20231210205156.kausxdcwsydggwie@airbuntu>
- <8ee6425a-0a0e-4391-9fd3-8fe74c809772@arm.com>
- <20231212121023.mehtligcuwcmjtz4@airbuntu>
+To: Vincent Guittot <vincent.guittot@linaro.org>
+References: <20231212142730.998913-1-vincent.guittot@linaro.org>
+Cc: catalin.marinas@arm.com, will@kernel.org,
+ linux-trace-kernel@vger.kernel.org, amit.kachhap@gmail.com,
+ daniel.lezcano@linaro.org, mhiramat@kernel.org, vschneid@redhat.com,
+ bristot@redhat.com, mgorman@suse.de, bsegall@google.com,
+ juri.lelli@redhat.com, peterz@infradead.org, mingo@redhat.com,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ konrad.dybcio@linaro.org, andersson@kernel.org, agross@kernel.org,
+ rui.zhang@intel.com, viresh.kumar@linaro.org, rafael@kernel.org,
+ sudeep.holla@arm.com, dietmar.eggemann@arm.com, rostedt@goodmis.org,
+ linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
 From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20231212121023.mehtligcuwcmjtz4@airbuntu>
+In-Reply-To: <20231212142730.998913-1-vincent.guittot@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
+Hi Vincent,
+
+I've been waiting for this feature, thanks!
 
 
-On 12/12/23 12:10, Qais Yousef wrote:
-> On 12/11/23 07:56, Lukasz Luba wrote:
->>
->>
->> On 12/10/23 20:51, Qais Yousef wrote:
->>> On 12/08/23 10:05, Lukasz Luba wrote:
->>>> Hi Qais,
->>>>
->>>> On 12/8/23 01:52, Qais Yousef wrote:
->>>>
->>>> [snip]
->>>>
->>>>> @@ -6704,14 +6677,6 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
->>>>>     	 */
->>>>>     	util_est_enqueue(&rq->cfs, p);
->>>>> -	/*
->>>>> -	 * If in_iowait is set, the code below may not trigger any cpufreq
->>>>> -	 * utilization updates, so do it here explicitly with the IOWAIT flag
->>>>> -	 * passed.
->>>>> -	 */
->>>>> -	if (p->in_iowait)
->>>>> -		cpufreq_update_util(rq, SCHED_CPUFREQ_IOWAIT);
->>>>> -
->>>>
->>>> Why this io wait boost is considered as the $subject says 'aggressive'
->>>> calling?
->>>
->>> This will trigger a frequency update along with the iowait boost. Did I miss
->>> something?
->>
->> Yes, it will change CPU freq and it was the main goal for this code
->> path. We have tests which check how that works on different memory
->> types.
->>
->> Why do you want to remove it?
+On 12/12/23 14:27, Vincent Guittot wrote:
+> Following the consolidation and cleanup of CPU capacity in [1], this serie
+> reworks how the scheduler gets the pressures on CPUs. We need to take into
+> account all pressures applied by cpufreq on the compute capacity of a CPU
+> for dozens of ms or more and not only cpufreq cooling device or HW
+> mitigiations. we split the pressure applied on CPU's capacity in 2 parts:
+> - one from cpufreq and freq_qos
+> - one from HW high freq mitigiation.
 > 
-> It seems you missed this hunk? I of course didn't remove it altogether if
-> that's what you mean :)
+> The next step will be to add a dedicated interface for long standing
+> capping of the CPU capacity (i.e. for seconds or more) like the
+> scaling_max_freq of cpufreq sysfs. The latter is already taken into
+> account by this serie but as a temporary pressure which is not always the
+> best choice when we know that it will happen for seconds or more.
 > 
-> 	@@ -6772,6 +6737,8 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
-> 	 enqueue_throttle:
-> 		assert_list_leaf_cfs_rq(rq);
+> [1] https://lore.kernel.org/lkml/20231211104855.558096-1-vincent.guittot@linaro.org/
 > 
-> 	+       cpufreq_update_util(rq, p->in_iowait ? SCHED_CPUFREQ_IOWAIT : 0);
-> 	+
-> 		hrtick_update(rq);
-> 	 }
+> Vincent Guittot (4):
+>    cpufreq: Add a cpufreq pressure feedback for the scheduler
+>    sched: Take cpufreq feedback into account
+>    thermal/cpufreq: Remove arch_update_thermal_pressure()
+>    sched: Rename arch_update_thermal_pressure into
+>      arch_update_hw_pressure
+> 
+>   arch/arm/include/asm/topology.h               |  6 +--
+>   arch/arm64/include/asm/topology.h             |  6 +--
+>   drivers/base/arch_topology.c                  | 26 ++++-----
+>   drivers/cpufreq/cpufreq.c                     | 48 +++++++++++++++++
+>   drivers/cpufreq/qcom-cpufreq-hw.c             |  4 +-
+>   drivers/thermal/cpufreq_cooling.c             |  3 --
+>   include/linux/arch_topology.h                 |  8 +--
+>   include/linux/cpufreq.h                       | 10 ++++
+>   include/linux/sched/topology.h                |  8 +--
+>   .../{thermal_pressure.h => hw_pressure.h}     | 14 ++---
+>   include/trace/events/sched.h                  |  2 +-
+>   init/Kconfig                                  | 12 ++---
+>   kernel/sched/core.c                           |  8 +--
+>   kernel/sched/fair.c                           | 53 ++++++++++---------
+>   kernel/sched/pelt.c                           | 18 +++----
+>   kernel/sched/pelt.h                           | 16 +++---
+>   kernel/sched/sched.h                          |  4 +-
+>   17 files changed, 152 insertions(+), 94 deletions(-)
+>   rename include/trace/events/{thermal_pressure.h => hw_pressure.h} (55%)
 > 
 
-Yes, you're right, I missed that change. I will have to spend some time
-to figure out this new flow in the whole patch set.
+I would like to test it, but something worries me. Why there is 0/5 in
+this subject and only 4 patches?
 
+Could you tell me your base branch that I can apply this, please?
 
->>
->> Did you run some tests (e.g. fio, gallery, etc) to check if you still
->> have a decent performance out some new ufs/nvme memories?
-> 
-> PCMark storage gives
-> 
-> before*: 29681
-> after: 30014
-
-The result looks good.
-
-Thanks,
+Regards,
 Lukasz
 
