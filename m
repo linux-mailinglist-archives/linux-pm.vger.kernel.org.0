@@ -1,141 +1,114 @@
-Return-Path: <linux-pm+bounces-1179-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1180-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAF2081397D
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 19:10:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 85BA1813992
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 19:13:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6851A282ECF
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 18:10:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 43140283003
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 18:13:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4018D67E8F;
-	Thu, 14 Dec 2023 18:10:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FFD467E9B;
+	Thu, 14 Dec 2023 18:13:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="tY1PZOXl"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lEKAGWxt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD8B10A;
-	Thu, 14 Dec 2023 10:10:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=F6v3AKzs82rkOxn7Bw7IYQ7aZOZcvY0R37BDizdoEeM=; b=tY1PZOXlkxfPhC2ytAtA0EChgV
-	8xCikVzwQf/d2ei3BQiYpgHklnc1tZ55NIOKpAXSmHbLYqZAbjznFALBKmUxTrM4w2RITv7a7Q6XV
-	8XubzTsdDZhxlotwEGrTMzdgUb1Yg7n7Iz5rqFqo47poHwJ4ccKf3791BCJtbXIwi8MIlAzn1uWTE
-	OOYF2o+5Hj7dg2UbMDFo2mAQX/FDQEqk8jY8NDjlNrtMtGVSQ16JC/qnqo216nVBiSVzT5rfswiQP
-	CqIDdHbL71hGf6tFcrchFr7OZ0y0UeWzp4gUjEYw/EhCnmIE43HhXw9gXHQ3o86quWAXEeKRp0wEP
-	IVtRjJdA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:55476)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1rDqA1-0001pW-1e;
-	Thu, 14 Dec 2023 18:10:13 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1rDqA2-0002m4-0s; Thu, 14 Dec 2023 18:10:14 +0000
-Date: Thu, 14 Dec 2023 18:10:13 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-	x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
-	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	jianyong.wu@arm.com, justin.he@arm.com,
-	James Morse <james.morse@arm.com>
-Subject: Re: [PATCH RFC v3 01/21] ACPI: Only enumerate enabled (or
- functional) devices
-Message-ID: <ZXtFBYJEX2RrFrwj@shell.armlinux.org.uk>
-References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
- <E1rDOfs-00DvjY-HQ@rmk-PC.armlinux.org.uk>
- <20231214173241.0000260f@Huawei.com>
- <CAJZ5v0jymOtZ0y65K9wE8FJk+ZKwP+FoGm4AKHXcYVfQJL9MVw@mail.gmail.com>
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5DA10F
+	for <linux-pm@vger.kernel.org>; Thu, 14 Dec 2023 10:13:48 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-50bf2d9b3fdso11435591e87.3
+        for <linux-pm@vger.kernel.org>; Thu, 14 Dec 2023 10:13:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702577626; x=1703182426; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tuFQiYL7mCE3oHKRLdSCc7s+Ncls7kZmn2fblqIRkx8=;
+        b=lEKAGWxttiG8opPmSYECmRkCasDywhDUbwhDnWQ5h/gtYb2cE9tth947CEERZ/EM6e
+         RfH7IoEvs/3Labqb0pZSDVKN222/fs1cxNtUot9gs30OZ91nBp7AOGzH4oAh/H4+SHGH
+         TpRTgWZIpnurrGaiF2cRvZIm3QDsILpOB73WVS7TZBj0EtMC//thFcjlO11qKVAGOTmw
+         omcsNHcrhruSBWmRKGP1c0iW9M0VLGlIZb4QZ0bfsEp6OyR6GuVE/jrPO6pv/jDHaGnX
+         L5l+0Znob8a8KJDNrCl9bqS6acQBSGTd3/7ekyi6DC3+8Hm0FW1fvPzEp9MgH1v1Ee4x
+         gygA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702577626; x=1703182426;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tuFQiYL7mCE3oHKRLdSCc7s+Ncls7kZmn2fblqIRkx8=;
+        b=SVcAZ/3dm1JLiHM7wop64Ef0TvmaY9JRXi1/sJS9cu1FORJ065ODn9NJ+AeGnJunjB
+         ubWEXcn0ElI6SCHPaWqiRBvIBja5JhQKBu98NrpTLo98KVOJKV63NDYfel/d9dMY16Pv
+         rQG6jhH5dMNNdB6boYwk2WQT00Wdn6CggcvYElqA8Lq893Rzf+LEC7TusEgTN0w/DsPl
+         h8TubxYX4OKO5m3lusNMf5kCOF/XdZmXvUEASwN1RIdpiQ272DFqMTMRRCnZDrV92eYg
+         vqEHeR6h+nRBPBNQHfvRHrvoQuKCj3cdqEgHvNSogZEJ9k+wG3De94OlO0CrgJ/rroNC
+         BBqA==
+X-Gm-Message-State: AOJu0Yw+7Mcrl3DW7rJvvsUO4TFrNf2T6TPSaT7BYAueNEAjZ0BVONo2
+	mZZ+/dnbeBkngFhfEvaFMoX0AQ==
+X-Google-Smtp-Source: AGHT+IHgvuEzeQl5Y//pNTWvJizo/K4IYlbci5jNuAt/NSrN6gr53RX9i01j4tZOo06pQX29pJn91w==
+X-Received: by 2002:ac2:44ba:0:b0:50e:15df:5462 with SMTP id c26-20020ac244ba000000b0050e15df5462mr944396lfm.94.1702577626399;
+        Thu, 14 Dec 2023 10:13:46 -0800 (PST)
+Received: from [127.0.1.1] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
+        by smtp.gmail.com with ESMTPSA id n11-20020a0565120acb00b0050be6038170sm1928838lfu.48.2023.12.14.10.13.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Dec 2023 10:13:46 -0800 (PST)
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 0/6] SC8180X fixes
+Date: Thu, 14 Dec 2023 19:13:37 +0100
+Message-Id: <20231214-topic-sc8180_fixes-v1-0-421904863006@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0jymOtZ0y65K9wE8FJk+ZKwP+FoGm4AKHXcYVfQJL9MVw@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANFFe2UC/x3LQQqAIBBA0avErBMcNZKuEhFhU80mxYkIpLsnL
+ R+fX0AoMwkMTYFMNwvHswLbBsKxnDspXqvBaGPRoFNXTByUBI9ezxs/JKr3rl9Q+9V2BuqYMv2
+ hfuP0vh8kepQFZAAAAA==
+To: Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+ Georgi Djakov <djakov@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+ Maximilian Luz <luzmaximilian@gmail.com>, 
+ Gustave Monce <gustave.monce@outlook.com>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.13-dev-0438c
+X-Spam-Level: *
 
-On Thu, Dec 14, 2023 at 06:47:00PM +0100, Rafael J. Wysocki wrote:
-> On Thu, Dec 14, 2023 at 6:32 PM Jonathan Cameron
-> <Jonathan.Cameron@huawei.com> wrote:
-> >
-> > On Wed, 13 Dec 2023 12:49:16 +0000
-> > Russell King (Oracle) <rmk+kernel@armlinux.org.uk> wrote:
-> >
-> > > From: James Morse <james.morse@arm.com>
-> > >
-> > > Today the ACPI enumeration code 'visits' all devices that are present.
-> > >
-> > > This is a problem for arm64, where CPUs are always present, but not
-> > > always enabled. When a device-check occurs because the firmware-policy
-> > > has changed and a CPU is now enabled, the following error occurs:
-> > > | acpi ACPI0007:48: Enumeration failure
-> > >
-> > > This is ultimately because acpi_dev_ready_for_enumeration() returns
-> > > true for a device that is not enabled. The ACPI Processor driver
-> > > will not register such CPUs as they are not 'decoding their resources'.
-> > >
-> > > Change acpi_dev_ready_for_enumeration() to also check the enabled bit.
-> > > ACPI allows a device to be functional instead of maintaining the
-> > > present and enabled bit. Make this behaviour an explicit check with
-> > > a reference to the spec, and then check the present and enabled bits.
-> > > This is needed to avoid enumerating present && functional devices that
-> > > are not enabled.
-> > >
-> > > Signed-off-by: James Morse <james.morse@arm.com>
-> > > Tested-by: Miguel Luis <miguel.luis@oracle.com>
-> > > Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
-> > > Tested-by: Jianyong Wu <jianyong.wu@arm.com>
-> > > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> > > ---
-> > > If this change causes problems on deployed hardware, I suggest an
-> > > arch opt-in: ACPI_IGNORE_STA_ENABLED, that causes
-> > > acpi_dev_ready_for_enumeration() to only check the present bit.
-> >
-> > My gut feeling (having made ACPI 'fixes' in the past that ran into
-> > horribly broken firmware and had to be reverted) is reduce the blast
-> > radius preemptively from the start. I'd love to live in a world were
-> > that wasn't necessary but I don't trust all the generators of ACPI tables.
-> > I'll leave it to Rafael and other ACPI experts suggest how narrow we should
-> > make it though - arch opt in might be narrow enough.
-> 
-> A chicken bit wouldn't help much IMO, especially in the cases when
-> working setups get broken.
-> 
-> I would very much prefer to limit the scope of it, say to processors
-> only, in the first place.
+8180 has quite a big of bugs, this series fixes some of them.
+clk_ignore_unused & d_ignore_unused are no longer necessary (at least
+as far as I could test, through remote console access..)
 
-Thanks for the feedback and the idea.
+p1 for Georgi, rest for qcom
 
-I guess we need something like:
+The keen-eyed among you (hi Krzysztof) will notice that there are no
+bindings updates, mostly because half of 8180x is undocumented.. I
+intend to help fix that up in a separate series, hopefully soon :)
 
-	if (device->status.present)
-		return device->device_type != ACPI_BUS_TYPE_PROCESSOR ||
-		       device->status.enabled;
-	else
-		return device->status.functional;
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (6):
+      interconnect: qcom: sc8180x: Mark CO0 BCM keepalive
+      arm64: dts: qcom: sc8180x: Add UFS GDSC
+      arm64: dts: qcom: sc8180x: Add missing MDP clocks
+      arm64: dts: qcom: sc8180x: Add interconnects to UFS
+      arm64: dts: qcom: sc8180x: Describe the GIC redistributor
+      arm64: dts: qcom: sc8180x-primus: Allow UFS regulators load/mode setting
 
-so we only check device->status.enabled for processor-type devices?
+ arch/arm64/boot/dts/qcom/sc8180x-primus.dts |  6 ++++++
+ arch/arm64/boot/dts/qcom/sc8180x.dtsi       | 19 +++++++++++++++++--
+ drivers/interconnect/qcom/sc8180x.c         |  1 +
+ 3 files changed, 24 insertions(+), 2 deletions(-)
+---
+base-commit: 11651f8cb2e88372d4ed523d909514dc9a613ea3
+change-id: 20231214-topic-sc8180_fixes-7847a108d352
 
+Best regards,
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
 
