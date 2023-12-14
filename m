@@ -1,75 +1,61 @@
-Return-Path: <linux-pm+bounces-1121-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1122-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D456181270B
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 06:43:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C99081290A
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 08:24:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 114921C214B6
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 05:43:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D6F31F2111B
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 07:24:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A19763C1;
-	Thu, 14 Dec 2023 05:43:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2005BDDC5;
+	Thu, 14 Dec 2023 07:24:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WrqT+Jqi"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k27cEFNL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA148112
-	for <linux-pm@vger.kernel.org>; Wed, 13 Dec 2023 21:43:10 -0800 (PST)
-Received: by mail-oi1-x236.google.com with SMTP id 5614622812f47-3b9dbbaa9a9so6443975b6e.2
-        for <linux-pm@vger.kernel.org>; Wed, 13 Dec 2023 21:43:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702532590; x=1703137390; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2zJEKJBJdRMRCgJFJEeFLk/7+B+l3ptfOOAh8xQH8eM=;
-        b=WrqT+Jqi05FHIN9RA9jJYU6rmRrrb9c2uYCg7CqClmZEKbuxij6nuCEwuCEzZisDA9
-         rjIwi3NguPfra4YUpb+J/ermcBAh6DSe2ciLhrVr9TgF/KVVvcNm1O1EEQor5QScpIsR
-         bXNbRtAqBLLvN+Ukx2LjpYKFdoXiwDJM58Yjyj4JT0OwYIJ5lYw6WJdSgA9W+2m6oDuM
-         t8PPjoXKPl2KDzXeNnI6KXRzA4xpOBjeAWFbTNKR+e1XAtmgfRTTPL6UWe/S8/+8zJQf
-         kvUf7HH11AgZgfTZFSMMUtAxuf6pp2YUpzgaZEvtyHBFZUCvchX4NnRgPxYQzda1LGy6
-         01dQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702532590; x=1703137390;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2zJEKJBJdRMRCgJFJEeFLk/7+B+l3ptfOOAh8xQH8eM=;
-        b=PYullVe7tPQuZQhu2yrGZa8cWPw3bYdxOcPIF2LkCljsSnqaok+J7ngwDdIDQ1zmIT
-         IyJDp80DnP7qz59Ii1P1QT1eIdaVyt9mXPiI6WSwmIudXyiM/APcdyBN8vuY5ln7Dn0Q
-         kvuxjDASCaopWbPmdxxy2UlhUuWPAJeGjXgvKAWytiALDwVLgnEHlv3IbQ/PhpJPHiK3
-         esw7X8Zn3TIXfRFLbI5SLQrFuuU9oKCL3YuRtsZI0o7Dl910kv5JW5iJRnEzlUhgsoRn
-         YbR+htW91W0Dd/GpAYa0Izp9AVRnVYOQo3nY+sjWJdVuwK6armXH0cVJPovIuU1+n6uw
-         qk/g==
-X-Gm-Message-State: AOJu0YyQ+wsFf4b7DuvviO5Le84QZ/4FxM5armwNzgFMwHAxsvejWBzg
-	9+g0WHMXyH5FqJKtMQiTSS52Cg==
-X-Google-Smtp-Source: AGHT+IGYWNbaFlApZ1lFvqRaU1qt9FMGrCRJVZt4T9E+6r/Apb1PpoPAXMGsw6TNwwldN5dhTrbFiw==
-X-Received: by 2002:a05:6808:11c8:b0:3ba:2af:c7da with SMTP id p8-20020a05680811c800b003ba02afc7damr9445649oiv.110.1702532590040;
-        Wed, 13 Dec 2023 21:43:10 -0800 (PST)
-Received: from localhost ([122.172.82.6])
-        by smtp.gmail.com with ESMTPSA id x20-20020aa793b4000000b006ce4c7ba448sm10887964pff.25.2023.12.13.21.43.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Dec 2023 21:43:09 -0800 (PST)
-Date: Thu, 14 Dec 2023 11:13:07 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: catalin.marinas@arm.com, will@kernel.org, sudeep.holla@arm.com,
-	rafael@kernel.org, agross@kernel.org, andersson@kernel.org,
-	konrad.dybcio@linaro.org, mingo@redhat.com, peterz@infradead.org,
-	juri.lelli@redhat.com, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-	bristot@redhat.com, vschneid@redhat.com, lukasz.luba@arm.com,
-	rui.zhang@intel.com, mhiramat@kernel.org, daniel.lezcano@linaro.org,
-	amit.kachhap@gmail.com, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] cpufreq: Add a cpufreq pressure feedback for the
- scheduler
-Message-ID: <20231214054307.axl33gagxacidjbn@vireshk-i7>
-References: <20231212142730.998913-1-vincent.guittot@linaro.org>
- <20231212142730.998913-2-vincent.guittot@linaro.org>
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBC8F5;
+	Wed, 13 Dec 2023 23:24:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702538641; x=1734074641;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=n+EMCP39Ou08Hk0CdxIr+mRISfIYGOru/KXGx9QU3hU=;
+  b=k27cEFNL41fOJiJlSrN5O3bmGDvVVoBqFhWU54CXrwNOh2rJGZcz/CDM
+   q2wtjKTu5291cxNCjTBDGQjQ1GITbb82zRyhKyqQD0htV5ItveF710zlm
+   nkXduxyhV8TUsKY0u0Lc5IefNrrEpq26KyaWTNNX5GGKCsaeHnw2WyLbp
+   UyvdwqFTd4AcVr3WBqpQKsOsRV5PJ+N5a+0wN9eM9q+skA9ZEhVRsZ1O/
+   /n7xpJFLf4+rr3+CNHTFgtu9vyYY/a2iZsu0DTfnaqP5iiR6RnvHY4gQQ
+   0Ifur9u9bGlDYI/tDUwYvUnRIJT22u+6ElMbeMOll16vkrPHCVwqs9Etc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="393951934"
+X-IronPort-AV: E=Sophos;i="6.04,274,1695711600"; 
+   d="scan'208";a="393951934"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 23:24:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="723969124"
+X-IronPort-AV: E=Sophos;i="6.04,274,1695711600"; 
+   d="scan'208";a="723969124"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 13 Dec 2023 23:23:58 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rDg4a-000LjJ-0i;
+	Thu, 14 Dec 2023 07:23:56 +0000
+Date: Thu, 14 Dec 2023 15:23:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, caleb.connolly@linaro.org,
+	lina.iyer@linaro.org, lukasz.luba@arm.com, quic_manafm@quicinc.com,
+	quic_priyjain@quicinc.com, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/2] PM: QoS: Add a performance QoS
+Message-ID: <202312141515.SbtqsA27-lkp@intel.com>
+References: <20231213175818.2826876-2-daniel.lezcano@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,23 +64,125 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231212142730.998913-2-vincent.guittot@linaro.org>
-X-Spam-Level: *
+In-Reply-To: <20231213175818.2826876-2-daniel.lezcano@linaro.org>
 
-On 12-12-23, 15:27, Vincent Guittot wrote:
-> @@ -2618,6 +2663,9 @@ static int cpufreq_set_policy(struct cpufreq_policy *policy,
->  	policy->max = __resolve_freq(policy, policy->max, CPUFREQ_RELATION_H);
->  	trace_cpu_frequency_limits(policy);
->  
-> +	cpus = policy->related_cpus;
-> +	cpufreq_update_pressure(cpus, policy->max);
-> +
->  	policy->cached_target_freq = UINT_MAX;
+Hi Daniel,
 
-One more question, why are you doing this from cpufreq_set_policy ? If
-due to cpufreq cooling or from userspace, we end up limiting the
-maximum possible frequency, will this routine always get called ?
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on rafael-pm/acpi-bus rafael-pm/thermal linus/master rafael-pm/devprop v6.7-rc5 next-20231213]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/PM-QoS-Add-a-performance-QoS/20231214-020026
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20231213175818.2826876-2-daniel.lezcano%40linaro.org
+patch subject: [PATCH v1 2/2] PM: QoS: Add a performance QoS
+config: x86_64-randconfig-012-20231214 (https://download.01.org/0day-ci/archive/20231214/202312141515.SbtqsA27-lkp@intel.com/config)
+compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231214/202312141515.SbtqsA27-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202312141515.SbtqsA27-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   ld: sound/core/oss/pcm_plugin.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/core/oss/pcm_oss.o:include/linux/pm_qos.h:300: first defined here
+   ld: sound/core/oss/io.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/core/oss/pcm_oss.o:include/linux/pm_qos.h:300: first defined here
+   ld: sound/core/oss/copy.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/core/oss/pcm_oss.o:include/linux/pm_qos.h:300: first defined here
+   ld: sound/core/oss/linear.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/core/oss/pcm_oss.o:include/linux/pm_qos.h:300: first defined here
+   ld: sound/core/oss/mulaw.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/core/oss/pcm_oss.o:include/linux/pm_qos.h:300: first defined here
+   ld: sound/core/oss/route.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/core/oss/pcm_oss.o:include/linux/pm_qos.h:300: first defined here
+   ld: sound/core/oss/rate.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/core/oss/pcm_oss.o:include/linux/pm_qos.h:300: first defined here
+--
+   ld: sound/virtio/virtio_chmap.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/virtio/virtio_card.o:include/linux/pm_qos.h:300: first defined here
+   ld: sound/virtio/virtio_ctl_msg.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/virtio/virtio_card.o:include/linux/pm_qos.h:300: first defined here
+   ld: sound/virtio/virtio_jack.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/virtio/virtio_card.o:include/linux/pm_qos.h:300: first defined here
+   ld: sound/virtio/virtio_pcm.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/virtio/virtio_card.o:include/linux/pm_qos.h:300: first defined here
+   ld: sound/virtio/virtio_pcm_msg.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/virtio/virtio_card.o:include/linux/pm_qos.h:300: first defined here
+   ld: sound/virtio/virtio_pcm_ops.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/virtio/virtio_card.o:include/linux/pm_qos.h:300: first defined here
+--
+   ld: sound/soc/soc-dapm.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/soc/soc-core.o:include/linux/pm_qos.h:300: first defined here
+   ld: sound/soc/soc-jack.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/soc/soc-core.o:include/linux/pm_qos.h:300: first defined here
+   ld: sound/soc/soc-utils.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/soc/soc-core.o:include/linux/pm_qos.h:300: first defined here
+   ld: sound/soc/soc-dai.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/soc/soc-core.o:include/linux/pm_qos.h:300: first defined here
+   ld: sound/soc/soc-component.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/soc/soc-core.o:include/linux/pm_qos.h:300: first defined here
+   ld: sound/soc/soc-pcm.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/soc/soc-core.o:include/linux/pm_qos.h:300: first defined here
+   ld: sound/soc/soc-devres.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/soc/soc-core.o:include/linux/pm_qos.h:300: first defined here
+   ld: sound/soc/soc-ops.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/soc/soc-core.o:include/linux/pm_qos.h:300: first defined here
+   ld: sound/soc/soc-link.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/soc/soc-core.o:include/linux/pm_qos.h:300: first defined here
+   ld: sound/soc/soc-card.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/soc/soc-core.o:include/linux/pm_qos.h:300: first defined here
+   ld: sound/soc/soc-generic-dmaengine-pcm.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/soc/soc-core.o:include/linux/pm_qos.h:300: first defined here
+   ld: sound/soc/soc-ac97.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/soc/soc-core.o:include/linux/pm_qos.h:300: first defined here
+   ld: sound/soc/soc-compress.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/soc/soc-core.o:include/linux/pm_qos.h:300: first defined here
+--
+   ld: sound/soc/codecs/cs35l45-tables.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/soc/codecs/cs35l45.o:include/linux/pm_qos.h:300: first defined here
+--
+   ld: sound/soc/codecs/rt715-sdw.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/soc/codecs/rt715.o:include/linux/pm_qos.h:300: first defined here
+--
+   ld: sound/soc/codecs/rt712-sdca-sdw.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/soc/codecs/rt712-sdca.o:include/linux/pm_qos.h:300: first defined here
+--
+   ld: sound/soc/codecs/rt711-sdw.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/soc/codecs/rt711.o:include/linux/pm_qos.h:300: first defined here
+--
+   ld: sound/soc/codecs/rt700-sdw.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/soc/codecs/rt700.o:include/linux/pm_qos.h:300: first defined here
+--
+   ld: sound/soc/codecs/rt722-sdca-sdw.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/soc/codecs/rt722-sdca.o:include/linux/pm_qos.h:300: first defined here
+--
+   ld: sound/soc/fsl/fsl_asrc_dma.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/soc/fsl/fsl_asrc.o:include/linux/pm_qos.h:300: first defined here
+--
+   ld: sound/pci/ac97/ac97_pcm.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/pci/ac97/ac97_codec.o:include/linux/pm_qos.h:300: first defined here
+   ld: sound/pci/ac97/ac97_proc.o: in function `dev_pm_qos_hide_perf_limit':
+>> include/linux/pm_qos.h:300: multiple definition of `dev_pm_qos_hide_perf_limit'; sound/pci/ac97/ac97_codec.o:include/linux/pm_qos.h:300: first defined here
+..
+
+
+vim +300 include/linux/pm_qos.h
+
+   297	
+   298	static inline int dev_pm_qos_expose_perf_limit(struct device *dev)
+   299				{ return 0; }
+ > 300	void dev_pm_qos_hide_perf_limit(struct device *dev) {}
+   301	
 
 -- 
-viresh
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
