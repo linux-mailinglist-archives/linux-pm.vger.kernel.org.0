@@ -1,142 +1,142 @@
-Return-Path: <linux-pm+bounces-1187-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1188-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2F3F8139C5
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 19:17:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC7A38139EB
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 19:26:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 685181F21E42
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 18:17:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80E5B2821D1
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 18:26:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF16468EAF;
-	Thu, 14 Dec 2023 18:16:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2C2B68B84;
+	Thu, 14 Dec 2023 18:26:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Em8U2JPw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC710A6;
-	Thu, 14 Dec 2023 10:16:14 -0800 (PST)
-Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-3b9fb227545so688621b6e.1;
-        Thu, 14 Dec 2023 10:16:14 -0800 (PST)
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B21D7CF
+	for <linux-pm@vger.kernel.org>; Thu, 14 Dec 2023 10:26:26 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-552925413dfso917a12.0
+        for <linux-pm@vger.kernel.org>; Thu, 14 Dec 2023 10:26:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1702578385; x=1703183185; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=601UPuCRwasJAIPUegryVCdBPot9FRMepCdAZlBh5KE=;
+        b=Em8U2JPw7MDy/4ElMN1hfPUed4x4c2TGpAzpPkr6IjPfgFgla3lBCjXzlQ/Qss4iVE
+         ZZFPMsG+TlzZT3f/LT0mBfMCSKlqTGKXDCfZYdNpbdAfngqUy6P+0jXfVi0EZbcwB5xD
+         eU8nhCH7FOU/He7ITiIIPjvA2aXaEWWzsZzLJy2WmQqlkxSq604VoWmP91suDtVmOVB6
+         cVTttirHxNaE/6+66uMvcX8KtQYJ7hGy/T5yDWs/65IH+oCOF7IhtQLzKj0WUAxyYO6l
+         PBGdyM2HdmF8q7+EfL0YjeTQn6UQV0sUC0ntx8XSmlWJcuWklQRtW9rDrdoWP1XF0S7e
+         wVhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702577774; x=1703182574;
+        d=1e100.net; s=20230601; t=1702578385; x=1703183185;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8fVrLLiv/CD23rD47e8kGnLhnnuQbRgVTt+cM3Cov5A=;
-        b=ENG+GXthL/SA75mRfhxCaaWTQVIZcYD81czKsMwRHjHZij23ng/ehK6ulS+QSeLWjd
-         mzOt2STAO69+23gZMUx2bkyrgQOQ2Maw0gse1VWFLI8geX6q/pO5pVnMHeC8v8tN3mvl
-         E3b8nFiiTdwWoFrkz4QvATVkQ+P568fVqquODZdxdOd2aFLt7tKbQXGRPse+0yLw09dy
-         1r22OU+Q8eDo8qCP32fOvReL+8KmK3DijBH+JACCYb2hANprogXvdUV+hldAzdXT6ktr
-         dEPp4Z4GeNRU1mMvY9iVMcP6w2DV3hvlSrRuYGOoMoZzdsuE0afoogagvZe+g1tKCu01
-         Oulw==
-X-Gm-Message-State: AOJu0YzO+TDxeAIrWOBiBY8krLz4ZD434tAwBiNvBtxRT8fyh6eUs1xx
-	aBwbTPoe7kQ3nbccH1QfOOxSNPaTAc8HaspvWOE=
-X-Google-Smtp-Source: AGHT+IHJijZImnPNUIIOWv84OL2w1tGUmgZPvXQ1Drc8dHZAkuSK99fCqBUWsD+7YUkvDs3ihxHUMSQwP8kpLp8yZOg=
-X-Received: by 2002:a05:6870:9a8a:b0:203:36fc:6c8a with SMTP id
- hp10-20020a0568709a8a00b0020336fc6c8amr4450470oab.4.1702577773953; Thu, 14
- Dec 2023 10:16:13 -0800 (PST)
+        bh=601UPuCRwasJAIPUegryVCdBPot9FRMepCdAZlBh5KE=;
+        b=sS2Hgn2NH0sBmdRa7ID/KaVahu8Z76M7IXbFPayLHoZ9DvXRZlMy0r8rLkiCD1l7c9
+         7/Ko419qTdT6b134g+FGEu3vl3562cmlDvkmizz3DwZKEIvIhknHvxekxWC9KfxRltl9
+         5ytUp2hgzjEb4kKhFcAFA0eZuUsGx2n8c4cdO/37EyuOaUE3aGdTxAmSJwatDmE+bnk6
+         G9DgUsL4AT046973bx8yoJdKDY7PHpkdoTe0VmWZZDOE7uJzC+cyw4FdMM7I6qWVNYwL
+         kI3NRDFoLcjITG4JHiIsaSsVffueajuIxxLyFfIwu2ZtJx3AZtF/I1sia0nM7vnallqF
+         XP/A==
+X-Gm-Message-State: AOJu0Yzy2waLSyw3DnO76TY55QRfcldL2JBFukK3dDXrnJKX73WSldCw
+	uPJ+jLKvwXc8LMLeTj/reAsVHx1PcRSXKkAIdPy8RQ==
+X-Google-Smtp-Source: AGHT+IGGmczZzBVVmMuiLdJxh6exaXQX79QMiq48LG0ZiVDJdUbjiCdugLinjhG02vM8kE5Q/4yLaX+s77iSkdIiMo0=
+X-Received: by 2002:a50:f69c:0:b0:552:7df2:edfc with SMTP id
+ d28-20020a50f69c000000b005527df2edfcmr78099edn.2.1702578384993; Thu, 14 Dec
+ 2023 10:26:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk> <E1rDOfs-00DvjY-HQ@rmk-PC.armlinux.org.uk>
- <20231214173241.0000260f@Huawei.com> <CAJZ5v0jymOtZ0y65K9wE8FJk+ZKwP+FoGm4AKHXcYVfQJL9MVw@mail.gmail.com>
- <ZXtFBYJEX2RrFrwj@shell.armlinux.org.uk>
-In-Reply-To: <ZXtFBYJEX2RrFrwj@shell.armlinux.org.uk>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 14 Dec 2023 19:16:02 +0100
-Message-ID: <CAJZ5v0h2Keyb-gFWFuPsKtwqjXvM2snyGpo6MMfFzaXKbfEpgw@mail.gmail.com>
-Subject: Re: [PATCH RFC v3 01/21] ACPI: Only enumerate enabled (or functional) devices
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
-	linux-pm@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, 
-	acpica-devel@lists.linuxfoundation.org, linux-csky@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>, 
-	Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com, justin.he@arm.com, 
-	James Morse <james.morse@arm.com>
+References: <20231120234015.3273143-1-radusolea@google.com>
+ <9d1009d9-b95b-4152-841f-19470a17ba97@linaro.org> <CAPpbzyhEkqjA0Kv=f_O1hy-dT8o-O4tPB_KpQqbE9b7vwC+2NA@mail.gmail.com>
+ <570c9777-3d89-4f3c-b856-3e821883a7e2@linaro.org> <CAPpbzyiZmxhfQDOukEeuDv+B6j3CH43ugx_WyAvR3B-riRZChQ@mail.gmail.com>
+ <0412fada-037d-47ea-bc3a-4634d134232c@linaro.org> <CAPpbzyiUEc0_5mDOWGQyXGbN4J4x8PHHBVRRUq4bSmqFdp4XtQ@mail.gmail.com>
+ <b5d75de8-2006-40fa-add7-2db59f3e6cc4@linaro.org>
+In-Reply-To: <b5d75de8-2006-40fa-add7-2db59f3e6cc4@linaro.org>
+From: Radu Solea <radusolea@google.com>
+Date: Thu, 14 Dec 2023 10:26:13 -0800
+Message-ID: <CAPpbzygHs7Z2S9TJ7vwmhZUtRqfCnxAwFdRRG4q37yetNCPWMQ@mail.gmail.com>
+Subject: Re: [PATCH v2 RESEND] thermal core: add option to run PM_POST_SUSPEND asynchronously
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: linux-pm@vger.kernel.org, rafael@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 14, 2023 at 7:10=E2=80=AFPM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
+On Thu, Dec 14, 2023 at 12:25=E2=80=AFAM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
-> On Thu, Dec 14, 2023 at 06:47:00PM +0100, Rafael J. Wysocki wrote:
-> > On Thu, Dec 14, 2023 at 6:32=E2=80=AFPM Jonathan Cameron
-> > <Jonathan.Cameron@huawei.com> wrote:
-> > >
-> > > On Wed, 13 Dec 2023 12:49:16 +0000
-> > > Russell King (Oracle) <rmk+kernel@armlinux.org.uk> wrote:
-> > >
-> > > > From: James Morse <james.morse@arm.com>
-> > > >
-> > > > Today the ACPI enumeration code 'visits' all devices that are prese=
-nt.
-> > > >
-> > > > This is a problem for arm64, where CPUs are always present, but not
-> > > > always enabled. When a device-check occurs because the firmware-pol=
-icy
-> > > > has changed and a CPU is now enabled, the following error occurs:
-> > > > | acpi ACPI0007:48: Enumeration failure
-> > > >
-> > > > This is ultimately because acpi_dev_ready_for_enumeration() returns
-> > > > true for a device that is not enabled. The ACPI Processor driver
-> > > > will not register such CPUs as they are not 'decoding their resourc=
-es'.
-> > > >
-> > > > Change acpi_dev_ready_for_enumeration() to also check the enabled b=
-it.
-> > > > ACPI allows a device to be functional instead of maintaining the
-> > > > present and enabled bit. Make this behaviour an explicit check with
-> > > > a reference to the spec, and then check the present and enabled bit=
-s.
-> > > > This is needed to avoid enumerating present && functional devices t=
-hat
-> > > > are not enabled.
-> > > >
-> > > > Signed-off-by: James Morse <james.morse@arm.com>
-> > > > Tested-by: Miguel Luis <miguel.luis@oracle.com>
-> > > > Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
-> > > > Tested-by: Jianyong Wu <jianyong.wu@arm.com>
-> > > > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> > > > ---
-> > > > If this change causes problems on deployed hardware, I suggest an
-> > > > arch opt-in: ACPI_IGNORE_STA_ENABLED, that causes
-> > > > acpi_dev_ready_for_enumeration() to only check the present bit.
-> > >
-> > > My gut feeling (having made ACPI 'fixes' in the past that ran into
-> > > horribly broken firmware and had to be reverted) is reduce the blast
-> > > radius preemptively from the start. I'd love to live in a world were
-> > > that wasn't necessary but I don't trust all the generators of ACPI ta=
-bles.
-> > > I'll leave it to Rafael and other ACPI experts suggest how narrow we =
-should
-> > > make it though - arch opt in might be narrow enough.
-> >
-> > A chicken bit wouldn't help much IMO, especially in the cases when
-> > working setups get broken.
-> >
-> > I would very much prefer to limit the scope of it, say to processors
-> > only, in the first place.
+> On 14/12/2023 01:21, Radu Solea wrote:
 >
-> Thanks for the feedback and the idea.
+> [ ... ]
 >
-> I guess we need something like:
+> >>> I can't go into much detail about the hardware. But let's put it this
+> >>> way, if thermal_zone_device_update() takes 5 ms for each device (read
+> >>> temp, get trips, set trips, etc). Assume 5 onboard thermal zones, on =
+a
+> >>> good day, ignoring system churn you'd get to around 25ms (already
+> >>> significant).
+> >>> Now on top of that add that these devices have multiple functions,
+> >>> like a PMIC for example. The resume sequence is the perfect time fram=
+e
+> >>> where you'd encounter more than one operation aimed at any one of
+> >>> these devices. Unless you have uncommonly smart drivers and devices,
+> >>> these will be queued.
+> >>> The driver in most cases will spin (hardly ideal, but realistic), eve=
+n
+> >>> if they would yield the effect on the completion of the chain is at
+> >>> least the same or, likely, worse.
+> >>>
+> >>> To the patch itself, I realized I've been somewhat hamfisted.
+> >>> thermal_zone_device_init() should not be deferred, and likely should
+> >>> execute for all zones before the in_suspend lock-out is released. I'l=
+l
+> >>> correct that once we've landed on something.
+> >>>
+> >>> To my 50ms, it's almost the worst-case, but it happens way more often
+> >>> than would be comfortable.
+> >>
+> >> If you call monitor_thermal_zone() instead of
+> >> thermal_zone_device_update(), does it speed up the resume time ?
+> >>
+> > Looks like it does, I'll rework the patch. Don't think the config
+> > switch is useful anymore.
 >
->         if (device->status.present)
->                 return device->device_type !=3D ACPI_BUS_TYPE_PROCESSOR |=
-|
->                        device->status.enabled;
->         else
->                 return device->status.functional;
+> Well, we probably have to go a bit further in the concept.
 >
-> so we only check device->status.enabled for processor-type devices?
+> There are some thermal zones which may need to be checked immediately
+> and others no. That depends on the temperature speed behavior.
+>
+> The higher is the temperature speed for a device, the lower is the
+> polling (including zero).
+>
+> So the monitoring delay can be used as a criteria to check if the
+> thermal zone needs an update or postpone the monitoring.
+>
+> As we don't want to change the current behavior, we can add a global
+> option telling the polling delay above which we call
+> monitor_thermal_zone() and defaulting to zero.
+>
+> Does it make sense?
+It does, alternatively we add a device tree flag to the tz and not add
+a side effect to the delay.
+Either works imo.
 
-Yes, something like this.
+>
+> --
+> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
+M SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
+>
 
