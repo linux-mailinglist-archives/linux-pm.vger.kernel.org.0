@@ -1,102 +1,106 @@
-Return-Path: <linux-pm+bounces-1140-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1141-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6456E812C2B
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 10:50:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 216C4812C65
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 10:59:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A17582827C4
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 09:50:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A5B60B2134A
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 09:59:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CBF335887;
-	Thu, 14 Dec 2023 09:50:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03DF339FC1;
+	Thu, 14 Dec 2023 09:59:24 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDA81FDE;
-	Thu, 14 Dec 2023 01:50:09 -0800 (PST)
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5908b15f43eso716882eaf.1;
-        Thu, 14 Dec 2023 01:50:09 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702547409; x=1703152209;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=H7IcPRb+X4qnuTs0aHDHBpi/NcRx3U1FPPLkX97/vT0=;
-        b=YbeMpdvl+8fpL4KZeR71OUAvsadM6ll1fnobE4c5xVpaPyVx9BsD5CmWjYjWkJcB6V
-         O08FJRtm7JDLwwxSSc5dO2yF/jlyK7fn+b/CziPgiRRwMOAOuiCTWjUN5/vLt8aIchf2
-         6y0E3f3jbjdnkN303TYIk0np5z4pU5X8YwJjo59rnSH6jH048OHI0aGiXmrBdOwG8FFR
-         Tlsza9GJeow+046NbPZqRejENW9OMr+TdtuHQYDvnqahSGCSzxZJ/le2rqvFVXyRjpxh
-         rO4Jyk2iYEt/jnL8p9eZ5JG7P6FfL3VmLxSwp9zdUfGdvaZV/mzDW3Fp/zXsxHR7Ieoc
-         NrFw==
-X-Gm-Message-State: AOJu0YxtYeyXb/ibQEhdwSikq128CVRX7G6FUOTWO4DWR+Wfi2EC5hZc
-	/6cOquHRy8lGdp/8tCRqeiAITxhbAZ0NTVET61c=
-X-Google-Smtp-Source: AGHT+IGjjfZZyhF8aBrc8arga5Q1x2NL23YNg0eLq9/u1h3fJzX/pm+FRQC/QVJZ6OdzoCYLjk4lm5pADQbrZgiKE0o=
-X-Received: by 2002:a05:6871:2284:b0:1fb:648:5207 with SMTP id
- sd4-20020a056871228400b001fb06485207mr17719939oab.2.1702547408842; Thu, 14
- Dec 2023 01:50:08 -0800 (PST)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id B51FE112;
+	Thu, 14 Dec 2023 01:59:20 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0C78BC15;
+	Thu, 14 Dec 2023 02:00:06 -0800 (PST)
+Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2F1B73F762;
+	Thu, 14 Dec 2023 01:59:18 -0800 (PST)
+Date: Thu, 14 Dec 2023 09:59:14 +0000
+From: Andre Przywara <andre.przywara@arm.com>
+To: Maxim Kiselev <bigunclemax@gmail.com>
+Cc: anarsoul@gmail.com, bob@electricworry.net, conor+dt@kernel.org,
+ daniel.lezcano@linaro.org, devicetree@vger.kernel.org,
+ jernej.skrabec@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+ linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+ linux-sunxi@lists.linux.dev, lukasz.luba@arm.com,
+ martin.botka@somainline.org, rafael@kernel.org, robh+dt@kernel.org,
+ rui.zhang@intel.com, samuel@sholland.org, tiny.windzz@gmail.com,
+ wens@csie.org
+Subject: Re: [PATCH v3 5/6] thermal: sun8i: add support for H616 THS
+ controller
+Message-ID: <20231214095914.4a98ba8c@donnerap.manchester.arm.com>
+In-Reply-To: <CALHCpMjz4YiE_=6Cxq7RqF_3qPaw8UCA=6eLy9ZZuofRhr7mcA@mail.gmail.com>
+References: <20231128005849.19044-6-andre.przywara@arm.com>
+	<a14fb458-caf0-4a4a-b76b-c2503b0840d2@gmail.com>
+	<20231211000528.57cb646c@minigeek.lan>
+	<CALHCpMjz4YiE_=6Cxq7RqF_3qPaw8UCA=6eLy9ZZuofRhr7mcA@mail.gmail.com>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231213175818.2826876-1-daniel.lezcano@linaro.org>
-In-Reply-To: <20231213175818.2826876-1-daniel.lezcano@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 14 Dec 2023 10:49:56 +0100
-Message-ID: <CAJZ5v0gh0KSogBqtkq6GmK4pZ7iDc2FELr3=P55ifBish_NeSw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] PM: QoS: Rename freq to range constraint
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: rafael@kernel.org, caleb.connolly@linaro.org, lina.iyer@linaro.org, 
-	lukasz.luba@arm.com, quic_manafm@quicinc.com, quic_priyjain@quicinc.com, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 13, 2023 at 6:58=E2=80=AFPM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> The frequency pm_qos relies on a couple of values, the min and max
-> frequencies. However more pm_qos will be added with the same logic of
-> a couple of min and max. Instead of writing new set of constraints as
-> well as type, etc... let's rename freq_* to a more generic name
-> range_*
->
-> That way, new qos range based can be added easily.
->
-> No functional changes intended.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
+On Tue, 12 Dec 2023 21:09:45 +0300
+Maxim Kiselev <bigunclemax@gmail.com> wrote:
 
-[cut]
+Hi Maksim,
 
-> --- a/include/linux/pm_qos.h
-> +++ b/include/linux/pm_qos.h
-> @@ -77,25 +77,26 @@ struct pm_qos_flags {
->  #define FREQ_QOS_MIN_DEFAULT_VALUE     0
->  #define FREQ_QOS_MAX_DEFAULT_VALUE     S32_MAX
->
-> -enum freq_qos_req_type {
-> -       FREQ_QOS_MIN =3D 1,
-> +enum range_qos_req_type {
-> +       RANGE_QOS_MIN =3D 1,
-> +       RANGE_QOS_MAX,
-> +       FREQ_QOS_MIN,
->         FREQ_QOS_MAX,
->  };
+sorry for the delay.
 
-I'd rather do:
+> =D0=BF=D0=BD, 11 =D0=B4=D0=B5=D0=BA. 2023=E2=80=AF=D0=B3. =D0=B2 02:48, A=
+ndre Przywara <andre.przywara@arm.com>:
+> >
+> > On Sat, 9 Dec 2023 13:44:34 +0300
+> > Maksim Kiselev <bigunclemax@gmail.com> wrote:
+> >
+> > Hi Maksim,
+> > =20
+> > > Hi Martin, Andre.
+> > >
+> > > May I inquire? Why do we need a separate sun50i_h616_ths_calibrate()
+> > > function? Why can't we just extend an existing sun50i_h6_ths_calibrat=
+e()?
+> > >
+> > > At my glance the calculations in both functions are the same. We just
+> > > need to handle a special case for the 4th sensor. =20
+> >
+> > You seem to be right, they are indeed the same, just written slightly
+> > differently. Do you already have any patches that unify that? =20
+>=20
+> No, I don't have any patches for that yet. But I can do it if you told
+> me where to
+> send the patch. Should I put it here as a reply?
 
-+enum range_qos_req_type {
-+       RANGE_QOS_MIN =3D 1
-+       RANGE_QOS_MAX,
-};
+Can you make one patch on top of mainline, that prepares the existing
+sun50i_h6_ths_calibrate() function to deal with four sensors? I would then
+include this patch of yours in the next submission, and put Martin's H616
+patch (now probably just the struct ths_thermal_chip) on top then.
 
-+#define FREQ_QOS_MIN     RANGE_QOS_MIN
-+#define FREQ_QOS_MAX     RANGE_QOS_MAX
+Please send this patch just to the list (CC:ing people like Martin and
+me), starting a new thread.
 
-and they would map exactly.
+Many thanks,
+Andre
+
+> > I don't know if Martin or I find time to do it this week, but we could
+> > also optimise this later.
+> >
+> > Cheers,
+> > Andre =20
+>=20
+> Best regards,
+> Maksim
+
 
