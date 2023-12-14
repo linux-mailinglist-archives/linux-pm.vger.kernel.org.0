@@ -1,60 +1,60 @@
-Return-Path: <linux-pm+bounces-1156-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1157-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA85E81320A
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 14:47:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 47265813585
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 17:00:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5B491C21793
-	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 13:47:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5CCC31C20CC8
+	for <lists+linux-pm@lfdr.de>; Thu, 14 Dec 2023 16:00:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53DAF56B76;
-	Thu, 14 Dec 2023 13:47:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 905B85E0BA;
+	Thu, 14 Dec 2023 15:59:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p/Diy8RF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oE/U4nNR"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30E324EB38;
-	Thu, 14 Dec 2023 13:47:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03207C433C8;
-	Thu, 14 Dec 2023 13:47:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 671BB5D91C;
+	Thu, 14 Dec 2023 15:59:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 326FEC433C8;
+	Thu, 14 Dec 2023 15:59:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702561641;
-	bh=lWqoyY+Lp0x9QIy2h5s/P2Ib5HZKYH1QdBbOLtUFQsE=;
+	s=k20201202; t=1702569595;
+	bh=7CoqfRw4JMr1mH61QnY6pnHqNDAJkzpjjIZkWX4fWDo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=p/Diy8RFki0Xj0UHq3i2rCZfhaqQg8EttcvF9psMEeM0+YTNy7zkRYMakriJZiqLK
-	 dBOBbHJ+2pqIQ0Qiwgg2Tr1V9wqcoRJR7PDuwBSk4mBYFvTth01psHiZwYVmPnOXFz
-	 5ZxP23bDpK1suw9uvM+qoQSUZ5tw10ARjNfqk6zQtsFdG1PWOwxgbD2ZmqHv2CYbpC
-	 9VPpcEJFmiFv05M30RH9pLf4nm5OPAT2tauPWu6Qol9Fq1zAhY/NLJC7PSJXfnbV27
-	 uuzPsug4M8oVleSFbo6yHZdfymHCVUNOMf/YNt6auGzR7/YglzJO7oLpFmFiQT9mXD
-	 5eH3JiIG3ZIhQ==
-Date: Thu, 14 Dec 2023 13:47:14 +0000
+	b=oE/U4nNRQ8qAZMz6rhJ8Sce7YX983atw1Ny0Zxc1hMmAY3JxOc7pXYNlvPBXeaGuQ
+	 loSUdaeJXdWV/b3HHhWHdDDfT6hOK0eKn3Pt3dYKl6FVkwhr2ptTCiXvrUv9tSOUBV
+	 KDfMM8KNsKA3mz02PUm3IzzbDmXD8pzBQINycWQ65iM94UygxbumUS/VhfEFlA+nQF
+	 9iMziNRgNs4Q/XbCBepT75LTFGS1psYisR0ReKKYzFozGOYLbjC1TLjHBrdDMCiJEO
+	 mUmt/Ay9ptppcOBYMVi3QK87vU8cfcMSXYvX6HW4Fx9kLEIg1b77B9osyiebHQrJvD
+	 eKcW3URUzhcqg==
+Date: Thu, 14 Dec 2023 15:59:49 +0000
 From: Conor Dooley <conor@kernel.org>
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Brandon Cheo Fusi <fusibrandon13@gmail.com>,
+To: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>,
 	Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Yangtao Li <tiny.windzz@gmail.com>, devicetree@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 1/5] riscv: dts: allwinner: Update opp table to allow CPU
- frequency scaling
-Message-ID: <20231214-junkyard-corset-d35b01bad69f@spud>
-References: <20231214103342.30775-1-fusibrandon13@gmail.com>
- <20231214103342.30775-2-fusibrandon13@gmail.com>
- <20231214111446.camz2krqanaieybh@vireshk-i7>
+	Conor Dooley <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>,
+	Support Opensource <support.opensource@diasemi.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Steve Twiss <stwiss.opensource@diasemi.com>,
+	linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>, linux-renesas-soc@vger.kernel.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v6 8/8] dt-bindings: mfd: dlg,da9063: Convert da9062 to
+ json-schema
+Message-ID: <20231214-muzzle-spectator-6d8c278ccf8b@spud>
+References: <20231214080911.23359-1-biju.das.jz@bp.renesas.com>
+ <20231214080911.23359-9-biju.das.jz@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -62,72 +62,51 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="4Bt0sbK2SeaAxN2v"
+	protocol="application/pgp-signature"; boundary="HqlfYCRaK1p8RYfx"
 Content-Disposition: inline
-In-Reply-To: <20231214111446.camz2krqanaieybh@vireshk-i7>
+In-Reply-To: <20231214080911.23359-9-biju.das.jz@bp.renesas.com>
 
 
---4Bt0sbK2SeaAxN2v
+--HqlfYCRaK1p8RYfx
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 14, 2023 at 04:44:46PM +0530, Viresh Kumar wrote:
-> On 14-12-23, 11:33, Brandon Cheo Fusi wrote:
-> > Two OPPs are currently defined for the D1/D1s; one at 408MHz and
-> > another at 1.08GHz. Switching between these can be done with the
-> > "sun50i-cpufreq-nvmem" driver. This patch populates the opp table
-> > appropriately, with inspiration from
-> > https://github.com/Tina-Linux/linux-5.4/blob/master/arch/riscv/boot/dts=
-/sunxi/sun20iw1p1.dtsi
-> >=20
-> > The supply voltages are PWM-controlled, but support for that IP
-> > is still in the works. So stick to a fixed 0.9V vdd-cpu supply,
-> > which seems to be the default on most D1 boards.
-> >=20
-> > Signed-off-by: Brandon Cheo Fusi <fusibrandon13@gmail.com>
-> > ---
-> >  arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi | 18 +++++++++++++++---
-> >  1 file changed, 15 insertions(+), 3 deletions(-)
-> >=20
-> > diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi b/arch/riscv=
-/boot/dts/allwinner/sun20i-d1s.dtsi
-> > index 64c3c2e6c..e211fe4c7 100644
-> > --- a/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
-> > +++ b/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
-> > @@ -39,16 +39,22 @@ cpu0_intc: interrupt-controller {
-> >  	};
-> > =20
-> >  	opp_table_cpu: opp-table-cpu {
-> > -		compatible =3D "operating-points-v2";
-> > +		compatible =3D "allwinner,sun20i-d1-operating-points",
+On Thu, Dec 14, 2023 at 08:09:11AM +0000, Biju Das wrote:
+> Convert the da9062 PMIC device tree binding documentation to json-schema.
 >=20
-> I don't think you should add a new compatible for every SoC that needs
-> to be supported by a DT bindings and cpufreq driver. Maybe you should
-> just reuse "allwinner,sun50i-h6-operating-points" and it will work
-> fine for you ?
+> Document the missing gpio child node for da9062.
 >=20
-> Rob ?
+> While at it, update description with link to product information and
+> example.
+>=20
+> The missing child node with of_compatible defined in MFD_CELL_OF is
+> causing the below warning message:
+> da9062-gpio: Failed to locate of_node [id: -1]
+>=20
+> So, make all child nodes with of_compatible defined in struct mfd_cell
+> as required property for da906{1,2} devices.
+>=20
+> The "gpio-controller" and "#gpio-cells" properties are defined in the
+> parent instead of gpio child node as there are existing driver users
+> based on these parent properties.
 
-The driver can definitely just reuse sun50i-h6, but the binding and
-devicetree should have a soc-specific compatible for the sun20i-d1.
-
-That said, the compatible does need to be documented, there's a
-dt-bindings patch missing from this series.
+Thanks for updating the commit message :)
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
 Cheers,
 Conor.
 
---4Bt0sbK2SeaAxN2v
+--HqlfYCRaK1p8RYfx
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZXsHYgAKCRB4tDGHoIJi
-0llNAPwPlCtHYqdw3PHm/F9o63nh77wIsWE9SawYpIg6XvVYSQEA3ontbKuKxaUy
-sMpsYI0c/7MsH2HbQPLjiFJVxobR5wo=
-=L6Mk
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZXsmdQAKCRB4tDGHoIJi
+0lzGAP4oEdT2WUJUxiyRRCFGE6OT0WvQwnCe1E3iSspn6sqjPAEA2Ki0TvwYTowX
+TGIvSJPBorLjAV43jOT30EsDyvL91gg=
+=3PTg
 -----END PGP SIGNATURE-----
 
---4Bt0sbK2SeaAxN2v--
+--HqlfYCRaK1p8RYfx--
 
