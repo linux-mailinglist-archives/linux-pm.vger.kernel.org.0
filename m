@@ -1,96 +1,209 @@
-Return-Path: <linux-pm+bounces-1202-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1203-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD8AF81473E
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 12:46:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E26D814825
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 13:34:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 50EFEB21237
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 11:46:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6335C1C22C5F
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 12:34:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A512224B52;
-	Fri, 15 Dec 2023 11:46:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6167C199D7;
+	Fri, 15 Dec 2023 12:34:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D6/lvmum"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GqGTdqkS"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8960E2555B
-	for <linux-pm@vger.kernel.org>; Fri, 15 Dec 2023 11:46:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1385EC433CA
-	for <linux-pm@vger.kernel.org>; Fri, 15 Dec 2023 11:46:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AEFE2C68D;
+	Fri, 15 Dec 2023 12:34:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45979C433C8;
+	Fri, 15 Dec 2023 12:34:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702640807;
-	bh=MaUigJ61RVevT3FZsCJYmvoNnK+i2vlev1rG1zTE+BU=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=D6/lvmumF8wPbiPLnbPXS2HrgTyUrO7szcmPWRgcEpIHxGHnmWjanqR0Ujm4kaWiX
-	 aBrdqP3Oo0qf4UefUAGqyKlkg2nco+MOspzghjPs/Bwr+2x38NCOjZjyrWIUGzWoVs
-	 BbycnPWp/NA8JOA45XwIpbWI7UDN4ZRiATb+nUd6KFalNYrHIlMO1478Tr2b0M6hq+
-	 aIAUiu+06hh7clfHDD9KX5GdtKmrQtHzcGvJOQjTjykHWxaGYaZyPSy74Y/b8dLxp3
-	 qxjWYmmmKSnguwgsuQq5Liw0FLlbgNkP8ZFJfMcWj4p0xzlnQYCcPsk82wobnSWDlb
-	 NbuOiX881G7+w==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id EA6F8C53BD2; Fri, 15 Dec 2023 11:46:46 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 218171] amd-pstate not loading on zen2 threadripper 3960x
- (trx40
-Date: Fri, 15 Dec 2023 11:46:46 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: badouri.g@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218171-137361-PYbVzqEVPe@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218171-137361@https.bugzilla.kernel.org/>
-References: <bug-218171-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1702643668;
+	bh=FaCZ2fNraad49PiDtX3wes78ymtVFrS8O37vDr/7Bwk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GqGTdqkSJTbeNCkys9izOFrKzzGLhSAUGY0S7zmNMp1fq9I+nGBTZ82rMYGw37rBh
+	 YzsNrhE8bM3v+zM28ABp2cZCG3Xndyrx42SAlCImrSLIixr9CIiqpCuoWbH11oSw1o
+	 H6d2m1s6vJpfhUc+yl3E8goo8CkW2kf2Z5GnIEz9BdmyvAem7g3SL0PJlPC9T0sf8G
+	 bJrNdNN631TrOa5WbwoBq4/yfSS0xIg/FVZ+6BEmBDR5OaswBheC9dSsAnaMqFSG31
+	 3oCNJU4tNUgVycsGEWUuuAQY6lh1gZPM4LKW/3+mAxzk6GGV5DIlHW3//laGWdYu0E
+	 BvWrQPiud4/0w==
+Date: Fri, 15 Dec 2023 13:34:26 +0100
+From: Maxime Ripard <mripard@kernel.org>
+To: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Michael Turquette <mturquette@baylibre.com>, 
+	dri-devel@lists.freedesktop.org, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+	Thierry Reding <thierry.reding@gmail.com>, David Airlie <airlied@gmail.com>, linux-clk@vger.kernel.org, 
+	Jerome Brunet <jbrunet@baylibre.com>, Rob Herring <robh@kernel.org>, 
+	Samuel Holland <samuel@sholland.org>, Kevin Hilman <khilman@baylibre.com>, 
+	Russell King <linux@armlinux.org.uk>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Jonathan Hunter <jonathanh@nvidia.com>, Chanwoo Choi <cw00.choi@samsung.com>, 
+	Chen-Yu Tsai <wens@csie.org>, MyungJoo Ham <myungjoo.ham@samsung.com>, 
+	Johan Hovold <johan+linaro@kernel.org>, linux-sunxi@lists.linux.dev, Daniel Vetter <daniel@ffwll.ch>, 
+	linux-pm@vger.kernel.org, Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, linux-tegra@vger.kernel.org, linux-amlogic@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Stephen Boyd <sboyd@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	Kyungmin Park <kyungmin.park@samsung.com>, kernel@pengutronix.de, Georgi Djakov <djakov@kernel.org>
+Subject: Re: [PATCH 0/5] clk: Make clk_rate_exclusive_get() return void
+Message-ID: <nsa54fwu4ewmcaehesuqefoo5r7z3tuvj76hjb4ngtkaygxwxx@h73ihjon5gby>
+References: <cover.1702400947.git.u.kleine-koenig@pengutronix.de>
+ <ki5n3rz5n4oxj2hhc3rj6xpn3e2tdi7fcp2q7exjbzilrlqflp@przautvhuy4g>
+ <20231213074300.4bq7wkfqd4jhhcr4@pengutronix.de>
+ <2nvbag657mlniqwq7fbilapc6vfw5qumab3yd6bqul25ot6wcn@wdlkh5az2fgs>
+ <20231213110829.bjaxjjiyy4ug7o67@pengutronix.de>
+ <6wnsxbi27xdxjtaqaaaq5wtwwilp4jfw4mg5y2ctdl7xrs44ry@ns6y36pf7hge>
+ <20231213155252.eq6cdzk2vuwllzdu@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="wu77dsjz7uev4rk4"
+Content-Disposition: inline
+In-Reply-To: <20231213155252.eq6cdzk2vuwllzdu@pengutronix.de>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218171
 
---- Comment #21 from Gino Badouri (badouri.g@gmail.com) ---
-Thank you Jan,
+--wu77dsjz7uev4rk4
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I hope this gives the developers some more information to digest.
-I've reached out to Asus with a full report and a link to this thread.
-However I doubt they'll look into it, as the sTRX40 platform is discontinue=
+On Wed, Dec 13, 2023 at 04:52:52PM +0100, Uwe Kleine-K=F6nig wrote:
+> On Wed, Dec 13, 2023 at 12:54:14PM +0100, Maxime Ripard wrote:
+> > On Wed, Dec 13, 2023 at 12:08:29PM +0100, Uwe Kleine-K=F6nig wrote:
+> > > On Wed, Dec 13, 2023 at 09:36:49AM +0100, Maxime Ripard wrote:
+> > > > On Wed, Dec 13, 2023 at 08:43:00AM +0100, Uwe Kleine-K=F6nig wrote:
+> > > > > On Wed, Dec 13, 2023 at 08:16:04AM +0100, Maxime Ripard wrote:
+> > > > > > On Tue, Dec 12, 2023 at 06:26:37PM +0100, Uwe Kleine-K=F6nig wr=
+ote:
+> > > > > > > clk_rate_exclusive_get() returns zero unconditionally. Most u=
+sers "know"
+> > > > > > > that and don't check the return value. This series fixes the =
+four users
+> > > > > > > that do error checking on the returned value and then makes f=
+unction
+> > > > > > > return void.
+> > > > > > >=20
+> > > > > > > Given that the changes to the drivers are simple and so merge=
+ conflicts
+> > > > > > > (if any) should be easy to handle, I suggest to merge this co=
+mplete
+> > > > > > > series via the clk tree.
+> > > > > >=20
+> > > > > > I don't think it's the right way to go about it.
+> > > > > >=20
+> > > > > > clk_rate_exclusive_get() should be expected to fail. For exampl=
+e if
+> > > > > > there's another user getting an exclusive rate on the same cloc=
+k.
+> > > > > >=20
+> > > > > > If we're not checking for it right now, then it should probably=
+ be
+> > > > > > fixed, but the callers checking for the error are right to do s=
+o if they
+> > > > > > rely on an exclusive rate. It's the ones that don't that should=
+ be
+> > > > > > modified.
+> > > > >=20
+> > > > > If some other consumer has already "locked" a clock that I call
+> > > > > clk_rate_exclusive_get() for, this isn't an error. In my bubble I=
+ call
+> > > > > this function because I don't want the rate to change e.g. becaus=
+e I
+> > > > > setup some registers in the consuming device to provide a fixed U=
+ART
+> > > > > baud rate or i2c bus frequency (and that works as expected).
+> > > >=20
+> > > > [a long text of mostly right things (Uwe's interpretation) that are
+> > > > however totally unrelated to the patches under discussion.]
+> >=20
+> > I'm glad you consider it "mostly" right.
+>=20
+> there was no offense intended. I didn't agree to all points, but didn't
+> think it was helpful to discuss that given that I considered them
+> orthogonal to my suggested modifications.
+> =20
+> > > The clk API works with and without my patches in exactly the same way.
+> > > It just makes more explicit that clk_rate_exclusive_get() cannot fail
+> > > today and removes the error handling from consumers that is never use=
 d.
-I'm not export on ACPI tables at all, but I'm wondering whether it's the
-mainboard vendor to blame for this.
-I believe the "AGESA" firmware which is part of the bios is responsible for
-setting up CPPC.
-And this firmware is provided by AMD to the mainboard vendors.
-For sTRX40 (which only lasted one generation), the latest version seems to =
-be
-1.0.0.4.
-Perhaps this version is too old and doesn't provide the necessary
-info/specification for the ACPI tables.
+> >=20
+> > Not really, no.
+>=20
+> What exactly do you oppose here? Both of my sentences are correct?!
 
---=20
-You may reply to this email to add a comment.
+That the API works in the exact same way.
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+> > An API is an interface, meant to provide an abstraction. The only
+> > relevant thing is whether or not that function, from an abstract point
+> > of view, can fail.
+>=20
+> What is the ideal API that you imagine? For me the ideal API is:
+>=20
+> A consumer might call clk_rate_exclusive_get() and after that returns
+> all other consumers are prohibited to change the rate of the clock
+> (directly and indirectly) until clk_rate_exclusive_put() is called. If
+> this ends in a double lock (i.e. two different consumers locked the
+> clock), then I cannot change the rate (and neither can anybody else).
+>=20
+> That is fine iff I don't need to change the rate and just want to rely
+> on it to keep its current value (which is a valid use case). And if I
+> want to change the rate but another consumer prevents that, I handle
+> that in the same away as I handle all other failures to set the rate to
+> the value I need. I have to prepare for that anyhow even if I have
+> ensured that I'm the only one having exclusivity on that clock.
+>=20
+> Letting clk_rate_exclusive_get() fail in the assumption that the
+> consumer also wants to modify the rate is wrong. The obvious point where
+> to stop such consumers is when they call clk_rate_set(). And those who
+> don't modify the rate then continue without interruption even if there
+> are two lockers.
+>=20
+> This can easily be implemented without clk_rate_exclusive_get() ever
+> failing.
+>=20
+> > Can you fail to get the exclusivity? Yes. On a theoretical basis, you
+> > can, and the function was explicitly documented as such.
+>=20
+> Sure, you could modify the clk internals such that
+> clk_rate_exclusive_get() needs to allocate memory. Or that it fails if
+> another consumer already has called it. At least the latter is a change
+> in semantics that requires to review (and maybe fix) all users. Also
+> note that calling clk_rate_exclusive_get() essentially locks all parent
+> clocks up to the root clock. So if clk_rate_exclusive_get() fails in the
+> presence of another locker, you can only have one locker per clock
+> hierarchy because it's impossible that both grab the lock on the root
+> clock.
+
+We're not discussing the same thing. You're talking about from a
+technical point of view, I'm talking about it from an abstraction point
+of view. Let's use another example: kmalloc cannot fail. Are we going to
+remove every possible check for a null pointer in the kernel?
+
+No, of course we won't, because at some point it might and the error
+handling will be valuable.
+
+Same story here.
+
+Maxime
+
+--wu77dsjz7uev4rk4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZXxH0gAKCRDj7w1vZxhR
+xV/qAQD3/+x4S05zuQ5N2nfPdpjw4SxrkhoevmzHBpy1FgHZiQD/VV4FJjb2kuQG
+qaKs9P5j71Zv3P0kGzQhaFxK9fkLCws=
+=lYpt
+-----END PGP SIGNATURE-----
+
+--wu77dsjz7uev4rk4--
 
