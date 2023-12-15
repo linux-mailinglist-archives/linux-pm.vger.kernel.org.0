@@ -1,91 +1,96 @@
-Return-Path: <linux-pm+bounces-1201-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1202-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD587814714
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 12:37:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD8AF81473E
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 12:46:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C6931C23197
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 11:37:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 50EFEB21237
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 11:46:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C88B224B52;
-	Fri, 15 Dec 2023 11:37:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A512224B52;
+	Fri, 15 Dec 2023 11:46:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D6/lvmum"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE9D250E3;
-	Fri, 15 Dec 2023 11:37:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-6d9db92bd71so162836a34.1;
-        Fri, 15 Dec 2023 03:37:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702640243; x=1703245043;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=chmxXCVKTjnWRwvktM7WJmrnV0qr6vYgbWjqnpS7IJo=;
-        b=Fe7aChh+3ejMtqF5Om8aJGgVcLkq5rNdYcJ+DZu03zYkIvJCGN725P2rheWvJFiKAS
-         DKRqdpILre21UTeyC2lO+Nrh1BDmmemd24LCAylcJea5/2m4YBv4RNTEGfyBmIMN8iF/
-         YkF+mCIrPGSPAbNM4yx+y4sw6K5hoo1cLIe0kEtVRO+IM+H9hF662urcF7AUv6gs+i6H
-         hA5K+TLDQdO5oXKxoKlY8zXkeHlKAPFcJrNgjjsbQZHId7w5ecjTNeOMO0QL3q+9qhpl
-         2HSlSZ2KzwNntu+n8zsCX/YCnoAytPZyO9PsXYOQuQjHvajz+xDksJXw4Weh0ClHSSpr
-         VGNQ==
-X-Gm-Message-State: AOJu0YzkPDKskCsntnS5tOt7tSMHnJrCaCUV7Dwr93UBD64YbDdtFkks
-	prSapoS3ifc+MzODZ82IPiqBVg50eiCGFNqztU4=
-X-Google-Smtp-Source: AGHT+IHTDUq4BO4EjBrWxr3vF8ypXzDh/RIrRjQ+P+DlBmh/k3JHusO3Z8YMKWXD+gagQce78H4HrFlNyrnOYcvrN0k=
-X-Received: by 2002:a05:6870:860c:b0:203:7c44:b622 with SMTP id
- h12-20020a056870860c00b002037c44b622mr225641oal.0.1702640243406; Fri, 15 Dec
- 2023 03:37:23 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8960E2555B
+	for <linux-pm@vger.kernel.org>; Fri, 15 Dec 2023 11:46:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 1385EC433CA
+	for <linux-pm@vger.kernel.org>; Fri, 15 Dec 2023 11:46:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702640807;
+	bh=MaUigJ61RVevT3FZsCJYmvoNnK+i2vlev1rG1zTE+BU=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=D6/lvmumF8wPbiPLnbPXS2HrgTyUrO7szcmPWRgcEpIHxGHnmWjanqR0Ujm4kaWiX
+	 aBrdqP3Oo0qf4UefUAGqyKlkg2nco+MOspzghjPs/Bwr+2x38NCOjZjyrWIUGzWoVs
+	 BbycnPWp/NA8JOA45XwIpbWI7UDN4ZRiATb+nUd6KFalNYrHIlMO1478Tr2b0M6hq+
+	 aIAUiu+06hh7clfHDD9KX5GdtKmrQtHzcGvJOQjTjykHWxaGYaZyPSy74Y/b8dLxp3
+	 qxjWYmmmKSnguwgsuQq5Liw0FLlbgNkP8ZFJfMcWj4p0xzlnQYCcPsk82wobnSWDlb
+	 NbuOiX881G7+w==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id EA6F8C53BD2; Fri, 15 Dec 2023 11:46:46 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218171] amd-pstate not loading on zen2 threadripper 3960x
+ (trx40
+Date: Fri, 15 Dec 2023 11:46:46 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: badouri.g@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218171-137361-PYbVzqEVPe@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218171-137361@https.bugzilla.kernel.org/>
+References: <bug-218171-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231215112950.13916-1-colin.i.king@gmail.com>
-In-Reply-To: <20231215112950.13916-1-colin.i.king@gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 15 Dec 2023 12:37:12 +0100
-Message-ID: <CAJZ5v0juh7nO-KenieqCRLnhmBSDUSNYRcYBDKpSsMORUiKseQ@mail.gmail.com>
-Subject: Re: [PATCH][next] PM: hibernate: Fix spelling mistake "hiberantion"
- -> "hibernation"
-To: Colin Ian King <colin.i.king@gmail.com>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
-	linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 15, 2023 at 12:29=E2=80=AFPM Colin Ian King <colin.i.king@gmail=
-.com> wrote:
->
-> There is a spelling mistake in a pr_info message. Fix it.
->
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->  kernel/power/hibernate.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> index f8c81ef5b172..4b0b7cf2e019 100644
-> --- a/kernel/power/hibernate.c
-> +++ b/kernel/power/hibernate.c
-> @@ -671,7 +671,7 @@ static void power_down(void)
->                 if (error =3D=3D -EAGAIN || error =3D=3D -EBUSY) {
->                         swsusp_unmark();
->                         events_check_enabled =3D false;
-> -                       pr_info("Wakeup event detected during hiberantion=
-, rolling back.\n");
-> +                       pr_info("Wakeup event detected during hibernation=
-, rolling back.\n");
->                         return;
->                 }
->                 fallthrough;
-> --
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218171
 
-Thanks, I've fixed it in the tree in the meantime.
+--- Comment #21 from Gino Badouri (badouri.g@gmail.com) ---
+Thank you Jan,
+
+I hope this gives the developers some more information to digest.
+I've reached out to Asus with a full report and a link to this thread.
+However I doubt they'll look into it, as the sTRX40 platform is discontinue=
+d.
+I'm not export on ACPI tables at all, but I'm wondering whether it's the
+mainboard vendor to blame for this.
+I believe the "AGESA" firmware which is part of the bios is responsible for
+setting up CPPC.
+And this firmware is provided by AMD to the mainboard vendors.
+For sTRX40 (which only lasted one generation), the latest version seems to =
+be
+1.0.0.4.
+Perhaps this version is too old and doesn't provide the necessary
+info/specification for the ACPI tables.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
 
