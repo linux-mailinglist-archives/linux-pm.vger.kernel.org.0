@@ -1,102 +1,91 @@
-Return-Path: <linux-pm+bounces-1200-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1201-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA15A8146EA
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 12:30:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DD587814714
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 12:37:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DBE9F1C228BC
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 11:30:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C6931C23197
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 11:37:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DC3124B37;
-	Fri, 15 Dec 2023 11:29:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ffiHkhFQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C88B224B52;
+	Fri, 15 Dec 2023 11:37:25 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7EF224B30;
-	Fri, 15 Dec 2023 11:29:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE9D250E3;
+	Fri, 15 Dec 2023 11:37:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-40c69403b3eso5253075e9.3;
-        Fri, 15 Dec 2023 03:29:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702639792; x=1703244592; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XpdCVDeSx25taP7QY8j0ivdRn5G3/1hqXyiZNxHPDZs=;
-        b=ffiHkhFQXjTfl6i7VurjNXr0enfkRqfJz5HNawGaKq/3JVxRaVRFdWN4ATOPWXMwn6
-         f2dIDK8rzLLR/EmFd2aAK7+1BbQdjaD3v8Tia0HOPnEEihw/e+tlpVN46SqOD1PMKhhf
-         Fq4nQ3iVMdvhBaXodRjII8b4wkZLQbR7NzcWl1qUxRl2KRSrr1pUAeA422H1ehBwAM2g
-         g8Z9y2hHEN/GzAWF608bo9SnifPigaW+Zk5uyYSfyZ4Yqd+dK2GiwYTnnW7G/ERHPTGn
-         xf7hUTvXsvPHAPbwLQgnWBFCTVrH6cyWPtFwBzLO2247gaO6pnPhImQ2OVrdnoOjNlHE
-         ykmQ==
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-6d9db92bd71so162836a34.1;
+        Fri, 15 Dec 2023 03:37:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702639792; x=1703244592;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XpdCVDeSx25taP7QY8j0ivdRn5G3/1hqXyiZNxHPDZs=;
-        b=OOqv3ZHpnPpzJRfppaFo8TK3RuCVSTUc6uIFkExeCWkMWm2Ru2oiiRubgTBM2VhL+q
-         WemgwNaYckxCzG1QrpALUxUR6yfxF3KNHDynHYxthnT6dwLEKp7NUT1kvFFiZb2aXM0U
-         yoIOjjAhIknr0Y6OStGBpnAVvJErzUBMdXqAeTVWwtXkDowyIBsNVcoEeph4wTgjNJ/6
-         5ZCw92sEEF3wq75Nlw3fglM66MECr2SH+l8Wu3WrYoT4GR9eDEy6MEr6CvMN4DIxM1Oz
-         ox91HhPLQMZArNSd6DuHv6JlUGuvo29tmUJiWR2qmBH56pb3R6NdZAw4/fJIO6zbWUrt
-         rjWA==
-X-Gm-Message-State: AOJu0YyZcGIgWc3RtUwg2FizBzp55ZUsc5TSfxE8qslPWcJAY5m3HIKZ
-	aiceVxHybmxbo1OsA20RY98=
-X-Google-Smtp-Source: AGHT+IEQoR0GiDgBalzSADI3L4P8cGCDNVIEQwoouG28tZ/cQPaGiPfLz+p9GY3Jaad31QQEqH1D7w==
-X-Received: by 2002:a7b:c5cc:0:b0:40c:53d1:4c6 with SMTP id n12-20020a7bc5cc000000b0040c53d104c6mr2947832wmk.166.1702639791893;
-        Fri, 15 Dec 2023 03:29:51 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id fl9-20020a05600c0b8900b0040b43da0bbasm28939219wmb.30.2023.12.15.03.29.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Dec 2023 03:29:51 -0800 (PST)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Len Brown <len.brown@intel.com>,
-	Pavel Machek <pavel@ucw.cz>,
-	linux-pm@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH][next] PM: hibernate: Fix spelling mistake "hiberantion" -> "hibernation"
-Date: Fri, 15 Dec 2023 11:29:50 +0000
-Message-Id: <20231215112950.13916-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20230601; t=1702640243; x=1703245043;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=chmxXCVKTjnWRwvktM7WJmrnV0qr6vYgbWjqnpS7IJo=;
+        b=Fe7aChh+3ejMtqF5Om8aJGgVcLkq5rNdYcJ+DZu03zYkIvJCGN725P2rheWvJFiKAS
+         DKRqdpILre21UTeyC2lO+Nrh1BDmmemd24LCAylcJea5/2m4YBv4RNTEGfyBmIMN8iF/
+         YkF+mCIrPGSPAbNM4yx+y4sw6K5hoo1cLIe0kEtVRO+IM+H9hF662urcF7AUv6gs+i6H
+         hA5K+TLDQdO5oXKxoKlY8zXkeHlKAPFcJrNgjjsbQZHId7w5ecjTNeOMO0QL3q+9qhpl
+         2HSlSZ2KzwNntu+n8zsCX/YCnoAytPZyO9PsXYOQuQjHvajz+xDksJXw4Weh0ClHSSpr
+         VGNQ==
+X-Gm-Message-State: AOJu0YzkPDKskCsntnS5tOt7tSMHnJrCaCUV7Dwr93UBD64YbDdtFkks
+	prSapoS3ifc+MzODZ82IPiqBVg50eiCGFNqztU4=
+X-Google-Smtp-Source: AGHT+IHTDUq4BO4EjBrWxr3vF8ypXzDh/RIrRjQ+P+DlBmh/k3JHusO3Z8YMKWXD+gagQce78H4HrFlNyrnOYcvrN0k=
+X-Received: by 2002:a05:6870:860c:b0:203:7c44:b622 with SMTP id
+ h12-20020a056870860c00b002037c44b622mr225641oal.0.1702640243406; Fri, 15 Dec
+ 2023 03:37:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20231215112950.13916-1-colin.i.king@gmail.com>
+In-Reply-To: <20231215112950.13916-1-colin.i.king@gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 15 Dec 2023 12:37:12 +0100
+Message-ID: <CAJZ5v0juh7nO-KenieqCRLnhmBSDUSNYRcYBDKpSsMORUiKseQ@mail.gmail.com>
+Subject: Re: [PATCH][next] PM: hibernate: Fix spelling mistake "hiberantion"
+ -> "hibernation"
+To: Colin Ian King <colin.i.king@gmail.com>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
+	linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-There is a spelling mistake in a pr_info message. Fix it.
+On Fri, Dec 15, 2023 at 12:29=E2=80=AFPM Colin Ian King <colin.i.king@gmail=
+.com> wrote:
+>
+> There is a spelling mistake in a pr_info message. Fix it.
+>
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  kernel/power/hibernate.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+> index f8c81ef5b172..4b0b7cf2e019 100644
+> --- a/kernel/power/hibernate.c
+> +++ b/kernel/power/hibernate.c
+> @@ -671,7 +671,7 @@ static void power_down(void)
+>                 if (error =3D=3D -EAGAIN || error =3D=3D -EBUSY) {
+>                         swsusp_unmark();
+>                         events_check_enabled =3D false;
+> -                       pr_info("Wakeup event detected during hiberantion=
+, rolling back.\n");
+> +                       pr_info("Wakeup event detected during hibernation=
+, rolling back.\n");
+>                         return;
+>                 }
+>                 fallthrough;
+> --
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- kernel/power/hibernate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index f8c81ef5b172..4b0b7cf2e019 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -671,7 +671,7 @@ static void power_down(void)
- 		if (error == -EAGAIN || error == -EBUSY) {
- 			swsusp_unmark();
- 			events_check_enabled = false;
--			pr_info("Wakeup event detected during hiberantion, rolling back.\n");
-+			pr_info("Wakeup event detected during hibernation, rolling back.\n");
- 			return;
- 		}
- 		fallthrough;
--- 
-2.39.2
-
+Thanks, I've fixed it in the tree in the meantime.
 
