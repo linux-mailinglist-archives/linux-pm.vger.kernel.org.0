@@ -1,103 +1,102 @@
-Return-Path: <linux-pm+bounces-1199-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1200-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 353208146CE
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 12:25:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA15A8146EA
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 12:30:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67FC71C232E4
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 11:25:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DBE9F1C228BC
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 11:30:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E165124B47;
-	Fri, 15 Dec 2023 11:25:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DC3124B37;
+	Fri, 15 Dec 2023 11:29:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jO17Ak8q"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ffiHkhFQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E7BE24B22
-	for <linux-pm@vger.kernel.org>; Fri, 15 Dec 2023 11:25:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 065FFC433CC
-	for <linux-pm@vger.kernel.org>; Fri, 15 Dec 2023 11:25:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702639503;
-	bh=B5Nl5lRDqgM6zVn94/ZihNmtzrTcD7PANdEp1S47qOU=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=jO17Ak8qXOlXlqMx/r75nSEaFZcx6coGSJQsw+SqvEcbdoITLq9Ycp9xIts8sNvmL
-	 hHlhfFOTbwbkybph5qhAoMJtyvt+jkttx68ZlWwzS5frgm4knUV4tUXikBV0l2NZZB
-	 LMdboiYMtv5iLPHL5h6YcYzJjqH26bQZCoFcH7qK+6mo6tXyZRyrKEaN5zoRBD2zEH
-	 fAJ/5fN21FcnzrHCbX5hAtDRIXkQVOYSBJMjFwyWPTqGg2trBAyXCafGZFrMAJDmN8
-	 cEM9cK31o/L15+n/OaRtgL9IReX0ZfzQ8S6xWobhh05qtA53OIqGp03NGfGMAE3/9A
-	 DqEGL2jVESRoQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id E9B90C53BD3; Fri, 15 Dec 2023 11:25:02 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 218171] amd-pstate not loading on zen2 threadripper 3960x
- (trx40
-Date: Fri, 15 Dec 2023 11:25:02 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: johnypean@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-218171-137361-qQoeJ1sKFn@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218171-137361@https.bugzilla.kernel.org/>
-References: <bug-218171-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7EF224B30;
+	Fri, 15 Dec 2023 11:29:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-40c69403b3eso5253075e9.3;
+        Fri, 15 Dec 2023 03:29:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702639792; x=1703244592; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XpdCVDeSx25taP7QY8j0ivdRn5G3/1hqXyiZNxHPDZs=;
+        b=ffiHkhFQXjTfl6i7VurjNXr0enfkRqfJz5HNawGaKq/3JVxRaVRFdWN4ATOPWXMwn6
+         f2dIDK8rzLLR/EmFd2aAK7+1BbQdjaD3v8Tia0HOPnEEihw/e+tlpVN46SqOD1PMKhhf
+         Fq4nQ3iVMdvhBaXodRjII8b4wkZLQbR7NzcWl1qUxRl2KRSrr1pUAeA422H1ehBwAM2g
+         g8Z9y2hHEN/GzAWF608bo9SnifPigaW+Zk5uyYSfyZ4Yqd+dK2GiwYTnnW7G/ERHPTGn
+         xf7hUTvXsvPHAPbwLQgnWBFCTVrH6cyWPtFwBzLO2247gaO6pnPhImQ2OVrdnoOjNlHE
+         ykmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702639792; x=1703244592;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XpdCVDeSx25taP7QY8j0ivdRn5G3/1hqXyiZNxHPDZs=;
+        b=OOqv3ZHpnPpzJRfppaFo8TK3RuCVSTUc6uIFkExeCWkMWm2Ru2oiiRubgTBM2VhL+q
+         WemgwNaYckxCzG1QrpALUxUR6yfxF3KNHDynHYxthnT6dwLEKp7NUT1kvFFiZb2aXM0U
+         yoIOjjAhIknr0Y6OStGBpnAVvJErzUBMdXqAeTVWwtXkDowyIBsNVcoEeph4wTgjNJ/6
+         5ZCw92sEEF3wq75Nlw3fglM66MECr2SH+l8Wu3WrYoT4GR9eDEy6MEr6CvMN4DIxM1Oz
+         ox91HhPLQMZArNSd6DuHv6JlUGuvo29tmUJiWR2qmBH56pb3R6NdZAw4/fJIO6zbWUrt
+         rjWA==
+X-Gm-Message-State: AOJu0YyZcGIgWc3RtUwg2FizBzp55ZUsc5TSfxE8qslPWcJAY5m3HIKZ
+	aiceVxHybmxbo1OsA20RY98=
+X-Google-Smtp-Source: AGHT+IEQoR0GiDgBalzSADI3L4P8cGCDNVIEQwoouG28tZ/cQPaGiPfLz+p9GY3Jaad31QQEqH1D7w==
+X-Received: by 2002:a7b:c5cc:0:b0:40c:53d1:4c6 with SMTP id n12-20020a7bc5cc000000b0040c53d104c6mr2947832wmk.166.1702639791893;
+        Fri, 15 Dec 2023 03:29:51 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id fl9-20020a05600c0b8900b0040b43da0bbasm28939219wmb.30.2023.12.15.03.29.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Dec 2023 03:29:51 -0800 (PST)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Len Brown <len.brown@intel.com>,
+	Pavel Machek <pavel@ucw.cz>,
+	linux-pm@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH][next] PM: hibernate: Fix spelling mistake "hiberantion" -> "hibernation"
+Date: Fri, 15 Dec 2023 11:29:50 +0000
+Message-Id: <20231215112950.13916-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218171
+There is a spelling mistake in a pr_info message. Fix it.
 
---- Comment #20 from Jan Kosterec (johnypean@gmail.com) ---
-Created attachment 305606
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305606&action=3Dedit
-Gigabyte TRX40 DESIGNARE BIOS v. FD TR 3970X
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ kernel/power/hibernate.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hi, attaching my report with acpitables:
+diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+index f8c81ef5b172..4b0b7cf2e019 100644
+--- a/kernel/power/hibernate.c
++++ b/kernel/power/hibernate.c
+@@ -671,7 +671,7 @@ static void power_down(void)
+ 		if (error == -EAGAIN || error == -EBUSY) {
+ 			swsusp_unmark();
+ 			events_check_enabled = false;
+-			pr_info("Wakeup event detected during hiberantion, rolling back.\n");
++			pr_info("Wakeup event detected during hibernation, rolling back.\n");
+ 			return;
+ 		}
+ 		fallthrough;
+-- 
+2.39.2
 
-$ sudo inxi -F
-Machine:
-Type: Desktop System: Gigabyte product: TRX40 DESIGNARE v: -CF serial: N/A
-Mobo: Gigabyte model: TRX40 DESIGNARE serial: N/A UEFI: American Megatrends
-LLC. v: FD
-date: 09/07/2022
-CPU:
-Info: 32-core model: AMD Ryzen Threadripper 3970X bits: 64 type: MT MCP cac=
-he:
-L2: 16 MiB
-Speed (MHz): avg: 2251 min/max: 2200/3700
-
-$ sudo dmesg | grep amd_pstate
-[    2.189961] amd_pstate: the _CPC object is not present in SBIOS or ACPI
-disabled
-
-CPPC settings enabled in bios
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
 
