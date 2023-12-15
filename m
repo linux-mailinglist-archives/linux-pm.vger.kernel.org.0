@@ -1,255 +1,285 @@
-Return-Path: <linux-pm+bounces-1227-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1228-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C622D814E99
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 18:28:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 253E6814FDA
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 19:48:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D5B01F2588B
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 17:28:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D0290286FAE
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 18:48:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3121B4B5B3;
-	Fri, 15 Dec 2023 17:18:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E3CF3013B;
+	Fri, 15 Dec 2023 18:47:59 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0669A60BA7;
-	Fri, 15 Dec 2023 17:18:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4SsG9z4ZPHz6J9Zx;
-	Sat, 16 Dec 2023 01:17:27 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 71F951400DB;
-	Sat, 16 Dec 2023 01:18:33 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Fri, 15 Dec
- 2023 17:18:32 +0000
-Date: Fri, 15 Dec 2023 17:18:31 +0000
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-CC: <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
-	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-	<x86@kernel.org>, <acpica-devel@lists.linuxfoundation.org>,
-	<linux-csky@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-ia64@vger.kernel.org>, <linux-parisc@vger.kernel.org>, Salil Mehta
-	<salil.mehta@huawei.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	<jianyong.wu@arm.com>, <justin.he@arm.com>, James Morse <james.morse@arm.com>
-Subject: Re: [PATCH RFC v3 21/21] cpumask: Add enabled cpumask for present
- CPUs that can be brought online
-Message-ID: <20231215171831.00004a19@Huawei.com>
-In-Reply-To: <E1rDOhX-00Dvlg-Ci@rmk-PC.armlinux.org.uk>
-References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
-	<E1rDOhX-00Dvlg-Ci@rmk-PC.armlinux.org.uk>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67A6841843;
+	Fri, 15 Dec 2023 18:47:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C2C96C15;
+	Fri, 15 Dec 2023 10:48:40 -0800 (PST)
+Received: from [10.57.85.151] (unknown [10.57.85.151])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 09F173F738;
+	Fri, 15 Dec 2023 10:47:53 -0800 (PST)
+Message-ID: <cd717e08-1f53-47c3-902d-56f4a8d80f46@arm.com>
+Date: Fri, 15 Dec 2023 18:48:57 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla Thunderbird
+Subject: Re: Various Exynos targets never return to no cooling
+Content-Language: en-US
+To: Mateusz Majewski <m.majewski2@samsung.com>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+ Marek Szyprowski <m.szyprowski@samsung.com>, linux-pm@vger.kernel.org,
+ linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <CGME20231213134258eucas1p23b66a7989c326176386f4a7c619cde75@eucas1p2.samsung.com>
+ <20231213134235.1607510-1-m.majewski2@samsung.com>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20231213134235.1607510-1-m.majewski2@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Wed, 13 Dec 2023 12:50:59 +0000
-Russell King (Oracle) <rmk+kernel@armlinux.org.uk> wrote:
+Hi Mateusz,
 
-> From: James Morse <james.morse@arm.com>
+On 12/13/23 13:42, Mateusz Majewski wrote:
+> Hi,
 > 
-> The 'offline' file in sysfs shows all offline CPUs, including those
-> that aren't present. User-space is expected to remove not-present CPUs
-> from this list to learn which CPUs could be brought online.
+>> I understand your requirement for the interrupts only mode, but
+>> maybe till the moment there is no fix upstream, you can enable
+>> it as well?
 > 
-> CPUs can be present but not-enabled. These CPUs can't be brought online
-> until the firmware policy changes, which comes with an ACPI notification
-> that will register the CPUs.
+> We (actually Marek and independently another coworker) had an idea how
+> to solve this while still avoiding polling all the time, and it turned
+> out to be quite simple to implement (PoC-quality). The idea was to run
+> several cycles of polling after each interrupt. This could be done like
+> this:
+
+That's cool PoC, if we don't find any other solution, we would have
+consider it as well. So let's try first tackle from other angle...
+
 > 
-> With only the offline and present files, user-space is unable to
-> determine which CPUs it can try to bring online. Add a new CPU mask
-> that shows this based on all the registered CPUs.
-> 
-> Signed-off-by: James Morse <james.morse@arm.com>
-> Tested-by: Miguel Luis <miguel.luis@oracle.com>
-> Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
-> Tested-by: Jianyong Wu <jianyong.wu@arm.com>
-> ---
-
-Needs docs
-Documentation/ABI/testing/sysfs-devices-system-cpu
-seems to have the rest of the similar entries.
-
-> Outstanding comment:
->  https://lore.kernel.org/r/20230914175443.000038f6@Huawei.com
-Very fussy reviewer. I'd ignore him on this :)
-
-Code is fine.
-
-Thanks for taking this forwards.  Maybe the end of this saga is
-close!
-
-Jonathan
-
-> ---
->  drivers/base/cpu.c      | 10 ++++++++++
->  include/linux/cpumask.h | 25 +++++++++++++++++++++++++
->  kernel/cpu.c            |  3 +++
->  3 files changed, 38 insertions(+)
-> 
-> diff --git a/drivers/base/cpu.c b/drivers/base/cpu.c
-> index 13d052bf13f4..a6e96a0a92b7 100644
-> --- a/drivers/base/cpu.c
-> +++ b/drivers/base/cpu.c
-> @@ -95,6 +95,7 @@ void unregister_cpu(struct cpu *cpu)
->  {
->  	int logical_cpu = cpu->dev.id;
->  
-> +	set_cpu_enabled(logical_cpu, false);
->  	unregister_cpu_under_node(logical_cpu, cpu_to_node(logical_cpu));
->  
->  	device_unregister(&cpu->dev);
-> @@ -273,6 +274,13 @@ static ssize_t print_cpus_offline(struct device *dev,
->  }
->  static DEVICE_ATTR(offline, 0444, print_cpus_offline, NULL);
->  
-> +static ssize_t print_cpus_enabled(struct device *dev,
-> +				  struct device_attribute *attr, char *buf)
-> +{
-> +	return sysfs_emit(buf, "%*pbl\n", cpumask_pr_args(cpu_enabled_mask));
-> +}
-> +static DEVICE_ATTR(enabled, 0444, print_cpus_enabled, NULL);
+> diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
+> index 6482513bfe66..b4bffe405194 100644
+> --- a/drivers/thermal/samsung/exynos_tmu.c
+> +++ b/drivers/thermal/samsung/exynos_tmu.c
+> @@ -760,6 +760,12 @@ static irqreturn_t exynos_tmu_threaded_irq(int irq, void *id)
+>   {
+>   	struct exynos_tmu_data *data = id;
+>   
+> +	/* TODO: would need some API */
+> +	mutex_lock(&data->tzd->lock);
+> +	data->tzd->additional_poll_reps = 10;
+> +	data->tzd->additional_poll_jiffies = HZ / 10;
+> +	mutex_unlock(&data->tzd->lock);
 > +
->  static ssize_t print_cpus_isolated(struct device *dev,
->  				  struct device_attribute *attr, char *buf)
->  {
-> @@ -413,6 +421,7 @@ int register_cpu(struct cpu *cpu, int num)
->  	register_cpu_under_node(num, cpu_to_node(num));
->  	dev_pm_qos_expose_latency_limit(&cpu->dev,
->  					PM_QOS_RESUME_LATENCY_NO_CONSTRAINT);
-> +	set_cpu_enabled(num, true);
->  
->  	return 0;
->  }
-> @@ -494,6 +503,7 @@ static struct attribute *cpu_root_attrs[] = {
->  	&cpu_attrs[2].attr.attr,
->  	&dev_attr_kernel_max.attr,
->  	&dev_attr_offline.attr,
-> +	&dev_attr_enabled.attr,
->  	&dev_attr_isolated.attr,
->  #ifdef CONFIG_NO_HZ_FULL
->  	&dev_attr_nohz_full.attr,
-> diff --git a/include/linux/cpumask.h b/include/linux/cpumask.h
-> index cfb545841a2c..cc72a0887f04 100644
-> --- a/include/linux/cpumask.h
-> +++ b/include/linux/cpumask.h
-> @@ -92,6 +92,7 @@ static inline void set_nr_cpu_ids(unsigned int nr)
->   *
->   *     cpu_possible_mask- has bit 'cpu' set iff cpu is populatable
->   *     cpu_present_mask - has bit 'cpu' set iff cpu is populated
-> + *     cpu_enabled_mask  - has bit 'cpu' set iff cpu can be brought online
->   *     cpu_online_mask  - has bit 'cpu' set iff cpu available to scheduler
->   *     cpu_active_mask  - has bit 'cpu' set iff cpu available to migration
->   *
-> @@ -124,11 +125,13 @@ static inline void set_nr_cpu_ids(unsigned int nr)
->  
->  extern struct cpumask __cpu_possible_mask;
->  extern struct cpumask __cpu_online_mask;
-> +extern struct cpumask __cpu_enabled_mask;
->  extern struct cpumask __cpu_present_mask;
->  extern struct cpumask __cpu_active_mask;
->  extern struct cpumask __cpu_dying_mask;
->  #define cpu_possible_mask ((const struct cpumask *)&__cpu_possible_mask)
->  #define cpu_online_mask   ((const struct cpumask *)&__cpu_online_mask)
-> +#define cpu_enabled_mask   ((const struct cpumask *)&__cpu_enabled_mask)
->  #define cpu_present_mask  ((const struct cpumask *)&__cpu_present_mask)
->  #define cpu_active_mask   ((const struct cpumask *)&__cpu_active_mask)
->  #define cpu_dying_mask    ((const struct cpumask *)&__cpu_dying_mask)
-> @@ -993,6 +996,7 @@ extern const DECLARE_BITMAP(cpu_all_bits, NR_CPUS);
->  #else
->  #define for_each_possible_cpu(cpu) for_each_cpu((cpu), cpu_possible_mask)
->  #define for_each_online_cpu(cpu)   for_each_cpu((cpu), cpu_online_mask)
-> +#define for_each_enabled_cpu(cpu)   for_each_cpu((cpu), cpu_enabled_mask)
->  #define for_each_present_cpu(cpu)  for_each_cpu((cpu), cpu_present_mask)
->  #endif
->  
-> @@ -1015,6 +1019,15 @@ set_cpu_possible(unsigned int cpu, bool possible)
->  		cpumask_clear_cpu(cpu, &__cpu_possible_mask);
->  }
->  
-> +static inline void
-> +set_cpu_enabled(unsigned int cpu, bool can_be_onlined)
-> +{
-> +	if (can_be_onlined)
-> +		cpumask_set_cpu(cpu, &__cpu_enabled_mask);
+>   	thermal_zone_device_update(data->tzd, THERMAL_EVENT_UNSPECIFIED);
+>   
+>   	mutex_lock(&data->lock);
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 625ba07cbe2f..c825d068402f 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -299,12 +299,24 @@ static void thermal_zone_device_set_polling(struct thermal_zone_device *tz,
+>   
+>   static void monitor_thermal_zone(struct thermal_zone_device *tz)
+>   {
+> +	unsigned long delay;
+> +
+>   	if (tz->mode != THERMAL_DEVICE_ENABLED)
+> -		thermal_zone_device_set_polling(tz, 0);
+> +		delay = 0;
+>   	else if (tz->passive)
+> -		thermal_zone_device_set_polling(tz, tz->passive_delay_jiffies);
+> +		delay = tz->passive_delay_jiffies;
+>   	else if (tz->polling_delay_jiffies)
+> -		thermal_zone_device_set_polling(tz, tz->polling_delay_jiffies);
+> +		delay = tz->polling_delay_jiffies;
 > +	else
-> +		cpumask_clear_cpu(cpu, &__cpu_enabled_mask);
-> +}
+> +		delay = 0; /* TODO: ??? */
 > +
->  static inline void
->  set_cpu_present(unsigned int cpu, bool present)
->  {
-> @@ -1096,6 +1109,7 @@ static __always_inline unsigned int num_online_cpus(void)
->  	return raw_atomic_read(&__num_online_cpus);
->  }
->  #define num_possible_cpus()	cpumask_weight(cpu_possible_mask)
-> +#define num_enabled_cpus()	cpumask_weight(cpu_enabled_mask)
->  #define num_present_cpus()	cpumask_weight(cpu_present_mask)
->  #define num_active_cpus()	cpumask_weight(cpu_active_mask)
->  
-> @@ -1104,6 +1118,11 @@ static inline bool cpu_online(unsigned int cpu)
->  	return cpumask_test_cpu(cpu, cpu_online_mask);
->  }
->  
-> +static inline bool cpu_enabled(unsigned int cpu)
-> +{
-> +	return cpumask_test_cpu(cpu, cpu_enabled_mask);
-> +}
+> +	if (tz->additional_poll_reps > 0) {
+> +		tz->additional_poll_reps -= 1;
+> +		if (delay == 0 || tz->additional_poll_jiffies < delay)
+> +			delay = tz->additional_poll_jiffies;
+> +	}
 > +
->  static inline bool cpu_possible(unsigned int cpu)
->  {
->  	return cpumask_test_cpu(cpu, cpu_possible_mask);
-> @@ -1128,6 +1147,7 @@ static inline bool cpu_dying(unsigned int cpu)
->  
->  #define num_online_cpus()	1U
->  #define num_possible_cpus()	1U
-> +#define num_enabled_cpus()	1U
->  #define num_present_cpus()	1U
->  #define num_active_cpus()	1U
->  
-> @@ -1141,6 +1161,11 @@ static inline bool cpu_possible(unsigned int cpu)
->  	return cpu == 0;
->  }
->  
-> +static inline bool cpu_enabled(unsigned int cpu)
-> +{
-> +	return cpu == 0;
-> +}
-> +
->  static inline bool cpu_present(unsigned int cpu)
->  {
->  	return cpu == 0;
-> diff --git a/kernel/cpu.c b/kernel/cpu.c
-> index a86972a91991..fe0a5189f8ae 100644
-> --- a/kernel/cpu.c
-> +++ b/kernel/cpu.c
-> @@ -3122,6 +3122,9 @@ EXPORT_SYMBOL(__cpu_possible_mask);
->  struct cpumask __cpu_online_mask __read_mostly;
->  EXPORT_SYMBOL(__cpu_online_mask);
->  
-> +struct cpumask __cpu_enabled_mask __read_mostly;
-> +EXPORT_SYMBOL(__cpu_enabled_mask);
-> +
->  struct cpumask __cpu_present_mask __read_mostly;
->  EXPORT_SYMBOL(__cpu_present_mask);
->  
+> +	thermal_zone_device_set_polling(tz, delay);
+>   }
+>   
+>   static void handle_non_critical_trips(struct thermal_zone_device *tz,
+> @@ -425,6 +437,8 @@ static void thermal_zone_device_init(struct thermal_zone_device *tz)
+>   	tz->temperature = THERMAL_TEMP_INVALID;
+>   	tz->prev_low_trip = -INT_MAX;
+>   	tz->prev_high_trip = INT_MAX;
+> +	tz->additional_poll_jiffies = 0;
+> +	tz->additional_poll_reps = 0;
+>   	list_for_each_entry(pos, &tz->thermal_instances, tz_node)
+>   		pos->initialized = false;
+>   }
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index c7190e2dfcb4..576b1f3ef25d 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -172,6 +172,8 @@ struct thermal_zone_device {
+>   	int passive;
+>   	int prev_low_trip;
+>   	int prev_high_trip;
+> +	int additional_poll_reps;
+> +	unsigned long additional_poll_jiffies;
+>   	atomic_t need_update;
+>   	struct thermal_zone_device_ops *ops;
+>   	struct thermal_zone_params *tzp;
+> 
+> In my tests this is enough to resolve the issue consistently on both
+> TM2E and XU4, both before and after my other patchset.
+> 
+> To be honest, this is not the most elegant solution probably and it
+> still doesn't really take into account the governor needs. Therefore, if
+> 
+>> Regarding this topic, I just wanted to tell you that I had conversation
+>> with Rafael & Daniel last Fri. Rafael gave me a hint to his latest work
+>> in his repo regarding potentially similar race with temperature value.
+> 
+> brings a better solution, it would be great :)
+> 
 
+I have spent some time to better understand the machinery in those
+updates and notifications in the core and the governors. I've also
+checked the hint from Rafael about maybe similar trip & temp dance.
+(that change is in PM linux-next:
+"44844db91397 thermal: core: Add trip thresholds for trip crossing 
+detection")
+
+Unfortunately, that won't help, since in this TMU we get the
+temperature value wrong sometimes IIUC (CMIIW).
+
+Are we able inside the exynos_tmu_threaded_irq() get information
+which of the 2 (3 if count critical) IRQs for low_temp, high_temp
+has triggered?
+I can see in the ->tmu_clear_irqs() we read the IRQ pending reg.
+If we are able to say which of the two temp values triggered
+that action, then thermal framework shouldn't ignore that and use
+extra features to mitigate the glitching of the temp value.
+IMO it would be correct because IRQ was triggered based on physics
+so the value that we would pass and use is valid.
+You would probably need to properly track those temp values and where
+you are with the programmed trips (some extra context in the driver).
+
+The exynos_get_temp() needs to work like today - no faking temperature,
+no filtering, etc, always report best known temp from that reg.
+Different components in thermal can read that temp e.g. sysfs.
+
+In all governors 'tz->temperature' is used, which is good (not the
+tz->ops->get_temp(). So let's try to introduce something simple:
+
+----------------------------------------8<---------------------------
+
+diff --git a/drivers/thermal/samsung/exynos_tmu.c 
+b/drivers/thermal/samsung/exynos_tmu.c
+index 667bb18205fc..345ea0836b99 100644
+--- a/drivers/thermal/samsung/exynos_tmu.c
++++ b/drivers/thermal/samsung/exynos_tmu.c
+@@ -786,8 +786,13 @@ static int exynos7_tmu_read(struct exynos_tmu_data 
+*data)
+  static irqreturn_t exynos_tmu_threaded_irq(int irq, void *id)
+  {
+         struct exynos_tmu_data *data = id;
++       int temp;
+
+-       thermal_zone_device_update(data->tzd, THERMAL_EVENT_UNSPECIFIED);
++       temp = exynos_determine_temp_based_on_irq(data);
++
++       thermal_zone_device_update_with_temp(data->tzd,
++                               THERMAL_EVENT_TEMP_SAMPLE,
++                               temp);
+
+         mutex_lock(&data->lock);
+         clk_enable(data->clk);
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 9c17d35ccbbd..4cdc7b7eed1e 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -495,6 +495,43 @@ void thermal_zone_device_update(struct 
+thermal_zone_device *tz,
+  }
+  EXPORT_SYMBOL_GPL(thermal_zone_device_update);
+
++void thermal_zone_device_update_with_temp(struct thermal_zone_device *tz,
++                                         enum thermal_notify_event event,
++                                         int temp)
++{
++       const struct thermal_trip *trip;
++
++       mutex_lock(&tz->lock);
++       if (device_is_registered(&tz->device))
++               goto unlock;
++
++       if (atomic_read(&in_suspend))
++               goto unlock;
++
++       if (!thermal_zone_device_is_enabled(tz))
++               goto unlock;
++
++       tz->last_temperature = tz->temperature;
++       tz->temperature = temp;
++
++       trace_thermal_temperature(tz);
++
++       thermal_genl_sampling_temp(tz->id, temp);
++
++       __thermal_zone_set_trips(tz);
++
++       tz->notify_event = event;
++
++       for_each_trip(tz, trip)
++               handle_thermal_trip(tz, trip);
++
++       monitor_thermal_zone(tz);
++
++unlock:
++       mutex_unlock(&tz->lock);
++}
++EXPORT_SYMBOL_GPL(thermal_zone_device_update_with_temp);
++
+  static void thermal_zone_device_check(struct work_struct *work)
+  {
+         struct thermal_zone_device *tz = container_of(work, struct
+-------------------------------->8-----------------------------------
+
+There is this event not used in thermal fwk: THERMAL_EVENT_TEMP_SAMPLE,
+which could also suit here.
+
+Some extras:
+There is a callback which is used in step_wise governor:
+get_tz_trend()
+      tz->ops->get_trend()
+which is not implemented in the Exynos TMU tz. We can use it
+and provide the trend, if we still have to after this modification.
+
+Beside:
+1. This new API function should be faster on some devices, e.g.
+those which has temperature sensor attached to some slow bus
+(I have heard about temperature overhead even a few
+milli-seconds)
+2. Sounds to re-use the information from such drivers like
+this Exynos which has IRQs for particular temp value and
+can avoid 2nd reading, which might cause confusion by providing
+different value due to glitch/rounding.
+
+So I think I could justify this new API interface.
+
+Let me know what you think about this approach.
+
+Regards,
+Lukasz
 
