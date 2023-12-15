@@ -1,162 +1,158 @@
-Return-Path: <linux-pm+bounces-1195-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1196-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EEDA81414C
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 06:35:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4184A814414
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 09:59:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA615284423
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 05:35:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 73C4A1C2285E
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 08:59:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03E3863B3;
-	Fri, 15 Dec 2023 05:34:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4415616418;
+	Fri, 15 Dec 2023 08:59:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=trvn.ru header.i=@trvn.ru header.b="o3fE8TcR"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="M6z/mau1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8C7F63A6;
-	Fri, 15 Dec 2023 05:34:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=trvn.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trvn.ru
-Received: from authenticated-user (box.trvn.ru [194.87.146.52])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(No client certificate requested)
-	by box.trvn.ru (Postfix) with ESMTPSA id EF824403BF;
-	Fri, 15 Dec 2023 10:29:22 +0500 (+05)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
-	t=1702618164; bh=wJhGZlFfjScpdy3VQmLDEEdsC0w0gtsbyZa72g/IvsY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=o3fE8TcRvkhGpHFeYdMIue4Mt4Kudw+bq2DbbqgM7ZhrtJqW+H7RIx4T0uuhp+X53
-	 NAEbsqOJ6AGxLt7Rk+zbNR18lceA04szHgpiSXNGo3qpkjtacX1Z5qoKQ3FgMGAmFK
-	 ZbMOWI9CiVYcEKla9G9w6WDc5kgaBR89pQfbderarbz9C1Cn9hsvhXTf9I/JZw/wLy
-	 +sVXB+w1ZHDcF4W4Ck3cPm3AVlquMGrzczT+ELzy9wR+pn/vLFqVyXTgPunOQOLFsJ
-	 QwQPJO8T+cPDeoTWieDsysBljdx1OCBep3ZvzIlvFQ+WIhMHWmVyL0AuzumCvtCtBT
-	 4QvoIXfXN4iQA==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4016D171AC
+	for <linux-pm@vger.kernel.org>; Fri, 15 Dec 2023 08:59:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-32f8441dfb5so319362f8f.0
+        for <linux-pm@vger.kernel.org>; Fri, 15 Dec 2023 00:59:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1702630751; x=1703235551; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z4WNnW1NOB+fO7Mg7VbmdWzZX8Gi/hj8/iQQVYrLkFo=;
+        b=M6z/mau1nGCcxKJBD1JweSODuXuRgGkipmmYS+u1Eejlmd4pT883VU91Fkata1Rnmj
+         nLC2HS4xJDuQalTpzTlmwZqfogyMF1TkST+Q/JobaHUF6ofqbsAHSFKx/l/6df+a4m2L
+         u58bOP83ZqxuPg7Z6bUUdOsIwAX+Jdb2IYnegIAfrcptlWHriL7veQfRlBuiyNxDa0kB
+         wJNxobJ3E+L35CDOrQyY1SmqIwHfWbpuG6+AYeKWTyjIHsVBbE40+UvtwF515bxU1X6J
+         pBwaJepPUXwonixPC7Z/fjyref1ktmg7jIWDVRKLA/B4VYRsGIGxUTtYsjN7nnFcAlDe
+         RoYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702630751; x=1703235551;
+        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
+         :subject:cc:to:from:user-agent:references:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=z4WNnW1NOB+fO7Mg7VbmdWzZX8Gi/hj8/iQQVYrLkFo=;
+        b=kqoI5Ac0hqC1X07YBcAPlV19V6a7RMlcwelr+q3x6nXlIS414jrqKmWtexsgX11L3J
+         I2EBp957Zjrv2XP7aX7D3O0XjZMtlAEZk8UayEM46IoE8bOYa4IIWDi5Uk0XP2E4AzG+
+         HTcCLCm07xxWC3dp3N8B626RQPcWGlanCWbobcMkcvIzOiQN+8JwOhgaVs513FkCAmEl
+         +Df4HwE/xhaFrmjPK5Jq39n/toUhjuv0QeKrfy/kj++2tkrsWuMIbH4BxsnVWrnwpvBm
+         dMV0OPSoVse5OhYc4cqzZvpDOBSQicFPpqpYGrdPJjKoWYAMowd9LAgwSzbTVlEOfGDZ
+         ZfYg==
+X-Gm-Message-State: AOJu0YzHoYW1Gp9cH/rni6IBZmCpMFZuxaCP19WM8HkYJ6Pl/WU57r14
+	UG12Pk9ztbAWy9+BZguoDuWpAxQ2aNOjg/Hdc/npkg==
+X-Google-Smtp-Source: AGHT+IEboGQxDSRvg+eZ0u566TMxgE1PRMgtXrg9o17xozQrBEwE5qf8IjdFQqOGaJQkmuVK10ixdQ==
+X-Received: by 2002:a7b:c8c2:0:b0:40c:279d:31a3 with SMTP id f2-20020a7bc8c2000000b0040c279d31a3mr5769544wml.176.1702630751467;
+        Fri, 15 Dec 2023 00:59:11 -0800 (PST)
+Received: from localhost ([2a01:e0a:3c5:5fb1:95b3:332a:9768:b3f2])
+        by smtp.gmail.com with ESMTPSA id j8-20020a05600c190800b0040c58e410a3sm10914972wmq.14.2023.12.15.00.59.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Dec 2023 00:59:11 -0800 (PST)
+References: <cover.1702400947.git.u.kleine-koenig@pengutronix.de>
+ <ki5n3rz5n4oxj2hhc3rj6xpn3e2tdi7fcp2q7exjbzilrlqflp@przautvhuy4g>
+User-agent: mu4e 1.10.8; emacs 29.1
+From: Jerome Brunet <jbrunet@baylibre.com>
+To: Maxime Ripard <mripard@kernel.org>
+Cc: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+ Michael Turquette
+ <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Russell King
+ <linux@armlinux.org.uk>, linux-clk@vger.kernel.org, MyungJoo Ham
+ <myungjoo.ham@samsung.com>, Kyungmin Park <kyungmin.park@samsung.com>,
+ Chanwoo Choi <cw00.choi@samsung.com>, Chen-Yu Tsai <wens@csie.org>, Jernej
+ Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>,
+ linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-sunxi@lists.linux.dev, Neil Armstrong <neil.armstrong@linaro.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann
+ <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Daniel Vetter
+ <daniel@ffwll.ch>, Kevin Hilman <khilman@baylibre.com>, Jerome Brunet
+ <jbrunet@baylibre.com>, Martin Blumenstingl
+ <martin.blumenstingl@googlemail.com>, dri-devel@lists.freedesktop.org,
+ linux-amlogic@lists.infradead.org, Krzysztof Kozlowski
+ <krzysztof.kozlowski@linaro.org>, Thierry Reding
+ <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, Rob
+ Herring <robh@kernel.org>, linux-tegra@vger.kernel.org, Johan Hovold
+ <johan+linaro@kernel.org>, Georgi Djakov <djakov@kernel.org>,
+ kernel@pengutronix.de
+Subject: Re: [PATCH 0/5] clk: Make clk_rate_exclusive_get() return void
+Date: Fri, 15 Dec 2023 09:41:59 +0100
+In-reply-to: <ki5n3rz5n4oxj2hhc3rj6xpn3e2tdi7fcp2q7exjbzilrlqflp@przautvhuy4g>
+Message-ID: <1jedfnq1sx.fsf@starbuckisacylon.baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 15 Dec 2023 10:29:22 +0500
-From: Nikita Travkin <nikita@trvn.ru>
-To: Rob Herring <robh@kernel.org>
-Cc: Sebastian Reichel <sre@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
- cros-qcom-dts-watchers@chromium.org, Andy Gross <agross@kernel.org>, Bjorn
- Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: power: supply: Add Acer Aspire 1 EC
-In-Reply-To: <20231214220210.GA988134-robh@kernel.org>
-References: <20231212-aspire1-ec-v2-0-ca495ea0a7ac@trvn.ru>
- <20231212-aspire1-ec-v2-1-ca495ea0a7ac@trvn.ru>
- <20231214220210.GA988134-robh@kernel.org>
-Message-ID: <207edefe4e8eac9679cd8966d28820cd@trvn.ru>
-X-Sender: nikita@trvn.ru
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Rob Herring писал(а) 15.12.2023 03:02:
-> On Tue, Dec 12, 2023 at 05:49:09PM +0500, Nikita Travkin wrote:
->> Add binding for the EC found in the Acer Aspire 1 laptop.
->>
->> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
->> ---
->>  .../bindings/power/supply/acer,aspire1-ec.yaml     | 67 ++++++++++++++++++++++
->>  1 file changed, 67 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/power/supply/acer,aspire1-ec.yaml b/Documentation/devicetree/bindings/power/supply/acer,aspire1-ec.yaml
->> new file mode 100644
->> index 000000000000..1fbf1272a00f
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/power/supply/acer,aspire1-ec.yaml
->> @@ -0,0 +1,67 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/power/supply/acer,aspire1-ec.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Acer Aspire 1 Embedded Controller
->> +
->> +maintainers:
->> +  - Nikita Travkin <nikita@trvn.ru>
->> +
->> +description:
->> +  The Acer Aspire 1 laptop uses an embedded controller to control battery
->> +  and charging as well as to provide a set of misc features such as the
->> +  laptop lid status and HPD events for the USB Type-C DP alt mode.
->> +
->> +properties:
->> +  compatible:
->> +    const: acer,aspire1-ec
->> +
->> +  reg:
->> +    const: 0x76
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  acer,media-keys-on-top:
->> +    description: Configure the keyboard layout to use media features of
->> +      the fn row when the fn key is not pressed. The firmware may choose
->> +      to add this property when user selects the fn mode in the firmware
->> +      setup utility.
->> +    type: boolean
-> 
-> Besides the naming, this isn't really a property of the EC, but really 
-> part of the keyboard layout. It seems you just stuck it here because 
-> this is part of the specific device.
-> 
 
-The EC on this device is also a keyboard controller, but the keyboard
-part has a dedicated i2c bus with hid-over-i2c. Since this is the
-"management" bus of the same device, I decided that it fits here.
+On Wed 13 Dec 2023 at 08:16, Maxime Ripard <mripard@kernel.org> wrote:
 
-> It is also hardly a feature unique to this device. I'm typing this from 
-> a device with the exact same thing (M1 Macbook Pro). Actually, all 3 
-> laptops I have in front of me have the same thing. The other 2 have 
-> a Fnlock (Fn+ESC) though.  On the M1, it's just a module param which I 
-> set as persistent. Though I now wonder if the Fnlock could be 
-> implemented on it too. Being able to switch whenever I want would be 
-> nice. That would probably have to be in Linux where as these other 
-> laptops probably implement this in their EC/firmware?
-> 
-> What I'm getting at is controlling changing this in firmware is not a 
-> great experience and this should all be common.
-> 
+> [[PGP Signed Part:Undecided]]
+> Hi,
+>
+> On Tue, Dec 12, 2023 at 06:26:37PM +0100, Uwe Kleine-K=C3=B6nig wrote:
+>> Hello,
+>>=20
+>> clk_rate_exclusive_get() returns zero unconditionally. Most users "know"
+>> that and don't check the return value. This series fixes the four users
+>> that do error checking on the returned value and then makes function
+>> return void.
+>>=20
+>> Given that the changes to the drivers are simple and so merge conflicts
+>> (if any) should be easy to handle, I suggest to merge this complete
+>> series via the clk tree.
+>
+> I don't think it's the right way to go about it.
+>
+> clk_rate_exclusive_get() should be expected to fail.
 
-You may be right, however my goal here is to support the original
-firmware feature that is lost when we use DT.
+Yes, at some point it might. That is why the API returns an error code.
+What CCF (or any other framework) should be no concern to the consummer.
 
-This is a WoA laptop with UEFI/ACPI and, as usual for "Windows"
-machines, there is a setting in the firmware setup utility ("bios") to
-set the fn behavior. But it works by setting an ACPI value, and for
-Snapdragon devices we can't use that now.
+Driver not checking the return are taking there chances, and that is up
+to them. It is like regmap. Most calls can return an error code but the
+vast majority of driver happily ignore that.
 
-Long term I want to have a EFI driver that would automatically
-detect/load DT and my plan is to handle things like this (and i.e. mac
-address, different touchpad vendor, etc) there. Thus I'm adding this
-property already, as an equivalent of that weird acpi bit that original
-firmware sets.
+> For example if
+> there's another user getting an exclusive rate on the same clock.
+>
+> If we're not checking for it right now, then it should probably be
+> fixed, but the callers checking for the error are right to do so if they
+> rely on an exclusive rate. It's the ones that don't that should be
+> modified.
+>
 
-If we only provide a module param, the "intended by OEM" way of setting
-the fn mode will be broken, and one would need to know how to write a
-magic special config file to set a kernel module param. I think it's not
-the best UX. (and just adds to the silly "arm/dt bad, x86/uefi/acpi
-"just works"" argument many people sadly have)
+I'm not sure that would be right. For sure, restricting a to single user
+was not my intent when I wrote the thing.
 
-If you think I shouldn't use DT to pass this info, feel free to say so.
-I will drop this property and see if there is something else I can do
-to still support this without relying on Linux cooperation.
+The intent was for a consumer to state that it cannot tolerate a rate
+change of the clock it is using. It is fine for several consumers to
+state that for a single clock, as long as they 'agree' on the rate. Two
+instances of the same device could be a good example of that.
 
-Looking forward to your opinion,
-Nikita
+Those consumers should use 'clk_set_rate_exclusive()' to set the rate
+and protect it atomically. Calling 'clk_exclusive_get()' then
+'clk_set_rate()' is racy as both instance could effectively lock the
+rate without actually getting the rate they want :/
 
-> Rob
+Admittingly, the API naming is terrible when it comes to this ...
+
+> Maxime
+>
+> [[End of PGP Signed Part]]
+
+
+--=20
+Jerome
 
