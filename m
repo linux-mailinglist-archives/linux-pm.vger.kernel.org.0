@@ -1,206 +1,135 @@
-Return-Path: <linux-pm+bounces-1232-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1239-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2319E81508E
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 21:02:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 056D581519E
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 22:09:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CCFF0282A44
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 20:02:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 37DC91C23508
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 21:09:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B31E4187B;
-	Fri, 15 Dec 2023 20:02:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5213F47F4B;
+	Fri, 15 Dec 2023 21:09:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=sholland.org header.i=@sholland.org header.b="qRat0JjU";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="bTJSsJXY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 210CC45974;
-	Fri, 15 Dec 2023 20:02:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id 74bf26d935cc733f; Fri, 15 Dec 2023 21:02:14 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 9014D668B59;
-	Fri, 15 Dec 2023 21:02:13 +0100 (CET)
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Linux ACPI <linux-acpi@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>
-Subject: [PATCH v1 6/6] thermal: netlink: Rework cdev-related notify API
-Date: Fri, 15 Dec 2023 21:02:04 +0100
-Message-ID: <7628882.EvYhyI6sBW@kreacher>
-In-Reply-To: <4556052.LvFx2qVVIh@kreacher>
-References: <4556052.LvFx2qVVIh@kreacher>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10CE44778B;
+	Fri, 15 Dec 2023 21:09:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sholland.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sholland.org
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailout.nyi.internal (Postfix) with ESMTP id 08D615C01B4;
+	Fri, 15 Dec 2023 16:09:49 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 15 Dec 2023 16:09:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1702674589;
+	 x=1702760989; bh=+9pLPYjGFzgfQNqnSkxnhSaHWO67M+0iAl8v+uqZUn0=; b=
+	qRat0JjUuSP+CfpfIN2pUKpArcFwNph/k3XRmvINBOoHN7pB4D8n7pkE8iBHA0Qk
+	odXJPgXteR0Xm5RtvWlDCYGtYMAyFMhF7pXJlrFvsJEgzuJBUmrxnIQ/h9GGJkjN
+	AGllPtoiPQ1HfYI38BcYwoCaVwaXYsYM3Tm/3Ue9M8yhshedBOFofOzWZuP0zTRH
+	yoSAxvbBB0bEnEMgotajZaiTr/OvB019lYMFqK70HQXJR10SlhyMmmObJ9am4Y2W
+	GBrwGsxQuhzD4ndPWNnD0ftTtGDpoIydMftL78GEid9ydKYWP0b2TrvbhSwoSP1q
+	BT/On1G6mHYrRMvC06NsDA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1702674589; x=
+	1702760989; bh=+9pLPYjGFzgfQNqnSkxnhSaHWO67M+0iAl8v+uqZUn0=; b=b
+	TJSsJXYOMfo+ayDWdjBB5rX0z+IaPLykp8Ix+V7WgrTdZYVwjG8gfMG4b9OTbfjq
+	BvN1l2in5uzVkegf4KRXbfwPKmH6xOjdHfMTZFBX+geQfbINDI09rw2YAk4rVOYm
+	pAy/TrpjkteeXFBBWnpA3dEZ4gA0UF3LIFDizumOqDWUkto/fUg9ac7PNcWu5m1U
+	nv9UKqi4YQgf+evBIuqDQ3gj/HfUupEs8dyeH47PUMFPs7lroHF3jKdhPKns5PWu
+	f80ah+Ujds+y5aFrz+912p6PJU4tnF8p+er+N4rj+IgENkr/OsfyyCIVPfZSFDxg
+	+HyD5PD9PgXUGHZeZ++qA==
+X-ME-Sender: <xms:nMB8ZZEuYE7BXDpGFfbOk_4c1rdExyb3dPRpgkHivUzKCxO6A-QLYA>
+    <xme:nMB8ZeU1bLyUJmYrQJ60LyUUDXmr1R6AUGGdS2N5QOvPi48nCTejAqM8UEQZe0TfF
+    FGZu0hOzSA4KQ1wLQ>
+X-ME-Received: <xmr:nMB8ZbII-66LC2gnpfa7Wn4D_icvvn3BPx7bVDbylIuSFNwX0_2BAFdLU-pXqiH_1k2yFEk_fBlzsJ3clBLKt_56v6nHM76vKNe1tLxog3LYC1o76O_g8zktoQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvddtvddgudeghecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefkffggfgfuvfevfhfhjggtgfesthekredttddvjeenucfhrhhomhepufgr
+    mhhuvghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqne
+    cuggftrfgrthhtvghrnhepteevhffhteegfeehteehhfevgfejtdehudehvdejveetgedt
+    ffejjefhffehudffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:nMB8ZfELrq8xAznZrAp53-LvFGhKOEdj4xfr1b1x7PB9_8EzoQwECQ>
+    <xmx:nMB8ZfVfRWgzryaISqCJQAgWBuk81px9I4pWUvrfQJcsVQhdVwG_yw>
+    <xmx:nMB8ZaOVgiaKi2SjWVQBwKssdcB0_9tRhb0QlVXnGAX-fa1Sqk7f2g>
+    <xmx:ncB8ZTmp8MMBx-462eITdqMgyHG8rDd6oz_R_LOFOWw2517D1T7oEA>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 15 Dec 2023 16:09:47 -0500 (EST)
+Message-ID: <11b5aea1-7c6e-4be5-ae01-9c4c869dc98c@sholland.org>
+Date: Fri, 15 Dec 2023 15:09:46 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrvddtvddgudefudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgt
- phhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 4/5] cpufreq: Add support for RISC-V CPU Frequency scaling
+ drivers
+To: Brandon Cheo Fusi <fusibrandon13@gmail.com>, viresh.kumar@linaro.org
+Cc: aou@eecs.berkeley.edu, conor+dt@kernel.org, devicetree@vger.kernel.org,
+ jernej.skrabec@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-sunxi@lists.linux.dev, palmer@dabbelt.com, paul.walmsley@sifive.com,
+ rafael@kernel.org, robh+dt@kernel.org, tiny.windzz@gmail.com, wens@csie.org
+References: <20231214111702.xdd7qlcrpqh74i3j@vireshk-i7>
+ <20231215151723.46409-1-fusibrandon13@gmail.com>
+Content-Language: en-US
+From: Samuel Holland <samuel@sholland.org>
+In-Reply-To: <20231215151723.46409-1-fusibrandon13@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hi Brandon,
 
-The only actually used thermal netlink notification routine related
-to cooling devices is thermal_notify_cdev_state_update().  The other
-two, thermal_notify_cdev_add() and thermal_notify_cdev_delete(), are
-never used.
+On 12/15/23 09:17, Brandon Cheo Fusi wrote:
+> On Thu, Dec 14, 2023 at 12:17 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>>
+>> On 14-12-23, 11:33, Brandon Cheo Fusi wrote:
+>>> Add Kconfig file for cpufreq scaling drivers that can handle RISC-V
+>>> CPUs. An entry is included for the Allwinner H6 cpufreq driver that
+>>> works with D1.
+>>>
+>>> Signed-off-by: Brandon Cheo Fusi <fusibrandon13@gmail.com>
+>>> ---
+>>>  drivers/cpufreq/Kconfig       |  4 ++++
+>>>  drivers/cpufreq/Kconfig.riscv | 16 ++++++++++++++++
+>>>  2 files changed, 20 insertions(+)
+>>>  create mode 100644 drivers/cpufreq/Kconfig.riscv
+>>
+>> We don't have a separate kconfig file for each architecture. Only if
+>> there are too many entries for an architecture, we add a new file.
+>>
+>> --
+>> viresh
+> 
+> The sun50i cpufreq driver is currently only available when CONFIG_ARM or
+> CONFIG_ARM64 is selected, so this was the only decent way I could think
+> of making it accessible on either one of CONFIG_(ARM | ARM64 | RISC-V).
+> Any suggestions for a better workaround ?
 
-So as to get rid of dead code, drop thermal_notify_cdev_add/delete(),
-which can be added back if they turn out to be ever needed, along with
-the related code.
+Move the option to the main drivers/cpufreq/Kconfig, like QORIQ_CPUFREQ,
+which is also used with multiple architectures (PowerPC and ARM, in that
+case). We don't want two options for the same driver.
 
-In analogy with the previous thermal netlink API changes, redefine
-thermal_notify_cdev_state_update() to take a const cdev pointer as its
-first argument and let it extract the requisite information from there
-by itself.
-
-No intentional functional impact.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/thermal_helpers.c |    2 -
- drivers/thermal/thermal_netlink.c |   43 ++------------------------------------
- drivers/thermal/thermal_netlink.h |   19 +++-------------
- 3 files changed, 8 insertions(+), 56 deletions(-)
-
-Index: linux-pm/drivers/thermal/thermal_netlink.h
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_netlink.h
-+++ linux-pm/drivers/thermal/thermal_netlink.h
-@@ -24,9 +24,8 @@ int thermal_notify_tz_trip_up(const stru
- 			      const struct thermal_trip *trip);
- int thermal_notify_tz_trip_change(const struct thermal_zone_device *tz,
- 				  const struct thermal_trip *trip);
--int thermal_notify_cdev_state_update(int cdev_id, int state);
--int thermal_notify_cdev_add(int cdev_id, const char *name, int max_state);
--int thermal_notify_cdev_delete(int cdev_id);
-+int thermal_notify_cdev_state_update(const struct thermal_cooling_device *cdev,
-+				     int state);
- int thermal_notify_tz_gov_change(const struct thermal_zone_device *tz,
- 				 const char *name);
- int thermal_genl_sampling_temp(int id, int temp);
-@@ -76,18 +75,8 @@ static inline int thermal_notify_tz_trip
- 	return 0;
- }
- 
--static inline int thermal_notify_cdev_state_update(int cdev_id, int state)
--{
--	return 0;
--}
--
--static inline int thermal_notify_cdev_add(int cdev_id, const char *name,
--					  int max_state)
--{
--	return 0;
--}
--
--static inline int thermal_notify_cdev_delete(int cdev_id)
-+static inline int thermal_notify_cdev_state_update(const struct thermal_cooling_device *cdev,
-+						   int state)
- {
- 	return 0;
- }
-Index: linux-pm/drivers/thermal/thermal_helpers.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_helpers.c
-+++ linux-pm/drivers/thermal/thermal_helpers.c
-@@ -152,7 +152,7 @@ static void thermal_cdev_set_cur_state(s
- 	if (cdev->ops->set_cur_state(cdev, target))
- 		return;
- 
--	thermal_notify_cdev_state_update(cdev->id, target);
-+	thermal_notify_cdev_state_update(cdev, target);
- 	thermal_cooling_device_stats_update(cdev, target);
- }
- 
-Index: linux-pm/drivers/thermal/thermal_netlink.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_netlink.c
-+++ linux-pm/drivers/thermal/thermal_netlink.c
-@@ -147,27 +147,6 @@ static int thermal_genl_event_tz_trip_ch
- 	return 0;
- }
- 
--static int thermal_genl_event_cdev_add(struct param *p)
--{
--	if (nla_put_string(p->msg, THERMAL_GENL_ATTR_CDEV_NAME,
--			   p->name) ||
--	    nla_put_u32(p->msg, THERMAL_GENL_ATTR_CDEV_ID,
--			p->cdev_id) ||
--	    nla_put_u32(p->msg, THERMAL_GENL_ATTR_CDEV_MAX_STATE,
--			p->cdev_max_state))
--		return -EMSGSIZE;
--
--	return 0;
--}
--
--static int thermal_genl_event_cdev_delete(struct param *p)
--{
--	if (nla_put_u32(p->msg, THERMAL_GENL_ATTR_CDEV_ID, p->cdev_id))
--		return -EMSGSIZE;
--
--	return 0;
--}
--
- static int thermal_genl_event_cdev_state_update(struct param *p)
- {
- 	if (nla_put_u32(p->msg, THERMAL_GENL_ATTR_CDEV_ID,
-@@ -244,8 +223,6 @@ static cb_t event_cb[] = {
- 	[THERMAL_GENL_EVENT_TZ_TRIP_UP]		= thermal_genl_event_tz_trip_up,
- 	[THERMAL_GENL_EVENT_TZ_TRIP_DOWN]	= thermal_genl_event_tz_trip_down,
- 	[THERMAL_GENL_EVENT_TZ_TRIP_CHANGE]	= thermal_genl_event_tz_trip_change,
--	[THERMAL_GENL_EVENT_CDEV_ADD]		= thermal_genl_event_cdev_add,
--	[THERMAL_GENL_EVENT_CDEV_DELETE]	= thermal_genl_event_cdev_delete,
- 	[THERMAL_GENL_EVENT_CDEV_STATE_UPDATE]	= thermal_genl_event_cdev_state_update,
- 	[THERMAL_GENL_EVENT_TZ_GOV_CHANGE]	= thermal_genl_event_gov_change,
- 	[THERMAL_GENL_EVENT_CPU_CAPABILITY_CHANGE] = thermal_genl_event_cpu_capability_change,
-@@ -348,28 +325,14 @@ int thermal_notify_tz_trip_change(const
- 	return thermal_genl_send_event(THERMAL_GENL_EVENT_TZ_TRIP_CHANGE, &p);
- }
- 
--int thermal_notify_cdev_state_update(int cdev_id, int cdev_state)
-+int thermal_notify_cdev_state_update(const struct thermal_cooling_device *cdev,
-+				     int state)
- {
--	struct param p = { .cdev_id = cdev_id, .cdev_state = cdev_state };
-+	struct param p = { .cdev_id = cdev->id, .cdev_state = state };
- 
- 	return thermal_genl_send_event(THERMAL_GENL_EVENT_CDEV_STATE_UPDATE, &p);
- }
- 
--int thermal_notify_cdev_add(int cdev_id, const char *name, int cdev_max_state)
--{
--	struct param p = { .cdev_id = cdev_id, .name = name,
--			   .cdev_max_state = cdev_max_state };
--
--	return thermal_genl_send_event(THERMAL_GENL_EVENT_CDEV_ADD, &p);
--}
--
--int thermal_notify_cdev_delete(int cdev_id)
--{
--	struct param p = { .cdev_id = cdev_id };
--
--	return thermal_genl_send_event(THERMAL_GENL_EVENT_CDEV_DELETE, &p);
--}
--
- int thermal_notify_tz_gov_change(const struct thermal_zone_device *tz,
- 				 const char *name)
- {
-
-
+Regards,
+Samuel
 
 
