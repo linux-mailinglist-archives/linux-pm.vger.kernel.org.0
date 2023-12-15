@@ -1,176 +1,188 @@
-Return-Path: <linux-pm+bounces-1204-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1205-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F415A81495A
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 14:33:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1ED7A814B74
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 16:16:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 31DC71C23C05
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 13:33:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8DE79B23C84
+	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 15:15:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAB152DB8E;
-	Fri, 15 Dec 2023 13:33:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 944BC37176;
+	Fri, 15 Dec 2023 15:13:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="t4sElNh+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mPhVSq6T"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E000D2DB86
-	for <linux-pm@vger.kernel.org>; Fri, 15 Dec 2023 13:33:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-6cebbf51742so451471b3a.1
-        for <linux-pm@vger.kernel.org>; Fri, 15 Dec 2023 05:33:42 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBBD83C471;
+	Fri, 15 Dec 2023 15:13:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-33646dbedc9so663740f8f.3;
+        Fri, 15 Dec 2023 07:13:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1702647222; x=1703252022; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=oLGsZCDgMoXBBKy2bRzfl+/SAF+9vZzW3vWo/eXcoT8=;
-        b=t4sElNh+isx1i+yuT0487ITpHZ80Ec1W8E4/mB5woIwgYObKlKEjBGvA2rmbrv958+
-         FvHwdLqll6vnHxlKvDOhHM0hpr+31X8ja6FkqMIhVhjgbF9dGFHTs7No/YwIsfDfdomV
-         Nd+bawXC/D0lTYcUx0adAg+ClXhupu0dzMxrCFgxBMbVmZxEE96IiqXrpsQKLzlMEOh1
-         Ve1BGK3xiCCpEecK3g6HPIhn20yxlV04/8EXhSXELkbiso82tZ9WpNYQLt3A4rQm7exF
-         uI+POkYY9aH4h10bIRHEzGpAam51oAUp9FuB6FJ4792szFoCACK+fwl7EV1CY9h0+ScZ
-         IWoQ==
+        d=gmail.com; s=20230601; t=1702653204; x=1703258004; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=brYOzG3g23wL22CEoDTu8T5IzltVcQQgzthieH5Rn74=;
+        b=mPhVSq6TOcznDbqFf/FCmcrpcEXIJC2ewo8P8xGcFXLN3metR8HgNasaBE2chVsufs
+         lFDK22DsKDMi1ki0w9TYfUbRKP4180WKRIWISwwxlcRFhNN1Q2nowhMmBJW+mIN2GYJB
+         CSvlYlUfNmrM9r7PhP/OjGJsH048+QzwlZZYTKWC7muTGYRRs2TDlswqulA6xrS5BJqw
+         MU2IMzDIDED0o5Hcmhd31+t0dBpkpzRWO/u/XTxrd/Wpf6aBPiXzH0CQlJAXhlDM09CC
+         E91ZNoN9wu5GtylKERyED1yAnIxQNzgQ+V8YmyWBl0bGVxOJSZbFI1cFu+0BR5XBnLJk
+         yvXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702647222; x=1703252022;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oLGsZCDgMoXBBKy2bRzfl+/SAF+9vZzW3vWo/eXcoT8=;
-        b=vX4WDe/6Fx7E+T3/GkImqhGWgoAEsoDJPh1bTQS5gRODG4Be4VitASt3b+lUHQitm6
-         Ox+BENNMObRjq8wzxqqcHgcRqjQfN0mg9+xlFmYGoKBMONTXGklw881GaiQa0UCi/pj4
-         Yp88oA5j3pzKqS8SyqfdD3Z3Po8e705wLHAur3zg+5mNOqjBBp8moHeVyrLBZy0XUH0v
-         syd3YkpC/AJkEpTO5iIrbM/sxApGpFMbiqOKYPBb/ROpjF9XMyOc+MXJ9md8kH63x3+P
-         BkMMehVLaS9ZRxqE8nKLwqUIjQOj9EWM0R56D0C8B0ao4r/gRZKJhOC56ggEfi8J95gx
-         sLtA==
-X-Gm-Message-State: AOJu0Yy6vLf9DJjnHw8kcN1TMPvyqfmF1nQfv+bd0yskoVZF4Us9lkRV
-	sXgIJFFpplTM12SwTXLi5anwTg==
-X-Google-Smtp-Source: AGHT+IFIED/MtqEM6IaX9IO8PrWjxNI5KAYPctSt1cJRt6+lq0dO1vZvWr4WMd70pGpCkCyLV7xKWw==
-X-Received: by 2002:a05:6a00:2303:b0:6ce:945d:80eb with SMTP id h3-20020a056a00230300b006ce945d80ebmr16430243pfh.2.1702647221049;
-        Fri, 15 Dec 2023 05:33:41 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id o3-20020a655203000000b005c68e0c83a6sm11636580pgp.43.2023.12.15.05.33.40
+        d=1e100.net; s=20230601; t=1702653204; x=1703258004;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=brYOzG3g23wL22CEoDTu8T5IzltVcQQgzthieH5Rn74=;
+        b=jN0icT0rWxUQdDRGwLcVgRf9NdsR6bfT+Uec6Fwy3dxIo5DaA/JLpGm82qqRfL8yeT
+         Gv41s75ZzTHF2dvzhsJExJszXxYZAwFnMtUDTws235ucaWczPzstJqPAWUm8W1yVF+5E
+         vh17LaKO+m0dUdj1xg78st6wUToUAb9TPPecwIQCseYMJtazCBV3tqTLIbBntzKBmsv8
+         2TuVsQSko241/kwRdFfWPGp6MxmKhrHOWaEcTPt93n3g356s7/P0vrjSQ01vMN+BC8n9
+         ZI/kok3n/tQcSzkaIdPdhfMHbcqupT8XshAZH7Trl/DFDa3mDnLwJ8Hu4kTn0oIbgeAh
+         1pRA==
+X-Gm-Message-State: AOJu0YzdytIoY0/B1DR8XCub6N/s2vy/pXKDeISLZbnBfYROKutcvxUc
+	o29OvDJoPL+abjvj84sbD3Q=
+X-Google-Smtp-Source: AGHT+IG6xfZAKkoFs/nB1j6orGlhGJ6P+tWaOcp0B83WVeZzCcdiugIKJlUguBz4lJNFDEAwHhhOIg==
+X-Received: by 2002:adf:f050:0:b0:336:3538:6636 with SMTP id t16-20020adff050000000b0033635386636mr3854305wro.86.1702653203715;
+        Fri, 15 Dec 2023 07:13:23 -0800 (PST)
+Received: from localhost.localdomain ([154.72.162.212])
+        by smtp.gmail.com with ESMTPSA id s18-20020a5d4ed2000000b00336421f1818sm6600631wrv.112.2023.12.15.07.13.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Dec 2023 05:33:40 -0800 (PST)
-Message-ID: <657c55b4.650a0220.f9a07.1dd7@mx.google.com>
-Date: Fri, 15 Dec 2023 05:33:40 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 15 Dec 2023 07:13:22 -0800 (PST)
+From: Brandon Cheo Fusi <fusibrandon13@gmail.com>
+To: viresh.kumar@linaro.org
+Cc: aou@eecs.berkeley.edu,
+	conor+dt@kernel.org,
+	devicetree@vger.kernel.org,
+	fusibrandon13@gmail.com,
+	jernej.skrabec@gmail.com,
+	krzysztof.kozlowski+dt@linaro.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-sunxi@lists.linux.dev,
+	palmer@dabbelt.com,
+	paul.walmsley@sifive.com,
+	rafael@kernel.org,
+	robh+dt@kernel.org,
+	samuel@sholland.org,
+	tiny.windzz@gmail.com,
+	wens@csie.org
+Subject: Re: [PATCH 1/5] riscv: dts: allwinner: Update opp table to allow CPU frequency scaling
+Date: Fri, 15 Dec 2023 16:12:09 +0100
+Message-Id: <20231215151209.46221-1-fusibrandon13@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20231214111446.camz2krqanaieybh@vireshk-i7>
+References: <20231214111446.camz2krqanaieybh@vireshk-i7>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.7-rc5-91-g3b6de08083e1f
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.7-rc5-91-g3b6de08083e1f)
-To: rafael@kernel.org, linux-pm@vger.kernel.org,
- kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.7-rc5-91-g3b=
-6de08083e1f)
+On Thu, Dec 14, 2023 at 12:14 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> On 14-12-23, 11:33, Brandon Cheo Fusi wrote:
+> > Two OPPs are currently defined for the D1/D1s; one at 408MHz and
+> > another at 1.08GHz. Switching between these can be done with the
+> > "sun50i-cpufreq-nvmem" driver. This patch populates the opp table
+> > appropriately, with inspiration from
+> > https://github.com/Tina-Linux/linux-5.4/blob/master/arch/riscv/boot/dts/sunxi/sun20iw1p1.dtsi
+> >
+> > The supply voltages are PWM-controlled, but support for that IP
+> > is still in the works. So stick to a fixed 0.9V vdd-cpu supply,
+> > which seems to be the default on most D1 boards.
+> >
+> > Signed-off-by: Brandon Cheo Fusi <fusibrandon13@gmail.com>
+> > ---
+> >  arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi | 18 +++++++++++++++---
+> >  1 file changed, 15 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi b/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
+> > index 64c3c2e6c..e211fe4c7 100644
+> > --- a/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
+> > +++ b/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
+> > @@ -39,16 +39,22 @@ cpu0_intc: interrupt-controller {
+> >       };
+> >
+> >       opp_table_cpu: opp-table-cpu {
+> > -             compatible = "operating-points-v2";
+> > +             compatible = "allwinner,sun20i-d1-operating-points",
+>
+> I don't think you should add a new compatible for every SoC that needs
+> to be supported by a DT bindings and cpufreq driver. Maybe you should
+> just reuse "allwinner,sun50i-h6-operating-points" and it will work
+> fine for you ?
+>
+> Rob ?
+>
+> > +                              "allwinner,sun50i-h6-operating-points";
+> > +             nvmem-cells = <&cpu_speed_grade>;
+> > +             nvmem-cell-names = "speed";
+> > +             opp-shared;
+> >
+> >               opp-408000000 {
+> > +                     clock-latency-ns = <244144>; /* 8 32k periods */
+> >                       opp-hz = /bits/ 64 <408000000>;
+> > -                     opp-microvolt = <900000 900000 1100000>;
+> > +                     opp-microvolt-speed0 = <900000>;
+>
+> The separate property name thing was required when you could have
+> different values for different SoC instances, which can be read from
+> efuses, like in your case.
+>
+> But all I see is speed0 here, why don't you always set opp-microvolt
+> then ?
+>
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-7-rc5-91-g3b6de08083e1f/
+Setting opp-microvolt would be ok, but opp-microvolt-speed0 was chosen for
+consistency with the driver bindings here
+https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/opp/allwinner,sun50i-h6-operating-points.yaml#L52 
 
-Tree: pm
-Branch: testing
-Git Describe: v6.7-rc5-91-g3b6de08083e1f
-Git Commit: 3b6de08083e1f132679a930ff88ecea6d992fe75
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+> Also why degrade from min/max/target type to just target ?
+>
 
-Warnings Detected:
+This is a mistake on my part as I thought requesting non default voltages
+was going to be a problem with lack of PWM support. Will be reverted in v2.
 
-arc:
+> >               };
+> >
+> >               opp-1080000000 {
+> > +                     clock-latency-ns = <244144>; /* 8 32k periods */
+> >                       opp-hz = /bits/ 64 <1008000000>;
+> > -                     opp-microvolt = <900000 900000 1100000>;
+> > +                     opp-microvolt-speed0 = <900000>;
+> >               };
+> >       };
+> >
+> > @@ -115,3 +121,8 @@ pmu {
+> >                       <0x00000000 0x0000000f 0xffffffff 0xffffffff 0x00020000>;
+> >       };
+> >  };
+> > +
+> > +&sid {
+> > +     cpu_speed_grade: cpu-speed-grade@0 {
+> > +             reg = <0x00 0x2>;
+> > +     };
+> > +};
+> > --
+> > 2.30.2
+>
+> --
+> viresh
 
-arm64:
-
-arm:
-
-i386:
-
-mips:
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+Thank you for reviewing.
+Brandon.
 
