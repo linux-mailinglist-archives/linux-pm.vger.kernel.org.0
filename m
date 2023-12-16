@@ -1,145 +1,101 @@
-Return-Path: <linux-pm+bounces-1240-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1241-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94835815869
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Dec 2023 09:18:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DA9738158DE
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Dec 2023 12:57:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 403F91F25555
-	for <lists+linux-pm@lfdr.de>; Sat, 16 Dec 2023 08:18:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6406E1F21FD0
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Dec 2023 11:57:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 497C413AFD;
-	Sat, 16 Dec 2023 08:18:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3DCE14A97;
+	Sat, 16 Dec 2023 11:57:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="P2mcD+70"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S3Sg+LYa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87EAA13AED;
-	Sat, 16 Dec 2023 08:18:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BG8AlnW011556;
-	Sat, 16 Dec 2023 08:15:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=UrutHSPGcLDRLLUpSzQn97qPAwY9DBQLxCjQ9z93DWs=; b=P2
-	mcD+70T0TpAXVrwTaecPrUvY+EWWkwBu4MIT0j4DciDLrbngCVypQxXrEz8EW1Ev
-	Fol2HOa2iQp54LLF3T8GXZHMqUBXdzSIUt/bn56b1z/WJpEB582DL2VntRr5KzT0
-	Qv2djQvJ7mqROMv7lIkNXx1urqlqug0xttGL4ks+KAXN2CEirAVKPHHuV4RIfgrG
-	/y0VisQtm1ara5PT+tcR4Lmj/8ChbSY+zXy5/JpLZyh8XEYEsN4Hhi9Gct2DCSVY
-	iZ7tOlEHVGSv7YDFN9WVz3Php6Ury7U1ZIGjfuueaJakfV1GfPyM9Wyjc82N/j0T
-	X2S8QUAY2kICJHHPJZGw==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v14vjg7vw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 16 Dec 2023 08:15:22 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BG8FLdL011863
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 16 Dec 2023 08:15:21 GMT
-Received: from [10.216.47.123] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Sat, 16 Dec
- 2023 00:15:17 -0800
-Message-ID: <89ca6eb2-9a33-c37e-14ae-6181edb8626c@quicinc.com>
-Date: Sat, 16 Dec 2023 13:45:14 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4095E15E80
+	for <linux-pm@vger.kernel.org>; Sat, 16 Dec 2023 11:57:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a1e2f34467aso123644666b.2
+        for <linux-pm@vger.kernel.org>; Sat, 16 Dec 2023 03:57:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702727854; x=1703332654; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sasmTE3kn4ottVMB01j7/uruXUS+ZP27vW8db5V0zpc=;
+        b=S3Sg+LYaMIUS496jsVeG7ZdrRD8Kf6vUdxJA5QWBdIkT1ukDYhn8c+aDlSHKfee0VF
+         /dr222su9eWkD4mjg5M6dn8mk46JFAlG6963drajsw4v0ckXJfPYRcsACuCbENDo/ya/
+         ehkGPpfdyAS7hif+x0N3nUT4he6JrSWcawe8a+DFztnyKyzMV4eUlq0+nVB2PDOJLAZl
+         CB9YSiDjDCU83XBhEbKs3GyrJMyYmBH0legeq0mBYW6kmlF9qGzAM6s7l1dUNq1F3Rcf
+         pWpKruIXsooeAmW0roQS7OVSca8hSuqKb02CouDCmG7NfGoPffczSEBvUjdzddxDTeuu
+         uQQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702727854; x=1703332654;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sasmTE3kn4ottVMB01j7/uruXUS+ZP27vW8db5V0zpc=;
+        b=U6ivlIPBbgCTHotkUnvDF7/qQ9/QYQsqoAXl2qCNppHYmS+1U0u6n9VnRveMTRmUG1
+         s+jCjB9mwDEMPT/KgRlTwpqcosSjfuuIfovdw2cGoxYrGD9PLoReQsEXWS/aXOEbO2Q8
+         BlQi+YHflCXeUur3MIzM3G7Vpe7CUmGAX2WVAWO/yRihygGf3CdvIGJNxLsfJEa6zU8z
+         /402JTfCjgCiWzMlJULKjAGahz7QWF2CMnHKs2TxwCKPLY1fZmodswaXxG4w2TD7kwS8
+         Jo5smjs9dpo/NjRCRJQaJ83Ki8tDDlQwlfAP7nsLRwg/gUpPOqnWQbfFBfs3hFI/od6P
+         2bYQ==
+X-Gm-Message-State: AOJu0YxaRNBSNwvcVGsczKFpj4Zwv7QI5J1HnqW5qIWNGtWoE2tf6BXI
+	eiq6RlWYC6UR8W+dRIb3Piw=
+X-Google-Smtp-Source: AGHT+IHkWNtBEfMdX0PJDRnaW0ZYCZLEPw+7mXrxjlk0MJeKsgVnlWpdkf/mD5BRRMhEn890wwRxMQ==
+X-Received: by 2002:a17:906:d6:b0:a1f:a0f1:ec60 with SMTP id 22-20020a17090600d600b00a1fa0f1ec60mr6918767eji.14.1702727854290;
+        Sat, 16 Dec 2023 03:57:34 -0800 (PST)
+Received: from pek-lpggp6.wrs.com (unknown-105-121.windriver.com. [147.11.105.121])
+        by smtp.gmail.com with ESMTPSA id tx6-20020a1709078e8600b00a1fabca52f5sm8045910ejc.154.2023.12.16.03.57.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 16 Dec 2023 03:57:34 -0800 (PST)
+From: Kevin Hao <haokexin@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <len.brown@intel.com>,
+	Pavel Machek <pavel@ucw.cz>
+Cc: linux-pm@vger.kernel.org
+Subject: [PATCH] PM: Remove the mention of freezer_count() in comment
+Date: Sat, 16 Dec 2023 19:57:17 +0800
+Message-Id: <20231216115717.2285930-1-haokexin@gmail.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] power: reset: msm: Process register_restart_handler()
- error
-Content-Language: en-US
-To: Nikita Kiryushin <kiryushin@ancud.ru>, Andy Gross <agross@kernel.org>
-CC: Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Stephen Boyd
-	<sboyd@codeaurora.org>,
-        Pramod Gurav <pramod.gurav@smartplayin.com>,
-        Guenter
- Roeck <linux@roeck-us.net>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lvc-project@linuxtesting.org>
-References: <feeb1a89-59bd-4fd6-81a5-1d828f95b0f0@ancud.ru>
-From: Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <feeb1a89-59bd-4fd6-81a5-1d828f95b0f0@ancud.ru>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: iPeTEqpyHD1CYQFA_s5Qs3YqJqvzId4w
-X-Proofpoint-GUID: iPeTEqpyHD1CYQFA_s5Qs3YqJqvzId4w
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- bulkscore=0 clxscore=1011 malwarescore=0 lowpriorityscore=0 spamscore=0
- adultscore=0 mlxlogscore=999 mlxscore=0 priorityscore=1501 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2311290000
- definitions=main-2312160062
 
+The freezer_count() has been removed by commit f5d39b020809
+("freezer,sched: Rewrite core freezer logic").
 
+Signed-off-by: Kevin Hao <haokexin@gmail.com>
+---
+ kernel/power/main.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-On 11/8/2023 10:57 PM, Nikita Kiryushin wrote:
-> If registering restart handler fails for msm-restart result is not checked.
-> It may be irrelevant now (as stated in comment to register_restart_handler,
-> the function currently always returns zero), but if the behavior changes
-> in the future, an error at registration of handler will be silently 
-> skipped.
-> 
-> Add return error code and print error message too debug log in case of
-> non-zero result of register_restart_handler.
-> 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> 
-> Fixes: 18a702e0de98 ("power: reset: use restart_notifier mechanism for 
-> msm-poweroff")
-> 
-> Signed-off-by: Nikita Kiryushin <kiryushin@ancud.ru>
-> ---
->   drivers/power/reset/msm-poweroff.c | 7 ++++++-
->   1 file changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/power/reset/msm-poweroff.c 
-> b/drivers/power/reset/msm-poweroff.c
-> index b9a401bd280b..5877a1ba2778 100644
-> --- a/drivers/power/reset/msm-poweroff.c
-> +++ b/drivers/power/reset/msm-poweroff.c
-> @@ -35,11 +35,16 @@ static void do_msm_poweroff(void)
->    static int msm_restart_probe(struct platform_device *pdev)
->   {
-> +    int ret = -EINVAL;
+diff --git a/kernel/power/main.c b/kernel/power/main.c
+index f6425ae3e8b0..768c07155d53 100644
+--- a/kernel/power/main.c
++++ b/kernel/power/main.c
+@@ -61,8 +61,7 @@ EXPORT_SYMBOL_GPL(lock_system_sleep);
+ void unlock_system_sleep(unsigned int flags)
+ {
+ 	/*
+-	 * Don't use freezer_count() because we don't want the call to
+-	 * try_to_freeze() here.
++	 * Don't call try_to_freeze() here.
+ 	 *
+ 	 * Reason:
+ 	 * Fundamentally, we just don't need it, because freezing condition
+-- 
+2.39.2
 
-This does not add up anything., no need to initialize.
-
--Mukesh
-
-
->       msm_ps_hold = devm_platform_ioremap_resource(pdev, 0);
->       if (IS_ERR(msm_ps_hold))
->           return PTR_ERR(msm_ps_hold);
->   -    register_restart_handler(&restart_nb);
-> +    ret = register_restart_handler(&restart_nb);
-> +    if (ret) {
-> +        dev_err(&pdev->dev, "unable to register restart handler, %d\n", 
-> ret);
-> +        return ret;
-> +    }
->        pm_power_off = do_msm_poweroff;
->   -- 2.34.1
-> 
 
