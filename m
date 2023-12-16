@@ -1,135 +1,145 @@
-Return-Path: <linux-pm+bounces-1239-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1240-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 056D581519E
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 22:09:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94835815869
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Dec 2023 09:18:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 37DC91C23508
-	for <lists+linux-pm@lfdr.de>; Fri, 15 Dec 2023 21:09:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 403F91F25555
+	for <lists+linux-pm@lfdr.de>; Sat, 16 Dec 2023 08:18:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5213F47F4B;
-	Fri, 15 Dec 2023 21:09:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 497C413AFD;
+	Sat, 16 Dec 2023 08:18:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sholland.org header.i=@sholland.org header.b="qRat0JjU";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="bTJSsJXY"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="P2mcD+70"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10CE44778B;
-	Fri, 15 Dec 2023 21:09:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sholland.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sholland.org
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailout.nyi.internal (Postfix) with ESMTP id 08D615C01B4;
-	Fri, 15 Dec 2023 16:09:49 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 15 Dec 2023 16:09:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1702674589;
-	 x=1702760989; bh=+9pLPYjGFzgfQNqnSkxnhSaHWO67M+0iAl8v+uqZUn0=; b=
-	qRat0JjUuSP+CfpfIN2pUKpArcFwNph/k3XRmvINBOoHN7pB4D8n7pkE8iBHA0Qk
-	odXJPgXteR0Xm5RtvWlDCYGtYMAyFMhF7pXJlrFvsJEgzuJBUmrxnIQ/h9GGJkjN
-	AGllPtoiPQ1HfYI38BcYwoCaVwaXYsYM3Tm/3Ue9M8yhshedBOFofOzWZuP0zTRH
-	yoSAxvbBB0bEnEMgotajZaiTr/OvB019lYMFqK70HQXJR10SlhyMmmObJ9am4Y2W
-	GBrwGsxQuhzD4ndPWNnD0ftTtGDpoIydMftL78GEid9ydKYWP0b2TrvbhSwoSP1q
-	BT/On1G6mHYrRMvC06NsDA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1702674589; x=
-	1702760989; bh=+9pLPYjGFzgfQNqnSkxnhSaHWO67M+0iAl8v+uqZUn0=; b=b
-	TJSsJXYOMfo+ayDWdjBB5rX0z+IaPLykp8Ix+V7WgrTdZYVwjG8gfMG4b9OTbfjq
-	BvN1l2in5uzVkegf4KRXbfwPKmH6xOjdHfMTZFBX+geQfbINDI09rw2YAk4rVOYm
-	pAy/TrpjkteeXFBBWnpA3dEZ4gA0UF3LIFDizumOqDWUkto/fUg9ac7PNcWu5m1U
-	nv9UKqi4YQgf+evBIuqDQ3gj/HfUupEs8dyeH47PUMFPs7lroHF3jKdhPKns5PWu
-	f80ah+Ujds+y5aFrz+912p6PJU4tnF8p+er+N4rj+IgENkr/OsfyyCIVPfZSFDxg
-	+HyD5PD9PgXUGHZeZ++qA==
-X-ME-Sender: <xms:nMB8ZZEuYE7BXDpGFfbOk_4c1rdExyb3dPRpgkHivUzKCxO6A-QLYA>
-    <xme:nMB8ZeU1bLyUJmYrQJ60LyUUDXmr1R6AUGGdS2N5QOvPi48nCTejAqM8UEQZe0TfF
-    FGZu0hOzSA4KQ1wLQ>
-X-ME-Received: <xmr:nMB8ZbII-66LC2gnpfa7Wn4D_icvvn3BPx7bVDbylIuSFNwX0_2BAFdLU-pXqiH_1k2yFEk_fBlzsJ3clBLKt_56v6nHM76vKNe1tLxog3LYC1o76O_g8zktoQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvddtvddgudeghecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefkffggfgfuvfevfhfhjggtgfesthekredttddvjeenucfhrhhomhepufgr
-    mhhuvghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqne
-    cuggftrfgrthhtvghrnhepteevhffhteegfeehteehhfevgfejtdehudehvdejveetgedt
-    ffejjefhffehudffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:nMB8ZfELrq8xAznZrAp53-LvFGhKOEdj4xfr1b1x7PB9_8EzoQwECQ>
-    <xmx:nMB8ZfVfRWgzryaISqCJQAgWBuk81px9I4pWUvrfQJcsVQhdVwG_yw>
-    <xmx:nMB8ZaOVgiaKi2SjWVQBwKssdcB0_9tRhb0QlVXnGAX-fa1Sqk7f2g>
-    <xmx:ncB8ZTmp8MMBx-462eITdqMgyHG8rDd6oz_R_LOFOWw2517D1T7oEA>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 15 Dec 2023 16:09:47 -0500 (EST)
-Message-ID: <11b5aea1-7c6e-4be5-ae01-9c4c869dc98c@sholland.org>
-Date: Fri, 15 Dec 2023 15:09:46 -0600
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87EAA13AED;
+	Sat, 16 Dec 2023 08:18:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BG8AlnW011556;
+	Sat, 16 Dec 2023 08:15:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=UrutHSPGcLDRLLUpSzQn97qPAwY9DBQLxCjQ9z93DWs=; b=P2
+	mcD+70T0TpAXVrwTaecPrUvY+EWWkwBu4MIT0j4DciDLrbngCVypQxXrEz8EW1Ev
+	Fol2HOa2iQp54LLF3T8GXZHMqUBXdzSIUt/bn56b1z/WJpEB582DL2VntRr5KzT0
+	Qv2djQvJ7mqROMv7lIkNXx1urqlqug0xttGL4ks+KAXN2CEirAVKPHHuV4RIfgrG
+	/y0VisQtm1ara5PT+tcR4Lmj/8ChbSY+zXy5/JpLZyh8XEYEsN4Hhi9Gct2DCSVY
+	iZ7tOlEHVGSv7YDFN9WVz3Php6Ury7U1ZIGjfuueaJakfV1GfPyM9Wyjc82N/j0T
+	X2S8QUAY2kICJHHPJZGw==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v14vjg7vw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 16 Dec 2023 08:15:22 +0000 (GMT)
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+	by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BG8FLdL011863
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 16 Dec 2023 08:15:21 GMT
+Received: from [10.216.47.123] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Sat, 16 Dec
+ 2023 00:15:17 -0800
+Message-ID: <89ca6eb2-9a33-c37e-14ae-6181edb8626c@quicinc.com>
+Date: Sat, 16 Dec 2023 13:45:14 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/5] cpufreq: Add support for RISC-V CPU Frequency scaling
- drivers
-To: Brandon Cheo Fusi <fusibrandon13@gmail.com>, viresh.kumar@linaro.org
-Cc: aou@eecs.berkeley.edu, conor+dt@kernel.org, devicetree@vger.kernel.org,
- jernej.skrabec@gmail.com, krzysztof.kozlowski+dt@linaro.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-sunxi@lists.linux.dev, palmer@dabbelt.com, paul.walmsley@sifive.com,
- rafael@kernel.org, robh+dt@kernel.org, tiny.windzz@gmail.com, wens@csie.org
-References: <20231214111702.xdd7qlcrpqh74i3j@vireshk-i7>
- <20231215151723.46409-1-fusibrandon13@gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] power: reset: msm: Process register_restart_handler()
+ error
 Content-Language: en-US
-From: Samuel Holland <samuel@sholland.org>
-In-Reply-To: <20231215151723.46409-1-fusibrandon13@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To: Nikita Kiryushin <kiryushin@ancud.ru>, Andy Gross <agross@kernel.org>
+CC: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konrad.dybcio@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Stephen Boyd
+	<sboyd@codeaurora.org>,
+        Pramod Gurav <pramod.gurav@smartplayin.com>,
+        Guenter
+ Roeck <linux@roeck-us.net>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <lvc-project@linuxtesting.org>
+References: <feeb1a89-59bd-4fd6-81a5-1d828f95b0f0@ancud.ru>
+From: Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <feeb1a89-59bd-4fd6-81a5-1d828f95b0f0@ancud.ru>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: iPeTEqpyHD1CYQFA_s5Qs3YqJqvzId4w
+X-Proofpoint-GUID: iPeTEqpyHD1CYQFA_s5Qs3YqJqvzId4w
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ bulkscore=0 clxscore=1011 malwarescore=0 lowpriorityscore=0 spamscore=0
+ adultscore=0 mlxlogscore=999 mlxscore=0 priorityscore=1501 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2311290000
+ definitions=main-2312160062
 
-Hi Brandon,
 
-On 12/15/23 09:17, Brandon Cheo Fusi wrote:
-> On Thu, Dec 14, 2023 at 12:17 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->>
->> On 14-12-23, 11:33, Brandon Cheo Fusi wrote:
->>> Add Kconfig file for cpufreq scaling drivers that can handle RISC-V
->>> CPUs. An entry is included for the Allwinner H6 cpufreq driver that
->>> works with D1.
->>>
->>> Signed-off-by: Brandon Cheo Fusi <fusibrandon13@gmail.com>
->>> ---
->>>  drivers/cpufreq/Kconfig       |  4 ++++
->>>  drivers/cpufreq/Kconfig.riscv | 16 ++++++++++++++++
->>>  2 files changed, 20 insertions(+)
->>>  create mode 100644 drivers/cpufreq/Kconfig.riscv
->>
->> We don't have a separate kconfig file for each architecture. Only if
->> there are too many entries for an architecture, we add a new file.
->>
->> --
->> viresh
+
+On 11/8/2023 10:57 PM, Nikita Kiryushin wrote:
+> If registering restart handler fails for msm-restart result is not checked.
+> It may be irrelevant now (as stated in comment to register_restart_handler,
+> the function currently always returns zero), but if the behavior changes
+> in the future, an error at registration of handler will be silently 
+> skipped.
 > 
-> The sun50i cpufreq driver is currently only available when CONFIG_ARM or
-> CONFIG_ARM64 is selected, so this was the only decent way I could think
-> of making it accessible on either one of CONFIG_(ARM | ARM64 | RISC-V).
-> Any suggestions for a better workaround ?
+> Add return error code and print error message too debug log in case of
+> non-zero result of register_restart_handler.
+> 
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> 
+> Fixes: 18a702e0de98 ("power: reset: use restart_notifier mechanism for 
+> msm-poweroff")
+> 
+> Signed-off-by: Nikita Kiryushin <kiryushin@ancud.ru>
+> ---
+>   drivers/power/reset/msm-poweroff.c | 7 ++++++-
+>   1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/power/reset/msm-poweroff.c 
+> b/drivers/power/reset/msm-poweroff.c
+> index b9a401bd280b..5877a1ba2778 100644
+> --- a/drivers/power/reset/msm-poweroff.c
+> +++ b/drivers/power/reset/msm-poweroff.c
+> @@ -35,11 +35,16 @@ static void do_msm_poweroff(void)
+>    static int msm_restart_probe(struct platform_device *pdev)
+>   {
+> +    int ret = -EINVAL;
 
-Move the option to the main drivers/cpufreq/Kconfig, like QORIQ_CPUFREQ,
-which is also used with multiple architectures (PowerPC and ARM, in that
-case). We don't want two options for the same driver.
+This does not add up anything., no need to initialize.
 
-Regards,
-Samuel
+-Mukesh
 
+
+>       msm_ps_hold = devm_platform_ioremap_resource(pdev, 0);
+>       if (IS_ERR(msm_ps_hold))
+>           return PTR_ERR(msm_ps_hold);
+>   -    register_restart_handler(&restart_nb);
+> +    ret = register_restart_handler(&restart_nb);
+> +    if (ret) {
+> +        dev_err(&pdev->dev, "unable to register restart handler, %d\n", 
+> ret);
+> +        return ret;
+> +    }
+>        pm_power_off = do_msm_poweroff;
+>   -- 2.34.1
+> 
 
