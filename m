@@ -1,62 +1,62 @@
-Return-Path: <linux-pm+bounces-1254-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1255-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF486816181
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Dec 2023 19:00:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F734816183
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Dec 2023 19:00:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 49A441F217FB
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Dec 2023 18:00:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B35E41F21A45
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Dec 2023 18:00:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 710FB46430;
-	Sun, 17 Dec 2023 17:59:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC1D246558;
+	Sun, 17 Dec 2023 18:00:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="KqNHoZ2/"
+	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="hoDrg9cJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B07481AB
-	for <linux-pm@vger.kernel.org>; Sun, 17 Dec 2023 17:59:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE52D47A70
+	for <linux-pm@vger.kernel.org>; Sun, 17 Dec 2023 18:00:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-40b5155e154so28609605e9.3
-        for <linux-pm@vger.kernel.org>; Sun, 17 Dec 2023 09:59:57 -0800 (PST)
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3365f09de18so1091960f8f.2
+        for <linux-pm@vger.kernel.org>; Sun, 17 Dec 2023 10:00:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1702835996; x=1703440796; darn=vger.kernel.org;
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1702836018; x=1703440818; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PB5TqBvmgxA5EFBzHlsLEmjHmlM7x/tbO20cnIclOF0=;
-        b=KqNHoZ2/tETIe0A9zv+skvgLD6JEzRLRACEgxkcyhoK2HMmzqjJIelMFZ0pS+dgLpD
-         1V/zFwd7d0Irre3h7KdavEhZ5YbY0IpYL9rsvFO/6ysdxoBFM8x+aSqwqO7zTaFM5L3i
-         8+hfhtIJYBvVVM9PzMhLNUtllMs5XWvS7zf7m5P+FxMPUBusC6uD/MFa+qRCzpzHEz6I
-         e0yedcJiDJdF0YL1JgH6ReRa7mxxNWlm8RkYrITjyj2AerILQ9wVVkXmEytxY64/0+N1
-         5i4czcSIYHrH8SiAXoLJmad9b9aMiqoM4Wb3oL+plItCup/PvN0tk4sDfHCDszFPoBm8
-         vTFw==
+        bh=DjTCpnUGn4KBlZ0Ywyu5H1cv+f2lB6j5TM6mv3JNV0I=;
+        b=hoDrg9cJXlVpL6hgzpuT5WaNlmEQ9O4uJ3GNmydCGdeEFNo11IaQ3Va5iPZVhplEbL
+         emIqzBrhTZVtQvp4Hqg6Aw4zblP+PKsoGeixXWMKoZBNasQtExRXk/nAhTJd2PH8EzKg
+         8MzvLhhyc1T1Fgu3w2ZsjFkj/O/D6VyF7LYGh4EJtC9L7pRUH432rTeBVeI3eBQKlh97
+         awhI3sGQ2Kuj5MhwmKQRF90t16DaOHKr6de51Nvv2sDv1DI0BbCnE222XcRP5MI3TYff
+         UP7UJixjBxRip1cPD9M3jDheeCvO201QR9O76OYqXSTx3vpnEq78e0XYnDPebRNt0wWZ
+         XEQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702835996; x=1703440796;
+        d=1e100.net; s=20230601; t=1702836018; x=1703440818;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PB5TqBvmgxA5EFBzHlsLEmjHmlM7x/tbO20cnIclOF0=;
-        b=K9nGows1eIWgktp1w4wavA0Mqu7oRkc6V4ZEODQ5D1OKqSqD2F9aWRWZLC80kZ0y8J
-         ahVVF7bzzil1awS3tuErKUC77CKwwlkwnMxUWntxGY3PFoCPinuPitKBjJKu+dX+MOZZ
-         Km/yR3Ix/soZUdIc/Pty1+p5wPGsPCNTBRXolbR4tj5Zw8p2xsBJSwtKcUCwo41Mr8JA
-         W6l0pytBOqxYtWSQTqZbreZnJVe/Fq6bnIBxQdhwDq7YM4zTz2xt89xM9JLEeMCVMrfi
-         CAevPFidaVa3AByRlmfUgjnKW762hVC48Nt30UNKtUSIQcSgeLQ8imjnIJhpBBhxTB/W
-         54IA==
-X-Gm-Message-State: AOJu0YxO+Qd4knuOLKgOSidVEhjv6xbHBFuqK2/f98WO1iB8Zzlvi8Wh
-	DPCyn7Ywo9zhfJKd24tz/pi0eQ==
-X-Google-Smtp-Source: AGHT+IF2SUXwZzo0JIGvQbZxVYfZuQ6LNiGHl0aDHrLZ0Lr25HO/Iyesi/PcPHNXMN4hfCQD7TfL2g==
-X-Received: by 2002:a05:600c:4296:b0:40b:5e4a:406c with SMTP id v22-20020a05600c429600b0040b5e4a406cmr7409281wmc.140.1702835996023;
-        Sun, 17 Dec 2023 09:59:56 -0800 (PST)
+        bh=DjTCpnUGn4KBlZ0Ywyu5H1cv+f2lB6j5TM6mv3JNV0I=;
+        b=be7CvkOeONWEUo/PW4TMtSJVtGhvAP7I5AXQtDGxjbJQLb///Pbd7+FXyAO7LBhM1z
+         mUwF4ypjMow1YRYp8edq77g4Ls0p3MOX88886BQ6DoTCim0nAQPu9ZLrVINnX8cKLpFb
+         zeZFd7Ms4c5jrP6peFbuTGkvnnTSwde2xLxKBhfNKoj5iDF8aHkoXIySbh0/7W/wjHqR
+         Ereq8ct6Mw8LONEOR0/Sv9vZruI6Cxn6ExEvd1iey5CqKBwIzG8turFvJakYHPtT8zR1
+         80fpTkuQ8jK86SuDOiKSPJmLU/4Py4VnzQtflOd4AxEGxWi/QdrTLsWVTXcowacUnHqy
+         HTyA==
+X-Gm-Message-State: AOJu0YwGQlsvQ/uj2G/TdIzjPORQ9UmA+m1vjsarG5s5nL2wZhDOtRPx
+	NRkfKkgcZPJdFOoCoTXKtEdXnA==
+X-Google-Smtp-Source: AGHT+IGfozpQr3KKqaJ1UK2NQKXWnaZvIuddDDjwDFgis6eUGTO4PaiwnyHzZ0hPXGFxJIlNXmilzA==
+X-Received: by 2002:a5d:4486:0:b0:336:64fd:72e7 with SMTP id j6-20020a5d4486000000b0033664fd72e7mr536883wrq.52.1702836018138;
+        Sun, 17 Dec 2023 10:00:18 -0800 (PST)
 Received: from airbuntu (host86-135-101-43.range86-135.btcentralplus.com. [86.135.101.43])
-        by smtp.gmail.com with ESMTPSA id f10-20020a05600c4e8a00b0040d15dcb77asm3446604wmq.23.2023.12.17.09.59.55
+        by smtp.gmail.com with ESMTPSA id h15-20020a5d504f000000b00336566b885csm6591930wrt.87.2023.12.17.10.00.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Dec 2023 09:59:55 -0800 (PST)
-Date: Sun, 17 Dec 2023 17:59:54 +0000
+        Sun, 17 Dec 2023 10:00:17 -0800 (PST)
+Date: Sun, 17 Dec 2023 18:00:16 +0000
 From: Qais Yousef <qyousef@layalina.io>
 To: Lukasz Luba <lukasz.luba@arm.com>
 Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
@@ -65,11 +65,11 @@ Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
 	daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
 	len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org,
 	wvw@google.com
-Subject: Re: [PATCH v5 10/23] PM: EM: Add API for memory allocations for new
- tables
-Message-ID: <20231217175954.ascmdio7smqwmnfi@airbuntu>
+Subject: Re: [PATCH v5 13/23] PM: EM: Add performance field to struct
+ em_perf_state
+Message-ID: <20231217180016.wkkatrjuanuk5x52@airbuntu>
 References: <20231129110853.94344-1-lukasz.luba@arm.com>
- <20231129110853.94344-11-lukasz.luba@arm.com>
+ <20231129110853.94344-14-lukasz.luba@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,137 +78,133 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231129110853.94344-11-lukasz.luba@arm.com>
+In-Reply-To: <20231129110853.94344-14-lukasz.luba@arm.com>
 
 On 11/29/23 11:08, Lukasz Luba wrote:
-> The runtime modified EM table can be provided from drivers. Create
-> mechanism which allows safely allocate and free the table for device
-> drivers. The same table can be used by the EAS in task scheduler code
-> paths, so make sure the memory is not freed when the device driver module
-> is unloaded.
+> The performance doesn't scale linearly with the frequency. Also, it may
+> be different in different workloads. Some CPUs are designed to be
+> particularly good at some applications e.g. images or video processing
+> and other CPUs in different. When those different types of CPUs are
+> combined in one SoC they should be properly modeled to get max of the HW
+> in Energy Aware Scheduler (EAS). The Energy Model (EM) provides the
+> power vs. performance curves to the EAS, but assumes the CPUs capacity
+> is fixed and scales linearly with the frequency. This patch allows to
+> adjust the curve on the 'performance' axis as well.
 > 
 > Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 > ---
->  include/linux/energy_model.h | 11 +++++++++
->  kernel/power/energy_model.c  | 44 ++++++++++++++++++++++++++++++++++--
->  2 files changed, 53 insertions(+), 2 deletions(-)
+>  include/linux/energy_model.h | 11 ++++++-----
+>  kernel/power/energy_model.c  | 27 +++++++++++++++++++++++++++
+>  2 files changed, 33 insertions(+), 5 deletions(-)
 > 
 > diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-> index 94a77a813724..e785211828fe 100644
+> index ae3ccc8b9f44..e30750500b10 100644
 > --- a/include/linux/energy_model.h
 > +++ b/include/linux/energy_model.h
-> @@ -5,6 +5,7 @@
->  #include <linux/device.h>
->  #include <linux/jump_label.h>
->  #include <linux/kobject.h>
-> +#include <linux/kref.h>
->  #include <linux/rcupdate.h>
->  #include <linux/sched/cpufreq.h>
->  #include <linux/sched/topology.h>
-> @@ -39,10 +40,12 @@ struct em_perf_state {
+> @@ -13,6 +13,7 @@
+>  
 >  /**
->   * struct em_perf_table - Performance states table
->   * @rcu:	RCU used for safe access and destruction
-> + * @refcount:	Reference count to track the owners
->   * @state:	List of performance states, in ascending order
+>   * struct em_perf_state - Performance state of a performance domain
+> + * @performance:	Non-linear CPU performance at a given frequency
+>   * @frequency:	The frequency in KHz, for consistency with CPUFreq
+>   * @power:	The power consumed at this level (by 1 CPU or by a registered
+>   *		device). It can be a total power: static and dynamic.
+> @@ -21,6 +22,7 @@
+>   * @flags:	see "em_perf_state flags" description below.
 >   */
->  struct em_perf_table {
->  	struct rcu_head rcu;
-> +	struct kref refcount;
->  	struct em_perf_state state[];
->  };
->  
-> @@ -184,6 +187,8 @@ int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
->  				struct em_data_callback *cb, cpumask_t *span,
->  				bool microwatts);
->  void em_dev_unregister_perf_domain(struct device *dev);
-> +struct em_perf_table __rcu *em_allocate_table(struct em_perf_domain *pd);
-> +void em_free_table(struct em_perf_table __rcu *table);
->  
->  /**
->   * em_pd_get_efficient_state() - Get an efficient performance state from the EM
-> @@ -368,6 +373,12 @@ static inline int em_pd_nr_perf_states(struct em_perf_domain *pd)
+>  struct em_perf_state {
+> +	unsigned long performance;
+>  	unsigned long frequency;
+>  	unsigned long power;
+>  	unsigned long cost;
+> @@ -207,14 +209,14 @@ void em_free_table(struct em_perf_table __rcu *table);
+>   */
+>  static inline int
+>  em_pd_get_efficient_state(struct em_perf_state *table, int nr_perf_states,
+> -			  unsigned long freq, unsigned long pd_flags)
+> +			  unsigned long max_util, unsigned long pd_flags)
 >  {
->  	return 0;
->  }
-> +static inline
-> +struct em_perf_table __rcu *em_allocate_table(struct em_perf_domain *pd)
-> +{
-> +	return NULL;
-> +}
-> +static inline void em_free_table(struct em_perf_table __rcu *table) {}
->  #endif
+>  	struct em_perf_state *ps;
+>  	int i;
 >  
->  #endif
+>  	for (i = 0; i < nr_perf_states; i++) {
+>  		ps = &table[i];
+> -		if (ps->frequency >= freq) {
+> +		if (ps->performance >= max_util) {
+>  			if (pd_flags & EM_PERF_DOMAIN_SKIP_INEFFICIENCIES &&
+>  			    ps->flags & EM_PERF_STATE_INEFFICIENT)
+>  				continue;
+> @@ -246,8 +248,8 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
+>  				unsigned long allowed_cpu_cap)
+>  {
+>  	struct em_perf_table *runtime_table;
+> -	unsigned long freq, scale_cpu;
+>  	struct em_perf_state *ps;
+> +	unsigned long scale_cpu;
+>  	int cpu, i;
+>  
+>  	if (!sum_util)
+> @@ -274,14 +276,13 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
+>  
+>  	max_util = map_util_perf(max_util);
+>  	max_util = min(max_util, allowed_cpu_cap);
+> -	freq = map_util_freq(max_util, ps->frequency, scale_cpu);
+>  
+>  	/*
+>  	 * Find the lowest performance state of the Energy Model above the
+>  	 * requested frequency.
+>  	 */
+>  	i = em_pd_get_efficient_state(runtime_table->state, pd->nr_perf_states,
+> -				      freq, pd->flags);
+> +				      max_util, pd->flags);
+>  	ps = &runtime_table->state[i];
+>  
+>  	/*
 > diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-> index 489287666705..489a358b9a00 100644
+> index 614891fde8df..b5016afe6a19 100644
 > --- a/kernel/power/energy_model.c
 > +++ b/kernel/power/energy_model.c
-> @@ -114,12 +114,46 @@ static void em_destroy_table_rcu(struct rcu_head *rp)
->  	kfree(runtime_table);
+> @@ -46,6 +46,7 @@ static void em_debug_create_ps(struct em_perf_state *ps, struct dentry *pd)
+>  	debugfs_create_ulong("frequency", 0444, d, &ps->frequency);
+>  	debugfs_create_ulong("power", 0444, d, &ps->power);
+>  	debugfs_create_ulong("cost", 0444, d, &ps->cost);
+> +	debugfs_create_ulong("performance", 0444, d, &ps->performance);
+>  	debugfs_create_ulong("inefficient", 0444, d, &ps->flags);
 >  }
 >  
-> -static void em_free_table(struct em_perf_table __rcu *table)
-> +static void em_release_table_kref(struct kref *kref)
->  {
-> +	struct em_perf_table __rcu *table;
-> +
-> +	/* It was the last owner of this table so we can free */
-> +	table = container_of(kref, struct em_perf_table, refcount);
-> +
->  	call_rcu(&table->rcu, em_destroy_table_rcu);
+> @@ -171,6 +172,30 @@ em_allocate_table(struct em_perf_domain *pd)
+>  	return table;
 >  }
 >  
-> -static struct em_perf_table __rcu *
-> +static inline void em_inc_usage(struct em_perf_table __rcu *table)
+> +static void em_init_performance(struct device *dev, struct em_perf_domain *pd,
+> +				struct em_perf_state *table, int nr_states)
 > +{
-> +	kref_get(&table->refcount);
-> +}
+> +	u64 fmax, max_cap;
+> +	int i, cpu;
 > +
-> +static void em_dec_usage(struct em_perf_table __rcu *table)
-> +{
-> +	kref_put(&table->refcount, em_release_table_kref);
-> +}
+> +	/* This is needed only for CPUs and EAS skip other devices */
+> +	if (!_is_cpu_device(dev))
+> +		return;
+> +
+> +	cpu = cpumask_first(em_span_cpus(pd));
+> +
+> +	/*
+> +	 * Calculate the performance value for each frequency with
+> +	 * linear relationship. The final CPU capacity might not be ready at
+> +	 * boot time, but the EM will be updated a bit later with correct one.
+> +	 */
+> +	fmax = (u64) table[nr_states - 1].frequency;
+> +	max_cap = (u64) arch_scale_cpu_capacity(cpu);
+> +	for (i = 0; i < nr_states; i++)
+> +		table[i].performance = div64_u64(max_cap * table[i].frequency,
+> +						 fmax);
 
-nit: em_table_inc/dec() instead? matches general theme elsewhere in the code
-base.
+Should we sanity check the returned performance value is correct in case we got
+passed a malformed table? Maybe the table is sanity checked and sorted before
+we get here; I didn't check to be honest.
 
-> +
-> +/**
-> + * em_free_table() - Handles safe free of the EM table when needed
-> + * @table : EM memory which is going to be freed
-> + *
-> + * No return values.
-> + */
-> +void em_free_table(struct em_perf_table __rcu *table)
-> +{
-> +	em_dec_usage(table);
-> +}
-> +
-> +/**
-> + * em_allocate_table() - Handles safe allocation of the new EM table
-> + * @table : EM memory which is going to be freed
-> + *
-> + * Increments the reference counter to mark that there is an owner of that
-> + * EM table. That might be a device driver module or EAS.
-> + * Returns allocated table or error.
-> + */
-> +struct em_perf_table __rcu *
->  em_allocate_table(struct em_perf_domain *pd)
->  {
->  	struct em_perf_table __rcu *table;
-> @@ -128,6 +162,12 @@ em_allocate_table(struct em_perf_domain *pd)
->  	table_size = sizeof(struct em_perf_state) * pd->nr_perf_states;
->  
->  	table = kzalloc(sizeof(*table) + table_size, GFP_KERNEL);
-> +	if (!table)
-> +		return table;
-> +
-> +	kref_init(&table->refcount);
-> +	em_inc_usage(table);
-
-Doesn't kref_init() initialize to the count to 1 already? Is the em_inc_usage()
-needed here?
+I think a warning that performance is always <= max_cap would be helpful in
+general as code evolved in the future.
 
 
 Cheers
@@ -216,10 +212,20 @@ Cheers
 --
 Qais Yousef
 
+> +}
 > +
->  	return table;
->  }
+>  static int em_compute_costs(struct device *dev, struct em_perf_state *table,
+>  			    struct em_data_callback *cb, int nr_states,
+>  			    unsigned long flags)
+> @@ -331,6 +356,8 @@ static int em_create_perf_table(struct device *dev, struct em_perf_domain *pd,
+>  		table[i].frequency = prev_freq = freq;
+>  	}
 >  
+> +	em_init_performance(dev, pd, table, nr_states);
+> +
+>  	ret = em_compute_costs(dev, table, cb, nr_states, flags);
+>  	if (ret)
+>  		return -EINVAL;
 > -- 
 > 2.25.1
 > 
