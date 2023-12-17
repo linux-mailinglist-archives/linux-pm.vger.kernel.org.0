@@ -1,151 +1,138 @@
-Return-Path: <linux-pm+bounces-1245-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1247-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA2BB815F98
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Dec 2023 15:16:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 98649815FD5
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Dec 2023 15:34:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A8551F21E06
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Dec 2023 14:16:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36EC31F22849
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Dec 2023 14:34:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABE8C44394;
-	Sun, 17 Dec 2023 14:16:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ad7ET35A"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01D12481B3;
+	Sun, 17 Dec 2023 14:30:37 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E3344C65;
-	Sun, 17 Dec 2023 14:16:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-40c824b199fso11532215e9.1;
-        Sun, 17 Dec 2023 06:16:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702822595; x=1703427395; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QE9LT5uKY7JsupABUBOBD9RMHYXjaUg8xO88EJrYaiI=;
-        b=ad7ET35At84zRVG5iBN9bHnBzMCm5UonhOYE/Igc7vy3MHULFqYlw4kbaqJkZ8+n44
-         ZN8/mfGNtylQJgSOjztV7J3spuR/PTgPUn20sEj7QjK3FibupqmZBYyrJCr6oKd8tWti
-         UDPbJeocZPBxmBaqvrBsVZn1oEKPUvEqf+R+xLmfnF0jHZymNdRE684INZCLhkukBVsw
-         ZevkxNuvdDaoO53e5ST409Z1V2RYVSOHFzzjnIG4hH0ZP808rHkSL7tzLZZEUXhWOLl0
-         F5M6w7WYj9KoIG0YRiIcGlVh/aaUS+GecXCAXC2LcXSAm2DY5kQItfT5dXGtfwdlxb6u
-         hjgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702822595; x=1703427395;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QE9LT5uKY7JsupABUBOBD9RMHYXjaUg8xO88EJrYaiI=;
-        b=oDVWHamIO96GVciKpwORNUmU1CnrvBZseMW6zo+K1qx4kEAV3TAmpymW48WmNceTfn
-         xDnchN9BFKPG4+j2o026AYi1BUbLROHtQmJ+ulm2MSqClA0VSsbe3AKXOVhyJlt1cRmh
-         3mJNSO1i6BCKemdC1xumCC0fdxD85P42DFX+jKD+QyrL/tWhVJa5hdnuR+/KL5+yFC/H
-         IvJaeCJZVuBT80YlH8uuXCHlPdZBh8t5fpf4stoFplO6ZTF1nGVeeyW38sUESwboPCWw
-         9LV1+ovdhsLFgjHuLk2W9VsNE1hehmNIO0xUl+7FVbA4gyROJmhiRP40A1c9tzabl4j0
-         aDYQ==
-X-Gm-Message-State: AOJu0YxqaIhL88OjcO1DIerKTwLjhQ3DUzlkFSeLvZK8iJMF14nJuMGQ
-	BtsqvBXE/goWvP8vklQQfP2XUC2Q+dKeXA3x2jM=
-X-Google-Smtp-Source: AGHT+IExjfuW3jpa3SoAweUUhttwxY1n4WMOilHgVfSu02tbiEGYUETmuPVXW8HjArsYt2iXhbv/LkNJ28MdXpL/zFs=
-X-Received: by 2002:a05:600c:21d4:b0:40c:36ff:7513 with SMTP id
- x20-20020a05600c21d400b0040c36ff7513mr7155285wmj.164.1702822595053; Sun, 17
- Dec 2023 06:16:35 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F14B145971
+	for <linux-pm@vger.kernel.org>; Sun, 17 Dec 2023 14:30:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rEs9f-0006VJ-OC; Sun, 17 Dec 2023 15:30:07 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rEs9b-00GUh4-VU; Sun, 17 Dec 2023 15:30:03 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+	(envelope-from <ukl@pengutronix.de>)
+	id 1rEs9b-004hyq-J9; Sun, 17 Dec 2023 15:30:03 +0100
+From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: kernel@pengutronix.de,
+	Markus Mayer <mmayer@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Santosh Shilimkar <ssantosh@kernel.org>,
+	Paul Cercueil <paul@crapouillou.net>,
+	linux-mips@vger.kernel.org,
+	Yong Wu <yong.wu@mediatek.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-mediatek@lists.infradead.org,
+	Roger Quadros <rogerq@kernel.org>,
+	Tony Lindgren <tony@atomide.com>,
+	linux-omap@vger.kernel.org,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	linux-pm@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	linux-stm32@st-md-mailman.stormreply.com,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Sumit Gupta <sumitg@nvidia.com>,
+	Nick Alcock <nick.alcock@oracle.com>,
+	linux-tegra@vger.kernel.org,
+	Rob Herring <robh@kernel.org>
+Subject: [PATCH 00/15] memory: Convert to platform remove callback returning void
+Date: Sun, 17 Dec 2023 15:29:26 +0100
+Message-ID: <cover.1702822744.git.u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231128005849.19044-6-andre.przywara@arm.com>
- <a14fb458-caf0-4a4a-b76b-c2503b0840d2@gmail.com> <20231211000528.57cb646c@minigeek.lan>
- <CALHCpMjz4YiE_=6Cxq7RqF_3qPaw8UCA=6eLy9ZZuofRhr7mcA@mail.gmail.com> <20231214095914.4a98ba8c@donnerap.manchester.arm.com>
-In-Reply-To: <20231214095914.4a98ba8c@donnerap.manchester.arm.com>
-From: Maxim Kiselev <bigunclemax@gmail.com>
-Date: Sun, 17 Dec 2023 18:16:23 +0400
-Message-ID: <CALHCpMj6+J7xDO0EGut=hmJxXONXrgQoHTQ3vVzdk_97g6BzkA@mail.gmail.com>
-Subject: Re: [PATCH v3 5/6] thermal: sun8i: add support for H616 THS controller
-To: Andre Przywara <andre.przywara@arm.com>
-Cc: anarsoul@gmail.com, bob@electricworry.net, conor+dt@kernel.org, 
-	daniel.lezcano@linaro.org, devicetree@vger.kernel.org, 
-	jernej.skrabec@gmail.com, krzysztof.kozlowski+dt@linaro.org, 
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, 
-	linux-sunxi@lists.linux.dev, lukasz.luba@arm.com, martin.botka@somainline.org, 
-	rafael@kernel.org, robh+dt@kernel.org, rui.zhang@intel.com, 
-	samuel@sholland.org, tiny.windzz@gmail.com, wens@csie.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2631; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=FyuyHaIj5jd4bPxOXQjJ+ozo7s7sihGMLWkkNmVGnME=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlfwXFp0yrTZyYp2KFK2fwTyu80UmXy69MORJAs wm48iAIgimJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZX8FxQAKCRCPgPtYfRL+ TgNJB/9eFZpgOAoyZMQMzWGucpEqIvWX6W0eNcnXBmurNkaFQmk9v1UHmj1xyNFW24mvDrwXPRz PaBLdyRO1QyT7ZOOWdkxvvYU+/g6yBUmpw+P5lihn0tefw+vl6Ej1suMnbs2tMdJ0FTQYQZRyQL ZnZyl3AYPprWtaCsKyu9b4pRwdQGJ4KG1NnvRkE562N+Wg7eXkwU5ah9EQWW4t+Jcs6SgvZHMhp 1quJkD1SA//uBFFZXLUV5UysntvLZwazuV3zLV81y6r02+H5X8Y3mcj7mX2qPf8Ubh9GWDrcybC h8kJTYL4+I5P2Hh+7xPkiTW8Rt32gZGaprL2X8zZ8V/x9QkC
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-Hi Andre,
+Hello,
 
-=D1=87=D1=82, 14 =D0=B4=D0=B5=D0=BA. 2023=E2=80=AF=D0=B3. =D0=B2 13:59, And=
-re Przywara <andre.przywara@arm.com>:
->
-> On Tue, 12 Dec 2023 21:09:45 +0300
-> Maxim Kiselev <bigunclemax@gmail.com> wrote:
->
-> Hi Maksim,
->
-> sorry for the delay.
+this series converts the platform drivers below drivers/memory to make
+use of .remove_new. See commit 5c5a7680e67b ("platform: Provide a remove
+callback that returns no value") for an extended explanation and the
+eventual goal. The TL;DR; is to make it harder for driver authors to
+leak resources without noticing.
 
-Now it's my turn to apologize for the delay :)
+This is merge window material. All patches are pairwise independent of
+each other so they can be applied individually. Still it would be great
+to let them go in all together.
 
->
-> > =D0=BF=D0=BD, 11 =D0=B4=D0=B5=D0=BA. 2023=E2=80=AF=D0=B3. =D0=B2 02:48,=
- Andre Przywara <andre.przywara@arm.com>:
-> > >
-> > > On Sat, 9 Dec 2023 13:44:34 +0300
-> > > Maksim Kiselev <bigunclemax@gmail.com> wrote:
-> > >
-> > > Hi Maksim,
-> > >
-> > > > Hi Martin, Andre.
-> > > >
-> > > > May I inquire? Why do we need a separate sun50i_h616_ths_calibrate(=
-)
-> > > > function? Why can't we just extend an existing sun50i_h6_ths_calibr=
-ate()?
-> > > >
-> > > > At my glance the calculations in both functions are the same. We ju=
-st
-> > > > need to handle a special case for the 4th sensor.
-> > >
-> > > You seem to be right, they are indeed the same, just written slightly
-> > > differently. Do you already have any patches that unify that?
-> >
-> > No, I don't have any patches for that yet. But I can do it if you told
-> > me where to
-> > send the patch. Should I put it here as a reply?
->
-> Can you make one patch on top of mainline, that prepares the existing
-> sun50i_h6_ths_calibrate() function to deal with four sensors? I would the=
-n
-> include this patch of yours in the next submission, and put Martin's H616
-> patch (now probably just the struct ths_thermal_chip) on top then.
->
-> Please send this patch just to the list (CC:ing people like Martin and
-> me), starting a new thread.
+Best regards
+Uwe
 
-You can find my patch here:
-https://lore.kernel.org/all/20231217133637.54773-1-bigunclemax@gmail.com/
+Uwe Kleine-König (15):
+  memory: brcmstb_dpfe: Convert to platform remove callback returning void
+  memory: brcmstb_memc: Convert to platform remove callback returning void
+  memory: emif: Convert to platform remove callback returning void
+  memory: fsl-corenet-cf: Convert to platform remove callback returning void
+  memory: fsl_ifc: Convert to platform remove callback returning void
+  memory: jz4780-nemc: Convert to platform remove callback returning void
+  memory: mtk-smi: Convert to platform remove callback returning void
+  memory: omap-gpmc: Convert to platform remove callback returning void
+  memory: renesas-rpc-if: Convert to platform remove callback returning void
+  memory: exynos5422-dmc: Convert to platform remove callback returning void
+  memory: stm32-fmc2-ebi: Convert to platform remove callback returning void
+  memory: tegra186-emc: Convert to platform remove callback returning void
+  memory: tegra210-emc: Convert to platform remove callback returning void
+  memory: ti-aemif: Convert to platform remove callback returning void
+  memory: ti-emif-pm: Convert to platform remove callback returning void
 
-Best regards,
-Maksim
+ drivers/memory/brcmstb_dpfe.c            |  6 ++----
+ drivers/memory/brcmstb_memc.c            |  6 ++----
+ drivers/memory/emif.c                    |  6 ++----
+ drivers/memory/fsl-corenet-cf.c          |  6 ++----
+ drivers/memory/fsl_ifc.c                 |  6 ++----
+ drivers/memory/jz4780-nemc.c             |  5 ++---
+ drivers/memory/mtk-smi.c                 | 10 ++++------
+ drivers/memory/omap-gpmc.c               |  6 ++----
+ drivers/memory/renesas-rpc-if.c          |  6 ++----
+ drivers/memory/samsung/exynos5422-dmc.c  |  6 ++----
+ drivers/memory/stm32-fmc2-ebi.c          |  6 ++----
+ drivers/memory/tegra/tegra186-emc.c      |  6 ++----
+ drivers/memory/tegra/tegra210-emc-core.c |  6 ++----
+ drivers/memory/ti-aemif.c                |  5 ++---
+ drivers/memory/ti-emif-pm.c              |  6 ++----
+ 15 files changed, 32 insertions(+), 60 deletions(-)
 
-> Many thanks,
-> Andre
->
-> > > I don't know if Martin or I find time to do it this week, but we coul=
-d
-> > > also optimise this later.
-> > >
-> > > Cheers,
-> > > Andre
-> >
-> > Best regards,
-> > Maksim
->
+base-commit: 17cb8a20bde66a520a2ca7aad1063e1ce7382240
+-- 
+2.42.0
 
