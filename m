@@ -1,150 +1,95 @@
-Return-Path: <linux-pm+bounces-1263-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1264-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50649816256
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Dec 2023 22:10:05 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C16F881627F
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Dec 2023 22:39:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0D981F21F4B
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Dec 2023 21:10:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B194AB20D3B
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Dec 2023 21:39:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91389495CC;
-	Sun, 17 Dec 2023 21:09:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDC1748CCB;
+	Sun, 17 Dec 2023 21:39:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iryjYSYb"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="AI1u+MRL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA23E49F77;
-	Sun, 17 Dec 2023 21:09:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-50e270639d9so1550155e87.3;
-        Sun, 17 Dec 2023 13:09:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702847368; x=1703452168; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VEmC8yzpg0VqIzMb5nxgOtA5V+BfOBifdcCXQ6xHVfo=;
-        b=iryjYSYbYP0DX/DmxzCa3kCTEutqt0G46cq6jTWg7Xyyu+jDhL8ie0RS+LBfbd5x1T
-         xawtKL6XuNUU+sMSu+w+4Dr2BasvRvyhM9LSKlO7eLKYi2p8kg53jE4H1qOCcPNjWyA6
-         rUzqklvajrJzGa3vLNciYpJPs3UCA2YA7BzWkXcBGqJgZLwAozmvZEFc5HtrYIYfzL+5
-         0B215HNmdkrp5BauVHLVFkqT0AU3ko2jBY8USoyrLELeakJTQ4fTwuWCTyn7sWvAaTsK
-         wpSM2scGyPu6seP11K2zxZHOvFvXv7GMbu5u40b7Ba3nNXLt1llVZWAvWIyMKHk90xcQ
-         KrWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702847368; x=1703452168;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VEmC8yzpg0VqIzMb5nxgOtA5V+BfOBifdcCXQ6xHVfo=;
-        b=cFnpmFueIzJZjhFdSmHvYt/EJCxNJtE3Sq92RJ/fa5HkV5qm/ccZbUONocdIcSoxGC
-         gfpmm4o2LscIhKherJiFaVyksMbziWM8o1E0jqTbTTCmSQEoQ+qDQURqfhL5c7nNZqEj
-         GGcsbqx6h6HOt+zJ5aQoKfPfVbz5n/sHnobK5MwMg8kPfneGeEvC77DRQpk9fUiR2VDH
-         f+SSx597URAE/k4r4ELc8iPeXBIkZOZkmZgwx4MZJlbDCkyZQRYCEGRbcJgv62hidocu
-         RTi4KLGr1tt7CWONJsFcpErkrXFVNsuvZGPmqAXbFDmj4FeORS4Awo3A6+Z2eyWwBKfN
-         7C5w==
-X-Gm-Message-State: AOJu0YzQpaCpRp7s9XMkQpb9ckBHnHn6mfhbR5MokbCM/7A7/Dob5gQJ
-	ab1z2cQTMFuFOQ83nTyXDaI=
-X-Google-Smtp-Source: AGHT+IEmHz+jRu9UqOYO0LhhslWbwSbg09nII/aLGLXumsvPqPzNtDYWNyrCPwroyrvzHYdz6tqJSQ==
-X-Received: by 2002:ac2:4c15:0:b0:50e:3b2a:a7ed with SMTP id t21-20020ac24c15000000b0050e3b2aa7edmr29915lfq.16.1702847367506;
-        Sun, 17 Dec 2023 13:09:27 -0800 (PST)
-Received: from wpc.yadro.com (188-169-139-214.dsl.utg.ge. [188.169.139.214])
-        by smtp.gmail.com with ESMTPSA id vc11-20020a170907d08b00b00a1ce58e9fc7sm13316096ejc.64.2023.12.17.13.09.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Dec 2023 13:09:27 -0800 (PST)
-From: Maksim Kiselev <bigunclemax@gmail.com>
-To: 
-Cc: Andre Przywara <andre.przywara@arm.com>,
-	Maxim Kiselev <bigunclemax@gmail.com>,
-	Vasily Khoruzhick <anarsoul@gmail.com>,
-	Yangtao Li <tiny.windzz@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	John Watts <contact@jookia.org>,
-	Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-	linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: [PATCH v6 3/3] riscv: dts: allwinner: d1: Add thermal sensor
-Date: Mon, 18 Dec 2023 00:06:24 +0300
-Message-Id: <20231217210629.131486-4-bigunclemax@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20231217210629.131486-1-bigunclemax@gmail.com>
-References: <20231217210629.131486-1-bigunclemax@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C81648CC3;
+	Sun, 17 Dec 2023 21:39:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 4E807E0003;
+	Sun, 17 Dec 2023 21:39:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1702849163;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/O7tnrRXiqNnUS6mB8Em3vnSBAxRarOdTJFbfYRuCB8=;
+	b=AI1u+MRLUMEHXuabkyu74D8nNbH7zXPzRi0YtHOdhTuXfPoe8wK3Csr0bfMSJypkfpf3Gk
+	NuquSwx4srQXHt6OFsA1K+NbTlLzStRyQmCcyfeUX0pcx9uGiFaUeo5n55I2sVcpCRiqUi
+	Z+9jJSlYqBlOSPfrGRSSsg4EG/9rfB7NS4R4FoxK0cqAScnEsTgefMiEuLkd5fWEMlX10g
+	9jXnllhnOm7wd1ovkkwVsXjTA23uWx3JTMYh/QNAI63YeZH/bUlDVJ6VzqcH9F1xgcl/gM
+	gApJCLDm9ZQOTguKSjzNwQXw7TCs9rC+jUtkvdoPa8roLGYviMRTsEVTVL/74A==
+Date: Sun, 17 Dec 2023 22:39:17 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+	Alessandro Zummo <a.zummo@towertech.it>,
+	Mario Limonciello <mario.limonciello@amd.com>
+Cc: "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" <linux-rtc@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org,
+	tobrohl@gmail.com, aalsing@gmail.com, Dhaval.Giani@amd.com,
+	xmb8dsv4@gmail.com, x86@kernel.org, dhaval.giani@gmail.com,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Borislav Petkov <bp@alien8.de>, "H . Peter Anvin" <hpa@zytor.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>
+Subject: Re: [PATCH v4 0/4] Extend time to wait for UIP for some callers
+Message-ID: <170284892664.25661.2800776178102384405.b4-ty@bootlin.com>
+References: <20231128053653.101798-1-mario.limonciello@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20231128053653.101798-1-mario.limonciello@amd.com>
+X-GND-Sasl: alexandre.belloni@bootlin.com
 
-From: Maxim Kiselev <bigunclemax@gmail.com>
 
-This patch adds a thermal sensor controller node for the D1/T113s.
-Also it adds a THS calibration data cell to efuse node.
+On Mon, 27 Nov 2023 23:36:49 -0600, Mario Limonciello wrote:
+> A number of users have reported their system will have a failure reading
+> the RTC around s2idle entry or exit.
+> 
+> This failure manifests as UIP clear taking longer than 10ms.
+> 
+> By a debugging patch provided by Mateusz Jończyk it is shown that this
+> has taken upwards of 300ms in some cases.
+> 
+> [...]
 
-Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
----
- .../boot/dts/allwinner/sunxi-d1s-t113.dtsi      | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+Applied, thanks!
 
-diff --git a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-index 5a9d7f5a75b4..6f5427d9cfbf 100644
---- a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-+++ b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-@@ -166,6 +166,19 @@ gpadc: adc@2009000 {
- 			#io-channel-cells = <1>;
- 		};
- 
-+		ths: thermal-sensor@2009400 {
-+			compatible = "allwinner,sun20i-d1-ths";
-+			reg = <0x02009400 0x400>;
-+			interrupts = <SOC_PERIPHERAL_IRQ(58) IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&ccu CLK_BUS_THS>;
-+			clock-names = "bus";
-+			resets = <&ccu RST_BUS_THS>;
-+			nvmem-cells = <&ths_calibration>;
-+			nvmem-cell-names = "calibration";
-+			status = "disabled";
-+			#thermal-sensor-cells = <0>;
-+		};
-+
- 		dmic: dmic@2031000 {
- 			compatible = "allwinner,sun20i-d1-dmic",
- 				     "allwinner,sun50i-h6-dmic";
-@@ -415,6 +428,10 @@ sid: efuse@3006000 {
- 			reg = <0x3006000 0x1000>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
-+
-+			ths_calibration: thermal-sensor-calibration@14 {
-+				reg = <0x14 0x4>;
-+			};
- 		};
- 
- 		crypto: crypto@3040000 {
+[1/4] rtc: mc146818-lib: Adjust failure return code for mc146818_get_time()
+      commit: af838635a3eb9b1bc0d98599c101ebca98f31311
+[2/4] rtc: Adjust failure return code for cmos_set_alarm()
+      commit: 1311a8f0d4b23f58bbababa13623aa40b8ad4e0c
+[3/4] rtc: Add support for configuring the UIP timeout for RTC reads
+      commit: 120931db07b49252aba2073096b595482d71857c
+[4/4] rtc: Extend timeout for waiting for UIP to clear to 1s
+      commit: cef9ecc8e938dd48a560f7dd9be1246359248d20
+
+
 -- 
-2.40.1
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
