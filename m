@@ -1,118 +1,82 @@
-Return-Path: <linux-pm+bounces-1246-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1248-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44A00815FC4
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Dec 2023 15:31:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A0238160E4
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Dec 2023 18:25:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7332B21AD4
-	for <lists+linux-pm@lfdr.de>; Sun, 17 Dec 2023 14:31:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA82D281BE5
+	for <lists+linux-pm@lfdr.de>; Sun, 17 Dec 2023 17:25:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D432E46BA4;
-	Sun, 17 Dec 2023 14:30:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DCA44A988;
+	Sun, 17 Dec 2023 17:21:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YusXwokC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DBEB45BF1
-	for <linux-pm@vger.kernel.org>; Sun, 17 Dec 2023 14:30:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rEs9f-0006WW-9b; Sun, 17 Dec 2023 15:30:07 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rEs9e-00GUhc-2u; Sun, 17 Dec 2023 15:30:06 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-	(envelope-from <ukl@pengutronix.de>)
-	id 1rEs9d-004hzT-Pr; Sun, 17 Dec 2023 15:30:05 +0100
-From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: kernel@pengutronix.de,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4541A4CB32;
+	Sun, 17 Dec 2023 17:21:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBCE7C433C8;
+	Sun, 17 Dec 2023 17:21:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702833713;
+	bh=8N3P5nYe7wXCoqXxo98OZAZtfqGTeIMLsSiomVlGjP4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=YusXwokCqi/jVflsk+obcw8ntr0+E/IL24iW+t2XMlaPQeivpW2snFpflUCGjJFf6
+	 pWUvWjPSQdxjwSTPeuEoy3tXsGEmKT8YV2fFd2oxw4jb+QoXbN2GFCxo1oTvuT5h8L
+	 ja9ZT3x7DkhQ8k8N0UEM1JT37V30qbzYMPrD1kMkbIl6KfnM0PS7qxpfLg4zPDaQrO
+	 ghGJ//TNJ2TORJlYbBUcOLVvGW+434n91lhLgq44gEl49e1KxJ7VQgZ2teEVEsX4Nu
+	 k6D+DTaMTlAqkQuWV1T97eaQuMgSzqbBBDpLZ9Tb70lKhypi0A6QcR0SV2ZFU/rZEW
+	 JZikVQpqI9MdA==
+From: Bjorn Andersson <andersson@kernel.org>
+To: Andy Gross <agross@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Georgi Djakov <djakov@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: Marijn Suijten <marijn.suijten@somainline.org>,
+	linux-arm-msm@vger.kernel.org,
 	linux-pm@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 10/15] memory: exynos5422-dmc: Convert to platform remove callback returning void
-Date: Sun, 17 Dec 2023 15:29:36 +0100
-Message-ID:  <167dbda286584eafec07da8c11673da07ba72362.1702822744.git.u.kleine-koenig@pengutronix.de>
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH 0/2] Enable interconnect on SM6115
+Date: Sun, 17 Dec 2023 11:21:08 -0600
+Message-ID: <170283349423.66089.10057591496955925021.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <cover.1702822744.git.u.kleine-koenig@pengutronix.de>
-References: <cover.1702822744.git.u.kleine-koenig@pengutronix.de>
+In-Reply-To: <20231209-topic-6115iccdt-v1-0-f62da62b7276@linaro.org>
+References: <20231209-topic-6115iccdt-v1-0-f62da62b7276@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2061; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=FHOjgtzRIN9XHjUcxCP7MGMz7yRB1JuZQ6LGi2PE66k=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlfwXQmW+Q6PEK4vacr/EoUiA1qF6qrGQu4k8BB 9+ceA0cHFWJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZX8F0AAKCRCPgPtYfRL+ TibiCAC1uo4RR6+/cFLGqWwewyu7CjBqgCgdaQNtmQtdcpP2BuwkSLign+vU7FxZOYvzOomdeb7 Kbha57cN1prbQpTJKp03UX5Y1TyYuVy9YkkPh+Ac2Xi2b98vREFLjfHkN36A2dnfUjLBm4v34+7 vE1YzF5TRy+eKezWaP/iCLmnv85eU9Sn5FMf6SYKYcOEWOuesQzWE+LzP4pM+h4Qsu7IkMOMtgl Hp8SNhDVJklZXTzVGDXH1qQETrw545SnVH1mjxL044eXLlp+mYtBnJhB160GOkhvLz6Z/jZmBgh 50xvY3amw2c7RHVnhGLOYfeiqWmVuYPjiebx2NauufYrlzb+
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-The .remove() callback for a platform driver returns an int which makes
-many driver authors wrongly assume it's possible to do error handling by
-returning an error code. However the value returned is ignored (apart
-from emitting a warning) and this typically results in resource leaks.
 
-To improve here there is a quest to make the remove callback return
-void. In the first step of this quest all drivers are converted to
-.remove_new(), which already returns void. Eventually after all drivers
-are converted, .remove_new() will be renamed to .remove().
+On Mon, 11 Dec 2023 10:23:57 +0100, Konrad Dybcio wrote:
+> The SM6115 interconnect driver has been merged now. Add nodes required
+> to make use of it.
+> 
+> Patch 1 for icc, patch 2 for qcom.
+> 
+> Likely depends on patch 3/ (qcm2290 BWMON compatible) from [1].
+> 
+> [...]
 
-Trivially convert this driver from always returning zero in the remove
-callback to the void returning variant.
+Applied, thanks!
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
----
- drivers/memory/samsung/exynos5422-dmc.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+[2/2] arm64: dts: qcom: sm6115: Hook up interconnects
+      commit: b3eaa47395b9d0fc593e7f8b8b0abb4c769ad30d
 
-diff --git a/drivers/memory/samsung/exynos5422-dmc.c b/drivers/memory/samsung/exynos5422-dmc.c
-index 6d019dbd721c..da7ecd921c72 100644
---- a/drivers/memory/samsung/exynos5422-dmc.c
-+++ b/drivers/memory/samsung/exynos5422-dmc.c
-@@ -1558,7 +1558,7 @@ static int exynos5_dmc_probe(struct platform_device *pdev)
-  * clean the device's resources. It just calls explicitly disable function for
-  * the performance counters.
-  */
--static int exynos5_dmc_remove(struct platform_device *pdev)
-+static void exynos5_dmc_remove(struct platform_device *pdev)
- {
- 	struct exynos5_dmc *dmc = dev_get_drvdata(&pdev->dev);
- 
-@@ -1569,8 +1569,6 @@ static int exynos5_dmc_remove(struct platform_device *pdev)
- 
- 	clk_disable_unprepare(dmc->mout_bpll);
- 	clk_disable_unprepare(dmc->fout_bpll);
--
--	return 0;
- }
- 
- static const struct of_device_id exynos5_dmc_of_match[] = {
-@@ -1581,7 +1579,7 @@ MODULE_DEVICE_TABLE(of, exynos5_dmc_of_match);
- 
- static struct platform_driver exynos5_dmc_platdrv = {
- 	.probe	= exynos5_dmc_probe,
--	.remove = exynos5_dmc_remove,
-+	.remove_new = exynos5_dmc_remove,
- 	.driver = {
- 		.name	= "exynos5-dmc",
- 		.of_match_table = exynos5_dmc_of_match,
+Best regards,
 -- 
-2.42.0
-
+Bjorn Andersson <andersson@kernel.org>
 
