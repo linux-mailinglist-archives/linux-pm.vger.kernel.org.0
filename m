@@ -1,189 +1,112 @@
-Return-Path: <linux-pm+bounces-1281-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1282-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75B7B816D34
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 13:01:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45EBA816DC3
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 13:15:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F3AFC1F23ECC
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 12:01:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C7731C23860
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 12:15:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2DAC199CA;
-	Mon, 18 Dec 2023 11:55:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 741C44B152;
+	Mon, 18 Dec 2023 12:14:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="C2KaLUoh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E72162136B;
-	Mon, 18 Dec 2023 11:55:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BDE2E1FB;
-	Mon, 18 Dec 2023 03:56:30 -0800 (PST)
-Received: from [10.57.86.170] (unknown [10.57.86.170])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0C0FF3F64C;
-	Mon, 18 Dec 2023 03:55:43 -0800 (PST)
-Message-ID: <44cb77d0-1d9a-47af-b699-e3019b520574@arm.com>
-Date: Mon, 18 Dec 2023 11:56:50 +0000
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CFA74F899;
+	Mon, 18 Dec 2023 12:14:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=08SzGJH5lXG9BtLXnSCiZJkgfUYvZPRLdF1MiDN6maA=; b=C2KaLUoh/n1BgxKSf6SrAbqvai
+	JKrWWotA8ePs91dXAVLuwjEpSY5ePbNax2YRNGRaUBgp7XlJSEVD5M4TKEtLw4VeIHgs2tqfFO7aM
+	dxhfjGyheynixij5MnQ9UsD+vCLAUH1h1KZirAZWC8js4LRKy1n3PwI3uBnUi1JZVY2U7Ihv5/Mor
+	rJp5cRqch1rnSU/tEZFmu+buYl/SCLuuuxAXtVHXXphaJjFugXWAG6myDphxhCF2EwzotxfXC/uJ4
+	u6LnZqqFeEf53FdSsSiRJvxxjxBXV5gsbJXRjyqKyBk1ikWGT5yxqUY1944KT5NF09+Aqz0ttUPbl
+	JFeOLJUA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:54580)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1rFCVj-0005GR-2l;
+	Mon, 18 Dec 2023 12:14:15 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1rFCVi-0006hJ-Np; Mon, 18 Dec 2023 12:14:14 +0000
+Date: Mon, 18 Dec 2023 12:14:14 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+	x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
+	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	jianyong.wu@arm.com, justin.he@arm.com,
+	James Morse <james.morse@arm.com>
+Subject: Re: [PATCH RFC v3 21/21] cpumask: Add enabled cpumask for present
+ CPUs that can be brought online
+Message-ID: <ZYA3lmPOwIOJq/iY@shell.armlinux.org.uk>
+References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
+ <E1rDOhX-00Dvlg-Ci@rmk-PC.armlinux.org.uk>
+ <20231215171831.00004a19@Huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 22/23] PM: EM: Add em_dev_compute_costs() as API for
- device drivers
-To: Qais Yousef <qyousef@layalina.io>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- rafael@kernel.org, rui.zhang@intel.com, amit.kucheria@verdurent.com,
- amit.kachhap@gmail.com, daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
- len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org, wvw@google.com
-References: <20231129110853.94344-1-lukasz.luba@arm.com>
- <20231129110853.94344-23-lukasz.luba@arm.com>
- <8fc499cf-fca1-4465-bff7-a93dfd36f3c8@arm.com>
- <20231217180316.rblvtqaxjvu5xedf@airbuntu>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20231217180316.rblvtqaxjvu5xedf@airbuntu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231215171831.00004a19@Huawei.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-Hi Dietmar and Qais,
-
-On 12/17/23 18:03, Qais Yousef wrote:
-> On 12/12/23 19:50, Dietmar Eggemann wrote:
->> On 29/11/2023 12:08, Lukasz Luba wrote:
->>> The device drivers can modify EM at runtime by providing a new EM table.
->>> The EM is used by the EAS and the em_perf_state::cost stores
->>> pre-calculated value to avoid overhead. This patch provides the API for
->>> device drivers to calculate the cost values properly (and not duplicate
->>> the same code).
->>
->> New interface w/o any users? Can we not remove this from this patch-set
->> and introduce it with the first user(s)?
-
-I didn't wanted to introduce the user of this in the same patch set.
-I will send a follow up patch for Exynos SoC. More about this below.
-
+On Fri, Dec 15, 2023 at 05:18:31PM +0000, Jonathan Cameron wrote:
+> On Wed, 13 Dec 2023 12:50:59 +0000
+> Russell King (Oracle) <rmk+kernel@armlinux.org.uk> wrote:
 > 
-> It's a chicken and egg problem. No interface, will not enable the new users to
-> appear too. So assuming the interface makes sense, I vote to keep it.
+> > From: James Morse <james.morse@arm.com>
+> > 
+> > The 'offline' file in sysfs shows all offline CPUs, including those
+> > that aren't present. User-space is expected to remove not-present CPUs
+> > from this list to learn which CPUs could be brought online.
+> > 
+> > CPUs can be present but not-enabled. These CPUs can't be brought online
+> > until the firmware policy changes, which comes with an ACPI notification
+> > that will register the CPUs.
+> > 
+> > With only the offline and present files, user-space is unable to
+> > determine which CPUs it can try to bring online. Add a new CPU mask
+> > that shows this based on all the registered CPUs.
+> > 
+> > Signed-off-by: James Morse <james.morse@arm.com>
+> > Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> > Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
+> > Tested-by: Jianyong Wu <jianyong.wu@arm.com>
+> > ---
+> 
+> Needs docs
+> Documentation/ABI/testing/sysfs-devices-system-cpu
+> seems to have the rest of the similar entries.
 
-There are already in mainline platforms which will benefit from this
-feature and would use this API. The platform which support chip
-binning and adjust the voltage based on that information. It can be a
-driver which can even be built as a module. One example is Exynos5 ASV
-(Adaptive Supply Voltage) part of the Exynos chipid driver [1].
-Here is the dmesg log with some additional debug from this driver.
-As you can see the EM finished the registration and also update (the
-new feature from this patch set), but it worked on old Voltages from
-OPPs. (Also, this driver can be built as a module).
+Any ideas what I put in there as "Date" ? It seems to me that we have
+little idea when this might be merged.. I could use the date of the
+commit (Nov 2022).
 
--------------------------------------------------
-[    4.651049] cpu cpu4: EM: created perf domain
-[    4.654073] cpu cpu0: EM: OPP:1200000 is inefficient
-[    4.654108] cpu cpu0: EM: OPP:1100000 is inefficient
-[    4.654140] cpu cpu0: EM: OPP:900000 is inefficient
-[    4.654173] cpu cpu0: EM: OPP:800000 is inefficient
-[    4.654204] cpu cpu0: EM: OPP:600000 is inefficient
-[    4.654235] cpu cpu0: EM: OPP:500000 is inefficient
-[    4.654266] cpu cpu0: EM: OPP:400000 is inefficient
-[    4.654297] cpu cpu0: EM: OPP:200000 is inefficient
-[    4.654342] cpu cpu0: EM: updated
-....
-[    4.750026] exynos-chipid 10000000.chipid: cpu0 opp0, freq: 1500 missing
-[    4.755329] exynos-chipid 10000000.chipid: Checking asv_volt=1175000 
-opp_volt=1275000
-[    4.763213] exynos-chipid 10000000.chipid: Checking asv_volt=1125000 
-opp_volt=1250000
-[    4.770982] exynos-chipid 10000000.chipid: Checking asv_volt=1075000 
-opp_volt=1250000
-[    4.778820] exynos-chipid 10000000.chipid: Checking asv_volt=1037500 
-opp_volt=1250000
-[    4.786515] exynos-chipid 10000000.chipid: Checking asv_volt=1000000 
-opp_volt=1100000
-[    4.794356] exynos-chipid 10000000.chipid: Checking asv_volt=962500 
-opp_volt=1100000
-[    4.802018] exynos-chipid 10000000.chipid: Checking asv_volt=925000 
-opp_volt=1100000
-[    4.816323] exynos-chipid 10000000.chipid: Checking asv_volt=900000 
-opp_volt=1000000
-[    4.824109] exynos-chipid 10000000.chipid: Checking asv_volt=900000 
-opp_volt=1000000
-[    4.839933] exynos-chipid 10000000.chipid: Checking asv_volt=900000 
-opp_volt=1000000
-[    4.854762] exynos-chipid 10000000.chipid: Checking asv_volt=900000 
-opp_volt=1000000
-[    4.866191] exynos-chipid 10000000.chipid: Checking asv_volt=900000 
-opp_volt=900000
-[    4.878812] exynos-chipid 10000000.chipid: Checking asv_volt=900000 
-opp_volt=900000
-[    4.886052] exynos-chipid 10000000.chipid: cpu4 opp0, freq: 2100 missing
-[    4.892800] exynos-chipid 10000000.chipid: Checking asv_volt=1225000 
-opp_volt=1312500
-[    4.900542] exynos-chipid 10000000.chipid: Checking asv_volt=1162500 
-opp_volt=1262500
-[    4.908342] exynos-chipid 10000000.chipid: Checking asv_volt=1112500 
-opp_volt=1237500
-[    4.916066] exynos-chipid 10000000.chipid: Checking asv_volt=1075000 
-opp_volt=1250000
-[    4.923926] exynos-chipid 10000000.chipid: Checking asv_volt=1037500 
-opp_volt=1250000
-[    4.931707] exynos-chipid 10000000.chipid: Checking asv_volt=1000000 
-opp_volt=1100000
-[    4.939582] exynos-chipid 10000000.chipid: Checking asv_volt=975000 
-opp_volt=1100000
-[    4.947225] exynos-chipid 10000000.chipid: Checking asv_volt=950000 
-opp_volt=1100000
-[    4.954885] exynos-chipid 10000000.chipid: Checking asv_volt=925000 
-opp_volt=1000000
-[    4.962601] exynos-chipid 10000000.chipid: Checking asv_volt=900000 
-opp_volt=1000000
-[    4.974047] exynos-chipid 10000000.chipid: Checking asv_volt=900000 
-opp_volt=1000000
-[    4.974071] exynos-chipid 10000000.chipid: Checking asv_volt=900000 
-opp_volt=1000000
-[    4.993670] exynos-chipid 10000000.chipid: Checking asv_volt=900000 
-opp_volt=900000
-[    5.001163] exynos-chipid 10000000.chipid: Checking asv_volt=900000 
-opp_volt=900000
-[    5.008818] exynos-chipid 10000000.chipid: Checking asv_volt=900000 
-opp_volt=900000
-[    5.016318] exynos-chipid 10000000.chipid: Checking asv_volt=900000 
-opp_volt=900000
-[    5.023955] exynos-chipid 10000000.chipid: Checking asv_volt=900000 
-opp_volt=900000
-[    5.039723] exynos-chipid 10000000.chipid: Checking asv_volt=900000 
-opp_volt=900000
-[    5.054445] exynos-chipid 10000000.chipid: Checking asv_volt=900000 
-opp_volt=900000
-[    5.066709] exynos-chipid 10000000.chipid: Exynos: CPU[EXYNOS5800] 
-PRO_ID[0xe5422000] REV[0x1] Detected
-
--------------------------------------------------
-
-The new EM which would be updated from that driver, would have lower
-voltages as well as different 'inefficient OPPs'. The maximum voltage
-difference based on the tables is 13.54% which means for the dynamic
-power:
-1362500 = 1.135416667 * 1200000
-P_dyn = C* f * (V*1.1354 * V*1.1354) = C*f*V^2 * 1.289
-
-That's ~29% different dynamic power (for one core).
-
-This Voltage adjustment is due to chip lottery. Different SoC vendors
-use different name for this fact.
-I only have this Exynos platform, but when this API
-and v5 features get in, the vendors can modify their drivers and test.
-
-This should help both: EAS and IPA/DTPM.
-
-Regards,
-Lukasz
-
-[1] 
-https://elixir.bootlin.com/linux/latest/source/drivers/soc/samsung/exynos5422-asv.c
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
