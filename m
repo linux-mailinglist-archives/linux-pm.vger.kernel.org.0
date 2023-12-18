@@ -1,169 +1,103 @@
-Return-Path: <linux-pm+bounces-1291-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1292-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACA34817659
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 16:52:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6DB081765E
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 16:54:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4156D1C244D5
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 15:52:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 794BCB21514
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 15:54:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2128E3D57F;
-	Mon, 18 Dec 2023 15:52:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="SoaR5zD+"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FE9742379;
+	Mon, 18 Dec 2023 15:53:56 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0246042392
-	for <linux-pm@vger.kernel.org>; Mon, 18 Dec 2023 15:52:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6ce934e9d51so1648015b3a.1
-        for <linux-pm@vger.kernel.org>; Mon, 18 Dec 2023 07:52:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1702914735; x=1703519535; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=xRTTXKwsjJet8ZkeLHXEyVsnly/+Y+ihhaRVJKHSVpQ=;
-        b=SoaR5zD+Nt22wAImoKGjWaV1CxcGc8lJ6bN6ZEwwf/ZK0LzQQMxMmiEyn8U3UrxuNp
-         dP0QbBluWFhgpuwP5gmgU+rINehoQYgdtNjZWRTuEFoHusCiCBj1WYpgD05P7EMwPT2n
-         pKQ6Ww+mL8WrJDN87514pJFJB9Aq+jzc1oeiOnDSK8xLtbDiKEPBk94PevZU2N3rh/Go
-         lyNev8yZPxTrTwiLdNAkr35Y2cjLVPIvZ4eNh52Lmmlj8GMwL41swkTmGFLLv4Q3wRDB
-         Ljoiz1wbNTqpyhRtenzGe94snvF668p9l8D2v44xuGyJqc1rNriYTg3IvxyoHthfGeyX
-         hNgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702914735; x=1703519535;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xRTTXKwsjJet8ZkeLHXEyVsnly/+Y+ihhaRVJKHSVpQ=;
-        b=dlKgkbcXKCHTD03KoHNgaWx8pSaQI9swnHBnHXTG5z4Sst5Gp4UwLjDNOuRKSYCZYS
-         y4ewwQE99q+LJt6AiuB3x5n33VuHACIwpO+4LYKGOKqka62LBE/OvsUZs7cEPDl2zcTh
-         R0IfEHt/aGmVJqbbZvMzwHH75CtD2SF96LDEiosKYpDB6Ejrt7rFzNBPP4kXKUFCZSon
-         CbAsUra/M2EX/kL3ncvZtXzMb0Vbm3midMnH5xV0G4+L3RBMLERs4SZtolGeVgH8aB29
-         Zj1fwz1Z1JM1L84BvZE0XvatE/Pb74lrEyLIsWQgD9iOFc8Ek9eJYIi36ghKhgLXIPP+
-         DAEA==
-X-Gm-Message-State: AOJu0YyFB66NvLY7j6ES2Adb92g/GCfvmeUO0eCThvbdAge8Kzy/tOH3
-	v7CIlF71gVCYIAwee/ZaPT7Ce0P+ZmbEqdSs7+w=
-X-Google-Smtp-Source: AGHT+IFeOqO6/R+ITYvB9oqZTCMeVr2JNfPaB6Ag9UCkTkczfjWk4XyP/+Z49DTDlSZcT5rvPYCB2A==
-X-Received: by 2002:a05:6a00:124c:b0:6d6:e6cb:770d with SMTP id u12-20020a056a00124c00b006d6e6cb770dmr911002pfi.62.1702914735190;
-        Mon, 18 Dec 2023 07:52:15 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id fb7-20020a056a002d8700b006ce7e75cfa7sm1791867pfb.57.2023.12.18.07.52.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Dec 2023 07:52:14 -0800 (PST)
-Message-ID: <65806aae.050a0220.f90f7.4b92@mx.google.com>
-Date: Mon, 18 Dec 2023 07:52:14 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 116FC3D566;
+	Mon, 18 Dec 2023 15:53:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C60E92F4;
+	Mon, 18 Dec 2023 07:54:37 -0800 (PST)
+Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B004F3F5A1;
+	Mon, 18 Dec 2023 07:53:50 -0800 (PST)
+Date: Mon, 18 Dec 2023 15:53:45 +0000
+From: Andre Przywara <andre.przywara@arm.com>
+To: Conor Dooley <conor@kernel.org>
+Cc: Brandon Cheo Fusi <fusibrandon13@gmail.com>, Yangtao Li
+ <tiny.windzz@gmail.com>, Viresh Kumar <vireshk@kernel.org>, Nishanth Menon
+ <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, Rob Herring
+ <robh+dt@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
+ Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Samuel Holland <samuel@sholland.org>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, "Rafael J . Wysocki" <rafael@kernel.org>, Maxime
+ Ripard <mripard@kernel.org>, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 3/5] cpufreq: sun50i: Add D1 support
+Message-ID: <20231218155345.476e71ea@donnerap.manchester.arm.com>
+In-Reply-To: <20231218-blabber-slapstick-ab7ae45af019@spud>
+References: <20231218110543.64044-1-fusibrandon13@gmail.com>
+	<20231218110543.64044-4-fusibrandon13@gmail.com>
+	<20231218-blabber-slapstick-ab7ae45af019@spud>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.7-rc6-87-gfbcc41b787013
-Subject: pm/testing build: 7 builds: 0 failed, 7 passed,
- 4 warnings (v6.7-rc6-87-gfbcc41b787013)
-To: rafael@kernel.org, linux-pm@vger.kernel.org,
- kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-pm/testing build: 7 builds: 0 failed, 7 passed, 4 warnings (v6.7-rc6-87-gfb=
-cc41b787013)
+On Mon, 18 Dec 2023 14:55:30 +0000
+Conor Dooley <conor@kernel.org> wrote:
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-7-rc6-87-gfbcc41b787013/
+Hi,
 
-Tree: pm
-Branch: testing
-Git Describe: v6.7-rc6-87-gfbcc41b787013
-Git Commit: fbcc41b78701321b5d7ba64b77bd1c19981d001f
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 7 unique architectures
+> On Mon, Dec 18, 2023 at 12:05:41PM +0100, Brandon Cheo Fusi wrote:
+> > Add support for D1 based devices to the Allwinner H6 cpufreq
+> > driver
+> > 
+> > Signed-off-by: Brandon Cheo Fusi <fusibrandon13@gmail.com>
+> > ---
+> >  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> > index 32a9c88f8..ccf83780f 100644
+> > --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> > +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> > @@ -160,6 +160,7 @@ static struct platform_driver sun50i_cpufreq_driver = {
+> >  
+> >  static const struct of_device_id sun50i_cpufreq_match_list[] = {
+> >  	{ .compatible = "allwinner,sun50i-h6" },
+> > +	{ .compatible = "allwinner,sun20i-d1" },  
+> 
+> I thought the feedback in v2 was to drop this change, since the
+> devicetree has the sun50i-h6 as a fallback compatible?
 
-Warnings Detected:
+Well, this is the *board* (fallback) compatible string, so we cannot assign
+it as we like. The whole (existing) scheme is admittedly somewhat weird,
+because we not only match on a particular device compatible
+(like allwinner,sun20i-d1-operating-points), but also need to blocklist and
+re-match some parts against the *board compatible*, owing to the
+cpufreq-dt driver. The board name is basically used as a placeholder to
+find out the SoC, because there is (or was?) no other good way - the
+CPU DT nodes don't work for this. Back when this was introduced, this was
+the "least worst" solution.
 
-arc:
+I don't remember all the details, and didn't find time yet to look into
+this in more detail, but fixing this is non-trivial. If this isn't 6.8
+material, I might have a look at this later this week/month.
 
-arm64:
-
-i386:
-
-mips:
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+Cheers,
+Andre
 
