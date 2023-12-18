@@ -1,105 +1,130 @@
-Return-Path: <linux-pm+bounces-1286-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1287-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0ED678170AF
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 14:43:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2D998173E0
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 15:40:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C3D8282D52
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 13:43:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D75361C21E45
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 14:40:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A7111D127;
-	Mon, 18 Dec 2023 13:42:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDEDD13FE6;
+	Mon, 18 Dec 2023 14:40:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YquedR+o"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="o8S7Ru0T"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8F41D159
-	for <linux-pm@vger.kernel.org>; Mon, 18 Dec 2023 13:42:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E5B2200C0
+	for <linux-pm@vger.kernel.org>; Mon, 18 Dec 2023 14:40:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-40c69403b3eso29263675e9.3
-        for <linux-pm@vger.kernel.org>; Mon, 18 Dec 2023 05:42:46 -0800 (PST)
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5532b45c286so1774405a12.0
+        for <linux-pm@vger.kernel.org>; Mon, 18 Dec 2023 06:40:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702906965; x=1703511765; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xyEG4+5CWlynpKgbnqEksNZUKPX7fzBsT3XPQGSore8=;
-        b=YquedR+oCDpFK2QO1vifa6qmqchNGSs6FM34pFufOPCCqjZ5n3nXHrH2UQsgQqUI7Y
-         Jn2gjr6+Fy1MZRnrUmICAAZdQ3lWF4szuqHFGY4OVCLErUoexf1NzhCCZaxuQTRhxwq3
-         PMer1zr6X/hjNDi26Z3AWlz2A450Lv+8U0IqjN63zW0n7rGFjatz8M/ZxohqvgHqOs8n
-         YNnZNrQ88N3kzMTn3BPwRgiuZaqq6SSguX+jMi9FbY7MI/V+da0Ku4ZcKMKA8E3Vussi
-         DJXvX8vGldWHg7uwHEzXOLRmirBDXvm0oye+QPbQrO2q43DoeGETTad/O7Qnp/EmRFQP
-         VCwA==
+        d=linaro.org; s=google; t=1702910402; x=1703515202; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bQTHmPqAi3BiL6/SuUuJyEm6v6KImHr4PNYUjCrz2Do=;
+        b=o8S7Ru0TO0sOoJc4eHASjA7/NQDC/MG6s8TZpndgov9Y+waUpWvu+byzmaTaXLOOMS
+         xgoPPyuUE4uLkM4F/m9EKfwrHABK62mkAvdeC0b+rsXQ/1xrVCwylKltOjE8AXEUdqVj
+         ut18DPxyCCNLJEehmzIDRyDyww4QpzSN2oFbZh+fkSMcNoZ7G5VXBytNDQmSRMe/FKXO
+         8T6zKO7rFla4gx+GvaHpzsgu7oaC40KyfYJWiuJZPduKlP/fdZyYbxnadFuerNwSMT2Q
+         E9tHyhP6p9Brv61LgTVZPceH2tUPT2Hf5z1XOIOclovbkTMq9rfd7RUdgXovPY0yzKBK
+         XbFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702906965; x=1703511765;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1702910402; x=1703515202;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xyEG4+5CWlynpKgbnqEksNZUKPX7fzBsT3XPQGSore8=;
-        b=GpY/QojRM8EWXZTx60GRMqYLfKK3vOKUF9FDcJv19TgMeAmUnr4Tr21YxG/L77Mrig
-         DYd+Qh5MvrVa48+RwIm4sKNOKTgbzr0W3+j70JgcH1nbC0r5nk+dX31IYqU1Wd1a/oxR
-         t9MKo1t8Wa0Wp5Rizgkw8w/lK4uk6rc5QARquxpp4tgD/qcOwazKthx2x+DMjdXXhWYf
-         hjbO4FbYhHPO+0ao2XbcusQ8F3r+d6/FKIrOLGmmOz3hUlqcpUz5Jx140TRlbHZYXNTh
-         iDlIS7oW315A4QwDkw5Cp4tP9Uw4m9CU8UKhSroXyvhVcU/H9//wROC6mFxzmIXhvAfQ
-         Lt8Q==
-X-Gm-Message-State: AOJu0Yz3MJchcs9q1H5GA+DzaTDvaSHFhfaPbKTTewFiMPMggsYNl3AF
-	9yq5NCouK+gLbUHVLxOd/mg75N90SPGl3syX9XBqCg==
-X-Google-Smtp-Source: AGHT+IFEsHmQvoI+lwVFUNs2ikaUGdgRgCy7+Zn0cnWHJ6oZBH16pyO7uuiglM/OBqgJBBq7eFjBgg==
-X-Received: by 2002:a7b:cd12:0:b0:40c:33aa:4ef5 with SMTP id f18-20020a7bcd12000000b0040c33aa4ef5mr8025674wmj.91.1702906964902;
-        Mon, 18 Dec 2023 05:42:44 -0800 (PST)
-Received: from krzk-bin.. ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id h7-20020a170906530700b00a1b32663d7csm14242327ejo.102.2023.12.18.05.42.43
+        bh=bQTHmPqAi3BiL6/SuUuJyEm6v6KImHr4PNYUjCrz2Do=;
+        b=MkNzYPeKp5Y4bp6RPibM2vIGiIxQeijPV+GxFmq+eTEZXIJBO7H2gzxqfjTuFudgLD
+         iLUrt65XaikK8ZvEaUlj+s+UtTIzGJX6b9213UczSyJb76ipvFWtFIhICuQAJ0WoExL0
+         sjC8knkNVVkJOc7fANz+5p0W+EruTf1F7uM0qr87Na9owxilDnPqNbjs1d3OAvz/FZQl
+         bGtBXz1Oh2sFB67sU6epQTFjntmp5l9kD2MjmVDdedVvaNzpkfySkJbOdYdfa2Fo8jOe
+         JLSQGo4bl6fg942wiv05q5kYa+B8znTblv7N2ReW0DOOOOvOAhMDl+k9oc9PT1v3EBuh
+         ElNA==
+X-Gm-Message-State: AOJu0YwojcGjwGtlllNBpFjUg5fxbXB4GYRcM6kdydKXz1z94aSzbKAu
+	Lncc2jBCGIS1wxa8bAxKLMbLEA==
+X-Google-Smtp-Source: AGHT+IGieG6PHSpO7kAdb+8EmH7ka7SFF91cTZxrMXWbWpVh5X/q1rwqv3Vyvx+8ZcYUYPpLejfn/g==
+X-Received: by 2002:a17:906:1f4d:b0:a19:a1ba:bae7 with SMTP id d13-20020a1709061f4d00b00a19a1babae7mr3766338ejk.141.1702910402457;
+        Mon, 18 Dec 2023 06:40:02 -0800 (PST)
+Received: from [10.167.154.1] (178235179137.dynamic-4-waw-k-1-3-0.vectranet.pl. [178.235.179.137])
+        by smtp.gmail.com with ESMTPSA id o18-20020a17090611d200b00a2362ef4387sm654930eja.49.2023.12.18.06.40.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Dec 2023 05:42:44 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] power: supply: drop maintainer-less BQ27XXX
-Date: Mon, 18 Dec 2023 14:42:41 +0100
-Message-Id: <20231218134241.50284-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Mon, 18 Dec 2023 06:40:02 -0800 (PST)
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Date: Mon, 18 Dec 2023 15:40:00 +0100
+Subject: [PATCH] thermal: core: Print out thermal zone name on
+ update_temperature error
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20231218-topic-thermaldbg-v1-1-451bcb723e1d@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAL9ZgGUC/x2NywrCMBAAf6Xs2UAejai/Ih426dosxLRsqgil/
+ +7icQaG2aGTMHW4DTsIfbjz0hTcaYBcsM1keFIGb31w3l3MtqyczVZIXlinNBuM12DtGOIYz6B
+ Zwk4mCbZcNGzvWlWuQk/+/j/3x3H8AJUeitZ3AAAA
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>
+Cc: Marijn Suijten <marijn.suijten@somainline.org>, 
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1702910400; l=1225;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=UU7uKTLN3epJ08kwExjhQmhXBD0r95XXPC6qw1eXEh4=;
+ b=Q+80yXiJ0lRIuo9VrUzn28vbeGgMSh97SH+S/F1mpK+OYOMmKiVcZfD0RqeQlgjdcaarchEAE
+ ydCTp+GOpjcBkEoRxIlKLtjUyc9Aqg37NWxIYBTeZHmiULKGfh7qFkg
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
-BQ27XXX charger driver does not have maintainers nor status:
+Currently, we can encounter an error like this:
 
-  ./MAINTAINERS:21808: warning: section without status 	TI BQ27XXX POWER SUPPLY DRIVER
+  thermal thermal_zone48: failed to read out thermal zone (-19)
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+It's good to know that there's been an issue, but on some occasions
+(like the error happening in the middle of a platform crash), one may
+not be able to look up what kind of thermal zone that is.
+
+Add the TZ name to the error message in order to speed up debugging.
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- MAINTAINERS | 5 -----
- 1 file changed, 5 deletions(-)
+ drivers/thermal/thermal_core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index cdf1575dc851..28b98fc4637c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -21763,11 +21763,6 @@ L:	linux-omap@vger.kernel.org
- S:	Maintained
- F:	drivers/thermal/ti-soc-thermal/
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 2415dc50c31d..a6ccf93eb34e 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -403,8 +403,8 @@ static void update_temperature(struct thermal_zone_device *tz)
+ 	if (ret) {
+ 		if (ret != -EAGAIN)
+ 			dev_warn(&tz->device,
+-				 "failed to read out thermal zone (%d)\n",
+-				 ret);
++				 "failed to read out thermal zone %s (%d)\n",
++				 tz->type, ret);
+ 		return;
+ 	}
  
--TI BQ27XXX POWER SUPPLY DRIVER
--F:	drivers/power/supply/bq27xxx_battery.c
--F:	drivers/power/supply/bq27xxx_battery_i2c.c
--F:	include/linux/power/bq27xxx_battery.h
--
- TI CDCE706 CLOCK DRIVER
- M:	Max Filippov <jcmvbkbc@gmail.com>
- S:	Maintained
+
+---
+base-commit: ceb2fe0d438644e1de06b9a6468a1fb8e2199c70
+change-id: 20231218-topic-thermaldbg-a59300435456
+
+Best regards,
 -- 
-2.34.1
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
 
