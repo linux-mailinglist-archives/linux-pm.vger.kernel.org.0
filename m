@@ -1,110 +1,194 @@
-Return-Path: <linux-pm+bounces-1328-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1329-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F06F817B1F
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 20:40:56 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C05B817BA8
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 21:18:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 107641F21658
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 19:40:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A0A65B23CA9
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 20:17:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A84385D759;
-	Mon, 18 Dec 2023 19:40:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D35AB72069;
+	Mon, 18 Dec 2023 20:17:48 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE7F1E530;
-	Mon, 18 Dec 2023 19:40:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 429C67146E;
+	Mon, 18 Dec 2023 20:17:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-59158202d22so816588eaf.0;
-        Mon, 18 Dec 2023 11:40:49 -0800 (PST)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-20394042a45so279477fac.0;
+        Mon, 18 Dec 2023 12:17:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702928448; x=1703533248;
+        d=1e100.net; s=20230601; t=1702930666; x=1703535466;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fqCIyrV80aQe/xoEqMj06Wb1LCcYSvkWNPSdUnD3As8=;
-        b=ISu3/3/LiXkAW/i7y7Rf0rBn1Lz/nDn0wjKxM5UJQJ/A0McbdeEBEi39thjqI+1BYs
-         4p611R5qSXFtGQCEp1s2Cr7GM0/tUJBlsdSMoIaKmWqlAAYdX1iVK3BtfRzh3a0lAPZN
-         v9I6Vbbl2SWMiyBRMw17hVYlLcn0ZUmtV9wM3A1mbPkPm9KGT+QeGdHjzSXxVPhjJNpX
-         oBkCDevJVdr0jE/hdUyZ4tgztmuWsitk4U+ZAiVVSAbefJbfL1FKyGVTVoiHnsd9dqsK
-         qS0aWdOrHdo3NaAR6dJe0ardcHxL9b+nx95YH67yvtSCCCr5MmklbyCOVauox3OV5Unq
-         O1hg==
-X-Gm-Message-State: AOJu0YwVIcz/ZVMbCctMJGfjiWOOemCUBaUOK8JXav4+cO4QCizhyCu5
-	feeNDgbn+XNbor4OnI4WDZFpKxQp6LSdGQuv0iM=
-X-Google-Smtp-Source: AGHT+IFw6ui7RKvOySfqcNYWm/9KsHzVK8NCh6DrCyO+hgtaUUqYO5d9lQ5UTiAmONH8I1X7ZbYO4U+ycwbN2h9KA0g=
-X-Received: by 2002:a05:6820:2a18:b0:590:9027:7ab0 with SMTP id
- dr24-20020a0568202a1800b0059090277ab0mr24739293oob.0.1702928448299; Mon, 18
- Dec 2023 11:40:48 -0800 (PST)
+        bh=BVggm/k7h51uGokCDrYG9yM8ij6+ByTlCjSSiz9AMHU=;
+        b=j+cpQAhZ5EEyQhYmHr0vMjlkHiWBOE0Q/mGiu/JrTWX3qqoOAf6hORYIKIinCVwTs5
+         yGKbLcrk1gb1WNZXe2/vxOagVXtwV/rS5PCw7qIxss954TuXeTvQTCjQedRKZo6ax/iF
+         ixU/rvy+geguv/CA8mXBpdmLFWJVZX/cyuWXHVxTtvHBtc33H4PCnzO1BQBlVXYs/RyI
+         pWuro8Q0MgyN8tTfY+/BvgDPYnC8Nz2ryFqJa4oluvzZD4bU+OOk3IIF5vWD/rYPJFxE
+         DDx5EvLJEPMuzC7wtX77BRNscywfc+PvfMViCfUK2XIBGgrcvu/tar1LDm9MJboLITK7
+         Qk9Q==
+X-Gm-Message-State: AOJu0YxMLBTv2B7NYmm5chKSElGEU03qGjummiquhPRJIYWOWFm7GmnM
+	WqtLANJtUi/8XlT8a9wv5575rJGDGHpuEsNZY1U=
+X-Google-Smtp-Source: AGHT+IFMjefUSNquEpPstcFy8KIyactI5mxHoAdfHlD4qq0J99AZZDv3tX1Y2M6bLJ1U3Iv5VjAbiMgTsk/u/KcBObU=
+X-Received: by 2002:a05:6870:9591:b0:203:e5bc:154a with SMTP id
+ k17-20020a056870959100b00203e5bc154amr834085oao.2.1702930665760; Mon, 18 Dec
+ 2023 12:17:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231218-topic-thermaldbg-v1-1-451bcb723e1d@linaro.org>
-In-Reply-To: <20231218-topic-thermaldbg-v1-1-451bcb723e1d@linaro.org>
+References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk> <E1rDOfx-00Dvje-MS@rmk-PC.armlinux.org.uk>
+In-Reply-To: <E1rDOfx-00Dvje-MS@rmk-PC.armlinux.org.uk>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 18 Dec 2023 20:40:37 +0100
-Message-ID: <CAJZ5v0gkko7nWH2ePwEhbfXR-jAb9+f+rsfYXKBMSz04uW4rYg@mail.gmail.com>
-Subject: Re: [PATCH] thermal: core: Print out thermal zone name on
- update_temperature error
-To: Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Marijn Suijten <marijn.suijten@somainline.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Mon, 18 Dec 2023 21:17:34 +0100
+Message-ID: <CAJZ5v0iB0bS6nmjQ++pV1zp5YSGuigbffK5VD3wsX+8bY9MA5w@mail.gmail.com>
+Subject: Re: [PATCH RFC v3 02/21] ACPI: processor: Add support for processors
+ described as container packages
+To: Russell King <rmk+kernel@armlinux.org.uk>
+Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, 
+	acpica-devel@lists.linuxfoundation.org, linux-csky@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>, 
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com, justin.he@arm.com, 
+	James Morse <james.morse@arm.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 18, 2023 at 3:40=E2=80=AFPM Konrad Dybcio <konrad.dybcio@linaro=
-.org> wrote:
+On Wed, Dec 13, 2023 at 1:49=E2=80=AFPM Russell King <rmk+kernel@armlinux.o=
+rg.uk> wrote:
 >
-> Currently, we can encounter an error like this:
+> From: James Morse <james.morse@arm.com>
 >
->   thermal thermal_zone48: failed to read out thermal zone (-19)
+> ACPI has two ways of describing processors in the DSDT. From ACPI v6.5,
+> 5.2.12:
 >
-> It's good to know that there's been an issue, but on some occasions
-> (like the error happening in the middle of a platform crash), one may
-> not be able to look up what kind of thermal zone that is.
+> "Starting with ACPI Specification 6.3, the use of the Processor() object
+> was deprecated. Only legacy systems should continue with this usage. On
+> the Itanium architecture only, a _UID is provided for the Processor()
+> that is a string object. This usage of _UID is also deprecated since it
+> can preclude an OSPM from being able to match a processor to a
+> non-enumerable device, such as those defined in the MADT. From ACPI
+> Specification 6.3 onward, all processor objects for all architectures
+> except Itanium must now use Device() objects with an _HID of ACPI0007,
+> and use only integer _UID values."
 >
-> Add the TZ name to the error message in order to speed up debugging.
+> Also see https://uefi.org/specs/ACPI/6.5/08_Processor_Configuration_and_C=
+ontrol.html#declaring-processors
+>
+> Duplicate descriptions are not allowed, the ACPI processor driver already
+> parses the UID from both devices and containers. acpi_processor_get_info(=
+)
+> returns an error if the UID exists twice in the DSDT.
 
-s/name/type/ ?  It looks like that's what you mean.
+I'm not really sure how the above is related to the actual patch.
 
-First, the tz type is not its name (because there may be multiple
-zones of the same type) and it would be consistent with the first
-paragraph above.
+> The missing probe for CPUs described as packages
 
+It is unclear what exactly is meant by "CPUs described as packages".
+
+From the patch, it looks like those would be Processor() objects
+defined under a processor container device.
+
+> creates a problem for
+> moving the cpu_register() calls into the acpi_processor driver, as CPUs
+> described like this don't get registered, leading to errors from other
+> subsystems when they try to add new sysfs entries to the CPU node.
+> (e.g. topology_sysfs_init()'s use of topology_add_dev() via cpuhp)
 >
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> To fix this, parse the processor container and call acpi_processor_add()
+> for each processor that is discovered like this.
+
+Discovered like what?
+
+> The processor container
+> handler is added with acpi_scan_add_handler(), so no detach call will
+> arrive.
+
+The above requires clarification too.
+
+> Qemu TCG describes CPUs using processor devices in a processor container.
+> For more information, see build_cpus_aml() in Qemu hw/acpi/cpu.c and
+> https://uefi.org/specs/ACPI/6.5/08_Processor_Configuration_and_Control.ht=
+ml#processor-container-device
+>
+> Signed-off-by: James Morse <james.morse@arm.com>
+> Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
+> Tested-by: Jianyong Wu <jianyong.wu@arm.com>
 > ---
->  drivers/thermal/thermal_core.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_cor=
-e.c
-> index 2415dc50c31d..a6ccf93eb34e 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -403,8 +403,8 @@ static void update_temperature(struct thermal_zone_de=
-vice *tz)
->         if (ret) {
->                 if (ret !=3D -EAGAIN)
->                         dev_warn(&tz->device,
-> -                                "failed to read out thermal zone (%d)\n"=
-,
-> -                                ret);
-> +                                "failed to read out thermal zone %s (%d)=
-\n",
-> +                                tz->type, ret);
->                 return;
->         }
->
->
+> Outstanding comments:
+>  https://lore.kernel.org/r/20230914145353.000072e2@Huawei.com
+>  https://lore.kernel.org/r/50571c2f-aa3c-baeb-3add-cd59e0eddc02@redhat.co=
+m
 > ---
+>  drivers/acpi/acpi_processor.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+>
+> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.=
+c
+> index 4fe2ef54088c..6a542e0ce396 100644
+> --- a/drivers/acpi/acpi_processor.c
+> +++ b/drivers/acpi/acpi_processor.c
+> @@ -626,9 +626,31 @@ static struct acpi_scan_handler processor_handler =
+=3D {
+>         },
+>  };
+>
+> +static acpi_status acpi_processor_container_walk(acpi_handle handle,
+> +                                                u32 lvl,
+> +                                                void *context,
+> +                                                void **rv)
+> +{
+> +       struct acpi_device *adev;
+> +       acpi_status status;
+> +
+> +       adev =3D acpi_get_acpi_dev(handle);
+> +       if (!adev)
+> +               return AE_ERROR;
+
+Why is the reference counting needed here?
+
+Wouldn't acpi_fetch_acpi_dev() suffice?
+
+Also, should the walk really be terminated on the first error?
+
+> +
+> +       status =3D acpi_processor_add(adev, &processor_device_ids[0]);
+> +       acpi_put_acpi_dev(adev);
+> +
+> +       return status;
+> +}
+> +
+>  static int acpi_processor_container_attach(struct acpi_device *dev,
+>                                            const struct acpi_device_id *i=
+d)
+>  {
+> +       acpi_walk_namespace(ACPI_TYPE_PROCESSOR, dev->handle,
+> +                           ACPI_UINT32_MAX, acpi_processor_container_wal=
+k,
+> +                           NULL, NULL, NULL);
+
+This covers processor objects only, so why is this not needed for
+processor devices defined under a processor container object?
+
+It is not obvious, so it would be nice to add a comment explaining the
+difference.
+
+> +
+>         return 1;
+>  }
+>
+> --
 
