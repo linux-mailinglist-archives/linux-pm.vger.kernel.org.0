@@ -1,30 +1,30 @@
-Return-Path: <linux-pm+bounces-1265-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1266-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A56058163E1
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 01:57:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C9FD8163F2
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 02:09:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62ED928281E
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 00:57:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8698E1C20953
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 01:09:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1363C1861;
-	Mon, 18 Dec 2023 00:57:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4E221FC4;
+	Mon, 18 Dec 2023 01:09:42 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F10041863;
-	Mon, 18 Dec 2023 00:57:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6A6F1FA3;
+	Mon, 18 Dec 2023 01:09:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B55E81FB;
-	Sun, 17 Dec 2023 16:58:32 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BA0F01FB;
+	Sun, 17 Dec 2023 17:10:24 -0800 (PST)
 Received: from minigeek.lan (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C59CD3F738;
-	Sun, 17 Dec 2023 16:57:44 -0800 (PST)
-Date: Mon, 18 Dec 2023 00:57:30 +0000
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C6A413F738;
+	Sun, 17 Dec 2023 17:09:36 -0800 (PST)
+Date: Mon, 18 Dec 2023 01:09:26 +0000
 From: Andre Przywara <andre.przywara@arm.com>
 To: Maksim Kiselev <bigunclemax@gmail.com>
 Cc: Vasily Khoruzhick <anarsoul@gmail.com>, Yangtao Li
@@ -35,17 +35,17 @@ Cc: Vasily Khoruzhick <anarsoul@gmail.com>, Yangtao Li
  <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec
  <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, Paul
  Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, John Watts <contact@jookia.org>,
- Cristian Ciocaltea <cristian.ciocaltea@collabora.com>, Marc Kleine-Budde
- <mkl@pengutronix.de>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v6 2/3] thermal: sun8i: Add D1/T113s THS controller
- support
-Message-ID: <20231218005730.59227952@minigeek.lan>
-In-Reply-To: <20231217210629.131486-3-bigunclemax@gmail.com>
+ Albert Ou <aou@eecs.berkeley.edu>, Marc Kleine-Budde <mkl@pengutronix.de>,
+ John Watts <contact@jookia.org>, Cristian Ciocaltea
+ <cristian.ciocaltea@collabora.com>, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v6 3/3] riscv: dts: allwinner: d1: Add thermal sensor
+Message-ID: <20231218010926.10e15c57@minigeek.lan>
+In-Reply-To: <20231217210629.131486-4-bigunclemax@gmail.com>
 References: <20231217210629.131486-1-bigunclemax@gmail.com>
-	<20231217210629.131486-3-bigunclemax@gmail.com>
+	<20231217210629.131486-4-bigunclemax@gmail.com>
 Organization: Arm Ltd.
 X-Mailer: Claws Mail 4.2.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 Precedence: bulk
@@ -57,62 +57,68 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon, 18 Dec 2023 00:06:23 +0300
+On Mon, 18 Dec 2023 00:06:24 +0300
 Maksim Kiselev <bigunclemax@gmail.com> wrote:
 
-Hi Maksim,
+Hi,
 
 > From: Maxim Kiselev <bigunclemax@gmail.com>
 > 
-> This patch adds a thermal sensor controller support for the D1/T113s,
-> which is similar to the one on H6, but with only one sensor and
-> different scale and offset values.
-
-That looks alright to me, the offset and scale values match the
-converted values in the manual, and the rest looks indeed the same as
-used on the H6.
-
+> This patch adds a thermal sensor controller node for the D1/T113s.
+> Also it adds a THS calibration data cell to efuse node.
+> 
 > Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
+> ---
+>  .../boot/dts/allwinner/sunxi-d1s-t113.dtsi      | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
+> index 5a9d7f5a75b4..6f5427d9cfbf 100644
+> --- a/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
+> +++ b/arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
+> @@ -166,6 +166,19 @@ gpadc: adc@2009000 {
+>  			#io-channel-cells = <1>;
+>  		};
+>  
+> +		ths: thermal-sensor@2009400 {
+> +			compatible = "allwinner,sun20i-d1-ths";
+> +			reg = <0x02009400 0x400>;
+> +			interrupts = <SOC_PERIPHERAL_IRQ(58) IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&ccu CLK_BUS_THS>;
+> +			clock-names = "bus";
+> +			resets = <&ccu RST_BUS_THS>;
+> +			nvmem-cells = <&ths_calibration>;
+> +			nvmem-cell-names = "calibration";
+> +			status = "disabled";
+
+Any reason this is disabled? We typically don't disable those internal
+devices in the SoC .dtsi, the THS is one example (check the instances
+in other SoCs' .dtsi files).
+
+The rest looks alright, compared to the manual, so with this line
+removed:
 
 Reviewed-by: Andre Przywara <andre.przywara@arm.com>
 
-Thanks,
+Cheers,
 Andre
 
-> ---
->  drivers/thermal/sun8i_thermal.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
-> index f989b55a8aa8..6a8e386dbc8d 100644
-> --- a/drivers/thermal/sun8i_thermal.c
-> +++ b/drivers/thermal/sun8i_thermal.c
-> @@ -606,6 +606,18 @@ static const struct ths_thermal_chip sun50i_h6_ths = {
->  	.calc_temp = sun8i_ths_calc_temp,
->  };
->  
-> +static const struct ths_thermal_chip sun20i_d1_ths = {
-> +	.sensor_num = 1,
-> +	.has_bus_clk_reset = true,
-> +	.offset = 188552,
-> +	.scale = 673,
-> +	.temp_data_base = SUN50I_H6_THS_TEMP_DATA,
-> +	.calibrate = sun50i_h6_ths_calibrate,
-> +	.init = sun50i_h6_thermal_init,
-> +	.irq_ack = sun50i_h6_irq_ack,
-> +	.calc_temp = sun8i_ths_calc_temp,
-> +};
+> +			#thermal-sensor-cells = <0>;
+> +		};
 > +
->  static const struct of_device_id of_ths_match[] = {
->  	{ .compatible = "allwinner,sun8i-a83t-ths", .data = &sun8i_a83t_ths },
->  	{ .compatible = "allwinner,sun8i-h3-ths", .data = &sun8i_h3_ths },
-> @@ -614,6 +626,7 @@ static const struct of_device_id of_ths_match[] = {
->  	{ .compatible = "allwinner,sun50i-a100-ths", .data = &sun50i_a100_ths },
->  	{ .compatible = "allwinner,sun50i-h5-ths", .data = &sun50i_h5_ths },
->  	{ .compatible = "allwinner,sun50i-h6-ths", .data = &sun50i_h6_ths },
-> +	{ .compatible = "allwinner,sun20i-d1-ths", .data = &sun20i_d1_ths },
->  	{ /* sentinel */ },
->  };
->  MODULE_DEVICE_TABLE(of, of_ths_match);
+>  		dmic: dmic@2031000 {
+>  			compatible = "allwinner,sun20i-d1-dmic",
+>  				     "allwinner,sun50i-h6-dmic";
+> @@ -415,6 +428,10 @@ sid: efuse@3006000 {
+>  			reg = <0x3006000 0x1000>;
+>  			#address-cells = <1>;
+>  			#size-cells = <1>;
+> +
+> +			ths_calibration: thermal-sensor-calibration@14 {
+> +				reg = <0x14 0x4>;
+> +			};
+>  		};
+>  
+>  		crypto: crypto@3040000 {
 
 
