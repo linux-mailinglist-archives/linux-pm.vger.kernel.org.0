@@ -1,136 +1,177 @@
-Return-Path: <linux-pm+bounces-1306-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1307-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE95C817700
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 17:10:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA87981772A
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 17:15:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 64F60B2117F
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 16:10:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B29981C2505D
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 16:14:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6368642387;
-	Mon, 18 Dec 2023 16:09:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E83603D556;
+	Mon, 18 Dec 2023 16:14:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gb1u82cG"
+	dkim=pass (2048-bit key) header.d=sholland.org header.i=@sholland.org header.b="h5YRu0xm";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="2c/NbeoX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6FBD3D546;
-	Mon, 18 Dec 2023 16:09:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702915758; x=1734451758;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=swCu2ES7Jorb4M6K59myq2bEWQMpG0kDhJu6Hra6UJE=;
-  b=Gb1u82cG8HSox2lSLTR29SUznKrbkzDJy38eWBcSfGvuOZ3/iLagEOOw
-   XtyqZVq9LEmD6/5A7jKYwQSs3hMifD1ptdf8mbsV+ukcGWDkWa//Vg/Uw
-   QEUlYmUrY80RnxJMSslbifMzW5JXz/fz5FmX2+H9/BvEQmeIPv+G5Pv8C
-   G99/a1AgXMyUC8MOOz4seSlz9EUdJAsu6sAAMBuIkSfTQ8RRP0QM+1uMw
-   6Wc+iKuwdLJDq0iF6zQvY0hW2+AQ7rLc2gXYq8E3p/qSEv8B4Mh6LcsTd
-   QaZfPD/dEZfserhGuoND/BZh/QV1yKWAKG06AvdvY7NfGvhDZFUPFB/wV
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="8897210"
-X-IronPort-AV: E=Sophos;i="6.04,286,1695711600"; 
-   d="scan'208";a="8897210"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2023 08:09:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="899021765"
-X-IronPort-AV: E=Sophos;i="6.04,286,1695711600"; 
-   d="scan'208";a="899021765"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2023 08:09:16 -0800
-Date: Mon, 18 Dec 2023 08:11:00 -0800
-From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Bagas Sanjaya <bagasdotme@gmail.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Regressions <regressions@lists.linux.dev>,
-	Linux Power Management <linux-pm@vger.kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Ramses VdP <ramses@well-founded.dev>
-Subject: Re: Fwd: Intel hybrid CPU scheduler always prefers E cores
-Message-ID: <20231218161100.GA7839@ranerica-svr.sc.intel.com>
-References: <01df8329-06d7-4fd1-9c7a-05296f33231e@gmail.com>
- <20231128140225.GS8262@noisy.programming.kicks-ass.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81BDF49891;
+	Mon, 18 Dec 2023 16:14:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sholland.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sholland.org
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailnew.nyi.internal (Postfix) with ESMTP id 83B0B580974;
+	Mon, 18 Dec 2023 11:14:44 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 18 Dec 2023 11:14:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1702916084;
+	 x=1702923284; bh=6hSi0QYlB46i5legZj1Q7xKc4G5X4LGmhxKU180ngxA=; b=
+	h5YRu0xmF3N6ngePNTIApGIvibyXXlEaYL2Zsyftd4C/eDKPQHQs9P2T5T6dP5d7
+	Zw0q+wS53eIHOSOlXqC8BMNo0+nBjTH6QWpL9S3BflMvnV4s10eD5xqBL9Fup0iV
+	SyDVTrgbeeVstoj6Eu70FJ5MBy0GgIBeO9STD+R0lRnAFfkcOe+ZezdPCEAFclq1
+	X97Cka4f228PmnderwxwTB72Uzn71nYuFcTtmPOjBcdL//ihEn7Ok2KoJnVQQIZY
+	8EtNHMziu4PGlmkEiJXsfN8o58R65/m0XyRIVXf05trW1tVQVm7jpjqALeBtL0Ji
+	XhwhqTSU4He6BvYUEJGtgA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1702916084; x=
+	1702923284; bh=6hSi0QYlB46i5legZj1Q7xKc4G5X4LGmhxKU180ngxA=; b=2
+	c/NbeoXu6NgaSRQcaeYIHeUC7KDddwPp8Kt45aCedtbFloC2CDbi/3cggRpOx4Q3
+	IAceYKGnB00W7p0thxnkEy6hmwH/VTNm3MEwCL5b82xJtsmruAnlm+kD9henj3jm
+	wds8nkSEBH9GmRUtCvJlDY5NQw4sx4M/W2osvdqUVdx75FDaW0IVIWPSWjn4QUCH
+	EQiK5PmoneOn7Tp7WAHG+GjTwgxa/Qa6V+tWCNkbf25+VLiLzDhDakHAMP0uJEsE
+	UEHoZtAxl1s8xrHbdcsBWtU+04VxDznAyPJZT3vKtLDOYPtoeKi842dw6Nl1VZvg
+	9iqjIFc7wf+WuJqYKLqaQ==
+X-ME-Sender: <xms:82-AZeuzn37EaHmt_jBVvMGyCzzaWc_DxBVON1bBOtzvVd01YPoVVA>
+    <xme:82-AZTfZPlRSG9cQNsihav_u7xTWgcQhTdLBGMu9pyS440LycJ54Ey2fyRTxnomI5
+    lwpz2djCkshEcy8qA>
+X-ME-Received: <xmr:82-AZZw-_j3XEAkn3CuyqQAOX1kBxlEqiI9GpdfOSw3ZNc_YEogdrB2QYJUTZzAsMjuzxF-RMFxI5b-j7myXUWUlzmXji6BsDKgRlzbPtnc6hZSabKvM13uIMg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvddtkedgkeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtvdejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpeduffekkeejtdfhjeeivddukeehhfegteeihfefleelheeuudej
+    veefgeeggeehleenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrh
+    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhl
+    rghnugdrohhrgh
+X-ME-Proxy: <xmx:82-AZZM8NBZQdsE0Uy3dM_axGkmgOZvCcPpPXdT4wYhvZKt5Lol0aw>
+    <xmx:82-AZe-gcfDBPoWUPLeIcsFWTL5CGAuXB8--OHBes13fSRMZDXV5QA>
+    <xmx:82-AZRXcMpaql3SA-DESowLOKGAFp8bNN5nc3-ifaz6gWrbaecCgtA>
+    <xmx:9G-AZRi9UMKBgqfBd_LI6mnwolGB3S19lzyzIEor2KeSKnWRq-1JZg>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 18 Dec 2023 11:14:42 -0500 (EST)
+Message-ID: <aad8302d-a015-44ee-ad11-1a4c6e00074c@sholland.org>
+Date: Mon, 18 Dec 2023 10:14:42 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231128140225.GS8262@noisy.programming.kicks-ass.net>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/5] riscv: dts: allwinner: Update opp table to allow
+ CPU frequency scaling
+Content-Language: en-US
+To: Brandon Cheo Fusi <fusibrandon13@gmail.com>,
+ Yangtao Li <tiny.windzz@gmail.com>, Viresh Kumar <vireshk@kernel.org>,
+ Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ "Rafael J . Wysocki" <rafael@kernel.org>, Maxime Ripard <mripard@kernel.org>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20231218110543.64044-1-fusibrandon13@gmail.com>
+ <20231218110543.64044-2-fusibrandon13@gmail.com>
+From: Samuel Holland <samuel@sholland.org>
+In-Reply-To: <20231218110543.64044-2-fusibrandon13@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Nov 28, 2023 at 03:02:25PM +0100, Peter Zijlstra wrote:
-> On Tue, Nov 28, 2023 at 08:22:27PM +0700, Bagas Sanjaya wrote:
-> > Hi,
-> > 
-> > I come across an interesting bug report on Bugzilla [1]. The reporter
-> > wrote:
+On 12/18/23 05:05, Brandon Cheo Fusi wrote:
+> Two OPPs are currently defined for the D1/D1s; one at 408MHz and
+> another at 1.08GHz. Switching between these can be done with the
+> "sun50i-cpufreq-nvmem" driver. This patch populates the opp table
+> appropriately, inspired by
+> https://github.com/Tina-Linux/linux-5.4/blob/master/arch/riscv/boot/dts/sunxi/sun20iw1p1.dtsi
 > 
-> Thanks for forwarding, what happend in bugzilla staysi in bugzilla etc..
+> The supply voltages are PWM-controlled, but support for that IP
+> is still in the works. So stick to a target vdd-cpu supply of 0.9V,
+> which seems to be the default on most D1 boards.
 > 
-> Did you perchance Cc the reporter?
+> Signed-off-by: Brandon Cheo Fusi <fusibrandon13@gmail.com>
+> ---
+>  arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi | 18 +++++++++++++++---
+>  1 file changed, 15 insertions(+), 3 deletions(-)
 > 
-> > > I am running an intel alder lake system (Core i7-1260P), with a mix
-> > > of P and E cores.
-> > > 
-> > > Since Linux 6.6, and also on the current 6.7 RC, the scheduler seems
-> > > to have a strong preference for the E cores, and single threaded
-> > > workloads are consistently scheduled on one of the E cores.
-> > > 
-> > > With Linux 6.4 and before, when I ran a single threaded CPU-bound
-> > > process, it was scheduled on a P core. With 6.5, it seems that the
-> > > choice of P or E seemed rather random.
-> > > 
-> > > I tested these by running "stress" with different amounts of
-> > > threads. With a single thread on Linux 6.6 and 6.7, I always have an
-> > > E core at 100% and no load on the P cores. Starting from 3 threads I
-> > > get some load on the P cores as well, but the E cores stay more
-> > > heavily loaded.  With "taskset" I can force a process to run on a P
-> > > core, but clearly it's not very practical to have to do CPU
-> > > scheduling manually.
-> > > 
-> > > This severely affects single-threaded performance of my CPU since
-> > > the E cores are considerably slower. Several of my workflows are now
-> > > a lot slower due to them being single-threaded and heavily CPU-bound
-> > > and being scheduled on E cores whereas they would run on P cores
-> > > before.
-> > > 
-> > > I am not sure what the exact desired behaviour is here, to balance
-> > > power consumption and performance, but currently my P cores are
-> > > barely used for single-threaded workloads.
-> > > 
-> > > Is this intended behaviour or is this indeed a regression? Or is
-> > > there perhaps any configuration that I should have done from my
-> > > side? Is there any further info that I can provide to help you
-> > > figure out what's going on?
-> > 
-> > PM and scheduler people, is this a regression or works as intended?
-> 
-> AFAIK that is supposed to be steered by the ITMT muck and I don't think
-> we changed that.
-> 
-> Ricardo?
+> diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi b/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
+> index 64c3c2e6c..2f1771c19 100644
+> --- a/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
+> +++ b/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
+> @@ -39,16 +39,22 @@ cpu0_intc: interrupt-controller {
+>  	};
+>  
+>  	opp_table_cpu: opp-table-cpu {
+> -		compatible = "operating-points-v2";
+> +		compatible = "allwinner,sun20i-d1-operating-points",
+> +				 "allwinner,sun50i-h6-operating-points";
 
-Sorry for the late reply. This email was buried in a ton of email. To
-complete report here, Srinivas helped to debug the issue. The problem is
-that the computer in question lacks the necessary ACPI support to use ITMT.
+This is not correct. The compatible string specifies the algorithm for
+looking up the speed grade from the NVMEM cell, and D1 uses a totally
+different algorithm compared to H6:
 
-A new firmware release appears to have solved the issue.
+https://github.com/Tina-Linux/linux-5.4/blob/master/drivers/cpufreq/sun50i-cpufreq-nvmem.c#L293-L338
 
-Thanks and BR,
-Ricardo
+So you cannot use a fallback compatible string here, and you need to add
+driver support for the D1's speed bin encoding.
+
+Regards,
+Samuel
+
+> +		nvmem-cells = <&cpu_speed_grade>;
+> +		nvmem-cell-names = "speed";
+> +		opp-shared;
+>  
+>  		opp-408000000 {
+> +			clock-latency-ns = <244144>; /* 8 32k periods */
+>  			opp-hz = /bits/ 64 <408000000>;
+> -			opp-microvolt = <900000 900000 1100000>;
+> +			opp-microvolt-speed0 = <900000 900000 1100000>;
+>  		};
+>  
+>  		opp-1080000000 {
+> +			clock-latency-ns = <244144>; /* 8 32k periods */
+>  			opp-hz = /bits/ 64 <1008000000>;
+> -			opp-microvolt = <900000 900000 1100000>;
+> +			opp-microvolt-speed0 = <900000 900000 1100000>;
+>  		};
+>  	};
+>  
+> @@ -115,3 +121,9 @@ pmu {
+>  			<0x00000000 0x0000000f 0xffffffff 0xffffffff 0x00020000>;
+>  	};
+>  };
+> +
+> +&sid {
+> +	cpu_speed_grade: cpu-speed-grade@0 {
+> +		reg = <0x00 0x2>;
+> +	};
+> +};
+
 
