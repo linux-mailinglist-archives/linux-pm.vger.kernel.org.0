@@ -1,103 +1,134 @@
-Return-Path: <linux-pm+bounces-1292-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1293-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6DB081765E
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 16:54:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 045828176A5
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 17:02:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 794BCB21514
-	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 15:54:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B33181C25532
+	for <lists+linux-pm@lfdr.de>; Mon, 18 Dec 2023 16:02:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FE9742379;
-	Mon, 18 Dec 2023 15:53:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E27349886;
+	Mon, 18 Dec 2023 16:02:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="O5ixwYUX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 116FC3D566;
-	Mon, 18 Dec 2023 15:53:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C60E92F4;
-	Mon, 18 Dec 2023 07:54:37 -0800 (PST)
-Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B004F3F5A1;
-	Mon, 18 Dec 2023 07:53:50 -0800 (PST)
-Date: Mon, 18 Dec 2023 15:53:45 +0000
-From: Andre Przywara <andre.przywara@arm.com>
-To: Conor Dooley <conor@kernel.org>
-Cc: Brandon Cheo Fusi <fusibrandon13@gmail.com>, Yangtao Li
- <tiny.windzz@gmail.com>, Viresh Kumar <vireshk@kernel.org>, Nishanth Menon
- <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
- Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Samuel Holland <samuel@sholland.org>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
- <aou@eecs.berkeley.edu>, "Rafael J . Wysocki" <rafael@kernel.org>, Maxime
- Ripard <mripard@kernel.org>, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 3/5] cpufreq: sun50i: Add D1 support
-Message-ID: <20231218155345.476e71ea@donnerap.manchester.arm.com>
-In-Reply-To: <20231218-blabber-slapstick-ab7ae45af019@spud>
-References: <20231218110543.64044-1-fusibrandon13@gmail.com>
-	<20231218110543.64044-4-fusibrandon13@gmail.com>
-	<20231218-blabber-slapstick-ab7ae45af019@spud>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B904942375
+	for <linux-pm@vger.kernel.org>; Mon, 18 Dec 2023 16:02:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a236d2cc372so42365466b.3
+        for <linux-pm@vger.kernel.org>; Mon, 18 Dec 2023 08:02:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702915335; x=1703520135; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=c4hFbIwksqnnHMFEIUpDIp2sv6C4RgN/QaxeoGjcsV4=;
+        b=O5ixwYUXcyM9DTz1Ay7bcNMrvbJduiXVJjECpndeDew2JQ+836VanTHZoCHpu4elUf
+         2po8jYki4wvqVIzrZ4LjH6hm5JLOOL6Gl3r+3CfcTZkNN6tw4jUzWhxolSwEjJQwoOFo
+         EWmvGlobwUi9UH6uDU2PszjplMFp+cdJhhesqQKDI73PbNmnqyFeJ0NEkdjHGM9ClGBz
+         Kub4fnURTIbhWt5vkYXOOm819JBFMgGqc2EGGk4VfetCprArdufE/0FvcmYdzbhxFWgj
+         dSR+/NjzR/gYV8rZZJkfDpPC9VJcHphD95wBJX1YSaLVVuI/NwMrcGv9WsPsiQuE9Erq
+         qOLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702915335; x=1703520135;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c4hFbIwksqnnHMFEIUpDIp2sv6C4RgN/QaxeoGjcsV4=;
+        b=iaCimSragwobPDaPEUU9USR/asvsMRVR0RCYSKOxzFGjkK+QtzkSZDJJS7vmHQGi6T
+         osFMqcekTVW33Yhv0z91mZMLP7Vk+OCPAtS77USlOQZ21AEHjRtRMhxQ5KhsiHkXHUKj
+         2gAqWg3ZeMPd3nsW5u/Ff6dJ4we84vFz89PlP54i2JVT0/ZIJCaD9Kg+bZbsAVjQcedZ
+         xLjIg5Dajt+lUCOUWdam/9dJZxg/+TKAQXu8zJbRFYsfTZSrsoQCygXACFcqL6r7qiAM
+         h/TvzLY78q4gQYogDF73Le+LBE8pwrZP4j3MedQaPKpaTchhDd9ZMBfjG5duL/JCT1kE
+         VCjA==
+X-Gm-Message-State: AOJu0Yxm11qFUKy230BDshiJP40hoOxiahWi96m7AO/nYHttbHOjjMvk
+	pTjbCxbyb5J5ri+/sOtiSsyhGg==
+X-Google-Smtp-Source: AGHT+IGKfxKawkNOG95ldyV5Amy0pn0orRx9Kky6oco0+fkJ1sV58/N2nFdibVGmvUe0F9sZUP8LjA==
+X-Received: by 2002:a17:907:31c3:b0:a19:a1ba:da2d with SMTP id xf3-20020a17090731c300b00a19a1bada2dmr10314351ejb.84.1702915335035;
+        Mon, 18 Dec 2023 08:02:15 -0800 (PST)
+Received: from [10.167.154.1] (178235179137.dynamic-4-waw-k-1-3-0.vectranet.pl. [178.235.179.137])
+        by smtp.gmail.com with ESMTPSA id ts7-20020a170907c5c700b00a1dd58874b8sm14260693ejc.119.2023.12.18.08.02.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Dec 2023 08:02:14 -0800 (PST)
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 00/12] 8550 fixups
+Date: Mon, 18 Dec 2023 17:02:01 +0100
+Message-Id: <20231218-topic-8550_fixes-v1-0-ce1272d77540@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPlsgGUC/x2L0QqDMAwAf0XyvICtOMRfERltms6AVGl0DMR/X
+ 9jjHXcXKFdhhbG5oPJHVLZi4B4N0BLKm1GSMfjWd867AY9tF8Kh79tXli8r+kjPjlJmlxPYFoM
+ yxhoKLTaWc11N7pX/tZlpvu8fJCfhincAAAA=
+To: Bjorn Andersson <andersson@kernel.org>, 
+ Georgi Djakov <djakov@kernel.org>, Abel Vesa <abel.vesa@linaro.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Taniya Das <quic_tdas@quicinc.com>, 
+ Jagadeesh Kona <quic_jkona@quicinc.com>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+Cc: Marijn Suijten <marijn.suijten@somainline.org>, 
+ linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1702915332; l=1669;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=6Yb6Qe/+BKF3DV+Lv1BhKuTvaTNyVIFwB8H4W5q8BdI=;
+ b=WN6C/G5NMRK0U5PRvi6RcGbFHGJhOq0WE7mMSQzhNKn7wyhSth6m02iTHjs3EDXx7AmQreUZ+
+ qE3T1qxAX9ED17zx28TncGmUEfwG8aEyZttWnxMiImBy7buOGhSsja0
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
-On Mon, 18 Dec 2023 14:55:30 +0000
-Conor Dooley <conor@kernel.org> wrote:
+I found a couple of sneaky bugs concerning 8550, ranging from icc and clk,
+to some usual omissions in the dts. This series attempts to amend them to
+mostly prevent UB due to misconfiguration.
 
-Hi,
+Patches 1-2 for icc, rest for qcom
 
-> On Mon, Dec 18, 2023 at 12:05:41PM +0100, Brandon Cheo Fusi wrote:
-> > Add support for D1 based devices to the Allwinner H6 cpufreq
-> > driver
-> > 
-> > Signed-off-by: Brandon Cheo Fusi <fusibrandon13@gmail.com>
-> > ---
-> >  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> > index 32a9c88f8..ccf83780f 100644
-> > --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> > +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> > @@ -160,6 +160,7 @@ static struct platform_driver sun50i_cpufreq_driver = {
-> >  
-> >  static const struct of_device_id sun50i_cpufreq_match_list[] = {
-> >  	{ .compatible = "allwinner,sun50i-h6" },
-> > +	{ .compatible = "allwinner,sun20i-d1" },  
-> 
-> I thought the feedback in v2 was to drop this change, since the
-> devicetree has the sun50i-h6 as a fallback compatible?
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (12):
+      interconnect: qcom: sm8550: Remove bogus per-RSC BCMs and nodes
+      interconnect: qcom: sm8550: Enable sync_state
+      clk: qcom: gcc-sm8550: Add the missing RETAIN_FF_ENABLE GDSC flag
+      clk: qcom: gcc-sm8550: Mark the PCIe GDSCs votable
+      clk: qcom: gcc-sm8550: use collapse-voting for PCIe GDSCs
+      clk: qcom: gcc-sm8550: Mark RCGs shared where applicable
+      clk: qcom: gpucc-sm8550: Update GPU PLL settings
+      clk: qcom: dispcc-sm8550: Update disp PLL settings
+      clk: qcom: dispcc-sm8550: Use the correct PLL configuration function
+      arm64: dts: qcom: sm8550: Switch UFS from opp-table-hz to opp-v2
+      arm64: dts: qcom: sm8550: Separate out X3 idle state
+      arm64: dts: qcom: sm8550: Update idle state time requirements
 
-Well, this is the *board* (fallback) compatible string, so we cannot assign
-it as we like. The whole (existing) scheme is admittedly somewhat weird,
-because we not only match on a particular device compatible
-(like allwinner,sun20i-d1-operating-points), but also need to blocklist and
-re-match some parts against the *board compatible*, owing to the
-cpufreq-dt driver. The board name is basically used as a placeholder to
-find out the SoC, because there is (or was?) no other good way - the
-CPU DT nodes don't work for this. Back when this was introduced, this was
-the "least worst" solution.
+ arch/arm64/boot/dts/qcom/sm8550.dtsi |  82 +++--
+ drivers/clk/qcom/dispcc-sm8550.c     |  12 +-
+ drivers/clk/qcom/gcc-sm8550.c        | 110 +++----
+ drivers/clk/qcom/gpucc-sm8550.c      |   6 +-
+ drivers/interconnect/qcom/sm8550.c   | 575 +----------------------------------
+ drivers/interconnect/qcom/sm8550.h   | 284 ++++++++---------
+ 6 files changed, 257 insertions(+), 812 deletions(-)
+---
+base-commit: ceb2fe0d438644e1de06b9a6468a1fb8e2199c70
+change-id: 20231218-topic-8550_fixes-2bc63cdfe1fd
 
-I don't remember all the details, and didn't find time yet to look into
-this in more detail, but fixing this is non-trivial. If this isn't 6.8
-material, I might have a look at this later this week/month.
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Cheers,
-Andre
 
