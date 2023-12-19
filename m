@@ -1,149 +1,157 @@
-Return-Path: <linux-pm+bounces-1341-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1342-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 976E481821D
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 08:17:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D44D88182F9
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 09:06:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A5E771C230A2
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 07:17:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ECE8B1C23758
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 08:06:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1483881E;
-	Tue, 19 Dec 2023 07:17:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57375C8DE;
+	Tue, 19 Dec 2023 08:06:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ndSacNlr"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IvcTWN+4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 886E811C9F;
-	Tue, 19 Dec 2023 07:17:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702970252; x=1734506252;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FVUCMuly39zh45kSUkdxdd10YAp2v8XjUsT+A/CBjTk=;
-  b=ndSacNlrU40KKr5cM59IaoL4m+qGBNuFYldKnykPiTE4k5rCToBRsgR5
-   pOssNzmjgL2fAKo6bMYnehinq4ebFG73lIQg5FUW4nsu5GHc3ta0D+Xzp
-   su4myFmXFGSlq5j7umyMXyDitFGrNYFZql78Pl/ZVMzvkTdL5FViyhqsH
-   zWbih23ElyPCORSl3CP2q3PYzAqqYFUZKvYW16xvimw2YB0LeY2SzMD8z
-   LzihHryJ2qcZno2YxZxyPzCWHBlMH0lW0fXkhIlbvTUL+G970QkgEpj+C
-   y0ameVQkIj1oCdPi/hNmBiP5PvoGO5DR2Xo7E4kKDoV6CIbQiUNrvfP+l
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="426751088"
-X-IronPort-AV: E=Sophos;i="6.04,287,1695711600"; 
-   d="scan'208";a="426751088"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2023 23:17:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10928"; a="894170301"
-X-IronPort-AV: E=Sophos;i="6.04,287,1695711600"; 
-   d="scan'208";a="894170301"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 18 Dec 2023 23:17:29 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rFUM3-0004xd-0w;
-	Tue, 19 Dec 2023 07:17:27 +0000
-Date: Tue, 19 Dec 2023 15:16:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Daniel Lezcano <daniel.lezcano@linaro.org>, rjw@rjwysocki.net,
-	lukasz.luba@arm.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	rui.zhang@intel.com, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v2 1/2] thermal/debugfs: Add thermal cooling device
- debugfs information
-Message-ID: <202312191425.5o49Dzmt-lkp@intel.com>
-References: <20231218171942.3048095-1-daniel.lezcano@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9E3611712
+	for <linux-pm@vger.kernel.org>; Tue, 19 Dec 2023 08:06:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-54ba86ae133so3732500a12.2
+        for <linux-pm@vger.kernel.org>; Tue, 19 Dec 2023 00:06:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702973177; x=1703577977; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zHZZ1qBFLYk5D7ybnvL0vNBwkKCdL+WfKJkMFR2G4jQ=;
+        b=IvcTWN+420WsmMQcZ+Ce8AZ7w11Au3LmG0wbK58RSbKxX63/cTJQkGx0xgCArXNcyP
+         yDDAuXZ7tXPRj5TNcOnoCSVzvJNu7mzM1tE8rV0WWWqEmC4i3N4EmWwKt95CVxtDKAEl
+         juyPD/IL8tHUIldkR03oaygtthIhQ9VFdpi/xPKnQStSiETd5YqGNzNc0co8NUWzLRQJ
+         dT8uMUhzkFUJlCUiMwAYNWpKLSh+u+dzQV2zQtIHmtmgbCCl1KIqgb/P2K5uPcM4AJhd
+         XHw4f6KIW5ub0VwNpe/SY2wciPVyu8k2zcX0DEJ9MnoE8olRVeGWfQhc0Hbgw5AnF/U5
+         cYPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702973177; x=1703577977;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zHZZ1qBFLYk5D7ybnvL0vNBwkKCdL+WfKJkMFR2G4jQ=;
+        b=FClW6P9BeLT07oWTa3Z7Y4IA/OtnaUZFcVWICAhc3gIFjjoDpVhr8jA6dQh6tis7n2
+         TML/X4jweDF3s5yx+WzS2bRz8ewGm0WseUBwzdWeRnZxM1noGqIpVWrSlYV2kZVMksJ/
+         P1fB/PSETfHlzQY6fEbEVCepUGjF8ih9q4cXdkjZqd1S1QyerTA8taeYBa/3xgPnx0JD
+         Or7EK8p+TaoJguUARAz+GsF/YK+vBvrnCWnm/kvpnSeYKDcNCaNimlwjKi6RKgvcXvuM
+         GfBNknzdPKIbKASL4kUpZkx2HQM9t1GB290M/Fx45EnK4Vc6HLNK2v6qBruwjcwy1HVj
+         PadQ==
+X-Gm-Message-State: AOJu0YwfKjQyLAk6Vlj38q3TWc5Js7pwjjhrnJmAHZiGHSaJdfKyvzfT
+	uvY3V4w3DdNdE6EyZ0YQVaKfdA==
+X-Google-Smtp-Source: AGHT+IFk7nCwJ3Cgygcv0PPxf8Nmoq++kFT+oSJXnVr98jtfa/yztBLisAU2VWlBWmsiTo2oa5jg+Q==
+X-Received: by 2002:a50:cbc7:0:b0:54c:5d34:980c with SMTP id l7-20020a50cbc7000000b0054c5d34980cmr8989833edi.82.1702973176885;
+        Tue, 19 Dec 2023 00:06:16 -0800 (PST)
+Received: from krzk-bin.. ([178.197.218.27])
+        by smtp.gmail.com with ESMTPSA id t16-20020aa7d710000000b00553533738f0sm1667914edq.57.2023.12.19.00.06.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Dec 2023 00:06:16 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	kernel@pengutronix.de,
+	Markus Mayer <mmayer@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	Santosh Shilimkar <ssantosh@kernel.org>,
+	Paul Cercueil <paul@crapouillou.net>,
+	linux-mips@vger.kernel.org,
+	Yong Wu <yong.wu@mediatek.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-mediatek@lists.infradead.org,
+	Roger Quadros <rogerq@kernel.org>,
+	Tony Lindgren <tony@atomide.com>,
+	linux-omap@vger.kernel.org,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	linux-pm@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	linux-stm32@st-md-mailman.stormreply.com,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Sumit Gupta <sumitg@nvidia.com>,
+	Nick Alcock <nick.alcock@oracle.com>,
+	linux-tegra@vger.kernel.org,
+	Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH 00/15] memory: Convert to platform remove callback returning void
+Date: Tue, 19 Dec 2023 09:06:12 +0100
+Message-Id: <170297316309.10063.8435852209780151651.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1702822744.git.u.kleine-koenig@pengutronix.de>
+References: <cover.1702822744.git.u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231218171942.3048095-1-daniel.lezcano@linaro.org>
-
-Hi Daniel,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on rafael-pm/thermal]
-[also build test WARNING on linus/master v6.7-rc6 next-20231218]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/thermal-debugfs-Add-thermal-debugfs-information-for-mitigation-episodes/20231219-012118
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
-patch link:    https://lore.kernel.org/r/20231218171942.3048095-1-daniel.lezcano%40linaro.org
-patch subject: [PATCH v2 1/2] thermal/debugfs: Add thermal cooling device debugfs information
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20231219/202312191425.5o49Dzmt-lkp@intel.com/config)
-compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231219/202312191425.5o49Dzmt-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312191425.5o49Dzmt-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/thermal/thermal_debugfs.c:73: warning: cannot understand function prototype: 'struct cdev_value '
->> drivers/thermal/thermal_debugfs.c:91: warning: cannot understand function prototype: 'struct thermal_debugfs '
->> drivers/thermal/thermal_debugfs.c:370: warning: bad line: 
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
 
-vim +73 drivers/thermal/thermal_debugfs.c
+On Sun, 17 Dec 2023 15:29:26 +0100, Uwe Kleine-König wrote:
+> this series converts the platform drivers below drivers/memory to make
+> use of .remove_new. See commit 5c5a7680e67b ("platform: Provide a remove
+> callback that returns no value") for an extended explanation and the
+> eventual goal. The TL;DR; is to make it harder for driver authors to
+> leak resources without noticing.
+> 
+> This is merge window material. All patches are pairwise independent of
+> each other so they can be applied individually. Still it would be great
+> to let them go in all together.
+> 
+> [...]
 
-    60	
-    61	/**
-    62	 * cdev_value - Common structure for cooling device entry
-    63	 *
-    64	 * The following common structure allows to store the information
-    65	 * related to the transitions and to the state residencies. They are
-    66	 * identified with a id which is associated to a value. It is used as
-    67	 * nodes for the "transitions" and "durations" above.
-    68	 *
-    69	 * @node: node to insert the structure in a list
-    70	 * @id: identifier of the value which can be a state or a transition
-    71	 * @value: the id associated value which can be a duration or an occurrence
-    72	 */
-  > 73	struct cdev_value {
-    74		struct list_head node;
-    75		int id;
-    76		u64 value;
-    77	};
-    78	
-    79	/**
-    80	 * thermal_debugfs - High level structure for a thermal object in
-    81	 * debugfs
-    82	 *
-    83	 * The thermal_debugfs structure is the common structure used by the
-    84	 * cooling device to compute the statistics.
-    85	 *
-    86	 * @d_top: top directory of the thermal object directory
-    87	 * @lock: per object lock to protect the internals
-    88	 *
-    89	 * @cdev: a cooling device debug structure
-    90	 */
-  > 91	struct thermal_debugfs {
-    92		struct dentry *d_top;
-    93		struct mutex lock;
-    94		union {
-    95			struct cdev_debugfs cdev;
-    96		};
-    97	};
-    98	
+Applied, thanks!
 
+[01/15] memory: brcmstb_dpfe: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/431187eadbc7b0f2650d4e55111b3fff4720f867
+[02/15] memory: brcmstb_memc: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/f7754712ad6094de5be18674777b265ed4db2f45
+[03/15] memory: emif: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/c8a53461990cb697ca494d6671fab9e196d20ce4
+[04/15] memory: fsl-corenet-cf: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/021d044b0f9c9a09aa2f778e876e467a8810fb4a
+[05/15] memory: fsl_ifc: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/f17130855d51f24563a24cd957add769ad59eee9
+[06/15] memory: jz4780-nemc: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/9024fbbd77b4d73279bbbe2c748a4e4b414d50cc
+[07/15] memory: mtk-smi: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/08c1aeaa45ce0fd18912e92c6705586c8aa5240f
+[08/15] memory: omap-gpmc: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/6a4edb1a4f61e28cc127cd06c470ce3599ee0d9c
+[09/15] memory: renesas-rpc-if: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/961abc9f7d6771e8f13db1f4d8b0ffff3f0f41a4
+[10/15] memory: exynos5422-dmc: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/8013408e4912fb7e469bb8b14fd3a5c956257eec
+[11/15] memory: stm32-fmc2-ebi: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/1455b6b0c83132960826d0e527a79a355e096a80
+[12/15] memory: tegra186-emc: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/dcefa0368458e9e20642dbd2608adae6b22e6464
+[13/15] memory: tegra210-emc: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/622fa819a2f0f3e6d8322a0b6d3177302ae937b6
+[14/15] memory: ti-aemif: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/7852eb8c8ac7e0164b43cc5f8d8245cc3a037620
+[15/15] memory: ti-emif-pm: Convert to platform remove callback returning void
+        https://git.kernel.org/krzk/linux-mem-ctrl/c/365fcc03b6321f36eb7cbda8baa737238c387907
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
