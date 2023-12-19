@@ -1,108 +1,239 @@
-Return-Path: <linux-pm+bounces-1385-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1386-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EB7D819145
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 21:22:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FA0E819183
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 21:32:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 18373B24908
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 20:22:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C2B601C240D3
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 20:32:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42DB9154AB;
-	Tue, 19 Dec 2023 20:22:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11E4914A8F;
+	Tue, 19 Dec 2023 20:32:20 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF91639AC2;
-	Tue, 19 Dec 2023 20:22:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C11F3B189;
+	Tue, 19 Dec 2023 20:32:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-5908b15f43eso683637eaf.1;
-        Tue, 19 Dec 2023 12:22:47 -0800 (PST)
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5909156aea9so824263eaf.0;
+        Tue, 19 Dec 2023 12:32:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703017367; x=1703622167;
+        d=1e100.net; s=20230601; t=1703017937; x=1703622737;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DXlywzJaPAESGuJk2xO4+LBMlhtKKW+VkLv3NiQaeHk=;
-        b=VFNxPu9a4q19/4gKDy7PPOaYjaG66yPl0jIMQB5CMmmhQT1jYDa6SGD+NAln+kAcs5
-         pXyg4ivTe2P4RpAPPWtGUWZQ0YbpnOndrFkh/KTFqvryasLWMPilevHA8+ZfR8gN7kUp
-         6rS/fERl74+fM0xk7KZ9JgFV6TL3gZC/AhCVwBfOICtmxe4l2FSjYv42aHM0fHhEym2o
-         D/dycTB83nB93DkLuytJHEXUoRctdXB4CcFcYBPkLV9seyVuUnSgOwUXMs3lzu5Mv18q
-         cS0N2w7TABMXb7hZ3EyMRvvRi1i/Lq+wzpzLne10DxLbMRVCzxUDhauiFFUlnrmiHOt/
-         4xrw==
-X-Gm-Message-State: AOJu0YzkJR9GJt0bIEWeXHt7d3mdvIg1/8yS4g3audV0wnRWBEMYqyvw
-	04YG3FF8mVWOo05KQ1R6GclTSbzLCuxrRklzKoY=
-X-Google-Smtp-Source: AGHT+IEVpzq3/27qDU++90GkptwsrxjMBHkYrh2zLbxXG+y+Dk0KoljAZgjZXHsuQyGhfMpP4NIhP9nRQEGnkK0UkxI=
-X-Received: by 2002:a4a:b141:0:b0:591:c8cd:a13a with SMTP id
- e1-20020a4ab141000000b00591c8cda13amr9317821ooo.0.1703017367009; Tue, 19 Dec
- 2023 12:22:47 -0800 (PST)
+        bh=rz5E3fjvqMyLiddSP1uy19E5YF0I/DE0BxWP+hMc2sY=;
+        b=Srs7JWmRR6w4JVHEzSM/ON8hMG5CuVWPuaU6f5WMUVyWBeexb0R+ctE3e+vZmrB7J+
+         ugI1xkeuzi65qA4JEJHfYm4RmQLQ91mDU8kzetDEz5E3nXV6orWIfxRwX9QLWdR6Qkv5
+         Hd/PHhvHhoFDRspJOU1EuAmpVKqG+UrdN4r4mGYaaNl7suANUfHwnPGkUjLV4p7iCabO
+         Y2o5pGTOMDUtd4cwpj9GHSJtxW7hoIr2FkuREJjX0IkmVDjmKZU1VwmXRcjkjp3SJAy1
+         kQr5L8GxDrAbhxMXRZk0zK5s60sG+zXqGiHZPLVEx1uxjTvfBYVwSDTEHttP6Z2ddQTr
+         tz8A==
+X-Gm-Message-State: AOJu0YzquOFZQxk8ePQLm8PvNOSKRyJhH/U88CWLCkvwaAOk3c56DLeS
+	DlugQIs/VGEs22glnHrPm/kX3ALJq/LKjCYb98Q=
+X-Google-Smtp-Source: AGHT+IFrvP3cd4l9qiGv8wHmvWjEFk33NEFWy3dIkDhtiPiXQFYL1qUAv1fkOpeyH7+Sf1CUIrnD+1hfXn0GhEHxN/c=
+X-Received: by 2002:a05:6820:2484:b0:591:4861:6b02 with SMTP id
+ cq4-20020a056820248400b0059148616b02mr21185640oob.1.1703017937385; Tue, 19
+ Dec 2023 12:32:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231213102808.94695-1-yaozhenguo1@gmail.com>
-In-Reply-To: <20231213102808.94695-1-yaozhenguo1@gmail.com>
+References: <170245316678.651355.6640896026073025688.stgit@mhiramat.roam.corp.google.com>
+ <170245317569.651355.7858730719579399805.stgit@mhiramat.roam.corp.google.com>
+In-Reply-To: <170245317569.651355.7858730719579399805.stgit@mhiramat.roam.corp.google.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 19 Dec 2023 21:22:35 +0100
-Message-ID: <CAJZ5v0i4DAtzoJUyN0H-4rL=HR=cNntqrrJaDj12suF=7JiyeQ@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Add Emerald Rapids support in
- no-HWP mode
-To: Zhenguo Yao <yaozhenguo1@gmail.com>, srinivas.pandruvada@linux.intel.com
-Cc: lenb@kernel.org, rafael@kernel.org, viresh.kumar@linaro.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, yaozhenguo@jd.com
+Date: Tue, 19 Dec 2023 21:32:06 +0100
+Message-ID: <CAJZ5v0j1eD9soyh2JmqfphvwVBApKD_ikFOr3+XYvS4f_0cboA@mail.gmail.com>
+Subject: Re: [PATCH v6] PM: sleep: Expose last succeeded resumed timestamp in sysfs
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
+	Randy Dunlap <rdunlap@infradead.org>, suleiman@google.com, briannorris@google.com, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 13, 2023 at 11:28=E2=80=AFAM Zhenguo Yao <yaozhenguo1@gmail.com=
-> wrote:
+On Wed, Dec 13, 2023 at 8:39=E2=80=AFAM Masami Hiramatsu (Google)
+<mhiramat@kernel.org> wrote:
 >
-> Users may disable HWP in firmware, in which case intel_pstate wouldn't lo=
-ad
-> unless the CPU model is explicitly supported.
+> From: Masami Hiramatsu <mhiramat@kernel.org>
 >
-> See also the following past commits:
+> Expose last succeeded resumed timestamp as last_success_resume_time
+> attribute of suspend_stats in sysfs so that user can use this time
+> stamp as a reference point of resuming user space.
 >
-> commit df51f287b5de ("cpufreq: intel_pstate: Add Sapphire Rapids support
-> in no-HWP mode")
-> commit d8de7a44e11f ("cpufreq: intel_pstate: Add Skylake servers support"=
-)
-> commit 706c5328851d ("cpufreq: intel_pstate: Add Cometlake support in
-> no-HWP mode")
-> commit fbdc21e9b038 ("cpufreq: intel_pstate: Add Icelake servers support =
-in
-> no-HWP mode")
-> commit 71bb5c82aaae ("cpufreq: intel_pstate: Add Tigerlake support in
-> no-HWP mode")
->
-> Signed-off-by: Zhenguo Yao <yaozhenguo1@gmail.com>
+> There are some printk()s for printing the similar resume timing to
+> dmesg, but those are recorded with local_clock(), and user can not
+> compare it with current time.
 
-Srinivas, any objections?
+You'd need to explain why.
 
+> We also have tracing events but it requires CAP_SYS_ADMIN to use it.
+>
+> This suspend_stats attribute is easy to access and only expose the
+> timestamp in CLOCK_MONOTONIC. User can find the actual resumed
+> time and measure the elapsed time from the time when the kernel
+> finished the resume
+
+So now it is the time when the kernel has started thawing tasks.
+
+> to the user-space action (e.g. display the UI)
+> and use it as a performance metric of user process resuming time.
+
+The whole "user process resuming time" idea is highly questionable,
+because it assumes that the user space task has been notified of the
+system suspend somehow and so it knows that it will be resuming
+subsequently.
+
+I'm wondering what exactly is going on?
+
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 > ---
->  drivers/cpufreq/intel_pstate.c | 1 +
->  1 file changed, 1 insertion(+)
+>  Changes in v6:
+>   - Fix to record resume time before thawing user processes.
+>  Changes in v5:
+>   - Just updated for v6.7-rc3.
+>  Changes in v4.1:
+>   - Fix document typo (again).
+>  Changes in v4:
+>   - Update description to add why.
+>   - Fix document typo.
+>  Changes in v3:
+>   - Add (unsigned long long) casting for %llu.
+>   - Add a line after last_success_resume_time_show().
+>  Changes in v2:
+>   - Use %llu instead of %lu for printing u64 value.
+>   - Remove unneeded indent spaces from the last_success_resume_time
+>     line in the debugfs suspend_stat file.
+> ---
+>  Documentation/ABI/testing/sysfs-power |   10 ++++++++++
+>  include/linux/suspend.h               |    2 ++
+>  kernel/power/main.c                   |   15 +++++++++++++++
+>  kernel/power/suspend.c                |    3 +++
+>  4 files changed, 30 insertions(+)
 >
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstat=
-e.c
-> index a534a1f7f1ee..39e0a2cf7236 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -2406,6 +2406,7 @@ static const struct x86_cpu_id intel_pstate_cpu_ids=
-[] =3D {
->         X86_MATCH(ICELAKE_X,            core_funcs),
->         X86_MATCH(TIGERLAKE,            core_funcs),
->         X86_MATCH(SAPPHIRERAPIDS_X,     core_funcs),
-> +       X86_MATCH(EMERALDRAPIDS_X,      core_funcs),
->         {}
+> diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/te=
+sting/sysfs-power
+> index a3942b1036e2..e14975859766 100644
+> --- a/Documentation/ABI/testing/sysfs-power
+> +++ b/Documentation/ABI/testing/sysfs-power
+> @@ -442,6 +442,16 @@ Description:
+>                 'total_hw_sleep' and 'last_hw_sleep' may not be accurate.
+>                 This number is measured in microseconds.
+>
+> +What:          /sys/power/suspend_stats/last_success_resume_time
+> +Date:          Oct 2023
+> +Contact:       Masami Hiramatsu <mhiramat@kernel.org>
+> +Description:
+> +               The /sys/power/suspend_stats/last_success_resume_time fil=
+e
+> +               contains the timestamp of when the kernel successfully
+> +               resumed from suspend/hibernate.
+
+It needs to say what exactly the time is.
+
+> +               This floating point number is measured in seconds by mono=
+tonic
+> +               clock.
+> +
+>  What:          /sys/power/sync_on_suspend
+>  Date:          October 2019
+>  Contact:       Jonas Meurer <jonas@freesources.org>
+> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> index ef503088942d..ddd789044960 100644
+> --- a/include/linux/suspend.h
+> +++ b/include/linux/suspend.h
+> @@ -8,6 +8,7 @@
+>  #include <linux/pm.h>
+>  #include <linux/mm.h>
+>  #include <linux/freezer.h>
+> +#include <linux/timekeeping.h>
+>  #include <asm/errno.h>
+>
+>  #ifdef CONFIG_VT
+> @@ -71,6 +72,7 @@ struct suspend_stats {
+>         u64     last_hw_sleep;
+>         u64     total_hw_sleep;
+>         u64     max_hw_sleep;
+> +       struct timespec64 last_success_resume_time;
+>         enum suspend_stat_step  failed_steps[REC_FAILED_NUM];
 >  };
->  MODULE_DEVICE_TABLE(x86cpu, intel_pstate_cpu_ids);
-> --
-> 2.39.3
+>
+> diff --git a/kernel/power/main.c b/kernel/power/main.c
+> index f6425ae3e8b0..2ab23fd3daac 100644
+> --- a/kernel/power/main.c
+> +++ b/kernel/power/main.c
+> @@ -421,6 +421,17 @@ static ssize_t last_failed_step_show(struct kobject =
+*kobj,
+>  }
+>  static struct kobj_attribute last_failed_step =3D __ATTR_RO(last_failed_=
+step);
+>
+> +static ssize_t last_success_resume_time_show(struct kobject *kobj,
+> +               struct kobj_attribute *attr, char *buf)
+> +{
+> +       return sprintf(buf, "%llu.%llu\n",
+> +               (unsigned long long)suspend_stats.last_success_resume_tim=
+e.tv_sec,
+> +               (unsigned long long)suspend_stats.last_success_resume_tim=
+e.tv_nsec);
+> +}
+> +
+> +static struct kobj_attribute last_success_resume_time =3D
+> +                       __ATTR_RO(last_success_resume_time);
+> +
+>  static struct attribute *suspend_attrs[] =3D {
+>         &success.attr,
+>         &fail.attr,
+> @@ -438,6 +449,7 @@ static struct attribute *suspend_attrs[] =3D {
+>         &last_hw_sleep.attr,
+>         &total_hw_sleep.attr,
+>         &max_hw_sleep.attr,
+> +       &last_success_resume_time.attr,
+>         NULL,
+>  };
+>
+> @@ -514,6 +526,9 @@ static int suspend_stats_show(struct seq_file *s, voi=
+d *unused)
+>                         suspend_step_name(
+>                                 suspend_stats.failed_steps[index]));
+>         }
+> +       seq_printf(s,   "last_success_resume_time:\t%-llu.%llu\n",
+> +                  (unsigned long long)suspend_stats.last_success_resume_=
+time.tv_sec,
+> +                  (unsigned long long)suspend_stats.last_success_resume_=
+time.tv_nsec);
+>
+>         return 0;
+>  }
+> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> index fa3bf161d13f..b85889358f53 100644
+> --- a/kernel/power/suspend.c
+> +++ b/kernel/power/suspend.c
+> @@ -595,6 +595,9 @@ static int enter_state(suspend_state_t state)
+>   Finish:
+>         events_check_enabled =3D false;
+>         pm_pr_dbg("Finishing wakeup.\n");
+> +       /* Record last succeeded resume time before thawing processes. */
+
+IMV the comment should explain why this particular time is recorded or
+it is not very useful otherwise.
+
+> +       if (!error)
+> +               ktime_get_ts64(&suspend_stats.last_success_resume_time);
+
+A blank line here, please.
+
+>         suspend_finish();
+>   Unlock:
+>         mutex_unlock(&system_transition_mutex);
+>
 >
 
