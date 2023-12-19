@@ -1,80 +1,141 @@
-Return-Path: <linux-pm+bounces-1367-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1368-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5731D818BA5
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 16:55:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE76F818C23
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 17:25:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 04EFF285327
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 15:55:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F20A51C23CF8
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 16:25:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A27E41CFA0;
-	Tue, 19 Dec 2023 15:55:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oQYT0AiF"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B8E01D549;
+	Tue, 19 Dec 2023 16:24:44 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F6EA1CF8D;
-	Tue, 19 Dec 2023 15:55:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DE22C433C7;
-	Tue, 19 Dec 2023 15:55:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703001343;
-	bh=Q13RYne6oAAu2A1c6nbVonpf8SXJBoK4LC2Jg1dY1JI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oQYT0AiFYlah4357+s7DMp7/GIamAB2XrDiN5AY/+fUXgyclLK7RPLvGP9JuP1olx
-	 4KHd6HvJA+3db9IvULtMZsSladsYOk5yeI5pys/iFC++yAs76z68wGFKLRjwRBGsoK
-	 X7da6Urz0XO7inBFtdFI156FrvRlzKWAO4faKKwnKl/3Kc/Sq47sersNEX+1FxH2U5
-	 1OLSb2dDSQq+M2/qQd/NaJPdbzvmFAuyLPhFBLFC3k+cRok6IXdplYMvokohV/6bYR
-	 MSJy8heVnRlMyBN6QJ+RcCT6YCOsptMKUr7SkZs77mag9V+OyY2DIV1n/4JVMhg/XX
-	 244ztYAUjPX1A==
-Received: from johan by xi.lan with local (Exim 4.96.2)
-	(envelope-from <johan@kernel.org>)
-	id 1rFcRZ-0008Iq-0I;
-	Tue, 19 Dec 2023 16:55:41 +0100
-Date: Tue, 19 Dec 2023 16:55:41 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Sebastian Reichel <sre@kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: power: reset: qcom-pon: fix inconsistent
- example
-Message-ID: <ZYG88VLLx1nEPOua@hovoldconsulting.com>
-References: <20231130173017.12723-1-johan+linaro@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5DB820300
+	for <linux-pm@vger.kernel.org>; Tue, 19 Dec 2023 16:24:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-62-glSPhPVcMzuzOWwj_68aXA-1; Tue, 19 Dec 2023 16:24:32 +0000
+X-MC-Unique: glSPhPVcMzuzOWwj_68aXA-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Tue, 19 Dec
+ 2023 16:24:17 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Tue, 19 Dec 2023 16:24:17 +0000
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Bo Ye' <bo.ye@mediatek.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>
+CC: "yongdong.zhang@mediatek.com" <yongdong.zhang@mediatek.com>, C Cheng
+	<C.Cheng@mediatek.com>, "linux-pm@vger.kernel.org"
+	<linux-pm@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-mediatek@lists.infradead.org"
+	<linux-mediatek@lists.infradead.org>
+Subject: RE: [PATCH v2] fix overflow in idle exit_latency
+Thread-Topic: [PATCH v2] fix overflow in idle exit_latency
+Thread-Index: AQHaMimXVH0RYY21AUO99y9pfKPzPrCwyXhw
+Date: Tue, 19 Dec 2023 16:24:17 +0000
+Message-ID: <e807b180b074419ba4f1d1ff8a4c1a80@AcuMS.aculab.com>
+References: <20231219031444.91752-1-bo.ye@mediatek.com>
+In-Reply-To: <20231219031444.91752-1-bo.ye@mediatek.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231130173017.12723-1-johan+linaro@kernel.org>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Sebastian,
+From: Bo Ye=20
+> Sent: 19 December 2023 03:15
+>=20
+> From: C Cheng <C.Cheng@mediatek.com>
+>=20
+> In detail:
+>=20
+> In C language, when you perform a multiplication operation, if
+> both operands are of int type, the multiplication operation is
+> performed on the int type, and then the result is converted to
+> the target type. This means that if the product of int type
+> multiplication exceeds the range that int type can represent,
+>  an overflow will occur even if you store the result in a
+> variable of int64_t type.
+>=20
+> For a multiplication of two int values, it is better to use
+> mul_u32_u32() rather than s->exit_latency_ns =3D s->exit_latency *
+> NSEC_PER_USEC to avoid potential overflow happenning.
+>=20
+> Signed-off-by: C Cheng <C.Cheng@mediatek.com>
+> Signed-off-by: Bo Ye <bo.ye@mediatek.com>
+> ---
+> Change in v2:
+> -remove Change-ID
+> -correct patch author name
+> -replace multiplication of two int values with mul_u32_u32
+> -refine commit message
+> ---
+>  drivers/cpuidle/driver.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/cpuidle/driver.c b/drivers/cpuidle/driver.c
+> index d9cda7f6ccb9..cf5873cc45dc 100644
+> --- a/drivers/cpuidle/driver.c
+> +++ b/drivers/cpuidle/driver.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/cpumask.h>
+>  #include <linux/tick.h>
+>  #include <linux/cpu.h>
+> +#include <linux/math64.h>
+>=20
+>  #include "cpuidle.h"
+>=20
+> @@ -187,7 +188,7 @@ static void __cpuidle_driver_init(struct cpuidle_driv=
+er *drv)
+>  =09=09=09s->target_residency =3D div_u64(s->target_residency_ns, NSEC_PE=
+R_USEC);
+>=20
+>  =09=09if (s->exit_latency > 0)
+> -=09=09=09s->exit_latency_ns =3D s->exit_latency * NSEC_PER_USEC;
+> +=09=09=09s->exit_latency_ns =3D mul_u32_u32(s->exit_latency, NSEC_PER_US=
+EC);
 
-On Thu, Nov 30, 2023 at 06:30:17PM +0100, Johan Hovold wrote:
-> The current PON example is a bit of a mess after converting the binding
-> document to yaml and in the process updating parts of the example to
-> match the pmk8350 binding while leaving parts from the older pm8998
-> example in place.
-> 
-> Clean up the example and make it consistent by adding some newline
-> separators; dropping labels; removing stray spaces; fixing the PON node
-> name; and fixing the unit address so that it matches the interrupt
-> specifiers (which re-encodes the PON base address, 0x800 => 0x8).
-> 
-> Fixes: 76ba1900cb67 ("dt-bindings: power: reset: qcom-pon: Convert qcom PON binding to yaml")
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Just force either side of the multiply to a 64bit unsigned type.
+The compiler will then DTRT which is likely to be better code than
+whatever mul_u32_u32() generates.
 
-I noticed that this on is not yet in linux-next so sending a reminder.
+In any case is the 'exit_latency' ever going to be greater than 4 seconds?
+In which case the 32bit multiply will never overflow.
 
-Johan
+=09David
+
+>  =09=09else if (s->exit_latency_ns < 0)
+>  =09=09=09s->exit_latency_ns =3D  0;
+>  =09=09else
+> --
+> 2.18.0
+>=20
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
+PT, UK
+Registration No: 1397386 (Wales)
+
 
