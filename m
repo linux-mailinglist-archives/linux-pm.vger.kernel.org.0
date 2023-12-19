@@ -1,31 +1,46 @@
-Return-Path: <linux-pm+bounces-1354-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1355-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4FD008185B0
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 11:52:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7EC48185C2
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 11:56:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E3B9EB20AF2
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 10:52:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1ADE11C2114E
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 10:56:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B6AC14AB6;
-	Tue, 19 Dec 2023 10:52:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A29F114A90;
+	Tue, 19 Dec 2023 10:56:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="SnZH+wvt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23CE314F68;
-	Tue, 19 Dec 2023 10:52:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8A00F1FB;
-	Tue, 19 Dec 2023 02:53:03 -0800 (PST)
-Received: from [10.57.85.227] (unknown [10.57.85.227])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0CE713F738;
-	Tue, 19 Dec 2023 02:52:16 -0800 (PST)
-Message-ID: <b31672e4-ab41-4724-86ef-038606318663@arm.com>
-Date: Tue, 19 Dec 2023 10:53:22 +0000
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37D8515AD3;
+	Tue, 19 Dec 2023 10:56:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1702983398;
+	bh=E6SsGnEMQ5sQgGiV6jGfWzSqHuxNI3tqz6LYjcZqyto=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=SnZH+wvtXP/GDQpXtBpr6B06nuYwgID2MgVv83MO2PFYFvCRdaDS4P+bE87L8txKt
+	 RoyiRqFbVhDQPx5AkWDyVDaTP1C/+6RjX6EM8EATNNe/kEk/VVzo460gYKNNl3uf+h
+	 Z+zANvIvh14t56VGrNHm9Ib7EAx1ZPIorZaMWb4ZDWKFz4c4CAbkw5J9WUknEK7P+K
+	 B7AfteaDmOitMNkbE0JdgIUwsTMehGLyt20I3ShIFFkacKwyca1lcelLd92qpahoe6
+	 BvIoFdwvydjowZo1gVXSsF/SnaV7woUSYfhCiNu0Wd7p0T5UMFN8MTrKtHdWHQOxx0
+	 3A16LWwIN13Hg==
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id E8E3337814A3;
+	Tue, 19 Dec 2023 10:56:37 +0000 (UTC)
+Message-ID: <e23ebdd8-7fbe-435b-a850-0ef18a51b020@collabora.com>
+Date: Tue, 19 Dec 2023 11:56:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -33,86 +48,41 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 03/23] PM: EM: Find first CPU active while updating OPP
- efficiency
+Subject: Re: [PATCH v2] fix overflow in idle exit_latency
 Content-Language: en-US
-To: Qais Yousef <qyousef@layalina.io>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- rafael@kernel.org, dietmar.eggemann@arm.com, rui.zhang@intel.com,
- amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
- daniel.lezcano@linaro.org, viresh.kumar@linaro.org, len.brown@intel.com,
- pavel@ucw.cz, mhiramat@kernel.org, wvw@google.com
-References: <20231129110853.94344-1-lukasz.luba@arm.com>
- <20231129110853.94344-4-lukasz.luba@arm.com>
- <20231217175829.a6hqz7mqlvrujsvs@airbuntu>
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20231217175829.a6hqz7mqlvrujsvs@airbuntu>
+To: Bo Ye <bo.ye@mediatek.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>
+Cc: yongdong.zhang@mediatek.com, C Cheng <C.Cheng@mediatek.com>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+References: <20231219031444.91752-1-bo.ye@mediatek.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20231219031444.91752-1-bo.ye@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-
-
-On 12/17/23 17:58, Qais Yousef wrote:
-> On 11/29/23 11:08, Lukasz Luba wrote:
->> The Energy Model might be updated at runtime and the energy efficiency
->> for each OPP may change. Thus, there is a need to update also the
->> cpufreq framework and make it aligned to the new values. In order to
->> do that, use a first active CPU from the Performance Domain. This is
->> needed since the first CPU in the cpumask might be offline when we
->> run this code path.
+Il 19/12/23 04:14, Bo Ye ha scritto:
+> From: C Cheng <C.Cheng@mediatek.com>
 > 
-> I didn't understand the problem here. It seems you're fixing a race, but the
-> description is not clear to me what the race is.
-
-I have explained that in v1, v4 comments for this patch.
-When the EM is registered the fist CPU is always online. No problem
-for the old code, but for new code with runtime modification at
-later time, potentially from different subsystems - it it (e.g. thermal,
-drivers, etc). The fist CPU might be offline, but still such EM
-update for this domain shouldn'y fail. Although, when the CPU is offline
-we cannot get the valid policy...
-
-We can get it for next cpu in the cpumask, that's what the code is
-doing.
-
+> In detail:
 > 
->>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->>   kernel/power/energy_model.c | 11 +++++++++--
->>   1 file changed, 9 insertions(+), 2 deletions(-)
->>
->> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
->> index 42486674b834..aa7c89f9e115 100644
->> --- a/kernel/power/energy_model.c
->> +++ b/kernel/power/energy_model.c
->> @@ -243,12 +243,19 @@ em_cpufreq_update_efficiencies(struct device *dev, struct em_perf_state *table)
->>   	struct em_perf_domain *pd = dev->em_pd;
->>   	struct cpufreq_policy *policy;
->>   	int found = 0;
->> -	int i;
->> +	int i, cpu;
->>   
->>   	if (!_is_cpu_device(dev) || !pd)
->>   		return;
->>   
->> -	policy = cpufreq_cpu_get(cpumask_first(em_span_cpus(pd)));
->> +	/* Try to get a CPU which is active and in this PD */
->> +	cpu = cpumask_first_and(em_span_cpus(pd), cpu_active_mask);
->> +	if (cpu >= nr_cpu_ids) {
->> +		dev_warn(dev, "EM: No online CPU for CPUFreq policy\n");
->> +		return;
->> +	}
->> +
->> +	policy = cpufreq_cpu_get(cpu);
+> In C language, when you perform a multiplication operation, if
+> both operands are of int type, the multiplication operation is
+> performed on the int type, and then the result is converted to
+> the target type. This means that if the product of int type
+> multiplication exceeds the range that int type can represent,
+>   an overflow will occur even if you store the result in a
+> variable of int64_t type.
 > 
-> Shouldn't policy be NULL here if all policy->realted_cpus were offlined?
+> For a multiplication of two int values, it is better to use
+> mul_u32_u32() rather than s->exit_latency_ns = s->exit_latency *
+> NSEC_PER_USEC to avoid potential overflow happenning.
+> 
+> Signed-off-by: C Cheng <C.Cheng@mediatek.com>
+> Signed-off-by: Bo Ye <bo.ye@mediatek.com>
 
-It will be NULL but we will capture that fact in other way in the 'if'
-above.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-We want something else.
 
-We want to get policy using 'some' online CPU's id from our known
-cpumask. Then we can continue with such policy in the code.
 
