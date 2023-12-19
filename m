@@ -1,34 +1,34 @@
-Return-Path: <linux-pm+bounces-1362-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1363-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 204D5818835
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 14:01:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0867E818841
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 14:07:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A5AA3B234EC
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 13:01:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6F2C1F22562
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 13:07:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E36618AE9;
-	Tue, 19 Dec 2023 13:00:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0D2818B08;
+	Tue, 19 Dec 2023 13:06:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="kco6YoTU"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="BfHuZel9"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from m15.mail.163.com (m15.mail.163.com [45.254.50.220])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36B481B267;
-	Tue, 19 Dec 2023 13:00:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8279818B04;
+	Tue, 19 Dec 2023 13:06:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=hu16B
-	/w9CwNQoqVaJ4g0i49fjsPPZNTMZNSo5via85Y=; b=kco6YoTUE8aJI6U/9IX5V
-	ylAtXRoF0XLIGTN2G8W5cvdPX2k+8oY2JkCctAfiT9PAluu3sMX+9jbBRq2e9kg/
-	TtILX9ceKw89zsRd5hsP27lwxLdNTEm+AlRDZMcwg+VQdL/71ww5zGITvvGxg4qn
-	IjNp6nvzuwvOaAz7l8yqzE=
+	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=/n2XJ
+	IfcbrULIis+G3+HtQ6D4FhSo/cN2GijjyoaIW4=; b=BfHuZel9uSjVEsxqIKnJS
+	6DTf6qRV7W0rWdkzkmasVYH8yQ1+SiOImVyVUJgyVV7mxcffF56Y+4xEGxnWwuHz
+	fUP+eONWdoh/jCe2nCjcCJvTLp36RyrWiEfxNqjIgpXHSEK6zX5T7SDwywk5eol8
+	Ho6m9rWbXZ4Op7c8d8zv+U=
 Received: from ubuntu22.localdomain (unknown [117.176.219.50])
-	by zwqz-smtp-mta-g2-2 (Coremail) with SMTP id _____wD3_3Dbk4FlqxFqBw--.22995S2;
-	Tue, 19 Dec 2023 21:00:12 +0800 (CST)
+	by zwqz-smtp-mta-g0-1 (Coremail) with SMTP id _____wC3PxBUlYFljtpaEA--.10184S2;
+	Tue, 19 Dec 2023 21:06:29 +0800 (CST)
 From: chenguanxi11234@163.com
 To: rafael@kernel.org
 Cc: len.brown@intel.com,
@@ -37,7 +37,7 @@ Cc: len.brown@intel.com,
 	linux-kernel@vger.kernel.org,
 	Chen Haonan <chen.haonan2@zte.com.cn>
 Subject: [PATCH linux-next v2] kernel/power: Use kmap_local_page() in snapshot.c
-Date: Tue, 19 Dec 2023 21:00:58 +0800
+Date: Tue, 19 Dec 2023 21:06:25 +0800
 Message-Id: <19e305896a2357d305f955fa14cc379e40e512bd.1702977429.git.chen.haonan2@zte.com.cn>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
@@ -46,13 +46,60 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Signed-off-by: Chen Haonan <chen.haonan2@zte.com.cn>
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3_3Dbk4FlqxFqBw--.22995S2
-X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-	VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUfcdbUUUUU
-X-CM-SenderInfo: xfkh0wxxdq5xirrsjki6rwjhhfrp/1tbiQABL+mVOAjMcXAAAsr
+X-CM-TRANSID:_____wC3PxBUlYFljtpaEA--.10184S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7ur1fKFWkZF18tF1fCr43GFg_yoW8WFy8pF
+	4UAFyDG3yYva48t34IqF1vkry3WwnxA3yrJFW3A3WfZrnIgwnFvr1Iqa18t3W3trWxJFWr
+	ArZrtayvkFs5KwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jJiSdUUUUU=
+X-CM-SenderInfo: xfkh0wxxdq5xirrsjki6rwjhhfrp/1tbiQABL+mVOAjMcXAABsq
 
 From: Chen Haonan <chen.haonan2@zte.com.cn>
+
+kmap_atomic() has been deprecated in favor of kmap_local_page().
+
+kmap_atomic() disables page-faults and preemption (the latter 
+only for !PREEMPT_RT kernels).The code between the mapping and 
+un-mapping in this patch does not depend on the above-mentioned 
+side effects.So simply replaced kmap_atomic() with kmap_local_page().
+
+Signed-off-by: Chen Haonan <chen.haonan2@zte.com.cn>
+---
+ kernel/power/snapshot.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+index e3e8f1c6e75f..5c96ff067c64 100644
+--- a/kernel/power/snapshot.c
++++ b/kernel/power/snapshot.c
+@@ -1487,11 +1487,11 @@ static bool copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
+ 	s_page = pfn_to_page(src_pfn);
+ 	d_page = pfn_to_page(dst_pfn);
+ 	if (PageHighMem(s_page)) {
+-		src = kmap_atomic(s_page);
+-		dst = kmap_atomic(d_page);
++		src = kmap_local_page(s_page);
++		dst = kmap_local_page(d_page);
+ 		zeros_only = do_copy_page(dst, src);
+-		kunmap_atomic(dst);
+-		kunmap_atomic(src);
++		kunmap_local(dst);
++		kunmap_local(src);
+ 	} else {
+ 		if (PageHighMem(d_page)) {
+ 			/*
+@@ -1499,9 +1499,9 @@ static bool copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
+ 			 * data modified by kmap_atomic()
+ 			 */
+ 			zeros_only = safe_copy_page(buffer, s_page);
+-			dst = kmap_atomic(d_page);
++			dst = kmap_local_page(d_page);
+ 			copy_page(dst, buffer);
+-			kunmap_atomic(dst);
++			kunmap_local(dst);
+ 		} else {
+ 			zeros_only = safe_copy_page(page_address(d_page), s_page);
+ 		}
+-- 
+2.25.1
 
 
