@@ -1,138 +1,167 @@
-Return-Path: <linux-pm+bounces-1337-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1338-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26C13818025
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 04:15:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE634818058
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 05:03:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 90BD5B23203
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 03:15:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4657C1F24725
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 04:03:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A55BD4426;
-	Tue, 19 Dec 2023 03:15:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 449BC5244;
+	Tue, 19 Dec 2023 04:03:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="LUxd9qXz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VvnG9E54"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFD077468;
-	Tue, 19 Dec 2023 03:15:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: ceafe8529e1c11eea5db2bebc7c28f94-20231219
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=Uc8TGbTWFJXJZhL7Yec5wz80/Sme6MVdPJeQBPGh5sA=;
-	b=LUxd9qXzqm+t1GQlgRX9ahm9lfCO4kR2eQU2+yRgjDGb2ZvrHCtm07uBFgDVyObypGfqAAN/OeU9a50K7A7VU6TqBT+FNvj7Ipz1pVgA20HtnC2RD0j/4AM+WyO3lFWPd3zuuoFuWf3QNdKxlseItGXxjunctBl/Wt4KQ6ywqXM=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.35,REQID:49605fb5-4545-4306-9122-95f4c2686844,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:5d391d7,CLOUDID:597e5a61-c89d-4129-91cb-8ebfae4653fc,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-	RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:
-	NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
-X-UUID: ceafe8529e1c11eea5db2bebc7c28f94-20231219
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
-	(envelope-from <bo.ye@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 563580467; Tue, 19 Dec 2023 11:15:05 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Tue, 19 Dec 2023 11:15:03 +0800
-Received: from mcddlt001.gcn.mediatek.inc (10.19.240.15) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Tue, 19 Dec 2023 11:15:02 +0800
-From: Bo Ye <bo.ye@mediatek.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
-	<daniel.lezcano@linaro.org>, Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-CC: <yongdong.zhang@mediatek.com>, C Cheng <C.Cheng@mediatek.com>, Bo Ye
-	<bo.ye@mediatek.com>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>
-Subject: [PATCH v2] fix overflow in idle exit_latency
-Date: Tue, 19 Dec 2023 11:14:42 +0800
-Message-ID: <20231219031444.91752-1-bo.ye@mediatek.com>
-X-Mailer: git-send-email 2.17.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6539522B;
+	Tue, 19 Dec 2023 04:03:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-1f060e059a3so3159154fac.1;
+        Mon, 18 Dec 2023 20:03:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702958619; x=1703563419; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Nl46Laaf5BxsrexhW0VqzTfPX9XGtBYJT5ohcciFkz4=;
+        b=VvnG9E54D7b7O/Ol7uT9VkrSkrXr7VhVJo2cplSSIWc4YRZVaUcHA2lk1zKE4txSL4
+         4FoiM9ZhqTX4QalcQbvTw9L+WNPzZNyTFcywbkev10pB+bmobzYMUl5I/TLEmEXyPAWt
+         Rzn2qVpBbl1ApfXa213IT0+74VfG0WrXlykYMyHv1XyLU/ibwDOMnyWkkAiAKubBau11
+         pjnOR0Bqv/Dnlu0qxtBmXxepDRV3oNohcYAPFJyFXmwW9b9zQc7p98sqkyf9DO6tK7Vf
+         T6aqOhBgQGjjcGNnBDqFelXQER34MQ6da7yoFAatDAO1c5YddZChuG+SRZ3XJrpj5A13
+         Fcfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702958619; x=1703563419;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Nl46Laaf5BxsrexhW0VqzTfPX9XGtBYJT5ohcciFkz4=;
+        b=UMg36zaznZb4yGumURBo6/DCQHcfhacpaFq0Bxy1N1JZJVPAIDt7Ms+8oNV/oYnmjY
+         d7dwbxTtcDJNuUZtyO48kXck/bedY8L7IrbavU8HJ3oGXw5J91J3EGi38EQIIXMAYObj
+         bJF+qw++C/iilXF113q9lerO9fGOyM9UyfFctEOJAliIXlAq4vCKm2HxJRPefC7EnzGM
+         +KgQwfVMy+4ef2HFA/ResZE9OLp8gfabNRNvkrmBkvUwEl6jP3UlGp6hHlAs/nDb2T5e
+         jiQKxEVqwYjSKipIos2nYPg70ZTRM4tSXupGmr9lHNEnGUGVD82SCp/pCnddTqzhYC+g
+         paMA==
+X-Gm-Message-State: AOJu0Yyc4bNUbFff0VAW5kTFk8etG5JjplfyhIbaw4r/FANN7mz163du
+	dOOgTas63TrJ4tIjYkMZkaKqiS/z0IgfaZc/bJw=
+X-Google-Smtp-Source: AGHT+IHI78ApR44WhF5zXGZj0dkyTeWRzgqJPpruDxQ6d6wP7WOlUcfPVqyb2IyEr7XVV10B1YvjdK6JypkmutV/2p0=
+X-Received: by 2002:a05:6870:2327:b0:1fb:31a0:619c with SMTP id
+ w39-20020a056870232700b001fb31a0619cmr21702223oao.47.1702958618637; Mon, 18
+ Dec 2023 20:03:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-AS-Result: No-10--0.581900-8.000000
-X-TMASE-MatchedRID: Bn0z3T9b+WALj6umkFEndkKcYi5Qw/RVwW1rM+V9HtIf/28+P8WCgP6r
-	IPjisOwVcto9nSFCcQUzAylM0q9+nMc7x4DEI6P2e7MO8jvmPSyAfODDLypXmvt592eq2xoTU7g
-	EPucszGdOJB5wP1oqhO1oMOv2nr2NkfRhdidsajMURSScn+QSXt0H8LFZNFG76sBnwpOylLPAPI
-	cR41PqunfVvfXf3EO2gRffnX50nm9u1jRmR2R6BTvyUDm8uVn3bYdPRFL+GVW7F+BBzr8amdrEU
-	qFrRQ4GM/cJLu1mnTkXRoPmWO3jekxwdkPqCq7vDEyN+J8hd+jCS9WgDXVPCn7cGd19dSFd
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--0.581900-8.000000
-X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
-X-TM-SNTS-SMTP:
-	11FAC9A90BC813C03769B41050A5049E53D6CBC065D06896E3C61187F7063FAB2000:8
-X-MTK: N
+References: <20231129110853.94344-1-lukasz.luba@arm.com> <20231129110853.94344-10-lukasz.luba@arm.com>
+ <20231217175923.wxmfocgckpaytptb@airbuntu>
+In-Reply-To: <20231217175923.wxmfocgckpaytptb@airbuntu>
+From: Xuewen Yan <xuewen.yan94@gmail.com>
+Date: Tue, 19 Dec 2023 12:03:28 +0800
+Message-ID: <CAB8ipk_5TjUTrZ-nrGAwYMugLJFF72MvvRDzPJqaCayNwCm1wg@mail.gmail.com>
+Subject: Re: [PATCH v5 09/23] PM: EM: Use runtime modified EM for CPUs energy
+ estimation in EAS
+To: Qais Yousef <qyousef@layalina.io>
+Cc: Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, rafael@kernel.org, dietmar.eggemann@arm.com, 
+	rui.zhang@intel.com, amit.kucheria@verdurent.com, amit.kachhap@gmail.com, 
+	daniel.lezcano@linaro.org, viresh.kumar@linaro.org, len.brown@intel.com, 
+	pavel@ucw.cz, mhiramat@kernel.org, wvw@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: C Cheng <C.Cheng@mediatek.com>
+On Mon, Dec 18, 2023 at 1:59=E2=80=AFAM Qais Yousef <qyousef@layalina.io> w=
+rote:
+>
+> On 11/29/23 11:08, Lukasz Luba wrote:
+> > The new Energy Model (EM) supports runtime modification of the performa=
+nce
+> > state table to better model the power used by the SoC. Use this new
+> > feature to improve energy estimation and therefore task placement in
+> > Energy Aware Scheduler (EAS).
+>
+> nit: you moved the code to use the new runtime em table instead of the on=
+e
+> parsed at boot.
+>
+> >
+> > Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> > ---
+> >  include/linux/energy_model.h | 16 ++++++++++++----
+> >  1 file changed, 12 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/include/linux/energy_model.h b/include/linux/energy_model.=
+h
+> > index 1e618e431cac..94a77a813724 100644
+> > --- a/include/linux/energy_model.h
+> > +++ b/include/linux/energy_model.h
+> > @@ -238,6 +238,7 @@ static inline unsigned long em_cpu_energy(struct em=
+_perf_domain *pd,
+> >                               unsigned long max_util, unsigned long sum=
+_util,
+> >                               unsigned long allowed_cpu_cap)
+> >  {
+> > +     struct em_perf_table *runtime_table;
+> >       unsigned long freq, scale_cpu;
+> >       struct em_perf_state *ps;
+> >       int cpu, i;
+> > @@ -255,7 +256,14 @@ static inline unsigned long em_cpu_energy(struct e=
+m_perf_domain *pd,
+> >        */
+> >       cpu =3D cpumask_first(to_cpumask(pd->cpus));
+> >       scale_cpu =3D arch_scale_cpu_capacity(cpu);
+> > -     ps =3D &pd->table[pd->nr_perf_states - 1];
+> > +
+> > +     /*
+> > +      * No rcu_read_lock() since it's already called by task scheduler=
+.
+> > +      * The runtime_table is always there for CPUs, so we don't check.
+> > +      */
+>
+> WARN_ON(rcu_read_lock_held()) instead?
 
-In detail:
+I agree, or SCHED_WARN_ON(!rcu_read_lock_held()) ?
 
-In C language, when you perform a multiplication operation, if
-both operands are of int type, the multiplication operation is
-performed on the int type, and then the result is converted to
-the target type. This means that if the product of int type
-multiplication exceeds the range that int type can represent,
- an overflow will occur even if you store the result in a
-variable of int64_t type.
-
-For a multiplication of two int values, it is better to use
-mul_u32_u32() rather than s->exit_latency_ns = s->exit_latency *
-NSEC_PER_USEC to avoid potential overflow happenning.
-
-Signed-off-by: C Cheng <C.Cheng@mediatek.com>
-Signed-off-by: Bo Ye <bo.ye@mediatek.com>
----
-Change in v2:
--remove Change-ID
--correct patch author name
--replace multiplication of two int values with mul_u32_u32
--refine commit message
----
- drivers/cpuidle/driver.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/cpuidle/driver.c b/drivers/cpuidle/driver.c
-index d9cda7f6ccb9..cf5873cc45dc 100644
---- a/drivers/cpuidle/driver.c
-+++ b/drivers/cpuidle/driver.c
-@@ -16,6 +16,7 @@
- #include <linux/cpumask.h>
- #include <linux/tick.h>
- #include <linux/cpu.h>
-+#include <linux/math64.h>
- 
- #include "cpuidle.h"
- 
-@@ -187,7 +188,7 @@ static void __cpuidle_driver_init(struct cpuidle_driver *drv)
- 			s->target_residency = div_u64(s->target_residency_ns, NSEC_PER_USEC);
- 
- 		if (s->exit_latency > 0)
--			s->exit_latency_ns = s->exit_latency * NSEC_PER_USEC;
-+			s->exit_latency_ns = mul_u32_u32(s->exit_latency, NSEC_PER_USEC);
- 		else if (s->exit_latency_ns < 0)
- 			s->exit_latency_ns =  0;
- 		else
--- 
-2.18.0
-
+>
+>
+> Cheers
+>
+> --
+> Qais Yousef
+>
+> > +     runtime_table =3D rcu_dereference(pd->runtime_table);
+> > +
+> > +     ps =3D &runtime_table->state[pd->nr_perf_states - 1];
+> >
+> >       max_util =3D map_util_perf(max_util);
+> >       max_util =3D min(max_util, allowed_cpu_cap);
+> > @@ -265,9 +273,9 @@ static inline unsigned long em_cpu_energy(struct em=
+_perf_domain *pd,
+> >        * Find the lowest performance state of the Energy Model above th=
+e
+> >        * requested frequency.
+> >        */
+> > -     i =3D em_pd_get_efficient_state(pd->table, pd->nr_perf_states, fr=
+eq,
+> > -                                   pd->flags);
+> > -     ps =3D &pd->table[i];
+> > +     i =3D em_pd_get_efficient_state(runtime_table->state, pd->nr_perf=
+_states,
+> > +                                   freq, pd->flags);
+> > +     ps =3D &runtime_table->state[i];
+> >
+> >       /*
+> >        * The capacity of a CPU in the domain at the performance state (=
+ps)
+> > --
+> > 2.25.1
+> >
+>
 
