@@ -1,113 +1,156 @@
-Return-Path: <linux-pm+bounces-1374-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1375-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEF07818E71
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 18:43:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C26B818F1E
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 19:01:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 903DF1F28622
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 17:43:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C448B21564
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 18:01:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C0523174A;
-	Tue, 19 Dec 2023 17:43:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iI2wwi2d"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1B012E3E3;
+	Tue, 19 Dec 2023 17:59:41 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF0B03D0BD
-	for <linux-pm@vger.kernel.org>; Tue, 19 Dec 2023 17:43:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-40b5155e154so60958225e9.3
-        for <linux-pm@vger.kernel.org>; Tue, 19 Dec 2023 09:43:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703007783; x=1703612583; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TRnmGv8xzBtREryt49zmigJAc9uozsvO/KimVQjMLww=;
-        b=iI2wwi2d1JfuYnPtXeMDcds2VWNc+WiyASTa5IXWdT7Vu529+SnmwfoAx+ecseUoVx
-         WOkhBfi8gXbtPaxg3sxHXoFG1nMp2Pj55hHxejnwxjJf76ifEsu0nJNdh4c/VhonIDaI
-         js3Rg2xYSaXE8zrNesn6xruYsq5P4kNmZrQjjQLU02TFZh7XwNEjJuRBE4vR76AdgKuu
-         Uh8DZJiDN/nJAnyry8291CegGcEtY7oST+qoD9Hq51VOoreHwI7sAzpxAg676/n/ghmy
-         BRC6xEbwQit2K0280n6kmqVQuzN2Kayo5f+ROZq3JhOtiO0Sa4uUn78ElFRVYLmmgHt6
-         2U5Q==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CA0D3D0D2
+	for <linux-pm@vger.kernel.org>; Tue, 19 Dec 2023 17:59:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5909156aea9so802808eaf.0
+        for <linux-pm@vger.kernel.org>; Tue, 19 Dec 2023 09:59:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703007783; x=1703612583;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TRnmGv8xzBtREryt49zmigJAc9uozsvO/KimVQjMLww=;
-        b=pZQBlUrzxaoMVE8HxWh3Xg49XlkLDnVv5eOrq6emONtQMNWokEcTDqGBJ/XNr7+lZ3
-         xl5BAl27cfmO0EhktC6FaglKBU+lqjHrXKUzuJjZ2rhd3YEZ+fdCJKcYud5MGMaJ9Ala
-         YE17XDi6/u5s6ZHmP5QtSGdaEWlzF6jiRWUmY8kI55dTKxkMt4SVCpTL3IvFDaWkjhRz
-         h9ZjP/D66DwdNBdMb4W03J6ZIj6pAb0WMQc69cJLnV4thwy9bxUFKkO6UslOd0S8xKqf
-         1eAnslW/+i8Hb1AXXI0oE8knkJwZ7M+TzNz8Z4FnDtAcj+Yqrxx/7pMkCXewGLa7DjYD
-         0qog==
-X-Gm-Message-State: AOJu0Ywn/sUEsV1xTJGg65rU/qvini9UwTdP+vKznrNmuR8FXFHNDZma
-	h3BK+vu/0EyiPcTcE3OcJOR/ng==
-X-Google-Smtp-Source: AGHT+IFuUu0ohM0DgqSQKkmxColi/SAtbH6YHORkgyaGUdrSffYDo7d3mbYVlsllH+lOmS2Eou5MzQ==
-X-Received: by 2002:a05:600c:2051:b0:40c:6924:5f2d with SMTP id p17-20020a05600c205100b0040c69245f2dmr4379823wmg.231.1703007782984;
-        Tue, 19 Dec 2023 09:43:02 -0800 (PST)
-Received: from [192.168.10.46] ([37.170.14.102])
-        by smtp.googlemail.com with ESMTPSA id c9-20020a05600c0a4900b0040c6d559490sm3942666wmq.3.2023.12.19.09.42.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Dec 2023 09:43:02 -0800 (PST)
-Message-ID: <4ed663b6-6c1d-43ed-8417-1704b9adfbae@linaro.org>
-Date: Tue, 19 Dec 2023 18:42:57 +0100
+        d=1e100.net; s=20230601; t=1703008779; x=1703613579;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qYWus7B1187lySowqzSlrbzkyUAeNdjylrCpaloJzmI=;
+        b=PV6yDOk7mog9bX7Lo98MiMCLbLjEZp+jM7sYW1Xgp7fOvh1FXsCiu2aI37PfRltAoo
+         GU5ITpkEWEHSa7nIo/tEm12kPNEtBTb+JKk+wKw2fQvNrbl23Iuoev0yNL/scqyV61B8
+         JmVKlKqrIQKXqc+kKMCycw6KeBLC1Bho8wiWc9JeJiRat1aWGu0xiyXH36wBC+w74lUi
+         GrMAtojU8YN3367JPY4XVXOlC5XZWet3EqbmaFPyPwur77AwhF3V/spMCYc12Pblrgvw
+         svLrgegwl4c5IrLZKWWrYSAeMyTK+f+QwWZ3Zl+UI5lHrWjzQoTUlgpx4WxNA8URV0zU
+         8EIQ==
+X-Gm-Message-State: AOJu0YzLxfC+4QJRMkdBkIZ7YBiXDMJcdRUEllBEmha+1kk/bSVOPKsr
+	qAnao/9h4bkIUiFwmkX1RrfKbzQMWetjxNIC7sFLOiMR
+X-Google-Smtp-Source: AGHT+IEGT/lUrdmwKFkJ6vBT8fLYvIeXxEd8fOZbY8Gx4xxhpOI74ElJE5FdjPdxqcgTgJSy3jFpgRH+Ihcu37oOtaw=
+X-Received: by 2002:a05:6820:2c91:b0:593:e60a:493e with SMTP id
+ dx17-20020a0568202c9100b00593e60a493emr2216753oob.0.1703008779418; Tue, 19
+ Dec 2023 09:59:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 0/3] Add D1/T113s thermal sensor controller support
-Content-Language: en-US
-To: Maksim Kiselev <bigunclemax@gmail.com>
-Cc: Andre Przywara <andre.przywara@arm.com>,
- Vasily Khoruzhick <anarsoul@gmail.com>, Yangtao Li <tiny.windzz@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
- Jernej Skrabec <jernej.skrabec@gmail.com>,
- Samuel Holland <samuel@sholland.org>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Marc Kleine-Budde <mkl@pengutronix.de>, John Watts <contact@jookia.org>,
- Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-References: <20231217210629.131486-1-bigunclemax@gmail.com>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20231217210629.131486-1-bigunclemax@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20231214165622.100428-1-dedekind1@gmail.com>
+In-Reply-To: <20231214165622.100428-1-dedekind1@gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 19 Dec 2023 18:59:28 +0100
+Message-ID: <CAJZ5v0hcL1KLauQOODr7Lm_wrzMw=mdkkPP0+vEcETAQPdgnsA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] intel_idle: add Grand Ridge SoC support
+To: Artem Bityutskiy <dedekind1@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM Mailing List <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 17/12/2023 22:06, Maksim Kiselev wrote:
-> This series adds support for Allwinner D1/T113s thermal sensor controller.
-> THIS controller is similar to the one on H6, but with only one sensor and
-> uses a different scale and offset values.
-> 
-> v6:
-> - Rebased onto 6.7.0-rc5
+On Thu, Dec 14, 2023 at 5:56=E2=80=AFPM Artem Bityutskiy <dedekind1@gmail.c=
+om> wrote:
+>
+> From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+>
+> Add Intel Grand Ridge SoC C-states, which are C1, C1E, and C6S.
+>
+> The Grand Ridge SoC is built with modules, each module includes 4 cores
+> (Crestmont microarchitecture). There is one L2 cache per module, shared b=
+etween
+> the 4 cores.
+>
+> There is no core C6 state, but there is C6S state, which has module scope=
+:
+> when all 4 cores request C6S, the entire module (4 cores + L2 cache) ente=
+rs the
+> low power state.
+>
+> Package C6 is not supported by Grand Ridge SoC.
+>
+> Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+> ---
+>  drivers/idle/intel_idle.c | 36 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 36 insertions(+)
+>
+> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> index cfd0b24fd7f1..3b846d4f8707 100644
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -1271,6 +1271,35 @@ static struct cpuidle_state snr_cstates[] __initda=
+ta =3D {
+>                 .enter =3D NULL }
+>  };
+>
+> +static struct cpuidle_state grr_cstates[] __initdata =3D {
+> +       {
+> +               .name =3D "C1",
+> +               .desc =3D "MWAIT 0x00",
+> +               .flags =3D MWAIT2flg(0x00) | CPUIDLE_FLAG_ALWAYS_ENABLE,
+> +               .exit_latency =3D 1,
+> +               .target_residency =3D 1,
+> +               .enter =3D &intel_idle,
+> +               .enter_s2idle =3D intel_idle_s2idle, },
+> +       {
+> +               .name =3D "C1E",
+> +               .desc =3D "MWAIT 0x01",
+> +               .flags =3D MWAIT2flg(0x01) | CPUIDLE_FLAG_ALWAYS_ENABLE,
+> +               .exit_latency =3D 2,
+> +               .target_residency =3D 10,
+> +               .enter =3D &intel_idle,
+> +               .enter_s2idle =3D intel_idle_s2idle, },
+> +       {
+> +               .name =3D "C6S",
+> +               .desc =3D "MWAIT 0x22",
+> +               .flags =3D MWAIT2flg(0x22) | CPUIDLE_FLAG_TLB_FLUSHED,
+> +               .exit_latency =3D 140,
+> +               .target_residency =3D 500,
+> +               .enter =3D &intel_idle,
+> +               .enter_s2idle =3D intel_idle_s2idle, },
+> +       {
+> +               .enter =3D NULL }
+> +};
+> +
+>  static const struct idle_cpu idle_cpu_nehalem __initconst =3D {
+>         .state_table =3D nehalem_cstates,
+>         .auto_demotion_disable_flags =3D NHM_C1_AUTO_DEMOTE | NHM_C3_AUTO=
+_DEMOTE,
+> @@ -1420,6 +1449,12 @@ static const struct idle_cpu idle_cpu_snr __initco=
+nst =3D {
+>         .use_acpi =3D true,
+>  };
+>
+> +static const struct idle_cpu idle_cpu_grr __initconst =3D {
+> +       .state_table =3D grr_cstates,
+> +       .disable_promotion_to_c1e =3D true,
+> +       .use_acpi =3D true,
+> +};
+> +
+>  static const struct x86_cpu_id intel_idle_ids[] __initconst =3D {
+>         X86_MATCH_INTEL_FAM6_MODEL(NEHALEM_EP,          &idle_cpu_nhx),
+>         X86_MATCH_INTEL_FAM6_MODEL(NEHALEM,             &idle_cpu_nehalem=
+),
+> @@ -1466,6 +1501,7 @@ static const struct x86_cpu_id intel_idle_ids[] __i=
+nitconst =3D {
+>         X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT_PLUS,  &idle_cpu_bxt),
+>         X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT_D,     &idle_cpu_dnv),
+>         X86_MATCH_INTEL_FAM6_MODEL(ATOM_TREMONT_D,      &idle_cpu_snr),
+> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_CRESTMONT,      &idle_cpu_grr),
+>         {}
+>  };
+>
+>
+> base-commit: ee96d5c15517fbdf136aeff1919646e843fbb6f3
+> --
 
-Applied, patch 1 & 2
-
-Thanks
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Applied as 6.8 material along with the [2/2], thanks!
 
