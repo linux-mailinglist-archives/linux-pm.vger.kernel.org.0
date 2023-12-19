@@ -1,64 +1,64 @@
-Return-Path: <linux-pm+bounces-1360-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1361-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B6478186F9
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 13:05:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE8C4818784
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 13:33:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0593F286F1A
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 12:05:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B4CF51C236A6
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 12:33:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B72A16423;
-	Tue, 19 Dec 2023 12:05:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9213210E5;
+	Tue, 19 Dec 2023 12:33:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="n9qVQMNn"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mRbNSKsh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 980B0171AB
-	for <linux-pm@vger.kernel.org>; Tue, 19 Dec 2023 12:05:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB07C18E0E
+	for <linux-pm@vger.kernel.org>; Tue, 19 Dec 2023 12:33:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-336755f1688so322719f8f.0
-        for <linux-pm@vger.kernel.org>; Tue, 19 Dec 2023 04:05:49 -0800 (PST)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-40c38de1ee4so44773335e9.0
+        for <linux-pm@vger.kernel.org>; Tue, 19 Dec 2023 04:33:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702987548; x=1703592348; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1702989207; x=1703594007; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=X3YR050jxxqtUei61l45Oklud07svtS5N+6+fAR6YhA=;
-        b=n9qVQMNnxEkO2UUmM56BYSv7X1Wdp/D/IGM/PNBB74BGymPdxPZtGIfaL9n1DFPZ+Z
-         +4q8cwwJclgFD0bTxU7SDl/k6yrDx69seslcN4fgeRPFgnWSJwDlkC4wV2k6SLFGle4g
-         wXh5VPrEw6em/8oJqO2i3XREsc9g6JYbEfZIX5tR9oku6hKJFNZsQSMO4MmEfm6EK1IR
-         gcmFzEHB8hEpISqCWq+2HJ6DLRfd/mqg/FcaXRAFXlv6tMCPDhlpnD2GLn8Gookh2H2Z
-         Du5z+kWjKhdhJCsTelK0hyFn/AP+NVRln8fYVXH3J9IjK84kNvJTRCu5gCd5Jqq2+OMI
-         LacA==
+        bh=xA3u4t+UtUJ0McmzJljzqmFtcCuyXSppyAwUPeBeqLw=;
+        b=mRbNSKshcWCp5A30JNBv22Pht0GAk/9P4UH8anqaUOPwVPr8n7cFCy4hAVaWcZc37W
+         mzOTeWh0GWdnMImrCCECamLsycicic+uMGaPRb3PTTVtvIocV90761fTrMvIF/i5T+Z9
+         HHEyQDuP4q4tzvPph2CxYm6c4aRlu98e/uUc1kOlFvXNThwsJD2MLgHbXPZuN2XKQpaM
+         cRFz3JSG/wUOFZl5S1Tmep8Q5kOd8aEgEJGELuMlGiEwGLbBCF9Q3tXRTnFuRBXwpeZD
+         GAZYBtQ8YhBXjdTT0Hy9YYGXD8kuCvnztJ9H/Yh4yOEnU/AIIgulfiIZ+fbSREuZdMhZ
+         g+Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702987548; x=1703592348;
+        d=1e100.net; s=20230601; t=1702989207; x=1703594007;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X3YR050jxxqtUei61l45Oklud07svtS5N+6+fAR6YhA=;
-        b=NOooMmNFsOpJEuBRdJtqp70phmo28QOqWD1h5kCG8RIERAucYnwDEAuahBPxYtEPa9
-         hhtUfGjlEWFeHzwNfkr2de1OJqEZnJKKPmdPbVhtoyqdzuNolI4ttUYVqXnNsrB5/rXD
-         Of6QH8znJJNFXET6LxiPkU6V8TXc1K1g/4sO/zez1f/yDxw4KZak/i8wam8Dj3JnHX6I
-         hzCWT9IQR4PK9TTm1nCYVWBBSolPbC7ViXX42O2yfQbaun2Nyw2MieL1H4rf0hHyV7CC
-         u+3b5K/4liyccqNX9TUbMv6VKStp9flfi+rXolW9WRucukaFGDJM2W9Nc8oh7sznHyMX
-         nW+A==
-X-Gm-Message-State: AOJu0YxPe63vXzE6P1WSzBt3PlGP4q2KJSv4zS/dPussikx3VXwlB9eV
-	9xbtL/bRr6XcYa6u/EI/myZ1AA==
-X-Google-Smtp-Source: AGHT+IF5d2kbKxQ7jOydN8S3q0DvtY7+5q+/TZGiKHZOcdhuKnEn8CMYBJrqz1/C8FrBWWz+Kpwutw==
-X-Received: by 2002:adf:ee8b:0:b0:336:66f7:2d39 with SMTP id b11-20020adfee8b000000b0033666f72d39mr1859810wro.11.1702987547704;
-        Tue, 19 Dec 2023 04:05:47 -0800 (PST)
+        bh=xA3u4t+UtUJ0McmzJljzqmFtcCuyXSppyAwUPeBeqLw=;
+        b=AQRmSOzRPLYAviJxeBI5ICe7qeuOH1p8DDLZs9NeIiH9y4fpftvewtg+z/CUI6qR0v
+         9ioq5Bzan6M4K1pOPFnt+eTXAsyo7bdN4uA6YHebliqIAxKDT3AgCPq05BTNLMCAq5hL
+         b9Cm79XAWeUViB/DfaSfAzlReQvS6tZJ8KYwLi2R66XBYPJeUj/pfPChv+1qoPItEkaf
+         ON+OnJYoANLiZl1H1UvAJLgJdcFSvihsrzzM9EksWuo/CLY4Oi4r/isH7S4fgQf/zo8O
+         bImx3VZn6sALvea2dXXz23b/TlvqshkLhpyaPWhqUGTOYSvb8bzfIf4WewytxOtvTv6x
+         N/xQ==
+X-Gm-Message-State: AOJu0Yz4vUeBtbJeQhJN8mntTplCAIi4ogKb8ZsGUZBqaCLLsZ2VaG1x
+	ui5vkhJdLXu4XT2fC7EeWbWlNg==
+X-Google-Smtp-Source: AGHT+IFzoKKAKbnPL7LRL39CV2dy6y+u+klABAwXLT5Oif8aLNSfNjfHBHfrrjrqv4ztFu1wS+PLvA==
+X-Received: by 2002:a05:600c:3502:b0:40d:18e2:895 with SMTP id h2-20020a05600c350200b0040d18e20895mr1948499wmq.98.1702989207121;
+        Tue, 19 Dec 2023 04:33:27 -0800 (PST)
 Received: from [192.168.10.46] ([37.167.119.56])
-        by smtp.googlemail.com with ESMTPSA id v30-20020adfa1de000000b003366cb73f74sm3811062wrv.66.2023.12.19.04.05.46
+        by smtp.googlemail.com with ESMTPSA id n33-20020a05600c502100b004030e8ff964sm2697092wmr.34.2023.12.19.04.33.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Dec 2023 04:05:47 -0800 (PST)
-Message-ID: <f2f31c85-70e4-4a2b-b791-73433cdaf881@linaro.org>
-Date: Tue, 19 Dec 2023 13:05:46 +0100
+        Tue, 19 Dec 2023 04:33:26 -0800 (PST)
+Message-ID: <3a61d2d9-158f-4728-af19-a8700d5ce1a1@linaro.org>
+Date: Tue, 19 Dec 2023 13:33:25 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -66,57 +66,112 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] thermal: core: Print out thermal zone name on
- update_temperature error
+Subject: Re: [PATCH v1 2/2] PM: QoS: Add a performance QoS
 Content-Language: en-US
-To: Konrad Dybcio <konrad.dybcio@linaro.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
- Marijn Suijten <marijn.suijten@somainline.org>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-References: <20231218-topic-thermaldbg-v1-1-451bcb723e1d@linaro.org>
- <CAJZ5v0gkko7nWH2ePwEhbfXR-jAb9+f+rsfYXKBMSz04uW4rYg@mail.gmail.com>
- <1e151dcf-d4fc-4aec-9f68-c8ef372a00f2@linaro.org>
+To: Caleb Connolly <caleb.connolly@linaro.org>, rafael@kernel.org
+Cc: lina.iyer@linaro.org, lukasz.luba@arm.com, quic_manafm@quicinc.com,
+ quic_priyjain@quicinc.com, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Viresh Kumar <viresh.kumar@linaro.org>
+References: <20231213175818.2826876-1-daniel.lezcano@linaro.org>
+ <20231213175818.2826876-2-daniel.lezcano@linaro.org>
+ <9f8566b8-71d3-4dbd-8bde-f9a4cfde8372@linaro.org>
 From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <1e151dcf-d4fc-4aec-9f68-c8ef372a00f2@linaro.org>
+In-Reply-To: <9f8566b8-71d3-4dbd-8bde-f9a4cfde8372@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 
-Hi Konrad,
+Hi Caleb,
 
-[Cc: Angelo]
+[Cc'ed Viresh]
 
-On 19/12/2023 12:48, Konrad Dybcio wrote:
-> On 18.12.2023 20:40, Rafael J. Wysocki wrote:
->> On Mon, Dec 18, 2023 at 3:40 PM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->>>
->>> Currently, we can encounter an error like this:
->>>
->>>    thermal thermal_zone48: failed to read out thermal zone (-19)
->>>
->>> It's good to know that there's been an issue, but on some occasions
->>> (like the error happening in the middle of a platform crash), one may
->>> not be able to look up what kind of thermal zone that is.
->>>
->>> Add the TZ name to the error message in order to speed up debugging.
->>
->> s/name/type/ ?  It looks like that's what you mean.
->>
->> First, the tz type is not its name (because there may be multiple
->> zones of the same type) and it would be consistent with the first
->> paragraph above.
-> That's possible, I'm no expert wrt thermal :)
+On 13/12/2023 19:35, Caleb Connolly wrote:
+> Hi Daniel,
 > 
-> Would you be okay with this change, together with an amended commit
-> message?
+> On 13/12/2023 17:58, Daniel Lezcano wrote:
+>> Currently cpufreq and devfreq are using the freq QoS to aggregate the
+>> requests for frequency ranges.
+>>
+>> However, there are new devices wanting to act not on a frequency range
+>> but on a performance index range. Those need also to export to
+>> userspace the knob to act on their performance limits.
+>>
+>> This change provides a performance limiter QoS based on a minimum /
+>> maximum performance values. At init time, the limits of the interval
+>> are 0 / 1024. It is up to the backend to convert the 1024 to the
+>> maximum performance state. So if the performance must be limited to
+>> 50%, it should set to maximum limit to 512 where the backend will end
+>> up by converting (max performance index / 2). The same applies for the
+>> minimum. Obviously, the min can not be greater than the max.
+> 
+> I really feel like it should be possible to have arbitrary min/max
+> performance values. As is the case with latency and frequency.
 
-Angelo is looking for how to sort out the name vs type confusion [1].
+We had an initial discussion about the performance QoS some weeks ago. 
+Rafael is reluctant to have arbitrary values. So it was proposed a 1024 
+based approach and let the back end to convert the value to its index.
 
-May be you should wait he comes with a proposal before updating the message?
+If we go for a similar approach to the frequencies, then we should have 
+more files to describe the different states. At least one defining the 
+current state, the min and the max.
 
-[1] 
-https://lore.kernel.org/all/3428b2af-5522-4090-995a-10eaee90c28e@linaro.org/
+
+>>   1. With the example above, if there is a odd number like 5 for the
+>>   number of performance indexes and we ask for 512 (so 50%), what would
+>>   be the performance index computed? (5/2=2 or 5/2=3)? (I would say the
+>>   minimum otherwise we end up with a performance limit greater than
+>>   what we actually asked for).
+> 
+> For a device with just a handful of performance indices this is quite a
+> large margin for error. If there are just 3 for example, and some
+> algorithm is decreasing the performance level over time (e.g. due to
+> some thermal condition), the algorithm cannot determine at what point
+> the devices performance level has actually changed, making debugging and
+> tuning of behaviour needlessly difficult.
+
+Yes, it is a valid point. May be we can find an intermediate approach.
+
+If we define an additional information, let's call it "granularity" for 
+example and keep the 0-1023, then the userspace can rely on this 
+information to build the steps.
+
+If we take your example with a 3 performance states device, then the 
+granularity would be:
+
+1024 / 3 = 341.3
+
+As floating does not exist in the kernel, then it would be 342.
+
+State 0 = 0 x 342 = 0
+State 1 = 1 x 342 = 342
+State 2 = 2 x 342 = 684
+State 3 = 3 x 342 = 1026 (floored to 1024)
+
+So we end up with a fixed range, a way to quickly escalate the stairs 
+and three files in the device's power sysfs entry.
+
+> This also leaves it up to the backend driver to decide if it should
+> round up or down, something that should definitely be handled by the
+> framework.
+
+> Maybe I missed some previous discussion, but isn't this what
+> operating-points is designed for?
+> 
+> It has an `opp-level` property, but that is meant to be device-specific.
+> With the `opp-hz` property being the "normalised" values that the
+> framework deals with.
+> 
+> We would just want some way to defined an `opp-level` as a percentage
+> (or whatever), with an arbitrary `opp-performance-index` being the
+> device-specific property.
+> 
+> This also gracefully handles non-linear performance scaling.
+
+I think it is a different subject, we are talking about how to describe 
+the hardware and these performance states. But I agree, it is worth to 
+keep the opp description in mind.
+
+[ ... ]
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
