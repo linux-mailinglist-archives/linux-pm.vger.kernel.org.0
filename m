@@ -1,31 +1,31 @@
-Return-Path: <linux-pm+bounces-1353-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1354-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEF44818550
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 11:29:36 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FD008185B0
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 11:52:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88AD1284982
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 10:29:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E3B9EB20AF2
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 10:52:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F90414A84;
-	Tue, 19 Dec 2023 10:29:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B6AC14AB6;
+	Tue, 19 Dec 2023 10:52:22 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 834EE14A8F;
-	Tue, 19 Dec 2023 10:29:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23CE314F68;
+	Tue, 19 Dec 2023 10:52:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2923D1FB;
-	Tue, 19 Dec 2023 02:30:13 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8A00F1FB;
+	Tue, 19 Dec 2023 02:53:03 -0800 (PST)
 Received: from [10.57.85.227] (unknown [10.57.85.227])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A03BB3F738;
-	Tue, 19 Dec 2023 02:29:26 -0800 (PST)
-Message-ID: <89df2982-5492-43db-8e25-d974ff19fda2@arm.com>
-Date: Tue, 19 Dec 2023 10:30:32 +0000
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0CE713F738;
+	Tue, 19 Dec 2023 02:52:16 -0800 (PST)
+Message-ID: <b31672e4-ab41-4724-86ef-038606318663@arm.com>
+Date: Tue, 19 Dec 2023 10:53:22 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -33,8 +33,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 02/23] PM: EM: Refactor
- em_cpufreq_update_efficiencies() arguments
+Subject: Re: [PATCH v5 03/23] PM: EM: Find first CPU active while updating OPP
+ efficiency
 Content-Language: en-US
 To: Qais Yousef <qyousef@layalina.io>
 Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
@@ -43,10 +43,10 @@ Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
  daniel.lezcano@linaro.org, viresh.kumar@linaro.org, len.brown@intel.com,
  pavel@ucw.cz, mhiramat@kernel.org, wvw@google.com
 References: <20231129110853.94344-1-lukasz.luba@arm.com>
- <20231129110853.94344-3-lukasz.luba@arm.com>
- <20231217175812.s5vaabxtm4cgil36@airbuntu>
+ <20231129110853.94344-4-lukasz.luba@arm.com>
+ <20231217175829.a6hqz7mqlvrujsvs@airbuntu>
 From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20231217175812.s5vaabxtm4cgil36@airbuntu>
+In-Reply-To: <20231217175829.a6hqz7mqlvrujsvs@airbuntu>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
@@ -54,65 +54,65 @@ Content-Transfer-Encoding: 7bit
 
 On 12/17/23 17:58, Qais Yousef wrote:
 > On 11/29/23 11:08, Lukasz Luba wrote:
->> In order to prepare the code for the modifiable EM perf_state table,
->> refactor existing function em_cpufreq_update_efficiencies().
+>> The Energy Model might be updated at runtime and the energy efficiency
+>> for each OPP may change. Thus, there is a need to update also the
+>> cpufreq framework and make it aligned to the new values. In order to
+>> do that, use a first active CPU from the Performance Domain. This is
+>> needed since the first CPU in the cpumask might be offline when we
+>> run this code path.
 > 
-> nit: What is being refactored here? The description is not adding much info
-> about the change.
+> I didn't understand the problem here. It seems you're fixing a race, but the
+> description is not clear to me what the race is.
 
-The function takes the ptr to the table now as its argument. You have
-missed that in the code below?
+I have explained that in v1, v4 comments for this patch.
+When the EM is registered the fist CPU is always online. No problem
+for the old code, but for new code with runtime modification at
+later time, potentially from different subsystems - it it (e.g. thermal,
+drivers, etc). The fist CPU might be offline, but still such EM
+update for this domain shouldn'y fail. Although, when the CPU is offline
+we cannot get the valid policy...
 
-> 
-> 
-> Cheers
-> 
-> --
-> Qais Yousef
+We can get it for next cpu in the cpumask, that's what the code is
+doing.
+
 > 
 >>
 >> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 >> ---
->>   kernel/power/energy_model.c | 8 +++-----
->>   1 file changed, 3 insertions(+), 5 deletions(-)
+>>   kernel/power/energy_model.c | 11 +++++++++--
+>>   1 file changed, 9 insertions(+), 2 deletions(-)
 >>
 >> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
->> index 8b9dd4a39f63..42486674b834 100644
+>> index 42486674b834..aa7c89f9e115 100644
 >> --- a/kernel/power/energy_model.c
 >> +++ b/kernel/power/energy_model.c
->> @@ -237,10 +237,10 @@ static int em_create_pd(struct device *dev, int nr_states,
->>   	return 0;
->>   }
->>   
->> -static void em_cpufreq_update_efficiencies(struct device *dev)
->> +static void
->> +em_cpufreq_update_efficiencies(struct device *dev, struct em_perf_state *table)
->>   {
+>> @@ -243,12 +243,19 @@ em_cpufreq_update_efficiencies(struct device *dev, struct em_perf_state *table)
 >>   	struct em_perf_domain *pd = dev->em_pd;
->> -	struct em_perf_state *table;
 >>   	struct cpufreq_policy *policy;
 >>   	int found = 0;
->>   	int i;
->> @@ -254,8 +254,6 @@ static void em_cpufreq_update_efficiencies(struct device *dev)
+>> -	int i;
+>> +	int i, cpu;
+>>   
+>>   	if (!_is_cpu_device(dev) || !pd)
 >>   		return;
->>   	}
 >>   
->> -	table = pd->table;
->> -
->>   	for (i = 0; i < pd->nr_perf_states; i++) {
->>   		if (!(table[i].flags & EM_PERF_STATE_INEFFICIENT))
->>   			continue;
->> @@ -397,7 +395,7 @@ int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
->>   
->>   	dev->em_pd->flags |= flags;
->>   
->> -	em_cpufreq_update_efficiencies(dev);
->> +	em_cpufreq_update_efficiencies(dev, dev->em_pd->table);
->>   
->>   	em_debug_create_pd(dev);
->>   	dev_info(dev, "EM: created perf domain\n");
->> -- 
->> 2.25.1
->>
+>> -	policy = cpufreq_cpu_get(cpumask_first(em_span_cpus(pd)));
+>> +	/* Try to get a CPU which is active and in this PD */
+>> +	cpu = cpumask_first_and(em_span_cpus(pd), cpu_active_mask);
+>> +	if (cpu >= nr_cpu_ids) {
+>> +		dev_warn(dev, "EM: No online CPU for CPUFreq policy\n");
+>> +		return;
+>> +	}
+>> +
+>> +	policy = cpufreq_cpu_get(cpu);
 > 
+> Shouldn't policy be NULL here if all policy->realted_cpus were offlined?
+
+It will be NULL but we will capture that fact in other way in the 'if'
+above.
+
+We want something else.
+
+We want to get policy using 'some' online CPU's id from our known
+cpumask. Then we can continue with such policy in the code.
 
