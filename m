@@ -1,59 +1,59 @@
-Return-Path: <linux-pm+bounces-1339-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1340-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA55C8180A7
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 05:42:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F304818175
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 07:23:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F83D1F247E9
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 04:42:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05FF31C21B66
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 06:23:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8A3E10E4;
-	Tue, 19 Dec 2023 04:42:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A17F746C;
+	Tue, 19 Dec 2023 06:22:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NWMFrUUT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dRXGI6PV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E63668BE1;
-	Tue, 19 Dec 2023 04:42:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9670C120;
+	Tue, 19 Dec 2023 06:22:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f172.google.com with SMTP id 5614622812f47-3b9e2a5e8faso1690851b6e.1;
-        Mon, 18 Dec 2023 20:42:23 -0800 (PST)
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-1f03d9ad89fso2857756fac.1;
+        Mon, 18 Dec 2023 22:22:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702960943; x=1703565743; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1702966976; x=1703571776; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8wN82s6T7Bz2Zpf2akZr11znIoaGa6mjatH3NjUqmpo=;
-        b=NWMFrUUTL4buomgfB1Idk1KYK0Cc19m4lhiT01rI70bjvU78fZ0ElkUtpk/piNDq0o
-         gYyOlbjgXHzLnKISjFqJ35ZcPt0EOi99llTS2cBxISI3z4MvYKxoDN08/vK+WxrgKCTN
-         jg9AcdPnSk95Caf2epqtDyo4qzcI4ue+tIl65CtXQFJYcq9GVR34dnPA0GeR+rfQJ0Td
-         wBaPYbU9xEK1OAvKmyRiLHXRs7ySdcmMHkFyMoVz5k6c5Vx/HTaNUvltfRjejkpv6Ht6
-         TI1OanbPLCX2s+zFuEnYWLyFQVFsZ7Cky68+Ug+8IbscKdnfK+IFSo050UgIO8/KOfRH
-         W5RQ==
+        bh=sSgHs0FWEMrb15OfbOetmXR8o3wALHpJc7WKcpx+S5s=;
+        b=dRXGI6PVALMmEyU9qk1QCl6O/8d0RbT9caGJw2J9ruFwqyzE0sfZJbH5MNvvyNpiF9
+         iO1Bm59MgzHntTvMnpNIH5iuswimFGMUvDxmddvsI3Ob/JeI2WlP0ds1Ils5zfRZH0MV
+         VqUdl0A3ij9I2yxi3mIqs/5RU+ir1KRWpRMRbtNlBMAW6kxPgIGKY+appERPMxBfe7Nj
+         rcipfk22dItOrD8ko/P8QYsjXAzxEOJ7YMPRIC59fNIKBSS4ZegfejSC9MnDUH21d2qk
+         bRa12p4MqTrZAFE0yc80B9Amm1IlK8kg9ebSnPyMaluUJQWQsHp7o8kPTF26iWOtC1HD
+         S46w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702960943; x=1703565743;
+        d=1e100.net; s=20230601; t=1702966976; x=1703571776;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8wN82s6T7Bz2Zpf2akZr11znIoaGa6mjatH3NjUqmpo=;
-        b=BlgF3xJ+RE0B9AmjXx3U4KV0Rmt01Byxgu0x+tc5EJUyFyu1fUWvNjF5Zkmb0Pummj
-         cVUMWi8p85nAXDpwvCZ0JcjaA1OOCvspa5Vtz4IT9nt8akkFSyU/e5/yUiILNjKk0fxO
-         OTqqRF9VPhwwBl/vzdqlwAjLlJwBjhWNsZDRcoi6hfuqwfR4welIKLLOjgw45iV3Etqn
-         t0Zl63dm7hs1tXtlPLccS8A/SI2HyS0nQsksfS23t5tsGvHyfCboZXT0heYE4kk5C7ay
-         dfI3lSN9vXHDUn0513e0bDPJ17KZYpdQcY13SbS2V9S+xD8Iaa3L6t6efxpaEp+D9XAq
-         X42g==
-X-Gm-Message-State: AOJu0YyaSShgpHfS/S9nwvvE8dR05jvjZAZwnsuRIkf02cFTdW2o0pfT
-	OmcEYTYUFJxBOe5tbPXp+SRRCMVF1fKalFud4HU=
-X-Google-Smtp-Source: AGHT+IFRoK/gRPTT7EGwCxV0Fruup0O1I3mKRHx+ackgZZ7TnJzwdG7a9Pd0Cupd7eZcTCB9zJDz8LEwX5FRT3qCFPI=
-X-Received: by 2002:a05:6808:a11:b0:3b9:e52e:da33 with SMTP id
- n17-20020a0568080a1100b003b9e52eda33mr175699oij.7.1702960942831; Mon, 18 Dec
- 2023 20:42:22 -0800 (PST)
+        bh=sSgHs0FWEMrb15OfbOetmXR8o3wALHpJc7WKcpx+S5s=;
+        b=ODhrTAxHj2AdRhbFk0Mlbj1VNbfkr9zKKmLe0cRzgDSeAl3/M0qWRT4ppGqQzO402m
+         xOTD46OKC4qyWQFVetXKD0WW+0qzUwe0vWrfJyNdOLAQR4zpSKS4LJNuZGWjMpUszRcs
+         ZyLV4UAU1/TeIQeE/Zg1HNKyfnoevlxxvrjgSwaGD8v59NHv4MpL/nicgtY3zMl7m4x2
+         FExVUmNW8mPOKECaK4jqeumnjw6a3ME8fDq8ZG/2L1/p5rv8kq8htWktCrf3TU72c0cM
+         uQQvPADLqtOo0Ry9fCcHNFQjDkFnPM4JyZGB0G0h41Mevc+lkUEcnGtFAJq+lmAWXTq3
+         og7w==
+X-Gm-Message-State: AOJu0Ywl9zCNFGtdxEkrud2XFVzwwSD3+p2sbB1/QnXTn1iNxgtV6dgK
+	KVOodmgaTj4+etQaNPt8wCZ/95K3jUOPEN/d/A0=
+X-Google-Smtp-Source: AGHT+IE0fRbD/t0vhrxi97Q32D0rrqp3h5/XhjXIHtcBtogjmtZ09D4huhkkfvRMMOa0RjYDO+5mCgfRwHXM/OpQVwk=
+X-Received: by 2002:a05:6871:5207:b0:203:d05e:a812 with SMTP id
+ ht7-20020a056871520700b00203d05ea812mr2879393oac.19.1702966975725; Mon, 18
+ Dec 2023 22:22:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -63,8 +63,8 @@ MIME-Version: 1.0
 References: <20231129110853.94344-1-lukasz.luba@arm.com> <20231129110853.94344-24-lukasz.luba@arm.com>
 In-Reply-To: <20231129110853.94344-24-lukasz.luba@arm.com>
 From: Xuewen Yan <xuewen.yan94@gmail.com>
-Date: Tue, 19 Dec 2023 12:42:12 +0800
-Message-ID: <CAB8ipk_BmdOYWKo_b7g=e6LJVyt1=Yo=wuG5dvUtTvNnmCw+Zg@mail.gmail.com>
+Date: Tue, 19 Dec 2023 14:22:45 +0800
+Message-ID: <CAB8ipk_Zx5NtSpNXHsAqpZSq2yVHGAni5sN=ot5Lkc0jGZxoxA@mail.gmail.com>
 Subject: Re: [PATCH v5 23/23] Documentation: EM: Update with runtime
  modification design
 To: Lukasz Luba <lukasz.luba@arm.com>
@@ -75,6 +75,8 @@ Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, rafael@kernel.org,
 	wvw@google.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+
+Hi Lukasz,
 
 On Wed, Nov 29, 2023 at 7:11=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> w=
 rote:
@@ -330,6 +332,15 @@ woken
 > +  -> drivers/soc/example/example_em_mod.c
 > +
 > +  01   static void foo_get_new_em(struct device *dev)
+
+Because now some drivers use the dev_pm_opp_of_register_em() to
+register energy model,
+and maybe we can add a new function to update the energy model using
+"EM_SET_ACTIVE_POWER_CB(em_cb, cb)"
+instead of letting users set power again?
+
+Thanks!
+
 > +  02   {
 > +  03           struct em_perf_table __rcu *runtime_table;
 > +  04           struct em_perf_state *table, *new_table;
@@ -373,15 +384,6 @@ t);
 > +  39           }
 > +  40
 > +  41           ctx->runtime_table =3D runtime_table;
-
-Because here is ctx, maybe the foo_get_new_em(struct device *dev)
-shoule be foo_get_new_em(struct foo_context *ctx)?
-
-
-BR
----
-xuewen
-
 > +  42   }
 > +  43
 > +  44   /*
