@@ -1,160 +1,133 @@
-Return-Path: <linux-pm+bounces-1343-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1344-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B684A818302
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 09:06:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 499FC81834C
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 09:27:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A806282244
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 08:06:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A65E11F24433
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 08:27:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B986EF9EC;
-	Tue, 19 Dec 2023 08:06:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EEC41119A;
+	Tue, 19 Dec 2023 08:27:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pBktmR3C"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="CzdXGrjQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB77E125B2
-	for <linux-pm@vger.kernel.org>; Tue, 19 Dec 2023 08:06:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-553a8e67d1eso54280a12.1
-        for <linux-pm@vger.kernel.org>; Tue, 19 Dec 2023 00:06:34 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C3D13FEC
+	for <linux-pm@vger.kernel.org>; Tue, 19 Dec 2023 08:27:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3b9f727d94cso1468264b6e.1
+        for <linux-pm@vger.kernel.org>; Tue, 19 Dec 2023 00:27:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702973193; x=1703577993; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zkburO87GrYbWAAryh2St3RzkyFRXOl5bHPngDUMmPU=;
-        b=pBktmR3CpFJhZdol0zEE2JOt9eJR4wVO2XhcgKu27fa9i7iQU9zDIp+uHJ6v+s8T9g
-         FVOB2vMXKgnSu95Yt4g4Hq4UPD7ePfr2Bqc6d7v/edMP8eZGU1x0/ykbyaVP2czy44PQ
-         Wro2wbrVIs40dPPvONy2hrAFpLOIq1iBA5xcEhFBADXYdFkrGQpFk66+WhFUbCjIJsJ+
-         uB03g85lnM7OQOuOHbNCxN3/0f8qhrCzpxDXF6VyD7BqMBXnjWv8X/UMjxzvWxkOMdb7
-         CNBIyfLNFxPlcEelm6VZqLGPFFJIPez6nGFWc6mMxFIzG+tDwRzjZjBu4jpZJDORaGST
-         ibjA==
+        d=chromium.org; s=google; t=1702974461; x=1703579261; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=d9mjWg+9jf9K26duFvN0uz9/tUf2ZAojSB2YpAHDwss=;
+        b=CzdXGrjQx6F3XNhX/hDSAzQS0jExVqdRjZcnD3z3uFj74gTpAiq6wIPlniLZ+wgXh8
+         /GhIrem+FCyEHkluU4keYQ6iukBQZgp+BrrfLA3Ft9CLAWzILURybM7p1IIDa05F0F/O
+         sKIC6OFkpt3POSdBZhOMphSK/RGin8zl4UTZw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702973193; x=1703577993;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zkburO87GrYbWAAryh2St3RzkyFRXOl5bHPngDUMmPU=;
-        b=MJt4HoQRex3AZLACpnucPahAd0OgfTCaKLd1Na1ZJds+YPqZnYguXVxXMNifgJvV6D
-         kXmuFNL8G5sujl9e1FJP1UjmDa1PyOMu+4eSJcVmeYsvQfnFEBxJcOMMwSYIuKsTLXA1
-         xXs0sxr+7teRvCR7K4DwX8l20FtDmGVFjTt8tapgI6/cDbrIoWuBBSEkYH+nhXUA91nd
-         GULmQxCG4WjVxgk0xviLVY8xVjJy57al+jS82cIWEjhy8s7fw02uUC6jd7veQoZQ8Oyv
-         0SLJHSOJcPkMmT3G7x9BZAoF6jiYOc5IQHmD88TU592g/yZCnyszxkffyrSOkiBnOa0m
-         If9Q==
-X-Gm-Message-State: AOJu0Yykecm7FBg0/ZKDMWowFmxRIY7j04PZRJ35lqde0v2FrMPIGn9m
-	z9hAlpcHiJ9OIi5jD/JPoDj/0w==
-X-Google-Smtp-Source: AGHT+IFuXKP1XsUNYSdDB0mo59cBQmsF0TVgC6TQGtWoadzXEeEY8/1LgNvdGvo6QIYr6egjsV/hcg==
-X-Received: by 2002:a17:906:3e55:b0:a23:456b:bd82 with SMTP id t21-20020a1709063e5500b00a23456bbd82mr1989474eji.40.1702973193226;
-        Tue, 19 Dec 2023 00:06:33 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id re14-20020a170907a2ce00b00a1f751d2ba4sm14432324ejc.99.2023.12.19.00.06.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Dec 2023 00:06:32 -0800 (PST)
-Message-ID: <cb60263e-4ca2-4042-ba2f-8e17fc850639@linaro.org>
-Date: Tue, 19 Dec 2023 09:06:29 +0100
+        d=1e100.net; s=20230601; t=1702974461; x=1703579261;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d9mjWg+9jf9K26duFvN0uz9/tUf2ZAojSB2YpAHDwss=;
+        b=AxGuOTBmnzkZlBB+pat3M3HHck7WFd42W5G5RO6y9u35BEAxkrdnEhYH9/F2QDm1B7
+         ryGbAeHC9ugpnEUKiTgQQGuXMUERpugy0NNhY3QfRaxifm3yxokTcAlzwQSMY/mcqJee
+         AtwTCwdvkaZC9RqV2EuYH/AASfhz+u149pgwH5MU/oRTACFJr48Qbx5n9mlX4En9OKk/
+         vZWrvE49wcVB5HrOR1QXguf7gplFVuUH9+GFDcK1CGejyRRoSrUnzGIDqSypqoGQIf0B
+         7SwE15b6e9Gt78IL+uPMyDLCJImU6CfN7d5S62lJGkJdrz4EPUw5wvhWBmICRvWHnEpI
+         m1pg==
+X-Gm-Message-State: AOJu0YwdtjFsaQqPNwIxRzShfNGpJQPJ1ODYvnVKTDv7/KPQU+HtXYWD
+	PYkWHjBbv9Yw2Hm1FomzK+iJ3g==
+X-Google-Smtp-Source: AGHT+IE/rlWaZhIZsk9W2/LEBbaDvPfz7GUTydXmHDziltIOSmDwM7Hz0QYY4u8OBHGRZO0I5Yl0Ng==
+X-Received: by 2002:a05:6808:bcf:b0:3b8:b52b:5b65 with SMTP id o15-20020a0568080bcf00b003b8b52b5b65mr13762331oik.59.1702974460935;
+        Tue, 19 Dec 2023 00:27:40 -0800 (PST)
+Received: from wenstp920.tpe.corp.google.com ([2401:fa00:1:10:a1d9:66f1:da29:6b6b])
+        by smtp.gmail.com with ESMTPSA id e8-20020aa78c48000000b006d7e67d2e74sm2930644pfd.32.2023.12.19.00.27.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Dec 2023 00:27:40 -0800 (PST)
+From: Chen-Yu Tsai <wenst@chromium.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>
+Cc: Chen-Yu Tsai <wenst@chromium.org>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] thermal/core: Correctly free tz->tzp in thermal zone registration error path
+Date: Tue, 19 Dec 2023 16:27:24 +0800
+Message-ID: <20231219082726.844508-1-wenst@chromium.org>
+X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/15] memory: Convert to platform remove callback
- returning void
-Content-Language: en-US
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: kernel@pengutronix.de, Markus Mayer <mmayer@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- Santosh Shilimkar <ssantosh@kernel.org>, Paul Cercueil
- <paul@crapouillou.net>, linux-mips@vger.kernel.org,
- Yong Wu <yong.wu@mediatek.com>, Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- linux-mediatek@lists.infradead.org, Roger Quadros <rogerq@kernel.org>,
- Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org,
- Lukasz Luba <lukasz.luba@arm.com>, Alim Akhtar <alim.akhtar@samsung.com>,
- linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- linux-stm32@st-md-mailman.stormreply.com,
- Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>, Sumit Gupta <sumitg@nvidia.com>,
- Nick Alcock <nick.alcock@oracle.com>, linux-tegra@vger.kernel.org,
- Rob Herring <robh@kernel.org>
-References: <cover.1702822744.git.u.kleine-koenig@pengutronix.de>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <cover.1702822744.git.u.kleine-koenig@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 17/12/2023 15:29, Uwe Kleine-König wrote:
-> Hello,
-> 
-> this series converts the platform drivers below drivers/memory to make
-> use of .remove_new. See commit 5c5a7680e67b ("platform: Provide a remove
-> callback that returns no value") for an extended explanation and the
-> eventual goal. The TL;DR; is to make it harder for driver authors to
-> leak resources without noticing.
+After commit 3d439b1a2ad3 ("thermal/core: Alloc-copy-free the thermal
+zone parameters structure"), the core now copies the thermal zone
+parameters structure, and frees it if an error happens during thermal
+zone device registration, or upon unregistration of the device.
 
-Thanks, applied.
-It is however very late in the cycle, so there is a chance this will
-miss the merge window. If this happens, I will keep it for the next
-cycle (no need for resending).
+In the error path, if device_register() was called, then `tz` disappears
+before kfree(tz->tzp) happens, causing a NULL pointer deference crash.
 
-Best regards,
-Krzysztof
+In my case, the error path was entered from the sbs power supply driver,
+which through the power supply core registers a thermal zone *without
+trip points* for the battery temperature sensor. This combined with
+setting the default thermal governor to "power allocator", which
+*requires* trip_max, causes the thermal zone registration to error out.
+
+The error path should handle the two cases, one where device_register
+has not happened and the kobj hasn't been reference counted, and vice
+versa where it has. The original commit tried to cover the first case,
+but fails for the second. Fix this by adding kfree(tz->tzp) before
+put_device() to cover the second case, and check if `tz` is still valid
+before calling kfree(tz->tzp) to avoid crashing in the second case.
+
+Fixes: 3d439b1a2ad3 ("thermal/core: Alloc-copy-free the thermal zone parameters structure")
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+---
+This includes the minimal changes to fix the crash. I suppose some other
+things in the thermal core could be reworked:
+- Don't use "power allocator" for thermal zones without trip points
+- Move some of the thermal zone cleanup code into the release function
+
+ drivers/thermal/thermal_core.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 2415dc50c31d..e47826d82062 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -1392,12 +1392,16 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
+ unregister:
+ 	device_del(&tz->device);
+ release_device:
++	/* Free tz->tzp before tz goes away. */
++	kfree(tz->tzp);
+ 	put_device(&tz->device);
+ 	tz = NULL;
+ remove_id:
+ 	ida_free(&thermal_tz_ida, id);
+ free_tzp:
+-	kfree(tz->tzp);
++	/* If we arrived here before device_register() was called. */
++	if (tz)
++		kfree(tz->tzp);
+ free_tz:
+ 	kfree(tz);
+ 	return ERR_PTR(result);
+-- 
+2.43.0.472.g3155946c3a-goog
 
 
