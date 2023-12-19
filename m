@@ -1,111 +1,152 @@
-Return-Path: <linux-pm+bounces-1370-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1371-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84272818DB2
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 18:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 07F21818DBA
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 18:15:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2523D1F26D80
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 17:14:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B9041F273EF
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 17:15:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E4CD20B16;
-	Tue, 19 Dec 2023 17:14:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03D1E20DEB;
+	Tue, 19 Dec 2023 17:15:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EM2r0lHn"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ixh2ncz6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02EE535896;
-	Tue, 19 Dec 2023 17:14:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a2340c803c6so356346266b.0;
-        Tue, 19 Dec 2023 09:14:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1703006044; x=1703610844; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f9vtfVLly14ekhlTunGy1vRxwLpd8U5NIsSj2AVK3Vk=;
-        b=EM2r0lHns+qVfCE/SnsFr51o7VCJHzTlBqDn7KOvQH3457NqbuwOtwcTNX/T6lsSZW
-         W1WBvZbfd/TO8ecEoxfQpXDw3HMAqOAWCplTskcNRtoj2XiY5xocXSVpzC9ZEhctrybW
-         PASKUAaGtLj5Ny9dbzrCam7dWejaah7AN1bYI8tnBb3vOZbTkx8gXK1gXUu8m2RnoZCE
-         l15GFBcJIHAPtoxQiJTon/4SfJeWDzWgMdDxjOXrd4F+SXOojn6AQc38Pgf7Xgd//8C7
-         MeI8+OXjhxGdWa8tvzOQHedqrtvMJDaFEKxEITS3j8v6Yoc1Bi+Lqr8yCCaq6eTh3rPY
-         Hxcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703006044; x=1703610844;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f9vtfVLly14ekhlTunGy1vRxwLpd8U5NIsSj2AVK3Vk=;
-        b=sDa2XuX+U6Z2a0fN318rhkanrCny6t3uBpui9Cy7BuHoJP1mCB9ow14oE8WGvpWODY
-         8yzyLkhjGbbiQ99SnWxHda0+RNeycVwOCdldTTUS4xcmjGuhTf4NeixYdObdN2fHYBjN
-         gE5cL5Crd6E1qX9lDtO/6miK0JC0P4TfwhbdVXpdj/DT2z6nvAGn0f8zkOVCoLBnqkfh
-         8UIrTRTmXGpSDFMtWowEBnqzAUcjmrme98N4v99X1j9/d/AmGvS1SeqsY3N/NF9rqBBP
-         uZZ8hHPi4Y/SU/yOcOionWjnIpBM/CGa5FSF8LjDxdwE1hgV0FVOUKGtxXvkgvN3NrWR
-         VJXA==
-X-Gm-Message-State: AOJu0YzCfTIrYIe6RfS+x6+4NwZQodeiomYv2ftAzxKfX8UPjubVmhU3
-	/Dn2QC5EaGFXJoKBM/EUpqE=
-X-Google-Smtp-Source: AGHT+IG4srAKNtlRLgacln5AazC7R1jIUPMIg1CJHj5l9uMv+Lm+7DWv6+igpI5lY+xNGDiLnRvPEw==
-X-Received: by 2002:a17:907:3d91:b0:9fe:57b3:bc08 with SMTP id he17-20020a1709073d9100b009fe57b3bc08mr11848783ejc.41.1703006044090;
-        Tue, 19 Dec 2023 09:14:04 -0800 (PST)
-Received: from jernej-laptop.localnet (82-149-12-148.dynamic.telemach.net. [82.149.12.148])
-        by smtp.gmail.com with ESMTPSA id cx7-20020a170907168700b009fc576e26e6sm15541544ejd.80.2023.12.19.09.14.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Dec 2023 09:14:03 -0800 (PST)
-From: Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To: Maksim Kiselev <bigunclemax@gmail.com>
-Cc: Andre Przywara <andre.przywara@arm.com>,
- Maxim Kiselev <bigunclemax@gmail.com>,
- Vasily Khoruzhick <anarsoul@gmail.com>, Yangtao Li <tiny.windzz@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
- Samuel Holland <samuel@sholland.org>,
- Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- John Watts <contact@jookia.org>,
- Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
- Marc Kleine-Budde <mkl@pengutronix.de>, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-riscv@lists.infradead.org
-Subject:
- Re: [PATCH v6 2/3] thermal: sun8i: Add D1/T113s THS controller support
-Date: Tue, 19 Dec 2023 18:14:01 +0100
-Message-ID: <1950771.PYKUYFuaPT@jernej-laptop>
-In-Reply-To: <20231217210629.131486-3-bigunclemax@gmail.com>
-References:
- <20231217210629.131486-1-bigunclemax@gmail.com>
- <20231217210629.131486-3-bigunclemax@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA94020DE7;
+	Tue, 19 Dec 2023 17:15:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id DCC9C1BF20B;
+	Tue, 19 Dec 2023 17:15:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1703006126;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=wwUidinRNx7RWGe1+c0trzBztgp3LU+5Gjom79tMrrw=;
+	b=ixh2ncz6Fm0+a7VlxiI3HYCv7L1BOWoURrAtM4LtVHZkXjiqq/Crxfr4RAngAENHM/xafP
+	L40IrAZQuvAlYAz6NOQ+mXo/iEbbTqfzUsqLZD0HxJaKmAAaHgOc5Z6evNk2eemdjTgFwN
+	0J+PSuBVVnavKOn5aKRAY4rAi/lKUyDU399dGeOMAUAZYjiZBBr1QJ9wPrZgmhh5a+bOwE
+	WRy7N2CMk0Yw+wEwmOP8TuYObRoEvTLpcd+EklxTYzjGtMfKZbutxsGJDx5JQzrTNDP2vk
+	jc/Po+qMt2lR44unBbS7+cQ+W4h46WUppQYV11dIxyc5v5Tl+fD9eL+zMH4t9g==
+Message-ID: <f68c9a54-0fde-4709-9d2f-0d23a049341b@bootlin.com>
+Date: Tue, 19 Dec 2023 18:15:25 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+From: Thomas Richard <thomas.richard@bootlin.com>
+Cc: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ Gregory CLEMENT <gregory.clement@bootlin.com>
+Subject: omap-i2c: runtime pm issue during suspend to ram
+To: linux-pm@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-omap@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>,
+ Tony Lindgren <tony@atomide.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: thomas.richard@bootlin.com
 
-Dne nedelja, 17. december 2023 ob 22:06:23 CET je Maksim Kiselev napisal(a):
-> From: Maxim Kiselev <bigunclemax@gmail.com>
-> 
-> This patch adds a thermal sensor controller support for the D1/T113s,
-> which is similar to the one on H6, but with only one sensor and
-> different scale and offset values.
-> 
-> Signed-off-by: Maxim Kiselev <bigunclemax@gmail.com>
+Hello,
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+I have a gpio expander (pca953x driver) connected to an i2c controller
+managed by the omap-i2c driver.
+And I have some issues with pm_runtime_force_suspend/resume during
+suspend to ram.
+For some reasons, related to hardware design, I need to access to this
+gpio expander during suspend_noirq and resume_noirq. So I had to move
+the suspend/resume of the pca953x to suspend_noirq/resume_noirq.
 
-Best regards,
-Jernej
+The i2c controller is autosuspended when I start the suspend sequence.
+In suspend_noirq, I access to one gpio of the expander, so rpm_resume is
+called to resume the i2c controller.
+And rpm_resume returns an error because disable_depth > 0 [1]. In
+suspend_noirq, runtime pm is disabled (disable_depth is incremented when
+runtime pm is disabled [2]). So the expander is not reachable, and the
+access fails.
+
+[1]
+https://elixir.bootlin.com/linux/v6.7-rc6/source/drivers/base/power/runtime.c#L773
+[2]
+https://elixir.bootlin.com/linux/v6.7-rc6/source/drivers/base/power/runtime.c#L1474
+
+The suspend_noirq of the gpio expander don't do i2c access, so no
+problem for pca953x suspend.
+The pm_runtime_force_suspend (suspend_noirq [3]) of the i2c controller
+does nothing as the device is already suspended [4].
+
+[3]
+https://elixir.bootlin.com/linux/v6.7-rc6/source/drivers/i2c/busses/i2c-omap.c#L1579
+[4]
+https://elixir.bootlin.com/linux/v6.7-rc6/source/drivers/base/power/runtime.c#L1878
+
+Then during the pm_runtime_force_resume (resume_noirq [3]) the i2c
+controller is not resumed because needs_for_resume is equal to 0 [5].
+The needs_for_resume flag is set in pm_runtime_force_suspend [6] but we
+don't reach this point, because the device is already suspended [4].
+
+[5]
+https://elixir.bootlin.com/linux/v6.7-rc6/source/drivers/base/power/runtime.c#L1929
+[6]
+https://elixir.bootlin.com/linux/v6.7-rc6/source/drivers/base/power/runtime.c#L1900
+
+Then the resume_noirq of the pca953x driver is called, consequently
+rpm_resume is called to resume the i2c controller. But it is never
+resumed because disable_depth > 0 [7] (runtime pm is still disabled in
+resume_noirq). So the resume_noirq fails.
+
+[7]
+https://elixir.bootlin.com/linux/v6.7-rc6/source/drivers/base/power/runtime.c#L773
+
+I found a workaround which is to resume the controller and disable
+runtime pm during suspend, then runtime pm is enabled during resume.
+But there is probably a better solution to fix this issue.
+
+Best Regards,
+
+Thomas Richard
+
+
+diff --git a/drivers/i2c/busses/i2c-omap.c b/drivers/i2c/busses/i2c-omap.c
+index 42165ef57946..fe79b27b46fd 100644
+--- a/drivers/i2c/busses/i2c-omap.c
++++ b/drivers/i2c/busses/i2c-omap.c
+@@ -1575,9 +1575,24 @@ static int __maybe_unused
+omap_i2c_runtime_resume(struct device *dev)
+        return 0;
+ }
+
++static int omap_i2c_suspend(struct device *dev)
++{
++       pm_runtime_get_sync(dev);
++       pm_runtime_disable(dev);
++       return 0;
++}
++
++static int omap_i2c_resume(struct device *dev)
++{
++       pm_runtime_enable(dev);
++       pm_runtime_put_autosuspend(dev);
++       return 0;
++}
++
+ static const struct dev_pm_ops omap_i2c_pm_ops = {
+        SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
+                                      pm_runtime_force_resume)
++       SET_SYSTEM_SLEEP_PM_OPS(omap_i2c_suspend, omap_i2c_resume)
+        SET_RUNTIME_PM_OPS(omap_i2c_runtime_suspend,
+                           omap_i2c_runtime_resume, NULL)
+ };
+
 
 
 
