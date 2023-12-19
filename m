@@ -1,156 +1,110 @@
-Return-Path: <linux-pm+bounces-1375-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1376-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C26B818F1E
-	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 19:01:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E4CD818F1D
+	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 19:01:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C448B21564
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C11A3288545
 	for <lists+linux-pm@lfdr.de>; Tue, 19 Dec 2023 18:01:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1B012E3E3;
-	Tue, 19 Dec 2023 17:59:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2470937898;
+	Tue, 19 Dec 2023 17:59:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DsZs8aj7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CA0D3D0D2
-	for <linux-pm@vger.kernel.org>; Tue, 19 Dec 2023 17:59:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5909156aea9so802808eaf.0
-        for <linux-pm@vger.kernel.org>; Tue, 19 Dec 2023 09:59:40 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 826FF37D01
+	for <linux-pm@vger.kernel.org>; Tue, 19 Dec 2023 17:59:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-40d3102a2d9so1395465e9.1
+        for <linux-pm@vger.kernel.org>; Tue, 19 Dec 2023 09:59:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1703008783; x=1703613583; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tqHXsUzuWClKVHdDcXRwOKbkdcrm5H9v6SELG5butfI=;
+        b=DsZs8aj7qpStwF1OKzQig+7dJeUfaUTQjkBZW2tq902AMyIgNmtzJLMfWx16unhK8c
+         Dq/DrCm2n1/MiSFBqlvdlmZg5IsxL+36AH/VcaAB8s/oi/LhWbt7TGsOYd54z9pOMq2A
+         RggFbTv8JdRCkPS2XxOxGkw0HYnmlQxDGHn/HFH8jXZ5KVJeFlIxKxHnxT5fdBpZFAFS
+         5PALjg21dPwECNIyLFwCJ2IJzxuP4Yt7mfXzFppFAb+USkUCY/Kt/iSywazI6CD7HD5s
+         Ij343RSw1SaqO8kP+EhWnCqHtdhZur8L37DcBw1MhkM5KhFTdluje7/tznzBMefs2asr
+         lxXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703008779; x=1703613579;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qYWus7B1187lySowqzSlrbzkyUAeNdjylrCpaloJzmI=;
-        b=PV6yDOk7mog9bX7Lo98MiMCLbLjEZp+jM7sYW1Xgp7fOvh1FXsCiu2aI37PfRltAoo
-         GU5ITpkEWEHSa7nIo/tEm12kPNEtBTb+JKk+wKw2fQvNrbl23Iuoev0yNL/scqyV61B8
-         JmVKlKqrIQKXqc+kKMCycw6KeBLC1Bho8wiWc9JeJiRat1aWGu0xiyXH36wBC+w74lUi
-         GrMAtojU8YN3367JPY4XVXOlC5XZWet3EqbmaFPyPwur77AwhF3V/spMCYc12Pblrgvw
-         svLrgegwl4c5IrLZKWWrYSAeMyTK+f+QwWZ3Zl+UI5lHrWjzQoTUlgpx4WxNA8URV0zU
-         8EIQ==
-X-Gm-Message-State: AOJu0YzLxfC+4QJRMkdBkIZ7YBiXDMJcdRUEllBEmha+1kk/bSVOPKsr
-	qAnao/9h4bkIUiFwmkX1RrfKbzQMWetjxNIC7sFLOiMR
-X-Google-Smtp-Source: AGHT+IEGT/lUrdmwKFkJ6vBT8fLYvIeXxEd8fOZbY8Gx4xxhpOI74ElJE5FdjPdxqcgTgJSy3jFpgRH+Ihcu37oOtaw=
-X-Received: by 2002:a05:6820:2c91:b0:593:e60a:493e with SMTP id
- dx17-20020a0568202c9100b00593e60a493emr2216753oob.0.1703008779418; Tue, 19
- Dec 2023 09:59:39 -0800 (PST)
+        d=1e100.net; s=20230601; t=1703008783; x=1703613583;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tqHXsUzuWClKVHdDcXRwOKbkdcrm5H9v6SELG5butfI=;
+        b=LFDWH+XARIfX/i0a01vyNgYRq65b3nZBvipddjTNtsrPe6Cnz/c9+UqigDaxfcbohK
+         oGAtBDsgAR2xVmoXpTOk8pFFGD4bOv5l3lO0PN+2ci+OsowDb2gFDhgO0b9FMPWlRbSU
+         bhdydBUrEWohNsKLwGq+9qdO61z31c8rPl4hHomiSXYX/Lm/ZcmkpvsVnBU94cMOUGGn
+         ke4jK55mbq7XIJkRNNzChN1rZuM4uZkKeS0Nr3CXI+Gv/LYq8qk4jTJIYtsVV2g54ZN2
+         C0pv+gNVUZNt3sxDuJARiMfx+3SGYKixKsDAs8g3VSVrmz/1VbnPrnOGHyzPnzSvyFUI
+         6yvA==
+X-Gm-Message-State: AOJu0YzY16xTqUAgpgn6lYPiq7nnX50H4yG5gHeMlK4AMQezw2t9cSbd
+	sX7vLGe76mE77bQp2LSs/IfH0w==
+X-Google-Smtp-Source: AGHT+IHTbL5R+BKsfjLA4+IL6EQF0An0d3vy+3YBRu4MG01xcYYLuWQyJRn7wEhHU1ArwUxfMgj3Vg==
+X-Received: by 2002:a05:600c:1c1a:b0:40b:5e1c:af27 with SMTP id j26-20020a05600c1c1a00b0040b5e1caf27mr10072010wms.45.1703008782679;
+        Tue, 19 Dec 2023 09:59:42 -0800 (PST)
+Received: from [192.168.10.46] ([37.170.14.102])
+        by smtp.googlemail.com with ESMTPSA id m39-20020a05600c3b2700b0040d23cea7bcsm1320165wms.1.2023.12.19.09.59.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Dec 2023 09:59:42 -0800 (PST)
+Message-ID: <ffe8605b-3e71-4726-993b-8a5873263989@linaro.org>
+Date: Tue, 19 Dec 2023 18:59:40 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231214165622.100428-1-dedekind1@gmail.com>
-In-Reply-To: <20231214165622.100428-1-dedekind1@gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 19 Dec 2023 18:59:28 +0100
-Message-ID: <CAJZ5v0hcL1KLauQOODr7Lm_wrzMw=mdkkPP0+vEcETAQPdgnsA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] intel_idle: add Grand Ridge SoC support
-To: Artem Bityutskiy <dedekind1@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM Mailing List <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] thermal: amlogic: Two cleanups
+Content-Language: en-US
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+ Guillaume La Roque <glaroque@baylibre.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+ linux-pm@vger.kernel.org, linux-amlogic@lists.infradead.org,
+ kernel@pengutronix.de
+References: <20231116112633.668826-1-u.kleine-koenig@pengutronix.de>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20231116112633.668826-1-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Dec 14, 2023 at 5:56=E2=80=AFPM Artem Bityutskiy <dedekind1@gmail.c=
-om> wrote:
->
-> From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
->
-> Add Intel Grand Ridge SoC C-states, which are C1, C1E, and C6S.
->
-> The Grand Ridge SoC is built with modules, each module includes 4 cores
-> (Crestmont microarchitecture). There is one L2 cache per module, shared b=
-etween
-> the 4 cores.
->
-> There is no core C6 state, but there is C6S state, which has module scope=
-:
-> when all 4 cores request C6S, the entire module (4 cores + L2 cache) ente=
-rs the
-> low power state.
->
-> Package C6 is not supported by Grand Ridge SoC.
->
-> Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-> ---
->  drivers/idle/intel_idle.c | 36 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 36 insertions(+)
->
-> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> index cfd0b24fd7f1..3b846d4f8707 100644
-> --- a/drivers/idle/intel_idle.c
-> +++ b/drivers/idle/intel_idle.c
-> @@ -1271,6 +1271,35 @@ static struct cpuidle_state snr_cstates[] __initda=
-ta =3D {
->                 .enter =3D NULL }
->  };
->
-> +static struct cpuidle_state grr_cstates[] __initdata =3D {
-> +       {
-> +               .name =3D "C1",
-> +               .desc =3D "MWAIT 0x00",
-> +               .flags =3D MWAIT2flg(0x00) | CPUIDLE_FLAG_ALWAYS_ENABLE,
-> +               .exit_latency =3D 1,
-> +               .target_residency =3D 1,
-> +               .enter =3D &intel_idle,
-> +               .enter_s2idle =3D intel_idle_s2idle, },
-> +       {
-> +               .name =3D "C1E",
-> +               .desc =3D "MWAIT 0x01",
-> +               .flags =3D MWAIT2flg(0x01) | CPUIDLE_FLAG_ALWAYS_ENABLE,
-> +               .exit_latency =3D 2,
-> +               .target_residency =3D 10,
-> +               .enter =3D &intel_idle,
-> +               .enter_s2idle =3D intel_idle_s2idle, },
-> +       {
-> +               .name =3D "C6S",
-> +               .desc =3D "MWAIT 0x22",
-> +               .flags =3D MWAIT2flg(0x22) | CPUIDLE_FLAG_TLB_FLUSHED,
-> +               .exit_latency =3D 140,
-> +               .target_residency =3D 500,
-> +               .enter =3D &intel_idle,
-> +               .enter_s2idle =3D intel_idle_s2idle, },
-> +       {
-> +               .enter =3D NULL }
-> +};
-> +
->  static const struct idle_cpu idle_cpu_nehalem __initconst =3D {
->         .state_table =3D nehalem_cstates,
->         .auto_demotion_disable_flags =3D NHM_C1_AUTO_DEMOTE | NHM_C3_AUTO=
-_DEMOTE,
-> @@ -1420,6 +1449,12 @@ static const struct idle_cpu idle_cpu_snr __initco=
-nst =3D {
->         .use_acpi =3D true,
->  };
->
-> +static const struct idle_cpu idle_cpu_grr __initconst =3D {
-> +       .state_table =3D grr_cstates,
-> +       .disable_promotion_to_c1e =3D true,
-> +       .use_acpi =3D true,
-> +};
-> +
->  static const struct x86_cpu_id intel_idle_ids[] __initconst =3D {
->         X86_MATCH_INTEL_FAM6_MODEL(NEHALEM_EP,          &idle_cpu_nhx),
->         X86_MATCH_INTEL_FAM6_MODEL(NEHALEM,             &idle_cpu_nehalem=
-),
-> @@ -1466,6 +1501,7 @@ static const struct x86_cpu_id intel_idle_ids[] __i=
-nitconst =3D {
->         X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT_PLUS,  &idle_cpu_bxt),
->         X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT_D,     &idle_cpu_dnv),
->         X86_MATCH_INTEL_FAM6_MODEL(ATOM_TREMONT_D,      &idle_cpu_snr),
-> +       X86_MATCH_INTEL_FAM6_MODEL(ATOM_CRESTMONT,      &idle_cpu_grr),
->         {}
->  };
->
->
-> base-commit: ee96d5c15517fbdf136aeff1919646e843fbb6f3
-> --
+On 16/11/2023 12:26, Uwe Kleine-König wrote:
+> Hello,
+> 
+> while rebasing my patch stack to v6.7-rc1 I spotted these two patch
+> opportunities for the amlogic thermal driver.
+> 
+> Best regards
+> Uwe
+> 
+> Uwe Kleine-König (2):
+>    thermal: amlogic: Make amlogic_thermal_disable() return void
+>    thermal: amlogic: Use DEFINE_SIMPLE_DEV_PM_OPS for PM functions
+> 
+>   drivers/thermal/amlogic_thermal.c | 19 ++++++++++---------
+>   1 file changed, 10 insertions(+), 9 deletions(-)
+> 
+> base-commit: f31817cbcf48d191faee7cebfb59197d2048cd64
 
-Applied as 6.8 material along with the [2/2], thanks!
+Applied, thanks
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
 
