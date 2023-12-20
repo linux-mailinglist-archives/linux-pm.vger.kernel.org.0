@@ -1,189 +1,265 @@
-Return-Path: <linux-pm+bounces-1433-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1434-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D59D81A4A4
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 17:22:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0021F81A4D4
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 17:24:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A48828C561
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 16:22:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E4861F26671
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 16:24:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7DE4482D4;
-	Wed, 20 Dec 2023 16:16:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B182482F6;
+	Wed, 20 Dec 2023 16:19:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KSWc2J0f"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44148482DF;
-	Wed, 20 Dec 2023 16:16:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7FE8D1FB;
-	Wed, 20 Dec 2023 08:17:05 -0800 (PST)
-Received: from [10.57.82.217] (unknown [10.57.82.217])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B6CDB3F64C;
-	Wed, 20 Dec 2023 08:16:19 -0800 (PST)
-Message-ID: <4e5f7d1b-1534-432b-92c1-880c863d79a2@arm.com>
-Date: Wed, 20 Dec 2023 16:17:26 +0000
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E05AC482D1;
+	Wed, 20 Dec 2023 16:19:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5D3EC433C7;
+	Wed, 20 Dec 2023 16:19:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1703089191;
+	bh=NFnLPjIF3IoK6ZQaApwVUq9VwTB1vbMNJismRladVlU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=KSWc2J0fMZSAb9Yh2YgLercKcaoZTqYnKoFJd6/RaBi6YdiiCEKsW4tqHq57TdbFi
+	 nxSimYLlVqDzQtYHUYobsAVrSsh8IG+HuCEAvcEM92gro1WD+pA30Byj2NkyTu+rOu
+	 Q2o+QSDTnhWNZH51KL+D3Tbj00BikTuiv5m6khxs5g1a05foH09F69fkxYlieXfbu1
+	 A9dsmToJ5fsjhbocUeM4x7bBT+OZrWK/boDPmAKyChgrVROk9abe6qvyZC1/e+uEdh
+	 F3HAAlSvFGo0ugtih6TbOXlEgef13ZGKVTsge7Q7H6CgnwFSz7ccizcgiatGY/qjw/
+	 ERh/hscNYGv5Q==
+Date: Thu, 21 Dec 2023 01:19:47 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, Randy
+ Dunlap <rdunlap@infradead.org>, suleiman@google.com,
+ briannorris@google.com, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+Subject: Re: [PATCH v6] PM: sleep: Expose last succeeded resumed timestamp
+ in sysfs
+Message-Id: <20231221011947.88fddb3324d6aa1ab63dffb6@kernel.org>
+In-Reply-To: <CAJZ5v0j1eD9soyh2JmqfphvwVBApKD_ikFOr3+XYvS4f_0cboA@mail.gmail.com>
+References: <170245316678.651355.6640896026073025688.stgit@mhiramat.roam.corp.google.com>
+	<170245317569.651355.7858730719579399805.stgit@mhiramat.roam.corp.google.com>
+	<CAJZ5v0j1eD9soyh2JmqfphvwVBApKD_ikFOr3+XYvS4f_0cboA@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/8] thermal: core: Add governor callback for thermal
- zone change
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
- linux-pm@vger.kernel.org, rui.zhang@intel.com
-References: <20231212134844.1213381-1-lukasz.luba@arm.com>
- <20231212134844.1213381-2-lukasz.luba@arm.com>
- <CAJZ5v0iFOrgtN82pqUqDhE1jMA4wjhH19DFhzPP3yYO05O03=g@mail.gmail.com>
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0iFOrgtN82pqUqDhE1jMA4wjhH19DFhzPP3yYO05O03=g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+Hi,
 
+On Tue, 19 Dec 2023 21:32:06 +0100
+"Rafael J. Wysocki" <rafael@kernel.org> wrote:
 
-On 12/20/23 13:51, Rafael J. Wysocki wrote:
-> On Tue, Dec 12, 2023 at 2:48 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> Add a new callback which can update governors when there is a change in
->> the thermal zone internals, e.g. thermal cooling instance list changed.
+> On Wed, Dec 13, 2023 at 8:39 AM Masami Hiramatsu (Google)
+> <mhiramat@kernel.org> wrote:
+> >
+> > From: Masami Hiramatsu <mhiramat@kernel.org>
+> >
+> > Expose last succeeded resumed timestamp as last_success_resume_time
+> > attribute of suspend_stats in sysfs so that user can use this time
+> > stamp as a reference point of resuming user space.
+> >
+> > There are some printk()s for printing the similar resume timing to
+> > dmesg, but those are recorded with local_clock(), and user can not
+> > compare it with current time.
 > 
-> I would say what struct type the callback is going to be added to.
+> You'd need to explain why.
 
-OK, I'll add that.
-
-> 
->> That makes possible to move some heavy operations like memory allocations
->> related to the number of cooling instances out of the throttle() callback.
->>
->> Reuse the 'enum thermal_notify_event' and extend it with a new event:
->> THERMAL_INSTANCE_LIST_UPDATE.
-> 
-> I think that this is a bit too low-level (see below).
-
-Yes, I agree (based on below).
+OK, I'll add it.
 
 > 
->> Both callback code paths (throttle() and update_tz()) are protected with
->> the same thermal zone lock, which guaranties the consistency.
->>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->>   drivers/thermal/thermal_core.c | 13 +++++++++++++
->>   include/linux/thermal.h        |  5 +++++
->>   2 files changed, 18 insertions(+)
->>
->> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
->> index 625ba07cbe2f..592c956f6fd5 100644
->> --- a/drivers/thermal/thermal_core.c
->> +++ b/drivers/thermal/thermal_core.c
->> @@ -314,6 +314,14 @@ static void handle_non_critical_trips(struct thermal_zone_device *tz,
->>                         def_governor->throttle(tz, trip);
->>   }
->>
+> > We also have tracing events but it requires CAP_SYS_ADMIN to use it.
+> >
+> > This suspend_stats attribute is easy to access and only expose the
+> > timestamp in CLOCK_MONOTONIC. User can find the actual resumed
+> > time and measure the elapsed time from the time when the kernel
+> > finished the resume
 > 
-> I needed a bit more time to think about this.
+> So now it is the time when the kernel has started thawing tasks.
+
+Yes, so update the description.
+
+> 
+> > to the user-space action (e.g. display the UI)
+> > and use it as a performance metric of user process resuming time.
+> 
+> The whole "user process resuming time" idea is highly questionable,
+> because it assumes that the user space task has been notified of the
+> system suspend somehow and so it knows that it will be resuming
+> subsequently.
+> 
+> I'm wondering what exactly is going on?
+
+I'm improving ChromeOS system resume performance. As you assumed, the
+user space tasks have been notified the suspend and the resume from
+the power manager daemon. We already have a metrics about kernel resume
+time, but no user space resume time. If we have a metrics about user-
+space resuming, we can identify which part caused a resume delay if
+any delay happens.
+
+For that purpose, the key parts is this timestamp when the kernel
+actually finished the resuming, because user application (power
+manager and chrome etc.) can get the timestamp when any event happens
+in the user space, but it can not know the kernel event timestamp
+counted by the same clock easily.
+
+> 
+> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > ---
+> >  Changes in v6:
+> >   - Fix to record resume time before thawing user processes.
+> >  Changes in v5:
+> >   - Just updated for v6.7-rc3.
+> >  Changes in v4.1:
+> >   - Fix document typo (again).
+> >  Changes in v4:
+> >   - Update description to add why.
+> >   - Fix document typo.
+> >  Changes in v3:
+> >   - Add (unsigned long long) casting for %llu.
+> >   - Add a line after last_success_resume_time_show().
+> >  Changes in v2:
+> >   - Use %llu instead of %lu for printing u64 value.
+> >   - Remove unneeded indent spaces from the last_success_resume_time
+> >     line in the debugfs suspend_stat file.
+> > ---
+> >  Documentation/ABI/testing/sysfs-power |   10 ++++++++++
+> >  include/linux/suspend.h               |    2 ++
+> >  kernel/power/main.c                   |   15 +++++++++++++++
+> >  kernel/power/suspend.c                |    3 +++
+> >  4 files changed, 30 insertions(+)
+> >
+> > diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/testing/sysfs-power
+> > index a3942b1036e2..e14975859766 100644
+> > --- a/Documentation/ABI/testing/sysfs-power
+> > +++ b/Documentation/ABI/testing/sysfs-power
+> > @@ -442,6 +442,16 @@ Description:
+> >                 'total_hw_sleep' and 'last_hw_sleep' may not be accurate.
+> >                 This number is measured in microseconds.
+> >
+> > +What:          /sys/power/suspend_stats/last_success_resume_time
+> > +Date:          Oct 2023
+> > +Contact:       Masami Hiramatsu <mhiramat@kernel.org>
+> > +Description:
+> > +               The /sys/power/suspend_stats/last_success_resume_time file
+> > +               contains the timestamp of when the kernel successfully
+> > +               resumed from suspend/hibernate.
+> 
+> It needs to say what exactly the time is.
 
 OK.
 
 > 
->> +static void handle_instances_list_update(struct thermal_zone_device *tz)
->> +{
->> +       if (!tz->governor || !tz->governor->update_tz)
->> +               return;
->> +
->> +       tz->governor->update_tz(tz, THERMAL_INSTANCE_LIST_UPDATE);
->> +}
+> > +               This floating point number is measured in seconds by monotonic
+> > +               clock.
+> > +
+> >  What:          /sys/power/sync_on_suspend
+> >  Date:          October 2019
+> >  Contact:       Jonas Meurer <jonas@freesources.org>
+> > diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> > index ef503088942d..ddd789044960 100644
+> > --- a/include/linux/suspend.h
+> > +++ b/include/linux/suspend.h
+> > @@ -8,6 +8,7 @@
+> >  #include <linux/pm.h>
+> >  #include <linux/mm.h>
+> >  #include <linux/freezer.h>
+> > +#include <linux/timekeeping.h>
+> >  #include <asm/errno.h>
+> >
+> >  #ifdef CONFIG_VT
+> > @@ -71,6 +72,7 @@ struct suspend_stats {
+> >         u64     last_hw_sleep;
+> >         u64     total_hw_sleep;
+> >         u64     max_hw_sleep;
+> > +       struct timespec64 last_success_resume_time;
+> >         enum suspend_stat_step  failed_steps[REC_FAILED_NUM];
+> >  };
+> >
+> > diff --git a/kernel/power/main.c b/kernel/power/main.c
+> > index f6425ae3e8b0..2ab23fd3daac 100644
+> > --- a/kernel/power/main.c
+> > +++ b/kernel/power/main.c
+> > @@ -421,6 +421,17 @@ static ssize_t last_failed_step_show(struct kobject *kobj,
+> >  }
+> >  static struct kobj_attribute last_failed_step = __ATTR_RO(last_failed_step);
+> >
+> > +static ssize_t last_success_resume_time_show(struct kobject *kobj,
+> > +               struct kobj_attribute *attr, char *buf)
+> > +{
+> > +       return sprintf(buf, "%llu.%llu\n",
+> > +               (unsigned long long)suspend_stats.last_success_resume_time.tv_sec,
+> > +               (unsigned long long)suspend_stats.last_success_resume_time.tv_nsec);
+> > +}
+> > +
+> > +static struct kobj_attribute last_success_resume_time =
+> > +                       __ATTR_RO(last_success_resume_time);
+> > +
+> >  static struct attribute *suspend_attrs[] = {
+> >         &success.attr,
+> >         &fail.attr,
+> > @@ -438,6 +449,7 @@ static struct attribute *suspend_attrs[] = {
+> >         &last_hw_sleep.attr,
+> >         &total_hw_sleep.attr,
+> >         &max_hw_sleep.attr,
+> > +       &last_success_resume_time.attr,
+> >         NULL,
+> >  };
+> >
+> > @@ -514,6 +526,9 @@ static int suspend_stats_show(struct seq_file *s, void *unused)
+> >                         suspend_step_name(
+> >                                 suspend_stats.failed_steps[index]));
+> >         }
+> > +       seq_printf(s,   "last_success_resume_time:\t%-llu.%llu\n",
+> > +                  (unsigned long long)suspend_stats.last_success_resume_time.tv_sec,
+> > +                  (unsigned long long)suspend_stats.last_success_resume_time.tv_nsec);
+> >
+> >         return 0;
+> >  }
+> > diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> > index fa3bf161d13f..b85889358f53 100644
+> > --- a/kernel/power/suspend.c
+> > +++ b/kernel/power/suspend.c
+> > @@ -595,6 +595,9 @@ static int enter_state(suspend_state_t state)
+> >   Finish:
+> >         events_check_enabled = false;
+> >         pm_pr_dbg("Finishing wakeup.\n");
+> > +       /* Record last succeeded resume time before thawing processes. */
 > 
-> So I would call the above something more generic, like
-> thermal_governor_update_tz() and I would pass the "reason" argument to
-> it.
+> IMV the comment should explain why this particular time is recorded or
+> it is not very useful otherwise.
 
-That sounds better, I agree.
+Agreed.
 
 > 
->> +
->>   void thermal_zone_device_critical(struct thermal_zone_device *tz)
->>   {
->>          /*
->> @@ -723,6 +731,8 @@ int thermal_bind_cdev_to_trip(struct thermal_zone_device *tz,
->>                  list_add_tail(&dev->tz_node, &tz->thermal_instances);
->>                  list_add_tail(&dev->cdev_node, &cdev->thermal_instances);
->>                  atomic_set(&tz->need_update, 1);
->> +
->> +               handle_instances_list_update(tz);
+> > +       if (!error)
+> > +               ktime_get_ts64(&suspend_stats.last_success_resume_time);
 > 
-> In particular for this, I would use a special "reason" value, like
-> THERMAL_TZ_BIND_CDEV.
-> 
-> Yes, the list of instances will change as a result of the binding, but
-> that is an internal detail specific to the current implementation.
+> A blank line here, please.
 
-I see. With that new more generic thermal_governor_update_tz() would
-be better then, right?
+OK.
+
+Thank you,
 
 > 
->>          }
->>          mutex_unlock(&cdev->lock);
->>          mutex_unlock(&tz->lock);
->> @@ -781,6 +791,9 @@ int thermal_unbind_cdev_from_trip(struct thermal_zone_device *tz,
->>                  if (pos->tz == tz && pos->trip == trip && pos->cdev == cdev) {
->>                          list_del(&pos->tz_node);
->>                          list_del(&pos->cdev_node);
->> +
->> +                       handle_instances_list_update(tz);
-> 
-> Analogously, I'd use something like THERMAL_TZ_UNBIND_CDEV here.
+> >         suspend_finish();
+> >   Unlock:
+> >         mutex_unlock(&system_transition_mutex);
+> >
+> >
 
-OK
 
-> 
->> +
->>                          mutex_unlock(&cdev->lock);
->>                          mutex_unlock(&tz->lock);
->>                          goto unbind;
->> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
->> index c7190e2dfcb4..9fd0d3fb234a 100644
->> --- a/include/linux/thermal.h
->> +++ b/include/linux/thermal.h
->> @@ -51,6 +51,7 @@ enum thermal_notify_event {
->>          THERMAL_DEVICE_POWER_CAPABILITY_CHANGED, /* power capability changed */
->>          THERMAL_TABLE_CHANGED, /* Thermal table(s) changed */
->>          THERMAL_EVENT_KEEP_ALIVE, /* Request for user space handler to respond */
->> +       THERMAL_INSTANCE_LIST_UPDATE, /* List of thermal instances changed */
-> 
-> So I would add THERMAL_TZ_BIND_CDEV and THERMAL_TZ_UNBIND_CDEV to the list.
-
-OK
-
-> 
->>   };
->>
->>   /**
->> @@ -195,6 +196,8 @@ struct thermal_zone_device {
->>    *                     thermal zone.
->>    * @throttle:  callback called for every trip point even if temperature is
->>    *             below the trip point temperature
->> + * @update_tz: callback called when thermal zone internals have changed, e.g.
->> + *             thermal cooling instance was added/removed
->>    * @governor_list:     node in thermal_governor_list (in thermal_core.c)
->>    */
->>   struct thermal_governor {
->> @@ -203,6 +206,8 @@ struct thermal_governor {
->>          void (*unbind_from_tz)(struct thermal_zone_device *tz);
->>          int (*throttle)(struct thermal_zone_device *tz,
->>                          const struct thermal_trip *trip);
->> +       void (*update_tz)(struct thermal_zone_device *tz,
->> +                         enum thermal_notify_event reason);
->>          struct list_head        governor_list;
->>   };
->>
->> --
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
