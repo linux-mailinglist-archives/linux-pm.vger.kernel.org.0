@@ -1,118 +1,140 @@
-Return-Path: <linux-pm+bounces-1421-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1422-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5E06819FED
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 14:37:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FE6481A01B
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 14:46:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F3A4F1C224EC
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 13:37:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE3301F256F5
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 13:46:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C93624B4B;
-	Wed, 20 Dec 2023 13:37:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C9DF2D633;
+	Wed, 20 Dec 2023 13:46:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="esTol5AA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C712436AED;
-	Wed, 20 Dec 2023 13:37:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-590a21e977aso149511eaf.1;
-        Wed, 20 Dec 2023 05:37:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703079451; x=1703684251;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zi2/E2JPV+E9OtEb+OM3gBdNSO0WpJsVMVo8MT1752Q=;
-        b=XYJGNkpURqgyWzOqZIQhyj9nWiIgxi+/VN3Ib+Kiu9sUvsjDhRwrkLpVwu8l68nqwP
-         YgnrB5OUqoI4p8qHXLTzSS4NEHWCdAbuRonBOfiDhpXB4eVNow9YJ8XBD8JNncqMZ8Cu
-         gCs+9Ono9T+Lmb28MCNuCLF0UXROIAQ9pP1tJSIOkMKq/zCbThu4fKd0rqhcPC8h4V0n
-         wAPhqLjqHNnCe80p6XuiYdyTF07i5evaTmfvVMs21QMnZEFoV2FnCE7CaM1cfW3JkfRd
-         +9q2JNN83XNCWKQLta6S0ZSBx3Fht98YeMj8n30+ZUmQkxESFS5cWs7lTnmLp8Y70i0P
-         cFOA==
-X-Gm-Message-State: AOJu0YzFhjA3yyqGFGhxSM30Gtki9cTqLpNxL2qNs9RCMCxmfr6lcmAi
-	d1CB1DPJ+xffGKTtVf3MKxa+/p6OOZesRmNMYhU=
-X-Google-Smtp-Source: AGHT+IFPWD1e7bEmPP17/BQHTxvMpnKN6yH0aErwTtDPwWdlJLiDHeAP8Hb82e1l2JF/FiGR8wGIdFVB4I83HJ1p0Lg=
-X-Received: by 2002:a05:6820:258a:b0:593:e53b:2df1 with SMTP id
- cs10-20020a056820258a00b00593e53b2df1mr4441366oob.1.1703079450842; Wed, 20
- Dec 2023 05:37:30 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B46B42574F;
+	Wed, 20 Dec 2023 13:46:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BC90A20008;
+	Wed, 20 Dec 2023 13:46:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1703080001;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2UdwF1Rjcv1TKOg33yHMjjbxn0Z7BKkWICiZ67r61hM=;
+	b=esTol5AAWX5bDskH5pub/LxILQiWTedAKsAT9CGjYD0I7f54SKWg/H4R+0RW1Cg8FrbHzs
+	SQJNtI5USdXeAZPMm1rt40n8FKGwhD4CueKisXGdFYky8YVptjTfeoo0xq0yOZDrSvpvQc
+	YAtvmm2TBHhUx7y35rSddoTozFftOhr88ux+oKNn7LFjgOR8o5kcb3sYgHbZvmJ8RqDp1S
+	HnkMnGr07e4Qm95aoUV4LXzngihtsJWIKHSG82+uWiVFMfUqIU4A08gulkfHAAQSRIGE0q
+	iIG8Zd8v6+AkTQ2BkOVMCwZ9H06asPsLQyQrpmlRD1a3cbLvWfDTC9LvNa53Nw==
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20231212134844.1213381-1-lukasz.luba@arm.com> <b2f9db3f-96a4-4e1e-9be0-32f19948c489@arm.com>
-In-Reply-To: <b2f9db3f-96a4-4e1e-9be0-32f19948c489@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 20 Dec 2023 14:37:19 +0100
-Message-ID: <CAJZ5v0jx=Nm0zrKeGuDkkiskCT_LOF77fVFWt-mATkf3X9qUDQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/8] Add callback for cooling list update to speed-up IPA
-To: Lukasz Luba <lukasz.luba@arm.com>
-Cc: daniel.lezcano@linaro.org, rafael@kernel.org, linux-pm@vger.kernel.org, 
-	rui.zhang@intel.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 20 Dec 2023 14:46:39 +0100
+Message-Id: <CXT7H2RTWJLL.11PFC2VV861BW@bootlin.com>
+To: "Thomas Richard" <thomas.richard@bootlin.com>, "Tony Lindgren"
+ <tony@atomide.com>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: omap-i2c: runtime pm issue during suspend to ram
+Cc: <linux-pm@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
+ <linux-omap@vger.kernel.org>, "Vignesh Raghavendra" <vigneshr@ti.com>,
+ "Kevin Hilman" <khilman@kernel.org>, "Gregory CLEMENT"
+ <gregory.clement@bootlin.com>, "Kumar Udit" <u-kumar1@ti.com>
+X-Mailer: aerc 0.15.2
+References: <f68c9a54-0fde-4709-9d2f-0d23a049341b@bootlin.com>
+ <4c31acd8-4edb-44f5-9a90-cb2f2dc530b6@bootlin.com>
+ <20231220111415.GZ5166@atomide.com>
+ <7b743758-fbc1-4cad-bfbc-d3fd3e69ce17@bootlin.com>
+In-Reply-To: <7b743758-fbc1-4cad-bfbc-d3fd3e69ce17@bootlin.com>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Wed, Dec 20, 2023 at 1:53=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> w=
-rote:
->
-> Hi Daniel, Rafael,
->
-> On 12/12/23 13:48, Lukasz Luba wrote:
-> > Hi all,
-> >
-> > The patch set a new callback for thermal governors and implementation f=
-or
-> > Intelligent Power Allocator.
-> >
-> > The goal is to move some heavy operarions like the memory allocations a=
-nd heavy
-> > computations (multiplications) out of throttle() callback hot path.
-> >
-> > The new callback is generic enough to handle other imporants update eve=
-nts.
-> > It re-uses existing thermal_notify_event definitions.
-> >
-> > In addition there are some small clean-ups for IPA code.
-> >
-> > changes:
-> > v2:
-> > - change callback name to update_tz() and add parameter (Rafael)
-> > - added new event to trigger this callback - instance 'weight' update
-> >
-> > Regards,
-> > Lukasz
-> >
-> > Lukasz Luba (8):
-> >    thermal: core: Add governor callback for thermal zone change
-> >    thermal: gov_power_allocator: Refactor check_power_actors()
-> >    thermal: gov_power_allocator: Move memory allocation out of throttle=
-()
-> >    thermal: gov_power_allocator: Simplify checks for valid power actor
-> >    thermal: gov_power_allocator: Refactor checks in divvy_up_power()
-> >    thermal/sysfs: Update instance->weight under tz lock
-> >    thermal/sysfs: Update governors when the 'weight' has changed
-> >    thermal: gov_power_allocator: Support new update callback of weights
-> >
-> >   drivers/thermal/gov_power_allocator.c | 216 ++++++++++++++++++-------=
--
-> >   drivers/thermal/thermal_core.c        |  13 ++
-> >   drivers/thermal/thermal_sysfs.c       |  15 ++
-> >   include/linux/thermal.h               |   6 +
-> >   4 files changed, 182 insertions(+), 68 deletions(-)
-> >
->
-> I know it's a bit late in time period...
-> You probably missed that patch set in your mailbox.
-> This patch set can probably just wait to the next window, or
-> should I resend it later in 2024?
+Hello,
 
-Not really, I was about to comment one the first patch.
+On Wed Dec 20, 2023 at 12:36 PM CET, Thomas Richard wrote:
+> On 12/20/23 12:14, Tony Lindgren wrote:
+> > * Thomas Richard <thomas.richard@bootlin.com> [231220 10:50]:
+> >> On 12/19/23 18:15, Thomas Richard wrote:
+> >>> Hello,
+> >>
+> >> I add some people in this thread.
+> >>
+> >>>
+> >>> I have a gpio expander (pca953x driver) connected to an i2c controlle=
+r
+> >>> managed by the omap-i2c driver.
+> >>> And I have some issues with pm_runtime_force_suspend/resume during
+> >>> suspend to ram.
+> >>> For some reasons, related to hardware design, I need to access to thi=
+s
+> >>> gpio expander during suspend_noirq and resume_noirq. So I had to move
+> >>> the suspend/resume of the pca953x to suspend_noirq/resume_noirq.
+> >=20
+> > Hmm at noirq level you need to do polling on the i2c controller?
+>
+> Hello Tony,
+>
+> Thanks for your reply.
+>
+> No, irq is still active in suspend_noirq for this i2c controller due to
+> the flag IRQF_NO_SUSPEND [1].
+> If this flag is set, the interrupt is still enabled in suspend_noirq [2].
+>
+> [1]
+> https://elixir.bootlin.com/linux/v6.7-rc6/source/drivers/i2c/busses/i2c-o=
+map.c#L1473
+> [2]
+> https://www.kernel.org/doc/html/latest/power/suspend-and-interrupts.html#=
+the-irqf-no-suspend-flag
+>
+> >=20
+> >>> diff --git a/drivers/i2c/busses/i2c-omap.c b/drivers/i2c/busses/i2c-o=
+map.c
+> >>> index 42165ef57946..fe79b27b46fd 100644
+> >>> --- a/drivers/i2c/busses/i2c-omap.c
+> >>> +++ b/drivers/i2c/busses/i2c-omap.c
+> >>> @@ -1575,9 +1575,24 @@ static int __maybe_unused
+> >>> omap_i2c_runtime_resume(struct device *dev)
+> >>>         return 0;
+> >>>  }
+> >>>
+> >>> +static int omap_i2c_suspend(struct device *dev)
+> >>> +{
+> >>> +       pm_runtime_get_sync(dev);
+> >>> +       pm_runtime_disable(dev);
+> >>> +       return 0;
+> >>> +}
+> >=20
+> > If you want the i2c controller enabled during suspend, you can leave it
+> > enabled above, and as we already have SET_NOIRQ_SYSTEM_SLEEP_PM_OPS
+> > doing force_suspend() and force_resume(), you can runtime PM put on
+> > resume. So something like below might do the trick:
+>
+> Ok I'll test it. Thanks
 
-I'll do that shortly.
+The issue with this approach is that it requires knowing at suspend-time
+if the controller will be used at resume_noirq-time. Ideally the
+controller's behavior would not be modified until a xfer is done at
+resume_noirq time. There are many platforms that use this driver that
+probably don't need the controller woken up.
+
+Thanks,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
