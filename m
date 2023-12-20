@@ -1,57 +1,57 @@
-Return-Path: <linux-pm+bounces-1427-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1428-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA88881A14B
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 15:42:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67F6B81A186
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 15:53:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 232591C22522
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 14:42:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DC3E1F2332E
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 14:53:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FDDC38DD8;
-	Wed, 20 Dec 2023 14:41:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 049131DA45;
+	Wed, 20 Dec 2023 14:53:19 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC88B3D966;
-	Wed, 20 Dec 2023 14:41:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 981693E494;
+	Wed, 20 Dec 2023 14:53:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-59415f07ee4so2974eaf.1;
-        Wed, 20 Dec 2023 06:41:53 -0800 (PST)
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-59408b117b6so8904eaf.0;
+        Wed, 20 Dec 2023 06:53:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703083313; x=1703688113;
+        d=1e100.net; s=20230601; t=1703083995; x=1703688795;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=E+XJtAZSW6XAM9Qwm/kB+hjQt5tSRjulwvOVlKrXhqs=;
-        b=cy6PxAYDDfNb6lbhwEkh2BZmotTqg+d9LyS4anqROLyBMidxaSJ5EwSS0UXCiIjdyK
-         InCS6awY/hfExE2LGIw2J88GQVvdav5Jrc6EThzHBLh0BIO6wWVbs1R0Wpz/WOTt2QYe
-         bZXYmDYpQZTH40n+CLj+lFe3BLJvlpXtSbK8jduX6z2SISqFZRTUAjvVG5E4TNQACMQu
-         uoqKCVXtQ64qKu8M9oURUZoeJvvyxRqCvHZ7zABE4SfjcrOL+2JH2bfF3jUizJmsys5Z
-         URoRUM4Xnv2m9nN8RqTRtotJeDcdxMdVdmPKCufTv6Kd9v7tO0rJQLxZLz194XLn3hCM
-         qjXA==
-X-Gm-Message-State: AOJu0YxnoxYSLYsGUSCj7eqssdR7rpq8yVDvefv3Hn0eiBZ1nn4eWOWC
-	L6zu4OrLFE1gIYtau/fo1VqZV0Pspkhfd2WfCsE=
-X-Google-Smtp-Source: AGHT+IEvXa9Urj590Qy4NyjoC8dihiPWvI7Rf7th0N6QvUdPo1ZuvQtGHDf38rozoim6yRSOs3b9lvwCY/mnZnscvt4=
-X-Received: by 2002:a05:6820:2c91:b0:593:e60a:493e with SMTP id
- dx17-20020a0568202c9100b00593e60a493emr4341253oob.0.1703083312931; Wed, 20
- Dec 2023 06:41:52 -0800 (PST)
+        bh=B/zlRVnAA6clM7lU88Df5rRPOkk60KNgaWc/JlduENc=;
+        b=hTZ4kuz2AcTqlPAtbv+3XNdbkiTSVOYbyRSEZnCkGYMKodhSICtvbPAC9imvB2KoHC
+         SyT+m+k/8Z3euOwN1vVe78TJ9Qgjwm9ly7APgXq7gqj5ruO5nl3+5tkzs3rNkqdSNvGU
+         CUbefC6is9vELKkKB6AE1+vLvrB/jlsEaj0oJkcP81rCrZteTLwFaSubbOkOzGae+w7M
+         dUbzPn34XSKzAzLKHWd9+AgKVQcaRm3ttpojTpCjBf25oosdDmTc9MxRX99UHEHNLT8L
+         OXI1BsfMIbR8eyWhxl5BBFChgl6q/gwtS0pExsJCjb1sEEq7SaKQYbDvgpbfndNdrCbE
+         D6Uw==
+X-Gm-Message-State: AOJu0Yw5tuapx0HPUjQ5uVR39DtiwJJglmxzVvTww/4CbdshtTs6uB+L
+	zXKWPn++YGNiUTLGQffTUXxqDP2ZY/j75RyJTtY=
+X-Google-Smtp-Source: AGHT+IH5gvpLiU9kletTxr2CIKmMAJVwRMcFmJj8elwT/RQ5BhGe0hdc1mfboHxDz//Qx2+AhpQHWyapaD2aY9Pdx+8=
+X-Received: by 2002:a4a:b141:0:b0:591:c8cd:a13a with SMTP id
+ e1-20020a4ab141000000b00591c8cda13amr11252400ooo.0.1703083995668; Wed, 20 Dec
+ 2023 06:53:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231212134844.1213381-1-lukasz.luba@arm.com> <20231212134844.1213381-6-lukasz.luba@arm.com>
-In-Reply-To: <20231212134844.1213381-6-lukasz.luba@arm.com>
+References: <20231212134844.1213381-1-lukasz.luba@arm.com> <20231212134844.1213381-7-lukasz.luba@arm.com>
+In-Reply-To: <20231212134844.1213381-7-lukasz.luba@arm.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 20 Dec 2023 15:41:41 +0100
-Message-ID: <CAJZ5v0hmzRbEG3V9WeJ7d2Kx1va-Fox18rKafms_wkNe36H_YQ@mail.gmail.com>
-Subject: Re: [PATCH v2 5/8] thermal: gov_power_allocator: Refactor checks in divvy_up_power()
+Date: Wed, 20 Dec 2023 15:53:04 +0100
+Message-ID: <CAJZ5v0hes13rmAgcyMYtz1ZXxV72pM3QgRY=LKF9jK=GbAyS=g@mail.gmail.com>
+Subject: Re: [PATCH v2 6/8] thermal/sysfs: Update instance->weight under tz lock
 To: Lukasz Luba <lukasz.luba@arm.com>
 Cc: linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org, rafael@kernel.org, 
 	linux-pm@vger.kernel.org, rui.zhang@intel.com
@@ -61,78 +61,66 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, Dec 12, 2023 at 2:48=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> w=
 rote:
 >
-> Simplify the code and remove one extra 'if' block.
->
-> No intentional functional impact.
+> The user-space can change thermal instance weight value while the
+> throtte() callback is running for a governor.
+
+This needs to be more precise IMV.  Something like
+
+"User space can change the weight of a thermal instance via sysfs
+while the .throttle() callback is running for a governor, because
+weight_store() does not use the zone lock."
+
+> The IPA governor uses the
+> 'weight' value for power calculation and also keeps it in 'total_weight'.
+> Therefore, the 'weight' value must not change during the throttle()
+> callback. Use 'tz->lock' mutex which also guards the throttle() to make
+> the update value safe.
+
+"The IPA governor uses instance weight values for power calculations
+and caches the sum of them as total_weight, so it gets confused when
+one of them changes while its .throttle() callback is running.
+
+To prevent that from happening, use thermal zone locking in weight_store().=
+"
+
 >
 > Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 > ---
->  drivers/thermal/gov_power_allocator.c | 20 ++++++++++----------
->  1 file changed, 10 insertions(+), 10 deletions(-)
+>  drivers/thermal/thermal_sysfs.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 >
-> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_=
-power_allocator.c
-> index 1a605fd9c8c6..574aa5822112 100644
-> --- a/drivers/thermal/gov_power_allocator.c
-> +++ b/drivers/thermal/gov_power_allocator.c
-> @@ -349,7 +349,8 @@ static void divvy_up_power(u32 *req_power, u32 *max_p=
-ower, int num_actors,
->                            u32 total_req_power, u32 power_range,
->                            u32 *granted_power, u32 *extra_actor_power)
+> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sy=
+sfs.c
+> index eef40d4f3063..df85df7d4a88 100644
+> --- a/drivers/thermal/thermal_sysfs.c
+> +++ b/drivers/thermal/thermal_sysfs.c
+> @@ -961,6 +961,7 @@ ssize_t weight_store(struct device *dev, struct devic=
+e_attribute *attr,
+>                      const char *buf, size_t count)
 >  {
-> -       u32 extra_power, capped_extra_power;
-> +       u32 capped_extra_power =3D 0;
-> +       u32 extra_power =3D 0;
->         int i;
->
->         /*
-> @@ -358,8 +359,6 @@ static void divvy_up_power(u32 *req_power, u32 *max_p=
-ower, int num_actors,
->         if (!total_req_power)
->                 total_req_power =3D 1;
->
-> -       capped_extra_power =3D 0;
-> -       extra_power =3D 0;
->         for (i =3D 0; i < num_actors; i++) {
->                 u64 req_range =3D (u64)req_power[i] * power_range;
->
-> @@ -375,7 +374,7 @@ static void divvy_up_power(u32 *req_power, u32 *max_p=
-ower, int num_actors,
->                 capped_extra_power +=3D extra_actor_power[i];
->         }
->
-> -       if (!extra_power)
-> +       if (!extra_power || !capped_extra_power)
->                 return;
->
->         /*
-> @@ -383,12 +382,13 @@ static void divvy_up_power(u32 *req_power, u32 *max=
-_power, int num_actors,
->          * how far they are from the max
->          */
->         extra_power =3D min(extra_power, capped_extra_power);
-> -       if (capped_extra_power > 0)
-> -               for (i =3D 0; i < num_actors; i++) {
-> -                       u64 extra_range =3D (u64)extra_actor_power[i] * e=
-xtra_power;
-> -                       granted_power[i] +=3D DIV_ROUND_CLOSEST_ULL(extra=
-_range,
-> -                                                        capped_extra_pow=
-er);
-> -               }
-> +
-> +       for (i =3D 0; i < num_actors; i++) {
-> +               u64 extra_range =3D (u64)extra_actor_power[i] * extra_pow=
-er;
-> +
-> +               granted_power[i] +=3D DIV_ROUND_CLOSEST_ULL(extra_range,
-> +                                                capped_extra_power);
-> +       }
->  }
->
->  static int allocate_power(struct thermal_zone_device *tz, int control_te=
-mp)
-> --
+>         struct thermal_instance *instance;
+> +       struct thermal_zone_device *tz;
 
-Looks good to me.
+IMO the local var doesn't help much.  You may as well use
+instance->tz->lock directly below.
+
+>         int ret, weight;
+>
+>         ret =3D kstrtoint(buf, 0, &weight);
+> @@ -968,7 +969,12 @@ ssize_t weight_store(struct device *dev, struct devi=
+ce_attribute *attr,
+>                 return ret;
+>
+>         instance =3D container_of(attr, struct thermal_instance, weight_a=
+ttr);
+> +       tz =3D instance->tz;
+> +
+> +       /* Don't race with governors using the 'weight' value */
+> +       mutex_lock(&tz->lock);
+>         instance->weight =3D weight;
+> +       mutex_unlock(&tz->lock);
+>
+>         return count;
+>  }
+> --
 
