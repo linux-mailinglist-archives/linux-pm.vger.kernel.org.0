@@ -1,31 +1,31 @@
-Return-Path: <linux-pm+bounces-1437-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1438-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5049681A4E8
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 17:26:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A950481A4ED
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 17:27:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B06128A1AF
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 16:26:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB7791C22BFA
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 16:27:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A4CF40BF5;
-	Wed, 20 Dec 2023 16:22:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA74448CFD;
+	Wed, 20 Dec 2023 16:24:00 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F85946432;
-	Wed, 20 Dec 2023 16:22:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C9254655A;
+	Wed, 20 Dec 2023 16:23:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 898C31FB;
-	Wed, 20 Dec 2023 08:23:37 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A4A751FB;
+	Wed, 20 Dec 2023 08:24:43 -0800 (PST)
 Received: from [10.57.82.217] (unknown [10.57.82.217])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C19F93F64C;
-	Wed, 20 Dec 2023 08:22:51 -0800 (PST)
-Message-ID: <65b879ad-aff2-4f7e-bad1-ac85dc5fd146@arm.com>
-Date: Wed, 20 Dec 2023 16:23:59 +0000
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DBDC93F64C;
+	Wed, 20 Dec 2023 08:23:57 -0800 (PST)
+Message-ID: <9344980f-5be6-4973-95b5-0e31cffe30da@arm.com>
+Date: Wed, 20 Dec 2023 16:25:05 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -33,89 +33,75 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 6/8] thermal/sysfs: Update instance->weight under tz
- lock
+Subject: Re: [PATCH v2 0/8] Add callback for cooling list update to speed-up
+ IPA
 Content-Language: en-US
 To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
- linux-pm@vger.kernel.org, rui.zhang@intel.com
+Cc: daniel.lezcano@linaro.org, linux-pm@vger.kernel.org, rui.zhang@intel.com,
+ linux-kernel@vger.kernel.org
 References: <20231212134844.1213381-1-lukasz.luba@arm.com>
- <20231212134844.1213381-7-lukasz.luba@arm.com>
- <CAJZ5v0hes13rmAgcyMYtz1ZXxV72pM3QgRY=LKF9jK=GbAyS=g@mail.gmail.com>
+ <b2f9db3f-96a4-4e1e-9be0-32f19948c489@arm.com>
+ <CAJZ5v0jx=Nm0zrKeGuDkkiskCT_LOF77fVFWt-mATkf3X9qUDQ@mail.gmail.com>
 From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0hes13rmAgcyMYtz1ZXxV72pM3QgRY=LKF9jK=GbAyS=g@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jx=Nm0zrKeGuDkkiskCT_LOF77fVFWt-mATkf3X9qUDQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 
 
-On 12/20/23 14:53, Rafael J. Wysocki wrote:
-> On Tue, Dec 12, 2023 at 2:48 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+On 12/20/23 13:37, Rafael J. Wysocki wrote:
+> On Wed, Dec 20, 2023 at 1:53 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
 >>
->> The user-space can change thermal instance weight value while the
->> throtte() callback is running for a governor.
-> 
-> This needs to be more precise IMV.  Something like
-> 
-> "User space can change the weight of a thermal instance via sysfs
-> while the .throttle() callback is running for a governor, because
-> weight_store() does not use the zone lock."
-
-Agree, I'll use it.
-
-> 
->> The IPA governor uses the
->> 'weight' value for power calculation and also keeps it in 'total_weight'.
->> Therefore, the 'weight' value must not change during the throttle()
->> callback. Use 'tz->lock' mutex which also guards the throttle() to make
->> the update value safe.
-> 
-> "The IPA governor uses instance weight values for power calculations
-> and caches the sum of them as total_weight, so it gets confused when
-> one of them changes while its .throttle() callback is running.
-> 
-> To prevent that from happening, use thermal zone locking in weight_store()."
-
-Agree, thanks.
-
-> 
+>> Hi Daniel, Rafael,
 >>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->>   drivers/thermal/thermal_sysfs.c | 6 ++++++
->>   1 file changed, 6 insertions(+)
+>> On 12/12/23 13:48, Lukasz Luba wrote:
+>>> Hi all,
+>>>
+>>> The patch set a new callback for thermal governors and implementation for
+>>> Intelligent Power Allocator.
+>>>
+>>> The goal is to move some heavy operarions like the memory allocations and heavy
+>>> computations (multiplications) out of throttle() callback hot path.
+>>>
+>>> The new callback is generic enough to handle other imporants update events.
+>>> It re-uses existing thermal_notify_event definitions.
+>>>
+>>> In addition there are some small clean-ups for IPA code.
+>>>
+>>> changes:
+>>> v2:
+>>> - change callback name to update_tz() and add parameter (Rafael)
+>>> - added new event to trigger this callback - instance 'weight' update
+>>>
+>>> Regards,
+>>> Lukasz
+>>>
+>>> Lukasz Luba (8):
+>>>     thermal: core: Add governor callback for thermal zone change
+>>>     thermal: gov_power_allocator: Refactor check_power_actors()
+>>>     thermal: gov_power_allocator: Move memory allocation out of throttle()
+>>>     thermal: gov_power_allocator: Simplify checks for valid power actor
+>>>     thermal: gov_power_allocator: Refactor checks in divvy_up_power()
+>>>     thermal/sysfs: Update instance->weight under tz lock
+>>>     thermal/sysfs: Update governors when the 'weight' has changed
+>>>     thermal: gov_power_allocator: Support new update callback of weights
+>>>
+>>>    drivers/thermal/gov_power_allocator.c | 216 ++++++++++++++++++--------
+>>>    drivers/thermal/thermal_core.c        |  13 ++
+>>>    drivers/thermal/thermal_sysfs.c       |  15 ++
+>>>    include/linux/thermal.h               |   6 +
+>>>    4 files changed, 182 insertions(+), 68 deletions(-)
+>>>
 >>
->> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
->> index eef40d4f3063..df85df7d4a88 100644
->> --- a/drivers/thermal/thermal_sysfs.c
->> +++ b/drivers/thermal/thermal_sysfs.c
->> @@ -961,6 +961,7 @@ ssize_t weight_store(struct device *dev, struct device_attribute *attr,
->>                       const char *buf, size_t count)
->>   {
->>          struct thermal_instance *instance;
->> +       struct thermal_zone_device *tz;
+>> I know it's a bit late in time period...
+>> You probably missed that patch set in your mailbox.
+>> This patch set can probably just wait to the next window, or
+>> should I resend it later in 2024?
 > 
-> IMO the local var doesn't help much.  You may as well use
-> instance->tz->lock directly below.
-
-OK, I'll change that.
-
+> Not really, I was about to comment one the first patch.
 > 
->>          int ret, weight;
->>
->>          ret = kstrtoint(buf, 0, &weight);
->> @@ -968,7 +969,12 @@ ssize_t weight_store(struct device *dev, struct device_attribute *attr,
->>                  return ret;
->>
->>          instance = container_of(attr, struct thermal_instance, weight_attr);
->> +       tz = instance->tz;
->> +
->> +       /* Don't race with governors using the 'weight' value */
->> +       mutex_lock(&tz->lock);
->>          instance->weight = weight;
->> +       mutex_unlock(&tz->lock);
->>
->>          return count;
->>   }
->> --
+> I'll do that shortly.
+> 
+
+Thank you for the comments. I'll send a v3 with changes.
 
