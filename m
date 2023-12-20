@@ -1,64 +1,31 @@
-Return-Path: <linux-pm+bounces-1419-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1420-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03977819F18
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 13:34:45 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5387C819F5A
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 13:54:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 26AAC1C22494
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 12:34:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 41D45B22C93
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 12:53:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45371224CA;
-	Wed, 20 Dec 2023 12:34:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="L33mAer/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE77E24B4C;
+	Wed, 20 Dec 2023 12:53:52 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C4B24B29
-	for <linux-pm@vger.kernel.org>; Wed, 20 Dec 2023 12:34:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-553a65b6ad4so2296909a12.0
-        for <linux-pm@vger.kernel.org>; Wed, 20 Dec 2023 04:34:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703075676; x=1703680476; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BC20f4XutzLFfpBlBZPN2cj1EyfzNMVi6SKb89pUAMs=;
-        b=L33mAer/gJZ6xWEYOaCWyeB3VBCBFbKo+DoBTuKCU6M8y8JNOTH4sc9lTzE3TlEZnt
-         k7LgEgom9Zgf4pPPz112m/inPQwMP5vIVRoLvmVYe5dOmSW0nD1cR6BxJ8Szm6MyEQ1A
-         fx5h/Pz2Cdplj6zxVSN+v142xHTOrZcZpebCCztIXjjC9XKnpAwiOxtJ7W1iuys6CRqX
-         +LRCTM8JALKnlMhuIa9XCZUxrEflc0zn8SLMw0Hnu/+hiiLYxH3IOfE1QJLW0RoXcalX
-         3vDRDWANdU4ucDTLF2tAUrpN47GmfpVxDXLilHcRSDqNUYkk6w3QnP7sowsqnYtx3CJ4
-         q6wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703075676; x=1703680476;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BC20f4XutzLFfpBlBZPN2cj1EyfzNMVi6SKb89pUAMs=;
-        b=KQhTd7tW2f1EMZQlc+pQVNWuABITYQXFQxK+d6uunjG9twAMJj5l9XFL3kopU8vSdd
-         +xiGzRD+J/OfEM0116MWz2rehOh+VBlJen8ff9ULCVgukxQEmBu9LB0s3O3fxuAwGUan
-         r6vsYF1VBZgjdG1GLGS5nPpGcMzVb83CRVn727EZwIACqRAvZ3VnPDCIUsq5/2U8gy+S
-         OKCvx6MMpW1iMQwNwqMNFqoEB9/cjTWCfcGuoiZq8ybHZeqAa1qxIyn78qynXWgBJ4cZ
-         9o/cxN2iF4IdGwXsVumh/vw+HAZHmjW6rAcf4CvdOrv+XbJLS0f2107H4rZtekrt4Qp7
-         tiHg==
-X-Gm-Message-State: AOJu0YwULvNa9ddywPB2Grmu+2RRFopOVe50F6rBZtgC0wu/1imMNAgm
-	dpTZoc8fSVLSPuTmwyCmGIHotg==
-X-Google-Smtp-Source: AGHT+IHfLA0M9+7B/B79vaXWFhdnJgnAtZr90vLKDClciPf9jJT12Xwyn0FDdgw3+Dl0MFf73BejpQ==
-X-Received: by 2002:a17:906:3289:b0:a1a:57f4:e5a4 with SMTP id 9-20020a170906328900b00a1a57f4e5a4mr10680260ejw.140.1703075675982;
-        Wed, 20 Dec 2023 04:34:35 -0800 (PST)
-Received: from [192.168.199.59] (178235179206.dynamic-4-waw-k-1-3-0.vectranet.pl. [178.235.179.206])
-        by smtp.gmail.com with ESMTPSA id lv16-20020a170906bc9000b00a23540a14c8sm3959949ejb.29.2023.12.20.04.34.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 20 Dec 2023 04:34:35 -0800 (PST)
-Message-ID: <cfe3ee21-e1c7-4e54-b544-43cdc8d64bfa@linaro.org>
-Date: Wed, 20 Dec 2023 13:34:33 +0100
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58E6F25543;
+	Wed, 20 Dec 2023 12:53:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 479591FB;
+	Wed, 20 Dec 2023 04:54:34 -0800 (PST)
+Received: from [10.57.82.217] (unknown [10.57.82.217])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9124D3F738;
+	Wed, 20 Dec 2023 04:53:48 -0800 (PST)
+Message-ID: <b2f9db3f-96a4-4e1e-9be0-32f19948c489@arm.com>
+Date: Wed, 20 Dec 2023 12:54:55 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -66,82 +33,64 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] interconnect: qcom: Add MSM8909 interconnect
- provider driver
+Subject: Re: [PATCH v2 0/8] Add callback for cooling list update to speed-up
+ IPA
 Content-Language: en-US
-To: Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
- Georgi Djakov <djakov@kernel.org>
-Cc: Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, Adam Skladowski <a39.skl@gmail.com>
-References: <20231220-icc-msm8909-v2-0-3b68bbed2891@kernkonzept.com>
- <20231220-icc-msm8909-v2-2-3b68bbed2891@kernkonzept.com>
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <20231220-icc-msm8909-v2-2-3b68bbed2891@kernkonzept.com>
-Content-Type: text/plain; charset=UTF-8
+To: daniel.lezcano@linaro.org, rafael@kernel.org
+Cc: linux-pm@vger.kernel.org, rui.zhang@intel.com,
+ linux-kernel@vger.kernel.org
+References: <20231212134844.1213381-1-lukasz.luba@arm.com>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20231212134844.1213381-1-lukasz.luba@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 20.12.2023 11:38, Stephan Gerhold wrote:
-> From: Adam Skladowski <a39.skl@gmail.com>
-> 
-> Add driver for interconnect busses found in MSM8909 based platforms.
-> The topology consists of three NoCs that are partially controlled by
-> a RPM processor.
-> 
-> In the downstream/vendor kernel from Qualcomm there is an additional
-> "mm-snoc". However, it actually ends up using the same RPM "snoc_clk"
-> as the normal "snoc". It looks like this is actually the same NoC
-> in hardware and the "mm-snoc" was only defined to assign a different
-> "qcom,util-fact" to increase bandwidth requests by a static margin.
-> In mainline we can represent this by assigning the equivalent "ab_coeff"
-> to all the nodes that are part of "mm-snoc" downstream.
-> 
-> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
-> [Stephan: Drop separate mm-snoc that exists downstream since it's
->  actually the same NoC as SNoC in hardware, add qos_offset for BIMC,
->  add ab_coeff for mm-snoc nodes and BIMC]
-> Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-> ---
-The hard work we put into fixing up smd rpm icc paid off.. thanks!
+Hi Daniel, Rafael,
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+On 12/12/23 13:48, Lukasz Luba wrote:
+> Hi all,
+> 
+> The patch set a new callback for thermal governors and implementation for
+> Intelligent Power Allocator.
+> 
+> The goal is to move some heavy operarions like the memory allocations and heavy
+> computations (multiplications) out of throttle() callback hot path.
+> 
+> The new callback is generic enough to handle other imporants update events.
+> It re-uses existing thermal_notify_event definitions.
+> 
+> In addition there are some small clean-ups for IPA code.
+> 
+> changes:
+> v2:
+> - change callback name to update_tz() and add parameter (Rafael)
+> - added new event to trigger this callback - instance 'weight' update
+> 
+> Regards,
+> Lukasz
+> 
+> Lukasz Luba (8):
+>    thermal: core: Add governor callback for thermal zone change
+>    thermal: gov_power_allocator: Refactor check_power_actors()
+>    thermal: gov_power_allocator: Move memory allocation out of throttle()
+>    thermal: gov_power_allocator: Simplify checks for valid power actor
+>    thermal: gov_power_allocator: Refactor checks in divvy_up_power()
+>    thermal/sysfs: Update instance->weight under tz lock
+>    thermal/sysfs: Update governors when the 'weight' has changed
+>    thermal: gov_power_allocator: Support new update callback of weights
+> 
+>   drivers/thermal/gov_power_allocator.c | 216 ++++++++++++++++++--------
+>   drivers/thermal/thermal_core.c        |  13 ++
+>   drivers/thermal/thermal_sysfs.c       |  15 ++
+>   include/linux/thermal.h               |   6 +
+>   4 files changed, 182 insertions(+), 68 deletions(-)
+> 
 
-Konrad
+I know it's a bit late in time period...
+You probably missed that patch set in your mailbox.
+This patch set can probably just wait to the next window, or
+should I resend it later in 2024?
+
+Regards,
+Lukasz
 
