@@ -1,43 +1,64 @@
-Return-Path: <linux-pm+bounces-1418-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1419-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CCB8819E34
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 12:36:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03977819F18
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 13:34:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2905E281AC4
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 11:36:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 26AAC1C22494
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 12:34:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B74B2137E;
-	Wed, 20 Dec 2023 11:36:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45371224CA;
+	Wed, 20 Dec 2023 12:34:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ZDGHwBCP"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="L33mAer/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2A6221379;
-	Wed, 20 Dec 2023 11:36:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2E3941BF203;
-	Wed, 20 Dec 2023 11:36:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1703072162;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=x+sCRFL2UuJ2Inm7d7HF8h3P+fdYtvsGALrrMT6jGy0=;
-	b=ZDGHwBCP9C5RS5Mdj3Bjf4D/2IhVYaD4W3rg5u6oSwMrJ0GWyCOrJ2sRMX3unF2JsvYAKU
-	9CVKuqW96AzpS7KO+IVyiTTqfRax+kMnYFYarNh0O1Dehie7HRuEaG/qOLpkr21/isUFEF
-	u/Sna1FeAFcNGAEydaPDMtk/F1umQbPGCJGbYOD485cJ441usOuviK9um+PeBUoJJWQ7io
-	uFDBm7CXpxJrDoaszDFqpGfhER0JhIAVVkA7V2FCGqDelbxqWbWRUmT4doXYFHwvH/H+dp
-	g7apDyGkUJPmgKLcXnnml1jG7kPoIerqneXsdfb+riWvgS0IJ7xgbCass/bXhA==
-Message-ID: <7b743758-fbc1-4cad-bfbc-d3fd3e69ce17@bootlin.com>
-Date: Wed, 20 Dec 2023 12:36:01 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C4B24B29
+	for <linux-pm@vger.kernel.org>; Wed, 20 Dec 2023 12:34:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-553a65b6ad4so2296909a12.0
+        for <linux-pm@vger.kernel.org>; Wed, 20 Dec 2023 04:34:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1703075676; x=1703680476; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BC20f4XutzLFfpBlBZPN2cj1EyfzNMVi6SKb89pUAMs=;
+        b=L33mAer/gJZ6xWEYOaCWyeB3VBCBFbKo+DoBTuKCU6M8y8JNOTH4sc9lTzE3TlEZnt
+         k7LgEgom9Zgf4pPPz112m/inPQwMP5vIVRoLvmVYe5dOmSW0nD1cR6BxJ8Szm6MyEQ1A
+         fx5h/Pz2Cdplj6zxVSN+v142xHTOrZcZpebCCztIXjjC9XKnpAwiOxtJ7W1iuys6CRqX
+         +LRCTM8JALKnlMhuIa9XCZUxrEflc0zn8SLMw0Hnu/+hiiLYxH3IOfE1QJLW0RoXcalX
+         3vDRDWANdU4ucDTLF2tAUrpN47GmfpVxDXLilHcRSDqNUYkk6w3QnP7sowsqnYtx3CJ4
+         q6wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703075676; x=1703680476;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BC20f4XutzLFfpBlBZPN2cj1EyfzNMVi6SKb89pUAMs=;
+        b=KQhTd7tW2f1EMZQlc+pQVNWuABITYQXFQxK+d6uunjG9twAMJj5l9XFL3kopU8vSdd
+         +xiGzRD+J/OfEM0116MWz2rehOh+VBlJen8ff9ULCVgukxQEmBu9LB0s3O3fxuAwGUan
+         r6vsYF1VBZgjdG1GLGS5nPpGcMzVb83CRVn727EZwIACqRAvZ3VnPDCIUsq5/2U8gy+S
+         OKCvx6MMpW1iMQwNwqMNFqoEB9/cjTWCfcGuoiZq8ybHZeqAa1qxIyn78qynXWgBJ4cZ
+         9o/cxN2iF4IdGwXsVumh/vw+HAZHmjW6rAcf4CvdOrv+XbJLS0f2107H4rZtekrt4Qp7
+         tiHg==
+X-Gm-Message-State: AOJu0YwULvNa9ddywPB2Grmu+2RRFopOVe50F6rBZtgC0wu/1imMNAgm
+	dpTZoc8fSVLSPuTmwyCmGIHotg==
+X-Google-Smtp-Source: AGHT+IHfLA0M9+7B/B79vaXWFhdnJgnAtZr90vLKDClciPf9jJT12Xwyn0FDdgw3+Dl0MFf73BejpQ==
+X-Received: by 2002:a17:906:3289:b0:a1a:57f4:e5a4 with SMTP id 9-20020a170906328900b00a1a57f4e5a4mr10680260ejw.140.1703075675982;
+        Wed, 20 Dec 2023 04:34:35 -0800 (PST)
+Received: from [192.168.199.59] (178235179206.dynamic-4-waw-k-1-3-0.vectranet.pl. [178.235.179.206])
+        by smtp.gmail.com with ESMTPSA id lv16-20020a170906bc9000b00a23540a14c8sm3959949ejb.29.2023.12.20.04.34.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Dec 2023 04:34:35 -0800 (PST)
+Message-ID: <cfe3ee21-e1c7-4e54-b544-43cdc8d64bfa@linaro.org>
+Date: Wed, 20 Dec 2023 13:34:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -45,115 +66,82 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: omap-i2c: runtime pm issue during suspend to ram
+Subject: Re: [PATCH v2 2/2] interconnect: qcom: Add MSM8909 interconnect
+ provider driver
 Content-Language: en-US
-To: Tony Lindgren <tony@atomide.com>
-Cc: linux-pm@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-omap@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>,
- Kevin Hilman <khilman@kernel.org>, =?UTF-8?Q?Th=C3=A9o_Lebrun?=
- <theo.lebrun@bootlin.com>, Gregory CLEMENT <gregory.clement@bootlin.com>,
- Kumar Udit <u-kumar1@ti.com>
-References: <f68c9a54-0fde-4709-9d2f-0d23a049341b@bootlin.com>
- <4c31acd8-4edb-44f5-9a90-cb2f2dc530b6@bootlin.com>
- <20231220111415.GZ5166@atomide.com>
-From: Thomas Richard <thomas.richard@bootlin.com>
-In-Reply-To: <20231220111415.GZ5166@atomide.com>
+To: Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+ Georgi Djakov <djakov@kernel.org>
+Cc: Bjorn Andersson <andersson@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Adam Skladowski <a39.skl@gmail.com>
+References: <20231220-icc-msm8909-v2-0-3b68bbed2891@kernkonzept.com>
+ <20231220-icc-msm8909-v2-2-3b68bbed2891@kernkonzept.com>
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
+ BB/OmIWU6X+LZW6P88ZmHe+KeyABLMP5s1tJNK1j4ntT7mECcWZDzafPWF4F6m4WJOG27kTJ
+ HGWdmtO+RvadOVi6CoUDqALsmfS3MUG5Pj2Ne9+0jRg4hEnB92AyF9rW2G3qisFcwPgvatt7
+ TXD5E38mLyOPOUyXNj9XpDbt1hNwKQfiidmPh5e7VNAWRnW1iCMMoKqzM1Anzq7e5Afyeifz
+ zRcQPLaqrPjnKqZGL2BKQSZDh6NkI5ZLRhhHQf61fkWcUpTp1oDC6jWVfT7hwRVIQLrrNj9G
+ MpPzrlN4YuAqKeIer1FMt8cq64ifgTzxHzXsMcUdclzq2LTk2RXaPl6Jg/IXWqUClJHbamSk
+ t1bfif3SnmhA6TiNvEpDKPiT3IDs42THU6ygslrBxyROQPWLI9IL1y8S6RtEh8H+NZQWZNzm
+ UQ3imZirlPjxZtvz1BtnnBWS06e7x/UEAguj7VHCuymVgpl2Za17d1jj81YN5Rp5L9GXxkV1
+ aUEwONM3eCI3qcYm5JNc5X+JthZOWsbIPSC1Rhxz3JmWIwP1udr5E3oNRe9u2LIEq+wH/toH
+ kpPDhTeMkvt4KfE5m5ercid9+ZXAqoaYLUL4HCEw+HW0DXcKDwARAQABzShLb25yYWQgRHli
+ Y2lvIDxrb25yYWQuZHliY2lvQGxpbmFyby5vcmc+wsGOBBMBCAA4FiEEU24if9oCL2zdAAQV
+ R4cBcg5dfFgFAmQ5bqwCGwMFCwkIBwIGFQoJCAsCBBYCAwECHgECF4AACgkQR4cBcg5dfFjO
+ BQ//YQV6fkbqQCceYebGg6TiisWCy8LG77zV7DB0VMIWJv7Km7Sz0QQrHQVzhEr3trNenZrf
+ yy+o2tQOF2biICzbLM8oyQPY8B///KJTWI2khoB8IJSJq3kNG68NjPg2vkP6CMltC/X3ohAo
+ xL2UgwN5vj74QnlNneOjc0vGbtA7zURNhTz5P/YuTudCqcAbxJkbqZM4WymjQhe0XgwHLkiH
+ 5LHSZ31MRKp/+4Kqs4DTXMctc7vFhtUdmatAExDKw8oEz5NbskKbW+qHjW1XUcUIrxRr667V
+ GWH6MkVceT9ZBrtLoSzMLYaQXvi3sSAup0qiJiBYszc/VOu3RbIpNLRcXN3KYuxdQAptacTE
+ mA+5+4Y4DfC3rUSun+hWLDeac9z9jjHm5rE998OqZnOU9aztbd6zQG5VL6EKgsVXAZD4D3RP
+ x1NaAjdA3MD06eyvbOWiA5NSzIcC8UIQvgx09xm7dThCuQYJR4Yxjd+9JPJHI6apzNZpDGvQ
+ BBZzvwxV6L1CojUEpnilmMG1ZOTstktWpNzw3G2Gis0XihDUef0MWVsQYJAl0wfiv/0By+XK
+ mm2zRR+l/dnzxnlbgJ5pO0imC2w0TVxLkAp0eo0LHw619finad2u6UPQAkZ4oj++iIGrJkt5
+ Lkn2XgB+IW8ESflz6nDY3b5KQRF8Z6XLP0+IEdLOOARkOW7yEgorBgEEAZdVAQUBAQdAwmUx
+ xrbSCx2ksDxz7rFFGX1KmTkdRtcgC6F3NfuNYkYDAQgHwsF2BBgBCAAgFiEEU24if9oCL2zd
+ AAQVR4cBcg5dfFgFAmQ5bvICGwwACgkQR4cBcg5dfFju1Q//Xta1ShwL0MLSC1KL1lXGXeRM
+ 8arzfyiB5wJ9tb9U/nZvhhdfilEDLe0jKJY0RJErbdRHsalwQCrtq/1ewQpMpsRxXzAjgfRN
+ jc4tgxRWmI+aVTzSRpywNahzZBT695hMz81cVZJoZzaV0KaMTlSnBkrviPz1nIGHYCHJxF9r
+ cIu0GSIyUjZ/7xslxdvjpLth16H27JCWDzDqIQMtg61063gNyEyWgt1qRSaK14JIH/DoYRfn
+ jfFQSC8bffFjat7BQGFz4ZpRavkMUFuDirn5Tf28oc5ebe2cIHp4/kajTx/7JOxWZ80U70mA
+ cBgEeYSrYYnX+UJsSxpzLc/0sT1eRJDEhI4XIQM4ClIzpsCIN5HnVF76UQXh3a9zpwh3dk8i
+ bhN/URmCOTH+LHNJYN/MxY8wuukq877DWB7k86pBs5IDLAXmW8v3gIDWyIcgYqb2v8QO2Mqx
+ YMqL7UZxVLul4/JbllsQB8F/fNI8AfttmAQL9cwo6C8yDTXKdho920W4WUR9k8NT/OBqWSyk
+ bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
+ nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
+ izWDgYvmBE8=
+In-Reply-To: <20231220-icc-msm8909-v2-2-3b68bbed2891@kernkonzept.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-GND-Sasl: thomas.richard@bootlin.com
 
-On 12/20/23 12:14, Tony Lindgren wrote:
-> * Thomas Richard <thomas.richard@bootlin.com> [231220 10:50]:
->> On 12/19/23 18:15, Thomas Richard wrote:
->>> Hello,
->>
->> I add some people in this thread.
->>
->>>
->>> I have a gpio expander (pca953x driver) connected to an i2c controller
->>> managed by the omap-i2c driver.
->>> And I have some issues with pm_runtime_force_suspend/resume during
->>> suspend to ram.
->>> For some reasons, related to hardware design, I need to access to this
->>> gpio expander during suspend_noirq and resume_noirq. So I had to move
->>> the suspend/resume of the pca953x to suspend_noirq/resume_noirq.
+On 20.12.2023 11:38, Stephan Gerhold wrote:
+> From: Adam Skladowski <a39.skl@gmail.com>
 > 
-> Hmm at noirq level you need to do polling on the i2c controller?
-
-Hello Tony,
-
-Thanks for your reply.
-
-No, irq is still active in suspend_noirq for this i2c controller due to
-the flag IRQF_NO_SUSPEND [1].
-If this flag is set, the interrupt is still enabled in suspend_noirq [2].
-
-[1]
-https://elixir.bootlin.com/linux/v6.7-rc6/source/drivers/i2c/busses/i2c-omap.c#L1473
-[2]
-https://www.kernel.org/doc/html/latest/power/suspend-and-interrupts.html#the-irqf-no-suspend-flag
-
+> Add driver for interconnect busses found in MSM8909 based platforms.
+> The topology consists of three NoCs that are partially controlled by
+> a RPM processor.
 > 
->>> diff --git a/drivers/i2c/busses/i2c-omap.c b/drivers/i2c/busses/i2c-omap.c
->>> index 42165ef57946..fe79b27b46fd 100644
->>> --- a/drivers/i2c/busses/i2c-omap.c
->>> +++ b/drivers/i2c/busses/i2c-omap.c
->>> @@ -1575,9 +1575,24 @@ static int __maybe_unused
->>> omap_i2c_runtime_resume(struct device *dev)
->>>         return 0;
->>>  }
->>>
->>> +static int omap_i2c_suspend(struct device *dev)
->>> +{
->>> +       pm_runtime_get_sync(dev);
->>> +       pm_runtime_disable(dev);
->>> +       return 0;
->>> +}
+> In the downstream/vendor kernel from Qualcomm there is an additional
+> "mm-snoc". However, it actually ends up using the same RPM "snoc_clk"
+> as the normal "snoc". It looks like this is actually the same NoC
+> in hardware and the "mm-snoc" was only defined to assign a different
+> "qcom,util-fact" to increase bandwidth requests by a static margin.
+> In mainline we can represent this by assigning the equivalent "ab_coeff"
+> to all the nodes that are part of "mm-snoc" downstream.
 > 
-> If you want the i2c controller enabled during suspend, you can leave it
-> enabled above, and as we already have SET_NOIRQ_SYSTEM_SLEEP_PM_OPS
-> doing force_suspend() and force_resume(), you can runtime PM put on
-> resume. So something like below might do the trick:
+> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
+> [Stephan: Drop separate mm-snoc that exists downstream since it's
+>  actually the same NoC as SNoC in hardware, add qos_offset for BIMC,
+>  add ab_coeff for mm-snoc nodes and BIMC]
+> Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+> ---
+The hard work we put into fixing up smd rpm icc paid off.. thanks!
 
-Ok I'll test it. Thanks
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-> 
-> static int omap_i2c_suspend(struct device *dev)
-> {
-> 	return pm_runtime_resume_and_get(dev);
-> }
-> 
-> static int omap_i2c_resume(struct device *dev)
-> {
-> 	pm_runtime_mark_last_busy(dev);
-> 	pm_runtime_put_autosuspend(dev);
-> 
-> 	return 0;
-> }
-> 
->>>  static const struct dev_pm_ops omap_i2c_pm_ops = {
->>>         SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend,
->>>                                       pm_runtime_force_resume)
->>> +       SET_SYSTEM_SLEEP_PM_OPS(omap_i2c_suspend, omap_i2c_resume)
->>>         SET_RUNTIME_PM_OPS(omap_i2c_runtime_suspend,
->>>                            omap_i2c_runtime_resume, NULL)
->>>  };
-> 
-> And with the changes you did to omap_i2c_pm_ops naturally. This way
-> the controller should stay active until noirq ops.
-> 
-> Of course it's possible I did not quite understand what you're trying
-> to do, but if so please let me know :)
-
-The context is:
-One gpio of this expander is the reset pin of PCIe endpoints.
-And this reset pin shall be managed during the suspend_noirq and
-resume_noirq of the PCIe controller.
-That's why I need to do some i2c accesses during suspend_noirq/resume_noirq.
-
--- 
-Thomas Richard, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+Konrad
 
