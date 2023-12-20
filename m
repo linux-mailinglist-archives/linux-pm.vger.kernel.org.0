@@ -1,96 +1,118 @@
-Return-Path: <linux-pm+bounces-1420-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1421-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5387C819F5A
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 13:54:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5E06819FED
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 14:37:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 41D45B22C93
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 12:53:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F3A4F1C224EC
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 13:37:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE77E24B4C;
-	Wed, 20 Dec 2023 12:53:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C93624B4B;
+	Wed, 20 Dec 2023 13:37:33 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58E6F25543;
-	Wed, 20 Dec 2023 12:53:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 479591FB;
-	Wed, 20 Dec 2023 04:54:34 -0800 (PST)
-Received: from [10.57.82.217] (unknown [10.57.82.217])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9124D3F738;
-	Wed, 20 Dec 2023 04:53:48 -0800 (PST)
-Message-ID: <b2f9db3f-96a4-4e1e-9be0-32f19948c489@arm.com>
-Date: Wed, 20 Dec 2023 12:54:55 +0000
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C712436AED;
+	Wed, 20 Dec 2023 13:37:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-590a21e977aso149511eaf.1;
+        Wed, 20 Dec 2023 05:37:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703079451; x=1703684251;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zi2/E2JPV+E9OtEb+OM3gBdNSO0WpJsVMVo8MT1752Q=;
+        b=XYJGNkpURqgyWzOqZIQhyj9nWiIgxi+/VN3Ib+Kiu9sUvsjDhRwrkLpVwu8l68nqwP
+         YgnrB5OUqoI4p8qHXLTzSS4NEHWCdAbuRonBOfiDhpXB4eVNow9YJ8XBD8JNncqMZ8Cu
+         gCs+9Ono9T+Lmb28MCNuCLF0UXROIAQ9pP1tJSIOkMKq/zCbThu4fKd0rqhcPC8h4V0n
+         wAPhqLjqHNnCe80p6XuiYdyTF07i5evaTmfvVMs21QMnZEFoV2FnCE7CaM1cfW3JkfRd
+         +9q2JNN83XNCWKQLta6S0ZSBx3Fht98YeMj8n30+ZUmQkxESFS5cWs7lTnmLp8Y70i0P
+         cFOA==
+X-Gm-Message-State: AOJu0YzFhjA3yyqGFGhxSM30Gtki9cTqLpNxL2qNs9RCMCxmfr6lcmAi
+	d1CB1DPJ+xffGKTtVf3MKxa+/p6OOZesRmNMYhU=
+X-Google-Smtp-Source: AGHT+IFPWD1e7bEmPP17/BQHTxvMpnKN6yH0aErwTtDPwWdlJLiDHeAP8Hb82e1l2JF/FiGR8wGIdFVB4I83HJ1p0Lg=
+X-Received: by 2002:a05:6820:258a:b0:593:e53b:2df1 with SMTP id
+ cs10-20020a056820258a00b00593e53b2df1mr4441366oob.1.1703079450842; Wed, 20
+ Dec 2023 05:37:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/8] Add callback for cooling list update to speed-up
- IPA
-Content-Language: en-US
-To: daniel.lezcano@linaro.org, rafael@kernel.org
-Cc: linux-pm@vger.kernel.org, rui.zhang@intel.com,
- linux-kernel@vger.kernel.org
-References: <20231212134844.1213381-1-lukasz.luba@arm.com>
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20231212134844.1213381-1-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20231212134844.1213381-1-lukasz.luba@arm.com> <b2f9db3f-96a4-4e1e-9be0-32f19948c489@arm.com>
+In-Reply-To: <b2f9db3f-96a4-4e1e-9be0-32f19948c489@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 20 Dec 2023 14:37:19 +0100
+Message-ID: <CAJZ5v0jx=Nm0zrKeGuDkkiskCT_LOF77fVFWt-mATkf3X9qUDQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/8] Add callback for cooling list update to speed-up IPA
+To: Lukasz Luba <lukasz.luba@arm.com>
+Cc: daniel.lezcano@linaro.org, rafael@kernel.org, linux-pm@vger.kernel.org, 
+	rui.zhang@intel.com, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Daniel, Rafael,
+On Wed, Dec 20, 2023 at 1:53=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> w=
+rote:
+>
+> Hi Daniel, Rafael,
+>
+> On 12/12/23 13:48, Lukasz Luba wrote:
+> > Hi all,
+> >
+> > The patch set a new callback for thermal governors and implementation f=
+or
+> > Intelligent Power Allocator.
+> >
+> > The goal is to move some heavy operarions like the memory allocations a=
+nd heavy
+> > computations (multiplications) out of throttle() callback hot path.
+> >
+> > The new callback is generic enough to handle other imporants update eve=
+nts.
+> > It re-uses existing thermal_notify_event definitions.
+> >
+> > In addition there are some small clean-ups for IPA code.
+> >
+> > changes:
+> > v2:
+> > - change callback name to update_tz() and add parameter (Rafael)
+> > - added new event to trigger this callback - instance 'weight' update
+> >
+> > Regards,
+> > Lukasz
+> >
+> > Lukasz Luba (8):
+> >    thermal: core: Add governor callback for thermal zone change
+> >    thermal: gov_power_allocator: Refactor check_power_actors()
+> >    thermal: gov_power_allocator: Move memory allocation out of throttle=
+()
+> >    thermal: gov_power_allocator: Simplify checks for valid power actor
+> >    thermal: gov_power_allocator: Refactor checks in divvy_up_power()
+> >    thermal/sysfs: Update instance->weight under tz lock
+> >    thermal/sysfs: Update governors when the 'weight' has changed
+> >    thermal: gov_power_allocator: Support new update callback of weights
+> >
+> >   drivers/thermal/gov_power_allocator.c | 216 ++++++++++++++++++-------=
+-
+> >   drivers/thermal/thermal_core.c        |  13 ++
+> >   drivers/thermal/thermal_sysfs.c       |  15 ++
+> >   include/linux/thermal.h               |   6 +
+> >   4 files changed, 182 insertions(+), 68 deletions(-)
+> >
+>
+> I know it's a bit late in time period...
+> You probably missed that patch set in your mailbox.
+> This patch set can probably just wait to the next window, or
+> should I resend it later in 2024?
 
-On 12/12/23 13:48, Lukasz Luba wrote:
-> Hi all,
-> 
-> The patch set a new callback for thermal governors and implementation for
-> Intelligent Power Allocator.
-> 
-> The goal is to move some heavy operarions like the memory allocations and heavy
-> computations (multiplications) out of throttle() callback hot path.
-> 
-> The new callback is generic enough to handle other imporants update events.
-> It re-uses existing thermal_notify_event definitions.
-> 
-> In addition there are some small clean-ups for IPA code.
-> 
-> changes:
-> v2:
-> - change callback name to update_tz() and add parameter (Rafael)
-> - added new event to trigger this callback - instance 'weight' update
-> 
-> Regards,
-> Lukasz
-> 
-> Lukasz Luba (8):
->    thermal: core: Add governor callback for thermal zone change
->    thermal: gov_power_allocator: Refactor check_power_actors()
->    thermal: gov_power_allocator: Move memory allocation out of throttle()
->    thermal: gov_power_allocator: Simplify checks for valid power actor
->    thermal: gov_power_allocator: Refactor checks in divvy_up_power()
->    thermal/sysfs: Update instance->weight under tz lock
->    thermal/sysfs: Update governors when the 'weight' has changed
->    thermal: gov_power_allocator: Support new update callback of weights
-> 
->   drivers/thermal/gov_power_allocator.c | 216 ++++++++++++++++++--------
->   drivers/thermal/thermal_core.c        |  13 ++
->   drivers/thermal/thermal_sysfs.c       |  15 ++
->   include/linux/thermal.h               |   6 +
->   4 files changed, 182 insertions(+), 68 deletions(-)
-> 
+Not really, I was about to comment one the first patch.
 
-I know it's a bit late in time period...
-You probably missed that patch set in your mailbox.
-This patch set can probably just wait to the next window, or
-should I resend it later in 2024?
-
-Regards,
-Lukasz
+I'll do that shortly.
 
