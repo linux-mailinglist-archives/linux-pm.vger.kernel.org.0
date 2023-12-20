@@ -1,129 +1,99 @@
-Return-Path: <linux-pm+bounces-1411-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1406-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 060A1819D6C
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 11:57:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BE5E819D0A
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 11:39:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5F182894C7
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 10:57:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35192281EA8
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 10:39:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85F0220B30;
-	Wed, 20 Dec 2023 10:57:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8454208DC;
+	Wed, 20 Dec 2023 10:39:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernkonzept.com header.i=@kernkonzept.com header.b="Pm6rYARo"
+	dkim=pass (2048-bit key) header.d=kernkonzept.com header.i=@kernkonzept.com header.b="OzTUXXh1"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx.kernkonzept.com (serv1.kernkonzept.com [159.69.200.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88A80210E9;
-	Wed, 20 Dec 2023 10:57:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8AEE20B03;
+	Wed, 20 Dec 2023 10:38:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kernkonzept.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernkonzept.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=kernkonzept.com; s=mx1; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Reply-To:Content-ID:Content-Description;
-	bh=CsVrMzlnClZBs8fIy1cwy38/3lc5X9yJ6wHcUOPH4WM=; b=Pm6rYARoAbayjWXgboBdqN3rYh
-	NIjefdVbMu0n9vThQoS94qSZ81IT2T4LImMgGMcrvzKTg0QRHQP3jcP78E8IDujY2habqr++Hn26V
-	YWzzF0WraOICVuN1+sYKITJi0rAfy3k0ydmaMiIyG3CgPft4yBR63ysDpBd85woAlFkKKLhTbadWT
-	CIhsH4Lh6PqjDsySHZnbWBTpcVZSJnOvhRkiVpmXqj/DdWLOwFP3TFIIwi7fkVAtRrPwagOLmjdQW
-	hojj4P2XTfUPE1GgYKPk2KGQzG5bgFCdsiSmpqgyemU9JQe6dXrgHBGlw4aYF8fAvZsNSCVtXBZ+G
-	87TvQWiQ==;
-Received: from [10.22.3.24] (helo=kernkonzept.com)
+	d=kernkonzept.com; s=mx1; h=Cc:To:Content-Transfer-Encoding:Content-Type:
+	MIME-Version:Message-Id:Date:Subject:From:References:In-Reply-To:Reply-To:
+	Content-ID:Content-Description;
+	bh=dwDLdd2b/kYUmwZbTEH75R1JJBbL2t9FuMgP4hnOqJU=; b=OzTUXXh13dJxCS6VIBdrsnW+0l
+	e04Vls6Ze0+GEWBmMx4zRVaWqJgocroKuqMGD2t0hCJkSQCXZs1TpG0IvH/76485IYP9mdulpFG2o
+	/8DdNZyZTWpgruNoI2cwAtyd3Tu0/YOZmBohh5A3b7/ONN0qefw0Q9vh+rqjhR5hSByxNuJD1IDKs
+	Pvy1Gf/IGFCmzSH6Bqk9+0i2N9xozECJKNzHU5Mvu2P8DUy2Mtmfaqcg8TnvhjKZ2DPAj1uoPfGD5
+	Q2+p+fpkrV8+gr/norbIH9B7zI6BhRjayEygy50zZhnh4KZlaa2Mblqwq9RuI0gf3peh5LxvQJeDi
+	fpZPml8w==;
+Received: from [10.22.3.24] (helo=serv1.dd1.int.kernkonzept.com)
 	by mx.kernkonzept.com with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim 4.96)
-	id 1rFthn-00DKcd-2H;
-	Wed, 20 Dec 2023 11:21:35 +0100
-Date: Wed, 20 Dec 2023 11:21:30 +0100
+	id 1rFtyY-00DKtz-14;
+	Wed, 20 Dec 2023 11:38:54 +0100
 From: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
-To: Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: Georgi Djakov <djakov@kernel.org>, Andy Gross <agross@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Adam Skladowski <a39.skl@gmail.com>
-Subject: Re: [PATCH 2/2] interconnect: qcom: Add MSM8909 interconnect
+Subject: [PATCH v2 0/2] interconnect: qcom: Add MSM8909 interconnect
  provider driver
-Message-ID: <ZYLAKvXE156fPHJ1@kernkonzept.com>
-References: <20231206-icc-msm8909-v1-0-fe0dd632beff@kernkonzept.com>
- <20231206-icc-msm8909-v1-2-fe0dd632beff@kernkonzept.com>
- <3f921a53-8eac-48e6-be17-43c07a0313d0@linaro.org>
+Date: Wed, 20 Dec 2023 11:38:48 +0100
+Message-Id: <20231220-icc-msm8909-v2-0-3b68bbed2891@kernkonzept.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3f921a53-8eac-48e6-be17-43c07a0313d0@linaro.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADjEgmUC/23MQQ6CMBCF4auQWVtTBlLBFfcwLLTMyITQkpYQl
+ fTuVtYu/5e8b4dIQSjCtdgh0CZRvMuBpwLseHdPUjLkBtRYlaiNEmvVHOem1a261IyNqQ0ztpA
+ fSyCW16Hd+tyjxNWH94Fv5W/972yl0opJD4Op8EHM3UTBTd59aFnP1s/Qp5S+OPuyj6wAAAA=
+To: Georgi Djakov <djakov@kernel.org>
+Cc: Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org, 
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Adam Skladowski <a39.skl@gmail.com>, 
+ Stephan Gerhold <stephan.gerhold@kernkonzept.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.12.4
 
-On Sat, Dec 09, 2023 at 06:54:16PM +0100, Konrad Dybcio wrote:
-> On 6.12.2023 15:35, Stephan Gerhold wrote:
-> > From: Adam Skladowski <a39.skl@gmail.com>
-> > 
-> > Add driver for interconnect busses found in MSM8909 based platforms.
-> > The topology consists of three NoCs that are partially controlled by a
-> > RPM processor.
-> > 
-> > In the downstream/vendor kernel from Qualcomm there is an additional
-> > "mm-snoc". However, it doesn't have a separate RPM clock assigned. It
-> > looks like this is actually the same NoC in hardware and the "mm-snoc"
-> > was only defined to assign a different "qcom,util-fact". In mainline we
-> > can represent this by assigning the equivalent "ab_coeff" to all the
-> > nodes that are part of "mm-snoc" downstream.
-> Worth mentioning that snoc_mm used the same clock as snoc, which is not
-> obvious with some of these older designs:
-> 
-> static DEFINE_CLK_VOTER(snoc_msmbus_a_clk,  &snoc_a_clk.c,  LONG_MAX);
-> static DEFINE_CLK_VOTER(snoc_mm_msmbus_a_clk,  &snoc_a_clk.c,  LONG_MAX);
-> 
+Add bindings and driver for the three MSM8909 NoCs/interconnects:
+BIMC, SNoC and PCNoC. The driver allows scaling the bus bandwidths
+for better power management.
 
-Thanks, will try to clarify this in v2!
+Signed-off-by: Stephan Gerhold <stephan.gerhold@kernkonzept.com>
+---
+Changes in v2:
+- Fix compile error on next (.remove -> .remove_new, kernel test robot)
+- Drop unnecessary headers, in particular of_platform.h (Rob)
+  - Adapted changes from https://lore.kernel.org/linux-arm-msm/20231214-topic-6115iccfix-v1-1-9ad999683a7d@linaro.org/
+- Clarify that snoc-mm downstream uses same clock as snoc (Konrad)
+- Link to v1: https://lore.kernel.org/r/20231206-icc-msm8909-v1-0-fe0dd632beff@kernkonzept.com
 
-> [...]
-> 
-> > +
-> > +static struct platform_driver msm8909_noc_driver = {
-> > +	.probe = qnoc_probe,
-> > +	.remove = qnoc_remove,
-> > +	.driver = {
-> > +		.name = "qnoc-msm8909",
-> > +		.of_match_table = msm8909_noc_of_match,
-> > +		.sync_state = icc_sync_state,
-> > +	},
-> > +};
-> > +module_platform_driver(msm8909_noc_driver);
-> And you may want this to be a bit higher up in the food chain!
+---
+Adam Skladowski (2):
+      dt-bindings: interconnect: Add Qualcomm MSM8909 DT bindings
+      interconnect: qcom: Add MSM8909 interconnect provider driver
 
-I would prefer to keep this as-is for now since this is what it has been
-intensively tested with. I do have a timing issue when interconnect is
-configured for the debug UART, but moving to core_initcall() does not
-help either. It seems like the ICC driver simply cannot be probed
-earlier due to other dependencies, or due to the time the RPM needs
-until it shows up.
+ .../devicetree/bindings/interconnect/qcom,rpm.yaml |    3 +
+ drivers/interconnect/qcom/Kconfig                  |    9 +
+ drivers/interconnect/qcom/Makefile                 |    2 +
+ drivers/interconnect/qcom/msm8909.c                | 1329 ++++++++++++++++++++
+ include/dt-bindings/interconnect/qcom,msm8909.h    |   93 ++
+ 5 files changed, 1436 insertions(+)
+---
+base-commit: 20d857259d7d10cd0d5e8b60608455986167cfad
+change-id: 20231206-icc-msm8909-74f28646ff29
 
-At some point we should do a thorough review of the initcall levels for
-all the Qualcomm-related core drivers and see if and in which cases
-diverting from the defaults actually helps. I would leave this up for
-future work right now, though.
-
-> 
-> Otherwise I don't see anything obviously wrong, I assume you tested
-> this without clk/pd_ignore_unused, with rpmcc cleanup and can confirm
-> the QoS programming went through without angry resets.
-> 
-
-Yes, all of that works in my tests. 🎉
-
-Thanks for the review!
-
+Best regards,
 -- 
 Stephan Gerhold <stephan.gerhold@kernkonzept.com>
 Kernkonzept GmbH at Dresden, Germany, HRB 31129, CEO Dr.-Ing. Michael Hohmuth
+
 
