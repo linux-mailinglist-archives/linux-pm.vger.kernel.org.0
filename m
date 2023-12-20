@@ -1,83 +1,109 @@
-Return-Path: <linux-pm+bounces-1393-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1394-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AE1681985D
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 07:02:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C1348199D4
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 08:48:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 020F91F269E7
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 06:02:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E66211F25BEC
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 07:48:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3203FC06;
-	Wed, 20 Dec 2023 06:02:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Xk7beHXK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C565F16403;
+	Wed, 20 Dec 2023 07:48:25 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from mxout70.expurgate.net (mxout70.expurgate.net [194.37.255.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6331516403;
-	Wed, 20 Dec 2023 06:02:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=V2XLrvBNlSvWfWER+NFbcM1HOV3BBjacqgahQWtCuOM=; b=Xk7beHXKtJ6Wz9V6Fw3nuUGOED
-	UFmT6F7UO9YDBALVRzKcbM3UMF6Kc/0z5AESygtNhc2dqThgxkqV6lvphbtUCOGZtLMA4wQ95OoAa
-	fhT7juFXJ7nCATsKlitGecglDtMkQiT55Qm31aRpgNEoLDtxVsFWyj3WoREU00pRg/0DrVGLwEfji
-	pTn/539nYu5tSRR9MSAHxPJhBO9XhqxXiD9HOCpUi6Bt+6ryrFEFXlPKL3Y+7EjXpJBBVHkMGyTko
-	2V9/MZgBYT29fy4RoZVySi9zIwAeuxfYJK5k7KCcl/OhdUuiOszeDlh7ieWzo2oQjU+myJ75HyOrJ
-	ECD83tsw==;
-Received: from [50.53.46.231] (helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1rFpfK-00GF2z-26;
-	Wed, 20 Dec 2023 06:02:46 +0000
-From: Randy Dunlap <rdunlap@infradead.org>
-To: linux-kernel@vger.kernel.org
-Cc: Randy Dunlap <rdunlap@infradead.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>,
-	Len Brown <len.brown@intel.com>,
-	linux-pm@vger.kernel.org
-Subject: [PATCH] PM: hibernate: repair Excess function parameter warning
-Date: Tue, 19 Dec 2023 22:02:46 -0800
-Message-ID: <20231220060246.511-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.43.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F4631863B;
+	Wed, 20 Dec 2023 07:48:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dev.tdt.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dev.tdt.de
+Received: from [127.0.0.1] (helo=localhost)
+	by relay.expurgate.net with smtp (Exim 4.92)
+	(envelope-from <prvs=27325e8b39=fe@dev.tdt.de>)
+	id 1rFr2f-001Wsk-7a; Wed, 20 Dec 2023 08:30:57 +0100
+Received: from [195.243.126.94] (helo=securemail.tdt.de)
+	by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <fe@dev.tdt.de>)
+	id 1rFr2e-00842a-BG; Wed, 20 Dec 2023 08:30:56 +0100
+Received: from securemail.tdt.de (localhost [127.0.0.1])
+	by securemail.tdt.de (Postfix) with ESMTP id E820C24004B;
+	Wed, 20 Dec 2023 08:30:55 +0100 (CET)
+Received: from mail.dev.tdt.de (unknown [10.2.4.42])
+	by securemail.tdt.de (Postfix) with ESMTP id 68382240049;
+	Wed, 20 Dec 2023 08:30:55 +0100 (CET)
+Received: from mail.dev.tdt.de (localhost [IPv6:::1])
+	by mail.dev.tdt.de (Postfix) with ESMTP id BBD262230F;
+	Wed, 20 Dec 2023 08:30:54 +0100 (CET)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date: Wed, 20 Dec 2023 08:30:54 +0100
+From: Florian Eckert <fe@dev.tdt.de>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Eckert.Florian@googlemail.com, rafael@kernel.org, rui.zhang@intel.com,
+ lukasz.luba@arm.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tools/thermal/tmon: Fix compilation warning for wrong
+ format
+In-Reply-To: <6dbed9d3-abfe-476c-a771-10a5e70bb87c@linaro.org>
+References: <20231204141335.2798194-1-fe@dev.tdt.de>
+ <6dbed9d3-abfe-476c-a771-10a5e70bb87c@linaro.org>
+Message-ID: <6a9f55419ee05ba44ef40430e7a16ac4@dev.tdt.de>
+X-Sender: fe@dev.tdt.de
+User-Agent: Roundcube Webmail/1.3.17
+X-purgate-ID: 151534::1703057456-71B3339C-00D76D5A/0/0
+X-purgate-type: clean
+X-purgate: clean
 
-Function swsusp_close() does not have any parameters, so remove the
-description of parameter @exclusive to prevent this warning.
 
-swap.c:1573: warning: Excess function parameter 'exclusive' description in 'swsusp_close'
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Len Brown <len.brown@intel.com>
-Cc: linux-pm@vger.kernel.org
----
- kernel/power/swap.c |    1 -
- 1 file changed, 1 deletion(-)
+On 2023-12-19 19:12, Daniel Lezcano wrote:
+> On 04/12/2023 15:13, Florian Eckert wrote:
+>> The following warnings are shown during compilation:
+>> 
+>> tui.c: In function 'show_cooling_device':
+>>   tui.c:216:40: warning: format '%d' expects argument of type 'int', 
+>> but
+>> argument 7 has type 'long unsigned int' [-Wformat=]
+>>     216 |                         "%02d %12.12s%6d %6d",
+>>         |                                      ~~^
+>>         |                                        |
+>>         |                                        int
+>>         |                                      %6ld
+>>   ......
+>>     219 |                         ptdata.cdi[j].cur_state,
+>>         |                         ~~~~~~~~~~~~~~~~~~~~~~~
+>>         |                                      |
+>>         |                                      long unsigned int
+>>   tui.c:216:44: warning: format '%d' expects argument of type 'int', 
+>> but
+>> argument 8 has type 'long unsigned int' [-Wformat=]
+>>     216 |                         "%02d %12.12s%6d %6d",
+>>         |                                          ~~^
+>>         |                                            |
+>>         |                                            int
+>>         |                                          %6ld
+>>   ......
+>>     220 |                         ptdata.cdi[j].max_state);
+>>         |                         ~~~~~~~~~~~~~~~~~~~~~~~
+>>         |                                      |
+>>         |                                      long unsigned int
+>> 
+>> To fix this, the correct string format must be used for printing.
+>> 
+>> Signed-off-by: Florian Eckert <fe@dev.tdt.de>
+>> ---
+> 
+> Applied, thanks
 
-diff -- a/kernel/power/swap.c b/kernel/power/swap.c
---- a/kernel/power/swap.c
-+++ b/kernel/power/swap.c
-@@ -1566,7 +1566,6 @@ put:
- 
- /**
-  * swsusp_close - close resume device.
-- * @exclusive: Close the resume device which is exclusively opened.
-  */
- 
- void swsusp_close(void)
+Thanks :+1:
 
