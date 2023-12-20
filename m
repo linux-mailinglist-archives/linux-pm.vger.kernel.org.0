@@ -1,145 +1,137 @@
-Return-Path: <linux-pm+bounces-1431-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1432-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44F2781A25B
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 16:27:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 677B981A451
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 17:19:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE6481F21246
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 15:27:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 943E01C24FBB
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 16:19:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 496AA40BE7;
-	Wed, 20 Dec 2023 15:25:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZfIbUWkn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B16D4B125;
+	Wed, 20 Dec 2023 16:13:01 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D7D40BEF;
-	Wed, 20 Dec 2023 15:25:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-40c3fe6c1b5so62921835e9.2;
-        Wed, 20 Dec 2023 07:25:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1703085953; x=1703690753; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uS6w3rNmw0cdtYnw4LMSsxjjgZzl4QPxrmb81MWLsvk=;
-        b=ZfIbUWknOEot2+Xgy5pP2CIdtrldY5SLtigTqyJUjFcQhCKI6PHfP/Nk4YRTTqgu0A
-         6fvJ4qV3g8g9KkOJLbliw0mhekLwKaOftqKP+sp+U7bRC528AKzDb2QfH57rKSQha7FY
-         41YaAYEqRndgkaD0StqpSpiBGlF8U62wZay3rM4yVigcCocH3TWU5G1vFftJnXz385iB
-         Mcw6rJs1wLFxCvJV1sCM1x5VAXQXk9BfG0xUJp9JMh0qrcxP77DEXJliU67w0UJPXFpF
-         o+wIjCuKnB/tTryCJsfq2+ggef945gZRm/zDkmtj3bAKK+hQpzTKifEOIyrT/wrBUtlA
-         RP6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703085953; x=1703690753;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uS6w3rNmw0cdtYnw4LMSsxjjgZzl4QPxrmb81MWLsvk=;
-        b=gyC+3x24Mc+SiQgDtYYRzm4PcbgU9qQCHXE8fBUTTRkKwPpEAVWZQ1mwx92FkrOyB1
-         YtyKxE2nV7eaE/xCZQSsA6kyORDr4P9kFMZlzm0wddfB4xzgha1HcDKx3Tx5+iaJ6nlO
-         2FTN2v8pyi+ff/PHvwpLqXbMqYAypAdb1SNrmOC5sgVg8bw6Qo4maLZi7Q6wBWy8viyg
-         WdGJBwYTJ0uqcj953XiSvStK31dXWXN6sc5LXNwtFGaoHK5YlCJzzFIukm8/DR7x4wat
-         XKU69GDruKsScMiU9SjpWPhJlHYvCqf3cUBRZ2n0v5dngHIDYsc/iCbesuEuEEfIT2to
-         5WJw==
-X-Gm-Message-State: AOJu0YzL29/muuddjzvhTWhZr5+iPGHV0ZRDXpX4hKgWDluReukUQdDH
-	y8ILUql++4HWAXCib4dQ7aM=
-X-Google-Smtp-Source: AGHT+IGqN3fsaKks2Cw8XAX/rXbmEt1dkYX1uzdoef3zSrDXFU1J51FjOJPUUlBcU0nkMxM5sTgiRQ==
-X-Received: by 2002:a05:600c:5d5:b0:40c:34e1:72e5 with SMTP id p21-20020a05600c05d500b0040c34e172e5mr9978141wmd.69.1703085953376;
-        Wed, 20 Dec 2023 07:25:53 -0800 (PST)
-Received: from jernej-laptop.localnet (82-149-12-148.dynamic.telemach.net. [82.149.12.148])
-        by smtp.gmail.com with ESMTPSA id l2-20020a05600c4f0200b003feae747ff2sm7858073wmq.35.2023.12.20.07.25.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Dec 2023 07:25:53 -0800 (PST)
-From: Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To: Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
- Yangtao Li <tiny.windzz@gmail.com>, "Rafael J . Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- Brandon Cheo Fusi <fusibrandon13@gmail.com>
-Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-sunxi@lists.linux.dev, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- Brandon Cheo Fusi <fusibrandon13@gmail.com>
-Subject: Re: [RFC PATCH 2/2] riscv: dts: allwinner: Fill in OPPs
-Date: Wed, 20 Dec 2023 16:25:50 +0100
-Message-ID: <113541315.nniJfEyVGO@jernej-laptop>
-In-Reply-To: <20231220095141.27883-3-fusibrandon13@gmail.com>
-References:
- <20231220095141.27883-1-fusibrandon13@gmail.com>
- <20231220095141.27883-3-fusibrandon13@gmail.com>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5023A4CE0D;
+	Wed, 20 Dec 2023 16:12:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8A0722F4;
+	Wed, 20 Dec 2023 08:13:43 -0800 (PST)
+Received: from [10.57.82.217] (unknown [10.57.82.217])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C384D3F64C;
+	Wed, 20 Dec 2023 08:12:57 -0800 (PST)
+Message-ID: <489ff972-272a-4038-b455-383fcbaa251d@arm.com>
+Date: Wed, 20 Dec 2023 16:14:04 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 8/8] thermal: gov_power_allocator: Support new update
+ callback of weights
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
+ linux-pm@vger.kernel.org, rui.zhang@intel.com
+References: <20231212134844.1213381-1-lukasz.luba@arm.com>
+ <20231212134844.1213381-9-lukasz.luba@arm.com>
+ <CAJZ5v0gEFNhPYh8MdG6JPaXC0XggvyED+0QDuV+aLa5vASzhhA@mail.gmail.com>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAJZ5v0gEFNhPYh8MdG6JPaXC0XggvyED+0QDuV+aLa5vASzhhA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Dne sreda, 20. december 2023 ob 10:51:41 CET je Brandon Cheo Fusi napisal(a):
-> Specifies two voltage ranges, in order of increasing stability,
-> for each OPP. This is heavily inspired by
+Hi Rafael,
+
+On 12/20/23 14:59, Rafael J. Wysocki wrote:
+> On Tue, Dec 12, 2023 at 2:48 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>> When the thermal instance's weight is updated from the sysfs the governor
+>> update_tz() callback is triggered. Implement proper reaction to this
+>> event in the IPA, which would save CPU cycles spent in throttle().
+>> This will speed-up the main throttle() IPA function and clean it up
+>> a bit.
+>>
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   drivers/thermal/gov_power_allocator.c | 15 +++++++++------
+>>   1 file changed, 9 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+>> index 574aa5822112..a9f1549e6355 100644
+>> --- a/drivers/thermal/gov_power_allocator.c
+>> +++ b/drivers/thermal/gov_power_allocator.c
+>> @@ -61,6 +61,7 @@ static inline s64 div_frac(s64 x, s64 y)
+>>    *                     @trip_switch_on should be NULL.
+>>    * @trip_max:          last passive trip point of the thermal zone. The
+>>    *                     temperature we are controlling for.
+>> + * @total_weight:      Sum of all thermal instances weights
+>>    * @num_actors:                number of cooling devices supporting IPA callbacks
+>>    * @buffer_size:       IPA internal buffer size
+>>    * @req_power:         IPA buffer for requested power
+>> @@ -76,6 +77,7 @@ struct power_allocator_params {
+>>          u32 sustainable_power;
+>>          const struct thermal_trip *trip_switch_on;
+>>          const struct thermal_trip *trip_max;
+>> +       int total_weight;
+>>          int num_actors;
+>>          int buffer_size;
+>>          u32 *req_power;
+>> @@ -403,16 +405,11 @@ static int allocate_power(struct thermal_zone_device *tz, int control_temp)
+>>          u32 total_req_power = 0;
+>>          u32 *weighted_req_power;
+>>          u32 power_range, weight;
+>> -       int total_weight = 0;
+>>          int i = 0;
+>>
+>>          if (!params->num_actors)
+>>                  return -ENODEV;
+>>
+>> -       list_for_each_entry(instance, &tz->thermal_instances, tz_node)
+>> -               if (power_actor_is_valid(params, instance))
+>> -                       total_weight += instance->weight;
+>> -
+>>          /* Clean all buffers for new power estimations */
+>>          memset(params->req_power, 0, params->buffer_size);
+>>
+>> @@ -430,7 +427,7 @@ static int allocate_power(struct thermal_zone_device *tz, int control_temp)
+>>                  if (cdev->ops->get_requested_power(cdev, &req_power[i]))
+>>                          continue;
+>>
+>> -               if (!total_weight)
+>> +               if (!params->total_weight)
+>>                          weight = 1 << FRAC_BITS;
+>>                  else
+>>                          weight = instance->weight;
+>> @@ -666,6 +663,12 @@ static void power_allocator_update_tz(struct thermal_zone_device *tz,
+>>
+>>                  allocate_actors_buffer(params, num_actors);
+>>                  break;
+>> +       case THERMAL_INSTANCE_WEIGHT_UPDATE:
+>> +               params->total_weight = 0;
+>> +               list_for_each_entry(instance, &tz->thermal_instances, tz_node)
+>> +                       if (power_actor_is_valid(params, instance))
+>> +                               params->total_weight += instance->weight;
+>> +               break;
+>>          default:
+>>                  break;
+>>          }
+>> --
 > 
-> https://github.com/Tina-Linux/linux-5.4/blob/master/arch/riscv/boot/dts/sunxi/sun20iw1p1.dtsi#L118-L133
-> 
-> and
-> 
-> https://github.com/mangopi-sbc/tina-linux-5.4/blob/0d4903ebd9d2194ad914686d5b0fc1ddacf11a9d/arch/riscv/boot/dts/sunxi/sun20iw1p1.dtsi#L118-L182
+> This one looks good to me, but if you decide to follow my advice from
+> the previous comments, it will need to be adjusted.
 
-Remove links from message. If you really want them, add Link tag for each.
+Yes, I will follow your recommendations, so this will be adjusted.
 
-> 
-> Signed-off-by: Brandon Cheo Fusi <fusibrandon13@gmail.com>
-> ---
->  arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi b/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
-> index 2f1771c19..8e7bc8bd0 100644
-> --- a/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
-> +++ b/arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
-> @@ -48,13 +48,17 @@ opp_table_cpu: opp-table-cpu {
->  		opp-408000000 {
->  			clock-latency-ns = <244144>; /* 8 32k periods */
->  			opp-hz = /bits/ 64 <408000000>;
-> -			opp-microvolt-speed0 = <900000 900000 1100000>;
-> +
-> +			opp-microvolt-speed0 = <950000 900000 1100000>;
+Thank you for the review. I will respond to your other comments in
+patches as well.
 
-Second value should be same as first, otherwise you'll experience stability issue.
-
-> +			opp-microvolt-speed1 = <900000 900000 1100000>;
->  		};
->  
->  		opp-1080000000 {
->  			clock-latency-ns = <244144>; /* 8 32k periods */
->  			opp-hz = /bits/ 64 <1008000000>;
-> -			opp-microvolt-speed0 = <900000 900000 1100000>;
-> +
-> +			opp-microvolt-speed0 = <1100000 900000 1100000>;
-
-Ditto.
-
-Best regards,
-Jernej
-
-> +			opp-microvolt-speed1 = <950000 900000 1100000>;
->  		};
->  	};
->  
-> 
-
-
-
-
+Regards,
+Lukasz
 
