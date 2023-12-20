@@ -1,188 +1,130 @@
-Return-Path: <linux-pm+bounces-1423-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1424-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BDE281A046
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 14:51:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E0D281A0B7
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 15:08:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD3132839DF
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 13:51:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A97EA1C21BED
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 14:08:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79AC6347B0;
-	Wed, 20 Dec 2023 13:51:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 194E037D18;
+	Wed, 20 Dec 2023 14:08:13 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 133AD38DD8;
-	Wed, 20 Dec 2023 13:51:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAF7038DD9;
+	Wed, 20 Dec 2023 14:08:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-6da6576064dso1009890a34.1;
-        Wed, 20 Dec 2023 05:51:19 -0800 (PST)
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-6d9db2f1ddfso1445981a34.0;
+        Wed, 20 Dec 2023 06:08:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703080279; x=1703685079;
+        d=1e100.net; s=20230601; t=1703081290; x=1703686090;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=m2lU+eMx3+kOMFg1wDlc+9EMfswuKkS1DBslLLWNXWE=;
-        b=h9FPeVoNAnCGg+nh8e4CO6zTeCyoekXFCSW7JNrBsvIgx0NYfHBW7vY8k9Ym1Ln+lY
-         OlpoMkV2DtAIMi+AJhgrdKROoSo+iA+I0/c0PDtZjaikVicvX0n2KA+/RBY+glJTFJn1
-         4L3APLr5NAKE8NMKZKjrZNiIoMhj4T/vqKonnBeIaxOC0+hPTXh20aPQLH4f9sBsTYMQ
-         nL6I2zsegWK2rbmsGI9Zrx7X681Fg0Ylk4chSRmHMaTvoUOVbdOabGVj0oh8SgNfoeaV
-         lkxSdEHCTdp8OTXqzCvykk53jdxGoF+ed73OCMA36SxOEpSdEb/8DapHkpCEb7gM0AEw
-         x54A==
-X-Gm-Message-State: AOJu0Yz66x3L74bDRqPJSNVg3fdrpk6Kg/9cKZq5oqOObxNM0PDFthaG
-	C7c9vM47QxKla9PzfP3wfIPt4kc0DtGCtvvi+Kk=
-X-Google-Smtp-Source: AGHT+IE2325k4JDGlJJwoytkERkv8LDhLcy0rhdfXp0W2j5XnLlymgPbXD0ZO/MRtZcXLZt9f3yWuw4cArCMsjf/wfI=
-X-Received: by 2002:a05:6870:b028:b0:1fb:e5f:c530 with SMTP id
- y40-20020a056870b02800b001fb0e5fc530mr35863963oae.4.1703080279087; Wed, 20
- Dec 2023 05:51:19 -0800 (PST)
+        bh=5XhtQFN3mZQ/Dw8ZbAdKZYMHrSfvWlcNoVNMZmYn47s=;
+        b=KJCaxSjYaT3s3lB6bUtmnp6DRV+Z7QDmaHrHYoh71pR5IAplMqstPzbTP8tsrRO5xR
+         bXCsR5G+BsYjSukiTHxiCzTsX/a16opPlGzH19NTTSf1c3HG093V0JOfX3aW/NakUXzs
+         wzfLpegaUCdzoB0hVT85hyufsSBxHpf1IBsFO1CkthW9KEeHXZyZi+wb+zW5+FRfP6XY
+         DVLqE5wqLqYLsO3aJvz+7+wnXi8SNuDF9pzA+t2L095oJ/gUFMnYO5ONLBWYoLP0XX28
+         /hea+5IjAUs0AMmJVpQp36Dat1Q266WZIisNsFPZO0Bcw33IGRAxlmtJw+sI4+hqOzN1
+         2fEg==
+X-Gm-Message-State: AOJu0YzxS38D7GKl4SMfK1gF+kaeGEwYH0z5nBudtHgZOGVOVWSYf7ph
+	5xBY+Ff9Su34eyUIbV+vlJMumYSyeyICk+mYz4Y=
+X-Google-Smtp-Source: AGHT+IFzmOJOqjqOBRB6g1dbVELMhLRT7SmkuthyUaBl0tQTEwy7ae4sETVM4yefl7ZPhZN8oi4e9LW1+P0hQXN0RH4=
+X-Received: by 2002:a4a:b141:0:b0:591:c8cd:a13a with SMTP id
+ e1-20020a4ab141000000b00591c8cda13amr11108064ooo.0.1703081290634; Wed, 20 Dec
+ 2023 06:08:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231212134844.1213381-1-lukasz.luba@arm.com> <20231212134844.1213381-2-lukasz.luba@arm.com>
-In-Reply-To: <20231212134844.1213381-2-lukasz.luba@arm.com>
+References: <20231206113138.3576492-1-lukasz.luba@arm.com> <20231206113138.3576492-3-lukasz.luba@arm.com>
+In-Reply-To: <20231206113138.3576492-3-lukasz.luba@arm.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 20 Dec 2023 14:51:07 +0100
-Message-ID: <CAJZ5v0iFOrgtN82pqUqDhE1jMA4wjhH19DFhzPP3yYO05O03=g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/8] thermal: core: Add governor callback for thermal
- zone change
+Date: Wed, 20 Dec 2023 15:07:59 +0100
+Message-ID: <CAJZ5v0jSt87KXB0HPXhc+T05K0FgQNKzrNVj4NqYJ+a_WCJbWw@mail.gmail.com>
+Subject: Re: [PATCH 2/5] thermal: gov_power_allocator: Refactor check_power_actors()
 To: Lukasz Luba <lukasz.luba@arm.com>
 Cc: linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org, rafael@kernel.org, 
 	linux-pm@vger.kernel.org, rui.zhang@intel.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 12, 2023 at 2:48=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> w=
+On Wed, Dec 6, 2023 at 12:30=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> w=
 rote:
 >
-> Add a new callback which can update governors when there is a change in
-> the thermal zone internals, e.g. thermal cooling instance list changed.
+> Refactor check_power_actors() to make it possible for re-use in the
+> upcoming new callback.
 
-I would say what struct type the callback is going to be added to.
-
-> That makes possible to move some heavy operations like memory allocations
-> related to the number of cooling instances out of the throttle() callback=
-.
+I would say "In preparation for a subsequent change, rearrange
+check_power_actors()".
 >
-> Reuse the 'enum thermal_notify_event' and extend it with a new event:
-> THERMAL_INSTANCE_LIST_UPDATE.
-
-I think that this is a bit too low-level (see below).
-
-> Both callback code paths (throttle() and update_tz()) are protected with
-> the same thermal zone lock, which guaranties the consistency.
+> No intentional functional impact.
 >
 > Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 > ---
->  drivers/thermal/thermal_core.c | 13 +++++++++++++
->  include/linux/thermal.h        |  5 +++++
->  2 files changed, 18 insertions(+)
+>  drivers/thermal/gov_power_allocator.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
 >
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_cor=
-e.c
-> index 625ba07cbe2f..592c956f6fd5 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -314,6 +314,14 @@ static void handle_non_critical_trips(struct thermal=
-_zone_device *tz,
->                        def_governor->throttle(tz, trip);
->  }
->
+> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_=
+power_allocator.c
+> index 785fff14223d..38e1e89ba10c 100644
+> --- a/drivers/thermal/gov_power_allocator.c
+> +++ b/drivers/thermal/gov_power_allocator.c
+> @@ -581,8 +581,9 @@ static void allow_maximum_power(struct thermal_zone_d=
+evice *tz, bool update)
+>   * power actor API. The warning should help to investigate the issue, wh=
+ich
+>   * could be e.g. lack of Energy Model for a given device.
+>   *
+> - * Return: 0 on success, -EINVAL if any cooling device does not implemen=
+t
+> - * the power actor API.
+> + * Return number of cooling devices or -EINVAL if any cooling device doe=
+s not
+> + * implement the power actor API. Return value 0 is also valid since coo=
+ling
+> + * devices might be attached later.
 
-I needed a bit more time to think about this.
+I would say "If all of the cooling devices currently attached to @tz
+implement the power actor API, return the number of them (which may be
+0, because some cooling devices may be attached later).  Otherwise,
+return -EINVAL."
 
-> +static void handle_instances_list_update(struct thermal_zone_device *tz)
-> +{
-> +       if (!tz->governor || !tz->governor->update_tz)
-> +               return;
-> +
-> +       tz->governor->update_tz(tz, THERMAL_INSTANCE_LIST_UPDATE);
-> +}
-
-So I would call the above something more generic, like
-thermal_governor_update_tz() and I would pass the "reason" argument to
-it.
-
-> +
->  void thermal_zone_device_critical(struct thermal_zone_device *tz)
->  {
->         /*
-> @@ -723,6 +731,8 @@ int thermal_bind_cdev_to_trip(struct thermal_zone_dev=
-ice *tz,
->                 list_add_tail(&dev->tz_node, &tz->thermal_instances);
->                 list_add_tail(&dev->cdev_node, &cdev->thermal_instances);
->                 atomic_set(&tz->need_update, 1);
-> +
-> +               handle_instances_list_update(tz);
-
-In particular for this, I would use a special "reason" value, like
-THERMAL_TZ_BIND_CDEV.
-
-Yes, the list of instances will change as a result of the binding, but
-that is an internal detail specific to the current implementation.
-
->         }
->         mutex_unlock(&cdev->lock);
->         mutex_unlock(&tz->lock);
-> @@ -781,6 +791,9 @@ int thermal_unbind_cdev_from_trip(struct thermal_zone=
-_device *tz,
->                 if (pos->tz =3D=3D tz && pos->trip =3D=3D trip && pos->cd=
-ev =3D=3D cdev) {
->                         list_del(&pos->tz_node);
->                         list_del(&pos->cdev_node);
-> +
-> +                       handle_instances_list_update(tz);
-
-Analogously, I'd use something like THERMAL_TZ_UNBIND_CDEV here.
-
-> +
->                         mutex_unlock(&cdev->lock);
->                         mutex_unlock(&tz->lock);
->                         goto unbind;
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index c7190e2dfcb4..9fd0d3fb234a 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -51,6 +51,7 @@ enum thermal_notify_event {
->         THERMAL_DEVICE_POWER_CAPABILITY_CHANGED, /* power capability chan=
-ged */
->         THERMAL_TABLE_CHANGED, /* Thermal table(s) changed */
->         THERMAL_EVENT_KEEP_ALIVE, /* Request for user space handler to re=
-spond */
-> +       THERMAL_INSTANCE_LIST_UPDATE, /* List of thermal instances change=
-d */
-
-So I would add THERMAL_TZ_BIND_CDEV and THERMAL_TZ_UNBIND_CDEV to the list.
-
->  };
->
->  /**
-> @@ -195,6 +196,8 @@ struct thermal_zone_device {
->   *                     thermal zone.
->   * @throttle:  callback called for every trip point even if temperature =
-is
->   *             below the trip point temperature
-> + * @update_tz: callback called when thermal zone internals have changed,=
- e.g.
-> + *             thermal cooling instance was added/removed
->   * @governor_list:     node in thermal_governor_list (in thermal_core.c)
 >   */
->  struct thermal_governor {
-> @@ -203,6 +206,8 @@ struct thermal_governor {
->         void (*unbind_from_tz)(struct thermal_zone_device *tz);
->         int (*throttle)(struct thermal_zone_device *tz,
->                         const struct thermal_trip *trip);
-> +       void (*update_tz)(struct thermal_zone_device *tz,
-> +                         enum thermal_notify_event reason);
->         struct list_head        governor_list;
->  };
+>  static int check_power_actors(struct thermal_zone_device *tz,
+>                               struct power_allocator_params *params)
+> @@ -597,8 +598,9 @@ static int check_power_actors(struct thermal_zone_dev=
+ice *tz,
+>                 if (!cdev_is_power_actor(instance->cdev)) {
+>                         dev_warn(&tz->device, "power_allocator: %s is not=
+ a power actor\n",
+>                                  instance->cdev->type);
+> -                       ret =3D -EINVAL;
+> +                       return -EINVAL;
+>                 }
+> +               ret++;
+>         }
 >
+>         return ret;
+> @@ -631,7 +633,7 @@ static int power_allocator_bind(struct thermal_zone_d=
+evice *tz)
+>         }
+>
+>         ret =3D check_power_actors(tz, params);
+> -       if (ret) {
+> +       if (ret < 0) {
+>                 dev_warn(&tz->device, "power_allocator: binding failed\n"=
+);
+>                 kfree(params);
+>                 return ret;
 > --
 
