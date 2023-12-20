@@ -1,140 +1,188 @@
-Return-Path: <linux-pm+bounces-1422-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1423-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FE6481A01B
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 14:46:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BDE281A046
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 14:51:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE3301F256F5
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 13:46:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD3132839DF
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 13:51:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C9DF2D633;
-	Wed, 20 Dec 2023 13:46:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="esTol5AA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79AC6347B0;
+	Wed, 20 Dec 2023 13:51:21 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B46B42574F;
-	Wed, 20 Dec 2023 13:46:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BC90A20008;
-	Wed, 20 Dec 2023 13:46:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1703080001;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2UdwF1Rjcv1TKOg33yHMjjbxn0Z7BKkWICiZ67r61hM=;
-	b=esTol5AAWX5bDskH5pub/LxILQiWTedAKsAT9CGjYD0I7f54SKWg/H4R+0RW1Cg8FrbHzs
-	SQJNtI5USdXeAZPMm1rt40n8FKGwhD4CueKisXGdFYky8YVptjTfeoo0xq0yOZDrSvpvQc
-	YAtvmm2TBHhUx7y35rSddoTozFftOhr88ux+oKNn7LFjgOR8o5kcb3sYgHbZvmJ8RqDp1S
-	HnkMnGr07e4Qm95aoUV4LXzngihtsJWIKHSG82+uWiVFMfUqIU4A08gulkfHAAQSRIGE0q
-	iIG8Zd8v6+AkTQ2BkOVMCwZ9H06asPsLQyQrpmlRD1a3cbLvWfDTC9LvNa53Nw==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 133AD38DD8;
+	Wed, 20 Dec 2023 13:51:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-6da6576064dso1009890a34.1;
+        Wed, 20 Dec 2023 05:51:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703080279; x=1703685079;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m2lU+eMx3+kOMFg1wDlc+9EMfswuKkS1DBslLLWNXWE=;
+        b=h9FPeVoNAnCGg+nh8e4CO6zTeCyoekXFCSW7JNrBsvIgx0NYfHBW7vY8k9Ym1Ln+lY
+         OlpoMkV2DtAIMi+AJhgrdKROoSo+iA+I0/c0PDtZjaikVicvX0n2KA+/RBY+glJTFJn1
+         4L3APLr5NAKE8NMKZKjrZNiIoMhj4T/vqKonnBeIaxOC0+hPTXh20aPQLH4f9sBsTYMQ
+         nL6I2zsegWK2rbmsGI9Zrx7X681Fg0Ylk4chSRmHMaTvoUOVbdOabGVj0oh8SgNfoeaV
+         lkxSdEHCTdp8OTXqzCvykk53jdxGoF+ed73OCMA36SxOEpSdEb/8DapHkpCEb7gM0AEw
+         x54A==
+X-Gm-Message-State: AOJu0Yz66x3L74bDRqPJSNVg3fdrpk6Kg/9cKZq5oqOObxNM0PDFthaG
+	C7c9vM47QxKla9PzfP3wfIPt4kc0DtGCtvvi+Kk=
+X-Google-Smtp-Source: AGHT+IE2325k4JDGlJJwoytkERkv8LDhLcy0rhdfXp0W2j5XnLlymgPbXD0ZO/MRtZcXLZt9f3yWuw4cArCMsjf/wfI=
+X-Received: by 2002:a05:6870:b028:b0:1fb:e5f:c530 with SMTP id
+ y40-20020a056870b02800b001fb0e5fc530mr35863963oae.4.1703080279087; Wed, 20
+ Dec 2023 05:51:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20231212134844.1213381-1-lukasz.luba@arm.com> <20231212134844.1213381-2-lukasz.luba@arm.com>
+In-Reply-To: <20231212134844.1213381-2-lukasz.luba@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 20 Dec 2023 14:51:07 +0100
+Message-ID: <CAJZ5v0iFOrgtN82pqUqDhE1jMA4wjhH19DFhzPP3yYO05O03=g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/8] thermal: core: Add governor callback for thermal
+ zone change
+To: Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org, rafael@kernel.org, 
+	linux-pm@vger.kernel.org, rui.zhang@intel.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 20 Dec 2023 14:46:39 +0100
-Message-Id: <CXT7H2RTWJLL.11PFC2VV861BW@bootlin.com>
-To: "Thomas Richard" <thomas.richard@bootlin.com>, "Tony Lindgren"
- <tony@atomide.com>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: omap-i2c: runtime pm issue during suspend to ram
-Cc: <linux-pm@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
- <linux-omap@vger.kernel.org>, "Vignesh Raghavendra" <vigneshr@ti.com>,
- "Kevin Hilman" <khilman@kernel.org>, "Gregory CLEMENT"
- <gregory.clement@bootlin.com>, "Kumar Udit" <u-kumar1@ti.com>
-X-Mailer: aerc 0.15.2
-References: <f68c9a54-0fde-4709-9d2f-0d23a049341b@bootlin.com>
- <4c31acd8-4edb-44f5-9a90-cb2f2dc530b6@bootlin.com>
- <20231220111415.GZ5166@atomide.com>
- <7b743758-fbc1-4cad-bfbc-d3fd3e69ce17@bootlin.com>
-In-Reply-To: <7b743758-fbc1-4cad-bfbc-d3fd3e69ce17@bootlin.com>
-X-GND-Sasl: theo.lebrun@bootlin.com
 
-Hello,
+On Tue, Dec 12, 2023 at 2:48=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> w=
+rote:
+>
+> Add a new callback which can update governors when there is a change in
+> the thermal zone internals, e.g. thermal cooling instance list changed.
 
-On Wed Dec 20, 2023 at 12:36 PM CET, Thomas Richard wrote:
-> On 12/20/23 12:14, Tony Lindgren wrote:
-> > * Thomas Richard <thomas.richard@bootlin.com> [231220 10:50]:
-> >> On 12/19/23 18:15, Thomas Richard wrote:
-> >>> Hello,
-> >>
-> >> I add some people in this thread.
-> >>
-> >>>
-> >>> I have a gpio expander (pca953x driver) connected to an i2c controlle=
-r
-> >>> managed by the omap-i2c driver.
-> >>> And I have some issues with pm_runtime_force_suspend/resume during
-> >>> suspend to ram.
-> >>> For some reasons, related to hardware design, I need to access to thi=
-s
-> >>> gpio expander during suspend_noirq and resume_noirq. So I had to move
-> >>> the suspend/resume of the pca953x to suspend_noirq/resume_noirq.
-> >=20
-> > Hmm at noirq level you need to do polling on the i2c controller?
->
-> Hello Tony,
->
-> Thanks for your reply.
->
-> No, irq is still active in suspend_noirq for this i2c controller due to
-> the flag IRQF_NO_SUSPEND [1].
-> If this flag is set, the interrupt is still enabled in suspend_noirq [2].
->
-> [1]
-> https://elixir.bootlin.com/linux/v6.7-rc6/source/drivers/i2c/busses/i2c-o=
-map.c#L1473
-> [2]
-> https://www.kernel.org/doc/html/latest/power/suspend-and-interrupts.html#=
-the-irqf-no-suspend-flag
->
-> >=20
-> >>> diff --git a/drivers/i2c/busses/i2c-omap.c b/drivers/i2c/busses/i2c-o=
-map.c
-> >>> index 42165ef57946..fe79b27b46fd 100644
-> >>> --- a/drivers/i2c/busses/i2c-omap.c
-> >>> +++ b/drivers/i2c/busses/i2c-omap.c
-> >>> @@ -1575,9 +1575,24 @@ static int __maybe_unused
-> >>> omap_i2c_runtime_resume(struct device *dev)
-> >>>         return 0;
-> >>>  }
-> >>>
-> >>> +static int omap_i2c_suspend(struct device *dev)
-> >>> +{
-> >>> +       pm_runtime_get_sync(dev);
-> >>> +       pm_runtime_disable(dev);
-> >>> +       return 0;
-> >>> +}
-> >=20
-> > If you want the i2c controller enabled during suspend, you can leave it
-> > enabled above, and as we already have SET_NOIRQ_SYSTEM_SLEEP_PM_OPS
-> > doing force_suspend() and force_resume(), you can runtime PM put on
-> > resume. So something like below might do the trick:
->
-> Ok I'll test it. Thanks
+I would say what struct type the callback is going to be added to.
 
-The issue with this approach is that it requires knowing at suspend-time
-if the controller will be used at resume_noirq-time. Ideally the
-controller's behavior would not be modified until a xfer is done at
-resume_noirq time. There are many platforms that use this driver that
-probably don't need the controller woken up.
+> That makes possible to move some heavy operations like memory allocations
+> related to the number of cooling instances out of the throttle() callback=
+.
+>
+> Reuse the 'enum thermal_notify_event' and extend it with a new event:
+> THERMAL_INSTANCE_LIST_UPDATE.
 
-Thanks,
+I think that this is a bit too low-level (see below).
 
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Both callback code paths (throttle() and update_tz()) are protected with
+> the same thermal zone lock, which guaranties the consistency.
+>
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>  drivers/thermal/thermal_core.c | 13 +++++++++++++
+>  include/linux/thermal.h        |  5 +++++
+>  2 files changed, 18 insertions(+)
+>
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_cor=
+e.c
+> index 625ba07cbe2f..592c956f6fd5 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -314,6 +314,14 @@ static void handle_non_critical_trips(struct thermal=
+_zone_device *tz,
+>                        def_governor->throttle(tz, trip);
+>  }
+>
+
+I needed a bit more time to think about this.
+
+> +static void handle_instances_list_update(struct thermal_zone_device *tz)
+> +{
+> +       if (!tz->governor || !tz->governor->update_tz)
+> +               return;
+> +
+> +       tz->governor->update_tz(tz, THERMAL_INSTANCE_LIST_UPDATE);
+> +}
+
+So I would call the above something more generic, like
+thermal_governor_update_tz() and I would pass the "reason" argument to
+it.
+
+> +
+>  void thermal_zone_device_critical(struct thermal_zone_device *tz)
+>  {
+>         /*
+> @@ -723,6 +731,8 @@ int thermal_bind_cdev_to_trip(struct thermal_zone_dev=
+ice *tz,
+>                 list_add_tail(&dev->tz_node, &tz->thermal_instances);
+>                 list_add_tail(&dev->cdev_node, &cdev->thermal_instances);
+>                 atomic_set(&tz->need_update, 1);
+> +
+> +               handle_instances_list_update(tz);
+
+In particular for this, I would use a special "reason" value, like
+THERMAL_TZ_BIND_CDEV.
+
+Yes, the list of instances will change as a result of the binding, but
+that is an internal detail specific to the current implementation.
+
+>         }
+>         mutex_unlock(&cdev->lock);
+>         mutex_unlock(&tz->lock);
+> @@ -781,6 +791,9 @@ int thermal_unbind_cdev_from_trip(struct thermal_zone=
+_device *tz,
+>                 if (pos->tz =3D=3D tz && pos->trip =3D=3D trip && pos->cd=
+ev =3D=3D cdev) {
+>                         list_del(&pos->tz_node);
+>                         list_del(&pos->cdev_node);
+> +
+> +                       handle_instances_list_update(tz);
+
+Analogously, I'd use something like THERMAL_TZ_UNBIND_CDEV here.
+
+> +
+>                         mutex_unlock(&cdev->lock);
+>                         mutex_unlock(&tz->lock);
+>                         goto unbind;
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index c7190e2dfcb4..9fd0d3fb234a 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -51,6 +51,7 @@ enum thermal_notify_event {
+>         THERMAL_DEVICE_POWER_CAPABILITY_CHANGED, /* power capability chan=
+ged */
+>         THERMAL_TABLE_CHANGED, /* Thermal table(s) changed */
+>         THERMAL_EVENT_KEEP_ALIVE, /* Request for user space handler to re=
+spond */
+> +       THERMAL_INSTANCE_LIST_UPDATE, /* List of thermal instances change=
+d */
+
+So I would add THERMAL_TZ_BIND_CDEV and THERMAL_TZ_UNBIND_CDEV to the list.
+
+>  };
+>
+>  /**
+> @@ -195,6 +196,8 @@ struct thermal_zone_device {
+>   *                     thermal zone.
+>   * @throttle:  callback called for every trip point even if temperature =
+is
+>   *             below the trip point temperature
+> + * @update_tz: callback called when thermal zone internals have changed,=
+ e.g.
+> + *             thermal cooling instance was added/removed
+>   * @governor_list:     node in thermal_governor_list (in thermal_core.c)
+>   */
+>  struct thermal_governor {
+> @@ -203,6 +206,8 @@ struct thermal_governor {
+>         void (*unbind_from_tz)(struct thermal_zone_device *tz);
+>         int (*throttle)(struct thermal_zone_device *tz,
+>                         const struct thermal_trip *trip);
+> +       void (*update_tz)(struct thermal_zone_device *tz,
+> +                         enum thermal_notify_event reason);
+>         struct list_head        governor_list;
+>  };
+>
+> --
 
