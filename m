@@ -1,109 +1,108 @@
-Return-Path: <linux-pm+bounces-1394-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1395-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C1348199D4
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 08:48:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 932378199E5
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 08:56:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E66211F25BEC
-	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 07:48:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F79328496C
+	for <lists+linux-pm@lfdr.de>; Wed, 20 Dec 2023 07:56:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C565F16403;
-	Wed, 20 Dec 2023 07:48:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09DB3168C4;
+	Wed, 20 Dec 2023 07:56:18 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mxout70.expurgate.net (mxout70.expurgate.net [194.37.255.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F4631863B;
-	Wed, 20 Dec 2023 07:48:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dev.tdt.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dev.tdt.de
-Received: from [127.0.0.1] (helo=localhost)
-	by relay.expurgate.net with smtp (Exim 4.92)
-	(envelope-from <prvs=27325e8b39=fe@dev.tdt.de>)
-	id 1rFr2f-001Wsk-7a; Wed, 20 Dec 2023 08:30:57 +0100
-Received: from [195.243.126.94] (helo=securemail.tdt.de)
-	by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <fe@dev.tdt.de>)
-	id 1rFr2e-00842a-BG; Wed, 20 Dec 2023 08:30:56 +0100
-Received: from securemail.tdt.de (localhost [127.0.0.1])
-	by securemail.tdt.de (Postfix) with ESMTP id E820C24004B;
-	Wed, 20 Dec 2023 08:30:55 +0100 (CET)
-Received: from mail.dev.tdt.de (unknown [10.2.4.42])
-	by securemail.tdt.de (Postfix) with ESMTP id 68382240049;
-	Wed, 20 Dec 2023 08:30:55 +0100 (CET)
-Received: from mail.dev.tdt.de (localhost [IPv6:::1])
-	by mail.dev.tdt.de (Postfix) with ESMTP id BBD262230F;
-	Wed, 20 Dec 2023 08:30:54 +0100 (CET)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A4D11C680;
+	Wed, 20 Dec 2023 07:56:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E9CDF1FB;
+	Tue, 19 Dec 2023 23:56:59 -0800 (PST)
+Received: from [10.57.82.217] (unknown [10.57.82.217])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D23B13F64C;
+	Tue, 19 Dec 2023 23:56:12 -0800 (PST)
+Message-ID: <930c762f-518a-420e-8da5-54c5ab1bf578@arm.com>
+Date: Wed, 20 Dec 2023 07:57:19 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date: Wed, 20 Dec 2023 08:30:54 +0100
-From: Florian Eckert <fe@dev.tdt.de>
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Eckert.Florian@googlemail.com, rafael@kernel.org, rui.zhang@intel.com,
- lukasz.luba@arm.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tools/thermal/tmon: Fix compilation warning for wrong
- format
-In-Reply-To: <6dbed9d3-abfe-476c-a771-10a5e70bb87c@linaro.org>
-References: <20231204141335.2798194-1-fe@dev.tdt.de>
- <6dbed9d3-abfe-476c-a771-10a5e70bb87c@linaro.org>
-Message-ID: <6a9f55419ee05ba44ef40430e7a16ac4@dev.tdt.de>
-X-Sender: fe@dev.tdt.de
-User-Agent: Roundcube Webmail/1.3.17
-X-purgate-ID: 151534::1703057456-71B3339C-00D76D5A/0/0
-X-purgate-type: clean
-X-purgate: clean
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 23/23] Documentation: EM: Update with runtime
+ modification design
+Content-Language: en-US
+To: Xuewen Yan <xuewen.yan94@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ rafael@kernel.org, dietmar.eggemann@arm.com, rui.zhang@intel.com,
+ amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
+ daniel.lezcano@linaro.org, viresh.kumar@linaro.org, len.brown@intel.com,
+ pavel@ucw.cz, mhiramat@kernel.org, qyousef@layalina.io, wvw@google.com
+References: <20231129110853.94344-1-lukasz.luba@arm.com>
+ <20231129110853.94344-24-lukasz.luba@arm.com>
+ <CAB8ipk_Zx5NtSpNXHsAqpZSq2yVHGAni5sN=ot5Lkc0jGZxoxA@mail.gmail.com>
+ <cbb2ae63-eb51-451a-b202-2a1c447a93e9@arm.com>
+ <CAB8ipk8jsgUufoMB+z8=YQyOXyia91L-QGCTNuFeKngVBx5ZWA@mail.gmail.com>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAB8ipk8jsgUufoMB+z8=YQyOXyia91L-QGCTNuFeKngVBx5ZWA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
 
-On 2023-12-19 19:12, Daniel Lezcano wrote:
-> On 04/12/2023 15:13, Florian Eckert wrote:
->> The following warnings are shown during compilation:
->> 
->> tui.c: In function 'show_cooling_device':
->>   tui.c:216:40: warning: format '%d' expects argument of type 'int', 
->> but
->> argument 7 has type 'long unsigned int' [-Wformat=]
->>     216 |                         "%02d %12.12s%6d %6d",
->>         |                                      ~~^
->>         |                                        |
->>         |                                        int
->>         |                                      %6ld
->>   ......
->>     219 |                         ptdata.cdi[j].cur_state,
->>         |                         ~~~~~~~~~~~~~~~~~~~~~~~
->>         |                                      |
->>         |                                      long unsigned int
->>   tui.c:216:44: warning: format '%d' expects argument of type 'int', 
->> but
->> argument 8 has type 'long unsigned int' [-Wformat=]
->>     216 |                         "%02d %12.12s%6d %6d",
->>         |                                          ~~^
->>         |                                            |
->>         |                                            int
->>         |                                          %6ld
->>   ......
->>     220 |                         ptdata.cdi[j].max_state);
->>         |                         ~~~~~~~~~~~~~~~~~~~~~~~
->>         |                                      |
->>         |                                      long unsigned int
->> 
->> To fix this, the correct string format must be used for printing.
->> 
->> Signed-off-by: Florian Eckert <fe@dev.tdt.de>
->> ---
+On 12/20/23 02:08, Xuewen Yan wrote:
+> On Tue, Dec 19, 2023 at 5:31 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>>
+>>
+>> On 12/19/23 06:22, Xuewen Yan wrote:
+>>> Hi Lukasz,
+>>>
+>>> On Wed, Nov 29, 2023 at 7:11 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>> [snip]
+>>
+>>>> +
+>>>> +  -> drivers/soc/example/example_em_mod.c
+>>>> +
+>>>> +  01   static void foo_get_new_em(struct device *dev)
+>>>
+>>> Because now some drivers use the dev_pm_opp_of_register_em() to
+>>> register energy model,
+>>> and maybe we can add a new function to update the energy model using
+>>> "EM_SET_ACTIVE_POWER_CB(em_cb, cb)"
+>>> instead of letting users set power again?
+>>>
+>>
+>> There are different usage of this EM feature:
+>> 1. Adjust power values after boot is finish and e.g. ASV in Exynos
+>>      has adjusted new voltage values in the OPP framework. It's
+>>      due to chip binning. I have described that in conversation
+>>      below patch 22/23. I'm going to send a patch for that
+>>      platform and OPP fwk later as a follow up to this series.
 > 
-> Applied, thanks
+> I understand what you mean, what I mean is that if we can provide an
+> interface for changing EM of opp fwk, it will be more friendly for
+> those users who use opp, because then they don't have to calculate the
+> new EM by themselves, but only need After updating the voltage of opp,
+> just call this interface directly.
 
-Thanks :+1:
+It is the plan. Don't worry. I didn't wanted to push this in one
+big patch set. Exynos driver + the OPP change would do exactly this.
+The EM functions from drivers/opp/of.c will be re-used for this.
+
+It is too big to be made in one step. There is pattern in those more
+complex changes, like in Arm SCMI fwk to make the improvements
+gradually. This folds into the same bucket.
+
+Although, you are another person asking for similar thing, so I
+will send a follow-up change using this new EM API - instead
+of waiting to finish this review.
+
+Thanks,
+Lukasz
 
