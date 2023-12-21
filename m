@@ -1,44 +1,44 @@
-Return-Path: <linux-pm+bounces-1502-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1503-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5598981B66F
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 13:52:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAB3F81B671
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 13:52:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 874781C24ECE
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 12:52:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FCAF1F248E1
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 12:52:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58CA579485;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFDE379955;
 	Thu, 21 Dec 2023 12:48:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="qicGfq/R"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="QicB7AJB"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE99678E6A;
-	Thu, 21 Dec 2023 12:48:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8937F78E91;
+	Thu, 21 Dec 2023 12:48:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1703162923;
-	bh=0ZHYzhTVEyHVYGEu0Vbtv3RzxoA8W7+Bwiowr0GjFQ8=;
+	s=mail; t=1703162924;
+	bh=VcggBe2EeLqiQDA9strzfLU3yta4SiXSv2ot71tu2xk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=qicGfq/RblLFSM9Pq53+m0knm05zAUH9HGX+bxyrbFDrUna7hNhaCyIjgX8Wz1odN
-	 /3Nz9U2MJkq3B1mlKoFZIf0leMIITRNe/54GLLcnLfSOo/WpP182iaLos9RZrUUO3T
-	 v79xf5mSj7IZSwLKM9XqmNcVkziLa7HEuFWmL6v0buUcub17GdMYl7ELBddarnEauH
-	 Uc8cUy7Hic0AJR5n/5GAs3IQOHquCEVERD5ep0qzjo3RkKCvBqHMVjz8QgmXHI4phg
-	 VRHxyZs6aM4ciEiASZ+ypVZLGd++LBRpJcxL1bixrr68AtqhD48ttWrryEkmoX0LR5
-	 Ei4e3xqd8Rhvg==
+	b=QicB7AJBvJbAbnQ8IX/E4WBw6nkBbaAxDgxJIHc8Li/4XOq1epT9EBbL4M4wvloeg
+	 MkPxtwMcjO5rxdNpYFFTZ/04Mi+c35VpvKOXrk5jEdVXqiuQ+pIbfQg3Pz9GciRKYQ
+	 9Lt0QysUjcngt2jfNX+z/LsR8rIwQPkzweqiHgKdB0zNQk3ZwHuH68Ljunq1VFwDA5
+	 Hb5GF6nFWO43TOZl7m2fSRy58CvA/C+NOV6CPDf3/sEDpt1paAhfsqp6GbuS3lTA6+
+	 hvNlWFYeN+58RnnTzguYtbNsoxUoNVlJM2a35sBT18UNfKbthwmmhx2+CHUTW22rXy
+	 9/I5oKmGi9QPg==
 Received: from IcarusMOD.eternityproject.eu (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 99818378201D;
-	Thu, 21 Dec 2023 12:48:42 +0000 (UTC)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 6135B3782021;
+	Thu, 21 Dec 2023 12:48:43 +0000 (UTC)
 From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 To: daniel.lezcano@linaro.org
 Cc: rafael@kernel.org,
@@ -48,9 +48,9 @@ Cc: rafael@kernel.org,
 	linux-kernel@vger.kernel.org,
 	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
 	kernel@collabora.com
-Subject: [RFC PATCH 14/26] thermal: intel: x86_pkg_temp: Migrate to thermal_zone_device_register()
-Date: Thu, 21 Dec 2023 13:48:13 +0100
-Message-ID: <20231221124825.149141-15-angelogioacchino.delregno@collabora.com>
+Subject: [RFC PATCH 15/26] power: supply: core: Migrate to thermal_zone_device_register()
+Date: Thu, 21 Dec 2023 13:48:14 +0100
+Message-ID: <20231221124825.149141-16-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231221124825.149141-1-angelogioacchino.delregno@collabora.com>
 References: <20231221124825.149141-1-angelogioacchino.delregno@collabora.com>
@@ -70,54 +70,41 @@ Migrate to the new thermal zone device registration function.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/thermal/intel/x86_pkg_temp_thermal.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+ drivers/power/supply/power_supply_core.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-index 11a7f8108bbb..8fdab44d28df 100644
---- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
-+++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-@@ -57,10 +57,6 @@ struct zone_device {
- 	struct cpumask			cpumask;
- };
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index 73265001dd4b..d656a2e39157 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -1297,6 +1297,12 @@ static struct thermal_zone_device_ops psy_tzd_ops = {
  
--static struct thermal_zone_params pkg_temp_tz_params = {
--	.no_hwmon	= true,
--};
--
- /* Keep track of how many zone pointers we allocated in init() */
- static int max_id __read_mostly;
- /* Array of zone pointers */
-@@ -312,6 +308,11 @@ static struct thermal_trip *pkg_temp_thermal_trips_init(int cpu, int tj_max, int
- 
- static int pkg_temp_thermal_device_add(unsigned int cpu)
+ static int psy_register_thermal(struct power_supply *psy)
  {
 +	struct thermal_zone_device_params tzdp = {
-+		.type = "x86_pkg_temp",
-+		.tzp = { .no_hwmon = true },
-+		.ops = &tzone_ops,
++		/* Prefer our hwmon device and avoid duplicates */
++		.tzp = { .no_hwmon = IS_ENABLED(CONFIG_POWER_SUPPLY_HWMON) },
++		.ops = &psy_tzd_ops,
++		.devdata = psy
 +	};
- 	int id = topology_logical_die_id(cpu);
- 	u32 eax, ebx, ecx, edx;
- 	struct zone_device *zonedev;
-@@ -344,10 +345,13 @@ static int pkg_temp_thermal_device_add(unsigned int cpu)
+ 	int ret;
  
- 	INIT_DELAYED_WORK(&zonedev->work, pkg_temp_thermal_threshold_work_fn);
- 	zonedev->cpu = cpu;
--	zonedev->tzone = thermal_zone_device_register_with_trips("x86_pkg_temp",
--			zonedev->trips, thres_count,
--			(thres_count == MAX_NUMBER_OF_TRIPS) ? 0x03 : 0x01,
--			zonedev, &tzone_ops, &pkg_temp_tz_params, 0, 0);
-+
-+	tzdp.devdata = zonedev;
-+	tzdp.trips = zonedev->trips;
-+	tzdp.num_trips = thres_count;
-+	tzdp.mask = (thres_count == MAX_NUMBER_OF_TRIPS) ? 0x03 : 0x01;
-+
-+	zonedev->tzone = thermal_zone_device_register(&tzdp);
- 	if (IS_ERR(zonedev->tzone)) {
- 		err = PTR_ERR(zonedev->tzone);
- 		goto out_kfree_trips;
+ 	if (psy->desc->no_thermal)
+@@ -1304,12 +1310,8 @@ static int psy_register_thermal(struct power_supply *psy)
+ 
+ 	/* Register battery zone device psy reports temperature */
+ 	if (psy_has_property(psy->desc, POWER_SUPPLY_PROP_TEMP)) {
+-		/* Prefer our hwmon device and avoid duplicates */
+-		struct thermal_zone_params tzp = {
+-			.no_hwmon = IS_ENABLED(CONFIG_POWER_SUPPLY_HWMON)
+-		};
+-		psy->tzd = thermal_tripless_zone_device_register(psy->desc->name,
+-				psy, &psy_tzd_ops, &tzp);
++		tzdp.name = psy->desc->name;
++		psy->tzd = thermal_zone_device_register(&tzdp);
+ 		if (IS_ERR(psy->tzd))
+ 			return PTR_ERR(psy->tzd);
+ 		ret = thermal_zone_device_enable(psy->tzd);
 -- 
 2.43.0
 
