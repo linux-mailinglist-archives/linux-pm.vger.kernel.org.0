@@ -1,64 +1,65 @@
-Return-Path: <linux-pm+bounces-1517-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1518-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2CBB81B6AB
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 13:58:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB96881B6CE
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 14:01:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 72FDA286F0A
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 12:58:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 281D1B2159E
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 13:01:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDADC77622;
-	Thu, 21 Dec 2023 12:52:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0EF07608F;
+	Thu, 21 Dec 2023 12:57:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LhZ/3gnE"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bRk7bVzb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0255673188
-	for <linux-pm@vger.kernel.org>; Thu, 21 Dec 2023 12:52:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A33745E8
+	for <linux-pm@vger.kernel.org>; Thu, 21 Dec 2023 12:57:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5540a2516b6so919208a12.0
-        for <linux-pm@vger.kernel.org>; Thu, 21 Dec 2023 04:52:03 -0800 (PST)
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-55359dc0290so1357214a12.1
+        for <linux-pm@vger.kernel.org>; Thu, 21 Dec 2023 04:57:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703163122; x=1703767922; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uGwBTIh4Dz1SJStKRaT4MD0TZ8mnFlnlThnve5PWJVQ=;
-        b=LhZ/3gnEr9CLL/qUrVtq787wjBunjeIP15S0UWDdjcgflgffZ1VbUnzyPMmWdpEEl1
-         mEl6I3taTHJSWBByfAI6UnVjtHOK9gPCIXYoxI+xkbA7nFfB7zC7HcP9XFQttXRmu6dn
-         KHvRopBSUxDUUfDWxlysZUw8vBwEeu5txE8kTYqaf6UBypzU8tvMtqI/W4tTgDBj6Etx
-         aP2URaZnpfq32b3xuBLr+J3IutUMD65s6ZYZgLUrhi2JeJFdKPP+ZzlbDLPldoWh/Dtq
-         HYBVBE7F561B0mU7P7GuNcZ0HmfAC/dJQTVNbSFLnGX8+Wp1Uo27u+r/AyDPtlTj9Fa7
-         vBbg==
+        d=linaro.org; s=google; t=1703163439; x=1703768239; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=H/4BkBTLjSuROOM6v42NHaPt36UEL8/mhBKljFDoocY=;
+        b=bRk7bVzbz/XxV/mX2aMQJH4XGHet2117lRL0LJMyaUYaTKI3k5i+/sk9KLgsYb3MA3
+         XrKA9JwAORLVL3w5NsZq9gyjFTgBHDtSQOu+sTCAkhCKnP0ZiG+l6BrjaFx7D+1Mefhb
+         cXSabxuZkjBnJOc0IpoJ9gI9ltXj8BzZSQkBAqSVdZomoFGrwdLmHJg69j9gL7PKXVFR
+         kCKBeG7Y0x3wYBHovfs6XiPne2cipscpW+uOmz3bYxPUSVJsdV3K2TFLrdTj/ni7PNTj
+         NpFbwg1Xg8CY0uxMtzQOXCbGeX7mFtGxuqbkYyLAfAiWyyiOvs6hs2Y+Vv2HuALaEBUA
+         yIpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703163122; x=1703767922;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uGwBTIh4Dz1SJStKRaT4MD0TZ8mnFlnlThnve5PWJVQ=;
-        b=c4q2BNUk7ojr0eZJ+gn6mt7jYGjKnT8hsTwi7Lvr2mf1FD3YfbtWaFbliN8Eeh5moo
-         BdoxDSvmKsdgquVg3UKzOCmHOU19mfh9p1EGpcXrKTLQwsTnb04ajr+H+UOMYlfI2KXM
-         CpYRN37ziKYjN8TMN/n3x7qNaHf/b1ulUW8R3z3YOjBhkR7JocPnwpVfs+kxru3ne3us
-         vmOw1vfApyY/wignh3aKL4ppXFUsVU/8x8F48e3xwrk2aTUKWv5pQ+EKiyGPE10syALH
-         BDPAVcWM1raU9JrjowaEcoohg5PltMDG4z+kiWUE87Z+7Cn7j+6OmXiM+ZOAO4FfpJ23
-         7XMQ==
-X-Gm-Message-State: AOJu0YwsPsbfIIw83feOt/jcZkhcAIVtK2s46bO9+qfVXgJdyafM962x
-	fpyFOyUbka/Hhp3611g55phElA==
-X-Google-Smtp-Source: AGHT+IFpsAsQsrZEFCPKENktHEluTVoHQkw16pumZSePVVQj6bjUO8pFL/EkjErINMJ260tfuQXpsg==
-X-Received: by 2002:a17:907:7850:b0:a23:57a1:d85b with SMTP id lb16-20020a170907785000b00a2357a1d85bmr4379329ejc.74.1703163122074;
-        Thu, 21 Dec 2023 04:52:02 -0800 (PST)
+        d=1e100.net; s=20230601; t=1703163439; x=1703768239;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H/4BkBTLjSuROOM6v42NHaPt36UEL8/mhBKljFDoocY=;
+        b=jKsJx0Q2fbVjP1rj7rMnZDud3RjDt/GFACNE8pJ93MiRSOsS6Rkz71GCv2nDOsm72G
+         XNi5QK5n6+OB22p0leaiLCGAaZwsV8Hcbf2oHh5U9Cv4Z8lIt6n9ecsD7aAwvKymWnZa
+         NN/OO5vdwgYKRiFf2XpLrbW86zu4KGJUhMfejVRyNgXVxWA5jRbsoFpBwg3WMlUI3k6S
+         BwT/JaCDhL/tB46jb01EqOJ+HgzfR4RyX/BpzC7SuwvpPpKfFmLY3mCLucQzSiisNIsK
+         b3BoQPY9EedPdQfYryI7hDLF+E7z3xQRgYzcjMEhUTQcp4Zq1E2U49pIAgmoervw2Xsz
+         2J/Q==
+X-Gm-Message-State: AOJu0YwZqlsVhcTzmit0pPb88DAvMUnncsXvU7DF8wfgevjVc6aghzy2
+	BBSc1+jnXhS2lD4Vbcj4nIdkucsS6kLCHA==
+X-Google-Smtp-Source: AGHT+IHEfb0rvqx99f7k1pq7FNsmWuDO3WB2cGP/jAYCBRZmk+3jDHXJpuUgCl1m/qByuXEeZiJ1/w==
+X-Received: by 2002:aa7:c397:0:b0:553:346e:b0d0 with SMTP id k23-20020aa7c397000000b00553346eb0d0mr649538edq.14.1703163439228;
+        Thu, 21 Dec 2023 04:57:19 -0800 (PST)
 Received: from [192.168.199.125] (178235179206.dynamic-4-waw-k-1-3-0.vectranet.pl. [178.235.179.206])
-        by smtp.gmail.com with ESMTPSA id e3-20020a17090681c300b00a1f7ae3dfbcsm935159ejx.174.2023.12.21.04.51.59
+        by smtp.gmail.com with ESMTPSA id x7-20020a50ba87000000b005527cfaa2dfsm1164238ede.49.2023.12.21.04.57.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Dec 2023 04:52:01 -0800 (PST)
-Message-ID: <b6866ee4-31d9-4404-9bd9-92bc4ab59b8c@linaro.org>
-Date: Thu, 21 Dec 2023 13:51:58 +0100
+        Thu, 21 Dec 2023 04:57:18 -0800 (PST)
+Message-ID: <8d206362-7d80-46dc-8474-871fc53abc20@linaro.org>
+Date: Thu, 21 Dec 2023 13:57:15 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -66,8 +67,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/8] arm64: dts: qcom: sa8295p-adp: add max20411
-Content-Language: en-US
+Subject: Re: [PATCH 2/8] clk: qcom: gdsc: Enable supply reglator in GPU GX
+ handler
 To: Bjorn Andersson <quic_bjorande@quicinc.com>,
  Bjorn Andersson <andersson@kernel.org>,
  Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
@@ -81,7 +82,8 @@ Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 References: <20231220-sa8295p-gpu-v1-0-d8cdf2257f97@quicinc.com>
- <20231220-sa8295p-gpu-v1-6-d8cdf2257f97@quicinc.com>
+ <20231220-sa8295p-gpu-v1-2-d8cdf2257f97@quicinc.com>
+Content-Language: en-US
 From: Konrad Dybcio <konrad.dybcio@linaro.org>
 Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
@@ -118,48 +120,34 @@ Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
  nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
  izWDgYvmBE8=
-In-Reply-To: <20231220-sa8295p-gpu-v1-6-d8cdf2257f97@quicinc.com>
+In-Reply-To: <20231220-sa8295p-gpu-v1-2-d8cdf2257f97@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 21.12.2023 04:50, Bjorn Andersson wrote:
-> From: Bjorn Andersson <andersson@kernel.org>
+> The GX GDSC is modelled to aid the GMU in powering down the GPU in the
+> event that the GPU crashes, so that it can be restarted again. But in
+> the event that the power-domain is supplied through a dedicated
+> regulator (in contrast to being a subdomin of another power-domain),
+> something needs to turn that regulator on, both to make sure things are
+> powered and to match the operation in gdsc_disable().
 > 
-> The SA8295P ADP has a MAX20411 LDO regulator on I2C 12, supplying the
-> VDD_GFX pads. Enable the bus and add the maxim,max20411 device on the
-> bus.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 > ---
->  arch/arm64/boot/dts/qcom/sa8295p-adp.dts | 40 ++++++++++++++++++++++++++++++++
->  1 file changed, 40 insertions(+)
+>  drivers/clk/qcom/gdsc.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-> index fd253942e5e5..e16406c9c19d 100644
-> --- a/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-> +++ b/arch/arm64/boot/dts/qcom/sa8295p-adp.dts
-> @@ -266,6 +266,26 @@ &dispcc1 {
->  	status = "okay";
->  };
->  
-> +&i2c12 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&qup1_i2c4_state>;
-property-n
-property-names
+> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+> index 5358e28122ab..d1139c895503 100644
+> --- a/drivers/clk/qcom/gdsc.c
+> +++ b/drivers/clk/qcom/gdsc.c
+> @@ -557,7 +557,13 @@ void gdsc_unregister(struct gdsc_desc *desc)
+>   */
+>  int gdsc_gx_do_nothing_enable(struct generic_pm_domain *domain)
+I suppose the name is confusing now..
 
-(same below)
-> +
-> +	status = "okay";
-> +
-> +	vdd_gfx: regulator@39 {
-> +		compatible = "maxim,max20411";
-> +		reg = <0x39>;
-> +
-> +		regulator-min-microvolt = <800000>;
-> +		regulator-max-microvolt = <968750>;
-Is this ever going to be scaled? I suppose you could add some OPP code to
-drm/msm and use opp-microvolts.. Or lock this down at min=max
+But at the same time I can't come up with anything that's less than
+like 6 words..
 
 Konrad
 
