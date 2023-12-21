@@ -1,111 +1,176 @@
-Return-Path: <linux-pm+bounces-1484-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1485-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD41181B4A7
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 12:07:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F79281B571
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 13:05:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 723591F232B1
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 11:07:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54BC31F2455B
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 12:05:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE4D36AB8F;
-	Thu, 21 Dec 2023 11:07:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 911D36D1BF;
+	Thu, 21 Dec 2023 12:05:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="cvUZu78q"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A1DE4120C;
-	Thu, 21 Dec 2023 11:07:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3ba32e9554bso152237b6e.1;
-        Thu, 21 Dec 2023 03:07:01 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C86A46E2B0
+	for <linux-pm@vger.kernel.org>; Thu, 21 Dec 2023 12:05:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1d3ad3ad517so3717325ad.0
+        for <linux-pm@vger.kernel.org>; Thu, 21 Dec 2023 04:05:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1703160337; x=1703765137; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=kF12I4nLvX8usAxW07lBYcwQ8oEcLNU3sy4oq6YAZHs=;
+        b=cvUZu78qmaMwRZ97V0fb7YEo9XL/0+VhTVlJ6bvbjW5G76jugFR6UePIpDV81tXgvf
+         DRk7bApy94vSzXuo4QugHuNdKm9g47KTtZ14VAAsaWjICwq99gJe19CJEKFmNcBnUI/V
+         h8V/+i8ASp49bJaYYvG8GlrLTySq3ovhWdrMw3VY5TO3egf4FYQY2L3ibJcW/DcK6Yzi
+         yDuCWZPxcRBQAVw4H0nm5IGnIT0TCrRuXQ8FDWxEzQIjnLTiFcEs01RGckfRhwbVNITV
+         +hnu2dnG/yGNn/3sz1D29qwKJ+avmfdrw7GB6qGXW0ywl5mGbIu8ABu+W4lnhS6w5Ajm
+         iY8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703156820; x=1703761620;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KFySEnepUE+tDIi+pM++FTPD8l5vR/6BAzQA3Eq9QBI=;
-        b=TcN/a1CMQhkmPbONm+8IZ+nttxmPSze4HZOdv7QTISbjc1Gz2egch1Z38sYz+cUlO4
-         pEmNe9s69Pocy4cUvxhnzzJvhyD1QciYHTec9wMdfYBOMrqLzH6rQGv5Y/ID+7aeGA/g
-         MZS+n0mbkqbFa+Uu3XfZ54nK5oIvuDBG55T79rexiafKgGAjREzzQwaTruMRMUjcqZQG
-         lBS3oeNYWTIR4QUeGbm2LYgzgMMWb72q6asP5gErOBJUgDkSUnoyLhUXl710bY/OIenV
-         5xJolMj+swlfAfBrrw5e/ztrS1MKZ4V7mtcBcWmnEhwv8448MazJ+LfuI7PZ387GZA9J
-         FhSA==
-X-Gm-Message-State: AOJu0Yynb84NzQ4dHxwAW5r9pOUSvx4OHfqYL2jnV3F/Z6kSITslm4BY
-	1KrKxmDZz+gIDEJi60RpmI4vK357n9ubxtRnt70=
-X-Google-Smtp-Source: AGHT+IFccL6Z2EozfxozVM+x3rnOqtP5HKLCPF2ejd6EdNcwGQZ4mIq/rAebsMlg8Gb8tYZb2RRqGanQUw3wiHS8YAo=
-X-Received: by 2002:a05:6820:2484:b0:591:4861:6b02 with SMTP id
- cq4-20020a056820248400b0059148616b02mr25687361oob.1.1703156820529; Thu, 21
- Dec 2023 03:07:00 -0800 (PST)
+        d=1e100.net; s=20230601; t=1703160337; x=1703765137;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kF12I4nLvX8usAxW07lBYcwQ8oEcLNU3sy4oq6YAZHs=;
+        b=mzv2jZj9b/I+efKk5KdUsYu+U0UIkmo6Pau2qYvUpxaVwACMDj2SQmhkTYFGYNFKYD
+         r2m5R4AaUmDtUNUo4mYos4fib2sbw/0wZDaOTjHuR0OssE20FHbsh2hG9iL6g/OB6Z6Z
+         vrO2CYBB4k+mOM3Vf26dVuUAocC2NTu+SLxhHF0tsILaYvZGD0DmwOVOAc5xwbh2R165
+         IBxtqOB5xKvqnvxkVttP9BoeRPN2sWeAGzIC0fpCPMDvygAnQTFzudIqzCqO+Kgr9Ino
+         ampBQ4774eY+VW9Scpd4y1XLw/HW4/JbsrX+u7X57l+Nk8Y+1bK87h7xg9PRyrNv7RTp
+         IY+g==
+X-Gm-Message-State: AOJu0YzUDpngH9Hpxz8ObjHIl2LFmydzN6F/HXIu1xFwLDqHyCLR50lN
+	YgZPIU+aVJ8w8aoZ2NqQGefZrezluMSLZsuMmvY=
+X-Google-Smtp-Source: AGHT+IHVEwxosfPiX9AZ3ut9ptV8G0a9dk6BbXMDdqo8n0UQhgyqaHxbkxuC4e5dfd5A9WGYIQ9jog==
+X-Received: by 2002:a17:902:b195:b0:1d0:6ffd:adf1 with SMTP id s21-20020a170902b19500b001d06ffdadf1mr10235078plr.88.1703160337041;
+        Thu, 21 Dec 2023 04:05:37 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id w4-20020a170902d3c400b001d3e8a5755csm1478678plb.48.2023.12.21.04.05.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Dec 2023 04:05:36 -0800 (PST)
+Message-ID: <65842a10.170a0220.1f673.3e5e@mx.google.com>
+Date: Thu, 21 Dec 2023 04:05:36 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231221055144.24862-1-rdunlap@infradead.org>
-In-Reply-To: <20231221055144.24862-1-rdunlap@infradead.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 21 Dec 2023 12:06:48 +0100
-Message-ID: <CAJZ5v0j5mcxRMQR3T+tmuL89Y+GjrWYwK_hj+fYikczp=Ey3Fw@mail.gmail.com>
-Subject: Re: [PATCH] thermal: cpuidle_cooling: fix kernel-doc warning and a spello
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: linux-kernel@vger.kernel.org, Amit Daniel Kachhap <amit.kachhap@gmail.com>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Lukasz Luba <lukasz.luba@arm.com>, "Rafael J . Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.7-rc6-95-g52227a1b24640
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.7-rc6-95-g52227a1b24640)
+To: rafael@kernel.org, linux-pm@vger.kernel.org,
+ kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On Thu, Dec 21, 2023 at 6:51=E2=80=AFAM Randy Dunlap <rdunlap@infradead.org=
-> wrote:
->
-> Correct one misuse of kernel-doc notation and one spelling error as
-> reported by codespell.
->
-> cpuidle_cooling.c:152: warning: cannot understand function prototype: 'st=
-ruct thermal_cooling_device_ops cpuidle_cooling_ops =3D '
->
-> For the kernel-doc warning, don't use "/**" for a comment on data.
-> kernel-doc can be used for structure declarations but not definitions.
->
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Amit Daniel Kachhap <amit.kachhap@gmail.com>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: Lukasz Luba <lukasz.luba@arm.com>
-> Cc: Rafael J. Wysocki <rafael@kernel.org>
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: linux-pm@vger.kernel.org
-> ---
->  drivers/thermal/cpuidle_cooling.c |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff -- a/drivers/thermal/cpuidle_cooling.c b/drivers/thermal/cpuidle_coo=
-ling.c
-> --- a/drivers/thermal/cpuidle_cooling.c
-> +++ b/drivers/thermal/cpuidle_cooling.c
-> @@ -66,7 +66,7 @@ static unsigned int cpuidle_cooling_runt
->   * @state : a pointer to the state variable to be filled
->   *
->   * The function always returns 100 as the injection ratio. It is
-> - * percentile based for consistency accross different platforms.
-> + * percentile based for consistency across different platforms.
->   *
->   * Return: The function can not fail, it is always zero
->   */
-> @@ -146,7 +146,7 @@ static int cpuidle_cooling_set_cur_state
->         return 0;
->  }
->
-> -/**
-> +/*
->   * cpuidle_cooling_ops - thermal cooling device ops
->   */
->  static struct thermal_cooling_device_ops cpuidle_cooling_ops =3D {
+pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.7-rc6-95-g52=
+227a1b24640)
 
-Applied as 6.8 material, thanks!
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+7-rc6-95-g52227a1b24640/
+
+Tree: pm
+Branch: testing
+Git Describe: v6.7-rc6-95-g52227a1b24640
+Git Commit: 52227a1b24640361bf68926fe12e60ab76004c7d
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
 
