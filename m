@@ -1,45 +1,86 @@
-Return-Path: <linux-pm+bounces-1479-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1480-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B85A81B201
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 10:21:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43A6581B335
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 11:10:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A06181C23769
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 09:21:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D87B1B23400
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 10:10:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CF0A21341;
-	Thu, 21 Dec 2023 09:05:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 817924E1AA;
+	Thu, 21 Dec 2023 10:10:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XkLwMoSf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7528208D6;
-	Thu, 21 Dec 2023 09:05:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B27092F4;
-	Thu, 21 Dec 2023 01:06:28 -0800 (PST)
-Received: from e129166.arm.com (unknown [10.57.87.53])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E09F03F5A1;
-	Thu, 21 Dec 2023 01:05:41 -0800 (PST)
-From: Lukasz Luba <lukasz.luba@arm.com>
-To: linux-kernel@vger.kernel.org,
-	rafael@kernel.org
-Cc: linux-pm@vger.kernel.org,
-	daniel.lezcano@linaro.org,
-	rui.zhang@intel.com,
-	lukasz.luba@arm.com,
-	m.majewski2@samsung.com,
-	bzolnier@gmail.com,
-	m.szyprowski@samsung.com,
-	krzysztof.kozlowski@linaro.org,
-	linux-samsung-soc@vger.kernel.org
-Subject: [RFC PATCH] thermal: Add API to update framework with known temperature
-Date: Thu, 21 Dec 2023 09:06:37 +0000
-Message-Id: <20231221090637.1996394-1-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.25.1
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA2D851C20;
+	Thu, 21 Dec 2023 10:10:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-50e4a637958so816990e87.2;
+        Thu, 21 Dec 2023 02:10:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1703153433; x=1703758233; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0fIP+gY5tjmlfd94qvCRw5zI94zpMLdzYlGd9t55ptY=;
+        b=XkLwMoSfHkvLqxfIQH+N2dSVg4fWT/urJyeD5R3AGVdmvzQSydOr16oGx5Pb2je7Uc
+         +BFtkLnIeqQqnxjC4Uf+ORYJ/8F0pqb4tN1LTqpL/libaSHzIfZYUyvNao85Xt+JXIU0
+         B11QMUeIx2wPEezBgI2jOKZRonzbVjskaE5j8DsTHSQssr7V/MSx7eAO9YIDR4H35CCU
+         DZ8crzxmpudPpLBqAG/QUNTTc0biVRGahZPhDi9NY8L4gRMDokRH/Kf2USmHy6s1BSfw
+         UgD7pZEuEDztz9A0GQfLy57SW6+jFo1Z8LG19qKWpANJyA1LmpFIID28QGr2xpdjlR8Y
+         luvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703153433; x=1703758233;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0fIP+gY5tjmlfd94qvCRw5zI94zpMLdzYlGd9t55ptY=;
+        b=dqilKyxLRTpSndEvJXPpHFW+fkUJfhr80hstYutwncRezio6p7XsW8tMtBh21ofBJx
+         cVe+le9QFMCgrxtckq+A8HK7xXrSqTGfo/hMvAjdqPUM7fEROIqnyh7FMTfGzGu2RF7R
+         r68u+9cELl1+l4xeypLDNZYfyB6lCJTOqxfgSxF4nd4gmY03qX4AYKVdZ8k7akpv/2Xb
+         ItAVx4FdgiZEjtPgVLRhAd5fbgCN11wiorv+Eud+UENpuKrO+Rxjl0PMaxddyCXlP+gq
+         i9RPbiTflazO5n/mee7J+0VuRPU1E7WMWDEHQ1Yda9YGf4cRxTJ1dsWGpo14n8nuFNxB
+         5KOA==
+X-Gm-Message-State: AOJu0Yy2FUqagOnPB68XyeBRwKpIGakJ3oesqdcIb16lAU6pc0xT7viu
+	fCrP0yZD9XlIAYlS3U7KFIM=
+X-Google-Smtp-Source: AGHT+IFtYAcqviJSNW2hlf7hb2pY1nEpa7NDu2xXdMOCQkRzDnF1hONtWet1/ZO/uZRytB3dHQ2T/w==
+X-Received: by 2002:a05:6512:402:b0:50e:51e0:732 with SMTP id u2-20020a056512040200b0050e51e00732mr622482lfk.277.1703153432484;
+        Thu, 21 Dec 2023 02:10:32 -0800 (PST)
+Received: from localhost.localdomain ([154.72.163.204])
+        by smtp.gmail.com with ESMTPSA id x7-20020a170906b08700b00a25f5dba09dsm784928ejy.145.2023.12.21.02.10.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Dec 2023 02:10:31 -0800 (PST)
+From: Brandon Cheo Fusi <fusibrandon13@gmail.com>
+To: Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Yangtao Li <tiny.windzz@gmail.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: devicetree@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Brandon Cheo Fusi <fusibrandon13@gmail.com>
+Subject: [RFC PATCH v2 0/3] Add support for reading D1 efuse speed bin
+Date: Thu, 21 Dec 2023 11:10:10 +0100
+Message-Id: <20231221101013.67204-1-fusibrandon13@gmail.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -48,177 +89,36 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Some thermal drivers support trip point interrupts. These IRQs are
-triggered when the defined temperature threshold value is reached. This
-information is enough to say what is the temperature. Therefore, create
-a new API, which allows to provide temperature value as an argument and
-avoid reading the temperature again by in the framework function. This
-would also avoid scenario when the temperature which is later read via
-update_temperature() is different than the one which triggered the IRQ.
-This issue has been reported on some mainline boards.
+Hi everyone,
 
-It should also improve performance in such scenario, since there is no
-call to __thermal_zone_get_temp() in the code path (which might be heavy,
-when temperature sensor is connected via slow interface).
+This series is an attempt to get feedback on decoding D1 efuse speed bins
+in the Sun50i H6 cpufreq driver, and turning the result into a meaningful
+value that selects voltage ranges in an OPP table.
 
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
----
-Hi all,
+I want to make sure I get this right before sending in a v3 of the D1
+cpufreq support series here
 
-This is a RFC with proposal to skip reading temperature using get_temp()
-callback when calling thermal_zone_device_update() from thermal driver IRQ
-hanlder. There was a discussion [1] that reading temperature after the IRQ
-might give different value than that IRQ trip threshold was programmed. 
+https://lore.kernel.org/linux-sunxi/20231218110543.64044-1-fusibrandon13@gmail.com/T/#t
 
-Therefore, this proposal aims to solve the situation and feed temperature
-to the thermal fwk as an argument.
+which is currently stuck at
 
-Regards,
-Lukasz
+https://lore.kernel.org/linux-sunxi/aad8302d-a015-44ee-ad11-1a4c6e00074c@sholland.org/
 
-[1] https://lore.kernel.org/lkml/20231113130435.500353-1-m.majewski2@samsung.com/
+Changes in v2:
+- Make speed bin decoding generic in one patch and add D1 support in a
+  separate patch
+- Fix OPP voltage ranges to avoid stability issues
 
+Brandon Cheo Fusi (3):
+  cpufreq: sun50i: Refactor speed bin decoding
+  cpufreq: sun50i: Add support for D1's speed bin decoding
+  riscv: dts: allwinner: Fill in OPPs
 
- drivers/thermal/thermal_core.c  | 29 ++++++++++++++++++++++++-----
- drivers/thermal/thermal_core.h  |  3 ++-
- drivers/thermal/thermal_sysfs.c |  6 ++++--
- drivers/thermal/thermal_trip.c  |  2 +-
- 4 files changed, 31 insertions(+), 9 deletions(-)
+ arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi | 19 +++-
+ drivers/cpufreq/sun50i-cpufreq-nvmem.c        | 89 +++++++++++++++----
+ 2 files changed, 89 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 62979c5401c3..9f25c62bd3cd 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -417,10 +417,16 @@ static void handle_thermal_trip(struct thermal_zone_device *tz,
- 		handle_non_critical_trips(tz, trip);
- }
- 
--static void update_temperature(struct thermal_zone_device *tz)
-+static void update_temperature(struct thermal_zone_device *tz, bool read_temp,
-+			       int known_temp)
- {
- 	int temp, ret;
- 
-+	if (!read_temp) {
-+		temp = known_temp;
-+		goto set_temperature;
-+	}
-+
- 	ret = __thermal_zone_get_temp(tz, &temp);
- 	if (ret) {
- 		if (ret != -EAGAIN)
-@@ -430,6 +436,7 @@ static void update_temperature(struct thermal_zone_device *tz)
- 		return;
- 	}
- 
-+set_temperature:
- 	tz->last_temperature = tz->temperature;
- 	tz->temperature = temp;
- 
-@@ -449,7 +456,8 @@ static void thermal_zone_device_init(struct thermal_zone_device *tz)
- }
- 
- void __thermal_zone_device_update(struct thermal_zone_device *tz,
--				  enum thermal_notify_event event)
-+				  enum thermal_notify_event event,
-+				  bool read_temp, int temp)
- {
- 	struct thermal_trip *trip;
- 
-@@ -459,7 +467,7 @@ void __thermal_zone_device_update(struct thermal_zone_device *tz,
- 	if (!thermal_zone_device_is_enabled(tz))
- 		return;
- 
--	update_temperature(tz);
-+	update_temperature(tz, read_temp, temp);
- 
- 	__thermal_zone_set_trips(tz);
- 
-@@ -491,7 +499,7 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
- 	if (!ret)
- 		tz->mode = mode;
- 
--	__thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
-+	__thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED, true, 0);
- 
- 	mutex_unlock(&tz->lock);
- 
-@@ -532,11 +540,22 @@ void thermal_zone_device_update(struct thermal_zone_device *tz,
- {
- 	mutex_lock(&tz->lock);
- 	if (thermal_zone_is_present(tz))
--		__thermal_zone_device_update(tz, event);
-+		__thermal_zone_device_update(tz, event, true, 0);
- 	mutex_unlock(&tz->lock);
- }
- EXPORT_SYMBOL_GPL(thermal_zone_device_update);
- 
-+void thermal_zone_device_update_with_temp(struct thermal_zone_device *tz,
-+					  enum thermal_notify_event event,
-+					  int temp)
-+{
-+	mutex_lock(&tz->lock);
-+	if (thermal_zone_is_present(tz))
-+		__thermal_zone_device_update(tz, event, false, temp);
-+	mutex_unlock(&tz->lock);
-+}
-+EXPORT_SYMBOL_GPL(thermal_zone_device_update_with_temp);
-+
- static void thermal_zone_device_check(struct work_struct *work)
- {
- 	struct thermal_zone_device *tz = container_of(work, struct
-diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-index e6a2b6f97be8..2d73847fcfea 100644
---- a/drivers/thermal/thermal_core.h
-+++ b/drivers/thermal/thermal_core.h
-@@ -113,7 +113,8 @@ void thermal_unregister_governor(struct thermal_governor *);
- int thermal_zone_device_set_policy(struct thermal_zone_device *, char *);
- int thermal_build_list_of_policies(char *buf);
- void __thermal_zone_device_update(struct thermal_zone_device *tz,
--				  enum thermal_notify_event event);
-+				  enum thermal_notify_event event,
-+				  bool read_temp, int temp);
- void thermal_zone_device_critical_reboot(struct thermal_zone_device *tz);
- void thermal_governor_update_tz(struct thermal_zone_device *tz,
- 				enum thermal_notify_event reason);
-diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-index 5abf6d136c24..9062545f314e 100644
---- a/drivers/thermal/thermal_sysfs.c
-+++ b/drivers/thermal/thermal_sysfs.c
-@@ -131,7 +131,8 @@ trip_point_temp_store(struct device *dev, struct device_attribute *attr,
- 
- 		thermal_zone_set_trip_temp(tz, trip, temp);
- 
--		__thermal_zone_device_update(tz, THERMAL_TRIP_CHANGED);
-+		__thermal_zone_device_update(tz, THERMAL_TRIP_CHANGED,
-+					     true, 0);
- 	}
- 
- unlock:
-@@ -256,7 +257,8 @@ emul_temp_store(struct device *dev, struct device_attribute *attr,
- 		ret = tz->ops->set_emul_temp(tz, temperature);
- 
- 	if (!ret)
--		__thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
-+		__thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED,
-+					     true, 0);
- 
- 	mutex_unlock(&tz->lock);
- 
-diff --git a/drivers/thermal/thermal_trip.c b/drivers/thermal/thermal_trip.c
-index a1ad345c0741..77dc433e6e1c 100644
---- a/drivers/thermal/thermal_trip.c
-+++ b/drivers/thermal/thermal_trip.c
-@@ -158,7 +158,7 @@ void thermal_zone_trip_updated(struct thermal_zone_device *tz,
- 	thermal_notify_tz_trip_change(tz->id, thermal_zone_trip_id(tz, trip),
- 				      trip->type, trip->temperature,
- 				      trip->hysteresis);
--	__thermal_zone_device_update(tz, THERMAL_TRIP_CHANGED);
-+	__thermal_zone_device_update(tz, THERMAL_TRIP_CHANGED, true, 0);
- }
- 
- void thermal_zone_set_trip_temp(struct thermal_zone_device *tz,
 -- 
-2.25.1
+2.30.2
 
 
