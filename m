@@ -1,153 +1,157 @@
-Return-Path: <linux-pm+bounces-1487-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1488-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20C3481B5CE
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 13:29:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 383F881B64C
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 13:48:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A1F461F234F4
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 12:29:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A58A61F21516
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 12:48:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9921745F6;
-	Thu, 21 Dec 2023 12:28:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F0B273170;
+	Thu, 21 Dec 2023 12:48:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="AXZPsO/w"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="EAOGMCt6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2061.outbound.protection.outlook.com [40.107.92.61])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CC5D745F1;
-	Thu, 21 Dec 2023 12:28:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ek+VACDlnK4fqpi+LEPutzXzJrLvgDK5CGkRMFBC2ocOiMpaoljdbwV4PLVF/biZiCJn9oVS0Rkanq79XIHEINGoD7VeWmIDQOrdMWKyzzddzCDSY7WgILmdpip0wlbcO+LD4ylXZVwI62Rv8QbdlcR3dD1dkO+jb73AU3nX8zZGurWmClj7sJm9WHnRsQGDaFF5ygGsy7+9v4jzlzAIGGDLJNZ0ATlDSXhHJWbCmbCGpoW99/JumVAGbwfXR8qp0xqRnxyTHHSQOec2FgeiEucvQG7lHRNKrvcSTm8mMWPTCKp+ATIS8ADw9YQmgXFv2eXnFQ5I0uLulCv+Q8hVww==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tW8YFj4bY+C+9+JPx/nreRIrasMX4Ci//3HgKJ0R62I=;
- b=h9zp2sxwHuHofeNqzbsCfVl7u/G7f9PnHCUzxvqMQzMdqsW1LkZSY6XuejknBIP3KLKJC0xUuRJ05BmZGStAjw3FqfnJSboQhYxUMmyGdHHSsuNYXutYcR/aH0wYM2qes9ZAJswXJnBEY1k8v2F2CFQBhBPF5H0/Un4B9vyVm/y4Py4qiH6q8V4PIPIZ54aPvzV2Wwx2vrT6OHVz6+v021TZ4/9poYsCRR/gCCO9pMU34kGixdPrlm44V9/TgEQBX62Irtj3cF/iTAgOCzCu+ZRkdFZ4dhC56B08hzaURca/zANh1ucoo4e0eIHThf13oticzZ5qfBzfQXTufIcphQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tW8YFj4bY+C+9+JPx/nreRIrasMX4Ci//3HgKJ0R62I=;
- b=AXZPsO/w5SRz+VDOTfeKtBaNIvelI/42SWprvcpPV5VcOKB0oTpRh9tMWQNxHTxLJHihLQ3geZwu3ZQj1AgsfEcbQzJVLGc2qGXcqKXpEmPTznCaGKW7dW86MHh6pmdpjHlKCrPToNr8gru5eMspLegkLihLjyc/GVLRKlz1xP0=
-Received: from MW4P221CA0022.NAMP221.PROD.OUTLOOK.COM (2603:10b6:303:8b::27)
- by CH0PR12MB5058.namprd12.prod.outlook.com (2603:10b6:610:e1::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7113.19; Thu, 21 Dec
- 2023 12:28:23 +0000
-Received: from MWH0EPF000971E8.namprd02.prod.outlook.com
- (2603:10b6:303:8b:cafe::15) by MW4P221CA0022.outlook.office365.com
- (2603:10b6:303:8b::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7113.18 via Frontend
- Transport; Thu, 21 Dec 2023 12:28:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- MWH0EPF000971E8.mail.protection.outlook.com (10.167.243.68) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7113.14 via Frontend Transport; Thu, 21 Dec 2023 12:28:22 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Thu, 21 Dec
- 2023 06:28:20 -0600
-From: Michal Simek <michal.simek@amd.com>
-To: <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
-	<michal.simek@xilinx.com>, <git@xilinx.com>
-CC: Conor Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>, Rob Herring <robh+dt@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>, <devicetree@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>
-Subject: [PATCH v3 3/4] dt-bindings: power: reset: xilinx: Rename node names in examples
-Date: Thu, 21 Dec 2023 13:27:56 +0100
-Message-ID: <920c839ae2c9c5803c6c08b8705a0d8338bb94bc.1703161663.git.michal.simek@amd.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1703161663.git.michal.simek@amd.com>
-References: <cover.1703161663.git.michal.simek@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E22E6EB63;
+	Thu, 21 Dec 2023 12:48:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1703162912;
+	bh=2NCEeLfcBTGldq8y38nz7ZWXoN1JW/y1+OmDgAsYgXo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=EAOGMCt68cmj+wdZMGdZ1VpamGZvkorPLseeE/zWVz5O7IVZwQT9dM8x8ZKUYZyn8
+	 u/VgkRM6XEAj7ZPYR353W9VLptOfB6LjfnkYG7kZkqX38azs8jpgHQqotAlaZ8irPg
+	 MZ/de6lcu0CBB9R1DKIeY3hW60ueKi905x06swnhEsyy3krfjBbgdR6V7kJAEkgVDF
+	 MjrSh5q8yk41i96uZ7tqrIDF8w5xx2T2TiWNWHgKvc8iPFqJ/0Bw0PN0qiS30fpNWG
+	 ZCO0N8f4AEotZv1cwoLkCRgDinKNRcsldOSeviOkq7zo0P+uKJr2X+h00wHKuGsbIf
+	 +9hwZS4FbevIQ==
+Received: from IcarusMOD.eternityproject.eu (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id B75CE3781485;
+	Thu, 21 Dec 2023 12:48:31 +0000 (UTC)
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+To: daniel.lezcano@linaro.org
+Cc: rafael@kernel.org,
+	rui.zhang@intel.com,
+	lukasz.luba@arm.com,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	kernel@collabora.com
+Subject: [RFC PATCH 00/26] Add thermal zones names and new registration func
+Date: Thu, 21 Dec 2023 13:47:59 +0100
+Message-ID: <20231221124825.149141-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1255; i=michal.simek@amd.com; h=from:subject:message-id; bh=qVrvpz8Il4FZNCPKd9oussz0ew4UkcAivJt5txBH6Sg=; b=owGbwMvMwCR4yjP1tKYXjyLjabUkhtQWfa/3j38Hbl2/vmiK5JxOj26pcEN9Hm/GvxphHex+J f/etl/oiGVhEGRikBVTZJG2uXJmb+WMKcIXD8vBzGFlAhnCwMUpABPpVmCYZ73A/G7u2a4fBUl/ v7Lbfj/jcU51HcMcjh3b9Rm3yexOXxx89yi75KI/3Dw/AA==
-X-Developer-Key: i=michal.simek@amd.com; a=openpgp; fpr=67350C9BF5CCEE9B5364356A377C7F21FE3D1F91
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000971E8:EE_|CH0PR12MB5058:EE_
-X-MS-Office365-Filtering-Correlation-Id: bd80ab48-55a3-4007-8125-08dc022052a6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	VuRABSc2jhdD9l/TTLradHz5GN6r0tqZudYZe3xJOYXYnfTnhn2+JS2CfUTLySuxe/b15ANqPhVyZw2aetypBTeslGK0+cHOA3AxbQpMBTQ6voBxnug9Y8furSHwVvfm6Cwkq4LVoaaGN11jeIOWKbRr6uGxwuMAx/rJEHMYxJSqYdMwCRJbBhOjxuaTH0GC9PTlMhjoNkQ7alUg1q6+BXjB6z8I7vN/urxOiEk1VcQkDH3Mhx5r89eJmetPIUL2vau+TGzMI5x+wwaByhnWDpzEMr7/fa8bAIA81qEoSOe52Mpcd9MWbtp3ZFFm5sNR0xMwBfaGNewT3673wcZdwRwhEg5z7oa8urF1krnhjfoggUKgSx5zhPV62Uvl+ecyAahHMVebXlUQGuHmfmTfYv1/IllR0xXdTstZAmGRRgxdQFnMR36xFx55ErA4GcgFUvangVC9amnM3BAcars9UtYSqE5Xkk7Bin8HV5xsg3zbRxTNEgwq+nSAD9GIFpKnxw740FPqGEptL9+1Hjehen4OZ4AAu9o7NPgeB1nF0qjsfiMpQE4AoMdBXXYde5kY/PG2i5qRfPqXkoZWkcBEUudLoFOPSOEsWbGeqbeOY1dFT9y+eLYZ+4aAPKIHhz4eHD870dOh6si2Aw7v83HrLJh/O7Z7JCVmdrE8zPgwVWsY8MB+522nr6WgK8yvGWchZ9YJsESNjLNQkcw0VyWTD7IiuHYEvGC3Z28DyVTZw++lVWj9bt75jIVQnbhM/kx2LgBAT/LuP5S3SddFNvGFjLEQyqnf8ztSMfXdlIQA1Y8=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(376002)(136003)(346002)(396003)(230922051799003)(82310400011)(64100799003)(451199024)(1800799012)(186009)(46966006)(40470700004)(36840700001)(83380400001)(47076005)(40460700003)(110136005)(36756003)(70586007)(70206006)(36860700001)(54906003)(316002)(4326008)(8676002)(8936002)(356005)(6666004)(2906002)(40480700001)(7416002)(44832011)(81166007)(82740400003)(478600001)(86362001)(5660300002)(426003)(2616005)(26005)(336012)(16526019)(41300700001)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Dec 2023 12:28:22.6901
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bd80ab48-55a3-4007-8125-08dc022052a6
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MWH0EPF000971E8.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5058
 
-Rename zynqmp-power node name to power-management which is more aligned
-with generic node name recommendation.
+** This RFC was sent only to thermal API maintainers + reviewers on purpose **
 
-Signed-off-by: Michal Simek <michal.simek@amd.com>
----
+As per previous discussion with Daniel [1], I've prepared this series adding
+a new struct thermal_zone_device_params, used in a new registration function
+for thermal zones thermal_zone_device_register(), deprecating and, finally,
+replacing functions thermal_tripless_zone_device_register() and
+thermal_zone_device_register_with_trips().
 
-Changes in v3:
-- s/power-controller/power-management/g
-- align commit message
+The new flow to register a thermal zone becomes the following:
+ - Declare a struct thermal_zone_device_params (`tzp` in this example)
+ - Fill in all the params (instead of passing all of them to a function)
+ - Call thermal_zone_device_register(tzp)
 
-Changes in v2:
-- New patch is series
+Moreover, I've also introduced the concept of `name` for a thermal zone,
+and set, as suggested, a constraint for which:
+ - Multiple thermal zones can have the same `type` (so, no change), and
+ - A thermal zone's name must be *unique*.
 
- .../devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml    | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This should then help (in a later series?) to disambiguate thermal zone
+name vs type, as most of (if not all) the users seem to actually be
+misusing the TZ type referring to / using it as a TZ name.
 
-diff --git a/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml b/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml
-index 45792e216981..799831636194 100644
---- a/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml
-+++ b/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml
-@@ -57,7 +57,7 @@ examples:
- 
-     firmware {
-       zynqmp-firmware {
--        zynqmp-power {
-+        power-management {
-           compatible = "xlnx,zynqmp-power";
-           interrupts = <0 35 4>;
-         };
-@@ -70,7 +70,7 @@ examples:
- 
-     firmware {
-       zynqmp-firmware {
--        zynqmp-power {
-+        power-management {
-           compatible = "xlnx,zynqmp-power";
-           interrupt-parent = <&gic>;
-           interrupts = <0 35 4>;
+Please note that this series is currently a RFC because it's apparently
+growing bigger than I wanted - and because I probably have to add some
+more code on top. Before doing so, I'm trying to get feedback on what
+I've done until now.
+
+P.S.: I know, there's a fixup commit in the mix, will obviously fix
+that for v1 :-)
+
+[1]: https://lore.kernel.org/all/20231115144857.424005-1-angelogioacchino.delregno@collabora.com/
+
+AngeloGioacchino Del Regno (26):
+  thermal: Introduce thermal_zone_device_register() and params structure
+  thermal/of: Migrate to thermal_zone_device_register()
+  platform/x86: acerhdf: Migrate to thermal_zone_device_register()
+  ACPI: thermal: Migrate to thermal_zone_device_register()
+  thermal/drivers/da9062: Migrate to thermal_zone_device_register()
+  thermal/drivers/imx: Migrate to thermal_zone_device_register()
+  thermal/drivers/rcar: Migrate to thermal_zone_device_register()
+  thermal/drivers/st: Migrate to thermal_zone_device_register()
+  thermal: intel: pch_thermal: Migrate to thermal_zone_device_register()
+  thermal: intel: quark_dts: Migrate to thermal_zone_device_register()
+  thermal: intel: soc_dts_iosf: Migrate to
+    thermal_zone_device_register()
+  thermal: intel: int340x: Migrate to thermal_zone_device_register()
+  thermal: int340x: processor: Migrate to thermal_zone_device_register()
+  thermal: intel: x86_pkg_temp: Migrate to
+    thermal_zone_device_register()
+  power: supply: core: Migrate to thermal_zone_device_register()
+  thermal/drivers/armada: Migrate to thermal_zone_device_register()
+  thermal/drivers/dove: Migrate to thermal_zone_device_register()
+  thermal/drivers/kirkwood: Migrate to thermal_zone_device_register()
+  thermal/drivers/spear: Migrate to thermal_zone_device_register()
+  thermal/drivers/int340x: Migrate to thermal_zone_device_register()
+  wifi: iwlwifi: mvm: Migrate to thermal_zone_device_register()
+  cxgb4: Migrate to thermal_zone_device_register()
+  mlxsw: core_thermal: Migrate to thermal_zone_device_register()
+  fixup! power: supply: core: Migrate to thermal_zone_device_register()
+  thermal: Remove tripless_zone_register and register_with_trips
+    functions
+  thermal: Introduce thermal zones names
+
+ drivers/acpi/thermal.c                        |  18 +--
+ .../ethernet/chelsio/cxgb4/cxgb4_thermal.c    |  18 ++-
+ .../ethernet/mellanox/mlxsw/core_thermal.c    |  93 +++++++-------
+ drivers/net/wireless/intel/iwlwifi/mvm/tt.c   |  27 ++--
+ drivers/platform/x86/acerhdf.c                |  25 ++--
+ drivers/power/supply/power_supply_core.c      |  14 +-
+ drivers/thermal/armada_thermal.c              |  10 +-
+ drivers/thermal/da9062-thermal.c              |  14 +-
+ drivers/thermal/dove_thermal.c                |   8 +-
+ drivers/thermal/imx_thermal.c                 |  19 ++-
+ .../intel/int340x_thermal/int3400_thermal.c   |  17 +--
+ .../int340x_thermal/int340x_thermal_zone.c    |  28 ++--
+ .../processor_thermal_device_pci.c            |  23 ++--
+ drivers/thermal/intel/intel_pch_thermal.c     |  11 +-
+ .../thermal/intel/intel_quark_dts_thermal.c   |  21 +--
+ drivers/thermal/intel/intel_soc_dts_iosf.c    |  22 +++-
+ drivers/thermal/intel/x86_pkg_temp_thermal.c  |  20 +--
+ drivers/thermal/kirkwood_thermal.c            |   8 +-
+ drivers/thermal/rcar_thermal.c                |  13 +-
+ drivers/thermal/spear_thermal.c               |   8 +-
+ drivers/thermal/st/st_thermal.c               |  15 ++-
+ drivers/thermal/thermal_core.c                | 120 +++++++++---------
+ drivers/thermal/thermal_of.c                  |  38 +++---
+ drivers/thermal/thermal_sysfs.c               |   9 ++
+ drivers/thermal/thermal_trace.h               |  17 ++-
+ include/linux/thermal.h                       |  50 ++++++--
+ 26 files changed, 391 insertions(+), 275 deletions(-)
+
 -- 
-2.36.1
+2.43.0
 
 
