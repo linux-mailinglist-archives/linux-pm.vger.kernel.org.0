@@ -1,88 +1,102 @@
-Return-Path: <linux-pm+bounces-1466-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1467-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 433D181AE11
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 05:36:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4501D81AE87
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 06:51:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3915281BC6
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 04:36:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EFA941F244FB
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 05:51:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37ADF7465;
-	Thu, 21 Dec 2023 04:36:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52EA89479;
+	Thu, 21 Dec 2023 05:51:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PudtbnkL"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Zv0M382b"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 039CBAD31;
-	Thu, 21 Dec 2023 04:36:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EA1DC433C8;
-	Thu, 21 Dec 2023 04:36:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703133385;
-	bh=Ye0z8hSnZkvGRVITl2wlNpanlqLTvzdlfbhdatzGoR4=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=PudtbnkLI0SC9Z0NDsUUSzMU0ipAjqo60oSzraQ7xsNN3sdgdBZAAUxAiLxBLQcxm
-	 C3r9vtGIiK4fwmrQce1zVRLHaZD+6R1nASG367QBQV0YIgHS10p7UUpjKFcOP9fhuV
-	 M0dPvCvdsLHf3kD/dx9weNUjr8R575aiZvYX27vMePLLepvRuWwrXz6BsR6fDcHTll
-	 Lanq0JZV+JeXdzeAQRndBdLNx2P02z2ViR6g1fozSAe30hXvqka96EGodMSbJzaWYM
-	 P+2XObkg0V6nk0JfnilGyuUV2PZLi6oaBTdKjRsZL59k89Nbsgf1GWNO+sYPOdVqPA
-	 lHZkPIkJ7EDtQ==
-Message-ID: <d0fe9a3302f8c367a26dd5b4b1b29c68.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E7559474;
+	Thu, 21 Dec 2023 05:51:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=+XoCK53Gvu/al13C+ucC/sWMObI4hSS6KAdW71BQpfs=; b=Zv0M382bWEcWJmtA3dhuJ0koDy
+	jdd6oUNr3xlkxv99M7I0n5xSjhQL1Prj2y+L2rUL8jgGkFbphsKGUwMHmtBA3h2H70+gOedzVojd0
+	Y2qMMx09fGWkTq1RdTK/AE3h1RKok8zqmd7qiQxhzHF9imST1Y1f41gbSy1RW/fAzOwPKrY9me8B7
+	1J4G6QMvkgiugjFlbp3kn35Cj/+lM7anql28zBC9IeC+BLansdc6Y+BNHmicYAjdGSpJUAMePcirS
+	kd82j1oh8zvn5VlaxnsIiuR2BnZtVssTOnA9lfLRFLdsULM0BV6pHcqFtTWBzoVDYvjVCg30EMwDI
+	NYY/tqJQ==;
+Received: from [50.53.46.231] (helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1rGByD-001m5e-1V;
+	Thu, 21 Dec 2023 05:51:49 +0000
+From: Randy Dunlap <rdunlap@infradead.org>
+To: linux-kernel@vger.kernel.org
+Cc: Randy Dunlap <rdunlap@infradead.org>,
+	Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	linux-pm@vger.kernel.org
+Subject: [PATCH] thermal: cpuidle_cooling: fix kernel-doc warning and a spello
+Date: Wed, 20 Dec 2023 21:51:44 -0800
+Message-ID: <20231221055144.24862-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20231220-sa8295p-gpu-v1-2-d8cdf2257f97@quicinc.com>
-References: <20231220-sa8295p-gpu-v1-0-d8cdf2257f97@quicinc.com> <20231220-sa8295p-gpu-v1-2-d8cdf2257f97@quicinc.com>
-Subject: Re: [PATCH 2/8] clk: qcom: gdsc: Enable supply reglator in GPU GX handler
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, Bjorn Andersson <quic_bjorande@quicinc.com>
-To: Bjorn Andersson <andersson@kernel.org>, Bjorn Andersson <quic_bjorande@quicinc.com>, Catalin Marinas <catalin.marinas@arm.com>, Conor Dooley <conor+dt@kernel.org>, Johan Hovold <johan+linaro@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Michael Turquette <mturquette@baylibre.com>, Rob Herring <robh+dt@kernel.org>, Taniya Das <quic_tdas@quicinc.com>, Ulf Hansson <ulf.hansson@linaro.org>, Will Deacon <will@kernel.org>
-Date: Wed, 20 Dec 2023 20:36:23 -0800
-User-Agent: alot/0.10
+Content-Transfer-Encoding: 8bit
 
-Quoting Bjorn Andersson (2023-12-20 19:50:36)
-> The GX GDSC is modelled to aid the GMU in powering down the GPU in the
-> event that the GPU crashes, so that it can be restarted again. But in
-> the event that the power-domain is supplied through a dedicated
-> regulator (in contrast to being a subdomin of another power-domain),
-> something needs to turn that regulator on, both to make sure things are
-> powered and to match the operation in gdsc_disable().
->=20
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
->  drivers/clk/qcom/gdsc.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-> index 5358e28122ab..d1139c895503 100644
-> --- a/drivers/clk/qcom/gdsc.c
-> +++ b/drivers/clk/qcom/gdsc.c
-> @@ -557,7 +557,13 @@ void gdsc_unregister(struct gdsc_desc *desc)
->   */
->  int gdsc_gx_do_nothing_enable(struct generic_pm_domain *domain)
->  {
-> +       struct gdsc *sc =3D domain_to_gdsc(domain);
-> +       int ret =3D 0;
-> +
->         /* Do nothing but give genpd the impression that we were successf=
-ul */
+Correct one misuse of kernel-doc notation and one spelling error as
+reported by codespell.
 
-Update this comment.
+cpuidle_cooling.c:152: warning: cannot understand function prototype: 'struct thermal_cooling_device_ops cpuidle_cooling_ops = '
 
-> -       return 0;
-> +       if (sc->rsupply)
-> +               ret =3D regulator_enable(sc->rsupply);
-> +
-> +       return ret;
->  }
+For the kernel-doc warning, don't use "/**" for a comment on data.
+kernel-doc can be used for structure declarations but not definitions.
+
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Amit Daniel Kachhap <amit.kachhap@gmail.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Lukasz Luba <lukasz.luba@arm.com>
+Cc: Rafael J. Wysocki <rafael@kernel.org>
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: linux-pm@vger.kernel.org
+---
+ drivers/thermal/cpuidle_cooling.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff -- a/drivers/thermal/cpuidle_cooling.c b/drivers/thermal/cpuidle_cooling.c
+--- a/drivers/thermal/cpuidle_cooling.c
++++ b/drivers/thermal/cpuidle_cooling.c
+@@ -66,7 +66,7 @@ static unsigned int cpuidle_cooling_runt
+  * @state : a pointer to the state variable to be filled
+  *
+  * The function always returns 100 as the injection ratio. It is
+- * percentile based for consistency accross different platforms.
++ * percentile based for consistency across different platforms.
+  *
+  * Return: The function can not fail, it is always zero
+  */
+@@ -146,7 +146,7 @@ static int cpuidle_cooling_set_cur_state
+ 	return 0;
+ }
+ 
+-/**
++/*
+  * cpuidle_cooling_ops - thermal cooling device ops
+  */
+ static struct thermal_cooling_device_ops cpuidle_cooling_ops = {
 
