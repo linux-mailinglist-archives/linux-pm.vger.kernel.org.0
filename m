@@ -1,146 +1,224 @@
-Return-Path: <linux-pm+bounces-1477-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1479-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 656BB81AFF2
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 09:03:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B85A81B201
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 10:21:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E0BA2860F1
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 08:03:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A06181C23769
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 09:21:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E50C6156C9;
-	Thu, 21 Dec 2023 08:03:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CF0A21341;
+	Thu, 21 Dec 2023 09:05:47 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B49817992;
-	Thu, 21 Dec 2023 08:03:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7528208D6;
+	Thu, 21 Dec 2023 09:05:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 344B82F4;
-	Thu, 21 Dec 2023 00:03:58 -0800 (PST)
-Received: from [10.57.87.53] (unknown [10.57.87.53])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9BA4B3F738;
-	Thu, 21 Dec 2023 00:03:10 -0800 (PST)
-Message-ID: <fe2f856b-c9c4-41b9-b569-079657b05b79@arm.com>
-Date: Thu, 21 Dec 2023 08:04:16 +0000
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B27092F4;
+	Thu, 21 Dec 2023 01:06:28 -0800 (PST)
+Received: from e129166.arm.com (unknown [10.57.87.53])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E09F03F5A1;
+	Thu, 21 Dec 2023 01:05:41 -0800 (PST)
+From: Lukasz Luba <lukasz.luba@arm.com>
+To: linux-kernel@vger.kernel.org,
+	rafael@kernel.org
+Cc: linux-pm@vger.kernel.org,
+	daniel.lezcano@linaro.org,
+	rui.zhang@intel.com,
+	lukasz.luba@arm.com,
+	m.majewski2@samsung.com,
+	bzolnier@gmail.com,
+	m.szyprowski@samsung.com,
+	krzysztof.kozlowski@linaro.org,
+	linux-samsung-soc@vger.kernel.org
+Subject: [RFC PATCH] thermal: Add API to update framework with known temperature
+Date: Thu, 21 Dec 2023 09:06:37 +0000
+Message-Id: <20231221090637.1996394-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] OPP: Add API to update EM after adjustment of voltage
- for OPPs
-Content-Language: en-US
-To: Xuewen Yan <xuewen.yan94@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- dietmar.eggemann@arm.com, linux-arm-kernel@lists.infradead.org,
- sboyd@kernel.org, nm@ti.com, linux-samsung-soc@vger.kernel.org,
- daniel.lezcano@linaro.org, rafael@kernel.org, viresh.kumar@linaro.org,
- krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com,
- m.szyprowski@samsung.com, mhiramat@kernel.org, qyousef@layalina.io,
- wvw@google.com
-References: <20231220110339.1065505-1-lukasz.luba@arm.com>
- <20231220110339.1065505-2-lukasz.luba@arm.com>
- <CAB8ipk9PQbS=bjZ8F8brCfdXOgz6HUT0on2K1ZDLAaOhV9OpZw@mail.gmail.com>
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAB8ipk9PQbS=bjZ8F8brCfdXOgz6HUT0on2K1ZDLAaOhV9OpZw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+Some thermal drivers support trip point interrupts. These IRQs are
+triggered when the defined temperature threshold value is reached. This
+information is enough to say what is the temperature. Therefore, create
+a new API, which allows to provide temperature value as an argument and
+avoid reading the temperature again by in the framework function. This
+would also avoid scenario when the temperature which is later read via
+update_temperature() is different than the one which triggered the IRQ.
+This issue has been reported on some mainline boards.
+
+It should also improve performance in such scenario, since there is no
+call to __thermal_zone_get_temp() in the code path (which might be heavy,
+when temperature sensor is connected via slow interface).
+
+Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+---
+Hi all,
+
+This is a RFC with proposal to skip reading temperature using get_temp()
+callback when calling thermal_zone_device_update() from thermal driver IRQ
+hanlder. There was a discussion [1] that reading temperature after the IRQ
+might give different value than that IRQ trip threshold was programmed. 
+
+Therefore, this proposal aims to solve the situation and feed temperature
+to the thermal fwk as an argument.
+
+Regards,
+Lukasz
+
+[1] https://lore.kernel.org/lkml/20231113130435.500353-1-m.majewski2@samsung.com/
 
 
-On 12/21/23 07:28, Xuewen Yan wrote:
-> On Wed, Dec 20, 2023 at 7:02 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> There are device drivers which can modify voltage values for OPPs. It
->> could be due to the chip binning and those drivers have specific chip
->> knowledge about this. This adjustment can happen after Energy Model is
->> registered, thus EM can have stale data about power.
->>
->> Introduce new API function which can be used by device driver which
->> adjusted the voltage for OPPs. The implementation takes care about
->> calculating needed internal details in the new EM table ('cost' field).
->> It plugs in the new EM table to the framework so other subsystems would
->> use the correct data.
->>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->>   drivers/opp/of.c       | 69 ++++++++++++++++++++++++++++++++++++++++++
->>   include/linux/pm_opp.h |  6 ++++
->>   2 files changed, 75 insertions(+)
->>
->> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
->> index 81fa27599d58..992434c0b711 100644
->> --- a/drivers/opp/of.c
->> +++ b/drivers/opp/of.c
->> @@ -1596,3 +1596,72 @@ int dev_pm_opp_of_register_em(struct device *dev, struct cpumask *cpus)
->>          return ret;
->>   }
->>   EXPORT_SYMBOL_GPL(dev_pm_opp_of_register_em);
->> +
->> +/**
->> + * dev_pm_opp_of_update_em() - Update Energy Model with new power values
->> + * @dev                : Device for which an Energy Model has to be registered
->> + *
->> + * This uses the "dynamic-power-coefficient" devicetree property to calculate
->> + * power values for EM. It uses the new adjusted voltage values known for OPPs
->> + * which have changed after boot.
->> + */
->> +int dev_pm_opp_of_update_em(struct device *dev)
->> +{
->> +       struct em_perf_table __rcu *runtime_table;
->> +       struct em_perf_state *table, *new_table;
->> +       struct em_perf_domain *pd;
->> +       int ret, table_size, i;
->> +
->> +       if (IS_ERR_OR_NULL(dev))
->> +               return -EINVAL;
->> +
->> +       pd = em_pd_get(dev);
->> +       if (!pd) {
->> +               dev_warn(dev, "Couldn't find Energy Model %d\n", ret);
->> +               return -EINVAL;
->> +       }
->> +
->> +       runtime_table = em_allocate_table(pd);
->> +       if (!runtime_table) {
->> +               dev_warn(dev, "new EM allocation failed\n");
->> +               return -ENOMEM;
->> +       }
->> +
->> +       new_table = runtime_table->state;
->> +
->> +       table = em_get_table(pd);
->> +       /* Initialize data based on older EM table */
->> +       table_size = sizeof(struct em_perf_state) * pd->nr_perf_states;
->> +       memcpy(new_table, table, table_size);
->> +
->> +       em_put_table();
->> +
->> +       /* Update power values which might change due to new voltage in OPPs */
->> +       for (i = 0; i < pd->nr_perf_states; i++) {
->> +               unsigned long freq = new_table[i].frequency;
->> +               unsigned long power;
->> +
->> +               ret = _get_power(dev, &power, &freq);
->> +               if (ret)
->> +                       goto failed;
-> 
-> Need we use the EM_SET_ACTIVE_POWER_CB(em_cb, _get_power) and call
-> em_cb->active_power?
-> 
+ drivers/thermal/thermal_core.c  | 29 ++++++++++++++++++++++++-----
+ drivers/thermal/thermal_core.h  |  3 ++-
+ drivers/thermal/thermal_sysfs.c |  6 ++++--
+ drivers/thermal/thermal_trip.c  |  2 +-
+ 4 files changed, 31 insertions(+), 9 deletions(-)
 
-No, not in this case. It's not like registration of EM, when there
-is a need to also pass the callback function. As you can see this code
-operates locally and the call _get_power() just simply gets the
-power in straight way. Later the whole 'runtime_table' is passed to the
-EM framework to 'swap' the pointers under RCU.
-
-Thanks Xuewen for having a look at this!
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 62979c5401c3..9f25c62bd3cd 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -417,10 +417,16 @@ static void handle_thermal_trip(struct thermal_zone_device *tz,
+ 		handle_non_critical_trips(tz, trip);
+ }
+ 
+-static void update_temperature(struct thermal_zone_device *tz)
++static void update_temperature(struct thermal_zone_device *tz, bool read_temp,
++			       int known_temp)
+ {
+ 	int temp, ret;
+ 
++	if (!read_temp) {
++		temp = known_temp;
++		goto set_temperature;
++	}
++
+ 	ret = __thermal_zone_get_temp(tz, &temp);
+ 	if (ret) {
+ 		if (ret != -EAGAIN)
+@@ -430,6 +436,7 @@ static void update_temperature(struct thermal_zone_device *tz)
+ 		return;
+ 	}
+ 
++set_temperature:
+ 	tz->last_temperature = tz->temperature;
+ 	tz->temperature = temp;
+ 
+@@ -449,7 +456,8 @@ static void thermal_zone_device_init(struct thermal_zone_device *tz)
+ }
+ 
+ void __thermal_zone_device_update(struct thermal_zone_device *tz,
+-				  enum thermal_notify_event event)
++				  enum thermal_notify_event event,
++				  bool read_temp, int temp)
+ {
+ 	struct thermal_trip *trip;
+ 
+@@ -459,7 +467,7 @@ void __thermal_zone_device_update(struct thermal_zone_device *tz,
+ 	if (!thermal_zone_device_is_enabled(tz))
+ 		return;
+ 
+-	update_temperature(tz);
++	update_temperature(tz, read_temp, temp);
+ 
+ 	__thermal_zone_set_trips(tz);
+ 
+@@ -491,7 +499,7 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
+ 	if (!ret)
+ 		tz->mode = mode;
+ 
+-	__thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
++	__thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED, true, 0);
+ 
+ 	mutex_unlock(&tz->lock);
+ 
+@@ -532,11 +540,22 @@ void thermal_zone_device_update(struct thermal_zone_device *tz,
+ {
+ 	mutex_lock(&tz->lock);
+ 	if (thermal_zone_is_present(tz))
+-		__thermal_zone_device_update(tz, event);
++		__thermal_zone_device_update(tz, event, true, 0);
+ 	mutex_unlock(&tz->lock);
+ }
+ EXPORT_SYMBOL_GPL(thermal_zone_device_update);
+ 
++void thermal_zone_device_update_with_temp(struct thermal_zone_device *tz,
++					  enum thermal_notify_event event,
++					  int temp)
++{
++	mutex_lock(&tz->lock);
++	if (thermal_zone_is_present(tz))
++		__thermal_zone_device_update(tz, event, false, temp);
++	mutex_unlock(&tz->lock);
++}
++EXPORT_SYMBOL_GPL(thermal_zone_device_update_with_temp);
++
+ static void thermal_zone_device_check(struct work_struct *work)
+ {
+ 	struct thermal_zone_device *tz = container_of(work, struct
+diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
+index e6a2b6f97be8..2d73847fcfea 100644
+--- a/drivers/thermal/thermal_core.h
++++ b/drivers/thermal/thermal_core.h
+@@ -113,7 +113,8 @@ void thermal_unregister_governor(struct thermal_governor *);
+ int thermal_zone_device_set_policy(struct thermal_zone_device *, char *);
+ int thermal_build_list_of_policies(char *buf);
+ void __thermal_zone_device_update(struct thermal_zone_device *tz,
+-				  enum thermal_notify_event event);
++				  enum thermal_notify_event event,
++				  bool read_temp, int temp);
+ void thermal_zone_device_critical_reboot(struct thermal_zone_device *tz);
+ void thermal_governor_update_tz(struct thermal_zone_device *tz,
+ 				enum thermal_notify_event reason);
+diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+index 5abf6d136c24..9062545f314e 100644
+--- a/drivers/thermal/thermal_sysfs.c
++++ b/drivers/thermal/thermal_sysfs.c
+@@ -131,7 +131,8 @@ trip_point_temp_store(struct device *dev, struct device_attribute *attr,
+ 
+ 		thermal_zone_set_trip_temp(tz, trip, temp);
+ 
+-		__thermal_zone_device_update(tz, THERMAL_TRIP_CHANGED);
++		__thermal_zone_device_update(tz, THERMAL_TRIP_CHANGED,
++					     true, 0);
+ 	}
+ 
+ unlock:
+@@ -256,7 +257,8 @@ emul_temp_store(struct device *dev, struct device_attribute *attr,
+ 		ret = tz->ops->set_emul_temp(tz, temperature);
+ 
+ 	if (!ret)
+-		__thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
++		__thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED,
++					     true, 0);
+ 
+ 	mutex_unlock(&tz->lock);
+ 
+diff --git a/drivers/thermal/thermal_trip.c b/drivers/thermal/thermal_trip.c
+index a1ad345c0741..77dc433e6e1c 100644
+--- a/drivers/thermal/thermal_trip.c
++++ b/drivers/thermal/thermal_trip.c
+@@ -158,7 +158,7 @@ void thermal_zone_trip_updated(struct thermal_zone_device *tz,
+ 	thermal_notify_tz_trip_change(tz->id, thermal_zone_trip_id(tz, trip),
+ 				      trip->type, trip->temperature,
+ 				      trip->hysteresis);
+-	__thermal_zone_device_update(tz, THERMAL_TRIP_CHANGED);
++	__thermal_zone_device_update(tz, THERMAL_TRIP_CHANGED, true, 0);
+ }
+ 
+ void thermal_zone_set_trip_temp(struct thermal_zone_device *tz,
+-- 
+2.25.1
 
 
