@@ -1,233 +1,716 @@
-Return-Path: <linux-pm+bounces-1534-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1535-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B800881BCAF
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 18:12:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0176581BCED
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 18:20:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D1CF8B21E4D
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 17:12:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6C7E6B263D7
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 17:20:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 512D959910;
-	Thu, 21 Dec 2023 17:11:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mUFviwBD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ADB05991D;
+	Thu, 21 Dec 2023 17:19:42 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA76562805;
-	Thu, 21 Dec 2023 17:11:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BEB9627E8;
+	Thu, 21 Dec 2023 17:19:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-553eb74df60so1228638a12.0;
-        Thu, 21 Dec 2023 09:11:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1703178713; x=1703783513; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8c7qdOK44Erw1rd2N9Dkc3C/rkBrTjfjshoie/DwZvs=;
-        b=mUFviwBDk+rBD0Cigr7Ej1YqAFjUeW9dpF+t6QeI6n6ppzg3OrDoWqq4wOiWKrDMgU
-         QI0bXw9Y70sxTTp12n/v86SeMKdw6qTyARCSit+yHJlNyopV2GkLcW7IwVpEDTV6mvAw
-         y1BUTSs1GCulkEENA7QX7AVSPjFNt+s9Kgf5EeNJ3L+ttgt9Zck9qSCY6ieMdRrenA0P
-         iYFFYRTyT0dgSxyYck4huvBZTts5Xk/PJ5Af1Ya6KByOa7xSa048a9sAp5HlFrOuqlpM
-         5gMJGtArxsmU9+fodaU4Mga4JwvSl55VVyNtlUDcNYC7p1MPx2lPGJfTQZ+fbZ5u9KIT
-         4zbA==
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-593f182f263so111774eaf.0;
+        Thu, 21 Dec 2023 09:19:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703178713; x=1703783513;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1703179179; x=1703783979;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8c7qdOK44Erw1rd2N9Dkc3C/rkBrTjfjshoie/DwZvs=;
-        b=n7VlwyqyTCc5jBAk7Xvsevj70aCd08ecfYc/ULRg0Wl9D30m/3uuVs6f8vV6HOiOMl
-         QfmlGmgJ3katSmXKkSeG2L/bKz9qSUY+Yml3oiZX0lqmLAC/Pw61EwVOdGBO4E0VqJ1z
-         mEaLe+NLblFaKiR6v0MYEqy/lyNOoHJqIlvqNZ1N5fKa9MFqzbc4zxScgWfWez2q3q+x
-         f8WUaP2PM1YzKK24ujs5WFLMlhJDFasWo7tn3ALDNSDu5BSuIvZxKO7bfVMKaPge85Ri
-         DB4Ke5UK6Mn4gsoQtV40zf0XOpQmvQvvauKcHczQyxx6U2uC/OuqsSDZuz5q69lqRyJW
-         d0aw==
-X-Gm-Message-State: AOJu0Yytc6zepfRDLk7Trg02x9XRskgmt8uA9z184vGJthckM/ddhU+v
-	e+v4wFarTJ1nzvNZxldUVs4=
-X-Google-Smtp-Source: AGHT+IHNiAZdFnzAEiUdKfNoeSk+geKiEkWgT/aPnMVG9zgCLJmSuW1YXNdZkHxCVKCqsDhOaSRiwg==
-X-Received: by 2002:a50:c057:0:b0:54b:27e7:f965 with SMTP id u23-20020a50c057000000b0054b27e7f965mr12048802edd.19.1703178712653;
-        Thu, 21 Dec 2023 09:11:52 -0800 (PST)
-Received: from localhost.localdomain ([154.72.163.204])
-        by smtp.gmail.com with ESMTPSA id b24-20020a056402139800b0054cb316499dsm1400760edv.10.2023.12.21.09.11.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Dec 2023 09:11:52 -0800 (PST)
-From: Brandon Cheo Fusi <fusibrandon13@gmail.com>
-To: andre.przywara@arm.com
-Cc: aou@eecs.berkeley.edu,
-	conor+dt@kernel.org,
-	devicetree@vger.kernel.org,
-	fusibrandon13@gmail.com,
-	jernej.skrabec@gmail.com,
-	krzysztof.kozlowski+dt@linaro.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-sunxi@lists.linux.dev,
-	palmer@dabbelt.com,
-	paul.walmsley@sifive.com,
-	rafael@kernel.org,
-	robh+dt@kernel.org,
-	samuel@sholland.org,
-	sfr@canb.auug.org.au,
-	tiny.windzz@gmail.com,
-	viresh.kumar@linaro.org,
-	wens@csie.org
-Subject: Re: [RFC PATCH v2 2/3] cpufreq: sun50i: Add support for D1's speed bin decoding
-Date: Thu, 21 Dec 2023 18:11:07 +0100
-Message-Id: <20231221171107.85991-1-fusibrandon13@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20231221124957.27fa9922@donnerap.manchester.arm.com>
-References: <20231221124957.27fa9922@donnerap.manchester.arm.com>
+        bh=WhX940bckgA4p1wmjuh48lmqWWaTtJ+9YEEpzwCfa30=;
+        b=S7hKJSTGah1a24F5Ax6apMiYkDWfmgdPeOtA9zPyMHM3YguW9I8f3hoUyE3Oy4h2ln
+         lvrN/MP7fnFo0mvEXnmt7pYiKcoB2Yp4oYKMjDh6LfUIqCHPDga2Y39okqaxvYZ7e6JK
+         E49gZba3yiX5RI6z3EHYvIHt+FX98LChYmvD++tHZ9hDArrRsVjoMm2B0kxEgO5Sb0Qe
+         UwV50PUbPRjWKSlmWAi+z+5RVYOVwWSkwQ+9t3f2/oC77QHZDqD3UKTyIkjZkcpSMFLH
+         Z8hfHUYlUIwja2on+7JUjD8cAFv4WOR+Sudu9SXJnxQ5OKghV3r2BPZ33gYCAJMvfQYR
+         ulfQ==
+X-Gm-Message-State: AOJu0YzrwTQT6Xm/H//tNTIispsjgUR/TdZVKDNDjmBriLInEIUZ9lzr
+	Z/GUO9nM+d4OIXAPNdpjPVlz7qV3Y2SgbFqBKjo=
+X-Google-Smtp-Source: AGHT+IEyk7R7FGhaOPkyVi2aw9cBFHPDCEvCqY+Uzvc63Is+VcBmRtUS+7e3bw/jaXnB1/w59xvCOe1P0xFwQhOFddI=
+X-Received: by 2002:a4a:d195:0:b0:594:177d:8bd6 with SMTP id
+ j21-20020a4ad195000000b00594177d8bd6mr4157161oor.1.1703179179096; Thu, 21 Dec
+ 2023 09:19:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20231219092539.3655172-1-daniel.lezcano@linaro.org>
+In-Reply-To: <20231219092539.3655172-1-daniel.lezcano@linaro.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 21 Dec 2023 18:19:27 +0100
+Message-ID: <CAJZ5v0j+F2uLauRqGZ1nvX3CsoA3+JXyzXFp5VtzvVTQTg6Yvw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] thermal/debugfs: Add thermal cooling device
+ debugfs information
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: rjw@rjwysocki.net, lukasz.luba@arm.com, rui.zhang@intel.com, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	"Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 21, 2023 at 1:50 PM Andre Przywara <andre.przywara@arm.com> wrote:
+On Tue, Dec 19, 2023 at 10:25=E2=80=AFAM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
-> On Thu, 21 Dec 2023 11:10:12 +0100
-> Brandon Cheo Fusi <fusibrandon13@gmail.com> wrote:
+> The thermal framework does not have any debug information except a
+> sysfs stat which is a bit controversial. This one allocates big chunks
+> of memory for every cooling devices with a high number of states and
+> could represent on some systems in production several megabytes of
+> memory for just a portion of it. As the sysfs is limited to a page
+> size, the output is not exploitable with large data array and gets
+> truncated.
 >
-> Hi Brandon,
+> The patch provides the same information than sysfs except the
+> transitions are dynamically allocated, thus they won't show more
+> events than the ones which actually occurred. There is no longer a
+> size limitation and it opens the field for more debugging information
+> where the debugfs is designed for, not sysfs.
 >
-> thanks for the quick turnaround, and for splitting this code up, that
-> makes reasoning about this much easier!
+> The thermal debugfs directory structure tries to stay consistent with
+> the sysfs one but in a very simplified way:
 >
-> > Adds support for decoding the efuse value read from D1 efuse speed
-> > bins, and factors out equivalent code for sun50i.
-> >
-> > The algorithm is gotten from
-> >
-> > https://github.com/Tina-Linux/linux-5.4/blob/master/drivers/cpufreq/sun50i-cpufreq-nvmem.c#L293-L338
-> >
-> > and maps an efuse value to either 0 or 1, with 1 meaning stable at
-> > a lower supply voltage for the same clock frequency.
-> >
-> > Signed-off-by: Brandon Cheo Fusi <fusibrandon13@gmail.com>
-> > ---
-> >  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 34 ++++++++++++++++++++++++++
-> >  1 file changed, 34 insertions(+)
-> >
-> > diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> > index fc509fc49..b1cb95308 100644
-> > --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> > +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> > @@ -29,6 +29,33 @@ struct sunxi_cpufreq_data {
-> >       u32 (*efuse_xlate)(u32 *speedbin, size_t len);
-> >  };
-> >
-> > +static u32 sun20i_efuse_xlate(u32 *speedbin, size_t len)
+> thermal/
+>  -- cooling_devices
+>     |-- 0
+>     |   |-- clear
+>     |   |-- time_in_state_ms
+>     |   |-- total_trans
+>     |   `-- trans_table
+>     |-- 1
+>     |   |-- clear
+>     |   |-- time_in_state_ms
+>     |   |-- total_trans
+>     |   `-- trans_table
+>     |-- 2
+>     |   |-- clear
+>     |   |-- time_in_state_ms
+>     |   |-- total_trans
+>     |   `-- trans_table
+>     |-- 3
+>     |   |-- clear
+>     |   |-- time_in_state_ms
+>     |   |-- total_trans
+>     |   `-- trans_table
+>     `-- 4
+>         |-- clear
+>         |-- time_in_state_ms
+>         |-- total_trans
+>         `-- trans_table
 >
-> I feel like this prototype can be shortened to:
+> The content of the files in the cooling devices directory is the same
+> as the sysfs one except for the trans_table which has the following
+> format:
 >
-> static u32 sun20i_efuse_xlate(u32 speedbin)
+> Transition      Hits
+> 1->0            246
+> 0->1            246
+> 2->1            632
+> 1->2            632
+> 3->2            98
+> 2->3            98
 >
-> See below.
->
-> > +{
-> > +     u32 ret, efuse_value = 0;
-> > +     int i;
-> > +
-> > +     for (i = 0; i < len; i++)
-> > +             efuse_value |= ((u32)speedbin[i] << (i * 8));
->
-> The cast is not needed. Looking deeper into the original code you linked
-> to, cell_value[] there is an array of u8, so they assemble a little endian
-> 32-bit integer from *up to* four 8-bit values read from the nvmem.
->
-> So I think this code here is wrong, len is the size of the nvmem cells
-> holding the bin identifier, in *bytes*, so the idea here is to just read
-> the (lowest) 16 bits (in the D1 case, cf. "reg = <0x00 0x2>;" in the next
-> patch) from this nvmem cell. Here you are combining two 32-bit words into
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+> Changelog:
+>   - v3
+>     - Fixed kerneldoc description (kbuild)
+>     - Made some functions static
 
-This is true. Not sure though what the 'in the D1 case...' bit means.
+There are a few minor nits still, as far as I'm concerned (see below).
 
-> efuse_value.
->
-> So I think this whole part above is actually not necessary: we are
-> expecting maximum 32 bits, and nvmem_cell_read() should take care of
-> masking off unrequested bits, so we get the correct value back already. So
-> can you try to remove the loop above, and use ...
->
-> > +
-> > +     switch (efuse_value) {
->
->         switch (*speedbin & 0xffff) {
->
+>   - v2
+>     - Added parameter names to fix kbuild report
+>     - Renamed 'reset' to 'clear' to avoid confusion (Rafael)
+>     - Fixed several typos and rephrased some sentences (Rafael)
+>     - Renamed structure field name s/list/node/ (Rafael)
+>     - Documented structures and exported functions (Rafael)
+>     - s/trans_list/transitions/ (Rafael)
+>     - s/duration_list/durations/ (Rafael)
+>     - Folded 'alloc' and 'insert' into a single function (Rafael)
+>     - s/list/lists/ as it is an array of lists (Rafael)
+>     - s/pos/entry/ (Rafael)
+>     - Introduced a locking in the 'clear' callback function (Rafael)
+>     - s/to/new_state/ and s/from/old_state/ (Rafael)
+>     - Added some comments in thermal_debug_cdev_transition() (Rafael)
+>     - Explained why char[11] (Rafael)
+>     - s/Hits/Occurrences/ (Rafael)
+>     - s/Time/Residency/ (Rafael)
+>     - Constified structure pointer passed to thermal_debug_cdev_transitio=
+n()
+>     - s/thermal_debug_cdev_transition()/thermal_debug_cdev_state_update()=
+/
+>   - v1 (from RFC):
+>     - Fixed typo "occurred"
+>     - Changed Kconfig option name and description
+>     - Removed comment in the Makefile
+>     - Renamed exported function name s/debugfs/debug/
+>     - Replaced thermal_debug_cdev_[unregister|register] by [add|remove]
+> ---
+>  drivers/thermal/Kconfig           |   7 +
+>  drivers/thermal/Makefile          |   2 +
+>  drivers/thermal/thermal_core.c    |   6 +
+>  drivers/thermal/thermal_core.h    |   1 +
+>  drivers/thermal/thermal_debugfs.c | 424 ++++++++++++++++++++++++++++++
+>  drivers/thermal/thermal_debugfs.h |  14 +
+>  drivers/thermal/thermal_helpers.c |  27 +-
+>  include/linux/thermal.h           |   7 +
+>  8 files changed, 482 insertions(+), 6 deletions(-)
+>  create mode 100644 drivers/thermal/thermal_debugfs.c
+>  create mode 100644 drivers/thermal/thermal_debugfs.h
 
-Shouldn't the bytes in *speedbin be reversed? 
+[cut]
 
-> here instead? Or drop the pointer at all, and just use one u32 value, see
-> the above prototype.
->
+All of the above changes look good to me.
 
-I was uncomfortable dropping the len parameter, because then each
-platform's efuse_xlate would ignore the number of valid bytes actually
-read.
+> +
+> +/**
+> + * struct cdev_debugfs - per cooling device statistics structure
+> + * A cooling device can have a high number of states. Showing the
+> + * transitions on a matrix based representation can be overkill given
+> + * most of the transitions won't happen and we end up with a matrix
+> + * filled with zero. Instead, we show the transitions which actually
+> + * happened.
+> + *
+> + * Every transition updates the current_state and the timestamp. The
+> + * transitions and the durations are stored in lists.
+> + *
+> + * @total: the number of transitions for this cooling device
+> + * @current_state: the current cooling device state
+> + * @timestamp: the state change timestamp
+> + * @durations: an array of lists containing the residencies of each stat=
+e
+> + * @transitions: an array of lists containing the state transitions
 
-> Cheers,
-> Andre
->
-> P.S. This is just a "peephole review" of this patch, I haven't got around
-> to look at this whole scheme in whole yet, to see if we actually need this
-> or can simplify this or clean it up.
->
->
-> > +     case 0x5e00:
-> > +             /* QFN package */
-> > +             ret = 0;
-> > +             break;
-> > +     case 0x5c00:
-> > +     case 0x7400:
-> > +             /* QFN package */
-> > +             ret = 1;
-> > +             break;
-> > +     case 0x5000:
-> > +     default:
-> > +             /* BGA package */
-> > +             ret = 0;
-> > +     }
-> > +
-> > +     return ret;
-> > +}
-> > +
-> >  static u32 sun50i_efuse_xlate(u32 *speedbin, size_t len)
-> >  {
-> >       u32 efuse_value = 0;
-> > @@ -46,6 +73,10 @@ static u32 sun50i_efuse_xlate(u32 *speedbin, size_t len)
-> >               return 0;
-> >  }
-> >
-> > +struct sunxi_cpufreq_data sun20i_cpufreq_data = {
-> > +     .efuse_xlate = sun20i_efuse_xlate,
-> > +};
-> > +
-> >  struct sunxi_cpufreq_data sun50i_cpufreq_data = {
-> >       .efuse_xlate = sun50i_efuse_xlate,
-> >  };
-> > @@ -54,6 +85,9 @@ static const struct of_device_id cpu_opp_match_list[] = {
-> >       { .compatible = "allwinner,sun50i-h6-operating-points",
-> >         .data = &sun50i_cpufreq_data,
-> >       },
-> > +     { .compatible = "allwinner,sun20i-d1-operating-points",
-> > +       .data = &sun20i_cpufreq_data,
-> > +     },
-> >       {}
-> >  };
-> >
->
+I would use the same ordering as for the fields below.
 
-Thank you for reviewing.
-Brandon.
+> + */
+> +struct cdev_debugfs {
+> +       u32 total;
+> +       int current_state;
+> +       ktime_t timestamp;
+> +       struct list_head transitions[CDEVSTATS_HASH_SIZE];
+> +       struct list_head durations[CDEVSTATS_HASH_SIZE];
+> +};
+> +
+> +/**
+> + * struct cdev_value - Common structure for cooling device entry
+> + *
+> + * The following common structure allows to store the information
+> + * related to the transitions and to the state residencies. They are
+> + * identified with a id which is associated to a value. It is used as
+> + * nodes for the "transitions" and "durations" above.
+> + *
+> + * @node: node to insert the structure in a list
+> + * @id: identifier of the value which can be a state or a transition
+> + * @value: the id associated value which can be a duration or an occurre=
+nce
+
+s/an occurrence/a number of occurrences/  IIUC.
+
+> + */
+> +struct cdev_value {
+
+I'm not sure about the name here.  I would rather call it cdev_record,
+because it consists of two items, the id and the value.
+
+> +       struct list_head node;
+> +       int id;
+> +       u64 value;
+
+This is kind of a union, but sort of in disguise.
+
+Why not make it a union proper, that is
+
+struct cdev_record {
+        struct list_head node;
+        int id;
+        union {
+                krime_t residency; /* for duration records */
+                u64 count; /* for occurrences records */
+        } data;
+};
+
+which then would result in a bit cleaner code in some places below, if
+I'm not mistaken?
+
+> +};
+> +
+> +/**
+> + * struct thermal_debugfs - High level structure for a thermal object in=
+ debugfs
+> + *
+> + * The thermal_debugfs structure is the common structure used by the
+> + * cooling device to compute the statistics.
+> + *
+> + * @d_top: top directory of the thermal object directory
+> + * @lock: per object lock to protect the internals
+> + *
+> + * @cdev: a cooling device debug structure
+> + */
+> +struct thermal_debugfs {
+> +       struct dentry *d_top;
+> +       struct mutex lock;
+> +       union {
+> +               struct cdev_debugfs cdev;
+
+I would call this cdev_dbg so it is not confused with a cooling device obje=
+ct.
+
+> +       };
+> +};
+> +
+> +void thermal_debug_init(void)
+> +{
+> +       d_root =3D debugfs_create_dir("thermal", NULL);
+> +       if (!d_root)
+> +               return;
+> +
+> +       d_cdev =3D debugfs_create_dir("cooling_devices", d_root);
+> +}
+> +
+> +static struct thermal_debugfs *thermal_debugfs_add_id(struct dentry *d, =
+int id)
+> +{
+> +       struct thermal_debugfs *dfs;
+
+I'm not sure about the "fs" parts of the variable names here and
+below.  It doesn't seem to mean anything in particular, so it would be
+better to use something more meaningful IMV.  For example, this
+particular pointer could be called thermdbg and pointers to the cdev
+or thermal zone (in the next patch) data sets could be called cdev_dbg
+and tz_dbg, respectively.
+
+> +       char ids[IDSLENGTH];
+> +
+> +       dfs =3D kzalloc(sizeof(*dfs), GFP_KERNEL);
+> +       if (!dfs)
+> +               return NULL;
+> +
+> +       mutex_init(&dfs->lock);
+> +
+> +       snprintf(ids, IDSLENGTH, "%d", id);
+> +
+> +       dfs->d_top =3D debugfs_create_dir(ids, d);
+> +       if (!dfs->d_top) {
+> +               kfree(dfs);
+> +               return NULL;
+> +       }
+> +
+> +       return dfs;
+> +}
+> +
+> +static void thermal_debugfs_remove_id(struct thermal_debugfs *dfs)
+> +{
+> +       if (!dfs)
+> +               return;
+> +
+> +       debugfs_remove(dfs->d_top);
+> +
+> +       kfree(dfs);
+> +}
+> +
+> +static struct cdev_value *thermal_debugfs_cdev_value_alloc(struct therma=
+l_debugfs *dfs,
+> +                                                          struct list_he=
+ad *list, int id)
+
+The analogous list_head pointer in the next function is called lists,
+so this one could be called lists either.
+
+> +{
+> +       struct cdev_value *cdev_value;
+> +
+> +       cdev_value =3D kzalloc(sizeof(*cdev_value), GFP_KERNEL);
+> +       if (cdev_value) {
+> +               cdev_value->id =3D id;
+> +               INIT_LIST_HEAD(&cdev_value->node);
+> +               list_add_tail(&cdev_value->node, &list[cdev_value->id % C=
+DEVSTATS_HASH_SIZE]);
+> +       }
+
+What about (using the names suggested above)
+
+cdev_record =3D kzalloc(sizeof(*cdev_record), GFP_KERNEL);
+if (!cdev_record)
+        return NULL;
+
+cdev_record->id =3D id;
+list_add_tail(&cdev_record->node, &lists[cdev_record->id %
+CDEVSTATS_HASH_SIZE]);
+
+> +
+> +       return cdev_value;
+> +}
+
+BTW, a list_head need not be initialized before adding it to an existing li=
+st.
+
+> +
+> +static struct cdev_value *thermal_debugfs_cdev_value_find(struct thermal=
+_debugfs *dfs,
+> +                                                         struct list_hea=
+d *lists, int id)
+> +{
+> +       struct cdev_value *entry;
+> +
+> +       list_for_each_entry(entry, &lists[id % CDEVSTATS_HASH_SIZE], node=
+)
+> +               if (entry->id =3D=3D id)
+> +                       return entry;
+> +
+> +       return NULL;
+> +}
+> +
+> +static struct cdev_value *thermal_debugfs_cdev_value_get(struct thermal_=
+debugfs *dfs,
+> +                                                        struct list_head=
+ *list, int id)
+
+And here?
+
+> +{
+> +       struct cdev_value *cdev_value;
+> +
+> +       cdev_value =3D thermal_debugfs_cdev_value_find(dfs, list, id);
+> +       if (cdev_value)
+> +               return cdev_value;
+> +
+> +       return thermal_debugfs_cdev_value_alloc(dfs, list, id);
+> +}
+> +
+> +static void thermal_debugfs_cdev_clear(struct cdev_debugfs *cfs)
+> +{
+> +       int i;
+> +       struct cdev_value *entry, *tmp;
+> +
+> +       for (i =3D 0; i < CDEVSTATS_HASH_SIZE; i++) {
+> +
+> +               list_for_each_entry_safe(entry, tmp, &cfs->transitions[i]=
+, node) {
+> +                       list_del(&entry->node);
+> +                       kfree(entry);
+> +               }
+> +
+> +               list_for_each_entry_safe(entry, tmp, &cfs->durations[i], =
+node) {
+> +                       list_del(&entry->node);
+> +                       kfree(entry);
+> +               }
+> +       }
+> +
+> +       cfs->total =3D 0;
+> +}
+> +
+> +static void *cdev_seq_start(struct seq_file *s, loff_t *pos)
+> +{
+> +       struct thermal_debugfs *dfs =3D s->private;
+> +
+> +       mutex_lock(&dfs->lock);
+> +
+> +       return (*pos < CDEVSTATS_HASH_SIZE) ? pos : NULL;
+> +}
+> +
+> +static void *cdev_seq_next(struct seq_file *s, void *v, loff_t *pos)
+> +{
+> +       (*pos)++;
+> +
+> +       return (*pos < CDEVSTATS_HASH_SIZE) ? pos : NULL;
+> +}
+> +
+> +static void cdev_seq_stop(struct seq_file *s, void *v)
+> +{
+> +       struct thermal_debugfs *dfs =3D s->private;
+> +
+> +       mutex_unlock(&dfs->lock);
+> +}
+> +
+> +static int cdev_tt_seq_show(struct seq_file *s, void *v)
+> +{
+> +       struct thermal_debugfs *dfs =3D s->private;
+> +       struct cdev_debugfs *cfs =3D &dfs->cdev;
+> +       struct list_head *transitions =3D cfs->transitions;
+> +       struct cdev_value *entry;
+> +       int i =3D *(loff_t *)v;
+> +
+> +       if (!i)
+> +               seq_puts(s, "Transition\tOccurences\n");
+> +
+> +       list_for_each_entry(entry, &transitions[i], node) {
+> +               /*
+> +                * Assuming maximum cdev states is 1024, the longer
+> +                * string for a transition would be "1024->1024\0"
+> +                */
+> +               char buffer[11];
+> +
+> +               snprintf(buffer, ARRAY_SIZE(buffer), "%d->%d",
+> +                        entry->id >> 16, entry->id & 0xFFFF);
+> +
+> +               seq_printf(s, "%-10s\t%-10llu\n", buffer, entry->value);
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct seq_operations tt_sops =3D {
+> +       .start =3D cdev_seq_start,
+> +       .next =3D cdev_seq_next,
+> +       .stop =3D cdev_seq_stop,
+> +       .show =3D cdev_tt_seq_show,
+> +};
+> +
+> +DEFINE_SEQ_ATTRIBUTE(tt);
+> +
+> +static int cdev_dt_seq_show(struct seq_file *s, void *v)
+> +{
+> +       struct thermal_debugfs *dfs =3D s->private;
+> +       struct cdev_debugfs *cfs =3D &dfs->cdev;
+> +       struct list_head *durations =3D cfs->durations;
+> +       struct cdev_value *entry;
+> +       int i =3D *(loff_t *)v;
+> +
+> +       if (!i)
+> +               seq_puts(s, "State\tResidency\n");
+> +
+> +       list_for_each_entry(entry, &durations[i], node) {
+> +               s64 duration =3D entry->value;
+> +
+> +               if (entry->id =3D=3D cfs->current_state)
+> +                       duration +=3D ktime_ms_delta(ktime_get(), cfs->ti=
+mestamp);
+> +
+> +               seq_printf(s, "%-5d\t%-10llu\n", entry->id, duration);
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static const struct seq_operations dt_sops =3D {
+> +       .start =3D cdev_seq_start,
+> +       .next =3D cdev_seq_next,
+> +       .stop =3D cdev_seq_stop,
+> +       .show =3D cdev_dt_seq_show,
+> +};
+> +
+> +DEFINE_SEQ_ATTRIBUTE(dt);
+> +
+> +static int cdev_clear_set(void *data, u64 val)
+> +{
+> +       struct thermal_debugfs *dfs =3D data;
+> +
+> +       if (!val)
+> +               return -EINVAL;
+> +
+> +       mutex_lock(&dfs->lock);
+> +
+> +       thermal_debugfs_cdev_clear(&dfs->cdev);
+> +
+> +       mutex_unlock(&dfs->lock);
+> +
+> +       return 0;
+> +}
+> +
+> +DEFINE_DEBUGFS_ATTRIBUTE(cdev_clear_fops, NULL, cdev_clear_set, "%llu\n"=
+);
+> +
+> +/**
+> + * thermal_debug_cdev_state_update - Update a cooling device state chang=
+e
+> + *
+> + * Computes a transition and the duration of the previous state residenc=
+y.
+> + *
+> + * @cdev : a pointer to a cooling device
+> + * @new_state: an integer corresponding to the new cooling device state
+> + */
+> +void thermal_debug_cdev_state_update(const struct thermal_cooling_device=
+ *cdev,
+> +                                    int new_state)
+> +{
+> +       struct thermal_debugfs *dfs =3D cdev->debugfs;
+> +       struct cdev_debugfs *cfs;
+> +       struct cdev_value *cdev_value;
+> +       ktime_t now =3D ktime_get();
+
+I'd call ktime_get() right before using now for the first time.
+
+> +       int transition, old_state;
+> +
+> +       if (!dfs || (dfs->cdev.current_state =3D=3D new_state))
+> +               return;
+> +
+> +       mutex_lock(&dfs->lock);
+> +
+> +       cfs =3D &dfs->cdev;
+> +
+> +       old_state =3D cfs->current_state;
+
+Because new_state and transition are only used later, after the
+duration record has been processed, I would move the next two lines
+after the if () below.
+
+> +       cfs->current_state =3D new_state;
+> +       transition =3D (old_state << 16) | new_state;
+> +
+> +       /*
+> +        * Get the old state information in the durations list. If
+> +        * this one does not exist, a new allocated one will be
+> +        * returned. Recompute the total duration in the old state and
+> +        * get a new timestamp for the new state.
+> +        */
+> +       cdev_value =3D thermal_debugfs_cdev_value_get(dfs, cfs->durations=
+, old_state);
+> +       if (cdev_value) {
+> +               cdev_value->value +=3D ktime_ms_delta(now, cfs->timestamp=
+);
+
+Use ktime_add() here and convert to ms when printing the record?
+
+> +               cfs->timestamp =3D now;
+> +       }
+> +
+> +       /*
+> +        * Get the transition in the transitions list. If this one
+> +        * does not exist, a new allocated one will be returned.
+> +        * Increment the occurrence of this transition which is stored
+> +        * in the value field.
+> +        */
+> +       cdev_value =3D thermal_debugfs_cdev_value_get(dfs, cfs->transitio=
+ns,
+> +                                                   transition);
+> +       if (cdev_value)
+> +               cdev_value->value++;
+> +
+> +       cfs->total++;
+> +
+> +       mutex_unlock(&dfs->lock);
+> +}
+> +
+> +/**
+> + * thermal_debug_cdev_add - Add a cooling device debugfs entry
+> + *
+> + * Allocates a cooling device object for debug, initializes the
+> + * statistics and create the entries in sysfs.
+> + * @cdev: a pointer to a cooling device
+> + */
+> +void thermal_debug_cdev_add(struct thermal_cooling_device *cdev)
+> +{
+> +       struct thermal_debugfs *dfs;
+> +       struct cdev_debugfs *cfs;
+> +       int i;
+> +
+> +       dfs =3D thermal_debugfs_add_id(d_cdev, cdev->id);
+> +       if (!dfs)
+> +               return;
+> +
+> +       cfs =3D &dfs->cdev;
+> +
+> +       for (i =3D 0; i < CDEVSTATS_HASH_SIZE; i++) {
+> +               INIT_LIST_HEAD(&cfs->transitions[i]);
+> +               INIT_LIST_HEAD(&cfs->durations[i]);
+> +       }
+> +
+> +       cfs->current_state =3D 0;
+> +       cfs->timestamp =3D ktime_get();
+> +
+> +       debugfs_create_file("trans_table", 0400, dfs->d_top, dfs, &tt_fop=
+s);
+> +
+> +       debugfs_create_file("time_in_state_ms", 0400, dfs->d_top, dfs, &d=
+t_fops);
+> +
+> +       debugfs_create_file("clear", 0200, dfs->d_top, dfs, &cdev_clear_f=
+ops);
+> +
+> +       debugfs_create_u32("total_trans", 0400, dfs->d_top, &cfs->total);
+> +
+> +       cdev->debugfs =3D dfs;
+> +}
+> +
+> +/**
+> + * thermal_debug_cdev_remove - Remove a cooling device debugfs entry
+> + *
+> + * Frees the statistics memory data and remove the debugfs entry
+> + *
+> + * @cdev: a pointer to a cooling device
+> + */
+> +void thermal_debug_cdev_remove(struct thermal_cooling_device *cdev)
+> +{
+> +       struct thermal_debugfs *dfs =3D cdev->debugfs;
+> +
+> +       if (!dfs)
+> +               return;
+> +
+> +       mutex_lock(&dfs->lock);
+> +
+> +       thermal_debugfs_cdev_clear(&dfs->cdev);
+> +       cdev->debugfs =3D NULL;
+> +       thermal_debugfs_remove_id(dfs);
+> +
+> +       mutex_unlock(&dfs->lock);
+> +}
+> diff --git a/drivers/thermal/thermal_debugfs.h b/drivers/thermal/thermal_=
+debugfs.h
+> new file mode 100644
+> index 000000000000..341499388448
+> --- /dev/null
+> +++ b/drivers/thermal/thermal_debugfs.h
+> @@ -0,0 +1,14 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +#ifdef CONFIG_THERMAL_DEBUGFS
+> +void thermal_debug_init(void);
+> +void thermal_debug_cdev_add(struct thermal_cooling_device *cdev);
+> +void thermal_debug_cdev_remove(struct thermal_cooling_device *cdev);
+> +void thermal_debug_cdev_state_update(const struct thermal_cooling_device=
+ *cdev, int state);
+> +#else
+> +static inline void thermal_debug_init(void) {}
+> +static inline void thermal_debug_cdev_add(struct thermal_cooling_device =
+*cdev) {}
+> +static inline void thermal_debug_cdev_remove(struct thermal_cooling_devi=
+ce *cdev) {}
+> +static inline void thermal_debug_cdev_state_update(const struct thermal_=
+cooling_device *cdev,
+> +                                                  int state) {}
+> +#endif /* CONFIG_THERMAL_DEBUGFS */
+> diff --git a/drivers/thermal/thermal_helpers.c b/drivers/thermal/thermal_=
+helpers.c
+> index 69e8ea4aa908..435c123b721b 100644
+> --- a/drivers/thermal/thermal_helpers.c
+> +++ b/drivers/thermal/thermal_helpers.c
+> @@ -151,14 +151,29 @@ int thermal_zone_get_temp(struct thermal_zone_devic=
+e *tz, int *temp)
+>  }
+>  EXPORT_SYMBOL_GPL(thermal_zone_get_temp);
+>
+> -static void thermal_cdev_set_cur_state(struct thermal_cooling_device *cd=
+ev,
+> -                                      int target)
+> +void thermal_set_delay_jiffies(unsigned long *delay_jiffies, int delay_m=
+s)
+>  {
+> -       if (cdev->ops->set_cur_state(cdev, target))
+> -               return;
+> +       *delay_jiffies =3D msecs_to_jiffies(delay_ms);
+> +       if (delay_ms > 1000)
+> +               *delay_jiffies =3D round_jiffies(*delay_jiffies);
+> +}
+
+This adds a function that's never used AFAICS.  I suppose the next
+patch will use it?
+
+The rest of the patch LGTM.
+
+Thanks!
 
