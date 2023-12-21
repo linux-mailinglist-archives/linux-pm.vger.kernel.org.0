@@ -1,207 +1,233 @@
-Return-Path: <linux-pm+bounces-1533-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1534-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13A6A81BAA3
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 16:25:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B800881BCAF
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 18:12:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7EB1EB26066
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 15:25:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D1CF8B21E4D
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 17:12:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E818A58237;
-	Thu, 21 Dec 2023 15:24:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 512D959910;
+	Thu, 21 Dec 2023 17:11:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CFb1oPYU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mUFviwBD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BDC458215
-	for <linux-pm@vger.kernel.org>; Thu, 21 Dec 2023 15:24:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3368ae75082so382200f8f.1
-        for <linux-pm@vger.kernel.org>; Thu, 21 Dec 2023 07:24:20 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA76562805;
+	Thu, 21 Dec 2023 17:11:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-553eb74df60so1228638a12.0;
+        Thu, 21 Dec 2023 09:11:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703172258; x=1703777058; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1703178713; x=1703783513; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EW4UFXmfryDRvAbEc3thu9hdl9GkSp2IgG/2/oPu1XE=;
-        b=CFb1oPYUVZuKtyxsTQYDiYV7XR5OXVAgJd9Mktt1mqjEsxGfoAnARasGZcvGTEpUAZ
-         TfO5HxearkFBts+C1t1eN+0xu5TAmysCFz/AIm3H7GDkPOvzmOgy0vJGyO14ERtH2HhL
-         1EgMxuMsGDBFA3EPclCqW9Y1BnsT2Q9lCgNIZlSsjHje6Vz1qEg7Umi9NTAqBbizXnTJ
-         kkTXbcEQdSFbxNsSW4B1AkYaoGhltwQYa5Ll8T3dZ77Yc483TOi1yNAIeWSycHHE5/Zx
-         ntAdq/QKAXi2/Sz6yASwTO7BWt1pGWNjc2OaAne9MkWlQBq46ZEZG8sADaZdXixBtdYS
-         Vffw==
+        bh=8c7qdOK44Erw1rd2N9Dkc3C/rkBrTjfjshoie/DwZvs=;
+        b=mUFviwBDk+rBD0Cigr7Ej1YqAFjUeW9dpF+t6QeI6n6ppzg3OrDoWqq4wOiWKrDMgU
+         QI0bXw9Y70sxTTp12n/v86SeMKdw6qTyARCSit+yHJlNyopV2GkLcW7IwVpEDTV6mvAw
+         y1BUTSs1GCulkEENA7QX7AVSPjFNt+s9Kgf5EeNJ3L+ttgt9Zck9qSCY6ieMdRrenA0P
+         iYFFYRTyT0dgSxyYck4huvBZTts5Xk/PJ5Af1Ya6KByOa7xSa048a9sAp5HlFrOuqlpM
+         5gMJGtArxsmU9+fodaU4Mga4JwvSl55VVyNtlUDcNYC7p1MPx2lPGJfTQZ+fbZ5u9KIT
+         4zbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703172258; x=1703777058;
+        d=1e100.net; s=20230601; t=1703178713; x=1703783513;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EW4UFXmfryDRvAbEc3thu9hdl9GkSp2IgG/2/oPu1XE=;
-        b=HPL96AY3G/9o1XcAGy2o8YggsVMSaqtKAliIHfcV4qoj8AkfMM4sounp02h5wm+hmN
-         /mMKBS11fsfE43ANb7gQC+NUzVJIL/FByH2WvjWCJ6qYUihnIdeMT1AGRl5HmxBYA4AR
-         lzmGOr4sIqJB3+3UItgAA8dWw9b8tfDu6oT+B2NmqGPMWoEgPqleOppmrkLwAjxAuw5Z
-         bqj9oECJK2aMq7p4fZACW1Q0f6ri7mQInqPQbMpbEoCL65fmKhT2jNm0rlF9n50sUHx5
-         kGT8UrqFzFQdRGF7H8naaC7WpL7Y22bqNQWEVKxHDKBjuCZeNfJp1HNoQBh2vf3eEN8q
-         j2bg==
-X-Gm-Message-State: AOJu0YxFO98s/62zlyfQL0dV9IHBh9f39E+FFpQJ5h9LSg9SRCU6ZW8+
-	S6iNnsboZgttus9ytRF0J0mR4g==
-X-Google-Smtp-Source: AGHT+IFV4lp3HaT2elvrC1ZEK9+aGj2nsqqaqkLI2enYvIHG+UiSLXNYY15i3mv5tv1y2IdbLT/KwQ==
-X-Received: by 2002:a05:600c:3b25:b0:40c:6a61:23da with SMTP id m37-20020a05600c3b2500b0040c6a6123damr564633wms.41.1703172258515;
-        Thu, 21 Dec 2023 07:24:18 -0800 (PST)
-Received: from vingu-book.. ([2a01:e0a:f:6020:2db4:9d2a:db65:42d6])
-        by smtp.gmail.com with ESMTPSA id t3-20020a05600c450300b0040c4acaa4bfsm11466974wmo.19.2023.12.21.07.24.17
+        bh=8c7qdOK44Erw1rd2N9Dkc3C/rkBrTjfjshoie/DwZvs=;
+        b=n7VlwyqyTCc5jBAk7Xvsevj70aCd08ecfYc/ULRg0Wl9D30m/3uuVs6f8vV6HOiOMl
+         QfmlGmgJ3katSmXKkSeG2L/bKz9qSUY+Yml3oiZX0lqmLAC/Pw61EwVOdGBO4E0VqJ1z
+         mEaLe+NLblFaKiR6v0MYEqy/lyNOoHJqIlvqNZ1N5fKa9MFqzbc4zxScgWfWez2q3q+x
+         f8WUaP2PM1YzKK24ujs5WFLMlhJDFasWo7tn3ALDNSDu5BSuIvZxKO7bfVMKaPge85Ri
+         DB4Ke5UK6Mn4gsoQtV40zf0XOpQmvQvvauKcHczQyxx6U2uC/OuqsSDZuz5q69lqRyJW
+         d0aw==
+X-Gm-Message-State: AOJu0Yytc6zepfRDLk7Trg02x9XRskgmt8uA9z184vGJthckM/ddhU+v
+	e+v4wFarTJ1nzvNZxldUVs4=
+X-Google-Smtp-Source: AGHT+IHNiAZdFnzAEiUdKfNoeSk+geKiEkWgT/aPnMVG9zgCLJmSuW1YXNdZkHxCVKCqsDhOaSRiwg==
+X-Received: by 2002:a50:c057:0:b0:54b:27e7:f965 with SMTP id u23-20020a50c057000000b0054b27e7f965mr12048802edd.19.1703178712653;
+        Thu, 21 Dec 2023 09:11:52 -0800 (PST)
+Received: from localhost.localdomain ([154.72.163.204])
+        by smtp.gmail.com with ESMTPSA id b24-20020a056402139800b0054cb316499dsm1400760edv.10.2023.12.21.09.11.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Dec 2023 07:24:17 -0800 (PST)
-From: Vincent Guittot <vincent.guittot@linaro.org>
-To: catalin.marinas@arm.com,
-	will@kernel.org,
-	sudeep.holla@arm.com,
-	rafael@kernel.org,
-	viresh.kumar@linaro.org,
-	agross@kernel.org,
-	andersson@kernel.org,
-	konrad.dybcio@linaro.org,
-	mingo@redhat.com,
-	peterz@infradead.org,
-	juri.lelli@redhat.com,
-	dietmar.eggemann@arm.com,
-	rostedt@goodmis.org,
-	bsegall@google.com,
-	mgorman@suse.de,
-	bristot@redhat.com,
-	vschneid@redhat.com,
-	lukasz.luba@arm.com,
-	rui.zhang@intel.com,
-	mhiramat@kernel.org,
-	daniel.lezcano@linaro.org,
-	amit.kachhap@gmail.com,
-	linux@armlinux.org.uk,
-	corbet@lwn.net,
+        Thu, 21 Dec 2023 09:11:52 -0800 (PST)
+From: Brandon Cheo Fusi <fusibrandon13@gmail.com>
+To: andre.przywara@arm.com
+Cc: aou@eecs.berkeley.edu,
+	conor+dt@kernel.org,
+	devicetree@vger.kernel.org,
+	fusibrandon13@gmail.com,
+	jernej.skrabec@gmail.com,
+	krzysztof.kozlowski+dt@linaro.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH v2 5/5] sched/pelt: Remove shift of thermal clock
-Date: Thu, 21 Dec 2023 16:24:07 +0100
-Message-Id: <20231221152407.436177-6-vincent.guittot@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231221152407.436177-1-vincent.guittot@linaro.org>
-References: <20231221152407.436177-1-vincent.guittot@linaro.org>
+	linux-riscv@lists.infradead.org,
+	linux-sunxi@lists.linux.dev,
+	palmer@dabbelt.com,
+	paul.walmsley@sifive.com,
+	rafael@kernel.org,
+	robh+dt@kernel.org,
+	samuel@sholland.org,
+	sfr@canb.auug.org.au,
+	tiny.windzz@gmail.com,
+	viresh.kumar@linaro.org,
+	wens@csie.org
+Subject: Re: [RFC PATCH v2 2/3] cpufreq: sun50i: Add support for D1's speed bin decoding
+Date: Thu, 21 Dec 2023 18:11:07 +0100
+Message-Id: <20231221171107.85991-1-fusibrandon13@gmail.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20231221124957.27fa9922@donnerap.manchester.arm.com>
+References: <20231221124957.27fa9922@donnerap.manchester.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The optional shift of the clock used by thermal/hw load avg has been
-introduced to handle case where the signal was not always a high frequency
-hw signal. Now that cpufreq provides a signal for firmware and
-SW pressure, we can remove this exception and always keep this PELT signal
-aligned with other signals.
-Mark deprecated sched_thermal_decay_shift boot parameter.
+On Thu, Dec 21, 2023 at 1:50 PM Andre Przywara <andre.przywara@arm.com> wrote:
+>
+> On Thu, 21 Dec 2023 11:10:12 +0100
+> Brandon Cheo Fusi <fusibrandon13@gmail.com> wrote:
+>
+> Hi Brandon,
+>
+> thanks for the quick turnaround, and for splitting this code up, that
+> makes reasoning about this much easier!
+>
+> > Adds support for decoding the efuse value read from D1 efuse speed
+> > bins, and factors out equivalent code for sun50i.
+> >
+> > The algorithm is gotten from
+> >
+> > https://github.com/Tina-Linux/linux-5.4/blob/master/drivers/cpufreq/sun50i-cpufreq-nvmem.c#L293-L338
+> >
+> > and maps an efuse value to either 0 or 1, with 1 meaning stable at
+> > a lower supply voltage for the same clock frequency.
+> >
+> > Signed-off-by: Brandon Cheo Fusi <fusibrandon13@gmail.com>
+> > ---
+> >  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 34 ++++++++++++++++++++++++++
+> >  1 file changed, 34 insertions(+)
+> >
+> > diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> > index fc509fc49..b1cb95308 100644
+> > --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> > +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> > @@ -29,6 +29,33 @@ struct sunxi_cpufreq_data {
+> >       u32 (*efuse_xlate)(u32 *speedbin, size_t len);
+> >  };
+> >
+> > +static u32 sun20i_efuse_xlate(u32 *speedbin, size_t len)
+>
+> I feel like this prototype can be shortened to:
+>
+> static u32 sun20i_efuse_xlate(u32 speedbin)
+>
+> See below.
+>
+> > +{
+> > +     u32 ret, efuse_value = 0;
+> > +     int i;
+> > +
+> > +     for (i = 0; i < len; i++)
+> > +             efuse_value |= ((u32)speedbin[i] << (i * 8));
+>
+> The cast is not needed. Looking deeper into the original code you linked
+> to, cell_value[] there is an array of u8, so they assemble a little endian
+> 32-bit integer from *up to* four 8-bit values read from the nvmem.
+>
+> So I think this code here is wrong, len is the size of the nvmem cells
+> holding the bin identifier, in *bytes*, so the idea here is to just read
+> the (lowest) 16 bits (in the D1 case, cf. "reg = <0x00 0x2>;" in the next
+> patch) from this nvmem cell. Here you are combining two 32-bit words into
 
-Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
----
- .../admin-guide/kernel-parameters.txt          |  1 +
- kernel/sched/core.c                            |  2 +-
- kernel/sched/fair.c                            | 10 ++--------
- kernel/sched/sched.h                           | 18 ------------------
- 4 files changed, 4 insertions(+), 27 deletions(-)
+This is true. Not sure though what the 'in the D1 case...' bit means.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 65731b060e3f..2ee15522b15d 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5722,6 +5722,7 @@
- 			but is useful for debugging and performance tuning.
- 
- 	sched_thermal_decay_shift=
-+			[Deprecated]
- 			[KNL, SMP] Set a decay shift for scheduler thermal
- 			pressure signal. Thermal pressure signal follows the
- 			default decay period of other scheduler pelt
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index a6f084bdf1c5..c68e47bfd5ae 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -5670,7 +5670,7 @@ void scheduler_tick(void)
- 
- 	update_rq_clock(rq);
- 	hw_pressure = arch_scale_hw_pressure(cpu_of(rq));
--	update_hw_load_avg(rq_clock_hw(rq), rq, hw_pressure);
-+	update_hw_load_avg(rq_clock_task(rq), rq, hw_pressure);
- 	curr->sched_class->task_tick(rq, curr, 0);
- 	if (sched_feat(LATENCY_WARN))
- 		resched_latency = cpu_resched_latency(rq);
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index ce0d32f441a8..16d71e764131 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -78,15 +78,9 @@ static unsigned int normalized_sysctl_sched_base_slice	= 750000ULL;
- 
- const_debug unsigned int sysctl_sched_migration_cost	= 500000UL;
- 
--int sched_hw_decay_shift;
- static int __init setup_sched_thermal_decay_shift(char *str)
- {
--	int _shift = 0;
--
--	if (kstrtoint(str, 0, &_shift))
--		pr_warn("Unable to set scheduler thermal pressure decay shift parameter\n");
--
--	sched_hw_decay_shift = clamp(_shift, 0, 10);
-+	pr_warn("Ignoring the deprecated sched_thermal_decay_shift= option\n");
- 	return 1;
- }
- __setup("sched_thermal_decay_shift=", setup_sched_thermal_decay_shift);
-@@ -9271,7 +9265,7 @@ static bool __update_blocked_others(struct rq *rq, bool *done)
- 
- 	decayed = update_rt_rq_load_avg(now, rq, curr_class == &rt_sched_class) |
- 		  update_dl_rq_load_avg(now, rq, curr_class == &dl_sched_class) |
--		  update_hw_load_avg(rq_clock_hw(rq), rq, hw_pressure) |
-+		  update_hw_load_avg(now, rq, hw_pressure) |
- 		  update_irq_load_avg(rq, 0);
- 
- 	if (others_have_blocked(rq))
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 677d24202eec..6fc6718a1060 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1520,24 +1520,6 @@ static inline u64 rq_clock_task(struct rq *rq)
- 	return rq->clock_task;
- }
- 
--/**
-- * By default the decay is the default pelt decay period.
-- * The decay shift can change the decay period in
-- * multiples of 32.
-- *  Decay shift		Decay period(ms)
-- *	0			32
-- *	1			64
-- *	2			128
-- *	3			256
-- *	4			512
-- */
--extern int sched_hw_decay_shift;
--
--static inline u64 rq_clock_hw(struct rq *rq)
--{
--	return rq_clock_task(rq) >> sched_hw_decay_shift;
--}
--
- static inline void rq_clock_skip_update(struct rq *rq)
- {
- 	lockdep_assert_rq_held(rq);
--- 
-2.34.1
+> efuse_value.
+>
+> So I think this whole part above is actually not necessary: we are
+> expecting maximum 32 bits, and nvmem_cell_read() should take care of
+> masking off unrequested bits, so we get the correct value back already. So
+> can you try to remove the loop above, and use ...
+>
+> > +
+> > +     switch (efuse_value) {
+>
+>         switch (*speedbin & 0xffff) {
+>
 
+Shouldn't the bytes in *speedbin be reversed? 
+
+> here instead? Or drop the pointer at all, and just use one u32 value, see
+> the above prototype.
+>
+
+I was uncomfortable dropping the len parameter, because then each
+platform's efuse_xlate would ignore the number of valid bytes actually
+read.
+
+> Cheers,
+> Andre
+>
+> P.S. This is just a "peephole review" of this patch, I haven't got around
+> to look at this whole scheme in whole yet, to see if we actually need this
+> or can simplify this or clean it up.
+>
+>
+> > +     case 0x5e00:
+> > +             /* QFN package */
+> > +             ret = 0;
+> > +             break;
+> > +     case 0x5c00:
+> > +     case 0x7400:
+> > +             /* QFN package */
+> > +             ret = 1;
+> > +             break;
+> > +     case 0x5000:
+> > +     default:
+> > +             /* BGA package */
+> > +             ret = 0;
+> > +     }
+> > +
+> > +     return ret;
+> > +}
+> > +
+> >  static u32 sun50i_efuse_xlate(u32 *speedbin, size_t len)
+> >  {
+> >       u32 efuse_value = 0;
+> > @@ -46,6 +73,10 @@ static u32 sun50i_efuse_xlate(u32 *speedbin, size_t len)
+> >               return 0;
+> >  }
+> >
+> > +struct sunxi_cpufreq_data sun20i_cpufreq_data = {
+> > +     .efuse_xlate = sun20i_efuse_xlate,
+> > +};
+> > +
+> >  struct sunxi_cpufreq_data sun50i_cpufreq_data = {
+> >       .efuse_xlate = sun50i_efuse_xlate,
+> >  };
+> > @@ -54,6 +85,9 @@ static const struct of_device_id cpu_opp_match_list[] = {
+> >       { .compatible = "allwinner,sun50i-h6-operating-points",
+> >         .data = &sun50i_cpufreq_data,
+> >       },
+> > +     { .compatible = "allwinner,sun20i-d1-operating-points",
+> > +       .data = &sun20i_cpufreq_data,
+> > +     },
+> >       {}
+> >  };
+> >
+>
+
+Thank you for reviewing.
+Brandon.
 
