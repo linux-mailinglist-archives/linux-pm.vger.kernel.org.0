@@ -1,176 +1,155 @@
-Return-Path: <linux-pm+bounces-1485-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1486-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F79281B571
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 13:05:44 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1839A81B5C4
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 13:28:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54BC31F2455B
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 12:05:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 77232B240B8
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 12:28:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 911D36D1BF;
-	Thu, 21 Dec 2023 12:05:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0F616EB76;
+	Thu, 21 Dec 2023 12:28:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="cvUZu78q"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="uyS6qk20"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2051.outbound.protection.outlook.com [40.107.244.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C86A46E2B0
-	for <linux-pm@vger.kernel.org>; Thu, 21 Dec 2023 12:05:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1d3ad3ad517so3717325ad.0
-        for <linux-pm@vger.kernel.org>; Thu, 21 Dec 2023 04:05:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1703160337; x=1703765137; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=kF12I4nLvX8usAxW07lBYcwQ8oEcLNU3sy4oq6YAZHs=;
-        b=cvUZu78qmaMwRZ97V0fb7YEo9XL/0+VhTVlJ6bvbjW5G76jugFR6UePIpDV81tXgvf
-         DRk7bApy94vSzXuo4QugHuNdKm9g47KTtZ14VAAsaWjICwq99gJe19CJEKFmNcBnUI/V
-         h8V/+i8ASp49bJaYYvG8GlrLTySq3ovhWdrMw3VY5TO3egf4FYQY2L3ibJcW/DcK6Yzi
-         yDuCWZPxcRBQAVw4H0nm5IGnIT0TCrRuXQ8FDWxEzQIjnLTiFcEs01RGckfRhwbVNITV
-         +hnu2dnG/yGNn/3sz1D29qwKJ+avmfdrw7GB6qGXW0ywl5mGbIu8ABu+W4lnhS6w5Ajm
-         iY8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703160337; x=1703765137;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kF12I4nLvX8usAxW07lBYcwQ8oEcLNU3sy4oq6YAZHs=;
-        b=mzv2jZj9b/I+efKk5KdUsYu+U0UIkmo6Pau2qYvUpxaVwACMDj2SQmhkTYFGYNFKYD
-         r2m5R4AaUmDtUNUo4mYos4fib2sbw/0wZDaOTjHuR0OssE20FHbsh2hG9iL6g/OB6Z6Z
-         vrO2CYBB4k+mOM3Vf26dVuUAocC2NTu+SLxhHF0tsILaYvZGD0DmwOVOAc5xwbh2R165
-         IBxtqOB5xKvqnvxkVttP9BoeRPN2sWeAGzIC0fpCPMDvygAnQTFzudIqzCqO+Kgr9Ino
-         ampBQ4774eY+VW9Scpd4y1XLw/HW4/JbsrX+u7X57l+Nk8Y+1bK87h7xg9PRyrNv7RTp
-         IY+g==
-X-Gm-Message-State: AOJu0YzUDpngH9Hpxz8ObjHIl2LFmydzN6F/HXIu1xFwLDqHyCLR50lN
-	YgZPIU+aVJ8w8aoZ2NqQGefZrezluMSLZsuMmvY=
-X-Google-Smtp-Source: AGHT+IHVEwxosfPiX9AZ3ut9ptV8G0a9dk6BbXMDdqo8n0UQhgyqaHxbkxuC4e5dfd5A9WGYIQ9jog==
-X-Received: by 2002:a17:902:b195:b0:1d0:6ffd:adf1 with SMTP id s21-20020a170902b19500b001d06ffdadf1mr10235078plr.88.1703160337041;
-        Thu, 21 Dec 2023 04:05:37 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id w4-20020a170902d3c400b001d3e8a5755csm1478678plb.48.2023.12.21.04.05.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Dec 2023 04:05:36 -0800 (PST)
-Message-ID: <65842a10.170a0220.1f673.3e5e@mx.google.com>
-Date: Thu, 21 Dec 2023 04:05:36 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 657FC6EB4D;
+	Thu, 21 Dec 2023 12:28:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Jk9+4oTDP+jtnX0qOA+jAmywjkydnuF7JxBTw4+S0X0aY4b8qp5Yr+99PyASnuKr+ZbDgSIb581WbAp1OsUSpH9s5ze1lBw9+rJiasWo1wi30F2PHpJQ9LpIqikR/s0SGWXU3yBGTy5h0DZMbSh7yAP5alw4IQufdSybr/Ld74jvvalwyxp4yuXy1E3R7PE+G1Q7SU6OC0HZ3Wfh9yTlGo7cqgL9K04POKbE03KW+LI5HO1flbA4jVf30F39Kx4QU4cbhypM6mnOkOJuOd4MZKsPL96TjaCB5CEaY6qvoLgMH3R+hDoSvo1pwlMyYEkw8rnVUzjg0EMPZpKbMc3Dfg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=A8EW+A2ylUPQXWMXlQnsQpve+NUOMeP0l+OfB2frPP0=;
+ b=h1/8Jm2gOVngWTasBz4jNx1nlCwuziqsADYcowpi1l/dfDcTpU9pmFa/wvMnMtfScro6AamVhQbvq3/nbbfOvWJanEuQwJOf4Gv6r2yaeSVDiH7JMEilWSUozfbnFRifttbSO1WMc3m3ZvPT9162azV8RF10b2SKAqjB6xdMbY/rGVIQj9N38qYbFYv8qImVHlhGwzDJGj1i/EJGK0sOcOkiyuVp1h8FOfzdB2qrnzJnElpPYqz+oFI9TfFeaR5z7Tqmvq1DikevisdcCK3jkquSdg76/9BTUqAjnIXlYci1S0zp5b64Cbgz5n99nezQo7HpIH8NUhPycM7x2OJzWQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=A8EW+A2ylUPQXWMXlQnsQpve+NUOMeP0l+OfB2frPP0=;
+ b=uyS6qk20fV/2L/Q2AcysWK/kAAg3RhRnT1AeFOE/zuEZggwEGrZy4s4FJGdrK21OOmIK+1E8qVWBbImKTXdhMZP/eX8AVvyTo32999YNMfsYStcLcVUZlVLFqAKhPlQwqX0eBFE7EbWKCK/bnD8J/WJKSRrJiZ1Bd5Amjjh0yCs=
+Received: from BYAPR04CA0015.namprd04.prod.outlook.com (2603:10b6:a03:40::28)
+ by SN7PR12MB7227.namprd12.prod.outlook.com (2603:10b6:806:2aa::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7113.18; Thu, 21 Dec
+ 2023 12:28:03 +0000
+Received: from MWH0EPF000971E3.namprd02.prod.outlook.com
+ (2603:10b6:a03:40:cafe::4d) by BYAPR04CA0015.outlook.office365.com
+ (2603:10b6:a03:40::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7113.20 via Frontend
+ Transport; Thu, 21 Dec 2023 12:28:03 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ MWH0EPF000971E3.mail.protection.outlook.com (10.167.243.70) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7113.14 via Frontend Transport; Thu, 21 Dec 2023 12:28:03 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Thu, 21 Dec
+ 2023 06:28:00 -0600
+From: Michal Simek <michal.simek@amd.com>
+To: <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
+	<michal.simek@xilinx.com>, <git@xilinx.com>
+CC: Conor Dooley <conor+dt@kernel.org>, Damien Le Moal <dlemoal@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Laurent Pinchart
+	<laurent.pinchart@ideasonboard.com>, Mark Brown <broonie@kernel.org>, "Naman
+ Trivedi Manojbhai" <naman.trivedimanojbhai@amd.com>, Parth Gajjar
+	<parth.gajjar@amd.com>, Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
+	Rob Herring <robh+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+	"Wolfram Sang" <wsa@kernel.org>, <devicetree@vger.kernel.org>, kishore Manne
+	<nava.kishore.manne@amd.com>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-pm@vger.kernel.org>
+Subject: [PATCH v3 0/4] dt-bindings: xilinx: Add missing firmware child nodes
+Date: Thu, 21 Dec 2023 13:27:53 +0100
+Message-ID: <cover.1703161663.git.michal.simek@amd.com>
+X-Mailer: git-send-email 2.36.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.7-rc6-95-g52227a1b24640
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 4 warnings (v6.7-rc6-95-g52227a1b24640)
-To: rafael@kernel.org, linux-pm@vger.kernel.org,
- kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1256; i=michal.simek@amd.com; h=from:subject:message-id; bh=yNGsKt64bh0rhJILDw7kTRzHHB6RuZoh1RZtL9CJ75o=; b=owGbwMvMwCR4yjP1tKYXjyLjabUkhtQWfcfc6YrTV/7cxalyI+Tyj6wDH1vaSh8Y/JNYsvWm0 ewFjY47O2JZGASZGGTFFFmkba6c2Vs5Y4rwxcNyMHNYmUCGMHBxCsBEbH0Y5uf0599TPFfVsLYy 30xmXae66dXdyxnml6VwNuuHTFQ0fL8zcvd1Drlzv2axAAA=
+X-Developer-Key: i=michal.simek@amd.com; a=openpgp; fpr=67350C9BF5CCEE9B5364356A377C7F21FE3D1F91
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWH0EPF000971E3:EE_|SN7PR12MB7227:EE_
+X-MS-Office365-Filtering-Correlation-Id: c4809390-e83d-4fd2-1044-08dc022046ff
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	UgQ05RJCNsDZ3PVQ1wh6Z6UwuTbYXWhRD/D++LxqmALk45zPtMDo7aR9eTpz1zfn/mwbo4RnEibBq4+2EiEc7nhiwU4yvXQJ9fKi45bRjqIxgmxpqSEjnbjb8ZBTuL0beY9l2HPJ4W2mDRbI+3vfPFHBDgWZlRerZilhNXKX+eOa6aq3k+uvi//NydXa2XGx5CjPjg2f7qcHfWEhuJJSxNXzg2rvHbeY+yuSR79eOTQtiZ+nAvU/A/c8G+gHm+S6Sd+2MBgHz7In9B/IsO5bA+QbU5xyrLYXbvooDRc0REm/mOne7yw4PYzGMGXTdxgQhHg1KPC19QmMlFOtDItMc9b9IHiPfGA09jktkRADyyNs3XBEY6tnD02jiW5LQz9zj95mYNESirpWKiRGRZNp6xTGHMLA1Jq2dvBx4t91Dcial2MDY8gpsqFisNjgVmAW3KE8yI7E1kn8aHoA0O+KGO/KuJRLR98h38SJFngIpMdREoG9RdhuFE3WSDwOGQklRAC9aABJOVLdIJ9r1ROS3C20QF831xXo2r0QT4hMz0uDOVkOCB/mB9nEeCNkq+x2V7EVmGJ2QVgsneJdiKdxrU82psnvLUKOJ69jFqsz7F6ALjwOcx9ZFr4Jda3wxtpIG/uSembuV6UH9DuHKDCOsAIEIixmCDtHwfF4CM9ZRhHj9EOcOtOs4nOGBIVjGX2XsKK9qpiVKT0UWibaf3G7Wl1g2lHbvhxUKCMbK/ogikwu0xSjXZQLWqRcqacxMI5hqlPy/okrXphiWk5f81P53w==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(346002)(136003)(39860400002)(396003)(376002)(230922051799003)(1800799012)(451199024)(82310400011)(64100799003)(186009)(40470700004)(36840700001)(46966006)(47076005)(356005)(81166007)(82740400003)(41300700001)(86362001)(26005)(16526019)(36860700001)(36756003)(336012)(83380400001)(426003)(2616005)(7416002)(5660300002)(2906002)(8676002)(8936002)(4326008)(316002)(70206006)(70586007)(54906003)(478600001)(40480700001)(110136005)(966005)(6666004)(40460700003)(44832011)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Dec 2023 12:28:03.1691
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c4809390-e83d-4fd2-1044-08dc022046ff
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	MWH0EPF000971E3.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7227
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.7-rc6-95-g52=
-227a1b24640)
+Hi,
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-7-rc6-95-g52227a1b24640/
+series is converting missing descriptions for child nodes and also
+synchronizing name for power-management discussed with Krzysztof in v1
+version available here.
+https://lore.kernel.org/r/fc7863a2-d3c5-47c8-9484-ef9cd6d7dd5d@linaro.org
 
-Tree: pm
-Branch: testing
-Git Describe: v6.7-rc6-95-g52227a1b24640
-Git Commit: 52227a1b24640361bf68926fe12e60ab76004c7d
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+Thanks,
+Michal
 
-Warnings Detected:
+Changes in v3:
+- s/power-controller/power-management/g
+- extend example
+- s/power-controller/power-management/g
+- align commit message
+- s/power-controller/power-management/g
+- update subject and commit message to match sed above
 
-arc:
+Changes in v2:
+- Sort nodes by name
+- Rename zynqmp-power to power-controller
+- Keep only single patch for easier handling as done in v1
+- New patch in series
+- New patch is series
+- New patch is series
 
-arm64:
+Michal Simek (4):
+  dt-bindings: firmware: xilinx: Describe missing child nodes
+  dt-bindings: firmware: xilinx: Sort node names (clock-controller)
+  dt-bindings: power: reset: xilinx: Rename node names in examples
+  arm64: zynqmp: Rename zynqmp-power node to power-management
 
-arm:
+ .../firmware/xilinx/xlnx,zynqmp-firmware.yaml | 68 ++++++++++++++++---
+ .../power/reset/xlnx,zynqmp-power.yaml        |  4 +-
+ arch/arm64/boot/dts/xilinx/zynqmp.dtsi        |  2 +-
+ 3 files changed, 62 insertions(+), 12 deletions(-)
 
-i386:
+-- 
+2.36.1
 
-mips:
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
 
