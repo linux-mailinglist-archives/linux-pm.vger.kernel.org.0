@@ -1,43 +1,43 @@
-Return-Path: <linux-pm+bounces-1504-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1505-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EAA681B673
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 13:52:46 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B47CC81B676
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 13:53:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D19FA1C25142
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 12:52:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A7004B25E64
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 12:53:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 762C37997C;
-	Thu, 21 Dec 2023 12:48:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ACD47A224;
+	Thu, 21 Dec 2023 12:48:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="cv7ptrkk"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="HdlNm/lr"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16EBE79475;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A73F7995E;
 	Thu, 21 Dec 2023 12:48:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1703162924;
-	bh=93ZKOVlrTVJQ0RvWV6bc6BLDjs7S1OZ1L+ZoHQabC8w=;
+	s=mail; t=1703162925;
+	bh=L31yIrmZZhUrsQD11ECO7zUb5b6T40l2nXIhxFSEcLk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cv7ptrkksutYRmpo8MnHwHmsY5ObfJ0q5g3+GHNYYFwn/gC0NK1AJBYKaz9fMQDWo
-	 Kl+LvuNPs2fCdiEsiRZaSCf0ehJaB9DtBAnsSAwOV3QaA6yFrUS3D4rMZqDVE9Xyto
-	 0FrCEpdRAnn02ZBfF+We1e1oO5XRNBD89hYxdrhszU17vYtuppLJNzso/4UNnNzUT0
-	 M8E1oUWLT01uLwKdHm2JxnpqWNXREkJpT3drdAnOC1JhEzvKDI1gi+rh9gQcVNyJMT
-	 xfwsqW7g2LUwrRAZEDjTOn4eaBNktswoccjnkGDg9kfCoRh8V63BKjaLyd+CYtudxa
-	 nJpraJBEM1YrA==
+	b=HdlNm/lrnFfpEGr9id8D7nnqQIUw+fEXiRCLGINaeB80x0WrR9HSKLWAcFtEX9DNY
+	 MgFF/FT5bK/5RobU0AdeNvLpFOn0bwZTJdUd+H/B0ZJuGPJOBOmRq9b63ECVOZ4WzP
+	 4MXqmVSIiqpWMNcF01PS+8VNt/0gQdmaYuVAvzszOaqQTamG5iC3KXdjMA39vnUgR/
+	 IB4AtxXb9ScySAWL9inb9dfEk6KoqIuo394r5bgKmyKcS0D0EVYjGUhCiGYU62lRO2
+	 iUi97mgYim9aVtgGDRmRwN8NwXSLZPay5SpUGqGT5XZKMGQcArwhD5I9rzXx79V3f/
+	 ufuSOdsMfDcNQ==
 Received: from IcarusMOD.eternityproject.eu (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 2ACA53781F84;
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id E604E3782017;
 	Thu, 21 Dec 2023 12:48:44 +0000 (UTC)
 From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 To: daniel.lezcano@linaro.org
@@ -48,9 +48,9 @@ Cc: rafael@kernel.org,
 	linux-kernel@vger.kernel.org,
 	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
 	kernel@collabora.com
-Subject: [RFC PATCH 16/26] thermal/drivers/armada: Migrate to thermal_zone_device_register()
-Date: Thu, 21 Dec 2023 13:48:15 +0100
-Message-ID: <20231221124825.149141-17-angelogioacchino.delregno@collabora.com>
+Subject: [RFC PATCH 17/26] thermal/drivers/dove: Migrate to thermal_zone_device_register()
+Date: Thu, 21 Dec 2023 13:48:16 +0100
+Message-ID: <20231221124825.149141-18-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231221124825.149141-1-angelogioacchino.delregno@collabora.com>
 References: <20231221124825.149141-1-angelogioacchino.delregno@collabora.com>
@@ -70,39 +70,35 @@ Migrate to the new thermal zone device registration function.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/thermal/armada_thermal.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/thermal/dove_thermal.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_thermal.c
-index f783547ef964..f48a776af147 100644
---- a/drivers/thermal/armada_thermal.c
-+++ b/drivers/thermal/armada_thermal.c
-@@ -864,8 +864,14 @@ static int armada_thermal_probe(struct platform_device *pdev)
- 	 * into it, which requires the use of regmaps across all the driver.
- 	 */
- 	if (IS_ERR(syscon_node_to_regmap(pdev->dev.parent->of_node))) {
-+		struct thermal_zone_device_params tzdp = {
-+			.ops = &legacy_ops,
-+			.devdata = priv
-+		};
-+
- 		/* Ensure device name is correct for the thermal core */
- 		armada_set_sane_name(pdev, priv);
-+		tzdp.type = priv->zone_name;
+diff --git a/drivers/thermal/dove_thermal.c b/drivers/thermal/dove_thermal.c
+index ac30de3c0a5f..09ed02395d12 100644
+--- a/drivers/thermal/dove_thermal.c
++++ b/drivers/thermal/dove_thermal.c
+@@ -117,6 +117,10 @@ static const struct of_device_id dove_thermal_id_table[] = {
  
- 		ret = armada_thermal_probe_legacy(pdev, priv);
- 		if (ret)
-@@ -876,9 +882,7 @@ static int armada_thermal_probe(struct platform_device *pdev)
- 		/* Wait the sensors to be valid */
- 		armada_wait_sensor_validity(priv);
+ static int dove_thermal_probe(struct platform_device *pdev)
+ {
++	struct thermal_zone_device_params tzdp = {
++		.type = "dove_thermal",
++		.ops = &ops
++	};
+ 	struct thermal_zone_device *thermal = NULL;
+ 	struct dove_thermal_priv *priv;
+ 	int ret;
+@@ -139,8 +143,8 @@ static int dove_thermal_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
  
--		tz = thermal_tripless_zone_device_register(priv->zone_name,
--							   priv, &legacy_ops,
--							   NULL);
-+		tz = thermal_zone_device_register(&tzdp);
- 		if (IS_ERR(tz)) {
- 			dev_err(&pdev->dev,
- 				"Failed to register thermal zone device\n");
+-	thermal = thermal_tripless_zone_device_register("dove_thermal", priv,
+-							&ops, NULL);
++	tzdp.devdata = priv;
++	thermal = thermal_zone_device_register(&tzdp);
+ 	if (IS_ERR(thermal)) {
+ 		dev_err(&pdev->dev,
+ 			"Failed to register thermal zone device\n");
 -- 
 2.43.0
 
