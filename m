@@ -1,140 +1,178 @@
-Return-Path: <linux-pm+bounces-1511-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1516-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7032281B686
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 13:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F2FD81B6A1
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 13:57:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 109C91F26352
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 12:54:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E2E801F23D7D
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 12:57:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 881C27C643;
-	Thu, 21 Dec 2023 12:48:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="2fwhnr5R"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C304C76909;
+	Thu, 21 Dec 2023 12:50:04 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACDAD7BEF7
-	for <linux-pm@vger.kernel.org>; Thu, 21 Dec 2023 12:48:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-35d3846fac9so3077925ab.2
-        for <linux-pm@vger.kernel.org>; Thu, 21 Dec 2023 04:48:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1703162931; x=1703767731; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=iffL0toZTsUNOp4O3Gui4zN7Q/1D8BsuDf2xkAfQTjE=;
-        b=2fwhnr5RV5yAjz+h6zaWd2upIFOCQeo/vB3Wvr7PZqio3Q+xrFsGg5pgf3fDnpZ0qR
-         o+qdHlORjITdcZwW3xzsae61MVxKfTxtH19fmxHDgRzQbOK9bNqOmm0XFKfJJvU4Qjof
-         K9+7U2mpCRzmeDuPU6R/cfVXwpF7xI7wrs92i68SFKRRNXyrbI21rrA+T6/uTvF/nW9J
-         0K2b9UvHlZ9OzW0GVBB6iBypCBPE07G+Fjxerq3PHlWRlPEkVn4RAMN9+yRYerc1JvWb
-         D21ijSFT9uB3h24AI/Qm7HH1wh6tWn95aL+rhJAQp0+Y8yVX/QzSOUvNesVhNPgc0JrJ
-         85Dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703162931; x=1703767731;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iffL0toZTsUNOp4O3Gui4zN7Q/1D8BsuDf2xkAfQTjE=;
-        b=Aqn4pZz1Z6rWE41AZWNDXq1QTmYYe8kTYT5xDWOwMZudfpjaBezoe/mZE2L8nrmKL9
-         Z+ugplI1onccCs/9W34/dD6mpw92WsAFF8uKkuCvPmq1SO6bs77MR1QKYt2P5GttkCAg
-         XznnItymxO1BWt8sXqSMsHSacYK0qliaSTd+Svw1I+RAu/HUHOvaxzD6330BcpToV/Jg
-         caiTCMkvTEHbwXkbXEGvvEdgM3N8HBmzs45IWfqcu9f52IxQC7UIkAcd8PjRZ1XGQnwN
-         2q5Rqu6Dsm1QzANAAJhXfroEIVJxZltHGG2YYrZwaQr8S6in+1ldur5nomsUP/9CK5ss
-         VDuw==
-X-Gm-Message-State: AOJu0YwZRvDFdD2kIYwEh4vMV4PIZFGuvibGE160Mz3kJEpRHMXMg4Yv
-	nrbOm035wNvC8lS04prKgo5tjg==
-X-Google-Smtp-Source: AGHT+IF3PCpgBP4ad/Fp7+vBtgxFP6IH6mqxExZ1aDhh8SfxUa1J6cbkRrNJh9v91A/VtfkYvEBkeg==
-X-Received: by 2002:a92:d941:0:b0:35e:6b02:7037 with SMTP id l1-20020a92d941000000b0035e6b027037mr22038640ilq.58.1703162930825;
-        Thu, 21 Dec 2023 04:48:50 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id p23-20020a635b17000000b005c66b54476bsm1441341pgb.63.2023.12.21.04.48.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Dec 2023 04:48:48 -0800 (PST)
-Message-ID: <65843430.630a0220.9b24a.3c9c@mx.google.com>
-Date: Thu, 21 Dec 2023 04:48:48 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5B98768E3;
+	Thu, 21 Dec 2023 12:50:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D90762F4;
+	Thu, 21 Dec 2023 04:50:46 -0800 (PST)
+Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7D29D3F738;
+	Thu, 21 Dec 2023 04:49:59 -0800 (PST)
+Date: Thu, 21 Dec 2023 12:49:57 +0000
+From: Andre Przywara <andre.przywara@arm.com>
+To: Brandon Cheo Fusi <fusibrandon13@gmail.com>
+Cc: Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Chen-Yu Tsai
+ <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland
+ <samuel@sholland.org>, Yangtao Li <tiny.windzz@gmail.com>, "Rafael J .
+ Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+ Stephen Rothwell <sfr@canb.auug.org.au>, devicetree@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+Subject: Re: [RFC PATCH v2 2/3] cpufreq: sun50i: Add support for D1's speed
+ bin decoding
+Message-ID: <20231221124957.27fa9922@donnerap.manchester.arm.com>
+In-Reply-To: <20231221101013.67204-3-fusibrandon13@gmail.com>
+References: <20231221101013.67204-1-fusibrandon13@gmail.com>
+	<20231221101013.67204-3-fusibrandon13@gmail.com>
+Organization: ARM
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v6.7-rc6-95-g52227a1b24640
-Subject: pm/testing baseline: 56 runs,
- 1 regressions (v6.7-rc6-95-g52227a1b24640)
-To: rafael@kernel.org, linux-pm@vger.kernel.org,
- kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-pm/testing baseline: 56 runs, 1 regressions (v6.7-rc6-95-g52227a1b24640)
+On Thu, 21 Dec 2023 11:10:12 +0100
+Brandon Cheo Fusi <fusibrandon13@gmail.com> wrote:
 
-Regressions Summary
--------------------
+Hi Brandon,
 
-platform         | arch | lab         | compiler | defconfig          | reg=
-ressions
------------------+------+-------------+----------+--------------------+----=
---------
-beaglebone-black | arm  | lab-broonie | gcc-10   | multi_v7_defconfig | 1  =
-        =
+thanks for the quick turnaround, and for splitting this code up, that
+makes reasoning about this much easier!
+
+> Adds support for decoding the efuse value read from D1 efuse speed
+> bins, and factors out equivalent code for sun50i.
+> 
+> The algorithm is gotten from
+> 
+> https://github.com/Tina-Linux/linux-5.4/blob/master/drivers/cpufreq/sun50i-cpufreq-nvmem.c#L293-L338
+> 
+> and maps an efuse value to either 0 or 1, with 1 meaning stable at
+> a lower supply voltage for the same clock frequency.
+> 
+> Signed-off-by: Brandon Cheo Fusi <fusibrandon13@gmail.com>
+> ---
+>  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 34 ++++++++++++++++++++++++++
+>  1 file changed, 34 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> index fc509fc49..b1cb95308 100644
+> --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
+> @@ -29,6 +29,33 @@ struct sunxi_cpufreq_data {
+>  	u32 (*efuse_xlate)(u32 *speedbin, size_t len);
+>  };
+>  
+> +static u32 sun20i_efuse_xlate(u32 *speedbin, size_t len)
+
+I feel like this prototype can be shortened to:
+
+static u32 sun20i_efuse_xlate(u32 speedbin)
+
+See below.
+
+> +{
+> +	u32 ret, efuse_value = 0;
+> +	int i;
+> +
+> +	for (i = 0; i < len; i++)
+> +		efuse_value |= ((u32)speedbin[i] << (i * 8));
+
+The cast is not needed. Looking deeper into the original code you linked
+to, cell_value[] there is an array of u8, so they assemble a little endian
+32-bit integer from *up to* four 8-bit values read from the nvmem.
+
+So I think this code here is wrong, len is the size of the nvmem cells
+holding the bin identifier, in *bytes*, so the idea here is to just read
+the (lowest) 16 bits (in the D1 case, cf. "reg = <0x00 0x2>;" in the next
+patch) from this nvmem cell. Here you are combining two 32-bit words into
+efuse_value.
+
+So I think this whole part above is actually not necessary: we are
+expecting maximum 32 bits, and nvmem_cell_read() should take care of
+masking off unrequested bits, so we get the correct value back already. So
+can you try to remove the loop above, and use ...
+
+> +
+> +	switch (efuse_value) {
+
+	switch (*speedbin & 0xffff) {
+
+here instead? Or drop the pointer at all, and just use one u32 value, see
+the above prototype.
+
+Cheers,
+Andre
+
+P.S. This is just a "peephole review" of this patch, I haven't got around
+to look at this whole scheme in whole yet, to see if we actually need this
+or can simplify this or clean it up.
 
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.7-rc6=
--95-g52227a1b24640/plan/baseline/
+> +	case 0x5e00:
+> +		/* QFN package */
+> +		ret = 0;
+> +		break;
+> +	case 0x5c00:
+> +	case 0x7400:
+> +		/* QFN package */
+> +		ret = 1;
+> +		break;
+> +	case 0x5000:
+> +	default:
+> +		/* BGA package */
+> +		ret = 0;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+>  static u32 sun50i_efuse_xlate(u32 *speedbin, size_t len)
+>  {
+>  	u32 efuse_value = 0;
+> @@ -46,6 +73,10 @@ static u32 sun50i_efuse_xlate(u32 *speedbin, size_t len)
+>  		return 0;
+>  }
+>  
+> +struct sunxi_cpufreq_data sun20i_cpufreq_data = {
+> +	.efuse_xlate = sun20i_efuse_xlate,
+> +};
+> +
+>  struct sunxi_cpufreq_data sun50i_cpufreq_data = {
+>  	.efuse_xlate = sun50i_efuse_xlate,
+>  };
+> @@ -54,6 +85,9 @@ static const struct of_device_id cpu_opp_match_list[] = {
+>  	{ .compatible = "allwinner,sun50i-h6-operating-points",
+>  	  .data = &sun50i_cpufreq_data,
+>  	},
+> +	{ .compatible = "allwinner,sun20i-d1-operating-points",
+> +	  .data = &sun20i_cpufreq_data,
+> +	},
+>  	{}
+>  };
+>  
 
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v6.7-rc6-95-g52227a1b24640
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      52227a1b24640361bf68926fe12e60ab76004c7d =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform         | arch | lab         | compiler | defconfig          | reg=
-ressions
------------------+------+-------------+----------+--------------------+----=
---------
-beaglebone-black | arm  | lab-broonie | gcc-10   | multi_v7_defconfig | 1  =
-        =
-
-
-  Details:     https://kernelci.org/test/plan/id/65842a77727c4520a3e1367e
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.7-rc6-95-g52227a=
-1b24640/arm/multi_v7_defconfig/gcc-10/lab-broonie/baseline-beaglebone-black=
-.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.7-rc6-95-g52227a=
-1b24640/arm/multi_v7_defconfig/gcc-10/lab-broonie/baseline-beaglebone-black=
-.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/65842a77727c4520a3e13=
-67f
-        new failure (last pass: v6.7-rc5-91-g3b6de08083e1f) =
-
- =20
 
