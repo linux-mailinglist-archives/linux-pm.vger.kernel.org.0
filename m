@@ -1,195 +1,143 @@
-Return-Path: <linux-pm+bounces-1541-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1542-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F422281BF4B
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 21:02:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E945481BFA8
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 21:39:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A63F5287B73
-	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 20:02:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 26BA01C236E6
+	for <lists+linux-pm@lfdr.de>; Thu, 21 Dec 2023 20:39:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3BEB6EB64;
-	Thu, 21 Dec 2023 20:02:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD6B576909;
+	Thu, 21 Dec 2023 20:39:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IY4gSHXZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F2E4651AC;
-	Thu, 21 Dec 2023 20:02:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-3b9fb227545so128397b6e.1;
-        Thu, 21 Dec 2023 12:02:03 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25559768F2
+	for <linux-pm@vger.kernel.org>; Thu, 21 Dec 2023 20:39:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a2335d81693so224628166b.0
+        for <linux-pm@vger.kernel.org>; Thu, 21 Dec 2023 12:39:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1703191159; x=1703795959; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YPVJn7AZ3bjDEu4d/NGVYeo54HeMW/o7bassHS4OtTI=;
+        b=IY4gSHXZoLLdxPoV04ioiUF5PH03027uEA2TX+9I2iZuVl98upKsxl8TSinpZ41a3z
+         mFNTPlchN8nZG5EIvEPcooTjuOiJ+CuCx01j0h9XWSAaiRF4r0M8NUJq4RNRZKVuplE+
+         tSsGtoaXZW6dPkaRHtWice/44U1LBar++k7q3QMFuJR9R41UQjfmJlFW7tWAI+Tg/q0J
+         vtcBeuJyfQywIMspyBP1lJiglJSJvX/BB/Zwlo/tCarq572bhYiiXfNzy0kjiADRWwsK
+         8OQan/q4++DM9AdmoEz0fsWkLrN+SmNmmJPTR/hPHPBw86kkSrq4GmCOPjQzrJz714eL
+         JGHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703188922; x=1703793722;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XtaH4nkfWzBTwDdIvfbGlDnvjw8JE5Ezgnk1g1ujwFU=;
-        b=SZUYhR1COwghtL1SSkwv3ODZN6gJgaJlFX+LhepSn/Z/1x5In6x1qw/jsLUySmPyN1
-         gMCJ+0QR/lWYS8gCN1hnaqvFvg2TLMmVbsfEFuTRXeaFSIjiUI3mMKAg+cxD7Dzf61NC
-         iUa+55f1wVJZy09usJzhcK7kSQQeVgmvpnFzRwWQMLjgFGOI3FNyzfo6FwBbdBymHYjd
-         KjJDz0aDxdcLx18ENlW9ebrvVuXtL2tqE/GcW3neRWBaeQnIhy11/VbvJF6qTZK2hqmi
-         Crw7AhfaSUibW45tftytL+h2LPpysZHcqijM/DK2oaTov/kJ4w3SKSmw5B+HAik2P7xv
-         fO9w==
-X-Gm-Message-State: AOJu0YztrOgglb6rc7qu7X1/hXxUcHf5IOkJJNR3ah/iiDjriq8oHIag
-	vb6oVyTWdcW3GnaqiKOMdh9qhumoMkdkXsFyqBw=
-X-Google-Smtp-Source: AGHT+IH33M1GYQpUeZctljakeSCCKWDW84ql+MSWV1uSzlfgr2dBzY+jzJjK2q40LQCBT5BHCrdWJqsMldXJwwVwD+A=
-X-Received: by 2002:a05:6820:1043:b0:594:36ea:b0ce with SMTP id
- x3-20020a056820104300b0059436eab0cemr361932oot.0.1703188922498; Thu, 21 Dec
- 2023 12:02:02 -0800 (PST)
+        d=1e100.net; s=20230601; t=1703191159; x=1703795959;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YPVJn7AZ3bjDEu4d/NGVYeo54HeMW/o7bassHS4OtTI=;
+        b=Casp+1L5sLBsYEyGZ9aoXtdjaJD/Qdvd2RLJZ3FZ7whWd5+ceFnUCQ3ew69f1Kq7Ez
+         aJsYRbamSUzNHm2yTpcSt8LdZ7SHoXH/VRBECwZOMxgP4j4ur4Cn/9lMt4mWRxK/I6rE
+         JYT1PpiuvE5f0lp1HefJL/6b2Biv8hRLCyNCf7azBU2rAPkGCuNgtwkIXN8/WdHuFUPs
+         e7XJiAEdrFUvRWqNNkqF0woj0HFnL+JD6iK9tR4h2AbiXH2q2leVDAUFDz6kOkIxucZO
+         TnC7cuZS8kJWFM+UMyJ3FvZu6y8GKrbnjfCG1zP66KfhbjwxWGI8ijR4nliPp+9SQKTz
+         MA/w==
+X-Gm-Message-State: AOJu0Ywh5MLI4/EnTqfLbad/0aoeYeEm9pB4nUL4LlvhORCjy54sKk8j
+	C3eBiR8sfDW4Wf1neKvkEtKU96VYaCI1VQ==
+X-Google-Smtp-Source: AGHT+IGLFnOmjPCopdTFhcTrsizjQ2yFUZek0gyX9ASOeYRqklVwlEoh+AhqpCgrzGm9ABFBcjxOqw==
+X-Received: by 2002:a17:906:abd8:b0:a23:ca2c:653b with SMTP id kq24-20020a170906abd800b00a23ca2c653bmr1386787ejb.23.1703191159450;
+        Thu, 21 Dec 2023 12:39:19 -0800 (PST)
+Received: from [192.168.0.22] ([78.10.206.178])
+        by smtp.gmail.com with ESMTPSA id wh15-20020a170906fd0f00b00a26b37e0e7fsm162858ejb.60.2023.12.21.12.39.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Dec 2023 12:39:18 -0800 (PST)
+Message-ID: <5827119c-5788-4d59-8073-3d7f393aa821@linaro.org>
+Date: Thu, 21 Dec 2023 21:39:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231221152407.436177-1-vincent.guittot@linaro.org>
- <20231221152407.436177-2-vincent.guittot@linaro.org> <CAJZ5v0iU+nx_Tk_K74=dfeOuA7Lyvbq51UW=U1L4mZVEKy-+ZQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iU+nx_Tk_K74=dfeOuA7Lyvbq51UW=U1L4mZVEKy-+ZQ@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 21 Dec 2023 21:01:51 +0100
-Message-ID: <CAJZ5v0iChOQKpHaQy+Q0e9bBDjPsB107qk0FfT1z8_exFXiJdQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/5] cpufreq: Add a cpufreq pressure feedback for the scheduler
-To: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: catalin.marinas@arm.com, will@kernel.org, sudeep.holla@arm.com, 
-	rafael@kernel.org, viresh.kumar@linaro.org, agross@kernel.org, 
-	andersson@kernel.org, konrad.dybcio@linaro.org, mingo@redhat.com, 
-	peterz@infradead.org, juri.lelli@redhat.com, dietmar.eggemann@arm.com, 
-	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de, bristot@redhat.com, 
-	vschneid@redhat.com, lukasz.luba@arm.com, rui.zhang@intel.com, 
-	mhiramat@kernel.org, daniel.lezcano@linaro.org, amit.kachhap@gmail.com, 
-	linux@armlinux.org.uk, corbet@lwn.net, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 3/4] dt-bindings: power: reset: xilinx: Rename node
+ names in examples
+Content-Language: en-US
+To: Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
+ monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com
+Cc: Conor Dooley <conor+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Rob Herring <robh+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-pm@vger.kernel.org
+References: <cover.1703161663.git.michal.simek@amd.com>
+ <920c839ae2c9c5803c6c08b8705a0d8338bb94bc.1703161663.git.michal.simek@amd.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <920c839ae2c9c5803c6c08b8705a0d8338bb94bc.1703161663.git.michal.simek@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Dec 21, 2023 at 8:57=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
->
-> On Thu, Dec 21, 2023 at 4:24=E2=80=AFPM Vincent Guittot
-> <vincent.guittot@linaro.org> wrote:
-> >
-> > Provide to the scheduler a feedback about the temporary max available
-> > capacity. Unlike arch_update_thermal_pressure, this doesn't need to be
-> > filtered as the pressure will happen for dozens ms or more.
-> >
-> > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> > ---
-> >  drivers/cpufreq/cpufreq.c | 34 ++++++++++++++++++++++++++++++++++
-> >  include/linux/cpufreq.h   | 10 ++++++++++
-> >  2 files changed, 44 insertions(+)
-> >
-> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > index 44db4f59c4cc..15bd41f9bb5e 100644
-> > --- a/drivers/cpufreq/cpufreq.c
-> > +++ b/drivers/cpufreq/cpufreq.c
-> > @@ -2563,6 +2563,38 @@ int cpufreq_get_policy(struct cpufreq_policy *po=
-licy, unsigned int cpu)
-> >  }
-> >  EXPORT_SYMBOL(cpufreq_get_policy);
-> >
-> > +DEFINE_PER_CPU(unsigned long, cpufreq_pressure);
-> > +
-> > +/**
-> > + * cpufreq_update_pressure() - Update cpufreq pressure for CPUs
-> > + * @policy: cpufreq policy of the CPUs.
-> > + *
-> > + * Update the value of cpufreq pressure for all @cpus in the policy.
-> > + */
-> > +static void cpufreq_update_pressure(struct cpufreq_policy *policy)
-> > +{
-> > +       unsigned long max_capacity, capped_freq, pressure;
-> > +       u32 max_freq;
-> > +       int cpu;
-> > +
-> > +       cpu =3D cpumask_first(policy->related_cpus);
-> > +       pressure =3D max_capacity =3D arch_scale_cpu_capacity(cpu);
->
-> I would prefer two separate statements instead of the above.
->
-> Other than this
->
-> Acked-by: Rafael J. Wysocki <rafael@kernel.org>
->
-> > +       capped_freq =3D policy->max;
-> > +       max_freq =3D arch_scale_freq_ref(cpu);
-> > +
-> > +       /*
-> > +        * Handle properly the boost frequencies, which should simply c=
-lean
-> > +        * the thermal pressure value.
-> > +        */
-> > +       if (max_freq <=3D capped_freq)
-> > +               pressure -=3D max_capacity;
+On 21/12/2023 13:27, Michal Simek wrote:
+> Rename zynqmp-power node name to power-management which is more aligned
+> with generic node name recommendation.
+> 
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
 
-Actually, it would be somewhat cleaner to do
 
-pressure =3D 0;
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-here and
 
-> > +       else
-> > +               pressure -=3D mult_frac(max_capacity, capped_freq, max_=
-freq);
+Best regards,
+Krzysztof
 
-pressure =3D max_capacity - mult_frac(max_capacity, capped_freq, max_freq);
-
-and it would not be necessary to initialize pressure.
-
-> > +
-> > +       for_each_cpu(cpu, policy->related_cpus)
-> > +               WRITE_ONCE(per_cpu(cpufreq_pressure, cpu), pressure);
-> > +}
-> > +
-> >  /**
-> >   * cpufreq_set_policy - Modify cpufreq policy parameters.
-> >   * @policy: Policy object to modify.
-> > @@ -2618,6 +2650,8 @@ static int cpufreq_set_policy(struct cpufreq_poli=
-cy *policy,
-> >         policy->max =3D __resolve_freq(policy, policy->max, CPUFREQ_REL=
-ATION_H);
-> >         trace_cpu_frequency_limits(policy);
-> >
-> > +       cpufreq_update_pressure(policy);
-> > +
-> >         policy->cached_target_freq =3D UINT_MAX;
-> >
-> >         pr_debug("new min and max freqs are %u - %u kHz\n",
-> > diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> > index afda5f24d3dd..b1d97edd3253 100644
-> > --- a/include/linux/cpufreq.h
-> > +++ b/include/linux/cpufreq.h
-> > @@ -241,6 +241,12 @@ struct kobject *get_governor_parent_kobj(struct cp=
-ufreq_policy *policy);
-> >  void cpufreq_enable_fast_switch(struct cpufreq_policy *policy);
-> >  void cpufreq_disable_fast_switch(struct cpufreq_policy *policy);
-> >  bool has_target_index(void);
-> > +
-> > +DECLARE_PER_CPU(unsigned long, cpufreq_pressure);
-> > +static inline unsigned long cpufreq_get_pressure(int cpu)
-> > +{
-> > +       return per_cpu(cpufreq_pressure, cpu);
-> > +}
-> >  #else
-> >  static inline unsigned int cpufreq_get(unsigned int cpu)
-> >  {
-> > @@ -263,6 +269,10 @@ static inline bool cpufreq_supports_freq_invarianc=
-e(void)
-> >         return false;
-> >  }
-> >  static inline void disable_cpufreq(void) { }
-> > +static inline unsigned long cpufreq_get_pressure(int cpu)
-> > +{
-> > +       return 0;
-> > +}
-> >  #endif
-> >
-> >  #ifdef CONFIG_CPU_FREQ_STAT
-> > --
-> > 2.34.1
-> >
 
