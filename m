@@ -1,132 +1,97 @@
-Return-Path: <linux-pm+bounces-1550-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1556-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BD7581C423
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Dec 2023 05:40:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC50881C4FE
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Dec 2023 07:20:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96C841F25C2E
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Dec 2023 04:40:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8FFDBB24A2F
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Dec 2023 06:20:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 944578F6E;
-	Fri, 22 Dec 2023 04:39:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA9446FC2;
+	Fri, 22 Dec 2023 06:19:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Ic4YRyAh"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="SgSmDTZc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23F6E3209;
-	Fri, 22 Dec 2023 04:39:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BM3xUMm013908;
-	Fri, 22 Dec 2023 04:39:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:date:subject:mime-version:content-type
-	:content-transfer-encoding:message-id:references:in-reply-to:to
-	:cc; s=qcppdkim1; bh=S++rYSCN+Zhvdk7MOdAERLqeroPAteS+ELCWSWqu7Vc
-	=; b=Ic4YRyAhUks5YfROk5Of2hIUmNV2O/peSN2Q+rEYURNE7YZNZj/Q77oglMs
-	TXwqMg6tdAWCdVBeKKsHGoCl+zqmEK4mjpBgjSwmCe1yUv3qTn5H8Co+vPvzqAac
-	hgZToGYvFq47o0iL7j4SFb3A3YWiJEg+wIXQynrGrvniFQVzv4EHjWxeQv3g3WX6
-	2lbMZDHMnDqM3/XK30crxOhlEOshHPK/Y12eKiosJ6VBbGW4CjEN0YYz/rwSkZHP
-	beIM1gr+i3RkRNJUSys9aP554nVYpcHlhhITKLBp/AXWNjmUePmCi/shg3yylw+T
-	A3x9CqMybGl0RLbSDQND0KkvnmA==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v4kbwaj1j-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 22 Dec 2023 04:39:27 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BM4dQpB020659
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 22 Dec 2023 04:39:26 GMT
-Received: from [169.254.0.1] (10.49.16.6) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Thu, 21 Dec
- 2023 20:39:26 -0800
-From: Bjorn Andersson <quic_bjorande@quicinc.com>
-Date: Thu, 21 Dec 2023 20:39:29 -0800
-Subject: [PATCH v2 8/8] arm64: defconfig: Enable MAX20411 regulator driver
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2192DDAB;
+	Fri, 22 Dec 2023 06:19:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=vcXjkACtt3w1L/iqeM+O5LdUiTqdAb5DknSdUDcSKoc=; b=SgSmDTZcnoh8EPslL2Q+3FamC+
+	YeOAMA8kz00VkR8vEe+udxLOtP6sTjlBj0aY38cKjVeeg06v18ldqz4ehKCXoqLWG0emXRs5/2KCE
+	tKb2QURK3ygLRQoNHs08YlNrHxl1rgIE8Iksc6eJyaUSz++xS7Mp0wejEW1wrddbFK+dmsIPraB0P
+	ba5wl6wOyPSz3bdRO6CAJxeGZX6trtDLxKSQ3LOy/mvLb+TTq9LqadG+Y2cvjRq+XEJt21QErwk1i
+	aEKIDHHv7IpNzCtwZzl8iY6FYhs3bkSdTV+ZIN1IhW+av48U/TzCLsDs+B3yAOn0LJ03r4m2xkNYx
+	a+sNasaw==;
+Received: from [50.53.46.231] (helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1rGYsd-0053gU-31;
+	Fri, 22 Dec 2023 06:19:31 +0000
+From: Randy Dunlap <rdunlap@infradead.org>
+To: linux-kernel@vger.kernel.org
+Cc: Randy Dunlap <rdunlap@infradead.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	linux-pm@vger.kernel.org
+Subject: [PATCH] thermal: max7620: fix all kernel-doc warnings
+Date: Thu, 21 Dec 2023 22:19:31 -0800
+Message-ID: <20231222061931.10807-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20231220-sa8295p-gpu-v2-8-4763246b72c0@quicinc.com>
-References: <20231220-sa8295p-gpu-v2-0-4763246b72c0@quicinc.com>
-In-Reply-To: <20231220-sa8295p-gpu-v2-0-4763246b72c0@quicinc.com>
-To: Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof
- Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Ulf Hansson
-	<ulf.hansson@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        "Catalin
- Marinas" <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        "Bjorn
- Andersson" <quic_bjorande@quicinc.com>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1703219963; l=670;
- i=quic_bjorande@quicinc.com; s=20230915; h=from:subject:message-id;
- bh=unb+KmBC3PDXA2J/s/HHbtUD1oFS0hJ/byKzZ00/Jfw=;
- b=UVpv5+plWWT9lXJQ2PK9AaaX0E2kdoMcFR2NmGjfwfTBE4Jy1nZD3WQv9YwniRalVk3SI0DG4Cvj
- pjrm09lmBZQ+vSXCuEToid6EErvLBGmRC3YiZRowaDCpxjELU6wf
-X-Developer-Key: i=quic_bjorande@quicinc.com; a=ed25519;
- pk=VkhObtljigy9k0ZUIE1Mvr0Y+E1dgBEH9WoLQnUtbIM=
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: eRAEMIO5PYu8gwi8SpcGVQzr7ID5gC1L
-X-Proofpoint-ORIG-GUID: eRAEMIO5PYu8gwi8SpcGVQzr7ID5gC1L
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
- malwarescore=0 mlxlogscore=786 spamscore=0 impostorscore=0 mlxscore=0
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2312220029
+Content-Transfer-Encoding: 8bit
 
-The Qualcomm SA8295P ADP board uses a max20411 to power the GPU
-subsystem.
+Correct all kernel-doc notation to prevent warnings from
+scripts/kernel-doc:
 
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+max77620_thermal.c:48: warning: Function parameter or member 'tz' not described in 'max77620_thermal_read_temp'
+max77620_thermal.c:48: warning: Excess function parameter 'data' description in 'max77620_thermal_read_temp'
+max77620_thermal.c:48: warning: No description found for return value of 'max77620_thermal_read_temp'
+
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Rafael J. Wysocki <rafael@kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-pm@vger.kernel.org
 ---
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/thermal/max77620_thermal.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index ef1061089548..ec94a0c4fd03 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -751,6 +751,7 @@ CONFIG_REGULATOR_HI6421V530=y
- CONFIG_REGULATOR_HI655X=y
- CONFIG_REGULATOR_MAX77620=y
- CONFIG_REGULATOR_MAX8973=y
-+CONFIG_REGULATOR_MAX20411=m
- CONFIG_REGULATOR_MP8859=y
- CONFIG_REGULATOR_MT6315=m
- CONFIG_REGULATOR_MT6357=y
-
--- 
-2.25.1
-
+diff -- a/drivers/thermal/max77620_thermal.c b/drivers/thermal/max77620_thermal.c
+--- a/drivers/thermal/max77620_thermal.c
++++ b/drivers/thermal/max77620_thermal.c
+@@ -32,7 +32,7 @@ struct max77620_therm_info {
+ 
+ /**
+  * max77620_thermal_read_temp: Read PMIC die temperatue.
+- * @data:	Device specific data.
++ * @tz:		pointer to &thermal_zone_device
+  * @temp:	Temperature in millidegrees Celsius
+  *
+  * The actual temperature of PMIC die is not available from PMIC.
+@@ -41,7 +41,7 @@ struct max77620_therm_info {
+  * If threshold has not been crossed then assume die temperature as 100degC
+  * else 120degC or 140deG based on the PMIC die temp threshold status.
+  *
+- * Return 0 on success otherwise error number to show reason of failure.
++ * Return: %0 on success otherwise error number to show reason of failure.
+  */
+ 
+ static int max77620_thermal_read_temp(struct thermal_zone_device *tz, int *temp)
 
