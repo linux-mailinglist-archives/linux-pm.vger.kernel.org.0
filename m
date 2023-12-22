@@ -1,142 +1,176 @@
-Return-Path: <linux-pm+bounces-1543-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1544-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E302281C341
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Dec 2023 04:01:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AEC4481C347
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Dec 2023 04:07:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 73375B2241D
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Dec 2023 03:01:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E0E41F25486
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Dec 2023 03:07:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 347A1ECA;
-	Fri, 22 Dec 2023 03:01:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0190EB8;
+	Fri, 22 Dec 2023 03:07:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="Ks0zm/lR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from baidu.com (mx20.baidu.com [111.202.115.85])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC9AEB8
-	for <linux-pm@vger.kernel.org>; Fri, 22 Dec 2023 03:01:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=baidu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baidu.com
-From: "Li,Rongqing" <lirongqing@baidu.com>
-To: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"peterz@infradead.org" <peterz@infradead.org>
-Subject: RE:  WARNING: at drivers/cpuidle/cpuidle.c:269
-Thread-Topic: WARNING: at drivers/cpuidle/cpuidle.c:269
-Thread-Index: AdoxiaVtCgx1PiOmQ5asG1t3SMumYgC+QLTQ
-Date: Fri, 22 Dec 2023 03:01:04 +0000
-Message-ID: <3f709048558d4c568b37b2948e05512d@baidu.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52625468B
+	for <linux-pm@vger.kernel.org>; Fri, 22 Dec 2023 03:07:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1d2f1cecf89so9086205ad.1
+        for <linux-pm@vger.kernel.org>; Thu, 21 Dec 2023 19:07:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1703214453; x=1703819253; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=WSYtQPXKWBhiP2AKDbvLSpER0DB4mRWZjOJMYq33N0I=;
+        b=Ks0zm/lR6J0RKxbICuYx9S5X89IwtylJCNWMAy4/R/uL04t/sUBN2YBaZFt1Qq7lIK
+         EIBmqgmCLPWBVZoyLuIBZyIOVuSKAfnNAoWxM1yzmz/M5el3arj9tWAGA7atYNtIFWx+
+         gsvvY0BIp2ufgWfegSZnwwkjl0pDzSLmJor3dRsDIOYNBbHzaDHluqnsrAv9zlFhLsPZ
+         yQuGcKYMsQ+KKH9P/Jgt8Ev49UDJxS/qSxnAFcyRJafoXtu2QWOsCcRBhvBzw4ZbexXe
+         8AseLKlWlMryt0eLZdfkd62HjVGhIbuTJY62MyS3d7k2Zs8WnXWdVQyEXEhNrhhTbniH
+         BRoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703214453; x=1703819253;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WSYtQPXKWBhiP2AKDbvLSpER0DB4mRWZjOJMYq33N0I=;
+        b=ltlIuxSVJSUv4nEtAZ0JO7RFnvwrOcrby+uYQ73h34/ckYRyhYSb4uTd5EVhlWs+kR
+         TVgpA8VY/j424gOHvJsd98qhe0XoYtU6S7LAqr3HRBufldmsWPRK76S0KGBjkrbSoUmB
+         7MJQ2wwmbpmD8ApYcl+4W9rprBksnEtA9PcoRvkQQPh3Clnq1n7e7MPpCNT4UdxPG1ZB
+         fGNSPp0WGHXaMH40CrFBWW2i8RiR3J58wqGEw9rO8nDlIJs+tEznZ3OhBLxP2IALK0t+
+         IjQk2/K4rq9HgH6JWgnja0C0/BCqnbjpYgICzuP6lJnUt1B5pZALVn24Zo/Z2JTUg7Mz
+         Gk1g==
+X-Gm-Message-State: AOJu0Yzg49B0jmsU/1htROkV9aSpM6vjVMaLvLIoieCf3smLmTl4kPmM
+	t5ywQ1EoVXxPe7mQnMOyH2r6CEvhi5b3jDksTpVS3gTkOcA=
+X-Google-Smtp-Source: AGHT+IG6h4tSzY9pH5CIisoj7YKbFzwXkEHuweBDFPezQF5Jh+5CqRHUUU2p3IYDu4E4L8bD/n0Qvg==
+X-Received: by 2002:a17:902:bd81:b0:1d3:39fd:9043 with SMTP id q1-20020a170902bd8100b001d339fd9043mr477743pls.13.1703214453588;
+        Thu, 21 Dec 2023 19:07:33 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id bh10-20020a170902a98a00b001d4160c4f97sm569178plb.188.2023.12.21.19.07.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Dec 2023 19:07:33 -0800 (PST)
+Message-ID: <6584fd75.170a0220.b461d.3201@mx.google.com>
+Date: Thu, 21 Dec 2023 19:07:33 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-FEAS-Client-IP: 172.31.51.55
-X-FE-Last-Public-Client-IP: 100.100.100.38
-X-FE-Policy-ID: 15:10:21:SYSTEM
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.7-rc6-100-g6a473ae3ce709
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.7-rc6-100-g6a473ae3ce709)
+To: rafael@kernel.org, linux-pm@vger.kernel.org,
+ kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From: "kernelci.org bot" <bot@kernelci.org>
 
-> -----Original Message-----
-> From: Li,Rongqing
-> Sent: Monday, December 18, 2023 4:13 PM
-> To: linux-pm@vger.kernel.org
-> Subject: WARNING: at drivers/cpuidle/cpuidle.c:269
->=20
-> [  775.997365] ------------[ cut here ]------------ [  775.997962] defaul=
-t_enter_idle
-> leaked IRQ state [  775.997985] WARNING: CPU: 2 PID: 0 at
-> drivers/cpuidle/cpuidle.c:269 cpuidle_enter_state+0x3bc/0x450 [  775.9994=
-61]
-> Modules linked in: nft_compat(E) nf_tables(E) libcrc32c(E) nfnetlink(E) i=
-sofs(E)
-> crct10dif_pclmul(E) crc32_pclmul(E) ghash_clmulni_intel(E) sha512_ssse3(E=
-)
-> hid_generic(E) aesni_intel(E) crypto_simd(E) cryptd(E) input_leds(E) led_=
-class(E)
-> pcspkr(E) i2c_i801(E) i2c_smbus(E) usbhid(E) hid(E) i2c_core(E) virtio_ne=
-t(E)
-> net_failover(E) failover(E) sch_fq_codel(E) virtio_blk(E) atkbd(E) vivald=
-i_fmap(E)
-> crc32c_intel(E) serio_raw(E) sr_mod(E) cdrom(E) uhci_hcd(E) virtio_pci(E)=
- sg(E)
-> virtio(E) virtio_pci_legacy_dev(E) ehci_pci(E) ehci_hcd(E)
-> virtio_pci_modern_dev(E) virtio_ring(E)
-> [  776.004677] CPU: 2 PID: 0 Comm: swapper/2 Tainted: G            E
-> 6.7.0-rc3 #21
-> [  776.006896] RIP: 0010:cpuidle_enter_state+0x3bc/0x450
-> [  776.007517] Code: 4a 71 43 ff e9 91 fd ff ff 80 3d a0 86 d7 00 00 75 1=
-a 49 8b
-> 74 24 50 48 c7 c7 2d 2c c8 84 c6 05 8b 86 d7 00 01 e8 44 3e 4d ff <0f> 0b=
- fa e9
-> ce fc ff ff 8b 73 04 65 8b 05 ce 4a a6 7b 89 c0 48 0f [  776.009582] RSP:
-> 0018:ffffb765000abe90 EFLAGS: 00010282 [  776.010217] RAX:
-> 0000000000000000 RBX: ffffd764ffd00988 RCX: 0000000000000027
-> [  776.011033] RDX: 0000000000a1810d RSI: ffffb765000abd78 RDI:
-> ffff95c22fd204c8 [  776.011847] RBP: 0000000000000001 R08:
-> 0000000000000000 R09: c0000000ffff7fff [  776.012660] R10:
-> 0000000000000001 R11: ffffb765000abd18 R12: ffffffff85314bc0
-> [  776.013483] R13: ffffffff85314b40 R14: 0000000000000001 R15:
-> 0000000000000000 [  776.014304] FS:  0000000000000000(0000)
-> GS:ffff95c22fd00000(0000) knlGS:0000000000000000 [  776.015286] CS:
-> 0010 DS: 0000 ES: 0000 CR0: 0000000080050033 [  776.015973] CR2:
-> 00007f0e0260c1a0 CR3: 00000001087e0006 CR4: 0000000000770ef0
-> [  776.016789] DR0: 0000000000000000 DR1: 0000000000000000 DR2:
-> 0000000000000000 [  776.017606] DR3: 0000000000000000 DR6:
-> 00000000fffe0ff0 DR7: 0000000000000400 [  776.018425] PKRU: 55555554
-> [  776.018825] Call Trace:
-> [  776.019200]  <TASK>
-> [  776.019539]  ? __warn+0x85/0x140
-> [  776.019995]  ? cpuidle_enter_state+0x3bc/0x450 [  776.020559]  ?
-> report_bug+0xfc/0x1e0 [  776.021044]  ? console_unlock+0x51/0xe0
-> [  776.021554]  ? handle_bug+0x3f/0x70 [  776.022032]  ?
-> exc_invalid_op+0x17/0x70 [  776.022536]  ? asm_exc_invalid_op+0x1a/0x20
-> [  776.023076]  ? cpuidle_enter_state+0x3bc/0x450 [  776.023641]
-> cpuidle_enter+0x2d/0x40 [  776.024127]  do_idle+0x138/0x200
-> [  776.024574]  cpu_startup_entry+0x2a/0x30 [  776.025091]
-> start_secondary+0x119/0x140 [  776.025610]
-> secondary_startup_64_no_verify+0x16b/0x16b
-> [  776.026249]  </TASK>
-> [  776.026594] ---[ end trace 0000000000000000 ]---
->=20
->=20
->=20
-> cat /sys/devices/system/cpu/cpuidle/current_governor_ro
-> haltpoll
+pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.7-rc6-100-g6=
+a473ae3ce709)
+
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+7-rc6-100-g6a473ae3ce709/
+
+Tree: pm
+Branch: testing
+Git Describe: v6.7-rc6-100-g6a473ae3ce709
+Git Commit: 6a473ae3ce709c1b9fb544f105559f195814535a
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
 
 
+Warnings summary:
 
-Peter:
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
 
-I see the below warning in VM with haltpoll driver, seem it is caused by th=
-is commit
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
+Detailed per-defconfig build reports:
 
-    cpuidle: Move IRQ state validation
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
 
-    Make cpuidle_enter_state() consistent with the s2idle variant and
-    verify ->enter() always returns with interrupts disabled.
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
-default_enter_idle maybe enable irq as below
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
-28 static int default_enter_idle(struct cpuidle_device *dev,
- 29                   struct cpuidle_driver *drv, int index)
- 30 {
- 31     if (current_clr_polling_and_test()) {
- 32         local_irq_enable();
- 33         return index;
- 34     }
- 35     arch_cpu_idle();
- 36     return index;
- 37 }
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
 
-Thanks=20
--Li
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
 
