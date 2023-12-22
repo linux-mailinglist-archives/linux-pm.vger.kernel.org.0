@@ -1,170 +1,129 @@
-Return-Path: <linux-pm+bounces-1559-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1560-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A88981C89C
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Dec 2023 11:57:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DB2681C8D9
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Dec 2023 12:14:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 275312875A2
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Dec 2023 10:57:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D59E01F22E23
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Dec 2023 11:14:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7CF814A86;
-	Fri, 22 Dec 2023 10:57:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A365715AD7;
+	Fri, 22 Dec 2023 11:14:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oFOp2d2U"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j4i4j7ZJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8D0217742;
-	Fri, 22 Dec 2023 10:57:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3475EC433C8;
-	Fri, 22 Dec 2023 10:56:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703242620;
-	bh=yxOODCQy7qdFmmgdHpYsbarUrclf58haVTyhf7Ua4hg=;
-	h=From:To:Cc:Subject:Date:From;
-	b=oFOp2d2ULZLDtmEDim4t3dyCQ4kuNv3BAP8Olo15d9hN34s2Lm+MX6ynrMxXw5ZqC
-	 HvSF5h32r5r9zzaidgHPF96wbbUq3F3bP4hBRdb1cgnttCpufpQ0od0Ydq/CregAEs
-	 GLQ9uYWWMMcXJtS4rK5J6z7gtaClDTxZBPAkTJ0d15CQUeD/ivbkLJ9WZhmiz7Ois6
-	 WxSPFpqjEEW51D6y1SN3WHW64a+bLP4rJF47QO8iQnOHfcxJzPAxT2BeTU2kUVceXe
-	 iU98W6rj4bRzxfUQ/tMYMKPPdC0VUGjjwSMGcP1U4GcI3p1LYcezVGT82N6+IgN5B6
-	 0hufQmzZKJ8Dg==
-From: Georgi Djakov <djakov@kernel.org>
-To: gregkh@linuxfoundation.org
-Cc: linux-pm@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19CFE1426C;
+	Fri, 22 Dec 2023 11:14:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-50e23a4df33so2128486e87.2;
+        Fri, 22 Dec 2023 03:14:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1703243676; x=1703848476; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ywwb2c8K+kZPbyhXDFCz7U5YWzVC2teLlAt2hSiJc0A=;
+        b=j4i4j7ZJEb420d9qFo3pMBUdaXgDy15Yot02E4+0+qfthRfZVJwSLxiGVgBl6y0Abn
+         9JPr8M1qFDzrp8+7MkxmNqttEQbUwiynDISlbH3lUkSpfJt8PQ47YNBfsci//2HV3Yde
+         OfssNAcJGAsgkFl0LTUDCuET17IQRB6PxkBZGXQCPeP8MtQE6WvXkZFYyHbhE1juDqm0
+         MgfezNTLXjrRpbb5rEjXIrUo4KGFglUMrK3dOvdwLb1JKKKrYxdgO3N063oTG4JTrTKu
+         Ii86XvJmKSgk8G3m0RSr4zK2bDg9VKN4JeDb6cSHrbbdbjX0sEXE5BvI08Vwv9SfEd2Y
+         SSiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703243676; x=1703848476;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ywwb2c8K+kZPbyhXDFCz7U5YWzVC2teLlAt2hSiJc0A=;
+        b=GvRS+yuvVTqRiFvURvzwkG+5ukXwIdKorYeMvIVLf3sWRnEFPE/xK/uaykh9gGH5T1
+         fcgMaC8JNeXeTKblzYrPOzDrFnprxCExslhfyDcUQGIBjMkR5Ml/vlTPa/SR5yw3Qj+O
+         2cgRILyA7j2/CVHKqWi9Ac5D23W1zFYDjGZGpWz9z/I4B8Qrg5A6jKKI8kYshEYwLZ5u
+         ibIz1zOjxw4RIdUuAkOTflZ0gV3oHLnqIPQMa3KqIYbBjU1UYIITCBzYbD/BgufC0HuA
+         F8A+sODZ6PaeTYEk7HfQ0vGGsdpX71FJvSHkviIytL/OSfnMD4n11iDHUqIPhdXOvSPT
+         Hqag==
+X-Gm-Message-State: AOJu0YzzUSRn5SrY7Ju7hoqNnpgu4yg5dBx8/vV31J3WEPhPGLozE5S5
+	mtcUHKZN6ZZwMwyw9P1o/Dc=
+X-Google-Smtp-Source: AGHT+IEHhoBZ6sLrw8lKHDckHa1uRnHimx5cP137ZR9Lgo9yiD12gvt8LEkOv80eCcFyVhpbiFrZ1g==
+X-Received: by 2002:ac2:5dd5:0:b0:50b:ebd1:6e8a with SMTP id x21-20020ac25dd5000000b0050bebd16e8amr572807lfq.133.1703243675755;
+        Fri, 22 Dec 2023 03:14:35 -0800 (PST)
+Received: from localhost.localdomain ([154.72.162.91])
+        by smtp.gmail.com with ESMTPSA id es15-20020a056402380f00b0055267663784sm2420469edb.11.2023.12.22.03.14.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Dec 2023 03:14:35 -0800 (PST)
+From: Brandon Cheo Fusi <fusibrandon13@gmail.com>
+To: Andre Przywara <andre.przywara@arm.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Yangtao Li <tiny.windzz@gmail.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: devicetree@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
-	djakov@kernel.org
-Subject: [GIT PULL] interconnect changes for 6.8
-Date: Fri, 22 Dec 2023 12:56:49 +0200
-Message-Id: <20231222105649.1607990-1-djakov@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	linux-pm@vger.kernel.org,
+	Brandon Cheo Fusi <fusibrandon13@gmail.com>
+Subject: [RFC PATCH v3 0/3] Add support for reading D1 efuse speed bin
+Date: Fri, 22 Dec 2023 12:14:04 +0100
+Message-Id: <20231222111407.104270-1-fusibrandon13@gmail.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hello Greg,
+Hi everyone,
 
-This is the pull request with interconnect changes for the v6.8-rc1 merge
-window. It contains some new drivers. As always, the summary is in the
-signed tag.
+This series is an attempt to get feedback on decoding D1 efuse speed bins
+in the Sun50i H6 cpufreq driver, and turning the result into a meaningful
+value that selects voltage ranges in an OPP table.
 
-All patches have been in linux-next for more than a week. Please pull into
-char-misc-next when possible.
+I want to make sure I get this right before sending in a v3 of the D1
+cpufreq support series here
 
-Thanks,
-Georgi
+https://lore.kernel.org/linux-sunxi/20231218110543.64044-1-fusibrandon13@gmail.com/T/#t
 
-The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
+which is currently stuck at
 
-  Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
+https://lore.kernel.org/linux-sunxi/aad8302d-a015-44ee-ad11-1a4c6e00074c@sholland.org/
 
-are available in the Git repository at:
+Changes in v3:
+- Drop 'len' parameter and pointer in sunxi_cpufreq_data::efuse_xlate()
+  prototype
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.8-rc1
+Changes in v2:
+- Make speed bin decoding generic in one patch and add D1 support in a
+  separate patch
+- Fix OPP voltage ranges to avoid stability issues
 
-for you to fetch changes up to addb5295403270f9b287f2d76f1072b6f653af1d:
+Brandon Cheo Fusi (3):
+  cpufreq: sun50i: Refactor speed bin decoding
+  cpufreq: sun50i: Add support for D1's speed bin decoding
+  riscv: dts: allwinner: Fill in OPPs
 
-  Merge branch 'icc-qcm2290' into icc-next (2023-12-15 00:43:01 +0200)
+ arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi | 19 +++-
+ drivers/cpufreq/sun50i-cpufreq-nvmem.c        | 89 +++++++++++++++----
+ 2 files changed, 87 insertions(+), 21 deletions(-)
 
-----------------------------------------------------------------
-interconnect changes for 6.8
+-- 
+2.30.2
 
-This pull request contains the interconnect changes for the 6.8-rc1 merge
-window. These are just driver changes with the following highlights:
-
-Driver changes:
-- New interconnect driver for the SM8650 platform.
-- New interconnect driver for the SM6115 platform.
-- New interconnect driver for the X1E80100 (Snapdragon X Elite) platform.
-- Add compatible string for the BWMONv4 instance on the QCM2290 platform.
-- Complete the platform drivers conversion to the .remove_new callback
-  returning void (mostly iMX, Exynos and the rest of Qcom drivers).
-
-Signed-off-by: Georgi Djakov <djakov@kernel.org>
-
-----------------------------------------------------------------
-Georgi Djakov (5):
-      Merge branch 'icc-sm8650' into icc-next
-      Merge branch 'icc-platform-remove' into icc-next
-      Merge branch 'icc-x1e80100' into icc-next
-      Merge branch 'icc-sm6115' into icc-next
-      Merge branch 'icc-qcm2290' into icc-next
-
-Konrad Dybcio (5):
-      dt-bindings: interconnect: Add Qualcomm SM6115 NoC
-      interconnect: qcom: Add SM6115 interconnect provider driver
-      dt-bindings: interconnect: qcom,msm8998-bwmon: Add SM6115 bwmon instance
-      dt-bindings: interconnect: qcom,msm8998-bwmon: Add QCM2290 bwmon instance
-      interconnect: qcom: sm6115: Fix up includes
-
-Neil Armstrong (3):
-      dt-bindings: interconnect: document the RPMh Network-On-Chip Interconnect in Qualcomm SM8650 SoC
-      interconnect: qcom: introduce RPMh Network-On-Chip Interconnect on SM8650 SoC
-      dt-bindings: interconnect: qcom-bwmon: document SM8650 BWMONs
-
-Rajendra Nayak (2):
-      dt-bindings: interconnect: Add Qualcomm X1E80100 SoC
-      interconnect: qcom: Add X1E80100 interconnect provider driver
-
-Uwe Kleine-König (9):
-      interconnect: qcom: Make qnoc_remove return void
-      interconnect: imx8mm: Convert to platform remove callback returning void
-      interconnect: imx8mn: Convert to platform remove callback returning void
-      interconnect: imx8mp: Convert to platform remove callback returning void
-      interconnect: imx8mq: Convert to platform remove callback returning void
-      interconnect: qcom/msm8974: Convert to platform remove callback returning void
-      interconnect: qcom/osm-l3: Convert to platform remove callback returning void
-      interconnect: qcom/smd-rpm: Convert to platform remove callback returning void
-      interconnect: exynos: Convert to platform remove callback returning void
-
- .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml   |    4 +
- .../devicetree/bindings/interconnect/qcom,sm6115.yaml          |  152 +
- .../devicetree/bindings/interconnect/qcom,sm8650-rpmh.yaml     |  136 +
- .../devicetree/bindings/interconnect/qcom,x1e80100-rpmh.yaml   |   83 +
- drivers/interconnect/imx/imx8mm.c                              |    9 +-
- drivers/interconnect/imx/imx8mn.c                              |    9 +-
- drivers/interconnect/imx/imx8mp.c                              |    9 +-
- drivers/interconnect/imx/imx8mq.c                              |    9 +-
- drivers/interconnect/qcom/Kconfig                              |   27 +
- drivers/interconnect/qcom/Makefile                             |    6 +
- drivers/interconnect/qcom/icc-rpm.c                            |    4 +-
- drivers/interconnect/qcom/icc-rpm.h                            |    2 +-
- drivers/interconnect/qcom/msm8916.c                            |    2 +-
- drivers/interconnect/qcom/msm8939.c                            |    2 +-
- drivers/interconnect/qcom/msm8974.c                            |    6 +-
- drivers/interconnect/qcom/msm8996.c                            |    2 +-
- drivers/interconnect/qcom/osm-l3.c                             |    6 +-
- drivers/interconnect/qcom/qcm2290.c                            |    2 +-
- drivers/interconnect/qcom/qcs404.c                             |    2 +-
- drivers/interconnect/qcom/sdm660.c                             |    2 +-
- drivers/interconnect/qcom/sm6115.c                             | 1423 +++++
- drivers/interconnect/qcom/sm8650.c                             | 1674 ++++++
- drivers/interconnect/qcom/sm8650.h                             |  143 +
- drivers/interconnect/qcom/smd-rpm.c                            |    6 +-
- drivers/interconnect/qcom/x1e80100.c                           | 2328 ++++++++
- drivers/interconnect/qcom/x1e80100.h                           |  192 +
- drivers/interconnect/samsung/exynos.c                          |    6 +-
- include/dt-bindings/interconnect/qcom,sm6115.h                 |  111 +
- include/dt-bindings/interconnect/qcom,sm8650-rpmh.h            |  154 +
- include/dt-bindings/interconnect/qcom,x1e80100-rpmh.h          |  207 +
- 30 files changed, 6660 insertions(+), 58 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm6115.yaml
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm8650-rpmh.yaml
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,x1e80100-rpmh.yaml
- create mode 100644 drivers/interconnect/qcom/sm6115.c
- create mode 100644 drivers/interconnect/qcom/sm8650.c
- create mode 100644 drivers/interconnect/qcom/sm8650.h
- create mode 100644 drivers/interconnect/qcom/x1e80100.c
- create mode 100644 drivers/interconnect/qcom/x1e80100.h
- create mode 100644 include/dt-bindings/interconnect/qcom,sm6115.h
- create mode 100644 include/dt-bindings/interconnect/qcom,sm8650-rpmh.h
- create mode 100644 include/dt-bindings/interconnect/qcom,x1e80100-rpmh.h
 
