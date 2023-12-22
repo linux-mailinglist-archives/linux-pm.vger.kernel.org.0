@@ -1,172 +1,299 @@
-Return-Path: <linux-pm+bounces-1564-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1565-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F0B181C9B1
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Dec 2023 13:07:55 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA69981CB6F
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Dec 2023 15:38:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C04A28748C
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Dec 2023 12:07:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1A023B22C00
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Dec 2023 14:38:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D1991804E;
-	Fri, 22 Dec 2023 12:07:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E390D1D55D;
+	Fri, 22 Dec 2023 14:38:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Y74jHu/t"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Eb7MKkPP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B28F11799E
-	for <linux-pm@vger.kernel.org>; Fri, 22 Dec 2023 12:07:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-50e68243b67so860334e87.1
-        for <linux-pm@vger.kernel.org>; Fri, 22 Dec 2023 04:07:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703246857; x=1703851657; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=nvgpL3qEBxgU0a2eKbgDbOrM1FwKdSrTGRnjkzSYtp8=;
-        b=Y74jHu/tVgBpZDwL0mQ0j5I9klRWx334YLy+tS78nbxsExmV1WkKYkT2MC4rDF2SRH
-         o4pu/EqA0Y+s2F53cLNo1wJGFXqB4YMoXb0JgPGw/CnOH4on6h+CyghnyrZ1wMTjY4pb
-         OkAyGpTzt6gBwl35/1taiVcGTwwb+lPy1F2SeYBxF3VeM5DZVvk1XpLdfJrObgBExkZq
-         fkDzomtAx/cGzpfb9eTwTpGrFpkPUB1l7I4uuWGfkccPCtqLKgvQHtzBWyZQuaQXOwYK
-         vFvGHFvXWuGCWspz9eD9uTRizzCRIA9X8RNb+Fg0iNHAtpK4XiCqUnWIjP7IDNUqZXN4
-         Nk5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703246857; x=1703851657;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nvgpL3qEBxgU0a2eKbgDbOrM1FwKdSrTGRnjkzSYtp8=;
-        b=q4uVqAGGD4MS58xHWasV7Df4hyh9zh5TAXCZyKhHQd0vSo4UnSh/1Q971Sf3jOfKyS
-         lMIk4TuW9nXLm9d5ttCkkakcV57fx/y9ZFOETkIj3bsdVwxLGg/4QwG64tVpS8EU/H/F
-         TbH2Sze2+ZrexWI6DNehM/uYgERDg5kYv7K7+c7PjbuSLhpmcAhhtGHY8erBCynYLQMd
-         LEDXWqWNmZHqxrLYF9HrzQpxCjTC8couKPkgmmXfTs0mugx9XkXkbYvEj9r6zftEuhde
-         IDmRmJqqbGg+UpK6wTXu/k/FmfdAZkiTb4qwCO3zeZ8wk6B8YfLo+VTXZD6y6CsU/5/7
-         77TA==
-X-Gm-Message-State: AOJu0YzXybukR72cTxRA+n+/d694/1WVk4/vzlDYYhg0POKz9Xm27zPS
-	BtxKR6wjdkXL+/gjyTmAf67gdl0MLjoVFA==
-X-Google-Smtp-Source: AGHT+IESJiqB2x1rgNMeJY/VGI58lLZz48PlqJXxFZTH15QE3NVtltjaDSQWwzqSSvdmDe/FGXrcHg==
-X-Received: by 2002:ac2:48b9:0:b0:50e:1870:1ef2 with SMTP id u25-20020ac248b9000000b0050e18701ef2mr480321lfg.114.1703246856607;
-        Fri, 22 Dec 2023 04:07:36 -0800 (PST)
-Received: from [192.168.199.125] (178235179206.dynamic-4-waw-k-1-3-0.vectranet.pl. [178.235.179.206])
-        by smtp.gmail.com with ESMTPSA id f19-20020a056402069300b0054c9b0bd576sm2470850edy.26.2023.12.22.04.07.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Dec 2023 04:07:36 -0800 (PST)
-Message-ID: <94d2c5e2-d75e-4de6-928a-e278b341a02c@linaro.org>
-Date: Fri, 22 Dec 2023 13:07:33 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F6E1CFAE;
+	Fri, 22 Dec 2023 14:38:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1703255922; x=1734791922;
+  h=date:from:to:cc:subject:message-id;
+  bh=3ccm4/0zDgn0JcMJ6cz++1E96aS6+Ihb79HHInMLl8o=;
+  b=Eb7MKkPPbSWMNKfzqonLrwgSgF6+jsOn0Eff4vn/OhD4ZOxOlrner9Ue
+   6q4frUIOcnbihKHLfUjeHCWfwwFAMkfyTXgbAbRYabEnSTRjIaPXr4eaq
+   LPosPciNhkZIxGIWvHRJh8iFSoze7sm/7EU3eoeOFwBMa8rmqasAO9GUP
+   6SR0OoIYNx3WwiGsFlmH91MQxcPNFRLBZtabN3ke8tOQ3oYtbq9Y57/dI
+   K5+FKfRfnYW3fPCzYvFFodDqMuJA3Aonu0YW1dDl1mf0Xx+9JuA9h7/pu
+   8tjEnHajE/BQFa1Pbqz7heC61fWNVA+Vcv2PddSoKchttzNGdDEeeDVPZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="427282433"
+X-IronPort-AV: E=Sophos;i="6.04,296,1695711600"; 
+   d="scan'208";a="427282433"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2023 06:38:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10932"; a="895479979"
+X-IronPort-AV: E=Sophos;i="6.04,296,1695711600"; 
+   d="scan'208";a="895479979"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga002.fm.intel.com with ESMTP; 22 Dec 2023 06:38:40 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rGgfd-0009YN-2z;
+	Fri, 22 Dec 2023 14:38:37 +0000
+Date: Fri, 22 Dec 2023 22:38:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 4e374de186c531ab44eb9d7bf13cd3a42e7db245
+Message-ID: <202312222223.KBrNzFXU-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/8] dt-bindings: clock: qcom: Allow VDD_GFX supply to
- GX
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- Bjorn Andersson <quic_bjorande@quicinc.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
- Ulf Hansson <ulf.hansson@linaro.org>, Johan Hovold
- <johan+linaro@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20231220-sa8295p-gpu-v2-0-4763246b72c0@quicinc.com>
- <20231220-sa8295p-gpu-v2-1-4763246b72c0@quicinc.com>
- <26617c83-31b3-4ad9-8a61-0b8271fad41f@linaro.org>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <26617c83-31b3-4ad9-8a61-0b8271fad41f@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 22.12.2023 09:12, Krzysztof Kozlowski wrote:
-> On 22/12/2023 05:39, Bjorn Andersson wrote:
->> In some designs the SoC's VDD_GFX pads are supplied by an external
->> regulator, rather than a power-domain. Allow this to be described in the
->> GPU clock controller binding.
->>
->> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
->> ---
->>  Documentation/devicetree/bindings/clock/qcom,gpucc.yaml | 16 ++++++++++++++++
->>  1 file changed, 16 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml b/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml
->> index f369fa34e00c..c0dd24c9dcb3 100644
->> --- a/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml
->> +++ b/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml
->> @@ -53,6 +53,9 @@ properties:
->>    power-domains:
->>      maxItems: 1
->>  
->> +  vdd-gfx-supply:
->> +    description: Regulator supply for the VDD_GFX pads
->> +
->>    '#clock-cells':
->>      const: 1
->>  
->> @@ -74,6 +77,19 @@ required:
->>    - '#reset-cells'
->>    - '#power-domain-cells'
->>  
->> +# Allow either power-domains or vdd-gfx-supply, not both
->> +oneOf:
->> +  - required:
->> +      - power-domains
->> +  - required:
->> +      - vdd-gfx-supply
-> 
-> This should be enough, assuming one of them is actually required. The
-> code. See also:
-> https://elixir.bootlin.com/linux/v5.17-rc2/source/Documentation/devicetree/bindings/reserved-memory/reserved-memory.yaml#L91
-At least one of them indeed is, though this change is being made
-implicitly. No clock controller works with no power FWIW
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 4e374de186c531ab44eb9d7bf13cd3a42e7db245  Merge branch 'acpi-apei' into bleeding-edge
 
-Konrad
+Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- s390-allmodconfig
+|   |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-callbacks-busymod.o
+|   |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-callbacks-demo.o
+|   |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-callbacks-mod.o
+|   |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-sample.o
+|   |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-shadow-fix1.o
+|   `-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-shadow-fix2.o
+|-- s390-allyesconfig
+|   |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-callbacks-busymod.o
+|   |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-callbacks-demo.o
+|   |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-callbacks-mod.o
+|   |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-sample.o
+|   |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-shadow-fix1.o
+|   `-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-shadow-fix2.o
+`-- x86_64-buildonly-randconfig-003-20231222
+    |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-callbacks-busymod.o
+    |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-callbacks-demo.o
+    |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-callbacks-mod.o
+    |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-sample.o
+    |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-shadow-fix1.o
+    `-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-shadow-fix2.o
+clang_recent_errors
+|-- x86_64-allmodconfig
+|   |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-callbacks-busymod.o
+|   |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-callbacks-demo.o
+|   |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-callbacks-mod.o
+|   |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-sample.o
+|   |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-shadow-fix1.o
+|   `-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-shadow-fix2.o
+|-- x86_64-allyesconfig
+|   |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-callbacks-busymod.o
+|   |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-callbacks-demo.o
+|   |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-callbacks-mod.o
+|   |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-sample.o
+|   |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-shadow-fix1.o
+|   `-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-shadow-fix2.o
+`-- x86_64-randconfig-001-20231222
+    |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-callbacks-busymod.o
+    |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-callbacks-demo.o
+    |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-callbacks-mod.o
+    |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-sample.o
+    |-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-shadow-fix1.o
+    `-- WARNING:modpost:missing-MODULE_DESCRIPTION()-in-samples-livepatch-livepatch-shadow-fix2.o
+
+elapsed time: 1470m
+
+configs tested: 169
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                        nsim_700_defconfig   gcc  
+arc                   randconfig-001-20231222   gcc  
+arc                   randconfig-002-20231222   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                            mps2_defconfig   gcc  
+arm                       omap2plus_defconfig   gcc  
+arm                   randconfig-001-20231222   gcc  
+arm                   randconfig-002-20231222   gcc  
+arm                   randconfig-003-20231222   gcc  
+arm                   randconfig-004-20231222   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20231222   gcc  
+arm64                 randconfig-002-20231222   gcc  
+arm64                 randconfig-003-20231222   gcc  
+arm64                 randconfig-004-20231222   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20231222   gcc  
+csky                  randconfig-002-20231222   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20231222   clang
+hexagon               randconfig-002-20231222   clang
+i386                             allmodconfig   clang
+i386                              allnoconfig   clang
+i386                             allyesconfig   clang
+i386         buildonly-randconfig-001-20231222   gcc  
+i386         buildonly-randconfig-002-20231222   gcc  
+i386         buildonly-randconfig-003-20231222   gcc  
+i386         buildonly-randconfig-004-20231222   gcc  
+i386         buildonly-randconfig-005-20231222   gcc  
+i386         buildonly-randconfig-006-20231222   gcc  
+i386                                defconfig   gcc  
+i386                  randconfig-001-20231222   gcc  
+i386                  randconfig-002-20231222   gcc  
+i386                  randconfig-003-20231222   gcc  
+i386                  randconfig-004-20231222   gcc  
+i386                  randconfig-005-20231222   gcc  
+i386                  randconfig-006-20231222   gcc  
+i386                  randconfig-011-20231222   clang
+i386                  randconfig-012-20231222   clang
+i386                  randconfig-013-20231222   clang
+i386                  randconfig-014-20231222   clang
+i386                  randconfig-015-20231222   clang
+i386                  randconfig-016-20231222   clang
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20231222   gcc  
+loongarch             randconfig-002-20231222   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   clang
+mips                             allyesconfig   gcc  
+mips                          ath79_defconfig   clang
+mips                      malta_kvm_defconfig   clang
+mips                      maltasmvp_defconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20231222   gcc  
+nios2                 randconfig-002-20231222   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20231222   gcc  
+parisc                randconfig-002-20231222   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   clang
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                      arches_defconfig   gcc  
+powerpc                   lite5200b_defconfig   clang
+powerpc                 mpc8313_rdb_defconfig   clang
+powerpc               randconfig-001-20231222   gcc  
+powerpc               randconfig-002-20231222   gcc  
+powerpc               randconfig-003-20231222   gcc  
+powerpc64             randconfig-001-20231222   gcc  
+powerpc64             randconfig-002-20231222   gcc  
+powerpc64             randconfig-003-20231222   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   clang
+riscv                            allyesconfig   gcc  
+riscv                    nommu_virt_defconfig   clang
+riscv                 randconfig-001-20231222   gcc  
+riscv                 randconfig-002-20231222   gcc  
+riscv                          rv32_defconfig   clang
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                  randconfig-001-20231222   clang
+s390                  randconfig-002-20231222   clang
+sh                               allmodconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                        apsh4ad0a_defconfig   gcc  
+sh                ecovec24-romimage_defconfig   gcc  
+sh                             espt_defconfig   gcc  
+sh                    randconfig-001-20231222   gcc  
+sh                    randconfig-002-20231222   gcc  
+sh                           se7619_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                       sparc32_defconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64               randconfig-001-20231222   gcc  
+sparc64               randconfig-002-20231222   gcc  
+um                               allmodconfig   clang
+um                               allyesconfig   clang
+um                    randconfig-001-20231222   gcc  
+um                    randconfig-002-20231222   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20231222   gcc  
+x86_64       buildonly-randconfig-002-20231222   gcc  
+x86_64       buildonly-randconfig-003-20231222   gcc  
+x86_64       buildonly-randconfig-004-20231222   gcc  
+x86_64       buildonly-randconfig-005-20231222   gcc  
+x86_64       buildonly-randconfig-006-20231222   gcc  
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20231222   clang
+x86_64                randconfig-002-20231222   clang
+x86_64                randconfig-003-20231222   clang
+x86_64                randconfig-004-20231222   clang
+x86_64                randconfig-005-20231222   clang
+x86_64                randconfig-006-20231222   clang
+x86_64                randconfig-011-20231222   gcc  
+x86_64                randconfig-012-20231222   gcc  
+x86_64                randconfig-013-20231222   gcc  
+x86_64                randconfig-014-20231222   gcc  
+x86_64                randconfig-015-20231222   gcc  
+x86_64                randconfig-016-20231222   gcc  
+x86_64                randconfig-071-20231222   gcc  
+x86_64                randconfig-072-20231222   gcc  
+x86_64                randconfig-073-20231222   gcc  
+x86_64                randconfig-074-20231222   gcc  
+x86_64                randconfig-075-20231222   gcc  
+x86_64                randconfig-076-20231222   gcc  
+x86_64                          rhel-8.3-rust   clang
+xtensa                  cadence_csp_defconfig   gcc  
+xtensa                randconfig-001-20231222   gcc  
+xtensa                randconfig-002-20231222   gcc  
+xtensa                    smp_lx200_defconfig   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
