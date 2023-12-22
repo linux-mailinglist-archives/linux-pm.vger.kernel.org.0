@@ -1,178 +1,170 @@
-Return-Path: <linux-pm+bounces-1558-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1559-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BD1F81C64C
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Dec 2023 09:12:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A88981C89C
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Dec 2023 11:57:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7C1ACB21C28
-	for <lists+linux-pm@lfdr.de>; Fri, 22 Dec 2023 08:12:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 275312875A2
+	for <lists+linux-pm@lfdr.de>; Fri, 22 Dec 2023 10:57:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA8BEC154;
-	Fri, 22 Dec 2023 08:12:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7CF814A86;
+	Fri, 22 Dec 2023 10:57:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Jj/egOss"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oFOp2d2U"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12A1BFBED
-	for <linux-pm@vger.kernel.org>; Fri, 22 Dec 2023 08:12:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a2698cff486so190354266b.0
-        for <linux-pm@vger.kernel.org>; Fri, 22 Dec 2023 00:12:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703232726; x=1703837526; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=l3ulPGHKv/ZPZ4PrF7+MKhogClUDyW/rffu8i5zrlFY=;
-        b=Jj/egOssPeZDNyTAF5XOnd2c38wymmYDBRjZpcUIzTuvLMh5VVnfA+/u1vDiHb3jpu
-         WmT7D3d9yalCa4kKRF6Uwfd0kD14VBIk71kks9n8z6aliWNlShVYKxlOIc/Hj/EvRcEo
-         4Bg0pQUyYtbiO1rx+61iCYxfeyPLJ7HqPwetmy7ItAo1VO434soxqZuaY+mj/Pznb32t
-         ZX8GlOB+Sby/SiCWhp8HQ2M1KWGZ2n2PXAR9U8jTN1bxrXC97jiLx4qU9jtlCvj9d04V
-         blTUJpIe9YJQz3t3GuqYmXsE02Ub87PpR5+fGxg5cmEwT1O202CnYEjkGgvy0ZvMTbeH
-         E11g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703232726; x=1703837526;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l3ulPGHKv/ZPZ4PrF7+MKhogClUDyW/rffu8i5zrlFY=;
-        b=l7iHdem0OqPEIfDQ/XOw9jrTp9v+VWUvf3tZmWlqstwZyhbiCg1DQyvU2PHzLgtkzC
-         nfqypDjZy+jLhdDWRu5A6M5OpmRbTYKyDThFaUxfxpu1z8U1QSkYHQ/84K3V/6dugf0h
-         a7kGvdaadDodOzIo4QgUGTI5CxSRjQliRoV0sA/UzlfI15QPiGnlOZJan8OhTSEByXnR
-         aBmGObrU+NTmEYjz0GzDZaAR13pzdsRJS6v0o7GTmTpVfB56ORAZUFYHtDO8msqrVTQJ
-         xiA46f5bmFVJLIs5Et77uVjWim8KZx4cXyxKr50dQr7EXjCdHLrBdiMCAp85FPaZcxgH
-         pJbg==
-X-Gm-Message-State: AOJu0YxT8nFCvJdOzXDzfwHsH+qY+9AmNGoXet/Ev6Y+HHG3x3dN+KSq
-	C/NaJ4wXbz20d1PcCIZSN3zjJ12GFzE7Kg==
-X-Google-Smtp-Source: AGHT+IFQ8yqAiGLpByY3+iJbad7ReYXbgOANRLDNM0da2/guhsGcIZctGqkBR7xXfeBxJLsHdfqtSQ==
-X-Received: by 2002:a17:906:4a15:b0:a23:5780:6305 with SMTP id w21-20020a1709064a1500b00a2357806305mr270074eju.216.1703232726357;
-        Fri, 22 Dec 2023 00:12:06 -0800 (PST)
-Received: from [192.168.0.22] ([78.10.206.178])
-        by smtp.gmail.com with ESMTPSA id u23-20020a170906109700b00a26af5717e9sm930059eju.42.2023.12.22.00.12.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Dec 2023 00:12:05 -0800 (PST)
-Message-ID: <26617c83-31b3-4ad9-8a61-0b8271fad41f@linaro.org>
-Date: Fri, 22 Dec 2023 09:12:04 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8D0217742;
+	Fri, 22 Dec 2023 10:57:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3475EC433C8;
+	Fri, 22 Dec 2023 10:56:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1703242620;
+	bh=yxOODCQy7qdFmmgdHpYsbarUrclf58haVTyhf7Ua4hg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=oFOp2d2ULZLDtmEDim4t3dyCQ4kuNv3BAP8Olo15d9hN34s2Lm+MX6ynrMxXw5ZqC
+	 HvSF5h32r5r9zzaidgHPF96wbbUq3F3bP4hBRdb1cgnttCpufpQ0od0Ydq/CregAEs
+	 GLQ9uYWWMMcXJtS4rK5J6z7gtaClDTxZBPAkTJ0d15CQUeD/ivbkLJ9WZhmiz7Ois6
+	 WxSPFpqjEEW51D6y1SN3WHW64a+bLP4rJF47QO8iQnOHfcxJzPAxT2BeTU2kUVceXe
+	 iU98W6rj4bRzxfUQ/tMYMKPPdC0VUGjjwSMGcP1U4GcI3p1LYcezVGT82N6+IgN5B6
+	 0hufQmzZKJ8Dg==
+From: Georgi Djakov <djakov@kernel.org>
+To: gregkh@linuxfoundation.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	djakov@kernel.org
+Subject: [GIT PULL] interconnect changes for 6.8
+Date: Fri, 22 Dec 2023 12:56:49 +0200
+Message-Id: <20231222105649.1607990-1-djakov@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/8] dt-bindings: clock: qcom: Allow VDD_GFX supply to
- GX
-Content-Language: en-US
-To: Bjorn Andersson <quic_bjorande@quicinc.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
- Ulf Hansson <ulf.hansson@linaro.org>, Johan Hovold
- <johan+linaro@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20231220-sa8295p-gpu-v2-0-4763246b72c0@quicinc.com>
- <20231220-sa8295p-gpu-v2-1-4763246b72c0@quicinc.com>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231220-sa8295p-gpu-v2-1-4763246b72c0@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 22/12/2023 05:39, Bjorn Andersson wrote:
-> In some designs the SoC's VDD_GFX pads are supplied by an external
-> regulator, rather than a power-domain. Allow this to be described in the
-> GPU clock controller binding.
-> 
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
->  Documentation/devicetree/bindings/clock/qcom,gpucc.yaml | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml b/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml
-> index f369fa34e00c..c0dd24c9dcb3 100644
-> --- a/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml
-> +++ b/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml
-> @@ -53,6 +53,9 @@ properties:
->    power-domains:
->      maxItems: 1
->  
-> +  vdd-gfx-supply:
-> +    description: Regulator supply for the VDD_GFX pads
-> +
->    '#clock-cells':
->      const: 1
->  
-> @@ -74,6 +77,19 @@ required:
->    - '#reset-cells'
->    - '#power-domain-cells'
->  
-> +# Allow either power-domains or vdd-gfx-supply, not both
-> +oneOf:
-> +  - required:
-> +      - power-domains
-> +  - required:
-> +      - vdd-gfx-supply
+Hello Greg,
 
-This should be enough, assuming one of them is actually required. The
-code. See also:
-https://elixir.bootlin.com/linux/v5.17-rc2/source/Documentation/devicetree/bindings/reserved-memory/reserved-memory.yaml#L91
+This is the pull request with interconnect changes for the v6.8-rc1 merge
+window. It contains some new drivers. As always, the summary is in the
+signed tag.
 
-Best regards,
-Krzysztof
+All patches have been in linux-next for more than a week. Please pull into
+char-misc-next when possible.
 
+Thanks,
+Georgi
+
+The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
+
+  Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.8-rc1
+
+for you to fetch changes up to addb5295403270f9b287f2d76f1072b6f653af1d:
+
+  Merge branch 'icc-qcm2290' into icc-next (2023-12-15 00:43:01 +0200)
+
+----------------------------------------------------------------
+interconnect changes for 6.8
+
+This pull request contains the interconnect changes for the 6.8-rc1 merge
+window. These are just driver changes with the following highlights:
+
+Driver changes:
+- New interconnect driver for the SM8650 platform.
+- New interconnect driver for the SM6115 platform.
+- New interconnect driver for the X1E80100 (Snapdragon X Elite) platform.
+- Add compatible string for the BWMONv4 instance on the QCM2290 platform.
+- Complete the platform drivers conversion to the .remove_new callback
+  returning void (mostly iMX, Exynos and the rest of Qcom drivers).
+
+Signed-off-by: Georgi Djakov <djakov@kernel.org>
+
+----------------------------------------------------------------
+Georgi Djakov (5):
+      Merge branch 'icc-sm8650' into icc-next
+      Merge branch 'icc-platform-remove' into icc-next
+      Merge branch 'icc-x1e80100' into icc-next
+      Merge branch 'icc-sm6115' into icc-next
+      Merge branch 'icc-qcm2290' into icc-next
+
+Konrad Dybcio (5):
+      dt-bindings: interconnect: Add Qualcomm SM6115 NoC
+      interconnect: qcom: Add SM6115 interconnect provider driver
+      dt-bindings: interconnect: qcom,msm8998-bwmon: Add SM6115 bwmon instance
+      dt-bindings: interconnect: qcom,msm8998-bwmon: Add QCM2290 bwmon instance
+      interconnect: qcom: sm6115: Fix up includes
+
+Neil Armstrong (3):
+      dt-bindings: interconnect: document the RPMh Network-On-Chip Interconnect in Qualcomm SM8650 SoC
+      interconnect: qcom: introduce RPMh Network-On-Chip Interconnect on SM8650 SoC
+      dt-bindings: interconnect: qcom-bwmon: document SM8650 BWMONs
+
+Rajendra Nayak (2):
+      dt-bindings: interconnect: Add Qualcomm X1E80100 SoC
+      interconnect: qcom: Add X1E80100 interconnect provider driver
+
+Uwe Kleine-König (9):
+      interconnect: qcom: Make qnoc_remove return void
+      interconnect: imx8mm: Convert to platform remove callback returning void
+      interconnect: imx8mn: Convert to platform remove callback returning void
+      interconnect: imx8mp: Convert to platform remove callback returning void
+      interconnect: imx8mq: Convert to platform remove callback returning void
+      interconnect: qcom/msm8974: Convert to platform remove callback returning void
+      interconnect: qcom/osm-l3: Convert to platform remove callback returning void
+      interconnect: qcom/smd-rpm: Convert to platform remove callback returning void
+      interconnect: exynos: Convert to platform remove callback returning void
+
+ .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml   |    4 +
+ .../devicetree/bindings/interconnect/qcom,sm6115.yaml          |  152 +
+ .../devicetree/bindings/interconnect/qcom,sm8650-rpmh.yaml     |  136 +
+ .../devicetree/bindings/interconnect/qcom,x1e80100-rpmh.yaml   |   83 +
+ drivers/interconnect/imx/imx8mm.c                              |    9 +-
+ drivers/interconnect/imx/imx8mn.c                              |    9 +-
+ drivers/interconnect/imx/imx8mp.c                              |    9 +-
+ drivers/interconnect/imx/imx8mq.c                              |    9 +-
+ drivers/interconnect/qcom/Kconfig                              |   27 +
+ drivers/interconnect/qcom/Makefile                             |    6 +
+ drivers/interconnect/qcom/icc-rpm.c                            |    4 +-
+ drivers/interconnect/qcom/icc-rpm.h                            |    2 +-
+ drivers/interconnect/qcom/msm8916.c                            |    2 +-
+ drivers/interconnect/qcom/msm8939.c                            |    2 +-
+ drivers/interconnect/qcom/msm8974.c                            |    6 +-
+ drivers/interconnect/qcom/msm8996.c                            |    2 +-
+ drivers/interconnect/qcom/osm-l3.c                             |    6 +-
+ drivers/interconnect/qcom/qcm2290.c                            |    2 +-
+ drivers/interconnect/qcom/qcs404.c                             |    2 +-
+ drivers/interconnect/qcom/sdm660.c                             |    2 +-
+ drivers/interconnect/qcom/sm6115.c                             | 1423 +++++
+ drivers/interconnect/qcom/sm8650.c                             | 1674 ++++++
+ drivers/interconnect/qcom/sm8650.h                             |  143 +
+ drivers/interconnect/qcom/smd-rpm.c                            |    6 +-
+ drivers/interconnect/qcom/x1e80100.c                           | 2328 ++++++++
+ drivers/interconnect/qcom/x1e80100.h                           |  192 +
+ drivers/interconnect/samsung/exynos.c                          |    6 +-
+ include/dt-bindings/interconnect/qcom,sm6115.h                 |  111 +
+ include/dt-bindings/interconnect/qcom,sm8650-rpmh.h            |  154 +
+ include/dt-bindings/interconnect/qcom,x1e80100-rpmh.h          |  207 +
+ 30 files changed, 6660 insertions(+), 58 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm6115.yaml
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm8650-rpmh.yaml
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,x1e80100-rpmh.yaml
+ create mode 100644 drivers/interconnect/qcom/sm6115.c
+ create mode 100644 drivers/interconnect/qcom/sm8650.c
+ create mode 100644 drivers/interconnect/qcom/sm8650.h
+ create mode 100644 drivers/interconnect/qcom/x1e80100.c
+ create mode 100644 drivers/interconnect/qcom/x1e80100.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,sm6115.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,sm8650-rpmh.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,x1e80100-rpmh.h
 
