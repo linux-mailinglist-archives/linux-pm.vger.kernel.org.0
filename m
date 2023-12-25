@@ -1,145 +1,116 @@
-Return-Path: <linux-pm+bounces-1574-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1575-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77D1B81E0E9
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Dec 2023 14:36:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5591A81E22E
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Dec 2023 20:56:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 89A061C21256
-	for <lists+linux-pm@lfdr.de>; Mon, 25 Dec 2023 13:36:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1102C281FCE
+	for <lists+linux-pm@lfdr.de>; Mon, 25 Dec 2023 19:56:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C8A051C53;
-	Mon, 25 Dec 2023 13:36:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D12A853804;
+	Mon, 25 Dec 2023 19:55:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="rQwXs4oR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NxYtli9Z"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 734EF51C35;
-	Mon, 25 Dec 2023 13:36:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1703511381;
-	bh=IwmmB7WjpTOgIxwbZn9fGmU/1RvI/f6TS4uE1mr5Uko=;
-	h=From:To:Cc:Subject:Date:From;
-	b=rQwXs4oR7QOzlNkpL89uoyhg3/ZaKB6wfLk2Tn0SmVMllirbtqgeMNOkI3k1sUP2W
-	 sfh9B5917RFN16+ZwyDwCzC4ejLeZHvaoEXYCqmlGahippC8uUVoDN6AqgZoA3XyfM
-	 18tRdB2+Qc1Y2MsR9hQdIPDFrCGOnHyqA+HhcUHpwVSfbWAemOLty0357oCZVEhRQN
-	 0j2AhFCiLeutVafMlRbWJpJkpkYMbUJv3URd/ayY0DWgp04cudNOp4MTFLuw5omIFL
-	 Ehz/TnMjQfObkBvmoRyFnj56NA7iPop8K0ki7IiddtjprUaP2ehp1lACW7R/rRgQ4z
-	 UbIOqDG4Cm7kQ==
-Received: from eugen-station.. (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: ehristev)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id B50D937813F2;
-	Mon, 25 Dec 2023 13:36:20 +0000 (UTC)
-From: Eugen Hristev <eugen.hristev@collabora.com>
-To: matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	kernel@collabora.com,
-	Eugen Hristev <eugen.hristev@collabora.com>
-Subject: [PATCH] pmdomain: mediatek: fix race conditions with genpd
-Date: Mon, 25 Dec 2023 15:36:15 +0200
-Message-Id: <20231225133615.78993-1-eugen.hristev@collabora.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55A9D537F1;
+	Mon, 25 Dec 2023 19:55:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-67f9fac086bso25831486d6.3;
+        Mon, 25 Dec 2023 11:55:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1703534157; x=1704138957; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v+5mdzcIi0J0U/jyti3PngFAcX/L3/DjChGGJD4WjO0=;
+        b=NxYtli9ZFO+nMhFI9jJM7AmM0UEQP1AYBBIsOQxfutncfFzrXXCl15MO/db7qTycZK
+         E+BH/bT9aSglTtOFm3KR2+eZigo1JECteRjB+Lf6D4H+VUekocZzQOW9kNtiT6vNAEdu
+         eyULYF4OpMBf9aO1e3D6n6vle9kAczFQsb+PP3Gpcj0oNr7p6TzgdohHThbsm/UKZGkI
+         b7vElq1p6YB//aONShEDs/fdGYpRWY/CXq75zdr+SSC1pzI1Yeu71uwlTIlo01Fasmfd
+         zmN59m49OnC7ZyKAwFOtXPoIG+DlBtpEIU1qiuOKJ3GnObSqiIA8sdeJ/CFmjuNqHnfP
+         vTTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703534157; x=1704138957;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=v+5mdzcIi0J0U/jyti3PngFAcX/L3/DjChGGJD4WjO0=;
+        b=MfRAV5ecmWVJGgpiky0hi3GmiB0RSj+818pzkavsUq3u4xlw+Whbpcbc4NR5ck1qNu
+         mzcma0jmC70uzLWUrPKdfEreDwKq/4KUHcuv50N6x93Ea0w6D5niLKf+VqYbmmktx+dR
+         p/wzOi9BfKKdLdt4VCrQiHo7gACGfG9umiT0lEHhZ5QJd1G1H52wPrcp25SfIZSe3LJu
+         qsrKc7seUPyYM3N5xNz4c1jHqGLQbBsDPt3yFtFm9t9Evr+B6lr0lA9cg6lXJbFBJxGZ
+         N7io5fHfSC5x1GBHnVGrxyrUjEKl7ebN4OVw9EPlUrU//1Fuw8ySkFOPhyunRP3aN9l5
+         Q0KQ==
+X-Gm-Message-State: AOJu0YzROFql4ZIsbY1+HX9/cPP1tbA3e8CECrK5NuBBHPpoHCInyVBG
+	ikQqfEgCpEjx2AuIkPwvZPFRqML9CAnc1JlNO8I=
+X-Google-Smtp-Source: AGHT+IGXQ1DzDW/z7mbnW1aKOma9kP1mZ08AqBa7wFFHcRRfcWmagU8jQFFGhrorFhUOmpGd2hGTlBhrmy9h8xA7nx4=
+X-Received: by 2002:ad4:5c49:0:b0:67f:6982:edb4 with SMTP id
+ a9-20020ad45c49000000b0067f6982edb4mr13149244qva.14.1703534157222; Mon, 25
+ Dec 2023 11:55:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20231212-ep93xx-v6-0-c307b8ac9aa8@maquefel.me>
+ <ZXnxBtqbneUMbvwq@smile.fi.intel.com> <d6e898200b96e816ea8c8c9a847307088ec5821c.camel@maquefel.me>
+In-Reply-To: <d6e898200b96e816ea8c8c9a847307088ec5821c.camel@maquefel.me>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Mon, 25 Dec 2023 21:55:20 +0200
+Message-ID: <CAHp75Vcx8oviLiCu=cnzKcdXjEq9wG=PCiBuPTBYe6FFfUcz7Q@mail.gmail.com>
+Subject: Re: [PATCH v6 00/40] ep93xx device tree conversion
+To: Nikita Shubin <nikita.shubin@maquefel.me>
+Cc: Andy Shevchenko <andy@kernel.org>, Hartley Sweeten <hsweeten@visionengravers.com>, 
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	Lukasz Majewski <lukma@denx.de>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Vinod Koul <vkoul@kernel.org>, Wim Van Sebroeck <wim@linux-watchdog.org>, 
+	Guenter Roeck <linux@roeck-us.net>, Thierry Reding <thierry.reding@gmail.com>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
+	Mark Brown <broonie@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Miquel Raynal <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>, 
+	Vignesh Raghavendra <vigneshr@ti.com>, Damien Le Moal <dlemoal@kernel.org>, 
+	Sergey Shtylyov <s.shtylyov@omp.ru>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	dmaengine@vger.kernel.org, linux-watchdog@vger.kernel.org, 
+	linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org, 
+	linux-input@vger.kernel.org, linux-sound@vger.kernel.org, 
+	Arnd Bergmann <arnd@arndb.de>, Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Andrew Lunn <andrew@lunn.ch>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-If the power domains are registered first with genpd and *after that*
-the driver attempts to power them on in the probe sequence, then it is
-possible that a race condition occurs if genpd tries to power them on
-in the same time.
-The same is valid for powering them off before unregistering them
-from genpd.
-Attempt to fix race conditions by first removing the domains from genpd
-and *after that* powering down domains.
-Also first power up the domains and *after that* register them
-to genpd.
+On Sat, Dec 23, 2023 at 11:13=E2=80=AFAM Nikita Shubin
+<nikita.shubin@maquefel.me> wrote:
+> On Wed, 2023-12-13 at 19:59 +0200, Andy Shevchenko wrote:
 
-Fixes: 59b644b01cf4 ("soc: mediatek: Add MediaTek SCPSYS power domains")
-Signed-off-by: Eugen Hristev <eugen.hristev@collabora.com>
----
+...
 
-This comes as another way to fix the problem as described in this thread:
-https://lore.kernel.org/linux-arm-kernel/20231129113120.4907-1-eugen.hristev@collabora.com/
+> I haven't found any missing tags, that b4 didn't apply, the ones above
+> refer to a very old iteration and were given to cover letter and i
+> don't feel like they need to be included.
 
-I have not been able to reproduce the problem with either fix anymore
-(so far).
+When somebody gives you a tag against a cover letter, it means the
+entire series (if not spelled differently). `b4` even has a parameter
+-t for that IIRC.
 
-I have a few doubts about this one though, if I really covered the
-way it's supposed to work, and registering the pmdomains in the recursive
-function in the reversed order has any side effect or if it does not
-work correctly.
-Tested on mt8186 where it appears to be fine.
 
-Eugen
-
- drivers/pmdomain/mediatek/mtk-pm-domains.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.c b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-index e26dc17d07ad..e274e3315fe7 100644
---- a/drivers/pmdomain/mediatek/mtk-pm-domains.c
-+++ b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-@@ -561,6 +561,11 @@ static int scpsys_add_subdomain(struct scpsys *scpsys, struct device_node *paren
- 			goto err_put_node;
- 		}
- 
-+		/* recursive call to add all subdomains */
-+		ret = scpsys_add_subdomain(scpsys, child);
-+		if (ret)
-+			goto err_put_node;
-+
- 		ret = pm_genpd_add_subdomain(parent_pd, child_pd);
- 		if (ret) {
- 			dev_err(scpsys->dev, "failed to add %s subdomain to parent %s\n",
-@@ -570,11 +575,6 @@ static int scpsys_add_subdomain(struct scpsys *scpsys, struct device_node *paren
- 			dev_dbg(scpsys->dev, "%s add subdomain: %s\n", parent_pd->name,
- 				child_pd->name);
- 		}
--
--		/* recursive call to add all subdomains */
--		ret = scpsys_add_subdomain(scpsys, child);
--		if (ret)
--			goto err_put_node;
- 	}
- 
- 	return 0;
-@@ -588,9 +588,6 @@ static void scpsys_remove_one_domain(struct scpsys_domain *pd)
- {
- 	int ret;
- 
--	if (scpsys_domain_is_on(pd))
--		scpsys_power_off(&pd->genpd);
--
- 	/*
- 	 * We're in the error cleanup already, so we only complain,
- 	 * but won't emit another error on top of the original one.
-@@ -600,6 +597,8 @@ static void scpsys_remove_one_domain(struct scpsys_domain *pd)
- 		dev_err(pd->scpsys->dev,
- 			"failed to remove domain '%s' : %d - state may be inconsistent\n",
- 			pd->genpd.name, ret);
-+	if (scpsys_domain_is_on(pd))
-+		scpsys_power_off(&pd->genpd);
- 
- 	clk_bulk_put(pd->num_clks, pd->clks);
- 	clk_bulk_put(pd->num_subsys_clks, pd->subsys_clks);
--- 
-2.34.1
-
+--=20
+With Best Regards,
+Andy Shevchenko
 
