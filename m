@@ -1,215 +1,145 @@
-Return-Path: <linux-pm+bounces-1582-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1583-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7ABE581E78B
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Dec 2023 14:18:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 945DD81E87F
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Dec 2023 17:47:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F43C1C20EAD
-	for <lists+linux-pm@lfdr.de>; Tue, 26 Dec 2023 13:18:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 416191F21A8A
+	for <lists+linux-pm@lfdr.de>; Tue, 26 Dec 2023 16:47:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6081F4EB3A;
-	Tue, 26 Dec 2023 13:18:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83CB14F605;
+	Tue, 26 Dec 2023 16:47:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AYeEodHt"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="EG/5PsFl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4282B4EB36;
-	Tue, 26 Dec 2023 13:18:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AD21C433C7;
-	Tue, 26 Dec 2023 13:18:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703596699;
-	bh=1Jvtrvq6zSXyv65vAE6f19WOYESewGkQRlVOfMtg8jg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=AYeEodHtCkfn0EaLL/T5sWtt2WPdX0yv1kwvAhaEOsWqejJ/6Or9is3eIyKBxs/0C
-	 swys2LqSSXk164TTBxwgm2ahkLJgAnF09ZBeR7vvptJAaCfxamQMZnYcaekMiKyHw8
-	 BM4CanSBUIoteMy5/NDvSkbWDCDrHpBPVy60q6xwoosvVshp5TiDiNta0xaBUyNi61
-	 ubD8p3fQzOZqvjKrMqrwKScgWbXEVjgWvT53FJDMdpwc3EbAYVBKSjIZJZKxfETaUW
-	 BR/MABjOuqUWmvHb4cssXDYbN14h4j5tMvndI3KI3XrjBFfTMz7r8VKC7jhEGn00Zf
-	 BULjLnxTsxlIg==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>,
-	Len Brown <len.brown@intel.com>,
-	Randy Dunlap <rdunlap@infradead.org>
-Cc: suleiman@google.com,
-	briannorris@google.com,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH v7] PM: sleep: Expose last succeeded resumed timestamp in sysfs
-Date: Tue, 26 Dec 2023 22:18:16 +0900
-Message-ID:  <170359669607.1864392.5078004271237566637.stgit@mhiramat.roam.corp.google.com>
-X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
-In-Reply-To:  <170359668692.1864392.6909734045167510522.stgit@mhiramat.roam.corp.google.com>
-References:  <170359668692.1864392.6909734045167510522.stgit@mhiramat.roam.corp.google.com>
-User-Agent: StGit/0.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 406FD4F209;
+	Tue, 26 Dec 2023 16:47:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 983671C0002;
+	Tue, 26 Dec 2023 16:47:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1703609230;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WpMtIUDRlEAdXOuUM7RrfvoQHPEx0gmuNKvS2j61YTo=;
+	b=EG/5PsFlfw3gmirnFS9nxoFJXk+OEa1U/0I0PQggEfYnrdQkdwOjTKxbY7YPNkVrt/kj8R
+	hO2vVQEGS3JKeo0WjZyb5q255Pgo+g1O24f3/IBk3cJGC+gF9+/DCbjEH7Ts5oISCPkru2
+	2uXIIIfBSnC715npAven87Ei2mvo/KBOwMKb/F1hNhxvrf3xbAq648KsjSSWuwawEF931+
+	8PYuXQ15zm8htdbGaY1PtbXZwhnqNdRhd/ZH3jJe/+erSZvc3UzsbJ8nGW4MFw56hiUZbb
+	VAWojmcYQaOW7X1WrazdRZpYArwHwW6/edn6ZOHv7HSHRvaMv3ltbNJkJA69Cw==
+Message-ID: <dc19f432-afa6-422a-a60e-622e17d646a9@bootlin.com>
+Date: Tue, 26 Dec 2023 17:47:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: omap-i2c: runtime pm issue during suspend to ram
+Content-Language: en-US
+To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ Tony Lindgren <tony@atomide.com>
+Cc: linux-pm@vger.kernel.org, linux-i2c@vger.kernel.org,
+ linux-omap@vger.kernel.org, Vignesh Raghavendra <vigneshr@ti.com>,
+ Kevin Hilman <khilman@kernel.org>,
+ Gregory CLEMENT <gregory.clement@bootlin.com>, Kumar Udit <u-kumar1@ti.com>
+References: <f68c9a54-0fde-4709-9d2f-0d23a049341b@bootlin.com>
+ <4c31acd8-4edb-44f5-9a90-cb2f2dc530b6@bootlin.com>
+ <20231220111415.GZ5166@atomide.com>
+ <7b743758-fbc1-4cad-bfbc-d3fd3e69ce17@bootlin.com>
+ <CXT7H2RTWJLL.11PFC2VV861BW@bootlin.com>
+From: Thomas Richard <thomas.richard@bootlin.com>
+In-Reply-To: <CXT7H2RTWJLL.11PFC2VV861BW@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-GND-Sasl: thomas.richard@bootlin.com
 
-From: Masami Hiramatsu <mhiramat@kernel.org>
+On 12/20/23 14:46, Théo Lebrun wrote:
+> Hello,
+> 
+> On Wed Dec 20, 2023 at 12:36 PM CET, Thomas Richard wrote:
+>> On 12/20/23 12:14, Tony Lindgren wrote:
+>>> * Thomas Richard <thomas.richard@bootlin.com> [231220 10:50]:
+>>>> On 12/19/23 18:15, Thomas Richard wrote:
+>>>>> Hello,
+>>>>
+>>>> I add some people in this thread.
+>>>>
+>>>>>
+>>>>> I have a gpio expander (pca953x driver) connected to an i2c controller
+>>>>> managed by the omap-i2c driver.
+>>>>> And I have some issues with pm_runtime_force_suspend/resume during
+>>>>> suspend to ram.
+>>>>> For some reasons, related to hardware design, I need to access to this
+>>>>> gpio expander during suspend_noirq and resume_noirq. So I had to move
+>>>>> the suspend/resume of the pca953x to suspend_noirq/resume_noirq.
+>>>
+>>> Hmm at noirq level you need to do polling on the i2c controller?
+>>
+>> Hello Tony,
+>>
+>> Thanks for your reply.
+>>
+>> No, irq is still active in suspend_noirq for this i2c controller due to
+>> the flag IRQF_NO_SUSPEND [1].
+>> If this flag is set, the interrupt is still enabled in suspend_noirq [2].
+>>
+>> [1]
+>> https://elixir.bootlin.com/linux/v6.7-rc6/source/drivers/i2c/busses/i2c-omap.c#L1473
+>> [2]
+>> https://www.kernel.org/doc/html/latest/power/suspend-and-interrupts.html#the-irqf-no-suspend-flag
+>>
+>>>
+>>>>> diff --git a/drivers/i2c/busses/i2c-omap.c b/drivers/i2c/busses/i2c-omap.c
+>>>>> index 42165ef57946..fe79b27b46fd 100644
+>>>>> --- a/drivers/i2c/busses/i2c-omap.c
+>>>>> +++ b/drivers/i2c/busses/i2c-omap.c
+>>>>> @@ -1575,9 +1575,24 @@ static int __maybe_unused
+>>>>> omap_i2c_runtime_resume(struct device *dev)
+>>>>>         return 0;
+>>>>>  }
+>>>>>
+>>>>> +static int omap_i2c_suspend(struct device *dev)
+>>>>> +{
+>>>>> +       pm_runtime_get_sync(dev);
+>>>>> +       pm_runtime_disable(dev);
+>>>>> +       return 0;
+>>>>> +}
+>>>
+>>> If you want the i2c controller enabled during suspend, you can leave it
+>>> enabled above, and as we already have SET_NOIRQ_SYSTEM_SLEEP_PM_OPS
+>>> doing force_suspend() and force_resume(), you can runtime PM put on
+>>> resume. So something like below might do the trick:
+>>
+>> Ok I'll test it. Thanks
+> 
+> The issue with this approach is that it requires knowing at suspend-time
+> if the controller will be used at resume_noirq-time. Ideally the
+> controller's behavior would not be modified until a xfer is done at
+> resume_noirq time. There are many platforms that use this driver that
+> probably don't need the controller woken up.
+> 
 
-Expose last succeeded resumed timestamp as last_success_resume_time
-attribute of suspend_stats in sysfs so that user can use this time
-stamp as a reference point of resuming user space.
+@Tony, I tested your patch and it works well. Thanks !!
+As Théo mentioned it, we wake up the controller even if noboy need it in
+suspend_noirq/resume_noirq.
+I don't know if the fact that we cannot wake up a runtime suspended
+device in suspend_noirq/resume_noirq (yes I know runtime pm is disabled
+in suspend_noirq/resume_noirq) is a bug or not.
 
-On some system like the ChromeOS, the system suspend and resume are
-controlled by a power management process. The user-space tasks will be
-noticed the suspend and the resume signal from it.
-To improve the suspend/resume performance and/or to find regressions,
-we would like to know how long the resume processes are taken in kernel
-and in user-space.
-For this purpose, expose the accarate time when the kernel is finished
-to resume so that we can distinguish the duration of kernel resume and
-user space resume.
-
-This suspend_stats attribute is easy to access and only expose the
-timestamp in CLOCK_MONOTONIC. User can find the accarate time when the
-kernel finished to resume its drivers/subsystems and start thawing, and
-measure the elapsed time from the time when the kernel finished the
-resume to a user-space action (e.g. displaying the UI).
-
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- Changes in v7:
-  - Update patch description.
-  - Update sysfs documentation to say the exact timing.
-  - Update the comment.
- Changes in v6:
-  - Fix to record resume time before thawing user processes.
- Changes in v5:
-  - Just updated for v6.7-rc3.
- Changes in v4.1:
-  - Fix document typo (again).
- Changes in v4:
-  - Update description to add why.
-  - Fix document typo.
- Changes in v3:
-  - Add (unsigned long long) casting for %llu.
-  - Add a line after last_success_resume_time_show().
- Changes in v2:
-  - Use %llu instead of %lu for printing u64 value.
-  - Remove unneeded indent spaces from the last_success_resume_time
-    line in the debugfs suspend_stat file.
----
- Documentation/ABI/testing/sysfs-power |   11 +++++++++++
- include/linux/suspend.h               |    2 ++
- kernel/power/main.c                   |   15 +++++++++++++++
- kernel/power/suspend.c                |    9 +++++++++
- 4 files changed, 37 insertions(+)
-
-diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/testing/sysfs-power
-index a3942b1036e2..ee567e7e9d4a 100644
---- a/Documentation/ABI/testing/sysfs-power
-+++ b/Documentation/ABI/testing/sysfs-power
-@@ -442,6 +442,17 @@ Description:
- 		'total_hw_sleep' and 'last_hw_sleep' may not be accurate.
- 		This number is measured in microseconds.
- 
-+What:		/sys/power/suspend_stats/last_success_resume_time
-+Date:		Dec 2023
-+Contact:	Masami Hiramatsu <mhiramat@kernel.org>
-+Description:
-+		The /sys/power/suspend_stats/last_success_resume_time file
-+		contains the timestamp of when the kernel successfully
-+		resumed drivers/subsystems from suspend/hibernate. This is
-+		just before thawing the user processes.
-+		This floating point number is measured in seconds by monotonic
-+		clock.
-+
- What:		/sys/power/sync_on_suspend
- Date:		October 2019
- Contact:	Jonas Meurer <jonas@freesources.org>
-diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-index ef503088942d..ddd789044960 100644
---- a/include/linux/suspend.h
-+++ b/include/linux/suspend.h
-@@ -8,6 +8,7 @@
- #include <linux/pm.h>
- #include <linux/mm.h>
- #include <linux/freezer.h>
-+#include <linux/timekeeping.h>
- #include <asm/errno.h>
- 
- #ifdef CONFIG_VT
-@@ -71,6 +72,7 @@ struct suspend_stats {
- 	u64	last_hw_sleep;
- 	u64	total_hw_sleep;
- 	u64	max_hw_sleep;
-+	struct timespec64 last_success_resume_time;
- 	enum suspend_stat_step	failed_steps[REC_FAILED_NUM];
- };
- 
-diff --git a/kernel/power/main.c b/kernel/power/main.c
-index f6425ae3e8b0..2ab23fd3daac 100644
---- a/kernel/power/main.c
-+++ b/kernel/power/main.c
-@@ -421,6 +421,17 @@ static ssize_t last_failed_step_show(struct kobject *kobj,
- }
- static struct kobj_attribute last_failed_step = __ATTR_RO(last_failed_step);
- 
-+static ssize_t last_success_resume_time_show(struct kobject *kobj,
-+		struct kobj_attribute *attr, char *buf)
-+{
-+	return sprintf(buf, "%llu.%llu\n",
-+		(unsigned long long)suspend_stats.last_success_resume_time.tv_sec,
-+		(unsigned long long)suspend_stats.last_success_resume_time.tv_nsec);
-+}
-+
-+static struct kobj_attribute last_success_resume_time =
-+			__ATTR_RO(last_success_resume_time);
-+
- static struct attribute *suspend_attrs[] = {
- 	&success.attr,
- 	&fail.attr,
-@@ -438,6 +449,7 @@ static struct attribute *suspend_attrs[] = {
- 	&last_hw_sleep.attr,
- 	&total_hw_sleep.attr,
- 	&max_hw_sleep.attr,
-+	&last_success_resume_time.attr,
- 	NULL,
- };
- 
-@@ -514,6 +526,9 @@ static int suspend_stats_show(struct seq_file *s, void *unused)
- 			suspend_step_name(
- 				suspend_stats.failed_steps[index]));
- 	}
-+	seq_printf(s,	"last_success_resume_time:\t%-llu.%llu\n",
-+		   (unsigned long long)suspend_stats.last_success_resume_time.tv_sec,
-+		   (unsigned long long)suspend_stats.last_success_resume_time.tv_nsec);
- 
- 	return 0;
- }
-diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-index fa3bf161d13f..2d0f46b4d0cf 100644
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -595,6 +595,15 @@ static int enter_state(suspend_state_t state)
-  Finish:
- 	events_check_enabled = false;
- 	pm_pr_dbg("Finishing wakeup.\n");
-+
-+	/*
-+	 * Record last succeeded resume timestamp just before thawing processes.
-+	 * This is for helping users to measure user-space resume performance
-+	 * for improving their programs or finding regressions.
-+	 */
-+	if (!error)
-+		ktime_get_ts64(&suspend_stats.last_success_resume_time);
-+
- 	suspend_finish();
-  Unlock:
- 	mutex_unlock(&system_transition_mutex);
+-- 
+Thomas Richard, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
 
