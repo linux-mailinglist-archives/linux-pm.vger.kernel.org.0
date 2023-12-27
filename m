@@ -1,139 +1,119 @@
-Return-Path: <linux-pm+bounces-1610-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1611-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2482D81EF57
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 15:11:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D516E81EFB6
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 16:19:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B85CD1F21974
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 14:11:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 560DB1F2179F
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 15:19:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 618C34501E;
-	Wed, 27 Dec 2023 14:11:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB2DD45956;
+	Wed, 27 Dec 2023 15:19:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WC6LkhZ/"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cnDMjclf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F6834500F
-	for <linux-pm@vger.kernel.org>; Wed, 27 Dec 2023 14:11:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3409945957
+	for <linux-pm@vger.kernel.org>; Wed, 27 Dec 2023 15:18:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3368ae75082so2663921f8f.1
-        for <linux-pm@vger.kernel.org>; Wed, 27 Dec 2023 06:11:07 -0800 (PST)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a26fbc3b9f2so202425866b.3
+        for <linux-pm@vger.kernel.org>; Wed, 27 Dec 2023 07:18:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703686266; x=1704291066; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=kbfXQvj1Xsq5VyRfwtqsLCuthnRMjLvQaw2Eu7/Ztxs=;
-        b=WC6LkhZ/qyKe4znU4dOHmZB6y2bW94x2PKE5ouoklrcPWMiGUcIYMb1mzVUEkV3V/b
-         8JTNsAHEGLrVUQKgamf+ytOrIuA2++PNYAYa3MqNM7SKTBuX9IVICyec1Q8jPbnyAn68
-         ZdhSubwwIctiZjMXn70r+VfidJleECir/RMBeuGjLrftka5IV6fp28zu9pBVbF3BB932
-         Z6MmqXCHNFJTXDSPqjjSMjdYiPhApgdFyur1WyVsBaDQpb2In0USnEE2KCHCk7cwL2Zu
-         FtByZDcHApi2jZhNEOcVvZyREwesjf/gbReUr0ljqEkVGkHvKMfGcAq/rdGFV50c3kFF
-         Hl5w==
+        d=linaro.org; s=google; t=1703690337; x=1704295137; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mLqxqDFp3g+3ctBYsDTo10ZcgpJFg083E8N42zGHui8=;
+        b=cnDMjclfrAtGi/lioxq7wyTONEk9+6IkpcRrhimtTkpBi+c0wJ/gtqGG+RBT6aQah8
+         husp6Z5F8Y9vpRk9VSI1EbrETCCl/6ybnxRN8YBj29s/p974UDJH/jo5/XPN0mP1BEbP
+         zHBU3CuFdzyV/6PGyCjGueOmqo/5ZwKbtopjV+7/jzCPTaIh18TPI5gb/LyodqkEnK87
+         pM1/3gqm5y1FbUS1eF6rh3jSUIByKksvb7m5TZ6+0ix6Ye+i9jx2ArhXH7CYAr5MnKfE
+         jBJ9KnXiADQzzfqh6LAEl3XxswIu9n3SdZ4te2FN0PIDOmqityuiuOMlDRpqgbj1A5i8
+         7kkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703686266; x=1704291066;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kbfXQvj1Xsq5VyRfwtqsLCuthnRMjLvQaw2Eu7/Ztxs=;
-        b=e3tepU1ilP2QPzfYrXsbHloAX1T9woGOmTDS8mZyQ2iz7fbilW6MlT1gZZNxrdhpm8
-         TssP01gvdSu0rFaRr881EBhL/41IfCEZUliZdwupqRoMNrN/RDY2loRSLSbKExipJoLb
-         edh7vLJX6TtGYPReN+BRd1ueQJu+MYL47FsTupiHOS+EWmU6XpvSb5UW0hF7CsZyGYVM
-         Mcp5fODlCDOlIXESRr9brv/ef02/tv9fnDT0I1xdxQmfaRj12jx7/0ZoBC8h83G0Ialo
-         tECiib2ACu33a855ARWd1SqzcAUp7N2hN18v6/RnhVgb3POMFIA2IEnFPhUNT4Uqr4E1
-         EqNA==
-X-Gm-Message-State: AOJu0YzD4/DO24cCwkx5I4FjAlIa8ZiEKS1HPkPOY4WTNLmw/pQIW8nL
-	bVdhHfc2R7JtJYpdwgJ0GkglJOxDocrlvA==
-X-Google-Smtp-Source: AGHT+IHQRD1bXTN3QuoSGQVkMEuY+wter+DyBtLVMUhOcsY+dYvCV9JehvkbXtNpL+2NcBS2KeobvA==
-X-Received: by 2002:a05:600c:19ce:b0:40d:5f60:505e with SMTP id u14-20020a05600c19ce00b0040d5f60505emr456154wmq.122.1703686265839;
-        Wed, 27 Dec 2023 06:11:05 -0800 (PST)
-Received: from mai.linaro.org (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id q17-20020adfcd91000000b003362d0eefd3sm14854930wrj.20.2023.12.27.06.11.05
+        d=1e100.net; s=20230601; t=1703690337; x=1704295137;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mLqxqDFp3g+3ctBYsDTo10ZcgpJFg083E8N42zGHui8=;
+        b=CqoyfDasDEA++aoQr0URzAgzSJoKtkm6tac0IANZEnhwO7TtvdPuZIJqmcodBs55lR
+         fTuVZM0xCnnZ7THPblYtcrvwlQyQJwUbfE9MK4gVwEdXQgg51NF/oigaFBntjc6HivEp
+         bBbMCEgvUZYJ1aImBla4vQl+m5SSuPsbgBSnuh6gPYcAUUBWx0abuLB0P1OfJVgezazk
+         EZnnQGcDIP4Fcv1CFdMrE6Lw2vyaqDXi4vfcBNKR7HNsw+N2EUs6a5dntIu72c6/x9Vn
+         jUIFFejACbL/qQKc1qJlPGmDQ63Qn0FvYr09z9gFkzvHj9us5wPv3LIrdpWIszeiEXzl
+         WlAg==
+X-Gm-Message-State: AOJu0YxuYoTfPlwi25a3jI9zgKupZREHBCO7TLvmeSHdQXBxWEO9iNWm
+	DJJyyDIPtIte0YHe7Nvj+72qI5yi6S+i/oUHPnmPPZ+SREA=
+X-Google-Smtp-Source: AGHT+IEaKfAy25WQK5eNyuq98+hX1R8ubfyxj5LoJG9Q7+1uQ/ZypYr7jJNdkN01lBGF2xlwWxDSkQ==
+X-Received: by 2002:a17:906:73c6:b0:a27:59a1:e0a2 with SMTP id n6-20020a17090673c600b00a2759a1e0a2mr262385ejl.29.1703690337230;
+        Wed, 27 Dec 2023 07:18:57 -0800 (PST)
+Received: from [10.167.154.1] (178235179028.dynamic-4-waw-k-1-3-0.vectranet.pl. [178.235.179.28])
+        by smtp.gmail.com with ESMTPSA id gi16-20020a1709070c9000b00a19b7362dcfsm6652072ejc.139.2023.12.27.07.18.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Dec 2023 06:11:05 -0800 (PST)
-Date: Wed, 27 Dec 2023 15:11:03 +0100
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/2] thermal: netlink: Add thermal_group_has_listeners()
- helper
-Message-ID: <ZYwwdz2XabAuCv4y@mai.linaro.org>
-References: <20231227140057.174314-1-stanislaw.gruszka@linux.intel.com>
- <20231227140057.174314-2-stanislaw.gruszka@linux.intel.com>
+        Wed, 27 Dec 2023 07:18:56 -0800 (PST)
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Date: Wed, 27 Dec 2023 16:18:54 +0100
+Subject: [PATCH] pmdomain: core: Print a message when unused power domains
+ are disabled
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231227140057.174314-2-stanislaw.gruszka@linux.intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20231227-topic-pmdomain_spam-v1-1-ff0410086b36@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAF1AjGUC/x2N2wrCQAwFf6Xk2UAbQcVfEZHsNmsD3QsbFaH03
+ w0+zhyGs4FJVzG4Dht0+ahpLQ7TYYC4cHkK6uwMNNJxIjrjqzaN2PJcM2t5WOOMJJeTbyGNlMD
+ LwCYYOpe4eFve6+qydUn6/V/d7vv+A074gn56AAAA
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Marijn Suijten <marijn.suijten@somainline.org>, 
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1703690336; l=954;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=HOZ0tQ5XhpJRiYiK8g2v+oe13TgirBOq/Tfiaulf0Ik=;
+ b=nysMJgbMvUy50OtruHiNQ2kL3c7am2LQt/62JQFIG7jsF27bNqouTR0XbOwsJUFbqapBgK5HA
+ Zm7WZGoaxbWBI0r0Luv5UOKGQ4u3mM3mQVBee9h8DFA/PBWQf04fg+o
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
-Hi Stanislaw,
+In a similar spirit to commit 12ca59b91d04 ("clk: Print an info line
+before disabling unused clocks"), print the message in both ignore AND
+cleanup cases to better inform the user (and more importantly, the
+developer) when it happens.
 
-thanks for this optimization. One question below.
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ drivers/pmdomain/core.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-On Wed, Dec 27, 2023 at 03:00:57PM +0100, Stanislaw Gruszka wrote:
-> Add a helper function to check if there are listeners for
-> thermal_gnl_family multicast groups.
-> 
-> For now use it to avoid unnecessary allocations and sending
-> thermal genl messages when there are no recipients.
-> 
-> In the future, in conjunction with (not yet implemented) notification
-> of change in the netlink socket group membership, this helper can be
-> used to open/close hardware interfaces based on the presence of
-> user space subscribers.
-> 
-> Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-> ---
->  drivers/thermal/thermal_netlink.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
-> index aca36c4ddbf3..b4e758d22077 100644
-> --- a/drivers/thermal/thermal_netlink.c
-> +++ b/drivers/thermal/thermal_netlink.c
-> @@ -76,6 +76,11 @@ typedef int (*cb_t)(struct param *);
->  
->  static struct genl_family thermal_gnl_family;
->  
-> +static int thermal_group_has_listeners(enum thermal_genl_multicast_groups group)
-> +{
-> +	return genl_has_listeners(&thermal_gnl_family, &init_net, group);
-> +}
-> +
->  /************************** Sampling encoding *******************************/
->  
->  int thermal_genl_sampling_temp(int id, int temp)
-> @@ -83,6 +88,9 @@ int thermal_genl_sampling_temp(int id, int temp)
->  	struct sk_buff *skb;
->  	void *hdr;
->  
-> +	if (!thermal_group_has_listeners(THERMAL_GENL_SAMPLING_GROUP))
-> +		return -ESRCH;
-> +
+diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+index a1f6cba3ae6c..69902797a5bb 100644
+--- a/drivers/pmdomain/core.c
++++ b/drivers/pmdomain/core.c
+@@ -1100,6 +1100,7 @@ static int __init genpd_power_off_unused(void)
+ 		return 0;
+ 	}
+ 
++	pr_info("genpd: Disabling unused power domains\n");
+ 	mutex_lock(&gpd_list_lock);
+ 
+ 	list_for_each_entry(genpd, &gpd_list, gpd_list_node)
 
-Do really want to return an error ? Shall we just bail out instead ?
+---
+base-commit: 39676dfe52331dba909c617f213fdb21015c8d10
+change-id: 20231227-topic-pmdomain_spam-2e86227bf02f
 
-[ ... ]
-
+Best regards,
 -- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
- <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
 
