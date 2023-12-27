@@ -1,64 +1,64 @@
-Return-Path: <linux-pm+bounces-1585-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1586-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E34D81EB13
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 02:07:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1397D81EB19
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 02:08:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 335B01F22A65
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 01:07:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 60C92B22214
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 01:08:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5826B1FA3;
-	Wed, 27 Dec 2023 01:07:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1050A35;
+	Wed, 27 Dec 2023 01:07:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IG5DCc3h"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GaXtYYeS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C11C23DE
-	for <linux-pm@vger.kernel.org>; Wed, 27 Dec 2023 01:07:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 450ED2563
+	for <linux-pm@vger.kernel.org>; Wed, 27 Dec 2023 01:07:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5537dd673e5so3797645a12.0
-        for <linux-pm@vger.kernel.org>; Tue, 26 Dec 2023 17:07:19 -0800 (PST)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5553d588cc7so548675a12.3
+        for <linux-pm@vger.kernel.org>; Tue, 26 Dec 2023 17:07:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703639238; x=1704244038; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1703639274; x=1704244074; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=t4tMFvEeMgMjXLstJzcFftKZTc5NR15boMM+FQhmp88=;
-        b=IG5DCc3hzatQF9Js9Bu7n+sD3kvelDR1mbw/AIuRQ5Sb97dITbBr5/wr+m8LjCWN5u
-         9J5P69tvPcArag8hSX9o0A2cLSA5EWiKa90N6rmKZ7RLjzwrtzKjRyd1RsgrlXcG/Kvb
-         23MEdm2C5p6xkonVJn4rmDU/ohpF1Gb62QQMDY/2x1uRbuah+XilmC/QYZbj6BkNOdGR
-         WLRRfbNsk7FTPVgTdn9selFWSeKv+h/e/eMOL97A+WsNpqDkZeG0Wmajr+HhUbmlQjXz
-         xPzLDbcrHKndB15JXXu5uLYutYAnraNG9PltKroKD8FssP/pxRMKMutEFhm8bbIqFlzw
-         DKJQ==
+        bh=AxR4gV4znkMrzrhAKW/RK6v6jnqPLmwIxeqvoIYxOdM=;
+        b=GaXtYYeS625ziUNT3iRtyz90SBEi892u7Yt+5+RDM4HFGRISkQ2kJkjYlnIgpIyZU7
+         sIqZinG9H/qd1rrjTST9kNFqAbsE2WeTa6a7KWIGBl1N7O4X44Z5nXWdNEIe4NBnCbDE
+         LIfSPvblCwvp5NLesheurXNYxAhZD+4etAkd18gq5jn6Pbv5GXpa4/k9hWdFJT3ayqwD
+         hU7IF6obyfhNoa4nLufgGfaUfJ+Z/Uk2ymxvRAPN2NYkZ2IVcnhKYbOfVM4z5ajSAPeQ
+         v0bJUbyQIBZNsmN5gGijZfaa+AJagzwE86fuQtOZ7ikanWOOTHgPRBC/fXj5uf7XLrU4
+         DzoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703639238; x=1704244038;
+        d=1e100.net; s=20230601; t=1703639274; x=1704244074;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t4tMFvEeMgMjXLstJzcFftKZTc5NR15boMM+FQhmp88=;
-        b=T1QRgjNaA6jGVlUOvUUopdiO3tZtw4ewe0BiWQqe4Q5tnYBtckoHxXxCStLts6vATh
-         jcqIey2Z4Ih/EKKs3EZP9fDlBjYoZXFjV4T3SLPFqEgV5HyZobQLFbxqsDAOTRm+31L3
-         Ts10w+oB1dgLVQymHX+oZL/T13g5d9eELG9b5qd9nGQ+YXBTTrkJL5GuJ91s8IVfm2F0
-         5j78E9P+7eeszVoVTWYiDoNX2kgJdPTbSyY3YKBJLXRU70Q6KKn+70eqpHo2BA2fUcE9
-         gnZXPokjhbAcEMR4+lqwQcI1jqepR2gdPAThs9nKscipTWiKhRj6XyXTISNziddEHbXx
-         DOlA==
-X-Gm-Message-State: AOJu0Yx5qGjF5fHJeFt1bkhB3CqM9mLU4Mu4LL3rxYLZkb5kiyT4p0FL
-	r5gM46YkTWmz/JzH472ETpOm6V2wxZhxWg==
-X-Google-Smtp-Source: AGHT+IGZGUY+ComcdEv3TyZJpAQYnWaCNAV0YpFmNZdDLTG10Crgm8nPIvZHBhDmwODdKfuPMHH2Qg==
-X-Received: by 2002:a50:875c:0:b0:553:8226:da72 with SMTP id 28-20020a50875c000000b005538226da72mr5950719edv.16.1703639238415;
-        Tue, 26 Dec 2023 17:07:18 -0800 (PST)
+        bh=AxR4gV4znkMrzrhAKW/RK6v6jnqPLmwIxeqvoIYxOdM=;
+        b=bv3K3qKJF9ShrBZ5Qdbm/kCDw3LApBZ+H2eazIjZDNGuUmB/wm9hfqFdnCzVtTVLmB
+         msRyJlTsD5MDZspg1QWzMRxEVbTe1VY66Xv6GfOgUjGu0uAYOdxrUZ50fCAtvIw3BOsX
+         fHTfP00CHFXmYDzV/Xw7q7AMnyr97Q+6eBL9HVLWAFQKiRPu9iSyOdrAZtXOHLSdPagx
+         uv2tNjbKYXZL77ieiRLentyWr7gtUg+rgifRoCUS1F6rgSYZbsLEOxEh8puNE4Mk+03s
+         AUHJkmPs/6f0iprVJLSYwjQ+69N1NQMcmgtpaxFAxZ+EaOEPgTqK5x2hQVxv+zxu+qYZ
+         EeAA==
+X-Gm-Message-State: AOJu0YwAwUI6iWahyLtbUf7nKG+PPN1QCu37XRD76T3M4qKIcxkQw9nY
+	m9+RgU6kKDKtQCghl86YsRj/xSopCV9+Zg==
+X-Google-Smtp-Source: AGHT+IHqi1nGTM1SFl7McFUBiZefOF3Y4ttRdR97oPsoBjvi35a4WrmHKS0pBNtuJtxBUdSLwiZdiQ==
+X-Received: by 2002:a50:b40f:0:b0:555:1365:9428 with SMTP id b15-20020a50b40f000000b0055513659428mr1109293edh.82.1703639274745;
+        Tue, 26 Dec 2023 17:07:54 -0800 (PST)
 Received: from [192.168.199.125] (178235179028.dynamic-4-waw-k-1-3-0.vectranet.pl. [178.235.179.28])
-        by smtp.gmail.com with ESMTPSA id ck8-20020a0564021c0800b0055515b40464sm1599865edb.81.2023.12.26.17.07.16
+        by smtp.gmail.com with ESMTPSA id ck8-20020a0564021c0800b0055515b40464sm1599865edb.81.2023.12.26.17.07.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Dec 2023 17:07:17 -0800 (PST)
-Message-ID: <43728d36-0d20-4e1e-8671-726c29d09a2d@linaro.org>
-Date: Wed, 27 Dec 2023 02:07:15 +0100
+        Tue, 26 Dec 2023 17:07:54 -0800 (PST)
+Message-ID: <0d20be70-7db2-4d8b-aecb-5256a42ba62e@linaro.org>
+Date: Wed, 27 Dec 2023 02:07:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -66,8 +66,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/8] clk: qcom: gdsc: Enable supply reglator in GPU GX
- handler
+Subject: Re: [PATCH v2 3/8] clk: qcom: gpucc-sc8280xp: Add external supply for
+ GX gdsc
 Content-Language: en-US
 To: Bjorn Andersson <quic_bjorande@quicinc.com>,
  Bjorn Andersson <andersson@kernel.org>,
@@ -80,9 +80,10 @@ To: Bjorn Andersson <quic_bjorande@quicinc.com>,
  Will Deacon <will@kernel.org>
 Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+ linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 References: <20231220-sa8295p-gpu-v2-0-4763246b72c0@quicinc.com>
- <20231220-sa8295p-gpu-v2-2-4763246b72c0@quicinc.com>
+ <20231220-sa8295p-gpu-v2-3-4763246b72c0@quicinc.com>
 From: Konrad Dybcio <konrad.dybcio@linaro.org>
 Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
@@ -119,20 +120,23 @@ Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
  nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
  izWDgYvmBE8=
-In-Reply-To: <20231220-sa8295p-gpu-v2-2-4763246b72c0@quicinc.com>
+In-Reply-To: <20231220-sa8295p-gpu-v2-3-4763246b72c0@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 22.12.2023 05:39, Bjorn Andersson wrote:
-> The GX GDSC is modelled to aid the GMU in powering down the GPU in the
-> event that the GPU crashes, so that it can be restarted again. But in
-> the event that the power-domain is supplied through a dedicated
-> regulator (in contrast to being a subdomin of another power-domain),
-> something needs to turn that regulator on, both to make sure things are
-> powered and to match the operation in gdsc_disable().
+> On SA8295P and SA8540P the GFX rail is powered by a dedicated external
+> regulator, instead of the rpmh-controlled "gfx.lvl".
 > 
+> Define the "vdd-gfx" as the supply regulator for the GDSC, to cause the
+> gdsc logic to look for, and control, this external power supply.
+> 
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 > ---
+Worth noting the regulator framework will create a virtual supply
+for the normal 8280
+
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
