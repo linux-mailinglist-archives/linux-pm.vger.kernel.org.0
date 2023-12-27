@@ -1,64 +1,64 @@
-Return-Path: <linux-pm+bounces-1588-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1589-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 977C281EB25
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 02:09:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CD0081EB2C
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 02:10:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 920961C220E7
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 01:09:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF28928342F
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 01:09:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A66841876;
-	Wed, 27 Dec 2023 01:08:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F8561FB5;
+	Wed, 27 Dec 2023 01:09:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="q5jKE4Zl"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="a2JXwI2G"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A30B1FC8
-	for <linux-pm@vger.kernel.org>; Wed, 27 Dec 2023 01:08:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE0671876
+	for <linux-pm@vger.kernel.org>; Wed, 27 Dec 2023 01:09:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5552579335fso868788a12.2
-        for <linux-pm@vger.kernel.org>; Tue, 26 Dec 2023 17:08:46 -0800 (PST)
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-50e7e55c0f6so1145334e87.0
+        for <linux-pm@vger.kernel.org>; Tue, 26 Dec 2023 17:09:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703639325; x=1704244125; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1703639390; x=1704244190; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=WW9HYx9j/x4ss/Xoh0AagUmpiviqWROUvVZzg+XtJcM=;
-        b=q5jKE4Zl3Sv47GoLX1ijfhm/VUCFcnhBRFd8VgyIPyfxFF5V9D5M0K1eSx/zdiA2La
-         dI958V7OJoqKnWoiWIfOyVR2TwqQ8aNFmD+qlJ4/ltSVZgMviglXFYH9GKNa3DgEMOb0
-         fLxdMxHWPRdMDwaHyRCViYOZZvtWVW+5YZGCPMe0tkJwJvfPEJfRN422O/kXozrJjPKk
-         vF1tjz1+tAJuTP3SmcKDgrAZymv2TZ+WI3hd8ryM6vtZasOjyw6hNqTXhzngIXd5I/SD
-         V3MKnX34srtBIbSYk1gPk7YJ4YRtWQKZq74Wep7pQO8AgiL5BPTfGQa2SknxGKPIZiRm
-         wexg==
+        bh=I9VfHVLP88p3cP7SpdmfALR412cMP7LrXGEL/d7Ygmg=;
+        b=a2JXwI2GSX1hs7LzbXADL5M0dwd18G463Z01eaQVF4Um8gooSaC4owJN5+XYU2p5Ib
+         kv2D7KT28wmO8d4vB0JLeWRyYAktyZMQnWD+lWo2t/BLOuzPqcS2nEtC181bYZ9KaNVw
+         Ydz+NZzvQ5TNkeDYDhauSCOK5UGdg3A7jecDyOPxKuxhVUB8Sx5Qzqkg0imx12sCaFOC
+         GeS0yfqly9aAxMzWOh3HhKOQxFCYPyYdJ0JUKi7k+emGeQzYB5AcoezhjnIzoi5E/cG/
+         uSOOVEkzj4wur67QHYGnV1qIgr+VYlqe5paOstzB1olu/p/GprGNmhcKKIpsne09fI3x
+         +QtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703639325; x=1704244125;
+        d=1e100.net; s=20230601; t=1703639390; x=1704244190;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WW9HYx9j/x4ss/Xoh0AagUmpiviqWROUvVZzg+XtJcM=;
-        b=canJlRL0aNq9UfuqZzNCJKSHqzVjLqNLFTlYZ3cy6/puOiUkq5xwm5G00ZzOkViDU/
-         t4o2m8kBsS9Q6/2pPejRpliM/J+WgEnC3rZ8cuqn+CfWmmK5fxt+BmNPS3gT9iMpmWVj
-         N2rt0BIN0Qgr1sTvwWP2Uq16IG8TL4EpzBeNYW9dQm4M34TdIjllgEn5eLTw84QhWof2
-         cACW0zQbtU6hCDc9WupdyqSQTrdCzWdopM7bCm+Bf5UrFYzFCaRiCvi8sPN90MPFQBv2
-         jWiA6X2w18DDccrSCGuw1U3pUIjLYp9D4q7J7jH9uCKLv6mOGilQRnSkjVcpq7ySUmgU
-         kvTg==
-X-Gm-Message-State: AOJu0YyJEw+/bKEyV/NrJ86PVGpQvbchMAibnvbjZHmVFkpkxro+1wyg
-	mdLxxBVIIKGO3SCpEC/HbHg5TfO3ja3g7Q==
-X-Google-Smtp-Source: AGHT+IFMh9s/4u5QWAzEcZBzBdigcM8CuFsPVxhHwQbB5U+yW7MywTpJ7bNqMbbly25Js36Bq5/BNA==
-X-Received: by 2002:a05:6402:4410:b0:54a:f8e9:a9a8 with SMTP id y16-20020a056402441000b0054af8e9a9a8mr6190668eda.20.1703639325331;
-        Tue, 26 Dec 2023 17:08:45 -0800 (PST)
+        bh=I9VfHVLP88p3cP7SpdmfALR412cMP7LrXGEL/d7Ygmg=;
+        b=HDp29XMvf687n9cXMcBlTBACkxBGdpazIborn4DY+UgzS+07lo+gexM4ZvBiREMrUz
+         yLXD0ZwKl12urRXTLRfZuiMB6vNGmCQO8iXQ9d6jnyPLqGBnqurp46iBNJD3of8aB5y2
+         WERTYkamMtkuq7yMxgiWsXbfeyxzIFg0Oa52HIaWCCDXsIYVd4vAFcEUMk0S2oVWgDiQ
+         m9Px9Nd5xQ3Y+JeHLNB7teHO7guYePV9z4T676dI9eABY5NESew8LiylsOWQhHVuPcS1
+         arPH3gEaXxnnuXtkorWuc6/xgFFad2LnEp6sC1EnNZLTBWWfJQpsBm6WaKevURnLOHgO
+         Ch8Q==
+X-Gm-Message-State: AOJu0YwR++WNrhwmqfp01Fdf82OMyabI+1WjetpSOSqPb0pGdYJy/pYZ
+	yY450gNnnGX08hnO4wD6BohjMu5k9RQbug==
+X-Google-Smtp-Source: AGHT+IEuiCPOp/0lMCRX1bA3Ozq+b+B6zjTRHTHfBM+/soywhiiJn3FVFC8wZOuOfSh/SvjvqSb8/A==
+X-Received: by 2002:ac2:4a72:0:b0:50e:7b34:c18a with SMTP id q18-20020ac24a72000000b0050e7b34c18amr500583lfp.111.1703639389958;
+        Tue, 26 Dec 2023 17:09:49 -0800 (PST)
 Received: from [192.168.199.125] (178235179028.dynamic-4-waw-k-1-3-0.vectranet.pl. [178.235.179.28])
-        by smtp.gmail.com with ESMTPSA id ck8-20020a0564021c0800b0055515b40464sm1599865edb.81.2023.12.26.17.08.43
+        by smtp.gmail.com with ESMTPSA id ck8-20020a0564021c0800b0055515b40464sm1599865edb.81.2023.12.26.17.09.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Dec 2023 17:08:45 -0800 (PST)
-Message-ID: <9a11ba2f-d7bc-4860-9987-58f56fad76da@linaro.org>
-Date: Wed, 27 Dec 2023 02:08:43 +0100
+        Tue, 26 Dec 2023 17:09:49 -0800 (PST)
+Message-ID: <4a1c18e3-39c8-4070-ae55-b1148b3dc65b@linaro.org>
+Date: Wed, 27 Dec 2023 02:09:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -66,7 +66,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 6/8] arm64: dts: qcom: sa8295p-adp: add max20411
+Subject: Re: [PATCH v2 7/8] arm64: dts: qcom: sa8295p-adp: Enable GPU
 Content-Language: en-US
 To: Bjorn Andersson <quic_bjorande@quicinc.com>,
  Bjorn Andersson <andersson@kernel.org>,
@@ -81,7 +81,7 @@ Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 References: <20231220-sa8295p-gpu-v2-0-4763246b72c0@quicinc.com>
- <20231220-sa8295p-gpu-v2-6-4763246b72c0@quicinc.com>
+ <20231220-sa8295p-gpu-v2-7-4763246b72c0@quicinc.com>
 From: Konrad Dybcio <konrad.dybcio@linaro.org>
 Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
@@ -118,34 +118,44 @@ Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
  nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
  izWDgYvmBE8=
-In-Reply-To: <20231220-sa8295p-gpu-v2-6-4763246b72c0@quicinc.com>
+In-Reply-To: <20231220-sa8295p-gpu-v2-7-4763246b72c0@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 22.12.2023 05:39, Bjorn Andersson wrote:
-> From: Bjorn Andersson <andersson@kernel.org>
+> With the necessary support in place for supplying VDD_GFX from the
+> MAX20411 regulator, enable the GPU clock controller, GMU, Adreno SMMU
+> and the GPU on the SA8295P ADP.
 > 
-> The SA8295P ADP has a MAX20411 LDO regulator on I2C 12, supplying the
-> VDD_GFX pads. Enable the bus and add the maxim,max20411 device on the
-> bus.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 > ---
+[...]
 
->  &tlmm {
->  	pcie2a_default: pcie2a-default-state {
->  		clkreq-n-pins {
-> @@ -728,4 +760,12 @@ wake-n-pins {
->  			bias-pull-up;
->  		};
->  	};
+> +&gpucc {
+> +	vdd-gfx-supply = <&vdd_gfx>;
+> +	status = "okay";
+> +};
+Already enabled
+
 > +
-> +	qup1_i2c4_state: qup1-i2c4-state {
-> +		pins = "gpio0", "gpio1";
-> +		function = "qup12";
+> +&gmu {
+> +	status = "okay";
+> +};
 > +
-> +		drive-strength = <2>;
-unnecessary newline
+> +&gpu {
+> +	status = "okay";
+> +
+> +	zap-shader {
+> +		memory-region = <&gpu_mem>;
+> +		firmware-name = "qcom/sa8295p/a690_zap.mbn";
+> +	};
+> +};
+> +
+> +&gpu_smmu {
+> +	status = "okay";
+> +};
+Already enabled
+
 
 Konrad
 
