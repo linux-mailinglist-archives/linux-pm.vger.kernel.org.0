@@ -1,198 +1,139 @@
-Return-Path: <linux-pm+bounces-1584-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1585-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9340481EAD8
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 01:03:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E34D81EB13
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 02:07:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 120B71F21ADB
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 00:03:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 335B01F22A65
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 01:07:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36FC7372;
-	Wed, 27 Dec 2023 00:03:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5826B1FA3;
+	Wed, 27 Dec 2023 01:07:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kk11qKhm"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IG5DCc3h"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17FD563AD;
-	Wed, 27 Dec 2023 00:03:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64777C433C8;
-	Wed, 27 Dec 2023 00:03:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703635420;
-	bh=B1YU6Z//abG7ywAgEviDCHYEJW3306hDtGtRh7TtSCA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=Kk11qKhmxi7OwqP/DjfVaplCr3uO8d7rH6JC/KcYSF+YjhpCFelK2Vu+4Np8g1AFL
-	 QEGk1sRPAmBHP9zrHZyW/DwlO6D8DVZR3d6Cbb6whMU6+LCEeX0YaoI6afj/DmYR31
-	 ptUMKoUk0geXUhoA1yYZzyimgMNsl59/ihJDFA+awsPteOXbI+FZHIaVl9vMgkWRXT
-	 SsUjyVqXgNQey2vCWF78ZSrUy8lICWl375DUyr615fP2T85vSZ5ZnrozOn8PgADzkQ
-	 IjbmO1NkmgH01p8Tb7sGQsDGMJA8JhoZhI+R9Bm7HlvqOlHd2bG4ESNam1CsKAVaRc
-	 irw1q0DxwggZQ==
-Date: Tue, 26 Dec 2023 18:03:38 -0600
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: "David E. Box" <david.e.box@linux.intel.com>
-Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
-	"Kenneth R. Crudup" <kenny@panix.com>, vidyas@nvidia.com,
-	bhelgaas@google.com, kai.heng.feng@canonical.com,
-	andrea.righi@canonical.com, vicamo.yang@canonical.com,
-	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	Ricky WU <ricky_wu@realtek.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	linux-pm@vger.kernel.org, linux-pci@vger.kernel.org,
-	Thomas Witt <kernel@witt.link>,
-	Matthew Garrett <mjg59@srcf.ucam.org>
-Subject: Re: My AlderLake Dell (XPS-9320) needs these patches to get full
- standby/low-power modes
-Message-ID: <20231227000338.GA1484308@bhelgaas>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C11C23DE
+	for <linux-pm@vger.kernel.org>; Wed, 27 Dec 2023 01:07:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5537dd673e5so3797645a12.0
+        for <linux-pm@vger.kernel.org>; Tue, 26 Dec 2023 17:07:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1703639238; x=1704244038; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=t4tMFvEeMgMjXLstJzcFftKZTc5NR15boMM+FQhmp88=;
+        b=IG5DCc3hzatQF9Js9Bu7n+sD3kvelDR1mbw/AIuRQ5Sb97dITbBr5/wr+m8LjCWN5u
+         9J5P69tvPcArag8hSX9o0A2cLSA5EWiKa90N6rmKZ7RLjzwrtzKjRyd1RsgrlXcG/Kvb
+         23MEdm2C5p6xkonVJn4rmDU/ohpF1Gb62QQMDY/2x1uRbuah+XilmC/QYZbj6BkNOdGR
+         WLRRfbNsk7FTPVgTdn9selFWSeKv+h/e/eMOL97A+WsNpqDkZeG0Wmajr+HhUbmlQjXz
+         xPzLDbcrHKndB15JXXu5uLYutYAnraNG9PltKroKD8FssP/pxRMKMutEFhm8bbIqFlzw
+         DKJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703639238; x=1704244038;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=t4tMFvEeMgMjXLstJzcFftKZTc5NR15boMM+FQhmp88=;
+        b=T1QRgjNaA6jGVlUOvUUopdiO3tZtw4ewe0BiWQqe4Q5tnYBtckoHxXxCStLts6vATh
+         jcqIey2Z4Ih/EKKs3EZP9fDlBjYoZXFjV4T3SLPFqEgV5HyZobQLFbxqsDAOTRm+31L3
+         Ts10w+oB1dgLVQymHX+oZL/T13g5d9eELG9b5qd9nGQ+YXBTTrkJL5GuJ91s8IVfm2F0
+         5j78E9P+7eeszVoVTWYiDoNX2kgJdPTbSyY3YKBJLXRU70Q6KKn+70eqpHo2BA2fUcE9
+         gnZXPokjhbAcEMR4+lqwQcI1jqepR2gdPAThs9nKscipTWiKhRj6XyXTISNziddEHbXx
+         DOlA==
+X-Gm-Message-State: AOJu0Yx5qGjF5fHJeFt1bkhB3CqM9mLU4Mu4LL3rxYLZkb5kiyT4p0FL
+	r5gM46YkTWmz/JzH472ETpOm6V2wxZhxWg==
+X-Google-Smtp-Source: AGHT+IGZGUY+ComcdEv3TyZJpAQYnWaCNAV0YpFmNZdDLTG10Crgm8nPIvZHBhDmwODdKfuPMHH2Qg==
+X-Received: by 2002:a50:875c:0:b0:553:8226:da72 with SMTP id 28-20020a50875c000000b005538226da72mr5950719edv.16.1703639238415;
+        Tue, 26 Dec 2023 17:07:18 -0800 (PST)
+Received: from [192.168.199.125] (178235179028.dynamic-4-waw-k-1-3-0.vectranet.pl. [178.235.179.28])
+        by smtp.gmail.com with ESMTPSA id ck8-20020a0564021c0800b0055515b40464sm1599865edb.81.2023.12.26.17.07.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Dec 2023 17:07:17 -0800 (PST)
+Message-ID: <43728d36-0d20-4e1e-8671-726c29d09a2d@linaro.org>
+Date: Wed, 27 Dec 2023 02:07:15 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5a6d5b9688ff8f0a08da7dd6ecf00fc386ac37f8.camel@linux.intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/8] clk: qcom: gdsc: Enable supply reglator in GPU GX
+ handler
+Content-Language: en-US
+To: Bjorn Andersson <quic_bjorande@quicinc.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Johan Hovold
+ <johan+linaro@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20231220-sa8295p-gpu-v2-0-4763246b72c0@quicinc.com>
+ <20231220-sa8295p-gpu-v2-2-4763246b72c0@quicinc.com>
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <20231220-sa8295p-gpu-v2-2-4763246b72c0@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Dec 20, 2023 at 05:19:34PM -0800, David E. Box wrote:
-> On Fri, 2023-11-17 at 16:21 -0800, David E. Box wrote:
-> > On Thu, 2023-11-16 at 17:18 -0600, Bjorn Helgaas wrote:
-> > > [+cc Matthew, author of 41cd766b0659 ("PCI: Don't enable aspm before drivers
-> > > have had a chance to veto it")]
-> > > 
-> > > On Thu, Nov 16, 2023 at 12:10:02PM -0800, David E. Box wrote:
-> > > > On Tue, 2023-11-07 at 13:15 +0200, Mika Westerberg wrote:
-> > > > > On Mon, Nov 06, 2023 at 12:11:07PM -0600, Bjorn Helgaas wrote:
-> > > > > > On Sat, Nov 04, 2023 at 10:13:24AM -0700, Kenneth R. Crudup wrote:
-> > > > > > > 
-> > > > > > > I have a Dell XPS-9320 with an Alderlake chipset, and the NVMe
-> > > > > > > behind a VMD device:
-> > > > > > > 
-> > > > > > > ----
-> > > > > > > [    0.127342] smpboot: CPU0: 12th Gen Intel(R) Core(TM) i7-1280P
-> > > > > > > (family:
-> > > > > > > 0x6, model: 0x9a, stepping: 0x3)
-> > > > > > > ----
-> > > > > > > 0000:00:0e.0 0104: 8086:467f
-> > > > > > >         Subsystem: 1028:0af3
-> > > > > > >         Flags: bus master, fast devsel, latency 0, IOMMU group 9
-> > > > > > >         Memory at 603c000000 (64-bit, non-prefetchable) [size=32M]
-> > > > > > >         Memory at 72000000 (32-bit, non-prefetchable) [size=32M]
-> > > > > > > a7152be79b6        Memory at 6040100000 (64-bit, non-prefetchable)
-> > > > > > > [size=1M]
-> > > > > > >         Capabilities: <access denied>
-> > > > > > >         Kernel driver in use: vmd
-> > > > > > > ----
-> > > > > > > 
-> > > > > > > The only release kernel that was able to get this laptop to
-> > > > > > > fully get into low-power (unfortunately only s0ix) was the
-> > > > > > > Ubuntu-6.2.0- ... series from Ubuntu (remote
-> > > > > > > git://git.launchpad.net/~ubuntu-
-> > > > > > > kernel/ubuntu/+source/linux/+git/lunar).
-> > > > > > > 
-> > > > > > > I'd bisected it to the following commits (in this order):
-> > > > > > > 
-> > > > > > > 4ff116d0d5fd PCI/ASPM: Save L1 PM Substates Capability for
-> > > > > > > suspend/resume
-> > > > > > > 5e85eba6f50d PCI/ASPM: Refactor L1 PM Substates Control Register
-> > > > > > > programming
-> > > > > > > 1a0102a08f20 UBUNTU: SAUCE: PCI/ASPM: Enable ASPM for links under
-> > > > > > > VMD
-> > > > > > > domain
-> > > > > > > 47c7bfd31514 UBUNTU: SAUCE: PCI/ASPM: Enable LTR for endpoints
-> > > > > > > behind
-> > > > > > > VMD
-> > > > > > > 154d48da2c57 UBUNTU: SAUCE: vmd: fixup bridge ASPM by driver name
-> > > > > > > instead
-> > > > > > 
-> > > > > > Thanks for these.  You don't happen to have URLs for those Ubuntu
-> > > > > > commits, do you?  E.g., https://git.kernel.org/linus/4ff116d0d5fd
-> > > > > > (which was reverted by a7152be79b62 ("Revert "PCI/ASPM: Save L1 PM
-> > > > > > Substates Capability for suspend/resume"")).
-> > > > > > 
-> > > > > > > Without the patches I never see Pkg%PC8 or higher(? lower?),
-> > > > > > > nor i915 states DC5/6, all necssary for SYS%LPI/CPU%LPI. I've
-> > > > > > > attached a little script I use alongside turbostat for
-> > > > > > > verifying low-power operation (and also for seeing what
-> > > > > > > chipset subsystem may be preventing it).
-> > > > > > > 
-> > > > > > > The first two are in Linus' trees, but were reverted
-> > > > > > > (4ff116d0d5fd in a7152be79b6, 5e85eba6f50d in ff209ecc376a).
-> > > > > > > The last three come from Ubuntu's Linux trees (see remote spec
-> > > > > > > above). The first two remain reverted in the Ubuntu trees, but
-> > > > > > > if I put them back, I get increased power savings during
-> > > > > > > suspend/resume cycles.
-> > > > > > > 
-> > > > > > > Considering the power draw is really significant without these
-> > > > > > > patches (10s of %s per hour) and I'd think Dell would have
-> > > > > > > sold some decent number of these laptops, I'd been patiently
-> > > > > > > waiting for these patches, or some variant to show up in the
-> > > > > > > stable trees, but so far I'm up to the 6.6 stable kernel and
-> > > > > > > still having to manually cherry-pick these, so I thought maybe
-> > > > > > > I could bring this to the PM maintainers' attention so at
-> > > > > > > least start a discussion about this issue.
-> > > > > > 
-> > > > > > Thank you very much for raising this again.  We really need to make
-> > > > > > some progress, and Mika recently posted a patch to add the
-> > > > > > 4ff116d0d5fd functionality again:
-> > > > > > https://lore.kernel.org/r/20231002070044.2299644-1-mika.westerberg@linux.intel.com
-> > > > > > 
-> > > > > > The big problem is that it works on *most* systems, but it still
-> > > > > > seems to break a few.  So Mika's current patch relies on a
-> > > > > > denylist of systems where we *don't* restore the substates.
-> > > > > 
-> > > > > According to latest reports it is just that one system where this
-> > > > > is still an issue. The latest patch works in Asus UX305FA even if
-> > > > > it is not in the denylist. That would leave that one system only
-> > > > > to the denylist, at least the ones we are aware about.
-> > > > 
-> > > > I've been working with Thomas, whose system is the last known to
-> > > > have problems with Mika's patch. It turns out that his config sets
-> > > > aspm_policy to 'powersave'.  If he sets it to any other policy,
-> > > > Mika's patch works [1]. It's possible that others may see the same
-> > > > issue if they use 'powersave' as well.
-> > > > 
-> > > > The theory right now is that enabling L1SS in pci_restore_state() is
-> > > > too early.  
-> > > 
-> > > I'd really like to figure out what "too early" means.  We can
-> > > make it later by enabling L1SS somewhere else, but unless we
-> > > know exactly what needs to happen first, we're likely to break
-> > > it again.  And if we know what's required, we can probably
-> > > figure out a cleaner way to restore it.
-> > 
-> > Still trying to understand this particular failure. The current
-> > patch to Thomas more closely mimics how ASPM is enabled during
-> > boot when powersave is set. If it works we can at least prove that
-> > we can get it to work again by using a similar flow.
+On 22.12.2023 05:39, Bjorn Andersson wrote:
+> The GX GDSC is modelled to aid the GMU in powering down the GPU in the
+> event that the GPU crashes, so that it can be restarted again. But in
+> the event that the power-domain is supplied through a dedicated
+> regulator (in contrast to being a subdomin of another power-domain),
+> something needs to turn that regulator on, both to make sure things are
+> powered and to match the operation in gdsc_disable().
 > 
-> With some free time I was able to find a system in our lab that
-> reproduces the same failure reported on the last problem report from
-> Thomas. That is, with powersave selected, the nvme fails to come up
-> after resume from S3 with this patch without a quirk. It's actually
-> obvious when you can see the flow. We observed that on S3 resume,
-> BIOS has enabled L1.2 (likely back to preboot setting). Restoring
-> powersave will therefore disable L1.2. Per spec, L1.2 must be
-> disabled on the downstream first. But pci_restore_state() gets
-> called on upstream devices first. Indeed, on my system, clearing the
-> L1.2 state on the root port makes the nvme device inaccessible by
-> the time pci_aspm_restore_state() is called for it. I've modified
-> the patch to defer L1SS restore until the downstream component so
-> they can be done together. The patch clears L1.2 on the child first
-> before the parent, restores both configs and then reenables them in
-> reverse on the parent then the child. This works on my system.  I've
-> posted the patch as a V5 and on the bugzilla and appreciate if
-> anyone here can test.
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-This is FANTASTIC!  Thank you so much for getting to the bottom of
-this!
-
-Bjorn
+Konrad
 
