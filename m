@@ -1,160 +1,150 @@
-Return-Path: <linux-pm+bounces-1621-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1622-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B92E81F1B5
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 20:53:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 397C281F1D4
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 21:21:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03E121F230E7
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 19:53:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA3C7283CB4
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 20:21:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFE8947A57;
-	Wed, 27 Dec 2023 19:53:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 584E647F56;
+	Wed, 27 Dec 2023 20:21:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="P3WGgsZm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A7F047A51;
-	Wed, 27 Dec 2023 19:53:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-6dc003289c9so128173a34.0;
-        Wed, 27 Dec 2023 11:53:38 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703706817; x=1704311617;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PzGvqkA+7vSK4S2dZ8/CmTeqqUn7cIuH50aZn1M+9vQ=;
-        b=aA5QtZOpz8PS2QEnyTd+HBvKv7QToIxNN92ylzF/V2eU4y2Ly46TuXI4/bLP3oyskX
-         stoMzM0ZYyoyZEGHxafk61Pz7gn7W9kgDgEJ3OxkbA1ah0VUfuI/hYXXPjK7pUFiKHAu
-         cx99ZKNKBY1gg4nOpfMx9WxNaeRpVb8qMXE/Wtt6op9GjlL5b76mIl1JuLPxkK3VcqQu
-         wzxEEXUAjrYF3KfobWpYVUEVeDvK0vGlnsvecFjR2SF6VMla9WZTYlVGUHgf8783LbKE
-         nO2LJ3x22L9nlHHHCQ3v4dkypEl4de+SiugL8kCiIkupNO32ih/KXuFgonxL5FVL3ohq
-         cA+A==
-X-Gm-Message-State: AOJu0Yx8k1RKyuEvhxAUR0k/flG4JBzaNLQCI4YlvfugoZCihlANIPte
-	fUsdm7ClQglIp4KBot9RMogqXWr6OoR3WnEsChU=
-X-Google-Smtp-Source: AGHT+IG/Ky3kwmKNdjmAEoxafNE3axXWpyvvl8+rX7EE+bMJtEIGTrxSpSorul7oLAG7YnBfwX14zB5hV3aO1laoJ0g=
-X-Received: by 2002:a4a:dc96:0:b0:594:ad62:bab9 with SMTP id
- g22-20020a4adc96000000b00594ad62bab9mr5536266oou.1.1703706817350; Wed, 27 Dec
- 2023 11:53:37 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA87447F46;
+	Wed, 27 Dec 2023 20:21:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BRJvPqN020877;
+	Wed, 27 Dec 2023 20:21:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	date:from:to:cc:subject:message-id:references:mime-version
+	:content-type:in-reply-to; s=qcppdkim1; bh=2quQCISfmXXvAuqhivENf
+	6jVOT6ATrMLLpI3zefedDI=; b=P3WGgsZmFDboyy/qfXtOfJRWdAk/62UUyJI/s
+	A+1eyQVCLWWWVq4wsAlkcd3YNo0b4nIoyqp6+Hrj73Jrzcg4fQ2ka7+l2X062EXR
+	GKphQ60yjRXQRz+DkDD5z2PrF1O2SZcLyEupgN3u9V68fMm58vJ1qNx2pMg9dZwD
+	KRSY+jlDS1uAevifo6aZQk+ijLIfouObj1TvvzLpeoLpmhOEWzWySL72G0ZP0DLr
+	pc8EjbUPIlglsMFh3fdEPdVvT0uzoHmmXHeWhUGZNBKIOQOIkmIwSFiOrvMwlxM5
+	D0kkfRUEw2nVC8ekl29SMlw+9przf000taPcpDr/UMqN7n1Nw==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3v8grt14t7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 27 Dec 2023 20:21:33 +0000 (GMT)
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3BRKLWsr007498
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 27 Dec 2023 20:21:32 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Wed, 27 Dec 2023 12:21:32 -0800
+Date: Wed, 27 Dec 2023 12:21:30 -0800
+From: Bjorn Andersson <quic_bjorande@quicinc.com>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+CC: Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette
+	<mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring
+	<robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Catalin Marinas
+	<catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v2 7/8] arm64: dts: qcom: sa8295p-adp: Enable GPU
+Message-ID: <20231227202130.GA1315173@hu-bjorande-lv.qualcomm.com>
+References: <20231220-sa8295p-gpu-v2-0-4763246b72c0@quicinc.com>
+ <20231220-sa8295p-gpu-v2-7-4763246b72c0@quicinc.com>
+ <4a1c18e3-39c8-4070-ae55-b1148b3dc65b@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231219092539.3655172-1-daniel.lezcano@linaro.org>
- <20231219092539.3655172-2-daniel.lezcano@linaro.org> <CAJZ5v0gPHwJ+02hYbp5dRx1r69BdLWr_QDKautu-RXy1MEC5LQ@mail.gmail.com>
- <60ecab8e-7b96-469e-9bae-25c51514e6e8@linaro.org>
-In-Reply-To: <60ecab8e-7b96-469e-9bae-25c51514e6e8@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 27 Dec 2023 20:53:25 +0100
-Message-ID: <CAJZ5v0hKH7tYDur4mG8QF0GfgL+jFfW_bBc3QesUS68OQb_PMA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] thermal/debugfs: Add thermal debugfs information
- for mitigation episodes
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, rjw@rjwysocki.net, lukasz.luba@arm.com, 
-	rui.zhang@intel.com, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <4a1c18e3-39c8-4070-ae55-b1148b3dc65b@linaro.org>
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: inYKcTRVZQYCScIFDOT_tCHeQ41FmRKx
+X-Proofpoint-ORIG-GUID: inYKcTRVZQYCScIFDOT_tCHeQ41FmRKx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ phishscore=0 suspectscore=0 spamscore=0 malwarescore=0 priorityscore=1501
+ lowpriorityscore=0 mlxlogscore=701 mlxscore=0 impostorscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2311290000 definitions=main-2312270149
 
-Hi Daniel,
+On Wed, Dec 27, 2023 at 02:09:47AM +0100, Konrad Dybcio wrote:
+> On 22.12.2023 05:39, Bjorn Andersson wrote:
+> > With the necessary support in place for supplying VDD_GFX from the
+> > MAX20411 regulator, enable the GPU clock controller, GMU, Adreno SMMU
+> > and the GPU on the SA8295P ADP.
+> > 
+> > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> > ---
+> [...]
+> 
+> > +&gpucc {
+> > +	vdd-gfx-supply = <&vdd_gfx>;
+> > +	status = "okay";
+> > +};
+> Already enabled
+> 
 
-On Sat, Dec 23, 2023 at 12:41=E2=80=AFPM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
->
-> Hi Rafael,
->
-> On 21/12/2023 20:26, Rafael J. Wysocki wrote:
->
-> [ ... ]
->
->
-> >> +/**
-> >> + * struct tz_events - Store all events related to a mitigation episod=
-e
-> >> + *
-> >> + * The tz_events structure describes a mitigation episode.
-> >
-> > So why not call it tz_mitigation?
->
-> A mitigation episode =3D N x tz_events
->
-> eg.
-> trip A =3D passive cooling - cpufreq cluster0
-> trip B =3D passive cooling - cpufreq cluster0 + cluster1
-> trip C =3D active cooling + fan
->
-> temperature trip A < trip B < trip C
->
-> The mitigation episode, as defined, begins at trip A, and we can have
-> multiple events (eg. trip B crossed several times, trip C, then trip B
-> again etc ...).
+No, we're disabling these in sa8540p.dtsi, so they need to be re-enabled
+here.
 
-I understand this, but I thought that tz_events represented the entire epis=
-ode.
+I don't remember if it's because the attempt to bring up gfx.lvl or if
+it's the attempt to operate the GPU components without adequate VDD_GFX,
+that is causing the issue...but either way, we don't survive boot.
 
-> [ ... ]
->
-> >> +       if (dfs->tz.trip_index < 0) {
-> >> +               tze =3D thermal_debugfs_tz_event_alloc(tz, now);
-> >> +               if (!tze)
-> >> +                       return;
-> >> +
-> >> +               list_add(&tze->node, &dfs->tz.tz_events);
-> >> +       }
-> >> +
-> >> +       dfs->tz.trip_index++;
-> >> +       dfs->tz.trips_crossed[dfs->tz.trip_index] =3D trip_id;
-> >
-> > So trip_index is an index into trips_crossed[] and the value is the ID
-> > of the trip passed by thermal_debug_tz_trip_up() IIUC, so the trip IDs
-> > in trips_crossed[] are always sorted by the trip temperature, in the
-> > ascending order.
-> >
-> > It would be good to write this down somewhere in a comment.
-> >
-> > And what if trip temperatures change during a mitigation episode such
-> > that the order by the trip temperature changes?
->
-> Changing a trip point temperature during a mitigation is a general
-> question about the thermal framework.
->
-> How the governors will behave with such a change on the fly while they
-> are in action?
->
-> IMO, we should prevent to change a trip point temperature when this one
-> is crossed and has a cooling device bound to it.
 
-Well, it's not that simple.
+It's possible that we could move the max20411 up to sa8540p.dtsi to
+avoid the intermediate disable, but I'm not confident that it's "part of
+the platform"...
 
-There are legitimate cases in which this can happen on purpose.  For
-example, the ACPI spec does not provide a way to get a trip hysteresis
-from the platform firmware and instead it recommends the firmware to
-update the trip temperature every time it is crossed on the way up in
-order to implement hysteresis.
+Regards,
+Bjorn
 
-> >> +
-> >> +       tze =3D list_first_entry(&dfs->tz.tz_events, struct tz_events,=
- node);
-> >> +       tze->trip_stats[trip_id].timestamp =3D now;
-> >> +       tze->trip_stats[trip_id].max =3D max(tze->trip_stats[trip_id].=
-max, temperature);
-> >> +       tze->trip_stats[trip_id].min =3D min(tze->trip_stats[trip_id].=
-min, temperature);
-> >> +       tze->trip_stats[trip_id].avg =3D tze->trip_stats[trip_id].avg =
-+
-> >> +               (temperature - tze->trip_stats[trip_id].avg) /
-> >> +               tze->trip_stats[trip_id].count;
-> >> +
-> >> +       mutex_unlock(&dfs->lock);
-> >> +}
->
->
->
-> --
+> > +
+> > +&gmu {
+> > +	status = "okay";
+> > +};
+> > +
+> > +&gpu {
+> > +	status = "okay";
+> > +
+> > +	zap-shader {
+> > +		memory-region = <&gpu_mem>;
+> > +		firmware-name = "qcom/sa8295p/a690_zap.mbn";
+> > +	};
+> > +};
+> > +
+> > +&gpu_smmu {
+> > +	status = "okay";
+> > +};
+> Already enabled
+> 
+> 
+> Konrad
 
