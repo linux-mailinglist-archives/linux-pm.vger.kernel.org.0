@@ -1,126 +1,129 @@
-Return-Path: <linux-pm+bounces-1604-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1605-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC17381EE51
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 11:47:46 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F1B181EE89
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 12:15:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 86C50283F25
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 10:47:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C71DAB21AD5
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 11:15:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8988837143;
-	Wed, 27 Dec 2023 10:47:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34B10446AD;
+	Wed, 27 Dec 2023 11:15:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fqWLKCqA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pP9RBZ+D"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF75544369
-	for <linux-pm@vger.kernel.org>; Wed, 27 Dec 2023 10:47:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-40d5aa35b60so10043545e9.0
-        for <linux-pm@vger.kernel.org>; Wed, 27 Dec 2023 02:47:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703674059; x=1704278859; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MlgTvlJqMJTSMAgZlyM/SdpxyUCvvDL0/QaBMMYPmM8=;
-        b=fqWLKCqAIUrlBooOxbkIwWihKiNwEZuOTBOtAxrZwLTGFGQaLgTO2f5kV9h3jBsoe2
-         N9fD338M90oz89b6tSSDRodsLwLvpeH0bPQ5pg09IWb/H4gP3E+87U7nV5bk6U5D+9/I
-         CwJZviHPrUPo8eEA/Z5x9BtkDWDsbZIg0aMzEYUwJWNCoA6SoDXAgcRzo8ojuWVkRnFS
-         BbHK46FWgSrNzaYxZ1oU1/4BKX2OCdt68fka+tEMIy5RvfBCuA9mcG0P2TTUBmnqgyRj
-         agpypAEXZDrft8SQQD55dQr965RIHJf+PU78tKuZBhlIKKrpdLFuQYyyqdp0EZGXCkoG
-         xZ5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703674059; x=1704278859;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MlgTvlJqMJTSMAgZlyM/SdpxyUCvvDL0/QaBMMYPmM8=;
-        b=lmzi52Agcz8LkclcR1/U99b8JL13jbUK8QWxjFn9XS8nLFPZu5qrcLi6zHVpge6uwU
-         V839HonA2VB/f1lrQhegYOHp1EJPVkY6SvQx0srXQZ1lCC9Ie5MGPCrrsPe+0Lqa2Fxb
-         /9YP9sta84boJEkrsOl8cc0O1lMHIdaNl1oXn7IOIM6+211LCPFd6/ktb6os+4A1/PN8
-         U/pMBlWlr241rlHxhOrBX/gORol4QzFhGnGZ3pPiVHAlRWDw1X2FuYIJCAL6WNNhULDF
-         4CZ44sGxw9AoXEY5l2Nglu/ACEBfvdS5GT2tv4vNsG0dyv2Z7Z0ilAlJYgyVQFcOVGHB
-         b0AQ==
-X-Gm-Message-State: AOJu0Ywm5LqxEPqiwdwIzDxOHBTx/4H0jKNnpS752uL0Du+HQuwSaqJD
-	MsjQAchLgfwYBL7T49fVdEZH+7FG16Lq1A==
-X-Google-Smtp-Source: AGHT+IFbKXKT+wevKTLRZZAlgFNY60Qg5hIT2Sdi7sJMqq+4+SDgc6GuEnGfTZCpjtKirGEr35CyDA==
-X-Received: by 2002:a05:600c:5405:b0:40d:2d25:b8ee with SMTP id he5-20020a05600c540500b0040d2d25b8eemr2312408wmb.171.1703674059167;
-        Wed, 27 Dec 2023 02:47:39 -0800 (PST)
-Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id j36-20020a05600c1c2400b0040d5bc2ea43sm3997602wms.31.2023.12.27.02.47.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Dec 2023 02:47:38 -0800 (PST)
-Message-ID: <6a759144-2e0a-4d86-ae01-c67ebb347fd5@linaro.org>
-Date: Wed, 27 Dec 2023 11:47:34 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF88E44396;
+	Wed, 27 Dec 2023 11:15:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 354F6C433C8;
+	Wed, 27 Dec 2023 11:15:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1703675723;
+	bh=Gy+D+S27rQJBs12wlJEa+cumgsdCkF3P6tKjEyxVt5s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pP9RBZ+DfqI9ufbs6J2xz/FKM0nY4Pwf02G34GG/l91DTZu2tk+J7E60zTnEhjPL3
+	 qZpNUMit64mYzbAtmwb9KGD6zaz5A40god5gLykenVaCm2sXCYmzeuPBwh81SyO6PE
+	 Bmza1w3YIvrK9XpCQ1ll0SBpVNNIbPKuiFHL1di27kuvrOtBBRDVMYxJBl9aC9WXFF
+	 MVkAcY36NePVzE7QE5kh7q0qI8bFlVKwHv5Lb87s+QQdATKl+4EzU0nNeZCmAVTbhm
+	 BIC374HdlJLWXGEfqtrC7dzBPDecYaAPxTeXEnoldydMWpAyK6aa7O4FdWU6pXS3QV
+	 BU1AUG2sovIcQ==
+Date: Wed, 27 Dec 2023 12:15:14 +0100
+From: Lorenzo Pieralisi <lpieralisi@kernel.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "Russell King (Oracle)" <linux@armlinux.org.uk>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+	x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
+	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	jianyong.wu@arm.com, justin.he@arm.com,
+	James Morse <james.morse@arm.com>
+Subject: Re: [PATCH RFC v3 13/21] ACPICA: Add new MADT GICC flags fields
+Message-ID: <ZYwHQgdGGGVkwmJ8@lpieralisi>
+References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
+ <E1rDOgs-00Dvko-6t@rmk-PC.armlinux.org.uk>
+ <20231215162322.00007391@Huawei.com>
+ <ZXyEiHLFBsoUkfNI@shell.armlinux.org.uk>
+ <ZYAPhlwPUT/7dN4n@lpieralisi>
+ <CAJZ5v0hyUqJspPbGTgTMSVHVBe=wHR6swPx-O3UcsH5dXDFpTA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/2] thermal/debugfs: Add thermal cooling device
- debugfs information
-Content-Language: en-US
-To: rjw@rjwysocki.net, lukasz.luba@arm.com
-Cc: rui.zhang@intel.com, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20231227102643.2655651-1-daniel.lezcano@linaro.org>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20231227102643.2655651-1-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0hyUqJspPbGTgTMSVHVBe=wHR6swPx-O3UcsH5dXDFpTA@mail.gmail.com>
 
-On 27/12/2023 11:26, Daniel Lezcano wrote:
+On Mon, Dec 18, 2023 at 02:14:30PM +0100, Rafael J. Wysocki wrote:
+> On Mon, Dec 18, 2023 at 10:23 AM Lorenzo Pieralisi
+> <lpieralisi@kernel.org> wrote:
+> >
+> > On Fri, Dec 15, 2023 at 04:53:28PM +0000, Russell King (Oracle) wrote:
+> > > On Fri, Dec 15, 2023 at 04:23:22PM +0000, Jonathan Cameron wrote:
+> > > > On Wed, 13 Dec 2023 12:50:18 +0000
+> > > > Russell King (Oracle) <rmk+kernel@armlinux.org.uk> wrote:
+> > > >
+> > > > > From: James Morse <james.morse@arm.com>
+> > > > >
+> > > > > Add the new flag field to the MADT's GICC structure.
+> > > > >
+> > > > > 'Online Capable' indicates a disabled CPU can be enabled later. See
+> > > > > ACPI specification 6.5 Tabel 5.37: GICC CPU Interface Flags.
+> > > > >
+> > > > > Signed-off-by: James Morse <james.morse@arm.com>
+> > > > > Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> > > > > Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
+> > > > > Tested-by: Jianyong Wu <jianyong.wu@arm.com>
+> > > > > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> > > >
+> > > > I see there is an acpica pull request including this bit but with a different name
+> > > > For reference.
+> > > > https://github.com/acpica/acpica/pull/914/commits/453a5f67567786522021d5f6913f561f8b3cabf6
+> > > >
+> > > > +CC Lorenzo who submitted that.
+> > >
+> > > > > +#define ACPI_MADT_GICC_CPU_CAPABLE      (1<<3)   /* 03: CPU is online capable */
+> > > >
+> > > > ACPI_MADT_GICC_ONLINE_CAPABLE
+> > >
+> > > It's somewhat disappointing, but no big deal. It's easy enough to change
+> > > "irqchip/gic-v3: Add support for ACPI's disabled but 'online capable' CPUs"
+> > > to use Lorenzo's name when that patch hits - and it becomes one less
+> > > patch in this patch set when Lorenzo's change eventually hits mainline.
+> > >
+> > > Does anyone know how long it may take for Lorenzo's change to get into
+> > > mainline? Would it be by the 6.8 merge window or the following one?
+> >
+> > I wish I knew. I submitted ACPICA changes for the online capable bit
+> > since I had to add additional flags on top (ie DMA coherent) and it
+> > would not make sense to submit the latter without the former.
+> >
+> > I'd be great if the ACPICA headers can make it into Linux for the upcoming
+> > merge window, not sure what I can do to fasttrack the process though
+> > (I shall ping the maintainers).
+> 
+> If your upstream pull request has been merged, I can pick up Linux
+> patches carrying Link: tags pointing to the upstream ACPICA commits in
+> that pull request.
 
-[ ... ]
+ACPICA PR was merged, sent the Linuxized version along with the GIC changes
+here:
 
-> +void thermal_set_delay_jiffies(unsigned long *delay_jiffies, int delay_ms)
->   {
-> -	if (cdev->ops->set_cur_state(cdev, target))
-> -		return;
-> +	*delay_jiffies = msecs_to_jiffies(delay_ms);
-> +	if (delay_ms > 1000)
-> +		*delay_jiffies = round_jiffies(*delay_jiffies);
-> +}
+https://lore.kernel.org/lkml/20231227110038.55453-1-lpieralisi@kernel.org
 
-Please ignore this version. I forgot to remove this unrelated change 
-from a previous test.
-
-> +
-> +static int thermal_cdev_set_cur_state(struct thermal_cooling_device *cdev, int state)
-> +{
-> +	int ret;
->   
-> -	thermal_notify_cdev_state_update(cdev->id, target);
-> -	thermal_cooling_device_stats_update(cdev, target);
-> +	/*
-> +	 * No check is needed for the ops->set_cur_state as the
-> +	 * registering function checked the ops are correctly set
-> +	 */
-> +	ret = cdev->ops->set_cur_state(cdev, state);
-> +	if (!ret) {
-> +		thermal_notify_cdev_state_update(cdev->id, state);
-> +		thermal_cooling_device_stats_update(cdev, state);
-> +		thermal_debug_cdev_state_update(cdev, state);
-> +	}
-> +
-> +	return ret;
-
-[ ... ]
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Thanks,
+Lorenzo
 
