@@ -1,65 +1,65 @@
-Return-Path: <linux-pm+bounces-1611-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1612-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D516E81EFB6
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 16:19:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A1FD81EFBB
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 16:21:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 560DB1F2179F
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 15:19:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD79B283585
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 15:21:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB2DD45956;
-	Wed, 27 Dec 2023 15:19:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1E4A4595B;
+	Wed, 27 Dec 2023 15:21:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cnDMjclf"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SAvW12Uj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3409945957
-	for <linux-pm@vger.kernel.org>; Wed, 27 Dec 2023 15:18:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBD3A45957
+	for <linux-pm@vger.kernel.org>; Wed, 27 Dec 2023 15:21:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a26fbc3b9f2so202425866b.3
-        for <linux-pm@vger.kernel.org>; Wed, 27 Dec 2023 07:18:58 -0800 (PST)
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-50e7c6f0487so1813874e87.3
+        for <linux-pm@vger.kernel.org>; Wed, 27 Dec 2023 07:21:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703690337; x=1704295137; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1703690496; x=1704295296; darn=vger.kernel.org;
         h=cc:to:message-id:content-transfer-encoding:mime-version:subject
          :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mLqxqDFp3g+3ctBYsDTo10ZcgpJFg083E8N42zGHui8=;
-        b=cnDMjclfrAtGi/lioxq7wyTONEk9+6IkpcRrhimtTkpBi+c0wJ/gtqGG+RBT6aQah8
-         husp6Z5F8Y9vpRk9VSI1EbrETCCl/6ybnxRN8YBj29s/p974UDJH/jo5/XPN0mP1BEbP
-         zHBU3CuFdzyV/6PGyCjGueOmqo/5ZwKbtopjV+7/jzCPTaIh18TPI5gb/LyodqkEnK87
-         pM1/3gqm5y1FbUS1eF6rh3jSUIByKksvb7m5TZ6+0ix6Ye+i9jx2ArhXH7CYAr5MnKfE
-         jBJ9KnXiADQzzfqh6LAEl3XxswIu9n3SdZ4te2FN0PIDOmqityuiuOMlDRpqgbj1A5i8
-         7kkQ==
+        bh=FCTlaMTC6ywPq5vAUIrnIqVxtGJdBQu5ZEYw3o8dV44=;
+        b=SAvW12UjadP4Jtx3TP4b4E6kR5qd039f/Rdi/ohC1L28pv38KAAxQIJpMOrdAc2zI6
+         guQ/Jr9OEnN8VFXxpjoth1628MdxOUv9HRCxbyNWcgkqrV/bI7bveFeZ5CXCa5A3v0JV
+         Cte2a22EbHYWntG8Npjh+WMtDYYZoau/qGRiJNUL3OVdkN28GO/oZPdBrCz6hJsqIspW
+         zr4PiO8vQcU9a1lWZeu46kvxGUWktojSuvDViI2tpORQN1SWDQBb0qcf6acjppvh0fkt
+         ppSIyAbKHZ2b4o/bDcah+NIScxgLdvxmx4yRNVrYCbAOWKtrssaLlaqCs+zUiU12web3
+         EJuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703690337; x=1704295137;
+        d=1e100.net; s=20230601; t=1703690496; x=1704295296;
         h=cc:to:message-id:content-transfer-encoding:mime-version:subject
          :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=mLqxqDFp3g+3ctBYsDTo10ZcgpJFg083E8N42zGHui8=;
-        b=CqoyfDasDEA++aoQr0URzAgzSJoKtkm6tac0IANZEnhwO7TtvdPuZIJqmcodBs55lR
-         fTuVZM0xCnnZ7THPblYtcrvwlQyQJwUbfE9MK4gVwEdXQgg51NF/oigaFBntjc6HivEp
-         bBbMCEgvUZYJ1aImBla4vQl+m5SSuPsbgBSnuh6gPYcAUUBWx0abuLB0P1OfJVgezazk
-         EZnnQGcDIP4Fcv1CFdMrE6Lw2vyaqDXi4vfcBNKR7HNsw+N2EUs6a5dntIu72c6/x9Vn
-         jUIFFejACbL/qQKc1qJlPGmDQ63Qn0FvYr09z9gFkzvHj9us5wPv3LIrdpWIszeiEXzl
-         WlAg==
-X-Gm-Message-State: AOJu0YxuYoTfPlwi25a3jI9zgKupZREHBCO7TLvmeSHdQXBxWEO9iNWm
-	DJJyyDIPtIte0YHe7Nvj+72qI5yi6S+i/oUHPnmPPZ+SREA=
-X-Google-Smtp-Source: AGHT+IEaKfAy25WQK5eNyuq98+hX1R8ubfyxj5LoJG9Q7+1uQ/ZypYr7jJNdkN01lBGF2xlwWxDSkQ==
-X-Received: by 2002:a17:906:73c6:b0:a27:59a1:e0a2 with SMTP id n6-20020a17090673c600b00a2759a1e0a2mr262385ejl.29.1703690337230;
-        Wed, 27 Dec 2023 07:18:57 -0800 (PST)
+        bh=FCTlaMTC6ywPq5vAUIrnIqVxtGJdBQu5ZEYw3o8dV44=;
+        b=X1tkmElzoXXiziti7mIzaiUChvVNloQTbe3eLNl/QsGn6pzN6MfP7UgQ72OljqS7kG
+         hNrIeoey5jCOS4/vJeUnPY/LuZTMVlfwFGVfaKlMjmfLwkrKUD0m373QLkRMvk08gNVc
+         gxtEb0JUeZrEpNVmJdPZfLTUDuKWm3bj3i3gJK9IcDERcNXLz17QIPbTog/1gODm3hDf
+         BM2of+/xAFgWiow2Ic/m/QJsU1FHXdXedvxtZ/0imthohyvMyBve0pg00aqyyyYFpx2L
+         +AIdrRjhZR3Gdw0EdtC7lAbVaq5Lc63CtAGhapTTx/b3xm+UolfIhY5J1UiaPAmIRtRv
+         WF+A==
+X-Gm-Message-State: AOJu0YzXuENiOlhzHov1psuFLQpwweKfHpLEAq13fX98FeWAni4zj1Pz
+	b4RPuDBUQqoZGcGfySNyZgt/0VUUSSMo0kO364PKOmzIL9w=
+X-Google-Smtp-Source: AGHT+IFdd1QhiPuQjlqF75Iukcq0/Hgg8WvxFxPm1Kf7M+zTLkMWtqVmTb9QfIGuiphU+bY3qds3vQ==
+X-Received: by 2002:a05:6512:3444:b0:50e:79a5:5462 with SMTP id j4-20020a056512344400b0050e79a55462mr1091958lfr.199.1703690489681;
+        Wed, 27 Dec 2023 07:21:29 -0800 (PST)
 Received: from [10.167.154.1] (178235179028.dynamic-4-waw-k-1-3-0.vectranet.pl. [178.235.179.28])
-        by smtp.gmail.com with ESMTPSA id gi16-20020a1709070c9000b00a19b7362dcfsm6652072ejc.139.2023.12.27.07.18.56
+        by smtp.gmail.com with ESMTPSA id i15-20020a05640200cf00b0055404e08589sm8686015edu.85.2023.12.27.07.21.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Dec 2023 07:18:56 -0800 (PST)
+        Wed, 27 Dec 2023 07:21:29 -0800 (PST)
 From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Date: Wed, 27 Dec 2023 16:18:54 +0100
-Subject: [PATCH] pmdomain: core: Print a message when unused power domains
- are disabled
+Date: Wed, 27 Dec 2023 16:21:24 +0100
+Subject: [PATCH] pmdomain: core: Move the unused cleanup to a _sync
+ initcall
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -68,49 +68,52 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231227-topic-pmdomain_spam-v1-1-ff0410086b36@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAF1AjGUC/x2N2wrCQAwFf6Xk2UAbQcVfEZHsNmsD3QsbFaH03
- w0+zhyGs4FJVzG4Dht0+ahpLQ7TYYC4cHkK6uwMNNJxIjrjqzaN2PJcM2t5WOOMJJeTbyGNlMD
- LwCYYOpe4eFve6+qydUn6/V/d7vv+A074gn56AAAA
-To: Ulf Hansson <ulf.hansson@linaro.org>
+Message-Id: <20231227-topic-pmdomain_sync_cleanup-v1-1-5f36769d538b@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAPNAjGUC/x2NQQqDMBAAvyJ7bsAkBaFfKUXWzVoX4iYkVVrEv
+ zd4nDnMHFC5CFd4dAcU3qVK0gb21gEtqG82EhqD6523zg3mk7KQyWtIK4qO9ac0UmTULRvkwYf
+ +br1nglaYsLKZCiotraFbjE3mwrN8r+XzdZ5/bny/9oIAAAA=
+To: Ulf Hansson <ulf.hansson@linaro.org>, Kevin Hilman <khilman@linaro.org>, 
+ "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
 Cc: Marijn Suijten <marijn.suijten@somainline.org>, 
  linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Bjorn Andersson <andersson@kernel.org>, 
  Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1703690336; l=954;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1703690488; l=993;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=HOZ0tQ5XhpJRiYiK8g2v+oe13TgirBOq/Tfiaulf0Ik=;
- b=nysMJgbMvUy50OtruHiNQ2kL3c7am2LQt/62JQFIG7jsF27bNqouTR0XbOwsJUFbqapBgK5HA
- Zm7WZGoaxbWBI0r0Luv5UOKGQ4u3mM3mQVBee9h8DFA/PBWQf04fg+o
+ bh=UYTPDXSMwDDqu5IXgCZ/QHkjN8Hb0RJgrRT9Yhl3fv0=;
+ b=mGKEdP6m2Uc4DcAcbnyehLbza9hmdquGTiwedUuAj4jTyVcMOnntnhEQHlsF726/wEs7AwxHt
+ 6e4I2PclHqMCfu1lAs+L+KiMCqnI0FqHbZrOnCpDQ9e1EktsvHlJr8W
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 
-In a similar spirit to commit 12ca59b91d04 ("clk: Print an info line
-before disabling unused clocks"), print the message in both ignore AND
-cleanup cases to better inform the user (and more importantly, the
-developer) when it happens.
+The unused clock cleanup uses the _sync initcall to give all users at
+earlier initcalls time to probe. Do the same to avoid leaving some PDs
+dangling at "on" (which actually happened on qcom!).
 
+Fixes: 2fe71dcdfd10 ("PM / domains: Add late_initcall to disable unused PM domains")
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/pmdomain/core.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/pmdomain/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-index a1f6cba3ae6c..69902797a5bb 100644
+index a1f6cba3ae6c..18e232b5ed53 100644
 --- a/drivers/pmdomain/core.c
 +++ b/drivers/pmdomain/core.c
-@@ -1100,6 +1100,7 @@ static int __init genpd_power_off_unused(void)
- 		return 0;
- 	}
+@@ -1109,7 +1109,7 @@ static int __init genpd_power_off_unused(void)
  
-+	pr_info("genpd: Disabling unused power domains\n");
- 	mutex_lock(&gpd_list_lock);
+ 	return 0;
+ }
+-late_initcall(genpd_power_off_unused);
++late_initcall_sync(genpd_power_off_unused);
  
- 	list_for_each_entry(genpd, &gpd_list, gpd_list_node)
+ #ifdef CONFIG_PM_SLEEP
+ 
 
 ---
 base-commit: 39676dfe52331dba909c617f213fdb21015c8d10
-change-id: 20231227-topic-pmdomain_spam-2e86227bf02f
+change-id: 20231227-topic-pmdomain_sync_cleanup-ae73d04133ec
 
 Best regards,
 -- 
