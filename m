@@ -1,82 +1,76 @@
-Return-Path: <linux-pm+bounces-1618-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1619-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F67181F10A
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 18:45:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA52881F174
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 19:58:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 515A12817AF
-	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 17:45:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C8B51F23076
+	for <lists+linux-pm@lfdr.de>; Wed, 27 Dec 2023 18:58:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C8F64652F;
-	Wed, 27 Dec 2023 17:45:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA5DF4645A;
+	Wed, 27 Dec 2023 18:58:31 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09C8746524;
-	Wed, 27 Dec 2023 17:45:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-6dbca8c6eeeso1109332a34.1;
-        Wed, 27 Dec 2023 09:45:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703699102; x=1704303902;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IijGyDJlNdIFWsVBwI/OZtAC73/0ucV8TiF4nNbafsQ=;
-        b=N2FQakHUnSzgkmI4UylhwnWI0grw/x5uddZG+Ie9Md6qgAhabr5ytiboTFjafwGBEL
-         hyXpw5PaSHBsjrCvJhXsoZhQaVmI1w8EWBtt/xQp3BjModg/fsERmNCzUxM9s9htlU5m
-         xBKx8Io/ENa6ZYiLIXCb3zD4cUZE+UK8AnuU+m/B0S7FiIXEaRW/r+udt0okMUcRFXjy
-         I8mBYUHEod/vtEi7pLXaQtMrE6UoWy0zY+VUAuVUilVBv7lpLjKZrKvT2ohtCBao4wFN
-         pXj3eiCt/JOIfY7ZW+t2WHCg1l1GssZ6SGrYQjYCiAYHuXx5z+w+/YkXWC4dJ5RnuIrx
-         ckjA==
-X-Gm-Message-State: AOJu0YxkMDc5cavLkp9LuJ1LUyyAYqe0s0l7XWkMh0yxWKIqUdAEsoj/
-	5ONY9Q9C1TJ2qVdqQw11OWGT2gPj8HdIiNHxI+c=
-X-Google-Smtp-Source: AGHT+IHb5kyfPFFrbWmVJ2RKCSVFIpUezeFpLAGOrixJNax43QJUV3Usr6dq4uaUlo3cci21w+6ciLzJkHZTV9jT6mU=
-X-Received: by 2002:a05:6820:358:b0:593:fbd5:10aa with SMTP id
- m24-20020a056820035800b00593fbd510aamr12501632ooe.1.1703699102027; Wed, 27
- Dec 2023 09:45:02 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A81A20306;
+	Wed, 27 Dec 2023 18:58:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
+ id 67a3122417753e74; Wed, 27 Dec 2023 19:58:27 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 9C90D668E12;
+	Wed, 27 Dec 2023 19:58:26 +0100 (CET)
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Youngmin Nam <youngmin.nam@samsung.com>, Greg KH <gregkh@linuxfoundation.org>
+Cc: rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, d7271.choe@samsung.com, janghyuck.kim@samsung.com, hyesoo.yu@samsung.com
+Subject: Re: [BUG] mutex deadlock of dpm_resume() in low memory situation
+Date: Wed, 27 Dec 2023 19:58:26 +0100
+Message-ID: <5755916.DvuYhMxLoT@kreacher>
+In-Reply-To: <5754861.DvuYhMxLoT@kreacher>
+References: <CGME20231227084252epcas2p3b063f7852f81f82cd0a31afd7f404db4@epcas2p3.samsung.com> <2023122701-mortify-deed-4e66@gregkh> <5754861.DvuYhMxLoT@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CGME20231227084252epcas2p3b063f7852f81f82cd0a31afd7f404db4@epcas2p3.samsung.com>
- <ZYvjiqX6EsL15moe@perf> <2023122701-mortify-deed-4e66@gregkh>
-In-Reply-To: <2023122701-mortify-deed-4e66@gregkh>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 27 Dec 2023 18:44:51 +0100
-Message-ID: <CAJZ5v0hGd0LzaBkiPYV3D7fnTm9aVOn6eT84q-_r1Rr-1Vupow@mail.gmail.com>
-Subject: Re: [BUG] mutex deadlock of dpm_resume() in low memory situation
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Youngmin Nam <youngmin.nam@samsung.com>, rafael@kernel.org, len.brown@intel.com, 
-	pavel@ucw.cz, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	d7271.choe@samsung.com, janghyuck.kim@samsung.com, hyesoo.yu@samsung.com
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrvddvledguddvtdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopedutddprhgtphhtthhopeihohhunhhgmhhinhdrnhgrmhesshgrmhhsuhhnghdrtghomhdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhgvnhdrsghrohifnhesihhnthgvlhdrtghomhdprhgtphhtthhopehprghvvghlsehutgifrdgt
+ iidprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=10 Fuz1=10 Fuz2=10
 
-On Wed, Dec 27, 2023 at 5:08=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
-> wrote:
->
-> On Wed, Dec 27, 2023 at 05:42:50PM +0900, Youngmin Nam wrote:
-> > Could you look into this issue ?
->
-> Can you submit a patch that resolves the issue for you, as you have a
-> way to actually test this out?  That would be the quickest way to get it
-> resolved, and to help confirm that this is even an issue at all.
+On Wednesday, December 27, 2023 7:39:20 PM CET Rafael J. Wysocki wrote:
+> On Wednesday, December 27, 2023 5:08:40 PM CET Greg KH wrote:
+> > On Wed, Dec 27, 2023 at 05:42:50PM +0900, Youngmin Nam wrote:
+> > > Could you look into this issue ?
+> > 
+> > Can you submit a patch that resolves the issue for you, as you have a
+> > way to actually test this out?  That would be the quickest way to get it
+> > resolved, and to help confirm that this is even an issue at all.
+> 
+> Something like the appended patch should be sufficient to address this AFAICS.
+> 
+> I haven't tested it yet (will do so shortly), so all of the usual disclaimers
+> apply.
+> 
+> I think that it can be split into 2 patches, but for easier testing here
+> it goes in one piece.
 
-This is a real problem, unfortunately, and the fix would require some
-infra changes AFAICS.
+Well, please scratch this, it will not handle "async" devices properly.
 
-To address it, we would need a variant of async_schedule_node_domain()
-that would bail out on low memory instead of attempting to run the
-stuff synchronously which is harmful (not just for the deadlock
-reason) in the suspend-resume paths.
 
-I'll try to cut a test patch shortly.
+
 
