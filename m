@@ -1,324 +1,134 @@
-Return-Path: <linux-pm+bounces-1645-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1646-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D70E81F7E1
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 12:43:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D11081F7FE
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 12:58:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD7B42818D8
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 11:43:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C8829284E54
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 11:58:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5D82F507;
-	Thu, 28 Dec 2023 11:42:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="O4tR9mqM"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B6136FD6;
+	Thu, 28 Dec 2023 11:58:13 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3FB1DF41
-	for <linux-pm@vger.kernel.org>; Thu, 28 Dec 2023 11:42:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2cc3f5e7451so63560151fa.2
-        for <linux-pm@vger.kernel.org>; Thu, 28 Dec 2023 03:42:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703763737; x=1704368537; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RRWMu59rNtOPUlLCcrLwZ/1N45+kXoQ242BxKmPWGXk=;
-        b=O4tR9mqMIFhQHGhTLjYwRlVx+WggfHYUFyWw6FGQ9WuqEXwNZ3mTH9Dz8nRXkFt358
-         cbC/UcmdxflrVvR+2fUZ8O5v4I7/E2mVQwLqjA7jVCcgGv/7d97LUnx0NdjMD/L9jEuS
-         X46La8hsQI0zEZUVHI/o6FKAOf/uq3OqmXRKaevglGpIKcaix67l5aFxPJpjGTHqf2V8
-         aKKYYsQMVNmjpxPAR7IIrVHptBgpzvOWSOXA7L2jUHN7tdAOcbpcGNC4Mtg4ihIJyk4H
-         19l7w7RUQGEMSqLbjhe9QgfT/63iUbra8lhkScD0XNFKizTqzQwXWiEah7YexvROKZn5
-         AV7g==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFCFB79C6
+	for <linux-pm@vger.kernel.org>; Thu, 28 Dec 2023 11:58:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-593f182f263so1263276eaf.0
+        for <linux-pm@vger.kernel.org>; Thu, 28 Dec 2023 03:58:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703763737; x=1704368537;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1703764691; x=1704369491;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=RRWMu59rNtOPUlLCcrLwZ/1N45+kXoQ242BxKmPWGXk=;
-        b=GBRwE7vvLcfQn7uN3hHJs7rmZ7GjAsowYwm+LjVyjviHRibkwwwqvh8CIBSZ2y4N1g
-         3IFOFCKiOvxEY1LS96I3OCbFVtt9Kv5r2aJVwhQj4lb99TjG+h2eJCIiFSQOd6DgGtjn
-         by5iewUEYJrBEhuk6zMbiCS6s6SLHFN5rWOatHpyJfpHzpI4ftoaW2J1t0LCwfN3LLs3
-         wEOiXDeHT22OFT2xNDZlQHZ8or4PDsb6X/lkJhFM/PuDraueusFCtPv5tujrirDTIq1r
-         HGwtnU0hnCY5adArWqZE5xRNEUCVW8bWtFkg1s+bzLxTa0NBx7EFSpDZj/saPKpWx4Cm
-         pVhA==
-X-Gm-Message-State: AOJu0YwwXaP2iXzF99jhPlvQzdB9fMJvCUkXBBtC1egXZDhd67lk6OzZ
-	StzQlNS7OlIH02Bt/g1dPY1pKGNc5HpMLoLXLsR+z1jEKiw=
-X-Google-Smtp-Source: AGHT+IEGzGB4z4Zc+psjuJqw8mmLq0GXxPnow0cjVenT3tWn/Hx/mVE1ghf3ErO/f9Ux27PrNfG/bg==
-X-Received: by 2002:a2e:868c:0:b0:2cc:d7a7:8ecb with SMTP id l12-20020a2e868c000000b002ccd7a78ecbmr1483887lji.16.1703763736825;
-        Thu, 28 Dec 2023 03:42:16 -0800 (PST)
-Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id a4-20020a05651c210400b002cc32fbe2e5sm2792867ljq.51.2023.12.28.03.42.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Dec 2023 03:42:16 -0800 (PST)
-From: Ulf Hansson <ulf.hansson@linaro.org>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	linux-pm@vger.kernel.org
-Cc: Ulf Hansson <ulf.hansson@linaro.org>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Kevin Hilman <khilman@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Nikunj Kela <nkela@quicinc.com>,
-	Prasad Sodagudi <psodagud@quicinc.com>,
-	Stephan Gerhold <stephan@gerhold.net>,
-	Ben Horgan <Ben.Horgan@arm.com>,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-remoteproc@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-	Vikash Garodia <quic_vgarodia@quicinc.com>,
-	"Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
-Subject: [PATCH 5/5] media: venus: Convert to dev_pm_domain_attach|detach_list() for vcodec
-Date: Thu, 28 Dec 2023 12:41:57 +0100
-Message-Id: <20231228114157.104822-6-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231228114157.104822-1-ulf.hansson@linaro.org>
-References: <20231228114157.104822-1-ulf.hansson@linaro.org>
+        bh=vWvHOcapyI3VDJEZRgtkXEFnB+dZ+jZDayXlSDpRaXU=;
+        b=tpTAb5PG8DS3euuEPzTJ3WTPZnEJAUHQC6w2E4lZloOKUO1FhWlNQNyG6GuMfO9pyX
+         VxQdMuD0kGWzQHr7NtuiJgERNJNtgSuPDS0Tpg61fKpodwBNMYHGoM8njsbjEJvIt3QS
+         O8lfbdyAD78IFEMLgEBS3PdlOMuY0dgBfwpc0CPrqfXRuIquji2yIKBKZSeXUYnqcxUf
+         94PMt62yuUhBuN7fsw5UvnVCTpQPWps+rliEDg+CpAUBHSoXQaTq5kCyvWtNNZsyJRpp
+         j03fE5yTqLXN16Xr7HAdXOJw4HVvKEZopA90b3NpYspD/7AS28C+k+rw+uKecY7mB5So
+         QLsA==
+X-Gm-Message-State: AOJu0YzIMeWeBb9U/taXE+77/8PJJmVEY1kP2lzcnpUzZCzZF8/quzNC
+	g8nrBHNaTywYSMm9n+K0IYJdrOWru2dNJ1xfZys821OV
+X-Google-Smtp-Source: AGHT+IHrMUKq6bysUL1sqASxOH7ck45tAQXdTxR4oJfKOga54QSevGxoeSg1DNuHGb1yhpc3Ope1PBUui62/3cQdqsM=
+X-Received: by 2002:a4a:d1b0:0:b0:594:177d:8bd6 with SMTP id
+ z16-20020a4ad1b0000000b00594177d8bd6mr14423912oor.1.1703764690767; Thu, 28
+ Dec 2023 03:58:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20231228100248.180721-1-stanislaw.gruszka@linux.intel.com> <20231228100248.180721-2-stanislaw.gruszka@linux.intel.com>
+In-Reply-To: <20231228100248.180721-2-stanislaw.gruszka@linux.intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 28 Dec 2023 12:57:59 +0100
+Message-ID: <CAJZ5v0gMJFVZToWQPTNstQOpYF9+yDiMYk74dasGp5VWW_-ndA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] thermal: netlink: Add thermal_group_has_listeners()
+ helper
+To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Let's avoid some of the boilerplate code to manage the vcodec PM domains,
-by converting into using dev_pm_domain_attach|detach_list().
+On Thu, Dec 28, 2023 at 11:49=E2=80=AFAM Stanislaw Gruszka
+<stanislaw.gruszka@linux.intel.com> wrote:
+>
+> Add a helper function to check if there are listeners for
+> thermal_gnl_family multicast groups.
+>
+> For now use it to avoid unnecessary allocations and sending
+> thermal genl messages when there are no recipients.
+>
+> In the future, in conjunction with (not yet implemented) notification
+> of change in the netlink socket group membership, this helper can be
+> used to open/close hardware interfaces based on the presence of
+> user space subscribers.
+>
+> Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+> ---
+> v2: Do not return -ESRCH error when there are no listeners
 
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Stanimir Varbanov <stanimir.k.varbanov@gmail.com>
-Cc: Vikash Garodia <quic_vgarodia@quicinc.com>
-Cc: "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
-Cc: Bjorn Andersson <andersson@kernel.org>
-Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: <linux-media@vger.kernel.org>
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
- drivers/media/platform/qcom/venus/core.c      | 12 +++--
- drivers/media/platform/qcom/venus/core.h      |  7 ++-
- .../media/platform/qcom/venus/pm_helpers.c    | 48 +++++++------------
- 3 files changed, 26 insertions(+), 41 deletions(-)
+Both patches in the series look good to me.
 
-diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index 9cffe975581b..bd9b474280e4 100644
---- a/drivers/media/platform/qcom/venus/core.c
-+++ b/drivers/media/platform/qcom/venus/core.c
-@@ -16,6 +16,7 @@
- #include <linux/platform_device.h>
- #include <linux/slab.h>
- #include <linux/types.h>
-+#include <linux/pm_domain.h>
- #include <linux/pm_runtime.h>
- #include <media/videobuf2-v4l2.h>
- #include <media/v4l2-mem2mem.h>
-@@ -114,7 +115,8 @@ static void venus_sys_error_handler(struct work_struct *work)
- 	pm_runtime_put_sync(core->dev);
- 
- 	for (i = 0; i < max_attempts; i++) {
--		if (!core->pmdomains[0] || !pm_runtime_active(core->pmdomains[0]))
-+		if (!core->pmdomains ||
-+		    !pm_runtime_active(core->pmdomains->pd_devs[0]))
- 			break;
- 		usleep_range(1000, 1500);
- 	}
-@@ -705,7 +707,7 @@ static const struct venus_resources sdm845_res_v2 = {
- 	.vcodec0_clks = { "vcodec0_core", "vcodec0_bus" },
- 	.vcodec1_clks = { "vcodec1_core", "vcodec1_bus" },
- 	.vcodec_clks_num = 2,
--	.vcodec_pmdomains = { "venus", "vcodec0", "vcodec1" },
-+	.vcodec_pmdomains = (const char *[]) { "venus", "vcodec0", "vcodec1" },
- 	.vcodec_pmdomains_num = 3,
- 	.opp_pmdomain = (const char *[]) { "cx", NULL },
- 	.vcodec_num = 2,
-@@ -754,7 +756,7 @@ static const struct venus_resources sc7180_res = {
- 	.clks_num = 3,
- 	.vcodec0_clks = { "vcodec0_core", "vcodec0_bus" },
- 	.vcodec_clks_num = 2,
--	.vcodec_pmdomains = { "venus", "vcodec0" },
-+	.vcodec_pmdomains = (const char *[]) { "venus", "vcodec0" },
- 	.vcodec_pmdomains_num = 2,
- 	.opp_pmdomain = (const char *[]) { "cx", NULL },
- 	.vcodec_num = 1,
-@@ -811,7 +813,7 @@ static const struct venus_resources sm8250_res = {
- 	.resets_num = 2,
- 	.vcodec0_clks = { "vcodec0_core" },
- 	.vcodec_clks_num = 1,
--	.vcodec_pmdomains = { "venus", "vcodec0" },
-+	.vcodec_pmdomains = (const char *[]) { "venus", "vcodec0" },
- 	.vcodec_pmdomains_num = 2,
- 	.opp_pmdomain = (const char *[]) { "mx", NULL },
- 	.vcodec_num = 1,
-@@ -870,7 +872,7 @@ static const struct venus_resources sc7280_res = {
- 	.clks_num = 3,
- 	.vcodec0_clks = {"vcodec_core", "vcodec_bus"},
- 	.vcodec_clks_num = 2,
--	.vcodec_pmdomains = { "venus", "vcodec0" },
-+	.vcodec_pmdomains = (const char *[]) { "venus", "vcodec0" },
- 	.vcodec_pmdomains_num = 2,
- 	.opp_pmdomain = (const char *[]) { "cx", NULL },
- 	.vcodec_num = 1,
-diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-index 4a633261ece4..7ef341bf21cc 100644
---- a/drivers/media/platform/qcom/venus/core.h
-+++ b/drivers/media/platform/qcom/venus/core.h
-@@ -25,7 +25,6 @@
- 
- #define VIDC_CLKS_NUM_MAX		4
- #define VIDC_VCODEC_CLKS_NUM_MAX	2
--#define VIDC_PMDOMAINS_NUM_MAX		3
- #define VIDC_RESETS_NUM_MAX		2
- 
- extern int venus_fw_debug;
-@@ -72,7 +71,7 @@ struct venus_resources {
- 	const char * const vcodec0_clks[VIDC_VCODEC_CLKS_NUM_MAX];
- 	const char * const vcodec1_clks[VIDC_VCODEC_CLKS_NUM_MAX];
- 	unsigned int vcodec_clks_num;
--	const char * const vcodec_pmdomains[VIDC_PMDOMAINS_NUM_MAX];
-+	const char **vcodec_pmdomains;
- 	unsigned int vcodec_pmdomains_num;
- 	const char **opp_pmdomain;
- 	unsigned int vcodec_num;
-@@ -134,7 +133,7 @@ struct venus_format {
-  * @video_path: an interconnect handle to video to/from memory path
-  * @cpucfg_path: an interconnect handle to cpu configuration path
-  * @has_opp_table: does OPP table exist
-- * @pmdomains:	an array of pmdomains struct device pointers
-+ * @pmdomains:	a pointer to a list of pmdomains
-  * @opp_dl_venus: an device-link for device OPP
-  * @opp_pmdomain: an OPP power-domain
-  * @resets: an array of reset signals
-@@ -187,7 +186,7 @@ struct venus_core {
- 	struct icc_path *video_path;
- 	struct icc_path *cpucfg_path;
- 	bool has_opp_table;
--	struct device *pmdomains[VIDC_PMDOMAINS_NUM_MAX];
-+	struct dev_pm_domain_list *pmdomains;
- 	struct device_link *opp_dl_venus;
- 	struct device *opp_pmdomain;
- 	struct reset_control *resets[VIDC_RESETS_NUM_MAX];
-diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
-index a1b127caa90a..502822059498 100644
---- a/drivers/media/platform/qcom/venus/pm_helpers.c
-+++ b/drivers/media/platform/qcom/venus/pm_helpers.c
-@@ -455,7 +455,7 @@ static int poweroff_coreid(struct venus_core *core, unsigned int coreid_mask)
- 		if (ret)
- 			return ret;
- 
--		ret = pm_runtime_put_sync(core->pmdomains[1]);
-+		ret = pm_runtime_put_sync(core->pmdomains->pd_devs[1]);
- 		if (ret < 0)
- 			return ret;
- 	}
-@@ -471,7 +471,7 @@ static int poweroff_coreid(struct venus_core *core, unsigned int coreid_mask)
- 		if (ret)
- 			return ret;
- 
--		ret = pm_runtime_put_sync(core->pmdomains[2]);
-+		ret = pm_runtime_put_sync(core->pmdomains->pd_devs[2]);
- 		if (ret < 0)
- 			return ret;
- 	}
-@@ -484,7 +484,7 @@ static int poweron_coreid(struct venus_core *core, unsigned int coreid_mask)
- 	int ret;
- 
- 	if (coreid_mask & VIDC_CORE_ID_1) {
--		ret = pm_runtime_get_sync(core->pmdomains[1]);
-+		ret = pm_runtime_get_sync(core->pmdomains->pd_devs[1]);
- 		if (ret < 0)
- 			return ret;
- 
-@@ -502,7 +502,7 @@ static int poweron_coreid(struct venus_core *core, unsigned int coreid_mask)
- 	}
- 
- 	if (coreid_mask & VIDC_CORE_ID_2) {
--		ret = pm_runtime_get_sync(core->pmdomains[2]);
-+		ret = pm_runtime_get_sync(core->pmdomains->pd_devs[2]);
- 		if (ret < 0)
- 			return ret;
- 
-@@ -860,19 +860,18 @@ static int vcodec_domains_get(struct venus_core *core)
- 	struct device **opp_virt_dev;
- 	struct device *dev = core->dev;
- 	const struct venus_resources *res = core->res;
--	struct device *pd;
--	unsigned int i;
-+	struct dev_pm_domain_attach_data vcodec_data = {
-+		.pd_names = res->vcodec_pmdomains,
-+		.num_pd_names = res->vcodec_pmdomains_num,
-+		.pd_flags = PD_FLAG_NO_DEV_LINK,
-+	};
- 
- 	if (!res->vcodec_pmdomains_num)
- 		goto skip_pmdomains;
- 
--	for (i = 0; i < res->vcodec_pmdomains_num; i++) {
--		pd = dev_pm_domain_attach_by_name(dev,
--						  res->vcodec_pmdomains[i]);
--		if (IS_ERR_OR_NULL(pd))
--			return pd ? PTR_ERR(pd) : -ENODATA;
--		core->pmdomains[i] = pd;
--	}
-+	ret = dev_pm_domain_attach_list(dev, &vcodec_data, &core->pmdomains);
-+	if (ret < 0)
-+		return ret;
- 
- skip_pmdomains:
- 	if (!core->res->opp_pmdomain)
-@@ -896,30 +895,14 @@ static int vcodec_domains_get(struct venus_core *core)
- 	return 0;
- 
- opp_attach_err:
--	for (i = 0; i < res->vcodec_pmdomains_num; i++) {
--		if (IS_ERR_OR_NULL(core->pmdomains[i]))
--			continue;
--		dev_pm_domain_detach(core->pmdomains[i], true);
--	}
--
-+	dev_pm_domain_detach_list(core->pmdomains);
- 	return ret;
- }
- 
- static void vcodec_domains_put(struct venus_core *core)
- {
--	const struct venus_resources *res = core->res;
--	unsigned int i;
-+	dev_pm_domain_detach_list(core->pmdomains);
- 
--	if (!res->vcodec_pmdomains_num)
--		goto skip_pmdomains;
--
--	for (i = 0; i < res->vcodec_pmdomains_num; i++) {
--		if (IS_ERR_OR_NULL(core->pmdomains[i]))
--			continue;
--		dev_pm_domain_detach(core->pmdomains[i], true);
--	}
--
--skip_pmdomains:
- 	if (!core->has_opp_table)
- 		return;
- 
-@@ -1035,7 +1018,8 @@ static void core_put_v4(struct venus_core *core)
- static int core_power_v4(struct venus_core *core, int on)
- {
- 	struct device *dev = core->dev;
--	struct device *pmctrl = core->pmdomains[0];
-+	struct device *pmctrl = core->pmdomains ?
-+			core->pmdomains->pd_devs[0] : NULL;
- 	int ret = 0;
- 
- 	if (on == POWER_ON) {
--- 
-2.34.1
+Daniel, any objections?
 
+>
+>  drivers/thermal/thermal_netlink.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+> diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_=
+netlink.c
+> index aca36c4ddbf3..332052e24a86 100644
+> --- a/drivers/thermal/thermal_netlink.c
+> +++ b/drivers/thermal/thermal_netlink.c
+> @@ -76,6 +76,11 @@ typedef int (*cb_t)(struct param *);
+>
+>  static struct genl_family thermal_gnl_family;
+>
+> +static int thermal_group_has_listeners(enum thermal_genl_multicast_group=
+s group)
+> +{
+> +       return genl_has_listeners(&thermal_gnl_family, &init_net, group);
+> +}
+> +
+>  /************************** Sampling encoding **************************=
+*****/
+>
+>  int thermal_genl_sampling_temp(int id, int temp)
+> @@ -83,6 +88,9 @@ int thermal_genl_sampling_temp(int id, int temp)
+>         struct sk_buff *skb;
+>         void *hdr;
+>
+> +       if (!thermal_group_has_listeners(THERMAL_GENL_SAMPLING_GROUP))
+> +               return 0;
+> +
+>         skb =3D genlmsg_new(NLMSG_GOODSIZE, GFP_KERNEL);
+>         if (!skb)
+>                 return -ENOMEM;
+> @@ -280,6 +288,9 @@ static int thermal_genl_send_event(enum thermal_genl_=
+event event,
+>         int ret =3D -EMSGSIZE;
+>         void *hdr;
+>
+> +       if (!thermal_group_has_listeners(THERMAL_GENL_EVENT_GROUP))
+> +               return 0;
+> +
+>         msg =3D genlmsg_new(NLMSG_GOODSIZE, GFP_KERNEL);
+>         if (!msg)
+>                 return -ENOMEM;
+> --
+> 2.34.1
+>
+>
 
