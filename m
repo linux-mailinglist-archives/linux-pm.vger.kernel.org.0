@@ -1,124 +1,87 @@
-Return-Path: <linux-pm+bounces-1647-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1648-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BC7F81F83B
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 13:43:42 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0835981F8CF
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 14:23:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D0EAF2840F3
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 12:43:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 66D2EB2381E
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 13:23:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B161748F;
-	Thu, 28 Dec 2023 12:43:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WKozO4cT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E59508466;
+	Thu, 28 Dec 2023 13:23:19 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6014B748D
-	for <linux-pm@vger.kernel.org>; Thu, 28 Dec 2023 12:43:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-40d41555f9dso61919325e9.2
-        for <linux-pm@vger.kernel.org>; Thu, 28 Dec 2023 04:43:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703767413; x=1704372213; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MLFqGgO5Rfo6D6SMVC6Pxe2bC2kc4jtbsBPp02xvsvc=;
-        b=WKozO4cTv4JPggLCsuIZz/Y0bOUQnMRmCMuaUavpDRMZgJmPaiceTe+Fc4QawooPSa
-         eIAsTYXfFp/S5mGS0gjVTyjrNGEZ9hI3dcloaO9YbvYVBU9GGHGNnIP7aaBvZ5kDoRd+
-         9oloHITcOvwm3K4E5IV+0BLs9UTgSIcuH76DG3jL/0N26YvtMtHt52CplRTTjlz/EtZm
-         mcNWPy9LVabHCWcNqYem9FaOh1DtJWCR5pwMYq9k5EHAlJvEYzWVwlftLAmecAwnogg6
-         0rrNOELHQH9h4rZfXG9LqdTVaxkrojuyXiT3Zbdx8412G0g7oQgmIRw/mULK0fAuR3ZX
-         Jxmg==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97947D2FC;
+	Thu, 28 Dec 2023 13:23:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-6dbd87b706aso1105654a34.0;
+        Thu, 28 Dec 2023 05:23:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703767413; x=1704372213;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MLFqGgO5Rfo6D6SMVC6Pxe2bC2kc4jtbsBPp02xvsvc=;
-        b=KQeL7WLn/goKUhk3IGQc6N3tmEpg0aoArcuhD9p/5F2SW1oYcwoPC2h8vxsonH8ZaU
-         rMzmrgxlm3BsS9SzMaAB09feRbQr5FCkpbWrdVekjRshWswCUUyC+KgRZe/GWZZz2TkL
-         8l+eRF4tV+RQsy8kBOEAfuvgk6CmW/H+/BS9QegNl3hTCoFPymDwfrMgj+f4U66cxU3H
-         mpM1F0h4P7S746uy0zxVWBTVC9BsFxiqajeSw91ZnZYmXF/gqbp6XE3UeTU9CZnX4MTf
-         W6cPPu2uNe6F4alBGSNiCDZRIHq+nyd7172jPjuITUHAeLX6Tq8t8Gss/iM8zrbTftSg
-         h7wA==
-X-Gm-Message-State: AOJu0YyKW1feOSyXnz+BpJwCmPN2FCb+3BWlYwbTiVyDFww/fWDVvcRd
-	QuiPXGdrzp6UoFAP0a920YS6GO6TAcEoNw==
-X-Google-Smtp-Source: AGHT+IHfsJHKnHc0x4DUPZ06hq8imSM6ayeTWyJLb/0sWsoLCeYm0wlM2oYQfZI+kG6SCf9LVQT4TQ==
-X-Received: by 2002:a05:600c:3105:b0:40d:5ec5:de8d with SMTP id g5-20020a05600c310500b0040d5ec5de8dmr1108958wmo.61.1703767413382;
-        Thu, 28 Dec 2023 04:43:33 -0800 (PST)
-Received: from [192.168.192.23] ([37.165.193.16])
-        by smtp.googlemail.com with ESMTPSA id f12-20020a05600c154c00b0040d18ffbeeasm27713742wmg.31.2023.12.28.04.43.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Dec 2023 04:43:32 -0800 (PST)
-Message-ID: <b05aef23-edbc-4985-a5d3-7b9ff157bb28@linaro.org>
-Date: Thu, 28 Dec 2023 13:43:30 +0100
+        d=1e100.net; s=20230601; t=1703769797; x=1704374597;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QeFP6suxl7EtcK3JyaW9i7TB53KdnNxv2gyZPlwRh+A=;
+        b=pxhe1cy4tkXiQOW+dVsmW5xv5XkyzYOQVAI4K0eyTeNV611YyTlyFas6LXco4dMj6M
+         efcIucbYGYMY7M7R7bieKtAXdA0/nzB3ziAfnDti4BidXyEgFoy4oqlf7icIOWUdu7c/
+         K+HhEnbYc92HFu0NTXd3K4pQJrSYCPyJNKm0vETIM/cwMV+QWNY8LlDDQQPLqs5xsw3i
+         LAypSst9178CXLrB3skr7rvHJxOc+GaCWE+PN/QL5SMLnMohLLVDnyQviGnF3njpYXXm
+         Y4OEVCUyJX3D6WUAg0YD3BpQmR476WfxGIZ/asoVnIGCXuholPlc2hUrHvExgTxM2UXl
+         3tsg==
+X-Gm-Message-State: AOJu0YwJiXzpuQWmitbhrjEP8NaAm8FacPcIz/VJualwFtHMDCFcskPA
+	PHNxVaD8MJGKrHFMJodcBgS4Map6JVvhBnDkPXW58U8s
+X-Google-Smtp-Source: AGHT+IH1B6v2PjfGwNghxpykoryjy3gBaJ41XOQ9spluBAAwXJ9HNHrJD08hiRmGkKFa87NboRKTrPKHmWf/zm/YNXw=
+X-Received: by 2002:a05:6820:2e01:b0:594:35b4:8a with SMTP id
+ ec1-20020a0568202e0100b0059435b4008amr13760579oob.0.1703769797435; Thu, 28
+ Dec 2023 05:23:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] thermal: netlink: Add
- thermal_group_has_listeners() helper
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
- Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
- linux-pm@vger.kernel.org
-References: <20231228100248.180721-1-stanislaw.gruszka@linux.intel.com>
- <20231228100248.180721-2-stanislaw.gruszka@linux.intel.com>
- <CAJZ5v0gMJFVZToWQPTNstQOpYF9+yDiMYk74dasGp5VWW_-ndA@mail.gmail.com>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0gMJFVZToWQPTNstQOpYF9+yDiMYk74dasGp5VWW_-ndA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <5751163.DvuYhMxLoT@kreacher>
+In-Reply-To: <5751163.DvuYhMxLoT@kreacher>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 28 Dec 2023 14:23:06 +0100
+Message-ID: <CAJZ5v0gyQ5O-QJEcRJq6pU+Ey6QLiK76SG4hAcQDR_4EPOtX6w@mail.gmail.com>
+Subject: Re: [PATCH v1 0/3] thermal: core: Fix issues related to thermal zone resume
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
+	Zhang Rui <rui.zhang@intel.com>, LKML <linux-kernel@vger.kernel.org>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Bo Ye <bo.ye@mediatek.com>, 
+	Radu Solea <radusolea@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 28/12/2023 12:57, Rafael J. Wysocki wrote:
-> On Thu, Dec 28, 2023 at 11:49 AM Stanislaw Gruszka
-> <stanislaw.gruszka@linux.intel.com> wrote:
->>
->> Add a helper function to check if there are listeners for
->> thermal_gnl_family multicast groups.
->>
->> For now use it to avoid unnecessary allocations and sending
->> thermal genl messages when there are no recipients.
->>
->> In the future, in conjunction with (not yet implemented) notification
->> of change in the netlink socket group membership, this helper can be
->> used to open/close hardware interfaces based on the presence of
->> user space subscribers.
->>
->> Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
->> ---
->> v2: Do not return -ESRCH error when there are no listeners
-> 
-> Both patches in the series look good to me.
-> 
-> Daniel, any objections?
-> 
+On Mon, Dec 18, 2023 at 8:28=E2=80=AFPM Rafael J. Wysocki <rjw@rjwysocki.ne=
+t> wrote:
+>
+> Hi Everyone,
+>
+> This patch series fixes some issues related to the suspend and resume of
+> thermal zones during system-wide transitions.
+>
+> Patch [1/3] addresses some existing synchronization issues.
+>
+> Patch [2/3] is a preliminary change for the last patch.
+>
+> Patch [3/3] rearranges the thermal zone resume code to resume thermal
+> zones asynchronously using the existing thermal zone polling support.
+>
+> Please refer to the individual patch changelogs for details.
 
-No objections,
+These are fixes, so it would be good to get them into 6.8.
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Since I don't see any objections to them, I'm adding them to the
+bleeding-edge branch and will move them to linux-next next week.
 
-for both of them
-
-Thanks
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Thanks!
 
