@@ -1,165 +1,140 @@
-Return-Path: <linux-pm+bounces-1630-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1631-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D94581F4B6
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 06:29:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C009581F51D
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 07:41:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BD9D9B21AC7
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 05:29:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 71FED1F22607
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 06:41:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C23E15C3;
-	Thu, 28 Dec 2023 05:29:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0555D29AB;
+	Thu, 28 Dec 2023 06:40:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fNrWRZ0B"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="rbv5RNY+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFD471C3D
-	for <linux-pm@vger.kernel.org>; Thu, 28 Dec 2023 05:29:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1d3ea5cc137so45435775ad.0
-        for <linux-pm@vger.kernel.org>; Wed, 27 Dec 2023 21:29:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703741359; x=1704346159; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=V4wrXuBDdQR1JrqtAidYtGXT/UZktLXAIUHcsugG1q0=;
-        b=fNrWRZ0BcDDYxZLkSpI31wjRq83VQwL7KllLIs9puqxkeyoR9Rudb2zkABaw7A2PpU
-         ZyhxQugPHqGbPTUgjNLqcNlnjkeCitU8IeMibmwaDPYvWLMslxTWRPz2a9LzuK0E+iiT
-         z5vJcUYISYzDEZNc/QM+b6ScqZHDXYms4GrikeW9vmFrZrvE34mgyGj8dT86XefUf/aL
-         TP7M6IKmIa9m2vak+aaEYOhOkAnWer7B6svB/CJ5N0O3j8oe+OPTAixqux0ksVDlUlYh
-         N22qKtU2dfjg1r2UHb/rjALSiHa+BVmTXmOfBdkFvoydoGKOY48Z6GEEhpWGOUH62V7J
-         v86g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703741359; x=1704346159;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V4wrXuBDdQR1JrqtAidYtGXT/UZktLXAIUHcsugG1q0=;
-        b=XKdfmZL+xLdQgTNDu72Y60xjhcooJ9fRNrUHbOxmiqM74OJFNdWdr937n/kMX1bChr
-         buURRA1EpW7eqLqeQ0FUXFWhNsbyVp9zQO7OHVkZAsJXH+MrS8UPEowdWkAGS9KkGqdR
-         aw+y9/fU+D6SPfLN5a4zxL/zg9DDcWOOT28hyo7JCCqMNI/33xtQFpqh3Ps/NymYaCCf
-         4qQa68U5RQw5VME89Dpa8XzuQI68R13GY3Auj+gNOGkMROF2ptLnzCJYYM1o4Qj+lgtl
-         vfrTpbvfEbtwN48zVVYe9fB6vHB43D0ncO+iila+K963eT49hYML/XEvN/cAsvw6Q0wa
-         lhBA==
-X-Gm-Message-State: AOJu0YzE/Fq5/xL158boKHiuC3jFdFQ62Biu/Nfw3zdBeHEWo10+PTsh
-	pH5JfSv22wUZtsp9YVDj+A7GYmzYLwYrmg==
-X-Google-Smtp-Source: AGHT+IHHGfSXRmYt4sOEi0zvGnO3QGTmhrJKVc+PpJqkEYRmshLT6zpqR8p4t0JKp9qKt177O5CAKQ==
-X-Received: by 2002:a17:902:684f:b0:1d0:6ffe:9f5 with SMTP id f15-20020a170902684f00b001d06ffe09f5mr342433pln.83.1703741359089;
-        Wed, 27 Dec 2023 21:29:19 -0800 (PST)
-Received: from localhost ([122.172.86.168])
-        by smtp.gmail.com with ESMTPSA id c22-20020a170902b69600b001d2ffeac9d3sm3716220pls.186.2023.12.27.21.29.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Dec 2023 21:29:18 -0800 (PST)
-Date: Thu, 28 Dec 2023 10:59:15 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc: vireshk@kernel.org, nm@ti.com, sboyd@kernel.org, ulf.hansson@linaro.org,
-	stephan.gerhold@kernkonzept.com, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] OPP: Fix _set_required_opps when opp is NULL
-Message-ID: <20231228052915.ft4e7hwgtngfsyc7@vireshk-i7>
-References: <20231223023421.3818297-1-bryan.odonoghue@linaro.org>
- <20231226055936.pzyt4xjzlfhfqb4y@vireshk-i7>
- <d50810e0-b8e7-4394-975f-d77d8dd24849@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C83863A8;
+	Thu, 28 Dec 2023 06:40:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 3BS6dsld085183;
+	Thu, 28 Dec 2023 00:39:54 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1703745594;
+	bh=EJCG44e6LiY2ozmpMigA/5JiJCeZqYoyVZe30RPWG6Y=;
+	h=From:Date:Subject:To:CC;
+	b=rbv5RNY+MADYwh6Tw4OL4irSGRbsUlEttVko4ZRxetPTgdxDjtOC+ui95SygAT6YL
+	 Uv+A02W5fcKT7ctmO0U8ahfK/xspN8iOTj1cE0T0lS2gqYcE+NUDHWu0rEBOmVBlbJ
+	 inPkc+I3Ei/alHPY7fUsKtZEiYk1K+gtuQsJq5+8=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 3BS6dson016974
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 28 Dec 2023 00:39:54 -0600
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 28
+ Dec 2023 00:39:53 -0600
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 28 Dec 2023 00:39:53 -0600
+Received: from [127.0.1.1] (uda0497581.dhcp.ti.com [10.24.69.44])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 3BS6dm9n054066;
+	Thu, 28 Dec 2023 00:39:49 -0600
+From: Manorit Chawdhry <m-chawdhry@ti.com>
+Date: Thu, 28 Dec 2023 12:09:48 +0530
+Subject: [PATCH] dt-bindings: thermal: k3-j72xx: Update bindings for J721S2
+ SoCs
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d50810e0-b8e7-4394-975f-d77d8dd24849@linaro.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20231228-b4-upstream-j721s2-vtm-dt-binding-v1-1-e866277f9c64@ti.com>
+X-B4-Tracking: v=1; b=H4sIADMYjWUC/x3NQQqDMBBA0avIrB1oxlirV5EuNJnaEUwlk4og3
+ t3g8m3+P0A5Cit0xQGRN1H5hQxTFuC+Q5gYxWcDPagyRC8cLf5XTZGHBeeGjBJuaUGfcJTgJUz
+ Y1vw0rrXkKgu5s0b+yH4/+vd5XqClTF9zAAAA
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano
+	<daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
+	<lukasz.luba@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, J
+ Keerthy <j-keerthy@ti.com>
+CC: <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Udit Kumar <u-kumar1@ti.com>,
+        Nishanth Menon
+	<nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Manorit Chawdhry
+	<m-chawdhry@ti.com>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1703745589; l=1535;
+ i=m-chawdhry@ti.com; s=20231127; h=from:subject:message-id;
+ bh=k6TeF/GvBob+g5G7fXguWw0kINtreXNy1kGKFr4s9Zs=;
+ b=pKGrfs6sZX1F1lLx9Zst4Cbhmel8xkyFu4dC5qTPSkszqYdOSATTakhIdZAktCnG/3Zh8oJvs
+ yzCHlIxj7YWBSKhfZCJ7KGeJKNPtpElTKWfDGf2iz6H9kv4YHT3O04G
+X-Developer-Key: i=m-chawdhry@ti.com; a=ed25519;
+ pk=fsr6Tm39TvsTgfyfFQLk+nnqIz2sBA1PthfqqfiiYSs=
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On 27-12-23, 12:41, Bryan O'Donoghue wrote:
-> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+The clock and processor ID for J721S2 differs from the existing
+compatibles, add a new compatible to represent this change for adding
+support for Adaptive voltage scaling.
 
-Thanks Bryan. Here is the merged commit:
-
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Date: Sat, 23 Dec 2023 02:34:21 +0000
-Subject: [PATCH] OPP: Fix _set_required_opps when opp is NULL
-
-_set_required_opps can be called with opp NULL in _disable_opp_table().
-
-commit e37440e7e2c2 ("OPP: Call dev_pm_opp_set_opp() for required OPPs")
-requires the opp pointer to be non-NULL to function.
-
-[   81.253439] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000048
-[   81.438407] Hardware name: Qualcomm Technologies, Inc. Robotics RB5 (DT)
-[   81.445296] Workqueue: pm pm_runtime_work
-[   81.449446] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   81.456609] pc : _set_required_opps+0x178/0x28c
-[   81.461288] lr : _set_required_opps+0x178/0x28c
-[   81.465962] sp : ffff80008078bb00
-[   81.469375] x29: ffff80008078bb00 x28: ffffd1cd71bfe308 x27: 0000000000000000
-[   81.476730] x26: ffffd1cd70ebc578 x25: ffffd1cd70a08710 x24: 00000000ffffffff
-[   81.484083] x23: 00000000ffffffff x22: 0000000000000000 x21: ffff56ff892b3c48
-[   81.491435] x20: ffff56f1071c10 x19: 0000000000000000 x18: ffffffffffffffff
-[   81.498788] x17: 2030207865646e69 x16: 2030303131207370 x15: 706f5f6465726975
-[   81.506141] x14: 7165725f7465735f x13: ffff5700f5c00000 x12: 00000000000008ac
-[   81.513495] x11: 00000000000002e4 x10: ffff5700f6700000 x9 : ffff5700f5c00000
-[   81.520848] x8 : 00000000fffdffff x7 : ffff5700f6700000 x6 : 80000000fffe0000
-[   81.528200] x5 : ffff5700fef40d08 x4 : 0000000000000000 x3 : 0000000000000000
-[   81.535551] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff56ff81298f80
-[   81.542904] Call trace:
-[   81.545437]  _set_required_opps+0x178/0x28c
-[   81.549754]  _set_opp+0x3fc/0x5c0
-[   81.553181]  dev_pm_opp_set_rate+0x90/0x26c
-[   81.557498]  core_power_v4+0x44/0x15c [venus_core]
-[   81.562509]  venus_runtime_suspend+0x40/0xd0 [venus_core]
-[   81.568135]  pm_generic_runtime_suspend+0x2c/0x44
-[   81.572983]  __rpm_callback+0x48/0x1d8
-[   81.576852]  rpm_callback+0x6c/0x78
-[   81.580453]  rpm_suspend+0x10c/0x570
-[   81.584143]  pm_runtime_work+0xc4/0xc8
-[   81.588011]  process_one_work+0x138/0x244
-[   81.592153]  worker_thread+0x320/0x438
-[   81.596021]  kthread+0x110/0x114
-[   81.599355]  ret_from_fork+0x10/0x20
-[   81.603052] Code: f10000ff fa5410e0 54fffbe1 97f05ae8 (f94026c5)
-[   81.609317] ---[ end trace 0000000000000000 ]---
-
-Fix it.
-
-Fixes: e37440e7e2c2 ("OPP: Call dev_pm_opp_set_opp() for required OPPs")
-Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-[ Viresh: Implemented the fix differently ]
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Signed-off-by: Manorit Chawdhry <m-chawdhry@ti.com>
 ---
- drivers/opp/core.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ .../devicetree/bindings/thermal/ti,j72xx-thermal.yaml        | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 49b429984bdb..a6e80f566e9b 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -1066,6 +1066,7 @@ static int _set_required_opps(struct device *dev, struct opp_table *opp_table,
- 			      struct dev_pm_opp *opp, bool up)
- {
- 	struct device **devs = opp_table->required_devs;
-+	struct dev_pm_opp *required_opp;
- 	int index, target, delta, ret;
+diff --git a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+index 171b3622ed84..5792ccc058aa 100644
+--- a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
++++ b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+@@ -24,9 +24,13 @@ description: |
  
- 	if (!devs)
-@@ -1088,7 +1089,9 @@ static int _set_required_opps(struct device *dev, struct opp_table *opp_table,
+ properties:
+   compatible:
+-    enum:
+-      - ti,j721e-vtm
+-      - ti,j7200-vtm
++    anyOf:
++      - items:
++          - enum:
++              - ti,j721e-vtm
++              - ti,j7200-vtm
++              - ti,j721s2-vtm
++      - maxItems: 2
  
- 	while (index != target) {
- 		if (devs[index]) {
--			ret = dev_pm_opp_set_opp(devs[index], opp->required_opps[index]);
-+			required_opp = opp ? opp->required_opps[index] : NULL;
-+
-+			ret = dev_pm_opp_set_opp(devs[index], required_opp);
- 			if (ret)
- 				return ret;
- 		}
+   reg:
+     items:
+@@ -72,7 +76,7 @@ examples:
+   - |
+     #include <dt-bindings/soc/ti,sci_pm_domain.h>
+     wkup_vtm0: thermal-sensor@42040000 {
+-        compatible = "ti,j721e-vtm";
++        compatible = "ti,j721e-vtm", "ti,j7200-vtm";
+         reg = <0x42040000 0x350>,
+               <0x42050000 0x350>,
+               <0x43000300 0x10>;
+
+---
+base-commit: 39676dfe52331dba909c617f213fdb21015c8d10
+change-id: 20231228-b4-upstream-j721s2-vtm-dt-binding-95e61c942c34
+
+Best regards,
+-- 
+Manorit Chawdhry <m-chawdhry@ti.com>
+
 
