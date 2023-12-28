@@ -1,170 +1,113 @@
-Return-Path: <linux-pm+bounces-1632-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1633-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E894B81F52C
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 07:49:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF79F81F5C0
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 08:57:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9ED8C281977
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 06:49:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B0DE283C51
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 07:57:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F24682909;
-	Thu, 28 Dec 2023 06:49:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="YiU05am2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 060F44401;
+	Thu, 28 Dec 2023 07:57:21 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2942B3C0E
-	for <linux-pm@vger.kernel.org>; Thu, 28 Dec 2023 06:49:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20231228064014epoutp011c14a70081557a2f2f7715ac574fc5f9~k65wFLaCj0854308543epoutp015
-	for <linux-pm@vger.kernel.org>; Thu, 28 Dec 2023 06:40:14 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20231228064014epoutp011c14a70081557a2f2f7715ac574fc5f9~k65wFLaCj0854308543epoutp015
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1703745614;
-	bh=A7fONOiB2KcoiR2yR271Shvujvl1NUDkB7NXQKc2mM8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=YiU05am2wjYqfzGsSkuj8FGPeEjfOBX0vRQGkL3durl6Z5G2e/L8DRgoF9O6gElKD
-	 pbDyOEljuh2N+pn7kBPGirQtkE3O0NG3sTVMYoipdNYwX1Q8ywhvbVUuy/sIH3pRCr
-	 iCR2s9SUTbhY03QqsHCq7AGTj0JmkESZfCc+ioYg=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-	epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-	20231228064013epcas2p2a3ab0255fd527dbd438d70b6c2dca362~k65vWdxBw0352903529epcas2p2B;
-	Thu, 28 Dec 2023 06:40:13 +0000 (GMT)
-Received: from epsmgec2p1.samsung.com (unknown [182.195.36.100]) by
-	epsnrtp1.localdomain (Postfix) with ESMTP id 4T0zQh6srgz4x9Q7; Thu, 28 Dec
-	2023 06:40:12 +0000 (GMT)
-Received: from epcas2p3.samsung.com ( [182.195.41.55]) by
-	epsmgec2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-	49.63.08648.C481D856; Thu, 28 Dec 2023 15:40:12 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
-	20231228064012epcas2p327ba8a0aae748cbf1a3122475ae9a8c1~k65uK7WZP2736327363epcas2p30;
-	Thu, 28 Dec 2023 06:40:12 +0000 (GMT)
-Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20231228064012epsmtrp22dac7d9f6d1bee8419fbd151b1d05eaa~k65uJ0QHS3252532525epsmtrp2z;
-	Thu, 28 Dec 2023 06:40:12 +0000 (GMT)
-X-AuditID: b6c32a43-4b3ff700000021c8-ea-658d184ca48f
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
-	D4.10.18939.C481D856; Thu, 28 Dec 2023 15:40:12 +0900 (KST)
-Received: from perf (unknown [10.229.95.91]) by epsmtip2.samsung.com
-	(KnoxPortal) with ESMTPA id
-	20231228064012epsmtip272cd714b4361500a1bf05d66beca29eb~k65t94Q_-0352703527epsmtip2e;
-	Thu, 28 Dec 2023 06:40:12 +0000 (GMT)
-Date: Thu, 28 Dec 2023 15:40:09 +0900
-From: Youngmin Nam <youngmin.nam@samsung.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: len.brown@intel.com, pavel@ucw.cz, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, d7271.choe@samsung.com,
-	janghyuck.kim@samsung.com, hyesoo.yu@samsung.com, "Rafael J. Wysocki"
-	<rjw@rjwysocki.net>, Greg KH <gregkh@linuxfoundation.org>, Youngmin Nam
-	<youngmin.nam@samsung.com>, hs.gil@samsung.com
-Subject: Re: [BUG] mutex deadlock of dpm_resume() in low memory situation
-Message-ID: <ZY0YSc4YoUPTmEMr@perf>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C252F63AC
+	for <linux-pm@vger.kernel.org>; Thu, 28 Dec 2023 07:57:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
+X-ASG-Debug-ID: 1703750229-1eb14e0c7d074c0001-MQbzy6
+Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx2.zhaoxin.com with ESMTP id blxFhhqhkdOaVL6N (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Thu, 28 Dec 2023 15:57:09 +0800 (CST)
+X-Barracuda-Envelope-From: TonyWWang-oc@zhaoxin.com
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX1.zhaoxin.com
+ (10.28.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 28 Dec
+ 2023 15:57:09 +0800
+Received: from tony.zhaoxin.com (10.32.65.162) by zxbjmbx1.zhaoxin.com
+ (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 28 Dec
+ 2023 15:57:06 +0800
+X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
+From: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
+To: <rafael@kernel.org>, <lenb@kernel.org>, <robert.moore@intel.com>,
+	<linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<acpica-devel@lists.linux.dev>, <tglx@linutronix.de>, <mingo@redhat.com>,
+	<bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+	<hpa@zytor.com>, <mcgrof@kernel.org>, <peterz@infradead.org>,
+	<j.granados@samsung.com>, <TonyWWang-oc@zhaoxin.com>,
+	<ricardo.neri-calderon@linux.intel.com>, <viresh.kumar@linaro.org>,
+	<linux-pm@vger.kernel.org>
+CC: <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>, <LeoLiu-oc@zhaoxin.com>,
+	<LindaChai@zhaoxin.com>
+Subject: [PATCH 0/3] Add Zhaoxin preferred core support in acpi-cpufreq
+Date: Thu, 28 Dec 2023 15:57:02 +0800
+X-ASG-Orig-Subj: [PATCH 0/3] Add Zhaoxin preferred core support in acpi-cpufreq
+Message-ID: <20231228075705.26652-1-TonyWWang-oc@zhaoxin.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAJZ5v0jupWr_89mttKMg-KGa6_dpu62JiUkUaueMfHVgeUXYWg@mail.gmail.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrBJsWRmVeSWpSXmKPExsWy7bCmua6PRG+qweWFxhbX9k5kt2hevJ7N
-	Yuv8ecwWfzsvsFpsnlNsMWvKXiaLy7vmsFl87j3CaHH31FE2i7lfpjJbnDl9idVi8YFP7A48
-	Hov3vGTy2LSqk81j/9w17B5brrazePRtWcXosWL1d3aPz5vkAtijsm0yUhNTUosUUvOS81My
-	89JtlbyD453jTc0MDHUNLS3MlRTyEnNTbZVcfAJ03TJzgA5VUihLzCkFCgUkFhcr6dvZFOWX
-	lqQqZOQXl9gqpRak5BSYF+gVJ+YWl+al6+WlllgZGhgYmQIVJmRn/P18l7VgIl/FxMaNbA2M
-	i7i7GDk5JARMJBa9vsDYxcjFISSwg1Fi3+UTzBDOJ0aJWde/sMA5ffceM8O0fNk5HapqJ6PE
-	xq+tbBDOQ0aJ/8cugVWxCKhK/D3xAcxmE9CV2HbiHyOILSKgLbFk0VWwbmaB3UwSE5pPM4Ek
-	hAU8JZbM7Qdr4BVQllh16T8jhC0ocXLmExYQm1MgUOJy+0WwmyQE1nJInLtzD6iBA8hxkdi1
-	NwziPGGJV8e3sEPYUhKf3+1lg7CLJRru32KG6G1hlDh1/QXUP8YSs561M4LMYRbIlHg/Pxli
-	pLLEkVtga5kF+CQ6Dv9lhwjzSnS0CUE0qkn8mrKBEcKWkdi9eAXUQA+JvW8+MEHCpItJ4vrE
-	DSwTGOVmIflmFsIyCFNTYv0u/Vlgy+QlmrfOZoYIS0ss/8eBpGIBI9sqRrHUguLc9NRkowJD
-	eFwn5+duYgQnYS3nHYxX5v/TO8TIxMF4iFGCg1lJhPe4aE+qEG9KYmVValF+fFFpTmrxIUZT
-	YCxNZJYSTc4H5oG8knhDE0sDEzMzQ3MjUwNzJXHee61zU4QE0hNLUrNTUwtSi2D6mDg4pRqY
-	7mqvnpj1alOaU3zpX6f43WbdJ2q07ixNEZE5+LFsxhMWBoZ5zTqS3+f3b7irJm42VeTI2vmB
-	jEYhiiuutK+LufYkNP3lOQkzP4bTv+69tedfcuTRrt398xIWbTe1uK9RccuA++V3kcjZU3hU
-	biTa7ty28OH1DUuO1KX8bhJcacntwn6gbe3N8xM75cJtTu06dca3RX86b9wsmcKwmyxGJk1T
-	TA/cW/V/+V2OC+xfuh5MabkttqijPnMF39SdQoX5LRpSh5x8Q1qX1oeWn/P2fV7hdeHghm+R
-	ZQnfg/SUKxPv7l3Yq1abuVRw24z5sRqHcjhK3fmiF6Rb6vlVqPz8fkxE51PsLe6w9oSLSvlc
-	SizFGYmGWsxFxYkAllGReksEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupgkeLIzCtJLcpLzFFi42LZdlhJXtdHojfVYPkmPotreyeyWzQvXs9m
-	sXX+PGaLv50XWC02zym2mDVlL5PF5V1z2Cw+9x5htLh76iibxdwvU5ktzpy+xGqx+MAndgce
-	j8V7XjJ5bFrVyeaxf+4ado8tV9tZPPq2rGL0WLH6O7vH501yAexRXDYpqTmZZalF+nYJXBmz
-	GyIKNnBXrJ92g7GB8S5HFyMnh4SAicSXndOZuxi5OIQEtjNKbHn1mBkiISNxe+VlVghbWOJ+
-	yxFWiKL7jBJ7NqwFK2IRUJX4e+IDmM0moCux7cQ/RhBbREBbYsmiq2BTmQX2MkkcvnoLbJKw
-	gKfEkrn9YA28AsoSqy79Z4SY2sMkcWfVOyaIhKDEyZlPWEBsZgF1iT/zLgE1cADZ0hLL/3FA
-	hOUlmrfOBpvDKRAocbn9IssERsFZSLpnIemehdA9C0n3AkaWVYyiqQXFuem5yQWGesWJucWl
-	eel6yfm5mxjBkaUVtINx2fq/eocYmTgYDzFKcDArifAeF+1JFeJNSaysSi3Kjy8qzUktPsQo
-	zcGiJM6rnNOZIiSQnliSmp2aWpBaBJNl4uCUamDq7ytduKdl/YtJMaY3Fzxass4n437Eiu9T
-	2NdHL+ly+bCn/goP50vlbWtXr4jVmRx2QG9Tw5zWZ1tnL1lV6NTirB1xY/U9Qb274ZOffIpu
-	WeUyW4/zdvfrsMdrchwe2J2+unlOy+MS7stbV0zyvzhzu8+5bOWtW1Js+DlFhPN2HW1Yfk9i
-	70+FH/L12/6av1m8+N/nS3Ma7gg3XnizyLFzOuvEf3NnGKlHuizQYksy++Yh+5A7t0CZvfKs
-	RmzO24xbV00er3B7dnuZi5Nw26xNxjXzDdavXPVIZsbjOyccIg1fBVRopGVeiV5fM/XCnYVf
-	jp6u+Ck7u9J6wpqQx98ucOz9ZcpgtleEZ52cTdeT2IVKLMUZiYZazEXFiQCdy6WaGwMAAA==
-X-CMS-MailID: 20231228064012epcas2p327ba8a0aae748cbf1a3122475ae9a8c1
-X-Msg-Generator: CA
-Content-Type: multipart/mixed;
-	boundary="----OVq5TT9zsDSQAN86dWjJc6zPY8CEKIwxCZDtRM.ioT5ZEg4T=_151d76_"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20231227084252epcas2p3b063f7852f81f82cd0a31afd7f404db4
-References: <CGME20231227084252epcas2p3b063f7852f81f82cd0a31afd7f404db4@epcas2p3.samsung.com>
-	<2023122701-mortify-deed-4e66@gregkh> <5754861.DvuYhMxLoT@kreacher>
-	<5755916.DvuYhMxLoT@kreacher>
-	<CAJZ5v0jupWr_89mttKMg-KGa6_dpu62JiUkUaueMfHVgeUXYWg@mail.gmail.com>
-
-------OVq5TT9zsDSQAN86dWjJc6zPY8CEKIwxCZDtRM.ioT5ZEg4T=_151d76_
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Disposition: inline
+Content-Type: text/plain
+X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
+ zxbjmbx1.zhaoxin.com (10.29.252.163)
+X-Barracuda-Connect: ZXSHMBX1.zhaoxin.com[10.28.252.163]
+X-Barracuda-Start-Time: 1703750229
+X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
+X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
+X-Virus-Scanned: by bsmtpd at zhaoxin.com
+X-Barracuda-Scan-Msg-Size: 1474
+X-Barracuda-BRTS-Status: 0
+X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
+X-Barracuda-Spam-Score: -2.02
+X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.118665
+	Rule breakdown below
+	 pts rule name              description
+	---- ---------------------- --------------------------------------------------
 
-On Wed, Dec 27, 2023 at 09:50:01PM +0100, Rafael J. Wysocki wrote:
-> On Wed, Dec 27, 2023 at 7:58 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> >
-> > On Wednesday, December 27, 2023 7:39:20 PM CET Rafael J. Wysocki wrote:
-> > > On Wednesday, December 27, 2023 5:08:40 PM CET Greg KH wrote:
-> > > > On Wed, Dec 27, 2023 at 05:42:50PM +0900, Youngmin Nam wrote:
-> > > > > Could you look into this issue ?
-> > > >
-> > > > Can you submit a patch that resolves the issue for you, as you have a
-> > > > way to actually test this out?  That would be the quickest way to get it
-> > > > resolved, and to help confirm that this is even an issue at all.
-> > >
-> > > Something like the appended patch should be sufficient to address this AFAICS.
-> > >
-> > > I haven't tested it yet (will do so shortly), so all of the usual disclaimers
-> > > apply.
-> > >
-> > > I think that it can be split into 2 patches, but for easier testing here
-> > > it goes in one piece.
-> >
-> > Well, please scratch this, it will not handle "async" devices properly.
-> 
-> This
-> 
-> https://lore.kernel.org/linux-pm/6019796.lOV4Wx5bFT@kreacher/
-> 
-> should address the issue properly (it has been lightly tested).
-> 
-> Please give it a go and let me know if it works for you (on top of 6.7-rc7).
-> 
-Thanks for your help.
-Actually, this is very rare case on our side and it is the first time for us to see this issue.
-Anyway, let me test and let you know.
+For Zhaoxin CPUs, the cores' highest frequencies may be different, which
+means that cores may run at different max frequencies,
 
-------OVq5TT9zsDSQAN86dWjJc6zPY8CEKIwxCZDtRM.ioT5ZEg4T=_151d76_
-Content-Type: text/plain; charset="utf-8"
+According to ACPI-spec6 chapter 8.4.7, the per-core highest frequency
+value can be obtained via cppc.
 
+The core with the higher frequency have better performance, which can be
+called as preferred core. And better performance can be achieved by
+making the scheduler to run tasks on these preferred cores.
 
-------OVq5TT9zsDSQAN86dWjJc6zPY8CEKIwxCZDtRM.ioT5ZEg4T=_151d76_--
+The cpufreq driver can use the highest frequency value as the prioriy of
+core to make the scheduler try to get better performace.
+
+More specifically:
+Add cppc_get_highest_perf function in CPPC driver.
+Export two funcions which will be used in acpi-cpufreq drvier.
+In the acpi-cpufreq driver use cppc_get_highest_perf() to get highest
+frequency value of each core, use sched_set_itmt_core_prio() to set
+highest frequency value as core priority, and use sched_set_itmt_support()
+provided by ITMT to tell the scheduler to favor on the preferred cores.
+
+Tony W Wang-oc (3):
+  ACPI: CPPC: Add get the highest perf register value support
+  x86/sched/itmt: Export two API symbols
+  ACPI: cpufreq: Add ITMT support when CPPC enabled for Zhaoxin CPUs
+
+ arch/x86/kernel/itmt.c         |  2 ++
+ drivers/acpi/cppc_acpi.c       | 13 ++++++++
+ drivers/cpufreq/acpi-cpufreq.c | 56 +++++++++++++++++++++++++++++++++-
+ include/acpi/cppc_acpi.h       |  5 +++
+ 4 files changed, 75 insertions(+), 1 deletion(-)
+
+-- 
+2.25.1
+
 
