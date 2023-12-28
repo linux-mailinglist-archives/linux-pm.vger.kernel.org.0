@@ -1,101 +1,181 @@
-Return-Path: <linux-pm+bounces-1657-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1658-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C234081FA8F
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 20:02:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6018381FA96
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 20:13:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E34721C211CD
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 19:02:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A2CC1C211CD
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 19:13:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E19CAF9D7;
-	Thu, 28 Dec 2023 19:02:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1989E101D8;
+	Thu, 28 Dec 2023 19:13:18 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 895BE101C1
-	for <linux-pm@vger.kernel.org>; Thu, 28 Dec 2023 19:02:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 925D9101C1;
+	Thu, 28 Dec 2023 19:13:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-6dbd87b706aso1160688a34.0
-        for <linux-pm@vger.kernel.org>; Thu, 28 Dec 2023 11:02:07 -0800 (PST)
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-593f182f263so1327692eaf.0;
+        Thu, 28 Dec 2023 11:13:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703790126; x=1704394926;
+        d=1e100.net; s=20230601; t=1703790795; x=1704395595;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bTGSWsWdrnBnSajK8RJvpjNm2gCy8ziMmxsijrHGWbs=;
-        b=ghJ1n4s9u10WKsUTTkHdumQjkCuOV0b9ibE953F1Ta+yqXWUTTQTEiukyjATzay/tu
-         ahPqYaQRx6Ib7oUDm9y74+L2uAMTM1qvjMdBVPXp6XvXBtN86UuRQUW5q8cQLTK5pYNo
-         s3P+pWbLLMBGIoUuMCTuxlwGGxdS3DFUNrsK7Sl5pOIPAZc2eCA31w2TxZMdxClsMXG8
-         +oSIsvmHGNHsIAdeb5vYjV/rTXTS+aFV8XCaPTIZiIBgyLkw8JmOY7twb1r7iOtvug26
-         exmTTDrVflTCBSMI1pg8YEwX2onuLVfMlUYHSuJFxgY1FVARvPe3nrx5Zv6i+ev8JdiX
-         cnDg==
-X-Gm-Message-State: AOJu0YyWD9QOx031mDRBeYIsNLB5VMweyeX1RTrtO0b7dfBANTh+luGD
-	/Ss4Jwm+3yHD1BkpXSwVXWuY5shZl3dNd8V5F9A=
-X-Google-Smtp-Source: AGHT+IEJhy+PCJWSQEKpdJEGeOx9mAY/CBHP48IBxP0hzo4C+KR4msspmWaGk7mFaGR752FQUivcqUKmAnOKfBhrjqU=
-X-Received: by 2002:a05:6820:2e01:b0:594:35b4:8a with SMTP id
- ec1-20020a0568202e0100b0059435b4008amr14619088oob.0.1703790126321; Thu, 28
- Dec 2023 11:02:06 -0800 (PST)
+        bh=M0OKN9HKwBCVGBwl7+BR58ZezIupQSEZhUTpvcAXEIc=;
+        b=miUOEzgsbYxLpsZEoJ3zdjCeKV1qdEMn+SVYXlvwvtwscs63Ql2JpeX7fqLjUXj1ql
+         JTkKXMinRyKsi+PBpno09m/dJFBWKT1G4Ti/Bce/1kUF/TVXIpuGht+OrpcFZZ23bhsq
+         1RzJA3roHsfO9xboT7cJrhnwZiYy9pxJLQdyCb1fDe0ZrAjg+OfYwjySTIAtFfFmJMno
+         K3b0ajD+6I552h/O23/H//RhCkRyRnEJphqOn3aLi247QxEANpwkdQuh5cXF8+RttkeU
+         Gc3izvAaVtva+SnB8TZJAuBvQjT6GONP0Ltc4a0xGRmKG0832Aq7tTEyIcAlWUTG2WJX
+         35TQ==
+X-Gm-Message-State: AOJu0YwexXoKmFtedP9C5j/4krwguNXFAwdBy4ia0CUZSRPX68j5ufjm
+	05RiAVJ0X6F0MgPMbabHykVcmgPtAgjzjaFU3FIp2lkf
+X-Google-Smtp-Source: AGHT+IHNVleauOP87gCEE931G0e8QpUkJGdtV9h5iHXztG7FwEnzgVVRmZFKGsjidN7ECBFe0Kb2s/meciXM2WR+E1w=
+X-Received: by 2002:a4a:c719:0:b0:594:c433:66e6 with SMTP id
+ n25-20020a4ac719000000b00594c43366e6mr6467169ooq.0.1703790795635; Thu, 28 Dec
+ 2023 11:13:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231228100248.180721-1-stanislaw.gruszka@linux.intel.com>
- <20231228100248.180721-2-stanislaw.gruszka@linux.intel.com>
- <CAJZ5v0gMJFVZToWQPTNstQOpYF9+yDiMYk74dasGp5VWW_-ndA@mail.gmail.com> <b05aef23-edbc-4985-a5d3-7b9ff157bb28@linaro.org>
-In-Reply-To: <b05aef23-edbc-4985-a5d3-7b9ff157bb28@linaro.org>
+References: <20231227104532.2671761-1-daniel.lezcano@linaro.org>
+In-Reply-To: <20231227104532.2671761-1-daniel.lezcano@linaro.org>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 28 Dec 2023 20:01:55 +0100
-Message-ID: <CAJZ5v0jG3YX2j9-COKnCTJnbM-HUVE_vok2xS+CMGpz0r9vGNA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] thermal: netlink: Add thermal_group_has_listeners()
- helper
-To: Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org
+Date: Thu, 28 Dec 2023 20:13:05 +0100
+Message-ID: <CAJZ5v0goxF4sbipnLJCGkzBzKQgrYXyWSPtCbLjLqZ61AHo08Q@mail.gmail.com>
+Subject: Re: [PATCH v5 1/2] thermal/debugfs: Add thermal cooling device
+ debugfs information
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: rjw@rjwysocki.net, lukasz.luba@arm.com, rui.zhang@intel.com, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 28, 2023 at 1:43=E2=80=AFPM Daniel Lezcano
+On Wed, Dec 27, 2023 at 11:46=E2=80=AFAM Daniel Lezcano
 <daniel.lezcano@linaro.org> wrote:
 >
-> On 28/12/2023 12:57, Rafael J. Wysocki wrote:
-> > On Thu, Dec 28, 2023 at 11:49=E2=80=AFAM Stanislaw Gruszka
-> > <stanislaw.gruszka@linux.intel.com> wrote:
-> >>
-> >> Add a helper function to check if there are listeners for
-> >> thermal_gnl_family multicast groups.
-> >>
-> >> For now use it to avoid unnecessary allocations and sending
-> >> thermal genl messages when there are no recipients.
-> >>
-> >> In the future, in conjunction with (not yet implemented) notification
-> >> of change in the netlink socket group membership, this helper can be
-> >> used to open/close hardware interfaces based on the presence of
-> >> user space subscribers.
-> >>
-> >> Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-> >> ---
-> >> v2: Do not return -ESRCH error when there are no listeners
-> >
-> > Both patches in the series look good to me.
-> >
-> > Daniel, any objections?
-> >
+> The thermal framework does not have any debug information except a
+> sysfs stat which is a bit controversial. This one allocates big chunks
+> of memory for every cooling devices with a high number of states and
+> could represent on some systems in production several megabytes of
+> memory for just a portion of it. As the sysfs is limited to a page
+> size, the output is not exploitable with large data array and gets
+> truncated.
 >
-> No objections,
+> The patch provides the same information than sysfs except the
+> transitions are dynamically allocated, thus they won't show more
+> events than the ones which actually occurred. There is no longer a
+> size limitation and it opens the field for more debugging information
+> where the debugfs is designed for, not sysfs.
 >
-> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> The thermal debugfs directory structure tries to stay consistent with
+> the sysfs one but in a very simplified way:
 >
-> for both of them
+> thermal/
+>  -- cooling_devices
+>     |-- 0
+>     |   |-- clear
+>     |   |-- time_in_state_ms
+>     |   |-- total_trans
+>     |   `-- trans_table
+>     |-- 1
+>     |   |-- clear
+>     |   |-- time_in_state_ms
+>     |   |-- total_trans
+>     |   `-- trans_table
+>     |-- 2
+>     |   |-- clear
+>     |   |-- time_in_state_ms
+>     |   |-- total_trans
+>     |   `-- trans_table
+>     |-- 3
+>     |   |-- clear
+>     |   |-- time_in_state_ms
+>     |   |-- total_trans
+>     |   `-- trans_table
+>     `-- 4
+>         |-- clear
+>         |-- time_in_state_ms
+>         |-- total_trans
+>         `-- trans_table
+>
+> The content of the files in the cooling devices directory is the same
+> as the sysfs one except for the trans_table which has the following
+> format:
+>
+> Transition      Hits
+> 1->0            246
+> 0->1            246
+> 2->1            632
+> 1->2            632
+> 3->2            98
+> 2->3            98
+>
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+> Changelog:
+>   - v5
+>     - Removed a spurious change in thermal_helper.c, missed to remove it =
+in v4 (Rafael)
 
-OK
+This one LGTM now.
 
-Both applied as 6.8 material, thanks!
+I've only spotted a few very minor things that can be fixed up while
+applying the patch.
+
+>   - v4
+>     - Fixed kerneldoc description ordering (Rafael)
+>     - Fixed comment (Rafael)
+>     - Renamed s/cdev_value/cdev_record/ (Rafael)
+>     - Used union instead of a common 'value' field in cdev_record (Rafael=
+)
+>     - Renamed s/cdev/cdev_dbg/ for clarity (Rafael)
+>     - Renamed s/dfs/thermal_dbg/ for clarity (Rafael)
+>     - Renamed s/list/lists/ in the place where there are array of lists (=
+Rafael)
+>     - Inverted initialization logic when allocating a cdev_record (Rafael=
+)
+>     - Moved now =3D ktime_get() closer to the place where it is used (Raf=
+ael)
+>     - Moved two lines down to a condition (Rafael)
+>     - Removed strange and unexpected addition of function (Rafael)
+>   - v3
+>     - Fixed kerneldoc description (kbuild)
+>     - Made some functions static
+>   - v2
+>     - Added parameter names to fix kbuild report
+>     - Renamed 'reset' to 'clear' to avoid confusion (Rafael)
+>     - Fixed several typos and rephrased some sentences (Rafael)
+>     - Renamed structure field name s/list/node/ (Rafael)
+>     - Documented structures and exported functions (Rafael)
+>     - s/trans_list/transitions/ (Rafael)
+>     - s/duration_list/durations/ (Rafael)
+>     - Folded 'alloc' and 'insert' into a single function (Rafael)
+>     - s/list/lists/ as it is an array of lists (Rafael)
+>     - s/pos/entry/ (Rafael)
+>     - Introduced a locking in the 'clear' callback function (Rafael)
+>     - s/to/new_state/ and s/from/old_state/ (Rafael)
+>     - Added some comments in thermal_debug_cdev_transition() (Rafael)
+>     - Explained why char[11] (Rafael)
+>     - s/Hits/Occurrences/ (Rafael)
+>     - s/Time/Residency/ (Rafael)
+>     - Constified structure pointer passed to thermal_debug_cdev_transitio=
+n()
+>     - s/thermal_debug_cdev_transition()/thermal_debug_cdev_state_update()=
+/
+>   - v1 (from RFC):
+>     - Fixed typo "occurred"
+>     - Changed Kconfig option name and description
+>     - Removed comment in the Makefile
+>     - Renamed exported function name s/debugfs/debug/
+>     - Replaced thermal_debug_cdev_[unregister|register] by [add|remove]
+> ---
 
