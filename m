@@ -1,62 +1,62 @@
-Return-Path: <linux-pm+bounces-1655-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1656-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8863A81FA77
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 19:06:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E245081FA84
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 19:41:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 440C9283B85
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 18:06:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E0BADB22630
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 18:41:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19ED3F9C7;
-	Thu, 28 Dec 2023 18:06:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 875BB8460;
+	Thu, 28 Dec 2023 18:41:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="274qxj/q"
+	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="hjh09u07"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55088101C6
-	for <linux-pm@vger.kernel.org>; Thu, 28 Dec 2023 18:06:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA560F9D1
+	for <linux-pm@vger.kernel.org>; Thu, 28 Dec 2023 18:41:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-3369339f646so5178970f8f.0
-        for <linux-pm@vger.kernel.org>; Thu, 28 Dec 2023 10:06:51 -0800 (PST)
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-40d5a41143fso23562475e9.3
+        for <linux-pm@vger.kernel.org>; Thu, 28 Dec 2023 10:41:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1703786809; x=1704391609; darn=vger.kernel.org;
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1703788870; x=1704393670; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4TQXItvWuDmTePFkOjJNdDeKYpVVl6+9BdVfsLroUnU=;
-        b=274qxj/qxTe1HD/7WhYwdz86wfaL0+VO5ehtBl7ddoS2jUofeaDHhBAabeJtRxyE6u
-         lyFgwxWw4ErKjq0nlqdYKcCuXCF5KhCo6thlk4FSv2YV+UedaP/tFU1w6yggdo5mBB0h
-         xbdF+ejF3CPuhlRIadVeIrfoqm0nmzD/olm3+4O5rJ75DUfKL6A1oJu73SvBIp+n34Jr
-         W3SWJ5cNfcbC2X2BTIENCIe8NOAsMS7hOd/NHi1fEqLH75f3aOhUZ8+mSVSRNW64MzTk
-         2AWTHXr4O0OYx7fIvM6wVvwGlwtfDnhKPAuJdCSvq7rWlwx2RsjHPDI8ZMc+wb+GOqj+
-         7tjg==
+        bh=iirN11FE11z2AdkUVp2pGSwKkOSOx/YMQULcIMI6Uxw=;
+        b=hjh09u07DIuV2CKWvwWZbjVHsFyhjOCBdj14B07S8IT8i2Cye8vEc3TWoqrNwc1lfS
+         seoaKEEMTXJbGdjgqsFY4h6vse/bdO7cbuMnpzwUrW9so/NdxEWuS1/gtbi+OIbmeX7X
+         D3b3sRq7H35lpzC3bEccmZrZHduQRhaPIxu0CJzi7EnbAX0pSqRzTLZxZmCTvlEjmG2f
+         MPreL2I24hF2ToNpJgNBUPqQAJwrvgzlWAt3ZuPiB4zKva+h6OoEeuQZIGvLns3vkNWC
+         Pk65Pg7qVuQolvadAtJnp5GUK7+z7/n6jcybbSt+PLwdLmzwlCt+43ncCjb6tunLKWRc
+         7KNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703786809; x=1704391609;
+        d=1e100.net; s=20230601; t=1703788870; x=1704393670;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4TQXItvWuDmTePFkOjJNdDeKYpVVl6+9BdVfsLroUnU=;
-        b=AnC8ZQZfeBDEcNmj6FB1EYW7A7LZGIrY7i1MZFE3ztYKsMRihmFgkVLcurzWXs013e
-         M80pgKanMxjt1DZpZlcY2deQnsQHaQv2OAUniHn0275Fy9l28NaUAx0bqEhINiTE70Gb
-         as+8pba8blGrSFEmQVFrPn7qaoaPFRBmsCDQAlhBzbAiBrtJHvOBdNDBcZFxzlFEpNX0
-         C5WxRxqYlbmXUoEyIwlvjIIeDMQEUReeA2DJ44XQnanijP+BtmLUwC5G8pgwJlUxkYJ7
-         jQbZxVUD0gFZsDNXznPQNN5N6SoDadSsH8wzPMImrmVcY1rd4mzPq9iWJ7V7ekyY+KEg
-         i8CQ==
-X-Gm-Message-State: AOJu0YwleKf4uloHlUOMyr4nb4vKM8px6weLKfGJOD2ljBLuJKvXvobM
-	d3SOzkMF0YVmNNX2MFT8qBHU2Vl3GF3vxg==
-X-Google-Smtp-Source: AGHT+IFlEvBYd7xm9G7YbqfcaOHTH6oG95pi+uSQx/fWj0M27l8eBpC8RqiIQP/gJfxXmUZzG0DRIQ==
-X-Received: by 2002:a5d:46c1:0:b0:333:2fd2:5d21 with SMTP id g1-20020a5d46c1000000b003332fd25d21mr5340714wrs.83.1703786809484;
-        Thu, 28 Dec 2023 10:06:49 -0800 (PST)
+        bh=iirN11FE11z2AdkUVp2pGSwKkOSOx/YMQULcIMI6Uxw=;
+        b=ogfInwQ479cCPlEvOktv+mxOTfMVKCtg0Dn4BoSH3WYjOKSYyl4fAdhO0UYy+mCq0Y
+         s+E8GOympo+fWS0Y9sAsfdBAPA9CGVFX5TI/SINGa7G/PD/cbdTBAzPVwuYoyHQcLoPm
+         2Dfyk/vy8zdg+d+pcwVXqkw5c7QBfjlXGY7LprUOHM5cuFiV+8IlodqQMAcMWWdJmjgq
+         6aa9IJDnsyPc0DAyMHK8fp9kx5P3aEBAQ3DLEoCPpV4kXuXrhlxCpZRPhLiQAP1yLNcO
+         n8NamSakbg270rxzWKVCRCqxwJHS8YViRDkVWEENQIbstTQOfaAW8iL5degyLjNuTdYx
+         b0Hw==
+X-Gm-Message-State: AOJu0Ywo5bzRilElqdUgZGbP3rWPZCVcq3DH+3QHwM1IrRlMH0jGApZv
+	3x1+hWB5PuPBNO3sOjb+S4dmVlpQO1byhvgw8Z5fsSdVfAg=
+X-Google-Smtp-Source: AGHT+IHWj78iSvO6jk95Dkf+/uo1cOMc9yitSOcHmHmGWYFDksWTIcftoBEFIZ53Zh1lXLYIDCFqLw==
+X-Received: by 2002:a05:600c:5492:b0:40d:6025:3650 with SMTP id iv18-20020a05600c549200b0040d60253650mr1261241wmb.30.1703788869859;
+        Thu, 28 Dec 2023 10:41:09 -0800 (PST)
 Received: from airbuntu (host109-154-238-212.range109-154.btcentralplus.com. [109.154.238.212])
-        by smtp.gmail.com with ESMTPSA id z4-20020a5d4d04000000b00336a1f6ce7csm13052322wrt.19.2023.12.28.10.06.48
+        by smtp.gmail.com with ESMTPSA id f8-20020adffcc8000000b003366b500047sm17552067wrs.50.2023.12.28.10.41.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Dec 2023 10:06:48 -0800 (PST)
-Date: Thu, 28 Dec 2023 18:06:47 +0000
+        Thu, 28 Dec 2023 10:41:09 -0800 (PST)
+Date: Thu, 28 Dec 2023 18:41:07 +0000
 From: Qais Yousef <qyousef@layalina.io>
 To: Lukasz Luba <lukasz.luba@arm.com>
 Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
@@ -65,11 +65,11 @@ Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
 	daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
 	len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org,
 	wvw@google.com
-Subject: Re: [PATCH v5 15/23] PM: EM: Optimize em_cpu_energy() and remove
- division
-Message-ID: <20231228180647.rwz4u7ebk5p2hjcr@airbuntu>
+Subject: Re: [PATCH v5 00/23] Introduce runtime modifiable Energy Model
+Message-ID: <20231228184107.mfxgfwaclwaeqswg@airbuntu>
 References: <20231129110853.94344-1-lukasz.luba@arm.com>
- <20231129110853.94344-16-lukasz.luba@arm.com>
+ <20231217182255.mgrpgpu6ojjg62jp@airbuntu>
+ <4f780b5e-7e37-40e3-bdf1-d7fe5d8dd1fc@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,30 +78,138 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231129110853.94344-16-lukasz.luba@arm.com>
+In-Reply-To: <4f780b5e-7e37-40e3-bdf1-d7fe5d8dd1fc@arm.com>
 
-On 11/29/23 11:08, Lukasz Luba wrote:
+On 12/19/23 10:22, Lukasz Luba wrote:
 
-> @@ -220,8 +218,9 @@ static int em_compute_costs(struct device *dev, struct em_perf_state *table,
->  				return -EINVAL;
->  			}
->  		} else {
-> -			power_res = table[i].power;
-> -			cost = div64_u64(fmax * power_res, table[i].frequency);
-> +			/* increase resolution of 'cost' precision */
-> +			power_res = table[i].power * 10;
-
-Power is in uW, right? You're just taking advantage here that everything will
-use this new cost field so you can add as many 0s to improve resolution without
-impact elsewhere that care to compare using the same units?
-
-Did you see a problem or just being extra cautious here?
-
-> +			cost = power_res / table[i].performance;
->  		}
->  
->  		table[i].cost = cost;
-> -- 
-> 2.25.1
+> > One thing I'm not sure about is that in practice temperature of the SoC can
+> > vary a lot in a short period of time. What is the expectation here? I can see
+> > this useful in practice only if we average it over a window of time. Following
+> > it will be really hard. Big variations can happen in few ms scales.
 > 
+> It's mostly for long running heavy workloads, which involve other device
+> than CPUs, e.g. GPU or ISP (Image Signal Processor). Those devices can
+> heat up the SoC. In our game DrArm running on pixel6 the GPU uses 75-77%
+> of total power budget (starting from ~2.5W for GPU + 1.3W for all CPUs).
+> That 2.5W from the GPU is heating up the CPUs and mostly impact the Big
+> cores, which are made from High-Performance cells (thus leaking more).
+> OverUtilization in the first 4-5min of gaming is ~4-9%, so EAS can work
+> and save some power, if it has a good model. Later we have thermal
+> throttling and OU goes to ~50% but EAS still can work. If the model is
+> more precised - thus adjusted for the raising leakage due to temperature
+> increase (generated due to GPU power), than we still can use better that
+> power budget and not waist on the leakage at higher OPPs.
+
+I can understand the need. But looking at one specific case vs generalized form
+is different.
+
+So IIUC the expectation is to track temperature variations over minutes by
+external sources to CPU.
+
+> > I didn't get how the new performance field is supposed to be controlled and
+> > modified by users. A driver interface doesn't seem suitable as there's no
+> > subsystem that knows the characteristic of the workload except userspace. In
+> > Android we do have contextual info about what the current top-app to enable
+> > modifying the capacities to match its characteristics.
+> 
+> Well in latest public documentation (May2023) for Cortex-X4 there are
+> described new features of Arm cores: PDP, MPMM, which can change the
+> 'performance' of the core in FW. Our SCMI kernel subsystem will get an
+> interrupt, so the drivers can know about it. It could be used for
+> recalculating the efficiency of the CPUs in the EM. When there is no
+> hotplug and the long running app is still running, that FW policy would
+> be reflected in EM. It's just not done all-in-one-step. Those patches
+> will be later.
+
+I think these features are some form of thermal throttling IIUC.
+
+I was asking for handling the EM accuracy issue using the runtime model. I was
+expecting some sysfs knobs. Do you see this also require a vendor specific
+driver to try to account for the EM inaccuracy issues we're seeing?
+
+> Second, I have used that 'performance' field to finally get rid of
+> this runtime division in em_cpu_energy() hot path - which was annoying
+> me for very long time. It wasn't possible to optimize that last
+> operation there, because the not all CPUs boot and final CPU capacity
+> is not known when we register EMs. With this feature finally I can
+> remove that heavy operation. You can see more in that patch 15/23.
+
+Yep, it's good addition :)
+
+> > > 5. All CPUs (Little+Mid+Big) power values in mW
+> > > +------------+--------+---------------------+-------+-----------+
+> > > |  channel   | metric |       kernel        | value | perc_diff |
+> > > +------------+--------+---------------------+-------+-----------+
+> > > |    CPU     | gmean  | EM_default          | 142.1 |   0.0%    |
+> > > |    CPU     | gmean  | EM_modified_runtime | 131.8 |  -7.27%   |
+> > > +------------+--------+---------------------+-------+-----------+
+> > 
+> > How did you modify the EM here? Did you change both performance and power
+> > fields? How did you calculate the new ones?
+> 
+> It was just the power values modified on my pixel6:
+> for Littles 1.6x, Mid 0.8x, Big 1.3x of their boot power.
+> TBH I don't know the chip binning of that SoC, but I suspect it
+> could be due to this fact. More about possible error range in chip
+> binning power values you can find in my comment to the patch 22/23
+
+Strange just modifying the power had this impact. It could be related to
+similar impact I've seen with migration margin for the little increasing. By
+making the cost higher there, then it'd move the residency to other cores and
+potentially reduce running at higher freq on the littles.
+
+> > Did you try to simulate any heating effect during the run if you're taking
+> > temperature into account to modify the power? What was the variation like and
+> 
+> Yes, I did that experiment and presented on OSPM 2023 slide 13. There is
+> big CPU power plot change in time, due to GPU heat. All detailed data is
+> there. The big CPU power is ~18-20% higher when 1-1.5W GPU is heating up
+> the whole SoC.
+
+I meant during your experiment above.
+
+> > at what rate was the EM being updated in this case? I think Jankbench in
+> 
+> In this experiment EM was only set once w/ the values mentioned above.
+> It could be due to the chip lottery. I cannot say on 100% this phone.
+> 
+> > general wouldn't stress the SoC enough.
+> 
+> True, this test is not power heavy as it can be seen. It's more
+> to show that the default EM after boot might not be the optimal one.
+
+I wouldn't reach that conclusion for this particular case. But the underlying
+issues exists for sure.
+
+> > It'd be insightful to look at frequency residencies between the two runs and
+> > power breakdown for each cluster if you have access to them. No worries if not!
+> 
+> I'm afraid you're asking for too much ;)
+
+It should be easy to get them. It's hard to know where the benefit is coming
+from otherwise. But as I said, no worries if not. If you have perfetto traces
+I can take help to take a look.
+
+> > My brain started to fail me somewhere around patch 15. I'll have another look
+> > some time later in the week but generally looks good to me. If I have any
+> > worries it is about how it can be used with the provided interfaces. Especially
+> > expectations about managing fast thermal changes at the level you're targeting.
+> 
+> No worries, thanks for the review! The fast thermal changes, which are
+> linked to the CPU's workload are not an issue here and I'm not worried
+> about those. The side effect of the heat from other device is the issue.
+> Thus, that thermal driver which modifies the EM should be aware of the
+> 'whole SoC' situation (like mainline IPA does, when it manages all
+> devices in a single thermal zone).
+
+I think in practice there will be challenges to generalize the thermal impact.
+But overall from EM accuracy point of view (for all the various reasons
+mentioned), we need this ability to help handle them in practice. Booting with
+a single hardcoded EM doesn't work.
+
+
+Cheers
+
+--
+Qais Yousef
 
