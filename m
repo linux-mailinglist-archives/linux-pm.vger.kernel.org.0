@@ -1,135 +1,121 @@
-Return-Path: <linux-pm+bounces-1664-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1665-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18BF981FD01
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Dec 2023 05:30:30 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55CA681FD67
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Dec 2023 08:02:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4AFA31C21469
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Dec 2023 04:30:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C830AB214E2
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Dec 2023 07:02:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B3D262B;
-	Fri, 29 Dec 2023 04:30:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5C6923BB;
+	Fri, 29 Dec 2023 07:02:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZOutGeEu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hiQTcVbY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70CF6612A;
-	Fri, 29 Dec 2023 04:30:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-67f911e9ac4so52092886d6.3;
-        Thu, 28 Dec 2023 20:30:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1703824222; x=1704429022; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=siCP+01Rw8sv/FO7/j37qD22Hyz6Ky5dYCZkzYaFy1A=;
-        b=ZOutGeEu/ET9I/Xj7NX/Bq4uu9+rlJqjwRE3ibopi5K3KrQ6yl7saBTKnHtoSDSeJ7
-         tvMAxVac2l5j0ZFeljLOxCJHkDr2c3T/uzjWXBUUVd+2ypggSVKinVfRO7wMJb/Xj4pq
-         Wo0o7b3sMIYl77b+Wql7fx9uPOBgnKnVZKJwEip33l1/5SeIck0py9n/dmkDG0JVibrz
-         TbyDru68l7VWdJsDmJb1xhV6tJey7BmRZDib0VhtsWsZTrZbr8EPWyuQa6NQMB2GUV+W
-         UEQzm+aMz+OI2ZAJkMwhaH2uEsHV6hTPJuCQOsGb4atf2xoRJghVP686jOHOCzI5sEgB
-         d2xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703824222; x=1704429022;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=siCP+01Rw8sv/FO7/j37qD22Hyz6Ky5dYCZkzYaFy1A=;
-        b=XtqyedDunN2NF6ma/hD3iIxN8lLW6lfY9adQ0g/KuVL/Wyt2HidQd2dPDld6dep0D1
-         /rLGLBJGvkUzcRRtQpGEMruRAm8XRx+WwdRbbx61EkJ7jVtkBq8Ux7bQ7pEb7cHUOHoi
-         bleeq4rUWOUNrdSAnNF66CL/fXgmtxkvdODFPd8ZfNK1nptq3erwypQ0l6uwOjsOzQeD
-         wrCbeigDky1qa9+TaYOOFWsrFEx0qd9pb7ZG4OtIzFPcWqXcM7fjWD13pyljiiY/SX4i
-         Su6Uc8J5ODbghIja+yRFjtT+N7sz2cgsIbMb3BSvZlRE2WzqSA43w7b9mjqzKKj9BBqn
-         LlkA==
-X-Gm-Message-State: AOJu0Yxt1Gt/kW/GqAsMxDqvvpnjYAkswOas4l+m8gBsPQb6KxsOaRpb
-	ZDfFDQ8+353KnCFn0VtMYMpgOR0dGJqKV5mxw7A=
-X-Google-Smtp-Source: AGHT+IFLFR3I5Dh5jwn9n1wg7C45v+vP5k/zr57xOfGbcX2de+sdM9KRc5F7XePdRKzEt+cWvvhK4tkefp5TJfXXbZ8=
-X-Received: by 2002:a05:6214:90b:b0:67f:fc06:5ae3 with SMTP id
- dj11-20020a056214090b00b0067ffc065ae3mr7080443qvb.81.1703824222067; Thu, 28
- Dec 2023 20:30:22 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA4D023A4;
+	Fri, 29 Dec 2023 07:02:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1703833354; x=1735369354;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LSvcQG3U5KLGAazpVSYk1Ga5VrUD6NmAFmtR76jg2NM=;
+  b=hiQTcVbYe75ZaXEdPFno8/L5gezyXbK5BICsGSJMweq9yAG6Pf6YhZCq
+   b/E7C7Le3obbZSEGwdiApPbveSSs8EO9ZUrXUuLnTDciYJbGnEA6HVbj6
+   Si4tG27m+eur84QedpxJU59QQF4VV5PKW+4hH9p6JvtskMbANmHTGw2+N
+   ldGk1YnVONg2YADtWfjgkZc3YZvgckt0qk16PkjLImsxL9fevZizsWKYD
+   2MrPMStOEv/y1vlcYZY9Be8aACdwzQDLVIrFlk9G2VTBP7BQC1pAfJww0
+   l7gXCXQh+3iZgh3zOMkHuWUbWeKbToteWg11CWLKzK6fkj/s00QVdeNY0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10937"; a="381600831"
+X-IronPort-AV: E=Sophos;i="6.04,314,1695711600"; 
+   d="scan'208";a="381600831"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2023 23:02:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,314,1695711600"; 
+   d="scan'208";a="27070934"
+Received: from sgruszka-mobl.ger.corp.intel.com (HELO localhost) ([10.252.35.82])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2023 23:02:31 -0800
+Date: Thu, 28 Dec 2023 21:29:45 +0100
+From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Greg KH <gregkh@linuxfoundation.org>, linux-pm@vger.kernel.org,
+	Youngmin Nam <youngmin.nam@samsung.com>, rafael@kernel.org,
+	linux-kernel@vger.kernel.org, d7271.choe@samsung.com,
+	janghyuck.kim@samsung.com, hyesoo.yu@samsung.com,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: [PATCH v1 2/3] async: Introduce async_schedule_dev_nocall()
+Message-ID: <ZY3auVvVzxwTmAX8@linux.intel.com>
+References: <CGME20231227084252epcas2p3b063f7852f81f82cd0a31afd7f404db4@epcas2p3.samsung.com>
+ <5754861.DvuYhMxLoT@kreacher>
+ <6019796.lOV4Wx5bFT@kreacher>
+ <4874693.GXAFRqVoOG@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231228103921.23839-1-di.shen@unisoc.com> <CAJZ5v0jYX8QJjFzOTSWFf7PnBP+twm3Ww+9MVqwAsJrPx1fycQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jYX8QJjFzOTSWFf7PnBP+twm3Ww+9MVqwAsJrPx1fycQ@mail.gmail.com>
-From: Di Shen <cindygm567@gmail.com>
-Date: Fri, 29 Dec 2023 12:30:10 +0800
-Message-ID: <CAHYJL4p9ocr1FsM_Oc-p-H=NzfVuU3=8NYBwSV8oi+_vNuVUPg@mail.gmail.com>
-Subject: Re: [PATCH] thermal: core: export the governor register related API
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Di Shen <di.shen@unisoc.com>, daniel.lezcano@linaro.org, rui.zhang@intel.com, 
-	lukasz.luba@arm.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	xuewen.yan@unisoc.com, zhanglyra@gmail.com, orsonzhai@gmail.com, 
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4874693.GXAFRqVoOG@kreacher>
 
-Hi Rafael,
+On Wed, Dec 27, 2023 at 09:38:23PM +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> In preparation for subsequent changes, introduce a specialized variant
+> of async_schedule_dev() that will not invoke the argument function
+> synchronously when it cannot be scheduled for asynchronous execution.
+> 
+> The new function, async_schedule_dev_nocall(), will be used for fixing
+> possible deadlocks in the system-wide power management core code.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/base/power/main.c |   12 ++++++++----
+>  include/linux/async.h     |    2 ++
+>  kernel/async.c            |   29 +++++++++++++++++++++++++++++
+>  3 files changed, 39 insertions(+), 4 deletions(-)
+> 
+> Index: linux-pm/kernel/async.c
+> ===================================================================
+> --- linux-pm.orig/kernel/async.c
+> +++ linux-pm/kernel/async.c
+> @@ -244,6 +244,35 @@ async_cookie_t async_schedule_node(async
+>  EXPORT_SYMBOL_GPL(async_schedule_node);
+>  
+>  /**
+> + * async_schedule_dev_nocall - A simplified variant of async_schedule_dev()
+> + * @func: function to execute asynchronously
+> + * @dev: device argument to be passed to function
+> + *
+> + * @dev is used as both the argument for the function and to provide NUMA
+> + * context for where to run the function.
+> + *
+> + * If the asynchronous execution of @func is scheduled successfully, return
+> + * true. Otherwise, do nothing and return false, unlike async_schedule_dev()
+> + * that will run the function synchronously then.
+> + */
+> +bool async_schedule_dev_nocall(async_func_t func, struct device *dev)
+> +{
+> +	struct async_entry *entry;
+> +
+> +	entry = kzalloc(sizeof(struct async_entry), GFP_KERNEL);
 
-On Fri, Dec 29, 2023 at 4:24=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
->
-> On Thu, Dec 28, 2023 at 11:39=E2=80=AFAM Di Shen <di.shen@unisoc.com> wro=
-te:
-> >
-> > To enable users to register their own thermal governor,
->
-> Why would anyone want to do that?
->
+Is GFP_KERNEL intended here ? I think it's not safe since will
+be called from device_resume_noirq() .
 
-On Android systems, due to GKI restrictions, vendors cannot modify the
-kernel, and
-vendor-specific changes must be loaded as modules, so export this symbol so=
- that
-vendors can load their own specific governor.
+Regards
+Stanislaw
 
-> > this patch
-> > exports thermal_register_governor() and thermal_unregister_governor().
-> > This change would not affect the registration of the default governor.
-> >
-> > Signed-off-by: Di Shen <di.shen@unisoc.com>
-> > ---
-> >  drivers/thermal/thermal_core.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_c=
-ore.c
-> > index 9c17d35ccbbd..56695988e20f 100644
-> > --- a/drivers/thermal/thermal_core.c
-> > +++ b/drivers/thermal/thermal_core.c
-> > @@ -167,6 +167,7 @@ int thermal_register_governor(struct thermal_govern=
-or *governor)
-> >
-> >         return err;
-> >  }
-> > +EXPORT_SYMBOL_GPL(thermal_register_governor);
-> >
-> >  void thermal_unregister_governor(struct thermal_governor *governor)
-> >  {
-> > @@ -193,6 +194,7 @@ void thermal_unregister_governor(struct thermal_gov=
-ernor *governor)
-> >  exit:
-> >         mutex_unlock(&thermal_governor_lock);
-> >  }
-> > +EXPORT_SYMBOL_GPL(thermal_unregister_governor);
-> >
-> >  int thermal_zone_device_set_policy(struct thermal_zone_device *tz,
-> >                                    char *policy)
-> > --
-> > 2.17.1
-> >
->
-
-Best regards,
-Di
 
