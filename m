@@ -1,77 +1,80 @@
-Return-Path: <linux-pm+bounces-1652-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1653-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6A5E81FA3F
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 18:14:52 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8F4D81FA5B
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 18:33:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 57330B20E5C
-	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 17:14:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 15004B21DCE
+	for <lists+linux-pm@lfdr.de>; Thu, 28 Dec 2023 17:33:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6BA2EEB6;
-	Thu, 28 Dec 2023 17:14:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E5DEF507;
+	Thu, 28 Dec 2023 17:33:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="SE9s4t14"
+	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="W7AjGhbW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33ED8F9CA
-	for <linux-pm@vger.kernel.org>; Thu, 28 Dec 2023 17:14:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34C35F9C1
+	for <linux-pm@vger.kernel.org>; Thu, 28 Dec 2023 17:32:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-40d5a41143fso22939465e9.3
-        for <linux-pm@vger.kernel.org>; Thu, 28 Dec 2023 09:14:43 -0800 (PST)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-40d5b89e2bfso21121735e9.0
+        for <linux-pm@vger.kernel.org>; Thu, 28 Dec 2023 09:32:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1703783682; x=1704388482; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=d5bhZr4OZWNhAWGe5k8YtvZn7JH/mPSTxU7SneuBK2M=;
-        b=SE9s4t14+uJnP8aRfGIjtqA/6q5KNgWDdQWHwyDOjBIj2F4qIbY5aMRg8l9h0pJQQP
-         7ET0/ZrE9gRbKe0bID3ttWKoYAquyYImJg5yVedh8AbBPpsbycK+2y509N0+ckxMqSjW
-         ySsfiGykN2m99KXBsB1z5Iho5UwSrMDBfa7XwTdvpIFN1uZSZEfh251ds/7ZbVd4ZOZ/
-         9muEUHx5axYvqYBrMXLiSvae1urijB8DOyd8poLIJnVKdZeDMpJLFWWRIfPUTB9yTjtJ
-         7AVMsqHum20LCQcn7qox56uma8gDlV14PP50Wv00EmxwITb6dpxVCCjc5dcrCl9rIs5f
-         4+Xw==
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1703784778; x=1704389578; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=dF9C92RFiM0uMpz4TXaSY90Z5FfObpNGK3ZwhCMW8wg=;
+        b=W7AjGhbWDrEkVSNC/RqB7XplM6hEc0rXU6K/yv2ASYY5lfjvc1AT+5/HjWCGPPNZ3P
+         i/4SWX2y3VU48EAGOxPDXDlcNdN0qz7wnmr+xxfspNADIa2KQahYiWSMoWLuJJn9paQN
+         bY3QoVq4ZkwYIrAJKZWoLeUuWTNGsQJFyxVSexh7c/9YWWF1KIIQlyX5TYKej9TpnZHF
+         OWRN/5zZkez6OdM7cOzVBv6YhJIVVxmIj2fZWeLdd2PK3CaEN1INq75YburjuRc9qKII
+         dZGF13Etix/QJoBnHugU+I46uMwq+0FQzubgKk0btxzNti1/WB1Hoh6c1wbUP1yWCT2f
+         rSsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703783682; x=1704388482;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=d5bhZr4OZWNhAWGe5k8YtvZn7JH/mPSTxU7SneuBK2M=;
-        b=lM+w4vz2N12neJhfTdnxi/L2XUkyaXXNRzWbJgauFV/4wu69Pxw3j0Ru9AkXacue4M
-         H/6NyXtUgqQJsehM7YmDz6GHbJoVviFwqdtDa+qrqWuorLPZMaJZXEuAOV5Yqz7/3lDD
-         nR6lO53vZt8dz1K9e8pF3x37MhBV+ULsIamK0EsZoDiuyuR726NZG8V/1uQJnV7v/j9u
-         ralQYYnQDCYpUwBlz/6B3lEu4fm1sRhSgwfeXZr+WHHJmUiomuYLRNHaNSFM7GQYizoh
-         lffZnDS0JIgg6e1fECxAkikTLCIas3UgNIXqMEczautXwMaZVhVJqLqgiQMCdo6z3ayL
-         Liug==
-X-Gm-Message-State: AOJu0Yz8cqhp8aqKWJaEGU6OnQsxhSuQEb++jEdQuvOrUYFs9aySxv/w
-	B67/JByFOc1WZ55FnLFx3TiAFEiSw2SCnQ==
-X-Google-Smtp-Source: AGHT+IHTkh/6edX4qHjr6QTUR6Vo2mxhnQqGjR8riEsvT7YhXvjEzVuTLLE+BAEdL5iB+sx3JUDMBw==
-X-Received: by 2002:a05:600c:1503:b0:40d:355e:ab92 with SMTP id b3-20020a05600c150300b0040d355eab92mr5759877wmg.22.1703783682448;
-        Thu, 28 Dec 2023 09:14:42 -0800 (PST)
+        d=1e100.net; s=20230601; t=1703784778; x=1704389578;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dF9C92RFiM0uMpz4TXaSY90Z5FfObpNGK3ZwhCMW8wg=;
+        b=VRM3w+lPpb0UQqAhbeFiiiMUejCI4HcfwIcEktPFhEqdROyw2FXkFzQA4kU/Xyt/6z
+         Ky2zAQApANSSSmISjYttSeg8tri/yZmpwYh/FjxHqWiexo+Ia90+4LjGeNde/iJWzHmn
+         rMlphUGJgcdQyCtuUAD7uO4o0coSVpzOG7XYzosVVl5BSw6tg2I29iJQYPNIjZXho2C8
+         gqc2u8uT6F78zYWK1T/ion9p2+34Sul7Efbb+5H2EJQaPdq61etzu+xF5pvpJydOPwPe
+         z8Rk1HLYYJ+eZVkL4Wx0RsMBI/36rxkBKyO8oiI77j72LohlTUpsoBhYp7y5svud1xwX
+         C2Tg==
+X-Gm-Message-State: AOJu0Yxy2p/ZkC9Jn9YCcSMiXjmJ1HU5Wc8SPZttB03HKiEIL+ttY5im
+	AtoUVHX9gMLxfUlYv8LHtetkh5tH7OeJJw==
+X-Google-Smtp-Source: AGHT+IEoVcHRZN247qbioInl2CgJl16iYloAaIp5hy6xNF66O7hkW66wH4NmOT4A2LdWUr+fpaKvdw==
+X-Received: by 2002:a05:600c:c06:b0:40d:6e04:6ee2 with SMTP id fm6-20020a05600c0c0600b0040d6e046ee2mr583101wmb.113.1703784778422;
+        Thu, 28 Dec 2023 09:32:58 -0800 (PST)
 Received: from airbuntu (host109-154-238-212.range109-154.btcentralplus.com. [109.154.238.212])
-        by smtp.gmail.com with ESMTPSA id u18-20020a05600c19d200b0040d61b1cecasm4180432wmq.33.2023.12.28.09.14.41
+        by smtp.gmail.com with ESMTPSA id d3-20020a05600c34c300b0040d5a4865casm9792305wmq.36.2023.12.28.09.32.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Dec 2023 09:14:42 -0800 (PST)
-Date: Thu, 28 Dec 2023 17:14:41 +0000
+        Thu, 28 Dec 2023 09:32:58 -0800 (PST)
+Date: Thu, 28 Dec 2023 17:32:56 +0000
 From: Qais Yousef <qyousef@layalina.io>
 To: Lukasz Luba <lukasz.luba@arm.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	rafael@kernel.org, dietmar.eggemann@arm.com, rui.zhang@intel.com,
+Cc: Xuewen Yan <xuewen.yan94@gmail.com>, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, rafael@kernel.org,
+	dietmar.eggemann@arm.com, rui.zhang@intel.com,
 	amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
 	daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
 	len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org,
 	wvw@google.com
-Subject: Re: [PATCH v5 05/23] PM: EM: Refactor a new function
- em_compute_costs()
-Message-ID: <20231228171441.jgyjtp3knbtcqgf7@airbuntu>
+Subject: Re: [PATCH v5 09/23] PM: EM: Use runtime modified EM for CPUs energy
+ estimation in EAS
+Message-ID: <20231228173256.kepuwwimb4b2osew@airbuntu>
 References: <20231129110853.94344-1-lukasz.luba@arm.com>
- <20231129110853.94344-6-lukasz.luba@arm.com>
- <20231217175845.2jdeqaz62mmcjuwu@airbuntu>
- <5f7f52a4-4f0a-4694-a743-478c5e4e4079@arm.com>
+ <20231129110853.94344-10-lukasz.luba@arm.com>
+ <20231217175923.wxmfocgckpaytptb@airbuntu>
+ <CAB8ipk_5TjUTrZ-nrGAwYMugLJFF72MvvRDzPJqaCayNwCm1wg@mail.gmail.com>
+ <1ccd7a20-0479-46f7-a968-57a18f0c0152@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -80,23 +83,88 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <5f7f52a4-4f0a-4694-a743-478c5e4e4079@arm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1ccd7a20-0479-46f7-a968-57a18f0c0152@arm.com>
 
-On 12/19/23 10:59, Lukasz Luba wrote:
+On 12/19/23 08:32, Lukasz Luba wrote:
+> Hi Qais and Xuewen,
 > 
-> 
-> On 12/17/23 17:58, Qais Yousef wrote:
-> > On 11/29/23 11:08, Lukasz Luba wrote:
-> > > Refactor a dedicated function which will be easier to maintain and re-use
-> > > in future. The upcoming changes for the modifiable EM perf_state table
-> > > will use it (instead of duplicating the code).
+> On 12/19/23 04:03, Xuewen Yan wrote:
+> > On Mon, Dec 18, 2023 at 1:59 AM Qais Yousef <qyousef@layalina.io> wrote:
+> > > 
+> > > On 11/29/23 11:08, Lukasz Luba wrote:
+> > > > The new Energy Model (EM) supports runtime modification of the performance
+> > > > state table to better model the power used by the SoC. Use this new
+> > > > feature to improve energy estimation and therefore task placement in
+> > > > Energy Aware Scheduler (EAS).
+> > > 
+> > > nit: you moved the code to use the new runtime em table instead of the one
+> > > parsed at boot.
+> > > 
+> > > > 
+> > > > Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> > > > ---
+> > > >   include/linux/energy_model.h | 16 ++++++++++++----
+> > > >   1 file changed, 12 insertions(+), 4 deletions(-)
+> > > > 
+> > > > diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+> > > > index 1e618e431cac..94a77a813724 100644
+> > > > --- a/include/linux/energy_model.h
+> > > > +++ b/include/linux/energy_model.h
+> > > > @@ -238,6 +238,7 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
+> > > >                                unsigned long max_util, unsigned long sum_util,
+> > > >                                unsigned long allowed_cpu_cap)
+> > > >   {
+> > > > +     struct em_perf_table *runtime_table;
+> > > >        unsigned long freq, scale_cpu;
+> > > >        struct em_perf_state *ps;
+> > > >        int cpu, i;
+> > > > @@ -255,7 +256,14 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
+> > > >         */
+> > > >        cpu = cpumask_first(to_cpumask(pd->cpus));
+> > > >        scale_cpu = arch_scale_cpu_capacity(cpu);
+> > > > -     ps = &pd->table[pd->nr_perf_states - 1];
+> > > > +
+> > > > +     /*
+> > > > +      * No rcu_read_lock() since it's already called by task scheduler.
+> > > > +      * The runtime_table is always there for CPUs, so we don't check.
+> > > > +      */
+> > > 
+> > > WARN_ON(rcu_read_lock_held()) instead?
 > > 
-> > nit: What is being refactored? Looks like you took em_compute_cost() out of
-> > em_create_perf_table().
+> > I agree, or SCHED_WARN_ON(!rcu_read_lock_held()) ?
 > 
-> Yes, it's going to be re-used later for also update code path, not only
-> register code path.
+> I disagree here. This is a sched function in hot path and as comment
 
-Sorry I was terse. I meant the commit message could be clearer to require less
-effort untangling what is actually being changed.
+WARN_ON() is not a sched function.
+
+> says:
+> 
+> -----------------------
+>  * This function must be used only for CPU devices. There is no validation,
+>  * i.e. if the EM is a CPU type and has cpumask allocated. It is called from
+>  * the scheduler code quite frequently and that is why there is not checks.
+> -----------------------
+> 
+> We don't have to put the checks or warnings everywhere in the kernel
+> functions. Especially hot one like this one.
+
+When checks are necessary, there are ways even for hot paths.
+
+> 
+> As you might not notice, we don't even check if the pd->cpus is not NULL
+
+rcu_read_lock_held() is only enabled for lockdebug build and it's the standard
+way to document and add verification to ensure locking rules are honoured. On
+non lockdebug build this will be compiled out.
+
+You had to put a long comment to ensure locking rules are correct, why not
+use existing infrastructure instead to provide better checks and inherent
+documentation?
+
+We had a bug recently where the rcu_read_lock() was moved and this broke some
+function buried down in the call stack. So subtle code shuffles elsewhere can
+cause unwanted side effects; and it's hard to catch these bugs.
+
+	https://lore.kernel.org/stable/20231009130130.210024505@linuxfoundation.org/
 
