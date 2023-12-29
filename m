@@ -1,139 +1,205 @@
-Return-Path: <linux-pm+bounces-1672-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1673-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C6788200B6
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Dec 2023 18:15:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5926F8200C8
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Dec 2023 18:22:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 484B828421B
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Dec 2023 17:15:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B0D06B21C49
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Dec 2023 17:22:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4BCB12B6E;
-	Fri, 29 Dec 2023 17:15:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FCC912B6B;
+	Fri, 29 Dec 2023 17:22:39 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5189E12B6A;
-	Fri, 29 Dec 2023 17:15:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D001E12E40;
+	Fri, 29 Dec 2023 17:22:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-590a21e977aso127016eaf.1;
-        Fri, 29 Dec 2023 09:15:15 -0800 (PST)
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-6dbca8c6eeeso1488300a34.1;
+        Fri, 29 Dec 2023 09:22:37 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703870114; x=1704474914;
+        d=1e100.net; s=20230601; t=1703870557; x=1704475357;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uIpqBtiyNIjj1Q2v6I1K0k8F1dXNQa2RGr5h1JJcf7k=;
-        b=RzPryYni45wVbODTuocutDmNeGxdwh77f2eu9Zp86aT51G+hKfqzkYBpzXST/NCYJ9
-         Eh6EwcdfhbBNsfr7ENBwVNkqwiprA1Qju7PoqLppaiTaGVP/CNyJnGPk0Vv4g3JZzuOI
-         9fcY39zy5pl1bfWSkNKfeqP2IDiGxiHTnXKbOvxkr/9tJVdpMcqQFPWmslMWDkwtI6Mn
-         JDTt5U/eshMokrXFtbye2jB0MADHjnjqXEyhYYyye3/Cxi+M163r5jh78TY3to4H3gNG
-         wGjo6D3nSXiwOQShUbrHGYGFk9/jEOuH1bDgGdsoahz9/nDzLg3gHHdE/A9EleO+2fjH
-         SNLg==
-X-Gm-Message-State: AOJu0YxBJnooGt7SfnJO79h2oEyLar6U0EcEQ/ncdU9PS2mfvbnCwDim
-	FlrVVJ3kL2dSSQQRCSNCJDYL25kyIJ15fu1XIbc=
-X-Google-Smtp-Source: AGHT+IHhAJbwOwKbh3BFqZeperr3t8NxfevGdnBCgkcjCUO2O/4Fl1RpsPvNDnQNrzD/r/2JzyATTKdaxLWx7n+HkNg=
-X-Received: by 2002:a4a:dc96:0:b0:594:ad62:bab9 with SMTP id
- g22-20020a4adc96000000b00594ad62bab9mr10376974oou.1.1703870114307; Fri, 29
- Dec 2023 09:15:14 -0800 (PST)
+        bh=3zXsDSVyjkOlIslVUejAQip3X8oIGu+vcHizvG4w/TU=;
+        b=wpSfowfKYZMiboymg7TjPTcqnmTVhZg2QGtAJzHppcWjICWMTdQGIVybjV0Gh9G3Ce
+         2POMvqWpH1iyDbzwibV+KOffGY5ot2y+jExPJSNifPkAtKymL5nNuggl1aRnbi5VRalx
+         PrqSpExcKyMhflIi55tX9KN892RVyBHFM5FiXCzVAewbF/hBKj8J71lo3XatZKZYVTBB
+         e61771YmUsYxodxDRrDvXo5QQVvwstEvHsb7xXEAuqJ9NZmcCcxRY+kBMF92moxFBkvu
+         irmV78vjcBL6vgka4w740zqEdsL00byX9cHJrDSTk4svxtun2bDq1Qy6/oAFm7+v7k3l
+         jD7g==
+X-Gm-Message-State: AOJu0YzgCIkPGdtrNnsunaSLxc6fwwHkKa+npqQi8c9bAicghPTlU3oE
+	dEPJGmkO2jmdxqXELEmZui5sI+oTv+i350ASp5s=
+X-Google-Smtp-Source: AGHT+IFix9+4OOdNeMwDWjSfLcUeqzsSuVHBHBnU+yXmFaQggHNijD7IlcxeVT63CGIrZEqDSfsz4ihGfdhVQc8ScTU=
+X-Received: by 2002:a05:6820:358:b0:593:fbd5:10aa with SMTP id
+ m24-20020a056820035800b00593fbd510aamr17645813ooe.1.1703870556822; Fri, 29
+ Dec 2023 09:22:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231220231753.1824364-1-lukasz.luba@arm.com>
-In-Reply-To: <20231220231753.1824364-1-lukasz.luba@arm.com>
+References: <20231227062940.10780-1-ricardo.neri-calderon@linux.intel.com> <20231227062940.10780-2-ricardo.neri-calderon@linux.intel.com>
+In-Reply-To: <20231227062940.10780-2-ricardo.neri-calderon@linux.intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 29 Dec 2023 18:15:03 +0100
-Message-ID: <CAJZ5v0gxdV4rUtcYM+c9eo9vA_=cW7Sn-Yk2Mo4ssjTMF0t-uQ@mail.gmail.com>
-Subject: Re: [PATCH v3 0/9] Add callback for cooling list update to speed-up IPA
-To: Lukasz Luba <lukasz.luba@arm.com>
-Cc: linux-kernel@vger.kernel.org, rafael@kernel.org, linux-pm@vger.kernel.org, 
-	daniel.lezcano@linaro.org, rui.zhang@intel.com
+Date: Fri, 29 Dec 2023 18:22:25 +0100
+Message-ID: <CAJZ5v0iTaoiWWxueysmgx_SxqLZB0iODqSMX0vht9n8r_MC=KA@mail.gmail.com>
+Subject: Re: [PATCH 1/4] thermal: intel: hfi: Refactor enabling code into
+ helper functions
+To: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, Chen Yu <yu.c.chen@intel.com>, 
+	Len Brown <len.brown@intel.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>, 
+	Zhao Liu <zhao1.liu@intel.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Zhao Liu <zhao1.liu@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 21, 2023 at 12:16=E2=80=AFAM Lukasz Luba <lukasz.luba@arm.com> =
-wrote:
+On Wed, Dec 27, 2023 at 7:28=E2=80=AFAM Ricardo Neri
+<ricardo.neri-calderon@linux.intel.com> wrote:
 >
-> Hi all,
+> In preparation to add a suspend notifier, wrap the logic to enable HFI an=
+d
+> program its memory buffer into helper functions. Both the CPU hotplug
+> callback and the suspend notifier will use it.
+
+No functional impact?
+
+> Cc: Chen Yu <yu.c.chen@intel.com>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: Zhao Liu <zhao1.liu@linux.intel.com>
+> Cc: linux-pm@vger.kernel.org
+> Cc: stable@vger.kernel.org
+
+Please don't CC stable@vger on patch submissions, although you may add
+a Cc: stable tag without actually CCing it for my information, but in
+that case please add a full tag including the earliest stable series
+the patch is intended to apply to.
+
+> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> ---
+>  drivers/thermal/intel/intel_hfi.c | 46 +++++++++++++++++--------------
+>  1 file changed, 25 insertions(+), 21 deletions(-)
 >
-> The patch set adds a new callback for thermal governors and implementatio=
-n for
-> Intelligent Power Allocator.
+> diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/in=
+tel_hfi.c
+> index c69db6c90869..87ac7b196981 100644
+> --- a/drivers/thermal/intel/intel_hfi.c
+> +++ b/drivers/thermal/intel/intel_hfi.c
+> @@ -347,6 +347,25 @@ static void init_hfi_instance(struct hfi_instance *h=
+fi_instance)
+>         hfi_instance->data =3D hfi_instance->hdr + hfi_features.hdr_size;
+>  }
 >
-> The goal is to move some heavy operations like the memory allocations and=
- heavy
-> computations (multiplications) out of throttle() callback hot path.
+> +static void hfi_enable(void)
+> +{
+> +       u64 msr_val;
+> +
+> +       rdmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
+> +       msr_val |=3D HW_FEEDBACK_CONFIG_HFI_ENABLE_BIT;
+> +       wrmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
+> +}
+> +
+> +static void hfi_set_hw_table(struct hfi_instance *hfi_instance)
+> +{
+> +       phys_addr_t hw_table_pa;
+> +       u64 msr_val;
+> +
+> +       hw_table_pa =3D virt_to_phys(hfi_instance->hw_table);
+> +       msr_val =3D hw_table_pa | HW_FEEDBACK_PTR_VALID_BIT;
+> +       wrmsrl(MSR_IA32_HW_FEEDBACK_PTR, msr_val);
+> +}
+> +
+>  /**
+>   * intel_hfi_online() - Enable HFI on @cpu
+>   * @cpu:       CPU in which the HFI will be enabled
+> @@ -364,8 +383,6 @@ void intel_hfi_online(unsigned int cpu)
+>  {
+>         struct hfi_instance *hfi_instance;
+>         struct hfi_cpu_info *info;
+> -       phys_addr_t hw_table_pa;
+> -       u64 msr_val;
+>         u16 die_id;
 >
-> The new callback is generic enough to handle other important update event=
-s.
-> It re-uses existing thermal_notify_event definitions.
+>         /* Nothing to do if hfi_instances are missing. */
+> @@ -403,14 +420,16 @@ void intel_hfi_online(unsigned int cpu)
+>         /*
+>          * Hardware is programmed with the physical address of the first =
+page
+>          * frame of the table. Hence, the allocated memory must be page-a=
+ligned.
+> +        *
+> +        * Some processors do not forget the initial address of the HFI t=
+able
+> +        * even after having been reprogrammed. Keep using the same pages=
+. Do
+> +        * not free them.
+
+This comment change does not seem to belong to this patch.  I guess it
+needs to go to one of the subsequent patches?
+
+>          */
+>         hfi_instance->hw_table =3D alloc_pages_exact(hfi_features.nr_tabl=
+e_pages,
+>                                                    GFP_KERNEL | __GFP_ZER=
+O);
+>         if (!hfi_instance->hw_table)
+>                 goto unlock;
 >
-> In addition there are some small clean-ups for IPA code.
+> -       hw_table_pa =3D virt_to_phys(hfi_instance->hw_table);
+> -
+>         /*
+>          * Allocate memory to keep a local copy of the table that
+>          * hardware generates.
+> @@ -420,16 +439,6 @@ void intel_hfi_online(unsigned int cpu)
+>         if (!hfi_instance->local_table)
+>                 goto free_hw_table;
 >
-> The patch set is based on current pm/bleeding-edge branch (20 Dec).
+> -       /*
+> -        * Program the address of the feedback table of this die/package.=
+ On
+> -        * some processors, hardware remembers the old address of the HFI=
+ table
+> -        * even after having been reprogrammed and re-enabled. Thus, do n=
+ot free
+> -        * the pages allocated for the table or reprogram the hardware wi=
+th a
+> -        * new base address. Namely, program the hardware only once.
+> -        */
+> -       msr_val =3D hw_table_pa | HW_FEEDBACK_PTR_VALID_BIT;
+> -       wrmsrl(MSR_IA32_HW_FEEDBACK_PTR, msr_val);
+> -
+>         init_hfi_instance(hfi_instance);
 >
-> changes:
-> v3:
-> - changed helper name to thermal_governor_update_tz() with also
->   "reason" argument (Rafael)
-> - added thermal_governor_update_tz() to thermal_core.h for use from sysfs
->   functions
-> - changed names of the events (THERMAL_TZ_BIND_CDEV) (Rafael)
-> - patch 2/9 changed header and comment for function (Rafael)
-> - patch 3/9: used unsigned types for num_actors, buffer_size (Rafael)
-> - changed trace functions and added new patch 4/9 to be prepare tracing f=
-or
->   different internal IPA array; it also drops dynamic array inside trace =
-event
-> - used new structure power_actor and changed the code in patch 5/9 (Rafae=
-l)
-> - keept the local num_actors variable (Rafael)
-> - patch 6/9 skipped redundant parens and changed the header desc. (Rafael=
-)
-> - patch 7/9 changed header and used instance->tz->lock (Rafael)
-> - patch 8/9 removed handle_weight_update() and renamed new event to
->   THERMAL_INSTANCE_WEIGHT_CHANGE (Rafael)
-> - patch 9/9 aliged to use THERMAL_INSTANCE_WEIGHT_CHANGE is switch (Rafae=
-l)
+>         INIT_DELAYED_WORK(&hfi_instance->update_work, hfi_update_work_fn)=
+;
+> @@ -438,13 +447,8 @@ void intel_hfi_online(unsigned int cpu)
 >
-> v2 can be found here [1]
+>         cpumask_set_cpu(cpu, hfi_instance->cpus);
 >
-> Regards,
-> Lukasz
+> -       /*
+> -        * Enable the hardware feedback interface and never disable it. S=
+ee
+> -        * comment on programming the address of the table.
+> -        */
+> -       rdmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
+> -       msr_val |=3D HW_FEEDBACK_CONFIG_HFI_ENABLE_BIT;
+> -       wrmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
+> +       hfi_set_hw_table(hfi_instance);
+> +       hfi_enable();
 >
-> [1] https://lore.kernel.org/lkml/20231212134844.1213381-1-lukasz.luba@arm=
-.com/
->
-> Lukasz Luba (9):
->   thermal: core: Add governor callback for thermal zone change
->   thermal: gov_power_allocator: Refactor check_power_actors()
->   thermal: gov_power_allocator: Refactor checks in divvy_up_power()
->   thermal: gov_power_allocator: Change trace functions
->   thermal: gov_power_allocator: Move memory allocation out of throttle()
->   thermal: gov_power_allocator: Simplify checks for valid power actor
->   thermal/sysfs: Update instance->weight under tz lock
->   thermal/sysfs: Update governors when the 'weight' has changed
->   thermal: gov_power_allocator: Support new update callback of weights
->
->  drivers/thermal/gov_power_allocator.c | 269 ++++++++++++++++----------
->  drivers/thermal/thermal_core.c        |  14 ++
->  drivers/thermal/thermal_core.h        |   2 +
->  drivers/thermal/thermal_sysfs.c       |   7 +
->  drivers/thermal/thermal_trace_ipa.h   |  50 +++--
->  include/linux/thermal.h               |   7 +
->  6 files changed, 226 insertions(+), 123 deletions(-)
->
+>  unlock:
+>         mutex_unlock(&hfi_instance_lock);
 > --
-
-All patches in the series applied as 6.8 material, with minor white
-space adjustment in patch [8/9].
-
-Thanks!
 
