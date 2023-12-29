@@ -1,147 +1,139 @@
-Return-Path: <linux-pm+bounces-1671-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1672-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39B718200B1
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Dec 2023 18:12:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C6788200B6
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Dec 2023 18:15:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C45BE1F220A2
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Dec 2023 17:12:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 484B828421B
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Dec 2023 17:15:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3440F12B69;
-	Fri, 29 Dec 2023 17:12:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4BCB12B6E;
+	Fri, 29 Dec 2023 17:15:16 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C424C12B61;
-	Fri, 29 Dec 2023 17:12:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5189E12B6A;
+	Fri, 29 Dec 2023 17:15:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3bbc5cd15b6so367348b6e.0;
-        Fri, 29 Dec 2023 09:12:48 -0800 (PST)
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-590a21e977aso127016eaf.1;
+        Fri, 29 Dec 2023 09:15:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703869968; x=1704474768;
+        d=1e100.net; s=20230601; t=1703870114; x=1704474914;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HdiTaY4wXcOHiFobHYaOWoRTwcwWY53xK1QwAvbQC8E=;
-        b=dTjcBoqcAfRy/6p41TbGYdFruKKuW3UJu9q+y9vqlZMpLIqD9Oj7mVpf5kbIZ+fm4o
-         DR3WAwHvzCBNBOeR6gQrroITJ2Gw6u+A+cW3o4HC5Eh+cOH77mLe5uyBXrvx54FXcU5p
-         FJEdeAL+ta+MAwuZAKB0bmS1/F53CUESkfNQbWEoykkf4MhjVnzero3e1BD/qm+4P+bg
-         Zsv6lbUYE6/3GRlysZIGnTTLxeE4dj5tYtWaejJnzyDsburpVZXwjQDYrMe/DLFKSYcq
-         Vie8MjWt3W3gH2ku+7A6cNOEJSBD3By+q3Kgy/mBmpBr1Cq16FaqYXiL7q2WnmbuJIgU
-         d8tg==
-X-Gm-Message-State: AOJu0YynTl20tZ02sgRizMOZnvgrok1mUX6AG38hNhdTVlM1Z0Bo1XR8
-	SB23A1a+7TTQOX40OHBMXLhJq1AzwYYL2UaVDe0=
-X-Google-Smtp-Source: AGHT+IFfyXOQC8zU2QuZ7sMVZIymxpNx27SsWQtka+nbAAgX317CZe3KvSGEwVOQknk1f83gxxIBuBKxIZ3q+8e1hRQ=
-X-Received: by 2002:a4a:ce87:0:b0:594:ec5f:f697 with SMTP id
- f7-20020a4ace87000000b00594ec5ff697mr5429797oos.0.1703869967849; Fri, 29 Dec
- 2023 09:12:47 -0800 (PST)
+        bh=uIpqBtiyNIjj1Q2v6I1K0k8F1dXNQa2RGr5h1JJcf7k=;
+        b=RzPryYni45wVbODTuocutDmNeGxdwh77f2eu9Zp86aT51G+hKfqzkYBpzXST/NCYJ9
+         Eh6EwcdfhbBNsfr7ENBwVNkqwiprA1Qju7PoqLppaiTaGVP/CNyJnGPk0Vv4g3JZzuOI
+         9fcY39zy5pl1bfWSkNKfeqP2IDiGxiHTnXKbOvxkr/9tJVdpMcqQFPWmslMWDkwtI6Mn
+         JDTt5U/eshMokrXFtbye2jB0MADHjnjqXEyhYYyye3/Cxi+M163r5jh78TY3to4H3gNG
+         wGjo6D3nSXiwOQShUbrHGYGFk9/jEOuH1bDgGdsoahz9/nDzLg3gHHdE/A9EleO+2fjH
+         SNLg==
+X-Gm-Message-State: AOJu0YxBJnooGt7SfnJO79h2oEyLar6U0EcEQ/ncdU9PS2mfvbnCwDim
+	FlrVVJ3kL2dSSQQRCSNCJDYL25kyIJ15fu1XIbc=
+X-Google-Smtp-Source: AGHT+IHhAJbwOwKbh3BFqZeperr3t8NxfevGdnBCgkcjCUO2O/4Fl1RpsPvNDnQNrzD/r/2JzyATTKdaxLWx7n+HkNg=
+X-Received: by 2002:a4a:dc96:0:b0:594:ad62:bab9 with SMTP id
+ g22-20020a4adc96000000b00594ad62bab9mr10376974oou.1.1703870114307; Fri, 29
+ Dec 2023 09:15:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231228145416.GAZY2MGLY6THMkAZ2W@fat_crate.local>
-In-Reply-To: <20231228145416.GAZY2MGLY6THMkAZ2W@fat_crate.local>
+References: <20231220231753.1824364-1-lukasz.luba@arm.com>
+In-Reply-To: <20231220231753.1824364-1-lukasz.luba@arm.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 29 Dec 2023 18:12:36 +0100
-Message-ID: <CAJZ5v0j3Wb-9Czb50u=NWjNz-W8mgMDEarWY7XG49d+LdzKAYw@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: haltpoll: Do not enable interrupts when entering idle
-To: "Borislav Petkov (AMD)" <bp@alien8.de>
-Cc: linux-pm@vger.kernel.org, forza@tnonline.net, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	lkml <linux-kernel@vger.kernel.org>
+Date: Fri, 29 Dec 2023 18:15:03 +0100
+Message-ID: <CAJZ5v0gxdV4rUtcYM+c9eo9vA_=cW7Sn-Yk2Mo4ssjTMF0t-uQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/9] Add callback for cooling list update to speed-up IPA
+To: Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-kernel@vger.kernel.org, rafael@kernel.org, linux-pm@vger.kernel.org, 
+	daniel.lezcano@linaro.org, rui.zhang@intel.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 28, 2023 at 3:54=E2=80=AFPM Borislav Petkov (AMD) <bp@alien8.de=
-> wrote:
+On Thu, Dec 21, 2023 at 12:16=E2=80=AFAM Lukasz Luba <lukasz.luba@arm.com> =
+wrote:
 >
-> Hi,
+> Hi all,
 >
-> I think PeterZ's massaging from
+> The patch set adds a new callback for thermal governors and implementatio=
+n for
+> Intelligent Power Allocator.
 >
->   https://lore.kernel.org/all/20230112194314.845371875@infradead.org/
+> The goal is to move some heavy operations like the memory allocations and=
+ heavy
+> computations (multiplications) out of throttle() callback hot path.
 >
-> missed one.
+> The new callback is generic enough to handle other important update event=
+s.
+> It re-uses existing thermal_notify_event definitions.
 >
-> @Forza, if you want to have your real name in the patch tags below and
-> thus be part of git history, lemme know. If you don't want them there,
-> either.
+> In addition there are some small clean-ups for IPA code.
 >
-> Thx.
+> The patch set is based on current pm/bleeding-edge branch (20 Dec).
 >
-> ---
-> From: Borislav Petkov (AMD) <bp@alien8.de>
-
-I would have appreciated a Subject: line here.
-
+> changes:
+> v3:
+> - changed helper name to thermal_governor_update_tz() with also
+>   "reason" argument (Rafael)
+> - added thermal_governor_update_tz() to thermal_core.h for use from sysfs
+>   functions
+> - changed names of the events (THERMAL_TZ_BIND_CDEV) (Rafael)
+> - patch 2/9 changed header and comment for function (Rafael)
+> - patch 3/9: used unsigned types for num_actors, buffer_size (Rafael)
+> - changed trace functions and added new patch 4/9 to be prepare tracing f=
+or
+>   different internal IPA array; it also drops dynamic array inside trace =
+event
+> - used new structure power_actor and changed the code in patch 5/9 (Rafae=
+l)
+> - keept the local num_actors variable (Rafael)
+> - patch 6/9 skipped redundant parens and changed the header desc. (Rafael=
+)
+> - patch 7/9 changed header and used instance->tz->lock (Rafael)
+> - patch 8/9 removed handle_weight_update() and renamed new event to
+>   THERMAL_INSTANCE_WEIGHT_CHANGE (Rafael)
+> - patch 9/9 aliged to use THERMAL_INSTANCE_WEIGHT_CHANGE is switch (Rafae=
+l)
 >
-> The cpuidle governors' ->enter() methods are supposed to be IRQ
-> invariant:
-
-cpuidle governors have no ->enter() callbacks, drivers do.  And this
-particular haltpoll is a driver (there is a haltpoll governor too,
-confusingly enough).
-
+> v2 can be found here [1]
 >
->   5e26aa933911 ("cpuidle/poll: Ensure IRQs stay disabled after cpuidle_st=
-ate::enter() calls")
->   bb7b11258561 ("cpuidle: Move IRQ state validation")
+> Regards,
+> Lukasz
 >
-> Do that in the haltpoll governor too.
-
-And so s/governor/driver/ here.
-
-> Fixes: 5e26aa933911 ("cpuidle/poll: Ensure IRQs stay disabled after cpuid=
-le_state::enter() calls")
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D218245
-> Reported-by: <forza@tnonline.net>
-> Tested-by: <forza@tnonline.net>
-> Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-
-Nevertheless, applied (with the changelog adjustments mentioned above).
-
-> ---
->  drivers/cpuidle/cpuidle-haltpoll.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
+> [1] https://lore.kernel.org/lkml/20231212134844.1213381-1-lukasz.luba@arm=
+.com/
 >
-> diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle=
--haltpoll.c
-> index e66df22f9695..d8515d5c0853 100644
-> --- a/drivers/cpuidle/cpuidle-haltpoll.c
-> +++ b/drivers/cpuidle/cpuidle-haltpoll.c
-> @@ -25,13 +25,12 @@ MODULE_PARM_DESC(force, "Load unconditionally");
->  static struct cpuidle_device __percpu *haltpoll_cpuidle_devices;
->  static enum cpuhp_state haltpoll_hp_state;
+> Lukasz Luba (9):
+>   thermal: core: Add governor callback for thermal zone change
+>   thermal: gov_power_allocator: Refactor check_power_actors()
+>   thermal: gov_power_allocator: Refactor checks in divvy_up_power()
+>   thermal: gov_power_allocator: Change trace functions
+>   thermal: gov_power_allocator: Move memory allocation out of throttle()
+>   thermal: gov_power_allocator: Simplify checks for valid power actor
+>   thermal/sysfs: Update instance->weight under tz lock
+>   thermal/sysfs: Update governors when the 'weight' has changed
+>   thermal: gov_power_allocator: Support new update callback of weights
 >
-> -static int default_enter_idle(struct cpuidle_device *dev,
-> -                             struct cpuidle_driver *drv, int index)
-> +static __cpuidle int default_enter_idle(struct cpuidle_device *dev,
-> +                                       struct cpuidle_driver *drv, int i=
-ndex)
->  {
-> -       if (current_clr_polling_and_test()) {
-> -               local_irq_enable();
-> +       if (current_clr_polling_and_test())
->                 return index;
-> -       }
-> +
->         arch_cpu_idle();
->         return index;
->  }
-> --
-> 2.42.0.rc0.25.ga82fb66fed25
->
+>  drivers/thermal/gov_power_allocator.c | 269 ++++++++++++++++----------
+>  drivers/thermal/thermal_core.c        |  14 ++
+>  drivers/thermal/thermal_core.h        |   2 +
+>  drivers/thermal/thermal_sysfs.c       |   7 +
+>  drivers/thermal/thermal_trace_ipa.h   |  50 +++--
+>  include/linux/thermal.h               |   7 +
+>  6 files changed, 226 insertions(+), 123 deletions(-)
 >
 > --
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
+
+All patches in the series applied as 6.8 material, with minor white
+space adjustment in patch [8/9].
+
+Thanks!
 
