@@ -1,98 +1,182 @@
-Return-Path: <linux-pm+bounces-1679-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1680-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6778C8201CB
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Dec 2023 22:31:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42C1C8202E3
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Dec 2023 00:52:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 99BB11C216EF
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Dec 2023 21:31:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B072B1F22DCF
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Dec 2023 23:52:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23B3E1429B;
-	Fri, 29 Dec 2023 21:31:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6CEE14F78;
+	Fri, 29 Dec 2023 23:51:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="3gOIgpCN"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TGlnMH6f"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 052FF14292;
-	Fri, 29 Dec 2023 21:31:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1703885462;
-	bh=h3ANz3W0DslZaQwI4kM53iFECoCiLF7i5w4P/6cAJS8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=3gOIgpCN0rHmhUVUO1x2NnY6I/4ngpObwu+s2JXdw+Ag6ioDeIyjdvrO/Uk+g24Sq
-	 D7Ne+1Ni/VgEbpuKRL05s5UI27ctN3ZkHkPeyWm0iAlwHZ7ytovnXYUueBkoukDqF9
-	 UjNMiOP/HVjzYwyncI8WR8sMPsAbOpIz08kRmfrVaazWFSIU22xTHrEe7Yym8yFj2n
-	 8mx5y53Iy/5e4FPWcsgN+9YDVEefyQ0LLxiqTW5vhXwLURDC58gwj0FBH/P69XU/7w
-	 YwoqaLOCC5jW3B4Dgun60zgg8Bice0jLp0IkvzslrLeytSWfTv9NQqD5card03KGyX
-	 ZVcVV3emGe49A==
-Received: from localhost.localdomain (zone.collabora.co.uk [167.235.23.81])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nfraprado)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 44A0E3781FD5;
-	Fri, 29 Dec 2023 21:30:56 +0000 (UTC)
-From: =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= <nfraprado@collabora.com>
-To: Viresh Kumar <viresh.kumar@linaro.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>
-Cc: kernel@collabora.com,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	=?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= <nfraprado@collabora.com>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Hector Yuan <hector.yuan@mediatek.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-mediatek@lists.infradead.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH 1/2] dt-bindings: cpufreq: Add big CPU supply
-Date: Fri, 29 Dec 2023 18:28:39 -0300
-Message-ID: <20231229212853.277334-1-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.43.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0874314F65
+	for <linux-pm@vger.kernel.org>; Fri, 29 Dec 2023 23:51:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-9fa45e75ed9so754254566b.1
+        for <linux-pm@vger.kernel.org>; Fri, 29 Dec 2023 15:51:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1703893914; x=1704498714; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+euFWqMJJkXiPS9ThG6gX+dfKUD0ApFu+6/ednPk02U=;
+        b=TGlnMH6fFccaGH1UcA3nW9ra6YLe7BXJ5tQa/95AEPaHTZpzb/b5yfoPYlS79ZcNSI
+         peWKe4mwv/ilZ2LnOm4PrcU6mr8GypQ6TnZMxw6RfvVxeGlAfEr8uHvqHngZNYJmwOi1
+         mBx06T8j0mCEc1BV0uaMYffaFdFCHd3TGZ5ufGj0CxnLqTKZJsLqJOixsYtZtBVz5CkW
+         LEf4efJFR3oZeGeiAxdOLQIO5hkwatZa+MNxt6jmv8eIaeGBzfxwOzsMfYHZ9w5esF2F
+         O0sr30Bsu2tHTSPck1zP1wMytpqQoz8djWC03COncOzBA1fBkJUtk56SZvWD5t1XrVpX
+         6b4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703893914; x=1704498714;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+euFWqMJJkXiPS9ThG6gX+dfKUD0ApFu+6/ednPk02U=;
+        b=dnkV8wSvsNVfBOwKPCMLAoaMDT5lvPEa4XUjwyBb+jyuYTUAZHQ/tp9+CZu1yHlHSV
+         GrMosnEgwsFLS3VPBH3BUqgOTgfkD2FM7H3RMrCSve8Zqnu01sllrFRCqewmvVcxx+QD
+         n690GjokIT88fn6x/Toth2M4+PH565aHPzORqGd3H80tff75f/aqZVg8LUI2yS72jZNN
+         pmmJZF8NJAUItPMoJX6gxc593nQKi62RqEjYSRmPOYZdgIjqmS47uGNiDIhCD90adchE
+         TpGgX0JKIJsgjYGoEns14B3Wu4BmLmUkh9in/taNi6KUuZ0SdWd0BQh4x0tNMmb1iVwn
+         QfoQ==
+X-Gm-Message-State: AOJu0YyjPCuiRF2guSKGI3qorujGzyUnK4Cx0G6/kLshQ8cH/kQ52QXD
+	7pk+MloC2d78EH6wWmr7ueD6TBxWCXxKEA==
+X-Google-Smtp-Source: AGHT+IEZLEvgPP3ahYwzenIjDIuESsbwlOQfI4RC7EC8W/b1ijXh/HWo6aIqKz0oVQLeAdy9Po/ghw==
+X-Received: by 2002:a17:906:73d5:b0:a23:3bf5:bc73 with SMTP id n21-20020a17090673d500b00a233bf5bc73mr4897253ejl.58.1703893913867;
+        Fri, 29 Dec 2023 15:51:53 -0800 (PST)
+Received: from [192.168.199.125] (178235179036.dynamic-4-waw-k-1-3-0.vectranet.pl. [178.235.179.36])
+        by smtp.gmail.com with ESMTPSA id d8-20020a170906304800b00a26a5f80d07sm2256252ejd.14.2023.12.29.15.51.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 29 Dec 2023 15:51:53 -0800 (PST)
+Message-ID: <4e56729e-0549-4075-8f6c-a43c84ae9b9a@linaro.org>
+Date: Sat, 30 Dec 2023 00:51:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/8] dt-bindings: clock: qcom: Allow VDD_GFX supply to
+ GX
+Content-Language: en-US
+To: Bjorn Andersson <quic_bjorande@quicinc.com>,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Johan Hovold
+ <johan+linaro@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
+ linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+References: <20231220-sa8295p-gpu-v2-0-4763246b72c0@quicinc.com>
+ <20231220-sa8295p-gpu-v2-1-4763246b72c0@quicinc.com>
+ <26617c83-31b3-4ad9-8a61-0b8271fad41f@linaro.org>
+ <20231227203048.GB1315173@hu-bjorande-lv.qualcomm.com>
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <20231227203048.GB1315173@hu-bjorande-lv.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-The performance-controller hardware block on MediaTek SoCs is
-responsible for controlling the frequency of the CPUs. As such, it needs
-any CPU regulator to have been configured prior to initializing. Add a
-phandle in the binding so this dependency can be described.
+On 27.12.2023 21:30, Bjorn Andersson wrote:
+> On Fri, Dec 22, 2023 at 09:12:04AM +0100, Krzysztof Kozlowski wrote:
+>> On 22/12/2023 05:39, Bjorn Andersson wrote:
+>>> In some designs the SoC's VDD_GFX pads are supplied by an external
+>>> regulator, rather than a power-domain. Allow this to be described in the
+>>> GPU clock controller binding.
+>>>
+>>> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+>>> ---
+>>>  Documentation/devicetree/bindings/clock/qcom,gpucc.yaml | 16 ++++++++++++++++
+>>>  1 file changed, 16 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml b/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml
+>>> index f369fa34e00c..c0dd24c9dcb3 100644
+>>> --- a/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml
+>>> +++ b/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml
+>>> @@ -53,6 +53,9 @@ properties:
+>>>    power-domains:
+>>>      maxItems: 1
+>>>  
+>>> +  vdd-gfx-supply:
+>>> +    description: Regulator supply for the VDD_GFX pads
+>>> +
+>>>    '#clock-cells':
+>>>      const: 1
+>>>  
+>>> @@ -74,6 +77,19 @@ required:
+>>>    - '#reset-cells'
+>>>    - '#power-domain-cells'
+>>>  
+>>> +# Allow either power-domains or vdd-gfx-supply, not both
+>>> +oneOf:
+>>> +  - required:
+>>> +      - power-domains
+>>> +  - required:
+>>> +      - vdd-gfx-supply
+>>
+>> This should be enough, assuming one of them is actually required. The
+>> code. See also:
+>> https://elixir.bootlin.com/linux/v5.17-rc2/source/Documentation/devicetree/bindings/reserved-memory/reserved-memory.yaml#L91
+>>
+> 
+> Yes, that would be the correct binding. But the majority of our
+> DeviceTree source does not specify a power-domain for their gpucc.
+> 
+> While this should be corrected, it seem reasonable to leave this
+> optional for now.
+Moreover, I think it would be reasonable to add power-domains as
+required in qcom,gcc.yaml. IIRC all "normal" (not q6) clock controllers
+use at least CX+MX, with perhaps more hw-specific domains for some clocks
+or GDSCs.
 
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
-
- .../devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml        | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
-index d0aecde2b89b..d75b01d04998 100644
---- a/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
-+++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
-@@ -33,6 +33,8 @@ properties:
-       performance domains.
-     const: 1
- 
-+  big-cpus-supply: true
-+
- required:
-   - compatible
-   - reg
--- 
-2.43.0
-
+Konrad
 
