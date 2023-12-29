@@ -1,110 +1,147 @@
-Return-Path: <linux-pm+bounces-1670-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1671-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8D2A820088
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Dec 2023 17:36:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39B718200B1
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Dec 2023 18:12:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 813FB1F229F9
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Dec 2023 16:36:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C45BE1F220A2
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Dec 2023 17:12:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1CDB125BD;
-	Fri, 29 Dec 2023 16:36:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3440F12B69;
+	Fri, 29 Dec 2023 17:12:50 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E5AF12B60;
-	Fri, 29 Dec 2023 16:36:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C424C12B61;
+	Fri, 29 Dec 2023 17:12:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-3bbc5cd15b6so361934b6e.0;
-        Fri, 29 Dec 2023 08:36:13 -0800 (PST)
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3bbc5cd15b6so367348b6e.0;
+        Fri, 29 Dec 2023 09:12:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703867772; x=1704472572;
+        d=1e100.net; s=20230601; t=1703869968; x=1704474768;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=g5osr6xfn25Wt0TdDGmPAZn7SDMAzkOWPXYFwHYI1i4=;
-        b=v05a3tJjKfXRApfF4MI7GmraruaMjJN0N6i3Nw/OHO4BjLBJe4WhaRMrfvMkxnsZrU
-         fgnoPDJhXrPqPTHaQNZtbEMTHLTNK4nhVtXvmG+J1/UBZlQFyqJRgFwWb3xHnG+Gdd99
-         129p6TuHUYJdDgpd+yN1jBt4VOylZk7HlPsSX9jISGLpht6auoZ2IFJybj+4m9tJzfIb
-         1ScDPbIRv4ioRp38sNXJS2Bhb4K2zRU14jELTPQGvJXx1cqNvRp3u3VH8ii1D9Mjda68
-         tW/mQ6EhW/J2KPIofn2jRbhBcNSdEQTIZ5yy/PN5IdBMqrGrAIJJnRnIzQn5L8NyIyvi
-         mMag==
-X-Gm-Message-State: AOJu0YyoIaMwxX8NstoctBIP+ZxZ75ZnmzEyQoEk80uXm4Ta/oo39+aC
-	ciPYZGC2qfojxLhIWroxpqDjXtWCrRmfrj9cTkQ=
-X-Google-Smtp-Source: AGHT+IFs9CoXnbyFsUnv7A/DkAc47usxTcTcrUe5GUpFVHU+aw3llxkYsOyxE6COSY8AJNEwPeqiOjViUCTybWo9Bog=
-X-Received: by 2002:a4a:dc96:0:b0:594:ad62:bab9 with SMTP id
- g22-20020a4adc96000000b00594ad62bab9mr10280653oou.1.1703867772553; Fri, 29
- Dec 2023 08:36:12 -0800 (PST)
+        bh=HdiTaY4wXcOHiFobHYaOWoRTwcwWY53xK1QwAvbQC8E=;
+        b=dTjcBoqcAfRy/6p41TbGYdFruKKuW3UJu9q+y9vqlZMpLIqD9Oj7mVpf5kbIZ+fm4o
+         DR3WAwHvzCBNBOeR6gQrroITJ2Gw6u+A+cW3o4HC5Eh+cOH77mLe5uyBXrvx54FXcU5p
+         FJEdeAL+ta+MAwuZAKB0bmS1/F53CUESkfNQbWEoykkf4MhjVnzero3e1BD/qm+4P+bg
+         Zsv6lbUYE6/3GRlysZIGnTTLxeE4dj5tYtWaejJnzyDsburpVZXwjQDYrMe/DLFKSYcq
+         Vie8MjWt3W3gH2ku+7A6cNOEJSBD3By+q3Kgy/mBmpBr1Cq16FaqYXiL7q2WnmbuJIgU
+         d8tg==
+X-Gm-Message-State: AOJu0YynTl20tZ02sgRizMOZnvgrok1mUX6AG38hNhdTVlM1Z0Bo1XR8
+	SB23A1a+7TTQOX40OHBMXLhJq1AzwYYL2UaVDe0=
+X-Google-Smtp-Source: AGHT+IFfyXOQC8zU2QuZ7sMVZIymxpNx27SsWQtka+nbAAgX317CZe3KvSGEwVOQknk1f83gxxIBuBKxIZ3q+8e1hRQ=
+X-Received: by 2002:a4a:ce87:0:b0:594:ec5f:f697 with SMTP id
+ f7-20020a4ace87000000b00594ec5ff697mr5429797oos.0.1703869967849; Fri, 29 Dec
+ 2023 09:12:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CGME20231227084252epcas2p3b063f7852f81f82cd0a31afd7f404db4@epcas2p3.samsung.com>
- <5754861.DvuYhMxLoT@kreacher> <6019796.lOV4Wx5bFT@kreacher>
- <4874693.GXAFRqVoOG@kreacher> <ZY3auVvVzxwTmAX8@linux.intel.com>
- <CAJZ5v0gns5zeLEk39NGwjLy40wzHAHDWYBYapWwQWcJ9jrF-3Q@mail.gmail.com> <ZY44KH2wGIUyIZp6@linux.intel.com>
-In-Reply-To: <ZY44KH2wGIUyIZp6@linux.intel.com>
+References: <20231228145416.GAZY2MGLY6THMkAZ2W@fat_crate.local>
+In-Reply-To: <20231228145416.GAZY2MGLY6THMkAZ2W@fat_crate.local>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 29 Dec 2023 17:36:01 +0100
-Message-ID: <CAJZ5v0jWSH_+wC7P=bBV8uKNp1PBUjkE06Ec6HR1Zd5as8GQ2g@mail.gmail.com>
-Subject: Re: [PATCH v1 2/3] async: Introduce async_schedule_dev_nocall()
-To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	Greg KH <gregkh@linuxfoundation.org>, linux-pm@vger.kernel.org, 
-	Youngmin Nam <youngmin.nam@samsung.com>, linux-kernel@vger.kernel.org, 
-	d7271.choe@samsung.com, janghyuck.kim@samsung.com, hyesoo.yu@samsung.com, 
-	Alan Stern <stern@rowland.harvard.edu>, Ulf Hansson <ulf.hansson@linaro.org>
+Date: Fri, 29 Dec 2023 18:12:36 +0100
+Message-ID: <CAJZ5v0j3Wb-9Czb50u=NWjNz-W8mgMDEarWY7XG49d+LdzKAYw@mail.gmail.com>
+Subject: Re: [PATCH] cpuidle: haltpoll: Do not enable interrupts when entering idle
+To: "Borislav Petkov (AMD)" <bp@alien8.de>
+Cc: linux-pm@vger.kernel.org, forza@tnonline.net, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	lkml <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 29, 2023 at 3:54=E2=80=AFPM Stanislaw Gruszka
-<stanislaw.gruszka@linux.intel.com> wrote:
+On Thu, Dec 28, 2023 at 3:54=E2=80=AFPM Borislav Petkov (AMD) <bp@alien8.de=
+> wrote:
 >
-> On Fri, Dec 29, 2023 at 02:37:36PM +0100, Rafael J. Wysocki wrote:
-> > > > +bool async_schedule_dev_nocall(async_func_t func, struct device *d=
-ev)
-> > > > +{
-> > > > +     struct async_entry *entry;
-> > > > +
-> > > > +     entry =3D kzalloc(sizeof(struct async_entry), GFP_KERNEL);
-> > >
-> > > Is GFP_KERNEL intended here ?
-> >
-> > Yes, it is.
-> >
-> > PM will be the only user of this, at least for now, and it all runs in
-> > process context.
-> >
-> > > I think it's not safe since will
-> > > be called from device_resume_noirq() .
-> >
-> > device_resume_noirq() runs in process context too.
-> >
-> > The name is somewhat confusing (sorry about that) and it means that
-> > hardirq handlers (for the majority of IRQs) don't run in that resume
-> > phase, but interrupts are enabled locally on all CPUs (this is
-> > required for wakeup handling, among other things).
+> Hi,
 >
-> Then my concern would be: if among devices with disabled IRQs are
-> disk devices? Seems there are disk devices as well, and because
-> GFP_KERNEL can start reclaiming memory by doing disk IO (write
-> dirty pages for example), with disk driver interrupts disabled
-> reclaiming process can not finish.
+> I think PeterZ's massaging from
 >
-> I do not see how such possible infinite waiting for disk IO
-> scenario is prevented here, did I miss something?
+>   https://lore.kernel.org/all/20230112194314.845371875@infradead.org/
+>
+> missed one.
+>
+> @Forza, if you want to have your real name in the patch tags below and
+> thus be part of git history, lemme know. If you don't want them there,
+> either.
+>
+> Thx.
+>
+> ---
+> From: Borislav Petkov (AMD) <bp@alien8.de>
 
-Well, it is not a concern, because the suspend code already prevents
-the mm subsystem from trying too hard to find free memory.  See the
-pm_restrict_gfp_mask() call in enter_state().
+I would have appreciated a Subject: line here.
 
-Otherwise, it would have been a problem for any GFP_KERNEL allocations
-made during system-wide suspend-resume, not just in the _noirq phases.
+>
+> The cpuidle governors' ->enter() methods are supposed to be IRQ
+> invariant:
+
+cpuidle governors have no ->enter() callbacks, drivers do.  And this
+particular haltpoll is a driver (there is a haltpoll governor too,
+confusingly enough).
+
+>
+>   5e26aa933911 ("cpuidle/poll: Ensure IRQs stay disabled after cpuidle_st=
+ate::enter() calls")
+>   bb7b11258561 ("cpuidle: Move IRQ state validation")
+>
+> Do that in the haltpoll governor too.
+
+And so s/governor/driver/ here.
+
+> Fixes: 5e26aa933911 ("cpuidle/poll: Ensure IRQs stay disabled after cpuid=
+le_state::enter() calls")
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D218245
+> Reported-by: <forza@tnonline.net>
+> Tested-by: <forza@tnonline.net>
+> Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+
+Nevertheless, applied (with the changelog adjustments mentioned above).
+
+> ---
+>  drivers/cpuidle/cpuidle-haltpoll.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle=
+-haltpoll.c
+> index e66df22f9695..d8515d5c0853 100644
+> --- a/drivers/cpuidle/cpuidle-haltpoll.c
+> +++ b/drivers/cpuidle/cpuidle-haltpoll.c
+> @@ -25,13 +25,12 @@ MODULE_PARM_DESC(force, "Load unconditionally");
+>  static struct cpuidle_device __percpu *haltpoll_cpuidle_devices;
+>  static enum cpuhp_state haltpoll_hp_state;
+>
+> -static int default_enter_idle(struct cpuidle_device *dev,
+> -                             struct cpuidle_driver *drv, int index)
+> +static __cpuidle int default_enter_idle(struct cpuidle_device *dev,
+> +                                       struct cpuidle_driver *drv, int i=
+ndex)
+>  {
+> -       if (current_clr_polling_and_test()) {
+> -               local_irq_enable();
+> +       if (current_clr_polling_and_test())
+>                 return index;
+> -       }
+> +
+>         arch_cpu_idle();
+>         return index;
+>  }
+> --
+> 2.42.0.rc0.25.ga82fb66fed25
+>
+>
+> --
+> Regards/Gruss,
+>     Boris.
+>
+> https://people.kernel.org/tglx/notes-about-netiquette
 
