@@ -1,99 +1,240 @@
-Return-Path: <linux-pm+bounces-1675-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1676-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABB428200D9
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Dec 2023 18:32:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFE0A8200FB
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Dec 2023 18:55:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9BD1E1C21731
-	for <lists+linux-pm@lfdr.de>; Fri, 29 Dec 2023 17:32:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3627FB21004
+	for <lists+linux-pm@lfdr.de>; Fri, 29 Dec 2023 17:55:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C899C12B7A;
-	Fri, 29 Dec 2023 17:32:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0865D12B7C;
+	Fri, 29 Dec 2023 17:55:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Jq4jNfO5"
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kILiAllz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB2C212B6B;
-	Fri, 29 Dec 2023 17:32:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 3EA5340E01A1;
-	Fri, 29 Dec 2023 17:32:17 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id m2923ETygnOY; Fri, 29 Dec 2023 17:32:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1703871134; bh=y87yQhMe83x84E0oJ1qSJX5sTal91GOtJb88CpisDUk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Jq4jNfO5TGWOzoOTlCXEFyGTZsjEyWRS87OJv8lURWOHq9QBUmJ68acO4kdkIBa8t
-	 elweZLvEBFg0Q3aewJ2yN8df65K4Sv/5CHq4szYv2QGrbqZOqnrN4n7PJ51wt1FKRO
-	 Mc1iAGaxrQ1DKxZ0iFw8u6BA5lAa/td46+GzsbPUCyxQNJAf+7b0BYSNA8/bNVf6wB
-	 kjojOJEfCbQePUkx1Iw8VZbgqDO1toqhgiUdWH8Bji8itcp1FulEq8H1+PUZV4KUbT
-	 zbC91A2s1vQUF2SRFU2WGhGCW/BbG7ma+H5sFIxgfOfmcfgLjNlbjS5MmBW6mc7BJ9
-	 9R72qiQDA/QOg5plHJW//K5v/lMXVEdcNszjf6PSnNdrXLM56xziatct4SxDmNAl25
-	 MAFlAizFZDRaPdM88zWZs+uuL524LbmLwMp+4KJp+FUjsSFmSJV2SajjeO/MYZECLd
-	 TXTK/m1tEJvwgeyUhAVQezF1aUkO/CCG092USbyccaiQvAXN+ijpp28PCcP19z3rBZ
-	 G3qIg+skd6YxF5aSOdLw0eFgsQ88KSgh4y2DoFdcZy1hSttDMIFAZzYfIQbUTgYkev
-	 7TDOrPAusdhIQ+OnrmIl0/XTZ/aLEH1msVk0MBZ0Yt5BTGQmwYNv/uofK2tNP5oxNL
-	 NKMdamG06diNmdAFQN3hfOw0=
-Received: from zn.tnic (pd9530f8c.dip0.t-ipconnect.de [217.83.15.140])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id CD1B640E00C7;
-	Fri, 29 Dec 2023 17:32:09 +0000 (UTC)
-Date: Fri, 29 Dec 2023 18:32:03 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org, forza@tnonline.net,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	lkml <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] cpuidle: haltpoll: Do not enable interrupts when
- entering idle
-Message-ID: <20231229173203.GFZY8Ck4tVMQJyWoQ2@fat_crate.local>
-References: <20231228145416.GAZY2MGLY6THMkAZ2W@fat_crate.local>
- <CAJZ5v0j3Wb-9Czb50u=NWjNz-W8mgMDEarWY7XG49d+LdzKAYw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7CAD12B82
+	for <linux-pm@vger.kernel.org>; Fri, 29 Dec 2023 17:55:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dev-mail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dev-mail.net
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+	by mailout.west.internal (Postfix) with ESMTP id CC48D3200AB7
+	for <linux-pm@vger.kernel.org>; Fri, 29 Dec 2023 12:55:27 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Fri, 29 Dec 2023 12:55:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:content-transfer-encoding:content-type
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm2; t=1703872527; x=1703958927; bh=xqsCQW6ihHh/f
+	KJsGte3MxAzTm0BfI/Xj8busQRS0LE=; b=kILiAllzaVtEwAo5yGV6kEUuzvgQ8
+	ykGIgB0wNLOQUW/1C2ssM70fLMK4nCg/q2CtBozZ5gcYermkbktMYzrvwKI+wONB
+	0aTlJ0S39actMTEbdYzeRg1Sm6zn15qQN/eEV6eZxPqZ1NotVYSoEOXlbHUOtbVL
+	2Prba+E7Ru/NSXzVfbJttdxmU8T1397FCGw6STnRz79PAyAp48YRwLDFKJorhM6n
+	Tcros20kMl+QuoINaCgd5hP+p8kWfSvVNb6U1DeQQ0lhmXmcwgpGdXfbl7aESZuX
+	d37nE0+4pW5LzMSGXf3EHhgtS+y3hHhgaiUhQ8FaDenXYzbtAd4X4o5rA==
+X-ME-Sender: <xms:DwiPZWUYQeC0DsSqdj2LQ4QtgwaXK8jN3TgVhhUkM8BaoAtOPZQ66w>
+    <xme:DwiPZSk9tFJ5KJidMKDJXAPN4tPbcFLuLL0RqKaOQJx-ci68fKlqYzkaNiTHOB7PY
+    V5_bC7DyEgpJpc0>
+X-ME-Received: <xmr:DwiPZaY43Qzc8WNH9FAGaOtdyEF-l6uX8-SV_BQcnwVyWMlRlbWAfDpbIHhUNXHHGR-QMKccC4x0bnWr8AmnDZX9YsTTPUUHm4OaHw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdeffedguddtjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecunecujfgurhepkfffgggfrhfhvffutgfgsehtje
+    ertddtvdejnecuhfhrohhmpehpghhnugcuoehpghhnugesuggvvhdqmhgrihhlrdhnvght
+    qeenucggtffrrghtthgvrhhnpeefveegjedttdetheetffdugeehieeukedugfetvdegud
+    dufffguddvudekffffleenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepphhgnhguseguvghvqd
+    hmrghilhdrnhgvth
+X-ME-Proxy: <xmx:DwiPZdWuAa1TBymuSaew_TRCo2Vhlm18CCX6T-16QKaiSdVHVBQgsA>
+    <xmx:DwiPZQmTaku8ic2hQGBIIm4a44slvoEJg0laNR7KE0g9QtAFiUeegA>
+    <xmx:DwiPZSdNrbcDFpLUuDkFYzh-4f5rSUaR4Y-Hh47UHWVOfzIhb0mBzA>
+    <xmx:DwiPZVyYJ37vrpSoV57uAe--nEs2Xt3iQRSbJu2FLRaIu4cxx95kzA>
+Feedback-ID: if6e94526:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA for
+ <linux-pm@vger.kernel.org>; Fri, 29 Dec 2023 12:55:26 -0500 (EST)
+Message-ID: <3829f405-17cf-4036-8a17-6d659031ca2f@dev-mail.net>
+Date: Fri, 29 Dec 2023 12:55:26 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0j3Wb-9Czb50u=NWjNz-W8mgMDEarWY7XG49d+LdzKAYw@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Reply-To: pgnd@dev-mail.net
+From: pgnd <pgnd@dev-mail.net>
+Content-Language: en-US, fr, de-DE, pl, es-ES
+To: linux-pm@vger.kernel.org
+Subject: tuning pstate driver for amd ryzen w/ kernel 6.8+: 'amd-pstate' vs
+ 'amd-pstate-epp'?
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Dec 29, 2023 at 06:12:36PM +0100, Rafael J. Wysocki wrote:
-> I would have appreciated a Subject: line here.
+i'm upgrading a number of amd Zen 2/3 Ryzen servers & workstations, for general/mixed edge & developer server use.
 
-mutt uses it as the actual subject if I do
+kernels are all currently,
 
-mutt -H /path/to/patch-file
+	uname -rm
+	  6.6.8-200.fc39.x86_64 x86_64
 
-since I want to type in stuff before sending.
+checking 'scaling_driver' and 'scaling_governor' on multiple boxes, they're all over the map.
 
-> cpuidle governors have no ->enter() callbacks, drivers do.  And this
-> particular haltpoll is a driver (there is a haltpoll governor too,
-> confusingly enough).
+my inclination is to standardize for an adaptive load, with
 
-Fun.
+	cpupower frequency-set -g  schedutil
 
-> Nevertheless, applied (with the changelog adjustments mentioned above).
+and
 
-Thanks!
+	"... intel_pstate=disable amd_pstate=guided" on kernel cmdline ..."
 
--- 
-Regards/Gruss,
-    Boris.
+here's the result for one,
 
-https://people.kernel.org/tglx/notes-about-netiquette
+	cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver
+		amd-pstate
+
+	cat /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
+		schedutil
+
+	cpupower frequency-info
+		analyzing CPU 0:
+		  driver: amd-pstate
+		  CPUs which run at the same hardware frequency: 0
+		  CPUs which need to have their frequency coordinated by software: 0
+		  maximum transition latency: 20.0 us
+		  hardware limits: 400 MHz - 4.46 GHz
+		  available cpufreq governors: conservative ondemand userspace powersave performance schedutil
+		  current policy: frequency should be within 400 MHz and 4.46 GHz.
+		                  The governor "schedutil" may decide which speed to use
+		                  within this range.
+		  current CPU frequency: Unable to call hardware
+		  current CPU frequency: 4.01 GHz (asserted by call to kernel)
+		  boost state support:
+		    Supported: yes
+		    Active: yes
+		    AMD PSTATE Highest Performance: 166. Maximum Frequency: 4.46 GHz.
+		    AMD PSTATE Nominal Performance: 145. Nominal Frequency: 3.90 GHz.
+		    AMD PSTATE Lowest Non-linear Performance: 88. Lowest Non-linear Frequency: 2.37 GHz.
+		    AMD PSTATE Lowest Performance: 15. Lowest Frequency: 400 MHz.
+
+
+for some, before the mods, i see 'amd-pstate-epp' in use; e.g.,
+
+     cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver
+		amd-pstate-epp
+
+	cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver
+		amd-pstate-epp
+
+	cpupower frequency-info
+		analyzing CPU 11:
+		  driver: amd-pstate-epp
+		  CPUs which run at the same hardware frequency: 11
+		  CPUs which need to have their frequency coordinated by software: 11
+		  maximum transition latency:  Cannot determine or is not supported.
+		  hardware limits: 400 MHz - 4.46 GHz
+		  available cpufreq governors: performance powersave
+		  current policy: frequency should be within 400 MHz and 4.46 GHz.
+		                  The governor "powersave" may decide which speed to use
+		                  within this range.
+		  current CPU frequency: Unable to call hardware
+		  current CPU frequency: 2.96 GHz (asserted by call to kernel)
+		  boost state support:
+		    Supported: yes
+		    Active: yes
+		    AMD PSTATE Highest Performance: 166. Maximum Frequency: 4.46 GHz.
+		    AMD PSTATE Nominal Performance: 145. Nominal Frequency: 3.90 GHz.
+		    AMD PSTATE Lowest Non-linear Performance: 88. Lowest Non-linear Frequency: 2.37 GHz.
+		    AMD PSTATE Lowest Performance: 15. Lowest Frequency: 400 MHz.
+
+NOTE
+	the similar frequency scales/limits,
+and
+
+		  driver: amd-pstate
+		  CPUs which run at the same hardware frequency: 0
+
+vs
+
+		  driver: amd-pstate-epp
+		  CPUs which run at the same hardware frequency: 11
+
+reading up at,
+
+   amd-pstate CPU Performance Scaling Driver
+    https://docs.kernel.org/admin-guide/pm/amd-pstate.html
+
+i can see _what_ some of the differences are.
+
+but don't get from the read what's the "best" driver tuning for these bigger-boxes with variable demand.
+
+for those 2 boxes, e.g., @ driver: amd-pstate
+
+	cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver
+		amd-pstate
+
+shows mixed freqs across CPUs,
+
+	total=$( lscpu | grep "^CPU(s):" | awk '{print $2}')
+	for ((i = 0; i < total; ++i))
+	do
+	 echo "${i}  $( cpupower frequency-info cpu${i} | grep "current CPU.*Hz" )"
+	done
+
+		0    current CPU frequency: 3.56 GHz (asserted by call to kernel)
+		1    current CPU frequency: 4.45 GHz (asserted by call to kernel)
+		2    current CPU frequency: 3.56 GHz (asserted by call to kernel)
+		3    current CPU frequency: 4.45 GHz (asserted by call to kernel)
+		4    current CPU frequency: 3.61 GHz (asserted by call to kernel)
+		5    current CPU frequency: 3.56 GHz (asserted by call to kernel)
+		6    current CPU frequency: 3.66 GHz (asserted by call to kernel)
+		7    current CPU frequency: 4.45 GHz (asserted by call to kernel)
+		8    current CPU frequency: 4.45 GHz (asserted by call to kernel)
+		9    current CPU frequency: 3.56 GHz (asserted by call to kernel)
+		10    current CPU frequency: 3.93 GHz (asserted by call to kernel)
+		11    current CPU frequency: 4.45 GHz (asserted by call to kernel)
+
+same as for @ driver: amd-pstate-epp
+
+	cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_driver
+		amd-pstate-epp
+
+shows same freqs across CPUs,
+
+	total=$( lscpu | grep "^CPU(s):" | awk '{print $2}')
+	for ((i = 0; i < total; ++i))
+	do
+	 echo "${i}  $( cpupower frequency-info cpu${i} | grep "current CPU.*Hz" )"
+	done
+
+		0    current CPU frequency: 3.55 GHz (asserted by call to kernel)
+		1    current CPU frequency: 3.55 GHz (asserted by call to kernel)
+		2    current CPU frequency: 3.55 GHz (asserted by call to kernel)
+		3    current CPU frequency: 3.55 GHz (asserted by call to kernel)
+		4    current CPU frequency: 3.55 GHz (asserted by call to kernel)
+		5    current CPU frequency: 3.56 GHz (asserted by call to kernel)
+		6    current CPU frequency: 3.55 GHz (asserted by call to kernel)
+		7    current CPU frequency: 4.44 GHz (asserted by call to kernel)
+		8    current CPU frequency: 3.55 GHz (asserted by call to kernel)
+		9    current CPU frequency: 3.55 GHz (asserted by call to kernel)
+		10    current CPU frequency: 4.44 GHz (asserted by call to kernel)
+		11    current CPU frequency: 4.44 GHz (asserted by call to kernel)
+
+looking at these outputs, I don't see the difference/preference.
+
+short of long-term power/preformance benchmarking, what up-front rationale should be used for selecting
+
+		  driver: amd-pstate
+
+vs
+
+		  driver: amd-pstate-epp
+
+?
+
 
