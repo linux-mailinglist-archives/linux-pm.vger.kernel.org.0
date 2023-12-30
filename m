@@ -1,96 +1,93 @@
-Return-Path: <linux-pm+bounces-1681-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1682-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0892582037D
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Dec 2023 04:28:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B6A5820455
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Dec 2023 11:33:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 911C91F2225A
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Dec 2023 03:28:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BFC7D1F216DD
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Dec 2023 10:33:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22A5510F7;
-	Sat, 30 Dec 2023 03:28:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qdM5eDz6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F36D21FC5;
+	Sat, 30 Dec 2023 10:33:25 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0611D10EB
-	for <linux-pm@vger.kernel.org>; Sat, 30 Dec 2023 03:28:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7550DC433C7
-	for <linux-pm@vger.kernel.org>; Sat, 30 Dec 2023 03:28:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703906903;
-	bh=Sc6/wQUjRbDjuGliFFH0/YsXd3ySUnSKHlprGgtZlqQ=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=qdM5eDz6BygDCdgPpriH+HYCbtM5H25lZcI9Ff4XiO8BSg0yBc+cQzkbKbpglsM+X
-	 UHspXcej1bGAqg4Q9mqHYvN1vwSiOO6btxMreAGOZ8yur8rvEXbi+rXBkAEjFG8ENH
-	 yT1FIgv4Oa6NgiwxWgxvmUjuJ02yWzAB0vqU9Do4S+154oxOf0zv4Zj5SiM4jfJoFg
-	 x14YE72itnh3qggBJfJrfGFn/mo8knVu37d49wo+N9uKIh2dILhJypxnKnSwpIDuJ6
-	 E8X2MVGsocZRt+sngHtMTiKF6VRUswPyJLlC2JT/KCc8OgLT16oSd5LGZ898oFbTlM
-	 tG9TuqILNfnKg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 6062DC53BD0; Sat, 30 Dec 2023 03:28:23 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 218171] amd-pstate not loading on zen2 threadripper 3960x
- (trx40
-Date: Sat, 30 Dec 2023 03:28:22 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: pnascimento@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-218171-137361-QhKAoCteL2@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218171-137361@https.bugzilla.kernel.org/>
-References: <bug-218171-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E1CE23A5;
+	Sat, 30 Dec 2023 10:33:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout1.hostsharing.net (Postfix) with ESMTPS id 594B6300002D0;
+	Sat, 30 Dec 2023 11:33:13 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id 3DE44254B5A; Sat, 30 Dec 2023 11:33:13 +0100 (CET)
+Date: Sat, 30 Dec 2023 11:33:13 +0100
+From: Lukas Wunner <lukas@wunner.de>
+To: Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+	Rob Herring <robh@kernel.org>, Krzysztof Wilczy??ski <kw@linux.com>,
+	Alexandru Gagniuc <mr.nuke.me@gmail.com>,
+	Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Alex Deucher <alexdeucher@gmail.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>
+Subject: Re: [PATCH v3 01/10] PCI: Protect Link Control 2 Register with RMW
+ locking
+Message-ID: <20231230103313.GA12257@wunner.de>
+References: <20230929115723.7864-1-ilpo.jarvinen@linux.intel.com>
+ <20230929115723.7864-2-ilpo.jarvinen@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230929115723.7864-2-ilpo.jarvinen@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218171
+On Fri, Sep 29, 2023 at 02:57:14PM +0300, Ilpo Järvinen wrote:
+> PCIe Bandwidth Controller performs RMW accesses the Link Control 2
+                                                 ^
+						 to
 
---- Comment #22 from Pedro Nascimento (pnascimento@gmail.com) ---
-Created attachment 305671
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305671&action=3Dedit
-ACPI dump for Gigabyte TRX40 AORUS PRO WIFI with a 3970X TR
+> Register which can occur concurrently to other sources of Link Control
+> 2 Register writes. Therefore, add Link Control 2 Register among the PCI
+> Express Capability Registers that need RMW locking.
+[...]
+> --- a/Documentation/PCI/pciebus-howto.rst
+> +++ b/Documentation/PCI/pciebus-howto.rst
+> @@ -218,7 +218,7 @@ that is shared between many drivers including the service drivers.
+>  RMW Capability accessors (pcie_capability_clear_and_set_word(),
+>  pcie_capability_set_word(), and pcie_capability_clear_word()) protect
+>  a selected set of PCI Express Capability Registers (Link Control
+> -Register and Root Control Register). Any change to those registers
+> -should be performed using RMW accessors to avoid problems due to
+> -concurrent updates. For the up-to-date list of protected registers,
+> -see pcie_capability_clear_and_set_word().
+> +Register, Root Control Register, and Link Control 2 Register). Any
+> +change to those registers should be performed using RMW accessors to
+> +avoid problems due to concurrent updates. For the up-to-date list of
+> +protected registers, see pcie_capability_clear_and_set_word().
 
-Here's mine. Note that this is a Gigabyte mobo.
+Maybe use a list of bullet points of the affected registers so that
+this can be extended more easily in the future.
 
-Machine:
-Type: Desktop System: Gigabyte product: TRX40 AORUS PRO WIFI v: -CF serial:=
- N/A
-Mobo: Gigabyte model: TRX40 AORUS PRO WIFI serial: N/A UEFI: American
-Megatrends LLC. v: F6
-date: 09/07/2022
-CPU:
-Info: 32-core model: AMD Ryzen Threadripper 3970X bits: 64 type: MT MCP cac=
-he:
-L2: 16 MiB
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
+Otherwise,
+Reviewed-by: Lukas Wunner <lukas@wunner.de>
 
