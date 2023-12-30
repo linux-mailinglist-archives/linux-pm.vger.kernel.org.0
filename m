@@ -1,120 +1,165 @@
-Return-Path: <linux-pm+bounces-1683-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1684-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55AA18204AA
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Dec 2023 12:46:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C21ED8205D7
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Dec 2023 13:22:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 87F5C1C20DD4
-	for <lists+linux-pm@lfdr.de>; Sat, 30 Dec 2023 11:46:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 274D81F216CC
+	for <lists+linux-pm@lfdr.de>; Sat, 30 Dec 2023 12:22:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B096B7497;
-	Sat, 30 Dec 2023 11:46:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F12479C2;
+	Sat, 30 Dec 2023 12:22:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UdTmY8PN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C67A779CD;
-	Sat, 30 Dec 2023 11:45:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
-	by bmailout2.hostsharing.net (Postfix) with ESMTPS id 0F3BB2800B6C3;
-	Sat, 30 Dec 2023 12:45:50 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id 007581AA9C7; Sat, 30 Dec 2023 12:45:49 +0100 (CET)
-Date: Sat, 30 Dec 2023 12:45:49 +0100
-From: Lukas Wunner <lukas@wunner.de>
-To: Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-	Rob Herring <robh@kernel.org>, Krzysztof Wilczy??ski <kw@linux.com>,
-	Alexandru Gagniuc <mr.nuke.me@gmail.com>,
-	Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-	Bjorn Helgaas <bhelgaas@google.com>, linux-kernel@vger.kernel.org,
-	Alex Deucher <alexdeucher@gmail.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>
-Subject: Re: [PATCH v3 05/10] PCI: Store all PCIe Supported Link Speeds
-Message-ID: <20231230114549.GB12257@wunner.de>
-References: <20230929115723.7864-1-ilpo.jarvinen@linux.intel.com>
- <20230929115723.7864-6-ilpo.jarvinen@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA8098473
+	for <linux-pm@vger.kernel.org>; Sat, 30 Dec 2023 12:22:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-555d4232e4fso1221536a12.3
+        for <linux-pm@vger.kernel.org>; Sat, 30 Dec 2023 04:22:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1703938933; x=1704543733; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=WraejfcK2e2j5BfUVDmZdtIL5eFxZdjlTkM6VwDeTVI=;
+        b=UdTmY8PNFYbmblYxw7hPNxvRCIn36zCMi8eXvlKUi1WLs5Rlmye9eaP4+7vA8uBiRM
+         RjpbWA04HOzVZiJmsR8io1p+96XQtZ6scoA7Iu4C0wkXVgYUU2I1Hr8Shh2zjZJUDSoB
+         yZWMETjJFJsvudSSCjkr9cKnKkB+richEhYHDUBaHi9Sr/Zt72FUQAiH0OHRdaljCWqU
+         bNlXvsPnXa5ckhsAp7i1l+kIh8eDD0kNVxmL9r1Kiu3Xp0FRdKRdOXGKVwCZVV9m4lIK
+         vrMrvd5+FpM/lkOaABJmvsXsykxq0Wm2l5G9CbXm3tn+PmXapx8ZqCN3N3XOJI8wagrN
+         1CxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703938933; x=1704543733;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WraejfcK2e2j5BfUVDmZdtIL5eFxZdjlTkM6VwDeTVI=;
+        b=ti2yfwjCZDbFgPmKH7eWTvA5gPR5UrEY9pkmmZxprbxsRRtfvMvCwM4YEK7MZZW69F
+         fxh4c/dLpPJRQMlx8j/YSAWozhYJy7YJO2SsbHoq9MUrMURFfxw4qnoqEHSQl6in19nl
+         DY/NCgRFR8t/Vd44JlWufguNCqArhnlldOqm88ulqBIMj3oWpadtTKOC4FCY7SbzTRqA
+         L5VzaLvaRdHv2SqwpN9K6WgdUDnXF2PWy+3Px16Fn2CLAl+nVeh9QyofIsQSGJrOHTBp
+         RwcWxsgn9N1PwP9ZLjHGdnXO9gLwPUvaHUBEwozjn2qEGU7NytGia1H8wzTb75fDIoh7
+         +bwg==
+X-Gm-Message-State: AOJu0YxAEbIXI1wNg9Qxg1yAb9iJJ94uP0Ac6JJ8ge/AebWMQ2L+97GN
+	Wr/rGeHE2CvspTY75FaofJ+ndnmyKbEaqQ==
+X-Google-Smtp-Source: AGHT+IGioza2ZLJGqYDEiNM69okkxaTquc5p5kuP+zRZUhfhEuqvZbJCDySqOqnouQ7x7+YejTIElA==
+X-Received: by 2002:a50:8acb:0:b0:554:4dce:9d47 with SMTP id k11-20020a508acb000000b005544dce9d47mr7873841edk.14.1703938932976;
+        Sat, 30 Dec 2023 04:22:12 -0800 (PST)
+Received: from [192.168.199.125] (178235179036.dynamic-4-waw-k-1-3-0.vectranet.pl. [178.235.179.36])
+        by smtp.gmail.com with ESMTPSA id s20-20020a056402015400b005530cb1464bsm12202499edu.15.2023.12.30.04.22.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 30 Dec 2023 04:22:12 -0800 (PST)
+Message-ID: <dc11577e-7088-4975-8543-ad8001e678fe@linaro.org>
+Date: Sat, 30 Dec 2023 13:22:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230929115723.7864-6-ilpo.jarvinen@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 7/8] arm64: dts: qcom: sa8295p-adp: Enable GPU
+To: Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Johan Hovold
+ <johan+linaro@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
+ linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+References: <20231220-sa8295p-gpu-v2-0-4763246b72c0@quicinc.com>
+ <20231220-sa8295p-gpu-v2-7-4763246b72c0@quicinc.com>
+ <4a1c18e3-39c8-4070-ae55-b1148b3dc65b@linaro.org>
+ <20231227202130.GA1315173@hu-bjorande-lv.qualcomm.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <20231227202130.GA1315173@hu-bjorande-lv.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Sep 29, 2023 at 02:57:18PM +0300, Ilpo Järvinen wrote:
-> struct pci_bus stores max_bus_speed. Implementation Note in PCIe r6.0.1
-> sec 7.5.3.18, however, recommends determining supported Link Speeds
-> using the Supported Link Speeds Vector in the Link Capabilities 2
-> Register (when available).
+On 27.12.2023 21:21, Bjorn Andersson wrote:
+> On Wed, Dec 27, 2023 at 02:09:47AM +0100, Konrad Dybcio wrote:
+>> On 22.12.2023 05:39, Bjorn Andersson wrote:
+>>> With the necessary support in place for supplying VDD_GFX from the
+>>> MAX20411 regulator, enable the GPU clock controller, GMU, Adreno SMMU
+>>> and the GPU on the SA8295P ADP.
+>>>
+>>> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+>>> ---
+>> [...]
+>>
+>>> +&gpucc {
+>>> +	vdd-gfx-supply = <&vdd_gfx>;
+>>> +	status = "okay";
+>>> +};
+>> Already enabled
+>>
 > 
-> Add pcie_bus_speeds into struct pci_bus which caches the Supported Link
-> Speeds. The value is taken directly from the Supported Link Speeds
-> Vector or synthetized from the Max Link Speed in the Link Capabilities
-> Register when the Link Capabilities 2 Register is not available.
+> No, we're disabling these in sa8540p.dtsi, so they need to be re-enabled
+> here.
+> 
+> I don't remember if it's because the attempt to bring up gfx.lvl or if
+> it's the attempt to operate the GPU components without adequate VDD_GFX,
+> that is causing the issue...but either way, we don't survive boot.
+Oh right!
 
-Remind me, what's the reason again to cache this and why is
-max_bus_speed not sufficient?  Is the point that there may be
-"gaps" in the supported link speeds, i.e. not every bit below
-the maximum supported speed may be set?  And you need to skip
-over those gaps when throttling to a lower speed?
+On 8155 touching mmcx, lcx or lmx would kaboom the platform..
 
-Maybe this becomes apparent in a later patch but from a reviewer's
-perspective starting at patch 1 and working one's way forward through
-the series, it's a bit puzzling, so an explanation in the commit
-message would be beneficial.
+> 
+> 
+> It's possible that we could move the max20411 up to sa8540p.dtsi to
+> avoid the intermediate disable, but I'm not confident that it's "part of
+> the platform"...
+Yeah, it's probably a question that is impossible to answer, as my
+wild assumption is that all designs are ADP-derived anyway..
 
-
-> --- a/drivers/pci/probe.c
-> +++ b/drivers/pci/probe.c
-[...]
-> +static u8 pcie_get_supported_speeds(u32 linkcap, u32 linkcap2)
-> +{
-> +	u8 speeds;
-> +
-> +	speeds = linkcap2 & PCI_EXP_LNKCAP2_SLS;
-> +	if (speeds)
-> +		return speeds;
-> +
-> +	/*
-> +	 * Synthetize supported link speeds from the Max Link Speed in the
-> +	 * Link Capabilities Register.
-> +	 */
-> +	speeds = PCI_EXP_LNKCAP2_SLS_2_5GB;
-> +	if ((linkcap & PCI_EXP_LNKCAP_SLS) == PCI_EXP_LNKCAP_SLS_5_0GB)
-> +		speeds |= PCI_EXP_LNKCAP2_SLS_5_0GB;
-> +	return speeds;
-> +}
-
-This seems to duplicate portions of pcie_get_speed_cap().
-
-Can you refactor that function to take advantage of the cached value,
-i.e. basically return PCIE_LNKCAP2_SLS2SPEED(dev->bus->pcie_bus_speeds)?
-
-Also, I note that pci_set_bus_speed() doesn't use LNKCAP2.
-Presumably that's a historic artefact but maybe it can be
-converted to use LNKCAP2 as well.  Granted, it's not directly
-related to this series, but always nice to clean up and
-rationalize the code.
-
-Thanks,
-
-Lukas
+Konrad
 
