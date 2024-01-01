@@ -1,52 +1,51 @@
-Return-Path: <linux-pm+bounces-1708-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1709-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A79D8214EB
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jan 2024 19:12:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C6E88214FD
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jan 2024 19:31:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B65ED281787
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jan 2024 18:12:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA0FB1C20E48
+	for <lists+linux-pm@lfdr.de>; Mon,  1 Jan 2024 18:31:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA3ADC143;
-	Mon,  1 Jan 2024 18:12:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FC7C33D4;
+	Mon,  1 Jan 2024 18:31:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BmwUdS1r"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lV8z3DVn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0618BA43;
-	Mon,  1 Jan 2024 18:12:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1AE6D518;
+	Mon,  1 Jan 2024 18:31:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704132771; x=1735668771;
+  t=1704133908; x=1735669908;
   h=date:from:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=xaOMzq2s3eMU8oWUt36+JE+ktUuXJd1kcZHmLKD8vJI=;
-  b=BmwUdS1rM8IZ6hUsmxrZmb7FKZC+9XHUt5exe1WT7UQNEHEJ1qKlzPwm
-   VnKxoPB3eIsdK9bo7Y30KVXVURRRkz5h80Ap9GRD0/JLPUCYLFKUEuZ5X
-   IM0g/VVjY964UZ0nRhvSA1a0qLTU6Z1Pz5VfYDOFoMkHqVB5lv/P//XSv
-   VTZMGge0sIPA26B1IbmPFVSwko9PdOC4u8jKCv8eUtCylLTzpTM8lF0+U
-   uSdNwqgwifBX35kPAm3gFgGVamoy8MGLECbqRX3weWAs4eikMhj6Hei7O
-   9xtST45XkGXzihSMIS6MJJS4Fw3qMZ8hyeGymAPTv9HFywSxa0f2PvaH4
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10940"; a="3626573"
+  bh=uHQYWjLuuveSvnDuj/VEd1ZDF12rii/PI2weQakgYeg=;
+  b=lV8z3DVnp1z+wZFc24jYFvZbAMNL6Kkm81BfIwrFjUHtN0tZ9ajH7oVa
+   jLYMG9NGirOAiOKattadR3IXRjYZoMIVja3R2IJdyPa3m2rH/cUCrwiei
+   WhNGRRtfy3RUO0s+IdA/lz1CEUbZ0LXGLf++KpsBbuVTEgVE1OmW6hKWo
+   S0hObpV/tdyAoxGMEca50IkkO3xgMLbzLk5m1cRw2RcFonsR3Tbdmxsc/
+   HDav4DNLt2qqODUPgPEC6f0Di+L9kLB4/RZwjlqFNFv7p+HgRCDbo50ox
+   BuIx90wl9/R9O/tsI0J/zHik77pv1Yzbt0XXm/jNpZDEld9dTUpA/J4fE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10940"; a="4141744"
 X-IronPort-AV: E=Sophos;i="6.04,322,1695711600"; 
-   d="scan'208";a="3626573"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2024 10:12:49 -0800
+   d="scan'208";a="4141744"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2024 10:31:47 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10940"; a="870035694"
 X-IronPort-AV: E=Sophos;i="6.04,322,1695711600"; 
-   d="scan'208";a="870035694"
+   d="scan'208";a="27877970"
 Received: from amazouz-mobl.ger.corp.intel.com ([10.251.210.158])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2024 10:12:45 -0800
-Date: Mon, 1 Jan 2024 20:12:43 +0200 (EET)
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2024 10:31:43 -0800
+Date: Mon, 1 Jan 2024 20:31:39 +0200 (EET)
 From: =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To: Lukas Wunner <lukas@wunner.de>
 cc: linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>, 
@@ -60,146 +59,93 @@ cc: linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
     Alex Deucher <alexdeucher@gmail.com>, 
     Daniel Lezcano <daniel.lezcano@linaro.org>, 
     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>
-Subject: Re: [PATCH v3 08/10] PCI/bwctrl: Add "controller" part into PCIe
- bwctrl
-In-Reply-To: <20231230184905.GA6104@wunner.de>
-Message-ID: <b56bb460-7876-272a-23ce-83d1dab212b2@linux.intel.com>
-References: <20230929115723.7864-1-ilpo.jarvinen@linux.intel.com> <20230929115723.7864-9-ilpo.jarvinen@linux.intel.com> <20231230184905.GA6104@wunner.de>
+Subject: Re: [PATCH v3 06/10] PCI: Cache PCIe device's Supported Speed
+ Vector
+In-Reply-To: <20231230151931.GA25718@wunner.de>
+Message-ID: <94973372-91fc-27fc-b187-7427af9e4b7d@linux.intel.com>
+References: <20230929115723.7864-1-ilpo.jarvinen@linux.intel.com> <20230929115723.7864-7-ilpo.jarvinen@linux.intel.com> <20231230151931.GA25718@wunner.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-900971598-1704132769=:7866"
+Content-Type: multipart/mixed; boundary="8323329-122494420-1704133906=:7866"
 
   This message is in MIME format.  The first part should be readable text,
   while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-900971598-1704132769=:7866
+--8323329-122494420-1704133906=:7866
 Content-Type: text/plain; charset=iso-8859-1
 Content-Transfer-Encoding: 8BIT
 
 On Sat, 30 Dec 2023, Lukas Wunner wrote:
 
-> On Fri, Sep 29, 2023 at 02:57:21PM +0300, Ilpo Järvinen wrote:
+> On Fri, Sep 29, 2023 at 02:57:19PM +0300, Ilpo Järvinen wrote:
+> > The Supported Link Speeds Vector in the Link Capabilities Register 2
+> > corresponds to the bus below on Root Ports and Downstream Ports,
+> > whereas it corresponds to the bus above on Upstream Ports and
+> > Endpoints.
 > 
+> It would be good to add a pointer to the spec here.  I think the
+> relevant section is PCIe r6.1 sec 7.5.3.18 which says:
 > 
-> > --- a/drivers/pci/pcie/bwctrl.c
-
-> > +static u16 speed2lnkctl2(enum pci_bus_speed speed)
-> > +{
-> > +	static const u16 speed_conv[] = {
-> > +		[PCIE_SPEED_2_5GT] = PCI_EXP_LNKCTL2_TLS_2_5GT,
-> > +		[PCIE_SPEED_5_0GT] = PCI_EXP_LNKCTL2_TLS_5_0GT,
-> > +		[PCIE_SPEED_8_0GT] = PCI_EXP_LNKCTL2_TLS_8_0GT,
-> > +		[PCIE_SPEED_16_0GT] = PCI_EXP_LNKCTL2_TLS_16_0GT,
-> > +		[PCIE_SPEED_32_0GT] = PCI_EXP_LNKCTL2_TLS_32_0GT,
-> > +		[PCIE_SPEED_64_0GT] = PCI_EXP_LNKCTL2_TLS_64_0GT,
-> > +	};
+>  "Supported Link Speeds Vector - This field indicates the supported
+>   Link speed(s) of the associated Port."
+>                        ^^^^^^^^^^^^^^^
 > 
-> Looks like this could be a u8 array to save a little bit of memory.
+> Obviously the associated port is upstream on a Switch Upstream Port
+> or Endpoint, whereas it is downstream on a Switch Downstream Port
+> or Root Port.
 > 
-> Also, this seems to duplicate pcie_link_speed[] defined in probe.c.
+> Come to think of it, what about edge cases such as RCiEPs?
 
-It's not the same. pcie_link_speed[] is indexed by a different thing 
-unless you also suggest I should do index minus a number? There are 
-plenty of arithmetics possible when converting between the types but
-the existing converions functions don't seem to take advantage of those
-properties so I've been a bit hesitant to add such assumptions myself.
+On real HW I've seen, RCiEPs don't seem to have these speeds at all 
+(PCIe r6.1, sec 7.5.3):
 
-I suppose I used u16 because the reg is u16 but you're of course correct 
-that the values don't take up more than u8.
+"The Link Capabilities, Link Status, and Link Control registers are 
+required for all Root Ports, Switch Ports, Bridges, and Endpoints that are 
+not RCiEPs. For Functions that do not implement the Link Capabilities, 
+Link Status, and Link Contro registers, these spaces must be hardwired to 
+0. Link Capabilities 2, Link Status 2, and Link Control 2 registers are
+required for all Root Ports, Switch Ports, Bridges, and Endpoints (except 
+for RCiEPs) that implement capabilities requiring those registers. For 
+Functions that do not implement the Link Capabilities 2, Link Status 2, 
+and Link Control 2 registers, these spaces must be hardwired to 0b."
 
-> > +static int bwctrl_select_speed(struct pcie_device *srv, enum pci_bus_speed *speed)
-> > +{
-> > +	struct pci_bus *bus = srv->port->subordinate;
-> > +	u8 speeds, dev_speeds;
-> > +	int i;
-> > +
-> > +	if (*speed > PCIE_LNKCAP2_SLS2SPEED(bus->pcie_bus_speeds))
-> > +		return -EINVAL;
-> > +
-> > +	dev_speeds = READ_ONCE(bus->pcie_dev_speeds);
+> > Only the former is currently cached in pcie_bus_speeds in
+> > the struct pci_bus. The link speeds that are supported is the
+> > intersection of these two.
 > 
-> Hm, why is the compiler barrier needed?
+> I'm wondering if caching both is actually necessary.  Why not cache
+> just the intersection?  Do we need either of the two somewhere?
 
-It's probably an overkill but there could be a checker which finds this 
-read is not protected by anything while the value could get updated 
-concurrectly (there's probably already such checker as I've seen patches 
-to data races found with some tool). I suppose the alternative would be to 
-mark the data race being harmless (because if endpoint removal clears 
-pcie_dev_speeds, bwctrl will be pretty moot). I just chose to use 
-READ_ONCE() that prevents rereading the same value later in this function 
-making the function behave consistently regardless of what occurs parallel 
-to it with the endpoints.
+Intersection is enough at least for bwctrl. The only downside that is 
+barely worth mentioning is that the bus SLSV has to be re-read when
+function 0 sets the intersection.
 
-If the value selected cannot be set because of endpoint no longer being 
-there, the other parts of the code will detect that.
+I can think of somebody wanting to expose the list of both supported speed 
+to userspace though sysfs (not done by this patch series), but they could 
+be read from the registers in that case so that use case doesn't really 
+matter much, IMO.
 
-So if I just add a comment to this line why there's the data race and keep 
-it as is?
-
-> > +	/* Only the lowest speed can be set when there are no devices */
-> > +	if (!dev_speeds)
-> > +		dev_speeds = PCI_EXP_LNKCAP2_SLS_2_5GB;
+> > Store the device's Supported Link Speeds Vector into the struct pci_bus
+> > when the Function 0 is enumerated (the Multi-Function Devices must have
+> > same speeds the same for all Functions) to be easily able to calculate
+> > the intersection of Supported Link Speeds.
 > 
-> Maybe move this to patch [06/10], i.e. set dev->bus->pcie_dev_speeds to
-> PCI_EXP_LNKCAP2_SLS_2_5GB on removal (instead of 0).
+> Might want to add an explanation what you're going to need this for,
+> I assume it's accessed frequently by the bandwidth throttling driver
+> in a subsequent patch?
 
-Okay, I'll set it to 2_5GB on init and removal.
-
-> > +	speeds = bus->pcie_bus_speeds & dev_speeds;
-> > +	i = BIT(fls(speeds));
-> > +	while (i >= PCI_EXP_LNKCAP2_SLS_2_5GB) {
-> > +		enum pci_bus_speed candidate;
-> > +
-> > +		if (speeds & i) {
-> > +			candidate = PCIE_LNKCAP2_SLS2SPEED(i);
-> > +			if (candidate <= *speed) {
-> > +				*speed = candidate;
-> > +				return 0;
-> > +			}
-> > +		}
-> > +		i >>= 1;
-> > +	}
-> 
-> Can't we just do something like
-> 
-> 	supported_speeds = bus->pcie_bus_speeds & dev_speeds;
-> 	desired_speeds = GEN_MASK(pcie_link_speed[*speed], 1);
-> 	*speed = BIT(fls(supported_speeds & desired_speeds));
-> 
-> and thus avoid the loop altogether?
-
-Yes, I can change to loopless version.
-
-I'll try to create functions for the speed format conversions though 
-rather than open coding them into the logic.
-
-> > @@ -91,16 +242,32 @@ static int pcie_bandwidth_notification_probe(struct pcie_device *srv)
-> >  	if (ret)
-> >  		return ret;
-> >  
-> > +	data = kzalloc(sizeof(*data), GFP_KERNEL);
-> > +	if (!data) {
-> > +		ret = -ENOMEM;
-> > +		goto free_irq;
-> > +	}
-> > +	mutex_init(&data->set_speed_mutex);
-> > +	set_service_data(srv, data);
-> > +
-> 
-> I think you should move that further up so that you allocate and populate
-> the data struct before requesting the IRQ.  Otherwise if BIOS has already
-> enabled link bandwith notification for some reason, the IRQ handler might
-> be invoked without the data struct being allocated.
-
-Sure, I don't know why I missed that possibility.
-
+Yes. I tend to try to avoid forward references because some maintainers 
+complain about them (leading to minimal changes where true motivations 
+have to be hidden because "future" cannot be used to motivate a change 
+even if that's often the truest motivation within a patch series). But 
+I'll add a fwd ref here to make it more obvious. :-)
 
 -- 
  i.
 
---8323329-900971598-1704132769=:7866--
+--8323329-122494420-1704133906=:7866--
 
