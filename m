@@ -1,157 +1,161 @@
-Return-Path: <linux-pm+bounces-1745-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1746-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 210018222D3
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 22:01:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2924C82234F
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 22:38:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCF0C1C21399
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 21:01:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 18C161C2201F
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 21:38:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C533B1642A;
-	Tue,  2 Jan 2024 21:01:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CD5B168B1;
+	Tue,  2 Jan 2024 21:38:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LKTUzykS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dylfigDy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25E3416427
-	for <linux-pm@vger.kernel.org>; Tue,  2 Jan 2024 21:01:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-40d41555f9dso100167755e9.2
-        for <linux-pm@vger.kernel.org>; Tue, 02 Jan 2024 13:01:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704229264; x=1704834064; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=dstAtoDhSyAt9Ec6YxAr7xXLaqmXSKwXbZxFdyWhN30=;
-        b=LKTUzykSY0J/6pugrhNIxol79TNuqsI872SrAzA+IHKraf8tsaK2ermhd/BxjpH7aC
-         YaHRtlmEGswcVnMdnUbVmtrYWk6P6WNIdylWSvJAY0DhWf5jTTCdxdZIXDjMkObQOgdI
-         WIJNjKKCr9Aac6ftiBfTM2I07SxvU9C33/P9X4PwR7IRkY/IA70gucl/YVT1Tp7dChwl
-         Iwtl5x6hYMDxifgXxLiINUXppoVjrlUAtIH/AAJGFmCOmdcczQ1zFVaC0o2MiNI94QEn
-         5kqD840NaoKzG7Pw1J2MmuP0eQn/5sHQBTlU5AISpoyqlJzFuLfEG0Lj0muajc08/Ugv
-         ARqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704229264; x=1704834064;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dstAtoDhSyAt9Ec6YxAr7xXLaqmXSKwXbZxFdyWhN30=;
-        b=uNC/8122XHvEWsQOuCHiwOQfkg2jrUyP5TsvXrAraTGq7GeIEXDMFAohV/7lldD11S
-         9KkP/55zpTJadqfAZWSL1xTO9E+acO0q8p5HR8CI8wLf+WO4JT74eVempW9NC678lVes
-         TLCp8BFAqRjsjXHGqNJnedSJec1mthXOkbCQZxmRlsuaFzJ1L7wb+Y8sA4w/ViV2THku
-         7u2hp2BZ5QMk38ngTwv0zFsA61wg3pC8RzzwCGGdPoFAeSVoh8LGB81bLXgpxsqi/Ov2
-         ApinH/TpXpsEL6lCYFhLsLRi0cg+6FgbSUIqBL5T61fsjaEouVdLqvQaHnfQXEhJLm2L
-         jLpQ==
-X-Gm-Message-State: AOJu0Yz43b7mpPvVtjnJnDXOCdBwIntCnhGg+zoUotR4IXgjZQRnyPYo
-	rWdFnkJYURuwRf97CX7ADHJ0ncKSrCuD8Q==
-X-Google-Smtp-Source: AGHT+IHvYwQImOhlq5Jp5m7IRZTN6U6G0Gn2nqnXfeZK6+8tzjH/oqKq0tXr+YROcRTWiW8zh4HCSQ==
-X-Received: by 2002:a05:600c:4ed0:b0:40d:878d:6f81 with SMTP id g16-20020a05600c4ed000b0040d878d6f81mr2090256wmq.146.1704229264433;
-        Tue, 02 Jan 2024 13:01:04 -0800 (PST)
-Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id v10-20020a05600c470a00b0040d839e7bb3sm134119wmo.19.2024.01.02.13.01.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Jan 2024 13:01:03 -0800 (PST)
-Message-ID: <e9ce1ead-d78b-4a89-b330-0f17cd57decc@linaro.org>
-Date: Tue, 2 Jan 2024 22:00:57 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2453168A8;
+	Tue,  2 Jan 2024 21:38:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704231492; x=1735767492;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=SHWODI1YRWWrKC8GkPard7QJ7Ml2YhlQqRFPlo5WVf0=;
+  b=dylfigDy/tDPKG2mUudosn3dm0ELowYG3czm8AELRe2y7r0LiiXJT1fn
+   NMX5Fe+vro13AUuU0ftlXXHxfTTSRlLmD/6Gmw9M6vZ+nAyjO/r/O5Gsi
+   g7mFfXVG09kQKHAvgNLB+SRN660GQsGmT3ITp8Iq37HIbRHqQJ/8aRasw
+   PVpRvia8jlRakMbJEYRZay+qkPMABke2a0ccu6Hdzbg3n5jwa8udwQvZu
+   kOh1945acvj1Q+ZyuW+o9H62I2BEKrbDUqYgJ8XwxkaapXPSkM6S2Z2xg
+   2UyBOYslitqnf79lXQIAy79X1fHlKLSMlGHfH/KUvUUvdWNLf6RpgKqWb
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10941"; a="3737810"
+X-IronPort-AV: E=Sophos;i="6.04,326,1695711600"; 
+   d="scan'208";a="3737810"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2024 13:38:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10941"; a="783304446"
+X-IronPort-AV: E=Sophos;i="6.04,326,1695711600"; 
+   d="scan'208";a="783304446"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 02 Jan 2024 13:38:08 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rKmSc-000LTU-1P;
+	Tue, 02 Jan 2024 21:38:06 +0000
+Date: Wed, 3 Jan 2024 05:37:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-acpi@vger.kernel.org, devel@acpica.org,
+	linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge 157/159]
+ drivers/thermal/thermal_core.c:1469:6: warning: variable 'tz_id' set but not
+ used
+Message-ID: <202401030509.AAQGAhUF-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] dt-bindings: interconnect: Remove bogus interconnect
- nodes
-To: Konrad Dybcio <konrad.dybcio@linaro.org>,
- Bjorn Andersson <andersson@kernel.org>, Georgi Djakov <djakov@kernel.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Rajendra Nayak
- <quic_rjendra@quicinc.com>, Sibi Sankar <quic_sibis@quicinc.com>,
- Abel Vesa <abel.vesa@linaro.org>
-Cc: Marijn Suijten <marijn.suijten@somainline.org>,
- linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20240102-topic-x1e_fixes-v1-0-70723e08d5f6@linaro.org>
- <20240102-topic-x1e_fixes-v1-2-70723e08d5f6@linaro.org>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240102-topic-x1e_fixes-v1-2-70723e08d5f6@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 02/01/2024 19:29, Konrad Dybcio wrote:
-> The downstream kernel has infrastructure for passing votes from different
-> interconnect nodes onto different RPMh RSCs. This neither implemented, not
-> is going to be implemented upstream (in favor of a different solution
-> using ICC tags through the same node).
-> 
-> Unfortunately, as it happens, meaningless (in the upstream context) parts
-> of the vendor driver were copied, ending up causing havoc - since all
-> "per-RSC" (in quotes because they all point to the main APPS one) BCMs
-> defined within the driver overwrite the value in RPMh on every
-> aggregation.
-> 
-> To both avoid keeping bogus code around and possibly introducing
-> impossible-to-track-down bugs (busses shutting down for no reason), get
-> rid of the duplicated ICC node definitions.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   b8a1fe5b94254945ed28a3f519e8ecd60e288871
+commit: f36483a0a8c34a752816bfec1c7d2e693efbce99 [157/159] thermal: netlink: Pass thermal zone pointer to notify routines
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240103/202401030509.AAQGAhUF-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240103/202401030509.AAQGAhUF-lkp@intel.com/reproduce)
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202401030509.AAQGAhUF-lkp@intel.com/
 
-Best regards,
-Krzysztof
+All warnings (new ones prefixed by >>):
 
+>> drivers/thermal/thermal_core.c:1469:6: warning: variable 'tz_id' set but not used [-Wunused-but-set-variable]
+           int tz_id;
+               ^
+   1 warning generated.
+
+
+vim +/tz_id +1469 drivers/thermal/thermal_core.c
+
+7cefbaf081eb7c drivers/thermal/thermal_core.c Daniel Lezcano    2023-04-19  1462  
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1463  /**
+a052b5118f13fe drivers/thermal/thermal_core.c Yang Yingliang    2021-05-17  1464   * thermal_zone_device_unregister - removes the registered thermal zone device
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1465   * @tz: the thermal zone device to remove
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1466   */
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1467  void thermal_zone_device_unregister(struct thermal_zone_device *tz)
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1468  {
+ded2d383b1b441 drivers/thermal/thermal_core.c Zhang Rui         2023-03-30 @1469  	int tz_id;
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1470  	struct thermal_cooling_device *cdev;
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1471  	struct thermal_zone_device *pos = NULL;
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1472  
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1473  	if (!tz)
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1474  		return;
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1475  
+a5f785ce608caf drivers/thermal/thermal_core.c Dmitry Osipenko   2020-08-18  1476  	tz_id = tz->id;
+7e8ee1e9d7561f drivers/thermal/thermal_sys.c  Durgadoss R       2012-09-18  1477  
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1478  	mutex_lock(&thermal_list_lock);
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1479  	list_for_each_entry(pos, &thermal_tz_list, node)
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1480  		if (pos == tz)
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1481  			break;
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1482  	if (pos != tz) {
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1483  		/* thermal zone device not found */
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1484  		mutex_unlock(&thermal_list_lock);
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1485  		return;
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1486  	}
+b38aa87f67931e drivers/thermal/thermal_core.c Rafael J. Wysocki 2023-12-08  1487  
+b38aa87f67931e drivers/thermal/thermal_core.c Rafael J. Wysocki 2023-12-08  1488  	mutex_lock(&tz->lock);
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1489  	list_del(&tz->node);
+b38aa87f67931e drivers/thermal/thermal_core.c Rafael J. Wysocki 2023-12-08  1490  	mutex_unlock(&tz->lock);
+7e8ee1e9d7561f drivers/thermal/thermal_sys.c  Durgadoss R       2012-09-18  1491  
+7e8ee1e9d7561f drivers/thermal/thermal_sys.c  Durgadoss R       2012-09-18  1492  	/* Unbind all cdevs associated with 'this' thermal zone */
+ded2d383b1b441 drivers/thermal/thermal_core.c Zhang Rui         2023-03-30  1493  	list_for_each_entry(cdev, &thermal_cdev_list, node)
+ded2d383b1b441 drivers/thermal/thermal_core.c Zhang Rui         2023-03-30  1494  		if (tz->ops->unbind)
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1495  			tz->ops->unbind(tz, cdev);
+7e8ee1e9d7561f drivers/thermal/thermal_sys.c  Durgadoss R       2012-09-18  1496  
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1497  	mutex_unlock(&thermal_list_lock);
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1498  
+163b00cde7cf22 drivers/thermal/thermal_core.c Wei Wang          2019-11-12  1499  	cancel_delayed_work_sync(&tz->poll_queue);
+b1569e99c795bf drivers/thermal/thermal_sys.c  Matthew Garrett   2008-12-03  1500  
+e33df1d2f3a014 drivers/thermal/thermal_core.c Javi Merino       2015-02-26  1501  	thermal_set_governor(tz, NULL);
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1502  
+e68b16abd91dca drivers/thermal/thermal.c      Zhang Rui         2008-04-21  1503  	thermal_remove_hwmon_sysfs(tz);
+5a5b7d8d541684 drivers/thermal/thermal_core.c keliu             2022-05-27  1504  	ida_free(&thermal_tz_ida, tz->id);
+b31ef8285b19ec drivers/thermal/thermal_core.c Matthew Wilcox    2016-12-21  1505  	ida_destroy(&tz->ida);
+30b2ae07d3d60a drivers/thermal/thermal_core.c Guenter Roeck     2022-11-10  1506  
+30b2ae07d3d60a drivers/thermal/thermal_core.c Guenter Roeck     2022-11-10  1507  	device_del(&tz->device);
+30b2ae07d3d60a drivers/thermal/thermal_core.c Guenter Roeck     2022-11-10  1508  
+3d439b1a2ad36c drivers/thermal/thermal_core.c Daniel Lezcano    2023-04-04  1509  	kfree(tz->tzp);
+3d439b1a2ad36c drivers/thermal/thermal_core.c Daniel Lezcano    2023-04-04  1510  
+30b2ae07d3d60a drivers/thermal/thermal_core.c Guenter Roeck     2022-11-10  1511  	put_device(&tz->device);
+55cdf0a283b876 drivers/thermal/thermal_core.c Daniel Lezcano    2020-07-06  1512  
+f36483a0a8c34a drivers/thermal/thermal_core.c Rafael J. Wysocki 2023-12-15  1513  	thermal_notify_tz_delete(tz);
+4649620d9404d3 drivers/thermal/thermal_core.c Rafael J. Wysocki 2023-12-08  1514  
+4649620d9404d3 drivers/thermal/thermal_core.c Rafael J. Wysocki 2023-12-08  1515  	wait_for_completion(&tz->removal);
+4649620d9404d3 drivers/thermal/thermal_core.c Rafael J. Wysocki 2023-12-08  1516  	kfree(tz);
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1517  }
+910cb1e34d2fb8 drivers/thermal/thermal_core.c Eduardo Valentin  2013-04-23  1518  EXPORT_SYMBOL_GPL(thermal_zone_device_unregister);
+203d3d4aa48233 drivers/thermal/thermal.c      Zhang Rui         2008-01-17  1519  
+
+:::::: The code at line 1469 was first introduced by commit
+:::::: ded2d383b1b441f380552897791ffb85a1377f08 thermal/core: Remove thermal_bind_params structure
+
+:::::: TO: Zhang Rui <rui.zhang@intel.com>
+:::::: CC: Daniel Lezcano <daniel.lezcano@linaro.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
