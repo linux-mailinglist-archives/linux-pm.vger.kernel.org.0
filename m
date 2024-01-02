@@ -1,85 +1,159 @@
-Return-Path: <linux-pm+bounces-1721-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1722-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A6E7821971
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 11:10:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FBC1821ABC
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 12:16:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D9CAA1F21F93
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 10:10:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C3A58283066
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 11:16:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23705CA78;
-	Tue,  2 Jan 2024 10:10:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fkl2+TSI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52D8CDDBA;
+	Tue,  2 Jan 2024 11:16:19 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 088A1D266
-	for <linux-pm@vger.kernel.org>; Tue,  2 Jan 2024 10:10:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 86CE3C433CB
-	for <linux-pm@vger.kernel.org>; Tue,  2 Jan 2024 10:10:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704190218;
-	bh=Iff7itUVqdf5K8JiPB95MEGXkGcLNImvBb9ZrQ7ATDE=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=fkl2+TSICLucEg2Xd6HOUJzKAAmRweo4THSxF0vHlctM75OV/EudKrv0oUEuaf4Gt
-	 t67jQzYwDGgygD63gBL2iXeGgxOl3qCnSFDlb9CoEssTWhNzJfLCCWjYI4m5FzKGZg
-	 AuqyoAqDZD1SbvaMPOSYAF1wDgE8DwSGiLe0RtjUvPNnE4kI6RXtyGZX+CLPhNIK0l
-	 JeKjIY8RoebXQu47zy0WgySYwljpdBDk4m8PSNTII/6rLC0CLjc3vTbLmLGLrYnKNb
-	 XKAFzc3hAdtHcuz7d5ATiKsW8clJhH7g7YvvpfcIiKTGN2ojyg5B96dsuW7HxQUDHS
-	 T0Tcl3vknoL/Q==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 5E90AC4332E; Tue,  2 Jan 2024 10:10:18 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 218171] amd-pstate not loading on zen2 threadripper 3960x
- (trx40
-Date: Tue, 02 Jan 2024 10:10:17 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: aros@gmx.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: ANSWERED
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-218171-137361-UqH4RFVV1h@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218171-137361@https.bugzilla.kernel.org/>
-References: <bug-218171-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5B07DF51;
+	Tue,  2 Jan 2024 11:16:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 21B5CC15;
+	Tue,  2 Jan 2024 03:17:02 -0800 (PST)
+Received: from [10.57.86.61] (unknown [10.57.86.61])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 813A63F7A6;
+	Tue,  2 Jan 2024 03:16:13 -0800 (PST)
+Message-ID: <781005d2-2ec9-4e6b-8472-33da85e77575@arm.com>
+Date: Tue, 2 Jan 2024 11:17:31 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 09/23] PM: EM: Use runtime modified EM for CPUs energy
+ estimation in EAS
+Content-Language: en-US
+To: Qais Yousef <qyousef@layalina.io>
+Cc: Xuewen Yan <xuewen.yan94@gmail.com>, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, rafael@kernel.org, dietmar.eggemann@arm.com,
+ rui.zhang@intel.com, amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
+ daniel.lezcano@linaro.org, viresh.kumar@linaro.org, len.brown@intel.com,
+ pavel@ucw.cz, mhiramat@kernel.org, wvw@google.com
+References: <20231129110853.94344-1-lukasz.luba@arm.com>
+ <20231129110853.94344-10-lukasz.luba@arm.com>
+ <20231217175923.wxmfocgckpaytptb@airbuntu>
+ <CAB8ipk_5TjUTrZ-nrGAwYMugLJFF72MvvRDzPJqaCayNwCm1wg@mail.gmail.com>
+ <1ccd7a20-0479-46f7-a968-57a18f0c0152@arm.com>
+ <20231228173256.kepuwwimb4b2osew@airbuntu>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20231228173256.kepuwwimb4b2osew@airbuntu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218171
 
-Artem S. Tashkinov (aros@gmx.com) changed:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |ANSWERED
+On 12/28/23 17:32, Qais Yousef wrote:
+> On 12/19/23 08:32, Lukasz Luba wrote:
+>> Hi Qais and Xuewen,
+>>
+>> On 12/19/23 04:03, Xuewen Yan wrote:
+>>> On Mon, Dec 18, 2023 at 1:59 AM Qais Yousef <qyousef@layalina.io> wrote:
+>>>>
+>>>> On 11/29/23 11:08, Lukasz Luba wrote:
+>>>>> The new Energy Model (EM) supports runtime modification of the performance
+>>>>> state table to better model the power used by the SoC. Use this new
+>>>>> feature to improve energy estimation and therefore task placement in
+>>>>> Energy Aware Scheduler (EAS).
+>>>>
+>>>> nit: you moved the code to use the new runtime em table instead of the one
+>>>> parsed at boot.
+>>>>
+>>>>>
+>>>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>>>>> ---
+>>>>>    include/linux/energy_model.h | 16 ++++++++++++----
+>>>>>    1 file changed, 12 insertions(+), 4 deletions(-)
+>>>>>
+>>>>> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+>>>>> index 1e618e431cac..94a77a813724 100644
+>>>>> --- a/include/linux/energy_model.h
+>>>>> +++ b/include/linux/energy_model.h
+>>>>> @@ -238,6 +238,7 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
+>>>>>                                 unsigned long max_util, unsigned long sum_util,
+>>>>>                                 unsigned long allowed_cpu_cap)
+>>>>>    {
+>>>>> +     struct em_perf_table *runtime_table;
+>>>>>         unsigned long freq, scale_cpu;
+>>>>>         struct em_perf_state *ps;
+>>>>>         int cpu, i;
+>>>>> @@ -255,7 +256,14 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
+>>>>>          */
+>>>>>         cpu = cpumask_first(to_cpumask(pd->cpus));
+>>>>>         scale_cpu = arch_scale_cpu_capacity(cpu);
+>>>>> -     ps = &pd->table[pd->nr_perf_states - 1];
+>>>>> +
+>>>>> +     /*
+>>>>> +      * No rcu_read_lock() since it's already called by task scheduler.
+>>>>> +      * The runtime_table is always there for CPUs, so we don't check.
+>>>>> +      */
+>>>>
+>>>> WARN_ON(rcu_read_lock_held()) instead?
+>>>
+>>> I agree, or SCHED_WARN_ON(!rcu_read_lock_held()) ?
+>>
+>> I disagree here. This is a sched function in hot path and as comment
+> 
+> WARN_ON() is not a sched function.
 
---=20
-You may reply to this email to add a comment.
+I was referring to em_cpu_energy() being sched function. No one else
+should call it. That's the old contract also put into the doc of
+that function.
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+> 
+>> says:
+>>
+>> -----------------------
+>>   * This function must be used only for CPU devices. There is no validation,
+>>   * i.e. if the EM is a CPU type and has cpumask allocated. It is called from
+>>   * the scheduler code quite frequently and that is why there is not checks.
+>> -----------------------
+>>
+>> We don't have to put the checks or warnings everywhere in the kernel
+>> functions. Especially hot one like this one.
+> 
+> When checks are necessary, there are ways even for hot paths.
+
+We have that function called from feec() where the RCU must be hold,
+otherwise the whole EAS would be unstable.
+
+> 
+>>
+>> As you might not notice, we don't even check if the pd->cpus is not NULL
+> 
+> rcu_read_lock_held() is only enabled for lockdebug build and it's the standard
+> way to document and add verification to ensure locking rules are honoured. On
+> non lockdebug build this will be compiled out.
+> 
+> You had to put a long comment to ensure locking rules are correct, why not
+> use existing infrastructure instead to provide better checks and inherent
+> documentation?
+
+I didn't want to add any more overhead in this hot path.
+
+> 
+> We had a bug recently where the rcu_read_lock() was moved and this broke some
+> function buried down in the call stack. So subtle code shuffles elsewhere can
+> cause unwanted side effects; and it's hard to catch these bugs.
+> 
+> 	https://lore.kernel.org/stable/20231009130130.210024505@linuxfoundation.org/
+
+OK, let me check that w/ and w/o lockdebug build and the
+SCHED_WARN_ON(!rcu_read_lock_held())
+
+Although, it would be only a safety net for accidental use of
+em_cpu_energy() from code path other than feec()...
+Which actually might bring some value.
 
