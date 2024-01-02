@@ -1,64 +1,78 @@
-Return-Path: <linux-pm+bounces-1747-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1748-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 089AC822572
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 00:20:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78D5A822585
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 00:33:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1909F1C21A64
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 23:20:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15C9E283F3C
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 23:33:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E39BF17744;
-	Tue,  2 Jan 2024 23:20:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B03917740;
+	Tue,  2 Jan 2024 23:33:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aHgUYL+H"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BOxMgSO6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0AD51773D;
-	Tue,  2 Jan 2024 23:20:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704237628; x=1735773628;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Ux+MBx3ndzvuSHoRhV99v9zK1ijm22s5cA4UAbiYEZs=;
-  b=aHgUYL+H+qJsOVUfqheMfOTDQnHRkeQtFsXCPtUrNR5Fiu++HVLgeMb3
-   3PwxyGlbvqtc38mM/kpBle0uNtQHeCguyStc7iwoatfUO+speW9iodb66
-   g5l4m43cBDuiDyr2PjycUhzmOmx3V+Be6T6R5hKWIh7xR83blojrmQhu+
-   EDEg5ISzmij+QEwqj78KXeB4P1W6Q+bH1gZupZLqgjbp4T7qHYBtItRwr
-   A0AWo9fjE6W2SGqycob/6Mh5MVkFgemqCnxGPqT4dLuhxIs1NhH7mUbod
-   lgzoyaulC/ZR34uvGPixZQ0QMfplhfopOREciBK7MP8mzf6po1yayjrrQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10941"; a="3768937"
-X-IronPort-AV: E=Sophos;i="6.04,326,1695711600"; 
-   d="scan'208";a="3768937"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2024 15:20:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10941"; a="729622034"
-X-IronPort-AV: E=Sophos;i="6.04,326,1695711600"; 
-   d="scan'208";a="729622034"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 02 Jan 2024 15:20:22 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rKo3R-000LXM-1Q;
-	Tue, 02 Jan 2024 23:20:19 +0000
-Date: Wed, 3 Jan 2024 07:19:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-	devel@acpica.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge 154/159]
- drivers/thermal/intel/../thermal_netlink.h:27:20: warning: 'struct
- thermal_trip' declared inside parameter list will not be visible outside of
- this definition or declaration
-Message-ID: <202401030734.oCkQjI4z-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 586CB17984
+	for <linux-pm@vger.kernel.org>; Tue,  2 Jan 2024 23:33:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2ccbf8cbf3aso90880191fa.3
+        for <linux-pm@vger.kernel.org>; Tue, 02 Jan 2024 15:33:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1704238414; x=1704843214; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=idbn+oW+ru79HvN1qxo/ff+LJhpYNwODr6kmnulljN4=;
+        b=BOxMgSO6Ua3dcWWtt/6WKfOXsHqM0wbe30ijg71RaFyfkjZY2WATTG18j5BQE2jQFh
+         7QB0Rm7+m4GfQ3+w/hDHM+/emEdSVIUOroiRav+SGenN9q68MCiHMm1hnwf/tWKXHSgB
+         WJ+JK9xj4DwIPnz9bAaiXXdx4348AYGOtl0JBZYbDcbLVSQF2cxAVT4D6frXkeHjILam
+         Eb4zJXKCPg4B8fNAbTfpVsjVETBA9EjOyWIPBrnODt1ImHlD6JI4e4MGLw3N/dd6WuLA
+         GuIkvY1A6q9Yhv5u1hlP0SA7OGfrBDZAtWCTZdynbpSiAEOWfMHtvaQapkia5TV1lQA+
+         qG6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704238414; x=1704843214;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=idbn+oW+ru79HvN1qxo/ff+LJhpYNwODr6kmnulljN4=;
+        b=TAGfKW1IsCwykFea2jIops2Kv4jAbB4EQs+IgyKIyLq3nV43iNT7NoJKhP4RpPO7pK
+         mppB5btn5VpRLVp6zrh7bPbXRXsFXgJYL1axGU/CzsU/w2+eeJoj7UT/bc1E89pwDmmJ
+         gfOUzIk52iFp3sRTI6Cpq0SZneZ8vnKDljzemE1ca5K2aXy+WSJ861KHD1qrNVmAlSrf
+         Cqruo4RpCCyxTS1wdO8nmgr0OoRwr99iJh/8tRJcVjZQW1yJdN0fUI/+XyuI80e/zql5
+         0tjoqJ7gLWA/UVafIQFDg8OV8azIcuXlKZ3WppDN/vj/dgs39mYQ5s0y+xsQ+siByBy2
+         0NSQ==
+X-Gm-Message-State: AOJu0YwTKV0YbzwOewItCMam5rO2Ra9QllCrxChu3BGx/M3e6yxBS1Qn
+	6GCuLlftU9p6BuTXq3sfd8lSWu9PdiNm5g==
+X-Google-Smtp-Source: AGHT+IF4WB/wHeBDxLZQA+hq3pgf2KuxfIsCfu9z6Ah8FS7+nNNRGyvvP5PeHgFRmdJA9/e5eBvpcw==
+X-Received: by 2002:a2e:88cf:0:b0:2cc:dbbe:7c55 with SMTP id a15-20020a2e88cf000000b002ccdbbe7c55mr4684881ljk.94.1704238414248;
+        Tue, 02 Jan 2024 15:33:34 -0800 (PST)
+Received: from linaro.org ([79.115.23.25])
+        by smtp.gmail.com with ESMTPSA id t25-20020a056402241900b00553b6b5bb44sm16499540eda.67.2024.01.02.15.33.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Jan 2024 15:33:33 -0800 (PST)
+Date: Wed, 3 Jan 2024 01:33:32 +0200
+From: Abel Vesa <abel.vesa@linaro.org>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+	Georgi Djakov <djakov@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Rajendra Nayak <quic_rjendra@quicinc.com>,
+	Sibi Sankar <quic_sibis@quicinc.com>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 3/4] arm64: dts: qcom: x1e80100: Add missing system-wide
+ PSCI power domain
+Message-ID: <ZZSdTKe/aw2M1/2X@linaro.org>
+References: <20240102-topic-x1e_fixes-v1-0-70723e08d5f6@linaro.org>
+ <20240102-topic-x1e_fixes-v1-3-70723e08d5f6@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -67,63 +81,56 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240102-topic-x1e_fixes-v1-3-70723e08d5f6@linaro.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   b8a1fe5b94254945ed28a3f519e8ecd60e288871
-commit: 1fccea663914c7d8e334904525b6696eef0f6345 [154/159] thermal: netlink: Pass pointers to thermal_notify_tz_trip_change()
-config: i386-randconfig-005-20240102 (https://download.01.org/0day-ci/archive/20240103/202401030734.oCkQjI4z-lkp@intel.com/config)
-compiler: gcc-7 (Ubuntu 7.5.0-6ubuntu2) 7.5.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240103/202401030734.oCkQjI4z-lkp@intel.com/reproduce)
+On 24-01-02 19:29:49, Konrad Dybcio wrote:
+> Previous Qualcomm SoCs over the past couple years have used the Arm DSU
+> architecture, which basically unified the meaning of the "cluster" and
+> "system". This is however clearly not the case on X1E, as can be seen
+> by three separate cluster power domains.
+> 
+> Add the lacking system-level power domain. For now it's going to be
+> always-on, as no system-wide idle states are defined at the moment.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401030734.oCkQjI4z-lkp@intel.com/
+Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
 
-All warnings (new ones prefixed by >>):
-
-   In file included from drivers/thermal/intel/intel_hfi.c:46:0:
->> drivers/thermal/intel/../thermal_netlink.h:27:20: warning: 'struct thermal_trip' declared inside parameter list will not be visible outside of this definition or declaration
-          const struct thermal_trip *trip);
-                       ^~~~~~~~~~~~
->> drivers/thermal/intel/../thermal_netlink.h:26:48: warning: 'struct thermal_zone_device' declared inside parameter list will not be visible outside of this definition or declaration
-    int thermal_notify_tz_trip_change(const struct thermal_zone_device *tz,
-                                                   ^~~~~~~~~~~~~~~~~~~
-
-
-vim +27 drivers/thermal/intel/../thermal_netlink.h
-
-    12	
-    13	/* Netlink notification function */
-    14	#ifdef CONFIG_THERMAL_NETLINK
-    15	int __init thermal_netlink_init(void);
-    16	void __init thermal_netlink_exit(void);
-    17	int thermal_notify_tz_create(int tz_id, const char *name);
-    18	int thermal_notify_tz_delete(int tz_id);
-    19	int thermal_notify_tz_enable(int tz_id);
-    20	int thermal_notify_tz_disable(int tz_id);
-    21	int thermal_notify_tz_trip_down(int tz_id, int id, int temp);
-    22	int thermal_notify_tz_trip_up(int tz_id, int id, int temp);
-    23	int thermal_notify_tz_trip_delete(int tz_id, int id);
-    24	int thermal_notify_tz_trip_add(int tz_id, int id, int type,
-    25				       int temp, int hyst);
-  > 26	int thermal_notify_tz_trip_change(const struct thermal_zone_device *tz,
-  > 27					  const struct thermal_trip *trip);
-    28	int thermal_notify_cdev_state_update(int cdev_id, int state);
-    29	int thermal_notify_cdev_add(int cdev_id, const char *name, int max_state);
-    30	int thermal_notify_cdev_delete(int cdev_id);
-    31	int thermal_notify_tz_gov_change(int tz_id, const char *name);
-    32	int thermal_genl_sampling_temp(int id, int temp);
-    33	int thermal_genl_cpu_capability_event(int count,
-    34					      struct thermal_genl_cpu_caps *caps);
-    35	#else
-    36	static inline int thermal_netlink_init(void)
-    37	{
-    38		return 0;
-    39	}
-    40	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  arch/arm64/boot/dts/qcom/x1e80100.dtsi | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/x1e80100.dtsi b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
+> index 6f75fc342ceb..fc164b9b3ef1 100644
+> --- a/arch/arm64/boot/dts/qcom/x1e80100.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/x1e80100.dtsi
+> @@ -395,16 +395,24 @@ CPU_PD11: power-domain-cpu11 {
+>  		CLUSTER_PD0: power-domain-cpu-cluster0 {
+>  			#power-domain-cells = <0>;
+>  			domain-idle-states = <&CLUSTER_CL4>, <&CLUSTER_CL5>;
+> +			power-domains = <&SYSTEM_PD>;
+>  		};
+>  
+>  		CLUSTER_PD1: power-domain-cpu-cluster1 {
+>  			#power-domain-cells = <0>;
+>  			domain-idle-states = <&CLUSTER_CL4>, <&CLUSTER_CL5>;
+> +			power-domains = <&SYSTEM_PD>;
+>  		};
+>  
+>  		CLUSTER_PD2: power-domain-cpu-cluster2 {
+>  			#power-domain-cells = <0>;
+>  			domain-idle-states = <&CLUSTER_CL4>, <&CLUSTER_CL5>;
+> +			power-domains = <&SYSTEM_PD>;
+> +		};
+> +
+> +		SYSTEM_PD: power-domain-system {
+> +			#power-domain-cells = <0>;
+> +			/* TODO: system-wide idle states */
+>  		};
+>  	};
+>  
+> 
+> -- 
+> 2.43.0
+> 
 
