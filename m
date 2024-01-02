@@ -1,216 +1,103 @@
-Return-Path: <linux-pm+bounces-1711-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1712-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FF6C8215E8
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 00:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A975382169B
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 04:23:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6EB42819FD
-	for <lists+linux-pm@lfdr.de>; Mon,  1 Jan 2024 23:11:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D0C77280F1C
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 03:23:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CFE6E552;
-	Mon,  1 Jan 2024 23:11:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28553A48;
+	Tue,  2 Jan 2024 03:23:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OhYoCEIZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y1QBM4lo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9412AF9C3;
-	Mon,  1 Jan 2024 23:11:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704150664; x=1735686664;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=UfoigrsgWZw1qwRV1NPochIPQ0OH+itXFklI76nBwvQ=;
-  b=OhYoCEIZRVA9fxguImnqLpHXw4uDQ30oob7OydWlfqz4ky8qHdrqMtJH
-   mp1SlFAkVTFAT0GFLD5N8zQK2Nc/Zv0vhAL8mP32uT+zju+a68kzjSBn/
-   +0rpIMPv/wKZw8XTBdFjW9w1tbFJEDOXJdJkHzU3raArZMSo8/Cw42zxE
-   pnCmfGu1SCoFqcOZxL5NK/B+NJCJmDKQnoFNFoNebktdzdDL/dMnumG1Y
-   jAFlfEZ/LSViIEo8Xfjrn/oGAHz2pO+PIQPJG+V1CqzeTdIU9DQMcoIDS
-   KJXVD0RKTU1nwmGA89iDzkRVjurtf7FxI37nn2SQdsxz06PgiHIJ0/e4q
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10940"; a="399588091"
-X-IronPort-AV: E=Sophos;i="6.04,323,1695711600"; 
-   d="scan'208";a="399588091"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2024 15:11:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10940"; a="1110880998"
-X-IronPort-AV: E=Sophos;i="6.04,323,1695711600"; 
-   d="scan'208";a="1110880998"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jan 2024 15:11:02 -0800
-Date: Mon, 1 Jan 2024 15:12:41 -0800
-From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	Chen Yu <yu.c.chen@intel.com>, Len Brown <len.brown@intel.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-	Zhang Rui <rui.zhang@intel.com>, Zhao Liu <zhao1.liu@intel.com>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Zhao Liu <zhao1.liu@linux.intel.com>
-Subject: Re: [PATCH 1/4] thermal: intel: hfi: Refactor enabling code into
- helper functions
-Message-ID: <20240101231240.GA8281@ranerica-svr.sc.intel.com>
-References: <20231227062940.10780-1-ricardo.neri-calderon@linux.intel.com>
- <20231227062940.10780-2-ricardo.neri-calderon@linux.intel.com>
- <CAJZ5v0iTaoiWWxueysmgx_SxqLZB0iODqSMX0vht9n8r_MC=KA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E72320F8
+	for <linux-pm@vger.kernel.org>; Tue,  2 Jan 2024 03:23:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7A4B0C433CB
+	for <linux-pm@vger.kernel.org>; Tue,  2 Jan 2024 03:23:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704165812;
+	bh=y5pZ8GH4xZYQjG9zYnsfR/EvZQawP79ue7Iy9Pt178g=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=Y1QBM4loOEwjGMH3yfPR4tjfqpQhpzCBVvDQPJpi0LRlj7rF+Sm5AvPCijDlbzTY6
+	 Id8nEW4F55BniyFziHwDlpL7hZwFxC/YwQ+eXtz+CyId2khTVElySlGAHDBWw26IiQ
+	 44CT616pQNcauwBgGRyaBE8vpCNiu68ImuDbvLi7r/wH5mqr5ALYJ1Ox/BkvI57JLt
+	 /eA1rJ9cyUZjyT4Vk+ZvC5Ko8G3sNfwJ+hNwbyPOTCVlefXZWi04LrpeYB66Ioy1My
+	 rt/fiORE2nGiMF7bDDq7hizeOJtMiC5/EZQxv2yXPXEYinIfEZEPfL3GiQ4bF7troX
+	 LMxqdy2jg99Bw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 610A8C53BD0; Tue,  2 Jan 2024 03:23:32 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218171] amd-pstate not loading on zen2 threadripper 3960x
+ (trx40
+Date: Tue, 02 Jan 2024 03:23:32 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: Perry.Yuan@amd.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218171-137361-sRGe94r8pO@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218171-137361@https.bugzilla.kernel.org/>
+References: <bug-218171-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0iTaoiWWxueysmgx_SxqLZB0iODqSMX0vht9n8r_MC=KA@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 
-On Fri, Dec 29, 2023 at 06:22:25PM +0100, Rafael J. Wysocki wrote:
-> On Wed, Dec 27, 2023 at 7:28 AM Ricardo Neri
-> <ricardo.neri-calderon@linux.intel.com> wrote:
-> >
-> > In preparation to add a suspend notifier, wrap the logic to enable HFI and
-> > program its memory buffer into helper functions. Both the CPU hotplug
-> > callback and the suspend notifier will use it.
-> 
-> No functional impact?
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218171
 
-Thank you for your review!
+--- Comment #23 from Perry Yuan(AMD) (Perry.Yuan@amd.com) ---
+(In reply to Pedro Nascimento from comment #22)
+> Created attachment 305671 [details]
+> ACPI dump for Gigabyte TRX40 AORUS PRO WIFI with a 3970X TR
+>=20
+> Here's mine. Note that this is a Gigabyte mobo.
+>=20
+> Machine:
+> Type: Desktop System: Gigabyte product: TRX40 AORUS PRO WIFI v: -CF seria=
+l:
+> N/A
+> Mobo: Gigabyte model: TRX40 AORUS PRO WIFI serial: N/A UEFI: American
+> Megatrends LLC. v: F6
+> date: 09/07/2022
+> CPU:
+> Info: 32-core model: AMD Ryzen Threadripper 3970X bits: 64 type: MT MCP
+> cache: L2: 16 MiB
 
-Correct. There is no functional impact. I will update the commit message
-in my next version.
+Hi Pedro,=20
 
-> 
-> > Cc: Chen Yu <yu.c.chen@intel.com>
-> > Cc: Len Brown <len.brown@intel.com>
-> > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > Cc: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-> > Cc: Zhang Rui <rui.zhang@intel.com>
-> > Cc: Zhao Liu <zhao1.liu@linux.intel.com>
-> > Cc: linux-pm@vger.kernel.org
-> > Cc: stable@vger.kernel.org
-> 
-> Please don't CC stable@vger on patch submissions, although you may add
-> a Cc: stable tag without actually CCing it for my information, but in
-> that case please add a full tag including the earliest stable series
-> the patch is intended to apply to.
+The BIOS and some PM firmware are shipped from board vendors, I can see the
+pstate driver can work well with our CRB board, but the final BIOS release
+comes from vendor, If you would like to get CPPC work on your board, I would
+suggest that you request support from board vendor.
 
-I see. Sure Rafael, I can do this.
+--=20
+You may reply to this email to add a comment.
 
-> 
-> > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> > ---
-> >  drivers/thermal/intel/intel_hfi.c | 46 +++++++++++++++++--------------
-> >  1 file changed, 25 insertions(+), 21 deletions(-)
-> >
-> > diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-> > index c69db6c90869..87ac7b196981 100644
-> > --- a/drivers/thermal/intel/intel_hfi.c
-> > +++ b/drivers/thermal/intel/intel_hfi.c
-> > @@ -347,6 +347,25 @@ static void init_hfi_instance(struct hfi_instance *hfi_instance)
-> >         hfi_instance->data = hfi_instance->hdr + hfi_features.hdr_size;
-> >  }
-> >
-> > +static void hfi_enable(void)
-> > +{
-> > +       u64 msr_val;
-> > +
-> > +       rdmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
-> > +       msr_val |= HW_FEEDBACK_CONFIG_HFI_ENABLE_BIT;
-> > +       wrmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
-> > +}
-> > +
-> > +static void hfi_set_hw_table(struct hfi_instance *hfi_instance)
-> > +{
-> > +       phys_addr_t hw_table_pa;
-> > +       u64 msr_val;
-> > +
-> > +       hw_table_pa = virt_to_phys(hfi_instance->hw_table);
-> > +       msr_val = hw_table_pa | HW_FEEDBACK_PTR_VALID_BIT;
-> > +       wrmsrl(MSR_IA32_HW_FEEDBACK_PTR, msr_val);
-> > +}
-> > +
-> >  /**
-> >   * intel_hfi_online() - Enable HFI on @cpu
-> >   * @cpu:       CPU in which the HFI will be enabled
-> > @@ -364,8 +383,6 @@ void intel_hfi_online(unsigned int cpu)
-> >  {
-> >         struct hfi_instance *hfi_instance;
-> >         struct hfi_cpu_info *info;
-> > -       phys_addr_t hw_table_pa;
-> > -       u64 msr_val;
-> >         u16 die_id;
-> >
-> >         /* Nothing to do if hfi_instances are missing. */
-> > @@ -403,14 +420,16 @@ void intel_hfi_online(unsigned int cpu)
-> >         /*
-> >          * Hardware is programmed with the physical address of the first page
-> >          * frame of the table. Hence, the allocated memory must be page-aligned.
-> > +        *
-> > +        * Some processors do not forget the initial address of the HFI table
-> > +        * even after having been reprogrammed. Keep using the same pages. Do
-> > +        * not free them.
-> 
-> This comment change does not seem to belong to this patch.  I guess it
-> needs to go to one of the subsequent patches?
-
-My intention was is to relocate here the comment I deleted in the
-subsequent hunk (after some rewording). Sure, I can put this comment in
-patch 3/4, which deals with disabling HFI.
- 
-> 
-> >          */
-> >         hfi_instance->hw_table = alloc_pages_exact(hfi_features.nr_table_pages,
-> >                                                    GFP_KERNEL | __GFP_ZERO);
-> >         if (!hfi_instance->hw_table)
-> >                 goto unlock;
-> >
-> > -       hw_table_pa = virt_to_phys(hfi_instance->hw_table);
-> > -
-> >         /*
-> >          * Allocate memory to keep a local copy of the table that
-> >          * hardware generates.
-> > @@ -420,16 +439,6 @@ void intel_hfi_online(unsigned int cpu)
-> >         if (!hfi_instance->local_table)
-> >                 goto free_hw_table;
-> >
-> > -       /*
-> > -        * Program the address of the feedback table of this die/package. On
-> > -        * some processors, hardware remembers the old address of the HFI table
-> > -        * even after having been reprogrammed and re-enabled. Thus, do not free
-> > -        * the pages allocated for the table or reprogram the hardware with a
-> > -        * new base address. Namely, program the hardware only once.
-> > -        */
-> > -       msr_val = hw_table_pa | HW_FEEDBACK_PTR_VALID_BIT;
-> > -       wrmsrl(MSR_IA32_HW_FEEDBACK_PTR, msr_val);
-> > -
-> >         init_hfi_instance(hfi_instance);
-> >
-> >         INIT_DELAYED_WORK(&hfi_instance->update_work, hfi_update_work_fn);
-> > @@ -438,13 +447,8 @@ void intel_hfi_online(unsigned int cpu)
-> >
-> >         cpumask_set_cpu(cpu, hfi_instance->cpus);
-> >
-> > -       /*
-> > -        * Enable the hardware feedback interface and never disable it. See
-> > -        * comment on programming the address of the table.
-> > -        */
-> > -       rdmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
-> > -       msr_val |= HW_FEEDBACK_CONFIG_HFI_ENABLE_BIT;
-> > -       wrmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
-> > +       hfi_set_hw_table(hfi_instance);
-> > +       hfi_enable();
-> >
-> >  unlock:
-> >         mutex_unlock(&hfi_instance_lock);
-> > --
+You are receiving this mail because:
+You are the assignee for the bug.=
 
