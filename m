@@ -1,90 +1,80 @@
-Return-Path: <linux-pm+bounces-1729-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1730-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5ECF4821C78
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 14:19:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 349A4821C82
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 14:24:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0FE2B28121A
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 13:19:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 84C75282E98
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 13:24:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7019F9F3;
-	Tue,  2 Jan 2024 13:18:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03852F9F3;
+	Tue,  2 Jan 2024 13:24:15 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AD68F9E6;
-	Tue,  2 Jan 2024 13:18:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0F18FBE1;
+	Tue,  2 Jan 2024 13:24:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5958d3f2d8aso270136eaf.1;
-        Tue, 02 Jan 2024 05:18:55 -0800 (PST)
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6dc08cc6b9cso358481a34.1;
+        Tue, 02 Jan 2024 05:24:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704201534; x=1704806334;
+        d=1e100.net; s=20230601; t=1704201852; x=1704806652;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1Z/aZekOHHjZPa6W+lRfUU70kAOn6yYoCT3d0V22B6s=;
-        b=LnngeC/Ulg5L8H12/YVUsUM/qOxGeuv04apZmdLzImzt9MtQUU2UKon/ns3tKqMONF
-         pjnxR9XybHo4wA8dXGJefzCWkzWDAg46lyLk+E0yX8qrxH5V+X2lnHv2gBLWP3PIEh9T
-         loLamdecVU9lgQgu5graglljSmKOOLX8tySH0WzkHGWYKRZZikjMO6ZD/VBNsb8OhtGz
-         v60euh1XItjkpoJP+a5HGPkCv60V4lwtD13U68q3SkWkXoebbxsGNUUxZpoHh9Wt/XZo
-         O49VBuTiEIwKv98g0c4GCJiyf/A5U5P3m4dGHbQS54VavCVMBWvKNKndgxkKmOKUK/l/
-         wxRQ==
-X-Gm-Message-State: AOJu0YwWtECialLn6dzKAvP0Oo1DZckezqqVMPW87t5W5PByA22ks0Z/
-	DyzPf7qpHbQkZXuPurDvt/+ppB7ARDG8i/H+wAGo4YVs
-X-Google-Smtp-Source: AGHT+IHbWu7tF56Yvh8842MWCPhLy8fvp/UUcthGkkfA3I+BV2Bk0AeT9d8KQsJN4ahrUMpbPnhy7K2167sop+sBJ7g=
-X-Received: by 2002:a4a:da55:0:b0:595:e0dd:9f8a with SMTP id
- f21-20020a4ada55000000b00595e0dd9f8amr1053638oou.1.1704201534446; Tue, 02 Jan
- 2024 05:18:54 -0800 (PST)
+        bh=IcU2TDpQ8VVSLToE7Vm5jFsV/f9rGTk4EUxek9wNMtc=;
+        b=ZyZmKZ7xH7Bc2aYxwaAkvvRHtr8dAno5YSvp7vDFbRLTJ6QrsHl0Zi2slIcgzlYBWb
+         9DnWC+7f46RC2wkQZO+huPa1LcKP7/L/Oh+OiOi4mPHnl+WdxAV42xrneHnnGSL33KC3
+         G9lmI1W7FmLdExJGoBNDkqr9ZWAVRxVFswJtjbWlqbE6dTnzSJ/lCb9HB6i8M6CLYj6H
+         GbWZLD4tqdHPqG6xROIy4QgBYxiTNY+kPKkYydFaonGnrq8T/lD6V4VP49y+Q16/XRAW
+         u9bJaIzv01fAXbSPFiekOjRoAw5keX/N4DaTLLtBy/W5cHBNd/aCYk8Du6QuoYoDiBcO
+         vQKQ==
+X-Gm-Message-State: AOJu0YzxiRgM781kRCwvMBwwOum0ucJMpDiN6aN+z9WKghgc24cS3DZ9
+	0bYWrkgv6vIXNdlMxZ595mLplW8oPgRSl/uUDx5TBEiO
+X-Google-Smtp-Source: AGHT+IE5k6ReH/T/sAdlA8Xi760DZsqWt2Y2CAdLNyXPx0M0dHY/Pv1shnE3gxIXemWFE/NIkzCzd4L/cPfToGK5uwc=
+X-Received: by 2002:a4a:b38c:0:b0:595:6024:c4f8 with SMTP id
+ p12-20020a4ab38c000000b005956024c4f8mr5155232ooo.1.1704201852556; Tue, 02 Jan
+ 2024 05:24:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CGME20231227084252epcas2p3b063f7852f81f82cd0a31afd7f404db4@epcas2p3.samsung.com>
- <2023122701-mortify-deed-4e66@gregkh> <5754861.DvuYhMxLoT@kreacher> <6019796.lOV4Wx5bFT@kreacher>
-In-Reply-To: <6019796.lOV4Wx5bFT@kreacher>
+References: <4556052.LvFx2qVVIh@kreacher>
+In-Reply-To: <4556052.LvFx2qVVIh@kreacher>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 2 Jan 2024 14:18:43 +0100
-Message-ID: <CAJZ5v0j6vspzj00ZH66eHtcDP8_fUcaR+KNoaTA8qG1r0hkrVQ@mail.gmail.com>
-Subject: Re: [PATCH v1 0/3] PM: sleep: Fix possible device suspend-resume deadlocks
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Greg KH <gregkh@linuxfoundation.org>, linux-pm@vger.kernel.org, 
-	Youngmin Nam <youngmin.nam@samsung.com>, rafael@kernel.org, linux-kernel@vger.kernel.org, 
-	d7271.choe@samsung.com, janghyuck.kim@samsung.com, hyesoo.yu@samsung.com, 
-	Alan Stern <stern@rowland.harvard.edu>, Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 2 Jan 2024 14:24:01 +0100
+Message-ID: <CAJZ5v0hRGKjwDv0VLw550CLfUuNGaVXxmvcpbFhS=PCPqY0n4A@mail.gmail.com>
+Subject: Re: [PATCH v1 0/6] thermal: netlink: Redefine the API and drop unused code
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Linux ACPI <linux-acpi@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Lukasz Luba <lukasz.luba@arm.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 27, 2023 at 9:41=E2=80=AFPM Rafael J. Wysocki <rjw@rjwysocki.ne=
+On Fri, Dec 15, 2023 at 9:02=E2=80=AFPM Rafael J. Wysocki <rjw@rjwysocki.ne=
 t> wrote:
 >
 > Hi Everyone,
 >
-> As reported here
+> This patch series redefines the thermal netlink API to be somewhat more
+> convenient to use on the caller side and drops some unused code from
+> the thermal netlink library.
 >
-> https://lore.kernel.org/linux-pm/ZYvjiqX6EsL15moe@perf/
->
-> the device suspend-resume code running during system-wide PM transitions
-> deadlock on low memory, because it attempts to acquire a mutex that's
-> already held by it in those cases.
->
-> This series addresses the issue by changing the resume code behavior
-> to directly run the device PM functions synchronously if they cannot
-> be scheduled for asynchronous executions (patch [3/3]).
->
-> For this purpose, the async code is rearranged (patch [1/3]) and a
-> new variant of async_schedule_dev() is introduced (patch [2/3]).
+> Please refer to the individual patch changelogs for details.
 
-Given the lack of negative feedback, I've queued up this series for 6.8-rc1=
-.
+No feedback, so this series doesn't appear to be controversial, and I
+would like to get it into 6.8.
 
-Please let me know if there are any issues with that.
+Tentatively queuing it up and please let me know if it is problematic.
 
 Thanks!
 
