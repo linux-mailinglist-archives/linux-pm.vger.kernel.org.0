@@ -1,31 +1,31 @@
-Return-Path: <linux-pm+bounces-1722-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1723-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FBC1821ABC
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 12:16:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5A8D821B14
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 12:38:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C3A58283066
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 11:16:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8FB631C21DCF
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 11:38:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52D8CDDBA;
-	Tue,  2 Jan 2024 11:16:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FFECE572;
+	Tue,  2 Jan 2024 11:38:11 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5B07DF51;
-	Tue,  2 Jan 2024 11:16:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16584F4F7;
+	Tue,  2 Jan 2024 11:38:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 21B5CC15;
-	Tue,  2 Jan 2024 03:17:02 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4C661C15;
+	Tue,  2 Jan 2024 03:38:54 -0800 (PST)
 Received: from [10.57.86.61] (unknown [10.57.86.61])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 813A63F7A6;
-	Tue,  2 Jan 2024 03:16:13 -0800 (PST)
-Message-ID: <781005d2-2ec9-4e6b-8472-33da85e77575@arm.com>
-Date: Tue, 2 Jan 2024 11:17:31 +0000
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D48573F7A6;
+	Tue,  2 Jan 2024 03:38:05 -0800 (PST)
+Message-ID: <47c72c07-aafe-4f94-864b-53f9e45857db@arm.com>
+Date: Tue, 2 Jan 2024 11:39:23 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -33,127 +33,139 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 09/23] PM: EM: Use runtime modified EM for CPUs energy
- estimation in EAS
+Subject: Re: [PATCH v5 14/23] PM: EM: Support late CPUs booting and capacity
+ adjustment
 Content-Language: en-US
 To: Qais Yousef <qyousef@layalina.io>
-Cc: Xuewen Yan <xuewen.yan94@gmail.com>, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, rafael@kernel.org, dietmar.eggemann@arm.com,
- rui.zhang@intel.com, amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ rafael@kernel.org, dietmar.eggemann@arm.com, rui.zhang@intel.com,
+ amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
  daniel.lezcano@linaro.org, viresh.kumar@linaro.org, len.brown@intel.com,
  pavel@ucw.cz, mhiramat@kernel.org, wvw@google.com
 References: <20231129110853.94344-1-lukasz.luba@arm.com>
- <20231129110853.94344-10-lukasz.luba@arm.com>
- <20231217175923.wxmfocgckpaytptb@airbuntu>
- <CAB8ipk_5TjUTrZ-nrGAwYMugLJFF72MvvRDzPJqaCayNwCm1wg@mail.gmail.com>
- <1ccd7a20-0479-46f7-a968-57a18f0c0152@arm.com>
- <20231228173256.kepuwwimb4b2osew@airbuntu>
+ <20231129110853.94344-15-lukasz.luba@arm.com>
+ <20231217180038.vcyaaoni3nvmlf6f@airbuntu>
 From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20231228173256.kepuwwimb4b2osew@airbuntu>
+In-Reply-To: <20231217180038.vcyaaoni3nvmlf6f@airbuntu>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
 
 
-On 12/28/23 17:32, Qais Yousef wrote:
-> On 12/19/23 08:32, Lukasz Luba wrote:
->> Hi Qais and Xuewen,
+On 12/17/23 18:00, Qais Yousef wrote:
+> On 11/29/23 11:08, Lukasz Luba wrote:
+>> The patch adds needed infrastructure to handle the late CPUs boot, which
+>> might change the previous CPUs capacity values. With this changes the new
+>> CPUs which try to register EM will trigger the needed re-calculations for
+>> other CPUs EMs. Thanks to that the em_per_state::performance values will
+>> be aligned with the CPU capacity information after all CPUs finish the
+>> boot and EM registrations.
 >>
->> On 12/19/23 04:03, Xuewen Yan wrote:
->>> On Mon, Dec 18, 2023 at 1:59 AM Qais Yousef <qyousef@layalina.io> wrote:
->>>>
->>>> On 11/29/23 11:08, Lukasz Luba wrote:
->>>>> The new Energy Model (EM) supports runtime modification of the performance
->>>>> state table to better model the power used by the SoC. Use this new
->>>>> feature to improve energy estimation and therefore task placement in
->>>>> Energy Aware Scheduler (EAS).
->>>>
->>>> nit: you moved the code to use the new runtime em table instead of the one
->>>> parsed at boot.
->>>>
->>>>>
->>>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->>>>> ---
->>>>>    include/linux/energy_model.h | 16 ++++++++++++----
->>>>>    1 file changed, 12 insertions(+), 4 deletions(-)
->>>>>
->>>>> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
->>>>> index 1e618e431cac..94a77a813724 100644
->>>>> --- a/include/linux/energy_model.h
->>>>> +++ b/include/linux/energy_model.h
->>>>> @@ -238,6 +238,7 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
->>>>>                                 unsigned long max_util, unsigned long sum_util,
->>>>>                                 unsigned long allowed_cpu_cap)
->>>>>    {
->>>>> +     struct em_perf_table *runtime_table;
->>>>>         unsigned long freq, scale_cpu;
->>>>>         struct em_perf_state *ps;
->>>>>         int cpu, i;
->>>>> @@ -255,7 +256,14 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
->>>>>          */
->>>>>         cpu = cpumask_first(to_cpumask(pd->cpus));
->>>>>         scale_cpu = arch_scale_cpu_capacity(cpu);
->>>>> -     ps = &pd->table[pd->nr_perf_states - 1];
->>>>> +
->>>>> +     /*
->>>>> +      * No rcu_read_lock() since it's already called by task scheduler.
->>>>> +      * The runtime_table is always there for CPUs, so we don't check.
->>>>> +      */
->>>>
->>>> WARN_ON(rcu_read_lock_held()) instead?
->>>
->>> I agree, or SCHED_WARN_ON(!rcu_read_lock_held()) ?
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   kernel/power/energy_model.c | 121 ++++++++++++++++++++++++++++++++++++
+>>   1 file changed, 121 insertions(+)
 >>
->> I disagree here. This is a sched function in hot path and as comment
+>> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+>> index b5016afe6a19..d3fa5a77de80 100644
+>> --- a/kernel/power/energy_model.c
+>> +++ b/kernel/power/energy_model.c
+>> @@ -25,6 +25,9 @@ static DEFINE_MUTEX(em_pd_mutex);
+>>   
+>>   static void em_cpufreq_update_efficiencies(struct device *dev,
+>>   					   struct em_perf_state *table);
+>> +static void em_check_capacity_update(void);
+>> +static void em_update_workfn(struct work_struct *work);
+>> +static DECLARE_DELAYED_WORK(em_update_work, em_update_workfn);
+>>   
+>>   static bool _is_cpu_device(struct device *dev)
+>>   {
+>> @@ -596,6 +599,10 @@ int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
+>>   
+>>   unlock:
+>>   	mutex_unlock(&em_pd_mutex);
+>> +
+>> +	if (_is_cpu_device(dev))
+>> +		em_check_capacity_update();
+>> +
+>>   	return ret;
+>>   }
+>>   EXPORT_SYMBOL_GPL(em_dev_register_perf_domain);
+>> @@ -631,3 +638,117 @@ void em_dev_unregister_perf_domain(struct device *dev)
+>>   	mutex_unlock(&em_pd_mutex);
+>>   }
+>>   EXPORT_SYMBOL_GPL(em_dev_unregister_perf_domain);
+>> +
+>> +/*
+>> + * Adjustment of CPU performance values after boot, when all CPUs capacites
+>> + * are correctly calculated.
+>> + */
+>> +static void em_adjust_new_capacity(struct device *dev,
+>> +				   struct em_perf_domain *pd,
+>> +				   u64 max_cap)
+>> +{
+>> +	struct em_perf_table __rcu *runtime_table;
+>> +	struct em_perf_state *table, *new_table;
+>> +	int ret, table_size;
+>> +
+>> +	runtime_table = em_allocate_table(pd);
+>> +	if (!runtime_table) {
+>> +		dev_warn(dev, "EM: allocation failed\n");
+>> +		return;
+>> +	}
+>> +
+>> +	new_table = runtime_table->state;
+>> +
+>> +	table = em_get_table(pd);
+>> +	/* Initialize data based on older runtime table */
+>> +	table_size = sizeof(struct em_perf_state) * pd->nr_perf_states;
+>> +	memcpy(new_table, table, table_size);
+>> +
+>> +	em_put_table();
+>> +
+>> +	em_init_performance(dev, pd, new_table, pd->nr_perf_states);
+>> +	ret = em_compute_costs(dev, new_table, NULL, pd->nr_perf_states,
+>> +			       pd->flags);
+>> +	if (ret) {
+>> +		em_free_table(runtime_table);
+>> +		return;
+>> +	}
+>> +
+>> +	ret = em_dev_update_perf_domain(dev, runtime_table);
+>> +	if (ret)
+>> +		dev_warn(dev, "EM: update failed %d\n", ret);
+>> +
+>> +	/*
+>> +	 * This is one-time-update, so give up the ownership in this updater.
+>> +	 * The EM fwk will keep the reference and free the memory when needed.
+>> +	 */
+>> +	em_free_table(runtime_table);
+>> +}
+>> +
+>> +static void em_check_capacity_update(void)
+>> +{
+>> +	cpumask_var_t cpu_done_mask;
+>> +	struct em_perf_state *table;
+>> +	struct em_perf_domain *pd;
+>> +	unsigned long cpu_capacity;
+>> +	int cpu;
+>> +
+>> +	if (!zalloc_cpumask_var(&cpu_done_mask, GFP_KERNEL)) {
+>> +		pr_warn("no free memory\n");
+>> +		return;
+>> +	}
+>> +
+>> +	/* Check if CPUs capacity has changed than update EM */
+>> +	for_each_possible_cpu(cpu) {
 > 
-> WARN_ON() is not a sched function.
-
-I was referring to em_cpu_energy() being sched function. No one else
-should call it. That's the old contract also put into the doc of
-that function.
-
+> Can't we instead hook into cpufreq_online/offline() to check if we need to
+> do any em related update for this policy?
 > 
->> says:
->>
->> -----------------------
->>   * This function must be used only for CPU devices. There is no validation,
->>   * i.e. if the EM is a CPU type and has cpumask allocated. It is called from
->>   * the scheduler code quite frequently and that is why there is not checks.
->> -----------------------
->>
->> We don't have to put the checks or warnings everywhere in the kernel
->> functions. Especially hot one like this one.
-> 
-> When checks are necessary, there are ways even for hot paths.
 
-We have that function called from feec() where the RCU must be hold,
-otherwise the whole EAS would be unstable.
-
-> 
->>
->> As you might not notice, we don't even check if the pd->cpus is not NULL
-> 
-> rcu_read_lock_held() is only enabled for lockdebug build and it's the standard
-> way to document and add verification to ensure locking rules are honoured. On
-> non lockdebug build this will be compiled out.
-> 
-> You had to put a long comment to ensure locking rules are correct, why not
-> use existing infrastructure instead to provide better checks and inherent
-> documentation?
-
-I didn't want to add any more overhead in this hot path.
-
-> 
-> We had a bug recently where the rcu_read_lock() was moved and this broke some
-> function buried down in the call stack. So subtle code shuffles elsewhere can
-> cause unwanted side effects; and it's hard to catch these bugs.
-> 
-> 	https://lore.kernel.org/stable/20231009130130.210024505@linuxfoundation.org/
-
-OK, let me check that w/ and w/o lockdebug build and the
-SCHED_WARN_ON(!rcu_read_lock_held())
-
-Although, it would be only a safety net for accidental use of
-em_cpu_energy() from code path other than feec()...
-Which actually might bring some value.
+I think it would be a bit over-engineering. We know the moment when
+there is a need for this check - it's when new EM is registered.
+Also, for the cpu hotplug, not always the capacity would change,
+which would confuse in such code. Not mentioning, that it will create
+an extra everhead for that hotplug notification chain, for not good
+reason.
 
