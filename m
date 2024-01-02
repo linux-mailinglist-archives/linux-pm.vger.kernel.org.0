@@ -1,31 +1,31 @@
-Return-Path: <linux-pm+bounces-1723-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1724-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5A8D821B14
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 12:38:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8185821B2A
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 12:45:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8FB631C21DCF
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 11:38:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 189541C20EB9
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 11:45:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FFECE572;
-	Tue,  2 Jan 2024 11:38:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CC7FEAD3;
+	Tue,  2 Jan 2024 11:45:49 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16584F4F7;
-	Tue,  2 Jan 2024 11:38:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD36FEAD6;
+	Tue,  2 Jan 2024 11:45:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4C661C15;
-	Tue,  2 Jan 2024 03:38:54 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 37011C15;
+	Tue,  2 Jan 2024 03:46:33 -0800 (PST)
 Received: from [10.57.86.61] (unknown [10.57.86.61])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D48573F7A6;
-	Tue,  2 Jan 2024 03:38:05 -0800 (PST)
-Message-ID: <47c72c07-aafe-4f94-864b-53f9e45857db@arm.com>
-Date: Tue, 2 Jan 2024 11:39:23 +0000
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BE0083F7A6;
+	Tue,  2 Jan 2024 03:45:44 -0800 (PST)
+Message-ID: <d9bea2d0-3869-4f08-8eb8-0ca33ce525ea@arm.com>
+Date: Tue, 2 Jan 2024 11:47:02 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -33,8 +33,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 14/23] PM: EM: Support late CPUs booting and capacity
- adjustment
+Subject: Re: [PATCH v5 15/23] PM: EM: Optimize em_cpu_energy() and remove
+ division
 Content-Language: en-US
 To: Qais Yousef <qyousef@layalina.io>
 Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
@@ -43,129 +43,49 @@ Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
  daniel.lezcano@linaro.org, viresh.kumar@linaro.org, len.brown@intel.com,
  pavel@ucw.cz, mhiramat@kernel.org, wvw@google.com
 References: <20231129110853.94344-1-lukasz.luba@arm.com>
- <20231129110853.94344-15-lukasz.luba@arm.com>
- <20231217180038.vcyaaoni3nvmlf6f@airbuntu>
+ <20231129110853.94344-16-lukasz.luba@arm.com>
+ <20231228180647.rwz4u7ebk5p2hjcr@airbuntu>
 From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20231217180038.vcyaaoni3nvmlf6f@airbuntu>
+In-Reply-To: <20231228180647.rwz4u7ebk5p2hjcr@airbuntu>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 12/17/23 18:00, Qais Yousef wrote:
+On 12/28/23 18:06, Qais Yousef wrote:
 > On 11/29/23 11:08, Lukasz Luba wrote:
->> The patch adds needed infrastructure to handle the late CPUs boot, which
->> might change the previous CPUs capacity values. With this changes the new
->> CPUs which try to register EM will trigger the needed re-calculations for
->> other CPUs EMs. Thanks to that the em_per_state::performance values will
->> be aligned with the CPU capacity information after all CPUs finish the
->> boot and EM registrations.
->>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->>   kernel/power/energy_model.c | 121 ++++++++++++++++++++++++++++++++++++
->>   1 file changed, 121 insertions(+)
->>
->> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
->> index b5016afe6a19..d3fa5a77de80 100644
->> --- a/kernel/power/energy_model.c
->> +++ b/kernel/power/energy_model.c
->> @@ -25,6 +25,9 @@ static DEFINE_MUTEX(em_pd_mutex);
->>   
->>   static void em_cpufreq_update_efficiencies(struct device *dev,
->>   					   struct em_perf_state *table);
->> +static void em_check_capacity_update(void);
->> +static void em_update_workfn(struct work_struct *work);
->> +static DECLARE_DELAYED_WORK(em_update_work, em_update_workfn);
->>   
->>   static bool _is_cpu_device(struct device *dev)
->>   {
->> @@ -596,6 +599,10 @@ int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
->>   
->>   unlock:
->>   	mutex_unlock(&em_pd_mutex);
->> +
->> +	if (_is_cpu_device(dev))
->> +		em_check_capacity_update();
->> +
->>   	return ret;
->>   }
->>   EXPORT_SYMBOL_GPL(em_dev_register_perf_domain);
->> @@ -631,3 +638,117 @@ void em_dev_unregister_perf_domain(struct device *dev)
->>   	mutex_unlock(&em_pd_mutex);
->>   }
->>   EXPORT_SYMBOL_GPL(em_dev_unregister_perf_domain);
->> +
->> +/*
->> + * Adjustment of CPU performance values after boot, when all CPUs capacites
->> + * are correctly calculated.
->> + */
->> +static void em_adjust_new_capacity(struct device *dev,
->> +				   struct em_perf_domain *pd,
->> +				   u64 max_cap)
->> +{
->> +	struct em_perf_table __rcu *runtime_table;
->> +	struct em_perf_state *table, *new_table;
->> +	int ret, table_size;
->> +
->> +	runtime_table = em_allocate_table(pd);
->> +	if (!runtime_table) {
->> +		dev_warn(dev, "EM: allocation failed\n");
->> +		return;
->> +	}
->> +
->> +	new_table = runtime_table->state;
->> +
->> +	table = em_get_table(pd);
->> +	/* Initialize data based on older runtime table */
->> +	table_size = sizeof(struct em_perf_state) * pd->nr_perf_states;
->> +	memcpy(new_table, table, table_size);
->> +
->> +	em_put_table();
->> +
->> +	em_init_performance(dev, pd, new_table, pd->nr_perf_states);
->> +	ret = em_compute_costs(dev, new_table, NULL, pd->nr_perf_states,
->> +			       pd->flags);
->> +	if (ret) {
->> +		em_free_table(runtime_table);
->> +		return;
->> +	}
->> +
->> +	ret = em_dev_update_perf_domain(dev, runtime_table);
->> +	if (ret)
->> +		dev_warn(dev, "EM: update failed %d\n", ret);
->> +
->> +	/*
->> +	 * This is one-time-update, so give up the ownership in this updater.
->> +	 * The EM fwk will keep the reference and free the memory when needed.
->> +	 */
->> +	em_free_table(runtime_table);
->> +}
->> +
->> +static void em_check_capacity_update(void)
->> +{
->> +	cpumask_var_t cpu_done_mask;
->> +	struct em_perf_state *table;
->> +	struct em_perf_domain *pd;
->> +	unsigned long cpu_capacity;
->> +	int cpu;
->> +
->> +	if (!zalloc_cpumask_var(&cpu_done_mask, GFP_KERNEL)) {
->> +		pr_warn("no free memory\n");
->> +		return;
->> +	}
->> +
->> +	/* Check if CPUs capacity has changed than update EM */
->> +	for_each_possible_cpu(cpu) {
 > 
-> Can't we instead hook into cpufreq_online/offline() to check if we need to
-> do any em related update for this policy?
+>> @@ -220,8 +218,9 @@ static int em_compute_costs(struct device *dev, struct em_perf_state *table,
+>>   				return -EINVAL;
+>>   			}
+>>   		} else {
+>> -			power_res = table[i].power;
+>> -			cost = div64_u64(fmax * power_res, table[i].frequency);
+>> +			/* increase resolution of 'cost' precision */
+>> +			power_res = table[i].power * 10;
 > 
+> Power is in uW, right? You're just taking advantage here that everything will
+> use this new cost field so you can add as many 0s to improve resolution without
+> impact elsewhere that care to compare using the same units?
 
-I think it would be a bit over-engineering. We know the moment when
-there is a need for this check - it's when new EM is registered.
-Also, for the cpu hotplug, not always the capacity would change,
-which would confuse in such code. Not mentioning, that it will create
-an extra everhead for that hotplug notification chain, for not good
-reason.
+This code doesn't overwrite the 'power' field value. The 'cost' value is
+only used in EAS, so yes I just want to increase resolution there.
+
+I think you mixed 'power' and 'cost' fields. We don't compare 'cost'
+anywhere. We just use 'cost' in one place em_cpu_energy() and we
+multiply it (not compare it).
+
+> 
+> Did you see a problem or just being extra cautious here?
+
+There is no problem, 'cost' is a private coefficient for EAS only.
+
+> 
+>> +			cost = power_res / table[i].performance;
+>>   		}
+>>   
+>>   		table[i].cost = cost;
+>> -- 
+>> 2.25.1
+>>
 
