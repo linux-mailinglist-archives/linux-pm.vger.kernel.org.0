@@ -1,199 +1,403 @@
-Return-Path: <linux-pm+bounces-1726-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1727-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9B3A821C0E
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 13:51:51 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 075DB821C3D
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 14:07:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D7C0D1C21F4F
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 12:51:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6728EB221F1
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 13:07:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 565BAF4F7;
-	Tue,  2 Jan 2024 12:51:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F3F1F9DF;
+	Tue,  2 Jan 2024 13:07:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=armh.onmicrosoft.com header.i=@armh.onmicrosoft.com header.b="134aR5P3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2047.outbound.protection.outlook.com [40.107.8.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D570EF9C3;
-	Tue,  2 Jan 2024 12:51:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-593f182f263so2143166eaf.0;
-        Tue, 02 Jan 2024 04:51:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704199905; x=1704804705;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nWJpsSWjAqvITEmiBbPlA7D2pwFtpr6ooxh4CXH4Kz0=;
-        b=tznP7T7VPmbrUuI5dtZ5+eHzqsXCeqo4rn41G4Yh7+g54ra4WRARLZZqgGBwZ5p17x
-         i9P3rzqYXV1BWX5P6dexwe3ZmFhhk+rDQqAXuXEgKvdaoozKW1ub8S+UmJTW/lVcU7CB
-         78OYEWaGfwz6bJuH4qeq/f+mfuhdYsKI0lA2KwWQmmOKq9iW/xNURdNH4t6K2rEPAp1D
-         d4TdXQaDTed8vUH5vfj0Zxix+LwcHeauehzHHQ0XBSHYWCORR+tTxKnsdCanbDMaKs4x
-         e2xL8ET5NswydAaL4ibi8HnR3atKKQ+L9lATJkVDjnQPOscExoVmbB4Azx+ZwX07K5q2
-         sJzA==
-X-Gm-Message-State: AOJu0YxkjLnd4QWNyGj0H5jlTxMVveBTNMGxGSUVE5a/nycJ7U5pZVeJ
-	WwssnVsnssNvyfqgveXl0Ro9Q67hI2nxtmemmhU=
-X-Google-Smtp-Source: AGHT+IHDBkPRU3mIu++qRAviLkA1G9ucIWm/FarTZFV8d7+KkDNR01/7Qq4GsvhtAKiAsdHVwmDKcrB/OTPSpgWRFWY=
-X-Received: by 2002:a4a:c719:0:b0:594:c433:66e6 with SMTP id
- n25-20020a4ac719000000b00594c43366e6mr13646877ooq.0.1704199904988; Tue, 02
- Jan 2024 04:51:44 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 293B5FBE7;
+	Tue,  2 Jan 2024 13:07:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a9oBKDUfUIVu12zsIh63GmKkPu5XUDbVSByTfW8jMY6r2nAchXE8XmLsda5v/dHudqaHPuRbBTs4Mf2A+UtJpycGVjtr5E0b4RFFMVdQ7aH/jD8EeTpM7jZCeUOUMmr28aC71hDCEoRfbGWhYLg1ZP4JItvCitq2jdlkK2bmk7+/6+NCEMRL/O3h1eHTOUFZgDI6eq+gbDdWe9bV1sWixngB1L4FBfvXiFdDtaTdBp043335KVjKVasirT62QcVLi0hXC8bFmTCI5eNqkjHKsdS7LMJzPeFJq4v7EQMqgQu4S4ShClm0eiptwsmDE7CTlm5mZNx2xPa6S+dmh0kHpA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qMuVsC9AWHLuCDPaAYWLd7P5CRYYcbMwJnZESJk+FPk=;
+ b=eB8P2I8GWuECLr64IQYEGKpFjXMQhUGxAnuIe/50id8o9pyfQdUSwOIC0UA/Ft0F7/QVFs07OZiPGCwQvt96ffZmU/1E1D8PokYGuLAF/uISTakqEWU0KTuzR24/jE26L/p8iLdT3fWj6OjXvHfVEd62w5pMMgx0JSHk7Rnf3vy7k7vdTtPsUgTxGgS/McfeRAVEOTFMrsd0nIvwLIJluFt0PSjtSWUyqZ+uYr/9ugRRw4K0JDIEtHMyxNXKueSQc/XrC7fbkVgft0cYk4o6cPAe8e78eimvSduNH2xLAHedJZsI1YbAEXI7w/tD0vKmE8kyX3kZ/ofIWLeFBB9ZyQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qMuVsC9AWHLuCDPaAYWLd7P5CRYYcbMwJnZESJk+FPk=;
+ b=134aR5P3PD7wHdexO/YIQ1j8bJVjKQdXd5uHl1pRIs0CQae3ImdhMPlL41TmW00i0OJnbl0s+swqn+qXR2wpGyb7SKxbNQ0dI6qmx8ZfDuaE/vORcy3/l9bywzm9qwAiOi7oQcKesGE0ehd/8pmRkbCEUZK6vO91ujg2uv8rdJY=
+Received: from DBBPR08MB6012.eurprd08.prod.outlook.com (2603:10a6:10:205::9)
+ by DB9PR08MB7889.eurprd08.prod.outlook.com (2603:10a6:10:39c::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7135.25; Tue, 2 Jan
+ 2024 13:07:26 +0000
+Received: from DBBPR08MB6012.eurprd08.prod.outlook.com
+ ([fe80::1827:6361:a3a3:5831]) by DBBPR08MB6012.eurprd08.prod.outlook.com
+ ([fe80::1827:6361:a3a3:5831%4]) with mapi id 15.20.7135.023; Tue, 2 Jan 2024
+ 13:07:25 +0000
+From: Jose Marinho <Jose.Marinho@arm.com>
+To: Jonathan Cameron <Jonathan.Cameron@Huawei.com>, "Russell King (Oracle)"
+	<rmk+kernel@armlinux.org.uk>
+CC: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-riscv@lists.infradead.org"
+	<linux-riscv@lists.infradead.org>, "kvmarm@lists.linux.dev"
+	<kvmarm@lists.linux.dev>, "x86@kernel.org" <x86@kernel.org>,
+	"acpica-devel@lists.linuxfoundation.org"
+	<acpica-devel@lists.linuxfoundation.org>, "linux-csky@vger.kernel.org"
+	<linux-csky@vger.kernel.org>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "linux-ia64@vger.kernel.org"
+	<linux-ia64@vger.kernel.org>, "linux-parisc@vger.kernel.org"
+	<linux-parisc@vger.kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, Jianyong Wu
+	<Jianyong.Wu@arm.com>, Justin He <Justin.He@arm.com>, James Morse
+	<James.Morse@arm.com>, Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
+	nd <nd@arm.com>
+Subject: RE: [PATCH RFC v3 20/21] ACPI: Add _OSC bits to advertise OS support
+ for toggling CPU present/enabled
+Thread-Topic: [PATCH RFC v3 20/21] ACPI: Add _OSC bits to advertise OS support
+ for toggling CPU present/enabled
+Thread-Index: AQHaL3ntNyOGqVAnrU+84Ux6biaSarDGiPtQ
+Date: Tue, 2 Jan 2024 13:07:25 +0000
+Message-ID:
+ <DBBPR08MB60121770239F324D877847E18861A@DBBPR08MB6012.eurprd08.prod.outlook.com>
+References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
+	<E1rDOhS-00Dvla-7i@rmk-PC.armlinux.org.uk>
+ <20231215171227.00006550@Huawei.com>
+In-Reply-To: <20231215171227.00006550@Huawei.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ts-tracking-id: 220FBD1A958A4349801F4D34C4EDB266.0
+x-checkrecipientchecked: true
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DBBPR08MB6012:EE_|DB9PR08MB7889:EE_
+x-ms-office365-filtering-correlation-id: 4d9fbb8a-6984-4296-f48b-08dc0b93c41d
+nodisclaimer: true
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ inFwSiSfqBq197UYjfu0XSyRKJAoKu3KUrHuFZXp+YF6c7xb+Eq5FhjrADa9lBjBFgyRuc9FmIpPVrgZqscsCVZos7Se5k8EDOYo8yCruGiuB/gfKIT607pVOG9B9/+nIlw+qgbVHsPsaveH/o+c7DUrwqjMjc52bku7GS2tD8E2Sy/cMF9ezAWOPCFcqTAk1V5RiaO6oFG8bHL9u99SAFQ8iZJ+IkJmaidcRhzhIqhyx75HBxCGUWXX+l028ctsEnmpE3T9sxFkrdndq2PDqcZ7e17Lf/VvMYEGNlxbW4Qi6vYV2pa/KtZIyAvfVtlMWzukcTCFFBZLSfAJXb0qJ9hNO3OzH/Wr0LGNg4hiQVqzmnn7yVP0IKdL+kVuBZMML6G0hQnuGxNt6C7jukZt67ICoN+nyj1ToYvmm/lDofLUcALsdDVpboibNWsrWrNlP1DQaYA8+8LurcJzfS5eMrDy2jUvKp9HIAhvmd8SabxjJzBqFZuEHOJpPjVjju6+Au5H7QYkjrh6tAjmOlCzYBCZOIuySPUabGVV5/HS4pUPOMCSXMzG/rUIehK5SVa6839F/Mn5k9koIOMq4nzrvmzUseEOjaFp6qJNF0F4jls=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR08MB6012.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(39860400002)(396003)(136003)(376002)(366004)(230922051799003)(1800799012)(64100799003)(451199024)(186009)(26005)(71200400001)(122000001)(83380400001)(38100700002)(76116006)(110136005)(66946007)(66556008)(64756008)(66446008)(66476007)(316002)(54906003)(478600001)(966005)(86362001)(55016003)(5660300002)(2906002)(7416002)(52536014)(33656002)(8936002)(8676002)(4326008)(38070700009)(9686003)(6506007)(7696005)(53546011)(41300700001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?cgxOvH4N3jU5Zt7a4hQIG9cgUq/+HSUTZ8bZ3+Z3Lvtp6K2q7EXA3COqDmYy?=
+ =?us-ascii?Q?VYSN7xK/cWaOTyuYg9TpKh2eVyV4wdOTKK/7S1pMhSBbHYQ3i2GuqsEGL2BE?=
+ =?us-ascii?Q?EDvFygdzoldu4OYsBIRa5xvXwY6UlDImSQMQICzhaquUhZ6gublJErbKFfCW?=
+ =?us-ascii?Q?do559/cAyv7QIFcqD2hCKL9kVfsGk/5VFQYLaoDu+geXEHcD7eIVX/ishNHT?=
+ =?us-ascii?Q?hd4BmVNd7+TUmqNxaZrUduYWU9jy8o2wCMoF8yx/LS+MvhnBHhFzzykOy6vT?=
+ =?us-ascii?Q?CqjBY9HgOgeW/+USkyYob2EAX0TOt1IAWD7gflNZR0O+zVJriYPcrHmpdeUg?=
+ =?us-ascii?Q?iMiIOFZG0fpm3C+IuRJgfa/v0YFmKPH73zS+V05fJGWHeqhr0cZ9+1QLkxwR?=
+ =?us-ascii?Q?+z7E/Zpl6b2SEIPt5WEaFaqGWbvPOb3772u32YROBSfTim19nplO4eWPnC2r?=
+ =?us-ascii?Q?mztwMBb+iv7BXVXQsl2WL4St7csFGpeEhxsyCR4STpypt4mtMtdDyyrXFjBg?=
+ =?us-ascii?Q?TQpVxtpOhJ/GQvhnSmbgf3xNkPqE2xHeReowyrThsSVOR4ND7ppVu4AVO99K?=
+ =?us-ascii?Q?lGXNsNFHTl+xmLDb1AxGqUEF514yDUeHecUXPFo+ciibIQg13FJBjrx9y9S4?=
+ =?us-ascii?Q?cpOI76rj5mT/1YbFXg+yiQKLwnYAfamcC3eYXsrcu2DmKA4CjPNkgY5UvVjw?=
+ =?us-ascii?Q?aqL1bEu5osLpfLdjQTT0ov5dhqNNLyaNkmagh0WZYf1WF+MUPDE3lVm4KCmk?=
+ =?us-ascii?Q?8kkNsmoxQT47SIEx9Irp7fH3ThViGr34Rtzht0vzw3fsgfPg5F7ArmWdEZCL?=
+ =?us-ascii?Q?Xeoz5dEon95195xrqdcD+8bqXwG2DOQkmVzx34/SVtRwWZ1WofRA3fGzImIE?=
+ =?us-ascii?Q?qIsDRALbdeKebyD74ZtfBoDdHSaTHZZo8hhCqS36/ucb72ijs83Ui58f156g?=
+ =?us-ascii?Q?XejGl6p2uBaPlQXNjw+MpC5muCdaU13gHlAVituxABCbh/OhtwOMOYht3y5X?=
+ =?us-ascii?Q?N110Xw72w2EwRPQQ1/KwPpmKymsZUxKAJpobO5JFMa0XnbOfcLsNPWzjjAzJ?=
+ =?us-ascii?Q?eclwvLsJ7TzMXx9bFlttyw6gW/EHaF71LJ/O1WKvB4wuDY5I3dTIi5v+NKc5?=
+ =?us-ascii?Q?obxhdloFmLPecFnqtUwxtDfc0MuyTGcBFCph7CcIh1ugblV0mnFpY3wOUF36?=
+ =?us-ascii?Q?uXb6FC8sdA3mitq3TJls3p8zSAsIJwuMAHoYSsY/pggT8n/3ODKAwrYfwdbL?=
+ =?us-ascii?Q?7Ht44exEVxuCCmMf0feqWB1FGcMZh8oxFQ5gvDDPJ/UADQhtzyQV7pA0Il/Z?=
+ =?us-ascii?Q?fdKXBO74JKnCDscZjenkN01uDzP1+x42+fhzbxp+7KDafQCDEfYfKjYO2w+h?=
+ =?us-ascii?Q?gwXDM1HVXlJs3qqchTH3SpkS238zu16++K3hgZ7j14WvCGL7EJHAfviUVPav?=
+ =?us-ascii?Q?n4WTL1k5wIc2EFFQvXN0WPyezX2DNGLhBZ2cVcIAcZEK5KyG4Qzd4yHNGL9h?=
+ =?us-ascii?Q?lSI9LD8KpNFLOV4xLRdtk1bYfUZf4+uRJg/waBUQQQ7RsNqF7d8a5PBXXbAX?=
+ =?us-ascii?Q?hFTTE3i/4/yr3ICaQWcHxbHHFkXg8R2p+84cxjTK?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <7163da4d-3f73-490c-a387-04d82e8bee1b@free.fr>
-In-Reply-To: <7163da4d-3f73-490c-a387-04d82e8bee1b@free.fr>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 2 Jan 2024 13:51:29 +0100
-Message-ID: <CAJZ5v0iX=E-4T87_mUjToj+oRDqkek_iu_L05z0zzrR66xZSmg@mail.gmail.com>
-Subject: Re: [GIT PULL] thermal material for v6.8-rc1
-To: Daniel Lezcano <daniel.lezcano@free.fr>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux PM mailing list <linux-pm@vger.kernel.org>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>, 
-	Binbin Zhou <zhoubb.aaron@gmail.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Fabio Estevam <festevam@denx.de>, Johan Hovold <johan+linaro@kernel.org>, 
-	Florian Eckert <fe@dev.tdt.de>, Mateusz Majewski <m.majewski2@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DBBPR08MB6012.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4d9fbb8a-6984-4296-f48b-08dc0b93c41d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Jan 2024 13:07:25.7742
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: KsnnOwg6YeGR0Q1+dONTA/Ydk2cIFdhhP9IIKR0oHRwCC5pMhdWv9ML7HZfxGmyI76jdVh98yrHaR71KGWq5Iw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR08MB7889
 
-Hi Daniel,
+Hi Jonathan,
 
-On Tue, Jan 2, 2024 at 10:25=E2=80=AFAM Daniel Lezcano <daniel.lezcano@free=
-.fr> wrote:
->
->
-> Hi Rafael,
->
-> happy new year 2024!
->
-> Please consider pulling these thermal changes.
->
-> Thanks
->
->    -- Daniel
->
-> The following changes since commit 5f70413a85056db04050604a76b52e3f39a37f=
-21:
->
->    thermal: cpuidle_cooling: fix kernel-doc warning and a spello
-> (2023-12-21 12:05:48 +0100)
->
-> are available in the Git repository at:
->
->
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
-> tags/thermal-v6.8-rc1
->
-> for you to fetch changes up to 5314b1543787e6cd5d248186fcfd5c5fc4ca2146:
->
->    thermal/drivers/exynos: Use set_trips ops (2024-01-02 09:33:19 +0100)
->
-> ----------------------------------------------------------------
-> - Converted Mediatek Thermal to the json-schema (Rafa=C5=82 Mi=C5=82ecki)
->
-> - Fixed DT bindings issue on Loongson (Binbin Zhou)
->
-> - Fixed returning NULL instead of -ENODEV on Loogsoo (Binbin Zhou)
->
-> - Added the DT binding for the tsens on SM8650 platform (Neil Armstrong)
->
-> - Added a reboot on critical option feature (Fabio Estevam)
->
-> - Made usage of DEFINE_SIMPLE_DEV_PM_OPS on AmLogic (Uwe Kleine-K=C3=B6ni=
-g)
->
-> - Added the D1/T113s THS controller support on Sun8i (Maxim Kiselev)
->
-> - Fixed example in the DT binding for QCom SPMI (Johan Hovold)
->
-> - Fixed compilation warning for the tmon utility (Florian Eckert)
->
-> - Added interrupt based configuration on Exynos along with a set of
->    related cleanups (Mateusz Majewski)
->
-> ----------------------------------------------------------------
-> Binbin Zhou (2):
->        dt-bindings: thermal: loongson,ls2k-thermal: Fix binding check iss=
-ues
->        drivers/thermal/loongson2_thermal: Fix incorrect PTR_ERR() judgmen=
-t
->
-> Fabio Estevam (4):
->        dt-bindings: thermal-zones: Document critical-action
->        thermal/core: Prepare for introduction of thermal reboot
->        reboot: Introduce thermal_zone_device_critical_reboot()
->        thermal/thermal_of: Allow rebooting after critical temp
->
-> Florian Eckert (1):
->        tools/thermal/tmon: Fix compilation warning for wrong format
->
-> Johan Hovold (2):
->        dt-bindings: thermal: qcom-spmi-adc-tm5/hc: Fix example node names
->        dt-bindings: thermal: qcom-spmi-adc-tm5/hc: Clean up examples
->
-> Mateusz Majewski (9):
->        thermal/drivers/exynos: Remove an unnecessary field description
->        thermal/drivers/exynos: Drop id field
->        thermal/drivers/exynos: Wwitch from workqueue-driven interrupt
-> handling to threaded interrupts
->        thermal/drivers/exynos: Handle devm_regulator_get_optional return
-> value correctly
->        thermal/drivers/exynos: Simplify regulator (de)initialization
->        thermal/drivers/exynos: Stop using the threshold mechanism on
-> Exynos 4210
->        thermal/drivers/exynos: Split initialization of TMU and the
-> thermal zone
->        thermal/drivers/exynos: Use BIT wherever possible
->        thermal/drivers/exynos: Use set_trips ops
->
-> Maxim Kiselev (2):
->        dt-bindings: thermal: sun8i: Add binding for D1/T113s THS controll=
-er
->        thermal/drivers/sun8i: Add D1/T113s THS controller support
->
-> Neil Armstrong (1):
->        dt-bindings: thermal: qcom-tsens: document the SM8650 Temperature
-> Sensor
->
-> Rafa=C5=82 Mi=C5=82ecki (1):
->        dt-bindings: thermal: convert Mediatek Thermal to the json-schema
->
-> Uwe Kleine-K=C3=B6nig (2):
->        thermal: amlogic: Make amlogic_thermal_disable() return void
->        thermal: amlogic: Use DEFINE_SIMPLE_DEV_PM_OPS for PM functions
->
->   .../bindings/thermal/allwinner,sun8i-a83t-ths.yaml |   7 +-
->   .../bindings/thermal/loongson,ls2k-thermal.yaml    |  10 +-
->   .../bindings/thermal/mediatek,thermal.yaml         |  99 ++++
->   .../bindings/thermal/mediatek-thermal.txt          |  52 --
->   .../bindings/thermal/qcom-spmi-adc-tm-hc.yaml      |   8 +-
->   .../bindings/thermal/qcom-spmi-adc-tm5.yaml        |  16 +-
->   .../devicetree/bindings/thermal/qcom-tsens.yaml    |   1 +
->   .../devicetree/bindings/thermal/thermal-zones.yaml |  16 +
->   drivers/thermal/amlogic_thermal.c                  |  19 +-
->   drivers/thermal/loongson2_thermal.c                |   2 +-
->   drivers/thermal/samsung/exynos_tmu.c               | 529
-> +++++++++++----------
->   drivers/thermal/sun8i_thermal.c                    |  13 +
->   drivers/thermal/thermal_core.c                     |  21 +-
->   drivers/thermal/thermal_core.h                     |   1 +
->   drivers/thermal/thermal_of.c                       |   6 +
->   include/linux/reboot.h                             |  12 +-
->   kernel/reboot.c                                    |  34 +-
->   tools/thermal/tmon/tui.c                           |   2 +-
->   18 files changed, 491 insertions(+), 357 deletions(-)
->   create mode 100644
-> Documentation/devicetree/bindings/thermal/mediatek,thermal.yaml
->   delete mode 100644
-> Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
+> -----Original Message-----
+> From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+> Sent: Friday, December 15, 2023 5:12 PM
+> To: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> Cc: linux-pm@vger.kernel.org; loongarch@lists.linux.dev; linux-
+> acpi@vger.kernel.org; linux-arch@vger.kernel.org; linux-
+> kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+> riscv@lists.infradead.org; kvmarm@lists.linux.dev; x86@kernel.org; acpica=
+-
+> devel@lists.linuxfoundation.org; linux-csky@vger.kernel.org; linux-
+> doc@vger.kernel.org; linux-ia64@vger.kernel.org; linux-
+> parisc@vger.kernel.org; Salil Mehta <salil.mehta@huawei.com>; Jean-Philip=
+pe
+> Brucker <jean-philippe@linaro.org>; Jianyong Wu <Jianyong.Wu@arm.com>;
+> Justin He <Justin.He@arm.com>; James Morse <James.Morse@arm.com>;
+> Jose Marinho <Jose.Marinho@arm.com>; Samer El-Haj-Mahmoud <Samer.El-
+> Haj-Mahmoud@arm.com>
+> Subject: Re: [PATCH RFC v3 20/21] ACPI: Add _OSC bits to advertise OS
+> support for toggling CPU present/enabled
+>=20
+> On Wed, 13 Dec 2023 12:50:54 +0000
+> Russell King (Oracle) <rmk+kernel@armlinux.org.uk> wrote:
+>=20
+> > From: James Morse <james.morse@arm.com>
+> >
+> > Platform firmware can disabled a CPU, or make it not-present by making
+> > an eject-request notification, then waiting for the os to make it
+> > offline
+> OS
+>=20
+> > and call _EJx. After the firmware updates _STA with the new status.
+> >
+> > Not all operating systems support this. For arm64 making CPUs
+> > not-present has never been supported. For all ACPI architectures,
+> > making CPUs disabled has recently been added. Firmware can't know what
+> the OS has support for.
+> >
+> > Add two new _OSC bits to advertise whether the OS supports the _STA
+> > enabled or present bits being toggled for CPUs. This will be important
+> > for arm64 if systems that support physical CPU hotplug ever appear as
+> > arm64 linux doesn't currently support this, so firmware shouldn't try.
+> >
+> > Advertising this support to firmware is useful for cloud orchestrators
+> > to know whether they can scale a particular VM by adding CPUs.
+> >
+> > Signed-off-by: James Morse <james.morse@arm.com>
+> > Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> > Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
+> > Tested-by: Jianyong Wu <jianyong.wu@arm.com>
+>=20
+> I'm very much in favor of this _OSC but it hasn't been accepted yet I thi=
+nk...
+> https://bugzilla.tianocore.org/show_bug.cgi?id=3D4481
+>=20
+> Jose? Github suggests you are the proposer on this.
 
-Pulled and added to the thermal branch in linux-pm.git.
+The addition of these _OSC bits was proposed by us on the forum in question=
+.
+The forum opted to pause the definition until additional practical informat=
+ion could be provided on the use-cases.
 
-Thanks!
+If anyone is interested in progressing the _OSC bit definition, you are inv=
+ited to express that interest in the Bugzilla ticket.
+Information that you should provide to increase the chances of the ticket b=
+eing reopened:
+- use-case for the new _OSC bits,
+- what breaks (if anything) without the proposed _OSC bits.
+
+We did receive additional comments:
+- the proposed _OSC bits are not generic: the bits simply convey whether th=
+e guest OS understands CPU hot-plug, but it says nothing about the number o=
+f CPUs that the OS supports.
+- There could be alternate schemes that do not rely on spec changes. E.g. t=
+here could be a hypervisor IMPDEF mechanism to describe if an OS image supp=
+orts CPU hot-plug.
+
+>=20
+> btw v4 looks ok but v5 in the tianocore github seems to have lost the act=
+ual
+> OSC part.
+
+Agree that, if we do progress with this spec change, v4 is the correct form=
+ulation we should adopt.=20
+
+Regards,
+Jose
+
+>=20
+> Jonathan
+>=20
+> > ---
+> > I'm assuming Loongarch machines do not support physical CPU hotplug.
+> >
+> > Changes since RFC v3:
+> >  * Drop ia64 changes
+> >  * Update James' comment below "---" to remove reference to ia64
+> >
+> > Outstanding comment:
+> >  https://lore.kernel.org/r/20230914175021.000018fd@Huawei.com
+>=20
+>=20
+>=20
+> > ---
+> >  arch/x86/Kconfig              |  1 +
+> >  drivers/acpi/Kconfig          |  9 +++++++++
+> >  drivers/acpi/acpi_processor.c | 14 +++++++++++++-
+> >  drivers/acpi/bus.c            | 16 ++++++++++++++++
+> >  include/linux/acpi.h          |  4 ++++
+> >  5 files changed, 43 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig index
+> > 64fc7c475ab0..33fc4dcd950c 100644
+> > --- a/arch/x86/Kconfig
+> > +++ b/arch/x86/Kconfig
+> > @@ -60,6 +60,7 @@ config X86
+> >  	select ACPI_LEGACY_TABLES_LOOKUP	if ACPI
+> >  	select ACPI_SYSTEM_POWER_STATES_SUPPORT	if ACPI
+> >  	select ACPI_HOTPLUG_PRESENT_CPU		if ACPI_PROCESSOR
+> && HOTPLUG_CPU
+> > +	select ACPI_HOTPLUG_IGNORE_OSC		if ACPI &&
+> HOTPLUG_CPU
+> >  	select ARCH_32BIT_OFF_T			if X86_32
+> >  	select ARCH_CLOCKSOURCE_INIT
+> >  	select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE
+> > diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig index
+> > 9c5a43d0aff4..020e7c0ab985 100644
+> > --- a/drivers/acpi/Kconfig
+> > +++ b/drivers/acpi/Kconfig
+> > @@ -311,6 +311,15 @@ config ACPI_HOTPLUG_PRESENT_CPU
+> >  	depends on ACPI_PROCESSOR && HOTPLUG_CPU
+> >  	select ACPI_CONTAINER
+> >
+> > +config ACPI_HOTPLUG_IGNORE_OSC
+> > +	bool
+> > +	depends on ACPI_HOTPLUG_PRESENT_CPU
+> > +	help
+> > +	  Ignore whether firmware acknowledged support for toggling the CPU
+> > +	  present bit in _STA. Some architectures predate the _OSC bits, so
+> > +	  firmware doesn't know to do this.
+> > +
+> > +
+> >  config ACPI_PROCESSOR_AGGREGATOR
+> >  	tristate "Processor Aggregator"
+> >  	depends on ACPI_PROCESSOR
+> > diff --git a/drivers/acpi/acpi_processor.c
+> > b/drivers/acpi/acpi_processor.c index ea12e70dfd39..5bb207a7a1dd
+> > 100644
+> > --- a/drivers/acpi/acpi_processor.c
+> > +++ b/drivers/acpi/acpi_processor.c
+> > @@ -182,6 +182,18 @@ static void __init acpi_pcc_cpufreq_init(void)
+> > static void __init acpi_pcc_cpufreq_init(void) {}  #endif /*
+> > CONFIG_X86 */
+> >
+> > +static bool acpi_processor_hotplug_present_supported(void)
+> > +{
+> > +	if (!IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU))
+> > +		return false;
+> > +
+> > +	/* x86 systems pre-date the _OSC bit */
+> > +	if (IS_ENABLED(CONFIG_ACPI_HOTPLUG_IGNORE_OSC))
+> > +		return true;
+> > +
+> > +	return osc_sb_hotplug_present_support_acked;
+> > +}
+> > +
+> >  /* Initialization */
+> >  static int acpi_processor_make_present(struct acpi_processor *pr)  {
+> > @@ -189,7 +201,7 @@ static int acpi_processor_make_present(struct
+> acpi_processor *pr)
+> >  	acpi_status status;
+> >  	int ret;
+> >
+> > -	if (!IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU)) {
+> > +	if (!acpi_processor_hotplug_present_supported()) {
+> >  		pr_err_once("Changing CPU present bit is not supported\n");
+> >  		return -ENODEV;
+> >  	}
+> > diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c index
+> > 72e64c0718c9..7122450739d6 100644
+> > --- a/drivers/acpi/bus.c
+> > +++ b/drivers/acpi/bus.c
+> > @@ -298,6 +298,13 @@
+> > EXPORT_SYMBOL_GPL(osc_sb_native_usb4_support_confirmed);
+> >
+> >  bool osc_sb_cppc2_support_acked;
+> >
+> > +/*
+> > + * ACPI 6.? Proposed Operating System Capabilities for modifying CPU
+> > + * present/enable.
+> > + */
+> > +bool osc_sb_hotplug_enabled_support_acked;
+> > +bool osc_sb_hotplug_present_support_acked;
+> > +
+> >  static u8 sb_uuid_str[] =3D "0811B06E-4A27-44F9-8D60-3CBBC22E7B48";
+> >  static void acpi_bus_osc_negotiate_platform_control(void)
+> >  {
+> > @@ -346,6 +353,11 @@ static void
+> > acpi_bus_osc_negotiate_platform_control(void)
+> >
+> >  	if (!ghes_disable)
+> >  		capbuf[OSC_SUPPORT_DWORD] |=3D OSC_SB_APEI_SUPPORT;
+> > +
+> > +	capbuf[OSC_SUPPORT_DWORD] |=3D
+> OSC_SB_HOTPLUG_ENABLED_SUPPORT;
+> > +	if (IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU))
+> > +		capbuf[OSC_SUPPORT_DWORD] |=3D
+> OSC_SB_HOTPLUG_PRESENT_SUPPORT;
+> > +
+> >  	if (ACPI_FAILURE(acpi_get_handle(NULL, "\\_SB", &handle)))
+> >  		return;
+> >
+> > @@ -383,6 +395,10 @@ static void
+> acpi_bus_osc_negotiate_platform_control(void)
+> >  			capbuf_ret[OSC_SUPPORT_DWORD] &
+> OSC_SB_NATIVE_USB4_SUPPORT;
+> >  		osc_cpc_flexible_adr_space_confirmed =3D
+> >  			capbuf_ret[OSC_SUPPORT_DWORD] &
+> OSC_SB_CPC_FLEXIBLE_ADR_SPACE;
+> > +		osc_sb_hotplug_enabled_support_acked =3D
+> > +			capbuf_ret[OSC_SUPPORT_DWORD] &
+> OSC_SB_HOTPLUG_ENABLED_SUPPORT;
+> > +		osc_sb_hotplug_present_support_acked =3D
+> > +			capbuf_ret[OSC_SUPPORT_DWORD] &
+> OSC_SB_HOTPLUG_PRESENT_SUPPORT;
+> >  	}
+> >
+> >  	kfree(context.ret.pointer);
+> > diff --git a/include/linux/acpi.h b/include/linux/acpi.h index
+> > 00be66683505..c572abac803c 100644
+> > --- a/include/linux/acpi.h
+> > +++ b/include/linux/acpi.h
+> > @@ -559,12 +559,16 @@ acpi_status acpi_run_osc(acpi_handle handle,
+> struct acpi_osc_context *context);
+> >  #define OSC_SB_NATIVE_USB4_SUPPORT		0x00040000
+> >  #define OSC_SB_PRM_SUPPORT			0x00200000
+> >  #define OSC_SB_FFH_OPR_SUPPORT			0x00400000
+> > +#define OSC_SB_HOTPLUG_ENABLED_SUPPORT		0x00800000
+> > +#define OSC_SB_HOTPLUG_PRESENT_SUPPORT		0x01000000
+> >
+> >  extern bool osc_sb_apei_support_acked;  extern bool
+> > osc_pc_lpi_support_confirmed;  extern bool
+> > osc_sb_native_usb4_support_confirmed;
+> >  extern bool osc_sb_cppc2_support_acked;  extern bool
+> > osc_cpc_flexible_adr_space_confirmed;
+> > +extern bool osc_sb_hotplug_enabled_support_acked;
+> > +extern bool osc_sb_hotplug_present_support_acked;
+> >
+> >  /* USB4 Capabilities */
+> >  #define OSC_USB_USB3_TUNNELING			0x00000001
+
 
