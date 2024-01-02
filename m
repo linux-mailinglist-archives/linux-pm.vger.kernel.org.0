@@ -1,218 +1,199 @@
-Return-Path: <linux-pm+bounces-1725-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1726-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C4A0821B6E
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 13:11:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9B3A821C0E
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 13:51:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 944641C21867
-	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 12:11:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D7C0D1C21F4F
+	for <lists+linux-pm@lfdr.de>; Tue,  2 Jan 2024 12:51:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19ACAEAF6;
-	Tue,  2 Jan 2024 12:11:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 565BAF4F7;
+	Tue,  2 Jan 2024 12:51:47 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D11EBEAED;
-	Tue,  2 Jan 2024 12:11:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5AD3DC15;
-	Tue,  2 Jan 2024 04:12:22 -0800 (PST)
-Received: from [10.57.86.61] (unknown [10.57.86.61])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E2F093F7A6;
-	Tue,  2 Jan 2024 04:11:33 -0800 (PST)
-Message-ID: <c546fb2b-e713-4dec-a4cb-d597bc432b4a@arm.com>
-Date: Tue, 2 Jan 2024 12:12:51 +0000
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D570EF9C3;
+	Tue,  2 Jan 2024 12:51:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-593f182f263so2143166eaf.0;
+        Tue, 02 Jan 2024 04:51:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704199905; x=1704804705;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nWJpsSWjAqvITEmiBbPlA7D2pwFtpr6ooxh4CXH4Kz0=;
+        b=tznP7T7VPmbrUuI5dtZ5+eHzqsXCeqo4rn41G4Yh7+g54ra4WRARLZZqgGBwZ5p17x
+         i9P3rzqYXV1BWX5P6dexwe3ZmFhhk+rDQqAXuXEgKvdaoozKW1ub8S+UmJTW/lVcU7CB
+         78OYEWaGfwz6bJuH4qeq/f+mfuhdYsKI0lA2KwWQmmOKq9iW/xNURdNH4t6K2rEPAp1D
+         d4TdXQaDTed8vUH5vfj0Zxix+LwcHeauehzHHQ0XBSHYWCORR+tTxKnsdCanbDMaKs4x
+         e2xL8ET5NswydAaL4ibi8HnR3atKKQ+L9lATJkVDjnQPOscExoVmbB4Azx+ZwX07K5q2
+         sJzA==
+X-Gm-Message-State: AOJu0YxkjLnd4QWNyGj0H5jlTxMVveBTNMGxGSUVE5a/nycJ7U5pZVeJ
+	WwssnVsnssNvyfqgveXl0Ro9Q67hI2nxtmemmhU=
+X-Google-Smtp-Source: AGHT+IHDBkPRU3mIu++qRAviLkA1G9ucIWm/FarTZFV8d7+KkDNR01/7Qq4GsvhtAKiAsdHVwmDKcrB/OTPSpgWRFWY=
+X-Received: by 2002:a4a:c719:0:b0:594:c433:66e6 with SMTP id
+ n25-20020a4ac719000000b00594c43366e6mr13646877ooq.0.1704199904988; Tue, 02
+ Jan 2024 04:51:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 00/23] Introduce runtime modifiable Energy Model
-Content-Language: en-US
-To: Qais Yousef <qyousef@layalina.io>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- rafael@kernel.org, dietmar.eggemann@arm.com, rui.zhang@intel.com,
- amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
- daniel.lezcano@linaro.org, viresh.kumar@linaro.org, len.brown@intel.com,
- pavel@ucw.cz, mhiramat@kernel.org, wvw@google.com
-References: <20231129110853.94344-1-lukasz.luba@arm.com>
- <20231217182255.mgrpgpu6ojjg62jp@airbuntu>
- <4f780b5e-7e37-40e3-bdf1-d7fe5d8dd1fc@arm.com>
- <20231228184107.mfxgfwaclwaeqswg@airbuntu>
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20231228184107.mfxgfwaclwaeqswg@airbuntu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <7163da4d-3f73-490c-a387-04d82e8bee1b@free.fr>
+In-Reply-To: <7163da4d-3f73-490c-a387-04d82e8bee1b@free.fr>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 2 Jan 2024 13:51:29 +0100
+Message-ID: <CAJZ5v0iX=E-4T87_mUjToj+oRDqkek_iu_L05z0zzrR66xZSmg@mail.gmail.com>
+Subject: Re: [GIT PULL] thermal material for v6.8-rc1
+To: Daniel Lezcano <daniel.lezcano@free.fr>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	Linux PM mailing list <linux-pm@vger.kernel.org>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>, 
+	Binbin Zhou <zhoubb.aaron@gmail.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Fabio Estevam <festevam@denx.de>, Johan Hovold <johan+linaro@kernel.org>, 
+	Florian Eckert <fe@dev.tdt.de>, Mateusz Majewski <m.majewski2@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Hi Daniel,
 
+On Tue, Jan 2, 2024 at 10:25=E2=80=AFAM Daniel Lezcano <daniel.lezcano@free=
+.fr> wrote:
+>
+>
+> Hi Rafael,
+>
+> happy new year 2024!
+>
+> Please consider pulling these thermal changes.
+>
+> Thanks
+>
+>    -- Daniel
+>
+> The following changes since commit 5f70413a85056db04050604a76b52e3f39a37f=
+21:
+>
+>    thermal: cpuidle_cooling: fix kernel-doc warning and a spello
+> (2023-12-21 12:05:48 +0100)
+>
+> are available in the Git repository at:
+>
+>
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
+> tags/thermal-v6.8-rc1
+>
+> for you to fetch changes up to 5314b1543787e6cd5d248186fcfd5c5fc4ca2146:
+>
+>    thermal/drivers/exynos: Use set_trips ops (2024-01-02 09:33:19 +0100)
+>
+> ----------------------------------------------------------------
+> - Converted Mediatek Thermal to the json-schema (Rafa=C5=82 Mi=C5=82ecki)
+>
+> - Fixed DT bindings issue on Loongson (Binbin Zhou)
+>
+> - Fixed returning NULL instead of -ENODEV on Loogsoo (Binbin Zhou)
+>
+> - Added the DT binding for the tsens on SM8650 platform (Neil Armstrong)
+>
+> - Added a reboot on critical option feature (Fabio Estevam)
+>
+> - Made usage of DEFINE_SIMPLE_DEV_PM_OPS on AmLogic (Uwe Kleine-K=C3=B6ni=
+g)
+>
+> - Added the D1/T113s THS controller support on Sun8i (Maxim Kiselev)
+>
+> - Fixed example in the DT binding for QCom SPMI (Johan Hovold)
+>
+> - Fixed compilation warning for the tmon utility (Florian Eckert)
+>
+> - Added interrupt based configuration on Exynos along with a set of
+>    related cleanups (Mateusz Majewski)
+>
+> ----------------------------------------------------------------
+> Binbin Zhou (2):
+>        dt-bindings: thermal: loongson,ls2k-thermal: Fix binding check iss=
+ues
+>        drivers/thermal/loongson2_thermal: Fix incorrect PTR_ERR() judgmen=
+t
+>
+> Fabio Estevam (4):
+>        dt-bindings: thermal-zones: Document critical-action
+>        thermal/core: Prepare for introduction of thermal reboot
+>        reboot: Introduce thermal_zone_device_critical_reboot()
+>        thermal/thermal_of: Allow rebooting after critical temp
+>
+> Florian Eckert (1):
+>        tools/thermal/tmon: Fix compilation warning for wrong format
+>
+> Johan Hovold (2):
+>        dt-bindings: thermal: qcom-spmi-adc-tm5/hc: Fix example node names
+>        dt-bindings: thermal: qcom-spmi-adc-tm5/hc: Clean up examples
+>
+> Mateusz Majewski (9):
+>        thermal/drivers/exynos: Remove an unnecessary field description
+>        thermal/drivers/exynos: Drop id field
+>        thermal/drivers/exynos: Wwitch from workqueue-driven interrupt
+> handling to threaded interrupts
+>        thermal/drivers/exynos: Handle devm_regulator_get_optional return
+> value correctly
+>        thermal/drivers/exynos: Simplify regulator (de)initialization
+>        thermal/drivers/exynos: Stop using the threshold mechanism on
+> Exynos 4210
+>        thermal/drivers/exynos: Split initialization of TMU and the
+> thermal zone
+>        thermal/drivers/exynos: Use BIT wherever possible
+>        thermal/drivers/exynos: Use set_trips ops
+>
+> Maxim Kiselev (2):
+>        dt-bindings: thermal: sun8i: Add binding for D1/T113s THS controll=
+er
+>        thermal/drivers/sun8i: Add D1/T113s THS controller support
+>
+> Neil Armstrong (1):
+>        dt-bindings: thermal: qcom-tsens: document the SM8650 Temperature
+> Sensor
+>
+> Rafa=C5=82 Mi=C5=82ecki (1):
+>        dt-bindings: thermal: convert Mediatek Thermal to the json-schema
+>
+> Uwe Kleine-K=C3=B6nig (2):
+>        thermal: amlogic: Make amlogic_thermal_disable() return void
+>        thermal: amlogic: Use DEFINE_SIMPLE_DEV_PM_OPS for PM functions
+>
+>   .../bindings/thermal/allwinner,sun8i-a83t-ths.yaml |   7 +-
+>   .../bindings/thermal/loongson,ls2k-thermal.yaml    |  10 +-
+>   .../bindings/thermal/mediatek,thermal.yaml         |  99 ++++
+>   .../bindings/thermal/mediatek-thermal.txt          |  52 --
+>   .../bindings/thermal/qcom-spmi-adc-tm-hc.yaml      |   8 +-
+>   .../bindings/thermal/qcom-spmi-adc-tm5.yaml        |  16 +-
+>   .../devicetree/bindings/thermal/qcom-tsens.yaml    |   1 +
+>   .../devicetree/bindings/thermal/thermal-zones.yaml |  16 +
+>   drivers/thermal/amlogic_thermal.c                  |  19 +-
+>   drivers/thermal/loongson2_thermal.c                |   2 +-
+>   drivers/thermal/samsung/exynos_tmu.c               | 529
+> +++++++++++----------
+>   drivers/thermal/sun8i_thermal.c                    |  13 +
+>   drivers/thermal/thermal_core.c                     |  21 +-
+>   drivers/thermal/thermal_core.h                     |   1 +
+>   drivers/thermal/thermal_of.c                       |   6 +
+>   include/linux/reboot.h                             |  12 +-
+>   kernel/reboot.c                                    |  34 +-
+>   tools/thermal/tmon/tui.c                           |   2 +-
+>   18 files changed, 491 insertions(+), 357 deletions(-)
+>   create mode 100644
+> Documentation/devicetree/bindings/thermal/mediatek,thermal.yaml
+>   delete mode 100644
+> Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
 
-On 12/28/23 18:41, Qais Yousef wrote:
-> On 12/19/23 10:22, Lukasz Luba wrote:
-> 
->>> One thing I'm not sure about is that in practice temperature of the SoC can
->>> vary a lot in a short period of time. What is the expectation here? I can see
->>> this useful in practice only if we average it over a window of time. Following
->>> it will be really hard. Big variations can happen in few ms scales.
->>
->> It's mostly for long running heavy workloads, which involve other device
->> than CPUs, e.g. GPU or ISP (Image Signal Processor). Those devices can
->> heat up the SoC. In our game DrArm running on pixel6 the GPU uses 75-77%
->> of total power budget (starting from ~2.5W for GPU + 1.3W for all CPUs).
->> That 2.5W from the GPU is heating up the CPUs and mostly impact the Big
->> cores, which are made from High-Performance cells (thus leaking more).
->> OverUtilization in the first 4-5min of gaming is ~4-9%, so EAS can work
->> and save some power, if it has a good model. Later we have thermal
->> throttling and OU goes to ~50% but EAS still can work. If the model is
->> more precised - thus adjusted for the raising leakage due to temperature
->> increase (generated due to GPU power), than we still can use better that
->> power budget and not waist on the leakage at higher OPPs.
-> 
-> I can understand the need. But looking at one specific case vs generalized form
-> is different.
-> 
-> So IIUC the expectation is to track temperature variations over minutes by
-> external sources to CPU.
+Pulled and added to the thermal branch in linux-pm.git.
 
-Yes
-
-> 
->>> I didn't get how the new performance field is supposed to be controlled and
->>> modified by users. A driver interface doesn't seem suitable as there's no
->>> subsystem that knows the characteristic of the workload except userspace. In
->>> Android we do have contextual info about what the current top-app to enable
->>> modifying the capacities to match its characteristics.
->>
->> Well in latest public documentation (May2023) for Cortex-X4 there are
->> described new features of Arm cores: PDP, MPMM, which can change the
->> 'performance' of the core in FW. Our SCMI kernel subsystem will get an
->> interrupt, so the drivers can know about it. It could be used for
->> recalculating the efficiency of the CPUs in the EM. When there is no
->> hotplug and the long running app is still running, that FW policy would
->> be reflected in EM. It's just not done all-in-one-step. Those patches
->> will be later.
-> 
-> I think these features are some form of thermal throttling IIUC.
-> 
-> I was asking for handling the EM accuracy issue using the runtime model. I was
-> expecting some sysfs knobs. Do you see this also require a vendor specific
-> driver to try to account for the EM inaccuracy issues we're seeing?
-
-Yes, it needs vendor driver. In the EM fwk we don't plan to add sysfs
-interface.
-
-> 
->> Second, I have used that 'performance' field to finally get rid of
->> this runtime division in em_cpu_energy() hot path - which was annoying
->> me for very long time. It wasn't possible to optimize that last
->> operation there, because the not all CPUs boot and final CPU capacity
->> is not known when we register EMs. With this feature finally I can
->> remove that heavy operation. You can see more in that patch 15/23.
-> 
-> Yep, it's good addition :)
-> 
->>>> 5. All CPUs (Little+Mid+Big) power values in mW
->>>> +------------+--------+---------------------+-------+-----------+
->>>> |  channel   | metric |       kernel        | value | perc_diff |
->>>> +------------+--------+---------------------+-------+-----------+
->>>> |    CPU     | gmean  | EM_default          | 142.1 |   0.0%    |
->>>> |    CPU     | gmean  | EM_modified_runtime | 131.8 |  -7.27%   |
->>>> +------------+--------+---------------------+-------+-----------+
->>>
->>> How did you modify the EM here? Did you change both performance and power
->>> fields? How did you calculate the new ones?
->>
->> It was just the power values modified on my pixel6:
->> for Littles 1.6x, Mid 0.8x, Big 1.3x of their boot power.
->> TBH I don't know the chip binning of that SoC, but I suspect it
->> could be due to this fact. More about possible error range in chip
->> binning power values you can find in my comment to the patch 22/23
-> 
-> Strange just modifying the power had this impact. It could be related to
-> similar impact I've seen with migration margin for the little increasing. By
-> making the cost higher there, then it'd move the residency to other cores and
-> potentially reduce running at higher freq on the littles.
-
-Well, on Pixel6 we don't know the chip binning for the CPUs and big L3
-cache... This could be the source of such a need in power values
-adjustment. In my OdroidXU4 (Exynos5422) I can see binning and the max
-power for some OPP can be ~30%. It's too big to ignore and I dare to say
-that in Pixel6 the binning should be there (don't know the variation
-though).
-
-> 
->>> Did you try to simulate any heating effect during the run if you're taking
->>> temperature into account to modify the power? What was the variation like and
->>
->> Yes, I did that experiment and presented on OSPM 2023 slide 13. There is
->> big CPU power plot change in time, due to GPU heat. All detailed data is
->> there. The big CPU power is ~18-20% higher when 1-1.5W GPU is heating up
->> the whole SoC.
-> 
-> I meant during your experiment above.
-
-For that experiment there power is too low and GPU is even lower ~5-10mW
-so there is no temperature impact.
-
-> 
->>> at what rate was the EM being updated in this case? I think Jankbench in
->>
->> In this experiment EM was only set once w/ the values mentioned above.
->> It could be due to the chip lottery. I cannot say on 100% this phone.
->>
->>> general wouldn't stress the SoC enough.
->>
->> True, this test is not power heavy as it can be seen. It's more
->> to show that the default EM after boot might not be the optimal one.
-> 
-> I wouldn't reach that conclusion for this particular case. But the underlying
-> issues exists for sure.
-
-Hard to say for sure the root cause, when you don't have full access to
-the SoC internals and doc. We would need the chip binning and some
-other internals.
-
-> 
->>> It'd be insightful to look at frequency residencies between the two runs and
->>> power breakdown for each cluster if you have access to them. No worries if not!
->>
->> I'm afraid you're asking for too much ;)
-> 
-> It should be easy to get them. It's hard to know where the benefit is coming
-> from otherwise. But as I said, no worries if not. If you have perfetto traces
-> I can take help to take a look.
-
-We use Mid cores more (but still at lowest OPP) instead of keeping them
-in idle. I don't have perfetto traces.
-
-> 
->>> My brain started to fail me somewhere around patch 15. I'll have another look
->>> some time later in the week but generally looks good to me. If I have any
->>> worries it is about how it can be used with the provided interfaces. Especially
->>> expectations about managing fast thermal changes at the level you're targeting.
->>
->> No worries, thanks for the review! The fast thermal changes, which are
->> linked to the CPU's workload are not an issue here and I'm not worried
->> about those. The side effect of the heat from other device is the issue.
->> Thus, that thermal driver which modifies the EM should be aware of the
->> 'whole SoC' situation (like mainline IPA does, when it manages all
->> devices in a single thermal zone).
-> 
-> I think in practice there will be challenges to generalize the thermal impact.
-> But overall from EM accuracy point of view (for all the various reasons
-> mentioned), we need this ability to help handle them in practice. Booting with
-> a single hardcoded EM doesn't work.
-> 
-
-Thanks, I agree. That's the main goal, to get rid of the single
-hardcoded EM created during boot, from sometimes bogus information.
-
-Regards,
-Lukasz
-
+Thanks!
 
