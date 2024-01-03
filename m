@@ -1,257 +1,108 @@
-Return-Path: <linux-pm+bounces-1751-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1752-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2BC38227A9
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 05:00:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CCAF8227C0
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 05:13:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8BA4F283FD4
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 04:00:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CCEB2837A5
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 04:13:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 541BC11723;
-	Wed,  3 Jan 2024 03:59:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92CA311C8D;
+	Wed,  3 Jan 2024 04:13:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nkuSnhuG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63749171C4;
-	Wed,  3 Jan 2024 03:59:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4T4bZF3Ky2z1Q63x;
-	Wed,  3 Jan 2024 11:59:17 +0800 (CST)
-Received: from kwepemm600004.china.huawei.com (unknown [7.193.23.242])
-	by mail.maildlp.com (Postfix) with ESMTPS id 43FFE180076;
-	Wed,  3 Jan 2024 11:59:52 +0800 (CST)
-Received: from [10.67.121.59] (10.67.121.59) by kwepemm600004.china.huawei.com
- (7.193.23.242) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Wed, 3 Jan
- 2024 11:59:51 +0800
-Message-ID: <a0fc2111-3d8e-a87b-f2cf-49ad810b11df@huawei.com>
-Date: Wed, 3 Jan 2024 11:59:47 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23D8D17984;
+	Wed,  3 Jan 2024 04:13:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704255202; x=1735791202;
+  h=from:to:cc:subject:date:message-id;
+  bh=IGi0e3uXdLwqOum7ZLXcJjnmPDlSGG/id/BqMsxXwvI=;
+  b=nkuSnhuG4JSt1+lV4aPIrdm+ti+xRDwlrX9PrjM5/7TaQYYf6xGL6ryb
+   SArGfkrHpbfup+v2vV5kyhW1zxo24fp1Sjyo0tFawH2shqpfvKG/UiflO
+   5L737s91DdoeGsMTKoa1dbZXZMSvS//FzT4gNyv5+HFF20RflIBxIfn5x
+   edsUOLFgJBHNwiNWqokQme/7jX2LDllQNhKVguzyDfjMysaEONB31yevd
+   VJNpj4Rq3XP07n1EeHdk7T9tP8MhmRRJWKhpOST4Hlrc8AeeZR17MRcSU
+   6jjH2v+CYx4A88/ZdgxfYReyvYStDaYKywMp1TcedqRXw9zZnNl4ySeNN
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10941"; a="463357395"
+X-IronPort-AV: E=Sophos;i="6.04,326,1695711600"; 
+   d="scan'208";a="463357395"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2024 20:13:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10941"; a="1026957000"
+X-IronPort-AV: E=Sophos;i="6.04,326,1695711600"; 
+   d="scan'208";a="1026957000"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga006.fm.intel.com with ESMTP; 02 Jan 2024 20:13:21 -0800
+From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc: Chen Yu <yu.c.chen@intel.com>,
+	Len Brown <len.brown@intel.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Zhao Liu <zhao1.liu@intel.com>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/4] thermal: intel: hfi: Fix memory corruption on resume from hibernation
+Date: Tue,  2 Jan 2024 20:14:55 -0800
+Message-Id: <20240103041459.11113-1-ricardo.neri-calderon@linux.intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH] cpufreq: CPPC: Resolve the large frequency discrepancy
- from cpuinfo_cur_freq
-To: <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <rafael@kernel.org>,
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-CC: <beata.michalska@arm.com>, <sumitg@nvidia.com>, <ionela.voinescu@arm.com>,
-	<zengheng4@huawei.com>, <yang@os.amperecomputing.com>, <will@kernel.org>,
-	<sudeep.holla@arm.com>, <liuyonglong@huawei.com>, <zhanjie9@hisilicon.com>,
-	<lihuisong@huawei.com>
-References: <20231212072617.14756-1-lihuisong@huawei.com>
-From: "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <20231212072617.14756-1-lihuisong@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600004.china.huawei.com (7.193.23.242)
 
-kindly ping for review.
+Hi,
 
-在 2023/12/12 15:26, Huisong Li 写道:
-> Many developers found that the cpu current frequency is greater than
-> the maximum frequency of the platform, please see [1], [2] and [3].
->
-> In the scenarios with high memory access pressure, the patch [1] has
-> proved the significant latency of cpc_read() which is used to obtain
-> delivered and reference performance counter cause an absurd frequency.
-> The sampling interval for this counters is very critical and is expected
-> to be equal. However, the different latency of cpc_read() has a direct
-> impact on their sampling interval.
->
-> This patch adds a interface, cpc_read_arch_counters_on_cpu, to read
-> delivered and reference performance counter together. According to my
-> test[4], the discrepancy of cpu current frequency in the scenarios with
-> high memory access pressure is lower than 0.2% by stress-ng application.
->
-> [1] https://lore.kernel.org/all/20231025093847.3740104-4-zengheng4@huawei.com/
-> [2] https://lore.kernel.org/all/20230328193846.8757-1-yang@os.amperecomputing.com/
-> [3] https://lore.kernel.org/all/20230418113459.12860-7-sumitg@nvidia.com/
->
-> [4] My local test:
-> The testing platform enable SMT and include 128 logical CPU in total,
-> and CPU base frequency is 2.7GHz. Reading "cpuinfo_cur_freq" for each
-> physical core on platform during the high memory access pressure from
-> stress-ng, and the output is as follows:
->    0: 2699133     2: 2699942     4: 2698189     6: 2704347
->    8: 2704009    10: 2696277    12: 2702016    14: 2701388
->   16: 2700358    18: 2696741    20: 2700091    22: 2700122
->   24: 2701713    26: 2702025    28: 2699816    30: 2700121
->   32: 2700000    34: 2699788    36: 2698884    38: 2699109
->   40: 2704494    42: 2698350    44: 2699997    46: 2701023
->   48: 2703448    50: 2699501    52: 2700000    54: 2699999
->   56: 2702645    58: 2696923    60: 2697718    62: 2700547
->   64: 2700313    66: 2700000    68: 2699904    70: 2699259
->   72: 2699511    74: 2700644    76: 2702201    78: 2700000
->   80: 2700776    82: 2700364    84: 2702674    86: 2700255
->   88: 2699886    90: 2700359    92: 2699662    94: 2696188
->   96: 2705454    98: 2699260   100: 2701097   102: 2699630
-> 104: 2700463   106: 2698408   108: 2697766   110: 2701181
-> 112: 2699166   114: 2701804   116: 2701907   118: 2701973
-> 120: 2699584   122: 2700474   124: 2700768   126: 2701963
->
-> Signed-off-by: Huisong Li <lihuisong@huawei.com>
-> ---
->   arch/arm64/kernel/topology.c | 43 ++++++++++++++++++++++++++++++++++--
->   drivers/acpi/cppc_acpi.c     | 22 +++++++++++++++---
->   include/acpi/cppc_acpi.h     |  5 +++++
->   3 files changed, 65 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-> index 7d37e458e2f5..c3122154d738 100644
-> --- a/arch/arm64/kernel/topology.c
-> +++ b/arch/arm64/kernel/topology.c
-> @@ -299,6 +299,11 @@ core_initcall(init_amu_fie);
->   #ifdef CONFIG_ACPI_CPPC_LIB
->   #include <acpi/cppc_acpi.h>
->   
-> +struct amu_counters {
-> +	u64 corecnt;
-> +	u64 constcnt;
-> +};
-> +
->   static void cpu_read_corecnt(void *val)
->   {
->   	/*
-> @@ -322,8 +327,27 @@ static void cpu_read_constcnt(void *val)
->   		      0UL : read_constcnt();
->   }
->   
-> +static void cpu_read_amu_counters(void *data)
-> +{
-> +	struct amu_counters *cnt = (struct amu_counters *)data;
-> +
-> +	/*
-> +	 * The running time of the this_cpu_has_cap() might have a couple of
-> +	 * microseconds and is significantly increased to tens of microseconds.
-> +	 * But AMU core and constant counter need to be read togeter without any
-> +	 * time interval to reduce the calculation discrepancy using this counters.
-> +	 */
-> +	if (this_cpu_has_cap(ARM64_WORKAROUND_2457168)) {
-> +		cnt->corecnt = read_corecnt();
-> +		cnt->constcnt = 0;
-> +	} else {
-> +		cnt->corecnt = read_corecnt();
-> +		cnt->constcnt = read_constcnt();
-> +	}
-> +}
-> +
->   static inline
-> -int counters_read_on_cpu(int cpu, smp_call_func_t func, u64 *val)
-> +int counters_read_on_cpu(int cpu, smp_call_func_t func, void *data)
->   {
->   	/*
->   	 * Abort call on counterless CPU or when interrupts are
-> @@ -335,7 +359,7 @@ int counters_read_on_cpu(int cpu, smp_call_func_t func, u64 *val)
->   	if (WARN_ON_ONCE(irqs_disabled()))
->   		return -EPERM;
->   
-> -	smp_call_function_single(cpu, func, val, 1);
-> +	smp_call_function_single(cpu, func, data, 1);
->   
->   	return 0;
->   }
-> @@ -364,6 +388,21 @@ bool cpc_ffh_supported(void)
->   	return true;
->   }
->   
-> +int cpc_read_arch_counters_on_cpu(int cpu, u64 *delivered, u64 *reference)
-> +{
-> +	struct amu_counters cnts = {0};
-> +	int ret;
-> +
-> +	ret = counters_read_on_cpu(cpu, cpu_read_amu_counters, &cnts);
-> +	if (ret)
-> +		return ret;
-> +
-> +	*delivered = cnts.corecnt;
-> +	*reference = cnts.constcnt;
-> +
-> +	return 0;
-> +}
-> +
->   int cpc_read_ffh(int cpu, struct cpc_reg *reg, u64 *val)
->   {
->   	int ret = -EOPNOTSUPP;
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index 7ff269a78c20..f303fabd7cfe 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -1299,6 +1299,11 @@ bool cppc_perf_ctrs_in_pcc(void)
->   }
->   EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
->   
-> +int __weak cpc_read_arch_counters_on_cpu(int cpu, u64 *delivered, u64 *reference)
-> +{
-> +	return 0;
-> +}
-> +
->   /**
->    * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
->    * @cpunum: CPU from which to read counters.
-> @@ -1313,7 +1318,8 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
->   		*ref_perf_reg, *ctr_wrap_reg;
->   	int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpunum);
->   	struct cppc_pcc_data *pcc_ss_data = NULL;
-> -	u64 delivered, reference, ref_perf, ctr_wrap_time;
-> +	u64 delivered = 0, reference = 0;
-> +	u64 ref_perf, ctr_wrap_time;
->   	int ret = 0, regs_in_pcc = 0;
->   
->   	if (!cpc_desc) {
-> @@ -1350,8 +1356,18 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
->   		}
->   	}
->   
-> -	cpc_read(cpunum, delivered_reg, &delivered);
-> -	cpc_read(cpunum, reference_reg, &reference);
-> +	if (cpc_ffh_supported()) {
-> +		ret = cpc_read_arch_counters_on_cpu(cpunum, &delivered, &reference);
-> +		if (ret) {
-> +			pr_debug("read arch counters failed, ret=%d.\n", ret);
-> +			ret = 0;
-> +		}
-> +	}
-> +	if (!delivered || !reference) {
-> +		cpc_read(cpunum, delivered_reg, &delivered);
-> +		cpc_read(cpunum, reference_reg, &reference);
-> +	}
-> +
->   	cpc_read(cpunum, ref_perf_reg, &ref_perf);
->   
->   	/*
-> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
-> index 6126c977ece0..07d4fd82d499 100644
-> --- a/include/acpi/cppc_acpi.h
-> +++ b/include/acpi/cppc_acpi.h
-> @@ -152,6 +152,7 @@ extern bool cpc_ffh_supported(void);
->   extern bool cpc_supported_by_cpu(void);
->   extern int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val);
->   extern int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val);
-> +extern int cpc_read_arch_counters_on_cpu(int cpu, u64 *delivered, u64 *reference);
->   extern int cppc_get_epp_perf(int cpunum, u64 *epp_perf);
->   extern int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls, bool enable);
->   extern int cppc_get_auto_sel_caps(int cpunum, struct cppc_perf_caps *perf_caps);
-> @@ -209,6 +210,10 @@ static inline int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val)
->   {
->   	return -ENOTSUPP;
->   }
-> +static inline int cpc_read_arch_counters_on_cpu(int cpu, u64 *delivered, u64 *reference)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
->   static inline int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls, bool enable)
->   {
->   	return -ENOTSUPP;
+This is v2 of this series. You can read the overview and motivation in the
+cover letter of v1 [1].
+
+I smoke-retested this version on a Meteor Lake system. It completed 50
+cycles of suspend-to-disk and resume. I completed longer testing for v1.
+
+Changes since v1:
+ * Added locking to hfi_pm_notify() to serialize RMW operations on the
+   MSR_IA32_HW_FEEDBACK_CONFIG register. (Rafael)
+ * Relocated a comment regarding the reallocation of HFI memory to
+   patch 3/4. (Rafael)
+ * Clarified that patch 1/4 does not introduce functional changes.
+   (Rafael)
+ * Indicated the first stable version on which this patchset should be
+   backported.
+ * Renamed hfi_do_pm_[enable|disable]() as hfi_do_[enable|disable]() for
+   future reuse. (Stan)
+ * Registered the HFI suspend notifier towards the end of
+   intel_hfi_init(). (Stan)
+
+Thanks and BR,
+Ricardo
+
+[1]. https://lore.kernel.org/all/20231227062940.10780-1-ricardo.neri-calderon@linux.intel.com/
+
+Ricardo Neri (4):
+  thermal: intel: hfi: Refactor enabling code into helper functions
+  thermal: intel: hfi: Enable an HFI instance from its first online CPU
+  thermal: intel: hfi: Disable an HFI instance when all its CPUs go
+    offline
+  thermal: intel: hfi: Add a suspend notifier
+
+ drivers/thermal/intel/intel_hfi.c | 153 +++++++++++++++++++++++++-----
+ 1 file changed, 127 insertions(+), 26 deletions(-)
+
+-- 
+2.25.1
+
 
