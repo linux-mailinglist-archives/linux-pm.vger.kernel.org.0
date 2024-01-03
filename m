@@ -1,139 +1,106 @@
-Return-Path: <linux-pm+bounces-1794-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1786-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7472E82332C
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 18:27:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8F0F823042
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 16:13:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8275C1C23AD7
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 17:27:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EAE801C236F8
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 15:13:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A268B1C28C;
-	Wed,  3 Jan 2024 17:26:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAFCE1A726;
+	Wed,  3 Jan 2024 15:13:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MJtJBiNZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TIUKMdGI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E17931C280;
-	Wed,  3 Jan 2024 17:26:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704302816; x=1735838816;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EJE3hRpgK0X23wIsKdiyvAzh6pSGgJFYMhCfGWSeSWc=;
-  b=MJtJBiNZoMJMrCXxgFmqDk221JUfRAy3g1DTgKZkkTYsYBbpFL8LqdKK
-   Hq6D2B7N8oA+bclF+KQP51jyvNRQljZleend+40frvaXHGZst4JoK8ajS
-   oTTyWu8XmTftWa9GKDONFx/VyBg+/1J+tc2uvTKuJICS3a45/IxCCEfhC
-   2XUf7Vldi4c5Mx570ga8GGRVEeLYvfkpP0P/11vl+EKi9Awv/2YByVaUL
-   25RCODabia2S0UILg/sJjALo1+lMUT1/ahHCHN6eAYgccuIhSAbbyM8Xo
-   OaoBmcekpKCz4bbWmMT68WbOnSvcUJxyK+lA1kN4j8QmilKSxs1Q4zxXh
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10942"; a="18561802"
-X-IronPort-AV: E=Sophos;i="6.04,328,1695711600"; 
-   d="scan'208";a="18561802"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2024 09:26:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10942"; a="953283636"
-X-IronPort-AV: E=Sophos;i="6.04,328,1695711600"; 
-   d="scan'208";a="953283636"
-Received: from sgruszka-mobl.ger.corp.intel.com (HELO localhost) ([10.252.36.57])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2024 09:26:51 -0800
-Date: Wed, 3 Jan 2024 16:02:34 +0100
-From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	Chen Yu <yu.c.chen@intel.com>, Len Brown <len.brown@intel.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Zhang Rui <rui.zhang@intel.com>, Zhao Liu <zhao1.liu@intel.com>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] thermal: intel: hfi: Add a suspend notifier
-Message-ID: <ZZV3CgnaWznmzFKF@linux.intel.com>
-References: <20240103041459.11113-1-ricardo.neri-calderon@linux.intel.com>
- <20240103041459.11113-5-ricardo.neri-calderon@linux.intel.com>
- <CAJZ5v0jSERoeMki9ZvWtTqiZidETeo1Xm_Qb0Oo2qRG0PMrSJQ@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A941A71F;
+	Wed,  3 Jan 2024 15:13:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ECBBC433CB;
+	Wed,  3 Jan 2024 15:13:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704294792;
+	bh=bFm0Z1sKJZItmcrSwYlr++E/l6Wo9Z9RcEYIw1gv8/k=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=TIUKMdGIxBTc4tUVBKOOy03kAHheVOgCdA51aToMHMZ3YINlt8SR9K5e66IhWeB5U
+	 zxG67KSJBbgpwPAaQZff1JkqfEfErcjUrKEWcQx+7DCcDCNvcRAjVmemKiMiHx8n6V
+	 4dix+n/6EfSLm7kDjjlcnKTgdyh9wQGxqpO1aT8Ec7FSzHcrCvgeyL7b9IHpR2IMnC
+	 hs/h09zfO6J+pln+zbQCz9kEz+9vdjetSzsnVuyS0bhQPOD5Wg3zVo6y30skbhn4pn
+	 1C/BgAnXSyByvbAMPPs9eeEJFgaONm+1RmIACU2lPkn8cnZjrUQZhX8tQevBifBfFf
+	 QmmgCKVUQaRJA==
+Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2cc9fa5e8e1so114008371fa.3;
+        Wed, 03 Jan 2024 07:13:12 -0800 (PST)
+X-Gm-Message-State: AOJu0YxHmCm3TXmE7jYJzpLvY5VRIi3LGCy987pZPjZmwJq3ra6rfXV/
+	dPu/KttpdmpJxPbNjUn4GltKf/KN4yxSAiLPYw==
+X-Google-Smtp-Source: AGHT+IFSlj6nZ8ZUfTGFMSFmV/q5bvx3ay0bqNUHIfGx+Gz9YS2Lv41/6TR2DLdMKsWU/APCPg4voqSUFRKuaq9MzdA=
+X-Received: by 2002:a2e:98d5:0:b0:2cc:843a:ec97 with SMTP id
+ s21-20020a2e98d5000000b002cc843aec97mr7360555ljj.43.1704294790370; Wed, 03
+ Jan 2024 07:13:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0jSERoeMki9ZvWtTqiZidETeo1Xm_Qb0Oo2qRG0PMrSJQ@mail.gmail.com>
+References: <20240103142051.111717-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20240103142051.111717-1-krzysztof.kozlowski@linaro.org>
+From: Rob Herring <robh+dt@kernel.org>
+Date: Wed, 3 Jan 2024 08:12:58 -0700
+X-Gmail-Original-Message-ID: <CAL_JsqKAKNHz4wPuJPX7ULhVUz=KFRtNn=coWhs3d6LWk+jtGQ@mail.gmail.com>
+Message-ID: <CAL_JsqKAKNHz4wPuJPX7ULhVUz=KFRtNn=coWhs3d6LWk+jtGQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: thermal: correct thermal zone node name limit
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Liviu Dudau <liviu.dudau@arm.com>, Sudeep Holla <sudeep.holla@arm.com>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, Amit Kucheria <amit.kucheria@linaro.org>, 
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 03, 2024 at 02:34:26PM +0100, Rafael J. Wysocki wrote:
-> > +static int hfi_pm_notify(struct notifier_block *nb,
-> > +                        unsigned long mode, void *unused)
-> > +{
-> > +       struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, 0);
-> > +       struct hfi_instance *hfi = info->hfi_instance;
-> > +       int ret = 0;
-> > +
-> > +       /* HFI may not be in use. */
-> > +       if (!hfi)
-> > +               return ret;
-> > +
-> > +       mutex_lock(&hfi_instance_lock);
-> > +       /*
-> > +        * Only handle the HFI instance of the package of the boot CPU. The
-> > +        * instances of other packages are handled in the CPU hotplug callbacks.
-> > +        */
-> > +       switch (mode) {
-> > +       case PM_HIBERNATION_PREPARE:
-> > +       case PM_SUSPEND_PREPARE:
-> > +       case PM_RESTORE_PREPARE:
-> > +               ret = smp_call_function_single(0, hfi_do_disable, NULL, true);
-> > +               break;
-> > +
-> > +       case PM_POST_RESTORE:
-> > +       case PM_POST_HIBERNATION:
-> > +       case PM_POST_SUSPEND:
-> > +               ret = smp_call_function_single(0, hfi_do_enable, hfi, true);
-> > +               break;
-> 
-> Because this handles the boot CPU only, one has to wonder if it should
-> be a syscore op rather than a PM notifier.
-> 
-> It does not sleep AFAICS, so it can run in that context, and it is
-> guaranteed to run on the boot CPU then, so it is not necessary to
-> force that.  Moreover, syscore ops are guaranteed to be
-> non-concurrent, so locking is not needed.
+On Wed, Jan 3, 2024 at 7:20=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> Linux kernel uses thermal zone node name during registering thermal
+> zones and has a hard-coded limit of 20 characters, including terminating
+> NUL byte.  The bindings expect node names to finish with '-thermal'
+> which is eight bytes long, thus we have only 11 characters for the reset
+> of the node name, not 12.
+>
+> Reported-by: Rob Herring <robh@kernel.org>
+> Closes: https://lore.kernel.org/all/CAL_JsqKogbT_4DPd1n94xqeHaU_J8ve5K09W=
+OyVsRX3jxxUW3w@mail.gmail.com/
+> Fixes: 1202a442a31f ("dt-bindings: thermal: Add yaml bindings for thermal=
+ zones")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/thermal/thermal-zones.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml=
+ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+> index 4a8dabc48170..bbc883fd4044 100644
+> --- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+> @@ -49,7 +49,7 @@ properties:
+>        to take when the temperature crosses those thresholds.
+>
+>  patternProperties:
+> -  "^[a-zA-Z][a-zA-Z0-9\\-]{1,12}-thermal$":
+> +  "^[a-zA-Z][a-zA-Z0-9\\-]{1,11}-thermal$":
 
-There are below warnings in smp_call_function_single() :
+Now off by 1 instead of 2. It should be 1 starting char, 1-10 chars,
+and 8 chars for "-thermal".
 
-        /*
-         * Can deadlock when called with interrupts disabled.
-         * We allow cpu's that are not yet online though, as no one else can
-         * send smp call function interrupt to this cpu and as such deadlocks
-         * can't happen.
-         */
-        WARN_ON_ONCE(cpu_online(this_cpu) && irqs_disabled()
-                     && !oops_in_progress);
+Can you also add a comment that this length is due to the kernel.
 
-        /*
-         * When @wait we can deadlock when we interrupt between llist_add() and
-         * arch_send_call_function_ipi*(); when !@wait we can deadlock due to
-         * csd_lock() on because the interrupt context uses the same csd
-         * storage.
-         */
-        WARN_ON_ONCE(!in_task());
-
-And this one in syscore_suspend(): 
-
-        WARN_ONCE(!irqs_disabled(),
-                "Interrupts enabled before system core suspend.\n");
-                                                                     
-So seems they are not compatible.
-
-Regards
-Stanislaw
+Rob
 
