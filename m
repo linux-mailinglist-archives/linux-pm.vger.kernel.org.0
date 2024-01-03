@@ -1,171 +1,273 @@
-Return-Path: <linux-pm+bounces-1760-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1761-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CC96822B0D
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 11:12:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6141C822B2B
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 11:18:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A61F71F23DA1
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 10:12:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 63E211C231CB
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 10:18:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6F8318AE8;
-	Wed,  3 Jan 2024 10:12:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D35518657;
+	Wed,  3 Jan 2024 10:17:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lvPu8raB"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cEOKkcE3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B5618656
-	for <linux-pm@vger.kernel.org>; Wed,  3 Jan 2024 10:11:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 822F218653
+	for <linux-pm@vger.kernel.org>; Wed,  3 Jan 2024 10:17:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-dbe78430946so1818025276.0
-        for <linux-pm@vger.kernel.org>; Wed, 03 Jan 2024 02:11:58 -0800 (PST)
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-dbdd013c68bso6498489276.2
+        for <linux-pm@vger.kernel.org>; Wed, 03 Jan 2024 02:17:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704276717; x=1704881517; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=PtpNPR2Ppv9oShH1PIo9qMmaypsTJ3RN+rG3DHT7G5I=;
-        b=lvPu8raB9OXaH9Rq2HLA+rH++8rvLT6marCexYl1nQfm3mgVlb9GxPHOC4u59vajdf
-         jwdCPCiu5XJlAoKE7vUcOw1MfjTlEAE0B3TYq8DP7aePJovek9QucTpmas1o49IjTLie
-         1G0R51E9yfGwuQvO74eg3o8usKAhPE4VuP9zj2Iqsy1cF+hWuBsSgc5sn4KdKwaAdCTm
-         +rurQjaoNhnN2t0NlfvE/7wjIclFRsHRVZI+HPlag+VA/NCHUjz194j4W6kH1ZSdnWUt
-         MkhbgzvLzo4R2ZHaUVByd/Ee4VhJFyFYetW7r3m3ks04y6Tbig8Y7THrssophOd9QdoG
-         nyIA==
+        d=linaro.org; s=google; t=1704277075; x=1704881875; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Scmrhih7hxA5GuetUV6f9gA0fz7HYsSC+1TAzsNPLsk=;
+        b=cEOKkcE3JR/pRGpKa7F606jO9SVa371a340Sp/pDSrFKCRyiWvzr5POLJoafRC9Cie
+         WNPh/PruI6GWYzFs5k8jRwbBIQqgDCHH58BbZS3G4Yqn0LBMUW4hkpZFeOpNwgSA9NUY
+         9EaYoQJQEFF34dBu9bHsnDDQMyL06VPEHSoekNfCrzmmHaN+TiqdWDaJstnMgk+cjGHw
+         ZI3/6DWRsILfgrJ6krLmJM7/rUHpv/AY3E4QwhZqQfS1LpOTZwDGQRrKckYaO7MhjalZ
+         vvdgqutDe8rm9INtXDfOk7neky7Hy0NMWjiEll2QOiXmPavesJI5+ENMq5jSHSxAX2hL
+         r4FA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704276717; x=1704881517;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PtpNPR2Ppv9oShH1PIo9qMmaypsTJ3RN+rG3DHT7G5I=;
-        b=A9AUCe9oLP9PzDJxvfarslNvbVpEJq9yb0y1P/7VQH1v0EGp/BAeyMhxaYWJRfReWa
-         DKBQrUqKirzliCmGZr0///O2J/hnB7rvCqCvphitKE5P12naDHVyvL8m0Z2jNZGXPLo0
-         Dwr4AlkcGYsBGZoWdm6Yw/nlNCRz6v/92qsYPoAmKEfYetH4eQbqV4sxZE7XdXlMYRRw
-         Yw6GI2KrH0qv3Gh6uNjqHs0bJAJj3f21Q7xG1ICFG7IhUms/zfldF0cfxW9zSFcxEt2A
-         zx4c1Pcs9Vf2yt037kIAAK43/ydrRwE3V9XWJbQrARa2ErNTIdOGe8s1WY0/qGksowLb
-         6R0g==
-X-Gm-Message-State: AOJu0YzvoqRfBVwSSsuMRDlGP6913b654QuPrX7r0b/OYbgdw/8X8z4/
-	Mif3iOya7Y7fIAJZ8sbHkSOHX3SksaM92mqXyZOBE0hk4k9/OA==
-X-Google-Smtp-Source: AGHT+IF2XO36CiELCMwjscZCQ6v87hxA4fvw2qOPmqzgOjU5sNMJ0Lpcxm/J0S19SL0ftsJUFsetKsKZoTzl5VNNJmw=
-X-Received: by 2002:a25:ab44:0:b0:dbc:ad34:43a1 with SMTP id
- u62-20020a25ab44000000b00dbcad3443a1mr8805456ybi.112.1704276717219; Wed, 03
- Jan 2024 02:11:57 -0800 (PST)
+        d=1e100.net; s=20230601; t=1704277075; x=1704881875;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Scmrhih7hxA5GuetUV6f9gA0fz7HYsSC+1TAzsNPLsk=;
+        b=VMkEwk/9rJFt+sBOdMwVzoKc8YqqYW0IJF+KGhioHoWBM81dVr9C2EW2301qPjjbLf
+         +JwuCokJHxbleZPeD/vCaJ3Xp3y4TS7KIW3hwq2uzj3/LuxTiaKFh8X2L+2vxJBkB7w1
+         5Vy6FL7YphT96AtChJModvLNuj9FYhkonKO2eXOAZ+mYcCZ6BwmlOu2IbkbvNWd0DQhi
+         TTiVWreAW6WHkbHkIfu+L9sftnPHVZ8O3B0ih13JbHNRFKelbWCmywtdwWu8O7unTppD
+         mSN4+RJd0XwHcJnI6BWp82FFBVnF1+dTblZFQD6q0PfjZ81Zk75wnYECXjWAHHWeWK1L
+         Vgpw==
+X-Gm-Message-State: AOJu0YwicTUt0m8iuZbb4Qn3FvbD2Wybb6rzR0YRs3WJqXAGVY4XXNp0
+	pmE479E/cpZQGCHY/V2SwOQJbODQMMszEAseF6hXmvxgSQkfXQ==
+X-Google-Smtp-Source: AGHT+IE7HiUEQ4naUDjpKJlvYcSC4jJgKxiKK5Frq8V1Xd0XhmUBdF2wPZAjrqmnWa1oef+THMUfXyCl4ton5HibS74=
+X-Received: by 2002:a25:c7d1:0:b0:db5:4e80:54c9 with SMTP id
+ w200-20020a25c7d1000000b00db54e8054c9mr9529450ybe.42.1704277075476; Wed, 03
+ Jan 2024 02:17:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231228114157.104822-1-ulf.hansson@linaro.org>
- <20231228114157.104822-4-ulf.hansson@linaro.org> <ZZRY4rMjjkIsG3Ef@p14s>
-In-Reply-To: <ZZRY4rMjjkIsG3Ef@p14s>
+References: <CGME20231227084252epcas2p3b063f7852f81f82cd0a31afd7f404db4@epcas2p3.samsung.com>
+ <5754861.DvuYhMxLoT@kreacher> <6019796.lOV4Wx5bFT@kreacher>
+ <13435856.uLZWGnKmhe@kreacher> <CAPDyKFohQjDzpYpm0QQLM4eTzGOzGfDNKUGHHC-niPBOrtR8BQ@mail.gmail.com>
+ <CAJZ5v0jPtYFk=pPE63CGGL0kuc+N_bZqKdgBMC=PMrwqzHBDTg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jPtYFk=pPE63CGGL0kuc+N_bZqKdgBMC=PMrwqzHBDTg@mail.gmail.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 3 Jan 2024 11:11:19 +0100
-Message-ID: <CAPDyKFqgw_my76dicP9wuQAmF=kF=v5wGwxEF05wTQHdSvfuCA@mail.gmail.com>
-Subject: Re: [PATCH 3/5] remoteproc: imx_rproc: Convert to dev_pm_domain_attach|detach_list()
-To: Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org, 
-	Sudeep Holla <sudeep.holla@arm.com>, Kevin Hilman <khilman@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Nikunj Kela <nkela@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, 
-	Stephan Gerhold <stephan@gerhold.net>, Ben Horgan <Ben.Horgan@arm.com>, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-remoteproc@vger.kernel.org, 
-	linux-media@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>
+Date: Wed, 3 Jan 2024 11:17:18 +0100
+Message-ID: <CAPDyKFp5BGpVX5WZxD+u4QELD9KEKVGE41q8mPxM8Eg4dP7RLw@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] PM: sleep: Fix possible deadlocks in core
+ system-wide PM code
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Greg KH <gregkh@linuxfoundation.org>, 
+	linux-pm@vger.kernel.org, Youngmin Nam <youngmin.nam@samsung.com>, 
+	linux-kernel@vger.kernel.org, d7271.choe@samsung.com, 
+	janghyuck.kim@samsung.com, hyesoo.yu@samsung.com, 
+	Alan Stern <stern@rowland.harvard.edu>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2 Jan 2024 at 19:41, Mathieu Poirier <mathieu.poirier@linaro.org> wrote:
+On Tue, 2 Jan 2024 at 14:54, Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> Hi Ulf,
+> On Tue, Jan 2, 2024 at 2:35=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.or=
+g> wrote:
+> >
+> > On Wed, 27 Dec 2023 at 21:41, Rafael J. Wysocki <rjw@rjwysocki.net> wro=
+te:
+> > >
+> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > > It is reported that in low-memory situations the system-wide resume c=
+ore
+> > > code deadlocks, because async_schedule_dev() executes its argument
+> > > function synchronously if it cannot allocate memory (an not only then=
+)
+> > > and that function attempts to acquire a mutex that is already held.
+> > >
+> > > Address this by changing the code in question to use
+> > > async_schedule_dev_nocall() for scheduling the asynchronous
+> > > execution of device suspend and resume functions and to directly
+> > > run them synchronously if async_schedule_dev_nocall() returns false.
+> > >
+> > > Fixes: 09beebd8f93b ("PM: sleep: core: Switch back to async_schedule_=
+dev()")
+> > > Link: https://lore.kernel.org/linux-pm/ZYvjiqX6EsL15moe@perf/
+> > > Reported-by: Youngmin Nam <youngmin.nam@samsung.com>
+> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > ---
+> > >
+> > > The commit pointed to by the Fixes: tag is the last one that modified
+> > > the code in question, even though the bug had been there already befo=
+re.
+> > >
+> > > Still, the fix will not apply to the code before that commit.
+> >
+> > An option could be to just do "Cc: stable@vger.kernel.org # v5.7+"
+> > instead of pointing to a commit with a Fixes tag.
 >
-> I'm in agreement with the modifications done to imx_rproc.c and imx_dsp_rproc.c.
-> There is one thing I am ambivalent on, please see below.
->
-> On Thu, Dec 28, 2023 at 12:41:55PM +0100, Ulf Hansson wrote:
-> > Let's avoid the boilerplate code to manage the multiple PM domain case, by
-> > converting into using dev_pm_domain_attach|detach_list().
-> >
-> > Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> > Cc: Bjorn Andersson <andersson@kernel.org>
-> > Cc: Shawn Guo <shawnguo@kernel.org>
-> > Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> > Cc: <linux-remoteproc@vger.kernel.org>
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > ---
-> >  drivers/remoteproc/imx_rproc.c | 73 +++++-----------------------------
-> >  1 file changed, 9 insertions(+), 64 deletions(-)
-> >
-> > diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
-> > index 8bb293b9f327..3161f14442bc 100644
-> > --- a/drivers/remoteproc/imx_rproc.c
-> > +++ b/drivers/remoteproc/imx_rproc.c
-> > @@ -92,7 +92,6 @@ struct imx_rproc_mem {
-> >
-> >  static int imx_rproc_xtr_mbox_init(struct rproc *rproc);
-> >  static void imx_rproc_free_mbox(struct rproc *rproc);
-> > -static int imx_rproc_detach_pd(struct rproc *rproc);
-> >
-> >  struct imx_rproc {
-> >       struct device                   *dev;
-> > @@ -113,10 +112,8 @@ struct imx_rproc {
-> >       u32                             rproc_pt;       /* partition id */
-> >       u32                             rsrc_id;        /* resource id */
-> >       u32                             entry;          /* cpu start address */
-> > -     int                             num_pd;
-> >       u32                             core_index;
-> > -     struct device                   **pd_dev;
-> > -     struct device_link              **pd_dev_link;
-> > +     struct dev_pm_domain_list       *pd_list;
-> >  };
-> >
-> >  static const struct imx_rproc_att imx_rproc_att_imx93[] = {
-> > @@ -853,7 +850,7 @@ static void imx_rproc_put_scu(struct rproc *rproc)
-> >               return;
-> >
-> >       if (imx_sc_rm_is_resource_owned(priv->ipc_handle, priv->rsrc_id)) {
-> > -             imx_rproc_detach_pd(rproc);
-> > +             dev_pm_domain_detach_list(priv->pd_list);
-> >               return;
-> >       }
-> >
-> > @@ -880,72 +877,20 @@ static int imx_rproc_partition_notify(struct notifier_block *nb,
-> >  static int imx_rproc_attach_pd(struct imx_rproc *priv)
-> >  {
-> >       struct device *dev = priv->dev;
-> > -     int ret, i;
-> > -
-> > -     /*
-> > -      * If there is only one power-domain entry, the platform driver framework
-> > -      * will handle it, no need handle it in this driver.
-> > -      */
-> > -     priv->num_pd = of_count_phandle_with_args(dev->of_node, "power-domains",
-> > -                                               "#power-domain-cells");
-> > -     if (priv->num_pd <= 1)
-> > -             return 0;
->
-> In function dev_pm_domain_attach_list(), this condition is "<= 0" rather than
-> "<= 1".  As such the association between the device and power domain will be
-> done twice when there is a single power domain, i.e once by the core and once in
-> dev_pm_domain_attach_list().
->
-> I am assuming the runtime PM subsystem is smart enough to deal with this kind of
-> situation but would like a confirmation.
+> Right, but one can argue that every commit with a "Cc: stable" tag is
+> a fix, so it should carry a Fixes: tag too anyway.
 
-Thanks for reviewing!
+Yes, certainly. But in this case it's more questionable as it's not
+really fixing the commit it points out.
 
-To cover the the single PM domain case, imx_rproc_attach_pd() is
-returning 0 when dev->pm_domain has been assigned. Moreover,
-dev_pm_domain_attach_list() doesn't allow attaching in the single PM
-domain case, as it returns -EEXIST if "dev->pm_domain" is already
-assigned.
+Note that, I have no strong opinion here, but maybe Greg has a preferred wa=
+y?
 
-Did that make sense to you?
+>
+> > >
+> > > ---
+> > >  drivers/base/power/main.c |  148 +++++++++++++++++++++--------------=
+-----------
+> > >  1 file changed, 68 insertions(+), 80 deletions(-)
+> > >
+> > > Index: linux-pm/drivers/base/power/main.c
+> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > --- linux-pm.orig/drivers/base/power/main.c
+> > > +++ linux-pm/drivers/base/power/main.c
+> > > @@ -579,7 +579,7 @@ bool dev_pm_skip_resume(struct device *d
+> > >  }
+> > >
+> > >  /**
+> > > - * device_resume_noirq - Execute a "noirq resume" callback for given=
+ device.
+> > > + * __device_resume_noirq - Execute a "noirq resume" callback for giv=
+en device.
+> > >   * @dev: Device to handle.
+> > >   * @state: PM transition of the system being carried out.
+> > >   * @async: If true, the device is being resumed asynchronously.
+> > > @@ -587,7 +587,7 @@ bool dev_pm_skip_resume(struct device *d
+> > >   * The driver of @dev will not receive interrupts while this functio=
+n is being
+> > >   * executed.
+> > >   */
+> > > -static int device_resume_noirq(struct device *dev, pm_message_t stat=
+e, bool async)
+> > > +static void __device_resume_noirq(struct device *dev, pm_message_t s=
+tate, bool async)
+> > >  {
+> > >         pm_callback_t callback =3D NULL;
+> > >         const char *info =3D NULL;
+> > > @@ -655,7 +655,13 @@ Skip:
+> > >  Out:
+> > >         complete_all(&dev->power.completion);
+> > >         TRACE_RESUME(error);
+> > > -       return error;
+> > > +
+> > > +       if (error) {
+> > > +               suspend_stats.failed_resume_noirq++;
+> > > +               dpm_save_failed_step(SUSPEND_RESUME_NOIRQ);
+> > > +               dpm_save_failed_dev(dev_name(dev));
+> > > +               pm_dev_err(dev, state, async ? " async noirq" : " noi=
+rq", error);
+> > > +       }
+> > >  }
+> > >
+> > >  static bool is_async(struct device *dev)
+> > > @@ -668,11 +674,15 @@ static bool dpm_async_fn(struct device *
+> > >  {
+> > >         reinit_completion(&dev->power.completion);
+> > >
+> > > -       if (is_async(dev)) {
+> > > -               get_device(dev);
+> > > -               async_schedule_dev(func, dev);
+> > > +       if (!is_async(dev))
+> > > +               return false;
+> > > +
+> > > +       get_device(dev);
+> > > +
+> > > +       if (async_schedule_dev_nocall(func, dev))
+> > >                 return true;
+> > > -       }
+> > > +
+> > > +       put_device(dev);
+> > >
+> > >         return false;
+> > >  }
+> > > @@ -680,15 +690,19 @@ static bool dpm_async_fn(struct device *
+> > >  static void async_resume_noirq(void *data, async_cookie_t cookie)
+> > >  {
+> > >         struct device *dev =3D data;
+> > > -       int error;
+> > > -
+> > > -       error =3D device_resume_noirq(dev, pm_transition, true);
+> > > -       if (error)
+> > > -               pm_dev_err(dev, pm_transition, " async", error);
+> > >
+> > > +       __device_resume_noirq(dev, pm_transition, true);
+> > >         put_device(dev);
+> > >  }
+> > >
+> > > +static void device_resume_noirq(struct device *dev)
+> > > +{
+> > > +       if (dpm_async_fn(dev, async_resume_noirq))
+> > > +               return;
+> > > +
+> > > +       __device_resume_noirq(dev, pm_transition, false);
+> > > +}
+> > > +
+> > >  static void dpm_noirq_resume_devices(pm_message_t state)
+> > >  {
+> > >         struct device *dev;
+> > > @@ -698,14 +712,6 @@ static void dpm_noirq_resume_devices(pm_
+> > >         mutex_lock(&dpm_list_mtx);
+> > >         pm_transition =3D state;
+> > >
+> > > -       /*
+> > > -        * Advanced the async threads upfront,
+> > > -        * in case the starting of async threads is
+> > > -        * delayed by non-async resuming devices.
+> > > -        */
+> > > -       list_for_each_entry(dev, &dpm_noirq_list, power.entry)
+> > > -               dpm_async_fn(dev, async_resume_noirq);
+> > > -
+> >
+> > If I understand correctly, this means that we are no longer going to
+> > run the async devices upfront, right?
+>
+> Right.
+>
+> > Depending on how devices get ordered in the dpm_noirq_list, it sounds
+> > like the above could have a negative impact on the total resume time!?
+>
+> It could, but it is unclear at this time whether or not it will.
+>
+> > Of course, if all devices would be async capable this wouldn't be a
+> > problem...
+>
+> Sure.
+>
+> So the existing behavior can be restored with the help of an
+> additional device flag, but I didn't decide to add such a flag just
+> yet.
+>
+> I'll probably do it in 6.9, unless the performance impact is serious
+> enough, in which case it can be added earlier.
+>
+> I still would prefer to get to a point at which the suspend and resume
+> paths are analogous (from the async POV) and that's what happens after
+> this patch, so I'd say that IMO it is better to address any
+> performance regressions on top of it.
+
+Fair enough!
 
 [...]
+
+Feel free to add my Reviewed-by for the series!
 
 Kind regards
 Uffe
