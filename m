@@ -1,274 +1,97 @@
-Return-Path: <linux-pm+bounces-1761-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1762-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6141C822B2B
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 11:18:04 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CD71822B38
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 11:24:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 63E211C231CB
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 10:18:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B431CB22B7B
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 10:24:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D35518657;
-	Wed,  3 Jan 2024 10:17:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cEOKkcE3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF59318AFB;
+	Wed,  3 Jan 2024 10:24:26 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 822F218653
-	for <linux-pm@vger.kernel.org>; Wed,  3 Jan 2024 10:17:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-dbdd013c68bso6498489276.2
-        for <linux-pm@vger.kernel.org>; Wed, 03 Jan 2024 02:17:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704277075; x=1704881875; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Scmrhih7hxA5GuetUV6f9gA0fz7HYsSC+1TAzsNPLsk=;
-        b=cEOKkcE3JR/pRGpKa7F606jO9SVa371a340Sp/pDSrFKCRyiWvzr5POLJoafRC9Cie
-         WNPh/PruI6GWYzFs5k8jRwbBIQqgDCHH58BbZS3G4Yqn0LBMUW4hkpZFeOpNwgSA9NUY
-         9EaYoQJQEFF34dBu9bHsnDDQMyL06VPEHSoekNfCrzmmHaN+TiqdWDaJstnMgk+cjGHw
-         ZI3/6DWRsILfgrJ6krLmJM7/rUHpv/AY3E4QwhZqQfS1LpOTZwDGQRrKckYaO7MhjalZ
-         vvdgqutDe8rm9INtXDfOk7neky7Hy0NMWjiEll2QOiXmPavesJI5+ENMq5jSHSxAX2hL
-         r4FA==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA2D18C03;
+	Wed,  3 Jan 2024 10:24:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-594cabe74f8so342439eaf.0;
+        Wed, 03 Jan 2024 02:24:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704277075; x=1704881875;
+        d=1e100.net; s=20230601; t=1704277464; x=1704882264;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Scmrhih7hxA5GuetUV6f9gA0fz7HYsSC+1TAzsNPLsk=;
-        b=VMkEwk/9rJFt+sBOdMwVzoKc8YqqYW0IJF+KGhioHoWBM81dVr9C2EW2301qPjjbLf
-         +JwuCokJHxbleZPeD/vCaJ3Xp3y4TS7KIW3hwq2uzj3/LuxTiaKFh8X2L+2vxJBkB7w1
-         5Vy6FL7YphT96AtChJModvLNuj9FYhkonKO2eXOAZ+mYcCZ6BwmlOu2IbkbvNWd0DQhi
-         TTiVWreAW6WHkbHkIfu+L9sftnPHVZ8O3B0ih13JbHNRFKelbWCmywtdwWu8O7unTppD
-         mSN4+RJd0XwHcJnI6BWp82FFBVnF1+dTblZFQD6q0PfjZ81Zk75wnYECXjWAHHWeWK1L
-         Vgpw==
-X-Gm-Message-State: AOJu0YwicTUt0m8iuZbb4Qn3FvbD2Wybb6rzR0YRs3WJqXAGVY4XXNp0
-	pmE479E/cpZQGCHY/V2SwOQJbODQMMszEAseF6hXmvxgSQkfXQ==
-X-Google-Smtp-Source: AGHT+IE7HiUEQ4naUDjpKJlvYcSC4jJgKxiKK5Frq8V1Xd0XhmUBdF2wPZAjrqmnWa1oef+THMUfXyCl4ton5HibS74=
-X-Received: by 2002:a25:c7d1:0:b0:db5:4e80:54c9 with SMTP id
- w200-20020a25c7d1000000b00db54e8054c9mr9529450ybe.42.1704277075476; Wed, 03
- Jan 2024 02:17:55 -0800 (PST)
+        bh=Cqvf+yrxjn7ZuAyIxhrwAMBD1FRrppXcklII58Vtq/g=;
+        b=VLwFktISnJAKXiFUPuSK+sjghmSASVhzCtMAdAYT5V262n+680JEZbNfqP9o8iiRME
+         ubnbB2eoNcFLBlrB8lzei6lKKfIzpyoYybVfT19zQzioqbK0s0ajfQM77VLN0Qlv3LC5
+         N9tEhef+RqSr2u20wW3D+zE5oRp4yGCU+DR2T9uikZETj7EqG85O4g6fRWOJQfHr0zb4
+         23sqPLxNwjN+dNV6rKQnGCEZREusYIDIeisP4QFBdWm1YVmBaE1Ug8KQYmo8Jprz71XJ
+         fxYd+PS/2z7rVsfD2w6PEcj9PJmyZEC1fWOrqsNZ3soaBZqF+PgcfdfodMoSJvgGGZdw
+         P9Iw==
+X-Gm-Message-State: AOJu0YxAmmK8qQQr0DfKCJpyQbxwvhaBybomUKNmmYqrk4nD8eZeUExf
+	pZt/wdWnu9zJLKUlz4R2Y0hGMlqM++rdQgkkB/5RR1En
+X-Google-Smtp-Source: AGHT+IExyBe6bUzYjW4DhQn85miz2Ftlb3jJzSW0DMcvpVuAG09NrGfmwPf01hFToO3AzQ8Z3o3A1i0t6Ko61ien5vk=
+X-Received: by 2002:a4a:dc96:0:b0:594:ad62:bab9 with SMTP id
+ g22-20020a4adc96000000b00594ad62bab9mr19642880oou.1.1704277464554; Wed, 03
+ Jan 2024 02:24:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CGME20231227084252epcas2p3b063f7852f81f82cd0a31afd7f404db4@epcas2p3.samsung.com>
- <5754861.DvuYhMxLoT@kreacher> <6019796.lOV4Wx5bFT@kreacher>
- <13435856.uLZWGnKmhe@kreacher> <CAPDyKFohQjDzpYpm0QQLM4eTzGOzGfDNKUGHHC-niPBOrtR8BQ@mail.gmail.com>
- <CAJZ5v0jPtYFk=pPE63CGGL0kuc+N_bZqKdgBMC=PMrwqzHBDTg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jPtYFk=pPE63CGGL0kuc+N_bZqKdgBMC=PMrwqzHBDTg@mail.gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 3 Jan 2024 11:17:18 +0100
-Message-ID: <CAPDyKFp5BGpVX5WZxD+u4QELD9KEKVGE41q8mPxM8Eg4dP7RLw@mail.gmail.com>
-Subject: Re: [PATCH v1 3/3] PM: sleep: Fix possible deadlocks in core
- system-wide PM code
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Greg KH <gregkh@linuxfoundation.org>, 
-	linux-pm@vger.kernel.org, Youngmin Nam <youngmin.nam@samsung.com>, 
-	linux-kernel@vger.kernel.org, d7271.choe@samsung.com, 
-	janghyuck.kim@samsung.com, hyesoo.yu@samsung.com, 
-	Alan Stern <stern@rowland.harvard.edu>
+References: <4556052.LvFx2qVVIh@kreacher> <CAJZ5v0hRGKjwDv0VLw550CLfUuNGaVXxmvcpbFhS=PCPqY0n4A@mail.gmail.com>
+ <b670b0bc-79ea-4be7-a78d-644b344be408@arm.com>
+In-Reply-To: <b670b0bc-79ea-4be7-a78d-644b344be408@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 3 Jan 2024 11:24:13 +0100
+Message-ID: <CAJZ5v0jcaa8S7g+kKCC9yHHW-7BN0TLWZecOhdNMpHWYFExgHw@mail.gmail.com>
+Subject: Re: [PATCH v1 0/6] thermal: netlink: Redefine the API and drop unused code
+To: Lukasz Luba <lukasz.luba@arm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Linux PM <linux-pm@vger.kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Linux ACPI <linux-acpi@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2 Jan 2024 at 14:54, Rafael J. Wysocki <rafael@kernel.org> wrote:
+Hi Lukasz,
+
+On Wed, Jan 3, 2024 at 9:10=E2=80=AFAM Lukasz Luba <lukasz.luba@arm.com> wr=
+ote:
 >
-> On Tue, Jan 2, 2024 at 2:35=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.or=
-g> wrote:
+> Hi Rafael,
+>
+> On 1/2/24 13:24, Rafael J. Wysocki wrote:
+> > On Fri, Dec 15, 2023 at 9:02=E2=80=AFPM Rafael J. Wysocki <rjw@rjwysock=
+i.net> wrote:
+> >>
+> >> Hi Everyone,
+> >>
+> >> This patch series redefines the thermal netlink API to be somewhat mor=
+e
+> >> convenient to use on the caller side and drops some unused code from
+> >> the thermal netlink library.
+> >>
+> >> Please refer to the individual patch changelogs for details.
 > >
-> > On Wed, 27 Dec 2023 at 21:41, Rafael J. Wysocki <rjw@rjwysocki.net> wro=
-te:
-> > >
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > It is reported that in low-memory situations the system-wide resume c=
-ore
-> > > code deadlocks, because async_schedule_dev() executes its argument
-> > > function synchronously if it cannot allocate memory (an not only then=
-)
-> > > and that function attempts to acquire a mutex that is already held.
-> > >
-> > > Address this by changing the code in question to use
-> > > async_schedule_dev_nocall() for scheduling the asynchronous
-> > > execution of device suspend and resume functions and to directly
-> > > run them synchronously if async_schedule_dev_nocall() returns false.
-> > >
-> > > Fixes: 09beebd8f93b ("PM: sleep: core: Switch back to async_schedule_=
-dev()")
-> > > Link: https://lore.kernel.org/linux-pm/ZYvjiqX6EsL15moe@perf/
-> > > Reported-by: Youngmin Nam <youngmin.nam@samsung.com>
-> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > ---
-> > >
-> > > The commit pointed to by the Fixes: tag is the last one that modified
-> > > the code in question, even though the bug had been there already befo=
-re.
-> > >
-> > > Still, the fix will not apply to the code before that commit.
+> > No feedback, so this series doesn't appear to be controversial, and I
+> > would like to get it into 6.8.
 > >
-> > An option could be to just do "Cc: stable@vger.kernel.org # v5.7+"
-> > instead of pointing to a commit with a Fixes tag.
->
-> Right, but one can argue that every commit with a "Cc: stable" tag is
-> a fix, so it should carry a Fixes: tag too anyway.
-
-Yes, certainly. But in this case it's more questionable as it's not
-really fixing the commit it points out.
-
-Note that, I have no strong opinion here, but maybe Greg has a preferred wa=
-y?
-
->
-> > >
-> > > ---
-> > >  drivers/base/power/main.c |  148 +++++++++++++++++++++--------------=
------------
-> > >  1 file changed, 68 insertions(+), 80 deletions(-)
-> > >
-> > > Index: linux-pm/drivers/base/power/main.c
-> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > --- linux-pm.orig/drivers/base/power/main.c
-> > > +++ linux-pm/drivers/base/power/main.c
-> > > @@ -579,7 +579,7 @@ bool dev_pm_skip_resume(struct device *d
-> > >  }
-> > >
-> > >  /**
-> > > - * device_resume_noirq - Execute a "noirq resume" callback for given=
- device.
-> > > + * __device_resume_noirq - Execute a "noirq resume" callback for giv=
-en device.
-> > >   * @dev: Device to handle.
-> > >   * @state: PM transition of the system being carried out.
-> > >   * @async: If true, the device is being resumed asynchronously.
-> > > @@ -587,7 +587,7 @@ bool dev_pm_skip_resume(struct device *d
-> > >   * The driver of @dev will not receive interrupts while this functio=
-n is being
-> > >   * executed.
-> > >   */
-> > > -static int device_resume_noirq(struct device *dev, pm_message_t stat=
-e, bool async)
-> > > +static void __device_resume_noirq(struct device *dev, pm_message_t s=
-tate, bool async)
-> > >  {
-> > >         pm_callback_t callback =3D NULL;
-> > >         const char *info =3D NULL;
-> > > @@ -655,7 +655,13 @@ Skip:
-> > >  Out:
-> > >         complete_all(&dev->power.completion);
-> > >         TRACE_RESUME(error);
-> > > -       return error;
-> > > +
-> > > +       if (error) {
-> > > +               suspend_stats.failed_resume_noirq++;
-> > > +               dpm_save_failed_step(SUSPEND_RESUME_NOIRQ);
-> > > +               dpm_save_failed_dev(dev_name(dev));
-> > > +               pm_dev_err(dev, state, async ? " async noirq" : " noi=
-rq", error);
-> > > +       }
-> > >  }
-> > >
-> > >  static bool is_async(struct device *dev)
-> > > @@ -668,11 +674,15 @@ static bool dpm_async_fn(struct device *
-> > >  {
-> > >         reinit_completion(&dev->power.completion);
-> > >
-> > > -       if (is_async(dev)) {
-> > > -               get_device(dev);
-> > > -               async_schedule_dev(func, dev);
-> > > +       if (!is_async(dev))
-> > > +               return false;
-> > > +
-> > > +       get_device(dev);
-> > > +
-> > > +       if (async_schedule_dev_nocall(func, dev))
-> > >                 return true;
-> > > -       }
-> > > +
-> > > +       put_device(dev);
-> > >
-> > >         return false;
-> > >  }
-> > > @@ -680,15 +690,19 @@ static bool dpm_async_fn(struct device *
-> > >  static void async_resume_noirq(void *data, async_cookie_t cookie)
-> > >  {
-> > >         struct device *dev =3D data;
-> > > -       int error;
-> > > -
-> > > -       error =3D device_resume_noirq(dev, pm_transition, true);
-> > > -       if (error)
-> > > -               pm_dev_err(dev, pm_transition, " async", error);
-> > >
-> > > +       __device_resume_noirq(dev, pm_transition, true);
-> > >         put_device(dev);
-> > >  }
-> > >
-> > > +static void device_resume_noirq(struct device *dev)
-> > > +{
-> > > +       if (dpm_async_fn(dev, async_resume_noirq))
-> > > +               return;
-> > > +
-> > > +       __device_resume_noirq(dev, pm_transition, false);
-> > > +}
-> > > +
-> > >  static void dpm_noirq_resume_devices(pm_message_t state)
-> > >  {
-> > >         struct device *dev;
-> > > @@ -698,14 +712,6 @@ static void dpm_noirq_resume_devices(pm_
-> > >         mutex_lock(&dpm_list_mtx);
-> > >         pm_transition =3D state;
-> > >
-> > > -       /*
-> > > -        * Advanced the async threads upfront,
-> > > -        * in case the starting of async threads is
-> > > -        * delayed by non-async resuming devices.
-> > > -        */
-> > > -       list_for_each_entry(dev, &dpm_noirq_list, power.entry)
-> > > -               dpm_async_fn(dev, async_resume_noirq);
-> > > -
+> > Tentatively queuing it up and please let me know if it is problematic.
 > >
-> > If I understand correctly, this means that we are no longer going to
-> > run the async devices upfront, right?
+> > Thanks!
+> >
 >
-> Right.
->
-> > Depending on how devices get ordered in the dpm_noirq_list, it sounds
-> > like the above could have a negative impact on the total resume time!?
->
-> It could, but it is unclear at this time whether or not it will.
->
-> > Of course, if all devices would be async capable this wouldn't be a
-> > problem...
->
-> Sure.
->
-> So the existing behavior can be restored with the help of an
-> additional device flag, but I didn't decide to add such a flag just
-> yet.
->
-> I'll probably do it in 6.9, unless the performance impact is serious
-> enough, in which case it can be added earlier.
->
-> I still would prefer to get to a point at which the suspend and resume
-> paths are analogous (from the async POV) and that's what happens after
-> this patch, so I'd say that IMO it is better to address any
-> performance regressions on top of it.
+> I agree, these are not controversial patches, so IMO queuing them is OK.
+> I took a glance at them, but I can do the proper review today if you
+> like.
 
-Fair enough!
-
-[...]
-
-Feel free to add my Reviewed-by for the series!
-
-Kind regards
-Uffe
+Well, if you can allocate some time for that, it would be appreciated!
 
