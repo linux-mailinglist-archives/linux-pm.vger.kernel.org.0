@@ -1,88 +1,104 @@
-Return-Path: <linux-pm+bounces-1772-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1773-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90EE2822BE1
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 12:13:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F6E9822BF9
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 12:19:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F0668B23025
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 11:13:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 016CA1F23CCD
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 11:19:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2473E18E07;
-	Wed,  3 Jan 2024 11:13:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E26A18E0C;
+	Wed,  3 Jan 2024 11:19:03 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92A1F18EA1;
-	Wed,  3 Jan 2024 11:13:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A9F4BC15;
-	Wed,  3 Jan 2024 03:13:47 -0800 (PST)
-Received: from [10.57.85.107] (unknown [10.57.85.107])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8C76C3F7A6;
-	Wed,  3 Jan 2024 03:13:00 -0800 (PST)
-Message-ID: <062556a9-bf24-4f92-9c37-1723984c5127@arm.com>
-Date: Wed, 3 Jan 2024 11:14:18 +0000
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1031018E0D
+	for <linux-pm@vger.kernel.org>; Wed,  3 Jan 2024 11:19:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-6dbca8c6eeeso2365871a34.1
+        for <linux-pm@vger.kernel.org>; Wed, 03 Jan 2024 03:19:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704280741; x=1704885541;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HMNl6kltkXE+YdC+BykUtDHAsS75Qs5ALg2FmWCqRu4=;
+        b=U3F4YlSl9ppRX3Xf+4/3mofHEl47tRC4IGlZmXfRrSOdTBdsVB8Wc8J/4orB6IYAdQ
+         fvxBtj2fsYqpx2Q6RFkBNmzMCSUcXy4jJEvnyONMk4SMAMiip+T0ygMYT5bRUvfqY1Y+
+         N4wb6X4iGIF3lvI3OGSYe6TM3OFj63/HpGIvBnuEFyfTy3VVU4sLmMEw4SNtaAnMMyoq
+         WkoEaOdHmX6+0LYkxGockEJb9ydatbXFJAVOyEarjdvo79iwvA/RdfAiHZhj3NMYFnKz
+         2j7V1NuSqnJT+lHYYPheiPc9xZE/nWP9gxQdSSRjYLcgYKVKr2bJneXYDfYw84Qmn16F
+         ePDg==
+X-Gm-Message-State: AOJu0YxbyfMLQPSty+NVBuv9cTy2tIe9lv3H/jSPjXYsxVmgnteatzIA
+	aETIeeqpPpsv9euE7quhHXf9zhECrzD9EsIvXjJCRre8
+X-Google-Smtp-Source: AGHT+IFxYVQdzgQLFD54mg7yAH62oQ2O1HzI8NRWqjXb6Zw5e/Sf+d/2QJYEap2fRSO5Q89IpnGpEejixEtqm4q6RB4=
+X-Received: by 2002:a05:6820:358:b0:593:fbd5:10aa with SMTP id
+ m24-20020a056820035800b00593fbd510aamr26991899ooe.1.1704280741020; Wed, 03
+ Jan 2024 03:19:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 0/6] thermal: netlink: Redefine the API and drop unused
- code
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Linux PM <linux-pm@vger.kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Linux ACPI <linux-acpi@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-References: <4556052.LvFx2qVVIh@kreacher>
- <CAJZ5v0hRGKjwDv0VLw550CLfUuNGaVXxmvcpbFhS=PCPqY0n4A@mail.gmail.com>
- <b670b0bc-79ea-4be7-a78d-644b344be408@arm.com>
- <CAJZ5v0jcaa8S7g+kKCC9yHHW-7BN0TLWZecOhdNMpHWYFExgHw@mail.gmail.com>
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0jcaa8S7g+kKCC9yHHW-7BN0TLWZecOhdNMpHWYFExgHw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240103110157.5yq5o2hzeq3wwjvc@vireshk-i7>
+In-Reply-To: <20240103110157.5yq5o2hzeq3wwjvc@vireshk-i7>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 3 Jan 2024 12:18:49 +0100
+Message-ID: <CAJZ5v0in-Y8WRcqsXUeHxoDZ1eG0eqnWOrCSs19bepOr+uhATw@mail.gmail.com>
+Subject: Re: [GIT PULL] cpufreq/arm updates for 6.8
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Hi Viresh,
 
+On Wed, Jan 3, 2024 at 12:02=E2=80=AFPM Viresh Kumar <viresh.kumar@linaro.o=
+rg> wrote:
+>
+> Hi Rafael,
+>
+> The following changes since commit 8f96e29aae31354191227ad476dc7f6147ef1d=
+75:
+>
+>   pmdomain: qcom: rpmpd: Set GENPD_FLAG_ACTIVE_WAKEUP (2023-11-23 13:08:0=
+1 +0530)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufr=
+eq-arm-updates-6.8
+>
+> for you to fetch changes up to 0990319a0400db1d6069b5549327cd9105a266d5:
+>
+>   cpufreq: armada-8k: Fix parameter type warning (2023-12-18 11:22:57 +05=
+30)
+>
+> ----------------------------------------------------------------
+> ARM cpufreq updates for 6.8
+>
+> - Check return value of a function in SCMI cpufreq driver (Alexandra Diup=
+ina).
+> - Use 'NULL' instead of '0' in Armada cpufreq driver (Gregory CLEMENT).
+>
+> ----------------------------------------------------------------
+> Alexandra Diupina (1):
+>       cpufreq: scmi: process the result of devm_of_clk_add_hw_provider()
+>
+> Gregory CLEMENT (1):
+>       cpufreq: armada-8k: Fix parameter type warning
+>
+>  drivers/cpufreq/armada-8k-cpufreq.c | 4 ++--
+>  drivers/cpufreq/scmi-cpufreq.c      | 7 +++++--
+>  2 files changed, 7 insertions(+), 4 deletions(-)
+>
+> --
 
-On 1/3/24 10:24, Rafael J. Wysocki wrote:
-> Hi Lukasz,
-> 
-> On Wed, Jan 3, 2024 at 9:10 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> Hi Rafael,
->>
->> On 1/2/24 13:24, Rafael J. Wysocki wrote:
->>> On Fri, Dec 15, 2023 at 9:02 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->>>>
->>>> Hi Everyone,
->>>>
->>>> This patch series redefines the thermal netlink API to be somewhat more
->>>> convenient to use on the caller side and drops some unused code from
->>>> the thermal netlink library.
->>>>
->>>> Please refer to the individual patch changelogs for details.
->>>
->>> No feedback, so this series doesn't appear to be controversial, and I
->>> would like to get it into 6.8.
->>>
->>> Tentatively queuing it up and please let me know if it is problematic.
->>>
->>> Thanks!
->>>
->>
->> I agree, these are not controversial patches, so IMO queuing them is OK.
->> I took a glance at them, but I can do the proper review today if you
->> like.
-> 
-> Well, if you can allocate some time for that, it would be appreciated!
-
-Sure, no problem, I'll do that today.
+Pulled and added to the linux-next branch in linux-pm.git, thanks!
 
