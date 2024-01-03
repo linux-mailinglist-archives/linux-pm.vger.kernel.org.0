@@ -1,109 +1,109 @@
-Return-Path: <linux-pm+bounces-1765-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1766-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49065822B63
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 11:28:52 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0871822B70
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 11:34:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D9B11C23317
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 10:28:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1D8F2B21137
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 10:34:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6706718B0C;
-	Wed,  3 Jan 2024 10:28:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8B7718B0B;
+	Wed,  3 Jan 2024 10:34:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="pKmf45K6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C0D18C01;
-	Wed,  3 Jan 2024 10:28:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-594cabe74f8so342938eaf.0;
-        Wed, 03 Jan 2024 02:28:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704277712; x=1704882512;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=O71FlOOiGk/7AmpyQ57yDmpDlt8Ip4jkuT5waQGee/E=;
-        b=HEcomYPki1NYzWwzTIIX60PuKgJSgEC62nMJEEWif52l6M9LRhsPB42OsghBhY6qgD
-         mZetX1e7n7zV+sTmObo3KIOW1eILHJx/c/LAMQ3tZAWZvyzek3dMxSyqhm+syAWDJlqq
-         Uj3AkWUdnv/gbNwtGBCRWL6NeWYGfQcaZBaI+0rMLEQrCJdOnjQTdxqo4BfZbeOeNzmV
-         XMZ+I3MarQA60be1u4f4hGGWJAhHG0ZUBd9xcsrh/6Y9ZGOx+bZm+6nDcQDczfb+3eXX
-         oENYT8yHaAXUZ6NwbQg2ubTcipIdt28qd+Ykg4o5mL/UJIE8x0/vT6s0famVPdMnURuf
-         Rrag==
-X-Gm-Message-State: AOJu0YxLQJGhRNqQCMCYLI0l+k4y3oHPWQR0+bb1bWmzKm8SEjXUO6IT
-	8ivDxFzHdG22QsQvbBltzRuw44Il3/BPABZDHQ8=
-X-Google-Smtp-Source: AGHT+IHDHVKD4l2m03lvzGargJCfCc+oBOr/CtCjvbAuwmyIHLrwhTBUjyn0GdqiZNPKDkqkraHM2sMA1muQHmOBBks=
-X-Received: by 2002:a4a:e096:0:b0:595:6028:d8cb with SMTP id
- w22-20020a4ae096000000b005956028d8cbmr6936937oos.0.1704277712127; Wed, 03 Jan
- 2024 02:28:32 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C554218C07;
+	Wed,  3 Jan 2024 10:34:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB253C433C7;
+	Wed,  3 Jan 2024 10:34:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1704278041;
+	bh=aWS2YME3848I0ynrLAlho7FFoHCPwzbm0vF7fMYm1is=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pKmf45K6HdKLWkwCnWBjoCLIEIx8ZjwReE5yynxg3/Qf7jwrID7nt62+qAvqexJUt
+	 gugqzkk1v8/V3sDUravrVz6JVtkypqNrKBDyJL+FQhshpEwI5t/3TUUsD5bBHXNctf
+	 3BrHPWIFXPlo4HKXHmGFIX4yMCChL7NLj4J45qic=
+Date: Wed, 3 Jan 2024 11:33:58 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
+	Youngmin Nam <youngmin.nam@samsung.com>,
+	linux-kernel@vger.kernel.org, d7271.choe@samsung.com,
+	janghyuck.kim@samsung.com, hyesoo.yu@samsung.com,
+	Alan Stern <stern@rowland.harvard.edu>
+Subject: Re: [PATCH v1 3/3] PM: sleep: Fix possible deadlocks in core
+ system-wide PM code
+Message-ID: <2024010322-uneven-nanometer-7d6d@gregkh>
+References: <CGME20231227084252epcas2p3b063f7852f81f82cd0a31afd7f404db4@epcas2p3.samsung.com>
+ <5754861.DvuYhMxLoT@kreacher>
+ <6019796.lOV4Wx5bFT@kreacher>
+ <13435856.uLZWGnKmhe@kreacher>
+ <CAPDyKFohQjDzpYpm0QQLM4eTzGOzGfDNKUGHHC-niPBOrtR8BQ@mail.gmail.com>
+ <CAJZ5v0jPtYFk=pPE63CGGL0kuc+N_bZqKdgBMC=PMrwqzHBDTg@mail.gmail.com>
+ <CAPDyKFp5BGpVX5WZxD+u4QELD9KEKVGE41q8mPxM8Eg4dP7RLw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CGME20231227084252epcas2p3b063f7852f81f82cd0a31afd7f404db4@epcas2p3.samsung.com>
- <2023122701-mortify-deed-4e66@gregkh> <5754861.DvuYhMxLoT@kreacher>
- <6019796.lOV4Wx5bFT@kreacher> <CAJZ5v0j6vspzj00ZH66eHtcDP8_fUcaR+KNoaTA8qG1r0hkrVQ@mail.gmail.com>
- <ZZTk9dRlueSuZuAy@perf>
-In-Reply-To: <ZZTk9dRlueSuZuAy@perf>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 3 Jan 2024 11:28:21 +0100
-Message-ID: <CAJZ5v0j=7ePbEhW0+9WBGqgGhafGazyM-APr-ZRsweWDAQ76Vw@mail.gmail.com>
-Subject: Re: [PATCH v1 0/3] PM: sleep: Fix possible device suspend-resume deadlocks
-To: Youngmin Nam <youngmin.nam@samsung.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	Greg KH <gregkh@linuxfoundation.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, d7271.choe@samsung.com, 
-	janghyuck.kim@samsung.com, hyesoo.yu@samsung.com, hs.gil@samsung.com, 
-	yulgon.kim@samsung.com, Alan Stern <stern@rowland.harvard.edu>, 
-	Ulf Hansson <ulf.hansson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPDyKFp5BGpVX5WZxD+u4QELD9KEKVGE41q8mPxM8Eg4dP7RLw@mail.gmail.com>
 
-On Wed, Jan 3, 2024 at 5:39=E2=80=AFAM Youngmin Nam <youngmin.nam@samsung.c=
-om> wrote:
->
-> On Tue, Jan 02, 2024 at 02:18:43PM +0100, Rafael J. Wysocki wrote:
-> > On Wed, Dec 27, 2023 at 9:41=E2=80=AFPM Rafael J. Wysocki <rjw@rjwysock=
-i.net> wrote:
-> > >
-> > > Hi Everyone,
-> > >
-> > > As reported here
-> > >
-> > > https://lore.kernel.org/linux-pm/ZYvjiqX6EsL15moe@perf/
-> > >
-> > > the device suspend-resume code running during system-wide PM transiti=
-ons
-> > > deadlock on low memory, because it attempts to acquire a mutex that's
-> > > already held by it in those cases.
-> > >
-> > > This series addresses the issue by changing the resume code behavior
-> > > to directly run the device PM functions synchronously if they cannot
-> > > be scheduled for asynchronous executions (patch [3/3]).
-> > >
-> > > For this purpose, the async code is rearranged (patch [1/3]) and a
-> > > new variant of async_schedule_dev() is introduced (patch [2/3]).
+On Wed, Jan 03, 2024 at 11:17:18AM +0100, Ulf Hansson wrote:
+> On Tue, 2 Jan 2024 at 14:54, Rafael J. Wysocki <rafael@kernel.org> wrote:
 > >
-> > Given the lack of negative feedback, I've queued up this series for 6.8=
--rc1.
+> > On Tue, Jan 2, 2024 at 2:35 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > >
+> > > On Wed, 27 Dec 2023 at 21:41, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> > > >
+> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > >
+> > > > It is reported that in low-memory situations the system-wide resume core
+> > > > code deadlocks, because async_schedule_dev() executes its argument
+> > > > function synchronously if it cannot allocate memory (an not only then)
+> > > > and that function attempts to acquire a mutex that is already held.
+> > > >
+> > > > Address this by changing the code in question to use
+> > > > async_schedule_dev_nocall() for scheduling the asynchronous
+> > > > execution of device suspend and resume functions and to directly
+> > > > run them synchronously if async_schedule_dev_nocall() returns false.
+> > > >
+> > > > Fixes: 09beebd8f93b ("PM: sleep: core: Switch back to async_schedule_dev()")
+> > > > Link: https://lore.kernel.org/linux-pm/ZYvjiqX6EsL15moe@perf/
+> > > > Reported-by: Youngmin Nam <youngmin.nam@samsung.com>
+> > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > ---
+> > > >
+> > > > The commit pointed to by the Fixes: tag is the last one that modified
+> > > > the code in question, even though the bug had been there already before.
+> > > >
+> > > > Still, the fix will not apply to the code before that commit.
+> > >
+> > > An option could be to just do "Cc: stable@vger.kernel.org # v5.7+"
+> > > instead of pointing to a commit with a Fixes tag.
 > >
-> > Please let me know if there are any issues with that.
-> >
-> > Thanks!
-> >
-> Hi Rafael
->
-> We haven't seen any regression issue under our stress test.
->
-> So, feel free to add
->
-> Tested-by: Youngmin Nam <youngmin.nam@samsung.com>
+> > Right, but one can argue that every commit with a "Cc: stable" tag is
+> > a fix, so it should carry a Fixes: tag too anyway.
+> 
+> Yes, certainly. But in this case it's more questionable as it's not
+> really fixing the commit it points out.
+> 
+> Note that, I have no strong opinion here, but maybe Greg has a preferred way?
 
-Thank you!
+Either is fine with me, just to give me a good hint on how far back a
+commit should be backported to.
+
+thanks,
+
+greg k-h
 
