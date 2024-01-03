@@ -1,185 +1,120 @@
-Return-Path: <linux-pm+bounces-1778-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1779-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C319822D84
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 13:50:42 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F1CE822D95
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 13:54:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8A9261F24211
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 12:50:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0AC68B222FE
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 12:54:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D494519456;
-	Wed,  3 Jan 2024 12:50:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92F711944F;
+	Wed,  3 Jan 2024 12:54:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZVj0QktV"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cOnw9bNd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C18F519445
-	for <linux-pm@vger.kernel.org>; Wed,  3 Jan 2024 12:50:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABA511944C
+	for <linux-pm@vger.kernel.org>; Wed,  3 Jan 2024 12:54:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-dbd7248ac28so6434366276.2
-        for <linux-pm@vger.kernel.org>; Wed, 03 Jan 2024 04:50:30 -0800 (PST)
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-dbd73620c82so6752322276.2
+        for <linux-pm@vger.kernel.org>; Wed, 03 Jan 2024 04:54:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704286230; x=1704891030; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1704286478; x=1704891278; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uMQJge1OFocSBVvJxeeoeFzhMb6jVyBHP21ntl+sV/E=;
-        b=ZVj0QktVZfoenLqVk7AA3TlGU3MUq4uZYDZ12GObE9QSpQ0vYncX+HXpYWgYzgDiQj
-         eb7iUM2VEWVrjvsWAFONkTNjdqmePh9wCIS+q6949O0muCxyKlRhKIVQp04Z6Fv/qkQX
-         DU6w4GKyPMkHFkBPwUe5AeEpK+sHMd8OQTirUnJ/1h7Fgwp/9hvP6LQzKbpxABZVydom
-         rf2TivldeVBM9HFmOcDOvp72DR6ZxnPXg6z6UjrbtTMpdTygnPAb1VThqe59lzXdlwZu
-         w7r7NZEyUZ/zndSYwMUVMkrKMe3N6dwMsbZ9v2nkhiD8uAp63fQ1ZgoY24dcO7I5JYFB
-         9moA==
+        bh=pOGNoa+uoP67gG3C3OdO7eu3hZWCRo+rAfnDqGQ6OWk=;
+        b=cOnw9bNdlSS3KGMy113cvsKHQg220lVPEWJP/CZ7zG7S+/DxwKnQUPhjSflJmYpQaW
+         sPB3bi3+/OIPqpGVpyBpXZ0t+seoM1IALVU9tFE1ikGEhabSNlc8n8qxiV5nL4ThcCEk
+         5BN2jEM5EajpBRzTJIF6+Tex9JcFcZV7OHdKxF56cwGznan4RfKRwlds2/r034FvdHvY
+         n1zk2S9R4vrvHiNIIYPl1eSnngSUPg1PBoZXsQXHTzCEE4IhuBQqrK+Lf5ninxygGTgr
+         bQQDQFHfEzCXZcsd1b5mxViC5gCkavQ1VWjmSCP+Ggj44tRQkrQYjSNtoTEyZWp013P5
+         nYGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704286230; x=1704891030;
+        d=1e100.net; s=20230601; t=1704286478; x=1704891278;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=uMQJge1OFocSBVvJxeeoeFzhMb6jVyBHP21ntl+sV/E=;
-        b=rJQonp1tzgFdAdB6Msk1ac5z9c7rdUZ2t9nANcKEiEB5sip4ck/KdfVNon29sYYo7Z
-         1byd0xj8gG5FBWN6J8TwQiOBURCiBcaC3r5rTfArl5ofoZ0lZR7odYPitwtPidwPlEsg
-         SAY58Obj0TWCfJ1bAeXs3onlOI5D0I4X/voKs9C8/k7JK370C9kQj2AV0fTrxRAbd3Yl
-         X6N2hy6STipI9grMx7yLvVC5YKUo857tkkH7jt51nhrjhGo4K9PPYGU/WFB4BflhfBEw
-         eBY5diIiIhbds1f+7E4inf+ZiNSz7SNjdHiCRC7E/RtiwdF/jHMsoy/oqbPG3toi8WHN
-         eYXw==
-X-Gm-Message-State: AOJu0Yy3dKmOgP9l8XJTSOGrhcrk1hdIAIt/YKOsVpOrDWUKrHuaStwH
-	NjJGibzIzLlXQS5+4qSZPUetENRYfHoyRrB1fVzcf2R/mwWoXg==
-X-Google-Smtp-Source: AGHT+IEli+i1LhMaNCig5qS+FtDFjWedP/VNkzC6jzMcC0RM0qSY5aMRs5tMe1+MaZQwo/pUvmcXTIs/GQCNBQrScXc=
-X-Received: by 2002:a25:840c:0:b0:db7:dacf:3fb2 with SMTP id
- u12-20020a25840c000000b00db7dacf3fb2mr8131789ybk.95.1704286229718; Wed, 03
- Jan 2024 04:50:29 -0800 (PST)
+        bh=pOGNoa+uoP67gG3C3OdO7eu3hZWCRo+rAfnDqGQ6OWk=;
+        b=LrKysMF3ynN92iSd8EcM5iMMGKgUVDVZi2KsTLGDnKxodpQgo7BnKAj/75lEGlxZqx
+         m1hpg0vP6Uis/t1zKfrD+cwGyILMIrmi57NDoE7MHlD6YeKgErJc/PGtNCzdM+xptfI0
+         hCnJk/VSpHBXD7nfHj9vxj+b63UwTzE4rV6idNj3xBdwuNGgwFmTZ9VXhyr9NMYQBqLL
+         iK8yEu9r6gWkweqlQhvtA52OgDJCZtTjz3fLcqudD7MsfsdRBMHhkBbXHteVTH3Ua+iO
+         2/n9KZ8/kCdURxcLLbryGPyVqVrV/WyPmiiPbmFlm0XzoGljjtWUFOWSexHlzDzWLyTc
+         dnPg==
+X-Gm-Message-State: AOJu0YyYdE6LT4j7CK3u9FJwvy7KYUzpbJHw43Qa8pIC34JRHj3htkNg
+	Y1PZr8DY243gbVioIpevb9a75tyiEJtFmEANTuGdgTFu2rKAWw==
+X-Google-Smtp-Source: AGHT+IEixB+WBNhbDXVIfjA3/lNv5WlNF7f1gcgq06js9K5QExKPJiNz8iPEs2JGsGvCguUuLd4AYEFxFy6bIiDoz20=
+X-Received: by 2002:a25:d245:0:b0:dbc:f8ff:c7d7 with SMTP id
+ j66-20020a25d245000000b00dbcf8ffc7d7mr9690250ybg.37.1704286478608; Wed, 03
+ Jan 2024 04:54:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231228114157.104822-1-ulf.hansson@linaro.org>
- <20231228114157.104822-2-ulf.hansson@linaro.org> <22330d85-1d5c-48de-b006-9176f275328e@quicinc.com>
-In-Reply-To: <22330d85-1d5c-48de-b006-9176f275328e@quicinc.com>
+References: <20231220-sa8295p-gpu-v2-0-4763246b72c0@quicinc.com> <20231220-sa8295p-gpu-v2-4-4763246b72c0@quicinc.com>
+In-Reply-To: <20231220-sa8295p-gpu-v2-4-4763246b72c0@quicinc.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 3 Jan 2024 13:49:53 +0100
-Message-ID: <CAPDyKFqcB_ANOBsJBitjdgdUs2G8B3qWWvD54Bmw56ZoUKNWAg@mail.gmail.com>
-Subject: Re: [PATCH 1/5] PM: domains: Add helper functions to attach/detach
- multiple PM domains
-To: Nikunj Kela <quic_nkela@quicinc.com>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org, 
-	Sudeep Holla <sudeep.holla@arm.com>, Kevin Hilman <khilman@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Nikunj Kela <nkela@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, 
-	Stephan Gerhold <stephan@gerhold.net>, Ben Horgan <Ben.Horgan@arm.com>, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-remoteproc@vger.kernel.org, 
-	linux-media@vger.kernel.org
+Date: Wed, 3 Jan 2024 13:54:02 +0100
+Message-ID: <CAPDyKFoD-+2q4sDZL3J-2a2kGUmBXpUc6vj8zxzaO72O_Ksj7g@mail.gmail.com>
+Subject: Re: [PATCH v2 4/8] soc: qcom: rpmhpd: Drop SA8540P gfx.lvl
+To: Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Taniya Das <quic_tdas@quicinc.com>, Johan Hovold <johan+linaro@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org, 
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, 
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 
-On Fri, 29 Dec 2023 at 21:21, Nikunj Kela <quic_nkela@quicinc.com> wrote:
+On Fri, 22 Dec 2023 at 05:39, Bjorn Andersson <quic_bjorande@quicinc.com> wrote:
 >
+> On SA8295P and SA8540P gfx.lvl is not provdied by rpmh, but rather is
+> handled by an external regulator (max20411). Drop gfx.lvl from the list
+> of power-domains exposed on this platform.
 >
-> On 12/28/2023 3:41 AM, Ulf Hansson wrote:
-> > Attaching/detaching of a device to multiple PM domains has started to
-> > become a common operation for many drivers, typically during ->probe() and
-> > ->remove(). In most cases, this has lead to lots of boilerplate code in the
-> > drivers.
-> >
-> > To fixup up the situation, let's introduce a pair of helper functions,
-> > dev_pm_domain_attach|detach_list(), that driver can use instead of the
-> > open-coding. Note that, it seems reasonable to limit the support for these
-> > helpers to DT based platforms, at it's the only valid use case for now.
-> >
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > ---
-> >   drivers/base/power/common.c | 133 ++++++++++++++++++++++++++++++++++++
-> >   include/linux/pm_domain.h   |  38 +++++++++++
-> >   2 files changed, 171 insertions(+)
-> >
-> > diff --git a/drivers/base/power/common.c b/drivers/base/power/common.c
-> > index 44ec20918a4d..1ef51889fc6f 100644
-> > --- a/drivers/base/power/common.c
-> > +++ b/drivers/base/power/common.c
-> > @@ -167,6 +167,114 @@ struct device *dev_pm_domain_attach_by_name(struct device *dev,
-> >   }
-> >   EXPORT_SYMBOL_GPL(dev_pm_domain_attach_by_name);
-> >
-> > +/**
-> > + * dev_pm_domain_attach_list - Associate a device with its PM domains.
-> > + * @dev: The device used to lookup the PM domains for.
-> > + * @data: The data used for attaching to the PM domains.
-> > + * @list: An out-parameter with an allocated list of attached PM domains.
-> > + *
-> > + * This function helps to attach a device to its multiple PM domains. The
-> > + * caller, which is typically a driver's probe function, may provide a list of
-> > + * names for the PM domains that we should try to attach the device to, but it
-> > + * may also provide an empty list, in case the attach should be done for all of
-> > + * the available PM domains.
-> > + *
-> > + * Callers must ensure proper synchronization of this function with power
-> > + * management callbacks.
-> > + *
-> > + * Returns the number of attached PM domains or a negative error code in case of
-> > + * a failure. Note that, to detach the list of PM domains, the driver shall call
-> > + * dev_pm_domain_detach_list(), typically during the remove phase.
-> > + */
-> > +int dev_pm_domain_attach_list(struct device *dev,
-> > +                           const struct dev_pm_domain_attach_data *data,
-> > +                           struct dev_pm_domain_list **list)
-> > +{
-> > +     struct device_node *np = dev->of_node;
-> > +     struct dev_pm_domain_list *pds;
-> > +     struct device *pd_dev = NULL;
-> > +     int ret, i, num_pds = 0;
-> > +     bool by_id = true;
-> > +     u32 link_flags = data && data->pd_flags & PD_FLAG_NO_DEV_LINK ? 0 :
-> > +                     DL_FLAG_STATELESS | DL_FLAG_PM_RUNTIME;
-> > +
-> > +     if (dev->pm_domain)
-> > +             return -EEXIST;
-> > +
-> > +     /* For now this is limited to OF based platforms. */
-> > +     if (!np)
-> > +             return 0;
-> > +
-> > +     if (data && data->pd_names) {
-> > +             num_pds = data->num_pd_names;
-> > +             by_id = false;
-> > +     } else {
-> > +             num_pds = of_count_phandle_with_args(np, "power-domains",
-> > +                                                  "#power-domain-cells");
-> > +     }
-> > +
-> > +     if (num_pds <= 0)
-> > +             return 0;
-> > +
-> > +     pds = devm_kzalloc(dev, sizeof(*pds), GFP_KERNEL);
-> > +     if (!pds)
-> > +             return -ENOMEM;
-> > +
-> > +     pds->pd_devs = devm_kcalloc(dev, num_pds, sizeof(*pds->pd_devs),
-> > +                                 GFP_KERNEL);
-> > +     if (!pds->pd_devs)
-> > +             return -ENOMEM;
-> > +
-> > +     pds->pd_links = devm_kcalloc(dev, num_pds, sizeof(*pds->pd_links),
-> > +                                  GFP_KERNEL);
-> > +     if (!pds->pd_links)
-> > +             return -ENOMEM;
-> > +
-> > +     if (link_flags && data->pd_flags & PD_FLAG_DEV_LINK_ON)
->
-> Since data is optional, this check results in crash if data is NULL. Thanks
+> Fixes: f68f1cb3437d ("soc: qcom: rpmhpd: add sc8280xp & sa8540p rpmh power-domains")
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 
-Thanks for spotting this! I certainly tested that option too, but must
-have been on some earlier internal version. :-)
+I guess it's easier if you funnel this through the soc tree - or you
+prefer if I take it through my pmdomain tree?
 
-I will iterate the series tomorrow to fix this up.
-
-[...]
+No matter what, feel free to add:
+Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
 
 Kind regards
 Uffe
+
+> ---
+>  drivers/pmdomain/qcom/rpmhpd.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/drivers/pmdomain/qcom/rpmhpd.c b/drivers/pmdomain/qcom/rpmhpd.c
+> index 3078896b1300..27a73ff72614 100644
+> --- a/drivers/pmdomain/qcom/rpmhpd.c
+> +++ b/drivers/pmdomain/qcom/rpmhpd.c
+> @@ -217,7 +217,6 @@ static struct rpmhpd *sa8540p_rpmhpds[] = {
+>         [SC8280XP_CX] = &cx,
+>         [SC8280XP_CX_AO] = &cx_ao,
+>         [SC8280XP_EBI] = &ebi,
+> -       [SC8280XP_GFX] = &gfx,
+>         [SC8280XP_LCX] = &lcx,
+>         [SC8280XP_LMX] = &lmx,
+>         [SC8280XP_MMCX] = &mmcx,
+>
+> --
+> 2.25.1
+>
 
