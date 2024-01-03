@@ -1,211 +1,176 @@
-Return-Path: <linux-pm+bounces-1756-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1757-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2745D8227C7
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 05:14:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5AB98227D9
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 05:39:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BAA7B1F23905
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 04:14:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70DC9282856
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 04:39:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB9DA1802A;
-	Wed,  3 Jan 2024 04:13:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16B7D33C4;
+	Wed,  3 Jan 2024 04:39:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cXms+410"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="MJB9Ud66"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 809B11774E;
-	Wed,  3 Jan 2024 04:13:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704255205; x=1735791205;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=HGzNCG5g7llZWM6V7G5bX9v6oQIYTajXgZNc9d2qMM4=;
-  b=cXms+410UF1oo/eQEHOqLsd7IDeqDIgkzP0edTUDPnq3+wLrtk6fKnmV
-   sHagjRq/fld5WDKoZhDCeN2nUZcVInKKip9E4hol8xnxncEf8796HTC90
-   /cYTvXeJndFzwD+mEP7J4t/GQVt2n0uAry4YyUcYFSKDPhZUTEJvovgcc
-   NlZCkriGWxjfXApC7iGxwlkqdvzH0mrx7x9ZdMiHhEXkI3LMdjgflV0Ol
-   u2L5SCks5eoz5YgdDc031tS9i6FhfEX7g+ldF4yLvKhz5ESGXX8zeCPdh
-   Z+sKrP5Hb9xQmdCtdlu61/bwL14OilYwtnuWmUbySS9Fk8tPaOn50bZ6C
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10941"; a="463357399"
-X-IronPort-AV: E=Sophos;i="6.04,326,1695711600"; 
-   d="scan'208";a="463357399"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2024 20:13:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10941"; a="1026957015"
-X-IronPort-AV: E=Sophos;i="6.04,326,1695711600"; 
-   d="scan'208";a="1026957015"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga006.fm.intel.com with ESMTP; 02 Jan 2024 20:13:21 -0800
-From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc: Chen Yu <yu.c.chen@intel.com>,
-	Len Brown <len.brown@intel.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Zhao Liu <zhao1.liu@intel.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/4] thermal: intel: hfi: Add a suspend notifier
-Date: Tue,  2 Jan 2024 20:14:59 -0800
-Message-Id: <20240103041459.11113-5-ricardo.neri-calderon@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20240103041459.11113-1-ricardo.neri-calderon@linux.intel.com>
-References: <20240103041459.11113-1-ricardo.neri-calderon@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FDE6171C8
+	for <linux-pm@vger.kernel.org>; Wed,  3 Jan 2024 04:39:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20240103043921epoutp0263ab2a14033d964234da6a6698225e76~mvH68-kAo1415514155epoutp02r
+	for <linux-pm@vger.kernel.org>; Wed,  3 Jan 2024 04:39:21 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20240103043921epoutp0263ab2a14033d964234da6a6698225e76~mvH68-kAo1415514155epoutp02r
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1704256761;
+	bh=+z+RwFYXciET0SiS/y+SreGeC/xbNenokiOyj2egkPE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=MJB9Ud66/2xJxSXxJGIZm6lUcHCxPjJ9qC8IseKZX6vr2EN+S1jjSjhYqqHb10ak8
+	 Aa3+OxyWTtJ3As7Oxrsu0nf09BdebGoQVVu7OGU/1eXjusgZcC1Uiq2D9Eobj3+PYX
+	 ch7XPBjaLHjMBDNo55h+Pa6w0d78oJZ5L+4RWJQA=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+	epcas2p1.samsung.com (KnoxPortal) with ESMTP id
+	20240103043920epcas2p1d0a5bce4ee9d59f04a85ab496f5fb66b~mvH6QlcGg3186931869epcas2p1E;
+	Wed,  3 Jan 2024 04:39:20 +0000 (GMT)
+Received: from epsmges2p1.samsung.com (unknown [182.195.36.101]) by
+	epsnrtp1.localdomain (Postfix) with ESMTP id 4T4cSS1rTKz4x9Pr; Wed,  3 Jan
+	2024 04:39:20 +0000 (GMT)
+Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
+	epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
+	AC.06.10006.8F4E4956; Wed,  3 Jan 2024 13:39:20 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+	epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+	20240103043919epcas2p4932e1a901dda96a736ea6892ee626ae0~mvH5Wr_mj1796717967epcas2p4g;
+	Wed,  3 Jan 2024 04:39:19 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20240103043919epsmtrp11d1f22ca2e33346b78d86f60fa9404e8~mvH5V6LCA0271402714epsmtrp1l;
+	Wed,  3 Jan 2024 04:39:19 +0000 (GMT)
+X-AuditID: b6c32a45-179ff70000002716-c2-6594e4f81272
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	EB.59.08817.7F4E4956; Wed,  3 Jan 2024 13:39:19 +0900 (KST)
+Received: from perf (unknown [10.229.95.91]) by epsmtip2.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20240103043919epsmtip2edd1902343f8e3ecbc95c637ef26de16~mvH5Iv5tQ0657406574epsmtip2M;
+	Wed,  3 Jan 2024 04:39:19 +0000 (GMT)
+Date: Wed, 3 Jan 2024 13:39:17 +0900
+From: Youngmin Nam <youngmin.nam@samsung.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki"
+	<rjw@rjwysocki.net>
+Cc: Greg KH <gregkh@linuxfoundation.org>, linux-pm@vger.kernel.org, Youngmin
+	Nam <youngmin.nam@samsung.com>, rafael@kernel.org,
+	linux-kernel@vger.kernel.org, d7271.choe@samsung.com,
+	janghyuck.kim@samsung.com, hyesoo.yu@samsung.com, hs.gil@samsung.com,
+	yulgon.kim@samsung.com, Alan Stern <stern@rowland.harvard.edu>, Ulf Hansson
+	<ulf.hansson@linaro.org>
+Subject: Re: [PATCH v1 0/3] PM: sleep: Fix possible device suspend-resume
+ deadlocks
+Message-ID: <ZZTk9dRlueSuZuAy@perf>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+In-Reply-To: <CAJZ5v0j6vspzj00ZH66eHtcDP8_fUcaR+KNoaTA8qG1r0hkrVQ@mail.gmail.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrPJsWRmVeSWpSXmKPExsWy7bCmqe6PJ1NSDR71c1lc2zuR3aJ58Xo2
+	i63z5zFb/O28wGqxeU6xxeVdc9gsPvceYbSY+2Uqs8WZ05dYLSb8vsBmcXxtuMXiA5/YLTrO
+	HmR34PXYtKqTzePOtT1sHvvnrmH32HK1ncVj9t0fjB59W1YxenzeJBfAHpVtk5GamJJapJCa
+	l5yfkpmXbqvkHRzvHG9qZmCoa2hpYa6kkJeYm2qr5OIToOuWmQN0rJJCWWJOKVAoILG4WEnf
+	zqYov7QkVSEjv7jEVim1ICWnwLxArzgxt7g0L10vL7XEytDAwMgUqDAhO6Nr0wH2gofcFS+v
+	7mVuYLzG2cXIySEhYCLxZFknUxcjF4eQwA5GiYY9T1kgnE+MEt83zWSGcL4xSkycdJQNpqVj
+	12s2iMReRon5TzezQzgPGSWuHJvCDlLFIqAi8a19LQuIzSagK7HtxD9GEFtEIExiX88xsAZm
+	gVdMEo+6bzKDJIQFQiU6G7rAGngFlCUO313OBGELSpyc+QQszikQKPFj8SJWkGYJgR0cEu/e
+	Poe6yUWiYXYPK4QtLPHq+BZ2CFtK4mV/G5RdLNFw/xYzRHMLo8Sp6y+YIRLGErOetYOdxyyQ
+	KbHr6h+gQRxAcWWJI7dYIMJ8Eh2H/7JDhHklOtqEIDrVJH5N2cAIYctI7F68Amqih8TeNx+g
+	odrFJDHnzj72CYxys5D8MwvJtllAY5kFNCXW79KHCMtLNG+dzQwRlpZY/o8DScUCRrZVjGKp
+	BcW56anFRgWG8OhOzs/dxAhOyVquOxgnv/2gd4iRiYPxEKMEB7OSCO/6dZNThXhTEiurUovy
+	44tKc1KLDzGaAiNqIrOUaHI+MCvklcQbmlgamJiZGZobmRqYK4nz3mudmyIkkJ5YkpqdmlqQ
+	WgTTx8TBKdXAtMWcb5WwzzRvy+v3ZrhcvfD9tl/Qc3Wz1FZL9g0X/EOc9odpb17JdN768NTg
+	4vXaj3cd83XhbLhUW+NZbGOZ/WdT+8uvksaNPv92X7TW5f04m6EuqimmZmnKfN3+h1dK7hnu
+	FjYxM1E/dNT9rGakz9anJ6ZFhjyapJCs2J7j2c+RbRiv7vH5X8ru4NKamdF5v830pGfkrFn0
+	9t+TUH1+Xb+9qc9kd72dneyRrnGZ7VhqckDF+ShJG0eFP6f+Cn66lrhHcOnZnsZL39Pkme13
+	R1ZM+jrROlaoYtEdPqvLfxKj+b34ZI80z1JTKX5/qWnfGoa4/WwSK0sz6l5cVp0Y28b6zt9x
+	oUm7zLunZ5mUWIozEg21mIuKEwH56wNeUgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprAIsWRmVeSWpSXmKPExsWy7bCSvO73J1NSDZp3aFtc2zuR3aJ58Xo2
+	i63z5zFb/O28wGqxeU6xxeVdc9gsPvceYbSY+2Uqs8WZ05dYLSb8vsBmcXxtuMXiA5/YLTrO
+	HmR34PXYtKqTzePOtT1sHvvnrmH32HK1ncVj9t0fjB59W1YxenzeJBfAHsVlk5Kak1mWWqRv
+	l8CVMePZGtaCBs6KHcfPsjYwTmTvYuTkkBAwkejY9Zqti5GLQ0hgN6PEkd5nrBAJGYnbKy9D
+	2cIS91uOsEIU3WeU2L94ORNIgkVAReJb+1oWEJtNQFdi24l/jCC2iECYxMRjb8BqmAXeMEks
+	+qoMYgsLhEp0NnSB1fMKKEscvgsyB2RoD5PEiwtHoRKCEidnPmGBaFaX+DPvEnMXIweQLS2x
+	/B8HRFheonnrbGYQm1MgUOLH4kWsExgFZyHpnoWkexZC9ywk3QsYWVYxSqYWFOem5xYbFhjl
+	pZbrFSfmFpfmpesl5+duYgRHmpbWDsY9qz7oHWJk4mA8xCjBwawkwrt+3eRUId6UxMqq1KL8
+	+KLSnNTiQ4zSHCxK4rzfXvemCAmkJ5akZqemFqQWwWSZODilGphO+HPUmd8yex6U8XaZ85LF
+	XyvKr+3i+3dM67JbVcpm0ZOLYh+s3b9raolXcOuhJydZs4rXJWmumVpfJ3DA7NblGQXhV9bU
+	lM2dpN2w6ll7cVVwXEpwduTSKv5z1im+WWFf/O5mzD6c0qM/t6WJNWLPhQfRgZ4uzvm6pXMX
+	FqXavjM7csXkaPatKOeyReqrJpZdu7Tm+yP98uOeXDpMXAIHv34Kjaq3NX1kr55Q3n9jweVa
+	DavjyYvPLTl7ULCCU1vsSofBx1cFs55nfw3dKHK48fzi3uT+8gT/nuyZWX2vn64JmvN+78ML
+	SjpPY/o5eW/MnuZktj5izd9JLexmL8SOaPKvnsnv0hi9vW53wm4lluKMREMt5qLiRADb95Rt
+	IwMAAA==
+X-CMS-MailID: 20240103043919epcas2p4932e1a901dda96a736ea6892ee626ae0
+X-Msg-Generator: CA
+Content-Type: multipart/mixed;
+	boundary="----beKDcrNeaD4oBIFRuchmvdVAwfnDGI5TYPt7fforSuRq9wgD=_182864_"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20231227084252epcas2p3b063f7852f81f82cd0a31afd7f404db4
+References: <CGME20231227084252epcas2p3b063f7852f81f82cd0a31afd7f404db4@epcas2p3.samsung.com>
+	<2023122701-mortify-deed-4e66@gregkh> <5754861.DvuYhMxLoT@kreacher>
+	<6019796.lOV4Wx5bFT@kreacher>
+	<CAJZ5v0j6vspzj00ZH66eHtcDP8_fUcaR+KNoaTA8qG1r0hkrVQ@mail.gmail.com>
 
-The kernel gives the HFI hardware a memory region that the latter uses to
-provide updates to the HFI table. The kernel allocates this memory region
-at boot. It remains constant throughout runtime time.
+------beKDcrNeaD4oBIFRuchmvdVAwfnDGI5TYPt7fforSuRq9wgD=_182864_
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Content-Disposition: inline
 
-When resuming from suspend or hibernation, the restore kernel allocates a
-second memory buffer and reprograms the HFI hardware with the new location
-as part of a normal boot. The location of the second memory buffer may
-differ from the one allocated by the image kernel. Subsequently, when the
-restore kernel transfers control to the image kernel, the second buffer
-becomes invalid, potentially leading to memory corruption if the hardware
-writes to it (hardware continues using the buffer from the restore kernel).
+On Tue, Jan 02, 2024 at 02:18:43PM +0100, Rafael J. Wysocki wrote:
+> On Wed, Dec 27, 2023 at 9:41 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> >
+> > Hi Everyone,
+> >
+> > As reported here
+> >
+> > https://lore.kernel.org/linux-pm/ZYvjiqX6EsL15moe@perf/
+> >
+> > the device suspend-resume code running during system-wide PM transitions
+> > deadlock on low memory, because it attempts to acquire a mutex that's
+> > already held by it in those cases.
+> >
+> > This series addresses the issue by changing the resume code behavior
+> > to directly run the device PM functions synchronously if they cannot
+> > be scheduled for asynchronous executions (patch [3/3]).
+> >
+> > For this purpose, the async code is rearranged (patch [1/3]) and a
+> > new variant of async_schedule_dev() is introduced (patch [2/3]).
+> 
+> Given the lack of negative feedback, I've queued up this series for 6.8-rc1.
+> 
+> Please let me know if there are any issues with that.
+> 
+> Thanks!
+> 
+Hi Rafael
 
-Add a suspend notifier to disable all HFI instances before jumping to the
-image kernel and enable them once the image kernel has been restored. Use
-the memory buffer that the image kernel allocated.
+We haven't seen any regression issue under our stress test.
 
-For non-boot CPUs, rely on the CPU hotplug callbacks as CPUs are disabled
-and enabled during suspend and resume, respectively.
+So, feel free to add
 
-The CPU hotplug callbacks do not cover the boot CPU. Handle the HFI
-instance of the boot CPU from the suspend notifier callback.
+Tested-by: Youngmin Nam <youngmin.nam@samsung.com>
 
-Cc: Chen Yu <yu.c.chen@intel.com>
-Cc: Len Brown <len.brown@intel.com>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Cc: Zhang Rui <rui.zhang@intel.com>
-Cc: Zhao Liu <zhao1.liu@linux.intel.com>
-Cc: linux-pm@vger.kernel.org
-Cc: stable@vger.kernel.org    # 6.1
-Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
---
-Changes since v1:
- * Moved registration of the suspend notifier towards the end of
-   intel_hfi_init(). (Stan)
- * Renamed hfi_do_pm_[enable|disable]() to hfi_do_[enable|disable](). Stan
-   will use these functions outside the suspend notifier. (Stan)
- * Added locking to calls to hfi_[enable|disable]() from the suspend
-   notifier. (Rafael)
----
- drivers/thermal/intel/intel_hfi.c | 62 +++++++++++++++++++++++++++++++
- 1 file changed, 62 insertions(+)
+Thanks.
 
-diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-index 22445403b520..8d6e4f8dc67a 100644
---- a/drivers/thermal/intel/intel_hfi.c
-+++ b/drivers/thermal/intel/intel_hfi.c
-@@ -30,11 +30,13 @@
- #include <linux/kernel.h>
- #include <linux/math.h>
- #include <linux/mutex.h>
-+#include <linux/notifier.h>
- #include <linux/percpu-defs.h>
- #include <linux/printk.h>
- #include <linux/processor.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
-+#include <linux/suspend.h>
- #include <linux/string.h>
- #include <linux/topology.h>
- #include <linux/workqueue.h>
-@@ -571,6 +573,60 @@ static __init int hfi_parse_features(void)
- 	return 0;
- }
- 
-+static void hfi_do_enable(void *info)
-+{
-+	struct hfi_instance *hfi_instance = info;
-+
-+	hfi_set_hw_table(hfi_instance);
-+	hfi_enable();
-+}
-+
-+static void hfi_do_disable(void *info)
-+{
-+	hfi_disable();
-+}
-+
-+static int hfi_pm_notify(struct notifier_block *nb,
-+			 unsigned long mode, void *unused)
-+{
-+	struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, 0);
-+	struct hfi_instance *hfi = info->hfi_instance;
-+	int ret = 0;
-+
-+	/* HFI may not be in use. */
-+	if (!hfi)
-+		return ret;
-+
-+	mutex_lock(&hfi_instance_lock);
-+	/*
-+	 * Only handle the HFI instance of the package of the boot CPU. The
-+	 * instances of other packages are handled in the CPU hotplug callbacks.
-+	 */
-+	switch (mode) {
-+	case PM_HIBERNATION_PREPARE:
-+	case PM_SUSPEND_PREPARE:
-+	case PM_RESTORE_PREPARE:
-+		ret = smp_call_function_single(0, hfi_do_disable, NULL, true);
-+		break;
-+
-+	case PM_POST_RESTORE:
-+	case PM_POST_HIBERNATION:
-+	case PM_POST_SUSPEND:
-+		ret = smp_call_function_single(0, hfi_do_enable, hfi, true);
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	mutex_unlock(&hfi_instance_lock);
-+
-+	return ret;
-+}
-+
-+static struct notifier_block hfi_pm_nb = {
-+	.notifier_call = hfi_pm_notify,
-+};
-+
- void __init intel_hfi_init(void)
- {
- 	struct hfi_instance *hfi_instance;
-@@ -602,8 +658,14 @@ void __init intel_hfi_init(void)
- 	if (!hfi_updates_wq)
- 		goto err_nomem;
- 
-+	if (register_pm_notifier(&hfi_pm_nb))
-+		goto err_pm_notif;
-+
- 	return;
- 
-+err_pm_notif:
-+	destroy_workqueue(hfi_updates_wq);
-+
- err_nomem:
- 	for (j = 0; j < i; ++j) {
- 		hfi_instance = &hfi_instances[j];
--- 
-2.25.1
+------beKDcrNeaD4oBIFRuchmvdVAwfnDGI5TYPt7fforSuRq9wgD=_182864_
+Content-Type: text/plain; charset="utf-8"
 
+
+------beKDcrNeaD4oBIFRuchmvdVAwfnDGI5TYPt7fforSuRq9wgD=_182864_--
 
