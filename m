@@ -1,137 +1,176 @@
-Return-Path: <linux-pm+bounces-1776-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1777-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 190E1822D2A
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 13:36:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F9B9822D32
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 13:37:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC5511F24238
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 12:36:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B28C9B2315A
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 12:37:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9590D285;
-	Wed,  3 Jan 2024 12:36:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59C30D285;
+	Wed,  3 Jan 2024 12:37:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dbb8Q4bR"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="pTtMnMx2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F422718EDD
-	for <linux-pm@vger.kernel.org>; Wed,  3 Jan 2024 12:36:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-555e07761acso3959888a12.0
-        for <linux-pm@vger.kernel.org>; Wed, 03 Jan 2024 04:36:13 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B689F19442
+	for <linux-pm@vger.kernel.org>; Wed,  3 Jan 2024 12:37:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3bbd6e3795eso4072017b6e.2
+        for <linux-pm@vger.kernel.org>; Wed, 03 Jan 2024 04:37:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704285372; x=1704890172; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+s0dp5DatYp/J08ZyMTNZZ+6BOa/8d/K9WWRhoOwgwk=;
-        b=dbb8Q4bREAgqg2O/0WZg7vzaHoBjokOt3xYNGXitczDVqUXi6S8z7o2fvXsm9K3QB3
-         J3UPLElRLbtpUGB0tSgxfkfEeIwB8CTjPEs008hKX++YiBgZ6pskPNtjVhLtmHbvje0K
-         T5PjIgrEn8glssCm+99fGoy/ey/U0abnPxN+BXrLAz2lz0MC85fQ27LcKyP3nmnEPYg/
-         8HHI/BnAl2jkViRCQxyxSXImmlDdvJgWVDzrUx9nbz02gx5Yh8nr+NYUGcQqCuTAR3rc
-         pmbJdOoPmcCQ0mE78jRQh+c7IXIIsUnYmd0uKR9XwKC6P6S4Sm8/jBEf4/T/rwM3bUdD
-         8tLQ==
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1704285439; x=1704890239; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZLccUbZIGCcP0SHupasCqIR7GlneVkbwyHPzOk4+FWI=;
+        b=pTtMnMx2Dd6Ib/srhSD0IBNQ/tZkns0405RlZKYcJ3rZRkRANSxfl9YPuuOziBinwU
+         EakZC5Urh8VCwCMnkkNB1Xi4ATXhu72JWanpGlldF9t6LQGWodH6wRz425mjqkj86674
+         +UpyqTvTXZalgxixcy7OZwoIdmm2Pfgs1FKszJ/xuE96+s/VHZzlzN7XY3EzbuW6CaUY
+         az+HPDgrFty/yQR+7/U6ken5nHdIUvhwsS171trJSFiy94TVKMMSRiZhaDhkpGDlkqbw
+         RGXZjoKENvVuXARri6SEDV/tYnM8hiVwbMmItYw1DZa4dzlRbpSuzV6YABxRZyb7yCr+
+         1KyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704285372; x=1704890172;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1704285439; x=1704890239;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+s0dp5DatYp/J08ZyMTNZZ+6BOa/8d/K9WWRhoOwgwk=;
-        b=XkOjQ2a/0qFDvpB/xEUC2m7jeyn8PmacAWCSsqa+O0PsJh9a2HmPqbo1kjR1e3AUi8
-         wryr6egBtI6+DqQlOVfMLApaj+akQyW8Mx1YXY3tNM3T2AOdNSFrEGA9DKogxa9ALN4a
-         OCqQ2nPtHeO0akFgTeTubgkD5ELzntGimJm3Yx6lOKthOTbLrms60qtW4ufgC1Kox6Rk
-         /n0C2o/rP6PrNe04LmcRhS/l0Gq49vpnyM5VdMv87aB9zFpFvQ9ogVeaL6BQ4cggZvNC
-         JMuwAruoBOAKxpxbaAsNqbZIiy0dLt25Zctb8Jp+PuwDO1X/enM3hur27uN9xjkvLHO7
-         d/3g==
-X-Gm-Message-State: AOJu0Ywuc3sLsFZUsXyxosNfkgCcpJJZOzIcPPTyOAX+f67eOnV6/OMs
-	DEpPYNf3EwOwAICa3r+uTY32yl1Q3vkzNA==
-X-Google-Smtp-Source: AGHT+IHTlIV+MUjfHZN7D2+8CQ5/YdFs4/QpJ1lfvSWj3f2hRKi89REdhRo6RrqHGFuZMpezboV/nA==
-X-Received: by 2002:a50:9e67:0:b0:555:1b4f:6908 with SMTP id z94-20020a509e67000000b005551b4f6908mr4543723ede.49.1704285372272;
-        Wed, 03 Jan 2024 04:36:12 -0800 (PST)
-Received: from [10.167.154.1] (178235179036.dynamic-4-waw-k-1-3-0.vectranet.pl. [178.235.179.36])
-        by smtp.gmail.com with ESMTPSA id r14-20020a056402018e00b00556d13abcc7sm675362edv.85.2024.01.03.04.36.11
+        bh=ZLccUbZIGCcP0SHupasCqIR7GlneVkbwyHPzOk4+FWI=;
+        b=DCW2vmlX4JfxpG1LX9x9cQ3N9lBqB9CeFM3427HClRonoOOO7XEqbcf8qeyCmgq0Wm
+         XdmYoQrdyhEn+X6HxT5InAICMv1f4Tq1f8cqPUOTtMP0/eMQL0aF4vtJIcz6pk2VRtCi
+         DPEYNqbRFHFjVxS1cs0UDa0Q82HbfLEbg5j/FnZ+XmOenoJl1so2hSha70mkTqSGz8cx
+         dbXVT1RgVHQd1/rRaYjDtPHdOSDSqLQ9gSp0A1p5z5j9wOQc9eHMCEOxyY5HAX0fCc9b
+         Xcc3y/R2ROTHVgmiMHhk9yWp+szyUQbPg1xsTs8RhDjDWuMFr+lNOOsgS0wV++RbMUtK
+         VNcQ==
+X-Gm-Message-State: AOJu0YwcPVU2Y5IHnuVTKA0hNSTbM3So5cYuHYQ2BSdFU1xLtGEEIw5m
+	qaJqYGuiIGoOPr0RL0z1e7CF6XAW4NCTsQ==
+X-Google-Smtp-Source: AGHT+IFTWu9ZF2v9uZVIwbB2l7jihwAxH6AoOzZAtgp0S2w2f4BSwf9IzryqMfqp9ns3/l3rItK0dQ==
+X-Received: by 2002:a05:6358:7e56:b0:172:e470:39f2 with SMTP id p22-20020a0563587e5600b00172e47039f2mr19823306rwm.24.1704285439651;
+        Wed, 03 Jan 2024 04:37:19 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id q23-20020a056a0002b700b006d9a4a4b14dsm18801262pfs.68.2024.01.03.04.37.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jan 2024 04:36:11 -0800 (PST)
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Date: Wed, 03 Jan 2024 13:36:08 +0100
-Subject: [PATCH v2] power: supply: qcom_battmgr: Ignore notifications
- before initialization
+        Wed, 03 Jan 2024 04:37:19 -0800 (PST)
+Message-ID: <659554ff.050a0220.863b0.51cc@mx.google.com>
+Date: Wed, 03 Jan 2024 04:37:19 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240103-topic-battmgr2-v2-1-c07b9206a2a5@linaro.org>
-X-B4-Tracking: v=1; b=H4sIALdUlWUC/x2N0QqDMAwAf0XyvEBbdYP9ythDGqMGXJW0joH47
- 5Y93sFxB2QxlQzP5gCTr2ZdU4Vwa4BnSpOgDpUhuNA571os66aMkUr5TBbQ9+wfI/F9aHuoUaQ
- sGI0SzzVL+7JUuZmM+vtfXu/zvACz+6zvdQAAAA==
-To: Bjorn Andersson <andersson@kernel.org>, 
- Sebastian Reichel <sre@kernel.org>
-Cc: Marijn Suijten <marijn.suijten@somainline.org>, 
- Sebastian Reichel <sebastian.reichel@collabora.com>, 
- linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Xilin Wu <wuxilin123@gmail.com>, 
- Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1704285371; l=1885;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=ODWm1IaDFE2NpVyeLRbMWGZv/BmufuK6hOWy1KUm/rA=;
- b=6xTIV3xZVCCi3rJJfDz1pUorgA2CokGIroSqeYNyeHh36OAyoaP1TPok7oC34p0G980+P05Ey
- DSaKETbABwpD4sLWwsxOB9fhDShB/2S3wqVQpTCqW5tFWQHCiYKni7R
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.7-rc8-156-g3d6055242846
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.7-rc8-156-g3d6055242846)
+To: rafael@kernel.org, linux-pm@vger.kernel.org,
+ kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Commit b43f7ddc2b7a ("power: supply: qcom_battmgr: Register the power
-supplies after PDR is up") moved the devm_power_supply_register() calls
-so that the power supply devices are not registered before we go through
-the entire initialization sequence (power up the ADSP remote processor,
-wait for it to come online, coordinate with userspace..).
+pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.7-rc8-156-g3=
+d6055242846)
 
-Some firmware versions (e.g. on SM8550) seem to leave battmgr at least
-partly initialized when exiting the bootloader and loading Linux. Check
-if the power supply devices are registered before consuming the battmgr
-notifications.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+7-rc8-156-g3d6055242846/
 
-Fixes: b43f7ddc2b7a ("power: supply: qcom_battmgr: Register the power supplies after PDR is up")
-Reported-by: Xilin Wu <wuxilin123@gmail.com>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Tree: pm
+Branch: testing
+Git Describe: v6.7-rc8-156-g3d6055242846
+Git Commit: 3d605524284615c2e1d6a317d1b24b5237153b34
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
 ---
-Changes in v2:
-- Fix the commit title
-- Link to v1: https://lore.kernel.org/linux-arm-msm/d9cf7d9d-60d9-4637-97bf-c9840452899e@linaro.org/T/#t
----
- drivers/power/supply/qcom_battmgr.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
-index a12e2a66d516..7d85292eb839 100644
---- a/drivers/power/supply/qcom_battmgr.c
-+++ b/drivers/power/supply/qcom_battmgr.c
-@@ -1271,6 +1271,10 @@ static void qcom_battmgr_callback(const void *data, size_t len, void *priv)
- 	struct qcom_battmgr *battmgr = priv;
- 	unsigned int opcode = le32_to_cpu(hdr->opcode);
- 
-+	/* Ignore the pings that come before Linux cleanly initializes the battmgr stack */
-+	if (!battmgr->bat_psy)
-+		return;
-+
- 	if (opcode == BATTMGR_NOTIFICATION)
- 		qcom_battmgr_notification(battmgr, data, len);
- 	else if (battmgr->variant == QCOM_BATTMGR_SC8280XP)
-
----
-base-commit: 0fef202ac2f8e6d9ad21aead648278f1226b9053
-change-id: 20240103-topic-battmgr2-15c17fac6d35
-
-Best regards,
--- 
-Konrad Dybcio <konrad.dybcio@linaro.org>
-
+For more info write to <info@kernelci.org>
 
