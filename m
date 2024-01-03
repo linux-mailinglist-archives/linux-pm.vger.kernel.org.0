@@ -1,115 +1,172 @@
-Return-Path: <linux-pm+bounces-1759-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1760-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D87CB822A9C
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 10:54:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CC96822B0D
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 11:12:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7725D1F23979
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 09:54:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A61F71F23DA1
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 10:12:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5642D1862A;
-	Wed,  3 Jan 2024 09:54:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6F8318AE8;
+	Wed,  3 Jan 2024 10:12:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zfSaECK1"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lvPu8raB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC71618AE7
-	for <linux-pm@vger.kernel.org>; Wed,  3 Jan 2024 09:54:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B5618656
+	for <linux-pm@vger.kernel.org>; Wed,  3 Jan 2024 10:11:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-40d60c49ee7so54252885e9.0
-        for <linux-pm@vger.kernel.org>; Wed, 03 Jan 2024 01:54:01 -0800 (PST)
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-dbe78430946so1818025276.0
+        for <linux-pm@vger.kernel.org>; Wed, 03 Jan 2024 02:11:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704275640; x=1704880440; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yvwGK/ajNH4j3g/k9LHnvMmnVM5XM7MT9VEa1Y2TxfI=;
-        b=zfSaECK1+zrgqAAWWYvPnIM2I6hERxyOYrUlz4KwOwBjKEYTme7KNyFyx1kCdtQf7P
-         +1MzSDkCyLAMJNeKVgJ3ZyrUFaU2EXF4ysg5LDVUB3qHsEPx5Q6TxfXkvM0NjbwFtdi2
-         CagHs3y6s0S1Ck3oiMG4BL0tHyWquSE8yeqK/kfHl7K+Yl4TeUPpNHFWus30nKFnlqms
-         A7Vms/RM1P6j4lkReBIyfzUCD1gSbd2D6xDDgBNhuXFCfvvjWPuKbLHZlEU0fiPS6rpD
-         HITO0EPk5gqpDG8iIViMlwqKm9J6vu/wz4tK31rv8NI7HOI93mJRvfcrUpW6WZsK58mR
-         TuQw==
+        d=linaro.org; s=google; t=1704276717; x=1704881517; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PtpNPR2Ppv9oShH1PIo9qMmaypsTJ3RN+rG3DHT7G5I=;
+        b=lvPu8raB9OXaH9Rq2HLA+rH++8rvLT6marCexYl1nQfm3mgVlb9GxPHOC4u59vajdf
+         jwdCPCiu5XJlAoKE7vUcOw1MfjTlEAE0B3TYq8DP7aePJovek9QucTpmas1o49IjTLie
+         1G0R51E9yfGwuQvO74eg3o8usKAhPE4VuP9zj2Iqsy1cF+hWuBsSgc5sn4KdKwaAdCTm
+         +rurQjaoNhnN2t0NlfvE/7wjIclFRsHRVZI+HPlag+VA/NCHUjz194j4W6kH1ZSdnWUt
+         MkhbgzvLzo4R2ZHaUVByd/Ee4VhJFyFYetW7r3m3ks04y6Tbig8Y7THrssophOd9QdoG
+         nyIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704275640; x=1704880440;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yvwGK/ajNH4j3g/k9LHnvMmnVM5XM7MT9VEa1Y2TxfI=;
-        b=K9VJuyl5V+E9uqpaz1E3C7buQATX9T8Hd/z7ZFq7fQOCdhHFkqHjwzHyGdTxuHSa9U
-         2sTg+VPEuaUo2+Zddn6jW3lzBd7EFKIwwBFy+hBEDvY4o4t77yVjjiELJpBUXQ1uHXWa
-         bx8V62WXfiD9DBl9LL/QlNokvgsNmVsG6k7fiJVLHlUE0iuyX8jruuK7R5F740+gZDfx
-         mKRXUPIcNmYlD4Dweu+JCJkxofI9kllyQFmISbPwqAubm3mQ68e1LicmINYsj0iMDUqd
-         9gcIHRpEJkHlQkPOZ7BrzW0Xfb9d6GJCkc/PHmeQsL0mri+laWJHrfREztHap3sJ0Xu1
-         4jaw==
-X-Gm-Message-State: AOJu0YxiQbl5WMXnTTSCXHLAAFhyft6XSP6gwYc5cz8GpMdzmqE1VlFk
-	VHsVWxBJ4MohrTFn9lD+pF+/zoGjBWhC1w==
-X-Google-Smtp-Source: AGHT+IETruL/uOb+rdjpVP8lj+qu5BvxT0opC87FWCxIbN6EhcNQUyqHOwG2gvQDb+r8OKezB7Bsqw==
-X-Received: by 2002:a05:600c:4d26:b0:40c:50d5:f7ac with SMTP id u38-20020a05600c4d2600b0040c50d5f7acmr9806511wmp.60.1704275639983;
-        Wed, 03 Jan 2024 01:53:59 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id r8-20020a5d4948000000b003367a5b6b69sm30115767wrs.106.2024.01.03.01.53.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 03 Jan 2024 01:53:59 -0800 (PST)
-Message-ID: <3c9f9a53-958e-4d6c-8fe1-6514f97fe1e0@linaro.org>
-Date: Wed, 3 Jan 2024 10:53:58 +0100
+        d=1e100.net; s=20230601; t=1704276717; x=1704881517;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PtpNPR2Ppv9oShH1PIo9qMmaypsTJ3RN+rG3DHT7G5I=;
+        b=A9AUCe9oLP9PzDJxvfarslNvbVpEJq9yb0y1P/7VQH1v0EGp/BAeyMhxaYWJRfReWa
+         DKBQrUqKirzliCmGZr0///O2J/hnB7rvCqCvphitKE5P12naDHVyvL8m0Z2jNZGXPLo0
+         Dwr4AlkcGYsBGZoWdm6Yw/nlNCRz6v/92qsYPoAmKEfYetH4eQbqV4sxZE7XdXlMYRRw
+         Yw6GI2KrH0qv3Gh6uNjqHs0bJAJj3f21Q7xG1ICFG7IhUms/zfldF0cfxW9zSFcxEt2A
+         zx4c1Pcs9Vf2yt037kIAAK43/ydrRwE3V9XWJbQrARa2ErNTIdOGe8s1WY0/qGksowLb
+         6R0g==
+X-Gm-Message-State: AOJu0YzvoqRfBVwSSsuMRDlGP6913b654QuPrX7r0b/OYbgdw/8X8z4/
+	Mif3iOya7Y7fIAJZ8sbHkSOHX3SksaM92mqXyZOBE0hk4k9/OA==
+X-Google-Smtp-Source: AGHT+IF2XO36CiELCMwjscZCQ6v87hxA4fvw2qOPmqzgOjU5sNMJ0Lpcxm/J0S19SL0ftsJUFsetKsKZoTzl5VNNJmw=
+X-Received: by 2002:a25:ab44:0:b0:dbc:ad34:43a1 with SMTP id
+ u62-20020a25ab44000000b00dbcad3443a1mr8805456ybi.112.1704276717219; Wed, 03
+ Jan 2024 02:11:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 0/6] thermal: netlink: Redefine the API and drop unused
- code
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
- Linux PM <linux-pm@vger.kernel.org>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Zhang Rui <rui.zhang@intel.com>, Linux ACPI <linux-acpi@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>
-References: <4556052.LvFx2qVVIh@kreacher>
- <CAJZ5v0hRGKjwDv0VLw550CLfUuNGaVXxmvcpbFhS=PCPqY0n4A@mail.gmail.com>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0hRGKjwDv0VLw550CLfUuNGaVXxmvcpbFhS=PCPqY0n4A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20231228114157.104822-1-ulf.hansson@linaro.org>
+ <20231228114157.104822-4-ulf.hansson@linaro.org> <ZZRY4rMjjkIsG3Ef@p14s>
+In-Reply-To: <ZZRY4rMjjkIsG3Ef@p14s>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 3 Jan 2024 11:11:19 +0100
+Message-ID: <CAPDyKFqgw_my76dicP9wuQAmF=kF=v5wGwxEF05wTQHdSvfuCA@mail.gmail.com>
+Subject: Re: [PATCH 3/5] remoteproc: imx_rproc: Convert to dev_pm_domain_attach|detach_list()
+To: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org, 
+	Sudeep Holla <sudeep.holla@arm.com>, Kevin Hilman <khilman@kernel.org>, 
+	Konrad Dybcio <konrad.dybcio@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Nikunj Kela <nkela@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, 
+	Stephan Gerhold <stephan@gerhold.net>, Ben Horgan <Ben.Horgan@arm.com>, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-remoteproc@vger.kernel.org, 
+	linux-media@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
 
+On Tue, 2 Jan 2024 at 19:41, Mathieu Poirier <mathieu.poirier@linaro.org> wrote:
+>
+> Hi Ulf,
+>
+> I'm in agreement with the modifications done to imx_rproc.c and imx_dsp_rproc.c.
+> There is one thing I am ambivalent on, please see below.
+>
+> On Thu, Dec 28, 2023 at 12:41:55PM +0100, Ulf Hansson wrote:
+> > Let's avoid the boilerplate code to manage the multiple PM domain case, by
+> > converting into using dev_pm_domain_attach|detach_list().
+> >
+> > Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> > Cc: Bjorn Andersson <andersson@kernel.org>
+> > Cc: Shawn Guo <shawnguo@kernel.org>
+> > Cc: Sascha Hauer <s.hauer@pengutronix.de>
+> > Cc: <linux-remoteproc@vger.kernel.org>
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > ---
+> >  drivers/remoteproc/imx_rproc.c | 73 +++++-----------------------------
+> >  1 file changed, 9 insertions(+), 64 deletions(-)
+> >
+> > diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
+> > index 8bb293b9f327..3161f14442bc 100644
+> > --- a/drivers/remoteproc/imx_rproc.c
+> > +++ b/drivers/remoteproc/imx_rproc.c
+> > @@ -92,7 +92,6 @@ struct imx_rproc_mem {
+> >
+> >  static int imx_rproc_xtr_mbox_init(struct rproc *rproc);
+> >  static void imx_rproc_free_mbox(struct rproc *rproc);
+> > -static int imx_rproc_detach_pd(struct rproc *rproc);
+> >
+> >  struct imx_rproc {
+> >       struct device                   *dev;
+> > @@ -113,10 +112,8 @@ struct imx_rproc {
+> >       u32                             rproc_pt;       /* partition id */
+> >       u32                             rsrc_id;        /* resource id */
+> >       u32                             entry;          /* cpu start address */
+> > -     int                             num_pd;
+> >       u32                             core_index;
+> > -     struct device                   **pd_dev;
+> > -     struct device_link              **pd_dev_link;
+> > +     struct dev_pm_domain_list       *pd_list;
+> >  };
+> >
+> >  static const struct imx_rproc_att imx_rproc_att_imx93[] = {
+> > @@ -853,7 +850,7 @@ static void imx_rproc_put_scu(struct rproc *rproc)
+> >               return;
+> >
+> >       if (imx_sc_rm_is_resource_owned(priv->ipc_handle, priv->rsrc_id)) {
+> > -             imx_rproc_detach_pd(rproc);
+> > +             dev_pm_domain_detach_list(priv->pd_list);
+> >               return;
+> >       }
+> >
+> > @@ -880,72 +877,20 @@ static int imx_rproc_partition_notify(struct notifier_block *nb,
+> >  static int imx_rproc_attach_pd(struct imx_rproc *priv)
+> >  {
+> >       struct device *dev = priv->dev;
+> > -     int ret, i;
+> > -
+> > -     /*
+> > -      * If there is only one power-domain entry, the platform driver framework
+> > -      * will handle it, no need handle it in this driver.
+> > -      */
+> > -     priv->num_pd = of_count_phandle_with_args(dev->of_node, "power-domains",
+> > -                                               "#power-domain-cells");
+> > -     if (priv->num_pd <= 1)
+> > -             return 0;
+>
+> In function dev_pm_domain_attach_list(), this condition is "<= 0" rather than
+> "<= 1".  As such the association between the device and power domain will be
+> done twice when there is a single power domain, i.e once by the core and once in
+> dev_pm_domain_attach_list().
+>
+> I am assuming the runtime PM subsystem is smart enough to deal with this kind of
+> situation but would like a confirmation.
 
-Hi Rafael,
+Thanks for reviewing!
 
-On 02/01/2024 14:24, Rafael J. Wysocki wrote:
-> On Fri, Dec 15, 2023 at 9:02 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->>
->> Hi Everyone,
->>
->> This patch series redefines the thermal netlink API to be somewhat more
->> convenient to use on the caller side and drops some unused code from
->> the thermal netlink library.
->>
->> Please refer to the individual patch changelogs for details.
-> 
-> No feedback, so this series doesn't appear to be controversial, and I
-> would like to get it into 6.8.
-> 
-> Tentatively queuing it up and please let me know if it is problematic.
+To cover the the single PM domain case, imx_rproc_attach_pd() is
+returning 0 when dev->pm_domain has been assigned. Moreover,
+dev_pm_domain_attach_list() doesn't allow attaching in the single PM
+domain case, as it returns -EEXIST if "dev->pm_domain" is already
+assigned.
 
-I did not have time to review them properly and I'm OoO until next week. 
-Is it possible to wait for the next time so I can review them ?
+Did that make sense to you?
 
+[...]
 
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Kind regards
+Uffe
 
