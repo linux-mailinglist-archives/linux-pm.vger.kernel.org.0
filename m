@@ -1,184 +1,257 @@
-Return-Path: <linux-pm+bounces-1793-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1795-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E8908231AC
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 17:57:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 512E38233E5
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 18:53:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF311B2257E
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 16:57:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B22E51F24450
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 17:53:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB1151C694;
-	Wed,  3 Jan 2024 16:57:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iYOVHk2X"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 309091C2A8;
+	Wed,  3 Jan 2024 17:53:46 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C89DC1C290;
-	Wed,  3 Jan 2024 16:57:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40EA1C433C8;
-	Wed,  3 Jan 2024 16:57:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704301032;
-	bh=Dg2dDaPNZtNW//yG71kg8XZ8E7Hu6Q4eVI6C38LDthI=;
-	h=From:Date:Subject:To:Cc:From;
-	b=iYOVHk2XhpQokWq7/u1JypdHbjqJIiozmZIPP46+vKl8+c5MNTwZ6lIeawQdtTHlV
-	 fD/GNag5+BHJ3/XEBKZ3BU3o036DXxaNh+5e+43uCAJq6l8sBZedNQmiO+XtajmUV9
-	 fCBitXICxXvR2TVg8YtfB2MjhLHc7sLAZSYCFMcrWb2WrAIXYYKmQ113Vw5m2m9rHz
-	 o/GeuEn1DesYlKAWVMgrpROoZySLAsZwhabV9haMU4APb5I6MSdePpHfCgha9sfVM5
-	 5NecWyk06XBBXjdFEdq95t21rkwffHIloaFf5YhpyfgWsftyXx+XgHBDIV9kfMux5D
-	 A0IKqSxubn/Sw==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Wed, 03 Jan 2024 09:57:07 -0700
-Subject: [PATCH] power: supply: bq24190_charger: Fix "initializer element
- is not constant" error
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F04B1C2A3;
+	Wed,  3 Jan 2024 17:53:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F32AAC15;
+	Wed,  3 Jan 2024 09:54:27 -0800 (PST)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.2.78.69])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BEC3D3F7A6;
+	Wed,  3 Jan 2024 09:53:41 -0800 (PST)
+Date: Wed, 3 Jan 2024 17:53:40 +0000
+From: Ionela Voinescu <ionela.voinescu@arm.com>
+To: Huisong Li <lihuisong@huawei.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, rafael@kernel.org,
+	beata.michalska@arm.com, sumitg@nvidia.com, zengheng4@huawei.com,
+	yang@os.amperecomputing.com, will@kernel.org, sudeep.holla@arm.com,
+	liuyonglong@huawei.com, zhanjie9@hisilicon.com
+Subject: Re: [PATCH] cpufreq: CPPC: Resolve the large frequency discrepancy
+ from cpuinfo_cur_freq
+Message-ID: <ZZWfJOsDlEXWYHA5@arm.com>
+References: <20231212072617.14756-1-lihuisong@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240103-fix-bq24190_charger-vbus_desc-non-const-v1-1-115ddf798c70@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAOKRlWUC/x2N0QqDMAxFf0XyvEBaRXC/MoasaXR9SbdkE0H89
- 5U9HrjnngNcrIjDtTvAZCteqjYIlw74+dBVsOTGECkOFKjHpeyY3nEIE81tYasYbunrcxZn1Kr
- IVf2DPKaFKGQepwzt7WXS1H/pdj/PHxCHbTp5AAAA
-To: sre@kernel.org
-Cc: chenhuiz@axis.com, linux-pm@vger.kernel.org, llvm@lists.linux.dev, 
- patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.13-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5503; i=nathan@kernel.org;
- h=from:subject:message-id; bh=Dg2dDaPNZtNW//yG71kg8XZ8E7Hu6Q4eVI6C38LDthI=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDKlTJ74w+KGgfPuA2GGRZGmtJnFX1sCTLfPF89kTBesaf
- 0nwf77WUcrCIMbFICumyFL9WPW4oeGcs4w3Tk2CmcPKBDKEgYtTACbiO5nhf2Cw+8YJE3meun/0
- trPeHP7hkEg663+bHsYk7nvWam3vPRkZ+lVfdFmtn2Te5xzC9vn95czL5/vPbpKOuFWgVcWztXY
- yCwA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231212072617.14756-1-lihuisong@huawei.com>
 
-When building with a version of GCC prior to 8.x, there is an error
-around non-constant initializer elements:
+Hi,
 
-  drivers/power/supply/bq24190_charger.c:1978:16: error: initializer element is not constant
-     .vbus_desc = bq24190_vbus_desc,
-                  ^~~~~~~~~~~~~~~~~
-  drivers/power/supply/bq24190_charger.c:1978:16: note: (near initialization for 'bq24190_chip_info_tbl[0].vbus_desc')
-  drivers/power/supply/bq24190_charger.c:1989:16: error: initializer element is not constant
-     .vbus_desc = bq24190_vbus_desc,
-                  ^~~~~~~~~~~~~~~~~
-  drivers/power/supply/bq24190_charger.c:1989:16: note: (near initialization for 'bq24190_chip_info_tbl[1].vbus_desc')
-  drivers/power/supply/bq24190_charger.c:2000:16: error: initializer element is not constant
-     .vbus_desc = bq24190_vbus_desc,
-                  ^~~~~~~~~~~~~~~~~
-  drivers/power/supply/bq24190_charger.c:2000:16: note: (near initialization for 'bq24190_chip_info_tbl[2].vbus_desc')
-  drivers/power/supply/bq24190_charger.c:2011:16: error: initializer element is not constant
-     .vbus_desc = bq24190_vbus_desc,
-                  ^~~~~~~~~~~~~~~~~
-  drivers/power/supply/bq24190_charger.c:2011:16: note: (near initialization for 'bq24190_chip_info_tbl[3].vbus_desc')
-  drivers/power/supply/bq24190_charger.c:2022:16: error: initializer element is not constant
-     .vbus_desc = bq24296_vbus_desc,
-                  ^~~~~~~~~~~~~~~~~
-  drivers/power/supply/bq24190_charger.c:2022:16: note: (near initialization for 'bq24190_chip_info_tbl[4].vbus_desc')
+On Tuesday 12 Dec 2023 at 15:26:17 (+0800), Huisong Li wrote:
+> Many developers found that the cpu current frequency is greater than
+> the maximum frequency of the platform, please see [1], [2] and [3].
+> 
+> In the scenarios with high memory access pressure, the patch [1] has
+> proved the significant latency of cpc_read() which is used to obtain
+> delivered and reference performance counter cause an absurd frequency.
+> The sampling interval for this counters is very critical and is expected
+> to be equal. However, the different latency of cpc_read() has a direct
+> impact on their sampling interval.
+> 
 
-Clang versions prior to 17.x show a similar error:
+Would this [1] alternative solution work for you?
 
-  drivers/power/supply/bq24190_charger.c:1978:16: error: initializer element is not a compile-time constant
-                  .vbus_desc = bq24190_vbus_desc,
-                               ^~~~~~~~~~~~~~~~~
-  1 error generated.
+[1] https://lore.kernel.org/lkml/20231127160838.1403404-1-beata.michalska@arm.com/
 
-Newer compilers have decided to accept these structures as compile time
-constants as an extension. To resolve this issue for all supported
-compilers, change the vbus_desc member in 'struct bq24190_chip_info' to
-a pointer, as it is only ever passed by reference anyways, and adjust
-the assignments accordingly.
+Thanks,
+Ionela.
 
-Closes: https://github.com/ClangBuiltLinux/linux/issues/1973
-Fixes: b150a703b56f ("power: supply: bq24190_charger: Add support for BQ24296")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/power/supply/bq24190_charger.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/supply/bq24190_charger.c
-index a8995a21fadb..2b393eb5c282 100644
---- a/drivers/power/supply/bq24190_charger.c
-+++ b/drivers/power/supply/bq24190_charger.c
-@@ -246,7 +246,7 @@ struct bq24190_dev_info {
- struct bq24190_chip_info {
- 	int ichg_array_size;
- #ifdef CONFIG_REGULATOR
--	const struct regulator_desc vbus_desc;
-+	const struct regulator_desc *vbus_desc;
- #endif
- 	int (*check_chip)(struct bq24190_dev_info *bdi);
- 	int (*set_chg_config)(struct bq24190_dev_info *bdi, const u8 chg_config);
-@@ -728,7 +728,7 @@ static int bq24190_register_vbus_regulator(struct bq24190_dev_info *bdi)
- 	else
- 		cfg.init_data = &bq24190_vbus_init_data;
- 	cfg.driver_data = bdi;
--	reg = devm_regulator_register(bdi->dev, &bdi->info->vbus_desc, &cfg);
-+	reg = devm_regulator_register(bdi->dev, bdi->info->vbus_desc, &cfg);
- 	if (IS_ERR(reg)) {
- 		ret = PTR_ERR(reg);
- 		dev_err(bdi->dev, "Can't register regulator: %d\n", ret);
-@@ -1975,7 +1975,7 @@ static const struct bq24190_chip_info bq24190_chip_info_tbl[] = {
- 	[BQ24190] = {
- 		.ichg_array_size = ARRAY_SIZE(bq24190_ccc_ichg_values),
- #ifdef CONFIG_REGULATOR
--		.vbus_desc = bq24190_vbus_desc,
-+		.vbus_desc = &bq24190_vbus_desc,
- #endif
- 		.check_chip = bq24190_check_chip,
- 		.set_chg_config = bq24190_battery_set_chg_config,
-@@ -1986,7 +1986,7 @@ static const struct bq24190_chip_info bq24190_chip_info_tbl[] = {
- 	[BQ24192] = {
- 		.ichg_array_size = ARRAY_SIZE(bq24190_ccc_ichg_values),
- #ifdef CONFIG_REGULATOR
--		.vbus_desc = bq24190_vbus_desc,
-+		.vbus_desc = &bq24190_vbus_desc,
- #endif
- 		.check_chip = bq24190_check_chip,
- 		.set_chg_config = bq24190_battery_set_chg_config,
-@@ -1997,7 +1997,7 @@ static const struct bq24190_chip_info bq24190_chip_info_tbl[] = {
- 	[BQ24192i] = {
- 		.ichg_array_size = ARRAY_SIZE(bq24190_ccc_ichg_values),
- #ifdef CONFIG_REGULATOR
--		.vbus_desc = bq24190_vbus_desc,
-+		.vbus_desc = &bq24190_vbus_desc,
- #endif
- 		.check_chip = bq24190_check_chip,
- 		.set_chg_config = bq24190_battery_set_chg_config,
-@@ -2008,7 +2008,7 @@ static const struct bq24190_chip_info bq24190_chip_info_tbl[] = {
- 	[BQ24196] = {
- 		.ichg_array_size = ARRAY_SIZE(bq24190_ccc_ichg_values),
- #ifdef CONFIG_REGULATOR
--		.vbus_desc = bq24190_vbus_desc,
-+		.vbus_desc = &bq24190_vbus_desc,
- #endif
- 		.check_chip = bq24190_check_chip,
- 		.set_chg_config = bq24190_battery_set_chg_config,
-@@ -2019,7 +2019,7 @@ static const struct bq24190_chip_info bq24190_chip_info_tbl[] = {
- 	[BQ24296] = {
- 		.ichg_array_size = BQ24296_CCC_ICHG_VALUES_LEN,
- #ifdef CONFIG_REGULATOR
--		.vbus_desc = bq24296_vbus_desc,
-+		.vbus_desc = &bq24296_vbus_desc,
- #endif
- 		.check_chip = bq24296_check_chip,
- 		.set_chg_config = bq24296_battery_set_chg_config,
-
----
-base-commit: b150a703b56fb6eb282d059b421652ccd9155c23
-change-id: 20240103-fix-bq24190_charger-vbus_desc-non-const-c6bf001dc69d
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+> This patch adds a interface, cpc_read_arch_counters_on_cpu, to read
+> delivered and reference performance counter together. According to my
+> test[4], the discrepancy of cpu current frequency in the scenarios with
+> high memory access pressure is lower than 0.2% by stress-ng application.
+> 
+> [1] https://lore.kernel.org/all/20231025093847.3740104-4-zengheng4@huawei.com/
+> [2] https://lore.kernel.org/all/20230328193846.8757-1-yang@os.amperecomputing.com/
+> [3] https://lore.kernel.org/all/20230418113459.12860-7-sumitg@nvidia.com/
+> 
+> [4] My local test:
+> The testing platform enable SMT and include 128 logical CPU in total,
+> and CPU base frequency is 2.7GHz. Reading "cpuinfo_cur_freq" for each
+> physical core on platform during the high memory access pressure from
+> stress-ng, and the output is as follows:
+>   0: 2699133     2: 2699942     4: 2698189     6: 2704347
+>   8: 2704009    10: 2696277    12: 2702016    14: 2701388
+>  16: 2700358    18: 2696741    20: 2700091    22: 2700122
+>  24: 2701713    26: 2702025    28: 2699816    30: 2700121
+>  32: 2700000    34: 2699788    36: 2698884    38: 2699109
+>  40: 2704494    42: 2698350    44: 2699997    46: 2701023
+>  48: 2703448    50: 2699501    52: 2700000    54: 2699999
+>  56: 2702645    58: 2696923    60: 2697718    62: 2700547
+>  64: 2700313    66: 2700000    68: 2699904    70: 2699259
+>  72: 2699511    74: 2700644    76: 2702201    78: 2700000
+>  80: 2700776    82: 2700364    84: 2702674    86: 2700255
+>  88: 2699886    90: 2700359    92: 2699662    94: 2696188
+>  96: 2705454    98: 2699260   100: 2701097   102: 2699630
+> 104: 2700463   106: 2698408   108: 2697766   110: 2701181
+> 112: 2699166   114: 2701804   116: 2701907   118: 2701973
+> 120: 2699584   122: 2700474   124: 2700768   126: 2701963
+> 
+> Signed-off-by: Huisong Li <lihuisong@huawei.com>
+> ---
+>  arch/arm64/kernel/topology.c | 43 ++++++++++++++++++++++++++++++++++--
+>  drivers/acpi/cppc_acpi.c     | 22 +++++++++++++++---
+>  include/acpi/cppc_acpi.h     |  5 +++++
+>  3 files changed, 65 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+> index 7d37e458e2f5..c3122154d738 100644
+> --- a/arch/arm64/kernel/topology.c
+> +++ b/arch/arm64/kernel/topology.c
+> @@ -299,6 +299,11 @@ core_initcall(init_amu_fie);
+>  #ifdef CONFIG_ACPI_CPPC_LIB
+>  #include <acpi/cppc_acpi.h>
+>  
+> +struct amu_counters {
+> +	u64 corecnt;
+> +	u64 constcnt;
+> +};
+> +
+>  static void cpu_read_corecnt(void *val)
+>  {
+>  	/*
+> @@ -322,8 +327,27 @@ static void cpu_read_constcnt(void *val)
+>  		      0UL : read_constcnt();
+>  }
+>  
+> +static void cpu_read_amu_counters(void *data)
+> +{
+> +	struct amu_counters *cnt = (struct amu_counters *)data;
+> +
+> +	/*
+> +	 * The running time of the this_cpu_has_cap() might have a couple of
+> +	 * microseconds and is significantly increased to tens of microseconds.
+> +	 * But AMU core and constant counter need to be read togeter without any
+> +	 * time interval to reduce the calculation discrepancy using this counters.
+> +	 */
+> +	if (this_cpu_has_cap(ARM64_WORKAROUND_2457168)) {
+> +		cnt->corecnt = read_corecnt();
+> +		cnt->constcnt = 0;
+> +	} else {
+> +		cnt->corecnt = read_corecnt();
+> +		cnt->constcnt = read_constcnt();
+> +	}
+> +}
+> +
+>  static inline
+> -int counters_read_on_cpu(int cpu, smp_call_func_t func, u64 *val)
+> +int counters_read_on_cpu(int cpu, smp_call_func_t func, void *data)
+>  {
+>  	/*
+>  	 * Abort call on counterless CPU or when interrupts are
+> @@ -335,7 +359,7 @@ int counters_read_on_cpu(int cpu, smp_call_func_t func, u64 *val)
+>  	if (WARN_ON_ONCE(irqs_disabled()))
+>  		return -EPERM;
+>  
+> -	smp_call_function_single(cpu, func, val, 1);
+> +	smp_call_function_single(cpu, func, data, 1);
+>  
+>  	return 0;
+>  }
+> @@ -364,6 +388,21 @@ bool cpc_ffh_supported(void)
+>  	return true;
+>  }
+>  
+> +int cpc_read_arch_counters_on_cpu(int cpu, u64 *delivered, u64 *reference)
+> +{
+> +	struct amu_counters cnts = {0};
+> +	int ret;
+> +
+> +	ret = counters_read_on_cpu(cpu, cpu_read_amu_counters, &cnts);
+> +	if (ret)
+> +		return ret;
+> +
+> +	*delivered = cnts.corecnt;
+> +	*reference = cnts.constcnt;
+> +
+> +	return 0;
+> +}
+> +
+>  int cpc_read_ffh(int cpu, struct cpc_reg *reg, u64 *val)
+>  {
+>  	int ret = -EOPNOTSUPP;
+> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+> index 7ff269a78c20..f303fabd7cfe 100644
+> --- a/drivers/acpi/cppc_acpi.c
+> +++ b/drivers/acpi/cppc_acpi.c
+> @@ -1299,6 +1299,11 @@ bool cppc_perf_ctrs_in_pcc(void)
+>  }
+>  EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
+>  
+> +int __weak cpc_read_arch_counters_on_cpu(int cpu, u64 *delivered, u64 *reference)
+> +{
+> +	return 0;
+> +}
+> +
+>  /**
+>   * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
+>   * @cpunum: CPU from which to read counters.
+> @@ -1313,7 +1318,8 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
+>  		*ref_perf_reg, *ctr_wrap_reg;
+>  	int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpunum);
+>  	struct cppc_pcc_data *pcc_ss_data = NULL;
+> -	u64 delivered, reference, ref_perf, ctr_wrap_time;
+> +	u64 delivered = 0, reference = 0;
+> +	u64 ref_perf, ctr_wrap_time;
+>  	int ret = 0, regs_in_pcc = 0;
+>  
+>  	if (!cpc_desc) {
+> @@ -1350,8 +1356,18 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
+>  		}
+>  	}
+>  
+> -	cpc_read(cpunum, delivered_reg, &delivered);
+> -	cpc_read(cpunum, reference_reg, &reference);
+> +	if (cpc_ffh_supported()) {
+> +		ret = cpc_read_arch_counters_on_cpu(cpunum, &delivered, &reference);
+> +		if (ret) {
+> +			pr_debug("read arch counters failed, ret=%d.\n", ret);
+> +			ret = 0;
+> +		}
+> +	}
+> +	if (!delivered || !reference) {
+> +		cpc_read(cpunum, delivered_reg, &delivered);
+> +		cpc_read(cpunum, reference_reg, &reference);
+> +	}
+> +
+>  	cpc_read(cpunum, ref_perf_reg, &ref_perf);
+>  
+>  	/*
+> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
+> index 6126c977ece0..07d4fd82d499 100644
+> --- a/include/acpi/cppc_acpi.h
+> +++ b/include/acpi/cppc_acpi.h
+> @@ -152,6 +152,7 @@ extern bool cpc_ffh_supported(void);
+>  extern bool cpc_supported_by_cpu(void);
+>  extern int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val);
+>  extern int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val);
+> +extern int cpc_read_arch_counters_on_cpu(int cpu, u64 *delivered, u64 *reference);
+>  extern int cppc_get_epp_perf(int cpunum, u64 *epp_perf);
+>  extern int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls, bool enable);
+>  extern int cppc_get_auto_sel_caps(int cpunum, struct cppc_perf_caps *perf_caps);
+> @@ -209,6 +210,10 @@ static inline int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val)
+>  {
+>  	return -ENOTSUPP;
+>  }
+> +static inline int cpc_read_arch_counters_on_cpu(int cpu, u64 *delivered, u64 *reference)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+>  static inline int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls, bool enable)
+>  {
+>  	return -ENOTSUPP;
+> -- 
+> 2.33.0
+> 
 
