@@ -1,189 +1,182 @@
-Return-Path: <linux-pm+bounces-1788-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1789-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B7A58230A7
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 16:37:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5DAF823123
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 17:19:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8ADE01C216E2
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 15:37:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E358284338
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 16:19:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFE2C1B268;
-	Wed,  3 Jan 2024 15:37:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6C161B295;
+	Wed,  3 Jan 2024 16:19:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="R/kL4X0T"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21C371B267;
-	Wed,  3 Jan 2024 15:37:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-595ffa2e6a2so164913eaf.0;
-        Wed, 03 Jan 2024 07:37:46 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 224CB1B296
+	for <linux-pm@vger.kernel.org>; Wed,  3 Jan 2024 16:19:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-3374eb61cbcso577479f8f.0
+        for <linux-pm@vger.kernel.org>; Wed, 03 Jan 2024 08:19:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1704298759; x=1704903559; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=selIPiTBkoS5l1OMM3i9w0HzBJej2N34COzM6/N+NXw=;
+        b=R/kL4X0TuZViqbCth7s4OVAa3mr2h0jHTHDMHYgWkquq6pbl3f1nU5D3JQ450UxFLf
+         xhfNez88fb2TgyA0Yr6PKPQF+t81IuNuHYT107+2pD3PLNAFHqJeS0SnMgY0ed79yExL
+         lNVBT++TDjCYA3WOUlqfFcc2s7GP94jzpEV0xOJNvjGbP0a8eqYSUJQtet57oVgeNdJC
+         KJ0OXHfPkFVGzn06aoPzutMMt66xGNuEY2zrehR+RgQ0xMRK9fzMSaRuYE+J1rS/QLff
+         7927CNvu11Ses4Pa1/G9XVQBPBqNRT0A8yIchldWXGPxEC2cMMAUKJstUuKdtdoZXcWO
+         8wAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704296266; x=1704901066;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=40j+IqysrfYQAUt1SJO3JpRmqTkW8BeHGoeDA+iZloI=;
-        b=OoMLNn83L1QCMLgwVxFhxrcH9l0Y3nKZ7K8xTz8Kj9CYYO78NoVsqngB4f7rGeouZ6
-         OGAdDK1nLxmHxJYmzFGH8dBMOR7DTvpha8xPV9p7fnMuaPPW2sIi2jZHNAD/fbP0wwdr
-         uneEZLMnvJnfyocfMUgEx3tuZfN4TuVgp99P2nME/0qGO0Wj7RCNfxTdvcpye1ClXKda
-         d3IwKVtMAW43hX6xrPHiB11hAkabITWwyrqHJuXHiyLkd4VrJcY8nIANOKpfcWDVcCwU
-         bB0i7Tpw9pcRjXk1AVMy7iOTlJb1bTUGFOnGSXWVyHEiVcqrb3gbBd9B3tvqEivChZAh
-         VuKg==
-X-Gm-Message-State: AOJu0YzOs+YGVoUqxhki/LDr8FVQ2uikLtVdgVkqa6OoeRETQUPkvGHB
-	jMJUslxVIoM7cgbPIHx0xo08Yxp9zHSEEDWTJZk=
-X-Google-Smtp-Source: AGHT+IEQNWRFK5ZWxSqawWVegeMCE+VE1LW3uWj3cWaGWt2FsA5ZWT7ccUJrKWdr45QdTslurAf486vxU50F76ICkVM=
-X-Received: by 2002:a4a:b38c:0:b0:595:6024:c4f8 with SMTP id
- p12-20020a4ab38c000000b005956024c4f8mr8288888ooo.1.1704296266137; Wed, 03 Jan
- 2024 07:37:46 -0800 (PST)
+        d=1e100.net; s=20230601; t=1704298759; x=1704903559;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=selIPiTBkoS5l1OMM3i9w0HzBJej2N34COzM6/N+NXw=;
+        b=bjzbQzZG5YicObJEp1HAat4OBEGtIDz7+IsPJdodBBYxhgR4VwuWSRd3XQOEV/3pMM
+         L07sYhwPPtJJS6koVHxXQfdkwlf9Iuj0aaP+6Xntn3jMGQNHlhEYarR20x18WwQPCdtW
+         zelXTR8jSa+MFEQG4Pu/2xoDHq9EvxxEA1Jsvm946mLDgRd/EV8QynvCrD+OoCrgcC0N
+         GcnxYcNRwgz4+IiRIAcn25pmCq9CXtgygFLrh/tRwk2uaIR40rsVuRNOvBaoYwL7Zp9H
+         71yZ5WKqzSsXAhvQDtaXgKSWdCaml2D+m92QgvS2HQViLQodR2F1EULN83wxv2Cj8aII
+         S4AQ==
+X-Gm-Message-State: AOJu0YweZBR3eCoVeErSt4iYs/XrOvNppHzBF7rVSZ2OontgVHcCQvbr
+	D8Qq7xfqYodLwMh7t8/Vak7fB4Cc7pmWxXOawwatXBpjLNhitw==
+X-Google-Smtp-Source: AGHT+IHxc6RmbUDk8qZRRP/wXwKJQLoJEMFsPKWaRD1qnAIxQ7oGRHhKlBd9L738dgpFKgfPEWiB2CKPi4ihoQcZq9g=
+X-Received: by 2002:a5d:4cc8:0:b0:336:95d2:c64a with SMTP id
+ c8-20020a5d4cc8000000b0033695d2c64amr9871256wrt.130.1704298759433; Wed, 03
+ Jan 2024 08:19:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231228075705.26652-1-TonyWWang-oc@zhaoxin.com> <20231228075705.26652-4-TonyWWang-oc@zhaoxin.com>
-In-Reply-To: <20231228075705.26652-4-TonyWWang-oc@zhaoxin.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 3 Jan 2024 16:37:35 +0100
-Message-ID: <CAJZ5v0hEd-NV5WoRPOZgZwxNS6M=TKcw7DpDUM9MWFYAaa+1Mw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] ACPI: cpufreq: Add ITMT support when CPPC enabled for
- Zhaoxin CPUs
-To: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
-Cc: rafael@kernel.org, lenb@kernel.org, robert.moore@intel.com, 
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	acpica-devel@lists.linux.dev, tglx@linutronix.de, mingo@redhat.com, 
-	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
-	mcgrof@kernel.org, peterz@infradead.org, j.granados@samsung.com, 
-	ricardo.neri-calderon@linux.intel.com, viresh.kumar@linaro.org, 
-	linux-pm@vger.kernel.org, CobeChen@zhaoxin.com, TimGuo@zhaoxin.com, 
-	LeoLiu-oc@zhaoxin.com, LindaChai@zhaoxin.com
+References: <20231228114157.104822-1-ulf.hansson@linaro.org>
+ <20231228114157.104822-4-ulf.hansson@linaro.org> <ZZRY4rMjjkIsG3Ef@p14s> <CAPDyKFqgw_my76dicP9wuQAmF=kF=v5wGwxEF05wTQHdSvfuCA@mail.gmail.com>
+In-Reply-To: <CAPDyKFqgw_my76dicP9wuQAmF=kF=v5wGwxEF05wTQHdSvfuCA@mail.gmail.com>
+From: Mathieu Poirier <mathieu.poirier@linaro.org>
+Date: Wed, 3 Jan 2024 09:19:08 -0700
+Message-ID: <CANLsYkzAG4EdYgQ9hNgMB3icGY_yrNwXesBnYxnBtzakrGv7zg@mail.gmail.com>
+Subject: Re: [PATCH 3/5] remoteproc: imx_rproc: Convert to dev_pm_domain_attach|detach_list()
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org, 
+	Sudeep Holla <sudeep.holla@arm.com>, Kevin Hilman <khilman@kernel.org>, 
+	Konrad Dybcio <konrad.dybcio@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Nikunj Kela <nkela@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, 
+	Stephan Gerhold <stephan@gerhold.net>, Ben Horgan <Ben.Horgan@arm.com>, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-remoteproc@vger.kernel.org, 
+	linux-media@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 28, 2023 at 8:57=E2=80=AFAM Tony W Wang-oc <TonyWWang-oc@zhaoxi=
-n.com> wrote:
+On Wed, 3 Jan 2024 at 03:11, Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
-> For Zhaoxin CPUs, the cores' highest frequencies may be different, which
-> means that cores may run at different max frequencies,
+> On Tue, 2 Jan 2024 at 19:41, Mathieu Poirier <mathieu.poirier@linaro.org> wrote:
+> >
+> > Hi Ulf,
+> >
+> > I'm in agreement with the modifications done to imx_rproc.c and imx_dsp_rproc.c.
+> > There is one thing I am ambivalent on, please see below.
+> >
+> > On Thu, Dec 28, 2023 at 12:41:55PM +0100, Ulf Hansson wrote:
+> > > Let's avoid the boilerplate code to manage the multiple PM domain case, by
+> > > converting into using dev_pm_domain_attach|detach_list().
+> > >
+> > > Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> > > Cc: Bjorn Andersson <andersson@kernel.org>
+> > > Cc: Shawn Guo <shawnguo@kernel.org>
+> > > Cc: Sascha Hauer <s.hauer@pengutronix.de>
+> > > Cc: <linux-remoteproc@vger.kernel.org>
+> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > > ---
+> > >  drivers/remoteproc/imx_rproc.c | 73 +++++-----------------------------
+> > >  1 file changed, 9 insertions(+), 64 deletions(-)
+> > >
+> > > diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
+> > > index 8bb293b9f327..3161f14442bc 100644
+> > > --- a/drivers/remoteproc/imx_rproc.c
+> > > +++ b/drivers/remoteproc/imx_rproc.c
+> > > @@ -92,7 +92,6 @@ struct imx_rproc_mem {
+> > >
+> > >  static int imx_rproc_xtr_mbox_init(struct rproc *rproc);
+> > >  static void imx_rproc_free_mbox(struct rproc *rproc);
+> > > -static int imx_rproc_detach_pd(struct rproc *rproc);
+> > >
+> > >  struct imx_rproc {
+> > >       struct device                   *dev;
+> > > @@ -113,10 +112,8 @@ struct imx_rproc {
+> > >       u32                             rproc_pt;       /* partition id */
+> > >       u32                             rsrc_id;        /* resource id */
+> > >       u32                             entry;          /* cpu start address */
+> > > -     int                             num_pd;
+> > >       u32                             core_index;
+> > > -     struct device                   **pd_dev;
+> > > -     struct device_link              **pd_dev_link;
+> > > +     struct dev_pm_domain_list       *pd_list;
+> > >  };
+> > >
+> > >  static const struct imx_rproc_att imx_rproc_att_imx93[] = {
+> > > @@ -853,7 +850,7 @@ static void imx_rproc_put_scu(struct rproc *rproc)
+> > >               return;
+> > >
+> > >       if (imx_sc_rm_is_resource_owned(priv->ipc_handle, priv->rsrc_id)) {
+> > > -             imx_rproc_detach_pd(rproc);
+> > > +             dev_pm_domain_detach_list(priv->pd_list);
+> > >               return;
+> > >       }
+> > >
+> > > @@ -880,72 +877,20 @@ static int imx_rproc_partition_notify(struct notifier_block *nb,
+> > >  static int imx_rproc_attach_pd(struct imx_rproc *priv)
+> > >  {
+> > >       struct device *dev = priv->dev;
+> > > -     int ret, i;
+> > > -
+> > > -     /*
+> > > -      * If there is only one power-domain entry, the platform driver framework
+> > > -      * will handle it, no need handle it in this driver.
+> > > -      */
+> > > -     priv->num_pd = of_count_phandle_with_args(dev->of_node, "power-domains",
+> > > -                                               "#power-domain-cells");
+> > > -     if (priv->num_pd <= 1)
+> > > -             return 0;
+> >
+> > In function dev_pm_domain_attach_list(), this condition is "<= 0" rather than
+> > "<= 1".  As such the association between the device and power domain will be
+> > done twice when there is a single power domain, i.e once by the core and once in
+> > dev_pm_domain_attach_list().
+> >
+> > I am assuming the runtime PM subsystem is smart enough to deal with this kind of
+> > situation but would like a confirmation.
 >
-> According to ACPI-spec6 chapter 8.4.7, the per-core highest frequency
-> value can be obtained via cppc.
+> Thanks for reviewing!
 >
-> The core with the higher frequency have better performance, which can be
-> called as preferred core. And better performance can be achieved by
-> making the scheduler to run tasks on these preferred cores.
+> To cover the the single PM domain case, imx_rproc_attach_pd() is
+> returning 0 when dev->pm_domain has been assigned. Moreover,
+> dev_pm_domain_attach_list() doesn't allow attaching in the single PM
+> domain case, as it returns -EEXIST if "dev->pm_domain" is already
+> assigned.
 >
-> The cpufreq driver can use the highest frequency value as the prioriy of
-> core to make the scheduler try to get better performace. More specificall=
-y,
-> in the acpi-cpufreq driver use cppc_get_highest_perf() to get highest
-> frequency value of each core, use sched_set_itmt_core_prio() to set
-> highest frequency value as core priority, and use sched_set_itmt_support(=
-)
-> provided by ITMT to tell the scheduler to favor on the preferred cores.
+> Did that make sense to you?
 >
-> Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
-> ---
->  drivers/cpufreq/acpi-cpufreq.c | 56 +++++++++++++++++++++++++++++++++-
->  1 file changed, 55 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufre=
-q.c
-> index 37f1cdf46d29..f4c1ff9e4bb0 100644
-> --- a/drivers/cpufreq/acpi-cpufreq.c
-> +++ b/drivers/cpufreq/acpi-cpufreq.c
-> @@ -663,8 +663,56 @@ static u64 get_max_boost_ratio(unsigned int cpu)
->
->         return div_u64(highest_perf << SCHED_CAPACITY_SHIFT, nominal_perf=
-);
->  }
-> +
-> +/* The work item is needed to avoid CPU hotplug locking issues */
-> +static void sched_itmt_work_fn(struct work_struct *work)
-> +{
-> +       sched_set_itmt_support();
-> +}
-> +
-> +static DECLARE_WORK(sched_itmt_work, sched_itmt_work_fn);
-> +
-> +static void set_itmt_prio(int cpu)
-> +{
-> +       static bool cppc_highest_perf_diff;
-> +       static struct cpumask core_prior_mask;
-> +       u64 highest_perf;
-> +       static u64 max_highest_perf =3D 0, min_highest_perf =3D U64_MAX;
-> +       int ret;
-> +
-> +       ret =3D cppc_get_highest_perf(cpu, &highest_perf);
-> +       if (ret)
-> +               return;
-> +
-> +       sched_set_itmt_core_prio(highest_perf, cpu);
-> +       cpumask_set_cpu(cpu, &core_prior_mask);
-> +
-> +       if (max_highest_perf <=3D min_highest_perf) {
-> +               if (highest_perf > max_highest_perf)
-> +                       max_highest_perf =3D highest_perf;
-> +
-> +               if (highest_perf < min_highest_perf)
-> +                       min_highest_perf =3D highest_perf;
-> +
-> +               if (max_highest_perf > min_highest_perf) {
-> +                       /*
-> +                        * This code can be run during CPU online under t=
-he
-> +                        * CPU hotplug locks, so sched_set_itmt_support()
-> +                        * cannot be called from here.  Queue up a work i=
-tem
-> +                        * to invoke it.
-> +                        */
-> +                       cppc_highest_perf_diff =3D true;
-> +               }
-> +       }
-> +
-> +       if (cppc_highest_perf_diff && cpumask_equal(&core_prior_mask, cpu=
-_online_mask)) {
-> +               pr_debug("queue a work to set itmt enabled\n");
-> +               schedule_work(&sched_itmt_work);
-> +       }
-> +}
->  #else
->  static inline u64 get_max_boost_ratio(unsigned int cpu) { return 0; }
-> +static void set_itmt_prio(int cpu) { }
->  #endif
->
->  static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
-> @@ -677,7 +725,7 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_polic=
-y *policy)
->         unsigned int valid_states =3D 0;
->         unsigned int result =3D 0;
->         u64 max_boost_ratio;
-> -       unsigned int i;
-> +       unsigned int i, j;
->  #ifdef CONFIG_SMP
->         static int blacklisted;
->  #endif
-> @@ -742,6 +790,12 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_poli=
-cy *policy)
->         }
->  #endif
->
-> +       if (c->x86_vendor =3D=3D X86_VENDOR_CENTAUR || c->x86_vendor =3D=
-=3D X86_VENDOR_ZHAOXIN) {
-> +               for_each_cpu(j, policy->cpus) {
-> +                       set_itmt_prio(j);
-> +               }
-> +       }
-> +
->         /* capability check */
->         if (perf->state_count <=3D 1) {
->                 pr_debug("No P-States\n");
-> --
 
-Have you considered using the CPPC cpufreq driver on those platforms?
+Ah yes!  The correlation between dev->pm_domain and the magic done by
+the core framework was lost on me.
+
+Once you respin to address Nikunj's comment I will ask the NXP team in
+Romania to test this set.  With the holiday season still floating in
+the air it may take a little while for them to get to it.
+
+> [...]
+>
+> Kind regards
+> Uffe
 
