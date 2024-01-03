@@ -1,87 +1,189 @@
-Return-Path: <linux-pm+bounces-1787-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1788-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 109FC823049
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 16:15:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B7A58230A7
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 16:37:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B8F801F2438E
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 15:15:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8ADE01C216E2
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 15:37:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 099DB1A71F;
-	Wed,  3 Jan 2024 15:15:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IBH/QuA3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFE2C1B268;
+	Wed,  3 Jan 2024 15:37:49 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD3561B290;
-	Wed,  3 Jan 2024 15:15:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53746C433CC;
-	Wed,  3 Jan 2024 15:15:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704294911;
-	bh=ldRoSHvT6Rsry6/JCGChzrHz1I65uNFCAGV5UUxFlGA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=IBH/QuA3Eycfx0gIQnxzlatxLaXul9m7My77lsHmfTkfYNeF2R35sxVYcFG0qYDGz
-	 Q2iFfwWqCBl3NgMeZtXwVmpGWCNbLQrkdM0GRQlC93esLlCTFu6U66mTgGhgug0Kcv
-	 jFjCSnPbSFL9OlRN51iSaJlvh1uHcR7qdrwMV/pdymLkbQ5YDBMVvS9Ze5qwochBmV
-	 qV6Xw2hM0zEWHyDmy3HuZsuU1ynBjHnGM1PnPCb2UuY5nlXrgjwXcSafGbSdPnI6Z8
-	 8+Y2X5cpolzxxxFBMG8Xq2OhIkh6uZ+ziQbhdUODDuGMS0j0h4nkOueGMPGO3GH1uA
-	 71+1Qu//CUDkQ==
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2cce6bb9b48so53150141fa.1;
-        Wed, 03 Jan 2024 07:15:11 -0800 (PST)
-X-Gm-Message-State: AOJu0YzHIzN5G4odunC0wl0jkOjn2AvX5fVy/ankt0xHJz4MyNP2ShDb
-	aEVI6ULa9RCvKy04uOlcB/vAeA/3ja5kY2b3iQ==
-X-Google-Smtp-Source: AGHT+IFqtORKMYmea6Sua/HpDIR+OhSvzO5v/pjx+rnHnj7+cZmrhfeXvNjnLi75WlD7c7NCdkjTTKvfobADQjhDnlM=
-X-Received: by 2002:a2e:9c14:0:b0:2cc:6666:168d with SMTP id
- s20-20020a2e9c14000000b002cc6666168dmr3813403lji.69.1704294909538; Wed, 03
- Jan 2024 07:15:09 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21C371B267;
+	Wed,  3 Jan 2024 15:37:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-595ffa2e6a2so164913eaf.0;
+        Wed, 03 Jan 2024 07:37:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704296266; x=1704901066;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=40j+IqysrfYQAUt1SJO3JpRmqTkW8BeHGoeDA+iZloI=;
+        b=OoMLNn83L1QCMLgwVxFhxrcH9l0Y3nKZ7K8xTz8Kj9CYYO78NoVsqngB4f7rGeouZ6
+         OGAdDK1nLxmHxJYmzFGH8dBMOR7DTvpha8xPV9p7fnMuaPPW2sIi2jZHNAD/fbP0wwdr
+         uneEZLMnvJnfyocfMUgEx3tuZfN4TuVgp99P2nME/0qGO0Wj7RCNfxTdvcpye1ClXKda
+         d3IwKVtMAW43hX6xrPHiB11hAkabITWwyrqHJuXHiyLkd4VrJcY8nIANOKpfcWDVcCwU
+         bB0i7Tpw9pcRjXk1AVMy7iOTlJb1bTUGFOnGSXWVyHEiVcqrb3gbBd9B3tvqEivChZAh
+         VuKg==
+X-Gm-Message-State: AOJu0YzOs+YGVoUqxhki/LDr8FVQ2uikLtVdgVkqa6OoeRETQUPkvGHB
+	jMJUslxVIoM7cgbPIHx0xo08Yxp9zHSEEDWTJZk=
+X-Google-Smtp-Source: AGHT+IEQNWRFK5ZWxSqawWVegeMCE+VE1LW3uWj3cWaGWt2FsA5ZWT7ccUJrKWdr45QdTslurAf486vxU50F76ICkVM=
+X-Received: by 2002:a4a:b38c:0:b0:595:6024:c4f8 with SMTP id
+ p12-20020a4ab38c000000b005956024c4f8mr8288888ooo.1.1704296266137; Wed, 03 Jan
+ 2024 07:37:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240103142051.111717-1-krzysztof.kozlowski@linaro.org> <20240103142051.111717-2-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20240103142051.111717-2-krzysztof.kozlowski@linaro.org>
-From: Rob Herring <robh+dt@kernel.org>
-Date: Wed, 3 Jan 2024 08:14:57 -0700
-X-Gmail-Original-Message-ID: <CAL_JsqKBANb+SKfykPvUH82bGH6sU5LuCfsM5iSbZ6Uk4vKHrw@mail.gmail.com>
-Message-ID: <CAL_JsqKBANb+SKfykPvUH82bGH6sU5LuCfsM5iSbZ6Uk4vKHrw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] arm64: dts: juno: fix thermal zone node names
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Liviu Dudau <liviu.dudau@arm.com>, Sudeep Holla <sudeep.holla@arm.com>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, Amit Kucheria <amit.kucheria@linaro.org>, 
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20231228075705.26652-1-TonyWWang-oc@zhaoxin.com> <20231228075705.26652-4-TonyWWang-oc@zhaoxin.com>
+In-Reply-To: <20231228075705.26652-4-TonyWWang-oc@zhaoxin.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 3 Jan 2024 16:37:35 +0100
+Message-ID: <CAJZ5v0hEd-NV5WoRPOZgZwxNS6M=TKcw7DpDUM9MWFYAaa+1Mw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] ACPI: cpufreq: Add ITMT support when CPPC enabled for
+ Zhaoxin CPUs
+To: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
+Cc: rafael@kernel.org, lenb@kernel.org, robert.moore@intel.com, 
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	acpica-devel@lists.linux.dev, tglx@linutronix.de, mingo@redhat.com, 
+	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
+	mcgrof@kernel.org, peterz@infradead.org, j.granados@samsung.com, 
+	ricardo.neri-calderon@linux.intel.com, viresh.kumar@linaro.org, 
+	linux-pm@vger.kernel.org, CobeChen@zhaoxin.com, TimGuo@zhaoxin.com, 
+	LeoLiu-oc@zhaoxin.com, LindaChai@zhaoxin.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 3, 2024 at 7:21=E2=80=AFAM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+On Thu, Dec 28, 2023 at 8:57=E2=80=AFAM Tony W Wang-oc <TonyWWang-oc@zhaoxi=
+n.com> wrote:
 >
-> Linux kernel uses thermal zone node name during registering thermal
-> zones and has a hard-coded limit of 20 characters, including terminating
-> NUL byte.  Exceeding the limit will cause failure to configure thermal
-> zone.
+> For Zhaoxin CPUs, the cores' highest frequencies may be different, which
+> means that cores may run at different max frequencies,
 >
-> Reported-by: Rob Herring <robh@kernel.org>
-> Closes: https://lore.kernel.org/all/CAL_JsqKogbT_4DPd1n94xqeHaU_J8ve5K09W=
-OyVsRX3jxxUW3w@mail.gmail.com/
-> Fixes: fb4d25d7a33f ("arm64: dts: juno: Align thermal zone names with bin=
-dings")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> According to ACPI-spec6 chapter 8.4.7, the per-core highest frequency
+> value can be obtained via cppc.
+>
+> The core with the higher frequency have better performance, which can be
+> called as preferred core. And better performance can be achieved by
+> making the scheduler to run tasks on these preferred cores.
+>
+> The cpufreq driver can use the highest frequency value as the prioriy of
+> core to make the scheduler try to get better performace. More specificall=
+y,
+> in the acpi-cpufreq driver use cppc_get_highest_perf() to get highest
+> frequency value of each core, use sched_set_itmt_core_prio() to set
+> highest frequency value as core priority, and use sched_set_itmt_support(=
+)
+> provided by ITMT to tell the scheduler to favor on the preferred cores.
+>
+> Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
 > ---
->  arch/arm64/boot/dts/arm/juno-base.dtsi | 4 ++--
->  arch/arm64/boot/dts/arm/juno-scmi.dtsi | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  drivers/cpufreq/acpi-cpufreq.c | 56 +++++++++++++++++++++++++++++++++-
+>  1 file changed, 55 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufre=
+q.c
+> index 37f1cdf46d29..f4c1ff9e4bb0 100644
+> --- a/drivers/cpufreq/acpi-cpufreq.c
+> +++ b/drivers/cpufreq/acpi-cpufreq.c
+> @@ -663,8 +663,56 @@ static u64 get_max_boost_ratio(unsigned int cpu)
+>
+>         return div_u64(highest_perf << SCHED_CAPACITY_SHIFT, nominal_perf=
+);
+>  }
+> +
+> +/* The work item is needed to avoid CPU hotplug locking issues */
+> +static void sched_itmt_work_fn(struct work_struct *work)
+> +{
+> +       sched_set_itmt_support();
+> +}
+> +
+> +static DECLARE_WORK(sched_itmt_work, sched_itmt_work_fn);
+> +
+> +static void set_itmt_prio(int cpu)
+> +{
+> +       static bool cppc_highest_perf_diff;
+> +       static struct cpumask core_prior_mask;
+> +       u64 highest_perf;
+> +       static u64 max_highest_perf =3D 0, min_highest_perf =3D U64_MAX;
+> +       int ret;
+> +
+> +       ret =3D cppc_get_highest_perf(cpu, &highest_perf);
+> +       if (ret)
+> +               return;
+> +
+> +       sched_set_itmt_core_prio(highest_perf, cpu);
+> +       cpumask_set_cpu(cpu, &core_prior_mask);
+> +
+> +       if (max_highest_perf <=3D min_highest_perf) {
+> +               if (highest_perf > max_highest_perf)
+> +                       max_highest_perf =3D highest_perf;
+> +
+> +               if (highest_perf < min_highest_perf)
+> +                       min_highest_perf =3D highest_perf;
+> +
+> +               if (max_highest_perf > min_highest_perf) {
+> +                       /*
+> +                        * This code can be run during CPU online under t=
+he
+> +                        * CPU hotplug locks, so sched_set_itmt_support()
+> +                        * cannot be called from here.  Queue up a work i=
+tem
+> +                        * to invoke it.
+> +                        */
+> +                       cppc_highest_perf_diff =3D true;
+> +               }
+> +       }
+> +
+> +       if (cppc_highest_perf_diff && cpumask_equal(&core_prior_mask, cpu=
+_online_mask)) {
+> +               pr_debug("queue a work to set itmt enabled\n");
+> +               schedule_work(&sched_itmt_work);
+> +       }
+> +}
+>  #else
+>  static inline u64 get_max_boost_ratio(unsigned int cpu) { return 0; }
+> +static void set_itmt_prio(int cpu) { }
+>  #endif
+>
+>  static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
+> @@ -677,7 +725,7 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_polic=
+y *policy)
+>         unsigned int valid_states =3D 0;
+>         unsigned int result =3D 0;
+>         u64 max_boost_ratio;
+> -       unsigned int i;
+> +       unsigned int i, j;
+>  #ifdef CONFIG_SMP
+>         static int blacklisted;
+>  #endif
+> @@ -742,6 +790,12 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_poli=
+cy *policy)
+>         }
+>  #endif
+>
+> +       if (c->x86_vendor =3D=3D X86_VENDOR_CENTAUR || c->x86_vendor =3D=
+=3D X86_VENDOR_ZHAOXIN) {
+> +               for_each_cpu(j, policy->cpus) {
+> +                       set_itmt_prio(j);
+> +               }
+> +       }
+> +
+>         /* capability check */
+>         if (perf->state_count <=3D 1) {
+>                 pr_debug("No P-States\n");
+> --
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Have you considered using the CPPC cpufreq driver on those platforms?
 
