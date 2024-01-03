@@ -1,129 +1,184 @@
-Return-Path: <linux-pm+bounces-1792-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1793-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A44F0823190
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 17:51:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E8908231AC
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 17:57:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3ED29287FD1
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 16:51:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AF311B2257E
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 16:57:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFCD41BDF0;
-	Wed,  3 Jan 2024 16:51:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB1151C694;
+	Wed,  3 Jan 2024 16:57:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iYOVHk2X"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 279231BDEC;
-	Wed,  3 Jan 2024 16:51:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
-Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
-	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
-	by bmailout1.hostsharing.net (Postfix) with ESMTPS id F3C6530000861;
-	Wed,  3 Jan 2024 17:51:19 +0100 (CET)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-	id E6CE12B0031; Wed,  3 Jan 2024 17:51:19 +0100 (CET)
-Date: Wed, 3 Jan 2024 17:51:19 +0100
-From: Lukas Wunner <lukas@wunner.de>
-To: Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-	Rob Herring <robh@kernel.org>, Krzysztof Wilczy??ski <kw@linux.com>,
-	Alexandru Gagniuc <mr.nuke.me@gmail.com>,
-	Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Alex Deucher <alexdeucher@gmail.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>
-Subject: Re: [PATCH v3 06/10] PCI: Cache PCIe device's Supported Speed Vector
-Message-ID: <20240103165119.GB3463@wunner.de>
-References: <20230929115723.7864-1-ilpo.jarvinen@linux.intel.com>
- <20230929115723.7864-7-ilpo.jarvinen@linux.intel.com>
- <20231230151931.GA25718@wunner.de>
- <94973372-91fc-27fc-b187-7427af9e4b7d@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C89DC1C290;
+	Wed,  3 Jan 2024 16:57:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40EA1C433C8;
+	Wed,  3 Jan 2024 16:57:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704301032;
+	bh=Dg2dDaPNZtNW//yG71kg8XZ8E7Hu6Q4eVI6C38LDthI=;
+	h=From:Date:Subject:To:Cc:From;
+	b=iYOVHk2XhpQokWq7/u1JypdHbjqJIiozmZIPP46+vKl8+c5MNTwZ6lIeawQdtTHlV
+	 fD/GNag5+BHJ3/XEBKZ3BU3o036DXxaNh+5e+43uCAJq6l8sBZedNQmiO+XtajmUV9
+	 fCBitXICxXvR2TVg8YtfB2MjhLHc7sLAZSYCFMcrWb2WrAIXYYKmQ113Vw5m2m9rHz
+	 o/GeuEn1DesYlKAWVMgrpROoZySLAsZwhabV9haMU4APb5I6MSdePpHfCgha9sfVM5
+	 5NecWyk06XBBXjdFEdq95t21rkwffHIloaFf5YhpyfgWsftyXx+XgHBDIV9kfMux5D
+	 A0IKqSxubn/Sw==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Wed, 03 Jan 2024 09:57:07 -0700
+Subject: [PATCH] power: supply: bq24190_charger: Fix "initializer element
+ is not constant" error
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <94973372-91fc-27fc-b187-7427af9e4b7d@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240103-fix-bq24190_charger-vbus_desc-non-const-v1-1-115ddf798c70@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAOKRlWUC/x2N0QqDMAxFf0XyvEBaRXC/MoasaXR9SbdkE0H89
+ 5U9HrjnngNcrIjDtTvAZCteqjYIlw74+dBVsOTGECkOFKjHpeyY3nEIE81tYasYbunrcxZn1Kr
+ IVf2DPKaFKGQepwzt7WXS1H/pdj/PHxCHbTp5AAAA
+To: sre@kernel.org
+Cc: chenhuiz@axis.com, linux-pm@vger.kernel.org, llvm@lists.linux.dev, 
+ patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.13-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5503; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=Dg2dDaPNZtNW//yG71kg8XZ8E7Hu6Q4eVI6C38LDthI=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDKlTJ74w+KGgfPuA2GGRZGmtJnFX1sCTLfPF89kTBesaf
+ 0nwf77WUcrCIMbFICumyFL9WPW4oeGcs4w3Tk2CmcPKBDKEgYtTACbiO5nhf2Cw+8YJE3meun/0
+ trPeHP7hkEg663+bHsYk7nvWam3vPRkZ+lVfdFmtn2Te5xzC9vn95czL5/vPbpKOuFWgVcWztXY
+ yCwA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Mon, Jan 01, 2024 at 08:31:39PM +0200, Ilpo Järvinen wrote:
-> On Sat, 30 Dec 2023, Lukas Wunner wrote:
-> > On Fri, Sep 29, 2023 at 02:57:19PM +0300, Ilpo Järvinen wrote:
-> > > Only the former is currently cached in pcie_bus_speeds in
-> > > the struct pci_bus. The link speeds that are supported is the
-> > > intersection of these two.
-> > 
-> > I'm wondering if caching both is actually necessary.  Why not cache
-> > just the intersection?  Do we need either of the two somewhere?
-> 
-> Intersection is enough at least for bwctrl. The only downside that is 
-> barely worth mentioning is that the bus SLSV has to be re-read when
-> function 0 sets the intersection.
->
-> I can think of somebody wanting to expose the list of both supported speed 
-> to userspace though sysfs (not done by this patch series), but they could 
-> be read from the registers in that case so that use case doesn't really 
-> matter much, IMO.
+When building with a version of GCC prior to 8.x, there is an error
+around non-constant initializer elements:
 
-Yes, that would be a reasonable argument to keep both values instead
-of storing just the intersection.
+  drivers/power/supply/bq24190_charger.c:1978:16: error: initializer element is not constant
+     .vbus_desc = bq24190_vbus_desc,
+                  ^~~~~~~~~~~~~~~~~
+  drivers/power/supply/bq24190_charger.c:1978:16: note: (near initialization for 'bq24190_chip_info_tbl[0].vbus_desc')
+  drivers/power/supply/bq24190_charger.c:1989:16: error: initializer element is not constant
+     .vbus_desc = bq24190_vbus_desc,
+                  ^~~~~~~~~~~~~~~~~
+  drivers/power/supply/bq24190_charger.c:1989:16: note: (near initialization for 'bq24190_chip_info_tbl[1].vbus_desc')
+  drivers/power/supply/bq24190_charger.c:2000:16: error: initializer element is not constant
+     .vbus_desc = bq24190_vbus_desc,
+                  ^~~~~~~~~~~~~~~~~
+  drivers/power/supply/bq24190_charger.c:2000:16: note: (near initialization for 'bq24190_chip_info_tbl[2].vbus_desc')
+  drivers/power/supply/bq24190_charger.c:2011:16: error: initializer element is not constant
+     .vbus_desc = bq24190_vbus_desc,
+                  ^~~~~~~~~~~~~~~~~
+  drivers/power/supply/bq24190_charger.c:2011:16: note: (near initialization for 'bq24190_chip_info_tbl[3].vbus_desc')
+  drivers/power/supply/bq24190_charger.c:2022:16: error: initializer element is not constant
+     .vbus_desc = bq24296_vbus_desc,
+                  ^~~~~~~~~~~~~~~~~
+  drivers/power/supply/bq24190_charger.c:2022:16: note: (near initialization for 'bq24190_chip_info_tbl[4].vbus_desc')
 
+Clang versions prior to 17.x show a similar error:
 
-> > > Store the device's Supported Link Speeds Vector into the struct pci_bus
-> > > when the Function 0 is enumerated (the Multi-Function Devices must have
-> > > same speeds the same for all Functions) to be easily able to calculate
-> > > the intersection of Supported Link Speeds.
-> > 
-> > Might want to add an explanation what you're going to need this for,
-> > I assume it's accessed frequently by the bandwidth throttling driver
-> > in a subsequent patch?
-> 
-> Yes. I tend to try to avoid forward references because some maintainers 
-> complain about them (leading to minimal changes where true motivations 
-> have to be hidden because "future" cannot be used to motivate a change 
-> even if that's often the truest motivation within a patch series). But 
-> I'll add a fwd ref here to make it more obvious. :-)
+  drivers/power/supply/bq24190_charger.c:1978:16: error: initializer element is not a compile-time constant
+                  .vbus_desc = bq24190_vbus_desc,
+                               ^~~~~~~~~~~~~~~~~
+  1 error generated.
 
-Bjorn has used phrases such as "We're about to ..." a couple of times
-in commit messages to convey that a particular change in the present
-patch will be taken advantage of by a subsequent patch.
+Newer compilers have decided to accept these structures as compile time
+constants as an extension. To resolve this issue for all supported
+compilers, change the vbus_desc member in 'struct bq24190_chip_info' to
+a pointer, as it is only ever passed by reference anyways, and adjust
+the assignments accordingly.
 
-I've used the same phrase but got criticized (in other subsystems)
-for using "we".
+Closes: https://github.com/ClangBuiltLinux/linux/issues/1973
+Fixes: b150a703b56f ("power: supply: bq24190_charger: Add support for BQ24296")
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/power/supply/bq24190_charger.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-So I use phrases such as:
+diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/supply/bq24190_charger.c
+index a8995a21fadb..2b393eb5c282 100644
+--- a/drivers/power/supply/bq24190_charger.c
++++ b/drivers/power/supply/bq24190_charger.c
+@@ -246,7 +246,7 @@ struct bq24190_dev_info {
+ struct bq24190_chip_info {
+ 	int ichg_array_size;
+ #ifdef CONFIG_REGULATOR
+-	const struct regulator_desc vbus_desc;
++	const struct regulator_desc *vbus_desc;
+ #endif
+ 	int (*check_chip)(struct bq24190_dev_info *bdi);
+ 	int (*set_chg_config)(struct bq24190_dev_info *bdi, const u8 chg_config);
+@@ -728,7 +728,7 @@ static int bq24190_register_vbus_regulator(struct bq24190_dev_info *bdi)
+ 	else
+ 		cfg.init_data = &bq24190_vbus_init_data;
+ 	cfg.driver_data = bdi;
+-	reg = devm_regulator_register(bdi->dev, &bdi->info->vbus_desc, &cfg);
++	reg = devm_regulator_register(bdi->dev, bdi->info->vbus_desc, &cfg);
+ 	if (IS_ERR(reg)) {
+ 		ret = PTR_ERR(reg);
+ 		dev_err(bdi->dev, "Can't register regulator: %d\n", ret);
+@@ -1975,7 +1975,7 @@ static const struct bq24190_chip_info bq24190_chip_info_tbl[] = {
+ 	[BQ24190] = {
+ 		.ichg_array_size = ARRAY_SIZE(bq24190_ccc_ichg_values),
+ #ifdef CONFIG_REGULATOR
+-		.vbus_desc = bq24190_vbus_desc,
++		.vbus_desc = &bq24190_vbus_desc,
+ #endif
+ 		.check_chip = bq24190_check_chip,
+ 		.set_chg_config = bq24190_battery_set_chg_config,
+@@ -1986,7 +1986,7 @@ static const struct bq24190_chip_info bq24190_chip_info_tbl[] = {
+ 	[BQ24192] = {
+ 		.ichg_array_size = ARRAY_SIZE(bq24190_ccc_ichg_values),
+ #ifdef CONFIG_REGULATOR
+-		.vbus_desc = bq24190_vbus_desc,
++		.vbus_desc = &bq24190_vbus_desc,
+ #endif
+ 		.check_chip = bq24190_check_chip,
+ 		.set_chg_config = bq24190_battery_set_chg_config,
+@@ -1997,7 +1997,7 @@ static const struct bq24190_chip_info bq24190_chip_info_tbl[] = {
+ 	[BQ24192i] = {
+ 		.ichg_array_size = ARRAY_SIZE(bq24190_ccc_ichg_values),
+ #ifdef CONFIG_REGULATOR
+-		.vbus_desc = bq24190_vbus_desc,
++		.vbus_desc = &bq24190_vbus_desc,
+ #endif
+ 		.check_chip = bq24190_check_chip,
+ 		.set_chg_config = bq24190_battery_set_chg_config,
+@@ -2008,7 +2008,7 @@ static const struct bq24190_chip_info bq24190_chip_info_tbl[] = {
+ 	[BQ24196] = {
+ 		.ichg_array_size = ARRAY_SIZE(bq24190_ccc_ichg_values),
+ #ifdef CONFIG_REGULATOR
+-		.vbus_desc = bq24190_vbus_desc,
++		.vbus_desc = &bq24190_vbus_desc,
+ #endif
+ 		.check_chip = bq24190_check_chip,
+ 		.set_chg_config = bq24190_battery_set_chg_config,
+@@ -2019,7 +2019,7 @@ static const struct bq24190_chip_info bq24190_chip_info_tbl[] = {
+ 	[BQ24296] = {
+ 		.ichg_array_size = BQ24296_CCC_ICHG_VALUES_LEN,
+ #ifdef CONFIG_REGULATOR
+-		.vbus_desc = bq24296_vbus_desc,
++		.vbus_desc = &bq24296_vbus_desc,
+ #endif
+ 		.check_chip = bq24296_check_chip,
+ 		.set_chg_config = bq24296_battery_set_chg_config,
 
- "An upcoming commit will create DOE mailboxes upon device enumeration by
-  the PCI core.  Their lifetime shall not be limited by a driver.
-  Therefore rework..." (see 022b66f38195)
+---
+base-commit: b150a703b56fb6eb282d059b421652ccd9155c23
+change-id: 20240103-fix-bq24190_charger-vbus_desc-non-const-c6bf001dc69d
 
-Can also reference the past:
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
- "The PCI core has just been amended to create a pci_doe_mb struct for
-  every DOE instance on device enumeration.  [...]  That leaves [...]
-  without any callers, so drop them." (see 74e491e5d1bc)
-
-If someone finds your commit e.g. through git blame, it may help them
-enormously if you provide context in the commit message.  If maintainers
-in other subsystem tell you otherwise, they're wrong. ;)
-
-Thanks,
-
-Lukas
 
