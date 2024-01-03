@@ -1,120 +1,115 @@
-Return-Path: <linux-pm+bounces-1779-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1780-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F1CE822D95
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 13:54:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A790E822E19
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 14:15:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0AC68B222FE
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 12:54:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 56C96285BCC
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 13:15:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92F711944F;
-	Wed,  3 Jan 2024 12:54:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cOnw9bNd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F07019444;
+	Wed,  3 Jan 2024 13:15:26 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABA511944C
-	for <linux-pm@vger.kernel.org>; Wed,  3 Jan 2024 12:54:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-dbd73620c82so6752322276.2
-        for <linux-pm@vger.kernel.org>; Wed, 03 Jan 2024 04:54:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704286478; x=1704891278; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pOGNoa+uoP67gG3C3OdO7eu3hZWCRo+rAfnDqGQ6OWk=;
-        b=cOnw9bNdlSS3KGMy113cvsKHQg220lVPEWJP/CZ7zG7S+/DxwKnQUPhjSflJmYpQaW
-         sPB3bi3+/OIPqpGVpyBpXZ0t+seoM1IALVU9tFE1ikGEhabSNlc8n8qxiV5nL4ThcCEk
-         5BN2jEM5EajpBRzTJIF6+Tex9JcFcZV7OHdKxF56cwGznan4RfKRwlds2/r034FvdHvY
-         n1zk2S9R4vrvHiNIIYPl1eSnngSUPg1PBoZXsQXHTzCEE4IhuBQqrK+Lf5ninxygGTgr
-         bQQDQFHfEzCXZcsd1b5mxViC5gCkavQ1VWjmSCP+Ggj44tRQkrQYjSNtoTEyZWp013P5
-         nYGw==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 166A019452;
+	Wed,  3 Jan 2024 13:15:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-595ffa2e6a2so145122eaf.0;
+        Wed, 03 Jan 2024 05:15:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704286478; x=1704891278;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pOGNoa+uoP67gG3C3OdO7eu3hZWCRo+rAfnDqGQ6OWk=;
-        b=LrKysMF3ynN92iSd8EcM5iMMGKgUVDVZi2KsTLGDnKxodpQgo7BnKAj/75lEGlxZqx
-         m1hpg0vP6Uis/t1zKfrD+cwGyILMIrmi57NDoE7MHlD6YeKgErJc/PGtNCzdM+xptfI0
-         hCnJk/VSpHBXD7nfHj9vxj+b63UwTzE4rV6idNj3xBdwuNGgwFmTZ9VXhyr9NMYQBqLL
-         iK8yEu9r6gWkweqlQhvtA52OgDJCZtTjz3fLcqudD7MsfsdRBMHhkBbXHteVTH3Ua+iO
-         2/n9KZ8/kCdURxcLLbryGPyVqVrV/WyPmiiPbmFlm0XzoGljjtWUFOWSexHlzDzWLyTc
-         dnPg==
-X-Gm-Message-State: AOJu0YyYdE6LT4j7CK3u9FJwvy7KYUzpbJHw43Qa8pIC34JRHj3htkNg
-	Y1PZr8DY243gbVioIpevb9a75tyiEJtFmEANTuGdgTFu2rKAWw==
-X-Google-Smtp-Source: AGHT+IEixB+WBNhbDXVIfjA3/lNv5WlNF7f1gcgq06js9K5QExKPJiNz8iPEs2JGsGvCguUuLd4AYEFxFy6bIiDoz20=
-X-Received: by 2002:a25:d245:0:b0:dbc:f8ff:c7d7 with SMTP id
- j66-20020a25d245000000b00dbcf8ffc7d7mr9690250ybg.37.1704286478608; Wed, 03
- Jan 2024 04:54:38 -0800 (PST)
+        d=1e100.net; s=20230601; t=1704287724; x=1704892524;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lfyvIelZW7mDBavaNQIQHDffrRYb1YXYXAAsZleBbOE=;
+        b=eRQaOby+ZXtwzzjiWmmLp2OkjAUl3TkZFZPfXaCxm0nZq2lCN3kROV5dgy9ifKzOPl
+         cCza1TA+zQ5wb+dOmQyDGMIbkmBerU+JhkwJFx6C+1Wy4A8qwhY+Fh6uOvgnZuKsUXMP
+         JvaNXmsE/uSCFJlNL+AA8D5l89eBKlwpiOtZdnGfvYP9L207hEI78LyWj1jqXVMZJHbj
+         1BGME0Kn3waUjF5uL+2q7jbARIcV49aUVlKhbb32NyWwtmyfR3HeYI3c07XYKSadxWRn
+         tMBDMQZqclNVr/MKoK6rMlsCOKXp1AycRrsQ6QL+1CViDGZJCp7C6yywMzzg2qjBp7Us
+         p2mg==
+X-Gm-Message-State: AOJu0Yx8gZ210cAHbDOBkpcwsuRQD9zqwuGy/rXmawyxEyu9MJtOYeVP
+	D2XeZ+FQdB3EiyV/NtewdbUa6OmXJuFV6EYBVC8=
+X-Google-Smtp-Source: AGHT+IF6G9iejcCFuWF94TE+8OnDKLwTebZ4yYyxeEIo2WtUzbGVu9pAN1nfLuEeMt90lMGpJWYVY7neydiQir9EbFw=
+X-Received: by 2002:a4a:b38c:0:b0:595:6024:c4f8 with SMTP id
+ p12-20020a4ab38c000000b005956024c4f8mr7908752ooo.1.1704287724047; Wed, 03 Jan
+ 2024 05:15:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231220-sa8295p-gpu-v2-0-4763246b72c0@quicinc.com> <20231220-sa8295p-gpu-v2-4-4763246b72c0@quicinc.com>
-In-Reply-To: <20231220-sa8295p-gpu-v2-4-4763246b72c0@quicinc.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 3 Jan 2024 13:54:02 +0100
-Message-ID: <CAPDyKFoD-+2q4sDZL3J-2a2kGUmBXpUc6vj8zxzaO72O_Ksj7g@mail.gmail.com>
-Subject: Re: [PATCH v2 4/8] soc: qcom: rpmhpd: Drop SA8540P gfx.lvl
-To: Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Taniya Das <quic_tdas@quicinc.com>, Johan Hovold <johan+linaro@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org, 
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, 
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+References: <20240103041459.11113-1-ricardo.neri-calderon@linux.intel.com>
+In-Reply-To: <20240103041459.11113-1-ricardo.neri-calderon@linux.intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 3 Jan 2024 14:15:12 +0100
+Message-ID: <CAJZ5v0hDSgn5Cc_md0ZzCtriA21NcBf6WN49PgtVs1dgUSVsiw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] thermal: intel: hfi: Fix memory corruption on
+ resume from hibernation
+To: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, Chen Yu <yu.c.chen@intel.com>, 
+	Len Brown <len.brown@intel.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>, 
+	Zhao Liu <zhao1.liu@intel.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 22 Dec 2023 at 05:39, Bjorn Andersson <quic_bjorande@quicinc.com> wrote:
+On Wed, Jan 3, 2024 at 5:13=E2=80=AFAM Ricardo Neri
+<ricardo.neri-calderon@linux.intel.com> wrote:
 >
-> On SA8295P and SA8540P gfx.lvl is not provdied by rpmh, but rather is
-> handled by an external regulator (max20411). Drop gfx.lvl from the list
-> of power-domains exposed on this platform.
+> Hi,
 >
-> Fixes: f68f1cb3437d ("soc: qcom: rpmhpd: add sc8280xp & sa8540p rpmh power-domains")
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-
-I guess it's easier if you funnel this through the soc tree - or you
-prefer if I take it through my pmdomain tree?
-
-No matter what, feel free to add:
-Acked-by: Ulf Hansson <ulf.hansson@linaro.org>
-
-Kind regards
-Uffe
-
-> ---
->  drivers/pmdomain/qcom/rpmhpd.c | 1 -
->  1 file changed, 1 deletion(-)
+> This is v2 of this series. You can read the overview and motivation in th=
+e
+> cover letter of v1 [1].
 >
-> diff --git a/drivers/pmdomain/qcom/rpmhpd.c b/drivers/pmdomain/qcom/rpmhpd.c
-> index 3078896b1300..27a73ff72614 100644
-> --- a/drivers/pmdomain/qcom/rpmhpd.c
-> +++ b/drivers/pmdomain/qcom/rpmhpd.c
-> @@ -217,7 +217,6 @@ static struct rpmhpd *sa8540p_rpmhpds[] = {
->         [SC8280XP_CX] = &cx,
->         [SC8280XP_CX_AO] = &cx_ao,
->         [SC8280XP_EBI] = &ebi,
-> -       [SC8280XP_GFX] = &gfx,
->         [SC8280XP_LCX] = &lcx,
->         [SC8280XP_LMX] = &lmx,
->         [SC8280XP_MMCX] = &mmcx,
+> I smoke-retested this version on a Meteor Lake system. It completed 50
+> cycles of suspend-to-disk and resume. I completed longer testing for v1.
+>
+> Changes since v1:
+>  * Added locking to hfi_pm_notify() to serialize RMW operations on the
+>    MSR_IA32_HW_FEEDBACK_CONFIG register. (Rafael)
+>  * Relocated a comment regarding the reallocation of HFI memory to
+>    patch 3/4. (Rafael)
+>  * Clarified that patch 1/4 does not introduce functional changes.
+>    (Rafael)
+>  * Indicated the first stable version on which this patchset should be
+>    backported.
+>  * Renamed hfi_do_pm_[enable|disable]() as hfi_do_[enable|disable]() for
+>    future reuse. (Stan)
+>  * Registered the HFI suspend notifier towards the end of
+>    intel_hfi_init(). (Stan)
+>
+> Thanks and BR,
+> Ricardo
+>
+> [1]. https://lore.kernel.org/all/20231227062940.10780-1-ricardo.neri-cald=
+eron@linux.intel.com/
+>
+> Ricardo Neri (4):
+>   thermal: intel: hfi: Refactor enabling code into helper functions
+>   thermal: intel: hfi: Enable an HFI instance from its first online CPU
+>   thermal: intel: hfi: Disable an HFI instance when all its CPUs go
+>     offline
+>   thermal: intel: hfi: Add a suspend notifier
+>
+>  drivers/thermal/intel/intel_hfi.c | 153 +++++++++++++++++++++++++-----
+>  1 file changed, 127 insertions(+), 26 deletions(-)
 >
 > --
-> 2.25.1
->
+
+I've queued up the first 3 patches from the series for 6.8 as they
+make sense even without the [4/4] IMO.
+
+I still have some comments on the last one, though, but let me reply
+to it directly.
 
