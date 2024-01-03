@@ -1,227 +1,324 @@
-Return-Path: <linux-pm+bounces-1782-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1783-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B3FB822EBA
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 14:41:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63570822ECA
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 14:43:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35AB41F23C86
-	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 13:41:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D2EE284950
+	for <lists+linux-pm@lfdr.de>; Wed,  3 Jan 2024 13:43:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 712D1199B4;
-	Wed,  3 Jan 2024 13:38:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A943819BCD;
+	Wed,  3 Jan 2024 13:41:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jSLzNE3w"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC7DF1A59D;
-	Wed,  3 Jan 2024 13:38:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-594cabe74f8so370838eaf.0;
-        Wed, 03 Jan 2024 05:38:38 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF5D719BC3
+	for <linux-pm@vger.kernel.org>; Wed,  3 Jan 2024 13:41:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-28c7c9b19f1so2871404a91.1
+        for <linux-pm@vger.kernel.org>; Wed, 03 Jan 2024 05:41:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1704289275; x=1704894075; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LvuPjU/IgmMeJVXibAVcHoabpAAtu1SyJkkN9yxBvKY=;
+        b=jSLzNE3wl2d+5mCzkH116gN/LlHafdn2w7BZcky4QmUcfDv72G50fzQXCZIvx9kcSV
+         wMbU5pTBOcn+F4tx/FScEO4SjiD63jJphIXFYnuKowax5rE3VZZgnfbCae5dgNArVzJ8
+         HLqDUp9ghfkQvG5TxHLR2n5YPJ2W/Z57RH7zmFWX5qNyJLuwxzfuTGsneZrwAaaqnj6b
+         eO8unsalJ4kIs/Js7JoFuh7kxCDBIBwfMGYA9Bp1KScmiweKhDl9lOT4cY/qrgZbjzkd
+         4RXbKvGgOEJBVxxqGER0xJaDTHFErelJT/j3Uht/otYsJRPY2bqoBVdM6ILjUqvO5hxh
+         vtqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704289118; x=1704893918;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jAn2nW/5MaBJuG//Cc3icnX/0rkkS5pmAQ07kArKsk8=;
-        b=HQXK+h5zz1hJY6CYKiWJi7KaBUsa4SbZ49YjuHqGaE7g9HTssL7yxc7ALmvkGgC5SO
-         InkRQgV5nIGtqyNwo8O3/ACOxUMXp5OuXOJSotXFh90s5/yRm3cBsecvKbIMFtjfKTf3
-         +gQuLBfX6qK86FcFRaiC96EJDbKxLAILoUNobjEmd5NI+CvKHN411ccWOpLiiWcfW+t5
-         s7Azi02GSDNhkSuxIQY8IfgokSkmkMl1pOPaOJLeH5R7V7PSMcE4oa62/8Nc8JsVQKyO
-         nqCVphZGP4MOJmyEhXBw73cFnGLCJZ5kkZTgVIWIvgpCt69flrw/tGrcSwbYpim7F5bh
-         NFZw==
-X-Gm-Message-State: AOJu0YzRzxQdbTIv10cROgu6z9l5Kx+88NLDN/QhZHdja9BjL4fkz8rz
-	hbIQwEASiaVMwG4iznVbJ2JM3t8NXk8wdLfBn30=
-X-Google-Smtp-Source: AGHT+IH8thOEK2HNeOFjVdgy3io5k3YqU5+G5eTWfnS51H5767RC7XWAZu8POv3Q0Sj0t6fk0tm/tNjOp9NmZUBBiac=
-X-Received: by 2002:a4a:e096:0:b0:595:6028:d8cb with SMTP id
- w22-20020a4ae096000000b005956028d8cbmr7273908oos.0.1704289117907; Wed, 03 Jan
- 2024 05:38:37 -0800 (PST)
+        d=1e100.net; s=20230601; t=1704289275; x=1704894075;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LvuPjU/IgmMeJVXibAVcHoabpAAtu1SyJkkN9yxBvKY=;
+        b=IlgulgjBrubW/F0ibL2tundGB26BjPKFhG/hE82jBS/Y3yZ8rfUZs21cfTDCOipE9J
+         egTSKbNQO/REezvVRzJlZqEctBiTe6qxPlK4kkOZKJAtgSG+XKIjbHLn9hCs2RgNExOF
+         ukNA0nU0jHCIcbN/1DSQamty7zX0ZKzTLCiyI85wfJexbWoazeQa725qgGtfDWUd/mlQ
+         347TLGX/heL/cLLWLlCgpCUj14msbkRqeA4Ihea4UC+3D5mPLJJJjqJlHdfhmJDfHN8K
+         Macj2XZZbKKFngQ9vjcro2XrAEbNVPcGKMpsAoDC4V6ww4EIdVFidm85Bc3OGG9IlfHG
+         hAYg==
+X-Gm-Message-State: AOJu0Yz8LRl16uKcxM3+ld++mPI7AhhVS82Y5K4KZUobXOrQzUKWz6Ra
+	xbgbVswEaKC6p2jercwS9A8xltqGtJNISJeE6nw+e8A9vs83TA==
+X-Google-Smtp-Source: AGHT+IFgMREW0a+5RgXL5UBvl62QyyRG13LxltUKOAWoZ8mPkanEmqAeA6bEMPIkqbHOKcVM477djGZ8URCoGIJ7l0U=
+X-Received: by 2002:a17:90a:df90:b0:28c:146e:31e7 with SMTP id
+ p16-20020a17090adf9000b0028c146e31e7mr5428986pjv.0.1704289275013; Wed, 03 Jan
+ 2024 05:41:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240103041459.11113-1-ricardo.neri-calderon@linux.intel.com>
- <20240103041459.11113-5-ricardo.neri-calderon@linux.intel.com> <CAJZ5v0jSERoeMki9ZvWtTqiZidETeo1Xm_Qb0Oo2qRG0PMrSJQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jSERoeMki9ZvWtTqiZidETeo1Xm_Qb0Oo2qRG0PMrSJQ@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 3 Jan 2024 14:38:26 +0100
-Message-ID: <CAJZ5v0inNopOHMJ85pjHNLXi0kRuJaLLA2aF=fZF3jWTbC7r=g@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] thermal: intel: hfi: Add a suspend notifier
-To: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, Chen Yu <yu.c.chen@intel.com>, 
-	Len Brown <len.brown@intel.com>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>, 
-	Zhao Liu <zhao1.liu@intel.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+References: <20231208015242.385103-1-qyousef@layalina.io> <20231208015242.385103-2-qyousef@layalina.io>
+ <CAKfTPtAKainBfpPOKTJ21zQmmYw7O0Z0v8utfg=QTBtE1L5O_w@mail.gmail.com>
+ <20231212124037.at47izy5xp6lsxh2@airbuntu> <20231229002529.sidy6wxmclhzlzib@airbuntu>
+In-Reply-To: <20231229002529.sidy6wxmclhzlzib@airbuntu>
+From: Vincent Guittot <vincent.guittot@linaro.org>
+Date: Wed, 3 Jan 2024 14:41:03 +0100
+Message-ID: <CAKfTPtCu7_Z8RCMeSJGzyu79Af-gypyqLyyWQkuZsMHgnf3CzQ@mail.gmail.com>
+Subject: Re: [PATCH 1/4] sched/fair: Be less aggressive in calling cpufreq_update_util()
+To: Qais Yousef <qyousef@layalina.io>
+Cc: Ingo Molnar <mingo@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>, 
+	Rick Yiu <rickyiu@google.com>, Chung-Kai Mei <chungkai@google.com>, 
+	Hongyan Xia <hongyan.xia2@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 3, 2024 at 2:34=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.org=
-> wrote:
+On Fri, 29 Dec 2023 at 01:25, Qais Yousef <qyousef@layalina.io> wrote:
 >
-> The subject should say "add a PM notifier" to indicate that
-> hibernation is covered too.
+> On 12/12/23 12:40, Qais Yousef wrote:
+> > On 12/12/23 12:06, Vincent Guittot wrote:
+> >
+> > > > @@ -6772,6 +6737,8 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
+> > > >  enqueue_throttle:
+> > > >         assert_list_leaf_cfs_rq(rq);
+> > > >
+> > >
+> > > Here and in the other places below,  you lose :
+> > >
+> > >  -       } else if (decayed) {
+> > >
+> > > The decayed condition ensures a rate limit (~1ms) in the number of
+> > > calls to cpufreq_update_util.
+> > >
+> > > enqueue/dequeue/tick don't create any sudden change in the PELT
+> > > signals that would require to update cpufreq of the change unlike
+> > > attach/detach
+> >
+> > Okay, thanks for the clue. Let me rethink this again.
 >
-> On Wed, Jan 3, 2024 at 5:13=E2=80=AFAM Ricardo Neri
-> <ricardo.neri-calderon@linux.intel.com> wrote:
-> >
-> > The kernel gives the HFI hardware a memory region that the latter uses =
-to
-> > provide updates to the HFI table. The kernel allocates this memory regi=
-on
-> > at boot. It remains constant throughout runtime time.
-> >
-> > When resuming from suspend or hibernation, the restore kernel allocates=
- a
->
-> The restore kernel is only used during resume from hibernation, so
-> this particular problem is hibernation-specific.
->
-> It is possible, at least in principle, that the address of the HFI
-> table is "lost" by the processor during resume from "deep" suspend
-> (ACPI S3), in which case it may not survive the firmware-driven part
-> of the suspend-resume cycle.  It is thus prudent to disable HFI on
-> suspend and re-enable it on resume for the boot CPU (under the
-> assumption that the other CPUs will be taken care of by CPU offline),
-> but for a somewhat different reason than in the hibernation case.
->
-> > second memory buffer and reprograms the HFI hardware with the new locat=
-ion
-> > as part of a normal boot. The location of the second memory buffer may
-> > differ from the one allocated by the image kernel. Subsequently, when t=
-he
-> > restore kernel transfers control to the image kernel, the second buffer
-> > becomes invalid, potentially leading to memory corruption if the hardwa=
-re
-> > writes to it (hardware continues using the buffer from the restore kern=
-el).
-> >
-> > Add a suspend notifier to disable all HFI instances before jumping to t=
-he
-> > image kernel and enable them once the image kernel has been restored. U=
-se
-> > the memory buffer that the image kernel allocated.
-> >
-> > For non-boot CPUs, rely on the CPU hotplug callbacks as CPUs are disabl=
-ed
-> > and enabled during suspend and resume, respectively.
-> >
-> > The CPU hotplug callbacks do not cover the boot CPU. Handle the HFI
-> > instance of the boot CPU from the suspend notifier callback.
-> >
-> > Cc: Chen Yu <yu.c.chen@intel.com>
-> > Cc: Len Brown <len.brown@intel.com>
-> > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > Cc: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-> > Cc: Zhang Rui <rui.zhang@intel.com>
-> > Cc: Zhao Liu <zhao1.liu@linux.intel.com>
-> > Cc: linux-pm@vger.kernel.org
-> > Cc: stable@vger.kernel.org    # 6.1
-> > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> > --
-> > Changes since v1:
-> >  * Moved registration of the suspend notifier towards the end of
-> >    intel_hfi_init(). (Stan)
-> >  * Renamed hfi_do_pm_[enable|disable]() to hfi_do_[enable|disable](). S=
-tan
-> >    will use these functions outside the suspend notifier. (Stan)
-> >  * Added locking to calls to hfi_[enable|disable]() from the suspend
-> >    notifier. (Rafael)
-> > ---
-> >  drivers/thermal/intel/intel_hfi.c | 62 +++++++++++++++++++++++++++++++
-> >  1 file changed, 62 insertions(+)
-> >
-> > diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/=
-intel_hfi.c
-> > index 22445403b520..8d6e4f8dc67a 100644
-> > --- a/drivers/thermal/intel/intel_hfi.c
-> > +++ b/drivers/thermal/intel/intel_hfi.c
-> > @@ -30,11 +30,13 @@
-> >  #include <linux/kernel.h>
-> >  #include <linux/math.h>
-> >  #include <linux/mutex.h>
-> > +#include <linux/notifier.h>
-> >  #include <linux/percpu-defs.h>
-> >  #include <linux/printk.h>
-> >  #include <linux/processor.h>
-> >  #include <linux/slab.h>
-> >  #include <linux/spinlock.h>
-> > +#include <linux/suspend.h>
-> >  #include <linux/string.h>
-> >  #include <linux/topology.h>
-> >  #include <linux/workqueue.h>
-> > @@ -571,6 +573,60 @@ static __init int hfi_parse_features(void)
-> >         return 0;
-> >  }
-> >
-> > +static void hfi_do_enable(void *info)
-> > +{
-> > +       struct hfi_instance *hfi_instance =3D info;
-> > +
-> > +       hfi_set_hw_table(hfi_instance);
-> > +       hfi_enable();
-> > +}
-> > +
-> > +static void hfi_do_disable(void *info)
-> > +{
-> > +       hfi_disable();
-> > +}
-> > +
-> > +static int hfi_pm_notify(struct notifier_block *nb,
-> > +                        unsigned long mode, void *unused)
-> > +{
-> > +       struct hfi_cpu_info *info =3D &per_cpu(hfi_cpu_info, 0);
-> > +       struct hfi_instance *hfi =3D info->hfi_instance;
-> > +       int ret =3D 0;
-> > +
-> > +       /* HFI may not be in use. */
-> > +       if (!hfi)
-> > +               return ret;
-> > +
-> > +       mutex_lock(&hfi_instance_lock);
-> > +       /*
-> > +        * Only handle the HFI instance of the package of the boot CPU.=
- The
-> > +        * instances of other packages are handled in the CPU hotplug c=
-allbacks.
-> > +        */
-> > +       switch (mode) {
-> > +       case PM_HIBERNATION_PREPARE:
-> > +       case PM_SUSPEND_PREPARE:
-> > +       case PM_RESTORE_PREPARE:
-> > +               ret =3D smp_call_function_single(0, hfi_do_disable, NUL=
-L, true);
-> > +               break;
-> > +
-> > +       case PM_POST_RESTORE:
-> > +       case PM_POST_HIBERNATION:
-> > +       case PM_POST_SUSPEND:
-> > +               ret =3D smp_call_function_single(0, hfi_do_enable, hfi,=
- true);
-> > +               break;
->
-> Because this handles the boot CPU only, one has to wonder if it should
-> be a syscore op rather than a PM notifier.
->
-> It does not sleep AFAICS, so it can run in that context, and it is
-> guaranteed to run on the boot CPU then, so it is not necessary to
-> force that.  Moreover, syscore ops are guaranteed to be
-> non-concurrent, so locking is not needed.
->
-> In addition, disabling HFI from a PM notifier is generally observable
-> by user space, because PM notifiers run before user space is frozen,
-> but doing it from a syscore op wouldn't be.
+> Thinking more about this. Do we really need to send freq updates at
+> enqueue/attach etc?
 
-One more thing: PM notifiers run on all variants of system suspend and
-resume, including suspend-to-idle in which case HFI need not be
-disabled/enabled IIUC and syscore ops only run in hibernation and
-"deep" suspend cycles, so they cover the cases in which the special
-handling is really needed and don't add useless overhead otherwise.
+Yes, attach and detach are the 2 events which can make abrupt and
+significant changes in the utilization of the CPU.
+
+>
+> I did an experiment to remove all the updates except in three places:
+>
+> 1. Context switch (done unconditionally)
+> 2. Tick
+> 2. update_blocked_averages()
+
+From the PoV of util_avg, attach, detach, tick and
+update_blocked_averages are mandatory events to report to cpufreq to
+correctly follow utilization.
+
+>
+> I tried the below patch on mac mini with m1 SoC, 6.6 kernel; speedometers
+> scores were the same (against this series).
+>
+> I ran perf bench sched pipe to see if the addition in context switch will make
+> things worse
+>
+> before (this series applied):
+>
+>         # Running 'sched/pipe' benchmark:
+>         # Executed 1000000 pipe operations between two processes
+>
+>              Total time: 20.505 [sec]
+>
+>               20.505628 usecs/op
+>                   48767 ops/sec
+>
+> after (proposed patch below applied on top):
+>
+>         # Running 'sched/pipe' benchmark:
+>         # Executed 1000000 pipe operations between two processes
+>
+>              Total time: 19.475 [sec]
+>
+>               19.475838 usecs/op
+>                   51345 ops/sec
+>
+> I tried against vanilla kernel (without any patches, including some dependency
+> backports) using schedutil governor
+>
+>         # Running 'sched/pipe' benchmark:
+>         # Executed 1000000 pipe operations between two processes
+>
+>              Total time: 22.428 [sec]
+>
+>               22.428166 usecs/op
+>                   44586 ops/sec
+>
+> (I got higher run to run variance against this kernel)
+>
+> So things got better. I think we can actually unify all updates to be at
+> context switch and tick for all classes.
+>
+> The one hole is for long running CFS tasks without context switch; no updates
+> until tick this means the dvfs headroom needs to cater for that as worst case
+> scenario now. I think this is the behavior today actually; but accidental
+> updates due to enqueue/dequeue could have helped to issue more updates. If none
+> of that happens, then updating load_avg at entity_tick() is what would have
+> triggered a frequency update.
+>
+> I'm not sure if the blocked average one is required to be honest. But feared
+> that when the cpu goes to idle we might miss reducing frequencies vote for that
+> CPU - which matters on shared cpufreq policies.
+>
+> I haven't done comprehensive testing of course. But would love to hear any
+> thoughts on how we can be more strategic and reduce the number of cpufreq
+> updates we send. And iowait boost state needs to be verified.
+>
+> While testing this series more I did notice that short kworker context switches
+> still can cause the frequency to go high. I traced this back to
+> __balance_callbacks() in finish_lock_switch() after calling
+> uclamp_context_switch(). So I think we do have a problem of updates being
+> 'accidental' and we need to improve the interaction with the governor to be
+> more intentional keeping in mind all the constraints we have today in h/w and
+> software.
+>
+> --->8---
+>
+>
+> From 6deed09be1d075afa3858ca62dd54826cdb60d44 Mon Sep 17 00:00:00 2001
+> From: Qais Yousef <qyousef@layalina.io>
+> Date: Tue, 26 Dec 2023 01:23:57 +0000
+> Subject: [PATCH] sched/fair: Update freq on tick and context switch and
+>  blocked avgs
+>
+> Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
+> ---
+>  kernel/sched/cpufreq_schedutil.c |  3 ---
+>  kernel/sched/fair.c              | 13 +------------
+>  kernel/sched/sched.h             | 15 +--------------
+>  3 files changed, 2 insertions(+), 29 deletions(-)
+>
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> index c0879a985097..553a3d7f02d8 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -166,9 +166,6 @@ static inline bool ignore_short_tasks(int cpu,
+>         struct task_struct *p = cpu_rq(cpu)->curr;
+>         unsigned long task_util;
+>
+> -       if (!(flags & SCHED_CPUFREQ_PERF_HINTS))
+> -               return false;
+> -
+>         if (!fair_policy(p->policy))
+>                 return false;
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index d63eae534cec..3a30f78b37d3 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -5717,8 +5717,6 @@ static bool throttle_cfs_rq(struct cfs_rq *cfs_rq)
+>         sub_nr_running(rq, task_delta);
+>
+>  done:
+> -       cpufreq_update_util(rq, 0);
+> -
+>         /*
+>          * Note: distribution will already see us throttled via the
+>          * throttled-list.  rq->lock protects completion.
+> @@ -5811,8 +5809,6 @@ void unthrottle_cfs_rq(struct cfs_rq *cfs_rq)
+>  unthrottle_throttle:
+>         assert_list_leaf_cfs_rq(rq);
+>
+> -       cpufreq_update_util(rq, 0);
+> -
+>         /* Determine whether we need to wake up potentially idle CPU: */
+>         if (rq->curr == rq->idle && rq->cfs.nr_running)
+>                 resched_curr(rq);
+> @@ -6675,8 +6671,6 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
+>  enqueue_throttle:
+>         assert_list_leaf_cfs_rq(rq);
+>
+> -       cpufreq_update_util(rq, p->in_iowait ? SCHED_CPUFREQ_IOWAIT : 0);
+> -
+>         hrtick_update(rq);
+>  }
+>
+> @@ -6754,7 +6748,6 @@ static void dequeue_task_fair(struct rq *rq, struct task_struct *p, int flags)
+>
+>  dequeue_throttle:
+>         util_est_update(&rq->cfs, p, task_sleep);
+> -       cpufreq_update_util(rq, 0);
+>         hrtick_update(rq);
+>  }
+>
+> @@ -8338,7 +8331,6 @@ done: __maybe_unused;
+>
+>         update_misfit_status(p, rq);
+>         sched_fair_update_stop_tick(rq, p);
+> -       cpufreq_update_util(rq, 0);
+>
+>         return p;
+>
+> @@ -12460,7 +12452,7 @@ static void task_tick_fair(struct rq *rq, struct task_struct *curr, int queued)
+>
+>         update_misfit_status(curr, rq);
+>         update_overutilized_status(task_rq(curr));
+> -       cpufreq_update_util(rq, SCHED_CPUFREQ_PERF_HINTS);
+> +       cpufreq_update_util(rq, current->in_iowait ? SCHED_CPUFREQ_IOWAIT : 0);
+>
+>         task_tick_core(rq, curr);
+>  }
+> @@ -12585,7 +12577,6 @@ static void detach_task_cfs_rq(struct task_struct *p)
+>         struct sched_entity *se = &p->se;
+>
+>         detach_entity_cfs_rq(se);
+> -       cpufreq_update_util(task_rq(p), 0);
+>  }
+>
+>  static void attach_task_cfs_rq(struct task_struct *p)
+> @@ -12593,7 +12584,6 @@ static void attach_task_cfs_rq(struct task_struct *p)
+>         struct sched_entity *se = &p->se;
+>
+>         attach_entity_cfs_rq(se);
+> -       cpufreq_update_util(task_rq(p), 0);
+>  }
+>
+>  static void switched_from_fair(struct rq *rq, struct task_struct *p)
+> @@ -12839,7 +12829,6 @@ static int __sched_group_set_shares(struct task_group *tg, unsigned long shares)
+>                         update_load_avg(cfs_rq_of(se), se, UPDATE_TG);
+>                         update_cfs_group(se);
+>                 }
+> -               cpufreq_update_util(rq, 0);
+>                 rq_unlock_irqrestore(rq, &rf);
+>         }
+>
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index 516187ea2b81..e1622e2b82be 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -3076,20 +3076,7 @@ static inline bool uclamp_rq_is_capped(struct rq *rq)
+>  /* Request freq update on context switch if necessary */
+>  static inline void uclamp_context_switch(struct rq *rq)
+>  {
+> -       unsigned long uclamp_min;
+> -       unsigned long uclamp_max;
+> -       unsigned long util;
+> -
+> -       /* Only RT and FAIR tasks are aware of uclamp */
+> -       if (!rt_policy(current->policy) && !fair_policy(current->policy))
+> -               return;
+> -
+> -       uclamp_min = uclamp_eff_value(current, UCLAMP_MIN);
+> -       uclamp_max = uclamp_eff_value(current, UCLAMP_MAX);
+> -       util = rq->cfs.avg.util_avg;
+> -
+> -       if (uclamp_min > util || uclamp_max < util)
+> -               cpufreq_update_util(rq, SCHED_CPUFREQ_PERF_HINTS);
+> +       cpufreq_update_util(rq, current->in_iowait ? SCHED_CPUFREQ_IOWAIT : 0);
+>  }
+>  #else /* CONFIG_UCLAMP_TASK */
+>  static inline unsigned long uclamp_eff_value(struct task_struct *p,
+> --
+> 2.40.1
+>
 
