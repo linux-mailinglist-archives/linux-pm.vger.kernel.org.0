@@ -1,162 +1,98 @@
-Return-Path: <linux-pm+bounces-1828-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1829-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1C3F8244D5
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 16:20:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50058824547
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 16:45:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 11B4F1C21663
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 15:20:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1518283231
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 15:45:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C26392377E;
-	Thu,  4 Jan 2024 15:20:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="tGYYc6hr"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33748241FE;
+	Thu,  4 Jan 2024 15:45:48 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39508241E6;
-	Thu,  4 Jan 2024 15:20:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 404FKY2O025030;
-	Thu, 4 Jan 2024 09:20:34 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1704381634;
-	bh=8L6XjEgvpWhme0+WHDMHLTnWTs8TNY8c5ZoS/bqIkNM=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=tGYYc6hrcDhXDL3m/gtiKBRT7BIs7xj95ssF2l98MJFLbKoKI5X59QSFljFRn3R6x
-	 IV/g34ACniFJH9XUvQ8oWjSwDO3GYbxv9nzfweyc0xvxdG+7GtP5/P8JEfyslJk61I
-	 1pGTXaIZrGUqhofgFq9Dprf+mTUoOOOIih2FQVls=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 404FKYWt088547
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 4 Jan 2024 09:20:34 -0600
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 4
- Jan 2024 09:20:34 -0600
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 4 Jan 2024 09:20:34 -0600
-Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 404FKYnn007652;
-	Thu, 4 Jan 2024 09:20:34 -0600
-Date: Thu, 4 Jan 2024 09:20:34 -0600
-From: Nishanth Menon <nm@ti.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC: Manorit Chawdhry <m-chawdhry@ti.com>,
-        "Rafael J. Wysocki"
-	<rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui
-	<rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-        Rob Herring
-	<robh+dt@kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, J
- Keerthy <j-keerthy@ti.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Udit Kumar
-	<u-kumar1@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Subject: Re: [PATCH] dt-bindings: thermal: k3-j72xx: Update bindings for
- J721S2 SoCs
-Message-ID: <20240104152034.gijjaeehlcylorws@tranquil>
-References: <20231228-b4-upstream-j721s2-vtm-dt-binding-v1-1-e866277f9c64@ti.com>
- <65a294e7-1c3c-4022-9498-e83e7415ffb3@linaro.org>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BA09241ED;
+	Thu,  4 Jan 2024 15:45:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4E8EFC15;
+	Thu,  4 Jan 2024 07:46:30 -0800 (PST)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 546523F64C;
+	Thu,  4 Jan 2024 07:45:42 -0800 (PST)
+Message-ID: <ad392cd4-b2d0-4671-bb9f-4bb62e2b12bf@arm.com>
+Date: Thu, 4 Jan 2024 16:45:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <65a294e7-1c3c-4022-9498-e83e7415ffb3@linaro.org>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 11/23] PM: EM: Add API for updating the runtime
+ modifiable EM
+Content-Language: en-US
+To: Lukasz Luba <lukasz.luba@arm.com>
+Cc: rui.zhang@intel.com, amit.kucheria@verdurent.com,
+ linux-kernel@vger.kernel.org, amit.kachhap@gmail.com,
+ daniel.lezcano@linaro.org, viresh.kumar@linaro.org, len.brown@intel.com,
+ pavel@ucw.cz, mhiramat@kernel.org, qyousef@layalina.io, wvw@google.com,
+ linux-pm@vger.kernel.org, rafael@kernel.org
+References: <20231129110853.94344-1-lukasz.luba@arm.com>
+ <20231129110853.94344-12-lukasz.luba@arm.com>
+ <2236f098-b889-4d70-b863-11a3f246889c@arm.com>
+ <22c41b1a-333e-42b1-839f-a755d88313af@arm.com>
+From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <22c41b1a-333e-42b1-839f-a755d88313af@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 10:33-20240104, Krzysztof Kozlowski wrote:
-> On 28/12/2023 07:39, Manorit Chawdhry wrote:
-> > The clock and processor ID for J721S2 differs from the existing
-> > compatibles, add a new compatible to represent this change for adding
-> > support for Adaptive voltage scaling.
+On 20/12/2023 09:06, Lukasz Luba wrote:
+> 
+> 
+> On 12/12/23 18:50, Dietmar Eggemann wrote:
+>> On 29/11/2023 12:08, Lukasz Luba wrote:
 
-This makes no sense to begin with. You do not need a new compatible just
-for clock ID change (processor ID has nothing to do with vtm node).
+[...]
 
-This approach is just plain wrong. AVS support has been done in the past
-(class 3,2,1.5 and 0) and bindings have been mature for more that a
-decade for the same.
+>>> +int em_dev_update_perf_domain(struct device *dev,
+>>> +                  struct em_perf_table __rcu *new_table)
+>>> +{
+>>> +    struct em_perf_table __rcu *old_table;
+>>> +    struct em_perf_domain *pd;
+>>> +
+>>> +    /*
+>>> +     * The lock serializes update and unregister code paths. When the
+>>> +     * EM has been unregistered in the meantime, we should capture that
+>>> +     * when entering this critical section. It also makes sure that
+>>
+>> What do you want to capture here? You want to block in this moment,
+>> right? Don't understand the 2. sentence here.
+>>
+>> [...]
+> 
+> There is general issue with module... they can reload. A driver which
+> registered EM can than later disappear. I had similar issues for the
+> devfreq cooling. It can happen at any time. In this scenario let's
+> consider scenario w/ 2 kernel drivers:
+> 1. Main driver which registered EM, e.g. GPU driver
+> 2. Thermal driver which updates that EM
+> When 1. starts unload process, it has to make sure that it will
+> not free the main EM 'pd', because the 2. might try to use e.g.
+> 'pd->nr_perf_states' while doing update at the moment.
+> Thus, this 'pd' has local mutex, to avoid issues of
+> module unload vs. EM update. The EM unregister will block on
+> that mutex and let the background update finish it's critical
+> section.
 
-So NAK for this patch
+All true but wouldn't
 
-> 
-> Subject: everything is "update". Write proper subjects.
-> 
-> A nit, subject: drop second/last, redundant "bindings for". The
-> "dt-bindings" prefix is already stating that these are bindings.
-> 
-> 
-> 
-> > 
-> > Signed-off-by: Manorit Chawdhry <m-chawdhry@ti.com>
-> > ---
-> >  .../devicetree/bindings/thermal/ti,j72xx-thermal.yaml        | 12 ++++++++----
-> >  1 file changed, 8 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
-> > index 171b3622ed84..5792ccc058aa 100644
-> > --- a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
-> > +++ b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
-> > @@ -24,9 +24,13 @@ description: |
-> >  
-> >  properties:
-> >    compatible:
-> > -    enum:
-> > -      - ti,j721e-vtm
-> > -      - ti,j7200-vtm
-> > +    anyOf:
-> 
-> ? Eh, what?
-> 
-> > +      - items:
-> > +          - enum:
-> > +              - ti,j721e-vtm
-> > +              - ti,j7200-vtm
-> > +              - ti,j721s2-vtm
-> > +      - maxItems: 2
-> 
-> What? I really do not understand what are you doing here.
-> 
-> 
-> >  
-> >    reg:
-> >      items:
-> > @@ -72,7 +76,7 @@ examples:
-> >    - |
-> >      #include <dt-bindings/soc/ti,sci_pm_domain.h>
-> >      wkup_vtm0: thermal-sensor@42040000 {
-> > -        compatible = "ti,j721e-vtm";
-> > +        compatible = "ti,j721e-vtm", "ti,j7200-vtm";
-> 
-> It's an enum, not a list.
-> 
-> NAK, please read example-schema and other bindings. Then get review from
-> TI folks before posting new versions.
-> 
-> Best regards,
-> Krzysztof
-> 
+    /* Serialize update/unregister or concurrent updates */
 
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+be sufficient as a comment here?
+
 
