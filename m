@@ -1,58 +1,58 @@
-Return-Path: <linux-pm+bounces-1869-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1870-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 224ED824939
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 20:47:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CC6382494B
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 20:56:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AEA801F2335B
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 19:47:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E32C6B22525
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 19:56:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EC7921A13;
-	Thu,  4 Jan 2024 19:47:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AA922C18E;
+	Thu,  4 Jan 2024 19:56:08 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DDA32C19E;
-	Thu,  4 Jan 2024 19:47:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE1A62C687;
+	Thu,  4 Jan 2024 19:56:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-59629f0f67aso119115eaf.0;
-        Thu, 04 Jan 2024 11:47:31 -0800 (PST)
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-59584f41f1eso108890eaf.1;
+        Thu, 04 Jan 2024 11:56:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704397650; x=1705002450;
+        d=1e100.net; s=20230601; t=1704398166; x=1705002966;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9YPpasLIRq1YN3KdZH5r1q0RRJLitmfKfle8fM0qQes=;
-        b=Sl/ITVYBcj4e+ovkmJfCuSNpX2thd5HXGrL6yKwXmj5g76rcHN+cyljqtZcNvSdDee
-         Mivvfy0O0PB9/ZErx7YcG/e3uZPevD/4nIMhTbt/wWCUZF+iAr4cmPyxMLGQ0aLImwuD
-         s6xluKkhEJb/NvgrPpBiM9YixCmR3M3WMayR8FJHhUVrLnwGFS4/ZjOg6VGGB0fOXCRN
-         QpOJRCPj2A+TmblGx9QXWcHj0VBl/PcBKFXpsteEQZQhZTqUMPdHgIPl0ZcHGLHka1V5
-         Q0Ot507lcgyUy3Lcxbez4IJUJSymOhYz8XX011NPQ08QoKhDeTkIEA7H7MS0Hyprm2wR
-         4ciw==
-X-Gm-Message-State: AOJu0Yy9RMzXWJELJncRosfRoxe1iYjPz1HKf2DkWvtn1LG2f9gJn5Aa
-	lf9WmFkHt/1CNwUUidoAO+zmJ0Dp7l/gVU1Obm4=
-X-Google-Smtp-Source: AGHT+IGa+PawcYliltEPtRGTiTs3GNq84Jl/X9dsA+kY7UlM3UrEE0U49Gy3usoA48yxV7YhsP81Ip1vEmUHGo2IY9I=
-X-Received: by 2002:a4a:e70a:0:b0:596:27ee:455d with SMTP id
- y10-20020a4ae70a000000b0059627ee455dmr1950518oou.0.1704397650649; Thu, 04 Jan
- 2024 11:47:30 -0800 (PST)
+        bh=0+jZOMYAlf7is9OHtTiWtxt9LBNlP0KIxoNuDCX7eGw=;
+        b=ka00fHg+gGnSMHt2MpAkqo0lvwXLkCReX9Ev8mKJungOXAUyz1L4/c7qh83wBJX85x
+         NBsAfVkgRVtFhMEtOl6se6dm7fnjFLrTK8HJG+0sUOaf0b7PExJIuU/UwK6x9I6kb4Vl
+         t2FKLsqFBWl77O0FdxFykIDlb2qphrEAjrFZ73MOCgh//RTIAVUCaeysc/QlU5Q4cwec
+         OpRG9kCHtP7pAPh2Ti3CrnQ8IlphX5TrPMscyXvswpKp6RtJZNiCWcXGUmYdhNqbpfnw
+         bLL8xPKG01rn9c6uMkt5GfzBu6CccCjsUjDCZpl9iHWxkQqLqv1c9/F21B8H2BoP12UD
+         2UXg==
+X-Gm-Message-State: AOJu0Yxr/hi8rEGKiWa6YAevG8rng5ucEKKGPHBuLeBOPudvVZ3AsGiT
+	QufCy9wd2UX7mSRq0zdSSTLqSjv0rw6vzwpMBJ8=
+X-Google-Smtp-Source: AGHT+IG8OOImNU59uiRw+dioLdXaq3scpbPnYlmlcGZOXofWISN5bID2e4BhtsEaYG+tgevyRhzLzz4PMn0E9Iojwi8=
+X-Received: by 2002:a4a:ea90:0:b0:595:6028:d8cb with SMTP id
+ r16-20020a4aea90000000b005956028d8cbmr2188042ooh.0.1704398165812; Thu, 04 Jan
+ 2024 11:56:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240104171553.2080674-1-lukasz.luba@arm.com> <20240104171553.2080674-12-lukasz.luba@arm.com>
-In-Reply-To: <20240104171553.2080674-12-lukasz.luba@arm.com>
+References: <20240104171553.2080674-1-lukasz.luba@arm.com> <20240104171553.2080674-13-lukasz.luba@arm.com>
+In-Reply-To: <20240104171553.2080674-13-lukasz.luba@arm.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 4 Jan 2024 20:47:19 +0100
-Message-ID: <CAJZ5v0hqRkDmhRBfB4g-2EH2piv-KOQdwad7rVoSK8FzZKg=TA@mail.gmail.com>
-Subject: Re: [PATCH v6 11/23] PM: EM: Add API for updating the runtime
- modifiable EM
+Date: Thu, 4 Jan 2024 20:55:54 +0100
+Message-ID: <CAJZ5v0g9nEis2Bcvygn70vAT=iifHisZ_7_T4PcmQSU_=_Ymgg@mail.gmail.com>
+Subject: Re: [PATCH v6 12/23] PM: EM: Add helpers to read under RCU lock the
+ EM table
 To: Lukasz Luba <lukasz.luba@arm.com>
 Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, rafael@kernel.org, 
 	dietmar.eggemann@arm.com, rui.zhang@intel.com, amit.kucheria@verdurent.com, 
@@ -62,135 +62,73 @@ Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, rafael@kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-I don't really like using the API TLA in patch subjects, because it
-does not really say much.  IMO a subject like this would be better:
-
-"PM: EM: Introduce em_dev_update_perf_domain() for EM updates"
-
 On Thu, Jan 4, 2024 at 6:15=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> wr=
 ote:
 >
-> Add API function em_dev_update_perf_domain() which allows to safely
-> change the EM.
-
-"... which allows the EM to be changed safely."
-
-New paragraph:
-
-> The concurrent modifiers are protected by the mutex
-> to serialize them. Removal of the old memory is asynchronous and
-> handled by the RCU mechanisms.
-
-"Concurrent updaters are serialized with a mutex and the removal of
-memory that will not be used any more is carried out with the help of
-RCU."
-
+> To use the runtime modifiable EM table there is a need to use RCU
+> read locking properly. Add helper functions for the device drivers and
+> frameworks to make sure it's done properly.
 >
 > Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 > ---
->  include/linux/energy_model.h |  8 +++++++
->  kernel/power/energy_model.c  | 41 ++++++++++++++++++++++++++++++++++++
->  2 files changed, 49 insertions(+)
+>  include/linux/energy_model.h | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
 >
 > diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-> index 753d70d0ce7e..f33257ed83fd 100644
+> index f33257ed83fd..cfaf5d8b1aad 100644
 > --- a/include/linux/energy_model.h
 > +++ b/include/linux/energy_model.h
-> @@ -183,6 +183,8 @@ struct em_data_callback {
->
->  struct em_perf_domain *em_cpu_get(int cpu);
->  struct em_perf_domain *em_pd_get(struct device *dev);
-> +int em_dev_update_perf_domain(struct device *dev,
-> +                             struct em_perf_table __rcu *new_table);
->  int em_dev_register_perf_domain(struct device *dev, unsigned int nr_stat=
-es,
->                                 struct em_data_callback *cb, cpumask_t *s=
-pan,
->                                 bool microwatts);
-> @@ -376,6 +378,12 @@ struct em_perf_table __rcu *em_allocate_table(struct=
- em_perf_domain *pd)
->         return NULL;
->  }
->  static inline void em_free_table(struct em_perf_table __rcu *table) {}
-> +static inline
-> +int em_dev_update_perf_domain(struct device *dev,
-> +                             struct em_perf_table __rcu *new_table)
-> +{
-> +       return -EINVAL;
-> +}
->  #endif
->
->  #endif
-> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-> index bbc406db0be1..496dc00835c6 100644
-> --- a/kernel/power/energy_model.c
-> +++ b/kernel/power/energy_model.c
-> @@ -220,6 +220,47 @@ static int em_allocate_perf_table(struct em_perf_dom=
-ain *pd,
->         return 0;
+> @@ -338,6 +338,20 @@ static inline int em_pd_nr_perf_states(struct em_per=
+f_domain *pd)
+>         return pd->nr_perf_states;
 >  }
 >
-> +/**
-> + * em_dev_update_perf_domain() - Update runtime EM table for a device
-> + * @dev                : Device for which the EM is to be updated
-> + * @table      : The new EM table that is going to be used from now
-
-This is called "new_table" below.
-
-> + *
-> + * Update EM runtime modifiable table for the @dev using the provided @t=
-able.
-> + *
-> + * This function uses mutex to serialize writers, so it must not be call=
-ed
-
-"uses a mutex"
-
-> + * from non-sleeping context.
-
-"a non-sleeping context".
-
-> + *
-> + * Return 0 on success or a proper error in case of failure.
-
-It is not clear what "a proper error" means.  It would be better to
-simply say "or an error code on failure" IMO.
-
-> + */
-> +int em_dev_update_perf_domain(struct device *dev,
-> +                             struct em_perf_table __rcu *new_table)
+> +static inline struct em_perf_state *em_get_table(struct em_perf_domain *=
+pd)
 > +{
-> +       struct em_perf_table __rcu *old_table;
-> +       struct em_perf_domain *pd;
+> +       struct em_perf_table __rcu *table;
 > +
-> +       /* Serialize update/unregister or concurrent updates */
-> +       mutex_lock(&em_pd_mutex);
-> +
-> +       if (!dev || !dev->em_pd) {
-
-dev need not be checked under the lock.
-
-> +               mutex_unlock(&em_pd_mutex);
-> +               return -EINVAL;
-> +       }
-> +       pd =3D dev->em_pd;
-> +
-> +       em_table_inc(new_table);
-> +
-> +       old_table =3D pd->em_table;
-> +       rcu_assign_pointer(pd->em_table, new_table);
-> +
-> +       em_cpufreq_update_efficiencies(dev, new_table->state);
-> +
-> +       em_table_dec(old_table);
-> +
-> +       mutex_unlock(&em_pd_mutex);
-> +       return 0;
+> +       rcu_read_lock();
+> +       table =3D rcu_dereference(pd->em_table);
+> +       return table->state;
 > +}
-> +EXPORT_SYMBOL_GPL(em_dev_update_perf_domain);
 > +
->  static int em_create_runtime_table(struct em_perf_domain *pd)
+> +static inline void em_put_table(void)
+> +{
+> +       rcu_read_unlock();
+> +}
+
+The lack of symmetry between em_get_table() and em_put_table() is kind
+of confusing.
+
+I don't really like these wrappers.
+
+IMO it would be better to use rcu_read_lock()/rcu_read_unlock()
+directly everywhere they are needed and there can be a wrapper around
+rcu_dereference(pd->em_table), something like
+
+static inline struct em_perf_state *em_perf_state_from_pd(struct
+em_perf_domain *pd)
+{
+        return rcu_dereference(pd->em_table)->state;
+}
+
+> +
+>  #else
+>  struct em_data_callback {};
+>  #define EM_ADV_DATA_CB(_active_power_cb, _cost_cb) { }
+> @@ -384,6 +398,11 @@ int em_dev_update_perf_domain(struct device *dev,
 >  {
->         struct em_perf_table __rcu *table;
+>         return -EINVAL;
+>  }
+> +static inline struct em_perf_state *em_get_table(struct em_perf_domain *=
+pd)
+> +{
+> +       return NULL;
+> +}
+> +static inline void em_put_table(void) {}
+>  #endif
+>
+>  #endif
 > --
 
