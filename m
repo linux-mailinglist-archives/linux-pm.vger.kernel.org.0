@@ -1,58 +1,57 @@
-Return-Path: <linux-pm+bounces-1863-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1864-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92BA08248A2
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 20:08:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B96548248D7
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 20:16:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F6501F21FE5
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 19:08:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B73451C22679
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 19:16:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AD5F286AF;
-	Thu,  4 Jan 2024 19:08:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 294EC2C18E;
+	Thu,  4 Jan 2024 19:16:10 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C845E2C18C;
-	Thu,  4 Jan 2024 19:08:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A75D52C18C;
+	Thu,  4 Jan 2024 19:16:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3bb7e50679bso188849b6e.0;
-        Thu, 04 Jan 2024 11:08:11 -0800 (PST)
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5962dd690d3so37657eaf.0;
+        Thu, 04 Jan 2024 11:16:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704395291; x=1705000091;
+        d=1e100.net; s=20230601; t=1704395767; x=1705000567;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=oHvkNoyDDxzbLwlNA3wT9KR65mBKm5P0nwrkbLsti3U=;
-        b=q5WBGurLyfQC0VKvO8Rh0sE0OC7StNUhOnNS89gR3ENpkyNkU5kSC1cI8mreV3jz6Z
-         T0uvWexe9TPquoc8qBpbliDGd1URnJ35q9s2jkMpCYQWOwrJGBxn/jLkZZoP6arym3gz
-         ojaMsU3cZBKnoE3xYx8W+OHbJ9LJcGHcTybTmS9rPUWkALCQ+mteA5iEpRR2O3y397N3
-         1TATnv0GRggBasWBXb9epojn1KA522XJ7G/1q3xHEi8MJQSjJwXL+VGBxwkX4MeP8dN2
-         ZwhrhDI0uyeTMUE20fXfFFQ09HN/vhc1mKzU1oaBiVfzMGyfLpM6o12XMh+Y0lzRhHuK
-         koHw==
-X-Gm-Message-State: AOJu0YwOWNxE5sXOo0X2112G6QQVAIM9Tm9Mh/Xf30AZMHzClV55Ww9V
-	912QF2QMBWJUDZd7zqCtZJBDrsnev1fJIODSKZE=
-X-Google-Smtp-Source: AGHT+IECo+vuspUhcs7s76845zh7su3GowH0b83Oe/Q0O+NoCL0hKkiCZtCG9PSj/vh+F3VB8Y+VAKPTsIFuwjG2Ae8=
-X-Received: by 2002:a4a:e70a:0:b0:596:27ee:455b with SMTP id
- y10-20020a4ae70a000000b0059627ee455bmr1857781oou.1.1704395290859; Thu, 04 Jan
- 2024 11:08:10 -0800 (PST)
+        bh=t00RBDrtTyl0DfdRD/pORXC3D/0so4Mo4Rl4fO0OIVo=;
+        b=GFelVZVVgBkk6Jymfgm8lIkLxoOIsuNlhkC/FobzC3t+pEY/AlVQxgmZVDr1jGP0CV
+         nXbgcWbDeWBN/i/MDcBd3LaA/lZoo+FyBeJA00kNAGz56m58S2mFxQ1xSpaM64hgq6di
+         LulvM7DCiR4Bup08GM7QoliL9evj7TbBq0IIy+OG7W1j/HVpOkaWJf5Q1eSlCHSeNxfb
+         0zPikVsx+XKyx13p2venYXlX8z4u3b+Iohu9o/shbE45iuxZw1Bre+Vu/vAQ+RvWCPGr
+         JNgvsBkWWTR69AZkFz9plBydp2smXjcnmEUXIaCu8lT4eMkinp3ljWeWRZySOulDgTEi
+         La6A==
+X-Gm-Message-State: AOJu0YwsKFRpgroBpxbZs8ngd5q9iOuFb9YFgAyQUHWGOVx+5DWusOFL
+	k3N/aHFOyxknLrE+fMZ/grvryP1LCYiGxaXN/Gg=
+X-Google-Smtp-Source: AGHT+IG5JZvfneOXQ56b0CCdpviJzF2lPNh5VMuPb5X6o7xTWMYyLsmntyRo7Lq0ldtLzXIUvRYk/h0CsqebUB3YVHc=
+X-Received: by 2002:a4a:ea90:0:b0:595:6028:d8cb with SMTP id
+ r16-20020a4aea90000000b005956028d8cbmr2095008ooh.0.1704395767584; Thu, 04 Jan
+ 2024 11:16:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240104171553.2080674-1-lukasz.luba@arm.com> <20240104171553.2080674-3-lukasz.luba@arm.com>
-In-Reply-To: <20240104171553.2080674-3-lukasz.luba@arm.com>
+References: <20240104171553.2080674-1-lukasz.luba@arm.com> <20240104171553.2080674-6-lukasz.luba@arm.com>
+In-Reply-To: <20240104171553.2080674-6-lukasz.luba@arm.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 4 Jan 2024 20:07:59 +0100
-Message-ID: <CAJZ5v0jCtS1XHczORnZFhwO7N=FommFNbQC7NdaM5SHKXUnTog@mail.gmail.com>
-Subject: Re: [PATCH v6 02/23] PM: EM: Refactor em_cpufreq_update_efficiencies()
- arguments
+Date: Thu, 4 Jan 2024 20:15:56 +0100
+Message-ID: <CAJZ5v0ij2aMzzhC3Ur0y0LSdnT0TypeH0DGSnsUPaxm6bDXcXw@mail.gmail.com>
+Subject: Re: [PATCH v6 05/23] PM: EM: Refactor a new function em_compute_costs()
 To: Lukasz Luba <lukasz.luba@arm.com>
 Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, rafael@kernel.org, 
 	dietmar.eggemann@arm.com, rui.zhang@intel.com, amit.kucheria@verdurent.com, 
@@ -62,74 +61,133 @@ Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, rafael@kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-The word "refactor" appears to be quite loaded in your patch
-descriptions, but it is not always the best one to use IMV.
+Here, I would say "Introduce em_compute_costs()" in the subject and then ->
 
-For instance, this patch simply extends the argument list of
-em_cpufreq_update_efficiencies(), so I would say just that in the
-subject: "Extend em_cpufreq_update_efficiencies() argument list"
-
-On Thu, Jan 4, 2024 at 6:14=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> wr=
+On Thu, Jan 4, 2024 at 6:15=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> wr=
 ote:
 >
-> In order to prepare the code for the modifiable EM perf_state table,
-> refactor existing function em_cpufreq_update_efficiencies().
+> Refactor a dedicated function which will be easier to maintain and re-use
 
-"make em_cpufreq_update_efficiencies() take a pointer to the EM table
-as its second argument and modify it to use that new argument instead
-of the "table" member of dev->em_pd"
+-> "Move the EM costs computation code into a new dedicated function,
+em_compute_costs(), that can be reused in other places in the future."
 
-or something like this.
-
-> The function now takes the ptr to the EM table as its argument.
+> in future. The upcoming changes for the modifiable EM perf_state table
+> will use it (instead of duplicating the code).
 >
-> No functional impact.
+> This change is not expected to alter the general functionality.
 >
 > Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 > ---
->  kernel/power/energy_model.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
+>  kernel/power/energy_model.c | 72 ++++++++++++++++++++++---------------
+>  1 file changed, 43 insertions(+), 29 deletions(-)
 >
 > diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-> index 8b9dd4a39f63..42486674b834 100644
+> index aa7c89f9e115..3bea930410c6 100644
 > --- a/kernel/power/energy_model.c
 > +++ b/kernel/power/energy_model.c
-> @@ -237,10 +237,10 @@ static int em_create_pd(struct device *dev, int nr_=
-states,
->         return 0;
->  }
+> @@ -103,14 +103,52 @@ static void em_debug_create_pd(struct device *dev) =
+{}
+>  static void em_debug_remove_pd(struct device *dev) {}
+>  #endif
 >
-> -static void em_cpufreq_update_efficiencies(struct device *dev)
-> +static void
-> +em_cpufreq_update_efficiencies(struct device *dev, struct em_perf_state =
-*table)
+> +static int em_compute_costs(struct device *dev, struct em_perf_state *ta=
+ble,
+> +                           struct em_data_callback *cb, int nr_states,
+> +                           unsigned long flags)
+> +{
+> +       unsigned long prev_cost =3D ULONG_MAX;
+> +       u64 fmax;
+> +       int i, ret;
+> +
+> +       /* Compute the cost of each performance state. */
+> +       fmax =3D (u64) table[nr_states - 1].frequency;
+> +       for (i =3D nr_states - 1; i >=3D 0; i--) {
+> +               unsigned long power_res, cost;
+> +
+> +               if (flags & EM_PERF_DOMAIN_ARTIFICIAL) {
+> +                       ret =3D cb->get_cost(dev, table[i].frequency, &co=
+st);
+> +                       if (ret || !cost || cost > EM_MAX_POWER) {
+> +                               dev_err(dev, "EM: invalid cost %lu %d\n",
+> +                                       cost, ret);
+> +                               return -EINVAL;
+> +                       }
+> +               } else {
+> +                       power_res =3D table[i].power;
+> +                       cost =3D div64_u64(fmax * power_res, table[i].fre=
+quency);
+> +               }
+> +
+> +               table[i].cost =3D cost;
+> +
+> +               if (table[i].cost >=3D prev_cost) {
+> +                       table[i].flags =3D EM_PERF_STATE_INEFFICIENT;
+> +                       dev_dbg(dev, "EM: OPP:%lu is inefficient\n",
+> +                               table[i].frequency);
+> +               } else {
+> +                       prev_cost =3D table[i].cost;
+> +               }
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+>  static int em_create_perf_table(struct device *dev, struct em_perf_domai=
+n *pd,
+>                                 int nr_states, struct em_data_callback *c=
+b,
+>                                 unsigned long flags)
 >  {
->         struct em_perf_domain *pd =3D dev->em_pd;
-> -       struct em_perf_state *table;
->         struct cpufreq_policy *policy;
->         int found =3D 0;
->         int i;
-> @@ -254,8 +254,6 @@ static void em_cpufreq_update_efficiencies(struct dev=
-ice *dev)
->                 return;
+> -       unsigned long power, freq, prev_freq =3D 0, prev_cost =3D ULONG_M=
+AX;
+> +       unsigned long power, freq, prev_freq =3D 0;
+>         struct em_perf_state *table;
+>         int i, ret;
+> -       u64 fmax;
+>
+>         table =3D kcalloc(nr_states, sizeof(*table), GFP_KERNEL);
+>         if (!table)
+> @@ -154,33 +192,9 @@ static int em_create_perf_table(struct device *dev, =
+struct em_perf_domain *pd,
+>                 table[i].frequency =3D prev_freq =3D freq;
 >         }
 >
-> -       table =3D pd->table;
+> -       /* Compute the cost of each performance state. */
+> -       fmax =3D (u64) table[nr_states - 1].frequency;
+> -       for (i =3D nr_states - 1; i >=3D 0; i--) {
+> -               unsigned long power_res, cost;
 > -
->         for (i =3D 0; i < pd->nr_perf_states; i++) {
->                 if (!(table[i].flags & EM_PERF_STATE_INEFFICIENT))
->                         continue;
-> @@ -397,7 +395,7 @@ int em_dev_register_perf_domain(struct device *dev, u=
-nsigned int nr_states,
+> -               if (flags & EM_PERF_DOMAIN_ARTIFICIAL) {
+> -                       ret =3D cb->get_cost(dev, table[i].frequency, &co=
+st);
+> -                       if (ret || !cost || cost > EM_MAX_POWER) {
+> -                               dev_err(dev, "EM: invalid cost %lu %d\n",
+> -                                       cost, ret);
+> -                               goto free_ps_table;
+> -                       }
+> -               } else {
+> -                       power_res =3D table[i].power;
+> -                       cost =3D div64_u64(fmax * power_res, table[i].fre=
+quency);
+> -               }
+> -
+> -               table[i].cost =3D cost;
+> -
+> -               if (table[i].cost >=3D prev_cost) {
+> -                       table[i].flags =3D EM_PERF_STATE_INEFFICIENT;
+> -                       dev_dbg(dev, "EM: OPP:%lu is inefficient\n",
+> -                               table[i].frequency);
+> -               } else {
+> -                       prev_cost =3D table[i].cost;
+> -               }
+> -       }
+> +       ret =3D em_compute_costs(dev, table, cb, nr_states, flags);
+> +       if (ret)
+> +               goto free_ps_table;
 >
->         dev->em_pd->flags |=3D flags;
->
-> -       em_cpufreq_update_efficiencies(dev);
-> +       em_cpufreq_update_efficiencies(dev, dev->em_pd->table);
->
->         em_debug_create_pd(dev);
->         dev_info(dev, "EM: created perf domain\n");
+>         pd->table =3D table;
+>         pd->nr_perf_states =3D nr_states;
 > --
-
-The code change itself LGTM.
+> 2.25.1
+>
 
