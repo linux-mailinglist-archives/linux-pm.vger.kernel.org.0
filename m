@@ -1,98 +1,239 @@
-Return-Path: <linux-pm+bounces-1866-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1867-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC6558248F4
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 20:24:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A729824925
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 20:36:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 082DCB213B5
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 19:24:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3AD71F22C75
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 19:36:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 823112C1A3;
-	Thu,  4 Jan 2024 19:24:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="lZuEGPyN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80A472C69A;
+	Thu,  4 Jan 2024 19:35:29 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01C382C6B1
-	for <linux-pm@vger.kernel.org>; Thu,  4 Jan 2024 19:23:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-555e07761acso1098202a12.0
-        for <linux-pm@vger.kernel.org>; Thu, 04 Jan 2024 11:23:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1704396238; x=1705001038; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vP64jz0/VAK3xfeL/8CfdG5CwhX3wPofMDHlLSKDnNM=;
-        b=lZuEGPyNKaZ47Yqk/JSy8z5LHLC9wiyQHaoia4AiwaBGIl5EU++NeuC0wxXg2v245S
-         FBUbVhOJrHjQZTqN+Y1qYFUtABeeVcZwg87+TqCoArZazWhnf5vwbQ/Fj+BXUDzcEy5D
-         VFiQehFo9bXCjcc6F0Qt0QrkAuqJdl4Yb9v6vGSuTaK9qqewLpm8kRg/swL6A07tDI2N
-         9Dfz9E4VOCHOGTKoQQ4y+DK20R9KoxmR2fws9U8bG+pVPl9jKStwsnvti9xpXxW5t9vu
-         0Hdpidbv9wr/1kG4/pYLzz0ww6DNbmiIcVtD/cFJpnITDEbQxQ0AOKJ0+BZYMIi0y7+t
-         2naQ==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3DA02C6A0;
+	Thu,  4 Jan 2024 19:35:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-59629f0f67aso117580eaf.0;
+        Thu, 04 Jan 2024 11:35:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704396238; x=1705001038;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vP64jz0/VAK3xfeL/8CfdG5CwhX3wPofMDHlLSKDnNM=;
-        b=faxAeTTzjlWUyAu8r1jE5owA2LuREp6mVfb9btAj0VfgO5ZIlb+11dT8dM799osemJ
-         GvxiQ+63DPdDBE4enW5gytpvyVHTsSYYlIYjN7ZLYH+avbmSk1a50/ymiPKZlNbNOJ91
-         22vqdvjYlac3gLnjq9LaPP2weKsX6yhEDq/foFVL9VZWWZY3iyRoauL97fRpGOMcxQPE
-         sO+VTNmXas1QhKSvZTmB2uBEMZnIvnGg2Le00Pp+acWleSeiXQXOMU1GZp+wAaJtePkx
-         KW2RBe1x2dQtpisnwYnSMDJrlgYCdYUaYjQCtDDc+npeI2gaOExwBjkVkiWpPaKN/Rd5
-         2y7Q==
-X-Gm-Message-State: AOJu0Yy36wDVHowwCmfE5538c10FdH1dp+lhnRi71GzTQxglShHHJgjZ
-	eoztJGvDJq4j6yKNuHCUp5NncGtgSCQLdw==
-X-Google-Smtp-Source: AGHT+IGt53v/I2xmcHd9Rpuooy2t5yo5vlHjdZu4FjkULa/G5M5nIe6mNsh4s8NwE5M3u0QLx+68pQ==
-X-Received: by 2002:a17:906:3606:b0:a27:2f10:fa06 with SMTP id q6-20020a170906360600b00a272f10fa06mr431974ejb.109.1704396238232;
-        Thu, 04 Jan 2024 11:23:58 -0800 (PST)
-Received: from airbuntu (92.40.216.189.threembb.co.uk. [92.40.216.189])
-        by smtp.gmail.com with ESMTPSA id ex15-20020a170907954f00b00a26ae85cfeasm13297121ejc.28.2024.01.04.11.23.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jan 2024 11:23:57 -0800 (PST)
-Date: Thu, 4 Jan 2024 19:23:55 +0000
-From: Qais Yousef <qyousef@layalina.io>
-To: Lukasz Luba <lukasz.luba@arm.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	rafael@kernel.org, dietmar.eggemann@arm.com, rui.zhang@intel.com,
-	amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
-	daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
-	len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org,
-	wvw@google.com
-Subject: Re: [PATCH v5 15/23] PM: EM: Optimize em_cpu_energy() and remove
- division
-Message-ID: <20240104192355.mrtqnek2cyw7rlkd@airbuntu>
-References: <20231129110853.94344-1-lukasz.luba@arm.com>
- <20231129110853.94344-16-lukasz.luba@arm.com>
- <20231228180647.rwz4u7ebk5p2hjcr@airbuntu>
- <d9bea2d0-3869-4f08-8eb8-0ca33ce525ea@arm.com>
+        d=1e100.net; s=20230601; t=1704396927; x=1705001727;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Wp++XMNDXxDK3eCoflFxpDVjis98CPwruo3etDqEbNw=;
+        b=d6EhSpOeVuF/Nb490i0duTTswYaKcoRdfsP646m6hK5oOGAND6S7yp4nCsBLAJKOBX
+         hekTQMgolaWsjUp/cetIcaEl5m+P4pCtpB7GSQhjUkLhtWwYBsexbItnnP/Rl9qEtv4D
+         ekGYt6O94LtTKMfwz31f02a1EfS5luatGZzBdGS1nSwwZw3Rzm+qxpQUdAI8ICJKGv4r
+         ImgKY3ooeaf5DcC8SheaZbDOtoWWAT+OdXpCDkD7aV8s6LIGWUYOABqZHtf1vEaLdUHm
+         on7osSlUiaTmm8j3gOUisQZwiRCh6q2YY420o8M5YUC8FqRd0udiykubXQoRNWksCZrM
+         F+Ag==
+X-Gm-Message-State: AOJu0YwRkjnJ9uRYhw+zoMDToduX1vudW5dktSJIFf8lOsb1U09i0HEb
+	CEq1pwNoHsEuzyUk72YrEsED4uezLl1VIu87JB0=
+X-Google-Smtp-Source: AGHT+IFxnlwS+SBeVjeB4OB7ubF9SRqFf/Sd24+Uw5YIep80l/JL/mJSnOacRGp32v0lpxpCjjM4BNkPBjvtaIgKWdU=
+X-Received: by 2002:a4a:da09:0:b0:596:2965:be22 with SMTP id
+ e9-20020a4ada09000000b005962965be22mr1741474oou.1.1704396927060; Thu, 04 Jan
+ 2024 11:35:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <d9bea2d0-3869-4f08-8eb8-0ca33ce525ea@arm.com>
+References: <20240104171553.2080674-1-lukasz.luba@arm.com> <20240104171553.2080674-11-lukasz.luba@arm.com>
+In-Reply-To: <20240104171553.2080674-11-lukasz.luba@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 4 Jan 2024 20:35:16 +0100
+Message-ID: <CAJZ5v0grn7RHLxf0Bfxh-PtwvQXfr0F8bGc9bWDuuD3_noLjGw@mail.gmail.com>
+Subject: Re: [PATCH v6 10/23] PM: EM: Add API for memory allocations for new tables
+To: Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, rafael@kernel.org, 
+	dietmar.eggemann@arm.com, rui.zhang@intel.com, amit.kucheria@verdurent.com, 
+	amit.kachhap@gmail.com, daniel.lezcano@linaro.org, viresh.kumar@linaro.org, 
+	len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org, qyousef@layalina.io, 
+	wvw@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 01/02/24 11:47, Lukasz Luba wrote:
-> > Did you see a problem or just being extra cautious here?
-> 
-> There is no problem, 'cost' is a private coefficient for EAS only.
+On Thu, Jan 4, 2024 at 6:15=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> wr=
+ote:
+>
+> The runtime modified EM table can be provided from drivers. Create
+> mechanism which allows safely allocate and free the table for device
+> drivers. The same table can be used by the EAS in task scheduler code
+> paths, so make sure the memory is not freed when the device driver module
+> is unloaded.
+>
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>  include/linux/energy_model.h | 11 +++++++++
+>  kernel/power/energy_model.c  | 43 ++++++++++++++++++++++++++++++++++--
+>  2 files changed, 52 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+> index 5f842da3bb0c..753d70d0ce7e 100644
+> --- a/include/linux/energy_model.h
+> +++ b/include/linux/energy_model.h
+> @@ -5,6 +5,7 @@
+>  #include <linux/device.h>
+>  #include <linux/jump_label.h>
+>  #include <linux/kobject.h>
+> +#include <linux/kref.h>
+>  #include <linux/rcupdate.h>
+>  #include <linux/sched/cpufreq.h>
+>  #include <linux/sched/topology.h>
+> @@ -39,10 +40,12 @@ struct em_perf_state {
+>  /**
+>   * struct em_perf_table - Performance states table
+>   * @rcu:       RCU used for safe access and destruction
+> + * @refcount:  Reference count to track the owners
 
-Let me  ask differently, what goes wrong if you don't increase the resolution
-here? Why is it necessary?
+"Reference counter to track the users"
 
+Also it is not really just a counter - it provides the memory release
+mechanism too.
 
-Cheers
+>   * @state:     List of performance states, in ascending order
+>   */
+>  struct em_perf_table {
+>         struct rcu_head rcu;
+> +       struct kref refcount;
 
---
-Qais Yousef
+So I would just call it kref.
+
+>         struct em_perf_state state[];
+>  };
+>
+> @@ -184,6 +187,8 @@ int em_dev_register_perf_domain(struct device *dev, u=
+nsigned int nr_states,
+>                                 struct em_data_callback *cb, cpumask_t *s=
+pan,
+>                                 bool microwatts);
+>  void em_dev_unregister_perf_domain(struct device *dev);
+> +struct em_perf_table __rcu *em_allocate_table(struct em_perf_domain *pd)=
+;
+> +void em_free_table(struct em_perf_table __rcu *table);
+>
+>  /**
+>   * em_pd_get_efficient_state() - Get an efficient performance state from=
+ the EM
+> @@ -365,6 +370,12 @@ static inline int em_pd_nr_perf_states(struct em_per=
+f_domain *pd)
+>  {
+>         return 0;
+>  }
+> +static inline
+> +struct em_perf_table __rcu *em_allocate_table(struct em_perf_domain *pd)
+> +{
+> +       return NULL;
+> +}
+> +static inline void em_free_table(struct em_perf_table __rcu *table) {}
+>  #endif
+>
+>  #endif
+> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+> index c03010084208..bbc406db0be1 100644
+> --- a/kernel/power/energy_model.c
+> +++ b/kernel/power/energy_model.c
+> @@ -114,12 +114,46 @@ static void em_destroy_table_rcu(struct rcu_head *r=
+p)
+>         kfree(table);
+>  }
+>
+> -static void em_free_table(struct em_perf_table __rcu *table)
+> +static void em_release_table_kref(struct kref *kref)
+>  {
+> +       struct em_perf_table __rcu *table;
+> +
+> +       /* It was the last owner of this table so we can free */
+> +       table =3D container_of(kref, struct em_perf_table, refcount);
+> +
+>         call_rcu(&table->rcu, em_destroy_table_rcu);
+>  }
+>
+> -static struct em_perf_table __rcu *
+> +static inline void em_table_inc(struct em_perf_table __rcu *table)
+
+Why not em_table_get()?
+
+> +{
+> +       kref_get(&table->refcount);
+> +}
+> +
+> +static void em_table_dec(struct em_perf_table __rcu *table)
+
+And em_table_put() here?
+
+Note that I do realize that the "put" and "get" terminology is used in
+one of the subsequent patches - I'll get to it later.
+
+> +{
+> +       kref_put(&table->refcount, em_release_table_kref);
+> +}
+> +
+> +/**
+> + * em_free_table() - Handles safe free of the EM table when needed
+> + * @table : EM memory which is going to be freed
+> + *
+> + * No return values.
+> + */
+> +void em_free_table(struct em_perf_table __rcu *table)
+> +{
+> +       em_table_dec(table);
+> +}
+
+Why is this necessary?  The function called by it could be extern
+instead and wrapped into a static inline wrapper in a header (if you
+really need the alias).
+
+> +
+> +/**
+> + * em_allocate_table() - Handles safe allocation of the new EM table
+
+" - Allocate a new EM table"
+
+And I would call this em_table_alloc() and (maybe) add an
+em_table_free() alias for em_table_put().
+
+> + * @table : EM memory which is going to be freed
+
+So the argument is called "pd" and it is not a table.  It is also used
+for computing the size of the new table AFAICS.
+
+> + *
+> + * Increments the reference counter to mark that there is an owner of th=
+at
+
+"Allocate a new EM table and initialize its kref to indicate that it
+has a user."
+
+> + * EM table. That might be a device driver module or EAS.
+> + * Returns allocated table or error.
+> + */
+> +struct em_perf_table __rcu *
+>  em_allocate_table(struct em_perf_domain *pd)
+>  {
+>         struct em_perf_table __rcu *table;
+> @@ -128,6 +162,11 @@ em_allocate_table(struct em_perf_domain *pd)
+>         table_size =3D sizeof(struct em_perf_state) * pd->nr_perf_states;
+>
+>         table =3D kzalloc(sizeof(*table) + table_size, GFP_KERNEL);
+> +       if (!table)
+> +               return table;
+
+I would return NULL from here explicitly.
+
+> +
+> +       kref_init(&table->refcount);
+> +
+>         return table;
+>  }
+>
+> --
 
