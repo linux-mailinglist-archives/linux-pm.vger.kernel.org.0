@@ -1,122 +1,87 @@
-Return-Path: <linux-pm+bounces-1824-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1825-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59660824202
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 13:50:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82A2982420E
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 13:54:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 61F331C210E7
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 12:50:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71E7B1C23954
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 12:54:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 921242136E;
-	Thu,  4 Jan 2024 12:50:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9BE42137F;
+	Thu,  4 Jan 2024 12:54:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WWdBu06O"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cHLnPAVv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4724E219E8;
-	Thu,  4 Jan 2024 12:50:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1d4c77effe9so419695ad.0;
-        Thu, 04 Jan 2024 04:50:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704372605; x=1704977405; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/9MytnKXy6VUbepQQQq3LMvOhLoxpcNzLzoYfwIfbJ4=;
-        b=WWdBu06O50xuXUq4uocvFL0xDN7Wz8BefazDY1aYDZBcu5aRijz+xBL2qi469aD3K1
-         XRxYELzIYbW1ZXY4hn/IV6Ru4dpWSIUF6nUec2bea/44S8m8dpPqNt/J+slkhbaxZN5v
-         VSfMHCChtp8oKm9XFEs9T6HzQgxLD4/+Kp8I6141HYe6w/KrdCrtyIguj509fEye4vto
-         mHUYqSu/720GSh1aWJCB/QBwYGfT8i7a0G8v9Nr0YO6473JAjYaJFK5lFQ6wuC4q54rP
-         9e5TGrgR2f6UpOxwcdChstd7ixG8I3Vf4oxr3xlnXPmSEHd1/wVumMHm8vmgFTFyBgb2
-         nkfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704372605; x=1704977405;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/9MytnKXy6VUbepQQQq3LMvOhLoxpcNzLzoYfwIfbJ4=;
-        b=gSH1K33qIgTh29/ZhlF8hggsVWCVWoxbOhNdJmyNv5qPZqWtuXp98T6DGtW12+GolV
-         3BpL86xUKfVMCeAqINjIqjp23oT3kBXxPz3WRk4sFd0Nt/PaiTm5Bn2ns8ZMGWd7ZULo
-         8F+MSzZIOHk/zkVlEurOnJl0DlR3Ewqki7EcwdQN5VesGuObiHI8KE+DwuVAqw4YKyLC
-         QXbZYraCTYslIVaPqb4NrougP7eLQ7qkfTGZ/ZyiGc2DrNPyA0i7z04ZoiiNDKaLZJdF
-         BCZfYcKfStmUUvcJ7GRt4mRVY047IMMbDWtl4HtRBPwnOmZJIBgFgLPJQs27Qxyckdbc
-         9NGg==
-X-Gm-Message-State: AOJu0Yy8ekJ8RIE3q4cxABlaeSt81RxvAFTqxw8emM1AkEoU7FJ0TMq0
-	BYCOuxEs8mQ9DP9sM4one3Y=
-X-Google-Smtp-Source: AGHT+IEg5OFJG0S7RHO+vGgSKUxk8zLrgU3NE2gefe4MDNbH+XxqlynXdqAOantob0MB5crda/uprA==
-X-Received: by 2002:a05:6a21:3384:b0:196:1899:d756 with SMTP id yy4-20020a056a21338400b001961899d756mr1010755pzb.2.1704372605233;
-        Thu, 04 Jan 2024 04:50:05 -0800 (PST)
-Received: from fabio-Precision-3551.. ([2804:14c:485:4b61:5a8e:132d:4dac:265a])
-        by smtp.gmail.com with ESMTPSA id v24-20020a17090331d800b001d4cac52e73sm4490082ple.131.2024.01.04.04.50.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jan 2024 04:50:04 -0800 (PST)
-From: Fabio Estevam <festevam@gmail.com>
-To: daniel.lezcano@linaro.org
-Cc: robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org,
-	linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	Fabio Estevam <festevam@denx.de>
-Subject: [PATCH v4] dt-bindings: thermal: qoriq-thermal: Adjust fsl,tmu-range min/maxItems
-Date: Thu,  4 Jan 2024 09:49:52 -0300
-Message-Id: <20240104124952.1975160-1-festevam@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE4EF2230A;
+	Thu,  4 Jan 2024 12:54:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1ADCFC433C7;
+	Thu,  4 Jan 2024 12:53:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704372844;
+	bh=TUgtbOo/PVfQSA54Hl3nscCe0OQ8k5krHwt9pHz+FgM=;
+	h=Date:Subject:To:References:Cc:From:In-Reply-To:From;
+	b=cHLnPAVvbsxhokJh4rMwLRys1z3+1kjxvxQGdFmgwkh1UaRd5/0Eq9uZTUcz46VDa
+	 KkGxKQ90nc+PupobVDIvS9rDBEv6tJsx5rfOKDupthHWSNz5A27XhaopzaJ8MTWVxX
+	 +Y9XI6Obc+OyXl8K2RuzPkTglEXcWQGssHrJNdq39f7HJteFtrQBehCMCFChLAU1bE
+	 yhVcVsPRoL4+5/gOVxhUdERSkDpQkRi61VeO4sRpsUJoevJOg7ySSe1y4zzp66PNWw
+	 P4kFV4Ixr7KmSZCzUH1/8GMa550FukSl0AW/kEjZUmmCocptrkWaxoTGGNGcMaaZpc
+	 OTow14fYYaHew==
+Message-ID: <64ee255e-9a5a-405e-b342-e91c55bd95ce@kernel.org>
+Date: Thu, 4 Jan 2024 13:53:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] OPP: Remove the unused argument to config_clks_t
+Content-Language: en-US
+To: Viresh Kumar <viresh.kumar@linaro.org>
+References: <f24f32f1213b4b9e9ff2b4a36922f8d6e3abac51.1704278832.git.viresh.kumar@linaro.org>
+Cc: Bart Van Assche <bvanassche@acm.org>, Dmitry Osipenko <digetx@gmail.com>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+ Viresh Kumar <vireshk@kernel.org>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ "James E.J. Bottomley" <jejb@linux.ibm.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>,
+ Kyungmin Park <kyungmin.park@samsung.com>,
+ MyungJoo Ham <myungjoo.ham@samsung.com>, Nishanth Menon <nm@ti.com>,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-tegra@vger.kernel.org,
+ Avri Altman <avri.altman@wdc.com>
+From: Konrad Dybcio <konradybcio@kernel.org>
+In-Reply-To: <f24f32f1213b4b9e9ff2b4a36922f8d6e3abac51.1704278832.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Fabio Estevam <festevam@denx.de>
 
-The number of fsl,tmu-range entries vary among the several NXP SoCs.
 
-- lx2160a has two fsl,tmu-range entries  (fsl,qoriq-tmu compatible)
-- imx8mq has four fsl,tmu-range entries. (fsl,imx8mq-tmu compatible)
-- imx93 has seven fsl,tmu-range entries. (fsl,qoriq-tmu compatible)
+On 3.01.2024 11:48, Viresh Kumar wrote:
+> The OPP core needs to take care of a special case, where the OPPs aren't
+> available for a device, but in order to keep the same unified interface
+> for the driver, the same OPP core API must take care of performing a
+> simple clk_set_rate() for the device.
+> 
+> This required the extra argument, but that is used only within the OPP
+> core and the drivers don't need to take care of that.
+> 
+> Simplify the external API and handle it differently within the OPP core.
+> 
+> This shouldn't result in any functional change.
 
-Change minItems and maxItems accordingly.
+Hi, so this apparently breaks serial on Qualcomm platforms using
+"qcom,geni-debug-uart".. I'm seeing garbage on the console, likely
+meaning that ratesetting wasn't done.
 
-This fixes the following schema warning:
-
-imx93-11x11-evk.dtb: tmu@44482000: fsl,tmu-range: 'oneOf' conditional failed, one must be fixed:
-        [2147483866, 2147483881, 2147483906, 2147483946, 2147484006, 2147484071, 2147484086] is too long
-
-Signed-off-by: Fabio Estevam <festevam@denx.de>
----
-Changes since v3:
-- Rebased against next-20240104.
-- Do as suggested by Rob:
-"So short term, I'd just leave things such that they don't warn or just
-drop the conditional."
-
- Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml b/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
-index 145744027234..d155d6799da6 100644
---- a/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
-+++ b/Documentation/devicetree/bindings/thermal/qoriq-thermal.yaml
-@@ -33,7 +33,8 @@ properties:
-     description: |
-       The values to be programmed into TTRnCR, as specified by the SoC
-       reference manual. The first cell is TTR0CR, the second is TTR1CR, etc.
--    maxItems: 4
-+    minItems: 2
-+    maxItems: 7
- 
-   fsl,tmu-calibration:
-     $ref: /schemas/types.yaml#/definitions/uint32-matrix
--- 
-2.34.1
-
+Konrad
 
