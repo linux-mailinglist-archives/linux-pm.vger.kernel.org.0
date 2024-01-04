@@ -1,65 +1,64 @@
-Return-Path: <linux-pm+bounces-1812-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1813-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A270823D1F
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 09:04:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 61221823D23
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 09:04:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B93B61F245C9
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 08:04:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB6021F24C44
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 08:04:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4DC81EB2F;
-	Thu,  4 Jan 2024 08:03:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30A03200C0;
+	Thu,  4 Jan 2024 08:04:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="s53y7Gmo"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fDwaXl4g"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DF6D2030F
-	for <linux-pm@vger.kernel.org>; Thu,  4 Jan 2024 08:03:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BA11200B7
+	for <linux-pm@vger.kernel.org>; Thu,  4 Jan 2024 08:04:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5534dcfdd61so379961a12.0
-        for <linux-pm@vger.kernel.org>; Thu, 04 Jan 2024 00:03:58 -0800 (PST)
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-556ea884968so271207a12.3
+        for <linux-pm@vger.kernel.org>; Thu, 04 Jan 2024 00:04:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704355436; x=1704960236; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=SyuGcP1D5BGUcMJ8icIN8M3Lavd6GsNJCUB2gjJbli4=;
-        b=s53y7GmoHTi+YmaJV3cqtom4vYuW3K6A8eVVcLmUXfsvWXC8qfQXl33bOXbqbfdA++
-         vhcQIQYcaRv8KmR6t46dXXCvsoILE0Eg8hCLyzijyDJkJptU8HgjxYxTp7iPS+6X4HyI
-         wd2OXZhK+Miys+qE97A7eAK5zvpwMKqfzg1/7FVjFFQS7UDfBnCPZflh1O1+jdE5bi0s
-         La+WNYY1gcjF6C1kMti8t3BYDWOrs8vIcPHuy+twf8+FV2XqUuJjy2WIkcIDMoOEf6rg
-         c58ZDU4eAZGRSpXYkUachih4WLrULj+qMBkhCjuAIA5ATNtTxQmukEBD33C5p2LTe7A7
-         raPw==
+        d=linaro.org; s=google; t=1704355473; x=1704960273; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ATbBAJmbxu3OA1twQpIT7nmBhtAHhm7KTP7Mv2IH7n0=;
+        b=fDwaXl4gb9eTpla82+wkyJYqePEUkoevbIpztzG98NRuMKmxHxyDx3kyV807kxV280
+         syB34jLgXdg+D4MGn1drrSCC5CxCtSiCZrA6kDBrCLkJ8oS6bhMOAJp5FYrorxOFH4gY
+         LOjXkiJYU9AHwEwD3I5q7L1S0M2M4e0VQUInVk6S/rig4wvy9nyXdqD+qiE9+JyRwdwR
+         pVAQLvaGLZ40Iv1ENluN60AnPz8lOnFOxqu8FyJoS9CNb+yEfThro0lDYDErsSAqQUQW
+         xIyEQW5Xj2Kn/MXg6W5Kid6PBQpSZsd7GprQMqcGh/E8cSFT9+ctQxjjHP+s1RMWVGjF
+         Lgmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704355436; x=1704960236;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SyuGcP1D5BGUcMJ8icIN8M3Lavd6GsNJCUB2gjJbli4=;
-        b=lKg2KvSoCQxuFWt9Rei6WEN3C6xnQTMyCCJ+p8BD99cV6eiPUF6Gnqurwh8i2jw0yR
-         d95OJVx9ItzPwvvyEHN+LahEeUI4JPQ5i5lqwRi83zLfJr95zKp7rxz7c4oxWjo78eI4
-         T5M74xFoacYL2GunFGy+aRyWaSqaHSXS0yRnn8ynybN3CYN7R5a1KeBWwhl9Q3gUVKMl
-         1dUW5fioskG3zarYBI32p7s4lFd7o7fhedEI3vPANVbAb8qAgozw29jzmPIWpWoxil6o
-         mN+2aXkYLq8GnTgOCz0I2y6S/X0Av4D9g5Z+blLhPTCNK/qszGTO81RXYdl63LustXcG
-         02RQ==
-X-Gm-Message-State: AOJu0YyodJCudBiep4nAyTjjOT5HMqYLL8p1iQS/C/c0CIWcdXgLap6t
-	/ACCqQvIgizjM7uR8iqNIyQqH4fVRQrthQ==
-X-Google-Smtp-Source: AGHT+IE170fCL0MUDsxr5CJ+VSflu51pi+pM6vymQ13pCBE9PZBZWH516etaNPrMuOpihTN7PAby9Q==
-X-Received: by 2002:a50:c301:0:b0:553:2cbe:9abb with SMTP id a1-20020a50c301000000b005532cbe9abbmr210907edb.2.1704355436551;
-        Thu, 04 Jan 2024 00:03:56 -0800 (PST)
+        d=1e100.net; s=20230601; t=1704355473; x=1704960273;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ATbBAJmbxu3OA1twQpIT7nmBhtAHhm7KTP7Mv2IH7n0=;
+        b=miYCFCznPKCQQL6KJvbOewwy4AbWLuqfMSorszWDrJGxqKk+tZH2uN47+orbYZ9Zjx
+         gQel+jel01qMwfJRiHoHFHcSqL8a8KgnXFNTqIue91OL+uiwQ0+T1Wnv/IdIo54Mrmf7
+         eY0ARf/eZjGhIdE1lmywTyK6d8E4SWy2iIBxvw2v15TPoa3AK4fLdRiMY68W6fwDDV+L
+         GYHxSKu98q83+MPi55dmlKuqCbA3fbkYIHKGUF19oc3u9BwzRXZ/v6E/xorScI7oa0oG
+         8c6n0DG7UhifqgJOsGgWpodCQIPHTNA+0k1yjZNi9NrcNMo7sov9npWp50wx3tgXs7tm
+         o1lw==
+X-Gm-Message-State: AOJu0Yz/pi+I8IuR/nx+6+3rOMZcfIRwk1KaSdqQhjPo457gDr+b59ho
+	hMO26WQvsyv/zeOe/VLjxHg1FYpJDvL6SQ==
+X-Google-Smtp-Source: AGHT+IEnmjYpjSbvwLEQNOSa8ioL3JiJ0nYrMim6c6CiDG7fyP7l8/sRczU9fuQiGFu/dd8pwoiUGw==
+X-Received: by 2002:a05:6402:c9b:b0:54c:b185:2895 with SMTP id cm27-20020a0564020c9b00b0054cb1852895mr116983edb.27.1704355472918;
+        Thu, 04 Jan 2024 00:04:32 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id p12-20020a05640243cc00b0055493aa8905sm15001520edc.63.2024.01.04.00.03.54
+        by smtp.gmail.com with ESMTPSA id p12-20020a05640243cc00b0055493aa8905sm15001520edc.63.2024.01.04.00.04.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Jan 2024 00:03:56 -0800 (PST)
-Message-ID: <4aa2c006-3210-4667-b05c-3c7b8e8e61be@linaro.org>
-Date: Thu, 4 Jan 2024 09:03:53 +0100
+        Thu, 04 Jan 2024 00:04:32 -0800 (PST)
+Message-ID: <ef861321-1b22-403f-b2f4-a75b165e30fd@linaro.org>
+Date: Thu, 4 Jan 2024 09:04:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -67,20 +66,23 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: cpufreq: Add big CPU supply
-To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
- Viresh Kumar <viresh.kumar@linaro.org>,
- "Rafael J . Wysocki" <rafael@kernel.org>
-Cc: kernel@collabora.com,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Conor Dooley <conor+dt@kernel.org>, Hector Yuan <hector.yuan@mediatek.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Matthias Brugger <matthias.bgg@gmail.com>, Rob Herring <robh+dt@kernel.org>,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
- linux-pm@vger.kernel.org
-References: <20231229212853.277334-1-nfraprado@collabora.com>
+Subject: Re: [PATCH] dt-bindings: thermal: mediatek,thermal: document AUXADC
+ 32k clock
 Content-Language: en-US
+To: =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+ "Rafael J . Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Rob Herring
+ <robh+dt@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Sascha Hauer <s.hauer@pengutronix.de>, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?=
+ <rafal@milecki.pl>, Daniel Golle <daniel@makrotopia.org>,
+ Sam Shih <sam.shih@mediatek.com>
+References: <20240101205134.9886-1-zajec5@gmail.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -126,37 +128,37 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20231229212853.277334-1-nfraprado@collabora.com>
+In-Reply-To: <20240101205134.9886-1-zajec5@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 29/12/2023 22:28, Nícolas F. R. A. Prado wrote:
-> The performance-controller hardware block on MediaTek SoCs is
-> responsible for controlling the frequency of the CPUs. As such, it needs
-> any CPU regulator to have been configured prior to initializing. Add a
-> phandle in the binding so this dependency can be described.
+On 01/01/2024 21:51, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
 > 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> ---
+> SoCs MT7981 and MT7986 include a newer thermal block (V3) that requires
+> enabling one more clock called AUXADC 32k. Require it in binding.
 > 
->  .../devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml        | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
-> index d0aecde2b89b..d75b01d04998 100644
-> --- a/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
-> +++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-mediatek-hw.yaml
-> @@ -33,6 +33,8 @@ properties:
->        performance domains.
->      const: 1
+
 >  
-> +  big-cpus-supply: true
+> +allOf:
+> +  - $ref: thermal-sensor.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - mediatek,mt7981-thermal
+> +              - mediatek,mt7986-thermal
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 3
+> +
+> +        clock-names:
+> +          minItems: 3
 
-Why big? Neither little nor medium need power? Why you do not need to
-provide all supplies?
-
-About the naming, use something matching the devices, e.g. from their
-datasheet/manual.
+else:
+Is the clock valid for other variants?
 
 Best regards,
 Krzysztof
