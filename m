@@ -1,134 +1,211 @@
-Return-Path: <linux-pm+bounces-1870-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1871-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CC6382494B
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 20:56:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E0F6824AA7
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 23:03:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E32C6B22525
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 19:56:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 851351F2198F
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 22:03:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AA922C18E;
-	Thu,  4 Jan 2024 19:56:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F67F2C85A;
+	Thu,  4 Jan 2024 22:03:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oy1rGAQ9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE1A62C687;
-	Thu,  4 Jan 2024 19:56:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6CF32C84F;
+	Thu,  4 Jan 2024 22:03:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-59584f41f1eso108890eaf.1;
-        Thu, 04 Jan 2024 11:56:06 -0800 (PST)
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-3368b9bbeb4so850654f8f.2;
+        Thu, 04 Jan 2024 14:03:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1704405826; x=1705010626; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gXXy4XaMx73PQXHAjdjEv87MNa8ZHKFz0AC7Uv3YPaw=;
+        b=Oy1rGAQ9x5vGN+PTD56sTjjKl5Qtaphvt2i6xQ+KZybN59gs+P8g+ph9qClImdqTWU
+         N9mljp8oeXG2I9DN9lsmgJ8oRx7AnP7dl0OAfqRupOcEFRjp2Vsc5Bb///fz4Uu5ePsY
+         pLZKhrS/fcKFPIO8XOK85m+EB6u8DT3Z/x4uHSFxEPh8MA4V81Xgs7YITxwbyjL4ah1i
+         qYf8XFyKwKibTfVurlGuJiAiddz10HRz6IaXiz5C5uRGQUE0EgUaWoFDT8dBnyzdWNAp
+         Yk2CtEtcy0EIbjlg2bt6OvNZmXn9gNB+XwU8XT3TTq/IGKtJdIpS58XN/8MxP+s9UxLM
+         XpUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704398166; x=1705002966;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0+jZOMYAlf7is9OHtTiWtxt9LBNlP0KIxoNuDCX7eGw=;
-        b=ka00fHg+gGnSMHt2MpAkqo0lvwXLkCReX9Ev8mKJungOXAUyz1L4/c7qh83wBJX85x
-         NBsAfVkgRVtFhMEtOl6se6dm7fnjFLrTK8HJG+0sUOaf0b7PExJIuU/UwK6x9I6kb4Vl
-         t2FKLsqFBWl77O0FdxFykIDlb2qphrEAjrFZ73MOCgh//RTIAVUCaeysc/QlU5Q4cwec
-         OpRG9kCHtP7pAPh2Ti3CrnQ8IlphX5TrPMscyXvswpKp6RtJZNiCWcXGUmYdhNqbpfnw
-         bLL8xPKG01rn9c6uMkt5GfzBu6CccCjsUjDCZpl9iHWxkQqLqv1c9/F21B8H2BoP12UD
-         2UXg==
-X-Gm-Message-State: AOJu0Yxr/hi8rEGKiWa6YAevG8rng5ucEKKGPHBuLeBOPudvVZ3AsGiT
-	QufCy9wd2UX7mSRq0zdSSTLqSjv0rw6vzwpMBJ8=
-X-Google-Smtp-Source: AGHT+IG8OOImNU59uiRw+dioLdXaq3scpbPnYlmlcGZOXofWISN5bID2e4BhtsEaYG+tgevyRhzLzz4PMn0E9Iojwi8=
-X-Received: by 2002:a4a:ea90:0:b0:595:6028:d8cb with SMTP id
- r16-20020a4aea90000000b005956028d8cbmr2188042ooh.0.1704398165812; Thu, 04 Jan
- 2024 11:56:05 -0800 (PST)
+        d=1e100.net; s=20230601; t=1704405826; x=1705010626;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gXXy4XaMx73PQXHAjdjEv87MNa8ZHKFz0AC7Uv3YPaw=;
+        b=JXKadd+tDWaBCHs+9foIhIQ7y227Xu2yz5GZw+vg35g11pZMOBPZvx6tiNyGLDUSMk
+         QQf+AiVwtLEk9QeXzg4bLvV8uqaerVisk2Xl6CGPhDFfl1Z4jwfrF4oLp30wh2PpZcUX
+         RNG8poBehpe3VF2rMwfXTS2IyuXg6pHIygvZvKDu5L9EH/mMOoTzEQn6ZX8wB/SY5sFG
+         qS6f98olB61peZ/QlbSYJUYFJah3x6mk6xWEFC3yeDb0vjYDFwGtPA7Wy0q2IL1Hkwc7
+         997g3QMiLzzDDZ22M6vV2gfAXdGkwH+mGdA+7GKcf6yKeyVa5MHqRvMoLs6NYJoJ7bhJ
+         SGeg==
+X-Gm-Message-State: AOJu0Yzo4pfKh70OIuyaUqykyH3NlfXVBNCu+1+/hcFxeVa6P+7qeDcm
+	XLYHoiHetJVtJLYDS6crCak=
+X-Google-Smtp-Source: AGHT+IHMnzEpSv8bC0DE1jfrn88WRg6WsYB4GValqBRgP/QIHGUfEF/vjn8EDZt4b1kOhthNJNcZ9g==
+X-Received: by 2002:a5d:6b12:0:b0:336:62f7:720f with SMTP id v18-20020a5d6b12000000b0033662f7720fmr299156wrw.160.1704405825822;
+        Thu, 04 Jan 2024 14:03:45 -0800 (PST)
+Received: from localhost.localdomain (host-80-116-159-187.pool80116.interbusiness.it. [80.116.159.187])
+        by smtp.googlemail.com with ESMTPSA id e18-20020adfe7d2000000b003367a5b6b69sm164286wrn.106.2024.01.04.14.03.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Jan 2024 14:03:45 -0800 (PST)
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: MyungJoo Ham <myungjoo.ham@samsung.com>,
+	Kyungmin Park <kyungmin.park@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	Jonghwa Lee <jonghwa3.lee@samsung.com>,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Cc: stable@vger.kernel.org
+Subject: [RESEND PATCH 1/2] PM / devfreq: Fix buffer overflow in trans_stat_show
+Date: Thu,  4 Jan 2024 22:55:14 +0100
+Message-ID: <20240104215521.10772-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240104171553.2080674-1-lukasz.luba@arm.com> <20240104171553.2080674-13-lukasz.luba@arm.com>
-In-Reply-To: <20240104171553.2080674-13-lukasz.luba@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 4 Jan 2024 20:55:54 +0100
-Message-ID: <CAJZ5v0g9nEis2Bcvygn70vAT=iifHisZ_7_T4PcmQSU_=_Ymgg@mail.gmail.com>
-Subject: Re: [PATCH v6 12/23] PM: EM: Add helpers to read under RCU lock the
- EM table
-To: Lukasz Luba <lukasz.luba@arm.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, rafael@kernel.org, 
-	dietmar.eggemann@arm.com, rui.zhang@intel.com, amit.kucheria@verdurent.com, 
-	amit.kachhap@gmail.com, daniel.lezcano@linaro.org, viresh.kumar@linaro.org, 
-	len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org, qyousef@layalina.io, 
-	wvw@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jan 4, 2024 at 6:15=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> wr=
-ote:
->
-> To use the runtime modifiable EM table there is a need to use RCU
-> read locking properly. Add helper functions for the device drivers and
-> frameworks to make sure it's done properly.
->
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->  include/linux/energy_model.h | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
->
-> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-> index f33257ed83fd..cfaf5d8b1aad 100644
-> --- a/include/linux/energy_model.h
-> +++ b/include/linux/energy_model.h
-> @@ -338,6 +338,20 @@ static inline int em_pd_nr_perf_states(struct em_per=
-f_domain *pd)
->         return pd->nr_perf_states;
->  }
->
-> +static inline struct em_perf_state *em_get_table(struct em_perf_domain *=
-pd)
-> +{
-> +       struct em_perf_table __rcu *table;
-> +
-> +       rcu_read_lock();
-> +       table =3D rcu_dereference(pd->em_table);
-> +       return table->state;
-> +}
-> +
-> +static inline void em_put_table(void)
-> +{
-> +       rcu_read_unlock();
-> +}
+Fix buffer overflow in trans_stat_show().
 
-The lack of symmetry between em_get_table() and em_put_table() is kind
-of confusing.
+Convert simple snprintf to the more secure scnprintf with size of
+PAGE_SIZE.
 
-I don't really like these wrappers.
+Add condition checking if we are exceeding PAGE_SIZE and exit early from
+loop. Also add at the end a warning that we exceeded PAGE_SIZE and that
+stats is disabled.
 
-IMO it would be better to use rcu_read_lock()/rcu_read_unlock()
-directly everywhere they are needed and there can be a wrapper around
-rcu_dereference(pd->em_table), something like
+Return -EFBIG in the case where we don't have enough space to write the
+full transition table.
 
-static inline struct em_perf_state *em_perf_state_from_pd(struct
-em_perf_domain *pd)
-{
-        return rcu_dereference(pd->em_table)->state;
-}
+Also document in the ABI that this function can return -EFBIG error.
 
-> +
->  #else
->  struct em_data_callback {};
->  #define EM_ADV_DATA_CB(_active_power_cb, _cost_cb) { }
-> @@ -384,6 +398,11 @@ int em_dev_update_perf_domain(struct device *dev,
->  {
->         return -EINVAL;
->  }
-> +static inline struct em_perf_state *em_get_table(struct em_perf_domain *=
-pd)
-> +{
-> +       return NULL;
-> +}
-> +static inline void em_put_table(void) {}
->  #endif
->
->  #endif
-> --
+Cc: stable@vger.kernel.org
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218041
+Fixes: e552bbaf5b98 ("PM / devfreq: Add sysfs node for representing frequency transition information.")
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+ Documentation/ABI/testing/sysfs-class-devfreq |  3 +
+ drivers/devfreq/devfreq.c                     | 57 +++++++++++++------
+ 2 files changed, 42 insertions(+), 18 deletions(-)
+
+diff --git a/Documentation/ABI/testing/sysfs-class-devfreq b/Documentation/ABI/testing/sysfs-class-devfreq
+index 5e6b74f30406..1e7e0bb4c14e 100644
+--- a/Documentation/ABI/testing/sysfs-class-devfreq
++++ b/Documentation/ABI/testing/sysfs-class-devfreq
+@@ -52,6 +52,9 @@ Description:
+ 
+ 			echo 0 > /sys/class/devfreq/.../trans_stat
+ 
++		If the transition table is bigger than PAGE_SIZE, reading
++		this will return an -EFBIG error.
++
+ What:		/sys/class/devfreq/.../available_frequencies
+ Date:		October 2012
+ Contact:	Nishanth Menon <nm@ti.com>
+diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+index 63347a5ae599..8459512d9b07 100644
+--- a/drivers/devfreq/devfreq.c
++++ b/drivers/devfreq/devfreq.c
+@@ -1688,7 +1688,7 @@ static ssize_t trans_stat_show(struct device *dev,
+ 			       struct device_attribute *attr, char *buf)
+ {
+ 	struct devfreq *df = to_devfreq(dev);
+-	ssize_t len;
++	ssize_t len = 0;
+ 	int i, j;
+ 	unsigned int max_state;
+ 
+@@ -1697,7 +1697,7 @@ static ssize_t trans_stat_show(struct device *dev,
+ 	max_state = df->max_state;
+ 
+ 	if (max_state == 0)
+-		return sprintf(buf, "Not Supported.\n");
++		return scnprintf(buf, PAGE_SIZE, "Not Supported.\n");
+ 
+ 	mutex_lock(&df->lock);
+ 	if (!df->stop_polling &&
+@@ -1707,31 +1707,52 @@ static ssize_t trans_stat_show(struct device *dev,
+ 	}
+ 	mutex_unlock(&df->lock);
+ 
+-	len = sprintf(buf, "     From  :   To\n");
+-	len += sprintf(buf + len, "           :");
+-	for (i = 0; i < max_state; i++)
+-		len += sprintf(buf + len, "%10lu",
+-				df->freq_table[i]);
++	len += scnprintf(buf + len, PAGE_SIZE - len, "     From  :   To\n");
++	len += scnprintf(buf + len, PAGE_SIZE - len, "           :");
++	for (i = 0; i < max_state; i++) {
++		if (len >= PAGE_SIZE - 1)
++			break;
++		len += scnprintf(buf + len, PAGE_SIZE - len, "%10lu",
++				 df->freq_table[i]);
++	}
++	if (len >= PAGE_SIZE - 1)
++		return PAGE_SIZE - 1;
+ 
+-	len += sprintf(buf + len, "   time(ms)\n");
++	len += scnprintf(buf + len, PAGE_SIZE - len, "   time(ms)\n");
+ 
+ 	for (i = 0; i < max_state; i++) {
++		if (len >= PAGE_SIZE - 1)
++			break;
+ 		if (df->freq_table[i] == df->previous_freq)
+-			len += sprintf(buf + len, "*");
++			len += scnprintf(buf + len, PAGE_SIZE - len, "*");
+ 		else
+-			len += sprintf(buf + len, " ");
++			len += scnprintf(buf + len, PAGE_SIZE - len, " ");
++		if (len >= PAGE_SIZE - 1)
++			break;
++
++		len += scnprintf(buf + len, PAGE_SIZE - len, "%10lu:",
++				 df->freq_table[i]);
++		for (j = 0; j < max_state; j++) {
++			if (len >= PAGE_SIZE - 1)
++				break;
++			len += scnprintf(buf + len, PAGE_SIZE - len, "%10u",
++					 df->stats.trans_table[(i * max_state) + j]);
++		}
++		if (len >= PAGE_SIZE - 1)
++			break;
++		len += scnprintf(buf + len, PAGE_SIZE - len, "%10llu\n", (u64)
++				 jiffies64_to_msecs(df->stats.time_in_state[i]));
++	}
+ 
+-		len += sprintf(buf + len, "%10lu:", df->freq_table[i]);
+-		for (j = 0; j < max_state; j++)
+-			len += sprintf(buf + len, "%10u",
+-				df->stats.trans_table[(i * max_state) + j]);
++	if (len < PAGE_SIZE - 1)
++		len += scnprintf(buf + len, PAGE_SIZE - len, "Total transition : %u\n",
++				 df->stats.total_trans);
+ 
+-		len += sprintf(buf + len, "%10llu\n", (u64)
+-			jiffies64_to_msecs(df->stats.time_in_state[i]));
++	if (len >= PAGE_SIZE - 1) {
++		pr_warn_once("devfreq transition table exceeds PAGE_SIZE. Disabling\n");
++		return -EFBIG;
+ 	}
+ 
+-	len += sprintf(buf + len, "Total transition : %u\n",
+-					df->stats.total_trans);
+ 	return len;
+ }
+ 
+-- 
+2.43.0
+
 
