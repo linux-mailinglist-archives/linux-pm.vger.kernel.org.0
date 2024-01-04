@@ -1,108 +1,162 @@
-Return-Path: <linux-pm+bounces-1827-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1828-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BBC1824358
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 15:11:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1C3F8244D5
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 16:20:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9AE7D1F225A1
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 14:10:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 11B4F1C21663
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 15:20:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03AC2210E7;
-	Thu,  4 Jan 2024 14:10:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C26392377E;
+	Thu,  4 Jan 2024 15:20:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="p6NiO/bv"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="tGYYc6hr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 538FC2230B
-	for <linux-pm@vger.kernel.org>; Thu,  4 Jan 2024 14:10:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-40e3485f0e1so4270935e9.3
-        for <linux-pm@vger.kernel.org>; Thu, 04 Jan 2024 06:10:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704377451; x=1704982251; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1IG/HNz7wTqJE1bnao0AkkiNoHMZAFUZYED8cZloi6g=;
-        b=p6NiO/bvtsW3YgLbwGmiWFFzwZrIF9zVcp+Y9ShaOBsDq7xLIhIwCI9SLV1A2Zf8DA
-         Qn8QwXpjOBBYY2rIrUKxWYdnIdrP/Smh5mCdTje7QVQmPCi1lID09nnghil9d/UlEx7d
-         cBfIBbGnl7QJy3ez3fIudQ0udOPpI3G8qc30PKlaBseCzsX3VuwgWIj0MAW4giPS0E7+
-         mRhBMdv64ZDXUB9VoUt3gnUPahsVi8GwZRzMjhAe/0tSOMB22UlVXZd4Ctioy250DIXx
-         r2F/PlrH7tpSta3rPkxiqjPTq8d1dK5o4HlT+EcvIl02Ie+FrdagcCaCuTRUQNAoOAGB
-         xjmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704377451; x=1704982251;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1IG/HNz7wTqJE1bnao0AkkiNoHMZAFUZYED8cZloi6g=;
-        b=A5KKLWZbpn+6rPW2AL1yLFDmWvjt9kPE//V1+TU717kbGHmVUEgu+F3Z63aKlDpigZ
-         /x/+Pe/FjXy2EgzZzESBSTYMgSzVe2zsD9UP6mQPHOYLv6XOtETZ8eSETvl3EkjnCHAZ
-         h04m9kOayH8LDAdULZ3ASrT/uHyKcsz8XZwTzD/O4S/BIoCc79G8L+U9ao6KCVOZa7LC
-         BQUZMNtl7y2Uvw70aI5U8MYriqaRmt9PXi/wYN3xhasXudGzj3B/dPV/nLRPQbodzVJz
-         5RWtXeNenVO0WxT1LvDpve6NdVV1D2mXF2U1sXCkJJdVLRiVKxlAZHsuDWB1kNymijrf
-         352A==
-X-Gm-Message-State: AOJu0YzOg8vfh7/xundPHxmYngCptC8Wnjdz0OCo2W82zM4kjryNxZ5C
-	6xPIEsl/0NOu60qpN7RimxVkWwL9ajXEtA==
-X-Google-Smtp-Source: AGHT+IGvfF8iQXUpHTP+ygPHMlMeDihW13RCa/olJo9wziP2tZDKBt9hQ+LpDxlLi2AYnJJ5mjPeng==
-X-Received: by 2002:a05:600c:3007:b0:40c:486d:6cb4 with SMTP id j7-20020a05600c300700b0040c486d6cb4mr411001wmh.83.1704377451520;
-        Thu, 04 Jan 2024 06:10:51 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id g15-20020a05600c310f00b0040d53588d94sm5857865wmo.46.2024.01.04.06.10.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Jan 2024 06:10:50 -0800 (PST)
-Message-ID: <abd91e5a-cf01-4b86-965b-ed315a58355d@linaro.org>
-Date: Thu, 4 Jan 2024 15:10:49 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39508241E6;
+	Thu,  4 Jan 2024 15:20:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 404FKY2O025030;
+	Thu, 4 Jan 2024 09:20:34 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1704381634;
+	bh=8L6XjEgvpWhme0+WHDMHLTnWTs8TNY8c5ZoS/bqIkNM=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=tGYYc6hrcDhXDL3m/gtiKBRT7BIs7xj95ssF2l98MJFLbKoKI5X59QSFljFRn3R6x
+	 IV/g34ACniFJH9XUvQ8oWjSwDO3GYbxv9nzfweyc0xvxdG+7GtP5/P8JEfyslJk61I
+	 1pGTXaIZrGUqhofgFq9Dprf+mTUoOOOIih2FQVls=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 404FKYWt088547
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 4 Jan 2024 09:20:34 -0600
+Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 4
+ Jan 2024 09:20:34 -0600
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 4 Jan 2024 09:20:34 -0600
+Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 404FKYnn007652;
+	Thu, 4 Jan 2024 09:20:34 -0600
+Date: Thu, 4 Jan 2024 09:20:34 -0600
+From: Nishanth Menon <nm@ti.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC: Manorit Chawdhry <m-chawdhry@ti.com>,
+        "Rafael J. Wysocki"
+	<rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui
+	<rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+        Rob Herring
+	<robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, J
+ Keerthy <j-keerthy@ti.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Udit Kumar
+	<u-kumar1@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Subject: Re: [PATCH] dt-bindings: thermal: k3-j72xx: Update bindings for
+ J721S2 SoCs
+Message-ID: <20240104152034.gijjaeehlcylorws@tranquil>
+References: <20231228-b4-upstream-j721s2-vtm-dt-binding-v1-1-e866277f9c64@ti.com>
+ <65a294e7-1c3c-4022-9498-e83e7415ffb3@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] thermal: k3_j72xx_bandgap: implement suspend/resume
- support
-Content-Language: en-US
-To: Thomas Richard <thomas.richard@bootlin.com>, rafael@kernel.org
-Cc: rui.zhang@intel.com, lukasz.luba@arm.com, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
- gregory.clement@bootlin.com, theo.lebrun@bootlin.com, u-kumar1@ti.com,
- Keerthy <j-keerthy@ti.com>
-References: <20231130164953.2043305-1-thomas.richard@bootlin.com>
- <d8f52066-323d-4622-b6b0-32834a504dfe@bootlin.com>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <d8f52066-323d-4622-b6b0-32834a504dfe@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <65a294e7-1c3c-4022-9498-e83e7415ffb3@linaro.org>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On 04/01/2024 12:31, Thomas Richard wrote:
-> On 11/30/23 17:49, Thomas Richard wrote:
->> From: Théo Lebrun <theo.lebrun@bootlin.com>
->>
->> This add suspend-to-ram support.
+On 10:33-20240104, Krzysztof Kozlowski wrote:
+> On 28/12/2023 07:39, Manorit Chawdhry wrote:
+> > The clock and processor ID for J721S2 differs from the existing
+> > compatibles, add a new compatible to represent this change for adding
+> > support for Adaptive voltage scaling.
+
+This makes no sense to begin with. You do not need a new compatible just
+for clock ID change (processor ID has nothing to do with vtm node).
+
+This approach is just plain wrong. AVS support has been done in the past
+(class 3,2,1.5 and 0) and bindings have been mature for more that a
+decade for the same.
+
+So NAK for this patch
+
 > 
-> Hello,
+> Subject: everything is "update". Write proper subjects.
 > 
-> Could someone please take a look at this patch ?
-
-Seems like the MAINTAINER file not up to date regarding ti_bandgap.c and 
-ti_j*bandgap.c
-
-[Added Keerthy]
-
-
+> A nit, subject: drop second/last, redundant "bindings for". The
+> "dt-bindings" prefix is already stating that these are bindings.
+> 
+> 
+> 
+> > 
+> > Signed-off-by: Manorit Chawdhry <m-chawdhry@ti.com>
+> > ---
+> >  .../devicetree/bindings/thermal/ti,j72xx-thermal.yaml        | 12 ++++++++----
+> >  1 file changed, 8 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+> > index 171b3622ed84..5792ccc058aa 100644
+> > --- a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+> > +++ b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+> > @@ -24,9 +24,13 @@ description: |
+> >  
+> >  properties:
+> >    compatible:
+> > -    enum:
+> > -      - ti,j721e-vtm
+> > -      - ti,j7200-vtm
+> > +    anyOf:
+> 
+> ? Eh, what?
+> 
+> > +      - items:
+> > +          - enum:
+> > +              - ti,j721e-vtm
+> > +              - ti,j7200-vtm
+> > +              - ti,j721s2-vtm
+> > +      - maxItems: 2
+> 
+> What? I really do not understand what are you doing here.
+> 
+> 
+> >  
+> >    reg:
+> >      items:
+> > @@ -72,7 +76,7 @@ examples:
+> >    - |
+> >      #include <dt-bindings/soc/ti,sci_pm_domain.h>
+> >      wkup_vtm0: thermal-sensor@42040000 {
+> > -        compatible = "ti,j721e-vtm";
+> > +        compatible = "ti,j721e-vtm", "ti,j7200-vtm";
+> 
+> It's an enum, not a list.
+> 
+> NAK, please read example-schema and other bindings. Then get review from
+> TI folks before posting new versions.
+> 
+> Best regards,
+> Krzysztof
+> 
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
 
