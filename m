@@ -1,64 +1,64 @@
-Return-Path: <linux-pm+bounces-1813-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1814-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61221823D23
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 09:04:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C319823D2B
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 09:08:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB6021F24C44
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 08:04:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC9A4287668
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 08:08:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30A03200C0;
-	Thu,  4 Jan 2024 08:04:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FE24200B2;
+	Thu,  4 Jan 2024 08:08:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fDwaXl4g"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jvN769tr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BA11200B7
-	for <linux-pm@vger.kernel.org>; Thu,  4 Jan 2024 08:04:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 987DB200BA
+	for <linux-pm@vger.kernel.org>; Thu,  4 Jan 2024 08:08:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-556ea884968so271207a12.3
-        for <linux-pm@vger.kernel.org>; Thu, 04 Jan 2024 00:04:34 -0800 (PST)
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-50e7ddd999bso240740e87.1
+        for <linux-pm@vger.kernel.org>; Thu, 04 Jan 2024 00:08:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704355473; x=1704960273; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1704355709; x=1704960509; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ATbBAJmbxu3OA1twQpIT7nmBhtAHhm7KTP7Mv2IH7n0=;
-        b=fDwaXl4gb9eTpla82+wkyJYqePEUkoevbIpztzG98NRuMKmxHxyDx3kyV807kxV280
-         syB34jLgXdg+D4MGn1drrSCC5CxCtSiCZrA6kDBrCLkJ8oS6bhMOAJp5FYrorxOFH4gY
-         LOjXkiJYU9AHwEwD3I5q7L1S0M2M4e0VQUInVk6S/rig4wvy9nyXdqD+qiE9+JyRwdwR
-         pVAQLvaGLZ40Iv1ENluN60AnPz8lOnFOxqu8FyJoS9CNb+yEfThro0lDYDErsSAqQUQW
-         xIyEQW5Xj2Kn/MXg6W5Kid6PBQpSZsd7GprQMqcGh/E8cSFT9+ctQxjjHP+s1RMWVGjF
-         Lgmw==
+        bh=b/PGdF3B3iwuG0k3TXxzXDW9ol0S69WmnY8YmNGg6IE=;
+        b=jvN769tr24gS2Lw/Ac92JDgNSL3S5olVF4/bSE/LlAw6FwYhlwKkHqY7BXIv9yQoFB
+         p8Ylh7IAr0yEyAzVujGFa9eNNRgccbVz2Ie95bd4gpI4uEdwSxZCWpwaWCp6Yi2VAfOM
+         ySI2Vc0b7Q04uVphlwWCmrdT1akvUVYU7eaNObGn6Bm3I0fbNsehKVD48gBTcqxxKpZx
+         N3BElRrW9zavqo0J2we3FgM2rLWri+xxUJyf4F0yZVk5m8IkM/hTP7bzYKlwEOo3K+4f
+         EQ3JP278agOep3R1c2nOo42F7AoNj9jZnJhTJ96Kwvp0Qiqs1XVcrKQuHpncrfbk8oWh
+         bnJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704355473; x=1704960273;
+        d=1e100.net; s=20230601; t=1704355709; x=1704960509;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ATbBAJmbxu3OA1twQpIT7nmBhtAHhm7KTP7Mv2IH7n0=;
-        b=miYCFCznPKCQQL6KJvbOewwy4AbWLuqfMSorszWDrJGxqKk+tZH2uN47+orbYZ9Zjx
-         gQel+jel01qMwfJRiHoHFHcSqL8a8KgnXFNTqIue91OL+uiwQ0+T1Wnv/IdIo54Mrmf7
-         eY0ARf/eZjGhIdE1lmywTyK6d8E4SWy2iIBxvw2v15TPoa3AK4fLdRiMY68W6fwDDV+L
-         GYHxSKu98q83+MPi55dmlKuqCbA3fbkYIHKGUF19oc3u9BwzRXZ/v6E/xorScI7oa0oG
-         8c6n0DG7UhifqgJOsGgWpodCQIPHTNA+0k1yjZNi9NrcNMo7sov9npWp50wx3tgXs7tm
-         o1lw==
-X-Gm-Message-State: AOJu0Yz/pi+I8IuR/nx+6+3rOMZcfIRwk1KaSdqQhjPo457gDr+b59ho
-	hMO26WQvsyv/zeOe/VLjxHg1FYpJDvL6SQ==
-X-Google-Smtp-Source: AGHT+IEnmjYpjSbvwLEQNOSa8ioL3JiJ0nYrMim6c6CiDG7fyP7l8/sRczU9fuQiGFu/dd8pwoiUGw==
-X-Received: by 2002:a05:6402:c9b:b0:54c:b185:2895 with SMTP id cm27-20020a0564020c9b00b0054cb1852895mr116983edb.27.1704355472918;
-        Thu, 04 Jan 2024 00:04:32 -0800 (PST)
+        bh=b/PGdF3B3iwuG0k3TXxzXDW9ol0S69WmnY8YmNGg6IE=;
+        b=Bm4ZcJfU/fpv4I+KOi8YJiECpIqmM/PyQTtAB4rHLX1OpQh53AdzKPzYOPCrtega3R
+         nMGgvFgNFyjfDg6uvdUxftgnypGaf63528COycBqNS0gtFPL1ubXZstawDaSOZvW0S1k
+         bfLJYm51q5vcJeyad+JR6XzRuaJHk06Hw4CWAT+eU5T5qnEXnnTkiJ4LuI/ZOmBtoHbF
+         Vxy8ct2CM5jkulHS0FkYRg64iKLVT4Bu7jHeXrM8ZmPSnNsTGmRyzAbWPIWZ9imw7rpb
+         W1eLFJsppjf/Zucf6UapuXNcXMOIlEsow8YGDQgRhMM9WO+HIuuimmohWmfJrtLAJ5mQ
+         lLaQ==
+X-Gm-Message-State: AOJu0YyMg+YbpJWXRZLABX+Xb3KXVZO5iYlObezK+mAp8ZgQmCtg5drn
+	uuT2sGfBGdDYtrW5dAVYbDlmZ0AQp6Bv2w==
+X-Google-Smtp-Source: AGHT+IEzPIXCpC5wNAhe/Kl6nJVFzUV7wggmA6I9V4zMkVgC9G7SBO1wv6hnkExB3aIpDRWSX0USDQ==
+X-Received: by 2002:a05:6512:34ce:b0:50e:7c9b:9e20 with SMTP id w14-20020a05651234ce00b0050e7c9b9e20mr116426lfr.19.1704355709624;
+        Thu, 04 Jan 2024 00:08:29 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.218.27])
-        by smtp.gmail.com with ESMTPSA id p12-20020a05640243cc00b0055493aa8905sm15001520edc.63.2024.01.04.00.04.31
+        by smtp.gmail.com with ESMTPSA id u23-20020aa7d0d7000000b005533a9934b6sm18460918edo.54.2024.01.04.00.08.26
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Jan 2024 00:04:32 -0800 (PST)
-Message-ID: <ef861321-1b22-403f-b2f4-a75b165e30fd@linaro.org>
-Date: Thu, 4 Jan 2024 09:04:31 +0100
+        Thu, 04 Jan 2024 00:08:29 -0800 (PST)
+Message-ID: <8aea46d8-0ecd-4f16-92a2-96ec5ae07240@linaro.org>
+Date: Thu, 4 Jan 2024 09:08:25 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -66,23 +66,25 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] dt-bindings: thermal: mediatek,thermal: document AUXADC
- 32k clock
+Subject: Re: [PATCH v3 1/3] dt-bindings: iio/adc: Move QCOM ADC bindings to
+ iio/adc folder
 Content-Language: en-US
-To: =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
- "Rafael J . Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Sascha Hauer <s.hauer@pengutronix.de>, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?=
- <rafal@milecki.pl>, Daniel Golle <daniel@makrotopia.org>,
- Sam Shih <sam.shih@mediatek.com>
-References: <20240101205134.9886-1-zajec5@gmail.com>
+To: Jishnu Prakash <quic_jprakash@quicinc.com>, jic23@kernel.org,
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ andersson@kernel.org, konrad.dybcio@linaro.org, lee@kernel.org,
+ andriy.shevchenko@linux.intel.com, daniel.lezcano@linaro.org,
+ dmitry.baryshkov@linaro.org
+Cc: lars@metafoo.de, luca@z3ntu.xyz, marijn.suijten@somainline.org,
+ agross@kernel.org, sboyd@kernel.org, rafael@kernel.org, rui.zhang@intel.com,
+ lukasz.luba@arm.com, linus.walleij@linaro.org, quic_subbaram@quicinc.com,
+ quic_collinsd@quicinc.com, quic_amelende@quicinc.com,
+ quic_kamalw@quicinc.com, kernel@quicinc.com, linux-kernel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-arm-msm-owner@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, cros-qcom-dts-watchers@chromium.org,
+ Rob Herring <robh@kernel.org>
+References: <20231231171237.3322376-1-quic_jprakash@quicinc.com>
+ <20231231171237.3322376-2-quic_jprakash@quicinc.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -128,37 +130,32 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240101205134.9886-1-zajec5@gmail.com>
+In-Reply-To: <20231231171237.3322376-2-quic_jprakash@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 01/01/2024 21:51, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
+On 31/12/2023 18:12, Jishnu Prakash wrote:
+> There are several files containing QCOM ADC macros for channel names
+> right now in the include/dt-bindings/iio folder. Since all of these
+> are specifically for adc, move the files to the
+> include/dt-bindings/iio/adc folder.
 > 
-> SoCs MT7981 and MT7986 include a newer thermal block (V3) that requires
-> enabling one more clock called AUXADC 32k. Require it in binding.
+> Also update all affected devicetree and driver files to fix compilation
+> errors seen with this move and update documentation files to fix
+> dtbinding check errors for the same.
 > 
+> Changes since v2:
+> - Updated some more new devicetree files requiring this change.
 
->  
-> +allOf:
-> +  - $ref: thermal-sensor.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - mediatek,mt7981-thermal
-> +              - mediatek,mt7986-thermal
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 3
-> +
-> +        clock-names:
-> +          minItems: 3
+Changelog goes under ---
 
-else:
-Is the clock valid for other variants?
+> 
+> Acked-by: Lee Jones <lee@kernel.org>
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Jishnu Prakash <quic_jprakash@quicinc.com>
+
+No dependencies mentioned and this has build failures. Please test your
+patches before sending.
 
 Best regards,
 Krzysztof
