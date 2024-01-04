@@ -1,275 +1,535 @@
-Return-Path: <linux-pm+bounces-1818-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1819-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18FDF823EC5
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 10:37:10 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7CF1823F1F
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 11:00:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3FED2826F4
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 09:37:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F2929B2282E
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 10:00:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87C2F1DFF2;
-	Thu,  4 Jan 2024 09:37:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAC15208DD;
+	Thu,  4 Jan 2024 10:00:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="SCVOsVLT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6B261E528;
-	Thu,  4 Jan 2024 09:37:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4T5Lzf1tRpz1Q7V7;
-	Thu,  4 Jan 2024 17:35:26 +0800 (CST)
-Received: from kwepemm600004.china.huawei.com (unknown [7.193.23.242])
-	by mail.maildlp.com (Postfix) with ESMTPS id 3E902140416;
-	Thu,  4 Jan 2024 17:36:53 +0800 (CST)
-Received: from [10.67.121.59] (10.67.121.59) by kwepemm600004.china.huawei.com
- (7.193.23.242) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Thu, 4 Jan
- 2024 17:36:51 +0800
-Message-ID: <9428a1ed-ba4d-1fe6-63e8-11e152bf1f09@huawei.com>
-Date: Thu, 4 Jan 2024 17:36:51 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDDE6208CA;
+	Thu,  4 Jan 2024 10:00:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 404A061G032126;
+	Thu, 4 Jan 2024 10:00:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=wQgYPle5TH7i7u2I3wtHU0/ODC612atETv4t+r4pHLY=; b=SC
+	VOsVLT+TO7K1whJIXutaO97sDptbPDld427p/QkERjPsHfbe/Xel7RStWrUUfhoC
+	oLK8NrVtFYNzn2g8x+gVPBLKDydqUDjmpJXkBTBWBTE8Gx3GY5lTk/DznLDeUmvV
+	RveEuraKKxWEjmIJ/ZQ0do3EWs6ck/08YYIY9pCr4E/sZWJiUEXhFGxIeubSM2FK
+	UB2kTFbQKaELM78wsYojFyi9SUkDbdWJ/As1+cb5Vxdt1jAHxJ1L7AUo3Swr5b3M
+	+IqGHRqe5O+FH5q+GovIFZMGuhH4gQyIGqBtQB4eFRzSrHCoVe64Qwn9vJ+ag1b4
+	ortlBEzZdpaHKy51Ov6w==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vdqb1rhyb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 04 Jan 2024 10:00:06 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 404A04wf029122
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 4 Jan 2024 10:00:04 GMT
+Received: from [10.216.41.156] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Thu, 4 Jan
+ 2024 02:00:00 -0800
+Message-ID: <4d4d5d3b-cdb2-484a-8297-4b8bb0817986@quicinc.com>
+Date: Thu, 4 Jan 2024 15:29:54 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH] cpufreq: CPPC: Resolve the large frequency discrepancy
- from cpuinfo_cur_freq
-To: Ionela Voinescu <ionela.voinescu@arm.com>
-CC: <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <rafael@kernel.org>,
-	<beata.michalska@arm.com>, <sumitg@nvidia.com>, <zengheng4@huawei.com>,
-	<yang@os.amperecomputing.com>, <will@kernel.org>, <sudeep.holla@arm.com>,
-	<liuyonglong@huawei.com>, <zhanjie9@hisilicon.com>, <lihuisong@huawei.com>
-References: <20231212072617.14756-1-lihuisong@huawei.com>
- <ZZWfJOsDlEXWYHA5@arm.com>
-From: "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <ZZWfJOsDlEXWYHA5@arm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/4] interconnect: qcom: x1e80100: Remove bogus per-RSC
+ BCMs and nodes
+To: Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>, Rob Herring
+	<robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Sibi Sankar" <quic_sibis@quicinc.com>,
+        Abel Vesa <abel.vesa@linaro.org>
+CC: Marijn Suijten <marijn.suijten@somainline.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+References: <20240102-topic-x1e_fixes-v1-0-70723e08d5f6@linaro.org>
+ <20240102-topic-x1e_fixes-v1-1-70723e08d5f6@linaro.org>
+Content-Language: en-US
+From: Rajendra Nayak <quic_rjendra@quicinc.com>
+In-Reply-To: <20240102-topic-x1e_fixes-v1-1-70723e08d5f6@linaro.org>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600004.china.huawei.com (7.193.23.242)
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: l8NlhSNnbSWm5-kHa27Qosoq8C-yUZtz
+X-Proofpoint-ORIG-GUID: l8NlhSNnbSWm5-kHa27Qosoq8C-yUZtz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 mlxscore=0 adultscore=0 priorityscore=1501
+ lowpriorityscore=0 bulkscore=0 mlxlogscore=999 clxscore=1011
+ malwarescore=0 phishscore=0 spamscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2311290000
+ definitions=main-2401040075
 
 
-在 2024/1/4 1:53, Ionela Voinescu 写道:
-> Hi,
->
-> On Tuesday 12 Dec 2023 at 15:26:17 (+0800), Huisong Li wrote:
->> Many developers found that the cpu current frequency is greater than
->> the maximum frequency of the platform, please see [1], [2] and [3].
->>
->> In the scenarios with high memory access pressure, the patch [1] has
->> proved the significant latency of cpc_read() which is used to obtain
->> delivered and reference performance counter cause an absurd frequency.
->> The sampling interval for this counters is very critical and is expected
->> to be equal. However, the different latency of cpc_read() has a direct
->> impact on their sampling interval.
->>
-> Would this [1] alternative solution work for you?
-It would work for me AFAICS.
-Because the "arch_freq_scale" is also from AMU core and constant 
-counter, and read together.
-But, from their discuss line, it seems that there are some tricky points 
-to clarify or consider.
->
-> [1] https://lore.kernel.org/lkml/20231127160838.1403404-1-beata.michalska@arm.com/
->
-> Thanks,
-> Ionela.
->
->> This patch adds a interface, cpc_read_arch_counters_on_cpu, to read
->> delivered and reference performance counter together. According to my
->> test[4], the discrepancy of cpu current frequency in the scenarios with
->> high memory access pressure is lower than 0.2% by stress-ng application.
->>
->> [1] https://lore.kernel.org/all/20231025093847.3740104-4-zengheng4@huawei.com/
->> [2] https://lore.kernel.org/all/20230328193846.8757-1-yang@os.amperecomputing.com/
->> [3] https://lore.kernel.org/all/20230418113459.12860-7-sumitg@nvidia.com/
->>
->> [4] My local test:
->> The testing platform enable SMT and include 128 logical CPU in total,
->> and CPU base frequency is 2.7GHz. Reading "cpuinfo_cur_freq" for each
->> physical core on platform during the high memory access pressure from
->> stress-ng, and the output is as follows:
->>    0: 2699133     2: 2699942     4: 2698189     6: 2704347
->>    8: 2704009    10: 2696277    12: 2702016    14: 2701388
->>   16: 2700358    18: 2696741    20: 2700091    22: 2700122
->>   24: 2701713    26: 2702025    28: 2699816    30: 2700121
->>   32: 2700000    34: 2699788    36: 2698884    38: 2699109
->>   40: 2704494    42: 2698350    44: 2699997    46: 2701023
->>   48: 2703448    50: 2699501    52: 2700000    54: 2699999
->>   56: 2702645    58: 2696923    60: 2697718    62: 2700547
->>   64: 2700313    66: 2700000    68: 2699904    70: 2699259
->>   72: 2699511    74: 2700644    76: 2702201    78: 2700000
->>   80: 2700776    82: 2700364    84: 2702674    86: 2700255
->>   88: 2699886    90: 2700359    92: 2699662    94: 2696188
->>   96: 2705454    98: 2699260   100: 2701097   102: 2699630
->> 104: 2700463   106: 2698408   108: 2697766   110: 2701181
->> 112: 2699166   114: 2701804   116: 2701907   118: 2701973
->> 120: 2699584   122: 2700474   124: 2700768   126: 2701963
->>
->> Signed-off-by: Huisong Li <lihuisong@huawei.com>
->> ---
->>   arch/arm64/kernel/topology.c | 43 ++++++++++++++++++++++++++++++++++--
->>   drivers/acpi/cppc_acpi.c     | 22 +++++++++++++++---
->>   include/acpi/cppc_acpi.h     |  5 +++++
->>   3 files changed, 65 insertions(+), 5 deletions(-)
->>
->> diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
->> index 7d37e458e2f5..c3122154d738 100644
->> --- a/arch/arm64/kernel/topology.c
->> +++ b/arch/arm64/kernel/topology.c
->> @@ -299,6 +299,11 @@ core_initcall(init_amu_fie);
->>   #ifdef CONFIG_ACPI_CPPC_LIB
->>   #include <acpi/cppc_acpi.h>
->>   
->> +struct amu_counters {
->> +	u64 corecnt;
->> +	u64 constcnt;
->> +};
->> +
->>   static void cpu_read_corecnt(void *val)
->>   {
->>   	/*
->> @@ -322,8 +327,27 @@ static void cpu_read_constcnt(void *val)
->>   		      0UL : read_constcnt();
->>   }
->>   
->> +static void cpu_read_amu_counters(void *data)
->> +{
->> +	struct amu_counters *cnt = (struct amu_counters *)data;
->> +
->> +	/*
->> +	 * The running time of the this_cpu_has_cap() might have a couple of
->> +	 * microseconds and is significantly increased to tens of microseconds.
->> +	 * But AMU core and constant counter need to be read togeter without any
->> +	 * time interval to reduce the calculation discrepancy using this counters.
->> +	 */
->> +	if (this_cpu_has_cap(ARM64_WORKAROUND_2457168)) {
->> +		cnt->corecnt = read_corecnt();
->> +		cnt->constcnt = 0;
->> +	} else {
->> +		cnt->corecnt = read_corecnt();
->> +		cnt->constcnt = read_constcnt();
->> +	}
->> +}
->> +
->>   static inline
->> -int counters_read_on_cpu(int cpu, smp_call_func_t func, u64 *val)
->> +int counters_read_on_cpu(int cpu, smp_call_func_t func, void *data)
->>   {
->>   	/*
->>   	 * Abort call on counterless CPU or when interrupts are
->> @@ -335,7 +359,7 @@ int counters_read_on_cpu(int cpu, smp_call_func_t func, u64 *val)
->>   	if (WARN_ON_ONCE(irqs_disabled()))
->>   		return -EPERM;
->>   
->> -	smp_call_function_single(cpu, func, val, 1);
->> +	smp_call_function_single(cpu, func, data, 1);
->>   
->>   	return 0;
->>   }
->> @@ -364,6 +388,21 @@ bool cpc_ffh_supported(void)
->>   	return true;
->>   }
->>   
->> +int cpc_read_arch_counters_on_cpu(int cpu, u64 *delivered, u64 *reference)
->> +{
->> +	struct amu_counters cnts = {0};
->> +	int ret;
->> +
->> +	ret = counters_read_on_cpu(cpu, cpu_read_amu_counters, &cnts);
->> +	if (ret)
->> +		return ret;
->> +
->> +	*delivered = cnts.corecnt;
->> +	*reference = cnts.constcnt;
->> +
->> +	return 0;
->> +}
->> +
->>   int cpc_read_ffh(int cpu, struct cpc_reg *reg, u64 *val)
->>   {
->>   	int ret = -EOPNOTSUPP;
->> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
->> index 7ff269a78c20..f303fabd7cfe 100644
->> --- a/drivers/acpi/cppc_acpi.c
->> +++ b/drivers/acpi/cppc_acpi.c
->> @@ -1299,6 +1299,11 @@ bool cppc_perf_ctrs_in_pcc(void)
->>   }
->>   EXPORT_SYMBOL_GPL(cppc_perf_ctrs_in_pcc);
->>   
->> +int __weak cpc_read_arch_counters_on_cpu(int cpu, u64 *delivered, u64 *reference)
->> +{
->> +	return 0;
->> +}
->> +
->>   /**
->>    * cppc_get_perf_ctrs - Read a CPU's performance feedback counters.
->>    * @cpunum: CPU from which to read counters.
->> @@ -1313,7 +1318,8 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
->>   		*ref_perf_reg, *ctr_wrap_reg;
->>   	int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpunum);
->>   	struct cppc_pcc_data *pcc_ss_data = NULL;
->> -	u64 delivered, reference, ref_perf, ctr_wrap_time;
->> +	u64 delivered = 0, reference = 0;
->> +	u64 ref_perf, ctr_wrap_time;
->>   	int ret = 0, regs_in_pcc = 0;
->>   
->>   	if (!cpc_desc) {
->> @@ -1350,8 +1356,18 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
->>   		}
->>   	}
->>   
->> -	cpc_read(cpunum, delivered_reg, &delivered);
->> -	cpc_read(cpunum, reference_reg, &reference);
->> +	if (cpc_ffh_supported()) {
->> +		ret = cpc_read_arch_counters_on_cpu(cpunum, &delivered, &reference);
->> +		if (ret) {
->> +			pr_debug("read arch counters failed, ret=%d.\n", ret);
->> +			ret = 0;
->> +		}
->> +	}
->> +	if (!delivered || !reference) {
->> +		cpc_read(cpunum, delivered_reg, &delivered);
->> +		cpc_read(cpunum, reference_reg, &reference);
->> +	}
->> +
->>   	cpc_read(cpunum, ref_perf_reg, &ref_perf);
->>   
->>   	/*
->> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
->> index 6126c977ece0..07d4fd82d499 100644
->> --- a/include/acpi/cppc_acpi.h
->> +++ b/include/acpi/cppc_acpi.h
->> @@ -152,6 +152,7 @@ extern bool cpc_ffh_supported(void);
->>   extern bool cpc_supported_by_cpu(void);
->>   extern int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val);
->>   extern int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val);
->> +extern int cpc_read_arch_counters_on_cpu(int cpu, u64 *delivered, u64 *reference);
->>   extern int cppc_get_epp_perf(int cpunum, u64 *epp_perf);
->>   extern int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls, bool enable);
->>   extern int cppc_get_auto_sel_caps(int cpunum, struct cppc_perf_caps *perf_caps);
->> @@ -209,6 +210,10 @@ static inline int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val)
->>   {
->>   	return -ENOTSUPP;
->>   }
->> +static inline int cpc_read_arch_counters_on_cpu(int cpu, u64 *delivered, u64 *reference)
->> +{
->> +	return -EOPNOTSUPP;
->> +}
->>   static inline int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls, bool enable)
->>   {
->>   	return -ENOTSUPP;
->> -- 
->> 2.33.0
->>
-> .
+
+On 1/2/2024 11:59 PM, Konrad Dybcio wrote:
+> The downstream kernel has infrastructure for passing votes from different
+> interconnect nodes onto different RPMh RSCs. This neither implemented, not
+> is going to be implemented upstream (in favor of a different solution
+> using ICC tags through the same node).
+> 
+> Unfortunately, as it happens, meaningless (in the upstream context) parts
+> of the vendor driver were copied, ending up causing havoc - since all
+> "per-RSC" (in quotes because they all point to the main APPS one) BCMs
+> defined within the driver overwrite the value in RPMh on every
+> aggregation.
+> 
+> To both avoid keeping bogus code around and possibly introducing
+> impossible-to-track-down bugs (busses shutting down for no reason), get
+> rid of the duplicated BCMs and their associated ICC nodes.
+
+Thanks Konrad for catching this, I do see these nodes in other Qualcomm 
+SoCs upstream (atleast sm8350/sm8450 and sm8550), perhaps they need to 
+be cleaned up as well?
+
+Reviewed-by: Rajendra Nayak <quic_rjendra@quicinc.com>
+
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   drivers/interconnect/qcom/x1e80100.c | 315 -----------------------------------
+>   1 file changed, 315 deletions(-)
+> 
+> diff --git a/drivers/interconnect/qcom/x1e80100.c b/drivers/interconnect/qcom/x1e80100.c
+> index d19501d913b3..5b2de9c3a1d6 100644
+> --- a/drivers/interconnect/qcom/x1e80100.c
+> +++ b/drivers/interconnect/qcom/x1e80100.c
+> @@ -670,150 +670,6 @@ static struct qcom_icc_node xm_usb4_2 = {
+>   	.links = { X1E80100_SLAVE_AGGRE_USB_SOUTH },
+>   };
+>   
+> -static struct qcom_icc_node qnm_mnoc_hf_disp = {
+> -	.name = "qnm_mnoc_hf_disp",
+> -	.id = X1E80100_MASTER_MNOC_HF_MEM_NOC_DISP,
+> -	.channels = 2,
+> -	.buswidth = 32,
+> -	.num_links = 1,
+> -	.links = { X1E80100_SLAVE_LLCC_DISP },
+> -};
+> -
+> -static struct qcom_icc_node qnm_pcie_disp = {
+> -	.name = "qnm_pcie_disp",
+> -	.id = X1E80100_MASTER_ANOC_PCIE_GEM_NOC_DISP,
+> -	.channels = 1,
+> -	.buswidth = 64,
+> -	.num_links = 1,
+> -	.links = { X1E80100_SLAVE_LLCC_DISP },
+> -};
+> -
+> -static struct qcom_icc_node llcc_mc_disp = {
+> -	.name = "llcc_mc_disp",
+> -	.id = X1E80100_MASTER_LLCC_DISP,
+> -	.channels = 8,
+> -	.buswidth = 4,
+> -	.num_links = 1,
+> -	.links = { X1E80100_SLAVE_EBI1_DISP },
+> -};
+> -
+> -static struct qcom_icc_node qnm_mdp_disp = {
+> -	.name = "qnm_mdp_disp",
+> -	.id = X1E80100_MASTER_MDP_DISP,
+> -	.channels = 2,
+> -	.buswidth = 32,
+> -	.num_links = 1,
+> -	.links = { X1E80100_SLAVE_MNOC_HF_MEM_NOC_DISP },
+> -};
+> -
+> -static struct qcom_icc_node qnm_pcie_pcie = {
+> -	.name = "qnm_pcie_pcie",
+> -	.id = X1E80100_MASTER_ANOC_PCIE_GEM_NOC_PCIE,
+> -	.channels = 1,
+> -	.buswidth = 64,
+> -	.num_links = 1,
+> -	.links = { X1E80100_SLAVE_LLCC_PCIE },
+> -};
+> -
+> -static struct qcom_icc_node llcc_mc_pcie = {
+> -	.name = "llcc_mc_pcie",
+> -	.id = X1E80100_MASTER_LLCC_PCIE,
+> -	.channels = 8,
+> -	.buswidth = 4,
+> -	.num_links = 1,
+> -	.links = { X1E80100_SLAVE_EBI1_PCIE },
+> -};
+> -
+> -static struct qcom_icc_node qnm_pcie_north_gem_noc_pcie = {
+> -	.name = "qnm_pcie_north_gem_noc_pcie",
+> -	.id = X1E80100_MASTER_PCIE_NORTH_PCIE,
+> -	.channels = 1,
+> -	.buswidth = 64,
+> -	.num_links = 1,
+> -	.links = { X1E80100_SLAVE_ANOC_PCIE_GEM_NOC_PCIE },
+> -};
+> -
+> -static struct qcom_icc_node qnm_pcie_south_gem_noc_pcie = {
+> -	.name = "qnm_pcie_south_gem_noc_pcie",
+> -	.id = X1E80100_MASTER_PCIE_SOUTH_PCIE,
+> -	.channels = 1,
+> -	.buswidth = 64,
+> -	.num_links = 1,
+> -	.links = { X1E80100_SLAVE_ANOC_PCIE_GEM_NOC_PCIE },
+> -};
+> -
+> -static struct qcom_icc_node xm_pcie_3_pcie = {
+> -	.name = "xm_pcie_3_pcie",
+> -	.id = X1E80100_MASTER_PCIE_3_PCIE,
+> -	.channels = 1,
+> -	.buswidth = 64,
+> -	.num_links = 1,
+> -	.links = { X1E80100_SLAVE_PCIE_NORTH_PCIE },
+> -};
+> -
+> -static struct qcom_icc_node xm_pcie_4_pcie = {
+> -	.name = "xm_pcie_4_pcie",
+> -	.id = X1E80100_MASTER_PCIE_4_PCIE,
+> -	.channels = 1,
+> -	.buswidth = 8,
+> -	.num_links = 1,
+> -	.links = { X1E80100_SLAVE_PCIE_NORTH_PCIE },
+> -};
+> -
+> -static struct qcom_icc_node xm_pcie_5_pcie = {
+> -	.name = "xm_pcie_5_pcie",
+> -	.id = X1E80100_MASTER_PCIE_5_PCIE,
+> -	.channels = 1,
+> -	.buswidth = 8,
+> -	.num_links = 1,
+> -	.links = { X1E80100_SLAVE_PCIE_NORTH_PCIE },
+> -};
+> -
+> -static struct qcom_icc_node xm_pcie_0_pcie = {
+> -	.name = "xm_pcie_0_pcie",
+> -	.id = X1E80100_MASTER_PCIE_0_PCIE,
+> -	.channels = 1,
+> -	.buswidth = 16,
+> -	.num_links = 1,
+> -	.links = { X1E80100_SLAVE_PCIE_SOUTH_PCIE },
+> -};
+> -
+> -static struct qcom_icc_node xm_pcie_1_pcie = {
+> -	.name = "xm_pcie_1_pcie",
+> -	.id = X1E80100_MASTER_PCIE_1_PCIE,
+> -	.channels = 1,
+> -	.buswidth = 16,
+> -	.num_links = 1,
+> -	.links = { X1E80100_SLAVE_PCIE_SOUTH_PCIE },
+> -};
+> -
+> -static struct qcom_icc_node xm_pcie_2_pcie = {
+> -	.name = "xm_pcie_2_pcie",
+> -	.id = X1E80100_MASTER_PCIE_2_PCIE,
+> -	.channels = 1,
+> -	.buswidth = 16,
+> -	.num_links = 1,
+> -	.links = { X1E80100_SLAVE_PCIE_SOUTH_PCIE },
+> -};
+> -
+> -static struct qcom_icc_node xm_pcie_6a_pcie = {
+> -	.name = "xm_pcie_6a_pcie",
+> -	.id = X1E80100_MASTER_PCIE_6A_PCIE,
+> -	.channels = 1,
+> -	.buswidth = 32,
+> -	.num_links = 1,
+> -	.links = { X1E80100_SLAVE_PCIE_SOUTH_PCIE },
+> -};
+> -
+> -static struct qcom_icc_node xm_pcie_6b_pcie = {
+> -	.name = "xm_pcie_6b_pcie",
+> -	.id = X1E80100_MASTER_PCIE_6B_PCIE,
+> -	.channels = 1,
+> -	.buswidth = 16,
+> -	.num_links = 1,
+> -	.links = { X1E80100_SLAVE_PCIE_SOUTH_PCIE },
+> -};
+> -
+>   static struct qcom_icc_node qns_a1noc_snoc = {
+>   	.name = "qns_a1noc_snoc",
+>   	.id = X1E80100_SLAVE_A1NOC_SNOC,
+> @@ -1514,76 +1370,6 @@ static struct qcom_icc_node qns_aggre_usb_south_snoc = {
+>   	.links = { X1E80100_MASTER_AGGRE_USB_SOUTH },
+>   };
+>   
+> -static struct qcom_icc_node qns_llcc_disp = {
+> -	.name = "qns_llcc_disp",
+> -	.id = X1E80100_SLAVE_LLCC_DISP,
+> -	.channels = 8,
+> -	.buswidth = 16,
+> -	.num_links = 1,
+> -	.links = { X1E80100_MASTER_LLCC_DISP },
+> -};
+> -
+> -static struct qcom_icc_node ebi_disp = {
+> -	.name = "ebi_disp",
+> -	.id = X1E80100_SLAVE_EBI1_DISP,
+> -	.channels = 8,
+> -	.buswidth = 4,
+> -	.num_links = 0,
+> -};
+> -
+> -static struct qcom_icc_node qns_mem_noc_hf_disp = {
+> -	.name = "qns_mem_noc_hf_disp",
+> -	.id = X1E80100_SLAVE_MNOC_HF_MEM_NOC_DISP,
+> -	.channels = 2,
+> -	.buswidth = 32,
+> -	.num_links = 1,
+> -	.links = { X1E80100_MASTER_MNOC_HF_MEM_NOC_DISP },
+> -};
+> -
+> -static struct qcom_icc_node qns_llcc_pcie = {
+> -	.name = "qns_llcc_pcie",
+> -	.id = X1E80100_SLAVE_LLCC_PCIE,
+> -	.channels = 8,
+> -	.buswidth = 16,
+> -	.num_links = 1,
+> -	.links = { X1E80100_MASTER_LLCC_PCIE },
+> -};
+> -
+> -static struct qcom_icc_node ebi_pcie = {
+> -	.name = "ebi_pcie",
+> -	.id = X1E80100_SLAVE_EBI1_PCIE,
+> -	.channels = 8,
+> -	.buswidth = 4,
+> -	.num_links = 0,
+> -};
+> -
+> -static struct qcom_icc_node qns_pcie_mem_noc_pcie = {
+> -	.name = "qns_pcie_mem_noc_pcie",
+> -	.id = X1E80100_SLAVE_ANOC_PCIE_GEM_NOC_PCIE,
+> -	.channels = 1,
+> -	.buswidth = 64,
+> -	.num_links = 1,
+> -	.links = { X1E80100_MASTER_ANOC_PCIE_GEM_NOC_PCIE },
+> -};
+> -
+> -static struct qcom_icc_node qns_pcie_north_gem_noc_pcie = {
+> -	.name = "qns_pcie_north_gem_noc_pcie",
+> -	.id = X1E80100_SLAVE_PCIE_NORTH_PCIE,
+> -	.channels = 1,
+> -	.buswidth = 64,
+> -	.num_links = 1,
+> -	.links = { X1E80100_MASTER_PCIE_NORTH_PCIE },
+> -};
+> -
+> -static struct qcom_icc_node qns_pcie_south_gem_noc_pcie = {
+> -	.name = "qns_pcie_south_gem_noc_pcie",
+> -	.id = X1E80100_SLAVE_PCIE_SOUTH_PCIE,
+> -	.channels = 1,
+> -	.buswidth = 64,
+> -	.num_links = 1,
+> -	.links = { X1E80100_MASTER_PCIE_SOUTH_PCIE },
+> -};
+> -
+>   static struct qcom_icc_bcm bcm_acv = {
+>   	.name = "ACV",
+>   	.num_nodes = 1,
+> @@ -1755,72 +1541,6 @@ static struct qcom_icc_bcm bcm_sn4 = {
+>   	.nodes = { &qnm_usb_anoc },
+>   };
+>   
+> -static struct qcom_icc_bcm bcm_acv_disp = {
+> -	.name = "ACV",
+> -	.num_nodes = 1,
+> -	.nodes = { &ebi_disp },
+> -};
+> -
+> -static struct qcom_icc_bcm bcm_mc0_disp = {
+> -	.name = "MC0",
+> -	.num_nodes = 1,
+> -	.nodes = { &ebi_disp },
+> -};
+> -
+> -static struct qcom_icc_bcm bcm_mm0_disp = {
+> -	.name = "MM0",
+> -	.num_nodes = 1,
+> -	.nodes = { &qns_mem_noc_hf_disp },
+> -};
+> -
+> -static struct qcom_icc_bcm bcm_mm1_disp = {
+> -	.name = "MM1",
+> -	.num_nodes = 1,
+> -	.nodes = { &qnm_mdp_disp },
+> -};
+> -
+> -static struct qcom_icc_bcm bcm_sh0_disp = {
+> -	.name = "SH0",
+> -	.num_nodes = 1,
+> -	.nodes = { &qns_llcc_disp },
+> -};
+> -
+> -static struct qcom_icc_bcm bcm_sh1_disp = {
+> -	.name = "SH1",
+> -	.num_nodes = 2,
+> -	.nodes = { &qnm_mnoc_hf_disp, &qnm_pcie_disp },
+> -};
+> -
+> -static struct qcom_icc_bcm bcm_acv_pcie = {
+> -	.name = "ACV",
+> -	.num_nodes = 1,
+> -	.nodes = { &ebi_pcie },
+> -};
+> -
+> -static struct qcom_icc_bcm bcm_mc0_pcie = {
+> -	.name = "MC0",
+> -	.num_nodes = 1,
+> -	.nodes = { &ebi_pcie },
+> -};
+> -
+> -static struct qcom_icc_bcm bcm_pc0_pcie = {
+> -	.name = "PC0",
+> -	.num_nodes = 1,
+> -	.nodes = { &qns_pcie_mem_noc_pcie },
+> -};
+> -
+> -static struct qcom_icc_bcm bcm_sh0_pcie = {
+> -	.name = "SH0",
+> -	.num_nodes = 1,
+> -	.nodes = { &qns_llcc_pcie },
+> -};
+> -
+> -static struct qcom_icc_bcm bcm_sh1_pcie = {
+> -	.name = "SH1",
+> -	.num_nodes = 1,
+> -	.nodes = { &qnm_pcie_pcie },
+> -};
+> -
+>   static struct qcom_icc_bcm *aggre1_noc_bcms[] = {
+>   };
+>   
+> @@ -1982,10 +1702,6 @@ static const struct qcom_icc_desc x1e80100_cnoc_main = {
+>   static struct qcom_icc_bcm * const gem_noc_bcms[] = {
+>   	&bcm_sh0,
+>   	&bcm_sh1,
+> -	&bcm_sh0_disp,
+> -	&bcm_sh1_disp,
+> -	&bcm_sh0_pcie,
+> -	&bcm_sh1_pcie,
+>   };
+>   
+>   static struct qcom_icc_node * const gem_noc_nodes[] = {
+> @@ -2004,11 +1720,6 @@ static struct qcom_icc_node * const gem_noc_nodes[] = {
+>   	[SLAVE_GEM_NOC_CNOC] = &qns_gem_noc_cnoc,
+>   	[SLAVE_LLCC] = &qns_llcc,
+>   	[SLAVE_MEM_NOC_PCIE_SNOC] = &qns_pcie,
+> -	[MASTER_MNOC_HF_MEM_NOC_DISP] = &qnm_mnoc_hf_disp,
+> -	[MASTER_ANOC_PCIE_GEM_NOC_DISP] = &qnm_pcie_disp,
+> -	[SLAVE_LLCC_DISP] = &qns_llcc_disp,
+> -	[MASTER_ANOC_PCIE_GEM_NOC_PCIE] = &qnm_pcie_pcie,
+> -	[SLAVE_LLCC_PCIE] = &qns_llcc_pcie,
+>   };
+>   
+>   static const struct qcom_icc_desc x1e80100_gem_noc = {
+> @@ -2067,19 +1778,11 @@ static const struct qcom_icc_desc x1e80100_lpass_lpicx_noc = {
+>   static struct qcom_icc_bcm * const mc_virt_bcms[] = {
+>   	&bcm_acv,
+>   	&bcm_mc0,
+> -	&bcm_acv_disp,
+> -	&bcm_mc0_disp,
+> -	&bcm_acv_pcie,
+> -	&bcm_mc0_pcie,
+>   };
+>   
+>   static struct qcom_icc_node * const mc_virt_nodes[] = {
+>   	[MASTER_LLCC] = &llcc_mc,
+>   	[SLAVE_EBI1] = &ebi,
+> -	[MASTER_LLCC_DISP] = &llcc_mc_disp,
+> -	[SLAVE_EBI1_DISP] = &ebi_disp,
+> -	[MASTER_LLCC_PCIE] = &llcc_mc_pcie,
+> -	[SLAVE_EBI1_PCIE] = &ebi_pcie,
+>   };
+>   
+>   static const struct qcom_icc_desc x1e80100_mc_virt = {
+> @@ -2092,8 +1795,6 @@ static const struct qcom_icc_desc x1e80100_mc_virt = {
+>   static struct qcom_icc_bcm * const mmss_noc_bcms[] = {
+>   	&bcm_mm0,
+>   	&bcm_mm1,
+> -	&bcm_mm0_disp,
+> -	&bcm_mm1_disp,
+>   };
+>   
+>   static struct qcom_icc_node * const mmss_noc_nodes[] = {
+> @@ -2110,8 +1811,6 @@ static struct qcom_icc_node * const mmss_noc_nodes[] = {
+>   	[SLAVE_MNOC_HF_MEM_NOC] = &qns_mem_noc_hf,
+>   	[SLAVE_MNOC_SF_MEM_NOC] = &qns_mem_noc_sf,
+>   	[SLAVE_SERVICE_MNOC] = &srvc_mnoc,
+> -	[MASTER_MDP_DISP] = &qnm_mdp_disp,
+> -	[SLAVE_MNOC_HF_MEM_NOC_DISP] = &qns_mem_noc_hf_disp,
+>   };
+>   
+>   static const struct qcom_icc_desc x1e80100_mmss_noc = {
+> @@ -2139,16 +1838,12 @@ static const struct qcom_icc_desc x1e80100_nsp_noc = {
+>   
+>   static struct qcom_icc_bcm * const pcie_center_anoc_bcms[] = {
+>   	&bcm_pc0,
+> -	&bcm_pc0_pcie,
+>   };
+>   
+>   static struct qcom_icc_node * const pcie_center_anoc_nodes[] = {
+>   	[MASTER_PCIE_NORTH] = &qnm_pcie_north_gem_noc,
+>   	[MASTER_PCIE_SOUTH] = &qnm_pcie_south_gem_noc,
+>   	[SLAVE_ANOC_PCIE_GEM_NOC] = &qns_pcie_mem_noc,
+> -	[MASTER_PCIE_NORTH_PCIE] = &qnm_pcie_north_gem_noc_pcie,
+> -	[MASTER_PCIE_SOUTH_PCIE] = &qnm_pcie_south_gem_noc_pcie,
+> -	[SLAVE_ANOC_PCIE_GEM_NOC_PCIE] = &qns_pcie_mem_noc_pcie,
+>   };
+>   
+>   static const struct qcom_icc_desc x1e80100_pcie_center_anoc = {
+> @@ -2166,10 +1861,6 @@ static struct qcom_icc_node * const pcie_north_anoc_nodes[] = {
+>   	[MASTER_PCIE_4] = &xm_pcie_4,
+>   	[MASTER_PCIE_5] = &xm_pcie_5,
+>   	[SLAVE_PCIE_NORTH] = &qns_pcie_north_gem_noc,
+> -	[MASTER_PCIE_3_PCIE] = &xm_pcie_3_pcie,
+> -	[MASTER_PCIE_4_PCIE] = &xm_pcie_4_pcie,
+> -	[MASTER_PCIE_5_PCIE] = &xm_pcie_5_pcie,
+> -	[SLAVE_PCIE_NORTH_PCIE] = &qns_pcie_north_gem_noc_pcie,
+>   };
+>   
+>   static const struct qcom_icc_desc x1e80100_pcie_north_anoc = {
+> @@ -2189,12 +1880,6 @@ static struct qcom_icc_node * const pcie_south_anoc_nodes[] = {
+>   	[MASTER_PCIE_6A] = &xm_pcie_6a,
+>   	[MASTER_PCIE_6B] = &xm_pcie_6b,
+>   	[SLAVE_PCIE_SOUTH] = &qns_pcie_south_gem_noc,
+> -	[MASTER_PCIE_0_PCIE] = &xm_pcie_0_pcie,
+> -	[MASTER_PCIE_1_PCIE] = &xm_pcie_1_pcie,
+> -	[MASTER_PCIE_2_PCIE] = &xm_pcie_2_pcie,
+> -	[MASTER_PCIE_6A_PCIE] = &xm_pcie_6a_pcie,
+> -	[MASTER_PCIE_6B_PCIE] = &xm_pcie_6b_pcie,
+> -	[SLAVE_PCIE_SOUTH_PCIE] = &qns_pcie_south_gem_noc_pcie,
+>   };
+>   
+>   static const struct qcom_icc_desc x1e80100_pcie_south_anoc = {
+> 
 
