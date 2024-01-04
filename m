@@ -1,143 +1,196 @@
-Return-Path: <linux-pm+bounces-1868-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1869-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8421C82492E
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 20:40:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 224ED824939
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 20:47:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F9F91F24F03
-	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 19:40:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AEA801F2335B
+	for <lists+linux-pm@lfdr.de>; Thu,  4 Jan 2024 19:47:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5F802C681;
-	Thu,  4 Jan 2024 19:40:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="tGBIwFg6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EC7921A13;
+	Thu,  4 Jan 2024 19:47:33 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0BF32C1A8
-	for <linux-pm@vger.kernel.org>; Thu,  4 Jan 2024 19:40:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a28ee72913aso119489566b.1
-        for <linux-pm@vger.kernel.org>; Thu, 04 Jan 2024 11:40:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1704397223; x=1705002023; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fTZHAYU4/5zK1CnYbSxkoDODTsetzakdQ8YutPSLziM=;
-        b=tGBIwFg6hLsHjVi8DTl9WCjle6LH4p55BK3N/rrX3LLVQjYteKoS2Q0p/ykCX+Ku4I
-         57EsvhOLwBsLBtrcklMfAPjic6U73h1plmALOKdmGyXmFxinZub4TFUUsZ9g6rjHo8MK
-         28c2bNw2Xf9QFxCuVj8d5VBqm4Xw3H6YVfPe1qGhE+wuCtYFmFEO7YaZ4wmCy3sUSixh
-         YgFP+fTIHyUBe0MUWWn0SfM9TXa+imcWxYYdODx4sQBj7VTypRHl3mi2nLHRFbDz/BVN
-         O0RDYtL2eos54L4WZQm+b9w5edoDl5y/5aXhYwWJ0anWSjsURa7UzEF1j+A7PO9qXQFD
-         VfOA==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DDA32C19E;
+	Thu,  4 Jan 2024 19:47:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-59629f0f67aso119115eaf.0;
+        Thu, 04 Jan 2024 11:47:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704397223; x=1705002023;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fTZHAYU4/5zK1CnYbSxkoDODTsetzakdQ8YutPSLziM=;
-        b=bb8w7Mpo4mtCJfIZDeTkJ8cIQLQeIAPFODGOQmWG6Bjms+Y7MjVaq7/cFLMWjPvko6
-         2U18PfTnFtydJ2lnKHar5pqj7TbCxpNp3IbT37gAJyMBMGV5z15roMnIe2rqedCE/TpF
-         qQtEwlNGQRtFkVdrA1vxqBVodVIr6pFuLiv++7AiBqibVSluQhYtB2DMyQ7kSUfDD/QD
-         qmwRZ7kuH/SO+eORniCXwCga420Bt4WXnEj9Oj93y3yIxNd78HZJ6hfNwT1L55S9zsZx
-         tvpfzjFPrzDtIzUyhFyjdGtQG7uvC+bJFO89L8OxiPvGkFWroPFU2ZO4ZQfNX180+/nB
-         hYGA==
-X-Gm-Message-State: AOJu0YwTSL/TvtqCXphgzgV1iiF5nyfqvMwZDLpl0hWFrc8ElAjpZS7z
-	qEVJHEFKFP3lYQjsyScmJk9KY0QWcjh2Fw==
-X-Google-Smtp-Source: AGHT+IHbrSZnDnUiv27Jyg9q5lq/BxQsEUGuuC63pb63tW15zYmY1XX5A33pAcPPfXWjmggFPk6U7g==
-X-Received: by 2002:a17:906:1d9:b0:a28:b7c1:7210 with SMTP id 25-20020a17090601d900b00a28b7c17210mr961863ejj.7.1704397223238;
-        Thu, 04 Jan 2024 11:40:23 -0800 (PST)
-Received: from airbuntu (92.40.216.191.threembb.co.uk. [92.40.216.191])
-        by smtp.gmail.com with ESMTPSA id k16-20020a170906681000b00a230f3799a4sm614ejr.225.2024.01.04.11.40.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jan 2024 11:40:22 -0800 (PST)
-Date: Thu, 4 Jan 2024 19:40:19 +0000
-From: Qais Yousef <qyousef@layalina.io>
-To: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Ingo Molnar <mingo@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
-	Rick Yiu <rickyiu@google.com>, Chung-Kai Mei <chungkai@google.com>,
-	Hongyan Xia <hongyan.xia2@arm.com>
-Subject: Re: [PATCH 1/4] sched/fair: Be less aggressive in calling
- cpufreq_update_util()
-Message-ID: <20240104194019.kgwpp5sipiudxfma@airbuntu>
-References: <20231208015242.385103-1-qyousef@layalina.io>
- <20231208015242.385103-2-qyousef@layalina.io>
- <CAKfTPtAKainBfpPOKTJ21zQmmYw7O0Z0v8utfg=QTBtE1L5O_w@mail.gmail.com>
- <20231212124037.at47izy5xp6lsxh2@airbuntu>
- <20231229002529.sidy6wxmclhzlzib@airbuntu>
- <CAKfTPtCu7_Z8RCMeSJGzyu79Af-gypyqLyyWQkuZsMHgnf3CzQ@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1704397650; x=1705002450;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9YPpasLIRq1YN3KdZH5r1q0RRJLitmfKfle8fM0qQes=;
+        b=Sl/ITVYBcj4e+ovkmJfCuSNpX2thd5HXGrL6yKwXmj5g76rcHN+cyljqtZcNvSdDee
+         Mivvfy0O0PB9/ZErx7YcG/e3uZPevD/4nIMhTbt/wWCUZF+iAr4cmPyxMLGQ0aLImwuD
+         s6xluKkhEJb/NvgrPpBiM9YixCmR3M3WMayR8FJHhUVrLnwGFS4/ZjOg6VGGB0fOXCRN
+         QpOJRCPj2A+TmblGx9QXWcHj0VBl/PcBKFXpsteEQZQhZTqUMPdHgIPl0ZcHGLHka1V5
+         Q0Ot507lcgyUy3Lcxbez4IJUJSymOhYz8XX011NPQ08QoKhDeTkIEA7H7MS0Hyprm2wR
+         4ciw==
+X-Gm-Message-State: AOJu0Yy9RMzXWJELJncRosfRoxe1iYjPz1HKf2DkWvtn1LG2f9gJn5Aa
+	lf9WmFkHt/1CNwUUidoAO+zmJ0Dp7l/gVU1Obm4=
+X-Google-Smtp-Source: AGHT+IGa+PawcYliltEPtRGTiTs3GNq84Jl/X9dsA+kY7UlM3UrEE0U49Gy3usoA48yxV7YhsP81Ip1vEmUHGo2IY9I=
+X-Received: by 2002:a4a:e70a:0:b0:596:27ee:455d with SMTP id
+ y10-20020a4ae70a000000b0059627ee455dmr1950518oou.0.1704397650649; Thu, 04 Jan
+ 2024 11:47:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtCu7_Z8RCMeSJGzyu79Af-gypyqLyyWQkuZsMHgnf3CzQ@mail.gmail.com>
+References: <20240104171553.2080674-1-lukasz.luba@arm.com> <20240104171553.2080674-12-lukasz.luba@arm.com>
+In-Reply-To: <20240104171553.2080674-12-lukasz.luba@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 4 Jan 2024 20:47:19 +0100
+Message-ID: <CAJZ5v0hqRkDmhRBfB4g-2EH2piv-KOQdwad7rVoSK8FzZKg=TA@mail.gmail.com>
+Subject: Re: [PATCH v6 11/23] PM: EM: Add API for updating the runtime
+ modifiable EM
+To: Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, rafael@kernel.org, 
+	dietmar.eggemann@arm.com, rui.zhang@intel.com, amit.kucheria@verdurent.com, 
+	amit.kachhap@gmail.com, daniel.lezcano@linaro.org, viresh.kumar@linaro.org, 
+	len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org, qyousef@layalina.io, 
+	wvw@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 01/03/24 14:41, Vincent Guittot wrote:
-> On Fri, 29 Dec 2023 at 01:25, Qais Yousef <qyousef@layalina.io> wrote:
-> >
-> > On 12/12/23 12:40, Qais Yousef wrote:
-> > > On 12/12/23 12:06, Vincent Guittot wrote:
-> > >
-> > > > > @@ -6772,6 +6737,8 @@ enqueue_task_fair(struct rq *rq, struct task_struct *p, int flags)
-> > > > >  enqueue_throttle:
-> > > > >         assert_list_leaf_cfs_rq(rq);
-> > > > >
-> > > >
-> > > > Here and in the other places below,  you lose :
-> > > >
-> > > >  -       } else if (decayed) {
-> > > >
-> > > > The decayed condition ensures a rate limit (~1ms) in the number of
-> > > > calls to cpufreq_update_util.
-> > > >
-> > > > enqueue/dequeue/tick don't create any sudden change in the PELT
-> > > > signals that would require to update cpufreq of the change unlike
-> > > > attach/detach
-> > >
-> > > Okay, thanks for the clue. Let me rethink this again.
-> >
-> > Thinking more about this. Do we really need to send freq updates at
-> > enqueue/attach etc?
-> 
-> Yes, attach and detach are the 2 events which can make abrupt and
-> significant changes in the utilization of the CPU.
-> 
-> >
-> > I did an experiment to remove all the updates except in three places:
-> >
-> > 1. Context switch (done unconditionally)
-> > 2. Tick
-> > 2. update_blocked_averages()
-> 
-> From the PoV of util_avg, attach, detach, tick and
-> update_blocked_averages are mandatory events to report to cpufreq to
-> correctly follow utilization.
+I don't really like using the API TLA in patch subjects, because it
+does not really say much.  IMO a subject like this would be better:
 
-Okay, I'll re-instate the attach/detach updates.
+"PM: EM: Introduce em_dev_update_perf_domain() for EM updates"
 
-Worth noting that unconditional calling is not a good idea after all. So I'll
-make sure that context switch updates are protected with static key for
-governors that don't register a hook, and that it is only called when we think
-it's necessary. I did notice some overhead after all against reverse-misfit
-patches.
+On Thu, Jan 4, 2024 at 6:15=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> wr=
+ote:
+>
+> Add API function em_dev_update_perf_domain() which allows to safely
+> change the EM.
 
+"... which allows the EM to be changed safely."
 
-Thanks!
+New paragraph:
 
---
-Qais Yousef
+> The concurrent modifiers are protected by the mutex
+> to serialize them. Removal of the old memory is asynchronous and
+> handled by the RCU mechanisms.
+
+"Concurrent updaters are serialized with a mutex and the removal of
+memory that will not be used any more is carried out with the help of
+RCU."
+
+>
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>  include/linux/energy_model.h |  8 +++++++
+>  kernel/power/energy_model.c  | 41 ++++++++++++++++++++++++++++++++++++
+>  2 files changed, 49 insertions(+)
+>
+> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+> index 753d70d0ce7e..f33257ed83fd 100644
+> --- a/include/linux/energy_model.h
+> +++ b/include/linux/energy_model.h
+> @@ -183,6 +183,8 @@ struct em_data_callback {
+>
+>  struct em_perf_domain *em_cpu_get(int cpu);
+>  struct em_perf_domain *em_pd_get(struct device *dev);
+> +int em_dev_update_perf_domain(struct device *dev,
+> +                             struct em_perf_table __rcu *new_table);
+>  int em_dev_register_perf_domain(struct device *dev, unsigned int nr_stat=
+es,
+>                                 struct em_data_callback *cb, cpumask_t *s=
+pan,
+>                                 bool microwatts);
+> @@ -376,6 +378,12 @@ struct em_perf_table __rcu *em_allocate_table(struct=
+ em_perf_domain *pd)
+>         return NULL;
+>  }
+>  static inline void em_free_table(struct em_perf_table __rcu *table) {}
+> +static inline
+> +int em_dev_update_perf_domain(struct device *dev,
+> +                             struct em_perf_table __rcu *new_table)
+> +{
+> +       return -EINVAL;
+> +}
+>  #endif
+>
+>  #endif
+> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+> index bbc406db0be1..496dc00835c6 100644
+> --- a/kernel/power/energy_model.c
+> +++ b/kernel/power/energy_model.c
+> @@ -220,6 +220,47 @@ static int em_allocate_perf_table(struct em_perf_dom=
+ain *pd,
+>         return 0;
+>  }
+>
+> +/**
+> + * em_dev_update_perf_domain() - Update runtime EM table for a device
+> + * @dev                : Device for which the EM is to be updated
+> + * @table      : The new EM table that is going to be used from now
+
+This is called "new_table" below.
+
+> + *
+> + * Update EM runtime modifiable table for the @dev using the provided @t=
+able.
+> + *
+> + * This function uses mutex to serialize writers, so it must not be call=
+ed
+
+"uses a mutex"
+
+> + * from non-sleeping context.
+
+"a non-sleeping context".
+
+> + *
+> + * Return 0 on success or a proper error in case of failure.
+
+It is not clear what "a proper error" means.  It would be better to
+simply say "or an error code on failure" IMO.
+
+> + */
+> +int em_dev_update_perf_domain(struct device *dev,
+> +                             struct em_perf_table __rcu *new_table)
+> +{
+> +       struct em_perf_table __rcu *old_table;
+> +       struct em_perf_domain *pd;
+> +
+> +       /* Serialize update/unregister or concurrent updates */
+> +       mutex_lock(&em_pd_mutex);
+> +
+> +       if (!dev || !dev->em_pd) {
+
+dev need not be checked under the lock.
+
+> +               mutex_unlock(&em_pd_mutex);
+> +               return -EINVAL;
+> +       }
+> +       pd =3D dev->em_pd;
+> +
+> +       em_table_inc(new_table);
+> +
+> +       old_table =3D pd->em_table;
+> +       rcu_assign_pointer(pd->em_table, new_table);
+> +
+> +       em_cpufreq_update_efficiencies(dev, new_table->state);
+> +
+> +       em_table_dec(old_table);
+> +
+> +       mutex_unlock(&em_pd_mutex);
+> +       return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(em_dev_update_perf_domain);
+> +
+>  static int em_create_runtime_table(struct em_perf_domain *pd)
+>  {
+>         struct em_perf_table __rcu *table;
+> --
 
