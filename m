@@ -1,331 +1,107 @@
-Return-Path: <linux-pm+bounces-1903-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1904-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3ED69825792
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jan 2024 17:04:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0F4F8259C8
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jan 2024 19:12:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C25EB1F25E21
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jan 2024 16:04:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C68301C23700
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jan 2024 18:12:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F98A35F11;
-	Fri,  5 Jan 2024 16:01:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1B46328D5;
+	Fri,  5 Jan 2024 18:11:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XAE5DJyC"
+	dkim=pass (2048-bit key) header.d=gmx.com header.i=erick.archer@gmx.com header.b="DVOY9zk1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95CCC35EE2
-	for <linux-pm@vger.kernel.org>; Fri,  5 Jan 2024 16:01:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-50e7f58c5fbso2202181e87.1
-        for <linux-pm@vger.kernel.org>; Fri, 05 Jan 2024 08:01:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704470491; x=1705075291; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hfaPY3yQfoH2pfubd1hE0qyxl2OsnhSkHMvbF5d+3SA=;
-        b=XAE5DJyC9E+rrEowooFFOx7nmKW2PremJaCQKWX0YZTMThEkbcEmUFklJMJrSs23Kz
-         pAlme/dL4ExxbkIE3Tu2ccjY6YbF6kIPT2M08D+H0v+AMu8m5NO1I09KqcppYWcKLJSr
-         +litKAuEFX3ZOfHFZjJSVB2XiEKUR2YbJhI616L8XXRClWeeltKb5h1c9+6ptn/VWT5a
-         eYeEgavlR7J6GmeAGe/C+KSkqMnMZEKSCfupHXbOrtUhmBBOu+HeQuT8x6gL066bnzmI
-         jKnGhP0qRer7gTi0hW+bxbnWjfQelXcLh9BghvMLg48vEynzeqekUjIe43/QfCddgjHF
-         3y9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704470491; x=1705075291;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hfaPY3yQfoH2pfubd1hE0qyxl2OsnhSkHMvbF5d+3SA=;
-        b=AJpI0phopNEs66OL8zTfy7FPpH697F9XgnDxy7gw9RDn9aSEgONfgcpalmYxZTNahq
-         4FmK7p6nVtbWYJ0MjuUclDlGVbbonlFXBsxmV3XAUATkjFGFoeilJJgGR7Nvr0eFSp7n
-         dr5Rd4q7UNVks9QUiz3ETZjU6Mc2trYF4uiQdPkrUklxbKTEVcfjQsArvSv9Qvqd9nob
-         xRMZchjZuV84gXged/hmcVwsRHzGHqG1oj8/CawP107F49eNoUv/lPH4T8k5LXF0kYH5
-         eh0myr5g9cwiIIu/FeGN6lwBExY3Awvb6SVdim330MzU5eF/bO1SYq1JxGvbv7KN/M59
-         M5Bg==
-X-Gm-Message-State: AOJu0Yzkw7fG4LaVAZEGVlY52vcZiKL5GiiqA64YdZkuegzRsvPXduyz
-	U7l0rfHR6Jmcb/v/NQEjBOvGm+cbW7NTxQ==
-X-Google-Smtp-Source: AGHT+IERdn5J2WMksCV2xwOZSB4UlNaSC9hjgX2okCC+u7HZvOM32yjjwGik6ASHsLufYsrr/E57Ww==
-X-Received: by 2002:ac2:46e1:0:b0:50e:80d3:4fd4 with SMTP id q1-20020ac246e1000000b0050e80d34fd4mr1191950lfo.51.1704470490597;
-        Fri, 05 Jan 2024 08:01:30 -0800 (PST)
-Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id n5-20020a056512310500b0050e76978861sm262094lfb.277.2024.01.05.08.01.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jan 2024 08:01:23 -0800 (PST)
-From: Ulf Hansson <ulf.hansson@linaro.org>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4835347A4;
+	Fri,  5 Jan 2024 18:11:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.com;
+	s=s31663417; t=1704478302; x=1705083102; i=erick.archer@gmx.com;
+	bh=WZ9qe02V+01V4KAvxMBIjiVOmDsQ6TARqMrWkQ1Sf2Y=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+	b=DVOY9zk18IErWyRYfutczyRnlaKEvJrrM742acHf6Lun4N/+G4tgXL8lA6Uv1VvJ
+	 NkeWgXItyvR5UCq7bPYbzVJta1TOmUT6qP1ofzbimtn6SngXe/HpuexXLIIV3rnvC
+	 X1B0OvO4XzS6pfZg7LQQUBBT2Pgg+OuqLD2fYkX+yEZ7cr+lHu3bfJ0ASSbuVWsb+
+	 yK90wxU8TaQBYrvTdg7d/BDimJm9ICWhA5JXAibTyRolgkUxx2fvQHeR5YAa/7Rb/
+	 9HRtlAwkXB+Ql//2A5UzAqNJqX8ICdSCcuVaTgmgVk+ZqxEhFXFA+6E71tOkx4hko
+	 ud4t9LirfFGUKIZqgw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from localhost.localdomain ([79.157.194.183]) by mail.gmx.net
+ (mrgmx104 [212.227.17.174]) with ESMTPSA (Nemesis) id
+ 1MjS54-1qtwm41b4c-00kvAN; Fri, 05 Jan 2024 19:11:42 +0100
+From: Erick Archer <erick.archer@gmx.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <len.brown@intel.com>,
+	Pavel Machek <pavel@ucw.cz>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	linux-pm@vger.kernel.org
-Cc: Ulf Hansson <ulf.hansson@linaro.org>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Kevin Hilman <khilman@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Nikunj Kela <nkela@quicinc.com>,
-	Prasad Sodagudi <psodagud@quicinc.com>,
-	Stephan Gerhold <stephan@gerhold.net>,
-	Ben Horgan <Ben.Horgan@arm.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: Erick Archer <erick.archer@gmx.com>,
+	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-remoteproc@vger.kernel.org,
-	linux-media@vger.kernel.org,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>,
-	Vikash Garodia <quic_vgarodia@quicinc.com>,
-	"Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
-Subject: [PATCH v2 5/5] media: venus: Convert to dev_pm_domain_attach|detach_list() for vcodec
-Date: Fri,  5 Jan 2024 17:01:03 +0100
-Message-Id: <20240105160103.183092-6-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240105160103.183092-1-ulf.hansson@linaro.org>
-References: <20240105160103.183092-1-ulf.hansson@linaro.org>
+	linux-hardening@vger.kernel.org
+Subject: [PATCH] PM / QOS: Use kcalloc() instead of kzalloc()
+Date: Fri,  5 Jan 2024 18:11:04 +0000
+Message-ID: <20240105181118.116292-1-erick.archer@gmx.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:omxFqGTE8J8I8WmBeLTm2kk9TxR0E4AfbUe68X34vGK0eXl+Bxz
+ m/covJsAe4mLfLWn3Vo0evT9CfW7Cd1nMUA4qoO45oVdZONfZi1TnnLQPN0X9iCQ3ro5ISX
+ /VZP/7f+1R/0c14vE3F5J+OSTG2zudQGlp0ccMgpyVy0sl4Cgflh8RADjTCIopFvUZJvDpP
+ clDOJy/O0mMq0KOwQ0P1g==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:fX1Ne/RBy28=;lsNhU36ONPPYM5u1Vd312QkjHPg
+ UX/mIszyTZrX1HiV8GBoYIsfKFWHczzz82eU2mhfrrJ5B5+soaQUbD6lG2e1bcvY/OBgUPzfn
+ dwuLqG40CIMj8EDvIQ6G1CAlO9jmyOHQ8BBwUOHRtzhRr3sfDiU/qqbWppEiTFTDU1S7ndZoT
+ RclAKFItZDoZ1UVNOHPx58f+fhO4XL0wFtsDNU3bA+uxu73UqT6My8NwkNtuT5vUI2ChRpQ5m
+ 3pHRZLOnGcbt6uly3QIMkUvHLXKtua3HODV5i/fgw+BedOJi0pJ3S7L4I2xWPwsL55G7F8Kpk
+ 8UHlvoEbipLfeYH2K5gWRdC4P5Q7BLq24dAMdHjZXXfgmifO2o3pIPIQoerb2l43RyhnFifG+
+ zLBtEt/lBQWUDoD4sHafXiGkaK73tLpw2ufrLFhOZf4SsJZ62tFXy8+aMxMzjyRIW0KH5VlbL
+ 32Z+GKszh9pUSPljRALpadq9Tssz7upqGfKIrzu7qmy7oXw2hPqTuKF97w0TmtvjD4mpB4iDe
+ a0+uCht1zeg9bltchsJ9DcNs766VDTC+BV9bR61Qg85Z1gIJl6FhmWJu9Tyibr9D4EjZ94JoN
+ taw3yAkJNG9QtXnWFpSlLN3IDoYKy8g8u27sDiN+wieT94Jc3hMbZTHkDHu3226qI+uN0W6dI
+ 7PlT1GrsrhlHoB3EWiUBdYlRTq1/ipzN7t2y3qKHvmC26Unwzct6JMcLAPBCLSMQ2EWf9kiV/
+ 5NiZ3yvbAytIPrykbZSB8M+no2LisZP6yve1h3+aKcO9WdUGqnmpEYL/IDq2DttTFlEmJmYes
+ XTatMihIuc22yLbBwdMmGCu+ryVQwBPQJqc7mfpiXW9GlqJ71GFJ2QQ/aIx42jt/G2iFcpejE
+ DtTfD+eKIgWEJzWjx5q1eW9EtuwF0BPho+0M4nx516NIX24MGl0+vwIyA6Nic9ARuuT7+u8yA
+ 4A66Avm12EO/XYws+iXyTyUlFaM=
 
-Let's avoid some of the boilerplate code to manage the vcodec PM domains,
-by converting into using dev_pm_domain_attach|detach_list().
+Use 2-factor multiplication argument form kcalloc() instead
+of kzalloc().
 
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Stanimir Varbanov <stanimir.k.varbanov@gmail.com>
-Cc: Vikash Garodia <quic_vgarodia@quicinc.com>
-Cc: "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
-Cc: Bjorn Andersson <andersson@kernel.org>
-Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: <linux-media@vger.kernel.org>
-Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
----
+Link: https://github.com/KSPP/linux/issues/162
+Signed-off-by: Erick Archer <erick.archer@gmx.com>
+=2D--
+ drivers/base/power/qos.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Changes in v2:
-	- Added tags Bryan's tags.
+diff --git a/drivers/base/power/qos.c b/drivers/base/power/qos.c
+index 8e93167f1783..bd77f6734f14 100644
+=2D-- a/drivers/base/power/qos.c
++++ b/drivers/base/power/qos.c
+@@ -201,7 +201,7 @@ static int dev_pm_qos_constraints_allocate(struct devi=
+ce *dev)
+ 	if (!qos)
+ 		return -ENOMEM;
 
----
- drivers/media/platform/qcom/venus/core.c      | 12 +++--
- drivers/media/platform/qcom/venus/core.h      |  7 ++-
- .../media/platform/qcom/venus/pm_helpers.c    | 48 +++++++------------
- 3 files changed, 26 insertions(+), 41 deletions(-)
-
-diff --git a/drivers/media/platform/qcom/venus/core.c b/drivers/media/platform/qcom/venus/core.c
-index 9cffe975581b..bd9b474280e4 100644
---- a/drivers/media/platform/qcom/venus/core.c
-+++ b/drivers/media/platform/qcom/venus/core.c
-@@ -16,6 +16,7 @@
- #include <linux/platform_device.h>
- #include <linux/slab.h>
- #include <linux/types.h>
-+#include <linux/pm_domain.h>
- #include <linux/pm_runtime.h>
- #include <media/videobuf2-v4l2.h>
- #include <media/v4l2-mem2mem.h>
-@@ -114,7 +115,8 @@ static void venus_sys_error_handler(struct work_struct *work)
- 	pm_runtime_put_sync(core->dev);
- 
- 	for (i = 0; i < max_attempts; i++) {
--		if (!core->pmdomains[0] || !pm_runtime_active(core->pmdomains[0]))
-+		if (!core->pmdomains ||
-+		    !pm_runtime_active(core->pmdomains->pd_devs[0]))
- 			break;
- 		usleep_range(1000, 1500);
- 	}
-@@ -705,7 +707,7 @@ static const struct venus_resources sdm845_res_v2 = {
- 	.vcodec0_clks = { "vcodec0_core", "vcodec0_bus" },
- 	.vcodec1_clks = { "vcodec1_core", "vcodec1_bus" },
- 	.vcodec_clks_num = 2,
--	.vcodec_pmdomains = { "venus", "vcodec0", "vcodec1" },
-+	.vcodec_pmdomains = (const char *[]) { "venus", "vcodec0", "vcodec1" },
- 	.vcodec_pmdomains_num = 3,
- 	.opp_pmdomain = (const char *[]) { "cx", NULL },
- 	.vcodec_num = 2,
-@@ -754,7 +756,7 @@ static const struct venus_resources sc7180_res = {
- 	.clks_num = 3,
- 	.vcodec0_clks = { "vcodec0_core", "vcodec0_bus" },
- 	.vcodec_clks_num = 2,
--	.vcodec_pmdomains = { "venus", "vcodec0" },
-+	.vcodec_pmdomains = (const char *[]) { "venus", "vcodec0" },
- 	.vcodec_pmdomains_num = 2,
- 	.opp_pmdomain = (const char *[]) { "cx", NULL },
- 	.vcodec_num = 1,
-@@ -811,7 +813,7 @@ static const struct venus_resources sm8250_res = {
- 	.resets_num = 2,
- 	.vcodec0_clks = { "vcodec0_core" },
- 	.vcodec_clks_num = 1,
--	.vcodec_pmdomains = { "venus", "vcodec0" },
-+	.vcodec_pmdomains = (const char *[]) { "venus", "vcodec0" },
- 	.vcodec_pmdomains_num = 2,
- 	.opp_pmdomain = (const char *[]) { "mx", NULL },
- 	.vcodec_num = 1,
-@@ -870,7 +872,7 @@ static const struct venus_resources sc7280_res = {
- 	.clks_num = 3,
- 	.vcodec0_clks = {"vcodec_core", "vcodec_bus"},
- 	.vcodec_clks_num = 2,
--	.vcodec_pmdomains = { "venus", "vcodec0" },
-+	.vcodec_pmdomains = (const char *[]) { "venus", "vcodec0" },
- 	.vcodec_pmdomains_num = 2,
- 	.opp_pmdomain = (const char *[]) { "cx", NULL },
- 	.vcodec_num = 1,
-diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
-index 4a633261ece4..7ef341bf21cc 100644
---- a/drivers/media/platform/qcom/venus/core.h
-+++ b/drivers/media/platform/qcom/venus/core.h
-@@ -25,7 +25,6 @@
- 
- #define VIDC_CLKS_NUM_MAX		4
- #define VIDC_VCODEC_CLKS_NUM_MAX	2
--#define VIDC_PMDOMAINS_NUM_MAX		3
- #define VIDC_RESETS_NUM_MAX		2
- 
- extern int venus_fw_debug;
-@@ -72,7 +71,7 @@ struct venus_resources {
- 	const char * const vcodec0_clks[VIDC_VCODEC_CLKS_NUM_MAX];
- 	const char * const vcodec1_clks[VIDC_VCODEC_CLKS_NUM_MAX];
- 	unsigned int vcodec_clks_num;
--	const char * const vcodec_pmdomains[VIDC_PMDOMAINS_NUM_MAX];
-+	const char **vcodec_pmdomains;
- 	unsigned int vcodec_pmdomains_num;
- 	const char **opp_pmdomain;
- 	unsigned int vcodec_num;
-@@ -134,7 +133,7 @@ struct venus_format {
-  * @video_path: an interconnect handle to video to/from memory path
-  * @cpucfg_path: an interconnect handle to cpu configuration path
-  * @has_opp_table: does OPP table exist
-- * @pmdomains:	an array of pmdomains struct device pointers
-+ * @pmdomains:	a pointer to a list of pmdomains
-  * @opp_dl_venus: an device-link for device OPP
-  * @opp_pmdomain: an OPP power-domain
-  * @resets: an array of reset signals
-@@ -187,7 +186,7 @@ struct venus_core {
- 	struct icc_path *video_path;
- 	struct icc_path *cpucfg_path;
- 	bool has_opp_table;
--	struct device *pmdomains[VIDC_PMDOMAINS_NUM_MAX];
-+	struct dev_pm_domain_list *pmdomains;
- 	struct device_link *opp_dl_venus;
- 	struct device *opp_pmdomain;
- 	struct reset_control *resets[VIDC_RESETS_NUM_MAX];
-diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
-index a1b127caa90a..502822059498 100644
---- a/drivers/media/platform/qcom/venus/pm_helpers.c
-+++ b/drivers/media/platform/qcom/venus/pm_helpers.c
-@@ -455,7 +455,7 @@ static int poweroff_coreid(struct venus_core *core, unsigned int coreid_mask)
- 		if (ret)
- 			return ret;
- 
--		ret = pm_runtime_put_sync(core->pmdomains[1]);
-+		ret = pm_runtime_put_sync(core->pmdomains->pd_devs[1]);
- 		if (ret < 0)
- 			return ret;
- 	}
-@@ -471,7 +471,7 @@ static int poweroff_coreid(struct venus_core *core, unsigned int coreid_mask)
- 		if (ret)
- 			return ret;
- 
--		ret = pm_runtime_put_sync(core->pmdomains[2]);
-+		ret = pm_runtime_put_sync(core->pmdomains->pd_devs[2]);
- 		if (ret < 0)
- 			return ret;
- 	}
-@@ -484,7 +484,7 @@ static int poweron_coreid(struct venus_core *core, unsigned int coreid_mask)
- 	int ret;
- 
- 	if (coreid_mask & VIDC_CORE_ID_1) {
--		ret = pm_runtime_get_sync(core->pmdomains[1]);
-+		ret = pm_runtime_get_sync(core->pmdomains->pd_devs[1]);
- 		if (ret < 0)
- 			return ret;
- 
-@@ -502,7 +502,7 @@ static int poweron_coreid(struct venus_core *core, unsigned int coreid_mask)
- 	}
- 
- 	if (coreid_mask & VIDC_CORE_ID_2) {
--		ret = pm_runtime_get_sync(core->pmdomains[2]);
-+		ret = pm_runtime_get_sync(core->pmdomains->pd_devs[2]);
- 		if (ret < 0)
- 			return ret;
- 
-@@ -860,19 +860,18 @@ static int vcodec_domains_get(struct venus_core *core)
- 	struct device **opp_virt_dev;
- 	struct device *dev = core->dev;
- 	const struct venus_resources *res = core->res;
--	struct device *pd;
--	unsigned int i;
-+	struct dev_pm_domain_attach_data vcodec_data = {
-+		.pd_names = res->vcodec_pmdomains,
-+		.num_pd_names = res->vcodec_pmdomains_num,
-+		.pd_flags = PD_FLAG_NO_DEV_LINK,
-+	};
- 
- 	if (!res->vcodec_pmdomains_num)
- 		goto skip_pmdomains;
- 
--	for (i = 0; i < res->vcodec_pmdomains_num; i++) {
--		pd = dev_pm_domain_attach_by_name(dev,
--						  res->vcodec_pmdomains[i]);
--		if (IS_ERR_OR_NULL(pd))
--			return pd ? PTR_ERR(pd) : -ENODATA;
--		core->pmdomains[i] = pd;
--	}
-+	ret = dev_pm_domain_attach_list(dev, &vcodec_data, &core->pmdomains);
-+	if (ret < 0)
-+		return ret;
- 
- skip_pmdomains:
- 	if (!core->res->opp_pmdomain)
-@@ -896,30 +895,14 @@ static int vcodec_domains_get(struct venus_core *core)
- 	return 0;
- 
- opp_attach_err:
--	for (i = 0; i < res->vcodec_pmdomains_num; i++) {
--		if (IS_ERR_OR_NULL(core->pmdomains[i]))
--			continue;
--		dev_pm_domain_detach(core->pmdomains[i], true);
--	}
--
-+	dev_pm_domain_detach_list(core->pmdomains);
- 	return ret;
- }
- 
- static void vcodec_domains_put(struct venus_core *core)
- {
--	const struct venus_resources *res = core->res;
--	unsigned int i;
-+	dev_pm_domain_detach_list(core->pmdomains);
- 
--	if (!res->vcodec_pmdomains_num)
--		goto skip_pmdomains;
--
--	for (i = 0; i < res->vcodec_pmdomains_num; i++) {
--		if (IS_ERR_OR_NULL(core->pmdomains[i]))
--			continue;
--		dev_pm_domain_detach(core->pmdomains[i], true);
--	}
--
--skip_pmdomains:
- 	if (!core->has_opp_table)
- 		return;
- 
-@@ -1035,7 +1018,8 @@ static void core_put_v4(struct venus_core *core)
- static int core_power_v4(struct venus_core *core, int on)
- {
- 	struct device *dev = core->dev;
--	struct device *pmctrl = core->pmdomains[0];
-+	struct device *pmctrl = core->pmdomains ?
-+			core->pmdomains->pd_devs[0] : NULL;
- 	int ret = 0;
- 
- 	if (on == POWER_ON) {
--- 
-2.34.1
+-	n =3D kzalloc(3 * sizeof(*n), GFP_KERNEL);
++	n =3D kcalloc(3, sizeof(*n), GFP_KERNEL);
+ 	if (!n) {
+ 		kfree(qos);
+ 		return -ENOMEM;
+=2D-
+2.42.0
 
 
