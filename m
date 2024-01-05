@@ -1,62 +1,62 @@
-Return-Path: <linux-pm+bounces-1900-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1901-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05773825782
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jan 2024 17:03:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5188B825787
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jan 2024 17:03:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1102285331
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jan 2024 16:03:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF9F81F22844
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jan 2024 16:03:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F59B2E824;
-	Fri,  5 Jan 2024 16:01:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 803223589E;
+	Fri,  5 Jan 2024 16:01:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pDJCNLOm"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YDmBF7lF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B640E34CD5
-	for <linux-pm@vger.kernel.org>; Fri,  5 Jan 2024 16:01:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADF523529D
+	for <linux-pm@vger.kernel.org>; Fri,  5 Jan 2024 16:01:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-50ea226bda8so1843650e87.2
-        for <linux-pm@vger.kernel.org>; Fri, 05 Jan 2024 08:01:16 -0800 (PST)
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2ccbc328744so20734771fa.3
+        for <linux-pm@vger.kernel.org>; Fri, 05 Jan 2024 08:01:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704470475; x=1705075275; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1704470478; x=1705075278; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=v4adrkCiXynUojze/iFBMYeb+HEd5tnQA25jx/jo/fM=;
-        b=pDJCNLOmnVHYDXvHROz/V9ko6aJEgCq6Mk/RM1GQoR55XbYiZkLMj7OWP4YvzxwPQl
-         x+1HIf1GTrMPAF6IVk/ua5iuEG0gF2pmX3KaNDo6cBtxtb7dlj/XMPSpeNirAV9Dl/Gy
-         mY1/V1Lp6HEZOzt8HKNg4equRumpkRP29YlmjBLbqgVPlopSuIGuGrM4rD9HkGrY2R6O
-         xpV3ilduH1rAGWwqoh/wfZt5WEv6J9xgMlpaorFufT+uZfs2VihTbLeHv4SsnNXVphqt
-         I7qroly+i/uonLq8ADXHOhCH/GeSwECmT9m8ES4G8jx2jlVYwhsSHaAyFZDoAAGjIlVg
-         MRGQ==
+        bh=+xTV3KNGUOJDAGwGlyDoyXQPDYV81EgjVZP/tKxx0pk=;
+        b=YDmBF7lFZiuX1dCRdWZpabfgxPbsOV6Stw36oosXPP+RmFjCmIpBv8udpLWBlxt+Zn
+         Qv73R0O/CWt5IJagtninpik/ErVDKFFg9zRUzO6Ba8ZVbJG5fmrbKMdiDe9eaqzqAAl9
+         9cPhlil85lEf8SOlHfz+XWk0lj7Q4wlsbL2ga13bAflBALtbmxcuqlnjJKnLgHm88tl3
+         PcRdke8Xc4jZ/LP0qCGPku9ZabkL4qcsq1e8MJleEg6aRh+ydbOF/31i3rxSDqI+rJfO
+         TA1fS436KkUCV3zU2P92PnyxygjzqSJYwULhWVFSLe307Az2DpfYUjQk5a9s2/BsAdg6
+         SUHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704470475; x=1705075275;
+        d=1e100.net; s=20230601; t=1704470478; x=1705075278;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=v4adrkCiXynUojze/iFBMYeb+HEd5tnQA25jx/jo/fM=;
-        b=FSTorywwZiByAyccFl6FD4WQzA8YuOCSraKHUEoOE89VtTZQti+YXmbGve9Nlkr3T9
-         QoCc34TpEAoIKlwGhwNWbPqi5uPDmJKxl0YV3U4/LcX/SCj2H9khJahDdXnWPu4GdbT4
-         asxRY6Z1pDYXirIxpg36ow8MCz4Z7lTYk/WhdX5N+/X89x+9MmorI779ifO8iN3/wg76
-         1OgEm52xXnAvlepbPMGrXKJ9P4P3rUAtuilHlz++smb+z+P4/dRZ8ZMCvZrmShTh3CWK
-         q6BKQaqEieWQ981pLtRqhIDb5r5C5U01/QCs2RTh8ufol7rYy5eoXnHAyq0Tk8zJDbtk
-         M9Aw==
-X-Gm-Message-State: AOJu0YxE/NHTETgYn+zVR+q2spLKevmvdKgjLAkTv0KYwvSRTX66WiFg
-	MVwJIk5S/MzRYeEOC7RQQpsYSlmuYZvDPQ==
-X-Google-Smtp-Source: AGHT+IGoYR9dNkx0TbEbTrZoz2zQHdVbLCqUuOHGn2IdJYr+CWUdepckfD72bhLcMFYSTGkVG//8iA==
-X-Received: by 2002:a19:6447:0:b0:50e:3d5b:cfef with SMTP id b7-20020a196447000000b0050e3d5bcfefmr869108lfj.53.1704470474915;
-        Fri, 05 Jan 2024 08:01:14 -0800 (PST)
+        bh=+xTV3KNGUOJDAGwGlyDoyXQPDYV81EgjVZP/tKxx0pk=;
+        b=Zi+uAlUcWp8FTg+jpVBgxv05slVgDiGOAUPbMsEatLaYHYfajMsmWRobaKoJZOSIxt
+         E1qAyFqaj8QPYDwMP18N0MP1q031X+c1H8wsw7jF4OA8V60zrGYrZoq7vSD3muuYo7Gw
+         CDL6EnZTP3r+P2Q2COlpc9Qd+9Jvmx5ZkBx0+0ANl3R7TZWbVk6BSe7CsglimGMlwdP2
+         NeTj1FVz1KNNLX5w2hY+huArPxG3Cbk/6WJ7QWSzUJ/YtG3J4zWCH5fmGBfU43MJMXX6
+         scPLi9xw/LB4gG3rXhDE83J3XfAOzdqCV412aNvYFfR+BU79oePaYH3GyGOE1kNKVt/k
+         LJMg==
+X-Gm-Message-State: AOJu0Yx+lkMeFLLY1LkqNeZzTIPttR9VF5w4khnQODv4bvKpA2tFGPmB
+	apD5nPiHiLTiOa+l9rl5NsxBbi77IYzwQw==
+X-Google-Smtp-Source: AGHT+IEhceusxqe38aK6YSRaF0oSmtJx101dr5UFrhN3EnDzMmqdMwFzHk96/G1pK1okalt2N+42DA==
+X-Received: by 2002:a05:6512:532:b0:50e:6e9f:bc89 with SMTP id o18-20020a056512053200b0050e6e9fbc89mr1038688lfc.104.1704470477717;
+        Fri, 05 Jan 2024 08:01:17 -0800 (PST)
 Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id n5-20020a056512310500b0050e76978861sm262094lfb.277.2024.01.05.08.01.11
+        by smtp.gmail.com with ESMTPSA id n5-20020a056512310500b0050e76978861sm262094lfb.277.2024.01.05.08.01.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jan 2024 08:01:12 -0800 (PST)
+        Fri, 05 Jan 2024 08:01:15 -0800 (PST)
 From: Ulf Hansson <ulf.hansson@linaro.org>
 To: "Rafael J . Wysocki" <rafael@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -80,9 +80,9 @@ Cc: Ulf Hansson <ulf.hansson@linaro.org>,
 	Sascha Hauer <s.hauer@pengutronix.de>,
 	Iuliana Prodan <iuliana.prodan@nxp.com>,
 	Daniel Baluta <daniel.baluta@nxp.com>
-Subject: [PATCH v2 2/5] remoteproc: imx_dsp_rproc: Convert to dev_pm_domain_attach|detach_list()
-Date: Fri,  5 Jan 2024 17:01:00 +0100
-Message-Id: <20240105160103.183092-3-ulf.hansson@linaro.org>
+Subject: [PATCH v2 3/5] remoteproc: imx_rproc: Convert to dev_pm_domain_attach|detach_list()
+Date: Fri,  5 Jan 2024 17:01:01 +0100
+Message-Id: <20240105160103.183092-4-ulf.hansson@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240105160103.183092-1-ulf.hansson@linaro.org>
 References: <20240105160103.183092-1-ulf.hansson@linaro.org>
@@ -117,92 +117,86 @@ Kind regards
 Ulf Hansson
 
 ---
- drivers/remoteproc/imx_dsp_rproc.c | 82 ++++--------------------------
- 1 file changed, 9 insertions(+), 73 deletions(-)
+ drivers/remoteproc/imx_rproc.c | 73 +++++-----------------------------
+ 1 file changed, 9 insertions(+), 64 deletions(-)
 
-diff --git a/drivers/remoteproc/imx_dsp_rproc.c b/drivers/remoteproc/imx_dsp_rproc.c
-index 8fcda9b74545..0409b7c47d5c 100644
---- a/drivers/remoteproc/imx_dsp_rproc.c
-+++ b/drivers/remoteproc/imx_dsp_rproc.c
-@@ -103,12 +103,10 @@ enum imx_dsp_rp_mbox_messages {
-  * @tx_ch: mailbox tx channel handle
-  * @rx_ch: mailbox rx channel handle
-  * @rxdb_ch: mailbox rx doorbell channel handle
-- * @pd_dev: power domain device
-- * @pd_dev_link: power domain device link
-+ * @pd_list: power domain list
-  * @ipc_handle: System Control Unit ipc handle
-  * @rproc_work: work for processing virtio interrupts
-  * @pm_comp: completion primitive to sync for suspend response
-- * @num_domains: power domain number
-  * @flags: control flags
-  */
- struct imx_dsp_rproc {
-@@ -121,12 +119,10 @@ struct imx_dsp_rproc {
- 	struct mbox_chan			*tx_ch;
- 	struct mbox_chan			*rx_ch;
- 	struct mbox_chan			*rxdb_ch;
--	struct device				**pd_dev;
--	struct device_link			**pd_dev_link;
-+	struct dev_pm_domain_list		*pd_list;
- 	struct imx_sc_ipc			*ipc_handle;
- 	struct work_struct			rproc_work;
- 	struct completion			pm_comp;
--	int					num_domains;
- 	u32					flags;
+diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
+index 8bb293b9f327..3161f14442bc 100644
+--- a/drivers/remoteproc/imx_rproc.c
++++ b/drivers/remoteproc/imx_rproc.c
+@@ -92,7 +92,6 @@ struct imx_rproc_mem {
+ 
+ static int imx_rproc_xtr_mbox_init(struct rproc *rproc);
+ static void imx_rproc_free_mbox(struct rproc *rproc);
+-static int imx_rproc_detach_pd(struct rproc *rproc);
+ 
+ struct imx_rproc {
+ 	struct device			*dev;
+@@ -113,10 +112,8 @@ struct imx_rproc {
+ 	u32				rproc_pt;	/* partition id */
+ 	u32				rsrc_id;	/* resource id */
+ 	u32				entry;		/* cpu start address */
+-	int                             num_pd;
+ 	u32				core_index;
+-	struct device                   **pd_dev;
+-	struct device_link              **pd_dev_link;
++	struct dev_pm_domain_list	*pd_list;
  };
  
-@@ -954,74 +950,14 @@ static const struct rproc_ops imx_dsp_rproc_ops = {
- static int imx_dsp_attach_pm_domains(struct imx_dsp_rproc *priv)
+ static const struct imx_rproc_att imx_rproc_att_imx93[] = {
+@@ -853,7 +850,7 @@ static void imx_rproc_put_scu(struct rproc *rproc)
+ 		return;
+ 
+ 	if (imx_sc_rm_is_resource_owned(priv->ipc_handle, priv->rsrc_id)) {
+-		imx_rproc_detach_pd(rproc);
++		dev_pm_domain_detach_list(priv->pd_list);
+ 		return;
+ 	}
+ 
+@@ -880,72 +877,20 @@ static int imx_rproc_partition_notify(struct notifier_block *nb,
+ static int imx_rproc_attach_pd(struct imx_rproc *priv)
  {
- 	struct device *dev = priv->rproc->dev.parent;
+ 	struct device *dev = priv->dev;
 -	int ret, i;
 -
--	priv->num_domains = of_count_phandle_with_args(dev->of_node,
--						       "power-domains",
--						       "#power-domain-cells");
--
--	/* If only one domain, then no need to link the device */
--	if (priv->num_domains <= 1)
+-	/*
+-	 * If there is only one power-domain entry, the platform driver framework
+-	 * will handle it, no need handle it in this driver.
+-	 */
+-	priv->num_pd = of_count_phandle_with_args(dev->of_node, "power-domains",
+-						  "#power-domain-cells");
+-	if (priv->num_pd <= 1)
 -		return 0;
 -
--	priv->pd_dev = devm_kmalloc_array(dev, priv->num_domains,
--					  sizeof(*priv->pd_dev),
--					  GFP_KERNEL);
+-	priv->pd_dev = devm_kmalloc_array(dev, priv->num_pd, sizeof(*priv->pd_dev), GFP_KERNEL);
 -	if (!priv->pd_dev)
 -		return -ENOMEM;
 -
--	priv->pd_dev_link = devm_kmalloc_array(dev, priv->num_domains,
--					       sizeof(*priv->pd_dev_link),
+-	priv->pd_dev_link = devm_kmalloc_array(dev, priv->num_pd, sizeof(*priv->pd_dev_link),
 -					       GFP_KERNEL);
+-
 -	if (!priv->pd_dev_link)
 -		return -ENOMEM;
 -
--	for (i = 0; i < priv->num_domains; i++) {
+-	for (i = 0; i < priv->num_pd; i++) {
 -		priv->pd_dev[i] = dev_pm_domain_attach_by_id(dev, i);
 -		if (IS_ERR(priv->pd_dev[i])) {
 -			ret = PTR_ERR(priv->pd_dev[i]);
--			goto detach_pm;
+-			goto detach_pd;
 -		}
 -
--		/*
--		 * device_link_add will check priv->pd_dev[i], if it is
--		 * NULL, then will break.
--		 */
--		priv->pd_dev_link[i] = device_link_add(dev,
--						       priv->pd_dev[i],
--						       DL_FLAG_STATELESS |
--						       DL_FLAG_PM_RUNTIME);
+-		priv->pd_dev_link[i] = device_link_add(dev, priv->pd_dev[i], DL_FLAG_STATELESS |
+-						       DL_FLAG_PM_RUNTIME | DL_FLAG_RPM_ACTIVE);
 -		if (!priv->pd_dev_link[i]) {
 -			dev_pm_domain_detach(priv->pd_dev[i], false);
 -			ret = -EINVAL;
--			goto detach_pm;
+-			goto detach_pd;
 -		}
 -	}
 -
 -	return 0;
 -
--detach_pm:
+-detach_pd:
 -	while (--i >= 0) {
 -		device_link_del(priv->pd_dev_link[i]);
 -		dev_pm_domain_detach(priv->pd_dev[i], false);
@@ -211,45 +205,34 @@ index 8fcda9b74545..0409b7c47d5c 100644
 -	return ret;
 -}
 -
--static int imx_dsp_detach_pm_domains(struct imx_dsp_rproc *priv)
+-static int imx_rproc_detach_pd(struct rproc *rproc)
 -{
+-	struct imx_rproc *priv = rproc->priv;
 -	int i;
 +	int ret;
++	struct dev_pm_domain_attach_data pd_data = {
++		.pd_flags = PD_FLAG_DEV_LINK_ON,
++	};
  
--	if (priv->num_domains <= 1)
-+	/* A single PM domain is already attached. */
+ 	/*
+ 	 * If there is only one power-domain entry, the platform driver framework
+ 	 * will handle it, no need handle it in this driver.
+ 	 */
+-	if (priv->num_pd <= 1)
 +	if (dev->pm_domain)
  		return 0;
  
--	for (i = 0; i < priv->num_domains; i++) {
+-	for (i = 0; i < priv->num_pd; i++) {
 -		device_link_del(priv->pd_dev_link[i]);
 -		dev_pm_domain_detach(priv->pd_dev[i], false);
 -	}
 -
 -	return 0;
-+	ret = dev_pm_domain_attach_list(dev, NULL, &priv->pd_list);
++	ret = dev_pm_domain_attach_list(dev, &pd_data, &priv->pd_list);
 +	return ret < 0 ? ret : 0;
  }
  
- /**
-@@ -1153,7 +1089,7 @@ static int imx_dsp_rproc_probe(struct platform_device *pdev)
- 	return 0;
- 
- err_detach_domains:
--	imx_dsp_detach_pm_domains(priv);
-+	dev_pm_domain_detach_list(priv->pd_list);
- err_put_rproc:
- 	rproc_free(rproc);
- 
-@@ -1167,7 +1103,7 @@ static void imx_dsp_rproc_remove(struct platform_device *pdev)
- 
- 	pm_runtime_disable(&pdev->dev);
- 	rproc_del(rproc);
--	imx_dsp_detach_pm_domains(priv);
-+	dev_pm_domain_detach_list(priv->pd_list);
- 	rproc_free(rproc);
- }
- 
+ static int imx_rproc_detect_mode(struct imx_rproc *priv)
 -- 
 2.34.1
 
