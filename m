@@ -1,135 +1,126 @@
-Return-Path: <linux-pm+bounces-1880-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1881-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8206182522C
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jan 2024 11:37:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55BDE825233
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jan 2024 11:37:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9C29DB25161
-	for <lists+linux-pm@lfdr.de>; Fri,  5 Jan 2024 10:36:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 696891C22FFC
+	for <lists+linux-pm@lfdr.de>; Fri,  5 Jan 2024 10:37:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D53D2CCBA;
-	Fri,  5 Jan 2024 10:35:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06F0820303;
+	Fri,  5 Jan 2024 10:36:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YXyxACKp"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="B4n0J9fo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8E6D2D614
-	for <linux-pm@vger.kernel.org>; Fri,  5 Jan 2024 10:35:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACF7F24B5D
+	for <linux-pm@vger.kernel.org>; Fri,  5 Jan 2024 10:36:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1d3aa0321b5so10549175ad.2
-        for <linux-pm@vger.kernel.org>; Fri, 05 Jan 2024 02:35:19 -0800 (PST)
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1d3e84fded7so9385095ad.1
+        for <linux-pm@vger.kernel.org>; Fri, 05 Jan 2024 02:36:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704450919; x=1705055719; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MgkvDd251Anuxsin8lOtI6fY5/rZr3zzcdi1k1L/6pI=;
-        b=YXyxACKpT76JW57FcUM7yWvRsktG56leOE/rfxSR9i2fPPCEQbDOfK69aPHv/A388P
-         Po+q9AraRBvD20gWVJmDAggHEtmZbW6GPDbEuQ6tjEU7opPo69DiOnoikG/79HpitTji
-         zNsYEbNjUv6vY14pKgp6xKAPRbozA2MwspZznKpCspfdobAQ5+08qaoBwN1sbCNd3Kmr
-         X1y8sm7D67SUaIVqng9dz+9YhCoruZfwKbQVxL36yStkDbkmgdlc8LMI9N9YHZ+NbGK/
-         IcDoirC1CDpZ/dPv4vzHhdy6iT5d4lcDj6MpwQqdopsyezBDmDilgvLGt02Je+mN7qMp
-         rq/A==
+        d=linaro.org; s=google; t=1704450962; x=1705055762; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aYVk8A2W+FUtJ8Xy1Wnlgo/2i74l4ok4AKaqwgOLkgQ=;
+        b=B4n0J9fo8Ijo8Pif/PrLgphBQxS+cnNkdD0yjCVLLWzjSL+MgVnsRRGSPrLje1yc4O
+         Vk3bTc7kkFjGWcuXHeVM5Hk6HNo63tUGjxmfsr9/g0AdsiFeAtZhYQ74ai/i7zpWlyfX
+         s+vazXxvZTmYnhx/NF2wqbuXRDMfWUl7xIoeJGVtyKZ7hhou0mltw1sUIj99fagILEUj
+         cVn6lr7/M8y0ufeamZYHPuH+quR1j1nJFBWOPtaNKMn625Dg1G1+WZCQLNJi9fVGbNFf
+         Yl70CMhxLmtleVgriNhbymQKCQZuRDjQWyNEdU//udzx7/4K/i4T0qHYZ91Eo5fCBtOR
+         zBeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704450919; x=1705055719;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MgkvDd251Anuxsin8lOtI6fY5/rZr3zzcdi1k1L/6pI=;
-        b=q47fCznSz+8T0tcqPM33XQbZAMpH6XmIOoixkUa4Cpvc5FHrJCp3ovdTmWJEPHRNYU
-         KfGfeOSXSO9sHxMYlJi8fc/e4Z82KbBOHZC0eeqzcofVKuW1JXLiWEmL8xBVzMt++dFr
-         wtAN3nu6R67Cf8fHXX0k0zx4avDIwtvZnXCWHTMtar0P5FR1hBd78JEPWu3N/AFE7wnb
-         xtHCZ2u1oZqNOjzauLE8hSZMOhIkRwQbXNo4Uadk2hBXYDKPkXyGMbk3WsNtp3lQQ3JC
-         vMlc3E9TlI2bwk6Wvt4eFNRxc3luMdy9gWnPRBpHCD0CqTFKOqWar2/Ytq8NUQ9mJANy
-         74zw==
-X-Gm-Message-State: AOJu0YwhC4blG4prYj5Swrn5cmNjQ9A2BJW+kcXwQAY/+qgfMwYJCr5Z
-	r73BhK0IQxF/SkUgcA8ck2mZmYwgN43GAg==
-X-Google-Smtp-Source: AGHT+IFsqfvz+55gSqZByNWxCCxnVEXLHi/buhhMRlmkjkHR9zjRw81loEDkUa/+0E1hvOxCaVxVOg==
-X-Received: by 2002:a17:902:e747:b0:1d4:dec9:f0a6 with SMTP id p7-20020a170902e74700b001d4dec9f0a6mr2310239plf.30.1704450919337;
-        Fri, 05 Jan 2024 02:35:19 -0800 (PST)
+        d=1e100.net; s=20230601; t=1704450962; x=1705055762;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aYVk8A2W+FUtJ8Xy1Wnlgo/2i74l4ok4AKaqwgOLkgQ=;
+        b=Icu6BbCq6ki7YdBbdcLFTkNEhIluNctaVIjv1W0907+JWvznWFvhrmROT/Lguw0bAP
+         +FDsW65+utDEaByNJJXyEaxSuwlenxbv7FeQoU8389Hzoajdx+F7kc/Gqdqtb/T4iV9Z
+         BBjznzM5lmIKOQIydyQzfGqzzTcvCQtuiRGHDbEW+uspA4Eb6VAiNh2J/oJIhg3TONIe
+         ym6nhKcdwavRAxI41bCm6MC+6nXWFWSSWmH3Pqb4iT/oEwPXqHozVuXXeONqxvq4jgvq
+         459EgESXxM7ySa+bBjnvegqC7VrdRuWFSwPLuvfAha1j1mM6nfcjLXYPC0TTFmk5Zynt
+         5X4w==
+X-Gm-Message-State: AOJu0Yz12ggZJmXVpuXBooAgZrkve2TN6J8wO8hSXKd5S0xNKN0mMf52
+	b05OaQ5Z0haZqeD1AfMRAT/OOnrVkPlVCg==
+X-Google-Smtp-Source: AGHT+IHoKcEtt38NlGK00XipqMe2SBKo1AhufkFFOv92P9hxGY8Eq/awqID3GPMUNAoD8jAAyAXh8Q==
+X-Received: by 2002:a17:903:1c4:b0:1d4:2732:5cfb with SMTP id e4-20020a17090301c400b001d427325cfbmr1971565plh.100.1704450962074;
+        Fri, 05 Jan 2024 02:36:02 -0800 (PST)
 Received: from localhost ([122.172.86.168])
-        by smtp.gmail.com with ESMTPSA id jf9-20020a170903268900b001d4910ff83dsm1084704plb.121.2024.01.05.02.35.18
+        by smtp.gmail.com with ESMTPSA id g13-20020a170902d5cd00b001d08bbcf78bsm1103069plh.74.2024.01.05.02.36.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 05 Jan 2024 02:35:18 -0800 (PST)
+        Fri, 05 Jan 2024 02:36:01 -0800 (PST)
+Date: Fri, 5 Jan 2024 16:05:59 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Viresh Kumar <vireshk@kernel.org>,
-	Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>,
-	linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
+To: Konrad Dybcio <konradybcio@kernel.org>
+Cc: Bart Van Assche <bvanassche@acm.org>,
+	Dmitry Osipenko <digetx@gmail.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] OPP: Rename 'rate_clk_single'
-Date: Fri,  5 Jan 2024 16:05:13 +0530
-Message-Id: <dcfec12b67980cba139a6c3afba57ebd4936ebe8.1704450910.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+	Stephen Boyd <sboyd@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	"James E.J. Bottomley" <jejb@linux.ibm.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Kyungmin Park <kyungmin.park@samsung.com>,
+	MyungJoo Ham <myungjoo.ham@samsung.com>, Nishanth Menon <nm@ti.com>,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-scsi@vger.kernel.org, linux-tegra@vger.kernel.org,
+	Avri Altman <avri.altman@wdc.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH] OPP: Remove the unused argument to config_clks_t
+Message-ID: <20240105103559.jj4vbo4fnhodayvx@vireshk-i7>
+References: <f24f32f1213b4b9e9ff2b4a36922f8d6e3abac51.1704278832.git.viresh.kumar@linaro.org>
+ <64ee255e-9a5a-405e-b342-e91c55bd95ce@kernel.org>
+ <d994e6c3-f69e-4910-b699-65cb3ab6c72b@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d994e6c3-f69e-4910-b699-65cb3ab6c72b@kernel.org>
 
-The field's name isn't clear enough. Rename it.
+On 04-01-24, 13:56, Konrad Dybcio wrote:
+> 
+> 
+> On 4.01.2024 13:53, Konrad Dybcio wrote:
+> > 
+> > On 3.01.2024 11:48, Viresh Kumar wrote:
+> >> The OPP core needs to take care of a special case, where the OPPs aren't
+> >> available for a device, but in order to keep the same unified interface
+> >> for the driver, the same OPP core API must take care of performing a
+> >> simple clk_set_rate() for the device.
+> >>
+> >> This required the extra argument, but that is used only within the OPP
+> >> core and the drivers don't need to take care of that.
+> >>
+> >> Simplify the external API and handle it differently within the OPP core.
+> >>
+> >> This shouldn't result in any functional change.
+> > Hi, so this apparently breaks serial on Qualcomm platforms using
+> > "qcom,geni-debug-uart".. I'm seeing garbage on the console, likely
+> > meaning that ratesetting wasn't done.
+> 
+> +CC Bjorn, Dmitry
+> 
+> Probably also worth noting it only happens when an OPP table is present
+> in the device tree.
 
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/opp/core.c | 4 ++--
- drivers/opp/opp.h  | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+Found the issue. Dropped the patch for now. Not sure if there is a
+clean way of handling it right now.
 
-diff --git a/drivers/opp/core.c b/drivers/opp/core.c
-index 5e6cfcbd2e87..c4e0432ae42a 100644
---- a/drivers/opp/core.c
-+++ b/drivers/opp/core.c
-@@ -963,7 +963,7 @@ _opp_config_clk_single(struct device *dev, struct opp_table *opp_table,
- 		dev_err(dev, "%s: failed to set clock rate: %d\n", __func__,
- 			ret);
- 	} else {
--		opp_table->rate_clk_single = freq;
-+		opp_table->current_rate_single_clk = freq;
- 	}
- 
- 	return ret;
-@@ -1352,7 +1352,7 @@ int dev_pm_opp_set_rate(struct device *dev, unsigned long target_freq)
- 		 * value of the frequency. In such a case, do not abort but
- 		 * configure the hardware to the desired frequency forcefully.
- 		 */
--		forced = opp_table->rate_clk_single != freq;
-+		forced = opp_table->current_rate_single_clk != freq;
- 	}
- 
- 	ret = _set_opp(dev, opp_table, opp, &freq, forced);
-diff --git a/drivers/opp/opp.h b/drivers/opp/opp.h
-index 558c9ac6a6fa..cff1fabd1ae3 100644
---- a/drivers/opp/opp.h
-+++ b/drivers/opp/opp.h
-@@ -170,7 +170,7 @@ enum opp_table_access {
-  * @clock_latency_ns_max: Max clock latency in nanoseconds.
-  * @parsed_static_opps: Count of devices for which OPPs are initialized from DT.
-  * @shared_opp: OPP is shared between multiple devices.
-- * @rate_clk_single: Currently configured frequency for single clk.
-+ * @current_rate_single_clk: Currently configured frequency for single clk.
-  * @current_opp: Currently configured OPP for the table.
-  * @suspend_opp: Pointer to OPP to be used during device suspend.
-  * @required_opp_tables: List of device OPP tables that are required by OPPs in
-@@ -219,7 +219,7 @@ struct opp_table {
- 
- 	unsigned int parsed_static_opps;
- 	enum opp_table_access shared_opp;
--	unsigned long rate_clk_single;
-+	unsigned long current_rate_single_clk;
- 	struct dev_pm_opp *current_opp;
- 	struct dev_pm_opp *suspend_opp;
- 
 -- 
-2.31.1.272.g89b43f80a514
-
+viresh
 
