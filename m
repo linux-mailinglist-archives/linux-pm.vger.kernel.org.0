@@ -1,185 +1,313 @@
-Return-Path: <linux-pm+bounces-1911-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1912-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47738825FB5
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Jan 2024 14:36:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD4C6825FBB
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Jan 2024 14:58:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8735128390C
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Jan 2024 13:36:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CBF661F223B9
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Jan 2024 13:58:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59F057460;
-	Sat,  6 Jan 2024 13:36:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A200A7475;
+	Sat,  6 Jan 2024 13:58:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="TycST3He"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01on2071.outbound.protection.outlook.com [40.107.239.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.smtpout.orange.fr (smtp-15.smtpout.orange.fr [80.12.242.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E197494;
-	Sat,  6 Jan 2024 13:36:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siliconsignals.io
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HpOrq9IYDkg/U91nxfM46FOdSh9PLm1/ho0Pv12Y1cPCjbbLokliG/aCUwcydxIoWEq9NlzPCI26LqjY+jARKK51EsU7GmHY03vu/E6Yr7rNjBenBexqOWBFGA8g3k9QjTIM/YlRYSbZFg4OyA6N1A3VuUcCmM1HfnCVrNvHPTUypiGSSDJ+eIZ0YLPLSMJ9eQgm6LkkWaTYFN4S7usLE1KQCnUowkEEZrlKT4CxOi3eTDK+bPeOSqm+9DMUKrdQDgwzW/UWVPt8vu2V9s8vknyKuW4YXibozmwfGiS00dK7C4EXRJsQU5yqZP5karEmYvOnsxKs5XWvvUdhkmaaFw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YKHXj3F2NfYxp+0VyvmYXwCr4S5KoL8DGhvuXgVBe1k=;
- b=bdIf/Q/4zdD/T/nXA8aGaMKibgRPJnCBuQ39lkRkLjvxLUvKGY+DzO4wmPwg/qaBVSn7baJPGnoNpytotR5HY4Vfy0Yo8ZBDg7jM6ZfOyJt5qwBdhpsTYPX9gXsPb/VyHST5mAJ/4H//IJylws71lNU8ZyyahlmRBXkZlBXJQEl2kDcREqhtty13Ou+BM8zt15mtnUgu3XFt/RNSbYqT5sXoyTxTApTE4tFwWYEoIiPAIgcSfZPKKWQRE4w2vW7RPxpX/4XwGN1+t21lhi2COOFohEuRM9AeewgWqDQXzruLhdqOoQvJtoRRuW/rOB9VCxDxsh5bHjEkaDO9HHJDsQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siliconsignals.io; dmarc=pass action=none
- header.from=siliconsignals.io; dkim=pass header.d=siliconsignals.io; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siliconsignals.io;
-Received: from MAZPR01MB6957.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:42::6)
- by MA0PR01MB8931.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:bc::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7159.18; Sat, 6 Jan
- 2024 13:36:10 +0000
-Received: from MAZPR01MB6957.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::c1b:b2aa:7fc0:6532]) by MAZPR01MB6957.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::c1b:b2aa:7fc0:6532%7]) with mapi id 15.20.7159.015; Sat, 6 Jan 2024
- 13:36:10 +0000
-From: Bhavin Sharma <bhavin.sharma@siliconsignals.io>
-To: sre@kernel.org
-Cc: Bhavin Sharma <bhavin.sharma@siliconsignals.io>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>,
-	linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] dt-bindings: power: supply: stc3117: Convert to DT schema format
-Date: Sat,  6 Jan 2024 19:05:44 +0530
-Message-Id: <20240106133546.936261-2-bhavin.sharma@siliconsignals.io>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240106133546.936261-1-bhavin.sharma@siliconsignals.io>
-References: <20240106133546.936261-1-bhavin.sharma@siliconsignals.io>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BMXPR01CA0096.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:b00:54::36) To MAZPR01MB6957.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:42::6)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAB4279C3;
+	Sat,  6 Jan 2024 13:58:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [192.168.1.18] ([92.140.202.140])
+	by smtp.orange.fr with ESMTPA
+	id M7BVr2yKtEoWxM7BVrkYrO; Sat, 06 Jan 2024 14:57:58 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1704549478;
+	bh=5+DV8oxdafXMalKMMxvfVdg2F/E7Ox7KYUXojGKS/zk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=TycST3HeQPw2Gzh/DrxYr6RjHpB9lcY9u7UCYdodMrltrfinSETlcddYqCS/sre5x
+	 QL/l0UiEcz3KpsbkLG/XQgIzQJBnjF58cEmvw7Q1GlE5KVSvqP4it8FBuXn9NnnoyS
+	 XEevVUibRLYnuEc6ij8BCyt8fyKy2Ek8xs1swDChOJgQF2J0R21mqEyLxPd+0BW/qs
+	 lxjY1OEeHOWmIQSy9NhXINEzKdzUi6mwajG7W4mf4Vz7iNmfoh0v6AEXS/Py1a43ad
+	 7LbKut14pD1xdfGSXSfBquyQ8wVgSNu4c2ofQOkuWkEPn3WOhbwPKxYwJsmDm2q7Q6
+	 wx3uy8du/ojtQ==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 06 Jan 2024 14:57:58 +0100
+X-ME-IP: 92.140.202.140
+Message-ID: <46bba29c-330d-417d-ad84-ceb5207fdb55@wanadoo.fr>
+Date: Sat, 6 Jan 2024 14:57:57 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MAZPR01MB6957:EE_|MA0PR01MB8931:EE_
-X-MS-Office365-Filtering-Correlation-Id: a32f7af2-0684-473c-80f6-08dc0ebc71ce
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	L4nMEUlJL1nSJgGaG+d7sEv9Ud0MJVpUpZOjXSVaNThUsdD4l4NR5W/VC4N4GQcdC/Zw4xM6LwpavN28z10ipSjOBNKjTf/c3pGXTsDphWGgmysrNB+Se17+3U+qGKucwyXFVuY/Ug/uCYgIAs1cPI0EQHPYEv2gRheFcx0nKodPD9T+s/3jY2wRF6HYWNpn1gBKjSUqvsx0yjA1/lzwfxGJL5QbR8iBPv9hWbuf2Lc5wK1B2a0TkdF+4BjEOe4N3UUsDgxJtGsvho2ZPgwlvZY0nO2vNTFrX1NGiccdU7hPsOp+le1HmjfxsXdcVBRtGwmKqPLXkR1OTh4oppXNSEWy3JXdtUl6WkVh8N0Y/gqlLyKKtmFDLSSbv8Vi7rJInuITjUgbCQ/jQmIUmY9mW3N9eL6MeGkxia1KbvRKXiaO/3LQ18Lb8YOG/gNNuswdqhpYJE4EnbJR5y2PdGTUS0KYhAQsVfa1t8XY7fjHOQaekBwJXwJmdX6VRipQgG7SvyU+D3GajfozepbMEJDxVgrKe+Qz6lJg1cbSF3qIf7yKEJbWqzCtuem7rV5fJPx6QDVi9PiOWUQmL9UnqYTaHp+GBl6KY/q5LzUrEHsova8=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MAZPR01MB6957.INDPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(366004)(376002)(346002)(39830400003)(396003)(136003)(230922051799003)(451199024)(186009)(64100799003)(1800799012)(38100700002)(44832011)(4326008)(5660300002)(2906002)(38350700005)(6512007)(478600001)(6666004)(6506007)(52116002)(966005)(26005)(2616005)(1076003)(54906003)(316002)(66946007)(66476007)(6916009)(36756003)(66556008)(8936002)(8676002)(6486002)(86362001)(41300700001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?s8dgmjUWA08k2jnZigZrjpO0B0vbo75Jq1a7lAu6yoV4ngct9rzkWL6uX4+s?=
- =?us-ascii?Q?3b9lOy5lQpEznGbVOfPE0PC7gVhp3d1TgiwO3aRzGSwf/bheLu0HuE/rwM2K?=
- =?us-ascii?Q?0gMO635yuB3najjFBxBMC6Jtt7Fg42SLqwteJn5PXMjPcVMMDH3lcg4W7w3Y?=
- =?us-ascii?Q?yxmB8jXyWe4sXG8kpnUVqB2JC9/NZcPhilu5qqztfopnwtNdGAyJlp0a/PHB?=
- =?us-ascii?Q?GE3kJ8FceRPHYminA13fu5I+euPxndI8L90xbIyOvIfHyhHr3LmLSazZyBP4?=
- =?us-ascii?Q?r82SvOVwg3dthLlU8HX7cRUjfVTlTVPwAb5S5uR7bovPfLVmFeRhbjwtk/Fy?=
- =?us-ascii?Q?Bu6eUyz4/v1DOOHhvPSd6QWpmyDPIMntUNT+jNCLgnOlApUSD4EMOC+v0+Ee?=
- =?us-ascii?Q?TJqgJpg3hT83XDB0Jmv9zy7M/ovHPIfJCq6g076nB7Qgw2OJVt8NE73chwDe?=
- =?us-ascii?Q?QDBtxflpzQUdjNtGomS06mH9d8snD2RXHCm3XKZUEcM16VF8cUYXjr81jgza?=
- =?us-ascii?Q?V0Fh10isXh73G7JGTcyw/oerww3SNW5U/0VwMmoIOpcDQ3TQ18NWA5eym0Ob?=
- =?us-ascii?Q?/feE9HHCgtJNpK1BTwtwEROPZYQYv65iZ0An0OALiOBeibYI8JI2jGkSZYxs?=
- =?us-ascii?Q?tqfkc0z04rCdSRxOfrqMu9zFEl2pDX2VasVg5V9XhXjRl5GnKS12KkQRWjw2?=
- =?us-ascii?Q?66mgFCo1xSlKz0hqfQeG4QKFUe+6vjvZnwGQ7K/DRC6JKZK9+HQh9sT84JHM?=
- =?us-ascii?Q?3P7hWJahX1d8cZsbumZ2lQ7F+TOTqf9oDtK/zi9tc837qE9zlLzX4dDJXG2f?=
- =?us-ascii?Q?2a+2VSeQOmhtUfbJhaX0SGyGjgzvHv25o1T8AqLrmktdTQDkUMTPbxECRYvw?=
- =?us-ascii?Q?KbeA+EU9YSgtVuff+9USfOYZiCyLaUcJbVKi5573WSabYGXCkyt9v71KD1S5?=
- =?us-ascii?Q?bz6q0zLN3NtY6L8Md6z14kUgAnPghC+W7TbIJF7evx4pAgwFFIL6XS9nygvm?=
- =?us-ascii?Q?Gq4er4BfTXQVGGIz9hgqXoy7+EXqEEWcz0Wkl5tcDTCDxzn9IXSwLqKXr0W6?=
- =?us-ascii?Q?u3QPpWj5wPjN3AePGC5s9kMYryPd8p4xPjavNvKRSEsP3OZK86JDDQHJw381?=
- =?us-ascii?Q?7DXctwNtmMhtaLCbX3Y+5FFD8ZxxrPlBBKRifnEg0+Z9RR+kmCbHpmh2iS2S?=
- =?us-ascii?Q?KwjScWcCOXwQiSsKrSd8O25Dyom26ivkBUVn7ybRIspbRIKRZWAzv/wVlqXf?=
- =?us-ascii?Q?ynEw2EQ5vHAMmld3LD22Zz83c0acKq3thN3qQ7DsRFqPv1p6uhUTneUeghJv?=
- =?us-ascii?Q?L5KqI+NZ/uzxsjcv7v1HQz8rVG4ONmBNrKCrm4DX8VkmdnT69uICuS/6d1+f?=
- =?us-ascii?Q?hmt0ib7gF9kzkpPbMJcCKGCNen+TUBSEMfLXX5jZqaCwmCyVBZ/Zc7T+Hjk2?=
- =?us-ascii?Q?vFCs3IFCn/rj91Q+K0tnrj6crxZOKjGnEnLniz+zKm9ESmJUUqoaaAnE+C9W?=
- =?us-ascii?Q?W7QqOvi7+3Lfx3PoshObdVSj3tW7DVjgdIiq2QmDHZSklk3zoNHJJS3DjqPu?=
- =?us-ascii?Q?xQtpo0C1TWoT8ZIRogrt+dWldvb7tdIT5ZvG9U9LtvOZ+PSEUsXXapapRIV+?=
- =?us-ascii?Q?Idg0Tnev5f/Z7ygowLcH3G8=3D?=
-X-OriginatorOrg: siliconsignals.io
-X-MS-Exchange-CrossTenant-Network-Message-Id: a32f7af2-0684-473c-80f6-08dc0ebc71ce
-X-MS-Exchange-CrossTenant-AuthSource: MAZPR01MB6957.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Jan 2024 13:36:10.6740
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 7ec5089e-a433-4bd1-a638-82ee62e21d37
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kxwNhclPz5KhwcHi42/MzYMjHUmRuMlKuOXWPAmx3+x1arUcGcaYsYQDDdUh9PgQNethsFCz/m6B35hcQ48iE0t6XMB8SFMtaNxZRGN7bEk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MA0PR01MB8931
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] power: supply: Add STC3117 fuel gauge unit driver
+Content-Language: fr
+To: bhavin.sharma@siliconsignals.io
+Cc: conor+dt@kernel.org, devicetree@vger.kernel.org,
+ krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, robh+dt@kernel.org, sre@kernel.org
+References: <20240106101435.2927116-1-bhavin.sharma@siliconsignals.io>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20240106101435.2927116-1-bhavin.sharma@siliconsignals.io>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Convert the binding to DT schema format.
+Le 06/01/2024 à 11:14, Bhavin Sharma a écrit :
+> Adding support for stc3117 fuel gauge driver with
+> minimal functionality to read voltage level currently
+> 
+> Signed-off-by: Bhavin Sharma <bhavin.sharma-TXG9oGKWPboh9/7i5KS7/GGXanvQGlWp@public.gmane.org>
+> ---
 
-Changes in V2 resolved below errors:
-	1. string value is redundantly quoted with any quotes (quoted-strings)
-	2. found character '\t' that cannot start any token
+Hi,
 
-Signed-off-by: Bhavin Sharma <bhavin.sharma@siliconsignals.io>
----
- .../bindings/power/supply/stc3117-fg.yaml     | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/power/supply/stc3117-fg.yaml
+>   drivers/power/supply/Kconfig              |   7 ++
+>   drivers/power/supply/Makefile             |   1 +
+>   drivers/power/supply/stc3117_fuel_gauge.c | 136 ++++++++++++++++++++++
+>   3 files changed, 144 insertions(+)
+>   create mode 100644 drivers/power/supply/stc3117_fuel_gauge.c
+> 
+> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+> index f21cb05815ec..02df55b0d5f0 100644
+> --- a/drivers/power/supply/Kconfig
+> +++ b/drivers/power/supply/Kconfig
+> @@ -875,6 +875,13 @@ config FUEL_GAUGE_SC27XX
+>   	  Say Y here to enable support for fuel gauge with SC27XX
+>   	  PMIC chips.
+>   
+> +config FUEL_GAUGE_STC3117
+> +	tristate "STMicroelectronics STC3117 fuel gauge driver"
+> +	depends on I2C
+> +	help
+> +	  Say Y here to enable support for fuel gauge with STC3117
+> +	  PMIC chips.
+> +
+>   config CHARGER_UCS1002
+>   	tristate "Microchip UCS1002 USB Port Power Controller"
+>   	depends on I2C
+> diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
+> index 58b567278034..f8ed3e5a8882 100644
+> --- a/drivers/power/supply/Makefile
+> +++ b/drivers/power/supply/Makefile
+> @@ -104,6 +104,7 @@ obj-$(CONFIG_CHARGER_CROS_USBPD)	+= cros_usbpd-charger.o
+>   obj-$(CONFIG_CHARGER_CROS_PCHG)	+= cros_peripheral_charger.o
+>   obj-$(CONFIG_CHARGER_SC2731)	+= sc2731_charger.o
+>   obj-$(CONFIG_FUEL_GAUGE_SC27XX)	+= sc27xx_fuel_gauge.o
+> +obj-$(CONFIG_FUEL_GAUGE_STC3117)	+= stc3117_fuel_gauge.o
+>   obj-$(CONFIG_CHARGER_UCS1002)	+= ucs1002_power.o
+>   obj-$(CONFIG_CHARGER_BD99954)	+= bd99954-charger.o
+>   obj-$(CONFIG_CHARGER_WILCO)	+= wilco-charger.o
+> diff --git a/drivers/power/supply/stc3117_fuel_gauge.c b/drivers/power/supply/stc3117_fuel_gauge.c
+> new file mode 100644
+> index 000000000000..bb033ac54858
+> --- /dev/null
+> +++ b/drivers/power/supply/stc3117_fuel_gauge.c
+> @@ -0,0 +1,136 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * stc3117_fuel_gauge.c - STMicroelectronics STC3117 Fuel Gauge Driver
+> + *
+> + * Copyright (c) 2024 Silicon Signals Pvt Ltd.
+> + * Author:      Bhavin Sharma <bhavin.sharma-TXG9oGKWPboh9/7i5KS7/GGXanvQGlWp@public.gmane.org>
+> + *              Hardevsinh Palaniya <hardevsinh.palaniya-TXG9oGKWPbrc8hPZMNZi9dBPR1lH4CV8@public.gmane.org>
+> + */
+> +
+> +
 
-diff --git a/Documentation/devicetree/bindings/power/supply/stc3117-fg.yaml b/Documentation/devicetree/bindings/power/supply/stc3117-fg.yaml
-new file mode 100644
-index 000000000..d6607a5ea
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/supply/stc3117-fg.yaml
-@@ -0,0 +1,41 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/supply/stc3117-fg.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: STMicroelectronics STC3117 Fuel Gauge Unit Power Supply
-+
-+maintainers:
-+  - Bhavin Sharma <bhavin.sharma@siliconsignals.io>
-+  - Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
-+
-+allOf:
-+  - $ref: power-supply.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - st,stc3117-fgu
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    &i2c6 {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      st3117: stc3117@70 {
-+        compatible = "st,stc3117-fgu";
-+        reg = <0x70>;
-+        status = "okay";
-+      };
-+    };
--- 
-2.25.1
+Only 1 NL is enough.
+
+> +#include <linux/i2c.h>
+> +#include <linux/i2c-dev.h>
+> +#include <linux/kernel.h>
+
+Is it really needed for a small driver like this?
+
+> +#include <linux/module.h>
+> +#include <linux/uaccess.h>
+> +#include <linux/power_supply.h>
+
+Keep alphabetical order.
+
+> +
+> +#define VOLTAGE_REG_ADDR	0x08
+> +#define VOLTAGE_REG_ADDR_SIZE	1		//in bytes
+> +#define VOLTAGE_DATA_SIZE	2		//in bytes
+> +#define LSB_VALUE		2200		//in micro-volts
+> +
+> +
+> +static int stc3117_probe(struct i2c_client *client);
+> +static void stc3117_dev_remove(struct i2c_client *client);
+
+If struct i2c_driver stc3117_i2c_driver was declared at the end of the 
+fine, these prototypes could be removed.
+
+> +
+> +static int stc3117_get_property(struct power_supply *psy,
+> +	enum power_supply_property psp, union power_supply_propval *val);
+> +static int stc3117_get_batt_volt(const struct i2c_client *client);
+
+Same here.
+I think that a different ordering could avoid these prototypes.
+
+> +
+> +const struct i2c_client *tmp_client;
+> +struct power_supply *stc_sply;
+> +
+> +static const struct of_device_id stc3117_of_match[] = {
+> +	{ .compatible = "st,stc3117-fgu" },
+> +	{},
+> +};
+> +
+> +MODULE_DEVICE_TABLE(of, stc3117_of_match);
+> +
+> +static const struct i2c_device_id stc3117_id[] = {
+> +	{"stc3117", 0},
+> +	{},
+> +};
+> +
+> +
+
+Only 1 NL is enough.
+
+> +MODULE_DEVICE_TABLE(i2c, stc3117_id);
+> +
+> +struct i2c_driver stc3117_i2c_driver = {
+> +	.driver = {
+> +		.name = "stc3117_i2c_driver",
+> +		.owner = THIS_MODULE,
+> +		.of_match_table = of_match_ptr(stc3117_of_match),
+> +	},
+> +	.probe = stc3117_probe,
+> +	.id_table = stc3117_id,
+> +	.remove = stc3117_dev_remove,
+> +};
+> +
+> +
+
+Only 1 NL is enough.
+
+> +static enum power_supply_property stc3117_battery_props[] = {
+> +	POWER_SUPPLY_PROP_VOLTAGE_NOW,
+> +};
+> +
+> +static const struct power_supply_desc stc3117_battery_desc = {
+> +	.name = "stc3117-battery",
+> +	.type = POWER_SUPPLY_TYPE_BATTERY,
+> +	.get_property = stc3117_get_property,
+> +	.properties = stc3117_battery_props,
+> +	.num_properties = ARRAY_SIZE(stc3117_battery_props),
+> +};
+> +
+> +static int stc3117_get_property(struct power_supply *psy,
+> +	enum power_supply_property psp, union power_supply_propval *val)
+> +{
+> +	switch (psp) {
+> +	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+> +		val->intval = stc3117_get_batt_volt(tmp_client);
+> +	break;
+
+This break should be indented by 1 more tab.
+
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +	return 0;
+> +}
+> +
+> +
+
+Only 1 NL is enough.
+
+> +static int stc3117_get_batt_volt(const struct i2c_client *stc_client)
+> +{
+> +	int ret, volt = 0;
+> +	char i2c_tx = VOLTAGE_REG_ADDR, i2c_rx[2] = {0};
+
+Maybe VOLTAGE_DATA_SIZE, instead of 2?
+
+> +
+> +	ret = i2c_master_send(stc_client, &i2c_tx, VOLTAGE_REG_ADDR_SIZE);
+> +	if (ret > 0) {
+> +
+> +		ret = i2c_master_recv(stc_client, i2c_rx, VOLTAGE_DATA_SIZE);
+> +		if (ret > 0) {
+> +
+> +			volt = (i2c_rx[1] << 8) + i2c_rx[0];
+> +			volt *= LSB_VALUE;
+> +
+> +			return volt;
+> +		}
+> +	}
+> +
+> +	return ret;
+> +}
+
+Writting it as:
+   ret = i2c_master_send()
+   if (ret < 0)
+	return ret;
+
+   ret = i2c_master_recv();
+   if (ret < 0)
+	return ret;
+
+   vols = ...
+
+would save some indentation.
+
+> +
+> +static int stc3117_probe(struct i2c_client *client)
+> +{
+> +	struct power_supply_config psy_cfg = {};
+> +	struct device *dev;
+> +
+> +	dev = &client->dev;
+> +
+> +	psy_cfg.of_node = dev->of_node;
+> +
+> +	tmp_client = client;
+> +
+> +	stc_sply = power_supply_register(dev, &stc3117_battery_desc, &psy_cfg);
+
+devm_power_supply_register() ?
+This would remove the need of the .remove() function.
+
+> +	if (IS_ERR(stc_sply))
+> +		pr_err("failed to register battery\n");
+
+dev_err()?
+
+Maybe this error code should be propagated. What the point of this 
+driver if this function fails?
+
+just my 2c,
+
+CJ
+
+> +
+> +	return 0;
+> +}
+> +
+> +static void stc3117_dev_remove(struct i2c_client *client)
+> +{
+> +	power_supply_unregister(stc_sply);
+> +}
+> +
+> +module_i2c_driver(stc3117_i2c_driver);
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_AUTHOR("Bhavin Sharma <bhavin.sharma-TXG9oGKWPboh9/7i5KS7/GGXanvQGlWp@public.gmane.org>");
+> +MODULE_AUTHOR("Hardevsinh Palaniya <hardevsinh.palaniya-TXG9oGKWPboh9/7i5KS7/GGXanvQGlWp@public.gmane.org>");
+> +MODULE_DESCRIPTION("STC3117 Fuel Gauge Driver");
+> +MODULE_VERSION("v1.0");
+> +
 
 
