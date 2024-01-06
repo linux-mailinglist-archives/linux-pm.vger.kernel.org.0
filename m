@@ -1,121 +1,132 @@
-Return-Path: <linux-pm+bounces-1917-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1918-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57DD482614B
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Jan 2024 20:16:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94A688261F5
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Jan 2024 23:40:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1CE981C210F0
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Jan 2024 19:16:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17A621F21D79
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Jan 2024 22:40:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B58F1DDCE;
-	Sat,  6 Jan 2024 19:16:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7D02F51F;
+	Sat,  6 Jan 2024 22:40:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="mkzBSV6h"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b4uLV6oU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06783DF4C;
-	Sat,  6 Jan 2024 19:16:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 406J28af002663;
-	Sat, 6 Jan 2024 19:15:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:mime-version:content-type; s=
-	qcppdkim1; bh=WKPh7IvIQvD2msUo8q8oDJlSIRzNpjO+foZ7NbVBD7Y=; b=mk
-	zBSV6hRIGDBTvzZVt6pO7ERtsyePf6+pqA2Z3kf2O/V8etCmXaV6XZ5zhV3xDVfT
-	SP/s2ZNL9M9Por2qoZm5p0XGDB5ATwg8W4r44rEtzZeA+FHPveLEeuoiqcrUGj/D
-	u9NwbaTNPHBlGC3xqjyywOLBAWE8HPmBWcA1NkpKeZiUQzV3JbpfisQR2JuhEGEZ
-	oXMnkVGSORjVMyLkEocyeJPDAUVPmnpJ/s4VlAU36hG/Elx6VcXoKAT0HBRXg5zH
-	sxO8NCJCYv8HwS5NADSTeD3GkwhHTka9U2A+42xAhMhW9ejJNsoC+MuHeRotWZFU
-	mk2/12cN7wMfSe9zF4pA==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3veymm91kq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 06 Jan 2024 19:15:26 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 406JFPqH030897
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 6 Jan 2024 19:15:25 GMT
-Received: from codeaurora.org (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Sat, 6 Jan
- 2024 11:15:23 -0800
-From: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano
-	<daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
-	<lukasz.luba@arm.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Manaf
- Meethalavalappu Pallikunhi" <quic_manafm@quicinc.com>
-Subject: [PATCH] thermal/sysfs: Always enable hysteresis write support
-Date: Sun, 7 Jan 2024 00:45:02 +0530
-Message-ID: <20240106191502.29126-1-quic_manafm@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A294101DB;
+	Sat,  6 Jan 2024 22:40:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-7ba8e33dd0cso40709239f.0;
+        Sat, 06 Jan 2024 14:40:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1704580804; x=1705185604; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=c8cx4G027Gz6iFuAIfhaAQlzyB7pPX4ipODK9kWLrHg=;
+        b=b4uLV6oUIW5+bjhHmJXZMwI1o19KJ0VO/PC+GzwryYc0hcBeL4pPRjGFB+lPXA8qGj
+         pAGcXXkRWvR1XhTtCFT033Xu5mo24w571QorytCXimSv6+QqAopjZ6ldIJbpNGg2P6FO
+         rhltdVCBdRL9mHDRf0nH/LUlZ7/gBpKz3BM0z4Bdglfhf0MB8BHJnKK55kQDH7t6uAB8
+         bYtHURLnU5xTl6SFQua2XH6/D0AvQGjmbpUz+LQE3ZpuoWgoSzz1h+LxThw96Tyl5zcF
+         /KYoch82dDPaZ0xmQ6k8IvLFh5lzGUueUkhqJQQH6P6TarK28ZTzdvhHxAEYVAUu0UFQ
+         T8GQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704580804; x=1705185604;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c8cx4G027Gz6iFuAIfhaAQlzyB7pPX4ipODK9kWLrHg=;
+        b=ZvfBVQUVCmETVQtnzX+ELFDZ875QQjqoIQ7OL4RPVa6jFkYD9Ccel9gRltaaEJn0ZF
+         rGl7WVzXSyPvYjtxETReffdLR2YznKgPNY4Upa94Wzl2LJ2NWvYbs3/lwe8OViZdqvkF
+         6Wep6YI7BN9b0tuBTLwxKiyITZIriyJU1fe8WmtYUjFJRRhzJGHorfFp6gXeh6juXVw7
+         MVcGSbivOfjZfHuCRCu5NDA9kcZS8+f+0MfodWtV6KjlPTX2EWgN50GKZJt8wsoU5E6+
+         hVD8iVPl1SI7S0zyv3JxkNOwZyhJgKlg2JkwLPI+8mxQQeQd+7lEb1do7dVNpSoQYvn4
+         /vcg==
+X-Gm-Message-State: AOJu0YyGgBj9UIJwC+lW40yHywuqeuQribgl2eZDCIq/ojs5q030lGrB
+	FgtprvFO0GMBepOYmuG3eP+u2KWQ8nRyHw==
+X-Google-Smtp-Source: AGHT+IF4ssqcTFHr3Jn08b3Gd7DuE+48XGfS+pjvMKa/I6ROTT1Ogk6JfMsJzI/AFBbKn9NBmODzPw==
+X-Received: by 2002:a05:6e02:16c7:b0:35f:f707:46ed with SMTP id 7-20020a056e0216c700b0035ff70746edmr2343459ilx.5.1704580804057;
+        Sat, 06 Jan 2024 14:40:04 -0800 (PST)
+Received: from aford-System-Version.lan ([2601:447:d002:5be:af2f:17f0:33a3:d6fe])
+        by smtp.gmail.com with ESMTPSA id l13-20020a056e021c0d00b0035ffe828182sm735346ilh.37.2024.01.06.14.40.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 06 Jan 2024 14:40:03 -0800 (PST)
+From: Adam Ford <aford173@gmail.com>
+To: linux-pm@vger.kernel.org
+Cc: Adam Ford <aford173@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Lucas Stach <l.stach@pengutronix.de>,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] dt-bindings: soc: imx: add fdcc clock to i.MX8MP hdmi blk ctrl
+Date: Sat,  6 Jan 2024 16:39:48 -0600
+Message-ID: <20240106223951.387067-1-aford173@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Mqo0o9bUz5b5aII9FhGjleUms7yd-vG9
-X-Proofpoint-GUID: Mqo0o9bUz5b5aII9FhGjleUms7yd-vG9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
- mlxlogscore=748 spamscore=0 phishscore=0 malwarescore=0 bulkscore=0
- suspectscore=0 adultscore=0 mlxscore=0 priorityscore=1501
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2401060128
+Content-Transfer-Encoding: 8bit
 
-The commit 2e38a2a981b2("thermal/core: Add a generic
-thermal_zone_set_trip() function") adds the support to update
-trip hysteresis even if set_trip_hyst() operation is not defined.
-But during hysteresis attribute creation, if this operation is
-defined then only it enables hysteresis write access. It leads
-to a case where hysteresis sysfs will be read only for a thermal
-zone when its set_trip_hyst() operation is not defined.
+Per guidance from the NXP downstream kernel, if the clock is
+disabled before HDMI/LCDIF probe, LCDIF will not get pixel
+clock from HDMI PHY and throw an error.  Fix this by adding
+the fdcc clock to the hdmi_blk_ctrl.
 
-Fix this by removing the check whether set_trip_hyst() operation
-is defined or not during hysteresis attribute initialization.
+Signed-off-by: Adam Ford <aford173@gmail.com>
 
-Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
----
- drivers/thermal/thermal_sysfs.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-index eef40d4f3063..08be016d7221 100644
---- a/drivers/thermal/thermal_sysfs.c
-+++ b/drivers/thermal/thermal_sysfs.c
-@@ -504,13 +504,9 @@ static int create_trip_attrs(struct thermal_zone_device *tz, int mask)
- 		sysfs_attr_init(&tz->trip_hyst_attrs[indx].attr.attr);
- 		tz->trip_hyst_attrs[indx].attr.attr.name =
- 					tz->trip_hyst_attrs[indx].name;
--		tz->trip_hyst_attrs[indx].attr.attr.mode = S_IRUGO;
-+		tz->trip_hyst_attrs[indx].attr.attr.mode = S_IRUGO | S_IWUSR;
- 		tz->trip_hyst_attrs[indx].attr.show = trip_point_hyst_show;
--		if (tz->ops->set_trip_hyst) {
--			tz->trip_hyst_attrs[indx].attr.attr.mode |= S_IWUSR;
--			tz->trip_hyst_attrs[indx].attr.store =
--					trip_point_hyst_store;
--		}
-+		tz->trip_hyst_attrs[indx].attr.store = trip_point_hyst_store;
- 		attrs[indx + tz->num_trips * 2] =
- 					&tz->trip_hyst_attrs[indx].attr.attr;
- 	}
+diff --git a/Documentation/devicetree/bindings/soc/imx/fsl,imx8mp-hdmi-blk-ctrl.yaml b/Documentation/devicetree/bindings/soc/imx/fsl,imx8mp-hdmi-blk-ctrl.yaml
+index 1be4ce2a45e8..741b5d8da4bb 100644
+--- a/Documentation/devicetree/bindings/soc/imx/fsl,imx8mp-hdmi-blk-ctrl.yaml
++++ b/Documentation/devicetree/bindings/soc/imx/fsl,imx8mp-hdmi-blk-ctrl.yaml
+@@ -42,8 +42,8 @@ properties:
+       - const: hdmi-tx-phy
+ 
+   clocks:
+-    minItems: 4
+-    maxItems: 4
++    minItems: 5
++    maxItems: 5
+ 
+   clock-names:
+     items:
+@@ -51,6 +51,7 @@ properties:
+       - const: axi
+       - const: ref_266m
+       - const: ref_24m
++      - const: fdcc
+ 
+   interconnects:
+     maxItems: 3
+@@ -82,8 +83,9 @@ examples:
+         clocks = <&clk IMX8MP_CLK_HDMI_APB>,
+                  <&clk IMX8MP_CLK_HDMI_ROOT>,
+                  <&clk IMX8MP_CLK_HDMI_REF_266M>,
+-                 <&clk IMX8MP_CLK_HDMI_24M>;
+-        clock-names = "apb", "axi", "ref_266m", "ref_24m";
++                 <&clk IMX8MP_CLK_HDMI_24M>,
++                 <&clk IMX8MP_CLK_HDMI_FDCC_TST>;
++        clock-names = "apb", "axi", "ref_266m", "ref_24m", "fdcc";
+         power-domains = <&pgc_hdmimix>, <&pgc_hdmimix>, <&pgc_hdmimix>,
+                         <&pgc_hdmimix>, <&pgc_hdmimix>, <&pgc_hdmimix>,
+                         <&pgc_hdmimix>, <&pgc_hdmi_phy>;
+-- 
+2.43.0
 
 
