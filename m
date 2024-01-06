@@ -1,313 +1,101 @@
-Return-Path: <linux-pm+bounces-1912-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1913-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD4C6825FBB
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Jan 2024 14:58:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28D06825FE7
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Jan 2024 15:36:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CBF661F223B9
-	for <lists+linux-pm@lfdr.de>; Sat,  6 Jan 2024 13:58:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96ECE282D63
+	for <lists+linux-pm@lfdr.de>; Sat,  6 Jan 2024 14:36:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A200A7475;
-	Sat,  6 Jan 2024 13:58:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21D16749D;
+	Sat,  6 Jan 2024 14:36:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="TycST3He"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ms+Xe2FU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-15.smtpout.orange.fr [80.12.242.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAB4279C3;
-	Sat,  6 Jan 2024 13:58:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.18] ([92.140.202.140])
-	by smtp.orange.fr with ESMTPA
-	id M7BVr2yKtEoWxM7BVrkYrO; Sat, 06 Jan 2024 14:57:58 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1704549478;
-	bh=5+DV8oxdafXMalKMMxvfVdg2F/E7Ox7KYUXojGKS/zk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=TycST3HeQPw2Gzh/DrxYr6RjHpB9lcY9u7UCYdodMrltrfinSETlcddYqCS/sre5x
-	 QL/l0UiEcz3KpsbkLG/XQgIzQJBnjF58cEmvw7Q1GlE5KVSvqP4it8FBuXn9NnnoyS
-	 XEevVUibRLYnuEc6ij8BCyt8fyKy2Ek8xs1swDChOJgQF2J0R21mqEyLxPd+0BW/qs
-	 lxjY1OEeHOWmIQSy9NhXINEzKdzUi6mwajG7W4mf4Vz7iNmfoh0v6AEXS/Py1a43ad
-	 7LbKut14pD1xdfGSXSfBquyQ8wVgSNu4c2ofQOkuWkEPn3WOhbwPKxYwJsmDm2q7Q6
-	 wx3uy8du/ojtQ==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 06 Jan 2024 14:57:58 +0100
-X-ME-IP: 92.140.202.140
-Message-ID: <46bba29c-330d-417d-ad84-ceb5207fdb55@wanadoo.fr>
-Date: Sat, 6 Jan 2024 14:57:57 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F281ABE5A;
+	Sat,  6 Jan 2024 14:36:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBB26C433C7;
+	Sat,  6 Jan 2024 14:36:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704551788;
+	bh=Z6nfSKtyFMKfBfwqZITl9eQ0v7SjF99tb+baXN8Wsjg=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=ms+Xe2FUCLlTFexDslAG8r+I+RMbTNiCsCYj3n1YVIKSanKw90hzwnW6smxVyvvc4
+	 kG6c+10QPTixW9eJzoxwEMPn31YEEsnKR23tVSEE2bvgnSGGvrYwgnmVel49XJ/SVd
+	 SXS809SpDTQeCZnDcOXM5hqosk5h0qiTzqts14EfKIp/PwhXOjPUI1K1/KxHZPREZQ
+	 c5yOJqXs1PZw7VHvSxWwvmhHbXfsbW+WbLUhRxHf6toKzR0SKUPMYPt3ztBnT00t5h
+	 FAvOxgB2MoVnd65X6G1iBsw7tmfnqhoeQQHao6+jxh6BXeS4b7BSyAFWWi4lgNGEvN
+	 Nymp8pesFy27w==
+Received: (nullmailer pid 1158634 invoked by uid 1000);
+	Sat, 06 Jan 2024 14:36:26 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] power: supply: Add STC3117 fuel gauge unit driver
-Content-Language: fr
-To: bhavin.sharma@siliconsignals.io
-Cc: conor+dt@kernel.org, devicetree@vger.kernel.org,
- krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, robh+dt@kernel.org, sre@kernel.org
-References: <20240106101435.2927116-1-bhavin.sharma@siliconsignals.io>
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20240106101435.2927116-1-bhavin.sharma@siliconsignals.io>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: Rob Herring <robh@kernel.org>
+To: Bhavin Sharma <bhavin.sharma@siliconsignals.io>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Rob Herring <robh+dt@kernel.org>, sre@kernel.org, Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>, linux-kernel@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+In-Reply-To: <20240106133546.936261-2-bhavin.sharma@siliconsignals.io>
+References: <20240106133546.936261-1-bhavin.sharma@siliconsignals.io>
+ <20240106133546.936261-2-bhavin.sharma@siliconsignals.io>
+Message-Id: <170455178667.1158618.9584358369325670417.robh@kernel.org>
+Subject: Re: [PATCH v2 2/2] dt-bindings: power: supply: stc3117: Convert to
+ DT schema format
+Date: Sat, 06 Jan 2024 07:36:26 -0700
 
-Le 06/01/2024 à 11:14, Bhavin Sharma a écrit :
-> Adding support for stc3117 fuel gauge driver with
-> minimal functionality to read voltage level currently
+
+On Sat, 06 Jan 2024 19:05:44 +0530, Bhavin Sharma wrote:
+> Convert the binding to DT schema format.
 > 
-> Signed-off-by: Bhavin Sharma <bhavin.sharma-TXG9oGKWPboh9/7i5KS7/GGXanvQGlWp@public.gmane.org>
+> Changes in V2 resolved below errors:
+> 	1. string value is redundantly quoted with any quotes (quoted-strings)
+> 	2. found character '\t' that cannot start any token
+> 
+> Signed-off-by: Bhavin Sharma <bhavin.sharma@siliconsignals.io>
 > ---
-
-Hi,
-
->   drivers/power/supply/Kconfig              |   7 ++
->   drivers/power/supply/Makefile             |   1 +
->   drivers/power/supply/stc3117_fuel_gauge.c | 136 ++++++++++++++++++++++
->   3 files changed, 144 insertions(+)
->   create mode 100644 drivers/power/supply/stc3117_fuel_gauge.c
+>  .../bindings/power/supply/stc3117-fg.yaml     | 41 +++++++++++++++++++
+>  1 file changed, 41 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/stc3117-fg.yaml
 > 
-> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-> index f21cb05815ec..02df55b0d5f0 100644
-> --- a/drivers/power/supply/Kconfig
-> +++ b/drivers/power/supply/Kconfig
-> @@ -875,6 +875,13 @@ config FUEL_GAUGE_SC27XX
->   	  Say Y here to enable support for fuel gauge with SC27XX
->   	  PMIC chips.
->   
-> +config FUEL_GAUGE_STC3117
-> +	tristate "STMicroelectronics STC3117 fuel gauge driver"
-> +	depends on I2C
-> +	help
-> +	  Say Y here to enable support for fuel gauge with STC3117
-> +	  PMIC chips.
-> +
->   config CHARGER_UCS1002
->   	tristate "Microchip UCS1002 USB Port Power Controller"
->   	depends on I2C
-> diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-> index 58b567278034..f8ed3e5a8882 100644
-> --- a/drivers/power/supply/Makefile
-> +++ b/drivers/power/supply/Makefile
-> @@ -104,6 +104,7 @@ obj-$(CONFIG_CHARGER_CROS_USBPD)	+= cros_usbpd-charger.o
->   obj-$(CONFIG_CHARGER_CROS_PCHG)	+= cros_peripheral_charger.o
->   obj-$(CONFIG_CHARGER_SC2731)	+= sc2731_charger.o
->   obj-$(CONFIG_FUEL_GAUGE_SC27XX)	+= sc27xx_fuel_gauge.o
-> +obj-$(CONFIG_FUEL_GAUGE_STC3117)	+= stc3117_fuel_gauge.o
->   obj-$(CONFIG_CHARGER_UCS1002)	+= ucs1002_power.o
->   obj-$(CONFIG_CHARGER_BD99954)	+= bd99954-charger.o
->   obj-$(CONFIG_CHARGER_WILCO)	+= wilco-charger.o
-> diff --git a/drivers/power/supply/stc3117_fuel_gauge.c b/drivers/power/supply/stc3117_fuel_gauge.c
-> new file mode 100644
-> index 000000000000..bb033ac54858
-> --- /dev/null
-> +++ b/drivers/power/supply/stc3117_fuel_gauge.c
-> @@ -0,0 +1,136 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * stc3117_fuel_gauge.c - STMicroelectronics STC3117 Fuel Gauge Driver
-> + *
-> + * Copyright (c) 2024 Silicon Signals Pvt Ltd.
-> + * Author:      Bhavin Sharma <bhavin.sharma-TXG9oGKWPboh9/7i5KS7/GGXanvQGlWp@public.gmane.org>
-> + *              Hardevsinh Palaniya <hardevsinh.palaniya-TXG9oGKWPbrc8hPZMNZi9dBPR1lH4CV8@public.gmane.org>
-> + */
-> +
-> +
 
-Only 1 NL is enough.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> +#include <linux/i2c.h>
-> +#include <linux/i2c-dev.h>
-> +#include <linux/kernel.h>
+yamllint warnings/errors:
 
-Is it really needed for a small driver like this?
+dtschema/dtc warnings/errors:
+Error: Documentation/devicetree/bindings/power/supply/stc3117-fg.example.dts:18.9-14 syntax error
+FATAL ERROR: Unable to parse input tree
+make[2]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/power/supply/stc3117-fg.example.dtb] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1424: dt_binding_check] Error 2
+make: *** [Makefile:234: __sub-make] Error 2
 
-> +#include <linux/module.h>
-> +#include <linux/uaccess.h>
-> +#include <linux/power_supply.h>
+doc reference errors (make refcheckdocs):
 
-Keep alphabetical order.
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240106133546.936261-2-bhavin.sharma@siliconsignals.io
 
-> +
-> +#define VOLTAGE_REG_ADDR	0x08
-> +#define VOLTAGE_REG_ADDR_SIZE	1		//in bytes
-> +#define VOLTAGE_DATA_SIZE	2		//in bytes
-> +#define LSB_VALUE		2200		//in micro-volts
-> +
-> +
-> +static int stc3117_probe(struct i2c_client *client);
-> +static void stc3117_dev_remove(struct i2c_client *client);
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-If struct i2c_driver stc3117_i2c_driver was declared at the end of the 
-fine, these prototypes could be removed.
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-> +
-> +static int stc3117_get_property(struct power_supply *psy,
-> +	enum power_supply_property psp, union power_supply_propval *val);
-> +static int stc3117_get_batt_volt(const struct i2c_client *client);
+pip3 install dtschema --upgrade
 
-Same here.
-I think that a different ordering could avoid these prototypes.
-
-> +
-> +const struct i2c_client *tmp_client;
-> +struct power_supply *stc_sply;
-> +
-> +static const struct of_device_id stc3117_of_match[] = {
-> +	{ .compatible = "st,stc3117-fgu" },
-> +	{},
-> +};
-> +
-> +MODULE_DEVICE_TABLE(of, stc3117_of_match);
-> +
-> +static const struct i2c_device_id stc3117_id[] = {
-> +	{"stc3117", 0},
-> +	{},
-> +};
-> +
-> +
-
-Only 1 NL is enough.
-
-> +MODULE_DEVICE_TABLE(i2c, stc3117_id);
-> +
-> +struct i2c_driver stc3117_i2c_driver = {
-> +	.driver = {
-> +		.name = "stc3117_i2c_driver",
-> +		.owner = THIS_MODULE,
-> +		.of_match_table = of_match_ptr(stc3117_of_match),
-> +	},
-> +	.probe = stc3117_probe,
-> +	.id_table = stc3117_id,
-> +	.remove = stc3117_dev_remove,
-> +};
-> +
-> +
-
-Only 1 NL is enough.
-
-> +static enum power_supply_property stc3117_battery_props[] = {
-> +	POWER_SUPPLY_PROP_VOLTAGE_NOW,
-> +};
-> +
-> +static const struct power_supply_desc stc3117_battery_desc = {
-> +	.name = "stc3117-battery",
-> +	.type = POWER_SUPPLY_TYPE_BATTERY,
-> +	.get_property = stc3117_get_property,
-> +	.properties = stc3117_battery_props,
-> +	.num_properties = ARRAY_SIZE(stc3117_battery_props),
-> +};
-> +
-> +static int stc3117_get_property(struct power_supply *psy,
-> +	enum power_supply_property psp, union power_supply_propval *val)
-> +{
-> +	switch (psp) {
-> +	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-> +		val->intval = stc3117_get_batt_volt(tmp_client);
-> +	break;
-
-This break should be indented by 1 more tab.
-
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +	return 0;
-> +}
-> +
-> +
-
-Only 1 NL is enough.
-
-> +static int stc3117_get_batt_volt(const struct i2c_client *stc_client)
-> +{
-> +	int ret, volt = 0;
-> +	char i2c_tx = VOLTAGE_REG_ADDR, i2c_rx[2] = {0};
-
-Maybe VOLTAGE_DATA_SIZE, instead of 2?
-
-> +
-> +	ret = i2c_master_send(stc_client, &i2c_tx, VOLTAGE_REG_ADDR_SIZE);
-> +	if (ret > 0) {
-> +
-> +		ret = i2c_master_recv(stc_client, i2c_rx, VOLTAGE_DATA_SIZE);
-> +		if (ret > 0) {
-> +
-> +			volt = (i2c_rx[1] << 8) + i2c_rx[0];
-> +			volt *= LSB_VALUE;
-> +
-> +			return volt;
-> +		}
-> +	}
-> +
-> +	return ret;
-> +}
-
-Writting it as:
-   ret = i2c_master_send()
-   if (ret < 0)
-	return ret;
-
-   ret = i2c_master_recv();
-   if (ret < 0)
-	return ret;
-
-   vols = ...
-
-would save some indentation.
-
-> +
-> +static int stc3117_probe(struct i2c_client *client)
-> +{
-> +	struct power_supply_config psy_cfg = {};
-> +	struct device *dev;
-> +
-> +	dev = &client->dev;
-> +
-> +	psy_cfg.of_node = dev->of_node;
-> +
-> +	tmp_client = client;
-> +
-> +	stc_sply = power_supply_register(dev, &stc3117_battery_desc, &psy_cfg);
-
-devm_power_supply_register() ?
-This would remove the need of the .remove() function.
-
-> +	if (IS_ERR(stc_sply))
-> +		pr_err("failed to register battery\n");
-
-dev_err()?
-
-Maybe this error code should be propagated. What the point of this 
-driver if this function fails?
-
-just my 2c,
-
-CJ
-
-> +
-> +	return 0;
-> +}
-> +
-> +static void stc3117_dev_remove(struct i2c_client *client)
-> +{
-> +	power_supply_unregister(stc_sply);
-> +}
-> +
-> +module_i2c_driver(stc3117_i2c_driver);
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_AUTHOR("Bhavin Sharma <bhavin.sharma-TXG9oGKWPboh9/7i5KS7/GGXanvQGlWp@public.gmane.org>");
-> +MODULE_AUTHOR("Hardevsinh Palaniya <hardevsinh.palaniya-TXG9oGKWPboh9/7i5KS7/GGXanvQGlWp@public.gmane.org>");
-> +MODULE_DESCRIPTION("STC3117 Fuel Gauge Driver");
-> +MODULE_VERSION("v1.0");
-> +
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
 
