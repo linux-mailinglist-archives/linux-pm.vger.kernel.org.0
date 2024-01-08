@@ -1,249 +1,161 @@
-Return-Path: <linux-pm+bounces-1942-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1954-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A12F82720D
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 16:03:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 68AAC827367
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 16:35:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C39FEB22306
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 15:03:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ECFEDB22B80
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 15:34:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1A9846520;
-	Mon,  8 Jan 2024 15:03:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A875852F91;
+	Mon,  8 Jan 2024 15:34:18 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from weierstrass.telenet-ops.be (weierstrass.telenet-ops.be [195.130.137.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4579B4777C;
-	Mon,  8 Jan 2024 15:03:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3bb7e50679bso223476b6e.0;
-        Mon, 08 Jan 2024 07:03:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704726183; x=1705330983;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=M9JyEXfT6jEk1OohZvyCKkji4/UiuSeEyA0R4Ybp9cA=;
-        b=NSv/QpnE8mCA4LPMoGKSq52CD0NdxskHJC3OeH2FXu/sVr7GM0etGRgU/rdJt2yY7E
-         1zM9EMNC16bVSa6xd2Xbj9O3UJm+t6QJW/WhnZ6s1OTiBc1mHz3h8fvLENdW08kzIWG9
-         o8lfjSoPRtgfSl+u1WmL1C7tJusJIy+6L/LBd3nihbgl/5DDaV0lY+U8JWLtnTce0ajB
-         30qzOOCTHhmSG9K+iNv0Qc9NYGBeY3YmC+dgBYtpZmwVZWcS/LVkSNfqOytMjSv9tRhJ
-         I/+tjrRCOfWtFj2dbXWY2RFP+uJMPYzoUNHbUyVUMScEtr2ZwgAZRNEzXVZF7dpiyJ7x
-         Y+Jw==
-X-Gm-Message-State: AOJu0YyGOGfbqOZeV1Vv2eLcjG25rccjA4Mya3gZtiixev2SGxJqDR88
-	FFkySq6qZ5UNDDl+6o4z/Zp/1yGs7nc/pTvumpsTYtCwmCA=
-X-Google-Smtp-Source: AGHT+IHB7Zirjd8hwWN6rwHYKs4XmEbhrznNBmeqdFDs2kubRuMwyC8W/yvUZCKDrcT9RaMcktO96hn0yAfC1Kj+oHA=
-X-Received: by 2002:a05:6808:6296:b0:3bd:26c1:54e5 with SMTP id
- du22-20020a056808629600b003bd26c154e5mr4076748oib.1.1704726182997; Mon, 08
- Jan 2024 07:03:02 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D454B52F92
+	for <linux-pm@vger.kernel.org>; Mon,  8 Jan 2024 15:34:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+	by weierstrass.telenet-ops.be (Postfix) with ESMTPS id 4T7ylp2Trfz4x0b6
+	for <linux-pm@vger.kernel.org>; Mon,  8 Jan 2024 16:34:14 +0100 (CET)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:d323:2fd4:4f64:e281])
+	by laurent.telenet-ops.be with bizsmtp
+	id YFZw2B00A0Qz0eJ01FZw4R; Mon, 08 Jan 2024 16:34:07 +0100
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1rMrco-00EtLl-Vn;
+	Mon, 08 Jan 2024 16:33:56 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1rMrdU-00D7nm-4O;
+	Mon, 08 Jan 2024 16:33:56 +0100
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Cong Dang <cong.dang.xn@renesas.com>,
+	Duy Nguyen <duy.nguyen.rh@renesas.com>,
+	Hai Pham <hai.pham.ud@renesas.com>,
+	Linh Phung <linh.phung.jy@renesas.com>,
+	linux-renesas-soc@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH 00/15] arm64: renesas: Add R-Car V4M and Gray Hawk Single support
+Date: Mon,  8 Jan 2024 16:33:39 +0100
+Message-Id: <cover.1704726960.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 8 Jan 2024 16:02:51 +0100
-Message-ID: <CAJZ5v0h91BzSHFd9XnV-yq72WNiJBcYTqtKnZWTgkuzGhVvvRw@mail.gmail.com>
-Subject: [GIT PULL] Power management updates for v6.8-rc1
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Linus,
+	Hi all,
 
-Please pull from the tag
+This patch series adds initial support for the Renesas R-Car V4M
+(R8A779G0) SoC and the Renesas Gray Hawk Single development board.
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-6.8-rc1
+As both driver code and DTS have hard dependencies on DT binding
+definitions, all patches in this series are supposed to go in through
+the renesas-devel, renesas-clk, and/or renesas-pmdomain trees, using a
+shared branch for DT binding definitions, as usual.
 
-with top-most commit f1e5e4639781724d05d90309900321baaecfde74
+Note that this series does not include the DT binding update for the
+HSCIF serial ports, as Greg does not like receiving new patches during
+the merge window.
 
- Merge branch 'pm-sleep'
+For testing, this series can be found at
+https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/log/?h=topic/v4m-gray-hawk-single-v1
 
-on top of commit 610a9b8f49fbcf1100716370d3b5f6f884a2835a
+Thanks for your comments (especially about the naming of the compatible
+value and DTB for Gray Hawk Single :-)!
 
- Linux 6.7-rc8
+Cong Dang (1):
+  clk: renesas: cpg-mssr: Add support for R-Car V4M
 
-to receive power management updates for 6.8-rc1.
+Duy Nguyen (6):
+  dt-bindings: clock: Add R8A779H0 V4M CPG Core Clock Definitions
+  dt-bindings: power: renesas,rcar-sysc: Document R-Car V4M support
+  dt-bindings: power: Add r8a779h0 SYSC power domain definitions
+  pmdomain: renesas: r8a779h0-sysc: Add r8a779h0 support
+  soc: renesas: Identify R-Car V4M
+  soc: renesas: rcar-rst: Add support for R-Car V4M
 
-These add support for new processors (Sierra Forest, Grand Ridge and
-Meteor Lake) to the intel_idle driver, make intel_pstate run on
-Emerald Rapids without HWP support and adjust it to utilize EPP values
-supplied by the platform firmware, fix issues, clean up code and improve
-documentation.
+Geert Uytterhoeven (6):
+  dt-bindings: clock: renesas,cpg-mssr: Document R-Car V4M support
+  dt-bindings: reset: renesas,rst: Document R-Car V4M support
+  dt-bindings: soc: renesas: Document R-Car V4M Gray Hawk Single
+  clk: renesas: rcar-gen4: Add support for FRQCRC1
+  soc: renesas: Introduce ARCH_RCAR_GEN4
+  arm64: dts: renesas: Add Gray Hawk Single board support
 
-The most significant fix addresses deadlocks in the core system-wide
-resume code that occur if async_schedule_dev() attempts to run its
-argument function synchronously (for example, due to a memory allocation
-failure).  It rearranges the code in question which may increase the
-system resume time in some cases, but this basically is a removal of a
-premature optimization.  That optimization will be added back later, but
-properly this time.
+Hai Pham (1):
+  arm64: dts: renesas: Add Renesas R8A779H0 SoC support
 
-Specifics:
+Linh Phung (1):
+  arm64: defconfig: Enable R8A779H0 SoC
 
- - Add support for the Sierra Forest, Grand Ridge and Meteorlake SoCs to
-   the intel_idle cpuidle driver (Artem Bityutskiy, Zhang Rui).
+ .../bindings/clock/renesas,cpg-mssr.yaml      |   1 +
+ .../bindings/power/renesas,rcar-sysc.yaml     |   1 +
+ .../bindings/reset/renesas,rst.yaml           |   1 +
+ .../bindings/soc/renesas/renesas.yaml         |   6 +
+ arch/arm64/boot/dts/renesas/Makefile          |   2 +
+ .../dts/renesas/r8a779h0-gray-hawk-single.dts |  52 ++++
+ arch/arm64/boot/dts/renesas/r8a779h0.dtsi     | 121 +++++++++
+ arch/arm64/configs/defconfig                  |   1 +
+ drivers/clk/renesas/Kconfig                   |   5 +
+ drivers/clk/renesas/Makefile                  |   1 +
+ drivers/clk/renesas/r8a779h0-cpg-mssr.c       | 240 ++++++++++++++++++
+ drivers/clk/renesas/rcar-gen4-cpg.c           |  10 +-
+ drivers/clk/renesas/renesas-cpg-mssr.c        |   6 +
+ drivers/clk/renesas/renesas-cpg-mssr.h        |   1 +
+ drivers/pmdomain/renesas/Kconfig              |   4 +
+ drivers/pmdomain/renesas/Makefile             |   1 +
+ drivers/pmdomain/renesas/r8a779h0-sysc.c      |  55 ++++
+ drivers/pmdomain/renesas/rcar-gen4-sysc.c     |   3 +
+ drivers/pmdomain/renesas/rcar-gen4-sysc.h     |   1 +
+ drivers/soc/renesas/Kconfig                   |  17 +-
+ drivers/soc/renesas/rcar-rst.c                |   1 +
+ drivers/soc/renesas/renesas-soc.c             |   8 +
+ include/dt-bindings/clock/r8a779h0-cpg-mssr.h |  96 +++++++
+ include/dt-bindings/power/r8a779h0-sysc.h     |  49 ++++
+ 24 files changed, 678 insertions(+), 5 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/renesas/r8a779h0-gray-hawk-single.dts
+ create mode 100644 arch/arm64/boot/dts/renesas/r8a779h0.dtsi
+ create mode 100644 drivers/clk/renesas/r8a779h0-cpg-mssr.c
+ create mode 100644 drivers/pmdomain/renesas/r8a779h0-sysc.c
+ create mode 100644 include/dt-bindings/clock/r8a779h0-cpg-mssr.h
+ create mode 100644 include/dt-bindings/power/r8a779h0-sysc.h
 
- - Do not enable interrupts when entering idle in the haltpoll cpuidle
-   driver (Borislav Petkov).
+-- 
+2.34.1
 
- - Add Emerald Rapids support in no-HWP mode to the intel_pstate cpufreq
-   driver (Zhenguo Yao).
+Gr{oetje,eeting}s,
 
- - Use EPP values programmed by the platform firmware as balanced
-   performance ones by default in intel_pstate (Srinivas Pandruvada).
+						Geert
 
- - Add a missing function return value check to the SCMI cpufreq driver
-   to avoid unexpected behavior (Alexandra Diupina).
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
- - Fix parameter type warning in the armada-8k cpufreq driver (Gregory
-   CLEMENT).
-
- - Rework trans_stat_show() in the devfreq core code to avoid buffer
-   overflows (Christian Marangi).
-
- - Synchronize devfreq_monitor_[start/stop] so as to prevent a timer
-   list corruption from occurring when devfreq governors are switched
-   frequently (Mukesh Ojha).
-
- - Fix possible deadlocks in the core system-wide PM code that occur if
-   device-handling functions cannot be executed asynchronously during
-   resume from system-wide suspend (Rafael J. Wysocki).
-
- - Clean up unnecessary local variable initializations in multiple
-   places in the hibernation code (Wang chaodong, Li zeming).
-
- - Adjust core hibernation code to avoid missing wakeup events that
-   occur after saving an image to persistent storage (Chris Feng).
-
- - Update hibernation code to enforce correct ordering during image
-   compression and decompression (Hongchen Zhang).
-
- - Use kmap_local_page() instead of kmap_atomic() in copy_data_page()
-   during hibernation and restore (Chen Haonan).
-
- - Adjust documentation and code comments to reflect recent tasks freezer
-   changes (Kevin Hao).
-
- - Repair excess function parameter description warning in the
-   hibernation image-saving code (Randy Dunlap).
-
- - Fix _set_required_opps when opp is NULL (Bryan O'Donoghue).
-
- - Use device_get_match_data() in the OPP code for TI (Rob Herring).
-
- - Clean up OPP level and other parts and call dev_pm_opp_set_opp()
-   recursively for required OPPs (Viresh Kumar).
-
-Thanks!
-
-
----------------
-
-Alexandra Diupina (1):
-      cpufreq: scmi: process the result of devm_of_clk_add_hw_provider()
-
-Artem Bityutskiy (2):
-      intel_idle: add Grand Ridge SoC support
-      intel_idle: add Sierra Forest SoC support
-
-Borislav Petkov (AMD) (1):
-      cpuidle: haltpoll: Do not enable interrupts when entering idle
-
-Bryan O'Donoghue (1):
-      OPP: Fix _set_required_opps when opp is NULL
-
-Chen Haonan (1):
-      PM: hibernate: Use kmap_local_page() in copy_data_page()
-
-Chris Feng (1):
-      PM: hibernate: Avoid missing wakeup events during hibernation
-
-Christian Marangi (2):
-      PM / devfreq: Fix buffer overflow in trans_stat_show
-      PM / devfreq: Convert to use sysfs_emit_at() API
-
-Gregory CLEMENT (1):
-      cpufreq: armada-8k: Fix parameter type warning
-
-Hongchen Zhang (1):
-      PM: hibernate: Enforce ordering during image compression/decompression
-
-Kevin Hao (2):
-      Documentation: PM: Adjust freezing-of-tasks.rst to the freezer changes
-      PM: sleep: Remove obsolete comment from unlock_system_sleep()
-
-Li zeming (2):
-      PM: hibernate: Do not initialize error in swap_write_page()
-      PM: hibernate: Do not initialize error in snapshot_write_next()
-
-Mukesh Ojha (1):
-      PM / devfreq: Synchronize devfreq_monitor_[start/stop]
-
-Rafael J. Wysocki (3):
-      async: Split async_schedule_node_domain()
-      async: Introduce async_schedule_dev_nocall()
-      PM: sleep: Fix possible deadlocks in core system-wide PM code
-
-Randy Dunlap (1):
-      PM: hibernate: Repair excess function parameter description warning
-
-Rob Herring (1):
-      opp: ti: Use device_get_match_data()
-
-Srinivas Pandruvada (1):
-      cpufreq: intel_pstate: Prioritize firmware-provided balance
-performance EPP
-
-Viresh Kumar (10):
-      OPP: Level zero is valid
-      OPP: Use _set_opp_level() for single genpd case
-      OPP: Call dev_pm_opp_set_opp() for required OPPs
-      OPP: Don't set OPP recursively for a parent genpd
-      OPP: Check for invalid OPP in dev_pm_opp_find_level_ceil()
-      OPP: The level field is always of unsigned int type
-      OPP: Move dev_pm_opp_icc_bw to internal opp.h
-      OPP: Relocate dev_pm_opp_sync_regulators()
-      OPP: Pass rounded rate to _set_opp()
-      OPP: Rename 'rate_clk_single'
-
-Wang chaodong (1):
-      PM: hibernate: Drop unnecessary local variable initialization
-
-Zhang Rui (1):
-      intel_idle: Add Meteorlake support
-
-Zhenguo Yao (1):
-      cpufreq: intel_pstate: Add Emerald Rapids support in no-HWP mode
-
----------------
-
- Documentation/ABI/testing/sysfs-class-devfreq |   3 +
- Documentation/power/freezing-of-tasks.rst     |  85 ++++----
- drivers/base/power/main.c                     | 148 ++++++-------
- drivers/cpufreq/armada-8k-cpufreq.c           |   4 +-
- drivers/cpufreq/intel_pstate.c                |  15 +-
- drivers/cpufreq/scmi-cpufreq.c                |   7 +-
- drivers/cpuidle/cpuidle-haltpoll.c            |   9 +-
- drivers/devfreq/devfreq.c                     |  80 +++++--
- drivers/idle/intel_idle.c                     | 114 ++++++++++
- drivers/opp/core.c                            | 294 +++++++++++++++-----------
- drivers/opp/of.c                              |  57 ++++-
- drivers/opp/opp.h                             |  24 ++-
- drivers/opp/ti-opp-supply.c                   |  13 +-
- include/linux/async.h                         |   2 +
- include/linux/pm_opp.h                        |  28 +--
- kernel/async.c                                |  85 ++++++--
- kernel/power/hibernate.c                      |  10 +-
- kernel/power/main.c                           |  16 --
- kernel/power/power.h                          |   2 +
- kernel/power/snapshot.c                       |  16 +-
- kernel/power/swap.c                           |  41 ++--
- 21 files changed, 658 insertions(+), 395 deletions(-)
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
 
