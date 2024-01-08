@@ -1,96 +1,130 @@
-Return-Path: <linux-pm+bounces-1947-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1959-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC705827350
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 16:34:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 379F6827551
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 17:35:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 631362863CA
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 15:34:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5AB011C21CA2
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 16:35:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14753524D1;
-	Mon,  8 Jan 2024 15:34:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76ABA52F86;
+	Mon,  8 Jan 2024 16:35:19 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [195.130.132.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E006A51C30
-	for <linux-pm@vger.kernel.org>; Mon,  8 Jan 2024 15:34:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:d323:2fd4:4f64:e281])
-	by xavier.telenet-ops.be with bizsmtp
-	id YFZw2B00X0Qz0eJ01FZwDK; Mon, 08 Jan 2024 16:34:08 +0100
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1rMrcp-00EtMf-Er;
-	Mon, 08 Jan 2024 16:33:56 +0100
-Received: from geert by rox.of.borg with local (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1rMrdU-00D7ov-Li;
-	Mon, 08 Jan 2024 16:33:56 +0100
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Cong Dang <cong.dang.xn@renesas.com>,
-	Duy Nguyen <duy.nguyen.rh@renesas.com>,
-	Hai Pham <hai.pham.ud@renesas.com>,
-	Linh Phung <linh.phung.jy@renesas.com>,
-	linux-renesas-soc@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 15/15] arm64: defconfig: Enable R8A779H0 SoC
-Date: Mon,  8 Jan 2024 16:33:54 +0100
-Message-Id: <db4ab7b72dc2f40085f19957f93b5442ca391fd6.1704726960.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1704726960.git.geert+renesas@glider.be>
-References: <cover.1704726960.git.geert+renesas@glider.be>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDBAE54664;
+	Mon,  8 Jan 2024 16:35:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3C484FEC;
+	Mon,  8 Jan 2024 08:36:02 -0800 (PST)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A9D683F64C;
+	Mon,  8 Jan 2024 08:35:10 -0800 (PST)
+Message-ID: <158a8c60-cb54-43c1-8232-6a0a46cc6d42@arm.com>
+Date: Mon, 8 Jan 2024 17:35:08 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/5] cpufreq: Add a cpufreq pressure feedback for the
+ scheduler
+Content-Language: en-US
+To: Vincent Guittot <vincent.guittot@linaro.org>, linux@armlinux.org.uk,
+ catalin.marinas@arm.com, will@kernel.org, sudeep.holla@arm.com,
+ rafael@kernel.org, viresh.kumar@linaro.org, agross@kernel.org,
+ andersson@kernel.org, konrad.dybcio@linaro.org, mingo@redhat.com,
+ peterz@infradead.org, juri.lelli@redhat.com, rostedt@goodmis.org,
+ bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+ vschneid@redhat.com, lukasz.luba@arm.com, rui.zhang@intel.com,
+ mhiramat@kernel.org, daniel.lezcano@linaro.org, amit.kachhap@gmail.com,
+ corbet@lwn.net, gregkh@linuxfoundation.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Cc: qyousef@layalina.io
+References: <20240108134843.429769-1-vincent.guittot@linaro.org>
+ <20240108134843.429769-2-vincent.guittot@linaro.org>
+From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20240108134843.429769-2-vincent.guittot@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Linh Phung <linh.phung.jy@renesas.com>
+On 08/01/2024 14:48, Vincent Guittot wrote:
+> Provide to the scheduler a feedback about the temporary max available
+> capacity. Unlike arch_update_thermal_pressure, this doesn't need to be
+> filtered as the pressure will happen for dozens ms or more.
 
-Enable support for the Renesas R-Car V4M (R8A779H0) SoC in the ARM64
-defconfig.
+Is this then related to the 'medium pace system pressure' you mentioned
+in your OSPM '23 talk?
 
-Signed-off-by: Linh Phung <linh.phung.jy@renesas.com>
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+> 
+> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> ---
+>  drivers/cpufreq/cpufreq.c | 36 ++++++++++++++++++++++++++++++++++++
+>  include/linux/cpufreq.h   | 10 ++++++++++
+>  2 files changed, 46 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 44db4f59c4cc..fa2e2ea26f7f 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -2563,6 +2563,40 @@ int cpufreq_get_policy(struct cpufreq_policy *policy, unsigned int cpu)
+>  }
+>  EXPORT_SYMBOL(cpufreq_get_policy);
+>  
+> +DEFINE_PER_CPU(unsigned long, cpufreq_pressure);
+> +
+> +/**
+> + * cpufreq_update_pressure() - Update cpufreq pressure for CPUs
+> + * @policy: cpufreq policy of the CPUs.
+> + *
+> + * Update the value of cpufreq pressure for all @cpus in the policy.
+> + */
+> +static void cpufreq_update_pressure(struct cpufreq_policy *policy)
+> +{
+> +	unsigned long max_capacity, capped_freq, pressure;
+> +	u32 max_freq;
+> +	int cpu;
+> +
+> +	/*
+> +	 * Handle properly the boost frequencies, which should simply clean
+> +	 * the thermal pressure value.
+               ^^^^^^^
+IMHO, this is a copy & paste error from topology_update_thermal_pressure()?
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 5ad2b841aafc8ed0..05500654bcf49a79 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1346,6 +1346,7 @@ CONFIG_ARCH_R8A77980=y
- CONFIG_ARCH_R8A77970=y
- CONFIG_ARCH_R8A779A0=y
- CONFIG_ARCH_R8A779G0=y
-+CONFIG_ARCH_R8A779H0=y
- CONFIG_ARCH_R8A774C0=y
- CONFIG_ARCH_R8A774E1=y
- CONFIG_ARCH_R8A774A1=y
--- 
-2.34.1
+> +	 */
+> +	if (max_freq <= capped_freq) {
+
+max_freq seems to be uninitialized.
+
+> +		pressure = 0;
+
+Is this x86 (turbo boost) specific? IMHO at arm we follow this max freq
+(including boost) relates to 1024 in capacity? Or haven't we made this
+discussion yet?
+
+> +	} else {
+> +		cpu = cpumask_first(policy->related_cpus);
+> +		max_capacity = arch_scale_cpu_capacity(cpu);
+> +		capped_freq = policy->max;
+> +		max_freq = arch_scale_freq_ref(cpu);
+> +
+> +		pressure = max_capacity -
+> +			   mult_frac(max_capacity, capped_freq, max_freq);
+> +	}
+> +
+> +	for_each_cpu(cpu, policy->related_cpus)
+> +		WRITE_ONCE(per_cpu(cpufreq_pressure, cpu), pressure);
+> +}
+> +
+
+[...]
 
 
