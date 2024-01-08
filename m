@@ -1,146 +1,161 @@
-Return-Path: <linux-pm+bounces-1928-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1929-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5732F826F89
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 14:19:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25C38827032
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 14:48:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E03C11F211FF
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 13:19:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CDFA1C229BE
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 13:48:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58C634175D;
-	Mon,  8 Jan 2024 13:19:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB87945963;
+	Mon,  8 Jan 2024 13:48:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Gd/Ruo1+"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ni9Y6ind"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA15445943;
-	Mon,  8 Jan 2024 13:19:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 408D524j018278;
-	Mon, 8 Jan 2024 13:19:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:from:to:cc:references
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=H2WtjUKyrDFyRvmYxtHi0flzOw39axtvbwMoZpQyHzc=; b=Gd
-	/Ruo1+QEbcM9hdtWRnrdNGmPhuA6+A4vfagA5qDAQCy53qRo+4fHmNDeHBqCa563
-	Vaixck5wk12Y0A5rvdDHErbAtge6DKx6dZa1y8m7nSqVYoiY8VpfKT2C4Z+AKnzv
-	EStE1ST3YOBgOJTFWGr5EX6D2ZGUGGJwaY0sormovvHXT+wsNULxyGNw4BtTKf3u
-	SzEQyrJoGAjBOXuxmuhE5eTngQZT1QlaCBJLLzuO8okYvP1+6cXc4IzXr+x6jsYZ
-	EQTanzP6L30b9Ih+guExcDhtEcqBqwDKYFxLrAn2kuQURSE8TwNkiht+li6vulVI
-	SbUiu4t48auxdFF2R8Jg==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vg8n094nd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Jan 2024 13:19:28 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 408DJRPt003498
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 8 Jan 2024 13:19:27 GMT
-Received: from [10.216.40.78] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 8 Jan
- 2024 05:19:17 -0800
-Message-ID: <0ba9f2af-169e-a9a2-9ae4-4c6a70b0a94e@quicinc.com>
-Date: Mon, 8 Jan 2024 18:49:13 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F41294594A
+	for <linux-pm@vger.kernel.org>; Mon,  8 Jan 2024 13:48:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-50eaabc36bcso2100992e87.2
+        for <linux-pm@vger.kernel.org>; Mon, 08 Jan 2024 05:48:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1704721727; x=1705326527; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3x2TdodL+Fcapt/Lz+/UzPzH9/xPlS0RgAh88kWjJrE=;
+        b=ni9Y6indTFLW4HjOoRre86ECBsygbT1d/sQ75lAMHQYJEw0ZtRmix3ke/qIUqdOq9P
+         wAO4ULL41UN1X70RbmuvKJQDzlHvssLK00B7dqTVD0znZfmmEGd9uTWV+Dmq4+HiTcrL
+         mp/DML+fK9u9oj/EwxZugoHykEugTvEq9H6Rh+bwWPPE2F3AGWbrI1eqEJbz5hEG+uVJ
+         MmTs7DdGY0rY98AT/AAhLLDmC1R8P3CBSi2D2U6ADNpM3V9pV6fLQFUQixh/j/Kgiija
+         rgD7MGKeoQYX53IkqcbkAzOHfaylQJMIvXrCLfamKAMGDubDs38H6lGqN01uDKJc5Wzi
+         TAXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704721727; x=1705326527;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3x2TdodL+Fcapt/Lz+/UzPzH9/xPlS0RgAh88kWjJrE=;
+        b=C0iaQw/G38APcjECHM5GV9Q++VCo0o8fcG/pDQEP8jYXAsT0t+7WGt157eI2iU9YhG
+         1uvbRHLqEtm5O3t9C/sgDzbBOQ6HlqZ7izWwuwtzZ2UrD2lYpB364Tu1Pfhqz4FgxwFU
+         EM/2rBpY6Gq4UqlPKG6jlkx2FpkBdTtnHa6LoK32EshmQv4U6DZiFDi3gjF1gyNygpjv
+         H5OsqMUMm8xIU1CzJjdm1MrJpps976xW5D3ChQCfO2LOBkwF8tBGtpHb6TeehYFpcivU
+         ilDbHBJ4ks0eHVEKNiXwTzMqf4FTyWqtmQNNxVZ3v1R+1hmC6QDCEhXo8Hc2YUbWLDJK
+         eIlQ==
+X-Gm-Message-State: AOJu0YyQV3JeqjxQl2HNAu6mmgMTq1E8eIM0n1iyKdAyfC6xWQwqInBZ
+	0S6GADcHpjXsIxwuYZ6sd5XF2z+SyYh8ng==
+X-Google-Smtp-Source: AGHT+IF8wvH8PrEkvaQ5eneyPSBxwlk4AX9BIBBL2hHuP2Fx1us01yJftrMyoHDAiZOd2XE/MC7YJA==
+X-Received: by 2002:a05:6512:318e:b0:50e:7a9e:5c1d with SMTP id i14-20020a056512318e00b0050e7a9e5c1dmr1884615lfe.0.1704721726995;
+        Mon, 08 Jan 2024 05:48:46 -0800 (PST)
+Received: from vingu-book.. ([2a01:e0a:f:6020:53aa:59bc:34ea:bb2c])
+        by smtp.gmail.com with ESMTPSA id n34-20020a05600c3ba200b0040d5b984668sm11165003wms.9.2024.01.08.05.48.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 08 Jan 2024 05:48:46 -0800 (PST)
+From: Vincent Guittot <vincent.guittot@linaro.org>
+To: linux@armlinux.org.uk,
+	catalin.marinas@arm.com,
+	will@kernel.org,
+	sudeep.holla@arm.com,
+	rafael@kernel.org,
+	viresh.kumar@linaro.org,
+	agross@kernel.org,
+	andersson@kernel.org,
+	konrad.dybcio@linaro.org,
+	mingo@redhat.com,
+	peterz@infradead.org,
+	juri.lelli@redhat.com,
+	dietmar.eggemann@arm.com,
+	rostedt@goodmis.org,
+	bsegall@google.com,
+	mgorman@suse.de,
+	bristot@redhat.com,
+	vschneid@redhat.com,
+	lukasz.luba@arm.com,
+	rui.zhang@intel.com,
+	mhiramat@kernel.org,
+	daniel.lezcano@linaro.org,
+	amit.kachhap@gmail.com,
+	corbet@lwn.net,
+	gregkh@linuxfoundation.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Cc: qyousef@layalina.io,
+	Vincent Guittot <vincent.guittot@linaro.org>
+Subject: [PATCH v3 0/5] Rework system pressure interface to the scheduler
+Date: Mon,  8 Jan 2024 14:48:38 +0100
+Message-Id: <20240108134843.429769-1-vincent.guittot@linaro.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v5 5/5] PCI: qcom: Add OPP support to scale performance
- state of power domain
-Content-Language: en-US
-From: Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
-To: Viresh Kumar <viresh.kumar@linaro.org>, Bjorn Helgaas <helgaas@kernel.org>
-CC: <agross@kernel.org>, <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <vireshk@kernel.org>, <nm@ti.com>, <sboyd@kernel.org>,
-        <mani@kernel.org>, <lpieralisi@kernel.org>, <kw@linux.com>,
-        <robh@kernel.org>, <bhelgaas@google.com>, <rafael@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <quic_vbadigan@quicinc.com>,
-        <quic_nitegupt@quicinc.com>, <quic_skananth@quicinc.com>,
-        <quic_ramkri@quicinc.com>, <quic_parass@quicinc.com>
-References: <20231102053013.7yt7pxin5awlu7w7@vireshk-i7>
- <20231102120950.GA115288@bhelgaas>
- <20231103051247.u4cnckzstcvs4lf5@vireshk-i7>
- <15a98ec0-214b-218b-1e3c-c09f770fce2e@quicinc.com>
-In-Reply-To: <15a98ec0-214b-218b-1e3c-c09f770fce2e@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: WcI-mnAEpLNNAwM7I5H5sEnfy8E7_XqX
-X-Proofpoint-ORIG-GUID: WcI-mnAEpLNNAwM7I5H5sEnfy8E7_XqX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=749 adultscore=0 lowpriorityscore=0 spamscore=0 phishscore=0
- malwarescore=0 impostorscore=0 priorityscore=1501 clxscore=1011
- bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2401080114
 
+Following the consolidation and cleanup of CPU capacity in [1], this serie
+reworks how the scheduler gets the pressures on CPUs. We need to take into
+account all pressures applied by cpufreq on the compute capacity of a CPU
+for dozens of ms or more and not only cpufreq cooling device or HW
+mitigiations. we split the pressure applied on CPU's capacity in 2 parts:
+- one from cpufreq and freq_qos
+- one from HW high freq mitigiation.
 
-On 11/8/2023 8:02 AM, Krishna Chaitanya Chundru wrote:
->
-> On 11/3/2023 10:42 AM, Viresh Kumar wrote:
->> On 02-11-23, 07:09, Bjorn Helgaas wrote:
->>> On Thu, Nov 02, 2023 at 11:00:13AM +0530, Viresh Kumar wrote:
->>>> On 01-11-23, 17:17, Bjorn Helgaas wrote:
->>>>> Can you expand "OPP" somewhere so we know what it stands for?  I'm
->>>>> sure everybody knows except me :)
->>>> It is "Operating Performance Points", defined here:
->>>>
->>>> Documentation/power/opp.rst
->>> Thanks; I meant in the subject or commit log of the next revision, of
->>> course.
->> Yeah, I understood that. Krishna shall do it in next version I believe.
->>
-> Hi All,
->
-> I will do this in my next patch both commit message and ICC voting 
-> through OPP
->
-> got stuck in some other work, will try to send new series as soon as 
-> possible.
->
-> - Krishna Chaitanya.
->
-Hi Viresh,
+The next step will be to add a dedicated interface for long standing
+capping of the CPU capacity (i.e. for seconds or more) like the
+scaling_max_freq of cpufreq sysfs. The latter is already taken into
+account by this serie but as a temporary pressure which is not always the
+best choice when we know that it will happen for seconds or more.
 
-Sorry for late response.
+[1] https://lore.kernel.org/lkml/20231211104855.558096-1-vincent.guittot@linaro.org/
 
-We calculate ICC BW voting based up on PCIe speed and PCIe width.
+Change since v1:
+- Rework cpufreq_update_pressure()
 
-Right now we are adding the opp table based up on PCIe speed.
+Change since v1:
+- Use struct cpufreq_policy as parameter of cpufreq_update_pressure()
+- Fix typos and comments
+- Make sched_thermal_decay_shift boot param as deprecated
 
-Each PCIe controller can support multiple lane configurations like x1, 
-x2, x4, x8, x16 based up on controller capability.
+Vincent Guittot (5):
+  cpufreq: Add a cpufreq pressure feedback for the scheduler
+  sched: Take cpufreq feedback into account
+  thermal/cpufreq: Remove arch_update_thermal_pressure()
+  sched: Rename arch_update_thermal_pressure into
+    arch_update_hw_pressure
+  sched/pelt: Remove shift of thermal clock
 
-So for each GEN speed we need  up to 5 entries in OPP table. This will 
-make OPP table very long.
+ .../admin-guide/kernel-parameters.txt         |  1 +
+ arch/arm/include/asm/topology.h               |  6 +-
+ arch/arm64/include/asm/topology.h             |  6 +-
+ drivers/base/arch_topology.c                  | 26 ++++----
+ drivers/cpufreq/cpufreq.c                     | 36 +++++++++++
+ drivers/cpufreq/qcom-cpufreq-hw.c             |  4 +-
+ drivers/thermal/cpufreq_cooling.c             |  3 -
+ include/linux/arch_topology.h                 |  8 +--
+ include/linux/cpufreq.h                       | 10 +++
+ include/linux/sched/topology.h                |  8 +--
+ .../{thermal_pressure.h => hw_pressure.h}     | 14 ++---
+ include/trace/events/sched.h                  |  2 +-
+ init/Kconfig                                  | 12 ++--
+ kernel/sched/core.c                           |  8 +--
+ kernel/sched/fair.c                           | 63 +++++++++----------
+ kernel/sched/pelt.c                           | 18 +++---
+ kernel/sched/pelt.h                           | 16 ++---
+ kernel/sched/sched.h                          | 22 +------
+ 18 files changed, 144 insertions(+), 119 deletions(-)
+ rename include/trace/events/{thermal_pressure.h => hw_pressure.h} (55%)
 
-It is best to calculate the ICC BW voting in the driver itself and apply 
-them through ICC driver.
-
-Let me know your opinion on this.
-
-Thanks & Regards,
-
-Krishna Chaitanya.
+-- 
+2.34.1
 
 
