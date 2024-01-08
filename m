@@ -1,36 +1,36 @@
-Return-Path: <linux-pm+bounces-1945-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1947-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CB3C827342
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 16:34:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC705827350
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 16:34:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 311121F209B6
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 15:34:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 631362863CA
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 15:34:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA5E051C5B;
-	Mon,  8 Jan 2024 15:34:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14753524D1;
+	Mon,  8 Jan 2024 15:34:14 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from andre.telenet-ops.be (andre.telenet-ops.be [195.130.132.53])
+Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [195.130.132.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F0545101B
-	for <linux-pm@vger.kernel.org>; Mon,  8 Jan 2024 15:34:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E006A51C30
+	for <linux-pm@vger.kernel.org>; Mon,  8 Jan 2024 15:34:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:d323:2fd4:4f64:e281])
-	by andre.telenet-ops.be with bizsmtp
-	id YFZw2B00E0Qz0eJ01FZwK9; Mon, 08 Jan 2024 16:34:07 +0100
+	by xavier.telenet-ops.be with bizsmtp
+	id YFZw2B00X0Qz0eJ01FZwDK; Mon, 08 Jan 2024 16:34:08 +0100
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtp (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1rMrcp-00EtMc-Dt;
+	id 1rMrcp-00EtMf-Er;
 	Mon, 08 Jan 2024 16:33:56 +0100
 Received: from geert by rox.of.borg with local (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1rMrdU-00D7oq-Kx;
+	id 1rMrdU-00D7ov-Li;
 	Mon, 08 Jan 2024 16:33:56 +0100
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Michael Turquette <mturquette@baylibre.com>,
@@ -53,9 +53,9 @@ Cc: Cong Dang <cong.dang.xn@renesas.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-pm@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 14/15] arm64: dts: renesas: Add Gray Hawk Single board support
-Date: Mon,  8 Jan 2024 16:33:53 +0100
-Message-Id: <3ba3eae34719e6141ab04077586c9ebd849a0346.1704726960.git.geert+renesas@glider.be>
+Subject: [PATCH 15/15] arm64: defconfig: Enable R8A779H0 SoC
+Date: Mon,  8 Jan 2024 16:33:54 +0100
+Message-Id: <db4ab7b72dc2f40085f19957f93b5442ca391fd6.1704726960.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1704726960.git.geert+renesas@glider.be>
 References: <cover.1704726960.git.geert+renesas@glider.be>
@@ -67,103 +67,29 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add initial support for the Renesas Gray Hawk Single board, which is
-based on the R-Car V4M (R8A779H0) SoC:
-  - Memory,
-  - Crystal oscillators,
-  - Serial console.
+From: Linh Phung <linh.phung.jy@renesas.com>
 
-Based on the White Hawk Single DTS, and on a patch for the Gray Hawk
-board stack in the BSP by Hai Pham.
+Enable support for the Renesas R-Car V4M (R8A779H0) SoC in the ARM64
+defconfig.
 
+Signed-off-by: Linh Phung <linh.phung.jy@renesas.com>
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
-An alternative naming candidate would be "r8a779h0-gray-hawk-s.dts".
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-As the Gray Hawk and White Hawk board stacks share all boards except for
-the CPU board, we might be able to reuse white-hawk-common.dtsi[1] once
-all needed SoC support has been added to r8a779h0.dtsi.
-
-[1] "[PATCH/RFC 0/7] arm64: dts: renesas: Add support for more R-Car V4H
-     and White Hawk variants"
-    https://lore.kernel.org/all/cover.1702309604.git.geert+renesas@glider.be
----
- arch/arm64/boot/dts/renesas/Makefile          |  2 +
- .../dts/renesas/r8a779h0-gray-hawk-single.dts | 52 +++++++++++++++++++
- 2 files changed, 54 insertions(+)
- create mode 100644 arch/arm64/boot/dts/renesas/r8a779h0-gray-hawk-single.dts
-
-diff --git a/arch/arm64/boot/dts/renesas/Makefile b/arch/arm64/boot/dts/renesas/Makefile
-index 8ea68d5827105b76..34d7c2262260f220 100644
---- a/arch/arm64/boot/dts/renesas/Makefile
-+++ b/arch/arm64/boot/dts/renesas/Makefile
-@@ -86,6 +86,8 @@ dtb-$(CONFIG_ARCH_R8A779G0) += r8a779g0-white-hawk-ard-audio-da7212.dtbo
- r8a779g0-white-hawk-ard-audio-da7212-dtbs := r8a779g0-white-hawk.dtb r8a779g0-white-hawk-ard-audio-da7212.dtbo
- dtb-$(CONFIG_ARCH_R8A779G0) += r8a779g0-white-hawk-ard-audio-da7212.dtb
- 
-+dtb-$(CONFIG_ARCH_R8A779H0) += r8a779h0-gray-hawk-single.dtb
-+
- dtb-$(CONFIG_ARCH_R8A77951) += r8a779m1-salvator-xs.dtb
- r8a779m1-salvator-xs-panel-aa104xd12-dtbs := r8a779m1-salvator-xs.dtb salvator-panel-aa104xd12.dtbo
- dtb-$(CONFIG_ARCH_R8A77951) += r8a779m1-salvator-xs-panel-aa104xd12.dtb
-diff --git a/arch/arm64/boot/dts/renesas/r8a779h0-gray-hawk-single.dts b/arch/arm64/boot/dts/renesas/r8a779h0-gray-hawk-single.dts
-new file mode 100644
-index 0000000000000000..fe3863cbf69d8454
---- /dev/null
-+++ b/arch/arm64/boot/dts/renesas/r8a779h0-gray-hawk-single.dts
-@@ -0,0 +1,52 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+/*
-+ * Device Tree Source for the Gray Hawk Single board
-+ *
-+ * Copyright (C) 2023 Renesas Electronics Corp.
-+ * Copyright (C) 2024 Glider bv
-+ */
-+
-+/dts-v1/;
-+#include "r8a779h0.dtsi"
-+
-+/ {
-+	model = "Renesas Gray Hawk Single board based on r8a779h0";
-+	compatible = "renesas,gray-hawk-single", "renesas,r8a779h0";
-+
-+	aliases {
-+		serial0 = &hscif0;
-+	};
-+
-+	chosen {
-+		bootargs = "ignore_loglevel";
-+		stdout-path = "serial0:921600n8";
-+	};
-+
-+	memory@48000000 {
-+		device_type = "memory";
-+		/* first 128MB is reserved for secure area. */
-+		reg = <0x0 0x48000000 0x0 0x78000000>;
-+	};
-+
-+	memory@480000000 {
-+		device_type = "memory";
-+		reg = <0x4 0x80000000 0x1 0x80000000>;
-+	};
-+};
-+
-+&extal_clk {
-+	clock-frequency = <16666666>;
-+};
-+
-+&extalr_clk {
-+	clock-frequency = <32768>;
-+};
-+
-+&hscif0 {
-+	uart-has-rtscts;
-+	status = "okay";
-+};
-+
-+&scif_clk {
-+	clock-frequency = <24000000>;
-+};
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 5ad2b841aafc8ed0..05500654bcf49a79 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -1346,6 +1346,7 @@ CONFIG_ARCH_R8A77980=y
+ CONFIG_ARCH_R8A77970=y
+ CONFIG_ARCH_R8A779A0=y
+ CONFIG_ARCH_R8A779G0=y
++CONFIG_ARCH_R8A779H0=y
+ CONFIG_ARCH_R8A774C0=y
+ CONFIG_ARCH_R8A774E1=y
+ CONFIG_ARCH_R8A774A1=y
 -- 
 2.34.1
 
