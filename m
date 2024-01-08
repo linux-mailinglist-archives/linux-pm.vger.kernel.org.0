@@ -1,38 +1,38 @@
-Return-Path: <linux-pm+bounces-1962-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1963-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61C548276C6
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 18:59:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C68B8276CB
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 19:00:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D79B1C20FC2
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 17:59:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC5C91F23923
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 18:00:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CAB254BD2;
-	Mon,  8 Jan 2024 17:53:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7400B54780;
+	Mon,  8 Jan 2024 17:54:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N/JpMxLB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EMDmRdTf"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75FEE55C09;
-	Mon,  8 Jan 2024 17:53:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 309D6C433C7;
-	Mon,  8 Jan 2024 17:53:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D5BF55C03;
+	Mon,  8 Jan 2024 17:54:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04718C433C8;
+	Mon,  8 Jan 2024 17:54:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704736404;
-	bh=p9o0WUrxvm4o8d5MtPSblCJUPK5xVGBjrqrTBR+OpRk=;
+	s=k20201202; t=1704736465;
+	bh=H8akq1SElUrdBmNdvj6Imrs/eJEK5RTMuhgHPm3mEe0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=N/JpMxLBd/3Bo2p4x9X6xpx4XIjmx+FYbz5UjwjOqDEG6x29ARvTtwqHJG/GDpLA/
-	 ZVgJP2ftdCtqQzSxdSigMbDGnRqXxC7vdX2yjGEEcalIYcWCvhuMgwJh6rRDnIqVeV
-	 ovNPAt5Mm0A78ccy7pq4TzRPzM5zDDP+bNOyYOokH9vMgUgc9qNc5LHkkkj2kKZkjz
-	 +1pDvH8F/ho6GCE4/hfxDxuoaziLuSlF9uSgMyPg+t76eY/AwiFDgpwsxKrZ/Rp5RB
-	 BkKwAXY+TuqsWtB0qTH+3y7BSDH2smO5/nm79xtHd2jNS2jqomGhqN8oltHUmvPyYS
-	 0eYSa5QpETu3w==
-Date: Mon, 8 Jan 2024 17:53:17 +0000
+	b=EMDmRdTfHqEdybNxER/2rpw1nTHP4SjivCgwHJxSkPAf+NnRdMX0f8vylwCiHrkwK
+	 CHJUtwBLbp9uEAj+HNgxZsUcjq7ZB7R284ghCyrPvdb4ntO8L7IIt9Ued/mVtrvfgW
+	 aQF2aajkWfPDIX0GIk44VAb4mcIVsTakeRS6T55IEM6TIEnIof3Sxk0g3H2lUcUkfZ
+	 6YutlHpqjmd0p4eLe2psk3U/TSCl01DowZlSPYNGKppK3Y6xRo4o2Ren/0e2rZohE+
+	 RlVAkrxT/DJXMiZ9n6D0w/b4c8YEKkCOG8katbETW7JRWh/oCqxiUOlgRy11VvBkIy
+	 Nt4pubSRoPTYA==
+Date: Mon, 8 Jan 2024 17:54:19 +0000
 From: Conor Dooley <conor@kernel.org>
 To: Geert Uytterhoeven <geert+renesas@glider.be>
 Cc: Michael Turquette <mturquette@baylibre.com>,
@@ -50,11 +50,11 @@ Cc: Michael Turquette <mturquette@baylibre.com>,
 	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
 	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	linux-pm@vger.kernel.org
-Subject: Re: [PATCH 03/15] dt-bindings: power: renesas,rcar-sysc: Document
- R-Car V4M support
-Message-ID: <20240108-usual-opacity-4257f2e55107@spud>
+Subject: Re: [PATCH 06/15] dt-bindings: soc: renesas: Document R-Car V4M Gray
+ Hawk Single
+Message-ID: <20240108-parka-wagon-5a2ef57599c9@spud>
 References: <cover.1704726960.git.geert+renesas@glider.be>
- <1196419f3ade9a27b3c7906b6a898376b817601d.1704726960.git.geert+renesas@glider.be>
+ <3b1baf0eaf9f483308a6df1340dae51d4b88a337.1704726960.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -62,57 +62,74 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="RWZRcfsMNb349y0C"
+	protocol="application/pgp-signature"; boundary="DNpDcsDGXpd6taFv"
 Content-Disposition: inline
-In-Reply-To: <1196419f3ade9a27b3c7906b6a898376b817601d.1704726960.git.geert+renesas@glider.be>
+In-Reply-To: <3b1baf0eaf9f483308a6df1340dae51d4b88a337.1704726960.git.geert+renesas@glider.be>
 
 
---RWZRcfsMNb349y0C
+--DNpDcsDGXpd6taFv
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 08, 2024 at 04:33:42PM +0100, Geert Uytterhoeven wrote:
-> From: Duy Nguyen <duy.nguyen.rh@renesas.com>
+On Mon, Jan 08, 2024 at 04:33:45PM +0100, Geert Uytterhoeven wrote:
+> Document the compatible values for the Renesas R-Car V4M (R8A779H0) SoC
+> and the Renesas Gray Hawk Single development board.
 >=20
-> Document support for the System Controller (SYSC) in the R-Car V4M
-> (R8A779H0) SoC.
->=20
-> Signed-off-by: Duy Nguyen <duy.nguyen.rh@renesas.com>
 > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
->  Documentation/devicetree/bindings/power/renesas,rcar-sysc.yaml | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/power/renesas,rcar-sysc.ya=
-ml b/Documentation/devicetree/bindings/power/renesas,rcar-sysc.yaml
-> index 0720b54881c2c87a..e76fb273490ff588 100644
-> --- a/Documentation/devicetree/bindings/power/renesas,rcar-sysc.yaml
-> +++ b/Documentation/devicetree/bindings/power/renesas,rcar-sysc.yaml
-> @@ -45,6 +45,7 @@ properties:
->        - renesas,r8a779a0-sysc # R-Car V3U
->        - renesas,r8a779f0-sysc # R-Car S4-8
->        - renesas,r8a779g0-sysc # R-Car V4H
-> +      - renesas,r8a779h0-sysc # R-Car V4M
-
-I like that the g0 is the v4h and the h0 is a v4m. Makes complete sense
-to me!
 
 Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
 Cheers,
 Conor.
 
---RWZRcfsMNb349y0C
+> ---
+> The Gray Hawk Single board is an integrated variant of the (not yet
+> supported) Gray Hawk board stack, which is very similar to the White
+> Hawk board stack.
+>=20
+> The schematics call it '"Gray Hawk"(1Board)'.
+> The Setup Manual calls it 'Gray Hawk Single Board'.
+>=20
+> Alternative naming candidates would be 'Gray Hawk S' and/or
+> 'renesas,gray-hawk-s'.
+> ---
+>  Documentation/devicetree/bindings/soc/renesas/renesas.yaml | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/soc/renesas/renesas.yaml b=
+/Documentation/devicetree/bindings/soc/renesas/renesas.yaml
+> index 16ca3ff7b1aea146..1c8f5122bccdb5c8 100644
+> --- a/Documentation/devicetree/bindings/soc/renesas/renesas.yaml
+> +++ b/Documentation/devicetree/bindings/soc/renesas/renesas.yaml
+> @@ -354,6 +354,12 @@ properties:
+>            - const: renesas,white-hawk-cpu
+>            - const: renesas,r8a779g0
+> =20
+> +      - description: R-Car V4M (R8A779H0)
+> +        items:
+> +          - enum:
+> +              - renesas,gray-hawk-single # Gray Hawk Single (RTP8A779H0A=
+SKB0F10S)
+> +          - const: renesas,r8a779h0
+> +
+>        - description: R-Car H3e (R8A779M0)
+>          items:
+>            - enum:
+> --=20
+> 2.34.1
+>=20
+
+--DNpDcsDGXpd6taFv
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZZw2jQAKCRB4tDGHoIJi
-0i5SAP994XukMstFRmWth8ENiuS2ZXUKJVXh7kOF0FqbJ3wwwgEAxomMxE7iqPxU
-MzZCVWEBDBrcLTtHR3Zdk2IXtnT5Hgw=
-=Jner
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZZw2ywAKCRB4tDGHoIJi
+0g4lAP9EeNAWIC9UvvddnzTFvZt54hIHj2qeMfuXTKj/lsKqbgD8CkgXxShQd1A7
+uO/RYoOCYddkw0Viwj/oolfyNDm/QAA=
+=eDue
 -----END PGP SIGNATURE-----
 
---RWZRcfsMNb349y0C--
+--DNpDcsDGXpd6taFv--
 
