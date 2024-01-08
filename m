@@ -1,210 +1,102 @@
-Return-Path: <linux-pm+bounces-1934-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1935-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B784E82704C
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 14:50:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56EE0827084
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 15:01:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3562928175C
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 13:50:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 70E741C21EBA
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 14:01:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64F6445963;
-	Mon,  8 Jan 2024 13:49:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 832B346442;
+	Mon,  8 Jan 2024 14:01:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="chVFedUY"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="CDhUsrJK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2367146541
-	for <linux-pm@vger.kernel.org>; Mon,  8 Jan 2024 13:48:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-3374e332124so1747724f8f.2
-        for <linux-pm@vger.kernel.org>; Mon, 08 Jan 2024 05:48:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704721736; x=1705326536; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q6tS/zmA8jTmUGQmD7ZGbI7KJfpIZIi+8GuPTUd/kRc=;
-        b=chVFedUYM36NKkGOYXAqT/Lo0iBTj1e+0nxYmADVdc4KsN5scXoT0CuAvi6rAnMiGO
-         HLCZE58JC3b1z466Y5LJVfzwHlLnyrzqHmj6XHxgSmbfGZk2oyaROYDB5P00e2UkVsRF
-         xdVh6hYmm09TILJy1DjghxcxUH5w1tiqr2ab9x92uXoSbqmX5r92texj6dk4JvjFBKGx
-         3Qw8E2vXOxvt7vPwjOXy4v3pgVJGlBWQzjZm+e5uul1p6roosO8FQ7mMhPCazTHoc62D
-         hNgjf8NXSooYAl4OEMOaqW+5hkfe8x1hzG5gh5Fi0BI/7egl7tUBsKc0DNPlXvWJaWXC
-         73og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704721736; x=1705326536;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=q6tS/zmA8jTmUGQmD7ZGbI7KJfpIZIi+8GuPTUd/kRc=;
-        b=EDxpYsocuvmSmKyHB9nJczrwNo07mKatO6zjpplSfO5mBECUIpIOh/nqzT0rWbFSsK
-         fluIp/Im5/KSVEUbfU88XLSY20EL1p/2v6plJwSJHSVzsqKxte+TV7KCLQqX5DOSkurw
-         b0j2aNnSOhDzBpvAPnTrJlQ3GlfPEQEeMh8tNqofCURRs2O2k2PDcQote1xk4L+USpLJ
-         J8cTNlWQQWSYSd086E3j5o5t2RFFNbAWu2Rj/rd7jzPoKxasuJVMGq6XUKI6dcJIKoz5
-         rVpZbD5TMil79FDuTmOexBysrSPhmanqEHdacmUrzKUlPFNUezHc2EOOsmCXy6c5GX3A
-         vBUA==
-X-Gm-Message-State: AOJu0YwIUORcKoMxoT7n89zciShJU4Nf62rogPw2DUsLY0lFBUvcmrIM
-	/frqwpnm53pu+p0kygEVvV7lt+a37OYEDw==
-X-Google-Smtp-Source: AGHT+IExBXWbVBsi6lW0nbPs92Y11blHgXhSiv0yCc/BePGdHEv57ZAi/RZ/fcIrf0iFuASaoWVAHA==
-X-Received: by 2002:a05:600c:5403:b0:40e:4b6d:c9fa with SMTP id he3-20020a05600c540300b0040e4b6dc9famr30807wmb.147.1704721736518;
-        Mon, 08 Jan 2024 05:48:56 -0800 (PST)
-Received: from vingu-book.. ([2a01:e0a:f:6020:53aa:59bc:34ea:bb2c])
-        by smtp.gmail.com with ESMTPSA id n34-20020a05600c3ba200b0040d5b984668sm11165003wms.9.2024.01.08.05.48.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jan 2024 05:48:55 -0800 (PST)
-From: Vincent Guittot <vincent.guittot@linaro.org>
-To: linux@armlinux.org.uk,
-	catalin.marinas@arm.com,
-	will@kernel.org,
-	sudeep.holla@arm.com,
-	rafael@kernel.org,
-	viresh.kumar@linaro.org,
-	agross@kernel.org,
-	andersson@kernel.org,
-	konrad.dybcio@linaro.org,
-	mingo@redhat.com,
-	peterz@infradead.org,
-	juri.lelli@redhat.com,
-	dietmar.eggemann@arm.com,
-	rostedt@goodmis.org,
-	bsegall@google.com,
-	mgorman@suse.de,
-	bristot@redhat.com,
-	vschneid@redhat.com,
-	lukasz.luba@arm.com,
-	rui.zhang@intel.com,
-	mhiramat@kernel.org,
-	daniel.lezcano@linaro.org,
-	amit.kachhap@gmail.com,
-	corbet@lwn.net,
-	gregkh@linuxfoundation.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Cc: qyousef@layalina.io,
-	Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH v3 5/5] sched/pelt: Remove shift of thermal clock
-Date: Mon,  8 Jan 2024 14:48:43 +0100
-Message-Id: <20240108134843.429769-6-vincent.guittot@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240108134843.429769-1-vincent.guittot@linaro.org>
-References: <20240108134843.429769-1-vincent.guittot@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB9674597A;
+	Mon,  8 Jan 2024 14:01:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 408CKZ6d013064;
+	Mon, 8 Jan 2024 14:01:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	from:to:cc:subject:date:message-id:mime-version:content-type; s=
+	qcppdkim1; bh=XSdf+yYKlevuqvUAJL2ZB1zbnY7c7soWv8e8oy1iaoM=; b=CD
+	hUsrJKcTPqhAVS5jeiB8uIQgjrzTVGCTR8O8smRHlzIlFkKdXCAHkUF7wb6T6opk
+	22o1/MqfDRBLbJb8ViZzvY1Y5eZxkxcY0HmwHgyWhsH0Jr39fisscM9V11q140pz
+	hcU9XWurgEgb6YVj0Oz0KkY3wWyQ66r+GJApZm1spC9AAdhtuFovamDLv879+1lu
+	7iOLnGiaaEAp5cAgm0MZ7gwNTqyTM6Gp6o8vXlvtb6NXwkIXgB1ILL9wcsXa1CC8
+	pY/QYEEhv4C5EkuKQMwYP8z4jDiwOQC7oFDamda2adCxlruxKb6X2rtYrvdIn3Be
+	Ydp6xn9h0BeFeWCWbkbg==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vgbu2gvce-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 08 Jan 2024 14:01:39 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 408E1cfu009427
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 8 Jan 2024 14:01:38 GMT
+Received: from blr-ubuntu-253.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Mon, 8 Jan 2024 06:01:34 -0800
+From: Sibi Sankar <quic_sibis@quicinc.com>
+To: <sudeep.holla@arm.com>, <cristian.marussi@arm.com>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>
+CC: <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_mdtipton@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>
+Subject: [PATCH 0/3] firmware: arm_scmi: Register and handle limits change notification
+Date: Mon, 8 Jan 2024 19:31:15 +0530
+Message-ID: <20240108140118.1596-1-quic_sibis@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 1VpS28Qtf73KLRqQFxwLRRczD4qm_F08
+X-Proofpoint-ORIG-GUID: 1VpS28Qtf73KLRqQFxwLRRczD4qm_F08
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 malwarescore=0 bulkscore=0 adultscore=0 phishscore=0
+ spamscore=0 clxscore=1011 mlxlogscore=469 impostorscore=0
+ priorityscore=1501 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2311290000 definitions=main-2401080119
 
-The optional shift of the clock used by thermal/hw load avg has been
-introduced to handle case where the signal was not always a high frequency
-hw signal. Now that cpufreq provides a signal for firmware and
-SW pressure, we can remove this exception and always keep this PELT signal
-aligned with other signals.
-Mark deprecated sched_thermal_decay_shift boot parameter.
+This series registers for scmi limits change notifications and adds
+perf_notify_support/perf_opp_xlate interfaces which are used by the
+scmi cpufreq driver to determine the throttled frequency and apply HW
+pressure.
 
-Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
----
- .../admin-guide/kernel-parameters.txt          |  1 +
- kernel/sched/core.c                            |  2 +-
- kernel/sched/fair.c                            | 10 ++--------
- kernel/sched/sched.h                           | 18 ------------------
- 4 files changed, 4 insertions(+), 27 deletions(-)
+Depends on:
+HW pressure: https://patchwork.kernel.org/project/linux-arm-msm/cover/20231221152407.436177-1-vincent.guittot@linaro.org/
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 65731b060e3f..2ee15522b15d 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5722,6 +5722,7 @@
- 			but is useful for debugging and performance tuning.
- 
- 	sched_thermal_decay_shift=
-+			[Deprecated]
- 			[KNL, SMP] Set a decay shift for scheduler thermal
- 			pressure signal. Thermal pressure signal follows the
- 			default decay period of other scheduler pelt
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index a6f084bdf1c5..c68e47bfd5ae 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -5670,7 +5670,7 @@ void scheduler_tick(void)
- 
- 	update_rq_clock(rq);
- 	hw_pressure = arch_scale_hw_pressure(cpu_of(rq));
--	update_hw_load_avg(rq_clock_hw(rq), rq, hw_pressure);
-+	update_hw_load_avg(rq_clock_task(rq), rq, hw_pressure);
- 	curr->sched_class->task_tick(rq, curr, 0);
- 	if (sched_feat(LATENCY_WARN))
- 		resched_latency = cpu_resched_latency(rq);
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index f1c3d600d6d6..d5ba6cdb141c 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -78,15 +78,9 @@ static unsigned int normalized_sysctl_sched_base_slice	= 750000ULL;
- 
- const_debug unsigned int sysctl_sched_migration_cost	= 500000UL;
- 
--int sched_hw_decay_shift;
- static int __init setup_sched_thermal_decay_shift(char *str)
- {
--	int _shift = 0;
--
--	if (kstrtoint(str, 0, &_shift))
--		pr_warn("Unable to set scheduler thermal pressure decay shift parameter\n");
--
--	sched_hw_decay_shift = clamp(_shift, 0, 10);
-+	pr_warn("Ignoring the deprecated sched_thermal_decay_shift= option\n");
- 	return 1;
- }
- __setup("sched_thermal_decay_shift=", setup_sched_thermal_decay_shift);
-@@ -9247,7 +9241,7 @@ static bool __update_blocked_others(struct rq *rq, bool *done)
- 
- 	decayed = update_rt_rq_load_avg(now, rq, curr_class == &rt_sched_class) |
- 		  update_dl_rq_load_avg(now, rq, curr_class == &dl_sched_class) |
--		  update_hw_load_avg(rq_clock_hw(rq), rq, hw_pressure) |
-+		  update_hw_load_avg(now, rq, hw_pressure) |
- 		  update_irq_load_avg(rq, 0);
- 
- 	if (others_have_blocked(rq))
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 677d24202eec..6fc6718a1060 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1520,24 +1520,6 @@ static inline u64 rq_clock_task(struct rq *rq)
- 	return rq->clock_task;
- }
- 
--/**
-- * By default the decay is the default pelt decay period.
-- * The decay shift can change the decay period in
-- * multiples of 32.
-- *  Decay shift		Decay period(ms)
-- *	0			32
-- *	1			64
-- *	2			128
-- *	3			256
-- *	4			512
-- */
--extern int sched_hw_decay_shift;
--
--static inline u64 rq_clock_hw(struct rq *rq)
--{
--	return rq_clock_task(rq) >> sched_hw_decay_shift;
--}
--
- static inline void rq_clock_skip_update(struct rq *rq)
- {
- 	lockdep_assert_rq_held(rq);
+Sibi Sankar (3):
+  firmware: arm_scmi: Add perf_notify_support interface
+  firmware: arm_scmi: Add perf_opp_xlate interface
+  cpufreq: scmi: Register for limit change notifications
+
+ drivers/cpufreq/scmi-cpufreq.c   | 42 +++++++++++++++++++++++++++++++-
+ drivers/firmware/arm_scmi/perf.c | 37 ++++++++++++++++++++++++++++
+ include/linux/scmi_protocol.h    | 11 +++++++++
+ 3 files changed, 89 insertions(+), 1 deletion(-)
+
 -- 
-2.34.1
+2.17.1
 
 
