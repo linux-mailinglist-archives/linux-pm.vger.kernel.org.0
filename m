@@ -1,36 +1,39 @@
-Return-Path: <linux-pm+bounces-1950-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1955-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F0AC827353
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 16:34:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85C83827364
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 16:34:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F10491F21AA8
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 15:34:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC12E1C22C25
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 15:34:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55D69524DD;
-	Mon,  8 Jan 2024 15:34:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0773A52F92;
+	Mon,  8 Jan 2024 15:34:19 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [195.130.132.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from riemann.telenet-ops.be (riemann.telenet-ops.be [195.130.137.80])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 054F751C36
-	for <linux-pm@vger.kernel.org>; Mon,  8 Jan 2024 15:34:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08D015103F
+	for <linux-pm@vger.kernel.org>; Mon,  8 Jan 2024 15:34:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+	by riemann.telenet-ops.be (Postfix) with ESMTPS id 4T7ylp2Jv6z4x1G5
+	for <linux-pm@vger.kernel.org>; Mon,  8 Jan 2024 16:34:14 +0100 (CET)
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:d323:2fd4:4f64:e281])
-	by xavier.telenet-ops.be with bizsmtp
-	id YFZw2B00A0Qz0eJ01FZwD7; Mon, 08 Jan 2024 16:34:08 +0100
+	by laurent.telenet-ops.be with bizsmtp
+	id YFZw2B00F0Qz0eJ01FZw4S; Mon, 08 Jan 2024 16:34:07 +0100
 Received: from rox.of.borg ([192.168.97.57])
 	by ramsan.of.borg with esmtp (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1rMrcp-00EtM1-3J;
+	id 1rMrcp-00EtM5-4L;
 	Mon, 08 Jan 2024 16:33:56 +0100
 Received: from geert by rox.of.borg with local (Exim 4.95)
 	(envelope-from <geert@linux-m68k.org>)
-	id 1rMrdU-00D7o5-A2;
+	id 1rMrdU-00D7oC-B2;
 	Mon, 08 Jan 2024 16:33:56 +0100
 From: Geert Uytterhoeven <geert+renesas@glider.be>
 To: Michael Turquette <mturquette@baylibre.com>,
@@ -53,9 +56,9 @@ Cc: Cong Dang <cong.dang.xn@renesas.com>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-pm@vger.kernel.org,
 	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 05/15] dt-bindings: reset: renesas,rst: Document R-Car V4M support
-Date: Mon,  8 Jan 2024 16:33:44 +0100
-Message-Id: <1d35a435db17a240abafb091751255379825b750.1704726960.git.geert+renesas@glider.be>
+Subject: [PATCH 06/15] dt-bindings: soc: renesas: Document R-Car V4M Gray Hawk Single
+Date: Mon,  8 Jan 2024 16:33:45 +0100
+Message-Id: <3b1baf0eaf9f483308a6df1340dae51d4b88a337.1704726960.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1704726960.git.geert+renesas@glider.be>
 References: <cover.1704726960.git.geert+renesas@glider.be>
@@ -67,26 +70,41 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Document support for the Reset (RST) module in the Renesas R-Car V4M
-(R8A779H0) SoC.
+Document the compatible values for the Renesas R-Car V4M (R8A779H0) SoC
+and the Renesas Gray Hawk Single development board.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- Documentation/devicetree/bindings/reset/renesas,rst.yaml | 1 +
- 1 file changed, 1 insertion(+)
+The Gray Hawk Single board is an integrated variant of the (not yet
+supported) Gray Hawk board stack, which is very similar to the White
+Hawk board stack.
 
-diff --git a/Documentation/devicetree/bindings/reset/renesas,rst.yaml b/Documentation/devicetree/bindings/reset/renesas,rst.yaml
-index e7e4872477517b2d..58b4a45d338006ff 100644
---- a/Documentation/devicetree/bindings/reset/renesas,rst.yaml
-+++ b/Documentation/devicetree/bindings/reset/renesas,rst.yaml
-@@ -50,6 +50,7 @@ properties:
-       - renesas,r8a779a0-rst      # R-Car V3U
-       - renesas,r8a779f0-rst      # R-Car S4-8
-       - renesas,r8a779g0-rst      # R-Car V4H
-+      - renesas,r8a779h0-rst      # R-Car V4M
+The schematics call it '"Gray Hawk"(1Board)'.
+The Setup Manual calls it 'Gray Hawk Single Board'.
+
+Alternative naming candidates would be 'Gray Hawk S' and/or
+'renesas,gray-hawk-s'.
+---
+ Documentation/devicetree/bindings/soc/renesas/renesas.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/soc/renesas/renesas.yaml b/Documentation/devicetree/bindings/soc/renesas/renesas.yaml
+index 16ca3ff7b1aea146..1c8f5122bccdb5c8 100644
+--- a/Documentation/devicetree/bindings/soc/renesas/renesas.yaml
++++ b/Documentation/devicetree/bindings/soc/renesas/renesas.yaml
+@@ -354,6 +354,12 @@ properties:
+           - const: renesas,white-hawk-cpu
+           - const: renesas,r8a779g0
  
-   reg:
-     maxItems: 1
++      - description: R-Car V4M (R8A779H0)
++        items:
++          - enum:
++              - renesas,gray-hawk-single # Gray Hawk Single (RTP8A779H0ASKB0F10S)
++          - const: renesas,r8a779h0
++
+       - description: R-Car H3e (R8A779M0)
+         items:
+           - enum:
 -- 
 2.34.1
 
