@@ -1,120 +1,146 @@
-Return-Path: <linux-pm+bounces-1927-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1928-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB552826F3E
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 14:06:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5732F826F89
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 14:19:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A8642839A0
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 13:06:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E03C11F211FF
+	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 13:19:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 452D540C1B;
-	Mon,  8 Jan 2024 13:06:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58C634175D;
+	Mon,  8 Jan 2024 13:19:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Gd/Ruo1+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDF8E45946
-	for <linux-pm@vger.kernel.org>; Mon,  8 Jan 2024 13:06:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5958d3f2d8aso339040eaf.1
-        for <linux-pm@vger.kernel.org>; Mon, 08 Jan 2024 05:06:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704719203; x=1705324003;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Z9ePyfvf7p6QsSJTohWy6AHSw588XqIbegiXU1AytT4=;
-        b=aKmM5WjpeAftmEbw923kZn5l+DxWWla6aEFFHvHC0XQoJu2nT0e1fUFaJyrzRb4kJh
-         VjgOJfLE6eVymE48tzBeg/Kd57O68O6FuQK5jE7+sRpTCwrI5GXz0uwNjnB0gsbyaWtF
-         /ZAqY+dC+KExKqNhAy2jLo2BMBD2CJ2yNIU5gNwCCGRtjepawGWUVNpgXWM+NRzElIwR
-         4XyZPL60VusMe78xA6nlcdowEmHNhFNPhUIT/BVMUhSeharSFwztyUNxxap4J4+ft6GV
-         6ZKkaSshYSCIYemR2vPcsAMbG1JYxEsugjqM89iUnieGv5m6JXOILbOvn3dylsWW2xLm
-         rIfg==
-X-Gm-Message-State: AOJu0YwsDa/X8agP4T8jq/PAsvlIiVZKsFvWgeYechouYSygOUKvAZgq
-	uTWlOqL5z7jkE6lD8SbIwpwucJmpbb5hE5tINv50jGJ3
-X-Google-Smtp-Source: AGHT+IEIJjcCETTgz5jDPmcHqxsvJh7J/mgEcbr82VXGs9gHj4uEXgb5S25nII4OVOIPqDjPVzsBioFwNVUTI+g2e4M=
-X-Received: by 2002:a05:6820:388:b0:598:6f59:3 with SMTP id
- r8-20020a056820038800b005986f590003mr386708ooj.0.1704719202749; Mon, 08 Jan
- 2024 05:06:42 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA15445943;
+	Mon,  8 Jan 2024 13:19:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 408D524j018278;
+	Mon, 8 Jan 2024 13:19:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:from:to:cc:references
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=H2WtjUKyrDFyRvmYxtHi0flzOw39axtvbwMoZpQyHzc=; b=Gd
+	/Ruo1+QEbcM9hdtWRnrdNGmPhuA6+A4vfagA5qDAQCy53qRo+4fHmNDeHBqCa563
+	Vaixck5wk12Y0A5rvdDHErbAtge6DKx6dZa1y8m7nSqVYoiY8VpfKT2C4Z+AKnzv
+	EStE1ST3YOBgOJTFWGr5EX6D2ZGUGGJwaY0sormovvHXT+wsNULxyGNw4BtTKf3u
+	SzEQyrJoGAjBOXuxmuhE5eTngQZT1QlaCBJLLzuO8okYvP1+6cXc4IzXr+x6jsYZ
+	EQTanzP6L30b9Ih+guExcDhtEcqBqwDKYFxLrAn2kuQURSE8TwNkiht+li6vulVI
+	SbUiu4t48auxdFF2R8Jg==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vg8n094nd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 08 Jan 2024 13:19:28 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 408DJRPt003498
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 8 Jan 2024 13:19:27 GMT
+Received: from [10.216.40.78] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 8 Jan
+ 2024 05:19:17 -0800
+Message-ID: <0ba9f2af-169e-a9a2-9ae4-4c6a70b0a94e@quicinc.com>
+Date: Mon, 8 Jan 2024 18:49:13 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240108095513.qlrwjon6qwhealvk@vireshk-i7>
-In-Reply-To: <20240108095513.qlrwjon6qwhealvk@vireshk-i7>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 8 Jan 2024 14:06:31 +0100
-Message-ID: <CAJZ5v0jmC+AxP_8bF2CA+XrZNoCQ2_qgUkcVzY-b_z4Z7N-3mQ@mail.gmail.com>
-Subject: Re: [GIT PULL] OPP updates for 6.8
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v5 5/5] PCI: qcom: Add OPP support to scale performance
+ state of power domain
+Content-Language: en-US
+From: Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>, Bjorn Helgaas <helgaas@kernel.org>
+CC: <agross@kernel.org>, <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <vireshk@kernel.org>, <nm@ti.com>, <sboyd@kernel.org>,
+        <mani@kernel.org>, <lpieralisi@kernel.org>, <kw@linux.com>,
+        <robh@kernel.org>, <bhelgaas@google.com>, <rafael@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <quic_vbadigan@quicinc.com>,
+        <quic_nitegupt@quicinc.com>, <quic_skananth@quicinc.com>,
+        <quic_ramkri@quicinc.com>, <quic_parass@quicinc.com>
+References: <20231102053013.7yt7pxin5awlu7w7@vireshk-i7>
+ <20231102120950.GA115288@bhelgaas>
+ <20231103051247.u4cnckzstcvs4lf5@vireshk-i7>
+ <15a98ec0-214b-218b-1e3c-c09f770fce2e@quicinc.com>
+In-Reply-To: <15a98ec0-214b-218b-1e3c-c09f770fce2e@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: WcI-mnAEpLNNAwM7I5H5sEnfy8E7_XqX
+X-Proofpoint-ORIG-GUID: WcI-mnAEpLNNAwM7I5H5sEnfy8E7_XqX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=749 adultscore=0 lowpriorityscore=0 spamscore=0 phishscore=0
+ malwarescore=0 impostorscore=0 priorityscore=1501 clxscore=1011
+ bulkscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2311290000 definitions=main-2401080114
 
+
+On 11/8/2023 8:02 AM, Krishna Chaitanya Chundru wrote:
+>
+> On 11/3/2023 10:42 AM, Viresh Kumar wrote:
+>> On 02-11-23, 07:09, Bjorn Helgaas wrote:
+>>> On Thu, Nov 02, 2023 at 11:00:13AM +0530, Viresh Kumar wrote:
+>>>> On 01-11-23, 17:17, Bjorn Helgaas wrote:
+>>>>> Can you expand "OPP" somewhere so we know what it stands for?  I'm
+>>>>> sure everybody knows except me :)
+>>>> It is "Operating Performance Points", defined here:
+>>>>
+>>>> Documentation/power/opp.rst
+>>> Thanks; I meant in the subject or commit log of the next revision, of
+>>> course.
+>> Yeah, I understood that. Krishna shall do it in next version I believe.
+>>
+> Hi All,
+>
+> I will do this in my next patch both commit message and ICC voting 
+> through OPP
+>
+> got stuck in some other work, will try to send new series as soon as 
+> possible.
+>
+> - Krishna Chaitanya.
+>
 Hi Viresh,
 
-On Mon, Jan 8, 2024 at 10:55=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
-rg> wrote:
->
-> Hi Rafael,
->
-> The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa=
-86:
->
->   Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/opp-u=
-pdates-6.8
->
-> for you to fetch changes up to dcfec12b67980cba139a6c3afba57ebd4936ebe8:
->
->   OPP: Rename 'rate_clk_single' (2024-01-05 15:55:41 +0530)
->
-> ----------------------------------------------------------------
-> OPP updates for 6.8
->
-> - Fix _set_required_opps when opp is NULL (Bryan O'Donoghue).
-> - ti: Use device_get_match_data() (Rob Herring).
-> - Minor cleanups around OPP level and other parts and call
->   dev_pm_opp_set_opp() recursively for required OPPs (Viresh Kumar).
->
-> ----------------------------------------------------------------
-> Bryan O'Donoghue (1):
->       OPP: Fix _set_required_opps when opp is NULL
->
-> Rob Herring (1):
->       opp: ti: Use device_get_match_data()
->
-> Viresh Kumar (10):
->       OPP: Level zero is valid
->       OPP: Use _set_opp_level() for single genpd case
->       OPP: Call dev_pm_opp_set_opp() for required OPPs
->       OPP: Don't set OPP recursively for a parent genpd
->       OPP: Check for invalid OPP in dev_pm_opp_find_level_ceil()
->       OPP: The level field is always of unsigned int type
->       OPP: Move dev_pm_opp_icc_bw to internal opp.h
->       OPP: Relocate dev_pm_opp_sync_regulators()
->       OPP: Pass rounded rate to _set_opp()
->       OPP: Rename 'rate_clk_single'
->
->  drivers/opp/core.c          | 294 ++++++++++++++++++++++++++++++++++++++=
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++--------------=
---------------------------------------------------------------
->  drivers/opp/of.c            |  57 ++++++++++++++++++++++++++++------
->  drivers/opp/opp.h           |  24 ++++++++++-----
->  drivers/opp/ti-opp-supply.c |  13 ++------
->  include/linux/pm_opp.h      |  28 +++++++----------
->  5 files changed, 244 insertions(+), 172 deletions(-)
->
-> --
+Sorry for late response.
 
-Pulled and added to the pm branch in linux-pm.git, thanks!
+We calculate ICC BW voting based up on PCIe speed and PCIe width.
+
+Right now we are adding the opp table based up on PCIe speed.
+
+Each PCIe controller can support multiple lane configurations like x1, 
+x2, x4, x8, x16 based up on controller capability.
+
+So for each GEN speed we need  up to 5 entries in OPP table. This will 
+make OPP table very long.
+
+It is best to calculate the ICC BW voting in the driver itself and apply 
+them through ICC driver.
+
+Let me know your opinion on this.
+
+Thanks & Regards,
+
+Krishna Chaitanya.
+
 
