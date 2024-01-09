@@ -1,60 +1,74 @@
-Return-Path: <linux-pm+bounces-2024-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2025-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77A67828B73
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 18:49:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E985828B9C
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 18:58:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CC2D1C24407
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 17:49:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A947B23649
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 17:58:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DD8A3B794;
-	Tue,  9 Jan 2024 17:49:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68DD93C068;
+	Tue,  9 Jan 2024 17:58:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F7p42TT/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AX6XZXx3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DF803B790;
-	Tue,  9 Jan 2024 17:49:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704822569; x=1736358569;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=9JaBJEThfVeRad1fTNZ0HBs7xNR4uGdV5+hV83rZ1mc=;
-  b=F7p42TT/2CbL/oGaROGXG5bLtV8d/bAVHUlDbQlNdjD3QsxHtACvBInd
-   cjWESVlI9TZ6kyopUkXVl4Ydv1osYYC2mF6zMvMzVyHPd5XDosyjXgE8T
-   6SjnH11r6whFzbKhVFRQPVMzaiQbiKWOMzkDZ1zFjrgXYnHi2M49ISAYT
-   pS4R89s+acQ4YL1eC7G8MwQC2Qi4QUjVxF8qE6MYRZyiz9kuObYoSY28M
-   OJI2dslZEuVe3SbGiZQhAyrMyvJYKFtouZIipNuoG6sn5IE+lQdSJE78H
-   gDWAs62pFrJIiALZeaeQaU5j7xFYlgr1EO5d6oikvhhhel+x5+Tgukrul
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="5631083"
-X-IronPort-AV: E=Sophos;i="6.04,183,1695711600"; 
-   d="scan'208";a="5631083"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2024 09:49:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,183,1695711600"; 
-   d="scan'208";a="16358727"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.14])
-  by fmviesa002.fm.intel.com with ESMTP; 09 Jan 2024 09:49:10 -0800
-From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To: rafael@kernel.org,
-	viresh.kumar@linaro.org
-Cc: linux-pm@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D43393BB4C;
+	Tue,  9 Jan 2024 17:58:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-40e43e48a16so28598095e9.2;
+        Tue, 09 Jan 2024 09:58:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1704823098; x=1705427898; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jpUtuzXOnCEqHGuFl9LL4Al2mrUJlNSjgLnKSAf1Ws0=;
+        b=AX6XZXx3cFGDVjyLiWXk8oT9oSecKCEIH3u3ZEdW/F6gQrooS/PFVRPByGOBSXR6Ry
+         4ov2unT2T4jNQeX3pXVFPyYZ4Uij1n/iThTp5JoZgaaQo+PbhCf2nb1yo9T557rb0DPW
+         2g/AMPjE4hITqzBbEVgxnWkFc+ndBieH9ZxK8EJs5cZHe0944FZwyCWuuDI9QMOXq541
+         VCTvS8eM6gpsD5YV1Ei8woRvG4fzlgecAF2QOoTMC6MGdRj+JB/eJCQWP1aO8WsJfffo
+         KalvAIZtihBVXQeRZI/id3759No19ifjsEBe9/oH1z7TjE0edyBf/bAeqGqn1j4CgFCc
+         94PA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704823098; x=1705427898;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jpUtuzXOnCEqHGuFl9LL4Al2mrUJlNSjgLnKSAf1Ws0=;
+        b=Ti4O3tbL0WRecEkZ2g+dqm3Ri3wXfF080IFu8BilvyQKyfmiQXRI1FyvP0fWWO3JwT
+         zlsI7kKSq23WG8cDbFzCidjVhT33TFI78j99hq/dsfYTEUtxZY9palRzzWs6OPdYhEOm
+         aELtPwSsL2CfcCsbkCsZjExKllU4NV7ynidcf5tw+iCy8QhdcZP44mMxOZmHpL26jY9b
+         fepkfoffZEmfzlaSVHB0VcGMvKzyE+FDwBC1v7sSk5Eoa0pytwIBJqoJHDgz1tVO5+kl
+         /32inACeR76E1CtzrvJmz7kDCnrPkicO0oO1i4dBUwW7v7avudcDdDCVyjnF7eBtzMQk
+         iVEA==
+X-Gm-Message-State: AOJu0Yz8RVG40xJz8F5EpwiS8XkHVP1ZVJUVTgiZdRWtMH+EhZO8Adyc
+	XXGgRqje0VZEqQK5aHojQBf9WbUtG5s=
+X-Google-Smtp-Source: AGHT+IHKcG3xLgIZvkIf6WXKaw2viLsbGnjXdHGB+gUG0ScLL60G2Y8/mqRCqsevl+1FE7O5XIddlw==
+X-Received: by 2002:a05:600c:a05:b0:40d:9237:dada with SMTP id z5-20020a05600c0a0500b0040d9237dadamr2958932wmp.103.1704823097807;
+        Tue, 09 Jan 2024 09:58:17 -0800 (PST)
+Received: from macminim1.retailmedia.com ([2a01:e0a:b14:c1f0:617b:c61e:d65f:861e])
+        by smtp.googlemail.com with ESMTPSA id iv14-20020a05600c548e00b0040e3733a32bsm15777075wmb.41.2024.01.09.09.58.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jan 2024 09:58:17 -0800 (PST)
+From: Erwan Velu <erwanaliasr1@gmail.com>
+X-Google-Original-From: Erwan Velu <e.velu@criteo.com>
+To: 
+Cc: Erwan Velu <e.velu@criteo.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Huang Rui <ray.huang@amd.com>,
+	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] cpufreq: intel_pstate: Update Meteor Lake hybrid scaling factor
-Date: Tue,  9 Jan 2024 09:48:48 -0800
-Message-Id: <20240109174848.3373231-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.40.1
+	linux-pm@vger.kernel.org
+Subject: [PATCH 1/2] admin-guide: Fixing typos
+Date: Tue,  9 Jan 2024 18:57:53 +0100
+Message-ID: <20240109175801.447943-1-e.velu@criteo.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -63,90 +77,40 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On some Meteor Lake platforms, maximum one core turbo frequency is not
-observed. During hybrid performance to frequency conversion, the maximum
-frequency is 100 MHz less. This results in requesting maximum frequency
-100 MHz less.
+This commit fixes two typos in the admin-guide.
 
-For example when the max one core turbo is 4.9 GHz:
-MSR HWP_CAPABILITIES shows highest performance ratio for P-core is 0x3E.
-With the current scaling factor of 78741 (1.27x for converting frequency
-to performance) results in max frequency of 4.8 GHz. This results in
-capping the max scaling frequency as 4.8 GHz, which is 100 MHz less than
-the desired.
+- a missing e in "reference_perf".
+- the amd_pstate sysfs path uses a dash instead of an underscore.
 
-Add capability to define per CPU model specific scaling factor and define
-scaling factor of 80000 (1.25x for converting frequency to performance for
-P-cores) for Meteor Lake.
-
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Signed-off-by: Erwan Velu <e.velu@criteo.com>
 ---
- drivers/cpufreq/intel_pstate.c | 21 ++++++++++++++++++---
- 1 file changed, 18 insertions(+), 3 deletions(-)
+ Documentation/admin-guide/acpi/cppc_sysfs.rst | 2 +-
+ Documentation/admin-guide/pm/amd-pstate.rst   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-index a534a1f7f1ee..843b3409f12b 100644
---- a/drivers/cpufreq/intel_pstate.c
-+++ b/drivers/cpufreq/intel_pstate.c
-@@ -302,7 +302,10 @@ static bool hwp_forced __read_mostly;
+diff --git a/Documentation/admin-guide/acpi/cppc_sysfs.rst b/Documentation/admin-guide/acpi/cppc_sysfs.rst
+index e53d76365aa7..36981c667823 100644
+--- a/Documentation/admin-guide/acpi/cppc_sysfs.rst
++++ b/Documentation/admin-guide/acpi/cppc_sysfs.rst
+@@ -75,4 +75,4 @@ taking two different snapshots of feedback counters at time T1 and T2.
+   delivered_counter_delta = fbc_t2[del] - fbc_t1[del]
+   reference_counter_delta = fbc_t2[ref] - fbc_t1[ref]
  
- static struct cpufreq_driver *intel_pstate_driver __read_mostly;
+-  delivered_perf = (refernce_perf x delivered_counter_delta) / reference_counter_delta
++  delivered_perf = (reference_perf x delivered_counter_delta) / reference_counter_delta
+diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
+index 1cf40f69278c..9eb26014d34b 100644
+--- a/Documentation/admin-guide/pm/amd-pstate.rst
++++ b/Documentation/admin-guide/pm/amd-pstate.rst
+@@ -361,7 +361,7 @@ Global Attributes
  
--#define HYBRID_SCALING_FACTOR	78741
-+#define HYBRID_SCALING_FACTOR		78741
-+#define HYBRID_SCALING_FACTOR_MTL	80000
-+
-+static int hybrid_scaling_factor = HYBRID_SCALING_FACTOR;
+ ``amd-pstate`` exposes several global attributes (files) in ``sysfs`` to
+ control its functionality at the system level.  They are located in the
+-``/sys/devices/system/cpu/amd-pstate/`` directory and affect all CPUs.
++``/sys/devices/system/cpu/amd_pstate/`` directory and affect all CPUs.
  
- static inline int core_get_scaling(void)
- {
-@@ -422,7 +425,7 @@ static int intel_pstate_cppc_get_scaling(int cpu)
- 	 */
- 	if (!ret && cppc_perf.nominal_perf && cppc_perf.nominal_freq &&
- 	    cppc_perf.nominal_perf * 100 != cppc_perf.nominal_freq)
--		return HYBRID_SCALING_FACTOR;
-+		return hybrid_scaling_factor;
- 
- 	return core_get_scaling();
- }
-@@ -1968,7 +1971,7 @@ static int hwp_get_cpu_scaling(int cpu)
- 	smp_call_function_single(cpu, hybrid_get_type, &cpu_type, 1);
- 	/* P-cores have a smaller perf level-to-freqency scaling factor. */
- 	if (cpu_type == 0x40)
--		return HYBRID_SCALING_FACTOR;
-+		return hybrid_scaling_factor;
- 
- 	/* Use default core scaling for E-cores */
- 	if (cpu_type == 0x20)
-@@ -3398,6 +3401,11 @@ static const struct x86_cpu_id intel_epp_balance_perf[] = {
- 	{}
- };
- 
-+static const struct x86_cpu_id intel_hybrid_scaling_factor[] = {
-+	X86_MATCH_INTEL_FAM6_MODEL(METEORLAKE_L, HYBRID_SCALING_FACTOR_MTL),
-+	{}
-+};
-+
- static int __init intel_pstate_init(void)
- {
- 	static struct cpudata **_all_cpu_data;
-@@ -3488,9 +3496,16 @@ static int __init intel_pstate_init(void)
- 
- 	if (hwp_active) {
- 		const struct x86_cpu_id *id = x86_match_cpu(intel_epp_balance_perf);
-+		const struct x86_cpu_id *hybrid_id = x86_match_cpu(intel_hybrid_scaling_factor);
- 
- 		if (id)
- 			epp_values[EPP_INDEX_BALANCE_PERFORMANCE] = id->driver_data;
-+
-+		if (hybrid_id) {
-+			hybrid_scaling_factor = hybrid_id->driver_data;
-+			pr_debug("hybrid scaling factor:%d\n", hybrid_scaling_factor);
-+		}
-+
- 	}
- 
- 	mutex_lock(&intel_pstate_driver_lock);
+ ``status``
+ 	Operation mode of the driver: "active", "passive" or "disable".
 -- 
 2.43.0
 
