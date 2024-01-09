@@ -1,333 +1,204 @@
-Return-Path: <linux-pm+bounces-2015-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2016-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 546E6828A92
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 17:59:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 409EF828A9C
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 18:00:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F21EA2821E2
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 16:59:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1D3A286875
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 17:00:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCCFD3A8C8;
-	Tue,  9 Jan 2024 16:59:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B5CF3AC1A;
+	Tue,  9 Jan 2024 17:00:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="edJzYx31"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074193A8C5;
-	Tue,  9 Jan 2024 16:59:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id 5c1102fa8f2cf404; Tue, 9 Jan 2024 17:59:23 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 40513669107;
-	Tue,  9 Jan 2024 17:59:23 +0100 (CET)
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Subject: [PATCH v1] PM: sleep: Restore asynchronous device resume optimization
-Date: Tue, 09 Jan 2024 17:59:22 +0100
-Message-ID: <10423008.nUPlyArG6x@kreacher>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 377763B18A
+	for <linux-pm@vger.kernel.org>; Tue,  9 Jan 2024 17:00:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-28be8ebcdc1so2127003a91.0
+        for <linux-pm@vger.kernel.org>; Tue, 09 Jan 2024 09:00:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1704819623; x=1705424423; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GlrZoxPpenGOhqFrmUG8PiyHrSyO0oBBT6cMAiO3UNE=;
+        b=edJzYx316aVyS2k0loWR5fC0QBxOA0rshXTpdzCNk3vLA0EZ1dK/TKsfwRjttZ6kNf
+         NUBD2FSPzPnjBZ6JwBIwSWTA3rbj1hNeQzAHQd23lemvHqLRw3iviDa9O+j90QCShaCA
+         8yVVREDolKo2gxEXRGQipd5af15VNQxbdrNpWwqV8mB61LdOhdqVBdyJx5YX+wpyH15i
+         uQGw0c6QTL7wl4j1D9UnkaP9xqHv8QCvVquV3d/i2pgbfE2CaCKoQ1HD43EBxpaUxeQI
+         1zcZlHySvxv/4qmSdAvthDEShIeyPvIMg2a8/JBHXDE4hcIp3/2WKDqaQjrTtK39Mk07
+         4S5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704819623; x=1705424423;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GlrZoxPpenGOhqFrmUG8PiyHrSyO0oBBT6cMAiO3UNE=;
+        b=hQ0yS/fpo6UACXOgp9S+bnd3cjWD8wHVWzyI599KMvRYIgPdu/7GYPAHL6uGG9SQWz
+         dmIUek/1gl6KcMBHSm6igzT1Ill1LC5DvQhBKcFMGHbAWfV64pnl/FGwdpxo0jhB6POx
+         pvf3zSJmsBIs6M3qMggkSDaSycbG9P8gtIKNPugzk+ANsbNYIPS5FXxENbQRfn5UMcez
+         L1YvvfVMeGe0C5zMrdhYDpv3eLarydDQSrV0SnXECxNYWwfQqPM1uVqG7RMXXn7FD6Ca
+         B0rDSoXDrgIOlyaFf7K9CY2V/33azweIR6nSBwlx0gSvGLD6FnOJ3gsC9XZvAi1lKlcS
+         re/A==
+X-Gm-Message-State: AOJu0Yxkl1Agesy0rz6Xix5DWTmaH1oslLxQc+wXpgDE8Ti/MOo83fSJ
+	Vnjmc9TEjaunv/nw9MQaFF8LtEOikl2+Mi6CRygaIAq8HdINhg==
+X-Google-Smtp-Source: AGHT+IHMr5gazpEPkkx7GMMw3VKwNSvx2iydEkTrkS2t970cjficwCZjM/LewbbmVn86pT0YwcWTH1AtT/Gbqy90bUc=
+X-Received: by 2002:a17:90a:ba18:b0:28c:6529:ecb4 with SMTP id
+ s24-20020a17090aba1800b0028c6529ecb4mr2374762pjr.98.1704819623455; Tue, 09
+ Jan 2024 09:00:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <20240109164655.626085-1-vincent.guittot@linaro.org>
+ <20240109164655.626085-2-vincent.guittot@linaro.org> <CAJZ5v0ixmEiOhwBHkDqH8QNtchiszAEi0rY2pDCGHXiWHob0NA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0ixmEiOhwBHkDqH8QNtchiszAEi0rY2pDCGHXiWHob0NA@mail.gmail.com>
+From: Vincent Guittot <vincent.guittot@linaro.org>
+Date: Tue, 9 Jan 2024 18:00:12 +0100
+Message-ID: <CAKfTPtAncXsNa6_8PXfn3Hv0G03WN79QgPQafJqPSo-3oJm6KA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/5] cpufreq: Add a cpufreq pressure feedback for the scheduler
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org, 
+	sudeep.holla@arm.com, viresh.kumar@linaro.org, agross@kernel.org, 
+	andersson@kernel.org, konrad.dybcio@linaro.org, mingo@redhat.com, 
+	peterz@infradead.org, juri.lelli@redhat.com, dietmar.eggemann@arm.com, 
+	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de, bristot@redhat.com, 
+	vschneid@redhat.com, lukasz.luba@arm.com, rui.zhang@intel.com, 
+	mhiramat@kernel.org, daniel.lezcano@linaro.org, amit.kachhap@gmail.com, 
+	corbet@lwn.net, gregkh@linuxfoundation.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	qyousef@layalina.io
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrvdehledgleefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepgedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsthgrnhhishhlrgifrdhgrhhushiikhgrsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
+Content-Transfer-Encoding: quoted-printable
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Tue, 9 Jan 2024 at 17:49, Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Tue, Jan 9, 2024 at 5:47=E2=80=AFPM Vincent Guittot
+> <vincent.guittot@linaro.org> wrote:
+> >
+> > Provide to the scheduler a feedback about the temporary max available
+> > capacity. Unlike arch_update_thermal_pressure, this doesn't need to be
+> > filtered as the pressure will happen for dozens ms or more.
+> >
+> > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+>
+> Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+>
+> and I think I've given the tag on this patch already.
 
-Before commit 7839d0078e0d ("PM: sleep: Fix possible deadlocks in core
-system-wide PM code"), the resume of devices that were allowed to resume
-asynchronously was scheduled before starting the resume of the other
-devices, so the former did not have to wait for the latter unless
-functional dependencies were present.
+yes, I preferred to not add it after the crap that I did in the v3
+with the cleanup of this [1/5] patch
 
-Commit 7839d0078e0d removed that optimization in order to address a
-correctness issue, but it can be restored with the help of a new device
-power management flag, so do that now.
+Thanks
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-I said I'd probably do this in 6.9, but then I thought more about it
-and now I think it would be nice to have 6.8-rc1 without a suspend
-performance regression and the change is relatively straightforward,
-so here it goes.
-
----
- drivers/base/power/main.c |  117 +++++++++++++++++++++++++---------------------
- include/linux/pm.h        |    1 
- 2 files changed, 65 insertions(+), 53 deletions(-)
-
-Index: linux-pm/include/linux/pm.h
-===================================================================
---- linux-pm.orig/include/linux/pm.h
-+++ linux-pm/include/linux/pm.h
-@@ -681,6 +681,7 @@ struct dev_pm_info {
- 	bool			wakeup_path:1;
- 	bool			syscore:1;
- 	bool			no_pm_callbacks:1;	/* Owned by the PM core */
-+	bool			in_progress:1;	/* Owned by the PM core */
- 	unsigned int		must_resume:1;	/* Owned by the PM core */
- 	unsigned int		may_skip_resume:1;	/* Set by subsystems */
- #else
-Index: linux-pm/drivers/base/power/main.c
-===================================================================
---- linux-pm.orig/drivers/base/power/main.c
-+++ linux-pm/drivers/base/power/main.c
-@@ -579,7 +579,7 @@ bool dev_pm_skip_resume(struct device *d
- }
- 
- /**
-- * __device_resume_noirq - Execute a "noirq resume" callback for given device.
-+ * device_resume_noirq - Execute a "noirq resume" callback for given device.
-  * @dev: Device to handle.
-  * @state: PM transition of the system being carried out.
-  * @async: If true, the device is being resumed asynchronously.
-@@ -587,7 +587,7 @@ bool dev_pm_skip_resume(struct device *d
-  * The driver of @dev will not receive interrupts while this function is being
-  * executed.
-  */
--static void __device_resume_noirq(struct device *dev, pm_message_t state, bool async)
-+static void device_resume_noirq(struct device *dev, pm_message_t state, bool async)
- {
- 	pm_callback_t callback = NULL;
- 	const char *info = NULL;
-@@ -674,16 +674,22 @@ static bool dpm_async_fn(struct device *
- {
- 	reinit_completion(&dev->power.completion);
- 
--	if (!is_async(dev))
--		return false;
-+	if (is_async(dev)) {
-+		dev->power.in_progress = true;
- 
--	get_device(dev);
--
--	if (async_schedule_dev_nocall(func, dev))
--		return true;
-+		get_device(dev);
- 
--	put_device(dev);
-+		if (async_schedule_dev_nocall(func, dev))
-+			return true;
- 
-+		put_device(dev);
-+	}
-+	/*
-+	 * Because async_schedule_dev_nocall() above has returned false or it
-+	 * has not been called at all, func() is not running and it safe to
-+	 * update the in_progress flag without additional synchronization.
-+	 */
-+	dev->power.in_progress = false;
- 	return false;
- }
- 
-@@ -691,18 +697,10 @@ static void async_resume_noirq(void *dat
- {
- 	struct device *dev = data;
- 
--	__device_resume_noirq(dev, pm_transition, true);
-+	device_resume_noirq(dev, pm_transition, true);
- 	put_device(dev);
- }
- 
--static void device_resume_noirq(struct device *dev)
--{
--	if (dpm_async_fn(dev, async_resume_noirq))
--		return;
--
--	__device_resume_noirq(dev, pm_transition, false);
--}
--
- static void dpm_noirq_resume_devices(pm_message_t state)
- {
- 	struct device *dev;
-@@ -712,18 +710,28 @@ static void dpm_noirq_resume_devices(pm_
- 	mutex_lock(&dpm_list_mtx);
- 	pm_transition = state;
- 
-+	/*
-+	 * Trigger the resume of "async" devices upfront so they don't have to
-+	 * wait for the "non-async" ones they don't depend on.
-+	 */
-+	list_for_each_entry(dev, &dpm_noirq_list, power.entry)
-+		dpm_async_fn(dev, async_resume_noirq);
-+
- 	while (!list_empty(&dpm_noirq_list)) {
- 		dev = to_device(dpm_noirq_list.next);
--		get_device(dev);
- 		list_move_tail(&dev->power.entry, &dpm_late_early_list);
- 
--		mutex_unlock(&dpm_list_mtx);
-+		if (!dev->power.in_progress) {
-+			get_device(dev);
- 
--		device_resume_noirq(dev);
-+			mutex_unlock(&dpm_list_mtx);
- 
--		put_device(dev);
-+			device_resume_noirq(dev, state, false);
-+
-+			put_device(dev);
- 
--		mutex_lock(&dpm_list_mtx);
-+			mutex_lock(&dpm_list_mtx);
-+		}
- 	}
- 	mutex_unlock(&dpm_list_mtx);
- 	async_synchronize_full();
-@@ -747,14 +755,14 @@ void dpm_resume_noirq(pm_message_t state
- }
- 
- /**
-- * __device_resume_early - Execute an "early resume" callback for given device.
-+ * device_resume_early - Execute an "early resume" callback for given device.
-  * @dev: Device to handle.
-  * @state: PM transition of the system being carried out.
-  * @async: If true, the device is being resumed asynchronously.
-  *
-  * Runtime PM is disabled for @dev while this function is being executed.
-  */
--static void __device_resume_early(struct device *dev, pm_message_t state, bool async)
-+static void device_resume_early(struct device *dev, pm_message_t state, bool async)
- {
- 	pm_callback_t callback = NULL;
- 	const char *info = NULL;
-@@ -820,18 +828,10 @@ static void async_resume_early(void *dat
- {
- 	struct device *dev = data;
- 
--	__device_resume_early(dev, pm_transition, true);
-+	device_resume_early(dev, pm_transition, true);
- 	put_device(dev);
- }
- 
--static void device_resume_early(struct device *dev)
--{
--	if (dpm_async_fn(dev, async_resume_early))
--		return;
--
--	__device_resume_early(dev, pm_transition, false);
--}
--
- /**
-  * dpm_resume_early - Execute "early resume" callbacks for all devices.
-  * @state: PM transition of the system being carried out.
-@@ -845,18 +845,28 @@ void dpm_resume_early(pm_message_t state
- 	mutex_lock(&dpm_list_mtx);
- 	pm_transition = state;
- 
-+	/*
-+	 * Trigger the resume of "async" devices upfront so they don't have to
-+	 * wait for the "non-async" ones they don't depend on.
-+	 */
-+	list_for_each_entry(dev, &dpm_late_early_list, power.entry)
-+		dpm_async_fn(dev, async_resume_early);
-+
- 	while (!list_empty(&dpm_late_early_list)) {
- 		dev = to_device(dpm_late_early_list.next);
--		get_device(dev);
- 		list_move_tail(&dev->power.entry, &dpm_suspended_list);
- 
--		mutex_unlock(&dpm_list_mtx);
-+		if (!dev->power.in_progress) {
-+			get_device(dev);
- 
--		device_resume_early(dev);
-+			mutex_unlock(&dpm_list_mtx);
- 
--		put_device(dev);
-+			device_resume_early(dev, state, false);
-+
-+			put_device(dev);
- 
--		mutex_lock(&dpm_list_mtx);
-+			mutex_lock(&dpm_list_mtx);
-+		}
- 	}
- 	mutex_unlock(&dpm_list_mtx);
- 	async_synchronize_full();
-@@ -876,12 +886,12 @@ void dpm_resume_start(pm_message_t state
- EXPORT_SYMBOL_GPL(dpm_resume_start);
- 
- /**
-- * __device_resume - Execute "resume" callbacks for given device.
-+ * device_resume - Execute "resume" callbacks for given device.
-  * @dev: Device to handle.
-  * @state: PM transition of the system being carried out.
-  * @async: If true, the device is being resumed asynchronously.
-  */
--static void __device_resume(struct device *dev, pm_message_t state, bool async)
-+static void device_resume(struct device *dev, pm_message_t state, bool async)
- {
- 	pm_callback_t callback = NULL;
- 	const char *info = NULL;
-@@ -975,18 +985,10 @@ static void async_resume(void *data, asy
- {
- 	struct device *dev = data;
- 
--	__device_resume(dev, pm_transition, true);
-+	device_resume(dev, pm_transition, true);
- 	put_device(dev);
- }
- 
--static void device_resume(struct device *dev)
--{
--	if (dpm_async_fn(dev, async_resume))
--		return;
--
--	__device_resume(dev, pm_transition, false);
--}
--
- /**
-  * dpm_resume - Execute "resume" callbacks for non-sysdev devices.
-  * @state: PM transition of the system being carried out.
-@@ -1006,16 +1008,25 @@ void dpm_resume(pm_message_t state)
- 	pm_transition = state;
- 	async_error = 0;
- 
-+	/*
-+	 * Trigger the resume of "async" devices upfront so they don't have to
-+	 * wait for the "non-async" ones they don't depend on.
-+	 */
-+	list_for_each_entry(dev, &dpm_suspended_list, power.entry)
-+		dpm_async_fn(dev, async_resume);
-+
- 	while (!list_empty(&dpm_suspended_list)) {
- 		dev = to_device(dpm_suspended_list.next);
- 
- 		get_device(dev);
- 
--		mutex_unlock(&dpm_list_mtx);
-+		if (!dev->power.in_progress) {
-+			mutex_unlock(&dpm_list_mtx);
- 
--		device_resume(dev);
-+			device_resume(dev, state, false);
- 
--		mutex_lock(&dpm_list_mtx);
-+			mutex_lock(&dpm_list_mtx);
-+		}
- 
- 		if (!list_empty(&dev->power.entry))
- 			list_move_tail(&dev->power.entry, &dpm_prepared_list);
-
-
-
+>
+> > ---
+> >  drivers/cpufreq/cpufreq.c | 36 ++++++++++++++++++++++++++++++++++++
+> >  include/linux/cpufreq.h   | 10 ++++++++++
+> >  2 files changed, 46 insertions(+)
+> >
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 44db4f59c4cc..f4eee3d107f1 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -2563,6 +2563,40 @@ int cpufreq_get_policy(struct cpufreq_policy *po=
+licy, unsigned int cpu)
+> >  }
+> >  EXPORT_SYMBOL(cpufreq_get_policy);
+> >
+> > +DEFINE_PER_CPU(unsigned long, cpufreq_pressure);
+> > +
+> > +/**
+> > + * cpufreq_update_pressure() - Update cpufreq pressure for CPUs
+> > + * @policy: cpufreq policy of the CPUs.
+> > + *
+> > + * Update the value of cpufreq pressure for all @cpus in the policy.
+> > + */
+> > +static void cpufreq_update_pressure(struct cpufreq_policy *policy)
+> > +{
+> > +       unsigned long max_capacity, capped_freq, pressure;
+> > +       u32 max_freq;
+> > +       int cpu;
+> > +
+> > +       cpu =3D cpumask_first(policy->related_cpus);
+> > +       max_freq =3D arch_scale_freq_ref(cpu);
+> > +       capped_freq =3D policy->max;
+> > +
+> > +       /*
+> > +        * Handle properly the boost frequencies, which should simply c=
+lean
+> > +        * the cpufreq pressure value.
+> > +        */
+> > +       if (max_freq <=3D capped_freq) {
+> > +               pressure =3D 0;
+> > +       } else {
+> > +               max_capacity =3D arch_scale_cpu_capacity(cpu);
+> > +               pressure =3D max_capacity -
+> > +                          mult_frac(max_capacity, capped_freq, max_fre=
+q);
+> > +       }
+> > +
+> > +       for_each_cpu(cpu, policy->related_cpus)
+> > +               WRITE_ONCE(per_cpu(cpufreq_pressure, cpu), pressure);
+> > +}
+> > +
+> >  /**
+> >   * cpufreq_set_policy - Modify cpufreq policy parameters.
+> >   * @policy: Policy object to modify.
+> > @@ -2618,6 +2652,8 @@ static int cpufreq_set_policy(struct cpufreq_poli=
+cy *policy,
+> >         policy->max =3D __resolve_freq(policy, policy->max, CPUFREQ_REL=
+ATION_H);
+> >         trace_cpu_frequency_limits(policy);
+> >
+> > +       cpufreq_update_pressure(policy);
+> > +
+> >         policy->cached_target_freq =3D UINT_MAX;
+> >
+> >         pr_debug("new min and max freqs are %u - %u kHz\n",
+> > diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> > index afda5f24d3dd..b1d97edd3253 100644
+> > --- a/include/linux/cpufreq.h
+> > +++ b/include/linux/cpufreq.h
+> > @@ -241,6 +241,12 @@ struct kobject *get_governor_parent_kobj(struct cp=
+ufreq_policy *policy);
+> >  void cpufreq_enable_fast_switch(struct cpufreq_policy *policy);
+> >  void cpufreq_disable_fast_switch(struct cpufreq_policy *policy);
+> >  bool has_target_index(void);
+> > +
+> > +DECLARE_PER_CPU(unsigned long, cpufreq_pressure);
+> > +static inline unsigned long cpufreq_get_pressure(int cpu)
+> > +{
+> > +       return per_cpu(cpufreq_pressure, cpu);
+> > +}
+> >  #else
+> >  static inline unsigned int cpufreq_get(unsigned int cpu)
+> >  {
+> > @@ -263,6 +269,10 @@ static inline bool cpufreq_supports_freq_invarianc=
+e(void)
+> >         return false;
+> >  }
+> >  static inline void disable_cpufreq(void) { }
+> > +static inline unsigned long cpufreq_get_pressure(int cpu)
+> > +{
+> > +       return 0;
+> > +}
+> >  #endif
+> >
+> >  #ifdef CONFIG_CPU_FREQ_STAT
+> > --
+> > 2.34.1
+> >
 
