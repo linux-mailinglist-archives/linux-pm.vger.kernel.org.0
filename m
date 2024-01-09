@@ -1,96 +1,76 @@
-Return-Path: <linux-pm+bounces-2004-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2005-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B19FF8289F6
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 17:28:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A6AA828A1F
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 17:37:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 60F52283157
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 16:28:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D9A71C24746
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 16:37:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D42993A8C2;
-	Tue,  9 Jan 2024 16:28:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E2B838F9A;
+	Tue,  9 Jan 2024 16:37:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ieee.org header.i=@ieee.org header.b="PtGgdaY/"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="Y/tPUQmp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA6B83A1C9
-	for <linux-pm@vger.kernel.org>; Tue,  9 Jan 2024 16:28:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ieee.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ieee.org
-Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-7bedd61c587so23530739f.2
-        for <linux-pm@vger.kernel.org>; Tue, 09 Jan 2024 08:28:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google; t=1704817691; x=1705422491; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nby+oSwByD9EHlU56EraVzzwXmfiSFCkU4R70siD1Rc=;
-        b=PtGgdaY/O/VySOF6ruAg84gqSePGcVXNjxDpOoblRBanUQmA6+Y7VWPn/6mfpiV60A
-         s3j5Eqech0tqGNC++IfUsal6x2f4FKXWv+iMQf9KQ6Ed+lhe9kjx9i1tJlDgC5k2RYIZ
-         tJg9EqGJIJnsjuiFMA3uqcBc96Uc4eSuWnezc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704817691; x=1705422491;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nby+oSwByD9EHlU56EraVzzwXmfiSFCkU4R70siD1Rc=;
-        b=Btp+p1mPptj1g7C4oqXTSQj6IuWQA3I3BZOJP3jS9ZJUkDu55so3Wo4sMAPXgb4fjP
-         G/jjpFZotCPDvhqBZqFop713N3TwXXIBq93K5k8cxk4aXvqw45vW1+Q8v3bGxoY6g9Gx
-         6oOaF7IU4Ge8VASRoBHBtBDxUVJCGR2skydyVet+3nV8yM9nAfx2fanMjlBg6YZXntZz
-         e0i/thdvdvryDUHAtCwHN779Cfdf9Zz/sCkh7Xa/I/5RRoI2rSJ+I9W69WvvCj1NTL0g
-         nJRLWHy9dsCz9V9KwhaSYcHYixj2Uf9Li17r76DicRnckO0vzmuO4WYSruBGcgsl157u
-         ynyA==
-X-Gm-Message-State: AOJu0YwfS/29xOIusJNE8NeSRQIaaAQukDJLnib+m28InX3l1RZGqJaX
-	eQ2UrsZHuI6MtQFoHOyknYjs1naVoSPzQg2Osx2wP320HdvA
-X-Google-Smtp-Source: AGHT+IFZANDHlrYQbVqnxa0ellDNxXxwpEYZ0p98XaoK5k8ri1jUTeUsGsc8kvg1NUF1nB6OGAiHjQ==
-X-Received: by 2002:a6b:4402:0:b0:7bb:1701:e577 with SMTP id r2-20020a6b4402000000b007bb1701e577mr5547051ioa.42.1704817690709;
-        Tue, 09 Jan 2024 08:28:10 -0800 (PST)
-Received: from [172.22.22.28] (c-98-61-227-136.hsd1.mn.comcast.net. [98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id e15-20020a6b500f000000b007bedb7d78b3sm404777iob.24.2024.01.09.08.28.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jan 2024 08:28:10 -0800 (PST)
-Message-ID: <5ab94881-052e-4068-ba10-e8c94aa55ec4@ieee.org>
-Date: Tue, 9 Jan 2024 10:28:08 -0600
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 733973A8E5
+	for <linux-pm@vger.kernel.org>; Tue,  9 Jan 2024 16:37:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id AB242475;
+	Tue,  9 Jan 2024 17:36:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1704818186;
+	bh=w2vE0WTv24GgGx55X1nYqEcrexe6YcLeUgYhx407efA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Y/tPUQmp75fqLLEkKN6mTGr0VWap/jbdoA01CswVVDgfshJc5M7Mx90DkI8vFtBJZ
+	 0zB72Bg2E1EWdgH/TaasOQAa0d3NLUoOk1+6v7aygfCrn2iZsmdZPub5q9czipnpwU
+	 K2JJeIVX9YbpF262uCJ5cTJi1NirpPIJ31fL3G60=
+Date: Tue, 9 Jan 2024 18:37:39 +0200
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
+	Paul Elder <paul.elder@ideasonboard.com>,
+	Alex Elder <elder@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH 1/2] pm: runtime: Simplify pm_runtime_get_if_active()
+ usage
+Message-ID: <20240109163739.GA27655@pendragon.ideasonboard.com>
+References: <20240109133639.111210-1-sakari.ailus@linux.intel.com>
+ <20240109133657.111258-1-sakari.ailus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] pm: runtime: Simplify pm_runtime_get_if_active()
- usage
-Content-Language: en-US
-To: Sakari Ailus <sakari.ailus@linux.intel.com>, linux-pm@vger.kernel.org
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- laurent.pinchart@ideasonboard.com,
- Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
- Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
- Jani Nikula <jani.nikula@linux.intel.com>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>,
- Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
- David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Lucas De Marchi <lucas.demarchi@intel.com>,
- =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
- Paul Elder <paul.elder@ideasonboard.com>, Alex Elder <elder@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- Mark Brown <broonie@kernel.org>
-References: <20240109133639.111210-1-sakari.ailus@linux.intel.com>
- <20240109133657.111258-1-sakari.ailus@linux.intel.com>
-From: Alex Elder <elder@ieee.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 In-Reply-To: <20240109133657.111258-1-sakari.ailus@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 1/9/24 7:36 AM, Sakari Ailus wrote:
+Hi Sakari,
+
+Thank you for the patch.
+
+On Tue, Jan 09, 2024 at 03:36:57PM +0200, Sakari Ailus wrote:
 > There are two ways to opportunistically increment a device's runtime PM
 > usage count, calling either pm_runtime_get_if_active() or
 > pm_runtime_get_if_in_use(). The former has an argument to tell whether to
@@ -105,25 +85,260 @@ On 1/9/24 7:36 AM, Sakari Ailus wrote:
 > 
 > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
-I like it.  For drivers/net/ipa/ipa_smp2p.c:
-
-Reviewed-by: Alex Elder <elder@linaro.org>
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
 > ---
->   Documentation/power/runtime_pm.rst      |  5 ++--
->   drivers/accel/ivpu/ivpu_pm.c            |  2 +-
->   drivers/base/power/runtime.c            |  9 ++++---
->   drivers/gpu/drm/i915/intel_runtime_pm.c |  2 +-
->   drivers/gpu/drm/xe/xe_pm.c              |  2 +-
->   drivers/media/i2c/ccs/ccs-core.c        |  2 +-
->   drivers/media/i2c/ov64a40.c             |  2 +-
->   drivers/media/i2c/thp7312.c             |  2 +-
->   drivers/net/ipa/ipa_smp2p.c             |  2 +-
->   drivers/pci/pci.c                       |  2 +-
->   include/linux/pm_runtime.h              | 32 +++++++++++++++++++++----
->   sound/hda/hdac_device.c                 |  2 +-
->   12 files changed, 44 insertions(+), 20 deletions(-)
+>  Documentation/power/runtime_pm.rst      |  5 ++--
+>  drivers/accel/ivpu/ivpu_pm.c            |  2 +-
+>  drivers/base/power/runtime.c            |  9 ++++---
+>  drivers/gpu/drm/i915/intel_runtime_pm.c |  2 +-
+>  drivers/gpu/drm/xe/xe_pm.c              |  2 +-
+>  drivers/media/i2c/ccs/ccs-core.c        |  2 +-
+>  drivers/media/i2c/ov64a40.c             |  2 +-
+>  drivers/media/i2c/thp7312.c             |  2 +-
+>  drivers/net/ipa/ipa_smp2p.c             |  2 +-
+>  drivers/pci/pci.c                       |  2 +-
+>  include/linux/pm_runtime.h              | 32 +++++++++++++++++++++----
+>  sound/hda/hdac_device.c                 |  2 +-
+>  12 files changed, 44 insertions(+), 20 deletions(-)
+> 
+> diff --git a/Documentation/power/runtime_pm.rst b/Documentation/power/runtime_pm.rst
+> index 65b86e487afe..da99379071a4 100644
+> --- a/Documentation/power/runtime_pm.rst
+> +++ b/Documentation/power/runtime_pm.rst
+> @@ -396,10 +396,9 @@ drivers/base/power/runtime.c and include/linux/pm_runtime.h:
+>        nonzero, increment the counter and return 1; otherwise return 0 without
+>        changing the counter
+>  
+> -  `int pm_runtime_get_if_active(struct device *dev, bool ign_usage_count);`
+> +  `int pm_runtime_get_if_active(struct device *dev);`
+>      - return -EINVAL if 'power.disable_depth' is nonzero; otherwise, if the
+> -      runtime PM status is RPM_ACTIVE, and either ign_usage_count is true
+> -      or the device's usage_count is non-zero, increment the counter and
+> +      runtime PM status is RPM_ACTIVE, increment the counter and
+>        return 1; otherwise return 0 without changing the counter
+>  
+>    `void pm_runtime_put_noidle(struct device *dev);`
+> diff --git a/drivers/accel/ivpu/ivpu_pm.c b/drivers/accel/ivpu/ivpu_pm.c
+> index 0af8864cb3b5..c6d93c7a1c58 100644
+> --- a/drivers/accel/ivpu/ivpu_pm.c
+> +++ b/drivers/accel/ivpu/ivpu_pm.c
+> @@ -292,7 +292,7 @@ int ivpu_rpm_get_if_active(struct ivpu_device *vdev)
+>  {
+>  	int ret;
+>  
+> -	ret = pm_runtime_get_if_active(vdev->drm.dev, false);
+> +	ret = pm_runtime_get_if_in_use(vdev->drm.dev);
+>  	drm_WARN_ON(&vdev->drm, ret < 0);
+>  
+>  	return ret;
+> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> index 05793c9fbb84..6af8e67ab9c7 100644
+> --- a/drivers/base/power/runtime.c
+> +++ b/drivers/base/power/runtime.c
+> @@ -1176,7 +1176,7 @@ int __pm_runtime_resume(struct device *dev, int rpmflags)
+>  EXPORT_SYMBOL_GPL(__pm_runtime_resume);
+>  
+>  /**
+> - * pm_runtime_get_if_active - Conditionally bump up device usage counter.
+> + * __pm_runtime_get_conditional - Conditionally bump up device usage counter.
+>   * @dev: Device to handle.
+>   * @ign_usage_count: Whether or not to look at the current usage counter value.
+>   *
+> @@ -1196,8 +1196,11 @@ EXPORT_SYMBOL_GPL(__pm_runtime_resume);
+>   *
+>   * The caller is responsible for decrementing the runtime PM usage counter of
+>   * @dev after this function has returned a positive value for it.
+> + *
+> + * This function is not intended to be called by drivers, use
+> + * pm_runtime_get_if_active() or pm_runtime_get_if_in_use() instead.
+>   */
+> -int pm_runtime_get_if_active(struct device *dev, bool ign_usage_count)
+> +int __pm_runtime_get_conditional(struct device *dev, bool ign_usage_count)
+>  {
+>  	unsigned long flags;
+>  	int retval;
+> @@ -1218,7 +1221,7 @@ int pm_runtime_get_if_active(struct device *dev, bool ign_usage_count)
+>  
+>  	return retval;
+>  }
+> -EXPORT_SYMBOL_GPL(pm_runtime_get_if_active);
+> +EXPORT_SYMBOL_GPL(__pm_runtime_get_conditional);
+>  
+>  /**
+>   * __pm_runtime_set_status - Set runtime PM status of a device.
+> diff --git a/drivers/gpu/drm/i915/intel_runtime_pm.c b/drivers/gpu/drm/i915/intel_runtime_pm.c
+> index 860b51b56a92..51cbca330bd5 100644
+> --- a/drivers/gpu/drm/i915/intel_runtime_pm.c
+> +++ b/drivers/gpu/drm/i915/intel_runtime_pm.c
+> @@ -246,7 +246,7 @@ static intel_wakeref_t __intel_runtime_pm_get_if_active(struct intel_runtime_pm
+>  		 * function, since the power state is undefined. This applies
+>  		 * atm to the late/early system suspend/resume handlers.
+>  		 */
+> -		if (pm_runtime_get_if_active(rpm->kdev, ignore_usecount) <= 0)
+> +		if (__pm_runtime_get_conditional(rpm->kdev, ignore_usecount) <= 0)
+>  			return 0;
+>  	}
+>  
+> diff --git a/drivers/gpu/drm/xe/xe_pm.c b/drivers/gpu/drm/xe/xe_pm.c
+> index b429c2876a76..dd110058bf74 100644
+> --- a/drivers/gpu/drm/xe/xe_pm.c
+> +++ b/drivers/gpu/drm/xe/xe_pm.c
+> @@ -330,7 +330,7 @@ int xe_pm_runtime_put(struct xe_device *xe)
+>  
+>  int xe_pm_runtime_get_if_active(struct xe_device *xe)
+>  {
+> -	return pm_runtime_get_if_active(xe->drm.dev, true);
+> +	return pm_runtime_get_if_active(xe->drm.dev);
+>  }
+>  
+>  void xe_pm_assert_unbounded_bridge(struct xe_device *xe)
+> diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+> index e21287d50c15..e1ae0f9fad43 100644
+> --- a/drivers/media/i2c/ccs/ccs-core.c
+> +++ b/drivers/media/i2c/ccs/ccs-core.c
+> @@ -674,7 +674,7 @@ static int ccs_set_ctrl(struct v4l2_ctrl *ctrl)
+>  		break;
+>  	}
+>  
+> -	pm_status = pm_runtime_get_if_active(&client->dev, true);
+> +	pm_status = pm_runtime_get_if_active(&client->dev);
+>  	if (!pm_status)
+>  		return 0;
+>  
+> diff --git a/drivers/media/i2c/ov64a40.c b/drivers/media/i2c/ov64a40.c
+> index 4fba4c2cb064..541bf74581d2 100644
+> --- a/drivers/media/i2c/ov64a40.c
+> +++ b/drivers/media/i2c/ov64a40.c
+> @@ -3287,7 +3287,7 @@ static int ov64a40_set_ctrl(struct v4l2_ctrl *ctrl)
+>  					 exp_max, 1, exp_val);
+>  	}
+>  
+> -	pm_status = pm_runtime_get_if_active(ov64a40->dev, true);
+> +	pm_status = pm_runtime_get_if_active(ov64a40->dev);
+>  	if (!pm_status)
+>  		return 0;
+>  
+> diff --git a/drivers/media/i2c/thp7312.c b/drivers/media/i2c/thp7312.c
+> index 2806887514dc..19bd923a7315 100644
+> --- a/drivers/media/i2c/thp7312.c
+> +++ b/drivers/media/i2c/thp7312.c
+> @@ -1052,7 +1052,7 @@ static int thp7312_s_ctrl(struct v4l2_ctrl *ctrl)
+>  	if (ctrl->flags & V4L2_CTRL_FLAG_INACTIVE)
+>  		return -EINVAL;
+>  
+> -	if (!pm_runtime_get_if_active(thp7312->dev, true))
+> +	if (!pm_runtime_get_if_active(thp7312->dev))
+>  		return 0;
+>  
+>  	switch (ctrl->id) {
+> diff --git a/drivers/net/ipa/ipa_smp2p.c b/drivers/net/ipa/ipa_smp2p.c
+> index 5620dc271fac..cbf3d4761ce3 100644
+> --- a/drivers/net/ipa/ipa_smp2p.c
+> +++ b/drivers/net/ipa/ipa_smp2p.c
+> @@ -92,7 +92,7 @@ static void ipa_smp2p_notify(struct ipa_smp2p *smp2p)
+>  		return;
+>  
+>  	dev = &smp2p->ipa->pdev->dev;
+> -	smp2p->power_on = pm_runtime_get_if_active(dev, true) > 0;
+> +	smp2p->power_on = pm_runtime_get_if_active(dev) > 0;
+>  
+>  	/* Signal whether the IPA power is enabled */
+>  	mask = BIT(smp2p->enabled_bit);
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index d8f11a078924..f8293ae71389 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -2510,7 +2510,7 @@ static void pci_pme_list_scan(struct work_struct *work)
+>  			 * If the device is in a low power state it
+>  			 * should not be polled either.
+>  			 */
+> -			pm_status = pm_runtime_get_if_active(dev, true);
+> +			pm_status = pm_runtime_get_if_active(dev);
+>  			if (!pm_status)
+>  				continue;
+>  
+> diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+> index 7c9b35448563..13cd526634c1 100644
+> --- a/include/linux/pm_runtime.h
+> +++ b/include/linux/pm_runtime.h
+> @@ -72,7 +72,8 @@ extern int pm_runtime_force_resume(struct device *dev);
+>  extern int __pm_runtime_idle(struct device *dev, int rpmflags);
+>  extern int __pm_runtime_suspend(struct device *dev, int rpmflags);
+>  extern int __pm_runtime_resume(struct device *dev, int rpmflags);
+> -extern int pm_runtime_get_if_active(struct device *dev, bool ign_usage_count);
+> +extern int __pm_runtime_get_conditional(struct device *dev,
+> +					bool ign_usage_count);
+>  extern int pm_schedule_suspend(struct device *dev, unsigned int delay);
+>  extern int __pm_runtime_set_status(struct device *dev, unsigned int status);
+>  extern int pm_runtime_barrier(struct device *dev);
+> @@ -94,16 +95,33 @@ extern void pm_runtime_release_supplier(struct device_link *link);
+>  
+>  extern int devm_pm_runtime_enable(struct device *dev);
+>  
+> +/**
+> + * pm_runtime_get_if_active - Bump up runtime PM usage counter if the device is
+> + *			      in active state
+> + * @dev: Target device.
+> + *
+> + * Increment the runtime PM usage counter of @dev if its runtime PM status is
+> + * %RPM_ACTIVE, in which case it returns 1. If the device is in a different
+> + * state, 0 is returned. -EINVAL is returned if runtime PM is disabled for the
+> + * device.
+> + */
+> +static inline int pm_runtime_get_if_active(struct device *dev)
+> +{
+> +	return __pm_runtime_get_conditional(dev, true);
+> +}
+> +
+>  /**
+>   * pm_runtime_get_if_in_use - Conditionally bump up runtime PM usage counter.
+>   * @dev: Target device.
+>   *
+>   * Increment the runtime PM usage counter of @dev if its runtime PM status is
+> - * %RPM_ACTIVE and its runtime PM usage counter is greater than 0.
+> + * %RPM_ACTIVE and its runtime PM usage counter is greater than 0, in which case
+> + * it returns 1. If the device is in a different state or its usage_count is 0,
+> + * 0 is returned. -EINVAL is returned if runtime PM is disabled for the device.
+>   */
+>  static inline int pm_runtime_get_if_in_use(struct device *dev)
+>  {
+> -	return pm_runtime_get_if_active(dev, false);
+> +	return __pm_runtime_get_conditional(dev, false);
+>  }
+>  
+>  /**
+> @@ -275,8 +293,12 @@ static inline int pm_runtime_get_if_in_use(struct device *dev)
+>  {
+>  	return -EINVAL;
+>  }
+> -static inline int pm_runtime_get_if_active(struct device *dev,
+> -					   bool ign_usage_count)
+> +static inline int pm_runtime_get_if_active(struct device *dev)
+> +{
+> +	return -EINVAL;
+> +}
+> +static inline int __pm_runtime_get_conditional(struct device *dev,
+> +					       bool ign_usage_count)
+>  {
+>  	return -EINVAL;
+>  }
+> diff --git a/sound/hda/hdac_device.c b/sound/hda/hdac_device.c
+> index 7f7b67fe1b65..068c16e52dff 100644
+> --- a/sound/hda/hdac_device.c
+> +++ b/sound/hda/hdac_device.c
+> @@ -612,7 +612,7 @@ EXPORT_SYMBOL_GPL(snd_hdac_power_up_pm);
+>  int snd_hdac_keep_power_up(struct hdac_device *codec)
+>  {
+>  	if (!atomic_inc_not_zero(&codec->in_pm)) {
+> -		int ret = pm_runtime_get_if_active(&codec->dev, true);
+> +		int ret = pm_runtime_get_if_active(&codec->dev);
+>  		if (!ret)
+>  			return -1;
+>  		if (ret < 0)
 
-. . .
+-- 
+Regards,
 
+Laurent Pinchart
 
