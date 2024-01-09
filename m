@@ -1,113 +1,120 @@
-Return-Path: <linux-pm+bounces-1991-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1992-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20476828728
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 14:33:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60FCF828733
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 14:36:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A5345B24B92
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 13:33:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA3FE286C1D
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 13:36:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8710738FA8;
-	Tue,  9 Jan 2024 13:33:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09A0D2206B;
+	Tue,  9 Jan 2024 13:36:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="V27oYiMn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kx430XlC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B1333984B
-	for <linux-pm@vger.kernel.org>; Tue,  9 Jan 2024 13:33:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-28d0052beb0so1892425a91.0
-        for <linux-pm@vger.kernel.org>; Tue, 09 Jan 2024 05:33:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704807191; x=1705411991; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HpVlVJ/RQGEJ1rvUCc6A3Ljjn+64q3ODdp483E8ssZg=;
-        b=V27oYiMnfEBSC4/NnsDz/ERGrt0a33M2SIX+mX2pUoIGtv97Jmz7NnQCc+qviuGb8Z
-         EcSMpQ7DZhroilQtmemBgk/FWyvbKyHxBzAHXkfa3g9u4GAYs1NZ64L22IPvOJ7a7da+
-         RXQ4I2mlf7mFFS0JMphm9qY0/HiPwzjKrfVu4eufkM0I1j0MFAgt/447HNuIJj4UjKgV
-         LDMZ/8SOjWK4dBuqSaKvfuvRbNTp4HtXElvyfg7eRvqGsNO0nq573TYmWOxiuyAXNvlP
-         avsirLL5q0E5SfUw6X+Hpdl13x8acjTdWqoHEuKUuZipN5MQJEkdgV38z5vQm1r2mthN
-         Ygjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704807191; x=1705411991;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HpVlVJ/RQGEJ1rvUCc6A3Ljjn+64q3ODdp483E8ssZg=;
-        b=Q6s6wssSeIP2D/wZhIaFBMmIPWDZd7TbA+MFnoyaNobEq4cQ7ujIc7LXUgTd58m5Sr
-         tmG3g4kOx8vR5SunJzbJlSTpaFUq4iUrBGS9ob9m4P456DPNISF1M42laYfV5oqZitNW
-         AdYVrp7UqSWnt7wK0WHUDMtoee5HgJ8VY76dUbU0qCiFOfyy6UEpPPXMOZGG7VN3Wl8C
-         qeBXYRNL+3MNkKYGvXFaSGdDY6SP975+UtQoxzFlpNJLisyg+JYUaxNiLInMqao/MLTb
-         GLlbSbiNoLxvYXIucXrSD/pHXNF5E/oCyN5+OSuhdINZGALxLSbUvrvIDSh30TzD6CIS
-         Ex7A==
-X-Gm-Message-State: AOJu0Ywk6VKOJ8obi2vYJ0YR+45UpUGM61gLu+f7iK8lHiHda8atuM+w
-	+Bl+6fP7/Bm79Qt91LV0p/lggKwslyEY3xiFCM2JuzX7SztDKw==
-X-Google-Smtp-Source: AGHT+IF1Jlg21jntY2f/r7bcEmT8wkpsmnUQVYvthZyqxU3f68k3t2w5ZLFd3lOIZRY2u1b3QOC3bVdVc4v5JhmvIaY=
-X-Received: by 2002:a17:90a:db45:b0:28b:bc2e:9d5f with SMTP id
- u5-20020a17090adb4500b0028bbc2e9d5fmr1991475pjx.84.1704807191420; Tue, 09 Jan
- 2024 05:33:11 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 364E138F9F
+	for <linux-pm@vger.kernel.org>; Tue,  9 Jan 2024 13:36:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704807406; x=1736343406;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=yFr9KGJx5XgPRln7KCPF/VRWVciagJnId5d0hywVu7I=;
+  b=kx430XlC4lo2i9CjYAEj1HtTYz7MV+hMv/S0iW9uR1SLkrYEPJ/EUQcL
+   vCVEQA8VwCNm8CkIFVkpLEp1qnW92EkaVBAvO36Wo5Z46lm9I7mY51Afo
+   9mSYMA3GKtJV6Nfn6KKm10Gn2D0QEn03AwYQ/9xiDr4/5gRhs0yoDzjsk
+   GmjIDL/Fe3FxX7HY/K81CBU66BU6qxqPeW0er3N5pXet5xx/heLJmno9K
+   94qK0Tpj54mMhxwTp1MUzP3DarlcfuXFK3mu9vis5tW1o4cSBZJBlghdD
+   JmCMG0ES70uCwIK2L5pRgP7+gwDIXfaOcL1+07NlULpdPTmP7GeU+4SfY
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="5550663"
+X-IronPort-AV: E=Sophos;i="6.04,183,1695711600"; 
+   d="scan'208";a="5550663"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2024 05:36:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="872245173"
+X-IronPort-AV: E=Sophos;i="6.04,183,1695711600"; 
+   d="scan'208";a="872245173"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2024 05:36:43 -0800
+Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 69C6711F913;
+	Tue,  9 Jan 2024 15:36:40 +0200 (EET)
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: linux-pm@vger.kernel.org
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	laurent.pinchart@ideasonboard.com
+Subject: [PATCH 0/2] Small runtime PM API changes
+Date: Tue,  9 Jan 2024 15:36:38 +0200
+Message-Id: <20240109133639.111210-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240108134843.429769-1-vincent.guittot@linaro.org>
- <20240108134843.429769-5-vincent.guittot@linaro.org> <0a64731f-f6fa-4382-a5cb-a29061eff2d6@arm.com>
-In-Reply-To: <0a64731f-f6fa-4382-a5cb-a29061eff2d6@arm.com>
-From: Vincent Guittot <vincent.guittot@linaro.org>
-Date: Tue, 9 Jan 2024 14:33:00 +0100
-Message-ID: <CAKfTPtCZVCB1yoocEUjLweodqkLVsF-+WwJzYruD17b0YKxS5A@mail.gmail.com>
-Subject: Re: [PATCH v3 4/5] sched: Rename arch_update_thermal_pressure into arch_update_hw_pressure
-To: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org, 
-	sudeep.holla@arm.com, rafael@kernel.org, viresh.kumar@linaro.org, 
-	agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org, 
-	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com, 
-	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de, bristot@redhat.com, 
-	vschneid@redhat.com, lukasz.luba@arm.com, rui.zhang@intel.com, 
-	mhiramat@kernel.org, daniel.lezcano@linaro.org, amit.kachhap@gmail.com, 
-	corbet@lwn.net, gregkh@linuxfoundation.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	qyousef@layalina.io
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Tue, 9 Jan 2024 at 12:56, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
->
-> On 08/01/2024 14:48, Vincent Guittot wrote:
-> > Now that cpufreq provides a pressure value to the scheduler, rename
->
-> I.e. that thermal (e.g. IPA governor) switches from average
-> (rq->avg_(thermal/hw).load_avg) (1) to instantenous (cpu_pressure) (2).
-> I rememeber a related dicussion during LPC 2018 :-)
->
-> > arch_update_thermal_pressure into HW pressure to reflect that it returns
-> > a pressure applied by HW (i.e. with a high frequency change) and not
-> > always related to thermal mitigation but also generated by max current
-> > limitation as an example. Such high frequency signal needs filtering to be
-> > smoothed and provide an value that reflects the average available capacity
-> > into the scheduler time scale.
->
-> So 'drivers/cpufreq/qcom-cpufreq-hw.c' is the only user of (1) right
-> now. Are we expecting more users here? If this stays the only user,
-> maybe it can do the averages by itself and we can completely switch to (2)?
+Hi folks,
 
-Yes I expect more users for this high frequency change which is
-typically 1ms and below. And I prefer to keep PELT averaging
-calculation inside scheduler instead of letting driver doing their own
-averaging which will be most of the time not aligned with what
-scheduler wants
+Here's a small but a different set of patches for making two relatively
+minor changes to runtime PM API. I restarted version numbering as this is
+meaningfully different from the previous set.
 
->
-> [...]
->
+pm_runtime_get_if_active() loses its second argument as it only made sense
+to have ign_usage_count argument true.
+
+The other change is also small but it has an effect on callers:
+pm_runtime_put_autosuspend() will, in the future, be re-purposed to
+include a call to pm_runtime_mark_last_busy() as well. Before this,
+current users of the function are moved to __pm_runtime_put_autosuspend()
+(added by this patchset) which will continue to have the current
+behaviour.
+
+I haven't included the conversion patches in this set as I only want to do
+that once this set has been approved and merged. The tree specific patches
+can be found here, on linux-next master (there are some V4L2 patches
+there, too, please ignore them for now):
+<URL:https://git.kernel.org/pub/scm/linux/kernel/git/sailus/linux-next.git/log/?h=pm>
+
+Later on, users calling pm_runtime_mark_last_busy() immediately followed
+by __pm_runtime_put_autosuspend() will be switched back to
+pm_runtime_put_autosuspend() once its behaviour change has been done (a
+patch near top of that branch). I'll provide these once the preceding ones
+have been merged.
+
+Comments are welcome.
+
+Sakari Ailus (2):
+  pm: runtime: Simplify pm_runtime_get_if_active() usage
+  pm: runtime: Add pm_runtime_put_autosuspend() replacement
+
+ Documentation/power/runtime_pm.rst      | 22 ++++++++-----
+ drivers/accel/ivpu/ivpu_pm.c            |  2 +-
+ drivers/base/power/runtime.c            |  9 +++--
+ drivers/gpu/drm/i915/intel_runtime_pm.c |  2 +-
+ drivers/gpu/drm/xe/xe_pm.c              |  2 +-
+ drivers/media/i2c/ccs/ccs-core.c        |  2 +-
+ drivers/media/i2c/ov64a40.c             |  2 +-
+ drivers/media/i2c/thp7312.c             |  2 +-
+ drivers/net/ipa/ipa_smp2p.c             |  2 +-
+ drivers/pci/pci.c                       |  2 +-
+ include/linux/pm_runtime.h              | 44 ++++++++++++++++++++++---
+ sound/hda/hdac_device.c                 |  2 +-
+ 12 files changed, 67 insertions(+), 26 deletions(-)
+
+-- 
+2.39.2
+
 
