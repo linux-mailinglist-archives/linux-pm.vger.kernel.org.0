@@ -1,127 +1,148 @@
-Return-Path: <linux-pm+bounces-1965-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1966-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4280827751
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 19:23:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7826827D76
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 04:46:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93812284B26
-	for <lists+linux-pm@lfdr.de>; Mon,  8 Jan 2024 18:23:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CEDD91C222DE
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 03:46:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 599F254BF8;
-	Mon,  8 Jan 2024 18:23:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68E3B4430;
+	Tue,  9 Jan 2024 03:45:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="pqpNI8Rj"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="YUX6y1tG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBB6454F9C;
-	Mon,  8 Jan 2024 18:23:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 408IHepa024137;
-	Mon, 8 Jan 2024 18:23:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	date:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=qcppdkim1; bh=uHY3fQLsNHWDaKV+dXru0
-	SBvr/s3dbPl29fFLxwGtjg=; b=pqpNI8Rjihhn5C/FPeVII7fBTbYbpwp9BkbEf
-	B1v9CFO1Xl5uLWoR9Ulo7ijKPYf75Xa8OOBGMFdROFV5J3GBVG82JkJdmIpJi3rL
-	KPjlELd95b5sJBojSZp0ClrQYEfdl8U+tfeXSwEsKo4/Wd4SYowsEkuehmILglCU
-	Wo5I6G9TV5GGIwTuSD8aK74Q4UmeW4d1NGuX0eAKEdfbmWGq6UrqFoyCenTQq9zE
-	+ejwKDOK9Ld6MAyNsWSQ+9WuoJyz1bw2aEz0ji74Qku0Dz6PoFlAlxae5/5gk8bH
-	jRgGeUi3tfMcwX3uCwCHhZx1Ug86Bc6fkzyLvFsBJWqTMf45g==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vgfwjry3u-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 08 Jan 2024 18:23:11 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 408INApm012620
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 8 Jan 2024 18:23:10 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Mon, 8 Jan 2024 10:23:09 -0800
-Date: Mon, 8 Jan 2024 10:23:08 -0800
-From: Bjorn Andersson <quic_bjorande@quicinc.com>
-To: Konrad Dybcio <konrad.dybcio@linaro.org>
-CC: Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette
-	<mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring
-	<robh+dt@kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Catalin Marinas
-	<catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "Dmitry
- Baryshkov" <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v2 3/8] clk: qcom: gpucc-sc8280xp: Add external supply
- for GX gdsc
-Message-ID: <20240108182308.GL1315173@hu-bjorande-lv.qualcomm.com>
-References: <20231220-sa8295p-gpu-v2-0-4763246b72c0@quicinc.com>
- <20231220-sa8295p-gpu-v2-3-4763246b72c0@quicinc.com>
- <0d20be70-7db2-4d8b-aecb-5256a42ba62e@linaro.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C69553FFF
+	for <linux-pm@vger.kernel.org>; Tue,  9 Jan 2024 03:45:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2cc7b9281d1so32144021fa.1
+        for <linux-pm@vger.kernel.org>; Mon, 08 Jan 2024 19:45:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1704771955; x=1705376755; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fd7/YRbFPwHwO9y5he5hBNzYN/gDqY/82MzLlZm9KnI=;
+        b=YUX6y1tG7xv77dbnHj+tbsPeKpGIO+31YWU1RrmrxfEg41rO0kFYBwQjuYwEH6ApTD
+         OXTteLB8dz+cu2W9Glu88ngzn7jSSIzj5/WQ5lQHBq41kHV0TOvh4rkcI4LqGR5PehIQ
+         ivDfsmlmdHju4c5zpL+ZAlWdL+rkBn1cTL1n0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704771955; x=1705376755;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fd7/YRbFPwHwO9y5he5hBNzYN/gDqY/82MzLlZm9KnI=;
+        b=PRbQEPSMRCfYd5f+03JTy0Xk3DPUdiuyAB4JtWDUD7rpKimieYbKurxPWpreHgN5EE
+         oOZDZwTPJs0bliIxI/GiGhX1p4TQxQK7g1IqcxK0pl7LRuhYVtoMu4wLft06EhBdcVuN
+         brl4RTlc1fB3uUaKr86os3UCSKU2wD02ogY2uqifhCqcP4z5VFLPLaVbJwXnh/xkpej+
+         iwd/wyoHofczWV1PiGzSeuhM3B20FuPw0XRd0zm8XcL/VN/UhGqgCQP6aMeUy0CEYTrK
+         5sBfRD4Au5ZwXrDuzieVeNYXtXL0Cvd03zRqdxcaylUVvCM3yYAxWwxUc57xJRm0Z6Fn
+         LYNA==
+X-Gm-Message-State: AOJu0Ywsf9Q/hdYqYXS701sJKktoMO9D4Q/AmMlSP/aHXaYmOM4odKD3
+	gL18GSQpB+RXGHvlF+8+2kLXBNH3FZOl6dnfjTBOKx91GpiN
+X-Google-Smtp-Source: AGHT+IEz8gHQeTkHleBOQVXUJi9TNmpfOEWm3/cRKrxK6wXP1Bm8y7NANfcHn1QPY9Df6/CM1zdVeVWY/y0P7EUByUg=
+X-Received: by 2002:a2e:7003:0:b0:2cd:417d:195e with SMTP id
+ l3-20020a2e7003000000b002cd417d195emr2052291ljc.49.1704771954850; Mon, 08 Jan
+ 2024 19:45:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <0d20be70-7db2-4d8b-aecb-5256a42ba62e@linaro.org>
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: AWHDRG9Pdm-ZMgbxBVL6ZrxrNndmMuFG
-X-Proofpoint-GUID: AWHDRG9Pdm-ZMgbxBVL6ZrxrNndmMuFG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
- impostorscore=0 lowpriorityscore=0 phishscore=0 mlxlogscore=778
- suspectscore=0 priorityscore=1501 mlxscore=0 malwarescore=0 adultscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2401080154
+References: <20231219082726.844508-1-wenst@chromium.org> <CAJZ5v0j2LTWt-vBLuDRk3aj0nK1Rmq5Np9QmzDe=_7RGq4rFiA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0j2LTWt-vBLuDRk3aj0nK1Rmq5Np9QmzDe=_7RGq4rFiA@mail.gmail.com>
+From: Chen-Yu Tsai <wenst@chromium.org>
+Date: Tue, 9 Jan 2024 11:45:43 +0800
+Message-ID: <CAGXv+5GX=7-4NVLtGtihEuNGbaeV3E+AwK=3iWqOwF5-XTyCaA@mail.gmail.com>
+Subject: Re: [PATCH] thermal/core: Correctly free tz->tzp in thermal zone
+ registration error path
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 27, 2023 at 02:07:52AM +0100, Konrad Dybcio wrote:
-> On 22.12.2023 05:39, Bjorn Andersson wrote:
-> > On SA8295P and SA8540P the GFX rail is powered by a dedicated external
-> > regulator, instead of the rpmh-controlled "gfx.lvl".
-> > 
-> > Define the "vdd-gfx" as the supply regulator for the GDSC, to cause the
-> > gdsc logic to look for, and control, this external power supply.
-> > 
-> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+On Tue, Dec 19, 2023 at 11:28=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.o=
+rg> wrote:
+>
+> On Tue, Dec 19, 2023 at 9:27=E2=80=AFAM Chen-Yu Tsai <wenst@chromium.org>=
+ wrote:
+> >
+> > After commit 3d439b1a2ad3 ("thermal/core: Alloc-copy-free the thermal
+> > zone parameters structure"), the core now copies the thermal zone
+> > parameters structure, and frees it if an error happens during thermal
+> > zone device registration, or upon unregistration of the device.
+> >
+> > In the error path, if device_register() was called, then `tz` disappear=
+s
+> > before kfree(tz->tzp) happens, causing a NULL pointer deference crash.
+> >
+> > In my case, the error path was entered from the sbs power supply driver=
+,
+> > which through the power supply core registers a thermal zone *without
+> > trip points* for the battery temperature sensor. This combined with
+> > setting the default thermal governor to "power allocator", which
+> > *requires* trip_max, causes the thermal zone registration to error out.
+> >
+> > The error path should handle the two cases, one where device_register
+> > has not happened and the kobj hasn't been reference counted, and vice
+> > versa where it has. The original commit tried to cover the first case,
+> > but fails for the second. Fix this by adding kfree(tz->tzp) before
+> > put_device() to cover the second case, and check if `tz` is still valid
+> > before calling kfree(tz->tzp) to avoid crashing in the second case.
+> >
+> > Fixes: 3d439b1a2ad3 ("thermal/core: Alloc-copy-free the thermal zone pa=
+rameters structure")
+> > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 > > ---
-> Worth noting the regulator framework will create a virtual supply
-> for the normal 8280
-> 
+> > This includes the minimal changes to fix the crash. I suppose some othe=
+r
+> > things in the thermal core could be reworked:
+> > - Don't use "power allocator" for thermal zones without trip points
+> > - Move some of the thermal zone cleanup code into the release function
+> >
+> >  drivers/thermal/thermal_core.c | 6 +++++-
+> >  1 file changed, 5 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_c=
+ore.c
+> > index 2415dc50c31d..e47826d82062 100644
+> > --- a/drivers/thermal/thermal_core.c
+> > +++ b/drivers/thermal/thermal_core.c
+> > @@ -1392,12 +1392,16 @@ thermal_zone_device_register_with_trips(const c=
+har *type, struct thermal_trip *t
+> >  unregister:
+> >         device_del(&tz->device);
+> >  release_device:
+> > +       /* Free tz->tzp before tz goes away. */
+> > +       kfree(tz->tzp);
+> >         put_device(&tz->device);
+> >         tz =3D NULL;
+> >  remove_id:
+> >         ida_free(&thermal_tz_ida, id);
+> >  free_tzp:
+> > -       kfree(tz->tzp);
+> > +       /* If we arrived here before device_register() was called. */
+> > +       if (tz)
+> > +               kfree(tz->tzp);
+> >  free_tz:
+> >         kfree(tz);
+> >         return ERR_PTR(result);
+> > --
+>
+> Can you please test linux-next from today?  The issue addressed by
+> your patch should be fixed there.
 
-You're right. No functional harm, but that's not very nice.
+Sorry for the very late reply. Yes it does. Thanks.
 
-I don't think we have any benefit from having a dummy supply, if the DT
-author failed to provide a proper one, so it seems reasonable to switch
-gdsc to devm_regulator_get_optional().
-
-Regards,
-Bjorn
-
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> 
-> Konrad
+ChenYu
 
