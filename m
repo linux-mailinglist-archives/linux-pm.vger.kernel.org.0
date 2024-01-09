@@ -1,73 +1,73 @@
-Return-Path: <linux-pm+bounces-2025-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2026-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E985828B9C
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 18:58:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C052828B9E
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 18:59:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A947B23649
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 17:58:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B814284703
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 17:58:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68DD93C068;
-	Tue,  9 Jan 2024 17:58:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A339D3BB29;
+	Tue,  9 Jan 2024 17:58:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AX6XZXx3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RRAyS3Ze"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D43393BB4C;
-	Tue,  9 Jan 2024 17:58:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF483BB24;
+	Tue,  9 Jan 2024 17:58:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-40e43e48a16so28598095e9.2;
-        Tue, 09 Jan 2024 09:58:19 -0800 (PST)
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3367f8f8cb0so3146331f8f.2;
+        Tue, 09 Jan 2024 09:58:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704823098; x=1705427898; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1704823132; x=1705427932; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jpUtuzXOnCEqHGuFl9LL4Al2mrUJlNSjgLnKSAf1Ws0=;
-        b=AX6XZXx3cFGDVjyLiWXk8oT9oSecKCEIH3u3ZEdW/F6gQrooS/PFVRPByGOBSXR6Ry
-         4ov2unT2T4jNQeX3pXVFPyYZ4Uij1n/iThTp5JoZgaaQo+PbhCf2nb1yo9T557rb0DPW
-         2g/AMPjE4hITqzBbEVgxnWkFc+ndBieH9ZxK8EJs5cZHe0944FZwyCWuuDI9QMOXq541
-         VCTvS8eM6gpsD5YV1Ei8woRvG4fzlgecAF2QOoTMC6MGdRj+JB/eJCQWP1aO8WsJfffo
-         KalvAIZtihBVXQeRZI/id3759No19ifjsEBe9/oH1z7TjE0edyBf/bAeqGqn1j4CgFCc
-         94PA==
+        bh=MBLORV9f1wdNQ5IV3RUD+Re4v0t7IkYwSTUQvtOoQHE=;
+        b=RRAyS3ZeBbS3UNU6P4y9mPuHsS4DsRNNV2JEMu5owtilJ8Oy/1FyxhDziZ33hXioUc
+         lcQT/Bm5teNPhUVibxh4HPPjBZCr+D9kGZNtj3MSTxfxbme6GauPY1cR2L6ho4LOoSa7
+         w+7oMaleOlrD7VWcwDon6o4MVL9xkQ6g2lS2SgZosM9btwxDPK6UjZaFWxJ+HOTNjHIj
+         +CgpIK8PmuDdyW/rnBz6sBlxSMqjwLGTujABacVz14yKaZc5yDJWNyMO0mBKmInBiKde
+         lf68esbRDaWfJeUAnGPS0ljSQUqmZrn0pyDFuEf7u40KXsQ3E8ThmdX0uJfYeMxiAWxj
+         UxCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704823098; x=1705427898;
+        d=1e100.net; s=20230601; t=1704823132; x=1705427932;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=jpUtuzXOnCEqHGuFl9LL4Al2mrUJlNSjgLnKSAf1Ws0=;
-        b=Ti4O3tbL0WRecEkZ2g+dqm3Ri3wXfF080IFu8BilvyQKyfmiQXRI1FyvP0fWWO3JwT
-         zlsI7kKSq23WG8cDbFzCidjVhT33TFI78j99hq/dsfYTEUtxZY9palRzzWs6OPdYhEOm
-         aELtPwSsL2CfcCsbkCsZjExKllU4NV7ynidcf5tw+iCy8QhdcZP44mMxOZmHpL26jY9b
-         fepkfoffZEmfzlaSVHB0VcGMvKzyE+FDwBC1v7sSk5Eoa0pytwIBJqoJHDgz1tVO5+kl
-         /32inACeR76E1CtzrvJmz7kDCnrPkicO0oO1i4dBUwW7v7avudcDdDCVyjnF7eBtzMQk
-         iVEA==
-X-Gm-Message-State: AOJu0Yz8RVG40xJz8F5EpwiS8XkHVP1ZVJUVTgiZdRWtMH+EhZO8Adyc
-	XXGgRqje0VZEqQK5aHojQBf9WbUtG5s=
-X-Google-Smtp-Source: AGHT+IHKcG3xLgIZvkIf6WXKaw2viLsbGnjXdHGB+gUG0ScLL60G2Y8/mqRCqsevl+1FE7O5XIddlw==
-X-Received: by 2002:a05:600c:a05:b0:40d:9237:dada with SMTP id z5-20020a05600c0a0500b0040d9237dadamr2958932wmp.103.1704823097807;
-        Tue, 09 Jan 2024 09:58:17 -0800 (PST)
+        bh=MBLORV9f1wdNQ5IV3RUD+Re4v0t7IkYwSTUQvtOoQHE=;
+        b=mnXr2eQeiJRSjG1zD1otrSmUTr3oiokHOXc4tkV8XlL6cHTsqrgSwwsBI8d3tff+B+
+         0OOVT/qJXgPza9oHHpzDbQQ8bCa32S06r7xwyk25Id+SdMuyZfsmOrcm0BtPqhAtPKaK
+         pWf7iEyC5YjiXCuOqrm6J/0ITGAoMXiBnkCWk64vh+l9ZWYO2Xnw53Jt/U3YQ6MJKOmd
+         o6wPmTDyW/D4z1eMyYPP5m9sHkiEmwXn5CVOcJONJwS45yohWmdpHTOIxacCBgvOC8po
+         8+fEV4lUtjkORtAqnb1yVIGyyDEWWwSvhbVTzS/hNyZ6i6Fcnk+f5QeyVrfBgzbbU79o
+         ydsQ==
+X-Gm-Message-State: AOJu0Yy2D0K51xrfODWqrAKGyHZqBoxqOm/L06s+NNY7xPSgWMpYf1Oi
+	ip8HtnPPQqO6UrL/IB80v6uWKtqQjjY=
+X-Google-Smtp-Source: AGHT+IFilyxnHtVyC4EuAKfjm8Ax+uaTvo3R173eY/2PB3iZc28H5rRAPG+mchtL7jV/uQuB4fOMsg==
+X-Received: by 2002:adf:f80d:0:b0:336:ec3f:fcf5 with SMTP id s13-20020adff80d000000b00336ec3ffcf5mr856094wrp.49.1704823132208;
+        Tue, 09 Jan 2024 09:58:52 -0800 (PST)
 Received: from macminim1.retailmedia.com ([2a01:e0a:b14:c1f0:617b:c61e:d65f:861e])
-        by smtp.googlemail.com with ESMTPSA id iv14-20020a05600c548e00b0040e3733a32bsm15777075wmb.41.2024.01.09.09.58.17
+        by smtp.googlemail.com with ESMTPSA id q10-20020adffeca000000b003367eae8e18sm2978993wrs.57.2024.01.09.09.58.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jan 2024 09:58:17 -0800 (PST)
+        Tue, 09 Jan 2024 09:58:51 -0800 (PST)
 From: Erwan Velu <erwanaliasr1@gmail.com>
 X-Google-Original-From: Erwan Velu <e.velu@criteo.com>
 To: 
 Cc: Erwan Velu <e.velu@criteo.com>,
-	Jonathan Corbet <corbet@lwn.net>,
 	Huang Rui <ray.huang@amd.com>,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH 1/2] admin-guide: Fixing typos
-Date: Tue,  9 Jan 2024 18:57:53 +0100
-Message-ID: <20240109175801.447943-1-e.velu@criteo.com>
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 2/2] cpufreq/amd-pstate: Adding Zen4 support in introduction
+Date: Tue,  9 Jan 2024 18:58:42 +0100
+Message-ID: <20240109175844.448006-1-e.velu@criteo.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -77,40 +77,27 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This commit fixes two typos in the admin-guide.
-
-- a missing e in "reference_perf".
-- the amd_pstate sysfs path uses a dash instead of an underscore.
+amd-pstate is implemented on Zen4, adding this architecture in the
+introduction.
 
 Signed-off-by: Erwan Velu <e.velu@criteo.com>
 ---
- Documentation/admin-guide/acpi/cppc_sysfs.rst | 2 +-
- Documentation/admin-guide/pm/amd-pstate.rst   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/cpufreq/amd-pstate.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/admin-guide/acpi/cppc_sysfs.rst b/Documentation/admin-guide/acpi/cppc_sysfs.rst
-index e53d76365aa7..36981c667823 100644
---- a/Documentation/admin-guide/acpi/cppc_sysfs.rst
-+++ b/Documentation/admin-guide/acpi/cppc_sysfs.rst
-@@ -75,4 +75,4 @@ taking two different snapshots of feedback counters at time T1 and T2.
-   delivered_counter_delta = fbc_t2[del] - fbc_t1[del]
-   reference_counter_delta = fbc_t2[ref] - fbc_t1[ref]
- 
--  delivered_perf = (refernce_perf x delivered_counter_delta) / reference_counter_delta
-+  delivered_perf = (reference_perf x delivered_counter_delta) / reference_counter_delta
-diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-index 1cf40f69278c..9eb26014d34b 100644
---- a/Documentation/admin-guide/pm/amd-pstate.rst
-+++ b/Documentation/admin-guide/pm/amd-pstate.rst
-@@ -361,7 +361,7 @@ Global Attributes
- 
- ``amd-pstate`` exposes several global attributes (files) in ``sysfs`` to
- control its functionality at the system level.  They are located in the
--``/sys/devices/system/cpu/amd-pstate/`` directory and affect all CPUs.
-+``/sys/devices/system/cpu/amd_pstate/`` directory and affect all CPUs.
- 
- ``status``
- 	Operation mode of the driver: "active", "passive" or "disable".
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index 1f6186475715..9a8d083f6ba5 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -14,7 +14,7 @@
+  * communicate the performance hints to hardware.
+  *
+  * AMD P-State is supported on recent AMD Zen base CPU series include some of
+- * Zen2 and Zen3 processors. _CPC needs to be present in the ACPI tables of AMD
++ * Zen2, Zen3 and Zen4 processors. _CPC needs to be present in the ACPI tables of AMD
+  * P-State supported system. And there are two types of hardware implementations
+  * for AMD P-State: 1) Full MSR Solution and 2) Shared Memory Solution.
+  * X86_FEATURE_CPPC CPU feature flag is used to distinguish the different types.
 -- 
 2.43.0
 
