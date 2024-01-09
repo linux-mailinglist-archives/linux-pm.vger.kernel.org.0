@@ -1,152 +1,79 @@
-Return-Path: <linux-pm+bounces-1983-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-1984-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67B0D828566
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 12:47:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 827B5828588
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 12:56:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB9EC1F2540A
-	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 11:47:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 14AF1B23BEE
+	for <lists+linux-pm@lfdr.de>; Tue,  9 Jan 2024 11:56:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A394D3716F;
-	Tue,  9 Jan 2024 11:47:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FB5C374D4;
+	Tue,  9 Jan 2024 11:56:18 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62CFD37149;
-	Tue,  9 Jan 2024 11:47:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernelsoft.com
-Received: from localhost.localdomain (unknown [106.37.191.2])
-	by mail (Coremail) with SMTP id AQAAfwAXEEwSMp1lYIpFAA--.14466S2;
-	Tue, 09 Jan 2024 19:46:27 +0800 (CST)
-From: tianyu2 <tianyu2@kernelsoft.com>
-To: rafael@kernel.org,
-	viresh.kumar@linaro.org,
-	shawnguo@kernel.org,
-	s.hauer@pengutronix.de
-Cc: kernel@pengutronix.de,
-	festevam@gmail.com,
-	linux-imx@nxp.com,
-	linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: imx6: use regmap to read ocotp register
-Date: Tue,  9 Jan 2024 19:45:21 +0800
-Message-Id: <20240109114521.518195-1-tianyu2@kernelsoft.com>
-X-Mailer: git-send-email 2.25.1
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B0B6364A4;
+	Tue,  9 Jan 2024 11:56:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 209FFC15;
+	Tue,  9 Jan 2024 03:57:01 -0800 (PST)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 94ED23F64C;
+	Tue,  9 Jan 2024 03:56:10 -0800 (PST)
+Message-ID: <0a64731f-f6fa-4382-a5cb-a29061eff2d6@arm.com>
+Date: Tue, 9 Jan 2024 12:56:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAfwAXEEwSMp1lYIpFAA--.14466S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXr13WF4kKFW8GFWxGw1DAwb_yoW5Xw4Dpa
-	y7uFWayrW5XFnrtw1vyF4kG3W3trn2yayUJa10kwnaqwnxtFyrWas0vF9YyF95ZF95GF15
-	XF1ktrWxCw4UXr7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_UUUUUUUUU==
-X-CM-SenderInfo: xwld05zxs6yvxuqhz2xriwhudrp/
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 4/5] sched: Rename arch_update_thermal_pressure into
+ arch_update_hw_pressure
+Content-Language: en-US
+To: Vincent Guittot <vincent.guittot@linaro.org>, linux@armlinux.org.uk,
+ catalin.marinas@arm.com, will@kernel.org, sudeep.holla@arm.com,
+ rafael@kernel.org, viresh.kumar@linaro.org, agross@kernel.org,
+ andersson@kernel.org, konrad.dybcio@linaro.org, mingo@redhat.com,
+ peterz@infradead.org, juri.lelli@redhat.com, rostedt@goodmis.org,
+ bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+ vschneid@redhat.com, lukasz.luba@arm.com, rui.zhang@intel.com,
+ mhiramat@kernel.org, daniel.lezcano@linaro.org, amit.kachhap@gmail.com,
+ corbet@lwn.net, gregkh@linuxfoundation.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Cc: qyousef@layalina.io
+References: <20240108134843.429769-1-vincent.guittot@linaro.org>
+ <20240108134843.429769-5-vincent.guittot@linaro.org>
+From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20240108134843.429769-5-vincent.guittot@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Reading the ocotp register directly is unsafe and will cause the system
-to hang if its clock is not turned on in CCM. The regmap interface has
-clk enabled, which can solve this problem.
+On 08/01/2024 14:48, Vincent Guittot wrote:
+> Now that cpufreq provides a pressure value to the scheduler, rename
 
-Signed-off-by: tianyu2 <tianyu2@kernelsoft.com>
----
- drivers/cpufreq/imx6q-cpufreq.c | 45 +++++++++++----------------------
- 1 file changed, 15 insertions(+), 30 deletions(-)
+I.e. that thermal (e.g. IPA governor) switches from average
+(rq->avg_(thermal/hw).load_avg) (1) to instantenous (cpu_pressure) (2).
+I rememeber a related dicussion during LPC 2018 :-)
 
-diff --git a/drivers/cpufreq/imx6q-cpufreq.c b/drivers/cpufreq/imx6q-cpufreq.c
-index 494d044b9e72..f18b9ee5e484 100644
---- a/drivers/cpufreq/imx6q-cpufreq.c
-+++ b/drivers/cpufreq/imx6q-cpufreq.c
-@@ -14,6 +14,8 @@
- #include <linux/pm_opp.h>
- #include <linux/platform_device.h>
- #include <linux/regulator/consumer.h>
-+#include <linux/mfd/syscon.h>
-+#include <linux/regmap.h>
- 
- #define PU_SOC_VOLTAGE_NORMAL	1250000
- #define PU_SOC_VOLTAGE_HIGH	1275000
-@@ -225,8 +227,6 @@ static void imx6x_disable_freq_in_opp(struct device *dev, unsigned long freq)
- 
- static int imx6q_opp_check_speed_grading(struct device *dev)
- {
--	struct device_node *np;
--	void __iomem *base;
- 	u32 val;
- 	int ret;
- 
-@@ -235,16 +235,11 @@ static int imx6q_opp_check_speed_grading(struct device *dev)
- 		if (ret)
- 			return ret;
- 	} else {
--		np = of_find_compatible_node(NULL, NULL, "fsl,imx6q-ocotp");
--		if (!np)
--			return -ENOENT;
-+		struct regmap *ocotp;
- 
--		base = of_iomap(np, 0);
--		of_node_put(np);
--		if (!base) {
--			dev_err(dev, "failed to map ocotp\n");
--			return -EFAULT;
--		}
-+		ocotp = syscon_regmap_lookup_by_compatible("fsl,imx6q-ocotp");
-+		if (IS_ERR(ocotp))
-+			return -ENOENT;
- 
- 		/*
- 		 * SPEED_GRADING[1:0] defines the max speed of ARM:
-@@ -254,8 +249,7 @@ static int imx6q_opp_check_speed_grading(struct device *dev)
- 		 * 2b'00: 792000000Hz;
- 		 * We need to set the max speed of ARM according to fuse map.
- 		 */
--		val = readl_relaxed(base + OCOTP_CFG3);
--		iounmap(base);
-+		regmap_read(ocotp, OCOTP_CFG3, &val);
- 	}
- 
- 	val >>= OCOTP_CFG3_SPEED_SHIFT;
-@@ -290,25 +284,16 @@ static int imx6ul_opp_check_speed_grading(struct device *dev)
- 		if (ret)
- 			return ret;
- 	} else {
--		struct device_node *np;
--		void __iomem *base;
--
--		np = of_find_compatible_node(NULL, NULL, "fsl,imx6ul-ocotp");
--		if (!np)
--			np = of_find_compatible_node(NULL, NULL,
--						     "fsl,imx6ull-ocotp");
--		if (!np)
--			return -ENOENT;
-+		struct regmap *ocotp;
- 
--		base = of_iomap(np, 0);
--		of_node_put(np);
--		if (!base) {
--			dev_err(dev, "failed to map ocotp\n");
--			return -EFAULT;
--		}
-+		ocotp = syscon_regmap_lookup_by_compatible("fsl,imx6ul-ocotp");
-+		if (IS_ERR(ocotp))
-+			ocotp = syscon_regmap_lookup_by_compatible("fsl,imx6ull-ocotp");
-+
-+		if (IS_ERR(ocotp))
-+			return -ENOENT;
- 
--		val = readl_relaxed(base + OCOTP_CFG3);
--		iounmap(base);
-+		regmap_read(ocotp, OCOTP_CFG3, &val);
- 	}
- 
- 	/*
--- 
-2.25.1
+> arch_update_thermal_pressure into HW pressure to reflect that it returns
+> a pressure applied by HW (i.e. with a high frequency change) and not
+> always related to thermal mitigation but also generated by max current
+> limitation as an example. Such high frequency signal needs filtering to be
+> smoothed and provide an value that reflects the average available capacity
+> into the scheduler time scale.
+
+So 'drivers/cpufreq/qcom-cpufreq-hw.c' is the only user of (1) right
+now. Are we expecting more users here? If this stays the only user,
+maybe it can do the averages by itself and we can completely switch to (2)?
+
+[...]
 
 
