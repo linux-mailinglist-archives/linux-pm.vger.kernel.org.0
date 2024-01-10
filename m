@@ -1,102 +1,98 @@
-Return-Path: <linux-pm+bounces-2084-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2085-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAEB9829C6C
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 15:21:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F25FD829C7A
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 15:25:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BFDB11C21A08
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 14:21:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D73228156C
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 14:25:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1701344387;
-	Wed, 10 Jan 2024 14:21:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FEED4A98B;
+	Wed, 10 Jan 2024 14:25:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="D5B/bia0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA4F04A997;
-	Wed, 10 Jan 2024 14:21:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-6ddf73f0799so131457a34.1;
-        Wed, 10 Jan 2024 06:21:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704896491; x=1705501291;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y76oX6QBn8qfBuvGxIul5sp+k3OyoCGGyF/zRteSiGA=;
-        b=JgZxkNSyrNrrndLxRE9a8Uus5UoOqEpMGV66TGGFVO2Xax1W6e7MqZNvbT4CK7vVc4
-         YZwHGrptuQcfxvnUhmfY3+vdjDsBpXUnXyS/UD+gnta88O6Gsv5Lh16eIncbv1TludEJ
-         oY+iwiqLkMVJZwkUyF/URL+E5RdMiHp38vL16l+y05xt9pjVJEtF/oF4YMpKaqdVIc4k
-         owNyig6VmyThMHgHWqQxEkCm1VxMLNosT2RviE8maBYDz024QMp2q6yvf3PLL8TV44NP
-         5WX32cGyrdQTeCC7i6YR+5RXl0ZY36zjD/yFdwnuuwxOmyu0VKMJiNmvWzn14WhKrJc7
-         L1pw==
-X-Gm-Message-State: AOJu0Ywuu9NH9uLUEMJyZSqz61Sqvc/EXgZdPmf7MO0O7AzcD9MHqZuc
-	aV+cpCEYbb8Hx2NttMbO8K5gheND7QcCLw6KHg0=
-X-Google-Smtp-Source: AGHT+IFtrZ5KMxRxEORv0sVOK2xbEdcxyqm8++gJWnMg8A7J8vx1gkkEhxeoP6Q7oU/d+RR18IU82MYHOeg0aTzcrAw=
-X-Received: by 2002:a05:6820:2e02:b0:598:9a35:71f1 with SMTP id
- ec2-20020a0568202e0200b005989a3571f1mr1505094oob.0.1704896491715; Wed, 10 Jan
- 2024 06:21:31 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73F3E4A99C;
+	Wed, 10 Jan 2024 14:25:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1704896714;
+	bh=vwOsYK81Kz7ekPSjYz//FcETzOWODCjxJchEEfAb39s=;
+	h=From:To:Cc:Subject:Date:From;
+	b=D5B/bia0HVVwkZiV0SO4gzRNmHqonfK01qPchiAJpbfX5nI7JJQ2tgcRNDUrM/Pu1
+	 wI2R0GxMa3nTsiPNsLq5dej97eMn+I9kcFXWTLHm76Rdmftx5E3BGVm74V5aha/+50
+	 AvmIL7SjElDBUEitXy4RYk3t4Bn0W1y5T5I2gdUFnQZkvCYNtoDA9fAnQnHwGRmO8m
+	 lRl3FSYNYRzHpVcofQRSgoYrYpJmP/pvlAToPIDaEeUZG80EgFeHX+lqVGoN4TlsiE
+	 ZceLgY4fZxZCdA166gNLRIKjECmYdTiEh9H3R3kHnAIiaWPebjTu8xYV7zkeNESp6d
+	 kenMdZhU4HUug==
+Received: from localhost.localdomain (zone.collabora.co.uk [167.235.23.81])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id D94AE378045F;
+	Wed, 10 Jan 2024 14:25:08 +0000 (UTC)
+From: =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= <nfraprado@collabora.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>
+Cc: kernel@collabora.com,
+	=?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= <nfraprado@collabora.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	"Hector.Yuan" <hector.yuan@mediatek.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH v2 0/2] Fixes for hang on MT8195-Tomato during mediatek-cpufreq-hw init
+Date: Wed, 10 Jan 2024 11:23:00 -0300
+Message-ID: <20240110142305.755367-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240109175844.448006-1-e.velu@criteo.com>
-In-Reply-To: <20240109175844.448006-1-e.velu@criteo.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 10 Jan 2024 15:21:20 +0100
-Message-ID: <CAJZ5v0ipYQURmFGGwmS5oyOuAOFDbG7TaaaWg4Ze-7PpBnSwkQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] cpufreq/amd-pstate: Adding Zen4 support in introduction
-To: Erwan Velu <erwanaliasr1@gmail.com>
-Cc: Erwan Velu <e.velu@criteo.com>, Huang Rui <ray.huang@amd.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jan 9, 2024 at 6:58=E2=80=AFPM Erwan Velu <erwanaliasr1@gmail.com> =
-wrote:
->
-> amd-pstate is implemented on Zen4, adding this architecture in the
-> introduction.
->
-> Signed-off-by: Erwan Velu <e.velu@criteo.com>
-> ---
->  drivers/cpufreq/amd-pstate.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 1f6186475715..9a8d083f6ba5 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -14,7 +14,7 @@
->   * communicate the performance hints to hardware.
->   *
->   * AMD P-State is supported on recent AMD Zen base CPU series include so=
-me of
-> - * Zen2 and Zen3 processors. _CPC needs to be present in the ACPI tables=
- of AMD
-> + * Zen2, Zen3 and Zen4 processors. _CPC needs to be present in the ACPI =
-tables of AMD
 
-IMO, it would be really nice to avoid extending this line so much, but
-this is up to the AMD people.
+These two patches fix an issue observed on MT8195-Tomato where if the
+mediatek-cpufreq-hw driver enabled the hardware (by writing to
+REG_FREQ_ENABLE) before the SPMI controller driver (spmi-mtk-pmif),
+behind which lies the big CPU supply, probed the platform would hang
+shortly after with "rcu: INFO: rcu_preempt detected stalls on
+CPUs/tasks" being printed in the log.
 
-Also, while you are at it, "include" in the first sentence should be
-"including" and a new paragraph after "processors." would make this
-comment easier to follow from the logical standpoint, because the
-first sentence is about the supported platforms and the second one is
-about additional requirements (ie. something else).
+Changes in v2:
+- Moved supply phandles to CPU nodes in DT
+- Added fixes tags
+- Added patch to verify CPU supplies are available before proceeding in
+  the mediatek-cpufreq-hw driver
 
->   * P-State supported system. And there are two types of hardware impleme=
-ntations
->   * for AMD P-State: 1) Full MSR Solution and 2) Shared Memory Solution.
->   * X86_FEATURE_CPPC CPU feature flag is used to distinguish the differen=
-t types.
-> --
+Nícolas F. R. A. Prado (2):
+  arm64: dts: mediatek: cherry: Describe CPU supplies
+  cpufreq: mediatek-hw: Wait for CPU supplies before probing
+
+ .../boot/dts/mediatek/mt8195-cherry.dtsi      | 32 +++++++++++++++++++
+ drivers/cpufreq/mediatek-cpufreq-hw.c         | 19 ++++++++++-
+ 2 files changed, 50 insertions(+), 1 deletion(-)
+
+-- 
+2.43.0
+
 
