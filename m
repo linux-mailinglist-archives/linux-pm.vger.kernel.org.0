@@ -1,31 +1,31 @@
-Return-Path: <linux-pm+bounces-2080-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2081-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 882A0829C02
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 15:08:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DEAA829C2F
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 15:14:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACE491C20F53
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 14:08:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFBB128230B
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 14:13:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 414684A989;
-	Wed, 10 Jan 2024 14:08:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BF9E4C3C1;
+	Wed, 10 Jan 2024 14:10:40 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E57DB495EB;
-	Wed, 10 Jan 2024 14:08:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF8C64C3B8;
+	Wed, 10 Jan 2024 14:10:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 118B42F4;
-	Wed, 10 Jan 2024 06:09:04 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 13BF92F4;
+	Wed, 10 Jan 2024 06:11:23 -0800 (PST)
 Received: from [10.57.87.179] (unknown [10.57.87.179])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0653B3F5A1;
-	Wed, 10 Jan 2024 06:08:15 -0800 (PST)
-Message-ID: <da5d4f05-e188-46ae-ae6a-227e394356a6@arm.com>
-Date: Wed, 10 Jan 2024 14:09:38 +0000
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0CB843F5A1;
+	Wed, 10 Jan 2024 06:10:34 -0800 (PST)
+Message-ID: <14e5634b-721a-4444-8825-967d807b71b7@arm.com>
+Date: Wed, 10 Jan 2024 14:11:57 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -33,8 +33,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 10/23] PM: EM: Add API for memory allocations for new
- tables
+Subject: Re: [PATCH v6 11/23] PM: EM: Add API for updating the runtime
+ modifiable EM
 Content-Language: en-US
 To: "Rafael J. Wysocki" <rafael@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
@@ -43,211 +43,168 @@ Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
  len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org, qyousef@layalina.io,
  wvw@google.com
 References: <20240104171553.2080674-1-lukasz.luba@arm.com>
- <20240104171553.2080674-11-lukasz.luba@arm.com>
- <CAJZ5v0grn7RHLxf0Bfxh-PtwvQXfr0F8bGc9bWDuuD3_noLjGw@mail.gmail.com>
+ <20240104171553.2080674-12-lukasz.luba@arm.com>
+ <CAJZ5v0hqRkDmhRBfB4g-2EH2piv-KOQdwad7rVoSK8FzZKg=TA@mail.gmail.com>
 From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0grn7RHLxf0Bfxh-PtwvQXfr0F8bGc9bWDuuD3_noLjGw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hqRkDmhRBfB4g-2EH2piv-KOQdwad7rVoSK8FzZKg=TA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 
 
-On 1/4/24 19:35, Rafael J. Wysocki wrote:
+On 1/4/24 19:47, Rafael J. Wysocki wrote:
+> I don't really like using the API TLA in patch subjects, because it
+> does not really say much.  IMO a subject like this would be better:
+> 
+> "PM: EM: Introduce em_dev_update_perf_domain() for EM updates"
+
+Fair enough
+
+> 
 > On Thu, Jan 4, 2024 at 6:15 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
 >>
->> The runtime modified EM table can be provided from drivers. Create
->> mechanism which allows safely allocate and free the table for device
->> drivers. The same table can be used by the EAS in task scheduler code
->> paths, so make sure the memory is not freed when the device driver module
->> is unloaded.
->>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->>   include/linux/energy_model.h | 11 +++++++++
->>   kernel/power/energy_model.c  | 43 ++++++++++++++++++++++++++++++++++--
->>   2 files changed, 52 insertions(+), 2 deletions(-)
->>
->> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
->> index 5f842da3bb0c..753d70d0ce7e 100644
->> --- a/include/linux/energy_model.h
->> +++ b/include/linux/energy_model.h
->> @@ -5,6 +5,7 @@
->>   #include <linux/device.h>
->>   #include <linux/jump_label.h>
->>   #include <linux/kobject.h>
->> +#include <linux/kref.h>
->>   #include <linux/rcupdate.h>
->>   #include <linux/sched/cpufreq.h>
->>   #include <linux/sched/topology.h>
->> @@ -39,10 +40,12 @@ struct em_perf_state {
->>   /**
->>    * struct em_perf_table - Performance states table
->>    * @rcu:       RCU used for safe access and destruction
->> + * @refcount:  Reference count to track the owners
+>> Add API function em_dev_update_perf_domain() which allows to safely
+>> change the EM.
 > 
-> "Reference counter to track the users"
-> 
-> Also it is not really just a counter - it provides the memory release
-> mechanism too.
-
-Agree
-
-> 
->>    * @state:     List of performance states, in ascending order
->>    */
->>   struct em_perf_table {
->>          struct rcu_head rcu;
->> +       struct kref refcount;
-> 
-> So I would just call it kref.
+> "... which allows the EM to be changed safely."
 
 OK
 
 > 
->>          struct em_perf_state state[];
->>   };
+> New paragraph:
+> 
+>> The concurrent modifiers are protected by the mutex
+>> to serialize them. Removal of the old memory is asynchronous and
+>> handled by the RCU mechanisms.
+> 
+> "Concurrent updaters are serialized with a mutex and the removal of
+> memory that will not be used any more is carried out with the help of
+> RCU."
+
+OK
+
+> 
 >>
->> @@ -184,6 +187,8 @@ int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   include/linux/energy_model.h |  8 +++++++
+>>   kernel/power/energy_model.c  | 41 ++++++++++++++++++++++++++++++++++++
+>>   2 files changed, 49 insertions(+)
+>>
+>> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+>> index 753d70d0ce7e..f33257ed83fd 100644
+>> --- a/include/linux/energy_model.h
+>> +++ b/include/linux/energy_model.h
+>> @@ -183,6 +183,8 @@ struct em_data_callback {
+>>
+>>   struct em_perf_domain *em_cpu_get(int cpu);
+>>   struct em_perf_domain *em_pd_get(struct device *dev);
+>> +int em_dev_update_perf_domain(struct device *dev,
+>> +                             struct em_perf_table __rcu *new_table);
+>>   int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
 >>                                  struct em_data_callback *cb, cpumask_t *span,
 >>                                  bool microwatts);
->>   void em_dev_unregister_perf_domain(struct device *dev);
->> +struct em_perf_table __rcu *em_allocate_table(struct em_perf_domain *pd);
->> +void em_free_table(struct em_perf_table __rcu *table);
->>
->>   /**
->>    * em_pd_get_efficient_state() - Get an efficient performance state from the EM
->> @@ -365,6 +370,12 @@ static inline int em_pd_nr_perf_states(struct em_perf_domain *pd)
->>   {
->>          return 0;
+>> @@ -376,6 +378,12 @@ struct em_perf_table __rcu *em_allocate_table(struct em_perf_domain *pd)
+>>          return NULL;
 >>   }
+>>   static inline void em_free_table(struct em_perf_table __rcu *table) {}
 >> +static inline
->> +struct em_perf_table __rcu *em_allocate_table(struct em_perf_domain *pd)
+>> +int em_dev_update_perf_domain(struct device *dev,
+>> +                             struct em_perf_table __rcu *new_table)
 >> +{
->> +       return NULL;
+>> +       return -EINVAL;
 >> +}
->> +static inline void em_free_table(struct em_perf_table __rcu *table) {}
 >>   #endif
 >>
 >>   #endif
 >> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
->> index c03010084208..bbc406db0be1 100644
+>> index bbc406db0be1..496dc00835c6 100644
 >> --- a/kernel/power/energy_model.c
 >> +++ b/kernel/power/energy_model.c
->> @@ -114,12 +114,46 @@ static void em_destroy_table_rcu(struct rcu_head *rp)
->>          kfree(table);
+>> @@ -220,6 +220,47 @@ static int em_allocate_perf_table(struct em_perf_domain *pd,
+>>          return 0;
 >>   }
 >>
->> -static void em_free_table(struct em_perf_table __rcu *table)
->> +static void em_release_table_kref(struct kref *kref)
->>   {
->> +       struct em_perf_table __rcu *table;
->> +
->> +       /* It was the last owner of this table so we can free */
->> +       table = container_of(kref, struct em_perf_table, refcount);
->> +
->>          call_rcu(&table->rcu, em_destroy_table_rcu);
->>   }
->>
->> -static struct em_perf_table __rcu *
->> +static inline void em_table_inc(struct em_perf_table __rcu *table)
-> 
-> Why not em_table_get()?
-
-I will change that...
-
-> 
->> +{
->> +       kref_get(&table->refcount);
->> +}
->> +
->> +static void em_table_dec(struct em_perf_table __rcu *table)
-> 
-> And em_table_put() here?
-
-and this as well.
-
-> 
-> Note that I do realize that the "put" and "get" terminology is used in
-> one of the subsequent patches - I'll get to it later.
-> 
->> +{
->> +       kref_put(&table->refcount, em_release_table_kref);
->> +}
->> +
 >> +/**
->> + * em_free_table() - Handles safe free of the EM table when needed
->> + * @table : EM memory which is going to be freed
->> + *
->> + * No return values.
->> + */
->> +void em_free_table(struct em_perf_table __rcu *table)
->> +{
->> +       em_table_dec(table);
->> +}
+>> + * em_dev_update_perf_domain() - Update runtime EM table for a device
+>> + * @dev                : Device for which the EM is to be updated
+>> + * @table      : The new EM table that is going to be used from now
 > 
-> Why is this necessary?  The function called by it could be extern
-> instead and wrapped into a static inline wrapper in a header (if you
-> really need the alias).
+> This is called "new_table" below.
 
-Sounds good, I'll change it.
-
-> 
->> +
->> +/**
->> + * em_allocate_table() - Handles safe allocation of the new EM table
-> 
-> " - Allocate a new EM table"
-
-OK
-
-> 
-> And I would call this em_table_alloc() and (maybe) add an
-> em_table_free() alias for em_table_put().
-
-OK
-
-> 
->> + * @table : EM memory which is going to be freed
-> 
-> So the argument is called "pd" and it is not a table.  It is also used
-> for computing the size of the new table AFAICS.
-
-True, good catch.
+good catch
 
 > 
 >> + *
->> + * Increments the reference counter to mark that there is an owner of that
+>> + * Update EM runtime modifiable table for the @dev using the provided @table.
+>> + *
+>> + * This function uses mutex to serialize writers, so it must not be called
 > 
-> "Allocate a new EM table and initialize its kref to indicate that it
-> has a user."
+> "uses a mutex"
 
 OK
 
 > 
->> + * EM table. That might be a device driver module or EAS.
->> + * Returns allocated table or error.
+>> + * from non-sleeping context.
+> 
+> "a non-sleeping context".
+
+OK
+
+> 
+>> + *
+>> + * Return 0 on success or a proper error in case of failure.
+> 
+> It is not clear what "a proper error" means.  It would be better to
+> simply say "or an error code on failure" IMO.
+
+Agree, I'll change it.
+
+> 
 >> + */
->> +struct em_perf_table __rcu *
->>   em_allocate_table(struct em_perf_domain *pd)
+>> +int em_dev_update_perf_domain(struct device *dev,
+>> +                             struct em_perf_table __rcu *new_table)
+>> +{
+>> +       struct em_perf_table __rcu *old_table;
+>> +       struct em_perf_domain *pd;
+>> +
+>> +       /* Serialize update/unregister or concurrent updates */
+>> +       mutex_lock(&em_pd_mutex);
+>> +
+>> +       if (!dev || !dev->em_pd) {
+> 
+> dev need not be checked under the lock.
+
+True, I will put it about the lock.
+
+> 
+>> +               mutex_unlock(&em_pd_mutex);
+>> +               return -EINVAL;
+>> +       }
+>> +       pd = dev->em_pd;
+>> +
+>> +       em_table_inc(new_table);
+>> +
+>> +       old_table = pd->em_table;
+>> +       rcu_assign_pointer(pd->em_table, new_table);
+>> +
+>> +       em_cpufreq_update_efficiencies(dev, new_table->state);
+>> +
+>> +       em_table_dec(old_table);
+>> +
+>> +       mutex_unlock(&em_pd_mutex);
+>> +       return 0;
+>> +}
+>> +EXPORT_SYMBOL_GPL(em_dev_update_perf_domain);
+>> +
+>>   static int em_create_runtime_table(struct em_perf_domain *pd)
 >>   {
 >>          struct em_perf_table __rcu *table;
->> @@ -128,6 +162,11 @@ em_allocate_table(struct em_perf_domain *pd)
->>          table_size = sizeof(struct em_perf_state) * pd->nr_perf_states;
->>
->>          table = kzalloc(sizeof(*table) + table_size, GFP_KERNEL);
->> +       if (!table)
->> +               return table;
-> 
-> I would return NULL from here explicitly.
-
-OK
-
-> 
->> +
->> +       kref_init(&table->refcount);
->> +
->>          return table;
->>   }
->>
 >> --
+
+
+Thank you for the review!
+
+Regards,
+Lukasz
 
