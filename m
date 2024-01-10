@@ -1,132 +1,124 @@
-Return-Path: <linux-pm+bounces-2087-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2088-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4693829C94
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 15:29:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DC94829C96
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 15:31:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D02A286F8A
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 14:29:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E97792888FA
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 14:30:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEC754A9B5;
-	Wed, 10 Jan 2024 14:29:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBC234B5A8;
+	Wed, 10 Jan 2024 14:30:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RmCPG5Pa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69B514BA92
-	for <linux-pm@vger.kernel.org>; Wed, 10 Jan 2024 14:29:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51813ECF;
+	Wed, 10 Jan 2024 14:30:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-6ddf73f0799so132590a34.1
-        for <linux-pm@vger.kernel.org>; Wed, 10 Jan 2024 06:29:10 -0800 (PST)
+Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-466fb253b19so3017447137.1;
+        Wed, 10 Jan 2024 06:30:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1704897053; x=1705501853; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i89h27D5x8fo1WpuYhfPb+vKKL6dKMeRr0vXj33KjsU=;
+        b=RmCPG5Pa2OFCUB2QAh+kE3i/P5stPU0pz/SEN5oRXYx0S2FLdY+EOpSHGDRvHPKtay
+         QFHV3Y7hz0SX3qywyGx1GzcH2owNXJrzCUrE8W+CK6RTWD2qA35M+pty6+21ZzQ1y496
+         vDQMXSkl4R2vKkXr8MKX+0/DBRqFeFn5UwgYnMTBRgTjn4OsgOLpLuM15+mKkd73kyGa
+         a0G8xjUhSZ7TIkMIo6qvjctYSHxKDqtSwqx3PYhpAQjzjiz+HTuEHan8yGBGU9Pt9pH8
+         CIeL5+fUr/v4U1KjjE0cd8hJhUy+fCpEL78a3kT0Nj4OEsFowtQ4dllNdfJEat6u+2kS
+         68UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704896949; x=1705501749;
+        d=1e100.net; s=20230601; t=1704897053; x=1705501853;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=e0uQV6ql8qfjywgggyZb3Typv6QUO73+dKsfhO0kJ5I=;
-        b=B0XiXukgghciUGsgfmH+Fw31TNirJlN5ALxzJJJFaBS3E7OIK7XBfZ9QrZdHmx0UIN
-         8x2mr3muU0YMIxJrEVg3fRyvsbrCdm3YP8QrhewyoESaiOeY0L/VNDqWxZ5NgJXTl9yY
-         aIkNf9USCGKOoU52rsfvt/hy/lH80rg4lWpZGCOpmRO4rtMUlhU+XLGJuHFfK7c5nZOc
-         UHEZj5nDTILE3e2+F4H4odD57NKimywCDZLMim69plDf97nHYnD5T+9BggbJ6ZtEsvy3
-         P5sUt11ygUY5DrF+RIFyMUEKhDJlzWABfYypaNke5L/dGObx8md8SvnlUBx0n42MpSj4
-         xgEw==
-X-Gm-Message-State: AOJu0Yy/+gl7Rjay+RW2zgtNhS/edGUyN7+j5hVPR02g3hC3W2XbY1l/
-	PYsJsql00wRp2lfgJI2mCixxHch3qYu1cWw+bqxxoRg5
-X-Google-Smtp-Source: AGHT+IHa+BzlTIUAjoIeuq0mSa1PxmQR0DXX9gJhG1yEWOo1wOgJVWydUT2Bp6p15dDd5bs8wkiXfT5C1oYyYd3z/ug=
-X-Received: by 2002:a05:6820:2e02:b0:598:9a35:71f1 with SMTP id
- ec2-20020a0568202e0200b005989a3571f1mr1527816oob.0.1704896949588; Wed, 10 Jan
- 2024 06:29:09 -0800 (PST)
+        bh=i89h27D5x8fo1WpuYhfPb+vKKL6dKMeRr0vXj33KjsU=;
+        b=g2R4S6ltLqki7XQgL39nVA3UoKa2r5Ex/2eB752Fe+c8wJEQ0BqQPWp6NVqQJsnFi4
+         gbmI8IKFp0IgyILT7Wy4bYCpPkQcTXmaDMiv/z6pXQYhQ9NQcvTEkiiLbxu8eFId6Pu7
+         9zlhxzE6BNWbezOafP0NQ/MQPl3s4dRi7rM72zSWOqfmiMtXPoIRuyR1m3SvkwOlWhdO
+         VjxcCKc+o36fk9zz8S214I9TYEh32NxZduSAyT156n0jviwx6Y+2X8E97bjt9Xy41IVP
+         UZgR6ft1wikKgXTImzocrnaZW6uQHSsrCQTTPQ18vQxvaDv0sRnt1zVnl3WGHd/IWz2V
+         +jDQ==
+X-Gm-Message-State: AOJu0YyJM6vDwDxkqcHbZuejumfX6hl9At1GEdRuumc/IgNV+uQ/NRkS
+	BeZVKAxFwTs9Kg3jSSotP18mcfwUnAfQaSyIe+s=
+X-Google-Smtp-Source: AGHT+IH6Wsgj/n6dG2gx6+FaBubAUOkNia/93mSaLY5eA+PCcfE6Qb9qS3S6iCa9M0HbrGhuKONOAxOweRHz6F0oF4Y=
+X-Received: by 2002:a05:6102:508e:b0:467:dd85:4304 with SMTP id
+ bl14-20020a056102508e00b00467dd854304mr203081vsb.27.1704897053071; Wed, 10
+ Jan 2024 06:30:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240110122356.142997-1-sakari.ailus@linux.intel.com>
-In-Reply-To: <20240110122356.142997-1-sakari.ailus@linux.intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 10 Jan 2024 15:28:58 +0100
-Message-ID: <CAJZ5v0hg=OTRUHi5Z2YW7f425C6Kw2+B5R+YhwkYj6Vo+zkamA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/2] Small runtime PM API changes
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, laurent.pinchart@ideasonboard.com
+References: <20240109175844.448006-1-e.velu@criteo.com> <CAJZ5v0ipYQURmFGGwmS5oyOuAOFDbG7TaaaWg4Ze-7PpBnSwkQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0ipYQURmFGGwmS5oyOuAOFDbG7TaaaWg4Ze-7PpBnSwkQ@mail.gmail.com>
+From: Erwan Velu <erwanaliasr1@gmail.com>
+Date: Wed, 10 Jan 2024 15:30:41 +0100
+Message-ID: <CAL2Jzuz5OMiU6g+dYu+SU0E=ydBmpZzbQ5XpEfRtheWYkfB6=w@mail.gmail.com>
+Subject: Re: [PATCH 2/2] cpufreq/amd-pstate: Adding Zen4 support in introduction
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Erwan Velu <e.velu@criteo.com>, Huang Rui <ray.huang@amd.com>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 10, 2024 at 1:24=E2=80=AFPM Sakari Ailus
-<sakari.ailus@linux.intel.com> wrote:
->
-> Hi folks,
->
-> Here's a small but a different set of patches for making two relatively
-> minor changes to runtime PM API. I restarted version numbering as this is
-> meaningfully different from the previous set.
->
-> pm_runtime_get_if_active() loses its second argument as it only made sens=
-e
-> to have ign_usage_count argument true.
->
-> The other change is also small but it has an effect on callers:
-> pm_runtime_put_autosuspend() will, in the future, be re-purposed to
-> include a call to pm_runtime_mark_last_busy() as well. Before this,
-> current users of the function are moved to __pm_runtime_put_autosuspend()
-> (added by this patchset) which will continue to have the current
-> behaviour.
->
-> I haven't included the conversion patches in this set as I only want to d=
-o
-> that once this set has been approved and merged. The tree specific patche=
-s
-> can be found here, on linux-next master (there are some V4L2 patches
-> there, too, please ignore them for now):
-> <URL:https://git.kernel.org/pub/scm/linux/kernel/git/sailus/linux-next.gi=
-t/log/?h=3Dpm>
->
-> Later on, users calling pm_runtime_mark_last_busy() immediately followed
-> by __pm_runtime_put_autosuspend() will be switched back to
-> pm_runtime_put_autosuspend() once its behaviour change has been done (a
-> patch near top of that branch). I'll provide these once the preceding one=
-s
-> have been merged.
->
-> Comments are welcome.
->
-> since v1:
->
-> - patch 1: Rename __pm_runtime_get_conditional() as
->   pm_runtime_get_conditional().
->
-> - patch 1: Reword documentation on driver use of
->   pm_runtime_get_conditional().
->
-> Sakari Ailus (2):
->   pm: runtime: Simplify pm_runtime_get_if_active() usage
->   pm: runtime: Add pm_runtime_put_autosuspend() replacement
->
->  Documentation/power/runtime_pm.rst      | 22 ++++++++-----
->  drivers/accel/ivpu/ivpu_pm.c            |  2 +-
->  drivers/base/power/runtime.c            | 10 ++++--
->  drivers/gpu/drm/i915/intel_runtime_pm.c |  2 +-
->  drivers/gpu/drm/xe/xe_pm.c              |  2 +-
->  drivers/media/i2c/ccs/ccs-core.c        |  2 +-
->  drivers/media/i2c/ov64a40.c             |  2 +-
->  drivers/media/i2c/thp7312.c             |  2 +-
->  drivers/net/ipa/ipa_smp2p.c             |  2 +-
->  drivers/pci/pci.c                       |  2 +-
->  include/linux/pm_runtime.h              | 44 ++++++++++++++++++++++---
->  sound/hda/hdac_device.c                 |  2 +-
->  12 files changed, 68 insertions(+), 26 deletions(-)
->
-> --
+So it's probably better to let AMD people fixing this part.
+Thx for the feedback.
 
-All of this LGTM, but it touches multiple pieces that are all in-flux
-now, so can you please rebase it on something more consistent like
-6.8-rc1 (when it's out) and resend with all of the tags received?
-
-Thanks!
+Le mer. 10 janv. 2024 =C3=A0 15:21, Rafael J. Wysocki <rafael@kernel.org> a=
+ =C3=A9crit :
+>
+> On Tue, Jan 9, 2024 at 6:58=E2=80=AFPM Erwan Velu <erwanaliasr1@gmail.com=
+> wrote:
+> >
+> > amd-pstate is implemented on Zen4, adding this architecture in the
+> > introduction.
+> >
+> > Signed-off-by: Erwan Velu <e.velu@criteo.com>
+> > ---
+> >  drivers/cpufreq/amd-pstate.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.=
+c
+> > index 1f6186475715..9a8d083f6ba5 100644
+> > --- a/drivers/cpufreq/amd-pstate.c
+> > +++ b/drivers/cpufreq/amd-pstate.c
+> > @@ -14,7 +14,7 @@
+> >   * communicate the performance hints to hardware.
+> >   *
+> >   * AMD P-State is supported on recent AMD Zen base CPU series include =
+some of
+> > - * Zen2 and Zen3 processors. _CPC needs to be present in the ACPI tabl=
+es of AMD
+> > + * Zen2, Zen3 and Zen4 processors. _CPC needs to be present in the ACP=
+I tables of AMD
+>
+> IMO, it would be really nice to avoid extending this line so much, but
+> this is up to the AMD people.
+>
+> Also, while you are at it, "include" in the first sentence should be
+> "including" and a new paragraph after "processors." would make this
+> comment easier to follow from the logical standpoint, because the
+> first sentence is about the supported platforms and the second one is
+> about additional requirements (ie. something else).
+>
+> >   * P-State supported system. And there are two types of hardware imple=
+mentations
+> >   * for AMD P-State: 1) Full MSR Solution and 2) Shared Memory Solution=
+.
+> >   * X86_FEATURE_CPPC CPU feature flag is used to distinguish the differ=
+ent types.
+> > --
 
