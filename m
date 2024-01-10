@@ -1,95 +1,138 @@
-Return-Path: <linux-pm+bounces-2067-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2068-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1516829AA1
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 13:50:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF36C829AC9
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 13:58:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 70AF91F255F0
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 12:50:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D50CB1C263D0
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 12:58:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5939482F1;
-	Wed, 10 Jan 2024 12:49:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0C1C48787;
+	Wed, 10 Jan 2024 12:58:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="HcyNoWgJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86C51482E4;
-	Wed, 10 Jan 2024 12:49:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-598a2136259so44221eaf.1;
-        Wed, 10 Jan 2024 04:49:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704890993; x=1705495793;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EbBz5SSqpLsC3Oz7qcffbBzeLsEQlLQDj8J0KmYAFR0=;
-        b=kLAS2qz/6pFoZCcCvBnTrpWFDTC3y/ys2ZAGAlilCh/WBkX+80qiU8/9rq03ARvPUu
-         6gZURV6v8Pdc5Wnu2Qgk8PZBzcbFri1CgtDXIeqCFJjtH71cz6mo5S8rZagTm6oV1KPl
-         kIY1nefq+38pGiaq+LiVMnzTmfPgskwPLXsqGLZMXKvAtrI89yFdMMdt2OzFZbZnVuzm
-         vPWsdceEpwN89zlRrc9UbezyduQ2/200FdTXfp3NFSHlA53odfDVBvS0JgjPM6YIVb7D
-         XavpMWmc7sgXLzHEKzG/TriiDeNu/HtW/FVYbB7s8+ClGZIJuQzoFNwJdvKqqCkovNic
-         d8OQ==
-X-Gm-Message-State: AOJu0Yxs1OzrR2XbsMDwx9Hwn2y2aZcf+77QbvNP55AzXDzzeurx4r3X
-	5LbO6FPwA03Pz9uxNicRIjombVkzeFKgYtkIvis=
-X-Google-Smtp-Source: AGHT+IF2xnditctp35zvn9RWugIkWYfcW/RhSsOY5v+PZOvVVQvVwHaMsyG1L9tKmINzD3i9hlXj1M0awncGJW1O6VM=
-X-Received: by 2002:a05:6820:80d:b0:598:81b7:4d25 with SMTP id
- bg13-20020a056820080d00b0059881b74d25mr2123776oob.1.1704890993641; Wed, 10
- Jan 2024 04:49:53 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40CE348781;
+	Wed, 10 Jan 2024 12:58:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40AA2mwO013795;
+	Wed, 10 Jan 2024 12:58:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=/vClWtu3HlYBCHjhqdD40ETyVbpVB8kO2AGNHZOK/lQ=; b=Hc
+	yNoWgJbTUxXloJBbWm+gL+LkCAxj2pPEA398P9hwkFjniMuW/J6q/XwJc1RcCwhG
+	uM6UBj38CiJd4a+tqSri87/pPsz4omqUHPoj89csGSTiZtBsqtPvQ7Ky6r028PY+
+	zNL0SEtmBGb6sK+bfPTZf0plly1hSV9UVbn/KMaF/ssJTHYf5bfMGjhrdxeLLiPf
+	pwgrP8r9q9W3mYTrvFNR1bCeDf1KOB+HxCiAQkH/2PbHt2FyHNdlYQT4XHjnw7Xw
+	DTz9s3YY9EjMcd/OUzXQcFBCVn3v0/kO3aI81UaB1IowSbbFxabzpFtljuzG9tul
+	VX8fWzONYFffncqiGR+Q==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vhs4mgf10-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 10 Jan 2024 12:58:31 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40ACwUlG002890
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 10 Jan 2024 12:58:30 GMT
+Received: from [10.216.48.153] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 10 Jan
+ 2024 04:58:22 -0800
+Message-ID: <ba732b1c-223c-ee70-d25b-4c78b312402c@quicinc.com>
+Date: Wed, 10 Jan 2024 18:28:19 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240106191502.29126-1-quic_manafm@quicinc.com>
- <CAJZ5v0gE6eEpALrfxHvCd5TRqjB+v8pffG4CKLTVXiSvuiWhHg@mail.gmail.com> <90c0a34a-2640-d6b7-0eb3-19fe789d2998@quicinc.com>
-In-Reply-To: <90c0a34a-2640-d6b7-0eb3-19fe789d2998@quicinc.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 10 Jan 2024 13:49:41 +0100
-Message-ID: <CAJZ5v0hmv_KKPODjzxFuvs=4qvr5-BNh-HCxzHyokT+rw4y9_Q@mail.gmail.com>
-Subject: Re: [PATCH] thermal/sysfs: Always enable hysteresis write support
-To: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH v5 5/5] PCI: qcom: Add OPP support to scale performance
+ state of power domain
+Content-Language: en-US
+To: Viresh Kumar <viresh.kumar@linaro.org>
+CC: Bjorn Helgaas <helgaas@kernel.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <vireshk@kernel.org>, <nm@ti.com>, <sboyd@kernel.org>,
+        <mani@kernel.org>, <lpieralisi@kernel.org>, <kw@linux.com>,
+        <robh@kernel.org>, <bhelgaas@google.com>, <rafael@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <quic_vbadigan@quicinc.com>,
+        <quic_nitegupt@quicinc.com>, <quic_skananth@quicinc.com>,
+        <quic_ramkri@quicinc.com>, <quic_parass@quicinc.com>
+References: <20231102053013.7yt7pxin5awlu7w7@vireshk-i7>
+ <20231102120950.GA115288@bhelgaas>
+ <20231103051247.u4cnckzstcvs4lf5@vireshk-i7>
+ <15a98ec0-214b-218b-1e3c-c09f770fce2e@quicinc.com>
+ <0ba9f2af-169e-a9a2-9ae4-4c6a70b0a94e@quicinc.com>
+ <20240110065757.xde2nvpr3z7c4isu@vireshk-i7>
+ <376b3716-46ff-2324-73fc-f3afa3f7af1c@quicinc.com>
+ <20240110073807.sqwmsyr6nmigg6zc@vireshk-i7>
+From: Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+In-Reply-To: <20240110073807.sqwmsyr6nmigg6zc@vireshk-i7>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ldLzFosc01dSUdg3R4AmVw9dR3hFeRMF
+X-Proofpoint-ORIG-GUID: ldLzFosc01dSUdg3R4AmVw9dR3hFeRMF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 phishscore=0 lowpriorityscore=0 mlxlogscore=999
+ adultscore=0 impostorscore=0 spamscore=0 clxscore=1015 mlxscore=0
+ suspectscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2311290000 definitions=main-2401100106
 
-On Wed, Jan 10, 2024 at 1:48=E2=80=AFPM Manaf Meethalavalappu Pallikunhi
-<quic_manafm@quicinc.com> wrote:
->
-> Resending to reflect to format
->
-> Hi Rafael,
->
-> On 1/9/2024 7:12 PM, Rafael J. Wysocki wrote:
-> > On Sat, Jan 6, 2024 at 8:16=E2=80=AFPM Manaf Meethalavalappu Pallikunhi
-> > <quic_manafm@quicinc.com> wrote:
-> >> The commit 2e38a2a981b2("thermal/core: Add a generic
-> >> thermal_zone_set_trip() function") adds the support to update
-> >> trip hysteresis even if set_trip_hyst() operation is not defined.
-> >> But during hysteresis attribute creation, if this operation is
-> >> defined then only it enables hysteresis write access. It leads
-> >> to a case where hysteresis sysfs will be read only for a thermal
-> >> zone when its set_trip_hyst() operation is not defined.
-> I think it is regression after recent re-work.  If  a sensor  is
-> registered witht thermal framework via thermal_of,  sensor driver
-> doesn't need to  know the trip configuration and nothing to do with
-> set_trip_hyst() in driver. Without this change, if  a sensor needs to be
-> monitored from userspace(trip/hysteresis), it is enforcing sensor driver
-> to add  dummy set_trip_hyst() operation. Correct me otherwise.
-> > Which is by design.
-> >
-> > For some thermal zone types (eg. acpi), updating trip hysteresis via
-> > sysfs might lead to incorrect behavior.
->
-> To address this, is it okay to guard hysteresis write permission under
-> CONFIG_THERMAL_WRITABLE_TRIPS flag ?
 
-I've already sent a reply to the original message.
+On 1/10/2024 1:08 PM, Viresh Kumar wrote:
+> On 10-01-24, 12:42, Krishna Chaitanya Chundru wrote:
+>> At present we are not changing the link width after link is initialized, but
+>> we have plans to
+>>
+>> add support change link width dynamically at runtime.
+> Hmm okay.
+>
+>> So, I think it is better to have ICC BW voting in the driver itself.
+> I guess it is better to have more entries in the OPP table then.. 15-20 OPPs
+> isn't too many to be honest.
+>
+> Replicating code is the last thing I would like to do.
+>
+> Maybe you can show the different layouts of the OPP table if you are concerned.
+> We can then see if it is getting too much or not.
+
+Viresh,
+
+it might be less only for now may be around 20 opp entries, but PCIe 
+spec is being updated every few years and a new gen
+
+gen speed will release, right now PCIe GEN6 is released but I don't we 
+had any device in the market now and GEN7 is in process.
+
+So in future it might become very big table. Either we need to come up 
+with a framework in the OPP to select the BW based up on lane width
+
+for particular speed or use the driver way.
+
+
+Thanks & Regards,
+
+Krishna Chaitanya.
+
 
