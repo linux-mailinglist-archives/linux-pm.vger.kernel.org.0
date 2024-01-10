@@ -1,63 +1,63 @@
-Return-Path: <linux-pm+bounces-2057-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2058-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A9A4829A1B
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 13:05:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66C89829A1F
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 13:05:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 718471C221C7
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 12:05:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D03141F2219B
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 12:05:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 832A9481A4;
-	Wed, 10 Jan 2024 12:04:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E190E481C2;
+	Wed, 10 Jan 2024 12:05:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="cvdTa2Yk"
+	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="ZVTbv1/v"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA36B47F74
-	for <linux-pm@vger.kernel.org>; Wed, 10 Jan 2024 12:04:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54FEF481B7
+	for <linux-pm@vger.kernel.org>; Wed, 10 Jan 2024 12:05:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-50e7b273352so4244096e87.1
-        for <linux-pm@vger.kernel.org>; Wed, 10 Jan 2024 04:04:55 -0800 (PST)
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-50e7d6565b5so4543325e87.0
+        for <linux-pm@vger.kernel.org>; Wed, 10 Jan 2024 04:05:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech.se; s=google; t=1704888294; x=1705493094; darn=vger.kernel.org;
+        d=ragnatech.se; s=google; t=1704888335; x=1705493135; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=Tv8y2dLeDjaY4Ft9G4cwSSAq1DW6ZNjqvX8osZdzC4Q=;
-        b=cvdTa2YkekTxrtVfxOIJYpWPYX1dOs2hqkCfqQcNYtlOD63O4E4aCZrKA4WyudMPAz
-         kIW9GZCIo3XGUm+VghPag8VeBTcx1bp2ha4BL5L8mi8UX9YUHgTD15J36wCNLzj5PYq5
-         L5rL7tVL7b7SSExQAfwtAxJlfb0eRp1c4f4iChZxfkIYEhCxHy62NBsj6sMjXLL2rFyd
-         mhcgnbUn/Qi8w/QDLz9/SWQidj3/HYogCx3mwIVtaodGt5ImsZFjzZz2MLKgUAChMeT7
-         lSIPPRUqJ4s7A3tfqPzvtcs7nKAxgvKw4Yj3Wja8YS/amx0pUubVZQ7JJI4bDE3b+xlg
-         yGhw==
+        bh=K7vyzY84VKTlUDz0Z+W+psuOPOLlEvpxgZy/UxbfPxQ=;
+        b=ZVTbv1/vha2O5XlrnkwCbwA2r2mF0zfC5N0NCBRHanitAs7WG6FeTGL5Q3SJhndc1j
+         aVm0ODJTa3oU0vf5kXc+uuq35v5USkftZA9smt50yjhw8tVRWyIWyfY/o2E5RZXC/aW5
+         X96UpUEzxO8r0SeuWKiwf+vY2abVWmaj0x67r7DKEq0u9h4GoXAJ4ZRCD7FhRjcWTvaB
+         aXm9aqfOw1IQNNzu39YEUjzYhI750T3bkYVU49XHhjKToVXnrvbpvF9wipq0ZJE6wEtn
+         +BEBSZ08zKIH1nqhnCL4N/Slbzdj7HuzN8hvNE+aAasKD4NJ2mEhHKBlAJqZ3Xonoenh
+         YdOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704888294; x=1705493094;
+        d=1e100.net; s=20230601; t=1704888335; x=1705493135;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tv8y2dLeDjaY4Ft9G4cwSSAq1DW6ZNjqvX8osZdzC4Q=;
-        b=fgBpxOq8OwIUa/DATUYk7sKKDjwXfIin/3LFHSwWa0OEL/j6OdHuECxzCaZr8aGVkx
-         aCHnizDASvS4k20HAokpNQPHhJmmdaE803zkFQ3db9WsafqS5fayEn3T7Qyi/lfkT/4/
-         qUf8nVsLw+aw1GCIL27HC9bdVYlVbivQB8aF53lxvoZGABIgMzHB2rnfljPQt7MF0V6e
-         XDx4136CSd3MqBfIgARhdm5R1XY3rz1lX8f1BYOCxyvXqfHZppobitpEF58rBv4utPCZ
-         rxDsRavEbM9Zm0jYIkUz5AlJ+BKTzRgc028CWCIfyny16OZXFQ811fooMhblF7PXWwzw
-         xCuw==
-X-Gm-Message-State: AOJu0Yw3m+iNBEQxsK6wAf9O9dSi6K4ZaUUPNRnchlS8pyF2L2zkN7ZF
-	xlOJBfjN99U6jBqccGmii+MgJsbdA9JUMg==
-X-Google-Smtp-Source: AGHT+IEkgQbzIoo2UUdvDbMmqFkbFawHI8AGeesCvZn+sbtVNpwNj67SS3ECouPVFPGwrwBa8ieOPA==
-X-Received: by 2002:a19:6514:0:b0:50e:8ed1:cf10 with SMTP id z20-20020a196514000000b0050e8ed1cf10mr298084lfb.42.1704888293920;
-        Wed, 10 Jan 2024 04:04:53 -0800 (PST)
+        bh=K7vyzY84VKTlUDz0Z+W+psuOPOLlEvpxgZy/UxbfPxQ=;
+        b=Oc3vvceEHABTxUXHera9l23ab/HkYLbMDRppOIAtoZRjQcDO4ldtof8oVhFY8bk0OJ
+         9d0bZa1BGoYxOFDwLszbDhop4UL+GgOITO8n7oEFoN6qzyayFm9W/hL4Na2sLWIEbjwQ
+         83qCS3kWwOxBX2lkRBNBWxacpLX+zeCK4LqR8H3bUD9ZvHgjNaFI+g3hA0xYbjfGW8AH
+         04rvfme66B2bpJPXWzNKLexyxNqL5H7dzWa2qohOaCq/ByxLEkSBLVd0GKx7QRNT7kdP
+         KmyuC6iN9bsqAigsBpBlSvNcVXlPz5GZQoZOZtQnxw/B692XdFj1Y4djNKafQ/pQXi0h
+         znUg==
+X-Gm-Message-State: AOJu0YyuO28Mb76j93Hc5R4Zscq20NsOThh2bTVI78CkZ/km04ldkhkc
+	5mMAwh39V4qOGxUe0bcavWWfZnmTzvLFbQ==
+X-Google-Smtp-Source: AGHT+IGWto/Zlbm7AYd/ByITUGqJT8iSVvxUBcGc1tvTwlEf8LGJQUBOJ1f6HQXycvfjTWkWbSNZyQ==
+X-Received: by 2002:a05:6512:3d22:b0:50e:a975:119e with SMTP id d34-20020a0565123d2200b0050ea975119emr553343lfv.20.1704888335513;
+        Wed, 10 Jan 2024 04:05:35 -0800 (PST)
 Received: from localhost (h-46-59-36-113.A463.priv.bahnhof.se. [46.59.36.113])
-        by smtp.gmail.com with ESMTPSA id be30-20020a056512251e00b0050e68f05d00sm654260lfb.18.2024.01.10.04.04.53
+        by smtp.gmail.com with ESMTPSA id z9-20020ac24f89000000b0050ebc47986fsm646375lfs.141.2024.01.10.04.05.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jan 2024 04:04:53 -0800 (PST)
-Date: Wed, 10 Jan 2024 13:04:52 +0100
+        Wed, 10 Jan 2024 04:05:35 -0800 (PST)
+Date: Wed, 10 Jan 2024 13:05:34 +0100
 From: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
 To: Geert Uytterhoeven <geert+renesas@glider.be>
 Cc: Michael Turquette <mturquette@baylibre.com>,
@@ -75,11 +75,11 @@ Cc: Michael Turquette <mturquette@baylibre.com>,
 	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
 	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	linux-pm@vger.kernel.org
-Subject: Re: [PATCH 04/15] dt-bindings: power: Add r8a779h0 SYSC power domain
- definitions
-Message-ID: <20240110120452.GD1625657@ragnatech.se>
+Subject: Re: [PATCH 05/15] dt-bindings: reset: renesas,rst: Document R-Car
+ V4M support
+Message-ID: <20240110120534.GE1625657@ragnatech.se>
 References: <cover.1704726960.git.geert+renesas@glider.be>
- <1285e6a9fb423c8d6fff0c7faef157a1ea172d70.1704726960.git.geert+renesas@glider.be>
+ <1d35a435db17a240abafb091751255379825b750.1704726960.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -89,83 +89,36 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1285e6a9fb423c8d6fff0c7faef157a1ea172d70.1704726960.git.geert+renesas@glider.be>
+In-Reply-To: <1d35a435db17a240abafb091751255379825b750.1704726960.git.geert+renesas@glider.be>
 
-Hello Geert,
+Hi Geert,
 
-Thanks for your work.
+Thanks for your patch.
 
-On 2024-01-08 16:33:43 +0100, Geert Uytterhoeven wrote:
-> From: Duy Nguyen <duy.nguyen.rh@renesas.com>
+On 2024-01-08 16:33:44 +0100, Geert Uytterhoeven wrote:
+> Document support for the Reset (RST) module in the Renesas R-Car V4M
+> (R8A779H0) SoC.
 > 
-> Add power domain indices for the Renesas R-Car V4M (R8A779H0) SoC.
-> 
-> Signed-off-by: Duy Nguyen <duy.nguyen.rh@renesas.com>
-> Signed-off-by: Hai Pham <hai.pham.ud@renesas.com>
 > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
 Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
 > ---
->  include/dt-bindings/power/r8a779h0-sysc.h | 49 +++++++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 include/dt-bindings/power/r8a779h0-sysc.h
+>  Documentation/devicetree/bindings/reset/renesas,rst.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/include/dt-bindings/power/r8a779h0-sysc.h b/include/dt-bindings/power/r8a779h0-sysc.h
-> new file mode 100644
-> index 0000000000000000..29f05f0401a13336
-> --- /dev/null
-> +++ b/include/dt-bindings/power/r8a779h0-sysc.h
-> @@ -0,0 +1,49 @@
-> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-> +/*
-> + * Copyright (C) 2023 Renesas Electronics Corp.
-> + */
-> +#ifndef __DT_BINDINGS_POWER_R8A779H0_SYSC_H__
-> +#define __DT_BINDINGS_POWER_R8A779H0_SYSC_H__
-> +
-> +/*
-> + * These power domain indices match the Power Domain Register Numbers (PDR)
-> + */
-> +
-> +#define R8A779H0_PD_A1E0D0C0		0
-> +#define R8A779H0_PD_A1E0D0C1		1
-> +#define R8A779H0_PD_A1E0D0C2		2
-> +#define R8A779H0_PD_A1E0D0C3		3
-> +#define R8A779H0_PD_A2E0D0		16
-> +#define R8A779H0_PD_A3CR0		21
-> +#define R8A779H0_PD_A3CR1		22
-> +#define R8A779H0_PD_A3CR2		23
-> +#define R8A779H0_PD_A33DGA		24
-> +#define R8A779H0_PD_A23DGB		25
-> +#define R8A779H0_PD_C4			31
-> +#define R8A779H0_PD_A1DSP0		33
-> +#define R8A779H0_PD_A2IMP01		34
-> +#define R8A779H0_PD_A2PSC		35
-> +#define R8A779H0_PD_A2CV0		36
-> +#define R8A779H0_PD_A2CV1		37
-> +#define R8A779H0_PD_A3IMR0		38
-> +#define R8A779H0_PD_A3IMR1		39
-> +#define R8A779H0_PD_A3VC		40
-> +#define R8A779H0_PD_A2CN0		42
-> +#define R8A779H0_PD_A1CN0		44
-> +#define R8A779H0_PD_A1DSP1		45
-> +#define R8A779H0_PD_A2DMA		47
-> +#define R8A779H0_PD_A2CV2		48
-> +#define R8A779H0_PD_A2CV3		49
-> +#define R8A779H0_PD_A3IMR2		50
-> +#define R8A779H0_PD_A3IMR3		51
-> +#define R8A779H0_PD_A3PCI		52
-> +#define R8A779H0_PD_A2PCIPHY		53
-> +#define R8A779H0_PD_A3VIP0		56
-> +#define R8A779H0_PD_A3VIP2		58
-> +#define R8A779H0_PD_A3ISP0		60
-> +#define R8A779H0_PD_A3DUL		62
-> +
-> +/* Always-on power area */
-> +#define R8A779H0_PD_ALWAYS_ON		64
-> +
-> +#endif /* __DT_BINDINGS_POWER_R8A779H0_SYSC_H__ */
+> diff --git a/Documentation/devicetree/bindings/reset/renesas,rst.yaml b/Documentation/devicetree/bindings/reset/renesas,rst.yaml
+> index e7e4872477517b2d..58b4a45d338006ff 100644
+> --- a/Documentation/devicetree/bindings/reset/renesas,rst.yaml
+> +++ b/Documentation/devicetree/bindings/reset/renesas,rst.yaml
+> @@ -50,6 +50,7 @@ properties:
+>        - renesas,r8a779a0-rst      # R-Car V3U
+>        - renesas,r8a779f0-rst      # R-Car S4-8
+>        - renesas,r8a779g0-rst      # R-Car V4H
+> +      - renesas,r8a779h0-rst      # R-Car V4M
+>  
+>    reg:
+>      maxItems: 1
 > -- 
 > 2.34.1
 > 
