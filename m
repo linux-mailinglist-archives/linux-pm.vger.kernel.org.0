@@ -1,31 +1,31 @@
-Return-Path: <linux-pm+bounces-2048-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2049-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70CA08294F6
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 09:25:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 500BF829648
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 10:26:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 209AE287031
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 08:25:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C83B8287BE0
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 09:26:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CC383DBA9;
-	Wed, 10 Jan 2024 08:25:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 792793E49A;
+	Wed, 10 Jan 2024 09:26:09 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68CCD3C461;
-	Wed, 10 Jan 2024 08:25:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6B8C320E;
+	Wed, 10 Jan 2024 09:26:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CBF482F4;
-	Wed, 10 Jan 2024 00:25:50 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 730C62F4;
+	Wed, 10 Jan 2024 01:26:51 -0800 (PST)
 Received: from [10.57.87.179] (unknown [10.57.87.179])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 38B753F73F;
-	Wed, 10 Jan 2024 00:25:03 -0800 (PST)
-Message-ID: <94aad654-4f20-4b82-b978-77f1f9376dab@arm.com>
-Date: Wed, 10 Jan 2024 08:26:25 +0000
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F108D3F64C;
+	Wed, 10 Jan 2024 01:26:03 -0800 (PST)
+Message-ID: <821be71b-97e8-444a-900b-48fc5d88829f@arm.com>
+Date: Wed, 10 Jan 2024 09:27:25 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -33,88 +33,128 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] cpufreq: scmi: Register for limit change
- notifications
+Subject: Re: [PATCH V6] thermal/core/power_allocator: avoid thermal cdev can
+ not be reset
 Content-Language: en-US
-To: Sibi Sankar <quic_sibis@quicinc.com>
-Cc: linux-arm-kernel@lists.infradead.org, viresh.kumar@linaro.org,
- rafael@kernel.org, cristian.marussi@arm.com, sudeep.holla@arm.com,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- quic_mdtipton@quicinc.com, linux-arm-msm@vger.kernel.org,
- Morten Rasmussen <morten.rasmussen@arm.com>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>
-References: <20240108140118.1596-1-quic_sibis@quicinc.com>
- <20240108140118.1596-4-quic_sibis@quicinc.com>
+To: Di Shen <di.shen@unisoc.com>
+Cc: linux-pm@vger.kernel.org, rui.zhang@intel.com, rafael@kernel.org,
+ daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org, wvw@google.com,
+ tkjos@google.com, xuewen.yan@unisoc.com, zhanglyra@gmail.com,
+ orsonzhai@gmail.com
+References: <20240109112736.32566-1-di.shen@unisoc.com>
 From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20240108140118.1596-4-quic_sibis@quicinc.com>
+In-Reply-To: <20240109112736.32566-1-di.shen@unisoc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi Sibi,
+Hi Di,
 
-+ Morten and Dietmar on CC
-
-On 1/8/24 14:01, Sibi Sankar wrote:
-> Register for limit change notifications if supported with the help of
-> perf_notify_support interface and determine the throttled frequency
-> using the perf_opp_xlate to apply HW pressure.
+On 1/9/24 11:27, Di Shen wrote:
+> Commit 0952177f2a1f ("thermal/core/power_allocator: Update once
+> cooling devices when temp is low") adds an update flag to avoid
+> the thermal event is triggered when there is no need, and
+> thermal cdev would be updated once when temperature is low.
 > 
-> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> But when the trips are writable, and switch_on_temp is set
+> to be a higher value, the cooling device state may not be
+> reset to 0, because last_temperature is smaller than the
+> switch_on_temp.
+> 
+> For example:
+> First:
+> switch_on_temp=70 control_temp=85;
+> Then userspace change the trip_temp:
+> switch_on_temp=45 control_temp=55 cur_temp=54
+> 
+> Then userspace reset the trip_temp:
+> switch_on_temp=70 control_temp=85 cur_temp=57 last_temp=54
+> 
+> At this time, the cooling device state should be reset to 0.
+> However, because cur_temp(57) < switch_on_temp(70)
+> last_temp(54) < switch_on_temp(70)  ---->  update = false,
+> update is false, the cooling device state can not be reset.
+> 
+> Considering tz->passive can also be represented the temperature
+> status, this patch modifies the update flag with tz->passive.
+> 
+> When the first time the temperature drops below switch_on, the
+> states of cooling devices can be reset once(because tz->passive = 1),
+> and the tz->passive is updated to 0. In the next round, because
+> tz->passive is 0, the cdev->state would not be updated.
+> 
+> By using the tz->passive as the "update" flag, the issue above
+> can be solved, and the cooling devices can be update only once
+> when the temperature is low.
+> 
+> Fixes: <0952177f2a1f> (thermal/core/power_allocator: Update once cooling devices when temp is low)
+
+This should be:
+Fixes: 0952177f2a1f ("thermal/core/power_allocator: Update once cooling 
+devices when temp is low")
+Cc: <stable@vger.kernel.org> # v5.13+
+
+> Signed-off-by: Di Shen <di.shen@unisoc.com>
+> 
 > ---
->   drivers/cpufreq/scmi-cpufreq.c | 42 +++++++++++++++++++++++++++++++++-
->   1 file changed, 41 insertions(+), 1 deletion(-)
+> V6:
+> Compared to the previous version:
+> - Not change the thermal core.
+> - Not add new variables and function.
+> - Use tz->passive as "update" flag to indicates whether the cooling
+>    device should be reset.
 > 
-> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-> index 4ee23f4ebf4a..53bc8868455d 100644
-> --- a/drivers/cpufreq/scmi-cpufreq.c
-> +++ b/drivers/cpufreq/scmi-cpufreq.c
-> @@ -25,9 +25,13 @@ struct scmi_data {
->   	int domain_id;
->   	int nr_opp;
->   	struct device *cpu_dev;
-> +	struct cpufreq_policy *policy;
->   	cpumask_var_t opp_shared_cpus;
-> +	struct notifier_block limit_notify_nb;
->   };
+> V5: [5]
+> - Simplify the reset ops, make it no return value and no specific
+>    trip ID as argument.
+> - Extend the commit message.
+> 
+> V4: [4]
+> - Compared to V3, handle it in thermal core instead of in governor.
+> - Add an ops to the governor structure, and call it when a trip
+>    point is changed.
+> - Define reset ops for power allocator.
+> 
+> V3: [3]
+> - Add fix tag.
+> 
+> V2: [2]
+> - Compared to v1, do not revert.
+> - Add a variable(last_switch_on_temp) in power_allocator_params
+>    to record the last switch_on_temp value.
+> - Adds a function to renew the update flag and update the
+>    last_switch_on_temp when thermal trips are writable.
+> 
+> V1: [1]
+> - Revert commit 0952177f2a1f.
+> 
+> [1] https://lore.kernel.org/all/20230309135515.1232-1-di.shen@unisoc.com/
+> [2] https://lore.kernel.org/all/20230315093008.17489-1-di.shen@unisoc.com/
+> [3] https://lore.kernel.org/all/20230320095620.7480-1-di.shen@unisoc.com/
+> [4] https://lore.kernel.org/all/20230619063534.12831-1-di.shen@unisoc.com/
+> [5] https://lore.kernel.org/all/20230710033234.28641-1-di.shen@unisoc.com/
+> ---
+> ---
+>   drivers/thermal/gov_power_allocator.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+> index 83d4f451b1a9..931cd88425e4 100644
+> --- a/drivers/thermal/gov_power_allocator.c
+> +++ b/drivers/thermal/gov_power_allocator.c
+> @@ -693,7 +693,7 @@ static int power_allocator_throttle(struct thermal_zone_device *tz,
 >   
-> +const struct scmi_handle *handle;
-> +static struct scmi_device *scmi_dev;
->   static struct scmi_protocol_handle *ph;
->   static const struct scmi_perf_proto_ops *perf_ops;
->   
-> @@ -144,6 +148,22 @@ scmi_get_cpu_power(struct device *cpu_dev, unsigned long *power,
->   	return 0;
->   }
->   
-> +static int scmi_limit_notify_cb(struct notifier_block *nb, unsigned long event, void *data)
-> +{
-> +	unsigned long freq_hz;
-> +	struct scmi_perf_limits_report *limit_notify = data;
-> +	struct scmi_data *priv = container_of(nb, struct scmi_data, limit_notify_nb);
-> +	struct cpufreq_policy *policy = priv->policy;
-> +
-> +	if (perf_ops->perf_opp_xlate(ph, priv->domain_id, limit_notify->range_max, &freq_hz))
-> +		return NOTIFY_OK;
-> +
-> +	/* Update HW pressure (the boost frequencies are accepted) */
-> +	arch_update_hw_pressure(policy->related_cpus, (freq_hz / HZ_PER_KHZ));
+>   	trip = params->trip_switch_on;
+>   	if (trip && tz->temperature < trip->temperature) {
+> -		update = tz->last_temperature >= trip->temperature;
+> +		update = tz->passive;
+>   		tz->passive = 0;
+>   		reset_pid_controller(params);
+>   		allow_maximum_power(tz, update);
 
-This is wrong. The whole idea of the new HW pressure was that I wanted
-to get rid of the 'signal smoothing' mechanism in order to get
-instantaneous value from FW to task scheduler. Vincent created
-2 interfaces in that new HW pressure:
-1. cpufreq_update_pressure(policy) - raw variable
-2. arch_update_hw_pressure(policy->related_cpus, (freq_hz / HZ_PER_KHZ))
-    - smoothing PELT mechanism, good for raw IRQ in drivers
+That small change LGTM.
 
-In our SCMI cpufreq driver we need the 1st one:
-cpufreq_update_pressure(policy)
-
-The FW will do the 'signal smoothing or filtering' and won't
-flood the kernel with hundreds of notifications.
-
-So, please change that bit and add me, Morten and Dietmar on CC.
-I would like to review it.
+Please send v7 and add Wei as 'Suggested-by:' for this compact solution
+suggestion.
 
 Regards,
 Lukasz
