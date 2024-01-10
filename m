@@ -1,108 +1,106 @@
-Return-Path: <linux-pm+bounces-2072-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2073-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9E2D829BB5
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 14:49:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7B61829BCA
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 14:52:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 499A9B2163B
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 13:49:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DEBE71C22308
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 13:51:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59AFF495C9;
-	Wed, 10 Jan 2024 13:48:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V1jPPPfb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DCF14A9BF;
+	Wed, 10 Jan 2024 13:51:14 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E20F4495CC;
-	Wed, 10 Jan 2024 13:48:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14496C433C7;
-	Wed, 10 Jan 2024 13:48:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704894507;
-	bh=Mpj9MmpWsZ0QXa3z+JG9y8iO9570kyRUme6G8UyY3ns=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=V1jPPPfbtZjWicjR/pXvV3fvfEd+WTpUYKesK1ver/unl0yUXsY4TkjQIutQjBRsP
-	 rP/Oz0q/0h14UEjOgFaxFG624+eWlJ/AO+ivv3TYC1sZnL+hL4/+Alo/46tP000hXg
-	 zplNZ64lLrfkj8J9hOzdzzP2smKm7MeEZ/IYISeNp94tvvX509RdtM1WHeyhjMm5jx
-	 6PVp6J9lR2f0adpYnosG4kNDW+C6yKAzSmFoUpH39oONuTUSb402zXo2PYbzqdDyDw
-	 8BKfIvBQaR2VfeSzJy9k28uur98lcaUtFQRjhOYk1Xziu9Q+q1jecwOjEuD67FrH9y
-	 AnuUlci6GEj1Q==
-Date: Wed, 10 Jan 2024 13:48:20 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: akpm@linux-foundation.org, llvm@lists.linux.dev,
-	patches@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	kvm@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-trace-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
-	linux-efi@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
-	linux-arch@vger.kernel.org, kasan-dev@googlegroups.com,
-	linux-mm@kvack.org, bridge@lists.linux.dev, netdev@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/3] arch and include: Update LLVM Phabricator links
-Message-ID: <20240110-apostle-trident-533d4c2c9c97@spud>
-References: <20240109-update-llvm-links-v1-0-eb09b59db071@kernel.org>
- <20240109-update-llvm-links-v1-2-eb09b59db071@kernel.org>
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C74B4A9B2;
+	Wed, 10 Jan 2024 13:51:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 66F4F2F4;
+	Wed, 10 Jan 2024 05:51:56 -0800 (PST)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 27E373F5A1;
+	Wed, 10 Jan 2024 05:51:06 -0800 (PST)
+Message-ID: <92d1b906-6d76-4e96-a688-3a06a0a88508@arm.com>
+Date: Wed, 10 Jan 2024 14:51:04 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="p6SYI+U6gP5vpK1M"
-Content-Disposition: inline
-In-Reply-To: <20240109-update-llvm-links-v1-2-eb09b59db071@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/5] sched: Take cpufreq feedback into account
+Content-Language: en-US
+To: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+ sudeep.holla@arm.com, rafael@kernel.org, viresh.kumar@linaro.org,
+ agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+ mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+ rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+ bristot@redhat.com, vschneid@redhat.com, lukasz.luba@arm.com,
+ rui.zhang@intel.com, mhiramat@kernel.org, daniel.lezcano@linaro.org,
+ amit.kachhap@gmail.com, corbet@lwn.net, gregkh@linuxfoundation.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ qyousef@layalina.io
+References: <20240108134843.429769-1-vincent.guittot@linaro.org>
+ <20240108134843.429769-3-vincent.guittot@linaro.org>
+ <fb25afab-9586-455a-b8c1-47949035c95a@arm.com>
+ <CAKfTPtDEKzup63H0iwHkTQCZOdQLUurACCYfEB-MpW+v7JEfag@mail.gmail.com>
+From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <CAKfTPtDEKzup63H0iwHkTQCZOdQLUurACCYfEB-MpW+v7JEfag@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
+On 09/01/2024 15:30, Vincent Guittot wrote:
+> On Tue, 9 Jan 2024 at 12:22, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+>>
+>> On 08/01/2024 14:48, Vincent Guittot wrote:
+>>> Aggregate the different pressures applied on the capacity of CPUs and
+>>> create a new function that returns the actual capacity of the CPU:
+>>>   get_actual_cpu_capacity()
+>>
+>>    function name                scaling
+>>
+>> (1) arch_scale_cpu_capacity() - uarch
+>>
+>> (2) get_actual_cpu_capacity() - hw + cpufreq/thermal of (1)
+>>
+>> (3) capacity_of()             - rt (rt/dl/irq) of (2) (used by fair)
+>>
+>> Although (1) - (3) are very close to each other from the functional
+> 
+> I don't get your point as name of (1) and (3) have not been changed by the patch
 
---p6SYI+U6gP5vpK1M
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That's true. But with capacity_orig_of() for (1), we had some coherence
+in the naming scheme of those cpu_capacity related functions (1) - (3).
+which helps when trying to understand the code.
 
-On Tue, Jan 09, 2024 at 03:16:30PM -0700, Nathan Chancellor wrote:
-> reviews.llvm.org was LLVM's Phabricator instances for code review. It
-> has been abandoned in favor of GitHub pull requests. While the majority
-> of links in the kernel sources still work because of the work Fangrui
-> has done turning the dynamic Phabricator instance into a static archive,
-> there are some issues with that work, so preemptively convert all the
-> links in the kernel sources to point to the commit on GitHub.
->=20
-> Most of the commits have the corresponding differential review link in
-> the commit message itself so there should not be any loss of fidelity in
-> the relevant information.
->=20
-> Link: https://discourse.llvm.org/t/update-on-github-pull-requests/71540/1=
-72
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
+I can see that actual_capacity_of() (2) sounds awful though.
 
->  arch/riscv/Kconfig              | 2 +-
->  arch/riscv/include/asm/ftrace.h | 2 +-
+>> standpoint, their names are not very coherent.
+>>
+>> I assume this makes it hard to understand all of this when reading the
+>> code w/o knowing these patches before.
+>>
+>> Why is (2) tagged with 'actual'?
+> 
+> This is the actual max compute capacity of the cpu at now  i.e.
+> possibly reduced because of temporary frequency capping
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Will the actual max compute capacity also depend on 'user space system
+pressure' later, i.e. on 'permanent' frequency capping?
 
-Cheers,
-Conor.
+> So (2) equals (1) minus temporary performance capping and (3)
+> additionally subtracts the time used by other class to (2)
 
---p6SYI+U6gP5vpK1M
-Content-Type: application/pgp-signature; name="signature.asc"
+OK.
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZZ6gJAAKCRB4tDGHoIJi
-0mIlAQCj5ZP6QEhEswWYjX38obn/p3pF8mt+Ve+vlBnVEhAW8QD8ClRvKxDiajR5
-Zp8ES/FLDyH/QJ5QjGuYLP5PATLeFAY=
-=SqXc
------END PGP SIGNATURE-----
-
---p6SYI+U6gP5vpK1M--
+A coherent set of those tags even reflected in those getters would help
+but can be done later too.
 
