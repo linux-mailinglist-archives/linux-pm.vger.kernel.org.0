@@ -1,64 +1,72 @@
-Return-Path: <linux-pm+bounces-2045-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2046-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D00682944A
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 08:28:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB9EB829450
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 08:29:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B557F1F261F2
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 07:28:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CEDAD1C257E5
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 07:29:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A33E3A8D2;
-	Wed, 10 Jan 2024 07:28:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3F633A1B5;
+	Wed, 10 Jan 2024 07:29:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OysyzjQE"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ak4OHJZG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BACD539FC0;
-	Wed, 10 Jan 2024 07:28:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704871702; x=1736407702;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RdL3JLaABYR7lAnPBZfj8AcnQb0dWP0L6Db1mzsmXaU=;
-  b=OysyzjQElN0IsyuZYx/QalPWAWDqLLb1Dff0/r7r/NTlJmbAnoadkcx1
-   Ron8T4rdRZnffNeMr6X+RG98mX/zQiYDg5fTtGSP1ul+Tcqgw0Qej27/B
-   xk8nKj224AV44Gcacb1WJnb0SeLQUpE0cnWcMhiGnTjfb7YvzZYzeo4Wm
-   EpRTs6zJEkXMe2Da2owLbA42gI3LZIB+4ndOlXQejGl1R15T6lvutiZyh
-   c0/AGpdO4XSWPIAZA48yzQazn94lQeFrLYA7KCPog/pkRPNnwHpLS7DhI
-   7R0a8cy7+Hxqpe2jd0KHJpNDVT0xsvP7+PSRLqoFk/l9cXp63xTysWMMJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="398123625"
-X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
-   d="scan'208";a="398123625"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2024 23:28:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="775139771"
-X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
-   d="scan'208";a="775139771"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 09 Jan 2024 23:28:13 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rNSxL-0006jk-1x;
-	Wed, 10 Jan 2024 07:25:11 +0000
-Date: Wed, 10 Jan 2024 15:17:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-	devel@acpica.org, linux-pm@vger.kernel.org,
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: [rafael-pm:bleeding-edge 1764/1779]
- drivers/thermal/thermal_debugfs.c:149: warning: Function parameter or member
- 'tz_episodes' not described in 'tz_debugfs'
-Message-ID: <202401101509.DstqlL7i-lkp@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFA5639ADE
+	for <linux-pm@vger.kernel.org>; Wed, 10 Jan 2024 07:29:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-59882363f5bso754151eaf.3
+        for <linux-pm@vger.kernel.org>; Tue, 09 Jan 2024 23:29:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1704871749; x=1705476549; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wo2ow3R5rRd9qIwMEMsgAnkS6j0WPS9tTieV0e+8cjc=;
+        b=ak4OHJZG0U+Gm+9znDg742WwHTekzoLHC0hUsY3HWxdn4+Z++frQkXK7d4OfDy7Kdx
+         CUs47DfLOXf3obL/l8UKgjzY9Dg51fQO8bwacOjZELK4LsAAJ8DhW04ZLltkz8xKJlKL
+         sfXITp1nIc6vy6bvRhtDHw4tcB9tYAFYBZrgIi1lH3vFpjOycmsa6oHFqkBj9sD8udFt
+         StATYFxZAGppFhtCm5J/KiVTBdynp7ulCm9RoG6vEpmqHm4vowt7VoCMH3y7z0rMVdP7
+         dxU0wGyfjNpcesUXCeELSzgqAy4gXA7zNzBcfQSD9miyW2JiaFaBhRs8uXsSd6uvo7m5
+         An9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704871749; x=1705476549;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wo2ow3R5rRd9qIwMEMsgAnkS6j0WPS9tTieV0e+8cjc=;
+        b=X0iyrnxJlhtF8IawP8yqmYHSjVw2RtNoafMmE3C5bSn+cvcOIkYeKKClNCYn+5W2kC
+         oyAUUGgchJja1iYPqioWcsNO7ULnCmOQcXn8ZgyBr9q+2NdfpL2g3FEkuf+wIlshURVA
+         Er6FlwYiBFbffL2uO1QYhxZaDAYpqlLedp3FPSyz8OIiJHWxz/VswobV1fZTFzMygMLQ
+         SstThSNyIbulp3cB31TaHispyViiJB25OigoC2QfUXGkjiS4tqfD0bcv4mGq1gi79SQZ
+         uc/+/FyAPSoH6aeU2NnJeUii0KUBZcmQvym+LcG8IcP8zlVv+zkBITmus56NkZj1tdTv
+         Aq1Q==
+X-Gm-Message-State: AOJu0Yw/vIgJBWyUcO1zq+kJfyCD6KRqXv5lA26EAHyOueZW82oZOxI7
+	ck4oz2fds0nvnod2M//oHqnAvvZiIBJp0A==
+X-Google-Smtp-Source: AGHT+IFBaMUQIrZ5GE8hoUnVwohwAlLo7uTYGkTzq+F0FKAwPL8/m4gCZV61h+d7TvAYjRrRkyIYZg==
+X-Received: by 2002:a05:6358:e4a3:b0:175:61e3:4ca8 with SMTP id by35-20020a056358e4a300b0017561e34ca8mr550444rwb.44.1704871748972;
+        Tue, 09 Jan 2024 23:29:08 -0800 (PST)
+Received: from localhost ([122.172.81.83])
+        by smtp.gmail.com with ESMTPSA id fh12-20020a056a00390c00b006d0d90edd2csm2842919pfb.42.2024.01.09.23.29.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jan 2024 23:29:08 -0800 (PST)
+Date: Wed, 10 Jan 2024 12:59:06 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Sibi Sankar <quic_sibis@quicinc.com>
+Cc: sudeep.holla@arm.com, cristian.marussi@arm.com, rafael@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, quic_mdtipton@quicinc.com,
+	linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 2/3] firmware: arm_scmi: Add perf_opp_xlate interface
+Message-ID: <20240110072906.7vnqykkcw3rkhoxa@vireshk-i7>
+References: <20240108140118.1596-1-quic_sibis@quicinc.com>
+ <20240108140118.1596-3-quic_sibis@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -67,50 +75,63 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240108140118.1596-3-quic_sibis@quicinc.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   335ccbd84e3d5491e06eaf60e3f6be2ef657a495
-commit: 15c1b25dd5fa2735060be35c7022bfbea4978a55 [1764/1779] thermal/debugfs: Add thermal debugfs information for mitigation episodes
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20240110/202401101509.DstqlL7i-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240110/202401101509.DstqlL7i-lkp@intel.com/reproduce)
+On 08-01-24, 19:31, Sibi Sankar wrote:
+> Add a new perf_opp_xlate interface to the existing perf_ops to translate
+> a given perf index to frequency.
+> 
+> This can be used by the cpufreq driver and framework to determine the
+> throttled frequency from a given perf index and apply HW pressure
+> accordingly.
+> 
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> ---
+>  drivers/firmware/arm_scmi/perf.c | 21 +++++++++++++++++++++
+>  include/linux/scmi_protocol.h    |  3 +++
+>  2 files changed, 24 insertions(+)
+> 
+> diff --git a/drivers/firmware/arm_scmi/perf.c b/drivers/firmware/arm_scmi/perf.c
+> index c167bb5e3607..f26390924e1c 100644
+> --- a/drivers/firmware/arm_scmi/perf.c
+> +++ b/drivers/firmware/arm_scmi/perf.c
+> @@ -964,6 +964,26 @@ static int scmi_notify_support(const struct scmi_protocol_handle *ph, u32 domain
+>  	return 0;
+>  }
+>  
+> +static int scmi_perf_opp_xlate(const struct scmi_protocol_handle *ph, u32 domain,
+> +			       int idx, unsigned long *freq)
+> +{
+> +	struct perf_dom_info *dom;
+> +
+> +	dom = scmi_perf_domain_lookup(ph, domain);
+> +	if (IS_ERR(dom))
+> +		return PTR_ERR(dom);
+> +
+> +	if (idx >= dom->opp_count)
+> +		return -ERANGE;
+> +
+> +	if (!dom->level_indexing_mode)
+> +		*freq = dom->opp[idx].perf * dom->mult_factor;
+> +	else
+> +		*freq = dom->opp[idx].indicative_freq * dom->mult_factor;
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct scmi_perf_proto_ops perf_proto_ops = {
+>  	.num_domains_get = scmi_perf_num_domains_get,
+>  	.info_get = scmi_perf_info_get,
+> @@ -979,6 +999,7 @@ static const struct scmi_perf_proto_ops perf_proto_ops = {
+>  	.fast_switch_possible = scmi_fast_switch_possible,
+>  	.power_scale_get = scmi_power_scale_get,
+>  	.perf_notify_support = scmi_notify_support,
+> +	.perf_opp_xlate = scmi_perf_opp_xlate,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401101509.DstqlL7i-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/thermal/thermal_debugfs.c:149: warning: Function parameter or member 'tz_episodes' not described in 'tz_debugfs'
-
-
-vim +149 drivers/thermal/thermal_debugfs.c
-
-   129	
-   130	/**
-   131	 * struct tz_debugfs - Store all mitigation episodes for a thermal zone
-   132	 *
-   133	 * The tz_debugfs structure contains the list of the mitigation
-   134	 * episodes and has to track which trip point has been crossed in
-   135	 * order to handle correctly nested trip point mitigation episodes.
-   136	 *
-   137	 * We keep the history of the trip point crossed in an array and as we
-   138	 * can go back and forth inside this history, eg. trip 0,1,2,1,2,1,0,
-   139	 * we keep track of the current position in the history array.
-   140	 *
-   141	 * @tz_episode: a list of thermal mitigation episodes
-   142	 * @trips_crossed: an array of trip points crossed by id
-   143	 * @nr_trips: the number of trip points currently being crossed
-   144	 */
-   145	struct tz_debugfs {
-   146		struct list_head tz_episodes;
-   147		int *trips_crossed;
-   148		int nr_trips;
- > 149	};
-   150	
+The use of "opp" here is a bit confusing as this doesn't have anything to do
+with the OPP framework and you are only getting the frequency out of it after
+all.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+viresh
 
