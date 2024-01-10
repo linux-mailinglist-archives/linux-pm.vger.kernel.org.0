@@ -1,124 +1,130 @@
-Return-Path: <linux-pm+bounces-2053-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2054-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A56A0829A0B
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 13:01:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF3A9829A10
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 13:01:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9BF5C1C20BD3
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 12:00:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C7B2289F8A
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 12:01:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E16B4481D0;
-	Wed, 10 Jan 2024 11:58:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C511547F72;
+	Wed, 10 Jan 2024 11:59:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iZ7APRVc"
+	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="HCp4vY2Z"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775AB4B5A4
-	for <linux-pm@vger.kernel.org>; Wed, 10 Jan 2024 11:58:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704887901; x=1736423901;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=z5Tuv2WSrteaAUcwm3Ij2GXm9M7DYmRSz7SLSybV2qI=;
-  b=iZ7APRVcrf5foPpdkWIVb43PKtY1wVSvi7JlAl4C3HOSPvBedQTiWmjf
-   f91Tc2Oao78XoGZC2C8x+E5GGH59TkIsYLkI/t30pMtAN3rHG3LuhMIjC
-   7SF16Y+YEvq0SEEnmZGmVeJLfCPwpdN76/3L9pdJoCjvWY6QFVIEL8vD4
-   g5tZ13CQF852mC/NiZJ7JPFhN31dDBZBGpJAFF8vhwvtKhDE0R+wrJuBO
-   rnkp9NxT38lFjba1T4mkC/UN2TaNz+Qk6xgYt17c/NvH4vKGlpo8CJpZX
-   ZZkft7prRS0SBK2HLStpufc9vb2K2Etb3Nsn/f70ZJU8/iG/EJBvxwAH6
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10948"; a="11978407"
-X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
-   d="scan'208";a="11978407"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2024 03:58:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10948"; a="905507043"
-X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
-   d="scan'208";a="905507043"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2024 03:58:15 -0800
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id 08BFE11F913;
-	Wed, 10 Jan 2024 13:58:12 +0200 (EET)
-Date: Wed, 10 Jan 2024 11:58:11 +0000
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	laurent.pinchart@ideasonboard.com,
-	Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Lucas De Marchi <lucas.demarchi@intel.com>,
-	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	Paul Elder <paul.elder@ideasonboard.com>,
-	Alex Elder <elder@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH 1/2] pm: runtime: Simplify pm_runtime_get_if_active()
- usage
-Message-ID: <ZZ6GU-Gvm2HmfpMf@kekkonen.localdomain>
-References: <20240109133639.111210-1-sakari.ailus@linux.intel.com>
- <20240109133657.111258-1-sakari.ailus@linux.intel.com>
- <ZZ2D3Tv2ZW9NuQoz@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01C3947F6D
+	for <linux-pm@vger.kernel.org>; Wed, 10 Jan 2024 11:59:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2cd0f4f306fso47858531fa.0
+        for <linux-pm@vger.kernel.org>; Wed, 10 Jan 2024 03:59:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech.se; s=google; t=1704887985; x=1705492785; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ISdmhcRR/GVAZSppZHeKDEjXMJ9voCrSTY/WHRDPz+M=;
+        b=HCp4vY2ZbZply1USFWqt5b1iDJTqh9TcJVVGasPNOnnLkwh/B9r0B8EUOs97IU9FuH
+         Syyrp/QnIoStZWzbsfL6JXH4vsA9V5TuuHNFLqyx7XBRrjtA67E2NxWnIWzCDkRYi1a4
+         4XZteIjckrLT1p7YJnvBHSJox7xyLsd2TLVBdC8HzuRJOhx4AKFe/frNq54aa1oNPOU4
+         uJn8+oLiFt98RdODFEUzRRxdcOTktSbJsNZZ+CJJgwY7ErPI3VDNj2DlfKjzoPSOlHP5
+         HFhNiq2nVpuqPkdst6eZKP2CrTKEQwG40j+Uq7Npc+fo0uwc4/a3vWUw7DgnxWu1jKf+
+         /qUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704887985; x=1705492785;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ISdmhcRR/GVAZSppZHeKDEjXMJ9voCrSTY/WHRDPz+M=;
+        b=esp16IsHEwRFNDYkd+dyqSKvKadcYXF/v+1/2xOlJswj+9B+fed/F8Bg2ZLHDfP2Pv
+         ZJ65wrQw5vUyVzLIRtId/Vabgrv/CHWCFf29lZjvJFb+Eza0EA10Xcz4UHLNmgZLv6Vd
+         1NOSSK+MEStkTAiYvxawkW+jiDkO+cHftUZZ3iDFt6QSCXrsOk/DfKgX3B4GZrFADHED
+         OvTFK8XVN1pK+yKjfvmA6xuC5O/lXr/2y0T8Ugu+gXB3AWmdHppQsTrbsTvrRdeXvtJd
+         k5IoNv5qpeqjp/p7uUbyoc2OBb+/W24Mv1EEdrzeW3BufQx0omjj6dKMmfr3LnWH/Ear
+         sHAA==
+X-Gm-Message-State: AOJu0YypBkkjAzT06JbOjYXHItRGbrqsDicng5fYyQc1jDrVjLJEs+K5
+	T9xHhmZMdwRZvixDI5+Epn92PES3LVpm2A==
+X-Google-Smtp-Source: AGHT+IGRceqNc3d0nTVh7e6+mL9Lw5I93LQLv+D4klCI5dK4DBKjF4S3gi0+1qjOna0v/0HlpNqqng==
+X-Received: by 2002:a2e:a305:0:b0:2c8:39fc:acf5 with SMTP id l5-20020a2ea305000000b002c839fcacf5mr513508lje.2.1704887984601;
+        Wed, 10 Jan 2024 03:59:44 -0800 (PST)
+Received: from localhost (h-46-59-36-113.A463.priv.bahnhof.se. [46.59.36.113])
+        by smtp.gmail.com with ESMTPSA id u1-20020a2eb801000000b002cd39846d92sm724889ljo.103.2024.01.10.03.59.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jan 2024 03:59:44 -0800 (PST)
+Date: Wed, 10 Jan 2024 12:59:43 +0100
+From: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+	Cong Dang <cong.dang.xn@renesas.com>,
+	Duy Nguyen <duy.nguyen.rh@renesas.com>,
+	Hai Pham <hai.pham.ud@renesas.com>,
+	Linh Phung <linh.phung.jy@renesas.com>,
+	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH 01/15] dt-bindings: clock: renesas,cpg-mssr: Document
+ R-Car V4M support
+Message-ID: <20240110115943.GA1625657@ragnatech.se>
+References: <cover.1704726960.git.geert+renesas@glider.be>
+ <81f5a2b55795af06f6fd54b3d566156e91138a17.1704726960.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZZ2D3Tv2ZW9NuQoz@intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <81f5a2b55795af06f6fd54b3d566156e91138a17.1704726960.git.geert+renesas@glider.be>
 
-Hi Rodrigo,
+Hi Geert,
 
-On Tue, Jan 09, 2024 at 12:35:25PM -0500, Rodrigo Vivi wrote:
-> On Tue, Jan 09, 2024 at 03:36:57PM +0200, Sakari Ailus wrote:
-> > There are two ways to opportunistically increment a device's runtime PM
-> > usage count, calling either pm_runtime_get_if_active() or
-> > pm_runtime_get_if_in_use(). The former has an argument to tell whether to
-> > ignore the usage count or not, and the latter simply calls the former with
-> > ign_usage_count set to false. The other users that want to ignore the
-> > usage_count will have to explitly set that argument to true which is a bit
-> > cumbersome.
-> > 
-> > To make this function more practical to use, remove the ign_usage_count
-> > argument from the function. The main implementation is renamed as
-> > __pm_runtime_get_conditional().
+Thanks for your work.
+
+On 2024-01-08 16:33:40 +0100, Geert Uytterhoeven wrote:
+> Document support for the Clock Pulse Generator (CPG) and Module Standby
+> Software Reset (MSSR) module on the Renesas R-Car V4M (R8A779H0) SoC.
 > 
-> Great idea! I recently found a bug in Xe caused by some confusion
-> with the ign_usage_count var.
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+
+> ---
+>  Documentation/devicetree/bindings/clock/renesas,cpg-mssr.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> > + * This function is not intended to be called by drivers, use
-> > + * pm_runtime_get_if_active() or pm_runtime_get_if_in_use() instead.
-> >   */
+> diff --git a/Documentation/devicetree/bindings/clock/renesas,cpg-mssr.yaml b/Documentation/devicetree/bindings/clock/renesas,cpg-mssr.yaml
+> index 9c3dc6c4fa94218c..084259d30232aa68 100644
+> --- a/Documentation/devicetree/bindings/clock/renesas,cpg-mssr.yaml
+> +++ b/Documentation/devicetree/bindings/clock/renesas,cpg-mssr.yaml
+> @@ -50,6 +50,7 @@ properties:
+>        - renesas,r8a779a0-cpg-mssr # R-Car V3U
+>        - renesas,r8a779f0-cpg-mssr # R-Car S4-8
+>        - renesas,r8a779g0-cpg-mssr # R-Car V4H
+> +      - renesas,r8a779h0-cpg-mssr # R-Car V4M
+>  
+>    reg:
+>      maxItems: 1
+> -- 
+> 2.34.1
 > 
-> Well, it is not intended, but we already have an usage for that.
-
-I'll change the above text to:
-
- * This function is not primarily intended for use in drivers, most of which are
- * better served by either pm_runtime_get_if_active() or
- * pm_runtime_get_if_in_use() instead.
-
-Perhaps it would better reflect the intention and actual use.
+> 
 
 -- 
-Regards,
-
-Sakari Ailus
+Kind Regards,
+Niklas Söderlund
 
