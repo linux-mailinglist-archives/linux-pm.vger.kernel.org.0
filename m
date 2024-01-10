@@ -1,180 +1,137 @@
-Return-Path: <linux-pm+bounces-2091-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2092-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F156D829EF3
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 18:19:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9790829F1D
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 18:26:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6BC3A1F218D0
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 17:19:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88428284462
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 17:26:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52C044CE11;
-	Wed, 10 Jan 2024 17:19:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC5B34D125;
+	Wed, 10 Jan 2024 17:25:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="5nMxCzdt"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="w+5XwlqQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F3DE4CDFE;
-	Wed, 10 Jan 2024 17:19:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dKLt0cWI20zWMfU4+LlPJGFgQfbKDOf0Oyze9fMc0L3rnTRSilT9X3uLJsEpMrUnnyWnXaUMyJfb6yYQ2ZH6yIHSfd2zLjSQvVfJx176srR2GbybmiG8DsBWnDz9gYBP1hUNwgScNDdPGUCYnlGRAZe9f0TulWiAWIvzcLr1zKCF/XPHjijoZSqaf1F7t3kyJLl2VmUyNkV+mtnxVL3ehfjDD6O3l5TWT8q+iasrTlDkEJbR7UlcWpvkFbQsIVw5EtcmWj7dx44z74X6lnU2tKwvIHrPn5qniziyyOA5ITpQSVMUrEtuhFqBoc/7QkzoMqmuRgsWwlYxiBLf7nM6dw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OMB0Qp+BXhNXehwVIdn7Dm8bnxsEXf1pmsJad5Mtv6Y=;
- b=MA3v1V/LmIGKI/OKMA32rJt4b8R86Fd4ZbNWiGbfORZ5CDQwVAqtxAIOwZp8eiEBQTrjNK1a17TXdsEm/PkZf9zCxH0Z/KlT/9vK7WH9UaQ+CrzZLZ+Ke7g/Dcz+eOhf3pz5gidseHDXHa10IsTEVNror1vGFLm74Z3KFAOLnKPAlknVCGo4wMIF9IjZT8hfpKMjVaM0a0RCsh0QeRhhKrT4Tz1lhmtjgEVyMC7MTxRyL3T+8tRNL+XLgSy1MhFQkER8igF9dZa1ERzbhRBgpN8/a/B6BwIHgt0LZ6JUuD51EDi8m3ugTO/elHJIc3SQO+mq8MICzdWXQSdIBfniDw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OMB0Qp+BXhNXehwVIdn7Dm8bnxsEXf1pmsJad5Mtv6Y=;
- b=5nMxCzdtvb0g5kkVjkEGvt5cNTcfBwg57SOXdh/0U8H2N0MQRvgnrP/StXYBiSOGeTwgOU8FrSEdaBlAyiaMPt0QIz1moQE8rPWiwF3Sw320nClWriOfpAl5kIGRqy/RK5RVdLIn84/0RM18sfqfvsjhv+54XDnGcNOx+nHFDVc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from SJ2PR12MB8690.namprd12.prod.outlook.com (2603:10b6:a03:540::10)
- by PH7PR12MB7872.namprd12.prod.outlook.com (2603:10b6:510:27c::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7181.17; Wed, 10 Jan
- 2024 17:19:46 +0000
-Received: from SJ2PR12MB8690.namprd12.prod.outlook.com
- ([fe80::9b8e:816d:20b9:9845]) by SJ2PR12MB8690.namprd12.prod.outlook.com
- ([fe80::9b8e:816d:20b9:9845%5]) with mapi id 15.20.7159.020; Wed, 10 Jan 2024
- 17:19:46 +0000
-Date: Thu, 11 Jan 2024 01:19:25 +0800
-From: Huang Rui <ray.huang@amd.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Erwan Velu <erwanaliasr1@gmail.com>
-Cc: Erwan Velu <e.velu@criteo.com>, Viresh Kumar <viresh.kumar@linaro.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] cpufreq/amd-pstate: Adding Zen4 support in
- introduction
-Message-ID: <ZZ7RnYy1xINapcSC@amd.com>
-References: <20240109175844.448006-1-e.velu@criteo.com>
- <CAJZ5v0ipYQURmFGGwmS5oyOuAOFDbG7TaaaWg4Ze-7PpBnSwkQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0ipYQURmFGGwmS5oyOuAOFDbG7TaaaWg4Ze-7PpBnSwkQ@mail.gmail.com>
-X-ClientProxiedBy: SG2PR02CA0084.apcprd02.prod.outlook.com
- (2603:1096:4:90::24) To SJ2PR12MB8690.namprd12.prod.outlook.com
- (2603:10b6:a03:540::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53BDD4D111
+	for <linux-pm@vger.kernel.org>; Wed, 10 Jan 2024 17:25:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-680adbf077dso31333656d6.1
+        for <linux-pm@vger.kernel.org>; Wed, 10 Jan 2024 09:25:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1704907527; x=1705512327; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Quxkd2kOtosd0xhGtW1MMtr97HwHYuSGHPI/EcetRCs=;
+        b=w+5XwlqQUyXYj8g2im0Pvn7grMhFHaJuYl2lDW30WjvLDoDv6GKpqBCwdb/Q6rko6g
+         tpnM3ip31+jO5eTXCXfkFy4qxdx4/ileYONHc1zedL/xk/is3on/mqydJpx4GwaOcSOR
+         gLPXo181lVYsfK8BlUXFS2y4FZoQiwEjGdculNHyohn7eake/rlseXEA7YsFi+6Cd3dg
+         QGvF57QQNAZr422fYYfNe/ZlCitQ1kiDrEQjiqKKwElocmPmRzbu8CcwGBn/eKEZkamy
+         gJsYkdxDknNBh8wzs32i6YR65qczVtKeaSKwMsMkDjrqCGHDdguo+ECaZ7A8iAIYaCbd
+         WorQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704907527; x=1705512327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Quxkd2kOtosd0xhGtW1MMtr97HwHYuSGHPI/EcetRCs=;
+        b=W9su/Hhz3OtEanzDXgv0BFn18eanazHs+md+5Vpu0G5J9rcN+czjgSp61Lcn5Y9ZUr
+         GBg84OxJFph6/BT7ZmgOARKlpxF0kZiZmjc7LI8VLG+WOCsT6B3D7Y5pQ8dBlqBd6+Np
+         iCBy3i6Q6l4QRHXlHnJhyP0OO/cEYrrLaKQkxnKWVMCFTFPS4l+CAWtSMDq5k/P6JeOE
+         syGn6KwZwMWq9EpzeAMNO0cZfdknAixv+UrOpJNgTacmaAH1A7431KsyaPjn1UX1tALM
+         u/j9r9UKMrSZsFcNfKo50i4H19pJSCJiiWS+uoL39huc0pJGBlHMQq/p4kRGFzP8jsu9
+         dYuQ==
+X-Gm-Message-State: AOJu0YwaewbT/Xgm/9WPU/TnGwJtm1s7KwjH513/mF4uVnrbNhK1AIKR
+	PzNzJHqJBak+wS/W0Z/QjhYUapGF/qYLpNAm+0nmGr1iqS8OZA==
+X-Google-Smtp-Source: AGHT+IE33eYzPxNj50mHq4ToCDSp6OSKaqrAqY1BJvDZ+yYXMeLMBCiBrvgPGHdUZ5z6ObmpRUl+dxy3YNhpTLcXkW8=
+X-Received: by 2002:a05:6214:c8b:b0:67f:7b95:a0f7 with SMTP id
+ r11-20020a0562140c8b00b0067f7b95a0f7mr1704090qvr.91.1704907526838; Wed, 10
+ Jan 2024 09:25:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR12MB8690:EE_|PH7PR12MB7872:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1db2b178-26ec-4e51-4bdf-08dc12005789
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	vvIxaRw8EvzuaL1Wf+tnpcRytLo8fd3KQOGyOEX/cDLrXwSs/m2U/2f84oRoHo6qlcAu94RBTSbquv5IRWZf2UVcLpk/yxz3HQsSYxSRImVZP/Px12FB9lMccVkDT2i5LCmKUWI5QxK1hjZYQ7h5xrgKbemSqBmtr+jpriEPNDI3bCzT0A87+/B8n2hMQydRD6NBILmnSL58MpD9yX9kQmUJzQ5Q1SfoRXV5lnNWAyscJZsAYxZoCatLU44LC+tSTeLnp+1nbzveNZnhsfh7tLyDJLErbwdUhetTctIOYIyM1w9ZzQ+/V5aj8OkauszNog8krL5RqLzA7MhZEFU+4lAuoEm035SBiJVX35q9OVlPo9GYZUoNODo+ybgIxJmT28ZgeJG3hngvc5s1N5jnVORvXJ0Te0MSHJThLGpdijevPz8GoynnISwupo01u2YhRbj12nlDyHgjWWIj+XyC4G+MTujEvKhrH0Hn36jfF02ce5x55kUtHoTOw/EFi2gqUtnD03hsB3QwBKmFYRDALGJhSgOTJSLuS0qs39HLWDn62agt4hSzUySUL7eDqVJb
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR12MB8690.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(366004)(376002)(136003)(346002)(396003)(230922051799003)(186009)(64100799003)(451199024)(1800799012)(26005)(4326008)(478600001)(8676002)(6486002)(8936002)(66556008)(66946007)(316002)(110136005)(66476007)(54906003)(83380400001)(6512007)(6666004)(53546011)(2616005)(6506007)(5660300002)(2906002)(41300700001)(36756003)(38100700002)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?d3U2Y2xxOE9CNzVQbjVnWE9vc2Y5OVZUOVRCbzFuVTZaVzRKaG90QWtvMzQ5?=
- =?utf-8?B?QlVFZElUWFU2WXByakhEQk1paXFtTFhKK1hyc3N0NVFhcHBLYnV5TlRZckxV?=
- =?utf-8?B?cHZqMWVoWUFkYnRFOU0ybWZiYVB4SXZ4RUxuT1UwZ2s5S3dVNFJuUGtNWkpl?=
- =?utf-8?B?YkJmd0wwY3VRRWhYVkg5SkFJN2xDUFhZZFdhS3ExOHBjY3BNRWVsWjZ5aktm?=
- =?utf-8?B?ZWE3TUVaRzJhM2xsMHE4UUsvTThEWjk0WS9uRWZhdUhEdWM5RGtjdU9OOFZy?=
- =?utf-8?B?ekhsbkw4eW1raFBNeHd6cEErV09nSk50SnFpOVpiZmhsY1YwQ3NLZzU2dWdi?=
- =?utf-8?B?ZlZNS2xLUTFVY3lDRWlRVlZVa2NJWEhiQ1loaXd2a1NxZUVsdVhYOXROVmgy?=
- =?utf-8?B?TG0xNk5uL0pGTlFpNHNTWXZnNTNQR3gyd2J4cm4zVEMvZWpSS0hGWlN5akY5?=
- =?utf-8?B?V0VJRm5kMm5rUlZpdm9vZjA3NGJvc20rZ1lLMG00MUkyWmhsWmFnT3paOGRs?=
- =?utf-8?B?Ulh2NXdTQTlGQkVvc0c0Q3lPK2I3QTZwRlB5TU1yTmhNMW80R080VUdIc3J5?=
- =?utf-8?B?cU5zdWNjSnF5TzlQcGlKaFlNVzEvWFhmSFFyMEtDUy9NaTlNaUtSNlFxdEgr?=
- =?utf-8?B?TUFsbzBzdEczaTRNU0QyRDk5U2V4YVJSVm1rcElEZzhIdUY1U1FtVmJGNWpp?=
- =?utf-8?B?ay9PTkhqNmdlVUQwNlhBTng2cVRkZkNpZkh2dVZYSlNoTStjaGluUXJnSjZ2?=
- =?utf-8?B?U3Z5KzVOa2hpYndDdzhtS3p1V1UwcHVkK1YxaEJOWTdkY3MvVzZsbnJzUlNR?=
- =?utf-8?B?TllEY1hTa1VubGthbjd3ZGJKUHFXSmdwSGtXVlZBdWY2Tm1nZHdhNjJMang5?=
- =?utf-8?B?cmp1aS9lcjUraGdpRTN6ZEplaVA4V0F5VnRTMXFQVFNtU21MTFFNNHQxL3Bw?=
- =?utf-8?B?SERPS1ZIYnNqZm9QVm5BWTZsNnpHQmdOaVh1amx1dGFuRzZYWDdUbzZiSTha?=
- =?utf-8?B?SXhDZThxUGVmS2JDdlhUVXN6TXpPcEpXcHV1Z284NmhNVytUWXhMdDA4VElL?=
- =?utf-8?B?WVVOM2UxN1FGdVV3TUNaWVVXdDNCZkJyb3ZMZTNvYytQNEhheGdOcnRRbjJn?=
- =?utf-8?B?cm11VExncTJaT09vYVVQVTR5ZFRLZUU4U0ZwQTJGMXU1MjRZN2JMZ2lsUDNq?=
- =?utf-8?B?OGljU2xDeDNpK3RtTGxwVjlhR0ZSQXJPVWx1WjRibFpYQVQwMFM3S1k0VTVi?=
- =?utf-8?B?bEdEQ3lQY3FzLzA3cDlCWFRidnd6dzhaTTJGU29Sa29weCtpZ2x1MzBuWkxH?=
- =?utf-8?B?UnBNVzFKa0QzWVVlTE85VXFmaGZpZVpiSHcrdmVYZDhLVGpUak5Oei94UHpY?=
- =?utf-8?B?dFJRejFBTGNiYTVKZmRPQ1gzN0xnQncwMlBNK0FWTFVJMVJ0OTNtb21hSjB4?=
- =?utf-8?B?ZVVrOUZhakoySU9uRmZteU5sUHd5WVdTV3B6RCtBZG5kQUczb0RDeTRpSjlL?=
- =?utf-8?B?OWNWZy9RMHFxcFVBeS9TNGdSR1JLY1Z5dWM0L0l2NW1YUHdSUmc4cW5KZEJu?=
- =?utf-8?B?V3k3b3d2b0pEclpuSkcraUh1ZlFrNGdhMzRsS0lEOUo3VzBEQS9jOFJZYVZB?=
- =?utf-8?B?aEZHbkdlY2VXR0NGOGFIWGNKOTlHYlViWVljN2NDZVpxRU9peWpNenlPZjJN?=
- =?utf-8?B?N0FuNm8wL0tOYmJMa1E1U1BoZ1lIZS8zdlo0UU9TNUpzYkN0SVNuc3M5S25L?=
- =?utf-8?B?cnpScGFmR240M3RYNWp6bEtVWDlHOHdldEpLaHNtRElsUHBrdElwVFlhQ2M1?=
- =?utf-8?B?NS9IeG1zWTlUTE9qamhJWTlndXZPZVdFUE5Jc2lubDRQNkIzWVV3YWZGNXdu?=
- =?utf-8?B?cDJzcDdMcmhoUmVwa1gzYzRCVW53ZVFvSm9LM2liTmdSY0VkWk43SWRnMFZD?=
- =?utf-8?B?R2lzczYzT2l3VmloM29hNFR1MUNYVi85VC9MbTNPRCtkV0Z5c05kcnhoeHdo?=
- =?utf-8?B?NUVPSUNubm40N1EyQ2trM2Jod0VVUGtzRktMQUtBQkkrN1dnU1k5RVVET3pp?=
- =?utf-8?B?ZzVKZE12NkpNRXBpbjlxbDI1UEZ4TDVXVG01enltdXJOTzJKbTV1ZEJNZGU5?=
- =?utf-8?Q?3EKS6xgaxpgdxLCyFwjJBspMf?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1db2b178-26ec-4e51-4bdf-08dc12005789
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR12MB8690.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2024 17:19:45.9848
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DXHTvlZ2PS0X3ErgD4gJFKy0XFkYxQkd11zoCmgiBe2aTRrv/C9ynlSCOnOjTvOYj8u6NipNLoDsp0hP5T5QSg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7872
+References: <20240108134843.429769-1-vincent.guittot@linaro.org>
+ <20240108134843.429769-3-vincent.guittot@linaro.org> <fb25afab-9586-455a-b8c1-47949035c95a@arm.com>
+ <CAKfTPtDEKzup63H0iwHkTQCZOdQLUurACCYfEB-MpW+v7JEfag@mail.gmail.com> <92d1b906-6d76-4e96-a688-3a06a0a88508@arm.com>
+In-Reply-To: <92d1b906-6d76-4e96-a688-3a06a0a88508@arm.com>
+From: Vincent Guittot <vincent.guittot@linaro.org>
+Date: Wed, 10 Jan 2024 18:25:15 +0100
+Message-ID: <CAKfTPtBh-Fc-bN3GMZSR7Dv1VCuck6xL_EQuFLBMkfSLGXSs_g@mail.gmail.com>
+Subject: Re: [PATCH v3 2/5] sched: Take cpufreq feedback into account
+To: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org, 
+	sudeep.holla@arm.com, rafael@kernel.org, viresh.kumar@linaro.org, 
+	agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org, 
+	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com, 
+	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de, bristot@redhat.com, 
+	vschneid@redhat.com, lukasz.luba@arm.com, rui.zhang@intel.com, 
+	mhiramat@kernel.org, daniel.lezcano@linaro.org, amit.kachhap@gmail.com, 
+	corbet@lwn.net, gregkh@linuxfoundation.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	qyousef@layalina.io
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Jan 10, 2024 at 10:21:20PM +0800, Rafael J. Wysocki wrote:
-> On Tue, Jan 9, 2024 at 6:58 PM Erwan Velu <erwanaliasr1@gmail.com> wrote:
+On Wed, 10 Jan 2024 at 14:51, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+>
+> On 09/01/2024 15:30, Vincent Guittot wrote:
+> > On Tue, 9 Jan 2024 at 12:22, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+> >>
+> >> On 08/01/2024 14:48, Vincent Guittot wrote:
+> >>> Aggregate the different pressures applied on the capacity of CPUs and
+> >>> create a new function that returns the actual capacity of the CPU:
+> >>>   get_actual_cpu_capacity()
+> >>
+> >>    function name                scaling
+> >>
+> >> (1) arch_scale_cpu_capacity() - uarch
+> >>
+> >> (2) get_actual_cpu_capacity() - hw + cpufreq/thermal of (1)
+> >>
+> >> (3) capacity_of()             - rt (rt/dl/irq) of (2) (used by fair)
+> >>
+> >> Although (1) - (3) are very close to each other from the functional
 > >
-> > amd-pstate is implemented on Zen4, adding this architecture in the
-> > introduction.
+> > I don't get your point as name of (1) and (3) have not been changed by the patch
+>
+> That's true. But with capacity_orig_of() for (1), we had some coherence
+> in the naming scheme of those cpu_capacity related functions (1) - (3).
+> which helps when trying to understand the code.
+>
+> I can see that actual_capacity_of() (2) sounds awful though.
+>
+> >> standpoint, their names are not very coherent.
+> >>
+> >> I assume this makes it hard to understand all of this when reading the
+> >> code w/o knowing these patches before.
+> >>
+> >> Why is (2) tagged with 'actual'?
 > >
-> > Signed-off-by: Erwan Velu <e.velu@criteo.com>
-> > ---
-> >  drivers/cpufreq/amd-pstate.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> > index 1f6186475715..9a8d083f6ba5 100644
-> > --- a/drivers/cpufreq/amd-pstate.c
-> > +++ b/drivers/cpufreq/amd-pstate.c
-> > @@ -14,7 +14,7 @@
-> >   * communicate the performance hints to hardware.
-> >   *
-> >   * AMD P-State is supported on recent AMD Zen base CPU series include some of
-> > - * Zen2 and Zen3 processors. _CPC needs to be present in the ACPI tables of AMD
-> > + * Zen2, Zen3 and Zen4 processors. _CPC needs to be present in the ACPI tables of AMD
-> 
-> IMO, it would be really nice to avoid extending this line so much, but
-> this is up to the AMD people.
+> > This is the actual max compute capacity of the cpu at now  i.e.
+> > possibly reduced because of temporary frequency capping
+>
+> Will the actual max compute capacity also depend on 'user space system
+> pressure' later, i.e. on 'permanent' frequency capping?
 
-Agree. Actually, we will use this driver for all future AMD CPU generations
-that starts from paritial Zen2.
+yes it will
 
-> 
-> Also, while you are at it, "include" in the first sentence should be
-> "including" and a new paragraph after "processors." would make this
-> comment easier to follow from the logical standpoint, because the
-> first sentence is about the supported platforms and the second one is
-> about additional requirements (ie. something else).
-> 
 
-How about modifying here as "partial Zen2, Zen3, and future processors"?
-
-Thanks,
-Ray
-
-> >   * P-State supported system. And there are two types of hardware implementations
-> >   * for AMD P-State: 1) Full MSR Solution and 2) Shared Memory Solution.
-> >   * X86_FEATURE_CPPC CPU feature flag is used to distinguish the different types.
-> > --
+>
+> > So (2) equals (1) minus temporary performance capping and (3)
+> > additionally subtracts the time used by other class to (2)
+>
+> OK.
+>
+> A coherent set of those tags even reflected in those getters would help
+> but can be done later too.
 
