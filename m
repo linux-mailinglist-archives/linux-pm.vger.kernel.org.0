@@ -1,82 +1,81 @@
-Return-Path: <linux-pm+bounces-2077-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2079-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03887829BE5
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 14:57:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 998DB829BFD
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 15:05:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 33C081C21FC9
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 13:57:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48F951F24E9A
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 14:05:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 223F948CFD;
-	Wed, 10 Jan 2024 13:57:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC4FC4A9AE;
+	Wed, 10 Jan 2024 14:05:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J5IfoyvQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EA604A997;
-	Wed, 10 Jan 2024 13:57:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5DB272F4;
-	Wed, 10 Jan 2024 05:58:08 -0800 (PST)
-Received: from [10.57.87.179] (unknown [10.57.87.179])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 50C1F3F5A1;
-	Wed, 10 Jan 2024 05:57:20 -0800 (PST)
-Message-ID: <f405ad09-cfae-40b9-b73a-a194d39090ed@arm.com>
-Date: Wed, 10 Jan 2024 13:58:44 +0000
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AB9848797;
+	Wed, 10 Jan 2024 14:05:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704895508; x=1736431508;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SWsVBP9cH1tPvG/nm5K35e0TZLa1y3pyiKzTVosVQgs=;
+  b=J5IfoyvQj8rfI1q3F64ikezYOc9WmxMkjRU8pBJ7l/+VubWzKpTJDE18
+   XkdIvEcwt5Cy4GB4K1uiSSdgwZY0MZwkTXk9qdYv3vQmzosvmubEFJY8J
+   xt950ebP5QpwaXpWSlNYkuPxi/FeNNtCncOflfsxvr7oRzPPFBUm5M6+9
+   xbDZwKC+ZreqKffG2VXFctwhTuDOwBFJn3hXLyn34xPiyJaBr0/QOmLgl
+   3H/fEtmyABxzhuADGI1I6MNVGCY1Kvdh4ITXdT7XfgPSabgwnMJGNUu5I
+   w2mfrHtNfLmR0LPf1XRce2blvZ0f2aHkIvzQ7g+lNF7yf+bJGIkWXrShD
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10948"; a="397382779"
+X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
+   d="scan'208";a="397382779"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2024 06:05:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10948"; a="905546712"
+X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
+   d="scan'208";a="905546712"
+Received: from kpurta-mobl.ger.corp.intel.com (HELO localhost) ([10.252.37.105])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2024 06:05:05 -0800
+Date: Wed, 10 Jan 2024 15:05:01 +0100
+From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	Linux PM <linux-pm@vger.kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1] PM: sleep: Restore asynchronous device resume
+ optimization
+Message-ID: <ZZ6kDVD3p4KdR9Cs@linux.intel.com>
+References: <10423008.nUPlyArG6x@kreacher>
+ <ZZ5zcBBEv7qupIdE@linux.intel.com>
+ <CAJZ5v0gp6uETgLNHxDnSd4h_0ois7J2AC7soJJVv18B99GmxcQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 07/23] PM: EM: Refactor how the EM table is allocated
- and populated
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- dietmar.eggemann@arm.com, rui.zhang@intel.com, amit.kucheria@verdurent.com,
- amit.kachhap@gmail.com, daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
- len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org, qyousef@layalina.io,
- wvw@google.com
-References: <20240104171553.2080674-1-lukasz.luba@arm.com>
- <20240104171553.2080674-8-lukasz.luba@arm.com>
- <CAJZ5v0jETcdATvjgULoGmr_g+cGA3=XWyCTjO1vkBZURCsGuLw@mail.gmail.com>
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0jETcdATvjgULoGmr_g+cGA3=XWyCTjO1vkBZURCsGuLw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0gp6uETgLNHxDnSd4h_0ois7J2AC7soJJVv18B99GmxcQ@mail.gmail.com>
 
-
-
-On 1/4/24 19:18, Rafael J. Wysocki wrote:
-> The changelog actually sets what happens here, so why don't you put
-> that into the changelog too?  Something like: "Split the allocation
-> and initialization of the EM table"
-
-OK I will do that.
-
+On Wed, Jan 10, 2024 at 01:33:07PM +0100, Rafael J. Wysocki wrote:
+> > I would consider different naming just to make clear this
+> > is regarding async call, in_progress looks too generic for me.
 > 
-> On Thu, Jan 4, 2024 at 6:15 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> Split the process of allocation and data initialization for the EM table.
->> The upcoming changes for modifiable EM will use it.
->>
->> This change is not expected to alter the general functionality.
->>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->>   kernel/power/energy_model.c | 55 ++++++++++++++++++++++---------------
->>   1 file changed, 33 insertions(+), 22 deletions(-)
+> OK, what about async_in_progress?
+Sure, that better.
 
-[snip]
-
->> --
-> 
-> The code changes LGTM.
-
-Thanks
+Regards
+Stanislaw
 
