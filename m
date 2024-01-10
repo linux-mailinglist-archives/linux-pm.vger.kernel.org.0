@@ -1,138 +1,158 @@
-Return-Path: <linux-pm+bounces-2068-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2069-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF36C829AC9
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 13:58:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0B66829AE0
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 14:03:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D50CB1C263D0
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 12:58:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 62C1B1F25B95
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 13:03:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0C1C48787;
-	Wed, 10 Jan 2024 12:58:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="HcyNoWgJ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C82BC4878F;
+	Wed, 10 Jan 2024 13:03:36 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40CE348781;
-	Wed, 10 Jan 2024 12:58:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40AA2mwO013795;
-	Wed, 10 Jan 2024 12:58:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=/vClWtu3HlYBCHjhqdD40ETyVbpVB8kO2AGNHZOK/lQ=; b=Hc
-	yNoWgJbTUxXloJBbWm+gL+LkCAxj2pPEA398P9hwkFjniMuW/J6q/XwJc1RcCwhG
-	uM6UBj38CiJd4a+tqSri87/pPsz4omqUHPoj89csGSTiZtBsqtPvQ7Ky6r028PY+
-	zNL0SEtmBGb6sK+bfPTZf0plly1hSV9UVbn/KMaF/ssJTHYf5bfMGjhrdxeLLiPf
-	pwgrP8r9q9W3mYTrvFNR1bCeDf1KOB+HxCiAQkH/2PbHt2FyHNdlYQT4XHjnw7Xw
-	DTz9s3YY9EjMcd/OUzXQcFBCVn3v0/kO3aI81UaB1IowSbbFxabzpFtljuzG9tul
-	VX8fWzONYFffncqiGR+Q==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vhs4mgf10-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 10 Jan 2024 12:58:31 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40ACwUlG002890
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 10 Jan 2024 12:58:30 GMT
-Received: from [10.216.48.153] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 10 Jan
- 2024 04:58:22 -0800
-Message-ID: <ba732b1c-223c-ee70-d25b-4c78b312402c@quicinc.com>
-Date: Wed, 10 Jan 2024 18:28:19 +0530
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89F634176B;
+	Wed, 10 Jan 2024 13:03:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7A8522F4;
+	Wed, 10 Jan 2024 05:04:19 -0800 (PST)
+Received: from [10.57.87.179] (unknown [10.57.87.179])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6C61F3F64C;
+	Wed, 10 Jan 2024 05:03:31 -0800 (PST)
+Message-ID: <0cbc1708-bc50-459c-ad57-0cf283921f2e@arm.com>
+Date: Wed, 10 Jan 2024 13:04:53 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH v5 5/5] PCI: qcom: Add OPP support to scale performance
- state of power domain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V7] thermal/core/power_allocator: avoid thermal cdev can
+ not be reset
 Content-Language: en-US
-To: Viresh Kumar <viresh.kumar@linaro.org>
-CC: Bjorn Helgaas <helgaas@kernel.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <vireshk@kernel.org>, <nm@ti.com>, <sboyd@kernel.org>,
-        <mani@kernel.org>, <lpieralisi@kernel.org>, <kw@linux.com>,
-        <robh@kernel.org>, <bhelgaas@google.com>, <rafael@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <quic_vbadigan@quicinc.com>,
-        <quic_nitegupt@quicinc.com>, <quic_skananth@quicinc.com>,
-        <quic_ramkri@quicinc.com>, <quic_parass@quicinc.com>
-References: <20231102053013.7yt7pxin5awlu7w7@vireshk-i7>
- <20231102120950.GA115288@bhelgaas>
- <20231103051247.u4cnckzstcvs4lf5@vireshk-i7>
- <15a98ec0-214b-218b-1e3c-c09f770fce2e@quicinc.com>
- <0ba9f2af-169e-a9a2-9ae4-4c6a70b0a94e@quicinc.com>
- <20240110065757.xde2nvpr3z7c4isu@vireshk-i7>
- <376b3716-46ff-2324-73fc-f3afa3f7af1c@quicinc.com>
- <20240110073807.sqwmsyr6nmigg6zc@vireshk-i7>
-From: Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
-In-Reply-To: <20240110073807.sqwmsyr6nmigg6zc@vireshk-i7>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To: Di Shen <di.shen@unisoc.com>
+Cc: linux-pm@vger.kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+ rafael@kernel.org, linux-kernel@vger.kernel.org, wvw@google.com,
+ tkjos@google.com, xuewen.yan@unisoc.com, zhanglyra@gmail.com,
+ orsonzhai@gmail.com, cindygm567@gmail.com
+References: <20240110115526.30776-1-di.shen@unisoc.com>
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20240110115526.30776-1-di.shen@unisoc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: ldLzFosc01dSUdg3R4AmVw9dR3hFeRMF
-X-Proofpoint-ORIG-GUID: ldLzFosc01dSUdg3R4AmVw9dR3hFeRMF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 phishscore=0 lowpriorityscore=0 mlxlogscore=999
- adultscore=0 impostorscore=0 spamscore=0 clxscore=1015 mlxscore=0
- suspectscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2401100106
 
 
-On 1/10/2024 1:08 PM, Viresh Kumar wrote:
-> On 10-01-24, 12:42, Krishna Chaitanya Chundru wrote:
->> At present we are not changing the link width after link is initialized, but
->> we have plans to
->>
->> add support change link width dynamically at runtime.
-> Hmm okay.
->
->> So, I think it is better to have ICC BW voting in the driver itself.
-> I guess it is better to have more entries in the OPP table then.. 15-20 OPPs
-> isn't too many to be honest.
->
-> Replicating code is the last thing I would like to do.
->
-> Maybe you can show the different layouts of the OPP table if you are concerned.
-> We can then see if it is getting too much or not.
 
-Viresh,
+On 1/10/24 11:55, Di Shen wrote:
+> Commit 0952177f2a1f ("thermal/core/power_allocator: Update once
+> cooling devices when temp is low") adds an update flag to avoid
+> the thermal event is triggered when there is no need, and
+> thermal cdev would be updated once when temperature is low.
+> 
+> But when the trips are writable, and switch_on_temp is set
+> to be a higher value, the cooling device state may not be
+> reset to 0, because last_temperature is smaller than the
+> switch_on_temp.
+> 
+> For example:
+> First:
+> switch_on_temp=70 control_temp=85;
+> Then userspace change the trip_temp:
+> switch_on_temp=45 control_temp=55 cur_temp=54
+> 
+> Then userspace reset the trip_temp:
+> switch_on_temp=70 control_temp=85 cur_temp=57 last_temp=54
+> 
+> At this time, the cooling device state should be reset to 0.
+> However, because cur_temp(57) < switch_on_temp(70)
+> last_temp(54) < switch_on_temp(70)  ---->  update = false,
+> update is false, the cooling device state can not be reset.
+> 
+> Considering tz->passive can also be represented the temperature
+> status, this patch modifies the update flag with tz->passive.
+> 
+> When the first time the temperature drops below switch_on, the
+> states of cooling devices can be reset once, and the tz->passive
+> is updated to 0. In the next round, because tz->passive is 0,
+> the cdev->state would not be updated.
+> 
+> By using the tz->passive as the "update" flag, the issue above
+> can be solved, and the cooling devices can be update only once
+> when the temperature is low.
+> 
+> Fixes: 0952177f2a1f ("thermal/core/power_allocator: Update once cooling devices when temp is low")
+> Cc: <stable@vger.kernel.org> # v5.13+
+> Suggested-by: Wei Wang <wvw@google.com>
+> Signed-off-by: Di Shen <di.shen@unisoc.com>
+> 
+> ---
+> V7:
+> - Some formatting changes.
+> - Add Suggested-by tag.
+> 
+> V6: [6]
+> Compared to the previous version:
+> - Not change the thermal core.
+> - Not add new variables and function.
+> - Use tz->passive as "update" flag to indicate whether the cooling
+>    devices should be reset.
+> 
+> V5: [5]
+> - Simplify the reset ops, make it no return value and no specific
+>    trip ID as argument.
+> - Extend the commit message.
+> 
+> V4: [4]
+> - Compared to V3, handle it in thermal core instead of in governor.
+> - Add an ops to the governor structure, and call it when a trip
+>    point is changed.
+> - Define reset ops for power allocator.
+> 
+> V3: [3]
+> - Add fix tag.
+> 
+> V2: [2]
+> - Compared to v1, do not revert.
+> - Add a variable(last_switch_on_temp) in power_allocator_params
+>    to record the last switch_on_temp value.
+> - Adds a function to renew the update flag and update the
+>    last_switch_on_temp when thermal trips are writable.
+> 
+> V1: [1]
+> - Revert commit 0952177f2a1f.
+> 
+> [1] https://lore.kernel.org/all/20230309135515.1232-1-di.shen@unisoc.com/
+> [2] https://lore.kernel.org/all/20230315093008.17489-1-di.shen@unisoc.com/
+> [3] https://lore.kernel.org/all/20230320095620.7480-1-di.shen@unisoc.com/
+> [4] https://lore.kernel.org/all/20230619063534.12831-1-di.shen@unisoc.com/
+> [5] https://lore.kernel.org/all/20230710033234.28641-1-di.shen@unisoc.com/
+> [6] https://lore.kernel.org/all/20240109112736.32566-1-di.shen@unisoc.com/
+> ---
+> ---
+>   drivers/thermal/gov_power_allocator.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+> index 7b6aa265ff6a..81e061f183ad 100644
+> --- a/drivers/thermal/gov_power_allocator.c
+> +++ b/drivers/thermal/gov_power_allocator.c
+> @@ -762,7 +762,7 @@ static int power_allocator_throttle(struct thermal_zone_device *tz,
+>   
+>   	trip = params->trip_switch_on;
+>   	if (trip && tz->temperature < trip->temperature) {
+> -		update = tz->last_temperature >= trip->temperature;
+> +		update = tz->passive;
+>   		tz->passive = 0;
+>   		reset_pid_controller(params);
+>   		allow_maximum_power(tz, update);
 
-it might be less only for now may be around 20 opp entries, but PCIe 
-spec is being updated every few years and a new gen
+Thanks for the patch, LGTM.
 
-gen speed will release, right now PCIe GEN6 is released but I don't we 
-had any device in the market now and GEN7 is in process.
-
-So in future it might become very big table. Either we need to come up 
-with a framework in the OPP to select the BW based up on lane width
-
-for particular speed or use the driver way.
-
-
-Thanks & Regards,
-
-Krishna Chaitanya.
-
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
