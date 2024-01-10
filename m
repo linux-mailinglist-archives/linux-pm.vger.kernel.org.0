@@ -1,137 +1,158 @@
-Return-Path: <linux-pm+bounces-2051-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2052-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 884B18297B4
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 11:37:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C97518299E6
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 12:56:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 985D91C21904
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 10:37:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 801972887CC
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 11:56:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AEB13FE3E;
-	Wed, 10 Jan 2024 10:37:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C0EmWP7u"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2BAC47F71;
+	Wed, 10 Jan 2024 11:56:27 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E384176B;
-	Wed, 10 Jan 2024 10:37:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704883060; x=1736419060;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/a07s3zLy6oSxp+NJcNrTR33vSL3+Fp4s3fo+xpFY40=;
-  b=C0EmWP7u6MVg7k6DOpxiMy+28mKaZ31btfYxlVZWsuzAkI/hCUTbAKFW
-   K63jSY67IByQfW4ZjfQUQS1EFkQICth+CMvZ8jxGeaHQo1fVzClaPl5yy
-   wtDw7foyu3BhgfEPuR7iuaotORd+rgPLUnmq21WPqHDnaJmOJQ1TWMRjf
-   dL0qOclwmXhsZDLObpPyFhQngnugrJiOhW0k6AbbpzRg2NuuleKEvH10G
-   NTAavgJ1pfOox1H8guKo3ogDve853+fXNVcj6OztN/4Qen4vcXxJIed9L
-   e+JzjDuOcXAqNUDDsBcsdPG6+zAGY2QlF1b24tFYrK+xFZ1lua0q6rTRl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="5252325"
-X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
-   d="scan'208";a="5252325"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2024 02:37:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="785563231"
-X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
-   d="scan'208";a="785563231"
-Received: from sgruszka-mobl.ger.corp.intel.com (HELO localhost) ([10.252.37.8])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2024 02:37:38 -0800
-Date: Wed, 10 Jan 2024 11:37:36 +0100
-From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Linux PM <linux-pm@vger.kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] PM: sleep: Restore asynchronous device resume
- optimization
-Message-ID: <ZZ5zcBBEv7qupIdE@linux.intel.com>
-References: <10423008.nUPlyArG6x@kreacher>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B14C47F46
+	for <linux-pm@vger.kernel.org>; Wed, 10 Jan 2024 11:56:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=unisoc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=unisoc.com
+Received: from dlp.unisoc.com ([10.29.3.86])
+	by SHSQR01.spreadtrum.com with ESMTP id 40ABtV4Y048116;
+	Wed, 10 Jan 2024 19:55:31 +0800 (+08)
+	(envelope-from Di.Shen@unisoc.com)
+Received: from SHDLP.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
+	by dlp.unisoc.com (SkyGuard) with ESMTPS id 4T95fV60jCz2NZjch;
+	Wed, 10 Jan 2024 19:48:34 +0800 (CST)
+Received: from bj10906pcu1.spreadtrum.com (10.0.73.72) by
+ BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Wed, 10 Jan 2024 19:55:28 +0800
+From: Di Shen <di.shen@unisoc.com>
+To: <lukasz.luba@arm.com>, <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
+        <rui.zhang@intel.com>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <wvw@google.com>, <tkjos@google.com>, <xuewen.yan@unisoc.com>,
+        <zhanglyra@gmail.com>, <orsonzhai@gmail.com>, <cindygm567@gmail.com>
+Subject: [PATCH V7] thermal/core/power_allocator: avoid thermal cdev can not be reset
+Date: Wed, 10 Jan 2024 19:55:26 +0800
+Message-ID: <20240110115526.30776-1-di.shen@unisoc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <10423008.nUPlyArG6x@kreacher>
+Content-Type: text/plain
+X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
+ BJMBX01.spreadtrum.com (10.0.64.7)
+X-MAIL:SHSQR01.spreadtrum.com 40ABtV4Y048116
 
-On Tue, Jan 09, 2024 at 05:59:22PM +0100, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Before commit 7839d0078e0d ("PM: sleep: Fix possible deadlocks in core
-> system-wide PM code"), the resume of devices that were allowed to resume
-> asynchronously was scheduled before starting the resume of the other
-> devices, so the former did not have to wait for the latter unless
-> functional dependencies were present.
-> 
-> Commit 7839d0078e0d removed that optimization in order to address a
-> correctness issue, but it can be restored with the help of a new device
-> power management flag, so do that now.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-> 
-> I said I'd probably do this in 6.9, but then I thought more about it
-> and now I think it would be nice to have 6.8-rc1 without a suspend
-> performance regression and the change is relatively straightforward,
-> so here it goes.
-> 
-> ---
->  drivers/base/power/main.c |  117 +++++++++++++++++++++++++---------------------
->  include/linux/pm.h        |    1 
->  2 files changed, 65 insertions(+), 53 deletions(-)
-> 
-> Index: linux-pm/include/linux/pm.h
-> ===================================================================
-> --- linux-pm.orig/include/linux/pm.h
-> +++ linux-pm/include/linux/pm.h
-> @@ -681,6 +681,7 @@ struct dev_pm_info {
->  	bool			wakeup_path:1;
->  	bool			syscore:1;
->  	bool			no_pm_callbacks:1;	/* Owned by the PM core */
-> +	bool			in_progress:1;	/* Owned by the PM core */
->  	unsigned int		must_resume:1;	/* Owned by the PM core */
->  	unsigned int		may_skip_resume:1;	/* Set by subsystems */
+Commit 0952177f2a1f ("thermal/core/power_allocator: Update once
+cooling devices when temp is low") adds an update flag to avoid
+the thermal event is triggered when there is no need, and
+thermal cdev would be updated once when temperature is low.
 
-Not related to the patch, just question: why some types here are
-unsigned int :1 others bool :1 ?
+But when the trips are writable, and switch_on_temp is set
+to be a higher value, the cooling device state may not be
+reset to 0, because last_temperature is smaller than the
+switch_on_temp.
 
->   * dpm_resume_early - Execute "early resume" callbacks for all devices.
->   * @state: PM transition of the system being carried out.
-> @@ -845,18 +845,28 @@ void dpm_resume_early(pm_message_t state
->  	mutex_lock(&dpm_list_mtx);
->  	pm_transition = state;
->  
-> +	/*
-> +	 * Trigger the resume of "async" devices upfront so they don't have to
-> +	 * wait for the "non-async" ones they don't depend on.
-> +	 */
-> +	list_for_each_entry(dev, &dpm_late_early_list, power.entry)
-> +		dpm_async_fn(dev, async_resume_early);
-> +
->  	while (!list_empty(&dpm_late_early_list)) {
->  		dev = to_device(dpm_late_early_list.next);
-> -		get_device(dev);
->  		list_move_tail(&dev->power.entry, &dpm_suspended_list);
->  
-> -		mutex_unlock(&dpm_list_mtx);
-> +		if (!dev->power.in_progress) {
+For example:
+First:
+switch_on_temp=70 control_temp=85;
+Then userspace change the trip_temp:
+switch_on_temp=45 control_temp=55 cur_temp=54
 
-I would consider different naming just to make clear this
-is regarding async call, in_progress looks too generic for me.
-Fine if you think otherwise, in general patch LGTM:
+Then userspace reset the trip_temp:
+switch_on_temp=70 control_temp=85 cur_temp=57 last_temp=54
 
-Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+At this time, the cooling device state should be reset to 0.
+However, because cur_temp(57) < switch_on_temp(70)
+last_temp(54) < switch_on_temp(70)  ---->  update = false,
+update is false, the cooling device state can not be reset.
+
+Considering tz->passive can also be represented the temperature
+status, this patch modifies the update flag with tz->passive.
+
+When the first time the temperature drops below switch_on, the
+states of cooling devices can be reset once, and the tz->passive
+is updated to 0. In the next round, because tz->passive is 0,
+the cdev->state would not be updated.
+
+By using the tz->passive as the "update" flag, the issue above
+can be solved, and the cooling devices can be update only once
+when the temperature is low.
+
+Fixes: 0952177f2a1f ("thermal/core/power_allocator: Update once cooling devices when temp is low")
+Cc: <stable@vger.kernel.org> # v5.13+
+Suggested-by: Wei Wang <wvw@google.com>
+Signed-off-by: Di Shen <di.shen@unisoc.com>
+
+---
+V7:
+- Some formatting changes.
+- Add Suggested-by tag.
+
+V6: [6]
+Compared to the previous version:
+- Not change the thermal core.
+- Not add new variables and function.
+- Use tz->passive as "update" flag to indicate whether the cooling
+  devices should be reset.
+
+V5: [5]
+- Simplify the reset ops, make it no return value and no specific
+  trip ID as argument.
+- Extend the commit message.
+
+V4: [4]
+- Compared to V3, handle it in thermal core instead of in governor.
+- Add an ops to the governor structure, and call it when a trip
+  point is changed.
+- Define reset ops for power allocator.
+
+V3: [3]
+- Add fix tag.
+
+V2: [2]
+- Compared to v1, do not revert.
+- Add a variable(last_switch_on_temp) in power_allocator_params
+  to record the last switch_on_temp value.
+- Adds a function to renew the update flag and update the
+  last_switch_on_temp when thermal trips are writable.
+
+V1: [1]
+- Revert commit 0952177f2a1f.
+
+[1] https://lore.kernel.org/all/20230309135515.1232-1-di.shen@unisoc.com/
+[2] https://lore.kernel.org/all/20230315093008.17489-1-di.shen@unisoc.com/
+[3] https://lore.kernel.org/all/20230320095620.7480-1-di.shen@unisoc.com/
+[4] https://lore.kernel.org/all/20230619063534.12831-1-di.shen@unisoc.com/
+[5] https://lore.kernel.org/all/20230710033234.28641-1-di.shen@unisoc.com/
+[6] https://lore.kernel.org/all/20240109112736.32566-1-di.shen@unisoc.com/
+---
+---
+ drivers/thermal/gov_power_allocator.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+index 7b6aa265ff6a..81e061f183ad 100644
+--- a/drivers/thermal/gov_power_allocator.c
++++ b/drivers/thermal/gov_power_allocator.c
+@@ -762,7 +762,7 @@ static int power_allocator_throttle(struct thermal_zone_device *tz,
+ 
+ 	trip = params->trip_switch_on;
+ 	if (trip && tz->temperature < trip->temperature) {
+-		update = tz->last_temperature >= trip->temperature;
++		update = tz->passive;
+ 		tz->passive = 0;
+ 		reset_pid_controller(params);
+ 		allow_maximum_power(tz, update);
+-- 
+2.17.1
 
 
