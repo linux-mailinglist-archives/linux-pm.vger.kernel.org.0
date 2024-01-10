@@ -1,119 +1,118 @@
-Return-Path: <linux-pm+bounces-2065-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2066-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD51A829A93
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 13:48:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0398829A97
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 13:49:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47C5A28760D
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 12:48:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5A401C24640
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 12:49:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6EB0482E4;
-	Wed, 10 Jan 2024 12:48:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="CAhhENMR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D72B1482E4;
+	Wed, 10 Jan 2024 12:49:01 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191F2481A6;
-	Wed, 10 Jan 2024 12:48:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40ABIS09027899;
-	Wed, 10 Jan 2024 12:47:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=i8J1gCk5JCeZc0OXGdHgoM6gqwj7n4x6zJOBGQRzsUY=; b=CA
-	hhENMRN8/sv4fhftwxeCrVkUveBN2Ghqz3svv+QHRmap0smGAjTM3F/lNxaGMUv3
-	3dkleuOjOk+/ouqLz7FEiR/XX42J5PoMCti8Leni7cNknsy+13fm/ej8mGQzEU5G
-	wjDQSmCahhuZkTRM/i9mLsnIfDRkIlG0gxEd7WmCjcjr++O58/56yOWpuDigW2b9
-	TLyNCKN80W+N6nvxhTbQVWLDg4xM42MXeyy4M24JiP31C9Bq1/g1XU6ZPdjrv9wg
-	x6IkiQNm3wnr+Q+tENco0h3PU/bVaexN8xkqgmGwRN3G1o1wdvmcxmjgXS2JrkQM
-	bSDQVQka3UoCvjOOjLzw==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vhnbnrwhp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 10 Jan 2024 12:47:24 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40AClNOi007777
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 10 Jan 2024 12:47:23 GMT
-Received: from [10.216.36.30] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 10 Jan
- 2024 04:47:21 -0800
-Message-ID: <90c0a34a-2640-d6b7-0eb3-19fe789d2998@quicinc.com>
-Date: Wed, 10 Jan 2024 18:17:17 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76760481BB;
+	Wed, 10 Jan 2024 12:49:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-6ddf73f0799so114026a34.1;
+        Wed, 10 Jan 2024 04:49:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704890939; x=1705495739;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=O7wdR/Eyk4uZr26rU209ZZ1Q0iKlXSFwBwzNCr/1V7s=;
+        b=YnxaX9gnXkVxz7pPvXCzGjhIFfnyNEaGErYNbDhUa9d7/uTucN/nleC9GU5NPt+9jv
+         cUtkDYkDH+EbBdibXNxAq6LOgs2ulQqb71ne6ovYbjoV8RytgmojiZecBY31hl/Qibyu
+         FPQD+rhxEiZnmDqxQaIk45jRmhQiL0kH2GzG0LK1rs4UK7EFcLhpl+8BBssHLxISF1rZ
+         lIytbR2L1zMDshEQI4VhZwDizur7zmrqEn3J/OSIocz/hlU3+hF2E3qa/KwLjDp48ZF8
+         0Z3Ql+5xeyZHKKomHR8N1SQhYQU2l4KLpdV9E9xrm+JSJ5fH51YVzi3Y+PJddcHVcndp
+         MN+A==
+X-Gm-Message-State: AOJu0YzL6P7o0JPxibg8Fi5H3sRhPTHW9glWDBI6KuC6f0Tb2QI4iZCk
+	Ks0vO5WuzWTsvVHT20HumvBr/Ym2Q3rIMCIQ5u0=
+X-Google-Smtp-Source: AGHT+IF0IOWk05Q5ngkC2ZGOhj+GKS4NW7UmshCWEOYCffNKsK5wjkmkscmprDJBqxda1cmk5+zf1oPzBh2QV59oiT0=
+X-Received: by 2002:a4a:e1b5:0:b0:598:76c6:7085 with SMTP id
+ 21-20020a4ae1b5000000b0059876c67085mr1827065ooy.1.1704890939515; Wed, 10 Jan
+ 2024 04:48:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] thermal/sysfs: Always enable hysteresis write support
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui
-	<rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 References: <20240106191502.29126-1-quic_manafm@quicinc.com>
- <CAJZ5v0gE6eEpALrfxHvCd5TRqjB+v8pffG4CKLTVXiSvuiWhHg@mail.gmail.com>
-From: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-In-Reply-To: <CAJZ5v0gE6eEpALrfxHvCd5TRqjB+v8pffG4CKLTVXiSvuiWhHg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: HOIewuGlM0jeWGMwkWdRj3NLhH2hzpQ6
-X-Proofpoint-GUID: HOIewuGlM0jeWGMwkWdRj3NLhH2hzpQ6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- spamscore=0 clxscore=1015 priorityscore=1501 mlxlogscore=712
- suspectscore=0 adultscore=0 impostorscore=0 malwarescore=0
- lowpriorityscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2311290000 definitions=main-2401100105
+ <CAJZ5v0gE6eEpALrfxHvCd5TRqjB+v8pffG4CKLTVXiSvuiWhHg@mail.gmail.com> <d7b82fc8-0ed8-80b8-9eb8-c77f9277178f@quicinc.com>
+In-Reply-To: <d7b82fc8-0ed8-80b8-9eb8-c77f9277178f@quicinc.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 10 Jan 2024 13:48:47 +0100
+Message-ID: <CAJZ5v0g4hnRqRCseRnTjfEF+-2=ZT8U9=2m9FODqh3G8eDd=Sw@mail.gmail.com>
+Subject: Re: [PATCH] thermal/sysfs: Always enable hysteresis write support
+To: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Resending to reflect to format
+Hi Manaf,
 
-Hi Rafael,
-
-On 1/9/2024 7:12 PM, Rafael J. Wysocki wrote:
-> On Sat, Jan 6, 2024 at 8:16 PM Manaf Meethalavalappu Pallikunhi
+On Wed, Jan 10, 2024 at 9:17=E2=80=AFAM Manaf Meethalavalappu Pallikunhi
+<quic_manafm@quicinc.com> wrote:
+>
+> Hi Rafael,
+>
+> On 1/9/2024 7:12 PM, Rafael J. Wysocki wrote:
+>
+> On Sat, Jan 6, 2024 at 8:16=E2=80=AFPM Manaf Meethalavalappu Pallikunhi
 > <quic_manafm@quicinc.com> wrote:
->> The commit 2e38a2a981b2("thermal/core: Add a generic
->> thermal_zone_set_trip() function") adds the support to update
->> trip hysteresis even if set_trip_hyst() operation is not defined.
->> But during hysteresis attribute creation, if this operation is
->> defined then only it enables hysteresis write access. It leads
->> to a case where hysteresis sysfs will be read only for a thermal
->> zone when its set_trip_hyst() operation is not defined.
-I think it is regression after recent re-work.  If  a sensor  is 
-registered witht thermal framework via thermal_of,  sensor driver 
-doesn't need to  know the trip configuration and nothing to do with 
-set_trip_hyst() in driver. Without this change, if  a sensor needs to be 
-monitored from userspace(trip/hysteresis), it is enforcing sensor driver 
-to add  dummy set_trip_hyst() operation. Correct me otherwise.
+>
+> The commit 2e38a2a981b2("thermal/core: Add a generic
+> thermal_zone_set_trip() function") adds the support to update
+> trip hysteresis even if set_trip_hyst() operation is not defined.
+> But during hysteresis attribute creation, if this operation is
+> defined then only it enables hysteresis write access. It leads
+> to a case where hysteresis sysfs will be read only for a thermal
+> zone when its set_trip_hyst() operation is not defined.
+>
 > Which is by design.
 >
+> I think it is regression after recent re-work. If a sensor is registered =
+with thermal framework via thermal_of,
+>
+> sensor driver doesn't need to know the trip configuration and nothing to =
+do with set_trip_hyst() in driver.
+>
+> Without this change, if a sensor needs to be monitored from userspace(tri=
+p/hysteresis),
+
+What exactly do you mean by "monitored" here?
+
+> it is enforcing sensor driver to add  dummy set_trip_hyst() operation. Co=
+rrect me otherwise
+
+With the current design, whether or not trip properties can be updated
+by user space is a thermal zone property expressed by the presence of
+the set_trip_* operations, so yes, whoever registers the thermal zone
+needs to provide those so that user space can update the trip
+properties.
+
 > For some thermal zone types (eg. acpi), updating trip hysteresis via
 > sysfs might lead to incorrect behavior.
+>
+> To address this issue, is it okay to  guard  hysteresis write permission =
+under CONFIG_THERMAL_WRITABLE_TRIPS defconfig ?
 
-To address this, is it okay to guard hysteresis write permission under 
-CONFIG_THERMAL_WRITABLE_TRIPS flag ?
+Not really, because it would affect all of the thermal zones then.
 
-Thanks,
+TBH, the exact scenario in which user space needs to update trip
+hysteresis is not particularly clear to me, so can you provide some
+more details, please?
 
-Manaf
-
+Thanks!
 
