@@ -1,103 +1,118 @@
-Return-Path: <linux-pm+bounces-2040-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2041-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E881C8293C8
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 07:43:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A8528293E0
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 07:58:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95FF1287CBC
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 06:43:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 309301C256F1
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 06:58:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56D8332C72;
-	Wed, 10 Jan 2024 06:43:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72F3E36AE3;
+	Wed, 10 Jan 2024 06:58:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GkckBDl9"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vEdiWc74"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 011332FC59
-	for <linux-pm@vger.kernel.org>; Wed, 10 Jan 2024 06:43:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CB27364A9
+	for <linux-pm@vger.kernel.org>; Wed, 10 Jan 2024 06:58:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6da202aa138so3099774b3a.2
-        for <linux-pm@vger.kernel.org>; Tue, 09 Jan 2024 22:43:27 -0800 (PST)
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1d509222c11so13526235ad.1
+        for <linux-pm@vger.kernel.org>; Tue, 09 Jan 2024 22:58:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1704869007; x=1705473807; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ufriYbCxMamJExkyO+DSziDprmr/nvohHV8KvnEcisE=;
-        b=GkckBDl9tyDeaKoq1OlLbr6jEBwdbjzMGB0I45CAU6xI+pgxYAVVcgVcq2AKQpBjM7
-         3wnDntahFoAcep5K8VnjbMQzSJIofcavO4I7WeCodBVsVW8sbbAy3vuCAA23d10llbWQ
-         O0Sa1BdzkP2xMT49yTz2ONeRQ0t3IdlTQum1qPOpfmaOziYsSz+6XZRSr9zXz8ZyI7IT
-         OorO6nPNXk+DvFyUSi31O7tQPj6+WQAiDZdAp8KoiEEuE89AijmVyZCZabZe5dKcdwdV
-         PbKiXXhbg5q2qGY1BdIQLX4bb8S1WkyNIE0CjOlaKMneYqwUl0Y8joqktrM0wx4EbVEw
-         JFlA==
+        d=linaro.org; s=google; t=1704869880; x=1705474680; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=GBt4RNNT5Udrunysdba+pFX1wxxljz+GPhqieimh10g=;
+        b=vEdiWc747a15KMtDZcFBtJpMmcSVIRX82MRTCMcXwXemLEIbZ9ufSrF22IH2ui4Ik5
+         VGjDFVllwuwvDNmVNE1DvzAQ8Uja52ibli2jZJ2LYBo5/YagJtsEP83JdtrZvJUjjKMA
+         E+9346PI5C9bMWbohUBfJLmyoaw8sc89HyumwLh7A5Ta6j+aJnNzM2PRDCbMl7iNvQWL
+         jVKI2gyWTZ3O4hB5miqk+lUyPa/knVLFxYZQxppNlt+47a1JtwN5LHOudNnivJjJCPgW
+         7ZtPXwL2O8dgS2HuF1a6CfCs1jenTeR8nrgWhhi99sk4N5v6oTKb+cS7K65TGWHxVBpf
+         g6PA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704869007; x=1705473807;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ufriYbCxMamJExkyO+DSziDprmr/nvohHV8KvnEcisE=;
-        b=ufIQW2LFsrBr4SqkgLF+tHOl1Gb4ygIklCFJj9JfI/T0A7ghhsOsYOjE8otAcm28qu
-         3U+NtcL4dDzSf9BZCbQeFXDtUAl44yTfIXQKF/LuML5PSp/gFKAuriaR83hK7MyXjm+X
-         50pAeN6+CVM3jsMn7PaoXWfvb7Lt1DX84SHOI/nnJeUSNGZ4NI8cM2tYoBdEi2LeoftO
-         YhM9yHEas+5bqmv/SzWh/ZsHTwVAmDFjNDlaiHp5kjlsre4cqWch5SyqGBmb60kQqNw1
-         LJPsLslzh+mCUcwZiqHDZY0JhYMGDwOjtNmxt1SysU0/3qu1ZNtcOw8MSz163JL16Yvm
-         3cPQ==
-X-Gm-Message-State: AOJu0YyxG/sXHMHY7pArG8qVVbui8rlbFeYjxPpQLLN1k6O1NUx6qagK
-	585HzBUvSXM/9zHb2zWibb6Cqr0SnR4OIg==
-X-Google-Smtp-Source: AGHT+IHVmZ9O2UiKApFYg6a+2bvUEeNRE+QH24QgnpIssMtERJd0DP+8Dglnh788IGmlXjBYlPjMPA==
-X-Received: by 2002:a05:6a20:1682:b0:198:7feb:97ae with SMTP id q2-20020a056a20168200b001987feb97aemr365175pzc.123.1704869007250;
-        Tue, 09 Jan 2024 22:43:27 -0800 (PST)
+        d=1e100.net; s=20230601; t=1704869880; x=1705474680;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GBt4RNNT5Udrunysdba+pFX1wxxljz+GPhqieimh10g=;
+        b=uLJiciGy4UWhqfg1N+G4cM8YqxNlaBtauhP8qLnqHh0C4tSoRw4sgU0YWp+xydDVDF
+         0qyNIllqqvPbNgFNs+vFPseou3sb/v2nHbHIm8HRYpj7cENSHgTk85AHk7fEozu83Nae
+         0CrtYJ5T7cdGh/FqG1sgsuDc8qXYBll0+TmKXLxDaxlnjkJ1TEvbQRlyuSHSNTdJvFXD
+         /jom9MySTfTUQk+pL53V75BTO0J8kNfobccS6hxmt2wo7yRG69Oixk6Q9O/OExW1IvcV
+         OCSM7lVkyaaXBIwFG+mr5RDv7oWbxFMJq9v95EBzvXMNrMyXdFieXNc7HegUfItbrBxf
+         /mqA==
+X-Gm-Message-State: AOJu0Yz+a9PMBsg+vXk+l2udCVI1AhYV5X/9AoXsjf6nilhtyDGCxN5o
+	M3n2YQ9A6myXycSssgyjIlXrMAKXdf97tQ==
+X-Google-Smtp-Source: AGHT+IE+fzYVlUMTlLXHdh6PBiZwhLw2zWvoqNw2CQsktuCCXv/r/7cTCDcu6yf84bzkmhKGBHha0g==
+X-Received: by 2002:a17:902:ecc2:b0:1d4:28f:29e5 with SMTP id a2-20020a170902ecc200b001d4028f29e5mr515216plh.24.1704869880397;
+        Tue, 09 Jan 2024 22:58:00 -0800 (PST)
 Received: from localhost ([122.172.81.83])
-        by smtp.gmail.com with ESMTPSA id n5-20020a634005000000b005cd64ff9a42sm2618582pga.64.2024.01.09.22.43.26
+        by smtp.gmail.com with ESMTPSA id p3-20020a170902b08300b001cfa0c04553sm2882969plr.116.2024.01.09.22.57.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Jan 2024 22:43:26 -0800 (PST)
-Date: Wed, 10 Jan 2024 12:13:24 +0530
+        Tue, 09 Jan 2024 22:57:59 -0800 (PST)
+Date: Wed, 10 Jan 2024 12:27:57 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
-	sudeep.holla@arm.com, rafael@kernel.org, agross@kernel.org,
-	andersson@kernel.org, konrad.dybcio@linaro.org, mingo@redhat.com,
-	peterz@infradead.org, juri.lelli@redhat.com,
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-	lukasz.luba@arm.com, rui.zhang@intel.com, mhiramat@kernel.org,
-	daniel.lezcano@linaro.org, amit.kachhap@gmail.com, corbet@lwn.net,
-	gregkh@linuxfoundation.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, qyousef@layalina.io
-Subject: Re: [PATCH v4 1/5] cpufreq: Add a cpufreq pressure feedback for the
- scheduler
-Message-ID: <20240110064324.bex3ssej5ghie6cu@vireshk-i7>
-References: <20240109164655.626085-1-vincent.guittot@linaro.org>
- <20240109164655.626085-2-vincent.guittot@linaro.org>
+To: Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+Cc: Bjorn Helgaas <helgaas@kernel.org>, agross@kernel.org,
+	andersson@kernel.org, konrad.dybcio@linaro.org,
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+	vireshk@kernel.org, nm@ti.com, sboyd@kernel.org, mani@kernel.org,
+	lpieralisi@kernel.org, kw@linux.com, robh@kernel.org,
+	bhelgaas@google.com, rafael@kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, quic_vbadigan@quicinc.com,
+	quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+	quic_ramkri@quicinc.com, quic_parass@quicinc.com
+Subject: Re: [PATCH v5 5/5] PCI: qcom: Add OPP support to scale performance
+ state of power domain
+Message-ID: <20240110065757.xde2nvpr3z7c4isu@vireshk-i7>
+References: <20231102053013.7yt7pxin5awlu7w7@vireshk-i7>
+ <20231102120950.GA115288@bhelgaas>
+ <20231103051247.u4cnckzstcvs4lf5@vireshk-i7>
+ <15a98ec0-214b-218b-1e3c-c09f770fce2e@quicinc.com>
+ <0ba9f2af-169e-a9a2-9ae4-4c6a70b0a94e@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240109164655.626085-2-vincent.guittot@linaro.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0ba9f2af-169e-a9a2-9ae4-4c6a70b0a94e@quicinc.com>
 
-On 09-01-24, 17:46, Vincent Guittot wrote:
-> Provide to the scheduler a feedback about the temporary max available
-> capacity. Unlike arch_update_thermal_pressure, this doesn't need to be
-> filtered as the pressure will happen for dozens ms or more.
+On 08-01-24, 18:49, Krishna Chaitanya Chundru wrote:
+> We calculate ICC BW voting based up on PCIe speed and PCIe width.
 > 
-> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> ---
->  drivers/cpufreq/cpufreq.c | 36 ++++++++++++++++++++++++++++++++++++
->  include/linux/cpufreq.h   | 10 ++++++++++
->  2 files changed, 46 insertions(+)
+> Right now we are adding the opp table based up on PCIe speed.
+> 
+> Each PCIe controller can support multiple lane configurations like x1, x2,
+> x4, x8, x16 based up on controller capability.
+> 
+> So for each GEN speed we need  up to 5 entries in OPP table. This will make
+> OPP table very long.
+> 
+> It is best to calculate the ICC BW voting in the driver itself and apply
+> them through ICC driver.
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+I see. Are the lane configurations fixed for a platform ? I mean, do you change
+those configurations at runtime or is that something that never changes, but the
+driver can end up getting used on a hardware that supports any one of them ?
+
+If they are fixed (second case), then you can use dev_pm_opp_set_prop_name() to
+make that easier for you. With that you will only need 5 OPP entries, but each
+of them will have five values of bw:
+
+bw-x1, bw-x2, ....  and you can select one of them during initialization.
 
 -- 
 viresh
