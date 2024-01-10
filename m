@@ -1,125 +1,137 @@
-Return-Path: <linux-pm+bounces-2050-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2051-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FFE28296E0
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 11:04:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 884B18297B4
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 11:37:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6FBFA28A0A6
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 10:04:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 985D91C21904
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 10:37:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C357F3F8E4;
-	Wed, 10 Jan 2024 10:04:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AEB13FE3E;
+	Wed, 10 Jan 2024 10:37:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="SPReVNX5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C0EmWP7u"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B5D3BE5E;
-	Wed, 10 Jan 2024 10:04:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id CBA8240E01B2;
-	Wed, 10 Jan 2024 10:04:23 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 4K_7Q4QU78V6; Wed, 10 Jan 2024 10:04:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1704881062; bh=oJLkoiziOduPtb/cNDhpBdqQ7Qw3Bv/OYk1DSPyjEys=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SPReVNX5mO4rjH8gAJR8lkxFlU5acWreAoHXYqShJBeGOIsQGLDhrQ8Ds4pr9eKsr
-	 lOgwXBr/Fn54So/pLG/3T6BmVBxgFyfb5Xgj+nS3WDzIEYJ79TUjVbwenTZKwqL30e
-	 /VQjFIg+gqRZ2R9vFVDkGBQprUU8J4EJxfkn5bBGLEDNipmQ+mgOm0GtMZKdLnHTzR
-	 0Vt67twZqO3HfmHHxbSO1HYFLM09gMHIA0kjS9ZNE19aSYYzJVBckVN29ZKbOfvcAD
-	 HbreznrZi+bJB2bhiolrNiWnDWNu725zmkGx3FaoUGqgntV8qIVtTe3AHbyCgMzhMs
-	 BEiWhR2Va1XvWXaUmib82+/UB/mbh3kL2KIANarumEWrEw6904J6wx6T8X/NuKlyYG
-	 /EMoNGLPk5uifTCyYdvvd7HoxVS+S6ppnSKahH9THaKf0loHG2tBALnRYRQNMpzKzT
-	 yEMrh4FM/wjTmUOvf6iu+1gCbyCsu42eWzVwJnzaTCUV5qwTt2YZ3Qm5t7b0MUXTHZ
-	 mE58e/yKnvboqMgpItDvOAYZ7EJaqbX6PcFJ716Iydztde4PPDPWek2K8Irsdoqdko
-	 HLJNXUpOm4ppsGHiEIIgweaAhXv1TFlr5goK0GHbMD2hBC8f1dd81HSZ+RVZdNQDeh
-	 EhMxTgipx0zkfBJ7H7D+mPUE=
-Received: from zn.tnic (pd9530f8c.dip0.t-ipconnect.de [217.83.15.140])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BE5E940E01A9;
-	Wed, 10 Jan 2024 10:04:03 +0000 (UTC)
-Date: Wed, 10 Jan 2024 11:04:02 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: "Meng, Li (Jassmine)" <Li.Meng@amd.com>
-Cc: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-	"Huang, Ray" <Ray.Huang@amd.com>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-	"Sharma, Deepak" <Deepak.Sharma@amd.com>,
-	"Deucher, Alexander" <Alexander.Deucher@amd.com>,
-	"Limonciello, Mario" <Mario.Limonciello@amd.com>,
-	"Huang, Shimmer" <Shimmer.Huang@amd.com>,
-	"Yuan, Perry" <Perry.Yuan@amd.com>,
-	"Du, Xiaojian" <Xiaojian.Du@amd.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Oleksandr Natalenko <oleksandr@natalenko.name>
-Subject: Re: [PATCH V12 1/7] x86: Drop CPU_SUP_INTEL from SCHED_MC_PRIO for
- the expansion.
-Message-ID: <20240110100402.GAZZ5rklxQUZk_KFV4@fat_crate.local>
-References: <20231205063537.872834-1-li.meng@amd.com>
- <20231205063537.872834-2-li.meng@amd.com>
- <20240109104504.GAZZ0jsFrrncZ8Vx8y@fat_crate.local>
- <DM4PR12MB63515E818A5B4D5E512F5234F7692@DM4PR12MB6351.namprd12.prod.outlook.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E384176B;
+	Wed, 10 Jan 2024 10:37:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704883060; x=1736419060;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/a07s3zLy6oSxp+NJcNrTR33vSL3+Fp4s3fo+xpFY40=;
+  b=C0EmWP7u6MVg7k6DOpxiMy+28mKaZ31btfYxlVZWsuzAkI/hCUTbAKFW
+   K63jSY67IByQfW4ZjfQUQS1EFkQICth+CMvZ8jxGeaHQo1fVzClaPl5yy
+   wtDw7foyu3BhgfEPuR7iuaotORd+rgPLUnmq21WPqHDnaJmOJQ1TWMRjf
+   dL0qOclwmXhsZDLObpPyFhQngnugrJiOhW0k6AbbpzRg2NuuleKEvH10G
+   NTAavgJ1pfOox1H8guKo3ogDve853+fXNVcj6OztN/4Qen4vcXxJIed9L
+   e+JzjDuOcXAqNUDDsBcsdPG6+zAGY2QlF1b24tFYrK+xFZ1lua0q6rTRl
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="5252325"
+X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
+   d="scan'208";a="5252325"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2024 02:37:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="785563231"
+X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
+   d="scan'208";a="785563231"
+Received: from sgruszka-mobl.ger.corp.intel.com (HELO localhost) ([10.252.37.8])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2024 02:37:38 -0800
+Date: Wed, 10 Jan 2024 11:37:36 +0100
+From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1] PM: sleep: Restore asynchronous device resume
+ optimization
+Message-ID: <ZZ5zcBBEv7qupIdE@linux.intel.com>
+References: <10423008.nUPlyArG6x@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DM4PR12MB63515E818A5B4D5E512F5234F7692@DM4PR12MB6351.namprd12.prod.outlook.com>
+In-Reply-To: <10423008.nUPlyArG6x@kreacher>
 
-On Wed, Jan 10, 2024 at 06:59:25AM +0000, Meng, Li (Jassmine) wrote:
-> The reason why I added the selects is just to distinguish different
-> pstate drivers.  These two drivers cannot be supported simultaneously
-> in the same project.
+On Tue, Jan 09, 2024 at 05:59:22PM +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Before commit 7839d0078e0d ("PM: sleep: Fix possible deadlocks in core
+> system-wide PM code"), the resume of devices that were allowed to resume
+> asynchronously was scheduled before starting the resume of the other
+> devices, so the former did not have to wait for the latter unless
+> functional dependencies were present.
+> 
+> Commit 7839d0078e0d removed that optimization in order to address a
+> correctness issue, but it can be restored with the help of a new device
+> power management flag, so do that now.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> I said I'd probably do this in 6.9, but then I thought more about it
+> and now I think it would be nice to have 6.8-rc1 without a suspend
+> performance regression and the change is relatively straightforward,
+> so here it goes.
+> 
+> ---
+>  drivers/base/power/main.c |  117 +++++++++++++++++++++++++---------------------
+>  include/linux/pm.h        |    1 
+>  2 files changed, 65 insertions(+), 53 deletions(-)
+> 
+> Index: linux-pm/include/linux/pm.h
+> ===================================================================
+> --- linux-pm.orig/include/linux/pm.h
+> +++ linux-pm/include/linux/pm.h
+> @@ -681,6 +681,7 @@ struct dev_pm_info {
+>  	bool			wakeup_path:1;
+>  	bool			syscore:1;
+>  	bool			no_pm_callbacks:1;	/* Owned by the PM core */
+> +	bool			in_progress:1;	/* Owned by the PM core */
+>  	unsigned int		must_resume:1;	/* Owned by the PM core */
+>  	unsigned int		may_skip_resume:1;	/* Set by subsystems */
 
-No, that's not what I meant. Read here:
+Not related to the patch, just question: why some types here are
+unsigned int :1 others bool :1 ?
 
-"- reverse dependencies: "select" <symbol> ["if" <expr>]
+>   * dpm_resume_early - Execute "early resume" callbacks for all devices.
+>   * @state: PM transition of the system being carried out.
+> @@ -845,18 +845,28 @@ void dpm_resume_early(pm_message_t state
+>  	mutex_lock(&dpm_list_mtx);
+>  	pm_transition = state;
+>  
+> +	/*
+> +	 * Trigger the resume of "async" devices upfront so they don't have to
+> +	 * wait for the "non-async" ones they don't depend on.
+> +	 */
+> +	list_for_each_entry(dev, &dpm_late_early_list, power.entry)
+> +		dpm_async_fn(dev, async_resume_early);
+> +
+>  	while (!list_empty(&dpm_late_early_list)) {
+>  		dev = to_device(dpm_late_early_list.next);
+> -		get_device(dev);
+>  		list_move_tail(&dev->power.entry, &dpm_suspended_list);
+>  
+> -		mutex_unlock(&dpm_list_mtx);
+> +		if (!dev->power.in_progress) {
 
-  While normal dependencies reduce the upper limit of a symbol (see
-  below), reverse dependencies can be used to force a lower limit of
-  another symbol. The value of the current menu symbol is used as the
-  minimal value <symbol> can be set to. If <symbol> is selected multiple
-  times, the limit is set to the largest selection.
-  Reverse dependencies can only be used with boolean or tristate
-  symbols.
+I would consider different naming just to make clear this
+is regarding async call, in_progress looks too generic for me.
+Fine if you think otherwise, in general patch LGTM:
 
-  Note:
-        select should be used with care. select will force
-        a symbol to a value without visiting the dependencies.
-        By abusing select you are able to select a symbol FOO even
-        if FOO depends on BAR that is not set.
-        In general use select only for non-visible symbols
-        (no prompts anywhere) and for symbols with no dependencies.
-        That will limit the usefulness but on the other hand avoid
-        the illegal configurations all over."
+Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
 
-From Documentation/kbuild/kconfig-language.rst
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
 
