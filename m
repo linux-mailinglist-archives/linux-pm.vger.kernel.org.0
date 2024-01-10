@@ -1,210 +1,109 @@
-Return-Path: <linux-pm+bounces-2081-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2082-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DEAA829C2F
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 15:14:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 26FDD829C3E
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 15:15:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFBB128230B
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 14:13:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C92D028A712
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 14:15:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BF9E4C3C1;
-	Wed, 10 Jan 2024 14:10:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDBDA4B5D4;
+	Wed, 10 Jan 2024 14:13:41 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF8C64C3B8;
-	Wed, 10 Jan 2024 14:10:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 13BF92F4;
-	Wed, 10 Jan 2024 06:11:23 -0800 (PST)
-Received: from [10.57.87.179] (unknown [10.57.87.179])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0CB843F5A1;
-	Wed, 10 Jan 2024 06:10:34 -0800 (PST)
-Message-ID: <14e5634b-721a-4444-8825-967d807b71b7@arm.com>
-Date: Wed, 10 Jan 2024 14:11:57 +0000
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C5054B5C5;
+	Wed, 10 Jan 2024 14:13:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-59584f41f1eso427128eaf.1;
+        Wed, 10 Jan 2024 06:13:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704896019; x=1705500819;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VB6UqhNETBqYunxJJvMUA9SmS3r4uwslMpuYoOasyy0=;
+        b=W2Bs3zPU4UhyDtzPpnCAZKKf6JRPW5IyfUa0kiCcFFaYA08zVBCDKLMWeM139eMnJM
+         AZrnxbCr+FuER59afpqbSstI4y/HRXW8atgo0F1LknhAhoBBh8w0mLhwKiiVFGRSz8kM
+         T/WTUG3+HJZX6+q8KrSZnfL/PIQ6xQCY+LXzj8PEKA8ulWayd6U4IdqrtHsH3+DnwE7C
+         6YL2/qqolU4GSyDDeI7DubGZDAvCC3deDxVMz512k/1dkpCtbesu28JPE6lrMSvU3SD6
+         XOAss9vzXVpE9NYh6zVB/60+qNm4B8t8UwKDEp7bTxIE4VImLwj4kjD2AUa4Yf3C9Pkz
+         9ETg==
+X-Gm-Message-State: AOJu0YzDPD3egE3CFIvHOC0LQq2AMJoJKUWa4sqq+asuMajZttthdhcW
+	RWsCpzWT69s9q+FJNOq3o2xgTV0cswlO/Lwq/v5TQTw8
+X-Google-Smtp-Source: AGHT+IEJF3AmfXmuebgf2YmkFzAhusVLGBp57WDhxGwNT5Z2T4O/RqPhLLmQY2XCPzCrIvOcj51DRKeoKiLMsEu7g0Y=
+X-Received: by 2002:a4a:bb8d:0:b0:598:75ed:c5c6 with SMTP id
+ h13-20020a4abb8d000000b0059875edc5c6mr2108775oop.0.1704896019116; Wed, 10 Jan
+ 2024 06:13:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 11/23] PM: EM: Add API for updating the runtime
- modifiable EM
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- dietmar.eggemann@arm.com, rui.zhang@intel.com, amit.kucheria@verdurent.com,
- amit.kachhap@gmail.com, daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
- len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org, qyousef@layalina.io,
- wvw@google.com
-References: <20240104171553.2080674-1-lukasz.luba@arm.com>
- <20240104171553.2080674-12-lukasz.luba@arm.com>
- <CAJZ5v0hqRkDmhRBfB4g-2EH2piv-KOQdwad7rVoSK8FzZKg=TA@mail.gmail.com>
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0hqRkDmhRBfB4g-2EH2piv-KOQdwad7rVoSK8FzZKg=TA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240109175801.447943-1-e.velu@criteo.com>
+In-Reply-To: <20240109175801.447943-1-e.velu@criteo.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 10 Jan 2024 15:13:27 +0100
+Message-ID: <CAJZ5v0juCOaLQGD_5nAtW-Ov5k5Gh+=e51NhdWy4bf-XDtvvQg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] admin-guide: Fixing typos
+To: Erwan Velu <erwanaliasr1@gmail.com>
+Cc: Erwan Velu <e.velu@criteo.com>, Jonathan Corbet <corbet@lwn.net>, Huang Rui <ray.huang@amd.com>, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Jan 9, 2024 at 6:58=E2=80=AFPM Erwan Velu <erwanaliasr1@gmail.com> =
+wrote:
+>
+> This commit fixes two typos in the admin-guide.
+>
+> - a missing e in "reference_perf".
+> - the amd_pstate sysfs path uses a dash instead of an underscore.
+>
+> Signed-off-by: Erwan Velu <e.velu@criteo.com>
+> ---
+>  Documentation/admin-guide/acpi/cppc_sysfs.rst | 2 +-
+>  Documentation/admin-guide/pm/amd-pstate.rst   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/Documentation/admin-guide/acpi/cppc_sysfs.rst b/Documentatio=
+n/admin-guide/acpi/cppc_sysfs.rst
+> index e53d76365aa7..36981c667823 100644
+> --- a/Documentation/admin-guide/acpi/cppc_sysfs.rst
+> +++ b/Documentation/admin-guide/acpi/cppc_sysfs.rst
+> @@ -75,4 +75,4 @@ taking two different snapshots of feedback counters at =
+time T1 and T2.
+>    delivered_counter_delta =3D fbc_t2[del] - fbc_t1[del]
+>    reference_counter_delta =3D fbc_t2[ref] - fbc_t1[ref]
+>
+> -  delivered_perf =3D (refernce_perf x delivered_counter_delta) / referen=
+ce_counter_delta
+> +  delivered_perf =3D (reference_perf x delivered_counter_delta) / refere=
+nce_counter_delta
+> diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/=
+admin-guide/pm/amd-pstate.rst
+> index 1cf40f69278c..9eb26014d34b 100644
+> --- a/Documentation/admin-guide/pm/amd-pstate.rst
+> +++ b/Documentation/admin-guide/pm/amd-pstate.rst
+> @@ -361,7 +361,7 @@ Global Attributes
+>
+>  ``amd-pstate`` exposes several global attributes (files) in ``sysfs`` to
+>  control its functionality at the system level.  They are located in the
+> -``/sys/devices/system/cpu/amd-pstate/`` directory and affect all CPUs.
+> +``/sys/devices/system/cpu/amd_pstate/`` directory and affect all CPUs.
+>
+>  ``status``
+>         Operation mode of the driver: "active", "passive" or "disable".
+> --
 
+Applied as 6.8-rc1 material with some edits in the subject and changelog.
 
-On 1/4/24 19:47, Rafael J. Wysocki wrote:
-> I don't really like using the API TLA in patch subjects, because it
-> does not really say much.  IMO a subject like this would be better:
-> 
-> "PM: EM: Introduce em_dev_update_perf_domain() for EM updates"
-
-Fair enough
-
-> 
-> On Thu, Jan 4, 2024 at 6:15 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> Add API function em_dev_update_perf_domain() which allows to safely
->> change the EM.
-> 
-> "... which allows the EM to be changed safely."
-
-OK
-
-> 
-> New paragraph:
-> 
->> The concurrent modifiers are protected by the mutex
->> to serialize them. Removal of the old memory is asynchronous and
->> handled by the RCU mechanisms.
-> 
-> "Concurrent updaters are serialized with a mutex and the removal of
-> memory that will not be used any more is carried out with the help of
-> RCU."
-
-OK
-
-> 
->>
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->>   include/linux/energy_model.h |  8 +++++++
->>   kernel/power/energy_model.c  | 41 ++++++++++++++++++++++++++++++++++++
->>   2 files changed, 49 insertions(+)
->>
->> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
->> index 753d70d0ce7e..f33257ed83fd 100644
->> --- a/include/linux/energy_model.h
->> +++ b/include/linux/energy_model.h
->> @@ -183,6 +183,8 @@ struct em_data_callback {
->>
->>   struct em_perf_domain *em_cpu_get(int cpu);
->>   struct em_perf_domain *em_pd_get(struct device *dev);
->> +int em_dev_update_perf_domain(struct device *dev,
->> +                             struct em_perf_table __rcu *new_table);
->>   int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
->>                                  struct em_data_callback *cb, cpumask_t *span,
->>                                  bool microwatts);
->> @@ -376,6 +378,12 @@ struct em_perf_table __rcu *em_allocate_table(struct em_perf_domain *pd)
->>          return NULL;
->>   }
->>   static inline void em_free_table(struct em_perf_table __rcu *table) {}
->> +static inline
->> +int em_dev_update_perf_domain(struct device *dev,
->> +                             struct em_perf_table __rcu *new_table)
->> +{
->> +       return -EINVAL;
->> +}
->>   #endif
->>
->>   #endif
->> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
->> index bbc406db0be1..496dc00835c6 100644
->> --- a/kernel/power/energy_model.c
->> +++ b/kernel/power/energy_model.c
->> @@ -220,6 +220,47 @@ static int em_allocate_perf_table(struct em_perf_domain *pd,
->>          return 0;
->>   }
->>
->> +/**
->> + * em_dev_update_perf_domain() - Update runtime EM table for a device
->> + * @dev                : Device for which the EM is to be updated
->> + * @table      : The new EM table that is going to be used from now
-> 
-> This is called "new_table" below.
-
-good catch
-
-> 
->> + *
->> + * Update EM runtime modifiable table for the @dev using the provided @table.
->> + *
->> + * This function uses mutex to serialize writers, so it must not be called
-> 
-> "uses a mutex"
-
-OK
-
-> 
->> + * from non-sleeping context.
-> 
-> "a non-sleeping context".
-
-OK
-
-> 
->> + *
->> + * Return 0 on success or a proper error in case of failure.
-> 
-> It is not clear what "a proper error" means.  It would be better to
-> simply say "or an error code on failure" IMO.
-
-Agree, I'll change it.
-
-> 
->> + */
->> +int em_dev_update_perf_domain(struct device *dev,
->> +                             struct em_perf_table __rcu *new_table)
->> +{
->> +       struct em_perf_table __rcu *old_table;
->> +       struct em_perf_domain *pd;
->> +
->> +       /* Serialize update/unregister or concurrent updates */
->> +       mutex_lock(&em_pd_mutex);
->> +
->> +       if (!dev || !dev->em_pd) {
-> 
-> dev need not be checked under the lock.
-
-True, I will put it about the lock.
-
-> 
->> +               mutex_unlock(&em_pd_mutex);
->> +               return -EINVAL;
->> +       }
->> +       pd = dev->em_pd;
->> +
->> +       em_table_inc(new_table);
->> +
->> +       old_table = pd->em_table;
->> +       rcu_assign_pointer(pd->em_table, new_table);
->> +
->> +       em_cpufreq_update_efficiencies(dev, new_table->state);
->> +
->> +       em_table_dec(old_table);
->> +
->> +       mutex_unlock(&em_pd_mutex);
->> +       return 0;
->> +}
->> +EXPORT_SYMBOL_GPL(em_dev_update_perf_domain);
->> +
->>   static int em_create_runtime_table(struct em_perf_domain *pd)
->>   {
->>          struct em_perf_table __rcu *table;
->> --
-
-
-Thank you for the review!
-
-Regards,
-Lukasz
+Thanks!
 
