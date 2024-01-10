@@ -1,150 +1,119 @@
-Return-Path: <linux-pm+bounces-2064-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2065-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E17B829A72
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 13:33:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD51A829A93
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 13:48:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B4C0AB244D8
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 12:33:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47C5A28760D
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 12:48:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2099B1E52E;
-	Wed, 10 Jan 2024 12:33:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6EB0482E4;
+	Wed, 10 Jan 2024 12:48:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="CAhhENMR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A25B848780;
-	Wed, 10 Jan 2024 12:33:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-6ddec302e68so222551a34.0;
-        Wed, 10 Jan 2024 04:33:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704890000; x=1705494800;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mdVwVLgR6l9w9IUJl5rXBB1+lz8z25YXeBpy/UgGLXk=;
-        b=sOeUVJh6BzF99F1fRi7w/Xf1tW2GrpDg/t3sVSKSs716k7HmxnAgU4ncmH9Kgtg4SU
-         t6Z3nQ3NTxNzRi6iR0JKzeZSX63n2vWevzFNP5fjKo5FwFIQDKZ87XchwyAf368rw3E8
-         X8hsq6j6OHRomhRJB6QqL6xynX7EyJqVaxIoI5yTWTowrV1OSmRdre8ALgnuDPcnfnKA
-         wcLp0u6kK88tOFgI2tMOXgVwvkYR6UC5SCip/os6Cl6IZ83vjhzuL9J169T1Bh8qqy09
-         AZOT/gS3i93cE/wWxdePj2lCq0umI+kfPceXNq1nIEXd83hzLqn5vJNXULgVPUVuECpB
-         Jqpw==
-X-Gm-Message-State: AOJu0Yzzm5ZjUkJkX6lrZYXjAC43uBAHtp5VL+2aBEgZNYRMXraWjvat
-	qtmhdLW6H1tUVB2w+R54YwSU/4rmEgqHE8/cUh4FDzgY
-X-Google-Smtp-Source: AGHT+IF7fEzV7PsxnHE9QKfxhElr11n1sr60mh+14CNFMczJEcSD/pXhmfHL4ULKPM37t3VEg3FswyH2DzSzW6VdFZg=
-X-Received: by 2002:a05:6820:2e02:b0:598:9a35:71f1 with SMTP id
- ec2-20020a0568202e0200b005989a3571f1mr1216376oob.0.1704889999119; Wed, 10 Jan
- 2024 04:33:19 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191F2481A6;
+	Wed, 10 Jan 2024 12:48:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40ABIS09027899;
+	Wed, 10 Jan 2024 12:47:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=i8J1gCk5JCeZc0OXGdHgoM6gqwj7n4x6zJOBGQRzsUY=; b=CA
+	hhENMRN8/sv4fhftwxeCrVkUveBN2Ghqz3svv+QHRmap0smGAjTM3F/lNxaGMUv3
+	3dkleuOjOk+/ouqLz7FEiR/XX42J5PoMCti8Leni7cNknsy+13fm/ej8mGQzEU5G
+	wjDQSmCahhuZkTRM/i9mLsnIfDRkIlG0gxEd7WmCjcjr++O58/56yOWpuDigW2b9
+	TLyNCKN80W+N6nvxhTbQVWLDg4xM42MXeyy4M24JiP31C9Bq1/g1XU6ZPdjrv9wg
+	x6IkiQNm3wnr+Q+tENco0h3PU/bVaexN8xkqgmGwRN3G1o1wdvmcxmjgXS2JrkQM
+	bSDQVQka3UoCvjOOjLzw==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vhnbnrwhp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 10 Jan 2024 12:47:24 +0000 (GMT)
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+	by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40AClNOi007777
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 10 Jan 2024 12:47:23 GMT
+Received: from [10.216.36.30] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 10 Jan
+ 2024 04:47:21 -0800
+Message-ID: <90c0a34a-2640-d6b7-0eb3-19fe789d2998@quicinc.com>
+Date: Wed, 10 Jan 2024 18:17:17 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <10423008.nUPlyArG6x@kreacher> <ZZ5zcBBEv7qupIdE@linux.intel.com>
-In-Reply-To: <ZZ5zcBBEv7qupIdE@linux.intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 10 Jan 2024 13:33:07 +0100
-Message-ID: <CAJZ5v0gp6uETgLNHxDnSd4h_0ois7J2AC7soJJVv18B99GmxcQ@mail.gmail.com>
-Subject: Re: [PATCH v1] PM: sleep: Restore asynchronous device resume optimization
-To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH] thermal/sysfs: Always enable hysteresis write support
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+CC: Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui
+	<rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20240106191502.29126-1-quic_manafm@quicinc.com>
+ <CAJZ5v0gE6eEpALrfxHvCd5TRqjB+v8pffG4CKLTVXiSvuiWhHg@mail.gmail.com>
+From: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+In-Reply-To: <CAJZ5v0gE6eEpALrfxHvCd5TRqjB+v8pffG4CKLTVXiSvuiWhHg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: HOIewuGlM0jeWGMwkWdRj3NLhH2hzpQ6
+X-Proofpoint-GUID: HOIewuGlM0jeWGMwkWdRj3NLhH2hzpQ6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-09_02,2023-12-07_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
+ spamscore=0 clxscore=1015 priorityscore=1501 mlxlogscore=712
+ suspectscore=0 adultscore=0 impostorscore=0 malwarescore=0
+ lowpriorityscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2311290000 definitions=main-2401100105
 
-On Wed, Jan 10, 2024 at 11:37=E2=80=AFAM Stanislaw Gruszka
-<stanislaw.gruszka@linux.intel.com> wrote:
+Resending to reflect to format
+
+Hi Rafael,
+
+On 1/9/2024 7:12 PM, Rafael J. Wysocki wrote:
+> On Sat, Jan 6, 2024 at 8:16 PM Manaf Meethalavalappu Pallikunhi
+> <quic_manafm@quicinc.com> wrote:
+>> The commit 2e38a2a981b2("thermal/core: Add a generic
+>> thermal_zone_set_trip() function") adds the support to update
+>> trip hysteresis even if set_trip_hyst() operation is not defined.
+>> But during hysteresis attribute creation, if this operation is
+>> defined then only it enables hysteresis write access. It leads
+>> to a case where hysteresis sysfs will be read only for a thermal
+>> zone when its set_trip_hyst() operation is not defined.
+I think it is regression after recent re-work.  If  a sensor  is 
+registered witht thermal framework via thermal_of,  sensor driver 
+doesn't need to  know the trip configuration and nothing to do with 
+set_trip_hyst() in driver. Without this change, if  a sensor needs to be 
+monitored from userspace(trip/hysteresis), it is enforcing sensor driver 
+to add  dummy set_trip_hyst() operation. Correct me otherwise.
+> Which is by design.
 >
-> On Tue, Jan 09, 2024 at 05:59:22PM +0100, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Before commit 7839d0078e0d ("PM: sleep: Fix possible deadlocks in core
-> > system-wide PM code"), the resume of devices that were allowed to resum=
-e
-> > asynchronously was scheduled before starting the resume of the other
-> > devices, so the former did not have to wait for the latter unless
-> > functional dependencies were present.
-> >
-> > Commit 7839d0078e0d removed that optimization in order to address a
-> > correctness issue, but it can be restored with the help of a new device
-> > power management flag, so do that now.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >
-> > I said I'd probably do this in 6.9, but then I thought more about it
-> > and now I think it would be nice to have 6.8-rc1 without a suspend
-> > performance regression and the change is relatively straightforward,
-> > so here it goes.
-> >
-> > ---
-> >  drivers/base/power/main.c |  117 +++++++++++++++++++++++++------------=
----------
-> >  include/linux/pm.h        |    1
-> >  2 files changed, 65 insertions(+), 53 deletions(-)
-> >
-> > Index: linux-pm/include/linux/pm.h
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > --- linux-pm.orig/include/linux/pm.h
-> > +++ linux-pm/include/linux/pm.h
-> > @@ -681,6 +681,7 @@ struct dev_pm_info {
-> >       bool                    wakeup_path:1;
-> >       bool                    syscore:1;
-> >       bool                    no_pm_callbacks:1;      /* Owned by the P=
-M core */
-> > +     bool                    in_progress:1;  /* Owned by the PM core *=
-/
-> >       unsigned int            must_resume:1;  /* Owned by the PM core *=
-/
-> >       unsigned int            may_skip_resume:1;      /* Set by subsyst=
-ems */
->
-> Not related to the patch, just question: why some types here are
-> unsigned int :1 others bool :1 ?
+> For some thermal zone types (eg. acpi), updating trip hysteresis via
+> sysfs might lead to incorrect behavior.
 
-No particular reason.
+To address this, is it okay to guard hysteresis write permission under 
+CONFIG_THERMAL_WRITABLE_TRIPS flag ?
 
-I think I will change them all to bool in the future.
+Thanks,
 
-> >   * dpm_resume_early - Execute "early resume" callbacks for all devices=
-.
-> >   * @state: PM transition of the system being carried out.
-> > @@ -845,18 +845,28 @@ void dpm_resume_early(pm_message_t state
-> >       mutex_lock(&dpm_list_mtx);
-> >       pm_transition =3D state;
-> >
-> > +     /*
-> > +      * Trigger the resume of "async" devices upfront so they don't ha=
-ve to
-> > +      * wait for the "non-async" ones they don't depend on.
-> > +      */
-> > +     list_for_each_entry(dev, &dpm_late_early_list, power.entry)
-> > +             dpm_async_fn(dev, async_resume_early);
-> > +
-> >       while (!list_empty(&dpm_late_early_list)) {
-> >               dev =3D to_device(dpm_late_early_list.next);
-> > -             get_device(dev);
-> >               list_move_tail(&dev->power.entry, &dpm_suspended_list);
-> >
-> > -             mutex_unlock(&dpm_list_mtx);
-> > +             if (!dev->power.in_progress) {
->
-> I would consider different naming just to make clear this
-> is regarding async call, in_progress looks too generic for me.
+Manaf
 
-OK, what about async_in_progress?
-
-> Fine if you think otherwise, in general patch LGTM:
->
-> Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-
-Thanks!
 
