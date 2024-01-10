@@ -1,188 +1,104 @@
-Return-Path: <linux-pm+bounces-2039-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2040-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A35E882929E
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 04:05:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E881C8293C8
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 07:43:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A882B25929
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 03:05:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95FF1287CBC
+	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 06:43:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFF87210B;
-	Wed, 10 Jan 2024 03:05:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56D8332C72;
+	Wed, 10 Jan 2024 06:43:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ko93EGdJ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GkckBDl9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B727A1871;
-	Wed, 10 Jan 2024 03:05:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704855930; x=1736391930;
-  h=from:to:cc:subject:date:message-id;
-  bh=pHu+JjwxmcBrvbDLReMh07daUmBXGKOvaUBLbr2Vdns=;
-  b=ko93EGdJE30AdGTe4KRDlnSCg0qfxOc/skxgkFlPUReIVbkrx7JkPGNF
-   KB1nFsGPLpLutYryBBNTnOHOon997mzwqTpZlDUJEhMPd9n+2t95dtWn2
-   lNnF2cIn3JAbbVCA3LWQEe+5OvSPG4bHy9lVPzVbhMQ6JxvFl7sVmWn2V
-   XlBJuFFNxfrrxyvTSeOXJMqlWzw1vAfBBU3SNo9qHESum9UxmKHl4JXgp
-   dv3iy0iWTVRBue95KYaAJ5j2qKZgUH1dY33zLydxC22L09Ze3SAX5CMcd
-   eA3r0vjsoIaaeTWwD5T88b4yrPMEumceaECtkDJc0zILRAA+eOuph6kC1
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="397244704"
-X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
-   d="scan'208";a="397244704"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2024 19:05:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10947"; a="1029002690"
-X-IronPort-AV: E=Sophos;i="6.04,184,1695711600"; 
-   d="scan'208";a="1029002690"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga006.fm.intel.com with ESMTP; 09 Jan 2024 19:05:29 -0800
-From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc: Chen Yu <yu.c.chen@intel.com>,
-	Len Brown <len.brown@intel.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Zhao Liu <zhao1.liu@intel.com>,
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3] thermal: intel: hfi: Add syscore callbacks
-Date: Tue,  9 Jan 2024 19:07:04 -0800
-Message-Id: <20240110030704.11305-1-ricardo.neri-calderon@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 011332FC59
+	for <linux-pm@vger.kernel.org>; Wed, 10 Jan 2024 06:43:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6da202aa138so3099774b3a.2
+        for <linux-pm@vger.kernel.org>; Tue, 09 Jan 2024 22:43:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1704869007; x=1705473807; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ufriYbCxMamJExkyO+DSziDprmr/nvohHV8KvnEcisE=;
+        b=GkckBDl9tyDeaKoq1OlLbr6jEBwdbjzMGB0I45CAU6xI+pgxYAVVcgVcq2AKQpBjM7
+         3wnDntahFoAcep5K8VnjbMQzSJIofcavO4I7WeCodBVsVW8sbbAy3vuCAA23d10llbWQ
+         O0Sa1BdzkP2xMT49yTz2ONeRQ0t3IdlTQum1qPOpfmaOziYsSz+6XZRSr9zXz8ZyI7IT
+         OorO6nPNXk+DvFyUSi31O7tQPj6+WQAiDZdAp8KoiEEuE89AijmVyZCZabZe5dKcdwdV
+         PbKiXXhbg5q2qGY1BdIQLX4bb8S1WkyNIE0CjOlaKMneYqwUl0Y8joqktrM0wx4EbVEw
+         JFlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704869007; x=1705473807;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ufriYbCxMamJExkyO+DSziDprmr/nvohHV8KvnEcisE=;
+        b=ufIQW2LFsrBr4SqkgLF+tHOl1Gb4ygIklCFJj9JfI/T0A7ghhsOsYOjE8otAcm28qu
+         3U+NtcL4dDzSf9BZCbQeFXDtUAl44yTfIXQKF/LuML5PSp/gFKAuriaR83hK7MyXjm+X
+         50pAeN6+CVM3jsMn7PaoXWfvb7Lt1DX84SHOI/nnJeUSNGZ4NI8cM2tYoBdEi2LeoftO
+         YhM9yHEas+5bqmv/SzWh/ZsHTwVAmDFjNDlaiHp5kjlsre4cqWch5SyqGBmb60kQqNw1
+         LJPsLslzh+mCUcwZiqHDZY0JhYMGDwOjtNmxt1SysU0/3qu1ZNtcOw8MSz163JL16Yvm
+         3cPQ==
+X-Gm-Message-State: AOJu0YyxG/sXHMHY7pArG8qVVbui8rlbFeYjxPpQLLN1k6O1NUx6qagK
+	585HzBUvSXM/9zHb2zWibb6Cqr0SnR4OIg==
+X-Google-Smtp-Source: AGHT+IHVmZ9O2UiKApFYg6a+2bvUEeNRE+QH24QgnpIssMtERJd0DP+8Dglnh788IGmlXjBYlPjMPA==
+X-Received: by 2002:a05:6a20:1682:b0:198:7feb:97ae with SMTP id q2-20020a056a20168200b001987feb97aemr365175pzc.123.1704869007250;
+        Tue, 09 Jan 2024 22:43:27 -0800 (PST)
+Received: from localhost ([122.172.81.83])
+        by smtp.gmail.com with ESMTPSA id n5-20020a634005000000b005cd64ff9a42sm2618582pga.64.2024.01.09.22.43.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jan 2024 22:43:26 -0800 (PST)
+Date: Wed, 10 Jan 2024 12:13:24 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+	sudeep.holla@arm.com, rafael@kernel.org, agross@kernel.org,
+	andersson@kernel.org, konrad.dybcio@linaro.org, mingo@redhat.com,
+	peterz@infradead.org, juri.lelli@redhat.com,
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+	lukasz.luba@arm.com, rui.zhang@intel.com, mhiramat@kernel.org,
+	daniel.lezcano@linaro.org, amit.kachhap@gmail.com, corbet@lwn.net,
+	gregkh@linuxfoundation.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, qyousef@layalina.io
+Subject: Re: [PATCH v4 1/5] cpufreq: Add a cpufreq pressure feedback for the
+ scheduler
+Message-ID: <20240110064324.bex3ssej5ghie6cu@vireshk-i7>
+References: <20240109164655.626085-1-vincent.guittot@linaro.org>
+ <20240109164655.626085-2-vincent.guittot@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240109164655.626085-2-vincent.guittot@linaro.org>
 
-The kernel allocates a memory buffer and provides its location to the
-hardware, which uses it to update the HFI table. This allocation occurs
-during boot and remains constant throughout runtime.
+On 09-01-24, 17:46, Vincent Guittot wrote:
+> Provide to the scheduler a feedback about the temporary max available
+> capacity. Unlike arch_update_thermal_pressure, this doesn't need to be
+> filtered as the pressure will happen for dozens ms or more.
+> 
+> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> ---
+>  drivers/cpufreq/cpufreq.c | 36 ++++++++++++++++++++++++++++++++++++
+>  include/linux/cpufreq.h   | 10 ++++++++++
+>  2 files changed, 46 insertions(+)
 
-When resuming from hibernation, the restore kernel allocates a second
-memory buffer and reprograms the HFI hardware with the new location as part
-of a normal boot. The location of the second memory buffer may differ from
-the one allocated by the image kernel. When the restore kernel transfers
-control to the image kernel, the second buffer becomes invalid, potentially
-leading to memory corruption if the hardware writes to it (the hardware
-continues using the buffer from the restore kernel).
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-It is also possible that the hardware forgets the address of the memory
-buffer when resuming from "deep" suspend. Memory corruption may also occur
-in such a scenario.
-
-To prevent the described memory corruption, disable HFI when preparing to
-suspend or hibernate. Enable it when resuming.
-
-Add syscore callbacks to handle the package of the boot CPU (packages of
-non-boot CPUs are handled via CPU offline). Syscore ops always run on the
-boot CPU. Additionally, HFI only needs to be disabled during "deep" suspend
-and hibernation. Syscore ops only run in these cases.
-
-Cc: Chen Yu <yu.c.chen@intel.com>
-Cc: Len Brown <len.brown@intel.com>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Cc: Zhang Rui <rui.zhang@intel.com>
-Cc: Zhao Liu <zhao1.liu@linux.intel.com>
-Cc: linux-pm@vger.kernel.org
-Cc: stable@vger.kernel.org    # 6.1
-Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
----
-This is v3 of the patch [4/4] of [1]. Rafael has already accepted the
-first three patches. Thanks!
-
-I tested this patch on the testing branch of Rafael on Jan 9th. 2024. I
-tested it on a Meteor Lake system. It completed 1000 hibernation-resume
-cycles.
-
-[1]. https://lore.kernel.org/all/20240103041459.11113-1-ricardo.neri-calderon@linux.intel.com/
-
----
-Changes since v2:
- * Switched to syscore ops instead of a suspend notifier as it is a better
-   fit: we only need to handle the boot CPU, disabling HFI is only needed
-   for "deep" suspend and hibernation. (Rafael)
- * Removed incorrect statement about the suspend flow in the commit
-   message. (Rafael)
-
-Changes since v1:
- * Moved registration of the suspend notifier towards the end of
-   intel_hfi_init(). (Stan)
- * Renamed hfi_do_pm_[enable|disable]() to hfi_do_[enable|disable](). Stan
-   will use these functions outside the suspend notifier. (Stan)
- * Added locking to calls to hfi_[enable|disable]() from the suspend
-   notifier. (Rafael)
----
- drivers/thermal/intel/intel_hfi.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
-
-diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-index 22445403b520..768cd5f9eb32 100644
---- a/drivers/thermal/intel/intel_hfi.c
-+++ b/drivers/thermal/intel/intel_hfi.c
-@@ -35,7 +35,9 @@
- #include <linux/processor.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
-+#include <linux/suspend.h>
- #include <linux/string.h>
-+#include <linux/syscore_ops.h>
- #include <linux/topology.h>
- #include <linux/workqueue.h>
- 
-@@ -571,6 +573,30 @@ static __init int hfi_parse_features(void)
- 	return 0;
- }
- 
-+static void hfi_do_enable(void)
-+{
-+	/* If we are here, we are on the boot CPU */
-+	struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, 0);
-+	struct hfi_instance *hfi_instance = info->hfi_instance;
-+
-+	/* No locking needed. There is no concurrency with CPU online. */
-+	hfi_set_hw_table(hfi_instance);
-+	hfi_enable();
-+}
-+
-+static int hfi_do_disable(void)
-+{
-+	/* No locking needed. There is no concurrency with CPU offline. */
-+	hfi_disable();
-+
-+	return 0;
-+}
-+
-+static struct syscore_ops hfi_pm_ops = {
-+	.resume = hfi_do_enable,
-+	.suspend = hfi_do_disable,
-+};
-+
- void __init intel_hfi_init(void)
- {
- 	struct hfi_instance *hfi_instance;
-@@ -602,6 +628,8 @@ void __init intel_hfi_init(void)
- 	if (!hfi_updates_wq)
- 		goto err_nomem;
- 
-+	register_syscore_ops(&hfi_pm_ops);
-+
- 	return;
- 
- err_nomem:
 -- 
-2.25.1
-
+viresh
 
