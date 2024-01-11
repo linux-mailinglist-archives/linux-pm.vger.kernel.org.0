@@ -1,223 +1,83 @@
-Return-Path: <linux-pm+bounces-2114-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2115-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0A1182AD8D
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jan 2024 12:33:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 847F482AE5B
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jan 2024 13:07:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 253D31F2342D
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jan 2024 11:33:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 347F3286634
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jan 2024 12:07:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3F1C15496;
-	Thu, 11 Jan 2024 11:32:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="m4l9wBed"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7215315ADD;
+	Thu, 11 Jan 2024 12:01:56 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09E0016410
-	for <linux-pm@vger.kernel.org>; Thu, 11 Jan 2024 11:32:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6d9af1f12d5so4329659b3a.3
-        for <linux-pm@vger.kernel.org>; Thu, 11 Jan 2024 03:32:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1704972727; x=1705577527; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JNl3tpkyK5Mul56pIgZxAMIH2IfRCEnxfyE9fY+1LDU=;
-        b=m4l9wBedswJIQVDZ9iGWGdJl9Zx/EVnZmK8UjrW3iuPogILnCXvAJ5f1DVnoOFFPr9
-         dNjJr40uwVe1jyOxPyyMIjVBHG9GKDQbxNUCgQDxMh+7ILiAaRt4exHzghki0ZceTZMF
-         3Dbv1wxPgpfe6UjtYap9e4S8wc+yTMP0/eZdYto48cZn9iVRxAi3usJchmpf1Y487iu9
-         QWZanqvBtoXd1mlGy8n/UNrxV0qZQnnJjHidpG3f4YZPfkINJtesjsPSueY3hMjzosBs
-         h/9j2Aeq0zw7BbfopuQadD6QMveY7L9dlciwRqhZlDo3pOhR7ulaooZ75t570elby4ih
-         aF5Q==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 251933FB10;
+	Thu, 11 Jan 2024 12:01:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-598a2136259so236186eaf.1;
+        Thu, 11 Jan 2024 04:01:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704972727; x=1705577527;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JNl3tpkyK5Mul56pIgZxAMIH2IfRCEnxfyE9fY+1LDU=;
-        b=SpR6RnoOn44XsVO6VLi4pQZeHAlJZ0BhOzlYhoaSD5lbmeiJ2QJQqYCd9EmjDeZhHS
-         5UyjKWSR2DIlh4frAX+cFqRA27S65vxoKtWyxHm6bnl6qD7LyGAY/+MzAXYd7NaiVLrn
-         pcCCAOJTTuqS3A9xmCe9vNtQk9WltjL/fdHA8kYrJLReaPzJ+2merwXhOYdK4ntjEvCy
-         IKbDJOh8WRYE0FjW6d2IlW9m36bSBoNxKwbWeV9XplDy080n+RA5MQE40GuxK2zzsj9f
-         C0/l31lRD8PSX01TufKAgC3EebsptQH8FRo59vXo7KtadmMbefnMl5UPnS9bphXwp85n
-         5SNA==
-X-Gm-Message-State: AOJu0Yxd7FiZkmAWgTDizlXOBFii9+VUlAlFsEjVD2EVGMn2tyZVcT2/
-	5B+2wgjIF+C6pUs207ySY78XC+xSlukE5A==
-X-Google-Smtp-Source: AGHT+IFNT0pZlCC90UfGIUe+0iysvNpEOqgrUfAsJP18C9CfIaYaEO8KkvhcxXutmMYmMdMAFoeQNg==
-X-Received: by 2002:a05:6a20:89a9:b0:199:dd9a:df27 with SMTP id h41-20020a056a2089a900b00199dd9adf27mr782621pzg.124.1704972727324;
-        Thu, 11 Jan 2024 03:32:07 -0800 (PST)
-Received: from sunil-laptop ([106.51.188.200])
-        by smtp.gmail.com with ESMTPSA id mm4-20020a1709030a0400b001d4b46d8c10sm972947plb.66.2024.01.11.03.32.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Jan 2024 03:32:06 -0800 (PST)
-Date: Thu, 11 Jan 2024 17:01:59 +0530
-From: Sunil V L <sunilvl@ventanamicro.com>
-To: Andrew Jones <ajones@ventanamicro.com>
-Cc: linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, Anup Patel <anup@brainfault.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
-	Atish Kumar Patra <atishp@rivosinc.com>
-Subject: Re: [PATCH -next 2/2] cpuidle: RISC-V: Add ACPI LPI support
-Message-ID: <ZZ/Rr7AXVAN4Ecmu@sunil-laptop>
-References: <20240111093058.121838-1-sunilvl@ventanamicro.com>
- <20240111093058.121838-3-sunilvl@ventanamicro.com>
- <20240111-d37d338a6b1aa71e944ebe05@orel>
+        d=1e100.net; s=20230601; t=1704974514; x=1705579314;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+XiuSCGwsd/t5Dgf3yHyqgsJ+VroL3UeTd33khGKhTI=;
+        b=iC0NQjk9AZwojcWE425RB4I1KjYFiF4vzjGQ1YJxTXyc84IYVsMb1k2gQxf8rRBogv
+         L8dfl+YcMM/UFEkwYOgPtMKPVvltVfL1RWyQN8c9vVhbptUVA9lgF+2qGIOwM2TfkfQI
+         Yp3O71vBUDpK1FyWzQDxin3+HAjF/oVZ0PeTY0Nh5c5SR/Bmb2S6zAD4LjXQeDn1aR8d
+         Q2wypfheVxjDlfHCN9RCxRm16XCeVlmAv0hLgDNODEcIWOBt7TYCNhmxO0evyVae38PT
+         uddTxCTWJypPxxaNWfpzk+d1x9vPlgFgocBEF8fYUx/hrTgCO5gjy52+WIaXIUxWo5ER
+         ThSQ==
+X-Gm-Message-State: AOJu0YybguhzfwZKD+irY/xRT10AKW/2IjRa8/I0GmTYKf0Zm34hwKf+
+	ugs4dLduPWAc+haNW6ZQAgDL77HDNqURFq+jzRCK2MXVxWM=
+X-Google-Smtp-Source: AGHT+IHhHHKIsE/cgwIw4HBa+BLWUndW9IeqnPSgYbokaXzRacI+Izx7X4eXyAx32qnJ00ZldF0VsznpxRwazZE1RJw=
+X-Received: by 2002:a4a:d08d:0:b0:598:81b7:4d25 with SMTP id
+ i13-20020a4ad08d000000b0059881b74d25mr2025290oor.1.1704974513976; Thu, 11 Jan
+ 2024 04:01:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240111-d37d338a6b1aa71e944ebe05@orel>
+References: <10423008.nUPlyArG6x@kreacher> <ZZ5zcBBEv7qupIdE@linux.intel.com>
+ <CAJZ5v0gp6uETgLNHxDnSd4h_0ois7J2AC7soJJVv18B99GmxcQ@mail.gmail.com>
+ <ZZ6kDVD3p4KdR9Cs@linux.intel.com> <ZZ+fiUZolz3jogcE@linux.intel.com>
+In-Reply-To: <ZZ+fiUZolz3jogcE@linux.intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 11 Jan 2024 13:01:41 +0100
+Message-ID: <CAJZ5v0j4chSHHiJYaxPuCcH8qM_yRd8y2FwtEL-Yp77Uq5RU3w@mail.gmail.com>
+Subject: Re: [PATCH v1] PM: sleep: Restore asynchronous device resume optimization
+To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
+	Linux PM <linux-pm@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 11, 2024 at 11:19:49AM +0100, Andrew Jones wrote:
-> On Thu, Jan 11, 2024 at 03:00:58PM +0530, Sunil V L wrote:
-> > Add required callbacks to support Low Power Idle (LPI) on ACPI based
-> > RISC-V platforms.
-> > 
-> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
-> > ---
-> >  drivers/cpuidle/cpuidle-riscv-sbi.c | 78 +++++++++++++++++++++++++++++
-> >  1 file changed, 78 insertions(+)
-> > 
-> > diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
-> > index e8094fc92491..cea67a54ab39 100644
-> > --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
-> > +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
-> > @@ -632,3 +632,81 @@ static int __init sbi_cpuidle_init(void)
-> >  	return 0;
-> >  }
-> >  device_initcall(sbi_cpuidle_init);
-> > +
-> > +#ifdef CONFIG_ACPI_PROCESSOR_IDLE
-> > +
-> > +#include <linux/acpi.h>
-> > +#include <acpi/processor.h>
-> > +
-> > +#define RISCV_FFH_LPI_TYPE_MASK		0x1000000000000000ULL
-> > +#define RISCV_FFH_LPI_RSVD_MASK		0x0FFFFFFF00000000ULL
-> 
-> GENMASK might look nicer and the type mask is 0xF000000000000000ULL,
-> where 0x1000000000000000ULL means that the type is an SBI identifier.
-> We need both defined
-> 
-> #define RISCV_FFH_LPI_TYPE_MASK              0xF000000000000000ULL
-> #define RISCV_FFH_LPI_TYPE_SBI               0x1000000000000000ULL
-> 
-Sure. Let me use GENMASK and define both MASK and SBI type.
+On Thu, Jan 11, 2024 at 8:58=E2=80=AFAM Stanislaw Gruszka
+<stanislaw.gruszka@linux.intel.com> wrote:
+>
+> On Wed, Jan 10, 2024 at 03:05:07PM +0100, Stanislaw Gruszka wrote:
+> > On Wed, Jan 10, 2024 at 01:33:07PM +0100, Rafael J. Wysocki wrote:
+> > > > I would consider different naming just to make clear this
+> > > > is regarding async call, in_progress looks too generic for me.
+> > >
+> > > OK, what about async_in_progress?
+> > Sure, that better.
+>
+> Even better would be using_async IMO, because we don't know if
+> async call is in progress or finish or before start.
 
-> as I point out below.
-> 
-> > +
-> > +static int acpi_cpu_init_idle(unsigned int cpu)
-> > +{
-> > +	int i;
-> > +	struct acpi_lpi_state *lpi;
-> > +	struct acpi_processor *pr = per_cpu(processors, cpu);
-> > +
-> > +	if (unlikely(!pr || !pr->flags.has_lpi))
-> > +		return -EINVAL;
-> > +
-> > +	/*
-> > +	 * The SBI HSM suspend function is only available when:
-> > +	 * 1) SBI version is 0.3 or higher
-> > +	 * 2) SBI HSM extension is available
-> > +	 */
-> > +	if (sbi_spec_version < sbi_mk_version(0, 3) ||
-> > +	    !sbi_probe_extension(SBI_EXT_HSM)) {
-> > +		pr_warn("HSM suspend not available\n");
-> 
-> The comment and these lines match what's done in sbi_cpuidle_init().
-> How about a static helper function to avoid duplication?
-> 
-Sure.
+Well, "in progress" applies to all of the processing of the async call
+and I regard it as "in progress" once it is known that it will run
+asynchronously eventually.
 
-> > +		return -EINVAL;
-> > +	}
-> > +
-> > +	if (pr->power.count <= 1)
-> > +		return -ENODEV;
-> > +
-> > +	for (i = 1; i < pr->power.count; i++) {
-> > +		u32 state;
-> > +
-> > +		lpi = &pr->power.lpi_states[i];
-> > +
-> > +		/* Validate Entry Method as per FFH spec.
-> > +		 * bits[63:60] should be 0x1
-> > +		 * bits[59:32] should be 0x0
-> > +		 * bits[31:0] represent a SBI power_state
->                                         ^ an
-> 
-> > +		 */
-> 
-> Comment block needs opening wing (/*)
-> 
-Okay.
-
-> > +		if (!(lpi->address & RISCV_FFH_LPI_TYPE_MASK) ||
-> 
-> This should be (lpi->address & RISCV_FFH_LPI_TYPE_MASK) != RISCV_FFH_LPI_TYPE_SBI
-> 
-Sure.
-
-Let me send v2 in couple of days with these changes.
-
-Thanks!
-Sunil
-
-> > +		    (lpi->address & RISCV_FFH_LPI_RSVD_MASK)) {
-> > +			pr_warn("Invalid LPI entry method %#llx\n", lpi->address);
-> > +			return -EINVAL;
-> > +		}
-> > +
-> > +		state = lpi->address;
-> > +		if (!sbi_suspend_state_is_valid(state)) {
-> > +			pr_warn("Invalid SBI power state %#x\n", state);
-> > +			return -EINVAL;
-> > +		}
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +int acpi_processor_ffh_lpi_probe(unsigned int cpu)
-> > +{
-> > +	return acpi_cpu_init_idle(cpu);
-> > +}
-> > +
-> > +int acpi_processor_ffh_lpi_enter(struct acpi_lpi_state *lpi)
-> > +{
-> > +	u32 state = lpi->address;
-> > +
-> > +	if (state & SBI_HSM_SUSP_NON_RET_BIT)
-> > +		return CPU_PM_CPU_IDLE_ENTER_PARAM(sbi_suspend,
-> > +						   lpi->index,
-> > +						   state);
-> > +	else
-> > +		return CPU_PM_CPU_IDLE_ENTER_RETENTION_PARAM(sbi_suspend,
-> > +							     lpi->index,
-> > +							     state);
-> > +}
-> > +
-> > +#endif
-> > -- 
-> > 2.34.1
-> >
-> 
-> Thanks,
-> drew
+In any case, I've already applied the async_in_progress version, thanks!
 
