@@ -1,83 +1,83 @@
-Return-Path: <linux-pm+bounces-2115-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2116-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 847F482AE5B
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jan 2024 13:07:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B5AD82AE87
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jan 2024 13:16:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 347F3286634
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jan 2024 12:07:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE7AC284AB9
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jan 2024 12:16:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7215315ADD;
-	Thu, 11 Jan 2024 12:01:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5E66156F0;
+	Thu, 11 Jan 2024 12:16:20 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 251933FB10;
-	Thu, 11 Jan 2024 12:01:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-598a2136259so236186eaf.1;
-        Thu, 11 Jan 2024 04:01:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704974514; x=1705579314;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+XiuSCGwsd/t5Dgf3yHyqgsJ+VroL3UeTd33khGKhTI=;
-        b=iC0NQjk9AZwojcWE425RB4I1KjYFiF4vzjGQ1YJxTXyc84IYVsMb1k2gQxf8rRBogv
-         L8dfl+YcMM/UFEkwYOgPtMKPVvltVfL1RWyQN8c9vVhbptUVA9lgF+2qGIOwM2TfkfQI
-         Yp3O71vBUDpK1FyWzQDxin3+HAjF/oVZ0PeTY0Nh5c5SR/Bmb2S6zAD4LjXQeDn1aR8d
-         Q2wypfheVxjDlfHCN9RCxRm16XCeVlmAv0hLgDNODEcIWOBt7TYCNhmxO0evyVae38PT
-         uddTxCTWJypPxxaNWfpzk+d1x9vPlgFgocBEF8fYUx/hrTgCO5gjy52+WIaXIUxWo5ER
-         ThSQ==
-X-Gm-Message-State: AOJu0YybguhzfwZKD+irY/xRT10AKW/2IjRa8/I0GmTYKf0Zm34hwKf+
-	ugs4dLduPWAc+haNW6ZQAgDL77HDNqURFq+jzRCK2MXVxWM=
-X-Google-Smtp-Source: AGHT+IHhHHKIsE/cgwIw4HBa+BLWUndW9IeqnPSgYbokaXzRacI+Izx7X4eXyAx32qnJ00ZldF0VsznpxRwazZE1RJw=
-X-Received: by 2002:a4a:d08d:0:b0:598:81b7:4d25 with SMTP id
- i13-20020a4ad08d000000b0059881b74d25mr2025290oor.1.1704974513976; Thu, 11 Jan
- 2024 04:01:53 -0800 (PST)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FFEF156C7;
+	Thu, 11 Jan 2024 12:16:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B8B642F4;
+	Thu, 11 Jan 2024 04:16:56 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 02E653F64C;
+	Thu, 11 Jan 2024 04:16:08 -0800 (PST)
+Date: Thu, 11 Jan 2024 12:16:06 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Andrew Jones <ajones@ventanamicro.com>
+Cc: Sunil V L <sunilvl@ventanamicro.com>, linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>, Anup Patel <anup@brainfault.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
+	Atish Kumar Patra <atishp@rivosinc.com>
+Subject: Re: [PATCH -next 1/2] ACPI: Enable ACPI_PROCESSOR for RISC-V
+Message-ID: <ZZ_cBlOSW9VCjkOv@bogus>
+References: <20240111093058.121838-1-sunilvl@ventanamicro.com>
+ <20240111093058.121838-2-sunilvl@ventanamicro.com>
+ <20240111-bb411d2dd39eb859dd049fa0@orel>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <10423008.nUPlyArG6x@kreacher> <ZZ5zcBBEv7qupIdE@linux.intel.com>
- <CAJZ5v0gp6uETgLNHxDnSd4h_0ois7J2AC7soJJVv18B99GmxcQ@mail.gmail.com>
- <ZZ6kDVD3p4KdR9Cs@linux.intel.com> <ZZ+fiUZolz3jogcE@linux.intel.com>
-In-Reply-To: <ZZ+fiUZolz3jogcE@linux.intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 11 Jan 2024 13:01:41 +0100
-Message-ID: <CAJZ5v0j4chSHHiJYaxPuCcH8qM_yRd8y2FwtEL-Yp77Uq5RU3w@mail.gmail.com>
-Subject: Re: [PATCH v1] PM: sleep: Restore asynchronous device resume optimization
-To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	Linux PM <linux-pm@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240111-bb411d2dd39eb859dd049fa0@orel>
 
-On Thu, Jan 11, 2024 at 8:58=E2=80=AFAM Stanislaw Gruszka
-<stanislaw.gruszka@linux.intel.com> wrote:
+On Thu, Jan 11, 2024 at 11:00:12AM +0100, Andrew Jones wrote:
+
+[...]
+
+> Also, interestingly, it looks like this ancient line
 >
-> On Wed, Jan 10, 2024 at 03:05:07PM +0100, Stanislaw Gruszka wrote:
-> > On Wed, Jan 10, 2024 at 01:33:07PM +0100, Rafael J. Wysocki wrote:
-> > > > I would consider different naming just to make clear this
-> > > > is regarding async call, in_progress looks too generic for me.
-> > >
-> > > OK, what about async_in_progress?
-> > Sure, that better.
+>  obj-$(CONFIG_ACPI_PROCESSOR)    += processor.o
 >
-> Even better would be using_async IMO, because we don't know if
-> async call is in progress or finish or before start.
+> in drivers/acpi/Makefile should be removed,
 
-Well, "in progress" applies to all of the processing of the async call
-and I regard it as "in progress" once it is known that it will run
-asynchronously eventually.
+No
 
-In any case, I've already applied the async_in_progress version, thanks!
+> since there's no drivers/acpi/processor.c file.
+
+Correct, but ..
+
+> I guess the make process silently filters object files which don't have
+> corresponding source files?
+
+May be, but I doubt if that is the case here.
+
+processor.o is just aggregation of all processor_*.o and this will be
+the processor.ko when built as a module.
+
+--
+Regards,
+Sudeep
 
