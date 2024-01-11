@@ -1,167 +1,176 @@
-Return-Path: <linux-pm+bounces-2121-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2120-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33DF982B054
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jan 2024 15:10:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E27F582B052
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jan 2024 15:09:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8C171F23479
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jan 2024 14:10:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E23BA1C2124D
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jan 2024 14:09:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B74E3B185;
-	Thu, 11 Jan 2024 14:10:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FA0A3B187;
+	Thu, 11 Jan 2024 14:09:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="kEzW59OM"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="H+HrSrlf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C879F16402;
-	Thu, 11 Jan 2024 14:10:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40B8iOiw022127;
-	Thu, 11 Jan 2024 14:09:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=EBT9hjnHIPcZmQBZESqJ6bAifbppCQratsO43cLPeuk=; b=kE
-	zW59OMVQQkDyjpskLzbPFHXDJKu3k65R58Q5Wfqv251b+HrrLlb9/3g2I21dk5mM
-	ah7NKNZfDPQyWD0pA2jXJspocBZWfPSRU72QO4hhy3qIPuCiSLl8gTTR/dvSW72q
-	Itq/M9pboozyP6hebORY6JLYpqdqS3bAjUZql8gZDKSHQihqOBeUGXrYRq7OfJaO
-	ov30RBtUZrvxz4wqE9XVBad2ynx2rqspPAmYLdFRG1VVLhlsO+SDQ3FIi6iNs6Jh
-	5Lm4C894/SqjWXbV/Ew9w0mciO9JzIo/O8TCy+EC0IVK/g108hVzqOEjTnQw47VK
-	7T4w3oVXcYDE7ePbfPJg==
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vjcmu8rs4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Jan 2024 14:09:40 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40BE9di3018115
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Jan 2024 14:09:39 GMT
-Received: from [10.216.36.30] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Thu, 11 Jan
- 2024 06:09:37 -0800
-Message-ID: <e83c9db6-ccac-7546-e9bb-39d404c4aea5@quicinc.com>
-Date: Thu, 11 Jan 2024 19:39:34 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 948143D542
+	for <linux-pm@vger.kernel.org>; Thu, 11 Jan 2024 14:09:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1d50d0c98c3so37513965ad.1
+        for <linux-pm@vger.kernel.org>; Thu, 11 Jan 2024 06:09:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1704982189; x=1705586989; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=l7ZSRPh2OpESjLd0uhmvAyPCKfE2pKLc9icDiFUCXjg=;
+        b=H+HrSrlfOyRMcIo3Oa/0yUYpuBzhojGksaWcE9MFFpFKB9JEVi5wb3uJDY1AMQCd7q
+         kL/0bp/B7DRI7Cqh4gtrgxcw0bVljrbiiglzW/kHddKOnOKXivHAyfHYN3q1wgPGRICM
+         MUgo6DgSb9H2nmRpCVRRYCi+ft5bO0j8ABv8Tf3HN90rMTN4sXyW9NKgtTnRfVYthNed
+         fF/eXAowCeegqgDpPyZAaZ5w7amBqoFJbWe3uOKVCx8k0d1mDZCTmg/Nh1mSZPiDlKAh
+         vhByhKYkGtPxX40uTPRDzugqEWG/DkPUejjqBNejFKdwDBMkHKDRDwSxgsN3Pu6MWm+j
+         XXNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704982189; x=1705586989;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l7ZSRPh2OpESjLd0uhmvAyPCKfE2pKLc9icDiFUCXjg=;
+        b=QMAGO9EcFsCEbYM7sxKrxORMC+dCaKYA3iF89I21q/Suhon9BsP0gYk5zWIoyNeGok
+         qcaelvgKjNs4cDPOgelWrIInYaAPbmTmG7pwgiOerVN3y5eDNVxA5ZornV4UmVpJdbH5
+         +GByTxhIxakafISrfms/n4MDPZfvlrgIOvjjl3SfSfkuF0HzP5eEx/sFOQV6Rap5Zt/H
+         1XbhYlWMptpK+5iX8TM3sZxcPM61BfQbPWPlrV3udsuQozy84+xvCq8EAS4IkmTW34Cd
+         vGbC8nnTHUy1D+iq6oKwOEbUwrj80/gujVRDJiWlNHynxchOmTlYuD5RPGhO1NzdU8/u
+         +vXw==
+X-Gm-Message-State: AOJu0YznizejKNqxvj88rLB7NgBJmvk76dXSNAgJqwSmGvc1vmy/j5QO
+	0Hm/ALH1THTFi8wtqSNR080egEtJJ6sqAg==
+X-Google-Smtp-Source: AGHT+IHPu3jAHanNlP1naOfs+ebaUMNlApqBle3JbtdjpeLtJgJO7aeoV+f7W/2MRCShNKBOT3P+Kg==
+X-Received: by 2002:a17:90a:fb85:b0:28d:fd67:fa9c with SMTP id cp5-20020a17090afb8500b0028dfd67fa9cmr154616pjb.37.1704982188870;
+        Thu, 11 Jan 2024 06:09:48 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id oh6-20020a17090b3a4600b0028cc9afaae9sm1580750pjb.34.2024.01.11.06.09.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Jan 2024 06:09:48 -0800 (PST)
+Message-ID: <659ff6ac.170a0220.72251.3e65@mx.google.com>
+Date: Thu, 11 Jan 2024 06:09:48 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] thermal/sysfs: Always enable hysteresis write support
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui
-	<rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20240106191502.29126-1-quic_manafm@quicinc.com>
- <CAJZ5v0gE6eEpALrfxHvCd5TRqjB+v8pffG4CKLTVXiSvuiWhHg@mail.gmail.com>
- <d7b82fc8-0ed8-80b8-9eb8-c77f9277178f@quicinc.com>
- <CAJZ5v0g4hnRqRCseRnTjfEF+-2=ZT8U9=2m9FODqh3G8eDd=Sw@mail.gmail.com>
-From: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-In-Reply-To: <CAJZ5v0g4hnRqRCseRnTjfEF+-2=ZT8U9=2m9FODqh3G8eDd=Sw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: J8QomHJhNTK1hn-OVpVKAd32KcoMq2vk
-X-Proofpoint-ORIG-GUID: J8QomHJhNTK1hn-OVpVKAd32KcoMq2vk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-09_01,2023-12-07_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 malwarescore=0 lowpriorityscore=0 impostorscore=0
- mlxlogscore=877 mlxscore=0 suspectscore=0 phishscore=0 bulkscore=0
- clxscore=1015 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2401110112
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v6.7-rc8-188-g2bbcd5ace0c78
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.7-rc8-188-g2bbcd5ace0c78)
+To: rafael@kernel.org, linux-pm@vger.kernel.org,
+ kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Hi Rafael,
+pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.7-rc8-188-g2=
+bbcd5ace0c78)
 
-On 1/10/2024 6:18 PM, Rafael J. Wysocki wrote:
-> Hi Manaf,
->
-> On Wed, Jan 10, 2024 at 9:17 AM Manaf Meethalavalappu Pallikunhi
-> <quic_manafm@quicinc.com> wrote:
->> Hi Rafael,
->>
->> On 1/9/2024 7:12 PM, Rafael J. Wysocki wrote:
->>
->> On Sat, Jan 6, 2024 at 8:16 PM Manaf Meethalavalappu Pallikunhi
->> <quic_manafm@quicinc.com> wrote:
->>
->> The commit 2e38a2a981b2("thermal/core: Add a generic
->> thermal_zone_set_trip() function") adds the support to update
->> trip hysteresis even if set_trip_hyst() operation is not defined.
->> But during hysteresis attribute creation, if this operation is
->> defined then only it enables hysteresis write access. It leads
->> to a case where hysteresis sysfs will be read only for a thermal
->> zone when its set_trip_hyst() operation is not defined.
->>
->> Which is by design.
->>
->> I think it is regression after recent re-work. If a sensor is registered with thermal framework via thermal_of,
->>
->> sensor driver doesn't need to know the trip configuration and nothing to do with set_trip_hyst() in driver.
->>
->> Without this change, if a sensor needs to be monitored from userspace(trip/hysteresis),
-> What exactly do you mean by "monitored" here?
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+7-rc8-188-g2bbcd5ace0c78/
 
-There can be userspace thermal manager/clients(eg: thermal HAL in 
-android, thermal manager daemon etc. ) with different trip 
-pairs(temperature and hysteresis) for its own thermal management, 
-temperature reporting, thermal tuning etc.
+Tree: pm
+Branch: testing
+Git Describe: v6.7-rc8-188-g2bbcd5ace0c78
+Git Commit: 2bbcd5ace0c7837ee4de185d520ea81e3e4048c0
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-This client can update trip and hysteresis dynamically via thermal zone 
-trip point sysfs nodes for event violation notification irrespective of 
-kernel thermal zone devicetree trip values.
+Warnings Detected:
 
-This was supporting until this rework without any set_trip_* ops from 
-sensor driver.
+arc:
 
->
->> it is enforcing sensor driver to add  dummy set_trip_hyst() operation. Correct me otherwise
-> With the current design, whether or not trip properties can be updated
-> by user space is a thermal zone property expressed by the presence of
-> the set_trip_* operations, so yes, whoever registers the thermal zone
+arm64:
 
-If you look at current code, it is allowing to set trip temperature 
-without set_trip_temp() operation, only hysteresis is not allowed.
+arm:
 
-As I mentioned above cases, userspace sysfs update is usecase/client 
-driven, not always a sensor driver specific requirement especially a 
-sensor is registered via thermal_of.  Not sure adding a dummy ops in 
-every sensor driver to achieve above requirement is right solution here.
+i386:
 
-> needs to provide those so that user space can update the trip
-> properties.
->
->> For some thermal zone types (eg. acpi), updating trip hysteresis via
->> sysfs might lead to incorrect behavior.
->>
->> To address this issue, is it okay to  guard  hysteresis write permission under CONFIG_THERMAL_WRITABLE_TRIPS defconfig ?
-> Not really, because it would affect all of the thermal zones then.
->
-> TBH, the exact scenario in which user space needs to update trip
-> hysteresis is not particularly clear to me, so can you provide some
-> more details, please?
+mips:
 
-I hope I explained more information in above comment. let me know otherwise.
+riscv:
 
-Thanks,
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
 
-Manaf
+x86_64:
 
->
-> Thanks!
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
 
