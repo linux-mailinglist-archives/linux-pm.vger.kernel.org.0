@@ -1,430 +1,217 @@
-Return-Path: <linux-pm+bounces-2111-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2112-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE7CF82ABEE
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jan 2024 11:26:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFE5782AC68
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jan 2024 11:47:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 62BAAB24EA5
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jan 2024 10:26:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E93C1F20585
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jan 2024 10:47:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FB3E134DD;
-	Thu, 11 Jan 2024 10:26:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8A4314AB5;
+	Thu, 11 Jan 2024 10:47:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="BYZDBswK"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="jlxKYbNp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2081.outbound.protection.outlook.com [40.107.15.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B18C13FE2;
-	Thu, 11 Jan 2024 10:26:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=pDZNBMDn2+p6BZE/RBnm0b+eYsTn5JNJblyxFwWjLwk=; b=BYZDBswK7aOutgUjZLmuntw9C6
-	/yYD+iZVGMuStm1/46YVQPXa4jHRv6Z8U/xIa+GSGAwKVe34SOytP3Tx9xGkr72yv80XAwvbHV0bI
-	sPo8k0+woUMNdoNp9uCH8fzeyQBvulH5ie2B1EvuuxPpAgFAxaDTDH6o16MImnNWfDZMt4MUpeydd
-	4Z4CGcT1w4kbIrcckE3oSmD9z4loTIDryx40alX5lGpP8DdcjKsh3Da0sjJdRoK9DB6NjVdi+llFX
-	fk+jEeT0JRIaRq95XtNKWwqN3BzgOn30vMAbYjbfZoJNdvcaRvtz18LFYQCvuQFlzqBBOaeWenMGv
-	Od4lYmnQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57484)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1rNsGM-0006OP-2L;
-	Thu, 11 Jan 2024 10:26:14 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1rNsGN-0006HT-CT; Thu, 11 Jan 2024 10:26:15 +0000
-Date: Thu, 11 Jan 2024 10:26:15 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-	"Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-	loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-	x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
-	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	jianyong.wu@arm.com, justin.he@arm.com,
-	James Morse <james.morse@arm.com>
-Subject: Re: [PATCH RFC v3 01/21] ACPI: Only enumerate enabled (or
- functional) devices
-Message-ID: <ZZ/CR/6Voec066DR@shell.armlinux.org.uk>
-References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
- <ZXxxa+XZjPZtNfJ+@shell.armlinux.org.uk>
- <20231215161539.00000940@Huawei.com>
- <5760569.DvuYhMxLoT@kreacher>
- <20240102143925.00004361@Huawei.com>
- <20240111101949.000075dc@Huawei.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D501F125CA;
+	Thu, 11 Jan 2024 10:47:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oIf+h6nS+pNAHRofrVFeK3yxBnPiuJi5XlHvk40HnFnbCOYJTyapSaTetQZ5T2dcf4fc//cg7tDNQl3M/0knTRXp6eIideRNWSzATdy5xIPOeq7NdXzQgilpFsS3ndt8rXSqieGT4RGO+mncUyFmcAHhotJJNy2HNKs78tLhb7UCj1NiTjehbFgNVLH/u3NLOjdKbiLQJn9frwNmbBT/twpLIg//7IPEzTlp995MtNeR1yTdP/MwmvExbAIS+8Q3BLCszGOKHsLitL88XBr9OJhFtoCP9QL0aeVvmDzrUaO5g2mYwmy2BUk/sPX0VCe5VQFAeSBkqKhvUBcBek7y9g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Uv5GElHf7WZhlNgo0rdf6fXmp46bvhAkVW4aRN868tk=;
+ b=UvdUOmv5U7ReyHcSG8z3YujssSwTX3qLOqIRl7GkdHFvx0JEYxuIpjN+9XXLUdXMwYbki2bJmTJkTFeZRQNMYqLqpY4ZNlyRhASkcwio9ydRZR0mqRyrR0l99V/vQohEQCluV06CynuyXzGN4EUJEDQbtkezwwlwOtOcm8sglYVkfT+tR88i4z+ICro5AsTOuECFz1YOVqejiUF6sOcFTmjl7/IEimCttpoWTpVFkhbB2yU28v8+ZxrfXgqUVedWN2ixNfd2m7QC+HEsWrNtd777Rc5cBW6Q+KPNGrw7DzND/S8/LQwPpcL/XbZwPqmsr3m/AFIqkVDOUKcxdQIxPQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Uv5GElHf7WZhlNgo0rdf6fXmp46bvhAkVW4aRN868tk=;
+ b=jlxKYbNpCEh3boUUs25x4j3pfVZt6ivM/rEhB86PVwpZrc2mOLkzdQdEgqTAPw+XcNldLjPybsRkhTbYMPPVEGiv5vvi8795z1G02Z+48uCfq9mzpc3JPgibrmcpWMHvEqvNEKwa7JzkpD5lZn/aF5QkRD0w5rer/9DXrVkW5lU=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AS8PR04MB8948.eurprd04.prod.outlook.com (2603:10a6:20b:42f::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7181.19; Thu, 11 Jan
+ 2024 10:47:12 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::c499:8cef:9bb1:ced6]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::c499:8cef:9bb1:ced6%3]) with mapi id 15.20.7181.019; Thu, 11 Jan 2024
+ 10:47:12 +0000
+From: Peng Fan <peng.fan@nxp.com>
+To: Sascha Hauer <s.hauer@pengutronix.de>, "Peng Fan (OSS)"
+	<peng.fan@oss.nxp.com>
+CC: "rafael@kernel.org" <rafael@kernel.org>, "daniel.lezcano@linaro.org"
+	<daniel.lezcano@linaro.org>, "rui.zhang@intel.com" <rui.zhang@intel.com>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] thermal/drivers/qoriq: fix getting tmu range
+Thread-Topic: [PATCH] thermal/drivers/qoriq: fix getting tmu range
+Thread-Index: AQHaAyyxm4iPh0Sv7U243t/NmfenWrDU4peAgAANj2A=
+Date: Thu, 11 Jan 2024 10:47:12 +0000
+Message-ID:
+ <DU0PR04MB9417DEC3852F9D6036B858D188682@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20231020081337.3141488-1-peng.fan@oss.nxp.com>
+ <ZZ-7V2bGL3c1RuZw@pengutronix.de>
+In-Reply-To: <ZZ-7V2bGL3c1RuZw@pengutronix.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|AS8PR04MB8948:EE_
+x-ms-office365-filtering-correlation-id: 40b4b7e6-7d1a-4f12-d15c-08dc1292ab1e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ FOd481L5FA5FJIcs+lYRlO0ksRPM2z+9e36cCQtlFgPHSGm4XPhwUl/lZU8YLEaee6JDf7MaMyZZ4FMAm/p9GSO87XnIpSZ2nlRK4MfHBN4V2u4c4SSQepm/J1YE5Gw/TR1uGryhwuzyX64qTkXh+FEcjDgkrK3yYFP8RGW+MBdVJpXWgAGKVZb2WsqOK+lyq/reCWqRyR1u36jN7aqCItsUQpMwWOKTcr60sHR0Q3JJpuSf1ktsfNLh4fHFMUaP4chkyctj/S/XEiLSeKRd2Ve8tvOwuWV3wPnjwl8epq4vpeEmrFUvgarYVYaRwMMoD7P4g0JDq5gzkFvAz130mfrade6qbW22Llu5CnHqQW3R9q0KrgZzyKcqVcy2GN6vgc2wFis9LSRC87sAqpeMvhBZmsnYPWOxQ/PWRvZM1mGlJrnSdiqGLDxbfhRwWqGea7zrrAffa/Opr2HpUYBo5xFpS70n00jE9vEBlKmAh8zZsUipDSjGD4tkZ5SxlZg+QUv3nr4+AK5wJI7L7BmviTE2u4/rFpCzZ97/9cmltESSD2XlnFDoAYSW9OtR2Bh5E6Jqb82Q3kBP2a/pnhlfxY1lz+0YxDWAKkZ8ipyd1Hw=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(136003)(366004)(346002)(376002)(396003)(230922051799003)(64100799003)(1800799012)(451199024)(186009)(44832011)(8936002)(8676002)(45080400002)(52536014)(5660300002)(4326008)(316002)(110136005)(66446008)(54906003)(64756008)(66476007)(66556008)(55016003)(2906002)(76116006)(66946007)(86362001)(38100700002)(966005)(122000001)(6506007)(33656002)(9686003)(7696005)(478600001)(41300700001)(26005)(38070700009)(83380400001)(71200400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?HR3EthmquQguiocOSfcbnq82sU1e7jxSsJ7kiRB0CxLSke/tH+F2SRSQ3Len?=
+ =?us-ascii?Q?+6Id5Gvp8iYPmKzNvdo/y7A3ljdAWwUf0CTtYCjQeJ2lqsisuBs+oregCYvJ?=
+ =?us-ascii?Q?0eSf4K1QOz3LCxFefg8722FKk0USIyr9DZ7HZ4X9AwKK8ZZ3aV/jN3HC6Ylu?=
+ =?us-ascii?Q?OxQTzIO584Lo1gP1fzXKnBBxoAB7uPvnU9KWcmTZDkO+FZevJ6YlSPBIvP0p?=
+ =?us-ascii?Q?yR1quyyT0/mLhiDxcQg5jBLnURfcsnLxBbp+hfv0qnMZer0N+QRNBkPYBvk5?=
+ =?us-ascii?Q?lD/S7b1byd8pNmB9sRsXV7l4aAQxahzfSS/UJRPziJ9E01YlC2m0u+JGUzCP?=
+ =?us-ascii?Q?1YhQkrk7UquEBap79XKm4nrxnU6PDRdMqjR1zOfJd3PpvIRa/5QzwT428c4g?=
+ =?us-ascii?Q?Q8c8Xz7JJows8icc6z3ffc/Mm4U6tJNlal1uas/uKK9RGd+xYjLtVjOAzAhM?=
+ =?us-ascii?Q?KrkOepK+SQmfy2WJ9FttzKd+M7FA3Jj4volcRgOhDyYoHw5fiHNzSPBqyXcQ?=
+ =?us-ascii?Q?xqEMjl7B56tSKF9oOdUAOKfzM0+bPrLRGjJckIYpRvEnZ82UP0hpoPHu5Jzx?=
+ =?us-ascii?Q?Ta/UUaxNHIuB+XCbAyaE7q6Vca26yjGSh6E3YiawMfr2GoCUJNuM6/tj7+Th?=
+ =?us-ascii?Q?wr6vJkYLPKjmGxUwvHcJqEmVDCS5Qb9eGFqNI3E+0dyatJx6scbse9ha08r3?=
+ =?us-ascii?Q?4cC7MtVwt26mvtcxPUG0rvWvNpqcsGF2D+7OjsQmjth/evBwxlgQdslmwSbz?=
+ =?us-ascii?Q?yRh5U9JwPzZcVTZKpEuc3IpJAW/jHCdlfkMIXUuw4kqtnZQ9BKQiVsJ0HzSL?=
+ =?us-ascii?Q?4MTY1Tie7NhtK/+uQrjtuCRpPHvxlpAYYJvkt2q8DlJzev63dYhYLNacphHA?=
+ =?us-ascii?Q?hb41cTfd70d0s0qtaQP2xM2r7sJCN5qTJ8k0asfHpNdvpp5jYRBICvY6+Y5K?=
+ =?us-ascii?Q?P6N1jmULJWt1mhT0Xe2csf+a6iHi5hNDGypjWrM1agB2yBXLJcK9AurRjTJo?=
+ =?us-ascii?Q?jPi/E2M46W5UUs+6G06v9RCB5hLGamgJ7aP+i9AofUzs+raWi6GoL0cHaDRv?=
+ =?us-ascii?Q?5ezdDnbpcIMTvlpoomidnMq7pPCb+ghHc8GxabvrXJMNffB5Z7X2tyVExxdB?=
+ =?us-ascii?Q?MW3AVcY3XsSLUU5+LXduSuADytaiiHC/wcp80Aslt62ACk8Qobq8NvB7LN5h?=
+ =?us-ascii?Q?mhra5unsTwjYHQMK8Bj3UCwtVBg1ARbkgUGuXeUn9eK7vYba+kYQltLe5rKg?=
+ =?us-ascii?Q?WVnY06YOgZQqvu1HLcq6Bd40lhDIK8PBOQx70Gmc2CT2tylY1trmzoD8MBZx?=
+ =?us-ascii?Q?mEiugJAC7g2uzttpHOdWrkLrq772chMGoZK+PpTNz4zxJBE2nDaY7eQ3EzR6?=
+ =?us-ascii?Q?1788wk8faJGBQa+NENtetnoeLrfZJJrphJdHpuJtArPFs4ILZttnGwSKQsHi?=
+ =?us-ascii?Q?Y+hbAzDlqalbxi7kkTSsKW7HOkrL21OzemVM+nTaN0/jQMWNKW6JQx54J3MC?=
+ =?us-ascii?Q?KCZikaIp0jC2pbeB4EBgJgNG+Dmk3KXJnesu0e93lpoST/Hw0CvnetXKBFi2?=
+ =?us-ascii?Q?LFx9EMmZPhFpdsQE6do=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240111101949.000075dc@Huawei.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 40b4b7e6-7d1a-4f12-d15c-08dc1292ab1e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Jan 2024 10:47:12.4938
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: F0G0d16H6SvG7Ul/ZL25SLOyDM1H626LvdV9b6/LhzcgfFI5Bs8qb4keyKJnLr4+EU1TaIYwq5v91J5/MRA1Mw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8948
 
-On Thu, Jan 11, 2024 at 10:19:49AM +0000, Jonathan Cameron wrote:
-> On Tue, 2 Jan 2024 14:39:25 +0000
-> Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
-> 
-> > On Fri, 15 Dec 2023 20:47:31 +0100
-> > "Rafael J. Wysocki" <rjw@rjwysocki.net> wrote:
-> > 
-> > > On Friday, December 15, 2023 5:15:39 PM CET Jonathan Cameron wrote:  
-> > > > On Fri, 15 Dec 2023 15:31:55 +0000
-> > > > "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
-> > > >     
-> > > > > On Thu, Dec 14, 2023 at 07:37:10PM +0100, Rafael J. Wysocki wrote:    
-> > > > > > On Thu, Dec 14, 2023 at 7:16 PM Rafael J. Wysocki <rafael@kernel.org> wrote:      
-> > > > > > >
-> > > > > > > On Thu, Dec 14, 2023 at 7:10 PM Russell King (Oracle)
-> > > > > > > <linux@armlinux.org.uk> wrote:      
-> > > > > > > > I guess we need something like:
-> > > > > > > >
-> > > > > > > >         if (device->status.present)
-> > > > > > > >                 return device->device_type != ACPI_BUS_TYPE_PROCESSOR ||
-> > > > > > > >                        device->status.enabled;
-> > > > > > > >         else
-> > > > > > > >                 return device->status.functional;
-> > > > > > > >
-> > > > > > > > so we only check device->status.enabled for processor-type devices?      
-> > > > > > >
-> > > > > > > Yes, something like this.      
-> > > > > > 
-> > > > > > However, that is not sufficient, because there are
-> > > > > > ACPI_BUS_TYPE_DEVICE devices representing processors.
-> > > > > > 
-> > > > > > I'm not sure about a clean way to do it ATM.      
-> > > > > 
-> > > > > Ok, how about:
-> > > > > 
-> > > > > static bool acpi_dev_is_processor(const struct acpi_device *device)
-> > > > > {
-> > > > > 	struct acpi_hardware_id *hwid;
-> > > > > 
-> > > > > 	if (device->device_type == ACPI_BUS_TYPE_PROCESSOR)
-> > > > > 		return true;
-> > > > > 
-> > > > > 	if (device->device_type != ACPI_BUS_TYPE_DEVICE)
-> > > > > 		return false;
-> > > > > 
-> > > > > 	list_for_each_entry(hwid, &device->pnp.ids, list)
-> > > > > 		if (!strcmp(ACPI_PROCESSOR_OBJECT_HID, hwid->id) ||
-> > > > > 		    !strcmp(ACPI_PROCESSOR_DEVICE_HID, hwid->id))
-> > > > > 			return true;
-> > > > > 
-> > > > > 	return false;
-> > > > > }
-> > > > > 
-> > > > > and then:
-> > > > > 
-> > > > > 	if (device->status.present)
-> > > > > 		return !acpi_dev_is_processor(device) || device->status.enabled;
-> > > > > 	else
-> > > > > 		return device->status.functional;
-> > > > > 
-> > > > > ?
-> > > > >     
-> > > > Changing it to CPU only for now makes sense to me and I think this code snippet should do the
-> > > > job.  Nice and simple.    
-> > > 
-> > > Well, except that it does checks that are done elsewhere slightly
-> > > differently, which from the maintenance POV is not nice.
-> > > 
-> > > Maybe something like the appended patch (untested).  
-> > 
-> > Hi Rafael,
-> > 
-> > As far as I can see that's functionally equivalent, so looks good to me.
-> > I'm not set up to test this today though, so will defer to Russell on whether
-> > there is anything missing
-> > 
-> > Thanks for putting this together.
-> 
-> This is rather embarrassing...
-> 
-> I span this up on a QEMU instance with some prints to find out we need
-> the !acpi_device_is_processor() restriction.
-> On my 'random' test setup it fails on one device. ACPI0017 - which I
-> happen to know rather well. It's the weird pseudo device that lets
-> a CXL aware OS know there is a CEDT table to probe.
-> 
-> Whilst I really don't like that hack (it is all about making software
-> distribution of out of tree modules easier rather than something
-> fundamental), I'm the CXL QEMU maintainer :(
-> 
-> Will fix that, but it shows there is at least one broken firmware out
-> there.
-> 
-> On plus side, Rafael's code seems to work as expected and lets that
-> buggy firwmare carry on working :) So lets pretend the bug in qemu
-> is a deliberate test case!
+Hi Sascha,
 
-Lol, thanks for a test case and showing that Rafael's approach is
-indeed necessary.
+> Subject: Re: [PATCH] thermal/drivers/qoriq: fix getting tmu range
+>
+> Hi Peng,
+>
+> On Fri, Oct 20, 2023 at 04:13:37PM +0800, Peng Fan (OSS) wrote:
+> > From: Peng Fan <peng.fan@nxp.com>
+> >
+> > TMU Version 1 has 4 TTRCRs, while TMU Version >=3D2 has 16 TTRCRs.
+> > So limit the len to 4 will report "invalid range data" for i.MX93.
+> >
+> > This patch drop the local array with allocated ttrcr array and able to
+> > support larger tmu ranges.
+> >
+> > Fixes: f12d60c81fce ("thermal/drivers/qoriq: Support version 2.1")
+> > Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> > ---
+> >  drivers/thermal/qoriq_thermal.c | 12 ++++++++----
+> >  1 file changed, 8 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/drivers/thermal/qoriq_thermal.c
+> > b/drivers/thermal/qoriq_thermal.c index ccc2eea7f9f5..404f01cca4da
+> > 100644
+> > --- a/drivers/thermal/qoriq_thermal.c
+> > +++ b/drivers/thermal/qoriq_thermal.c
+> > @@ -57,6 +57,9 @@
+> >  #define REGS_TTRnCR(n)     (0xf10 + 4 * (n)) /* Temperature Range n
+> >                                        * Control Register
+> >                                        */
+> > +#define NUM_TTRCR_V1       4
+> > +#define NUM_TTRCR_MAX      16
+> > +
+> >  #define REGS_IPBRR(n)              (0xbf8 + 4 * (n)) /* IP Block Revis=
+ion
+> >                                                * Register n
+> >                                                */
+> > @@ -71,6 +74,7 @@ struct qoriq_sensor {
+> >
+> >  struct qoriq_tmu_data {
+> >     int ver;
+> > +   u32 ttrcr[NUM_TTRCR_MAX];
+> >     struct regmap *regmap;
+> >     struct clk *clk;
+> >     struct qoriq_sensor     sensor[SITES_MAX];
+> > @@ -182,17 +186,17 @@ static int qoriq_tmu_calibration(struct device
+> *dev,
+> >                              struct qoriq_tmu_data *data)
+> >  {
+> >     int i, val, len;
+> > -   u32 range[4];
+>
+> Why don't you keep the array locally on the stack? Will it be needed
+> elsewhere later?
 
-Would your test quality for a tested-by for this? For reference, this
-is my current version below with Rafael's update:
+Because max 16 as of now, it will consume 64bytes in stack, so I
+move it out.
 
-8<====
-From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Subject: [PATCH] ACPI: Only enumerate enabled (or functional) processor
- devices
+>
+> Other than that:
+>
+> Tested-by: Sascha Hauer <s.hauer@pengutronix.de>
+>
 
-From: James Morse <james.morse@arm.com>
+Thanks for testing this patch.
 
-Today the ACPI enumeration code 'visits' all devices that are present.
+Thanks,
+Peng.
 
-This is a problem for arm64, where CPUs are always present, but not
-always enabled. When a device-check occurs because the firmware-policy
-has changed and a CPU is now enabled, the following error occurs:
-| acpi ACPI0007:48: Enumeration failure
-
-This is ultimately because acpi_dev_ready_for_enumeration() returns
-true for a device that is not enabled. The ACPI Processor driver
-will not register such CPUs as they are not 'decoding their resources'.
-
-ACPI allows a device to be functional instead of maintaining the
-present and enabled bit, but we can't simply check the enabled bit
-for all devices since firmware can be buggy.
-
-If ACPI indicates that the device is present and enabled, then all well
-and good, we can enumate it. However, if the device is present and not
-enabled, then we also check whether the device is a processor device
-to limit the impact of this new check to just processor devices.
-
-This avoids enumerating present && functional processor devices that
-are not enabled.
-
-Signed-off-by: James Morse <james.morse@arm.com>
-Co-developed-by: Rafael J. Wysocki <rjw@rjwysocki.net>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
----
-Changes since RFC v2:
- * Incorporate comment suggestion by Gavin Shan.
-Changes since RFC v3:
- * Fixed "sert" typo.
-Changes since RFC v3 (smaller series):
- * Restrict checking the enabled bit to processor devices, update
-   commit comments.
- * Use Rafael's suggestion in
-   https://lore.kernel.org/r/5760569.DvuYhMxLoT@kreacher
----
- drivers/acpi/acpi_processor.c | 11 ++++++++
- drivers/acpi/device_pm.c      |  2 +-
- drivers/acpi/device_sysfs.c   |  2 +-
- drivers/acpi/internal.h       |  4 ++-
- drivers/acpi/property.c       |  2 +-
- drivers/acpi/scan.c           | 49 ++++++++++++++++++++++++++++-------
- 6 files changed, 56 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-index 4fe2ef54088c..cf7c1cca69dd 100644
---- a/drivers/acpi/acpi_processor.c
-+++ b/drivers/acpi/acpi_processor.c
-@@ -626,6 +626,17 @@ static struct acpi_scan_handler processor_handler = {
- 	},
- };
- 
-+bool acpi_device_is_processor(const struct acpi_device *adev)
-+{
-+	if (adev->device_type == ACPI_BUS_TYPE_PROCESSOR)
-+		return true;
-+
-+	if (adev->device_type != ACPI_BUS_TYPE_DEVICE)
-+		return false;
-+
-+	return acpi_scan_check_handler(adev, &processor_handler);
-+}
-+
- static int acpi_processor_container_attach(struct acpi_device *dev,
- 					   const struct acpi_device_id *id)
- {
-diff --git a/drivers/acpi/device_pm.c b/drivers/acpi/device_pm.c
-index 3b4d048c4941..e3c80f3b3b57 100644
---- a/drivers/acpi/device_pm.c
-+++ b/drivers/acpi/device_pm.c
-@@ -313,7 +313,7 @@ int acpi_bus_init_power(struct acpi_device *device)
- 		return -EINVAL;
- 
- 	device->power.state = ACPI_STATE_UNKNOWN;
--	if (!acpi_device_is_present(device)) {
-+	if (!acpi_dev_ready_for_enumeration(device)) {
- 		device->flags.initialized = false;
- 		return -ENXIO;
- 	}
-diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysfs.c
-index 23373faa35ec..a0256d2493a7 100644
---- a/drivers/acpi/device_sysfs.c
-+++ b/drivers/acpi/device_sysfs.c
-@@ -141,7 +141,7 @@ static int create_pnp_modalias(const struct acpi_device *acpi_dev, char *modalia
- 	struct acpi_hardware_id *id;
- 
- 	/* Avoid unnecessarily loading modules for non present devices. */
--	if (!acpi_device_is_present(acpi_dev))
-+	if (!acpi_dev_ready_for_enumeration(acpi_dev))
- 		return 0;
- 
- 	/*
-diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
-index 866c7c4ed233..9388d4c8674a 100644
---- a/drivers/acpi/internal.h
-+++ b/drivers/acpi/internal.h
-@@ -62,6 +62,8 @@ void acpi_sysfs_add_hotplug_profile(struct acpi_hotplug_profile *hotplug,
- int acpi_scan_add_handler_with_hotplug(struct acpi_scan_handler *handler,
- 				       const char *hotplug_profile_name);
- void acpi_scan_hotplug_enabled(struct acpi_hotplug_profile *hotplug, bool val);
-+bool acpi_scan_check_handler(const struct acpi_device *adev,
-+			     struct acpi_scan_handler *handler);
- 
- #ifdef CONFIG_DEBUG_FS
- extern struct dentry *acpi_debugfs_dir;
-@@ -107,7 +109,6 @@ int acpi_device_setup_files(struct acpi_device *dev);
- void acpi_device_remove_files(struct acpi_device *dev);
- void acpi_device_add_finalize(struct acpi_device *device);
- void acpi_free_pnp_ids(struct acpi_device_pnp *pnp);
--bool acpi_device_is_present(const struct acpi_device *adev);
- bool acpi_device_is_battery(struct acpi_device *adev);
- bool acpi_device_is_first_physical_node(struct acpi_device *adev,
- 					const struct device *dev);
-@@ -119,6 +120,7 @@ int acpi_bus_register_early_device(int type);
- const struct acpi_device *acpi_companion_match(const struct device *dev);
- int __acpi_device_uevent_modalias(const struct acpi_device *adev,
- 				  struct kobj_uevent_env *env);
-+bool acpi_device_is_processor(const struct acpi_device *adev);
- 
- /* --------------------------------------------------------------------------
-                                   Power Resource
-diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
-index 6979a3f9f90a..14d6948fd88a 100644
---- a/drivers/acpi/property.c
-+++ b/drivers/acpi/property.c
-@@ -1420,7 +1420,7 @@ static bool acpi_fwnode_device_is_available(const struct fwnode_handle *fwnode)
- 	if (!is_acpi_device_node(fwnode))
- 		return false;
- 
--	return acpi_device_is_present(to_acpi_device_node(fwnode));
-+	return acpi_dev_ready_for_enumeration(to_acpi_device_node(fwnode));
- }
- 
- static const void *
-diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-index 02bb2cce423f..f94d1f744bcc 100644
---- a/drivers/acpi/scan.c
-+++ b/drivers/acpi/scan.c
-@@ -304,7 +304,7 @@ static int acpi_scan_device_check(struct acpi_device *adev)
- 	int error;
- 
- 	acpi_bus_get_status(adev);
--	if (acpi_device_is_present(adev)) {
-+	if (acpi_dev_ready_for_enumeration(adev)) {
- 		/*
- 		 * This function is only called for device objects for which
- 		 * matching scan handlers exist.  The only situation in which
-@@ -338,7 +338,7 @@ static int acpi_scan_bus_check(struct acpi_device *adev, void *not_used)
- 	int error;
- 
- 	acpi_bus_get_status(adev);
--	if (!acpi_device_is_present(adev)) {
-+	if (!acpi_dev_ready_for_enumeration(adev)) {
- 		acpi_scan_device_not_enumerated(adev);
- 		return 0;
- 	}
-@@ -1913,11 +1913,6 @@ static bool acpi_device_should_be_hidden(acpi_handle handle)
- 	return true;
- }
- 
--bool acpi_device_is_present(const struct acpi_device *adev)
--{
--	return adev->status.present || adev->status.functional;
--}
--
- static bool acpi_scan_handler_matching(struct acpi_scan_handler *handler,
- 				       const char *idstr,
- 				       const struct acpi_device_id **matchid)
-@@ -1938,6 +1933,18 @@ static bool acpi_scan_handler_matching(struct acpi_scan_handler *handler,
- 	return false;
- }
- 
-+bool acpi_scan_check_handler(const struct acpi_device *adev,
-+			     struct acpi_scan_handler *handler)
-+{
-+	struct acpi_hardware_id *hwid;
-+
-+	list_for_each_entry(hwid, &adev->pnp.ids, list)
-+		if (acpi_scan_handler_matching(handler, hwid->id, NULL))
-+			return true;
-+
-+	return false;
-+}
-+
- static struct acpi_scan_handler *acpi_scan_match_handler(const char *idstr,
- 					const struct acpi_device_id **matchid)
- {
-@@ -2381,16 +2388,38 @@ EXPORT_SYMBOL_GPL(acpi_dev_clear_dependencies);
-  * acpi_dev_ready_for_enumeration - Check if the ACPI device is ready for enumeration
-  * @device: Pointer to the &struct acpi_device to check
-  *
-- * Check if the device is present and has no unmet dependencies.
-+ * Check if the device is functional or enabled and has no unmet dependencies.
-  *
-- * Return true if the device is ready for enumeratino. Otherwise, return false.
-+ * Return true if the device is ready for enumeration. Otherwise, return false.
-  */
- bool acpi_dev_ready_for_enumeration(const struct acpi_device *device)
- {
- 	if (device->flags.honor_deps && device->dep_unmet)
- 		return false;
- 
--	return acpi_device_is_present(device);
-+	/*
-+	 * ACPI 6.5's 6.3.7 "_STA (Device Status)" allows firmware to return
-+	 * (!present && functional) for certain types of devices that should be
-+	 * enumerated. Note that the enabled bit should not be set unless the
-+	 * present bit is set.
-+	 *
-+	 * However, limit this only to processor devices to reduce possible
-+	 * regressions with firmware.
-+	 */
-+	if (device->status.functional)
-+		return true;
-+
-+	if (!device->status.present)
-+		return false;
-+
-+	/*
-+	 * Fast path - if enabled is set, avoid the more expensive test to
-+	 * check whether this device is a processor.
-+	 */
-+	if (device->status.enabled)
-+		return true;
-+
-+	return !acpi_device_is_processor(device);
- }
- EXPORT_SYMBOL_GPL(acpi_dev_ready_for_enumeration);
- 
--- 
-2.30.2
-
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+> Would be great if this could be picked up anytime soon.
+>
+> Sascha
+>
+> --
+> Pengutronix e.K.                           |                             =
+|
+> Steuerwalder Str. 21                       |
+> http://www.p/
+> engutronix.de%2F&data=3D05%7C02%7Cpeng.fan%40nxp.com%7C227277d8c0
+> 20468aaf6e08dc128ba2ab%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%
+> 7C0%7C638405638133353126%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC
+> 4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%
+> 7C%7C%7C&sdata=3DilwPz4Bs6f7CLf2snic7S%2FUsff0AYCgsFuZP9d2UExo%3D&
+> reserved=3D0  |
+> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    =
+|
+> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 =
+|
 
