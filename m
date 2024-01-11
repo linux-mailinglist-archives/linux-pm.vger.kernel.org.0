@@ -1,140 +1,146 @@
-Return-Path: <linux-pm+bounces-2094-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2095-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BA7982A01E
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 19:10:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1484182A55A
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jan 2024 01:46:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 770781C220BD
-	for <lists+linux-pm@lfdr.de>; Wed, 10 Jan 2024 18:10:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AC762B2658A
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jan 2024 00:46:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E8AD4D131;
-	Wed, 10 Jan 2024 18:10:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A74C8392;
+	Thu, 11 Jan 2024 00:46:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="iLYMN66F"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD9734CDF8;
-	Wed, 10 Jan 2024 18:10:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8EE252F4;
-	Wed, 10 Jan 2024 10:10:59 -0800 (PST)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 659FF3F5A1;
-	Wed, 10 Jan 2024 10:10:09 -0800 (PST)
-Message-ID: <5ac0df44-82b6-463b-a805-65f93d181215@arm.com>
-Date: Wed, 10 Jan 2024 19:10:08 +0100
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45CBE7EE
+	for <linux-pm@vger.kernel.org>; Thu, 11 Jan 2024 00:46:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-6d9cb95ddd1so2179117b3a.1
+        for <linux-pm@vger.kernel.org>; Wed, 10 Jan 2024 16:46:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1704933967; x=1705538767; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gueNhZrbsNiJzCN2gb4yLrjECQBWf6cwwXnoTcfXIT4=;
+        b=iLYMN66FKBdyLftqxvShVV6YPPjxaiH0A4bEAzAFXUh07Rtw7cg392gFExYv4aTjPp
+         8ZhTs0xsPpn6Xt3z7ZSCx9+l33aZXrNwfon+LzcPDHf5jEjnvZK8v7t2AiI8yLH+ugI3
+         SAixjT3vhp/BZBahYdq2dQahnHiGSuF9qMJow=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704933967; x=1705538767;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gueNhZrbsNiJzCN2gb4yLrjECQBWf6cwwXnoTcfXIT4=;
+        b=rW/VatIcIgAl0sTLEGETAylnMTXseDiRT02QGS94RMoc4XTagcC6As7cLOmmj3VpqX
+         Oz1wkQAphEskoDPGkYzllfUDn4/KJBHF2vGVr/cj8iPbbqpGTLi2KjTKACSEvGKs7Trz
+         L4kgoyOX4yY5TNvVH1yxXkeTmeoMXXm22IjpiLO3abxUL9gEiytPk0Yk99cf/dttiFsi
+         v+MWKecSXldzNZb+ijQadm53V/rxggUJBrblCbYxCTmP5Pa3IjWP9ViHMqkhh2b2LJVj
+         EMUk7diOPUxzBl6hcIdSupytahuhCMSb3j4d+wObD3qnhfpuG4om8w/c+hh/vR2K156U
+         o5nQ==
+X-Gm-Message-State: AOJu0Yx3q4iTV2UmnzEx685GyK9TUSrq6eSgL/dtkjtzVD9JnVwWfV5S
+	D2D/POC95HOn105oNYkz4ONzL5arzgz1
+X-Google-Smtp-Source: AGHT+IGkiZ1hknB2+0UC/gxIH8jrVZxWAA/1vUWxP929828CA6Qm4M9e8Oxn46aJ8qOxkFFVf4GTPg==
+X-Received: by 2002:aa7:90d3:0:b0:6d9:a64c:c5d1 with SMTP id k19-20020aa790d3000000b006d9a64cc5d1mr504196pfk.26.1704933967538;
+        Wed, 10 Jan 2024 16:46:07 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id y2-20020a62b502000000b006dac91d6da5sm4071344pfe.68.2024.01.10.16.46.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jan 2024 16:46:06 -0800 (PST)
+Date: Wed, 10 Jan 2024 16:46:06 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: akpm@linux-foundation.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	kvm@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
+	linux-efi@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+	linux-arch@vger.kernel.org, kasan-dev@googlegroups.com,
+	linux-mm@kvack.org, bridge@lists.linux.dev, netdev@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, mykolal@fb.com,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH 0/3] Update LLVM Phabricator and Bugzilla links
+Message-ID: <202401101645.ED161519BA@keescook>
+References: <20240109-update-llvm-links-v1-0-eb09b59db071@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/5] Rework system pressure interface to the scheduler
-Content-Language: en-US
-To: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
- sudeep.holla@arm.com, rafael@kernel.org, viresh.kumar@linaro.org,
- agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
- mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
- rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
- bristot@redhat.com, vschneid@redhat.com, lukasz.luba@arm.com,
- rui.zhang@intel.com, mhiramat@kernel.org, daniel.lezcano@linaro.org,
- amit.kachhap@gmail.com, corbet@lwn.net, gregkh@linuxfoundation.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- qyousef@layalina.io
-References: <20240108134843.429769-1-vincent.guittot@linaro.org>
- <d37e3d06-d9fc-4fc3-ad92-e7031489660a@arm.com>
- <CAKfTPtAOSgnStDSao1QarHuUW9BTfk1o7r6NO4LhwEJMhq1drg@mail.gmail.com>
-From: Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <CAKfTPtAOSgnStDSao1QarHuUW9BTfk1o7r6NO4LhwEJMhq1drg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240109-update-llvm-links-v1-0-eb09b59db071@kernel.org>
 
-On 09/01/2024 14:29, Vincent Guittot wrote:
-> On Tue, 9 Jan 2024 at 12:34, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
->>
->> On 08/01/2024 14:48, Vincent Guittot wrote:
->>> Following the consolidation and cleanup of CPU capacity in [1], this serie
->>> reworks how the scheduler gets the pressures on CPUs. We need to take into
->>> account all pressures applied by cpufreq on the compute capacity of a CPU
->>> for dozens of ms or more and not only cpufreq cooling device or HW
->>> mitigiations. we split the pressure applied on CPU's capacity in 2 parts:
->>> - one from cpufreq and freq_qos
->>> - one from HW high freq mitigiation.
->>>
->>> The next step will be to add a dedicated interface for long standing
->>> capping of the CPU capacity (i.e. for seconds or more) like the
->>> scaling_max_freq of cpufreq sysfs. The latter is already taken into
->>> account by this serie but as a temporary pressure which is not always the
->>> best choice when we know that it will happen for seconds or more.
->>
->> I guess this is related to the 'user space system pressure' (*) slide of
->> your OSPM '23 talk.
+On Tue, Jan 09, 2024 at 03:16:28PM -0700, Nathan Chancellor wrote:
+> This series updates all instances of LLVM Phabricator and Bugzilla links
+> to point to GitHub commits directly and LLVM's Bugzilla to GitHub issue
+> shortlinks respectively.
 > 
-> yes
+> I split up the Phabricator patch into BPF selftests and the rest of the
+> kernel in case the BPF folks want to take it separately from the rest of
+> the series, there are obviously no dependency issues in that case. The
+> Bugzilla change was mechanical enough and should have no conflicts.
 > 
->>
->> Where do you draw the line when it comes to time between (*) and the
->> 'medium pace system pressure' (e.g. thermal and FREQ_QOS).
+> I am aiming this at Andrew and CC'ing other lists, in case maintainers
+> want to chime in, but I think this is pretty uncontroversial (famous
+> last words...).
 > 
-> My goal is to consider the /sys/../scaling_max_freq as the 'user space
-> system pressure'
+> ---
+> Nathan Chancellor (3):
+>       selftests/bpf: Update LLVM Phabricator links
+>       arch and include: Update LLVM Phabricator links
+>       treewide: Update LLVM Bugzilla links
 > 
->>
->> IIRC, with (*) you want to rebuild the sched domains etc.
+>  arch/arm64/Kconfig                                 |  4 +--
+>  arch/powerpc/Makefile                              |  4 +--
+>  arch/powerpc/kvm/book3s_hv_nested.c                |  2 +-
+>  arch/riscv/Kconfig                                 |  2 +-
+>  arch/riscv/include/asm/ftrace.h                    |  2 +-
+>  arch/s390/include/asm/ftrace.h                     |  2 +-
+>  arch/x86/power/Makefile                            |  2 +-
+>  crypto/blake2b_generic.c                           |  2 +-
+>  drivers/firmware/efi/libstub/Makefile              |  2 +-
+>  drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c           |  2 +-
+>  drivers/media/test-drivers/vicodec/codec-fwht.c    |  2 +-
+>  drivers/regulator/Kconfig                          |  2 +-
+>  include/asm-generic/vmlinux.lds.h                  |  2 +-
+>  include/linux/compiler-clang.h                     |  2 +-
+>  lib/Kconfig.kasan                                  |  2 +-
+>  lib/raid6/Makefile                                 |  2 +-
+>  lib/stackinit_kunit.c                              |  2 +-
+>  mm/slab_common.c                                   |  2 +-
+>  net/bridge/br_multicast.c                          |  2 +-
+>  security/Kconfig                                   |  2 +-
+>  tools/testing/selftests/bpf/README.rst             | 32 +++++++++++-----------
+>  tools/testing/selftests/bpf/prog_tests/xdpwall.c   |  2 +-
+>  .../selftests/bpf/progs/test_core_reloc_type_id.c  |  2 +-
+>  23 files changed, 40 insertions(+), 40 deletions(-)
+> ---
+> base-commit: 0dd3ee31125508cd67f7e7172247f05b7fd1753a
+> change-id: 20240109-update-llvm-links-d03f9d649e1e
 > 
-> The easiest way would be to rebuild the sched_domain but the cost is
-> not small so I would prefer to skip the rebuild and add a new signal
-> that keep track on this capped capacity
+> Best regards,
+> -- 
+> Nathan Chancellor <nathan@kernel.org>
+> 
 
-Are you saying that you don't need to rebuild sched domains since
-cpu_capacity information of the sched domain hierarchy is
-independently updated via: 
+Excellent! Thanks for doing this. I spot checked a handful I was
+familiar with and everything looks good to me.
 
-update_sd_lb_stats() {
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-  update_group_capacity() {
-
-    if (!child)
-      update_cpu_capacity(sd, cpu) {
-
-        capacity = scale_rt_capacity(cpu) {
-
-          max = get_actual_cpu_capacity(cpu) <- (*)
-        }
-
-        sdg->sgc->capacity = capacity;
-        sdg->sgc->min_capacity = capacity;
-        sdg->sgc->max_capacity = capacity;
-      }
-
-  }
-
-}
-        
-(*) influence of temporary and permanent (to be added) frequency
-pressure on cpu_capacity (per-cpu and in sd data)
-
-
-example: hackbench on h960 with IPA:
-                                                                                  cap  min  max
-...
-hackbench-2284 [007] .Ns..  2170.796726: update_group_capacity: sdg !child cpu=7 1017 1017 1017
-hackbench-2456 [007] ..s..  2170.920729: update_group_capacity: sdg !child cpu=7 1018 1018 1018
-    <...>-2314 [007] ..s1.  2171.044724: update_group_capacity: sdg !child cpu=7 1011 1011 1011
-hackbench-2541 [007] ..s..  2171.168734: update_group_capacity: sdg !child cpu=7  918  918  918
-hackbench-2558 [007] .Ns..  2171.228716: update_group_capacity: sdg !child cpu=7  912  912  912
-    <...>-2321 [007] ..s..  2171.352718: update_group_capacity: sdg !child cpu=7  812  812  812
-hackbench-2553 [007] ..s..  2171.476721: update_group_capacity: sdg !child cpu=7  640  640  640
-    <...>-2446 [007] ..s2.  2171.600743: update_group_capacity: sdg !child cpu=7  610  610  610
-hackbench-2347 [007] ..s..  2171.724738: update_group_capacity: sdg !child cpu=7  406  406  406
-hackbench-2331 [007] .Ns1.  2171.848768: update_group_capacity: sdg !child cpu=7  390  390  390
-hackbench-2421 [007] ..s..  2171.972733: update_group_capacity: sdg !child cpu=7  388  388  388
-...
+-- 
+Kees Cook
 
