@@ -1,48 +1,74 @@
-Return-Path: <linux-pm+bounces-2106-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2107-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C2F782AB69
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jan 2024 10:56:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11E9782AB75
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jan 2024 11:00:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 707541C21298
-	for <lists+linux-pm@lfdr.de>; Thu, 11 Jan 2024 09:56:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8BBFB284058
+	for <lists+linux-pm@lfdr.de>; Thu, 11 Jan 2024 10:00:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B88F11C8C;
-	Thu, 11 Jan 2024 09:56:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13C2F12B91;
+	Thu, 11 Jan 2024 10:00:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="AsEZXAkq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB49111735
-	for <linux-pm@vger.kernel.org>; Thu, 11 Jan 2024 09:56:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <sha@pengutronix.de>)
-	id 1rNrnl-000540-5w; Thu, 11 Jan 2024 10:56:41 +0100
-Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <sha@pengutronix.de>)
-	id 1rNrnj-001tes-B4; Thu, 11 Jan 2024 10:56:39 +0100
-Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <sha@pengutronix.de>)
-	id 1rNrnj-00AavJ-0p;
-	Thu, 11 Jan 2024 10:56:39 +0100
-Date: Thu, 11 Jan 2024 10:56:39 +0100
-From: Sascha Hauer <s.hauer@pengutronix.de>
-To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc: rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH] thermal/drivers/qoriq: fix getting tmu range
-Message-ID: <ZZ-7V2bGL3c1RuZw@pengutronix.de>
-References: <20231020081337.3141488-1-peng.fan@oss.nxp.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 604CD125CA
+	for <linux-pm@vger.kernel.org>; Thu, 11 Jan 2024 10:00:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a277339dcf4so566543966b.2
+        for <linux-pm@vger.kernel.org>; Thu, 11 Jan 2024 02:00:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1704967214; x=1705572014; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SK6l91q7AEIn5ipGCEJlFPJF27Zw8+0MoPYYgQPY0a4=;
+        b=AsEZXAkq7rgCb3FMKtxC+H3Axt8OhMzF2gp6HL3KglEpPC7pY7kHgjFG81lXzvZ/UN
+         wLwIG5YIr1ReEYlGnn+d90k0CfdMpuxobTPyawzLSiaDcBaKeP2HJ4KQWiJS1XmMyJ39
+         k/Ox2Pc/agvuZh/X6kGyNAFogbRgembnxmEN5DN1il19f96KXjO0q4yMO2ZKT8wB+uhW
+         Z3uuo40KyPsRHX0BL8uZd/DaWA7ZBygNYC0OOd8vcHNYPg/HzJKv+59yuLsDWAmdoXxO
+         9kD7Obb+S73Nur8WGtFBbObUn8GOEjpRCq5IgfVPGJJtdo1oBRyj4Jx1HvVklaXvws9N
+         G1cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704967214; x=1705572014;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SK6l91q7AEIn5ipGCEJlFPJF27Zw8+0MoPYYgQPY0a4=;
+        b=XT/LP5KN+xz74zahjlidhe1wZ/w+qEJ0hFlnfL+4hr576AH+yc2ZCeTLQsLENr9jMw
+         LsREIL1fLzaLNd+SNb9fOfvODZEr0F5T67TVbQdb8ImJBO5ntBmfGtYGZUESxWBK/8IX
+         w+rEgo1mvmkEefpuZxiDVXaaprnOGH1XK86uhoQSN1GdtY6um+AszndQOzddMM7YFEZ2
+         iGrOt9XumE3zlnPnFH22/lCOLhkOcYGJ1C6hxn6M3WxE3RiTKFOpsBHEAghKfg4PEkRb
+         FLjUqil1Wl2BT0RY8Vj+O3h179/LGIuYJDGZFiSp4EXZ/cBp41eRCy0va78nHFrjktSW
+         HZkA==
+X-Gm-Message-State: AOJu0YxMt0d221SQg7qgEswQBWMRn3/cF0Pjnbb3HMP1Eq1om7bPxY22
+	DDTXG6IyEDIbZ3km3r+WBZmRXmp7SMCq8Q==
+X-Google-Smtp-Source: AGHT+IG9OykZ6CNPvrkHEc3LhlxSvCDJTd22uv+2HGjZ6t7gDVg53BD9mWU36h/4tpDnSh7smSjEVg==
+X-Received: by 2002:a17:907:9281:b0:a27:f6aa:c7b0 with SMTP id bw1-20020a170907928100b00a27f6aac7b0mr576724ejc.11.1704967214471;
+        Thu, 11 Jan 2024 02:00:14 -0800 (PST)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id o8-20020a170906358800b00a2ace215a78sm368912ejb.114.2024.01.11.02.00.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Jan 2024 02:00:13 -0800 (PST)
+Date: Thu, 11 Jan 2024 11:00:12 +0100
+From: Andrew Jones <ajones@ventanamicro.com>
+To: Sunil V L <sunilvl@ventanamicro.com>
+Cc: linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	"Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Anup Patel <anup@brainfault.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Conor Dooley <conor@kernel.org>, Atish Kumar Patra <atishp@rivosinc.com>
+Subject: Re: [PATCH -next 1/2] ACPI: Enable ACPI_PROCESSOR for RISC-V
+Message-ID: <20240111-bb411d2dd39eb859dd049fa0@orel>
+References: <20240111093058.121838-1-sunilvl@ventanamicro.com>
+ <20240111093058.121838-2-sunilvl@ventanamicro.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -51,75 +77,58 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231020081337.3141488-1-peng.fan@oss.nxp.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+In-Reply-To: <20240111093058.121838-2-sunilvl@ventanamicro.com>
 
-Hi Peng,
-
-On Fri, Oct 20, 2023 at 04:13:37PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+On Thu, Jan 11, 2024 at 03:00:57PM +0530, Sunil V L wrote:
+> The ACPI processor driver is not currently enabled for RISC-V.
+> This is required to enable CPU related functionalities like
+> LPI and CPPC. Hence, enable ACPI_PROCESSOR for RISC-V.
 > 
-> TMU Version 1 has 4 TTRCRs, while TMU Version >=2 has 16 TTRCRs.
-> So limit the len to 4 will report "invalid range data" for i.MX93.
-> 
-> This patch drop the local array with allocated ttrcr array and
-> able to support larger tmu ranges.
-> 
-> Fixes: f12d60c81fce ("thermal/drivers/qoriq: Support version 2.1")
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
 > ---
->  drivers/thermal/qoriq_thermal.c | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
+>  drivers/acpi/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
-> index ccc2eea7f9f5..404f01cca4da 100644
-> --- a/drivers/thermal/qoriq_thermal.c
-> +++ b/drivers/thermal/qoriq_thermal.c
-> @@ -57,6 +57,9 @@
->  #define REGS_TTRnCR(n)	(0xf10 + 4 * (n)) /* Temperature Range n
->  					   * Control Register
->  					   */
-> +#define NUM_TTRCR_V1	4
-> +#define NUM_TTRCR_MAX	16
-> +
->  #define REGS_IPBRR(n)		(0xbf8 + 4 * (n)) /* IP Block Revision
->  						   * Register n
->  						   */
-> @@ -71,6 +74,7 @@ struct qoriq_sensor {
+> diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig
+> index f819e760ff19..9a920752171c 100644
+> --- a/drivers/acpi/Kconfig
+> +++ b/drivers/acpi/Kconfig
+> @@ -282,7 +282,7 @@ config ACPI_CPPC_LIB
 >  
->  struct qoriq_tmu_data {
->  	int ver;
-> +	u32 ttrcr[NUM_TTRCR_MAX];
->  	struct regmap *regmap;
->  	struct clk *clk;
->  	struct qoriq_sensor	sensor[SITES_MAX];
-> @@ -182,17 +186,17 @@ static int qoriq_tmu_calibration(struct device *dev,
->  				 struct qoriq_tmu_data *data)
->  {
->  	int i, val, len;
-> -	u32 range[4];
+>  config ACPI_PROCESSOR
+>  	tristate "Processor"
+> -	depends on X86 || ARM64 || LOONGARCH
+> +	depends on X86 || ARM64 || LOONGARCH || RISCV
+>  	select ACPI_PROCESSOR_IDLE
+>  	select ACPI_CPU_FREQ_PSS if X86 || LOONGARCH
+>  	select THERMAL
+> -- 
+> 2.34.1
+>
 
-Why don't you keep the array locally on the stack? Will it be needed
-elsewhere later?
+Hi Sunil,
 
-Other than that:
+Typically we'll want the Kconfig changes to come at the end of a series,
+or squashed into the patch that adds support for it, otherwise there's
+risk of build breakage during bisection. In this case, we're safe because
+the two new functions (I looked ahead) have __weak versions when they're
+not present.
 
-Tested-by: Sascha Hauer <s.hauer@pengutronix.de>
+Also, interestingly, it looks like this ancient line
 
-Would be great if this could be picked up anytime soon.
+ obj-$(CONFIG_ACPI_PROCESSOR)    += processor.o
 
-Sascha
+in drivers/acpi/Makefile should be removed, since there's no
+drivers/acpi/processor.c file. I guess the make process silently
+filters object files which don't have corresponding source files?
+Maybe we should write a Makefile analyzer to see what other lines
+can be removed...
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Anyway, for this patch, which I'd prefer to be swapped in order with
+the other patch, or just squashed into the other patch,
+
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+
+Thanks,
+drew
 
