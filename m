@@ -1,537 +1,238 @@
-Return-Path: <linux-pm+bounces-2161-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2162-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B21782BFFD
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Jan 2024 13:49:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F65D82C10F
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Jan 2024 14:46:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B45101F24ADC
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Jan 2024 12:49:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 33ABD1C222C9
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Jan 2024 13:46:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F3E559B59;
-	Fri, 12 Jan 2024 12:49:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5279D6D1AB;
+	Fri, 12 Jan 2024 13:46:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ChYCfxlw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MizGIeQk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43CFC6BB2F
-	for <linux-pm@vger.kernel.org>; Fri, 12 Jan 2024 12:49:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22FF36D1A9;
+	Fri, 12 Jan 2024 13:46:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705063756; x=1736599756;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ggmgc7eG0KYdbb8K3cKPSE4JX2hcKTybeoQ3VrNjiaM=;
-  b=ChYCfxlwMz7fRHlQo9hDyR454JX0iBlzfumGKNCnwTwvPDsPFnsH66rz
-   K5w2hMFlBFpyyKAEErhFeiRsitGR39ev7b1JmrtTek2eznbYK1S9hhpmf
-   u+/Uo8f5HbiCARU9l0m75+HGgYl7t9rUTljW8FdQ/w9yJwbnIRL/kK+Xo
-   wIxIFf/yV3tJ+BrUm7myTIocR4NbASJyRfL+XijDaRAjm+IQQzabQ5AsZ
-   P0fvxyd/Fb8IK1PlQW+X9YH3ZVoZM6i96Rym+Nuc52x0oRNfxvMOh/941
-   2dTihyrAeYFfdyos7sRMr64FtQAn/bzKJnD/vk8wDPV3ix8+Dq4p/3ltw
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10950"; a="6525669"
+  t=1705067191; x=1736603191;
+  h=date:from:to:cc:subject:message-id;
+  bh=qx5EUGFOv9reWlKUF6lE9/VIZ8phVOB1or7OLDDxq1E=;
+  b=MizGIeQk+hS1w+E5Ad+lwFlnAOF+lIBpx087UcfOoIxvfSsmx8YhqRHy
+   refTsE6DhhNCP9x/8qLMjadX/pyQAIV/y9y/iXGx4JHXj4H6y8YUjGEyL
+   nggkTzyePdMuwHpI3MgygEPAS0O9oEBbozCC8UbkEjLTUfS4Tsfu3qKoP
+   QUMVpUSW4GpHGdmyc9uTQ9atJWh0i2LL391MsG0tgSBB9X7WFR4Hd0tqB
+   o4hgjYQ79ePpLid6yj+EKyFfZU+OLl3J+CvzuHXRLyqBDe6pd5aJejPkr
+   aMn0WR37iy6CRU08KiyabnPZEJxuYUzkhV9TI9+Bdl61DOo7myCsGAcn3
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10951"; a="430350983"
 X-IronPort-AV: E=Sophos;i="6.04,189,1695711600"; 
-   d="scan'208";a="6525669"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2024 04:49:16 -0800
+   d="scan'208";a="430350983"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2024 05:46:29 -0800
 X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10951"; a="873367247"
 X-IronPort-AV: E=Sophos;i="6.04,189,1695711600"; 
-   d="scan'208";a="17390872"
-Received: from pwlazlyn-mobl.ger.corp.intel.com (HELO pwlazlyn) ([10.246.16.73])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2024 04:49:14 -0800
-From: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
-To: len.brown@intel.com
-Cc: linux-pm@vger.kernel.org
-Subject: [PATCH 4/4] tools/power turbostat: Add reading aperf and mperf via perf API
-Date: Fri, 12 Jan 2024 13:48:15 +0100
-Message-Id: <20240112124815.970-5-patryk.wlazlyn@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240112124815.970-1-patryk.wlazlyn@linux.intel.com>
-References: <20240112124815.970-1-patryk.wlazlyn@linux.intel.com>
+   d="scan'208";a="873367247"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 12 Jan 2024 05:46:28 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rOHre-0009WE-1a;
+	Fri, 12 Jan 2024 13:46:26 +0000
+Date: Fri, 12 Jan 2024 21:45:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 2b2cd068b24ca1dbd163198aa8a6b37afcac2971
+Message-ID: <202401122142.i6DfHYJk-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Reading the counters via perf API is *usually* faster than going through
-the msr driver, mainly because we do less syscalls, which also helps
-with narrowing the gap between the reads. Getting cache misses on the
-perf path does cost more and this is where the "usually faster" comes
-from.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 2b2cd068b24ca1dbd163198aa8a6b37afcac2971  Merge branches 'pm-cpufreq' and 'pm-sleep' into linux-next
 
-We would fallback to the msr reads if the sysfs isn't there or when in
---no-perf mode.
+elapsed time: 1480m
 
-Signed-off-by: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
----
- tools/power/x86/turbostat/turbostat.c | 345 +++++++++++++++++++++-----
- 1 file changed, 277 insertions(+), 68 deletions(-)
+configs tested: 155
+configs skipped: 2
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index bf733e7d73b5..d85e38cbadcb 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -57,6 +57,7 @@
- enum counter_scope { SCOPE_CPU, SCOPE_CORE, SCOPE_PACKAGE };
- enum counter_type { COUNTER_ITEMS, COUNTER_CYCLES, COUNTER_SECONDS, COUNTER_USEC };
- enum counter_format { FORMAT_RAW, FORMAT_DELTA, FORMAT_PERCENT };
-+enum xperf_source { XPERF_SOURCE_PERF, XPERF_SOURCE_MSR };
- 
- struct msr_counter {
- 	unsigned int msr_num;
-@@ -209,6 +210,7 @@ char *proc_stat = "/proc/stat";
- FILE *outf;
- int *fd_percpu;
- int *fd_instr_count_percpu;
-+int *fd_xperf_percpu; /* File descriptors for perf group with APERF and MPERF counters. */
- struct timeval interval_tv = { 5, 0 };
- struct timespec interval_ts = { 5, 0 };
- 
-@@ -266,6 +268,7 @@ unsigned int first_counter_read = 1;
- int ignore_stdin;
- bool no_msr;
- bool no_perf;
-+enum xperf_source xperf_source;
- 
- int get_msr(int cpu, off_t offset, unsigned long long *msr);
- 
-@@ -1336,18 +1339,27 @@ static long perf_event_open(struct perf_event_attr *hw_event, pid_t pid, int cpu
- 	return syscall(__NR_perf_event_open, hw_event, pid, cpu, group_fd, flags);
- }
- 
--static int perf_instr_count_open(int cpu_num)
-+static long open_perf_counter(
-+	int cpu,
-+	unsigned type,
-+	unsigned config,
-+	int group_fd,
-+	__u64 read_format)
- {
--	struct perf_event_attr pea;
--	int fd;
-+	struct perf_event_attr attr;
-+	const pid_t pid = -1;
-+	const unsigned long flags = 0;
-+
-+	memset(&attr, 0, sizeof(struct perf_event_attr));
- 
--	memset(&pea, 0, sizeof(struct perf_event_attr));
--	pea.type = PERF_TYPE_HARDWARE;
--	pea.size = sizeof(struct perf_event_attr);
--	pea.config = PERF_COUNT_HW_INSTRUCTIONS;
-+	attr.type = type;
-+	attr.size = sizeof(struct perf_event_attr);
-+	attr.config = config;
-+	attr.disabled = 0;
-+	attr.sample_type = PERF_SAMPLE_IDENTIFIER;
-+	attr.read_format = read_format;
- 
--	/* counter for cpu_num, including user + kernel and all processes */
--	fd = perf_event_open(&pea, -1, cpu_num, -1, 0);
-+	const int fd = perf_event_open(&attr, pid, cpu, group_fd, flags);
- 	if (fd == -1) {
- 		warnx("capget(CAP_PERFMON) failed, try \"# setcap cap_sys_admin=ep %s\""
- 		      " or use --no-perf", progname);
-@@ -1362,7 +1374,7 @@ int get_instr_count_fd(int cpu)
- 	if (fd_instr_count_percpu[cpu])
- 		return fd_instr_count_percpu[cpu];
- 
--	fd_instr_count_percpu[cpu] = perf_instr_count_open(cpu);
-+	fd_instr_count_percpu[cpu] = open_perf_counter(cpu, PERF_TYPE_HARDWARE, PERF_COUNT_HW_INSTRUCTIONS, -1, 0);
- 
- 	return fd_instr_count_percpu[cpu];
- }
-@@ -2753,6 +2765,182 @@ int get_core_throt_cnt(int cpu, unsigned long long *cnt)
- 	return 0;
- }
- 
-+static unsigned read_perf_counter_info(
-+	const char * const path,
-+	const char * const parse_format)
-+{
-+	int fdmt;
-+	char buf[16];
-+	unsigned v;
-+
-+	fdmt = open(path, O_RDONLY, 0);
-+	if (fdmt == -1)
-+		errx(1, "Failed to read perf counter info %s\n", path);
-+
-+	if (read(fdmt, buf, sizeof(buf)) <= 0)
-+		return 0;
-+
-+	buf[sizeof(buf)-1] = '\0';
-+
-+	if (sscanf(buf, parse_format, &v) != 1)
-+		errx(1, "Failed to parse perf counter info %s\n", path);
-+
-+	close(fdmt);
-+
-+	return v;
-+}
-+
-+static unsigned read_msr_type(void)
-+{
-+	const char * const path = "/sys/bus/event_source/devices/msr/type";
-+	const char * const format = "%u";
-+
-+	return read_perf_counter_info(path, format);
-+}
-+
-+static unsigned read_aperf_config(void)
-+{
-+	const char * const path = "/sys/bus/event_source/devices/msr/events/aperf";
-+	const char * const format = "event=%x";
-+
-+	return read_perf_counter_info(path, format);
-+}
-+
-+static unsigned read_mperf_config(void)
-+{
-+	const char * const path = "/sys/bus/event_source/devices/msr/events/mperf";
-+	const char * const format = "event=%x";
-+
-+	return read_perf_counter_info(path, format);
-+}
-+
-+static int open_xperf_fd(int cpu)
-+{
-+	const unsigned msr_type = read_msr_type();
-+	const unsigned aperf_config = read_aperf_config();
-+	const unsigned mperf_config = read_mperf_config();
-+	int fd_aperf = -1, fd_mperf = -1;
-+
-+	fd_aperf = open_perf_counter(cpu, msr_type, aperf_config, -1, PERF_FORMAT_GROUP);
-+	if (fd_aperf == -1) {
-+		perror("open_perf_counter aperf");
-+		return 0;
-+	}
-+
-+	fd_mperf = open_perf_counter(cpu, msr_type, mperf_config, fd_aperf, PERF_FORMAT_GROUP);
-+	if (fd_mperf == -1) {
-+		perror("open_perf_counter mperf");
-+		close(fd_aperf);
-+		return 0;
-+	}
-+
-+	return fd_aperf;
-+}
-+
-+static int get_xperf_fd(int cpu)
-+{
-+	assert(fd_xperf_percpu);
-+
-+	if (fd_xperf_percpu[cpu])
-+		return fd_xperf_percpu[cpu];
-+
-+	fd_xperf_percpu[cpu] = open_xperf_fd(cpu);
-+
-+	return fd_xperf_percpu[cpu];
-+}
-+
-+/* Read APERF, MPERF and TSC using the perf API. */
-+static int read_aperf_mperf_tsc_perf(struct thread_data *t, int cpu)
-+{
-+	union {
-+		struct {
-+			unsigned long nr_entries;
-+			unsigned long aperf;
-+			unsigned long mperf;
-+		};
-+
-+		unsigned long as_array[3];
-+	} cnt;
-+
-+	const int fd_xperf = get_xperf_fd(cpu);
-+
-+	/*
-+	 * Read the TSC with rdtsc, because we want the absolute value and not
-+	 * the offset from the start of the process.
-+	 */
-+	t->tsc = rdtsc();
-+
-+	const int n = read(fd_xperf, &cnt.as_array[0], sizeof(cnt.as_array));
-+	if (n != sizeof(cnt.as_array))
-+		return 1;
-+
-+	t->aperf = cnt.aperf * aperf_mperf_multiplier;
-+	t->mperf = cnt.mperf * aperf_mperf_multiplier;
-+
-+	return 0;
-+}
-+
-+/* Read APERF, MPERF and TSC using the MSR driver and rdtsc instruction. */
-+static int read_aperf_mperf_tsc_msr(struct thread_data *t, int cpu)
-+{
-+	unsigned long long tsc_before, tsc_between, tsc_after, aperf_time, mperf_time;
-+	int aperf_mperf_retry_count = 0;
-+
-+	/*
-+	 * The TSC, APERF and MPERF must be read together for
-+	 * APERF/MPERF and MPERF/TSC to give accurate results.
-+	 *
-+	 * Unfortunately, APERF and MPERF are read by
-+	 * individual system call, so delays may occur
-+	 * between them.  If the time to read them
-+	 * varies by a large amount, we re-read them.
-+	 */
-+
-+	/*
-+	 * This initial dummy APERF read has been seen to
-+	 * reduce jitter in the subsequent reads.
-+	 */
-+
-+	if (get_msr(cpu, MSR_IA32_APERF, &t->aperf))
-+		return -3;
-+
-+retry:
-+	t->tsc = rdtsc();	/* re-read close to APERF */
-+
-+	tsc_before = t->tsc;
-+
-+	if (get_msr(cpu, MSR_IA32_APERF, &t->aperf))
-+		return -3;
-+
-+	tsc_between = rdtsc();
-+
-+	if (get_msr(cpu, MSR_IA32_MPERF, &t->mperf))
-+		return -4;
-+
-+	tsc_after = rdtsc();
-+
-+	aperf_time = tsc_between - tsc_before;
-+	mperf_time = tsc_after - tsc_between;
-+
-+	/*
-+	 * If the system call latency to read APERF and MPERF
-+	 * differ by more than 2x, then try again.
-+	 */
-+	if ((aperf_time > (2 * mperf_time)) || (mperf_time > (2 * aperf_time))) {
-+		aperf_mperf_retry_count++;
-+		if (aperf_mperf_retry_count < 5)
-+			goto retry;
-+		else
-+			warnx("cpu%d jitter %lld %lld", cpu, aperf_time, mperf_time);
-+	}
-+	aperf_mperf_retry_count = 0;
-+
-+	t->aperf = t->aperf * aperf_mperf_multiplier;
-+	t->mperf = t->mperf * aperf_mperf_multiplier;
-+
-+	return 0;
-+}
-+
- /*
-  * get_counters(...)
-  * migrate to cpu
-@@ -2762,7 +2950,6 @@ int get_counters(struct thread_data *t, struct core_data *c, struct pkg_data *p)
- {
- 	int cpu = t->cpu_id;
- 	unsigned long long msr;
--	int aperf_mperf_retry_count = 0;
- 	struct msr_counter *mp;
- 	int i;
- 
-@@ -2775,63 +2962,26 @@ int get_counters(struct thread_data *t, struct core_data *c, struct pkg_data *p)
- 
- 	if (first_counter_read)
- 		get_apic_id(t);
--retry:
-+
- 	t->tsc = rdtsc();	/* we are running on local CPU of interest */
- 
- 	if (DO_BIC(BIC_Avg_MHz) || DO_BIC(BIC_Busy) || DO_BIC(BIC_Bzy_MHz) || DO_BIC(BIC_IPC)
- 	    || soft_c1_residency_display(BIC_Avg_MHz)) {
--		unsigned long long tsc_before, tsc_between, tsc_after, aperf_time, mperf_time;
-+		int status = -1;
- 
--		/*
--		 * The TSC, APERF and MPERF must be read together for
--		 * APERF/MPERF and MPERF/TSC to give accurate results.
--		 *
--		 * Unfortunately, APERF and MPERF are read by
--		 * individual system call, so delays may occur
--		 * between them.  If the time to read them
--		 * varies by a large amount, we re-read them.
--		 */
-+		assert(!no_perf || !no_msr);
- 
--		/*
--		 * This initial dummy APERF read has been seen to
--		 * reduce jitter in the subsequent reads.
--		 */
--
--		if (get_msr(cpu, MSR_IA32_APERF, &t->aperf))
--			return -3;
--
--		t->tsc = rdtsc();	/* re-read close to APERF */
--
--		tsc_before = t->tsc;
--
--		if (get_msr(cpu, MSR_IA32_APERF, &t->aperf))
--			return -3;
--
--		tsc_between = rdtsc();
--
--		if (get_msr(cpu, MSR_IA32_MPERF, &t->mperf))
--			return -4;
--
--		tsc_after = rdtsc();
--
--		aperf_time = tsc_between - tsc_before;
--		mperf_time = tsc_after - tsc_between;
--
--		/*
--		 * If the system call latency to read APERF and MPERF
--		 * differ by more than 2x, then try again.
--		 */
--		if ((aperf_time > (2 * mperf_time)) || (mperf_time > (2 * aperf_time))) {
--			aperf_mperf_retry_count++;
--			if (aperf_mperf_retry_count < 5)
--				goto retry;
--			else
--				warnx("cpu%d jitter %lld %lld", cpu, aperf_time, mperf_time);
-+		switch (xperf_source) {
-+			case XPERF_SOURCE_PERF:
-+				status = read_aperf_mperf_tsc_perf(t, cpu);
-+				break;
-+			case XPERF_SOURCE_MSR:
-+				status = read_aperf_mperf_tsc_msr(t, cpu);
-+				break;
- 		}
--		aperf_mperf_retry_count = 0;
- 
--		t->aperf = t->aperf * aperf_mperf_multiplier;
--		t->mperf = t->mperf * aperf_mperf_multiplier;
-+		if (status != 0)
-+			return status;
- 	}
- 
- 	if (DO_BIC(BIC_IPC))
-@@ -5597,17 +5747,50 @@ void print_dev_latency(void)
-  */
- void linux_perf_init(void)
- {
--	if (!BIC_IS_ENABLED(BIC_IPC))
--		return;
--
- 	if (access("/proc/sys/kernel/perf_event_paranoid", F_OK))
- 		return;
- 
--	fd_instr_count_percpu = calloc(topo.max_cpu_num + 1, sizeof(int));
--	if (fd_instr_count_percpu == NULL)
--		err(-1, "calloc fd_instr_count_percpu");
-+	if (BIC_IS_ENABLED(BIC_IPC)) {
-+		fd_instr_count_percpu = calloc(topo.max_cpu_num + 1, sizeof(int));
-+		if (fd_instr_count_percpu == NULL)
-+			err(-1, "calloc fd_instr_count_percpu");
- 
--	BIC_PRESENT(BIC_IPC);
-+		BIC_PRESENT(BIC_IPC);
-+	}
-+
-+	const bool aperf_required = DO_BIC(BIC_Avg_MHz) || DO_BIC(BIC_Busy) ||
-+				    DO_BIC(BIC_Bzy_MHz) || DO_BIC(BIC_IPC);
-+	if (aperf_required && xperf_source == XPERF_SOURCE_PERF) {
-+		fd_xperf_percpu = calloc(topo.max_cpu_num + 1, sizeof(int));
-+		if (fd_xperf_percpu == NULL)
-+			err(-1, "calloc fd_xperf_percpu");
-+	}
-+}
-+
-+static int has_xperf_access_via_perf(void)
-+{
-+	if (access("/sys/bus/event_source/devices/msr/type", F_OK))
-+		return 0;
-+
-+	if (access("/sys/bus/event_source/devices/msr/events/aperf", F_OK))
-+		return 0;
-+
-+	if (access("/sys/bus/event_source/devices/msr/events/mperf", F_OK))
-+		return 0;
-+
-+	return 1;
-+}
-+
-+/* Check if we can access APERF and MPERF */
-+static int has_xperf_access(void)
-+{
-+	if (!no_msr)
-+		return 1;
-+
-+	if (!no_perf && has_xperf_access_via_perf())
-+		return 1;
-+
-+	return 0;
- }
- 
- void probe_cstates(void)
-@@ -5795,7 +5978,7 @@ void process_cpuid()
- 
- 	__cpuid(0x6, eax, ebx, ecx, edx);
- 	has_aperf = ecx & (1 << 0);
--	if (has_aperf) {
-+	if (has_aperf && has_xperf_access()) {
- 		BIC_PRESENT(BIC_Avg_MHz);
- 		BIC_PRESENT(BIC_Busy);
- 		BIC_PRESENT(BIC_Bzy_MHz);
-@@ -6264,6 +6447,20 @@ void set_base_cpu(void)
- 	err(-ENODEV, "No valid cpus found");
- }
- 
-+static void set_xperf_source(void)
-+{
-+	xperf_source = XPERF_SOURCE_PERF;
-+
-+	if (no_perf || !has_xperf_access_via_perf())
-+		xperf_source = XPERF_SOURCE_MSR;
-+
-+	if (quiet)
-+		return;
-+
-+	fprintf(outf, "aperf/mperf source: %s\n",
-+		xperf_source == XPERF_SOURCE_MSR ? "msr" : "perf");
-+}
-+
- void turbostat_init()
- {
- 	setup_all_buffers(true);
-@@ -6272,6 +6469,7 @@ void turbostat_init()
- 	check_permissions();
- 	process_cpuid();
- 	probe_pm_features();
-+	set_xperf_source();
- 	linux_perf_init();
- 
- 	for_all_cpus(get_cpu_type, ODD_COUNTERS);
-@@ -6859,6 +7057,17 @@ int main(int argc, char **argv)
- 
- 	turbostat_init();
- 
-+	/*
-+	 * We can't get TSC tweak in no-msr mode,
-+	 * so have to disable more BICs, since we can't report them accurately.
-+	 */
-+	if (platform->enable_tsc_tweak && no_msr) {
-+		bic_enabled &= ~BIC_Avg_MHz;
-+		bic_enabled &= ~BIC_Busy;
-+		bic_enabled &= ~BIC_Bzy_MHz;
-+		bic_enabled &= ~BIC_IPC;
-+	}
-+
- 	if (!no_msr)
- 		msr_sum_record();
- 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            alldefconfig   gcc  
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20240112   gcc  
+arc                   randconfig-002-20240112   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   clang
+arm                            qcom_defconfig   gcc  
+arm                   randconfig-001-20240112   clang
+arm                   randconfig-002-20240112   clang
+arm                   randconfig-003-20240112   clang
+arm                   randconfig-004-20240112   clang
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240112   clang
+arm64                 randconfig-002-20240112   clang
+arm64                 randconfig-003-20240112   clang
+arm64                 randconfig-004-20240112   clang
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240112   gcc  
+csky                  randconfig-002-20240112   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20240112   clang
+hexagon               randconfig-002-20240112   clang
+i386                             allmodconfig   clang
+i386                              allnoconfig   clang
+i386                             allyesconfig   clang
+i386         buildonly-randconfig-001-20240112   clang
+i386         buildonly-randconfig-002-20240112   clang
+i386         buildonly-randconfig-003-20240112   clang
+i386         buildonly-randconfig-004-20240112   clang
+i386         buildonly-randconfig-005-20240112   clang
+i386         buildonly-randconfig-006-20240112   clang
+i386                                defconfig   gcc  
+i386                  randconfig-001-20240112   clang
+i386                  randconfig-002-20240112   clang
+i386                  randconfig-003-20240112   clang
+i386                  randconfig-004-20240112   clang
+i386                  randconfig-005-20240112   clang
+i386                  randconfig-006-20240112   clang
+i386                  randconfig-011-20240112   gcc  
+i386                  randconfig-012-20240112   gcc  
+i386                  randconfig-013-20240112   gcc  
+i386                  randconfig-014-20240112   gcc  
+i386                  randconfig-015-20240112   gcc  
+i386                  randconfig-016-20240112   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240112   gcc  
+loongarch             randconfig-002-20240112   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   clang
+mips                             allyesconfig   gcc  
+mips                        bcm63xx_defconfig   clang
+mips                           gcw0_defconfig   gcc  
+mips                malta_qemu_32r6_defconfig   clang
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240112   gcc  
+nios2                 randconfig-002-20240112   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20240112   gcc  
+parisc                randconfig-002-20240112   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   clang
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                        icon_defconfig   clang
+powerpc                     kmeter1_defconfig   clang
+powerpc                 linkstation_defconfig   gcc  
+powerpc                 mpc8313_rdb_defconfig   clang
+powerpc               randconfig-001-20240112   clang
+powerpc               randconfig-002-20240112   clang
+powerpc               randconfig-003-20240112   clang
+powerpc                     tqm8548_defconfig   gcc  
+powerpc64             randconfig-001-20240112   clang
+powerpc64             randconfig-002-20240112   clang
+powerpc64             randconfig-003-20240112   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   clang
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                 randconfig-001-20240112   clang
+riscv                 randconfig-002-20240112   clang
+riscv                          rv32_defconfig   clang
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                          debug_defconfig   gcc  
+s390                                defconfig   gcc  
+s390                  randconfig-001-20240112   gcc  
+s390                  randconfig-002-20240112   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                        dreamcast_defconfig   gcc  
+sh                          kfr2r09_defconfig   gcc  
+sh                    randconfig-001-20240112   gcc  
+sh                    randconfig-002-20240112   gcc  
+sh                          sdk7780_defconfig   gcc  
+sh                     sh7710voipgw_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240112   gcc  
+sparc64               randconfig-002-20240112   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20240112   clang
+um                    randconfig-002-20240112   clang
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   clang
+x86_64                              defconfig   gcc  
+x86_64                          rhel-8.3-rust   clang
+xtensa                            allnoconfig   gcc  
+xtensa                randconfig-001-20240112   gcc  
+xtensa                randconfig-002-20240112   gcc  
+xtensa                         virt_defconfig   gcc  
+xtensa                    xip_kc705_defconfig   gcc  
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
