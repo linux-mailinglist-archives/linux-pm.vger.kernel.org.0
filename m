@@ -1,59 +1,59 @@
-Return-Path: <linux-pm+bounces-2173-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2174-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04BEC82C6F7
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Jan 2024 23:03:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 362E082C70C
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Jan 2024 23:16:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 100B61C21DB4
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Jan 2024 22:03:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 503011C21E53
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Jan 2024 22:16:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90A4E17729;
-	Fri, 12 Jan 2024 22:03:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0067117729;
+	Fri, 12 Jan 2024 22:15:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hv5cXUtY"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="j6bRLQsI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1833817722
-	for <linux-pm@vger.kernel.org>; Fri, 12 Jan 2024 22:03:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 486881772D
+	for <linux-pm@vger.kernel.org>; Fri, 12 Jan 2024 22:15:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-429d2ebdf05so77561cf.0
-        for <linux-pm@vger.kernel.org>; Fri, 12 Jan 2024 14:03:16 -0800 (PST)
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-428405a0205so19931cf.1
+        for <linux-pm@vger.kernel.org>; Fri, 12 Jan 2024 14:15:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1705096996; x=1705701796; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1705097756; x=1705702556; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9lHgN5qvgn7BlYDMVD9NaB939Lp8cACoBD9pFBrl1e8=;
-        b=hv5cXUtYVrK6GgP8gCLp8elexbbAzOMHeHxdrGzKjJHSHhzZuAn2l5l4hmLcOSNec2
-         s1D6o0mR+YzVGQ4SkznC4YSDeAvVc4CwETOe6kmCh9VfrvtYaC30C1slmKRLM1jZ4Enk
-         6M5SPt2+wvMEJrgOxbjsRrlrNrHnwgvNacty1W6/dRr+NU+RU33kp9CtMvLKAmheoHhg
-         vAYty9zdaftg0t/7ZVD5u/EdS76Th7PSqdslWBeaSRMaOw+x1lX43IsxRuCWq1OizN3/
-         uKrdT52RxnqS29Jh59lIOu2Dm6tgHK7m2lfspAZaObHZh5YAhJuWSHz/j7sKmYJ06OwI
-         BTMQ==
+        bh=oP5fGZzgpZ9SrgGeq8dIeW2tXFSQwQhUhlpKAu1DbqQ=;
+        b=j6bRLQsIMTu7MjvtVYm+17W91DlDKOc09sNbaC9blJe5qhzFrdfpTT1m9UpqhmOLLR
+         upRgU+xo+hlvbJLqxazgh/wuHcsPB4QLrlLy4WH416z4rpDQtqSC+ye+Tksw58vq/s03
+         Tw1tDb7sGYaXOF9sL6z9KrHe0Zg8xhTJy91486DJrx8SBdT7GwUw1VumiG+SRRX+EsiL
+         sByZ5aWvIGXvSw8uaf1gKd5M/AE4LNIh2jlvzQFhglOZYYVM7KP/orZuU2BFqT9K2Kt3
+         4ws/pnGNKQ8NKsUNqaxXdEr1BLepE5Jm+D1nmM3xJVBNZE/Nqw8NgUX1vh2BVG6xsqgJ
+         ONAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705096996; x=1705701796;
+        d=1e100.net; s=20230601; t=1705097756; x=1705702556;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9lHgN5qvgn7BlYDMVD9NaB939Lp8cACoBD9pFBrl1e8=;
-        b=wu9db7sHhUOKx58YcpGQG9GgX7TLjmYnL3QPhSTqMXMxHXvB/4TYnh4YO14e/tj/3z
-         t/tvZJ96Yh/MxL6RA5+r2+KuKLzQHlH0VQ/331HTZT2VpqwntquUOpurPvIRo6FICSrw
-         405TuCouX47hbY7gcMs2YwUhowHdvHUaarkZk+uwEz+B9qV70788A4xWynxwBXSI5uZK
-         vu/fTcxXcrllC3WV9wdegJLdq3a4nF3Wse8ARbIKToAWNXksTCpdKWjZvD9z8a63TZrM
-         9K10wvcxYlPB/uY6ILCJAdYtTmuS6rvYaas5aDP9gtjkUWrDnuMBoKRjnFL+TjQnJ7Kr
-         3oaQ==
-X-Gm-Message-State: AOJu0YyTiiWBolp5g41o1+cTfR+/d/QGthUaKE6DgfGmH3BkCrlumNBM
-	VvSyhLR2tLuaddr71Bfoey/vS4cwH2TXdorvn5UKQayCjr+v
-X-Google-Smtp-Source: AGHT+IFYF/m2xgNcuqcb4/FbnoeqqUGLh9dFt6e8c8HCujTIksvXc3E02pJYkniEr3zNANu4be8EiMzLheZdRMp6fy8=
-X-Received: by 2002:a05:622a:14c8:b0:429:c835:cd9f with SMTP id
- u8-20020a05622a14c800b00429c835cd9fmr524482qtx.12.1705096995694; Fri, 12 Jan
- 2024 14:03:15 -0800 (PST)
+        bh=oP5fGZzgpZ9SrgGeq8dIeW2tXFSQwQhUhlpKAu1DbqQ=;
+        b=HEVgSs/VTkhQRffFCo78CUwrmJ+NWeMyqdYt25j6+Ydxpt0V8ONDKHVa6H9Bk2KYdD
+         hIgyo5hDhGhNc+fxt1+Q4Q6RzWVo+ioOP/xR/h7Y8XFrFSZY5F3lLolcYSFUsGhhfOiP
+         H1h3X3bvhRhXziVxC7hQh9jcemOEO3h2wjPv6nJIf/vmZr42myhML9prMECd8W5HFRPr
+         bBbcHPFP0XShUz/LYh3ExCG4L4D/kc8HFXn5zU6QOmOmnqfqtNV9PW0Ts0iPjN3OUZJL
+         Q7IWvcR6/WBe5a4pPBDV3cbsnyE7stu+dMCfIrdBMe05dMa94NQEx3dNNtJrnoTxBHlF
+         hcBA==
+X-Gm-Message-State: AOJu0Yw2L3jhed98O9A4bUz6HUamd3H+dtCKwEu5xVBPdX5AHsaPRIWW
+	2HUyJrQgCFGQeRo3dOuQZupSXEoay80ApWizpF51u/s/5YRV
+X-Google-Smtp-Source: AGHT+IFFoU3MTUjYQMJj8EicBpziSzS7VeX+N1XmF+YFP6bUz5fPV3J53vSVX9kFH6naS1msjeDVFB3ysZ6ZaVwLbG8=
+X-Received: by 2002:a05:622a:174d:b0:429:cba2:8628 with SMTP id
+ l13-20020a05622a174d00b00429cba28628mr312680qtk.24.1705097755996; Fri, 12 Jan
+ 2024 14:15:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -61,101 +61,197 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20231111014933.1934562-1-davidai@google.com> <20231111014933.1934562-2-davidai@google.com>
- <865y231jvj.wl-maz@kernel.org> <CAGETcx9-n0z5buWgtLZ+6VxW2jEko1GWzkGtGhFiZEq-x_G4nw@mail.gmail.com>
- <867clpaxel.wl-maz@kernel.org>
-In-Reply-To: <867clpaxel.wl-maz@kernel.org>
+ <20231208124503.unhka7c6ihzrrwhu@bogus>
+In-Reply-To: <20231208124503.unhka7c6ihzrrwhu@bogus>
 From: Saravana Kannan <saravanak@google.com>
-Date: Fri, 12 Jan 2024 14:02:39 -0800
-Message-ID: <CAGETcx_8x4p7WTwqQiVGdtHftVjFUJruXsOXwJXgDi0GdEtLNA@mail.gmail.com>
+Date: Fri, 12 Jan 2024 14:15:20 -0800
+Message-ID: <CAGETcx9p8y7uN08_KyO45KygDU9i4KnU4HLd1XGhK+k0e9sahA@mail.gmail.com>
 Subject: Re: [PATCH v4 1/2] dt-bindings: cpufreq: add virtual cpufreq device
-To: Marc Zyngier <maz@kernel.org>
+To: Sudeep Holla <sudeep.holla@arm.com>
 Cc: David Dai <davidai@google.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
 	Viresh Kumar <viresh.kumar@linaro.org>, Rob Herring <robh+dt@kernel.org>, 
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Sudeep Holla <sudeep.holla@arm.com>, Quentin Perret <qperret@google.com>, 
-	Masami Hiramatsu <mhiramat@google.com>, Will Deacon <will@kernel.org>, 
+	Quentin Perret <qperret@google.com>, Masami Hiramatsu <mhiramat@google.com>, Will Deacon <will@kernel.org>, 
 	Peter Zijlstra <peterz@infradead.org>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Oliver Upton <oliver.upton@linux.dev>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Pavan Kondeti <quic_pkondeti@quicinc.com>, Gupta Pankaj <pankaj.gupta@amd.com>, 
-	Mel Gorman <mgorman@suse.de>, kernel-team@android.com, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Pavan Kondeti <quic_pkondeti@quicinc.com>, 
+	Gupta Pankaj <pankaj.gupta@amd.com>, Mel Gorman <mgorman@suse.de>, kernel-team@android.com, 
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Sorry for the delay in response. Was very busy for a while and then
-holidays started.
-
-On Fri, Dec 8, 2023 at 12:52=E2=80=AFAM Marc Zyngier <maz@kernel.org> wrote=
-:
->
-> On Thu, 07 Dec 2023 22:44:36 +0000,
-> Saravana Kannan <saravanak@google.com> wrote:
-> >
-> > On Wed, Nov 15, 2023 at 12:49=E2=80=AFAM Marc Zyngier <maz@kernel.org> =
+On Fri, Dec 8, 2023 at 4:47=E2=80=AFAM Sudeep Holla <sudeep.holla@arm.com> =
 wrote:
-> > >
-> > > On Sat, 11 Nov 2023 01:49:29 +0000,
-> > > David Dai <davidai@google.com> wrote:
-> > > >
-> > > > Adding bindings to represent a virtual cpufreq device.
-> > > >
-> > > > Virtual machines may expose MMIO regions for a virtual cpufreq devi=
-ce
-> > > > for guests to read frequency information or to request frequency
-> > > > selection. The virtual cpufreq device has an individual controller =
-for
-> > > > each frequency domain.
-> > >
-> > > I would really refrain form having absolute frequencies here. A
-> > > virtual machine can be migrated, and there are *zero* guarantees that
-> > > the target system has the same clock range as the source.
-> > >
-> > > This really should be a relative number, much like the capacity. That=
-,
-> > > at least, can be migrated across systems.
+>
+> On Fri, Nov 10, 2023 at 05:49:29PM -0800, David Dai wrote:
+> > Adding bindings to represent a virtual cpufreq device.
 > >
-> > There's nothing in this patch that mandates absolute frequency.
-> > In true KVM philosophy, we leave it to the VMM to decide.
+> > Virtual machines may expose MMIO regions for a virtual cpufreq device
+> > for guests to read frequency information or to request frequency
+> > selection. The virtual cpufreq device has an individual controller for
+> > each frequency domain.
+> >
+> > Co-developed-by: Saravana Kannan <saravanak@google.com>
+> > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > Signed-off-by: David Dai <davidai@google.com>
+> > ---
+> >  .../cpufreq/qemu,cpufreq-virtual.yaml         | 99 +++++++++++++++++++
+> >  1 file changed, 99 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/cpufreq/qemu,cpuf=
+req-virtual.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/cpufreq/qemu,cpufreq-vir=
+tual.yaml b/Documentation/devicetree/bindings/cpufreq/qemu,cpufreq-virtual.=
+yaml
+> > new file mode 100644
+> > index 000000000000..16606cf1fd1a
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/cpufreq/qemu,cpufreq-virtual.ya=
+ml
+> > @@ -0,0 +1,99 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/cpufreq/qemu,cpufreq-virtual.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Virtual CPUFreq
+> > +
+> > +maintainers:
+> > +  - David Dai <davidai@google.com>
+> > +  - Saravana Kannan <saravanak@google.com>
+> > +
+> > +description:
+> > +  Virtual CPUFreq is a virtualized driver in guest kernels that sends =
+frequency
+> > +  selection of its vCPUs as a hint to the host through MMIO regions. E=
+ach vCPU
+> > +  is associated with a frequency domain which can be shared with other=
+ vCPUs.
+> > +  Each frequency domain has its own set of registers for frequency con=
+trols.
+> > +
 >
-> This has nothing to do with KVM. It would apply to any execution
-> environment, including QEMU in TCG mode.
+> Are these register controls described somewhere ? The reason I ask is we
+> should be able to have single implementation of this virtual cpufreq
+> irrespective of the firmware used(DT vs ACPI) IMO.
+
+Agree that we want the same driver to work for DT and ACPI. This doc
+was written to be similar to other DT binding docs that don't describe
+the registers in the DT binding. The registers are pretty straight
+forward (can tell from the code too). One register to "set" the
+frequency and another to "get" the current frequency. We don't have
+any ACPI expertise/hardware to test this on or care about it right
+now. But David looked at some ACPI drivers and we think it should be
+trivial to add ACPI support to this. Just a different set of probe
+functions to register and populate the CPUfreq table.
+
 >
-> To quote the original patch:
+> > +properties:
+> > +  compatible:
+> > +    const: qemu,virtual-cpufreq
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +    description:
+> > +      Address and size of region containing frequency controls for eac=
+h of the
+> > +      frequency domains. Regions for each frequency domain is placed
+> > +      contiugously and contain registers for controlling DVFS(Dynamic =
+Frequency
+> > +      and Voltage) characteristics. The size of the region is proporti=
+onal to
+> > +      total number of frequency domains.
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    // This example shows a two CPU configuration with a frequency dom=
+ain
+> > +    // for each CPU.
+> > +    cpus {
+> > +      #address-cells =3D <1>;
+> > +      #size-cells =3D <0>;
+> > +
+> > +      cpu@0 {
+> > +        compatible =3D "arm,armv8";
+> > +        device_type =3D "cpu";
+> > +        reg =3D <0x0>;
+> > +        operating-points-v2 =3D <&opp_table0>;
+> > +      };
+> > +
+> > +      cpu@1 {
+> > +        compatible =3D "arm,armv8";
+> > +        device_type =3D "cpu";
+> > +        reg =3D <0x0>;
+> > +        operating-points-v2 =3D <&opp_table1>;
+> > +      };
+> > +    };
+> > +
+> > +    opp_table0: opp-table-0 {
+> > +      compatible =3D "operating-points-v2";
+> > +      opp-shared;
+> > +
+> > +      opp1098000000 {
+> > +        opp-hz =3D /bits/ 64 <1098000000>;
+> > +        opp-level =3D <1>;
+> > +      };
+> > +
+> > +      opp1197000000 {
+> > +        opp-hz =3D /bits/ 64 <1197000000>;
+> > +        opp-level =3D <2>;
+> > +      };
+> > +    };
+> > +
+> > +    opp_table1: opp-table-1 {
+> > +      compatible =3D "operating-points-v2";
+> > +      opp-shared;
+> > +
+> > +      opp1106000000 {
+> > +        opp-hz =3D /bits/ 64 <1106000000>;
+> > +        opp-level =3D <1>;
+> > +      };
+> > +
+> > +      opp1277000000 {
+> > +        opp-hz =3D /bits/ 64 <1277000000>;
+> > +        opp-level =3D <2>;
+> > +      };
+> > +    };
+> >
 >
-> +    description:
-> +      Address and size of region containing frequency controls for each =
-of the
-> +      frequency domains. Regions for each frequency domain is placed
-> +      contiugously and contain registers for controlling DVFS(Dynamic Fr=
-equency
-> +      and Voltage) characteristics. The size of the region is proportion=
-al to
-> +      total number of frequency domains.
+> I think using OPP with absolute frequencies seems not appropriate here.
+> Why can't these fetched from the registers and have some abstract values
+> instead ?
+
+Whether the frequencies are real or you want to cap it to 1024 and
+normalize it, you still need to populate the CPUfreq table. And we
+didn't want to reinvent the wheel and want to use existing means of
+representing the table in as cross-architecture as possible -- so, DT
+and ACPI should cover them all. For example, if we want to say CPU0
+and 1 for a single CPUfreq policy, that's all already doable in DT. We
+don't want to reinvent new schemes/register interfaces for that.
+
 >
-> What part of that indicates that *relative* frequencies are
-> acceptable? The example explicitly uses the opp-v2 binding, which
-> clearly is about absolute frequency.
+> > +    soc {
+> > +      #address-cells =3D <1>;
+> > +      #size-cells =3D <1>;
+> > +
+> > +      cpufreq@1040000 {
+> > +        compatible =3D "qemu,virtual-cpufreq";
+> > +        reg =3D <0x1040000 0x10>;
+>
+> So just 16bytes for 2 CPU system ? How does the register layout look like=
+ ?
+> I assume just 4 x 32bit registers: 2 for reading and 2 for setting the
+> frequencies ?
 
-We can update the doc to make that clearer and update the example too.
-
-> To reiterate: absolute frequencies are not the right tool for the job,
-> and they should explicitly be described as relative in the spec. Not
-> left as a "whatev'" option for the execution environment to interpret.
-
-I think it depends on the use case. If there's no plan to migrate the
-VM across different devices, there's no need to do the unnecessary
-normalization back and forth.
-
-And if we can translate between pCPU frequency and a normalized
-frequency, we can do the same for whatever made up frequencies too. In
-fact, we plan to do exactly that in our internal use cases for this.
-There's nothing here that prevents the VMM from doing that.
-
-Also, if there are hardware virtualized performance counters (AMU,
-CPPC, etc) that are used for frequency normalization, then we have to
-use the real frequencies in those devices otherwise the "current
-frequency" can be 2 GHz while the max normalized frequency is 1024
-KHz. That'll mess up load tracking.
+Yup. 2 registers per CPU frequency domain or policy.
 
 Thanks,
 Saravana
