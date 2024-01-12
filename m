@@ -1,142 +1,101 @@
-Return-Path: <linux-pm+bounces-2165-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2166-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DB2082C22D
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Jan 2024 15:52:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A50EC82C24D
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Jan 2024 15:56:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D390A1C242D2
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Jan 2024 14:52:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53ACF281B43
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Jan 2024 14:56:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BB516E2BF;
-	Fri, 12 Jan 2024 14:52:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N+NHAOHl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F4826E2AB;
+	Fri, 12 Jan 2024 14:56:47 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF8CB6DD19;
-	Fri, 12 Jan 2024 14:52:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C126DD10;
+	Fri, 12 Jan 2024 14:56:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-6ddf05b1922so1811530a34.2;
-        Fri, 12 Jan 2024 06:52:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705071150; x=1705675950; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZO45YkzCWML/dfVASjM1WgREcSCHVv4YlKgRi2In5SM=;
-        b=N+NHAOHlty+e+26ZSuZwn5EtDxqMoiMrYPERwvjRASNtFLpcC8YSRWo8IkR3OT5jWx
-         R4uZy4AlDpZPCI3C2bP+6FbKlLbHI3XqnFJDBIKBorRUs5dLOAowPAVLCmaolt7DEkde
-         P6aLsvOMAiLfYvaMLsirSV3+BQFKJp8MHDqHhxZv/CaVawJP3R3tkmVFhhzOK+cOCdVC
-         myCwRZUUV1A1V/fYXp7awT7nzf5B1kBocSPP2pBBzRq9ppDSJMu/7u+S7FY8sFjib2Y2
-         IZooIRZZsGH1yw0aLowLeAIhJ4SfG4A3kpAAWL59HQk7Dr7YWyN5KEmpNGLMDcXZRgIH
-         GTnw==
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-204458dec9cso959111fac.1;
+        Fri, 12 Jan 2024 06:56:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705071150; x=1705675950;
+        d=1e100.net; s=20230601; t=1705071404; x=1705676204;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZO45YkzCWML/dfVASjM1WgREcSCHVv4YlKgRi2In5SM=;
-        b=DJnd8AyZbJDUXoeswZ/WZ5dlbii0fecqgcTvFMVNucD5/P9zP2FZ1fqYTMLcjLHa8B
-         89Cj4sAkYZDc0wwU5ej9wAtb6Obwtyr5GU6AplKCroLOxvXlHn4UCg6jCT2rhio0Was5
-         GlaXv7AfniVUcuD4g41HLdU3PjxcbowU6clr7uQjtXfHWUYOF0jqRJsv4Ki7wgOnCpo9
-         5m3iN2YYP/4M51kcuGvi/HhFmUOP/sEtdfKHtHoliFXhpXnmHcE0yFTOl5IytoVS4Q8b
-         ++sQOjaxq/sb59b68640vD4d7K/AB9SyIVOxfyaJNFiTWYIrw1JNTtIM0nmF38ruiplV
-         nqZQ==
-X-Gm-Message-State: AOJu0Ywr5kBTYnkoROxhc+O7JZkFcapLeh1fRW1muamb9l0hWHX/8Z4x
-	MrE8jub/uveaagWaqthR9ezEUzyE4Ob3PYBFKJs=
-X-Google-Smtp-Source: AGHT+IF3L5IPA3aINLKE1Gh2ONL1jl1iO/jiOLm/9Zoi+Tx7cZA3qsT/gQ+IN9bZafCkSYUcodRd62GQ0tiAxg2qKZk=
-X-Received: by 2002:a05:6871:452:b0:206:8691:cc78 with SMTP id
- e18-20020a056871045200b002068691cc78mr1680164oag.34.1705071149757; Fri, 12
- Jan 2024 06:52:29 -0800 (PST)
+        bh=7ZpJF8ckEKzWu9JP8njFy/DUirOzmC1WDS5E6Eh5HQE=;
+        b=vpYJVkY56vJ529a8QLXr/I53SCt+UPq5RlT0wfdtCRECnJnR2F0MFJTdsQIMvCdE0k
+         iFEmPebd4S7Gls7kokLkjxrDcCssMzdMsFWm7J1yjqgPTw33n8xmtF85rWMBV0BDYd2y
+         FqVouq7kF8F8qJ8SguiQ3Lo1WzBTLCnc7ateRVeG023Xs2qi/lg0hGxn6ubVhCz5AxB4
+         Gtlozq2GzVh/fsI8JcGoOj7YIUaRQhdxp5GZ4YkM5m5A347loFCTDgs1eLwAjuhwGWyH
+         iAzTOWE9cR4K7jD46318S4RH2H5PVMAQpYoUJddLgf6yHhkRWHvV3OxyruwbWcooDqM+
+         X6Ng==
+X-Gm-Message-State: AOJu0YzYdfqU1ebItncnujeEBYQuShypn+t1A1YMdYcSaH8yBaSfTDjl
+	pf4hJBHG83bcpQIpPeYx2l3ImjfSjdS2N/dUO1g2CLHD
+X-Google-Smtp-Source: AGHT+IHqdJiMlARxTIb24YUXWd/c0ds830Sg3iyR4kvxB+qlqlYNB3iD2rCb8R1UK7EeVyED1cArKWr9rQST90WmkS0=
+X-Received: by 2002:a05:6870:c904:b0:206:b53d:474f with SMTP id
+ hj4-20020a056870c90400b00206b53d474fmr2693743oab.3.1705071404641; Fri, 12 Jan
+ 2024 06:56:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240109-update-llvm-links-v1-0-eb09b59db071@kernel.org>
-In-Reply-To: <20240109-update-llvm-links-v1-0-eb09b59db071@kernel.org>
-From: Alex Deucher <alexdeucher@gmail.com>
-Date: Fri, 12 Jan 2024 09:52:17 -0500
-Message-ID: <CADnq5_MVDDR-EvgSEhiw_qPkUDPnV25tjUN0SNYq45Q29BN4EQ@mail.gmail.com>
-Subject: Re: [PATCH 0/3] Update LLVM Phabricator and Bugzilla links
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: akpm@linux-foundation.org, linux-efi@vger.kernel.org, kvm@vger.kernel.org, 
-	llvm@lists.linux.dev, ast@kernel.org, dri-devel@lists.freedesktop.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, kasan-dev@googlegroups.com, 
-	linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-arch@vger.kernel.org, linux-s390@vger.kernel.org, mykolal@fb.com, 
-	daniel@iogearbox.net, andrii@kernel.org, amd-gfx@lists.freedesktop.org, 
-	linux-media@vger.kernel.org, linux-pm@vger.kernel.org, bridge@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org, 
-	patches@lists.linux.dev, linux-security-module@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+References: <efe2a897-4af0-4204-8105-1bee7d6b9380@moroto.mountain>
+In-Reply-To: <efe2a897-4af0-4204-8105-1bee7d6b9380@moroto.mountain>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 12 Jan 2024 15:56:31 +0100
+Message-ID: <CAJZ5v0isUXAPq0Vh-RU0iopes_4r7KaejgqgFpzRT_zeZySDBQ@mail.gmail.com>
+Subject: Re: [PATCH] thermal/debugfs: Unlock on error path in thermal_debug_tz_trip_up()
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 9, 2024 at 5:26=E2=80=AFPM Nathan Chancellor <nathan@kernel.org=
-> wrote:
+On Fri, Jan 12, 2024 at 3:30=E2=80=AFPM Dan Carpenter <dan.carpenter@linaro=
+.org> wrote:
 >
-> This series updates all instances of LLVM Phabricator and Bugzilla links
-> to point to GitHub commits directly and LLVM's Bugzilla to GitHub issue
-> shortlinks respectively.
+> Add a missing mutex_unlock(&thermal_dbg->lock) to this error path.
 >
-> I split up the Phabricator patch into BPF selftests and the rest of the
-> kernel in case the BPF folks want to take it separately from the rest of
-> the series, there are obviously no dependency issues in that case. The
-> Bugzilla change was mechanical enough and should have no conflicts.
->
-> I am aiming this at Andrew and CC'ing other lists, in case maintainers
-> want to chime in, but I think this is pretty uncontroversial (famous
-> last words...).
->
-
-Acked-by: Alex Deucher <alexander.deucher@amd.com>
-
+> Fixes: 4731c8f16a0e ("thermal/debugfs: Add thermal debugfs information fo=
+r mitigation episodes")
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
 > ---
-> Nathan Chancellor (3):
->       selftests/bpf: Update LLVM Phabricator links
->       arch and include: Update LLVM Phabricator links
->       treewide: Update LLVM Bugzilla links
+>  drivers/thermal/thermal_debugfs.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 >
->  arch/arm64/Kconfig                                 |  4 +--
->  arch/powerpc/Makefile                              |  4 +--
->  arch/powerpc/kvm/book3s_hv_nested.c                |  2 +-
->  arch/riscv/Kconfig                                 |  2 +-
->  arch/riscv/include/asm/ftrace.h                    |  2 +-
->  arch/s390/include/asm/ftrace.h                     |  2 +-
->  arch/x86/power/Makefile                            |  2 +-
->  crypto/blake2b_generic.c                           |  2 +-
->  drivers/firmware/efi/libstub/Makefile              |  2 +-
->  drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c           |  2 +-
->  drivers/media/test-drivers/vicodec/codec-fwht.c    |  2 +-
->  drivers/regulator/Kconfig                          |  2 +-
->  include/asm-generic/vmlinux.lds.h                  |  2 +-
->  include/linux/compiler-clang.h                     |  2 +-
->  lib/Kconfig.kasan                                  |  2 +-
->  lib/raid6/Makefile                                 |  2 +-
->  lib/stackinit_kunit.c                              |  2 +-
->  mm/slab_common.c                                   |  2 +-
->  net/bridge/br_multicast.c                          |  2 +-
->  security/Kconfig                                   |  2 +-
->  tools/testing/selftests/bpf/README.rst             | 32 +++++++++++-----=
-------
->  tools/testing/selftests/bpf/prog_tests/xdpwall.c   |  2 +-
->  .../selftests/bpf/progs/test_core_reloc_type_id.c  |  2 +-
->  23 files changed, 40 insertions(+), 40 deletions(-)
-> ---
-> base-commit: 0dd3ee31125508cd67f7e7172247f05b7fd1753a
-> change-id: 20240109-update-llvm-links-d03f9d649e1e
+> diff --git a/drivers/thermal/thermal_debugfs.c b/drivers/thermal/thermal_=
+debugfs.c
+> index a3fa09235da1..a3f06029fc54 100644
+> --- a/drivers/thermal/thermal_debugfs.c
+> +++ b/drivers/thermal/thermal_debugfs.c
+> @@ -591,7 +591,7 @@ void thermal_debug_tz_trip_up(struct thermal_zone_dev=
+ice *tz,
+>         if (!tz_dbg->nr_trips) {
+>                 tze =3D thermal_debugfs_tz_event_alloc(tz, now);
+>                 if (!tze)
+> -                       return;
+> +                       goto unlock;
 >
-> Best regards,
+>                 list_add(&tze->node, &tz_dbg->tz_episodes);
+>         }
+> @@ -619,6 +619,7 @@ void thermal_debug_tz_trip_up(struct thermal_zone_dev=
+ice *tz,
+>                 (temperature - tze->trip_stats[trip_id].avg) /
+>                 tze->trip_stats[trip_id].count;
+>
+> +unlock:
+>         mutex_unlock(&thermal_dbg->lock);
+>  }
+>
 > --
-> Nathan Chancellor <nathan@kernel.org>
->
+
+Applied, thanks!
 
