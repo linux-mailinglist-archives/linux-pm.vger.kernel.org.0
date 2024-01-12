@@ -1,171 +1,86 @@
-Return-Path: <linux-pm+bounces-2168-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2169-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCA2D82C26E
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Jan 2024 16:04:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF15882C39A
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Jan 2024 17:34:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB30F1C21988
-	for <lists+linux-pm@lfdr.de>; Fri, 12 Jan 2024 15:04:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F591285915
+	for <lists+linux-pm@lfdr.de>; Fri, 12 Jan 2024 16:34:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76CD56EB43;
-	Fri, 12 Jan 2024 15:04:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7714B745E7;
+	Fri, 12 Jan 2024 16:34:08 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from albert.telenet-ops.be (albert.telenet-ops.be [195.130.137.90])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04BA26E2C5;
-	Fri, 12 Jan 2024 15:04:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4TBPrs1VcSz6FGMn;
-	Fri, 12 Jan 2024 23:02:05 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 445D41400CB;
-	Fri, 12 Jan 2024 23:04:01 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Fri, 12 Jan
- 2024 15:04:00 +0000
-Date: Fri, 12 Jan 2024 15:03:59 +0000
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: "Russell King (Oracle)" <linux@armlinux.org.uk>,
-	<linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
-	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-	<x86@kernel.org>, <acpica-devel@lists.linuxfoundation.org>,
-	<linux-csky@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-ia64@vger.kernel.org>, <linux-parisc@vger.kernel.org>, Salil Mehta
-	<salil.mehta@huawei.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	<jianyong.wu@arm.com>, <justin.he@arm.com>, James Morse <james.morse@arm.com>
-Subject: Re: [PATCH RFC v3 02/21] ACPI: processor: Add support for
- processors described as container packages
-Message-ID: <20240112150359.0000733f@Huawei.com>
-In-Reply-To: <CAJZ5v0g2CFPrSfNzHKBz_Spwt304QEQtR6w57VR11i5APPrD8Q@mail.gmail.com>
-References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
-	<E1rDOfx-00Dvje-MS@rmk-PC.armlinux.org.uk>
-	<CAJZ5v0iB0bS6nmjQ++pV1zp5YSGuigbffK5VD3wsX+8bY9MA5w@mail.gmail.com>
-	<20240111175908.00002f46@Huawei.com>
-	<ZaA3l4yjgCXxSiVg@shell.armlinux.org.uk>
-	<20240112092520.00001278@Huawei.com>
-	<CAJZ5v0g2CFPrSfNzHKBz_Spwt304QEQtR6w57VR11i5APPrD8Q@mail.gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F29E5917B
+	for <linux-pm@vger.kernel.org>; Fri, 12 Jan 2024 16:34:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:8291:a340:26b8:8238])
+	by albert.telenet-ops.be with bizsmtp
+	id ZsZx2B0024LvM1A06sZxgn; Fri, 12 Jan 2024 17:33:57 +0100
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1rOKT3-00FGRn-6J;
+	Fri, 12 Jan 2024 17:33:57 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1rOKTk-0051dg-WD;
+	Fri, 12 Jan 2024 17:33:57 +0100
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Magnus Damm <magnus.damm@gmail.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: linux-renesas-soc@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] pmdomain: renesas: r8a77980-sysc: CR7 must be always on
+Date: Fri, 12 Jan 2024 17:33:55 +0100
+Message-Id: <fdad9a86132d53ecddf72b734dac406915c4edc0.1705076735.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, 12 Jan 2024 16:01:40 +0100
-"Rafael J. Wysocki" <rafael@kernel.org> wrote:
+The power domain containing the Cortex-R7 CPU core on the R-Car V3H SoC
+must always be in power-on state, unlike on other SoCs in the R-Car Gen3
+family.  See Table 9.4 "Power domains" in the R-Car Series, 3rd
+Generation Hardware User’s Manual Rev.1.00 and later.
 
-> On Fri, Jan 12, 2024 at 10:25=E2=80=AFAM Jonathan Cameron
-> <Jonathan.Cameron@huawei.com> wrote:
-> >
-> > On Thu, 11 Jan 2024 18:46:47 +0000
-> > "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
-> > =20
-> > > On Thu, Jan 11, 2024 at 05:59:08PM +0000, Jonathan Cameron wrote: =20
-> > > > On Mon, 18 Dec 2023 21:17:34 +0100
-> > > > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> > > > =20
-> > > > > On Wed, Dec 13, 2023 at 1:49=E2=80=AFPM Russell King <rmk+kernel@=
-armlinux.org.uk> wrote: =20
-> > > > > >
-> > > > > > From: James Morse <james.morse@arm.com> =20
-> > > >
-> > > > Done some digging + machine faking.  This is mid stage results at b=
-est.
-> > > >
-> > > > Summary: I don't think this patch is necessary.  If anyone happens =
-to be in
-> > > > the mood for testing on various platforms, can you drop this patch =
-and
-> > > > see if everything still works.
-> > > >
-> > > > With this patch in place, and a processor container containing
-> > > > Processor() objects acpi_process_add is called twice - once via
-> > > > the path added here and once via acpi_bus_attach etc.
-> > > >
-> > > > Maybe it's a left over from earlier approaches to some of this? =20
-> > >
-> > > From what you're saying, it seems that way. It would be really good to
-> > > get a reply from James to see whether he agrees - or at least get the
-> > > reason why this patch is in the series... but I suspect that will nev=
-er
-> > > come.
-> > > =20
-> > > > Both cases are covered by the existing handling without this.
-> > > >
-> > > > I'm far from clear on why we need this patch.  Presumably
-> > > > it's the reference in the description on it breaking for
-> > > > Processor Package containing Processor() objects that matters
-> > > > after a move... I'm struggling to find that move though! =20
-> > >
-> > > I do know that James did a lot of testing, so maybe he found some
-> > > corner case somewhere which made this necessary - but without input
-> > > from James, we can't know that.
-> > >
-> > > So, maybe the right way forward on this is to re-test the series
-> > > with this patch dropped, and see whether there's any ill effects.
-> > > It should be possible to resurect the patch if it does turn out to
-> > > be necessary.
-> > >
-> > > Does that sound like a good way forward?
-> > >
-> > > Thanks.
-> > > =20
-> >
-> > Yes that sounds like the best plan. Note this patch can only make a
-> > difference on non arm64 arches because it's a firmware bug to combine
-> > Processor() with a GICC entry in APIC/MADT.  To even test on ARM64
-> > you have to skip the bug check.
-> >
-> > https://elixir.bootlin.com/linux/latest/source/drivers/acpi/processor_c=
-ore.c#L101
-> >
-> >         /* device_declaration means Device object in DSDT, in the
-> >          * GIC interrupt model, logical processors are required to
-> >          * have a Processor Device object in the DSDT, so we should
-> >          * check device_declaration here
-> >          */
-> > //      if (device_declaration && (gicc->uid =3D=3D acpi_id)) {
-> >         if (gicc->uid =3D=3D acpi_id) {
-> >                 *mpidr =3D gicc->arm_mpidr;
-> >                 return 0;
-> >         }
-> >
-> > Only alternative is probably to go history diving and try and
-> > find another change that would have required this and is now gone.
-> >
-> > The ACPI scanning code has had a lot of changes whilst this work has
-> > been underway.  More than possible that this was papering over some
-> > issue that has long since been fixed. I can't find any deliberate
-> > functional changes, but there is some code generalization that 'might'
-> > have side effects in this area. Rafael, any expectation that anything
-> > changed in how scanning processor containers works? =20
->=20
-> There have been changes, but I can't recall when exactly without some
-> git history research.
->=20
-> In any case, it is always better to work on top of the current
-> mainline code IMO.
+Fix this by marking the domain as a CPU domain without control
+registers, so the driver will not touch it.
 
-Absolutely - just in this case the series has been rebased for=20
-a few years because the standards discussions took far far too long!
+Fixes: 41d6d8bd8ae94ca9 ("soc: renesas: rcar-sysc: add R8A77980 support")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+---
+ drivers/pmdomain/renesas/r8a77980-sysc.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Jonathan
-
+diff --git a/drivers/pmdomain/renesas/r8a77980-sysc.c b/drivers/pmdomain/renesas/r8a77980-sysc.c
+index 39ca84a67daadd21..621e411fc9991a40 100644
+--- a/drivers/pmdomain/renesas/r8a77980-sysc.c
++++ b/drivers/pmdomain/renesas/r8a77980-sysc.c
+@@ -25,7 +25,8 @@ static const struct rcar_sysc_area r8a77980_areas[] __initconst = {
+ 	  PD_CPU_NOCR },
+ 	{ "ca53-cpu3",	0x200, 3, R8A77980_PD_CA53_CPU3, R8A77980_PD_CA53_SCU,
+ 	  PD_CPU_NOCR },
+-	{ "cr7",	0x240, 0, R8A77980_PD_CR7,	R8A77980_PD_ALWAYS_ON },
++	{ "cr7",	0x240, 0, R8A77980_PD_CR7,	R8A77980_PD_ALWAYS_ON,
++	  PD_CPU_NOCR },
+ 	{ "a3ir",	0x180, 0, R8A77980_PD_A3IR,	R8A77980_PD_ALWAYS_ON },
+ 	{ "a2ir0",	0x400, 0, R8A77980_PD_A2IR0,	R8A77980_PD_A3IR },
+ 	{ "a2ir1",	0x400, 1, R8A77980_PD_A2IR1,	R8A77980_PD_A3IR },
+-- 
+2.34.1
 
 
