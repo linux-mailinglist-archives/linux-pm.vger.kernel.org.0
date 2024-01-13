@@ -1,180 +1,256 @@
-Return-Path: <linux-pm+bounces-2180-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2181-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EA8C82CADE
-	for <lists+linux-pm@lfdr.de>; Sat, 13 Jan 2024 10:37:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DDD582CD93
+	for <lists+linux-pm@lfdr.de>; Sat, 13 Jan 2024 16:46:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 006DA1F225FB
-	for <lists+linux-pm@lfdr.de>; Sat, 13 Jan 2024 09:37:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E904B283E02
+	for <lists+linux-pm@lfdr.de>; Sat, 13 Jan 2024 15:46:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E39BDA48;
-	Sat, 13 Jan 2024 09:37:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9003F1FA1;
+	Sat, 13 Jan 2024 15:46:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GDzN14Pi"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ewlU6F6p"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B695DA2A;
-	Sat, 13 Jan 2024 09:37:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28057C433C7;
-	Sat, 13 Jan 2024 09:37:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705138656;
-	bh=w/zSBBUrOCogh8TXa7vV7+1viFBuWmgXZKnDrd+wg/4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=GDzN14Pi0f4Pnq/RXyJZlmAXb+3jQHnB1NEEcUgJRyc5RkgaIN2MEh1c664bOhaoF
-	 Q4c/L96XzgDV//riRy4W8fbXJ9fouhbrHQ4Z9RWNidU/t+EwYXSlIveNgaQo9ct8Tb
-	 sZkGT0PgXZH2kAog8sFRSSlK8lr/EDywrl+BD9TCuX8XdBjSW4Etv0Oahnbkxr6gQK
-	 DNiS3LlLvQr6zvg4KBKL5bXqhiblv3zBY05QgINrxYlR4ehLhxWk8iZdV/QmCS2PlU
-	 hd32/uCQIhxGcNC5FrGNOiEo3i1VXkNHis3AsJ6+uwmKO6dZcD1za70LP39r7pkQWy
-	 wa/Lh3v3mrMMQ==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1rOaSL-00BMls-Kk;
-	Sat, 13 Jan 2024 09:37:33 +0000
-Date: Sat, 13 Jan 2024 09:37:33 +0000
-Message-ID: <86zfx98tgi.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Saravana Kannan <saravanak@google.com>
-Cc: David Dai <davidai@google.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Quentin Perret <qperret@google.com>,
-	Masami Hiramatsu <mhiramat@google.com>,
-	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Pavan Kondeti <quic_pkondeti@quicinc.com>,
-	Gupta Pankaj <pankaj.gupta@amd.com>,
-	Mel Gorman <mgorman@suse.de>,
-	kernel-team@android.com,
-	linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] dt-bindings: cpufreq: add virtual cpufreq device
-In-Reply-To: <CAGETcx_8x4p7WTwqQiVGdtHftVjFUJruXsOXwJXgDi0GdEtLNA@mail.gmail.com>
-References: <20231111014933.1934562-1-davidai@google.com>
-	<20231111014933.1934562-2-davidai@google.com>
-	<865y231jvj.wl-maz@kernel.org>
-	<CAGETcx9-n0z5buWgtLZ+6VxW2jEko1GWzkGtGhFiZEq-x_G4nw@mail.gmail.com>
-	<867clpaxel.wl-maz@kernel.org>
-	<CAGETcx_8x4p7WTwqQiVGdtHftVjFUJruXsOXwJXgDi0GdEtLNA@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03C8F23AD;
+	Sat, 13 Jan 2024 15:46:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705160767; x=1736696767;
+  h=date:from:to:cc:subject:message-id;
+  bh=HeB047Qg9LA2ybr5pLWsN6OfYSQtF62oj7HnyAFAlKs=;
+  b=ewlU6F6pyTHKH9mW6QQEl2po5QrPisF2YssdIiCilLJ35jkOAKsJaWrD
+   jZuAG360aX/ZokES2iUnB1y4SDg6GQ/i7eQaIFb3+FGhtvQQ7yUyOp59C
+   TCUCskMbAbkPd2laAiraP4Kgde6nkGX0gQ2Boz7ABUpraWofAouMhnWA0
+   jpN22hoyA2rr8LLDQnlmFONHQXiqvCTttaBRp1BaI72b5O1gpc9iy+sAw
+   tj7cafKsrp0ZSTo37Zjq7cm0SuBopfL1PsELTrOgSIJPlg2Yd5tDzDOkF
+   Q4GDrc5y+VZbgGvuovF6GlBhP/zHFApMGIRTOydJM27LbChElOIUBtuYp
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10952"; a="465771363"
+X-IronPort-AV: E=Sophos;i="6.04,192,1695711600"; 
+   d="scan'208";a="465771363"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2024 07:46:06 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.04,192,1695711600"; 
+   d="scan'208";a="25025828"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 13 Jan 2024 07:46:05 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rOgCv-000AdQ-0x;
+	Sat, 13 Jan 2024 15:46:01 +0000
+Date: Sat, 13 Jan 2024 23:45:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 15f5ad190ec05493ea77da93644d86d26834b485
+Message-ID: <202401132300.UJEwM93p-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: saravanak@google.com, davidai@google.com, rafael@kernel.org, viresh.kumar@linaro.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, sudeep.holla@arm.com, qperret@google.com, mhiramat@google.com, will@kernel.org, peterz@infradead.org, vincent.guittot@linaro.org, oliver.upton@linux.dev, dietmar.eggemann@arm.com, quic_pkondeti@quicinc.com, pankaj.gupta@amd.com, mgorman@suse.de, kernel-team@android.com, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Fri, 12 Jan 2024 22:02:39 +0000,
-Saravana Kannan <saravanak@google.com> wrote:
->=20
-> Sorry for the delay in response. Was very busy for a while and then
-> holidays started.
->=20
-> On Fri, Dec 8, 2023 at 12:52=E2=80=AFAM Marc Zyngier <maz@kernel.org> wro=
-te:
-> >
-> > On Thu, 07 Dec 2023 22:44:36 +0000,
-> > Saravana Kannan <saravanak@google.com> wrote:
-> > >
-> > > On Wed, Nov 15, 2023 at 12:49=E2=80=AFAM Marc Zyngier <maz@kernel.org=
-> wrote:
-> > > >
-> > > > On Sat, 11 Nov 2023 01:49:29 +0000,
-> > > > David Dai <davidai@google.com> wrote:
-> > > > >
-> > > > > Adding bindings to represent a virtual cpufreq device.
-> > > > >
-> > > > > Virtual machines may expose MMIO regions for a virtual cpufreq de=
-vice
-> > > > > for guests to read frequency information or to request frequency
-> > > > > selection. The virtual cpufreq device has an individual controlle=
-r for
-> > > > > each frequency domain.
-> > > >
-> > > > I would really refrain form having absolute frequencies here. A
-> > > > virtual machine can be migrated, and there are *zero* guarantees th=
-at
-> > > > the target system has the same clock range as the source.
-> > > >
-> > > > This really should be a relative number, much like the capacity. Th=
-at,
-> > > > at least, can be migrated across systems.
-> > >
-> > > There's nothing in this patch that mandates absolute frequency.
-> > > In true KVM philosophy, we leave it to the VMM to decide.
-> >
-> > This has nothing to do with KVM. It would apply to any execution
-> > environment, including QEMU in TCG mode.
-> >
-> > To quote the original patch:
-> >
-> > +    description:
-> > +      Address and size of region containing frequency controls for eac=
-h of the
-> > +      frequency domains. Regions for each frequency domain is placed
-> > +      contiugously and contain registers for controlling DVFS(Dynamic =
-Frequency
-> > +      and Voltage) characteristics. The size of the region is proporti=
-onal to
-> > +      total number of frequency domains.
-> >
-> > What part of that indicates that *relative* frequencies are
-> > acceptable? The example explicitly uses the opp-v2 binding, which
-> > clearly is about absolute frequency.
->=20
-> We can update the doc to make that clearer and update the example too.
->=20
-> > To reiterate: absolute frequencies are not the right tool for the job,
-> > and they should explicitly be described as relative in the spec. Not
-> > left as a "whatev'" option for the execution environment to interpret.
->=20
-> I think it depends on the use case. If there's no plan to migrate the
-> VM across different devices, there's no need to do the unnecessary
-> normalization back and forth.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 15f5ad190ec05493ea77da93644d86d26834b485  Merge branch 'thermal-core' into linux-next
 
-VM migration is a given, specially when QEMU is involved. Designing
-something that doesn't support it is a bug, plain and simple.
+elapsed time: 1463m
 
-> And if we can translate between pCPU frequency and a normalized
-> frequency, we can do the same for whatever made up frequencies too. In
-> fact, we plan to do exactly that in our internal use cases for this.
-> There's nothing here that prevents the VMM from doing that.
->
-> Also, if there are hardware virtualized performance counters (AMU,
-> CPPC, etc) that are used for frequency normalization, then we have to
-> use the real frequencies in those devices otherwise the "current
-> frequency" can be 2 GHz while the max normalized frequency is 1024
-> KHz. That'll mess up load tracking.
+configs tested: 174
+configs skipped: 2
 
-And that's exactly why this shouldn't be a *frequency*, but a
-performance scale or some other unit-less coefficient. Just like the
-big-little capacity.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-	M.
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+arc                              allmodconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20240113   gcc  
+arc                   randconfig-002-20240113   gcc  
+arm                              allmodconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                       aspeed_g4_defconfig   clang
+arm                                 defconfig   clang
+arm                           imxrt_defconfig   gcc  
+arm                      integrator_defconfig   gcc  
+arm                   randconfig-001-20240113   gcc  
+arm                   randconfig-002-20240113   gcc  
+arm                   randconfig-003-20240113   gcc  
+arm                   randconfig-004-20240113   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20240113   gcc  
+arm64                 randconfig-002-20240113   gcc  
+arm64                 randconfig-003-20240113   gcc  
+arm64                 randconfig-004-20240113   gcc  
+csky                             allmodconfig   gcc  
+csky                              allnoconfig   gcc  
+csky                             allyesconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20240113   gcc  
+csky                  randconfig-002-20240113   gcc  
+hexagon                          allmodconfig   clang
+hexagon                           allnoconfig   clang
+hexagon                          allyesconfig   clang
+hexagon                             defconfig   clang
+hexagon               randconfig-001-20240113   clang
+hexagon               randconfig-002-20240113   clang
+i386                             allmodconfig   clang
+i386                              allnoconfig   clang
+i386                             allyesconfig   clang
+i386         buildonly-randconfig-001-20240113   gcc  
+i386         buildonly-randconfig-002-20240113   gcc  
+i386         buildonly-randconfig-003-20240113   gcc  
+i386         buildonly-randconfig-004-20240113   gcc  
+i386         buildonly-randconfig-005-20240113   gcc  
+i386         buildonly-randconfig-006-20240113   gcc  
+i386                                defconfig   gcc  
+i386                  randconfig-001-20240113   gcc  
+i386                  randconfig-002-20240113   gcc  
+i386                  randconfig-003-20240113   gcc  
+i386                  randconfig-004-20240113   gcc  
+i386                  randconfig-005-20240113   gcc  
+i386                  randconfig-006-20240113   gcc  
+i386                  randconfig-011-20240113   clang
+i386                  randconfig-012-20240113   clang
+i386                  randconfig-013-20240113   clang
+i386                  randconfig-014-20240113   clang
+i386                  randconfig-015-20240113   clang
+i386                  randconfig-016-20240113   clang
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch             randconfig-001-20240113   gcc  
+loongarch             randconfig-002-20240113   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                        m5307c3_defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                              allnoconfig   clang
+mips                             allyesconfig   gcc  
+mips                          ath25_defconfig   clang
+nios2                            alldefconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20240113   gcc  
+nios2                 randconfig-002-20240113   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20240113   gcc  
+parisc                randconfig-002-20240113   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   clang
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                 canyonlands_defconfig   gcc  
+powerpc                    gamecube_defconfig   clang
+powerpc                 mpc8313_rdb_defconfig   clang
+powerpc               randconfig-001-20240113   gcc  
+powerpc               randconfig-002-20240113   gcc  
+powerpc               randconfig-003-20240113   gcc  
+powerpc                    sam440ep_defconfig   gcc  
+powerpc                     taishan_defconfig   gcc  
+powerpc                     tqm8540_defconfig   gcc  
+powerpc64             randconfig-001-20240113   gcc  
+powerpc64             randconfig-002-20240113   gcc  
+powerpc64             randconfig-003-20240113   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   clang
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv             nommu_k210_sdcard_defconfig   gcc  
+riscv                 randconfig-001-20240113   gcc  
+riscv                 randconfig-002-20240113   gcc  
+riscv                          rv32_defconfig   clang
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                  randconfig-001-20240113   clang
+s390                  randconfig-002-20240113   clang
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                                  defconfig   gcc  
+sh                          lboxre2_defconfig   gcc  
+sh                    randconfig-001-20240113   gcc  
+sh                    randconfig-002-20240113   gcc  
+sh                            titan_defconfig   gcc  
+sh                          urquell_defconfig   gcc  
+sparc                       sparc64_defconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20240113   gcc  
+sparc64               randconfig-002-20240113   gcc  
+um                               allmodconfig   clang
+um                                allnoconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20240113   gcc  
+um                    randconfig-002-20240113   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20240113   gcc  
+x86_64       buildonly-randconfig-002-20240113   gcc  
+x86_64       buildonly-randconfig-003-20240113   gcc  
+x86_64       buildonly-randconfig-004-20240113   gcc  
+x86_64       buildonly-randconfig-005-20240113   gcc  
+x86_64       buildonly-randconfig-006-20240113   gcc  
+x86_64                              defconfig   gcc  
+x86_64                randconfig-001-20240113   clang
+x86_64                randconfig-002-20240113   clang
+x86_64                randconfig-003-20240113   clang
+x86_64                randconfig-004-20240113   clang
+x86_64                randconfig-005-20240113   clang
+x86_64                randconfig-006-20240113   clang
+x86_64                randconfig-011-20240113   gcc  
+x86_64                randconfig-012-20240113   gcc  
+x86_64                randconfig-013-20240113   gcc  
+x86_64                randconfig-014-20240113   gcc  
+x86_64                randconfig-015-20240113   gcc  
+x86_64                randconfig-016-20240113   gcc  
+x86_64                randconfig-071-20240113   gcc  
+x86_64                randconfig-072-20240113   gcc  
+x86_64                randconfig-073-20240113   gcc  
+x86_64                randconfig-074-20240113   gcc  
+x86_64                randconfig-075-20240113   gcc  
+x86_64                randconfig-076-20240113   gcc  
+x86_64                          rhel-8.3-rust   clang
+xtensa                            allnoconfig   gcc  
+xtensa                randconfig-001-20240113   gcc  
+xtensa                randconfig-002-20240113   gcc  
 
---=20
-Without deviation from the norm, progress is not possible.
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
