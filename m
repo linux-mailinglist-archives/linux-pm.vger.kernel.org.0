@@ -1,151 +1,136 @@
-Return-Path: <linux-pm+bounces-2182-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2183-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A4D882D0D4
-	for <lists+linux-pm@lfdr.de>; Sun, 14 Jan 2024 15:10:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD8BB82D1DC
+	for <lists+linux-pm@lfdr.de>; Sun, 14 Jan 2024 19:36:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 990B7282260
-	for <lists+linux-pm@lfdr.de>; Sun, 14 Jan 2024 14:10:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59F59281D11
+	for <lists+linux-pm@lfdr.de>; Sun, 14 Jan 2024 18:36:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A764A23BC;
-	Sun, 14 Jan 2024 14:10:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADC03107B6;
+	Sun, 14 Jan 2024 18:36:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XrvcvhDr"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Lnv21vPt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51B9D20EB;
-	Sun, 14 Jan 2024 14:10:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-3bd7804bfe1so192133b6e.0;
-        Sun, 14 Jan 2024 06:10:35 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC8145243
+	for <linux-pm@vger.kernel.org>; Sun, 14 Jan 2024 18:36:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-40e6f652eb8so11636875e9.1
+        for <linux-pm@vger.kernel.org>; Sun, 14 Jan 2024 10:36:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1705241434; x=1705846234; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=M3WSWsFwwTld+EBhM8k9IfVkNuRLcxeBh/RSNpXjBV4=;
-        b=XrvcvhDrPRTgsGDORobI21nC7ijPouFQRFOyQWoTj+KEzK5pslclyXsqmX9asZXv0G
-         IcmGCGE3gt3MSSOvfusmSPgka5pd51PVvc52sL6J32oJHdrlPF3mF8MfZ8aFRAiiRQ8n
-         qNBD2HtN2ANZKwdCCSqUoNV8M3V19taxXy7Vreg5f6M/OsfSJzOqmseOAHRjlGOLZ7np
-         ujJ6kJ+mzPsT8iWGRTHA2ETmdRgJbqkPCv+ZTzZHWAIjhX9kmP+Gdi76c5hEmJsj/pha
-         //+CiYPCCc6OljWkuObDDlYucNyUbVKBukIngGa4u8ovZybsVz7r11Ucs6zUF0FrGb95
-         a/bA==
+        d=linaro.org; s=google; t=1705257369; x=1705862169; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EyQLKONUGoejFiGiJOkwSEqFD8Z/p6ggsj4XU4Zx2kc=;
+        b=Lnv21vPtxcl2v3OwPv5RW2rLbhoXlIWEDax3YxC1Ish2R+w4/HUtiZuBuEjom083pk
+         qVBinCiWMPCUf38+mv5mNFWha3bmzaQj30L3umQRYhGH07Ukcso+LPRZCHofk63xs1PO
+         mbS6BnD/yKbd6cCQHBbn3HZdqdzKyZF9LOH5cJV0vp5wJaWfYfKK9Rwy6Pawt55glU2Z
+         WZfALOvs7Nz91Ncb/ETVOYXT6f8KK7a0AARCYUhwDcGRSHxcVad7tXeUdwd6DUdQpOpc
+         FZ8/0sk4fTSIMCR1wV21Hooqeeugw9WkLSgOStntEYmShDxPjshoIJWxcdHc6fLTki0g
+         9z1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705241434; x=1705846234;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M3WSWsFwwTld+EBhM8k9IfVkNuRLcxeBh/RSNpXjBV4=;
-        b=FkAQUCle2mAr5B1Ng78yUijiTbaob5slshRv0AdsagSpEbuDCzMf3fRoLLCspJXc53
-         HyDlpYpnc0Ecn7RfjTDdpGPhkIejsEy4uLZVP2yfeRcuOmnMZdaRLDm7sv3id31ckrjj
-         pQIlGc+lQjilQej8umq3lwPUdaLxk6DyakoB4wbnsRFOGG8c7EKEnPFDKK3S/e9d+Ogn
-         iehdep4SD6qWDlEwzg8io/9NEQyJEfriRWbzijJpdiDeqpNUuBfGkd/xWbs71KEfkiUY
-         K+8/ALO2mXSFBToRiQ1+H8T19WiHXnnzv1rFfEBiCWeBlw0cbiiZPirzqxioEfzZLvnH
-         UiKw==
-X-Gm-Message-State: AOJu0Yxyw8stcrPirya41X9wTLmu02OKOD28uUcdiygVEJ8xFVmOZVR3
-	FPG1Ww2T/ZsFEG+N7Go0Tf4=
-X-Google-Smtp-Source: AGHT+IGH4gKlLxUwdPkCvvMUxGUjrD1fw3NT1xCDk7taXv/tg9rvi/H2OakBBbeigLPzQkpgUCZn8g==
-X-Received: by 2002:a05:6808:1b29:b0:3bd:7d40:50ff with SMTP id bx41-20020a0568081b2900b003bd7d4050ffmr100460oib.32.1705241434227;
-        Sun, 14 Jan 2024 06:10:34 -0800 (PST)
-Received: from archie.me ([103.131.18.64])
-        by smtp.gmail.com with ESMTPSA id l64-20020a639143000000b005c621e0de25sm6462664pge.71.2024.01.14.06.10.33
+        d=1e100.net; s=20230601; t=1705257369; x=1705862169;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EyQLKONUGoejFiGiJOkwSEqFD8Z/p6ggsj4XU4Zx2kc=;
+        b=jVDaW4DKEuMvBbYSDmY6eKb43tIhk6+1gL9ahE1miWt+Pa46OhLZGC5XuYn/sa9PxP
+         KF5WbpFgALIcTjNSZxagIVXRwAwys73PviPktWxywhCEA8hhbdzGame2ZnnJlvpxIb00
+         vFgT8vG+vMtpn0EBK71gNEGJR1aq5cVHjbmJUFm5bKRGkoU5pZ4pOyvGPL8sZSbSm3d6
+         LJl8/wwSDZtTiEn6Mw4bBF2S1qNL92i+T0z9VSARN9nOPOp1UkkEc2GgqnswagtQGydc
+         kEd8pr50hi6QiHGc1zsAbA5CvZB9kLBEnCRa7aaEnfbNtIcT4LDema0+vP9oLpKRpN7Q
+         8m0A==
+X-Gm-Message-State: AOJu0Yy54AwxW2jYfR/2nUf57YBFOI2yOkU2P0CuWp0QOfGrvHYuHNCk
+	CldcrvOEi5+Q19I7oBGr/vX1qYjDvfxTyQ==
+X-Google-Smtp-Source: AGHT+IFHMo2/EOYuRqEDUreqaqYe3tObOpvUcxwSTLetUDgAAG7ck8tTjPLZfGoh1+h1MIXKQM7/0g==
+X-Received: by 2002:a7b:c458:0:b0:40e:697a:701b with SMTP id l24-20020a7bc458000000b0040e697a701bmr1478351wmi.247.1705257369052;
+        Sun, 14 Jan 2024 10:36:09 -0800 (PST)
+Received: from vingu-book.. ([2a01:e0a:f:6020:6389:1f58:77fa:5f22])
+        by smtp.gmail.com with ESMTPSA id t6-20020a05600c198600b0040e48abec33sm17152808wmq.45.2024.01.14.10.36.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Jan 2024 06:10:33 -0800 (PST)
-Received: by archie.me (Postfix, from userid 1000)
-	id 59C1D184CE5C1; Sun, 14 Jan 2024 21:10:29 +0700 (WIB)
-Date: Sun, 14 Jan 2024 21:10:29 +0700
-From: Bagas Sanjaya <bagasdotme@gmail.com>
-To: "Dr. Henning Kopp" <hkopp22@yahoo.de>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Power Management <linux-pm@vger.kernel.org>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Ingo Molnar <mingo@kernel.org>
-Subject: Re: Why does Linux not implement pthread_suspend() and
- pthread_resume()?
-Message-ID: <ZaPrVWwqkHMj3Bpp@archie.me>
-References: <0219492d-3971-f8e0-8b46-22d442a2d442.ref@yahoo.de>
- <0219492d-3971-f8e0-8b46-22d442a2d442@yahoo.de>
+        Sun, 14 Jan 2024 10:36:03 -0800 (PST)
+From: Vincent Guittot <vincent.guittot@linaro.org>
+To: mingo@redhat.com,
+	peterz@infradead.org,
+	juri.lelli@redhat.com,
+	dietmar.eggemann@arm.com,
+	rostedt@goodmis.org,
+	bsegall@google.com,
+	mgorman@suse.de,
+	bristot@redhat.com,
+	vschneid@redhat.com,
+	wkarny@gmail.com,
+	torvalds@linux-foundation.org,
+	qyousef@layalina.io,
+	tglx@linutronix.de,
+	rafael@kernel.org,
+	viresh.kumar@linaro.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Subject: [PATCH] sched/fair: Fix frequency selection for non invariant case
+Date: Sun, 14 Jan 2024 19:36:00 +0100
+Message-Id: <20240114183600.135316-1-vincent.guittot@linaro.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="TWvxZVO7m6zehYbK"
-Content-Disposition: inline
-In-Reply-To: <0219492d-3971-f8e0-8b46-22d442a2d442@yahoo.de>
+Content-Transfer-Encoding: 8bit
 
+When frequency invariance is not enabled, get_capacity_ref_freq(policy)
+returns the current frequency and the performance margin applied by
+map_util_perf(), enabled the utilization to go above the maximum compute
+capacity and to select a higher frequency than the current one.
 
---TWvxZVO7m6zehYbK
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The performance margin is now applied earlier in the path to take into
+account some utilization clampings and we can't get an utilization higher
+than the maximum compute capacity.
 
-[also Cc: linux-pm people]
+We must use a frequency above the current frequency to get a chance to
+select a higher OPP when the current one becomes fully used. Apply
+the same margin and returns a frequency 25% higher than the current one in
+order to switch to the next OPP before we fully use the cpu at the current
+one.
 
-On Sun, Jan 14, 2024 at 12:20:04PM +0100, Dr. Henning Kopp wrote:
-> Hi everyone,
->=20
-> I have a question regarding pthreads. In particular, I was wondering why
-> there is no way to suspend and resume a thread in Linux.
->=20
-> In Windows, there is SuspendThread() and ResumeThread() from
-> processthreadsapi.h. However in Linux, there does not seem to be a similar
-> function in pthread.h.
->=20
-> When researching this issue i found multiple ways to work around the
-> inability of suspending a thread, such as using mutexes. But my question =
-is
-> why nobody bothered implementing suspending/resuming threads.
->=20
-> I found one answer on stackoverflow [1] that mentions that pthread_suspend
-> and pthread_resume_np is in the "Unix specification", but not implemented=
- in
-> Linux. I tried to follow up on this hint and get access to the Posix spec,
-> but i am not affiliated with a university anymore, so i was unable to
-> download the spec.
->=20
-> I read "man 7 pthreads". It mentions that there are two Linux
-> implementations of Posix threads, that differ in some details from the Po=
-six
-> spec. However, it does not mention suspending or resuming threads at all.
+Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+Closes: https://lore.kernel.org/lkml/CAHk-=wgWcYX2oXKtgvNN2LLDXP7kXkbo-xTfumEjmPbjSer2RQ@mail.gmail.com/
+Reported-by: Wyes Karny <wkarny@gmail.com>
+Closes: https://lore.kernel.org/lkml/20240114091240.xzdvqk75ifgfj5yx@wyes-pc/
+Fixes: 9c0b4bb7f630 ("sched/cpufreq: Rework schedutil governor performance estimation")
+Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+Tested-by: Wyes Karny <wkarny@gmail.com>
+---
+ kernel/sched/cpufreq_schedutil.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-LinuxThreads and NPTL?
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index 95c3c097083e..d12e95d30e2e 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -133,7 +133,11 @@ unsigned long get_capacity_ref_freq(struct cpufreq_policy *policy)
+ 	if (arch_scale_freq_invariant())
+ 		return policy->cpuinfo.max_freq;
+ 
+-	return policy->cur;
++	/*
++	 * Apply a 25% margin so that we select a higher frequency than
++	 * the current one before the CPU is full busy
++	 */
++	return policy->cur + (policy->cur >> 2);
+ }
+ 
+ /**
+-- 
+2.34.1
 
->=20
-> I hope this is the right mailing list for my question. If it is off-topic,
-> please accept my apologies.
->=20
-> So my question is: What is the reason that Linux does not implement
-> functions for suspending and resuming threads?
->=20
-
-Confused...
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---TWvxZVO7m6zehYbK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZaPrUQAKCRD2uYlJVVFO
-owSqAP0bAMuxQXF0Fr3YegItigo8XQnksqwS5Uwao9oYRSz35AEAiGtXyqqsfkou
-ftZEmy4Qp79j2I5gwFoq2X8n09FMTwk=
-=iY4L
------END PGP SIGNATURE-----
-
---TWvxZVO7m6zehYbK--
 
