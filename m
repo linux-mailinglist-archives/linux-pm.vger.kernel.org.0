@@ -1,256 +1,151 @@
-Return-Path: <linux-pm+bounces-2181-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2182-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DDD582CD93
-	for <lists+linux-pm@lfdr.de>; Sat, 13 Jan 2024 16:46:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A4D882D0D4
+	for <lists+linux-pm@lfdr.de>; Sun, 14 Jan 2024 15:10:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E904B283E02
-	for <lists+linux-pm@lfdr.de>; Sat, 13 Jan 2024 15:46:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 990B7282260
+	for <lists+linux-pm@lfdr.de>; Sun, 14 Jan 2024 14:10:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9003F1FA1;
-	Sat, 13 Jan 2024 15:46:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A764A23BC;
+	Sun, 14 Jan 2024 14:10:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ewlU6F6p"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XrvcvhDr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03C8F23AD;
-	Sat, 13 Jan 2024 15:46:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705160767; x=1736696767;
-  h=date:from:to:cc:subject:message-id;
-  bh=HeB047Qg9LA2ybr5pLWsN6OfYSQtF62oj7HnyAFAlKs=;
-  b=ewlU6F6pyTHKH9mW6QQEl2po5QrPisF2YssdIiCilLJ35jkOAKsJaWrD
-   jZuAG360aX/ZokES2iUnB1y4SDg6GQ/i7eQaIFb3+FGhtvQQ7yUyOp59C
-   TCUCskMbAbkPd2laAiraP4Kgde6nkGX0gQ2Boz7ABUpraWofAouMhnWA0
-   jpN22hoyA2rr8LLDQnlmFONHQXiqvCTttaBRp1BaI72b5O1gpc9iy+sAw
-   tj7cafKsrp0ZSTo37Zjq7cm0SuBopfL1PsELTrOgSIJPlg2Yd5tDzDOkF
-   Q4GDrc5y+VZbgGvuovF6GlBhP/zHFApMGIRTOydJM27LbChElOIUBtuYp
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10952"; a="465771363"
-X-IronPort-AV: E=Sophos;i="6.04,192,1695711600"; 
-   d="scan'208";a="465771363"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2024 07:46:06 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,192,1695711600"; 
-   d="scan'208";a="25025828"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 13 Jan 2024 07:46:05 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rOgCv-000AdQ-0x;
-	Sat, 13 Jan 2024 15:46:01 +0000
-Date: Sat, 13 Jan 2024 23:45:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 15f5ad190ec05493ea77da93644d86d26834b485
-Message-ID: <202401132300.UJEwM93p-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51B9D20EB;
+	Sun, 14 Jan 2024 14:10:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-3bd7804bfe1so192133b6e.0;
+        Sun, 14 Jan 2024 06:10:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1705241434; x=1705846234; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=M3WSWsFwwTld+EBhM8k9IfVkNuRLcxeBh/RSNpXjBV4=;
+        b=XrvcvhDrPRTgsGDORobI21nC7ijPouFQRFOyQWoTj+KEzK5pslclyXsqmX9asZXv0G
+         IcmGCGE3gt3MSSOvfusmSPgka5pd51PVvc52sL6J32oJHdrlPF3mF8MfZ8aFRAiiRQ8n
+         qNBD2HtN2ANZKwdCCSqUoNV8M3V19taxXy7Vreg5f6M/OsfSJzOqmseOAHRjlGOLZ7np
+         ujJ6kJ+mzPsT8iWGRTHA2ETmdRgJbqkPCv+ZTzZHWAIjhX9kmP+Gdi76c5hEmJsj/pha
+         //+CiYPCCc6OljWkuObDDlYucNyUbVKBukIngGa4u8ovZybsVz7r11Ucs6zUF0FrGb95
+         a/bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705241434; x=1705846234;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M3WSWsFwwTld+EBhM8k9IfVkNuRLcxeBh/RSNpXjBV4=;
+        b=FkAQUCle2mAr5B1Ng78yUijiTbaob5slshRv0AdsagSpEbuDCzMf3fRoLLCspJXc53
+         HyDlpYpnc0Ecn7RfjTDdpGPhkIejsEy4uLZVP2yfeRcuOmnMZdaRLDm7sv3id31ckrjj
+         pQIlGc+lQjilQej8umq3lwPUdaLxk6DyakoB4wbnsRFOGG8c7EKEnPFDKK3S/e9d+Ogn
+         iehdep4SD6qWDlEwzg8io/9NEQyJEfriRWbzijJpdiDeqpNUuBfGkd/xWbs71KEfkiUY
+         K+8/ALO2mXSFBToRiQ1+H8T19WiHXnnzv1rFfEBiCWeBlw0cbiiZPirzqxioEfzZLvnH
+         UiKw==
+X-Gm-Message-State: AOJu0Yxyw8stcrPirya41X9wTLmu02OKOD28uUcdiygVEJ8xFVmOZVR3
+	FPG1Ww2T/ZsFEG+N7Go0Tf4=
+X-Google-Smtp-Source: AGHT+IGH4gKlLxUwdPkCvvMUxGUjrD1fw3NT1xCDk7taXv/tg9rvi/H2OakBBbeigLPzQkpgUCZn8g==
+X-Received: by 2002:a05:6808:1b29:b0:3bd:7d40:50ff with SMTP id bx41-20020a0568081b2900b003bd7d4050ffmr100460oib.32.1705241434227;
+        Sun, 14 Jan 2024 06:10:34 -0800 (PST)
+Received: from archie.me ([103.131.18.64])
+        by smtp.gmail.com with ESMTPSA id l64-20020a639143000000b005c621e0de25sm6462664pge.71.2024.01.14.06.10.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Jan 2024 06:10:33 -0800 (PST)
+Received: by archie.me (Postfix, from userid 1000)
+	id 59C1D184CE5C1; Sun, 14 Jan 2024 21:10:29 +0700 (WIB)
+Date: Sun, 14 Jan 2024 21:10:29 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: "Dr. Henning Kopp" <hkopp22@yahoo.de>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Power Management <linux-pm@vger.kernel.org>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Ingo Molnar <mingo@kernel.org>
+Subject: Re: Why does Linux not implement pthread_suspend() and
+ pthread_resume()?
+Message-ID: <ZaPrVWwqkHMj3Bpp@archie.me>
+References: <0219492d-3971-f8e0-8b46-22d442a2d442.ref@yahoo.de>
+ <0219492d-3971-f8e0-8b46-22d442a2d442@yahoo.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="TWvxZVO7m6zehYbK"
+Content-Disposition: inline
+In-Reply-To: <0219492d-3971-f8e0-8b46-22d442a2d442@yahoo.de>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 15f5ad190ec05493ea77da93644d86d26834b485  Merge branch 'thermal-core' into linux-next
 
-elapsed time: 1463m
+--TWvxZVO7m6zehYbK
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-configs tested: 174
-configs skipped: 2
+[also Cc: linux-pm people]
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+On Sun, Jan 14, 2024 at 12:20:04PM +0100, Dr. Henning Kopp wrote:
+> Hi everyone,
+>=20
+> I have a question regarding pthreads. In particular, I was wondering why
+> there is no way to suspend and resume a thread in Linux.
+>=20
+> In Windows, there is SuspendThread() and ResumeThread() from
+> processthreadsapi.h. However in Linux, there does not seem to be a similar
+> function in pthread.h.
+>=20
+> When researching this issue i found multiple ways to work around the
+> inability of suspending a thread, such as using mutexes. But my question =
+is
+> why nobody bothered implementing suspending/resuming threads.
+>=20
+> I found one answer on stackoverflow [1] that mentions that pthread_suspend
+> and pthread_resume_np is in the "Unix specification", but not implemented=
+ in
+> Linux. I tried to follow up on this hint and get access to the Posix spec,
+> but i am not affiliated with a university anymore, so i was unable to
+> download the spec.
+>=20
+> I read "man 7 pthreads". It mentions that there are two Linux
+> implementations of Posix threads, that differ in some details from the Po=
+six
+> spec. However, it does not mention suspending or resuming threads at all.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20240113   gcc  
-arc                   randconfig-002-20240113   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                       aspeed_g4_defconfig   clang
-arm                                 defconfig   clang
-arm                           imxrt_defconfig   gcc  
-arm                      integrator_defconfig   gcc  
-arm                   randconfig-001-20240113   gcc  
-arm                   randconfig-002-20240113   gcc  
-arm                   randconfig-003-20240113   gcc  
-arm                   randconfig-004-20240113   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240113   gcc  
-arm64                 randconfig-002-20240113   gcc  
-arm64                 randconfig-003-20240113   gcc  
-arm64                 randconfig-004-20240113   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240113   gcc  
-csky                  randconfig-002-20240113   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240113   clang
-hexagon               randconfig-002-20240113   clang
-i386                             allmodconfig   clang
-i386                              allnoconfig   clang
-i386                             allyesconfig   clang
-i386         buildonly-randconfig-001-20240113   gcc  
-i386         buildonly-randconfig-002-20240113   gcc  
-i386         buildonly-randconfig-003-20240113   gcc  
-i386         buildonly-randconfig-004-20240113   gcc  
-i386         buildonly-randconfig-005-20240113   gcc  
-i386         buildonly-randconfig-006-20240113   gcc  
-i386                                defconfig   gcc  
-i386                  randconfig-001-20240113   gcc  
-i386                  randconfig-002-20240113   gcc  
-i386                  randconfig-003-20240113   gcc  
-i386                  randconfig-004-20240113   gcc  
-i386                  randconfig-005-20240113   gcc  
-i386                  randconfig-006-20240113   gcc  
-i386                  randconfig-011-20240113   clang
-i386                  randconfig-012-20240113   clang
-i386                  randconfig-013-20240113   clang
-i386                  randconfig-014-20240113   clang
-i386                  randconfig-015-20240113   clang
-i386                  randconfig-016-20240113   clang
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240113   gcc  
-loongarch             randconfig-002-20240113   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        m5307c3_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   clang
-mips                             allyesconfig   gcc  
-mips                          ath25_defconfig   clang
-nios2                            alldefconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240113   gcc  
-nios2                 randconfig-002-20240113   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240113   gcc  
-parisc                randconfig-002-20240113   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   clang
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                 canyonlands_defconfig   gcc  
-powerpc                    gamecube_defconfig   clang
-powerpc                 mpc8313_rdb_defconfig   clang
-powerpc               randconfig-001-20240113   gcc  
-powerpc               randconfig-002-20240113   gcc  
-powerpc               randconfig-003-20240113   gcc  
-powerpc                    sam440ep_defconfig   gcc  
-powerpc                     taishan_defconfig   gcc  
-powerpc                     tqm8540_defconfig   gcc  
-powerpc64             randconfig-001-20240113   gcc  
-powerpc64             randconfig-002-20240113   gcc  
-powerpc64             randconfig-003-20240113   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   clang
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv             nommu_k210_sdcard_defconfig   gcc  
-riscv                 randconfig-001-20240113   gcc  
-riscv                 randconfig-002-20240113   gcc  
-riscv                          rv32_defconfig   clang
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20240113   clang
-s390                  randconfig-002-20240113   clang
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                          lboxre2_defconfig   gcc  
-sh                    randconfig-001-20240113   gcc  
-sh                    randconfig-002-20240113   gcc  
-sh                            titan_defconfig   gcc  
-sh                          urquell_defconfig   gcc  
-sparc                       sparc64_defconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240113   gcc  
-sparc64               randconfig-002-20240113   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20240113   gcc  
-um                    randconfig-002-20240113   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240113   gcc  
-x86_64       buildonly-randconfig-002-20240113   gcc  
-x86_64       buildonly-randconfig-003-20240113   gcc  
-x86_64       buildonly-randconfig-004-20240113   gcc  
-x86_64       buildonly-randconfig-005-20240113   gcc  
-x86_64       buildonly-randconfig-006-20240113   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240113   clang
-x86_64                randconfig-002-20240113   clang
-x86_64                randconfig-003-20240113   clang
-x86_64                randconfig-004-20240113   clang
-x86_64                randconfig-005-20240113   clang
-x86_64                randconfig-006-20240113   clang
-x86_64                randconfig-011-20240113   gcc  
-x86_64                randconfig-012-20240113   gcc  
-x86_64                randconfig-013-20240113   gcc  
-x86_64                randconfig-014-20240113   gcc  
-x86_64                randconfig-015-20240113   gcc  
-x86_64                randconfig-016-20240113   gcc  
-x86_64                randconfig-071-20240113   gcc  
-x86_64                randconfig-072-20240113   gcc  
-x86_64                randconfig-073-20240113   gcc  
-x86_64                randconfig-074-20240113   gcc  
-x86_64                randconfig-075-20240113   gcc  
-x86_64                randconfig-076-20240113   gcc  
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                randconfig-001-20240113   gcc  
-xtensa                randconfig-002-20240113   gcc  
+LinuxThreads and NPTL?
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>=20
+> I hope this is the right mailing list for my question. If it is off-topic,
+> please accept my apologies.
+>=20
+> So my question is: What is the reason that Linux does not implement
+> functions for suspending and resuming threads?
+>=20
+
+Confused...
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--TWvxZVO7m6zehYbK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZaPrUQAKCRD2uYlJVVFO
+owSqAP0bAMuxQXF0Fr3YegItigo8XQnksqwS5Uwao9oYRSz35AEAiGtXyqqsfkou
+ftZEmy4Qp79j2I5gwFoq2X8n09FMTwk=
+=iY4L
+-----END PGP SIGNATURE-----
+
+--TWvxZVO7m6zehYbK--
 
