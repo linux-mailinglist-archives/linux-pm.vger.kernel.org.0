@@ -1,91 +1,101 @@
-Return-Path: <linux-pm+bounces-2184-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2185-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B63A182D2E1
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 02:01:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C835882D314
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 03:21:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D6951F21116
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 01:01:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B881281519
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 02:21:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 240C6110B;
-	Mon, 15 Jan 2024 01:01:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ysadX/VG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB73317CB;
+	Mon, 15 Jan 2024 02:21:07 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 890761374;
-	Mon, 15 Jan 2024 01:01:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=D498tm+X6eWH0ctrJ+yamEEYIoJnR90IzdsjGrMUKE8=; b=ysadX/VGgWgF3M/iBZpywxqN8I
-	2uAgx8YuLm139/LNslclVL+uIUHCjn65iOhGfxzDhLsuiwcLHmxGLW5Z924LrXBSkHApCRxZiU5eU
-	herpioouI8OhMrWX/pQuUCeyFQBaoGFPVIWZ7q6Kt4KsyX3H3q4MUNaHJDOwfaKRjPYNptWQeWMz2
-	gD/2ZUPZkcgYsQB5SkLRLjPPwTpO4ZfdwX1KGZxXH6opVBYtyAlgp2z3Rw6TPXUNS2Bjw79+gx6Wm
-	IXdFyAPD/4LBi5EtGMVhD2fV1LoI2idiRHpDxg7TdVQ8H6riFNN9tw+TbANKGjXDz3GU+DbOmvlK1
-	JfJDi51Q==;
-Received: from [50.53.46.231] (helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1rPBLq-007Zjo-0z;
-	Mon, 15 Jan 2024 01:01:18 +0000
-From: Randy Dunlap <rdunlap@infradead.org>
-To: linux-kernel@vger.kernel.org
-Cc: Randy Dunlap <rdunlap@infradead.org>,
-	Hongbo Zhang <hongbo.zhang@stericsson.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org
-Subject: [PATCH] thermal: db8500: remove kernel-doc notation from data
-Date: Sun, 14 Jan 2024 17:01:17 -0800
-Message-ID: <20240115010117.8383-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.43.0
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+	by smtp.subspace.kernel.org (Postfix) with SMTP id 2E5491FAB
+	for <linux-pm@vger.kernel.org>; Mon, 15 Jan 2024 02:21:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=netrider.rowland.org
+Received: (qmail 706546 invoked by uid 1000); 14 Jan 2024 21:20:59 -0500
+Date: Sun, 14 Jan 2024 21:20:59 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Bagas Sanjaya <bagasdotme@gmail.com>
+Cc: "Dr. Henning Kopp" <hkopp22@yahoo.de>,
+  Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+  Linux Power Management <linux-pm@vger.kernel.org>,
+  Ulf Hansson <ulf.hansson@linaro.org>,
+  "Rafael J . Wysocki" <rafael@kernel.org>,
+  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+  Viresh Kumar <viresh.kumar@linaro.org>,
+  Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@kernel.org>
+Subject: Re: Why does Linux not implement pthread_suspend() and
+ pthread_resume()?
+Message-ID: <5d1b969d-6c0a-4077-87ee-e41ab164fa3b@rowland.harvard.edu>
+References: <0219492d-3971-f8e0-8b46-22d442a2d442.ref@yahoo.de>
+ <0219492d-3971-f8e0-8b46-22d442a2d442@yahoo.de>
+ <ZaPrVWwqkHMj3Bpp@archie.me>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZaPrVWwqkHMj3Bpp@archie.me>
 
-Don't mark data with a "/**" comment. kernel-doc does not support
-documenting data definitions. This change prevents a kernel-doc
-warning.
+On Sun, Jan 14, 2024 at 09:10:29PM +0700, Bagas Sanjaya wrote:
+> [also Cc: linux-pm people]
+> 
+> On Sun, Jan 14, 2024 at 12:20:04PM +0100, Dr. Henning Kopp wrote:
+> > Hi everyone,
+> > 
+> > I have a question regarding pthreads. In particular, I was wondering why
+> > there is no way to suspend and resume a thread in Linux.
+> > 
+> > In Windows, there is SuspendThread() and ResumeThread() from
+> > processthreadsapi.h. However in Linux, there does not seem to be a similar
+> > function in pthread.h.
+> > 
+> > When researching this issue i found multiple ways to work around the
+> > inability of suspending a thread, such as using mutexes. But my question is
+> > why nobody bothered implementing suspending/resuming threads.
+> > 
+> > I found one answer on stackoverflow [1] that mentions that pthread_suspend
+> > and pthread_resume_np is in the "Unix specification", but not implemented in
+> > Linux. I tried to follow up on this hint and get access to the Posix spec,
+> > but i am not affiliated with a university anymore, so i was unable to
+> > download the spec.
+> > 
+> > I read "man 7 pthreads". It mentions that there are two Linux
+> > implementations of Posix threads, that differ in some details from the Posix
+> > spec. However, it does not mention suspending or resuming threads at all.
+> 
+> LinuxThreads and NPTL?
+> 
+> > 
+> > I hope this is the right mailing list for my question. If it is off-topic,
+> > please accept my apologies.
+> > 
+> > So my question is: What is the reason that Linux does not implement
+> > functions for suspending and resuming threads?
+> > 
+> 
+> Confused...
 
-db8500_thermal.c:27: warning: cannot understand function prototype: 'const unsigned long db8500_thermal_points[] = '
+These are indeed the wrong mailing lists (and people) for this question.  
+These lists are dedicated to discussions about the Linux kernel.  But 
+pthreads is a userspace library; it runs in user mode and is not part of 
+the kernel at all.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Hongbo Zhang <hongbo.zhang@stericsson.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Rafael J. Wysocki <rafael@kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Zhang Rui <rui.zhang@intel.com>
-Cc: Lukasz Luba <lukasz.luba@arm.com>
-Cc: linux-pm@vger.kernel.org
----
- drivers/thermal/db8500_thermal.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The best approach would be to find the group responsible for writing and 
+maintaining the Linux pthreads implementation (probably some subgroup 
+of the people working on the GNU C library), and ask them.
 
-diff -- a/drivers/thermal/db8500_thermal.c b/drivers/thermal/db8500_thermal.c
---- a/drivers/thermal/db8500_thermal.c
-+++ b/drivers/thermal/db8500_thermal.c
-@@ -20,7 +20,7 @@
- #define PRCMU_DEFAULT_MEASURE_TIME	0xFFF
- #define PRCMU_DEFAULT_LOW_TEMP		0
- 
--/**
-+/*
-  * db8500_thermal_points - the interpolation points that trigger
-  * interrupts
-  */
+Sorry I can't be of any more help.
+
+Alan Stern
+
 
