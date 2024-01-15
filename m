@@ -1,64 +1,53 @@
-Return-Path: <linux-pm+bounces-2203-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2204-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D00582D8F4
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 13:40:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 439D182D95A
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 14:00:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8FD33B213E9
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 12:40:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57B1E1C218E1
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 13:00:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3FB328F4;
-	Mon, 15 Jan 2024 12:40:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C677171DC;
+	Mon, 15 Jan 2024 12:58:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="E3nUl17e"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m2s6hzVu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D03B1134CA
-	for <linux-pm@vger.kernel.org>; Mon, 15 Jan 2024 12:40:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-33770772136so4954080f8f.3
-        for <linux-pm@vger.kernel.org>; Mon, 15 Jan 2024 04:40:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705322399; x=1705927199; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zsRK/J3InpLXmD2xXZcgPy1y+ubBCpi4pYLSA0UW/z0=;
-        b=E3nUl17eCD6fVnrbBfcjmbXZTkjZS00Kk1AgrcH5n2P8/2R8q7SclmL0Uj6aZU+HHp
-         QjavdXYdwytltOloAhnBspshVPJy7LKpCQgSi6ID+9stLq/RxAkiK/Gdzekx/D5R9T1n
-         w3LpyJXcLzR6UtgZgh3EGw+JCPOJa0c0SJkboM79QFmuAhKSmNosuSCuc8W12Eo+37E3
-         t0Y5B5WkwS/t/L7ErQY+NnXZuWlKaxGU6/B5py4RfVQjoU+SJ/e7vMDTVn+8AOxKKwDQ
-         uPHwJ7IQ0xQT4fxZyfYyN8Y1C7uHUUxSwxxBWEQj+hxNVl20C3h7KTj9AXNbcq9dsixv
-         IZrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705322399; x=1705927199;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zsRK/J3InpLXmD2xXZcgPy1y+ubBCpi4pYLSA0UW/z0=;
-        b=jgIMCnZ8FaqjIG7zyYHk9CijUovLbiwvahgZiLbtq5u6Kn2EwIqArkA0oNli1KaExp
-         8rpJ8QJU7D9P/I8NMr8d7kepnYkZEDHuGpZPzcJPxhxOc1KYiMtQyy+7bdXNvEI01yHt
-         wPqwn+P3mMYWFCptKSC1SVwDgCToNcB3IPud4AnDjgZREtEPSX1NmuxFCKEzSpLBwU27
-         SUtrZ2WE3+uL0c5WPMvZeqOUE2USZPUnqAgNiiEVnTHMEB5pfPLNzTj8vTJibtYbdAh8
-         6BjVnynygFk87GzfG8OnBSqJYk198DhhjQOsDVO9RFL91PHv22i/JN4tWFLkcbH7xZii
-         FuIg==
-X-Gm-Message-State: AOJu0Yw5A1qxMVfE3jYGLSAzSpKUrtOBOTbDL0Yv44t79Dyw5da0rtPv
-	HjKXyGUx93+JIU/kvjnY8ocIbWAkr1/wiQ==
-X-Google-Smtp-Source: AGHT+IGYGK5HYJtxYf6Y8FLJOAIKJCRS7+zCNj5z68tJRI9lPpwVMXl28qGhry6DFhtrpzKbgP5iHg==
-X-Received: by 2002:a5d:4a0a:0:b0:337:7b11:d63c with SMTP id m10-20020a5d4a0a000000b003377b11d63cmr3120808wrq.14.1705322399034;
-        Mon, 15 Jan 2024 04:39:59 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:439d:3bc0:a764:73dc? ([2a05:6e02:1041:c10:439d:3bc0:a764:73dc])
-        by smtp.googlemail.com with ESMTPSA id o14-20020adfe80e000000b0033674734a58sm11836029wrm.79.2024.01.15.04.39.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Jan 2024 04:39:58 -0800 (PST)
-Message-ID: <7417c498-2439-485d-9f78-fbb22f9ce393@linaro.org>
-Date: Mon, 15 Jan 2024 13:39:57 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1CBF171A3
+	for <linux-pm@vger.kernel.org>; Mon, 15 Jan 2024 12:58:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705323500; x=1736859500;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=hyOaAcSuzbO9KxDONBafxs8vR7M+/yAvNOjrZugu4vY=;
+  b=m2s6hzVuI7CQO5x+ZuY3/k+Ey4Jac6tf+2YL9Nz1TJOT2VRGatS2f4YL
+   SqOOlSzdjWmHQsm1sFRJGLbzG+5F31E6TIjzd5hotHSF5vv/QnvTO14xx
+   gu4DcgJHlXOt8QAVARF25GEvVaIbjeYlQO1mTXw8RfGoz+l2MqDte/+Yc
+   MdfXP8b56TAy5MB8/PVG7WtJaybf3KuTff5ehEtXZpg6Jfftr81i8pRzV
+   w5JsJfgekjYkl2vf4utS719+5dryp+Q8mMOKMQXmecJOlBwLxy9+a/XCf
+   1ouK4KMR/IyimOJqIAMrEUG127pmkX4wa7sI/eD4YX7u0Aehb2cpsFdCd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="463889948"
+X-IronPort-AV: E=Sophos;i="6.04,196,1695711600"; 
+   d="scan'208";a="463889948"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2024 04:58:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10953"; a="1030635059"
+X-IronPort-AV: E=Sophos;i="6.04,196,1695711600"; 
+   d="scan'208";a="1030635059"
+Received: from pwlazlyn-mobl.ger.corp.intel.com (HELO [10.246.16.73]) ([10.246.16.73])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2024 04:58:18 -0800
+Message-ID: <539e87e1-c2a7-4337-a178-b2dfd0aeeb8a@linux.intel.com>
+Date: Mon, 15 Jan 2024 13:58:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -66,202 +55,51 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 01/26] thermal: Introduce
- thermal_zone_device_register() and params structure
+Subject: Re: [PATCH 1/4] tools/power turbostat: Add --no-msr option
 Content-Language: en-US
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: rafael@kernel.org, rui.zhang@intel.com, lukasz.luba@arm.com,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, kernel@collabora.com
-References: <20231221124825.149141-1-angelogioacchino.delregno@collabora.com>
- <20231221124825.149141-2-angelogioacchino.delregno@collabora.com>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20231221124825.149141-2-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To: Len Brown <lenb@kernel.org>
+Cc: len.brown@intel.com, linux-pm@vger.kernel.org
+References: <20240112124815.970-1-patryk.wlazlyn@linux.intel.com>
+ <20240112124815.970-2-patryk.wlazlyn@linux.intel.com>
+ <CAJvTdK=NRSGz_1Mi_2-zLmqv4VeFiFF25Yw+sqeNLTV--r4TNg@mail.gmail.com>
+From: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
+In-Reply-To: <CAJvTdK=NRSGz_1Mi_2-zLmqv4VeFiFF25Yw+sqeNLTV--r4TNg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 21/12/2023 13:48, AngeloGioacchino Del Regno wrote:
-> In preparation for extending the thermal zone devices to actually have
-> a name and disambiguation of thermal zone types/names, introduce a new
-> thermal_zone_device_params structure which holds all of the parameters
-> that are necessary to register a thermal zone device, then add a new
-> function thermal_zone_device_register().
+> 6.7 added probe_platform_features().
 > 
-> The latter takes as parameter the newly introduced structure and is
-> made to eventually replace all usages of the now deprecated function
-> thermal_zone_device_register_with_trips() and of
-> thermal_tripless_zone_device_register().
+> Perhaps after it runs, we can simply update the result to disable
+> those impacted by no_msr?
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->   drivers/thermal/thermal_core.c | 27 +++++++++++++++++++++++++++
->   include/linux/thermal.h        | 33 +++++++++++++++++++++++++++++++++
->   2 files changed, 60 insertions(+)
+> platform->has_cst_msrs = 0;
+> platform->has_nhm_msrs = 0;
+> platform->rapl_msrs = 0;
+> etc.
 > 
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index e5434cdbf23b..6be508eb2d72 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -1235,6 +1235,8 @@ EXPORT_SYMBOL_GPL(thermal_zone_get_crit_temp);
->    *		   whether trip points have been crossed (0 for interrupt
->    *		   driven systems)
->    *
-> + * This function is deprecated. See thermal_zone_device_register().
-> + *
->    * This interface function adds a new thermal zone device (sensor) to
->    * /sys/class/thermal folder as thermal_zone[0-*]. It tries to bind all the
->    * thermal cooling devices registered at the same time.
-> @@ -1409,6 +1411,7 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
->   }
->   EXPORT_SYMBOL_GPL(thermal_zone_device_register_with_trips);
->   
-> +/* This function is deprecated. See thermal_zone_device_register(). */
->   struct thermal_zone_device *thermal_tripless_zone_device_register(
->   					const char *type,
->   					void *devdata,
-> @@ -1420,6 +1423,30 @@ struct thermal_zone_device *thermal_tripless_zone_device_register(
->   }
->   EXPORT_SYMBOL_GPL(thermal_tripless_zone_device_register);
->   
-> +/**
-> + * thermal_zone_device_register() - register a new thermal zone device
-> + * @tzdp:	Parameters of the new thermal zone device
-> + *		See struct thermal_zone_device_register.
-> + *
-> + * This interface function adds a new thermal zone device (sensor) to
-> + * /sys/class/thermal folder as thermal_zone[0-*]. It tries to bind all the
-> + * thermal cooling devices registered at the same time.
-> + * thermal_zone_device_unregister() must be called when the device is no
-> + * longer needed. The passive cooling depends on the .get_trend() return value.
-> + *
-> + * Return: a pointer to the created struct thermal_zone_device or an
-> + * in case of error, an ERR_PTR. Caller must check return value with
-> + * IS_ERR*() helpers.
-> + */
-> +struct thermal_zone_device *thermal_zone_device_register(struct thermal_zone_device_params *tzdp)
-> +{
-> +	return thermal_zone_device_register_with_trips(tzdp->type, tzdp->trips, tzdp->num_trips,
-> +						       tzdp->mask, tzdp->devdata, tzdp->ops,
-> +						       &tzdp->tzp, tzdp->passive_delay,
-> +						       tzdp->polling_delay);
-> +}
-> +EXPORT_SYMBOL_GPL(thermal_zone_device_register);
-> +
->   void *thermal_zone_device_priv(struct thermal_zone_device *tzd)
->   {
->   	return tzd->devdata;
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index 98957bae08ff..c6ed33a7e468 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -258,6 +258,33 @@ struct thermal_zone_params {
->   	int offset;
->   };
->   
-> +/**
-> + * struct thermal_zone_device_params - parameters for a thermal zone device
-> + * @type:		the thermal zone device type
-> + * @tzp:		thermal zone platform parameters
-> + * @ops:		standard thermal zone device callbacks
-> + * @devdata:		private device data
-> + * @trips:		a pointer to an array of thermal trips, if any
-> + * @num_trips:		the number of trip points the thermal zone support
-> + * @mask:		a bit string indicating the writeablility of trip points
-> + * @passive_delay:	number of milliseconds to wait between polls when
-> + *			performing passive cooling
-> + * @polling_delay:	number of milliseconds to wait between polls when checking
-> + *			whether trip points have been crossed (0 for interrupt
-> + *			driven systems)
-> + */
-> +struct thermal_zone_device_params {
-> +	const char *type;
-> +	struct thermal_zone_params tzp;
-> +	struct thermal_zone_device_ops *ops;
-> +	void *devdata;
-> +	struct thermal_trip *trips;
-> +	int num_trips;
-> +	int mask;
-> +	int passive_delay;
-> +	int polling_delay;
-> +};
+> that would avoid having to scatter no_msr in a lot of places.
+> 
+> of course that begs the question of what to do when a feature is
+> available both via MSR and via perf -- which is about to happen...
+> 
+> it also adds a place for us to make an error when we add a feature --
+> but even if we had a table and a bit to say whether the feature is
+> available via msr, we'd still have the opportunity to mess that up...
 
- From my POV, this "struct thermal_zone_params" has been always a 
-inadequate and catch-all structure. It will confuse with 
-thermal_zone_device_params
+Right. I thought about it, but I didn't like the idea of modifying the
+platform information, because of the reasons you outlined above, but
+also we might have some logic, along the way that cares if something is
+present, but not necessarily use MSR driver (or any other method) to get it.
 
-I suggest to cleanup a bit that by sorting the parameters in the right 
-structures where the result could be something like:
+With these changes, sure there are some no_msr checks scattered around,
+but they are usually close to where the data is acquired, making it easy
+to add an alternative path.
 
-eg.
+Modifying the platform_features would require to "unconst" a lot of the
+structures.
 
-struct thermal_zone_params {
-
-	const char *type;
-	struct thermal_zone_device_ops *ops;
-	struct thermal_trip *trips;
-	int num_trips;
-
-	int passive_delay;
-	int polling_delay;
-	
-	void *devdata;
-         bool no_hwmon;
-};
-
-struct thermal_governor_ipa_params {
-         u32 sustainable_power;
-         s32 k_po;
-         s32 k_pu;
-         s32 k_i;
-         s32 k_d;
-         s32 integral_cutoff;
-         int slope;
-         int offset;
-};
-
-struct thermal_governor_params {
-	char governor_name[THERMAL_NAME_LENGTH];
-	union {
-		struct thermal_governor_ipa_params ipa_params;
-	};
-};
-
-struct thermal_zone_device_params {
-	struct thermal_zone_params *tzp;
-	struct thermal_governor_params *tgp;
-}
-
-No functional changes just code reorg, being a series to be submitted 
-before the rest on these RFC changes (2->26)
-
->   /* Function declarations */
->   #ifdef CONFIG_THERMAL_OF
->   struct thermal_zone_device *devm_thermal_of_zone_register(struct device *dev, int id, void *data,
-> @@ -310,6 +337,8 @@ struct thermal_zone_device *thermal_tripless_zone_device_register(
->   					struct thermal_zone_device_ops *ops,
->   					const struct thermal_zone_params *tzp);
->   
-> +struct thermal_zone_device *thermal_zone_device_register(struct thermal_zone_device_params *tzdp);
-> +
->   void thermal_zone_device_unregister(struct thermal_zone_device *tz);
->   
->   void *thermal_zone_device_priv(struct thermal_zone_device *tzd);
-> @@ -372,6 +401,10 @@ static inline struct thermal_zone_device *thermal_tripless_zone_device_register(
->   					const struct thermal_zone_params *tzp)
->   { return ERR_PTR(-ENODEV); }
->   
-> +static inline struct thermal_zone_device *thermal_zone_device_register(
-> +					struct thermal_zone_device_params *tzdp)
-> +{ return ERR_PTR(-ENODEV); }
-> +
->   static inline void thermal_zone_device_unregister(struct thermal_zone_device *tz)
->   { }
->   
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+I think it's more clear to store a platform information in the
+platform_features and leave no_msr just to store whether the user
+requested the mode. This comes with a few extra checks, but leaves the
+structures independent.
 
