@@ -1,162 +1,120 @@
-Return-Path: <linux-pm+bounces-2196-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2197-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B013A82D815
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 12:06:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8B4782D85F
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 12:34:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6226B1F22091
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 11:06:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 987EB282541
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 11:34:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13DEB2C6A1;
-	Mon, 15 Jan 2024 11:06:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CA8C2BD00;
+	Mon, 15 Jan 2024 11:34:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="If4u5sBw"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="nFX2iE/I"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C43628DD1;
-	Mon, 15 Jan 2024 11:06:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=B8snCTk6m/S/IySGz0MUr7RGvF9ztHAy1wNv3isU/8A=; b=If4u5sBwSs6B37nBXDgiTbTUGN
-	lDo8qxPOFMMLR9tdUyLFo9NhxhiAei6ak3C/e+2MynMriUcITyfJLZRCR7Ly9EwLVRyTpXgvcUB3V
-	dwGg8WGAGKz7K/mPA9CiHN8UfYztvfbPPXOI0b0S+WLTsoNs8EV0O1R9IOUUphih0SDSGEtoXqkyc
-	uB4sWSh8b+qMXC/2xsfM+PilLtcS9vlGpghLJvk9GXVZXiWY3hrSNwUQ65+M5e30MzDBuRHWV1QU/
-	jXo3DcbVxcVsJSrnfHOPq2fWintWikuBFLjvQHJE8GaX60F8EKAbY9S+jDwY+ZggmQThypOLb+Xcb
-	DtnjfwcQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60190)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1rPKnW-0002Kh-1U;
-	Mon, 15 Jan 2024 11:06:30 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1rPKnV-0002tb-9h; Mon, 15 Jan 2024 11:06:29 +0000
-Date: Mon, 15 Jan 2024 11:06:29 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-	x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
-	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	jianyong.wu@arm.com, justin.he@arm.com,
-	James Morse <james.morse@arm.com>
-Subject: Re: [PATCH RFC v3 03/21] ACPI: processor: Register CPUs that are
- online, but not described in the DSDT
-Message-ID: <ZaURtUvWQyjYfiiO@shell.armlinux.org.uk>
-References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
- <E1rDOg2-00Dvjk-RI@rmk-PC.armlinux.org.uk>
- <CAJZ5v0ju1JHgpjuFLHZVs4NZiARG6iBZN_wza6c2e0kDhZjK0w@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37A7B2C683;
+	Mon, 15 Jan 2024 11:34:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: daa14486b39711eea2298b7352fd921d-20240115
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:MIME-Version:Reply-To:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=JL8etJQJZZlxR7+amaW8doF71Tvptr0HhTmq5ofDFk8=;
+	b=nFX2iE/IKpTCVXvJp5icHv94H4aX+ShCfcbswSgJqxTuISdW3CwT63nnRbNYXctXien316BRp6mEwdGvdHsgcKcXkxhqz30Hafn19BHT1CqhdWwDXLfANehcYD1YdAwxGWSOvW17VBijJk0GoUYbt0BLakyh0uArgBnKMcW7y50=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.35,REQID:860ce534-1785-4e39-a344-7b5f2019e2a1,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:5d391d7,CLOUDID:a683dd82-8d4f-477b-89d2-1e3bdbef96d1,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+	RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,
+	DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: daa14486b39711eea2298b7352fd921d-20240115
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw02.mediatek.com
+	(envelope-from <yu-chang.lee@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 115360283; Mon, 15 Jan 2024 19:18:48 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ MTKMBS14N1.mediatek.inc (172.21.101.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 15 Jan 2024 19:18:46 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Mon, 15 Jan 2024 19:18:46 +0800
+From: yu-chang.lee <yu-chang.lee@mediatek.com>
+To: <msp@baylibre.com>
+CC: Ulf Hansson <ulf.hansson@linaro.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, <fparent@baylibre.com>, Ben Lok
+	<ben.lok@mediatek.com>, Chris-qj Chen <Chris-qj.Chen@mediatek.com>, Louis Yu
+	<louis.yu@mediatek.com>, Bear Wang <bear.wang@mediatek.com>, MandyJH Liu
+	<MandyJH.Liu@mediatek.com>, Fan Chen <fan.chen@mediatek.com>, Xiufeng Li
+	<Xiufeng.Li@mediatek.com>, <abailon@baylibre.com>, <amergnat@baylibre.com>,
+	<afgros@baylibre.com>, yu-chang.lee <yu-chang.lee@mediatek.com>
+Subject: [PATCH 0/1] Need help to validate power domain driver modification on mt8365
+Date: Mon, 15 Jan 2024 19:18:43 +0800
+Message-ID: <20240115111844.22240-1-yu-chang.lee@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <Need help to validate power domain driver modification on mt8365>
+References: <Need help to validate power domain driver modification on mt8365>
+Reply-To: <msp@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0ju1JHgpjuFLHZVs4NZiARG6iBZN_wza6c2e0kDhZjK0w@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Type: text/plain
+X-TM-AS-Product-Ver: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-AS-Result: No-10--5.523200-8.000000
+X-TMASE-MatchedRID: fXkh6SfpfhtM4VjZ76ar2IQ6iEG+7EHnQKuv8uQBDjos7eP5cPCWQxLB
+	HER/v45pa888eHP8TjxdPJV7o2tMJaLCTO1UKypvbQ9aoPSmWJFKPIx+MJF9o5soi2XrUn/JlR1
+	cT9YafQUG3jF6chFcDnS4vQrt84k3IAcCikR3vq/Yh98d0MMCXCdiKF9WF8aIyjYtBKCN99W//3
+	PsX06R2V2kuxS4dcf0
+X-TM-AS-User-Approved-Sender: No
+X-TM-AS-User-Blocked-Sender: No
+X-TMASE-Result: 10--5.523200-8.000000
+X-TMASE-Version: SMEX-14.0.0.3152-9.1.1006-23728.005
+X-TM-SNTS-SMTP:
+	5D51DBEE3B8543E096065A55E9CD6ACC2AC7770FC9861491344DB8422BAE874B2000:8
+X-MTK: N
 
-On Mon, Dec 18, 2023 at 09:22:03PM +0100, Rafael J. Wysocki wrote:
-> On Wed, Dec 13, 2023 at 1:49 PM Russell King <rmk+kernel@armlinux.org.uk> wrote:
-> >
-> > From: James Morse <james.morse@arm.com>
-> >
-> > ACPI has two descriptions of CPUs, one in the MADT/APIC table, the other
-> > in the DSDT. Both are required. (ACPI 6.5's 8.4 "Declaring Processors"
-> > says "Each processor in the system must be declared in the ACPI
-> > namespace"). Having two descriptions allows firmware authors to get
-> > this wrong.
-> >
-> > If CPUs are described in the MADT/APIC, they will be brought online
-> > early during boot. Once the register_cpu() calls are moved to ACPI,
-> > they will be based on the DSDT description of the CPUs. When CPUs are
-> > missing from the DSDT description, they will end up online, but not
-> > registered.
-> >
-> > Add a helper that runs after acpi_init() has completed to register
-> > CPUs that are online, but weren't found in the DSDT. Any CPU that
-> > is registered by this code triggers a firmware-bug warning and kernel
-> > taint.
-> >
-> > Qemu TCG only describes the first CPU in the DSDT, unless cpu-hotplug
-> > is configured.
-> 
-> So why is this a kernel problem?
+Hi Markus,
 
-So what are you proposing should be the behaviour here? What this
-statement seems to be saying is that QEMU as it exists today only
-describes the first CPU in DSDT.
+In reply to mail "Need help to validate power domain driver modification on
+mt8365", the timing of "smi clamp protection" being called is completely 
+different from the one of "bus protection" that is why I think there should
+be another member represent "smi clamp protection" since these are 
+different thing essentially. In this way we match smi to its protection
+in an 1 to 1 manner which is more direct way to support multiple smi I
+think.
 
-As this patch series changes when arch_register_cpu() gets called (as
-described in the paragraph above) we obviously need to preserve the
-_existing_ behaviour to avoid causing regressions. So, if changing the
-kernel causes user visible regressions (e.g. sysfs entries to
-disappear) then it obviously _is_ a kernel problem that needs to be
-solved.
+By adding "scpsys_clamp_bus_protection_enable" at the end of bus protection
+function we also can guarantee bus protection still remain the same as
+before, while, at the same time, forcing bus protection sequence in the
+future.
 
-We can't say "well fix QEMU then" without invoking the wrath of Linus.
+yu-chang.lee (1):
+  soc: mediatek: pm-domains: support clamp protection
 
-> > Signed-off-by: James Morse <james.morse@arm.com>
-> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Reviewed-by: Gavin Shan <gshan@redhat.com>
-> > Tested-by: Miguel Luis <miguel.luis@oracle.com>
-> > Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
-> > Tested-by: Jianyong Wu <jianyong.wu@arm.com>
-> > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> > ---
-> >  drivers/acpi/acpi_processor.c | 19 +++++++++++++++++++
-> >  1 file changed, 19 insertions(+)
-> >
-> > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-> > index 6a542e0ce396..0511f2bc10bc 100644
-> > --- a/drivers/acpi/acpi_processor.c
-> > +++ b/drivers/acpi/acpi_processor.c
-> > @@ -791,6 +791,25 @@ void __init acpi_processor_init(void)
-> >         acpi_pcc_cpufreq_init();
-> >  }
-> >
-> > +static int __init acpi_processor_register_missing_cpus(void)
-> > +{
-> > +       int cpu;
-> > +
-> > +       if (acpi_disabled)
-> > +               return 0;
-> > +
-> > +       for_each_online_cpu(cpu) {
-> > +               if (!get_cpu_device(cpu)) {
-> > +                       pr_err_once(FW_BUG "CPU %u has no ACPI namespace description!\n", cpu);
-> > +                       add_taint(TAINT_FIRMWARE_WORKAROUND, LOCKDEP_STILL_OK);
-> > +                       arch_register_cpu(cpu);
-> 
-> Which part of this code is related to ACPI?
-
-That's a good question, and I suspect it would be more suited to being
-placed in drivers/base/cpu.c except for the problem that the error
-message refers to ACPI.
-
-As long as we keep the acpi_disabled test, I guess that's fine.
-cpu_dev_register_generic() there already tests acpi_disabled.
+ drivers/pmdomain/mediatek/mt8183-pm-domains.h |  52 ++++---
+ drivers/pmdomain/mediatek/mt8188-pm-domains.h |  41 +++++-
+ drivers/pmdomain/mediatek/mt8365-pm-domains.h |  12 +-
+ drivers/pmdomain/mediatek/mtk-pm-domains.c    | 132 +++++++++++++++---
+ drivers/pmdomain/mediatek/mtk-pm-domains.h    |   2 +
+ 5 files changed, 189 insertions(+), 50 deletions(-)
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+2.18.0
+
 
