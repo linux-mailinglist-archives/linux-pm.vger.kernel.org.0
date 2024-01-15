@@ -1,191 +1,227 @@
-Return-Path: <linux-pm+bounces-2212-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2213-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F7EC82DD99
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 17:28:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9405B82DDB7
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 17:39:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7F132B2128B
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 16:28:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 195C91F2244E
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 16:39:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0060217BAF;
-	Mon, 15 Jan 2024 16:28:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C148F17BC4;
+	Mon, 15 Jan 2024 16:39:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IjUYZaEC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6B4120E3;
-	Mon, 15 Jan 2024 16:28:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D01582F4;
-	Mon, 15 Jan 2024 08:29:04 -0800 (PST)
-Received: from [10.57.8.58] (unknown [10.57.8.58])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6CE913F5A1;
-	Mon, 15 Jan 2024 08:28:15 -0800 (PST)
-Message-ID: <f2e94d3b-bf2e-492f-a72d-f7978125d7d4@arm.com>
-Date: Mon, 15 Jan 2024 16:28:13 +0000
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269AE17BBE
+	for <linux-pm@vger.kernel.org>; Mon, 15 Jan 2024 16:39:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-da7ea62e76cso7425795276.3
+        for <linux-pm@vger.kernel.org>; Mon, 15 Jan 2024 08:39:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1705336757; x=1705941557; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=s/fqnYPq+dkxltZBpseJmaWi5P52GcYKf8Hz52+kYdw=;
+        b=IjUYZaECxzKfYLrIA6JZzfm/WyjSzCqj+ZaR3B/yqVXZfdIbfIalky8b+JGoH3NI3K
+         oIQhhDgEQUm91cIXyGgYivNQxQiONX5/J6XVIGuoD9YqKc5uEfmnR2iVx2ibEQnklPcV
+         7kHm7u0Az29VHRc5AyX57An1zAQB5RtH0Gyj0/ezzU+K0GoPhA1zPzlI7j0ML5MpbNyb
+         aUjb7v5PdTekQKR/bARWs2x2Cp0CAZMDiXsBN3D4WKvh3FckB9/Vssb334V71DaNV4d2
+         GjQIHsHTvOqIlAH8qeRtzLs5mB+s8z9sUNqD64FNeWIOhtvsAxshySe7SV9q1/sJzBm6
+         h7JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705336757; x=1705941557;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=s/fqnYPq+dkxltZBpseJmaWi5P52GcYKf8Hz52+kYdw=;
+        b=ji7Ijypz65vXbZ29NSZhFYIU2GD7YIaAlUXxG+KyofiVDJHU6k63QLAi1g618+KnWH
+         khlvSDOFukfhX7zzZpLZpYKwfR70GNphpu6ulKmWWoEreRujXV+whr+/IKtnywGDX31z
+         8ypQwgg0nDMwgANFmdwNjHbe+02JJAWkV+g+WqmQxpmCA9FAA2oCu6+hmtBe4E9fOcrx
+         vuRh49l49fM6LbBHCxJCQ0PReaNPdmsIm8/0QmtIwDSYxbgrGq01tcfbTVTrydu1WyaE
+         AF7N2wkNOKRVxAN8f5ELpu5P+QBxtDx7CRjkU4Th36hjLXqk4NX+VUMF4tKM1pqfbtLw
+         A/xw==
+X-Gm-Message-State: AOJu0Yx9Foxew+L0ofWoNUSZ4Fc4OlcDoufj43kyzsMqwKdRE21gC8By
+	bxKjUOS5BGMC9+HfvFryTrSyezdWwBp9+RKX8VD0qxulLgWmuQ==
+X-Google-Smtp-Source: AGHT+IHETO9D5PNXpCW0t0+ryr9d6gweyKG6zA7bPc8EVqB2nhkeswrpOk/2xV5U8DLwdyukn9i/vGUKpTbnfZA43ds=
+X-Received: by 2002:a05:6902:1b13:b0:dbd:98db:f6ec with SMTP id
+ eh19-20020a0569021b1300b00dbd98dbf6ecmr3260792ybb.33.1705336756978; Mon, 15
+ Jan 2024 08:39:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/2] dt-bindings: cpufreq: add virtual cpufreq device
-To: David Dai <davidai@google.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>,
- Saravana Kannan <saravanak@google.com>
-Cc: Quentin Perret <qperret@google.com>,
- Masami Hiramatsu <mhiramat@google.com>, Will Deacon <will@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Vincent Guittot <vincent.guittot@linaro.org>, Marc Zyngier <maz@kernel.org>,
- Oliver Upton <oliver.upton@linux.dev>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Pavan Kondeti <quic_pkondeti@quicinc.com>,
- Gupta Pankaj <pankaj.gupta@amd.com>, Mel Gorman <mgorman@suse.de>,
- kernel-team@android.com, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20231111014933.1934562-1-davidai@google.com>
- <20231111014933.1934562-2-davidai@google.com>
-Content-Language: en-US
-From: Hongyan Xia <hongyan.xia2@arm.com>
-In-Reply-To: <20231111014933.1934562-2-davidai@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <cover.1704726960.git.geert+renesas@glider.be> <ee3e57bafef123194b9779dbf5b9c181dc3b37ed.1704726960.git.geert+renesas@glider.be>
+In-Reply-To: <ee3e57bafef123194b9779dbf5b9c181dc3b37ed.1704726960.git.geert+renesas@glider.be>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Mon, 15 Jan 2024 17:38:40 +0100
+Message-ID: <CAPDyKFpc1ZsVhFM22zum=54LQ3Tiow7kG0nnt3WD3DBTGY6KFg@mail.gmail.com>
+Subject: Re: [PATCH 09/15] pmdomain: renesas: r8a779h0-sysc: Add r8a779h0 support
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 11/11/2023 01:49, David Dai wrote:
-> Adding bindings to represent a virtual cpufreq device.
-> 
-> Virtual machines may expose MMIO regions for a virtual cpufreq device
-> for guests to read frequency information or to request frequency
-> selection. The virtual cpufreq device has an individual controller for
-> each frequency domain.
-> 
-> Co-developed-by: Saravana Kannan <saravanak@google.com>
-> Signed-off-by: Saravana Kannan <saravanak@google.com>
-> Signed-off-by: David Dai <davidai@google.com>
+- trimmed cc-list
+
+On Mon, 8 Jan 2024 at 16:34, Geert Uytterhoeven <geert+renesas@glider.be> wrote:
+>
+> From: Duy Nguyen <duy.nguyen.rh@renesas.com>
+>
+> Add support for R-Car V4M (R8A779H0) SoC power areas to the R-Car SYSC
+> driver.
+>
+> Signed-off-by: Duy Nguyen <duy.nguyen.rh@renesas.com>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+To make sure we agree on the merge strategy; should I pick up $subject
+patch, patch3 and patch4 through my pmdomain tree? DT patches, like
+patch3 and patch4, I should share as usual via my immutable "dt"
+branch, so you can pull it into your renesas tree?
+
+Kind regards
+Uffe
+
 > ---
->   .../cpufreq/qemu,cpufreq-virtual.yaml         | 99 +++++++++++++++++++
->   1 file changed, 99 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/cpufreq/qemu,cpufreq-virtual.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/cpufreq/qemu,cpufreq-virtual.yaml b/Documentation/devicetree/bindings/cpufreq/qemu,cpufreq-virtual.yaml
+> Changes compared to the BSP:
+>   - Move from drivers/soc/renesas/ to drivers/pmdomain/renesas/,
+>   - Include rcar-gen4-sysc glue from "soc: renesas: rcar-gen4-sysc:
+>     Introduce R-Car Gen4 SYSC driver",
+>   - Remove unneeded includes,
+>   - Align second column,
+>   - Fix names of "a33dga" and "a23dgb" domains,
+>   - Add missing "a3cr[012]" domains.
+> ---
+>  drivers/pmdomain/renesas/Kconfig          |  4 ++
+>  drivers/pmdomain/renesas/Makefile         |  1 +
+>  drivers/pmdomain/renesas/r8a779h0-sysc.c  | 55 +++++++++++++++++++++++
+>  drivers/pmdomain/renesas/rcar-gen4-sysc.c |  3 ++
+>  drivers/pmdomain/renesas/rcar-gen4-sysc.h |  1 +
+>  5 files changed, 64 insertions(+)
+>  create mode 100644 drivers/pmdomain/renesas/r8a779h0-sysc.c
+>
+> diff --git a/drivers/pmdomain/renesas/Kconfig b/drivers/pmdomain/renesas/Kconfig
+> index 80bf2cf8b60e6f63..54acb4b1ec7c4892 100644
+> --- a/drivers/pmdomain/renesas/Kconfig
+> +++ b/drivers/pmdomain/renesas/Kconfig
+> @@ -71,6 +71,10 @@ config SYSC_R8A779G0
+>         bool "System Controller support for R-Car V4H" if COMPILE_TEST
+>         select SYSC_RCAR_GEN4
+>
+> +config SYSC_R8A779H0
+> +       bool "System Controller support for R-Car V4M" if COMPILE_TEST
+> +       select SYSC_RCAR_GEN4
+> +
+>  config SYSC_RMOBILE
+>         bool "System Controller support for R-Mobile" if COMPILE_TEST
+>
+> diff --git a/drivers/pmdomain/renesas/Makefile b/drivers/pmdomain/renesas/Makefile
+> index e306e396fc8c10e3..89180f19c23be732 100644
+> --- a/drivers/pmdomain/renesas/Makefile
+> +++ b/drivers/pmdomain/renesas/Makefile
+> @@ -24,6 +24,7 @@ obj-$(CONFIG_SYSC_R8A77995)   += r8a77995-sysc.o
+>  obj-$(CONFIG_SYSC_R8A779A0)    += r8a779a0-sysc.o
+>  obj-$(CONFIG_SYSC_R8A779F0)    += r8a779f0-sysc.o
+>  obj-$(CONFIG_SYSC_R8A779G0)    += r8a779g0-sysc.o
+> +obj-$(CONFIG_SYSC_R8A779H0)     += r8a779h0-sysc.o
+>  # Family
+>  obj-$(CONFIG_SYSC_RCAR)                += rcar-sysc.o
+>  obj-$(CONFIG_SYSC_RCAR_GEN4)   += rcar-gen4-sysc.o
+> diff --git a/drivers/pmdomain/renesas/r8a779h0-sysc.c b/drivers/pmdomain/renesas/r8a779h0-sysc.c
 > new file mode 100644
-> index 000000000000..16606cf1fd1a
+> index 0000000000000000..bf3fd50dc8dccaf0
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/cpufreq/qemu,cpufreq-virtual.yaml
-> @@ -0,0 +1,99 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/cpufreq/qemu,cpufreq-virtual.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +++ b/drivers/pmdomain/renesas/r8a779h0-sysc.c
+> @@ -0,0 +1,55 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Renesas R-Car V4M System Controller
+> + *
+> + * Copyright (C) 2016-2017 Glider bvba
+> + * Copyright (C) 2023 Renesas Electronics Corp
+> + */
 > +
-> +title: Virtual CPUFreq
+> +#include <linux/kernel.h>
 > +
-> +maintainers:
-> +  - David Dai <davidai@google.com>
-> +  - Saravana Kannan <saravanak@google.com>
+> +#include <dt-bindings/power/r8a779h0-sysc.h>
 > +
-> +description:
-> +  Virtual CPUFreq is a virtualized driver in guest kernels that sends frequency
-> +  selection of its vCPUs as a hint to the host through MMIO regions. Each vCPU
-> +  is associated with a frequency domain which can be shared with other vCPUs.
-> +  Each frequency domain has its own set of registers for frequency controls.
+> +#include "rcar-gen4-sysc.h"
 > +
-> +properties:
-> +  compatible:
-> +    const: qemu,virtual-cpufreq
+> +static struct rcar_gen4_sysc_area r8a779h0_areas[] __initdata = {
+> +       { "always-on",  R8A779H0_PD_ALWAYS_ON, -1, PD_ALWAYS_ON },
+> +       { "c4",         R8A779H0_PD_C4, R8A779H0_PD_ALWAYS_ON },
+> +       { "a2e0d0",     R8A779H0_PD_A2E0D0, R8A779H0_PD_C4, PD_SCU },
+> +       { "a1e0d0c0",   R8A779H0_PD_A1E0D0C0, R8A779H0_PD_A2E0D0, PD_CPU_NOCR },
+> +       { "a1e0d0c1",   R8A779H0_PD_A1E0D0C1, R8A779H0_PD_A2E0D0, PD_CPU_NOCR },
+> +       { "a1e0d0c2",   R8A779H0_PD_A1E0D0C2, R8A779H0_PD_A2E0D0, PD_CPU_NOCR },
+> +       { "a1e0d0c3",   R8A779H0_PD_A1E0D0C3, R8A779H0_PD_A2E0D0, PD_CPU_NOCR },
+> +       { "a3cr0",      R8A779H0_PD_A3CR0, R8A779H0_PD_ALWAYS_ON, PD_CPU_NOCR },
+> +       { "a3cr1",      R8A779H0_PD_A3CR1, R8A779H0_PD_ALWAYS_ON, PD_CPU_NOCR },
+> +       { "a3cr2",      R8A779H0_PD_A3CR2, R8A779H0_PD_ALWAYS_ON, PD_CPU_NOCR },
+> +       { "a33dga",     R8A779H0_PD_A33DGA, R8A779H0_PD_C4 },
+> +       { "a23dgb",     R8A779H0_PD_A23DGB, R8A779H0_PD_A33DGA },
+> +       { "a3vip0",     R8A779H0_PD_A3VIP0, R8A779H0_PD_C4 },
+> +       { "a3vip2",     R8A779H0_PD_A3VIP2, R8A779H0_PD_C4 },
+> +       { "a3dul",      R8A779H0_PD_A3DUL, R8A779H0_PD_C4 },
+> +       { "a3isp0",     R8A779H0_PD_A3ISP0, R8A779H0_PD_C4 },
+> +       { "a2cn0",      R8A779H0_PD_A2CN0, R8A779H0_PD_C4 },
+> +       { "a1cn0",      R8A779H0_PD_A1CN0, R8A779H0_PD_A2CN0 },
+> +       { "a1dsp0",     R8A779H0_PD_A1DSP0, R8A779H0_PD_A2CN0 },
+> +       { "a1dsp1",     R8A779H0_PD_A1DSP1, R8A779H0_PD_A2CN0 },
+> +       { "a2imp01",    R8A779H0_PD_A2IMP01, R8A779H0_PD_C4 },
+> +       { "a2psc",      R8A779H0_PD_A2PSC, R8A779H0_PD_C4 },
+> +       { "a2dma",      R8A779H0_PD_A2DMA, R8A779H0_PD_C4 },
+> +       { "a2cv0",      R8A779H0_PD_A2CV0, R8A779H0_PD_C4 },
+> +       { "a2cv1",      R8A779H0_PD_A2CV1, R8A779H0_PD_C4 },
+> +       { "a2cv2",      R8A779H0_PD_A2CV2, R8A779H0_PD_C4 },
+> +       { "a2cv3",      R8A779H0_PD_A2CV3, R8A779H0_PD_C4 },
+> +       { "a3imr0",     R8A779H0_PD_A3IMR0, R8A779H0_PD_C4 },
+> +       { "a3imr1",     R8A779H0_PD_A3IMR1, R8A779H0_PD_C4 },
+> +       { "a3imr2",     R8A779H0_PD_A3IMR2, R8A779H0_PD_C4 },
+> +       { "a3imr3",     R8A779H0_PD_A3IMR3, R8A779H0_PD_C4 },
+> +       { "a3vc",       R8A779H0_PD_A3VC, R8A779H0_PD_C4 },
+> +       { "a3pci",      R8A779H0_PD_A3PCI, R8A779H0_PD_C4 },
+> +       { "a2pciphy",   R8A779H0_PD_A2PCIPHY, R8A779H0_PD_A3PCI },
+> +};
 > +
-> +  reg:
-> +    maxItems: 1
-> +    description:
-> +      Address and size of region containing frequency controls for each of the
-> +      frequency domains. Regions for each frequency domain is placed
-> +      contiugously and contain registers for controlling DVFS(Dynamic Frequency
-> +      and Voltage) characteristics. The size of the region is proportional to
-> +      total number of frequency domains.
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    // This example shows a two CPU configuration with a frequency domain
-> +    // for each CPU.
-> +    cpus {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      cpu@0 {
-> +        compatible = "arm,armv8";
-> +        device_type = "cpu";
-> +        reg = <0x0>;
-> +        operating-points-v2 = <&opp_table0>;
-> +      };
-> +
-> +      cpu@1 {
-> +        compatible = "arm,armv8";
-> +        device_type = "cpu";
-> +        reg = <0x0>;
-> +        operating-points-v2 = <&opp_table1>;
-> +      };
-> +    };
-> +
-> +    opp_table0: opp-table-0 {
-> +      compatible = "operating-points-v2";
-> +      opp-shared;
-> +
-> +      opp1098000000 {
-> +        opp-hz = /bits/ 64 <1098000000>;
-> +        opp-level = <1>;
-> +      };
-> +
-> +      opp1197000000 {
-> +        opp-hz = /bits/ 64 <1197000000>;
-> +        opp-level = <2>;
-> +      };
-> +    };
-> +
-> +    opp_table1: opp-table-1 {
-> +      compatible = "operating-points-v2";
-> +      opp-shared;
-> +
-> +      opp1106000000 {
-> +        opp-hz = /bits/ 64 <1106000000>;
-> +        opp-level = <1>;
-> +      };
-> +
-> +      opp1277000000 {
-> +        opp-hz = /bits/ 64 <1277000000>;
-> +        opp-level = <2>;
-> +      };
-> +    };
-
-NIT: If my understanding is correct, it might be worth re-iterating that 
-these OPPs should mirror the host frequency domain this vCPU is pinned to.
-
-Also, since VM migration has been mentioned elsewhere in this thread, am 
-I right in saying that you can't change these OPPs after registration? 
-So, even if one wants to migrate, one has to migrate to an SoC with the 
-same frequency domains anyway, otherwise the OPPs in the VM are entirely 
-bogus?
-
-> +
-> +    soc {
-> +      #address-cells = <1>;
-> +      #size-cells = <1>;
-> +
-> +      cpufreq@1040000 {
-> +        compatible = "qemu,virtual-cpufreq";
-> +        reg = <0x1040000 0x10>;
-> +      };
-> +    };
+> +const struct rcar_gen4_sysc_info r8a779h0_sysc_info __initconst = {
+> +       .areas = r8a779h0_areas,
+> +       .num_areas = ARRAY_SIZE(r8a779h0_areas),
+> +};
+> diff --git a/drivers/pmdomain/renesas/rcar-gen4-sysc.c b/drivers/pmdomain/renesas/rcar-gen4-sysc.c
+> index 9e5e6e077abc081c..728248659a97e8cc 100644
+> --- a/drivers/pmdomain/renesas/rcar-gen4-sysc.c
+> +++ b/drivers/pmdomain/renesas/rcar-gen4-sysc.c
+> @@ -284,6 +284,9 @@ static const struct of_device_id rcar_gen4_sysc_matches[] __initconst = {
+>  #endif
+>  #ifdef CONFIG_SYSC_R8A779G0
+>         { .compatible = "renesas,r8a779g0-sysc", .data = &r8a779g0_sysc_info },
+> +#endif
+> +#ifdef CONFIG_SYSC_R8A779H0
+> +       { .compatible = "renesas,r8a779h0-sysc", .data = &r8a779h0_sysc_info },
+>  #endif
+>         { /* sentinel */ }
+>  };
+> diff --git a/drivers/pmdomain/renesas/rcar-gen4-sysc.h b/drivers/pmdomain/renesas/rcar-gen4-sysc.h
+> index 388cfa8f8f9fd656..fdf843aa51134f87 100644
+> --- a/drivers/pmdomain/renesas/rcar-gen4-sysc.h
+> +++ b/drivers/pmdomain/renesas/rcar-gen4-sysc.h
+> @@ -40,5 +40,6 @@ struct rcar_gen4_sysc_info {
+>  extern const struct rcar_gen4_sysc_info r8a779a0_sysc_info;
+>  extern const struct rcar_gen4_sysc_info r8a779f0_sysc_info;
+>  extern const struct rcar_gen4_sysc_info r8a779g0_sysc_info;
+> +extern const struct rcar_gen4_sysc_info r8a779h0_sysc_info;
+>
+>  #endif /* __SOC_RENESAS_RCAR_GEN4_SYSC_H__ */
+> --
+> 2.34.1
+>
 
