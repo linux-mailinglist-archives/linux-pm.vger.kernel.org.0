@@ -1,229 +1,191 @@
-Return-Path: <linux-pm+bounces-2211-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2212-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7028382DD7C
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 17:21:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F7EC82DD99
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 17:28:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA19C28393F
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 16:21:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7F132B2128B
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 16:28:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A573F17BB5;
-	Mon, 15 Jan 2024 16:17:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GD+7GY2Y"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0060217BAF;
+	Mon, 15 Jan 2024 16:28:20 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 810B417BB1;
-	Mon, 15 Jan 2024 16:17:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED86EC433B2;
-	Mon, 15 Jan 2024 16:16:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705335420;
-	bh=T+2sSv2X8aSMaN+ypn7mK/Rq48tUKizTpqsxeAp5JXg=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=GD+7GY2Y59G0AWjmxmyDueLlKdjD545OB41J37Fcw1V1AbXHiCPvMtkR8ZLBEk+bB
-	 o6h6jxgbo4NPaxdPliQlTsqCLFu0z1zw395a8xiF9jQis/ezAcPv7aZ7Nv0g9U2UUz
-	 NMFIKVdlIK1EP+dulIVzcKB8z3P233h8iHO5Xh/PiaycNVF17dAJJWbEB2cMaze/uH
-	 4bjXRqIJK+NsTTl2B+WhLfTBqxEwPmpuIYpEMqDGu6rsMV1+lzXx4R5BdkJ6SSTxiu
-	 XljzFVMlL2IWBqw175nqZ+3m12n+BxQUUkgO/tM1uk7XmhIFT5LpYQg+lyIwaZ2NiB
-	 dhQr8W2Z7TSkQ==
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2cd81b09e83so53699531fa.2;
-        Mon, 15 Jan 2024 08:16:59 -0800 (PST)
-X-Gm-Message-State: AOJu0YwOqh8yCg768VnykVmUXKvYDy4vIuBy9JtXyXfs5N2G+x7Nj8X3
-	hFIinAF4m4yRENUFLWNYLD1FmjaAfLxf+OGiQg==
-X-Google-Smtp-Source: AGHT+IF9uStzXLvMKSDmlonhF6vj8iuop2j6X3GFmK9wutfyiriS22etcNW5wavbcSbXH+5+Z1eNgdixUpHXm6YARF4=
-X-Received: by 2002:a2e:9ec4:0:b0:2cd:418:a38 with SMTP id h4-20020a2e9ec4000000b002cd04180a38mr1221350ljk.136.1705335418126;
- Mon, 15 Jan 2024 08:16:58 -0800 (PST)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6B4120E3;
+	Mon, 15 Jan 2024 16:28:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D01582F4;
+	Mon, 15 Jan 2024 08:29:04 -0800 (PST)
+Received: from [10.57.8.58] (unknown [10.57.8.58])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6CE913F5A1;
+	Mon, 15 Jan 2024 08:28:15 -0800 (PST)
+Message-ID: <f2e94d3b-bf2e-492f-a72d-f7978125d7d4@arm.com>
+Date: Mon, 15 Jan 2024 16:28:13 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230827115033.935089-1-dmitry.baryshkov@linaro.org>
- <20230827115033.935089-9-dmitry.baryshkov@linaro.org> <20231011154935.GA785564-robh@kernel.org>
- <CAA8EJpqf4Q7wh657==C45Ka8YmmyopkCQnyEFcXkaoRwnCRZLQ@mail.gmail.com>
- <CAL_JsqKwWyoPdt3C0FdsgN087xK0jGyp3PVgiCaETZK9FX2JdQ@mail.gmail.com> <CAA8EJpqNRrpcK50FRLcrSdyHFadU1=6yRqBOCFv=fnTBYJs9=g@mail.gmail.com>
-In-Reply-To: <CAA8EJpqNRrpcK50FRLcrSdyHFadU1=6yRqBOCFv=fnTBYJs9=g@mail.gmail.com>
-From: Rob Herring <robh@kernel.org>
-Date: Mon, 15 Jan 2024 10:16:45 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJo_5qAocpU9UqkZqGMxCLQ+BT6SgSJh3uTJ+Rrcfo-ZA@mail.gmail.com>
-Message-ID: <CAL_JsqJo_5qAocpU9UqkZqGMxCLQ+BT6SgSJh3uTJ+Rrcfo-ZA@mail.gmail.com>
-Subject: Re: [PATCH v4 08/23] soc: qcom: Add driver for Qualcomm Krait L2
- cache scaling
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Ilia Lin <ilia.lin@kernel.org>, 
-	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Georgi Djakov <djakov@kernel.org>, 
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-clk@vger.kernel.org, 
-	Christian Marangi <ansuelsmth@gmail.com>, Stephan Gerhold <stephan@gerhold.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/2] dt-bindings: cpufreq: add virtual cpufreq device
+To: David Dai <davidai@google.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>,
+ Saravana Kannan <saravanak@google.com>
+Cc: Quentin Perret <qperret@google.com>,
+ Masami Hiramatsu <mhiramat@google.com>, Will Deacon <will@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Vincent Guittot <vincent.guittot@linaro.org>, Marc Zyngier <maz@kernel.org>,
+ Oliver Upton <oliver.upton@linux.dev>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Pavan Kondeti <quic_pkondeti@quicinc.com>,
+ Gupta Pankaj <pankaj.gupta@amd.com>, Mel Gorman <mgorman@suse.de>,
+ kernel-team@android.com, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20231111014933.1934562-1-davidai@google.com>
+ <20231111014933.1934562-2-davidai@google.com>
+Content-Language: en-US
+From: Hongyan Xia <hongyan.xia2@arm.com>
+In-Reply-To: <20231111014933.1934562-2-davidai@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jan 3, 2024 at 8:02=E2=80=AFPM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> HI Rob,
->
-> Resurrecting old thread, but I think it's better as it has context.
->
-> Added driver core maintainers, see discussion points below.
->
-> On Wed, 11 Oct 2023 at 21:44, Rob Herring <robh@kernel.org> wrote:
-> >
-> > On Wed, Oct 11, 2023 at 1:20=E2=80=AFPM Dmitry Baryshkov
-> > <dmitry.baryshkov@linaro.org> wrote:
-> > >
-> > > On Wed, 11 Oct 2023 at 18:49, Rob Herring <robh@kernel.org> wrote:
-> > > >
-> > > > On Sun, Aug 27, 2023 at 02:50:18PM +0300, Dmitry Baryshkov wrote:
-> > > > > Add a simple driver that handles scaling of L2 frequency and volt=
-ages.
-> > > > >
-> > > > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > > > > ---
-> > > >
-> > > > [...]
-> > > >
-> > > > > +static const struct of_device_id krait_l2_match_table[] =3D {
-> > > > > +     { .compatible =3D "qcom,krait-l2-cache" },
-> > > > > +     {}
-> > > > > +};
-> > > > > +MODULE_DEVICE_TABLE(of, krait_l2_match_table);
-> > > > > +
-> > > > > +static struct platform_driver krait_l2_driver =3D {
-> > > > > +     .probe =3D krait_l2_probe,
-> > > > > +     .remove =3D krait_l2_remove,
-> > > > > +     .driver =3D {
-> > > > > +             .name =3D "qcom-krait-l2",
-> > > > > +             .of_match_table =3D krait_l2_match_table,
-> > > > > +             .sync_state =3D icc_sync_state,
-> > > > > +     },
-> > > > > +};
-> > > >
-> > > > As I mentioned in the other thread, cache devices already have a st=
-ruct
-> > > > device. Specifically, they have a struct device (no subclass) on th=
-e
-> > > > cpu_subsys bus type. So there should be no need for a platform devi=
-ce
-> > > > and second struct device.
-> > > >
-> > > > See drivers/acpi/processor_driver.c for an example. Or grep any use=
- of
-> > > > "cpu_subsys".
-> > >
-> > > Most likely you mean drivers/base/cacheinfo.c. I saw this code, I
-> > > don't think it makes a good fit here. The cacheinfo devices provide
-> > > information only, they are not tied to DT nodes in any way.
-> >
-> > They are completely tied to DT nodes beyond L1.
-> >
-> > >  cpu_subsys
-> > > doesn't provide a way to match drivers with subsys devices in the
-> > > non-ACPI case, etc.
-> >
-> > That's a 2 line addition to add DT support.
-> >
-> > > Moreover, the whole cacheinfo subsys is
-> > > non-existing on arm32, there is no cacheinfo implementation there,
-> > > thanks to the overall variety of architectures.
-> >
-> > Humm, well I don't think it would be too hard to add, but I won't ask
-> > you to do that. All the info comes from DT or can come from DT, so it
-> > should be just a matter of arm32 calling the cacheinfo init.
-> >
-> > > Thus said, I don't think cacheinfo makes a good fit for the case of
-> > > scaling L2 cache.
-> >
-> > I still disagree. It's not really cacheinfo. That is what creates the
-> > devices, but it's the cpu_subsys bus type. Why do you care that it is
-> > platform bus vs. cpu_subsys?
->
-> I finally found a timeslot to look at cacheinfo. I added support for
-> arm32 cacheinfo (which is fine) and tried using cacheinfo devices for
-> L2 driver mapping (the RFC has been posted at [1]).
-> But after I actually tried using it for the L2 cache driver.  I
-> stumbled upon several issues, which I'd like to discuss before rushing
-> to code.
->
-> First, you supposed that cacheinfo devices land onto the cpu_subsys
-> bus. However only actual CPU devices end up on cpu_subsys. CPU cache
-> devices are created using cpu_device_create(), but despite its name
-> they don't go to cpu_subsys.
->
-> Second and more important, these devices are created without any
-> attempt to share them. So on a 4-core system I have 4 distinct devices
-> for L2 cache even though it is shared between all cores.
+On 11/11/2023 01:49, David Dai wrote:
+> Adding bindings to represent a virtual cpufreq device.
+> 
+> Virtual machines may expose MMIO regions for a virtual cpufreq device
+> for guests to read frequency information or to request frequency
+> selection. The virtual cpufreq device has an individual controller for
+> each frequency domain.
+> 
+> Co-developed-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: David Dai <davidai@google.com>
+> ---
+>   .../cpufreq/qemu,cpufreq-virtual.yaml         | 99 +++++++++++++++++++
+>   1 file changed, 99 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/cpufreq/qemu,cpufreq-virtual.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/cpufreq/qemu,cpufreq-virtual.yaml b/Documentation/devicetree/bindings/cpufreq/qemu,cpufreq-virtual.yaml
+> new file mode 100644
+> index 000000000000..16606cf1fd1a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/cpufreq/qemu,cpufreq-virtual.yaml
+> @@ -0,0 +1,99 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/cpufreq/qemu,cpufreq-virtual.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Virtual CPUFreq
+> +
+> +maintainers:
+> +  - David Dai <davidai@google.com>
+> +  - Saravana Kannan <saravanak@google.com>
+> +
+> +description:
+> +  Virtual CPUFreq is a virtualized driver in guest kernels that sends frequency
+> +  selection of its vCPUs as a hint to the host through MMIO regions. Each vCPU
+> +  is associated with a frequency domain which can be shared with other vCPUs.
+> +  Each frequency domain has its own set of registers for frequency controls.
+> +
+> +properties:
+> +  compatible:
+> +    const: qemu,virtual-cpufreq
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description:
+> +      Address and size of region containing frequency controls for each of the
+> +      frequency domains. Regions for each frequency domain is placed
+> +      contiugously and contain registers for controlling DVFS(Dynamic Frequency
+> +      and Voltage) characteristics. The size of the region is proportional to
+> +      total number of frequency domains.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    // This example shows a two CPU configuration with a frequency domain
+> +    // for each CPU.
+> +    cpus {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      cpu@0 {
+> +        compatible = "arm,armv8";
+> +        device_type = "cpu";
+> +        reg = <0x0>;
+> +        operating-points-v2 = <&opp_table0>;
+> +      };
+> +
+> +      cpu@1 {
+> +        compatible = "arm,armv8";
+> +        device_type = "cpu";
+> +        reg = <0x0>;
+> +        operating-points-v2 = <&opp_table1>;
+> +      };
+> +    };
+> +
+> +    opp_table0: opp-table-0 {
+> +      compatible = "operating-points-v2";
+> +      opp-shared;
+> +
+> +      opp1098000000 {
+> +        opp-hz = /bits/ 64 <1098000000>;
+> +        opp-level = <1>;
+> +      };
+> +
+> +      opp1197000000 {
+> +        opp-hz = /bits/ 64 <1197000000>;
+> +        opp-level = <2>;
+> +      };
+> +    };
+> +
+> +    opp_table1: opp-table-1 {
+> +      compatible = "operating-points-v2";
+> +      opp-shared;
+> +
+> +      opp1106000000 {
+> +        opp-hz = /bits/ 64 <1106000000>;
+> +        opp-level = <1>;
+> +      };
+> +
+> +      opp1277000000 {
+> +        opp-hz = /bits/ 64 <1277000000>;
+> +        opp-level = <2>;
+> +      };
+> +    };
 
-I wonder if that's because things are created in CPU hotplug callbacks
-and there might be ordering problems if cache devices are created in
-another code path.
+NIT: If my understanding is correct, it might be worth re-iterating that 
+these OPPs should mirror the host frequency domain this vCPU is pinned to.
 
-Also, I think on some PowerPC systems, CPUs can move to different L2
-(or L3?) caches when hot unplugged and then plugged. So hotplug
-rescans everything. I don't think that would be a problem with this
-and PowerPC does its own scanning anyways. Just wanted you to be aware
-of the issue.
+Also, since VM migration has been mentioned elsewhere in this thread, am 
+I right in saying that you can't change these OPPs after registration? 
+So, even if one wants to migrate, one has to migrate to an SoC with the 
+same frequency domains anyway, otherwise the OPPs in the VM are entirely 
+bogus?
 
-> root@qcom-armv7a:~# stat -c "%N %i" /sys/bus/cpu/devices/cpu*/cache/index=
-2/level
-> /sys/bus/cpu/devices/cpu0/cache/index2/level 15537
-> /sys/bus/cpu/devices/cpu1/cache/index2/level 15560
-> /sys/bus/cpu/devices/cpu2/cache/index2/level 15583
-> /sys/bus/cpu/devices/cpu3/cache/index2/level 15606
->
-> I think it makes sense to rework cacheinfo to create actual CPU cache
-> devices (maybe having a separate cache bus).
-> In my case it should become something like:
->
-> cpu0-2-unified (shared between all 4 cores)
-> cpu0-1-icache
-> cpu0-1-dcache
-> cpu1-1-icache
-> cpu1-1-dcache
-> ...
->
-> I'm not sure if it's worth supporting more than one instance of the
-> same kind per level (e.g. I think current cacheinfo has nothing
-> against having two I-cache or two D-cache devices)
-
-Probably a safe assumption. Though I think old XScale CPUs had a 1K
-mini I-cache and the main L1 I-cache. I guess that's really an L0
-cache though.
-
-> The cpuN/cache/indexM should become symlinks to those cache devices.
->
-> What do you think?
-
-Seems like a good improvement to me if changing the current way
-doesn't cause an ABI issue.
-
-
-> [1] https://lore.kernel.org/linux-arm-msm/CAA8EJppCRzknaujKFyLa_i7x4UnX31=
-YFSyjtux+zJ0harixrbA@mail.gmail.com
->
-> > On a separate issue, I'd propose you move this to drivers/cache/
-> > instead of the dumping ground that is drivers/soc/. It's nothing more
-> > than a location to collect cache related drivers ATM because we seem
-> > to be accumulating more of them.
->
-> I thought about reusing drivers/devfreq, it already has the Mediatek CCI =
-driver.
-
-Anywhere except drivers/misc/ would be an improvement over
-drivers/soc/. devfreq is more tied to interconnects than caches
-though.
-
-Rob
+> +
+> +    soc {
+> +      #address-cells = <1>;
+> +      #size-cells = <1>;
+> +
+> +      cpufreq@1040000 {
+> +        compatible = "qemu,virtual-cpufreq";
+> +        reg = <0x1040000 0x10>;
+> +      };
+> +    };
 
