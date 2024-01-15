@@ -1,123 +1,123 @@
-Return-Path: <linux-pm+bounces-2189-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2190-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AA7082D5EE
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 10:28:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1E2B82D6E1
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 11:11:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6209282C03
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 09:28:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0223C1C21636
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 10:11:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13BF8EAF8;
-	Mon, 15 Jan 2024 09:28:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98314F4FA;
+	Mon, 15 Jan 2024 10:11:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="Bx4lfp/d"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 013C1EAD1;
-	Mon, 15 Jan 2024 09:28:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-5fa52e173f7so51302737b3.3;
-        Mon, 15 Jan 2024 01:28:04 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7BFAF9CE
+	for <linux-pm@vger.kernel.org>; Mon, 15 Jan 2024 10:11:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-598e01ce434so876597eaf.1
+        for <linux-pm@vger.kernel.org>; Mon, 15 Jan 2024 02:11:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1705313466; x=1705918266; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+D1l7MDJ7PqRKV1gRx82cPii/0bkhIwCmY25QP/RxaE=;
+        b=Bx4lfp/dAV5DrKNyckkBvP2tsq5kqUN1tWbObT5zPvJkTRXIvCeqc2fV0F4eRiOraY
+         Zll2cLGqgDOkFxRLIWQ7yJ9k+aERXZM024/GpxAnCTT4hxQlSOl2lD6YhOySyw3Kj6Tf
+         7vFoNvWYa4tPIIwjxPOIKtI9bgQ5PjatxQZnhgtdU6slJJZJg8+DWT5R886xaRaMxAD7
+         1LsOr527caCLPKlIO+3YiwBHt5vajTBHQre6sAXY7FZIPafMcX+sA57O2RQmFzL/CI+j
+         wx37gTwSyqByN5HdThaKzowq7oXLHhuLh5WrRLnHEm59zBQzna7y2tNmgx/RfrH69NoZ
+         8T/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705310884; x=1705915684;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cqlO20vL7TNKjRLp8iivk1MVILmtsEuTqgkIeOZu3lk=;
-        b=RI9cm3UrnWEydaXH6VUOL2AHRmaBkp4Jo/t4WcT5ctQA/DOsgjsd0l81t7yp1HvMbk
-         L/Z2HDqOFiJqCII5V0z3XfVYvTMtOYG5gz/45BqrthTMd8ojoTjEllUdhSA9wu7N8kxN
-         /qC1q0YbZr5pwbdXAnxZwd1Al7EabzsI9BtpK3CkOwd+N41IL0GZ4cfwebWMyrdYV1f5
-         GDr8a3TLA+XxvDvCCxspB372ppHnLvQLkviIePPcdWfxRMTSVxfTWwsbXQKnVAYBFcNO
-         cvn965XQ64Nbi4OYTIbj12pQ2vh+88l9uTLL8/9JExLjBOzsVXLDz+n/aOyCE4I2ziyu
-         6M9Q==
-X-Gm-Message-State: AOJu0YxO9ggrUavZtMHtU3jz+pPuauk4oDBgwOYwuVSdTVq5wkja4O1w
-	Fkf20S0RMURXkYp0OM/jUPf4Z+//NvIg0Q==
-X-Google-Smtp-Source: AGHT+IHMmD6SpJDKvdr3Bjm1O3GOgrEBUqC4FCfBlIPabJGGBXwNMoCHwaF33tAwgMEP+HRtUJFuBg==
-X-Received: by 2002:a0d:eb41:0:b0:5d7:1941:2c3c with SMTP id u62-20020a0deb41000000b005d719412c3cmr3135593ywe.105.1705310883690;
-        Mon, 15 Jan 2024 01:28:03 -0800 (PST)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id w16-20020a81a210000000b005e5e15f07dfsm3770331ywg.51.2024.01.15.01.28.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 Jan 2024 01:28:03 -0800 (PST)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-5e7409797a1so80747157b3.0;
-        Mon, 15 Jan 2024 01:28:03 -0800 (PST)
-X-Received: by 2002:a81:af63:0:b0:5ec:91e:9d68 with SMTP id
- x35-20020a81af63000000b005ec091e9d68mr3225085ywj.18.1705310883351; Mon, 15
- Jan 2024 01:28:03 -0800 (PST)
+        d=1e100.net; s=20230601; t=1705313466; x=1705918266;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+D1l7MDJ7PqRKV1gRx82cPii/0bkhIwCmY25QP/RxaE=;
+        b=DJUhCMmYcYXt1eXu5A107bfStNemhinbzz+h7nEkT5NeoIbTPUHd/TEAOzT6hM/ZZz
+         x0Nx+GfGGLbqvYwAJ1H67lnoeUXggvUxzqRBb9HxgOjMuNw5Z4JAogDH6oEG3KP+lP5v
+         9DA043aFi9dJcfJ9LqZ0Prv5Zu7HRNWFaeoe3vmD6BEjuWiCthOcz+Zz+q3xVGyMv9hh
+         dY42ahnPAvzcMYWASy1c32XHaxp7vxuZQGNsYvbQjcC+v91NVBs9ylL3o+Ie2CltQiTg
+         tNiXe6mA6eQp36mR8zxF1WvE/lYUz2lcPx7XCzmMQcjDmqHUTouO34UBggDQeBec9r86
+         eqfg==
+X-Gm-Message-State: AOJu0YydtkiSzC6NiHColGN4rPzfSykWWu6mg4IjYMnFBNEIzNgSZPs4
+	ysd5F9r0khVaxa8rsiNi8Hhd+cakqlZcrrFQN/iJKEM9l24FvA==
+X-Google-Smtp-Source: AGHT+IF47ROODJD0FnkWocuvC9yXVXK34tP9aIvQB8RqdRDE264JjbYTVF4hhoy3J/3GEi8o7KQVOg==
+X-Received: by 2002:a05:6359:6b81:b0:170:64cd:8aac with SMTP id ta1-20020a0563596b8100b0017064cd8aacmr3471927rwb.62.1705313465983;
+        Mon, 15 Jan 2024 02:11:05 -0800 (PST)
+Received: from localhost.localdomain ([106.51.188.200])
+        by smtp.gmail.com with ESMTPSA id u5-20020aa78385000000b006d9b8572e77sm7348256pfm.120.2024.01.15.02.11.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Jan 2024 02:11:05 -0800 (PST)
+From: Sunil V L <sunilvl@ventanamicro.com>
+To: linux-acpi@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Len Brown <lenb@kernel.org>,
+	Anup Patel <anup@brainfault.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Conor Dooley <conor@kernel.org>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Atish Kumar Patra <atishp@rivosinc.com>,
+	Pavel Machek <pavel@ucw.cz>,
+	Sunil V L <sunilvl@ventanamicro.com>
+Subject: [PATCH v2 -next 0/3] RISC-V: ACPI: Add LPI support
+Date: Mon, 15 Jan 2024 15:40:53 +0530
+Message-Id: <20240115101056.429471-1-sunilvl@ventanamicro.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1704726960.git.geert+renesas@glider.be> <2e083461752c9d52fdb251ad9071f6111f13c3c5.1704726960.git.geert+renesas@glider.be>
- <ca0cb671-43ce-4bda-aad5-da38bace4132@linaro.org>
-In-Reply-To: <ca0cb671-43ce-4bda-aad5-da38bace4132@linaro.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 15 Jan 2024 10:27:51 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUJYH7YhQ65Bh1K8F2earTM60VwBd2=LH2vnGbaGPU53w@mail.gmail.com>
-Message-ID: <CAMuHMdUJYH7YhQ65Bh1K8F2earTM60VwBd2=LH2vnGbaGPU53w@mail.gmail.com>
-Subject: Re: [PATCH 02/15] dt-bindings: clock: Add R8A779H0 V4M CPG Core Clock Definitions
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Magnus Damm <magnus.damm@gmail.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Cong Dang <cong.dang.xn@renesas.com>, 
-	Duy Nguyen <duy.nguyen.rh@renesas.com>, Hai Pham <hai.pham.ud@renesas.com>, 
-	Linh Phung <linh.phung.jy@renesas.com>, linux-renesas-soc@vger.kernel.org, 
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi Krzysztof,
+This series adds support for Low Power Idle (LPI) on ACPI based
+platforms. 
 
-On Tue, Jan 9, 2024 at 8:21=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> On 08/01/2024 16:33, Geert Uytterhoeven wrote:
-> > From: Duy Nguyen <duy.nguyen.rh@renesas.com>
-> >
-> > Add all Clock Pulse Generator Core Clock Outputs for the Renesas R-Car
-> > V4M (R8A779H0) SoC.
-> >
-> > Signed-off-by: Duy Nguyen <duy.nguyen.rh@renesas.com>
-> > Signed-off-by: Hai Pham <hai.pham.ud@renesas.com>
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > ---
-> > Changes compared to the BSP:
-> >   - Drop POST* clocks, as they are internal clocks.
-> > ---
-> >  include/dt-bindings/clock/r8a779h0-cpg-mssr.h | 96 +++++++++++++++++++
->
-> Mediatek was able to switch to vendor,device naming scheme, so Renesas
-> should follow as well.
+LPI is described in the ACPI spec [1]. RISC-V FFH spec required to
+enable this is available at [2].
 
-For new bindings, or also for existing ones?
-Doing the former means there are inconsistencies among different SoCs
-in the same family.
-Doing the latter requires keeping the existing header files as wrappers
-including the new header files, because the binding definitions are
-part of the stable DT API.
+[1] - https://uefi.org/specs/ACPI/6.5/08_Processor_Configuration_and_Control.html#lpi-low-power-idle-states 
+[2] - https://github.com/riscv-non-isa/riscv-acpi-ffh/releases/download/v/riscv-ffh.pdf
 
-Thanks!
+Changes since v1:
+	1) Reordered the commits such that the patch which enables
+	   ACPI_PROCESSOR is the last one in the series.
+	2) Used GENMASK and other changes to address Drew's comments.
+	3) Moved common functions required by both DT and ACPI based cpuidle
+	   drivers from the DT driver to common arch/riscv/suspend.c.
+	4) ACPI cpuidle driver is added under drivers/acpi/riscv
+	5) Rebased to latest for-next branch of linux-riscv.
 
-Gr{oetje,eeting}s,
+Sunil V L (3):
+  cpuidle: RISC-V: Move few functions to arch/riscv
+  ACPI: RISC-V: Add LPI driver
+  ACPI: Enable ACPI_PROCESSOR for RISC-V
 
-                        Geert
+ arch/riscv/include/asm/suspend.h    |  3 ++
+ arch/riscv/kernel/suspend.c         | 47 +++++++++++++++++
+ drivers/acpi/Kconfig                |  2 +-
+ drivers/acpi/riscv/Makefile         |  3 +-
+ drivers/acpi/riscv/cpuidle.c        | 81 +++++++++++++++++++++++++++++
+ drivers/cpuidle/cpuidle-riscv-sbi.c | 41 +--------------
+ 6 files changed, 135 insertions(+), 42 deletions(-)
+ create mode 100644 drivers/acpi/riscv/cpuidle.c
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+-- 
+2.34.1
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
 
