@@ -1,40 +1,40 @@
-Return-Path: <linux-pm+bounces-2226-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2224-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D19F082DEB6
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 18:58:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAB2682DEB2
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 18:57:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CBF32832B9
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 17:58:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7BFD41F22C24
+	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 17:57:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43D7C182CA;
-	Mon, 15 Jan 2024 17:57:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F289818048;
+	Mon, 15 Jan 2024 17:57:42 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFB74182AA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD574182A7;
 	Mon, 15 Jan 2024 17:57:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id 286ea037ab555c88; Mon, 15 Jan 2024 18:57:32 +0100
+ id 872efcd1a58f9332; Mon, 15 Jan 2024 18:57:31 +0100
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 205486692F2;
-	Mon, 15 Jan 2024 18:57:32 +0100 (CET)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 54BB16692F2;
+	Mon, 15 Jan 2024 18:57:31 +0100 (CET)
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, Lukasz Luba <lukasz.luba@arm.com>, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>
-Subject: [PATCH  v1 1/2] thermal: gov_fair_share: Fix dependency on trip points ordering
-Date: Mon, 15 Jan 2024 18:55:13 +0100
-Message-ID: <4918593.31r3eYUQgx@kreacher>
+Subject: [PATCH  v1 2/2] thermal: gov_bang_bang: Fix possible cooling device state ping-pong
+Date: Mon, 15 Jan 2024 18:57:06 +0100
+Message-ID: <2339862.ElGaqSPkdT@kreacher>
 In-Reply-To: <12389773.O9o76ZdvQC@kreacher>
 References: <12389773.O9o76ZdvQC@kreacher>
 Precedence: bulk
@@ -54,55 +54,33 @@ X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-The computation in the fair share governor's get_trip_level() function
-currently works under the assumption that the temperature ordering of
-trips[] in a thermal zone is ascending, which need not be the case.
+The current behavior of thermal_zone_trip_update() in the bang-bang
+thermal governor may be problematic for trip points with 0 hysteresis,
+because when the zone temperature reaches the trip temperature and
+stays there, it will then cause the cooling device go "on" and "off"
+alternately, which is not desirable.
 
-However, get_trip_level() can be made work regardless of whether or not
-the trips table is ordered by temperature in any way, so change it
-accordingly.
+Address this by requiring the zone temperature to actually fall below
+trip->temperature - trip->hysteresis for the cooling device to go off.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/thermal/gov_fair_share.c |   16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ drivers/thermal/gov_bang_bang.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Index: linux-pm/drivers/thermal/gov_fair_share.c
+Index: linux-pm/drivers/thermal/gov_bang_bang.c
 ===================================================================
---- linux-pm.orig/drivers/thermal/gov_fair_share.c
-+++ linux-pm/drivers/thermal/gov_fair_share.c
-@@ -18,22 +18,24 @@
- static int get_trip_level(struct thermal_zone_device *tz)
- {
- 	const struct thermal_trip *trip, *level_trip = NULL;
--	int trip_level;
-+	int trip_level = -1;
+--- linux-pm.orig/drivers/thermal/gov_bang_bang.c
++++ linux-pm/drivers/thermal/gov_bang_bang.c
+@@ -49,7 +49,7 @@ static int thermal_zone_trip_update(stru
+ 		if (instance->target == 0 && tz->temperature >= trip->temperature)
+ 			instance->target = 1;
+ 		else if (instance->target == 1 &&
+-			 tz->temperature <= trip->temperature - trip->hysteresis)
++			 tz->temperature < trip->temperature - trip->hysteresis)
+ 			instance->target = 0;
  
- 	for_each_trip(tz, trip) {
- 		if (trip->temperature >= tz->temperature)
--			break;
-+			continue;
- 
--		level_trip = trip;
-+		trip_level++;
-+
-+		if (!level_trip || trip->temperature > level_trip->temperature)
-+			level_trip = trip;
- 	}
- 
- 	/*  Bail out if the temperature is not greater than any trips. */
--	if (!level_trip)
-+	if (trip_level < 0)
- 		return 0;
- 
--	trip_level = thermal_zone_trip_id(tz, level_trip);
--
--	trace_thermal_zone_trip(tz, trip_level, level_trip->type);
-+	trace_thermal_zone_trip(tz, thermal_zone_trip_id(tz, level_trip),
-+				level_trip->type);
- 
- 	return trip_level;
- }
+ 		dev_dbg(&instance->cdev->device, "target=%d\n",
 
 
 
