@@ -1,37 +1,37 @@
-Return-Path: <linux-pm+bounces-2241-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2242-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7F0682E50A
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 01:29:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39BE682E522
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 01:31:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F98E283EF0
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 00:29:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3FD711C225BB
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 00:31:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AAC6219F0;
-	Tue, 16 Jan 2024 00:14:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EACD922EFF;
+	Tue, 16 Jan 2024 00:14:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NHYsnpO+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bgBcmViV"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E00B821376;
-	Tue, 16 Jan 2024 00:14:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 654ADC433B1;
-	Tue, 16 Jan 2024 00:14:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6FAD22EF9;
+	Tue, 16 Jan 2024 00:14:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F5A2C43330;
+	Tue, 16 Jan 2024 00:14:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705364072;
-	bh=AyGo3ewtWkL0GGARxpkWkH3BFyvJme2Zb4sfzrZAVfY=;
+	s=k20201202; t=1705364090;
+	bh=v9li6U7M5/pkMUeZgHlMbi5/SMgIPXiD2SJRD2dOdmk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NHYsnpO+QqP7dDNQ3Ks3WNnZJo9ZdrAudBlEsDcFucKinRhRg5eX4m6G90jbteDdT
-	 f6G5NI6d/7SVogf/WnMvSRMh2X6XB+tEzf3r0XHxKIY2BiJvxAuzve84QDhpcX62bh
-	 Wevx9t4gjm8sCwhEJ235/QCwDx8/AyJrvg4ppCgFP/1WIDk3TfuNjOKypM2NClaVO3
-	 wBHzhk4NgdA/TBysSLsIgYhQBiiNRl+IsXbPoKbxEYZOHVc8Rd93+xVYqpSKSJber+
-	 SdlH/6/LQ2uBB+56da5t6wL8LX3sDbti90o2tewD/0Y07fHHgDP85UjtmmenoGCpAS
-	 XkTTgsiC4UVnQ==
+	b=bgBcmViVSC54ccsH8vPU2H9BNL4QwP5MSzdY0mGjAyhW9S4St2hjRoe8XOsAJ/IM2
+	 H3f5Uq1Nfs9fjJZwRYFH7NSHdtBcqTLfpIWk6VTppN+ohPDRHXe5tPZ+BNJlpSMtZU
+	 B1g4ccXEHxf9gR69kXpIZ1PJa26MOMmYDco4wu0UVt7rY1NXwM6ONk+AIvFdABK299
+	 8Ni5h/Uxf0rDzZaOygD7y4g6y1NnK7UiatVXcCZNeS7G9oVl5VWF/uH8hNHgOOOVM2
+	 J0F+Ur8UnabB7Ggw+lJmqleRrPI98KNiD/nnEyeX1mfjOw/w196OTWtPBHayJ4ZYEc
+	 6elDurZId/m1A==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -42,12 +42,12 @@ Cc: Mukesh Ojha <quic_mojha@quicinc.com>,
 	Sasha Levin <sashal@kernel.org>,
 	kyungmin.park@samsung.com,
 	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 8/9] PM / devfreq: Synchronize devfreq_monitor_[start/stop]
-Date: Mon, 15 Jan 2024 19:14:13 -0500
-Message-ID: <20240116001418.213635-8-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 7/8] PM / devfreq: Synchronize devfreq_monitor_[start/stop]
+Date: Mon, 15 Jan 2024 19:14:35 -0500
+Message-ID: <20240116001439.213839-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240116001418.213635-1-sashal@kernel.org>
-References: <20240116001418.213635-1-sashal@kernel.org>
+In-Reply-To: <20240116001439.213839-1-sashal@kernel.org>
+References: <20240116001439.213839-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.73
+X-stable-base: Linux 5.15.147
 Content-Transfer-Encoding: 8bit
 
 From: Mukesh Ojha <quic_mojha@quicinc.com>
@@ -155,10 +155,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 22 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index fe6644f99887..8e9ba701a643 100644
+index 29a14b0ffe33..ef6b5ad5d804 100644
 --- a/drivers/devfreq/devfreq.c
 +++ b/drivers/devfreq/devfreq.c
-@@ -461,10 +461,14 @@ static void devfreq_monitor(struct work_struct *work)
+@@ -464,10 +464,14 @@ static void devfreq_monitor(struct work_struct *work)
  	if (err)
  		dev_err(&devfreq->dev, "dvfs failed with (%d) error\n", err);
  
@@ -174,7 +174,7 @@ index fe6644f99887..8e9ba701a643 100644
  	trace_devfreq_monitor(devfreq);
  }
  
-@@ -482,6 +486,10 @@ void devfreq_monitor_start(struct devfreq *devfreq)
+@@ -485,6 +489,10 @@ void devfreq_monitor_start(struct devfreq *devfreq)
  	if (IS_SUPPORTED_FLAG(devfreq->governor->flags, IRQ_DRIVEN))
  		return;
  
@@ -185,7 +185,7 @@ index fe6644f99887..8e9ba701a643 100644
  	switch (devfreq->profile->timer) {
  	case DEVFREQ_TIMER_DEFERRABLE:
  		INIT_DEFERRABLE_WORK(&devfreq->work, devfreq_monitor);
-@@ -490,12 +498,16 @@ void devfreq_monitor_start(struct devfreq *devfreq)
+@@ -493,12 +501,16 @@ void devfreq_monitor_start(struct devfreq *devfreq)
  		INIT_DELAYED_WORK(&devfreq->work, devfreq_monitor);
  		break;
  	default:
@@ -203,7 +203,7 @@ index fe6644f99887..8e9ba701a643 100644
  }
  EXPORT_SYMBOL(devfreq_monitor_start);
  
-@@ -512,6 +524,14 @@ void devfreq_monitor_stop(struct devfreq *devfreq)
+@@ -515,6 +527,14 @@ void devfreq_monitor_stop(struct devfreq *devfreq)
  	if (IS_SUPPORTED_FLAG(devfreq->governor->flags, IRQ_DRIVEN))
  		return;
  
