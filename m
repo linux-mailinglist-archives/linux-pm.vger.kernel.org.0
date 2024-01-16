@@ -1,46 +1,64 @@
-Return-Path: <linux-pm+bounces-2250-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2251-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A63CE82ECC0
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 11:28:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C57C82EDBA
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 12:30:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6ACF41C22E05
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 10:28:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA9BB1F246A2
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 11:30:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD7D8134DE;
-	Tue, 16 Jan 2024 10:28:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CAA31B80B;
+	Tue, 16 Jan 2024 11:30:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ld8DG5Rv"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eJYNQ5Gm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 827AF134A1;
-	Tue, 16 Jan 2024 10:28:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1705400911;
-	bh=PZUrFo6wofZ134ZKXKMQfZxI6raHwunCQnvppb6TgF0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ld8DG5Rv52rXCMrMBVPQqZaDQG2VhlD8fDQBaNa8LxJ4uGD32vSEJNZufV6goewMN
-	 xAFHe/sIu+dnN12RS4u6cxveQXCGMHbeK16hCSDm1bRqs0WdgQpyP5UQy1rCWvocCT
-	 3ygkMlJfHoUa9P5aHLBi1EtTmLoVZMdfbQa6KM5gzCoAYTHoxUh/MBTgT9wKK76/v3
-	 bRE/M9YKq8xhjlTBeslcS+XOaNcymImKL+3HuTDPv61qC2Q6NwxnqEgn10Oroj7LIX
-	 Q8SEZor4vvp0Kn2ugEwzfecH20pvbyf+UBiCruWsixulcToqNvNh7BsxQ3FYFhjm2t
-	 rj/NivcW9XsRA==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 79DD137811F1;
-	Tue, 16 Jan 2024 10:28:30 +0000 (UTC)
-Message-ID: <c476cc48-17ec-4e14-98d8-35bdffb5d296@collabora.com>
-Date: Tue, 16 Jan 2024 11:28:29 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F22041B7FD
+	for <linux-pm@vger.kernel.org>; Tue, 16 Jan 2024 11:30:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-40e86c02054so979805e9.2
+        for <linux-pm@vger.kernel.org>; Tue, 16 Jan 2024 03:30:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1705404624; x=1706009424; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2o8vTaU4/pwYnm4WYdt181bSyjz4o3CN/nDAC13N2X0=;
+        b=eJYNQ5Gm8xnJ3X8ONbFxs/IGpdegwOc8opUFOM2bEYBlpT3Qq+h0e6zvHuSe6j/qmc
+         Q648wXc9g227vRXmosYUAf4O7PB2Xd6Dam8WBDjCg3m03JrZwhMsypbIpCKImnA49h7F
+         hBciYDuYdO2SZDkiGOhj/b6mqJk2o7XgHacixZKkcRPMGMfmSkWXHwVMWdyiycODh/nN
+         +J62uCUMo7tiU9HmFUIm8B6V9WUv3KSGhX/r9thFcO98Q4j0o6aUJ6FqMUIXpUCj+Qw3
+         uvFkMK9WsCmqxMsOM/B2l9wMESxvlgyMu1z6Bh01DHwxf3Uqlg0brUMeCICqEj8Z3BVL
+         beiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705404624; x=1706009424;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2o8vTaU4/pwYnm4WYdt181bSyjz4o3CN/nDAC13N2X0=;
+        b=v8eQFE8jNe6tWfvfu3YN4UXujKsDnyn3AH4FJvpg5plZ0TqQ4b9a39xzKoOwW7dz4J
+         l2RLbv75SRTovrBdUnqEZRbviSbDiC/iQ/zqHRmYEIhi3VEvFG5kTqWjiESblKSaHMMr
+         FiArnNwKNoicIfqZnEKWdKfSgIOgad9AN4OVYTpKNHhniQeb/hCLo+fp1sPYpjBHzMOs
+         q5altGkz7Q6qlWKvp6SReJcBMNGO9/nemZ6f2lvEQ5WKy12EilGG5Y/KTZUjR4YYFawG
+         cz6d/FSYmFjF+o1aCuHtpxYQ5uZ7noRAYI4TMSZOtv28XMiHxu9c+jJqjWk7L0LI7ymw
+         dr1Q==
+X-Gm-Message-State: AOJu0YyvltKAItg0NpYtMsIVpNzWotNP4O23iaIj6MFVCNo0T+2RNo+q
+	frMJjny0wXwsO53XdGoSwC0V0Z7cZ6IgBw==
+X-Google-Smtp-Source: AGHT+IF8hoYcNpsis8PD54DQ2N+ohdGuCSDvyQGWWERbPng2CBgOo+X7EPoiT3LQrARK8d+iwRXZ/g==
+X-Received: by 2002:a05:600c:1c05:b0:40e:52f4:81bb with SMTP id j5-20020a05600c1c0500b0040e52f481bbmr3945168wms.146.1705404624092;
+        Tue, 16 Jan 2024 03:30:24 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:fab3:687:ead6:5b40? ([2a05:6e02:1041:c10:fab3:687:ead6:5b40])
+        by smtp.googlemail.com with ESMTPSA id iv11-20020a05600c548b00b0040d8ff79fd8sm19033463wmb.7.2024.01.16.03.30.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 16 Jan 2024 03:30:23 -0800 (PST)
+Message-ID: <3ca36f2f-1dc9-4f7e-9e83-3d3872530976@linaro.org>
+Date: Tue, 16 Jan 2024 12:30:23 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -48,652 +66,303 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/1] soc: mediatek: pm-domains: support clamp protection
+Subject: Re: [RFC PATCH 26/26] thermal: Introduce thermal zones names
 Content-Language: en-US
-To: "yu-chang.lee" <yu-chang.lee@mediatek.com>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>,
- Matthias Brugger <matthias.bgg@gmail.com>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, fparent@baylibre.com,
- Ben Lok <ben.lok@mediatek.com>, Chris-qj Chen <Chris-qj.Chen@mediatek.com>,
- Louis Yu <louis.yu@mediatek.com>, Bear Wang <bear.wang@mediatek.com>,
- MandyJH Liu <MandyJH.Liu@mediatek.com>, Fan Chen <fan.chen@mediatek.com>,
- Xiufeng Li <Xiufeng.Li@mediatek.com>, abailon@baylibre.com,
- amergnat@baylibre.com, afgros@baylibre.com, msp@baylibre.com
-References: <Need help to validate power domain driver modification on mt8365>
- <20240115111844.22240-1-yu-chang.lee@mediatek.com>
- <20240115111844.22240-2-yu-chang.lee@mediatek.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20240115111844.22240-2-yu-chang.lee@mediatek.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: rafael@kernel.org, rui.zhang@intel.com, lukasz.luba@arm.com,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, kernel@collabora.com
+References: <20231221124825.149141-1-angelogioacchino.delregno@collabora.com>
+ <20231221124825.149141-27-angelogioacchino.delregno@collabora.com>
+ <d824d351-b1b1-46e3-86ac-f4a6b42c89fc@linaro.org>
+ <3805d11d-bbc3-4509-bb2c-ce752a65618f@collabora.com>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <3805d11d-bbc3-4509-bb2c-ce752a65618f@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Il 15/01/24 12:18, yu-chang.lee ha scritto:
-> This patch mainly do two things
-> 1. Add smi clamp protection support
-> 2. Force order of bus protection between infra and smi
+On 16/01/2024 10:45, AngeloGioacchino Del Regno wrote:
+> Il 16/01/24 10:14, Daniel Lezcano ha scritto:
+>> On 21/12/2023 13:48, AngeloGioacchino Del Regno wrote:
+>>> Currently thermal zones have a "type" but this is often used, and
+>>> referenced, as a name instead in multiple kernel drivers that are
+>>> either registering a zone or grabbing a thermal zone handle and
+>>> unfortunately this is a kind of abuse/misuse of the thermal zone
+>>> concept of "type".
+>>>
+>>> In order to disambiguate name<->type and to actually provide an
+>>> accepted way of giving a specific name to a thermal zone for both
+>>> platform drivers and devicetree-defined zones, add a new "name"
+>>> member in the main thermal_zone_device structure, and also to the
+>>> thermal_zone_device_params structure which is used to register a
+>>> thermal zone device.
+>>>
+>>> This will enforce the following constraints:
+>>>   - Multiple thermal zones may be of the same "type" (no change);
+>>>   - A thermal zone may have a *unique* name: trying to register
+>>>     a new zone with the same name as an already present one will
+>>>     produce a failure;
+>>> ---
+>>>   drivers/thermal/thermal_core.c  | 34 ++++++++++++++++++++++++++++++---
+>>>   drivers/thermal/thermal_of.c    |  1 +
+>>>   drivers/thermal/thermal_sysfs.c |  9 +++++++++
+>>>   drivers/thermal/thermal_trace.h | 17 +++++++++++------
+>>>   include/linux/thermal.h         |  4 ++++
+>>>   5 files changed, 56 insertions(+), 9 deletions(-)
+>>>
+>>> diff --git a/drivers/thermal/thermal_core.c 
+>>> b/drivers/thermal/thermal_core.c
+>>> index 9eb0200a85ff..adf2ac8113e1 100644
+>>> --- a/drivers/thermal/thermal_core.c
+>>> +++ b/drivers/thermal/thermal_core.c
+>>> @@ -1238,8 +1238,8 @@ EXPORT_SYMBOL_GPL(thermal_zone_get_crit_temp);
+>>>   struct thermal_zone_device *thermal_zone_device_register(struct 
+>>> thermal_zone_device_params *tzdp)
+>>>   {
+>>>       struct thermal_zone_device *tz;
+>>> -    int id;
+>>> -    int result;
+>>> +    int id, tz_name_len;
+>>> +    int result = 0;
+>>>       struct thermal_governor *governor;
+>>>       if (!tzdp->type || strlen(tzdp->type) == 0) {
+>>> @@ -1248,11 +1248,36 @@ struct thermal_zone_device 
+>>> *thermal_zone_device_register(struct thermal_zone_dev
+>>>       }
+>>>       if (strlen(tzdp->type) >= THERMAL_NAME_LENGTH) {
+>>> -        pr_err("Thermal zone name (%s) too long, should be under %d 
+>>> chars\n",
+>>> +        pr_err("Thermal zone type (%s) too long, should be under %d 
+>>> chars\n",
+>>>                  tzdp->type, THERMAL_NAME_LENGTH);
+>>>           return ERR_PTR(-EINVAL);
+>>
+>> I would keep that as is and do second round of changes to clarify the 
+>> usage of ->type
+>>
 > 
-> For example: power on
-> "clamp protection enable" (smi, with clamp flag)
->    -> regulator enable
->      ...
->        -> clamp protection disaled (smi, with clamp flag)
->          -> bus protection disabled (smi -> infra)
+> Problem is, if we keep this one as-is, then we'll have ambiguous error 
+> messages in
+> this series... unless we stop limiting the tz type string to 
+> THERMAL_NAME_LENGTH
+> as well as not limit the tz name to that...
+
+I'm missing the point, how can it be more ambiguous if the message is 
+unchanged ?
+
+>>>       }
+>>> +    tz_name_len = tzdp->name ? strlen(tzdp->name) : 0;
+>>
+>> I suggest to change to a const char * and no longer limit to 
+>> THERMAL_NAME_LENGTH.
 > 
-> For example: power off
-> "clamp protection enable" (smi, with clamp flag)
->    -> bus protection enable (infra -> smi)
+> ...and to be completely honest, I actually like the THERMAL_NAME_LENGTH 
+> limitation,
+> because this both limits the length of the related sysfs file and avoids 
+> prolonging
+> error messages with very-very-very long type-strings and name-strings.
 > 
-> Signed-off-by: yu-chang.lee <yu-chang.lee@mediatek.com>
-> ---
->   drivers/pmdomain/mediatek/mt8183-pm-domains.h |  52 ++++---
->   drivers/pmdomain/mediatek/mt8188-pm-domains.h |  41 +++++-
->   drivers/pmdomain/mediatek/mt8365-pm-domains.h |  12 +-
->   drivers/pmdomain/mediatek/mtk-pm-domains.c    | 132 +++++++++++++++---
->   drivers/pmdomain/mediatek/mtk-pm-domains.h    |   2 +
->   5 files changed, 189 insertions(+), 50 deletions(-)
+> What I have in my head is:
 > 
-> diff --git a/drivers/pmdomain/mediatek/mt8183-pm-domains.h b/drivers/pmdomain/mediatek/mt8183-pm-domains.h
-> index c4c1b63d85b1..04fca4a1e8f3 100644
-> --- a/drivers/pmdomain/mediatek/mt8183-pm-domains.h
-> +++ b/drivers/pmdomain/mediatek/mt8183-pm-domains.h
-> @@ -103,6 +103,13 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8183[] = {
->   		.pwr_sta2nd_offs = 0x0184,
->   		.sram_pdn_bits = GENMASK(8, 8),
->   		.sram_pdn_ack_bits = GENMASK(12, 12),
-> +		.clamp_smi = {
-> +			BUS_PROT_WR(SMI,
-> +				    MT8183_SMI_COMMON_SMI_CLAMP_DISP,
-> +				    MT8183_SMI_COMMON_CLAMP_EN_SET,
-> +				    MT8183_SMI_COMMON_CLAMP_EN_CLR,
-> +				    MT8183_SMI_COMMON_CLAMP_EN),
-> +		},
->   		.bp_cfg = {
->   			BUS_PROT_WR(INFRA,
->   				    MT8183_TOP_AXI_PROT_EN_1_DISP,
-> @@ -114,11 +121,6 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8183[] = {
->   				    MT8183_TOP_AXI_PROT_EN_SET,
->   				    MT8183_TOP_AXI_PROT_EN_CLR,
->   				    MT8183_TOP_AXI_PROT_EN_STA1),
-> -			BUS_PROT_WR(SMI,
-> -				    MT8183_SMI_COMMON_SMI_CLAMP_DISP,
-> -				    MT8183_SMI_COMMON_CLAMP_EN_SET,
-> -				    MT8183_SMI_COMMON_CLAMP_EN_CLR,
-> -				    MT8183_SMI_COMMON_CLAMP_EN),
->   		},
->   	},
->   	[MT8183_POWER_DOMAIN_CAM] = {
-> @@ -129,6 +131,13 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8183[] = {
->   		.pwr_sta2nd_offs = 0x0184,
->   		.sram_pdn_bits = GENMASK(9, 8),
->   		.sram_pdn_ack_bits = GENMASK(13, 12),
-> +		.clamp_smi = {
-> +			BUS_PROT_WR(SMI,
-> +				    MT8183_SMI_COMMON_SMI_CLAMP_CAM,
-> +				    MT8183_SMI_COMMON_CLAMP_EN_SET,
-> +				    MT8183_SMI_COMMON_CLAMP_EN_CLR,
-> +				    MT8183_SMI_COMMON_CLAMP_EN),
-> +		},
->   		.bp_cfg = {
->   			BUS_PROT_WR(INFRA,
->   				    MT8183_TOP_AXI_PROT_EN_MM_CAM,
-> @@ -145,11 +154,6 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8183[] = {
->   					MT8183_TOP_AXI_PROT_EN_MM_SET,
->   					MT8183_TOP_AXI_PROT_EN_MM_CLR,
->   					MT8183_TOP_AXI_PROT_EN_MM_STA1),
-> -			BUS_PROT_WR(SMI,
-> -				    MT8183_SMI_COMMON_SMI_CLAMP_CAM,
-> -				    MT8183_SMI_COMMON_CLAMP_EN_SET,
-> -				    MT8183_SMI_COMMON_CLAMP_EN_CLR,
-> -				    MT8183_SMI_COMMON_CLAMP_EN),
->   		},
->   	},
->   	[MT8183_POWER_DOMAIN_ISP] = {
-> @@ -160,6 +164,13 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8183[] = {
->   		.pwr_sta2nd_offs = 0x0184,
->   		.sram_pdn_bits = GENMASK(9, 8),
->   		.sram_pdn_ack_bits = GENMASK(13, 12),
-> +		.clamp_smi = {
-> +			BUS_PROT_WR(SMI,
-> +				    MT8183_SMI_COMMON_SMI_CLAMP_ISP,
-> +				    MT8183_SMI_COMMON_CLAMP_EN_SET,
-> +				    MT8183_SMI_COMMON_CLAMP_EN_CLR,
-> +				    MT8183_SMI_COMMON_CLAMP_EN),
-> +		},
->   		.bp_cfg = {
->   			BUS_PROT_WR(INFRA,
->   				    MT8183_TOP_AXI_PROT_EN_MM_ISP,
-> @@ -171,11 +182,6 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8183[] = {
->   					MT8183_TOP_AXI_PROT_EN_MM_SET,
->   					MT8183_TOP_AXI_PROT_EN_MM_CLR,
->   					MT8183_TOP_AXI_PROT_EN_MM_STA1),
-> -			BUS_PROT_WR(SMI,
-> -				    MT8183_SMI_COMMON_SMI_CLAMP_ISP,
-> -				    MT8183_SMI_COMMON_CLAMP_EN_SET,
-> -				    MT8183_SMI_COMMON_CLAMP_EN_CLR,
-> -				    MT8183_SMI_COMMON_CLAMP_EN),
->   		},
->   	},
->   	[MT8183_POWER_DOMAIN_VDEC] = {
-> @@ -186,7 +192,7 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8183[] = {
->   		.pwr_sta2nd_offs = 0x0184,
->   		.sram_pdn_bits = GENMASK(8, 8),
->   		.sram_pdn_ack_bits = GENMASK(12, 12),
-> -		.bp_cfg = {
-> +		.clamp_smi = {
->   			BUS_PROT_WR(SMI,
->   				    MT8183_SMI_COMMON_SMI_CLAMP_VDEC,
->   				    MT8183_SMI_COMMON_CLAMP_EN_SET,
-> @@ -202,7 +208,7 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8183[] = {
->   		.pwr_sta2nd_offs = 0x0184,
->   		.sram_pdn_bits = GENMASK(11, 8),
->   		.sram_pdn_ack_bits = GENMASK(15, 12),
-> -		.bp_cfg = {
-> +		.clamp_smi = {
->   			BUS_PROT_WR(SMI,
->   				    MT8183_SMI_COMMON_SMI_CLAMP_VENC,
->   				    MT8183_SMI_COMMON_CLAMP_EN_SET,
-> @@ -218,6 +224,13 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8183[] = {
->   		.pwr_sta2nd_offs = 0x0184,
->   		.sram_pdn_bits = GENMASK(8, 8),
->   		.sram_pdn_ack_bits = GENMASK(12, 12),
-> +		.clamp_smi = {
-> +			BUS_PROT_WR(SMI,
-> +				    MT8183_SMI_COMMON_SMI_CLAMP_VPU_TOP,
-> +				    MT8183_SMI_COMMON_CLAMP_EN_SET,
-> +				    MT8183_SMI_COMMON_CLAMP_EN_CLR,
-> +				    MT8183_SMI_COMMON_CLAMP_EN),
-> +		},
->   		.bp_cfg = {
->   			BUS_PROT_WR(INFRA,
->   				    MT8183_TOP_AXI_PROT_EN_MM_VPU_TOP,
-> @@ -234,11 +247,6 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8183[] = {
->   				    MT8183_TOP_AXI_PROT_EN_MM_SET,
->   				    MT8183_TOP_AXI_PROT_EN_MM_CLR,
->   				    MT8183_TOP_AXI_PROT_EN_MM_STA1),
-> -			BUS_PROT_WR(SMI,
-> -				    MT8183_SMI_COMMON_SMI_CLAMP_VPU_TOP,
-> -				    MT8183_SMI_COMMON_CLAMP_EN_SET,
-> -				    MT8183_SMI_COMMON_CLAMP_EN_CLR,
-> -				    MT8183_SMI_COMMON_CLAMP_EN),
->   		},
->   	},
->   	[MT8183_POWER_DOMAIN_VPU_CORE0] = {
-> diff --git a/drivers/pmdomain/mediatek/mt8188-pm-domains.h b/drivers/pmdomain/mediatek/mt8188-pm-domains.h
-> index ade3c01149af..be2393c41f3e 100644
-> --- a/drivers/pmdomain/mediatek/mt8188-pm-domains.h
-> +++ b/drivers/pmdomain/mediatek/mt8188-pm-domains.h
-> @@ -577,6 +577,18 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
->   		.pwr_sta2nd_offs = 0x170,
->   		.sram_pdn_bits = BIT(8),
->   		.sram_pdn_ack_bits = BIT(12),
-> +		.clamp_smi = {
-> +			BUS_PROT_WR(SMI,
-> +				    MT8188_SMI_COMMON_SMI_CLAMP_DIP_TO_VDO0,
-> +				    MT8188_SMI_COMMON_CLAMP_EN_SET,
-> +				    MT8188_SMI_COMMON_CLAMP_EN_CLR,
-> +				    MT8188_SMI_COMMON_CLAMP_EN_STA),
-> +			BUS_PROT_WR(SMI,
-> +				    MT8188_SMI_COMMON_SMI_CLAMP_DIP_TO_VPP1,
-> +				    MT8188_SMI_COMMON_CLAMP_EN_SET,
-> +				    MT8188_SMI_COMMON_CLAMP_EN_CLR,
-> +				    MT8188_SMI_COMMON_CLAMP_EN_STA),
-> +		},
->   		.reset_smi = {
->   			SMI_RESET_WR(MT8188_SMI_LARB10_RESET,
->   				     MT8188_SMI_LARB10_RESET_ADDR),
-> @@ -589,7 +601,7 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
->   			SMI_RESET_WR(MT8188_SMI_LARB15_RESET,
->   				     MT8188_SMI_LARB15_RESET_ADDR),
->   		},
-> -		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-> +		.caps = MTK_SCPD_KEEP_DEFAULT_OFF | MTK_SCPD_CLAMP_PROTECTION,
->   	},
->   	[MT8188_POWER_DOMAIN_IPE] = {
->   		.name = "ipe",
-> @@ -599,11 +611,18 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
->   		.pwr_sta2nd_offs = 0x170,
->   		.sram_pdn_bits = BIT(8),
->   		.sram_pdn_ack_bits = BIT(12),
-> +		.clamp_smi = {
-> +			BUS_PROT_WR(SMI,
-> +				    MT8188_SMI_COMMON_SMI_CLAMP_IPE_TO_VPP1,
-> +				    MT8188_SMI_COMMON_CLAMP_EN_SET,
-> +				    MT8188_SMI_COMMON_CLAMP_EN_CLR,
-> +				    MT8188_SMI_COMMON_CLAMP_EN_STA),
-> +		},
->   		.reset_smi = {
->   			SMI_RESET_WR(MT8188_SMI_LARB12_RESET,
->   				     MT8188_SMI_LARB12_RESET_ADDR),
->   		},
-> -		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-> +		.caps = MTK_SCPD_KEEP_DEFAULT_OFF | MTK_SCPD_CLAMP_PROTECTION,
->   	},
->   	[MT8188_POWER_DOMAIN_CAM_VCORE] = {
->   		.name = "cam_vcore",
-> @@ -682,13 +701,20 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
->   		.pwr_sta2nd_offs = 0x170,
->   		.sram_pdn_bits = BIT(8),
->   		.sram_pdn_ack_bits = BIT(12),
-> +		.clamp_smi = {
-> +			BUS_PROT_WR(SMI,
-> +				    MT8188_SMI_COMMON_SMI_CLAMP_CAM_SUBA_TO_VPP0,
-> +				    MT8188_SMI_COMMON_CLAMP_EN_SET,
-> +				    MT8188_SMI_COMMON_CLAMP_EN_CLR,
-> +				    MT8188_SMI_COMMON_CLAMP_EN_STA),
-> +		},
->   		.reset_smi = {
->   			SMI_RESET_WR(MT8188_SMI_LARB16A_RESET,
->   				     MT8188_SMI_LARB16A_RESET_ADDR),
->   			SMI_RESET_WR(MT8188_SMI_LARB17A_RESET,
->   				     MT8188_SMI_LARB17A_RESET_ADDR),
->   		},
-> -		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-> +		.caps = MTK_SCPD_KEEP_DEFAULT_OFF | MTK_SCPD_CLAMP_PROTECTION,
->   	},
->   	[MT8188_POWER_DOMAIN_CAM_SUBB] = {
->   		.name = "cam_subb",
-> @@ -698,13 +724,20 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8188[] = {
->   		.pwr_sta2nd_offs = 0x170,
->   		.sram_pdn_bits = BIT(8),
->   		.sram_pdn_ack_bits = BIT(12),
-> +		.clamp_smi = {
-> +			BUS_PROT_WR(SMI,
-> +				    MT8188_SMI_COMMON_SMI_CLAMP_CAM_SUBB_TO_VDO0,
-> +				    MT8188_SMI_COMMON_CLAMP_EN_SET,
-> +				    MT8188_SMI_COMMON_CLAMP_EN_CLR,
-> +				    MT8188_SMI_COMMON_CLAMP_EN_STA),
-> +		},
->   		.reset_smi = {
->   			SMI_RESET_WR(MT8188_SMI_LARB16B_RESET,
->   				     MT8188_SMI_LARB16B_RESET_ADDR),
->   			SMI_RESET_WR(MT8188_SMI_LARB17B_RESET,
->   				     MT8188_SMI_LARB17B_RESET_ADDR),
->   		},
-> -		.caps = MTK_SCPD_KEEP_DEFAULT_OFF,
-> +		.caps = MTK_SCPD_KEEP_DEFAULT_OFF | MTK_SCPD_CLAMP_PROTECTION,
->   	},
->   };
->   
-> diff --git a/drivers/pmdomain/mediatek/mt8365-pm-domains.h b/drivers/pmdomain/mediatek/mt8365-pm-domains.h
-> index 3d83d49eaa7c..f9813cdcd3aa 100644
-> --- a/drivers/pmdomain/mediatek/mt8365-pm-domains.h
-> +++ b/drivers/pmdomain/mediatek/mt8365-pm-domains.h
-> @@ -76,7 +76,7 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8365[] = {
->   		.pwr_sta2nd_offs = 0x0184,
->   		.sram_pdn_bits = GENMASK(8, 8),
->   		.sram_pdn_ack_bits = GENMASK(12, 12),
-> -		.bp_cfg = {
-> +		.clamp_smi = {
->   			MT8365_BUS_PROT_SMI_WR_CLAMP_EN_PORT(1),
->   		},
->   	},
-> @@ -138,10 +138,12 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8365[] = {
->   		.pwr_sta2nd_offs = 0x0184,
->   		.sram_pdn_bits = GENMASK(9, 8),
->   		.sram_pdn_ack_bits = GENMASK(13, 12),
-> +		.clamp_smi = {
-> +			MT8365_BUS_PROT_SMI_WR_CLAMP_EN_PORT(2),
-> +		},
->   		.bp_cfg = {
->   			MT8365_BUS_PROT_INFRA_WR_TOPAXI_1(
->   				MT8365_INFRA_TOPAXI_PROTECTEN_1_CAM2MM_AXI_GALS_MST),
-> -			MT8365_BUS_PROT_SMI_WR_CLAMP_EN_PORT(2),
->   		},
->   	},
->   	[MT8365_POWER_DOMAIN_VDEC] = {
-> @@ -152,7 +154,7 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8365[] = {
->   		.pwr_sta2nd_offs = 0x0184,
->   		.sram_pdn_bits = GENMASK(8, 8),
->   		.sram_pdn_ack_bits = GENMASK(12, 12),
-> -		.bp_cfg = {
-> +		.clamp_smi = {
->   			MT8365_BUS_PROT_SMI_WR_CLAMP_EN_PORT(3),
->   		},
->   	},
-> @@ -164,11 +166,13 @@ static const struct scpsys_domain_data scpsys_domain_data_mt8365[] = {
->   		.pwr_sta2nd_offs = 0x0184,
->   		.sram_pdn_bits = GENMASK(14, 8),
->   		.sram_pdn_ack_bits = GENMASK(21, 15),
-> +		.clamp_smi = {
-> +			MT8365_BUS_PROT_SMI_WR_CLAMP_EN_PORT(4),
-> +		},
->   		.bp_cfg = {
->   			MT8365_BUS_PROT_INFRA_WR_TOPAXI_1(
->   				MT8365_INFRA_TOPAXI_PROTECTEN_1_APU2AP |
->   				MT8365_INFRA_TOPAXI_PROTECTEN_1_APU_CBIP_GALS_MST),
-> -			MT8365_BUS_PROT_SMI_WR_CLAMP_EN_PORT(4),
->   		},
->   	},
->   	[MT8365_POWER_DOMAIN_DSP] = {
-> diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.c b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> index 488920d29fbc..061296feb289 100644
-> --- a/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> +++ b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> @@ -47,9 +47,10 @@ struct scpsys_domain {
->   	struct clk_bulk_data *subsys_clks;
->   	struct regmap *infracfg_nao;
->   	struct regmap *infracfg;
-> -	struct regmap *smi;
-> +	struct regmap **smi;
->   	struct regmap **larb;
->   	int num_larb;
-> +	int num_smi;
->   	struct regulator *supply;
->   };
->   
-> @@ -78,6 +79,71 @@ static bool scpsys_domain_is_on(struct scpsys_domain *pd)
->   	return status && status2;
->   }
->   
-> +static int _scpsys_clamp_bus_protection_enable(const struct scpsys_bus_prot_data bpd,
-> +					       struct regmap *regmap)
-> +{
-> +	u32 val = 0, mask = bpd.bus_prot_sta_mask;
-> +
-> +	if (!mask)
-> +		return 0;
-> +
-> +	if (bpd.flags & BUS_PROT_REG_UPDATE)
-> +		regmap_set_bits(regmap, bpd.bus_prot_set, mask);
-> +	else
-> +		regmap_write(regmap, bpd.bus_prot_set, mask);
-> +
-> +	return regmap_read_poll_timeout(regmap, bpd.bus_prot_sta,
-> +				       val, (val & mask) == mask,
-> +				       MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
-> +}
+> imagine having a thermal zone named "cpu-little-bottom-right-core0" and 
+> a driver
+> named "qualcomm-power-controller" (which doesn't exist, but there are 
+> drivers with
+> pretty long names in the kernel anyway).
+> 
+> Kernel logging *may* have very long strings, decreasing readability:
+> [ 0.0000100 ] qualcomm-power-controller: cpu-little-bottom-right-core0: 
+> Failed to read thermal zone temperature -22
+> 
+> And sysfs would have something like
+> cpu-little-top-right-core0 cpu-little-top-left-core0 
+> cpu-little-bottom-right-core0
+> 
+> While sysfs could be ok, are we sure that allowing such long names is a 
+> good idea?
+> 
+> It's a genuine question - I don't really have more than just cosmetic 
+> reasons and
+> those are just only personal perspectives....
 
-This is practically a duplicated scpsys_bus_protect_set() function: it's doing the
-exact same, with the addition of that zero mask check, which is done elsewhere for
-the former anyway.
+IMO, it is up to the programmer to choose a convenient name.
 
-You can totally reuse scpsys_bus_protect_set() and scpsys_bus_protect_enable()
-instead of introducing new functions, and you can even add SMI bus protections
-to .bp_cfg if you do something like that:
+If the traces are giving unreadable output, then someone will send a 
+patch to change the name to something more readable.
 
-static int scpsys_bus_protect_set(struct scpsys_domain *pd,
-				  const struct scpsys_bus_prot_data *bpd,
-				  struct regmap *regmap, struct regmap *sta_regmap)
-{
-	struct regmap *sta_regmap = scpsys_bus_protect_get_sta_regmap(pd, bpd);
-	struct regmap *regmap = scpsys_bus_protect_get_regmap(pd, bpd);
-	u32 sta_mask = bpd->bus_prot_sta_mask;
-	u32 val;
-
-	if (bpd->flags & BUS_PROT_REG_UPDATE)
-		regmap_set_bits(regmap, bpd->bus_prot_set, bpd->bus_prot_set_clr_mask);
-	else
-		regmap_write(regmap, bpd->bus_prot_set, bpd->bus_prot_set_clr_mask);
-
-	return regmap_read_poll_timeout(sta_regmap, bpd->bus_prot_sta,
-					val, (val & sta_mask) == sta_mask,
-					MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
-}
-
-static int __scpsys_bus_protect_enable(struct scpsys_domain *pd, enum 
-scpsys_bus_prot_flags flags)
-{
-	for (int i = 0; i < SPM_MAX_BUS_PROT_DATA; i++) {
-		const struct scpsys_bus_prot_data *bpd = &pd->data->bp_cfg[i];
-		int j, num_regmaps, ret;
-		bool is_smi = bpd->flags & BUS_PROT_COMPONENT_SMI;
-
-		if (!bpd->bus_prot_set_clr_mask)
-			break;
-
-		if (!(bpd->flags & flags))
-			continue;
-
-		num_regmaps = is_smi ? pd->num_smi : 1;
-
-		for (j = 0; j < num_regmaps; j++) {
-			struct regmap *sta_regmap, *regmap;
-
-			if (is_smi) {
-				sta_regmap = pd->smi[j];
-				regmap = pd->smi[j];
-			} else {
-				sta_regmap = scpsys_bus_protect_get_sta_regmap(pd, bpd);
-				regmap = scpsys_bus_protect_get_regmap(pd, bpd);
-			}
-
-			if (bpd->flags & BUS_PROT_INVERTED)
-				ret = scpsys_bus_protect_clear(pd, bpd, regmap, sta_regmap);
-			else
-				ret = scpsys_bus_protect_set(pd, bpd, regmap, sta_regmap);
-			if (ret)
-				return ret;
-		}
-	}
-
-	return 0;
-}
-
-static int scpsys_bus_protect_enable(struct scpsys_domain *pd)
-{
-	int ret;
-
-	/* Enable bus protection and/or clamping on SMI first */
-	ret = __scpsys_bus_protect_enable(pd, BUS_PROT_COMPONENT_SMI);
-	if (ret)
-		return ret;
-
-	ret = __scpsys_bus_protect_enable(pd, BUS_PROT_COMPONENT_INFRA);
-	if (ret)
-		return ret;
-
-	return 0;
-}
+In addition, having array in structure to be passed as parameter is not 
+good because of the limited stack size in the kernel.
 
 
-...and it's the same for the protection_disable part.
+>>> +    if (tz_name_len) {
+>>> +        struct thermal_zone_device *pos;
+>>> +
+>>> +        if (tz_name_len >= THERMAL_NAME_LENGTH) {
+>>> +            pr_err("Thermal zone name (%s) too long, should be under 
+>>> %d chars\n",
+>>> +                   tzdp->name, THERMAL_NAME_LENGTH);
+>>> +            return ERR_PTR(-EINVAL);
+>>> +        }
+>>> +
+>>> +        mutex_lock(&thermal_list_lock);
+>>> +        list_for_each_entry(pos, &thermal_tz_list, node)
+>>> +            if (!strncasecmp(tzdp->name, pos->name, 
+>>> THERMAL_NAME_LENGTH)) {
+>>> +                result = -EEXIST;
+>>> +                break;
+>>> +            }
+>>> +        mutex_unlock(&thermal_list_lock);
+>>> +
+>>> +        if (result) {
+>>> +            pr_err("Thermal zone name (%s) already exists and must 
+>>> be unique\n",
+>>> +                   tzdp->name);
+>>> +            return ERR_PTR(result);
+>>> +        }
+>>
+>> Perhaps a lookup function would be more adequate. What about reusing 
+>> thermal_zone_get_by_name() and search with tz->name if it is !NULL, 
+>> tz->type otherwise ?
+>>
+> 
+> Okay yes that makes a lot of sense, and also breaks some of my brain 
+> loops around
+> making the migration a bit less painful.
+> 
+> Nice one! Will do :-D
+> 
+>>> +    }
+>>> +
+>>>       /*
+>>>        * Max trip count can't exceed 31 as the "mask >> num_trips" 
+>>> condition.
+>>>        * For example, shifting by 32 will result in compiler warning:
+>>> @@ -1307,6 +1332,9 @@ struct thermal_zone_device 
+>>> *thermal_zone_device_register(struct thermal_zone_dev
+>>>       tz->id = id;
+>>>       strscpy(tz->type, tzdp->type, sizeof(tz->type));
+>>> +    if (tz_name_len)
+>>> +        strscpy(tz->name, tzdp->name, sizeof(tzdp->name));
+>>> +
+>>>       if (!tzdp->ops->critical)
+>>>           tzdp->ops->critical = thermal_zone_device_critical;
+>>> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+>>> index 62a903ad649f..eaacc140abeb 100644
+>>> --- a/drivers/thermal/thermal_of.c
+>>> +++ b/drivers/thermal/thermal_of.c
+>>> @@ -486,6 +486,7 @@ static struct thermal_zone_device 
+>>> *thermal_of_zone_register(struct device_node *
+>>>           ret = PTR_ERR(np);
+>>>           goto out_kfree_of_ops;
+>>>       }
+>>> +    tzdp.name = np->name;
+>>>       tzdp.type = np->name;
+>>>       tzdp.trips = thermal_of_trips_init(np, &tzdp.num_trips);
+>>> diff --git a/drivers/thermal/thermal_sysfs.c 
+>>> b/drivers/thermal/thermal_sysfs.c
+>>> index f52af8a3b4b5..f4002fa6caa2 100644
+>>> --- a/drivers/thermal/thermal_sysfs.c
+>>> +++ b/drivers/thermal/thermal_sysfs.c
+>>> @@ -23,6 +23,14 @@
+>>>   /* sys I/F for thermal zone */
+>>> +static ssize_t
+>>> +name_show(struct device *dev, struct device_attribute *attr, char *buf)
+>>> +{
+>>> +    struct thermal_zone_device *tz = to_thermal_zone(dev);
+>>> +
+>>> +    return sprintf(buf, "%s\n", tz->name);
+>>> +}
+>>> +
+>>>   static ssize_t
+>>>   type_show(struct device *dev, struct device_attribute *attr, char 
+>>> *buf)
+>>>   {
+>>> @@ -341,6 +349,7 @@ create_s32_tzp_attr(offset);
+>>>    * All the attributes created for tzp (create_s32_tzp_attr) also 
+>>> are always
+>>>    * present on the sysfs interface.
+>>>    */
+>>> +static DEVICE_ATTR_RO(name);
+>>>   static DEVICE_ATTR_RO(type);
+>>>   static DEVICE_ATTR_RO(temp);
+>>>   static DEVICE_ATTR_RW(policy);
+>>> diff --git a/drivers/thermal/thermal_trace.h 
+>>> b/drivers/thermal/thermal_trace.h
+>>> index 459c8ce6cf3b..c9dbae1e3b9e 100644
+>>> --- a/drivers/thermal/thermal_trace.h
+>>> +++ b/drivers/thermal/thermal_trace.h
+>>> @@ -28,6 +28,7 @@ TRACE_EVENT(thermal_temperature,
+>>>       TP_ARGS(tz),
+>>>       TP_STRUCT__entry(
+>>> +        __string(thermal_zone_name, tz->name)
+>>>           __string(thermal_zone, tz->type)
+>>>           __field(int, id)
+>>>           __field(int, temp_prev)
+>>> @@ -35,15 +36,16 @@ TRACE_EVENT(thermal_temperature,
+>>>       ),
+>>>       TP_fast_assign(
+>>> +        __assign_str(thermal_zone_name, tz->name);
+>>>           __assign_str(thermal_zone, tz->type);
+>>>           __entry->id = tz->id;
+>>>           __entry->temp_prev = tz->last_temperature;
+>>>           __entry->temp = tz->temperature;
+>>>       ),
+>>> -    TP_printk("thermal_zone=%s id=%d temp_prev=%d temp=%d",
+>>> -        __get_str(thermal_zone), __entry->id, __entry->temp_prev,
+>>> -        __entry->temp)
+>>> +    TP_printk("thermal_zone=%s name=%s id=%d temp_prev=%d temp=%d",
+>>> +          __get_str(thermal_zone), __get_str(thermal_zone_name),
+>>> +          __entry->id, __entry->temp_prev, __entry->temp)
+>>>   );
+>>>   TRACE_EVENT(cdev_update,
+>>> @@ -73,6 +75,7 @@ TRACE_EVENT(thermal_zone_trip,
+>>>       TP_ARGS(tz, trip, trip_type),
+>>>       TP_STRUCT__entry(
+>>> +        __string(thermal_zone_name, tz->name)
+>>>           __string(thermal_zone, tz->type)
+>>>           __field(int, id)
+>>>           __field(int, trip)
+>>> @@ -80,15 +83,17 @@ TRACE_EVENT(thermal_zone_trip,
+>>>       ),
+>>>       TP_fast_assign(
+>>> +        __assign_str(thermal_zone_name, tz->name);
+>>>           __assign_str(thermal_zone, tz->type);
+>>>           __entry->id = tz->id;
+>>>           __entry->trip = trip;
+>>>           __entry->trip_type = trip_type;
+>>>       ),
+>>> -    TP_printk("thermal_zone=%s id=%d trip=%d trip_type=%s",
+>>> -        __get_str(thermal_zone), __entry->id, __entry->trip,
+>>> -        show_tzt_type(__entry->trip_type))
+>>> +    TP_printk("thermal_zone=%s name=%s id=%d trip=%d trip_type=%s",
+>>> +          __get_str(thermal_zone), __get_str(thermal_zone_name),
+>>> +          __entry->id, __entry->trip,
+>>> +          show_tzt_type(__entry->trip_type))
+>>>   );
+>>
+>> For now, I think we can keep the traces as they are and keep passing 
+>> the tz->type. Then we can replace tz->type by tz->name without 
+>> changing the trace format.
+>>
+> 
+> We can but, as a personal consideration, this looks "more complete" - as 
+> in - we
+> are not dropping the thermal zone *type* concept anyway (even though 
+> we're doing
+> "something else" with it), so including both type and name in tracing is 
+> useful
+> to whoever is trying to debug something.
+> 
+> If you have strong opinions against, though, it literally takes 30 
+> seconds for me
+> to just remove that part and there's no problem in doing so!
 
-Regards,
-Angelo
+Yes, just drop it for now. We will sort it out after.
 
-> +
-> +static int scpsys_clamp_bus_protection_enable(struct scpsys_domain *pd)
-> +{
-> +	int ret, i;
-> +
-> +	for (i = 0; i < pd->num_smi; i++) {
-> +		ret = _scpsys_clamp_bus_protection_enable(pd->data->clamp_smi[i], pd->smi[i]);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int _scpsys_clamp_bus_protection_disable(const struct scpsys_bus_prot_data bpd,
-> +						struct regmap *regmap)
-> +{
-> +	u32 val = 0, mask = bpd.bus_prot_sta_mask;
-> +
-> +	if (!mask)
-> +		return 0;
-> +
-> +	if (bpd.flags & BUS_PROT_REG_UPDATE)
-> +		regmap_clear_bits(regmap, bpd.bus_prot_clr, mask);
-> +	else
-> +		regmap_write(regmap, bpd.bus_prot_clr, mask);
-> +
-> +	if (bpd.flags & BUS_PROT_IGNORE_CLR_ACK)
-> +		return 0;
-> +
-> +	return regmap_read_poll_timeout(regmap, bpd.bus_prot_sta,
-> +				       val, !(val & mask),
-> +				       MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
-> +}
-> +
-> +static int scpsys_clamp_bus_protection_disable(struct scpsys_domain *pd)
-> +{
-> +	int ret, i;
-> +
-> +	for (i = pd->num_smi - 1 ; i >= 0; i--) {
-> +		ret = _scpsys_clamp_bus_protection_disable(pd->data->clamp_smi[i], pd->smi[i]);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->   static int scpsys_sram_enable(struct scpsys_domain *pd)
->   {
->   	u32 pdn_ack = pd->data->sram_pdn_ack_bits;
-> @@ -122,14 +188,6 @@ static int scpsys_sram_disable(struct scpsys_domain *pd)
->   					MTK_POLL_TIMEOUT);
->   }
->   
-> -static struct regmap *scpsys_bus_protect_get_regmap(struct scpsys_domain *pd,
-> -						    const struct scpsys_bus_prot_data *bpd)
-> -{
-> -	if (bpd->flags & BUS_PROT_COMPONENT_SMI)
-> -		return pd->smi;
-> -	else
-> -		return pd->infracfg;
-> -}
->   
->   static struct regmap *scpsys_bus_protect_get_sta_regmap(struct scpsys_domain *pd,
->   							const struct scpsys_bus_prot_data *bpd)
-> @@ -137,14 +195,14 @@ static struct regmap *scpsys_bus_protect_get_sta_regmap(struct scpsys_domain *pd
->   	if (bpd->flags & BUS_PROT_STA_COMPONENT_INFRA_NAO)
->   		return pd->infracfg_nao;
->   	else
-> -		return scpsys_bus_protect_get_regmap(pd, bpd);
-> +		return pd->infracfg;
->   }
->   
->   static int scpsys_bus_protect_clear(struct scpsys_domain *pd,
->   				    const struct scpsys_bus_prot_data *bpd)
->   {
->   	struct regmap *sta_regmap = scpsys_bus_protect_get_sta_regmap(pd, bpd);
-> -	struct regmap *regmap = scpsys_bus_protect_get_regmap(pd, bpd);
-> +	struct regmap *regmap = pd->infracfg;
->   	u32 sta_mask = bpd->bus_prot_sta_mask;
->   	u32 expected_ack;
->   	u32 val;
-> @@ -168,7 +226,7 @@ static int scpsys_bus_protect_set(struct scpsys_domain *pd,
->   				  const struct scpsys_bus_prot_data *bpd)
->   {
->   	struct regmap *sta_regmap = scpsys_bus_protect_get_sta_regmap(pd, bpd);
-> -	struct regmap *regmap = scpsys_bus_protect_get_regmap(pd, bpd);
-> +	struct regmap *regmap = pd->infracfg;
->   	u32 sta_mask = bpd->bus_prot_sta_mask;
->   	u32 val;
->   
-> @@ -199,14 +257,19 @@ static int scpsys_bus_protect_enable(struct scpsys_domain *pd)
->   			return ret;
->   	}
->   
-> -	return 0;
-> +	return scpsys_clamp_bus_protection_enable(pd);
->   }
->   
->   static int scpsys_bus_protect_disable(struct scpsys_domain *pd)
->   {
-> +	int ret;
-> +
-> +	ret = scpsys_clamp_bus_protection_disable(pd);
-> +	if (ret)
-> +		return ret;
-> +
->   	for (int i = SPM_MAX_BUS_PROT_DATA - 1; i >= 0; i--) {
->   		const struct scpsys_bus_prot_data *bpd = &pd->data->bp_cfg[i];
-> -		int ret;
->   
->   		if (!bpd->bus_prot_set_clr_mask)
->   			continue;
-> @@ -272,6 +335,12 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
->   	bool tmp;
->   	int ret;
->   
-> +	if (MTK_SCPD_CAPS(pd, MTK_SCPD_CLAMP_PROTECTION)) {
-> +		ret = scpsys_clamp_bus_protection_enable(pd);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
->   	ret = scpsys_regulator_enable(pd->supply);
->   	if (ret)
->   		return ret;
-> @@ -318,6 +387,12 @@ static int scpsys_power_on(struct generic_pm_domain *genpd)
->   	if (ret < 0)
->   		goto err_disable_subsys_clks;
->   
-> +	if (MTK_SCPD_CAPS(pd, MTK_SCPD_CLAMP_PROTECTION)) {
-> +		ret = scpsys_clamp_bus_protection_disable(pd);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
->   	ret = scpsys_bus_protect_disable(pd);
->   	if (ret < 0)
->   		goto err_disable_sram;
-> @@ -353,6 +428,12 @@ static int scpsys_power_off(struct generic_pm_domain *genpd)
->   	bool tmp;
->   	int ret;
->   
-> +	if (MTK_SCPD_CAPS(pd, MTK_SCPD_CLAMP_PROTECTION)) {
-> +		ret = scpsys_clamp_bus_protection_enable(pd);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
->   	ret = scpsys_bus_protect_enable(pd);
->   	if (ret < 0)
->   		return ret;
-> @@ -450,12 +531,23 @@ generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_no
->   	if (IS_ERR(pd->infracfg))
->   		return ERR_CAST(pd->infracfg);
->   
-> -	smi_node = of_parse_phandle(node, "mediatek,smi", 0);
-> -	if (smi_node) {
-> -		pd->smi = device_node_to_regmap(smi_node);
-> -		of_node_put(smi_node);
-> -		if (IS_ERR(pd->smi))
-> -			return ERR_CAST(pd->smi);
-> +	pd->num_smi = of_count_phandle_with_args(node, "mediatek,smi", NULL);
-> +	if (pd->num_smi > 0) {
-> +		pd->smi = devm_kcalloc(scpsys->dev, pd->num_smi, sizeof(*pd->smi), GFP_KERNEL);
-> +		if (!pd->smi)
-> +			return ERR_PTR(-ENOMEM);
-> +
-> +		for (i = 0; i < pd->num_smi; i++) {
-> +			smi_node = of_parse_phandle(node, "mediatek,smi", i);
-> +			if (!smi_node)
-> +				return ERR_PTR(-EINVAL);
-> +
-> +			pd->smi[i] = syscon_node_to_regmap(smi_node);
-> +			if (IS_ERR(pd->smi[i]))
-> +				return ERR_CAST(pd->smi[i]);
-> +		}
-> +	} else {
-> +		pd->num_smi = 0;
->   	}
->   
->   	pd->num_larb = of_count_phandle_with_args(node, "mediatek,larb", NULL);
-> diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.h b/drivers/pmdomain/mediatek/mtk-pm-domains.h
-> index 31c2a1bb500f..f903e2943f0e 100644
-> --- a/drivers/pmdomain/mediatek/mtk-pm-domains.h
-> +++ b/drivers/pmdomain/mediatek/mtk-pm-domains.h
-> @@ -13,6 +13,7 @@
->   #define MTK_SCPD_EXT_BUCK_ISO		BIT(6)
->   #define MTK_SCPD_HAS_INFRA_NAO		BIT(7)
->   #define MTK_SCPD_STRICT_BUS_PROTECTION	BIT(8)
-> +#define MTK_SCPD_CLAMP_PROTECTION	BIT(9)
->   #define MTK_SCPD_CAPS(_scpd, _x)	((_scpd)->data->caps & (_x))
->   
->   #define SPM_VDE_PWR_CON			0x0210
-> @@ -120,6 +121,7 @@ struct scpsys_domain_data {
->   	int ext_buck_iso_offs;
->   	u32 ext_buck_iso_mask;
->   	u16 caps;
-> +	const struct scpsys_bus_prot_data clamp_smi[SPM_MAX_BUS_PROT_DATA];
->   	const struct scpsys_bus_prot_data bp_cfg[SPM_MAX_BUS_PROT_DATA];
->   	const struct smi_reset_data reset_smi[SPM_MAX_SMI_RESET_DATA];
->   	int pwr_sta_offs;
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
 
