@@ -1,222 +1,125 @@
-Return-Path: <linux-pm+bounces-2231-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2232-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19F2382E1EB
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 21:43:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 82D5082E434
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 01:09:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8AC691F22D36
-	for <lists+linux-pm@lfdr.de>; Mon, 15 Jan 2024 20:43:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 405951F22BF6
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 00:09:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 854001A716;
-	Mon, 15 Jan 2024 20:43:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB1941079A;
+	Tue, 16 Jan 2024 00:08:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R/YXTCgF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OrNUJl1R"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6622B1B581;
-	Mon, 15 Jan 2024 20:43:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4B16C433C7;
-	Mon, 15 Jan 2024 20:43:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 963C5F9F6;
+	Tue, 16 Jan 2024 00:08:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BE47C43390;
+	Tue, 16 Jan 2024 00:08:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705351395;
-	bh=AB0MU58KQMheuhuESrBfAGmtVVn89O+3ztJ7LgDFSkY=;
-	h=Date:From:To:Cc:Subject:From;
-	b=R/YXTCgFMcwTd+gAmGqLkeTrXSjpFQgVvWymN4YOeYPypZYBqkChEFZJlR7cxpFbz
-	 xelPDQeVKK+HNbt17aFz4GtdTXY2rZmQe7JHiRpibmE8k/VQxomNhVJfaFELkWgzwQ
-	 gCxBbE+DV0uzN42DCbtwi92JrPzzHGzBuaGCHDOsIBOl1g2N0440uQMBSzEnb5AMuC
-	 FyOzzCIMDSAB19oJLVjZYfNBNtBGf3w7nF8v+f36lQ0TCTTLGdxopT2sk2Dp5tE/H3
-	 AKldojLXQvPIi1b3eDZY3vMt8/Qs0MFXHebqZk3FWIIGmZ1fqlBb7H9KyJ8PQsIZw1
-	 4VV44B8PKvJVA==
-Received: by mercury (Postfix, from userid 1000)
-	id B31DA10644D4; Mon, 15 Jan 2024 21:43:11 +0100 (CET)
-Date: Mon, 15 Jan 2024 21:43:11 +0100
-From: Sebastian Reichel <sre@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [GIT PULL] power-supply changes for 6.8
-Message-ID: <nqrl5ggszhlzaew6yte6t6uv5cbf4fhl5vd4pfhkitlsbqozvf@w4pttrz6supl>
+	s=k20201202; t=1705363735;
+	bh=jPWL0niYtMIZ4LWIOzaXcxKw/FiVWY+7ZQrXeF2El8I=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=OrNUJl1RwH6vphCO04my5NfkqP1zMLhvulXHN/9OimLuh/H/VAI1w1h291gQrXUNK
+	 XZuyJRbwMxxofirRoWKpi1UQKwKZqoXLc9X+VWJGFoorId7p7/kAVKD+DyG5btqrBq
+	 jcvMIlVK9/8eUF83cPTINPs79+Pzl0kKxYqTrUULQ99ffLSOqN8xvmVpJbzslA2y/z
+	 XXdqUMU68EurnfG1/UelV/jBobqMq2n+n9ytFYdaH98JVizvwMbtUWPI7lCrF6VreI
+	 7GMbuEPkvvuoDcB6r91s3FsCwaTNOlnt6ctLJ6F+LXoQaOd/N2Pk7o31Ip42NAIRVQ
+	 u6fCGaB5EjsqQ==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Vincent Guittot <vincent.guittot@linaro.org>,
+	Ingo Molnar <mingo@kernel.org>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.7 5/8] cpufreq: Use the fixed and coherent frequency for scaling capacity
+Date: Mon, 15 Jan 2024 19:08:17 -0500
+Message-ID: <20240116000838.212299-5-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240116000838.212299-1-sashal@kernel.org>
+References: <20240116000838.212299-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="bfg3u4hwrzkveyp2"
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.7
+Content-Transfer-Encoding: 8bit
 
+From: Vincent Guittot <vincent.guittot@linaro.org>
 
---bfg3u4hwrzkveyp2
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[ Upstream commit 599457ba15403037b489fe536266a3d5f9efaed7 ]
 
-Hi Linus,
+cpuinfo.max_freq can change at runtime because of boost as an example. This
+implies that the value could be different from the frequency that has been
+used to compute the capacity of a CPU.
 
-The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
+The new arch_scale_freq_ref() returns a fixed and coherent frequency
+that can be used to compute the capacity for a given frequency.
 
-  Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
+[ Also fix a arch_set_freq_scale()  newline style wart in <linux/cpufreq.h>. ]
 
-are available in the Git repository at:
+Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Tested-by: Lukasz Luba <lukasz.luba@arm.com>
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+Link: https://lore.kernel.org/r/20231211104855.558096-3-vincent.guittot@linaro.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/cpufreq/cpufreq.c | 4 ++--
+ include/linux/cpufreq.h   | 1 +
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.gi=
-t tags/for-v6.8
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 934d35f570b7..44db4f59c4cc 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -454,7 +454,7 @@ void cpufreq_freq_transition_end(struct cpufreq_policy *policy,
+ 
+ 	arch_set_freq_scale(policy->related_cpus,
+ 			    policy->cur,
+-			    policy->cpuinfo.max_freq);
++			    arch_scale_freq_ref(policy->cpu));
+ 
+ 	spin_lock(&policy->transition_lock);
+ 	policy->transition_ongoing = false;
+@@ -2174,7 +2174,7 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
+ 
+ 	policy->cur = freq;
+ 	arch_set_freq_scale(policy->related_cpus, freq,
+-			    policy->cpuinfo.max_freq);
++			    arch_scale_freq_ref(policy->cpu));
+ 	cpufreq_stats_record_transition(policy, freq);
+ 
+ 	if (trace_cpu_frequency_enabled()) {
+diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+index 1c5ca92a0555..afda5f24d3dd 100644
+--- a/include/linux/cpufreq.h
++++ b/include/linux/cpufreq.h
+@@ -1203,6 +1203,7 @@ void arch_set_freq_scale(const struct cpumask *cpus,
+ {
+ }
+ #endif
++
+ /* the following are really really optional */
+ extern struct freq_attr cpufreq_freq_attr_scaling_available_freqs;
+ extern struct freq_attr cpufreq_freq_attr_scaling_boost_freqs;
+-- 
+2.43.0
 
-for you to fetch changes up to 05599b5f56b750b5a92ff7f2c081945210816f83:
-
-  Merge power-supply fixes for 6.7 cycle (2024-01-14 21:38:31 +0100)
-
-----------------------------------------------------------------
-power supply and reset changes for the 6.8 series
-
-* new drivers / features
-  - bq24190: Add support for BQ24296 charger
-* cleanups
-  - all reset drivers: Stop using module_platform_driver_probe()
-  - gpio-restart: use devm_register_sys_off_handler
-  - pwr-mlxbf: support graceful reboot
-  - cw2015: correct time_to_empty units
-  - qcom-battmgr: Fix driver initialization sequence
-  - bq27xxx: Start/Stop delayed work in suspend/resume
-  - minor cleanups and fixes
-
-----------------------------------------------------------------
-Andrew Davis (1):
-      power: reset: gpio-restart: Use devm_register_sys_off_handler()
-
-Asmaa Mnebhi (1):
-      power: reset: pwr-mlxbf: support graceful reboot instead of emergency=
- reset
-
-Charalampos Mitrodimas (2):
-      power: supply: Fix indentation and some other warnings
-      power: supply: Use multiple MODULE_AUTHOR statements
-
-Elliot Berman (2):
-      dt-bindings: power: reset: $ref reboot-mode in syscon-reboot-mode
-      dt-bindings: power: reset: $ref reboot-mode in nvmem-reboot-mode
-
-Hermes Zhang (2):
-      dt-bindings: power: supply: bq24190: Add BQ24296 compatible
-      power: supply: bq24190_charger: Add support for BQ24296
-
-Jan Palus (1):
-      power: supply: cw2015: correct time_to_empty units in sysfs
-
-Johan Hovold (1):
-      dt-bindings: power: reset: qcom-pon: fix inconsistent example
-
-Konrad Dybcio (1):
-      power: supply: qcom_battmgr: Register the power supplies after PDR is=
- up
-
-Kunwu Chan (1):
-      power: supply: Fix null pointer dereference in smb2_probe
-
-Marek Vasut (1):
-      power: supply: bq27xxx: Stop and start delayed work in suspend and re=
-sume
-
-Michal Simek (1):
-      dt-bindings: power: reset: xilinx: Rename node names in examples
-
-Nathan Chancellor (1):
-      power: reset: at91: Drop '__init' from at91_wakeup_status()
-
-Sebastian Reichel (1):
-      Merge power-supply fixes for 6.7 cycle
-
-Su Hui (1):
-      power: supply: bq256xx: fix some problem in bq256xx_hw_init
-
-Uwe Kleine-K=F6nig (16):
-      power: reset: at91-poweroff: Stop using module_platform_driver_probe()
-      power: reset: at91-reset: Stop using module_platform_driver_probe()
-      power: reset: at91-sama5d2_shdwc: Stop using module_platform_driver_p=
-robe()
-      power: reset: as3722-poweroff: Convert to platform remove callback re=
-turning void
-      power: reset: at91-poweroff: Convert to platform remove callback retu=
-rning void
-      power: reset: atc260x-poweroff: Convert to platform remove callback r=
-eturning void
-      power: reset: ltc2952-poweroff: Convert to platform remove callback r=
-eturning void
-      power: reset: mt6323-poweroff: Convert to platform remove callback re=
-turning void
-      power: reset: qnap-poweroff: Convert to platform remove callback retu=
-rning void
-      power: reset: regulator-poweroff: Convert to platform remove callback=
- returning void
-      power: reset: restart-poweroff: Convert to platform remove callback r=
-eturning void
-      power: reset: rmobile-reset: Convert to platform remove callback retu=
-rning void
-      power: reset: syscon-poweroff: Convert to platform remove callback re=
-turning void
-      power: reset: tps65086-restart: Convert to platform remove callback r=
-eturning void
-      power: reset: at91-reset: Convert to platform remove callback returni=
-ng void
-      power: reset: at91-sama5d2_shdwc: Convert to platform remove callback=
- returning void
-
- .../bindings/power/reset/nvmem-reboot-mode.yaml    |   8 +-
- .../devicetree/bindings/power/reset/qcom,pon.yaml  |  13 +-
- .../bindings/power/reset/syscon-reboot-mode.yaml   |   8 +-
- .../bindings/power/reset/xlnx,zynqmp-power.yaml    |   4 +-
- .../devicetree/bindings/power/supply/bq24190.yaml  |   1 +
- drivers/power/reset/as3722-poweroff.c              |   6 +-
- drivers/power/reset/at91-poweroff.c                |  13 +-
- drivers/power/reset/at91-reset.c                   |  11 +-
- drivers/power/reset/at91-sama5d2_shdwc.c           |  13 +-
- drivers/power/reset/atc260x-poweroff.c             |   6 +-
- drivers/power/reset/gpio-restart.c                 |  34 +-
- drivers/power/reset/ltc2952-poweroff.c             |   5 +-
- drivers/power/reset/mt6323-poweroff.c              |   6 +-
- drivers/power/reset/pwr-mlxbf.c                    |  20 +-
- drivers/power/reset/qnap-poweroff.c                |   5 +-
- drivers/power/reset/regulator-poweroff.c           |   6 +-
- drivers/power/reset/restart-poweroff.c             |   6 +-
- drivers/power/reset/rmobile-reset.c                |   5 +-
- drivers/power/reset/syscon-poweroff.c              |   6 +-
- drivers/power/reset/tps65086-restart.c             |  12 +-
- drivers/power/supply/bq24190_charger.c             | 459 ++++++++++++++++-=
-----
- drivers/power/supply/bq256xx_charger.c             |   5 +-
- drivers/power/supply/bq27xxx_battery.c             |  22 +
- drivers/power/supply/bq27xxx_battery_i2c.c         |   1 +
- drivers/power/supply/cw2015_battery.c              |   2 +-
- drivers/power/supply/power_supply_core.c           | 167 ++++----
- drivers/power/supply/qcom_battmgr.c                | 109 ++---
- drivers/power/supply/qcom_pmi8998_charger.c        |   4 +
- include/linux/power/bq27xxx_battery.h              |   1 +
- 29 files changed, 615 insertions(+), 343 deletions(-)
-
---bfg3u4hwrzkveyp2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmWlmN8ACgkQ2O7X88g7
-+prmUQ/9E+OJVPxNrjqMYpdQWUIJhHxjyEvqa7dyGRGrZZ0ISyVbO2eCln8kfMwg
-dKtXTH7jy/QsXDi5AjdE4g5uvnALxISm/Dw8Law4T/L8RGuDNYqJYPjQ/2Nh67A8
-Bfc9fmJsLcBJIEh8Cn7ZIqjMKOY6lNqTG5CYngyVsetxpxo8Ncg+FPFK4FZHHdST
-7K1aDKDTigs6TEG2ElAyt1t1teB9sEzK1OoFj/NO61dBhqtMOlGnbBBsLSuefBwl
-d1qupc/mjuKA5UROx4sUX69m9O9xBkwSx45W+GklFg0UMlUcw8cGPOU1gmBN+nIM
-OedF+DCtf8hMklWeOfqdX5PpmelcNskm782QKbaH2KWmDdpRxmN+2Y4jm99SKKPN
-F1W29HcDtEvF+Tu8dQ9XxC9ujcsQ/cGp3uXhK/WLivpdkU8dsxwSePjR85cEym43
-6tozPlZHqC+ukifsnl9tP+admat4WfWnLQIShP8dKCUggrst6k/qXtiWbs8sEIOC
-ph1a7vTC0is6VpCP7l+P/4WnE8hfBVwosz5aSMDxhx69b3/oxfR5oxLIyisbjUXZ
-wnkGJBDcX3L5Y/1hrYhlql3L8tfXvyAvcwA3wRv/HvUb3oqKZ8xAqBoRvI1vqkOo
-SyXcB8bigHCQ5C5ywhCg38xBw5Rr8O2XrKMcwVZXX4aWoraTCYs=
-=1whw
------END PGP SIGNATURE-----
-
---bfg3u4hwrzkveyp2--
 
