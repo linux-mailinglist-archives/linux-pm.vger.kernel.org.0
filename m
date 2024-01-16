@@ -1,31 +1,31 @@
-Return-Path: <linux-pm+bounces-2259-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2260-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4EE782FD25
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 23:43:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5757682FD32
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 23:45:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D75861C28C14
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 22:43:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA7CF1F2A404
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 22:45:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75C712030D;
-	Tue, 16 Jan 2024 22:27:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 090A01D552;
+	Tue, 16 Jan 2024 22:33:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k4DNYJL5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="clIeEDIZ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51911249E3
-	for <linux-pm@vger.kernel.org>; Tue, 16 Jan 2024 22:27:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6E3720327
+	for <linux-pm@vger.kernel.org>; Tue, 16 Jan 2024 22:33:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705444029; cv=none; b=RoV/QsUfPVhBiuPCI2C/SiiKmw6XGFB7pXfeLBFeuiTficRIqGxro0dpgUnbZ/W8WAnUTyPVhc2VUEO8sM4FMhDbJb301ZFRfo/JP+pDo4KAToCqhWr6hs6mhrbOB1x1QxZXKdnD/Hc2xE+0ULoRbC2MSmrWRBE8+jHilC9d/4w=
+	t=1705444417; cv=none; b=TiZ6iaXfF0kF0Pdk2GCn3LYnGCHgMSZ3wFFoUe0p+jq0DuagXdnHwElPKihN7hcX01VQPOI+iAtax6xGnvo4pbROZplyf+JB62ms0rjq7Fu50GAkmuwyvCi8KJc0q3TnCm2ZyZqUYRY6NRhkQTQSwF+5pXS+hPjr3x3xzTcn6IE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705444029; c=relaxed/simple;
-	bh=ZEBCgHQrTt42yDQi6jXzlS/xiAcm+6uljPXHzgWiHzU=;
+	s=arc-20240116; t=1705444417; c=relaxed/simple;
+	bh=bdf0+zjZGEqKrUGL9QWqro5EVuqZ8E+cIe8uCweJ9Mg=;
 	h=Received:DKIM-Signature:Received:From:To:Subject:Date:
 	 X-Bugzilla-Reason:X-Bugzilla-Type:X-Bugzilla-Watch-Reason:
 	 X-Bugzilla-Product:X-Bugzilla-Component:X-Bugzilla-Version:
@@ -34,27 +34,27 @@ ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	 X-Bugzilla-Assigned-To:X-Bugzilla-Flags:X-Bugzilla-Changed-Fields:
 	 Message-ID:In-Reply-To:References:Content-Type:
 	 Content-Transfer-Encoding:X-Bugzilla-URL:Auto-Submitted:
-	 MIME-Version; b=eyKk1i3jTCs+1nNqwKCY+AvV4eRgqAak7+SpfvH6AY4fQ6RdMpvnF8yH7fKUFJEG6pxMfXLH13EwuZNdewvT0LqrmldvAHV2vFteMC3JWQWknD+L6gK+/kd8DT49uFhHoIO7H2fmCrQWpS2wDxiugO1kebDR5e/4XvglWnCdx7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k4DNYJL5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A51CAC43399
-	for <linux-pm@vger.kernel.org>; Tue, 16 Jan 2024 22:27:08 +0000 (UTC)
+	 MIME-Version; b=WxLuByYMOwW9Tt8yZOnA31mTLsqEnvW4lHq8IRNLLQWQZovFbCIBuMhRM8CtuRs1fF4+oa7jgUNrqrJRBvWCls1E8ZIR1Ako8HbauVEx/QII1Z1JcgIG/P4wVlwSt3QsYKcWoWcVMbFLAbRu+iU90s1wH5rb3k4nYQi9aLQ/bcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=clIeEDIZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4A224C433A6
+	for <linux-pm@vger.kernel.org>; Tue, 16 Jan 2024 22:33:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705444028;
-	bh=ZEBCgHQrTt42yDQi6jXzlS/xiAcm+6uljPXHzgWiHzU=;
+	s=k20201202; t=1705444417;
+	bh=bdf0+zjZGEqKrUGL9QWqro5EVuqZ8E+cIe8uCweJ9Mg=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=k4DNYJL5/FkAdp63YFptiPDmp0VoqvcDpOLsLO+UAwCDvE+rmwypSWv9Q+0xUtBWs
-	 o1Hzj+I99YIWK6Ex/3AtuML3meZdVrfLEz8NdOJVNZKUKMHvOLpTWzaZuLSzMn9GYo
-	 0xzWM1D2SRdMHn/ZvfbZHblfb0IhCS1K1O1blUhUc+0kfWBZBXOqxM/r0/VdEF4UMt
-	 fg4EPIksm3NcxL0k9m7BRQBx0UJznEsLHFI+FXth14WiIbiRZZgZuEjcJjw3nCN9Ez
-	 9PZ58x0AnuhRX7z8V/LKQFQRaE6GZ8NmXGKbi1jWef/qkWR4JfK2AjcGtxL7z0Nq+Y
-	 xfowMPUBp75yQ==
+	b=clIeEDIZkJlCW3wsazc22GmvBIOvVJvFYKkX2l8Q8NbgDN6xBaZrYAC7KhOasl7GF
+	 nOYck37v/75grJrIApHK7ZjFPh2f9vck3vffSw9fbWeQnPpz2UCJZInafFjCHeu1AS
+	 IYZTGGRKEPsNU8tv4LseJSu+NwQsC8EGH/kerXloAcudcZ0YyJCJqr+czXbfWJ0b57
+	 9yus6MKJndMa4j7sNYbdjUVoqOyMLp/aptez3RESSciWcPUqnU4q0KtX9kmi+pPSNt
+	 vNBNeU9FdU9LgyPPldJZJJt0HrbfE7WFo2ycuxSeRxYnHq2TTSO/sXAPrcLKgWKDXb
+	 oB7cKfetoeGlQ==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 92409C53BD4; Tue, 16 Jan 2024 22:27:08 +0000 (UTC)
+	id 38357C53BD4; Tue, 16 Jan 2024 22:33:37 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-pm@vger.kernel.org
 Subject: [Bug 218171] amd-pstate not loading on zen2 threadripper 3960x
  (trx40
-Date: Tue, 16 Jan 2024 22:27:08 +0000
+Date: Tue, 16 Jan 2024 22:33:36 +0000
 X-Bugzilla-Reason: AssignedTo
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -69,8 +69,8 @@ X-Bugzilla-Resolution: ANSWERED
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc attachments.created
-Message-ID: <bug-218171-137361-EeqUrsJbJl@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: attachments.description
+Message-ID: <bug-218171-137361-66I2ftGMUe@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-218171-137361@https.bugzilla.kernel.org/>
 References: <bug-218171-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -90,12 +90,22 @@ Alessio Di Sandro (alessio.disandro@gmail.com) changed:
 
            What    |Removed                     |Added
 ----------------------------------------------------------------------------
-                 CC|                            |alessio.disandro@gmail.com
+ Attachment #305722|ACPI tables for TR3970 MSI  |ACPI tables for TR 3970X on
+        description|Creator TRX40               |MSI Creator TRX40
 
---- Comment #24 from Alessio Di Sandro (alessio.disandro@gmail.com) ---
-Created attachment 305722
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305722&action=3Dedit
-ACPI tables for TR3970 MSI Creator TRX40
+--- Comment #25 from Alessio Di Sandro (alessio.disandro@gmail.com) ---
+Comment on attachment 305722
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305722
+ACPI tables for TR 3970X on MSI Creator TRX40
+
+Same behaviour on a MSI Creator TRX40, TR 3970X, BIOS version 7C59v17 (late=
+st),
+CPPC options enabled in the BIOS, Linux 6.6.11.
+
+It may very well be the board vendors being lazy, but it seems a bit fishy =
+that
+ALL of them have the same CPPC problem. With my MSI report, aren't these the
+entirety of the TRX40 boards?
 
 --=20
 You may reply to this email to add a comment.
