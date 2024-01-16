@@ -1,304 +1,105 @@
-Return-Path: <linux-pm+bounces-2258-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2259-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24B6782F56A
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 20:34:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4EE782FD25
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 23:43:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B278E286641
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 19:34:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D75861C28C14
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 22:43:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 030141D527;
-	Tue, 16 Jan 2024 19:34:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75C712030D;
+	Tue, 16 Jan 2024 22:27:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="uEtrcBcX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k4DNYJL5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D237E1D524
-	for <linux-pm@vger.kernel.org>; Tue, 16 Jan 2024 19:33:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51911249E3
+	for <linux-pm@vger.kernel.org>; Tue, 16 Jan 2024 22:27:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705433641; cv=none; b=May7lDpDWAZpQUoBquQtmPkA2D6Ol04AA1UPk9kASuf3YDK6mSnEXpCdhpIXIaOdzCSIc9V2mYVd7rCDI+wp0dtbLo+BsjKwWrGjRpXdGZG8UbCSnSYZbAcF3yRMfHBoUW9mCG9WMFHKmOKx+OL8g/PHW9mb7ND5f5GzRkJhabs=
+	t=1705444029; cv=none; b=RoV/QsUfPVhBiuPCI2C/SiiKmw6XGFB7pXfeLBFeuiTficRIqGxro0dpgUnbZ/W8WAnUTyPVhc2VUEO8sM4FMhDbJb301ZFRfo/JP+pDo4KAToCqhWr6hs6mhrbOB1x1QxZXKdnD/Hc2xE+0ULoRbC2MSmrWRBE8+jHilC9d/4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705433641; c=relaxed/simple;
-	bh=sZuC+lqlMRtSthfLhl2Beei5Sfxpx1sGtt6zGRlEi74=;
-	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:Date:
-	 From:To:Cc:Subject:Message-ID:References:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=H8Hoe84uUU1/TppNfssSue6DffApA6ed0olgBjpFerM+cDL/9tjGhw03xghbI55WovicI99sSq3/cL525T+el8EkdxiRFkwFEvWwqgeVWiFM8iFEormdEmzr2aPfAPQi970NhAkbpoXDntzo7dvyZjWLXXmcoAKUr0i8jQVYZZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=uEtrcBcX; arc=none smtp.client-ip=209.85.128.47
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-40e586a62f7so80662635e9.2
-        for <linux-pm@vger.kernel.org>; Tue, 16 Jan 2024 11:33:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1705433638; x=1706038438; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ab3ZIwu3XJ3IhNLR4wVJpIpbVXemMTSD7gJ4/J4o6F0=;
-        b=uEtrcBcXeQnKlUgNmhi+LoSjwHY0LJ6lNRZXWUbATF0fvvhK3EaNbGLIsheqi6fhdd
-         8ggwmP/fRPWdr28LKRcQia5GOSbT4IOizdOAlx3Q+YFHSE4AthZKQwd64A+SgFHL4oSz
-         xW/tkap5R7QimdW5vVry9sx6jLeLcMEv0ilsCfo5qljl0v5ISTwm8lEgJIKd6F5HfxIM
-         Se9h3b+G34wAlHAuP1aZoEtZrKWoycrMhf8i0h1dLLmX+SjuH/lcxh2+0735Ah0n2I4p
-         AKjKK3oJSlcS2yKIU4Z+xiogPxumeB4S4xlLdW/khGSki+A+0Bys5YGFfkrf80+Ds11R
-         JNDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705433638; x=1706038438;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ab3ZIwu3XJ3IhNLR4wVJpIpbVXemMTSD7gJ4/J4o6F0=;
-        b=FJUIwPX67KW6o6AEaiS5wm/y+AdklDyrlEr4ueLrAHIuyDeyCUzzVQMgMYtRkY7/0g
-         smOjLmh/dibiFwIU+S4AvHOECJIK1pNVu1ypaBrlpvgjzVSIfwzQeEUQihPETaljSY4E
-         sbTe7+I7wYh9uMdN3q+8LGtIiQhNtb+QkGiQPjEceUFsPhk5SpJVwUXoeCZhkrZEWp1Q
-         PAj08tXKgseVTS5EXQQQmNmVtKC3/EVLjyJtR4koRxc5VkpQOrwewQA3Aa0GuB7Int7r
-         Z2glIyGVFdwPeucA4Z291/CbfXUaYFlux2lgVK0YUzT0kbp5UhGrD12tMV+32gQuJpzg
-         QtUg==
-X-Gm-Message-State: AOJu0YxnJHQ2In2o/wNiRjy0t9JugTItUsnIMO5Li+xAIqAs1cuHntGv
-	KXzy4mqV3DGp7+9Nv2n3S1Shr32t6sdYug==
-X-Google-Smtp-Source: AGHT+IH/gTXr61TnbTI0B5aEX2OvMWDx1HRWkiT4lTmIOBRxw+YnzAPUCO/kqoR8cWktG4EAbLy8TQ==
-X-Received: by 2002:a05:600c:294:b0:40e:63c5:9de6 with SMTP id 20-20020a05600c029400b0040e63c59de6mr4512424wmk.25.1705433637810;
-        Tue, 16 Jan 2024 11:33:57 -0800 (PST)
-Received: from airbuntu (host109-154-205-127.range109-154.btcentralplus.com. [109.154.205.127])
-        by smtp.gmail.com with ESMTPSA id iv11-20020a05600c548b00b0040d8ff79fd8sm20244234wmb.7.2024.01.16.11.33.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 16 Jan 2024 11:33:57 -0800 (PST)
-Date: Tue, 16 Jan 2024 19:33:55 +0000
-From: Qais Yousef <qyousef@layalina.io>
-To: Lukasz Luba <lukasz.luba@arm.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	rafael@kernel.org, dietmar.eggemann@arm.com, rui.zhang@intel.com,
-	amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
-	daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
-	len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org,
-	wvw@google.com
-Subject: Re: [PATCH v5 15/23] PM: EM: Optimize em_cpu_energy() and remove
- division
-Message-ID: <20240116193355.44fp2lbfqwpytoft@airbuntu>
-References: <20231129110853.94344-1-lukasz.luba@arm.com>
- <20231129110853.94344-16-lukasz.luba@arm.com>
- <20231228180647.rwz4u7ebk5p2hjcr@airbuntu>
- <d9bea2d0-3869-4f08-8eb8-0ca33ce525ea@arm.com>
- <20240104192355.mrtqnek2cyw7rlkd@airbuntu>
- <2a8aa860-17dc-442a-a4ed-8f7c387b15ba@arm.com>
- <20240115122156.5743y4trhm4tkgs3@airbuntu>
- <661068a2-7c46-4703-ba4d-5ce1cdf44b3d@arm.com>
- <20240116131033.45berjhpwzc4hwr7@airbuntu>
- <e74edb50-5dba-4c81-a383-eb97e6bc5f29@arm.com>
+	s=arc-20240116; t=1705444029; c=relaxed/simple;
+	bh=ZEBCgHQrTt42yDQi6jXzlS/xiAcm+6uljPXHzgWiHzU=;
+	h=Received:DKIM-Signature:Received:From:To:Subject:Date:
+	 X-Bugzilla-Reason:X-Bugzilla-Type:X-Bugzilla-Watch-Reason:
+	 X-Bugzilla-Product:X-Bugzilla-Component:X-Bugzilla-Version:
+	 X-Bugzilla-Keywords:X-Bugzilla-Severity:X-Bugzilla-Who:
+	 X-Bugzilla-Status:X-Bugzilla-Resolution:X-Bugzilla-Priority:
+	 X-Bugzilla-Assigned-To:X-Bugzilla-Flags:X-Bugzilla-Changed-Fields:
+	 Message-ID:In-Reply-To:References:Content-Type:
+	 Content-Transfer-Encoding:X-Bugzilla-URL:Auto-Submitted:
+	 MIME-Version; b=eyKk1i3jTCs+1nNqwKCY+AvV4eRgqAak7+SpfvH6AY4fQ6RdMpvnF8yH7fKUFJEG6pxMfXLH13EwuZNdewvT0LqrmldvAHV2vFteMC3JWQWknD+L6gK+/kd8DT49uFhHoIO7H2fmCrQWpS2wDxiugO1kebDR5e/4XvglWnCdx7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k4DNYJL5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A51CAC43399
+	for <linux-pm@vger.kernel.org>; Tue, 16 Jan 2024 22:27:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705444028;
+	bh=ZEBCgHQrTt42yDQi6jXzlS/xiAcm+6uljPXHzgWiHzU=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=k4DNYJL5/FkAdp63YFptiPDmp0VoqvcDpOLsLO+UAwCDvE+rmwypSWv9Q+0xUtBWs
+	 o1Hzj+I99YIWK6Ex/3AtuML3meZdVrfLEz8NdOJVNZKUKMHvOLpTWzaZuLSzMn9GYo
+	 0xzWM1D2SRdMHn/ZvfbZHblfb0IhCS1K1O1blUhUc+0kfWBZBXOqxM/r0/VdEF4UMt
+	 fg4EPIksm3NcxL0k9m7BRQBx0UJznEsLHFI+FXth14WiIbiRZZgZuEjcJjw3nCN9Ez
+	 9PZ58x0AnuhRX7z8V/LKQFQRaE6GZ8NmXGKbi1jWef/qkWR4JfK2AjcGtxL7z0Nq+Y
+	 xfowMPUBp75yQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 92409C53BD4; Tue, 16 Jan 2024 22:27:08 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218171] amd-pstate not loading on zen2 threadripper 3960x
+ (trx40
+Date: Tue, 16 Jan 2024 22:27:08 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: alessio.disandro@gmail.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: ANSWERED
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc attachments.created
+Message-ID: <bug-218171-137361-EeqUrsJbJl@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218171-137361@https.bugzilla.kernel.org/>
+References: <bug-218171-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <e74edb50-5dba-4c81-a383-eb97e6bc5f29@arm.com>
 
-On 01/16/24 15:34, Lukasz Luba wrote:
-> 
-> 
-> On 1/16/24 13:10, Qais Yousef wrote:
-> > On 01/15/24 12:36, Lukasz Luba wrote:
-> > > 
-> > > 
-> > > On 1/15/24 12:21, Qais Yousef wrote:
-> > > > On 01/10/24 13:53, Lukasz Luba wrote:
-> > > > > 
-> > > > > 
-> > > > > On 1/4/24 19:23, Qais Yousef wrote:
-> > > > > > On 01/02/24 11:47, Lukasz Luba wrote:
-> > > > > > > > Did you see a problem or just being extra cautious here?
-> > > > > > > 
-> > > > > > > There is no problem, 'cost' is a private coefficient for EAS only.
-> > > > > > 
-> > > > > > Let me  ask differently, what goes wrong if you don't increase the resolution
-> > > > > > here? Why is it necessary?
-> > > > > > 
-> > > > > 
-> > > > > 
-> > > > > When you have 800mW at CPU capacity 1024, then the value is small (below
-> > > > > 1 thousand).
-> > > > > Example:
-> > > > > power = 800000 uW
-> > > > > cost = 800000 / 1024 = 781
-> > > > > 
-> > > > > While I know from past that sometimes OPPs might have close voltage
-> > > > > values and a rounding could occur and make some OPPs inefficient
-> > > > > while they aren't.
-> > > > > 
-> > > > > This is what would happen when we have the 1x resolution:
-> > > > > /sys/kernel/debug/energy_model/cpu4/ps:1008000/cost:551
-> > > > > /sys/kernel/debug/energy_model/cpu4/ps:1200000/cost:644
-> > > > > /sys/kernel/debug/energy_model/cpu4/ps:1416000/cost:744
-> > > > > /sys/kernel/debug/energy_model/cpu4/ps:1512000/cost:851
-> > > > > /sys/kernel/debug/energy_model/cpu4/ps:408000/cost:493
-> > > > > /sys/kernel/debug/energy_model/cpu4/ps:600000/cost:493
-> > > > > /sys/kernel/debug/energy_model/cpu4/ps:816000/cost:493
-> > > > > The bottom 3 OPPs have the same 'cost' thus 2 OPPs are in-efficient,
-> > > > > which is not true (see below).
-> > > > > 
-> > > > > This is what would happen when we have the 10x resolution:
-> > > > > /sys/kernel/debug/energy_model/cpu4/ps:1008000/cost:5513
-> > > > > /sys/kernel/debug/energy_model/cpu4/ps:1200000/cost:6443
-> > > > > /sys/kernel/debug/energy_model/cpu4/ps:1416000/cost:7447
-> > > > > /sys/kernel/debug/energy_model/cpu4/ps:1512000/cost:8514
-> > > > > /sys/kernel/debug/energy_model/cpu4/ps:408000/cost:4934
-> > > > > /sys/kernel/debug/energy_model/cpu4/ps:600000/cost:4933
-> > > > > /sys/kernel/debug/energy_model/cpu4/ps:816000/cost:4934
-> > > > > Here the OPP with 600MHz is more efficient than 408MHz,
-> > > > > which is true. So only 408MHz will be marked as in-efficient OPP.
-> > > > > 
-> > > > > 
-> > > > > This is what would happen when we have the 100x resolution:
-> > > > > /sys/kernel/debug/energy_model/cpu4/ps:1008000/cost:55137
-> > > > > /sys/kernel/debug/energy_model/cpu4/ps:1200000/cost:64433
-> > > > > /sys/kernel/debug/energy_model/cpu4/ps:1416000/cost:74473
-> > > > > /sys/kernel/debug/energy_model/cpu4/ps:1512000/cost:85140
-> > > > > /sys/kernel/debug/energy_model/cpu4/ps:408000/cost:49346
-> > > > > /sys/kernel/debug/energy_model/cpu4/ps:600000/cost:49331
-> > > > > /sys/kernel/debug/energy_model/cpu4/ps:816000/cost:49346
-> > > > > The higher (100x) resolution does not bring that much in
-> > > > > practice.
-> > > > 
-> > > > So it seems a uW is not sufficient enough. We moved from mW because of
-> > > > resolution already. Shall we make it nW then and multiply by 1000 always? The
-> > > > choice of 10 looks arbitrary IMHO
-> > > > 
-> > > 
-> > > No, there is no need of nW in the 'power' field for this.
-> > > You've missed the point.
-> > 
-> > I think you're missing what I am saying. The multiplication by 10 looks like
-> > magic value to increase resolution based on a single observation you noticed.
-> > 
-> > The feedback I am giving is that this needs to be better explained, in
-> > a comment. And instead of multiplying by 10 multiply by 1000. Saying this is
-> > enough based on a single observation is not adequate IMO.
-> 
-> I think you are trying to review something which you don't have full
-> details and previous history. I have been fighting with those rounding
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218171
 
-I don't think so..
+Alessio Di Sandro (alessio.disandro@gmail.com) changed:
 
-> issues in past and there are commits with description of issues.
-> You haven't analyze all edge cases, one more is below (about your
-> proposal with 1000x the nW).
-> 
-> > 
-> > Also the difference is tiny. Could you actually measure a difference in overall
-> > power with and without this extra decimal point resolution? It might be better
-> 
-> Yes, I had such power measurements, but for older rounding issues. Take
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |alessio.disandro@gmail.com
 
-so not against this series..
+--- Comment #24 from Alessio Di Sandro (alessio.disandro@gmail.com) ---
+Created attachment 305722
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305722&action=3Dedit
+ACPI tables for TR3970 MSI Creator TRX40
 
-> into account that the EM model is reflecting one CPU, but in reality we
-> often have 4 CPUs linked together in one frequency domain. Thus, a small
-> energy difference is actually multiplied.
-> 
-> > to run at 816MHz and go back to idle faster. So the trade-off is not clear cut
-> > to me.
-> 
-> It's not the $subject to discuss other possible design which set such
-> trade-offs differently. Please don't mix many topics. A "race to idle"
+--=20
+You may reply to this email to add a comment.
 
-I am not mixing topics. I am questioning the claim about this addition of
-resolution which looked random to me.
-
-> from OPPs which have a bit higher voltage is totally different topic,
-> currently not in EAS design at all. Otherwise we end up in a heuristic
-> issue like: how much more 'inefficient' it has to be to skip it.
-> Currently we are strict in 'inefficient' OPP tagging.
-
-Then this part of this patch about the resolution better be split into its own
-patch submission?
-
-> 
-> > 
-> > So generally I am not keen on magic values based on single observations.
-> > I think removing this or use 1000 is better.
-> 
-> That is your opinion. I've tried to explain to you:
-> 1) why we cannot remove it and why we need the 10x
-> 2) why we don't need more that 10x
-> 
-> > 
-> > AFAICT you decided that 0.1uW is worth caring about. But 0.19uW difference
-> > isn't.
-> 
-> It's not strictly related to power value, but the earlier division
-> operation that we perform in setup time and not in runtime (in different
-> order on the arguments in the math involved). That operation cuts some
-> important information from the integer value (as listed above in those
-> different configurations' dumps of 'cost' values).
-
--ENOPARSE. From what I see the cost has different resolution.
-
-> 
-> > 
-> > I can't see how much difference this makes in practice tbh. But using more
-> > uniform conversion so that the cost is in nW (keep the power field in uW) makes
-> > more sense at least.
-> 
-> This is the edge case which I've mentioned at the begging that you're
-> missing some background. Your proposal is to have 1000x resolution so in
-> nano-Watts power for the 'cost'. Let's consider example power of 1.4Watt
-> on single CPU at mid-high-freq OPP (700 capacity), running on 32bit
-> kernel, so unsigned long has 32bit.
-> 
-> power = 1.4W = 1400000000nW
-> 
-> cost = 1400000000 / 700 = 2000000 (2mln)
-> 
-> Then in EAS we can have this simulation:
-> 4 CPUs with util 550 voting for this OPP (700 capacity),
-> so the em_cpu_energy() would perform:
-> 
-> return cost * sum_util
-> 
-> 2000000 * (4 * 550) = 4400000000 <--- overflow on 32bit ulong
-> 
-> That's why I said you haven't considered your proposal fully.
-
-overflow was in mind, I didn't feel it was necessary to elaborate more..
-overflows issues can be handled
-
-> 
-> > 
-> > It still raises the question whether this minuscule cost difference is actually
-> > better taken into account. I think the perf/watt for 816MHz is much better so
-> > skipping 600MHz as inefficient looks better to me.
-> > 
-> 
-> This is exactly the place where we disagree. You "think the perf/watt
-> for 816MHz is much better so skipping 600MHz as inefficient looks
-> better". For me, the numbers from 3 different configuration dumps are
-> telling me exactly opposite. I will base the algorithms on the numbers
-> and not on a heuristic that I think looks better.
-> 
-> I'm going to send v7. Please end this discussion on v5.
-
-This thread is the context of the discussion..
-
-It seems you don't want the feedback. I don't think there's mixing of topics.
-But decisions made and I don't see proper explanation to them. Hence the
-questions and probing proposals in attempt to understand more. We do have to
-cover a wide areas of cases in general and enforcing such random numbers has
-been a problem in practice as there's no sensible defaults. And I am not seeing
-that this is a good generalization from what I am reading. Similar to
-util_threshold which has caused power regressions, and migration margin and
-dvfs headroom that are causing problems too. I see this is another random
-number added. The numbers you're referring to are very limited in scope, it's
-not number vs heuristics looks better the issue here. It seems you don't want
-to consider the perf/watt impact rather than the pure cost of a single OPP
-- which was the true intent behind the question. I might have misunderstood
-something, but If you explained this in this reply, I certainly would have lost
-it with this constant stop discussing and move to v6 or v7.
-
-Anyway. I'll leave this at here.
+You are receiving this mail because:
+You are the assignee for the bug.=
 
