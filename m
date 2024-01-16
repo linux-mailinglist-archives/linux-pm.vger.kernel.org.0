@@ -1,137 +1,184 @@
-Return-Path: <linux-pm+bounces-2254-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2255-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40DC782EEBC
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 13:11:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 192A282EF83
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 14:10:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5178B22C55
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 12:11:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17BBA1C23433
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 13:10:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C54371B96B;
-	Tue, 16 Jan 2024 12:10:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A37F01BC50;
+	Tue, 16 Jan 2024 13:10:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="pBhbcoIS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6354C1B961;
-	Tue, 16 Jan 2024 12:10:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-6ddf73f0799so1097692a34.1;
-        Tue, 16 Jan 2024 04:10:55 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFCBD1BDC2
+	for <linux-pm@vger.kernel.org>; Tue, 16 Jan 2024 13:10:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-40e80046246so8488495e9.1
+        for <linux-pm@vger.kernel.org>; Tue, 16 Jan 2024 05:10:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1705410635; x=1706015435; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mpQQ6zM11+ltm4n0lLXCP3FxFwkBIpd9Of4Vw5bi6aw=;
+        b=pBhbcoISgFyZsCb9smXkKqDIdZuEdnJyKZrm+sLjMMJYqSY2uZaVdrStq+f43cnnSs
+         r/xoc0V94jG/vtBXp2j1zEtq2a0++bPYWed6tg4AgTp2YQ5M9iiEpKSuwH+BBK1by5Di
+         k8Gh/T9FMWd+/MqXKWPfwWqNzMHhxThq5dTJhtxwBdTINhTTciDhxBO7+v9nXdE1U4GW
+         Fv/GY2XKnNt2FREzLzb4gakadLhthUjEc9V4+U4KTEm83LyX7SCNAE19M9r4ZvZjCVD0
+         EX9CLHbEgiA7xsEN7r3bfrDy7AF4SAnjRNvbwK5cil0HFFFJtSvLKIkXPv6j4UjxXne2
+         D+gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705407054; x=1706011854;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GJxJbQrhjLUsbQrSI34rLi8y9pfUfCcNo/+s+asS57g=;
-        b=GW41LcoF8wHyTdvLPOSBH2IOx/bZ7n9rnFuprV7FQfxNJs2+zKQwfS4sZxpSCjh/Es
-         8ORBtB6PuiGOY7z3KJwYyXL/vBYZmSgExUAJVKVMNEMhbInMR87BEZ1jAg2Y9ru2cLlC
-         eQRCHYBjxZuSXHs8j7Eq5J+WgVTxHNe3nYtjX4kON5iNPZgdkYObkR0SKtzkwCwljlVY
-         l/12XpM5Uwp8+/5ZZ7fcFgLlb4Lj55UYtZgApgbwUT8DAQKALHBh3tX43sKiX2GM1S7S
-         9GSkFfBtIUpanplnHAWMdzFUsXYzBhYVprQXPJiANw0xitIWWJQWg4NbSZbXswfM/fee
-         iNxA==
-X-Gm-Message-State: AOJu0YzT/+uQpenalY274kfCnUuGYBt4DG0NwQ9QJPsv4gxqzZPFVED5
-	TuoLVUH/TUmkccAMP5Q24XBPfeH498nYfll+uEQ=
-X-Google-Smtp-Source: AGHT+IGwy2IZP49o+Gun+KoKpqFEjx2TudG5WVv2dwpAPmt4lRu/tbTe8ZN2tYUTwxaGa5W4N90zWIgO/TwLA9SRXaw=
-X-Received: by 2002:a4a:dd8f:0:b0:598:b2d7:2499 with SMTP id
- h15-20020a4add8f000000b00598b2d72499mr10076731oov.0.1705407054402; Tue, 16
- Jan 2024 04:10:54 -0800 (PST)
+        d=1e100.net; s=20230601; t=1705410635; x=1706015435;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mpQQ6zM11+ltm4n0lLXCP3FxFwkBIpd9Of4Vw5bi6aw=;
+        b=TT82Cyp7uY9zayG+Ihq5mNztTJWeqW0nAek9jEw9rejvb66WHUY1eJIk5yJUUsHV6S
+         V/ZEzbx/MioqCDsMCgUdTomNYl6/WOGpqcIevl0Jr4GLtFxIBfMMTGLQJO332ZF7BNqp
+         wHSdL+ArlZAZ31daMK0h5gqX+krUX6jlIDg5hPx4xUzIrpGWQP7LEXAigOb/+SAvsYMX
+         qaFdNJIsKLHu0HLM1GsiKIKOl1ktlbqAczaJjXeHnFb5Ushij8cVXfo0kOP9hr2EV6iw
+         Wcc0TD3u2Gdd2teAJ3HwnxhwPWpt9jsO2tt6krShW9H6eAZDCSs5KiFybziBRYsYCfpq
+         WMIQ==
+X-Gm-Message-State: AOJu0YyyvDOfP50lsL1NhsipEg/NB8c3G7z89qdKkRnMEP3TWNCBRiis
+	CucSEJK1snAMfMeucBKx4mTDXnG0Gv0mLg==
+X-Google-Smtp-Source: AGHT+IELsyAZ7Icn9jnJH9VW3SNMomtvGax5Mz1vFC5N+G/Mzm8tRYlxO92yZwfqcwVqh2Z2dhpR1A==
+X-Received: by 2002:a05:600c:20d3:b0:40e:5977:3937 with SMTP id y19-20020a05600c20d300b0040e59773937mr3328913wmm.69.1705410634797;
+        Tue, 16 Jan 2024 05:10:34 -0800 (PST)
+Received: from airbuntu ([104.132.45.98])
+        by smtp.gmail.com with ESMTPSA id o15-20020adfcf0f000000b00337bdf4cfc6sm995109wrj.52.2024.01.16.05.10.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Jan 2024 05:10:34 -0800 (PST)
+Date: Tue, 16 Jan 2024 13:10:33 +0000
+From: Qais Yousef <qyousef@layalina.io>
+To: Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	rafael@kernel.org, dietmar.eggemann@arm.com, rui.zhang@intel.com,
+	amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
+	daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
+	len.brown@intel.com, pavel@ucw.cz, mhiramat@kernel.org,
+	wvw@google.com
+Subject: Re: [PATCH v5 15/23] PM: EM: Optimize em_cpu_energy() and remove
+ division
+Message-ID: <20240116131033.45berjhpwzc4hwr7@airbuntu>
+References: <20231129110853.94344-1-lukasz.luba@arm.com>
+ <20231129110853.94344-16-lukasz.luba@arm.com>
+ <20231228180647.rwz4u7ebk5p2hjcr@airbuntu>
+ <d9bea2d0-3869-4f08-8eb8-0ca33ce525ea@arm.com>
+ <20240104192355.mrtqnek2cyw7rlkd@airbuntu>
+ <2a8aa860-17dc-442a-a4ed-8f7c387b15ba@arm.com>
+ <20240115122156.5743y4trhm4tkgs3@airbuntu>
+ <661068a2-7c46-4703-ba4d-5ce1cdf44b3d@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 16 Jan 2024 13:10:43 +0100
-Message-ID: <CAJZ5v0j6AXAw2igWvHZN+GybT1pgjkg4_tDVMZwLEbuj7zHsEA@mail.gmail.com>
-Subject: [GIT PULL] More thermal control updates for v6.8-rc1
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <661068a2-7c46-4703-ba4d-5ce1cdf44b3d@arm.com>
 
-Hi Linus,
+On 01/15/24 12:36, Lukasz Luba wrote:
+> 
+> 
+> On 1/15/24 12:21, Qais Yousef wrote:
+> > On 01/10/24 13:53, Lukasz Luba wrote:
+> > > 
+> > > 
+> > > On 1/4/24 19:23, Qais Yousef wrote:
+> > > > On 01/02/24 11:47, Lukasz Luba wrote:
+> > > > > > Did you see a problem or just being extra cautious here?
+> > > > > 
+> > > > > There is no problem, 'cost' is a private coefficient for EAS only.
+> > > > 
+> > > > Let me  ask differently, what goes wrong if you don't increase the resolution
+> > > > here? Why is it necessary?
+> > > > 
+> > > 
+> > > 
+> > > When you have 800mW at CPU capacity 1024, then the value is small (below
+> > > 1 thousand).
+> > > Example:
+> > > power = 800000 uW
+> > > cost = 800000 / 1024 = 781
+> > > 
+> > > While I know from past that sometimes OPPs might have close voltage
+> > > values and a rounding could occur and make some OPPs inefficient
+> > > while they aren't.
+> > > 
+> > > This is what would happen when we have the 1x resolution:
+> > > /sys/kernel/debug/energy_model/cpu4/ps:1008000/cost:551
+> > > /sys/kernel/debug/energy_model/cpu4/ps:1200000/cost:644
+> > > /sys/kernel/debug/energy_model/cpu4/ps:1416000/cost:744
+> > > /sys/kernel/debug/energy_model/cpu4/ps:1512000/cost:851
+> > > /sys/kernel/debug/energy_model/cpu4/ps:408000/cost:493
+> > > /sys/kernel/debug/energy_model/cpu4/ps:600000/cost:493
+> > > /sys/kernel/debug/energy_model/cpu4/ps:816000/cost:493
+> > > The bottom 3 OPPs have the same 'cost' thus 2 OPPs are in-efficient,
+> > > which is not true (see below).
+> > > 
+> > > This is what would happen when we have the 10x resolution:
+> > > /sys/kernel/debug/energy_model/cpu4/ps:1008000/cost:5513
+> > > /sys/kernel/debug/energy_model/cpu4/ps:1200000/cost:6443
+> > > /sys/kernel/debug/energy_model/cpu4/ps:1416000/cost:7447
+> > > /sys/kernel/debug/energy_model/cpu4/ps:1512000/cost:8514
+> > > /sys/kernel/debug/energy_model/cpu4/ps:408000/cost:4934
+> > > /sys/kernel/debug/energy_model/cpu4/ps:600000/cost:4933
+> > > /sys/kernel/debug/energy_model/cpu4/ps:816000/cost:4934
+> > > Here the OPP with 600MHz is more efficient than 408MHz,
+> > > which is true. So only 408MHz will be marked as in-efficient OPP.
+> > > 
+> > > 
+> > > This is what would happen when we have the 100x resolution:
+> > > /sys/kernel/debug/energy_model/cpu4/ps:1008000/cost:55137
+> > > /sys/kernel/debug/energy_model/cpu4/ps:1200000/cost:64433
+> > > /sys/kernel/debug/energy_model/cpu4/ps:1416000/cost:74473
+> > > /sys/kernel/debug/energy_model/cpu4/ps:1512000/cost:85140
+> > > /sys/kernel/debug/energy_model/cpu4/ps:408000/cost:49346
+> > > /sys/kernel/debug/energy_model/cpu4/ps:600000/cost:49331
+> > > /sys/kernel/debug/energy_model/cpu4/ps:816000/cost:49346
+> > > The higher (100x) resolution does not bring that much in
+> > > practice.
+> > 
+> > So it seems a uW is not sufficient enough. We moved from mW because of
+> > resolution already. Shall we make it nW then and multiply by 1000 always? The
+> > choice of 10 looks arbitrary IMHO
+> > 
+> 
+> No, there is no need of nW in the 'power' field for this.
+> You've missed the point.
 
-Please pull from the tag
+I think you're missing what I am saying. The multiplication by 10 looks like
+magic value to increase resolution based on a single observation you noticed.
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- thermal-6.8-rc1-2
+The feedback I am giving is that this needs to be better explained, in
+a comment. And instead of multiplying by 10 multiply by 1000. Saying this is
+enough based on a single observation is not adequate IMO.
 
-with top-most commit dd75558b2d0b5e2b36ec0ef7e494d2763517d801
+Also the difference is tiny. Could you actually measure a difference in overall
+power with and without this extra decimal point resolution? It might be better
+to run at 816MHz and go back to idle faster. So the trade-off is not clear cut
+to me.
 
- Merge branches 'thermal-core' and 'thermal-intel'
+So generally I am not keen on magic values based on single observations.
+I think removing this or use 1000 is better.
 
-on top of commit 17e8b76491b007698cf63bc10093bc8991e45001
+AFAICT you decided that 0.1uW is worth caring about. But 0.19uW difference
+isn't.
 
- Merge branch 'thermal-intel'
+I can't see how much difference this makes in practice tbh. But using more
+uniform conversion so that the cost is in nW (keep the power field in uW) makes
+more sense at least.
 
-to receive more thermal control updates for 6.8-rc1.
-
-These add support for debugfs-based diagnostics to the thermal core,
-simplify the thermal netlink API, fix system-wide PM support in the
-Intel HFI driver and clean up some code.
-
-Specifics:
-
-  - Add debugfs-based diagnostics support to the thermal core (Daniel
-    Lezcano, Dan Carpenter).
-
-  - Fix a power allocator thermal governor issue preventing it from
-    resetting cooling devices sometimes (Di Shen).
-
-  - Simplify the thermal netlink API and clean up related code (Rafael J.
-    Wysocki).
-
-  - Make the Intel HFI driver support hibernation and deep suspend
-    properly (Ricardo Neri).
-
-Thanks!
-
-
----------------
-
-Christophe JAILLET (1):
-      thermal: core: Use kstrdup_const() during cooling device registration
-
-Dan Carpenter (1):
-      thermal/debugfs: Unlock on error path in thermal_debug_tz_trip_up()
-
-Daniel Lezcano (2):
-      thermal/debugfs: Add thermal cooling device debugfs information
-      thermal/debugfs: Add thermal debugfs information for mitigation episodes
-
-Di Shen (1):
-      thermal: gov_power_allocator: avoid inability to reset a cdev
-
-Rafael J. Wysocki (6):
-      thermal: netlink: Pass pointers to thermal_notify_tz_trip_change()
-      thermal: netlink: Pass pointers to thermal_notify_tz_trip_up/down()
-      thermal: netlink: Drop thermal_notify_tz_trip_add/delete()
-      thermal: netlink: Pass thermal zone pointer to notify routines
-      thermal: netlink: Rework notify API for cooling devices
-      thermal: helpers: Rearrange thermal_cdev_set_cur_state()
-
-Ricardo Neri (1):
-      thermal: intel: hfi: Add syscore callbacks for system-wide PM
-
----------------
-
- drivers/thermal/Kconfig               |   7 +
- drivers/thermal/Makefile              |   2 +
- drivers/thermal/gov_power_allocator.c |   2 +-
- drivers/thermal/intel/intel_hfi.c     |  28 ++
- drivers/thermal/thermal_core.c        |  38 +-
- drivers/thermal/thermal_core.h        |   1 +
- drivers/thermal/thermal_debugfs.c     | 839 ++++++++++++++++++++++++++++++++++
- drivers/thermal/thermal_debugfs.h     |  28 ++
- drivers/thermal/thermal_helpers.c     |  21 +-
- drivers/thermal/thermal_netlink.c     |  95 ++--
- drivers/thermal/thermal_netlink.h     |  75 ++-
- drivers/thermal/thermal_trip.c        |   8 +-
- include/linux/thermal.h               |   9 +-
- 13 files changed, 1026 insertions(+), 127 deletions(-)
+It still raises the question whether this minuscule cost difference is actually
+better taken into account. I think the perf/watt for 816MHz is much better so
+skipping 600MHz as inefficient looks better to me.
 
