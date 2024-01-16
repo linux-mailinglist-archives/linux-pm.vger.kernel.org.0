@@ -1,57 +1,53 @@
-Return-Path: <linux-pm+bounces-2233-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2234-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24A0F82E438
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 01:10:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E5E082E445
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 01:12:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B55861F22A3C
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 00:10:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70DD8282E3B
+	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 00:12:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AD5B637;
-	Tue, 16 Jan 2024 00:08:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DEB112B8B;
+	Tue, 16 Jan 2024 00:09:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fGXnoe7h"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q5mgIebH"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDCBD10A22;
-	Tue, 16 Jan 2024 00:08:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7359AC433F1;
-	Tue, 16 Jan 2024 00:08:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A88412B89;
+	Tue, 16 Jan 2024 00:09:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13002C433C7;
+	Tue, 16 Jan 2024 00:09:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705363736;
-	bh=4ig20DfLgOobc3y4XeGvxVrRPT7jphwKHwQP8IokssE=;
+	s=k20201202; t=1705363764;
+	bh=6UglXZc7mfYGHwHNw2RQBoiS3OjUzMb1B5BuMr7JggE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fGXnoe7hOfZftIDaTBdvcOp1cdQOjtV9j/XX7kLEOcpZiwsHYEmgdcTkpWhZe1kJW
-	 3fpTxHSUrrWae1XviKXrsMzkb62IcobyIuJ1bQXDRgxie0n3HP+77NsROIV9B0eIeE
-	 kI+WRQOEb4tbmindZeXKUqXQz1h7WHpzVwRfZw5FrjdlpZPpPdSH2K+mSU0SxLO/Ec
-	 I9yo+OBH1I+m+rMygvIUUqTfyqP0eW3CNlgAagCQSi3+3AHWCbwlbg5nKndL2zSZIg
-	 Nyew3G9LrmC6xOkKyxqqaxp78RCM7zuR+ug0D3KkuTVbERQ+h8q7RkTx61Cvx8xrK9
-	 hNmmFBDoOQFFQ==
+	b=q5mgIebHg+VjXlmpd72kYJV4qSSsLoRpfc58t3LrUI0UlDZPhPP/7/ZEQB3oaPQ4U
+	 lO9Bg5B0ULDo3NUGz2Vdb4RZa8IdsfJB4kZ3kEm747+vyJpQRecUKYZVEina9hc/cb
+	 XGqhfcuk163OJa5Dw5CNasQh3sKYov84jOeYig262Uop+ck37c9/gMiXspaPNwIpek
+	 aRlrs005vTuJh0vTPhMbZKnftkH7VJFn1ohKv2i0SFLXdYBPfzFpdNTYaVVdlUMghJ
+	 X1bCQ/IIPAyvkPz4MtSohtDnJ3mp9sRJxndIMZ6gPO3XEYqp6h+swk7XGvFok66QQx
+	 VVILKy1n/qL8w==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Cc: Vincent Guittot <vincent.guittot@linaro.org>,
 	Ingo Molnar <mingo@kernel.org>,
 	Lukasz Luba <lukasz.luba@arm.com>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
 	Viresh Kumar <viresh.kumar@linaro.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	mingo@redhat.com,
-	peterz@infradead.org,
-	juri.lelli@redhat.com,
 	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.7 6/8] cpufreq/schedutil: Use a fixed reference frequency
-Date: Mon, 15 Jan 2024 19:08:18 -0500
-Message-ID: <20240116000838.212299-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 4/6] cpufreq: Use the fixed and coherent frequency for scaling capacity
+Date: Mon, 15 Jan 2024 19:08:59 -0500
+Message-ID: <20240116000909.212520-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240116000838.212299-1-sashal@kernel.org>
-References: <20240116000838.212299-1-sashal@kernel.org>
+In-Reply-To: <20240116000909.212520-1-sashal@kernel.org>
+References: <20240116000909.212520-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -60,81 +56,69 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.7
+X-stable-base: Linux 6.6.12
 Content-Transfer-Encoding: 8bit
 
 From: Vincent Guittot <vincent.guittot@linaro.org>
 
-[ Upstream commit b3edde44e5d4504c23a176819865cd603fd16d6c ]
+[ Upstream commit 599457ba15403037b489fe536266a3d5f9efaed7 ]
 
 cpuinfo.max_freq can change at runtime because of boost as an example. This
-implies that the value could be different than the one that has been
-used when computing the capacity of a CPU.
+implies that the value could be different from the frequency that has been
+used to compute the capacity of a CPU.
 
-The new arch_scale_freq_ref() returns a fixed and coherent reference
-frequency that can be used when computing a frequency based on utilization.
+The new arch_scale_freq_ref() returns a fixed and coherent frequency
+that can be used to compute the capacity for a given frequency.
 
-Use this arch_scale_freq_ref() when available and fallback to
-policy otherwise.
+[ Also fix a arch_set_freq_scale()  newline style wart in <linux/cpufreq.h>. ]
 
 Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
 Signed-off-by: Ingo Molnar <mingo@kernel.org>
 Tested-by: Lukasz Luba <lukasz.luba@arm.com>
 Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-Link: https://lore.kernel.org/r/20231211104855.558096-4-vincent.guittot@linaro.org
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+Link: https://lore.kernel.org/r/20231211104855.558096-3-vincent.guittot@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/sched/cpufreq_schedutil.c | 26 ++++++++++++++++++++++++--
- 1 file changed, 24 insertions(+), 2 deletions(-)
+ drivers/cpufreq/cpufreq.c | 4 ++--
+ include/linux/cpufreq.h   | 1 +
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 5888176354e2..11422c054c84 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -114,6 +114,28 @@ static void sugov_deferred_update(struct sugov_policy *sg_policy)
- 	}
- }
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 60ed89000e82..8c4f9c2f9c44 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -454,7 +454,7 @@ void cpufreq_freq_transition_end(struct cpufreq_policy *policy,
  
-+/**
-+ * get_capacity_ref_freq - get the reference frequency that has been used to
-+ * correlate frequency and compute capacity for a given cpufreq policy. We use
-+ * the CPU managing it for the arch_scale_freq_ref() call in the function.
-+ * @policy: the cpufreq policy of the CPU in question.
-+ *
-+ * Return: the reference CPU frequency to compute a capacity.
-+ */
-+static __always_inline
-+unsigned long get_capacity_ref_freq(struct cpufreq_policy *policy)
-+{
-+	unsigned int freq = arch_scale_freq_ref(policy->cpu);
-+
-+	if (freq)
-+		return freq;
-+
-+	if (arch_scale_freq_invariant())
-+		return policy->cpuinfo.max_freq;
-+
-+	return policy->cur;
-+}
-+
- /**
-  * get_next_freq - Compute a new frequency for a given cpufreq policy.
-  * @sg_policy: schedutil policy object to compute the new frequency for.
-@@ -140,9 +162,9 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
- 				  unsigned long util, unsigned long max)
+ 	arch_set_freq_scale(policy->related_cpus,
+ 			    policy->cur,
+-			    policy->cpuinfo.max_freq);
++			    arch_scale_freq_ref(policy->cpu));
+ 
+ 	spin_lock(&policy->transition_lock);
+ 	policy->transition_ongoing = false;
+@@ -2174,7 +2174,7 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
+ 
+ 	policy->cur = freq;
+ 	arch_set_freq_scale(policy->related_cpus, freq,
+-			    policy->cpuinfo.max_freq);
++			    arch_scale_freq_ref(policy->cpu));
+ 	cpufreq_stats_record_transition(policy, freq);
+ 
+ 	if (trace_cpu_frequency_enabled()) {
+diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+index 71d186d6933a..738dcddf3cfe 100644
+--- a/include/linux/cpufreq.h
++++ b/include/linux/cpufreq.h
+@@ -1211,6 +1211,7 @@ void arch_set_freq_scale(const struct cpumask *cpus,
  {
- 	struct cpufreq_policy *policy = sg_policy->policy;
--	unsigned int freq = arch_scale_freq_invariant() ?
--				policy->cpuinfo.max_freq : policy->cur;
-+	unsigned int freq;
- 
-+	freq = get_capacity_ref_freq(policy);
- 	util = map_util_perf(util);
- 	freq = map_util_freq(util, freq, max);
- 
+ }
+ #endif
++
+ /* the following are really really optional */
+ extern struct freq_attr cpufreq_freq_attr_scaling_available_freqs;
+ extern struct freq_attr cpufreq_freq_attr_scaling_boost_freqs;
 -- 
 2.43.0
 
