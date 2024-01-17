@@ -1,146 +1,157 @@
-Return-Path: <linux-pm+bounces-2307-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2308-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5F8C8304E8
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 13:07:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11E6A8305D9
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 13:45:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A6F71C241EC
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 12:07:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7AF0D1F25F4C
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 12:45:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 992711DFE3;
-	Wed, 17 Jan 2024 12:07:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="NLe2U6KU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13DE31DFF4;
+	Wed, 17 Jan 2024 12:45:49 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1394C1DFC7;
-	Wed, 17 Jan 2024 12:07:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D13BA1DFEB;
+	Wed, 17 Jan 2024 12:45:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705493250; cv=none; b=cHEcNl6CTzFsZpVTmfBmExOxTY4xvH12+xxyrGZtD8Wh9MduPaD0J/VZn2uPXR++F8BdN+E9YBSH5odbSluQcxVv7Q1/9vh8nzaJGeQh5Imu7uyRRfqGBi+SoyECCMDvvK5egV/rxfdaovTpHroJKV2R/LnEpUg3o71NqYLzHCU=
+	t=1705495549; cv=none; b=A0TCyd1kTKVPgOaUXTt9mgTsmxUm8utHYRJ6wjCxTcXCYtOg4aQtPVGzWe5ymIS6E7NwSoTCzFdZu02MwgSVAgSACmmMhTxFqvg3ElSYvkfbJKc8bq8HJaZHyfSWSTrcd8fSmbaorvi+0kG229JjI0XNvIgo7ZjybjyIkfBsE8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705493250; c=relaxed/simple;
-	bh=IArXwFvZDoiTHZFdxHm8UwzDHOeQK97yKh7sOEA9mMo=;
-	h=Received:DKIM-Signature:Received:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:Content-Language:To:CC:
-	 References:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 X-Originating-IP:X-ClientProxiedBy:X-QCInternal:
-	 X-Proofpoint-Virus-Version:X-Proofpoint-ORIG-GUID:
-	 X-Proofpoint-GUID:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details; b=AH5bj4ZqT/KY2OBuf9PXiff3TdYrJDe+lNwiNrBwY6Y/ys6r9KfHoy8R+OvNTs3nHw4PYQqZsXfDlYXkt+Y1W56yEE8utmBrThKWHh8W0AHXY94cNQNkrogsmLNLRoTGSAqc9Dmeh1/w/HgtES5s3Xav69E47iIbuG4pL2ELJM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=NLe2U6KU; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40HB1CjG019753;
-	Wed, 17 Jan 2024 12:07:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=BzJA2P8XRyRHOryogsZXMMaTvL8nGkxACVkL27cO4B4=; b=NL
-	e2U6KUeSVsrvu42sDH7vyHZ36S9W10/QKzU8hX7jK7drz2dlnsKy4R4AC/9CXGdV
-	9y8zQdLsyzXzT7MliT7lczK+CVsVbvYWHM/b6y5Zi7aXlRQ4j2T0vo+/jJgdNpLG
-	Os5WSXCUjUucC7p3xKfWkmd/aAsR+rPcOtapU0dwGCWKhpRUDTDlhV858L86/qJT
-	jOFT8zzg0gmOfyA1Gkj5arIDx3sW2JMVhkJnRSJPVgd/LMx9cbNlNkMkF5XlDe2z
-	d3Z+mFCrs2YVdbtpVKXRuTGNH/yIQnYoPsl/ZpPqQ6TwCQrrfa/32fHYKOaFjk5P
-	rqjhsolAZ8eqmRzceicg==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vp4ak18h4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Jan 2024 12:07:15 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40HC6wIh002523
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Jan 2024 12:06:58 GMT
-Received: from [10.131.33.37] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 17 Jan
- 2024 04:06:55 -0800
-Message-ID: <674d8057-94b1-2e8a-a3ce-d8719e978298@quicinc.com>
-Date: Wed, 17 Jan 2024 17:36:52 +0530
+	s=arc-20240116; t=1705495549; c=relaxed/simple;
+	bh=i56mGxu8KysF5NrY4lHSjPEXT22HJYWPn3Qmd4oiqLQ=;
+	h=Received:Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
+	 Content-Language:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding; b=J4uuXqtSsD+UMajhd15n/RKEidwSi0KxBzr8kGxWYONRL5x10pSEXdRJGSimvr/7rTpMG1hfrCVKfvhtau2E7fRPTlxOh1B/lZ3R4Ul7FLnnxejJke875pIoEPT8GH8u3iZ4/vDZMwI8+W8FYxoeWXwyomoniGBjEHSLVtJPO2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 25A0C11FB;
+	Wed, 17 Jan 2024 04:46:32 -0800 (PST)
+Received: from [10.57.78.6] (unknown [10.57.78.6])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 005B83F766;
+	Wed, 17 Jan 2024 04:45:43 -0800 (PST)
+Message-ID: <000f7a73-9bd0-4c78-ba24-ef2e150882e7@arm.com>
+Date: Wed, 17 Jan 2024 12:45:42 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 0/3] firmware: arm_scmi: Register and handle limits change
- notification
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 04/23] PM: EM: Refactor em_pd_get_efficient_state() to
+ be more flexible
 Content-Language: en-US
-To: Cristian Marussi <cristian.marussi@arm.com>
-CC: <sudeep.holla@arm.com>, <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_mdtipton@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>
-References: <20240108140118.1596-1-quic_sibis@quicinc.com>
- <Zaeg1H9G5jOeOXh2@pluto>
-From: Sibi Sankar <quic_sibis@quicinc.com>
-In-Reply-To: <Zaeg1H9G5jOeOXh2@pluto>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To: Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, rafael@kernel.org
+Cc: dietmar.eggemann@arm.com, rui.zhang@intel.com,
+ amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
+ daniel.lezcano@linaro.org, viresh.kumar@linaro.org, len.brown@intel.com,
+ pavel@ucw.cz, mhiramat@kernel.org, qyousef@layalina.io, wvw@google.com,
+ xuewen.yan94@gmail.com
+References: <20240117095714.1524808-1-lukasz.luba@arm.com>
+ <20240117095714.1524808-5-lukasz.luba@arm.com>
+From: Hongyan Xia <hongyan.xia2@arm.com>
+In-Reply-To: <20240117095714.1524808-5-lukasz.luba@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: bxvcGTIC7OcA3Hn2rsZKKOjFdCxbmhMp
-X-Proofpoint-GUID: bxvcGTIC7OcA3Hn2rsZKKOjFdCxbmhMp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-17_06,2024-01-17_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
- mlxlogscore=704 mlxscore=0 impostorscore=0 phishscore=0 adultscore=0
- malwarescore=0 suspectscore=0 lowpriorityscore=0 priorityscore=1501
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2401170087
 
+On 17/01/2024 09:56, Lukasz Luba wrote:
+> The Energy Model (EM) is going to support runtime modification. There
+> are going to be 2 EM tables which store information. This patch aims
+> to prepare the code to be generic and use one of the tables. The function
+> will no longer get a pointer to 'struct em_perf_domain' (the EM) but
+> instead a pointer to 'struct em_perf_state' (which is one of the EM's
+> tables).
+> 
+> Prepare em_pd_get_efficient_state() for the upcoming changes and
+> make it possible to be re-used. Return an index for the best performance
+> state for a given EM table. The function arguments that are introduced
+> should allow to work on different performance state arrays. The caller of
+> em_pd_get_efficient_state() should be able to use the index either
+> on the default or the modifiable EM table.
+> 
+> Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>   include/linux/energy_model.h | 30 +++++++++++++++++-------------
+>   1 file changed, 17 insertions(+), 13 deletions(-)
+> 
+> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+> index c19e7effe764..b01277b17946 100644
+> --- a/include/linux/energy_model.h
+> +++ b/include/linux/energy_model.h
+> @@ -175,33 +175,35 @@ void em_dev_unregister_perf_domain(struct device *dev);
+>   
+>   /**
+>    * em_pd_get_efficient_state() - Get an efficient performance state from the EM
+> - * @pd   : Performance domain for which we want an efficient frequency
+> - * @freq : Frequency to map with the EM
+> + * @table:		List of performance states, in ascending order
+> + * @nr_perf_states:	Number of performance states
+> + * @freq:		Frequency to map with the EM
+> + * @pd_flags:		Performance Domain flags
+>    *
+>    * It is called from the scheduler code quite frequently and as a consequence
+>    * doesn't implement any check.
+>    *
+> - * Return: An efficient performance state, high enough to meet @freq
+> + * Return: An efficient performance state id, high enough to meet @freq
+>    * requirement.
+>    */
+> -static inline
+> -struct em_perf_state *em_pd_get_efficient_state(struct em_perf_domain *pd,
+> -						unsigned long freq)
+> +static inline int
+> +em_pd_get_efficient_state(struct em_perf_state *table, int nr_perf_states,
+> +			  unsigned long freq, unsigned long pd_flags)
+>   {
+>   	struct em_perf_state *ps;
+>   	int i;
+>   
+> -	for (i = 0; i < pd->nr_perf_states; i++) {
+> -		ps = &pd->table[i];
+> +	for (i = 0; i < nr_perf_states; i++) {
+> +		ps = &table[i];
+>   		if (ps->frequency >= freq) {
+> -			if (pd->flags & EM_PERF_DOMAIN_SKIP_INEFFICIENCIES &&
+> +			if (pd_flags & EM_PERF_DOMAIN_SKIP_INEFFICIENCIES &&
+>   			    ps->flags & EM_PERF_STATE_INEFFICIENT)
+>   				continue;
+> -			break;
+> +			return i;
+>   		}
+>   	}
+>   
+> -	return ps;
+> +	return nr_perf_states - 1;
+>   }
+>   
+>   /**
+> @@ -226,7 +228,7 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
+>   {
+>   	unsigned long freq, ref_freq, scale_cpu;
+>   	struct em_perf_state *ps;
+> -	int cpu;
+> +	int cpu, i;
+>   
+>   	if (!sum_util)
+>   		return 0;
+> @@ -251,7 +253,9 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
+>   	 * Find the lowest performance state of the Energy Model above the
+>   	 * requested frequency.
+>   	 */
+> -	ps = em_pd_get_efficient_state(pd, freq);
+> +	i = em_pd_get_efficient_state(pd->table, pd->nr_perf_states, freq,
+> +				      pd->flags);
+> +	ps = &pd->table[i];
+>   
+>   	/*
+>   	 * The capacity of a CPU in the domain at the performance state (ps)
 
-
-On 1/17/24 15:11, Cristian Marussi wrote:
-> On Mon, Jan 08, 2024 at 07:31:15PM +0530, Sibi Sankar wrote:
->> This series registers for scmi limits change notifications and adds
->> perf_notify_support/perf_opp_xlate interfaces which are used by the
->> scmi cpufreq driver to determine the throttled frequency and apply HW
->> pressure.
->>
-> 
-> Hi,
-> 
-> a few initial remarks from the mere SCMI standpoint.
-> 
-> Unlinke most SCMI protocols that expose domains info bits via an
-> *info_get protocol operation, PERF does no do this since (till now) there
-> wasn't a compelling reason (i.e. users)
-> 
-> Ulf recently in his GenPD/SCMI series recently started exposing something
-> and now you need to expose even more, adding also a new xlate ops.
-> 
-> For the sake of simplicity, I think that we could now expose straight
-> away the whole perf_domain_info and embedded structs via the usual *info_get.
-> 
-> After having done that, you can just drop your patch 1 and 2 since you
-> can access the needed info from the cpufreq_driver right away.
-> 
-> Having said, I have already such patch ready (for my internal testing), I
-> wll post it by the end of week after a minor cleanup, if you can bear with me.
-> 
-> Thoughts ?
-
-Ack, just from the naming I initially thought info_get would include
-everything but it just exposed minimal info. We certainly don't want to
-keep adding very similar ops just to expose more such info. I'll re-send
-the remainder of the series after you are done with your patches.
-Thanks.
-
--Sibi
-
-> 
-> Thanks,
-> Cristian
+Reviewed-by: Hongyan Xia <hongyan.xia@arm.com>
 
