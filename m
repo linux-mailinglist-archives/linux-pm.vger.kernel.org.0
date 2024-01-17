@@ -1,41 +1,40 @@
-Return-Path: <linux-pm+bounces-2308-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2309-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11E6A8305D9
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 13:45:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 333F783080A
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 15:28:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7AF0D1F25F4C
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 12:45:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A3C61C229C6
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 14:28:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13DE31DFF4;
-	Wed, 17 Jan 2024 12:45:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E75BD208AE;
+	Wed, 17 Jan 2024 14:28:47 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D13BA1DFEB;
-	Wed, 17 Jan 2024 12:45:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD8162033F;
+	Wed, 17 Jan 2024 14:28:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705495549; cv=none; b=A0TCyd1kTKVPgOaUXTt9mgTsmxUm8utHYRJ6wjCxTcXCYtOg4aQtPVGzWe5ymIS6E7NwSoTCzFdZu02MwgSVAgSACmmMhTxFqvg3ElSYvkfbJKc8bq8HJaZHyfSWSTrcd8fSmbaorvi+0kG229JjI0XNvIgo7ZjybjyIkfBsE8M=
+	t=1705501727; cv=none; b=qsmgo0NQIZ9VzLYoKSf00qE+lzlFD0C6cnT60vDho+RG6rKWnxT+O0gyPFoJG2QozTgLiHsmvDvTp9yAJThyFVflqceHCpsJRUO76NxowmWTboAAM27nfk4b15G83Ku/57RKtOFhWCS6ASEBLhObT2C8qr98qzfhu+Xo+xnHfyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705495549; c=relaxed/simple;
-	bh=i56mGxu8KysF5NrY4lHSjPEXT22HJYWPn3Qmd4oiqLQ=;
-	h=Received:Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
+	s=arc-20240116; t=1705501727; c=relaxed/simple;
+	bh=6a4mlGIcQJ+G6+bnDWd0rmwXDm0BP7zkGsQfwd6vtiU=;
+	h=Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
 	 Content-Language:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding; b=J4uuXqtSsD+UMajhd15n/RKEidwSi0KxBzr8kGxWYONRL5x10pSEXdRJGSimvr/7rTpMG1hfrCVKfvhtau2E7fRPTlxOh1B/lZ3R4Ul7FLnnxejJke875pIoEPT8GH8u3iZ4/vDZMwI8+W8FYxoeWXwyomoniGBjEHSLVtJPO2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 25A0C11FB;
-	Wed, 17 Jan 2024 04:46:32 -0800 (PST)
-Received: from [10.57.78.6] (unknown [10.57.78.6])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 005B83F766;
-	Wed, 17 Jan 2024 04:45:43 -0800 (PST)
-Message-ID: <000f7a73-9bd0-4c78-ba24-ef2e150882e7@arm.com>
-Date: Wed, 17 Jan 2024 12:45:42 +0000
+	 Content-Transfer-Encoding:X-bounce-key:X-HE-SMSGID; b=gXJ0zISElznFUK8K7jFAMM9xo8aKFMuHrAV0GQO7VFgj27IPakmNSbqIMbX6RimvbhFhKPr1KiBJCrSSClD49kOvW+aYF8Yxp90fmGE4ENTRd+zMZzjR7TZeI5kl8sW//yy6qtBrTJnjp/7KKbcKCHckMJHeunCfvY366KA6obk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; arc=none smtp.client-ip=80.237.130.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	id 1rQ6u1-0007yx-EK; Wed, 17 Jan 2024 15:28:25 +0100
+Message-ID: <7c9a417c-920b-4463-966f-250da3697bbf@leemhuis.info>
+Date: Wed, 17 Jan 2024 15:28:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -43,115 +42,54 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 04/23] PM: EM: Refactor em_pd_get_efficient_state() to
- be more flexible
-Content-Language: en-US
-To: Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, rafael@kernel.org
-Cc: dietmar.eggemann@arm.com, rui.zhang@intel.com,
- amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
- daniel.lezcano@linaro.org, viresh.kumar@linaro.org, len.brown@intel.com,
- pavel@ucw.cz, mhiramat@kernel.org, qyousef@layalina.io, wvw@google.com,
- xuewen.yan94@gmail.com
-References: <20240117095714.1524808-1-lukasz.luba@arm.com>
- <20240117095714.1524808-5-lukasz.luba@arm.com>
-From: Hongyan Xia <hongyan.xia2@arm.com>
-In-Reply-To: <20240117095714.1524808-5-lukasz.luba@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH] sched/fair: Fix frequency selection for non invariant
+ case
+Content-Language: en-US, de-DE
+To: Ingo Molnar <mingo@kernel.org>,
+ Vincent Guittot <vincent.guittot@linaro.org>
+Cc: mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+ dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+ mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com, wkarny@gmail.com,
+ torvalds@linux-foundation.org, qyousef@layalina.io, tglx@linutronix.de,
+ rafael@kernel.org, viresh.kumar@linaro.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20240114183600.135316-1-vincent.guittot@linaro.org>
+ <ZaZTlcFZaQefnf1v@gmail.com>
+From: Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <ZaZTlcFZaQefnf1v@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1705501725;80889283;
+X-HE-SMSGID: 1rQ6u1-0007yx-EK
 
-On 17/01/2024 09:56, Lukasz Luba wrote:
-> The Energy Model (EM) is going to support runtime modification. There
-> are going to be 2 EM tables which store information. This patch aims
-> to prepare the code to be generic and use one of the tables. The function
-> will no longer get a pointer to 'struct em_perf_domain' (the EM) but
-> instead a pointer to 'struct em_perf_state' (which is one of the EM's
-> tables).
+On 16.01.24 10:59, Ingo Molnar wrote:
 > 
-> Prepare em_pd_get_efficient_state() for the upcoming changes and
-> make it possible to be re-used. Return an index for the best performance
-> state for a given EM table. The function arguments that are introduced
-> should allow to work on different performance state arrays. The caller of
-> em_pd_get_efficient_state() should be able to use the index either
-> on the default or the modifiable EM table.
+> * Vincent Guittot <vincent.guittot@linaro.org> wrote:
 > 
-> Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->   include/linux/energy_model.h | 30 +++++++++++++++++-------------
->   1 file changed, 17 insertions(+), 13 deletions(-)
-> 
-> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-> index c19e7effe764..b01277b17946 100644
-> --- a/include/linux/energy_model.h
-> +++ b/include/linux/energy_model.h
-> @@ -175,33 +175,35 @@ void em_dev_unregister_perf_domain(struct device *dev);
->   
->   /**
->    * em_pd_get_efficient_state() - Get an efficient performance state from the EM
-> - * @pd   : Performance domain for which we want an efficient frequency
-> - * @freq : Frequency to map with the EM
-> + * @table:		List of performance states, in ascending order
-> + * @nr_perf_states:	Number of performance states
-> + * @freq:		Frequency to map with the EM
-> + * @pd_flags:		Performance Domain flags
->    *
->    * It is called from the scheduler code quite frequently and as a consequence
->    * doesn't implement any check.
->    *
-> - * Return: An efficient performance state, high enough to meet @freq
-> + * Return: An efficient performance state id, high enough to meet @freq
->    * requirement.
->    */
-> -static inline
-> -struct em_perf_state *em_pd_get_efficient_state(struct em_perf_domain *pd,
-> -						unsigned long freq)
-> +static inline int
-> +em_pd_get_efficient_state(struct em_perf_state *table, int nr_perf_states,
-> +			  unsigned long freq, unsigned long pd_flags)
->   {
->   	struct em_perf_state *ps;
->   	int i;
->   
-> -	for (i = 0; i < pd->nr_perf_states; i++) {
-> -		ps = &pd->table[i];
-> +	for (i = 0; i < nr_perf_states; i++) {
-> +		ps = &table[i];
->   		if (ps->frequency >= freq) {
-> -			if (pd->flags & EM_PERF_DOMAIN_SKIP_INEFFICIENCIES &&
-> +			if (pd_flags & EM_PERF_DOMAIN_SKIP_INEFFICIENCIES &&
->   			    ps->flags & EM_PERF_STATE_INEFFICIENT)
->   				continue;
-> -			break;
-> +			return i;
->   		}
->   	}
->   
-> -	return ps;
-> +	return nr_perf_states - 1;
->   }
->   
->   /**
-> @@ -226,7 +228,7 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
->   {
->   	unsigned long freq, ref_freq, scale_cpu;
->   	struct em_perf_state *ps;
-> -	int cpu;
-> +	int cpu, i;
->   
->   	if (!sum_util)
->   		return 0;
-> @@ -251,7 +253,9 @@ static inline unsigned long em_cpu_energy(struct em_perf_domain *pd,
->   	 * Find the lowest performance state of the Energy Model above the
->   	 * requested frequency.
->   	 */
-> -	ps = em_pd_get_efficient_state(pd, freq);
-> +	i = em_pd_get_efficient_state(pd->table, pd->nr_perf_states, freq,
-> +				      pd->flags);
-> +	ps = &pd->table[i];
->   
->   	/*
->   	 * The capacity of a CPU in the domain at the performance state (ps)
+>> When frequency invariance is not enabled, get_capacity_ref_freq(policy)
+>> returns the current frequency and the performance margin applied by
+>> map_util_perf(), enabled the utilization to go above the maximum compute
+>> capacity and to select a higher frequency than the current one.
+>> [...]
+>> Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+>> Closes: https://lore.kernel.org/lkml/CAHk-=wgWcYX2oXKtgvNN2LLDXP7kXkbo-xTfumEjmPbjSer2RQ@mail.gmail.com/
+>> Reported-by: Wyes Karny <wkarny@gmail.com>
+>> Closes: https://lore.kernel.org/lkml/20240114091240.xzdvqk75ifgfj5yx@wyes-pc/
 
-Reviewed-by: Hongyan Xia <hongyan.xia@arm.com>
+Thx for resolving this everyone. Allow me a quick question:
+
+I noticed the two Closes: tags above are missing in the actual commit:
+https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=e37617c8e53a1f7fcba6d5e1041f4fd8a2425c27
+
+Is there a overeager script here that removes them when it shouldn't?
+
+Just asking, because the lack of these tags makes regression tracking
+hard. And Linus really wants those tags in cases like this[1].
+
+Ciao, Thorsten
+
+[1] for details, see:
+https://lore.kernel.org/all/CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com/
+https://lore.kernel.org/all/CAHk-=wgs38ZrfPvy=nOwVkVzjpM3VFU1zobP37Fwd_h9iAD5JQ@mail.gmail.com/
+https://lore.kernel.org/all/CAHk-=wjxzafG-=J8oT30s7upn4RhBs6TX-uVFZ5rME+L5_DoJA@mail.gmail.com/
 
