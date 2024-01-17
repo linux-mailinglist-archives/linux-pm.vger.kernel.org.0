@@ -1,170 +1,132 @@
-Return-Path: <linux-pm+bounces-2264-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2265-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 816C482FF0F
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 04:00:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36F2082FF34
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 04:14:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1CAFA28C78C
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 03:00:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2B3F7B23417
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 03:14:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 979B21C05;
-	Wed, 17 Jan 2024 03:00:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CDE210F5;
+	Wed, 17 Jan 2024 03:12:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="CD9EvpYk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I6OjvojU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8EE9613C;
-	Wed, 17 Jan 2024 03:00:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56F85125B0
+	for <linux-pm@vger.kernel.org>; Wed, 17 Jan 2024 03:12:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705460426; cv=none; b=lqnnO2Ys8V6dDAFmxRrT56xPp4yHh1PSVLRUMC6IJCh7xrUZVm4/Sdjo1HmiTRndJWVDNc33RZwDTTREh2zgzPKrIhcL2hstBWOpLA7fVgeAqR/nXwTLbqsNMxdhisjwottB/sON1lj+UcNHu+GgxDsA04VEhPkSeoS1Ewqw0xA=
+	t=1705461162; cv=none; b=cSzlnJBVUdzY03xDMFT+BjubgKMjuXJlmYZU2+M6kag3XYZFSeoqZvaoeVY6K2swwY43Hs2eX/bjoZhMtiuETnfZUhOliNp0+mnshb4GjeCeTKON3aN4Z9O564O+6CSckN5uuFhwn5Y4Qp3hIqd2r5NEpgyxrdkvBt0HyOGjAzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705460426; c=relaxed/simple;
-	bh=huhDjS/FysDhMk2XBBGDNLNvYNAqjTIDA6KOPUS9giY=;
-	h=Received:DKIM-Signature:Received:Received:Received:Message-ID:
-	 Date:MIME-Version:User-Agent:Subject:Content-Language:To:CC:
-	 References:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 X-Originating-IP:X-ClientProxiedBy:X-QCInternal:
-	 X-Proofpoint-Virus-Version:X-Proofpoint-GUID:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details; b=RI9J/Qe0nN5mNbSljPV/OMGodFkmvrkdzAs+kY89baWbVw10ZgKqF1Mq36ovwWx2s21CshFdWkR+LyARO4Pcqj5a4QVZjOz0GDFo80q3Tax+na1VIjys8pa/eAw/b1y9+MaUlHigBJz5K0NHixc510ciKtxs/4Y81KlK+k5lWGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=CD9EvpYk; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40H16Lwf020111;
-	Wed, 17 Jan 2024 03:00:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=HLw4+Z1ecP3dMooOn4xJFlhUXZmcw9BpiM+2fDOjgXw=; b=CD
-	9EvpYkQZszXiaHT/txq10HKd9oypVyBH/Fn5j4H6tv41qzZkQ8Pab5y2beJTbvAo
-	/xjwg0+AGEMfifOHzrUM+TZdCpK/y8twJLkdKBODkDtF4EhusAUFt9DTr/nwd6H9
-	yk4HftfaYFjOKogwJWgkn/Iy9Qd78bryHECbYrLp6YD3KPG93Dgs0jslLMOThONX
-	brJj81pFKlve2GY/RrLL3C1d6X9hK4ogtTFhyDnBEUw/pzMmST7y3fKQ9JBwLVrY
-	ppGQm5ZyDBUX9ShXD20ngw1oqMabTqlB+H24LFJxGzTf6a2H3mhraRkz3L/AiXep
-	jaitvUxdBLJdEIiLs5Jw==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vnmq0jman-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Jan 2024 03:00:02 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40H301QL011018
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Jan 2024 03:00:01 GMT
-Received: from [10.131.33.37] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 16 Jan
- 2024 18:59:58 -0800
-Message-ID: <0800860a-e090-153f-bbbd-1f7666b14fed@quicinc.com>
-Date: Wed, 17 Jan 2024 08:29:55 +0530
+	s=arc-20240116; t=1705461162; c=relaxed/simple;
+	bh=+9SjZAyPtPr8ezs3ZjuAl23icD+OeqjNw+bRC2lJRAo=;
+	h=Received:DKIM-Signature:Received:From:To:Subject:Date:
+	 X-Bugzilla-Reason:X-Bugzilla-Type:X-Bugzilla-Watch-Reason:
+	 X-Bugzilla-Product:X-Bugzilla-Component:X-Bugzilla-Version:
+	 X-Bugzilla-Keywords:X-Bugzilla-Severity:X-Bugzilla-Who:
+	 X-Bugzilla-Status:X-Bugzilla-Resolution:X-Bugzilla-Priority:
+	 X-Bugzilla-Assigned-To:X-Bugzilla-Flags:X-Bugzilla-Changed-Fields:
+	 Message-ID:In-Reply-To:References:Content-Type:
+	 Content-Transfer-Encoding:X-Bugzilla-URL:Auto-Submitted:
+	 MIME-Version; b=RVurWE073JVu48UdK30QSH9dM8L1NSkMOYtMwq1bhfRK1VJYJ9LGUOBSNa3zvdgNYN2eK7cnTt3jiaPtaoeh1rCHbYFMX5FhnnttZSn16Z3Por1bXZG4YqIdG8VcAIL9OXGsM29okqhvzv6PyG95r9Tcg8ip0G5TByvQYyI4tPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I6OjvojU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BE37CC43394
+	for <linux-pm@vger.kernel.org>; Wed, 17 Jan 2024 03:12:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705461161;
+	bh=+9SjZAyPtPr8ezs3ZjuAl23icD+OeqjNw+bRC2lJRAo=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=I6OjvojUdhvp9gkuQFBScCab0+gVNoC/Nle9xmbcfvk1XUFAXOhUKHN1pJdnbOMW1
+	 /lBgO66xyD4wynnqVZxnBNxoAOq0+wDSITwv6iHPUSYbuv/YSchc1gN9QvRlPRyNPT
+	 Ssqbmd9Jn8KGps/LkwQH5hGhQDrq/NZZllEue+wHeMBSoLn8I30rDfgKn8DsBYZT64
+	 Li1IXOBNT9wjSxZRe1WM97vb+poIRml4FoPRLjBRpC6cvQ7mPnnmbRWI2nu+aEeS3r
+	 +oihQiwh4FrM/hACfHKGcOc9U+uHSrJEo7vRJ7xba2AsEMH5ne487TGy5408Q+P8TT
+	 /jaFTyhg974sg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id AB91DC4332E; Wed, 17 Jan 2024 03:12:41 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218171] amd-pstate not loading on zen2 threadripper 3960x
+ (trx40
+Date: Wed, 17 Jan 2024 03:12:41 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: Perry.Yuan@amd.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: ANSWERED
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218171-137361-RA2LrMYzys@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218171-137361@https.bugzilla.kernel.org/>
+References: <bug-218171-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/3] firmware: arm_scmi: Add perf_opp_xlate interface
-Content-Language: en-US
-To: Viresh Kumar <viresh.kumar@linaro.org>
-CC: <sudeep.holla@arm.com>, <cristian.marussi@arm.com>, <rafael@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_mdtipton@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>
-References: <20240108140118.1596-1-quic_sibis@quicinc.com>
- <20240108140118.1596-3-quic_sibis@quicinc.com>
- <20240110072906.7vnqykkcw3rkhoxa@vireshk-i7>
-From: Sibi Sankar <quic_sibis@quicinc.com>
-In-Reply-To: <20240110072906.7vnqykkcw3rkhoxa@vireshk-i7>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: cbyLFxNUivVLSbp6ELhXfzojiYWrbd1B
-X-Proofpoint-ORIG-GUID: cbyLFxNUivVLSbp6ELhXfzojiYWrbd1B
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-16_14,2024-01-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
- bulkscore=0 adultscore=0 suspectscore=0 impostorscore=0 lowpriorityscore=0
- malwarescore=0 clxscore=1015 mlxlogscore=999 spamscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2311290000
- definitions=main-2401170019
+
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218171
+
+--- Comment #26 from Perry Yuan(AMD) (Perry.Yuan@amd.com) ---
+(In reply to Alessio Di Sandro from comment #25)
+> Comment on attachment 305722 [details]
+> ACPI tables for TR 3970X on MSI Creator TRX40
+>=20
+> Same behaviour on a MSI Creator TRX40, TR 3970X, BIOS version 7C59v17
+> (latest), CPPC options enabled in the BIOS, Linux 6.6.11.
+>=20
+> It may very well be the board vendors being lazy, but it seems a bit fishy
+> that ALL of them have the same CPPC problem. With my MSI report, aren't
+> these the entirety of the TRX40 boards?
+
+thanks for the more information, please also submit ticket to board vendor =
+to
+request the issue fix, looks like the Bit Offset values are not correctly
+initialized.=20
 
 
+   ResourceTemplate ()
+            {
+                Register (PCC,
+                    0x20,               // Bit Width
+                    0x00,               // Bit Offset
+                    0x0000000000000000, // Address
+                    ,)
+            },
 
-On 1/10/24 12:59, Viresh Kumar wrote:
-> On 08-01-24, 19:31, Sibi Sankar wrote:
->> Add a new perf_opp_xlate interface to the existing perf_ops to translate
->> a given perf index to frequency.
->>
+            ResourceTemplate ()
+            {
+                Register (PCC,
+                    0x20,               // Bit Width
+                    0x00,               // Bit Offset
+                    0x0000000000000004, // Address
+                    ,)
+            },
 
-Hey Viresh,
-Thanks for taking time to review the series!
+ Perry.
 
->> This can be used by the cpufreq driver and framework to determine the
->> throttled frequency from a given perf index and apply HW pressure
->> accordingly.
->>
->> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
->> ---
->>   drivers/firmware/arm_scmi/perf.c | 21 +++++++++++++++++++++
->>   include/linux/scmi_protocol.h    |  3 +++
->>   2 files changed, 24 insertions(+)
->>
->> diff --git a/drivers/firmware/arm_scmi/perf.c b/drivers/firmware/arm_scmi/perf.c
->> index c167bb5e3607..f26390924e1c 100644
->> --- a/drivers/firmware/arm_scmi/perf.c
->> +++ b/drivers/firmware/arm_scmi/perf.c
->> @@ -964,6 +964,26 @@ static int scmi_notify_support(const struct scmi_protocol_handle *ph, u32 domain
->>   	return 0;
->>   }
->>   
->> +static int scmi_perf_opp_xlate(const struct scmi_protocol_handle *ph, u32 domain,
->> +			       int idx, unsigned long *freq)
->> +{
->> +	struct perf_dom_info *dom;
->> +
->> +	dom = scmi_perf_domain_lookup(ph, domain);
->> +	if (IS_ERR(dom))
->> +		return PTR_ERR(dom);
->> +
->> +	if (idx >= dom->opp_count)
->> +		return -ERANGE;
->> +
->> +	if (!dom->level_indexing_mode)
->> +		*freq = dom->opp[idx].perf * dom->mult_factor;
->> +	else
->> +		*freq = dom->opp[idx].indicative_freq * dom->mult_factor;
->> +
->> +	return 0;
->> +}
->> +
->>   static const struct scmi_perf_proto_ops perf_proto_ops = {
->>   	.num_domains_get = scmi_perf_num_domains_get,
->>   	.info_get = scmi_perf_info_get,
->> @@ -979,6 +999,7 @@ static const struct scmi_perf_proto_ops perf_proto_ops = {
->>   	.fast_switch_possible = scmi_fast_switch_possible,
->>   	.power_scale_get = scmi_power_scale_get,
->>   	.perf_notify_support = scmi_notify_support,
->> +	.perf_opp_xlate = scmi_perf_opp_xlate,
-> 
-> The use of "opp" here is a bit confusing as this doesn't have anything to do
-> with the OPP framework and you are only getting the frequency out of it after
-> all.
+--=20
+You may reply to this email to add a comment.
 
-Sure will re-name it.
-
--Sibi
-
-> 
+You are receiving this mail because:
+You are the assignee for the bug.=
 
