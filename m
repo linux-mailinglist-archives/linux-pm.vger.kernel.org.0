@@ -1,95 +1,108 @@
-Return-Path: <linux-pm+bounces-2309-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2310-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 333F783080A
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 15:28:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA444830AFF
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 17:24:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A3C61C229C6
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 14:28:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8730428FB37
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 16:24:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E75BD208AE;
-	Wed, 17 Jan 2024 14:28:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59CCE22325;
+	Wed, 17 Jan 2024 16:24:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LsLILLw9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD8162033F;
-	Wed, 17 Jan 2024 14:28:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3565222323
+	for <linux-pm@vger.kernel.org>; Wed, 17 Jan 2024 16:24:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705501727; cv=none; b=qsmgo0NQIZ9VzLYoKSf00qE+lzlFD0C6cnT60vDho+RG6rKWnxT+O0gyPFoJG2QozTgLiHsmvDvTp9yAJThyFVflqceHCpsJRUO76NxowmWTboAAM27nfk4b15G83Ku/57RKtOFhWCS6ASEBLhObT2C8qr98qzfhu+Xo+xnHfyU=
+	t=1705508693; cv=none; b=cTQf7d2BhylhkVfUQtZ63+qGzVcnbUJGIBCCAeadRTfYqSEughUut8GeT+RTogtDyRVOX0ifWfBMxQSQI94APO1phPFQ9jB59GrD6Aaw9kzDTpLoaGgyjFOdOvkl65C6BC7h0nd7nBeo4cOo4JhFXyDwp8wC24ovEui7BfOyZv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705501727; c=relaxed/simple;
-	bh=6a4mlGIcQJ+G6+bnDWd0rmwXDm0BP7zkGsQfwd6vtiU=;
-	h=Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
-	 Content-Language:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:X-bounce-key:X-HE-SMSGID; b=gXJ0zISElznFUK8K7jFAMM9xo8aKFMuHrAV0GQO7VFgj27IPakmNSbqIMbX6RimvbhFhKPr1KiBJCrSSClD49kOvW+aYF8Yxp90fmGE4ENTRd+zMZzjR7TZeI5kl8sW//yy6qtBrTJnjp/7KKbcKCHckMJHeunCfvY366KA6obk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; arc=none smtp.client-ip=80.237.130.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	id 1rQ6u1-0007yx-EK; Wed, 17 Jan 2024 15:28:25 +0100
-Message-ID: <7c9a417c-920b-4463-966f-250da3697bbf@leemhuis.info>
-Date: Wed, 17 Jan 2024 15:28:24 +0100
+	s=arc-20240116; t=1705508693; c=relaxed/simple;
+	bh=4W4BPQALA+uCiJizhzUWI6I3viR7jUmAGfXU9lxgUU8=;
+	h=Received:DKIM-Signature:Received:From:To:Subject:Date:
+	 X-Bugzilla-Reason:X-Bugzilla-Type:X-Bugzilla-Watch-Reason:
+	 X-Bugzilla-Product:X-Bugzilla-Component:X-Bugzilla-Version:
+	 X-Bugzilla-Keywords:X-Bugzilla-Severity:X-Bugzilla-Who:
+	 X-Bugzilla-Status:X-Bugzilla-Resolution:X-Bugzilla-Priority:
+	 X-Bugzilla-Assigned-To:X-Bugzilla-Flags:X-Bugzilla-Changed-Fields:
+	 Message-ID:In-Reply-To:References:Content-Type:
+	 Content-Transfer-Encoding:X-Bugzilla-URL:Auto-Submitted:
+	 MIME-Version; b=O3l5RRwp5MUtUSVnsUtAgAEDZBsEQM5P3PiyV52EDlQrB3+pk5+Y6E7HqqM97gm79JGNHhRUNd486UB1Suv159pfpPcyIFkcBsSGh5wQhNGz4BseurXzwHS+3ENvUmJhjnMRirMiFa3ZRFXApecIaxLN9Sg8WQqqeA8nHlmZe+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LsLILLw9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B321BC43399
+	for <linux-pm@vger.kernel.org>; Wed, 17 Jan 2024 16:24:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705508692;
+	bh=4W4BPQALA+uCiJizhzUWI6I3viR7jUmAGfXU9lxgUU8=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=LsLILLw9dKfC9on6UgC7ZRk+nCDYQThvjYC14xbQqsn0Sj9sbSDRRZVKP37UgciWB
+	 YXTSFBizVJ+8m52jAt+MML7FCa4gh0BjoiDcLYtpiRhG3dhHKi3JAxC8R6xleV+Rjg
+	 zeEHfCuOGQixafMsTpQID3WUbUB0sMWKz7+d6jTSmtIWbNbDRxrZp4+z9vnjtpkerZ
+	 wZjV5Yptjf6XpJy3nwJ8fXqWXZGKpt90OU/4ATeFzZ/OAHw0S/5NNTHyJRCCCucova
+	 aPJElrlty5KDyVL7EUfh9F7PBGKl7gIe0cNZDl3XgEFqo8+1ZzS8Ur+XUMChwLIs5u
+	 yveoo6MTeAxNA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id A06D6C53BD3; Wed, 17 Jan 2024 16:24:52 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218171] amd-pstate not loading on zen2 threadripper 3960x
+ (trx40
+Date: Wed, 17 Jan 2024 16:24:52 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: pnascimento@gmail.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: ANSWERED
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218171-137361-AYFkD8Ekr3@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218171-137361@https.bugzilla.kernel.org/>
+References: <bug-218171-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] sched/fair: Fix frequency selection for non invariant
- case
-Content-Language: en-US, de-DE
-To: Ingo Molnar <mingo@kernel.org>,
- Vincent Guittot <vincent.guittot@linaro.org>
-Cc: mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
- dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
- mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com, wkarny@gmail.com,
- torvalds@linux-foundation.org, qyousef@layalina.io, tglx@linutronix.de,
- rafael@kernel.org, viresh.kumar@linaro.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20240114183600.135316-1-vincent.guittot@linaro.org>
- <ZaZTlcFZaQefnf1v@gmail.com>
-From: Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <ZaZTlcFZaQefnf1v@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1705501725;80889283;
-X-HE-SMSGID: 1rQ6u1-0007yx-EK
 
-On 16.01.24 10:59, Ingo Molnar wrote:
-> 
-> * Vincent Guittot <vincent.guittot@linaro.org> wrote:
-> 
->> When frequency invariance is not enabled, get_capacity_ref_freq(policy)
->> returns the current frequency and the performance margin applied by
->> map_util_perf(), enabled the utilization to go above the maximum compute
->> capacity and to select a higher frequency than the current one.
->> [...]
->> Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
->> Closes: https://lore.kernel.org/lkml/CAHk-=wgWcYX2oXKtgvNN2LLDXP7kXkbo-xTfumEjmPbjSer2RQ@mail.gmail.com/
->> Reported-by: Wyes Karny <wkarny@gmail.com>
->> Closes: https://lore.kernel.org/lkml/20240114091240.xzdvqk75ifgfj5yx@wyes-pc/
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218171
 
-Thx for resolving this everyone. Allow me a quick question:
+--- Comment #27 from Pedro Nascimento (pnascimento@gmail.com) ---
+Hey Perry,
 
-I noticed the two Closes: tags above are missing in the actual commit:
-https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=e37617c8e53a1f7fcba6d5e1041f4fd8a2425c27
+Thank you for sharing your insights.
 
-Is there a overeager script here that removes them when it shouldn't?
+Given the issue is spread across MSI, Asus and Gigabyte, I'm concerned we w=
+ill
+never get around to convincing a fix should come from each of them.
 
-Just asking, because the lack of these tags makes regression tracking
-hard. And Linus really wants those tags in cases like this[1].
+Is it something you, as an AMD employee, could help with? Or is it possible=
+ to
+work around this at the driver level? Otherwise, I fear this will never be
+fixed.
 
-Ciao, Thorsten
+--=20
+You may reply to this email to add a comment.
 
-[1] for details, see:
-https://lore.kernel.org/all/CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com/
-https://lore.kernel.org/all/CAHk-=wgs38ZrfPvy=nOwVkVzjpM3VFU1zobP37Fwd_h9iAD5JQ@mail.gmail.com/
-https://lore.kernel.org/all/CAHk-=wjxzafG-=J8oT30s7upn4RhBs6TX-uVFZ5rME+L5_DoJA@mail.gmail.com/
+You are receiving this mail because:
+You are the assignee for the bug.=
 
