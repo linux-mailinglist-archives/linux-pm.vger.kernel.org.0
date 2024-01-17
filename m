@@ -1,225 +1,235 @@
-Return-Path: <linux-pm+bounces-2261-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2262-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF75F82FDD4
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 00:48:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13FA382FDE6
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 01:07:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DA511F26EDA
-	for <lists+linux-pm@lfdr.de>; Tue, 16 Jan 2024 23:48:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D80728C4E4
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 00:07:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB85367C6B;
-	Tue, 16 Jan 2024 23:48:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA90E181;
+	Wed, 17 Jan 2024 00:07:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YdYqvvKN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GUjUBt6U"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 329CE67C5E
-	for <linux-pm@vger.kernel.org>; Tue, 16 Jan 2024 23:48:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 814381C11;
+	Wed, 17 Jan 2024 00:07:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705448916; cv=none; b=M+p3KEZ7BmNj9Il3A20OYz8kiqW/QtzQCGdIF0BTfSl3JP6roNfoPWCh3oxkqDzggUykIIe1Vr6M0Ccs4uTl4FvpG7NGni29MhHek9+xO1DckGpJlG2Hx3LIt1j0x89DAtEImV1/FVYFs1Jw/KjsUZdNX3D+cbWjVpaWEMgP3gw=
+	t=1705450031; cv=none; b=eGocDtGpJDd/H8abnzK0psLMsxQjEQj7U0WoUEXG9RElCMot3vqpfm79nVPjB+hHCPJEIJGQETyrfhaueiiqzPJ309plKbvca3VunGIcengUsuJen6xmT7lVDrskp1rpKxQoopcNtbGq6RNkiwM0fsSSzGW/Ce8vurBtC6XmESo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705448916; c=relaxed/simple;
-	bh=O8Kq4uPVWRZlnIMs1LFsvejHjua+7vRBykNcj6Vhcqo=;
-	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:MIME-Version:
-	 References:In-Reply-To:From:Date:Message-ID:Subject:To:Cc:
-	 Content-Type:Content-Transfer-Encoding; b=olP4eZQKECsu+zFdlV/mtNkN7NNY0UOpJpDE+f+Pb+b0hi9Q8NoZuB4JH5qq+d6CWmSRupp/RxvAgPGOUW3/78l89iTuULp+na1pxY9KP5ETJRCRX18uNAKeLpzVeTC0oHj/iqAiDjyDf/HkF+YD7zEBD4G9uqEgqcmrmTYlzBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YdYqvvKN; arc=none smtp.client-ip=209.85.160.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-4298fa85baeso53871cf.1
-        for <linux-pm@vger.kernel.org>; Tue, 16 Jan 2024 15:48:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1705448914; x=1706053714; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TcX6td37QRw3Q78lq9NLHvuhZmpzzW+P43xh6D/Stls=;
-        b=YdYqvvKNHRTH0X/2vu0U5CkdwRnoWjDeDO9Evet+PiaE7PQPnh0lEIkDgbTwc41OkM
-         al+iwravePihA9SjBZPRJ/9TsmgDORoA4vJbCLz36bNS2GBFkVKHWkE4D0I7T88yECc4
-         Mnxq1ZVxhpm3EIdis0d74KuKXCW08AagpCwL/PQ3kvqqK+triz0vVLWR6ttY+Dm01WQ/
-         WkBux7YfV9U718Cxx1Sywpa/glejtvh+hVIOdR9CCHwIZSYKyKge5lc4g0rnL18Lxc9Y
-         9pflwdwI+ZH2TYR+JT4gmm8tLlgr7xHfoVMJiPo9NVPG31Qz4IoQkP40jBvmP4P1R+jR
-         guLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705448914; x=1706053714;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TcX6td37QRw3Q78lq9NLHvuhZmpzzW+P43xh6D/Stls=;
-        b=BojuohkXokNlEGMy9MY3AYXBSIsAHUyAHgtyMaNd2gDQTHDTS8xltvHtRJ3H/bdD63
-         WquItdcaOLsb67eGqryZBuYR5Wk6Hy+m+R4wmrFGLotOtIHvova7qAkPRZN1gMVoOJEW
-         3oBfNTyYYvCMDCsYdwDGp6B4VCO+gGTCklfAuZPpzLEbsVAQAAQBNSmBROBSTjQke0sB
-         nAQlObvwtJer5YnNonYw9agIwHoNTALD5GsckTTov0lP3uKDdkeowC8L085Z+cdFPIGI
-         r5kIsxhAOKJRFJ2LpuhSoGA++8/OEPmFLis5bb+y0B4adaBiMOAXiQFcMenIhxPNYxf5
-         lUxA==
-X-Gm-Message-State: AOJu0YwmAdT+BkXuNfTRpVA1UMYWjrWrM3El4McJBIyT2TFTHCBvmePx
-	IpPgFgrDzQaZiPfTNOXrfkVgOoC7LFkuGTifbGWsQwHYcTv/XmfSe10OQkc3XH5NpnNcxavpCUf
-	Vrn3N64swlR5wF3C8gjL9zEava2DIRFMhGxpb
-X-Google-Smtp-Source: AGHT+IF175+Y4Kli2T3zqhJiGB1qrctLtKv0qPENb4TsBh8AoPaduA173aWAazUv/IITNOQLJimNwyj4KFTx/iHL+2o=
-X-Received: by 2002:a05:622a:1dc6:b0:429:b532:5075 with SMTP id
- bn6-20020a05622a1dc600b00429b5325075mr51787qtb.22.1705448913924; Tue, 16 Jan
- 2024 15:48:33 -0800 (PST)
+	s=arc-20240116; t=1705450031; c=relaxed/simple;
+	bh=Hi3WbUEYSIhh0hiaezg7Ec88eCvYKaiPi+jMfAgJqZQ=;
+	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-Id:
+	 In-Reply-To:References:X-Mailer:Mime-Version:Content-Type:
+	 Content-Transfer-Encoding; b=qNVquky+C0styvnzj88HnbiQxLehcdRpnxextg7+ddlZkbvzZeZ6uhkimJdVERvfV8l+EmMa02svyHu1i8IcZ48iW20YInHND4sUTTOZOwaslsAO8EpCLOawAgU+dGgFOGNPsOeqO1/L2HbHiR3m05GD5Bsfbg69e90fs3/2fj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GUjUBt6U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5BC0C433C7;
+	Wed, 17 Jan 2024 00:07:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705450031;
+	bh=Hi3WbUEYSIhh0hiaezg7Ec88eCvYKaiPi+jMfAgJqZQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=GUjUBt6UCxqauu6S3cOUPnGnccJbsNUC8vy9MDjumfcVmIlMe+BXnTGgKGCrfGHA7
+	 VLXHHFDhomKGiCvNlp1Ba7g3hVBfrvcqeuKFUTjZdMmKvsTcXmxlwF+oggd/PGi2lh
+	 26Y/nd0kOyFwpdwgbjDUY4GjzLKHhKMxgBFBO5RHCFcmxG76uxIzvFZ5yIDbpKry7B
+	 DwO0XRcx0VIHyVi5mx0Kz3CJ46HLk95jg+7kU4lUi+aPHm7qHiJ3+ceb8BGIha6Vdr
+	 +SC9dQU2g13sPBhyZEM53apxdIbAPTjQo+lo0XJo2fIFtyRgeHfQI91pi3gfVar/zz
+	 FiXdgio969IxA==
+Date: Wed, 17 Jan 2024 09:07:06 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+ Len Brown <len.brown@intel.com>, Randy Dunlap <rdunlap@infradead.org>,
+ suleiman@google.com, briannorris@google.com, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+Subject: Re: [PATCH v7] PM: sleep: Expose last succeeded resumed timestamp
+ in sysfs
+Message-Id: <20240117090706.3522d23763fab9dcea21aee1@kernel.org>
+In-Reply-To: <170359669607.1864392.5078004271237566637.stgit@mhiramat.roam.corp.google.com>
+References: <170359668692.1864392.6909734045167510522.stgit@mhiramat.roam.corp.google.com>
+	<170359669607.1864392.5078004271237566637.stgit@mhiramat.roam.corp.google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20231111014933.1934562-1-davidai@google.com> <20231111014933.1934562-2-davidai@google.com>
- <865y231jvj.wl-maz@kernel.org> <CAGETcx9-n0z5buWgtLZ+6VxW2jEko1GWzkGtGhFiZEq-x_G4nw@mail.gmail.com>
- <867clpaxel.wl-maz@kernel.org> <CAGETcx_8x4p7WTwqQiVGdtHftVjFUJruXsOXwJXgDi0GdEtLNA@mail.gmail.com>
- <86zfx98tgi.wl-maz@kernel.org>
-In-Reply-To: <86zfx98tgi.wl-maz@kernel.org>
-From: Saravana Kannan <saravanak@google.com>
-Date: Tue, 16 Jan 2024 15:47:57 -0800
-Message-ID: <CAGETcx-sYUAE-Pgnf20ZXR_9WJOZ5FqksL=8i8+9PCLLazy54w@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: cpufreq: add virtual cpufreq device
-To: Marc Zyngier <maz@kernel.org>
-Cc: David Dai <davidai@google.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Sudeep Holla <sudeep.holla@arm.com>, Quentin Perret <qperret@google.com>, 
-	Masami Hiramatsu <mhiramat@google.com>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Oliver Upton <oliver.upton@linux.dev>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Pavan Kondeti <quic_pkondeti@quicinc.com>, Gupta Pankaj <pankaj.gupta@amd.com>, 
-	Mel Gorman <mgorman@suse.de>, kernel-team@android.com, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sat, Jan 13, 2024 at 1:37=E2=80=AFAM Marc Zyngier <maz@kernel.org> wrote=
-:
->
-> On Fri, 12 Jan 2024 22:02:39 +0000,
-> Saravana Kannan <saravanak@google.com> wrote:
-> >
-> > Sorry for the delay in response. Was very busy for a while and then
-> > holidays started.
-> >
-> > On Fri, Dec 8, 2023 at 12:52=E2=80=AFAM Marc Zyngier <maz@kernel.org> w=
-rote:
-> > >
-> > > On Thu, 07 Dec 2023 22:44:36 +0000,
-> > > Saravana Kannan <saravanak@google.com> wrote:
-> > > >
-> > > > On Wed, Nov 15, 2023 at 12:49=E2=80=AFAM Marc Zyngier <maz@kernel.o=
-rg> wrote:
-> > > > >
-> > > > > On Sat, 11 Nov 2023 01:49:29 +0000,
-> > > > > David Dai <davidai@google.com> wrote:
-> > > > > >
-> > > > > > Adding bindings to represent a virtual cpufreq device.
-> > > > > >
-> > > > > > Virtual machines may expose MMIO regions for a virtual cpufreq =
-device
-> > > > > > for guests to read frequency information or to request frequenc=
-y
-> > > > > > selection. The virtual cpufreq device has an individual control=
-ler for
-> > > > > > each frequency domain.
-> > > > >
-> > > > > I would really refrain form having absolute frequencies here. A
-> > > > > virtual machine can be migrated, and there are *zero* guarantees =
-that
-> > > > > the target system has the same clock range as the source.
-> > > > >
-> > > > > This really should be a relative number, much like the capacity. =
-That,
-> > > > > at least, can be migrated across systems.
-> > > >
-> > > > There's nothing in this patch that mandates absolute frequency.
-> > > > In true KVM philosophy, we leave it to the VMM to decide.
-> > >
-> > > This has nothing to do with KVM. It would apply to any execution
-> > > environment, including QEMU in TCG mode.
-> > >
-> > > To quote the original patch:
-> > >
-> > > +    description:
-> > > +      Address and size of region containing frequency controls for e=
-ach of the
-> > > +      frequency domains. Regions for each frequency domain is placed
-> > > +      contiugously and contain registers for controlling DVFS(Dynami=
-c Frequency
-> > > +      and Voltage) characteristics. The size of the region is propor=
-tional to
-> > > +      total number of frequency domains.
-> > >
-> > > What part of that indicates that *relative* frequencies are
-> > > acceptable? The example explicitly uses the opp-v2 binding, which
-> > > clearly is about absolute frequency.
-> >
-> > We can update the doc to make that clearer and update the example too.
-> >
-> > > To reiterate: absolute frequencies are not the right tool for the job=
-,
-> > > and they should explicitly be described as relative in the spec. Not
-> > > left as a "whatev'" option for the execution environment to interpret=
-.
-> >
-> > I think it depends on the use case. If there's no plan to migrate the
-> > VM across different devices, there's no need to do the unnecessary
-> > normalization back and forth.
->
-> VM migration is a given, specially when QEMU is involved. Designing
-> something that doesn't support it is a bug, plain and simple.
+Gently ping,
 
-I'm not saying this patch series doesn't allow migrating. I'm just
-pointing out that normalization might not always be worth it for a VMM
-to do.
+I would like to know this is enough or I should add more info/update.
 
-We'll update the example and documentation to used normalize values.
-CPUfreq itself used KHz for the tables and we can't really change that
-when we are emulating CPU freq scaling. Same goes for OPP table DT
-property names.
+Thank you,
 
-But the values we use can be 0 to 1024 Hz and be normalized.
+On Tue, 26 Dec 2023 22:18:16 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 
-> > And if we can translate between pCPU frequency and a normalized
-> > frequency, we can do the same for whatever made up frequencies too. In
-> > fact, we plan to do exactly that in our internal use cases for this.
-> > There's nothing here that prevents the VMM from doing that.
-> >
-> > Also, if there are hardware virtualized performance counters (AMU,
-> > CPPC, etc) that are used for frequency normalization, then we have to
-> > use the real frequencies in those devices otherwise the "current
-> > frequency" can be 2 GHz while the max normalized frequency is 1024
-> > KHz. That'll mess up load tracking.
->
-> And that's exactly why this shouldn't be a *frequency*, but a
-> performance scale or some other unit-less coefficient. Just like the
-> big-little capacity.
+> From: Masami Hiramatsu <mhiramat@kernel.org>
+> 
+> Expose last succeeded resumed timestamp as last_success_resume_time
+> attribute of suspend_stats in sysfs so that user can use this time
+> stamp as a reference point of resuming user space.
+> 
+> On some system like the ChromeOS, the system suspend and resume are
+> controlled by a power management process. The user-space tasks will be
+> noticed the suspend and the resume signal from it.
+> To improve the suspend/resume performance and/or to find regressions,
+> we would like to know how long the resume processes are taken in kernel
+> and in user-space.
+> For this purpose, expose the accarate time when the kernel is finished
+> to resume so that we can distinguish the duration of kernel resume and
+> user space resume.
+> 
+> This suspend_stats attribute is easy to access and only expose the
+> timestamp in CLOCK_MONOTONIC. User can find the accarate time when the
+> kernel finished to resume its drivers/subsystems and start thawing, and
+> measure the elapsed time from the time when the kernel finished the
+> resume to a user-space action (e.g. displaying the UI).
+> 
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> ---
+>  Changes in v7:
+>   - Update patch description.
+>   - Update sysfs documentation to say the exact timing.
+>   - Update the comment.
+>  Changes in v6:
+>   - Fix to record resume time before thawing user processes.
+>  Changes in v5:
+>   - Just updated for v6.7-rc3.
+>  Changes in v4.1:
+>   - Fix document typo (again).
+>  Changes in v4:
+>   - Update description to add why.
+>   - Fix document typo.
+>  Changes in v3:
+>   - Add (unsigned long long) casting for %llu.
+>   - Add a line after last_success_resume_time_show().
+>  Changes in v2:
+>   - Use %llu instead of %lu for printing u64 value.
+>   - Remove unneeded indent spaces from the last_success_resume_time
+>     line in the debugfs suspend_stat file.
+> ---
+>  Documentation/ABI/testing/sysfs-power |   11 +++++++++++
+>  include/linux/suspend.h               |    2 ++
+>  kernel/power/main.c                   |   15 +++++++++++++++
+>  kernel/power/suspend.c                |    9 +++++++++
+>  4 files changed, 37 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/testing/sysfs-power
+> index a3942b1036e2..ee567e7e9d4a 100644
+> --- a/Documentation/ABI/testing/sysfs-power
+> +++ b/Documentation/ABI/testing/sysfs-power
+> @@ -442,6 +442,17 @@ Description:
+>  		'total_hw_sleep' and 'last_hw_sleep' may not be accurate.
+>  		This number is measured in microseconds.
+>  
+> +What:		/sys/power/suspend_stats/last_success_resume_time
+> +Date:		Dec 2023
+> +Contact:	Masami Hiramatsu <mhiramat@kernel.org>
+> +Description:
+> +		The /sys/power/suspend_stats/last_success_resume_time file
+> +		contains the timestamp of when the kernel successfully
+> +		resumed drivers/subsystems from suspend/hibernate. This is
+> +		just before thawing the user processes.
+> +		This floating point number is measured in seconds by monotonic
+> +		clock.
+> +
+>  What:		/sys/power/sync_on_suspend
+>  Date:		October 2019
+>  Contact:	Jonas Meurer <jonas@freesources.org>
+> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> index ef503088942d..ddd789044960 100644
+> --- a/include/linux/suspend.h
+> +++ b/include/linux/suspend.h
+> @@ -8,6 +8,7 @@
+>  #include <linux/pm.h>
+>  #include <linux/mm.h>
+>  #include <linux/freezer.h>
+> +#include <linux/timekeeping.h>
+>  #include <asm/errno.h>
+>  
+>  #ifdef CONFIG_VT
+> @@ -71,6 +72,7 @@ struct suspend_stats {
+>  	u64	last_hw_sleep;
+>  	u64	total_hw_sleep;
+>  	u64	max_hw_sleep;
+> +	struct timespec64 last_success_resume_time;
+>  	enum suspend_stat_step	failed_steps[REC_FAILED_NUM];
+>  };
+>  
+> diff --git a/kernel/power/main.c b/kernel/power/main.c
+> index f6425ae3e8b0..2ab23fd3daac 100644
+> --- a/kernel/power/main.c
+> +++ b/kernel/power/main.c
+> @@ -421,6 +421,17 @@ static ssize_t last_failed_step_show(struct kobject *kobj,
+>  }
+>  static struct kobj_attribute last_failed_step = __ATTR_RO(last_failed_step);
+>  
+> +static ssize_t last_success_resume_time_show(struct kobject *kobj,
+> +		struct kobj_attribute *attr, char *buf)
+> +{
+> +	return sprintf(buf, "%llu.%llu\n",
+> +		(unsigned long long)suspend_stats.last_success_resume_time.tv_sec,
+> +		(unsigned long long)suspend_stats.last_success_resume_time.tv_nsec);
+> +}
+> +
+> +static struct kobj_attribute last_success_resume_time =
+> +			__ATTR_RO(last_success_resume_time);
+> +
+>  static struct attribute *suspend_attrs[] = {
+>  	&success.attr,
+>  	&fail.attr,
+> @@ -438,6 +449,7 @@ static struct attribute *suspend_attrs[] = {
+>  	&last_hw_sleep.attr,
+>  	&total_hw_sleep.attr,
+>  	&max_hw_sleep.attr,
+> +	&last_success_resume_time.attr,
+>  	NULL,
+>  };
+>  
+> @@ -514,6 +526,9 @@ static int suspend_stats_show(struct seq_file *s, void *unused)
+>  			suspend_step_name(
+>  				suspend_stats.failed_steps[index]));
+>  	}
+> +	seq_printf(s,	"last_success_resume_time:\t%-llu.%llu\n",
+> +		   (unsigned long long)suspend_stats.last_success_resume_time.tv_sec,
+> +		   (unsigned long long)suspend_stats.last_success_resume_time.tv_nsec);
+>  
+>  	return 0;
+>  }
+> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> index fa3bf161d13f..2d0f46b4d0cf 100644
+> --- a/kernel/power/suspend.c
+> +++ b/kernel/power/suspend.c
+> @@ -595,6 +595,15 @@ static int enter_state(suspend_state_t state)
+>   Finish:
+>  	events_check_enabled = false;
+>  	pm_pr_dbg("Finishing wakeup.\n");
+> +
+> +	/*
+> +	 * Record last succeeded resume timestamp just before thawing processes.
+> +	 * This is for helping users to measure user-space resume performance
+> +	 * for improving their programs or finding regressions.
+> +	 */
+> +	if (!error)
+> +		ktime_get_ts64(&suspend_stats.last_success_resume_time);
+> +
+>  	suspend_finish();
+>   Unlock:
+>  	mutex_unlock(&system_transition_mutex);
+> 
 
-Sorry I wasn't cleared in my explanation. Let me explain it better.
-When performance counters are available, the scheduler uses them to
-compute the current average CPU frequency over a scheduler tick. It
-looks at the performance counters to figure out how many CPU cycles
-have gone by and how much time has gone by and does (delta cycles /
-delta seconds) to compute current CPU freq in Hz. So, when a HW
-virtualized performance counter is available, and the scheduler inside
-the VM uses it to compute the average CPU frequency, the resulting
-frequency is going to be the real physical CPU frequency. And the CPU
-frequency value the scheduler used to compute the PELT load will be
-completely different from the normalized values and the load tracking
-will be completely wrong.
 
-Using their performance counters inside the VM reduces a lot of MMIO
-access exits to the host or memory accesses. So it makes sense a VM
-might want to use that. I was just trying to say that in that
-situation, a VMM might have a good reason to just use the real
-frequencies inside the VM too.
-
-In any case, we can update the doc to use normalized values/examples
-and call out this caveat.
-
-Thanks,
-Saravana
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
