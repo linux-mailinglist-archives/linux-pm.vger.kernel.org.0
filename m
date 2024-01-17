@@ -1,66 +1,66 @@
-Return-Path: <linux-pm+bounces-2303-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2304-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E27B3830426
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 12:05:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81311830429
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 12:06:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E92028185F
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 11:05:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DA8A1F23027
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 11:06:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E72C1DDD0;
-	Wed, 17 Jan 2024 11:05:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00A451DDE4;
+	Wed, 17 Jan 2024 11:05:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="fFDTp5xj"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="V8j9DuwT"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7C411DFD5;
-	Wed, 17 Jan 2024 11:05:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9819F1DFF7;
+	Wed, 17 Jan 2024 11:05:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705489525; cv=none; b=Ao+nUD152SEu0bP2H2BY0VPEKFEvsNv4QgEloDceEEFXRoF9lVF7WzD32xW/OZ8pXY1ntxzTV8quSofYJ7nmPWc8w8s6b5bL9Zwbvv38CBqA48blnV/r+yuf0lSH2p14H1FAzvMjIgWpNB4L50Xhhy3kl889dHFUuBbso4QZEO4=
+	t=1705489528; cv=none; b=LMPnFcA2pyplEh0/75KoJ8H35QCMurBC+gPEKKrmBtE4mr3h+g7u0dnfWZk5PkU7UHb3znrnWfVzltCMzOHnGk5QV3ewck1+pQcetgSan0J/NsiQln0YkGEd6m85/zbWfk2ILvF4NwHwdFj6FIMW1hgrU0sn5HPjp93FK7vmEwQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705489525; c=relaxed/simple;
-	bh=ad/wOoguBLGYvhj5gNQaZt002NeQWHQfD8deCfP5XRM=;
+	s=arc-20240116; t=1705489528; c=relaxed/simple;
+	bh=nIv7S5Ssl4N8lcGZ7x7Xq/d2Wy+1wcwhH26hO4muSQ4=;
 	h=Received:DKIM-Signature:Received:Received:Received:From:To:CC:
 	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
 	 MIME-Version:Content-Transfer-Encoding:Content-Type:
 	 X-Originating-IP:X-ClientProxiedBy:X-QCInternal:
 	 X-Proofpoint-Virus-Version:X-Proofpoint-GUID:
 	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details; b=rgoYDwAavSr+CJdTy99PEFHFUjTvvmwEeu+UwgoqpwMBwH+9FWcqRPpcdrytRQTgrLK77walKX56brkqYegn4UQ0WMfXnD9tsIY+mdOnIt0pHHLomv6ncb9UoCU0JWrKsghAlEOm1PkraO5LE32jZALtJtsuk3gt/J7mDePCIKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=fFDTp5xj; arc=none smtp.client-ip=205.220.168.131
+	 X-Proofpoint-Spam-Details; b=XEzhQ5aRUQRYGGYJPlSJR6DXO6PZC1xped68ivd1mjWjj14gQD8HbK9k2fN4nnJhl7AWz2cTBeLJCthu+qsaTGhps9LJyE1FoCvwGrEYnQZB7qk5pOy3bykT0/NUq3mVpD3wIwRCiHqU2XzfzUxdLvkSCuwdJTAS9h1zJih0bj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=V8j9DuwT; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
 Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40H48Wrl011339;
-	Wed, 17 Jan 2024 11:05:14 GMT
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40H79WtU011576;
+	Wed, 17 Jan 2024 11:05:19 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	from:to:cc:subject:date:message-id:in-reply-to:references
 	:mime-version:content-transfer-encoding:content-type; s=
-	qcppdkim1; bh=kIBM+GHgT/wUh9R8cGaTg7wnwnKkMQJIMeU6iA7gLtI=; b=fF
-	DTp5xjiWVK9uN/tjubBc6Rrp2/oj801Gk4xFd/vybuWQcnqg1H5qTdDvD+gB8EB3
-	K8CfhIvnunncLg04+uvAQwpvl3lK9Z0LDj3cx8g/bNsKkpS/mpjHQueptX0WRqOe
-	eYv9CycvULBwTC+rd7XZg87X2aKTGTSHHfc2X8PukzPLF+XI+ILyxDTHpcgQpmNa
-	7xwGfeFvzXWoHbpYoCpBE8Fe48Ss/VW1QWVuwiWG5rddVux+hV7BF+J/JUCAiIQx
-	HjmyUhBhfGaXtkQXpQJOJm6Qfy+hhE53/jLLQYTVeiuAnKgguqyuOM9aH4XI5M+o
-	4Mjb8dcywpl49q1AhVKQ==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vp6sqrv3m-1
+	qcppdkim1; bh=vlGPI0dnXph4HiaDHyobQa70eLKUOk82RAMp0wm6CyM=; b=V8
+	j9DuwTNd5tz2LjhZ5rXVlAg+jP3jrLoERpirnDOHCMf5noPjS/ZrzZDBpfGSri9G
+	bsoKv/Zink52zHlU88/UflDk9rHakR6GCgwXSIm66xEOCC6rl6MsMDb3v/+kk12s
+	hcfCtFSUMOi6YFgbLfG2YDVCmy88XAK3ZMDMtSt+jOm/jetpCzAmbdBWg5eGx+pi
+	64OItEJOsb3xoFxhdvMhf6+Vbvb5TZtF7xTvIzU4l0oBYcaJPGVw3zD0vKJ9bCab
+	PI/iJGtxWm3CoDss8boGyRJcKYR3aswF0pTQkZiSq8gLV1Vd4Uu1m2JVw9UKG69p
+	ClWRyJbDXjKSXRoLbqgw==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vp6sqrv3t-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Jan 2024 11:05:13 +0000 (GMT)
+	Wed, 17 Jan 2024 11:05:18 +0000 (GMT)
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40HB5DAF013494
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40HB5IfI007943
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Jan 2024 11:05:13 GMT
+	Wed, 17 Jan 2024 11:05:18 GMT
 Received: from hu-sibis-blr.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Wed, 17 Jan 2024 03:05:08 -0800
+ 15.2.1118.40; Wed, 17 Jan 2024 03:05:13 -0800
 From: Sibi Sankar <quic_sibis@quicinc.com>
 To: <sudeep.holla@arm.com>, <cristian.marussi@arm.com>, <rafael@kernel.org>,
         <viresh.kumar@linaro.org>, <morten.rasmussen@arm.com>,
@@ -70,9 +70,9 @@ CC: <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
         <linux-arm-msm@vger.kernel.org>, <nm@ti.com>,
         Sibi Sankar
 	<quic_sibis@quicinc.com>
-Subject: [PATCH 2/3] firmware: arm_scmi: Add support for marking certain frequencies as boost
-Date: Wed, 17 Jan 2024 16:34:42 +0530
-Message-ID: <20240117110443.2060704-3-quic_sibis@quicinc.com>
+Subject: [PATCH 3/3] cpufreq: scmi: Enable boost support
+Date: Wed, 17 Jan 2024 16:34:43 +0530
+Message-ID: <20240117110443.2060704-4-quic_sibis@quicinc.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240117110443.2060704-1-quic_sibis@quicinc.com>
 References: <20240117110443.2060704-1-quic_sibis@quicinc.com>
@@ -88,61 +88,77 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: c-LF6AQ3b8-Dre2U12eZ1yB6MKmVYtj4
-X-Proofpoint-ORIG-GUID: c-LF6AQ3b8-Dre2U12eZ1yB6MKmVYtj4
+X-Proofpoint-GUID: QzQ50FqTbV_MvgQ0K4SWefbpg7OZtc2b
+X-Proofpoint-ORIG-GUID: QzQ50FqTbV_MvgQ0K4SWefbpg7OZtc2b
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-01-17_06,2024-01-17_01,2023-05-22_02
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
  phishscore=0 spamscore=0 clxscore=1015 impostorscore=0 mlxscore=0
- bulkscore=0 mlxlogscore=984 malwarescore=0 adultscore=0 lowpriorityscore=0
+ bulkscore=0 mlxlogscore=999 malwarescore=0 adultscore=0 lowpriorityscore=0
  suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2311290000 definitions=main-2401170078
 
-All opps above the sustained level/frequency are treated as boost, so mark
-them accordingly.
+The X1E80100 SoC hosts a number cpu boost frequencies, so let's enable
+boost support if the freq_table has any opps marked as turbo in it.
 
-Suggested-by: Sudeep Holla <sudeep.holla@arm.com>
 Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
 ---
- drivers/firmware/arm_scmi/perf.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ drivers/cpufreq/scmi-cpufreq.c | 20 +++++++++++++++++++-
+ 1 file changed, 19 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/firmware/arm_scmi/perf.c b/drivers/firmware/arm_scmi/perf.c
-index e286f04ee6e3..d3fb8c804b3d 100644
---- a/drivers/firmware/arm_scmi/perf.c
-+++ b/drivers/firmware/arm_scmi/perf.c
-@@ -811,7 +811,7 @@ static int scmi_dvfs_device_opps_add(const struct scmi_protocol_handle *ph,
- 				     struct device *dev, u32 domain)
+diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
+index e0aa85764451..4355ec73502e 100644
+--- a/drivers/cpufreq/scmi-cpufreq.c
++++ b/drivers/cpufreq/scmi-cpufreq.c
+@@ -34,6 +34,7 @@ const struct scmi_handle *handle;
+ static struct scmi_device *scmi_dev;
+ static struct scmi_protocol_handle *ph;
+ static const struct scmi_perf_proto_ops *perf_ops;
++static struct cpufreq_driver scmi_cpufreq_driver;
+ 
+ static unsigned int scmi_cpufreq_get_rate(unsigned int cpu)
  {
- 	int idx, ret;
--	unsigned long freq;
-+	unsigned long freq, sustained_freq;
- 	struct dev_pm_opp_data data = {};
- 	struct perf_dom_info *dom;
+@@ -148,6 +149,12 @@ scmi_get_cpu_power(struct device *cpu_dev, unsigned long *power,
+ 	return 0;
+ }
  
-@@ -819,12 +819,21 @@ static int scmi_dvfs_device_opps_add(const struct scmi_protocol_handle *ph,
- 	if (IS_ERR(dom))
- 		return PTR_ERR(dom);
- 
-+	if (!dom->level_indexing_mode)
-+		sustained_freq = dom->sustained_perf_level * dom->mult_factor;
-+	else
-+		sustained_freq = dom->sustained_freq_khz * dom->mult_factor;
++static struct freq_attr *scmi_cpufreq_hw_attr[] = {
++	&cpufreq_freq_attr_scaling_available_freqs,
++	NULL,
++	NULL,
++};
 +
- 	for (idx = 0; idx < dom->opp_count; idx++) {
- 		if (!dom->level_indexing_mode)
- 			freq = dom->opp[idx].perf * dom->mult_factor;
- 		else
- 			freq = dom->opp[idx].indicative_freq * dom->mult_factor;
+ static int scmi_limit_notify_cb(struct notifier_block *nb, unsigned long event, void *data)
+ {
+ 	unsigned long freq_hz;
+@@ -271,6 +278,17 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
+ 	policy->fast_switch_possible =
+ 		perf_ops->fast_switch_possible(ph, domain);
  
-+		/* All opps above the sustained level/frequency are treated as boost */
-+		if (sustained_freq && freq > sustained_freq)
-+			data.turbo = true;
++	if (policy_has_boost_freq(policy)) {
++		ret = cpufreq_enable_boost_support();
++		if (ret) {
++			dev_warn(cpu_dev, "failed to enable boost: %d\n", ret);
++			goto out_free_opp;
++		} else {
++			scmi_cpufreq_hw_attr[1] = &cpufreq_freq_attr_scaling_boost_freqs;
++			scmi_cpufreq_driver.boost_enabled = true;
++		}
++	}
 +
- 		data.level = dom->opp[idx].perf;
- 		data.freq = freq;
- 
+ 	ret = perf_ops->perf_notify_support(ph, domain, &info);
+ 	if (ret)
+ 		dev_warn(cpu_dev, "failed to get supported notifications: %d\n", ret);
+@@ -348,7 +366,7 @@ static struct cpufreq_driver scmi_cpufreq_driver = {
+ 		  CPUFREQ_NEED_INITIAL_FREQ_CHECK |
+ 		  CPUFREQ_IS_COOLING_DEV,
+ 	.verify	= cpufreq_generic_frequency_table_verify,
+-	.attr	= cpufreq_generic_attr,
++	.attr	= scmi_cpufreq_hw_attr,
+ 	.target_index	= scmi_cpufreq_set_target,
+ 	.fast_switch	= scmi_cpufreq_fast_switch,
+ 	.get	= scmi_cpufreq_get_rate,
 -- 
 2.34.1
 
