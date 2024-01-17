@@ -1,198 +1,305 @@
-Return-Path: <linux-pm+bounces-2311-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2312-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4044E830B8F
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 17:57:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2A4C830B9B
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 18:00:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DED19284F8E
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 16:57:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 613AB1F24A24
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 17:00:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0BB5224E7;
-	Wed, 17 Jan 2024 16:57:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAD70225CC;
+	Wed, 17 Jan 2024 17:00:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ML4j8902"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WfDQxeks"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7375224EE
-	for <linux-pm@vger.kernel.org>; Wed, 17 Jan 2024 16:57:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0908F22EEC
+	for <linux-pm@vger.kernel.org>; Wed, 17 Jan 2024 17:00:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705510655; cv=none; b=Cm72YLSdLMzq3f+pjFgkcybtjrGRtLMetOXVKxMqiW3D/BKF/bnQ+e0eyoDOexuJAAYMB+Z/XvYQ4pf4etDzv/hko58t+P1485K1QF1DHnLmH5eDdBPQPQYhJRKde4ygn4PPlU9Ls65OVIFnx+bf0X1x1BImO5Gxft4SpgcMNQw=
+	t=1705510834; cv=none; b=ru2NL9e5zwu8BSwmJJZX0IONR15ws8jOIu7ZpKengpGyKO0Je+kxgglEECos1rN7dknCFqf0MB72M+uIcA9yLb0c/y3pr09fqclBZ1B301/srUyP4GefVwpf37HHUHhIacC8TYkoHfg6zCesymGL2WAeCmWFsWNkDWJaFtoJfSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705510655; c=relaxed/simple;
-	bh=agOJXwUo3pe4u6UcQAJG/G+WFkj+/Us7iLnr5KStv+I=;
+	s=arc-20240116; t=1705510834; c=relaxed/simple;
+	bh=pq/Av+SSO69BeU9h8xuQL0aN3Uu8++2iivejVhGQ0P4=;
 	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
-	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:
-	 Message-ID:Date:MIME-Version:User-Agent:Subject:Content-Language:
-	 To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding; b=Sv7eIS/J7eSOKXS8qICsgfxdDyAkEBRfUs9EnBiitW/jHxTFMYRdzrTRBymd0N6REGFMMfcG1zkXnMmUQqyrzKLeMkV3SWWAknw4zRZ8zi//OEI81NBWnI6JXhEFVZQCJ3NddQe06Ffq7H7Qik8j6UrZZmb6v8tdsEHAgAvw4hY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ML4j8902; arc=none smtp.client-ip=209.85.221.54
+	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:MIME-Version:
+	 References:In-Reply-To:From:Date:Message-ID:Subject:To:Cc:
+	 Content-Type; b=SgWWHCesseo5Q3ohqyKB7qMUyjW1If/2ZrbWNdQinpLM3dJDCNZ2smQUT35ARPim/8iE+fjLbU0HvwMcmak0w45NFT6Lpy8e1JBbQWnC53ttoNzb5N6ei58cXooAoWzXR282abBuQ/UKC7ikwij+UFgwBdM5s60aWaXblX88KUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WfDQxeks; arc=none smtp.client-ip=209.85.128.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-337c4f0f9daso567180f8f.2
-        for <linux-pm@vger.kernel.org>; Wed, 17 Jan 2024 08:57:33 -0800 (PST)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-5f69383e653so113821467b3.1
+        for <linux-pm@vger.kernel.org>; Wed, 17 Jan 2024 09:00:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705510652; x=1706115452; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Zf6BccYfszVQynsVkDHGRUDX6cGTvvaMJYhAaFuhcDo=;
-        b=ML4j89029fD1WkoqZC+ZpZCDLYfZeB7UXhh0453ffpplkteuen1JPG5qyDgAB13SnM
-         iZqCzrzH3Pb83tErsGN5a3Vuam/13SN4U6tt3Xzvh7Gb9+Wo1FR7VuDjYpvu0kqpbZPY
-         hex2XO14nnGUleApXNsY4E0NTyFjnohq6kOWvJ9bGIJp7FxZrgB2RrVcD9Rao5NbHo7Z
-         Mnc3OcyZTeAGFVzf2wInAddUbSfZByuGN10T1D9zL6pyVkTyEEw9fTqHCbGoTVxIvNdR
-         k3n8s+63NoUgFsIoVxZGldPexy4CbVkLYETeJUyCfT3Un+BKiPOSk42sBBhaOZAOqcMc
-         V5jg==
+        d=linaro.org; s=google; t=1705510832; x=1706115632; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cZ2p7jEyFK0ojPkUOrVvKOvjb7MyzhY/xh/W7SjMLt0=;
+        b=WfDQxeks9usOT6CfMsy6kO5Lyutt7cRJZq6JjRFOOdwWplzwUkEsrueDUPpmreZqAP
+         Fvk2j8GVgrrgA1D6taAlFnm1Xb3nhFkFhaT2femamQcT+3TO4M7NMXD+DUfnY0hol5fQ
+         FqnN0to2d52e+W10bEoxuMw+H+zRxTDbmgfscR3E9J98+mo7YcAT15qJmf7t8GKw+vYR
+         QsGXO8ZsWlytFJBZ/Mk2A+3YHdYQLcwRJU7feTlTejqf2BSJOZOpN0Iv/K7923XM2BpH
+         o+yEUmbZiH+qQhDUAOOx9Y6rdRU6VtjuqdrdOq3LdEVjQkgczScjOUj57UOCl6lTuFqI
+         vhKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705510652; x=1706115452;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zf6BccYfszVQynsVkDHGRUDX6cGTvvaMJYhAaFuhcDo=;
-        b=a1gOGZLAC+Eb+WNu69n/QI5twJJdn+L8/4GtcUCA0SYXdwh4lUcSO3MqVUO1xkKkPT
-         XjYsMpeV8fJwvFtwLBLydSlf7WNcu4OvACYHAc9xuNEmDknAF6eR6jCzMe8lmFXc3W3l
-         00bZsGXfRw9I3KIj4lFT69AJKaPh/E+kOE8tqKK/xvtYCyO4+GDpQbFjSoKwmMmxhh2f
-         YVI2RA2DTxND6W0ZQNYm+sVH1Nejmt5vMdcwNFp4Sv3nFSaCqx7S4JBO+3dUOjIV4Pv2
-         o1NjUGA4JxB7Btb3jZI3JtpJuTYRzNPWp/4Ruq/hLfYprTZKIVfgXiohvFcE7DHG5mx0
-         xTfA==
-X-Gm-Message-State: AOJu0YwJBOcQlL6hONwkL2Xnl3rIYDsZb+HZKri83tbczxQ9P7QKn6Lz
-	D00K1PKN1JSOVpOGxlk4utjneBdjYss+eQ==
-X-Google-Smtp-Source: AGHT+IF4aFSEVWFWZvI4X0t+poUXcnqZyrrkfJkH6j68c8CpcmuCocBQn3qAChOwhfi4UY4HXKcapQ==
-X-Received: by 2002:a7b:ce8a:0:b0:40d:685c:3880 with SMTP id q10-20020a7bce8a000000b0040d685c3880mr4993310wmj.176.1705510651900;
-        Wed, 17 Jan 2024 08:57:31 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:a2f4:93df:1b67:8ad0? ([2a05:6e02:1041:c10:a2f4:93df:1b67:8ad0])
-        by smtp.googlemail.com with ESMTPSA id v4-20020a05600c470400b0040e5945307esm23192566wmo.40.2024.01.17.08.57.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 Jan 2024 08:57:31 -0800 (PST)
-Message-ID: <921c2f90-fb8b-4e70-9e3d-6e185fec03b6@linaro.org>
-Date: Wed, 17 Jan 2024 17:57:30 +0100
+        d=1e100.net; s=20230601; t=1705510832; x=1706115632;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cZ2p7jEyFK0ojPkUOrVvKOvjb7MyzhY/xh/W7SjMLt0=;
+        b=IC4poYQtf3JUEBk67dCJjMqdtqg2H6FutfH4SsXZR4AkAR3tfRMqnmG4VL5kSxjo3u
+         4rWSVWjuJSM0aJPCY3Zlil6DSHd+dRnUKCKxkJUgY+nobzJCDU6XO1QSTzX7t4zQGnLK
+         tnB3JB0t8VcxnQCuBinTGx5AhKobiR29ongFLnsp2u2gYAJaUJKpFCatWNRs973uuEDb
+         pOv4O2u2GalzT7k2DdBoU1SjUrYzWWgoI1XajOOYjl1BHgiUl4x/uqyJerSg+le2iKbU
+         MfUtLw46RJoYO676xG7uaobsAExIK3AxBrbgZpEPck8gn8WV2yHXrskfOaahb5z5xe7r
+         D00g==
+X-Gm-Message-State: AOJu0YxGzQrqCntNoC7DpScE4uCbmx1eY0oAmREXRHg17ommLjFVJF3b
+	Xz/BVcw3n87/TqxOntFEc2ITAewtFX2FEo/hzy6bAY9X+B+EwccKVGzqHXJi540=
+X-Google-Smtp-Source: AGHT+IF3FBzrMaCLiZsZn2QO1HbliJx8eevMzxoBDHbU8qLUWtN/6V0qU7QemeuQaYTOe3s7ypkdwkWCAQzUxQorL3M=
+X-Received: by 2002:a81:4e8f:0:b0:5ff:7a0c:b610 with SMTP id
+ c137-20020a814e8f000000b005ff7a0cb610mr489485ywb.31.1705510831859; Wed, 17
+ Jan 2024 09:00:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] thermal/sysfs: Always enable hysteresis write support
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
- Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-Cc: Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240106191502.29126-1-quic_manafm@quicinc.com>
- <CAJZ5v0gE6eEpALrfxHvCd5TRqjB+v8pffG4CKLTVXiSvuiWhHg@mail.gmail.com>
- <d7b82fc8-0ed8-80b8-9eb8-c77f9277178f@quicinc.com>
- <CAJZ5v0g4hnRqRCseRnTjfEF+-2=ZT8U9=2m9FODqh3G8eDd=Sw@mail.gmail.com>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0g4hnRqRCseRnTjfEF+-2=ZT8U9=2m9FODqh3G8eDd=Sw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240103-genpd-perf-order-v2-1-eeecfc55624b@gerhold.net>
+In-Reply-To: <20240103-genpd-perf-order-v2-1-eeecfc55624b@gerhold.net>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 17 Jan 2024 17:59:55 +0100
+Message-ID: <CAPDyKFrycE-ONA753Z4tnYP5_NsRCtSfGr12ctFNDftvEQL8Gw@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: domains: Scale down parent performance states in
+ reverse order
+To: Stephan Gerhold <stephan@gerhold.net>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Viresh Kumar <viresh.kumar@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On 10/01/2024 13:48, Rafael J. Wysocki wrote:
-> Hi Manaf,
-> 
-> On Wed, Jan 10, 2024 at 9:17 AM Manaf Meethalavalappu Pallikunhi
-> <quic_manafm@quicinc.com> wrote:
->>
->> Hi Rafael,
->>
->> On 1/9/2024 7:12 PM, Rafael J. Wysocki wrote:
->>
->> On Sat, Jan 6, 2024 at 8:16 PM Manaf Meethalavalappu Pallikunhi
->> <quic_manafm@quicinc.com> wrote:
->>
->> The commit 2e38a2a981b2("thermal/core: Add a generic
->> thermal_zone_set_trip() function") adds the support to update
->> trip hysteresis even if set_trip_hyst() operation is not defined.
->> But during hysteresis attribute creation, if this operation is
->> defined then only it enables hysteresis write access. It leads
->> to a case where hysteresis sysfs will be read only for a thermal
->> zone when its set_trip_hyst() operation is not defined.
->>
->> Which is by design.
->>
->> I think it is regression after recent re-work. If a sensor is registered with thermal framework via thermal_of,
->>
->> sensor driver doesn't need to know the trip configuration and nothing to do with set_trip_hyst() in driver.
->>
->> Without this change, if a sensor needs to be monitored from userspace(trip/hysteresis),
-> 
-> What exactly do you mean by "monitored" here?
-> 
->> it is enforcing sensor driver to add  dummy set_trip_hyst() operation. Correct me otherwise
-> 
-> With the current design, whether or not trip properties can be updated
-> by user space is a thermal zone property expressed by the presence of
-> the set_trip_* operations, so yes, whoever registers the thermal zone
-> needs to provide those so that user space can update the trip
-> properties.
-> 
->> For some thermal zone types (eg. acpi), updating trip hysteresis via
->> sysfs might lead to incorrect behavior.
->>
->> To address this issue, is it okay to  guard  hysteresis write permission under CONFIG_THERMAL_WRITABLE_TRIPS defconfig ?
-> 
-> Not really, because it would affect all of the thermal zones then.
+On Wed, 3 Jan 2024 at 22:10, Stephan Gerhold <stephan@gerhold.net> wrote:
+>
+> Power domains might have parent domains assigned that are automatically
+> managed by the PM domain core. In particular, parent domains are
+> automatically powered on/off and setting performance states on child
+> domains is translated to parent domains (e.g. using an OPP table from
+> the device tree).
+>
+> Currently parent performance states are always adjusted before the
+> performance state of the child domain is changed.
+>
+> However, typically a parent/child relationship between two power
+> domains with performance states models the requirement to keep the
+> parent domain at a performance state equal or higher to the child
+> domain. When scaling down there is a brief moment where the parent
+> domain will end up having a lower performance state than required by
+> the child domain.
+>
+> To avoid this, we need to differentiate between scaling up/down and
+> adjust the order of operations:
+>
+>  - When scaling up, parent domains should be adjusted before the child
+>    domain. In case of an error, the rollback happens in reverse order.
+>
+>  - When scaling down, parent domains should be adjusted after the child
+>    domain, in reverse order, just as if we would rollback scaling up.
+>    In case of an error, the rollback happens in normal order (just as
+>    if we would normally scale up).
+>
+> Implement this by moving the existing functionality of
+> _genpd_set_performance_state() to two separate functions that are
+> called in the proper iteration order.
+>
+> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
 
-It seems like there is an inconsistency here with the writable trip 
-points and the writable hysteresis [1].
+Thanks for posting this - and sorry for the delay Stephan!
 
-My understanding is it does not make sense to have the hysteresis 
-writable even if the driver has a hysteresis dedicated ops. The code 
-allowing to change the hysteresis was done regardless the consistency 
-with the trip temperature change and writable trip points kernel option IMO.
+I just wanted to let you know that I am looking at this right now and
+will be testing this on my end too. Allow me a few more days - I will
+get back to you again, asap.
 
-It would make sense to have:
+Kind regards
+Uffe
 
-if enabled(CONFIG_WRITABLE_TRIP_POINT)
-  -> trip_temp RW
-  -> trip_hyst RW
-else
-  -> trip temp RO
-  -> trip hyst RO
-fi
-
-But if the interface exists since a long time, we may not want to change 
-it, right ?
-
-However, we can take the opportunity to introduce a new 'user' trip 
-point type in order to let the userspace to have dedicated trip point 
-and receive temperature notifications [2]
-
-> TBH, the exact scenario in which user space needs to update trip
-> hysteresis is not particularly clear to me, so can you provide some
-> more details, please?
-
-IIUC changing the hysteresis value is useful because the temperature 
-speed will vary given the thermal contribution of the components 
-surrounding the thermal zone, that includes the ambient temperature.
-
-However, that may apply to slow speed temperature sensor like the skin 
-temperature sensor where we may to do small hysteresis variation.
-
-The places managed by the kernel have an insane temperature transition 
-speed. The userspace is unable to follow this speed and manage the 
-hysteresis on the fly.
-
-So that brings us to userspace trip point handling again.
-
-   -- Daniel
-
-[1] 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/ABI/testing/sysfs-class-thermal?h=v6.7#n66
-
-[2] https://lpc.events/event/17/contributions/1423/contribution.pdf
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+> ---
+> Changes in v2:
+> - Rebase to adjust for move of drivers/base/power/domain.c
+>   to drivers/pmdomain/core.c
+> - Regenerate CC list
+> - No code changes
+> - Link to v1: https://lore.kernel.org/r/20231205-genpd-perf-order-v1-1-6597cc69a729@gerhold.net
+> ---
+> Related discussion: https://lore.kernel.org/linux-pm/ZWXgFNKgm9QaFuzx@gerhold.net/
+> ---
+>  drivers/pmdomain/core.c | 124 ++++++++++++++++++++++++++++++------------------
+>  1 file changed, 77 insertions(+), 47 deletions(-)
+>
+> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+> index a1f6cba3ae6c..fec9dc6ab828 100644
+> --- a/drivers/pmdomain/core.c
+> +++ b/drivers/pmdomain/core.c
+> @@ -311,72 +311,102 @@ static int genpd_xlate_performance_state(struct generic_pm_domain *genpd,
+>  }
+>
+>  static int _genpd_set_performance_state(struct generic_pm_domain *genpd,
+> -                                       unsigned int state, int depth)
+> +                                       unsigned int state, int depth);
+> +
+> +static void _genpd_rollback_parent_state(struct gpd_link *link, int depth)
+>  {
+> -       struct generic_pm_domain *parent;
+> -       struct gpd_link *link;
+> -       int parent_state, ret;
+> +       struct generic_pm_domain *parent = link->parent;
+> +       int parent_state;
+>
+> -       if (state == genpd->performance_state)
+> -               return 0;
+> +       genpd_lock_nested(parent, depth + 1);
+>
+> -       /* Propagate to parents of genpd */
+> -       list_for_each_entry(link, &genpd->child_links, child_node) {
+> -               parent = link->parent;
+> +       parent_state = link->prev_performance_state;
+> +       link->performance_state = parent_state;
+>
+> -               /* Find parent's performance state */
+> -               ret = genpd_xlate_performance_state(genpd, parent, state);
+> -               if (unlikely(ret < 0))
+> -                       goto err;
+> +       parent_state = _genpd_reeval_performance_state(parent, parent_state);
+> +       if (_genpd_set_performance_state(parent, parent_state, depth + 1)) {
+> +               pr_err("%s: Failed to roll back to %d performance state\n",
+> +                      parent->name, parent_state);
+> +       }
+>
+> -               parent_state = ret;
+> +       genpd_unlock(parent);
+> +}
+>
+> -               genpd_lock_nested(parent, depth + 1);
+> +static int _genpd_set_parent_state(struct generic_pm_domain *genpd,
+> +                                  struct gpd_link *link,
+> +                                  unsigned int state, int depth)
+> +{
+> +       struct generic_pm_domain *parent = link->parent;
+> +       int parent_state, ret;
+>
+> -               link->prev_performance_state = link->performance_state;
+> -               link->performance_state = parent_state;
+> -               parent_state = _genpd_reeval_performance_state(parent,
+> -                                               parent_state);
+> -               ret = _genpd_set_performance_state(parent, parent_state, depth + 1);
+> -               if (ret)
+> -                       link->performance_state = link->prev_performance_state;
+> +       /* Find parent's performance state */
+> +       ret = genpd_xlate_performance_state(genpd, parent, state);
+> +       if (unlikely(ret < 0))
+> +               return ret;
+>
+> -               genpd_unlock(parent);
+> +       parent_state = ret;
+>
+> -               if (ret)
+> -                       goto err;
+> -       }
+> +       genpd_lock_nested(parent, depth + 1);
+>
+> -       if (genpd->set_performance_state) {
+> -               ret = genpd->set_performance_state(genpd, state);
+> -               if (ret)
+> -                       goto err;
+> -       }
+> +       link->prev_performance_state = link->performance_state;
+> +       link->performance_state = parent_state;
+>
+> -       genpd->performance_state = state;
+> -       return 0;
+> +       parent_state = _genpd_reeval_performance_state(parent, parent_state);
+> +       ret = _genpd_set_performance_state(parent, parent_state, depth + 1);
+> +       if (ret)
+> +               link->performance_state = link->prev_performance_state;
+>
+> -err:
+> -       /* Encountered an error, lets rollback */
+> -       list_for_each_entry_continue_reverse(link, &genpd->child_links,
+> -                                            child_node) {
+> -               parent = link->parent;
+> +       genpd_unlock(parent);
+>
+> -               genpd_lock_nested(parent, depth + 1);
+> +       return ret;
+> +}
+> +
+> +static int _genpd_set_performance_state(struct generic_pm_domain *genpd,
+> +                                       unsigned int state, int depth)
+> +{
+> +       struct gpd_link *link = NULL;
+> +       int ret;
+> +
+> +       if (state == genpd->performance_state)
+> +               return 0;
+>
+> -               parent_state = link->prev_performance_state;
+> -               link->performance_state = parent_state;
+> +       /* When scaling up, propagate to parents first in normal order */
+> +       if (state > genpd->performance_state) {
+> +               list_for_each_entry(link, &genpd->child_links, child_node) {
+> +                       ret = _genpd_set_parent_state(genpd, link, state, depth);
+> +                       if (ret)
+> +                               goto rollback_parents_up;
+> +               }
+> +       }
+>
+> -               parent_state = _genpd_reeval_performance_state(parent,
+> -                                               parent_state);
+> -               if (_genpd_set_performance_state(parent, parent_state, depth + 1)) {
+> -                       pr_err("%s: Failed to roll back to %d performance state\n",
+> -                              parent->name, parent_state);
+> +       if (genpd->set_performance_state) {
+> +               ret = genpd->set_performance_state(genpd, state);
+> +               if (ret) {
+> +                       if (link)
+> +                               goto rollback_parents_up;
+> +                       return ret;
+>                 }
+> +       }
+>
+> -               genpd_unlock(parent);
+> +       /* When scaling down, propagate to parents last in reverse order */
+> +       if (state < genpd->performance_state) {
+> +               list_for_each_entry_reverse(link, &genpd->child_links, child_node) {
+> +                       ret = _genpd_set_parent_state(genpd, link, state, depth);
+> +                       if (ret)
+> +                               goto rollback_parents_down;
+> +               }
+>         }
+>
+> +       genpd->performance_state = state;
+> +       return 0;
+> +
+> +rollback_parents_up:
+> +       list_for_each_entry_continue_reverse(link, &genpd->child_links, child_node)
+> +               _genpd_rollback_parent_state(link, depth);
+> +       return ret;
+> +rollback_parents_down:
+> +       list_for_each_entry_continue(link, &genpd->child_links, child_node)
+> +               _genpd_rollback_parent_state(link, depth);
+>         return ret;
+>  }
+>
+>
+> ---
+> base-commit: 0fef202ac2f8e6d9ad21aead648278f1226b9053
+> change-id: 20231205-genpd-perf-order-bf33029c25ac
+>
+> Best regards,
+> --
+> Stephan Gerhold <stephan@gerhold.net>
+>
 
