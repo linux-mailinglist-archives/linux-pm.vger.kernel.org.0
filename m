@@ -1,165 +1,126 @@
-Return-Path: <linux-pm+bounces-2304-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2305-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81311830429
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 12:06:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61CE9830440
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 12:11:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2DA8A1F23027
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 11:06:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F0E771F24F0A
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 11:11:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00A451DDE4;
-	Wed, 17 Jan 2024 11:05:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="V8j9DuwT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5841C1D551;
+	Wed, 17 Jan 2024 11:10:47 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9819F1DFF7;
-	Wed, 17 Jan 2024 11:05:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C4881DA4C;
+	Wed, 17 Jan 2024 11:10:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705489528; cv=none; b=LMPnFcA2pyplEh0/75KoJ8H35QCMurBC+gPEKKrmBtE4mr3h+g7u0dnfWZk5PkU7UHb3znrnWfVzltCMzOHnGk5QV3ewck1+pQcetgSan0J/NsiQln0YkGEd6m85/zbWfk2ILvF4NwHwdFj6FIMW1hgrU0sn5HPjp93FK7vmEwQ=
+	t=1705489847; cv=none; b=V2UuJWO00GG/nzvy39kRMC9PO0kVmc9UXVy/SbEM91BOXisMcw7uYYTUGEkrpQaprycQDwXeLNOZGEXSO3wPbv0Tj9SSpT4PKlgRB0cE0HGuysb4EYbpgAgOJ8j2oAdiHIwH50Jx1HHXLB/6aT9PbvWghS6YoowdeN0ooQ14bq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705489528; c=relaxed/simple;
-	bh=nIv7S5Ssl4N8lcGZ7x7Xq/d2Wy+1wcwhH26hO4muSQ4=;
-	h=Received:DKIM-Signature:Received:Received:Received:From:To:CC:
-	 Subject:Date:Message-ID:X-Mailer:In-Reply-To:References:
-	 MIME-Version:Content-Transfer-Encoding:Content-Type:
-	 X-Originating-IP:X-ClientProxiedBy:X-QCInternal:
-	 X-Proofpoint-Virus-Version:X-Proofpoint-GUID:
-	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Virus-Version:
-	 X-Proofpoint-Spam-Details; b=XEzhQ5aRUQRYGGYJPlSJR6DXO6PZC1xped68ivd1mjWjj14gQD8HbK9k2fN4nnJhl7AWz2cTBeLJCthu+qsaTGhps9LJyE1FoCvwGrEYnQZB7qk5pOy3bykT0/NUq3mVpD3wIwRCiHqU2XzfzUxdLvkSCuwdJTAS9h1zJih0bj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=V8j9DuwT; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40H79WtU011576;
-	Wed, 17 Jan 2024 11:05:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding:content-type; s=
-	qcppdkim1; bh=vlGPI0dnXph4HiaDHyobQa70eLKUOk82RAMp0wm6CyM=; b=V8
-	j9DuwTNd5tz2LjhZ5rXVlAg+jP3jrLoERpirnDOHCMf5noPjS/ZrzZDBpfGSri9G
-	bsoKv/Zink52zHlU88/UflDk9rHakR6GCgwXSIm66xEOCC6rl6MsMDb3v/+kk12s
-	hcfCtFSUMOi6YFgbLfG2YDVCmy88XAK3ZMDMtSt+jOm/jetpCzAmbdBWg5eGx+pi
-	64OItEJOsb3xoFxhdvMhf6+Vbvb5TZtF7xTvIzU4l0oBYcaJPGVw3zD0vKJ9bCab
-	PI/iJGtxWm3CoDss8boGyRJcKYR3aswF0pTQkZiSq8gLV1Vd4Uu1m2JVw9UKG69p
-	ClWRyJbDXjKSXRoLbqgw==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vp6sqrv3t-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Jan 2024 11:05:18 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40HB5IfI007943
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 17 Jan 2024 11:05:18 GMT
-Received: from hu-sibis-blr.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Wed, 17 Jan 2024 03:05:13 -0800
-From: Sibi Sankar <quic_sibis@quicinc.com>
-To: <sudeep.holla@arm.com>, <cristian.marussi@arm.com>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <morten.rasmussen@arm.com>,
-        <dietmar.eggemann@arm.com>, <lukasz.luba@arm.com>, <sboyd@kernel.org>
-CC: <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_mdtipton@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <nm@ti.com>,
-        Sibi Sankar
-	<quic_sibis@quicinc.com>
-Subject: [PATCH 3/3] cpufreq: scmi: Enable boost support
-Date: Wed, 17 Jan 2024 16:34:43 +0530
-Message-ID: <20240117110443.2060704-4-quic_sibis@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240117110443.2060704-1-quic_sibis@quicinc.com>
-References: <20240117110443.2060704-1-quic_sibis@quicinc.com>
+	s=arc-20240116; t=1705489847; c=relaxed/simple;
+	bh=+Vkg04EQ/NJX+jN5XyPGUbM9KQ4RfjqcbzoXRUpVcH4=;
+	h=Received:Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
+	 Content-Language:To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding; b=day6cT/YOvmQiAPdiHhUnoqST3SRZLnAlYKIKbWsLxAxOW6CV+o4RmdZvQVAwqjgtEcCWfcMxL6+ZFdfzTA9OI0lG2O00EpdGnVwiIfibBJ064cuWpElCGr0dj9ENN3oWVfNpSFz4YVz2uquGuZCDheyM6QazQdTfu5s404UyAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5A6E311FB;
+	Wed, 17 Jan 2024 03:11:30 -0800 (PST)
+Received: from [10.57.78.6] (unknown [10.57.78.6])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2D2C73F5A1;
+	Wed, 17 Jan 2024 03:10:42 -0800 (PST)
+Message-ID: <016627c7-653d-4e1b-8e73-f73e166a7187@arm.com>
+Date: Wed, 17 Jan 2024 11:10:40 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: QzQ50FqTbV_MvgQ0K4SWefbpg7OZtc2b
-X-Proofpoint-ORIG-GUID: QzQ50FqTbV_MvgQ0K4SWefbpg7OZtc2b
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-17_06,2024-01-17_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 spamscore=0 clxscore=1015 impostorscore=0 mlxscore=0
- bulkscore=0 mlxlogscore=999 malwarescore=0 adultscore=0 lowpriorityscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2311290000 definitions=main-2401170078
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 02/23] PM: EM: Extend em_cpufreq_update_efficiencies()
+ argument list
+Content-Language: en-US
+To: Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, rafael@kernel.org
+Cc: dietmar.eggemann@arm.com, rui.zhang@intel.com,
+ amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
+ daniel.lezcano@linaro.org, viresh.kumar@linaro.org, len.brown@intel.com,
+ pavel@ucw.cz, mhiramat@kernel.org, qyousef@layalina.io, wvw@google.com,
+ xuewen.yan94@gmail.com
+References: <20240117095714.1524808-1-lukasz.luba@arm.com>
+ <20240117095714.1524808-3-lukasz.luba@arm.com>
+From: Hongyan Xia <hongyan.xia2@arm.com>
+In-Reply-To: <20240117095714.1524808-3-lukasz.luba@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The X1E80100 SoC hosts a number cpu boost frequencies, so let's enable
-boost support if the freq_table has any opps marked as turbo in it.
+On 17/01/2024 09:56, Lukasz Luba wrote:
+> In order to prepare the code for the modifiable EM perf_state table,
+> make em_cpufreq_update_efficiencies() take a pointer to the EM table
+> as its second argument and modify it to use that new argument instead
+> of the 'table' member of dev->em_pd.
+> 
+> No functional impact.
+> 
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>   kernel/power/energy_model.c | 8 +++-----
+>   1 file changed, 3 insertions(+), 5 deletions(-)
+> 
+> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+> index 8b9dd4a39f63..42486674b834 100644
+> --- a/kernel/power/energy_model.c
+> +++ b/kernel/power/energy_model.c
+> @@ -237,10 +237,10 @@ static int em_create_pd(struct device *dev, int nr_states,
+>   	return 0;
+>   }
+>   
+> -static void em_cpufreq_update_efficiencies(struct device *dev)
+> +static void
+> +em_cpufreq_update_efficiencies(struct device *dev, struct em_perf_state *table)
+>   {
+>   	struct em_perf_domain *pd = dev->em_pd;
+> -	struct em_perf_state *table;
+>   	struct cpufreq_policy *policy;
+>   	int found = 0;
+>   	int i;
+> @@ -254,8 +254,6 @@ static void em_cpufreq_update_efficiencies(struct device *dev)
+>   		return;
+>   	}
 
-Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
----
- drivers/cpufreq/scmi-cpufreq.c | 20 +++++++++++++++++++-
- 1 file changed, 19 insertions(+), 1 deletion(-)
+NIT: It's not shown here, but in the check above this line
 
-diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-index e0aa85764451..4355ec73502e 100644
---- a/drivers/cpufreq/scmi-cpufreq.c
-+++ b/drivers/cpufreq/scmi-cpufreq.c
-@@ -34,6 +34,7 @@ const struct scmi_handle *handle;
- static struct scmi_device *scmi_dev;
- static struct scmi_protocol_handle *ph;
- static const struct scmi_perf_proto_ops *perf_ops;
-+static struct cpufreq_driver scmi_cpufreq_driver;
- 
- static unsigned int scmi_cpufreq_get_rate(unsigned int cpu)
- {
-@@ -148,6 +149,12 @@ scmi_get_cpu_power(struct device *cpu_dev, unsigned long *power,
- 	return 0;
- }
- 
-+static struct freq_attr *scmi_cpufreq_hw_attr[] = {
-+	&cpufreq_freq_attr_scaling_available_freqs,
-+	NULL,
-+	NULL,
-+};
-+
- static int scmi_limit_notify_cb(struct notifier_block *nb, unsigned long event, void *data)
- {
- 	unsigned long freq_hz;
-@@ -271,6 +278,17 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
- 	policy->fast_switch_possible =
- 		perf_ops->fast_switch_possible(ph, domain);
- 
-+	if (policy_has_boost_freq(policy)) {
-+		ret = cpufreq_enable_boost_support();
-+		if (ret) {
-+			dev_warn(cpu_dev, "failed to enable boost: %d\n", ret);
-+			goto out_free_opp;
-+		} else {
-+			scmi_cpufreq_hw_attr[1] = &cpufreq_freq_attr_scaling_boost_freqs;
-+			scmi_cpufreq_driver.boost_enabled = true;
-+		}
-+	}
-+
- 	ret = perf_ops->perf_notify_support(ph, domain, &info);
- 	if (ret)
- 		dev_warn(cpu_dev, "failed to get supported notifications: %d\n", ret);
-@@ -348,7 +366,7 @@ static struct cpufreq_driver scmi_cpufreq_driver = {
- 		  CPUFREQ_NEED_INITIAL_FREQ_CHECK |
- 		  CPUFREQ_IS_COOLING_DEV,
- 	.verify	= cpufreq_generic_frequency_table_verify,
--	.attr	= cpufreq_generic_attr,
-+	.attr	= scmi_cpufreq_hw_attr,
- 	.target_index	= scmi_cpufreq_set_target,
- 	.fast_switch	= scmi_cpufreq_fast_switch,
- 	.get	= scmi_cpufreq_get_rate,
--- 
-2.34.1
+	if (!_is_cpu_device(dev) || !pd)
 
+The !pd check should be removed because em_cpufreq_update_efficiencies() 
+is only called after doing
+
+	dev->em_pd->flags |= flags;
+
+So compiler will optimize the !pd out anyway. But this is not directly 
+related to the PR, so just a NIT.
+
+>   
+> -	table = pd->table;
+> -
+>   	for (i = 0; i < pd->nr_perf_states; i++) {
+>   		if (!(table[i].flags & EM_PERF_STATE_INEFFICIENT))
+>   			continue;
+> @@ -397,7 +395,7 @@ int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
+>   
+>   	dev->em_pd->flags |= flags;
+>   
+> -	em_cpufreq_update_efficiencies(dev);
+> +	em_cpufreq_update_efficiencies(dev, dev->em_pd->table);
+>   
+>   	em_debug_create_pd(dev);
+>   	dev_info(dev, "EM: created perf domain\n");
+
+Reviewed-by: Hongyan Xia <hongyan.xia2@arm.com>
 
