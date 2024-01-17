@@ -1,41 +1,41 @@
-Return-Path: <linux-pm+bounces-2305-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2306-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61CE9830440
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 12:11:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33BE78304E0
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 13:05:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F0E771F24F0A
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 11:11:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A53E81F25063
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 12:05:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5841C1D551;
-	Wed, 17 Jan 2024 11:10:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E3871DDEC;
+	Wed, 17 Jan 2024 12:05:18 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C4881DA4C;
-	Wed, 17 Jan 2024 11:10:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2834B1DFCF;
+	Wed, 17 Jan 2024 12:05:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705489847; cv=none; b=V2UuJWO00GG/nzvy39kRMC9PO0kVmc9UXVy/SbEM91BOXisMcw7uYYTUGEkrpQaprycQDwXeLNOZGEXSO3wPbv0Tj9SSpT4PKlgRB0cE0HGuysb4EYbpgAgOJ8j2oAdiHIwH50Jx1HHXLB/6aT9PbvWghS6YoowdeN0ooQ14bq0=
+	t=1705493118; cv=none; b=SnvHFmRKKPA/Ts50acE4GG7jqeekMNRYlaovd9pfFB73XQ4CaeBBxSEFxtFFo2oqmPRSjsMRPkfwhqGhpnBAT4gNW2MQ2Qs+bTBZpOsYR0r0zPUQx9cT7kSMslakLevIFiQ/SMzFzv787i78erCab+wyQ0YS9DL6BIl9DL9oxCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705489847; c=relaxed/simple;
-	bh=+Vkg04EQ/NJX+jN5XyPGUbM9KQ4RfjqcbzoXRUpVcH4=;
+	s=arc-20240116; t=1705493118; c=relaxed/simple;
+	bh=Pmn8h/pdCxhnofqxr02aGCsKkLxC0a+7EXzpM4wIoQE=;
 	h=Received:Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
 	 Content-Language:To:Cc:References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding; b=day6cT/YOvmQiAPdiHhUnoqST3SRZLnAlYKIKbWsLxAxOW6CV+o4RmdZvQVAwqjgtEcCWfcMxL6+ZFdfzTA9OI0lG2O00EpdGnVwiIfibBJ064cuWpElCGr0dj9ENN3oWVfNpSFz4YVz2uquGuZCDheyM6QazQdTfu5s404UyAM=
+	 Content-Transfer-Encoding; b=X1dYT4wKXj6XRF03E3IA0dpGuh0lV0GNfi/cIYX6wfFIjgT84g+RjvCKyoaHfcKAhPS2k321VzH1FNcnVL+rGzcqpM+5PEEbHw7IH11rOoL/68PePXA9P6AIsU2RsiCoTXtQmnwoDTue7BMeun6ygfoaENuz9JP92zAXCgwP/M4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5A6E311FB;
-	Wed, 17 Jan 2024 03:11:30 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6607911FB;
+	Wed, 17 Jan 2024 04:06:01 -0800 (PST)
 Received: from [10.57.78.6] (unknown [10.57.78.6])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2D2C73F5A1;
-	Wed, 17 Jan 2024 03:10:42 -0800 (PST)
-Message-ID: <016627c7-653d-4e1b-8e73-f73e166a7187@arm.com>
-Date: Wed, 17 Jan 2024 11:10:40 +0000
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3EAD43F766;
+	Wed, 17 Jan 2024 04:05:13 -0800 (PST)
+Message-ID: <aaaa5a18-cef8-4de5-b45b-ab189e3ad228@arm.com>
+Date: Wed, 17 Jan 2024 12:05:11 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -43,8 +43,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 02/23] PM: EM: Extend em_cpufreq_update_efficiencies()
- argument list
+Subject: Re: [PATCH v7 03/23] PM: EM: Find first CPU active while updating OPP
+ efficiency
 Content-Language: en-US
 To: Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
  linux-pm@vger.kernel.org, rafael@kernel.org
@@ -54,73 +54,51 @@ Cc: dietmar.eggemann@arm.com, rui.zhang@intel.com,
  pavel@ucw.cz, mhiramat@kernel.org, qyousef@layalina.io, wvw@google.com,
  xuewen.yan94@gmail.com
 References: <20240117095714.1524808-1-lukasz.luba@arm.com>
- <20240117095714.1524808-3-lukasz.luba@arm.com>
+ <20240117095714.1524808-4-lukasz.luba@arm.com>
 From: Hongyan Xia <hongyan.xia2@arm.com>
-In-Reply-To: <20240117095714.1524808-3-lukasz.luba@arm.com>
+In-Reply-To: <20240117095714.1524808-4-lukasz.luba@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 17/01/2024 09:56, Lukasz Luba wrote:
-> In order to prepare the code for the modifiable EM perf_state table,
-> make em_cpufreq_update_efficiencies() take a pointer to the EM table
-> as its second argument and modify it to use that new argument instead
-> of the 'table' member of dev->em_pd.
-> 
-> No functional impact.
+> The Energy Model might be updated at runtime and the energy efficiency
+> for each OPP may change. Thus, there is a need to update also the
+> cpufreq framework and make it aligned to the new values. In order to
+> do that, use a first active CPU from the Performance Domain. This is
+> needed since the first CPU in the cpumask might be offline when we
+> run this code path.
 > 
 > Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 > ---
->   kernel/power/energy_model.c | 8 +++-----
->   1 file changed, 3 insertions(+), 5 deletions(-)
+>   kernel/power/energy_model.c | 11 +++++++++--
+>   1 file changed, 9 insertions(+), 2 deletions(-)
 > 
 > diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-> index 8b9dd4a39f63..42486674b834 100644
+> index 42486674b834..aa7c89f9e115 100644
 > --- a/kernel/power/energy_model.c
 > +++ b/kernel/power/energy_model.c
-> @@ -237,10 +237,10 @@ static int em_create_pd(struct device *dev, int nr_states,
->   	return 0;
->   }
->   
-> -static void em_cpufreq_update_efficiencies(struct device *dev)
-> +static void
-> +em_cpufreq_update_efficiencies(struct device *dev, struct em_perf_state *table)
->   {
+> @@ -243,12 +243,19 @@ em_cpufreq_update_efficiencies(struct device *dev, struct em_perf_state *table)
 >   	struct em_perf_domain *pd = dev->em_pd;
-> -	struct em_perf_state *table;
 >   	struct cpufreq_policy *policy;
 >   	int found = 0;
->   	int i;
-> @@ -254,8 +254,6 @@ static void em_cpufreq_update_efficiencies(struct device *dev)
+> -	int i;
+> +	int i, cpu;
+>   
+>   	if (!_is_cpu_device(dev) || !pd)
 >   		return;
->   	}
-
-NIT: It's not shown here, but in the check above this line
-
-	if (!_is_cpu_device(dev) || !pd)
-
-The !pd check should be removed because em_cpufreq_update_efficiencies() 
-is only called after doing
-
-	dev->em_pd->flags |= flags;
-
-So compiler will optimize the !pd out anyway. But this is not directly 
-related to the PR, so just a NIT.
-
 >   
-> -	table = pd->table;
-> -
->   	for (i = 0; i < pd->nr_perf_states; i++) {
->   		if (!(table[i].flags & EM_PERF_STATE_INEFFICIENT))
->   			continue;
-> @@ -397,7 +395,7 @@ int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
->   
->   	dev->em_pd->flags |= flags;
->   
-> -	em_cpufreq_update_efficiencies(dev);
-> +	em_cpufreq_update_efficiencies(dev, dev->em_pd->table);
->   
->   	em_debug_create_pd(dev);
->   	dev_info(dev, "EM: created perf domain\n");
+> -	policy = cpufreq_cpu_get(cpumask_first(em_span_cpus(pd)));
+> +	/* Try to get a CPU which is active and in this PD */
+> +	cpu = cpumask_first_and(em_span_cpus(pd), cpu_active_mask);
+> +	if (cpu >= nr_cpu_ids) {
+> +		dev_warn(dev, "EM: No online CPU for CPUFreq policy\n");
+> +		return;
+> +	}
+> +
+> +	policy = cpufreq_cpu_get(cpu);
+>   	if (!policy) {
+>   		dev_warn(dev, "EM: Access to CPUFreq policy failed\n");
+>   		return;
 
 Reviewed-by: Hongyan Xia <hongyan.xia2@arm.com>
 
