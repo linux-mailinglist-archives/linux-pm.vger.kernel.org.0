@@ -1,102 +1,168 @@
-Return-Path: <linux-pm+bounces-2266-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2267-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0089F830060
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 08:13:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BB848300EC
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 09:01:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F28111C233B1
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 07:13:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ACD502891A2
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 08:01:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9255A8C06;
-	Wed, 17 Jan 2024 07:13:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61317C13C;
+	Wed, 17 Jan 2024 08:01:45 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.astralinux.ru (mail.astralinux.ru [217.74.38.119])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00D025CB0;
-	Wed, 17 Jan 2024 07:13:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.74.38.119
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8DBCD29B;
+	Wed, 17 Jan 2024 08:01:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705475589; cv=none; b=D/b/HyI5Za18w6nNW2cRst7gnBkkd6ukBHbvnwMYxnbBZbbt4R2u6aMdrGNUnAU+Z+cmSpK7CtHWrzPnU0MCk4g2hhUR8k610mQYZDgweK9ik+S9qAiuHrS5atCMuqjdSIf8WVA817jJDsfDNSiEk2tn8oWdeTSzIBU2fnAAGyU=
+	t=1705478505; cv=none; b=RmSqbhECVGETf9E2XEEViky9Y3cKcK3QDSR0UMu7cRazhRc/J+rUhamyHB1mWU1xJX/kaV10R3jWmREDj+bVN3+UPBw9E6Pc86x5D7Y1s84UhyBQdV0uwPG4cqprBOuuCAsbXMja0sN0UAFvqryPBYpuZkDFP1cv3kuefT1mmLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705475589; c=relaxed/simple;
-	bh=VOPRzbPoK6eKabzYFOueNX9M9qUZqA8gbMPhJ2kva4Q=;
-	h=Received:Received:Received:X-Virus-Scanned:Received:Received:From:
-	 To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding; b=N2dtafzipByPov7+iBVpR+a7dqJq6sINxjzQ2hhJUEawBalBS2I4kPxNsx56NN69dQ6WDDqAYIxOMnZBV/2EXbgv3UzLYnzTM+Xnxh5moGufq9Byv5cttkuAGdIE60tIlyIB5A0QS7XOSf/F3gnH6kWoLzeoL0SeB8OryAyChw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=astralinux.ru; spf=pass smtp.mailfrom=astralinux.ru; arc=none smtp.client-ip=217.74.38.119
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=astralinux.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=astralinux.ru
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.astralinux.ru (Postfix) with ESMTP id 506861867522;
-	Wed, 17 Jan 2024 10:13:01 +0300 (MSK)
-Received: from mail.astralinux.ru ([127.0.0.1])
-	by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10032)
-	with ESMTP id DHjOdtHDzmxA; Wed, 17 Jan 2024 10:13:01 +0300 (MSK)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.astralinux.ru (Postfix) with ESMTP id 0096D1866B46;
-	Wed, 17 Jan 2024 10:13:01 +0300 (MSK)
-X-Virus-Scanned: amavisd-new at astralinux.ru
-Received: from mail.astralinux.ru ([127.0.0.1])
-	by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id z5YQWJPYpUoM; Wed, 17 Jan 2024 10:13:00 +0300 (MSK)
-Received: from rbta-msk-lt-106062.astralinux.ru (unknown [62.217.185.39])
-	by mail.astralinux.ru (Postfix) with ESMTPSA id ED2A91863E43;
-	Wed, 17 Jan 2024 10:12:59 +0300 (MSK)
-From: Anastasia Belova <abelova@astralinux.ru>
-To: Markus Mayer <mmayer@broadcom.com>
-Cc: Anastasia Belova <abelova@astralinux.ru>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	lvc-project@linuxtesting.org
-Subject: [PATCH] cpufreq: brcmstb-avs-cpufreq: add check for cpufreq_cpu_get's return value
-Date: Wed, 17 Jan 2024 10:12:20 +0300
-Message-Id: <20240117071220.26855-1-abelova@astralinux.ru>
-X-Mailer: git-send-email 2.30.2
+	s=arc-20240116; t=1705478505; c=relaxed/simple;
+	bh=yb5BrpRTiH6NGEkCU9W7D4r0H6Act+ZlT/+5wPBw81U=;
+	h=Received:Received:Message-ID:Date:MIME-Version:User-Agent:Subject:
+	 To:Cc:References:Content-Language:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding; b=swGP9d8H2yAO3Yu48Q7n3HGkzODCs9IaYYggcyt7KcRFxNW4LwVoFc59Lsk7IRuzNgAJrx6eBQmFqvkQAGQsU1UfzoiEfqqa0CaS+mGzQ03M+Q89vuXQfx0LwcQ7N+2Dhts9+mYYiPUlj7dnpd5V1dpvkV1vwGk1EBQWTRhdDSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DD94FDA7;
+	Wed, 17 Jan 2024 00:02:27 -0800 (PST)
+Received: from [10.57.90.139] (unknown [10.57.90.139])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C01CD3F5A1;
+	Wed, 17 Jan 2024 00:01:39 -0800 (PST)
+Message-ID: <f427fb5b-f451-4d17-98e5-5f079a017735@arm.com>
+Date: Wed, 17 Jan 2024 08:03:04 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/3] cpufreq: scmi: Register for limit change
+ notifications
+To: Sibi Sankar <quic_sibis@quicinc.com>
+Cc: linux-arm-kernel@lists.infradead.org, viresh.kumar@linaro.org,
+ rafael@kernel.org, cristian.marussi@arm.com, sudeep.holla@arm.com,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ quic_mdtipton@quicinc.com, linux-arm-msm@vger.kernel.org,
+ Morten Rasmussen <morten.rasmussen@arm.com>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>
+References: <20240108140118.1596-1-quic_sibis@quicinc.com>
+ <20240108140118.1596-4-quic_sibis@quicinc.com>
+ <94aad654-4f20-4b82-b978-77f1f9376dab@arm.com>
+ <dca6e28e-8bde-be3e-bc3c-e97e349b3f04@quicinc.com>
+Content-Language: en-US
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <dca6e28e-8bde-be3e-bc3c-e97e349b3f04@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-cpufreq_cpu_get may return NULL. To avoid NULL-dereference check it
-and return 0 in case of error.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-Fixes: de322e085995 ("cpufreq: brcmstb-avs-cpufreq: AVS CPUfreq driver fo=
-r Broadcom STB SoCs")
-Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
----
- drivers/cpufreq/brcmstb-avs-cpufreq.c | 2 ++
- 1 file changed, 2 insertions(+)
+On 1/17/24 02:58, Sibi Sankar wrote:
+> 
+> 
+> On 1/10/24 13:56, Lukasz Luba wrote:
+>> Hi Sibi,
+>>
+> 
+> Hey Lukasz,
+> Thanks for taking time to review the series!
+> 
+>> + Morten and Dietmar on CC
+>>
+>> On 1/8/24 14:01, Sibi Sankar wrote:
+>>> Register for limit change notifications if supported with the help of
+>>> perf_notify_support interface and determine the throttled frequency
+>>> using the perf_opp_xlate to apply HW pressure.
+>>>
+>>> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+>>> ---
+>>>   drivers/cpufreq/scmi-cpufreq.c | 42 +++++++++++++++++++++++++++++++++-
+>>>   1 file changed, 41 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/cpufreq/scmi-cpufreq.c 
+>>> b/drivers/cpufreq/scmi-cpufreq.c
+>>> index 4ee23f4ebf4a..53bc8868455d 100644
+>>> --- a/drivers/cpufreq/scmi-cpufreq.c
+>>> +++ b/drivers/cpufreq/scmi-cpufreq.c
+>>> @@ -25,9 +25,13 @@ struct scmi_data {
+>>>       int domain_id;
+>>>       int nr_opp;
+>>>       struct device *cpu_dev;
+>>> +    struct cpufreq_policy *policy;
+>>>       cpumask_var_t opp_shared_cpus;
+>>> +    struct notifier_block limit_notify_nb;
+>>>   };
+>>> +const struct scmi_handle *handle;
+>>> +static struct scmi_device *scmi_dev;
+>>>   static struct scmi_protocol_handle *ph;
+>>>   static const struct scmi_perf_proto_ops *perf_ops;
+>>> @@ -144,6 +148,22 @@ scmi_get_cpu_power(struct device *cpu_dev, 
+>>> unsigned long *power,
+>>>       return 0;
+>>>   }
+>>> +static int scmi_limit_notify_cb(struct notifier_block *nb, unsigned 
+>>> long event, void *data)
+>>> +{
+>>> +    unsigned long freq_hz;
+>>> +    struct scmi_perf_limits_report *limit_notify = data;
+>>> +    struct scmi_data *priv = container_of(nb, struct scmi_data, 
+>>> limit_notify_nb);
+>>> +    struct cpufreq_policy *policy = priv->policy;
+>>> +
+>>> +    if (perf_ops->perf_opp_xlate(ph, priv->domain_id, 
+>>> limit_notify->range_max, &freq_hz))
+>>> +        return NOTIFY_OK;
+>>> +
+>>> +    /* Update HW pressure (the boost frequencies are accepted) */
+>>> +    arch_update_hw_pressure(policy->related_cpus, (freq_hz / 
+>>> HZ_PER_KHZ));
+>>
+>> This is wrong. The whole idea of the new HW pressure was that I wanted
+>> to get rid of the 'signal smoothing' mechanism in order to get
+>> instantaneous value from FW to task scheduler. Vincent created
+>> 2 interfaces in that new HW pressure:
+>> 1. cpufreq_update_pressure(policy) - raw variable
+>> 2. arch_update_hw_pressure(policy->related_cpus, (freq_hz / HZ_PER_KHZ))
+>>     - smoothing PELT mechanism, good for raw IRQ in drivers
+>>
+>> In our SCMI cpufreq driver we need the 1st one:
+>> cpufreq_update_pressure(policy)
+>>
+>> The FW will do the 'signal smoothing or filtering' and won't
+>> flood the kernel with hundreds of notifications.
+> 
+> Ack, even though I see no mention of filtering being mandated in the 
+> SCMI specification, the scmi notification by itself will serve as a
+> rate limiter I guess.
+> 
+>>
+>> So, please change that bit and add me, Morten and Dietmar on CC.
+>> I would like to review it.
+> 
 
-diff --git a/drivers/cpufreq/brcmstb-avs-cpufreq.c b/drivers/cpufreq/brcm=
-stb-avs-cpufreq.c
-index 35fb3a559ea9..1a1857b0a6f4 100644
---- a/drivers/cpufreq/brcmstb-avs-cpufreq.c
-+++ b/drivers/cpufreq/brcmstb-avs-cpufreq.c
-@@ -481,6 +481,8 @@ static bool brcm_avs_is_firmware_loaded(struct privat=
-e_data *priv)
- static unsigned int brcm_avs_cpufreq_get(unsigned int cpu)
- {
- 	struct cpufreq_policy *policy =3D cpufreq_cpu_get(cpu);
-+	if (!policy)
-+		return 0;
- 	struct private_data *priv =3D policy->driver_data;
-=20
- 	cpufreq_cpu_put(policy);
---=20
-2.30.2
+True, the SCMI protocol doesn't describe the rate or limits of
+often these performance limit notifications can be sent.
+It's too HW specific and some balance has to made to not
+flood the kernel with hundreds or thousands of notifications
+per second. That could overload the SCMI channel.
 
+The FW implementation has to combine the perf. limit
+restrictions from different areas: thermal, power
+conditions, MPMM, etc. Some smarter approach in FW
+to the processing and filtering of perf limit notification
+would be needed. The kernel is not able to do the job at the same
+quality as FW in those areas.
+
+Therefore, in the kernel HW pressure signal we don't need
+another 'filtering or smoothing' on already processed
+SCMI notification information. That could even harm us
+if we don't get that FW information in kernel at right time
+due to convergence delays of the HW pressure w/ PELT smoothing.
 
