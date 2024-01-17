@@ -1,235 +1,197 @@
-Return-Path: <linux-pm+bounces-2262-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2263-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13FA382FDE6
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 01:07:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBA5E82FF07
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 03:59:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D80728C4E4
-	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 00:07:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F201828B857
+	for <lists+linux-pm@lfdr.de>; Wed, 17 Jan 2024 02:58:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA90E181;
-	Wed, 17 Jan 2024 00:07:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5585A17E9;
+	Wed, 17 Jan 2024 02:58:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GUjUBt6U"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="I7tJJWZO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 814381C11;
-	Wed, 17 Jan 2024 00:07:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C00B87F5;
+	Wed, 17 Jan 2024 02:58:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705450031; cv=none; b=eGocDtGpJDd/H8abnzK0psLMsxQjEQj7U0WoUEXG9RElCMot3vqpfm79nVPjB+hHCPJEIJGQETyrfhaueiiqzPJ309plKbvca3VunGIcengUsuJen6xmT7lVDrskp1rpKxQoopcNtbGq6RNkiwM0fsSSzGW/Ce8vurBtC6XmESo=
+	t=1705460336; cv=none; b=tXGWFUpxxRtif3l7X7O36C6hMvUaVv3aGPVp6grTR8Zz1EekYDeBKW7wwS0Ed5yFGDa0NiW6Z3OhLOaLRYMrZkfeD9+0hiWTfC0VtZ1mgmPQPE2Fw/uZOzKdS/nc5U3qDMeIXLJn8MgViE4EFaJs9xO1jS28LF36/NyXrj1Jqqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705450031; c=relaxed/simple;
-	bh=Hi3WbUEYSIhh0hiaezg7Ec88eCvYKaiPi+jMfAgJqZQ=;
-	h=Received:DKIM-Signature:Date:From:To:Cc:Subject:Message-Id:
-	 In-Reply-To:References:X-Mailer:Mime-Version:Content-Type:
-	 Content-Transfer-Encoding; b=qNVquky+C0styvnzj88HnbiQxLehcdRpnxextg7+ddlZkbvzZeZ6uhkimJdVERvfV8l+EmMa02svyHu1i8IcZ48iW20YInHND4sUTTOZOwaslsAO8EpCLOawAgU+dGgFOGNPsOeqO1/L2HbHiR3m05GD5Bsfbg69e90fs3/2fj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GUjUBt6U; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5BC0C433C7;
-	Wed, 17 Jan 2024 00:07:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705450031;
-	bh=Hi3WbUEYSIhh0hiaezg7Ec88eCvYKaiPi+jMfAgJqZQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=GUjUBt6UCxqauu6S3cOUPnGnccJbsNUC8vy9MDjumfcVmIlMe+BXnTGgKGCrfGHA7
-	 VLXHHFDhomKGiCvNlp1Ba7g3hVBfrvcqeuKFUTjZdMmKvsTcXmxlwF+oggd/PGi2lh
-	 26Y/nd0kOyFwpdwgbjDUY4GjzLKHhKMxgBFBO5RHCFcmxG76uxIzvFZ5yIDbpKry7B
-	 DwO0XRcx0VIHyVi5mx0Kz3CJ46HLk95jg+7kU4lUi+aPHm7qHiJ3+ceb8BGIha6Vdr
-	 +SC9dQU2g13sPBhyZEM53apxdIbAPTjQo+lo0XJo2fIFtyRgeHfQI91pi3gfVar/zz
-	 FiXdgio969IxA==
-Date: Wed, 17 Jan 2024 09:07:06 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
- Len Brown <len.brown@intel.com>, Randy Dunlap <rdunlap@infradead.org>,
- suleiman@google.com, briannorris@google.com, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-Subject: Re: [PATCH v7] PM: sleep: Expose last succeeded resumed timestamp
- in sysfs
-Message-Id: <20240117090706.3522d23763fab9dcea21aee1@kernel.org>
-In-Reply-To: <170359669607.1864392.5078004271237566637.stgit@mhiramat.roam.corp.google.com>
-References: <170359668692.1864392.6909734045167510522.stgit@mhiramat.roam.corp.google.com>
-	<170359669607.1864392.5078004271237566637.stgit@mhiramat.roam.corp.google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1705460336; c=relaxed/simple;
+	bh=WwF8WDsQiNqKPzAWmgzoJEmT2aqTa/gucOxXs5ngG9Y=;
+	h=Received:DKIM-Signature:Received:Received:Received:Message-ID:
+	 Date:MIME-Version:User-Agent:Subject:Content-Language:To:CC:
+	 References:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 X-Originating-IP:X-ClientProxiedBy:X-QCInternal:
+	 X-Proofpoint-Virus-Version:X-Proofpoint-GUID:
+	 X-Proofpoint-ORIG-GUID:X-Proofpoint-Virus-Version:
+	 X-Proofpoint-Spam-Details; b=ToVhJrvePDZ4p7QBPU5MSAg9TkAs/StUwLMNNqDRipGGYYIAlia/a1GV+1HXj/xxdbnNSgmN9jyLeVOoLviGsUSa+Ukc+p4kLd8h9WvTqXAhIb8TzM9iDG82fGSUrMCqvGaXko7AvpkjQrqgFa2J3LYdCFL/2y05/HU43wMzd5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=I7tJJWZO; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40H1U81a028624;
+	Wed, 17 Jan 2024 02:58:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=XT20oMvm0oGcwlHUcMRLH+G6eMPHlGWYcVsCf6M2eeQ=; b=I7
+	tJJWZO7tCHXU1dWgDoeQ2o2SUnuG/oT/ROjRQmNvvHItNqYyXSZ/7iHps5bJKDGS
+	farya5mynkycY+vpay9olPje8hadOViWrRb0M6CkporTfZggtvhJWClPJfXlmSF3
+	I2zSs/9zsWmC9JMpatLJVVfQl7Wdb5sy1VFWeaIr64PC6tDJzRAynI72Xg42C9w4
+	5xdFwNUKBOk+Qu38dD8ufhVtsoXTO7B93kzpDKjM/ahHiLSsVGVIyie54bE4NJMJ
+	RXf2JCZVzb6T4AAe6Nlb1rbnGHxUar0NovMq8PIwL6JFNUsLMDZ/Y8rldJArNSrx
+	6BfD94t3u/fCCvnlIRUg==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vnnvbjj2k-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 17 Jan 2024 02:58:44 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40H2whKn009635
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 17 Jan 2024 02:58:43 GMT
+Received: from [10.131.33.37] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 16 Jan
+ 2024 18:58:39 -0800
+Message-ID: <dca6e28e-8bde-be3e-bc3c-e97e349b3f04@quicinc.com>
+Date: Wed, 17 Jan 2024 08:28:36 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 3/3] cpufreq: scmi: Register for limit change
+ notifications
+Content-Language: en-US
+To: Lukasz Luba <lukasz.luba@arm.com>
+CC: <linux-arm-kernel@lists.infradead.org>, <viresh.kumar@linaro.org>,
+        <rafael@kernel.org>, <cristian.marussi@arm.com>,
+        <sudeep.holla@arm.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_mdtipton@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        "Morten
+ Rasmussen" <morten.rasmussen@arm.com>,
+        Dietmar Eggemann
+	<dietmar.eggemann@arm.com>
+References: <20240108140118.1596-1-quic_sibis@quicinc.com>
+ <20240108140118.1596-4-quic_sibis@quicinc.com>
+ <94aad654-4f20-4b82-b978-77f1f9376dab@arm.com>
+From: Sibi Sankar <quic_sibis@quicinc.com>
+In-Reply-To: <94aad654-4f20-4b82-b978-77f1f9376dab@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 95Ab1lA2b0o4CIWTz5Uh_vK9rDZnYcsw
+X-Proofpoint-ORIG-GUID: 95Ab1lA2b0o4CIWTz5Uh_vK9rDZnYcsw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-16_14,2024-01-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 mlxlogscore=999 lowpriorityscore=0 mlxscore=0
+ adultscore=0 impostorscore=0 suspectscore=0 clxscore=1011 spamscore=0
+ malwarescore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2311290000 definitions=main-2401170019
 
-Gently ping,
 
-I would like to know this is enough or I should add more info/update.
 
-Thank you,
-
-On Tue, 26 Dec 2023 22:18:16 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
-
-> From: Masami Hiramatsu <mhiramat@kernel.org>
-> 
-> Expose last succeeded resumed timestamp as last_success_resume_time
-> attribute of suspend_stats in sysfs so that user can use this time
-> stamp as a reference point of resuming user space.
-> 
-> On some system like the ChromeOS, the system suspend and resume are
-> controlled by a power management process. The user-space tasks will be
-> noticed the suspend and the resume signal from it.
-> To improve the suspend/resume performance and/or to find regressions,
-> we would like to know how long the resume processes are taken in kernel
-> and in user-space.
-> For this purpose, expose the accarate time when the kernel is finished
-> to resume so that we can distinguish the duration of kernel resume and
-> user space resume.
-> 
-> This suspend_stats attribute is easy to access and only expose the
-> timestamp in CLOCK_MONOTONIC. User can find the accarate time when the
-> kernel finished to resume its drivers/subsystems and start thawing, and
-> measure the elapsed time from the time when the kernel finished the
-> resume to a user-space action (e.g. displaying the UI).
-> 
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> ---
->  Changes in v7:
->   - Update patch description.
->   - Update sysfs documentation to say the exact timing.
->   - Update the comment.
->  Changes in v6:
->   - Fix to record resume time before thawing user processes.
->  Changes in v5:
->   - Just updated for v6.7-rc3.
->  Changes in v4.1:
->   - Fix document typo (again).
->  Changes in v4:
->   - Update description to add why.
->   - Fix document typo.
->  Changes in v3:
->   - Add (unsigned long long) casting for %llu.
->   - Add a line after last_success_resume_time_show().
->  Changes in v2:
->   - Use %llu instead of %lu for printing u64 value.
->   - Remove unneeded indent spaces from the last_success_resume_time
->     line in the debugfs suspend_stat file.
-> ---
->  Documentation/ABI/testing/sysfs-power |   11 +++++++++++
->  include/linux/suspend.h               |    2 ++
->  kernel/power/main.c                   |   15 +++++++++++++++
->  kernel/power/suspend.c                |    9 +++++++++
->  4 files changed, 37 insertions(+)
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/testing/sysfs-power
-> index a3942b1036e2..ee567e7e9d4a 100644
-> --- a/Documentation/ABI/testing/sysfs-power
-> +++ b/Documentation/ABI/testing/sysfs-power
-> @@ -442,6 +442,17 @@ Description:
->  		'total_hw_sleep' and 'last_hw_sleep' may not be accurate.
->  		This number is measured in microseconds.
->  
-> +What:		/sys/power/suspend_stats/last_success_resume_time
-> +Date:		Dec 2023
-> +Contact:	Masami Hiramatsu <mhiramat@kernel.org>
-> +Description:
-> +		The /sys/power/suspend_stats/last_success_resume_time file
-> +		contains the timestamp of when the kernel successfully
-> +		resumed drivers/subsystems from suspend/hibernate. This is
-> +		just before thawing the user processes.
-> +		This floating point number is measured in seconds by monotonic
-> +		clock.
-> +
->  What:		/sys/power/sync_on_suspend
->  Date:		October 2019
->  Contact:	Jonas Meurer <jonas@freesources.org>
-> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> index ef503088942d..ddd789044960 100644
-> --- a/include/linux/suspend.h
-> +++ b/include/linux/suspend.h
-> @@ -8,6 +8,7 @@
->  #include <linux/pm.h>
->  #include <linux/mm.h>
->  #include <linux/freezer.h>
-> +#include <linux/timekeeping.h>
->  #include <asm/errno.h>
->  
->  #ifdef CONFIG_VT
-> @@ -71,6 +72,7 @@ struct suspend_stats {
->  	u64	last_hw_sleep;
->  	u64	total_hw_sleep;
->  	u64	max_hw_sleep;
-> +	struct timespec64 last_success_resume_time;
->  	enum suspend_stat_step	failed_steps[REC_FAILED_NUM];
->  };
->  
-> diff --git a/kernel/power/main.c b/kernel/power/main.c
-> index f6425ae3e8b0..2ab23fd3daac 100644
-> --- a/kernel/power/main.c
-> +++ b/kernel/power/main.c
-> @@ -421,6 +421,17 @@ static ssize_t last_failed_step_show(struct kobject *kobj,
->  }
->  static struct kobj_attribute last_failed_step = __ATTR_RO(last_failed_step);
->  
-> +static ssize_t last_success_resume_time_show(struct kobject *kobj,
-> +		struct kobj_attribute *attr, char *buf)
-> +{
-> +	return sprintf(buf, "%llu.%llu\n",
-> +		(unsigned long long)suspend_stats.last_success_resume_time.tv_sec,
-> +		(unsigned long long)suspend_stats.last_success_resume_time.tv_nsec);
-> +}
-> +
-> +static struct kobj_attribute last_success_resume_time =
-> +			__ATTR_RO(last_success_resume_time);
-> +
->  static struct attribute *suspend_attrs[] = {
->  	&success.attr,
->  	&fail.attr,
-> @@ -438,6 +449,7 @@ static struct attribute *suspend_attrs[] = {
->  	&last_hw_sleep.attr,
->  	&total_hw_sleep.attr,
->  	&max_hw_sleep.attr,
-> +	&last_success_resume_time.attr,
->  	NULL,
->  };
->  
-> @@ -514,6 +526,9 @@ static int suspend_stats_show(struct seq_file *s, void *unused)
->  			suspend_step_name(
->  				suspend_stats.failed_steps[index]));
->  	}
-> +	seq_printf(s,	"last_success_resume_time:\t%-llu.%llu\n",
-> +		   (unsigned long long)suspend_stats.last_success_resume_time.tv_sec,
-> +		   (unsigned long long)suspend_stats.last_success_resume_time.tv_nsec);
->  
->  	return 0;
->  }
-> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> index fa3bf161d13f..2d0f46b4d0cf 100644
-> --- a/kernel/power/suspend.c
-> +++ b/kernel/power/suspend.c
-> @@ -595,6 +595,15 @@ static int enter_state(suspend_state_t state)
->   Finish:
->  	events_check_enabled = false;
->  	pm_pr_dbg("Finishing wakeup.\n");
-> +
-> +	/*
-> +	 * Record last succeeded resume timestamp just before thawing processes.
-> +	 * This is for helping users to measure user-space resume performance
-> +	 * for improving their programs or finding regressions.
-> +	 */
-> +	if (!error)
-> +		ktime_get_ts64(&suspend_stats.last_success_resume_time);
-> +
->  	suspend_finish();
->   Unlock:
->  	mutex_unlock(&system_transition_mutex);
+On 1/10/24 13:56, Lukasz Luba wrote:
+> Hi Sibi,
 > 
 
+Hey Lukasz,
+Thanks for taking time to review the series!
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> + Morten and Dietmar on CC
+> 
+> On 1/8/24 14:01, Sibi Sankar wrote:
+>> Register for limit change notifications if supported with the help of
+>> perf_notify_support interface and determine the throttled frequency
+>> using the perf_opp_xlate to apply HW pressure.
+>>
+>> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+>> ---
+>>   drivers/cpufreq/scmi-cpufreq.c | 42 +++++++++++++++++++++++++++++++++-
+>>   1 file changed, 41 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/cpufreq/scmi-cpufreq.c 
+>> b/drivers/cpufreq/scmi-cpufreq.c
+>> index 4ee23f4ebf4a..53bc8868455d 100644
+>> --- a/drivers/cpufreq/scmi-cpufreq.c
+>> +++ b/drivers/cpufreq/scmi-cpufreq.c
+>> @@ -25,9 +25,13 @@ struct scmi_data {
+>>       int domain_id;
+>>       int nr_opp;
+>>       struct device *cpu_dev;
+>> +    struct cpufreq_policy *policy;
+>>       cpumask_var_t opp_shared_cpus;
+>> +    struct notifier_block limit_notify_nb;
+>>   };
+>> +const struct scmi_handle *handle;
+>> +static struct scmi_device *scmi_dev;
+>>   static struct scmi_protocol_handle *ph;
+>>   static const struct scmi_perf_proto_ops *perf_ops;
+>> @@ -144,6 +148,22 @@ scmi_get_cpu_power(struct device *cpu_dev, 
+>> unsigned long *power,
+>>       return 0;
+>>   }
+>> +static int scmi_limit_notify_cb(struct notifier_block *nb, unsigned 
+>> long event, void *data)
+>> +{
+>> +    unsigned long freq_hz;
+>> +    struct scmi_perf_limits_report *limit_notify = data;
+>> +    struct scmi_data *priv = container_of(nb, struct scmi_data, 
+>> limit_notify_nb);
+>> +    struct cpufreq_policy *policy = priv->policy;
+>> +
+>> +    if (perf_ops->perf_opp_xlate(ph, priv->domain_id, 
+>> limit_notify->range_max, &freq_hz))
+>> +        return NOTIFY_OK;
+>> +
+>> +    /* Update HW pressure (the boost frequencies are accepted) */
+>> +    arch_update_hw_pressure(policy->related_cpus, (freq_hz / 
+>> HZ_PER_KHZ));
+> 
+> This is wrong. The whole idea of the new HW pressure was that I wanted
+> to get rid of the 'signal smoothing' mechanism in order to get
+> instantaneous value from FW to task scheduler. Vincent created
+> 2 interfaces in that new HW pressure:
+> 1. cpufreq_update_pressure(policy) - raw variable
+> 2. arch_update_hw_pressure(policy->related_cpus, (freq_hz / HZ_PER_KHZ))
+>     - smoothing PELT mechanism, good for raw IRQ in drivers
+> 
+> In our SCMI cpufreq driver we need the 1st one:
+> cpufreq_update_pressure(policy)
+> 
+> The FW will do the 'signal smoothing or filtering' and won't
+> flood the kernel with hundreds of notifications.
+
+Ack, even though I see no mention of filtering being mandated in the 
+SCMI specification, the scmi notification by itself will serve as a
+rate limiter I guess.
+
+> 
+> So, please change that bit and add me, Morten and Dietmar on CC.
+> I would like to review it.
+
+ack
+
+-Sibi
+
+> 
+> Regards,
+> Lukasz
 
