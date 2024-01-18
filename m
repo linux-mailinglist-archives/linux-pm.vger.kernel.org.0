@@ -1,108 +1,140 @@
-Return-Path: <linux-pm+bounces-2323-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2324-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFA7983127B
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Jan 2024 06:43:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6841C8312B5
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Jan 2024 07:29:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12A93286ECD
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Jan 2024 05:43:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1FB76283170
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Jan 2024 06:29:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D83CB612E;
-	Thu, 18 Jan 2024 05:43:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D37938BED;
+	Thu, 18 Jan 2024 06:29:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="ZVv9PYaB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C772333EA;
-	Thu, 18 Jan 2024 05:43:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E6A58F60
+	for <linux-pm@vger.kernel.org>; Thu, 18 Jan 2024 06:29:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705556592; cv=none; b=oGOH7p0ufQ3kXl8BGyCiNsyw6P6EmIUGToG5+sMLyfqyq/ZsBBZ7Ye6TCuWEseQH8evjQmlH/AU5lYqP0JHLy9yv700lnnEaXlPk4IHcT0iu51NIngikd92N5STGmK4Uj2YSSZ5Ye/oK1d6E0bmvTdIOt9nNnsqqYOTOxtvYArI=
+	t=1705559383; cv=none; b=Z3RZriwPWknpchrTR/6nOWkkmm8+H6wLTJXF2hWcVnSoW57zyL+x1mEIVZCXlyWwPFdQMOLo80qvkc+vEFqqPs32NAVoL+PbhxTxo9N8iwnDpsVX919kqCHCY/4f9Id956z4JSCgI7GQ3/FEORcQRChG5Ugw4QLj6b5IXAzd4cA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705556592; c=relaxed/simple;
-	bh=N8lyXV983QZcIN4IypN9VKPidDixXf4Ufs7PA3JcatQ=;
-	h=X-UUID:X-CID-P-RULE:X-CID-O-INFO:X-CID-INFO:X-CID-META:X-CID-BVR:
-	 X-CID-BAS:X-CID-FACTOR:X-UUID:Received:Received:X-ns-mid:Received:
-	 From:To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
-	 Content-Transfer-Encoding; b=u3VoVaW6bzEj5lKYs4m8UFESVnFFhleV98IcQ5mBJU30R+Mcw33LwH431KNHPraOZxktGIHEv+j1UBhw7Opb4882zLcbvzfw8BIj+qJaPxyBE19GvT8EjZKfGXV7QHpSvRwiNgPYrsgzaOky7+tOTvsmex1RM8WaE5B5He8uaZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 6d39311e58964ef3910abf0a8c644cd4-20240118
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.35,REQID:f8b43031-f88e-4f9b-bc87-756d56c07d5b,IP:10,
-	URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACT
-	ION:release,TS:-10
-X-CID-INFO: VERSION:1.1.35,REQID:f8b43031-f88e-4f9b-bc87-756d56c07d5b,IP:10,UR
-	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:-10
-X-CID-META: VersionHash:5d391d7,CLOUDID:8b8e7a7f-4f93-4875-95e7-8c66ea833d57,B
-	ulkID:240118134304ZHV6LL3N,BulkQuantity:0,Recheck:0,SF:24|17|19|44|66|38|1
-	02,TC:nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,CO
-	L:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI
-X-UUID: 6d39311e58964ef3910abf0a8c644cd4-20240118
-Received: from mail.kylinos.cn [(39.156.73.10)] by mailgw
-	(envelope-from <chentao@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 1039748442; Thu, 18 Jan 2024 13:43:01 +0800
-Received: from mail.kylinos.cn (localhost [127.0.0.1])
-	by mail.kylinos.cn (NSMail) with SMTP id 1B115E000EB9;
-	Thu, 18 Jan 2024 13:43:01 +0800 (CST)
-X-ns-mid: postfix-65A8BA64-89835715
-Received: from kernel.. (unknown [172.20.15.234])
-	by mail.kylinos.cn (NSMail) with ESMTPA id A0077E000EB9;
-	Thu, 18 Jan 2024 13:42:59 +0800 (CST)
-From: Kunwu Chan <chentao@kylinos.cn>
-To: nm@ti.com,
-	ssantosh@kernel.org,
-	ulf.hansson@linaro.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org,
-	Kunwu Chan <chentao@kylinos.cn>
-Subject: [PATCH] pmdomain: Add a null pointer check to the omap_prm_domain_init
-Date: Thu, 18 Jan 2024 13:42:57 +0800
-Message-Id: <20240118054257.200814-1-chentao@kylinos.cn>
-X-Mailer: git-send-email 2.39.2
+	s=arc-20240116; t=1705559383; c=relaxed/simple;
+	bh=/u5+kKTAb8cIuSKjldQRcHga6oj7W+2Gqj2x18oGMoo=;
+	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:From:
+	 To:Cc:Subject:Date:Message-Id:X-Mailer:MIME-Version:
+	 Content-Transfer-Encoding; b=StTmsE892vWjhB8Ui6TBJ1saayG2X5qTR4secGtjwYoX39p4z3arULmvFskm/Hzgp8xbDnTavBnHlSPeC0wgp53di33fOa8Is7Hf2aJHUODQjJZCQLV7x3JXLZC/pvzxDVI5Akz780iqH+ORXo6EAcEtgoB2iq3ox1snB4a00eM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=ZVv9PYaB; arc=none smtp.client-ip=209.85.166.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-3619223df51so896885ab.1
+        for <linux-pm@vger.kernel.org>; Wed, 17 Jan 2024 22:29:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1705559380; x=1706164180; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nKRSRDgZCX0qZ4H/CNTVQl9+01tMfjOuLKW5Fu3dbqs=;
+        b=ZVv9PYaBmSZgU6YRxXbURJRcUxyWweIO8g0p1RB60f8an/4jD7wpFlpN/cd+fHsL1Y
+         eLJlVuPbQenlc2El+yiJlNfTywtMeyRQkJrlqn/lCYFuyazT7nFZ8IIpeaW47pFwamf5
+         on1dKai6HNIDXVIiB9VseJCVI4cs1hhzXMSqqkWVuCWxEIZ5iCNROILiIEtcq/FCL+IT
+         76rzgNqrHUdrLorPesnB8eOwnLCOwO2t/paQZaPH5d6zMmiwDZGLF8fCsx0Rt50/LqNQ
+         297z7hdQpcEqZvXY/5JlZrm87b7R8EA/N0HoXJnzXqwNluiTUOYRTCbbA3x0fj8u+VSo
+         L5Pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705559380; x=1706164180;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nKRSRDgZCX0qZ4H/CNTVQl9+01tMfjOuLKW5Fu3dbqs=;
+        b=QddHZK18kApDAYDYsRFKtPvXjBrJ6hOQqiUHcgnjHmw9lvHY+4LQrjYx2aUiIwsDhQ
+         d4CQYf9+OGTspsdbpMgec6lf3ckZ8MfjYVo5mM6qndFkklFnaRqjE/++GH5OJQVXeipl
+         qqgxUXFHGzETakkgG2c4pGN40aqA89rGK4eIS5mFmq7HJVFTaw2Dy9OM2ACEg27bGEZL
+         6tQWHG6EVkCXc5BYs+2fEyJRrPLfvnnSQwgZmqHpAuxVHyIMKs3blGhRqoisP55c+c7d
+         4MYeQ99czW+6wvQ8I09SPhGPR7g8HGiCdWmfr6fRiOJSu73l5nWMJNXf6YVskkGJuNPz
+         DL5Q==
+X-Gm-Message-State: AOJu0YwoxJ5kP7uoFnTFuxqpiuIJet3HnVJwvGQkhBNkNdLp5T6pxOmg
+	oxT8yXN4+0vKYehj19k1VIMobibaJt9Tv0hMrycMQaqVEo5K9eubn7JmZFddx1dHm5/PLS+s5rU
+	qsPQ=
+X-Google-Smtp-Source: AGHT+IG1KliUgFB2bTNUn2Iwg2xlnQseSG6/fqem8LxM9mRgfpKIp7Pca72j/MOfj5keAZE9edU4lQ==
+X-Received: by 2002:a92:c844:0:b0:35f:e0a7:888a with SMTP id b4-20020a92c844000000b0035fe0a7888amr360581ilq.21.1705559380680;
+        Wed, 17 Jan 2024 22:29:40 -0800 (PST)
+Received: from sunil-laptop.dc1.ventanamicro.com ([106.51.83.242])
+        by smtp.gmail.com with ESMTPSA id bn28-20020a056e02339c00b0035fec699584sm4663269ilb.13.2024.01.17.22.29.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Jan 2024 22:29:40 -0800 (PST)
+From: Sunil V L <sunilvl@ventanamicro.com>
+To: linux-pm@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-acpi@vger.kernel.org
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Len Brown <lenb@kernel.org>,
+	Anup Patel <anup@brainfault.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Atish Kumar Patra <atishp@rivosinc.com>,
+	Sunil V L <sunilvl@ventanamicro.com>
+Subject: [PATCH v3 -next 0/3] RISC-V: ACPI: Add LPI support
+Date: Thu, 18 Jan 2024 11:59:27 +0530
+Message-Id: <20240118062930.245937-1-sunilvl@ventanamicro.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-devm_kasprintf() returns a pointer to dynamically allocated memory
-which can be NULL upon failure. Ensure the allocation was successful
-by checking the pointer validity.
+This series adds support for Low Power Idle (LPI) on ACPI based
+platforms. 
 
-Signed-off-by: Kunwu Chan <chentao@kylinos.cn>
----
- drivers/pmdomain/ti/omap_prm.c | 2 ++
- 1 file changed, 2 insertions(+)
+LPI is described in the ACPI spec [1]. RISC-V FFH spec required to
+enable this is available at [2].
 
-diff --git a/drivers/pmdomain/ti/omap_prm.c b/drivers/pmdomain/ti/omap_pr=
-m.c
-index c2feae3a634c..b8ceb3c2b81c 100644
---- a/drivers/pmdomain/ti/omap_prm.c
-+++ b/drivers/pmdomain/ti/omap_prm.c
-@@ -695,6 +695,8 @@ static int omap_prm_domain_init(struct device *dev, s=
-truct omap_prm *prm)
- 	data =3D prm->data;
- 	name =3D devm_kasprintf(dev, GFP_KERNEL, "prm_%s",
- 			      data->name);
-+	if (!name)
-+		return -ENOMEM;
-=20
- 	prmd->dev =3D dev;
- 	prmd->prm =3D prm;
---=20
-2.39.2
+[1] - https://uefi.org/specs/ACPI/6.5/08_Processor_Configuration_and_Control.html#lpi-low-power-idle-states 
+[2] - https://github.com/riscv-non-isa/riscv-acpi-ffh/releases/download/v/riscv-ffh.pdf
+
+Changes since v2:
+	1) Added "riscv_" prefix for functions made non static (Feedback from Drew)
+	2) Added RB tags from Drew.
+	
+Changes since v1:
+	1) Reordered the commits such that the patch which enables
+	   ACPI_PROCESSOR is the last one in the series.
+	2) Used GENMASK and other changes to address Drew's comments.
+	3) Moved common functions required by both DT and ACPI based cpuidle
+	   drivers from the DT driver to common arch/riscv/suspend.c.
+	4) ACPI cpuidle driver is added under drivers/acpi/riscv
+	5) Rebased to latest for-next branch of linux-riscv.
+
+
+Sunil V L (3):
+  cpuidle: RISC-V: Move few functions to arch/riscv
+  ACPI: RISC-V: Add LPI driver
+  ACPI: Enable ACPI_PROCESSOR for RISC-V
+
+ arch/riscv/include/asm/suspend.h    |  3 ++
+ arch/riscv/kernel/suspend.c         | 49 +++++++++++++++++
+ drivers/acpi/Kconfig                |  2 +-
+ drivers/acpi/riscv/Makefile         |  3 +-
+ drivers/acpi/riscv/cpuidle.c        | 81 +++++++++++++++++++++++++++++
+ drivers/cpuidle/cpuidle-riscv-sbi.c | 49 ++---------------
+ 6 files changed, 141 insertions(+), 46 deletions(-)
+ create mode 100644 drivers/acpi/riscv/cpuidle.c
+
+-- 
+2.34.1
 
 
