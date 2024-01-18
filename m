@@ -1,31 +1,31 @@
-Return-Path: <linux-pm+bounces-2342-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2343-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADE50831DD0
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Jan 2024 17:50:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61194831DE6
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Jan 2024 17:54:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E169F1C2334C
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Jan 2024 16:50:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 031A11F24674
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Jan 2024 16:54:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A06C2C842;
-	Thu, 18 Jan 2024 16:49:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 669122C1BB;
+	Thu, 18 Jan 2024 16:54:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KvMXfamM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dPusZKQ8"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76CB92C6BF
-	for <linux-pm@vger.kernel.org>; Thu, 18 Jan 2024 16:49:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423E12C1B1
+	for <linux-pm@vger.kernel.org>; Thu, 18 Jan 2024 16:54:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705596591; cv=none; b=ITPFkXOphRRnV/c3i4zgK5z8l21JeK7jglKjzfpX7rO4qsu2nbey/Nvla4hUPkFXSekYEDUUrncE9+I0a+afuUeDR0Cnzkqunb+0qLpt330Mxb8jDxtTTqWx5nKrvu2y6kYfp8bQ7jq75Bqd+9GdQfpycakZrzKES+63f6OnqYQ=
+	t=1705596850; cv=none; b=EMwGaod3ka3vPDlc4lGtWqMzNj84j1cowigMVe/sqPEKMEnTeQivUfxZSHCbF/yxAICSSWFBD960tVFZuVmG55K1/a+HgZcfPg8+rGgvmtRoKFkdFa3La4kGNi4rO5+6Q+n67ues/seFVTKOyXIF2/c8R8CxhPhbq82CgrI24Sk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705596591; c=relaxed/simple;
-	bh=ip+eamckK3Z1jSt6OwJN57ha8o553O3gvWbkrpjOhSg=;
+	s=arc-20240116; t=1705596850; c=relaxed/simple;
+	bh=FRDUC/x/UfDwKlgvn8+hTL2jUQ+eaHa3Xd9/8S/XG7g=;
 	h=Received:DKIM-Signature:Received:From:To:Subject:Date:
 	 X-Bugzilla-Reason:X-Bugzilla-Type:X-Bugzilla-Watch-Reason:
 	 X-Bugzilla-Product:X-Bugzilla-Component:X-Bugzilla-Version:
@@ -34,27 +34,27 @@ ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	 X-Bugzilla-Assigned-To:X-Bugzilla-Flags:X-Bugzilla-Changed-Fields:
 	 Message-ID:In-Reply-To:References:Content-Type:
 	 Content-Transfer-Encoding:X-Bugzilla-URL:Auto-Submitted:
-	 MIME-Version; b=W0hAR2mLSWzy4KZdMBBVoBapd7ArdTMtjyXldBeDjxrT/J7cyFLCVGo9Zja0VfanEfqmc/dqyfRM5tAJuydIStf4ykAGymcVe7jBjsppGfGhKfiAOO3ZIKgn8feQMzcoQHsPRhbswCIDQA/bT93VOwWZldfcgfz5HHdgLRmt3yc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KvMXfamM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 15C14C433A6
-	for <linux-pm@vger.kernel.org>; Thu, 18 Jan 2024 16:49:51 +0000 (UTC)
+	 MIME-Version; b=OluULUZZHP/QZUqjLmyJ74NVmkp3TNDjOlrctRPCdatkq4UznRPH2KkkQ8SwAgPFL2eCYJ1NgbC8KpRnyModILjAUEgRGLVJdVQH1niEirX3vuiTPreFD6fKG7WJJlqG3Z+7yG03ZVsKwsI/V8xlhiLQSeoG17lpJIefVgdE2dY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dPusZKQ8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B1447C433A6
+	for <linux-pm@vger.kernel.org>; Thu, 18 Jan 2024 16:54:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705596591;
-	bh=ip+eamckK3Z1jSt6OwJN57ha8o553O3gvWbkrpjOhSg=;
+	s=k20201202; t=1705596849;
+	bh=FRDUC/x/UfDwKlgvn8+hTL2jUQ+eaHa3Xd9/8S/XG7g=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=KvMXfamMF137fO7QXRs+nNEO9ErD59F5PpSi4eontDGnGPtHcXE2V353CCnOHX6zI
-	 t0Sk7RawyNtEVvg34QbjwyFLoYCZiztplkl0emXOW3g7euQjO5bEsbYij6IfdnfZp6
-	 03MLDIZlXWtAP6vrqSdXPiYJ1vIYJSm+1UggASyrhw9Dp7c9JYKqbAU7d5WFSvzg26
-	 SxVy+AUnuWmXTrjTyyXj3rf0hF4/xkzJrymrcXXVI0gGxBsFMSCEI8p44mCmUzUqfN
-	 mvSPRVj01CQgFiA1pA+yr62o5gcDz0iM3zfbfmUxll6DM90cubPazGuSnFC4ctIn+O
-	 SEia90dCPbmOg==
+	b=dPusZKQ8J46gmmy7lt1cAK8ZHRI6onJ9nyfut/JmneHnmOZtUt8B03EbASB8ZQtDm
+	 f/nDxsnAR0ATRfu8IaAZ3p+7OYezxKh5/61XVZGBN/X937FeJH2MDXsdAMx+28I6WA
+	 iBSL0ffs3LwwOIMn5Fw5rgQFqlTS0VnRFfq66kKcQNTRElzy3mRCudpIQ/S2SB2pJA
+	 Q7Zr+SugwwOFzLxUFINaiRGIPl1DZ7/q8X9owlww/DGTuq/t10mYyREzBE8DY70uJZ
+	 cm+18+KRQlqLsYuBpJesgEn+2ODWu8tvBj0Yve/UzWmbq0nGZBzngH/DR5lOOOz8Z3
+	 6fEnB7zOHqeRA==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 00904C53BD3; Thu, 18 Jan 2024 16:49:50 +0000 (UTC)
+	id 95ACAC4332E; Thu, 18 Jan 2024 16:54:09 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-pm@vger.kernel.org
 Subject: [Bug 217931] amd-pstate lacks crucial features: CPU frequency and
  boost control
-Date: Thu, 18 Jan 2024 16:49:50 +0000
+Date: Thu, 18 Jan 2024 16:54:08 +0000
 X-Bugzilla-Reason: AssignedTo
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -63,14 +63,14 @@ X-Bugzilla-Component: cpufreq
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: high
-X-Bugzilla-Who: mario.limonciello@amd.com
+X-Bugzilla-Who: aros@gmx.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217931-137361-7KFl5aWrld@https.bugzilla.kernel.org/>
+Message-ID: <bug-217931-137361-A2OUnmOzPS@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-217931-137361@https.bugzilla.kernel.org/>
 References: <bug-217931-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -86,10 +86,16 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D217931
 
---- Comment #18 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
-I was meaning #14/#15.  I want to see if they're finding the same thing as =
-you.
- Looking for a pattern.
+--- Comment #19 from Artem S. Tashkinov (aros@gmx.com) ---
+(In reply to Mario Limonciello (AMD) from comment #18)
+> I was meaning #14/#15.  I want to see if they're finding the same thing as
+> you.  Looking for a pattern.
+
+The amd-pstate driver doesn't allow to set any frequency limits, so I'm not
+sure how people here have achieved this.
+
+And I'm not using acpi-cpufreq any longer. I like amd-pstate more since it
+shows CPU cores frequency better/more precisely.
 
 --=20
 You may reply to this email to add a comment.
