@@ -1,56 +1,76 @@
-Return-Path: <linux-pm+bounces-2335-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2336-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73789831624
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Jan 2024 10:47:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24C8E83169F
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Jan 2024 11:25:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 977221C24EBD
-	for <lists+linux-pm@lfdr.de>; Thu, 18 Jan 2024 09:47:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D81D9286F31
+	for <lists+linux-pm@lfdr.de>; Thu, 18 Jan 2024 10:25:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EB0F1F60B;
-	Thu, 18 Jan 2024 09:46:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F38FC208B7;
+	Thu, 18 Jan 2024 10:25:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="hyWPPuKt"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Itg28zgb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 805261F934;
-	Thu, 18 Jan 2024 09:46:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E2E208B1
+	for <linux-pm@vger.kernel.org>; Thu, 18 Jan 2024 10:25:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705571213; cv=none; b=LmnbsapaHuwT1u7yOD8qbhFPmUqDRqsqQRs3ynxAMP726hB1GZW/Er5TIZcG6D+flDWdGL28N7UVRqrbBth7kIw8h8SJpup05+6ALoWneTRz7NkimJGA8a7dbsHib4vU64czo2pWJtq1qP3ZaQ6+jDbSsYVFff6APi6yAflDiwo=
+	t=1705573525; cv=none; b=e+mr+rKXc6nkoa+IXm5WzVw3O0ZjWSENXdtYiNvXIJ97DWgFhzo8N/YA9AKOMZfnYXBZfa9YfnNcHkuNcTVZNDl+x/FJXhNA5VInLN+ZAdSte3qjS8ui641EI+P3RlNgSxVsnsrmEAFphfA5Trtp6/4+EGijqk+wIAAJESxLeg8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705571213; c=relaxed/simple;
-	bh=saLotL2mkh07t8TficsUVCmF3iC0FBVXR0Jxq4GNmnU=;
-	h=DKIM-Signature:Received:Message-ID:Date:MIME-Version:User-Agent:
-	 Subject:Content-Language:From:To:Cc:References:In-Reply-To:
-	 Content-Type:Content-Transfer-Encoding; b=lOoNzKXtv8QDGe8NLhVn0p66SdmAux3chEq2EkrFhVc0ORHuorGWy5oE9dbm/fQH8xtE+FAU3tFDiNMzwaVOdYMPDd/jxCvk8AjaH45U2N0KyzLQiAQcBKS5R87d/2uzqDbB0OO6F6iqt6MWre0L6louzRzyIpbEWmLyqE4AFtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=hyWPPuKt; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1705571209;
-	bh=saLotL2mkh07t8TficsUVCmF3iC0FBVXR0Jxq4GNmnU=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=hyWPPuKtVRq0gPMYXRbwAle3sGCxvgsC7rImkS7RK3Q17ixVoJ0sUeATsbsO7C6gV
-	 Z6/1H8hcvsv2ICU3P9lVdRCFRwX8n7L7+fNqCsS0biYlXU3vO6DegYXM6dIlOc0w3P
-	 KP1OPluN3YZyzSCDTUyoK6vSXqPYgfnY/oEKTNnp1Iv6afony7rGnWvqh75ODZzVii
-	 oGnbY68/4RJzS8qDS1OugmedUgWbW12JaL7G2XI0PocLx7jhdE8VZP2VMbRm+STIkF
-	 2+Q2+DOQIy/e1FvRsJtUUcxJJtSD4M8heB2evVVyKRyU9r7nZA3FzlmohXE4NfOR7E
-	 dJ+UVEoQqSZwQ==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 3A9833781F8E;
-	Thu, 18 Jan 2024 09:46:49 +0000 (UTC)
-Message-ID: <7db00375-23cc-45eb-b91b-6846fde2302c@collabora.com>
-Date: Thu, 18 Jan 2024 10:46:48 +0100
+	s=arc-20240116; t=1705573525; c=relaxed/simple;
+	bh=/RFwUn+L0XLDZ7pWLxpNfofMNxLhWSzgFGWFnuu6l7g=;
+	h=Received:DKIM-Signature:X-Google-DKIM-Signature:
+	 X-Gm-Message-State:X-Google-Smtp-Source:X-Received:Received:
+	 Message-ID:Date:MIME-Version:User-Agent:Subject:Content-Language:
+	 To:Cc:References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding; b=sphq0RDMp5PZZerW0JqqcbeNJNF6ts4wDHPAe7igBoNACeegJjYkmtwCKEwhOl/11jkTPtV9m/B1N1VxSGhwieTqHtYyjjGGQD99RJzdQ9LiDNaXlFNWIZMtMuvkH4m+yQXvCc3VDarV46PSgGUJ+fvchzIs6tgKzE9O5HRMh28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Itg28zgb; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-40e80046264so41905695e9.0
+        for <linux-pm@vger.kernel.org>; Thu, 18 Jan 2024 02:25:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1705573522; x=1706178322; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=k24AhmjnPQLUkt/JHxUombKI/HErYrcObQB7jooRJW4=;
+        b=Itg28zgbAiobG6CaGW8XXHi9l8yqAmZnIRLFrtcT4AguRL0pAPlTv2Nwv/94/fStA7
+         GY6bpbYpansyrlOVMbLKk+geOWbsHAQzBG7cw8Fxb5jPdQBFDch71gswxHwbCCUl5V9s
+         Ar9VO66iZVvbwRZTkbDE6eG+oZbKAdh+aLGseZ2w0cYiEztsQVctTW+vZrr3mps4eQW5
+         6qpcuPd5KFKDiHmLhndN6Xnd6U/97UDRfcb3YERRP3Ds4m1RJPgITkP4lefj6q1ednHD
+         Eru5BU9giwtmVR1c9RAaRqwwhIvn3DU4QJPsgXfxLeVlQ+VCIvXRcw/KX3PmQeAJjM9m
+         8KWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705573522; x=1706178322;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=k24AhmjnPQLUkt/JHxUombKI/HErYrcObQB7jooRJW4=;
+        b=aA1SLZS0fOEPO8mvdEN96kHX2e0gOD5X2xENRLBqC+KhoZBRz0dInymzEBif99KYHz
+         BhhdRToJY6c+np/RLop43N8p/6OigkINxTEar6GLw60kUqoGMRAxBw0bIfoRT7dSSp5P
+         aNsC7YC+pYeIKapRRxJtnC0ZT+1bF69zjQnrZlM3xBQHzgJ8Tt5A1i62fXRMUDo8vJW6
+         sLOyYuDryrpk98Hx2rn3Z1p9hV2mdFjclWey++VwoZcTSRbNBC5y+/VLaGKN0y6lYbW7
+         OHAm3AQm1MSh2ppuLDuRA7si3R5XbZxKX+wKyiHmdqdz6FVc/8xr5TFxnSu6gMXv/j1j
+         941w==
+X-Gm-Message-State: AOJu0YxVsW0B3+/Kp2mNYd/7zGVRyUfr+qAK0G2gEmU9HfyhLXsEwVvV
+	kN51VxC5+wajiTm7QdzA64WxptGULJfLOKY55boUGULgCGLYeoPrmJ4JOyFxpaY=
+X-Google-Smtp-Source: AGHT+IF4bLefSoM6uIHKG8sWTgKDhMveu6Af4+VzJmMLqaVejII33G863Jt6Vt6G1Vxe88xp58QBUQ==
+X-Received: by 2002:a05:600c:6997:b0:40e:4ad9:666a with SMTP id fp23-20020a05600c699700b0040e4ad9666amr380238wmb.48.1705573522235;
+        Thu, 18 Jan 2024 02:25:22 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:a2f4:93df:1b67:8ad0? ([2a05:6e02:1041:c10:a2f4:93df:1b67:8ad0])
+        by smtp.googlemail.com with ESMTPSA id j17-20020a05600c1c1100b0040c46719966sm29161534wms.25.2024.01.18.02.25.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 Jan 2024 02:25:21 -0800 (PST)
+Message-ID: <41b284d7-e31f-48b5-8b21-0dca3e23cb1c@linaro.org>
+Date: Thu, 18 Jan 2024 11:25:21 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -58,345 +78,145 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 01/26] thermal: Introduce
- thermal_zone_device_register() and params structure
+Subject: Re: [PATCH] thermal/sysfs: Always enable hysteresis write support
 Content-Language: en-US
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: rafael@kernel.org, rui.zhang@intel.com, lukasz.luba@arm.com,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, kernel@collabora.com
-References: <20231221124825.149141-1-angelogioacchino.delregno@collabora.com>
- <20231221124825.149141-2-angelogioacchino.delregno@collabora.com>
- <7417c498-2439-485d-9f78-fbb22f9ce393@linaro.org>
- <33c7d36d-c2f5-477f-946a-6ad926a277d7@collabora.com>
- <9783d2a6-7395-4516-9fd1-d7c42ea35d07@collabora.com>
-In-Reply-To: <9783d2a6-7395-4516-9fd1-d7c42ea35d07@collabora.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>,
+ Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240106191502.29126-1-quic_manafm@quicinc.com>
+ <CAJZ5v0gE6eEpALrfxHvCd5TRqjB+v8pffG4CKLTVXiSvuiWhHg@mail.gmail.com>
+ <d7b82fc8-0ed8-80b8-9eb8-c77f9277178f@quicinc.com>
+ <CAJZ5v0g4hnRqRCseRnTjfEF+-2=ZT8U9=2m9FODqh3G8eDd=Sw@mail.gmail.com>
+ <921c2f90-fb8b-4e70-9e3d-6e185fec03b6@linaro.org>
+ <CAJZ5v0h+93YBsYsA5rOvzp+b3JMGyjUStHA=J8P7ynv+-ym-4g@mail.gmail.com>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0h+93YBsYsA5rOvzp+b3JMGyjUStHA=J8P7ynv+-ym-4g@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Il 18/01/24 10:39, AngeloGioacchino Del Regno ha scritto:
-> Il 16/01/24 10:58, AngeloGioacchino Del Regno ha scritto:
->> Il 15/01/24 13:39, Daniel Lezcano ha scritto:
->>> On 21/12/2023 13:48, AngeloGioacchino Del Regno wrote:
->>>> In preparation for extending the thermal zone devices to actually have
->>>> a name and disambiguation of thermal zone types/names, introduce a new
->>>> thermal_zone_device_params structure which holds all of the parameters
->>>> that are necessary to register a thermal zone device, then add a new
->>>> function thermal_zone_device_register().
->>>>
->>>> The latter takes as parameter the newly introduced structure and is
->>>> made to eventually replace all usages of the now deprecated function
->>>> thermal_zone_device_register_with_trips() and of
->>>> thermal_tripless_zone_device_register().
->>>>
->>>> Signed-off-by: AngeloGioacchino Del Regno 
->>>> <angelogioacchino.delregno@collabora.com>
->>>> ---
->>>>   drivers/thermal/thermal_core.c | 27 +++++++++++++++++++++++++++
->>>>   include/linux/thermal.h        | 33 +++++++++++++++++++++++++++++++++
->>>>   2 files changed, 60 insertions(+)
->>>>
->>>> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
->>>> index e5434cdbf23b..6be508eb2d72 100644
->>>> --- a/drivers/thermal/thermal_core.c
->>>> +++ b/drivers/thermal/thermal_core.c
->>>> @@ -1235,6 +1235,8 @@ EXPORT_SYMBOL_GPL(thermal_zone_get_crit_temp);
->>>>    *           whether trip points have been crossed (0 for interrupt
->>>>    *           driven systems)
->>>>    *
->>>> + * This function is deprecated. See thermal_zone_device_register().
->>>> + *
->>>>    * This interface function adds a new thermal zone device (sensor) to
->>>>    * /sys/class/thermal folder as thermal_zone[0-*]. It tries to bind all the
->>>>    * thermal cooling devices registered at the same time.
->>>> @@ -1409,6 +1411,7 @@ thermal_zone_device_register_with_trips(const char *type, 
->>>> struct thermal_trip *t
->>>>   }
->>>>   EXPORT_SYMBOL_GPL(thermal_zone_device_register_with_trips);
->>>> +/* This function is deprecated. See thermal_zone_device_register(). */
->>>>   struct thermal_zone_device *thermal_tripless_zone_device_register(
->>>>                       const char *type,
->>>>                       void *devdata,
->>>> @@ -1420,6 +1423,30 @@ struct thermal_zone_device 
->>>> *thermal_tripless_zone_device_register(
->>>>   }
->>>>   EXPORT_SYMBOL_GPL(thermal_tripless_zone_device_register);
->>>> +/**
->>>> + * thermal_zone_device_register() - register a new thermal zone device
->>>> + * @tzdp:    Parameters of the new thermal zone device
->>>> + *        See struct thermal_zone_device_register.
->>>> + *
->>>> + * This interface function adds a new thermal zone device (sensor) to
->>>> + * /sys/class/thermal folder as thermal_zone[0-*]. It tries to bind all the
->>>> + * thermal cooling devices registered at the same time.
->>>> + * thermal_zone_device_unregister() must be called when the device is no
->>>> + * longer needed. The passive cooling depends on the .get_trend() return value.
->>>> + *
->>>> + * Return: a pointer to the created struct thermal_zone_device or an
->>>> + * in case of error, an ERR_PTR. Caller must check return value with
->>>> + * IS_ERR*() helpers.
->>>> + */
->>>> +struct thermal_zone_device *thermal_zone_device_register(struct 
->>>> thermal_zone_device_params *tzdp)
->>>> +{
->>>> +    return thermal_zone_device_register_with_trips(tzdp->type, tzdp->trips, 
->>>> tzdp->num_trips,
->>>> +                               tzdp->mask, tzdp->devdata, tzdp->ops,
->>>> +                               &tzdp->tzp, tzdp->passive_delay,
->>>> +                               tzdp->polling_delay);
->>>> +}
->>>> +EXPORT_SYMBOL_GPL(thermal_zone_device_register);
->>>> +
->>>>   void *thermal_zone_device_priv(struct thermal_zone_device *tzd)
->>>>   {
->>>>       return tzd->devdata;
->>>> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
->>>> index 98957bae08ff..c6ed33a7e468 100644
->>>> --- a/include/linux/thermal.h
->>>> +++ b/include/linux/thermal.h
->>>> @@ -258,6 +258,33 @@ struct thermal_zone_params {
->>>>       int offset;
->>>>   };
->>>> +/**
->>>> + * struct thermal_zone_device_params - parameters for a thermal zone device
->>>> + * @type:        the thermal zone device type
->>>> + * @tzp:        thermal zone platform parameters
->>>> + * @ops:        standard thermal zone device callbacks
->>>> + * @devdata:        private device data
->>>> + * @trips:        a pointer to an array of thermal trips, if any
->>>> + * @num_trips:        the number of trip points the thermal zone support
->>>> + * @mask:        a bit string indicating the writeablility of trip points
->>>> + * @passive_delay:    number of milliseconds to wait between polls when
->>>> + *            performing passive cooling
->>>> + * @polling_delay:    number of milliseconds to wait between polls when checking
->>>> + *            whether trip points have been crossed (0 for interrupt
->>>> + *            driven systems)
->>>> + */
->>>> +struct thermal_zone_device_params {
->>>> +    const char *type;
->>>> +    struct thermal_zone_params tzp;
->>>> +    struct thermal_zone_device_ops *ops;
->>>> +    void *devdata;
->>>> +    struct thermal_trip *trips;
->>>> +    int num_trips;
->>>> +    int mask;
->>>> +    int passive_delay;
->>>> +    int polling_delay;
->>>> +};
->>>
->>>  From my POV, this "struct thermal_zone_params" has been always a inadequate and 
->>> catch-all structure. It will confuse with thermal_zone_device_params
->>>
->>> I suggest to cleanup a bit that by sorting the parameters in the right 
->>> structures where the result could be something like:
->>>
->>> eg.
->>>
->>> struct thermal_zone_params {
->>>
->>>      const char *type;
->>>      struct thermal_zone_device_ops *ops;
->>>      struct thermal_trip *trips;
->>>      int num_trips;
->>>
->>>      int passive_delay;
->>>      int polling_delay;
->>>
->>>      void *devdata;
->>>          bool no_hwmon;
->>> };
->>>
->>> struct thermal_governor_ipa_params {
->>>          u32 sustainable_power;
->>>          s32 k_po;
->>>          s32 k_pu;
->>>          s32 k_i;
->>>          s32 k_d;
->>>          s32 integral_cutoff;
->>>          int slope;
->>>          int offset;
->>> };
->>>
->>> struct thermal_governor_params {
->>>      char governor_name[THERMAL_NAME_LENGTH];
->>>      union {
->>>          struct thermal_governor_ipa_params ipa_params;
->>>      };
->>> };
->>>
->>> struct thermal_zone_device_params {
->>>      struct thermal_zone_params *tzp;
->>>      struct thermal_governor_params *tgp;
->>> }
->>>
->>> No functional changes just code reorg, being a series to be submitted before the 
->>> rest on these RFC changes (2->26)
->>>
+On 17/01/2024 19:49, Rafael J. Wysocki wrote:
+> On Wed, Jan 17, 2024 at 5:57 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
 >>
->> Could work. It's true that thermal_zone_params is a catch-all structure, and it's
->> not really the best... but I also haven't checked how complex and/or how much time
->> would your proposed change take.
+>> On 10/01/2024 13:48, Rafael J. Wysocki wrote:
+>>> Hi Manaf,
+>>>
+>>> On Wed, Jan 10, 2024 at 9:17 AM Manaf Meethalavalappu Pallikunhi
+>>> <quic_manafm@quicinc.com> wrote:
+>>>>
+>>>> Hi Rafael,
+>>>>
+>>>> On 1/9/2024 7:12 PM, Rafael J. Wysocki wrote:
+>>>>
+>>>> On Sat, Jan 6, 2024 at 8:16 PM Manaf Meethalavalappu Pallikunhi
+>>>> <quic_manafm@quicinc.com> wrote:
+>>>>
+>>>> The commit 2e38a2a981b2("thermal/core: Add a generic
+>>>> thermal_zone_set_trip() function") adds the support to update
+>>>> trip hysteresis even if set_trip_hyst() operation is not defined.
+>>>> But during hysteresis attribute creation, if this operation is
+>>>> defined then only it enables hysteresis write access. It leads
+>>>> to a case where hysteresis sysfs will be read only for a thermal
+>>>> zone when its set_trip_hyst() operation is not defined.
+>>>>
+>>>> Which is by design.
+>>>>
+>>>> I think it is regression after recent re-work. If a sensor is registered with thermal framework via thermal_of,
+>>>>
+>>>> sensor driver doesn't need to know the trip configuration and nothing to do with set_trip_hyst() in driver.
+>>>>
+>>>> Without this change, if a sensor needs to be monitored from userspace(trip/hysteresis),
+>>>
+>>> What exactly do you mean by "monitored" here?
+>>>
+>>>> it is enforcing sensor driver to add  dummy set_trip_hyst() operation. Correct me otherwise
+>>>
+>>> With the current design, whether or not trip properties can be updated
+>>> by user space is a thermal zone property expressed by the presence of
+>>> the set_trip_* operations, so yes, whoever registers the thermal zone
+>>> needs to provide those so that user space can update the trip
+>>> properties.
+>>>
+>>>> For some thermal zone types (eg. acpi), updating trip hysteresis via
+>>>> sysfs might lead to incorrect behavior.
+>>>>
+>>>> To address this issue, is it okay to  guard  hysteresis write permission under CONFIG_THERMAL_WRITABLE_TRIPS defconfig ?
+>>>
+>>> Not really, because it would affect all of the thermal zones then.
 >>
->> Shouldn't take much as far as I can foresee, but I really have to check a bit.
->> If I'm right as in it's not something huge, the next series will directly have
->> this stuff sorted - if not, I'll reach to you.
+>> It seems like there is an inconsistency here with the writable trip
+>> points and the writable hysteresis [1].
 >>
+>> My understanding is it does not make sense to have the hysteresis
+>> writable even if the driver has a hysteresis dedicated ops. The code
+>> allowing to change the hysteresis was done regardless the consistency
+>> with the trip temperature change and writable trip points kernel option IMO.
+>>
+>> It would make sense to have:
+>>
+>> if enabled(CONFIG_WRITABLE_TRIP_POINT)
+>>    -> trip_temp RW
+>>    -> trip_hyst RW
+>> else
+>>    -> trip temp RO
+>>    -> trip hyst RO
+>> fi
+>>
+>> But if the interface exists since a long time, we may not want to change
+>> it, right ?
 > 
-> So... I've checked the situation and coded some.
+> If the platform firmware implements hysteresis by changing trip
+> temperature (as recommended by the ACPI specification, for example),
+> modifying the trip hysteresis via sysfs is simply incorrect and user
+> space may not know that.
 > 
-> I came to the conclusion that doing it as suggested is possible but realistically
-> suboptimal, because that will need multiple immutable branches to actually end up
-> in upstream as changes would otherwise break kernel build.
+>> However, we can take the opportunity to introduce a new 'user' trip
+>> point type in order to let the userspace to have dedicated trip point
+>> and receive temperature notifications [2]
+>>
+>>> TBH, the exact scenario in which user space needs to update trip
+>>> hysteresis is not particularly clear to me, so can you provide some
+>>> more details, please?
+>>
+>> IIUC changing the hysteresis value is useful because the temperature
+>> speed will vary given the thermal contribution of the components
+>> surrounding the thermal zone, that includes the ambient temperature.
+>>
+>> However, that may apply to slow speed temperature sensor like the skin
+>> temperature sensor where we may to do small hysteresis variation.
+>>
+>> The places managed by the kernel have an insane temperature transition
+>> speed. The userspace is unable to follow this speed and manage the
+>> hysteresis on the fly.
+>>
+>> So that brings us to userspace trip point handling again.
 > 
-> Then, here I am suggesting a different way forward, while still performing this
-> much needed cleanup and reorganization:
-> 
-> First, we introduce thermal_zone_device_register() and params structure with
-> this commit, which will have
-> 
-> /* Structure to define Thermal Zone parameters */
-> struct thermal_zone_params {
->      /* Scheduled for removal - see struct thermal_zone_governor_params. */
->      char governor_name[THERMAL_NAME_LENGTH];
-> 
->      /* Scheduled for removal - see struct thermal_zone_governor_params. */
->      bool no_hwmon;
-> 
->      /*
->       * Sustainable power (heat) that this thermal zone can dissipate in
->       * mW
->       */
->      u32 sustainable_power;
-> 
->      /*
->       * Proportional parameter of the PID controller when
->       * overshooting (i.e., when temperature is below the target)
->       */
->      s32 k_po;
-> 
->      /*
->       * Proportional parameter of the PID controller when
->       * undershooting
->       */
->      s32 k_pu;
-> 
->      /* Integral parameter of the PID controller */
->      s32 k_i;
-> 
->      /* Derivative parameter of the PID controller */
->      s32 k_d;
-> 
->      /* threshold below which the error is no longer accumulated */
->      s32 integral_cutoff;
-> 
->      /*
->       * @slope:    slope of a linear temperature adjustment curve.
->       *         Used by thermal zone drivers.
->       */
->      int slope;
->      /*
->       * @offset:    offset of a linear temperature adjustment curve.
->       *         Used by thermal zone drivers (default 0).
->       */
->      int offset;
-> };
-> 
-> struct thermal_governor_params {
->      char governor_name[THERMAL_NAME_LENGTH];
->      struct thermal_zone_params ipa_params;
-> };
-> 
-> struct thermal_zone_platform_params {
->      const char *type;
->      struct thermal_zone_device_ops *ops;
->      struct thermal_trip *trips;
->      int num_trips;
->      int mask;
-> 
->      int passive_delay;
->      int polling_delay;
-> 
->      void *devdata;
->      bool no_hwmon;
-> };
-> 
-> 
-> struct thermal_zone_device_params {
->      struct thermal_zone_platform_params tzp;
->      struct thermal_governor_params *tgp;
-> };
-> 
-> (Note that the `no_hwmon` and `governor_name` are *temporarily* duplicated, but
-> there are good reasons to do that!)
-> 
-> Drivers will follow with the migration to `thermal_zone_device_register()`,
-> and that will be done *strictly* like so:
-> 
-> struct thermal_zone_device_params tzdp = {
->      .tzp = {
->          .type = "acerhdf",
->          .tzp = { .governor_name = "bang_bang" },
+> Well, I've already said that whether hysteresis can be modified via
+> sysfs is a property of a thermal zone.
 
-Whoops, sorry, this .tzp should've been removed, my bad!
+> It may as well be a trip property, for example expressed via a (new)
+> trip flag set in the trips table used for thermal zone registration.
+
+Yes, a trip property makes more sense.
+
+I'm a bit lost about WRITABLE_TRIP_POINT, writable hysteresis, read-only 
+temperature trip.
+
+Can we have a hysteresis writable but not the temperature ?
+
+You mentioned above "modifying the trip hysteresis via sysfs is simply 
+incorrect", so shall we allow that at the end?
+
+Is it possible to recap the situation?
 
 
 
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
->          .ops = &acerhdf_dev_ops,
->          .trips = trips,
->          .num_trips = ARRAY_SIZE(trips),
->          .polling_delay = kernelmode ? interval * 1000 : 0,
->          /* devdata, no_hwmon go here later in the code */
->      },
->      .tgp = { .governor_name = "bang_bang" }
-> };
-
-Looks like this instead:
-
-  struct thermal_zone_device_params tzdp = {
-       .tzp = {
-           .type = "acerhdf",
-           .ops = &acerhdf_dev_ops,
-           .trips = trips,
-           .num_trips = ARRAY_SIZE(trips),
-           .polling_delay = kernelmode ? interval * 1000 : 0,
-       },
-       .tgp = { .governor_name = "bang_bang" }
-};
-
-> 
-> Notice how in this case we're never *ever* referencing to any struct name,
-> apart from struct thermal_zone_device_params (meaning, I'm never creating
-> vars/pointers to struct thermal_zone_platform_params).
-> 
-> If we follow this style, at least temporarily and at least during this cleanup,
-> we will end up with a plan such that:
-> 
-> 1. In the first merge window:
->     - Drivers get migrated to thermal_zone_device_register()
->     - Functions register_with_trips()/tripless get deprecated but not yet removed
-> 
-> 2. In the next merge window (expecting all users updated from the first window):
->     - Functions register_with_trips/tripless get removed (<- no more external refs
->       to struct thermal_zone_params, which can be then safely renamed!)
->     - Duplicated members governor_name and no_hwmon get removed from
->       struct thermal_zone_params
->     - Some structures get renamed to give them the proposed better names (which
->       I also genuinely like)
->     - Only Thermal API internal changes, as users (all the ones that are not in
->       drivers/thermal/) won't need to get updated at all!
->       ... and that's why I said "strictly like so" in the example up there.
-> 
-> I think that this is the best strategy, for both ease of merging the changes and
-> internal reorganization.
-> 
-> Sure in the first merge window we'll be wasting a byte or two, but I am confident
-> in that this is a very low price to pay - and even better, only temporarily - for
-> other bigger benefits.
-> 
-> What do you think?
-> 
-> Cheers!
-> Angelo
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
 
