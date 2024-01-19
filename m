@@ -1,159 +1,177 @@
-Return-Path: <linux-pm+bounces-2370-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2375-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4C9A832644
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 10:07:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFDD08328A4
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 12:15:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8434328583F
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 09:07:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B1021F22E42
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 11:15:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC9A322087;
-	Fri, 19 Jan 2024 09:06:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC0B33D393;
+	Fri, 19 Jan 2024 11:15:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="twRq39oL"
+	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="bKIwIUGV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2079.outbound.protection.outlook.com [40.107.212.79])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FFC21E89E;
-	Fri, 19 Jan 2024 09:06:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.79
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705655194; cv=fail; b=dbb+NPxnfbqY9VQs6wxvHHBvr21xwMwW0Cwbj6EaiTQW408Fuj/ySJalnt8rMuMVuGai+QTTVoBf9SfTVC7IqYHnNkb2uAg38E2qfSeqilKz5ATWTcoiUoQYwCo3HSp84Mq93WIddoMzN1/vZAdlJc07C5TVh3IZ9dodNdp87os=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705655194; c=relaxed/simple;
-	bh=IZvjB7EN/4zNzdRQnCVGIQg4s42HWrXioCam/fK1DV0=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=m+cnZsxV8ut6SERmUrRjiLN36YOJQ2hUhHfKAB3SXqMq4UP1bxJvObX2UBl68lV+BWOdgFIA0aztEhJ4Bu/xkpOIv7H6a1/7bMh0T5+oW75xvXbFyQp0OtXzgK/bnivR3AhuUDpbYP/1T4h0AQkzOR3Ne7M3vAxSs+q10kESc3c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=twRq39oL; arc=fail smtp.client-ip=40.107.212.79
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Sfv7KOTQVQu5ozwi+Y8rHXbFDrRI2huujN6erunpMzUIOCyX8Xy3i/At2KNtoERysJdy13CfMlGO/RGe5yCV1CCRKJxLFjhJkJ20ZPFCGcPGniMqgv7+kf6Q4qmJQnW7hNTqB7bKBgjRSpZUVCKvMzLkEWa1uaJNKFwWTXw03jgb21sbfx3ZoMaqZZJwDFRnjt7/GZMPCcxAzsH7gfPzPxXdIxqFfCvPADkP9VJbUD2vI27LEfsAJpts07xXigowEFH/w3+Il/VTLqMro6UXXI/WMd809Gee24sWEWKw5EaTU3E8JIHZ6IE2sHG7VxyT8HXZPSker52uvOGxILQC3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=No7NU21ife6RzGvHBvQIbHlZ1whS1mUgP/ZoECpCgPo=;
- b=i5qE0PIl79fP8x4sNn2gv4ZfiRx2Dp8tjK+JMj1+KHaHd1ISj5FvesQnV8wnUP6BrXMldQrwirRPlb/ZmtGXQSKUJBGGWR/8fzLMIbx0TlzyZ91r1qr0HNn+Sic+g7gR/0dOX91y6Svozn/7cvpg1FVqmTE00NTBWCnOeSeOcocg6Wf4dtK/jL/HLhXxlieYDGO6Nl8nO3TI6nvTu76hROBT0CTHjmwX65U3EQ3KwXpydTRaAM5dFbbjDW9Msg6Ni01OAnmulbOldQXyEmUjP2I6reQyIh458n+N74HkkXiCl4Vk5EC5qLJdPwDhtoxHx23QwC4v/3ItAKNPtWinmw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=No7NU21ife6RzGvHBvQIbHlZ1whS1mUgP/ZoECpCgPo=;
- b=twRq39oLD9T+KXqC2KD9tc+L9d5xeUiiDowEhvI7QYaKurL3Sjrc9hxSxvCVWHLeHiDCpcAhaqBwVrRQZayJwOztOKSNv4y0trSn4rxB8RD1BkmIciZdgusOjbs5560TaRqeH5/UDMaNC00FbVtnuDCGKXhTFdomKYe3ZoK6qAc=
-Received: from MW4PR04CA0347.namprd04.prod.outlook.com (2603:10b6:303:8a::22)
- by DS7PR12MB8250.namprd12.prod.outlook.com (2603:10b6:8:db::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7202.24; Fri, 19 Jan
- 2024 09:06:27 +0000
-Received: from CO1PEPF000044F8.namprd21.prod.outlook.com
- (2603:10b6:303:8a:cafe::9e) by MW4PR04CA0347.outlook.office365.com
- (2603:10b6:303:8a::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7202.24 via Frontend
- Transport; Fri, 19 Jan 2024 09:06:27 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1PEPF000044F8.mail.protection.outlook.com (10.167.241.198) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7228.0 via Frontend Transport; Fri, 19 Jan 2024 09:06:27 +0000
-Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Fri, 19 Jan
- 2024 03:06:05 -0600
-From: Meng Li <li.meng@amd.com>
-To: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, Borislav Petkov
-	<bpetkov@amd.com>, Huang Rui <ray.huang@amd.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<x86@kernel.org>, <linux-acpi@vger.kernel.org>, Shuah Khan
-	<skhan@linuxfoundation.org>, <linux-kselftest@vger.kernel.org>, "Nathan
- Fontenot" <nathan.fontenot@amd.com>, Deepak Sharma <deepak.sharma@amd.com>,
-	Alex Deucher <alexander.deucher@amd.com>, Mario Limonciello
-	<mario.limonciello@amd.com>, Shimmer Huang <shimmer.huang@amd.com>, "Perry
- Yuan" <Perry.Yuan@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>, Viresh Kumar
-	<viresh.kumar@linaro.org>, Borislav Petkov <bp@alien8.de>, "Oleksandr
- Natalenko" <oleksandr@natalenko.name>, Meng Li <li.meng@amd.com>, Wyes Karny
-	<wyes.karny@amd.com>, Perry Yuan <perry.yuan@amd.com>
-Subject: [PATCH V14 7/7] Documentation: introduce amd-pstate preferrd core mode kernel command line options
-Date: Fri, 19 Jan 2024 17:05:02 +0800
-Message-ID: <20240119090502.3869695-8-li.meng@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240119090502.3869695-1-li.meng@amd.com>
-References: <20240119090502.3869695-1-li.meng@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B33DB3C470
+	for <linux-pm@vger.kernel.org>; Fri, 19 Jan 2024 11:15:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1705662954; cv=none; b=GNYyBIb2fOur8J8jOT1CnHUbwFq3en3MpBwKZJG1fGdy4nqkxRw41tkQVtyju2m7CkJRbMaOFg9WyMZjPOPtLsbsrNN8BoawkXhIXoIEhqCEmjRt14apEvFgre/rTf2OTPd937upfawN5HvajD+K25kxQgroa10YlCr16v3u2lU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1705662954; c=relaxed/simple;
+	bh=DO+mFZ7HF6rMuHe6kj7D6RUUm/n7CFHefjKby+CVNOo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=r13g0w59nkwZMcDOFl7noiP905fcyekgnzC6guNTrl8j4ZgtqzHMO6rrbdaWqoTOk1+wHA+3E7QZlydoctTxkseqwXPEI+19eOsjyznuXe8tJZf7Zas2VZ5XNQPXi8Z4javfjnYiZi6ltHTC/KQX1dmZNlMbMwZsM3wozZGvFGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=bKIwIUGV; arc=none smtp.client-ip=85.214.62.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+	(No client certificate requested)
+	(Authenticated sender: marex@denx.de)
+	by phobos.denx.de (Postfix) with ESMTPSA id BCFF787A82;
+	Fri, 19 Jan 2024 12:15:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+	s=phobos-20191101; t=1705662950;
+	bh=SUsZc5co9UnGPw9CafszzMNh7dbWHLX8Es5IDCF8Q+M=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=bKIwIUGV1ESVXKbIOMqL5nNhQ7s47t+FdDi6xZp/yJerbxZwm8L2P/J3Jl9HWu9LJ
+	 FH/r4ZocLwtrwzZVrVhfFv55x+KO4F0Bf9IHTy7sQojaLOYHLDnRLkpwAL7Lhuz09U
+	 ECLF9Cf95+DtBS0WfatGLDJatfPdjN4cXXvYDmjrX6oOTCiLvPgEIQSTDN1WQdoqD1
+	 csc93BhBGnQ+Fucr7mcZgkhj0EkuyJrG39WweP+KGoupfGPgNwZe9L54wZfzqM3oiz
+	 SlvM9S47TodIvmRxk+y28e3gTA057A83Dz5NnNKIGmhNUJosB7KlAcD9ISeiPcYolk
+	 iMjZN/orw2aCg==
+Message-ID: <73886bd9-e2ab-40ef-a1a0-a82222d97201@denx.de>
+Date: Fri, 19 Jan 2024 11:58:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] pmdomain: imx8m-blk-ctrl: imx8mp-blk-ctrl: Error out
+ if domains are missing in DT
+Content-Language: en-US
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc: linux-pm@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Jindong Yue <jindong.yue@nxp.com>, Marco Felsch <m.felsch@pengutronix.de>,
+ NXP Linux Team <linux-imx@nxp.com>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Fabio Estevam <festevam@gmail.com>,
+ linux-arm-kernel@lists.infradead.org, Lucas Stach <l.stach@pengutronix.de>
+References: <20240119014807.268694-1-marex@denx.de>
+ <asamq53uiegrgwo5c25sjn7n47bsv6xa3ybkueuhb2d42m66ze@t6ujdompm2gs>
+From: Marek Vasut <marex@denx.de>
+In-Reply-To: <asamq53uiegrgwo5c25sjn7n47bsv6xa3ybkueuhb2d42m66ze@t6ujdompm2gs>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000044F8:EE_|DS7PR12MB8250:EE_
-X-MS-Office365-Filtering-Correlation-Id: dec0e504-d57d-44fe-70cc-08dc18cdeb1b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	0bZ+9mItUCQsNnwz4qvbMAxIfbok0qoYXtBj7Y0za9vLm/GBNuehQDT7vo81xDRw442MhHPk8E2wHcphTRG6Cwm++vgFKPBHQi6ikhBF9DW18n5/A7ajvnIy4wqY89fNzOisqXuYbnJ2DfrqSziJZJqPlk12aJAIH2wGl5+WbqOQ7Odgzn1fOZq1N+VqKdKsMfqUvaEvqTyP3GZ+1drEaDdrX63ghmr9Uo6diNLorxI3/6WUK+1Cg1LuKRoNHkE8upZpLcSYSASQVg1TDf61IqUzmNnuB/q/eBwI1UkDFPxHTGSfSI/IFexyc7TdcxCf0s8dAgBpZYgU9jLtDIc8J4Cq6ANfw/c6GltVzGXuY6JXOmWz1UuOQeHLtAiapXXiLnrOtOsrjpxAM0Z4ugYg6lQS0Ce1RH7CLKVAFwspSri9GY9HRZ1v0BF8kA9Z4oZBZyYRaik+ZFgdHQ8XnaeHIKu3QTSOj877t7XMI61xOekS5e/meqmiVOEi+j3Wjn6W+MiUs93gBfRlQCb8v2gbxOZ4nUoVOeBN5kxkPvhzzLQ5WQMtenXOppiHoL3AHCUj83ouTMw4n8CAX/2ZljRT2s6EEdeprIhdj5IFb6Oaj5f0cSSDlcC/EUku2jICYFBGARPuN52PUYoFCzkQqBWHWCXX2f/ij8oZkbR2/8V5ASIuZZfJA0EiwLDAM5K9jGneVwjCQBxuvVkkgbCz5sKQn/NBrOAH78mJOWVZwrn1+jdHbr6TphcVqzXqN5NKpCv1rz8XJT79LntqvIVlmc1MUh0Zwf7dm3DbKTAZiw0M0HznKk5lpCXctAjv9T4J+J0x
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(136003)(376002)(346002)(396003)(230922051799003)(186009)(451199024)(64100799003)(82310400011)(1800799012)(46966006)(40470700004)(36840700001)(26005)(16526019)(478600001)(81166007)(1076003)(426003)(336012)(40480700001)(40460700003)(356005)(7696005)(2616005)(6666004)(316002)(70586007)(70206006)(54906003)(83380400001)(110136005)(6636002)(86362001)(5660300002)(41300700001)(4326008)(7416002)(8936002)(8676002)(82740400003)(47076005)(2906002)(36860700001)(36756003)(36900700001)(14943795004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2024 09:06:27.0167
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: dec0e504-d57d-44fe-70cc-08dc18cdeb1b
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CO1PEPF000044F8.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8250
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
 
-amd-pstate driver support enable/disable preferred core.
-Default enabled on platforms supporting amd-pstate preferred core.
-Disable amd-pstate preferred core with
-"amd_prefcore=disable" added to the kernel command line.
+On 1/19/24 08:42, Uwe Kleine-König wrote:
+> On Fri, Jan 19, 2024 at 02:47:41AM +0100, Marek Vasut wrote:
+>> This driver assumes that domain->power_dev is non-NULL in its suspend/resume
+>> path. The assumption is valid, since all the devices that are being looked up
+>> here should be described in DT. In case they are not described in DT, beause
+>> the DT is faulty, suspend/resume attempt would trigger NULL pointer dereference.
+>> To avoid this failure, check whether the power_dev assignment is not NULL right
+>> away in probe callback and fail early if it is.
+>>
+>> Signed-off-by: Marek Vasut <marex@denx.de>
+>> ---
+>> Cc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
+>> Cc: Fabio Estevam <festevam@gmail.com>
+>> Cc: Jindong Yue <jindong.yue@nxp.com>
+>> Cc: Lucas Stach <l.stach@pengutronix.de>
+>> Cc: Marco Felsch <m.felsch@pengutronix.de>
+>> Cc: NXP Linux Team <linux-imx@nxp.com>
+>> Cc: Peng Fan <peng.fan@nxp.com>
+>> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+>> Cc: Sascha Hauer <s.hauer@pengutronix.de>
+>> Cc: Shawn Guo <shawnguo@kernel.org>
+>> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Cc: linux-pm@vger.kernel.org
+>> ---
+>> V2: Add extra check for domain being NULL (thanks Peng)
+>> ---
+>>   drivers/pmdomain/imx/imx8m-blk-ctrl.c  | 9 ++++++---
+>>   drivers/pmdomain/imx/imx8mp-blk-ctrl.c | 9 ++++++---
+>>   2 files changed, 12 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/pmdomain/imx/imx8m-blk-ctrl.c b/drivers/pmdomain/imx/imx8m-blk-ctrl.c
+>> index 1341a707f61bc..ca942d7929c2b 100644
+>> --- a/drivers/pmdomain/imx/imx8m-blk-ctrl.c
+>> +++ b/drivers/pmdomain/imx/imx8m-blk-ctrl.c
+>> @@ -258,11 +258,14 @@ static int imx8m_blk_ctrl_probe(struct platform_device *pdev)
+>>   
+>>   		domain->power_dev =
+>>   			dev_pm_domain_attach_by_name(dev, data->gpc_name);
+>> -		if (IS_ERR(domain->power_dev)) {
+>> -			dev_err_probe(dev, PTR_ERR(domain->power_dev),
+>> +		if (IS_ERR_OR_NULL(domain->power_dev)) {
+>> +			if (!domain->power_dev)
+>> +				ret = -ENODEV;
+>> +			else
+>> +				ret = PTR_ERR(domain->power_dev);
+>> +			dev_err_probe(dev, ret,
+>>   				      "failed to attach power domain \"%s\"\n",
+>>   				      data->gpc_name);
+>> -			ret = PTR_ERR(domain->power_dev);
+>>   			goto cleanup_pds;
+>>   		}
+>>   
+>> diff --git a/drivers/pmdomain/imx/imx8mp-blk-ctrl.c b/drivers/pmdomain/imx/imx8mp-blk-ctrl.c
+>> index e3203eb6a0229..e488cf79b8007 100644
+>> --- a/drivers/pmdomain/imx/imx8mp-blk-ctrl.c
+>> +++ b/drivers/pmdomain/imx/imx8mp-blk-ctrl.c
+>> @@ -687,11 +687,14 @@ static int imx8mp_blk_ctrl_probe(struct platform_device *pdev)
+>>   
+>>   		domain->power_dev =
+>>   			dev_pm_domain_attach_by_name(dev, data->gpc_name);
+>> -		if (IS_ERR(domain->power_dev)) {
+>> -			dev_err_probe(dev, PTR_ERR(domain->power_dev),
+>> +		if (IS_ERR_OR_NULL(domain->power_dev)) {
+>> +			if (!domain->power_dev)
+>> +				ret = -ENODEV;
+>> +			else
+>> +				ret = PTR_ERR(domain->power_dev);
+>> +			dev_err_probe(dev, ret,
+>>   				      "failed to attach power domain %s\n",
+>>   				      data->gpc_name);
+>> -			ret = PTR_ERR(domain->power_dev);
+> 
+> This could be made a bit more compact using:
+> 
+> 	domain->power_dev =
+> 		dev_pm_domain_attach_by_name(dev, data->gpc_name) ||
+> 		ERR_PTR(-ENODEV);
+> 	if (IS_ERR(domain->power_dev)) {
+> 		ret = PTR_ERR(domain->power_dev);
+> 		...
+> 
+> I'm unsure though if this is human friendly enough?!
 
-Signed-off-by: Meng Li <li.meng@amd.com>
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-Reviewed-by: Wyes Karny <wyes.karny@amd.com>
-Reviewed-by: Huang Rui <ray.huang@amd.com>
-Reviewed-by: Perry Yuan <perry.yuan@amd.com>
-Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
----
- Documentation/admin-guide/kernel-parameters.txt | 5 +++++
- 1 file changed, 5 insertions(+)
+I think it is only more cryptic and doesn't improve readability.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index e0891ac76ab3..88b29efc474f 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -363,6 +363,11 @@
- 			  selects a performance level in this range and appropriate
- 			  to the current workload.
- 
-+	amd_prefcore=
-+			[X86]
-+			disable
-+			  Disable amd-pstate preferred core.
-+
- 	amijoy.map=	[HW,JOY] Amiga joystick support
- 			Map of devices attached to JOY0DAT and JOY1DAT
- 			Format: <a>,<b>
--- 
-2.34.1
+> Having said that I wonder about dev_pm_domain_attach_by_name(). IMHO if
+> NULL is an error case it and other errors are signaled by error
+> pointers, there is something to fix there.
 
+I don't think dev_pm_domain_attach_by_name() returning NULL is an error 
+-- the domain may be missing from DT and that is legitimate use case I 
+think.
+
+But not here, where all the domains should be described in DT because 
+the driver makes assumptions about their presence in the suspend/resume 
+part, and because the DT should fully describe the domains of this 
+hardware anyway, so we better catch such DT issues.
 
