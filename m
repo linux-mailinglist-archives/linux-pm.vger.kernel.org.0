@@ -1,49 +1,50 @@
-Return-Path: <linux-pm+bounces-2391-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2392-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3BEF832E24
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 18:28:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB67F832E6A
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 18:55:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E7B981C21738
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 17:28:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 822341F24CD6
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 17:55:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7462855E63;
-	Fri, 19 Jan 2024 17:28:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kGVPO4Qo"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46D4B54BE2;
+	Fri, 19 Jan 2024 17:54:30 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46A6A54F9B;
-	Fri, 19 Jan 2024 17:28:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3DFC56B7E
+	for <linux-pm@vger.kernel.org>; Fri, 19 Jan 2024 17:54:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705685321; cv=none; b=bYseRPpLCQ4B8cixNtvHt3P6RzEIxpi7YEsNEL8awyUryw8gHoWtHr6A0i7VllxEIbPxw7w/D2Hxj/MHrAJJZklwzb03xdlDSK/++5h+tPqF1Y1/mzgQ8U1XIXUXWhykTiuH8DwYs6MFXwRbfttQOO4sDWQoWBC6dCWHWJ4QJgk=
+	t=1705686870; cv=none; b=bhxjC0cUJa3nCVHVHE6avBKVz9b2lcBCxhI+Job0zJO0fiso7Zl8faRLY2nn5S7JVSQda0lbAVXExpMnrSBoFUDRf8BrI0l4x1fKemvcWGdo/lxrrxzQkFEYzNG1Xsku7n/G0gWGnuC5/x5ChK4jy0D8/eYfMYD0n99dpnSHjgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705685321; c=relaxed/simple;
-	bh=GQWTWoBKpbNB7G5ergb/SE1apkAwlCoyhbciiQBtTM8=;
+	s=arc-20240116; t=1705686870; c=relaxed/simple;
+	bh=thj0rbqL/gPURJA3HN4micGmDvafwRuWhOPghAP9hWg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rx4vUbNZiV6QQMZQfqR6Q39vy1Fn0Z1aXi4wQpHBXyPG960FBQ6idsdhqIkx3HHCE45hILrCSu38PcLCKEI5oBaS6jUnzESJ8l935//pxACdYkDOzvtuBAn5ewDDxx4htv53AMuP87PiARYrWT7rmRMHYoThmc5+vP4ShfisBxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kGVPO4Qo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90C6FC433C7;
-	Fri, 19 Jan 2024 17:28:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705685320;
-	bh=GQWTWoBKpbNB7G5ergb/SE1apkAwlCoyhbciiQBtTM8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kGVPO4QohMMi/GdXUPeCxL0gOWkmV4hXLQHUVzUDP7NoETtmUpr2vhg4XeVJvsADF
-	 afXMVdGusiFhV3wd53hIuoqeHdsX0Z8L8qsL7OSFIIjZ7xy9lkWWBHNfl+q/u7yevD
-	 W4VNGadiwuBykwAwydjc86Ypa/EVkaJ59VeSPGk8iHOB5/zsSM297y4/gtc4U0LTPO
-	 NhkLAni4miUC7/nKrvOd9pnHmM6QasYvcklWwak/Iyrey1Th3bEwZtHS25yAxzzwAU
-	 /MlSKNio1inEo/FCcQ46Qb9idoMb6Uwq1yXnAa33qRUnQfHUsNVSlpzBM2yb7b/yBa
-	 gAoIxEa2rRwgw==
-Date: Fri, 19 Jan 2024 11:28:38 -0600
-From: Rob Herring <robh@kernel.org>
-To: Oleksij Rempel <o.rempel@pengutronix.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=X2A3F0TzYK6ctoAOPoCU9XgMERGUPwJHVfPUk/wupyPOki2YhrM8cbQNy1mWdWsPIBb2Gw2d97Lt4oJSpiw2iA6mk9brlGlMRck7zC2Kvfrcc0yqlRDomJzv+zYFfM8ZphDDth0KAPwEiOzzPWrik/ZHgPbDavRvqLzGAHcFFZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1rQt4B-0002Z5-2w; Fri, 19 Jan 2024 18:54:07 +0100
+Received: from [2a0a:edc0:2:b01:1d::c0] (helo=ptx.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ore@pengutronix.de>)
+	id 1rQt4A-000y8v-1V; Fri, 19 Jan 2024 18:54:06 +0100
+Received: from ore by ptx.whiteo.stw.pengutronix.de with local (Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1rQt49-000lgo-Uc; Fri, 19 Jan 2024 18:54:05 +0100
+Date: Fri, 19 Jan 2024 18:54:05 +0100
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Rob Herring <robh@kernel.org>
 Cc: Sebastian Reichel <sre@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>,
@@ -55,104 +56,62 @@ Cc: Sebastian Reichel <sre@kernel.org>,
 	Daniel Lezcano <daniel.lezcano@linaro.org>,
 	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
 	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	=?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>
+	=?utf-8?B?U8O4cmVu?= Andersen <san@skov.dk>
 Subject: Re: [RFC PATCH v1 1/7] dt-bindings: power: reset: add generic PSCR
  binding trackers
-Message-ID: <20240119172838.GA460212-robh@kernel.org>
+Message-ID: <20240119175405.GA163482@pengutronix.de>
 References: <20240119132521.3609945-1-o.rempel@pengutronix.de>
  <20240119132521.3609945-2-o.rempel@pengutronix.de>
+ <20240119172838.GA460212-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240119132521.3609945-2-o.rempel@pengutronix.de>
+In-Reply-To: <20240119172838.GA460212-robh@kernel.org>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-On Fri, Jan 19, 2024 at 02:25:15PM +0100, Oleksij Rempel wrote:
-> Add binding for Power State Change Reason (PSCR) subsystem
-
-Why? 
-
-How is this different from the reboot reason binding?
-
+On Fri, Jan 19, 2024 at 11:28:38AM -0600, Rob Herring wrote:
+> On Fri, Jan 19, 2024 at 02:25:15PM +0100, Oleksij Rempel wrote:
+> > Add binding for Power State Change Reason (PSCR) subsystem
 > 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  .../devicetree/bindings/power/reset/pscr.yaml | 51 +++++++++++++++++++
->  1 file changed, 51 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/reset/pscr.yaml
+> Why? 
 > 
-> diff --git a/Documentation/devicetree/bindings/power/reset/pscr.yaml b/Documentation/devicetree/bindings/power/reset/pscr.yaml
-> new file mode 100644
-> index 000000000000..1ce973f3473c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/reset/pscr.yaml
-> @@ -0,0 +1,51 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/state-change/pscr.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Power State Change Reason (PSCR)
-> +
-> +maintainers:
-> +  - Oleksij Rempel <o.rempel@pengutronix.de>
-> +
-> +description: Binding for devices responsable to store reasons for power state
+> How is this different from the reboot reason binding?
 
-responsible
+I was not able to find "reboot reason", you probably refer to "reboot
+mode".
 
-> +  changes such as reboot and power-off. Reasons like unknown, under voltage,
-> +  and over temperature are captured for diagnostic or automatic recovery
-> +  purposes.
-> +
-> +properties:
-> +  $nodename:
-> +    pattern: "^pscr(@.*|-([0-9]|[1-9][0-9]+))?$"
+Reboot Mode:
+ Purpose: Dictates how the system should reboot (e.g., normal, recovery,
+   bootloader).
+ Usage: Provides instructions for the next boot mode.
+ Scenario: Utilized in planned reboots or software-triggered reset scenarios.
 
-Drop. This could be used in any random device.
+PSCR (Power State Change Reasons):
+ Purpose: Logs the reason behind a power state change (e.g., voltage drop,
+   over-temperature).
+ Usage: Used for rapid logging and post-event analysis, potentially informing
+   automatic decision-making in subsequent boots.
+ Scenario: Critical in abrupt power-down situations where immediate, detailed
+   decision-making is not possible.
 
-> +
-> +  pscr-unknown:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: Value to indicate an unknown reason for the power state change.
-
-What's an undocumented value? It would be unknown too, so just drop this 
-property.
-
-> +
-> +  pscr-under-voltage:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      Value to indicate an under-voltage condition of a system critical
-> +      regulator as the reason for the power state change.
-> +
-> +  pscr-over-current:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      Value to indicate an over-current condition of a system ctitical regulator
-> +      as the reason for the power state change.
-> +
-> +  pscr-regulator-failure:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      Value to indicate an unknow, system ctitical regulator related failure
-> +      as the reason for the power state change.
-> +
-> +  pscr-over-temperature:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    description: |
-> +      Value to indicate a system critical over-temperature condition as the
-> +      reason for the power state change.
-> +
-> +additionalProperties: true
-> +
-> +...
-> -- 
-> 2.39.2
-> 
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
