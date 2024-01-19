@@ -1,137 +1,158 @@
-Return-Path: <linux-pm+bounces-2390-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2391-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47E80832DA6
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 18:04:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3BEF832E24
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 18:28:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 826D91C20AFB
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 17:04:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E7B981C21738
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 17:28:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B2BB55796;
-	Fri, 19 Jan 2024 17:04:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7462855E63;
+	Fri, 19 Jan 2024 17:28:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BJ9N/BQs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kGVPO4Qo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A3E4C624
-	for <linux-pm@vger.kernel.org>; Fri, 19 Jan 2024 17:04:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46A6A54F9B;
+	Fri, 19 Jan 2024 17:28:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705683849; cv=none; b=a89zrMi4ciWG9kze0OTqy/20yHLHPeaYT2N81+2xJVAk/Twzh06uDklIY4wFc9skc3eyvYo7NEIv0RU9WkBjk2YsZcDVjz1pGeL+6fb52zasPlVPzPRggN46OoXN3T6sxXS/D+W31R/S9RUT0fNe8OeNXUTmcjWaDPv6jqZl/xo=
+	t=1705685321; cv=none; b=bYseRPpLCQ4B8cixNtvHt3P6RzEIxpi7YEsNEL8awyUryw8gHoWtHr6A0i7VllxEIbPxw7w/D2Hxj/MHrAJJZklwzb03xdlDSK/++5h+tPqF1Y1/mzgQ8U1XIXUXWhykTiuH8DwYs6MFXwRbfttQOO4sDWQoWBC6dCWHWJ4QJgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705683849; c=relaxed/simple;
-	bh=laQ5R2ljp5sOAD1PeJjNCx3V7TzWD7aQzqRo6lgnvpA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hGYl0KsSmpoXI4LdCzmqBr6JLBIrWM9ijMAkmiPyMr65jYRBlReW7gpt9jkIxLesQX6HYc3uzTWFmYER1F/xUAt6/4v89HLFdNZyL5R49vEJpaG5NRH0LpIzg2wohhFZFSlMzaOVHexyBWhdgX1/U3Pi9na1IHz7h5cj9xEygWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BJ9N/BQs; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-40e8f710d44so12228295e9.3
-        for <linux-pm@vger.kernel.org>; Fri, 19 Jan 2024 09:04:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705683846; x=1706288646; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fp4lNGKb8aVlGOpRF8y9CMoD/VH0i42/Ixsz2vaouoM=;
-        b=BJ9N/BQsWfarmO0yB7Rj3+FfHxHhRbHxHNw8XngRIUSPlp2zbgrMLu+CbEP/LyZk0r
-         cKLu3BR0XmT1suuLMX9UgwMMlf7088ew0rU9Qx+2g+Tv1mp8zZes/I3M7t321sgnyiIx
-         HLDiw1uFrF0+ti9ksgnYCkrMp2LCQ2fidfL4jdkJAoUmfuTdRQJVFyCdpewUH5bM9wz0
-         vTjz++K9zeR+Bb4xnwEH4Ji8quD+Je04GJg+3HkmULla6Oq24TwOE3xgdG1K1tYehDtu
-         nwoPWHAvVAMusi6MyTBZxKrDmlYpxfUA3qL/W9JBxDlP5dIJHho7KgUxaLkqDhRTNDXa
-         DLiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705683846; x=1706288646;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fp4lNGKb8aVlGOpRF8y9CMoD/VH0i42/Ixsz2vaouoM=;
-        b=PxtlCV/mwApHSDk10C+pGmEMKGL5UdYGNFHIUFPfCsOgW2DNKjkOYuYTooOoYBoHz+
-         ULtrkKsp6E/6sLO+VOXpYEiXd+fN25voPmb4CfgoSOHXthGEOLHv9AEWYW9L0AtvDOUS
-         6/RD/BjG5IxJyM8opnVlRJBIKPOZcstauK7B4b7Tj8W1FKQLchvudby7xDQzIYTk/+Ck
-         pZFioZPHk6G/ygu2087cm6Gkv6YQPj0wWf3fMa48K98H9tYBSXCmo08wdwv35WhuNoFf
-         jWndAS1GQpuQwnGoqhoDMByjre50JveKFxLenpUCKIz0lNR003wb1ZGccGW7kbekRKz5
-         4pDw==
-X-Gm-Message-State: AOJu0YxOBkyG4fmPCL0GG39ex1ACVZte9vtrwymP1oMSFLTrnmwDlCtV
-	q/zIbs2QdvSW67D2FRe/DTiZyLL4c2M+pB4xEbYwrg93j3VRj+CtLOuQw2/MEPQ=
-X-Google-Smtp-Source: AGHT+IGEA8WJp2FihijH5hF1ivVCC8ljmyKvQ7c/6EH1MKuwIUL9qtRlaeRJu4EVpr+Lalz6DsbNdA==
-X-Received: by 2002:a05:600c:35c5:b0:40e:691f:23ad with SMTP id r5-20020a05600c35c500b0040e691f23admr40987wmq.10.1705683845595;
-        Fri, 19 Jan 2024 09:04:05 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:80ec:9cf:f853:831a? ([2a05:6e02:1041:c10:80ec:9cf:f853:831a])
-        by smtp.googlemail.com with ESMTPSA id w4-20020a05600c474400b0040d5ae2906esm33848731wmo.30.2024.01.19.09.04.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Jan 2024 09:04:05 -0800 (PST)
-Message-ID: <6a5dc670-42bc-4d4c-bc27-e75234602333@linaro.org>
-Date: Fri, 19 Jan 2024 18:04:04 +0100
+	s=arc-20240116; t=1705685321; c=relaxed/simple;
+	bh=GQWTWoBKpbNB7G5ergb/SE1apkAwlCoyhbciiQBtTM8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rx4vUbNZiV6QQMZQfqR6Q39vy1Fn0Z1aXi4wQpHBXyPG960FBQ6idsdhqIkx3HHCE45hILrCSu38PcLCKEI5oBaS6jUnzESJ8l935//pxACdYkDOzvtuBAn5ewDDxx4htv53AMuP87PiARYrWT7rmRMHYoThmc5+vP4ShfisBxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kGVPO4Qo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90C6FC433C7;
+	Fri, 19 Jan 2024 17:28:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705685320;
+	bh=GQWTWoBKpbNB7G5ergb/SE1apkAwlCoyhbciiQBtTM8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kGVPO4QohMMi/GdXUPeCxL0gOWkmV4hXLQHUVzUDP7NoETtmUpr2vhg4XeVJvsADF
+	 afXMVdGusiFhV3wd53hIuoqeHdsX0Z8L8qsL7OSFIIjZ7xy9lkWWBHNfl+q/u7yevD
+	 W4VNGadiwuBykwAwydjc86Ypa/EVkaJ59VeSPGk8iHOB5/zsSM297y4/gtc4U0LTPO
+	 NhkLAni4miUC7/nKrvOd9pnHmM6QasYvcklWwak/Iyrey1Th3bEwZtHS25yAxzzwAU
+	 /MlSKNio1inEo/FCcQ46Qb9idoMb6Uwq1yXnAa33qRUnQfHUsNVSlpzBM2yb7b/yBa
+	 gAoIxEa2rRwgw==
+Date: Fri, 19 Jan 2024 11:28:38 -0600
+From: Rob Herring <robh@kernel.org>
+To: Oleksij Rempel <o.rempel@pengutronix.de>
+Cc: Sebastian Reichel <sre@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+	=?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>
+Subject: Re: [RFC PATCH v1 1/7] dt-bindings: power: reset: add generic PSCR
+ binding trackers
+Message-ID: <20240119172838.GA460212-robh@kernel.org>
+References: <20240119132521.3609945-1-o.rempel@pengutronix.de>
+ <20240119132521.3609945-2-o.rempel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6/9] arm64: dts: mediatek: mt8186: add default thermal
- zones
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzk@kernel.org>, Nicolas Pitre <nico@fluxnic.net>
-Cc: linux-pm@vger.kernel.org
-References: <20240111223020.3593558-1-nico@fluxnic.net>
- <20240111223020.3593558-7-nico@fluxnic.net>
- <d11047b4-2a7b-4007-801d-dd9d2955fe02@kernel.org>
- <n63rs2o2-7osn-9srn-3r9r-65081rs05r68@syhkavp.arg>
- <b91bada2-d9bf-4d98-b541-c41bcadc490a@kernel.org>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <b91bada2-d9bf-4d98-b541-c41bcadc490a@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240119132521.3609945-2-o.rempel@pengutronix.de>
 
-On 15/01/2024 18:52, Krzysztof Kozlowski wrote:
-> On 15/01/2024 18:46, Nicolas Pitre wrote:
->>>> @@ -2115,4 +2117,238 @@ larb19: smi@1c10f000 {
->>>>   			power-domains = <&spm MT8186_POWER_DOMAIN_IPE>;
->>>>   		};
->>>>   	};
->>>> +
->>>> +	thermal_zones: thermal-zones {
->>>> +		cpu_zone0-thermal {
->>>
->>> No underscores in node names. Could one CPU have multiple names? If not,
->>> then it is just "cpu0-thermal".
->>
->> Well... I'm not completely clear about this given the available info,
->> but this thermal zone would not be matching a single CPU but a few of
->> them, hence several "zones of CPUs".
+On Fri, Jan 19, 2024 at 02:25:15PM +0100, Oleksij Rempel wrote:
+> Add binding for Power State Change Reason (PSCR) subsystem
+
+Why? 
+
+How is this different from the reboot reason binding?
+
 > 
-> OK, then just: cpu-zone0-thermal
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  .../devicetree/bindings/power/reset/pscr.yaml | 51 +++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/reset/pscr.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/power/reset/pscr.yaml b/Documentation/devicetree/bindings/power/reset/pscr.yaml
+> new file mode 100644
+> index 000000000000..1ce973f3473c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/reset/pscr.yaml
+> @@ -0,0 +1,51 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/state-change/pscr.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Power State Change Reason (PSCR)
+> +
+> +maintainers:
+> +  - Oleksij Rempel <o.rempel@pengutronix.de>
+> +
+> +description: Binding for devices responsable to store reasons for power state
 
-Given the node name is used as the thermal zone name. The 'zone' is 
-duplicate in the namespace.
+responsible
 
-/sys/class/thermal/thermal_zone0/type = cpu-zone0-thermal
+> +  changes such as reboot and power-off. Reasons like unknown, under voltage,
+> +  and over temperature are captured for diagnostic or automatic recovery
+> +  purposes.
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^pscr(@.*|-([0-9]|[1-9][0-9]+))?$"
 
-Furthermore, if other thermal zones are registered before, that could be:
+Drop. This could be used in any random device.
 
-/sys/class/thermal/thermal_zone4/type = cpu-zone0-thermal
+> +
+> +  pscr-unknown:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: Value to indicate an unknown reason for the power state change.
 
-Kind of inconsistent :/
+What's an undocumented value? It would be unknown too, so just drop this 
+property.
 
-If it is a group of CPUS, they are probably belonging to the same 
-performance domain, may be we can use the name 'cluster' here:
-
-	cluster0-thermal
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+> +
+> +  pscr-under-voltage:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: |
+> +      Value to indicate an under-voltage condition of a system critical
+> +      regulator as the reason for the power state change.
+> +
+> +  pscr-over-current:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: |
+> +      Value to indicate an over-current condition of a system ctitical regulator
+> +      as the reason for the power state change.
+> +
+> +  pscr-regulator-failure:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: |
+> +      Value to indicate an unknow, system ctitical regulator related failure
+> +      as the reason for the power state change.
+> +
+> +  pscr-over-temperature:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: |
+> +      Value to indicate a system critical over-temperature condition as the
+> +      reason for the power state change.
+> +
+> +additionalProperties: true
+> +
+> +...
+> -- 
+> 2.39.2
+> 
 
