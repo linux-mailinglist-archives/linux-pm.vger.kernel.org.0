@@ -1,134 +1,297 @@
-Return-Path: <linux-pm+bounces-2386-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2387-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B39FE832BAA
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 15:51:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AA981832C2B
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 16:13:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1FFF4B23F54
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 14:51:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B2C2AB22F87
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 15:13:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9A3054773;
-	Fri, 19 Jan 2024 14:50:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2A2354756;
+	Fri, 19 Jan 2024 15:13:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VqIYDbdv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MchuSsS3"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ECE654770;
-	Fri, 19 Jan 2024 14:50:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4AC5467F;
+	Fri, 19 Jan 2024 15:13:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705675858; cv=none; b=XIPk00nPCGyJK/jNhvh/iXyFcs1g+sVH9KMZ80V5aXULitgFWx7s+03W7iVPmCdVG+bdkM7v+Ot3dWLuyMAeX5ebM8M5dzfmKhm7Qy77um+RS8uhBjTpLcDUcvxbJ3K1Bx+aBvYDG7MZ/nJGb7ZHHgWFD/ilzL4qHayHedcbZJw=
+	t=1705677189; cv=none; b=cB/nQQR2Iob7w3r78IdAoxjPEpRbP8gv8yryyhL4UrYzd6FO1flbYMkcCJNraeKNPH8ADFs0013bpBgcUVarNcQ8v2AHQ6j/UNc3MIJfGRMv5Z+dtCibEVV2xR5Pb+Ru1kWPmr0EDbTOjgXywguPychG1DCZ609jSLzeEo3yXSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705675858; c=relaxed/simple;
-	bh=fIf/QmB4/ZHrU+Xkylg228wL8h0iiEv1xx/gOxuxHm0=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=FilzBx/zu0Hd9/87p9857gXUSmBAxY/0fKpBzepdDuxIaIstJ83UCvZ/TqF4cA/yrUJH453JMyRZpKEIWKawh9WZYpsnkTnoo4St6Nd5AXqRigzyqEltfOP+vj03yeraTxRlFMCzIR3HPnaDfobrRk9KesAYNKRZpGnkbOZ3YlQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VqIYDbdv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0DADC43399;
-	Fri, 19 Jan 2024 14:50:56 +0000 (UTC)
+	s=arc-20240116; t=1705677189; c=relaxed/simple;
+	bh=3Qse2z0ZQniKsPfRSELAkjSkIbwmbKfeUdpJO4Djp+o=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=CYuppzpN84ppUk+rtUGe4tHbgD8SN1IeYIWWI/UvwnzK8XNLSamk4qY/aw3vAIbAMPOsa4AQ57KLhm51KMDFamyLhZ/lXAkiKhiGEwHqU4xzWUYxZ536BACHfz2QZ2ijYi2pX2//CfGjaczCZCw1Qj2LNq9nMtAEVhINRNN2ldU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MchuSsS3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE610C433C7;
+	Fri, 19 Jan 2024 15:13:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705675857;
-	bh=fIf/QmB4/ZHrU+Xkylg228wL8h0iiEv1xx/gOxuxHm0=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=VqIYDbdvCrKoCXIz6+bB2jES+W6EmKcKkGPAabLaTw0t9k9ojhLQRJV9QqRJSjBuW
-	 vT5D8N0jxgip8asRQfBhJVhTm++4bZ9GMHLN2WitB1O7jj4wikYAeUVVlb5WvezLhq
-	 yyYbbNyKGrkrY4gadPrVEL+0IgtyfU0JSsz7y1glcS92vscZ46JUvInQvJ/HrT1Z34
-	 7pqFz1hHZKqrCVkoBU5N85dFMrmVKTw6i1EZFcab3xuuMbrEMJWHHstUf4mXdjpFSV
-	 AI3YXyvt9GrSQdIjQUUpEx4y5vuHMvIIeowI6lPUAjo8DBweNcBPDXIldP3LOrf2Ab
-	 QLmlc8nFFAwvg==
-Date: Fri, 19 Jan 2024 08:50:55 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20201202; t=1705677189;
+	bh=3Qse2z0ZQniKsPfRSELAkjSkIbwmbKfeUdpJO4Djp+o=;
+	h=Date:From:To:Cc:Subject:From;
+	b=MchuSsS3PyGvBjy2JQJute6sT3sISHl/DJ973FDD+uVpNB4SIiqMHexHZGxq3lKpP
+	 Wz8XnindyIr4yzcLZasNqvhUxMDN9iKIEpzimW/FxNiIUfi6ZxglXsQNJ/kJwF5/8q
+	 1Zb2AInIy2LLFeyARGwkZDUSq1StLVWyJeF6K8CULPsW5E9Xydb17jfQqaaeLTx4vn
+	 i5dk/zlsdM2ImpMyUbAVw0lNd3VdlwBHEruwWnZ3E63JCAZGlUYl3v2atR2GMbWE+U
+	 DSIi/CkF3ggSs864f5BnOV7QUuT6bc/ZWcl4yi8h8HM+G3snWSeQKzUYkLjXt00cuh
+	 klqpa8ddVSOng==
+Date: Fri, 19 Jan 2024 09:13:07 -0600
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: linux-pci@vger.kernel.org, linux-pm@vger.kernel.org
+Cc: Jian-Hong Pan <jhp@endlessos.org>,
+	Nirmal Patel <nirmal.patel@linux.intel.com>,
+	Jonathan Derrick <jonathan.derrick@linux.dev>,
+	"David E. Box" <david.e.box@linux.intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [bugzilla-daemon@kernel.org: [Bug 218394] New: Enabled VMD on ASUS
+ B1400CEAE blocks going to deeper CPU Package C-state when s2idle]
+Message-ID: <20240119151307.GA178604@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Rob Herring <robh@kernel.org>
-To: Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Mark Brown <broonie@kernel.org>, kernel@pengutronix.de, 
- "Rafael J. Wysocki" <rafael@kernel.org>, devicetree@vger.kernel.org, 
- =?utf-8?q?S=C3=B8ren_Andersen?= <san@skov.dk>, 
- Conor Dooley <conor+dt@kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
- linux-pm@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>, 
- Zhang Rui <rui.zhang@intel.com>, 
- Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, 
- Sebastian Reichel <sre@kernel.org>, linux-kernel@vger.kernel.org, 
- Rob Herring <robh+dt@kernel.org>
-In-Reply-To: <20240119132521.3609945-4-o.rempel@pengutronix.de>
-References: <20240119132521.3609945-1-o.rempel@pengutronix.de>
- <20240119132521.3609945-4-o.rempel@pengutronix.de>
-Message-Id: <170567585226.287205.10607278595799788227.robh@kernel.org>
-Subject: Re: [RFC PATCH v1 3/7] dt-bindings: power: reset: add bindings for
- NVMEM hardware storing PSCR Data
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+
+[Thanks very much for the report.  Forwarding to some VMD and power
+management folks and the mailing lists because most people don't
+monitor bugzilla.  More info in bugzilla attachments.]
+
+----- Forwarded message from bugzilla-daemon@kernel.org -----
+
+Date: Fri, 19 Jan 2024 04:04:59 +0000
+From: bugzilla-daemon@kernel.org
+To: bjorn@helgaas.com
+Subject: [Bug 218394] New: Enabled VMD on ASUS B1400CEAE blocks going to deeper
+	CPU Package C-state when s2idle
+Message-ID: <bug-218394-41252@https.bugzilla.kernel.org/>
+
+https://bugzilla.kernel.org/show_bug.cgi?id=218394
+
+           Summary: Enabled VMD on ASUS B1400CEAE blocks going to deeper
+                    CPU Package C-state when s2idle
+          Hardware: Intel
+
+Created attachment 305728
+  --> https://bugzilla.kernel.org/attachment.cgi?id=305728&action=edit
+The kernel log with enabled VMD and s2idle
+
+We have an ASUS B1400CEAE laptop equipped with Intel i3-1115G4 CPU and Sandisk
+Corp WD Blue SN550 NVMe SSD.
+
+Tested with kernel 6.7 and we found the system consumes DC battery's power
+quickly when s2idle, if the Intel® RST VMD is enabled.  The battery only
+survives few hours.  After that, system cannot wake up because the battery is
+drained out.
+
+However, if the VMD is disabled, the battery has 90% energy left after s2idle
+24 hours.
+
+The BIOS has already been updated to latest version 314 from ASUS website.
+
+I also checked with S0ixSelftestTool.
+* If VMD is disabled, it shows "Congratulations! Your system achieved the
+deepest S0ix substate!"
+* If VMD is enabled, here is the test output:
 
 
-On Fri, 19 Jan 2024 14:25:17 +0100, Oleksij Rempel wrote:
-> Add device tree bindings that describe hardware implementations of
-> Non-Volatile Memory (NVMEM) used for storing Power State Change Reasons (PSCR).
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  .../bindings/power/reset/pscr-nvmem.yaml      | 54 +++++++++++++++++++
->  1 file changed, 54 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/reset/pscr-nvmem.yaml
-> 
+---Check S2idle path S0ix Residency---:
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+The system OS Kernel version is:
+Linux endless 6.7.0+ #97 SMP PREEMPT_DYNAMIC Thu Jan 18 16:52:17 CST 2024
+x86_64 GNU/Linux
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/power/reset/pscr-nvmem.yaml:32:16: [error] empty value in block mapping (empty-values)
-./Documentation/devicetree/bindings/power/reset/pscr-nvmem.yaml:33:22: [error] empty value in block mapping (empty-values)
-./Documentation/devicetree/bindings/power/reset/pscr-nvmem.yaml:34:21: [error] empty value in block mapping (empty-values)
-./Documentation/devicetree/bindings/power/reset/pscr-nvmem.yaml:35:25: [error] empty value in block mapping (empty-values)
+---Check whether your system supports S0ix or not---:
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/reset/pscr-nvmem.yaml: properties:pscr-unknown: None is not of type 'object', 'boolean'
-	from schema $id: http://json-schema.org/draft-07/schema#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/reset/pscr-nvmem.yaml: properties:pscr-over-current: None is not of type 'object', 'boolean'
-	from schema $id: http://json-schema.org/draft-07/schema#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/reset/pscr-nvmem.yaml: properties:pscr-under-voltage: None is not of type 'object', 'boolean'
-	from schema $id: http://json-schema.org/draft-07/schema#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/reset/pscr-nvmem.yaml: properties:pscr-over-temperature: None is not of type 'object', 'boolean'
-	from schema $id: http://json-schema.org/draft-07/schema#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/reset/pscr-nvmem.yaml: properties:pscr-unknown: None is not of type 'object', 'boolean'
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/reset/pscr-nvmem.yaml: properties:pscr-over-current: None is not of type 'object', 'boolean'
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/reset/pscr-nvmem.yaml: properties:pscr-under-voltage: None is not of type 'object', 'boolean'
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/reset/pscr-nvmem.yaml: properties:pscr-over-temperature: None is not of type 'object', 'boolean'
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/reset/pscr-nvmem.yaml: $id: Cannot determine base path from $id, relative path/filename doesn't match actual path or filename
- 	 $id: http://devicetree.org/schemas/power/state-change/pscr-nvmem.yaml
- 	file: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/reset/pscr-nvmem.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/reset/pscr-nvmem.yaml: ignoring, error in schema: properties: pscr-under-voltage
-Documentation/devicetree/bindings/power/reset/pscr-nvmem.example.dtb: /example-0/power-state-change-reason: failed to match any schema with compatible: ['pscr-nvmem']
+Low Power S0 Idle is:1
+Your system supports low power S0 idle capability.
 
-doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240119132521.3609945-4-o.rempel@pengutronix.de
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+---Check whether intel_pmc_core sysfs files exit---:
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+The pmc_core debug sysfs files are OK on your system.
 
-pip3 install dtschema --upgrade
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
 
+---Judge PC10, S0ix residency available status---:
+
+Test system supports S0ix.y substate
+
+S0ix substate before S2idle:
+  S0i2.0
+
+S0ix substate residency before S2idle:
+  0
+
+Turbostat output: 
+15.791949 sec
+CPU%c1  CPU%c6  CPU%c7  GFX%rc6 Pkg%pc2 Pkg%pc3 Pkg%pc6 Pkg%pc7 Pkg%pc8 Pkg%pc9
+Pk%pc10 SYS%LPI
+2.81    0.00    94.93   659.86  91.61   0.00    0.00    0.00    0.00    0.00   
+0.00    0.00
+3.84    0.00    93.93   659.92  91.62   0.00    0.00    0.00    0.00    0.00   
+0.00    0.00
+2.62
+3.26    0.00    95.93
+1.51
+
+CPU Core C7 residency after S2idle is: 94.93
+GFX RC6 residency after S2idle is: 659.86
+CPU Package C-state 2 residency after S2idle is: 91.61
+CPU Package C-state 3 residency after S2idle is: 0.00
+CPU Package C-state 8 residency after S2idle is: 0.00
+CPU Package C-state 9 residency after S2idle is: 0.00
+CPU Package C-state 10 residency after S2idle is: 0.00
+S0ix residency after S2idle is: 0.00
+
+Your system achieved PC2 residency: 91.61, but no PC8 residency during S2idle:
+0.00
+
+---Debug no PC8 residency scenario---:
+modprobe cpufreq_stats failedLoaded 0 prior measurements
+Cannot load from file /var/cache/powertop/saved_parameters.powertop
+File will be loaded after taking minimum number of measurement(s) with battery
+only 
+RAPL device for cpu 0
+RAPL Using PowerCap Sysfs : Domain Mask d
+RAPL device for cpu 0
+RAPL Using PowerCap Sysfs : Domain Mask d
+Devfreq not enabled
+glob returned GLOB_ABORTED
+Cannot load from file /var/cache/powertop/saved_parameters.powertop
+File will be loaded after taking minimum number of measurement(s) with battery
+only 
+Leaving PowerTOP
+
+Turbostat output: 
+
+16.186215 sec
+CPU%c1  CPU%c6  CPU%c7  GFX%rc6 Pkg%pc2 Pkg%pc3 Pkg%pc6 Pkg%pc7 Pkg%pc8 Pkg%pc9
+Pk%pc10 SYS%LPI
+2.52    0.00    95.42   783.82  91.97   0.35    0.00    0.00    0.00    0.00   
+0.00    0.00
+0.88    0.00    95.37   783.93  91.98   0.35    0.00    0.00    0.00    0.00   
+0.00    0.00
+4.05
+1.22    0.00    95.47
+3.92
+
+Your CPU Core C7 residency is available: 95.42
+
+Your system Intel graphics RC6 residency is available:783.82
+
+Checking PCIe Device D state and Bridge Link state:
+
+Available bridge device: 0000:00:07.0
+
+0000:00:07.0 Link is in Detect
+
+The link power management state of PCIe bridge: 0000:00:07.0 is OK.
+
+Your system default pcie_aspm policy setting is OK.
+
+Here is D3 log:
+ [  151.977362] nvme 10000:e1:00.0: PCI PM: Suspend power state: D0
+[  151.977365] nvme 10000:e1:00.0: PCI PM: Skipped
+[  151.977426] pcieport 10000:e0:06.0: PCI PM: Suspend power state: D0
+[  151.977429] pcieport 10000:e0:06.0: PCI PM: Skipped
+[  151.989417] ahci 10000:e0:17.0: PCI PM: Suspend power state: D3hot
+[  151.989577] sof-audio-pci-intel-tgl 0000:00:1f.3: PCI PM: Suspend power
+state: D3hot
+[  151.989583] i915 0000:00:02.0: PCI PM: Suspend power state: D3hot
+[  152.000784] i801_smbus 0000:00:1f.4: PCI PM: Suspend power state: D0
+[  152.000785] i801_smbus 0000:00:1f.4: PCI PM: Skipped
+[  152.013242] e1000e 0000:00:1f.6: PCI PM: Suspend power state: D3hot
+[  152.014780] mei_me 0000:00:16.0: PCI PM: Suspend power state: D3hot
+[  152.014784] vmd 0000:00:0e.0: PCI PM: Suspend power state: D3hot
+[  152.014790] iwlwifi 0000:00:14.3: PCI PM: Suspend power state: D3hot
+[  152.014795] proc_thermal 0000:00:04.0: PCI PM: Suspend power state: D3hot
+[  152.014959] intel-lpss 0000:00:15.1: PCI PM: Suspend power state: D3hot
+[  152.015075] xhci_hcd 0000:00:14.0: PCI PM: Suspend power state: D3hot
+[  152.018464] xhci_hcd 0000:00:0d.0: PCI PM: Suspend power state: D3cold
+[  152.023926] pcieport 0000:00:07.0: PCI PM: Suspend power state: D3cold
+[  152.055546] thunderbolt 0000:00:0d.2: PCI PM: Suspend power state: D3cold
+
+Checking PCI Devices D3 States:
+[  151.977362] nvme 10000:e1:00.0: PCI PM: Suspend power state: D0
+[  151.977365] nvme 10000:e1:00.0: PCI PM: Skipped
+[  151.977426] pcieport 10000:e0:06.0: PCI PM: Suspend power state: D0
+[  151.977429] pcieport 10000:e0:06.0: PCI PM: Skipped
+[  151.989417] ahci 10000:e0:17.0: PCI PM: Suspend power state: D3hot
+[  151.989577] sof-audio-pci-intel-tgl 0000:00:1f.3: PCI PM: Suspend power
+state: D3hot
+[  151.989583] i915 0000:00:02.0: PCI PM: Suspend power state: D3hot
+[  152.000784] i801_smbus 0000:00:1f.4: PCI PM: Suspend power state: D0
+[  152.000785] i801_smbus 0000:00:1f.4: PCI PM: Skipped
+[  152.013242] e1000e 0000:00:1f.6: PCI PM: Suspend power state: D3hot
+[  152.014780] mei_me 0000:00:16.0: PCI PM: Suspend power state: D3hot
+[  152.014784] vmd 0000:00:0e.0: PCI PM: Suspend power state: D3hot
+[  152.014790] iwlwifi 0000:00:14.3: PCI PM: Suspend power state: D3hot
+[  152.014795] proc_thermal 0000:00:04.0: PCI PM: Suspend power state: D3hot
+[  152.014959] intel-lpss 0000:00:15.1: PCI PM: Suspend power state: D3hot
+[  152.015075] xhci_hcd 0000:00:14.0: PCI PM: Suspend power state: D3hot
+[  152.018464] xhci_hcd 0000:00:0d.0: PCI PM: Suspend power state: D3cold
+[  152.023926] pcieport 0000:00:07.0: PCI PM: Suspend power state: D3cold
+[  152.055546] thunderbolt 0000:00:0d.2: PCI PM: Suspend power state: D3cold
+
+
+Checking PCI Devices tree diagram:
+-+-[0000:00]-+-00.0  Intel Corporation Device 9a04
+ |           +-02.0  Intel Corporation Tiger Lake-LP GT2 [UHD Graphics G4]
+ |           +-04.0  Intel Corporation TigerLake-LP Dynamic Tuning Processor
+Participant
+ |           +-06.0  Intel Corporation RST VMD Managed Controller
+ |           +-07.0-[01-2b]--
+ |           +-08.0  Intel Corporation GNA Scoring Accelerator module
+ |           +-0a.0  Intel Corporation Tigerlake Telemetry Aggregator Driver
+ |           +-0d.0  Intel Corporation Tiger Lake-LP Thunderbolt 4 USB
+Controller
+ |           +-0d.2  Intel Corporation Tiger Lake-LP Thunderbolt 4 NHI #0
+ |           +-0e.0  Intel Corporation Volume Management Device NVMe RAID
+Controller
+ |           +-14.0  Intel Corporation Tiger Lake-LP USB 3.2 Gen 2x1 xHCI Host
+Controller
+ |           +-14.2  Intel Corporation Tiger Lake-LP Shared SRAM
+ |           +-14.3  Intel Corporation Wi-Fi 6 AX201
+ |           +-15.0  Intel Corporation Tiger Lake-LP Serial IO I2C Controller
+#0
+ |           +-15.1  Intel Corporation Tiger Lake-LP Serial IO I2C Controller
+#1
+ |           +-16.0  Intel Corporation Tiger Lake-LP Management Engine
+Interface
+ |           +-17.0  Intel Corporation RST VMD Managed Controller
+ |           +-1f.0  Intel Corporation Tiger Lake-LP LPC Controller
+ |           +-1f.3  Intel Corporation Tiger Lake-LP Smart Sound Technology
+Audio Controller
+ |           +-1f.4  Intel Corporation Tiger Lake-LP SMBus Controller
+ |           +-1f.5  Intel Corporation Tiger Lake-LP SPI Controller
+ |           \-1f.6  Intel Corporation Ethernet Connection (13) I219-V
+ \-[10000:e0]-+-06.0-[e1]----00.0  Sandisk Corp WD Blue SN550 NVMe SSD
+              \-17.0  Intel Corporation Tiger Lake-LP SATA Controller
+
+pcieport 10000:e0:06.0: PCI PM: Suspend power state: D0 pcieport 10000:e0:06.0:
+PCI PM: Skipped pcieport 0000:00:07.0: PCI PM: Suspend power state: D3cold
+The pcieport 10000:e0:06.0 ASPM enable status:
+                LnkCtl: ASPM L1 Enabled; RCB 64 bytes, Disabled- CommClk+
+
+Pcieport is not in D3cold：          
+10000:e0:06.0
+
+-- 
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.
+
+----- End forwarded message -----
 
