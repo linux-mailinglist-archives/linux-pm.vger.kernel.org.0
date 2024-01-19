@@ -1,177 +1,123 @@
-Return-Path: <linux-pm+bounces-2375-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2371-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFDD08328A4
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 12:15:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B84383285E
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 12:09:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B1021F22E42
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 11:15:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 39BF52836EB
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 11:09:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC0B33D393;
-	Fri, 19 Jan 2024 11:15:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C5F74CB27;
+	Fri, 19 Jan 2024 11:08:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b="bKIwIUGV"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="sBbtETSC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B33DB3C470
-	for <linux-pm@vger.kernel.org>; Fri, 19 Jan 2024 11:15:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.62.61
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CF8A4C62F
+	for <linux-pm@vger.kernel.org>; Fri, 19 Jan 2024 11:08:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705662954; cv=none; b=GNYyBIb2fOur8J8jOT1CnHUbwFq3en3MpBwKZJG1fGdy4nqkxRw41tkQVtyju2m7CkJRbMaOFg9WyMZjPOPtLsbsrNN8BoawkXhIXoIEhqCEmjRt14apEvFgre/rTf2OTPd937upfawN5HvajD+K25kxQgroa10YlCr16v3u2lU=
+	t=1705662531; cv=none; b=pisgOtO0gUPuzuZMW+9biiaHpoXsy5A3Z0T68pncLR5927BO00HY6zN3KJiJjt0qdTj2qJR5PLaKWP645z1HrWkr8vThex+7eQAMhb+MIzN/60s7x0FvIwXm7gu1PMcGBakEQL5TdqBKuZlrQFSF/rhGI3eHwDM6DiCnBhwRQBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705662954; c=relaxed/simple;
-	bh=DO+mFZ7HF6rMuHe6kj7D6RUUm/n7CFHefjKby+CVNOo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=r13g0w59nkwZMcDOFl7noiP905fcyekgnzC6guNTrl8j4ZgtqzHMO6rrbdaWqoTOk1+wHA+3E7QZlydoctTxkseqwXPEI+19eOsjyznuXe8tJZf7Zas2VZ5XNQPXi8Z4javfjnYiZi6ltHTC/KQX1dmZNlMbMwZsM3wozZGvFGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de; spf=pass smtp.mailfrom=denx.de; dkim=pass (2048-bit key) header.d=denx.de header.i=@denx.de header.b=bKIwIUGV; arc=none smtp.client-ip=85.214.62.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=denx.de
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-	(No client certificate requested)
-	(Authenticated sender: marex@denx.de)
-	by phobos.denx.de (Postfix) with ESMTPSA id BCFF787A82;
-	Fri, 19 Jan 2024 12:15:49 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-	s=phobos-20191101; t=1705662950;
-	bh=SUsZc5co9UnGPw9CafszzMNh7dbWHLX8Es5IDCF8Q+M=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=bKIwIUGV1ESVXKbIOMqL5nNhQ7s47t+FdDi6xZp/yJerbxZwm8L2P/J3Jl9HWu9LJ
-	 FH/r4ZocLwtrwzZVrVhfFv55x+KO4F0Bf9IHTy7sQojaLOYHLDnRLkpwAL7Lhuz09U
-	 ECLF9Cf95+DtBS0WfatGLDJatfPdjN4cXXvYDmjrX6oOTCiLvPgEIQSTDN1WQdoqD1
-	 csc93BhBGnQ+Fucr7mcZgkhj0EkuyJrG39WweP+KGoupfGPgNwZe9L54wZfzqM3oiz
-	 SlvM9S47TodIvmRxk+y28e3gTA057A83Dz5NnNKIGmhNUJosB7KlAcD9ISeiPcYolk
-	 iMjZN/orw2aCg==
-Message-ID: <73886bd9-e2ab-40ef-a1a0-a82222d97201@denx.de>
-Date: Fri, 19 Jan 2024 11:58:54 +0100
+	s=arc-20240116; t=1705662531; c=relaxed/simple;
+	bh=M/khVo5w/QaYGS2KbY7GMVMAto7oj95Xs/13fc8sOY8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sQS0tP0hYMbDBNk508p6ChpR6Iu6llYgUxbFL1PfayRjWLe21/aHDsrLOQYC6HA452p1Vos63C6tNPh7L5MYSww4ow6CSr56U63e5YYZvF7OrxUZ2OvmXE8diZobYUV1Ggq3mDK5h9lctVn7XXRXIv4Vse7cK36mImiIcV+h8Qg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=sBbtETSC; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a2f0cb62068so59151166b.2
+        for <linux-pm@vger.kernel.org>; Fri, 19 Jan 2024 03:08:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1705662526; x=1706267326; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AkX7t6l4nQ/vCuey8Au/m+51v8pi/S+y8K9YAi1mcOo=;
+        b=sBbtETSCA9TEQml4IBa4FeUc3Xjox6F7SbRHlbteJh1DEDoqzIZv643gZcCvcj+Yzj
+         LLCkoutZt/jJRKFxG8/C0CyOE1ln1AX1WuATccrJcMEI1qe2BEUbx7uAe1tpX4eBx/UB
+         c+mLWt2yMycQ/Fy8ZyCwrpb8cOeOuWAsDNhQK5GA7gZ1mYw3Z+98oCn/NeZASelg7jxl
+         Ib3Bfnt20fne+diFtxY9fmnzLohEMEtlbS+iPOKjhsv2nQIdjbvhzsbjeT1zmdN/Rov8
+         6G4OhZ+QzPYl9Ncy37eW1aHoW59Xfutypx7nBzzv4Yv9hj/0/QhwiMa+dxNVewwqg+BA
+         LCyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705662526; x=1706267326;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AkX7t6l4nQ/vCuey8Au/m+51v8pi/S+y8K9YAi1mcOo=;
+        b=EOjLJxu9Lvq6Gs5yIXAXXKa7yEB3mAjGysBAybE0epBTV/YNP2QwFAc/GdIm+9jLhv
+         KEprWhdgTo0PcyPJpU+dYp5Uegkv1thaaWPwSiG6CZks+eFliy4p74KYiVmrtmkJBbAk
+         h6j4dLvFnT5eDeLLE0mMFLTl9bcJL7h6cGRYL+p1w430f5CuQ8XPJNVDqLjbX1xbV9t+
+         CLjD01NK5JFMvWwQQgVsTBQbzF5BlHR5B8IB3VXYYhGpzn0wj3fq54gJ0EPWOsNH4ntG
+         NxrbBP7l/hf2aqutLHW98fb+41Edgujr0EAs7Z4kePeqNOeLzT++zqIa3VSR6T2lwD0q
+         NCuQ==
+X-Gm-Message-State: AOJu0Yy4/qd1tTud1Xfu1hunEMoiy69PiaIU/KksYYyfDMrtevKspg2C
+	OcU1uPGElGKVoncbdKYSkIeK4FYh4ahqCSP7s/lMYkw/2pCiA9gVvtU+AdP3xqI=
+X-Google-Smtp-Source: AGHT+IEvKUBsNi++IWYFwDCr/xbC/i0gr1neZ+xh2X5zRMqR6tKq5tdCp7hVArBGP391ED1MdvZVbg==
+X-Received: by 2002:a17:906:6dcc:b0:a2f:d59:d9cb with SMTP id j12-20020a1709066dcc00b00a2f0d59d9cbmr617650ejt.177.1705662526094;
+        Fri, 19 Jan 2024 03:08:46 -0800 (PST)
+Received: from blaptop.baylibre (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id h20-20020a170906261400b00a28d438a1b0sm10091661ejc.83.2024.01.19.03.08.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 Jan 2024 03:08:45 -0800 (PST)
+From: Alexandre Bailon <abailon@baylibre.com>
+To: rafael@kernel.org,
+	daniel.lezcano@linaro.org,
+	robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org
+Cc: rui.zhang@intel.com,
+	lukasz.luba@arm.com,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alexandre Bailon <abailon@baylibre.com>
+Subject: [PATCH v2 0/3] thermal: Add support of multiple sensors
+Date: Fri, 19 Jan 2024 12:08:39 +0100
+Message-ID: <20240119110842.772606-1-abailon@baylibre.com>
+X-Mailer: git-send-email 2.41.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] pmdomain: imx8m-blk-ctrl: imx8mp-blk-ctrl: Error out
- if domains are missing in DT
-Content-Language: en-US
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc: linux-pm@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Jindong Yue <jindong.yue@nxp.com>, Marco Felsch <m.felsch@pengutronix.de>,
- NXP Linux Team <linux-imx@nxp.com>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Ulf Hansson <ulf.hansson@linaro.org>, Fabio Estevam <festevam@gmail.com>,
- linux-arm-kernel@lists.infradead.org, Lucas Stach <l.stach@pengutronix.de>
-References: <20240119014807.268694-1-marex@denx.de>
- <asamq53uiegrgwo5c25sjn7n47bsv6xa3ybkueuhb2d42m66ze@t6ujdompm2gs>
-From: Marek Vasut <marex@denx.de>
-In-Reply-To: <asamq53uiegrgwo5c25sjn7n47bsv6xa3ybkueuhb2d42m66ze@t6ujdompm2gs>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
-X-Virus-Status: Clean
 
-On 1/19/24 08:42, Uwe Kleine-König wrote:
-> On Fri, Jan 19, 2024 at 02:47:41AM +0100, Marek Vasut wrote:
->> This driver assumes that domain->power_dev is non-NULL in its suspend/resume
->> path. The assumption is valid, since all the devices that are being looked up
->> here should be described in DT. In case they are not described in DT, beause
->> the DT is faulty, suspend/resume attempt would trigger NULL pointer dereference.
->> To avoid this failure, check whether the power_dev assignment is not NULL right
->> away in probe callback and fail early if it is.
->>
->> Signed-off-by: Marek Vasut <marex@denx.de>
->> ---
->> Cc: "Uwe Kleine-König" <u.kleine-koenig@pengutronix.de>
->> Cc: Fabio Estevam <festevam@gmail.com>
->> Cc: Jindong Yue <jindong.yue@nxp.com>
->> Cc: Lucas Stach <l.stach@pengutronix.de>
->> Cc: Marco Felsch <m.felsch@pengutronix.de>
->> Cc: NXP Linux Team <linux-imx@nxp.com>
->> Cc: Peng Fan <peng.fan@nxp.com>
->> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
->> Cc: Sascha Hauer <s.hauer@pengutronix.de>
->> Cc: Shawn Guo <shawnguo@kernel.org>
->> Cc: Ulf Hansson <ulf.hansson@linaro.org>
->> Cc: linux-arm-kernel@lists.infradead.org
->> Cc: linux-pm@vger.kernel.org
->> ---
->> V2: Add extra check for domain being NULL (thanks Peng)
->> ---
->>   drivers/pmdomain/imx/imx8m-blk-ctrl.c  | 9 ++++++---
->>   drivers/pmdomain/imx/imx8mp-blk-ctrl.c | 9 ++++++---
->>   2 files changed, 12 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/pmdomain/imx/imx8m-blk-ctrl.c b/drivers/pmdomain/imx/imx8m-blk-ctrl.c
->> index 1341a707f61bc..ca942d7929c2b 100644
->> --- a/drivers/pmdomain/imx/imx8m-blk-ctrl.c
->> +++ b/drivers/pmdomain/imx/imx8m-blk-ctrl.c
->> @@ -258,11 +258,14 @@ static int imx8m_blk_ctrl_probe(struct platform_device *pdev)
->>   
->>   		domain->power_dev =
->>   			dev_pm_domain_attach_by_name(dev, data->gpc_name);
->> -		if (IS_ERR(domain->power_dev)) {
->> -			dev_err_probe(dev, PTR_ERR(domain->power_dev),
->> +		if (IS_ERR_OR_NULL(domain->power_dev)) {
->> +			if (!domain->power_dev)
->> +				ret = -ENODEV;
->> +			else
->> +				ret = PTR_ERR(domain->power_dev);
->> +			dev_err_probe(dev, ret,
->>   				      "failed to attach power domain \"%s\"\n",
->>   				      data->gpc_name);
->> -			ret = PTR_ERR(domain->power_dev);
->>   			goto cleanup_pds;
->>   		}
->>   
->> diff --git a/drivers/pmdomain/imx/imx8mp-blk-ctrl.c b/drivers/pmdomain/imx/imx8mp-blk-ctrl.c
->> index e3203eb6a0229..e488cf79b8007 100644
->> --- a/drivers/pmdomain/imx/imx8mp-blk-ctrl.c
->> +++ b/drivers/pmdomain/imx/imx8mp-blk-ctrl.c
->> @@ -687,11 +687,14 @@ static int imx8mp_blk_ctrl_probe(struct platform_device *pdev)
->>   
->>   		domain->power_dev =
->>   			dev_pm_domain_attach_by_name(dev, data->gpc_name);
->> -		if (IS_ERR(domain->power_dev)) {
->> -			dev_err_probe(dev, PTR_ERR(domain->power_dev),
->> +		if (IS_ERR_OR_NULL(domain->power_dev)) {
->> +			if (!domain->power_dev)
->> +				ret = -ENODEV;
->> +			else
->> +				ret = PTR_ERR(domain->power_dev);
->> +			dev_err_probe(dev, ret,
->>   				      "failed to attach power domain %s\n",
->>   				      data->gpc_name);
->> -			ret = PTR_ERR(domain->power_dev);
-> 
-> This could be made a bit more compact using:
-> 
-> 	domain->power_dev =
-> 		dev_pm_domain_attach_by_name(dev, data->gpc_name) ||
-> 		ERR_PTR(-ENODEV);
-> 	if (IS_ERR(domain->power_dev)) {
-> 		ret = PTR_ERR(domain->power_dev);
-> 		...
-> 
-> I'm unsure though if this is human friendly enough?!
+Following this comment [1], this updates thermal_of to support multiple
+sensors.
 
-I think it is only more cryptic and doesn't improve readability.
+This has some limitations:
+- A sensor must have its own termal zone, even if it is also registered
+  inside a thermal zone supporting multiple sensors.
+- Only support weighted average
 
-> Having said that I wonder about dev_pm_domain_attach_by_name(). IMHO if
-> NULL is an error case it and other errors are signaled by error
-> pointers, there is something to fix there.
+Changes in v2:
+- Rebased on 6.7
+- Seperated generic multi sensor and dt specfic code
+- Simplified the code
+- Drop min / max and only do weighted average (seems more adequate for IPA)
 
-I don't think dev_pm_domain_attach_by_name() returning NULL is an error 
--- the domain may be missing from DT and that is legitimate use case I 
-think.
+[1]: https://patchwork.kernel.org/comment/24723927/
 
-But not here, where all the domains should be described in DT because 
-the driver makes assumptions about their presence in the suspend/resume 
-part, and because the DT should fully describe the domains of this 
-hardware anyway, so we better catch such DT issues.
+Alexandre Bailon (3):
+  dt-bindings: thermal: Restore the thermal-sensors property
+  thermal: Add support of multi sensors to thermal_core
+  thermal: Add support of multi sensors to thermal_of
+
+ .../bindings/thermal/thermal-zones.yaml       |   5 +-
+ drivers/thermal/Makefile                      |   1 +
+ drivers/thermal/thermal_core.h                |   7 +
+ drivers/thermal/thermal_multi.c               | 178 ++++++++++++++++++
+ drivers/thermal/thermal_of.c                  | 139 ++++++++++++++
+ 5 files changed, 327 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/thermal/thermal_multi.c
+
+-- 
+2.41.0
+
 
