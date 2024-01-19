@@ -1,128 +1,242 @@
-Return-Path: <linux-pm+bounces-2354-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2355-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49E0183229F
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 01:23:52 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F1498322BB
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 01:46:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E2DC21F21F5D
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 00:23:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B3AFFB21E97
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 00:46:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50BF8182;
-	Fri, 19 Jan 2024 00:23:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 406C180D;
+	Fri, 19 Jan 2024 00:46:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rGaSBV19"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="faC1WXXh"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B19A63D
-	for <linux-pm@vger.kernel.org>; Fri, 19 Jan 2024 00:23:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1970038D;
+	Fri, 19 Jan 2024 00:46:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705623827; cv=none; b=gz/dd6FDJf1nnbdn6ZFE4K78+ZF8ci5Vfs8O7stCBrNsHv65MGFnFn8wX8kIAQ5V7S0WvgG190TWlKHKUtUrKr4jmIYe2xhacgQnDrKT2xUZT7l5/0qp3qyk3ZkiDN55jlTA1IXjh+l2mqlSDWdwVSNf7EgHrTS+cag1x2d1t4I=
+	t=1705625193; cv=none; b=mBnn3FInqV6K276098+kjr82gByRN01tG1jyuEM0aaipfsCPW1l90npz0mxDk/3xFWYS7wg4ocyUwqAJgVgPlkIZfU223M2ulqBeLRHIuVQvgbgC44LSUgFdM0sgQ+TGtVuNS0G5UowKTDGfFoR1ERLyEMzArhjNBFbnWBr2oxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705623827; c=relaxed/simple;
-	bh=L0xCNofjzfpId6Id2n6a9JZo2+jdv2wGeu02BhtSLjY=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=KXak+Si35GJC2vorP4DkX97O9upxiMpsUF0v/hxkzByX5+cxgxKiGsrFX8EZ/mxAO1cBCpIS9N6qqJoOSBYThOiOJM6R+AZqsoqppa6ilPPciRG87hSOSAZKrKfs+oRL2N2iU9Aq6YwVbfLIBDOvChRtey1uSSsNsgk5cx143vw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rGaSBV19; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A3051C43394
-	for <linux-pm@vger.kernel.org>; Fri, 19 Jan 2024 00:23:46 +0000 (UTC)
+	s=arc-20240116; t=1705625193; c=relaxed/simple;
+	bh=dzocCGndzebBDVp6sr61B4NYXyqttAewVD6DK4dMQ4k=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=bRRtMmE1QuoVjBYAAalARsYInTCOvMXG/rgC3sR+bA2GOniopkAinHBowUs/HSP3p38fUdIavLExhzWQ2Kk1hN524YNbZW+0uDeZYPoKSbXEkguivzoaAGL7GGMi/vTdGya8wWQ/VhbWn8aFd9UikiWIWAGHGH5HJOzt5YIkEA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=faC1WXXh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A5F7C433C7;
+	Fri, 19 Jan 2024 00:46:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705623826;
-	bh=L0xCNofjzfpId6Id2n6a9JZo2+jdv2wGeu02BhtSLjY=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=rGaSBV19Zj3+WDP0h3V/aTf2nG6GwEGXXI9Eo1bq9TeejOuMmSeFyjVlTmveGP+/d
-	 clqxz+tLY6FKV8sPgM8Efs4b0O8TcYXBNGGWLVI5ahtgVh0ts1MGHFqcux78SBQl8G
-	 RHfpHAfwb3276WpmlLdEUZsBAk52OsTA4rklgSureebSh/1aX3g49lwSuklMJ2JqBc
-	 EfiXb/hFOVaYyscgSpGhh+qgp/g8ZfZ0OCGuHHm2b3ZJ6tC7ma8LQF2DXUCwGGPa65
-	 sJe/Ow7tHp8HWy/7hB7obYFlWx5u6fowXWV5KYzW+K0yZmyOX3E77gr2ka8MBm8FFP
-	 uPsOPnEejH4JA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 8F813C53BD2; Fri, 19 Jan 2024 00:23:46 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 217931] amd-pstate lacks crucial features: CPU frequency and
- boost control
-Date: Fri, 19 Jan 2024 00:23:46 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: alex.delorenzo@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217931-137361-BHRebdqOob@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217931-137361@https.bugzilla.kernel.org/>
-References: <bug-217931-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1705625192;
+	bh=dzocCGndzebBDVp6sr61B4NYXyqttAewVD6DK4dMQ4k=;
+	h=Date:From:To:Cc:Subject:From;
+	b=faC1WXXh/cJruDTGIAzlfmsjor/2tHerCr0bjUZA7lpUrCsZYAaEH5dUtkUtydAcE
+	 FBSgqbWq8p6mr3y/oFVOIOn4gbZH3TMreEtxejvmizgnjVHxyZTHdlcOgf2gL1pcQe
+	 F+pmGQfb9XZobiQKZpauGmjmVb8+LXnleNQc8imFOzANZOShJeVCJHxaVfGyrvCrOX
+	 EVUdS16cMkV4p/Rz7o46yhf9wwpUE/sOlU7aKCMNzB+8HNlqpC3mxqB+FMoHnWRgiY
+	 gVVjSYBO+2QZlFBg7w+gAJm72unJSk55UeE7qE36WhBAhAGk9IoJtLKAG/vSNKqUT5
+	 /wMNMyDaWanlw==
+Received: by mercury (Postfix, from userid 1000)
+	id 3DB401061349; Fri, 19 Jan 2024 01:46:29 +0100 (CET)
+Date: Fri, 19 Jan 2024 01:46:29 +0100
+From: Sebastian Reichel <sre@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [GIT PULL] power-supply changes for 6.8-v2
+Message-ID: <ynrunm37opgms7vp4e2woj3nhqxkzvvg5bvrt3nquzndcsfc33@p46rdj6sipak>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="hb3cmvcm37u5v3qd"
+Content-Disposition: inline
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217931
 
---- Comment #27 from AlexDeLorenzo.dev (alex.delorenzo@gmail.com) ---
-(In reply to Mario Limonciello (AMD) from comment #16)
-> When you say getting stuck in lowest supported frequency does it resemble
-> bug 218305 perhaps?
+--hb3cmvcm37u5v3qd
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Looking at bug 218305, I haven't noticed if the issue is triggered by
-suspend/resume or restart cycles. I'm on a laptop that regularly goes throu=
-gh
-several days of use before being rebooted, so it's possible. I'll keep an e=
-ye
-out to see if that's related. From what I experienced, the issue would occur
-while using the machine for a few hours, and the issue would "fix" itself u=
-pon
-a suspend/resume or restart.
+Hi Linus,
 
-As far as similarities to bug 218305, I'm also running a Ryzen APU (on Zen 3
-and not 4) on an HP Dev One, which I believe is a modified Elitebook 845 G8=
- or
-G9. However, I've been told by HP support and the System76 team they outsou=
-rced
-the project to that the firmware on the Dev One was custom written for the
-project and unrelated to the standard Elitebook line's firmware.
+This is the same as the previous one with the referenced fix queued
+in addition. I just queued the fix, so it has only been in linux-next
+for a few minutes.
 
-I also use `ryzenadj` to set STAPM, PPT FAST and SLOW limits. Like in bug
-218305, I also leave my laptop plugged in the majority of the time.
+-- Sebastian
 
-When I experience the issue again, I'll look at more diagnostics to see if =
-it's
-like bug 218305.=20
+The following changes since commit b85ea95d086471afb4ad062012a4d73cd328fa86:
 
-> What is your CPU scaling governor when it happened?=20
+  Linux 6.7-rc1 (2023-11-12 16:19:07 -0800)
 
-I use the amd-pstate-epp driver in active mode, and alternate between the
-powersave and performance governors depending on whether I'm on battery pow=
-er
-or not, and delegate that switch to power-profiles-daemon versus using sysf=
-s.
+are available in the Git repository at:
 
-It's happened while on AC power, so it is likely I was using the performance
-governor when I experienced the issue.
+  https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.gi=
+t tags/for-v6.8-v2
 
---=20
-You may reply to this email to add a comment.
+for you to fetch changes up to 17d49b7e47a1001c8796f05f4a2bbdef0a998213:
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+  power: supply: bq24190_charger: Fix "initializer element is not constant"=
+ error (2024-01-19 01:03:17 +0100)
+
+----------------------------------------------------------------
+power supply and reset changes for the 6.8 series
+
+new features:
+  - bq24190: Add support for BQ24296 charger
+
+cleanups:
+  - all reset drivers: Stop using module_platform_driver_probe()
+  - gpio-restart: use devm_register_sys_off_handler
+  - pwr-mlxbf: support graceful reboot
+  - cw2015: correct time_to_empty units
+  - qcom-battmgr: Fix driver initialization sequence
+  - bq27xxx: Start/Stop delayed work in suspend/resume
+  - minor cleanups and fixes
+
+----------------------------------------------------------------
+Andrew Davis (1):
+      power: reset: gpio-restart: Use devm_register_sys_off_handler()
+
+Asmaa Mnebhi (1):
+      power: reset: pwr-mlxbf: support graceful reboot instead of emergency=
+ reset
+
+Charalampos Mitrodimas (2):
+      power: supply: Fix indentation and some other warnings
+      power: supply: Use multiple MODULE_AUTHOR statements
+
+Elliot Berman (2):
+      dt-bindings: power: reset: $ref reboot-mode in syscon-reboot-mode
+      dt-bindings: power: reset: $ref reboot-mode in nvmem-reboot-mode
+
+Hermes Zhang (2):
+      dt-bindings: power: supply: bq24190: Add BQ24296 compatible
+      power: supply: bq24190_charger: Add support for BQ24296
+
+Jan Palus (1):
+      power: supply: cw2015: correct time_to_empty units in sysfs
+
+Johan Hovold (1):
+      dt-bindings: power: reset: qcom-pon: fix inconsistent example
+
+Konrad Dybcio (1):
+      power: supply: qcom_battmgr: Register the power supplies after PDR is=
+ up
+
+Kunwu Chan (1):
+      power: supply: Fix null pointer dereference in smb2_probe
+
+Marek Vasut (1):
+      power: supply: bq27xxx: Stop and start delayed work in suspend and re=
+sume
+
+Michal Simek (1):
+      dt-bindings: power: reset: xilinx: Rename node names in examples
+
+Nathan Chancellor (2):
+      power: reset: at91: Drop '__init' from at91_wakeup_status()
+      power: supply: bq24190_charger: Fix "initializer element is not const=
+ant" error
+
+Sebastian Reichel (1):
+      Merge power-supply fixes for 6.7 cycle
+
+Su Hui (1):
+      power: supply: bq256xx: fix some problem in bq256xx_hw_init
+
+Uwe Kleine-K=F6nig (16):
+      power: reset: at91-poweroff: Stop using module_platform_driver_probe()
+      power: reset: at91-reset: Stop using module_platform_driver_probe()
+      power: reset: at91-sama5d2_shdwc: Stop using module_platform_driver_p=
+robe()
+      power: reset: as3722-poweroff: Convert to platform remove callback re=
+turning void
+      power: reset: at91-poweroff: Convert to platform remove callback retu=
+rning void
+      power: reset: atc260x-poweroff: Convert to platform remove callback r=
+eturning void
+      power: reset: ltc2952-poweroff: Convert to platform remove callback r=
+eturning void
+      power: reset: mt6323-poweroff: Convert to platform remove callback re=
+turning void
+      power: reset: qnap-poweroff: Convert to platform remove callback retu=
+rning void
+      power: reset: regulator-poweroff: Convert to platform remove callback=
+ returning void
+      power: reset: restart-poweroff: Convert to platform remove callback r=
+eturning void
+      power: reset: rmobile-reset: Convert to platform remove callback retu=
+rning void
+      power: reset: syscon-poweroff: Convert to platform remove callback re=
+turning void
+      power: reset: tps65086-restart: Convert to platform remove callback r=
+eturning void
+      power: reset: at91-reset: Convert to platform remove callback returni=
+ng void
+      power: reset: at91-sama5d2_shdwc: Convert to platform remove callback=
+ returning void
+
+ .../bindings/power/reset/nvmem-reboot-mode.yaml    |   8 +-
+ .../devicetree/bindings/power/reset/qcom,pon.yaml  |  13 +-
+ .../bindings/power/reset/syscon-reboot-mode.yaml   |   8 +-
+ .../bindings/power/reset/xlnx,zynqmp-power.yaml    |   4 +-
+ .../devicetree/bindings/power/supply/bq24190.yaml  |   1 +
+ drivers/power/reset/as3722-poweroff.c              |   6 +-
+ drivers/power/reset/at91-poweroff.c                |  13 +-
+ drivers/power/reset/at91-reset.c                   |  11 +-
+ drivers/power/reset/at91-sama5d2_shdwc.c           |  13 +-
+ drivers/power/reset/atc260x-poweroff.c             |   6 +-
+ drivers/power/reset/gpio-restart.c                 |  34 +-
+ drivers/power/reset/ltc2952-poweroff.c             |   5 +-
+ drivers/power/reset/mt6323-poweroff.c              |   6 +-
+ drivers/power/reset/pwr-mlxbf.c                    |  20 +-
+ drivers/power/reset/qnap-poweroff.c                |   5 +-
+ drivers/power/reset/regulator-poweroff.c           |   6 +-
+ drivers/power/reset/restart-poweroff.c             |   6 +-
+ drivers/power/reset/rmobile-reset.c                |   5 +-
+ drivers/power/reset/syscon-poweroff.c              |   6 +-
+ drivers/power/reset/tps65086-restart.c             |  12 +-
+ drivers/power/supply/bq24190_charger.c             | 459 ++++++++++++++++-=
+----
+ drivers/power/supply/bq256xx_charger.c             |   5 +-
+ drivers/power/supply/bq27xxx_battery.c             |  22 +
+ drivers/power/supply/bq27xxx_battery_i2c.c         |   1 +
+ drivers/power/supply/cw2015_battery.c              |   2 +-
+ drivers/power/supply/power_supply_core.c           | 167 ++++----
+ drivers/power/supply/qcom_battmgr.c                | 109 ++---
+ drivers/power/supply/qcom_pmi8998_charger.c        |   4 +
+ include/linux/power/bq27xxx_battery.h              |   1 +
+ 29 files changed, 615 insertions(+), 343 deletions(-)
+
+--hb3cmvcm37u5v3qd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmWpxl8ACgkQ2O7X88g7
++pqHZg//Yf5Tl1opwLf3EhHcO+AMFeM28n09XC9pjmsS8Ddsga3KtlwtahJWJ9tc
+cNcYny/BDD5JkXvDWh5v+OFm7PFPGBKX6ZqRDUTV1Axw0ehHC/sshxEV3bLt9mn1
+LWH8G88g3QJY5ivMv5Ukd+OMme7D0TZUDjSHkycflOESIFjnEfgHeyYcdFxABKGl
+g1o6dvkBl8RMFCgrDO9J4Ak26iQ6LB3lk6EKm426o4lZ34yspi8hkEG1/s4aDNW5
+srCzQ051V8Td1IqLP27b62UCLcd+cNrnPfxhznBSXUToTU/1uwVqxJicptK6YAXt
+wakob/rYL1QLNWUxNP/CeeBkEW7FUGNhPFNB0ijOU+rlsafoQoGhqgJ8WuqLTKYm
+6Uk1I3e3C1MYxnPlOhyUENKroaF7yzxWtbT6QcFFtVbNWKRkxzdigo4fQ847f32z
+3lIPS6o2bFWJGGg82ZDnTmkNXNroLPniq+SbnJWVMEmHx5+MmvBQq04KUOpxEOzB
+Zk8p/sZZv4dgK5aWFMoqOriVpAlbI3XP++UFZZNnmWbXFCmOzd5F48iPWEjIvIE7
+MZxdeBwwuiTGmItCuzq99dYNJRm9FjGgdgGO4ZavlCX5No1xFKvfJwUB9ilCDnll
+NvuAOFt2z3Pdu9B5wnvFKJuVY7rgKtZNttWAJbSvbKCXbIaJCXo=
+=a8Rh
+-----END PGP SIGNATURE-----
+
+--hb3cmvcm37u5v3qd--
 
