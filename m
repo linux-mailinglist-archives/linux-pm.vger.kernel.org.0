@@ -1,71 +1,71 @@
-Return-Path: <linux-pm+bounces-2372-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2373-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA0D9832861
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 12:09:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF6E3832862
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 12:09:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62E10283750
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 11:09:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D1CB1F22ED4
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 11:09:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C3F64CB5C;
-	Fri, 19 Jan 2024 11:08:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 781F84CDFF;
+	Fri, 19 Jan 2024 11:08:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="wLC3Vf1u"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="y8bOLWJK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99D244C633
-	for <linux-pm@vger.kernel.org>; Fri, 19 Jan 2024 11:08:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 872D14CB39
+	for <linux-pm@vger.kernel.org>; Fri, 19 Jan 2024 11:08:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705662532; cv=none; b=D7xkctzwk0CMcXXZchluTCkPXnuf7wigUpsgAcabezcmeMpNNEbfIBHwU2l+ILb8m2Tx3q2kguzF28oaz1akT/NBxOYfCQphsLjMhGwSFhH+Qo8JdA8GWClPQC6vl5bHayF6e5SJPJ+rgee8tN4NtrusMcZ5nbV30OmWhdettK8=
+	t=1705662533; cv=none; b=Z9H0xzwtRXwlcW4Wst4IkfP/pF2q+RFpQufyaI1+836iAjCY8f/Z2rLWn0jlZST3w9oq2C4YJTB8/DcSkKPCUwiIxA26hG5GhKfmnibmC7ihl79IwcpNormdbN37UcvGbFN3rzz7AiXEPkxW4bj8eFh/Tqm/pt03KOTgQST73NM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705662532; c=relaxed/simple;
-	bh=1DhpLZ/QC2ikMIv8OW+4cNzhlMmWDJJXRcZs198iPlk=;
+	s=arc-20240116; t=1705662533; c=relaxed/simple;
+	bh=HRG1HDvXfUhASA/toQUA5TK6BWaaBrkdi7tMwdoiI7s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LVsFfxCwxG3KrSU+703EKvU/CYDQ/g2z4RT+o/Tik2xlQ0YxHJp/VE3/CQMm5rjDnO81TzY/trM6iHuAuC7BFBU9yI7VfwnWGKrOwUE2OG7miM95YoJKv7ZeXODgpIaKYPytGrjJCCrXlOVvGoRrVsiZOVPL2l0/Z++Qgkp4ggY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=wLC3Vf1u; arc=none smtp.client-ip=209.85.208.43
+	 MIME-Version; b=cGTpAB1crPnhKmO4sLbxnRRbJ24tcAC/r/aqjqm+40DJJEwiCKaj7JGmEi/OXJxCahdtbymrFpKwxMwkZmjjP9Ejd44w88s5B/Z0lCSmx5C+ypFv83gwfixtkAd/pvVmpAuCYS0fPCWzye4pP4RDJMFVByWDijxvMmkIS/ywf48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=y8bOLWJK; arc=none smtp.client-ip=209.85.167.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-559edcee47eso616970a12.0
-        for <linux-pm@vger.kernel.org>; Fri, 19 Jan 2024 03:08:49 -0800 (PST)
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-50e7b273352so668826e87.1
+        for <linux-pm@vger.kernel.org>; Fri, 19 Jan 2024 03:08:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1705662528; x=1706267328; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1705662529; x=1706267329; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=okEOgUTTvG10NiN/AqLj194Y6CTF03Wx1MeaENsTf1o=;
-        b=wLC3Vf1uFLuxbO6Kz244e2x6oe9f5MU4ljeQMVtcBycE6W5UtjqQWtm8SWgqCtGjFa
-         N9zOMkI9+y6Wrfk/JUmJChcDs2codLgNGmZByIHk2k3tBoPu5o1WDP6GWFIFM4fRDuq6
-         4FCoPEURt4BX702K01E0HuQoXO9opzV/VygDkN6urCGOm9HGGPKcHQ16tKJ3ZlrnvqaK
-         YO0RBlwSX9hXSaFgoIQkQ5aCDIJrEeEpV5eJzxNENEEwCVBUZ1pn427sNedmRF9BJB5k
-         xuYT1RsjwzuhNuB/kr1Wt+eeu7OH9tIXKH5VhEIRRbbI6J8kWy91IosDlH0D2ugr/KTN
-         lblA==
+        bh=OjR2LFuZQNm/ecVtMuUirJ38DZRHEGKXOqw4QzmaE6o=;
+        b=y8bOLWJK/8FAcgtJQWxBfl/RXgRY6V/tCBKi4njhyPBnOaBcF7eHvwlnrBJLjJRa1J
+         hjJnW4hTVikrTB1On2xnjf9GZTyFJY4txk8J5ASy0ADbNJkOW1eLL5AAq2NiI6RoOdyG
+         l0sE19uqYZkxlbSWYoBdWTwbL6DuBDwFArvRqu+PZj2cgZjf7wDDhfLDqGPNOfh9KYJG
+         eyx47CJxw17jGRfWBNN3CVuqtI/ADAXwVgcr+gaglDjmV7+rQM9ON9jgMqUhyIC561yN
+         d7yg9k/fV2u40T5J7cyx/r3YYNuzih8vfi9k6SlbEVHHFXAyWIn0lliHMFla37HuByJT
+         5ypw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705662528; x=1706267328;
+        d=1e100.net; s=20230601; t=1705662529; x=1706267329;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=okEOgUTTvG10NiN/AqLj194Y6CTF03Wx1MeaENsTf1o=;
-        b=iCCZv4jLyI6PNLPa1lnE1gClJSp4oIwTru6pERE42d5/4Om8eo9VpJfmfJSR2aAG6v
-         kaWI25V579EMoEVABDLcPSn44goUAgCnVMdlt+2HERusAxE4niMoxJz12+OlXX1e8IFh
-         shvZOcwnfttt3VFuL9P6NbDg0ABUyQZ04ynh1uQ9ubJnuZZb3LVUsdcyexWp8xLjxXFr
-         qOcSfnKAwYD0ts7oVy1/xrQpRvNjAg3kySsVUxmFu+bTK+XbLhsete6b6pUBFbzlalnO
-         DHgguSvjEkXZPyySaoeg9xyjMlnXrviIdz5xK0DitXfEo7MLOIXTkJDgcObP84qQfNXK
-         O7mg==
-X-Gm-Message-State: AOJu0YzV2p8VHXtd7UpqZN4O37K06H+yjP4rh18bNAeXjul21i7jDePf
-	QkQy9ubq+QcCAOWVf8oUMGbG4/No7Vjye6R+b88EIqhx0KTlChtMrrwJuSb9pZI=
-X-Google-Smtp-Source: AGHT+IExGlo4SMY6bavsiNwBVukS5zNpiw1btzBfUGvzwWyix6ifH0LNGzSKIkssylX/XCDVEEzw9g==
-X-Received: by 2002:a17:906:5a8d:b0:a2e:92dd:80a3 with SMTP id l13-20020a1709065a8d00b00a2e92dd80a3mr1400562ejq.123.1705662527753;
-        Fri, 19 Jan 2024 03:08:47 -0800 (PST)
+        bh=OjR2LFuZQNm/ecVtMuUirJ38DZRHEGKXOqw4QzmaE6o=;
+        b=NSn/pny41VWJDhMtW4H0/TjlHVT9RDGYveOMPZi7mFgVvqRLg9AcyvF/AH4j8C/xpO
+         620EL6SULTQehmLPJLohLUtWDSlOm1ylkGZFHkEg5RLo4MJXyC+2NE2W7fof+3/H/1WB
+         yga+k9XeYhf+TYVCBaVqTN3DFgOXmBuwX6KlI2RECNbI8dgfWHKqRYRZINeYkXUDkHJy
+         hLcaMEcqHOAholpjVnSF2O2DM4tkOEHjyDqPMs/suhr4Wmh79S7+IyLXnVhQwZH7g8Py
+         sJbNiwiUI0pbvB9QNt+E2VW3Z0hBhIhCQuLvPa19lzukKEenM94xbQbyfl778momPpK7
+         /9Pg==
+X-Gm-Message-State: AOJu0YyVPamfKUO2OTPFdYEMaQ8VvOrWpZcncXAH/jwbKrnVN+7bqXHP
+	XkyTcTYkVijD+9awKTjZNp/w87VFTmm7mUQ6X1N/L84puaTyBa7c1TMOlB4w6ZY=
+X-Google-Smtp-Source: AGHT+IGmR08sudaVigkCkvIuDOcA3NhhCx2amlFjKxzmQKMiGI3DmISrs0NKDpbSBRiThecXvRsMAA==
+X-Received: by 2002:a19:2d4e:0:b0:50e:771a:9ff9 with SMTP id t14-20020a192d4e000000b0050e771a9ff9mr496796lft.78.1705662529382;
+        Fri, 19 Jan 2024 03:08:49 -0800 (PST)
 Received: from blaptop.baylibre (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id h20-20020a170906261400b00a28d438a1b0sm10091661ejc.83.2024.01.19.03.08.46
+        by smtp.gmail.com with ESMTPSA id h20-20020a170906261400b00a28d438a1b0sm10091661ejc.83.2024.01.19.03.08.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jan 2024 03:08:46 -0800 (PST)
+        Fri, 19 Jan 2024 03:08:48 -0800 (PST)
 From: Alexandre Bailon <abailon@baylibre.com>
 To: rafael@kernel.org,
 	daniel.lezcano@linaro.org,
@@ -78,9 +78,9 @@ Cc: rui.zhang@intel.com,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Alexandre Bailon <abailon@baylibre.com>
-Subject: [PATCH v2 1/3] dt-bindings: thermal: Restore the thermal-sensors property
-Date: Fri, 19 Jan 2024 12:08:40 +0100
-Message-ID: <20240119110842.772606-2-abailon@baylibre.com>
+Subject: [PATCH v2 2/3] thermal: Add support of multi sensors to thermal_core
+Date: Fri, 19 Jan 2024 12:08:41 +0100
+Message-ID: <20240119110842.772606-3-abailon@baylibre.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20240119110842.772606-1-abailon@baylibre.com>
 References: <20240119110842.772606-1-abailon@baylibre.com>
@@ -92,34 +92,234 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-thermal-sensors was defined in thermal.txt but when the yaml binding
-has been defined, its definition has changed, dropping support of multi
-sensors.
-Since we are adding support of multi sensors, use the original definition
-for thermal-sensors property.
+This adds support of multi sensors to thermal.
+Currently, this only support the get_temp operation.
+This returns an average temperature of all the sensors.
+If defined, a coefficient is applied to the value read from the sensor
+before computing the average.
 
 Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
 ---
- Documentation/devicetree/bindings/thermal/thermal-zones.yaml | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/thermal/Makefile        |   1 +
+ drivers/thermal/thermal_core.h  |   7 ++
+ drivers/thermal/thermal_multi.c | 178 ++++++++++++++++++++++++++++++++
+ 3 files changed, 186 insertions(+)
+ create mode 100644 drivers/thermal/thermal_multi.c
 
-diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-index 4a8dabc48170..b2988758d6ff 100644
---- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-+++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-@@ -77,10 +77,9 @@ patternProperties:
+diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+index c934cab309ae..757289a406f7 100644
+--- a/drivers/thermal/Makefile
++++ b/drivers/thermal/Makefile
+@@ -6,6 +6,7 @@ CFLAGS_thermal_core.o		:= -I$(src)
+ obj-$(CONFIG_THERMAL)		+= thermal_sys.o
+ thermal_sys-y			+= thermal_core.o thermal_sysfs.o
+ thermal_sys-y			+= thermal_trip.o thermal_helpers.o
++thermal_sys-y			+= thermal_multi.o
  
-       thermal-sensors:
-         $ref: /schemas/types.yaml#/definitions/phandle-array
--        maxItems: 1
-         description:
--          The thermal sensor phandle and sensor specifier used to monitor this
--          thermal zone.
-+          A list of thermal sensor phandles and sensor specifier
-+          used while monitoring the thermal zone.
+ # netlink interface to manage the thermal framework
+ thermal_sys-$(CONFIG_THERMAL_NETLINK)		+= thermal_netlink.o
+diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
+index 0a3b3ec5120b..26e83a5c8298 100644
+--- a/drivers/thermal/thermal_core.h
++++ b/drivers/thermal/thermal_core.h
+@@ -138,6 +138,13 @@ ssize_t weight_show(struct device *, struct device_attribute *, char *);
+ ssize_t weight_store(struct device *, struct device_attribute *, const char *,
+ 		     size_t);
  
-       coefficients:
-         $ref: /schemas/types.yaml#/definitions/uint32-array
++/* Multi sensors */
++int thermal_multi_sensor_validate_coeff(int *coeff, int count, int offset);
++int thermal_multi_sensor_register(const char *name,
++	struct thermal_zone_device *sensor_tz, int coeff);
++void thermal_multi_sensor_unregister(struct thermal_zone_device *sensor_tz);
++
++
+ #ifdef CONFIG_THERMAL_STATISTICS
+ void thermal_cooling_device_stats_update(struct thermal_cooling_device *cdev,
+ 					 unsigned long new_state);
+diff --git a/drivers/thermal/thermal_multi.c b/drivers/thermal/thermal_multi.c
+new file mode 100644
+index 000000000000..a5a4f1f2d594
+--- /dev/null
++++ b/drivers/thermal/thermal_multi.c
+@@ -0,0 +1,178 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/err.h>
++#include <linux/export.h>
++#include <linux/of.h>
++#include <linux/slab.h>
++#include <linux/thermal.h>
++#include <linux/types.h>
++#include <linux/string.h>
++
++#include "thermal_core.h"
++
++struct sensor_interface {
++	struct thermal_zone_device *tz;
++	int coeff;
++
++	struct list_head node;
++};
++
++struct multi_sensor_thermal_zone {
++	struct thermal_zone_device *tz;
++	struct mutex sensors_lock;
++	struct list_head sensors;
++
++	struct list_head node;
++};
++
++static DEFINE_MUTEX(multi_tz_mutex);
++static LIST_HEAD(multi_tz_list);
++
++#define TJ_MAX 120000
++
++static int multi_sensor_get_temp(struct thermal_zone_device *tz, int *temp)
++{
++	struct multi_sensor_thermal_zone *multi_tz = tz->devdata;
++	struct sensor_interface *sensor;
++	int accumulated_temp = 0;
++	u32 accumulated_coeff;
++	int ret;
++
++	mutex_lock(&multi_tz->sensors_lock);
++
++	if (list_empty(&multi_tz->sensors)) {
++		mutex_unlock(&multi_tz->sensors_lock);
++		return -ENODEV;
++	}
++
++	list_for_each_entry(sensor, &multi_tz->sensors, node) {
++		ret = thermal_zone_get_temp(sensor->tz, temp);
++		if (ret) {
++			mutex_unlock(&multi_tz->sensors_lock);
++			return ret;
++		}
++
++		accumulated_temp += *temp * sensor->coeff;
++		accumulated_coeff += sensor->coeff;
++	}
++
++	mutex_unlock(&multi_tz->sensors_lock);
++
++	*temp = accumulated_temp / accumulated_coeff;
++	return ret;
++}
++
++struct thermal_zone_device_ops multi_sensor_ops = {
++	.get_temp = multi_sensor_get_temp,
++};
++
++int thermal_multi_sensor_validate_coeff(int *coeff, int count, int offset)
++{
++	int max_accumulated_temp = 0;
++	int i;
++
++	for (i = 0; i < count; i++) {
++		max_accumulated_temp += TJ_MAX * coeff[i];
++		if (max_accumulated_temp < 0)
++			return -EOVERFLOW;
++	}
++
++	max_accumulated_temp += offset;
++	return max_accumulated_temp < 0 ? -EOVERFLOW : 0;
++}
++
++static struct thermal_zone_device *multi_sensor_tz_alloc(const char *name)
++{
++	struct thermal_zone_device *tz;
++	struct thermal_zone_params tzp = {};
++	struct multi_sensor_thermal_zone *multi_tz;
++
++	tz = thermal_zone_get_zone_by_name(name);
++	if (!IS_ERR(tz)) {
++		mutex_unlock(&multi_tz_mutex);
++		return tz;
++	}
++
++	multi_tz = kzalloc(sizeof(*multi_tz), GFP_KERNEL);
++	if (!multi_tz)
++		return ERR_PTR(-ENOMEM);
++	mutex_init(&multi_tz->sensors_lock);
++	INIT_LIST_HEAD(&multi_tz->sensors);
++
++	tzp.no_hwmon = true;
++	tzp.slope = 1;
++	tzp.offset = 0;
++
++	tz = thermal_tripless_zone_device_register(name, multi_tz,
++						   &multi_sensor_ops, &tzp);
++	if (IS_ERR(tz)) {
++		kfree(multi_tz);
++	} else {
++		multi_tz->tz = tz;
++		list_add(&multi_tz->node, &multi_tz_list);
++	}
++
++	return tz;
++}
++
++int thermal_multi_sensor_register(const char *name,
++	struct thermal_zone_device *sensor_tz, int coeff)
++{
++	struct thermal_zone_device *tz;
++	struct multi_sensor_thermal_zone *multi_tz;
++	struct sensor_interface *sensor;
++
++	mutex_lock(&multi_tz_mutex);
++
++	tz = multi_sensor_tz_alloc(name);
++	if (IS_ERR(tz)) {
++		mutex_unlock(&multi_tz_mutex);
++		return PTR_ERR(tz);
++	}
++	multi_tz =  tz->devdata;
++
++	sensor = kzalloc(sizeof(*sensor), GFP_KERNEL);
++	if (!sensor) {
++		mutex_unlock(&multi_tz_mutex);
++		return -ENOMEM;
++	}
++
++	sensor->tz = sensor_tz;
++	sensor->coeff = coeff;
++	mutex_lock(&multi_tz->sensors_lock);
++	list_add(&sensor->node, &multi_tz->sensors);
++	mutex_unlock(&multi_tz->sensors_lock);
++
++	thermal_zone_device_enable(tz);
++
++	mutex_unlock(&multi_tz_mutex);
++
++	return 0;
++}
++
++void thermal_multi_sensor_unregister(struct thermal_zone_device *sensor_tz)
++{
++	struct multi_sensor_thermal_zone *multi_tz;
++	struct sensor_interface *sensor, *tmp;
++
++	mutex_lock(&multi_tz_mutex);
++	list_for_each_entry(multi_tz, &multi_tz_list, node) {
++		mutex_lock(&multi_tz->sensors_lock);
++		list_for_each_entry_safe(sensor, tmp, &multi_tz->sensors, node) {
++			if (sensor->tz == sensor_tz) {
++				list_del(&sensor->node);
++				kfree(sensor);
++				break;
++			}
++		}
++
++		if (list_empty(&multi_tz->sensors)) {
++			thermal_zone_device_unregister(multi_tz->tz);
++			mutex_unlock(&multi_tz->sensors_lock);
++			kfree(multi_tz);
++		} else {
++			mutex_unlock(&multi_tz->sensors_lock);
++		}
++	}
++	mutex_unlock(&multi_tz_mutex);
++}
 -- 
 2.41.0
 
