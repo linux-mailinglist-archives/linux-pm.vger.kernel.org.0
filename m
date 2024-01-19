@@ -1,103 +1,111 @@
-Return-Path: <linux-pm+bounces-2384-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2385-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91636832AEC
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 15:07:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42BC8832BA6
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 15:51:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C28F1F23F70
-	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 14:07:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 580501C23F40
+	for <lists+linux-pm@lfdr.de>; Fri, 19 Jan 2024 14:51:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28F9C5380F;
-	Fri, 19 Jan 2024 14:07:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 486E753E20;
+	Fri, 19 Jan 2024 14:50:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ufaO3X1M"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Il73LRCT"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDDA9537FC;
-	Fri, 19 Jan 2024 14:07:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3A4537EA;
+	Fri, 19 Jan 2024 14:50:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705673247; cv=none; b=bpWLyVLihjVHwX4MZLWmJI2mW68BtpmDwDejrho2exmtPyng3j9rseOLqDbtn9CW8xTR4JaeM6fBGUc5bEnoCFJW49cTQP+wPQtQBUpJcVUDokZGHGT9elo+G0vxXUz0fR0Gq3P0T2fKuJCc6t6v54D/qi6lAb4Vr/Rcdwteo/U=
+	t=1705675855; cv=none; b=Kj/fO/YGYU3ZyY6OR5CNAM/TQtVwBl78msGOc2gE/VOl/NCgUrIW5s406C5p3J2Ct5EFgsUSgxI1Et7CcL1pSwaSzV+EavedHf1dZWOcM4ChUsgehc9Y6V0gzPNHcaVz1AEvtqfutbu4HZi5WnEOte+VUXTgWGtuz6BcJpEJDc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705673247; c=relaxed/simple;
-	bh=mC2DXqdjEQC66exVDQPqaBRO3tMoWAaPPIKH8mIOQvE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Owh6JKaec6KkoThyJz1zkhzBEeZNiyu52SwEHKGQJffRcuOF6go5WSsyIbvMCbiEkxf3R9FM/1314r3qKyBJMdCU3jOelcMfrbVsZStDkUBL9TfzVY9UlmsBnpMmNY6vOYs/i+39AhB7gfOJZCMSocekYlZyliP88SbSXyudTJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ufaO3X1M; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6D53C433F1;
-	Fri, 19 Jan 2024 14:07:25 +0000 (UTC)
+	s=arc-20240116; t=1705675855; c=relaxed/simple;
+	bh=wus+JdBy39/TlYRdizuSbTymPeGMbWWwjq3GLgCebHQ=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=BLH3PNwIxMsShqaIGNnCwf6odaxf2Z9qqS5ZrfqI7P/jOH13JmIYAmOo0GLkQKU6MZsCpVah2eDGxHQc8Tfj171pr+Au272GckVFVpdiiOId4oai7lpwe8b5mx3vIL1ByZw34/4O8RZCsxQPtfIN5Nc3Q9BNpzoHF9ZnrKCm+iY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Il73LRCT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ED75C433C7;
+	Fri, 19 Jan 2024 14:50:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705673246;
-	bh=mC2DXqdjEQC66exVDQPqaBRO3tMoWAaPPIKH8mIOQvE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ufaO3X1MTWwDkyXWZKBoxgKn7aCg9nHlDWZjGZKfGaY6vrsNjBFSeiNYXa31tAviv
-	 7pIX7VMk0MJGBy8mIJ6sQqfUY77RBPB55RDba9QD3AAYXNXFRgoW/I+z6DIeJYklbt
-	 43ZskenGMSJn0neHKZ95l4Ms2joUjgufrHZMxn/hMR9NI26/jk3Jx7sUbVZxkfeyn0
-	 /v+QtLv2rNtLWbPWaTE0pDIcZQXMgzMfkhiyndYRQCU7vO0YSS5LIu/nO6wEVMk9PB
-	 v+s5j4xem+XNmFvxJH1RnjqSSqX/RibEZQnGS1IlctPul1z9UFREEzGFCQ1A5MqfZt
-	 zT+zriz43aK0g==
-Date: Fri, 19 Jan 2024 14:07:22 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Oleksij Rempel <o.rempel@pengutronix.de>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	=?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>
-Subject: Re: [RFC PATCH v1 6/7] regulator: set Power State Change Reason
- before hw_protection_shutdown()
-Message-ID: <ZaqCGgd77rs3yq59@finisterre.sirena.org.uk>
-References: <20240119132521.3609945-1-o.rempel@pengutronix.de>
- <20240119132521.3609945-7-o.rempel@pengutronix.de>
+	s=k20201202; t=1705675854;
+	bh=wus+JdBy39/TlYRdizuSbTymPeGMbWWwjq3GLgCebHQ=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=Il73LRCTISeRJlSA4o3Od+Qsfli5PDKExos/nWrry1y8Hr5/FjoR3dkVioJozDkED
+	 F78w3UX/XfSm61Rz1uad9l3fn92ne1vsGKgnG91+2nVs9FOO9vpg8ABxyG2DGJXHLX
+	 2PWHyStAkTkru9BOxSvcr1igrvFdfVnkufRHZIFaoazSC4b7eBrakNo1WgE2cb38ea
+	 9VjtfhUaE/IR+lMKJEoJ6sd3MVMWEUF6eLoK9AJ9EeNpi7I87Yh+uF2CjeEJJaF57e
+	 roFkkjzMsG5xwCoBlxAg7DiTS57w5QyjIBLKaRYdXXfM0AZgVA3IvXDU7lp/Cc9Fkt
+	 PzWjqOMFUYFwg==
+Date: Fri, 19 Jan 2024 08:50:53 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Q0ELjM8ZH/7s+wG5"
-Content-Disposition: inline
-In-Reply-To: <20240119132521.3609945-7-o.rempel@pengutronix.de>
-X-Cookie: You might have mail.
+From: Rob Herring <robh@kernel.org>
+To: Oleksij Rempel <o.rempel@pengutronix.de>
+Cc: devicetree@vger.kernel.org, kernel@pengutronix.de, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ =?utf-8?q?S=C3=B8ren_Andersen?= <san@skov.dk>, 
+ Sebastian Reichel <sre@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, 
+ Liam Girdwood <lgirdwood@gmail.com>, linux-pm@vger.kernel.org, 
+ Lukasz Luba <lukasz.luba@arm.com>, Conor Dooley <conor+dt@kernel.org>, 
+ Zhang Rui <rui.zhang@intel.com>, Rob Herring <robh+dt@kernel.org>, 
+ Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
+In-Reply-To: <20240119132521.3609945-2-o.rempel@pengutronix.de>
+References: <20240119132521.3609945-1-o.rempel@pengutronix.de>
+ <20240119132521.3609945-2-o.rempel@pengutronix.de>
+Message-Id: <170567585145.286939.12867599377741148021.robh@kernel.org>
+Subject: Re: [RFC PATCH v1 1/7] dt-bindings: power: reset: add generic PSCR
+ binding trackers
 
 
---Q0ELjM8ZH/7s+wG5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Fri, 19 Jan 2024 14:25:15 +0100, Oleksij Rempel wrote:
+> Add binding for Power State Change Reason (PSCR) subsystem
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  .../devicetree/bindings/power/reset/pscr.yaml | 51 +++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/reset/pscr.yaml
+> 
 
-On Fri, Jan 19, 2024 at 02:25:20PM +0100, Oleksij Rempel wrote:
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> Store the state change reason to some black box, for later
-> investigation.
+yamllint warnings/errors:
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/reset/pscr.yaml: $id: Cannot determine base path from $id, relative path/filename doesn't match actual path or filename
+ 	 $id: http://devicetree.org/schemas/power/state-change/pscr.yaml
+ 	file: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/reset/pscr.yaml
 
---Q0ELjM8ZH/7s+wG5
-Content-Type: application/pgp-signature; name="signature.asc"
+doc reference errors (make refcheckdocs):
 
------BEGIN PGP SIGNATURE-----
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240119132521.3609945-2-o.rempel@pengutronix.de
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWqghoACgkQJNaLcl1U
-h9AqSQf/efBnzcrtjCJBKoNUTCFbiQ0DyNwDETiS+2ZruZjaSBcs7oxxPMuRyjxR
-nKcdtnG+U7hx1iD7o2hEJbTkxELEg9Zxf4RYfd9sIgzTA4KfuVRrsGd7AAqFM6hS
-/2bqpyennzYcbcom8RrNC+CLggjskFNS5W/fICtswq2L3dOrJ8IE7G2FKzEezWAH
-FFyUQSYM5TYee/Rnl/upEpmJAt0tgrshue0MSRfCmpL6WbmZW7pJhIzlDOeVeWKy
-CXQywnBxVMHyEpch/2DqlqWOUQXHLYJ2us1pLmINFt7ybc5QjAxZWhzL4T4Hj6Se
-pNFoMGrP2Vj42CPLvlPCv/5BNQcSew==
-=7Tuc
------END PGP SIGNATURE-----
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
---Q0ELjM8ZH/7s+wG5--
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
 
