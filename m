@@ -1,126 +1,187 @@
-Return-Path: <linux-pm+bounces-2409-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2410-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A7BE8333FB
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Jan 2024 13:06:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D912A83360F
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Jan 2024 21:26:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8994C1C20DFF
-	for <lists+linux-pm@lfdr.de>; Sat, 20 Jan 2024 12:06:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 57D5F282164
+	for <lists+linux-pm@lfdr.de>; Sat, 20 Jan 2024 20:26:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECC3FDDC7;
-	Sat, 20 Jan 2024 12:06:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CEAB125D5;
+	Sat, 20 Jan 2024 20:26:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.com header.i=erick.archer@gmx.com header.b="BrOEHDwk"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ip80SeM2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88DB6320F;
-	Sat, 20 Jan 2024 12:06:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FDE5125CB
+	for <linux-pm@vger.kernel.org>; Sat, 20 Jan 2024 20:26:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705752363; cv=none; b=MM9RkNVASByNOxx5Xh9gktDWxPpVre7x5JkVVyn4hNZ2d+AF2HaAz/DWyj+6rVaChvxi8PwhjfNAw+GztEO7gACPUDfGA/HnGgsq4QVFWh84dJrRLDYWXeGs4sJeXXNxinCUSxPC+XILeIvAKU6kTFthNEPJ9WpD9darWh4TqJo=
+	t=1705782371; cv=none; b=ZbuCpriyos5vd6+UHTrSjyT3RIXL9z/OOB/xKvasT0qjy++fRXi6D85cYwrIm6JE3yalwYgpXuYTpwBDhrZzqFoMErN2H58V5/DmczMIs/9fQRj6VYTfsDjiud4k/Y7901hXIoNptUIVKUTo5jj5CcfPErac7AXshmNqCHRpF+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705752363; c=relaxed/simple;
-	bh=6WljTQzsAyyeU2bPKrlfnVK55eNKnNBym7B97HV0Oq8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tTw6U5eMFM6Q4cIiU6dEnlDDqTHnxy1fFHGwyzbkWiKjVRpYKvjVTRhFZFLVzyuJjVK/C0hhajdYmkNnlQo7c7lSdu14yfAIxmvrrhNqOjYZvvQ8DeBVvrXAd3nkbyfrBalbHLLz+93hT7PrpqBsQ/5i5fG+hBPQSSzsV54Xp34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.com; spf=pass smtp.mailfrom=gmx.com; dkim=pass (2048-bit key) header.d=gmx.com header.i=erick.archer@gmx.com header.b=BrOEHDwk; arc=none smtp.client-ip=212.227.15.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.com;
-	s=s31663417; t=1705752347; x=1706357147; i=erick.archer@gmx.com;
-	bh=6WljTQzsAyyeU2bPKrlfnVK55eNKnNBym7B97HV0Oq8=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-	b=BrOEHDwkuzbLg79L4PnWJ5cxHqwsUPGnDQlzwnCN23SVhzi6ijC0Tv1jrg6O68I6
-	 bgKDWf2hDN1oiap2qVwhQbk08J9RJwuiYICzpZq/tC5toKmrV1c2BH3O5R/AndJ6w
-	 6lnMvuQTKXfM6ieXplXycc5ZQxDSY3j6ujnz8S7kfNEP2Zmmm+04z5/NZ967Z+oGl
-	 VBiwji4G0+8IAOO/41O3jtSCoav6fDkwyfgnVEC9YzagVt0Cgx5ip1WI0fAmkl0bU
-	 Ew9BnFALOWwVR6zbNCs2k3xAiXlVjuTtSqhEydplE8j9QbDFzXfokZf/KTg0JHYeO
-	 CO8E59t+xuXfoG+jPw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from localhost.localdomain ([79.157.194.183]) by mail.gmx.net
- (mrgmx004 [212.227.17.184]) with ESMTPSA (Nemesis) id
- 1M42jK-1rRA6d0MNM-0007t9; Sat, 20 Jan 2024 13:05:47 +0100
-From: Erick Archer <erick.archer@gmx.com>
-To: Viresh Kumar <vireshk@kernel.org>,
-	Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <len.brown@intel.com>,
-	Pavel Machek <pavel@ucw.cz>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Erick Archer <erick.archer@gmx.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH] Documentation: power: Use kcalloc() instead of kzalloc()
-Date: Sat, 20 Jan 2024 13:05:27 +0100
-Message-Id: <20240120120527.3866-1-erick.archer@gmx.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1705782371; c=relaxed/simple;
+	bh=E9NsYbZxlVjESIGCacSf+Ik7c/ume2adKqxJLr5Rotg=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=d6/MLg/T+uGoPV6lChhFfyLOhNd3adT3/DVg7z9bO5T7C+cwUNDgikJHE8aVjuuFtlTQInkEpjrYyMJ3eLEkqPazl5PBURUIwGzU1/5asQE68V6oEYJsskLCQxLdehr/ZSetiyHFMyTYYl65eyAvP7RfwyhVsiAa9K1pNc5GniI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ip80SeM2; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1705782368;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DX4dXMQ9Zd/jP9gKVwQfRx3j8zLRWZtP8Q+HxZciNU4=;
+	b=Ip80SeM2GcYz79zkUf2bxy8d6ITbPZ1gi1vND2S29oQ64VJY5bsNUFxfxphKSq2JgqzK2J
+	/JlPgpxDE7kIZY/7kl2ne6Jk60oBiwAj7+ytEP0LI0lVeKg/N7+4L7A1XXrC69LlHQ3CPo
+	uygZaOw3uIeigUpF89yGlJiW3SE2kSU=
+Received: from mail-lj1-f197.google.com (mail-lj1-f197.google.com
+ [209.85.208.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-617-MY1YhSD2MZe4Htbmdi1wtQ-1; Sat, 20 Jan 2024 15:26:06 -0500
+X-MC-Unique: MY1YhSD2MZe4Htbmdi1wtQ-1
+Received: by mail-lj1-f197.google.com with SMTP id 38308e7fff4ca-2cddf6eafdeso11510871fa.3
+        for <linux-pm@vger.kernel.org>; Sat, 20 Jan 2024 12:26:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705782365; x=1706387165;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DX4dXMQ9Zd/jP9gKVwQfRx3j8zLRWZtP8Q+HxZciNU4=;
+        b=SLWFcSh+ezfbAaE5xIOyraj3YSekOUsHr22ql64/emhCdiXYd9jI6h5fFIL3b8IlK6
+         S0qfwlX8a7tPwhEDKK5RBktZdAR1oB5DG9rSvQ0qh74dJZzZ1+YRKYh5d4LOnK5bkyoO
+         GcbeQQ+1e/IQsVtdw3IHkCrIjy/OJOB6Cn27ppVqg0cXyFp4Oi1lEGtSAVNv7Bi2xrlF
+         3HD+6wNqfCXSXkgwJOZttHN+8mtrahhHzx+IpU9r2JM1joy8qSlG9jxMToHI7mhV0HiT
+         NdevkjHhLZ+zMVZ3J0sLsXMD4bBjsa64BsD5C45RAJrgtXX4z2739C65rio2oEziv0Lx
+         zqPg==
+X-Gm-Message-State: AOJu0Yy549+jqAw8ZjndrfOEGG6a0xa972Q1HGMqxG9Lq9YKISTW32uu
+	WYVPtS/r0Jnl3PDmvpZv3nb8nKweU3dl2PDonX2ED7PX0zictqerDa27jwK3qF89tiZiZq9qUj1
+	mUu/MkpYZgxRvIrSeJbHWJRSdGpRpRDHTZkUo6pYWiT3YA6PRWuk6DfpkA1Afvwfv
+X-Received: by 2002:a2e:91c9:0:b0:2cd:fa79:4cc1 with SMTP id u9-20020a2e91c9000000b002cdfa794cc1mr275567ljg.89.1705782365083;
+        Sat, 20 Jan 2024 12:26:05 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGSO0D5rt1ubbifU4nVe4zOHGkl8IEXhQH7ZMFwmsWrcpWj5rb7od2jV1jehadOksOEMsSGNw==
+X-Received: by 2002:a2e:91c9:0:b0:2cd:fa79:4cc1 with SMTP id u9-20020a2e91c9000000b002cdfa794cc1mr275561ljg.89.1705782364743;
+        Sat, 20 Jan 2024 12:26:04 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id p16-20020aa7cc90000000b00558a7d36956sm12156869edt.0.2024.01.20.12.26.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 20 Jan 2024 12:26:04 -0800 (PST)
+Message-ID: <f27b491c-2f1c-4e68-804c-24eeaa8d10de@redhat.com>
+Date: Sat, 20 Jan 2024 21:26:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:MIB9rwFGn8LGmiHnZumtukOyb3RsmEdtPJtv639NvUDu4wkg9uM
- le8LXDqp2lj65dhD4DGvmd/RgkaUGRutEb5zp+iAzNeRObT2S888ysTeqpbHoA4FjZ42pLk
- 9YGTRAU8XT/RGai5CDlb93x6J5MGbpvFQt4PfhYsyWqBX84cBPsN1h1hcWmIbxJaY/vLSuE
- sGL8nyiOVW2uOmvnoWfnQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:PsIHd0DBSB0=;22SfptT7jfkPKbSIQF/aARbTyJB
- 7CsB1+3GKQZPBMDm6m6A1cLTA+wqnNwt3jQQ+MRxgI/hDEwgHzunaygKkU2IcM0b6RQimNthH
- KP4j7g7yokE/ezd45sO2wVY4/ruxS4HHDPOx0BnYWet8oESRM/Z5yLGEeJPzKjq8/hHIrDSGv
- Fl+2Xn5f5NrsWN8loLa5I9yvgXxWmnheBtPcsGmglHtS6KpcYxjAqktBxd/WG/Jkw9KJPl+xm
- f5HFcurAHxJGCc2q0xPWU51EOtf+s3IpS4yH4JghXX9X7pzh9xdXDoD8hNgIG2NFcDDUygkDl
- UFHtBcyKKEO/FIq6rby3SrTGyOofBc3XQSsGOJXrJBZpGD0/CyDb+BoVNDBVyoGkyDjFXc1x9
- 1i8dIc7wUqoM5gfSudJKYTHVh9zRXN2IlHwhfmoteIO7xvCJd8K5Gy4tTK1Mj4J2o3mQ3B/AO
- 06eTiozOauzv4Ji8eoT5w/5hgZhtNYQPbm0J/zTNa2GSHluJcvoiCaZZiXYhEPBut+rI6vKg8
- KyhHnWCRWeymlBT7AWVACMYh21g7F+CJd5MKEgL9wMb8bzgpV6qNmk0bJGlox50UGXSg+kww2
- 4kNyLOs4k48NTPfklUjgwwSRa8fO2MOIuDmljihXo5Oe/f4WQS40f77+a8RfuCPIxTg8oPtOQ
- ktEQzdDFhlUoqoHuPe7hCzdQnzZB/+U6yprJKu/fwbH4W+J/0zlSM4w5503IR7yEJHyEeA+Oh
- Q8pLJSkXjjDzBPm8Uenw3WkViByynOwibtRixMNAOoWHgpYbYF1vymVYgBMm99v7hbO0AHg0m
- 6Gf14DocWNBTnZZo8fc4rtrLCmvXZPTdaggV/F1UAvrKC75hFvy8LL5HpsQa42hG5XUpRfUod
- Qow3M81VdaPFkn/gkXwrT+993mpPCJmTDpEowFBI5IwP8PsLywlgEY/xc8/FAykVeJlPfv4o/
- dPoRx0KepLuBZYyfTtzcSIcy11g=
+User-Agent: Mozilla Thunderbird
+From: Hans de Goede <hdegoede@redhat.com>
+Subject: Re: PS/2 keyboard of laptop Dell XPS 13 9360 goes missing after S3
+To: Paul Menzel <pmenzel@molgen.mpg.de>, LKML <linux-kernel@vger.kernel.org>
+Cc: linux-input@vger.kernel.org, linux-pm@vger.kernel.org,
+ Dell.Client.Kernel@dell.com, regressions@lists.linux.dev
+References: <0aa4a61f-c939-46fe-a572-08022e8931c7@molgen.mpg.de>
+Content-Language: en-US, nl
+In-Reply-To: <0aa4a61f-c939-46fe-a572-08022e8931c7@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-As noted in the "Deprecated Interfaces, Language Features, Attributes,
-and Conventions" documentation [1], size calculations (especially
-multiplication) should not be performed in memory allocator (or similar)
-function arguments due to the risk of them overflowing. This could lead
-to values wrapping around and a smaller allocation being made than the
-caller was expecting. Using those allocations could lead to linear
-overflows of heap memory and other misbehaviors.
+Hi Paul,
 
-So, in the example code use the purpose specific kcalloc() function
-instead of the argument size * count in the kzalloc() function.
+On 1/18/24 13:57, Paul Menzel wrote:
+> #regzbot introduced v6.6.11..v6.7
+> 
+> Dear Linux folks,
+> 
+> 
+> There seems to be a regression in Linux 6.7 on the Dell XPS 13 9360 (Intel i7-7500U).
+> 
+>     [    0.000000] DMI: Dell Inc. XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022
+> 
+> The PS/2 keyboard goes missing after S3 resume¹. The problem does not happen with Linux 6.6.11.
 
-Link: https://www.kernel.org/doc/html/next/process/deprecated.html#open-co=
-ded-arithmetic-in-allocator-arguments [1]
-Link: https://github.com/KSPP/linux/issues/162
-Signed-off-by: Erick Archer <erick.archer@gmx.com>
-=2D--
- Documentation/power/opp.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thank you for reporting this.
 
-diff --git a/Documentation/power/opp.rst b/Documentation/power/opp.rst
-index a7c03c470980..1b7f1d854f14 100644
-=2D-- a/Documentation/power/opp.rst
-+++ b/Documentation/power/opp.rst
-@@ -305,7 +305,7 @@ dev_pm_opp_get_opp_count
- 	 {
- 		/* Do things */
- 		num_available =3D dev_pm_opp_get_opp_count(dev);
--		speeds =3D kzalloc(sizeof(u32) * num_available, GFP_KERNEL);
-+		speeds =3D kcalloc(num_available, sizeof(u32), GFP_KERNEL);
- 		/* populate the table in increasing order */
- 		freq =3D 0;
- 		while (!IS_ERR(opp =3D dev_pm_opp_find_freq_ceil(dev, &freq))) {
-=2D-
-2.25.1
+Can you try adding "i8042.dumbkbd=1" to your kernel commandline?
+
+This should at least lead to the device not disappearing from
+
+"sudo libinput list-devices"
+
+The next question is if the keyboard will still actually
+work after suspend/resume with "i8042.dumbkbd=1". If it
+stays in the list, but no longer works then there is
+a problem with the i8042 controller; or interrupt
+delivery to the i8042 controller.
+
+If "i8042.dumbkbd=1" somehow fully fixes things, then I guess
+my atkbd driver fix for other laptop keyboards is somehow
+causing issues for yours.
+
+If "i8042.dumbkbd=1" fully fixes things, can you try building
+your own 6.7.0 kernel with commit 936e4d49ecbc:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=936e4d49ecbc8c404790504386e1422b599dec39
+
+reverted?
+
+Regards,
+
+Hans
+
+
+
+
+
+
+
+
+> 
+>     [    1.435071] i8042: PNP: PS/2 Controller [PNP0303:PS2K,PNP0f13:PS2M] at 0x60,0x64 irq 1,12
+>     [    1.435409] i8042: Warning: Keylock active
+>     [    1.437624] serio: i8042 KBD port at 0x60,0x64 irq 1
+>     [    1.437631] serio: i8042 AUX port at 0x60,0x64 irq 12
+>     […]
+>     [    1.439743] input: AT Translated Set 2 keyboard as /devices/platform/i8042/serio0/input/input0
+> 
+>     $ sudo libinput list-devices
+>     […]
+>     Device:           AT Translated Set 2 keyboard
+>     Kernel:           /dev/input/event0
+>     Group:            15
+>     Seat:             seat0, default
+>     Capabilities:     keyboard
+>     Tap-to-click:     n/a
+>     Tap-and-drag:     n/a
+>     Tap drag lock:    n/a
+>     Left-handed:      n/a
+>     Nat.scrolling:    n/a
+>     Middle emulation: n/a
+>     Calibration:      n/a
+>     Scroll methods:   none
+>     Click methods:    none
+>     Disable-w-typing: n/a
+>     Disable-w-trackpointing: n/a
+>     Accel profiles:   n/a
+>     Rotation:         0.0
+> 
+> `libinput list-devices` does not list the device after resuming from S3. Some of the function keys, like brightness and airplane mode keys, still work, as the events are probably transmitted over the embedded controller or some other mechanism. An external USB keyboard also still works.
+> 
+> I haven’t had time to further analyze this, but wanted to report it. No idea
+> 
+> 
+> Kind regards,
+> 
+> Paul
+> 
+> 
+> ¹ s2idle is not working correctly on the device, in the sense, that energy usage is very high in that state, and the full battery is at 20 % after leaving it for eight hours.
+
 
 
