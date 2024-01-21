@@ -1,198 +1,160 @@
-Return-Path: <linux-pm+bounces-2423-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2424-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A0E3835596
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Jan 2024 12:55:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C12C835609
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Jan 2024 15:27:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA31F1F21843
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Jan 2024 11:55:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38816281DD2
+	for <lists+linux-pm@lfdr.de>; Sun, 21 Jan 2024 14:27:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38B8836AF2;
-	Sun, 21 Jan 2024 11:55:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xff.cz header.i=@xff.cz header.b="Kn4NHR4j"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21D71374DD;
+	Sun, 21 Jan 2024 14:27:25 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A736364DB;
-	Sun, 21 Jan 2024 11:55:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.181.215.36
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF70F374CC;
+	Sun, 21 Jan 2024 14:27:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705838150; cv=none; b=lK/kab8iT3cS0h/xGkToXVyOXcURDxAv1PU3Wyeo0OmZKIend2xMR22So9iU9ZgKOeoJ5JJKmbzv9f8uaUXigo0Z8uO7QaH7/pdO7M0iDlT+Eg2NTNY4uQyVGy+h70qbAv70JPsevn9Vp3dIH3c88SMRcBSPYzDgipKQ2niL1Ck=
+	t=1705847245; cv=none; b=rnGh3Dw+3/Kg3jU4bdsC8t0X2Hfi0IQSfBbWwWE11M1UaC55OCo4n0Sze0NYomm/grlM/satOrCTpHE89Kzc8ytV0LsEZeuubxMW6b2aHLZUIAtDF1Q9DunaMevapgs9muP6d4RiNKCtPzD0Mmtr8tj/lFIc7NZsIESRMaD2O9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705838150; c=relaxed/simple;
-	bh=VgT/ghWM9Rl0uTNRGxHSL3MLjQYvVBrjftEsvy2LytQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mrjs6fLc9m2uapTGtKdpCvSV3K6IJI/WDwAj7JHQRmlO8/In6KkziifOxP099PQ4euyyLOJVBJfud9iEjVQhXrPV5eH4/ANmvFg2pE8QbHebcQlDAtESyK4MPKgTtFMGZ8c2hFEJpjMXQ30F31K551l2UqnmLMd9p6gdfwOtBFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xff.cz; spf=pass smtp.mailfrom=xff.cz; dkim=pass (1024-bit key) header.d=xff.cz header.i=@xff.cz header.b=Kn4NHR4j; arc=none smtp.client-ip=195.181.215.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xff.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xff.cz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
-	t=1705838145; bh=VgT/ghWM9Rl0uTNRGxHSL3MLjQYvVBrjftEsvy2LytQ=;
-	h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
-	b=Kn4NHR4jpd+CKkKFE49IyQqnoq3JTaeBXJLkMRFN4NqCp3HGYh8j6y2ELyY5CPBUi
-	 WuJSklx5BVYnqH8o33UVzaVzUCMNoVD+LSAQYhFS0x5y1BSI/dNQR92/xBk8zHdfKk
-	 SXytiTi5hJ8EeUD7hOlKvCk3oIGSkRShl7Rvlia8=
-Date: Sun, 21 Jan 2024 12:55:43 +0100
-From: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
-To: Aren Moynihan <aren@peacevolution.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, Chen-Yu Tsai <wens@csie.org>, Sebastian Reichel <sre@kernel.org>
-Subject: Re: [PATCH 2/3] power: supply: axp20x_usb_power: enable usb_type
- reporting
-Message-ID: <yltrgkwj3evlyj6lu6ltdk2kg5bchtzginpx7dyblt6aqtdzwp@noczofep5o5b>
-Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>, 
-	Aren Moynihan <aren@peacevolution.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, Chen-Yu Tsai <wens@csie.org>, Sebastian Reichel <sre@kernel.org>
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
-References: <20240121014057.1042466-1-aren@peacevolution.org>
- <20240121014057.1042466-5-aren@peacevolution.org>
+	s=arc-20240116; t=1705847245; c=relaxed/simple;
+	bh=byIuojKAOQGpVvzM2HJOE6Kj44p/u4i6v+81soekYrQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bmHG7WdQiwQQwZ7vKR9ATBP+4pCTkDhzDeNdYDxkuBjjQcY0Sne/I5cd1U3k4Wd5/lxrKwi+K0RAAlXw/x18CBev+aaKYFbN2YIO0407PV9ncIlA13i0pI297XSIThpg/FdFBDUJ7rj/aHbbdI4pCGYvaPCM/+ksMC8V5697vuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [10.0.34.139] (unknown [62.214.191.67])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 30E5461E5FE01;
+	Sun, 21 Jan 2024 15:26:50 +0100 (CET)
+Message-ID: <0b30c88a-6f0c-447f-a08e-29a2a0256c1b@molgen.mpg.de>
+Date: Sun, 21 Jan 2024 15:26:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240121014057.1042466-5-aren@peacevolution.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: PS/2 keyboard of laptop Dell XPS 13 9360 goes missing after S3
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: linux-input@vger.kernel.org, linux-pm@vger.kernel.org,
+ Dell.Client.Kernel@dell.com, regressions@lists.linux.dev,
+ linux-kernel@vger.kernel.org
+References: <0aa4a61f-c939-46fe-a572-08022e8931c7@molgen.mpg.de>
+ <f27b491c-2f1c-4e68-804c-24eeaa8d10de@redhat.com>
+Content-Language: en-US
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <f27b491c-2f1c-4e68-804c-24eeaa8d10de@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hello Aren,
+Dear Hans,
 
-On Sat, Jan 20, 2024 at 08:40:02PM -0500, Aren Moynihan wrote:
-> Axp803 and axp813 can report the detected usb bc mode. SDP, CDP, and DCP
-> are supported.
-> 
-> Signed-off-by: Aren Moynihan <aren@peacevolution.org>
-> ---
-> 
->  drivers/power/supply/axp20x_usb_power.c | 52 +++++++++++++++++++++++++
->  1 file changed, 52 insertions(+)
-> 
-> diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supply/axp20x_usb_power.c
-> index 8c0c2c25565f..5656f6e57d54 100644
-> --- a/drivers/power/supply/axp20x_usb_power.c
-> +++ b/drivers/power/supply/axp20x_usb_power.c
-> @@ -57,6 +57,7 @@ struct axp_data {
->  	struct reg_field		vbus_valid_bit;
->  	struct reg_field		vbus_mon_bit;
->  	struct reg_field		usb_bc_en_bit;
-> +	struct reg_field		usb_bc_det_fld;
->  	struct reg_field		vbus_disable_bit;
->  	bool				vbus_needs_polling: 1;
->  };
-> @@ -69,6 +70,7 @@ struct axp20x_usb_power {
->  	struct regmap_field *vbus_valid_bit;
->  	struct regmap_field *vbus_mon_bit;
->  	struct regmap_field *usb_bc_en_bit;
-> +	struct regmap_field *usb_bc_det_fld;
->  	struct regmap_field *vbus_disable_bit;
->  	struct power_supply *supply;
->  	const struct axp_data *axp_data;
-> @@ -197,6 +199,37 @@ axp20x_usb_power_get_input_current_limit(struct axp20x_usb_power *power,
->  	return 0;
->  }
->  
-> +static int axp20x_get_usb_type(struct axp20x_usb_power *power,
-> +			       union power_supply_propval *val)
-> +{
-> +	unsigned int reg;
-> +	int ret;
-> +
-> +	if (!power->usb_bc_det_fld)
-> +		return -EINVAL;
 
-What if detection is disabled becase custom input current limit was set by the
-user? Does the HW keep the result of previous detection in the register?
+As always thank you very much for taking the time to reply.
+
+
+Am 20.01.24 um 21:26 schrieb Hans de Goede:
+
+> On 1/18/24 13:57, Paul Menzel wrote:
+>> #regzbot introduced v6.6.11..v6.7
+
+>> There seems to be a regression in Linux 6.7 on the Dell XPS 13 9360 (Intel i7-7500U).
+>>
+>>      [    0.000000] DMI: Dell Inc. XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022
+>>
+>> The PS/2 keyboard goes missing after S3 resume¹. The problem does not happen with Linux 6.6.11.
+> 
+> Thank you for reporting this.
+> 
+> Can you try adding "i8042.dumbkbd=1" to your kernel commandline?
+> 
+> This should at least lead to the device not disappearing from
+> 
+> "sudo libinput list-devices"
+> 
+> The next question is if the keyboard will still actually
+> work after suspend/resume with "i8042.dumbkbd=1". If it
+> stays in the list, but no longer works then there is
+> a problem with the i8042 controller; or interrupt
+> delivery to the i8042 controller.
+> 
+> If "i8042.dumbkbd=1" somehow fully fixes things, then I guess
+> my atkbd driver fix for other laptop keyboards is somehow
+> causing issues for yours.
+
+Just a quick feedback, that booting with `i8042.dumbkbd=1` seems to fix 
+the issue.
+
+> If "i8042.dumbkbd=1" fully fixes things, can you try building
+> your own 6.7.0 kernel with commit 936e4d49ecbc:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=936e4d49ecbc8c404790504386e1422b599dec39
+> 
+> reverted?
+
+I am going to try that as soon as possible.
+
 
 Kind regards,
-	Ondrej
 
-> +	ret = regmap_field_read(power->usb_bc_det_fld, &reg);
-> +	if (ret)
-> +		return ret;
-> +
-> +	switch (reg) {
-> +	case 1:
-> +		val->intval = POWER_SUPPLY_USB_TYPE_SDP;
-> +		break;
-> +	case 2:
-> +		val->intval = POWER_SUPPLY_USB_TYPE_CDP;
-> +		break;
-> +	case 3:
-> +		val->intval = POWER_SUPPLY_USB_TYPE_DCP;
-> +		break;
-> +	default:
-> +		val->intval = POWER_SUPPLY_USB_TYPE_UNKNOWN;
-> +		break;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static int axp20x_usb_power_get_property(struct power_supply *psy,
->  	enum power_supply_property psp, union power_supply_propval *val)
->  {
-> @@ -266,6 +299,8 @@ static int axp20x_usb_power_get_property(struct power_supply *psy,
->  	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
->  		return axp20x_usb_power_get_input_current_limit(power,
->  								&val->intval);
-> +	case POWER_SUPPLY_PROP_USB_TYPE:
-> +		return axp20x_get_usb_type(power, val);
->  	default:
->  		break;
->  	}
-> @@ -423,6 +458,14 @@ static enum power_supply_property axp813_usb_power_properties[] = {
->  	POWER_SUPPLY_PROP_VOLTAGE_MIN,
->  	POWER_SUPPLY_PROP_CURRENT_MAX,
->  	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
-> +	POWER_SUPPLY_PROP_USB_TYPE,
-> +};
-> +
-> +static enum power_supply_usb_type axp813_usb_types[] = {
-> +	POWER_SUPPLY_USB_TYPE_SDP,
-> +	POWER_SUPPLY_USB_TYPE_DCP,
-> +	POWER_SUPPLY_USB_TYPE_CDP,
-> +	POWER_SUPPLY_USB_TYPE_UNKNOWN,
->  };
->  
->  static const struct power_supply_desc axp20x_usb_power_desc = {
-> @@ -453,6 +496,8 @@ static const struct power_supply_desc axp813_usb_power_desc = {
->  	.property_is_writeable = axp20x_usb_power_prop_writeable,
->  	.get_property = axp20x_usb_power_get_property,
->  	.set_property = axp20x_usb_power_set_property,
-> +	.usb_types = axp813_usb_types,
-> +	.num_usb_types = ARRAY_SIZE(axp813_usb_types),
->  };
->  
->  static const char * const axp20x_irq_names[] = {
-> @@ -555,6 +600,7 @@ static const struct axp_data axp813_data = {
->  	.input_curr_lim_table = axp_813_usb_input_curr_lim_table,
->  	.input_curr_lim_fld = REG_FIELD(AXP22X_CHRG_CTRL3, 4, 7),
->  	.usb_bc_en_bit	= REG_FIELD(AXP288_BC_GLOBAL, 0, 0),
-> +	.usb_bc_det_fld = REG_FIELD(AXP288_BC_DET_STAT, 5, 7),
->  	.vbus_disable_bit = REG_FIELD(AXP20X_VBUS_IPSOUT_MGMT, 7, 7),
->  	.vbus_needs_polling = true,
->  };
-> @@ -708,6 +754,12 @@ static int axp20x_usb_power_probe(struct platform_device *pdev)
->  	if (ret)
->  		return ret;
->  
-> +	ret = axp20x_regmap_field_alloc_optional(&pdev->dev, power->regmap,
-> +						 axp_data->usb_bc_det_fld,
-> +						 &power->usb_bc_det_fld);
-> +	if (ret)
-> +		return ret;
-> +
->  	ret = axp20x_regmap_field_alloc_optional(&pdev->dev, power->regmap,
->  						 axp_data->vbus_disable_bit,
->  						 &power->vbus_disable_bit);
-> -- 
-> 2.43.0
-> 
+Paul
+
+
+>>      [    1.435071] i8042: PNP: PS/2 Controller [PNP0303:PS2K,PNP0f13:PS2M] at 0x60,0x64 irq 1,12
+>>      [    1.435409] i8042: Warning: Keylock active
+>>      [    1.437624] serio: i8042 KBD port at 0x60,0x64 irq 1
+>>      [    1.437631] serio: i8042 AUX port at 0x60,0x64 irq 12
+>>      […]
+>>      [    1.439743] input: AT Translated Set 2 keyboard as /devices/platform/i8042/serio0/input/input0
+>>
+>>      $ sudo libinput list-devices
+>>      […]
+>>      Device:           AT Translated Set 2 keyboard
+>>      Kernel:           /dev/input/event0
+>>      Group:            15
+>>      Seat:             seat0, default
+>>      Capabilities:     keyboard
+>>      Tap-to-click:     n/a
+>>      Tap-and-drag:     n/a
+>>      Tap drag lock:    n/a
+>>      Left-handed:      n/a
+>>      Nat.scrolling:    n/a
+>>      Middle emulation: n/a
+>>      Calibration:      n/a
+>>      Scroll methods:   none
+>>      Click methods:    none
+>>      Disable-w-typing: n/a
+>>      Disable-w-trackpointing: n/a
+>>      Accel profiles:   n/a
+>>      Rotation:         0.0
+>>
+>> `libinput list-devices` does not list the device after resuming
+>> from S3. Some of the function keys, like brightness and airplane
+>> mode keys, still work, as the events are probably transmitted over
+>> the embedded controller or some other mechanism. An external USB
+>> keyboard also still works.
+>> 
+>> I haven’t had time to further analyze this, but wanted to report
+>> it. No idea
+>> 
+>> 
+>> Kind regards,
+>> 
+>> Paul
+>> 
+>> 
+>> ¹ s2idle is not working correctly on the device, in the sense, that
+>> energy usage is very high in that state, and the full battery is at
+>> 20 % after leaving it for eight hours.
 
