@@ -1,251 +1,244 @@
-Return-Path: <linux-pm+bounces-2437-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2438-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A0AF835F52
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 11:19:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 546A583601E
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 11:53:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8BEB21C2274D
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 10:19:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78FB41C2093D
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 10:53:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 286C03A1A3;
-	Mon, 22 Jan 2024 10:19:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A845C3A1C6;
+	Mon, 22 Jan 2024 10:53:24 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87D7739FD1;
-	Mon, 22 Jan 2024 10:19:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E06FA3A262;
+	Mon, 22 Jan 2024 10:53:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705918765; cv=none; b=uphDbYP7tloHver9NtCSkAuhNBV8EuqSw561wJOHmvqa6oMIiiqtddQYDLKZh0COl196aRim9gUgCbhTMJBcLPw3xgiBfRCwCHHqpi1We0lDymW/g9qwd1CU9+WIAsX3Uihk68ClCv5qA8ilxgxdTsjWrJGrrJqzMfbQrVeoiXI=
+	t=1705920804; cv=none; b=d1sYyOX41FzeOcg/irKFMBz3YO4s+dlQYs8JEPZ45BgZpeeGul8ylMccEuQSYhZ8OS2X6qubLkl+OHUo3GrsVakXs3mlUzEYLUu3FXugnyEnsJsLR0oqXR4PwW+oUDY03VD6gehnYUJnusMLuvR44PwI27qA67OaFjjLmzM/a9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705918765; c=relaxed/simple;
-	bh=Gkz5hq9DIb0riRgjhpO+7SZV+cd4lEG3ZFpCkyuUELM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eu8lFQJW/srLu95GLIV1G7YxAab+yxp8Ri8KrOTmpIlkE3iLvm4fdtxEDrOPQl5gyhxg/0MjVOYnKbxIqoAkCmOCeWbs3sysTiI6IWIPNRMIYFwtLJ46LciiPYKl2M2BfAWcshy2HvGtFaRaAMT67A7nsbFZMSohzrj4bGogzzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-59584f41f1eso508079eaf.1;
-        Mon, 22 Jan 2024 02:19:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705918762; x=1706523562;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=is1qEjGDPTu2FZOuOhWd48UR3MyCDQP16MnZHTWIpiw=;
-        b=JZCWb0mbPBpuO8HgqLN0dWM9ctkl5T8E52bQWdmYUC2KDNwSx2YzfY78BYmGaYxi6G
-         za2xWnR54VOxFUwfqwAWELpGhWu4YhdJnZcwXiysLyIMCVZJ6HMQVFN19oRc7vf2tJog
-         xIQTt7azbD/VXA4Tchhw6VJdLqFUauPZI7gsbPysbN65xtlCqkYsm/CIWXkG681HPv2g
-         AExFcERVa1+YFQpTX/Pt9UMMkCmdUlsthTf3i8agqfLMRpA9K54R6m8RhBmjXhwI8NIX
-         krw3edYbQMxoa4xXn5ahQyRs5an2Dxtud7FONe4MC82jQBv160DDIMj//e+W+8+bJqCe
-         REcg==
-X-Gm-Message-State: AOJu0YzGg58TMnMgida6BuBsOsGUQF+NcItqEfDDIO3+N39Zuz01ot10
-	4AhbwkMfGEsBTUSERt/6+aKqQYtRNvHjY62UMxHInmB9rCbk0Y0qO2JGGKM/oSJv26f6FI0LGdn
-	OOU1RoZ2c7Kabmiva/p/1zADapbA=
-X-Google-Smtp-Source: AGHT+IE83ASFTs88Es21DMA7eEZl8IMPAAdeIYUTI9OoQHXbA0lG0zjeYSg9QpWycB4pXoGYWFDDvnX8/mGTKdUqM1E=
-X-Received: by 2002:a4a:c387:0:b0:599:2b86:993 with SMTP id
- u7-20020a4ac387000000b005992b860993mr5762451oop.0.1705918762556; Mon, 22 Jan
- 2024 02:19:22 -0800 (PST)
+	s=arc-20240116; t=1705920804; c=relaxed/simple;
+	bh=L5FK5n7+byXHvnUmc8Yx9kLf5H8D13l2oGTx6wWEyso=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uvm0Qgmj66VkvMu8pp4vzCb3XPkP2dEyk0Kpp/1P/3zmzuSajiOlP/PZz8QxlzXEq5to8Uq1WhcR0Marmq0kXLzGw82OCZBxdMRB+btRdasIXeApwqaCPm2Y0ktP8/N+TK34nGJhWZ0fVI+QuKgk6Ih2NF57oxPLTc2owCpklfo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
+ id 96ff3509ed9fbd29; Mon, 22 Jan 2024 11:53:14 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 010D666952F;
+	Mon, 22 Jan 2024 11:53:13 +0100 (CET)
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: rafael@kernel.org, viresh.kumar@linaro.org, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Directly use stored ratios for max frequencies
+Date: Mon, 22 Jan 2024 11:53:13 +0100
+Message-ID: <6021639.lOV4Wx5bFT@kreacher>
+In-Reply-To: <20240118120513.1018808-1-srinivas.pandruvada@linux.intel.com>
+References: <20240118120513.1018808-1-srinivas.pandruvada@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240106191502.29126-1-quic_manafm@quicinc.com>
- <CAJZ5v0gE6eEpALrfxHvCd5TRqjB+v8pffG4CKLTVXiSvuiWhHg@mail.gmail.com>
- <d7b82fc8-0ed8-80b8-9eb8-c77f9277178f@quicinc.com> <CAJZ5v0g4hnRqRCseRnTjfEF+-2=ZT8U9=2m9FODqh3G8eDd=Sw@mail.gmail.com>
- <921c2f90-fb8b-4e70-9e3d-6e185fec03b6@linaro.org> <CAJZ5v0h+93YBsYsA5rOvzp+b3JMGyjUStHA=J8P7ynv+-ym-4g@mail.gmail.com>
- <41b284d7-e31f-48b5-8b21-0dca3e23cb1c@linaro.org>
-In-Reply-To: <41b284d7-e31f-48b5-8b21-0dca3e23cb1c@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 22 Jan 2024 11:19:08 +0100
-Message-ID: <CAJZ5v0ina=7R6x6Ff=8_rRR9Kkmz2tkojbs_WWCN=JPmzhg+HQ@mail.gmail.com>
-Subject: Re: [PATCH] thermal/sysfs: Always enable hysteresis write support
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrvdekiedgvddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepiedprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepvhhirhgvshhhrdhkuhhmrghrsehlihhnrghrohdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+ lhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
 
-On Thu, Jan 18, 2024 at 11:25=E2=80=AFAM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 17/01/2024 19:49, Rafael J. Wysocki wrote:
-> > On Wed, Jan 17, 2024 at 5:57=E2=80=AFPM Daniel Lezcano
-> > <daniel.lezcano@linaro.org> wrote:
-> >>
-> >> On 10/01/2024 13:48, Rafael J. Wysocki wrote:
-> >>> Hi Manaf,
-> >>>
-> >>> On Wed, Jan 10, 2024 at 9:17=E2=80=AFAM Manaf Meethalavalappu Palliku=
-nhi
-> >>> <quic_manafm@quicinc.com> wrote:
-> >>>>
-> >>>> Hi Rafael,
-> >>>>
-> >>>> On 1/9/2024 7:12 PM, Rafael J. Wysocki wrote:
-> >>>>
-> >>>> On Sat, Jan 6, 2024 at 8:16=E2=80=AFPM Manaf Meethalavalappu Palliku=
-nhi
-> >>>> <quic_manafm@quicinc.com> wrote:
-> >>>>
-> >>>> The commit 2e38a2a981b2("thermal/core: Add a generic
-> >>>> thermal_zone_set_trip() function") adds the support to update
-> >>>> trip hysteresis even if set_trip_hyst() operation is not defined.
-> >>>> But during hysteresis attribute creation, if this operation is
-> >>>> defined then only it enables hysteresis write access. It leads
-> >>>> to a case where hysteresis sysfs will be read only for a thermal
-> >>>> zone when its set_trip_hyst() operation is not defined.
-> >>>>
-> >>>> Which is by design.
-> >>>>
-> >>>> I think it is regression after recent re-work. If a sensor is regist=
-ered with thermal framework via thermal_of,
-> >>>>
-> >>>> sensor driver doesn't need to know the trip configuration and nothin=
-g to do with set_trip_hyst() in driver.
-> >>>>
-> >>>> Without this change, if a sensor needs to be monitored from userspac=
-e(trip/hysteresis),
-> >>>
-> >>> What exactly do you mean by "monitored" here?
-> >>>
-> >>>> it is enforcing sensor driver to add  dummy set_trip_hyst() operatio=
-n. Correct me otherwise
-> >>>
-> >>> With the current design, whether or not trip properties can be update=
-d
-> >>> by user space is a thermal zone property expressed by the presence of
-> >>> the set_trip_* operations, so yes, whoever registers the thermal zone
-> >>> needs to provide those so that user space can update the trip
-> >>> properties.
-> >>>
-> >>>> For some thermal zone types (eg. acpi), updating trip hysteresis via
-> >>>> sysfs might lead to incorrect behavior.
-> >>>>
-> >>>> To address this issue, is it okay to  guard  hysteresis write permis=
-sion under CONFIG_THERMAL_WRITABLE_TRIPS defconfig ?
-> >>>
-> >>> Not really, because it would affect all of the thermal zones then.
-> >>
-> >> It seems like there is an inconsistency here with the writable trip
-> >> points and the writable hysteresis [1].
-> >>
-> >> My understanding is it does not make sense to have the hysteresis
-> >> writable even if the driver has a hysteresis dedicated ops. The code
-> >> allowing to change the hysteresis was done regardless the consistency
-> >> with the trip temperature change and writable trip points kernel optio=
-n IMO.
-> >>
-> >> It would make sense to have:
-> >>
-> >> if enabled(CONFIG_WRITABLE_TRIP_POINT)
-> >>    -> trip_temp RW
-> >>    -> trip_hyst RW
-> >> else
-> >>    -> trip temp RO
-> >>    -> trip hyst RO
-> >> fi
-> >>
-> >> But if the interface exists since a long time, we may not want to chan=
-ge
-> >> it, right ?
-> >
-> > If the platform firmware implements hysteresis by changing trip
-> > temperature (as recommended by the ACPI specification, for example),
-> > modifying the trip hysteresis via sysfs is simply incorrect and user
-> > space may not know that.
-> >
-> >> However, we can take the opportunity to introduce a new 'user' trip
-> >> point type in order to let the userspace to have dedicated trip point
-> >> and receive temperature notifications [2]
-> >>
-> >>> TBH, the exact scenario in which user space needs to update trip
-> >>> hysteresis is not particularly clear to me, so can you provide some
-> >>> more details, please?
-> >>
-> >> IIUC changing the hysteresis value is useful because the temperature
-> >> speed will vary given the thermal contribution of the components
-> >> surrounding the thermal zone, that includes the ambient temperature.
-> >>
-> >> However, that may apply to slow speed temperature sensor like the skin
-> >> temperature sensor where we may to do small hysteresis variation.
-> >>
-> >> The places managed by the kernel have an insane temperature transition
-> >> speed. The userspace is unable to follow this speed and manage the
-> >> hysteresis on the fly.
-> >>
-> >> So that brings us to userspace trip point handling again.
-> >
-> > Well, I've already said that whether hysteresis can be modified via
-> > sysfs is a property of a thermal zone.
->
-> > It may as well be a trip property, for example expressed via a (new)
-> > trip flag set in the trips table used for thermal zone registration.
->
-> Yes, a trip property makes more sense.
->
-> I'm a bit lost about WRITABLE_TRIP_POINT, writable hysteresis, read-only
-> temperature trip.
->
-> Can we have a hysteresis writable but not the temperature ?
->
-> You mentioned above "modifying the trip hysteresis via sysfs is simply
-> incorrect", so shall we allow that at the end?
->
-> Is it possible to recap the situation?
+On Thursday, January 18, 2024 1:05:13 PM CET Srinivas Pandruvada wrote:
+> Avoid unnecessary calculation for converting frequency to performance
+> ratio by using a scaling factor for the maximum non turbo and turbo
+> frequency. Here the driver already stored performance ratios for max
+> non turbo and turbo frequency by reading from MSR_HWP_CAPABILITIES.
+> Directly use those ratios without any calculations.
+> 
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> ---
+>  drivers/cpufreq/intel_pstate.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> index 2ca70b0b5fdc..6bbc21ca96e0 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -2532,7 +2532,14 @@ static void intel_pstate_update_perf_limits(struct cpudata *cpu,
+>  		int freq;
+>  
+>  		freq = max_policy_perf * perf_ctl_scaling;
+> -		max_policy_perf = DIV_ROUND_UP(freq, scaling);
+> +
+> +		if (freq == cpu->pstate.turbo_freq)
+> +			max_policy_perf = cpu->pstate.turbo_pstate;
+> +		else if (freq == cpu->pstate.max_freq)
+> +			max_policy_perf = cpu->pstate.max_pstate;
+> +		else
+> +			max_policy_perf = DIV_ROUND_UP(freq, scaling);
+> +
+>  		freq = min_policy_perf * perf_ctl_scaling;
+>  		min_policy_perf = DIV_ROUND_UP(freq, scaling);
+>  	}
+> 
 
-Sure, which is a good idea BTW.
+This needs to take all of the cases in which the analogous formula
+for computing a perf level is used, which are a few.
 
-First off, the callers of thermal_zone_device_register_with_trips()
-need to pass a mask of writeable trip points to it.  If the mask is 0,
-none of the trip attributes are writeable for any trips.
+Also, one can argue that this is a fix, because it prevents the CPU
+capacity from being limited artificially if the E-core-to-P-core scaling
+factor used by the platform to produce the HWP_CAP numbers is smaller
+than expected by the kernel.
 
-However, the mask only takes effect if CONFIG_THERMAL_WRITABLE_TRIPS
-is set.  Otherwise, it is not taken into account at all.
-
-Now, if CONFIG_THERMAL_WRITABLE_TRIPS is set, it only affects the trip
-temperature, which is a bit inconsistent.
-
-Moreover, the hysteresis is allowed to be updated unconditionally if
-tz->ops->set_trip_hyst is not NULL, which is even more inconsistent.
-
-So, because it already is only enabled if the creator of the thermal
-zone asks for it explicitly, it would be fine by me to simply allow
-the hysteresis to be updated if the temperature is allowed to be
-updated.
-
-IOW, something like the patch below (unstested, white space messed-up by gm=
-ail).
-
-If this looks OK to everyone from the functionality perspective, I can
-submit it properly with a changelog etc.
+So here's my version of this patch (lightly tested):
 
 ---
- drivers/thermal/thermal_sysfs.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Subject: [PATCH v1] cpufreq: intel_pstate: Refine computation of P-state for given frequency
 
-Index: linux-pm/drivers/thermal/thermal_sysfs.c
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
---- linux-pm.orig/drivers/thermal/thermal_sysfs.c
-+++ linux-pm/drivers/thermal/thermal_sysfs.c
-@@ -474,7 +474,8 @@ static int create_trip_attrs(struct ther
-                     tz->trip_hyst_attrs[indx].name;
-         tz->trip_hyst_attrs[indx].attr.attr.mode =3D S_IRUGO;
-         tz->trip_hyst_attrs[indx].attr.show =3D trip_point_hyst_show;
--        if (tz->ops->set_trip_hyst) {
-+        if (IS_ENABLED(CONFIG_THERMAL_WRITABLE_TRIPS) &&
-+            mask & (1 << indx)) {
-             tz->trip_hyst_attrs[indx].attr.attr.mode |=3D S_IWUSR;
-             tz->trip_hyst_attrs[indx].attr.store =3D
-                     trip_point_hyst_store;
+On systems using HWP, if a given frequency is equal to the maximum turbo
+frequency or the maximum non-turbo frequency, the HWP performance level
+corresponding to it is already known and can be used directly without
+any computation.
+
+Accordingly, adjust the code to use the known HWP performance levels in
+the cases mentioned above.
+
+This also helps to avoid limiting CPU capacity artificially in some
+cases when the BIOS produces the HWP_CAP numbers using a different
+E-core-to-P-core performance scaling factor than expected by the kernel.
+
+Fixes: f5c8cf2a4992 ("cpufreq: intel_pstate: hybrid: Use known scaling factor for P-cores")
+Cc: 6.1+ <stable@vger.kernel.org> # 6.1+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/cpufreq/intel_pstate.c |   55 +++++++++++++++++++++++++----------------
+ 1 file changed, 34 insertions(+), 21 deletions(-)
+
+Index: linux-pm/drivers/cpufreq/intel_pstate.c
+===================================================================
+--- linux-pm.orig/drivers/cpufreq/intel_pstate.c
++++ linux-pm/drivers/cpufreq/intel_pstate.c
+@@ -529,6 +529,30 @@ static int intel_pstate_cppc_get_scaling
+ }
+ #endif /* CONFIG_ACPI_CPPC_LIB */
+ 
++static int intel_pstate_freq_to_hwp_rel(struct cpudata *cpu, int freq,
++					unsigned int relation)
++{
++	if (freq == cpu->pstate.turbo_freq)
++		return cpu->pstate.turbo_pstate;
++
++	if (freq == cpu->pstate.max_freq)
++		return cpu->pstate.max_pstate;
++
++	switch (relation) {
++	case CPUFREQ_RELATION_H:
++		return freq / cpu->pstate.scaling;
++	case CPUFREQ_RELATION_C:
++		return DIV_ROUND_CLOSEST(freq, cpu->pstate.scaling);
++	}
++
++	return DIV_ROUND_UP(freq, cpu->pstate.scaling);
++}
++
++static int intel_pstate_freq_to_hwp(struct cpudata *cpu, int freq)
++{
++	return intel_pstate_freq_to_hwp_rel(cpu, freq, CPUFREQ_RELATION_L);
++}
++
+ /**
+  * intel_pstate_hybrid_hwp_adjust - Calibrate HWP performance levels.
+  * @cpu: Target CPU.
+@@ -546,6 +570,7 @@ static void intel_pstate_hybrid_hwp_adju
+ 	int perf_ctl_scaling = cpu->pstate.perf_ctl_scaling;
+ 	int perf_ctl_turbo = pstate_funcs.get_turbo(cpu->cpu);
+ 	int scaling = cpu->pstate.scaling;
++	int freq;
+ 
+ 	pr_debug("CPU%d: perf_ctl_max_phys = %d\n", cpu->cpu, perf_ctl_max_phys);
+ 	pr_debug("CPU%d: perf_ctl_turbo = %d\n", cpu->cpu, perf_ctl_turbo);
+@@ -559,16 +584,16 @@ static void intel_pstate_hybrid_hwp_adju
+ 	cpu->pstate.max_freq = rounddown(cpu->pstate.max_pstate * scaling,
+ 					 perf_ctl_scaling);
+ 
+-	cpu->pstate.max_pstate_physical =
+-			DIV_ROUND_UP(perf_ctl_max_phys * perf_ctl_scaling,
+-				     scaling);
++	freq = perf_ctl_max_phys * perf_ctl_scaling;
++	cpu->pstate.max_pstate_physical = intel_pstate_freq_to_hwp(cpu, freq);
+ 
+-	cpu->pstate.min_freq = cpu->pstate.min_pstate * perf_ctl_scaling;
++	freq = cpu->pstate.min_pstate * perf_ctl_scaling;
++	cpu->pstate.min_freq = freq;
+ 	/*
+ 	 * Cast the min P-state value retrieved via pstate_funcs.get_min() to
+ 	 * the effective range of HWP performance levels.
+ 	 */
+-	cpu->pstate.min_pstate = DIV_ROUND_UP(cpu->pstate.min_freq, scaling);
++	cpu->pstate.min_pstate = intel_pstate_freq_to_hwp(cpu, freq);
+ }
+ 
+ static inline void update_turbo_state(void)
+@@ -2528,13 +2553,12 @@ static void intel_pstate_update_perf_lim
+ 	 * abstract values to represent performance rather than pure ratios.
+ 	 */
+ 	if (hwp_active && cpu->pstate.scaling != perf_ctl_scaling) {
+-		int scaling = cpu->pstate.scaling;
+ 		int freq;
+ 
+ 		freq = max_policy_perf * perf_ctl_scaling;
+-		max_policy_perf = DIV_ROUND_UP(freq, scaling);
++		max_policy_perf = intel_pstate_freq_to_hwp(cpu, freq);
+ 		freq = min_policy_perf * perf_ctl_scaling;
+-		min_policy_perf = DIV_ROUND_UP(freq, scaling);
++		min_policy_perf = intel_pstate_freq_to_hwp(cpu, freq);
+ 	}
+ 
+ 	pr_debug("cpu:%d min_policy_perf:%d max_policy_perf:%d\n",
+@@ -2908,18 +2932,7 @@ static int intel_cpufreq_target(struct c
+ 
+ 	cpufreq_freq_transition_begin(policy, &freqs);
+ 
+-	switch (relation) {
+-	case CPUFREQ_RELATION_L:
+-		target_pstate = DIV_ROUND_UP(freqs.new, cpu->pstate.scaling);
+-		break;
+-	case CPUFREQ_RELATION_H:
+-		target_pstate = freqs.new / cpu->pstate.scaling;
+-		break;
+-	default:
+-		target_pstate = DIV_ROUND_CLOSEST(freqs.new, cpu->pstate.scaling);
+-		break;
+-	}
+-
++	target_pstate = intel_pstate_freq_to_hwp_rel(cpu, freqs.new, relation);
+ 	target_pstate = intel_cpufreq_update_pstate(policy, target_pstate, false);
+ 
+ 	freqs.new = target_pstate * cpu->pstate.scaling;
+@@ -2937,7 +2950,7 @@ static unsigned int intel_cpufreq_fast_s
+ 
+ 	update_turbo_state();
+ 
+-	target_pstate = DIV_ROUND_UP(target_freq, cpu->pstate.scaling);
++	target_pstate = intel_pstate_freq_to_hwp(cpu, target_freq);
+ 
+ 	target_pstate = intel_cpufreq_update_pstate(policy, target_pstate, true);
+ 
+
+
+
 
