@@ -1,49 +1,49 @@
-Return-Path: <linux-pm+bounces-2449-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2448-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97061836264
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 12:46:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 741A3836263
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 12:46:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE87F2904EF
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 11:46:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F90C290471
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 11:46:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A55B93D0C6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 625C23C070;
 	Mon, 22 Jan 2024 11:44:31 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C67A3C68A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 849913C48D;
 	Mon, 22 Jan 2024 11:44:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705923871; cv=none; b=EQ/QnpwlpWlAZA1tMvU3B+bog4WJoOuy2xQ3hy9VmxHHsq9SmPV/xzNVhqEpIt3mOkrviKMVX+Uhf3eltrdAG8SZRhQGG9YHnjNQzcnTfOBDIOxFX1xq3tsl1M9KA/6uz+Gh0LP2YGIUm8WbrirDSx+H0WfTm69+lRJ0GdDS5Vo=
+	t=1705923871; cv=none; b=Y+vkmrjaVx39iSU53KNIjKRwjmNZrK1nCTt0VcnFBPifly2CpPZhA0MrXh5OsMKZGzYrsvmziFZCQZ9IWWT5SJgEcrBKXNjjumb1HTOV/H4nLhTGTFfYIoFC2ao6Fz4WJq9JcBjiTv7TpiWnZp7Lo3DSsqUqfm8KuRWXdENweoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1705923871; c=relaxed/simple;
-	bh=k6I8vIqOm9FPnO/xt7Fix3r2rFtBxf84ZbLyTz5y5kI=;
+	bh=7eySJOq/vVh2sQLWmwb6KJeThhebMt/tVZTV26u+S6Q=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gOLCXurH4yG1+Gwyh/qmBR3HbLbYnBTDCj/73SpK98aaJsyWpM8oHN1W1D6A8/Ij/36TEngKjUfvg5u4azO8mGhv+SeBWQcflYbmxoenc14Pzfs6cI6Oo0Ak+PInlnlCkrIpJaN9DLZ+VcxmrhzfJtQxv/ZI88kRhiIt4Wf9bu4=
+	 MIME-Version:Content-Type; b=cjOJru8Q5nYs/gC39YCjzlya/qZCkqD0GbScpbEzQmoLnT1dTgbIkavnOgxrpR1JrOFu6TNFJ5unVQbsxHKmN4adtBFhV4yE939UohI0waXK3u+gf5ahwyB/F7aODhxsv3Gxrs3aoz7EaWWENpllDasUUuX5FEgk4yI0SMbLUnw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id 7d18eee11acd6026; Mon, 22 Jan 2024 12:44:25 +0100
+ id 3c9ee59df0d63310; Mon, 22 Jan 2024 12:44:25 +0100
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 71EAE669541;
-	Mon, 22 Jan 2024 12:44:25 +0100 (CET)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id B9DF2669540;
+	Mon, 22 Jan 2024 12:44:24 +0100 (CET)
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Subject: [PATCH v1 06/12] PM: sleep: stats: Define suspend_stats next to the code using it
-Date: Mon, 22 Jan 2024 12:31:20 +0100
-Message-ID: <2266871.iZASKD2KPV@kreacher>
+Subject: [PATCH v1 07/12] PM: sleep: stats: Call dpm_save_failed_step() at most once per phase
+Date: Mon, 22 Jan 2024 12:32:46 +0100
+Message-ID: <22171159.EfDdHjke4D@kreacher>
 In-Reply-To: <5760158.DvuYhMxLoT@kreacher>
 References: <5760158.DvuYhMxLoT@kreacher>
 Precedence: bulk
@@ -62,247 +62,100 @@ X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-It is not necessary to define struct suspend_stats in a header file and the
-suspend_stats variable in the core device system-wide PM code.  They both
-can be defined in kernel/power/main.c, next to the sysfs and debugfs code
-accessing suspend_stats, which can be static.
+If the handling of two or more devices fails in one suspend-resume
+phase, it should be counted once in the statistics which is not
+guaranteed to happen during system-wide resume of devices due to
+the possible asynchronous execution of device callbacks.
 
-Modify the code in question in accordance with the above observation and
-replace the static inline functions manipulating suspend_stats with
-regular ones defined in kernel/power/main.c.
-
-While at it, move the enum suspend_stat_step to the end of suspend.h which
-is a more suitable place for it.
-
-No intentional functional impact.
+Address this by using the async_error static variable during system-wide
+device resume to indicate that there has been a device resume error and
+the given suspend-resume phase should be counted as failing.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/base/power/main.c |    1 
- include/linux/suspend.h   |   70 +++++++++----------------------------------
- kernel/power/main.c       |   74 +++++++++++++++++++++++++++++++++++++---------
- kernel/power/power.h      |    2 +
- kernel/power/suspend.c    |    7 ----
- 5 files changed, 80 insertions(+), 74 deletions(-)
+ drivers/base/power/main.c |   20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
-Index: linux-pm/include/linux/suspend.h
-===================================================================
---- linux-pm.orig/include/linux/suspend.h
-+++ linux-pm/include/linux/suspend.h
-@@ -40,60 +40,6 @@ typedef int __bitwise suspend_state_t;
- #define PM_SUSPEND_MIN		PM_SUSPEND_TO_IDLE
- #define PM_SUSPEND_MAX		((__force suspend_state_t) 4)
- 
--enum suspend_stat_step {
--	SUSPEND_NONE = 0,
--	SUSPEND_FREEZE,
--	SUSPEND_PREPARE,
--	SUSPEND_SUSPEND,
--	SUSPEND_SUSPEND_LATE,
--	SUSPEND_SUSPEND_NOIRQ,
--	SUSPEND_RESUME_NOIRQ,
--	SUSPEND_RESUME_EARLY,
--	SUSPEND_RESUME,
--	SUSPEND_NR_STEPS
--};
--
--struct suspend_stats {
--	unsigned int step_failures[SUSPEND_NR_STEPS];
--	unsigned int fail;
--#define	REC_FAILED_NUM	2
--	int	last_failed_dev;
--	char	failed_devs[REC_FAILED_NUM][40];
--	int	last_failed_errno;
--	int	errno[REC_FAILED_NUM];
--	int	last_failed_step;
--	u64	last_hw_sleep;
--	u64	total_hw_sleep;
--	u64	max_hw_sleep;
--	enum suspend_stat_step	failed_steps[REC_FAILED_NUM];
--};
--
--extern struct suspend_stats suspend_stats;
--
--static inline void dpm_save_failed_dev(const char *name)
--{
--	strscpy(suspend_stats.failed_devs[suspend_stats.last_failed_dev],
--		name,
--		sizeof(suspend_stats.failed_devs[0]));
--	suspend_stats.last_failed_dev++;
--	suspend_stats.last_failed_dev %= REC_FAILED_NUM;
--}
--
--static inline void dpm_save_failed_errno(int err)
--{
--	suspend_stats.errno[suspend_stats.last_failed_errno] = err;
--	suspend_stats.last_failed_errno++;
--	suspend_stats.last_failed_errno %= REC_FAILED_NUM;
--}
--
--static inline void dpm_save_failed_step(enum suspend_stat_step step)
--{
--	suspend_stats.step_failures[step]++;
--	suspend_stats.failed_steps[suspend_stats.last_failed_step] = step;
--	suspend_stats.last_failed_step++;
--	suspend_stats.last_failed_step %= REC_FAILED_NUM;
--}
--
- /**
-  * struct platform_suspend_ops - Callbacks for managing platform dependent
-  *	system sleep states.
-@@ -621,4 +567,20 @@ static inline void queue_up_suspend_work
- 
- #endif /* !CONFIG_PM_AUTOSLEEP */
- 
-+enum suspend_stat_step {
-+	SUSPEND_NONE = 0,
-+	SUSPEND_FREEZE,
-+	SUSPEND_PREPARE,
-+	SUSPEND_SUSPEND,
-+	SUSPEND_SUSPEND_LATE,
-+	SUSPEND_SUSPEND_NOIRQ,
-+	SUSPEND_RESUME_NOIRQ,
-+	SUSPEND_RESUME_EARLY,
-+	SUSPEND_RESUME,
-+	SUSPEND_NR_STEPS
-+};
-+
-+void dpm_save_failed_dev(const char *name);
-+void dpm_save_failed_step(enum suspend_stat_step step);
-+
- #endif /* _LINUX_SUSPEND_H */
-Index: linux-pm/kernel/power/main.c
-===================================================================
---- linux-pm.orig/kernel/power/main.c
-+++ linux-pm/kernel/power/main.c
-@@ -95,19 +95,6 @@ int unregister_pm_notifier(struct notifi
- }
- EXPORT_SYMBOL_GPL(unregister_pm_notifier);
- 
--void pm_report_hw_sleep_time(u64 t)
--{
--	suspend_stats.last_hw_sleep = t;
--	suspend_stats.total_hw_sleep += t;
--}
--EXPORT_SYMBOL_GPL(pm_report_hw_sleep_time);
--
--void pm_report_max_hw_sleep(u64 t)
--{
--	suspend_stats.max_hw_sleep = t;
--}
--EXPORT_SYMBOL_GPL(pm_report_max_hw_sleep);
--
- int pm_notifier_call_chain_robust(unsigned long val_up, unsigned long val_down)
- {
- 	int ret;
-@@ -319,6 +306,67 @@ static ssize_t pm_test_store(struct kobj
- power_attr(pm_test);
- #endif /* CONFIG_PM_SLEEP_DEBUG */
- 
-+#define REC_FAILED_NUM	2
-+
-+struct suspend_stats {
-+	unsigned int step_failures[SUSPEND_NR_STEPS];
-+	unsigned int fail;
-+	int last_failed_dev;
-+	char failed_devs[REC_FAILED_NUM][40];
-+	int last_failed_errno;
-+	int errno[REC_FAILED_NUM];
-+	int last_failed_step;
-+	u64 last_hw_sleep;
-+	u64 total_hw_sleep;
-+	u64 max_hw_sleep;
-+	enum suspend_stat_step failed_steps[REC_FAILED_NUM];
-+};
-+
-+static struct suspend_stats suspend_stats;
-+
-+void dpm_save_failed_dev(const char *name)
-+{
-+	strscpy(suspend_stats.failed_devs[suspend_stats.last_failed_dev],
-+		name, sizeof(suspend_stats.failed_devs[0]));
-+	suspend_stats.last_failed_dev++;
-+	suspend_stats.last_failed_dev %= REC_FAILED_NUM;
-+}
-+
-+void dpm_save_failed_step(enum suspend_stat_step step)
-+{
-+	suspend_stats.step_failures[step]++;
-+	suspend_stats.failed_steps[suspend_stats.last_failed_step] = step;
-+	suspend_stats.last_failed_step++;
-+	suspend_stats.last_failed_step %= REC_FAILED_NUM;
-+}
-+
-+void dpm_save_errno(int err)
-+{
-+	if (!err) {
-+		suspend_stats.step_failures[SUSPEND_NONE]++;
-+		return;
-+	}
-+
-+	suspend_stats.fail++;
-+
-+	suspend_stats.errno[suspend_stats.last_failed_errno] = err;
-+	suspend_stats.last_failed_errno++;
-+	suspend_stats.last_failed_errno %= REC_FAILED_NUM;
-+}
-+
-+void pm_report_hw_sleep_time(u64 t)
-+{
-+	suspend_stats.last_hw_sleep = t;
-+	suspend_stats.total_hw_sleep += t;
-+}
-+EXPORT_SYMBOL_GPL(pm_report_hw_sleep_time);
-+
-+void pm_report_max_hw_sleep(u64 t)
-+{
-+	suspend_stats.max_hw_sleep = t;
-+}
-+EXPORT_SYMBOL_GPL(pm_report_max_hw_sleep);
-+
- static const char * const suspend_step_names[] = {
- 	[SUSPEND_NONE] = "",
- 	[SUSPEND_FREEZE] = "freeze",
-Index: linux-pm/kernel/power/power.h
-===================================================================
---- linux-pm.orig/kernel/power/power.h
-+++ linux-pm/kernel/power/power.h
-@@ -327,3 +327,5 @@ static inline void pm_sleep_enable_secon
- 	suspend_enable_secondary_cpus();
- 	cpuidle_resume();
- }
-+
-+void dpm_save_errno(int err);
-Index: linux-pm/kernel/power/suspend.c
-===================================================================
---- linux-pm.orig/kernel/power/suspend.c
-+++ linux-pm/kernel/power/suspend.c
-@@ -616,12 +616,7 @@ int pm_suspend(suspend_state_t state)
- 
- 	pr_info("suspend entry (%s)\n", mem_sleep_labels[state]);
- 	error = enter_state(state);
--	if (error) {
--		suspend_stats.fail++;
--		dpm_save_failed_errno(error);
--	} else {
--		suspend_stats.step_failures[SUSPEND_NONE]++;
--	}
-+	dpm_save_errno(error);
- 	pr_info("suspend exit\n");
- 	return error;
- }
 Index: linux-pm/drivers/base/power/main.c
 ===================================================================
 --- linux-pm.orig/drivers/base/power/main.c
 +++ linux-pm/drivers/base/power/main.c
-@@ -60,7 +60,6 @@ static LIST_HEAD(dpm_suspended_list);
- static LIST_HEAD(dpm_late_early_list);
- static LIST_HEAD(dpm_noirq_list);
+@@ -685,7 +685,7 @@ Out:
+ 	TRACE_RESUME(error);
  
--struct suspend_stats suspend_stats;
- static DEFINE_MUTEX(dpm_list_mtx);
- static pm_message_t pm_transition;
+ 	if (error) {
+-		dpm_save_failed_step(SUSPEND_RESUME_NOIRQ);
++		async_error = error;
+ 		dpm_save_failed_dev(dev_name(dev));
+ 		pm_dev_err(dev, state, async ? " async noirq" : " noirq", error);
+ 	}
+@@ -705,6 +705,9 @@ static void dpm_noirq_resume_devices(pm_
+ 	ktime_t starttime = ktime_get();
  
+ 	trace_suspend_resume(TPS("dpm_resume_noirq"), state.event, true);
++
++	async_error = 0;
++
+ 	mutex_lock(&dpm_list_mtx);
+ 	pm_transition = state;
+ 
+@@ -734,6 +737,9 @@ static void dpm_noirq_resume_devices(pm_
+ 	mutex_unlock(&dpm_list_mtx);
+ 	async_synchronize_full();
+ 	dpm_show_time(starttime, state, 0, "noirq");
++	if (async_error)
++		dpm_save_failed_step(SUSPEND_RESUME_NOIRQ);
++
+ 	trace_suspend_resume(TPS("dpm_resume_noirq"), state.event, false);
+ }
+ 
+@@ -815,7 +821,7 @@ Out:
+ 	complete_all(&dev->power.completion);
+ 
+ 	if (error) {
+-		dpm_save_failed_step(SUSPEND_RESUME_EARLY);
++		async_error = error;
+ 		dpm_save_failed_dev(dev_name(dev));
+ 		pm_dev_err(dev, state, async ? " async early" : " early", error);
+ 	}
+@@ -839,6 +845,9 @@ void dpm_resume_early(pm_message_t state
+ 	ktime_t starttime = ktime_get();
+ 
+ 	trace_suspend_resume(TPS("dpm_resume_early"), state.event, true);
++
++	async_error = 0;
++
+ 	mutex_lock(&dpm_list_mtx);
+ 	pm_transition = state;
+ 
+@@ -868,6 +877,9 @@ void dpm_resume_early(pm_message_t state
+ 	mutex_unlock(&dpm_list_mtx);
+ 	async_synchronize_full();
+ 	dpm_show_time(starttime, state, 0, "early");
++	if (async_error)
++		dpm_save_failed_step(SUSPEND_RESUME_EARLY);
++
+ 	trace_suspend_resume(TPS("dpm_resume_early"), state.event, false);
+ }
+ 
+@@ -971,7 +983,7 @@ static void device_resume(struct device
+ 	TRACE_RESUME(error);
+ 
+ 	if (error) {
+-		dpm_save_failed_step(SUSPEND_RESUME);
++		async_error = error;
+ 		dpm_save_failed_dev(dev_name(dev));
+ 		pm_dev_err(dev, state, async ? " async" : "", error);
+ 	}
+@@ -1030,6 +1042,8 @@ void dpm_resume(pm_message_t state)
+ 	mutex_unlock(&dpm_list_mtx);
+ 	async_synchronize_full();
+ 	dpm_show_time(starttime, state, 0, NULL);
++	if (async_error)
++		dpm_save_failed_step(SUSPEND_RESUME);
+ 
+ 	cpufreq_resume();
+ 	devfreq_resume();
 
 
 
