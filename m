@@ -1,126 +1,182 @@
-Return-Path: <linux-pm+bounces-2483-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2484-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69B1C836C1A
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 17:57:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CB99836BAC
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 17:50:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 17C50B3251B
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 16:49:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B93EA283775
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 16:49:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65C035A780;
-	Mon, 22 Jan 2024 15:22:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 708355A7A5;
+	Mon, 22 Jan 2024 15:22:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="S1dXNhgZ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NHOWNqQ/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76B55A10C
-	for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 15:22:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDD505A796
+	for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 15:22:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705936944; cv=none; b=kaR3umQw7JxjfFTIcpX4ksei1RN/UZrcpPkbAfC6E0UnfGb8JkLhjEgiDOfPDvGn3+MkjzBLf+DkjgmF6UrlIuihR/EHm+bvWy9tNFt4pD+7tZnH1OTcY8n1GIb0xZT9SZd5JwOVRE8NGCwReAXZq/M9s40tQ9qwBfmfJjDplTQ=
+	t=1705936947; cv=none; b=N5sJQ6DPUGQJSN8PqGG+nWuM8crQviELYexETCKABWJyZ9OHQG2vMedkFR75CXyLt6Tsm1OgD1mOAWw+Wti39p4aH3GDreZE8OTgPLs9A10koN4MAaPz18kEpAlEkRkaGS4diOM/UBJRsYnBxKyItEDOFRIHqMcJ+lMdEnI4rZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705936944; c=relaxed/simple;
-	bh=kPHw7M7MZ9eEaPEcUx+Jg7AAgahwXs0PTULrhciRfAs=;
+	s=arc-20240116; t=1705936947; c=relaxed/simple;
+	bh=s2CEPgXF2dnPJQTkJBzncHW/CdQrBKXkUFM7T6qq52o=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ELCWwPNcMuyUnnlQiBXinxeXVq3mb/pbeOXGDvL71FNrFfAPOBvd5FiuwcswW90OhISMZrXS9lNlvkzLK/8wN0xOOm5lFGF42J5VVRT/ttKm4i8DwNBA1oSKe6OU76x7oeNICBoqGwwPEDxezc9mhSy6Bcdu0xBZRfxqTtuRfOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=S1dXNhgZ; arc=none smtp.client-ip=209.85.128.182
+	 To:Cc:Content-Type; b=t8lc1DimkwtSD4U727SQe0Fb2Blx4VQt857aJktsmWxdFqmf2rD8jvDDl5DwoKd0xcmT/F0sdnAAEn8D89kRIBjZlWgQrTNCr9AonF1RrW7APivxfCWxFzJUM5Ow4TBfhRa6VmO82CS2LcBUuCzTAAnQJJIALtWe1G/eBvmhKrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NHOWNqQ/; arc=none smtp.client-ip=209.85.219.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-5ffd5620247so12602957b3.0
-        for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 07:22:22 -0800 (PST)
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-dc21ad8266fso2394127276.1
+        for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 07:22:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705936942; x=1706541742; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1705936945; x=1706541745; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xhBZ9e9dLCiSrnfGs3nmyAjRoc3LyZMuLRLZxqI/JA4=;
-        b=S1dXNhgZI6vB5ZNDtnkwBge5HyKwHTwWvYfpq6G+u6hIbMxrOYi1dKWaWqOeW0Vszg
-         QgkuyW69ZV9UPdFRR9lSB/ip7909R2JFhdEbbMAdf/Qcvk2LY06cpGRvLLIKHPkU0+r9
-         CXvJPPWTLv0F4EZGg7TM3ExoT2h6qgw91Mxy7bxS40mT4S0njNteHUg8NSIzg/QF5Y/9
-         ui4SPDmCRKcEpm9MnapOK8B9ZANe5N5CdVTR4TFkFcBzGhHpaA9kueMM6fUrN1TGA4E3
-         TU3++YgsnSpUu7JRLg3uDabLWCGjtx5tmvoJrTqBGgIwgmEeiZ0mj/8fCR2i1gwrJsEa
-         p07Q==
+        bh=vc0fzJAdCvYQscypRiFgQ18nWFhi2YTnJ0gQXl/95EA=;
+        b=NHOWNqQ/NNciGkr4/qKhFa9YLhy46CaHtbbXoDJeb3h8rsHTo6N0KZzMiru7wiZ+i0
+         oZzVJo7TuDUq0W9K3ocPNF2GZb/iYeYzoTTiLKmvomtk6WlROQRxAogdwGWL9hJciAtz
+         E37BVcvwQf2BraesqttR//0rAcFn/CyLgIPFYXjKNSEgpsFPwLyrmMfti+QHC7Kzh+xB
+         naLZMTpHMhD2LyXi7+7P8ia1sLGvZguZsQrV3c/FAOwHV/29VSGe+UCnWDb04j+8Vjm+
+         WK/XR/b+kDgBpF9qRD5c1ZvqsQQVYCkGrnjp1nb1//N/QiCpnTJm0rWksZaV5UCrNjlD
+         DDYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705936942; x=1706541742;
+        d=1e100.net; s=20230601; t=1705936945; x=1706541745;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xhBZ9e9dLCiSrnfGs3nmyAjRoc3LyZMuLRLZxqI/JA4=;
-        b=BHueuw0lWQx7tCQCnLq6n7DcdRq/x7HaK7c7xc1n3Ph2kOCF4vb61jneO/D+lt3Lw1
-         W4DZxI+OlIXwQBmij4/nN3qBpYEaDgpN6UhIhe3zDl9S/Ig0F6WkcqArN88hnB421Dgj
-         bimpxAhalJYldKlQxA1nhycFDJYjBwbY96KmoJhc3TAbPWoS4m8CBz46VhYGOBEt1Xx9
-         EerEfH04yEokOMV3Sk1r1o64n6Vtwig0MEYpAG7ecNTb6iryNBMY7aNaY4fsnNnmlQ9U
-         QnrPBalzUGoAA4N2Z1LD7NP1qad1Mn/dIvi/zNSkEwZJLVmoNEl5aH8/sw3N0SmB+u5b
-         j9JA==
-X-Gm-Message-State: AOJu0Yw7yZdqohNZT3JyRHeKnek1CjbrqUcJQAr7RnyiF8AdQdQmSNTs
-	jKR4KEHwVTwCPUCoVnKt3VxPesfuguyJA2V0A25LYje0uTPj5Ol5vehojVTtRDvmrLZ+PS/ekCD
-	BS9e3ublX65xSL7POnJj6m6IM7J82m+/KETk9nw==
-X-Google-Smtp-Source: AGHT+IHd/fvKIUJxwGz07cv8IEIgNcZpwAcQu933thnIQtqo3S8U61IJDJRgX99QNFbuv7Jd6cgESfTtcrmge+nyvPQ=
-X-Received: by 2002:a0d:d906:0:b0:5ff:8117:4e7e with SMTP id
- b6-20020a0dd906000000b005ff81174e7emr4242032ywe.70.1705936941994; Mon, 22 Jan
- 2024 07:22:21 -0800 (PST)
+        bh=vc0fzJAdCvYQscypRiFgQ18nWFhi2YTnJ0gQXl/95EA=;
+        b=mZznRDif1Oic/98Bfknx3FuTxnOT4qA3AzBrg1MZT68Q8i1HWW6toH32NHaN3zZMDe
+         r20aC7fK5v5n4b8Hds+ND0BSm+zsax3tBQd077N2q02DfmgdlVroK0XfPyLeWknF1Y08
+         J/0a24euS3B7+hWckueid0R0KxnHLkpvc5jAOd4xaNeLWETG5cyKxA9i6OvROtcpmq4z
+         8D20CT4qE0EWKr7Uc3ArwHRGeXiz0lySGJ2WPeZOkiSqc+emZX+Cprt1fPPWfUqGKjDY
+         yfVhFuusoxZ5c2NnhU5kZRj+AIBu0Un6WyrDvLvc4mXNFsTYTOOid8hnLKY6AlJTo6gp
+         Hycg==
+X-Gm-Message-State: AOJu0Yzj+QLI8EuPqdwnbgyLR1gYpGYk3mrCcFno6mDX5vvpqnccjL/J
+	73q395gCe6RF1LajvhpG6WVy86a/kODgtqBFYQXMm2EmJXJyZc2wGtlaZ8Yyp2LzbIjIxH3RlLy
+	i/YYSxF4Ct/Pem0sEDOmBkxEvwUtDUcOsY2sBjA==
+X-Google-Smtp-Source: AGHT+IGmvmbAGNSnSFXJ8ZKIH1QeBjdt527i6bLFKHt4ckhptNDJJNL2BiFBE/u/DZo+I321dEj84B5Sh0fW5BFj/LQ=
+X-Received: by 2002:a25:820d:0:b0:dc2:3257:913a with SMTP id
+ q13-20020a25820d000000b00dc23257913amr2201892ybk.17.1705936944993; Mon, 22
+ Jan 2024 07:22:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231227-topic-pmdomain_sync_cleanup-v1-1-5f36769d538b@linaro.org>
-In-Reply-To: <20231227-topic-pmdomain_sync_cleanup-v1-1-5f36769d538b@linaro.org>
+References: <5b440f84ab8b52499ab307c84154dcbc0f41d1d7.1705931035.git.geert+renesas@glider.be>
+In-Reply-To: <5b440f84ab8b52499ab307c84154dcbc0f41d1d7.1705931035.git.geert+renesas@glider.be>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 22 Jan 2024 16:21:46 +0100
-Message-ID: <CAPDyKFoer83wwCYyXS5S5wM8HcezyUDdxcW3d4Z+za0XpykSAw@mail.gmail.com>
-Subject: Re: [PATCH] pmdomain: core: Move the unused cleanup to a _sync initcall
-To: Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: Kevin Hilman <khilman@linaro.org>, "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
-	Marijn Suijten <marijn.suijten@somainline.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>
+Date: Mon, 22 Jan 2024 16:21:49 +0100
+Message-ID: <CAPDyKFqNpivthZxfzoeDS0FABGxmJjJq4caYRHga6+c6nmR_uA@mail.gmail.com>
+Subject: Re: [PATCH] pmdomain: renesas: rcar-gen4-sysc: Remove unneeded includes
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 27 Dec 2023 at 16:21, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+On Mon, 22 Jan 2024 at 14:44, Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
 >
-> The unused clock cleanup uses the _sync initcall to give all users at
-> earlier initcalls time to probe. Do the same to avoid leaving some PDs
-> dangling at "on" (which actually happened on qcom!).
+> The R-Car V3U System Controller (SYSC) driver no longer needs these
+> includes since the factoring out of the common R-Car Gen4 SYSC driver in
+> commit e62906d6315f652b ("soc: renesas: rcar-gen4-sysc: Introduce R-Car
+> Gen4 SYSC driver").
 >
-> Fixes: 2fe71dcdfd10 ("PM / domains: Add late_initcall to disable unused PM domains")
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> The R-Car S4-8 and V4H SYSC drivers never needed these includes, as
+> these drivers always used the common R-Car Gen4 SYSC driver.
+>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Applied for fixes and by adding a stable tag, thanks!
+Applied for next, thanks!
 
 Kind regards
 Uffe
 
 
-
 > ---
->  drivers/pmdomain/core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/pmdomain/renesas/r8a779a0-sysc.c | 12 ------------
+>  drivers/pmdomain/renesas/r8a779f0-sysc.c | 12 ------------
+>  drivers/pmdomain/renesas/r8a779g0-sysc.c | 12 ------------
+>  3 files changed, 36 deletions(-)
 >
-> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-> index a1f6cba3ae6c..18e232b5ed53 100644
-> --- a/drivers/pmdomain/core.c
-> +++ b/drivers/pmdomain/core.c
-> @@ -1109,7 +1109,7 @@ static int __init genpd_power_off_unused(void)
+> diff --git a/drivers/pmdomain/renesas/r8a779a0-sysc.c b/drivers/pmdomain/renesas/r8a779a0-sysc.c
+> index 04f1bc322ae7b671..54cdf250f7c2d143 100644
+> --- a/drivers/pmdomain/renesas/r8a779a0-sysc.c
+> +++ b/drivers/pmdomain/renesas/r8a779a0-sysc.c
+> @@ -5,19 +5,7 @@
+>   * Copyright (C) 2020 Renesas Electronics Corp.
+>   */
 >
->         return 0;
->  }
-> -late_initcall(genpd_power_off_unused);
-> +late_initcall_sync(genpd_power_off_unused);
+> -#include <linux/bits.h>
+> -#include <linux/clk/renesas.h>
+> -#include <linux/delay.h>
+> -#include <linux/err.h>
+> -#include <linux/io.h>
+> -#include <linux/iopoll.h>
+>  #include <linux/kernel.h>
+> -#include <linux/mm.h>
+> -#include <linux/of_address.h>
+> -#include <linux/pm_domain.h>
+> -#include <linux/slab.h>
+> -#include <linux/spinlock.h>
+> -#include <linux/types.h>
 >
->  #ifdef CONFIG_PM_SLEEP
+>  #include <dt-bindings/power/r8a779a0-sysc.h>
 >
+> diff --git a/drivers/pmdomain/renesas/r8a779f0-sysc.c b/drivers/pmdomain/renesas/r8a779f0-sysc.c
+> index 5602aa6bd7ed1529..6ed13cd1cb249df5 100644
+> --- a/drivers/pmdomain/renesas/r8a779f0-sysc.c
+> +++ b/drivers/pmdomain/renesas/r8a779f0-sysc.c
+> @@ -5,19 +5,7 @@
+>   * Copyright (C) 2021 Renesas Electronics Corp.
+>   */
 >
-> ---
-> base-commit: 39676dfe52331dba909c617f213fdb21015c8d10
-> change-id: 20231227-topic-pmdomain_sync_cleanup-ae73d04133ec
+> -#include <linux/bits.h>
+> -#include <linux/clk/renesas.h>
+> -#include <linux/delay.h>
+> -#include <linux/err.h>
+> -#include <linux/io.h>
+> -#include <linux/iopoll.h>
+>  #include <linux/kernel.h>
+> -#include <linux/mm.h>
+> -#include <linux/of_address.h>
+> -#include <linux/pm_domain.h>
+> -#include <linux/slab.h>
+> -#include <linux/spinlock.h>
+> -#include <linux/types.h>
 >
-> Best regards,
+>  #include <dt-bindings/power/r8a779f0-sysc.h>
+>
+> diff --git a/drivers/pmdomain/renesas/r8a779g0-sysc.c b/drivers/pmdomain/renesas/r8a779g0-sysc.c
+> index b932eba1b8042d8f..249cf43af45b6445 100644
+> --- a/drivers/pmdomain/renesas/r8a779g0-sysc.c
+> +++ b/drivers/pmdomain/renesas/r8a779g0-sysc.c
+> @@ -5,19 +5,7 @@
+>   * Copyright (C) 2022 Renesas Electronics Corp.
+>   */
+>
+> -#include <linux/bits.h>
+> -#include <linux/clk/renesas.h>
+> -#include <linux/delay.h>
+> -#include <linux/err.h>
+> -#include <linux/io.h>
+> -#include <linux/iopoll.h>
+>  #include <linux/kernel.h>
+> -#include <linux/mm.h>
+> -#include <linux/of_address.h>
+> -#include <linux/pm_domain.h>
+> -#include <linux/slab.h>
+> -#include <linux/spinlock.h>
+> -#include <linux/types.h>
+>
+>  #include <dt-bindings/power/r8a779g0-sysc.h>
+>
 > --
-> Konrad Dybcio <konrad.dybcio@linaro.org>
+> 2.34.1
 >
 
