@@ -1,49 +1,49 @@
-Return-Path: <linux-pm+bounces-2456-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2453-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E17B836273
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 12:48:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C35B83626C
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 12:46:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 163201F23331
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 11:48:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2EFB29087C
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 11:46:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CD7F3DB98;
-	Mon, 22 Jan 2024 11:44:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B3833D56A;
+	Mon, 22 Jan 2024 11:44:33 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5FF03D0D5;
-	Mon, 22 Jan 2024 11:44:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E6B53CF7C;
+	Mon, 22 Jan 2024 11:44:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705923875; cv=none; b=PqHKgqqanPsPKpsxPPFd0h/3rLKlh9CodYeySk9Tl7k70J9252T2S4XaZhtkSK/kFckh0zxiKKN8duZ3Tlb9iyfAGG/efVgR23TPqUxNPnI+rhBnVuvrTeJLTFiQlZi1Q3zQaabqToAnQ1PRdp79chtDrDi8ukw+t5LFSiPgEVU=
+	t=1705923873; cv=none; b=qjOSBp6+11rmOymCBTGoHAou7j+fDibLJ4tZ+H7WslDJ5LQOY8QjfcJV6T7y/w2crfF+Nepo4gNx7uaGOyEXTK/Wa9VYUu/Rbo1ICQPSxko9zM5zVfjsdzL0mHEw5r6iMSm0OJRjs8RzckNexukZdwETun3j4Hr9mM7fyk4SY6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705923875; c=relaxed/simple;
-	bh=TAuTg+ebqU3GHaMugMat3oRGpYYeFGa9Q3+ZhmA5B20=;
+	s=arc-20240116; t=1705923873; c=relaxed/simple;
+	bh=hzzxCxYHKJlV//EcCCMyFY5XRICC4MkyQFC2eFI+AqU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gRZi4V8+gUzQEyKHdCvPP9S2lp+5/avdMdwhidqRlwMLeaL/cQsMAIalZZ9empO2vjteUprz1ZH4dklHCrfXqbdHZZypkWTk07HSEhRP//7i0Q7mp/Mwfr91YX6cziBw0iOPtuNA5f3z7ShSmkGZlUiEEY2Ct8O7h/gNYgW8qWI=
+	 MIME-Version:Content-Type; b=CHR9I3YBdvnm7BzD6tQYw3U8thue/b0X/1RKMvUlJknh9gM2U9qtEWlOv1Gua6+L3IqcZAWEmGMWPTsR13FN1JbgEHDTwQo9YeYApQ/FNHM6zyt85aTdXTM071FtU+yFqg5WFwU4Ccl5bJDWbJ/YbRsb2TCQb9qBSFGXuLwAIaM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id 1f64a8577498be2e; Mon, 22 Jan 2024 12:44:29 +0100
+ id c0f29add93c09374; Mon, 22 Jan 2024 12:44:28 +0100
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 0D8A3669540;
-	Mon, 22 Jan 2024 12:44:29 +0100 (CET)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 53F7A669540;
+	Mon, 22 Jan 2024 12:44:28 +0100 (CET)
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Subject: [PATCH v1 01/12] PM: sleep: Simplify dpm_suspended_list walk in dpm_resume()
-Date: Mon, 22 Jan 2024 12:22:38 +0100
-Message-ID: <4553341.LvFx2qVVIh@kreacher>
+Subject: [PATCH v1 02/12] PM: sleep: Relocate two device PM core functions
+Date: Mon, 22 Jan 2024 12:24:21 +0100
+Message-ID: <4876491.GXAFRqVoOG@kreacher>
 In-Reply-To: <5760158.DvuYhMxLoT@kreacher>
 References: <5760158.DvuYhMxLoT@kreacher>
 Precedence: bulk
@@ -57,69 +57,97 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 195.136.19.94
 X-CLIENT-HOSTNAME: 195.136.19.94
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrvdekiedgfedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgepfeenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepgedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehsthgrnhhishhlrgifrdhgrhhushiikhgrsehlihhnuhigrdhinhhtvghlrdgtohhm
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrvdekiedgfedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepgedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehsthgrnhhishhlrgifrdhgrhhushiikhgrsehlihhnuhigrdhinhhtvghlrdgtohhm
 X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Notice that devices can be moved to dpm_prepared_list before running
-their resume callbacks, in analogy with dpm_noirq_resume_devices() and
-dpm_resume_early(), because doing so will not affect the final ordering
-of that list.
+Move is_async() and dpm_async_fn() in the PM core to a more suitable
+place.
 
-Namely, if a device is the first dpm_suspended_list entry while
-dpm_list_mtx is held, it has not been removed so far and it cannot be
-removed until dpm_list_mtx is released, so moving it to dpm_prepared_list
-at that point is valid.  If it is removed later, while its resume
-callback is running, it will be deleted from dpm_prepared_list without
-changing the ordering of the other devices in that list.
-
-Accordingly, rearrange the while () loop in dpm_resume() to move
-devices to dpm_prepared_list before running their resume callbacks and
-implify the locking and device reference counting in it.
-
-No intentional functional impact.
+No functional impact.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/base/power/main.c |   16 +++++-----------
- 1 file changed, 5 insertions(+), 11 deletions(-)
+ drivers/base/power/main.c |   58 +++++++++++++++++++++++-----------------------
+ 1 file changed, 29 insertions(+), 29 deletions(-)
 
 Index: linux-pm/drivers/base/power/main.c
 ===================================================================
 --- linux-pm.orig/drivers/base/power/main.c
 +++ linux-pm/drivers/base/power/main.c
-@@ -1017,25 +1017,19 @@ void dpm_resume(pm_message_t state)
+@@ -578,6 +578,35 @@ bool dev_pm_skip_resume(struct device *d
+ 	return !dev->power.must_resume;
+ }
  
- 	while (!list_empty(&dpm_suspended_list)) {
- 		dev = to_device(dpm_suspended_list.next);
++static bool is_async(struct device *dev)
++{
++	return dev->power.async_suspend && pm_async_enabled
++		&& !pm_trace_is_enabled();
++}
++
++static bool dpm_async_fn(struct device *dev, async_func_t func)
++{
++	reinit_completion(&dev->power.completion);
++
++	if (is_async(dev)) {
++		dev->power.async_in_progress = true;
++
++		get_device(dev);
++
++		if (async_schedule_dev_nocall(func, dev))
++			return true;
++
++		put_device(dev);
++	}
++	/*
++	 * Because async_schedule_dev_nocall() above has returned false or it
++	 * has not been called at all, func() is not running and it is safe to
++	 * update the async_in_progress flag without extra synchronization.
++	 */
++	dev->power.async_in_progress = false;
++	return false;
++}
++
+ /**
+  * device_resume_noirq - Execute a "noirq resume" callback for given device.
+  * @dev: Device to handle.
+@@ -664,35 +693,6 @@ Out:
+ 	}
+ }
+ 
+-static bool is_async(struct device *dev)
+-{
+-	return dev->power.async_suspend && pm_async_enabled
+-		&& !pm_trace_is_enabled();
+-}
+-
+-static bool dpm_async_fn(struct device *dev, async_func_t func)
+-{
+-	reinit_completion(&dev->power.completion);
+-
+-	if (is_async(dev)) {
+-		dev->power.async_in_progress = true;
 -
 -		get_device(dev);
-+		list_move_tail(&dev->power.entry, &dpm_prepared_list);
- 
- 		if (!dev->power.async_in_progress) {
-+			get_device(dev);
-+
- 			mutex_unlock(&dpm_list_mtx);
- 
- 			device_resume(dev, state, false);
- 
-+			put_device(dev);
-+
- 			mutex_lock(&dpm_list_mtx);
- 		}
 -
--		if (!list_empty(&dev->power.entry))
--			list_move_tail(&dev->power.entry, &dpm_prepared_list);
--
--		mutex_unlock(&dpm_list_mtx);
+-		if (async_schedule_dev_nocall(func, dev))
+-			return true;
 -
 -		put_device(dev);
+-	}
+-	/*
+-	 * Because async_schedule_dev_nocall() above has returned false or it
+-	 * has not been called at all, func() is not running and it is safe to
+-	 * update the async_in_progress flag without extra synchronization.
+-	 */
+-	dev->power.async_in_progress = false;
+-	return false;
+-}
 -
--		mutex_lock(&dpm_list_mtx);
- 	}
- 	mutex_unlock(&dpm_list_mtx);
- 	async_synchronize_full();
+ static void async_resume_noirq(void *data, async_cookie_t cookie)
+ {
+ 	struct device *dev = data;
 
 
 
