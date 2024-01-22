@@ -1,173 +1,193 @@
-Return-Path: <linux-pm+bounces-2489-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2490-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AF8A836BD0
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 17:52:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6ACD836BD6
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 17:53:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 806481C24C0A
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 16:52:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 555361F22ED1
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 16:53:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A4F14174F;
-	Mon, 22 Jan 2024 15:26:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27CD85C5E4;
+	Mon, 22 Jan 2024 15:26:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="x2b/kduM"
+	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="Y7e96axF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D12D41777
-	for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 15:26:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F6E15BAF1
+	for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 15:26:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705937192; cv=none; b=jkvx5ZNmop16zmDpB98c+NpwydV8yTZRUOyNI/evfVPO4uI4kXm09g8BDPrRqwpzHCNI0VfE4NIVIxCH9uYbBmwGIj2t48dzsu7Ucnm4ccN3rXGNzdZavPzP+muzal8oMxzXE/mLovIaPkMqjMEvg+Fdj5kl13tGcXO9LazcuMs=
+	t=1705937216; cv=none; b=tLx03DBhdsaGJNk7Ay2lyPFUAvgxsXvrf5ET4XZQgqLQ5MW3ezc7uASrdZnXc2WnpYDs7dE/A+AYsCvmCi9vV5sGMEttNJQ7GgBC/eQu7iYvUq4J+kiUKnpYxMoxT9bwPDsjsQgBNCFLgRe0CnmqtP1mJ827Is+cc80LN7jYe9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705937192; c=relaxed/simple;
-	bh=KLmdfWYDGVa0MGrW5xg1DDwnruZeNPwCPCY+n/p8dKo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=LGAwnzyz//d8/9c0FkXwVl5V1tcHGBup00IVKMUPY3MD2oTyD26dx3IMXTzUnvkdhED69ky9PscjunvSLZ13NJf3XT/kw++3cEFD8IsafyaZYJOhdXGmnbuYnIffDdYHxquOGXIyW4VhtrIWRYjQg2c3Em77BXHJqy/EzyA59BU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=x2b/kduM; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a28bd9ca247so369980966b.1
-        for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 07:26:30 -0800 (PST)
+	s=arc-20240116; t=1705937216; c=relaxed/simple;
+	bh=Z1EVLX63G+WkbjKr492KwFFsPOKWDV0QAZ12/V2x5eo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o24VqU2BeIWDItOtYoa5JZFxO8eCwyScLgOvkpykr1tVGoj6hoOmZPnNC7ZRjqZ4rWhkK94/qoJ2TkRn7NlzXpc5sxX0WnLxxM+ckcGniZ4KLae3LS2ds2oCxcZqnzornvgmPaPWAOp/7xcEVIKFaTmXvC7Lp40ZPcpfZBre6Lo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=Y7e96axF; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-50eabd1c701so3497490e87.3
+        for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 07:26:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705937188; x=1706541988; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=L2ssyj7QUsCONwfAWbtgWdWt1RvO5vwbDocJcWnwveQ=;
-        b=x2b/kduMFiHVSYwIPGMMNLV5y8j44bECOjCxCHzpy/jCdJI1GpoKgEUvg+IRFbB5dH
-         Te964RyQXA89envMITmacjRIzhUeCnQq9BRgDFzmT81WjmkScW1w5EDaLQ8uRLkeFsdb
-         aEffUidkKdvBJONQsEnm+F2x8rqE40rp6v7dV1BGMu7RRoERCPHJYmqUuWJeyH+Tc2o2
-         pDFRk2oFmqZpIme/47UmpWmkB6YOSIVlhGs97nUR4FnxQLK1oa8wFYo0MFYCJEHzSpuD
-         f3FjS1p3UANwlLbZh7KtkT8jDokkKRGK/NVM8B1a/mpgT0To9BIvtBOV4t3J23xBcaSz
-         ZTdg==
+        d=ragnatech.se; s=google; t=1705937211; x=1706542011; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=uhSC6XuresrDfgru+sp06u+6WUpqJQ0xiyuzeihUlLI=;
+        b=Y7e96axFoAsrjvkdnQdMH7YbwHMxkv/6Qucb7PF6cExHUIaEeJ6av0J+6MaGmwlgRL
+         /5+cvhvimn0DqjqNvHedITu1UcsNFBlqNAi1r5mYpxa1DIxf+WUSnvQqxLEe7YoZBJOD
+         c3SXdzLMr3IAEWXnwcZ5Jmp+ih/jSQHkKk6m8Kl0fJuHqRe7eHg0fu7/NTE+2NrjCEXw
+         NWl9d/Mh4YwEP/L9iZCf5Gb6CiTG3ZTvtSfpmA6ngJD4mdt+UrfVcGgJBd2wNSO3oYA8
+         /3nB63yZ7vPs4KBInJLwutOnrNA0ek8i/h2h01CU9IoAJgQGzmohsOs+7CoHcBOIyMSS
+         gbng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705937188; x=1706541988;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1705937211; x=1706542011;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L2ssyj7QUsCONwfAWbtgWdWt1RvO5vwbDocJcWnwveQ=;
-        b=vVbn4CCpnytsgqUK/SjODLvnCbjUF5YjmyKq4TH+FsO2qIdF3QtDY5qr2yt9XcvmjS
-         aDAvkTU6mzqOQbiQ5VpP1jvGP0Mjg/Eq4k57bg9mtU2ha+aUMJsy5FzfIMODaJhUrKFu
-         Ttk/GuiTmTfkdSWtauI+mE8CBIOlxf+2AdP0lcWVqj+gmGhgOK7OKBIHZttla2nakUDB
-         tr6/7lH1dierpdc8LlDXgLOu7PkcVuoj3cIVv4Nr6UllLHsZnI/N8hnzuuWdxrQlbKXr
-         kU/I0gIaPGJK5E8gg52VugZ4gQbT/6ZiNIVdqNY4FVThKBBJEUzNvo7PkWzS83MacDTZ
-         px7w==
-X-Gm-Message-State: AOJu0YywHx3EWsXeTYaPgSczEis+QircC00IbkzzjZobU8T1eJQ9uotj
-	HeGHrzA/fY9G5WkyV4MzaAoJNaxGyMMF4fouo+tW0LGyHG2UQQ6t63ONeqZXWlJ3RxdtyBAkVbO
-	a
-X-Google-Smtp-Source: AGHT+IEzdcu76uoeIojRSyt2U8jaGERGhWiOrHBkUFk7xxsf/jJ/WohyF5RC0zaSfO/NIbgnH4f9ww==
-X-Received: by 2002:a17:907:8b95:b0:a2f:bbc2:8f49 with SMTP id tb21-20020a1709078b9500b00a2fbbc28f49mr2806301ejc.7.1705937188570;
-        Mon, 22 Jan 2024 07:26:28 -0800 (PST)
-Received: from [192.168.231.132] (178235179218.dynamic-4-waw-k-1-3-0.vectranet.pl. [178.235.179.218])
-        by smtp.gmail.com with ESMTPSA id hu14-20020a170907a08e00b00a2f15b8cb76sm5302537ejc.184.2024.01.22.07.26.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Jan 2024 07:26:28 -0800 (PST)
-Message-ID: <d7f406f1-fc27-45e6-90a0-a7ee108505a6@linaro.org>
-Date: Mon, 22 Jan 2024 16:26:27 +0100
+        bh=uhSC6XuresrDfgru+sp06u+6WUpqJQ0xiyuzeihUlLI=;
+        b=ZJ1IcDEzqPFCiA1a8qcL+UiagcGB+UxsTWSiXEG5GZLBHRc9q0wxNrnZPmgODT3aFu
+         /00E2/u2+1+0bNC1z3/AHUpxCzmA/3xlwKSK6QZAbMFwOdbRyL4bXrheV9YTB25cxbik
+         AzP0ugNzRPJPUNzh9TjffbIvlafhKAAs17rfYYpLbYap/iS1tpEStY5byzUrqUGZ/kw0
+         fLQBsUhPiQXI9HCQUVOJSawsj4bEpuP2bPcHFANF7mTAt3V6SUdcAzlLWKM42jTVrUpA
+         lCZfzKy8qydsyN2RbSoNBs/6l3Xc0Hpty10qM6JkmkL8LXhw4+TuxhQBXsp1KOKZBk8A
+         E8AQ==
+X-Gm-Message-State: AOJu0YxiGUPbLQdcQo8RdF00+5WUHGfNrpo+AHX/9tgHlzfF03cuMDZE
+	x3REQSDgWq8MVScoUv1tSlm1n92F98iSCKAaXnRq2/V0tGBy2i7qSQCm8p4Td8m0j/I2KSFcwAE
+	Nmb4=
+X-Google-Smtp-Source: AGHT+IEFvyTGOnyAc7bq7nyDEqnQfQDJ0E/4goZpL2WmENaJWiw7+i8XUNuppTLV+6pmn3Lv9sDOlw==
+X-Received: by 2002:a19:f014:0:b0:50e:7e55:466 with SMTP id p20-20020a19f014000000b0050e7e550466mr1850513lfc.118.1705937211154;
+        Mon, 22 Jan 2024 07:26:51 -0800 (PST)
+Received: from localhost (h-46-59-36-113.A463.priv.bahnhof.se. [46.59.36.113])
+        by smtp.gmail.com with ESMTPSA id o16-20020ac24bd0000000b0050f097a6e55sm2020542lfq.177.2024.01.22.07.26.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Jan 2024 07:26:50 -0800 (PST)
+Date: Mon, 22 Jan 2024 16:26:50 +0100
+From: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] pmdomain: renesas: rcar-gen4-sysc: Remove unneeded
+ includes
+Message-ID: <20240122152650.GE4126432@ragnatech.se>
+References: <5b440f84ab8b52499ab307c84154dcbc0f41d1d7.1705931035.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [1/4] interconnect: qcom: icc-rpmh: Add QoS config support
-Content-Language: en-US
-To: Odelu Kukatla <quic_okukatla@quicinc.com>, georgi.djakov@linaro.org,
- Bjorn Andersson <andersson@kernel.org>, Georgi Djakov <djakov@kernel.org>,
- linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240122143030.11904-1-quic_okukatla@quicinc.com>
- <20240122143030.11904-2-quic_okukatla@quicinc.com>
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <20240122143030.11904-2-quic_okukatla@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5b440f84ab8b52499ab307c84154dcbc0f41d1d7.1705931035.git.geert+renesas@glider.be>
 
-On 22.01.2024 15:30, Odelu Kukatla wrote:
-> Introduce support to initialize QoS settings for QNOC platforms.
+Hi Geert,
+
+Thanks for your work.
+
+On 2024-01-22 14:44:41 +0100, Geert Uytterhoeven wrote:
+> The R-Car V3U System Controller (SYSC) driver no longer needs these
+> includes since the factoring out of the common R-Car Gen4 SYSC driver in
+> commit e62906d6315f652b ("soc: renesas: rcar-gen4-sysc: Introduce R-Car
+> Gen4 SYSC driver").
 > 
-> Change-Id: I068d49cbcfec5d34c01e5adc930eec72d306ed89
-> Signed-off-by: Odelu Kukatla <quic_okukatla@quicinc.com>
+> The R-Car S4-8 and V4H SYSC drivers never needed these includes, as
+> these drivers always used the common R-Car Gen4 SYSC driver.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+
 > ---
-
-[...]
-
-
-> +
-> +struct qcom_icc_qosbox {
-> +	u32 prio;
-> +	u32 urg_fwd;
-
-Also, why is this field not a bool?
-
-Everything in here could be const, btw
-
-> +	bool prio_fwd_disable;
-> +	u32 num_ports;
-> +	u32 offsets[];
-> +};
-> +
->  #define MAX_LINKS		128
->  #define MAX_BCMS		64
->  #define MAX_BCM_PER_NODE	3
-> @@ -58,6 +86,8 @@ struct bcm_db {
->   * @max_peak: current max aggregate value of all peak bw requests
->   * @bcms: list of bcms associated with this logical node
->   * @num_bcms: num of @bcms
-> + * @regmap: used for QOS registers access
-> + * @qosbox: qos config data associated with node
+>  drivers/pmdomain/renesas/r8a779a0-sysc.c | 12 ------------
+>  drivers/pmdomain/renesas/r8a779f0-sysc.c | 12 ------------
+>  drivers/pmdomain/renesas/r8a779g0-sysc.c | 12 ------------
+>  3 files changed, 36 deletions(-)
+> 
+> diff --git a/drivers/pmdomain/renesas/r8a779a0-sysc.c b/drivers/pmdomain/renesas/r8a779a0-sysc.c
+> index 04f1bc322ae7b671..54cdf250f7c2d143 100644
+> --- a/drivers/pmdomain/renesas/r8a779a0-sysc.c
+> +++ b/drivers/pmdomain/renesas/r8a779a0-sysc.c
+> @@ -5,19 +5,7 @@
+>   * Copyright (C) 2020 Renesas Electronics Corp.
 >   */
->  struct qcom_icc_node {
->  	const char *name;
-> @@ -70,6 +100,8 @@ struct qcom_icc_node {
->  	u64 max_peak[QCOM_ICC_NUM_BUCKETS];
->  	struct qcom_icc_bcm *bcms[MAX_BCM_PER_NODE];
->  	size_t num_bcms;
-> +	struct regmap *regmap;
-> +	struct qcom_icc_qosbox *qosbox;
+>  
+> -#include <linux/bits.h>
+> -#include <linux/clk/renesas.h>
+> -#include <linux/delay.h>
+> -#include <linux/err.h>
+> -#include <linux/io.h>
+> -#include <linux/iopoll.h>
+>  #include <linux/kernel.h>
+> -#include <linux/mm.h>
+> -#include <linux/of_address.h>
+> -#include <linux/pm_domain.h>
+> -#include <linux/slab.h>
+> -#include <linux/spinlock.h>
+> -#include <linux/types.h>
+>  
+>  #include <dt-bindings/power/r8a779a0-sysc.h>
+>  
+> diff --git a/drivers/pmdomain/renesas/r8a779f0-sysc.c b/drivers/pmdomain/renesas/r8a779f0-sysc.c
+> index 5602aa6bd7ed1529..6ed13cd1cb249df5 100644
+> --- a/drivers/pmdomain/renesas/r8a779f0-sysc.c
+> +++ b/drivers/pmdomain/renesas/r8a779f0-sysc.c
+> @@ -5,19 +5,7 @@
+>   * Copyright (C) 2021 Renesas Electronics Corp.
+>   */
+>  
+> -#include <linux/bits.h>
+> -#include <linux/clk/renesas.h>
+> -#include <linux/delay.h>
+> -#include <linux/err.h>
+> -#include <linux/io.h>
+> -#include <linux/iopoll.h>
+>  #include <linux/kernel.h>
+> -#include <linux/mm.h>
+> -#include <linux/of_address.h>
+> -#include <linux/pm_domain.h>
+> -#include <linux/slab.h>
+> -#include <linux/spinlock.h>
+> -#include <linux/types.h>
+>  
+>  #include <dt-bindings/power/r8a779f0-sysc.h>
+>  
+> diff --git a/drivers/pmdomain/renesas/r8a779g0-sysc.c b/drivers/pmdomain/renesas/r8a779g0-sysc.c
+> index b932eba1b8042d8f..249cf43af45b6445 100644
+> --- a/drivers/pmdomain/renesas/r8a779g0-sysc.c
+> +++ b/drivers/pmdomain/renesas/r8a779g0-sysc.c
+> @@ -5,19 +5,7 @@
+>   * Copyright (C) 2022 Renesas Electronics Corp.
+>   */
+>  
+> -#include <linux/bits.h>
+> -#include <linux/clk/renesas.h>
+> -#include <linux/delay.h>
+> -#include <linux/err.h>
+> -#include <linux/io.h>
+> -#include <linux/iopoll.h>
+>  #include <linux/kernel.h>
+> -#include <linux/mm.h>
+> -#include <linux/of_address.h>
+> -#include <linux/pm_domain.h>
+> -#include <linux/slab.h>
+> -#include <linux/spinlock.h>
+> -#include <linux/types.h>
+>  
+>  #include <dt-bindings/power/r8a779g0-sysc.h>
+>  
+> -- 
+> 2.34.1
+> 
+> 
 
-this member here as well
-
-Konrad
+-- 
+Kind Regards,
+Niklas Söderlund
 
