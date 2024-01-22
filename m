@@ -1,149 +1,139 @@
-Return-Path: <linux-pm+bounces-2513-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2505-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50E7E83748B
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 21:50:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F4B883722E
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 20:15:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C7091C272E7
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 20:50:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78D3BB35D54
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 18:31:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7362147A53;
-	Mon, 22 Jan 2024 20:50:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 160F35578F;
+	Mon, 22 Jan 2024 18:03:54 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-m17207.xmail.ntesmail.com (mail-m17207.xmail.ntesmail.com [45.195.17.207])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16BED3D3A7;
-	Mon, 22 Jan 2024 20:50:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.195.17.207
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8163155769;
+	Mon, 22 Jan 2024 18:03:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705956653; cv=none; b=gya9l4RRfZ00NaEavug8WjTpzCSa8hYYebPide7mqTWrOSxictC7EpTnzr6PxykK0IuWwfTaz8+9J/+vf4i5QJFTISm/6aOsE2RYp2rIlp03Wjz1AvhyHBUQBBSbOUi1ePr3xTBGUod1meZH7230uTTC1Twv08u+BerhPjkDLx8=
+	t=1705946633; cv=none; b=m0KmqlLQghRNEXDewsogkOIUMCFgHCBnXSM6ia7mJDb6mtcaxnjSdqym3OU+oBoFT7P/0g8oB4zN5nlwevKMuTOD6oU6JRWEuEu8E8I40x3deC59gCIWuaE7mPS/CJBOU20bHkEgXNCtfDKNWXFqbta092g6hXjYqRySriResLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705956653; c=relaxed/simple;
-	bh=iKziXW5nSbJLL99tAPoPAh//iFGA+h98wNVjisnajQ8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Dl9GIyy5hiovh0IHBjuJx2JB8BpCj/ahoLGtbq/2qrifQKQUKHHTFN2Fh5xw+AF/iNp3ohHPkepf5wgIjGn9RL6NDR66eoiLeemgxkgQ7Sv9h0ZntLSKV8HGshxsZU76Hlm0IJgp0dE75CDGCgE8QxSXGuAwDDMn2RIkF4mTUtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=link.tyut.edu.cn; spf=pass smtp.mailfrom=link.tyut.edu.cn; arc=none smtp.client-ip=45.195.17.207
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=link.tyut.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=link.tyut.edu.cn
-Received: from [192.168.2.76] (unknown [113.251.4.85])
-	by mail-m121145.qiye.163.com (Hmail) with ESMTPA id 3AD9F80010E;
-	Tue, 23 Jan 2024 01:11:59 +0800 (CST)
-Message-ID: <b8823223-e735-4d5a-b90e-6e2f2a6cd104@link.tyut.edu.cn>
-Date: Tue, 23 Jan 2024 01:11:58 +0800
+	s=arc-20240116; t=1705946633; c=relaxed/simple;
+	bh=Fh6Mfh+ZfjN747uqw1yJY2/Biltz7BVQb6iuhi4PHr8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rtYADGuDh0NnJf/KSD0EaVAZwzDP+83qmyrNq3aJbF6eaaL4zEHzuUOBidWZEHKK/FuussvfY1sMjZQQKETkS0R1RqfmQcrhQuE5xbQOiXUxVnM7a2pwlIxiP6UVOI/rPJbviGnkIq1v5O8BuInAHhnRzcnulglq3Jv0xPHmU1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-68197b99138so219246d6.1;
+        Mon, 22 Jan 2024 10:03:52 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705946631; x=1706551431;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=s26G0NnkppbXguh7peNPWPJ5jelauHZoMn0Xk4NSQUw=;
+        b=f9sj8dapz8X8s4X3rV7CprJ4yVeGEoaicBNlidoCaSjayweKFDw/PcvRUBrg/YCxmi
+         a+rpuUJYG3ww7Tx71XUdvnDc+IHZ1UIltCJM38MJzu6ACo1VbbFBz3hQUPvoXJgRVtdm
+         +Duv+eDNfM9T1ILJmxw3/p/26plcEi8Ums4q43FDoD/YPhnW1+La3M2la2iSAHWfUres
+         BGz/iiWlr4lGOQwwjbBwLrLIsvNyr5Ysj+qQYg86jmvBmIxsBOp0clHXDDB3mH1iaWDz
+         SmcR4vaTtgHc/S8updpLDKvE0HmyemNypUaJewLmInX+1YNwdh8irNp9j0fQHwUn0hVw
+         hizw==
+X-Gm-Message-State: AOJu0YzpKSZgMLO8owwP/NzVyChGP+JCTvPwJk7rJh7QVSnjZaC68sV5
+	Ofp8gX/ZrAQWnZ27ua6C5rk3IOTIQfe9P70ZQsBG8GnWKFwqkZezKhpIcwIiF8bqUoCYGSSdJ+y
+	F/qM9B7On8XvDtCou/+FbN1VApeiPS5Zjyos=
+X-Google-Smtp-Source: AGHT+IHydxkoIcTGgPnithAm3ZZ3Lbs6GLo4uCDeUNHWYMYJDcQ7kkQEBWJsEM9NkDfdwTNwYrCyeGF8yf+5uFu9gbc=
+X-Received: by 2002:a4a:cb87:0:b0:599:9e03:68da with SMTP id
+ y7-20020a4acb87000000b005999e0368damr789760ooq.0.1705946610762; Mon, 22 Jan
+ 2024 10:03:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] Documentation: power: Use kcalloc() instead of
- kzalloc()
-Content-Language: en-US
-To: Erick Archer <erick.archer@gmx.com>, Viresh Kumar <vireshk@kernel.org>,
- Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@ucw.cz>, Alex Shi <alexs@kernel.org>,
- Yanteng Si <siyanteng@loongson.cn>, Jonathan Corbet <corbet@lwn.net>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20240121104344.5001-1-erick.archer@gmx.com>
-From: Hu Haowen <2023002089@link.tyut.edu.cn>
-In-Reply-To: <20240121104344.5001-1-erick.archer@gmx.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZS0pPVkhOTBkeTEoYGh5CSlUTARMWGhIXJBQOD1
-	lXWRgSC1lBWUpKSFVJTkpVT1VDTllXWRYaDxIVHRRZQVlPS0hVSkpLSEpDVUpLS1VLWQY+
-X-HM-Tid: 0a8d32285244b03akuuu3ad9f80010e
-X-HM-MType: 10
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6N0k6Eww*EDwZPg4yAU4JUS0R
-	Tg8KCzFVSlVKTEtOQk9ITklLSENLVTMWGhIXVUlLSUhLS0lLQ0I7FxIVEFUPAg4PVR4fDlUYFUVZ
-	V1kSC1lBWUpKSFVJTkpVT1VDTllXWQgBWUFPQkhINwY+
+References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk> <E1rDOg7-00Dvjq-VZ@rmk-PC.armlinux.org.uk>
+ <CAJZ5v0je=-oVnSumZs=dzcyVuVUeVeTgO7yOnjGg1igyrS7EHQ@mail.gmail.com> <20240122174449.00002f78@Huawei.com>
+In-Reply-To: <20240122174449.00002f78@Huawei.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 22 Jan 2024 19:03:19 +0100
+Message-ID: <CAJZ5v0gePAsbRecOXDZ+q-Ds+nsoSBq6VU89ikuQoxds7TeQ3g@mail.gmail.com>
+Subject: Re: [PATCH RFC v3 04/21] ACPI: processor: Register all CPUs from acpi_processor_get_info()
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Russell King <rmk+kernel@armlinux.org.uk>, 
+	linux-pm@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, 
+	acpica-devel@lists.linuxfoundation.org, linux-csky@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>, 
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com, justin.he@arm.com, 
+	James Morse <james.morse@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, Jan 22, 2024 at 6:44=E2=80=AFPM Jonathan Cameron
+<Jonathan.Cameron@huawei.com> wrote:
+>
+> On Mon, 18 Dec 2023 21:30:50 +0100
+> "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+>
+> > On Wed, Dec 13, 2023 at 1:49=E2=80=AFPM Russell King <rmk+kernel@armlin=
+ux.org.uk> wrote:
+> > >
+> > > From: James Morse <james.morse@arm.com>
+> > >
+> > > To allow ACPI to skip the call to arch_register_cpu() when the _STA
+> > > value indicates the CPU can't be brought online right now, move the
+> > > arch_register_cpu() call into acpi_processor_get_info().
+> >
+> > This kind of looks backwards to me and has a potential to become
+> > super-confusing.
+> >
+> > I would instead add a way for the generic code to ask the platform
+> > firmware whether or not the given CPU is enabled and so it can be
+> > registered.
+>
+> Hi Rafael,
+>
+> The ACPI interpreter isn't up at this stage so we'd need to pull that
+> forwards. I'm not sure if we can pull the interpreter init early enough.
 
-在 2024/1/21 18:43, Erick Archer 写道:
-> As noted in the "Deprecated Interfaces, Language Features, Attributes,
-> and Conventions" documentation [1], size calculations (especially
-> multiplication) should not be performed in memory allocator (or similar)
-> function arguments due to the risk of them overflowing. This could lead
-> to values wrapping around and a smaller allocation being made than the
-> caller was expecting. Using those allocations could lead to linear
-> overflows of heap memory and other misbehaviors.
->
-> So, in the example code use the purpose specific kcalloc() function
-> instead of the argument size * count in the kzalloc() function.
->
-> At the same time, modify the translations accordingly.
->
-> Link: https://www.kernel.org/doc/html/next/process/deprecated.html#open-coded-arithmetic-in-allocator-arguments [1]
-> Link: https://github.com/KSPP/linux/issues/162
-> Signed-off-by: Erick Archer <erick.archer@gmx.com>
-> ---
-> Hi,
->
-> This patch is a merger of two previous ones [1] [2].
-> As Hu Haowen and Jonathan Corbet suggested, the translation change
-> only makes sense if the original file is modified. So, with this
-> v2 version the original file and the translations are modified at
-> the same time.
->
-> [1] https://lore.kernel.org/linux-hardening/20240120120527.3866-1-erick.archer@gmx.com/
-> [2] https://lore.kernel.org/linux-hardening/20240120122204.4287-1-erick.archer@gmx.com/
->
-> Thanks,
-> Erick
-> ---
->   Documentation/power/opp.rst                    | 2 +-
->   Documentation/translations/zh_CN/power/opp.rst | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/Documentation/power/opp.rst b/Documentation/power/opp.rst
-> index a7c03c470980..1b7f1d854f14 100644
-> --- a/Documentation/power/opp.rst
-> +++ b/Documentation/power/opp.rst
-> @@ -305,7 +305,7 @@ dev_pm_opp_get_opp_count
->   	 {
->   		/* Do things */
->   		num_available = dev_pm_opp_get_opp_count(dev);
-> -		speeds = kzalloc(sizeof(u32) * num_available, GFP_KERNEL);
-> +		speeds = kcalloc(num_available, sizeof(u32), GFP_KERNEL);
->   		/* populate the table in increasing order */
->   		freq = 0;
->   		while (!IS_ERR(opp = dev_pm_opp_find_freq_ceil(dev, &freq))) {
-> diff --git a/Documentation/translations/zh_CN/power/opp.rst b/Documentation/translations/zh_CN/power/opp.rst
-> index 8d6e3f6f6202..7470fa2d4c43 100644
-> --- a/Documentation/translations/zh_CN/power/opp.rst
-> +++ b/Documentation/translations/zh_CN/power/opp.rst
-> @@ -274,7 +274,7 @@ dev_pm_opp_get_opp_count
->   	 {
->   		/* 做一些事情 */
->   		num_available = dev_pm_opp_get_opp_count(dev);
-> -		speeds = kzalloc(sizeof(u32) * num_available, GFP_KERNEL);
-> +		speeds = kcalloc(num_available, sizeof(u32), GFP_KERNEL);
+Well, this patch effectively defers the AP registration to the time
+when acpi_processor_get_info() runs and the interpreter is up and
+running then.
 
+For consistency, it would be better to defer the AP registration in
+general to that point.
 
-For the zh_CN translation,
+> Perhaps pushing the registration back in all cases is the way to go?
+> Given the acpi interpretter is initialized via subsys_initcall() it would
+> need to be after that - I tried pushing cpu_dev_register_generic()
+> immediately after acpi_bus_init() and that seems fine.
 
-Reviewed-by: Hu Haowen <2023002089@link.tyut.edu.cn>
+Sounds promising.
 
+> We can't leave the rest of cpu_dev_init() that late because a bunch
+> of other stuff relies on it (CPU freq blows up first as a core_init()
+> on my setup).
 
-Thanks,
+I see.
 
-Hu Haowen
+> So to make this work we need it to always move the registration later
+> than the necessary infrastructure, perhaps to subsys_initcall_sync()
+> as is done for missing CPUs (we'd need to combine the two given that
+> needs to run after this, or potentially just stop checking for acpi_disab=
+led
+> and don't taint the kernel!).  I think this is probably the most consiste=
+nt
+> option on basis it at least moves the registration to the same point
+> whatever is going on and can easily use the arch callback you suggest
+> to hide away the logic on deciding if a CPU is there or not.
 
-
->   		/* 按升序填充表 */
->   		freq = 0;
->   		while (!IS_ERR(opp = dev_pm_opp_find_freq_ceil(dev, &freq))) {
-> --
-> 2.25.1
->
->
->
+I agree.
 
