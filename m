@@ -1,387 +1,460 @@
-Return-Path: <linux-pm+bounces-2426-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2427-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52C61835648
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Jan 2024 16:25:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E2EF835B9D
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 08:31:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 810181C20AF4
-	for <lists+linux-pm@lfdr.de>; Sun, 21 Jan 2024 15:25:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1ED7C1F22039
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 07:31:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E46B374FC;
-	Sun, 21 Jan 2024 15:25:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C28311196;
+	Mon, 22 Jan 2024 07:31:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LuEZI05F"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A0ED374FB;
-	Sun, 21 Jan 2024 15:25:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E1BBFBED
+	for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 07:31:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705850721; cv=none; b=EI7PcIPQe9sTPXVjIQ4DpcA9kf+lJGTv951tFu7XW+NPG83X6lvx1nHty/3fniJpjSG1heIOlvE/r/e1gO3g0TnRy6ElCyv9pE0+tBFD0YScAf+wtOOEbHHWvXhiEtest32zhXgPgqK/vHrj33op2fgbY/mUwIto1DMuhIi4HTw=
+	t=1705908678; cv=none; b=izIIhoPGQaanyug0WK8g/vQbmoh1IAdPFDjezPxqCxfcF3IMmbQdK1pkXSgy/uxY2dM179lTr5YZNvSgQRfSf26G4wvDNlJM0Zp5YoqkjRH2LKOjdEs7Hn8TPpDrSoGtqM1Imdm/uP0RhtYDtKQk0n7QtCVpMPmXnx+htoVv3LY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705850721; c=relaxed/simple;
-	bh=jGO81K2QgVEPQqbTMatCLa0toaJpWr0kDm/GsH1CW3Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rDuiXqbupiUJ8vHO+6aw1Uxm/8yWC8GKnEIXUz9y2Owl3MPovaFK4Ts93lbQ7tgUombbXub6Wx86ou8SNR4UkiVZy6aUXK8YZeTmBiFWTaNqIrJMV7bCE0ncHxe7EPM5C24ywMRlyAr3tf97U/3JIPo5dg8BiURsBYcPUtfJrWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2907a17fa34so545005a91.1;
-        Sun, 21 Jan 2024 07:25:18 -0800 (PST)
+	s=arc-20240116; t=1705908678; c=relaxed/simple;
+	bh=Llzbm9oUkBIrng0jHN+0KXkIbMGgbqqoOcPr8oYO5Og=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iSY0BckRSxD0XpFlOVC2TxmQZgkNhu+JnY0dRPRE7l1ejyO3SRMWfmcB03LpS2abFp9m31W79ye+i50hB9peL4E/8kOf7sDjAOWLoX5L9eQYLdISHgCE7ELPPwJ5DxXBuymfhWOcALiemI0eT2lPF3OxZzMni8qbuKyBTjHXaBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LuEZI05F; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1705908675;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=q7h2DVEhrlBFS3xqWaYiNz0NtwDtYA/pt6g+Gnzcrd4=;
+	b=LuEZI05F2vFXflPGPUWq0IU81b1zqC0kHo+vkOsL9ZFAPElF2tuaNtGVfrqdG03EfyGZKe
+	/IA/30j9oqlxYIRuS6XMM0KcS10FjyHDJX0OY+FMaNbKRbfJubqis3sFl9WW6tmfioMVL6
+	vSu1c8/cX5dqpdx3I39v+leaOKTBDnE=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-201-mAKCiuStPhWs5uK2TXyBBA-1; Mon, 22 Jan 2024 02:31:13 -0500
+X-MC-Unique: mAKCiuStPhWs5uK2TXyBBA-1
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-28e65698071so1227997a91.3
+        for <linux-pm@vger.kernel.org>; Sun, 21 Jan 2024 23:31:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705850718; x=1706455518;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ioCLCyK2xaIUJuYQNFoL0fsROPo2IIM04TY0gvr3Xo0=;
-        b=mAN2k1sFuyQiMl/lxAEoNg/sksvqX7PSYofrjnn5BV2ph8mJwdx5Uq1qLKMEJJIrZk
-         cOYAxG59AC0srhs3ZQ8m8mYBUmdnIX8B5vCVI/MTFwrS14nmyelaYtubskA9KAUf99GU
-         MC/+UcfJd0wPS+oYCixuhgrFeGZWqJPTf3IuXpUhmDZrd6nyB3QHBFZhgFhpDooqs4Jp
-         +cmfSWzJQb6Gmm8ZmfaNEf6MFoLkHaVxRi/i1la8l2U5Y8oXxur2pb4PWaNhZVdO2rqX
-         8tXFf9iJpPMro1ooRD9XL2eCuGeWeonDvndCUCFxqZFyWruUPnp3pqPiTFkl6iS6a2Ew
-         OYmg==
-X-Gm-Message-State: AOJu0Yz6Pw/OGsn+OfrN34UXoa+AxreBTaOS6Ct+1ZY7d4C/IpBuGd87
-	n8i8tnRjmy0u785JpQlH8nIfMrMGYTRHIIbQIzTjN8Qhi8p8xRU1TrUqtvkU
-X-Google-Smtp-Source: AGHT+IEEZTPn+xoybNObp6lctvB8qDZcvMjO5uvtRXO7HRf851D4blVSn7MIqEFRlyJ3Zxf1DEEH1g==
-X-Received: by 2002:a17:90b:3782:b0:28e:20d5:a047 with SMTP id mz2-20020a17090b378200b0028e20d5a047mr960588pjb.27.1705850717830;
-        Sun, 21 Jan 2024 07:25:17 -0800 (PST)
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com. [209.85.210.180])
-        by smtp.gmail.com with ESMTPSA id qj4-20020a17090b28c400b002906a444b2esm3237882pjb.7.2024.01.21.07.25.17
+        d=1e100.net; s=20230601; t=1705908672; x=1706513472;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q7h2DVEhrlBFS3xqWaYiNz0NtwDtYA/pt6g+Gnzcrd4=;
+        b=apOsJwdsWsB1NU1IQP10dSgBuoMsE1wH6VB1e9tW0CiFyoE8Zo27BM9L+lmz+NNkqE
+         NTkTHbxXSTt/zSV0SUQBteYKwX03ej8FGPLrDf2l4cGj7Z+H+pN/r0ZoxZlwy/BT3vwi
+         y8HU1/OVrfuWNOfCHfyV1YqFbSyDPk5fpRVqTB7q4XY/jvIEbJZQrRVrF81DplfMoxjK
+         7GwlhaWbskEam8ZvSAOKjQsgK9844SBHSQe28Nriuf8if6nHtt7FaZ/bNyIxLElRGca0
+         5Uxncvs2RibayB6/VUopSSzd0wURqSwMyTISoHV4KON5CxG6Q94Rr7iO7LkJ4dLCO6RO
+         FCiQ==
+X-Gm-Message-State: AOJu0Yyfk1CxsN9DRiLQ8StXtRTJCsSWhp7EG55YGeJ+ngwQP0Q6J2lF
+	G26AMM8WfAUQZy8AYuxE+VUG+V7mlnJjTOuzTw9j6mgiJBdB7hVn5/wzNkad4tbZM+nfzbE2pWj
+	tcVQ8QdMeqLDTny4a/PMZ2LHxhMBr7XgunsX6fBrr0KBVXbnO5SpODi0J
+X-Received: by 2002:a17:90a:b903:b0:28e:88d9:c314 with SMTP id p3-20020a17090ab90300b0028e88d9c314mr1170541pjr.11.1705908672212;
+        Sun, 21 Jan 2024 23:31:12 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHDCgmKu6d5PIapALN9UiADEjI2hUkrZBK0fyw5g8iUtS6EUbQqGF86PDL0wCSAJC+g9XfSAg==
+X-Received: by 2002:a17:90a:b903:b0:28e:88d9:c314 with SMTP id p3-20020a17090ab90300b0028e88d9c314mr1170530pjr.11.1705908671822;
+        Sun, 21 Jan 2024 23:31:11 -0800 (PST)
+Received: from [10.72.112.63] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id li9-20020a17090b48c900b0028b3539cd97sm8995232pjb.20.2024.01.21.23.31.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 Jan 2024 07:25:17 -0800 (PST)
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6db05618c1fso2267561b3a.1;
-        Sun, 21 Jan 2024 07:25:17 -0800 (PST)
-X-Received: by 2002:a05:6a20:8929:b0:19b:6ec7:8f9a with SMTP id
- i41-20020a056a20892900b0019b6ec78f9amr2714082pzg.70.1705850717152; Sun, 21
- Jan 2024 07:25:17 -0800 (PST)
+        Sun, 21 Jan 2024 23:31:11 -0800 (PST)
+Message-ID: <38d6eed5-05ff-4019-bc82-fc7356013c40@redhat.com>
+Date: Mon, 22 Jan 2024 17:31:00 +1000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240121014057.1042466-1-aren@peacevolution.org> <20240121014057.1042466-3-aren@peacevolution.org>
-In-Reply-To: <20240121014057.1042466-3-aren@peacevolution.org>
-Reply-To: wens@csie.org
-From: Chen-Yu Tsai <wens@csie.org>
-Date: Sun, 21 Jan 2024 23:25:04 +0800
-X-Gmail-Original-Message-ID: <CAGb2v65QcP1bcT++51n7Ada6QvFmrQzqiA-b3tbzfAr3XC6XJQ@mail.gmail.com>
-Message-ID: <CAGb2v65QcP1bcT++51n7Ada6QvFmrQzqiA-b3tbzfAr3XC6XJQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] power: supply: axp20x_usb_power: add input current limit
-To: Aren Moynihan <aren@peacevolution.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, =?UTF-8?Q?Ond=C5=99ej_Jirman?= <megi@xff.cz>, 
-	Sebastian Reichel <sre@kernel.org>, Hans de Goede <j.w.r.degoede@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC v3 01/21] ACPI: Only enumerate enabled (or functional)
+ devices
+Content-Language: en-US
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-acpi@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org,
+ kvmarm@lists.linux.dev, x86@kernel.org,
+ acpica-devel@lists.linuxfoundation.org, linux-csky@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org,
+ linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>,
+ Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com,
+ justin.he@arm.com, James Morse <james.morse@arm.com>
+References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
+ <ZXxxa+XZjPZtNfJ+@shell.armlinux.org.uk> <20231215161539.00000940@Huawei.com>
+ <5760569.DvuYhMxLoT@kreacher> <20240102143925.00004361@Huawei.com>
+ <20240111101949.000075dc@Huawei.com> <ZZ/CR/6Voec066DR@shell.armlinux.org.uk>
+From: Gavin Shan <gshan@redhat.com>
+In-Reply-To: <ZZ/CR/6Voec066DR@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi,
-
-+CC Hans de Goede since the AXP288 is similar to the later AXPs in the USB
-power section.
-
-On Sun, Jan 21, 2024 at 9:54=E2=80=AFAM Aren Moynihan <aren@peacevolution.o=
-rg> wrote:
->
-> Add properties for setting the maximum current that will be drawn from
-> the usb connection.
->
-> These changes don't apply to all axp20x chips, so we need to add new
-> power_desc and power supply property objects for axp813 specifically.
-> These are copied from the axp22x variants that were used before, with
-> extra fields added.
->
-> Also add a dev field to the axp20x_usb_power struct, so we can use
-> dev_dbg and dev_err in more places.
-
-I think this patch highlights some errors in the driver.
-
-1. We are likely misusing POWER_SUPPLY_PROP_CURRENT_MAX. Based on the
-   ABI docs, this is supposed to be a read only property. The correct
-   way would be to use POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT as you did.
-
-2. For AXP288 and AXP803/AXP813/AXP818, we are setting the current limit
-   for when BC detection finishes in register 0x30, not the actual active
-   limit in register 0x35. This should be fixed.
-
-3. BC detection race condition
-
-Could you maybe respin the patches to address them separately instead?
-
-
-Thanks
-ChenYu
-
-
-
-> Signed-off-by: Aren Moynihan <aren@peacevolution.org>
+On 1/11/24 20:26, Russell King (Oracle) wrote:
+> On Thu, Jan 11, 2024 at 10:19:49AM +0000, Jonathan Cameron wrote:
+>> On Tue, 2 Jan 2024 14:39:25 +0000
+>> Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+>>
+>>> On Fri, 15 Dec 2023 20:47:31 +0100
+>>> "Rafael J. Wysocki" <rjw@rjwysocki.net> wrote:
+>>>
+>>>> On Friday, December 15, 2023 5:15:39 PM CET Jonathan Cameron wrote:
+>>>>> On Fri, 15 Dec 2023 15:31:55 +0000
+>>>>> "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
+>>>>>      
+>>>>>> On Thu, Dec 14, 2023 at 07:37:10PM +0100, Rafael J. Wysocki wrote:
+>>>>>>> On Thu, Dec 14, 2023 at 7:16 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>>>>>>>>
+>>>>>>>> On Thu, Dec 14, 2023 at 7:10 PM Russell King (Oracle)
+>>>>>>>> <linux@armlinux.org.uk> wrote:
+>>>>>>>>> I guess we need something like:
+>>>>>>>>>
+>>>>>>>>>          if (device->status.present)
+>>>>>>>>>                  return device->device_type != ACPI_BUS_TYPE_PROCESSOR ||
+>>>>>>>>>                         device->status.enabled;
+>>>>>>>>>          else
+>>>>>>>>>                  return device->status.functional;
+>>>>>>>>>
+>>>>>>>>> so we only check device->status.enabled for processor-type devices?
+>>>>>>>>
+>>>>>>>> Yes, something like this.
+>>>>>>>
+>>>>>>> However, that is not sufficient, because there are
+>>>>>>> ACPI_BUS_TYPE_DEVICE devices representing processors.
+>>>>>>>
+>>>>>>> I'm not sure about a clean way to do it ATM.
+>>>>>>
+>>>>>> Ok, how about:
+>>>>>>
+>>>>>> static bool acpi_dev_is_processor(const struct acpi_device *device)
+>>>>>> {
+>>>>>> 	struct acpi_hardware_id *hwid;
+>>>>>>
+>>>>>> 	if (device->device_type == ACPI_BUS_TYPE_PROCESSOR)
+>>>>>> 		return true;
+>>>>>>
+>>>>>> 	if (device->device_type != ACPI_BUS_TYPE_DEVICE)
+>>>>>> 		return false;
+>>>>>>
+>>>>>> 	list_for_each_entry(hwid, &device->pnp.ids, list)
+>>>>>> 		if (!strcmp(ACPI_PROCESSOR_OBJECT_HID, hwid->id) ||
+>>>>>> 		    !strcmp(ACPI_PROCESSOR_DEVICE_HID, hwid->id))
+>>>>>> 			return true;
+>>>>>>
+>>>>>> 	return false;
+>>>>>> }
+>>>>>>
+>>>>>> and then:
+>>>>>>
+>>>>>> 	if (device->status.present)
+>>>>>> 		return !acpi_dev_is_processor(device) || device->status.enabled;
+>>>>>> 	else
+>>>>>> 		return device->status.functional;
+>>>>>>
+>>>>>> ?
+>>>>>>      
+>>>>> Changing it to CPU only for now makes sense to me and I think this code snippet should do the
+>>>>> job.  Nice and simple.
+>>>>
+>>>> Well, except that it does checks that are done elsewhere slightly
+>>>> differently, which from the maintenance POV is not nice.
+>>>>
+>>>> Maybe something like the appended patch (untested).
+>>>
+>>> Hi Rafael,
+>>>
+>>> As far as I can see that's functionally equivalent, so looks good to me.
+>>> I'm not set up to test this today though, so will defer to Russell on whether
+>>> there is anything missing
+>>>
+>>> Thanks for putting this together.
+>>
+>> This is rather embarrassing...
+>>
+>> I span this up on a QEMU instance with some prints to find out we need
+>> the !acpi_device_is_processor() restriction.
+>> On my 'random' test setup it fails on one device. ACPI0017 - which I
+>> happen to know rather well. It's the weird pseudo device that lets
+>> a CXL aware OS know there is a CEDT table to probe.
+>>
+>> Whilst I really don't like that hack (it is all about making software
+>> distribution of out of tree modules easier rather than something
+>> fundamental), I'm the CXL QEMU maintainer :(
+>>
+>> Will fix that, but it shows there is at least one broken firmware out
+>> there.
+>>
+>> On plus side, Rafael's code seems to work as expected and lets that
+>> buggy firwmare carry on working :) So lets pretend the bug in qemu
+>> is a deliberate test case!
+> 
+> Lol, thanks for a test case and showing that Rafael's approach is
+> indeed necessary.
+> 
+> Would your test quality for a tested-by for this? For reference, this
+> is my current version below with Rafael's update:
+> 
+> 8<====
+> From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> Subject: [PATCH] ACPI: Only enumerate enabled (or functional) processor
+>   devices
+> 
+> From: James Morse <james.morse@arm.com>
+> 
+> Today the ACPI enumeration code 'visits' all devices that are present.
+> 
+> This is a problem for arm64, where CPUs are always present, but not
+> always enabled. When a device-check occurs because the firmware-policy
+> has changed and a CPU is now enabled, the following error occurs:
+> | acpi ACPI0007:48: Enumeration failure
+> 
+> This is ultimately because acpi_dev_ready_for_enumeration() returns
+> true for a device that is not enabled. The ACPI Processor driver
+> will not register such CPUs as they are not 'decoding their resources'.
+> 
+> ACPI allows a device to be functional instead of maintaining the
+> present and enabled bit, but we can't simply check the enabled bit
+> for all devices since firmware can be buggy.
+> 
+> If ACPI indicates that the device is present and enabled, then all well
+> and good, we can enumate it. However, if the device is present and not
+> enabled, then we also check whether the device is a processor device
+> to limit the impact of this new check to just processor devices.
+> 
+> This avoids enumerating present && functional processor devices that
+> are not enabled.
+> 
+> Signed-off-by: James Morse <james.morse@arm.com>
+> Co-developed-by: Rafael J. Wysocki <rjw@rjwysocki.net>
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 > ---
->
->  drivers/power/supply/axp20x_usb_power.c | 127 +++++++++++++++++++++++-
->  1 file changed, 125 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supp=
-ly/axp20x_usb_power.c
-> index e23308ad4cc7..8c0c2c25565f 100644
-> --- a/drivers/power/supply/axp20x_usb_power.c
-> +++ b/drivers/power/supply/axp20x_usb_power.c
-> @@ -50,7 +50,10 @@ struct axp_data {
->         const char * const              *irq_names;
->         unsigned int                    num_irq_names;
->         const int                       *curr_lim_table;
-> +       int                             input_curr_lim_table_size;
-> +       const int                       *input_curr_lim_table;
->         struct reg_field                curr_lim_fld;
-> +       struct reg_field                input_curr_lim_fld;
->         struct reg_field                vbus_valid_bit;
->         struct reg_field                vbus_mon_bit;
->         struct reg_field                usb_bc_en_bit;
-> @@ -59,7 +62,9 @@ struct axp_data {
->  };
->
->  struct axp20x_usb_power {
-> +       struct device *dev;
->         struct regmap *regmap;
-> +       struct regmap_field *input_curr_lim_fld;
->         struct regmap_field *curr_lim_fld;
->         struct regmap_field *vbus_valid_bit;
->         struct regmap_field *vbus_mon_bit;
-> @@ -115,6 +120,15 @@ static void axp20x_usb_power_poll_vbus(struct work_s=
-truct *work)
->         if (val !=3D power->old_status)
->                 power_supply_changed(power->supply);
->
-> +       if (power->usb_bc_en_bit && (val & AXP20X_PWR_STATUS_VBUS_PRESENT=
-) !=3D
-> +               (power->old_status & AXP20X_PWR_STATUS_VBUS_PRESENT)) {
-> +               dev_dbg(power->dev, "Cable status changed, re-enabling US=
-B BC");
-> +               ret =3D regmap_field_write(power->usb_bc_en_bit, 1);
-> +               if (ret)
-> +                       dev_err(power->dev, "failed to enable USB BC: err=
-no %d",
-> +                               ret);
-> +       }
-> +
->         power->old_status =3D val;
->         power->online =3D val & AXP20X_PWR_STATUS_VBUS_USED;
->
-> @@ -123,6 +137,66 @@ static void axp20x_usb_power_poll_vbus(struct work_s=
-truct *work)
->                 mod_delayed_work(system_power_efficient_wq, &power->vbus_=
-detect, DEBOUNCE_TIME);
->  }
->
-> +static int
-> +axp20x_usb_power_set_input_current_limit(struct axp20x_usb_power *power,
-> +                                        int limit)
+> Changes since RFC v2:
+>   * Incorporate comment suggestion by Gavin Shan.
+> Changes since RFC v3:
+>   * Fixed "sert" typo.
+> Changes since RFC v3 (smaller series):
+>   * Restrict checking the enabled bit to processor devices, update
+>     commit comments.
+>   * Use Rafael's suggestion in
+>     https://lore.kernel.org/r/5760569.DvuYhMxLoT@kreacher
+> ---
+>   drivers/acpi/acpi_processor.c | 11 ++++++++
+>   drivers/acpi/device_pm.c      |  2 +-
+>   drivers/acpi/device_sysfs.c   |  2 +-
+>   drivers/acpi/internal.h       |  4 ++-
+>   drivers/acpi/property.c       |  2 +-
+>   drivers/acpi/scan.c           | 49 ++++++++++++++++++++++++++++-------
+>   6 files changed, 56 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
+> index 4fe2ef54088c..cf7c1cca69dd 100644
+> --- a/drivers/acpi/acpi_processor.c
+> +++ b/drivers/acpi/acpi_processor.c
+> @@ -626,6 +626,17 @@ static struct acpi_scan_handler processor_handler = {
+>   	},
+>   };
+>   
+> +bool acpi_device_is_processor(const struct acpi_device *adev)
 > +{
-> +       int ret;
-> +       unsigned int reg;
+> +	if (adev->device_type == ACPI_BUS_TYPE_PROCESSOR)
+> +		return true;
 > +
-> +       if (!power->axp_data->input_curr_lim_table)
-> +               return -EINVAL;
+> +	if (adev->device_type != ACPI_BUS_TYPE_DEVICE)
+> +		return false;
 > +
-> +       if (limit < power->axp_data->input_curr_lim_table[0])
-> +               return -EINVAL;
-> +
-> +       /*
-> +        * BC1.2 detection can cause a race condition if we try to set a =
-current
-> +        * limit while it's in progress. When it finishes it will overwri=
-te the
-> +        * current limit we just set.
-> +        */
-> +       if (power->usb_bc_en_bit) {
-> +               dev_dbg(power->dev,
-> +                       "disabling BC1.2 detection because current limit =
-was set");
-> +               ret =3D regmap_field_write(power->usb_bc_en_bit, 0);
-> +               if (ret)
-> +                       return ret;
-> +       }
-> +
-> +       for (reg =3D power->axp_data->input_curr_lim_table_size - 1; reg =
-> 0; reg--) {
-> +               if (limit >=3D power->axp_data->input_curr_lim_table[reg]=
-)
-> +                       break;
-> +       }
-> +
-> +       dev_dbg(power->dev, "setting input current limit reg to %d (%d uA=
-), requested %d uA",
-> +               reg, power->axp_data->input_curr_lim_table[reg], limit);
-> +
-> +       return regmap_field_write(power->input_curr_lim_fld, reg);
+> +	return acpi_scan_check_handler(adev, &processor_handler);
 > +}
 > +
-> +static int
-> +axp20x_usb_power_get_input_current_limit(struct axp20x_usb_power *power,
-> +                                        int *intval)
+>   static int acpi_processor_container_attach(struct acpi_device *dev,
+>   					   const struct acpi_device_id *id)
+>   {
+> diff --git a/drivers/acpi/device_pm.c b/drivers/acpi/device_pm.c
+> index 3b4d048c4941..e3c80f3b3b57 100644
+> --- a/drivers/acpi/device_pm.c
+> +++ b/drivers/acpi/device_pm.c
+> @@ -313,7 +313,7 @@ int acpi_bus_init_power(struct acpi_device *device)
+>   		return -EINVAL;
+>   
+>   	device->power.state = ACPI_STATE_UNKNOWN;
+> -	if (!acpi_device_is_present(device)) {
+> +	if (!acpi_dev_ready_for_enumeration(device)) {
+>   		device->flags.initialized = false;
+>   		return -ENXIO;
+>   	}
+> diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysfs.c
+> index 23373faa35ec..a0256d2493a7 100644
+> --- a/drivers/acpi/device_sysfs.c
+> +++ b/drivers/acpi/device_sysfs.c
+> @@ -141,7 +141,7 @@ static int create_pnp_modalias(const struct acpi_device *acpi_dev, char *modalia
+>   	struct acpi_hardware_id *id;
+>   
+>   	/* Avoid unnecessarily loading modules for non present devices. */
+> -	if (!acpi_device_is_present(acpi_dev))
+> +	if (!acpi_dev_ready_for_enumeration(acpi_dev))
+>   		return 0;
+>   
+>   	/*
+> diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
+> index 866c7c4ed233..9388d4c8674a 100644
+> --- a/drivers/acpi/internal.h
+> +++ b/drivers/acpi/internal.h
+> @@ -62,6 +62,8 @@ void acpi_sysfs_add_hotplug_profile(struct acpi_hotplug_profile *hotplug,
+>   int acpi_scan_add_handler_with_hotplug(struct acpi_scan_handler *handler,
+>   				       const char *hotplug_profile_name);
+>   void acpi_scan_hotplug_enabled(struct acpi_hotplug_profile *hotplug, bool val);
+> +bool acpi_scan_check_handler(const struct acpi_device *adev,
+> +			     struct acpi_scan_handler *handler);
+>   
+>   #ifdef CONFIG_DEBUG_FS
+>   extern struct dentry *acpi_debugfs_dir;
+> @@ -107,7 +109,6 @@ int acpi_device_setup_files(struct acpi_device *dev);
+>   void acpi_device_remove_files(struct acpi_device *dev);
+>   void acpi_device_add_finalize(struct acpi_device *device);
+>   void acpi_free_pnp_ids(struct acpi_device_pnp *pnp);
+> -bool acpi_device_is_present(const struct acpi_device *adev);
+>   bool acpi_device_is_battery(struct acpi_device *adev);
+>   bool acpi_device_is_first_physical_node(struct acpi_device *adev,
+>   					const struct device *dev);
+> @@ -119,6 +120,7 @@ int acpi_bus_register_early_device(int type);
+>   const struct acpi_device *acpi_companion_match(const struct device *dev);
+>   int __acpi_device_uevent_modalias(const struct acpi_device *adev,
+>   				  struct kobj_uevent_env *env);
+> +bool acpi_device_is_processor(const struct acpi_device *adev);
+>   
+>   /* --------------------------------------------------------------------------
+>                                     Power Resource
+> diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
+> index 6979a3f9f90a..14d6948fd88a 100644
+> --- a/drivers/acpi/property.c
+> +++ b/drivers/acpi/property.c
+> @@ -1420,7 +1420,7 @@ static bool acpi_fwnode_device_is_available(const struct fwnode_handle *fwnode)
+>   	if (!is_acpi_device_node(fwnode))
+>   		return false;
+>   
+> -	return acpi_device_is_present(to_acpi_device_node(fwnode));
+> +	return acpi_dev_ready_for_enumeration(to_acpi_device_node(fwnode));
+>   }
+>   
+>   static const void *
+> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
+> index 02bb2cce423f..f94d1f744bcc 100644
+> --- a/drivers/acpi/scan.c
+> +++ b/drivers/acpi/scan.c
+> @@ -304,7 +304,7 @@ static int acpi_scan_device_check(struct acpi_device *adev)
+>   	int error;
+>   
+>   	acpi_bus_get_status(adev);
+> -	if (acpi_device_is_present(adev)) {
+> +	if (acpi_dev_ready_for_enumeration(adev)) {
+>   		/*
+>   		 * This function is only called for device objects for which
+>   		 * matching scan handlers exist.  The only situation in which
+> @@ -338,7 +338,7 @@ static int acpi_scan_bus_check(struct acpi_device *adev, void *not_used)
+>   	int error;
+>   
+>   	acpi_bus_get_status(adev);
+> -	if (!acpi_device_is_present(adev)) {
+> +	if (!acpi_dev_ready_for_enumeration(adev)) {
+>   		acpi_scan_device_not_enumerated(adev);
+>   		return 0;
+>   	}
+> @@ -1913,11 +1913,6 @@ static bool acpi_device_should_be_hidden(acpi_handle handle)
+>   	return true;
+>   }
+>   
+> -bool acpi_device_is_present(const struct acpi_device *adev)
+> -{
+> -	return adev->status.present || adev->status.functional;
+> -}
+> -
+>   static bool acpi_scan_handler_matching(struct acpi_scan_handler *handler,
+>   				       const char *idstr,
+>   				       const struct acpi_device_id **matchid)
+> @@ -1938,6 +1933,18 @@ static bool acpi_scan_handler_matching(struct acpi_scan_handler *handler,
+>   	return false;
+>   }
+>   
+> +bool acpi_scan_check_handler(const struct acpi_device *adev,
+> +			     struct acpi_scan_handler *handler)
 > +{
-> +       int ret;
-> +       unsigned int v;
+> +	struct acpi_hardware_id *hwid;
 > +
-> +       if (!power->axp_data->input_curr_lim_table)
-> +               return -EINVAL;
+> +	list_for_each_entry(hwid, &adev->pnp.ids, list)
+> +		if (acpi_scan_handler_matching(handler, hwid->id, NULL))
+> +			return true;
 > +
-> +       ret =3D regmap_field_read(power->input_curr_lim_fld, &v);
-> +       if (ret)
-> +               return ret;
-> +
-> +       if (v < power->axp_data->input_curr_lim_table_size)
-> +               *intval =3D power->axp_data->input_curr_lim_table[v];
-> +       else
-> +               *intval =3D power->axp_data->input_curr_lim_table[
-> +                         power->axp_data->input_curr_lim_table_size - 1]=
-;
-> +
-> +       return 0;
+> +	return false;
 > +}
 > +
->  static int axp20x_usb_power_get_property(struct power_supply *psy,
->         enum power_supply_property psp, union power_supply_propval *val)
->  {
-> @@ -189,6 +263,9 @@ static int axp20x_usb_power_get_property(struct power=
-_supply *psy,
->
->                 val->intval =3D ret * 375; /* 1 step =3D 0.375 mA */
->                 return 0;
-> +       case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-> +               return axp20x_usb_power_get_input_current_limit(power,
-> +                                                               &val->int=
-val);
->         default:
->                 break;
->         }
-> @@ -290,6 +367,10 @@ static int axp20x_usb_power_set_property(struct powe=
-r_supply *psy,
->         case POWER_SUPPLY_PROP_CURRENT_MAX:
->                 return axp20x_usb_power_set_current_max(power, val->intva=
-l);
->
-> +       case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-> +               return axp20x_usb_power_set_input_current_limit(power,
-> +                                                               val->intv=
-al);
+>   static struct acpi_scan_handler *acpi_scan_match_handler(const char *idstr,
+>   					const struct acpi_device_id **matchid)
+>   {
+> @@ -2381,16 +2388,38 @@ EXPORT_SYMBOL_GPL(acpi_dev_clear_dependencies);
+>    * acpi_dev_ready_for_enumeration - Check if the ACPI device is ready for enumeration
+>    * @device: Pointer to the &struct acpi_device to check
+>    *
+> - * Check if the device is present and has no unmet dependencies.
+> + * Check if the device is functional or enabled and has no unmet dependencies.
+>    *
+> - * Return true if the device is ready for enumeratino. Otherwise, return false.
+> + * Return true if the device is ready for enumeration. Otherwise, return false.
+>    */
+>   bool acpi_dev_ready_for_enumeration(const struct acpi_device *device)
+>   {
+>   	if (device->flags.honor_deps && device->dep_unmet)
+>   		return false;
+>   
+> -	return acpi_device_is_present(device);
+> +	/*
+> +	 * ACPI 6.5's 6.3.7 "_STA (Device Status)" allows firmware to return
+> +	 * (!present && functional) for certain types of devices that should be
+> +	 * enumerated. Note that the enabled bit should not be set unless the
+> +	 * present bit is set.
+> +	 *
+> +	 * However, limit this only to processor devices to reduce possible
+> +	 * regressions with firmware.
+> +	 */
+> +	if (device->status.functional)
+> +		return true;
 > +
->         default:
->                 return -EINVAL;
->         }
-> @@ -313,7 +394,8 @@ static int axp20x_usb_power_prop_writeable(struct pow=
-er_supply *psy,
->                 return power->vbus_disable_bit !=3D NULL;
->
->         return psp =3D=3D POWER_SUPPLY_PROP_VOLTAGE_MIN ||
-> -              psp =3D=3D POWER_SUPPLY_PROP_CURRENT_MAX;
-> +              psp =3D=3D POWER_SUPPLY_PROP_CURRENT_MAX ||
-> +              psp =3D=3D POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT;
->  }
->
->  static enum power_supply_property axp20x_usb_power_properties[] =3D {
-> @@ -334,6 +416,15 @@ static enum power_supply_property axp22x_usb_power_p=
-roperties[] =3D {
->         POWER_SUPPLY_PROP_CURRENT_MAX,
->  };
->
-> +static enum power_supply_property axp813_usb_power_properties[] =3D {
-> +       POWER_SUPPLY_PROP_HEALTH,
-> +       POWER_SUPPLY_PROP_PRESENT,
-> +       POWER_SUPPLY_PROP_ONLINE,
-> +       POWER_SUPPLY_PROP_VOLTAGE_MIN,
-> +       POWER_SUPPLY_PROP_CURRENT_MAX,
-> +       POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
-> +};
+> +	if (!device->status.present)
+> +		return false;
 > +
->  static const struct power_supply_desc axp20x_usb_power_desc =3D {
->         .name =3D "axp20x-usb",
->         .type =3D POWER_SUPPLY_TYPE_USB,
-> @@ -354,6 +445,16 @@ static const struct power_supply_desc axp22x_usb_pow=
-er_desc =3D {
->         .set_property =3D axp20x_usb_power_set_property,
->  };
->
-> +static const struct power_supply_desc axp813_usb_power_desc =3D {
-> +       .name =3D "axp20x-usb",
-> +       .type =3D POWER_SUPPLY_TYPE_USB,
-> +       .properties =3D axp813_usb_power_properties,
-> +       .num_properties =3D ARRAY_SIZE(axp813_usb_power_properties),
-> +       .property_is_writeable =3D axp20x_usb_power_prop_writeable,
-> +       .get_property =3D axp20x_usb_power_get_property,
-> +       .set_property =3D axp20x_usb_power_set_property,
-> +};
+> +	/*
+> +	 * Fast path - if enabled is set, avoid the more expensive test to
+> +	 * check whether this device is a processor.
+> +	 */
+> +	if (device->status.enabled)
+> +		return true;
 > +
->  static const char * const axp20x_irq_names[] =3D {
->         "VBUS_PLUGIN",
->         "VBUS_REMOVAL",
-> @@ -394,6 +495,18 @@ static int axp813_usb_curr_lim_table[] =3D {
->         2500000,
->  };
->
-> +static int axp_813_usb_input_curr_lim_table[] =3D {
-> +       100000,
-> +       500000,
-> +       900000,
-> +       1500000,
-> +       2000000,
-> +       2500000,
-> +       3000000,
-> +       3500000,
-> +       4000000,
-> +};
-> +
->  static const struct axp_data axp192_data =3D {
->         .power_desc     =3D &axp20x_usb_power_desc,
->         .irq_names      =3D axp20x_irq_names,
-> @@ -433,11 +546,14 @@ static const struct axp_data axp223_data =3D {
->  };
->
->  static const struct axp_data axp813_data =3D {
-> -       .power_desc     =3D &axp22x_usb_power_desc,
-> +       .power_desc     =3D &axp813_usb_power_desc,
->         .irq_names      =3D axp22x_irq_names,
->         .num_irq_names  =3D ARRAY_SIZE(axp22x_irq_names),
->         .curr_lim_table =3D axp813_usb_curr_lim_table,
->         .curr_lim_fld   =3D REG_FIELD(AXP20X_VBUS_IPSOUT_MGMT, 0, 1),
-> +       .input_curr_lim_table_size =3D ARRAY_SIZE(axp_813_usb_input_curr_=
-lim_table),
-> +       .input_curr_lim_table =3D axp_813_usb_input_curr_lim_table,
-> +       .input_curr_lim_fld =3D REG_FIELD(AXP22X_CHRG_CTRL3, 4, 7),
->         .usb_bc_en_bit  =3D REG_FIELD(AXP288_BC_GLOBAL, 0, 0),
->         .vbus_disable_bit =3D REG_FIELD(AXP20X_VBUS_IPSOUT_MGMT, 7, 7),
->         .vbus_needs_polling =3D true,
-> @@ -558,6 +674,7 @@ static int axp20x_usb_power_probe(struct platform_dev=
-ice *pdev)
->
->         platform_set_drvdata(pdev, power);
->
-> +       power->dev =3D &pdev->dev;
->         power->axp_data =3D axp_data;
->         power->regmap =3D axp20x->regmap;
->         power->num_irqs =3D axp_data->num_irq_names;
-> @@ -567,6 +684,12 @@ static int axp20x_usb_power_probe(struct platform_de=
-vice *pdev)
->         if (IS_ERR(power->curr_lim_fld))
->                 return PTR_ERR(power->curr_lim_fld);
->
-> +       ret =3D axp20x_regmap_field_alloc_optional(&pdev->dev, power->reg=
-map,
-> +                                                axp_data->input_curr_lim=
-_fld,
-> +                                                &power->input_curr_lim_f=
-ld);
-> +       if (ret)
-> +               return ret;
-> +
->         ret =3D axp20x_regmap_field_alloc_optional(&pdev->dev, power->reg=
-map,
->                                                  axp_data->vbus_valid_bit=
-,
->                                                  &power->vbus_valid_bit);
-> --
-> 2.43.0
->
+
+It may be worthy to replace 'if enabled is set' with 'if the enabled bit is set',
+to be consistent with the terminologies used in the above comments.
+
+Apart from it, the patch itself looks good to me.
+
+> +	return !acpi_device_is_processor(device);
+>   }
+>   EXPORT_SYMBOL_GPL(acpi_dev_ready_for_enumeration);
+>   
+
+Thanks,
+Gavin
+
 
