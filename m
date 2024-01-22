@@ -1,130 +1,149 @@
-Return-Path: <linux-pm+bounces-2507-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2513-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5660E8370C2
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 19:50:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50E7E83748B
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 21:50:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0490C1F2A2B6
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 18:50:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C7091C272E7
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 20:50:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9174044381;
-	Mon, 22 Jan 2024 18:17:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7362147A53;
+	Mon, 22 Jan 2024 20:50:53 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-m17207.xmail.ntesmail.com (mail-m17207.xmail.ntesmail.com [45.195.17.207])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B80646430;
-	Mon, 22 Jan 2024 18:17:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16BED3D3A7;
+	Mon, 22 Jan 2024 20:50:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.195.17.207
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705947428; cv=none; b=UVJ8J22ZR7FfA8lRlkEg+LSMRucxHt7JyWO5gQQEMZB3BkuciZieRHozaVqEvpipVqhwDh44wVLK9WIVtD5zka0mzauMHX7PpukcX+UjGtQgyKK/67NbS45+WtfHYYwAAZigN/gYOltbenCeJn/PQ/4I7u3XYrpa69W/kTsEhpY=
+	t=1705956653; cv=none; b=gya9l4RRfZ00NaEavug8WjTpzCSa8hYYebPide7mqTWrOSxictC7EpTnzr6PxykK0IuWwfTaz8+9J/+vf4i5QJFTISm/6aOsE2RYp2rIlp03Wjz1AvhyHBUQBBSbOUi1ePr3xTBGUod1meZH7230uTTC1Twv08u+BerhPjkDLx8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705947428; c=relaxed/simple;
-	bh=jsvejlNfKaIARdUpmySnWtohSbLYvftZ4a6cH6XWWIc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cSttMiQlsK175nZBVIQ+u8t8W2MnmWrVQi4Ea+uheci4Zj4Om4xwJPSueC8pi652rIhMbWZtjlNj1AKM7JPEUEKCl5DQi+W/YmLT+FRiQKO/PrC5Rx8rQjGCcdU3T8T6C+VFwlaGAYq1V1aB3JULcGdyc7jRA1uOuMRwCZNVOCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3bc21303a35so742252b6e.0;
-        Mon, 22 Jan 2024 10:17:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705947426; x=1706552226;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bq9M9cm+CE6WAD/PzAq+M4FYMF5cDyj5a+NJZ7ioaVI=;
-        b=BskitE3jxieHuPGqQskc4grRohl6wUHaPsaaeujqrL7xasJL0gQfffAUFHUBI+1wfo
-         S5oApeTdYo9uiClOS4ecOZlos8C4qvhw+WAX9nb+6SiRMmGgpPCfJmu3LQG0EOuQCzRv
-         NkwdlFLghuFb8FxrwWHJxG/p97Ed1ImBqhODuvnos74pFLtXvhj5siMtgMnIGCxvFq9a
-         PeDh5/uC79ibWpfW+1VeLsLsb9AuWEQzxtVHuhqYmvGOfZOl/J6nojn31sQMTGI7ol1C
-         Sdy9F9zePYvOPHP64PsYwmyVStQr+nfJq0eU34R+2gypBMRV2itCwb6s+Od+KrYcJ5kv
-         vUaQ==
-X-Gm-Message-State: AOJu0YyeqZW034nTqR+uWQJZ66diqKeYOkRlNsQFfNDkPK70X1djlqXy
-	Ln24s8IUxzxGZfffbWnfATobKR3yROLqE5fPB5K9dyDxf4Pbu1hXetnT5t0JvDTODZfAKGFnGkK
-	YDDEs15oxi68VRHp/7kyAYbChdWQ=
-X-Google-Smtp-Source: AGHT+IG7X57s+1Hb3UmgWa4B2VhnsQsEmm2qhDCXpsDoekvAtRW8AijnCpEwtrAHQizHxz0U/8KF3rieJlIr+BPH7Us=
-X-Received: by 2002:a05:6808:308f:b0:3bd:a741:a048 with SMTP id
- bl15-20020a056808308f00b003bda741a048mr9775473oib.1.1705947426060; Mon, 22
- Jan 2024 10:17:06 -0800 (PST)
+	s=arc-20240116; t=1705956653; c=relaxed/simple;
+	bh=iKziXW5nSbJLL99tAPoPAh//iFGA+h98wNVjisnajQ8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Dl9GIyy5hiovh0IHBjuJx2JB8BpCj/ahoLGtbq/2qrifQKQUKHHTFN2Fh5xw+AF/iNp3ohHPkepf5wgIjGn9RL6NDR66eoiLeemgxkgQ7Sv9h0ZntLSKV8HGshxsZU76Hlm0IJgp0dE75CDGCgE8QxSXGuAwDDMn2RIkF4mTUtk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=link.tyut.edu.cn; spf=pass smtp.mailfrom=link.tyut.edu.cn; arc=none smtp.client-ip=45.195.17.207
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=link.tyut.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=link.tyut.edu.cn
+Received: from [192.168.2.76] (unknown [113.251.4.85])
+	by mail-m121145.qiye.163.com (Hmail) with ESMTPA id 3AD9F80010E;
+	Tue, 23 Jan 2024 01:11:59 +0800 (CST)
+Message-ID: <b8823223-e735-4d5a-b90e-6e2f2a6cd104@link.tyut.edu.cn>
+Date: Tue, 23 Jan 2024 01:11:58 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240122114121.56752-2-sakari.ailus@linux.intel.com> <20240122181205.GA275751@bhelgaas>
-In-Reply-To: <20240122181205.GA275751@bhelgaas>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 22 Jan 2024 19:16:54 +0100
-Message-ID: <CAJZ5v0gUpo6Shz2kQzie4XE23=fiPvD0=2yhjGptw8QbCq2SAg@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] pm: runtime: Simplify pm_runtime_get_if_active() usage
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: Sakari Ailus <sakari.ailus@linux.intel.com>, linux-pm@vger.kernel.org, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, linux-pci@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, Jaroslav Kysela <perex@perex.cz>, 
-	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>, laurent.pinchart@ideasonboard.com, 
-	David Airlie <airlied@gmail.com>, Paul Elder <paul.elder@ideasonboard.com>, 
-	linux-media@vger.kernel.org, 
-	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
-	intel-gfx@lists.freedesktop.org, Lucas De Marchi <lucas.demarchi@intel.com>, 
-	Mark Brown <broonie@kernel.org>, Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, intel-xe@lists.freedesktop.org, 
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>, Alex Elder <elder@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-sound@vger.kernel.org, 
-	Takashi Iwai <tiwai@suse.com>, Daniel Vetter <daniel@ffwll.ch>, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] Documentation: power: Use kcalloc() instead of
+ kzalloc()
+Content-Language: en-US
+To: Erick Archer <erick.archer@gmx.com>, Viresh Kumar <vireshk@kernel.org>,
+ Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
+ Pavel Machek <pavel@ucw.cz>, Alex Shi <alexs@kernel.org>,
+ Yanteng Si <siyanteng@loongson.cn>, Jonathan Corbet <corbet@lwn.net>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20240121104344.5001-1-erick.archer@gmx.com>
+From: Hu Haowen <2023002089@link.tyut.edu.cn>
+In-Reply-To: <20240121104344.5001-1-erick.archer@gmx.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZS0pPVkhOTBkeTEoYGh5CSlUTARMWGhIXJBQOD1
+	lXWRgSC1lBWUpKSFVJTkpVT1VDTllXWRYaDxIVHRRZQVlPS0hVSkpLSEpDVUpLS1VLWQY+
+X-HM-Tid: 0a8d32285244b03akuuu3ad9f80010e
+X-HM-MType: 10
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6N0k6Eww*EDwZPg4yAU4JUS0R
+	Tg8KCzFVSlVKTEtOQk9ITklLSENLVTMWGhIXVUlLSUhLS0lLQ0I7FxIVEFUPAg4PVR4fDlUYFUVZ
+	V1kSC1lBWUpKSFVJTkpVT1VDTllXWQgBWUFPQkhINwY+
 
-On Mon, Jan 22, 2024 at 7:12=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org> =
-wrote:
->
-> On Mon, Jan 22, 2024 at 01:41:21PM +0200, Sakari Ailus wrote:
-> > There are two ways to opportunistically increment a device's runtime PM
-> > usage count, calling either pm_runtime_get_if_active() or
-> > pm_runtime_get_if_in_use(). The former has an argument to tell whether =
-to
-> > ignore the usage count or not, and the latter simply calls the former w=
-ith
-> > ign_usage_count set to false. The other users that want to ignore the
-> > usage_count will have to explitly set that argument to true which is a =
-bit
-> > cumbersome.
->
-> s/explitly/explicitly/
->
-> > To make this function more practical to use, remove the ign_usage_count
-> > argument from the function. The main implementation is renamed as
-> > pm_runtime_get_conditional().
-> >
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > Reviewed-by: Alex Elder <elder@linaro.org> # drivers/net/ipa/ipa_smp2p.=
-c
-> > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > Acked-by: Takashi Iwai <tiwai@suse.de> # sound/
-> > Reviewed-by: Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com> # dr=
-ivers/accel/ivpu/
-> > Acked-by: Rodrigo Vivi <rodrigo.vivi@intel.com> # drivers/gpu/drm/i915/
-> > Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
->
-> Acked-by: Bjorn Helgaas <bhelgaas@google.com> # drivers/pci/
->
-> > -EXPORT_SYMBOL_GPL(pm_runtime_get_if_active);
-> > +EXPORT_SYMBOL_GPL(pm_runtime_get_conditional);
->
-> If pm_runtime_get_conditional() is exported, shouldn't it also be
-> documented in Documentation/power/runtime_pm.rst?
->
-> But I'm dubious about exporting it because
-> __intel_runtime_pm_get_if_active() is the only caller, and you end up
-> with the same pattern there that we have before this series in the PM
-> core.  Why can't intel_runtime_pm.c be updated to use
-> pm_runtime_get_if_active() or pm_runtime_get_if_in_use() directly, and
-> make pm_runtime_get_conditional() static?
 
-Sounds like a good suggestion to me.
+在 2024/1/21 18:43, Erick Archer 写道:
+> As noted in the "Deprecated Interfaces, Language Features, Attributes,
+> and Conventions" documentation [1], size calculations (especially
+> multiplication) should not be performed in memory allocator (or similar)
+> function arguments due to the risk of them overflowing. This could lead
+> to values wrapping around and a smaller allocation being made than the
+> caller was expecting. Using those allocations could lead to linear
+> overflows of heap memory and other misbehaviors.
+>
+> So, in the example code use the purpose specific kcalloc() function
+> instead of the argument size * count in the kzalloc() function.
+>
+> At the same time, modify the translations accordingly.
+>
+> Link: https://www.kernel.org/doc/html/next/process/deprecated.html#open-coded-arithmetic-in-allocator-arguments [1]
+> Link: https://github.com/KSPP/linux/issues/162
+> Signed-off-by: Erick Archer <erick.archer@gmx.com>
+> ---
+> Hi,
+>
+> This patch is a merger of two previous ones [1] [2].
+> As Hu Haowen and Jonathan Corbet suggested, the translation change
+> only makes sense if the original file is modified. So, with this
+> v2 version the original file and the translations are modified at
+> the same time.
+>
+> [1] https://lore.kernel.org/linux-hardening/20240120120527.3866-1-erick.archer@gmx.com/
+> [2] https://lore.kernel.org/linux-hardening/20240120122204.4287-1-erick.archer@gmx.com/
+>
+> Thanks,
+> Erick
+> ---
+>   Documentation/power/opp.rst                    | 2 +-
+>   Documentation/translations/zh_CN/power/opp.rst | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/Documentation/power/opp.rst b/Documentation/power/opp.rst
+> index a7c03c470980..1b7f1d854f14 100644
+> --- a/Documentation/power/opp.rst
+> +++ b/Documentation/power/opp.rst
+> @@ -305,7 +305,7 @@ dev_pm_opp_get_opp_count
+>   	 {
+>   		/* Do things */
+>   		num_available = dev_pm_opp_get_opp_count(dev);
+> -		speeds = kzalloc(sizeof(u32) * num_available, GFP_KERNEL);
+> +		speeds = kcalloc(num_available, sizeof(u32), GFP_KERNEL);
+>   		/* populate the table in increasing order */
+>   		freq = 0;
+>   		while (!IS_ERR(opp = dev_pm_opp_find_freq_ceil(dev, &freq))) {
+> diff --git a/Documentation/translations/zh_CN/power/opp.rst b/Documentation/translations/zh_CN/power/opp.rst
+> index 8d6e3f6f6202..7470fa2d4c43 100644
+> --- a/Documentation/translations/zh_CN/power/opp.rst
+> +++ b/Documentation/translations/zh_CN/power/opp.rst
+> @@ -274,7 +274,7 @@ dev_pm_opp_get_opp_count
+>   	 {
+>   		/* 做一些事情 */
+>   		num_available = dev_pm_opp_get_opp_count(dev);
+> -		speeds = kzalloc(sizeof(u32) * num_available, GFP_KERNEL);
+> +		speeds = kcalloc(num_available, sizeof(u32), GFP_KERNEL);
+
+
+For the zh_CN translation,
+
+Reviewed-by: Hu Haowen <2023002089@link.tyut.edu.cn>
+
+
+Thanks,
+
+Hu Haowen
+
+
+>   		/* 按升序填充表 */
+>   		freq = 0;
+>   		while (!IS_ERR(opp = dev_pm_opp_find_freq_ceil(dev, &freq))) {
+> --
+> 2.25.1
+>
+>
+>
 
