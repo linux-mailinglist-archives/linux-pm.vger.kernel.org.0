@@ -1,125 +1,242 @@
-Return-Path: <linux-pm+bounces-2510-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2511-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1B378372D5
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 20:43:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FDC683736E
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 21:02:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99268B23516
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 19:37:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A770BB21502
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 20:02:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06FCC3EA97;
-	Mon, 22 Jan 2024 19:37:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13E3A405D5;
+	Mon, 22 Jan 2024 20:02:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="elCw2513"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9791E1EF07;
-	Mon, 22 Jan 2024 19:37:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BFF13B790
+	for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 20:02:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705952246; cv=none; b=Q+aLq2dng5m4yxEARRlbGPkhq+mPH5UNMM+H+6Ku4yD1jEZJvCZ+8YwpRmPo57yqKmn5E1WlEtX+dZLY9ahEZ2sohjRkzDphY/Z2DunMA0phQpgmjpE/GqeXW0q85zU5eWETIhoddj9NQkXMleAvmq/954qD82U2huxCW9tQAIY=
+	t=1705953743; cv=none; b=mrQ08/lbha273RVxqvOaml2JVRKgmKd4/cCe82vRS5RWSOC9GyUGLEDbPCo3QVgnIaU3vN/SYXicBTdce44pIuJbhDR1uiVZ2qPDkEndOrKomAm/GSELmfT8smSYR8x6qKk6C/IhjCHnceRfu0pgMuv17fdp54JcERzIsVrR22Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705952246; c=relaxed/simple;
-	bh=RoIkcs5ey0VmVT8DRVQBY+Ice/V2Jk6D5ruHVfHqb6I=;
+	s=arc-20240116; t=1705953743; c=relaxed/simple;
+	bh=VdkhAorzBPaH/4Q+W05lpm+qjGuxdMhhs5V7dPnuTyo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sUG9ZSZykP0Fa36paAJxEOp75We4mw+qZwJz3nyNgZysJfAf8oEZz0Vuwrl9dPDeZBlvQqEzwmwzD0LfsAfqx2ia/3QY3US6w5YGPTN+89Nv5ithFs4KRousWHHnNunwgAYXlVvhx1ov8QdENLoM6NP9rRL7ZyPX9LoCAOF9MDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-5958d3f2d8aso225975eaf.1;
-        Mon, 22 Jan 2024 11:37:25 -0800 (PST)
+	 To:Cc:Content-Type; b=f2jqwSqtA1oL8xzoeSXVAKZ8yWXmrPXjZ1vmY99V+jaZONljWl+gVeMoatg/km+LgmWvvseiMGuIBABBVy7HBpErbIXkjsmp/aRGfuIr+x70x9/5BIEAQUWjkIczMozPWXrWWbBym7dmmdevigsaOrIYUHq5UaELuweGtQWry/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=elCw2513; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-339261a6ec2so2103664f8f.0
+        for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 12:02:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1705953739; x=1706558539; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=S9XdGfwCaFqRS40nSS7oXOASpHTiWciWWg6+rB3mocA=;
+        b=elCw25134BVwV6RfN8JXNOtKbmsUpYd9YOysB48fI+PXuloobbPgxSM/0B2C2aKpt9
+         4LMN2D99w+NSPQ15mVlRQ4L+M1mz8FbFLmBELaBXgsUXnGmb+OQmrKB1tx1fhtUmu8/n
+         6awumyw2WUuhsfW3OfTP+ZMEo//RzIwRiDw/lXxecpMsxNjrdUc0r22ZcOz4BVcWs4lf
+         ALrgNZ9b7qbzZjOWA3zOM0kYjLKHNEu7Q6t7pTM+3gBkseXgdhetnRmgtdGdseVZF+C1
+         K2YvF3du/hSW/FHbyaorOFTUcfnkbcjHV2zAkvC5QpYX2jjO6hAUb7ip5v3jc2jdYevt
+         94BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705952244; x=1706557044;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nesK9y4qWZhrNCSiCMAkJgfEGumzzvprEvfcz7ekwg4=;
-        b=pFkB8C6kfiJ+Dkx0yQHLZ6JdwXEsXOb/OJiJSOY2tknnvnaDXFZBqWi+Z4TEuWUCjQ
-         jHJAfW0C+qEdbCfY/2jiNTXKld0czbD7zpJ/sfvSXdYu76FjLkrT8OwY6oKpoLf1Xa5N
-         KaE75jNGvPiYozIJUSlxxBptOdAzT+hJcTOGuBwqXxokIsGNhKI9APVPyYsehwHZi6BK
-         AOclO3QYnGpXhz4q17Mp8WxdvbUPeHvDUuwhePjwnhPPN8BN2gM8iXY8uLEyxycC5GuP
-         toCL3CKrdeI0FPR1fManrajl3KPXG5F5T24e6dVkh5zxg0K+coe5T9IucSIvk3hHfh8G
-         pkJg==
-X-Gm-Message-State: AOJu0YzIo8JZU82fXKkWJyR0Iwjnu82GtZ7CN7CoWOv6M+h/1QQWiq+Q
-	0PFcAynTXlh57ZlsusOwJsLU6CrydzjW97+uKhfw34Nac7MYq1GLheCloTJpE3qLh46yzwv7kYK
-	QeHVK6y8bsoA/FtZkTySLUHMmf9A=
-X-Google-Smtp-Source: AGHT+IH0fdGswoQ6uEC4cc+D2uB7ejqea2Nnj7UmJc5iLidGGpOGUvopdRgTpzEh6BeeFThhHzHcXlUkMCieOABJ27k=
-X-Received: by 2002:a4a:d744:0:b0:598:e709:7620 with SMTP id
- h4-20020a4ad744000000b00598e7097620mr7318381oot.1.1705952244669; Mon, 22 Jan
- 2024 11:37:24 -0800 (PST)
+        d=1e100.net; s=20230601; t=1705953739; x=1706558539;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S9XdGfwCaFqRS40nSS7oXOASpHTiWciWWg6+rB3mocA=;
+        b=PsDptAcckj+/qYNjHycXQcgZdTRa54Df/bSGBuxTUY5TSICU5on0XsC6OvHNJLXugh
+         quExmddMBouggyr+xInIZM92hpAiMG3Wj+qDN3CP7b+a0kXlBEBpCEit5uiTUJ0vU68s
+         xcOu29UAj4dO9qqSwNM8sD7cuQ7I7LFNwEKyNmRHep+oGSo75iT5OROvyvUChvmn+FbW
+         DgOMq71ddoVurVBBaaltilcK9Yr5KECer/87wkrtVxzH7UozhmP+0w2xwUST7Zq6FVME
+         85fV9C4i3a+SAk92kIltn6llxjnfTZdKmC1U14g0cTZOXXaUp0Fg+GrDHZVkqFvAC2Pl
+         NLdA==
+X-Gm-Message-State: AOJu0Ywu6eTdV9z/pjHGhkWdPvp8z9xKPPrpsaqFnY6EWKScwx3/Rp4K
+	tVsIGgxm1GForLxjSzEbDeCM1KE3IEFYuS57CjKK0QVcCM16FRPhN1C6ExIHyz6oAu+hSPeWkjY
+	SOoqmWZ16Y4VP4pLXUTuHPXjSTgR7k6qkrwPgRg==
+X-Google-Smtp-Source: AGHT+IEP0LsFZ1DHoUGKiydzMLgHty4VJtBb5guXu8UbilwyiD38/IJiB6McSbbUFrxTg/eiRG2KWw2gTlp8GlSr0/A=
+X-Received: by 2002:adf:e68b:0:b0:337:6e32:1811 with SMTP id
+ r11-20020adfe68b000000b003376e321811mr2954342wrm.75.1705953739678; Mon, 22
+ Jan 2024 12:02:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240119113319.54158-1-mario.limonciello@amd.com> <CAAE01kHEperoassBmLwM3pWhJmWpjRS2fcE8VPkLAgvz7yAuQA@mail.gmail.com>
-In-Reply-To: <CAAE01kHEperoassBmLwM3pWhJmWpjRS2fcE8VPkLAgvz7yAuQA@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 22 Jan 2024 20:37:13 +0100
-Message-ID: <CAJZ5v0jXvjaC5niHqSxQyc+QnEj=gf+vgKrjjhdFkTgQrPHb3Q@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq/amd-pstate: Fix setting scaling max/min freq values
-To: Wyes Karny <wkarny@gmail.com>, Mario Limonciello <mario.limonciello@amd.com>
-Cc: ray.huang@amd.com, rafael@kernel.org, viresh.kumar@linaro.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.org
+References: <20240105160103.183092-1-ulf.hansson@linaro.org>
+ <20240105160103.183092-4-ulf.hansson@linaro.org> <87801f3e-b7ce-46ba-9856-1321635a11b5@nxp.com>
+In-Reply-To: <87801f3e-b7ce-46ba-9856-1321635a11b5@nxp.com>
+From: Mathieu Poirier <mathieu.poirier@linaro.org>
+Date: Mon, 22 Jan 2024 13:02:08 -0700
+Message-ID: <CANLsYkwtNa_-t0f5rhTh5mtF72urKNyqWk0_qfbBwSCQK_6eOg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] remoteproc: imx_rproc: Convert to dev_pm_domain_attach|detach_list()
+To: Iuliana Prodan <iuliana.prodan@nxp.com>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, "Rafael J . Wysocki" <rafael@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	linux-pm@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>, 
+	Kevin Hilman <khilman@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Nikunj Kela <nkela@quicinc.com>, 
+	Prasad Sodagudi <psodagud@quicinc.com>, Stephan Gerhold <stephan@gerhold.net>, 
+	Ben Horgan <Ben.Horgan@arm.com>, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-remoteproc@vger.kernel.org, 
+	linux-media@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Daniel Baluta <daniel.baluta@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 22, 2024 at 3:57=E2=80=AFPM Wyes Karny <wkarny@gmail.com> wrote=
-:
+On Mon, 22 Jan 2024 at 10:51, Iuliana Prodan <iuliana.prodan@nxp.com> wrote:
 >
-> On Sat, Jan 20, 2024 at 5:49=E2=80=AFAM Mario Limonciello
-> <mario.limonciello@amd.com> wrote:
+> On 1/5/2024 6:01 PM, Ulf Hansson wrote:
+> > Let's avoid the boilerplate code to manage the multiple PM domain case, by
+> > converting into using dev_pm_domain_attach|detach_list().
 > >
-> > Scaling min/max freq values were being cached and lagging a setting
-> > each time.  Fix the ordering of the clamp call to ensure they work.
+> > Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> > Cc: Bjorn Andersson <andersson@kernel.org>
+> > Cc: Shawn Guo <shawnguo@kernel.org>
+> > Cc: Sascha Hauer <s.hauer@pengutronix.de>
+> > Cc: Iuliana Prodan <iuliana.prodan@nxp.com>
+> > Cc: Daniel Baluta <daniel.baluta@nxp.com>
+> > Cc: <linux-remoteproc@vger.kernel.org>
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > ---
 > >
-> > Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D217931
-> > Cc: stable@vger.kernel.org
-> > Cc: wkarny@gmail.com
-> > Fixes: febab20caeba ("cpufreq/amd-pstate: Fix scaling_min_freq and scal=
-ing_max_freq update")
-> > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> > Changes in v2:
+> >       - None.
+> >
+> > Iuliana/Daniel I am ccing you to request help with test/review of this change.
+> > Note that, you will need patch 1/5 in the series too, to be able to test this.
+> >
+> > Kind regards
+> > Ulf Hansson
 >
-> Reviewed-by: Wyes Karny <wkarny@gmail.com>
+> Tested-by: Iuliana Prodan <iuliana.prodan@nxp.com>
+> Reviewed-by: Iuliana Prodan <iuliana.prodan@nxp.com>
+>
+
+Thanks for the leg-work on this.  I'll pick this up in rc1 later this week.
+
+> Iulia
 >
 > > ---
-> >  drivers/cpufreq/amd-pstate.c | 7 +++----
-> >  1 file changed, 3 insertions(+), 4 deletions(-)
+> >   drivers/remoteproc/imx_rproc.c | 73 +++++-----------------------------
+> >   1 file changed, 9 insertions(+), 64 deletions(-)
 > >
-> > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.=
-c
-> > index 1f6186475715..1791d37fbc53 100644
-> > --- a/drivers/cpufreq/amd-pstate.c
-> > +++ b/drivers/cpufreq/amd-pstate.c
-> > @@ -1232,14 +1232,13 @@ static void amd_pstate_epp_update_limit(struct =
-cpufreq_policy *policy)
-> >         max_limit_perf =3D div_u64(policy->max * cpudata->highest_perf,=
- cpudata->max_freq);
-> >         min_limit_perf =3D div_u64(policy->min * cpudata->highest_perf,=
- cpudata->max_freq);
+> > diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
+> > index 8bb293b9f327..3161f14442bc 100644
+> > --- a/drivers/remoteproc/imx_rproc.c
+> > +++ b/drivers/remoteproc/imx_rproc.c
+> > @@ -92,7 +92,6 @@ struct imx_rproc_mem {
 > >
-> > +       WRITE_ONCE(cpudata->max_limit_perf, max_limit_perf);
-> > +       WRITE_ONCE(cpudata->min_limit_perf, min_limit_perf);
-> > +
-> >         max_perf =3D clamp_t(unsigned long, max_perf, cpudata->min_limi=
-t_perf,
-> >                         cpudata->max_limit_perf);
-> >         min_perf =3D clamp_t(unsigned long, min_perf, cpudata->min_limi=
-t_perf,
-> >                         cpudata->max_limit_perf);
+> >   static int imx_rproc_xtr_mbox_init(struct rproc *rproc);
+> >   static void imx_rproc_free_mbox(struct rproc *rproc);
+> > -static int imx_rproc_detach_pd(struct rproc *rproc);
+> >
+> >   struct imx_rproc {
+> >       struct device                   *dev;
+> > @@ -113,10 +112,8 @@ struct imx_rproc {
+> >       u32                             rproc_pt;       /* partition id */
+> >       u32                             rsrc_id;        /* resource id */
+> >       u32                             entry;          /* cpu start address */
+> > -     int                             num_pd;
+> >       u32                             core_index;
+> > -     struct device                   **pd_dev;
+> > -     struct device_link              **pd_dev_link;
+> > +     struct dev_pm_domain_list       *pd_list;
+> >   };
+> >
+> >   static const struct imx_rproc_att imx_rproc_att_imx93[] = {
+> > @@ -853,7 +850,7 @@ static void imx_rproc_put_scu(struct rproc *rproc)
+> >               return;
+> >
+> >       if (imx_sc_rm_is_resource_owned(priv->ipc_handle, priv->rsrc_id)) {
+> > -             imx_rproc_detach_pd(rproc);
+> > +             dev_pm_domain_detach_list(priv->pd_list);
+> >               return;
+> >       }
+> >
+> > @@ -880,72 +877,20 @@ static int imx_rproc_partition_notify(struct notifier_block *nb,
+> >   static int imx_rproc_attach_pd(struct imx_rproc *priv)
+> >   {
+> >       struct device *dev = priv->dev;
+> > -     int ret, i;
 > > -
-> > -       WRITE_ONCE(cpudata->max_limit_perf, max_limit_perf);
-> > -       WRITE_ONCE(cpudata->min_limit_perf, min_limit_perf);
+> > -     /*
+> > -      * If there is only one power-domain entry, the platform driver framework
+> > -      * will handle it, no need handle it in this driver.
+> > -      */
+> > -     priv->num_pd = of_count_phandle_with_args(dev->of_node, "power-domains",
+> > -                                               "#power-domain-cells");
+> > -     if (priv->num_pd <= 1)
+> > -             return 0;
 > > -
-> >         value =3D READ_ONCE(cpudata->cppc_req_cached);
+> > -     priv->pd_dev = devm_kmalloc_array(dev, priv->num_pd, sizeof(*priv->pd_dev), GFP_KERNEL);
+> > -     if (!priv->pd_dev)
+> > -             return -ENOMEM;
+> > -
+> > -     priv->pd_dev_link = devm_kmalloc_array(dev, priv->num_pd, sizeof(*priv->pd_dev_link),
+> > -                                            GFP_KERNEL);
+> > -
+> > -     if (!priv->pd_dev_link)
+> > -             return -ENOMEM;
+> > -
+> > -     for (i = 0; i < priv->num_pd; i++) {
+> > -             priv->pd_dev[i] = dev_pm_domain_attach_by_id(dev, i);
+> > -             if (IS_ERR(priv->pd_dev[i])) {
+> > -                     ret = PTR_ERR(priv->pd_dev[i]);
+> > -                     goto detach_pd;
+> > -             }
+> > -
+> > -             priv->pd_dev_link[i] = device_link_add(dev, priv->pd_dev[i], DL_FLAG_STATELESS |
+> > -                                                    DL_FLAG_PM_RUNTIME | DL_FLAG_RPM_ACTIVE);
+> > -             if (!priv->pd_dev_link[i]) {
+> > -                     dev_pm_domain_detach(priv->pd_dev[i], false);
+> > -                     ret = -EINVAL;
+> > -                     goto detach_pd;
+> > -             }
+> > -     }
+> > -
+> > -     return 0;
+> > -
+> > -detach_pd:
+> > -     while (--i >= 0) {
+> > -             device_link_del(priv->pd_dev_link[i]);
+> > -             dev_pm_domain_detach(priv->pd_dev[i], false);
+> > -     }
+> > -
+> > -     return ret;
+> > -}
+> > -
+> > -static int imx_rproc_detach_pd(struct rproc *rproc)
+> > -{
+> > -     struct imx_rproc *priv = rproc->priv;
+> > -     int i;
+> > +     int ret;
+> > +     struct dev_pm_domain_attach_data pd_data = {
+> > +             .pd_flags = PD_FLAG_DEV_LINK_ON,
+> > +     };
 > >
-> >         if (cpudata->policy =3D=3D CPUFREQ_POLICY_PERFORMANCE)
-> > --
-
-Applied as 6.8-rc material, thanks!
+> >       /*
+> >        * If there is only one power-domain entry, the platform driver framework
+> >        * will handle it, no need handle it in this driver.
+> >        */
+> > -     if (priv->num_pd <= 1)
+> > +     if (dev->pm_domain)
+> >               return 0;
+> >
+> > -     for (i = 0; i < priv->num_pd; i++) {
+> > -             device_link_del(priv->pd_dev_link[i]);
+> > -             dev_pm_domain_detach(priv->pd_dev[i], false);
+> > -     }
+> > -
+> > -     return 0;
+> > +     ret = dev_pm_domain_attach_list(dev, &pd_data, &priv->pd_list);
+> > +     return ret < 0 ? ret : 0;
+> >   }
+> >
+> >   static int imx_rproc_detect_mode(struct imx_rproc *priv)
 
