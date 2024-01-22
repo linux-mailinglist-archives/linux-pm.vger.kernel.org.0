@@ -1,142 +1,126 @@
-Return-Path: <linux-pm+bounces-2495-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2496-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 925FC836CDD
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 18:19:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E47C8836CE5
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 18:20:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BB8528AEE8
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 17:19:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F8E31C26DC9
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 17:20:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA8824F1F9;
-	Mon, 22 Jan 2024 16:11:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 719543F8E1;
+	Mon, 22 Jan 2024 16:13:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=pobox.com header.i=@pobox.com header.b="BZr22Qnf";
+	dkim=pass (1024-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b="xEkHQKlL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from pb-smtp21.pobox.com (pb-smtp21.pobox.com [173.228.157.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BD043DBA9;
-	Mon, 22 Jan 2024 16:11:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEE014D590
+	for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 16:13:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.228.157.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705939891; cv=none; b=iRzQLbyU5Y6G3fwP+bl3lNtBrmGkrt+UC58dECUt9Z92D8O9udoYVhvWwAK2I4siiF781ovVcAHzdEcGpkNmbyvWrF6P0l2SXPJMjDWM1BV/RkCTi9stSBXZXJwfZ4cVRvRmxGhpsHs/SHvvRAakPM/0H+eME9xkOxPR4fedbdg=
+	t=1705940019; cv=none; b=oQHdOclZxRmEElSqNRLsLBw295Sp6qBaJTFjisECCSbL2ZUgxmfywPEwH4TZN47DB2FFKsTVgykoINCOXaEszT/XbejG3sFNpDDmsa4/l26IrbGSF8pBqXqhFKrJe/2HYmNgTrNtJlDtuFc4Uk80MTWB+2PtFVjQxED/lP+FpDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705939891; c=relaxed/simple;
-	bh=gd1xG0QVWf2kr1Slio5ktaMDy9hNa5uZog6KlhgzvOc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=S1RVcAnJmCa9DcxXqpXShRWzViexDStQjWoazCTRK88V6cX9epqMJmlijyjPEyjNjwIK34duxpghBRiurQRycx91Kgb4G1z3ZYjSY7PdKggiKQ1UVjbW/hWm7VnI+ywUporal6AqjXGU8oejWN4I0SMJAgyOw8kgK33Gub0NSrU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id 8cc4570eae3495fb; Mon, 22 Jan 2024 17:11:26 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	s=arc-20240116; t=1705940019; c=relaxed/simple;
+	bh=vVFbQAZQaCV1Nt2m+xFmWWvr4pQM73xG49Al6bRM/Qk=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=c4oNTYz2gQM9pVhYLlvKsIfHsqD9+FvYLoru/o1M36ogyTEAk03IDvAF3ONOP1oJucbD+C2Fiob70GN9hTCiJ6wFcC0i6VhKs+PMXVBPMm3p6qFHARm3J/pyiRKGsrAq4cI0VlO02wSndCR27zvr7b20einyjcXFjm2cZmzofkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fluxnic.net; spf=pass smtp.mailfrom=fluxnic.net; dkim=pass (1024-bit key) header.d=pobox.com header.i=@pobox.com header.b=BZr22Qnf; dkim=pass (1024-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b=xEkHQKlL; arc=none smtp.client-ip=173.228.157.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fluxnic.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fluxnic.net
+Received: from pb-smtp21.pobox.com (unknown [127.0.0.1])
+	by pb-smtp21.pobox.com (Postfix) with ESMTP id 39E79291B2;
+	Mon, 22 Jan 2024 11:13:37 -0500 (EST)
+	(envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=date:from
+	:to:cc:subject:in-reply-to:message-id:references:mime-version
+	:content-type; s=sasl; bh=vVFbQAZQaCV1Nt2m+xFmWWvr4pQM73xG49Al6b
+	RM/Qk=; b=BZr22QnfYPKhRKm8YZwP/qabCDa9tI51LKkb1ah1kdgxiwjhFZbh8s
+	rF7D/amev0Q2h6E4He25tlsHdb0HzGyI+X84zR6k7JqjJdsqcHRnRxuwvms34jSM
+	vPGW4l7LJ/3Cx+xJw2WtbZAOV6TQexkiBcDhIoRW6lMh1JwRqnneI=
+Received: from pb-smtp21.sea.icgroup.com (unknown [127.0.0.1])
+	by pb-smtp21.pobox.com (Postfix) with ESMTP id 33D2F291B1;
+	Mon, 22 Jan 2024 11:13:37 -0500 (EST)
+	(envelope-from nico@fluxnic.net)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
+ h=date:from:to:cc:subject:in-reply-to:message-id:references:mime-version:content-type; s=2016-12.pbsmtp; bh=vVFbQAZQaCV1Nt2m+xFmWWvr4pQM73xG49Al6bRM/Qk=; b=xEkHQKlL0cmZY7u5wTfQK9xWwlTGQvdZiTHr2SZbmxtEjE5N7LiISk6RDg9LLudyQf2EDmlb9RMoy6XF99Rh0YybydGArC+YJ27iwEmMd9t9ezA2+i8FR2VIEbFbuqiTp4dXGh8WnB7nYXk7/a9nz5tjUqP2170Uq1I3H8cEYbA=
+Received: from yoda.fluxnic.net (unknown [24.201.101.36])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 50F1166954D;
-	Mon, 22 Jan 2024 17:11:26 +0100 (CET)
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Subject: [PATCH v1] PM: sleep: Use bool for all 1-bit fields in struct dev_pm_info
-Date: Mon, 22 Jan 2024 17:11:26 +0100
-Message-ID: <12380944.O9o76ZdvQC@kreacher>
+	by pb-smtp21.pobox.com (Postfix) with ESMTPSA id 238F1291AA;
+	Mon, 22 Jan 2024 11:13:32 -0500 (EST)
+	(envelope-from nico@fluxnic.net)
+Received: from xanadu (unknown [IPv6:fd17:d3d3:663b:0:9696:df8a:e3:af35])
+	by yoda.fluxnic.net (Postfix) with ESMTPSA id D6749AF577D;
+	Mon, 22 Jan 2024 11:13:29 -0500 (EST)
+Date: Mon, 22 Jan 2024 11:13:29 -0500 (EST)
+From: Nicolas Pitre <nico@fluxnic.net>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+cc: linux-pm@vger.kernel.org
+Subject: Re: [PATCH 8/9] thermal/drivers/mediatek/lvts_thermal: allow early
+ empty sensor slots
+In-Reply-To: <152d56e7-9d98-4d7e-b3f8-d29c8dae0a8a@linaro.org>
+Message-ID: <637r7n03-9o9p-97r2-s92o-o015860n66n9@syhkavp.arg>
+References: <20240111223020.3593558-1-nico@fluxnic.net> <20240111223020.3593558-9-nico@fluxnic.net> <9d8100dd-11a8-482f-83a1-85bfc34f1746@linaro.org> <3047p728-p0pp-9qs5-qnn4-95s23qo2735n@syhkavp.arg> <f0805135-6b4b-4691-ae97-d3f995e52e88@linaro.org>
+ <36665522-1225-n119-6ns4-2n3p0086orp7@syhkavp.arg> <152d56e7-9d98-4d7e-b3f8-d29c8dae0a8a@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrvdekiedgkeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehs
- thgrnhhishhlrgifrdhgrhhushiikhgrsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+Content-Type: text/plain; charset=US-ASCII
+X-Pobox-Relay-ID:
+ 2FD54B06-B941-11EE-88A4-A19503B9AAD1-78420484!pb-smtp21.pobox.com
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Mon, 22 Jan 2024, Daniel Lezcano wrote:
 
-For some 1-bit fields in struct dev_pm_info the data type is bool, while
-for some other 1-bit fields in there it is unsigned int, and these
-differences are somewhat arbitrary.
+> On 22/01/2024 16:23, Nicolas Pitre wrote:
+> > On Mon, 22 Jan 2024, Daniel Lezcano wrote:
+> > 
+> >>
+> >> Hi Nico,
+> >>
+> >> On 19/01/2024 17:53, Nicolas Pitre wrote:
+> >>
+> >> [ ... ]
+> >>
+> >>>>> +		skip = lvts_ctrl_data->skipped_sensors;
+> >>>>>     		lvts_sensor[i].msr = lvts_ctrl_data->mode ==
+> >>>>> LVTS_MSR_IMMEDIATE_MODE ?
+> >>>>> -			imm_regs[i] : msr_regs[i];
+> >>>>> +			imm_regs[i + skip] : msr_regs[i + skip];
+> >>>>
+> >>>> Overall the series look ok but this changes is hard to understand.
+> >>>>
+> >>>> Could you propose a different approach to have the resulting code easier
+> >>>> to
+> >>>> understand ?
+> >>>
+> >>> I'm not sure how I could make it simpler. Maybe a comment is in order
+> >>> though?
+> >>>
+> >>> The sensor controller has 4 slots. Those slots are accessible either
+> >>> through imm_regs[<slot_number>] oe msr_regs[<slot_number>].  If, say,
+> >>> slot 0 is unpopulated then sensor 0 (i = 0) needs to address slot 1 (i =
+> >>> 0, skip = 1), sensor 1 is in slot 2 (i = 1, skip = 1), etc. Does this
+> >>> make sense?
+> >>
+> >> Why not keep the sensor id = slot id and declare the ones which are
+> >> disabled
+> >> with a mask?
+> > 
+> > Then what do you do with the empty sensor 0? Do we want to present dead
+> > sensor IDs to users?
+> 
+> You can skip it somehow in lvts_ctrl_start(), right?
 
-For consistency, change the data type of the latter to bool, so that all
-of the 1-bit fields in struct dev_pm_info fields are bool.
-
-This also reduces the size of struct device on my x86 systems by 8 B,
-from 1120 B to 1112 B.
-
-No intentional functional impact.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- include/linux/pm.h |   32 ++++++++++++++++----------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
-
-Index: linux-pm/include/linux/pm.h
-===================================================================
---- linux-pm.orig/include/linux/pm.h
-+++ linux-pm/include/linux/pm.h
-@@ -662,8 +662,8 @@ struct pm_subsys_data {
- 
- struct dev_pm_info {
- 	pm_message_t		power_state;
--	unsigned int		can_wakeup:1;
--	unsigned int		async_suspend:1;
-+	bool			can_wakeup:1;
-+	bool			async_suspend:1;
- 	bool			in_dpm_list:1;	/* Owned by the PM core */
- 	bool			is_prepared:1;	/* Owned by the PM core */
- 	bool			is_suspended:1;	/* Ditto */
-@@ -682,10 +682,10 @@ struct dev_pm_info {
- 	bool			syscore:1;
- 	bool			no_pm_callbacks:1;	/* Owned by the PM core */
- 	bool			async_in_progress:1;	/* Owned by the PM core */
--	unsigned int		must_resume:1;	/* Owned by the PM core */
--	unsigned int		may_skip_resume:1;	/* Set by subsystems */
-+	bool			must_resume:1;	/* Owned by the PM core */
-+	bool			may_skip_resume:1;	/* Set by subsystems */
- #else
--	unsigned int		should_wakeup:1;
-+	bool			should_wakeup:1;
- #endif
- #ifdef CONFIG_PM
- 	struct hrtimer		suspend_timer;
-@@ -696,18 +696,18 @@ struct dev_pm_info {
- 	atomic_t		usage_count;
- 	atomic_t		child_count;
- 	unsigned int		disable_depth:3;
--	unsigned int		idle_notification:1;
--	unsigned int		request_pending:1;
--	unsigned int		deferred_resume:1;
--	unsigned int		needs_force_resume:1;
--	unsigned int		runtime_auto:1;
-+	bool			idle_notification:1;
-+	bool			request_pending:1;
-+	bool			deferred_resume:1;
-+	bool			needs_force_resume:1;
-+	bool			runtime_auto:1;
- 	bool			ignore_children:1;
--	unsigned int		no_callbacks:1;
--	unsigned int		irq_safe:1;
--	unsigned int		use_autosuspend:1;
--	unsigned int		timer_autosuspends:1;
--	unsigned int		memalloc_noio:1;
--	unsigned int		links_count;
-+	bool			no_callbacks:1;
-+	bool			irq_safe:1;
-+	bool			use_autosuspend:1;
-+	bool			timer_autosuspends:1;
-+	bool			memalloc_noio:1;
-+	bool			links_count;
- 	enum rpm_request	request;
- 	enum rpm_status		runtime_status;
- 	enum rpm_status		last_status;
+I see what you mean. Indeed that would be better.
 
 
-
+Nicolas
 
