@@ -1,141 +1,142 @@
-Return-Path: <linux-pm+bounces-2494-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2495-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1CCB836CB9
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 18:15:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 925FC836CDD
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 18:19:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A011CB269E0
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 17:14:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BB8528AEE8
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 17:19:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5A2E6311B;
-	Mon, 22 Jan 2024 16:03:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="docyaTbG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA8824F1F9;
+	Mon, 22 Jan 2024 16:11:31 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 153A84D58D
-	for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 16:03:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BD043DBA9;
+	Mon, 22 Jan 2024 16:11:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705939431; cv=none; b=EP8WuDqMtLDrUpNJyqYLKn3YpApJaXLlV8FpnISe5WBvXIR9yk4bHYtN+lj3vrr19m+nLLMcD5Z/bYrvChKY139Xazsug1xjDwB7C/mVn7Qz3Ksb2WBRjbm6WIjIVr8PLfzJy63qbl+o3YxzYuyf9sv7+ZFFxcI9mRL6xNVlszo=
+	t=1705939891; cv=none; b=iRzQLbyU5Y6G3fwP+bl3lNtBrmGkrt+UC58dECUt9Z92D8O9udoYVhvWwAK2I4siiF781ovVcAHzdEcGpkNmbyvWrF6P0l2SXPJMjDWM1BV/RkCTi9stSBXZXJwfZ4cVRvRmxGhpsHs/SHvvRAakPM/0H+eME9xkOxPR4fedbdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705939431; c=relaxed/simple;
-	bh=HyoM+ZYpwj5Nk/gzMMs6XaXC5IB7F464xo7VUVlVbzI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ETxteYPYQblvWHdVgY97QCMnTjqlKyD8GBzcEXLoT106AqO/CYvMHw8GSci9+j7SvGBDrDtLvZP9Lu1qQhQLQCX4pEVWqu3sj83N9wjuQ8z2eJsAdtrOvCYWYFtbA1wk33+OGD1/kFPajwJz3RizudJ/cIYZL4KFOuMCk3YTZRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=docyaTbG; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-40eb2f3935eso539785e9.2
-        for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 08:03:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705939428; x=1706544228; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CBHDZSNC4QBj4r9mOtBAKpoDeDWTwxL96dYkAXkUF2Y=;
-        b=docyaTbGLx7KCgwC1ZMMJZxo89jvfiE+UDnsKxJycjYbKj1NPOGh26FviJpLBfMwbw
-         h0/fjkmdJtUWhSrecuxbILLHek5EqZroLWQ9dhl3kC0Hm6E53LAoGbQFQe8Qab7cQNbZ
-         WfO5rQY8L/KjCmu4ztDIWa1yBzsbQ+aEYgfZLNLdb86ZdAhqghm1GOQJ9fJIGJ+wh8pd
-         hM2XyNivca8NsKgaDp1NUO6cRMGGzTsV1NtVnOyl96UyASQmUO2BAvgeulOIHizOTesx
-         wGNlOM5v4MTfYosQpQYrRu9KmP1TYZVJY644GMld7exbHnmhUgVLGBsoOUFJRQnPmxKB
-         LI/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705939428; x=1706544228;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CBHDZSNC4QBj4r9mOtBAKpoDeDWTwxL96dYkAXkUF2Y=;
-        b=a2I5fLhghSb90jfk1bGSnGtPNP1MPtc9zVci6kg2TB1MbNLLbQLy81g2toorOagWC9
-         0VANdrOCemu7AhkZEY2pdq8qu2i20pzxMso/ZpPyalzbhbhjWDfd+gkpTAD3D2gjDIGm
-         INI5ZrjOoefsP9YJAhlEQULB3p4G0smVTJB1FfwVL8fADxllF5f7hJyFvOmuSPZEF2iU
-         K74kRmJxvuFhGfzZkfAaFoA8/LHMCrcDXghg1SMzVocvTaEPju/UeoleNsK0Qv+ftYiS
-         8WcLIIwvpRrP0dFMAeyVibSLBGDFBkhIMxnHbk7oxsENNjcMIFA70GPOK4jwu0EYNBIG
-         zjZw==
-X-Gm-Message-State: AOJu0YypuRUL/n5h5djzGF0PaY8+vFDW9Zfw4LG8EhPySx38P17I+Oke
-	qzPJUGW+mJpHknv2z7OiVOmDSOn07pWp+V1HQKQnvzHsbw2YTqMfL0l5IZsAMAPbxflUTZW83dC
-	F
-X-Google-Smtp-Source: AGHT+IFCiziNzsopVPmkB3svZZE0u+ncVKH4YWZZuvFK3QzISLgL4kzZx1Ve3LJomTK9S8Hpp2+Unw==
-X-Received: by 2002:a05:600c:3ac3:b0:40e:a44c:bff4 with SMTP id d3-20020a05600c3ac300b0040ea44cbff4mr2200456wms.28.1705939428128;
-        Mon, 22 Jan 2024 08:03:48 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id n5-20020a05600c294500b0040e63226f6dsm3772421wmd.1.2024.01.22.08.03.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Jan 2024 08:03:47 -0800 (PST)
-Message-ID: <152d56e7-9d98-4d7e-b3f8-d29c8dae0a8a@linaro.org>
-Date: Mon, 22 Jan 2024 17:03:47 +0100
+	s=arc-20240116; t=1705939891; c=relaxed/simple;
+	bh=gd1xG0QVWf2kr1Slio5ktaMDy9hNa5uZog6KlhgzvOc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=S1RVcAnJmCa9DcxXqpXShRWzViexDStQjWoazCTRK88V6cX9epqMJmlijyjPEyjNjwIK34duxpghBRiurQRycx91Kgb4G1z3ZYjSY7PdKggiKQ1UVjbW/hWm7VnI+ywUporal6AqjXGU8oejWN4I0SMJAgyOw8kgK33Gub0NSrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
+ id 8cc4570eae3495fb; Mon, 22 Jan 2024 17:11:26 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 50F1166954D;
+	Mon, 22 Jan 2024 17:11:26 +0100 (CET)
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+Subject: [PATCH v1] PM: sleep: Use bool for all 1-bit fields in struct dev_pm_info
+Date: Mon, 22 Jan 2024 17:11:26 +0100
+Message-ID: <12380944.O9o76ZdvQC@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 8/9] thermal/drivers/mediatek/lvts_thermal: allow early
- empty sensor slots
-Content-Language: en-US
-To: Nicolas Pitre <nico@fluxnic.net>
-Cc: linux-pm@vger.kernel.org
-References: <20240111223020.3593558-1-nico@fluxnic.net>
- <20240111223020.3593558-9-nico@fluxnic.net>
- <9d8100dd-11a8-482f-83a1-85bfc34f1746@linaro.org>
- <3047p728-p0pp-9qs5-qnn4-95s23qo2735n@syhkavp.arg>
- <f0805135-6b4b-4691-ae97-d3f995e52e88@linaro.org>
- <36665522-1225-n119-6ns4-2n3p0086orp7@syhkavp.arg>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <36665522-1225-n119-6ns4-2n3p0086orp7@syhkavp.arg>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrvdekiedgkeefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehs
+ thgrnhhishhlrgifrdhgrhhushiikhgrsehlihhnuhigrdhinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 
-On 22/01/2024 16:23, Nicolas Pitre wrote:
-> On Mon, 22 Jan 2024, Daniel Lezcano wrote:
-> 
->>
->> Hi Nico,
->>
->> On 19/01/2024 17:53, Nicolas Pitre wrote:
->>
->> [ ... ]
->>
->>>>> +		skip = lvts_ctrl_data->skipped_sensors;
->>>>>     		lvts_sensor[i].msr = lvts_ctrl_data->mode ==
->>>>> LVTS_MSR_IMMEDIATE_MODE ?
->>>>> -			imm_regs[i] : msr_regs[i];
->>>>> +			imm_regs[i + skip] : msr_regs[i + skip];
->>>>
->>>> Overall the series look ok but this changes is hard to understand.
->>>>
->>>> Could you propose a different approach to have the resulting code easier to
->>>> understand ?
->>>
->>> I'm not sure how I could make it simpler. Maybe a comment is in order
->>> though?
->>>
->>> The sensor controller has 4 slots. Those slots are accessible either
->>> through imm_regs[<slot_number>] oe msr_regs[<slot_number>].  If, say,
->>> slot 0 is unpopulated then sensor 0 (i = 0) needs to address slot 1 (i =
->>> 0, skip = 1), sensor 1 is in slot 2 (i = 1, skip = 1), etc. Does this
->>> make sense?
->>
->> Why not keep the sensor id = slot id and declare the ones which are disabled
->> with a mask?
-> 
-> Then what do you do with the empty sensor 0? Do we want to present dead
-> sensor IDs to users?
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-You can skip it somehow in lvts_ctrl_start(), right?
+For some 1-bit fields in struct dev_pm_info the data type is bool, while
+for some other 1-bit fields in there it is unsigned int, and these
+differences are somewhat arbitrary.
+
+For consistency, change the data type of the latter to bool, so that all
+of the 1-bit fields in struct dev_pm_info fields are bool.
+
+This also reduces the size of struct device on my x86 systems by 8 B,
+from 1120 B to 1112 B.
+
+No intentional functional impact.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ include/linux/pm.h |   32 ++++++++++++++++----------------
+ 1 file changed, 16 insertions(+), 16 deletions(-)
+
+Index: linux-pm/include/linux/pm.h
+===================================================================
+--- linux-pm.orig/include/linux/pm.h
++++ linux-pm/include/linux/pm.h
+@@ -662,8 +662,8 @@ struct pm_subsys_data {
+ 
+ struct dev_pm_info {
+ 	pm_message_t		power_state;
+-	unsigned int		can_wakeup:1;
+-	unsigned int		async_suspend:1;
++	bool			can_wakeup:1;
++	bool			async_suspend:1;
+ 	bool			in_dpm_list:1;	/* Owned by the PM core */
+ 	bool			is_prepared:1;	/* Owned by the PM core */
+ 	bool			is_suspended:1;	/* Ditto */
+@@ -682,10 +682,10 @@ struct dev_pm_info {
+ 	bool			syscore:1;
+ 	bool			no_pm_callbacks:1;	/* Owned by the PM core */
+ 	bool			async_in_progress:1;	/* Owned by the PM core */
+-	unsigned int		must_resume:1;	/* Owned by the PM core */
+-	unsigned int		may_skip_resume:1;	/* Set by subsystems */
++	bool			must_resume:1;	/* Owned by the PM core */
++	bool			may_skip_resume:1;	/* Set by subsystems */
+ #else
+-	unsigned int		should_wakeup:1;
++	bool			should_wakeup:1;
+ #endif
+ #ifdef CONFIG_PM
+ 	struct hrtimer		suspend_timer;
+@@ -696,18 +696,18 @@ struct dev_pm_info {
+ 	atomic_t		usage_count;
+ 	atomic_t		child_count;
+ 	unsigned int		disable_depth:3;
+-	unsigned int		idle_notification:1;
+-	unsigned int		request_pending:1;
+-	unsigned int		deferred_resume:1;
+-	unsigned int		needs_force_resume:1;
+-	unsigned int		runtime_auto:1;
++	bool			idle_notification:1;
++	bool			request_pending:1;
++	bool			deferred_resume:1;
++	bool			needs_force_resume:1;
++	bool			runtime_auto:1;
+ 	bool			ignore_children:1;
+-	unsigned int		no_callbacks:1;
+-	unsigned int		irq_safe:1;
+-	unsigned int		use_autosuspend:1;
+-	unsigned int		timer_autosuspends:1;
+-	unsigned int		memalloc_noio:1;
+-	unsigned int		links_count;
++	bool			no_callbacks:1;
++	bool			irq_safe:1;
++	bool			use_autosuspend:1;
++	bool			timer_autosuspends:1;
++	bool			memalloc_noio:1;
++	bool			links_count;
+ 	enum rpm_request	request;
+ 	enum rpm_status		runtime_status;
+ 	enum rpm_status		last_status;
 
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
 
 
