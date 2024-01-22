@@ -1,73 +1,73 @@
-Return-Path: <linux-pm+bounces-2491-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2492-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82E2E836BEE
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 17:54:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0AE30836C10
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 17:57:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33A9C281E55
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 16:54:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F6951C26413
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 16:57:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B7895D73A;
-	Mon, 22 Jan 2024 15:28:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12AAA5F563;
+	Mon, 22 Jan 2024 15:30:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GIiOoEA3"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gF22+h8Z"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA31C4643B
-	for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 15:28:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76A746538
+	for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 15:29:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705937303; cv=none; b=hU80EiNF/2uPlq4sMsneu5wpzkar8/gK5ut5BCNVdFrZy9gnbUFoMksrsYGVeeIeOebbicRkyPyTm63bdQAh70SHyfu9DokoaNrWxp4dto9o5RMtO7TPZM0/HpkAwfAU5Ksh7mneqWPV4EZDHCGCYUsiMqR3eyOxaUnQRkuPwSs=
+	t=1705937400; cv=none; b=WubGANziiErSWE69sJU31a7LWDvuOciU8tL+pcOxV/xCLA5OT6HEtTnr5xOeAmF2BYzbZI/F3+ywbX7/oM8Bn09rpRGhd4ejMS70ARW8z9G4SjPO7OoKU0blzsQd2nQVgS5CK3yUqkoHDs24s+w9vRG6CLIGJMspre5jwQS4iYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705937303; c=relaxed/simple;
-	bh=gJy6V6En8oglansz0+6dCHlstxS4CBQ5FEsC6dHHVuA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=kZfpYtNCVnJldT6mAlNIEmOQ5ryW4PdEz7gcnZjwSNBvx9WPF07PYVssX9KU0zVeB9W6YIkKlRW+5PG+jB3VO0dPV8Q046nVATqku1vqkGC4A/0ISdQctdUAI779Q7oJb/38cG7T3Cdrt5MF+BSGBkJMaHzLq6I85P2+HxQruBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GIiOoEA3; arc=none smtp.client-ip=209.85.208.54
+	s=arc-20240116; t=1705937400; c=relaxed/simple;
+	bh=92bGw/sdqkNXjPn8bN2lmF8HecPnbPE7/DcUY5IO+Bg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YoSd3zj9EyxSXK0zYzPBbOh0Zma6DJr8Yg7LwtFalAYL9qEfBF054BRSxJqezCXWkvR8694QFTZQFxCMxD3M8CHb4/84c5hsgFlIVfc6m+pavYck10vO+Gt9pSXI8n7UKfj7zvvMyG/fdj61y9yc0v/tsmkDEBqMGgmTQaeQ+rI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gF22+h8Z; arc=none smtp.client-ip=209.85.208.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-559cef15db5so7686468a12.0
-        for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 07:28:19 -0800 (PST)
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-55ad2a47b7aso1987448a12.3
+        for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 07:29:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705937298; x=1706542098; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1705937395; x=1706542195; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ivoj0IdiB6s2UMY3NlBWWJcKrLIKVYX5ec1XAbyGp20=;
-        b=GIiOoEA3ZCj7/E1zfiMZqxry/s2q5+oFkfJ1xChenKyFyjhQXU0oeysgxmUe9Ss4Dw
-         7pNciGtfNchvzOPGpOP0W8e8mxgwk7cD3Ld1+DzX2YXQcmOlG2QWYKWaFFrB/q8sWOFd
-         vR7caWMloP5qh0jJTMqD14PgT7wyo/4mEUpenQc0YZ0N9fOWsAil5mmqTiKdeGfvFyZq
-         4v5nCgA1LsVBjvWVuoeRns3WOb9+9mdLbv8fBjWLpPmTbNWRwo80boXpGoXJE0C0ugak
-         +Ble7txpkFfqYZCCHllDv8qfuYR5gd7IUDNLMvx+NDXGx2R50qNGfZNCXaLjVmRAwDvz
-         dttg==
+        bh=NzAfe33+3mfzwcWLyjFGbA+RuoBZjOLLTMygi6+aB1U=;
+        b=gF22+h8ZACYNXSxwFqOJqqhyuW7QbDvWvy+ZaIv5U0Orcaj+Ve+LWThn8n2AnUOemH
+         gdGIJInvzjRtV3O5Fmfb9+4xP8gGS0DushaflhbfLfK7jvjcIXXh5uEsxgAJHNprkvXb
+         4fGdquKKPa03E4VFafy3TGxHIHOKC27a47ltBi8hXWduwgI3PGuPUA6h/uK7JRJfTgqe
+         fOf/DZKMARxvCSgQG3yI0YZ66peLpI/i/lOIqW8T3m6XxvCfw4Fj6nV+HvNlFtxWBAVq
+         J3ds7ZbEEja1pJ1zwOf2pGrBWIi/u7aZIlpgx3BdTtezhh+RqizQwvq8PPhjH7+9DYyR
+         Jcqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705937298; x=1706542098;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1705937395; x=1706542195;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ivoj0IdiB6s2UMY3NlBWWJcKrLIKVYX5ec1XAbyGp20=;
-        b=VaMgqwa8o3SJLxGT0KXji8GWfkTssxsbTyhCvCzdOYMELU7F+mfOb3lw7vT33rRBtW
-         RzS5x22xUPJK5r5SBE0UnoAk3PEUBGTqtsg5Xe/pXibkjawI7wLe0XRf9tXD4BYrUaGj
-         4An0dLlilbKqsZ9u4FdfObsmwBBKUhYwwjjOhKAwrCPsrkurQ8RCvHPOe4z3e/rzmc+i
-         1KjQQnDOh6aqMxg2JiwcmHXwBbXSi3JeNI/Izu3OvW0J+oyidLea0rKBnP+U5letC292
-         AZOmPMrdmw2Ly7DJZmd0e4SIFLRLFNs+8iFsoLrKdIH8gAdPsEMiJKQr0GVvg75v0KVs
-         rcrg==
-X-Gm-Message-State: AOJu0YyWJk1YjbQ+LsTHIK8PhLwXscK6Vo4oXMK0hACTcbaB8RCUC9lD
-	5vAW+MXcUfE9z/Ml3REZwXbaM+cz8w2m8CONgChtc1s+FBdZalTDcr5lkKFWTXo=
-X-Google-Smtp-Source: AGHT+IG05z7/zQiSaBaTxMhSPIN7Oz0gWhKCEPa2yIsUouLEDwJED54o+9fiThp56KqzXZOvMwGJTA==
-X-Received: by 2002:a50:fc18:0:b0:55a:1e6a:496f with SMTP id i24-20020a50fc18000000b0055a1e6a496fmr84736edr.33.1705937297885;
-        Mon, 22 Jan 2024 07:28:17 -0800 (PST)
+        bh=NzAfe33+3mfzwcWLyjFGbA+RuoBZjOLLTMygi6+aB1U=;
+        b=ABFfrkfytoY0laMIrYDEDGjhdVvPMt6sLqQrzBs6ZW9/haYoQ35TfYBxG4s3dWIXS3
+         +M0jYUn5arC3OeXPPsLLv0ZBf2QL3pIcNWhq6GPB5Yp3cLfARGh+VxdZq35NeQRITzEN
+         Ncl9WlXweqfZRz3BSXew4uEAG7FDRsf5ktVGeERoHQoVLe8/jKXEmyefzz9cL/dt/WX9
+         Z6jIkrDl3PWHX+IKQwEnhmnuDISiAeVxhSriH87RmRKktb1eIbYQX5+i7ODREg9S+s8X
+         yEAwX4aeqFdFBKqzFq0A/VzSqMABXIneIxEaGQ4C5pIdBXuA3OyPBg18QmsTII2NdsjZ
+         FQ9A==
+X-Gm-Message-State: AOJu0YzEIImdoBjiFvtR/7+X6VR62V7vFQUBLRZdzzFy40GK4Rb5kK1t
+	gmrNv44/1jtJ0LTxmR2M299YVaB5bU/oojSf/Ka5124Twc6U1ffUTISw5qRjy+Y=
+X-Google-Smtp-Source: AGHT+IHhcZm5eWzUgP1DZ9HmWCAaHLtN7Q+BnC5BgjxK8pStYpd4vrObS9/AH9uSeOuvgTl6387rTQ==
+X-Received: by 2002:aa7:c914:0:b0:553:7a3f:3d63 with SMTP id b20-20020aa7c914000000b005537a3f3d63mr33224edt.18.1705937395182;
+        Mon, 22 Jan 2024 07:29:55 -0800 (PST)
 Received: from [192.168.231.132] (178235179218.dynamic-4-waw-k-1-3-0.vectranet.pl. [178.235.179.218])
-        by smtp.gmail.com with ESMTPSA id j9-20020a508a89000000b00554930be765sm14754031edj.97.2024.01.22.07.28.16
+        by smtp.gmail.com with ESMTPSA id j9-20020a508a89000000b00554930be765sm14754031edj.97.2024.01.22.07.29.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Jan 2024 07:28:17 -0800 (PST)
-Message-ID: <ebed24aa-e190-4735-b618-7d74fadd900c@linaro.org>
-Date: Mon, 22 Jan 2024 16:28:15 +0100
+        Mon, 22 Jan 2024 07:29:54 -0800 (PST)
+Message-ID: <08407f98-9d96-4682-8c80-5a6f79c11fb0@linaro.org>
+Date: Mon, 22 Jan 2024 16:29:53 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -75,14 +75,16 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [2/4] interconnect: qcom: sc7280: enable qos programming
+Subject: Re: [PATCH] pmdomain: core: Move the unused cleanup to a _sync
+ initcall
 Content-Language: en-US
-To: Odelu Kukatla <quic_okukatla@quicinc.com>, georgi.djakov@linaro.org,
- Bjorn Andersson <andersson@kernel.org>, Georgi Djakov <djakov@kernel.org>,
- linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240122143030.11904-1-quic_okukatla@quicinc.com>
- <20240122143030.11904-3-quic_okukatla@quicinc.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Kevin Hilman <khilman@linaro.org>,
+ "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+ Marijn Suijten <marijn.suijten@somainline.org>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>
+References: <20231227-topic-pmdomain_sync_cleanup-v1-1-5f36769d538b@linaro.org>
+ <CAPDyKFoer83wwCYyXS5S5wM8HcezyUDdxcW3d4Z+za0XpykSAw@mail.gmail.com>
 From: Konrad Dybcio <konrad.dybcio@linaro.org>
 Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  xsFNBF9ALYUBEADWAhxdTBWrwAgDQQzc1O/bJ5O7b6cXYxwbBd9xKP7MICh5YA0DcCjJSOum
@@ -119,46 +121,23 @@ Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
  bGqMHex48FVZhexNPYOd58EY9/7mL5u0sJmo+jTeb4JBgIbFPJCFyng4HwbniWgQJZ1WqaUC
  nas9J77uICis2WH7N8Bs9jy0wQYezNzqS+FxoNXmDQg2jetX8en4bO2Di7Pmx0jXA4TOb9TM
  izWDgYvmBE8=
-In-Reply-To: <20240122143030.11904-3-quic_okukatla@quicinc.com>
+In-Reply-To: <CAPDyKFoer83wwCYyXS5S5wM8HcezyUDdxcW3d4Z+za0XpykSAw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 22.01.2024 15:30, Odelu Kukatla wrote:
-> Enable QoS for the master ports with predefined values
-> for priority and urgency.
+On 22.01.2024 16:21, Ulf Hansson wrote:
+> On Wed, 27 Dec 2023 at 16:21, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>
+>> The unused clock cleanup uses the _sync initcall to give all users at
+>> earlier initcalls time to probe. Do the same to avoid leaving some PDs
+>> dangling at "on" (which actually happened on qcom!).
+>>
+>> Fixes: 2fe71dcdfd10 ("PM / domains: Add late_initcall to disable unused PM domains")
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > 
-> Change-Id: I1c4515402bcd6df8eed814be096aa5e1fc16cef6
-> Signed-off-by: Odelu Kukatla <quic_okukatla@quicinc.com>
-> ---
->  drivers/interconnect/qcom/sc7280.c | 250 +++++++++++++++++++++++++++++
->  1 file changed, 250 insertions(+)
-> 
-> diff --git a/drivers/interconnect/qcom/sc7280.c b/drivers/interconnect/qcom/sc7280.c
-> index 7d33694368e8..719844c34894 100644
-> --- a/drivers/interconnect/qcom/sc7280.c
-> +++ b/drivers/interconnect/qcom/sc7280.c
-> @@ -1,6 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0
->  /*
->   * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
->   *
->   */
->  
-> @@ -16,29 +17,59 @@
->  #include "icc-rpmh.h"
->  #include "sc7280.h"
->  
-> +static const struct regmap_config icc_regmap_config = {
-> +	.reg_bits = 32,
-> +	.reg_stride = 4,
-> +	.val_bits = 32,
+> Applied for fixes and by adding a stable tag, thanks!
 
-If you don't bother having .max_register, perhaps it could be defined
-in a common file?
-
-Also, do you really need locking between each access? If not, add
-.fast_io = true
+Right, this deserved a stable cc, thanks for taking care of this!
 
 Konrad
 
