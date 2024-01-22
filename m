@@ -1,335 +1,310 @@
-Return-Path: <linux-pm+bounces-2478-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2479-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E4CA836910
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 16:53:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5393E836B97
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 17:48:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B23D41F22A70
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 15:53:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC2E61F21468
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 16:48:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D21D84B5AA;
-	Mon, 22 Jan 2024 15:07:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 586B959B56;
+	Mon, 22 Jan 2024 15:21:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="Jrj0PVMZ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="A0kRBFiG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E63DD3DB9A
-	for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 15:07:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72D56405F0
+	for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 15:21:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705936079; cv=none; b=gUGn2UX7VpRMc+6m3sEvzDe7pUzlWra4HVadLhPp+A8PNc2fFShskwaMMW1KPWAJSQbfRD4RuryFyY+bpcv0gsWqN7wWJrAlgcFdznmFB81IliDtBccJoHzu7mOnMbgnmEPdk4Ybagjxm/yh4NeeC7q+M076rkzumPKxX7Xw4io=
+	t=1705936906; cv=none; b=aEL8s4wJC98mvO2XjAb8uO1WGv7UTKTcsuTHvkM+yE5Y0YRT23MLJW1zoG1f3Nsuw566Rq5By6LxQxW0ejYSD8mwmwDIUe/Xtd5iB9DzkvcRkL+z+tAMb7Id7JlCU2GLTMmGoxFJoNdLDFMhFJjT6RzDsx29SZxqgDLxsGyAkIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705936079; c=relaxed/simple;
-	bh=bj5iC0e2GlFGTqeGhc+KQ3stSnafgKzj4UxAwUmZl1I=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=nMf63EIF5goLs237A4+yPSi3Y+SnqHSmPcC0WJMOQ2rIJLVdOGHgb68OygvhwV89E18KRohFG3Ctf8fbyVERB04Kp/xp/q8vupRNrjjuI5p+5KHvgBGs9lwmAvxwdXRN1Zkah8Gg8rvcT0XuKMH0xZbOunBVeckZrVqZkMTuPtw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=Jrj0PVMZ; arc=none smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-5cf2d73a183so2929594a12.1
-        for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 07:07:57 -0800 (PST)
+	s=arc-20240116; t=1705936906; c=relaxed/simple;
+	bh=kDaZTGvX1qegyipawpDHtqiFJZ07zD34kOucMWLGuCY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NIy54XnuLagpAnbp36LvNPmfQLdv9LP7Nus1rzDuiFvQN7x0pMF/3MMXKAXVNS1FMwZKVyMYW5yTNTKzx5tgbXjgZuV3sE+Gaog5JNlcslxhO5T1oNWsX1Dky14o4ouFXXrg+H5wF5HcD4+Cez1CXkCzXqfO8Q9R88UpJIH6tZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=A0kRBFiG; arc=none smtp.client-ip=209.85.128.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-5ffcb478512so9523007b3.0
+        for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 07:21:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1705936077; x=1706540877; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=7SCki/ZfcAiNDTBObC706sF/HjFcHfGu9n5pgJsHHfE=;
-        b=Jrj0PVMZ+awuPd1eU99n1JwGa0fIIg8hU8zPG8xbeVM1M6Na7P/I1zr/5rWDc8kuQe
-         cEzJGGcA5u9HkgvFq9aSFocgOztDm73qWlJMwS98Def2E5ya974fEauagTV+Aya/NzT5
-         0E+9Y55zxodBDOY4ZOnLGSf6UGS67ZCkAPr6IhpyNUczwEmZrUXTmt4Qi3CRRnNjO7Tg
-         kyvsaabeDSCax6h48ilo27bE+06KVeKqhS9SPd1iC/ABRwHjQNg1O2eD0ZNA78WAay4Y
-         z769wms4Nh2YSYl/v+dNojiA59kwDa8OFle9GBP7aWw0CWnP8ZRaStEFCsCm7Jg7rNL+
-         /Wiw==
+        d=linaro.org; s=google; t=1705936902; x=1706541702; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=azZj8uWoAYXpYPWNpYpxGJSP02xYLkyFYL+zSVWu1Bk=;
+        b=A0kRBFiG6UAmHBkpek1H0z+ZugkprCM4v+dvp8ZkbvS2euJqTiIj63D9KyEHLJuQku
+         Ppy+zal9ycNrL0i7kzjKn3ScnHuy3F1qza3DknfSeHG7t1Yzw3c8uFsV83Pz7PcEIJnd
+         iegoZGjmVUjiHjc98u44hQ7Xm0fTaLlIV6iAwQjK5ArBKw5aHwvIjGwG/3MRHq0jhOOM
+         VzQD0YfMuD3IwywGPHN7TD2cAnO+urH4d8p8n2r59iuOPwba6/zapiBiA07hBK91/olR
+         1sEjlV4pl2gG96cM79rxqXwHHY/X1Lhzh8BQeePzXAlxx9v+xQOyN+n1p6NIcPK4D+p0
+         F8Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705936077; x=1706540877;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1705936902; x=1706541702;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7SCki/ZfcAiNDTBObC706sF/HjFcHfGu9n5pgJsHHfE=;
-        b=fzJOAPoljq6CwrPYOFEoGacXhDJ+36O03/XArCD7kkW5gAt8CT4XlvFPhMYhsPDtjo
-         4X/ONenaX+NICqbWaFW7YzKmt3xKnbuLxrbmBm2S+IzvzGuvzaUfCPiX2q/m2Hf4u1+U
-         WC2Pbr0etzWSqo42YJg9R6/fgRDrvSSwBvi8hruH22juFTDJFe/gbrqGOII9btbwhBeB
-         xzcqv+MPfXHqmxzn/8FoAm3iuYqjGDymriixyxTnpe4lj9LUsKC9wK97QhPwJW12JsqF
-         1gPg7/y+RrhpAILtCyVsdmHJPfE2FBPG5uPZqsrVzLcEjI6U2WdEb1QDk3GGOpekrlQR
-         aXSw==
-X-Gm-Message-State: AOJu0YwK6QHDbqKYmydcerGrBVcSyBQPdZK/Yr8kjLF3YzPL+pA1ewID
-	AYHNWSciplZchZVMHVAQzGQk/ksQaP93OEIe/dgx0drgpFPZnG4oQn/jVRIyrYYXaVUttO2hOgw
-	uc2U=
-X-Google-Smtp-Source: AGHT+IGGDsCP5bc4MxHkTHTkJFaWHolxG5PkUFbIc8idzXgeltKkTECc0QHJ06tzV6uzsg6QQSpUXg==
-X-Received: by 2002:a17:90a:9306:b0:28d:d3bb:7359 with SMTP id p6-20020a17090a930600b0028dd3bb7359mr5310830pjo.8.1705936077245;
-        Mon, 22 Jan 2024 07:07:57 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id r5-20020a17090ad40500b0028e01ddb6c2sm9940404pju.12.2024.01.22.07.07.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jan 2024 07:07:56 -0800 (PST)
-Message-ID: <65ae84cc.170a0220.69a81.1e3b@mx.google.com>
-Date: Mon, 22 Jan 2024 07:07:56 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        bh=azZj8uWoAYXpYPWNpYpxGJSP02xYLkyFYL+zSVWu1Bk=;
+        b=DhmDzyrnxd9vZ545GxIlSgOCdLM+NTCEgEOO1OX87QOQ7AySUcCu5AKo9ARiTHzOdO
+         p7U8+Bd6oizpAbYJHopMlYeVtpP8rkXTrpCG8FFGB5CcBUeGwS5xS5ShdY21vjJ2TAfZ
+         0Tjx/bwenXCJJd1Zcr7NOWhMitK8cNeOqoShO5rylEqYU+wq68J0wARN8R/MRAmM6BYA
+         QCH23gE9A1Emzcb1SsbjYFEX8gX+sW6GDlnCiIoaKjW8s9qX85YOrC54Hr2R/Lu8uHAC
+         FVZqEvB+Xo7CanyKaqZqIbV9i/bNqnhPPBkRiWCrAfWf6LCTb6G6G4O6d52nMUs87eN4
+         An7Q==
+X-Gm-Message-State: AOJu0YzzOMxwMPusPA2gZowd+aMCIILVd/f6eWvePMJQfA+xvBTItTlI
+	x/mgbNMSQutIXPUVaJQk41AtETMjENqKt+cMBUU7hiquKQdE6jTd/L8jEzKOlZ9ZDuOPhXufcsa
+	0E6IBG6JAClweKqrnOHpT+wZ51Lk9hT2+NhFmQjIy025rJ8/msJE=
+X-Google-Smtp-Source: AGHT+IGYCqA4bk0i1nasQEY2oO3ecNWeQHgvLLj0Cs/eKLO9AkpXZlekz3dN0S9SpflSX5Qf9j4n4Z9Lq2p6MFv6bDE=
+X-Received: by 2002:a81:5cc1:0:b0:5fa:1942:f055 with SMTP id
+ q184-20020a815cc1000000b005fa1942f055mr3274396ywb.48.1705936902370; Mon, 22
+ Jan 2024 07:21:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-X-Kernelci-Kernel: acpi-6.8-rc1-2-8775-gd8e6ba025f5e4
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 8 builds: 2 failed, 6 passed, 2 errors,
- 32 warnings (acpi-6.8-rc1-2-8775-gd8e6ba025f5e4)
-To: rafael@kernel.org, linux-pm@vger.kernel.org,
- kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
+References: <20240103-genpd-perf-order-v2-1-eeecfc55624b@gerhold.net>
+In-Reply-To: <20240103-genpd-perf-order-v2-1-eeecfc55624b@gerhold.net>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Mon, 22 Jan 2024 16:21:06 +0100
+Message-ID: <CAPDyKFr3TRWM9UOtKkxSXKCAFN5wuvWLNcUfQuqGD91Ut1Ys1g@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: domains: Scale down parent performance states in
+ reverse order
+To: Stephan Gerhold <stephan@gerhold.net>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Viresh Kumar <viresh.kumar@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-pm/testing build: 8 builds: 2 failed, 6 passed, 2 errors, 32 warnings (acpi=
--6.8-rc1-2-8775-gd8e6ba025f5e4)
+On Wed, 3 Jan 2024 at 22:10, Stephan Gerhold <stephan@gerhold.net> wrote:
+>
+> Power domains might have parent domains assigned that are automatically
+> managed by the PM domain core. In particular, parent domains are
+> automatically powered on/off and setting performance states on child
+> domains is translated to parent domains (e.g. using an OPP table from
+> the device tree).
+>
+> Currently parent performance states are always adjusted before the
+> performance state of the child domain is changed.
+>
+> However, typically a parent/child relationship between two power
+> domains with performance states models the requirement to keep the
+> parent domain at a performance state equal or higher to the child
+> domain. When scaling down there is a brief moment where the parent
+> domain will end up having a lower performance state than required by
+> the child domain.
+>
+> To avoid this, we need to differentiate between scaling up/down and
+> adjust the order of operations:
+>
+>  - When scaling up, parent domains should be adjusted before the child
+>    domain. In case of an error, the rollback happens in reverse order.
+>
+>  - When scaling down, parent domains should be adjusted after the child
+>    domain, in reverse order, just as if we would rollback scaling up.
+>    In case of an error, the rollback happens in normal order (just as
+>    if we would normally scale up).
+>
+> Implement this by moving the existing functionality of
+> _genpd_set_performance_state() to two separate functions that are
+> called in the proper iteration order.
+>
+> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/acp=
-i-6.8-rc1-2-8775-gd8e6ba025f5e4/
+I have tested this with my local set of test drivers - and things are
+now working as they should. Thanks a lot for fixing this!
 
-Tree: pm
-Branch: testing
-Git Describe: acpi-6.8-rc1-2-8775-gd8e6ba025f5e4
-Git Commit: d8e6ba025f5e45cb0821298919b0e07130cef877
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+I have applied the patch for next, but it's probably a good idea to
+add a fixes/stable tag to it and queue it as a fix instead. What do
+you think?
 
-Build Failures Detected:
+Note that, I took the liberty of slightly updating the commit message
+a bit, to try to make things even more clear.
 
-i386:
-    i386_defconfig: (gcc-10) FAIL
+Kind regards
+Uffe
 
-x86_64:
-    x86_64_defconfig: (gcc-10) FAIL
 
-Errors and Warnings Detected:
 
-arc:
-    haps_hs_smp_defconfig (gcc-10): 2 warnings
-
-arm64:
-    defconfig (gcc-10): 1 warning
-
-arm:
-
-i386:
-    i386_defconfig (gcc-10): 1 error, 1 warning
-
-mips:
-
-riscv:
-    defconfig (gcc-10): 1 warning
-
-sparc:
-    sparc64_defconfig (gcc-10): 26 warnings
-
-x86_64:
-    x86_64_defconfig (gcc-10): 1 error, 1 warning
-
-Errors summary:
-
-    1    security/security.c:810:2: error: =E2=80=98memcpy=E2=80=99 offset =
-32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-    1    arch/x86/include/asm/string_32.h:150:25: error: =E2=80=98__builtin=
-_memcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bou=
-nds]
-
-Warnings summary:
-
-    2    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offse=
-t 32 is out of the bounds [0, 0] [-Warray-bounds]
-    2    cc1: all warnings being treated as errors
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    1    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =
-=E2=80=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
-rototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
-pes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
-prototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
-ypes]
-    1    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =
-=E2=80=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype fo=
-r =E2=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for=
- =E2=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype=
- for =E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype=
- for =E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototyp=
-e for =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-protot=
-ypes]
-    1    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototyp=
-e for =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype=
- for =E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototyp=
-e for =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototy=
-pe for =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype f=
-or =E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype =
-for =E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype =
-for =E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
-    1    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype fo=
-r 'syscall_trace_enter' [-Wmissing-prototypes]
-    1    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype f=
-or 'arc_kprobe_handler' [-Wmissing-prototypes]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
-smatches
-
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
-smatches
-
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
- section mismatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
-rc_kprobe_handler' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
- mismatches
-
-Errors:
-    arch/x86/include/asm/string_32.h:150:25: error: =E2=80=98__builtin_memc=
-py=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 26 warnings, 0 =
-section mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype for =
-=E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototype for=
- =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototype for=
- =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for =E2=
-=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototype for=
- =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype for =
-=E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype for =
-=E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype for =
-=E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype for =
-=E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototype fo=
-r =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype for =
-=E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =E2=80=
-=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
-types]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
-ypes]
-    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
-=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
-=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 sec=
-tion mismatches
-
-Errors:
-    security/security.c:810:2: error: =E2=80=98memcpy=E2=80=99 offset 32 is=
- out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----
-For more info write to <info@kernelci.org>
+> ---
+> Changes in v2:
+> - Rebase to adjust for move of drivers/base/power/domain.c
+>   to drivers/pmdomain/core.c
+> - Regenerate CC list
+> - No code changes
+> - Link to v1: https://lore.kernel.org/r/20231205-genpd-perf-order-v1-1-6597cc69a729@gerhold.net
+> ---
+> Related discussion: https://lore.kernel.org/linux-pm/ZWXgFNKgm9QaFuzx@gerhold.net/
+> ---
+>  drivers/pmdomain/core.c | 124 ++++++++++++++++++++++++++++++------------------
+>  1 file changed, 77 insertions(+), 47 deletions(-)
+>
+> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+> index a1f6cba3ae6c..fec9dc6ab828 100644
+> --- a/drivers/pmdomain/core.c
+> +++ b/drivers/pmdomain/core.c
+> @@ -311,72 +311,102 @@ static int genpd_xlate_performance_state(struct generic_pm_domain *genpd,
+>  }
+>
+>  static int _genpd_set_performance_state(struct generic_pm_domain *genpd,
+> -                                       unsigned int state, int depth)
+> +                                       unsigned int state, int depth);
+> +
+> +static void _genpd_rollback_parent_state(struct gpd_link *link, int depth)
+>  {
+> -       struct generic_pm_domain *parent;
+> -       struct gpd_link *link;
+> -       int parent_state, ret;
+> +       struct generic_pm_domain *parent = link->parent;
+> +       int parent_state;
+>
+> -       if (state == genpd->performance_state)
+> -               return 0;
+> +       genpd_lock_nested(parent, depth + 1);
+>
+> -       /* Propagate to parents of genpd */
+> -       list_for_each_entry(link, &genpd->child_links, child_node) {
+> -               parent = link->parent;
+> +       parent_state = link->prev_performance_state;
+> +       link->performance_state = parent_state;
+>
+> -               /* Find parent's performance state */
+> -               ret = genpd_xlate_performance_state(genpd, parent, state);
+> -               if (unlikely(ret < 0))
+> -                       goto err;
+> +       parent_state = _genpd_reeval_performance_state(parent, parent_state);
+> +       if (_genpd_set_performance_state(parent, parent_state, depth + 1)) {
+> +               pr_err("%s: Failed to roll back to %d performance state\n",
+> +                      parent->name, parent_state);
+> +       }
+>
+> -               parent_state = ret;
+> +       genpd_unlock(parent);
+> +}
+>
+> -               genpd_lock_nested(parent, depth + 1);
+> +static int _genpd_set_parent_state(struct generic_pm_domain *genpd,
+> +                                  struct gpd_link *link,
+> +                                  unsigned int state, int depth)
+> +{
+> +       struct generic_pm_domain *parent = link->parent;
+> +       int parent_state, ret;
+>
+> -               link->prev_performance_state = link->performance_state;
+> -               link->performance_state = parent_state;
+> -               parent_state = _genpd_reeval_performance_state(parent,
+> -                                               parent_state);
+> -               ret = _genpd_set_performance_state(parent, parent_state, depth + 1);
+> -               if (ret)
+> -                       link->performance_state = link->prev_performance_state;
+> +       /* Find parent's performance state */
+> +       ret = genpd_xlate_performance_state(genpd, parent, state);
+> +       if (unlikely(ret < 0))
+> +               return ret;
+>
+> -               genpd_unlock(parent);
+> +       parent_state = ret;
+>
+> -               if (ret)
+> -                       goto err;
+> -       }
+> +       genpd_lock_nested(parent, depth + 1);
+>
+> -       if (genpd->set_performance_state) {
+> -               ret = genpd->set_performance_state(genpd, state);
+> -               if (ret)
+> -                       goto err;
+> -       }
+> +       link->prev_performance_state = link->performance_state;
+> +       link->performance_state = parent_state;
+>
+> -       genpd->performance_state = state;
+> -       return 0;
+> +       parent_state = _genpd_reeval_performance_state(parent, parent_state);
+> +       ret = _genpd_set_performance_state(parent, parent_state, depth + 1);
+> +       if (ret)
+> +               link->performance_state = link->prev_performance_state;
+>
+> -err:
+> -       /* Encountered an error, lets rollback */
+> -       list_for_each_entry_continue_reverse(link, &genpd->child_links,
+> -                                            child_node) {
+> -               parent = link->parent;
+> +       genpd_unlock(parent);
+>
+> -               genpd_lock_nested(parent, depth + 1);
+> +       return ret;
+> +}
+> +
+> +static int _genpd_set_performance_state(struct generic_pm_domain *genpd,
+> +                                       unsigned int state, int depth)
+> +{
+> +       struct gpd_link *link = NULL;
+> +       int ret;
+> +
+> +       if (state == genpd->performance_state)
+> +               return 0;
+>
+> -               parent_state = link->prev_performance_state;
+> -               link->performance_state = parent_state;
+> +       /* When scaling up, propagate to parents first in normal order */
+> +       if (state > genpd->performance_state) {
+> +               list_for_each_entry(link, &genpd->child_links, child_node) {
+> +                       ret = _genpd_set_parent_state(genpd, link, state, depth);
+> +                       if (ret)
+> +                               goto rollback_parents_up;
+> +               }
+> +       }
+>
+> -               parent_state = _genpd_reeval_performance_state(parent,
+> -                                               parent_state);
+> -               if (_genpd_set_performance_state(parent, parent_state, depth + 1)) {
+> -                       pr_err("%s: Failed to roll back to %d performance state\n",
+> -                              parent->name, parent_state);
+> +       if (genpd->set_performance_state) {
+> +               ret = genpd->set_performance_state(genpd, state);
+> +               if (ret) {
+> +                       if (link)
+> +                               goto rollback_parents_up;
+> +                       return ret;
+>                 }
+> +       }
+>
+> -               genpd_unlock(parent);
+> +       /* When scaling down, propagate to parents last in reverse order */
+> +       if (state < genpd->performance_state) {
+> +               list_for_each_entry_reverse(link, &genpd->child_links, child_node) {
+> +                       ret = _genpd_set_parent_state(genpd, link, state, depth);
+> +                       if (ret)
+> +                               goto rollback_parents_down;
+> +               }
+>         }
+>
+> +       genpd->performance_state = state;
+> +       return 0;
+> +
+> +rollback_parents_up:
+> +       list_for_each_entry_continue_reverse(link, &genpd->child_links, child_node)
+> +               _genpd_rollback_parent_state(link, depth);
+> +       return ret;
+> +rollback_parents_down:
+> +       list_for_each_entry_continue(link, &genpd->child_links, child_node)
+> +               _genpd_rollback_parent_state(link, depth);
+>         return ret;
+>  }
+>
+>
+> ---
+> base-commit: 0fef202ac2f8e6d9ad21aead648278f1226b9053
+> change-id: 20231205-genpd-perf-order-bf33029c25ac
+>
+> Best regards,
+> --
+> Stephan Gerhold <stephan@gerhold.net>
+>
 
