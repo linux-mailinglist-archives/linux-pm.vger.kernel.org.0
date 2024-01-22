@@ -1,114 +1,106 @@
-Return-Path: <linux-pm+bounces-2515-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2516-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C6B48375AE
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 22:56:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3AC6B8375D8
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 23:08:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA6EB1C262FA
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 21:56:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6DDF81C23C5E
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 22:08:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC5A1482ED;
-	Mon, 22 Jan 2024 21:56:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C31D482D6;
+	Mon, 22 Jan 2024 22:08:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="XtyKsMO6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jIMFv7S2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8277482D1;
-	Mon, 22 Jan 2024 21:56:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7723848780
+	for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 22:08:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705960594; cv=none; b=i8hjAvBWh8M9rJmYc5rKtMPrDFRlkZwR0w3mSwok36IeojqP+uYxDGK+0UJPizqLBPLXR/FseBQ1Ru7e2xAP6GMzRKtoMWLymdBUTzGhQ3Jj+kOqU9dO0bArlL0Jge4HAFdkGKwf94bVycri2uve7MUgDPNOemvS8CKsc4uPqn0=
+	t=1705961292; cv=none; b=WJCePXCymmzSmbNE10o6l72Sv/xovpPqXfaXDBPeQT/zYDSVKG9eYeZG4NMQq2W5q/DwEZ8MXglwt2/6KRdHxcrDvHe1NQQ+lMgZDqksdyGTgHtAJEToprnne2SvVFswYz8GofcJITFe8vRa/c78cG4VJAbbIIC4r6Y7mxKK6lE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705960594; c=relaxed/simple;
-	bh=J8tuHVuaRf99BTjAxEXGtJuL5FiKMuM5URapCqBOWYg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lNMZvzMP28Cr9njWSm5dY5LwhGYOwmexYPGCarCthcqhhELbhXYnTof+hy9NZM+MBh2/BI8HqqLQ1Fu3hjDX5aKleAdRXsNlW/k+DsDnZgCL0cb4w6GvxIyYC/Ks7WaTBStMInOzsSWk6h2NUgVWxrx3JvUa1kNKImiIw+3r3HA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=XtyKsMO6; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=DlkxdPo00vFXMtifZbwmiD3pZWcfGIoDSDnanNUdXxo=; b=XtyKsMO6Yn2dYk1lNRNde3BiDP
-	un+RAJyMR6k8+9e/yJl2r+Ov0qOcDIbhiz/y/7GX3fw87B0GNJ/3HmCLVJiLb2Ks1V96LgACams6f
-	cX+obUMvFpeX/Pmcl6RnUH2y50c9vxvFy0DDxefuB+2qrsso/uyXuGtyvj3A9FRQHRH/QBhxa5OTm
-	Zz/RSWt46rOm+BHPj4216FX8QXMjUNV0DnJe0jlcqUzpr7YBglGllncVFHK+j40azOzpeA1xvOtkS
-	tXvN5txsFycplH3UgwgXX380INC6PxDJ2P3HQ+KLP+EUK49pbp89QiATkRHw/56ttdlNvv/I2Oqdt
-	A0vRazAA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:50158)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1rS2HI-0001cI-2Q;
-	Mon, 22 Jan 2024 21:56:24 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1rS2HC-0001MW-T5; Mon, 22 Jan 2024 21:56:18 +0000
-Date: Mon, 22 Jan 2024 21:56:18 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-	x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
-	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	jianyong.wu@arm.com, justin.he@arm.com,
-	James Morse <james.morse@arm.com>
-Subject: Re: [PATCH RFC v3 04/21] ACPI: processor: Register all CPUs from
- acpi_processor_get_info()
-Message-ID: <Za7kglu6qO1n5ZCg@shell.armlinux.org.uk>
-References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
- <E1rDOg7-00Dvjq-VZ@rmk-PC.armlinux.org.uk>
- <CAJZ5v0je=-oVnSumZs=dzcyVuVUeVeTgO7yOnjGg1igyrS7EHQ@mail.gmail.com>
+	s=arc-20240116; t=1705961292; c=relaxed/simple;
+	bh=x3TkesbI6X22V9paxjyP3epr7ndXcPaIbGt8h1dWCnw=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=EdlU5Ssxl35yrxI02MOXJQJOd+RXxv5XsGKljzAlrC/UChdF/54BhGpoDj7etOjsAtZjlBU4dG8NfBV0+nrKskn687r/m+TWkkSZfVoXaVbb7W9rzYnFsuzhw4dmw1oHpRlD2FWsTveGVNR2t3fZSrkx7H+CP3sDo7qpxMZ7ARM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jIMFv7S2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4F28FC433A6
+	for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 22:08:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705961292;
+	bh=x3TkesbI6X22V9paxjyP3epr7ndXcPaIbGt8h1dWCnw=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=jIMFv7S29UJKhO9oCTZx2csYeQSPs8wEjHzfnw6V/1g8eWux62QCQKH9Y1M8MLsEJ
+	 CZRoG01bKPAj+35j+Fn6nN1JFY/CpWBZKo/qvrIPmUvDMlsPPjJv8RloxkBtZaaWts
+	 /9Rub06woiWQroQxdbyr44eOOBdeNBAxNMjcEEjWK6spYF+QtIEy3mg4RaVf4T9EtZ
+	 TH4SBULPJM4Drs2s6FSjytJKvFuwqgFykIzy6ctrOHt1YBFV4W9taz2P7TgiRrirZa
+	 1a+mER4wL7xAFbckDDD91BjMvFcsiFW6QwJlsa64yklOnQ8Nn2DEOS98Sq9HZHJGW/
+	 O3gNsCY7ocJKQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 3D3BFC53BCD; Mon, 22 Jan 2024 22:08:12 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218171] amd-pstate not loading on zen2 threadripper 3960x
+ (trx40
+Date: Mon, 22 Jan 2024 22:08:11 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: alessio.disandro@gmail.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: ANSWERED
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218171-137361-Ah4uakZucd@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218171-137361@https.bugzilla.kernel.org/>
+References: <bug-218171-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0je=-oVnSumZs=dzcyVuVUeVeTgO7yOnjGg1igyrS7EHQ@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Mon, Dec 18, 2023 at 09:30:50PM +0100, Rafael J. Wysocki wrote:
-> On Wed, Dec 13, 2023 at 1:49 PM Russell King <rmk+kernel@armlinux.org.uk> wrote:
-> > Systems can still be booted with 'acpi=off', or not include an
-> > ACPI description at all. For these, the CPUs continue to be
-> > registered by cpu_dev_register_generic().
-> >
-> > This moves the CPU register logic back to a subsys_initcall(),
-> > while the memory nodes will have been registered earlier.
-> 
-> Isn't this somewhat risky?
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218171
 
-Not really. The earlier full series moved the registration of CPUs
-from subsys (by the various architecture specific code) into the
-driver core - thus moving it much earlier. This patch merely
-restores it back to the subsys initialisation stage.
+--- Comment #32 from Alessio Di Sandro (alessio.disandro@gmail.com) ---
+I have investigated a bit what happens on the Windows (dark) side, and it l=
+ooks
+like CPPC is active and used by the OS (same MSI motherboard and bios with =
+dual
+boot).
 
-There is a low chance that something _could_ have become reliant
-on that change - and the longer it takes for this change to be
-merged, the more risk there is that something could become reliant
-on CPUs being registered very early.
+HWiNFO shows the list of cores in CPPC order, and by monitoring clocks core=
+ 21
+is indeed the one that can clock the highest.
 
-Maybe this ought to be spelt out more explicitly that it's merely
-restoring the point at which CPUs are registered.
+Windows Event Viewer agrees, showing ACPI CPPC being used (performance state
+type) and core 40 the one with the highest maximum performance percentage
+(numbering starts from 0 here and considers SMT cores too, while hwinfo sta=
+rts
+from 1, so that cores 40/41 in the viewer is core 21 in hwinfo). All the ot=
+her
+maximum performance percentage values agree with hwinfo's CPPC order.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
 
