@@ -1,49 +1,49 @@
-Return-Path: <linux-pm+bounces-2445-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2444-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 851E483625B
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 12:45:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E035083625A
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 12:45:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 201D41F2877B
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 11:45:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D38671C273E2
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 11:45:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E4523C485;
-	Mon, 22 Jan 2024 11:44:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 693003B79C;
+	Mon, 22 Jan 2024 11:44:26 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68D8D3B2A1;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B041F3B18D;
 	Mon, 22 Jan 2024 11:44:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705923867; cv=none; b=h1Qs9+lyIGNJAY7k+OCqNuoppSaEcfquj9LQSiPUcbf0pShOwkWFFA0xWZThqAOvFuOiGInyQbH0L4QyNd+uma9CPoVK2IdpqfqzDQ/AnPXj2+lSLEw/DejwSEn0rUUVLeHl/+7MVduTZyWqjCPBH3duetNf7icbOYTw5F7y02U=
+	t=1705923866; cv=none; b=sgOxxn8MH2ykHY+PxOrIQI8t4GXwPEvhw6ZlDypgqtdbzTK2w5M7WgdBEjRD0uEWvu+mon9PZ7bs8161QldvmmASXqKnKGsdafC9nBUfffZJ73VJwplEU8KJBeV8TMf7QleJPfQ1TLcvKiYMm5A9tvg7iNm9eBJanqh5YBe7s9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705923867; c=relaxed/simple;
-	bh=mpMKfd9yXRCoS8WrmhHHIz0u2n9wfzoTC6Y6FmHya8k=;
+	s=arc-20240116; t=1705923866; c=relaxed/simple;
+	bh=zLDg+aUXKQPOwMNT7k7M6cQ/qqSLFgfVqYQgwI16+KA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=q5lO+Dm8rIf3oFtMm6Y6u5ITb9N802POrQVtwoyDYlqkBgacc9sJaAFV10N9vVhL80DqhxpwLyOGynukIGmTyrbsbp5JlFK22PJzsi3W7QenhilnqJyFME1rFvN9wizIMaA/Kb/8HVmO+jDTd4PQRCL0LqB0qUqkgV3mBQwSe+I=
+	 MIME-Version:Content-Type; b=T/DjSaun3jPY/J6oyoYgZY7cwsiWNEhN/P/6LKjKHZ7Z+XWV2TcCo5lTkzjVGdvQNopKraUVFq74VFsUW4fXtPk8t+h6ShsyAql3FEihIajn9+kWa3wzpMmiGMrUrcBsIaCGEAtv1aoXyZVXbIPg0Nlk6qFwU72lh0sEG26T4bM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id 053a946a4536c0e0; Mon, 22 Jan 2024 12:44:22 +0100
+ id e6c3051c386dccb8; Mon, 22 Jan 2024 12:44:21 +0100
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id A5859669541;
-	Mon, 22 Jan 2024 12:44:21 +0100 (CET)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id E087D669543;
+	Mon, 22 Jan 2024 12:44:20 +0100 (CET)
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Subject: [PATCH v1 11/12] PM: sleep: Move devices to new lists earlier in each suspend phase
-Date: Mon, 22 Jan 2024 12:42:46 +0100
-Message-ID: <3476604.QJadu78ljV@kreacher>
+Subject: [PATCH v1 12/12] PM: sleep: Call dpm_async_fn() directly in each suspend phase
+Date: Mon, 22 Jan 2024 12:44:06 +0100
+Message-ID: <23385132.6Emhk5qWAg@kreacher>
 In-Reply-To: <5760158.DvuYhMxLoT@kreacher>
 References: <5760158.DvuYhMxLoT@kreacher>
 Precedence: bulk
@@ -62,99 +62,182 @@ X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-During a system-wide suspend of devices, dpm_noirq_suspend_devices(),
-dpm_suspend_late() and dpm_suspend() move devices from one list to
-another.  They do it with each device after its PM callback in the
-given suspend phase has run or has been scheduled for asynchronous
-execution, in case it is deleted from the current list in the
-meantime.
-
-However, devices can be moved to a new list before invoking their PM
-callbacks (which usually is the case for the devices whose callbacks
-are executed asynchronously anyway), because doing so does not affect
-the ordering of that list.  In either case, each device is moved to
-the new list after the previous device has been moved to it or gone
-away, and if a device is removed, it does not matter which list it is
-in at that point, because deleting an entry from a list does not change
-the ordering of the other entries in it.
-
-Accordingly, modify the functions mentioned above to move devices to
-new lists without waiting for their PM callbacks to run regardless of
-whether or not they run asynchronously.
+Simplify the system-wide suspend of devices by invoking dpm_async_fn()
+directly from the main loop in each suspend phase instead of using an
+additional wrapper function for running it.
 
 No intentional functional impact.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/base/power/main.c |   24 +++---------------------
- 1 file changed, 3 insertions(+), 21 deletions(-)
+ drivers/base/power/main.c |   61 ++++++++++++++++++----------------------------
+ 1 file changed, 25 insertions(+), 36 deletions(-)
 
 Index: linux-pm/drivers/base/power/main.c
 ===================================================================
 --- linux-pm.orig/drivers/base/power/main.c
 +++ linux-pm/drivers/base/power/main.c
-@@ -1304,18 +1304,12 @@ static int dpm_noirq_suspend_devices(pm_
- 	while (!list_empty(&dpm_late_early_list)) {
+@@ -1192,7 +1192,7 @@ static void dpm_superior_set_must_resume
+ }
+ 
+ /**
+- * __device_suspend_noirq - Execute a "noirq suspend" callback for given device.
++ * device_suspend_noirq - Execute a "noirq suspend" callback for given device.
+  * @dev: Device to handle.
+  * @state: PM transition of the system being carried out.
+  * @async: If true, the device is being suspended asynchronously.
+@@ -1200,7 +1200,7 @@ static void dpm_superior_set_must_resume
+  * The driver of @dev will not receive interrupts while this function is being
+  * executed.
+  */
+-static int __device_suspend_noirq(struct device *dev, pm_message_t state, bool async)
++static int device_suspend_noirq(struct device *dev, pm_message_t state, bool async)
+ {
+ 	pm_callback_t callback = NULL;
+ 	const char *info = NULL;
+@@ -1277,18 +1277,10 @@ static void async_suspend_noirq(void *da
+ {
+ 	struct device *dev = data;
+ 
+-	__device_suspend_noirq(dev, pm_transition, true);
++	device_suspend_noirq(dev, pm_transition, true);
+ 	put_device(dev);
+ }
+ 
+-static int device_suspend_noirq(struct device *dev)
+-{
+-	if (dpm_async_fn(dev, async_suspend_noirq))
+-		return 0;
+-
+-	return __device_suspend_noirq(dev, pm_transition, false);
+-}
+-
+ static int dpm_noirq_suspend_devices(pm_message_t state)
+ {
+ 	ktime_t starttime = ktime_get();
+@@ -1305,10 +1297,15 @@ static int dpm_noirq_suspend_devices(pm_
  		struct device *dev = to_device(dpm_late_early_list.prev);
  
-+		list_move(&dev->power.entry, &dpm_noirq_list);
+ 		list_move(&dev->power.entry, &dpm_noirq_list);
++
++		if (dpm_async_fn(dev, async_suspend_noirq))
++			continue;
++
  		get_device(dev);
++
  		mutex_unlock(&dpm_list_mtx);
  
- 		error = device_suspend_noirq(dev);
+-		error = device_suspend_noirq(dev);
++		error = device_suspend_noirq(dev, state, false);
  
--		mutex_lock(&dpm_list_mtx);
--
--		if (!error && !list_empty(&dev->power.entry))
--			list_move(&dev->power.entry, &dpm_noirq_list);
--
--		mutex_unlock(&dpm_list_mtx);
--
  		put_device(dev);
  
- 		mutex_lock(&dpm_list_mtx);
-@@ -1486,19 +1480,13 @@ int dpm_suspend_late(pm_message_t state)
- 	while (!list_empty(&dpm_suspended_list)) {
+@@ -1369,14 +1366,14 @@ static void dpm_propagate_wakeup_to_pare
+ }
+ 
+ /**
+- * __device_suspend_late - Execute a "late suspend" callback for given device.
++ * device_suspend_late - Execute a "late suspend" callback for given device.
+  * @dev: Device to handle.
+  * @state: PM transition of the system being carried out.
+  * @async: If true, the device is being suspended asynchronously.
+  *
+  * Runtime PM is disabled for @dev while this function is being executed.
+  */
+-static int __device_suspend_late(struct device *dev, pm_message_t state, bool async)
++static int device_suspend_late(struct device *dev, pm_message_t state, bool async)
+ {
+ 	pm_callback_t callback = NULL;
+ 	const char *info = NULL;
+@@ -1447,18 +1444,10 @@ static void async_suspend_late(void *dat
+ {
+ 	struct device *dev = data;
+ 
+-	__device_suspend_late(dev, pm_transition, true);
++	device_suspend_late(dev, pm_transition, true);
+ 	put_device(dev);
+ }
+ 
+-static int device_suspend_late(struct device *dev)
+-{
+-	if (dpm_async_fn(dev, async_suspend_late))
+-		return 0;
+-
+-	return __device_suspend_late(dev, pm_transition, false);
+-}
+-
+ /**
+  * dpm_suspend_late - Execute "late suspend" callbacks for all devices.
+  * @state: PM transition of the system being carried out.
+@@ -1481,11 +1470,15 @@ int dpm_suspend_late(pm_message_t state)
  		struct device *dev = to_device(dpm_suspended_list.prev);
  
-+		list_move(&dev->power.entry, &dpm_late_early_list);
+ 		list_move(&dev->power.entry, &dpm_late_early_list);
++
++		if (dpm_async_fn(dev, async_suspend_late))
++			continue;
++
  		get_device(dev);
  
  		mutex_unlock(&dpm_list_mtx);
  
- 		error = device_suspend_late(dev);
+-		error = device_suspend_late(dev);
++		error = device_suspend_late(dev, state, false);
  
--		mutex_lock(&dpm_list_mtx);
--
--		if (!list_empty(&dev->power.entry))
--			list_move(&dev->power.entry, &dpm_late_early_list);
--
--		mutex_unlock(&dpm_list_mtx);
--
  		put_device(dev);
  
- 		mutex_lock(&dpm_list_mtx);
-@@ -1763,19 +1751,13 @@ int dpm_suspend(pm_message_t state)
- 	while (!list_empty(&dpm_prepared_list)) {
+@@ -1582,12 +1575,12 @@ static void dpm_clear_superiors_direct_c
+ }
+ 
+ /**
+- * __device_suspend - Execute "suspend" callbacks for given device.
++ * device_suspend - Execute "suspend" callbacks for given device.
+  * @dev: Device to handle.
+  * @state: PM transition of the system being carried out.
+  * @async: If true, the device is being suspended asynchronously.
+  */
+-static int __device_suspend(struct device *dev, pm_message_t state, bool async)
++static int device_suspend(struct device *dev, pm_message_t state, bool async)
+ {
+ 	pm_callback_t callback = NULL;
+ 	const char *info = NULL;
+@@ -1716,18 +1709,10 @@ static void async_suspend(void *data, as
+ {
+ 	struct device *dev = data;
+ 
+-	__device_suspend(dev, pm_transition, true);
++	device_suspend(dev, pm_transition, true);
+ 	put_device(dev);
+ }
+ 
+-static int device_suspend(struct device *dev)
+-{
+-	if (dpm_async_fn(dev, async_suspend))
+-		return 0;
+-
+-	return __device_suspend(dev, pm_transition, false);
+-}
+-
+ /**
+  * dpm_suspend - Execute "suspend" callbacks for all non-sysdev devices.
+  * @state: PM transition of the system being carried out.
+@@ -1752,11 +1737,15 @@ int dpm_suspend(pm_message_t state)
  		struct device *dev = to_device(dpm_prepared_list.prev);
  
-+		list_move(&dev->power.entry, &dpm_suspended_list);
+ 		list_move(&dev->power.entry, &dpm_suspended_list);
++
++		if (dpm_async_fn(dev, async_suspend))
++			continue;
++
  		get_device(dev);
  
  		mutex_unlock(&dpm_list_mtx);
  
- 		error = device_suspend(dev);
+-		error = device_suspend(dev);
++		error = device_suspend(dev, state, false);
  
--		mutex_lock(&dpm_list_mtx);
--
--		if (!error && !list_empty(&dev->power.entry))
--			list_move(&dev->power.entry, &dpm_suspended_list);
--
--		mutex_unlock(&dpm_list_mtx);
--
  		put_device(dev);
  
- 		mutex_lock(&dpm_list_mtx);
 
 
 
