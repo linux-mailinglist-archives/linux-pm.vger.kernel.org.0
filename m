@@ -1,242 +1,263 @@
-Return-Path: <linux-pm+bounces-2511-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2512-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FDC683736E
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 21:02:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 118DE8373B3
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 21:27:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A770BB21502
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 20:02:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B523B287632
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 20:27:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13E3A405D5;
-	Mon, 22 Jan 2024 20:02:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93AA64177C;
+	Mon, 22 Jan 2024 20:27:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="elCw2513"
+	dkim=pass (1024-bit key) header.d=armh.onmicrosoft.com header.i=@armh.onmicrosoft.com header.b="8nnywCHk";
+	dkim=pass (1024-bit key) header.d=armh.onmicrosoft.com header.i=@armh.onmicrosoft.com header.b="8nnywCHk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2055.outbound.protection.outlook.com [40.107.6.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BFF13B790
-	for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 20:02:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705953743; cv=none; b=mrQ08/lbha273RVxqvOaml2JVRKgmKd4/cCe82vRS5RWSOC9GyUGLEDbPCo3QVgnIaU3vN/SYXicBTdce44pIuJbhDR1uiVZ2qPDkEndOrKomAm/GSELmfT8smSYR8x6qKk6C/IhjCHnceRfu0pgMuv17fdp54JcERzIsVrR22Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705953743; c=relaxed/simple;
-	bh=VdkhAorzBPaH/4Q+W05lpm+qjGuxdMhhs5V7dPnuTyo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f2jqwSqtA1oL8xzoeSXVAKZ8yWXmrPXjZ1vmY99V+jaZONljWl+gVeMoatg/km+LgmWvvseiMGuIBABBVy7HBpErbIXkjsmp/aRGfuIr+x70x9/5BIEAQUWjkIczMozPWXrWWbBym7dmmdevigsaOrIYUHq5UaELuweGtQWry/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=elCw2513; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-339261a6ec2so2103664f8f.0
-        for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 12:02:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705953739; x=1706558539; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=S9XdGfwCaFqRS40nSS7oXOASpHTiWciWWg6+rB3mocA=;
-        b=elCw25134BVwV6RfN8JXNOtKbmsUpYd9YOysB48fI+PXuloobbPgxSM/0B2C2aKpt9
-         4LMN2D99w+NSPQ15mVlRQ4L+M1mz8FbFLmBELaBXgsUXnGmb+OQmrKB1tx1fhtUmu8/n
-         6awumyw2WUuhsfW3OfTP+ZMEo//RzIwRiDw/lXxecpMsxNjrdUc0r22ZcOz4BVcWs4lf
-         ALrgNZ9b7qbzZjOWA3zOM0kYjLKHNEu7Q6t7pTM+3gBkseXgdhetnRmgtdGdseVZF+C1
-         K2YvF3du/hSW/FHbyaorOFTUcfnkbcjHV2zAkvC5QpYX2jjO6hAUb7ip5v3jc2jdYevt
-         94BQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705953739; x=1706558539;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=S9XdGfwCaFqRS40nSS7oXOASpHTiWciWWg6+rB3mocA=;
-        b=PsDptAcckj+/qYNjHycXQcgZdTRa54Df/bSGBuxTUY5TSICU5on0XsC6OvHNJLXugh
-         quExmddMBouggyr+xInIZM92hpAiMG3Wj+qDN3CP7b+a0kXlBEBpCEit5uiTUJ0vU68s
-         xcOu29UAj4dO9qqSwNM8sD7cuQ7I7LFNwEKyNmRHep+oGSo75iT5OROvyvUChvmn+FbW
-         DgOMq71ddoVurVBBaaltilcK9Yr5KECer/87wkrtVxzH7UozhmP+0w2xwUST7Zq6FVME
-         85fV9C4i3a+SAk92kIltn6llxjnfTZdKmC1U14g0cTZOXXaUp0Fg+GrDHZVkqFvAC2Pl
-         NLdA==
-X-Gm-Message-State: AOJu0Ywu6eTdV9z/pjHGhkWdPvp8z9xKPPrpsaqFnY6EWKScwx3/Rp4K
-	tVsIGgxm1GForLxjSzEbDeCM1KE3IEFYuS57CjKK0QVcCM16FRPhN1C6ExIHyz6oAu+hSPeWkjY
-	SOoqmWZ16Y4VP4pLXUTuHPXjSTgR7k6qkrwPgRg==
-X-Google-Smtp-Source: AGHT+IEP0LsFZ1DHoUGKiydzMLgHty4VJtBb5guXu8UbilwyiD38/IJiB6McSbbUFrxTg/eiRG2KWw2gTlp8GlSr0/A=
-X-Received: by 2002:adf:e68b:0:b0:337:6e32:1811 with SMTP id
- r11-20020adfe68b000000b003376e321811mr2954342wrm.75.1705953739678; Mon, 22
- Jan 2024 12:02:19 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B236341763
+	for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 20:27:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.6.55
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1705955248; cv=fail; b=d/X1HZpmaCRmlcAnasRnm0rDT1Drpw9Xgxvnl3cPMjLREcMRegpYIhSUoiboqzam99W86R6SBKUPbt895v+PXBWFDReIsWaMp3XcfTPccpozVI0nKFiQVi94af4i+CvGar9BDEen7ly3NAXRU6Y8RDpHqJXnmG40MhlMxO4HiFg=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1705955248; c=relaxed/simple;
+	bh=JjKGwoSHFeNMMw7VrYBXOz76Wa9gK3cWjzaIYWfe6Gk=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=s7EhQRz1jB0aAHAAqVNtKdIwU8VwseKuNdriPSsSSi0PhRv6zy/HeDzRF0nAQGgzlO86KONpPNrpTGrsrans+FaKEXDGArE6l0a5DyGYS4u04r42cWlqCkFuXDgOZPupR+qc95+RGfnv1AeOCXZRh/NZDCcHIwUvNUXZ1q08QsE=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=armh.onmicrosoft.com header.i=@armh.onmicrosoft.com header.b=8nnywCHk; dkim=pass (1024-bit key) header.d=armh.onmicrosoft.com header.i=@armh.onmicrosoft.com header.b=8nnywCHk; arc=fail smtp.client-ip=40.107.6.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=Xm+hXOUyzA/BLqS6ZyRr32lq1BkOMZJi2lsHUQPZ75oszn0Vi6l/833dVj+jEtvt/D5qQWNty/P7loX21CC4qd0O/YU/HMPD0ylFSj+d+S2yPIS7kpAcc+Jc01p22dGVR9HQxOrcL7BJm1rFtrzf1EWCn90xlFviBMFe5pAMIlDbG73XFjbmHqEI+AmgJDHOHpmK62BNi3F+Mw3YMFALJ/lAJ9gRtfCVV9XauKbU9OB5DmDvs8sVUWd2ZWxPz+wVpiGygCH8P3WgrOGV5ugKxejkcKMky061Onyu6DWsG4H8WUhiEHQS/uzrnd37fbmt0P2rsRFtAiKJE1bHsjuUQw==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OnQvOk+yNUK1LmLXgeJHrg7+RT68fptGZ3DRBDpJz+E=;
+ b=F+HJYt1qX50oRxh+1ORcC6er2lhYYsrTtxFiq2yM3Js/nU/Rxeza36Nq/TrkpWHe493nz9DSUXkY9cZ/+DmmGNZe7PkI+RRPy/cYlxrK6DR2pYEEbpLnXqNd5G6YcDNYcwmxT83Y2gGVdF7HTs3VFuC2C6ycIirqbwoXCiHDIQNsFDzJPrI0jhgaiyQGn7dwn20ZyK7VouK7llAK/bpyif90sPNp2eEhedetAIBWMpYKldsPoCRLDpzx1J7jn6vu20ztHN6RJd2kK/UwbWrNcfybc4PdkzykP3P8DD0mm8z2z5f0GjUDTr0UCWRnEQCErlRBBnroYTrS6D6x5A71Xg==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 63.35.35.123) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=arm.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
+ dkim=pass (signature was verified) header.d=armh.onmicrosoft.com; arc=pass (0
+ oda=1 ltdi=1 spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OnQvOk+yNUK1LmLXgeJHrg7+RT68fptGZ3DRBDpJz+E=;
+ b=8nnywCHk0kYCswv73XqKnKhpm/mCG4v+eh9V9pbKb1t2/CqT45fCUpO53L2rZMV7YKwD2Fh2Lc4OW7aJtPMqnpVbQdU60XcgZQTVKOza/A7xBhUVcIKF4bqAfcmAPvytVFUAItnTQVeacx5x3QhSi54/1G9qkjzPaNeP8jxMZ0A=
+Received: from AM0PR03CA0045.eurprd03.prod.outlook.com (2603:10a6:208::22) by
+ AS2PR08MB9715.eurprd08.prod.outlook.com (2603:10a6:20b:605::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7202.32; Mon, 22 Jan 2024 20:27:19 +0000
+Received: from AM4PEPF00025F9A.EURPRD83.prod.outlook.com
+ (2603:10a6:208:0:cafe::41) by AM0PR03CA0045.outlook.office365.com
+ (2603:10a6:208::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7202.31 via Frontend
+ Transport; Mon, 22 Jan 2024 20:27:19 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
+ client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
+ pr=C
+Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
+ AM4PEPF00025F9A.mail.protection.outlook.com (10.167.16.9) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7228.0 via Frontend Transport; Mon, 22 Jan 2024 20:27:19 +0000
+Received: ("Tessian outbound c87008563c51:v228"); Mon, 22 Jan 2024 20:27:19 +0000
+X-CheckRecipientChecked: true
+X-CR-MTA-CID: 29c686cc70c6eff2
+X-CR-MTA-TID: 64aa7808
+Received: from 3812da4aa1f1.2
+	by 64aa7808-outbound-1.mta.getcheckrecipient.com id 91B6820F-45BC-46B1-8BE1-6EE5B5EA5E83.1;
+	Mon, 22 Jan 2024 20:27:13 +0000
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 3812da4aa1f1.2
+    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
+    Mon, 22 Jan 2024 20:27:13 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mL21EvwyAORsuFmyFls7BHa5Skwecv48E9RXB1gJsEduLkgPOJ613MRBGa5IrsJWjLebUSpHzLgCSiYxL/AAft4zMYGGlny2DmrS9zzjZA65HrQrKEvSvtgwMsAxlfsS3veH+FTPuzSm+rzsQq7aMV4e4u1gZTO1JRaGr48LqM+oqWUGFEbiaHjiubydbSZHHCE7j5mRIvHTUB/eBIBkDdlWSkughCixZa+vi2MYlQJKZI7kit7OWDrco7FnJF8uavNQQDjM6kR3ay8lbL8BzUQ3PFr59L+90+hCa9OutfJzSCE5evEr3LPHeGcj9jGN8CJFsgUx4wXn4xKusbKJkw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OnQvOk+yNUK1LmLXgeJHrg7+RT68fptGZ3DRBDpJz+E=;
+ b=jDL/5D+400n3qyio5ySq4HAIlcb1oVrew4MMWlpdv9axM+LRnm4jBBSZN8UzOEagmH6+j67eEJILrmv1yHu+1aZYS4lMPPQqEV5V4ZRNPdxqUtYkPVk/m8DFUayIfhjeZXfWCw7RT3s+C9wKq68TfztVdEcO2tuWg+/AiFf+C8UCoJ30TxH3inK9TmzHqwsAO0HFbDB+nhpCSnPz0ACqyc0NaxqtaURgwcL6gUSk8OwIgYF9cSaZaP3MYZJEXTLooG65k8zwl/pp7IxOCn4EamLrjIjFBHTl1FN5/qbI2PZpQ97GE2+diBbqovYazfvZ6fStcfMzs4qR9zGU1k+9tA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OnQvOk+yNUK1LmLXgeJHrg7+RT68fptGZ3DRBDpJz+E=;
+ b=8nnywCHk0kYCswv73XqKnKhpm/mCG4v+eh9V9pbKb1t2/CqT45fCUpO53L2rZMV7YKwD2Fh2Lc4OW7aJtPMqnpVbQdU60XcgZQTVKOza/A7xBhUVcIKF4bqAfcmAPvytVFUAItnTQVeacx5x3QhSi54/1G9qkjzPaNeP8jxMZ0A=
+Received: from VE1PR08MB4768.eurprd08.prod.outlook.com (2603:10a6:802:ab::22)
+ by GV2PR08MB9877.eurprd08.prod.outlook.com (2603:10a6:150:dd::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7202.31; Mon, 22 Jan
+ 2024 20:27:09 +0000
+Received: from VE1PR08MB4768.eurprd08.prod.outlook.com
+ ([fe80::5c98:7294:1307:4796]) by VE1PR08MB4768.eurprd08.prod.outlook.com
+ ([fe80::5c98:7294:1307:4796%4]) with mapi id 15.20.7202.031; Mon, 22 Jan 2024
+ 20:27:04 +0000
+From: Ben Horgan <Ben.Horgan@arm.com>
+To: "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>
+CC: nd <nd@arm.com>, Vishnu Banavath <Vishnu.Banavath@arm.com>, Florent
+ Tomasin <Florent.Tomasin@arm.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+	Sudeep Holla <Sudeep.Holla@arm.com>, "linux-pm@vger.kernel.org"
+	<linux-pm@vger.kernel.org>
+Subject: Using scmi performance domains and scmi power domains together
+Thread-Topic: Using scmi performance domains and scmi power domains together
+Thread-Index: AQHaTXCIC237/uJ1K0CA6xtK0hXWVg==
+Date: Mon, 22 Jan 2024 20:27:03 +0000
+Message-ID:
+ <VE1PR08MB476848A0895993EAC92AF77B91752@VE1PR08MB4768.eurprd08.prod.outlook.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-GB
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+x-ms-traffictypediagnostic:
+	VE1PR08MB4768:EE_|GV2PR08MB9877:EE_|AM4PEPF00025F9A:EE_|AS2PR08MB9715:EE_
+X-MS-Office365-Filtering-Correlation-Id: be589c94-7273-4e13-f806-08dc1b888855
+x-checkrecipientrouted: true
+nodisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ 96SFy1Oi9YLbONkgZeTO8JYPWWptAB3VboHGPcXxFDMqNnMq5K9IFS6hpPb5NjHloywag1by1no6MMa7/QIHsyNQRYbmsFBVHzJAkZLtbFICcdQjGuhMp6+kbDzQoDqJuR4d/64m02RGj/Xx+RR0mb2iKHf9xSq1Lzz5EO2t9iw1jkgfKPDQyVKAmN4B9T7s0L0QPwPl7n95M5RlCT3EuaCAJC7CTJ8ool9li6ezsWRxb/THFrWeCWUMYl82dgbvxBQmUhQX5TGeJ6YjLIkcrDl//UtPDVsXAk/f9Fw9+DS/1ziHddCFI3O2DBtMkPdLer5Pqt7AATjufDca27HwayRNd0UTXJnZGh9DV1JbOz9VAfJbjNKVPJejbWJCmgAdFJBDpHMAH6eGhMbgieVL+q9T01gdsLPlYX91zp+8XhTPzOrCpNTdaPOHNCmnmwopXIKGyfhGAxNYlVveMpdBhC3FkZxmROxDH4itxX7eRj6JTMsIpKj/qSRzWnUWwPmmPPHP4LH+8w9EAAVo7+y4uqjAnNxG6Sf0Y4fx3FdsfxFyBB4QofI5b/dOiIYWN7r0VKOpQlBef9oVbE8PaHzs4n+xNrGaxU2LK0tOxq1DSWle3dfYl7j+ppimxbNoQf2a
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4768.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(39860400002)(396003)(136003)(366004)(376002)(230922051799003)(1800799012)(186009)(64100799003)(451199024)(38070700009)(55016003)(66946007)(66556008)(26005)(64756008)(54906003)(2906002)(9686003)(76116006)(6916009)(66446008)(6506007)(71200400001)(8936002)(91956017)(316002)(8676002)(4326008)(66476007)(5660300002)(52536014)(7696005)(478600001)(122000001)(38100700002)(33656002)(86362001)(41300700001);DIR:OUT;SFP:1101;
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240105160103.183092-1-ulf.hansson@linaro.org>
- <20240105160103.183092-4-ulf.hansson@linaro.org> <87801f3e-b7ce-46ba-9856-1321635a11b5@nxp.com>
-In-Reply-To: <87801f3e-b7ce-46ba-9856-1321635a11b5@nxp.com>
-From: Mathieu Poirier <mathieu.poirier@linaro.org>
-Date: Mon, 22 Jan 2024 13:02:08 -0700
-Message-ID: <CANLsYkwtNa_-t0f5rhTh5mtF72urKNyqWk0_qfbBwSCQK_6eOg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] remoteproc: imx_rproc: Convert to dev_pm_domain_attach|detach_list()
-To: Iuliana Prodan <iuliana.prodan@nxp.com>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, "Rafael J . Wysocki" <rafael@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	linux-pm@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>, 
-	Kevin Hilman <khilman@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Nikunj Kela <nkela@quicinc.com>, 
-	Prasad Sodagudi <psodagud@quicinc.com>, Stephan Gerhold <stephan@gerhold.net>, 
-	Ben Horgan <Ben.Horgan@arm.com>, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-remoteproc@vger.kernel.org, 
-	linux-media@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Daniel Baluta <daniel.baluta@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR08MB9877
+Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ AM4PEPF00025F9A.EURPRD83.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	884cbb67-5f78-4a8d-c206-08dc1b887eff
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	r/jnVL367kdub4ba1OGEuHSmalWweW9pq0KdHfi0EWaRDzg5Q05pD31bA9Sj7k3SKhCecx0feaJyJ2PQNjIMfrnBor1intEPuAmtUImOPvMHHh8u2lS/6HYp9Ic23kZuzuCyU1RSx2kIfwLiL5PaGYTxqUQBZy2TDyDdpDisDYIK3OwojgX4MfW7oNMch6z07JU9tmtVBtF0HreRQNOsMWXy1TEJQK35YZQ2H6wd/BQvjPDqhJR5h4xrAizc8L8ENgKTrBxcRmsg2wzUr+AJ8U1RnLOyPyVp3rtQZZ1EdsN2/6OOGabnArQn3WLgL34D31qeQqYY8LCZ3gjD4pC6MMxE3HoFdBH0bNnjhZR2P8z656VMqT4HcePUHurbFxSIUhLQzspY9lReeoiIjzEw1rhHV3ROqfNFc7lIlo5rF4wr7+sYvgz7cZ+QSaT6cvwaYT2rDp+aQH/8yxn9nS6ItXbjHmS0/rgGgyRWDZjtsAtLfXz2yBqfPg/YJlZei6IpzKM9RCZyI+NEWpnsz7gKEIYaDZQTpkMmRp9O96Ey6yV4dZsJgztdo3nojRINkHxT74rfRdvw7iIr9+tTfzJZHZktzXqCDE056vUtMAN8t28uO1nXCk7q/6RCnkvLSOm6Ao49L5uLESmhAZuqQIAzoH6Q1Ku0SPRpywjxd7G4C4/IAaFZD4OllIBNlABD5KKMFxbVkH7Pq+3WovsOvbpD1HavxQx4JWR+oyUZ5H/q1mtYLLOq6Kq+4m/4ksdwSjyu
+X-Forefront-Antispam-Report:
+	CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230031)(4636009)(376002)(346002)(396003)(136003)(39860400002)(230922051799003)(64100799003)(451199024)(1800799012)(186009)(82310400011)(40470700004)(46966006)(36840700001)(55016003)(40480700001)(40460700003)(336012)(7696005)(9686003)(26005)(6506007)(356005)(86362001)(82740400003)(81166007)(33656002)(52536014)(36860700001)(5660300002)(2906002)(47076005)(8676002)(41300700001)(70586007)(8936002)(6862004)(70206006)(4326008)(54906003)(316002)(478600001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jan 2024 20:27:19.6136
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: be589c94-7273-4e13-f806-08dc1b888855
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AM4PEPF00025F9A.EURPRD83.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR08MB9715
 
-On Mon, 22 Jan 2024 at 10:51, Iuliana Prodan <iuliana.prodan@nxp.com> wrote:
->
-> On 1/5/2024 6:01 PM, Ulf Hansson wrote:
-> > Let's avoid the boilerplate code to manage the multiple PM domain case, by
-> > converting into using dev_pm_domain_attach|detach_list().
-> >
-> > Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-> > Cc: Bjorn Andersson <andersson@kernel.org>
-> > Cc: Shawn Guo <shawnguo@kernel.org>
-> > Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> > Cc: Iuliana Prodan <iuliana.prodan@nxp.com>
-> > Cc: Daniel Baluta <daniel.baluta@nxp.com>
-> > Cc: <linux-remoteproc@vger.kernel.org>
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > ---
-> >
-> > Changes in v2:
-> >       - None.
-> >
-> > Iuliana/Daniel I am ccing you to request help with test/review of this change.
-> > Note that, you will need patch 1/5 in the series too, to be able to test this.
-> >
-> > Kind regards
-> > Ulf Hansson
->
-> Tested-by: Iuliana Prodan <iuliana.prodan@nxp.com>
-> Reviewed-by: Iuliana Prodan <iuliana.prodan@nxp.com>
->
-
-Thanks for the leg-work on this.  I'll pick this up in rc1 later this week.
-
-> Iulia
->
-> > ---
-> >   drivers/remoteproc/imx_rproc.c | 73 +++++-----------------------------
-> >   1 file changed, 9 insertions(+), 64 deletions(-)
-> >
-> > diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
-> > index 8bb293b9f327..3161f14442bc 100644
-> > --- a/drivers/remoteproc/imx_rproc.c
-> > +++ b/drivers/remoteproc/imx_rproc.c
-> > @@ -92,7 +92,6 @@ struct imx_rproc_mem {
-> >
-> >   static int imx_rproc_xtr_mbox_init(struct rproc *rproc);
-> >   static void imx_rproc_free_mbox(struct rproc *rproc);
-> > -static int imx_rproc_detach_pd(struct rproc *rproc);
-> >
-> >   struct imx_rproc {
-> >       struct device                   *dev;
-> > @@ -113,10 +112,8 @@ struct imx_rproc {
-> >       u32                             rproc_pt;       /* partition id */
-> >       u32                             rsrc_id;        /* resource id */
-> >       u32                             entry;          /* cpu start address */
-> > -     int                             num_pd;
-> >       u32                             core_index;
-> > -     struct device                   **pd_dev;
-> > -     struct device_link              **pd_dev_link;
-> > +     struct dev_pm_domain_list       *pd_list;
-> >   };
-> >
-> >   static const struct imx_rproc_att imx_rproc_att_imx93[] = {
-> > @@ -853,7 +850,7 @@ static void imx_rproc_put_scu(struct rproc *rproc)
-> >               return;
-> >
-> >       if (imx_sc_rm_is_resource_owned(priv->ipc_handle, priv->rsrc_id)) {
-> > -             imx_rproc_detach_pd(rproc);
-> > +             dev_pm_domain_detach_list(priv->pd_list);
-> >               return;
-> >       }
-> >
-> > @@ -880,72 +877,20 @@ static int imx_rproc_partition_notify(struct notifier_block *nb,
-> >   static int imx_rproc_attach_pd(struct imx_rproc *priv)
-> >   {
-> >       struct device *dev = priv->dev;
-> > -     int ret, i;
-> > -
-> > -     /*
-> > -      * If there is only one power-domain entry, the platform driver framework
-> > -      * will handle it, no need handle it in this driver.
-> > -      */
-> > -     priv->num_pd = of_count_phandle_with_args(dev->of_node, "power-domains",
-> > -                                               "#power-domain-cells");
-> > -     if (priv->num_pd <= 1)
-> > -             return 0;
-> > -
-> > -     priv->pd_dev = devm_kmalloc_array(dev, priv->num_pd, sizeof(*priv->pd_dev), GFP_KERNEL);
-> > -     if (!priv->pd_dev)
-> > -             return -ENOMEM;
-> > -
-> > -     priv->pd_dev_link = devm_kmalloc_array(dev, priv->num_pd, sizeof(*priv->pd_dev_link),
-> > -                                            GFP_KERNEL);
-> > -
-> > -     if (!priv->pd_dev_link)
-> > -             return -ENOMEM;
-> > -
-> > -     for (i = 0; i < priv->num_pd; i++) {
-> > -             priv->pd_dev[i] = dev_pm_domain_attach_by_id(dev, i);
-> > -             if (IS_ERR(priv->pd_dev[i])) {
-> > -                     ret = PTR_ERR(priv->pd_dev[i]);
-> > -                     goto detach_pd;
-> > -             }
-> > -
-> > -             priv->pd_dev_link[i] = device_link_add(dev, priv->pd_dev[i], DL_FLAG_STATELESS |
-> > -                                                    DL_FLAG_PM_RUNTIME | DL_FLAG_RPM_ACTIVE);
-> > -             if (!priv->pd_dev_link[i]) {
-> > -                     dev_pm_domain_detach(priv->pd_dev[i], false);
-> > -                     ret = -EINVAL;
-> > -                     goto detach_pd;
-> > -             }
-> > -     }
-> > -
-> > -     return 0;
-> > -
-> > -detach_pd:
-> > -     while (--i >= 0) {
-> > -             device_link_del(priv->pd_dev_link[i]);
-> > -             dev_pm_domain_detach(priv->pd_dev[i], false);
-> > -     }
-> > -
-> > -     return ret;
-> > -}
-> > -
-> > -static int imx_rproc_detach_pd(struct rproc *rproc)
-> > -{
-> > -     struct imx_rproc *priv = rproc->priv;
-> > -     int i;
-> > +     int ret;
-> > +     struct dev_pm_domain_attach_data pd_data = {
-> > +             .pd_flags = PD_FLAG_DEV_LINK_ON,
-> > +     };
-> >
-> >       /*
-> >        * If there is only one power-domain entry, the platform driver framework
-> >        * will handle it, no need handle it in this driver.
-> >        */
-> > -     if (priv->num_pd <= 1)
-> > +     if (dev->pm_domain)
-> >               return 0;
-> >
-> > -     for (i = 0; i < priv->num_pd; i++) {
-> > -             device_link_del(priv->pd_dev_link[i]);
-> > -             dev_pm_domain_detach(priv->pd_dev[i], false);
-> > -     }
-> > -
-> > -     return 0;
-> > +     ret = dev_pm_domain_attach_list(dev, &pd_data, &priv->pd_list);
-> > +     return ret < 0 ? ret : 0;
-> >   }
-> >
-> >   static int imx_rproc_detect_mode(struct imx_rproc *priv)
+Hi,=0A=
+=0A=
+I've been looking at adding support in total compute, an arm reference plat=
+form, to control the gpu operating points and gpu power on/off via scmi. Th=
+is was previously done for the juno platform but involved hacks. I would li=
+ke to make sure this is cleaner going forward.=0A=
+=0A=
+For device driver simplicity it would be good if a device with a single pow=
+er domain and a single performance domain could just use a single PM domain=
+. Using a single PM domain means this can be on the platform device and you=
+ don't need to create virtual devices. The drivers scmi_pm_domain and scmi_=
+perf_domain both initialize a separate 'struct generic_pm_domain genpd' for=
+ each of the corresponding scmi domains. Possibly, there could be some way =
+to bring these together under a single genpd domain. Possible options are:=
+=0A=
+=0A=
+A. Parent power domains with a helper driver that just uses an empty genpd =
+domain as the child of both the genpd performance domain and the genpd powe=
+r domain.=0A=
+B. Combine the scmi_pm_domain and scmi_perf_domain driver and create a 'str=
+uct generic_pm_domain genpd' for every pair of power domain and performance=
+ domain.=0A=
+C. Combine the scmi_pm_domain and scmi_perf_domain driver but only create t=
+he 'struct generic_pm_domain genpd' for the power domain combinations that =
+are used.=0A=
+D. Keep things as they are and use separate PM domains for performance and =
+power when using scmi.=0A=
+=0A=
+Examples of possible ways of expressing these options in the device tree, t=
+he scmi performance domain is 3 and the scmi power domain is 8.=0A=
+=0A=
+A.=0A=
+=0A=
+scmi_devpd: protocol@11 {=0A=
+	reg =3D <0x11>;=0A=
+	#power-domain-cells =3D <1>;=0A=
+};=0A=
+=0A=
+scmi_dvfs: protocol@13 {=0A=
+	reg =3D <0x13>;=0A=
+	#power-domain-cells =3D <1>;=0A=
+};=0A=
+=0A=
+perf_and_performance: perf_and_performance {=0A=
+	power-domain-names =3D "perf", "power";=0A=
+	power-domain =3D <&scmi_dvfs 3>, <&scmi_devpd 8>;=0A=
+};=0A=
+=0A=
+my_device : my_device  {=0A=
+	power-domain =3D <&perf_and_performance>=0A=
+};=0A=
+=0A=
+B. Combine on every pair=0A=
+=0A=
+scmi_pm_perf: protocol@11_13 {=0A=
+	reg =3D <0x11>, <0x13>;=0A=
+	#power-domain-cells =3D <2>;=0A=
+};=0A=
+=0A=
+my_device : my_device {=0A=
+	power-domain =3D <&scmi_pm_perf 8 3>=0A=
+};=0A=
+=0A=
+C. Combine on used pairs=0A=
+=0A=
+scmi_pm_perf: protocol@11_13 {=0A=
+	reg =3D <0x11>, <0x13>;=0A=
+	#power-domain-cells =3D <2>;=0A=
+       used-domains =3D <8, 3>, <9, 4>;=0A=
+};=0A=
+=0A=
+my_device : my_device {=0A=
+	power-domain =3D <&scmi_pm_perf 8 3>=0A=
+};=0A=
+=0A=
+It seems wasteful that the scmi_pm_domain sets up and makes scmi calls for =
+all possibly usable domains at start up even those that aren't controllable=
+ by linux. E.g. cpus may use scmi power domain controlled via psci.=0A=
+=0A=
+scmi_devpd: protocol@11 {=0A=
+	reg =3D <0x11>;=0A=
+	#power-domain-cells =3D <1>;=0A=
+	used-domains =3D <8>, <9>;=0A=
+};=0A=
+=0A=
+Any thoughts?=0A=
+=0A=
+Thanks,=0A=
+=0A=
+Ben=0A=
 
