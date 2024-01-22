@@ -1,244 +1,116 @@
-Return-Path: <linux-pm+bounces-2444-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2457-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E035083625A
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 12:45:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A53B5836281
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 12:49:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D38671C273E2
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 11:45:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 473771F288C3
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 11:49:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 693003B79C;
-	Mon, 22 Jan 2024 11:44:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 839053B794;
+	Mon, 22 Jan 2024 11:46:58 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B041F3B18D;
-	Mon, 22 Jan 2024 11:44:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2242439ACC;
+	Mon, 22 Jan 2024 11:46:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705923866; cv=none; b=sgOxxn8MH2ykHY+PxOrIQI8t4GXwPEvhw6ZlDypgqtdbzTK2w5M7WgdBEjRD0uEWvu+mon9PZ7bs8161QldvmmASXqKnKGsdafC9nBUfffZJ73VJwplEU8KJBeV8TMf7QleJPfQ1TLcvKiYMm5A9tvg7iNm9eBJanqh5YBe7s9A=
+	t=1705924018; cv=none; b=CwLKnJNsxmNEgYYBS26tY2h29C0nA4gw5HvqzRSOeivXNfRNCJLmHeJT8JEGWkS0jDgGJKSgY0fOu6o+mHDgV9DwEd6VVcnGBrBY1XpNEUqLBzCVsgGFzknUJBnJqGAPHMQpafgZlD+VDYGsTL/7NnQ44Dg60tI8LsJ9mVsRZkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705923866; c=relaxed/simple;
-	bh=zLDg+aUXKQPOwMNT7k7M6cQ/qqSLFgfVqYQgwI16+KA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=T/DjSaun3jPY/J6oyoYgZY7cwsiWNEhN/P/6LKjKHZ7Z+XWV2TcCo5lTkzjVGdvQNopKraUVFq74VFsUW4fXtPk8t+h6ShsyAql3FEihIajn9+kWa3wzpMmiGMrUrcBsIaCGEAtv1aoXyZVXbIPg0Nlk6qFwU72lh0sEG26T4bM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id e6c3051c386dccb8; Mon, 22 Jan 2024 12:44:21 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id E087D669543;
-	Mon, 22 Jan 2024 12:44:20 +0100 (CET)
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Subject: [PATCH v1 12/12] PM: sleep: Call dpm_async_fn() directly in each suspend phase
-Date: Mon, 22 Jan 2024 12:44:06 +0100
-Message-ID: <23385132.6Emhk5qWAg@kreacher>
-In-Reply-To: <5760158.DvuYhMxLoT@kreacher>
-References: <5760158.DvuYhMxLoT@kreacher>
+	s=arc-20240116; t=1705924018; c=relaxed/simple;
+	bh=Xu9dO42e0kGtP2iek34Ct8qcatx6D34+espsKKYUB0k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=d2RCdLdLKUHBvIbbsnvIpmBPNkpXC5JFMY+9FUycI3JSjwZyUsACjj6Ydjq/eXtrgiYsi6IonJDXe8K+SQBWYOwQLkYRwGAGIkrlYIcB+wfUXPHsbJrDx+Mmrmi1N0y3DrekXdBudrapY2dZ7iNq/h2+fdB9BCNjJoBe94csT5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-598afd970e4so444465eaf.0;
+        Mon, 22 Jan 2024 03:46:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705924016; x=1706528816;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Xu9dO42e0kGtP2iek34Ct8qcatx6D34+espsKKYUB0k=;
+        b=t40yxUAs45IY8vOSH07VRXYtgly+2p0OSwT6psBy0nY+w3T06u2mljjfDeTrjAF4Z+
+         ZLL8sMEbDYla+OR1gW7lzBhNUE4GyDlZ3ZkzlZONSiJPm2fZVgLBSVOGPj6nGP6o4FSR
+         1PI6qFz1ft5A9CBf6RRNMdSuQcWp1qDTa73osllZJYSsdUk+gimKgSozVBhSNHlskRxR
+         Waxa6ipAOpqfOCH2w+LFBn9tY7BA3p1sTP0QVPf0UyNsgofajLNJPQmiQSVK21tb1hUI
+         Gjmn3vvI4p+eDH0v0vrlSn2RiAoH76emtRUCA3FduAvO3qoLLQBGzGR/W6aKYW/ienwX
+         DC/g==
+X-Gm-Message-State: AOJu0YyqFNYi/KK35scnejnPIqBm7ADiIitKMXpOKY8NP1dGWSXMr3B3
+	hWqNOCS1zK007N8zOhFMIfo81ukyc7dtduzk3TduyveCH15DumYIPR2ux/uB5O56h5SWSdInOeb
+	aoUAgRXCGx6SsiNC6nF1UHJpDMek=
+X-Google-Smtp-Source: AGHT+IEaFNyIRXDCFBQIZlnYyvRFTeKr3IUazcDdu4f58xNCxAzZX4sK6mBZno00mYuQRKofhbbeEQFm/nzeRqdDtcM=
+X-Received: by 2002:a05:6870:2193:b0:214:2425:9962 with SMTP id
+ l19-20020a056870219300b0021424259962mr5660544oae.0.1705924016139; Mon, 22 Jan
+ 2024 03:46:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <20240118120513.1018808-1-srinivas.pandruvada@linux.intel.com>
+ <6021639.lOV4Wx5bFT@kreacher> <c961bae053da7287bfce49b2c1c2e7e6c754710a.camel@linux.intel.com>
+In-Reply-To: <c961bae053da7287bfce49b2c1c2e7e6c754710a.camel@linux.intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 22 Jan 2024 12:46:44 +0100
+Message-ID: <CAJZ5v0iFAPW5x3gWFnjYKLQQvWoJ65gdpwRhnyEgLD2p2pWUcA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Directly use stored ratios for max frequencies
+To: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, rafael@kernel.org, viresh.kumar@linaro.org, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrvdekiedgfedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepgedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehsthgrnhhishhlrgifrdhgrhhushiikhgrsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
+Content-Transfer-Encoding: quoted-printable
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Mon, Jan 22, 2024 at 12:35=E2=80=AFPM srinivas pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> On Mon, 2024-01-22 at 11:53 +0100, Rafael J. Wysocki wrote:
+> > On Thursday, January 18, 2024 1:05:13 PM CET Srinivas Pandruvada
+> > wrote:
+> > > Avoid unnecessary calculation for converting frequency to
+> > > performance
+> > > ratio by using a scaling factor for the maximum non turbo and turbo
+> >
+>
+> [...]
+>
+> > ---
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Subject: [PATCH v1] cpufreq: intel_pstate: Refine computation of P-
+> > state for given frequency
+> >
+> > On systems using HWP, if a given frequency is equal to the maximum
+> > turbo
+> > frequency or the maximum non-turbo frequency, the HWP performance
+> > level
+> > corresponding to it is already known and can be used directly without
+> > any computation.
+> >
+> > Accordingly, adjust the code to use the known HWP performance levels
+> > in
+> > the cases mentioned above.
+> >
+> > This also helps to avoid limiting CPU capacity artificially in some
+> > cases when the BIOS produces the HWP_CAP numbers using a different
+> > E-core-to-P-core performance scaling factor than expected by the
+> > kernel.
+> >
+> > Fixes: f5c8cf2a4992 ("cpufreq: intel_pstate: hybrid: Use known
+> > scaling factor for P-cores")
+> > Cc: 6.1+ <stable@vger.kernel.org> # 6.1+
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+>
+> Tested on the system which showed the issue, this patch work fine.
 
-Simplify the system-wide suspend of devices by invoking dpm_async_fn()
-directly from the main loop in each suspend phase instead of using an
-additional wrapper function for running it.
-
-No intentional functional impact.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/base/power/main.c |   61 ++++++++++++++++++----------------------------
- 1 file changed, 25 insertions(+), 36 deletions(-)
-
-Index: linux-pm/drivers/base/power/main.c
-===================================================================
---- linux-pm.orig/drivers/base/power/main.c
-+++ linux-pm/drivers/base/power/main.c
-@@ -1192,7 +1192,7 @@ static void dpm_superior_set_must_resume
- }
- 
- /**
-- * __device_suspend_noirq - Execute a "noirq suspend" callback for given device.
-+ * device_suspend_noirq - Execute a "noirq suspend" callback for given device.
-  * @dev: Device to handle.
-  * @state: PM transition of the system being carried out.
-  * @async: If true, the device is being suspended asynchronously.
-@@ -1200,7 +1200,7 @@ static void dpm_superior_set_must_resume
-  * The driver of @dev will not receive interrupts while this function is being
-  * executed.
-  */
--static int __device_suspend_noirq(struct device *dev, pm_message_t state, bool async)
-+static int device_suspend_noirq(struct device *dev, pm_message_t state, bool async)
- {
- 	pm_callback_t callback = NULL;
- 	const char *info = NULL;
-@@ -1277,18 +1277,10 @@ static void async_suspend_noirq(void *da
- {
- 	struct device *dev = data;
- 
--	__device_suspend_noirq(dev, pm_transition, true);
-+	device_suspend_noirq(dev, pm_transition, true);
- 	put_device(dev);
- }
- 
--static int device_suspend_noirq(struct device *dev)
--{
--	if (dpm_async_fn(dev, async_suspend_noirq))
--		return 0;
--
--	return __device_suspend_noirq(dev, pm_transition, false);
--}
--
- static int dpm_noirq_suspend_devices(pm_message_t state)
- {
- 	ktime_t starttime = ktime_get();
-@@ -1305,10 +1297,15 @@ static int dpm_noirq_suspend_devices(pm_
- 		struct device *dev = to_device(dpm_late_early_list.prev);
- 
- 		list_move(&dev->power.entry, &dpm_noirq_list);
-+
-+		if (dpm_async_fn(dev, async_suspend_noirq))
-+			continue;
-+
- 		get_device(dev);
-+
- 		mutex_unlock(&dpm_list_mtx);
- 
--		error = device_suspend_noirq(dev);
-+		error = device_suspend_noirq(dev, state, false);
- 
- 		put_device(dev);
- 
-@@ -1369,14 +1366,14 @@ static void dpm_propagate_wakeup_to_pare
- }
- 
- /**
-- * __device_suspend_late - Execute a "late suspend" callback for given device.
-+ * device_suspend_late - Execute a "late suspend" callback for given device.
-  * @dev: Device to handle.
-  * @state: PM transition of the system being carried out.
-  * @async: If true, the device is being suspended asynchronously.
-  *
-  * Runtime PM is disabled for @dev while this function is being executed.
-  */
--static int __device_suspend_late(struct device *dev, pm_message_t state, bool async)
-+static int device_suspend_late(struct device *dev, pm_message_t state, bool async)
- {
- 	pm_callback_t callback = NULL;
- 	const char *info = NULL;
-@@ -1447,18 +1444,10 @@ static void async_suspend_late(void *dat
- {
- 	struct device *dev = data;
- 
--	__device_suspend_late(dev, pm_transition, true);
-+	device_suspend_late(dev, pm_transition, true);
- 	put_device(dev);
- }
- 
--static int device_suspend_late(struct device *dev)
--{
--	if (dpm_async_fn(dev, async_suspend_late))
--		return 0;
--
--	return __device_suspend_late(dev, pm_transition, false);
--}
--
- /**
-  * dpm_suspend_late - Execute "late suspend" callbacks for all devices.
-  * @state: PM transition of the system being carried out.
-@@ -1481,11 +1470,15 @@ int dpm_suspend_late(pm_message_t state)
- 		struct device *dev = to_device(dpm_suspended_list.prev);
- 
- 		list_move(&dev->power.entry, &dpm_late_early_list);
-+
-+		if (dpm_async_fn(dev, async_suspend_late))
-+			continue;
-+
- 		get_device(dev);
- 
- 		mutex_unlock(&dpm_list_mtx);
- 
--		error = device_suspend_late(dev);
-+		error = device_suspend_late(dev, state, false);
- 
- 		put_device(dev);
- 
-@@ -1582,12 +1575,12 @@ static void dpm_clear_superiors_direct_c
- }
- 
- /**
-- * __device_suspend - Execute "suspend" callbacks for given device.
-+ * device_suspend - Execute "suspend" callbacks for given device.
-  * @dev: Device to handle.
-  * @state: PM transition of the system being carried out.
-  * @async: If true, the device is being suspended asynchronously.
-  */
--static int __device_suspend(struct device *dev, pm_message_t state, bool async)
-+static int device_suspend(struct device *dev, pm_message_t state, bool async)
- {
- 	pm_callback_t callback = NULL;
- 	const char *info = NULL;
-@@ -1716,18 +1709,10 @@ static void async_suspend(void *data, as
- {
- 	struct device *dev = data;
- 
--	__device_suspend(dev, pm_transition, true);
-+	device_suspend(dev, pm_transition, true);
- 	put_device(dev);
- }
- 
--static int device_suspend(struct device *dev)
--{
--	if (dpm_async_fn(dev, async_suspend))
--		return 0;
--
--	return __device_suspend(dev, pm_transition, false);
--}
--
- /**
-  * dpm_suspend - Execute "suspend" callbacks for all non-sysdev devices.
-  * @state: PM transition of the system being carried out.
-@@ -1752,11 +1737,15 @@ int dpm_suspend(pm_message_t state)
- 		struct device *dev = to_device(dpm_prepared_list.prev);
- 
- 		list_move(&dev->power.entry, &dpm_suspended_list);
-+
-+		if (dpm_async_fn(dev, async_suspend))
-+			continue;
-+
- 		get_device(dev);
- 
- 		mutex_unlock(&dpm_list_mtx);
- 
--		error = device_suspend(dev);
-+		error = device_suspend(dev, state, false);
- 
- 		put_device(dev);
- 
-
-
-
+So I'm going to add a Tested-by from you to it or please let me know
+if you don't want me to do so.
 
