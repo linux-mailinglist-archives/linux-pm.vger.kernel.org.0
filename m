@@ -1,196 +1,165 @@
-Return-Path: <linux-pm+bounces-2446-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2441-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C89183625E
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 12:45:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6B8483624C
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 12:44:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FC0D1C274DE
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 11:45:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 839AD1F20F1D
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 11:44:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05B983C49B;
-	Mon, 22 Jan 2024 11:44:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A0D43D54F;
+	Mon, 22 Jan 2024 11:41:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zc0oP46+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D980A39ACC;
-	Mon, 22 Jan 2024 11:44:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC6BF3D3BC;
+	Mon, 22 Jan 2024 11:41:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.88
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705923867; cv=none; b=VGrg8ldCDGnZdjmy86t8bkjyfyj7ZZUvqtudnoar3jva2TjoZ220gLBaUHn5A1+NdglXLgjCoBDNPixA6TQiF19HfmgfFMWgsGeRgu5K/0SxfGGaY5XDihZU9xu6nRzLe7xxPgnqFunz+08Gy1k2xttt/NTvx6/bfSVMI54qQX8=
+	t=1705923695; cv=none; b=CLdveub9mrodnnLokbpOYDO7Jy30VB75F8ZiTW7QdtLlkK9CT+L4Q8TCBuKzMYQLiedQnSkAntCpreevKLWSgFIx620/nq8tAwfd072IHIC/gTHRs5tQnsGnN/OrkZa3zLaRg6uLH6hCo36nvKGRyMMfwrKv6UJ9f/SD/oQfxYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705923867; c=relaxed/simple;
-	bh=gTjiJJ3k10zp61AiQqvOuvcvQS0uG1AXQCn4e+++Nc0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MLd9ukoOwzo+aJ4+C7x2yS6unRCNm/biYJidVtxCICGGqfJAd3vrkN0VcGSjUL6SOBv0RHV1KHM1ATktfY5Dc5vkSusopS/AVrmarQwK6Wiy7Dbe1JY3AWMRp6Q7O14W70/5gK/SO/eLqRza4YV8HX+gtV9z0qfmBOhMab5B2oU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id 9410ebf670e577ae; Mon, 22 Jan 2024 12:44:22 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 50FDD669540;
-	Mon, 22 Jan 2024 12:44:22 +0100 (CET)
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Subject: [PATCH v1 10/12] PM: sleep: Move some assignments from under a lock
-Date: Mon, 22 Jan 2024 12:39:17 +0100
-Message-ID: <1795169.VLH7GnMWUR@kreacher>
-In-Reply-To: <5760158.DvuYhMxLoT@kreacher>
-References: <5760158.DvuYhMxLoT@kreacher>
+	s=arc-20240116; t=1705923695; c=relaxed/simple;
+	bh=TFWI6JTKREohL41oXLi1D5cttfNwbBSLh8m7YgHZDUg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PAm+J11DMDZdhjejr8I8mFu0dI8JjeBj0U13hmDx04PCun4TsUwHYRuAKP4u0oKwJBOtIUINCcGhsHADf6ibuJNFq83yWYC3FQiH66E5kOcBV9by73dEBV04WEZ8qC2JLCJynrfAVxe3HW8KnTnUKtNUDdZn1qFd/ayLRL+Ukiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zc0oP46+; arc=none smtp.client-ip=192.55.52.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1705923693; x=1737459693;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=TFWI6JTKREohL41oXLi1D5cttfNwbBSLh8m7YgHZDUg=;
+  b=Zc0oP46+2c3YTs6ZRrxSzC2w+MyvRR3FozqmHryTVPkMrdLyB+7weC6h
+   oYkTsZOCy2qDATPdtt+IWWCV9S9Z0XsZCPtJi/8jmc95uxSBU8/l7dJah
+   pvyPEcyUv+5DDxyPp+TEUOqdYKFJ8uozmbuJA36uPEoLkJpztIYyMh2xu
+   4jUCrak0xKNwf9zBE/D3ZhBaYi0CWY84mDxAJ1QTQxlTcGY6fgAyCwQsJ
+   ryCp5A54wFcldGpBDsFjZyO0o25ZkEuH6tj4lScMQNlWI7Bwx38gJ+2qG
+   pQcQmZ8wvgqoyCdgQjqqwhOhbCFwZuy2pGNYKEtNykWWyI80F9ec6xPu+
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="432347123"
+X-IronPort-AV: E=Sophos;i="6.05,211,1701158400"; 
+   d="scan'208";a="432347123"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2024 03:41:32 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="904825864"
+X-IronPort-AV: E=Sophos;i="6.05,211,1701158400"; 
+   d="scan'208";a="904825864"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2024 03:41:26 -0800
+Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id E3EFC11FAD4;
+	Mon, 22 Jan 2024 13:41:21 +0200 (EET)
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: linux-pm@vger.kernel.org
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	laurent.pinchart@ideasonboard.com,
+	Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+	David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	=?UTF-8?q?Thomas=20Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
+	Paul Elder <paul.elder@ideasonboard.com>,
+	Alex Elder <elder@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Mark Brown <broonie@kernel.org>,
+	dri-devel@lists.freedesktop.org,
+	intel-gfx@lists.freedesktop.org,
+	intel-xe@lists.freedesktop.org,
+	linux-media@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-sound@vger.kernel.org
+Subject: [PATCH v3 0/2] Small runtime PM API changes
+Date: Mon, 22 Jan 2024 13:41:20 +0200
+Message-Id: <20240122114121.56752-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrvdekiedgfedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepgedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehsthgrnhhishhlrgifrdhgrhhushiikhgrsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
+Content-Transfer-Encoding: 8bit
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hi folks,
 
-The async_error and pm_transition variables are set under dpm_list_mtx
-in multiple places in the system-wide device PM core code, which is
-unnecessary and confusing, so rearrange the code so that the variables
-in question are set before acquiring the lock.
+Here's a small but a different set of patches for making two relatively
+minor changes to runtime PM API. I restarted version numbering as this is
+meaningfully different from the previous set.
 
-While at it, add some empty code lines around locking to improve the
-consistency of the code.
+pm_runtime_get_if_active() loses its second argument as it only made sense
+to have ign_usage_count argument true.
 
-No intentional functional impact.
+The other change is also small but it has an effect on callers:
+pm_runtime_put_autosuspend() will, in the future, be re-purposed to
+include a call to pm_runtime_mark_last_busy() as well. Before this,
+current users of the function are moved to __pm_runtime_put_autosuspend()
+(added by this patchset) which will continue to have the current
+behaviour.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/base/power/main.c |   28 +++++++++++++++++++++-------
- 1 file changed, 21 insertions(+), 7 deletions(-)
+I haven't included the conversion patches in this set as I only want to do
+that once this set has been approved and merged. The tree specific patches
+can be found here, on linux-next master (there are some V4L2 patches
+there, too, please ignore them for now):
+<URL:https://git.kernel.org/pub/scm/linux/kernel/git/sailus/linux-next.git/log/?h=pm>
 
-Index: linux-pm/drivers/base/power/main.c
-===================================================================
---- linux-pm.orig/drivers/base/power/main.c
-+++ linux-pm/drivers/base/power/main.c
-@@ -707,9 +707,9 @@ static void dpm_noirq_resume_devices(pm_
- 	trace_suspend_resume(TPS("dpm_resume_noirq"), state.event, true);
- 
- 	async_error = 0;
-+	pm_transition = state;
- 
- 	mutex_lock(&dpm_list_mtx);
--	pm_transition = state;
- 
- 	/*
- 	 * Trigger the resume of "async" devices upfront so they don't have to
-@@ -847,9 +847,9 @@ void dpm_resume_early(pm_message_t state
- 	trace_suspend_resume(TPS("dpm_resume_early"), state.event, true);
- 
- 	async_error = 0;
-+	pm_transition = state;
- 
- 	mutex_lock(&dpm_list_mtx);
--	pm_transition = state;
- 
- 	/*
- 	 * Trigger the resume of "async" devices upfront so they don't have to
-@@ -1012,10 +1012,11 @@ void dpm_resume(pm_message_t state)
- 	trace_suspend_resume(TPS("dpm_resume"), state.event, true);
- 	might_sleep();
- 
--	mutex_lock(&dpm_list_mtx);
- 	pm_transition = state;
- 	async_error = 0;
- 
-+	mutex_lock(&dpm_list_mtx);
-+
- 	/*
- 	 * Trigger the resume of "async" devices upfront so they don't have to
- 	 * wait for the "non-async" ones they don't depend on.
-@@ -1294,10 +1295,12 @@ static int dpm_noirq_suspend_devices(pm_
- 	int error = 0;
- 
- 	trace_suspend_resume(TPS("dpm_suspend_noirq"), state.event, true);
--	mutex_lock(&dpm_list_mtx);
-+
- 	pm_transition = state;
- 	async_error = 0;
- 
-+	mutex_lock(&dpm_list_mtx);
-+
- 	while (!list_empty(&dpm_late_early_list)) {
- 		struct device *dev = to_device(dpm_late_early_list.prev);
- 
-@@ -1320,7 +1323,9 @@ static int dpm_noirq_suspend_devices(pm_
- 		if (error || async_error)
- 			break;
- 	}
-+
- 	mutex_unlock(&dpm_list_mtx);
-+
- 	async_synchronize_full();
- 	if (!error)
- 		error = async_error;
-@@ -1470,11 +1475,14 @@ int dpm_suspend_late(pm_message_t state)
- 	int error = 0;
- 
- 	trace_suspend_resume(TPS("dpm_suspend_late"), state.event, true);
--	wake_up_all_idle_cpus();
--	mutex_lock(&dpm_list_mtx);
-+
- 	pm_transition = state;
- 	async_error = 0;
- 
-+	wake_up_all_idle_cpus();
-+
-+	mutex_lock(&dpm_list_mtx);
-+
- 	while (!list_empty(&dpm_suspended_list)) {
- 		struct device *dev = to_device(dpm_suspended_list.prev);
- 
-@@ -1498,7 +1506,9 @@ int dpm_suspend_late(pm_message_t state)
- 		if (error || async_error)
- 			break;
- 	}
-+
- 	mutex_unlock(&dpm_list_mtx);
-+
- 	async_synchronize_full();
- 	if (!error)
- 		error = async_error;
-@@ -1745,9 +1755,11 @@ int dpm_suspend(pm_message_t state)
- 	devfreq_suspend();
- 	cpufreq_suspend();
- 
--	mutex_lock(&dpm_list_mtx);
- 	pm_transition = state;
- 	async_error = 0;
-+
-+	mutex_lock(&dpm_list_mtx);
-+
- 	while (!list_empty(&dpm_prepared_list)) {
- 		struct device *dev = to_device(dpm_prepared_list.prev);
- 
-@@ -1771,7 +1783,9 @@ int dpm_suspend(pm_message_t state)
- 		if (error || async_error)
- 			break;
- 	}
-+
- 	mutex_unlock(&dpm_list_mtx);
-+
- 	async_synchronize_full();
- 	if (!error)
- 		error = async_error;
+Later on, users calling pm_runtime_mark_last_busy() immediately followed
+by __pm_runtime_put_autosuspend() will be switched back to
+pm_runtime_put_autosuspend() once its behaviour change has been done (a
+patch near top of that branch). I'll provide these once the preceding ones
+have been merged.
 
+Comments are welcome.
 
+since v2:
+
+- Rebase on v6.8-rc1 (no changes).
+
+- Add Rodrigo's Reviewed-by: to the 1st patch.
+
+since v1:
+
+- patch 1: Rename __pm_runtime_get_conditional() as
+  pm_runtime_get_conditional().
+
+- patch 1: Reword documentation on driver use of
+  pm_runtime_get_conditional().
+
+Sakari Ailus (2):
+  pm: runtime: Simplify pm_runtime_get_if_active() usage
+  pm: runtime: Add pm_runtime_put_autosuspend() replacement
+
+ Documentation/power/runtime_pm.rst      | 22 ++++++++-----
+ drivers/accel/ivpu/ivpu_pm.c            |  2 +-
+ drivers/base/power/runtime.c            | 10 ++++--
+ drivers/gpu/drm/i915/intel_runtime_pm.c |  2 +-
+ drivers/gpu/drm/xe/xe_pm.c              |  2 +-
+ drivers/media/i2c/ccs/ccs-core.c        |  2 +-
+ drivers/media/i2c/ov64a40.c             |  2 +-
+ drivers/media/i2c/thp7312.c             |  2 +-
+ drivers/net/ipa/ipa_smp2p.c             |  2 +-
+ drivers/pci/pci.c                       |  2 +-
+ include/linux/pm_runtime.h              | 44 ++++++++++++++++++++++---
+ sound/hda/hdac_device.c                 |  2 +-
+ 12 files changed, 68 insertions(+), 26 deletions(-)
+
+-- 
+2.39.2
 
 
