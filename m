@@ -1,244 +1,147 @@
-Return-Path: <linux-pm+bounces-2438-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2439-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 546A583601E
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 11:53:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C761E83603E
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 12:01:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78FB41C2093D
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 10:53:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7CCEA1F2218A
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 11:01:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A845C3A1C6;
-	Mon, 22 Jan 2024 10:53:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 977893A287;
+	Mon, 22 Jan 2024 11:01:29 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E06FA3A262;
-	Mon, 22 Jan 2024 10:53:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 363193A1C2;
+	Mon, 22 Jan 2024 11:01:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705920804; cv=none; b=d1sYyOX41FzeOcg/irKFMBz3YO4s+dlQYs8JEPZ45BgZpeeGul8ylMccEuQSYhZ8OS2X6qubLkl+OHUo3GrsVakXs3mlUzEYLUu3FXugnyEnsJsLR0oqXR4PwW+oUDY03VD6gehnYUJnusMLuvR44PwI27qA67OaFjjLmzM/a9Y=
+	t=1705921289; cv=none; b=RgOSIaqQbCCp73AV2uplbE08ydhmJSJMLjqtd/PjeR1NjFOi8+gYGuyHqH/OHEQA8Y9PGwdvvFo5hFYsciRgdIfDTRRo/LPcu0/VlVyMcWWgrkuqaQv5tMPQGDkvot/7G1XKO7dYkSHqns/3KkWgb9LjZb9udRouqTaT9Ez4VEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705920804; c=relaxed/simple;
-	bh=L5FK5n7+byXHvnUmc8Yx9kLf5H8D13l2oGTx6wWEyso=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uvm0Qgmj66VkvMu8pp4vzCb3XPkP2dEyk0Kpp/1P/3zmzuSajiOlP/PZz8QxlzXEq5to8Uq1WhcR0Marmq0kXLzGw82OCZBxdMRB+btRdasIXeApwqaCPm2Y0ktP8/N+TK34nGJhWZ0fVI+QuKgk6Ih2NF57oxPLTc2owCpklfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id 96ff3509ed9fbd29; Mon, 22 Jan 2024 11:53:14 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 010D666952F;
-	Mon, 22 Jan 2024 11:53:13 +0100 (CET)
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: rafael@kernel.org, viresh.kumar@linaro.org, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Directly use stored ratios for max frequencies
-Date: Mon, 22 Jan 2024 11:53:13 +0100
-Message-ID: <6021639.lOV4Wx5bFT@kreacher>
-In-Reply-To: <20240118120513.1018808-1-srinivas.pandruvada@linux.intel.com>
-References: <20240118120513.1018808-1-srinivas.pandruvada@linux.intel.com>
+	s=arc-20240116; t=1705921289; c=relaxed/simple;
+	bh=0I1hZBX1aIvcU2CFyoaBdQ1SCLCfeODeFuogHzNWc/0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JlQ39wvx2VSg8AUgcI1EtwKV2vHzk9NaDCXmRzvIIEdZUh8yWKSTVx++9bC6MaKAKlNej2PjWMU6OOQgJIoKCfvnbOt1xHDzrK6JOsFekZ++MMwAgzc/mv95orBrtn3lm5YYmFHpAJI20NPcDaJNQ0cpHKW8pgQ0vIAI5Pj5SnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-59910dcc17bso637932eaf.1;
+        Mon, 22 Jan 2024 03:01:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705921287; x=1706526087;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bTiz18276Uf+B1qD5cDSM1J5ZYoGHeeO739RJ3mibZ8=;
+        b=SwZNR6VsRPNjCFqtb36npR+fNTmRVuqCxMxrRWe/xPL7Lw6nbPnic4iy9uoLt5zt9L
+         A28XvLZoQh5bnk1YgJK+SDah1Ad0i7iVBb5GteQLqx5iSbKiGf77NWdcsIWL9HWJDRG7
+         BcuNnj3YBAaYHDYimCqX5XCdNfmFZ9cWXLYHklG5BZEfOGFupOnd7BY16AwG/VYeai7/
+         hIPdZSXWXXD4jJgcBOl0K8ANw4myoi8h7ep9LqplzyYN+32YTAX+wuI7gmN9SuIfeovi
+         EFOh7GkbFquNcFS9F8yrEx4x+6ah3h3IicVlc63fwWInDxC19DrXiZ1N/tCWLMmWpbXV
+         uXpw==
+X-Gm-Message-State: AOJu0Yzbw84FTAEyCW7Y3ItwS9Oho/sU5K+s8/XDAW1KsAOGWbLCuEVp
+	b46+pu2iUWHmlpouLjMoLWOAn2RNqqL3LgkS4SFviC6+9XnkxfN5elT8OB5A6Lzoy3A5cllRrkg
+	2xfdFTquKDDm2BKyI24EHMk6XXryJogA+
+X-Google-Smtp-Source: AGHT+IFXJ2Nc6UOX/9bZ6Gbyiif7n0uM7HQKKBupDvCF3JrlgDC9sxcsX8Q0tJCWHyxjp9sqFxLe1ehlPI7NuEBUx/E=
+X-Received: by 2002:a4a:a6c4:0:b0:599:283c:fc53 with SMTP id
+ i4-20020a4aa6c4000000b00599283cfc53mr6629599oom.0.1705921286993; Mon, 22 Jan
+ 2024 03:01:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <20240118122340.1034880-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20240118122340.1034880-1-srinivas.pandruvada@linux.intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 22 Jan 2024 12:01:12 +0100
+Message-ID: <CAJZ5v0jVKNEnwuep=Jq=cGTpq=NW9Pbu2AEduzmpv+L5Gec2Lw@mail.gmail.com>
+Subject: Re: [PATCH] thermal: intel: powerclamp: Remove dead code for target
+ mwait value
+To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrvdekiedgvddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepiedprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepvhhirhgvshhhrdhkuhhmrghrsehlihhnrghrohdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
- lhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+Content-Transfer-Encoding: quoted-printable
 
-On Thursday, January 18, 2024 1:05:13 PM CET Srinivas Pandruvada wrote:
-> Avoid unnecessary calculation for converting frequency to performance
-> ratio by using a scaling factor for the maximum non turbo and turbo
-> frequency. Here the driver already stored performance ratios for max
-> non turbo and turbo frequency by reading from MSR_HWP_CAPABILITIES.
-> Directly use those ratios without any calculations.
-> 
+On Thu, Jan 18, 2024 at 1:23=E2=80=AFPM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> After conversion of this driver to use powercap idle_inject core, this
+> driver doesn't use target_mwait value. So remove dead code.
+>
 > Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 > ---
->  drivers/cpufreq/intel_pstate.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index 2ca70b0b5fdc..6bbc21ca96e0 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -2532,7 +2532,14 @@ static void intel_pstate_update_perf_limits(struct cpudata *cpu,
->  		int freq;
->  
->  		freq = max_policy_perf * perf_ctl_scaling;
-> -		max_policy_perf = DIV_ROUND_UP(freq, scaling);
-> +
-> +		if (freq == cpu->pstate.turbo_freq)
-> +			max_policy_perf = cpu->pstate.turbo_pstate;
-> +		else if (freq == cpu->pstate.max_freq)
-> +			max_policy_perf = cpu->pstate.max_pstate;
-> +		else
-> +			max_policy_perf = DIV_ROUND_UP(freq, scaling);
-> +
->  		freq = min_policy_perf * perf_ctl_scaling;
->  		min_policy_perf = DIV_ROUND_UP(freq, scaling);
->  	}
-> 
+> Non urgent patch. For 6.9+ kernel.
+>
+>  drivers/thermal/intel/intel_powerclamp.c | 32 ------------------------
+>  1 file changed, 32 deletions(-)
+>
+> diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/i=
+ntel/intel_powerclamp.c
+> index 5ac5cb60bae6..bc6eb0dd66a4 100644
+> --- a/drivers/thermal/intel/intel_powerclamp.c
+> +++ b/drivers/thermal/intel/intel_powerclamp.c
+> @@ -49,7 +49,6 @@
+>   */
+>  #define DEFAULT_DURATION_JIFFIES (6)
+>
+> -static unsigned int target_mwait;
+>  static struct dentry *debug_dir;
+>  static bool poll_pkg_cstate_enable;
+>
+> @@ -312,34 +311,6 @@ MODULE_PARM_DESC(window_size, "sliding window in num=
+ber of clamping cycles\n"
+>         "\twindow size results in slower response time but more smooth\n"
+>         "\tclamping results. default to 2.");
+>
+> -static void find_target_mwait(void)
+> -{
+> -       unsigned int eax, ebx, ecx, edx;
+> -       unsigned int highest_cstate =3D 0;
+> -       unsigned int highest_subcstate =3D 0;
+> -       int i;
+> -
+> -       if (boot_cpu_data.cpuid_level < CPUID_MWAIT_LEAF)
+> -               return;
+> -
+> -       cpuid(CPUID_MWAIT_LEAF, &eax, &ebx, &ecx, &edx);
+> -
+> -       if (!(ecx & CPUID5_ECX_EXTENSIONS_SUPPORTED) ||
+> -           !(ecx & CPUID5_ECX_INTERRUPT_BREAK))
+> -               return;
+> -
+> -       edx >>=3D MWAIT_SUBSTATE_SIZE;
+> -       for (i =3D 0; i < 7 && edx; i++, edx >>=3D MWAIT_SUBSTATE_SIZE) {
+> -               if (edx & MWAIT_SUBSTATE_MASK) {
+> -                       highest_cstate =3D i;
+> -                       highest_subcstate =3D edx & MWAIT_SUBSTATE_MASK;
+> -               }
+> -       }
+> -       target_mwait =3D (highest_cstate << MWAIT_SUBSTATE_SIZE) |
+> -               (highest_subcstate - 1);
+> -
+> -}
+> -
+>  struct pkg_cstate_info {
+>         bool skip;
+>         int msr_index;
+> @@ -759,9 +730,6 @@ static int __init powerclamp_probe(void)
+>                 return -ENODEV;
+>         }
+>
+> -       /* find the deepest mwait value */
+> -       find_target_mwait();
+> -
+>         return 0;
+>  }
+>
+> --
 
-This needs to take all of the cases in which the analogous formula
-for computing a perf level is used, which are a few.
-
-Also, one can argue that this is a fix, because it prevents the CPU
-capacity from being limited artificially if the E-core-to-P-core scaling
-factor used by the platform to produce the HWP_CAP numbers is smaller
-than expected by the kernel.
-
-So here's my version of this patch (lightly tested):
-
----
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Subject: [PATCH v1] cpufreq: intel_pstate: Refine computation of P-state for given frequency
-
-On systems using HWP, if a given frequency is equal to the maximum turbo
-frequency or the maximum non-turbo frequency, the HWP performance level
-corresponding to it is already known and can be used directly without
-any computation.
-
-Accordingly, adjust the code to use the known HWP performance levels in
-the cases mentioned above.
-
-This also helps to avoid limiting CPU capacity artificially in some
-cases when the BIOS produces the HWP_CAP numbers using a different
-E-core-to-P-core performance scaling factor than expected by the kernel.
-
-Fixes: f5c8cf2a4992 ("cpufreq: intel_pstate: hybrid: Use known scaling factor for P-cores")
-Cc: 6.1+ <stable@vger.kernel.org> # 6.1+
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/cpufreq/intel_pstate.c |   55 +++++++++++++++++++++++++----------------
- 1 file changed, 34 insertions(+), 21 deletions(-)
-
-Index: linux-pm/drivers/cpufreq/intel_pstate.c
-===================================================================
---- linux-pm.orig/drivers/cpufreq/intel_pstate.c
-+++ linux-pm/drivers/cpufreq/intel_pstate.c
-@@ -529,6 +529,30 @@ static int intel_pstate_cppc_get_scaling
- }
- #endif /* CONFIG_ACPI_CPPC_LIB */
- 
-+static int intel_pstate_freq_to_hwp_rel(struct cpudata *cpu, int freq,
-+					unsigned int relation)
-+{
-+	if (freq == cpu->pstate.turbo_freq)
-+		return cpu->pstate.turbo_pstate;
-+
-+	if (freq == cpu->pstate.max_freq)
-+		return cpu->pstate.max_pstate;
-+
-+	switch (relation) {
-+	case CPUFREQ_RELATION_H:
-+		return freq / cpu->pstate.scaling;
-+	case CPUFREQ_RELATION_C:
-+		return DIV_ROUND_CLOSEST(freq, cpu->pstate.scaling);
-+	}
-+
-+	return DIV_ROUND_UP(freq, cpu->pstate.scaling);
-+}
-+
-+static int intel_pstate_freq_to_hwp(struct cpudata *cpu, int freq)
-+{
-+	return intel_pstate_freq_to_hwp_rel(cpu, freq, CPUFREQ_RELATION_L);
-+}
-+
- /**
-  * intel_pstate_hybrid_hwp_adjust - Calibrate HWP performance levels.
-  * @cpu: Target CPU.
-@@ -546,6 +570,7 @@ static void intel_pstate_hybrid_hwp_adju
- 	int perf_ctl_scaling = cpu->pstate.perf_ctl_scaling;
- 	int perf_ctl_turbo = pstate_funcs.get_turbo(cpu->cpu);
- 	int scaling = cpu->pstate.scaling;
-+	int freq;
- 
- 	pr_debug("CPU%d: perf_ctl_max_phys = %d\n", cpu->cpu, perf_ctl_max_phys);
- 	pr_debug("CPU%d: perf_ctl_turbo = %d\n", cpu->cpu, perf_ctl_turbo);
-@@ -559,16 +584,16 @@ static void intel_pstate_hybrid_hwp_adju
- 	cpu->pstate.max_freq = rounddown(cpu->pstate.max_pstate * scaling,
- 					 perf_ctl_scaling);
- 
--	cpu->pstate.max_pstate_physical =
--			DIV_ROUND_UP(perf_ctl_max_phys * perf_ctl_scaling,
--				     scaling);
-+	freq = perf_ctl_max_phys * perf_ctl_scaling;
-+	cpu->pstate.max_pstate_physical = intel_pstate_freq_to_hwp(cpu, freq);
- 
--	cpu->pstate.min_freq = cpu->pstate.min_pstate * perf_ctl_scaling;
-+	freq = cpu->pstate.min_pstate * perf_ctl_scaling;
-+	cpu->pstate.min_freq = freq;
- 	/*
- 	 * Cast the min P-state value retrieved via pstate_funcs.get_min() to
- 	 * the effective range of HWP performance levels.
- 	 */
--	cpu->pstate.min_pstate = DIV_ROUND_UP(cpu->pstate.min_freq, scaling);
-+	cpu->pstate.min_pstate = intel_pstate_freq_to_hwp(cpu, freq);
- }
- 
- static inline void update_turbo_state(void)
-@@ -2528,13 +2553,12 @@ static void intel_pstate_update_perf_lim
- 	 * abstract values to represent performance rather than pure ratios.
- 	 */
- 	if (hwp_active && cpu->pstate.scaling != perf_ctl_scaling) {
--		int scaling = cpu->pstate.scaling;
- 		int freq;
- 
- 		freq = max_policy_perf * perf_ctl_scaling;
--		max_policy_perf = DIV_ROUND_UP(freq, scaling);
-+		max_policy_perf = intel_pstate_freq_to_hwp(cpu, freq);
- 		freq = min_policy_perf * perf_ctl_scaling;
--		min_policy_perf = DIV_ROUND_UP(freq, scaling);
-+		min_policy_perf = intel_pstate_freq_to_hwp(cpu, freq);
- 	}
- 
- 	pr_debug("cpu:%d min_policy_perf:%d max_policy_perf:%d\n",
-@@ -2908,18 +2932,7 @@ static int intel_cpufreq_target(struct c
- 
- 	cpufreq_freq_transition_begin(policy, &freqs);
- 
--	switch (relation) {
--	case CPUFREQ_RELATION_L:
--		target_pstate = DIV_ROUND_UP(freqs.new, cpu->pstate.scaling);
--		break;
--	case CPUFREQ_RELATION_H:
--		target_pstate = freqs.new / cpu->pstate.scaling;
--		break;
--	default:
--		target_pstate = DIV_ROUND_CLOSEST(freqs.new, cpu->pstate.scaling);
--		break;
--	}
--
-+	target_pstate = intel_pstate_freq_to_hwp_rel(cpu, freqs.new, relation);
- 	target_pstate = intel_cpufreq_update_pstate(policy, target_pstate, false);
- 
- 	freqs.new = target_pstate * cpu->pstate.scaling;
-@@ -2937,7 +2950,7 @@ static unsigned int intel_cpufreq_fast_s
- 
- 	update_turbo_state();
- 
--	target_pstate = DIV_ROUND_UP(target_freq, cpu->pstate.scaling);
-+	target_pstate = intel_pstate_freq_to_hwp(cpu, target_freq);
- 
- 	target_pstate = intel_cpufreq_update_pstate(policy, target_pstate, true);
- 
-
-
-
+Applied as 6.8-rc material, thanks!
 
