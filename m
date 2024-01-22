@@ -1,126 +1,159 @@
-Return-Path: <linux-pm+bounces-2496-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2497-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E47C8836CE5
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 18:20:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A24D836CF0
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 18:21:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F8E31C26DC9
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 17:20:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5871F1C23E00
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 17:21:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 719543F8E1;
-	Mon, 22 Jan 2024 16:13:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=pobox.com header.i=@pobox.com header.b="BZr22Qnf";
-	dkim=pass (1024-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b="xEkHQKlL"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E52750A68;
+	Mon, 22 Jan 2024 16:23:00 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from pb-smtp21.pobox.com (pb-smtp21.pobox.com [173.228.157.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEE014D590
-	for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 16:13:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=173.228.157.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0319450276;
+	Mon, 22 Jan 2024 16:22:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705940019; cv=none; b=oQHdOclZxRmEElSqNRLsLBw295Sp6qBaJTFjisECCSbL2ZUgxmfywPEwH4TZN47DB2FFKsTVgykoINCOXaEszT/XbejG3sFNpDDmsa4/l26IrbGSF8pBqXqhFKrJe/2HYmNgTrNtJlDtuFc4Uk80MTWB+2PtFVjQxED/lP+FpDA=
+	t=1705940580; cv=none; b=RKJ25GmHlxp26Qcj8eYQoOLcraOG913KbiMJ65Uhxg3gJa0ZzzhhO3D7D70R7/RsIoAqgrGUZ1AAyBgesWls1jtXDM8s16FSTFPG5ZAwXBhybkw9bFNIUXspcHDQk8beXNg5KtKS4ddgc3mBYhPOdAU7AjbEailSS2bPIybYUfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705940019; c=relaxed/simple;
-	bh=vVFbQAZQaCV1Nt2m+xFmWWvr4pQM73xG49Al6bRM/Qk=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=c4oNTYz2gQM9pVhYLlvKsIfHsqD9+FvYLoru/o1M36ogyTEAk03IDvAF3ONOP1oJucbD+C2Fiob70GN9hTCiJ6wFcC0i6VhKs+PMXVBPMm3p6qFHARm3J/pyiRKGsrAq4cI0VlO02wSndCR27zvr7b20einyjcXFjm2cZmzofkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fluxnic.net; spf=pass smtp.mailfrom=fluxnic.net; dkim=pass (1024-bit key) header.d=pobox.com header.i=@pobox.com header.b=BZr22Qnf; dkim=pass (1024-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b=xEkHQKlL; arc=none smtp.client-ip=173.228.157.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fluxnic.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fluxnic.net
-Received: from pb-smtp21.pobox.com (unknown [127.0.0.1])
-	by pb-smtp21.pobox.com (Postfix) with ESMTP id 39E79291B2;
-	Mon, 22 Jan 2024 11:13:37 -0500 (EST)
-	(envelope-from nico@fluxnic.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=date:from
-	:to:cc:subject:in-reply-to:message-id:references:mime-version
-	:content-type; s=sasl; bh=vVFbQAZQaCV1Nt2m+xFmWWvr4pQM73xG49Al6b
-	RM/Qk=; b=BZr22QnfYPKhRKm8YZwP/qabCDa9tI51LKkb1ah1kdgxiwjhFZbh8s
-	rF7D/amev0Q2h6E4He25tlsHdb0HzGyI+X84zR6k7JqjJdsqcHRnRxuwvms34jSM
-	vPGW4l7LJ/3Cx+xJw2WtbZAOV6TQexkiBcDhIoRW6lMh1JwRqnneI=
-Received: from pb-smtp21.sea.icgroup.com (unknown [127.0.0.1])
-	by pb-smtp21.pobox.com (Postfix) with ESMTP id 33D2F291B1;
-	Mon, 22 Jan 2024 11:13:37 -0500 (EST)
-	(envelope-from nico@fluxnic.net)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=fluxnic.net;
- h=date:from:to:cc:subject:in-reply-to:message-id:references:mime-version:content-type; s=2016-12.pbsmtp; bh=vVFbQAZQaCV1Nt2m+xFmWWvr4pQM73xG49Al6bRM/Qk=; b=xEkHQKlL0cmZY7u5wTfQK9xWwlTGQvdZiTHr2SZbmxtEjE5N7LiISk6RDg9LLudyQf2EDmlb9RMoy6XF99Rh0YybydGArC+YJ27iwEmMd9t9ezA2+i8FR2VIEbFbuqiTp4dXGh8WnB7nYXk7/a9nz5tjUqP2170Uq1I3H8cEYbA=
-Received: from yoda.fluxnic.net (unknown [24.201.101.36])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by pb-smtp21.pobox.com (Postfix) with ESMTPSA id 238F1291AA;
-	Mon, 22 Jan 2024 11:13:32 -0500 (EST)
-	(envelope-from nico@fluxnic.net)
-Received: from xanadu (unknown [IPv6:fd17:d3d3:663b:0:9696:df8a:e3:af35])
-	by yoda.fluxnic.net (Postfix) with ESMTPSA id D6749AF577D;
-	Mon, 22 Jan 2024 11:13:29 -0500 (EST)
-Date: Mon, 22 Jan 2024 11:13:29 -0500 (EST)
-From: Nicolas Pitre <nico@fluxnic.net>
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-cc: linux-pm@vger.kernel.org
-Subject: Re: [PATCH 8/9] thermal/drivers/mediatek/lvts_thermal: allow early
- empty sensor slots
-In-Reply-To: <152d56e7-9d98-4d7e-b3f8-d29c8dae0a8a@linaro.org>
-Message-ID: <637r7n03-9o9p-97r2-s92o-o015860n66n9@syhkavp.arg>
-References: <20240111223020.3593558-1-nico@fluxnic.net> <20240111223020.3593558-9-nico@fluxnic.net> <9d8100dd-11a8-482f-83a1-85bfc34f1746@linaro.org> <3047p728-p0pp-9qs5-qnn4-95s23qo2735n@syhkavp.arg> <f0805135-6b4b-4691-ae97-d3f995e52e88@linaro.org>
- <36665522-1225-n119-6ns4-2n3p0086orp7@syhkavp.arg> <152d56e7-9d98-4d7e-b3f8-d29c8dae0a8a@linaro.org>
+	s=arc-20240116; t=1705940580; c=relaxed/simple;
+	bh=HxG7IkgYxV45Ifv398x/WvHC2ljk6bJKTaNgioOP7ig=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=U0eZjwvggNEPcviRHXrki2JNlUKdT3o1TqL/pbwPf2W+2UG50DQ6r2whLDqKXL4fwh+x+Gb2XXNKQnOZO2rt9CRzcH7TTKKholdt2JR1tqAwqbUNWZvdRDJR6bq5mhtn2e7eMd4NpGOVjTTYwocGETY185/nPkzPC4X1i2TrWj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-20475bf35a2so107839fac.1;
+        Mon, 22 Jan 2024 08:22:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705940578; x=1706545378;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NeqYwsAig8OM8+vknifuJYP2AzBgf+u+iQafy2tdxVA=;
+        b=MGjTXjg3/F/TOA5Hxx1OZ6rPP4oCtLd1vcwt2APgNMFG6p8H5ClitprX5iSieg0Kav
+         xcrXBSNA+WIJ1Mp5726BhH3Dm0OrGOjLjjSPFym21QuWtLJi1bGyDOms7W3usdIz5vm1
+         EpnxS51ipDgK8Cg8y9uj9ZKL2CYLEcPxYBmAYUXj2vjGIlHvjtf4zFW/qPT23Bbp/4wT
+         xa/aU3NUq00a1FtuJSqzt5/I5TBJS9nGpFs9lZ7hwDeqETvEnPxeGUA6qhkqvwmBaPE9
+         PjQOCCWrReponx/KByk3j+yCRUMlHY8Bsn+1AU4YvkFsdY93mkyyp8NWkGaH6diYqzZO
+         HPHw==
+X-Gm-Message-State: AOJu0YxBZk4v3xT2hLhPlIqyQveOwQSG2hB5aF1wVGteSmY4fxZWFwYo
+	iFZ5FwWDgxmzOFJ5IO3XJHX38MW/sbBWYz2flBK1t93NMgliG4jQlHix8HK5zb0NNm/hVtpY1I+
+	4/iiRA1XY7oQthc0/gM7nfk7WYzc=
+X-Google-Smtp-Source: AGHT+IFuHJXu5mAxkwobVQKGd/S4EJuqPyP21RbRV5V/lpmKFOP7N2htShcxq/NrWRpDaEz7nw7KbFO1kuk4zNCgfuM=
+X-Received: by 2002:a05:6870:7009:b0:213:7249:3fb0 with SMTP id
+ u9-20020a056870700900b0021372493fb0mr6379169oae.5.1705940577897; Mon, 22 Jan
+ 2024 08:22:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Pobox-Relay-ID:
- 2FD54B06-B941-11EE-88A4-A19503B9AAD1-78420484!pb-smtp21.pobox.com
+References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk> <E1rDOg2-00Dvjk-RI@rmk-PC.armlinux.org.uk>
+ <CAJZ5v0ju1JHgpjuFLHZVs4NZiARG6iBZN_wza6c2e0kDhZjK0w@mail.gmail.com>
+ <ZaURtUvWQyjYfiiO@shell.armlinux.org.uk> <20240122160227.00002d83@Huawei.com>
+In-Reply-To: <20240122160227.00002d83@Huawei.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 22 Jan 2024 17:22:46 +0100
+Message-ID: <CAJZ5v0hamuXJ_w-TSmVb=5jGide=Lb7sCjbzzNb_rFuPrvkgxQ@mail.gmail.com>
+Subject: Re: [PATCH RFC v3 03/21] ACPI: processor: Register CPUs that are
+ online, but not described in the DSDT
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: "Russell King (Oracle)" <linux@armlinux.org.uk>, "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
+	loongarch@lists.linux.dev, linux-acpi@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org, 
+	kvmarm@lists.linux.dev, x86@kernel.org, 
+	acpica-devel@lists.linuxfoundation.org, linux-csky@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>, 
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com, justin.he@arm.com, 
+	James Morse <james.morse@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 22 Jan 2024, Daniel Lezcano wrote:
+On Mon, Jan 22, 2024 at 5:02=E2=80=AFPM Jonathan Cameron
+<Jonathan.Cameron@huawei.com> wrote:
+>
+> On Mon, 15 Jan 2024 11:06:29 +0000
+> "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
+>
+> > On Mon, Dec 18, 2023 at 09:22:03PM +0100, Rafael J. Wysocki wrote:
+> > > On Wed, Dec 13, 2023 at 1:49=E2=80=AFPM Russell King <rmk+kernel@arml=
+inux.org.uk> wrote:
+> > > >
+> > > > From: James Morse <james.morse@arm.com>
+> > > >
+> > > > ACPI has two descriptions of CPUs, one in the MADT/APIC table, the =
+other
+> > > > in the DSDT. Both are required. (ACPI 6.5's 8.4 "Declaring Processo=
+rs"
+> > > > says "Each processor in the system must be declared in the ACPI
+> > > > namespace"). Having two descriptions allows firmware authors to get
+> > > > this wrong.
+> > > >
+> > > > If CPUs are described in the MADT/APIC, they will be brought online
+> > > > early during boot. Once the register_cpu() calls are moved to ACPI,
+> > > > they will be based on the DSDT description of the CPUs. When CPUs a=
+re
+> > > > missing from the DSDT description, they will end up online, but not
+> > > > registered.
+> > > >
+> > > > Add a helper that runs after acpi_init() has completed to register
+> > > > CPUs that are online, but weren't found in the DSDT. Any CPU that
+> > > > is registered by this code triggers a firmware-bug warning and kern=
+el
+> > > > taint.
+> > > >
+> > > > Qemu TCG only describes the first CPU in the DSDT, unless cpu-hotpl=
+ug
+> > > > is configured.
+> > >
+> > > So why is this a kernel problem?
+> >
+> > So what are you proposing should be the behaviour here? What this
+> > statement seems to be saying is that QEMU as it exists today only
+> > describes the first CPU in DSDT.
+>
+> This confuses me somewhat, because I'm far from sure which machines this
+> is true for in QEMU.  I'm guessing it's a legacy thing with
+> some old distro version of QEMU - so we'll have to paper over it anyway
+> but for current QEMU I'm not sure it's true.
+>
+> Helpfully there are a bunch of ACPI table tests so I've been checking
+> through all the multi CPU cases.
+>
+> CPU hotplug not enabled.
+> pc/DSDT.dimmpxm  - 4x Processor entries.  -smp 4
+> pc/DSDT.acpihmat - 2x Processor entries.  -smp 2
+> q35/DSDT.acpihmat - 2x Processor entries. -smp 2
+> virt/DSDT.acpihmatvirt - 4x ACPI0007 entries -smp 4
+> q35/DSDT.acpihmat-noinitiator - 4 x Processor () entries -smp 4
+> virt/DSDT.topology - 8x ACPI0007 entries
+>
+> I've also looked at the code and we have various types of
+> CPU hotplug on x86 but they all build appropriate numbers of
+> Processor() entries in DSDT.
+> Arm likewise seems to build the right number of ACPI0007 entries
+> (and doesn't yet have CPU HP support).
+>
+> If anyone can add a reference on why this is needed that would be very
+> helpful.
 
-> On 22/01/2024 16:23, Nicolas Pitre wrote:
-> > On Mon, 22 Jan 2024, Daniel Lezcano wrote:
-> > 
-> >>
-> >> Hi Nico,
-> >>
-> >> On 19/01/2024 17:53, Nicolas Pitre wrote:
-> >>
-> >> [ ... ]
-> >>
-> >>>>> +		skip = lvts_ctrl_data->skipped_sensors;
-> >>>>>     		lvts_sensor[i].msr = lvts_ctrl_data->mode ==
-> >>>>> LVTS_MSR_IMMEDIATE_MODE ?
-> >>>>> -			imm_regs[i] : msr_regs[i];
-> >>>>> +			imm_regs[i + skip] : msr_regs[i + skip];
-> >>>>
-> >>>> Overall the series look ok but this changes is hard to understand.
-> >>>>
-> >>>> Could you propose a different approach to have the resulting code easier
-> >>>> to
-> >>>> understand ?
-> >>>
-> >>> I'm not sure how I could make it simpler. Maybe a comment is in order
-> >>> though?
-> >>>
-> >>> The sensor controller has 4 slots. Those slots are accessible either
-> >>> through imm_regs[<slot_number>] oe msr_regs[<slot_number>].  If, say,
-> >>> slot 0 is unpopulated then sensor 0 (i = 0) needs to address slot 1 (i =
-> >>> 0, skip = 1), sensor 1 is in slot 2 (i = 1, skip = 1), etc. Does this
-> >>> make sense?
-> >>
-> >> Why not keep the sensor id = slot id and declare the ones which are
-> >> disabled
-> >> with a mask?
-> > 
-> > Then what do you do with the empty sensor 0? Do we want to present dead
-> > sensor IDs to users?
-> 
-> You can skip it somehow in lvts_ctrl_start(), right?
+Yes, it would.
 
-I see what you mean. Indeed that would be better.
+Personally, I would prefer to assume that it is not necessary until it
+turns out that (1) there is firmware with this issue actually in use
+and (2) updating the firmware in question to follow the specification
+is not practical.
 
-
-Nicolas
+Otherwise, we'd make it easier to ship non-compliant firmware for no
+good reason.
 
