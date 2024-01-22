@@ -1,183 +1,161 @@
-Return-Path: <linux-pm+bounces-2443-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2445-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0143D836254
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 12:44:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 851E483625B
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 12:45:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8FD1228E1A0
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 11:44:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 201D41F2877B
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 11:45:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6710E3BB36;
-	Mon, 22 Jan 2024 11:41:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eZiHmC7f"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E4523C485;
+	Mon, 22 Jan 2024 11:44:27 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD0BA3DBAD
-	for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 11:41:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.88
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68D8D3B2A1;
+	Mon, 22 Jan 2024 11:44:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705923700; cv=none; b=lJCshIjMev7KS4kE4Eo/kVYzGcQKI1W3oWng0nFZ8CFSHk7C8c/3oE8LI3KfhJKKM2vawfGZYCOYzRATxJ9ARWPCXrCgwooKzBo6PL0R6X9QFIchWyp3gtqzqpowIcDM0KytSV0PpDnPoDioGg//e4PIi85vL+rq54rfvr2p6hU=
+	t=1705923867; cv=none; b=h1Qs9+lyIGNJAY7k+OCqNuoppSaEcfquj9LQSiPUcbf0pShOwkWFFA0xWZThqAOvFuOiGInyQbH0L4QyNd+uma9CPoVK2IdpqfqzDQ/AnPXj2+lSLEw/DejwSEn0rUUVLeHl/+7MVduTZyWqjCPBH3duetNf7icbOYTw5F7y02U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705923700; c=relaxed/simple;
-	bh=HFZ2IUol6I+RG6PAFryIqM8H/UALV0K8+U2a36pXjkc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=APLbQX5IGj/5xg89nPPwa8KUsZPnUrRGG2BNdfqb3WwavlhoRuR8HNvmhbzrnKRo3SwCpWW6ns6r63aTlrczQdTgy5f+/5BDKbtPHH+Njx5xNGFIimTTkPyDomg9SvHpvH059ynVySfeNRIpPNwi+4vjfijMvu3wpDZwf4SgNls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eZiHmC7f; arc=none smtp.client-ip=192.55.52.88
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705923698; x=1737459698;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=HFZ2IUol6I+RG6PAFryIqM8H/UALV0K8+U2a36pXjkc=;
-  b=eZiHmC7fQLaCXdSNE7mcEBGgsx2whNau+VlhM5/8M47bcQ3N13AYy51H
-   jvhvklPZfIGkQF/LK5rIF6zPG1PNQeNIXz4XXLB5J5kkFcE65+KB0lO6R
-   HFCtFAqxpnBNOAeT6qeyz54NQD+QfZISrPDlT48d/ce+bTXGpJKY86Tm2
-   jH42VZ0bkhTsplB9+PtYMteNvtGD8ypVkfp8LpBWsJkKBYfXtyMoVX/iT
-   rUaEct5Seh+ElsJhJuyM8/MCf41ldkKoyrzjlj8L4USFa6YJoyn2qNr9U
-   6p8ArZeCqv8ChwEyq+gszr2C1RVuoqnSloICWsEgzUpPjq3s3nICMD4IJ
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="432347161"
-X-IronPort-AV: E=Sophos;i="6.05,211,1701158400"; 
-   d="scan'208";a="432347161"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2024 03:41:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10960"; a="904825870"
-X-IronPort-AV: E=Sophos;i="6.05,211,1701158400"; 
-   d="scan'208";a="904825870"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2024 03:41:37 -0800
-Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id A42D511FAD4;
-	Mon, 22 Jan 2024 13:41:34 +0200 (EET)
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: linux-pm@vger.kernel.org
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	laurent.pinchart@ideasonboard.com
-Subject: [PATCH v3 2/2] pm: runtime: Add pm_runtime_put_autosuspend() replacement
-Date: Mon, 22 Jan 2024 13:41:34 +0200
-Message-Id: <20240122114134.56767-1-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240122114121.56752-1-sakari.ailus@linux.intel.com>
-References: <20240122114121.56752-1-sakari.ailus@linux.intel.com>
+	s=arc-20240116; t=1705923867; c=relaxed/simple;
+	bh=mpMKfd9yXRCoS8WrmhHHIz0u2n9wfzoTC6Y6FmHya8k=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=q5lO+Dm8rIf3oFtMm6Y6u5ITb9N802POrQVtwoyDYlqkBgacc9sJaAFV10N9vVhL80DqhxpwLyOGynukIGmTyrbsbp5JlFK22PJzsi3W7QenhilnqJyFME1rFvN9wizIMaA/Kb/8HVmO+jDTd4PQRCL0LqB0qUqkgV3mBQwSe+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
+ id 053a946a4536c0e0; Mon, 22 Jan 2024 12:44:22 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id A5859669541;
+	Mon, 22 Jan 2024 12:44:21 +0100 (CET)
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+Subject: [PATCH v1 11/12] PM: sleep: Move devices to new lists earlier in each suspend phase
+Date: Mon, 22 Jan 2024 12:42:46 +0100
+Message-ID: <3476604.QJadu78ljV@kreacher>
+In-Reply-To: <5760158.DvuYhMxLoT@kreacher>
+References: <5760158.DvuYhMxLoT@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrvdekiedgfedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepgedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehsthgrnhhishhlrgifrdhgrhhushiikhgrsehlihhnuhigrdhinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
 
-Add __pm_runtime_put_autosuspend() that replaces
-pm_runtime_put_autosuspend() for new users. The intent is to later
-re-purpose pm_runtime_put_autosuspend() to also mark the device's last
-busy stamp---which is what the vast majority of users actually need.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-This is also described in pm_runtime_put_autosuspend() documentation.
+During a system-wide suspend of devices, dpm_noirq_suspend_devices(),
+dpm_suspend_late() and dpm_suspend() move devices from one list to
+another.  They do it with each device after its PM callback in the
+given suspend phase has run or has been scheduled for asynchronous
+execution, in case it is deleted from the current list in the
+meantime.
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+However, devices can be moved to a new list before invoking their PM
+callbacks (which usually is the case for the devices whose callbacks
+are executed asynchronously anyway), because doing so does not affect
+the ordering of that list.  In either case, each device is moved to
+the new list after the previous device has been moved to it or gone
+away, and if a device is removed, it does not matter which list it is
+in at that point, because deleting an entry from a list does not change
+the ordering of the other entries in it.
+
+Accordingly, modify the functions mentioned above to move devices to
+new lists without waiting for their PM callbacks to run regardless of
+whether or not they run asynchronously.
+
+No intentional functional impact.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- Documentation/power/runtime_pm.rst | 17 +++++++++++------
- include/linux/pm_runtime.h         | 12 ++++++++++++
- 2 files changed, 23 insertions(+), 6 deletions(-)
+ drivers/base/power/main.c |   24 +++---------------------
+ 1 file changed, 3 insertions(+), 21 deletions(-)
 
-diff --git a/Documentation/power/runtime_pm.rst b/Documentation/power/runtime_pm.rst
-index da99379071a4..6fa50e4f87ce 100644
---- a/Documentation/power/runtime_pm.rst
-+++ b/Documentation/power/runtime_pm.rst
-@@ -154,7 +154,7 @@ suspending the device are satisfied) and to queue up a suspend request for the
- device in that case.  If there is no idle callback, or if the callback returns
- 0, then the PM core will attempt to carry out a runtime suspend of the device,
- also respecting devices configured for autosuspend.  In essence this means a
--call to pm_runtime_autosuspend() (do note that drivers needs to update the
-+call to __pm_runtime_autosuspend() (do note that drivers needs to update the
- device last busy mark, pm_runtime_mark_last_busy(), to control the delay under
- this circumstance).  To prevent this (for example, if the callback routine has
- started a delayed suspend), the routine must return a non-zero value.  Negative
-@@ -409,6 +409,10 @@ drivers/base/power/runtime.c and include/linux/pm_runtime.h:
-       pm_request_idle(dev) and return its result
+Index: linux-pm/drivers/base/power/main.c
+===================================================================
+--- linux-pm.orig/drivers/base/power/main.c
++++ linux-pm/drivers/base/power/main.c
+@@ -1304,18 +1304,12 @@ static int dpm_noirq_suspend_devices(pm_
+ 	while (!list_empty(&dpm_late_early_list)) {
+ 		struct device *dev = to_device(dpm_late_early_list.prev);
  
-   `int pm_runtime_put_autosuspend(struct device *dev);`
-+    - does the same as __pm_runtime_put_autosuspend() for now, but in the
-+      future, will also call pm_runtime_mark_last_busy() as well, DO NOT USE!
-+
-+  `int __pm_runtime_put_autosuspend(struct device *dev);`
-     - decrement the device's usage counter; if the result is 0 then run
-       pm_request_autosuspend(dev) and return its result
++		list_move(&dev->power.entry, &dpm_noirq_list);
+ 		get_device(dev);
+ 		mutex_unlock(&dpm_list_mtx);
  
-@@ -539,6 +543,7 @@ It is safe to execute the following helper functions from interrupt context:
- - pm_runtime_put_noidle()
- - pm_runtime_put()
- - pm_runtime_put_autosuspend()
-+- __pm_runtime_put_autosuspend()
- - pm_runtime_enable()
- - pm_suspend_ignore_children()
- - pm_runtime_set_active()
-@@ -864,9 +869,9 @@ automatically be delayed until the desired period of inactivity has elapsed.
+ 		error = device_suspend_noirq(dev);
  
- Inactivity is determined based on the power.last_busy field.  Drivers should
- call pm_runtime_mark_last_busy() to update this field after carrying out I/O,
--typically just before calling pm_runtime_put_autosuspend().  The desired length
--of the inactivity period is a matter of policy.  Subsystems can set this length
--initially by calling pm_runtime_set_autosuspend_delay(), but after device
-+typically just before calling __pm_runtime_put_autosuspend().  The desired
-+length of the inactivity period is a matter of policy.  Subsystems can set this
-+length initially by calling pm_runtime_set_autosuspend_delay(), but after device
- registration the length should be controlled by user space, using the
- /sys/devices/.../power/autosuspend_delay_ms attribute.
+-		mutex_lock(&dpm_list_mtx);
+-
+-		if (!error && !list_empty(&dev->power.entry))
+-			list_move(&dev->power.entry, &dpm_noirq_list);
+-
+-		mutex_unlock(&dpm_list_mtx);
+-
+ 		put_device(dev);
  
-@@ -877,7 +882,7 @@ instead of the non-autosuspend counterparts::
+ 		mutex_lock(&dpm_list_mtx);
+@@ -1486,19 +1480,13 @@ int dpm_suspend_late(pm_message_t state)
+ 	while (!list_empty(&dpm_suspended_list)) {
+ 		struct device *dev = to_device(dpm_suspended_list.prev);
  
- 	Instead of: pm_runtime_suspend    use: pm_runtime_autosuspend;
- 	Instead of: pm_schedule_suspend   use: pm_request_autosuspend;
--	Instead of: pm_runtime_put        use: pm_runtime_put_autosuspend;
-+	Instead of: pm_runtime_put        use: __pm_runtime_put_autosuspend;
- 	Instead of: pm_runtime_put_sync   use: pm_runtime_put_sync_autosuspend.
++		list_move(&dev->power.entry, &dpm_late_early_list);
+ 		get_device(dev);
  
- Drivers may also continue to use the non-autosuspend helper functions; they
-@@ -916,7 +921,7 @@ Here is a schematic pseudo-code example::
- 		lock(&foo->private_lock);
- 		if (--foo->num_pending_requests == 0) {
- 			pm_runtime_mark_last_busy(&foo->dev);
--			pm_runtime_put_autosuspend(&foo->dev);
-+			__pm_runtime_put_autosuspend(&foo->dev);
- 		} else {
- 			foo_process_next_request(foo);
- 		}
-diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-index a212b3008ade..fc6d95b09570 100644
---- a/include/linux/pm_runtime.h
-+++ b/include/linux/pm_runtime.h
-@@ -482,6 +482,18 @@ static inline int pm_runtime_put(struct device *dev)
- 	return __pm_runtime_idle(dev, RPM_GET_PUT | RPM_ASYNC);
- }
+ 		mutex_unlock(&dpm_list_mtx);
  
-+/**
-+ * __pm_runtime_put_autosuspend - Drop device usage counter and queue autosuspend if 0.
-+ * @dev: Target device.
-+ *
-+ * Decrement the runtime PM usage counter of @dev and if it turns out to be
-+ * equal to 0, queue up a work item for @dev like in pm_request_autosuspend().
-+ */
-+static inline int __pm_runtime_put_autosuspend(struct device *dev)
-+{
-+	return __pm_runtime_suspend(dev, RPM_GET_PUT | RPM_ASYNC | RPM_AUTO);
-+}
-+
- /**
-  * pm_runtime_put_autosuspend - Drop device usage counter and queue autosuspend if 0.
-  * @dev: Target device.
--- 
-2.39.2
+ 		error = device_suspend_late(dev);
+ 
+-		mutex_lock(&dpm_list_mtx);
+-
+-		if (!list_empty(&dev->power.entry))
+-			list_move(&dev->power.entry, &dpm_late_early_list);
+-
+-		mutex_unlock(&dpm_list_mtx);
+-
+ 		put_device(dev);
+ 
+ 		mutex_lock(&dpm_list_mtx);
+@@ -1763,19 +1751,13 @@ int dpm_suspend(pm_message_t state)
+ 	while (!list_empty(&dpm_prepared_list)) {
+ 		struct device *dev = to_device(dpm_prepared_list.prev);
+ 
++		list_move(&dev->power.entry, &dpm_suspended_list);
+ 		get_device(dev);
+ 
+ 		mutex_unlock(&dpm_list_mtx);
+ 
+ 		error = device_suspend(dev);
+ 
+-		mutex_lock(&dpm_list_mtx);
+-
+-		if (!error && !list_empty(&dev->power.entry))
+-			list_move(&dev->power.entry, &dpm_suspended_list);
+-
+-		mutex_unlock(&dpm_list_mtx);
+-
+ 		put_device(dev);
+ 
+ 		mutex_lock(&dpm_list_mtx);
+
+
 
 
