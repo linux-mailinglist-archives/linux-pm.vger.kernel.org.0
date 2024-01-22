@@ -1,49 +1,49 @@
-Return-Path: <linux-pm+bounces-2451-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2446-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 637CB836268
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 12:46:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C89183625E
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 12:45:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C19E929072A
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 11:46:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FC0D1C274DE
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 11:45:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3E3D3D542;
-	Mon, 22 Jan 2024 11:44:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05B983C49B;
+	Mon, 22 Jan 2024 11:44:28 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9460C3A1BD;
-	Mon, 22 Jan 2024 11:44:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D980A39ACC;
+	Mon, 22 Jan 2024 11:44:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705923872; cv=none; b=o3AtZW7AP+dDF5biAOnqDx+oia0MO9qfgtFRx2RSeR/1De8VRJwQt192xYOZVcuxAyWtYymUdRY+VVEYHLIKQd33KRjLhWIBOAXrQWobkibOowkMslez7PYwVbn4wlvhhpZlG+s0g1FKXb3mX7r3p5X08gaf0BHa42ZPWPHPf0Q=
+	t=1705923867; cv=none; b=VGrg8ldCDGnZdjmy86t8bkjyfyj7ZZUvqtudnoar3jva2TjoZ220gLBaUHn5A1+NdglXLgjCoBDNPixA6TQiF19HfmgfFMWgsGeRgu5K/0SxfGGaY5XDihZU9xu6nRzLe7xxPgnqFunz+08Gy1k2xttt/NTvx6/bfSVMI54qQX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705923872; c=relaxed/simple;
-	bh=fw+tx0QLXKQOvFgAfYfyFRwUUJeuGesaym5awIhseJo=;
+	s=arc-20240116; t=1705923867; c=relaxed/simple;
+	bh=gTjiJJ3k10zp61AiQqvOuvcvQS0uG1AXQCn4e+++Nc0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=eOe+ifPrbmI4NCx7svsdzijU/9pzn8tj8cZCRQXkcRVuHyvNTWPQv+6W4MeF0cQLDqLgphjNpWy8FbOqmsAoPOPfbQoLnjvlJE+FBFph25tkYMSwNd7qXtbR8+OrsXT//9/B55MOBfVwrGC0btD+D5+AFNa4SjEgFAKf/7PbMs8=
+	 MIME-Version:Content-Type; b=MLd9ukoOwzo+aJ4+C7x2yS6unRCNm/biYJidVtxCICGGqfJAd3vrkN0VcGSjUL6SOBv0RHV1KHM1ATktfY5Dc5vkSusopS/AVrmarQwK6Wiy7Dbe1JY3AWMRp6Q7O14W70/5gK/SO/eLqRza4YV8HX+gtV9z0qfmBOhMab5B2oU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id c437ba25a9c7dce7; Mon, 22 Jan 2024 12:44:23 +0100
+ id 9410ebf670e577ae; Mon, 22 Jan 2024 12:44:22 +0100
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 0D45D669540;
-	Mon, 22 Jan 2024 12:44:23 +0100 (CET)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 50FDD669540;
+	Mon, 22 Jan 2024 12:44:22 +0100 (CET)
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Subject: [PATCH v1 09/12] PM: sleep: stats: Log errors right after running suspend callbacks
-Date: Mon, 22 Jan 2024 12:35:32 +0100
-Message-ID: <9237520.CDJkKcVGEf@kreacher>
+Subject: [PATCH v1 10/12] PM: sleep: Move some assignments from under a lock
+Date: Mon, 22 Jan 2024 12:39:17 +0100
+Message-ID: <1795169.VLH7GnMWUR@kreacher>
 In-Reply-To: <5760158.DvuYhMxLoT@kreacher>
 References: <5760158.DvuYhMxLoT@kreacher>
 Precedence: bulk
@@ -62,142 +62,134 @@ X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-The error logging and failure statistics updates are carried out in two
-places in each system-wide device suspend phase, which is unnecessary
-code duplication, so do that in one place in each phase, right after
-invoking device suspend callbacks.
+The async_error and pm_transition variables are set under dpm_list_mtx
+in multiple places in the system-wide device PM core code, which is
+unnecessary and confusing, so rearrange the code so that the variables
+in question are set before acquiring the lock.
 
-While at it, add "noirq" or "late" to the "async" string printed when
-the failing device callback in the "noirq" or "late" suspend phase,
-respectively, was run asynchronously.
+While at it, add some empty code lines around locking to improve the
+consistency of the code.
+
+No intentional functional impact.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/base/power/main.c |   49 ++++++++++++----------------------------------
- 1 file changed, 13 insertions(+), 36 deletions(-)
+ drivers/base/power/main.c |   28 +++++++++++++++++++++-------
+ 1 file changed, 21 insertions(+), 7 deletions(-)
 
 Index: linux-pm/drivers/base/power/main.c
 ===================================================================
 --- linux-pm.orig/drivers/base/power/main.c
 +++ linux-pm/drivers/base/power/main.c
-@@ -1244,6 +1244,8 @@ Run:
- 	error = dpm_run_callback(callback, dev, state, info);
- 	if (error) {
- 		async_error = error;
-+		dpm_save_failed_dev(dev_name(dev));
-+		pm_dev_err(dev, state, async ? " async noirq" : " noirq", error);
- 		goto Complete;
+@@ -707,9 +707,9 @@ static void dpm_noirq_resume_devices(pm_
+ 	trace_suspend_resume(TPS("dpm_resume_noirq"), state.event, true);
+ 
+ 	async_error = 0;
++	pm_transition = state;
+ 
+ 	mutex_lock(&dpm_list_mtx);
+-	pm_transition = state;
+ 
+ 	/*
+ 	 * Trigger the resume of "async" devices upfront so they don't have to
+@@ -847,9 +847,9 @@ void dpm_resume_early(pm_message_t state
+ 	trace_suspend_resume(TPS("dpm_resume_early"), state.event, true);
+ 
+ 	async_error = 0;
++	pm_transition = state;
+ 
+ 	mutex_lock(&dpm_list_mtx);
+-	pm_transition = state;
+ 
+ 	/*
+ 	 * Trigger the resume of "async" devices upfront so they don't have to
+@@ -1012,10 +1012,11 @@ void dpm_resume(pm_message_t state)
+ 	trace_suspend_resume(TPS("dpm_resume"), state.event, true);
+ 	might_sleep();
+ 
+-	mutex_lock(&dpm_list_mtx);
+ 	pm_transition = state;
+ 	async_error = 0;
+ 
++	mutex_lock(&dpm_list_mtx);
++
+ 	/*
+ 	 * Trigger the resume of "async" devices upfront so they don't have to
+ 	 * wait for the "non-async" ones they don't depend on.
+@@ -1294,10 +1295,12 @@ static int dpm_noirq_suspend_devices(pm_
+ 	int error = 0;
+ 
+ 	trace_suspend_resume(TPS("dpm_suspend_noirq"), state.event, true);
+-	mutex_lock(&dpm_list_mtx);
++
+ 	pm_transition = state;
+ 	async_error = 0;
+ 
++	mutex_lock(&dpm_list_mtx);
++
+ 	while (!list_empty(&dpm_late_early_list)) {
+ 		struct device *dev = to_device(dpm_late_early_list.prev);
+ 
+@@ -1320,7 +1323,9 @@ static int dpm_noirq_suspend_devices(pm_
+ 		if (error || async_error)
+ 			break;
  	}
++
+ 	mutex_unlock(&dpm_list_mtx);
++
+ 	async_synchronize_full();
+ 	if (!error)
+ 		error = async_error;
+@@ -1470,11 +1475,14 @@ int dpm_suspend_late(pm_message_t state)
+ 	int error = 0;
  
-@@ -1273,14 +1275,8 @@ Complete:
- static void async_suspend_noirq(void *data, async_cookie_t cookie)
- {
- 	struct device *dev = data;
--	int error;
--
--	error = __device_suspend_noirq(dev, pm_transition, true);
--	if (error) {
--		dpm_save_failed_dev(dev_name(dev));
--		pm_dev_err(dev, pm_transition, " async", error);
--	}
+ 	trace_suspend_resume(TPS("dpm_suspend_late"), state.event, true);
+-	wake_up_all_idle_cpus();
+-	mutex_lock(&dpm_list_mtx);
++
+ 	pm_transition = state;
+ 	async_error = 0;
  
-+	__device_suspend_noirq(dev, pm_transition, true);
- 	put_device(dev);
- }
++	wake_up_all_idle_cpus();
++
++	mutex_lock(&dpm_list_mtx);
++
+ 	while (!list_empty(&dpm_suspended_list)) {
+ 		struct device *dev = to_device(dpm_suspended_list.prev);
  
-@@ -1312,12 +1308,8 @@ static int dpm_noirq_suspend_devices(pm_
- 
- 		mutex_lock(&dpm_list_mtx);
- 
--		if (error) {
--			pm_dev_err(dev, state, " noirq", error);
--			dpm_save_failed_dev(dev_name(dev));
--		} else if (!list_empty(&dev->power.entry)) {
-+		if (!error && !list_empty(&dev->power.entry))
- 			list_move(&dev->power.entry, &dpm_noirq_list);
--		}
- 
- 		mutex_unlock(&dpm_list_mtx);
- 
-@@ -1437,6 +1429,8 @@ Run:
- 	error = dpm_run_callback(callback, dev, state, info);
- 	if (error) {
- 		async_error = error;
-+		dpm_save_failed_dev(dev_name(dev));
-+		pm_dev_err(dev, state, async ? " async late" : " late", error);
- 		goto Complete;
+@@ -1498,7 +1506,9 @@ int dpm_suspend_late(pm_message_t state)
+ 		if (error || async_error)
+ 			break;
  	}
- 	dpm_propagate_wakeup_to_parent(dev);
-@@ -1453,13 +1447,8 @@ Complete:
- static void async_suspend_late(void *data, async_cookie_t cookie)
- {
- 	struct device *dev = data;
--	int error;
++
+ 	mutex_unlock(&dpm_list_mtx);
++
+ 	async_synchronize_full();
+ 	if (!error)
+ 		error = async_error;
+@@ -1745,9 +1755,11 @@ int dpm_suspend(pm_message_t state)
+ 	devfreq_suspend();
+ 	cpufreq_suspend();
  
--	error = __device_suspend_late(dev, pm_transition, true);
--	if (error) {
--		dpm_save_failed_dev(dev_name(dev));
--		pm_dev_err(dev, pm_transition, " async", error);
--	}
-+	__device_suspend_late(dev, pm_transition, true);
- 	put_device(dev);
- }
+-	mutex_lock(&dpm_list_mtx);
+ 	pm_transition = state;
+ 	async_error = 0;
++
++	mutex_lock(&dpm_list_mtx);
++
+ 	while (!list_empty(&dpm_prepared_list)) {
+ 		struct device *dev = to_device(dpm_prepared_list.prev);
  
-@@ -1500,11 +1489,6 @@ int dpm_suspend_late(pm_message_t state)
- 		if (!list_empty(&dev->power.entry))
- 			list_move(&dev->power.entry, &dpm_late_early_list);
- 
--		if (error) {
--			pm_dev_err(dev, state, " late", error);
--			dpm_save_failed_dev(dev_name(dev));
--		}
--
- 		mutex_unlock(&dpm_list_mtx);
- 
- 		put_device(dev);
-@@ -1719,8 +1703,11 @@ static int __device_suspend(struct devic
- 	dpm_watchdog_clear(&wd);
- 
-  Complete:
--	if (error)
-+	if (error) {
- 		async_error = error;
-+		dpm_save_failed_dev(dev_name(dev));
-+		pm_dev_err(dev, state, async ? " async" : "", error);
-+	}
- 
- 	complete_all(&dev->power.completion);
- 	TRACE_SUSPEND(error);
-@@ -1730,14 +1717,8 @@ static int __device_suspend(struct devic
- static void async_suspend(void *data, async_cookie_t cookie)
- {
- 	struct device *dev = data;
--	int error;
--
--	error = __device_suspend(dev, pm_transition, true);
--	if (error) {
--		dpm_save_failed_dev(dev_name(dev));
--		pm_dev_err(dev, pm_transition, " async", error);
--	}
- 
-+	__device_suspend(dev, pm_transition, true);
- 	put_device(dev);
- }
- 
-@@ -1778,12 +1759,8 @@ int dpm_suspend(pm_message_t state)
- 
- 		mutex_lock(&dpm_list_mtx);
- 
--		if (error) {
--			pm_dev_err(dev, state, "", error);
--			dpm_save_failed_dev(dev_name(dev));
--		} else if (!list_empty(&dev->power.entry)) {
-+		if (!error && !list_empty(&dev->power.entry))
- 			list_move(&dev->power.entry, &dpm_suspended_list);
--		}
- 
- 		mutex_unlock(&dpm_list_mtx);
- 
+@@ -1771,7 +1783,9 @@ int dpm_suspend(pm_message_t state)
+ 		if (error || async_error)
+ 			break;
+ 	}
++
+ 	mutex_unlock(&dpm_list_mtx);
++
+ 	async_synchronize_full();
+ 	if (!error)
+ 		error = async_error;
 
 
 
