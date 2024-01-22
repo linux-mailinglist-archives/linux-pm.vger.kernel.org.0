@@ -1,159 +1,83 @@
-Return-Path: <linux-pm+bounces-2497-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2498-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A24D836CF0
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 18:21:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B320B836E3A
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 18:48:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5871F1C23E00
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 17:21:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 68AB81F28295
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 17:48:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E52750A68;
-	Mon, 22 Jan 2024 16:23:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C34B3EA88;
+	Mon, 22 Jan 2024 17:13:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="RWv1opR2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0319450276;
-	Mon, 22 Jan 2024 16:22:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E98593EA75;
+	Mon, 22 Jan 2024 17:13:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705940580; cv=none; b=RKJ25GmHlxp26Qcj8eYQoOLcraOG913KbiMJ65Uhxg3gJa0ZzzhhO3D7D70R7/RsIoAqgrGUZ1AAyBgesWls1jtXDM8s16FSTFPG5ZAwXBhybkw9bFNIUXspcHDQk8beXNg5KtKS4ddgc3mBYhPOdAU7AjbEailSS2bPIybYUfA=
+	t=1705943621; cv=none; b=LLODi67vTvky8oMqo6pawNi3dpjKzK2soglrk0h0OxzYigFMAbV8ge3H8SlfzVqKTrtprJO9rTB7P7b5ubadrZFcOhKqH9sQPE9fWwbUazfrf45+FeDNvzuPF8fTVQZs53xZskFEcqB8RVVZlBu6Wrnx2yps0gnx4ZHNeZCwgJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705940580; c=relaxed/simple;
-	bh=HxG7IkgYxV45Ifv398x/WvHC2ljk6bJKTaNgioOP7ig=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U0eZjwvggNEPcviRHXrki2JNlUKdT3o1TqL/pbwPf2W+2UG50DQ6r2whLDqKXL4fwh+x+Gb2XXNKQnOZO2rt9CRzcH7TTKKholdt2JR1tqAwqbUNWZvdRDJR6bq5mhtn2e7eMd4NpGOVjTTYwocGETY185/nPkzPC4X1i2TrWj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-20475bf35a2so107839fac.1;
-        Mon, 22 Jan 2024 08:22:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705940578; x=1706545378;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NeqYwsAig8OM8+vknifuJYP2AzBgf+u+iQafy2tdxVA=;
-        b=MGjTXjg3/F/TOA5Hxx1OZ6rPP4oCtLd1vcwt2APgNMFG6p8H5ClitprX5iSieg0Kav
-         xcrXBSNA+WIJ1Mp5726BhH3Dm0OrGOjLjjSPFym21QuWtLJi1bGyDOms7W3usdIz5vm1
-         EpnxS51ipDgK8Cg8y9uj9ZKL2CYLEcPxYBmAYUXj2vjGIlHvjtf4zFW/qPT23Bbp/4wT
-         xa/aU3NUq00a1FtuJSqzt5/I5TBJS9nGpFs9lZ7hwDeqETvEnPxeGUA6qhkqvwmBaPE9
-         PjQOCCWrReponx/KByk3j+yCRUMlHY8Bsn+1AU4YvkFsdY93mkyyp8NWkGaH6diYqzZO
-         HPHw==
-X-Gm-Message-State: AOJu0YxBZk4v3xT2hLhPlIqyQveOwQSG2hB5aF1wVGteSmY4fxZWFwYo
-	iFZ5FwWDgxmzOFJ5IO3XJHX38MW/sbBWYz2flBK1t93NMgliG4jQlHix8HK5zb0NNm/hVtpY1I+
-	4/iiRA1XY7oQthc0/gM7nfk7WYzc=
-X-Google-Smtp-Source: AGHT+IFuHJXu5mAxkwobVQKGd/S4EJuqPyP21RbRV5V/lpmKFOP7N2htShcxq/NrWRpDaEz7nw7KbFO1kuk4zNCgfuM=
-X-Received: by 2002:a05:6870:7009:b0:213:7249:3fb0 with SMTP id
- u9-20020a056870700900b0021372493fb0mr6379169oae.5.1705940577897; Mon, 22 Jan
- 2024 08:22:57 -0800 (PST)
+	s=arc-20240116; t=1705943621; c=relaxed/simple;
+	bh=bTxjd+qZSv1qFxwXubj1oMBpkIEEgxymwDM9Dh+JF6U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j1NX+wNgCeDCBVT5cPs2B1qF0+1SCi53A6mIXCdYClWoS/HOgh+iPM+cmGSvRxAkw5AVTwK1oGjwmMllBbmt3G6WlpW6JwB9JKfqKlg62qKyhwimdS3zzVtE1RX346VSxgbnzWnnEMWLsrUFvH+IKsRz+GgHIDHHeCFHpk9uxNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=RWv1opR2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 649E0C433C7;
+	Mon, 22 Jan 2024 17:13:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1705943620;
+	bh=bTxjd+qZSv1qFxwXubj1oMBpkIEEgxymwDM9Dh+JF6U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RWv1opR2q95xCpR0+3/hSNvNDyw56ylkajM5zYiRbcsJ+lWi18mTHAzOW2WRdlm2w
+	 rC8tazrjEsZd+l/QI04MEFtVlQ/4c4D4iQey7g6MLZryV6J35Lr7JYRgyIUSHLfKoD
+	 10H5hp7Ycm/nKHiibOTCpi+KvW7v7VBhMHoZmwyo=
+Date: Mon, 22 Jan 2024 09:13:39 -0800
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+Subject: Re: [PATCH v1] PM: sleep: Use bool for all 1-bit fields in struct
+ dev_pm_info
+Message-ID: <2024012230-attitude-diligence-cb4e@gregkh>
+References: <12380944.O9o76ZdvQC@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk> <E1rDOg2-00Dvjk-RI@rmk-PC.armlinux.org.uk>
- <CAJZ5v0ju1JHgpjuFLHZVs4NZiARG6iBZN_wza6c2e0kDhZjK0w@mail.gmail.com>
- <ZaURtUvWQyjYfiiO@shell.armlinux.org.uk> <20240122160227.00002d83@Huawei.com>
-In-Reply-To: <20240122160227.00002d83@Huawei.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 22 Jan 2024 17:22:46 +0100
-Message-ID: <CAJZ5v0hamuXJ_w-TSmVb=5jGide=Lb7sCjbzzNb_rFuPrvkgxQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v3 03/21] ACPI: processor: Register CPUs that are
- online, but not described in the DSDT
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: "Russell King (Oracle)" <linux@armlinux.org.uk>, "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
-	loongarch@lists.linux.dev, linux-acpi@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org, 
-	kvmarm@lists.linux.dev, x86@kernel.org, 
-	acpica-devel@lists.linuxfoundation.org, linux-csky@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>, 
-	Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com, justin.he@arm.com, 
-	James Morse <james.morse@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <12380944.O9o76ZdvQC@kreacher>
 
-On Mon, Jan 22, 2024 at 5:02=E2=80=AFPM Jonathan Cameron
-<Jonathan.Cameron@huawei.com> wrote:
->
-> On Mon, 15 Jan 2024 11:06:29 +0000
-> "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
->
-> > On Mon, Dec 18, 2023 at 09:22:03PM +0100, Rafael J. Wysocki wrote:
-> > > On Wed, Dec 13, 2023 at 1:49=E2=80=AFPM Russell King <rmk+kernel@arml=
-inux.org.uk> wrote:
-> > > >
-> > > > From: James Morse <james.morse@arm.com>
-> > > >
-> > > > ACPI has two descriptions of CPUs, one in the MADT/APIC table, the =
-other
-> > > > in the DSDT. Both are required. (ACPI 6.5's 8.4 "Declaring Processo=
-rs"
-> > > > says "Each processor in the system must be declared in the ACPI
-> > > > namespace"). Having two descriptions allows firmware authors to get
-> > > > this wrong.
-> > > >
-> > > > If CPUs are described in the MADT/APIC, they will be brought online
-> > > > early during boot. Once the register_cpu() calls are moved to ACPI,
-> > > > they will be based on the DSDT description of the CPUs. When CPUs a=
-re
-> > > > missing from the DSDT description, they will end up online, but not
-> > > > registered.
-> > > >
-> > > > Add a helper that runs after acpi_init() has completed to register
-> > > > CPUs that are online, but weren't found in the DSDT. Any CPU that
-> > > > is registered by this code triggers a firmware-bug warning and kern=
-el
-> > > > taint.
-> > > >
-> > > > Qemu TCG only describes the first CPU in the DSDT, unless cpu-hotpl=
-ug
-> > > > is configured.
-> > >
-> > > So why is this a kernel problem?
-> >
-> > So what are you proposing should be the behaviour here? What this
-> > statement seems to be saying is that QEMU as it exists today only
-> > describes the first CPU in DSDT.
->
-> This confuses me somewhat, because I'm far from sure which machines this
-> is true for in QEMU.  I'm guessing it's a legacy thing with
-> some old distro version of QEMU - so we'll have to paper over it anyway
-> but for current QEMU I'm not sure it's true.
->
-> Helpfully there are a bunch of ACPI table tests so I've been checking
-> through all the multi CPU cases.
->
-> CPU hotplug not enabled.
-> pc/DSDT.dimmpxm  - 4x Processor entries.  -smp 4
-> pc/DSDT.acpihmat - 2x Processor entries.  -smp 2
-> q35/DSDT.acpihmat - 2x Processor entries. -smp 2
-> virt/DSDT.acpihmatvirt - 4x ACPI0007 entries -smp 4
-> q35/DSDT.acpihmat-noinitiator - 4 x Processor () entries -smp 4
-> virt/DSDT.topology - 8x ACPI0007 entries
->
-> I've also looked at the code and we have various types of
-> CPU hotplug on x86 but they all build appropriate numbers of
-> Processor() entries in DSDT.
-> Arm likewise seems to build the right number of ACPI0007 entries
-> (and doesn't yet have CPU HP support).
->
-> If anyone can add a reference on why this is needed that would be very
-> helpful.
+On Mon, Jan 22, 2024 at 05:11:26PM +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> For some 1-bit fields in struct dev_pm_info the data type is bool, while
+> for some other 1-bit fields in there it is unsigned int, and these
+> differences are somewhat arbitrary.
+> 
+> For consistency, change the data type of the latter to bool, so that all
+> of the 1-bit fields in struct dev_pm_info fields are bool.
+> 
+> This also reduces the size of struct device on my x86 systems by 8 B,
+> from 1120 B to 1112 B.
+> 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  include/linux/pm.h |   32 ++++++++++++++++----------------
+>  1 file changed, 16 insertions(+), 16 deletions(-)
 
-Yes, it would.
-
-Personally, I would prefer to assume that it is not necessary until it
-turns out that (1) there is firmware with this issue actually in use
-and (2) updating the firmware in question to follow the specification
-is not practical.
-
-Otherwise, we'd make it easier to ship non-compliant firmware for no
-good reason.
+Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
