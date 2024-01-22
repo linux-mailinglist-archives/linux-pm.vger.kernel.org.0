@@ -1,116 +1,132 @@
-Return-Path: <linux-pm+bounces-2457-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2458-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A53B5836281
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 12:49:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 909FB8362AE
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 12:55:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 473771F288C3
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 11:49:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C41771C23117
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 11:55:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 839053B794;
-	Mon, 22 Jan 2024 11:46:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F4CC3A8F4;
+	Mon, 22 Jan 2024 11:55:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KfMsE6Yr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2242439ACC;
-	Mon, 22 Jan 2024 11:46:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEE2F3A1DE
+	for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 11:55:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705924018; cv=none; b=CwLKnJNsxmNEgYYBS26tY2h29C0nA4gw5HvqzRSOeivXNfRNCJLmHeJT8JEGWkS0jDgGJKSgY0fOu6o+mHDgV9DwEd6VVcnGBrBY1XpNEUqLBzCVsgGFzknUJBnJqGAPHMQpafgZlD+VDYGsTL/7NnQ44Dg60tI8LsJ9mVsRZkM=
+	t=1705924519; cv=none; b=X19Jr6APLtocvcgskBJdc8CCqHNvnAYBjCE1+CYvSuut8uoJaGb5mMBXwdum9ontrbsFFge2O5swplOG8R1COCZs3QsZrtgyOkrrIBi5iBJNlx/KsT2QUpxv8tYW3kFcOuYt4XUlRxy29CXV1635HCHlkrwVQkMWKAVcPNUl/js=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705924018; c=relaxed/simple;
-	bh=Xu9dO42e0kGtP2iek34Ct8qcatx6D34+espsKKYUB0k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=d2RCdLdLKUHBvIbbsnvIpmBPNkpXC5JFMY+9FUycI3JSjwZyUsACjj6Ydjq/eXtrgiYsi6IonJDXe8K+SQBWYOwQLkYRwGAGIkrlYIcB+wfUXPHsbJrDx+Mmrmi1N0y3DrekXdBudrapY2dZ7iNq/h2+fdB9BCNjJoBe94csT5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-598afd970e4so444465eaf.0;
-        Mon, 22 Jan 2024 03:46:56 -0800 (PST)
+	s=arc-20240116; t=1705924519; c=relaxed/simple;
+	bh=mOu5476Nn5BP/+EF52RGXEFZliGnk2XXHNAsjGbkH/8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aYQb990jMCptq8f6spPElClx7XgnVtbruRNONIsUDNGd0P6MqkRpbtkREgQV8xp6cknSmz5V0i7+nJKgWMTDtMtGVzb2ml9rhx4rmtxJOwJE5z8cPvTb2wt0QxaaV6m1vmtxXtLFaPsIA3iKxRNFQ+/dWZZDIi/PcO3kDsqMhxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KfMsE6Yr; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-337d90030bfso2714697f8f.2
+        for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 03:55:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1705924516; x=1706529316; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mafzyGGj5CNasM+3Z2mj+NKeLuio3ZouOIp2Hx28IOI=;
+        b=KfMsE6YrIwJTNfS2niE31cdsGrxvw+M2aiq0Ijk5vKwfoZ2zkZieEMj8W6DilC/5KP
+         j23ALeziOVAp8DKbnKNVBNTMu3VmjL1gIiTZYHVnZtLWLZrWgvxlq/3NuvAPmyvuyJyX
+         LX9/UH3Gt4MnXjgoK/FaM/hUt/ZfeZnV/Tt4cuFJB0ny9JEEAhU4942wjRlHKgZ/zDqF
+         nUC+pCS19nYhZ/03XqLYGhNofbLYpFj1SesSOQvIcV2GrXSMRh/5iAhGly/Qs6W75cqB
+         OXWxEgJSZ8x4/SIvuPDqBKVm1/DJXH3KmnClLv/oL60Vxdi5LZ26cwOzTbOEOMjol41y
+         UpSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705924016; x=1706528816;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Xu9dO42e0kGtP2iek34Ct8qcatx6D34+espsKKYUB0k=;
-        b=t40yxUAs45IY8vOSH07VRXYtgly+2p0OSwT6psBy0nY+w3T06u2mljjfDeTrjAF4Z+
-         ZLL8sMEbDYla+OR1gW7lzBhNUE4GyDlZ3ZkzlZONSiJPm2fZVgLBSVOGPj6nGP6o4FSR
-         1PI6qFz1ft5A9CBf6RRNMdSuQcWp1qDTa73osllZJYSsdUk+gimKgSozVBhSNHlskRxR
-         Waxa6ipAOpqfOCH2w+LFBn9tY7BA3p1sTP0QVPf0UyNsgofajLNJPQmiQSVK21tb1hUI
-         Gjmn3vvI4p+eDH0v0vrlSn2RiAoH76emtRUCA3FduAvO3qoLLQBGzGR/W6aKYW/ienwX
-         DC/g==
-X-Gm-Message-State: AOJu0YyqFNYi/KK35scnejnPIqBm7ADiIitKMXpOKY8NP1dGWSXMr3B3
-	hWqNOCS1zK007N8zOhFMIfo81ukyc7dtduzk3TduyveCH15DumYIPR2ux/uB5O56h5SWSdInOeb
-	aoUAgRXCGx6SsiNC6nF1UHJpDMek=
-X-Google-Smtp-Source: AGHT+IEaFNyIRXDCFBQIZlnYyvRFTeKr3IUazcDdu4f58xNCxAzZX4sK6mBZno00mYuQRKofhbbeEQFm/nzeRqdDtcM=
-X-Received: by 2002:a05:6870:2193:b0:214:2425:9962 with SMTP id
- l19-20020a056870219300b0021424259962mr5660544oae.0.1705924016139; Mon, 22 Jan
- 2024 03:46:56 -0800 (PST)
+        d=1e100.net; s=20230601; t=1705924516; x=1706529316;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mafzyGGj5CNasM+3Z2mj+NKeLuio3ZouOIp2Hx28IOI=;
+        b=vDhn0AXcWg9mh9MKrxSqdKut5gc+EqfldXHE2SF8VV8txA9uzElBPBFEncp3l1X6Ks
+         h4hcqwPCIhIh6sf8dfBfqObQjyKU+abl3vVnB7COQEktCwIoUF2xFTVx9fFdX7yIFJl5
+         CXXAoaPGaPSXUa8n1H/7inG9IK7MdfXWDFrZDvpladTGfV2vBFz9cWmcLcVdNzh+dPvI
+         GCYrAFBrcASgkY7pQ4jrMxxumNSjHRiSFUifAxEFKg/WkCZQlCJxyddVQdSfDv43XvVc
+         t76e03XbJ5Cm5VEAws+uhEkkGj4KCPZE5W3M8AMIMJZINL0S7CY6vleXH3QEydWbGlMm
+         Rihw==
+X-Gm-Message-State: AOJu0YxTuiqJYPOAlMhK241qdvCVBqkdA5VnnpC8kmyIDaqm5eP8G2Lq
+	xwP3lgSOPR8Pv8SukM/idG9xRHkKbRX6WTYtnaF1Q6pl+urp73R6L2L7MTe7ovQ5igFzz6TO31W
+	P
+X-Google-Smtp-Source: AGHT+IHYDdCFGiHYc/0mR2bMrKLJZ1weP7RYtOKBgymwNO5mom7duGY8EQKG+dLMD6MHnP7tkjodzQ==
+X-Received: by 2002:a05:6000:1542:b0:339:2bbe:eed5 with SMTP id 2-20020a056000154200b003392bbeeed5mr1035670wry.230.1705924515707;
+        Mon, 22 Jan 2024 03:55:15 -0800 (PST)
+Received: from ?IPV6:2a05:6e02:1041:c10:371e:2a86:62f0:bc48? ([2a05:6e02:1041:c10:371e:2a86:62f0:bc48])
+        by smtp.googlemail.com with ESMTPSA id a17-20020a5d5711000000b00339273d0626sm6490021wrv.84.2024.01.22.03.55.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Jan 2024 03:55:15 -0800 (PST)
+Message-ID: <f0805135-6b4b-4691-ae97-d3f995e52e88@linaro.org>
+Date: Mon, 22 Jan 2024 12:55:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240118120513.1018808-1-srinivas.pandruvada@linux.intel.com>
- <6021639.lOV4Wx5bFT@kreacher> <c961bae053da7287bfce49b2c1c2e7e6c754710a.camel@linux.intel.com>
-In-Reply-To: <c961bae053da7287bfce49b2c1c2e7e6c754710a.camel@linux.intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 22 Jan 2024 12:46:44 +0100
-Message-ID: <CAJZ5v0iFAPW5x3gWFnjYKLQQvWoJ65gdpwRhnyEgLD2p2pWUcA@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Directly use stored ratios for max frequencies
-To: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, rafael@kernel.org, viresh.kumar@linaro.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 8/9] thermal/drivers/mediatek/lvts_thermal: allow early
+ empty sensor slots
+Content-Language: en-US
+To: Nicolas Pitre <nico@fluxnic.net>
+Cc: linux-pm@vger.kernel.org
+References: <20240111223020.3593558-1-nico@fluxnic.net>
+ <20240111223020.3593558-9-nico@fluxnic.net>
+ <9d8100dd-11a8-482f-83a1-85bfc34f1746@linaro.org>
+ <3047p728-p0pp-9qs5-qnn4-95s23qo2735n@syhkavp.arg>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <3047p728-p0pp-9qs5-qnn4-95s23qo2735n@syhkavp.arg>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jan 22, 2024 at 12:35=E2=80=AFPM srinivas pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> On Mon, 2024-01-22 at 11:53 +0100, Rafael J. Wysocki wrote:
-> > On Thursday, January 18, 2024 1:05:13 PM CET Srinivas Pandruvada
-> > wrote:
-> > > Avoid unnecessary calculation for converting frequency to
-> > > performance
-> > > ratio by using a scaling factor for the maximum non turbo and turbo
-> >
->
-> [...]
->
-> > ---
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > Subject: [PATCH v1] cpufreq: intel_pstate: Refine computation of P-
-> > state for given frequency
-> >
-> > On systems using HWP, if a given frequency is equal to the maximum
-> > turbo
-> > frequency or the maximum non-turbo frequency, the HWP performance
-> > level
-> > corresponding to it is already known and can be used directly without
-> > any computation.
-> >
-> > Accordingly, adjust the code to use the known HWP performance levels
-> > in
-> > the cases mentioned above.
-> >
-> > This also helps to avoid limiting CPU capacity artificially in some
-> > cases when the BIOS produces the HWP_CAP numbers using a different
-> > E-core-to-P-core performance scaling factor than expected by the
-> > kernel.
-> >
-> > Fixes: f5c8cf2a4992 ("cpufreq: intel_pstate: hybrid: Use known
-> > scaling factor for P-cores")
-> > Cc: 6.1+ <stable@vger.kernel.org> # 6.1+
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
->
-> Tested on the system which showed the issue, this patch work fine.
 
-So I'm going to add a Tested-by from you to it or please let me know
-if you don't want me to do so.
+Hi Nico,
+
+On 19/01/2024 17:53, Nicolas Pitre wrote:
+
+[ ... ]
+
+>>> +		skip = lvts_ctrl_data->skipped_sensors;
+>>>    		lvts_sensor[i].msr = lvts_ctrl_data->mode ==
+>>> LVTS_MSR_IMMEDIATE_MODE ?
+>>> -			imm_regs[i] : msr_regs[i];
+>>> +			imm_regs[i + skip] : msr_regs[i + skip];
+>>
+>> Overall the series look ok but this changes is hard to understand.
+>>
+>> Could you propose a different approach to have the resulting code easier to
+>> understand ?
+> 
+> I'm not sure how I could make it simpler. Maybe a comment is in order
+> though?
+> 
+> The sensor controller has 4 slots. Those slots are accessible either
+> through imm_regs[<slot_number>] oe msr_regs[<slot_number>].  If, say,
+> slot 0 is unpopulated then sensor 0 (i = 0) needs to address slot 1 (i =
+> 0, skip = 1), sensor 1 is in slot 2 (i = 1, skip = 1), etc. Does this
+> make sense?
+
+Why not keep the sensor id = slot id and declare the ones which are 
+disabled with a mask?
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
 
