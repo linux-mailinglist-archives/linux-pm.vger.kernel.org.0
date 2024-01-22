@@ -1,287 +1,251 @@
-Return-Path: <linux-pm+bounces-2436-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2437-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36FFC835F22
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 11:08:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A0AF835F52
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 11:19:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BE8F1C24896
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 10:08:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8BEB21C2274D
+	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 10:19:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E0073A1A2;
-	Mon, 22 Jan 2024 10:08:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="E9pcFos/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 286C03A1A3;
+	Mon, 22 Jan 2024 10:19:25 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9D4F3A8D6;
-	Mon, 22 Jan 2024 10:08:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87D7739FD1;
+	Mon, 22 Jan 2024 10:19:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705918083; cv=none; b=EFugx26yTK8jkWVcb/VfkD7Gtt7NUSHYu6iHepOmr8rDaUt9akoM9rlIFFLZxjMzLHYeuHP9KgXzXuvlR4Xarqi5Ey4/jKAVd2Dmm9U3pOozqWoyIQ2FO3gz/ZOBJO1sbrgL6eDpTPcpeXEFNvRjKsAesUllLcmcZWJhN1OxrVk=
+	t=1705918765; cv=none; b=uphDbYP7tloHver9NtCSkAuhNBV8EuqSw561wJOHmvqa6oMIiiqtddQYDLKZh0COl196aRim9gUgCbhTMJBcLPw3xgiBfRCwCHHqpi1We0lDymW/g9qwd1CU9+WIAsX3Uihk68ClCv5qA8ilxgxdTsjWrJGrrJqzMfbQrVeoiXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705918083; c=relaxed/simple;
-	bh=ag+hYxu/A66ScY4Oq63gf3CBp+nUvvToL/T0NXkJCbg=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=lBZYpcYWbYs6UxB+kHp/XfmIIihNFCCW+FkWjvocFsyTU8f3hoTNRob2iM5cvwU8STLwGX93H/t6hGEnAyjYx39dP/q2aD+7oBhio7pJhThCdmVhB3UOcV64oadLqgiRV2nM01YraNi1Z/UCmsUh8IS3MgH/XUR7pGm561xWl2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=E9pcFos/; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40M4qCa7029725;
-	Mon, 22 Jan 2024 10:07:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:mime-version:content-type; s=
-	qcppdkim1; bh=5lALCKMEPv+nYV7+TcuQFNqiCA6mPBQQy2LrDk4B1+c=; b=E9
-	pcFos/SFtkTKzUHCtmALyk6/mUcnJ2Rx3smIoS5DnfVbaRO4j3SbefIB3O+msBfy
-	vkWLPQXZJMK93T0x64tNtFVGuRvx0lkKS2h8zr3qMVYCDdfQuiFw94axxUuUkWQg
-	7KImrJlaaf9dyUllyOVbXMx6A7wAinI3232hoak7tfL6iaFmdmlqCToPDT4ZhN/W
-	c8FpOzIBot37OV3jln3eR/Cs5HGZihwUHBp1IZfU8sfAvgn8y/eRyQqRUxVsyFmk
-	ZFoZp00G0XhQntH0Lrv3X2uYV0iOZ973V8UGCd6s7GMFm0rjSmj8dUYHC/AvfqwF
-	LULwBiFIL3wK09GjgCSw==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vr7fd3fqu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 22 Jan 2024 10:07:54 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40MA7r52021190
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 22 Jan 2024 10:07:53 GMT
-Received: from hu-priyjain-hyd.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Mon, 22 Jan 2024 02:07:49 -0800
-From: Priyansh Jain <quic_priyjain@quicinc.com>
-To: Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath
-	<thara.gopinath@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad
- Dybcio" <konrad.dybcio@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC: <quic_manafm@quicinc.com>, <quic_priyjain@quicinc.com>
-Subject: [PATCH] thermal/drivers/tsens: Add suspend to RAM support for tsens
-Date: Mon, 22 Jan 2024 15:37:26 +0530
-Message-ID: <20240122100726.16993-1-quic_priyjain@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1705918765; c=relaxed/simple;
+	bh=Gkz5hq9DIb0riRgjhpO+7SZV+cd4lEG3ZFpCkyuUELM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eu8lFQJW/srLu95GLIV1G7YxAab+yxp8Ri8KrOTmpIlkE3iLvm4fdtxEDrOPQl5gyhxg/0MjVOYnKbxIqoAkCmOCeWbs3sysTiI6IWIPNRMIYFwtLJ46LciiPYKl2M2BfAWcshy2HvGtFaRaAMT67A7nsbFZMSohzrj4bGogzzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-59584f41f1eso508079eaf.1;
+        Mon, 22 Jan 2024 02:19:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705918762; x=1706523562;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=is1qEjGDPTu2FZOuOhWd48UR3MyCDQP16MnZHTWIpiw=;
+        b=JZCWb0mbPBpuO8HgqLN0dWM9ctkl5T8E52bQWdmYUC2KDNwSx2YzfY78BYmGaYxi6G
+         za2xWnR54VOxFUwfqwAWELpGhWu4YhdJnZcwXiysLyIMCVZJ6HMQVFN19oRc7vf2tJog
+         xIQTt7azbD/VXA4Tchhw6VJdLqFUauPZI7gsbPysbN65xtlCqkYsm/CIWXkG681HPv2g
+         AExFcERVa1+YFQpTX/Pt9UMMkCmdUlsthTf3i8agqfLMRpA9K54R6m8RhBmjXhwI8NIX
+         krw3edYbQMxoa4xXn5ahQyRs5an2Dxtud7FONe4MC82jQBv160DDIMj//e+W+8+bJqCe
+         REcg==
+X-Gm-Message-State: AOJu0YzGg58TMnMgida6BuBsOsGUQF+NcItqEfDDIO3+N39Zuz01ot10
+	4AhbwkMfGEsBTUSERt/6+aKqQYtRNvHjY62UMxHInmB9rCbk0Y0qO2JGGKM/oSJv26f6FI0LGdn
+	OOU1RoZ2c7Kabmiva/p/1zADapbA=
+X-Google-Smtp-Source: AGHT+IE83ASFTs88Es21DMA7eEZl8IMPAAdeIYUTI9OoQHXbA0lG0zjeYSg9QpWycB4pXoGYWFDDvnX8/mGTKdUqM1E=
+X-Received: by 2002:a4a:c387:0:b0:599:2b86:993 with SMTP id
+ u7-20020a4ac387000000b005992b860993mr5762451oop.0.1705918762556; Mon, 22 Jan
+ 2024 02:19:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: LRKvspd8roNNeU41nDiCVa7lb7KEq7BW
-X-Proofpoint-ORIG-GUID: LRKvspd8roNNeU41nDiCVa7lb7KEq7BW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-21_04,2024-01-22_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 lowpriorityscore=0 mlxlogscore=999 mlxscore=0
- phishscore=0 adultscore=0 malwarescore=0 clxscore=1011 suspectscore=0
- impostorscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2311290000 definitions=main-2401220072
+References: <20240106191502.29126-1-quic_manafm@quicinc.com>
+ <CAJZ5v0gE6eEpALrfxHvCd5TRqjB+v8pffG4CKLTVXiSvuiWhHg@mail.gmail.com>
+ <d7b82fc8-0ed8-80b8-9eb8-c77f9277178f@quicinc.com> <CAJZ5v0g4hnRqRCseRnTjfEF+-2=ZT8U9=2m9FODqh3G8eDd=Sw@mail.gmail.com>
+ <921c2f90-fb8b-4e70-9e3d-6e185fec03b6@linaro.org> <CAJZ5v0h+93YBsYsA5rOvzp+b3JMGyjUStHA=J8P7ynv+-ym-4g@mail.gmail.com>
+ <41b284d7-e31f-48b5-8b21-0dca3e23cb1c@linaro.org>
+In-Reply-To: <41b284d7-e31f-48b5-8b21-0dca3e23cb1c@linaro.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 22 Jan 2024 11:19:08 +0100
+Message-ID: <CAJZ5v0ina=7R6x6Ff=8_rRR9Kkmz2tkojbs_WWCN=JPmzhg+HQ@mail.gmail.com>
+Subject: Re: [PATCH] thermal/sysfs: Always enable hysteresis write support
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add suspend callback support for tsens which disables tsens interrupts
-in suspend to RAM callback.
-Add resume callback support for tsens which reinitializes tsens hardware
-and enables back tsens interrupts in resume callback.
+On Thu, Jan 18, 2024 at 11:25=E2=80=AFAM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On 17/01/2024 19:49, Rafael J. Wysocki wrote:
+> > On Wed, Jan 17, 2024 at 5:57=E2=80=AFPM Daniel Lezcano
+> > <daniel.lezcano@linaro.org> wrote:
+> >>
+> >> On 10/01/2024 13:48, Rafael J. Wysocki wrote:
+> >>> Hi Manaf,
+> >>>
+> >>> On Wed, Jan 10, 2024 at 9:17=E2=80=AFAM Manaf Meethalavalappu Palliku=
+nhi
+> >>> <quic_manafm@quicinc.com> wrote:
+> >>>>
+> >>>> Hi Rafael,
+> >>>>
+> >>>> On 1/9/2024 7:12 PM, Rafael J. Wysocki wrote:
+> >>>>
+> >>>> On Sat, Jan 6, 2024 at 8:16=E2=80=AFPM Manaf Meethalavalappu Palliku=
+nhi
+> >>>> <quic_manafm@quicinc.com> wrote:
+> >>>>
+> >>>> The commit 2e38a2a981b2("thermal/core: Add a generic
+> >>>> thermal_zone_set_trip() function") adds the support to update
+> >>>> trip hysteresis even if set_trip_hyst() operation is not defined.
+> >>>> But during hysteresis attribute creation, if this operation is
+> >>>> defined then only it enables hysteresis write access. It leads
+> >>>> to a case where hysteresis sysfs will be read only for a thermal
+> >>>> zone when its set_trip_hyst() operation is not defined.
+> >>>>
+> >>>> Which is by design.
+> >>>>
+> >>>> I think it is regression after recent re-work. If a sensor is regist=
+ered with thermal framework via thermal_of,
+> >>>>
+> >>>> sensor driver doesn't need to know the trip configuration and nothin=
+g to do with set_trip_hyst() in driver.
+> >>>>
+> >>>> Without this change, if a sensor needs to be monitored from userspac=
+e(trip/hysteresis),
+> >>>
+> >>> What exactly do you mean by "monitored" here?
+> >>>
+> >>>> it is enforcing sensor driver to add  dummy set_trip_hyst() operatio=
+n. Correct me otherwise
+> >>>
+> >>> With the current design, whether or not trip properties can be update=
+d
+> >>> by user space is a thermal zone property expressed by the presence of
+> >>> the set_trip_* operations, so yes, whoever registers the thermal zone
+> >>> needs to provide those so that user space can update the trip
+> >>> properties.
+> >>>
+> >>>> For some thermal zone types (eg. acpi), updating trip hysteresis via
+> >>>> sysfs might lead to incorrect behavior.
+> >>>>
+> >>>> To address this issue, is it okay to  guard  hysteresis write permis=
+sion under CONFIG_THERMAL_WRITABLE_TRIPS defconfig ?
+> >>>
+> >>> Not really, because it would affect all of the thermal zones then.
+> >>
+> >> It seems like there is an inconsistency here with the writable trip
+> >> points and the writable hysteresis [1].
+> >>
+> >> My understanding is it does not make sense to have the hysteresis
+> >> writable even if the driver has a hysteresis dedicated ops. The code
+> >> allowing to change the hysteresis was done regardless the consistency
+> >> with the trip temperature change and writable trip points kernel optio=
+n IMO.
+> >>
+> >> It would make sense to have:
+> >>
+> >> if enabled(CONFIG_WRITABLE_TRIP_POINT)
+> >>    -> trip_temp RW
+> >>    -> trip_hyst RW
+> >> else
+> >>    -> trip temp RO
+> >>    -> trip hyst RO
+> >> fi
+> >>
+> >> But if the interface exists since a long time, we may not want to chan=
+ge
+> >> it, right ?
+> >
+> > If the platform firmware implements hysteresis by changing trip
+> > temperature (as recommended by the ACPI specification, for example),
+> > modifying the trip hysteresis via sysfs is simply incorrect and user
+> > space may not know that.
+> >
+> >> However, we can take the opportunity to introduce a new 'user' trip
+> >> point type in order to let the userspace to have dedicated trip point
+> >> and receive temperature notifications [2]
+> >>
+> >>> TBH, the exact scenario in which user space needs to update trip
+> >>> hysteresis is not particularly clear to me, so can you provide some
+> >>> more details, please?
+> >>
+> >> IIUC changing the hysteresis value is useful because the temperature
+> >> speed will vary given the thermal contribution of the components
+> >> surrounding the thermal zone, that includes the ambient temperature.
+> >>
+> >> However, that may apply to slow speed temperature sensor like the skin
+> >> temperature sensor where we may to do small hysteresis variation.
+> >>
+> >> The places managed by the kernel have an insane temperature transition
+> >> speed. The userspace is unable to follow this speed and manage the
+> >> hysteresis on the fly.
+> >>
+> >> So that brings us to userspace trip point handling again.
+> >
+> > Well, I've already said that whether hysteresis can be modified via
+> > sysfs is a property of a thermal zone.
+>
+> > It may as well be a trip property, for example expressed via a (new)
+> > trip flag set in the trips table used for thermal zone registration.
+>
+> Yes, a trip property makes more sense.
+>
+> I'm a bit lost about WRITABLE_TRIP_POINT, writable hysteresis, read-only
+> temperature trip.
+>
+> Can we have a hysteresis writable but not the temperature ?
+>
+> You mentioned above "modifying the trip hysteresis via sysfs is simply
+> incorrect", so shall we allow that at the end?
+>
+> Is it possible to recap the situation?
 
-Signed-off-by: Priyansh Jain <quic_priyjain@quicinc.com>
+Sure, which is a good idea BTW.
+
+First off, the callers of thermal_zone_device_register_with_trips()
+need to pass a mask of writeable trip points to it.  If the mask is 0,
+none of the trip attributes are writeable for any trips.
+
+However, the mask only takes effect if CONFIG_THERMAL_WRITABLE_TRIPS
+is set.  Otherwise, it is not taken into account at all.
+
+Now, if CONFIG_THERMAL_WRITABLE_TRIPS is set, it only affects the trip
+temperature, which is a bit inconsistent.
+
+Moreover, the hysteresis is allowed to be updated unconditionally if
+tz->ops->set_trip_hyst is not NULL, which is even more inconsistent.
+
+So, because it already is only enabled if the creator of the thermal
+zone asks for it explicitly, it would be fine by me to simply allow
+the hysteresis to be updated if the temperature is allowed to be
+updated.
+
+IOW, something like the patch below (unstested, white space messed-up by gm=
+ail).
+
+If this looks OK to everyone from the functionality perspective, I can
+submit it properly with a changelog etc.
+
 ---
- drivers/thermal/qcom/tsens-v2.c |  2 +
- drivers/thermal/qcom/tsens.c    | 93 +++++++++++++++++++++++++++++++--
- drivers/thermal/qcom/tsens.h    |  7 +++
- 3 files changed, 98 insertions(+), 4 deletions(-)
+ drivers/thermal/thermal_sysfs.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/qcom/tsens-v2.c b/drivers/thermal/qcom/tsens-v2.c
-index 29a61d2d6ca3..1b74db6299c4 100644
---- a/drivers/thermal/qcom/tsens-v2.c
-+++ b/drivers/thermal/qcom/tsens-v2.c
-@@ -107,6 +107,8 @@ static const struct reg_field tsens_v2_regfields[MAX_REGFIELDS] = {
- static const struct tsens_ops ops_generic_v2 = {
- 	.init		= init_common,
- 	.get_temp	= get_temp_tsens_valid,
-+	.suspend	= tsens_suspend_common,
-+	.resume		= tsens_resume_common,
- };
- 
- struct tsens_plat_data data_tsens_v2 = {
-diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index 6d7c16ccb44d..603ccb91009d 100644
---- a/drivers/thermal/qcom/tsens.c
-+++ b/drivers/thermal/qcom/tsens.c
-@@ -17,6 +17,7 @@
- #include <linux/pm.h>
- #include <linux/regmap.h>
- #include <linux/slab.h>
-+#include <linux/suspend.h>
- #include <linux/thermal.h>
- #include "../thermal_hwmon.h"
- #include "tsens.h"
-@@ -1153,7 +1154,7 @@ static const struct thermal_zone_device_ops tsens_of_ops = {
- };
- 
- static int tsens_register_irq(struct tsens_priv *priv, char *irqname,
--			      irq_handler_t thread_fn)
-+			      irq_handler_t thread_fn, int *irq_num)
- {
- 	struct platform_device *pdev;
- 	int ret, irq;
-@@ -1169,6 +1170,7 @@ static int tsens_register_irq(struct tsens_priv *priv, char *irqname,
- 		if (irq == -ENXIO)
- 			ret = 0;
- 	} else {
-+		*irq_num = irq;
- 		/* VER_0 interrupt is TRIGGER_RISING, VER_0_1 and up is ONESHOT */
- 		if (tsens_version(priv) == VER_0)
- 			ret = devm_request_threaded_irq(&pdev->dev, irq,
-@@ -1193,6 +1195,85 @@ static int tsens_register_irq(struct tsens_priv *priv, char *irqname,
- 	return ret;
- }
- 
-+static int tsens_reinit(struct tsens_priv *priv)
-+{
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&priv->ul_lock, flags);
-+
-+	/* in VER_0 TSENS need to be explicitly enabled */
-+	if (tsens_version(priv) == VER_0)
-+		regmap_field_write(priv->rf[TSENS_EN], 1);
-+
-+	/*
-+	 * Re-enable the watchdog, unmask the bark.
-+	 * Disable cycle completion monitoring
-+	 */
-+	if (priv->feat->has_watchdog) {
-+		regmap_field_write(priv->rf[WDOG_BARK_MASK], 0);
-+		regmap_field_write(priv->rf[CC_MON_MASK], 1);
-+	}
-+
-+	/* Re-enable interrupts */
-+	if (tsens_version(priv) >= VER_0_1)
-+		tsens_enable_irq(priv);
-+
-+	spin_unlock_irqrestore(&priv->ul_lock, flags);
-+
-+	return 0;
-+}
-+
-+int tsens_suspend_common(struct tsens_priv *priv)
-+{
-+	switch (pm_suspend_target_state) {
-+	case PM_SUSPEND_MEM:
-+		if (priv->combo_irq > 0) {
-+			disable_irq_nosync(priv->combo_irq);
-+			disable_irq_wake(priv->combo_irq);
-+		}
-+
-+		if (priv->uplow_irq > 0) {
-+			disable_irq_nosync(priv->uplow_irq);
-+			disable_irq_wake(priv->uplow_irq);
-+		}
-+
-+		if (priv->crit_irq > 0) {
-+			disable_irq_nosync(priv->crit_irq);
-+			disable_irq_wake(priv->crit_irq);
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+	return 0;
-+}
-+
-+int tsens_resume_common(struct tsens_priv *priv)
-+{
-+	switch (pm_suspend_target_state) {
-+	case PM_SUSPEND_MEM:
-+		tsens_reinit(priv);
-+		if (priv->combo_irq > 0) {
-+			enable_irq(priv->combo_irq);
-+			enable_irq_wake(priv->combo_irq);
-+		}
-+
-+		if (priv->uplow_irq > 0) {
-+			enable_irq(priv->uplow_irq);
-+			enable_irq_wake(priv->uplow_irq);
-+		}
-+
-+		if (priv->crit_irq > 0) {
-+			enable_irq(priv->crit_irq);
-+			enable_irq_wake(priv->crit_irq);
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+	return 0;
-+}
-+
- static int tsens_register(struct tsens_priv *priv)
- {
- 	int i, ret;
-@@ -1227,15 +1308,19 @@ static int tsens_register(struct tsens_priv *priv)
- 
- 	if (priv->feat->combo_int) {
- 		ret = tsens_register_irq(priv, "combined",
--					 tsens_combined_irq_thread);
-+					 tsens_combined_irq_thread,
-+					 &priv->combo_irq);
- 	} else {
--		ret = tsens_register_irq(priv, "uplow", tsens_irq_thread);
-+		ret = tsens_register_irq(priv, "uplow",
-+					 tsens_irq_thread,
-+					 &priv->uplow_irq);
- 		if (ret < 0)
- 			return ret;
- 
- 		if (priv->feat->crit_int)
- 			ret = tsens_register_irq(priv, "critical",
--						 tsens_critical_irq_thread);
-+						 tsens_critical_irq_thread,
-+						 &priv->crit_irq);
- 	}
- 
- 	return ret;
-diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
-index cb637fa289ca..268bf56105be 100644
---- a/drivers/thermal/qcom/tsens.h
-+++ b/drivers/thermal/qcom/tsens.h
-@@ -582,6 +582,11 @@ struct tsens_priv {
- 	const struct reg_field		*fields;
- 	const struct tsens_ops		*ops;
- 
-+	/* For saving irq number to re-use later */
-+	int				uplow_irq;
-+	int				crit_irq;
-+	int				combo_irq;
-+
- 	struct dentry			*debug_root;
- 	struct dentry			*debug;
- 
-@@ -634,6 +639,8 @@ void compute_intercept_slope(struct tsens_priv *priv, u32 *pt1, u32 *pt2, u32 mo
- int init_common(struct tsens_priv *priv);
- int get_temp_tsens_valid(const struct tsens_sensor *s, int *temp);
- int get_temp_common(const struct tsens_sensor *s, int *temp);
-+int tsens_suspend_common(struct tsens_priv *priv);
-+int tsens_resume_common(struct tsens_priv *priv);
- 
- /* TSENS target */
- extern struct tsens_plat_data data_8960;
--- 
-2.17.1
-
+Index: linux-pm/drivers/thermal/thermal_sysfs.c
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+--- linux-pm.orig/drivers/thermal/thermal_sysfs.c
++++ linux-pm/drivers/thermal/thermal_sysfs.c
+@@ -474,7 +474,8 @@ static int create_trip_attrs(struct ther
+                     tz->trip_hyst_attrs[indx].name;
+         tz->trip_hyst_attrs[indx].attr.attr.mode =3D S_IRUGO;
+         tz->trip_hyst_attrs[indx].attr.show =3D trip_point_hyst_show;
+-        if (tz->ops->set_trip_hyst) {
++        if (IS_ENABLED(CONFIG_THERMAL_WRITABLE_TRIPS) &&
++            mask & (1 << indx)) {
+             tz->trip_hyst_attrs[indx].attr.attr.mode |=3D S_IWUSR;
+             tz->trip_hyst_attrs[indx].attr.store =3D
+                     trip_point_hyst_store;
 
