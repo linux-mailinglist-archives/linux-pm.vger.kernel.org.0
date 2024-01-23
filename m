@@ -1,108 +1,113 @@
-Return-Path: <linux-pm+bounces-2533-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2534-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B23DA83871E
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 07:08:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21DAF838720
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 07:10:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63BCE28100E
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 06:08:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F5911C22FA2
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 06:10:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17C904EB52;
-	Tue, 23 Jan 2024 06:08:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 182D94EB5C;
+	Tue, 23 Jan 2024 06:09:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VCmW+xS8"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cNRO6RFu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B55484EB39
-	for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 06:08:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ACC84EB44
+	for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 06:09:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705990112; cv=none; b=RKDZ1vY9/kEnAbmHcmIq9MkIpb1vlEzvMlEpcBPRrB5AuCVV+IKwnRzi0LIIQxVcmie2DYA4JT+y72M+rcAiQdXI114S/tapLXvEXvSDCfZcpPKi6BMJ8lASzKME89+M1PYoF7eqGOhCOQbcm4fNHSTK/KrxiHVThwW02ek8vTI=
+	t=1705990197; cv=none; b=gI566S/Rqj09Zhh2dnBznuyjxArR6IPZ8iEXpZu7vr3f7oBvLwdHHhfnHHRQzfDQZ5mN8Ad7xnElcI9vktuJZ0Gn1x0AvNDY47osMenjHV0t5hq5PyIdtfaBou5KMH6f2FA1Wy2vDQmbKNEwkO1C2o6a6zlRFgnsPtnlPsMIbJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705990112; c=relaxed/simple;
-	bh=GUVsGZBjrAhZKwiHlLce8FOhfmc02VxxhC42+/QGmU8=;
+	s=arc-20240116; t=1705990197; c=relaxed/simple;
+	bh=fICYgU/e513dmMdbagqrvMAVnM53SUgfbQwsBjy+Yos=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IMvwtBJB4qT3jYkj4n2IJKeqEE+x1j9K6Oiq+YstjNmeQa/BFQBeLIesIlhiIBLHf0vFL7eoKa2b/jegG0nxPDZ/UX94dArhg1JYuWLcMX2Gn8El8GGUDcIVS97nxLWVo5Rg9L+Ms8g8DcNq30MlXtS5BOGOFv5FZppteA9PnBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VCmW+xS8; arc=none smtp.client-ip=209.85.210.173
+	 Content-Type:Content-Disposition:In-Reply-To; b=l9Q/CLA0vA/znZIPMElZxoEWv7MykCoC8bzDL5/mZE2Z8cqiI81gcV6Lu6sM96NiN9rzCQCvHLXOkGGc0v8jrMl/AIv/K6wUfaDCstXqAlr5WDs7BzOW/jIJ/cNoIosMtJz89U50SsDxQ1yVyigO3+KpsEgRDUoF8Hy3uQ6aka4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cNRO6RFu; arc=none smtp.client-ip=209.85.161.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-6dd7b525cd6so75581b3a.2
-        for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 22:08:30 -0800 (PST)
+Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-5993047a708so1987468eaf.3
+        for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 22:09:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705990110; x=1706594910; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PjCYKivQOpppRY3k2NnoMHNr/HHiX+mZSow7Cat6y2Y=;
-        b=VCmW+xS8zVWkD2/thgJUh6pHzBvF+mv0FMYR0Iiw+rWWe0CoP662UqebHp8Bxm+1SX
-         xD7jD12qYDjJMKqAeRLGR8OCq3HY0Dm8gwcHOZYeNKqSEbkg8yGIxbOyPCOqF0zloZDy
-         3AB+gT9lqJ87szhLKPUWgBvHcTZGAwbsushkkdcJvz6LDel6u744R2p3nIjBnWEe1dUL
-         fZhVihD13DhHmKPra+4mUSJ8jAtZMp1TvOI+krTlJyBbcUnLNvtumc0psta8XRIXvxnb
-         kxc+EawWdiFcugLoyiusPVz28yZ+rHPbYlwYiq3HEIWgGvJhpJNi9N95pTh25i/pjI6N
-         jOCA==
+        d=linaro.org; s=google; t=1705990194; x=1706594994; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=gH5uJ9kMxbNgHS2YfX23GkOHBxHF1R2S8Ddt4Z+/Q6A=;
+        b=cNRO6RFujdUoG9tD0smiK15hLZ5J3zS5hkUPx9zzpf2ZLUiRvk8qTCUFzU7dWDuAhT
+         3a3ovEpoYJ9/AlNO6b3XBxm37W3zlMQqFV9HKMhMsx9Gx4S+SPgTeL9J+ADGdm0e++fV
+         YzQRt/q7J3eb5GPwkYaK+dYlf5QiAr3WxSIL4ddFa80sBHuuqYuXpzkjHLcIUfuCMsb3
+         EZ5/TqaQ4li3PZ51ZrMs5Vu8gjw7YQBd+kQrL60NYmDFG1z6idhYHtKz5zJnMEk0W1Ye
+         /nxGUKaLWvvo9ZckZMx1WZ9vX2TudRik1KfnLMcSGUiZq+QUczLKQ+qjyj4EyZXkuA7E
+         Kstw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705990110; x=1706594910;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PjCYKivQOpppRY3k2NnoMHNr/HHiX+mZSow7Cat6y2Y=;
-        b=KG0fb4XuAv0hLALSMOd5MN5mgd4wbdvJ7/k16fBJti8d/bnUIWxCgcItm3Z9I3Z/PZ
-         7iqLgNRJiFyqx0rX9soTXcvR3tp+zDlFRq5sOgO3cGusuhJNWTqJznRoN2LnuxXGWSrp
-         Tg9u0QibFu2fjQxjdlWP0PWTak5NI5lEKpa03UjoEidhiWKAEaHSnavEkmf4NbmkQFjS
-         VKlpQ3YWzTiB1L8y6ySGYzKT78e1JXTTe/JclQsaPVvmJ4UIIK7E/0Rm3Opk4+LFC9zZ
-         G4dVeo0J/7e2t46WjZFCSgla2nGQfvpN0usJI3AgoP6dC+JHtYOSp1vaYP+X3GqujhFe
-         Jk5Q==
-X-Gm-Message-State: AOJu0YxLjizKS1USe6ts3KY6DGguLXtqA5o1pE0Dm4Pb62goavdVH2WY
-	V7RY8DpCdrirrF2tnwVdnZSGZUExDnluwaIprEUscuF1rsD+TT3Y+o30PuV+Zdg=
-X-Google-Smtp-Source: AGHT+IEVo+v4xwoQJxR11YbNdoxhbM07qMqKJcJcblpXRA+N7B5HyOF3Bstk+bC8IGfKD3nylQrRwg==
-X-Received: by 2002:a05:6a20:12d5:b0:19a:7e25:d7d3 with SMTP id v21-20020a056a2012d500b0019a7e25d7d3mr3294088pzg.18.1705990110050;
-        Mon, 22 Jan 2024 22:08:30 -0800 (PST)
+        d=1e100.net; s=20230601; t=1705990194; x=1706594994;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gH5uJ9kMxbNgHS2YfX23GkOHBxHF1R2S8Ddt4Z+/Q6A=;
+        b=suj41exqxa30cW4wUDYPCYU9CT3xp6e79USBJh7lZ795TPLAQ917zkNFhLcIr8iKZ6
+         gxGupekF1tDThaZXEfOg5vtbKWhLc+XFgzthNksDeggJOtJVU2RcHoVxdmnDY9Zj9uWb
+         hS1FCnWH9h7miEaI3yZgxwb1vkgyX4mQBjsCsE7a475fqbWIACgSkVvWJdtrtD7sc5A4
+         k5OR8SlhClyTC67m0JG0HRxwaEplpCEGmYcF9IngQQNLjIRxXRYYfHAxNp2g0oC4MRq0
+         VTd5PLwK4In9DR9Z778n3mosLhRli3kYiQEQGxP5z+sRh+/5YhIgJT7BtjVQMICRXBTP
+         g6TQ==
+X-Gm-Message-State: AOJu0YxLTn1phw5NI0sSltg7gTwH9ON9Qw4pgBxgLomm/2jtxlAtlBgC
+	XLTWP8vVGEgT/0vPTaID85HQvtRz2oQN3oKmTPl9XLAHoCh6GwnpbhT3jWoQYsQ=
+X-Google-Smtp-Source: AGHT+IEa6u4y25PmtAOJIzMLZ7kuLsaH6aiw8FXp0uievkuh4/VBS03zIAsrfkYHzALHuHoy/WXCXA==
+X-Received: by 2002:a05:6358:281a:b0:174:f664:e477 with SMTP id k26-20020a056358281a00b00174f664e477mr5037598rwb.60.1705990194606;
+        Mon, 22 Jan 2024 22:09:54 -0800 (PST)
 Received: from localhost ([122.172.81.83])
-        by smtp.gmail.com with ESMTPSA id jc15-20020a17090325cf00b001d70e875533sm7551881plb.160.2024.01.22.22.08.29
+        by smtp.gmail.com with ESMTPSA id s4-20020a62e704000000b006dbd59c126fsm4198271pfh.11.2024.01.22.22.09.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jan 2024 22:08:29 -0800 (PST)
-Date: Tue, 23 Jan 2024 11:38:27 +0530
+        Mon, 22 Jan 2024 22:09:53 -0800 (PST)
+Date: Tue, 23 Jan 2024 11:39:51 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Sibi Sankar <quic_sibis@quicinc.com>
-Cc: sudeep.holla@arm.com, cristian.marussi@arm.com, rafael@kernel.org,
-	morten.rasmussen@arm.com, dietmar.eggemann@arm.com,
-	lukasz.luba@arm.com, sboyd@kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, quic_mdtipton@quicinc.com,
-	linux-arm-msm@vger.kernel.org, nm@ti.com
-Subject: Re: [PATCH 0/3] cpufreq: scmi: Add boost frequency support
-Message-ID: <20240123060827.a3vszziftj6pszt3@vireshk-i7>
-References: <20240117110443.2060704-1-quic_sibis@quicinc.com>
+To: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>, kernel@collabora.com,
+	"Hector.Yuan" <hector.yuan@mediatek.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] cpufreq: mediatek-hw: Wait for CPU supplies
+ before probing
+Message-ID: <20240123060951.2m6h6t537bu27ois@vireshk-i7>
+References: <20240110142305.755367-1-nfraprado@collabora.com>
+ <20240110142305.755367-3-nfraprado@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240117110443.2060704-1-quic_sibis@quicinc.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240110142305.755367-3-nfraprado@collabora.com>
 
-On 17-01-24, 16:34, Sibi Sankar wrote:
-> This series adds provision to mark dynamic opps as boost capable and adds
-> boost frequency support to the scmi cpufreq driver.
+On 10-01-24, 11:23, Nícolas F. R. A. Prado wrote:
+> Before proceeding with the probe and enabling frequency scaling for the
+> CPUs, make sure that all supplies feeding the CPUs have probed.
 > 
-> Depends on:
-> HW pressure v4: https://patchwork.kernel.org/project/linux-arm-msm/cover/20240109164655.626085-1-vincent.guittot@linaro.org/
-> scmi notification v2: https://patchwork.kernel.org/project/linux-arm-msm/cover/20240117104116.2055349-1-quic_sibis@quicinc.com/
+> This fixes an issue observed on MT8195-Tomato where if the
+> mediatek-cpufreq-hw driver enabled the hardware (by writing to
+> REG_FREQ_ENABLE) before the SPMI controller driver (spmi-mtk-pmif),
+> behind which lies the big CPU supply, probed the platform would hang
+> shortly after with "rcu: INFO: rcu_preempt detected stalls on
+> CPUs/tasks" being printed in the log.
 > 
-> Sibi Sankar (3):
->   OPP: Extend dev_pm_opp_data with turbo support
->   firmware: arm_scmi: Add support for marking certain frequencies as
->     boost
->   cpufreq: scmi: Enable boost support
+> Fixes: 4855e26bcf4d ("cpufreq: mediatek-hw: Add support for CPUFREQ HW")
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-Sudeep, please lemme know if you are okay with the changes. Will apply
-them.
+Applied 2/2. Thanks.
 
 -- 
 viresh
