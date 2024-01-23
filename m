@@ -1,162 +1,107 @@
-Return-Path: <linux-pm+bounces-2578-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2579-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 909E583922A
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 16:10:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 685A983925B
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 16:15:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3227AB24255
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 15:10:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 211D2295CD5
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 15:15:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48CCC6024D;
-	Tue, 23 Jan 2024 15:09:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D228F5FDA3;
+	Tue, 23 Jan 2024 15:15:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="BBdgU6u/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qMkU3ziG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A14FD5F55B;
-	Tue, 23 Jan 2024 15:09:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5D8C5FBA4;
+	Tue, 23 Jan 2024 15:15:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706022573; cv=none; b=JavfFm1sCZWOA8NquMh3hSDj/bku16C2YBACS1WbCZe6/2I6pIgEzCmyRw1n7g6YoRzlr85sGYgO+3muJe4dsCQpBGxyAqjb1Gt5O8/LBVEGVNeZA4JDdyGAZTxEVXAlt41nRHjUD6k8YIGY1aMW4lCcG9rzheeTeFO9XECX+nY=
+	t=1706022900; cv=none; b=QdKoHmJsLHs/bTE8PJq6aFl17EZxJRpnDEAmBJebzXS3m/RUxDFsDiq5LSZCTGM3ZThMcREMK9T1zrzkG9Q7nHpvR77mKnD0VDSLE/iefznCieRHOA153REdX6Occh+62RmOLmaFwmKdDBShbT6JASvtdz25IDadZNRyJiS1Ow8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706022573; c=relaxed/simple;
-	bh=OmY52dAJtLk+DFU1yWAq3MiNuVQtFcHtaahSuJx1y14=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dfoILR6mTuiGLfQB2XiUP+rHSG4GSLTHX3WOkGpRO+JTnHu84UWDMgtVRoc+//KCH1+nizUgyZ52eFyx2jFfcLg5A0gBOUgdbEKAZLi069iROxKrKHGEqMoTcf/5rubhx25hIl/I43VfEJR3qdrGoteCTmbCtM9LoKMaSOWCDZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=BBdgU6u/; arc=none smtp.client-ip=198.47.19.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 40NF9Hr8057186;
-	Tue, 23 Jan 2024 09:09:17 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1706022557;
-	bh=cQO8AG1imo5nzL+9z6gHt9JLJg6ArVzr0rRl02yudVg=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=BBdgU6u/z+LChgmxrc5nlwoJaikDTChA8orEgn51eKY/21RZg0+jjF9RTptBCQuk+
-	 inu7Z+X4efNUluSmyiL4wA7xOb8NqJXzDa0eaQUKgcOfQU5yavn/uVq4ysgDl0GSI5
-	 IDfv2R8GjaOnnB8ILEeJA4Ecldgq+2bVTdqO/Cj8=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 40NF9Hjg029596
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 23 Jan 2024 09:09:17 -0600
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 23
- Jan 2024 09:09:17 -0600
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 23 Jan 2024 09:09:17 -0600
-Received: from lelvsmtp5.itg.ti.com ([10.249.42.149])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 40NF9FE8128205;
-	Tue, 23 Jan 2024 09:09:16 -0600
-From: Andrew Davis <afd@ti.com>
-To: =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Sebastian Reichel
-	<sre@kernel.org>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Andrew Davis
-	<afd@ti.com>
-Subject: [PATCH 5/5] power: supply: bq27xxx: Move one time design full read out of poll
-Date: Tue, 23 Jan 2024 09:09:14 -0600
-Message-ID: <20240123150914.308510-5-afd@ti.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240123150914.308510-1-afd@ti.com>
-References: <20240123150914.308510-1-afd@ti.com>
+	s=arc-20240116; t=1706022900; c=relaxed/simple;
+	bh=WHHtfD6iWrYh6lpxYrEm1LYinhY12nzjgR0YqOljmIU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ay2gEGIsA8QnDuCGz7i7KoJOK8rXjQMnBfORGWdq6cPhz+7ygXI9a4ygV464zqGQHi4fDMNdiBlHn7o4FjKYZZ7+W4Hc/8r7GLvD53NDySILCYPTMnvEr8/tkPo7gFRKgZaIXsVteMYf0fmHBisFr3m/doWR81L8UsSr5RHcwCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qMkU3ziG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5312EC43394;
+	Tue, 23 Jan 2024 15:14:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706022900;
+	bh=WHHtfD6iWrYh6lpxYrEm1LYinhY12nzjgR0YqOljmIU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qMkU3ziG6x0MwU9H/Ex+ucf9Z82j2HcRucb73B8HwSjLWVCzWsevuQcAmxd1hW9++
+	 oiVUobDyTg8AqEgn9SHeGwLvmI8cbJuCWctYlpKqz5kRPY6YW0OfeL5kbLXGdYuBf3
+	 5GR5YHeBoaHEnnuVi7c9fiylnRxX5YIwy+eM9qqHx0L4HIaS8FQ2hZ0dCvDw4uJfdq
+	 9gwc6G+1K8a8O4k/5mytq/7NeRqvSJae9vejwKusCBLaRnpnXbyaLPcUsT/Gw9LS3r
+	 lhuo3C5i4OvQ6q0hpfLjpfBi0M9+ePGyFe50ABVg12Sx0UqjFVf0+CU5NTUrxEuhWX
+	 3cMQGaxKyKYbg==
+Date: Tue, 23 Jan 2024 15:14:50 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	sudeep.holla@arm.com, gregkh@linuxfoundation.org, rafael@kernel.org,
+	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+	viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
+	lukasz.luba@arm.com, ionela.voinescu@arm.com,
+	pierre.gondois@arm.com, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+	conor.dooley@microchip.com, suagrfillet@gmail.com,
+	ajones@ventanamicro.com, lftan@kernel.org, beata.michalska@arm.com,
+	=?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>
+Subject: Re: [PATCH v7 3/7] cpufreq/schedutil: Use a fixed reference frequency
+Message-ID: <302b454c-f735-4857-8cc3-101d223139b7@sirena.org.uk>
+References: <20231211104855.558096-1-vincent.guittot@linaro.org>
+ <20231211104855.558096-4-vincent.guittot@linaro.org>
+ <Za8cjQXptttuyb6c@finisterre.sirena.org.uk>
+ <CAKfTPtAOJpr8VbXwSY_UMTf5Y2gEHAsobjHnJXqe1K1QDGygCA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="M/sd+h4waIyD9cAu"
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtAOJpr8VbXwSY_UMTf5Y2gEHAsobjHnJXqe1K1QDGygCA@mail.gmail.com>
+X-Cookie: Stay together, drag each other down.
 
-This value only needs read once. Move that read into the function
-that returns the value to keep the logic all in one place. This
-also avoids doing this check every time we read in values in
-the device update poll worker.
 
-While here, correct this function's error message.
+--M/sd+h4waIyD9cAu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Andrew Davis <afd@ti.com>
----
- drivers/power/supply/bq27xxx_battery.c | 24 ++++++++++++++++--------
- 1 file changed, 16 insertions(+), 8 deletions(-)
+On Tue, Jan 23, 2024 at 08:24:00AM +0100, Vincent Guittot wrote:
 
-diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-index 2bf5e007f16b2..363428530ee60 100644
---- a/drivers/power/supply/bq27xxx_battery.c
-+++ b/drivers/power/supply/bq27xxx_battery.c
-@@ -1595,17 +1595,24 @@ static inline int bq27xxx_battery_read_fcc(struct bq27xxx_device_info *di)
-  * Return the Design Capacity in µAh
-  * Or < 0 if something fails.
-  */
--static int bq27xxx_battery_read_dcap(struct bq27xxx_device_info *di)
-+static int bq27xxx_battery_read_dcap(struct bq27xxx_device_info *di,
-+				     union power_supply_propval *val)
- {
- 	int dcap;
- 
-+	/* We only have to read charge design full once */
-+	if (di->charge_design_full > 0) {
-+		val->intval = di->charge_design_full;
-+		return 0;
-+	}
-+
- 	if (di->opts & BQ27XXX_O_ZERO)
- 		dcap = bq27xxx_read(di, BQ27XXX_REG_DCAP, true);
- 	else
- 		dcap = bq27xxx_read(di, BQ27XXX_REG_DCAP, false);
- 
- 	if (dcap < 0) {
--		dev_dbg(di->dev, "error reading initial last measured discharge\n");
-+		dev_dbg(di->dev, "error reading design capacity\n");
- 		return dcap;
- 	}
- 
-@@ -1614,7 +1621,12 @@ static int bq27xxx_battery_read_dcap(struct bq27xxx_device_info *di)
- 	else
- 		dcap *= 1000;
- 
--	return dcap;
-+	/* Save for later reads */
-+	di->charge_design_full = dcap;
-+
-+	val->intval = dcap;
-+
-+	return 0;
- }
- 
- /*
-@@ -1865,10 +1877,6 @@ static void bq27xxx_battery_update_unlocked(struct bq27xxx_device_info *di)
- 		 */
- 		if (!(di->opts & BQ27XXX_O_ZERO))
- 			bq27xxx_battery_current_and_status(di, NULL, &status, &cache);
--
--		/* We only have to read charge design full once */
--		if (di->charge_design_full <= 0)
--			di->charge_design_full = bq27xxx_battery_read_dcap(di);
- 	}
- 
- 	if ((di->cache.capacity != cache.capacity) ||
-@@ -2062,7 +2070,7 @@ static int bq27xxx_battery_get_property(struct power_supply *psy,
- 		ret = bq27xxx_simple_value(di->cache.charge_full, val);
- 		break;
- 	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
--		ret = bq27xxx_simple_value(di->charge_design_full, val);
-+		ret = bq27xxx_battery_read_dcap(di, val);
- 		break;
- 	/*
- 	 * TODO: Implement these to make registers set from
--- 
-2.39.2
+> Could you tried this fix:
+> https://lore.kernel.org/lkml/20240117190545.596057-1-vincent.guittot@linaro.org/
 
+That seems to fix the issue, thanks.
+
+--M/sd+h4waIyD9cAu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWv1+kACgkQJNaLcl1U
+h9CM9Af/ZW1jVyySIIghihHPhUaTN6VzTCwUE6KJua1dSFK4a44q9koNBXFkOHtK
+l1AArHtcboHKaIpkJddeN7nof7iIXXcVQoDOhk6SNwhlwCUZdVWpL2hbHOPt1Tc6
+SCGoFV5RiBIQZwzbnI1vQDaEXvtX6lPw2yRRO85i7xOUpR6YnSoPNs1dMeS3Wn4X
+eYjZinuJAmmFm13ea3DcoyVT5QBhAI37b6BdhujLiyK4x+qWdGC7uRi3yn8Ehk53
+aq7OW2XH8COcWnH/VmNscUgZkUQI6oPgFBMekw2QtGRNmVXWWq+vFHHK1Qp+hFBp
+B0QJ8KHDYkRvNNdhwgLcxEQTasqDhw==
+=/XiG
+-----END PGP SIGNATURE-----
+
+--M/sd+h4waIyD9cAu--
 
