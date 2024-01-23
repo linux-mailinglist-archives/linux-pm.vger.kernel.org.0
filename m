@@ -1,194 +1,159 @@
-Return-Path: <linux-pm+bounces-2555-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2556-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEE52838E6A
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 13:22:55 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2572838EA8
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 13:38:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6984A1F25067
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 12:22:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1D8CBB2462C
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 12:38:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F21BA5C8FF;
-	Tue, 23 Jan 2024 12:22:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE9EB5EE7F;
+	Tue, 23 Jan 2024 12:38:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="daSWs3v5"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="y1xJnaPu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD9B5DF18
-	for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 12:22:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01E8D5D8F5
+	for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 12:38:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706012570; cv=none; b=XwUg6+4PtbC7VFiiNP7IDVCHr4PDzzaDoIqOxy4mT3CM04WegD74wteWUqlZZom0EreHrGpjxP8n1DbdbRJbeycKMyNpyTl3+OfniSphCZazGXh5ky47w5vhnKYDpz69YbX1qn0u9UA18tsEWMDK6gojwPe4mg5yPt3E+0VDIDI=
+	t=1706013503; cv=none; b=n7loFVQvWCI0CUSvWjgdeRldLiL9DgYhCEGo4ka6Zick4WEbztnjeItQ6URF2KFD/8JHUpow6b+QMU/dE5zhY7QIYHZA2eJhmbdNdwCwiKl1A456jnutiR2eu+dvwxzjI9LUnrXunHyeNcUVq1kRpsb/BXBBvoWQPT4iDujmUsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706012570; c=relaxed/simple;
-	bh=k01DIOSRLVW+DQ24icE6Ir9vmX5ig64RCP8pnc3p7ek=;
+	s=arc-20240116; t=1706013503; c=relaxed/simple;
+	bh=WBQDTNBTK9sdRRuBTkFzcjNllsxW2QS/rV8OG3A6y6U=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JL2ws6m79rFsk41lLz/NcINsPmtmr/MinVcOjuhOPnY8Oay0rJaqVwVzhMDg9zbGRyRpSaMaKgFuoiImwKBd5/LA9LwULWCUdcnxhCLKi384rVdz0yzz0wMQAG03NurCwza2qKNp5TY5fbOdD0ZqGrO98U7FlnI835VoIedgDvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=daSWs3v5; arc=none smtp.client-ip=209.85.219.179
+	 To:Cc:Content-Type; b=IcMCuAb7najw4WZKTgxtKH81ndYfTaIdCcmBDZ3k/gVOZO+OIxVIfHainyMkj1AIv83Mw1JZ9PL/ogyRICNyIbkUH1xz+fkxpDllEL9qSj84noMhZegF+rIyPxAhuD0dWnEIKafoyqIzw1ztJAr/oxouIUjHeFCQvCNIJxqiez8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=y1xJnaPu; arc=none smtp.client-ip=209.85.128.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-dc238cb1b17so3819898276.0
-        for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 04:22:49 -0800 (PST)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-6002a655d77so12184037b3.2
+        for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 04:38:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706012568; x=1706617368; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1706013500; x=1706618300; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2i2JkhvjeVmwGZk7KmpKzIYKY/0vcbt6K1rVecnj+is=;
-        b=daSWs3v5GBb3Z796ykMqaJjklxg1kU4UFVj3TpUM78LR2YYzsoZK7WhOJT9lYvfyrw
-         gsnQQ+PxWeat1m0NrXbEl1JMcoCQud030KlSPgJ/Sp8VWBPU580chAk0nb3bt9DSAvRj
-         SrkcS3aRWhplQ99RBozUBlFUtUXG6FBo3bC4VEwe1BolkujeQEb0xMkwqpF7a+0de6Cn
-         W2n0wFPBabGPvhqri2pkLimwQukTkjaH5MamK5V3KOdotP2RRBBwfMPtXlrsjFZ9VTi8
-         cLZNlqkqEuVbBTfSrjoatBCNHTS/kEDc5y/s7Ha3R/5XfsARGCvROt1YVsCrMu34i45X
-         ai+w==
+        bh=b0Aht4Z16P8L5ltKdjULPwhLp0+Y9JoWi3OkWohTfrU=;
+        b=y1xJnaPuWp2atV6P14a9WHO0DEDzDqqaFQjOJhABoM9HEZgIAA7h/FQw2EYKEo2j8Y
+         QcGlzyugWSOtZDWjdB3/+cb5bAbvjT4jUXWYuXnBDa0+0mJWpGkCktP7/u5l5/QxrrF+
+         LJtANgl+8BjmeCHxXl0UjwkgqGxLhMdBZWFj4zvieKZZNy2IYFnImWfEnvZDf1PeP0ov
+         +7tYWBdA+v9zxeTUkCLZWcXGm7lxQabns0EutJtxdlWuNfwemytn3o6yG7L64DvYMcuW
+         mPbxGOfmevdoQ2knoKISALT1jScuIf444motd8lM9KDEz5r3SwHdNsOjz2HKcIBkptMN
+         1sXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706012568; x=1706617368;
+        d=1e100.net; s=20230601; t=1706013500; x=1706618300;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2i2JkhvjeVmwGZk7KmpKzIYKY/0vcbt6K1rVecnj+is=;
-        b=L6cF1wZUR7LdoudSfxThn14F0r29+5FUQnMo6oEB1ixUJr2fowS2VBSFiBrP4F2hcr
-         HhLnkI05GzIbPTwcNcF7xNPsQSKhQHT5HsjMl3Avs7hWYv6OfvMx910CXBAIwfwcIeqM
-         Q3IPiEpbsImIzkI5Buwh3ITFlr+7ryri0fQzXUDJjRuoUzBIWjf1RYrzsfkvSKm6IZfm
-         e8LXOTbNNRyr7GGPvpqIh7F3GqG54wxI9xQDzcDnG8vNf8j0BR9KQUSXwfYuiI3z1nge
-         NXn09kloMlYAZbWMTz8GWkRx8rr04fN2jEmmXf87qg+xYLW4qbTNQEJc38beRiLKdepQ
-         kTvA==
-X-Gm-Message-State: AOJu0Yyf38G8HGuMpok54ee2G2i7ZX6b1b9tlQpsrQSNjbaIYxUI3IGp
-	zxfvNU6D+gGL8YoC1+ZUJrz1P7zwX2m88J5yl3pUzKGlhtsdp1mtx5FcibiRBtKYwp2Mrf3OxG/
-	YE8MUg2IJuWKuaGCZJaQeplkAakQ7LkzAt39BWQ==
-X-Google-Smtp-Source: AGHT+IHRYpBdL+ROMhEUsObvUM8ZcI+g0eEAzyEDHj0Yi0tXAbx/m8ujU8Z/pG8HvhWj58H8mBPxPah0p/6uQX6mzx0=
-X-Received: by 2002:a5b:d0d:0:b0:dc2:46cd:eeef with SMTP id
- y13-20020a5b0d0d000000b00dc246cdeeefmr3299310ybp.130.1706012568299; Tue, 23
- Jan 2024 04:22:48 -0800 (PST)
+        bh=b0Aht4Z16P8L5ltKdjULPwhLp0+Y9JoWi3OkWohTfrU=;
+        b=lD1CFyu9TzWrRHPquF0vxlKNQOdl7CaCGvJ9JD/7tF/moeWUneHMmG+L+0YzTIzM/W
+         qPjkBUN2n2QjWYP4ZfFUUnFSuboO2qEY/VLEQDpVzX7m7PDY4SPA3Lam9uEL3VVuSv+B
+         aKiJqrSdL5MTSZPV4huEMIa1k5/2ePnd40nZJxsFaVRxxBG9XaXJgdv3PqTwJ2EIbp8B
+         yUq5e/oAYE21xmG+Si2G0knARKZntlPPrOyW64aqEqcVXF3wXl3LpI/6DxGuX98BaPaa
+         vCouutqOjGeVpzUg1YOezRfvqIZGjSKTmYOEYYl8hu+HS2VJQved5NtCqD/lGVffHzm2
+         S31w==
+X-Gm-Message-State: AOJu0Yz8Qy0qAx2sUt5PT+NjW85mHfGibBjcbZRxcE3Po1T9htJwPaQv
+	79WXRR61HpmcRSy3kc+J8pcMizbych590UEmkjsNUN8crp5THvoyDe6ZImWYbgrRq7ocBZV5jxx
+	YzQzu8kcW7aPUibYfBWSQLxYPML5M5o+L7WA7nA==
+X-Google-Smtp-Source: AGHT+IFjlLKWbIaooUFn6twpk291b0gxpXJoWwlTCxkhUpnf30Mbu7r2hCw+P/4GYu6YGZMa4RxyQnwR/iUlnPiM5mg=
+X-Received: by 2002:a0d:de07:0:b0:5f7:a3bf:6071 with SMTP id
+ h7-20020a0dde07000000b005f7a3bf6071mr3324304ywe.105.1706013499919; Tue, 23
+ Jan 2024 04:38:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231225133615.78993-1-eugen.hristev@collabora.com>
-In-Reply-To: <20231225133615.78993-1-eugen.hristev@collabora.com>
+References: <20240105160103.183092-1-ulf.hansson@linaro.org>
+ <20240105160103.183092-4-ulf.hansson@linaro.org> <87801f3e-b7ce-46ba-9856-1321635a11b5@nxp.com>
+ <CANLsYkwtNa_-t0f5rhTh5mtF72urKNyqWk0_qfbBwSCQK_6eOg@mail.gmail.com> <Za8WFHxVQZ44fJJn@p14s>
+In-Reply-To: <Za8WFHxVQZ44fJJn@p14s>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 23 Jan 2024 13:22:12 +0100
-Message-ID: <CAPDyKFoNuKv3BSifiuJrYQ7JSKo6OHaugrWChhKWB3BxKrdKCQ@mail.gmail.com>
-Subject: Re: [PATCH] pmdomain: mediatek: fix race conditions with genpd
-To: Eugen Hristev <eugen.hristev@collabora.com>
-Cc: matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	kernel@collabora.com
+Date: Tue, 23 Jan 2024 13:37:43 +0100
+Message-ID: <CAPDyKFqTEYygDTQz6a4TRWr0Ozs8eMBFYWrFRohTzp7svC9gsw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/5] remoteproc: imx_rproc: Convert to dev_pm_domain_attach|detach_list()
+To: Mathieu Poirier <mathieu.poirier@linaro.org>, "Rafael J . Wysocki" <rafael@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Iuliana Prodan <iuliana.prodan@nxp.com>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org, 
+	Sudeep Holla <sudeep.holla@arm.com>, Kevin Hilman <khilman@kernel.org>, 
+	Konrad Dybcio <konrad.dybcio@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Nikunj Kela <nkela@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, 
+	Stephan Gerhold <stephan@gerhold.net>, Ben Horgan <Ben.Horgan@arm.com>, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-remoteproc@vger.kernel.org, 
+	linux-media@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Daniel Baluta <daniel.baluta@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Mon, 25 Dec 2023 at 14:36, Eugen Hristev <eugen.hristev@collabora.com> wrote:
+On Tue, 23 Jan 2024 at 02:27, Mathieu Poirier
+<mathieu.poirier@linaro.org> wrote:
 >
-> If the power domains are registered first with genpd and *after that*
-> the driver attempts to power them on in the probe sequence, then it is
-> possible that a race condition occurs if genpd tries to power them on
-> in the same time.
-> The same is valid for powering them off before unregistering them
-> from genpd.
+> On Mon, Jan 22, 2024 at 01:02:08PM -0700, Mathieu Poirier wrote:
+> > On Mon, 22 Jan 2024 at 10:51, Iuliana Prodan <iuliana.prodan@nxp.com> wrote:
+> > >
+> > > On 1/5/2024 6:01 PM, Ulf Hansson wrote:
+> > > > Let's avoid the boilerplate code to manage the multiple PM domain case, by
+> > > > converting into using dev_pm_domain_attach|detach_list().
+> > > >
+> > > > Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> > > > Cc: Bjorn Andersson <andersson@kernel.org>
+> > > > Cc: Shawn Guo <shawnguo@kernel.org>
+> > > > Cc: Sascha Hauer <s.hauer@pengutronix.de>
+> > > > Cc: Iuliana Prodan <iuliana.prodan@nxp.com>
+> > > > Cc: Daniel Baluta <daniel.baluta@nxp.com>
+> > > > Cc: <linux-remoteproc@vger.kernel.org>
+> > > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > > > ---
+> > > >
+> > > > Changes in v2:
+> > > >       - None.
+> > > >
+> > > > Iuliana/Daniel I am ccing you to request help with test/review of this change.
+> > > > Note that, you will need patch 1/5 in the series too, to be able to test this.
+> > > >
+> > > > Kind regards
+> > > > Ulf Hansson
+> > >
+> > > Tested-by: Iuliana Prodan <iuliana.prodan@nxp.com>
+> > > Reviewed-by: Iuliana Prodan <iuliana.prodan@nxp.com>
+> > >
+> >
+> > Thanks for the leg-work on this.  I'll pick this up in rc1 later this week.
+>
+> Looking at the other files in this set, Ulf of perhaps Bjorn should take this
+> set.
 
-Right. When the PM domain has been registered with genpd, attempts to
-power-on/off the PM domain need to be synchronized with genpd.
+Yes, all patches in the series depend on the new helper function that
+is introduced in patch 1.
 
-> Attempt to fix race conditions by first removing the domains from genpd
-> and *after that* powering down domains.
-> Also first power up the domains and *after that* register them
-> to genpd.
+I can certainly take the whole series via my pmdomain tree, if that's
+fine by everyone.
 
-This seems like a reasonable approach to me.
+Note that, there is also another series for genpd and qcom drivers
+that might make it for v6.9. It may be best to keep all these things
+together to avoid conflicts.
+
+Let's see what Greg/Rafael thinks about patch 1 first though.
 
 >
-> Fixes: 59b644b01cf4 ("soc: mediatek: Add MediaTek SCPSYS power domains")
-> Signed-off-by: Eugen Hristev <eugen.hristev@collabora.com>
-
-Applied for fixes and by adding a stable tag, thanks! Although,
-please, see some more comments below.
-
-> ---
+> for:
 >
-> This comes as another way to fix the problem as described in this thread:
-> https://lore.kernel.org/linux-arm-kernel/20231129113120.4907-1-eugen.hristev@collabora.com/
+> drivers/remoteproc/imx_rproc.c
+> drivers/remoteproc/imx_dsp_rproc.c
 >
-> I have not been able to reproduce the problem with either fix anymore
-> (so far).
->
-> I have a few doubts about this one though, if I really covered the
-> way it's supposed to work, and registering the pmdomains in the recursive
-> function in the reversed order has any side effect or if it does not
-> work correctly.
-> Tested on mt8186 where it appears to be fine.
+> Reviewed-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 
-I had a quick look at the code in the driver and a few things caught my eyes.
+Thanks Mathieu and Iuliana!
 
-*) The error path in scpsys_probe() doesn't seem to handle removal of
-the link between parent/child-domains (subdomains).
-**) An option that might simplify the code and error path too, could
-be to convert into using of_genpd_add|remove_subdomain() in favor or
-pm_genpd_add|remove_subdomain().
+[...]
 
 Kind regards
 Uffe
 
-
->
-> Eugen
->
->  drivers/pmdomain/mediatek/mtk-pm-domains.c | 15 +++++++--------
->  1 file changed, 7 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.c b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> index e26dc17d07ad..e274e3315fe7 100644
-> --- a/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> +++ b/drivers/pmdomain/mediatek/mtk-pm-domains.c
-> @@ -561,6 +561,11 @@ static int scpsys_add_subdomain(struct scpsys *scpsys, struct device_node *paren
->                         goto err_put_node;
->                 }
->
-> +               /* recursive call to add all subdomains */
-> +               ret = scpsys_add_subdomain(scpsys, child);
-> +               if (ret)
-> +                       goto err_put_node;
-> +
->                 ret = pm_genpd_add_subdomain(parent_pd, child_pd);
->                 if (ret) {
->                         dev_err(scpsys->dev, "failed to add %s subdomain to parent %s\n",
-> @@ -570,11 +575,6 @@ static int scpsys_add_subdomain(struct scpsys *scpsys, struct device_node *paren
->                         dev_dbg(scpsys->dev, "%s add subdomain: %s\n", parent_pd->name,
->                                 child_pd->name);
->                 }
-> -
-> -               /* recursive call to add all subdomains */
-> -               ret = scpsys_add_subdomain(scpsys, child);
-> -               if (ret)
-> -                       goto err_put_node;
->         }
->
->         return 0;
-> @@ -588,9 +588,6 @@ static void scpsys_remove_one_domain(struct scpsys_domain *pd)
->  {
->         int ret;
->
-> -       if (scpsys_domain_is_on(pd))
-> -               scpsys_power_off(&pd->genpd);
-> -
->         /*
->          * We're in the error cleanup already, so we only complain,
->          * but won't emit another error on top of the original one.
-> @@ -600,6 +597,8 @@ static void scpsys_remove_one_domain(struct scpsys_domain *pd)
->                 dev_err(pd->scpsys->dev,
->                         "failed to remove domain '%s' : %d - state may be inconsistent\n",
->                         pd->genpd.name, ret);
-> +       if (scpsys_domain_is_on(pd))
-> +               scpsys_power_off(&pd->genpd);
->
->         clk_bulk_put(pd->num_clks, pd->clks);
->         clk_bulk_put(pd->num_subsys_clks, pd->subsys_clks);
-> --
-> 2.34.1
->
->
+[1]
+https://lore.kernel.org/all/20240122-gdsc-hwctrl-v4-0-9061e8a7aa07@linaro.org/
 
