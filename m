@@ -1,71 +1,80 @@
-Return-Path: <linux-pm+bounces-2530-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2531-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34FFE838600
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 04:28:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C256838715
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 07:06:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6E2B0B249FF
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 03:28:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F65A1C22FC5
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 06:06:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9F771102;
-	Tue, 23 Jan 2024 03:28:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBAF84D5AB;
+	Tue, 23 Jan 2024 06:06:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k3Dhunne"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BXJDkejz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B5001FC8;
-	Tue, 23 Jan 2024 03:28:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6461B4F20D
+	for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 06:06:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705980506; cv=none; b=swJVZAoiQJUj4jaZdqZfg135HUmdmWryEQ3QZvbiWubwfe9IUukoMo7CcQSNyyS2SC9CeszjaEy8NpzV9Y4ueKvJ8uEh+l3xpe2abEC2L0n84RFP2w4hjd+OOKiD9p/mzQZeMBESXbpW0mCCWoMAXtGYpqjeIaD0ZCwvvunGGCs=
+	t=1705990006; cv=none; b=TjyYa9lQ7GWeDkQM/SmuX11ajUDXMiIJm2+63k87E6xUUqE2v+rPMaGfTCTBJSgzjulKw9oAdnM9of2oNBO37pMTV/IP7T7wc8Fwpu60RIJ7dgvT4bZBuEr6EHs2GSrR7+THteMFb8XzuvtkrWsM9rj9/c7xaVzHfaYgl62LpdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705980506; c=relaxed/simple;
-	bh=l7wfLVvCGP0+ecx1a4qU9SbMv8+iuyp7Pu55QwpeJsg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=SU0xpVR+vEstmewHnl6B8QYAUQO6APcY5PWsVwW55K3hTnP9+Gfq2zdD/f6HV1DTjpbXmKzaQTdOmGBMRa88JyxK5MeMYv9q1mf3hMWn7EclkV4GQVeCAhiYxNO304eKbNumGiE8oSC/vP53hDzmn9da41WD80Imb5091K6wlvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k3Dhunne; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705980503; x=1737516503;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=l7wfLVvCGP0+ecx1a4qU9SbMv8+iuyp7Pu55QwpeJsg=;
-  b=k3DhunnekM0i1OWlQwm3OLNi92Rk2OcRbiN2Xb6NeRDfOMxXBJEdwDbV
-   MLoMAE9EyUOnweDw7I1jB8zVGk5vgwPbfMlzWgrDtG5vlrdxHw6EKm3VK
-   hYlSEWsslOamyiipgmfZfqLL3BeAzziJu/KBD3BxOz7py+QZF+pSaDgoa
-   38Z1m7xcbTSErXV/S2s21nNpsoQVJxO4VcNJXXDG92ycmrlWhfD/6bEb+
-   BxxX+zu3rBa3cpvLAHRf5jgarLodJ7H9Tja05kcG9fMulZXa0yy07K4o3
-   5TjebWB6+I3luuerENZfBiaCPGKzto983YyAew9k67eRleGfWNlbSMMGH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10961"; a="1292116"
-X-IronPort-AV: E=Sophos;i="6.05,213,1701158400"; 
-   d="scan'208";a="1292116"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2024 19:28:22 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,213,1701158400"; 
-   d="scan'208";a="34257552"
-Received: from lkp-server01.sh.intel.com (HELO 961aaaa5b03c) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 22 Jan 2024 19:28:21 -0800
-Received: from kbuild by 961aaaa5b03c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rS7SU-00079E-1D;
-	Tue, 23 Jan 2024 03:28:18 +0000
-Date: Tue, 23 Jan 2024 11:28:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-	devel@acpica.org, linux-pm@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [rafael-pm:bleeding-edge 5/6] drivers/base/power/runtime.c:1815:24:
- warning: increment of a boolean expression
-Message-ID: <202401231130.9tnv8Gds-lkp@intel.com>
+	s=arc-20240116; t=1705990006; c=relaxed/simple;
+	bh=T4q6Sos/5XPEHqzYjmwsu0Dp48aHhx68Cm+I4CUBH0U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jM5OvGBW+LSXG4bqxfi4NWRoXngNVyDbnGFD8CoEfXc5m9TgDfJHLvNa35tkcraI3EhSnbr2ueLRjfrffRpr9onhyO4x/Rf/gpX+vP3oPkrBLZozgzmU0Mb8qOo3VTq0ZnEmgR5lWNf0RqutTZCDzIheFABTTCQo3KVUFL4v9mU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BXJDkejz; arc=none smtp.client-ip=209.85.161.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-595d24ad466so2587675eaf.0
+        for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 22:06:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1705990004; x=1706594804; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xDHsih41QhHdQq0FnZ41+qAtDYu4tobNnucMLu+mtEc=;
+        b=BXJDkejzrKiDUTkoEAo6LLXQmJU2em23LK3lCcUqHN84QUwBjwo/zleQCx+xKXqiCR
+         THAi/Er6WNCDndmkBF8CMMo5XrlvkaNwtu4sgBcJVxEAGSac1txQ+46mNtqsAhUDSWiz
+         D07VM2Qw+SfR7RQ5avSuKjug+HcnWQTJddvkVm3IquZj0GCHRwmXInRYULv1tZTW5/dH
+         5btq6Y6EvbwsBqKPBXAWulyLuvH8dnyU+yCPTXllIXqfHBnmOsnY8+GmlIPoeqQ9ZfuC
+         XWWQOlm4aBOwRyRX8UeX//Cp2Mqm5yZFtd09oEHuRwaSaVCXks2e+LgK/PuaCKF3CQcv
+         z5Dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705990004; x=1706594804;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xDHsih41QhHdQq0FnZ41+qAtDYu4tobNnucMLu+mtEc=;
+        b=GVkeylk6TSbkMfw9ewxd2OF22k/kIkBgwjyIS2A9pv2JAr0NwlG+d2Rb5EA9GWTIcK
+         DIAIhv+BufGYr3B4HKPTNcsPJK8U/nNGLW3Z2kTSM2aBB4/JF/khY9wYvHAe7hrIbgnE
+         fCup0o1OIElOhUlw8zKhvKSRzMD2IM9afFgEesgg8yMxu2x6DE1zAQEbfGdbYA2+TMPw
+         RsH7Owr9ITXLgHkD7El4szoAghEfOdKdOO8sz5z3WsCzI6vR+SPqJ7cW1L8WK+QqNrIh
+         BrTHbWaTRwW6You5aXALjkz5hwf/5sER94DKcaH+AmBu+5RGgVm00/lr6ydDUpvUD7d5
+         H6Kw==
+X-Gm-Message-State: AOJu0YyoDSOhNlwSMIYINRe8hFQRWJQFycuDu4uzkyoUPCJgaAvGFJLg
+	tEqx+ko+r8odOsmGXc4Gec/S0TXIe5qnHxXcNI+i6cF6ZjCbGQZJ46v8L2FdKKs=
+X-Google-Smtp-Source: AGHT+IHVcvmqk7JJCvw2qP+ZR34MAkZSZ1sPIGmyhTAV6YQKNGqB100KNSxmn5GNnYDiSXxZUAa4Ig==
+X-Received: by 2002:a05:6358:719:b0:176:6184:d5b0 with SMTP id e25-20020a056358071900b001766184d5b0mr1672221rwj.9.1705990004316;
+        Mon, 22 Jan 2024 22:06:44 -0800 (PST)
+Received: from localhost ([122.172.81.83])
+        by smtp.gmail.com with ESMTPSA id o125-20020a62cd83000000b006dd7f773c67sm207626pfg.167.2024.01.22.22.06.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Jan 2024 22:06:43 -0800 (PST)
+Date: Tue, 23 Jan 2024 11:36:41 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: tianyu2 <tianyu2@kernelsoft.com>
+Cc: rafael@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+	kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: imx6: use regmap to read ocotp register
+Message-ID: <20240123060641.gtqghndtja2m6rzu@vireshk-i7>
+References: <20240109114521.518195-1-tianyu2@kernelsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -74,61 +83,20 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240109114521.518195-1-tianyu2@kernelsoft.com>
 
-Hi Rafael,
+On 09-01-24, 19:45, tianyu2 wrote:
+> Reading the ocotp register directly is unsafe and will cause the system
+> to hang if its clock is not turned on in CCM. The regmap interface has
+> clk enabled, which can solve this problem.
+> 
+> Signed-off-by: tianyu2 <tianyu2@kernelsoft.com>
+> ---
+>  drivers/cpufreq/imx6q-cpufreq.c | 45 +++++++++++----------------------
+>  1 file changed, 15 insertions(+), 30 deletions(-)
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   f890729ea3ca4d549b4e2414c42e932163814f09
-commit: 5d872146e7f55e15c26d0a5600b155ee54bfdee6 [5/6] PM: sleep: Use bool for all 1-bit fields in struct dev_pm_info
-config: i386-buildonly-randconfig-004-20240123 (https://download.01.org/0day-ci/archive/20240123/202401231130.9tnv8Gds-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240123/202401231130.9tnv8Gds-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401231130.9tnv8Gds-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/base/power/runtime.c: In function 'pm_runtime_new_link':
->> drivers/base/power/runtime.c:1815:24: warning: increment of a boolean expression [-Wbool-operation]
-    1815 |  dev->power.links_count++;
-         |                        ^~
-   drivers/base/power/runtime.c: In function 'pm_runtime_drop_link_count':
->> drivers/base/power/runtime.c:1823:24: warning: decrement of a boolean expression [-Wbool-operation]
-    1823 |  dev->power.links_count--;
-         |                        ^~
-
-
-vim +1815 drivers/base/power/runtime.c
-
-21d5c57b3726166 Rafael J. Wysocki 2016-10-30  1811  
-baa8809f60971d1 Rafael J. Wysocki 2016-10-30  1812  void pm_runtime_new_link(struct device *dev)
-baa8809f60971d1 Rafael J. Wysocki 2016-10-30  1813  {
-baa8809f60971d1 Rafael J. Wysocki 2016-10-30  1814  	spin_lock_irq(&dev->power.lock);
-baa8809f60971d1 Rafael J. Wysocki 2016-10-30 @1815  	dev->power.links_count++;
-baa8809f60971d1 Rafael J. Wysocki 2016-10-30  1816  	spin_unlock_irq(&dev->power.lock);
-baa8809f60971d1 Rafael J. Wysocki 2016-10-30  1817  }
-baa8809f60971d1 Rafael J. Wysocki 2016-10-30  1818  
-e0e398e204634db Rafael J. Wysocki 2020-10-21  1819  static void pm_runtime_drop_link_count(struct device *dev)
-baa8809f60971d1 Rafael J. Wysocki 2016-10-30  1820  {
-baa8809f60971d1 Rafael J. Wysocki 2016-10-30  1821  	spin_lock_irq(&dev->power.lock);
-baa8809f60971d1 Rafael J. Wysocki 2016-10-30  1822  	WARN_ON(dev->power.links_count == 0);
-baa8809f60971d1 Rafael J. Wysocki 2016-10-30 @1823  	dev->power.links_count--;
-baa8809f60971d1 Rafael J. Wysocki 2016-10-30  1824  	spin_unlock_irq(&dev->power.lock);
-e0e398e204634db Rafael J. Wysocki 2020-10-21  1825  }
-e0e398e204634db Rafael J. Wysocki 2020-10-21  1826  
-
-:::::: The code at line 1815 was first introduced by commit
-:::::: baa8809f60971d10220dfe79248f54b2b265f003 PM / runtime: Optimize the use of device links
-
-:::::: TO: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Applied. Thanks.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+viresh
 
