@@ -1,147 +1,206 @@
-Return-Path: <linux-pm+bounces-2528-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2529-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 422D0838507
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 03:38:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7D618385A2
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 03:45:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E4963290300
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 02:38:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 188371C2659D
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 02:45:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A5137C0BC;
-	Tue, 23 Jan 2024 02:08:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BAF31854;
+	Tue, 23 Jan 2024 02:41:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="jlxuETIp"
+	dkim=pass (1024-bit key) header.d=peacevolution.org header.i=@peacevolution.org header.b="fQQ5yhGW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from a.peacevolution.org (a.peacevolution.org [206.189.193.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6AE67C0B5
-	for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 02:08:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3E48184;
+	Tue, 23 Jan 2024 02:41:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.193.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705975728; cv=none; b=Qyjz9k9of2U1I2rUPTVIa9ACMuGoK7Ilj6bDOK14RHrUPoqedZGpiBy0LxjmJkBA0Cr5D9jywevUWu+eYr+bcFtGvfiFPOuw9louC1r9ffaCNp0Q1YQJsEELI+DsDzPibWgmeeQSze1b5eXLgAUK6C9dJwtibipE3CEbzNcRYD0=
+	t=1705977673; cv=none; b=ZQtRqVYDlYioaYtCsiyRHyglPvUCScMnbsO19TLxFfX7HrYGb0kKQSnJO78Af73j3HYXzDQm2XGX8WDtg8cbH+QS2s1MoNL8gjcGizFBO9DfI2/0aQhoyLuGKOua8T+PUg5lj//IIJFUK2wdbZX6LsVUaLAIGDv3HMYR/6iLWo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705975728; c=relaxed/simple;
-	bh=R+kv9l/ZUzM8R/FElAZPCWzzxzFAddYDRk9QLtHUjGQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JcCPfnZFjym9hpy8O4YwGdfkpYw6v1HuBKFKhMNPW4DeDj01BDwp6Zdjav6DkWgwaE1/DmWHDWlR415tK/1Uhgy+N+IWB4RsK8cZ6P0x+VmoTTZpI+0VMR2063yPVHxBTJ4qLI09ZnAaPPJK97QocLLm+SLq8kL2UHuksJChEgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=jlxuETIp; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a277339dcf4so415861366b.2
-        for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 18:08:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1705975724; x=1706580524; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2o6pnpX/gRRzVtSBelmPlR+54VBb1uBa/4Pwf2be9x4=;
-        b=jlxuETIpd6q3tab8WM4HKNWnsRGEui4Z+zs2siiFXbFnb+46nFf5LplBA0j/nETlrO
-         5QC3f+C5KDbfeO/xbV0HQYdQsx5xGrEZFhcwn1iI/EmFLrYCdxzG87BOTgIqOeJGnPqU
-         otJsOU+Ox+j8VyftjD2aIqkLaFWw3HvbubehE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705975724; x=1706580524;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2o6pnpX/gRRzVtSBelmPlR+54VBb1uBa/4Pwf2be9x4=;
-        b=WmXBEZ9ujCVyRvvUgsbTaQ0cPoPlJUEl4lgP3zdNBh17aGUEoeZSkxhIOxL/F4yuiy
-         L2NBtbU9g+F70usMOwt8IN6aOjsLKAWNSc5HY//UxLMpmBsdZaNhG9ie+xYKqh+lmv+8
-         ZxkL+Eo70noKXGTBz9b6t9uxLrtWDucGqb9IKdfgHzyCwrVfJLvkwpXWUgj1uswBeAzs
-         jBW6VguvwC+23jUudHtSmvZcQ9SKjqK8PYtWcU9QLtj3o7chrzSz+T97fl25WeKGXcKr
-         4cv8js8rSdsR9Eh/J5VxUGgYD1DBOCgRFLsUI9WeqJHXh9aqjbaItv+usqFZZah49w6l
-         UbXw==
-X-Gm-Message-State: AOJu0YySY7XPwUqKUT8Z/qGH1X0Mdk7oJzPlvYtyJbNGEzx+Qfacg4WU
-	oHyzXS37n5gd4LEtcBif1GsCduXVrGoBlaQZwvvWlcr1IUO4oE9Bf8Q7I+GScAsKSmZqbitWyho
-	=
-X-Google-Smtp-Source: AGHT+IEQRAZmvhkDx4UQV5Sd1d7vCB1aXsD0Epwm9G3QeRyZt4t8/6PPZ0wD7MZx7Qdq7+lG9cZqmw==
-X-Received: by 2002:a17:906:8a55:b0:a2a:2498:93c5 with SMTP id gx21-20020a1709068a5500b00a2a249893c5mr2360813ejc.73.1705975724530;
-        Mon, 22 Jan 2024 18:08:44 -0800 (PST)
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
-        by smtp.gmail.com with ESMTPSA id d15-20020a170906c20f00b00a2ae7fb3fc6sm14029260ejz.93.2024.01.22.18.08.43
-        for <linux-pm@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 Jan 2024 18:08:43 -0800 (PST)
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-337cc8e72f5so3504816f8f.1
-        for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 18:08:43 -0800 (PST)
-X-Received: by 2002:a5d:4683:0:b0:337:c6b6:fe5d with SMTP id
- u3-20020a5d4683000000b00337c6b6fe5dmr2533245wrq.102.1705975723146; Mon, 22
- Jan 2024 18:08:43 -0800 (PST)
+	s=arc-20240116; t=1705977673; c=relaxed/simple;
+	bh=kLp8meRYf6WAyXXCjrEl3NJH0W1GjlZ5PFKii4fgdFE=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jxFw3smPU1nuNxPWBmPVLyuT0d4x5kHvaaBHMJCiTCbul3ohUI3y/mGC73NMKNWFGEJ8TJMygKkpr9m/E1Gt577p3zcLMQnWozYafaNogpcX0YmtcC4Ze6om+o5U4tlZVYvxjuWJFwFHV7YEN7xQXUWfK8SABn/bRL4b0XJtOlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=peacevolution.org; spf=pass smtp.mailfrom=peacevolution.org; dkim=pass (1024-bit key) header.d=peacevolution.org header.i=@peacevolution.org header.b=fQQ5yhGW; arc=none smtp.client-ip=206.189.193.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=peacevolution.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=peacevolution.org
+Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
+	by a.peacevolution.org (Postfix) with ESMTPA id DD29746341;
+	Tue, 23 Jan 2024 02:41:09 +0000 (UTC)
+Date: Mon, 22 Jan 2024 21:41:07 -0500
+From: Aren <aren@peacevolution.org>
+To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, 
+	Chen-Yu Tsai <wens@csie.org>, Sebastian Reichel <sre@kernel.org>
+Subject: Re: [PATCH 2/3] power: supply: axp20x_usb_power: enable usb_type
+ reporting
+Message-ID: <ethqwdndxmvqbcxvxkcj45iewutfb2d3zwka75yk67aavxoysf@pr2qrtd5rc7a>
+References: <20240121014057.1042466-1-aren@peacevolution.org>
+ <20240121014057.1042466-5-aren@peacevolution.org>
+ <yltrgkwj3evlyj6lu6ltdk2kg5bchtzginpx7dyblt6aqtdzwp@noczofep5o5b>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <170359668692.1864392.6909734045167510522.stgit@mhiramat.roam.corp.google.com>
- <170359669607.1864392.5078004271237566637.stgit@mhiramat.roam.corp.google.com>
- <20240117090706.3522d23763fab9dcea21aee1@kernel.org> <CAJZ5v0gqWRsSGQZp7tz-0Kw6od+fjd_iof4Rj7fkBy80ySkcEQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0gqWRsSGQZp7tz-0Kw6od+fjd_iof4Rj7fkBy80ySkcEQ@mail.gmail.com>
-From: Brian Norris <briannorris@chromium.org>
-Date: Mon, 22 Jan 2024 18:08:22 -0800
-X-Gmail-Original-Message-ID: <CA+ASDXOwfUrqRDVx_Fi62ERCLRPF+ixD014vE21Sm4mLF_j12A@mail.gmail.com>
-Message-ID: <CA+ASDXOwfUrqRDVx_Fi62ERCLRPF+ixD014vE21Sm4mLF_j12A@mail.gmail.com>
-Subject: Re: [PATCH v7] PM: sleep: Expose last succeeded resumed timestamp in sysfs
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
-	Randy Dunlap <rdunlap@infradead.org>, suleiman@google.com, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <yltrgkwj3evlyj6lu6ltdk2kg5bchtzginpx7dyblt6aqtdzwp@noczofep5o5b>
+X-Spamd-Bar: /
+Authentication-Results: auth=pass smtp.auth=aren@peacevolution.org smtp.mailfrom=aren@peacevolution.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=peacevolution.org;
+	s=dkim; t=1705977670;
+	h=from:subject:date:message-id:to:mime-version:content-type:content-transfer-encoding:in-reply-to:references;
+	bh=K6YQbP62dv7PqeMoua4cZkGTK4uQWle4Ke5iT1tdknQ=;
+	b=fQQ5yhGWWTr4IwtJzOtx4F/LlI9/tvsVMBUxC3NnhLqsdUC/tSkNdSd86IdTjMIBSRjbaU
+	DE9smiSBCRiZavPpIXrF2XauZtVhOtGwZFj8ZLlgMGBVSB/iXX6Go4D1u7rbNo9ccFUp1K
+	esWAk1hQ7vGg7qv0EnbVa3C3XNuF21Y=
 
-On Fri, Jan 19, 2024 at 1:08=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
-> On Wed, Jan 17, 2024 at 1:07=E2=80=AFAM Masami Hiramatsu <mhiramat@kernel=
-.org> wrote:
-> >
-> > Gently ping,
-> >
-> > I would like to know this is enough or I should add more info/update.
->
-> I still am not sure what this is going to be useful for.
->
-> Do you have a specific example?
+On Sun, Jan 21, 2024 at 12:55:43PM +0100, Ondřej Jirman wrote:
+> Hello Aren,
+> 
+> On Sat, Jan 20, 2024 at 08:40:02PM -0500, Aren Moynihan wrote:
+> > Axp803 and axp813 can report the detected usb bc mode. SDP, CDP, and DCP
+> > are supported.
+> > 
+> > Signed-off-by: Aren Moynihan <aren@peacevolution.org>
+> > ---
+> > 
+> >  drivers/power/supply/axp20x_usb_power.c | 52 +++++++++++++++++++++++++
+> >  1 file changed, 52 insertions(+)
+> > 
+> > diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supply/axp20x_usb_power.c
+> > index 8c0c2c25565f..5656f6e57d54 100644
+> > --- a/drivers/power/supply/axp20x_usb_power.c
+> > +++ b/drivers/power/supply/axp20x_usb_power.c
+> > @@ -57,6 +57,7 @@ struct axp_data {
+> >  	struct reg_field		vbus_valid_bit;
+> >  	struct reg_field		vbus_mon_bit;
+> >  	struct reg_field		usb_bc_en_bit;
+> > +	struct reg_field		usb_bc_det_fld;
+> >  	struct reg_field		vbus_disable_bit;
+> >  	bool				vbus_needs_polling: 1;
+> >  };
+> > @@ -69,6 +70,7 @@ struct axp20x_usb_power {
+> >  	struct regmap_field *vbus_valid_bit;
+> >  	struct regmap_field *vbus_mon_bit;
+> >  	struct regmap_field *usb_bc_en_bit;
+> > +	struct regmap_field *usb_bc_det_fld;
+> >  	struct regmap_field *vbus_disable_bit;
+> >  	struct power_supply *supply;
+> >  	const struct axp_data *axp_data;
+> > @@ -197,6 +199,37 @@ axp20x_usb_power_get_input_current_limit(struct axp20x_usb_power *power,
+> >  	return 0;
+> >  }
+> >  
+> > +static int axp20x_get_usb_type(struct axp20x_usb_power *power,
+> > +			       union power_supply_propval *val)
+> > +{
+> > +	unsigned int reg;
+> > +	int ret;
+> > +
+> > +	if (!power->usb_bc_det_fld)
+> > +		return -EINVAL;
+> 
+> What if detection is disabled becase custom input current limit was set by the
+> user? Does the HW keep the result of previous detection in the register?
 
-Since there seems to be some communication gap here, I'll give it a try.
+In that case the result appears to be USB_TYPE_UNKNOWN. I don't expect
+that would cause problems, but I guess we could cache the value when
+disabling usb bc detection if necessary.
 
-First, I'll paste the key phrase of its use case from the cover letter:
-
-  "we would like to know how long the resume processes are taken in kernel
-  and in user-space"
-
-This is a "system measurement" question, for use in tests (e.g., in a
-test lab for CI or for pre-release testing, where we suspend
-Chromebooks, wake them back up, and measure how long the wakeup took)
-or for user-reported metrics (e.g., similar statistics from real
-users' systems, if they've agreed to automatically report usage
-statistics, back to Google). We'd like to know how long it takes for a
-system to wake up, so we can detect when there are problems that lead
-to a slow system-resume experience. The user experience includes both
-time spent in the kernel and time spent after user space has thawed
-(and is spending time in potentially complex power and display manager
-stacks) before a Chromebook's display lights back up.
-
-If I understand the whole of Masami's work correctly, I believe we're
-taking "timestamps parsed out of dmesg" (or potentially out of ftrace,
-trace events, etc.) to measure the kernel side, plus "timestamp
-provided here in CLOCK_MONOTONIC" and "timestamp determined in our
-power/display managers" to measure user space.
-
-Does that make sense? Or are we still missing something "specific" for
-you? I could give code pointers [1], as it's all open source. But I'm
-not sure browsing our metric-collection code would help understanding
-any more than these explanations.
-
-(TBH, this all still seems kinda odd to me, since parsing dmesg isn't
-a great way to get machine-readable information. But this at least
-serves to close some gaps in measurement.)
-
-Brian
-
-[1] e.g., https://source.chromium.org/chromiumos/chromiumos/codesearch/+/ma=
-in:src/platform2/power_manager/powerd/metrics_collector.cc;l=3D294;drc=3Dce=
-8075df179c4f8b2f4e4c4df6978d3df665c4d1
+> Kind regards,
+> 	Ondrej
+> 
+> > +	ret = regmap_field_read(power->usb_bc_det_fld, &reg);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	switch (reg) {
+> > +	case 1:
+> > +		val->intval = POWER_SUPPLY_USB_TYPE_SDP;
+> > +		break;
+> > +	case 2:
+> > +		val->intval = POWER_SUPPLY_USB_TYPE_CDP;
+> > +		break;
+> > +	case 3:
+> > +		val->intval = POWER_SUPPLY_USB_TYPE_DCP;
+> > +		break;
+> > +	default:
+> > +		val->intval = POWER_SUPPLY_USB_TYPE_UNKNOWN;
+> > +		break;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >  static int axp20x_usb_power_get_property(struct power_supply *psy,
+> >  	enum power_supply_property psp, union power_supply_propval *val)
+> >  {
+> > @@ -266,6 +299,8 @@ static int axp20x_usb_power_get_property(struct power_supply *psy,
+> >  	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
+> >  		return axp20x_usb_power_get_input_current_limit(power,
+> >  								&val->intval);
+> > +	case POWER_SUPPLY_PROP_USB_TYPE:
+> > +		return axp20x_get_usb_type(power, val);
+> >  	default:
+> >  		break;
+> >  	}
+> > @@ -423,6 +458,14 @@ static enum power_supply_property axp813_usb_power_properties[] = {
+> >  	POWER_SUPPLY_PROP_VOLTAGE_MIN,
+> >  	POWER_SUPPLY_PROP_CURRENT_MAX,
+> >  	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
+> > +	POWER_SUPPLY_PROP_USB_TYPE,
+> > +};
+> > +
+> > +static enum power_supply_usb_type axp813_usb_types[] = {
+> > +	POWER_SUPPLY_USB_TYPE_SDP,
+> > +	POWER_SUPPLY_USB_TYPE_DCP,
+> > +	POWER_SUPPLY_USB_TYPE_CDP,
+> > +	POWER_SUPPLY_USB_TYPE_UNKNOWN,
+> >  };
+> >  
+> >  static const struct power_supply_desc axp20x_usb_power_desc = {
+> > @@ -453,6 +496,8 @@ static const struct power_supply_desc axp813_usb_power_desc = {
+> >  	.property_is_writeable = axp20x_usb_power_prop_writeable,
+> >  	.get_property = axp20x_usb_power_get_property,
+> >  	.set_property = axp20x_usb_power_set_property,
+> > +	.usb_types = axp813_usb_types,
+> > +	.num_usb_types = ARRAY_SIZE(axp813_usb_types),
+> >  };
+> >  
+> >  static const char * const axp20x_irq_names[] = {
+> > @@ -555,6 +600,7 @@ static const struct axp_data axp813_data = {
+> >  	.input_curr_lim_table = axp_813_usb_input_curr_lim_table,
+> >  	.input_curr_lim_fld = REG_FIELD(AXP22X_CHRG_CTRL3, 4, 7),
+> >  	.usb_bc_en_bit	= REG_FIELD(AXP288_BC_GLOBAL, 0, 0),
+> > +	.usb_bc_det_fld = REG_FIELD(AXP288_BC_DET_STAT, 5, 7),
+> >  	.vbus_disable_bit = REG_FIELD(AXP20X_VBUS_IPSOUT_MGMT, 7, 7),
+> >  	.vbus_needs_polling = true,
+> >  };
+> > @@ -708,6 +754,12 @@ static int axp20x_usb_power_probe(struct platform_device *pdev)
+> >  	if (ret)
+> >  		return ret;
+> >  
+> > +	ret = axp20x_regmap_field_alloc_optional(&pdev->dev, power->regmap,
+> > +						 axp_data->usb_bc_det_fld,
+> > +						 &power->usb_bc_det_fld);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> >  	ret = axp20x_regmap_field_alloc_optional(&pdev->dev, power->regmap,
+> >  						 axp_data->vbus_disable_bit,
+> >  						 &power->vbus_disable_bit);
+> > -- 
+> > 2.43.0
+> > 
 
