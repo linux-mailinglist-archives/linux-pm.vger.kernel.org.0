@@ -1,137 +1,192 @@
-Return-Path: <linux-pm+bounces-2551-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2552-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FF4D838BE3
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 11:29:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 07EE6838C22
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 11:34:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4352E1C227FB
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 10:29:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B1961C227BE
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 10:34:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A6375BAFC;
-	Tue, 23 Jan 2024 10:29:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5A485C61A;
+	Tue, 23 Jan 2024 10:33:50 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC8E75A784;
-	Tue, 23 Jan 2024 10:29:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 962FC50A77
+	for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 10:33:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706005774; cv=none; b=DZm3euRVCNutT4SsZDJckjW7rhEd9Px/cqMUWydtEr6ieO+uj29rKgN/iNr0Az3oA9uDf5eCrpnZiOOguazKl2v/3BneMl0xdbQQjXGPrUUjzgfUXwGDoqPSdI7si0DmP17SmlTGapcj9Xl5N+JwJK7XpNbFy8jUxLMS1yZTUZc=
+	t=1706006030; cv=none; b=tpR2pMFxE94CPeu0j55Unslq5qKS5Zih0t1oBLNX2vr2XMeiAUs5OF52Y1sf0gi9cS8tcCpBAk+1SeQempPD0eEW0MvfHbjG/cY/QiXzRr3thUQ+cnDJ8BAhd8X5fUd6FKNh5j55AhEkOq0fM+hgNNYm+RFm/RmwO85hkr8PgZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706005774; c=relaxed/simple;
-	bh=1z304UMB9iwNDgxznbQ/na098G6JM2egcJawzjYAgFU=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ERhRc5Hb++LNIU/64VugtridSW1xiRX3h9nyNNc6zgvhBTxQcFtjDFfWUUyLKrhgvmffmBvrDCbEqqXaTBZ0IoCcvHLf/udcme9zLhCKyWR1LC+rJBeHHOkr5XFPIFAMiHB6y176sZmfIGUBCxeGqxhvyjTFHKndB9SoTAbSjNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4TK3Ct523Lz6K91D;
-	Tue, 23 Jan 2024 18:26:34 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id B7F05140A90;
-	Tue, 23 Jan 2024 18:29:29 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 23 Jan
- 2024 10:29:29 +0000
-Date: Tue, 23 Jan 2024 10:29:28 +0000
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-CC: <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
-	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
-	<x86@kernel.org>, <acpica-devel@lists.linuxfoundation.org>,
-	<linux-csky@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-ia64@vger.kernel.org>, <linux-parisc@vger.kernel.org>, Salil Mehta
-	<salil.mehta@huawei.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	<jianyong.wu@arm.com>, <justin.he@arm.com>, James Morse <james.morse@arm.com>
-Subject: Re: [PATCH RFC v3 18/21] ACPI: processor: Only call
- arch_unregister_cpu() if HOTPLUG_CPU is selected
-Message-ID: <20240123102928.0000270c@Huawei.com>
-In-Reply-To: <ZYBB32fMWB6of7Jb@shell.armlinux.org.uk>
-References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
-	<E1rDOhH-00DvlO-UP@rmk-PC.armlinux.org.uk>
-	<20231215165009.000035f2@Huawei.com>
-	<ZYBB32fMWB6of7Jb@shell.armlinux.org.uk>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1706006030; c=relaxed/simple;
+	bh=+VwbuQ5RMqO/5eyhvD9p+fu+hN6uLjI6W//d4Lnp4Cs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mka97QzQoaIKksKjuoXABMHualLifc4kojTnnEq3RxQQnJB6wFQ2X9PlYiljzjT0mgt4TXY/U6cNkjXtXyb/0uIcR+/QewPn6Pj4PWyB9lJHcIyYV4ug9Zjpzr8lFE26Ur/4q31IOx+I8XYHpYcdHvCTLmYWpJJKeP46H9ykwko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 77D8F1FB;
+	Tue, 23 Jan 2024 02:34:33 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DB3D83F5A1;
+	Tue, 23 Jan 2024 02:33:46 -0800 (PST)
+Date: Tue, 23 Jan 2024 10:33:44 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Ben Horgan <Ben.Horgan@arm.com>
+Cc: "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	nd <nd@arm.com>, Vishnu Banavath <Vishnu.Banavath@arm.com>,
+	Florent Tomasin <Florent.Tomasin@arm.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: Using scmi performance domains and scmi power domains together
+Message-ID: <Za-WCHwfpf7dXJ1Z@bogus>
+References: <VE1PR08MB476848A0895993EAC92AF77B91752@VE1PR08MB4768.eurprd08.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <VE1PR08MB476848A0895993EAC92AF77B91752@VE1PR08MB4768.eurprd08.prod.outlook.com>
 
-On Mon, 18 Dec 2023 12:58:07 +0000
-"Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
+(+ Cristian)
 
-> On Fri, Dec 15, 2023 at 04:50:09PM +0000, Jonathan Cameron wrote:
-> > On Wed, 13 Dec 2023 12:50:43 +0000
-> > Russell King (Oracle) <rmk+kernel@armlinux.org.uk> wrote:
-> >   
-> > > From: James Morse <james.morse@arm.com>
-> > > 
-> > > The kbuild robot points out that configurations without HOTPLUG_CPU
-> > > selected can try to build acpi_processor_post_eject() without success
-> > > as arch_unregister_cpu() is not defined.
-> > > 
-> > > Check this explicitly. This will be merged into:
-> > > | ACPI: Add post_eject to struct acpi_scan_handler for cpu hotplug
-> > > for any subsequent posting.
-> > > 
-> > > Reported-by: kbuild test robot <lkp@intel.com>
-> > > Signed-off-by: James Morse <james.morse@arm.com>
-> > > Tested-by: Miguel Luis <miguel.luis@oracle.com>
-> > > Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
-> > > Tested-by: Jianyong Wu <jianyong.wu@arm.com>
-> > > ---
-> > > This should probably be squashed into an earlier patch.  
-> > 
-> > Agreed. If not
-> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>  
-> 
-> I'm not convinced that "ACPI: Add post_eject to struct acpi_scan_handler
-> for cpu hotplug" is the correct commit to squash this into.
-> 
-> As far as acpi_processor.c is concerned, This commit merely renames
-> acpi_processor_remove() to be acpi_processor_post_eject(). The function
-> references arch_unregister_cpu() before and after this change, and its
-> build is dependent on CONFIG_ACPI_HOTPLUG_PRESENT_CPU being defined.
-> 
-> Commit "ACPI: convert acpi_processor_post_eject() to use IS_ENABLED()"
-> removed the ifdef CONFIG_ACPI_HOTPLUG_PRESENT_CPU surrounding
-> acpi_processor_post_eject, and that symbol depends on
-> CONFIG_HOTPLUG_CPU, so I think this commit is also fine.
-> 
-> Commit "ACPI: Check _STA present bit before making CPUs not present"
-> rewrites the function - the original body gets called
-> acpi_processor_make_not_present() and a new acpi_processor_post_eject()
-> is created. At this point, it doesn't reference arch_unregister_cpu().
-> 
-> Commit "ACPI: add support to register CPUs based on the _STA enabled
-> bit" adds a reference to arch_unregister_cpu() in this new
-> acpi_processor_post_eject() - so I think this is the correct commit
-> this change should be merged into.
+On Mon, Jan 22, 2024 at 08:27:03PM +0000, Ben Horgan wrote:
+> Hi,
+>
+> I've been looking at adding support in total compute, an arm reference
+> platform, to control the gpu operating points and gpu power on/off via scmi.
+> This was previously done for the juno platform but involved hacks. I would
+> like to make sure this is cleaner going forward.
+>
+> For device driver simplicity it would be good if a device with a single
+> power domain and a single performance domain could just use a single PM
+> domain.
 
-That or where that change ends up given your earlier suggestion to
-move that change as well.  I find it hard to care as long as
-the bisection issue is squashed by the change.  If we make the code
-drop out before the build issue is introduced that's fine because
-we are arguing we shouldn't be running it anyway so such protection
-is fine if not necessary for build fix purposes.
+Do you have any other technical reason for this other than simplicity ?
+We can't always have to so simple when managing to support wide variety
+of platforms with standards like SCMI.
 
-J
+You need to justify why it is hard for the driver if there are 2 genpd
+domains associated with a device(power and perf genpds).
 
+> Using a single PM domain means this can be on the platform device
+> and you don't need to create virtual devices. The drivers scmi_pm_domain and
+> scmi_perf_domain both initialize a separate 'struct generic_pm_domain genpd'
+> for each of the corresponding scmi domains. Possibly, there could be some
+> way to bring these together under a single genpd domain. Possible options
+> are:
 > 
+> A. Parent power domains with a helper driver that just uses an empty genpd
+> domain as the child of both the genpd performance domain and the genpd power
+> domain.
+> B. Combine the scmi_pm_domain and scmi_perf_domain driver and create a
+> 'struct generic_pm_domain genpd' for every pair of power domain and
+> performance domain.
 
+This is purely software implementation and expect no change in the firmware
+(DT) representation of these domains and association with the device.
+
+> C. Combine the scmi_pm_domain and scmi_perf_domain driver but only create
+> the 'struct generic_pm_domain genpd' for the power domain combinations that
+> are used.
+
+Not possible unless the specification assures the power domain and the
+performance domain IDs match.
+
+> D. Keep things as they are and use separate PM domains for performance and
+> power when using scmi.
+
++1, it was designed this way to ensure it addresses all the possible
+implementations using SCMI.
+
+>
+> Examples of possible ways of expressing these options in the device tree,
+> the scmi performance domain is 3 and the scmi power domain is 8.
+>
+> A.
+>
+> scmi_devpd: protocol@11 {
+>         reg = <0x11>;
+>         #power-domain-cells = <1>;
+> };
+>
+> scmi_dvfs: protocol@13 {
+>         reg = <0x13>;
+>         #power-domain-cells = <1>;
+> };
+>
+> perf_and_performance: perf_and_performance {
+>         power-domain-names = "perf", "power";
+>         power-domain = <&scmi_dvfs 3>, <&scmi_devpd 8>;
+> };
+>
+> my_device : my_device  {
+>         power-domain = <&perf_and_performance>
+> };
+>
+
+NACK as I mentioned, we need to keep DT representation as minimal as
+possible, adding nodes for this virtual domain is a no go IMO. Just
+use the existing binding to create this virtual genpd at which point you
+may realise handling 2 genpd in the driver may not be so hard 😄.
+
+> B. Combine on every pair
+>
+> scmi_pm_perf: protocol@11_13 {
+>         reg = <0x11>, <0x13>;
+>         #power-domain-cells = <2>;
+> };
+>
+> my_device : my_device {
+>         power-domain = <&scmi_pm_perf 8 3>
+> };
+>
+
+Again big fat NACK as above. No change in the binding to make it confusing.
+
+> C. Combine on used pairs
+>
+> scmi_pm_perf: protocol@11_13 {
+>         reg = <0x11>, <0x13>;
+>         #power-domain-cells = <2>;
+>        used-domains = <8, 3>, <9, 4>;
+> };
+>
+> my_device : my_device {
+>         power-domain = <&scmi_pm_perf 8 3>
+> };
+>
+
+At this point I give up and will just say I would expect no change in the
+DT bindings to achieve whatever you are terming as "simple" here. We are
+not going to add any bindings to make it easy or simple for OS to implement
+it's policy.
+
+> It seems wasteful that the scmi_pm_domain sets up and makes scmi calls for
+> all possibly usable domains at start up even those that aren't controllable
+> by linux. E.g. cpus may use scmi power domain controlled via psci.
+>
+
+
+Not an OS issue. If the power domain is purely controlled by PSCI agent, why
+is it even present to OS as SCMI power domain. We have examples where it
+is correctly presented as PSCI power domain. So this issue doesn't exist,
+fix the SCMI platform firmware. It needs to present per agent view correctly
+and not present a global system view to all the agents.
+
+Unless I hear strong technical reasons to this approach other than simplicity,
+I am inclined towards opposing this proposal.
+
+-- 
+Regards,
+Sudeep
 
