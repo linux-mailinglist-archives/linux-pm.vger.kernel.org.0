@@ -1,192 +1,448 @@
-Return-Path: <linux-pm+bounces-2552-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2553-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07EE6838C22
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 11:34:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B13E838C89
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 11:51:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B1961C227BE
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 10:34:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8EA871F237B6
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 10:51:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5A485C61A;
-	Tue, 23 Jan 2024 10:33:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBD465C8ED;
+	Tue, 23 Jan 2024 10:51:43 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 962FC50A77
-	for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 10:33:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE1E55C8F0;
+	Tue, 23 Jan 2024 10:51:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706006030; cv=none; b=tpR2pMFxE94CPeu0j55Unslq5qKS5Zih0t1oBLNX2vr2XMeiAUs5OF52Y1sf0gi9cS8tcCpBAk+1SeQempPD0eEW0MvfHbjG/cY/QiXzRr3thUQ+cnDJ8BAhd8X5fUd6FKNh5j55AhEkOq0fM+hgNNYm+RFm/RmwO85hkr8PgZ4=
+	t=1706007103; cv=none; b=fRBwJC423iNojLLv7zLlGLbsA0BUpOFE7vf+y0v+OTXyoRnie0ilB8SjFkGTBVii9kb1c8wCr9PPttQu+iJTMr6K4jzZgqyDysVynDH1+4mHuykHrJDSsevm9dqbXA4ZomvhYTvRlkP2ias8lS2EfOtIuFWcMrSrI21pW3ToyDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706006030; c=relaxed/simple;
-	bh=+VwbuQ5RMqO/5eyhvD9p+fu+hN6uLjI6W//d4Lnp4Cs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mka97QzQoaIKksKjuoXABMHualLifc4kojTnnEq3RxQQnJB6wFQ2X9PlYiljzjT0mgt4TXY/U6cNkjXtXyb/0uIcR+/QewPn6Pj4PWyB9lJHcIyYV4ug9Zjpzr8lFE26Ur/4q31IOx+I8XYHpYcdHvCTLmYWpJJKeP46H9ykwko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 77D8F1FB;
-	Tue, 23 Jan 2024 02:34:33 -0800 (PST)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DB3D83F5A1;
-	Tue, 23 Jan 2024 02:33:46 -0800 (PST)
-Date: Tue, 23 Jan 2024 10:33:44 +0000
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Ben Horgan <Ben.Horgan@arm.com>
-Cc: "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	nd <nd@arm.com>, Vishnu Banavath <Vishnu.Banavath@arm.com>,
-	Florent Tomasin <Florent.Tomasin@arm.com>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: Re: Using scmi performance domains and scmi power domains together
-Message-ID: <Za-WCHwfpf7dXJ1Z@bogus>
-References: <VE1PR08MB476848A0895993EAC92AF77B91752@VE1PR08MB4768.eurprd08.prod.outlook.com>
+	s=arc-20240116; t=1706007103; c=relaxed/simple;
+	bh=YDWGY21cqzqJqv3snTRrbIpRBoA5JkwvIqTELbIZ6YM=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jm7lfc6yjWdYSPyMRACesxNE0GffpmqK6MyNBEh3hPwKtue83SQSndsxTep6XetQx6EeJms6x7MNCXxN13kCSGXYsoyHOL7dh7xb0kfTO9ILAwbcroI+uh7wjP2PXnZVCfv1FKFafR3htWu86feIWPta9Xtc6HihvRv39jE5KqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4TK3jv1h6bz6K62v;
+	Tue, 23 Jan 2024 18:49:07 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id E85871404F9;
+	Tue, 23 Jan 2024 18:51:37 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 23 Jan
+ 2024 10:51:37 +0000
+Date: Tue, 23 Jan 2024 10:51:36 +0000
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: Jose Marinho <Jose.Marinho@arm.com>
+CC: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-riscv@lists.infradead.org"
+	<linux-riscv@lists.infradead.org>, "kvmarm@lists.linux.dev"
+	<kvmarm@lists.linux.dev>, "x86@kernel.org" <x86@kernel.org>,
+	"acpica-devel@lists.linuxfoundation.org"
+	<acpica-devel@lists.linuxfoundation.org>, "linux-csky@vger.kernel.org"
+	<linux-csky@vger.kernel.org>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "linux-ia64@vger.kernel.org"
+	<linux-ia64@vger.kernel.org>, "linux-parisc@vger.kernel.org"
+	<linux-parisc@vger.kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, Jianyong Wu
+	<Jianyong.Wu@arm.com>, Justin He <Justin.He@arm.com>, James Morse
+	<James.Morse@arm.com>, Samer El-Haj-Mahmoud <Samer.El-Haj-Mahmoud@arm.com>,
+	nd <nd@arm.com>, Kangkang Shen <kangkang.shen@futurewei.com>
+Subject: Re: [PATCH RFC v3 20/21] ACPI: Add _OSC bits to advertise OS
+ support for toggling CPU present/enabled
+Message-ID: <20240123105136.000043e5@Huawei.com>
+In-Reply-To: <DBBPR08MB601227202A0F32F448952FDA8861A@DBBPR08MB6012.eurprd08.prod.outlook.com>
+References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
+	<E1rDOhS-00Dvla-7i@rmk-PC.armlinux.org.uk>
+	<20231215171227.00006550@Huawei.com>
+	<DBBPR08MB60121770239F324D877847E18861A@DBBPR08MB6012.eurprd08.prod.outlook.com>
+	<20240102151652.00001b3c@Huawei.com>
+	<DBBPR08MB601227202A0F32F448952FDA8861A@DBBPR08MB6012.eurprd08.prod.outlook.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <VE1PR08MB476848A0895993EAC92AF77B91752@VE1PR08MB4768.eurprd08.prod.outlook.com>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-(+ Cristian)
+On Tue, 2 Jan 2024 15:35:45 +0000
+Jose Marinho <Jose.Marinho@arm.com> wrote:
 
-On Mon, Jan 22, 2024 at 08:27:03PM +0000, Ben Horgan wrote:
-> Hi,
->
-> I've been looking at adding support in total compute, an arm reference
-> platform, to control the gpu operating points and gpu power on/off via scmi.
-> This was previously done for the juno platform but involved hacks. I would
-> like to make sure this is cleaner going forward.
->
-> For device driver simplicity it would be good if a device with a single
-> power domain and a single performance domain could just use a single PM
-> domain.
-
-Do you have any other technical reason for this other than simplicity ?
-We can't always have to so simple when managing to support wide variety
-of platforms with standards like SCMI.
-
-You need to justify why it is hard for the driver if there are 2 genpd
-domains associated with a device(power and perf genpds).
-
-> Using a single PM domain means this can be on the platform device
-> and you don't need to create virtual devices. The drivers scmi_pm_domain and
-> scmi_perf_domain both initialize a separate 'struct generic_pm_domain genpd'
-> for each of the corresponding scmi domains. Possibly, there could be some
-> way to bring these together under a single genpd domain. Possible options
-> are:
+> > -----Original Message-----
+> > From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+> > Sent: Tuesday, January 2, 2024 3:17 PM
+> > To: Jose Marinho <Jose.Marinho@arm.com>
+> > Cc: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>; linux-
+> > pm@vger.kernel.org; loongarch@lists.linux.dev; linux-acpi@vger.kernel.org;
+> > linux-arch@vger.kernel.org; linux-kernel@vger.kernel.org; linux-arm-
+> > kernel@lists.infradead.org; linux-riscv@lists.infradead.org;
+> > kvmarm@lists.linux.dev; x86@kernel.org; acpica-
+> > devel@lists.linuxfoundation.org; linux-csky@vger.kernel.org; linux-
+> > doc@vger.kernel.org; linux-ia64@vger.kernel.org; linux-parisc@vger.kernel.org;
+> > Salil Mehta <salil.mehta@huawei.com>; Jean-Philippe Brucker <jean-  
+> > philippe@linaro.org>; Jianyong Wu <Jianyong.Wu@arm.com>; Justin He  
+> > <Justin.He@arm.com>; James Morse <James.Morse@arm.com>; Samer El-Haj-
+> > Mahmoud <Samer.El-Haj-Mahmoud@arm.com>; nd <nd@arm.com>; Kangkang
+> > Shen <kangkang.shen@futurewei.com>
+> > Subject: Re: [PATCH RFC v3 20/21] ACPI: Add _OSC bits to advertise OS support
+> > for toggling CPU present/enabled
+> > 
+> > On Tue, 2 Jan 2024 13:07:25 +0000
+> > Jose Marinho <Jose.Marinho@arm.com> wrote:
+> >   
+> > > Hi Jonathan,
+> > >  
+> > > > -----Original Message-----
+> > > > From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+> > > > Sent: Friday, December 15, 2023 5:12 PM
+> > > > To: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> > > > Cc: linux-pm@vger.kernel.org; loongarch@lists.linux.dev; linux-
+> > > > acpi@vger.kernel.org; linux-arch@vger.kernel.org; linux-
+> > > > kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+> > > > riscv@lists.infradead.org; kvmarm@lists.linux.dev; x86@kernel.org;
+> > > > acpica- devel@lists.linuxfoundation.org; linux-csky@vger.kernel.org;
+> > > > linux- doc@vger.kernel.org; linux-ia64@vger.kernel.org; linux-
+> > > > parisc@vger.kernel.org; Salil Mehta <salil.mehta@huawei.com>;
+> > > > Jean-Philippe Brucker <jean-philippe@linaro.org>; Jianyong Wu
+> > > > <Jianyong.Wu@arm.com>; Justin He <Justin.He@arm.com>; James Morse
+> > > > <James.Morse@arm.com>; Jose Marinho <Jose.Marinho@arm.com>; Samer
+> > > > El-Haj-Mahmoud <Samer.El- Haj-Mahmoud@arm.com>
+> > > > Subject: Re: [PATCH RFC v3 20/21] ACPI: Add _OSC bits to advertise
+> > > > OS support for toggling CPU present/enabled
+> > > >
+> > > > On Wed, 13 Dec 2023 12:50:54 +0000
+> > > > Russell King (Oracle) <rmk+kernel@armlinux.org.uk> wrote:
+> > > >  
+> > > > > From: James Morse <james.morse@arm.com>
+> > > > >
+> > > > > Platform firmware can disabled a CPU, or make it not-present by
+> > > > > making an eject-request notification, then waiting for the os to
+> > > > > make it offline  
+> > > > OS
+> > > >  
+> > > > > and call _EJx. After the firmware updates _STA with the new status.
+> > > > >
+> > > > > Not all operating systems support this. For arm64 making CPUs
+> > > > > not-present has never been supported. For all ACPI architectures,
+> > > > > making CPUs disabled has recently been added. Firmware can't know
+> > > > > what  
+> > > > the OS has support for.  
+> > > > >
+> > > > > Add two new _OSC bits to advertise whether the OS supports the
+> > > > > _STA enabled or present bits being toggled for CPUs. This will be
+> > > > > important for arm64 if systems that support physical CPU hotplug
+> > > > > ever appear as
+> > > > > arm64 linux doesn't currently support this, so firmware shouldn't try.
+> > > > >
+> > > > > Advertising this support to firmware is useful for cloud
+> > > > > orchestrators to know whether they can scale a particular VM by adding  
+> > CPUs.  
+> > > > >
+> > > > > Signed-off-by: James Morse <james.morse@arm.com>
+> > > > > Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> > > > > Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
+> > > > > Tested-by: Jianyong Wu <jianyong.wu@arm.com>  
+> > > >
+> > > > I'm very much in favor of this _OSC but it hasn't been accepted yet I think...
+> > > > https://bugzilla.tianocore.org/show_bug.cgi?id=4481
+> > > >
+> > > > Jose? Github suggests you are the proposer on this.  
+> > >
+> > > The addition of these _OSC bits was proposed by us on the forum in question.
+> > > The forum opted to pause the definition until additional practical information  
+> > could be provided on the use-cases.  
+> > >
+> > > If anyone is interested in progressing the _OSC bit definition, you are invited to  
+> > express that interest in the Bugzilla ticket.
+> > 
+> > I've poked around a bit and can't find any reference to how to actually get a
+> > bugzilla account bugzilla.tianocore.org. Any pointers?  I'm sure I had one at one
+> > stage, but trying every plausible email address and the forgotten password link
+> > got me nowhere.
+> >   
 > 
-> A. Parent power domains with a helper driver that just uses an empty genpd
-> domain as the child of both the genpd performance domain and the genpd power
-> domain.
-> B. Combine the scmi_pm_domain and scmi_perf_domain driver and create a
-> 'struct generic_pm_domain genpd' for every pair of power domain and
-> performance domain.
+> The procedure to get a new account is described here: https://github.com/tianocore/tianocore.github.io/wiki/Reporting-Issues
+> The immediate next steps are:
+> - Join https://edk2.groups.io/g/devel, and subscribe edk2 | devel group.
+> - Send the email with the detail reason to Bugzilla Admin (gaoliming@byosoft.com.cn) , this email address will be created as Bugzilla account.
+> 
+> > > Information that you should provide to increase the chances of the ticket being  
+> > reopened:  
+> > > - use-case for the new _OSC bits,  
+> > 
+> > Really annoying without it as a hypervisor can't query if a guest can do anything
+> > useful if the host does virtual CPU hotplug via this newly added route.
+> > Given this is new functionality and there is non trivial effort required by the host
+> > to instantiate such a CPU it would be nice to be able to find out if the feature is
+> > supported by the Guest OS without having to basically suck it an see with
+> > hypervisors having to do a trial hotplug just to see if it 'might' work.
+> >   
+> > > - what breaks (if anything) without the proposed _OSC bits.  
+> > 
+> > Nothing breaks - you can merrily poke in hotplugged CPUs with the attendant
+> > creation of resources in the host and have them disappear into a black hole.
+> > That's ugly but not broken as such. Hopefully a hypervisor will not keep trying
+> > until the first attempt either succeeds or fails.
+> >   
+> > >
+> > > We did receive additional comments:
+> > > - the proposed _OSC bits are not generic: the bits simply convey whether the  
+> > guest OS understands CPU hot-plug, but it says nothing about the number of CPUs
+> > that the OS supports.
+> > 
+> > If a guest says it supports this feature, you would hope it supports it for the
+> > number of CPUs that have the present bit set but the enabled not.
+> > I'd clarify that in the text rather than provide a means of querying the number of
+> > CPUs supported.
+> > Number wouldn't be sufficient anyway as it wouldn't indicate 'which' CPUs are
+> > supported.
+> > Nothing says they have to be contiguous or lowest IDs etc.
+> >   
+> > > - There could be alternate schemes that do not rely on spec changes. E.g. there  
+> > could be a hypervisor IMPDEF mechanism to describe if an OS image supports
+> > CPU hot-plug.
+> > 
+> > Sigh. Yes, that could be done at the cost of every guest having to be made aware
+> > of every hypervisor impdef mechanism.  Trying to avoid that mess is why I think
+> > an _OSC makes sense as then everyone can use the same control.
+> > 
+> > No particular reason we should use ACPI at all for VMs :)
+> >   
+> > >  
+> > > >
+> > > > btw v4 looks ok but v5 in the tianocore github seems to have lost
+> > > > the actual OSC part.  
+> > >
+> > > Agree that, if we do progress with this spec change, v4 is the correct formulation  
+> > we should adopt.  
+> > >  
+> > Thanks for the update.
+> > 
+> > Overall this is a question we need to resolve soon.  If this code otherwise goes in
+> > linux without the OSC we will always need to support the 'suck it and see'
+> > approach as we'll never know if the guest fell down the hole. Thus if not added
+> > soon we might as well not add it at all and we'll all be looking at the code and
+> > thinking "that's ugly and shouldn't have been necessary" for years to come.
+> > 
+> > +CC Kangkang as he might be able to help get this started again.  
+> 
+> We're keen to support the progress of this ECR.
 
-This is purely software implementation and expect no change in the firmware
-(DT) representation of these domains and association with the device.
+So work is underway on kicking this off again, but I think we need a backup plan
+(even if it is a bit ugly) as I really don't want the kernel code to get caught
+behind an ASWG discussion that might not end up with the answer we want anyway.
 
-> C. Combine the scmi_pm_domain and scmi_perf_domain driver but only create
-> the 'struct generic_pm_domain genpd' for the power domain combinations that
-> are used.
+So even if we eventually land this _OSC in the spec, I think we will have
+systems where it's unknowable if they support this feature or not.
+That is the 'suck it and see' approach will be necessary.  If an orchestrator
+really wants to know if this is supported by the guest it will have to try
+telling the guest the CPU is enabled, and if the guest turns it on we know it
+supports this feature.  So it'll have to have a tedious probe loop.
 
-Not possible unless the specification assures the power domain and the
-performance domain IDs match.
+That can then be shortcut but an _OSC if we have one later.
 
-> D. Keep things as they are and use separate PM domains for performance and
-> power when using scmi.
+I really want to see this feature go into the kernel this cycle and this ugly
+corner isn't to my mind a blocker.
 
-+1, it was designed this way to ensure it addresses all the possible
-implementations using SCMI.
-
->
-> Examples of possible ways of expressing these options in the device tree,
-> the scmi performance domain is 3 and the scmi power domain is 8.
->
-> A.
->
-> scmi_devpd: protocol@11 {
->         reg = <0x11>;
->         #power-domain-cells = <1>;
-> };
->
-> scmi_dvfs: protocol@13 {
->         reg = <0x13>;
->         #power-domain-cells = <1>;
-> };
->
-> perf_and_performance: perf_and_performance {
->         power-domain-names = "perf", "power";
->         power-domain = <&scmi_dvfs 3>, <&scmi_devpd 8>;
-> };
->
-> my_device : my_device  {
->         power-domain = <&perf_and_performance>
-> };
->
-
-NACK as I mentioned, we need to keep DT representation as minimal as
-possible, adding nodes for this virtual domain is a no go IMO. Just
-use the existing binding to create this virtual genpd at which point you
-may realise handling 2 genpd in the driver may not be so hard 😄.
-
-> B. Combine on every pair
->
-> scmi_pm_perf: protocol@11_13 {
->         reg = <0x11>, <0x13>;
->         #power-domain-cells = <2>;
-> };
->
-> my_device : my_device {
->         power-domain = <&scmi_pm_perf 8 3>
-> };
->
-
-Again big fat NACK as above. No change in the binding to make it confusing.
-
-> C. Combine on used pairs
->
-> scmi_pm_perf: protocol@11_13 {
->         reg = <0x11>, <0x13>;
->         #power-domain-cells = <2>;
->        used-domains = <8, 3>, <9, 4>;
-> };
->
-> my_device : my_device {
->         power-domain = <&scmi_pm_perf 8 3>
-> };
->
-
-At this point I give up and will just say I would expect no change in the
-DT bindings to achieve whatever you are terming as "simple" here. We are
-not going to add any bindings to make it easy or simple for OS to implement
-it's policy.
-
-> It seems wasteful that the scmi_pm_domain sets up and makes scmi calls for
-> all possibly usable domains at start up even those that aren't controllable
-> by linux. E.g. cpus may use scmi power domain controlled via psci.
->
+So I suggest we drop this patch for now and we'll revisit later.
 
 
-Not an OS issue. If the power domain is purely controlled by PSCI agent, why
-is it even present to OS as SCMI power domain. We have examples where it
-is correctly presented as PSCI power domain. So this issue doesn't exist,
-fix the SCMI platform firmware. It needs to present per agent view correctly
-and not present a global system view to all the agents.
+> 
+> Regards,
+> Jose
+> 
+> > 
+> > Jonathan
+> >   
+> > > Regards,
+> > > Jose
+> > >  
+> > > >
+> > > > Jonathan
+> > > >  
+> > > > > ---
+> > > > > I'm assuming Loongarch machines do not support physical CPU hotplug.
+> > > > >
+> > > > > Changes since RFC v3:
+> > > > >  * Drop ia64 changes
+> > > > >  * Update James' comment below "---" to remove reference to ia64
+> > > > >
+> > > > > Outstanding comment:
+> > > > >  https://lore.kernel.org/r/20230914175021.000018fd@Huawei.com  
+> > > >
+> > > >
+> > > >  
+> > > > > ---
+> > > > >  arch/x86/Kconfig              |  1 +
+> > > > >  drivers/acpi/Kconfig          |  9 +++++++++
+> > > > >  drivers/acpi/acpi_processor.c | 14 +++++++++++++-
+> > > > >  drivers/acpi/bus.c            | 16 ++++++++++++++++
+> > > > >  include/linux/acpi.h          |  4 ++++
+> > > > >  5 files changed, 43 insertions(+), 1 deletion(-)
+> > > > >
+> > > > > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig index
+> > > > > 64fc7c475ab0..33fc4dcd950c 100644
+> > > > > --- a/arch/x86/Kconfig
+> > > > > +++ b/arch/x86/Kconfig
+> > > > > @@ -60,6 +60,7 @@ config X86
+> > > > >  	select ACPI_LEGACY_TABLES_LOOKUP	if ACPI
+> > > > >  	select ACPI_SYSTEM_POWER_STATES_SUPPORT	if ACPI
+> > > > >  	select ACPI_HOTPLUG_PRESENT_CPU		if ACPI_PROCESSOR  
+> > > > && HOTPLUG_CPU  
+> > > > > +	select ACPI_HOTPLUG_IGNORE_OSC		if ACPI &&  
+> > > > HOTPLUG_CPU  
+> > > > >  	select ARCH_32BIT_OFF_T			if X86_32
+> > > > >  	select ARCH_CLOCKSOURCE_INIT
+> > > > >  	select ARCH_CORRECT_STACKTRACE_ON_KRETPROBE
+> > > > > diff --git a/drivers/acpi/Kconfig b/drivers/acpi/Kconfig index
+> > > > > 9c5a43d0aff4..020e7c0ab985 100644
+> > > > > --- a/drivers/acpi/Kconfig
+> > > > > +++ b/drivers/acpi/Kconfig
+> > > > > @@ -311,6 +311,15 @@ config ACPI_HOTPLUG_PRESENT_CPU
+> > > > >  	depends on ACPI_PROCESSOR && HOTPLUG_CPU
+> > > > >  	select ACPI_CONTAINER
+> > > > >
+> > > > > +config ACPI_HOTPLUG_IGNORE_OSC
+> > > > > +	bool
+> > > > > +	depends on ACPI_HOTPLUG_PRESENT_CPU
+> > > > > +	help
+> > > > > +	  Ignore whether firmware acknowledged support for toggling the CPU
+> > > > > +	  present bit in _STA. Some architectures predate the _OSC bits, so
+> > > > > +	  firmware doesn't know to do this.
+> > > > > +
+> > > > > +
+> > > > >  config ACPI_PROCESSOR_AGGREGATOR
+> > > > >  	tristate "Processor Aggregator"
+> > > > >  	depends on ACPI_PROCESSOR
+> > > > > diff --git a/drivers/acpi/acpi_processor.c
+> > > > > b/drivers/acpi/acpi_processor.c index ea12e70dfd39..5bb207a7a1dd
+> > > > > 100644
+> > > > > --- a/drivers/acpi/acpi_processor.c
+> > > > > +++ b/drivers/acpi/acpi_processor.c
+> > > > > @@ -182,6 +182,18 @@ static void __init
+> > > > > acpi_pcc_cpufreq_init(void) static void __init
+> > > > > acpi_pcc_cpufreq_init(void) {}  #endif /*
+> > > > > CONFIG_X86 */
+> > > > >
+> > > > > +static bool acpi_processor_hotplug_present_supported(void)
+> > > > > +{
+> > > > > +	if (!IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU))
+> > > > > +		return false;
+> > > > > +
+> > > > > +	/* x86 systems pre-date the _OSC bit */
+> > > > > +	if (IS_ENABLED(CONFIG_ACPI_HOTPLUG_IGNORE_OSC))
+> > > > > +		return true;
+> > > > > +
+> > > > > +	return osc_sb_hotplug_present_support_acked;
+> > > > > +}
+> > > > > +
+> > > > >  /* Initialization */
+> > > > >  static int acpi_processor_make_present(struct acpi_processor *pr)
+> > > > > { @@ -189,7 +201,7 @@ static int
+> > > > > acpi_processor_make_present(struct  
+> > > > acpi_processor *pr)  
+> > > > >  	acpi_status status;
+> > > > >  	int ret;
+> > > > >
+> > > > > -	if (!IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU)) {
+> > > > > +	if (!acpi_processor_hotplug_present_supported()) {
+> > > > >  		pr_err_once("Changing CPU present bit is not supported\n");
+> > > > >  		return -ENODEV;
+> > > > >  	}
+> > > > > diff --git a/drivers/acpi/bus.c b/drivers/acpi/bus.c index
+> > > > > 72e64c0718c9..7122450739d6 100644
+> > > > > --- a/drivers/acpi/bus.c
+> > > > > +++ b/drivers/acpi/bus.c
+> > > > > @@ -298,6 +298,13 @@
+> > > > > EXPORT_SYMBOL_GPL(osc_sb_native_usb4_support_confirmed);
+> > > > >
+> > > > >  bool osc_sb_cppc2_support_acked;
+> > > > >
+> > > > > +/*
+> > > > > + * ACPI 6.? Proposed Operating System Capabilities for modifying
+> > > > > +CPU
+> > > > > + * present/enable.
+> > > > > + */
+> > > > > +bool osc_sb_hotplug_enabled_support_acked;
+> > > > > +bool osc_sb_hotplug_present_support_acked;
+> > > > > +
+> > > > >  static u8 sb_uuid_str[] = "0811B06E-4A27-44F9-8D60-3CBBC22E7B48";
+> > > > >  static void acpi_bus_osc_negotiate_platform_control(void)
+> > > > >  {
+> > > > > @@ -346,6 +353,11 @@ static void
+> > > > > acpi_bus_osc_negotiate_platform_control(void)
+> > > > >
+> > > > >  	if (!ghes_disable)
+> > > > >  		capbuf[OSC_SUPPORT_DWORD] |= OSC_SB_APEI_SUPPORT;
+> > > > > +
+> > > > > +	capbuf[OSC_SUPPORT_DWORD] |=  
+> > > > OSC_SB_HOTPLUG_ENABLED_SUPPORT;  
+> > > > > +	if (IS_ENABLED(CONFIG_ACPI_HOTPLUG_PRESENT_CPU))
+> > > > > +		capbuf[OSC_SUPPORT_DWORD] |=  
+> > > > OSC_SB_HOTPLUG_PRESENT_SUPPORT;  
+> > > > > +
+> > > > >  	if (ACPI_FAILURE(acpi_get_handle(NULL, "\\_SB", &handle)))
+> > > > >  		return;
+> > > > >
+> > > > > @@ -383,6 +395,10 @@ static void  
+> > > > acpi_bus_osc_negotiate_platform_control(void)  
+> > > > >  			capbuf_ret[OSC_SUPPORT_DWORD] &  
+> > > > OSC_SB_NATIVE_USB4_SUPPORT;  
+> > > > >  		osc_cpc_flexible_adr_space_confirmed =
+> > > > >  			capbuf_ret[OSC_SUPPORT_DWORD] &  
+> > > > OSC_SB_CPC_FLEXIBLE_ADR_SPACE;  
+> > > > > +		osc_sb_hotplug_enabled_support_acked =
+> > > > > +			capbuf_ret[OSC_SUPPORT_DWORD] &  
+> > > > OSC_SB_HOTPLUG_ENABLED_SUPPORT;  
+> > > > > +		osc_sb_hotplug_present_support_acked =
+> > > > > +			capbuf_ret[OSC_SUPPORT_DWORD] &  
+> > > > OSC_SB_HOTPLUG_PRESENT_SUPPORT;  
+> > > > >  	}
+> > > > >
+> > > > >  	kfree(context.ret.pointer);
+> > > > > diff --git a/include/linux/acpi.h b/include/linux/acpi.h index
+> > > > > 00be66683505..c572abac803c 100644
+> > > > > --- a/include/linux/acpi.h
+> > > > > +++ b/include/linux/acpi.h
+> > > > > @@ -559,12 +559,16 @@ acpi_status acpi_run_osc(acpi_handle handle,  
+> > > > struct acpi_osc_context *context);  
+> > > > >  #define OSC_SB_NATIVE_USB4_SUPPORT		0x00040000
+> > > > >  #define OSC_SB_PRM_SUPPORT			0x00200000
+> > > > >  #define OSC_SB_FFH_OPR_SUPPORT			0x00400000
+> > > > > +#define OSC_SB_HOTPLUG_ENABLED_SUPPORT		0x00800000
+> > > > > +#define OSC_SB_HOTPLUG_PRESENT_SUPPORT		0x01000000
+> > > > >
+> > > > >  extern bool osc_sb_apei_support_acked;  extern bool
+> > > > > osc_pc_lpi_support_confirmed;  extern bool
+> > > > > osc_sb_native_usb4_support_confirmed;
+> > > > >  extern bool osc_sb_cppc2_support_acked;  extern bool
+> > > > > osc_cpc_flexible_adr_space_confirmed;
+> > > > > +extern bool osc_sb_hotplug_enabled_support_acked;
+> > > > > +extern bool osc_sb_hotplug_present_support_acked;
+> > > > >
+> > > > >  /* USB4 Capabilities */
+> > > > >  #define OSC_USB_USB3_TUNNELING			0x00000001  
+> > >  
+> 
 
-Unless I hear strong technical reasons to this approach other than simplicity,
-I am inclined towards opposing this proposal.
-
--- 
-Regards,
-Sudeep
 
