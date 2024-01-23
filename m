@@ -1,141 +1,138 @@
-Return-Path: <linux-pm+bounces-2628-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2629-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41180839BCD
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 23:06:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 74FC3839C69
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 23:40:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ECA7C28CCFB
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 22:06:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2BEA22842AE
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 22:40:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCB9E4F21E;
-	Tue, 23 Jan 2024 22:05:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE573524B9;
+	Tue, 23 Jan 2024 22:40:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nnj7jTy9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D9964F211;
-	Tue, 23 Jan 2024 22:05:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91D8551010;
+	Tue, 23 Jan 2024 22:40:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706047558; cv=none; b=s2hQgUyvrk6o+IitWD1sMvouBOe+c4ezHMn3nWxfGkjYrnV54ePuMjzFG6965VjCrAmAhrFecLcGKOnprPfwbrOpEzsMjPdasI8dOvgc6frBxnKMEtFcwbweOJokWRN+Sk5k9rgqEKgP7nbRF70TLYgAS194vDTmDI+jF+sUV7c=
+	t=1706049636; cv=none; b=bQzyTop+bcFmah4nVLgHqIL+rO4us8EXsXOhL9x96j/MP4mTWCYzu2CYcEuYv7kdJ7b8DDwoiFNt7QOJYfu1p6DOhU4g6bNulni4KEVZhV+fSQF21JiUqX9aOcOLUXER4TIuIEXBBCEaZ0pWQW/fSaymSnxn0zNRDeHwwaaBMKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706047558; c=relaxed/simple;
-	bh=vsmubtr6a+nVdA9yIIm0YwyEISa8CSnDyRWB8gYi33I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=K8nKAmFjArJV/QV2zN2R5Tg4OKs/58vpBVklvD7VF4qTZo59BFbEIx//n6TxWdORLjj4G2ELRf6GgJT6IVaVdaI2mdTeF4R88sXvfaSUGVcTf2QJLp9vxOxrr64kl3dIyZ6yLvqnWA7QbpUYXetYZwDXam+taoJBO2gH9iewX6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-5997edc27ccso306217eaf.0;
-        Tue, 23 Jan 2024 14:05:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706047556; x=1706652356;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aysBJhX0WuSz/+ETJ4n6CNlBN6IDxcYCfjo2tVGWMw8=;
-        b=aoY8cI65umHzqMwdnYnwPK+0ts1g5J6sphFvTMu+/MAwOH7W/iUPuv4oA1r2noVTHm
-         wTGVUPPS012u+0ZeD+pJ1l990h1Ui+TwY05sq9kdmlLF0p89/0sZhwbPS7WkTfXuGuAt
-         7+l/ax3rcLSUrlv2j7MCJhmAZmfoxMVQ9j6l68ThLbS5xIio8OSDgIuJZD/eHBrLux41
-         ZmR6DtaBbDy/oXU/gbbKFogyRvUDCtx5U2ZkClfKut2hBRk6yxU/LIRz0UC3acEZdL4Q
-         IKRrjV/H8XhT+If6K0RHEf+mqo+bszGkVw6xeW4RD3jVjEcc7+J2SQMasL/pAGT9S2ja
-         8S7g==
-X-Gm-Message-State: AOJu0Yxo2zsTNe4vxU2pK0wW3e2c43Pgj9xovjvmHUbxmktNoHao2XGF
-	Ju6R1Yd+d6CGaUtaPZ4gyspafMNyjcUmEl0S1ByVU+omeHnCh7SApEBQy7iS+nwas+Vy8Vnl+4S
-	+HqHB09NfILF5rHcJzEYo/3EqVj4=
-X-Google-Smtp-Source: AGHT+IGxuSonfkyvyqMXYCwyYcKsBELyim/SUL0gp6b7rCRYXwswAvhbx4htB7UWDzGueWKNwDacix1RPMx7M/tNIDM=
-X-Received: by 2002:a05:6820:825:b0:599:a348:c582 with SMTP id
- bg37-20020a056820082500b00599a348c582mr614683oob.1.1706047556215; Tue, 23 Jan
- 2024 14:05:56 -0800 (PST)
+	s=arc-20240116; t=1706049636; c=relaxed/simple;
+	bh=Z/gVOBIyuGeHrB0qusJzDPUINYJVDgoRszKTN0NH9s0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y51A5jGrmoKH5LlYAKc4Ic+GaIg1KbsG//PuSaauml/TX8DWLGg2n1KRvLw9mNTbT1aOZ7uKh5XMto3b6iko990BPPxQQyfMwRGVV96BPCEcb+DiGrGqHHu/sIdB4MAktXTslaAGH1pD0G3MG/ly4GpgQwNm160lrbHW4SIQN2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nnj7jTy9; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706049635; x=1737585635;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Z/gVOBIyuGeHrB0qusJzDPUINYJVDgoRszKTN0NH9s0=;
+  b=Nnj7jTy9QoK33F0B+UdzyR3BS7WDenry6lephSpBjaV37LgcAmS6CM6b
+   kQnqXtXu8K9z/Mi6eOWJaHmg4DZBPKzeeUi2V466xkG9ITTPn2ayT6bLz
+   NvCVJtFrwcXJajnkX4KUz3eaKKnEtf2l9bNOB6LBh+Z4OL4Bem0xOapUz
+   DREVz3hF44258RZJOtvbHzrE/JLamoaKOz/FDVXTDT4VkTmUDv63lGfXE
+   FJxYbeSPDMC4x1//Sia7CDSntGNS7bUiPCMEkCPa+KCVipRzw0u0Uu8yi
+   Hq5RpDuaQh6srUU+mkRu5+ySmWHLXcqzEkf2KhO9kImTEuDqIZvYFUoLA
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="573954"
+X-IronPort-AV: E=Sophos;i="6.05,215,1701158400"; 
+   d="scan'208";a="573954"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2024 14:40:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="876490218"
+X-IronPort-AV: E=Sophos;i="6.05,215,1701158400"; 
+   d="scan'208";a="876490218"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2024 14:40:27 -0800
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id 596D411FB8E;
+	Wed, 24 Jan 2024 00:40:25 +0200 (EET)
+Date: Tue, 23 Jan 2024 22:40:25 +0000
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Bjorn Helgaas <helgaas@kernel.org>
+Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+	linux-pci@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	Jaroslav Kysela <perex@perex.cz>,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+	laurent.pinchart@ideasonboard.com, David Airlie <airlied@gmail.com>,
+	Paul Elder <paul.elder@ideasonboard.com>,
+	linux-media@vger.kernel.org,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	intel-gfx@lists.freedesktop.org,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	Mark Brown <broonie@kernel.org>,
+	Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	intel-xe@lists.freedesktop.org,
+	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+	Alex Elder <elder@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-sound@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
+	Daniel Vetter <daniel@ffwll.ch>, netdev@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] pm: runtime: Simplify pm_runtime_get_if_active()
+ usage
+Message-ID: <ZbBAWROxRKE8Y8VU@kekkonen.localdomain>
+References: <ZbAlFKE_fZ_riRVu@kekkonen.localdomain>
+ <20240123214801.GA330312@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAJZ5v0h7wsLt8d3ZoLXsK1=crAx66T42WDKNoHcg8CiHpAjS8g@mail.gmail.com>
- <Za/q9jivG4OdZM0f@shell.armlinux.org.uk> <CAJZ5v0gwe02uzAQoX0QDHo35OTEozpbnqC6vukjM3aE6HMq9WQ@mail.gmail.com>
- <ZbADTBLDEFtdglho@shell.armlinux.org.uk> <CAJZ5v0jh-EdrnjkJep++UDo+Uv4hmR7VV4KYVdF4CK2K+5XLtg@mail.gmail.com>
- <ZbAMjZoybVfiAGcT@shell.armlinux.org.uk> <CAJZ5v0gt=MR1JGsPZnZG_AqudA-KMmb4BOa_A6H9B6+Rhe_+JQ@mail.gmail.com>
- <ZbAdAdqqfXRuY3Xj@shell.armlinux.org.uk> <CAJZ5v0gsqbeJc4qX-AefOqu53=rDme2XzFXacWz_0zbVBoaXjw@mail.gmail.com>
- <ZbAoJO8f66Dg0lGF@shell.armlinux.org.uk> <ZbArzbC19L1YxLHi@shell.armlinux.org.uk>
-In-Reply-To: <ZbArzbC19L1YxLHi@shell.armlinux.org.uk>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 23 Jan 2024 23:05:43 +0100
-Message-ID: <CAJZ5v0jvek=W-FNhiY_0DQha2wDCUv7YW_4jaHUeX0DbYJOX6Q@mail.gmail.com>
-Subject: Re: [PATCH RFC v3 05/21] ACPI: Rename ACPI_HOTPLUG_CPU to include 'present'
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
-	linux-pm@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, 
-	acpica-devel@lists.linuxfoundation.org, linux-csky@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>, 
-	Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com, justin.he@arm.com, 
-	James Morse <james.morse@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240123214801.GA330312@bhelgaas>
 
-On Tue, Jan 23, 2024 at 10:12=E2=80=AFPM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
->
-> On Tue, Jan 23, 2024 at 08:57:08PM +0000, Russell King (Oracle) wrote:
-> > On Tue, Jan 23, 2024 at 09:17:18PM +0100, Rafael J. Wysocki wrote:
-> > > On Tue, Jan 23, 2024 at 9:09=E2=80=AFPM Russell King (Oracle)
-> > > <linux@armlinux.org.uk> wrote:
+On Tue, Jan 23, 2024 at 03:48:01PM -0600, Bjorn Helgaas wrote:
+> On Tue, Jan 23, 2024 at 08:44:04PM +0000, Sakari Ailus wrote:
+> > On Tue, Jan 23, 2024 at 11:24:23AM -0600, Bjorn Helgaas wrote:
+> > ...
+> 
+> > > - I don't know whether it's feasible, but it would be nice if the
+> > >   intel_pm_runtime_pm.c rework could be done in one shot instead of
+> > >   being split between patches 1/3 and 2/3.
+> > > 
+> > >   Maybe it could be a preliminary patch that uses the existing
+> > >   if_active/if_in_use interfaces, followed by the trivial if_active
+> > >   updates in this patch.  I think that would make the history easier
+> > >   to read than having the transitory pm_runtime_get_conditional() in
+> > >   the middle.
+> > 
+> > I think I'd merge the two patches. The second patch is fairly small, after
+> > all, and both deal with largely the same code.
+> 
+> I'm not sure which two patches you mean, but the fact that two patches
+> deal with largely the same code is not necessarily an argument for
+> merging them.  From a reviewing perspective, it's nice if a patch like
 
-[cut]
+Patches 1 and 2. The third patch introduces a new Runtime PM API function.
 
-> > Sorry, no point continuing this.
->
-> Let me be clear why I'm exhasperated by this.
->
-> I've been giving you a technical argument (Arm64 supporting ACPI
-> hotplug CPU, but ACPI_HOTPLUG_CPU=3Dn) for many many emails. You
-> seemed to misunderstand that, expecting ACPI_HOTPLUG_CPU to become
-> Y later in the series.
->
-> When that became clear that it wasn't, you've changed tack. It then
-> became about whether two functions get called or not.
->
-> When I pointed out that they are still going to be called, oh no,
-> it's not about whether those two functions will be called but
-> how they get called.
+> 1/3, where it's largely mechanical and easy to review, is separated
+> from patches that make more substantive changes.
+> 
+> That's why I think it'd be nice if the "interesting"
+> intel_pm_runtime_pm.c changes were all in the same patch, and ideally,
+> if that patch *only* touched intel_pm_runtime_pm.c.
 
-As I've said already in this thread, it is all about what "ACPI-based
-CPU hotplug" means to each of us.
+I don't think squashing the second patch to the first really changes this
+meaningfully: the i915 driver simply needs both
+pm_runtime_get_if_{active,in_use}, and this is what the patch does to other
+drivers already. Making the pm_runtime_get_conditional static would also
+fit for the first patch if the desire is to not to introduce it at all.
 
-I know what it means to me: Running the code that is compiled when
-ACPI_HOTPLUG_CPU is set via the processor scan handler.
-
-I'm not entirely sure what it means to you.
-
-You are saying that the config option name needs to be changed,
-because it is going to stay N for ARM64 and it will support
-"ACPI-based CPU hotplug" and I'm not sure what exactly you mean by
-this.
-
-To me, this just means that ARM64 is not going to use the processor
-scan handler in the way it is used on x86.
-
-> Essentially, what this comes down to is that _you_ have no technical
-> argument against the change, just _you_ don't personally want it
-> and it doesn't matter what justification I come up with, you're
-> always going to tell me something different.
-
-Sorry, but I'm just not convinced by your justification.
-
-> So why not state that you personally don't want it in the first
-> place? Why this game of cat and mouse and the constantly changing
-> arguments. I guess it's to waste developers time.
->
-> Well, I'm calling you out for this, because I'm that pissed off
-> at the amount of time you're causing to be wasted.
-
-And I don't have to suffer this kind of abuse.  Sorry.
+-- 
+Sakari Ailus
 
