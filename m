@@ -1,211 +1,147 @@
-Return-Path: <linux-pm+bounces-2613-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2614-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8EA88396B5
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 18:44:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E1748396FD
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 18:54:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 549DD1F24490
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 17:44:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 534AB1C2184F
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 17:54:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECA6680052;
-	Tue, 23 Jan 2024 17:44:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B031E811F5;
+	Tue, 23 Jan 2024 17:53:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rHAuPwn5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A3FB5FDBE;
-	Tue, 23 Jan 2024 17:44:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D549B811ED
+	for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 17:53:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706031853; cv=none; b=KIJC26CH1VTT1sa3vBmaopgaOD+FUTQ8CejFXZzSgsHEjTqj+ugoOssMZ4qOP98YkFuCyH8K4Bw8wBudjEX5psJQ0+oZeCKO2QZIzhw/F+r7fTvN9FhfWyqzp+H9ePcie4/j7zRNB/NTjVDPVZ5TkVOFVlGjS+roj87EJcHZAf0=
+	t=1706032433; cv=none; b=QlKVjKk+/r4sP+nOG9KGG6fxjD+vJh/DQCXw406NVTs+oe/pgmNfegf840FmiK+ar8c9FaIqEIfm6eVrhmI1p8v0VAx70oucDnYbmFjh1YB4WIGuwCkc3Sxygm6SsBLHUtuPoa4r3lYS+hSrAvuajlrub9eUV+S20+8SZYgsVgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706031853; c=relaxed/simple;
-	bh=h/fOGX9r8KCQE5Xn93RskzadT8HYnWRtaC3RKieW7lg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O459PomfjLN5UzEK6eTelzHL4e4hwF0wHUKTliqh+CBgybtvL+8Vc82Qj0UZtH5FdAIR/T6bPIt1F8u3IlqAWVyCYjNqU9iizyP6WkkEyDRFRyaswdXfKW4f+6ZoKhDAUv3eKEmcz7HQRttbsCY7TVrnOs+JWItgVzW6RGASBqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-6dfd973f3fdso447552a34.1;
-        Tue, 23 Jan 2024 09:44:12 -0800 (PST)
+	s=arc-20240116; t=1706032433; c=relaxed/simple;
+	bh=wVl9haQVCPWB5lzRPA2n7zxH/Rd+6wdBvfdx8WKhjak=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=eIY6kBM5VH1RudlCc+VmGjTv8vdjb8Nz9Gn5OLD4CRu3mex7OwEckJywEp5k+YV5oM3TRyQkV/rP34zySHXR8xcrH+7+1iyvbsAl4R5n7hTjgl9VtBx5MCyVNJFN8uDH00R1j/zri1iZL9eCFrIC/rETKhaiNFQs4E110m8emdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rHAuPwn5; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-50eabd1c701so5134551e87.3
+        for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 09:53:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706032430; x=1706637230; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Imf394kL4Iql2UnZew/bvNix8nVGsR4OQhBljRFX9lY=;
+        b=rHAuPwn5keRFL8donQq8pdtoArJ8fORsMAgqzxDMHzPIb3JratuJRj+bXCX6aJ0yMp
+         1sSCjwnN/SNUa1OarpOsiVnYy2i4b5nbgt1yq9yiwpWUxjYvgM659VXwNO/wM9nKr6N5
+         qtLN/6SDUKzDkLRJiuIPvNIa92kgj0QcXDucX2RQdagdxlt35kd9tQxFXnt0zIkbIoTn
+         gy5ntwSMXRlpVQIzWgDbt1Mw3ljvEnbqbxR+s0HwX5XV8PZQxc04WuT2LFiUR9VJMc3l
+         FmXQ/juP6fPUzpLq0KVjJf0vsR4BsAMoilS7HrQKsg9aZO2hzYFhcD4xi1BAes+KOlU1
+         PYzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706031851; x=1706636651;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kq6KcpPGxOZbbj6MD5pFvib4SOoS9hzSh6Dd/9DvrIs=;
-        b=pN4xqgjb2BWWUsqDs8SQKtdy1G7rE9+6zUdYQRaggIEc5s7xICHgMVElzxY7veRF77
-         PUIPQzMn5M/Ucmb5UADogrHWmfWYavV+nN5h4ayaxJR78WVYw5yI8C/2GYCcr9LN2vux
-         TKm2C2E6wl8vilcd/pp2hzrv/S0uR0cok7t25L+nK4qzNIDP80Gww8PQMzJbAE7R2htu
-         bpAdNljEl+jYMjDSJ6lQxPh3y2qSW8QJl84WhMAbH5ixhA7g0S2gqHJq55d9q8IdHFWe
-         /PSIQ8osgY+fSqG4dgts9ufEIFGqi2va8ZJgm6Ybn4Vhlpt6AFodT5+cZlKLSNrwwmL+
-         cHrw==
-X-Gm-Message-State: AOJu0YyGOvAYaXs5G4dEMYMNL4sMkGtOF0JX3HRR2BWZBxPO1NUa3IfV
-	d0lhBogAJg81k1XxUJ5fs+XanMtlVrUNuHPCLqJGCktzi7p0fSwzzy6ngac18lHmmEOKCMkmczd
-	jKKIKR7NY/tZv5lnVwpASW3DTv3Y=
-X-Google-Smtp-Source: AGHT+IEpP44JkahyRRncDJZ6FDB633whaZG3UM7wkrdtm7F6Y1fagxGT/g8CFvifyPleyOU2/X9qkHN1NII1GS6acpg=
-X-Received: by 2002:a4a:d9c4:0:b0:599:6d16:353c with SMTP id
- l4-20020a4ad9c4000000b005996d16353cmr9505215oou.1.1706031851278; Tue, 23 Jan
- 2024 09:44:11 -0800 (PST)
+        d=1e100.net; s=20230601; t=1706032430; x=1706637230;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Imf394kL4Iql2UnZew/bvNix8nVGsR4OQhBljRFX9lY=;
+        b=wMleqWI9PhhudOCLvq3NZ7Co/aBfLzvlSmI8e9g040A9FUUiNbUAikSaxOLi8k1ULF
+         XqJmcC8y73jlklHqZg2RJApy2izWUIphyT1DF7DzlD69nFuFj+CgUAM7qhFBk1JWvye1
+         9Ei/5FObmFCR0ycgttvAgD9AD7+O8AjpzeJDLG5lBXYsXb6Yiqo46yWZfDpiwk8NvZSQ
+         ITBJJR7wdL+FZtzLky7tflJkkWz82EILrFnY0ZDinLtgeWgwWI3sDENMQP6v0ohgCnpC
+         OHAvPsYB2vrIWR371jtU6913z91KZYKLK7gWKcWccPViziAcTSHfEROmYekwU3BLFopE
+         T3FA==
+X-Gm-Message-State: AOJu0YxXBtn4XeMGb8An3hX8P3gL9v+lX07WFZ7NnLvirSU9oLKtBCwH
+	mkRWnqYQTPLxA4+axEKDPMro1jf+5iSdBAbY0Ceo4UDdYMdMOlW7HypDBe6JqXM=
+X-Google-Smtp-Source: AGHT+IGlQzLHPjyad4jSTiFUwQ+wUYXFN3+pN1AE8D9XlERsL+T/vi018ZC8BpzsZPiA/qSmqxjbBQ==
+X-Received: by 2002:a05:6512:1082:b0:50e:c845:5be6 with SMTP id j2-20020a056512108200b0050ec8455be6mr3479727lfg.107.1706032429896;
+        Tue, 23 Jan 2024 09:53:49 -0800 (PST)
+Received: from [172.30.205.123] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
+        by smtp.gmail.com with ESMTPSA id j6-20020ac253a6000000b005100c529020sm100704lfh.6.2024.01.23.09.53.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 23 Jan 2024 09:53:49 -0800 (PST)
+Message-ID: <b7e91951-e554-4baf-9b8d-fca4a2f0d412@linaro.org>
+Date: Tue, 23 Jan 2024 18:53:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk> <E1rDOgD-00Dvk2-3h@rmk-PC.armlinux.org.uk>
- <CAJZ5v0g9nfLrEf9u4Ksw6BOWJQ9iv8Z-O8RsLU6jR5zk0ahxRw@mail.gmail.com>
- <20240122180013.000016d5@Huawei.com> <Za++/11n5KA1VS3p@shell.armlinux.org.uk>
- <CAJZ5v0h7wsLt8d3ZoLXsK1=crAx66T42WDKNoHcg8CiHpAjS8g@mail.gmail.com> <Za/q9jivG4OdZM0f@shell.armlinux.org.uk>
-In-Reply-To: <Za/q9jivG4OdZM0f@shell.armlinux.org.uk>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 23 Jan 2024 18:43:59 +0100
-Message-ID: <CAJZ5v0gwe02uzAQoX0QDHo35OTEozpbnqC6vukjM3aE6HMq9WQ@mail.gmail.com>
-Subject: Re: [PATCH RFC v3 05/21] ACPI: Rename ACPI_HOTPLUG_CPU to include 'present'
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
-	linux-pm@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, 
-	acpica-devel@lists.linuxfoundation.org, linux-csky@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>, 
-	Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com, justin.he@arm.com, 
-	James Morse <james.morse@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] power: supply: qcom_battmgr: Ignore notifications
+ before initialization
+Content-Language: en-US
+To: Johan Hovold <johan@kernel.org>
+Cc: Bjorn Andersson <andersson@kernel.org>, Sebastian Reichel
+ <sre@kernel.org>, Marijn Suijten <marijn.suijten@somainline.org>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>,
+ linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Xilin Wu <wuxilin123@gmail.com>
+References: <20240103-topic-battmgr2-v2-1-c07b9206a2a5@linaro.org>
+ <Za_iR0ctkgYO0W5L@hovoldconsulting.com>
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <Za_iR0ctkgYO0W5L@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Jan 23, 2024 at 5:36=E2=80=AFPM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
->
-> On Tue, Jan 23, 2024 at 05:15:54PM +0100, Rafael J. Wysocki wrote:
-> > On Tue, Jan 23, 2024 at 2:28=E2=80=AFPM Russell King (Oracle)
-> > <linux@armlinux.org.uk> wrote:
-> > >
-> > > On Mon, Jan 22, 2024 at 06:00:13PM +0000, Jonathan Cameron wrote:
-> > > > On Mon, 18 Dec 2023 21:35:16 +0100
-> > > > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> > > >
-> > > > > On Wed, Dec 13, 2023 at 1:49=E2=80=AFPM Russell King <rmk+kernel@=
-armlinux.org.uk> wrote:
-> > > > > >
-> > > > > > From: James Morse <james.morse@arm.com>
-> > > > > >
-> > > > > > The code behind ACPI_HOTPLUG_CPU allows a not-present CPU to be=
-come
-> > > > > > present.
-> > > > >
-> > > > > Right.
-> > > > >
-> > > > > > This isn't the only use of HOTPLUG_CPU. On arm64 and riscv
-> > > > > > CPUs can be taken offline as a power saving measure.
-> > > > >
-> > > > > But still there is the case in which a non-present CPU can become
-> > > > > present, isn't it there?
-> > > >
-> > > > Not yet defined by the architectures (and I'm assuming it probably =
-never will be).
-> > > >
-> > > > The original proposal we took to ARM was to do exactly that - they =
-pushed
-> > > > back hard on the basis there was no architecturally safe way to imp=
-lement it.
-> > > > Too much of the ARM arch has to exist from the start of time.
-> > > >
-> > > > https://lore.kernel.org/linux-arm-kernel/cbaa6d68-6143-e010-5f3c-ec=
-62f879ad95@arm.com/
-> > > > is one of the relevant threads of the kernel side of that discussio=
-n.
-> > > >
-> > > > Not to put specific words into the ARM architects mouths, but the
-> > > > short description is that there is currently no demand for working
-> > > > out how to make physical CPU hotplug possible, as such they will no=
-t
-> > > > provide an architecturally compliant way to do it for virtual CPU h=
-otplug and
-> > > > another means is needed (which is why this series doesn't use the p=
-resent bit
-> > > > for that purpose and we have the Online capable bit in MADT/GICC)
-> > > >
-> > > > It was a 'fun' dance of several years to get to that clarification.
-> > > > As another fun fact, the same is defined for x86, but I don't think
-> > > > anyone has used it yet (GICC for ARM has an online capable bit in t=
-he flags to
-> > > > enable this, which was remarkably similar to the online capable bit=
- in the
-> > > > flags of the Local APIC entries as added fairly recently).
-> > > >
-> > > > >
-> > > > > > On arm64 an offline CPU may be disabled by firmware, preventing=
- it from
-> > > > > > being brought back online, but it remains present throughout.
-> > > > > >
-> > > > > > Adding code to prevent user-space trying to online these disabl=
-ed CPUs
-> > > > > > needs some additional terminology.
-> > > > > >
-> > > > > > Rename the Kconfig symbol CONFIG_ACPI_HOTPLUG_PRESENT_CPU to re=
-flect
-> > > > > > that it makes possible CPUs present.
-> > > > >
-> > > > > Honestly, I don't think that this change is necessary or even use=
-ful.
-> > > >
-> > > > Whilst it's an attempt to avoid future confusion, the rename is
-> > > > not something I really care about so my advice to Russell is drop
-> > > > it unless you are attached to it!
-> > >
-> > > While I agree that it isn't a necessity, I don't fully agree that it
-> > > isn't useful.
-> > >
-> > > One of the issues will be that while Arm64 will support hotplug vCPU,
-> > > it won't be setting ACPI_HOTPLUG_CPU because it doesn't support
-> > > the present bit changing. So I can see why James decided to rename
-> > > it - because with Arm64's hotplug vCPU, the idea that ACPI_HOTPLUG_CP=
-U
-> > > somehow enables hotplug CPU support is now no longer true.
-> > >
-> > > Keeping it as ACPI_HOTPLUG_CPU makes the code less obvious, because i=
-t
-> > > leads one to assume that it ought to be enabled for Arm64's
-> > > implementatinon, and that could well cause issues in the future if
-> > > people make the assumption that "ACPI_HOTPLUG_CPU" means hotplug CPU
-> > > is supported in ACPI. It doesn't anymore.
-> >
-> > On x86 there is no confusion AFAICS.  It's always meant "as long as
-> > the platform supports it".
->
-> That's x86, which supports physical CPU hotplug. We're introducing
-> support for Arm64 here which doesn't support physical CPU hotplug.
->
->                                                 ACPI-based      Physical =
-       Virtual
-> Arch    HOTPLUG_CPU     ACPI_HOTPLUG_CPU        Hotplug         Hotplug  =
-       Hotplug
-> Arm64   Y               N                       Y               N        =
-       Y
-> x86     Y               Y                       Y               Y        =
-       Y
->
-> So ACPI_HOTPLUG_CPU becomes totally misnamed with the introduction
-> of hotplug on Arm64.
->
-> If we want to just look at stuff from an x86 perspective, then yes,
-> it remains correct to call it ACPI_HOTPLUG_CPU. It isn't correct as
-> soon as we add Arm64, as I already said.
 
-And if you rename it, it becomes less confusing for ARM64, but more
-confusing for x86, which basically is my point.
 
-IMO "hotplug" covers both cases well enough and "hotplug present" is
-only accurate for one of them.
+On 1/23/24 16:59, Johan Hovold wrote:
+> On Wed, Jan 03, 2024 at 01:36:08PM +0100, Konrad Dybcio wrote:
+>> Commit b43f7ddc2b7a ("power: supply: qcom_battmgr: Register the power
+>> supplies after PDR is up") moved the devm_power_supply_register() calls
+>> so that the power supply devices are not registered before we go through
+>> the entire initialization sequence (power up the ADSP remote processor,
+>> wait for it to come online, coordinate with userspace..).
+>>
+>> Some firmware versions (e.g. on SM8550) seem to leave battmgr at least
+>> partly initialized when exiting the bootloader and loading Linux. Check
+>> if the power supply devices are registered before consuming the battmgr
+>> notifications.
+> 
+> So this clearly was not tested properly as the offending commit breaks
+> both the Lenovo ThinkPad X13s and the SC8280XP CRD.
+> 
+> I spent some time this afternoon tracking down and considering the best
+> way to address this before I checked lore and found this proposed fix
+> (why was I not CCed?).
 
-> And honestly, a two line quip to my reasoned argument is not IMHO
-> an acceptable reply.
+I didn't give the offending commit a spin on the laptops, as I simply
+assumed the interface is generic enough to behave similarly across the
+platforms. With this, I didn't imagine the DSP firmwares aren't unloaded
+on these..
 
-Well, I'm not even sure how to respond to this ...
+[...]
+
+> 
+>> +	if (!battmgr->bat_psy)
+>> +		return;
+> 
+> This is not a proper fix. You register 3-4 class devices and only check
+> one. Even if your checked the last one, there's no locking or barriers
+> in place to prevent this from breaking.
+> 
+> Deferred registration of the class devices also risks missing
+> notifications as you'll be spending time on registration after the
+> service has gone live.
+> 
+> I'm sure all of this can be handled but as it is non-trivial and the
+> motivation for the offending commit is questionable to begin with, I
+> suggest reverting for now.
+> 
+> I'll send a revert for Sebastian to consider.
+
+What you're saying is valid, but a "battery" device is always expected
+to be present. If devm_power_supply_register fails, things would go very
+south very fast anyway. I personally don't see this being a terribly bad
+fix, but I'm open to different propositions.
+
+Konrad
 
