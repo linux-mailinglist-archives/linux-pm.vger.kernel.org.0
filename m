@@ -1,121 +1,112 @@
-Return-Path: <linux-pm+bounces-2521-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2522-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D05688377D7
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 00:53:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BABA3837F85
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 02:52:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 55FAAB24A5C
-	for <lists+linux-pm@lfdr.de>; Mon, 22 Jan 2024 23:53:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED73C1C28FA0
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 01:52:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABE464EB46;
-	Mon, 22 Jan 2024 23:53:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A2576281B;
+	Tue, 23 Jan 2024 00:52:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zoho.com header.i=dan.martins@zoho.com header.b="Vu5Hi9qy"
+	dkim=pass (1024-bit key) header.d=peacevolution.org header.i=@peacevolution.org header.b="KbR41SM5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender3-pp-o97.zoho.com (sender3-pp-o97.zoho.com [136.143.184.97])
+Received: from a.peacevolution.org (a.peacevolution.org [206.189.193.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F307E4EB21;
-	Mon, 22 Jan 2024 23:52:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.184.97
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705967581; cv=pass; b=rpmKVO8nAJLyhG/aE4AdcxYmQAu/i14up1X/wo2p6rBYPWpSdTmF2/cLFsN1Y4T2gpiHkxDPqBRB6WUNa3qryx1yk9/LrpZeXHxC+41Ybb9lcF25qd9iGPLjy911E8xvmK5RROsGusvSrk0ISqIJSS0Mxf5L5gFWaCrHUahc2wA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705967581; c=relaxed/simple;
-	bh=F+BthcYS7rPv7wyW5LCcvsLu8G5opQadpCyRRS+fEPY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Gs5i8QqwwyLk+5Xsb93uYpYbZ3Rt/yp3DRfDQnEiiLjA8BVrBqK1YDL/8NCH8tW+/uAHxfxawkOALKja3/FPM5+TBlwghKfU2gR4UZiVe8EPtzKIH42AhbXtJkbIsabcKHuEu8IMwTMwBzLjJFmm60EGkHqJpC7LoEYVWhocCm4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zoho.com; spf=pass smtp.mailfrom=zoho.com; dkim=pass (1024-bit key) header.d=zoho.com header.i=dan.martins@zoho.com header.b=Vu5Hi9qy; arc=pass smtp.client-ip=136.143.184.97
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zoho.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zoho.com
-ARC-Seal: i=1; a=rsa-sha256; t=1705967572; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=KwpzLOTUcANGxin5ZaE+roo7zRUFTgm92q3U33ruraTupUcJDt2hyx+Y3nkloJ2AHFkPm2lU/2TlrfrG0VHuYgR9093mT9vBVfhcZgDH/d4bUr0nquCNRE3FAt32N6ytecPsR/67kvlL5+OxXWji/YvLMdbiUPDcuKpNMkg1MrQ=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1705967572; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=rLJP6Vx7qrjR1VmFZBYANXrusW+ovjxxuJzHQHu7wV0=; 
-	b=GEbPjeqMdwtffUiWme6eg4M063A2RZ695Jom5N1Cme6C//Ny2THDoY152XpzLN1Mf0gleKR4q08JHS3E47YnFxb5wALryamaTDApMlt4EMWyOOwztLjE+FcaSlqPlN6UykeGk2mkoBlj/qBf2E4FRVcKgyJ5HDfVv3ZF1SrNy2k=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=zoho.com;
-	spf=pass  smtp.mailfrom=dan.martins@zoho.com;
-	dmarc=pass header.from=<dan.martins@zoho.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1705967572;
-	s=zm2022; d=zoho.com; i=dan.martins@zoho.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Feedback-ID:Message-Id:Reply-To;
-	bh=rLJP6Vx7qrjR1VmFZBYANXrusW+ovjxxuJzHQHu7wV0=;
-	b=Vu5Hi9qysqP8ZnwagMdQgcZCa1Xe4RHa5Z9z6LvqQYhIksSaSrbFI8CypceX310N
-	/OsIDrIkP1gQFhWHtxGERUQltGvFtMlxeFII8R5vswuUAObmlF/Sl+eo0wckPIzDOM9
-	FNP6Z6ApCCQ5Ykvhf18fDrbdESCr9nXhxyIjIdGU=
-Received: from draconyx.localnet (24-52-246-67.cable.teksavvy.com [24.52.246.67]) by mx.zohomail.com
-	with SMTPS id 1705967571694704.2488183367262; Mon, 22 Jan 2024 15:52:51 -0800 (PST)
-From: Dan Martins <dan.martins@zoho.com>
-To: ray.huang@amd.com, rafael@kernel.org,
- Mario Limonciello <mario.limonciello@amd.com>
-Cc: viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, Mario Limonciello <mario.limonciello@amd.com>,
- stable@vger.kernel.org, wkarny@gmail.com
-Subject:
- Re: [PATCH] cpufreq/amd-pstate: Fix setting scaling max/min freq values
-Date: Mon, 22 Jan 2024 18:52:50 -0500
-Message-ID: <2263414.iZASKD2KPV@draconyx>
-In-Reply-To: <20240119113319.54158-1-mario.limonciello@amd.com>
-References: <20240119113319.54158-1-mario.limonciello@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9E20627E3;
+	Tue, 23 Jan 2024 00:52:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.193.133
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1705971175; cv=none; b=WgMi2mYvS2BiuOnb56KucsdcvTD1itGdP3V0C7wL/9pgYsdVHcW9NT1bVTLRYCitrq13PD+TdhBYWyzs4VWYrGnl7FtjZT2oL4l0JdCZdg+I/R4atAYeFY5/4fa+wcQlBJB3rxH6R/IBY7laHz5/SHVfhzX5p4sYObQ1Ve+mhBM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1705971175; c=relaxed/simple;
+	bh=IHHAkhaPD/VxLEfCh4L6KUuwb5xEYZxbqYfBzxCDqiE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=czN8NZpG9iLUOPo7XqFNJyVSjIF9bBOCPavPUCxzwxKAHFEZRSqOnIqSD7Jl6z0wFFIz1EuEDKI4PkTwyyCp2MOtwPX02D9VurfbASzTR2W/bh9zTpU5nJYPG7+gh/yIuYBMcNbkO3Ckx2BRbD2edQ0O0mpF0qUUHmsYwPDc2lk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=peacevolution.org; spf=pass smtp.mailfrom=peacevolution.org; dkim=pass (1024-bit key) header.d=peacevolution.org header.i=@peacevolution.org header.b=KbR41SM5; arc=none smtp.client-ip=206.189.193.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=peacevolution.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=peacevolution.org
+Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
+	by a.peacevolution.org (Postfix) with ESMTPA id 7CD0F450F1;
+	Tue, 23 Jan 2024 00:52:46 +0000 (UTC)
+Date: Mon, 22 Jan 2024 19:52:44 -0500
+From: Aren <aren@peacevolution.org>
+To: Chen-Yu Tsai <wens@csie.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>, 
+	Sebastian Reichel <sre@kernel.org>, Hans de Goede <j.w.r.degoede@gmail.com>
+Subject: Re: Re: [PATCH 1/3] power: supply: axp20x_usb_power: add input
+ current limit
+Message-ID: <2dkeq46flco2xukggii3ljlw2zo7wjwuiutha7jlxozmf63swd@xnirwnfvvvcv>
+References: <20240121014057.1042466-1-aren@peacevolution.org>
+ <20240121014057.1042466-3-aren@peacevolution.org>
+ <CAGb2v65QcP1bcT++51n7Ada6QvFmrQzqiA-b3tbzfAr3XC6XJQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-Feedback-ID: rr08011228c4d23cc6ead3bea5099e72db00006c4b3724f29c5bbc477d7a2934471d3702b533a5981206e5b5fa:zu08011226df8b965205c05624cf8859df00007b21fe0c0d763776009e3f1d295e05561023dfd195a9276a:rf080112325c1086f76a58161ee12f58e20000555e5ba39e401679e75548f003e1e0d0261abcd215cdd5ba042258c9479ffa77968a1c7b:ZohoMail
-X-ZohoMailClient: External
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGb2v65QcP1bcT++51n7Ada6QvFmrQzqiA-b3tbzfAr3XC6XJQ@mail.gmail.com>
+X-Spamd-Bar: /
+Authentication-Results: auth=pass smtp.auth=aren@peacevolution.org smtp.mailfrom=aren@peacevolution.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=peacevolution.org;
+	s=dkim; t=1705971167;
+	h=from:subject:date:message-id:to:cc:mime-version:content-type:content-transfer-encoding:in-reply-to:references;
+	bh=1amB/L7gOBoM9TVvcIEb8QCr/e1Osy+QoThWNMN1a/Y=;
+	b=KbR41SM5eVxA1weRH7IkSPrSd9EVRgpemzguutoPd3732qEfAgt8MG+HSPZqcsdik4MsAy
+	3DdF5oM18yQ+mcwwDS0G9FRhx5OyMSPxCsFg7mrMVkD3CI3co8f6rtQuDT6T4y6r36SLHe
+	u0JpMpBF9BIudl/WQ0pT7y3RCENjB2c=
 
-On Friday, January 19, 2024 6:33:19 A.M. EST Mario Limonciello wrote:
-> Scaling min/max freq values were being cached and lagging a setting
-> each time.  Fix the ordering of the clamp call to ensure they work.
+On Sun, Jan 21, 2024 at 11:25:04PM +0800, Chen-Yu Tsai wrote:
+> Hi,
 > 
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217931
-> Cc: stable@vger.kernel.org
-> Cc: wkarny@gmail.com
-> Fixes: febab20caeba ("cpufreq/amd-pstate: Fix scaling_min_freq and
-> scaling_max_freq update") Signed-off-by: Mario Limonciello
-> <mario.limonciello@amd.com>
-> ---
->  drivers/cpufreq/amd-pstate.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
+> +CC Hans de Goede since the AXP288 is similar to the later AXPs in the USB
+> power section.
 > 
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 1f6186475715..1791d37fbc53 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -1232,14 +1232,13 @@ static void amd_pstate_epp_update_limit(struct
-> cpufreq_policy *policy) max_limit_perf = div_u64(policy->max *
-> cpudata->highest_perf, cpudata->max_freq); min_limit_perf =
-> div_u64(policy->min * cpudata->highest_perf, cpudata->max_freq);
+> On Sun, Jan 21, 2024 at 9:54 AM Aren Moynihan <aren@peacevolution.org> wrote:
+> >
+> > Add properties for setting the maximum current that will be drawn from
+> > the usb connection.
+> >
+> > These changes don't apply to all axp20x chips, so we need to add new
+> > power_desc and power supply property objects for axp813 specifically.
+> > These are copied from the axp22x variants that were used before, with
+> > extra fields added.
+> >
+> > Also add a dev field to the axp20x_usb_power struct, so we can use
+> > dev_dbg and dev_err in more places.
 > 
-> +	WRITE_ONCE(cpudata->max_limit_perf, max_limit_perf);
-> +	WRITE_ONCE(cpudata->min_limit_perf, min_limit_perf);
-> +
->  	max_perf = clamp_t(unsigned long, max_perf, cpudata-
->min_limit_perf,
->  			cpudata->max_limit_perf);
->  	min_perf = clamp_t(unsigned long, min_perf, cpudata-
->min_limit_perf,
->  			cpudata->max_limit_perf);
-> -
-> -	WRITE_ONCE(cpudata->max_limit_perf, max_limit_perf);
-> -	WRITE_ONCE(cpudata->min_limit_perf, min_limit_perf);
-> -
->  	value = READ_ONCE(cpudata->cppc_req_cached);
+> I think this patch highlights some errors in the driver.
 > 
->  	if (cpudata->policy == CPUFREQ_POLICY_PERFORMANCE)
+> 1. We are likely misusing POWER_SUPPLY_PROP_CURRENT_MAX. Based on the
+>    ABI docs, this is supposed to be a read only property. The correct
+>    way would be to use POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT as you did.
 
-Tested-by: Dan Martins <dan.martins@zoho.com>
+I think so, yes. I was hesitant to touch that because I wasn't sure if
+current_max was relied on anywhere. I'll do some grepping to confirm
+that it'll be safe.
 
+> 2. For AXP288 and AXP803/AXP813/AXP818, we are setting the current limit
+>    for when BC detection finishes in register 0x30, not the actual active
+>    limit in register 0x35. This should be fixed.
+> 
+> 3. BC detection race condition
+> 
+> Could you maybe respin the patches to address them separately instead?
 
+Sure, that sounds like a better way to split it up.
 
+ - Aren
+
+> Thanks
+> ChenYu
 
