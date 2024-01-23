@@ -1,60 +1,60 @@
-Return-Path: <linux-pm+bounces-2603-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2604-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 480AD8394FF
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 17:40:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73BE9839501
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 17:40:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0118028E3D2
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 16:40:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9880B1C278F3
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 16:40:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A11185C60;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7656485C6D;
 	Tue, 23 Jan 2024 16:37:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="Cj8rb6a3"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="JCcERF7c"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E824823A0;
-	Tue, 23 Jan 2024 16:37:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20B587F7DE;
+	Tue, 23 Jan 2024 16:37:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706027830; cv=none; b=cOhtVNDO6+hCj2W7rO21bJkYtnY9j4appuIrbVkd/rKs2kIWQ+++bscNkGafOmEGXxY7lIMe4FQ0YXlMfKm19n3/Nkbylz8PNyZp4w4NXrvSZHH0/QfZ248kN/LLowmqkEJuwd/ZinKWGPmaYFZIypUbcJepVV+QzSUzXTB44fA=
+	t=1706027830; cv=none; b=BtQlPEoCYObVPOGBvVwASc9+iVi6plE6d5Xtxjq/1HuiPgF1GtmBIuyprTw6TytfM2TFtZka6R88nP4vfTHeLnr2hsKRukWEqGmoC8X5DW01VBwTK0vGKsyb0GgkAmW+Hq6SnYm7+OvqB/TWuBUWOAPCa+N+8cPvSJvhr7hwUuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1706027830; c=relaxed/simple;
-	bh=dYCrje2ssLc36AN+z3buna/SfGdx7nGnIMP/hS0/SRw=;
+	bh=6/dLm2MjBZeLAHh+W3gQoWesu1TbtOA/vZ3gQb2SLuI=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hFTuMaAbZ/QMzJ96CZkCJOdqLRG65uY7pcSbGNAJ8xTP5exnWXIa75PSKVBCL+Ki6qlY4uCqpP0qp8zMblNrw3xMyA8ntf48mwOwgLkBvjgbSJDx2U3WovabfJ9OkwknpoWNKb/rVvOfn6R7BzqX3/33h0mMS90DJ/H2Oh9k6OY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=Cj8rb6a3; arc=none smtp.client-ip=198.47.23.249
+	 MIME-Version:Content-Type; b=l2dsJ1N3XnChtvf+Q5uJmjIOUra8Y/2tnHzsdTBkAq++iJ6nW0YsDHpUPN+3+/IZn8EsbYwTLIKKfGBr7J7dkWK/HmKdiP3Lk7RWTkVopr5GrZ3jTfW+cveADbgYFV/1Svo2WqhNEGc3jKu9Hh4tHKpyrY1MYw/f7l07ItJ+BwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=JCcERF7c; arc=none smtp.client-ip=198.47.19.142
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 40NGb0dA095659;
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 40NGb0vx094143;
 	Tue, 23 Jan 2024 10:37:00 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
 	s=ti-com-17Q1; t=1706027820;
-	bh=UvtASd/asXTA/GOqfe+7E7h/Aqkvx5Cby7w80f0NLYY=;
+	bh=zL7aZs11+xEUFcKlyHOFpkpjBIT3t+hkCmsvfTqmT94=;
 	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=Cj8rb6a3/vaYXI793H/zBsa0IaOH0Q/dpt5L9lFODzWKTCnt72F7OoULybes21/+4
-	 tfnoU+/AIWXVDvjfuAc20FRmd9sppaqGlFujLHnd3t6pBXhcDkZDO2l7CFtWkPHngE
-	 wI8zxczq65iMZGufXe1mY2xudM66G1CO9NJVt9QE=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 40NGb0qR119754
+	b=JCcERF7cRlA4mIEjiFkSaIyqQ2Q3/NjrRSASUv1vdEJyXtE5lZiesEUkmQ6Ww5Wfz
+	 iOOGQZPvR6dYqICJeDgifUf9lLIJ/NWAWj0wjIzjmBOsB3GWOF2H/LuNZdYS9vjtES
+	 3Qo7Hv5a6hT1yTdqvbZpIPF/wEw0MUGxoXThrphI=
+Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 40NGb0Bo000610
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
 	Tue, 23 Jan 2024 10:37:00 -0600
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 23
- Jan 2024 10:36:59 -0600
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ Jan 2024 10:37:00 -0600
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
  Frontend Transport; Tue, 23 Jan 2024 10:37:00 -0600
 Received: from lelvsmtp6.itg.ti.com ([10.249.42.149])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 40NGars5123403;
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 40NGars6123403;
 	Tue, 23 Jan 2024 10:36:59 -0600
 From: Andrew Davis <afd@ti.com>
 To: Sebastian Reichel <sre@kernel.org>,
@@ -67,9 +67,9 @@ To: Sebastian Reichel <sre@kernel.org>,
 CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Andrew Davis
 	<afd@ti.com>
-Subject: [PATCH 17/21] power: supply: da9150: Use devm_power_supply_register() helper
-Date: Tue, 23 Jan 2024 10:36:49 -0600
-Message-ID: <20240123163653.384385-18-afd@ti.com>
+Subject: [PATCH 18/21] power: supply: rx51: Use devm_iio_channel_get() helper
+Date: Tue, 23 Jan 2024 10:36:50 -0600
+Message-ID: <20240123163653.384385-19-afd@ti.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240123163653.384385-1-afd@ti.com>
 References: <20240123163653.384385-1-afd@ti.com>
@@ -83,58 +83,91 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Use the device lifecycle managed register function. This helps prevent
-mistakes like unregistering out of order in cleanup functions and
-forgetting to unregister on error paths.
+Use the device lifecycle managed get function. This helps prevent
+mistakes like releasing out of order in cleanup functions and
+forgetting to release on error paths.
 
 Signed-off-by: Andrew Davis <afd@ti.com>
 ---
- drivers/power/supply/da9150-charger.c | 15 ++++-----------
- 1 file changed, 4 insertions(+), 11 deletions(-)
+ drivers/power/supply/rx51_battery.c | 45 +++++++----------------------
+ 1 file changed, 11 insertions(+), 34 deletions(-)
 
-diff --git a/drivers/power/supply/da9150-charger.c b/drivers/power/supply/da9150-charger.c
-index 77e2d42382e45..b13cecd84f589 100644
---- a/drivers/power/supply/da9150-charger.c
-+++ b/drivers/power/supply/da9150-charger.c
-@@ -538,15 +538,13 @@ static int da9150_charger_probe(struct platform_device *pdev)
- 		return PTR_ERR(charger->vbat_chan);
+diff --git a/drivers/power/supply/rx51_battery.c b/drivers/power/supply/rx51_battery.c
+index e2bfc81f0fd97..d532c670661b6 100644
+--- a/drivers/power/supply/rx51_battery.c
++++ b/drivers/power/supply/rx51_battery.c
+@@ -192,7 +192,6 @@ static int rx51_battery_probe(struct platform_device *pdev)
+ {
+ 	struct power_supply_config psy_cfg = {};
+ 	struct rx51_device_info *di;
+-	int ret;
  
- 	/* Register power supplies */
--	charger->usb = power_supply_register(dev, &usb_desc, NULL);
-+	charger->usb = devm_power_supply_register(dev, &usb_desc, NULL);
- 	if (IS_ERR(charger->usb))
- 		return PTR_ERR(charger->usb);
+ 	di = devm_kzalloc(&pdev->dev, sizeof(*di), GFP_KERNEL);
+ 	if (!di)
+@@ -209,41 +208,23 @@ static int rx51_battery_probe(struct platform_device *pdev)
  
--	charger->battery = power_supply_register(dev, &battery_desc, NULL);
--	if (IS_ERR(charger->battery)) {
--		ret = PTR_ERR(charger->battery);
--		goto battery_fail;
+ 	psy_cfg.drv_data = di;
+ 
+-	di->channel_temp = iio_channel_get(di->dev, "temp");
+-	if (IS_ERR(di->channel_temp)) {
+-		ret = PTR_ERR(di->channel_temp);
+-		goto error;
 -	}
-+	charger->battery = devm_power_supply_register(dev, &battery_desc, NULL);
-+	if (IS_ERR(charger->battery))
-+		return PTR_ERR(charger->battery);
++	di->channel_temp = devm_iio_channel_get(di->dev, "temp");
++	if (IS_ERR(di->channel_temp))
++		return PTR_ERR(di->channel_temp);
  
- 	/* Get initial online supply */
- 	reg = da9150_reg_read(da9150, DA9150_STATUS_H);
-@@ -606,8 +604,6 @@ static int da9150_charger_probe(struct platform_device *pdev)
- chg_irq_fail:
- 	if (!IS_ERR_OR_NULL(charger->usb_phy))
- 		usb_unregister_notifier(charger->usb_phy, &charger->otg_nb);
--battery_fail:
--	power_supply_unregister(charger->usb);
+-	di->channel_bsi  = iio_channel_get(di->dev, "bsi");
+-	if (IS_ERR(di->channel_bsi)) {
+-		ret = PTR_ERR(di->channel_bsi);
+-		goto error_channel_temp;
+-	}
++	di->channel_bsi  = devm_iio_channel_get(di->dev, "bsi");
++	if (IS_ERR(di->channel_bsi))
++		return PTR_ERR(di->channel_bsi);
  
- 	return ret;
- }
-@@ -633,9 +629,6 @@ static void da9150_charger_remove(struct platform_device *pdev)
- 	if (!IS_ERR_OR_NULL(charger->usb_phy))
- 		usb_unregister_notifier(charger->usb_phy, &charger->otg_nb);
- 	cancel_work_sync(&charger->otg_work);
+-	di->channel_vbat = iio_channel_get(di->dev, "vbat");
+-	if (IS_ERR(di->channel_vbat)) {
+-		ret = PTR_ERR(di->channel_vbat);
+-		goto error_channel_bsi;
+-	}
++	di->channel_vbat = devm_iio_channel_get(di->dev, "vbat");
++	if (IS_ERR(di->channel_vbat))
++		return PTR_ERR(di->channel_vbat);
+ 
+ 	di->bat = power_supply_register(di->dev, &di->bat_desc, &psy_cfg);
+-	if (IS_ERR(di->bat)) {
+-		ret = PTR_ERR(di->bat);
+-		goto error_channel_vbat;
+-	}
++	if (IS_ERR(di->bat))
++		return PTR_ERR(di->bat);
+ 
+ 	return 0;
 -
--	power_supply_unregister(charger->battery);
--	power_supply_unregister(charger->usb);
+-error_channel_vbat:
+-	iio_channel_release(di->channel_vbat);
+-error_channel_bsi:
+-	iio_channel_release(di->channel_bsi);
+-error_channel_temp:
+-	iio_channel_release(di->channel_temp);
+-error:
+-
+-	return ret;
  }
  
- static struct platform_driver da9150_charger_driver = {
+ static void rx51_battery_remove(struct platform_device *pdev)
+@@ -251,10 +232,6 @@ static void rx51_battery_remove(struct platform_device *pdev)
+ 	struct rx51_device_info *di = platform_get_drvdata(pdev);
+ 
+ 	power_supply_unregister(di->bat);
+-
+-	iio_channel_release(di->channel_vbat);
+-	iio_channel_release(di->channel_bsi);
+-	iio_channel_release(di->channel_temp);
+ }
+ 
+ #ifdef CONFIG_OF
 -- 
 2.39.2
 
