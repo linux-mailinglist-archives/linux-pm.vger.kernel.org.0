@@ -1,138 +1,161 @@
-Return-Path: <linux-pm+bounces-2629-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2630-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74FC3839C69
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 23:40:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA446839D49
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 00:33:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2BEA22842AE
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 22:40:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 620E31F27345
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 23:33:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE573524B9;
-	Tue, 23 Jan 2024 22:40:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60B2553E19;
+	Tue, 23 Jan 2024 23:33:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Nnj7jTy9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I3MhngyQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91D8551010;
-	Tue, 23 Jan 2024 22:40:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 346DD3B78E;
+	Tue, 23 Jan 2024 23:33:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706049636; cv=none; b=bQzyTop+bcFmah4nVLgHqIL+rO4us8EXsXOhL9x96j/MP4mTWCYzu2CYcEuYv7kdJ7b8DDwoiFNt7QOJYfu1p6DOhU4g6bNulni4KEVZhV+fSQF21JiUqX9aOcOLUXER4TIuIEXBBCEaZ0pWQW/fSaymSnxn0zNRDeHwwaaBMKU=
+	t=1706052795; cv=none; b=mo4Q6+9boZTqK8uNA6pEihvpNHeBmGZYvyZDLFn9NwjF65IPSw2/xQoY1AdKeAGN/rCXVBcStpCoQrUHAhvBxMYu/g6IXcIXyh0GVGwRhNPU1RuLryzdVM51gRfS3ohnGHZ0tPuWCs/nu0WlJotR+AuCjs7VXO83NIQnxWOGiTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706049636; c=relaxed/simple;
-	bh=Z/gVOBIyuGeHrB0qusJzDPUINYJVDgoRszKTN0NH9s0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y51A5jGrmoKH5LlYAKc4Ic+GaIg1KbsG//PuSaauml/TX8DWLGg2n1KRvLw9mNTbT1aOZ7uKh5XMto3b6iko990BPPxQQyfMwRGVV96BPCEcb+DiGrGqHHu/sIdB4MAktXTslaAGH1pD0G3MG/ly4GpgQwNm160lrbHW4SIQN2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Nnj7jTy9; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706049635; x=1737585635;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Z/gVOBIyuGeHrB0qusJzDPUINYJVDgoRszKTN0NH9s0=;
-  b=Nnj7jTy9QoK33F0B+UdzyR3BS7WDenry6lephSpBjaV37LgcAmS6CM6b
-   kQnqXtXu8K9z/Mi6eOWJaHmg4DZBPKzeeUi2V466xkG9ITTPn2ayT6bLz
-   NvCVJtFrwcXJajnkX4KUz3eaKKnEtf2l9bNOB6LBh+Z4OL4Bem0xOapUz
-   DREVz3hF44258RZJOtvbHzrE/JLamoaKOz/FDVXTDT4VkTmUDv63lGfXE
-   FJxYbeSPDMC4x1//Sia7CDSntGNS7bUiPCMEkCPa+KCVipRzw0u0Uu8yi
-   Hq5RpDuaQh6srUU+mkRu5+ySmWHLXcqzEkf2KhO9kImTEuDqIZvYFUoLA
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="573954"
-X-IronPort-AV: E=Sophos;i="6.05,215,1701158400"; 
-   d="scan'208";a="573954"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2024 14:40:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="876490218"
-X-IronPort-AV: E=Sophos;i="6.05,215,1701158400"; 
-   d="scan'208";a="876490218"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2024 14:40:27 -0800
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id 596D411FB8E;
-	Wed, 24 Jan 2024 00:40:25 +0200 (EET)
-Date: Tue, 23 Jan 2024 22:40:25 +0000
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-	linux-pci@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	Jaroslav Kysela <perex@perex.cz>,
-	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-	laurent.pinchart@ideasonboard.com, David Airlie <airlied@gmail.com>,
-	Paul Elder <paul.elder@ideasonboard.com>,
-	linux-media@vger.kernel.org,
-	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	intel-gfx@lists.freedesktop.org,
-	Lucas De Marchi <lucas.demarchi@intel.com>,
-	Mark Brown <broonie@kernel.org>,
-	Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	intel-xe@lists.freedesktop.org,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-	Alex Elder <elder@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-sound@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
-	Daniel Vetter <daniel@ffwll.ch>, netdev@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] pm: runtime: Simplify pm_runtime_get_if_active()
- usage
-Message-ID: <ZbBAWROxRKE8Y8VU@kekkonen.localdomain>
-References: <ZbAlFKE_fZ_riRVu@kekkonen.localdomain>
- <20240123214801.GA330312@bhelgaas>
+	s=arc-20240116; t=1706052795; c=relaxed/simple;
+	bh=QGNoOHkwOGudSjTTpE/RdtDWUSLVrM6Fux/IWb+zhHM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=W/6pR3L3gH2+fmiDAs/elkcIeafA4l4ojTwgqZYQJhr4WCMLTba6XAzuVOqf7QlGpLOF896CFemOBOBHAOIWgiLxZqfcvmPI4LQovlI9rxrocKLeVMOV2+CDo2kLXn4ZoCqdNLhp/5D/ZPrqIuVLWGi+Fo2m0lCZPtcjma4Y+Uw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I3MhngyQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18AFAC433C7;
+	Tue, 23 Jan 2024 23:33:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706052794;
+	bh=QGNoOHkwOGudSjTTpE/RdtDWUSLVrM6Fux/IWb+zhHM=;
+	h=From:Date:Subject:To:Cc:From;
+	b=I3MhngyQQwiO+HC4n3VfkmRV26qY3hc8196Rl80VsXzQSixMKZRNcljsOQuC859Pt
+	 GtxxpSbvMhY0kWmqSRyhXBMqAPNRQGmlXtB9gs7SmTdba7VGsjUdeeAeMxVMu0/4Gl
+	 M69jk/jX/A0zXUXLdj6otuJq+2wXlwYZ2uY33QXB+djCAVLW0vmSqNzTAeu2wCYd3Q
+	 0rCxV5EHOCbgXGmxXbmY6jqiTZrxPVxWX+72yDJA0FxDVvVtpoxOU/0B4MtYkv2CYt
+	 dN39Ryh+HKhdgVGrAa4dpXktn7cQwArrt8kjeCK3pKHqC9YNQMftRWrhYwedS2aI5k
+	 3a8jZgdrGxdjQ==
+From: Mark Brown <broonie@kernel.org>
+Date: Tue, 23 Jan 2024 23:33:07 +0000
+Subject: [PATCH v3] thermal/drivers/sun8i: Don't fail probe due to zone
+ registration failure
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240123214801.GA330312@bhelgaas>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240123-thermal-sun8i-registration-v3-1-3e5771b1bbdd@kernel.org>
+X-B4-Tracking: v=1; b=H4sIALJMsGUC/43NwQ6CMAwG4FchOzuzbgroyfcwHsYosIjDdLhoC
+ O9u4WK8GE/N3/z9OomI5DGKYzYJwuSjHwIHs8mE62xoUfqas9BKG1VAKccO6WZ7GR+h9JKw9XE
+ kO/KZrBtjweTO2cYKBu6EjX+u+PnCuePqQK/1V4Jl+xebQIJ0h30FlSqU2anTFSlgvx2oFYub9
+ Mc6gP5pabZUUXATeOTllzXP8xuVCXwkEQEAAA==
+To: Vasily Khoruzhick <anarsoul@gmail.com>, 
+ Yangtao Li <tiny.windzz@gmail.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, 
+ Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Samuel Holland <samuel@sholland.org>
+Cc: Hugh Dickins <hughd@google.com>, linux-pm@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-0438c
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3046; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=QGNoOHkwOGudSjTTpE/RdtDWUSLVrM6Fux/IWb+zhHM=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlsEy2pfbbtfAa2AvPeU5FJK+lig+Fng09Sfcm5
+ fgY1u17UcGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZbBMtgAKCRAk1otyXVSH
+ 0GL2B/9T8OMF5ewkEdFH2AXiJaGPuFFxbdo8n+2gHijdVsbwin12SeH0pZR5zYV9jEb1kQjkm2t
+ GM7TFXxYNHmje9ZuQqtUF45nzMMShij0BdAxyiU1PfpM5gNycOam1hPpkVCmRA+53swpLJCl8aP
+ U48gmUmQ4BdbS+ZxiqvtcJTrOhItl02NwSu49BcWYhQDswW5vKKG3ZdJ/P2YbgDO/DpLbBW3W+R
+ KfG16WMDw6xjYADDD/xoTW3SiHmPppok0DFzb2KurnnH4BKJYKDLMXDK61SZfuduz8Mx80Rv2xR
+ qCfHX2hD13u2e2GQRWiRpB1oAgxZgSNwVEm5KnnzgpAvMqtf
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On Tue, Jan 23, 2024 at 03:48:01PM -0600, Bjorn Helgaas wrote:
-> On Tue, Jan 23, 2024 at 08:44:04PM +0000, Sakari Ailus wrote:
-> > On Tue, Jan 23, 2024 at 11:24:23AM -0600, Bjorn Helgaas wrote:
-> > ...
-> 
-> > > - I don't know whether it's feasible, but it would be nice if the
-> > >   intel_pm_runtime_pm.c rework could be done in one shot instead of
-> > >   being split between patches 1/3 and 2/3.
-> > > 
-> > >   Maybe it could be a preliminary patch that uses the existing
-> > >   if_active/if_in_use interfaces, followed by the trivial if_active
-> > >   updates in this patch.  I think that would make the history easier
-> > >   to read than having the transitory pm_runtime_get_conditional() in
-> > >   the middle.
-> > 
-> > I think I'd merge the two patches. The second patch is fairly small, after
-> > all, and both deal with largely the same code.
-> 
-> I'm not sure which two patches you mean, but the fact that two patches
-> deal with largely the same code is not necessarily an argument for
-> merging them.  From a reviewing perspective, it's nice if a patch like
+Currently the sun8i thermal driver will fail to probe if any of the
+thermal zones it is registering fails to register with the thermal core.
+Since we currently do not define any trip points for the GPU thermal
+zones on at least A64 or H5 this means that we have no thermal support
+on these platforms:
 
-Patches 1 and 2. The third patch introduces a new Runtime PM API function.
+[    1.698703] thermal_sys: Failed to find 'trips' node
+[    1.698707] thermal_sys: Failed to find trip points for thermal-sensor id=1
 
-> 1/3, where it's largely mechanical and easy to review, is separated
-> from patches that make more substantive changes.
-> 
-> That's why I think it'd be nice if the "interesting"
-> intel_pm_runtime_pm.c changes were all in the same patch, and ideally,
-> if that patch *only* touched intel_pm_runtime_pm.c.
+even though the main CPU thermal zone on both SoCs is fully configured.
+This does not seem ideal, while we may not be able to use all the zones
+it seems better to have those zones which are usable be operational.
+Instead just carry on registering zones if we get any non-deferral
+error, allowing use of those zones which are usable.
 
-I don't think squashing the second patch to the first really changes this
-meaningfully: the i915 driver simply needs both
-pm_runtime_get_if_{active,in_use}, and this is what the patch does to other
-drivers already. Making the pm_runtime_get_conditional static would also
-fit for the first patch if the desire is to not to introduce it at all.
+This means that we also need to update the interrupt handler to not
+attempt to notify the core for events on zones which we have not
+registered, I didn't see an ability to mask individual interrupts and
+I would expect that interrupts would still be indicated in the ISR even
+if they were masked.
 
+Reviewed-by: Vasily Khoruzhick <anarsoul@gmail.com>
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Changes in v3:
+- Rebase onto v6.8-rc1.
+- Link to v2: https://lore.kernel.org/r/20230912-thermal-sun8i-registration-v2-1-077230107768@kernel.org
+
+Changes in v2:
+- Rebase onto v6.6-rc1.
+- Link to v1: https://lore.kernel.org/r/20230718-thermal-sun8i-registration-v1-1-c95b1b070340@kernel.org
+---
+ drivers/thermal/sun8i_thermal.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+index 6a8e386dbc8d..c2a8ae7f8f2f 100644
+--- a/drivers/thermal/sun8i_thermal.c
++++ b/drivers/thermal/sun8i_thermal.c
+@@ -188,6 +188,9 @@ static irqreturn_t sun8i_irq_thread(int irq, void *data)
+ 	int i;
+ 
+ 	for_each_set_bit(i, &irq_bitmap, tmdev->chip->sensor_num) {
++		/* We allow some zones to not register. */
++		if (IS_ERR(tmdev->sensor[i].tzd))
++			continue;
+ 		thermal_zone_device_update(tmdev->sensor[i].tzd,
+ 					   THERMAL_EVENT_UNSPECIFIED);
+ 	}
+@@ -465,8 +468,17 @@ static int sun8i_ths_register(struct ths_device *tmdev)
+ 						      i,
+ 						      &tmdev->sensor[i],
+ 						      &ths_ops);
+-		if (IS_ERR(tmdev->sensor[i].tzd))
+-			return PTR_ERR(tmdev->sensor[i].tzd);
++
++		/*
++		 * If an individual zone fails to register for reasons
++		 * other than probe deferral (eg, a bad DT) then carry
++		 * on, other zones might register successfully.
++		 */
++		if (IS_ERR(tmdev->sensor[i].tzd)) {
++			if (PTR_ERR(tmdev->sensor[i].tzd) == -EPROBE_DEFER)
++				return PTR_ERR(tmdev->sensor[i].tzd);
++			continue;
++		}
+ 
+ 		devm_thermal_add_hwmon_sysfs(tmdev->dev, tmdev->sensor[i].tzd);
+ 	}
+
+---
+base-commit: 6613476e225e090cc9aad49be7fa504e290dd33d
+change-id: 20230718-thermal-sun8i-registration-df3a136ccafa
+
+Best regards,
 -- 
-Sakari Ailus
+Mark Brown <broonie@kernel.org>
+
 
