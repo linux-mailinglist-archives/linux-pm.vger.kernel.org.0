@@ -1,153 +1,121 @@
-Return-Path: <linux-pm+bounces-2610-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2612-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EF84839541
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 17:50:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C85D283964C
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 18:24:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB9F2290F30
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 16:50:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 807D6283740
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 17:24:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E61DF80055;
-	Tue, 23 Jan 2024 16:45:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 902137FBC4;
+	Tue, 23 Jan 2024 17:24:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="aRu2NBH+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WeSfU2Sm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58F548003D;
-	Tue, 23 Jan 2024 16:45:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A4437FBA8;
+	Tue, 23 Jan 2024 17:24:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706028336; cv=none; b=TawQK+V3hpAxeegbL2M3t9IE+oLDgUuzVx/y+d+XvzQ3tc0sg705bGPRoICz7mPrM8qmaZ+nV7hOtuLuzJXq2920nqx17q1a+qE5mToZnHRTO3+L+VoF81aFnijTIGgUEX40FdLsqZUpk2ux3iDM9Vun5ex94FNSoAKBNEuOaDs=
+	t=1706030666; cv=none; b=gRZK9yJv0zGbgWFE+YB8ldNr0mVfg3txcBC7coR7kR8nArXej6rBtHkovJB/ap3XSe96P5NIaEXmcUlTRIjAZ7loHaWXcJq8ivt+Q6Ex5/ncXNro3h9welsj2rb6WAZtUm4PVSCtyYbiPb4wH6d2er3CWHymyKCG9BkvVa5R/1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706028336; c=relaxed/simple;
-	bh=8LjL26PYrPwCrvs/xSN0nyOOCGfpd558CyvkBVEVt2M=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mJKRLYUWmd+pJ+edJtnNMI4ifMfT11Eh9q4VdK+fYOhqROC/3rL6RRhhqzTROo7pW/hp/OfpN/4jkNOEbhvbAPMDme5WRNqNyys1f7xhdLlGw7kGOVwM2ZU5LJpXI63kmgCm0e3GlmTPy58lv9BiyQjHapUaNVi6qNkkIp1ETPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=aRu2NBH+; arc=none smtp.client-ip=198.47.23.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 40NGimmf101836;
-	Tue, 23 Jan 2024 10:44:48 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1706028288;
-	bh=6OrX3DPXnzALpnhReuLUjIJGvye7DyNGb/CoW91+Q9Y=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=aRu2NBH+Jl34untySgYsJ01x94ByIoIEXYUbivOB09rHgr91C1x3H10BrGV/WTgaN
-	 vjfxeS3UWpG+j6SPnK/fTdcYOgsuYivuoRPIM0QgP9VAbLKYoLj/kcFu0rTEg2BVEN
-	 /LXH3crLEaSPXs1UEN0suP5rAaFW876Mhopb5Xdw=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 40NGimBu011494
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 23 Jan 2024 10:44:48 -0600
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 23
- Jan 2024 10:44:48 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 23 Jan 2024 10:44:48 -0600
-Received: from lelvsmtp5.itg.ti.com ([10.249.42.149])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 40NGiiKJ022038;
-	Tue, 23 Jan 2024 10:44:47 -0600
-From: Andrew Davis <afd@ti.com>
-To: Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi
-	<lpieralisi@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Karol Gugala
-	<kgugala@antmicro.com>,
-        Mateusz Holenko <mholenko@antmicro.com>,
-        Gabriel
- Somlo <gsomlo@gmail.com>, Joel Stanley <joel@jms.id.au>,
-        Mark Brown
-	<broonie@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang
-	<baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>, Lee
- Jones <lee@kernel.org>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>
-CC: <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        Andrew Davis
-	<afd@ti.com>
-Subject: [PATCH 4/4] firmware: ti_sci: Use devm_register_restart_handler()
-Date: Tue, 23 Jan 2024 10:44:43 -0600
-Message-ID: <20240123164443.394642-5-afd@ti.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240123164443.394642-1-afd@ti.com>
-References: <20240123164443.394642-1-afd@ti.com>
+	s=arc-20240116; t=1706030666; c=relaxed/simple;
+	bh=Oyao+3/Ux6TZycEPX8L/CtZdSt0adFVr9KdQJvVkrTM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=bdfmiHotMcJwCEalqx6XJULQBJdFTXgwfX9s/hhgPNt6pQQj0C8mRJsZOLpn3wO3oywJ8OcLYE3R9O7hzAtWVdC7smdWQiycEp0iyvSRsOd5fx6JWU2IkTsTnzaKhIIuuLV3jxLbjZmEWgEkuSi7ut9u+Qe+kepmRT5OTuWk5Rc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WeSfU2Sm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70157C433C7;
+	Tue, 23 Jan 2024 17:24:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706030665;
+	bh=Oyao+3/Ux6TZycEPX8L/CtZdSt0adFVr9KdQJvVkrTM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=WeSfU2SmF+MThNV+FwS3jNLbx/lbHqp3O8rGmEOzabcSnXEgrwMlsQB9X+zP4Dj5G
+	 wd1fgHH0A7R0Tmo1hzTqTwsERG+4Gn3Cx5lBeFm5nnKu5zpyTImNwviF1z+B9Bs+B5
+	 FDxtofh709s2gjhWj2TwrRefwkgnofaBeH2IOycUb4sAH6b1twJSE7eTOxL5ZpB136
+	 XW94cTSytbK36zuZLvfHBZJyLBwQtXSssVanGsGSNlbp69amctnSVmvxMuZ0ytbIUw
+	 x0q8WUofOp/tNMPpmUcwMX0JnwNQI0b6OZ1iN5n7Qvk/bytqBMVrKlnALAAEsYlcQ0
+	 7dIeV9ibAJhkg==
+Date: Tue, 23 Jan 2024 11:24:23 -0600
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+	linux-pci@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	Jaroslav Kysela <perex@perex.cz>,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+	laurent.pinchart@ideasonboard.com, David Airlie <airlied@gmail.com>,
+	Paul Elder <paul.elder@ideasonboard.com>,
+	linux-media@vger.kernel.org,
+	Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
+	intel-gfx@lists.freedesktop.org,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	Mark Brown <broonie@kernel.org>,
+	Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	intel-xe@lists.freedesktop.org,
+	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+	Alex Elder <elder@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-sound@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
+	Daniel Vetter <daniel@ffwll.ch>, netdev@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] pm: runtime: Simplify pm_runtime_get_if_active()
+ usage
+Message-ID: <20240123172423.GA317147@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240123095642.97303-2-sakari.ailus@linux.intel.com>
 
-Use device life-cycle managed register function to simplify probe.
+On Tue, Jan 23, 2024 at 11:56:42AM +0200, Sakari Ailus wrote:
+> There are two ways to opportunistically increment a device's runtime PM
+> usage count, calling either pm_runtime_get_if_active() or
+> pm_runtime_get_if_in_use(). The former has an argument to tell whether to
+> ignore the usage count or not, and the latter simply calls the former with
+> ign_usage_count set to false. The other users that want to ignore the
+> usage_count will have to explitly set that argument to true which is a bit
+> cumbersome.
+> 
+> To make this function more practical to use, remove the ign_usage_count
+> argument from the function. The main implementation is renamed as
+> pm_runtime_get_conditional().
+> 
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Reviewed-by: Alex Elder <elder@linaro.org> # drivers/net/ipa/ipa_smp2p.c
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Acked-by: Takashi Iwai <tiwai@suse.de> # sound/
+> Reviewed-by: Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com> # drivers/accel/ivpu/
+> Acked-by: Rodrigo Vivi <rodrigo.vivi@intel.com> # drivers/gpu/drm/i915/
+> Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
 
-Signed-off-by: Andrew Davis <afd@ti.com>
----
- drivers/firmware/ti_sci.c | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+Acked-by: Bjorn Helgaas <bhelgaas@google.com> # drivers/pci/
 
-diff --git a/drivers/firmware/ti_sci.c b/drivers/firmware/ti_sci.c
-index 8b9a2556de16d..16501aa0b84cf 100644
---- a/drivers/firmware/ti_sci.c
-+++ b/drivers/firmware/ti_sci.c
-@@ -103,7 +103,6 @@ struct ti_sci_desc {
-  */
- struct ti_sci_info {
- 	struct device *dev;
--	struct notifier_block nb;
- 	const struct ti_sci_desc *desc;
- 	struct dentry *d;
- 	void __iomem *debug_region;
-@@ -122,7 +121,6 @@ struct ti_sci_info {
- 
- #define cl_to_ti_sci_info(c)	container_of(c, struct ti_sci_info, cl)
- #define handle_to_ti_sci_info(h) container_of(h, struct ti_sci_info, handle)
--#define reboot_to_ti_sci_info(n) container_of(n, struct ti_sci_info, nb)
- 
- #ifdef CONFIG_DEBUG_FS
- 
-@@ -3254,10 +3252,9 @@ devm_ti_sci_get_resource(const struct ti_sci_handle *handle, struct device *dev,
- }
- EXPORT_SYMBOL_GPL(devm_ti_sci_get_resource);
- 
--static int tisci_reboot_handler(struct notifier_block *nb, unsigned long mode,
--				void *cmd)
-+static int tisci_reboot_handler(struct sys_off_data *data)
- {
--	struct ti_sci_info *info = reboot_to_ti_sci_info(nb);
-+	struct ti_sci_info *info = data->cb_data;
- 	const struct ti_sci_handle *handle = &info->handle;
- 
- 	ti_sci_cmd_core_reboot(handle);
-@@ -3400,10 +3397,9 @@ static int ti_sci_probe(struct platform_device *pdev)
- 	ti_sci_setup_ops(info);
- 
- 	if (reboot) {
--		info->nb.notifier_call = tisci_reboot_handler;
--		info->nb.priority = 128;
--
--		ret = register_restart_handler(&info->nb);
-+		ret = devm_register_restart_handler(dev,
-+						    tisci_reboot_handler,
-+						    info);
- 		if (ret) {
- 			dev_err(dev, "reboot registration fail(%d)\n", ret);
- 			goto out;
--- 
-2.39.2
+- Previous PM history uses "PM: " in the subject lines (not "pm: ").
 
+- I don't know whether it's feasible, but it would be nice if the
+  intel_pm_runtime_pm.c rework could be done in one shot instead of
+  being split between patches 1/3 and 2/3.
+
+  Maybe it could be a preliminary patch that uses the existing
+  if_active/if_in_use interfaces, followed by the trivial if_active
+  updates in this patch.  I think that would make the history easier
+  to read than having the transitory pm_runtime_get_conditional() in
+  the middle.
+
+- Similarly, it would be nice if pm_runtime_get_conditional() never
+  had to be published in pm_runtime.h, instead of being temporarily
+  added there by this patch and then immediately made private by 2/3.
+  Maybe that's not practical, I dunno.
+
+Bjorn
 
