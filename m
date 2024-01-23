@@ -1,190 +1,147 @@
-Return-Path: <linux-pm+bounces-2527-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2528-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 020BB83834C
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 03:27:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 422D0838507
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 03:38:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 27A941C295E4
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 02:27:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E4963290300
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 02:38:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48CAC612DD;
-	Tue, 23 Jan 2024 01:55:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A5137C0BC;
+	Tue, 23 Jan 2024 02:08:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H52PV/vs"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="jlxuETIp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B70120DF3;
-	Tue, 23 Jan 2024 01:55:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6AE67C0B5
+	for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 02:08:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705974929; cv=none; b=KECcQT2llweYfHnm0rm1jtg/cuToTHNDsoZiUbJe7Z9XXJhQ3xUI+QooTbRTHM1VGtSaA97MOzQBF2PX/QmqE4xhaU/nX02gUd6uzVIlStTQRl8kfDIEu/ykgN0uN1P0EcdADEEDFQyGGuN9yejIS+IJRSrbnCgjEEHZcw1f3aw=
+	t=1705975728; cv=none; b=Qyjz9k9of2U1I2rUPTVIa9ACMuGoK7Ilj6bDOK14RHrUPoqedZGpiBy0LxjmJkBA0Cr5D9jywevUWu+eYr+bcFtGvfiFPOuw9louC1r9ffaCNp0Q1YQJsEELI+DsDzPibWgmeeQSze1b5eXLgAUK6C9dJwtibipE3CEbzNcRYD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705974929; c=relaxed/simple;
-	bh=PlMfCQXOLuiUnoNxI1m0m3HX0MZ+Lbok1A9R0kJJkU0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ccu+2Vd5VnbZiFcn5SVIZyQ6XV2tol+1P4SmiVYq9esJuEE6zGN6YUKJobcB7Vt+9OmU/a2EetTq5DJX7/Tyuq9ZLk0mv8GDNXwWSWGUSIFgqne5onX76ypiA94prpGMGwtzevJOhO2sstQHRDIYzlk0oixwoq5lQn8w+R8U4Qk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H52PV/vs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29637C433F1;
-	Tue, 23 Jan 2024 01:55:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705974928;
-	bh=PlMfCQXOLuiUnoNxI1m0m3HX0MZ+Lbok1A9R0kJJkU0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H52PV/vsOGBLGJju20vxT4kJSE5HpjzukyjNVqZE99c+ElcwL/a6lImQ36/ySzLZ4
-	 3ibsX6zzoxiX9283SQcwd4hQJM5jwZUrvsWOYAjxnushnLd5sWMxIbSVerkFf4Xn3C
-	 oDXWFA+7P3kIFG7C2Zl3AUEuGv2QiIzbukRv0ML/vCMhG/0TA7d0ybW64wCf55tv5p
-	 Brd2JKuz7iy2v86ysWG4lg9DL0DlxPbEtD9807LeBJ+5nn+QkhjkEyU8/zydK9XGPC
-	 54QgeNurSdnxO3JytHTUZLiUM/CB8/NkuqS5XlOZCj+c6aMyhFULDUMnUktkrHIgl6
-	 anWa0eEGm7h1A==
-Date: Tue, 23 Jan 2024 01:55:25 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
-	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	sudeep.holla@arm.com, gregkh@linuxfoundation.org, rafael@kernel.org,
-	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-	viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
-	lukasz.luba@arm.com, ionela.voinescu@arm.com,
-	pierre.gondois@arm.com, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-	conor.dooley@microchip.com, suagrfillet@gmail.com,
-	ajones@ventanamicro.com, lftan@kernel.org, beata.michalska@arm.com,
-	=?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>
-Subject: Re: [PATCH v7 3/7] cpufreq/schedutil: Use a fixed reference frequency
-Message-ID: <Za8cjQXptttuyb6c@finisterre.sirena.org.uk>
-References: <20231211104855.558096-1-vincent.guittot@linaro.org>
- <20231211104855.558096-4-vincent.guittot@linaro.org>
+	s=arc-20240116; t=1705975728; c=relaxed/simple;
+	bh=R+kv9l/ZUzM8R/FElAZPCWzzxzFAddYDRk9QLtHUjGQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JcCPfnZFjym9hpy8O4YwGdfkpYw6v1HuBKFKhMNPW4DeDj01BDwp6Zdjav6DkWgwaE1/DmWHDWlR415tK/1Uhgy+N+IWB4RsK8cZ6P0x+VmoTTZpI+0VMR2063yPVHxBTJ4qLI09ZnAaPPJK97QocLLm+SLq8kL2UHuksJChEgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=jlxuETIp; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a277339dcf4so415861366b.2
+        for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 18:08:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1705975724; x=1706580524; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2o6pnpX/gRRzVtSBelmPlR+54VBb1uBa/4Pwf2be9x4=;
+        b=jlxuETIpd6q3tab8WM4HKNWnsRGEui4Z+zs2siiFXbFnb+46nFf5LplBA0j/nETlrO
+         5QC3f+C5KDbfeO/xbV0HQYdQsx5xGrEZFhcwn1iI/EmFLrYCdxzG87BOTgIqOeJGnPqU
+         otJsOU+Ox+j8VyftjD2aIqkLaFWw3HvbubehE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705975724; x=1706580524;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2o6pnpX/gRRzVtSBelmPlR+54VBb1uBa/4Pwf2be9x4=;
+        b=WmXBEZ9ujCVyRvvUgsbTaQ0cPoPlJUEl4lgP3zdNBh17aGUEoeZSkxhIOxL/F4yuiy
+         L2NBtbU9g+F70usMOwt8IN6aOjsLKAWNSc5HY//UxLMpmBsdZaNhG9ie+xYKqh+lmv+8
+         ZxkL+Eo70noKXGTBz9b6t9uxLrtWDucGqb9IKdfgHzyCwrVfJLvkwpXWUgj1uswBeAzs
+         jBW6VguvwC+23jUudHtSmvZcQ9SKjqK8PYtWcU9QLtj3o7chrzSz+T97fl25WeKGXcKr
+         4cv8js8rSdsR9Eh/J5VxUGgYD1DBOCgRFLsUI9WeqJHXh9aqjbaItv+usqFZZah49w6l
+         UbXw==
+X-Gm-Message-State: AOJu0YySY7XPwUqKUT8Z/qGH1X0Mdk7oJzPlvYtyJbNGEzx+Qfacg4WU
+	oHyzXS37n5gd4LEtcBif1GsCduXVrGoBlaQZwvvWlcr1IUO4oE9Bf8Q7I+GScAsKSmZqbitWyho
+	=
+X-Google-Smtp-Source: AGHT+IEQRAZmvhkDx4UQV5Sd1d7vCB1aXsD0Epwm9G3QeRyZt4t8/6PPZ0wD7MZx7Qdq7+lG9cZqmw==
+X-Received: by 2002:a17:906:8a55:b0:a2a:2498:93c5 with SMTP id gx21-20020a1709068a5500b00a2a249893c5mr2360813ejc.73.1705975724530;
+        Mon, 22 Jan 2024 18:08:44 -0800 (PST)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com. [209.85.221.54])
+        by smtp.gmail.com with ESMTPSA id d15-20020a170906c20f00b00a2ae7fb3fc6sm14029260ejz.93.2024.01.22.18.08.43
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Jan 2024 18:08:43 -0800 (PST)
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-337cc8e72f5so3504816f8f.1
+        for <linux-pm@vger.kernel.org>; Mon, 22 Jan 2024 18:08:43 -0800 (PST)
+X-Received: by 2002:a5d:4683:0:b0:337:c6b6:fe5d with SMTP id
+ u3-20020a5d4683000000b00337c6b6fe5dmr2533245wrq.102.1705975723146; Mon, 22
+ Jan 2024 18:08:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="rky4jjSVNSd+SvwM"
-Content-Disposition: inline
-In-Reply-To: <20231211104855.558096-4-vincent.guittot@linaro.org>
-X-Cookie: Two heads are more numerous than one.
+References: <170359668692.1864392.6909734045167510522.stgit@mhiramat.roam.corp.google.com>
+ <170359669607.1864392.5078004271237566637.stgit@mhiramat.roam.corp.google.com>
+ <20240117090706.3522d23763fab9dcea21aee1@kernel.org> <CAJZ5v0gqWRsSGQZp7tz-0Kw6od+fjd_iof4Rj7fkBy80ySkcEQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gqWRsSGQZp7tz-0Kw6od+fjd_iof4Rj7fkBy80ySkcEQ@mail.gmail.com>
+From: Brian Norris <briannorris@chromium.org>
+Date: Mon, 22 Jan 2024 18:08:22 -0800
+X-Gmail-Original-Message-ID: <CA+ASDXOwfUrqRDVx_Fi62ERCLRPF+ixD014vE21Sm4mLF_j12A@mail.gmail.com>
+Message-ID: <CA+ASDXOwfUrqRDVx_Fi62ERCLRPF+ixD014vE21Sm4mLF_j12A@mail.gmail.com>
+Subject: Re: [PATCH v7] PM: sleep: Expose last succeeded resumed timestamp in sysfs
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
+	Randy Dunlap <rdunlap@infradead.org>, suleiman@google.com, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Jan 19, 2024 at 1:08=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
+g> wrote:
+> On Wed, Jan 17, 2024 at 1:07=E2=80=AFAM Masami Hiramatsu <mhiramat@kernel=
+.org> wrote:
+> >
+> > Gently ping,
+> >
+> > I would like to know this is enough or I should add more info/update.
+>
+> I still am not sure what this is going to be useful for.
+>
+> Do you have a specific example?
 
---rky4jjSVNSd+SvwM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Since there seems to be some communication gap here, I'll give it a try.
 
-On Mon, Dec 11, 2023 at 11:48:51AM +0100, Vincent Guittot wrote:
-> cpuinfo.max_freq can change at runtime because of boost as an example. This
-> implies that the value could be different than the one that has been
-> used when computing the capacity of a CPU.
+First, I'll paste the key phrase of its use case from the cover letter:
 
-So, this seems very weird but I just finished a bisection of a failure
-that showed up during the merge window with the DT kselftests on
-meson-gxl-s905x-libretech-cc (Libretech Le Potato) running an arm64
-defconfig.  Looking at the commit this seems like a very surprising
-false result but I verified that the commit before this one runs fine
-and reproduced the failure, the bisect does seem to converge well also
-so it appears like there's something going on.  Does this ring any bells
-for anyone?
+  "we would like to know how long the resume processes are taken in kernel
+  and in user-space"
 
-The test is timed out by the kselftest wrapper:
+This is a "system measurement" question, for use in tests (e.g., in a
+test lab for CI or for pre-release testing, where we suspend
+Chromebooks, wake them back up, and measure how long the wakeup took)
+or for user-reported metrics (e.g., similar statistics from real
+users' systems, if they've agreed to automatically report usage
+statistics, back to Google). We'd like to know how long it takes for a
+system to wake up, so we can detect when there are problems that lead
+to a slow system-resume experience. The user experience includes both
+time spent in the kernel and time spent after user space has thawed
+(and is spending time in potentially complex power and display manager
+stacks) before a Chromebook's display lights back up.
 
-   kselftest: Running tests in dt
-   TAP version 13
-   1..1
-   # timeout set to 45
-   # selftests: dt: test_unprobed_devices.sh
-   # TAP version 13
-   #
-   not ok 1 selftests: dt: test_unprobed_devices.sh # TIMEOUT 45 seconds
+If I understand the whole of Masami's work correctly, I believe we're
+taking "timestamps parsed out of dmesg" (or potentially out of ftrace,
+trace events, etc.) to measure the kernel side, plus "timestamp
+provided here in CLOCK_MONOTONIC" and "timestamp determined in our
+power/display managers" to measure user space.
 
-with no obvious effect on the system, a successful run takes less than
-20 seconds so it shouldn't be that the timing is marginal.  I'm guessing
-that reading the one of the files under /sys/devices hung.  No other
-boards in my lab are affected and I'm not immediately seeing anything
-remarkable about this board.  Full log from a bad run at:
+Does that make sense? Or are we still missing something "specific" for
+you? I could give code pointers [1], as it's all open source. But I'm
+not sure browsing our metric-collection code would help understanding
+any more than these explanations.
 
-    https://lava.sirena.org.uk/scheduler/job/493329
+(TBH, this all still seems kinda odd to me, since parsing dmesg isn't
+a great way to get machine-readable information. But this at least
+serves to close some gaps in measurement.)
 
-and a good run:
+Brian
 
-    https://lava.sirena.org.uk/scheduler/job/492453
-
-Bisect log (the skipped commits didn't build):
-
-git bisect start
-# status: waiting for both good and bad commits
-# bad: [4fbbed7872677b0a28ba8237169968171a61efbd] Merge tag 'timers-core-2024-01-21' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
-git bisect bad 4fbbed7872677b0a28ba8237169968171a61efbd
-# status: waiting for good commit(s), bad commit known
-# good: [0dd3ee31125508cd67f7e7172247f05b7fd1753a] Linux 6.7
-git bisect good 0dd3ee31125508cd67f7e7172247f05b7fd1753a
-# bad: [ba5afb9a84df2e6b26a1b6389b98849cd16ea757] fs: rework listmount() implementation
-git bisect bad ba5afb9a84df2e6b26a1b6389b98849cd16ea757
-# bad: [de927f6c0b07d9e698416c5b287c521b07694cac] Merge tag 's390-6.8-1' of git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux
-git bisect bad de927f6c0b07d9e698416c5b287c521b07694cac
-# bad: [35f11a3710cdcbbc5090d14017a6295454e0cc73] Merge tag 'mtd/for-6.8' of git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux
-git bisect bad 35f11a3710cdcbbc5090d14017a6295454e0cc73
-# bad: [d30e51aa7b1f6fa7dd78d4598d1e4c047fcc3fb9] Merge tag 'slab-for-6.8' of git://git.kernel.org/pub/scm/linux/kernel/git/vbabka/slab
-git bisect bad d30e51aa7b1f6fa7dd78d4598d1e4c047fcc3fb9
-# skip: [968b80332432172dbbb773e749a43bdc846d1a13] Merge tag 'powerpc-6.8-1' of git://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux
-git bisect skip 968b80332432172dbbb773e749a43bdc846d1a13
-# good: [372a34e66fb7f95124fadae9c600b231c35696a7] fs: replace f_rcuhead with f_task_work
-git bisect good 372a34e66fb7f95124fadae9c600b231c35696a7
-# good: [ae24db43b3b427eb290b58d55179c32f0a7539d1] powerpc/ftrace: Remove nops after the call to ftrace_stub
-git bisect good ae24db43b3b427eb290b58d55179c32f0a7539d1
-# skip: [3cf1d6a5fbf3f724d12b01635319924239d42c00] Merge tag 'm68k-for-v6.8-tag1' of git://git.kernel.org/pub/scm/linux/kernel/git/geert/linux-m68k
-git bisect skip 3cf1d6a5fbf3f724d12b01635319924239d42c00
-# good: [2a33e2ddc6ebf9b5468091aded8a38f57de9a580] splice: remove permission hook from do_splice_direct()
-git bisect good 2a33e2ddc6ebf9b5468091aded8a38f57de9a580
-# good: [9b7e9e2f5d5c3d079ec46bc71b114012e362ea6e] fs: factor out backing_file_splice_{read,write}() helpers
-git bisect good 9b7e9e2f5d5c3d079ec46bc71b114012e362ea6e
-# good: [12c1b632d970c0138b4c5c65a1065e7d0604d272] fs: reformat idmapped mounts entry
-git bisect good 12c1b632d970c0138b4c5c65a1065e7d0604d272
-# good: [d23627a7688fabff0096a7beaff1a93de76afaad] EDAC/igen6: Add Intel Raptor Lake-P SoCs support
-git bisect good d23627a7688fabff0096a7beaff1a93de76afaad
-# skip: [ab5f3fcb7c72094684760e0cd8954d8d570b5e83] Merge tag 'arm64-upstream' of git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux
-git bisect skip ab5f3fcb7c72094684760e0cd8954d8d570b5e83
-# good: [eb183b2cd0a6549992eca3c4ada0b1bc1d9340f5] Revert "perf/arm_dmc620: Remove duplicate format attribute #defines"
-git bisect good eb183b2cd0a6549992eca3c4ada0b1bc1d9340f5
-# good: [1ab33c03145d0f6c345823fc2da935d9a1a9e9fc] asm-generic: make sparse happy with odd-sized put_unaligned_*()
-git bisect good 1ab33c03145d0f6c345823fc2da935d9a1a9e9fc
-# good: [794c68b20408bb6899f90314e36e256924cc85a1] x86/CPU/AMD: Get rid of amd_erratum_1485[]
-git bisect good 794c68b20408bb6899f90314e36e256924cc85a1
-# bad: [11137d384996bb05cf33c8163db271e1bac3f4bf] sched/fair: Simplify util_est
-git bisect bad 11137d384996bb05cf33c8163db271e1bac3f4bf
-# good: [9c0b4bb7f6303c9c4e2e34984c46f5a86478f84d] sched/cpufreq: Rework schedutil governor performance estimation
-git bisect good 9c0b4bb7f6303c9c4e2e34984c46f5a86478f84d
-# good: [599457ba15403037b489fe536266a3d5f9efaed7] cpufreq: Use the fixed and coherent frequency for scaling capacity
-git bisect good 599457ba15403037b489fe536266a3d5f9efaed7
-# bad: [50b813b147e9eb6546a1fc49d4e703e6d23691f2] cpufreq/cppc: Move and rename cppc_cpufreq_{perf_to_khz|khz_to_perf}()
-git bisect bad 50b813b147e9eb6546a1fc49d4e703e6d23691f2
-# bad: [15cbbd1d317e07b4e5c6aca5d4c5579539a82784] energy_model: Use a fixed reference frequency
-git bisect bad 15cbbd1d317e07b4e5c6aca5d4c5579539a82784
-# bad: [b3edde44e5d4504c23a176819865cd603fd16d6c] cpufreq/schedutil: Use a fixed reference frequency
-git bisect bad b3edde44e5d4504c23a176819865cd603fd16d6c
-# first bad commit: [b3edde44e5d4504c23a176819865cd603fd16d6c] cpufreq/schedutil: Use a fixed reference frequency
-
---rky4jjSVNSd+SvwM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWvHIwACgkQJNaLcl1U
-h9BKeAf+IFKGcFk0BJUojgKhxZlLR+EoeCrr+qKvkf4MJnUJL08q61JYwLMM819p
-6VM9aQxyVMZV4odlJ1iquxKsIWhGNsGjZoUN+75nVoNvC33xq3bWyi4hQuwuI5pD
-QdMDesukSV+dxpIGQ99rMt5DvYPUx17pGYP12O169bX5CH5KSxY/9Ct/tjgxs6tH
-zw+2s7IATJ1b2ShOFKgrhpk30UoaB0kHl/ojFa6+5AoAJtNXcXA2V0ho2I3ochZV
-F/NwOGdv0N0keLAuXoatUutq+MUfM8gRSitwO6Vg9VJ1EozUI8LFBeHsO9M98X7K
-Ey0zu/yA6e8muzklAjcX3c0cFCMVHw==
-=pMbb
------END PGP SIGNATURE-----
-
---rky4jjSVNSd+SvwM--
+[1] e.g., https://source.chromium.org/chromiumos/chromiumos/codesearch/+/ma=
+in:src/platform2/power_manager/powerd/metrics_collector.cc;l=3D294;drc=3Dce=
+8075df179c4f8b2f4e4c4df6978d3df665c4d1
 
