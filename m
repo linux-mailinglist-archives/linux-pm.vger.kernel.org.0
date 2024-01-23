@@ -1,191 +1,173 @@
-Return-Path: <linux-pm+bounces-2543-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2544-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2E1E838A48
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 10:27:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6ECCB838B1F
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 10:57:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54A3B28406A
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 09:27:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F25211F22CB5
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 09:57:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE64759B54;
-	Tue, 23 Jan 2024 09:27:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 474115A0E7;
+	Tue, 23 Jan 2024 09:56:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GbaLFC2f"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4078059B4A;
-	Tue, 23 Jan 2024 09:27:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 521965A781;
+	Tue, 23 Jan 2024 09:56:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706002052; cv=none; b=KXTmKcrPZMC7467urmHRikfGdT6qL2NMUbBUAOX++bb0lVUYCdjfz7qhJYcrqAEK5kYZNdV3HH8yku6jCfv0/ZVRInYA7FdsryA8miZ7jrpxdxcTiPn1Pinmzlouxumc83euLjX5qyzXNSAU2xVVb/o9r/0tAapIn1inV5Vf4hQ=
+	t=1706003816; cv=none; b=bHg2nwWhBUeMCA/JA8mjh3wXry9s7GJOyQNHp2X8r9VwuiK1VzdK5uE0MliBMv3+u0mGPCAt8EW109k9XMzu8xi4fOEKlRPYovfoKREtDW9IHxtlJ3CVsaJpi1jBylqr5ndTm/ToGkMXvfm1yPsJ9J+pPMowysljvy04cMh/j70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706002052; c=relaxed/simple;
-	bh=G0yzi1lG3fmcjNl/RGBz0t5QUu3R0RD1gtXtI6hWloQ=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GBjKR0ha1er+wuv6XsA0lRlisBqjMfFZnlRSx+1+OyTjIVVkKkXyZVbTOtbuO+XVvpSmtmHKA1xPK/WDy4KpiWK9wE9n42YPYE3kej1w3bdhyh0zeHjWXao9mtcRYbSiPePJKKcaUe2j0KlAoaoaM+G7ZdWDgrTGcxzG8wqSNeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4TK1rm0gmyz6K6JX;
-	Tue, 23 Jan 2024 17:24:56 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 9EBF81406AD;
-	Tue, 23 Jan 2024 17:27:26 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 23 Jan
- 2024 09:27:26 +0000
-Date: Tue, 23 Jan 2024 09:27:25 +0000
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-CC: "Rafael J. Wysocki" <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
-	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-riscv@lists.infradead.org>,
-	<kvmarm@lists.linux.dev>, <x86@kernel.org>,
-	<acpica-devel@lists.linuxfoundation.org>, <linux-csky@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-ia64@vger.kernel.org>,
-	<linux-parisc@vger.kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>, <jianyong.wu@arm.com>,
-	<justin.he@arm.com>, James Morse <james.morse@arm.com>,
-	<vishnu@os.amperecomputing.com>, <miguel.luis@oracle.com>
-Subject: Re: [PATCH RFC v3 03/21] ACPI: processor: Register CPUs that are
- online, but not described in the DSDT
-Message-ID: <20240123092725.00004382@Huawei.com>
-In-Reply-To: <Za6mHRJVjb6M1mun@shell.armlinux.org.uk>
-References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
-	<E1rDOg2-00Dvjk-RI@rmk-PC.armlinux.org.uk>
-	<CAJZ5v0ju1JHgpjuFLHZVs4NZiARG6iBZN_wza6c2e0kDhZjK0w@mail.gmail.com>
-	<ZaURtUvWQyjYfiiO@shell.armlinux.org.uk>
-	<20240122160227.00002d83@Huawei.com>
-	<CAJZ5v0hamuXJ_w-TSmVb=5jGide=Lb7sCjbzzNb_rFuPrvkgxQ@mail.gmail.com>
-	<Za6mHRJVjb6M1mun@shell.armlinux.org.uk>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1706003816; c=relaxed/simple;
+	bh=giqjHNiHA5lOOXvLyPmmD7zXAE91+Pqyfa9jWZiXxrk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Hvqli8CRUISjK/JNOIlQgZDwBdnAwQJekjwPf1LCcowhdMaNmJu8Vbijriv9WKfS4MLSJgrklqcWudLOOPa2StgVYwO7EUaTBHPtsJ3pkyDqH6wPe3Ut4pLFlAUpU70yR2KfeY1OpWVSyfMOy1GQt9iIUehcexy15qT8mmqqjoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GbaLFC2f; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706003815; x=1737539815;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=giqjHNiHA5lOOXvLyPmmD7zXAE91+Pqyfa9jWZiXxrk=;
+  b=GbaLFC2fWlGW9+IB6Xgf8Bxcq4EaAD4lk3qS36kTvcsDd4X2bPqySXfJ
+   FN8/q3O1seoEDpsnFF8Rg7WiEON+yJ00GR6P+UykLHekxsbKxvFcin08u
+   mf03RParLv83OxPOlkMbZCtiaSK3ZAH1M0M9pX15UZkQKEgDSCtfPfpqG
+   gHBY1tW5akeBrR89MqGFBWod9THaczH0u39CV3GVk4vQWu/YCwLii3s80
+   UlTO4750NlOWHEF+T3XK6sTXi4r//zvWIeIPCfWY7aq6+DdXnUi9sEXur
+   DHUK2abtM2AZEVOwUpIsbFA8K3S0VfUfT886WVhpMHFkp6X5yqthXQTVQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10961"; a="365646"
+X-IronPort-AV: E=Sophos;i="6.05,214,1701158400"; 
+   d="scan'208";a="365646"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2024 01:56:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,214,1701158400"; 
+   d="scan'208";a="27962082"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2024 01:56:47 -0800
+Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 2554111FC49;
+	Tue, 23 Jan 2024 11:56:43 +0200 (EET)
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: linux-pm@vger.kernel.org
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	laurent.pinchart@ideasonboard.com,
+	Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+	David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	=?UTF-8?q?Thomas=20Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
+	Paul Elder <paul.elder@ideasonboard.com>,
+	Alex Elder <elder@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Mark Brown <broonie@kernel.org>,
+	dri-devel@lists.freedesktop.org,
+	intel-gfx@lists.freedesktop.org,
+	intel-xe@lists.freedesktop.org,
+	linux-media@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-sound@vger.kernel.org
+Subject: [PATCH v4 0/3] Small runtime PM API changes
+Date: Tue, 23 Jan 2024 11:56:41 +0200
+Message-Id: <20240123095642.97303-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+Content-Transfer-Encoding: 8bit
 
-On Mon, 22 Jan 2024 17:30:05 +0000
-"Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
+Hi folks,
 
-> On Mon, Jan 22, 2024 at 05:22:46PM +0100, Rafael J. Wysocki wrote:
-> > On Mon, Jan 22, 2024 at 5:02=E2=80=AFPM Jonathan Cameron
-> > <Jonathan.Cameron@huawei.com> wrote: =20
-> > >
-> > > On Mon, 15 Jan 2024 11:06:29 +0000
-> > > "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
-> > > =20
-> > > > On Mon, Dec 18, 2023 at 09:22:03PM +0100, Rafael J. Wysocki wrote: =
-=20
-> > > > > On Wed, Dec 13, 2023 at 1:49=E2=80=AFPM Russell King <rmk+kernel@=
-armlinux.org.uk> wrote: =20
-> > > > > >
-> > > > > > From: James Morse <james.morse@arm.com>
-> > > > > >
-> > > > > > ACPI has two descriptions of CPUs, one in the MADT/APIC table, =
-the other
-> > > > > > in the DSDT. Both are required. (ACPI 6.5's 8.4 "Declaring Proc=
-essors"
-> > > > > > says "Each processor in the system must be declared in the ACPI
-> > > > > > namespace"). Having two descriptions allows firmware authors to=
- get
-> > > > > > this wrong.
-> > > > > >
-> > > > > > If CPUs are described in the MADT/APIC, they will be brought on=
-line
-> > > > > > early during boot. Once the register_cpu() calls are moved to A=
-CPI,
-> > > > > > they will be based on the DSDT description of the CPUs. When CP=
-Us are
-> > > > > > missing from the DSDT description, they will end up online, but=
- not
-> > > > > > registered.
-> > > > > >
-> > > > > > Add a helper that runs after acpi_init() has completed to regis=
-ter
-> > > > > > CPUs that are online, but weren't found in the DSDT. Any CPU th=
-at
-> > > > > > is registered by this code triggers a firmware-bug warning and =
-kernel
-> > > > > > taint.
-> > > > > >
-> > > > > > Qemu TCG only describes the first CPU in the DSDT, unless cpu-h=
-otplug
-> > > > > > is configured. =20
-> > > > >
-> > > > > So why is this a kernel problem? =20
-> > > >
-> > > > So what are you proposing should be the behaviour here? What this
-> > > > statement seems to be saying is that QEMU as it exists today only
-> > > > describes the first CPU in DSDT. =20
-> > >
-> > > This confuses me somewhat, because I'm far from sure which machines t=
-his
-> > > is true for in QEMU.  I'm guessing it's a legacy thing with
-> > > some old distro version of QEMU - so we'll have to paper over it anyw=
-ay
-> > > but for current QEMU I'm not sure it's true.
-> > >
-> > > Helpfully there are a bunch of ACPI table tests so I've been checking
-> > > through all the multi CPU cases.
-> > >
-> > > CPU hotplug not enabled.
-> > > pc/DSDT.dimmpxm  - 4x Processor entries.  -smp 4
-> > > pc/DSDT.acpihmat - 2x Processor entries.  -smp 2
-> > > q35/DSDT.acpihmat - 2x Processor entries. -smp 2
-> > > virt/DSDT.acpihmatvirt - 4x ACPI0007 entries -smp 4
-> > > q35/DSDT.acpihmat-noinitiator - 4 x Processor () entries -smp 4
-> > > virt/DSDT.topology - 8x ACPI0007 entries
-> > >
-> > > I've also looked at the code and we have various types of
-> > > CPU hotplug on x86 but they all build appropriate numbers of
-> > > Processor() entries in DSDT.
-> > > Arm likewise seems to build the right number of ACPI0007 entries
-> > > (and doesn't yet have CPU HP support).
-> > >
-> > > If anyone can add a reference on why this is needed that would be very
-> > > helpful. =20
-> >=20
-> > Yes, it would.
-> >=20
-> > Personally, I would prefer to assume that it is not necessary until it
-> > turns out that (1) there is firmware with this issue actually in use
-> > and (2) updating the firmware in question to follow the specification
-> > is not practical.
-> >=20
-> > Otherwise, we'd make it easier to ship non-compliant firmware for no
-> > good reason. =20
->=20
-> If Salil can't come up with a reason, then I'm in favour of dropping
-> the patch like already done for patch 2. If the code change serves no
-> useful purpose, there's no point in making the change.
->=20
+Here's a small but a different set of patches for making two relatively
+minor changes to runtime PM API. I restarted version numbering as this is
+meaningfully different from the previous set.
 
-Salil's out today, but I've messaged him to follow up later in the week.
+pm_runtime_get_if_active() loses its second argument as it only made sense
+to have ign_usage_count argument true.
 
-It 'might' be the odd cold plug path where QEMU half comes up, then extra
-CPUs are added, then it boots. (used by some orchestration frameworks)
-I don't have a set up for that and I won't get to creating one today anyway
-(we all love start of the year planning workshops!)
+The other change is also small but it has an effect on callers:
+pm_runtime_put_autosuspend() will, in the future, be re-purposed to
+include a call to pm_runtime_mark_last_busy() as well. Before this,
+current users of the function are moved to __pm_runtime_put_autosuspend()
+(added by this patchset) which will continue to have the current
+behaviour.
 
-I've +CC'd a few people have run tests on the various iterations of this
-work in the past.  Maybe one of them can shed some light on this?
+I haven't included the conversion patches in this set as I only want to do
+that once this set has been approved and merged. The tree specific patches
+can be found here, on linux-next master (there are some V4L2 patches
+there, too, please ignore them for now):
+<URL:https://git.kernel.org/pub/scm/linux/kernel/git/sailus/linux-next.git/log/?
 
-Jonathan
+Later on, users calling pm_runtime_mark_last_busy() immediately followed
+by __pm_runtime_put_autosuspend() will be switched back to
+pm_runtime_put_autosuspend() once its behaviour change has been done (a
+patch near top of that branch). I'll provide these once the preceding ones
+have been merged.
 
+Comments are welcome.
 
+since v3:
 
+- patch 1: Drop the previously added documentation on driver use of
+  pm_runtime_get_conditional().
+
+- Add a patch to make pm_runtime_get_conditional() static, including
+  switching i915 to pm_runtime_get_if_{active,in_use}.
+
+since v2:
+
+- Rebase on v6.8-rc1 (no changes).
+
+- Add Rodrigo's Reviewed-by: to the 1st patch.
+
+since v1:
+
+- patch 1: Rename __pm_runtime_get_conditional() as
+  pm_runtime_get_conditional().
+
+- patch 1: Reword documentation on driver use of
+  pm_runtime_get_conditional().
+
+Sakari Ailus (3):
+  pm: runtime: Simplify pm_runtime_get_if_active() usage
+  pm: runtime: Make pm_runtime_get_if_conditional() private
+  pm: runtime: Add pm_runtime_put_autosuspend() replacement
+
+ Documentation/power/runtime_pm.rst      | 22 +++++++++-------
+ drivers/accel/ivpu/ivpu_pm.c            |  2 +-
+ drivers/base/power/runtime.c            | 34 +++++++++++++++++++++++--
+ drivers/gpu/drm/i915/intel_runtime_pm.c |  5 +++-
+ drivers/gpu/drm/xe/xe_pm.c              |  2 +-
+ drivers/media/i2c/ccs/ccs-core.c        |  2 +-
+ drivers/media/i2c/ov64a40.c             |  2 +-
+ drivers/media/i2c/thp7312.c             |  2 +-
+ drivers/net/ipa/ipa_smp2p.c             |  2 +-
+ drivers/pci/pci.c                       |  2 +-
+ include/linux/pm_runtime.h              | 30 +++++++++++-----------
+ sound/hda/hdac_device.c                 |  2 +-
+ 12 files changed, 72 insertions(+), 35 deletions(-)
+
+-- 
+2.39.2
 
 
