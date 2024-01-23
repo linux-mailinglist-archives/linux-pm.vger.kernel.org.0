@@ -1,266 +1,170 @@
-Return-Path: <linux-pm+bounces-2582-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2583-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 977F283940A
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 17:01:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31E00839477
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 17:16:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 60B44B2223E
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 16:01:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57A911C23775
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 16:16:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BD55612DD;
-	Tue, 23 Jan 2024 16:01:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VpONMdBA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02556664B2;
+	Tue, 23 Jan 2024 16:16:09 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10BD55FBA0;
-	Tue, 23 Jan 2024 16:01:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EC0761674;
+	Tue, 23 Jan 2024 16:16:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706025689; cv=none; b=mtgrizh/8yTUPLzX8DCE76aG7S1Kr9p6xOVMjkco+kuY1huq6LiZ9Kd/E4bNEqtRoFeyCsEvb+DTPzophs2cNLKiAK+BTFAXzzpz3Cfm8FDozrjUX/5D+5Cacnik1loaaeoAz+FkGD0SV6kM8g9UQdDPLM6nGJk4/YD1hb6yB6o=
+	t=1706026568; cv=none; b=ediqZnRvtNZJjelby/Sn+YZPJjLQ8IfWJxnJJ4GXmFPIM427X/4iF81Mv+GUT/Yi5pDHmlglyTroq3QdzSZxaf6of6tv5UDzmVFvf1Ysg1iqv2jJxAloq2BEO3uCb0nSJma1cAL1nRJ3ZZGWcrsiWbMJj+xk60VFIRlM1qGMU6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706025689; c=relaxed/simple;
-	bh=6Mqw4U9lSxqIWa9FJ6sWmZqd9ZOUZYznzU3IIg45qQs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mt7ARdrZB+SlbOh99KMD+QTahWrIXHtnm9FsO6Iq0zfRiRWSOpDQ9VbXWic7hO4KwiB62Mpl0lRDikGT/9mOkIS3T1GEVbJGMXmXzsooHkfmIdkbcyLP/hJ6o7XHeKSHpiQWcfPWM5jeyXmSsCLYu5WDtT8BJZztF3gjz8PPzY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VpONMdBA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E3A2C433C7;
-	Tue, 23 Jan 2024 16:01:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706025688;
-	bh=6Mqw4U9lSxqIWa9FJ6sWmZqd9ZOUZYznzU3IIg45qQs=;
-	h=From:To:Cc:Subject:Date:From;
-	b=VpONMdBAKu8uw1JfEZF3S9P5RDExUDcoxM5mNdwYld/md1bNNQ60ij1/Bg+zz5MLn
-	 Pl8PaeRNdhI0XH7U1EMa018oQqfhzPfLT06zAIWoOF8ltGYzgH31KZh/jeiZOrjDxE
-	 /TtD8aU7XX5mccoAg+Lq91TQsDi9kAzKClLZdt2LoQvNb0PRsdD0eG47gJuRu0/3r6
-	 tel+htjiw1RY3eN0EzhGtI/GFEDALGwwN3/RriTl0uDYM6Q36BiP9QVD3oPqeQyFKw
-	 T8biAjvuYVb7G0v5CSIl+a4SHndfRMCs6/GLz9A1wha0QepusDqOfUvm4pFX565S1z
-	 eFKRCFKSRhAew==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan+linaro@kernel.org>)
-	id 1rSJDZ-000000004mH-3Pib;
-	Tue, 23 Jan 2024 17:01:41 +0100
-From: Johan Hovold <johan+linaro@kernel.org>
-To: Sebastian Reichel <sre@kernel.org>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Xilin Wu <wuxilin123@gmail.com>,
-	linux-arm-msm@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Johan Hovold <johan+linaro@kernel.org>
-Subject: [PATCH] Revert "power: supply: qcom_battmgr: Register the power supplies after PDR is up"
-Date: Tue, 23 Jan 2024 17:00:53 +0100
-Message-ID: <20240123160053.18331-1-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1706026568; c=relaxed/simple;
+	bh=w3+AYXUdBPT1k1chiYw1nvRpK0AKwcZFytOy9qQHdiM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mydW34joNzZQ5GFphB968f7z/i8uG6eSLhdpisEoXarGxkEU8WYE4Kxg4hULDt4J63aaZYN3H2oba/Xg+jdHAulZOvjIsnTV/q07niJtR21ybOw02Y22WIr7UFkBEV3EeKB90f4PvE0UukkT31K4M6wT1GdoSSjWNBY8v79PxPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-6dbc2bf4e8dso902859a34.1;
+        Tue, 23 Jan 2024 08:16:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706026566; x=1706631366;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yJEIU7VR+3J2Yia1miwsBzYF1liLE8jqQNwwQ3tqywA=;
+        b=BVXybsR8i8+Q94fqKbNu65fNCDxERYr1EwBDYE4uDfZomW0ecJcrNZUQNDVSlz7rSY
+         +VZ/kbFwCoT/ym3lc10W3xpU7w8RDBwFwAgLoCXcUexLvPc+NYOiI1PDSLkjv0498BX4
+         aAzrJqrFX0sg47eW125TFLs3at+5DG7NdPIWox89IHARfsqeY7TT+2+OjclrVUOJcCsw
+         K12grXX5NzyM8EDNp8F1dlqcb4wqyam58e6/N+9GFYImyNkcpEl7E1N0VESfzJcM27AH
+         hOQLp8QG0S3x2WdtBIroeIRYW/Yn2r/830tXCuQLLw42rvRCxtP+Nh9qj0C2GilaShBM
+         QUjA==
+X-Gm-Message-State: AOJu0Yz2XrrpP23i7jIWUWw7f0zjQyZhlm0juwYCJfO9ydnEJeuzVLgx
+	MQPQO/EnWqHBBTuWeMAu0/L1OhggYLJEKn2Ih5WUKrrYHxfiG602PbFE1TcVrN8jCnaId7oe5DR
+	phZM9E0cBPoU39C21btV0odXVg8cfRJXA
+X-Google-Smtp-Source: AGHT+IHQzsBW5twpX6SIjbULqATUBQ0vqIkaZWwGQH4D7Ygegig4qDUNFIf/V4v9BHOfqKgEoP5iIqbc4ar0eQw6LMM=
+X-Received: by 2002:a05:6808:f10:b0:3bd:c5eb:451c with SMTP id
+ m16-20020a0568080f1000b003bdc5eb451cmr2255072oiw.1.1706026566440; Tue, 23 Jan
+ 2024 08:16:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk> <E1rDOgD-00Dvk2-3h@rmk-PC.armlinux.org.uk>
+ <CAJZ5v0g9nfLrEf9u4Ksw6BOWJQ9iv8Z-O8RsLU6jR5zk0ahxRw@mail.gmail.com>
+ <20240122180013.000016d5@Huawei.com> <Za++/11n5KA1VS3p@shell.armlinux.org.uk>
+In-Reply-To: <Za++/11n5KA1VS3p@shell.armlinux.org.uk>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 23 Jan 2024 17:15:54 +0100
+Message-ID: <CAJZ5v0h7wsLt8d3ZoLXsK1=crAx66T42WDKNoHcg8CiHpAjS8g@mail.gmail.com>
+Subject: Re: [PATCH RFC v3 05/21] ACPI: Rename ACPI_HOTPLUG_CPU to include 'present'
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	linux-pm@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, 
+	acpica-devel@lists.linuxfoundation.org, linux-csky@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>, 
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com, justin.he@arm.com, 
+	James Morse <james.morse@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This reverts commit b43f7ddc2b7a5a90447d96cb4d3c6d142dd4a810.
+On Tue, Jan 23, 2024 at 2:28=E2=80=AFPM Russell King (Oracle)
+<linux@armlinux.org.uk> wrote:
+>
+> On Mon, Jan 22, 2024 at 06:00:13PM +0000, Jonathan Cameron wrote:
+> > On Mon, 18 Dec 2023 21:35:16 +0100
+> > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
+> >
+> > > On Wed, Dec 13, 2023 at 1:49=E2=80=AFPM Russell King <rmk+kernel@arml=
+inux.org.uk> wrote:
+> > > >
+> > > > From: James Morse <james.morse@arm.com>
+> > > >
+> > > > The code behind ACPI_HOTPLUG_CPU allows a not-present CPU to become
+> > > > present.
+> > >
+> > > Right.
+> > >
+> > > > This isn't the only use of HOTPLUG_CPU. On arm64 and riscv
+> > > > CPUs can be taken offline as a power saving measure.
+> > >
+> > > But still there is the case in which a non-present CPU can become
+> > > present, isn't it there?
+> >
+> > Not yet defined by the architectures (and I'm assuming it probably neve=
+r will be).
+> >
+> > The original proposal we took to ARM was to do exactly that - they push=
+ed
+> > back hard on the basis there was no architecturally safe way to impleme=
+nt it.
+> > Too much of the ARM arch has to exist from the start of time.
+> >
+> > https://lore.kernel.org/linux-arm-kernel/cbaa6d68-6143-e010-5f3c-ec62f8=
+79ad95@arm.com/
+> > is one of the relevant threads of the kernel side of that discussion.
+> >
+> > Not to put specific words into the ARM architects mouths, but the
+> > short description is that there is currently no demand for working
+> > out how to make physical CPU hotplug possible, as such they will not
+> > provide an architecturally compliant way to do it for virtual CPU hotpl=
+ug and
+> > another means is needed (which is why this series doesn't use the prese=
+nt bit
+> > for that purpose and we have the Online capable bit in MADT/GICC)
+> >
+> > It was a 'fun' dance of several years to get to that clarification.
+> > As another fun fact, the same is defined for x86, but I don't think
+> > anyone has used it yet (GICC for ARM has an online capable bit in the f=
+lags to
+> > enable this, which was remarkably similar to the online capable bit in =
+the
+> > flags of the Local APIC entries as added fairly recently).
+> >
+> > >
+> > > > On arm64 an offline CPU may be disabled by firmware, preventing it =
+from
+> > > > being brought back online, but it remains present throughout.
+> > > >
+> > > > Adding code to prevent user-space trying to online these disabled C=
+PUs
+> > > > needs some additional terminology.
+> > > >
+> > > > Rename the Kconfig symbol CONFIG_ACPI_HOTPLUG_PRESENT_CPU to reflec=
+t
+> > > > that it makes possible CPUs present.
+> > >
+> > > Honestly, I don't think that this change is necessary or even useful.
+> >
+> > Whilst it's an attempt to avoid future confusion, the rename is
+> > not something I really care about so my advice to Russell is drop
+> > it unless you are attached to it!
+>
+> While I agree that it isn't a necessity, I don't fully agree that it
+> isn't useful.
+>
+> One of the issues will be that while Arm64 will support hotplug vCPU,
+> it won't be setting ACPI_HOTPLUG_CPU because it doesn't support
+> the present bit changing. So I can see why James decided to rename
+> it - because with Arm64's hotplug vCPU, the idea that ACPI_HOTPLUG_CPU
+> somehow enables hotplug CPU support is now no longer true.
+>
+> Keeping it as ACPI_HOTPLUG_CPU makes the code less obvious, because it
+> leads one to assume that it ought to be enabled for Arm64's
+> implementatinon, and that could well cause issues in the future if
+> people make the assumption that "ACPI_HOTPLUG_CPU" means hotplug CPU
+> is supported in ACPI. It doesn't anymore.
 
-The offending commit deferred power-supply class device registration
-until the service-started notification is received.
-
-This triggers a NULL pointer dereference during boot of the Lenovo
-ThinkPad X13s and SC8280XP CRD as battery status notifications can be
-received before the service-start notification:
-
-	Unable to handle kernel NULL pointer dereference at virtual address 00000000000005c0
-	...
-	Call trace:
-	 _acquire+0x338/0x2064
-	 acquire+0x1e8/0x318
-	 spin_lock_irqsave+0x60/0x88
-	 _supply_changed+0x2c/0xa4
-	 battmgr_callback+0x1d4/0x60c [qcom_battmgr]
-	 pmic_glink_rpmsg_callback+0x5c/0xa4 [pmic_glink]
-	 qcom_glink_native_rx+0x58c/0x7e8
-	 qcom_glink_smem_intr+0x14/0x24 [qcom_glink_smem]
-	 __handle_irq_event_percpu+0xb0/0x2d4
-	 handle_irq_event+0x4c/0xb8
-
-As trying to serialise this is non-trivial and risks missing
-notifications, let's revert to registration during probe so that the
-driver data is all set up once the service goes live.
-
-The warning message during resume in case the aDSP firmware is not
-running that motivated the change can be considered a feature and should
-not be suppressed.
-
-Fixes: b43f7ddc2b7a ("power: supply: qcom_battmgr: Register the power supplies after PDR is up")
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/power/supply/qcom_battmgr.c | 109 +++++++++++++---------------
- 1 file changed, 49 insertions(+), 60 deletions(-)
-
-diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
-index a12e2a66d516..ec163d1bcd18 100644
---- a/drivers/power/supply/qcom_battmgr.c
-+++ b/drivers/power/supply/qcom_battmgr.c
-@@ -282,7 +282,6 @@ struct qcom_battmgr_wireless {
- 
- struct qcom_battmgr {
- 	struct device *dev;
--	struct auxiliary_device *adev;
- 	struct pmic_glink_client *client;
- 
- 	enum qcom_battmgr_variant variant;
-@@ -1294,69 +1293,11 @@ static void qcom_battmgr_enable_worker(struct work_struct *work)
- 		dev_err(battmgr->dev, "failed to request power notifications\n");
- }
- 
--static char *qcom_battmgr_battery[] = { "battery" };
--
--static void qcom_battmgr_register_psy(struct qcom_battmgr *battmgr)
--{
--	struct power_supply_config psy_cfg_supply = {};
--	struct auxiliary_device *adev = battmgr->adev;
--	struct power_supply_config psy_cfg = {};
--	struct device *dev = &adev->dev;
--
--	psy_cfg.drv_data = battmgr;
--	psy_cfg.of_node = adev->dev.of_node;
--
--	psy_cfg_supply.drv_data = battmgr;
--	psy_cfg_supply.of_node = adev->dev.of_node;
--	psy_cfg_supply.supplied_to = qcom_battmgr_battery;
--	psy_cfg_supply.num_supplicants = 1;
--
--	if (battmgr->variant == QCOM_BATTMGR_SC8280XP) {
--		battmgr->bat_psy = devm_power_supply_register(dev, &sc8280xp_bat_psy_desc, &psy_cfg);
--		if (IS_ERR(battmgr->bat_psy))
--			dev_err(dev, "failed to register battery power supply (%ld)\n",
--				PTR_ERR(battmgr->bat_psy));
--
--		battmgr->ac_psy = devm_power_supply_register(dev, &sc8280xp_ac_psy_desc, &psy_cfg_supply);
--		if (IS_ERR(battmgr->ac_psy))
--			dev_err(dev, "failed to register AC power supply (%ld)\n",
--				PTR_ERR(battmgr->ac_psy));
--
--		battmgr->usb_psy = devm_power_supply_register(dev, &sc8280xp_usb_psy_desc, &psy_cfg_supply);
--		if (IS_ERR(battmgr->usb_psy))
--			dev_err(dev, "failed to register USB power supply (%ld)\n",
--				PTR_ERR(battmgr->usb_psy));
--
--		battmgr->wls_psy = devm_power_supply_register(dev, &sc8280xp_wls_psy_desc, &psy_cfg_supply);
--		if (IS_ERR(battmgr->wls_psy))
--			dev_err(dev, "failed to register wireless charing power supply (%ld)\n",
--				PTR_ERR(battmgr->wls_psy));
--	} else {
--		battmgr->bat_psy = devm_power_supply_register(dev, &sm8350_bat_psy_desc, &psy_cfg);
--		if (IS_ERR(battmgr->bat_psy))
--			dev_err(dev, "failed to register battery power supply (%ld)\n",
--				PTR_ERR(battmgr->bat_psy));
--
--		battmgr->usb_psy = devm_power_supply_register(dev, &sm8350_usb_psy_desc, &psy_cfg_supply);
--		if (IS_ERR(battmgr->usb_psy))
--			dev_err(dev, "failed to register USB power supply (%ld)\n",
--				PTR_ERR(battmgr->usb_psy));
--
--		battmgr->wls_psy = devm_power_supply_register(dev, &sm8350_wls_psy_desc, &psy_cfg_supply);
--		if (IS_ERR(battmgr->wls_psy))
--			dev_err(dev, "failed to register wireless charing power supply (%ld)\n",
--				PTR_ERR(battmgr->wls_psy));
--	}
--}
--
- static void qcom_battmgr_pdr_notify(void *priv, int state)
- {
- 	struct qcom_battmgr *battmgr = priv;
- 
- 	if (state == SERVREG_SERVICE_STATE_UP) {
--		if (!battmgr->bat_psy)
--			qcom_battmgr_register_psy(battmgr);
--
- 		battmgr->service_up = true;
- 		schedule_work(&battmgr->enable_work);
- 	} else {
-@@ -1371,9 +1312,13 @@ static const struct of_device_id qcom_battmgr_of_variants[] = {
- 	{}
- };
- 
-+static char *qcom_battmgr_battery[] = { "battery" };
-+
- static int qcom_battmgr_probe(struct auxiliary_device *adev,
- 			      const struct auxiliary_device_id *id)
- {
-+	struct power_supply_config psy_cfg_supply = {};
-+	struct power_supply_config psy_cfg = {};
- 	const struct of_device_id *match;
- 	struct qcom_battmgr *battmgr;
- 	struct device *dev = &adev->dev;
-@@ -1383,7 +1328,14 @@ static int qcom_battmgr_probe(struct auxiliary_device *adev,
- 		return -ENOMEM;
- 
- 	battmgr->dev = dev;
--	battmgr->adev = adev;
-+
-+	psy_cfg.drv_data = battmgr;
-+	psy_cfg.of_node = adev->dev.of_node;
-+
-+	psy_cfg_supply.drv_data = battmgr;
-+	psy_cfg_supply.of_node = adev->dev.of_node;
-+	psy_cfg_supply.supplied_to = qcom_battmgr_battery;
-+	psy_cfg_supply.num_supplicants = 1;
- 
- 	INIT_WORK(&battmgr->enable_work, qcom_battmgr_enable_worker);
- 	mutex_init(&battmgr->lock);
-@@ -1395,6 +1347,43 @@ static int qcom_battmgr_probe(struct auxiliary_device *adev,
- 	else
- 		battmgr->variant = QCOM_BATTMGR_SM8350;
- 
-+	if (battmgr->variant == QCOM_BATTMGR_SC8280XP) {
-+		battmgr->bat_psy = devm_power_supply_register(dev, &sc8280xp_bat_psy_desc, &psy_cfg);
-+		if (IS_ERR(battmgr->bat_psy))
-+			return dev_err_probe(dev, PTR_ERR(battmgr->bat_psy),
-+					     "failed to register battery power supply\n");
-+
-+		battmgr->ac_psy = devm_power_supply_register(dev, &sc8280xp_ac_psy_desc, &psy_cfg_supply);
-+		if (IS_ERR(battmgr->ac_psy))
-+			return dev_err_probe(dev, PTR_ERR(battmgr->ac_psy),
-+					     "failed to register AC power supply\n");
-+
-+		battmgr->usb_psy = devm_power_supply_register(dev, &sc8280xp_usb_psy_desc, &psy_cfg_supply);
-+		if (IS_ERR(battmgr->usb_psy))
-+			return dev_err_probe(dev, PTR_ERR(battmgr->usb_psy),
-+					     "failed to register USB power supply\n");
-+
-+		battmgr->wls_psy = devm_power_supply_register(dev, &sc8280xp_wls_psy_desc, &psy_cfg_supply);
-+		if (IS_ERR(battmgr->wls_psy))
-+			return dev_err_probe(dev, PTR_ERR(battmgr->wls_psy),
-+					     "failed to register wireless charing power supply\n");
-+	} else {
-+		battmgr->bat_psy = devm_power_supply_register(dev, &sm8350_bat_psy_desc, &psy_cfg);
-+		if (IS_ERR(battmgr->bat_psy))
-+			return dev_err_probe(dev, PTR_ERR(battmgr->bat_psy),
-+					     "failed to register battery power supply\n");
-+
-+		battmgr->usb_psy = devm_power_supply_register(dev, &sm8350_usb_psy_desc, &psy_cfg_supply);
-+		if (IS_ERR(battmgr->usb_psy))
-+			return dev_err_probe(dev, PTR_ERR(battmgr->usb_psy),
-+					     "failed to register USB power supply\n");
-+
-+		battmgr->wls_psy = devm_power_supply_register(dev, &sm8350_wls_psy_desc, &psy_cfg_supply);
-+		if (IS_ERR(battmgr->wls_psy))
-+			return dev_err_probe(dev, PTR_ERR(battmgr->wls_psy),
-+					     "failed to register wireless charing power supply\n");
-+	}
-+
- 	battmgr->client = devm_pmic_glink_register_client(dev,
- 							  PMIC_GLINK_OWNER_BATTMGR,
- 							  qcom_battmgr_callback,
--- 
-2.43.0
-
+On x86 there is no confusion AFAICS.  It's always meant "as long as
+the platform supports it".
 
