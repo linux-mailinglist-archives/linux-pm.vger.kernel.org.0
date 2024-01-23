@@ -1,437 +1,194 @@
-Return-Path: <linux-pm+bounces-2554-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2555-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC46F838CAC
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 11:58:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEE52838E6A
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 13:22:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C1F31F21D72
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 10:58:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6984A1F25067
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 12:22:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4640D5C906;
-	Tue, 23 Jan 2024 10:58:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F21BA5C8FF;
+	Tue, 23 Jan 2024 12:22:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Cexv6yS4"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="daSWs3v5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2357459B57;
-	Tue, 23 Jan 2024 10:58:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD9B5DF18
+	for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 12:22:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706007487; cv=none; b=klHbUECgOEHHHcxGzlBddAzDoumUDAx7h2wykzUC/lCNv1pJSHqNPiiFdYsdr0Bz/oYhNlcMoH/znAvhL3LO6qVKotkwks1tOAOeYScfAGklu2dA/+ZqAGcexaBS5TFp8/HKohoEUGJbN7z0QeD3uf5msiEjYjwTse6dcOb678I=
+	t=1706012570; cv=none; b=XwUg6+4PtbC7VFiiNP7IDVCHr4PDzzaDoIqOxy4mT3CM04WegD74wteWUqlZZom0EreHrGpjxP8n1DbdbRJbeycKMyNpyTl3+OfniSphCZazGXh5ky47w5vhnKYDpz69YbX1qn0u9UA18tsEWMDK6gojwPe4mg5yPt3E+0VDIDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706007487; c=relaxed/simple;
-	bh=OhYlIvv0TdClu5WH0QRuIrrztntSFUlYkopnAOsdJtY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tQguF2EIkv0FbIfSdD1OnxH2WSkTDEZ1+/o/vpu0aituz/koRgX5/vDFSB0y8GcGF7m27MkWZVhR4zqqPhyUhkeV2TooTFzLeSHzNzWBLijlt1QYK7G/APcdlmNrG+VxLCdwi7khgRPLZU8duhwFR+pkR33mSwrGEAX02o+jdDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Cexv6yS4; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1706007483;
-	bh=OhYlIvv0TdClu5WH0QRuIrrztntSFUlYkopnAOsdJtY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Cexv6yS4R3tpSbE3jKu5P24BNsKL4jw7JKBdU0ekm4MJXoDHnGlbs3uPtuUmRocji
-	 YM+8WQT6BS2jIHi2gRQn9+w3aciZBx2YpT8EkcYLSpVqthJdmzO9mzGe4/2Lu9rq38
-	 YbfHA8N+XV34V4U+enIw6kpt/SQwrsT++gSosmvoYYeTVgFvwHdJpt8N8t11Tpb2Ck
-	 jQryl5zMnjvIXGoHxNxR7F3IrzSqmp7nHrh12zxfGGPd9IlmyuVKefZxPmzMBRY8qC
-	 mzriJgCx8okQbCb+mlopGKNuqahYPx4XWN6VLcPnkO3tgsuDuYZogcIXxXubI9Ozvf
-	 z21x5bDxGm55Q==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id CA9B737820AA;
-	Tue, 23 Jan 2024 10:58:02 +0000 (UTC)
-Message-ID: <4dd4ac79-e8bc-4d88-92d6-6061dae42092@collabora.com>
-Date: Tue, 23 Jan 2024 11:58:02 +0100
+	s=arc-20240116; t=1706012570; c=relaxed/simple;
+	bh=k01DIOSRLVW+DQ24icE6Ir9vmX5ig64RCP8pnc3p7ek=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JL2ws6m79rFsk41lLz/NcINsPmtmr/MinVcOjuhOPnY8Oay0rJaqVwVzhMDg9zbGRyRpSaMaKgFuoiImwKBd5/LA9LwULWCUdcnxhCLKi384rVdz0yzz0wMQAG03NurCwza2qKNp5TY5fbOdD0ZqGrO98U7FlnI835VoIedgDvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=daSWs3v5; arc=none smtp.client-ip=209.85.219.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-dc238cb1b17so3819898276.0
+        for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 04:22:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706012568; x=1706617368; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2i2JkhvjeVmwGZk7KmpKzIYKY/0vcbt6K1rVecnj+is=;
+        b=daSWs3v5GBb3Z796ykMqaJjklxg1kU4UFVj3TpUM78LR2YYzsoZK7WhOJT9lYvfyrw
+         gsnQQ+PxWeat1m0NrXbEl1JMcoCQud030KlSPgJ/Sp8VWBPU580chAk0nb3bt9DSAvRj
+         SrkcS3aRWhplQ99RBozUBlFUtUXG6FBo3bC4VEwe1BolkujeQEb0xMkwqpF7a+0de6Cn
+         W2n0wFPBabGPvhqri2pkLimwQukTkjaH5MamK5V3KOdotP2RRBBwfMPtXlrsjFZ9VTi8
+         cLZNlqkqEuVbBTfSrjoatBCNHTS/kEDc5y/s7Ha3R/5XfsARGCvROt1YVsCrMu34i45X
+         ai+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706012568; x=1706617368;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2i2JkhvjeVmwGZk7KmpKzIYKY/0vcbt6K1rVecnj+is=;
+        b=L6cF1wZUR7LdoudSfxThn14F0r29+5FUQnMo6oEB1ixUJr2fowS2VBSFiBrP4F2hcr
+         HhLnkI05GzIbPTwcNcF7xNPsQSKhQHT5HsjMl3Avs7hWYv6OfvMx910CXBAIwfwcIeqM
+         Q3IPiEpbsImIzkI5Buwh3ITFlr+7ryri0fQzXUDJjRuoUzBIWjf1RYrzsfkvSKm6IZfm
+         e8LXOTbNNRyr7GGPvpqIh7F3GqG54wxI9xQDzcDnG8vNf8j0BR9KQUSXwfYuiI3z1nge
+         NXn09kloMlYAZbWMTz8GWkRx8rr04fN2jEmmXf87qg+xYLW4qbTNQEJc38beRiLKdepQ
+         kTvA==
+X-Gm-Message-State: AOJu0Yyf38G8HGuMpok54ee2G2i7ZX6b1b9tlQpsrQSNjbaIYxUI3IGp
+	zxfvNU6D+gGL8YoC1+ZUJrz1P7zwX2m88J5yl3pUzKGlhtsdp1mtx5FcibiRBtKYwp2Mrf3OxG/
+	YE8MUg2IJuWKuaGCZJaQeplkAakQ7LkzAt39BWQ==
+X-Google-Smtp-Source: AGHT+IHRYpBdL+ROMhEUsObvUM8ZcI+g0eEAzyEDHj0Yi0tXAbx/m8ujU8Z/pG8HvhWj58H8mBPxPah0p/6uQX6mzx0=
+X-Received: by 2002:a5b:d0d:0:b0:dc2:46cd:eeef with SMTP id
+ y13-20020a5b0d0d000000b00dc246cdeeefmr3299310ybp.130.1706012568299; Tue, 23
+ Jan 2024 04:22:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 01/26] thermal: Introduce
- thermal_zone_device_register() and params structure
-Content-Language: en-US
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: rafael@kernel.org, rui.zhang@intel.com, lukasz.luba@arm.com,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, kernel@collabora.com
-References: <20231221124825.149141-1-angelogioacchino.delregno@collabora.com>
- <20231221124825.149141-2-angelogioacchino.delregno@collabora.com>
- <7417c498-2439-485d-9f78-fbb22f9ce393@linaro.org>
- <33c7d36d-c2f5-477f-946a-6ad926a277d7@collabora.com>
- <9783d2a6-7395-4516-9fd1-d7c42ea35d07@collabora.com>
- <45c3a83f-b049-4ef8-9406-84c149f61667@linaro.org>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <45c3a83f-b049-4ef8-9406-84c149f61667@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20231225133615.78993-1-eugen.hristev@collabora.com>
+In-Reply-To: <20231225133615.78993-1-eugen.hristev@collabora.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 23 Jan 2024 13:22:12 +0100
+Message-ID: <CAPDyKFoNuKv3BSifiuJrYQ7JSKo6OHaugrWChhKWB3BxKrdKCQ@mail.gmail.com>
+Subject: Re: [PATCH] pmdomain: mediatek: fix race conditions with genpd
+To: Eugen Hristev <eugen.hristev@collabora.com>
+Cc: matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+	kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
 
-Il 22/01/24 20:19, Daniel Lezcano ha scritto:
-> On 18/01/2024 10:39, AngeloGioacchino Del Regno wrote:
->> Il 16/01/24 10:58, AngeloGioacchino Del Regno ha scritto:
->>> Il 15/01/24 13:39, Daniel Lezcano ha scritto:
->>>> On 21/12/2023 13:48, AngeloGioacchino Del Regno wrote:
->>>>> In preparation for extending the thermal zone devices to actually have
->>>>> a name and disambiguation of thermal zone types/names, introduce a new
->>>>> thermal_zone_device_params structure which holds all of the parameters
->>>>> that are necessary to register a thermal zone device, then add a new
->>>>> function thermal_zone_device_register().
->>>>>
->>>>> The latter takes as parameter the newly introduced structure and is
->>>>> made to eventually replace all usages of the now deprecated function
->>>>> thermal_zone_device_register_with_trips() and of
->>>>> thermal_tripless_zone_device_register().
->>>>>
->>>>> Signed-off-by: AngeloGioacchino Del Regno 
->>>>> <angelogioacchino.delregno@collabora.com>
->>>>> ---
->>>>>   drivers/thermal/thermal_core.c | 27 +++++++++++++++++++++++++++
->>>>>   include/linux/thermal.h        | 33 +++++++++++++++++++++++++++++++++
->>>>>   2 files changed, 60 insertions(+)
->>>>>
->>>>> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
->>>>> index e5434cdbf23b..6be508eb2d72 100644
->>>>> --- a/drivers/thermal/thermal_core.c
->>>>> +++ b/drivers/thermal/thermal_core.c
->>>>> @@ -1235,6 +1235,8 @@ EXPORT_SYMBOL_GPL(thermal_zone_get_crit_temp);
->>>>>    *           whether trip points have been crossed (0 for interrupt
->>>>>    *           driven systems)
->>>>>    *
->>>>> + * This function is deprecated. See thermal_zone_device_register().
->>>>> + *
->>>>>    * This interface function adds a new thermal zone device (sensor) to
->>>>>    * /sys/class/thermal folder as thermal_zone[0-*]. It tries to bind all the
->>>>>    * thermal cooling devices registered at the same time.
->>>>> @@ -1409,6 +1411,7 @@ thermal_zone_device_register_with_trips(const char 
->>>>> *type, struct thermal_trip *t
->>>>>   }
->>>>>   EXPORT_SYMBOL_GPL(thermal_zone_device_register_with_trips);
->>>>> +/* This function is deprecated. See thermal_zone_device_register(). */
->>>>>   struct thermal_zone_device *thermal_tripless_zone_device_register(
->>>>>                       const char *type,
->>>>>                       void *devdata,
->>>>> @@ -1420,6 +1423,30 @@ struct thermal_zone_device 
->>>>> *thermal_tripless_zone_device_register(
->>>>>   }
->>>>>   EXPORT_SYMBOL_GPL(thermal_tripless_zone_device_register);
->>>>> +/**
->>>>> + * thermal_zone_device_register() - register a new thermal zone device
->>>>> + * @tzdp:    Parameters of the new thermal zone device
->>>>> + *        See struct thermal_zone_device_register.
->>>>> + *
->>>>> + * This interface function adds a new thermal zone device (sensor) to
->>>>> + * /sys/class/thermal folder as thermal_zone[0-*]. It tries to bind all the
->>>>> + * thermal cooling devices registered at the same time.
->>>>> + * thermal_zone_device_unregister() must be called when the device is no
->>>>> + * longer needed. The passive cooling depends on the .get_trend() return value.
->>>>> + *
->>>>> + * Return: a pointer to the created struct thermal_zone_device or an
->>>>> + * in case of error, an ERR_PTR. Caller must check return value with
->>>>> + * IS_ERR*() helpers.
->>>>> + */
->>>>> +struct thermal_zone_device *thermal_zone_device_register(struct 
->>>>> thermal_zone_device_params *tzdp)
->>>>> +{
->>>>> +    return thermal_zone_device_register_with_trips(tzdp->type, tzdp->trips, 
->>>>> tzdp->num_trips,
->>>>> +                               tzdp->mask, tzdp->devdata, tzdp->ops,
->>>>> +                               &tzdp->tzp, tzdp->passive_delay,
->>>>> +                               tzdp->polling_delay);
->>>>> +}
->>>>> +EXPORT_SYMBOL_GPL(thermal_zone_device_register);
->>>>> +
->>>>>   void *thermal_zone_device_priv(struct thermal_zone_device *tzd)
->>>>>   {
->>>>>       return tzd->devdata;
->>>>> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
->>>>> index 98957bae08ff..c6ed33a7e468 100644
->>>>> --- a/include/linux/thermal.h
->>>>> +++ b/include/linux/thermal.h
->>>>> @@ -258,6 +258,33 @@ struct thermal_zone_params {
->>>>>       int offset;
->>>>>   };
->>>>> +/**
->>>>> + * struct thermal_zone_device_params - parameters for a thermal zone device
->>>>> + * @type:        the thermal zone device type
->>>>> + * @tzp:        thermal zone platform parameters
->>>>> + * @ops:        standard thermal zone device callbacks
->>>>> + * @devdata:        private device data
->>>>> + * @trips:        a pointer to an array of thermal trips, if any
->>>>> + * @num_trips:        the number of trip points the thermal zone support
->>>>> + * @mask:        a bit string indicating the writeablility of trip points
->>>>> + * @passive_delay:    number of milliseconds to wait between polls when
->>>>> + *            performing passive cooling
->>>>> + * @polling_delay:    number of milliseconds to wait between polls when checking
->>>>> + *            whether trip points have been crossed (0 for interrupt
->>>>> + *            driven systems)
->>>>> + */
->>>>> +struct thermal_zone_device_params {
->>>>> +    const char *type;
->>>>> +    struct thermal_zone_params tzp;
->>>>> +    struct thermal_zone_device_ops *ops;
->>>>> +    void *devdata;
->>>>> +    struct thermal_trip *trips;
->>>>> +    int num_trips;
->>>>> +    int mask;
->>>>> +    int passive_delay;
->>>>> +    int polling_delay;
->>>>> +};
->>>>
->>>>  From my POV, this "struct thermal_zone_params" has been always a inadequate 
->>>> and catch-all structure. It will confuse with thermal_zone_device_params
->>>>
->>>> I suggest to cleanup a bit that by sorting the parameters in the right 
->>>> structures where the result could be something like:
->>>>
->>>> eg.
->>>>
->>>> struct thermal_zone_params {
->>>>
->>>>      const char *type;
->>>>      struct thermal_zone_device_ops *ops;
->>>>      struct thermal_trip *trips;
->>>>      int num_trips;
->>>>
->>>>      int passive_delay;
->>>>      int polling_delay;
->>>>
->>>>      void *devdata;
->>>>          bool no_hwmon;
->>>> };
->>>>
->>>> struct thermal_governor_ipa_params {
->>>>          u32 sustainable_power;
->>>>          s32 k_po;
->>>>          s32 k_pu;
->>>>          s32 k_i;
->>>>          s32 k_d;
->>>>          s32 integral_cutoff;
->>>>          int slope;
->>>>          int offset;
->>>> };
->>>>
->>>> struct thermal_governor_params {
->>>>      char governor_name[THERMAL_NAME_LENGTH];
->>>>      union {
->>>>          struct thermal_governor_ipa_params ipa_params;
->>>>      };
->>>> };
->>>>
->>>> struct thermal_zone_device_params {
->>>>      struct thermal_zone_params *tzp;
->>>>      struct thermal_governor_params *tgp;
->>>> }
->>>>
->>>> No functional changes just code reorg, being a series to be submitted before 
->>>> the rest on these RFC changes (2->26)
->>>>
->>>
->>> Could work. It's true that thermal_zone_params is a catch-all structure, and it's
->>> not really the best... but I also haven't checked how complex and/or how much time
->>> would your proposed change take.
->>>
->>> Shouldn't take much as far as I can foresee, but I really have to check a bit.
->>> If I'm right as in it's not something huge, the next series will directly have
->>> this stuff sorted - if not, I'll reach to you.
->>>
->>
->> So... I've checked the situation and coded some.
->>
->> I came to the conclusion that doing it as suggested is possible but realistically
->> suboptimal, because that will need multiple immutable branches to actually end up
->> in upstream as changes would otherwise break kernel build.
->>
->> Then, here I am suggesting a different way forward, while still performing this
->> much needed cleanup and reorganization:
->>
->> First, we introduce thermal_zone_device_register() and params structure with
->> this commit, which will have
->>
->> /* Structure to define Thermal Zone parameters */
->> struct thermal_zone_params {
->>      /* Scheduled for removal - see struct thermal_zone_governor_params. */
->>      char governor_name[THERMAL_NAME_LENGTH];
-> 
-> Take the opportunity to introduce a patch before doing a change to:
-> 
->      const char *governor_name;
-> 
+On Mon, 25 Dec 2023 at 14:36, Eugen Hristev <eugen.hristev@collabora.com> wrote:
+>
+> If the power domains are registered first with genpd and *after that*
+> the driver attempts to power them on in the probe sequence, then it is
+> possible that a race condition occurs if genpd tries to power them on
+> in the same time.
+> The same is valid for powering them off before unregistering them
+> from genpd.
 
-Agreed!
+Right. When the PM domain has been registered with genpd, attempts to
+power-on/off the PM domain need to be synchronized with genpd.
 
-> AFAICS, there is no place in the kernel where it is not a const char * assignation 
-> which is by the way wrong:
-> 
->      char governor_name[THERMAL_NAME_LENGTH];
->      governor_name = "step_wise";
-> 
->      :)
-> 
->>      /* Scheduled for removal - see struct thermal_zone_governor_params. */
->>      bool no_hwmon;
->>
->>      /*
->>       * Sustainable power (heat) that this thermal zone can dissipate in
->>       * mW
->>       */
->>      u32 sustainable_power;
->>
->>      /*
->>       * Proportional parameter of the PID controller when
->>       * overshooting (i.e., when temperature is below the target)
->>       */
->>      s32 k_po;
->>
->>      /*
->>       * Proportional parameter of the PID controller when
->>       * undershooting
->>       */
->>      s32 k_pu;
->>
->>      /* Integral parameter of the PID controller */
->>      s32 k_i;
->>
->>      /* Derivative parameter of the PID controller */
->>      s32 k_d;
->>
->>      /* threshold below which the error is no longer accumulated */
->>      s32 integral_cutoff;
->>
->>      /*
->>       * @slope:    slope of a linear temperature adjustment curve.
->>       *         Used by thermal zone drivers.
->>       */
->>      int slope;
->>      /*
->>       * @offset:    offset of a linear temperature adjustment curve.
->>       *         Used by thermal zone drivers (default 0).
->>       */
->>      int offset;
->> };
->>
->> struct thermal_governor_params {
->>      char governor_name[THERMAL_NAME_LENGTH];
-> 
->      const char *governor_name;
-> 
->>      struct thermal_zone_params ipa_params;
->> };
->>
->> struct thermal_zone_platform_params {
-> 
-> The name sounds inadequate.
-> 
-> May be just thermal_zone_params ?
-> 
+> Attempt to fix race conditions by first removing the domains from genpd
+> and *after that* powering down domains.
+> Also first power up the domains and *after that* register them
+> to genpd.
 
-It's not the best, but the plan is to change the struct name in the second cycle,
-as keeping the thermal_zone_params struct named as it is right now is essential
-to avoid immutable branches.
+This seems like a reasonable approach to me.
 
-window 1: Reorganization with temporary struct names -> no immutable branches
-window 2: Cleanup and rename -> no immutable branches
+>
+> Fixes: 59b644b01cf4 ("soc: mediatek: Add MediaTek SCPSYS power domains")
+> Signed-off-by: Eugen Hristev <eugen.hristev@collabora.com>
 
-Any change from the window 2 part brought to window 1 would need immutable
-branches all around... so I really can't call it "thermal_zone_params" in
-window 1.
+Applied for fixes and by adding a stable tag, thanks! Although,
+please, see some more comments below.
 
-Perhaps I can change the _platform_ name to something else, but still needs
-to be different from "thermal_zone_params"...
+> ---
+>
+> This comes as another way to fix the problem as described in this thread:
+> https://lore.kernel.org/linux-arm-kernel/20231129113120.4907-1-eugen.hristev@collabora.com/
+>
+> I have not been able to reproduce the problem with either fix anymore
+> (so far).
+>
+> I have a few doubts about this one though, if I really covered the
+> way it's supposed to work, and registering the pmdomains in the recursive
+> function in the reversed order has any side effect or if it does not
+> work correctly.
+> Tested on mt8186 where it appears to be fine.
 
->>      const char *type;
->>      struct thermal_zone_device_ops *ops;
-> 
-> Move the ops in the thermal_zone_device_params
-> 
->>      struct thermal_trip *trips;
->>      int num_trips;
->>      int mask;
->>
->>      int passive_delay;
->>      int polling_delay;
->>
->>      void *devdata;
-> 
-> And devdata also in the thermal_zone_device_params
-> 
+I had a quick look at the code in the driver and a few things caught my eyes.
 
-Ok! :-)
+*) The error path in scpsys_probe() doesn't seem to handle removal of
+the link between parent/child-domains (subdomains).
+**) An option that might simplify the code and error path too, could
+be to convert into using of_genpd_add|remove_subdomain() in favor or
+pm_genpd_add|remove_subdomain().
 
->>      bool no_hwmon;
->> };
->>
->>
->> struct thermal_zone_device_params {
->>      struct thermal_zone_platform_params tzp;
->>      struct thermal_governor_params *tgp;
->> };
->>
->> (Note that the `no_hwmon` and `governor_name` are *temporarily* duplicated, but
->> there are good reasons to do that!)
->>
->> Drivers will follow with the migration to `thermal_zone_device_register()`,
->> and that will be done *strictly* like so:
->>
->> struct thermal_zone_device_params tzdp = {
->>      .tzp = {
->>          .type = "acerhdf",
->>          .tzp = { .governor_name = "bang_bang" },
->>          .ops = &acerhdf_dev_ops,
->>          .trips = trips,
->>          .num_trips = ARRAY_SIZE(trips),
->>          .polling_delay = kernelmode ? interval * 1000 : 0,
->>          /* devdata, no_hwmon go here later in the code */
->>      },
->>      .tgp = { .governor_name = "bang_bang" }
->> };
->>
->> Notice how in this case we're never *ever* referencing to any struct name,
->> apart from struct thermal_zone_device_params (meaning, I'm never creating
->> vars/pointers to struct thermal_zone_platform_params).
->>
->> If we follow this style, at least temporarily and at least during this cleanup,
->> we will end up with a plan such that:
->>
->> 1. In the first merge window:
->>     - Drivers get migrated to thermal_zone_device_register()
->>     - Functions register_with_trips()/tripless get deprecated but not yet removed
->  >
->> 2. In the next merge window (expecting all users updated from the first window):
->>     - Functions register_with_trips/tripless get removed (<- no more external refs
->>       to struct thermal_zone_params, which can be then safely renamed!)
->>     - Duplicated members governor_name and no_hwmon get removed from
->>       struct thermal_zone_params
->>     - Some structures get renamed to give them the proposed better names (which
->>       I also genuinely like)
->>     - Only Thermal API internal changes, as users (all the ones that are not in
->>       drivers/thermal/) won't need to get updated at all!
->>       ... and that's why I said "strictly like so" in the example up there.
->>
->> I think that this is the best strategy, for both ease of merging the changes and
->> internal reorganization.
->>
->> Sure in the first merge window we'll be wasting a byte or two, but I am confident
->> in that this is a very low price to pay - and even better, only temporarily - for
->> other bigger benefits.
->>
->> What do you think?
-> 
-> Sounds like a plan :)
-> 
-> 
-
-Cool. It's time to write a good non-RFC series then!
-
-Cheers,
-Angelo
+Kind regards
+Uffe
 
 
+>
+> Eugen
+>
+>  drivers/pmdomain/mediatek/mtk-pm-domains.c | 15 +++++++--------
+>  1 file changed, 7 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/pmdomain/mediatek/mtk-pm-domains.c b/drivers/pmdomain/mediatek/mtk-pm-domains.c
+> index e26dc17d07ad..e274e3315fe7 100644
+> --- a/drivers/pmdomain/mediatek/mtk-pm-domains.c
+> +++ b/drivers/pmdomain/mediatek/mtk-pm-domains.c
+> @@ -561,6 +561,11 @@ static int scpsys_add_subdomain(struct scpsys *scpsys, struct device_node *paren
+>                         goto err_put_node;
+>                 }
+>
+> +               /* recursive call to add all subdomains */
+> +               ret = scpsys_add_subdomain(scpsys, child);
+> +               if (ret)
+> +                       goto err_put_node;
+> +
+>                 ret = pm_genpd_add_subdomain(parent_pd, child_pd);
+>                 if (ret) {
+>                         dev_err(scpsys->dev, "failed to add %s subdomain to parent %s\n",
+> @@ -570,11 +575,6 @@ static int scpsys_add_subdomain(struct scpsys *scpsys, struct device_node *paren
+>                         dev_dbg(scpsys->dev, "%s add subdomain: %s\n", parent_pd->name,
+>                                 child_pd->name);
+>                 }
+> -
+> -               /* recursive call to add all subdomains */
+> -               ret = scpsys_add_subdomain(scpsys, child);
+> -               if (ret)
+> -                       goto err_put_node;
+>         }
+>
+>         return 0;
+> @@ -588,9 +588,6 @@ static void scpsys_remove_one_domain(struct scpsys_domain *pd)
+>  {
+>         int ret;
+>
+> -       if (scpsys_domain_is_on(pd))
+> -               scpsys_power_off(&pd->genpd);
+> -
+>         /*
+>          * We're in the error cleanup already, so we only complain,
+>          * but won't emit another error on top of the original one.
+> @@ -600,6 +597,8 @@ static void scpsys_remove_one_domain(struct scpsys_domain *pd)
+>                 dev_err(pd->scpsys->dev,
+>                         "failed to remove domain '%s' : %d - state may be inconsistent\n",
+>                         pd->genpd.name, ret);
+> +       if (scpsys_domain_is_on(pd))
+> +               scpsys_power_off(&pd->genpd);
+>
+>         clk_bulk_put(pd->num_clks, pd->clks);
+>         clk_bulk_put(pd->num_subsys_clks, pd->subsys_clks);
+> --
+> 2.34.1
+>
+>
 
