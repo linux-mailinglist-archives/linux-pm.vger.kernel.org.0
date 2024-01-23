@@ -1,327 +1,156 @@
-Return-Path: <linux-pm+bounces-2622-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2623-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 856DC839A20
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 21:17:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D7EE839A7A
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 21:44:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8BC73B29354
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 20:17:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9F0D28A614
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 20:44:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BC3685C4B;
-	Tue, 23 Jan 2024 20:17:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DE0046B7;
+	Tue, 23 Jan 2024 20:44:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C6LkV1EI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 517E58121E;
-	Tue, 23 Jan 2024 20:17:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 251355662;
+	Tue, 23 Jan 2024 20:44:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706041052; cv=none; b=VzsbZcnQlzlxzYWEdAA5ORuisJa3TkECL17Gdp3rgAuE00n0HFjI/QqaPBwjRSzLqRIgyBqC/NqjmQwiOFCE+TELDmfhGU4s9czFBgAxy8N2YHcPdZJyp+CCbppEQDAczHJ5YoI8oRgEDKfKYyjmbzRp1dgbuzpy5TVBY1C9Jzk=
+	t=1706042656; cv=none; b=IqUKdQaNUwpr8DsPmoY4RTP9/wHVNjZQe6q+u27PxEC33T1gvT2/X1jCcYQFTCqVRp/OklZalc2K793tllYVeu+zBQhHBO0zlchHFM0TSlkG6mgZ3I6kIGKXgL/bB8dvBaQ69p+6ZvlZUr9ttRazeJbhhAihoVuN1p3HAeBa2Z0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706041052; c=relaxed/simple;
-	bh=/9f1YTKBu4zBe52fKkbMixxUaJxXc0rAwAqrn8phDrg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=K9KR06ewFawxg4Ci9m7oUz0nITiCXYJhcjKk/qdKsEXC7Z8Ato55+ZYWcgsbemeTzGwgsmeIYgEv96Jxsfsubz4EmyHDjNQnPgbweIUmoCCo9zMoYSg/fqbep74VD6v9chpAqugRkXgavtlY0ZFIqNZ8vJ/ZAUkk7d95NWImE7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3bc21303a35so952289b6e.0;
-        Tue, 23 Jan 2024 12:17:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706041050; x=1706645850;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sjwjCx3B3HGly0Ju5hQihpTfVoMomg/HaqPAAfRqPtg=;
-        b=K8cxJIBtXnPJ+WFaYRoAezWtZZvMPgh7E3DBRdnzi6iH+SJwqc5h87AdWPhuhn74Ij
-         lQD2dj+rF0Vx/lAeUFXUN9lWu4NV0dR6AF1u4yOxuivzoCnSiwcxpHnCIZBlV1uh8jZd
-         4ODlKN5ft1gvphHW1wzdk2FvlPPxc+jynF4chdyg60gpQyQeCWeIK0nYVI8kTlPJ+PbZ
-         eJKsmZKss+sFATEdsdVTZBqn4pL25sRKzvU+0hUz4o/X+lwR7nDrzzjVrw+YL+2evlc1
-         obgNnFY8MpdDN1ZHMxHteHLuUdK+kiClexb1+K8gHxv8be0vVnXCRf9d5ZjDQ/SVWyhb
-         +4zA==
-X-Gm-Message-State: AOJu0YzMN3l4mpZyL5Sk+6yyW0/bzGZXqq+z5YPcy+VS9lszInww6Kc6
-	4pGlT40otrX6YxFvxXb3Swn4JJPzpvP2QgzRj2MfVYwrNVtKmCGWV0n9O8O/d9Lg/Hljgt4TGpu
-	9i0ucNfMgp0om1NHRmeQTR2cTulU=
-X-Google-Smtp-Source: AGHT+IHml0amPVumvE3AkdPdfk0wGdrTR6wdzSDBZsH+0cMpLee+4fRC2vTsTL1WMI0dC+P3unXdJ9Uy83P3RZ5jLig=
-X-Received: by 2002:a05:6871:410e:b0:206:a752:52dd with SMTP id
- la14-20020a056871410e00b00206a75252ddmr498462oab.1.1706041050313; Tue, 23 Jan
- 2024 12:17:30 -0800 (PST)
+	s=arc-20240116; t=1706042656; c=relaxed/simple;
+	bh=YTYq9NKaF9Qyd5spfDIHdzZzMX2Nn0CsEqHbs7SWNQo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j7mH4xSl3b7g1H4jV40FnP8dEVY4YQDnfETY6kLCyEt+3pb4TWcDsko0DX3qXkxrVDhEo0HcNGWtN2iWINal+LxDoMgtT1ap1phXdfRzqt2UrEOES6KvdHa/j4OnhljKK5q8zE+tkn1EgxlrOcNGB3RC+WEAXDobIE2Ww6hxFIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C6LkV1EI; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706042655; x=1737578655;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=YTYq9NKaF9Qyd5spfDIHdzZzMX2Nn0CsEqHbs7SWNQo=;
+  b=C6LkV1EIWCLsYBwDFmHNKwBKMCwhZE5rt2ttdKiYHQyLM3L2L4oGN8QB
+   C7ZuWdXR6AEE1mPiohT2CAJcUiSIgDM/RwoSL577UIrq8ZwoZhY0lyQk4
+   zgm0TpfAZEbKvGFtiE70m1X7YtGBCTfT05fiIJqGS3wgNU+pCsCbXAeJM
+   I1NUe9d1P8Gmk1nvcE8JLQxCv0+0JUdmtO0Y8DkSk8DdIjgOmi7ehYyX4
+   enfa6LoXEURFbwoCFocq0eSoBbAlUmUQuXYL8Z0T/TQhxE+D3MMRIGqJZ
+   E4yspDEdwYywB4qjSvkIbHn4pvPnYCaywUtmv3XE43OV1DTP/xZCrVHvW
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="23114666"
+X-IronPort-AV: E=Sophos;i="6.05,215,1701158400"; 
+   d="scan'208";a="23114666"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2024 12:44:13 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10962"; a="905365871"
+X-IronPort-AV: E=Sophos;i="6.05,215,1701158400"; 
+   d="scan'208";a="905365871"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2024 12:44:07 -0800
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id 7F17811FAD4;
+	Tue, 23 Jan 2024 22:44:04 +0200 (EET)
+Date: Tue, 23 Jan 2024 20:44:04 +0000
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Bjorn Helgaas <helgaas@kernel.org>
+Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+	linux-pci@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	Jaroslav Kysela <perex@perex.cz>,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+	laurent.pinchart@ideasonboard.com, David Airlie <airlied@gmail.com>,
+	Paul Elder <paul.elder@ideasonboard.com>,
+	linux-media@vger.kernel.org,
+	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+	intel-gfx@lists.freedesktop.org,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	Mark Brown <broonie@kernel.org>,
+	Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	intel-xe@lists.freedesktop.org,
+	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+	Alex Elder <elder@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-sound@vger.kernel.org, Takashi Iwai <tiwai@suse.com>,
+	Daniel Vetter <daniel@ffwll.ch>, netdev@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] pm: runtime: Simplify pm_runtime_get_if_active()
+ usage
+Message-ID: <ZbAlFKE_fZ_riRVu@kekkonen.localdomain>
+References: <20240123095642.97303-2-sakari.ailus@linux.intel.com>
+ <20240123172423.GA317147@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAJZ5v0g9nfLrEf9u4Ksw6BOWJQ9iv8Z-O8RsLU6jR5zk0ahxRw@mail.gmail.com>
- <20240122180013.000016d5@Huawei.com> <Za++/11n5KA1VS3p@shell.armlinux.org.uk>
- <CAJZ5v0h7wsLt8d3ZoLXsK1=crAx66T42WDKNoHcg8CiHpAjS8g@mail.gmail.com>
- <Za/q9jivG4OdZM0f@shell.armlinux.org.uk> <CAJZ5v0gwe02uzAQoX0QDHo35OTEozpbnqC6vukjM3aE6HMq9WQ@mail.gmail.com>
- <ZbADTBLDEFtdglho@shell.armlinux.org.uk> <CAJZ5v0jh-EdrnjkJep++UDo+Uv4hmR7VV4KYVdF4CK2K+5XLtg@mail.gmail.com>
- <ZbAMjZoybVfiAGcT@shell.armlinux.org.uk> <CAJZ5v0gt=MR1JGsPZnZG_AqudA-KMmb4BOa_A6H9B6+Rhe_+JQ@mail.gmail.com>
- <ZbAdAdqqfXRuY3Xj@shell.armlinux.org.uk>
-In-Reply-To: <ZbAdAdqqfXRuY3Xj@shell.armlinux.org.uk>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 23 Jan 2024 21:17:18 +0100
-Message-ID: <CAJZ5v0gsqbeJc4qX-AefOqu53=rDme2XzFXacWz_0zbVBoaXjw@mail.gmail.com>
-Subject: Re: [PATCH RFC v3 05/21] ACPI: Rename ACPI_HOTPLUG_CPU to include 'present'
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
-	linux-pm@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, 
-	acpica-devel@lists.linuxfoundation.org, linux-csky@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>, 
-	Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com, justin.he@arm.com, 
-	James Morse <james.morse@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240123172423.GA317147@bhelgaas>
 
-On Tue, Jan 23, 2024 at 9:09=E2=80=AFPM Russell King (Oracle)
-<linux@armlinux.org.uk> wrote:
->
-> On Tue, Jan 23, 2024 at 08:27:05PM +0100, Rafael J. Wysocki wrote:
-> > On Tue, Jan 23, 2024 at 7:59=E2=80=AFPM Russell King (Oracle)
-> > <linux@armlinux.org.uk> wrote:
-> > >
-> > > On Tue, Jan 23, 2024 at 07:26:57PM +0100, Rafael J. Wysocki wrote:
-> > > > On Tue, Jan 23, 2024 at 7:20=E2=80=AFPM Russell King (Oracle)
-> > > > <linux@armlinux.org.uk> wrote:
-> > > > >
-> > > > > On Tue, Jan 23, 2024 at 06:43:59PM +0100, Rafael J. Wysocki wrote=
-:
-> > > > > > On Tue, Jan 23, 2024 at 5:36=E2=80=AFPM Russell King (Oracle)
-> > > > > > <linux@armlinux.org.uk> wrote:
-> > > > > > >
-> > > > > > > On Tue, Jan 23, 2024 at 05:15:54PM +0100, Rafael J. Wysocki w=
-rote:
-> > > > > > > > On Tue, Jan 23, 2024 at 2:28=E2=80=AFPM Russell King (Oracl=
-e)
-> > > > > > > > <linux@armlinux.org.uk> wrote:
-> > > > > > > > >
-> > > > > > > > > On Mon, Jan 22, 2024 at 06:00:13PM +0000, Jonathan Camero=
-n wrote:
-> > > > > > > > > > On Mon, 18 Dec 2023 21:35:16 +0100
-> > > > > > > > > > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> > > > > > > > > >
-> > > > > > > > > > > On Wed, Dec 13, 2023 at 1:49=E2=80=AFPM Russell King =
-<rmk+kernel@armlinux.org.uk> wrote:
-> > > > > > > > > > > >
-> > > > > > > > > > > > From: James Morse <james.morse@arm.com>
-> > > > > > > > > > > >
-> > > > > > > > > > > > The code behind ACPI_HOTPLUG_CPU allows a not-prese=
-nt CPU to become
-> > > > > > > > > > > > present.
-> > > > > > > > > > >
-> > > > > > > > > > > Right.
-> > > > > > > > > > >
-> > > > > > > > > > > > This isn't the only use of HOTPLUG_CPU. On arm64 an=
-d riscv
-> > > > > > > > > > > > CPUs can be taken offline as a power saving measure=
-.
-> > > > > > > > > > >
-> > > > > > > > > > > But still there is the case in which a non-present CP=
-U can become
-> > > > > > > > > > > present, isn't it there?
-> > > > > > > > > >
-> > > > > > > > > > Not yet defined by the architectures (and I'm assuming =
-it probably never will be).
-> > > > > > > > > >
-> > > > > > > > > > The original proposal we took to ARM was to do exactly =
-that - they pushed
-> > > > > > > > > > back hard on the basis there was no architecturally saf=
-e way to implement it.
-> > > > > > > > > > Too much of the ARM arch has to exist from the start of=
- time.
-> > > > > > > > > >
-> > > > > > > > > > https://lore.kernel.org/linux-arm-kernel/cbaa6d68-6143-=
-e010-5f3c-ec62f879ad95@arm.com/
-> > > > > > > > > > is one of the relevant threads of the kernel side of th=
-at discussion.
-> > > > > > > > > >
-> > > > > > > > > > Not to put specific words into the ARM architects mouth=
-s, but the
-> > > > > > > > > > short description is that there is currently no demand =
-for working
-> > > > > > > > > > out how to make physical CPU hotplug possible, as such =
-they will not
-> > > > > > > > > > provide an architecturally compliant way to do it for v=
-irtual CPU hotplug and
-> > > > > > > > > > another means is needed (which is why this series doesn=
-'t use the present bit
-> > > > > > > > > > for that purpose and we have the Online capable bit in =
-MADT/GICC)
-> > > > > > > > > >
-> > > > > > > > > > It was a 'fun' dance of several years to get to that cl=
-arification.
-> > > > > > > > > > As another fun fact, the same is defined for x86, but I=
- don't think
-> > > > > > > > > > anyone has used it yet (GICC for ARM has an online capa=
-ble bit in the flags to
-> > > > > > > > > > enable this, which was remarkably similar to the online=
- capable bit in the
-> > > > > > > > > > flags of the Local APIC entries as added fairly recentl=
-y).
-> > > > > > > > > >
-> > > > > > > > > > >
-> > > > > > > > > > > > On arm64 an offline CPU may be disabled by firmware=
-, preventing it from
-> > > > > > > > > > > > being brought back online, but it remains present t=
-hroughout.
-> > > > > > > > > > > >
-> > > > > > > > > > > > Adding code to prevent user-space trying to online =
-these disabled CPUs
-> > > > > > > > > > > > needs some additional terminology.
-> > > > > > > > > > > >
-> > > > > > > > > > > > Rename the Kconfig symbol CONFIG_ACPI_HOTPLUG_PRESE=
-NT_CPU to reflect
-> > > > > > > > > > > > that it makes possible CPUs present.
-> > > > > > > > > > >
-> > > > > > > > > > > Honestly, I don't think that this change is necessary=
- or even useful.
-> > > > > > > > > >
-> > > > > > > > > > Whilst it's an attempt to avoid future confusion, the r=
-ename is
-> > > > > > > > > > not something I really care about so my advice to Russe=
-ll is drop
-> > > > > > > > > > it unless you are attached to it!
-> > > > > > > > >
-> > > > > > > > > While I agree that it isn't a necessity, I don't fully ag=
-ree that it
-> > > > > > > > > isn't useful.
-> > > > > > > > >
-> > > > > > > > > One of the issues will be that while Arm64 will support h=
-otplug vCPU,
-> > > > > > > > > it won't be setting ACPI_HOTPLUG_CPU because it doesn't s=
-upport
-> > > > > > > > > the present bit changing. So I can see why James decided =
-to rename
-> > > > > > > > > it - because with Arm64's hotplug vCPU, the idea that ACP=
-I_HOTPLUG_CPU
-> > > > > > > > > somehow enables hotplug CPU support is now no longer true=
-.
-> > > > > > > > >
-> > > > > > > > > Keeping it as ACPI_HOTPLUG_CPU makes the code less obviou=
-s, because it
-> > > > > > > > > leads one to assume that it ought to be enabled for Arm64=
-'s
-> > > > > > > > > implementatinon, and that could well cause issues in the =
-future if
-> > > > > > > > > people make the assumption that "ACPI_HOTPLUG_CPU" means =
-hotplug CPU
-> > > > > > > > > is supported in ACPI. It doesn't anymore.
-> > > > > > > >
-> > > > > > > > On x86 there is no confusion AFAICS.  It's always meant "as=
- long as
-> > > > > > > > the platform supports it".
-> > > > > > >
-> > > > > > > That's x86, which supports physical CPU hotplug. We're introd=
-ucing
-> > > > > > > support for Arm64 here which doesn't support physical CPU hot=
-plug.
-> > > > > > >
-> > > > > > >                                                 ACPI-based   =
-   Physical        Virtual
-> > > > > > > Arch    HOTPLUG_CPU     ACPI_HOTPLUG_CPU        Hotplug      =
-   Hotplug         Hotplug
-> > > > > > > Arm64   Y               N                       Y            =
-   N               Y
-> > > > > > > x86     Y               Y                       Y            =
-   Y               Y
-> > > > > > >
-> > > > > > > So ACPI_HOTPLUG_CPU becomes totally misnamed with the introdu=
-ction
-> > > > > > > of hotplug on Arm64.
-> > > > > > >
-> > > > > > > If we want to just look at stuff from an x86 perspective, the=
-n yes,
-> > > > > > > it remains correct to call it ACPI_HOTPLUG_CPU. It isn't corr=
-ect as
-> > > > > > > soon as we add Arm64, as I already said.
-> > > > > >
-> > > > > > And if you rename it, it becomes less confusing for ARM64, but =
-more
-> > > > > > confusing for x86, which basically is my point.
-> > > > > >
-> > > > > > IMO "hotplug" covers both cases well enough and "hotplug presen=
-t" is
-> > > > > > only accurate for one of them.
-> > > > > >
-> > > > > > > And honestly, a two line quip to my reasoned argument is not =
-IMHO
-> > > > > > > an acceptable reply.
-> > > > > >
-> > > > > > Well, I'm not even sure how to respond to this ...
-> > > > >
-> > > > > The above explanation you give would have been useful...
-> > > > >
-> > > > > I don't see how "hotplug" covers both cases. As I've tried to poi=
-nt
-> > > > > out many times now, ACPI_HOTPLUG_CPU is N for Arm64, yet it suppo=
-rts
-> > > > > ACPI based hotplug. How does ACPI_HOTPLUG_CPU cover Arm64 if it's
-> > > > > N there?
-> > > >
-> > > > But IIUC this change is preliminary for changing it (or equivalent
-> > > > option with a different name) to Y, isn't it?
-> > >
-> > > No. As I keep saying, ACPI_HOTPLUG_CPU ends up N on Arm64 even when
-> > > it supports hotplug CPU via ACPI.
-> > >
-> > > Even with the full Arm64 patch set here, under arch/ we still only
-> > > have:
-> > >
-> > > arch/loongarch/Kconfig: select ACPI_HOTPLUG_PRESENT_CPU if ACPI_PROCE=
-SSOR && HOTPLUG_CPU
-> > > arch/x86/Kconfig:       select ACPI_HOTPLUG_PRESENT_CPU         if AC=
-PI_PROCESSOR && HOTPLUG_CPU
-> > >
-> > > To say it yet again, ACPI_HOTPLUG_(PRESENT_)CPU is *never* set on
-> > > Arm64.
-> >
-> > Allright, so ARM64 is not going to use the code that is conditional on
-> > ACPI_HOTPLUG_CPU today.
-> >
-> > Fair enough.
-> >
-> > > > > IMHO it totally doesn't, and moreover, it goes against what
-> > > > > one would logically expect - and this is why I have a problem wit=
-h
-> > > > > your effective NAK for this change. I believe you are basically
-> > > > > wrong on this for the reasons I've given - that ACPI_HOTPLUG_CPU
-> > > > > will be N for Arm64 despite it supporting ACPI-based CPU hotplug.
-> > > >
-> > > > So I still have to understand how renaming it for all architectures
-> > > > (including x86) is supposed to help.
-> > > >
-> > > > It will still be the same option under a different name.  How does
-> > > > that change things technically?
-> > >
-> > > Do you think that it makes any sense to have support for ACPI-based
-> > > hotplug CPU
-> >
-> > So this is all about what you and I mean by "ACPI-based hotplug CPU".
-> >
-> > > *and* having it functional with a configuration symbol
-> > > named "ACPI_HOTPLUG_CPU" to be set to N ? That's essentially what
-> > > you are advocating for...
-> >
-> > Setting ACPI_HOTPLUG_CPU to N means that you are not going to compile
-> > the code that is conditional on it.
-> >
-> > That code allows the processor driver to be removed from CPUs and
-> > arch_unregister_cpu() to be called from within acpi_bus_trim()  (among
-> > other things).  On the way up, it allows arch_register_cpu() to be
-> > called from within acpi_bus_scan().  If these things are not done,
-> > what I mean by "ACPI-based hotplug CPU" is not supported.
->
-> Even on Arm64, arch_register_cpu() and arch_unregister_cpu() will be
-> called when the CPU in the VM is hot-removed or hot-added...
+Hi Bjorn,
 
-In a different way, however.
+Thanks for the review.
+
+On Tue, Jan 23, 2024 at 11:24:23AM -0600, Bjorn Helgaas wrote:
+> On Tue, Jan 23, 2024 at 11:56:42AM +0200, Sakari Ailus wrote:
+> > There are two ways to opportunistically increment a device's runtime PM
+> > usage count, calling either pm_runtime_get_if_active() or
+> > pm_runtime_get_if_in_use(). The former has an argument to tell whether to
+> > ignore the usage count or not, and the latter simply calls the former with
+> > ign_usage_count set to false. The other users that want to ignore the
+> > usage_count will have to explitly set that argument to true which is a bit
+> > cumbersome.
+> > 
+> > To make this function more practical to use, remove the ign_usage_count
+> > argument from the function. The main implementation is renamed as
+> > pm_runtime_get_conditional().
+> > 
+> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > Reviewed-by: Alex Elder <elder@linaro.org> # drivers/net/ipa/ipa_smp2p.c
+> > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> > Acked-by: Takashi Iwai <tiwai@suse.de> # sound/
+> > Reviewed-by: Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com> # drivers/accel/ivpu/
+> > Acked-by: Rodrigo Vivi <rodrigo.vivi@intel.com> # drivers/gpu/drm/i915/
+> > Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> 
+> Acked-by: Bjorn Helgaas <bhelgaas@google.com> # drivers/pci/
+> 
+> - Previous PM history uses "PM: " in the subject lines (not "pm: ").
+
+Oops. I'm not sure why I used lower case. (Maybe I've written too many
+times "media:" prefix to the subject?) I'll fix this in v5.
+
+> 
+> - I don't know whether it's feasible, but it would be nice if the
+>   intel_pm_runtime_pm.c rework could be done in one shot instead of
+>   being split between patches 1/3 and 2/3.
+> 
+>   Maybe it could be a preliminary patch that uses the existing
+>   if_active/if_in_use interfaces, followed by the trivial if_active
+>   updates in this patch.  I think that would make the history easier
+>   to read than having the transitory pm_runtime_get_conditional() in
+>   the middle.
+
+I think I'd merge the two patches. The second patch is fairly small, after
+all, and both deal with largely the same code.
+
+> 
+> - Similarly, it would be nice if pm_runtime_get_conditional() never
+>   had to be published in pm_runtime.h, instead of being temporarily
+>   added there by this patch and then immediately made private by 2/3.
+>   Maybe that's not practical, I dunno.
+
+-- 
+Regards,
+
+Sakari Ailus
 
