@@ -1,229 +1,222 @@
-Return-Path: <linux-pm+bounces-2567-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2568-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A46EB83910A
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 15:15:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4321D839148
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 15:22:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 27FB71F2A467
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 14:15:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B09861F2AC89
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 14:22:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7297B604D6;
-	Tue, 23 Jan 2024 14:13:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VUV7wcHc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CD2E5FB8E;
+	Tue, 23 Jan 2024 14:22:32 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4E28604B5
-	for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 14:13:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 937905F858;
+	Tue, 23 Jan 2024 14:22:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706019232; cv=none; b=S6sSXbIG6UjC9UFTYi5LBfH6DWGPLdjTQEC661+2Z0XwPUjG9IIzWlnqCiOAZlQSVEywu10mx5TutVYu2Wlu/7dxrwEgXepSk7bMtBkQh8LpwLCJ6/IRHC2Aubw05dlbwex9WtQZtWBKQUle3H9Bd9zCCKNFMhYcB6H+UY6pQkw=
+	t=1706019752; cv=none; b=m7/BydWuTHrVneUKBjPcL5nFTAk3I4M8vpt7x5Yqsn3GobVHNTqwufDTcrtTNS2zzTLbsXAcp9HwPBLE4vJ7Ha3dAo0m7BipBq5QpOnNrjgswyMF6wxjUJR9nZqPhu6EpurUW0zjlhtFEGx+iDHGOUKs3IEfIdUVZPc1Oa1sTvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706019232; c=relaxed/simple;
-	bh=zd6Bmh48g7rsM+87XsXBkxNU+Zs2Yu+NMiweLujpj9I=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=JlN/8GTwn5tvjgXsyiz0wfqANkEpQ//XH1Z5D/d62OVoGpbsErOQZOE/KCJKd4DuibCCjAi7XGcHv+IWlMZwua+Y56u4ujzBgm8Hz3Rh1OLO6dJSwoPG0DeKby3qWKuc7yKm6AfD3O08u32OWd515jpnfT20KKL+TS5CskhQgZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=VUV7wcHc; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-33937dd1b43so1470720f8f.3
-        for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 06:13:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706019229; x=1706624029; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qJ0gjfKMOfp9CH0Fl1AfdBLtnAI1t5WhWrFWLERW/vA=;
-        b=VUV7wcHcc6udQnCmXkUlYNNaIXwzT45/R90OgLr6ZF9YVFWehNeLZksZ1rhDq8kso/
-         FtjfgzuXFdenYS9N9QONRHYyDNfqal2VXNCxhB2jM9o0kzTNFeXcnW3A/pOy9q3ZbFlY
-         ar7UHsOxXnVOh7eyWgvj6u6Rda4l4SPQ0lawXvvnPRiZdwYX8mEqWwWbkb+klYWcQE20
-         cg6Huqz2d9Pd5OsWOReudJDQQ05PFk1SzbRO243TBdyiqIlNJcrKNPgtuqYA+FXsOFTA
-         1637JUEZlON5rtdXKTdPX8QtuqkxIJFnP7legeuUooXNIiHY8BkaAkTs4r40N9m/HpW0
-         TCAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706019229; x=1706624029;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qJ0gjfKMOfp9CH0Fl1AfdBLtnAI1t5WhWrFWLERW/vA=;
-        b=uRdpPYCW96Lfyi1SFlXR1YmH0uNkynOnX8yhjZaq8NIjzYHU7IgGBywpAQdkFL1hjT
-         93vDxfS6rnxbur/pWYVM+oylXMbRVWIsq8HqYcRvLle+Hoy1bINcjp2mLjArfSZZN1Yr
-         +JKAd7PzF0Y4izBCD1LoWx6y/AhnwsYAeDisHSCElOfaNI7TmiFTCmGmK9e9Zy8gfK01
-         LvgVFviZEah/lLVsM/0uMTf7POpGw2J3gpPZhMuhtN0EtnmIUiHdGD4e2gCIoqvBc08w
-         ckSMthvI4YQqtQFA9kv3iUkYJnv6UQv2KkJJgGPdsskxZGUqQQ605U84n70FU6AooPMj
-         lTMg==
-X-Gm-Message-State: AOJu0YzuEpjWGkyqy3w1XfsXg6LC3vHLEFF1qaSCvCfbfU2rcVIG/Mry
-	7sRHDhWP+8P+4jVVEza1SFUf0KpX8E4c8FLP2A7pfHCm48A1+TU0Hsdnsqz60eg=
-X-Google-Smtp-Source: AGHT+IEmbmNSvVll9puJMHID5ADLiEU47RyJFA7juTXNLnNPBn9fghYRSUWnGYd4fyil/i4UIdqrsg==
-X-Received: by 2002:a5d:5086:0:b0:337:c5fb:c84f with SMTP id a6-20020a5d5086000000b00337c5fbc84fmr3473681wrt.33.1706019229029;
-        Tue, 23 Jan 2024 06:13:49 -0800 (PST)
-Received: from krzk-bin.. ([178.197.215.66])
-        by smtp.gmail.com with ESMTPSA id r8-20020adfe688000000b00337d97338b0sm12132298wrm.76.2024.01.23.06.13.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jan 2024 06:13:48 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Banajit Goswami <bgoswami@quicinc.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Frank Rowand <frowand.list@gmail.com>,
-	Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	linux-arm-msm@vger.kernel.org,
-	alsa-devel@alsa-project.org,
-	linux-sound@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Sean Anderson <sean.anderson@seco.com>
-Subject: [PATCH v4 6/6] ASoC: codecs: wsa884x: Allow sharing reset GPIO
-Date: Tue, 23 Jan 2024 15:13:11 +0100
-Message-Id: <20240123141311.220505-7-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240123141311.220505-1-krzysztof.kozlowski@linaro.org>
-References: <20240123141311.220505-1-krzysztof.kozlowski@linaro.org>
+	s=arc-20240116; t=1706019752; c=relaxed/simple;
+	bh=6UOC/IhmsB3mO8ORCE3KruE97dPphECfRSplYvUL/d0=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Fl8rJzEwq3t3+0wDys111k8hFTxLs1Y87mzZzVbqtPtRC3RIGkP7g6qPHZOwuVIKjFHm768pWQg2JH3v1onqXV1OCBl9CCvT+lfI2TrlH4ce7E7BlqAEP9epiXx4cyoikZQeHS3QF/m1MZj/Q6RpMKrj8UFCFr7VhPwzTzxoAFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.231])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4TK8P10Qfbz6K64n;
+	Tue, 23 Jan 2024 22:19:49 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 3CC42140AB8;
+	Tue, 23 Jan 2024 22:22:20 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 23 Jan
+ 2024 14:22:19 +0000
+Date: Tue, 23 Jan 2024 14:22:18 +0000
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+CC: <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
+	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<x86@kernel.org>, <acpica-devel@lists.linuxfoundation.org>,
+	<linux-csky@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-ia64@vger.kernel.org>, <linux-parisc@vger.kernel.org>, Salil Mehta
+	<salil.mehta@huawei.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	<jianyong.wu@arm.com>, <justin.he@arm.com>, James Morse <james.morse@arm.com>
+Subject: Re: [PATCH RFC v3 17/21] ACPI: add support to register CPUs based
+ on the _STA enabled bit
+Message-ID: <20240123142218.00001a7b@Huawei.com>
+In-Reply-To: <Za+61Jikkxh2BinY@shell.armlinux.org.uk>
+References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
+	<E1rDOhC-00DvlI-Pp@rmk-PC.armlinux.org.uk>
+	<ZYBDJG1g7SH7AiM1@shell.armlinux.org.uk>
+	<20240102145320.000062f9@Huawei.com>
+	<20240123102603.00004244@Huawei.com>
+	<Za+61Jikkxh2BinY@shell.armlinux.org.uk>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On some boards with multiple WSA8840/WSA8845 speakers, the reset
-(shutdown) GPIO is shared between two speakers.  Use the reset
-controller framework and its "reset-gpio" driver to handle this case.
-This allows bring-up and proper handling of all WSA884x speakers on
-X1E80100-CRD board.
+On Tue, 23 Jan 2024 13:10:44 +0000
+"Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
 
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Sean Anderson <sean.anderson@seco.com>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> On Tue, Jan 23, 2024 at 10:26:03AM +0000, Jonathan Cameron wrote:
+> > On Tue, 2 Jan 2024 14:53:20 +0000
+> > Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+> >   
+> > > On Mon, 18 Dec 2023 13:03:32 +0000
+> > > "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
+> > >   
+> > > > On Wed, Dec 13, 2023 at 12:50:38PM +0000, Russell King wrote:    
+> > > > > From: James Morse <james.morse@arm.com>
+> > > > > 
+> > > > > acpi_processor_get_info() registers all present CPUs. Registering a
+> > > > > CPU is what creates the sysfs entries and triggers the udev
+> > > > > notifications.
+> > > > > 
+> > > > > arm64 virtual machines that support 'virtual cpu hotplug' use the
+> > > > > enabled bit to indicate whether the CPU can be brought online, as
+> > > > > the existing ACPI tables require all hardware to be described and
+> > > > > present.
+> > > > > 
+> > > > > If firmware describes a CPU as present, but disabled, skip the
+> > > > > registration. Such CPUs are present, but can't be brought online for
+> > > > > whatever reason. (e.g. firmware/hypervisor policy).
+> > > > > 
+> > > > > Once firmware sets the enabled bit, the CPU can be registered and
+> > > > > brought online by user-space. Online CPUs, or CPUs that are missing
+> > > > > an _STA method must always be registered.      
+> > > > 
+> > > > ...
+> > > >     
+> > > > > @@ -526,6 +552,9 @@ static void acpi_processor_post_eject(struct acpi_device *device)
+> > > > >  		acpi_processor_make_not_present(device);
+> > > > >  		return;
+> > > > >  	}
+> > > > > +
+> > > > > +	if (cpu_present(pr->id) && !(sta & ACPI_STA_DEVICE_ENABLED))
+> > > > > +		arch_unregister_cpu(pr->id);      
+> > > > 
+> > > > This change isn't described in the commit log, but seems to be the cause
+> > > > of the build error identified by the kernel build bot that is fixed
+> > > > later in this series. I'm wondering whether this should be in a
+> > > > different patch, maybe "ACPI: Check _STA present bit before making CPUs
+> > > > not present" ?    
+> > > 
+> > > Would seem a bit odd to call arch_unregister_cpu() way before the code
+> > > is added to call the matching arch_registers_cpu()
+> > > 
+> > > Mind you this eject doesn't just apply to those CPUs that are registered
+> > > later I think, but instead to all.  So we run into the spec hole that
+> > > there is no way to identify initially 'enabled' CPUs that might be disabled
+> > > later.
+> > >   
+> > > > 
+> > > > Or maybe my brain isn't working properly (due to being Covid positive.)
+> > > > Any thoughts, Jonathan?    
+> > > 
+> > > I'll go with a resounding 'not sure' on where this change belongs.
+> > > I blame my non existent start of the year hangover.
+> > > Hope you have recovered!  
+> > 
+> > Looking again, I think you were right, move it to that earlier patch.  
+> 
+> I'm having second thoughts - because this patch introduces the
+> arch_register_cpu() into the acpi_processor_add() path (via
+> acpi_processor_get_info() and acpi_processor_make_enabled(), so isn't
+> it also correct to add arch_unregister_cpu() to the detach/post_eject
+> path as well? If we add one without the other, doesn't stuff become
+> a bit asymetric?
+> 
+> Looking more deeply at these changes, I'm finding it isn't easy to
+> keep track of everything that's going on here.
 
----
+I can sympathize.
 
-If previous patches are fine, then this commit is independent and could
-be taken via ASoC.
----
- sound/soc/codecs/wsa884x.c | 53 +++++++++++++++++++++++++++++++-------
- 1 file changed, 43 insertions(+), 10 deletions(-)
+> 
+> We had attach()/detach() callbacks that were nice and symetrical.
+> How we have this post_eject() callback that makes things asymetrical.
+> 
+> We have the attach() method that registers the CPU, but no detach
+> method, instead having the post_eject() method. On the face of it,
+> arch_unregister_cpu() doesn't look symetric unless one goes digging
+> more in the code - by that, I mean arch_register_cpu() only gets
+> called of present=1 _and_ enabled=1. However, arch_unregister_cpu()
+> gets called buried in acpi_processor_make_not_present(), called when
+> present=0, and then we have this new one to handle the case where
+> enabled=0. It is not obvious that arch_unregister_cpu() is the reverse
+> of what happens with arch_register_cpu() here.
 
-diff --git a/sound/soc/codecs/wsa884x.c b/sound/soc/codecs/wsa884x.c
-index f2653df84e4a..a9767ef0e39d 100644
---- a/sound/soc/codecs/wsa884x.c
-+++ b/sound/soc/codecs/wsa884x.c
-@@ -13,6 +13,7 @@
- #include <linux/pm_runtime.h>
- #include <linux/regmap.h>
- #include <linux/regulator/consumer.h>
-+#include <linux/reset.h>
- #include <linux/slab.h>
- #include <linux/soundwire/sdw.h>
- #include <linux/soundwire/sdw_registers.h>
-@@ -699,6 +700,7 @@ struct wsa884x_priv {
- 	struct sdw_stream_runtime *sruntime;
- 	struct sdw_port_config port_config[WSA884X_MAX_SWR_PORTS];
- 	struct gpio_desc *sd_n;
-+	struct reset_control *sd_reset;
- 	bool port_prepared[WSA884X_MAX_SWR_PORTS];
- 	bool port_enable[WSA884X_MAX_SWR_PORTS];
- 	unsigned int variant;
-@@ -1799,9 +1801,22 @@ static struct snd_soc_dai_driver wsa884x_dais[] = {
- 	},
- };
- 
--static void wsa884x_gpio_powerdown(void *data)
-+static void wsa884x_reset_powerdown(void *data)
- {
--	gpiod_direction_output(data, 1);
-+	struct wsa884x_priv *wsa884x = data;
-+
-+	if (wsa884x->sd_reset)
-+		reset_control_assert(wsa884x->sd_reset);
-+	else
-+		gpiod_direction_output(wsa884x->sd_n, 1);
-+}
-+
-+static void wsa884x_reset_deassert(struct wsa884x_priv *wsa884x)
-+{
-+	if (wsa884x->sd_reset)
-+		reset_control_deassert(wsa884x->sd_reset);
-+	else
-+		gpiod_direction_output(wsa884x->sd_n, 0);
- }
- 
- static void wsa884x_regulator_disable(void *data)
-@@ -1809,6 +1824,27 @@ static void wsa884x_regulator_disable(void *data)
- 	regulator_bulk_disable(WSA884X_SUPPLIES_NUM, data);
- }
- 
-+static int wsa884x_get_reset(struct device *dev, struct wsa884x_priv *wsa884x)
-+{
-+	wsa884x->sd_reset = devm_reset_control_get_optional_shared(dev, NULL);
-+	if (IS_ERR(wsa884x->sd_reset))
-+		return dev_err_probe(dev, PTR_ERR(wsa884x->sd_reset),
-+				     "Failed to get reset\n");
-+	else if (wsa884x->sd_reset)
-+		return 0;
-+	/*
-+	 * else: NULL, so use the backwards compatible way for powerdown-gpios,
-+	 * which does not handle sharing GPIO properly.
-+	 */
-+	wsa884x->sd_n = devm_gpiod_get_optional(dev, "powerdown",
-+						GPIOD_OUT_HIGH);
-+	if (IS_ERR(wsa884x->sd_n))
-+		return dev_err_probe(dev, PTR_ERR(wsa884x->sd_n),
-+				     "Shutdown Control GPIO not found\n");
-+
-+	return 0;
-+}
-+
- static int wsa884x_probe(struct sdw_slave *pdev,
- 			 const struct sdw_device_id *id)
- {
-@@ -1838,11 +1874,9 @@ static int wsa884x_probe(struct sdw_slave *pdev,
- 	if (ret)
- 		return ret;
- 
--	wsa884x->sd_n = devm_gpiod_get_optional(dev, "powerdown",
--						GPIOD_OUT_HIGH);
--	if (IS_ERR(wsa884x->sd_n))
--		return dev_err_probe(dev, PTR_ERR(wsa884x->sd_n),
--				     "Shutdown Control GPIO not found\n");
-+	ret = wsa884x_get_reset(dev, wsa884x);
-+	if (ret)
-+		return ret;
- 
- 	dev_set_drvdata(dev, wsa884x);
- 	wsa884x->slave = pdev;
-@@ -1858,9 +1892,8 @@ static int wsa884x_probe(struct sdw_slave *pdev,
- 	pdev->prop.sink_dpn_prop = wsa884x_sink_dpn_prop;
- 	pdev->prop.scp_int1_mask = SDW_SCP_INT1_BUS_CLASH | SDW_SCP_INT1_PARITY;
- 
--	/* Bring out of reset */
--	gpiod_direction_output(wsa884x->sd_n, 0);
--	ret = devm_add_action_or_reset(dev, wsa884x_gpio_powerdown, wsa884x->sd_n);
-+	wsa884x_reset_deassert(wsa884x);
-+	ret = devm_add_action_or_reset(dev, wsa884x_reset_powerdown, wsa884x);
- 	if (ret)
- 		return ret;
- 
--- 
-2.34.1
+One option would be to pull the arch_unregister_cpu() out so it
+happens in one place in both the present = 0 and enabled = 0 cases but
+I'm not sure if it's safe to reorder the contents of 
+acpi_processor_not_present() as it's followed by a bunch of things.
+
+Would looks something like
+
+if (cpu_present(pr->id)) {
+	if (!(sta & ACPI_STA_DEVICE_PRESENT)) {
+		acpi_processor_make_not_present(device); /* Remove arch_cpu_unregister() */
+	} else if (!(sta & ACPI_STA_DEVICE_ENABLED)) {
+		/* Nothing to do in this case */
+	} else {
+		return; /* Firmware did something silly - probably racing */
+	}
+	arch_unregister_cpu(pr->id);
+
+	return;
+}
+
+> 
+> Then we have the add() method allocating pr->throttling.shared_cpu_map,
+> and acpi_processor_make_not_present() freeing it. From what I read in
+> ACPI v6.5, enabled is not allowed to be set without present. So, if
+> _STA reports that a CPU that had present=1 enabled=1, but then is
+> later reported to be enabled=0 (which we handle by calling only
+> arch_unregister_cpu()) then what happens when _STA changes to
+> enabled=1 later? Does add() get called? 
+
+yes it does (I poked it to see) which indeed isn't good (unless I've
+broken my setup in some obscure way).
+
+Seems we need a few more things than arch_unregister_cpu() pulled out
+in the above code.
+
+
+> If it does, this would cause
+> a new acpi_processor structure to be allocated and the old one to be
+> leaked... I hope I'm wrong about add() being called - but if it isn't,
+> how does enabled going from 0->1 get handled... and if we are handling
+> its 1->0 transition separately from present, then surely we should be
+> handling that.
+> 
+> Maybe I'm just getting confused, but I've spent much of this morning
+> trying to unravel all this... and I'm of the opinion that this isn't a
+> sign of a good approach.
+
+It's all annoyingly messy at the root of things, but indeed you've found
+some issues in current implementation.  Feels like just ripping out
+a bunch of stuff from acpi_processor_make_not_present() and calling it
+for both paths will probably work, but I've not tested that yet.
+
+Jonathan
+> 
 
 
