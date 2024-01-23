@@ -1,142 +1,192 @@
-Return-Path: <linux-pm+bounces-2558-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2559-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D11F1838F4A
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 14:06:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D810838F9A
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 14:17:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EF6A21C272E4
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 13:06:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2B851F293CE
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 13:17:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC84E5EE8E;
-	Tue, 23 Jan 2024 13:01:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83447605DA;
+	Tue, 23 Jan 2024 13:11:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="I9wfgzI6"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="fpto1vRE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23CBE5EE85
-	for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 13:01:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48A736169F;
+	Tue, 23 Jan 2024 13:10:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706014866; cv=none; b=IAcbZ6Ch2gPE2rxsY6fqtwLDckbYrxpOCvp7RY7EeRd3phvi6Fv8Qzk/cFNJ4tMW0lka/lCHtNF3P0RqS1FENv2bdqIeHdM1kZuVXLyBQGSmQORv0AH4sE4MrIYZOsGM2H4dGBnF60iumTmbvSc4DgIvwNa1uiAKOkhaAXfjOPk=
+	t=1706015460; cv=none; b=LBWd2nuAqkBDKFpEdXFGDmM0WiWMawIgaO3tuG1f6yMXFxF2HFWMIVIpxwhWpOwpcQ1fkWtOPnDX19TBh52fBEzDlFSSyjNfyHAN2YMq1VZGAMdhzhzL8CHNq5Xe/TBmw5w4qOCz/lfwlOfcqKbjmVutrEkA+iERQErCionIz+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706014866; c=relaxed/simple;
-	bh=Rhu11kHNwAkr6YhiKhtbh07fNK4FgW0qEO9f97hhyI0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uVc+S5CoU80Q7iyZxx2JEYJtQZElM0GaP0kxYBDcoPuQeexLV5vIEfJUXO0o8yqMQwS9qEtznOe6EudvvuI4WihawUHAaObfEz1Jv9c/ZmC7kL9ustTDfLF+F8jpgjlxyWHVzTj+HAoMLRP5qsTqMEMFvYsUp6XBjkbmFNhjsRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=I9wfgzI6; arc=none smtp.client-ip=209.85.219.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-db3a09e96daso3504190276.3
-        for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 05:01:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706014864; x=1706619664; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3nn+YYpd5382zai0iv6hd4Aw6J6UtUSEjEEQnVFo5no=;
-        b=I9wfgzI6RteeWG1uauP3YOui1uTmV6L6MSgtpnlxpfaDBAP2QnFBqznn72Eo+yVLaw
-         pIIC9TNCz86Gt5KAB1zfMJPV7y+Jlk1c716sywU/ReVSNFeS+NS9l6lRSAdpBfL2vYFI
-         d3ODVcH8eFq31y6GnOUEd+Fd2S/Yx3UJmxAGbjghCrzsGS89jS4Wjfc6GVVE7gN9zg5i
-         hyq1w6lUjh4AfRv1oXv1wCQKHwKRAiV3CvJKNS2dbvPpp0brHUBwx5nVxmOaRM0j3mR5
-         uf9urjHMPC/lGqq0E9rtKEhSw3opM8+WEBrwPBDzQS+WheRWlzpT9PwJ8bzYKUiHpT3h
-         NV4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706014864; x=1706619664;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3nn+YYpd5382zai0iv6hd4Aw6J6UtUSEjEEQnVFo5no=;
-        b=syomdLPUHkLbKDZWJ1gmQf0/OSxboUEDsHEbNbAu3zr9jsNGZAvndXKnXXBfGe312B
-         ceK8dxvQcoFANdYcfa3pYDMfXXkE0cAtHUw55GsLaYQowwvK0i7k0TUcMFCCJmL3kryf
-         +DptMkid7hpKv2kWDxKNuV7QaDxigFRZi+vbDYsK7wnz592zejw4cnFHk8lpNFC79tu7
-         4HeLkuojguQIhdLkjwXPpipWIIM309547wxFe1krd0SAWZYpmD28UprghFNyHgujDjxF
-         IbRxSf42t/S2zStt994QfE1hNybWQ8DrFqKKe1un0i0gLj9m9PVRhVubSgcdF0th6+hC
-         PWUQ==
-X-Gm-Message-State: AOJu0YwMc4n/B1pkmlCVmOWT70vE+UvJjFqxupfbEPoKYG16Rcr+BpjQ
-	Zy1yIKU2NWVHcMCyeLpbON4EQYF4TIa3oyKnySvxr9REXvLHKaNmZLcgphWb7SOPsDAHn8LOBkF
-	R3ekST83njV7dNoOQxSI+4nm4EaDqJ8qiHR/e2w==
-X-Google-Smtp-Source: AGHT+IGjEf+QjHzCIZuEvzPO4c751eB6RGzISMIAvrjoFnsPa6N8IGO0Gksu7V5PY9K+8g3LsFuqwdUTtXYbGpYeIk0=
-X-Received: by 2002:a81:48cd:0:b0:5ff:7cca:a434 with SMTP id
- v196-20020a8148cd000000b005ff7ccaa434mr4298126ywa.51.1706014864029; Tue, 23
- Jan 2024 05:01:04 -0800 (PST)
+	s=arc-20240116; t=1706015460; c=relaxed/simple;
+	bh=5h4c0yLpAWhh9wDVnrtG83khZHw2xEkAxReFMbgcYiM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p6QeSZc530vylYdrYrkOvI82BFKnjUJSKtnpkZqkELuK6MCJH254E6lnGH1dpsDgkEam1gOaQACN4jq/nHgl1vGHTjVQKfIjd90notiquunR92/B/7tK6oZiRWMz+q1LilBYBJEkLpa2QgEYuAyMtnuPVXpPtg9qdsoQFEm77qk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=fpto1vRE; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=fSr5mFfM4iUU6EsOYToTuq8gdRk30qQl8QQSg63i70E=; b=fpto1vRE8xiQfC1uHZjgB53IU1
+	JLS4uiEkPBr6x1Klv4TNndrOnG/ui4aqzwG/Y2eqKlYIDHpeJacttqDhXV2KGhFFEn9acxBpxIouu
+	tOH2aiHL34vwZDnDTt45uqhH4MS/X5syanHIDBqUfCGS4JuKsSQ/+MMkvnURyhmYGdLkZ9t3oZuqF
+	XWRtZTgH2zKCxX4SfzUOlORMQvFyeJrKaOho9uAsnq3WH6zRTINuWSRJ4XEYkmi4DaXRKgTQN+Kz8
+	8qrlri2JBWoJpsiLMJuWZcj5/RLx3sn8Pm1uwiDKuFDLblQQ1Lq/w4uAOvqo/kJ0weC6iYY1dCIMz
+	idqciouw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:46192)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <linux@armlinux.org.uk>)
+	id 1rSGYC-0002Qx-1y;
+	Tue, 23 Jan 2024 13:10:48 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <linux@shell.armlinux.org.uk>)
+	id 1rSGY8-0001yi-Ln; Tue, 23 Jan 2024 13:10:44 +0000
+Date: Tue, 23 Jan 2024 13:10:44 +0000
+From: "Russell King (Oracle)" <linux@armlinux.org.uk>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
+	x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
+	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+	Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	jianyong.wu@arm.com, justin.he@arm.com,
+	James Morse <james.morse@arm.com>
+Subject: Re: [PATCH RFC v3 17/21] ACPI: add support to register CPUs based on
+ the _STA enabled bit
+Message-ID: <Za+61Jikkxh2BinY@shell.armlinux.org.uk>
+References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
+ <E1rDOhC-00DvlI-Pp@rmk-PC.armlinux.org.uk>
+ <ZYBDJG1g7SH7AiM1@shell.armlinux.org.uk>
+ <20240102145320.000062f9@Huawei.com>
+ <20240123102603.00004244@Huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240122-gdsc-hwctrl-v4-0-9061e8a7aa07@linaro.org>
-In-Reply-To: <20240122-gdsc-hwctrl-v4-0-9061e8a7aa07@linaro.org>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 23 Jan 2024 14:00:28 +0100
-Message-ID: <CAPDyKFqVGJ3DUfPaifvqhyTBMH1bM30AExr3M2apZMx00vv9Jw@mail.gmail.com>
-Subject: Re: [PATCH v4 0/5] PM: domains: Add control for switching back and
- forth to HW control
-To: Abel Vesa <abel.vesa@linaro.org>, Bjorn Andersson <andersson@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
-	Len Brown <len.brown@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Andy Gross <agross@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>, Vikash Garodia <quic_vgarodia@quicinc.com>, 
-	"Bryan O'Donoghue" <bryan.odonoghue@linaro.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Taniya Das <quic_tdas@quicinc.com>, Jagadeesh Kona <quic_jkona@quicinc.com>, 
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240123102603.00004244@Huawei.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 
-On Mon, 22 Jan 2024 at 09:47, Abel Vesa <abel.vesa@linaro.org> wrote:
->
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
-> Changes in v4:
-> - Re-worded 1st patch commit message, as per Bjorn's suggestion, and added
->   Dmitry's R-b tag
-> - Added Bjorn's and Dmitry's R-b tags to the 2nd patch
-> - Re-worded 3rd patch commit message, to better explain the HW_CTRL_TRIGGER flag.
-> - Added mode transition delay when setting mode for GDSC
-> - Added status polling if GDSSC is enabled when transitioning from HW to SW
-> - Re-worded 4th patch commit message to better explain why the
->   HW_CTRL_TRIGGER needs to be used instead
-> - Drop changes to SC7180, SDM845 and SM8550 video CC drivers, as only
->   SC7280 and SM8250 have been tested so far. More platforms (with v6 venus)
->   will be added eventually.
-> - Call genpd set_hwmode API only for v6 and dropped the vcodec_pmdomains_hwctrl.
-> - Re-worded 5th patch commit message accordingly.
-> - Link to v3:
->   https://lore.kernel.org/r/20231101-gdsc-hwctrl-v3-0-0740ae6b2b04@linaro.org/
->
-> ---
-> Abel Vesa (1):
->       PM: domains: Add the domain HW-managed mode to the summary
->
-> Jagadeesh Kona (3):
->       clk: qcom: gdsc: Add set and get hwmode callbacks to switch GDSC mode
->       clk: qcom: Use HW_CTRL_TRIGGER flag to switch video GDSC to HW mode
->       venus: pm_helpers: Use dev_pm_genpd_set_hwmode to switch GDSC mode
->
-> Ulf Hansson (1):
->       PM: domains: Allow devices attached to genpd to be managed by HW
->
->  drivers/clk/qcom/gdsc.c                        | 54 +++++++++++++++++
->  drivers/clk/qcom/gdsc.h                        |  1 +
->  drivers/clk/qcom/videocc-sc7280.c              |  2 +-
->  drivers/clk/qcom/videocc-sm8250.c              |  4 +-
->  drivers/media/platform/qcom/venus/pm_helpers.c | 23 +++----
->  drivers/pmdomain/core.c                        | 83 +++++++++++++++++++++++++-
->  include/linux/pm_domain.h                      | 17 ++++++
->  7 files changed, 169 insertions(+), 15 deletions(-)
-> ---
+On Tue, Jan 23, 2024 at 10:26:03AM +0000, Jonathan Cameron wrote:
+> On Tue, 2 Jan 2024 14:53:20 +0000
+> Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
+> 
+> > On Mon, 18 Dec 2023 13:03:32 +0000
+> > "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
+> > 
+> > > On Wed, Dec 13, 2023 at 12:50:38PM +0000, Russell King wrote:  
+> > > > From: James Morse <james.morse@arm.com>
+> > > > 
+> > > > acpi_processor_get_info() registers all present CPUs. Registering a
+> > > > CPU is what creates the sysfs entries and triggers the udev
+> > > > notifications.
+> > > > 
+> > > > arm64 virtual machines that support 'virtual cpu hotplug' use the
+> > > > enabled bit to indicate whether the CPU can be brought online, as
+> > > > the existing ACPI tables require all hardware to be described and
+> > > > present.
+> > > > 
+> > > > If firmware describes a CPU as present, but disabled, skip the
+> > > > registration. Such CPUs are present, but can't be brought online for
+> > > > whatever reason. (e.g. firmware/hypervisor policy).
+> > > > 
+> > > > Once firmware sets the enabled bit, the CPU can be registered and
+> > > > brought online by user-space. Online CPUs, or CPUs that are missing
+> > > > an _STA method must always be registered.    
+> > > 
+> > > ...
+> > >   
+> > > > @@ -526,6 +552,9 @@ static void acpi_processor_post_eject(struct acpi_device *device)
+> > > >  		acpi_processor_make_not_present(device);
+> > > >  		return;
+> > > >  	}
+> > > > +
+> > > > +	if (cpu_present(pr->id) && !(sta & ACPI_STA_DEVICE_ENABLED))
+> > > > +		arch_unregister_cpu(pr->id);    
+> > > 
+> > > This change isn't described in the commit log, but seems to be the cause
+> > > of the build error identified by the kernel build bot that is fixed
+> > > later in this series. I'm wondering whether this should be in a
+> > > different patch, maybe "ACPI: Check _STA present bit before making CPUs
+> > > not present" ?  
+> > 
+> > Would seem a bit odd to call arch_unregister_cpu() way before the code
+> > is added to call the matching arch_registers_cpu()
+> > 
+> > Mind you this eject doesn't just apply to those CPUs that are registered
+> > later I think, but instead to all.  So we run into the spec hole that
+> > there is no way to identify initially 'enabled' CPUs that might be disabled
+> > later.
+> > 
+> > > 
+> > > Or maybe my brain isn't working properly (due to being Covid positive.)
+> > > Any thoughts, Jonathan?  
+> > 
+> > I'll go with a resounding 'not sure' on where this change belongs.
+> > I blame my non existent start of the year hangover.
+> > Hope you have recovered!
+> 
+> Looking again, I think you were right, move it to that earlier patch.
 
-Bjorn, if it helps, I can funnel this complete series via my pmdomain tree?
+I'm having second thoughts - because this patch introduces the
+arch_register_cpu() into the acpi_processor_add() path (via
+acpi_processor_get_info() and acpi_processor_make_enabled(), so isn't
+it also correct to add arch_unregister_cpu() to the detach/post_eject
+path as well? If we add one without the other, doesn't stuff become
+a bit asymetric?
 
-Another option is that I host an immutable branch with patch1 and
-patch2 for you to pull in? Just let me know what you prefer.
+Looking more deeply at these changes, I'm finding it isn't easy to
+keep track of everything that's going on here.
 
-Kind regards
-Uffe
+We had attach()/detach() callbacks that were nice and symetrical.
+How we have this post_eject() callback that makes things asymetrical.
+
+We have the attach() method that registers the CPU, but no detach
+method, instead having the post_eject() method. On the face of it,
+arch_unregister_cpu() doesn't look symetric unless one goes digging
+more in the code - by that, I mean arch_register_cpu() only gets
+called of present=1 _and_ enabled=1. However, arch_unregister_cpu()
+gets called buried in acpi_processor_make_not_present(), called when
+present=0, and then we have this new one to handle the case where
+enabled=0. It is not obvious that arch_unregister_cpu() is the reverse
+of what happens with arch_register_cpu() here.
+
+Then we have the add() method allocating pr->throttling.shared_cpu_map,
+and acpi_processor_make_not_present() freeing it. From what I read in
+ACPI v6.5, enabled is not allowed to be set without present. So, if
+_STA reports that a CPU that had present=1 enabled=1, but then is
+later reported to be enabled=0 (which we handle by calling only
+arch_unregister_cpu()) then what happens when _STA changes to
+enabled=1 later? Does add() get called? If it does, this would cause
+a new acpi_processor structure to be allocated and the old one to be
+leaked... I hope I'm wrong about add() being called - but if it isn't,
+how does enabled going from 0->1 get handled... and if we are handling
+its 1->0 transition separately from present, then surely we should be
+handling that.
+
+Maybe I'm just getting confused, but I've spent much of this morning
+trying to unravel all this... and I'm of the opinion that this isn't a
+sign of a good approach.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
 
