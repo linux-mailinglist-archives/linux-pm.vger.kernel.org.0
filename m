@@ -1,31 +1,31 @@
-Return-Path: <linux-pm+bounces-2572-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2573-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5956839212
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 16:07:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39661839218
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 16:08:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E415283442
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 15:07:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E6160286E04
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 15:08:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C93B35FBB7;
-	Tue, 23 Jan 2024 15:07:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEE095FBA7;
+	Tue, 23 Jan 2024 15:07:36 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 572755FBA0
-	for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 15:07:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59EFB5FEE8
+	for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 15:07:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706022435; cv=none; b=j6ORGBLNBgw0QS5ysgMvDPaDQ5y+K72lzs7MBdhLyGSmKaflee9AwqSWWlKBdYIPfDiAtjNQ/9hIEygxSVSW29aMu483tJMO19MNravRVQsxYZQE2jca55SYfZYUM958DBsbJEVRzNdz0ZBN+YFlYg3k3406VkTHJkahMqWPtZ4=
+	t=1706022456; cv=none; b=sLJbYNVxObeaTkh6qxV9LM1Jp/ByGlRhtBdDBcD7oqjeGTKlM5n+Cvjw8Imyokwn5bHBua+Pm7dPjSXPmZcaF9Wsg2mJMRUgWtlllKvKnrFqfp6TkftCJs3vTpR34hKLWd3h9z/bTK7mwey4wcwhHCE0ZzCn3Ny2DqxAXY36nnY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706022435; c=relaxed/simple;
-	bh=b0nsHC1LlsVf82gw0OcuACEz8HSMsfQcxZCNzRl/XfU=;
+	s=arc-20240116; t=1706022456; c=relaxed/simple;
+	bh=08l0Ha6rh08av6IrPMxQjuFd50E7E9DewODPATbh6Uo=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=kcMKMwhz7cQoP5gymHhqagfq/cRI4N+kTUJAy8ByDiMQ1dOOwoKGq46dPALjzAkaRpokR1o1H1Z+afRWfYWqB0btqZjfn2ASSAQKcZEyF9LfhfN94LY5sCb3171oPg4+UiuyFdYNK5eWD6LwJ3bo5dzMonADCg655V604oZy4TE=
+	 Content-Type:MIME-Version; b=pY2XiTTLJXkjwAIsb1NJS4/9napscfg4Ztrkf/0ekXIeSP/9ZWqNGuSE82sN4gho+HBHCCkQ9rQBtIBShfvveNYI/8Ij8GDNXk6UvLXHVdo2MXxmhpQwgMGGUtSDI0okHVMLx3S1OVftCswea4qscHqIoVATH53Y9VTmfCYYm04=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,19 +33,18 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rSIMU-0001Fo-Gh; Tue, 23 Jan 2024 16:06:50 +0100
+	id 1rSIMs-0001IB-Cp; Tue, 23 Jan 2024 16:07:14 +0100
 Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rSIMR-001rL1-Fx; Tue, 23 Jan 2024 16:06:47 +0100
+	id 1rSIMr-001rL7-Tj; Tue, 23 Jan 2024 16:07:13 +0100
 Received: from pza by lupine with local (Exim 4.96)
 	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rSIMR-000Ab1-1K;
-	Tue, 23 Jan 2024 16:06:47 +0100
-Message-ID: <b9d2e1e5fd8b5022890e05fcc33410360e0d11d7.camel@pengutronix.de>
-Subject: Re: [PATCH v4 4/6] reset: Instantiate reset GPIO controller for
- shared reset-gpios
+	id 1rSIMr-000AdV-2i;
+	Tue, 23 Jan 2024 16:07:13 +0100
+Message-ID: <35f686e742fab537cf755322cecc97ce5be0a041.camel@pengutronix.de>
+Subject: Re: [PATCH v4 6/6] ASoC: codecs: wsa884x: Allow sharing reset GPIO
 From: Philipp Zabel <p.zabel@pengutronix.de>
 To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Bjorn Andersson
  <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, Srinivas
@@ -59,12 +58,12 @@ To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Bjorn Andersson
  linux-arm-msm@vger.kernel.org,  alsa-devel@alsa-project.org,
  linux-sound@vger.kernel.org,  devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org,  linux-pm@vger.kernel.org
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>, Chris Packham
- <chris.packham@alliedtelesis.co.nz>, Sean Anderson <sean.anderson@seco.com>
-Date: Tue, 23 Jan 2024 16:06:47 +0100
-In-Reply-To: <20240123141311.220505-5-krzysztof.kozlowski@linaro.org>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>, Sean Anderson
+ <sean.anderson@seco.com>
+Date: Tue, 23 Jan 2024 16:07:13 +0100
+In-Reply-To: <20240123141311.220505-7-krzysztof.kozlowski@linaro.org>
 References: <20240123141311.220505-1-krzysztof.kozlowski@linaro.org>
-	 <20240123141311.220505-5-krzysztof.kozlowski@linaro.org>
+	 <20240123141311.220505-7-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.46.4-2 
@@ -80,73 +79,17 @@ X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expand
 X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
 On Di, 2024-01-23 at 15:13 +0100, Krzysztof Kozlowski wrote:
-> Devices sharing a reset GPIO could use the reset framework for
-> coordinated handling of that shared GPIO line.  We have several cases of
-> such needs, at least for Devicetree-based platforms.
+> On some boards with multiple WSA8840/WSA8845 speakers, the reset
+> (shutdown) GPIO is shared between two speakers.  Use the reset
+> controller framework and its "reset-gpio" driver to handle this case.
+> This allows bring-up and proper handling of all WSA884x speakers on
+> X1E80100-CRD board.
 >=20
-> If Devicetree-based device requests a reset line, while "resets"
-> Devicetree property is missing but there is a "reset-gpios" one,
-> instantiate a new "reset-gpio" platform device which will handle such
-> reset line.  This allows seamless handling of such shared reset-gpios
-> without need of changing Devicetree binding [1].
->=20
-> To avoid creating multiple "reset-gpio" platform devices, store the
-> Devicetree "reset-gpios" GPIO specifiers used for new devices on a
-> linked list.  Later such Devicetree GPIO specifier (phandle to GPIO
-> controller, GPIO number and GPIO flags) is used to check if reset
-> controller for given GPIO was already registered.
->=20
-> If two devices have conflicting "reset-gpios" property, e.g. with
-> different ACTIVE_xxx flags, this would allow to spawn two separate
-> "reset-gpio" devices, where the second would fail probing on busy GPIO
-> request.
->=20
-> Link: https://lore.kernel.org/all/YXi5CUCEi7YmNxXM@robh.at.kernel.org/ [1=
-]
 > Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
 > Cc: Sean Anderson <sean.anderson@seco.com>
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I'm nearly out of complaints, two tiny cosmetic issues remaining:
-
-[...]
-> diff --git a/drivers/reset/core.c b/drivers/reset/core.c
-> index 4d5a78d3c085..6e81b8d35055 100644
-> --- a/drivers/reset/core.c
-> +++ b/drivers/reset/core.c
-[...]
-> @@ -813,12 +838,161 @@ static void __reset_control_put_internal(struct re=
-set_control *rstc)
->  	kref_put(&rstc->refcnt, __reset_control_release);
->  }
-> =20
-> +static int __reset_add_reset_gpio_lookup(int id, struct device_node *np,
-> +					 unsigned int gpio,
-> +					 unsigned int of_flags)
-> +{
-> +	unsigned int lookup_flags;
-> +	const char *label_tmp;
-> +
-> +	/*
-> +	 * Later we map GPIO flags between OF and Linux, however not all
-> +	 * constants from include/dt-bindings/gpio/gpio.h and
-> +	 * include/linux/gpio/machine.h match each other.
-> +	 */
-> +	if (of_flags > GPIO_ACTIVE_LOW) {
-> +		pr_err("reset-gpio code does not support GPIO flags %u for GPIO %u\n",
-> +			of_flags, gpio);
-
-Alignment to parenthesis is slightly off.
-
-> +		return -EINVAL;
-> +	}
-> +
-> +	struct gpio_device *gdev __free(gpio_device_put) =3D gpio_device_find_b=
-y_fwnode(of_fwnode_handle(np));
-
-Adding a local fwnode variable would make this fit in the 100 character
-limit again.
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 
 regards
 Philipp
