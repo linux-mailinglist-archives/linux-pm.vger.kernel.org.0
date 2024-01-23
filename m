@@ -1,314 +1,159 @@
-Return-Path: <linux-pm+bounces-2625-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2626-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3C28839AE7
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 22:13:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA48C839B50
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 22:45:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C6BDB260A2
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 21:13:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3F38AB2324C
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 21:44:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B07532C1B0;
-	Tue, 23 Jan 2024 21:12:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EF82481A8;
+	Tue, 23 Jan 2024 21:44:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="khPcMMPP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YgoENUiO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 849422C1A7;
-	Tue, 23 Jan 2024 21:12:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3A073D566;
+	Tue, 23 Jan 2024 21:44:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706044378; cv=none; b=WVre5vNC6dqw+kjwY2ZbUSeRl5ekrB1JxFeykWwG9Vgripi45jouaUJm3U9/alwSLDyJAa3NFpqmsltyzUWZ42pKcpRzQ1e1AtqzPBUHUtscsi8VvTTq1uIEJKDIybWDP/7OSISTb9H8LMrMhk/S3dvWzx77YTuT1BE7iJuyTAQ=
+	t=1706046287; cv=none; b=hgh60MIWdiGRTfPTYVOfZY7zQostslpc+UDmSzPAkvlcPB9+SDRhVjZiiwdmdxLnrf4+gGsMeu/XNXXu0ZqSkbh075Djj+QIqkXDel3EXCjd7izxPvtfDw6VWpwfJ8B4H66CgrrvidkK9ku+OBAQE4LwAJTK0BQ8s45kqEQLfp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706044378; c=relaxed/simple;
-	bh=y2tVhOoHqbkrgoEwdopUBYrq/O3nTt8UTKN6fH85W78=;
+	s=arc-20240116; t=1706046287; c=relaxed/simple;
+	bh=vDnjpIIbP4NzaPlkT4a++LVS2cc7fwQ3SA5eIisuHQM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b47DgCbvjNGRBE3Ebg5V7gh7K+Sc2Bc/JxfMIDG4/pEXp972M30NWoNcTy/KS/EPzf+9SH3JXPLNGbiN35ibrSOLKJqZyJUONQIr0OY/9WwT4N2DN9k1sdSgSqf33PX1tc8H5JWGt4z8tqLaOLFFV3DsETJdC9AShM4i/jWzfYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=khPcMMPP; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=SHg3OZ8rSfuStuI/t9nj9uzIE/yE48Lbl7/EYKvNYzQ=; b=khPcMMPPOS3B4SHAZHQpR7RIZd
-	z0s3275zIx+WRubbX4rCLVwWchIc3qCgsHQ3SwLBSBDibxOjWpdZE7n17u5PeYPR8bEUixN8TdGnV
-	tUzdOJ3cH38ZGg96a3RPK0Le/3lPA3HHqYnWBDe2Rr1Qq0ALcz2XOY+hOSS7f6wFs59Dvxa1eMwF+
-	fUimAV6KLbZbkzTlDfLDOyXIbY1cevpyffkEOj8oZWaSIA7Shw/Bpk6kPVR6XctAKYol+IABzZfTt
-	UA0Q4XsCOoepZOTZ96m6rptCs2EJNYKdmVTmM6SbZdtMydRWeBJQChp3Fz2W54mOdTUEaQh5PNI9s
-	x197biww==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56660)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1rSO4f-00036p-05;
-	Tue, 23 Jan 2024 21:12:49 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1rSO4b-0002Gq-Oh; Tue, 23 Jan 2024 21:12:45 +0000
-Date: Tue, 23 Jan 2024 21:12:45 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev,
-	x86@kernel.org, acpica-devel@lists.linuxfoundation.org,
-	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
-	Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	jianyong.wu@arm.com, justin.he@arm.com,
-	James Morse <james.morse@arm.com>
-Subject: Re: [PATCH RFC v3 05/21] ACPI: Rename ACPI_HOTPLUG_CPU to include
- 'present'
-Message-ID: <ZbArzbC19L1YxLHi@shell.armlinux.org.uk>
-References: <CAJZ5v0h7wsLt8d3ZoLXsK1=crAx66T42WDKNoHcg8CiHpAjS8g@mail.gmail.com>
- <Za/q9jivG4OdZM0f@shell.armlinux.org.uk>
- <CAJZ5v0gwe02uzAQoX0QDHo35OTEozpbnqC6vukjM3aE6HMq9WQ@mail.gmail.com>
- <ZbADTBLDEFtdglho@shell.armlinux.org.uk>
- <CAJZ5v0jh-EdrnjkJep++UDo+Uv4hmR7VV4KYVdF4CK2K+5XLtg@mail.gmail.com>
- <ZbAMjZoybVfiAGcT@shell.armlinux.org.uk>
- <CAJZ5v0gt=MR1JGsPZnZG_AqudA-KMmb4BOa_A6H9B6+Rhe_+JQ@mail.gmail.com>
- <ZbAdAdqqfXRuY3Xj@shell.armlinux.org.uk>
- <CAJZ5v0gsqbeJc4qX-AefOqu53=rDme2XzFXacWz_0zbVBoaXjw@mail.gmail.com>
- <ZbAoJO8f66Dg0lGF@shell.armlinux.org.uk>
+	 Content-Type:Content-Disposition:In-Reply-To; b=OVg+octsuWGpu1geNn008lCGkEmrhRrADN3DzQ3SKX2tyeWK8ZB3paywNZPTrzAq5sMcwONGyAm/+pTk4WwoLs5iYZ9D/NxYebuRrg06mtop81IrNSLVWxYvBW7Ix9Jgr/B3JUR9IBVDjogLTITYNGL4wpJQkWlElyOmuQmf3dI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YgoENUiO; arc=none smtp.client-ip=209.85.219.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-68195c0c8d1so19601096d6.3;
+        Tue, 23 Jan 2024 13:44:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706046284; x=1706651084; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+3MCPcQUCArKpNYmWhAQQTPpuom6plcd1PN16ZZMXig=;
+        b=YgoENUiOl0nq2N4AoetuYFjywC/QF/MHWSxF0Gbw/+Ig4PF/WfeblUyf5wGYWxcj11
+         7Yuijxg+LLih0StjpiQPBalqoNCOd5QHnX9vyoSDObUXMIf8mN1yiJOWdhD+SC/PIQxm
+         Ua4PyW9uzB6VutWRycMmgbjAt+sapPdbvsIwSKpkzaklnGst7ZWqCa2mSd1btQL0lpf5
+         Vm643RoaBSPV5ZTB8UZvS74+6W2LChFjidrbd1cHA6LkCFyOMRqyjHPsrXIXo9Saf06c
+         HZhbVgv1tDQvQuHQRULTt3wrj2/84E+CE8HKSCuiSms4jVA19HMBo3odTQCoYHo0Wnu/
+         mMxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706046284; x=1706651084;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+3MCPcQUCArKpNYmWhAQQTPpuom6plcd1PN16ZZMXig=;
+        b=LBRhobvco9H+6CHjrSibz+EG9Vx9UxY+Ma4+x7d1bR9yELRDPRJfR8iflmqbJLfPnd
+         NeQTi0/taGCqbNj0NlyGuTrjudc5MYkZI26hXxM2CBTZnVm3AEvTyr7FZ+oIywCockC/
+         6ZM1wgcgW0E4cdffLCtH96UdwnuT407iGcOuPgIRAxKfPWLt8qlHkVis2hdM2MZwIdma
+         yE77L2hJ9FfNv8Y2VA9xxQMcDnjnS+v/ISiMvOnb8UWGASEJuJgqjnojjHdS+bkEl2PN
+         0vMENnzUfoIjPPIzYmr4VnQJcTgl3V1qPY47aD9IYsf2wpfFXVz7Ea6RfM36YkqMq51V
+         JDfQ==
+X-Gm-Message-State: AOJu0Yz8pUai9xdyc84huYiubSAEhpuYABgOxwrLYQAN8+hT8YjC7Is/
+	tfnAxZ2tbLkvsyHx3KxVX/Y05M91zTsLBi6JxzTaedkUqtgk61nx
+X-Google-Smtp-Source: AGHT+IEnM4O/QvGUTq4CzT6ynknyJ6uSBpQcVtYap/v7zSMVnEgBOB3nMcUgxjrQKSrrA3y6M3Nxzg==
+X-Received: by 2002:ad4:5f0e:0:b0:681:7963:2aa8 with SMTP id fo14-20020ad45f0e000000b0068179632aa8mr1246200qvb.130.1706046284432;
+        Tue, 23 Jan 2024 13:44:44 -0800 (PST)
+Received: from errol.ini.cmu.edu ([72.95.245.133])
+        by smtp.gmail.com with ESMTPSA id nf3-20020a0562143b8300b00685ad9090basm3606011qvb.97.2024.01.23.13.44.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Jan 2024 13:44:43 -0800 (PST)
+Date: Tue, 23 Jan 2024 16:44:42 -0500
+From: "Gabriel L. Somlo" <gsomlo@gmail.com>
+To: Andrew Davis <afd@ti.com>
+Cc: Mark Rutland <mark.rutland@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Karol Gugala <kgugala@antmicro.com>,
+	Mateusz Holenko <mholenko@antmicro.com>,
+	Joel Stanley <joel@jms.id.au>, Mark Brown <broonie@kernel.org>,
+	Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>, Lee Jones <lee@kernel.org>,
+	Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH 4/4] firmware: ti_sci: Use devm_register_restart_handler()
+Message-ID: <ZbAzSjxbAgvvrV5l@errol.ini.cmu.edu>
+References: <20240123164443.394642-1-afd@ti.com>
+ <20240123164443.394642-5-afd@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZbAoJO8f66Dg0lGF@shell.armlinux.org.uk>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <20240123164443.394642-5-afd@ti.com>
+X-Clacks-Overhead: GNU Terry Pratchett
 
-On Tue, Jan 23, 2024 at 08:57:08PM +0000, Russell King (Oracle) wrote:
-> On Tue, Jan 23, 2024 at 09:17:18PM +0100, Rafael J. Wysocki wrote:
-> > On Tue, Jan 23, 2024 at 9:09 PM Russell King (Oracle)
-> > <linux@armlinux.org.uk> wrote:
-> > >
-> > > On Tue, Jan 23, 2024 at 08:27:05PM +0100, Rafael J. Wysocki wrote:
-> > > > On Tue, Jan 23, 2024 at 7:59 PM Russell King (Oracle)
-> > > > <linux@armlinux.org.uk> wrote:
-> > > > >
-> > > > > On Tue, Jan 23, 2024 at 07:26:57PM +0100, Rafael J. Wysocki wrote:
-> > > > > > On Tue, Jan 23, 2024 at 7:20 PM Russell King (Oracle)
-> > > > > > <linux@armlinux.org.uk> wrote:
-> > > > > > >
-> > > > > > > On Tue, Jan 23, 2024 at 06:43:59PM +0100, Rafael J. Wysocki wrote:
-> > > > > > > > On Tue, Jan 23, 2024 at 5:36 PM Russell King (Oracle)
-> > > > > > > > <linux@armlinux.org.uk> wrote:
-> > > > > > > > >
-> > > > > > > > > On Tue, Jan 23, 2024 at 05:15:54PM +0100, Rafael J. Wysocki wrote:
-> > > > > > > > > > On Tue, Jan 23, 2024 at 2:28 PM Russell King (Oracle)
-> > > > > > > > > > <linux@armlinux.org.uk> wrote:
-> > > > > > > > > > >
-> > > > > > > > > > > On Mon, Jan 22, 2024 at 06:00:13PM +0000, Jonathan Cameron wrote:
-> > > > > > > > > > > > On Mon, 18 Dec 2023 21:35:16 +0100
-> > > > > > > > > > > > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> > > > > > > > > > > >
-> > > > > > > > > > > > > On Wed, Dec 13, 2023 at 1:49 PM Russell King <rmk+kernel@armlinux.org.uk> wrote:
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > From: James Morse <james.morse@arm.com>
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > The code behind ACPI_HOTPLUG_CPU allows a not-present CPU to become
-> > > > > > > > > > > > > > present.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Right.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > > This isn't the only use of HOTPLUG_CPU. On arm64 and riscv
-> > > > > > > > > > > > > > CPUs can be taken offline as a power saving measure.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > But still there is the case in which a non-present CPU can become
-> > > > > > > > > > > > > present, isn't it there?
-> > > > > > > > > > > >
-> > > > > > > > > > > > Not yet defined by the architectures (and I'm assuming it probably never will be).
-> > > > > > > > > > > >
-> > > > > > > > > > > > The original proposal we took to ARM was to do exactly that - they pushed
-> > > > > > > > > > > > back hard on the basis there was no architecturally safe way to implement it.
-> > > > > > > > > > > > Too much of the ARM arch has to exist from the start of time.
-> > > > > > > > > > > >
-> > > > > > > > > > > > https://lore.kernel.org/linux-arm-kernel/cbaa6d68-6143-e010-5f3c-ec62f879ad95@arm.com/
-> > > > > > > > > > > > is one of the relevant threads of the kernel side of that discussion.
-> > > > > > > > > > > >
-> > > > > > > > > > > > Not to put specific words into the ARM architects mouths, but the
-> > > > > > > > > > > > short description is that there is currently no demand for working
-> > > > > > > > > > > > out how to make physical CPU hotplug possible, as such they will not
-> > > > > > > > > > > > provide an architecturally compliant way to do it for virtual CPU hotplug and
-> > > > > > > > > > > > another means is needed (which is why this series doesn't use the present bit
-> > > > > > > > > > > > for that purpose and we have the Online capable bit in MADT/GICC)
-> > > > > > > > > > > >
-> > > > > > > > > > > > It was a 'fun' dance of several years to get to that clarification.
-> > > > > > > > > > > > As another fun fact, the same is defined for x86, but I don't think
-> > > > > > > > > > > > anyone has used it yet (GICC for ARM has an online capable bit in the flags to
-> > > > > > > > > > > > enable this, which was remarkably similar to the online capable bit in the
-> > > > > > > > > > > > flags of the Local APIC entries as added fairly recently).
-> > > > > > > > > > > >
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > > On arm64 an offline CPU may be disabled by firmware, preventing it from
-> > > > > > > > > > > > > > being brought back online, but it remains present throughout.
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > Adding code to prevent user-space trying to online these disabled CPUs
-> > > > > > > > > > > > > > needs some additional terminology.
-> > > > > > > > > > > > > >
-> > > > > > > > > > > > > > Rename the Kconfig symbol CONFIG_ACPI_HOTPLUG_PRESENT_CPU to reflect
-> > > > > > > > > > > > > > that it makes possible CPUs present.
-> > > > > > > > > > > > >
-> > > > > > > > > > > > > Honestly, I don't think that this change is necessary or even useful.
-> > > > > > > > > > > >
-> > > > > > > > > > > > Whilst it's an attempt to avoid future confusion, the rename is
-> > > > > > > > > > > > not something I really care about so my advice to Russell is drop
-> > > > > > > > > > > > it unless you are attached to it!
-> > > > > > > > > > >
-> > > > > > > > > > > While I agree that it isn't a necessity, I don't fully agree that it
-> > > > > > > > > > > isn't useful.
-> > > > > > > > > > >
-> > > > > > > > > > > One of the issues will be that while Arm64 will support hotplug vCPU,
-> > > > > > > > > > > it won't be setting ACPI_HOTPLUG_CPU because it doesn't support
-> > > > > > > > > > > the present bit changing. So I can see why James decided to rename
-> > > > > > > > > > > it - because with Arm64's hotplug vCPU, the idea that ACPI_HOTPLUG_CPU
-> > > > > > > > > > > somehow enables hotplug CPU support is now no longer true.
-> > > > > > > > > > >
-> > > > > > > > > > > Keeping it as ACPI_HOTPLUG_CPU makes the code less obvious, because it
-> > > > > > > > > > > leads one to assume that it ought to be enabled for Arm64's
-> > > > > > > > > > > implementatinon, and that could well cause issues in the future if
-> > > > > > > > > > > people make the assumption that "ACPI_HOTPLUG_CPU" means hotplug CPU
-> > > > > > > > > > > is supported in ACPI. It doesn't anymore.
-> > > > > > > > > >
-> > > > > > > > > > On x86 there is no confusion AFAICS.  It's always meant "as long as
-> > > > > > > > > > the platform supports it".
-> > > > > > > > >
-> > > > > > > > > That's x86, which supports physical CPU hotplug. We're introducing
-> > > > > > > > > support for Arm64 here which doesn't support physical CPU hotplug.
-> > > > > > > > >
-> > > > > > > > >                                                 ACPI-based      Physical        Virtual
-> > > > > > > > > Arch    HOTPLUG_CPU     ACPI_HOTPLUG_CPU        Hotplug         Hotplug         Hotplug
-> > > > > > > > > Arm64   Y               N                       Y               N               Y
-> > > > > > > > > x86     Y               Y                       Y               Y               Y
-> > > > > > > > >
-> > > > > > > > > So ACPI_HOTPLUG_CPU becomes totally misnamed with the introduction
-> > > > > > > > > of hotplug on Arm64.
-> > > > > > > > >
-> > > > > > > > > If we want to just look at stuff from an x86 perspective, then yes,
-> > > > > > > > > it remains correct to call it ACPI_HOTPLUG_CPU. It isn't correct as
-> > > > > > > > > soon as we add Arm64, as I already said.
-> > > > > > > >
-> > > > > > > > And if you rename it, it becomes less confusing for ARM64, but more
-> > > > > > > > confusing for x86, which basically is my point.
-> > > > > > > >
-> > > > > > > > IMO "hotplug" covers both cases well enough and "hotplug present" is
-> > > > > > > > only accurate for one of them.
-> > > > > > > >
-> > > > > > > > > And honestly, a two line quip to my reasoned argument is not IMHO
-> > > > > > > > > an acceptable reply.
-> > > > > > > >
-> > > > > > > > Well, I'm not even sure how to respond to this ...
-> > > > > > >
-> > > > > > > The above explanation you give would have been useful...
-> > > > > > >
-> > > > > > > I don't see how "hotplug" covers both cases. As I've tried to point
-> > > > > > > out many times now, ACPI_HOTPLUG_CPU is N for Arm64, yet it supports
-> > > > > > > ACPI based hotplug. How does ACPI_HOTPLUG_CPU cover Arm64 if it's
-> > > > > > > N there?
-> > > > > >
-> > > > > > But IIUC this change is preliminary for changing it (or equivalent
-> > > > > > option with a different name) to Y, isn't it?
-> > > > >
-> > > > > No. As I keep saying, ACPI_HOTPLUG_CPU ends up N on Arm64 even when
-> > > > > it supports hotplug CPU via ACPI.
-> > > > >
-> > > > > Even with the full Arm64 patch set here, under arch/ we still only
-> > > > > have:
-> > > > >
-> > > > > arch/loongarch/Kconfig: select ACPI_HOTPLUG_PRESENT_CPU if ACPI_PROCESSOR && HOTPLUG_CPU
-> > > > > arch/x86/Kconfig:       select ACPI_HOTPLUG_PRESENT_CPU         if ACPI_PROCESSOR && HOTPLUG_CPU
-> > > > >
-> > > > > To say it yet again, ACPI_HOTPLUG_(PRESENT_)CPU is *never* set on
-> > > > > Arm64.
-> > > >
-> > > > Allright, so ARM64 is not going to use the code that is conditional on
-> > > > ACPI_HOTPLUG_CPU today.
-> > > >
-> > > > Fair enough.
-> > > >
-> > > > > > > IMHO it totally doesn't, and moreover, it goes against what
-> > > > > > > one would logically expect - and this is why I have a problem with
-> > > > > > > your effective NAK for this change. I believe you are basically
-> > > > > > > wrong on this for the reasons I've given - that ACPI_HOTPLUG_CPU
-> > > > > > > will be N for Arm64 despite it supporting ACPI-based CPU hotplug.
-> > > > > >
-> > > > > > So I still have to understand how renaming it for all architectures
-> > > > > > (including x86) is supposed to help.
-> > > > > >
-> > > > > > It will still be the same option under a different name.  How does
-> > > > > > that change things technically?
-> > > > >
-> > > > > Do you think that it makes any sense to have support for ACPI-based
-> > > > > hotplug CPU
-> > > >
-> > > > So this is all about what you and I mean by "ACPI-based hotplug CPU".
-> > > >
-> > > > > *and* having it functional with a configuration symbol
-> > > > > named "ACPI_HOTPLUG_CPU" to be set to N ? That's essentially what
-> > > > > you are advocating for...
-> > > >
-> > > > Setting ACPI_HOTPLUG_CPU to N means that you are not going to compile
-> > > > the code that is conditional on it.
-> > > >
-> > > > That code allows the processor driver to be removed from CPUs and
-> > > > arch_unregister_cpu() to be called from within acpi_bus_trim()  (among
-> > > > other things).  On the way up, it allows arch_register_cpu() to be
-> > > > called from within acpi_bus_scan().  If these things are not done,
-> > > > what I mean by "ACPI-based hotplug CPU" is not supported.
-> > >
-> > > Even on Arm64, arch_register_cpu() and arch_unregister_cpu() will be
-> > > called when the CPU in the VM is hot-removed or hot-added...
-> > 
-> > In a different way, however.
+On Tue, Jan 23, 2024 at 10:44:43AM -0600, Andrew Davis wrote:
+> Use device life-cycle managed register function to simplify probe.
 > 
-> This is getting tiresome. The goal posts keep moving. This isn't a
-> discussion, this is a "you're wrong and I'm going to keep changing my
-> argument if you agree with me to make you always wrong".
+> Signed-off-by: Andrew Davis <afd@ti.com>
+
+Reviewed-by: Gabriel Somlo <gsomlo@gmail.com>
+
+> ---
+>  drivers/firmware/ti_sci.c | 14 +++++---------
+>  1 file changed, 5 insertions(+), 9 deletions(-)
 > 
-> Sorry, no point continuing this.
-
-Let me be clear why I'm exhasperated by this.
-
-I've been giving you a technical argument (Arm64 supporting ACPI
-hotplug CPU, but ACPI_HOTPLUG_CPU=n) for many many emails. You
-seemed to misunderstand that, expecting ACPI_HOTPLUG_CPU to become
-Y later in the series.
-
-When that became clear that it wasn't, you've changed tack. It then
-became about whether two functions get called or not.
-
-When I pointed out that they are still going to be called, oh no,
-it's not about whether those two functions will be called but
-how they get called.
-
-Essentially, what this comes down to is that _you_ have no technical
-argument against the change, just _you_ don't personally want it
-and it doesn't matter what justification I come up with, you're
-always going to tell me something different.
-
-So why not state that you personally don't want it in the first
-place? Why this game of cat and mouse and the constantly changing
-arguments. I guess it's to waste developers time.
-
-Well, I'm calling you out for this, because I'm that pissed off
-at the amount of time you're causing to be wasted.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+> diff --git a/drivers/firmware/ti_sci.c b/drivers/firmware/ti_sci.c
+> index 8b9a2556de16d..16501aa0b84cf 100644
+> --- a/drivers/firmware/ti_sci.c
+> +++ b/drivers/firmware/ti_sci.c
+> @@ -103,7 +103,6 @@ struct ti_sci_desc {
+>   */
+>  struct ti_sci_info {
+>  	struct device *dev;
+> -	struct notifier_block nb;
+>  	const struct ti_sci_desc *desc;
+>  	struct dentry *d;
+>  	void __iomem *debug_region;
+> @@ -122,7 +121,6 @@ struct ti_sci_info {
+>  
+>  #define cl_to_ti_sci_info(c)	container_of(c, struct ti_sci_info, cl)
+>  #define handle_to_ti_sci_info(h) container_of(h, struct ti_sci_info, handle)
+> -#define reboot_to_ti_sci_info(n) container_of(n, struct ti_sci_info, nb)
+>  
+>  #ifdef CONFIG_DEBUG_FS
+>  
+> @@ -3254,10 +3252,9 @@ devm_ti_sci_get_resource(const struct ti_sci_handle *handle, struct device *dev,
+>  }
+>  EXPORT_SYMBOL_GPL(devm_ti_sci_get_resource);
+>  
+> -static int tisci_reboot_handler(struct notifier_block *nb, unsigned long mode,
+> -				void *cmd)
+> +static int tisci_reboot_handler(struct sys_off_data *data)
+>  {
+> -	struct ti_sci_info *info = reboot_to_ti_sci_info(nb);
+> +	struct ti_sci_info *info = data->cb_data;
+>  	const struct ti_sci_handle *handle = &info->handle;
+>  
+>  	ti_sci_cmd_core_reboot(handle);
+> @@ -3400,10 +3397,9 @@ static int ti_sci_probe(struct platform_device *pdev)
+>  	ti_sci_setup_ops(info);
+>  
+>  	if (reboot) {
+> -		info->nb.notifier_call = tisci_reboot_handler;
+> -		info->nb.priority = 128;
+> -
+> -		ret = register_restart_handler(&info->nb);
+> +		ret = devm_register_restart_handler(dev,
+> +						    tisci_reboot_handler,
+> +						    info);
+>  		if (ret) {
+>  			dev_err(dev, "reboot registration fail(%d)\n", ret);
+>  			goto out;
+> -- 
+> 2.39.2
+> 
 
