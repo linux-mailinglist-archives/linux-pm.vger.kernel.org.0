@@ -1,233 +1,223 @@
-Return-Path: <linux-pm+bounces-2549-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2547-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19CF3838B7D
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 11:15:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC1BC838B64
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 11:08:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3D8A41C22168
-	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 10:15:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 16ACD1F271BE
+	for <lists+linux-pm@lfdr.de>; Tue, 23 Jan 2024 10:08:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAF725A10B;
-	Tue, 23 Jan 2024 10:15:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dPoIB39a"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C82EB5A10A;
+	Tue, 23 Jan 2024 10:08:28 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 275655A0EB
-	for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 10:15:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F9E459B70;
+	Tue, 23 Jan 2024 10:08:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706004938; cv=none; b=oNkcEB4U9I75ou1JJWfnv5J9xHsVaSGoPQOzieDLhQ5uJAqv7mYwAlAhaJBbQxZyHTh7NtLnCwL49KxJzg/kqyzdFLccZhZDUi/c4O2Te0OsHO/WzgNq/D4l/8kTmGj5ZxAVHp71Wsrz50Dt8hlwOn6ss79RJaAKqPl5afY6Yj4=
+	t=1706004508; cv=none; b=ddyGWwV1gA66SLrcGloWwMwQeDOuEATuRf4dleLc3Dc787bzaAsj2G1LN8pDHvF3HS+dc+gB3v4PCcTsIBeQjnQ/L2Su/sNnQZYtALboU9v5e48vMFZO9MQn9ANW/2jnnNJAIljGoELt/wu+oAgSseSnr0O9PE91fL3pugtnnWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706004938; c=relaxed/simple;
-	bh=VsAKzQTjWrB/fdWeMlJRwIxVXlZHOl6RR8fK5n41VXE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Ij4e/vnHQaysGP4bWXAqUfUJfg3cZ279zvTnAMIPszigicvHGdgpZPyCw76j+s4Tb2LczKcRph8oPGQ9ppwbJfGkVhQEBlZ5SyHCGa/ncPav4+2e9l+j8a7h8V/H4CittTp/STLsV4rFHpUc6KjMOiVHamWE0Vv6BB04Kd82nmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dPoIB39a; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706004938; x=1737540938;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=VsAKzQTjWrB/fdWeMlJRwIxVXlZHOl6RR8fK5n41VXE=;
-  b=dPoIB39aRzOu39mIlIa5Am2Q10srf496okDqwzSI8znPIv9bufon4qMB
-   kDazjQkEG7lZWZGLyq+GAyieM74NyT76GN/cmkKn34HEDx4krgpTdZjY1
-   t561/gTlXsqdbsxpEC58s/OcP80tuGhfMUoYY9jYQpNaVS8KNz6nJ2GaL
-   19YHn+9LOiKXIhEtk8gQTHltdDyhvA28W0KIxGEKvpEHGBwncytU/rB6p
-   RfS/PVYr7qIdDkeIDzRDpd0Set1jh2Ec9FzHh2cfA6fsS/DEvW82VKiiF
-   NdZHeE2EcM5aX3gcRix0XhTtnSbqXlOkUBAJbRc0nfvf+RRiCEtISWS9T
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10961"; a="14828949"
-X-IronPort-AV: E=Sophos;i="6.05,214,1701158400"; 
-   d="scan'208";a="14828949"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2024 02:15:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10961"; a="1117206787"
-X-IronPort-AV: E=Sophos;i="6.05,214,1701158400"; 
-   d="scan'208";a="1117206787"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2024 02:15:31 -0800
-Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
-	by kekkonen.fi.intel.com (Postfix) with ESMTP id 3795611FC49;
-	Tue, 23 Jan 2024 11:58:24 +0200 (EET)
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: linux-pm@vger.kernel.org
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	laurent.pinchart@ideasonboard.com,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-	David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	intel-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org
-Subject: [PATCH v4 2/3] pm: runtime: Make pm_runtime_get_if_conditional() private
-Date: Tue, 23 Jan 2024 11:58:23 +0200
-Message-Id: <20240123095823.97346-1-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240123095642.97303-1-sakari.ailus@linux.intel.com>
-References: <20240123095642.97303-1-sakari.ailus@linux.intel.com>
+	s=arc-20240116; t=1706004508; c=relaxed/simple;
+	bh=kxaW1bi7sX+liEnGkuJfF9UhGpIIxLkLIuBsEeev57w=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LxkpexyNEOwdz1v7GOdXfEfLH3VA3mO6Y1cMmY/9ehQBG8DiWa3ackABLHxbYUczDA4hwYBA69n29zNHaAsrCPfZ6Ds0ESGMSHvaCPyUgkvqTbp8n7ovPoNBP8UCldrxj+JIoE4bPwfVWjqcF0euBTNDvneRRS8R/yBUlJ1oKaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4TK2lV0mHxz67hqY;
+	Tue, 23 Jan 2024 18:05:26 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id DCC251404F5;
+	Tue, 23 Jan 2024 18:08:22 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 23 Jan
+ 2024 10:08:22 +0000
+Date: Tue, 23 Jan 2024 10:08:21 +0000
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+CC: <linux-pm@vger.kernel.org>, <loongarch@lists.linux.dev>,
+	<linux-acpi@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-riscv@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<x86@kernel.org>, <acpica-devel@lists.linuxfoundation.org>,
+	<linux-csky@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-ia64@vger.kernel.org>, <linux-parisc@vger.kernel.org>, Salil Mehta
+	<salil.mehta@huawei.com>, Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	<jianyong.wu@arm.com>, <justin.he@arm.com>, James Morse <james.morse@arm.com>
+Subject: Re: [PATCH RFC v3 14/21] irqchip/gic-v3: Don't return errors from
+ gic_acpi_match_gicc()
+Message-ID: <20240123100821.00000064@Huawei.com>
+In-Reply-To: <ZZ2eGLwlkqZrh0In@shell.armlinux.org.uk>
+References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
+	<E1rDOgx-00Dvkv-Bb@rmk-PC.armlinux.org.uk>
+	<20231215163301.0000183a@Huawei.com>
+	<ZZ2eGLwlkqZrh0In@shell.armlinux.org.uk>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-Stop offering pm_runtime_get_if_conditional() API function for drivers,
-instead require them to use pm_runtime_get_if_{active,in_use}. Also
-convert the only user, the i915 driver, to use the said functions.
+On Tue, 9 Jan 2024 19:27:20 +0000
+"Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
 
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/base/power/runtime.c            | 34 ++++++++++++++++++++--
- drivers/gpu/drm/i915/intel_runtime_pm.c |  5 +++-
- include/linux/pm_runtime.h              | 38 ++-----------------------
- 3 files changed, 38 insertions(+), 39 deletions(-)
+> On Fri, Dec 15, 2023 at 04:33:01PM +0000, Jonathan Cameron wrote:
+> > On Wed, 13 Dec 2023 12:50:23 +0000
+> > Russell King (Oracle) <rmk+kernel@armlinux.org.uk> wrote:
+> >   
+> > > From: James Morse <james.morse@arm.com>
+> > > 
+> > > gic_acpi_match_gicc() is only called via gic_acpi_count_gicr_regions().
+> > > It should only count the number of enabled redistributors, but it
+> > > also tries to sanity check the GICC entry, currently returning an
+> > > error if the Enabled bit is set, but the gicr_base_address is zero.
+> > > 
+> > > Adding support for the online-capable bit to the sanity check
+> > > complicates it, for no benefit. The existing check implicitly
+> > > depends on gic_acpi_count_gicr_regions() previous failing to find
+> > > any GICR regions (as it is valid to have gicr_base_address of zero if
+> > > the redistributors are described via a GICR entry).
+> > > 
+> > > Instead of complicating the check, remove it. Failures that happen
+> > > at this point cause the irqchip not to register, meaning no irqs
+> > > can be requested. The kernel grinds to a panic() pretty quickly.
+> > > 
+> > > Without the check, MADT tables that exhibit this problem are still
+> > > caught by gic_populate_rdist(), which helpfully also prints what
+> > > went wrong:
+> > > | CPU4: mpidr 100 has no re-distributor!
+> > > 
+> > > Signed-off-by: James Morse <james.morse@arm.com>
+> > > Reviewed-by: Gavin Shan <gshan@redhat.com>
+> > > Tested-by: Miguel Luis <miguel.luis@oracle.com>
+> > > Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
+> > > Tested-by: Jianyong Wu <jianyong.wu@arm.com>
+> > > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> > > ---
+> > >  drivers/irqchip/irq-gic-v3.c | 18 ++++++------------
+> > >  1 file changed, 6 insertions(+), 12 deletions(-)
+> > > 
+> > > diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+> > > index 98b0329b7154..ebecd4546830 100644
+> > > --- a/drivers/irqchip/irq-gic-v3.c
+> > > +++ b/drivers/irqchip/irq-gic-v3.c
+> > > @@ -2420,21 +2420,15 @@ static int __init gic_acpi_match_gicc(union acpi_subtable_headers *header,
+> > >  
+> > >  	/*
+> > >  	 * If GICC is enabled and has valid gicr base address, then it means
+> > > -	 * GICR base is presented via GICC
+> > > +	 * GICR base is presented via GICC. The redistributor is only known to
+> > > +	 * be accessible if the GICC is marked as enabled. If this bit is not
+> > > +	 * set, we'd need to add the redistributor at runtime, which isn't
+> > > +	 * supported.
+> > >  	 */
+> > > -	if (acpi_gicc_is_usable(gicc) && gicc->gicr_base_address) {
+> > > +	if (gicc->flags & ACPI_MADT_ENABLED && gicc->gicr_base_address)  
+> > 
+> > I was very vague in previous review.  I think the reasons you are switching
+> > from acpi_gicc_is_useable(gicc) to the gicc->flags & ACPI_MADT_ENABLED
+> > needs calling out as I'm fairly sure that this point in the series at least
+> > acpi_gicc_is_usable is same as current upstream:
+> > 
+> > static inline bool acpi_gicc_is_usable(struct acpi_madt_generic_interrupt *gicc)
+> > {
+> > 	return gicc->flags & ACPI_MADT_ENABLED;
+> > }  
+> 
+> In a previous patch adding acpi_gicc_is_usable() c54e52f84d7a ("arm64,
+> irqchip/gic-v3, ACPI: Move MADT GICC enabled check into a helper") this
+> was:
+> 
+> -       if ((gicc->flags & ACPI_MADT_ENABLED) && gicc->gicr_base_address) {
+> +       if (acpi_gicc_is_usable(gicc) && gicc->gicr_base_address) {
+> 
+> so effectively this is undoing that particular change, which raises in
+> my mind why the change was made in the first place if it's just going
+> to be reverted in a later patch (because in a following patch,
+> acpi_gicc_is_usable() has an additional condition added to it that
+> isn't applicable here.) which effectively makes acpi_gicc_is_usable()
+> return true if either ACPI_MADT_ENABLED _or_
+> ACPI_MADT_GICC_ONLINE_CAPABLE (as it is now known) are set.
 
-diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-index 83e0cd2a19e7..d2c17e29567d 100644
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -1197,7 +1197,7 @@ EXPORT_SYMBOL_GPL(__pm_runtime_resume);
-  * The caller is responsible for decrementing the runtime PM usage counter of
-  * @dev after this function has returned a positive value for it.
-  */
--int pm_runtime_get_conditional(struct device *dev, bool ign_usage_count)
-+static int pm_runtime_get_conditional(struct device *dev, bool ign_usage_count)
- {
- 	unsigned long flags;
- 	int retval;
-@@ -1218,7 +1218,37 @@ int pm_runtime_get_conditional(struct device *dev, bool ign_usage_count)
- 
- 	return retval;
- }
--EXPORT_SYMBOL_GPL(pm_runtime_get_conditional);
-+
-+/**
-+ * pm_runtime_get_if_active - Bump up runtime PM usage counter if the device is
-+ *			      in active state
-+ * @dev: Target device.
-+ *
-+ * Increment the runtime PM usage counter of @dev if its runtime PM status is
-+ * %RPM_ACTIVE, in which case it returns 1. If the device is in a different
-+ * state, 0 is returned. -EINVAL is returned if runtime PM is disabled for the
-+ * device.
-+ */
-+int pm_runtime_get_if_active(struct device *dev)
-+{
-+	return pm_runtime_get_conditional(dev, true);
-+}
-+EXPORT_SYMBOL_GPL(pm_runtime_get_if_active);
-+
-+/**
-+ * pm_runtime_get_if_in_use - Conditionally bump up runtime PM usage counter.
-+ * @dev: Target device.
-+ *
-+ * Increment the runtime PM usage counter of @dev if its runtime PM status is
-+ * %RPM_ACTIVE and its runtime PM usage counter is greater than 0, in which case
-+ * it returns 1. If the device is in a different state or its usage_count is 0,
-+ * 0 is returned. -EINVAL is returned if runtime PM is disabled for the device.
-+ */
-+int pm_runtime_get_if_in_use(struct device *dev)
-+{
-+	return pm_runtime_get_conditional(dev, false);
-+}
-+EXPORT_SYMBOL_GPL(pm_runtime_get_if_in_use);
- 
- /**
-  * __pm_runtime_set_status - Set runtime PM status of a device.
-diff --git a/drivers/gpu/drm/i915/intel_runtime_pm.c b/drivers/gpu/drm/i915/intel_runtime_pm.c
-index b5f8abd2a22b..d4e844128826 100644
---- a/drivers/gpu/drm/i915/intel_runtime_pm.c
-+++ b/drivers/gpu/drm/i915/intel_runtime_pm.c
-@@ -246,7 +246,10 @@ static intel_wakeref_t __intel_runtime_pm_get_if_active(struct intel_runtime_pm
- 		 * function, since the power state is undefined. This applies
- 		 * atm to the late/early system suspend/resume handlers.
- 		 */
--		if (pm_runtime_get_conditional(rpm->kdev, ignore_usecount) <= 0)
-+		if ((ignore_usecount &&
-+		     pm_runtime_get_if_active(rpm->kdev) <= 0) ||
-+		    (!ignore_usecount &&
-+		     pm_runtime_get_if_in_use(rpm->kdev) <= 0))
- 			return 0;
- 	}
- 
-diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-index a212b3008ade..436baa167498 100644
---- a/include/linux/pm_runtime.h
-+++ b/include/linux/pm_runtime.h
-@@ -72,8 +72,8 @@ extern int pm_runtime_force_resume(struct device *dev);
- extern int __pm_runtime_idle(struct device *dev, int rpmflags);
- extern int __pm_runtime_suspend(struct device *dev, int rpmflags);
- extern int __pm_runtime_resume(struct device *dev, int rpmflags);
--extern int pm_runtime_get_conditional(struct device *dev,
--					bool ign_usage_count);
-+extern int pm_runtime_get_if_active(struct device *dev);
-+extern int pm_runtime_get_if_in_use(struct device *dev);
- extern int pm_schedule_suspend(struct device *dev, unsigned int delay);
- extern int __pm_runtime_set_status(struct device *dev, unsigned int status);
- extern int pm_runtime_barrier(struct device *dev);
-@@ -95,35 +95,6 @@ extern void pm_runtime_release_supplier(struct device_link *link);
- 
- extern int devm_pm_runtime_enable(struct device *dev);
- 
--/**
-- * pm_runtime_get_if_active - Bump up runtime PM usage counter if the device is
-- *			      in active state
-- * @dev: Target device.
-- *
-- * Increment the runtime PM usage counter of @dev if its runtime PM status is
-- * %RPM_ACTIVE, in which case it returns 1. If the device is in a different
-- * state, 0 is returned. -EINVAL is returned if runtime PM is disabled for the
-- * device.
-- */
--static inline int pm_runtime_get_if_active(struct device *dev)
--{
--	return pm_runtime_get_conditional(dev, true);
--}
--
--/**
-- * pm_runtime_get_if_in_use - Conditionally bump up runtime PM usage counter.
-- * @dev: Target device.
-- *
-- * Increment the runtime PM usage counter of @dev if its runtime PM status is
-- * %RPM_ACTIVE and its runtime PM usage counter is greater than 0, in which case
-- * it returns 1. If the device is in a different state or its usage_count is 0,
-- * 0 is returned. -EINVAL is returned if runtime PM is disabled for the device.
-- */
--static inline int pm_runtime_get_if_in_use(struct device *dev)
--{
--	return pm_runtime_get_conditional(dev, false);
--}
--
- /**
-  * pm_suspend_ignore_children - Set runtime PM behavior regarding children.
-  * @dev: Target device.
-@@ -297,11 +268,6 @@ static inline int pm_runtime_get_if_active(struct device *dev)
- {
- 	return -EINVAL;
- }
--static inline int pm_runtime_get_conditional(struct device *dev,
--					     bool ign_usage_count)
--{
--	return -EINVAL;
--}
- static inline int __pm_runtime_set_status(struct device *dev,
- 					    unsigned int status) { return 0; }
- static inline int pm_runtime_barrier(struct device *dev) { return 0; }
--- 
-2.39.2
+Ok. So maybe just calling out that we are about to change the meaning
+of acpi_gicc_is_usable() so need to partly revert that earlier patch
+to make use of it everywhere.
+
+Or perhaps introduce
+acpi_gicc_is_enabled() which is called by acpi_gicc_is_usable()
+along with the new conditions when they are added though as you
+say later, what does usable mean?
+
+> 
+> However, if ACPI_MADT_GICC_ONLINE_CAPABLE is set, does that actually
+> mean that the GICC is usable? I'm not sure it does. ACPI v6.5 says that
+> this bit indicates that the system supports enabling this processor
+> later. Is the GICC of a currently disabled processor "usable"...
+
+I agree, this is confusing.
+
+acpi_gicc_may_be_usable()?
+
+Or invert it in all places to give a cleaner meaning
+!acpi_gicc_never_usable()
+
+Bit of a pain to change this throughout again, but maybe necessary
+to avoid confusion in future.
+
+> 
+> Clearly, the intention of this change is not to count this GICC entry
+> if it is marked ACPI_MADT_GICC_ONLINE_CAPABLE, but I feel that isn't
+> described in the commit message.
+
+Agreed, though that only happens in the next patch so easier to describe
+there or via a patch adding initially identical multiple helper functions
+that then diverge in following patch?
+
+Whilst a helper for this one location seems silly it would let us put
+the two helpers next to each other where the distinction is obvious.
+
+> 
+> Moreover, I am getting the feeling that there are _two_ changes going
+> on here - there's the change that's talked about in the commit message
+> (the complex validation that seems unnecessary) and then there's the
+> preparation for the change to acpi_gicc_is_usable() - which maybe
+> should be in the following patch where it would be less confusing.
+
+Agreed.
+
+> 
+> Would you agree?
+> 
+Yes, the move would help as then it's obvious why this needs to change
+and that is separate from the naming question.
+
+So in conclusion, I agree with everything you've called out on this one,
+up to you to pick which solution cleans this up. I think options are.
+1) Just move the change to the next patch where it's easier to describe.
+   Leaves the odd 'usable' behind.
+2) Rename the useable() to something else, maybe inverting logic as
+   !never is easier than now_or_maybe_later.
+3) Possibly add another helper for this new case which starts as matching
+   the existing one, but diverges in a later patch (Should still not be
+   in this patch which as you observer is doing something else and I think
+   is actually a bug fix anyway, be it one that has never mattered for
+   any shipping firmware).
+
+Jonathan
+
 
 
