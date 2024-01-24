@@ -1,289 +1,360 @@
-Return-Path: <linux-pm+bounces-2631-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2632-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36603839E69
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 02:51:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41E3F83A001
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 04:18:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B7691C232EA
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 01:51:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 34B3B1C279DD
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 03:18:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC46115A8;
-	Wed, 24 Jan 2024 01:51:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 329D91FDC;
+	Wed, 24 Jan 2024 03:18:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b="ICANL9ix"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="2bKcFM/1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2096.outbound.protection.outlook.com [40.107.114.96])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AB531396;
-	Wed, 24 Jan 2024 01:51:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.114.96
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706061066; cv=fail; b=Ol0IdYULLSijNuBCV8PZ5+5NEJPoqQLm+WRxhEImgM3vWAHcKnARqZ41T4lRqy0qWSvdB2j/86LBCs6I7ILqNoNVyeNczmBdX6It4jlmACGxOLdGvt3WxYpEXLO9drQRXRAcvZOAcQOV2E7hbdjwAbGfWVzLjT1ipXsGpd//CqA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706061066; c=relaxed/simple;
-	bh=vVbRCbaKVDTe2a6Xp5NVKoZ934RPgsPFVGqJ2bfX0Bs=;
-	h=Message-ID:From:To:Cc:Subject:Content-Type:Date:MIME-Version; b=LqkydUekm8auI8KITxpbMisf3GypEeW5vf2VyDNKIxIheCryS10VJxyA4f1ZqZgjIGtmyZQ7GlWDAt+rmgVLuTKuOBGtRsPS2oNvY6TxtVi1Q/PiGPKPaSW72mgGk5RSvojteUE8DeF4T5jUPkbvAw5tOSFaaSzpV8r1gvO+fnU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b=ICANL9ix; arc=fail smtp.client-ip=40.107.114.96
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YRJp2zTD4LfHoqMmqbdOwefX7TzVhLkzn3Ec/u8sfZSPqn9cHRdDT2RgJumIQPtCiNpkKZI0rVNNH50cG220rvalAQH/Y/fW0krDLlIGQz5h/aFHUaDVkECN4ldmCRsnbEnQztOZMqXD0QWc651G/R99Q0F+QPxC8WJXe9NjH1w8rJZSLoimDidcN83Yv+J0R6GfXlgKEAN84SenkyTj8plgsWofOFVFHDO5P19x29Cn2vaHT1J1s1b1mSWSnqE6LchA85Tf6+kWRgbp2RDhpTeschG8n5PS4D9jGLgPmL1YvUFvXlsGHT/32B5DQQ8J+5zDOBnYhXDc4KAd+CKEQg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Fyil5/G1dN/+j+T5nNYUItmrfhde0hQn8N7Wj9I0mG8=;
- b=AswavklwGLtj/fEfm1IqlynZhcOyJoQQk+JKMQ6anInEjaCV+0wQulSW+i9FwJDI8iOyQTD44nwP9OIKa2GGqie8pvOyUobZ8gdFW0jIcmu562kQA195g+ZorljOCzTOhUuezqhgZxymIGk8fjmXbOuGuz8hYgr1UOyVDbrw6MhhN13t6WPaOWtWSfqR29Oq0rpjzTEzv+5JEK4t6rX0tH0715WPyXLInpGH4oxQai0Vq92esMSHifmhOlUSVdMIMBPehVNxNxBO0gAriyUZIv/EW1pJCOELqijb2w2he0KtT1DDz1un1i1ve/LJLGHrsqec+q3hRogWaw0sRTYl3Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Fyil5/G1dN/+j+T5nNYUItmrfhde0hQn8N7Wj9I0mG8=;
- b=ICANL9ix08pt7LJyuN9KkePCyPJdgPdurtqUhNobdWth4sKSiDEO5IUmHznm06sRotSIkeWJMw8ne1OiF+F3jkCYv+Q3rkd4p2rIQCX8zgqr6Ud/Jy+Dia63Fye2VvrXA5YJEBY6gM5MKtLjbNaZZ62ynLzNwt2e6hFZMjtO970=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
-Received: from TYCPR01MB10914.jpnprd01.prod.outlook.com
- (2603:1096:400:3a9::11) by OSYPR01MB5397.jpnprd01.prod.outlook.com
- (2603:1096:604:8a::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.22; Wed, 24 Jan
- 2024 01:51:00 +0000
-Received: from TYCPR01MB10914.jpnprd01.prod.outlook.com
- ([fe80::ce8:8f5e:99a0:aba4]) by TYCPR01MB10914.jpnprd01.prod.outlook.com
- ([fe80::ce8:8f5e:99a0:aba4%2]) with mapi id 15.20.7228.020; Wed, 24 Jan 2024
- 01:51:00 +0000
-Message-ID: <87sf2no5xo.wl-kuninori.morimoto.gx@renesas.com>
-From: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-To: Geert Uytterhoeven <geert+renesas@glider.be>, Ulf Hansson <ulf.hansson@linaro.org>
-Cc: linux-pm@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: [PATCH] pmdomain: renesas: sort each SoC on Kconfig
-User-Agent: Wanderlust/2.15.9 Emacs/27.1 Mule/6.0
-Content-Type: text/plain; charset=US-ASCII
-Date: Wed, 24 Jan 2024 01:51:00 +0000
-X-ClientProxiedBy: TY2PR02CA0070.apcprd02.prod.outlook.com
- (2603:1096:404:e2::34) To TYCPR01MB10914.jpnprd01.prod.outlook.com
- (2603:1096:400:3a9::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59350524C
+	for <linux-pm@vger.kernel.org>; Wed, 24 Jan 2024 03:18:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706066289; cv=none; b=B9+m7UKQCyp+Prgx5EENMjiBY84isaomzioDZeg2+vQrnVlVVBzBkIO8GAR/Z3QPZnNcyHgW+raf80pUHupMSRi72c4rcI1dNxlCUzautMf7/P0asWuxVvOL+slgIkDdZKYVhcBv4T+/vfvZjXIXfTZ1JAUJ3+CuocjMe9VcSpA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706066289; c=relaxed/simple;
+	bh=dFMpNSGfrMV8hc3MZCWaJcDSEFCfWmOTQfer5dEgoHc=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=gGt4EoiuJnzgNx+ToKwGWf2XrfcVA5IJvFgffdk7Nqg5ZflBqEcYKeVXu7l45V+pDwEDsXytIHTsW4QbWyTRqBww8onZuOiBSnWTZ0BTydud1NH1eVc42srjtGcQAncH0BoVnXxhm/Av8pHaSgiWgHwvT0Lv67ZaAdcbVxt2UNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=2bKcFM/1; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1d71b62fa87so28261105ad.0
+        for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 19:18:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1706066286; x=1706671086; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wd2tMLGNQLVC6yYZUM9TYYQ9sOk9iVdFwCU4jtb2drE=;
+        b=2bKcFM/1UMQjXaDHzjUu8s/mV8bWEGpiNjRxqQuarbtW3mEOoUwBvNkkN0kR/z13Yo
+         AECLE7c/UEuWr2VDKDRQUSJ5voXqS2Ad1OXmY07FwkL6aHEYuaFG2ZwpXuUup1JZhmD1
+         Fp1AHcbgyWMW9NbteNv0/maOVYzY0OvBEKMMRp8TGZAMWQMyNfjE9+zzfPtY5dz/pJV2
+         NmsgxvkQgARDQ3JH+uD67zGpNqUojN6+jOSBwXMRsnbOUe/5oyBTbnwA4mfNmDpcZFMN
+         3u/OlKwY7LV83oTcB3QHddjU6Z64orHFqPBnAQkkffcDhDxD23UmJoEQM10b74Qapw4V
+         2CYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706066286; x=1706671086;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Wd2tMLGNQLVC6yYZUM9TYYQ9sOk9iVdFwCU4jtb2drE=;
+        b=UpB5ntdJdpICFeTH4CPvyZ9/fdjBU/+uvvLX7gx+bpEDY6Afu5HZGTGvIQrx1myny4
+         Jm1uGboW9Kc3A2jYRNbroQefTv2OsgaFJs+A8diC7CQw5pArNlsZjICIAhcDNcG1xyCQ
+         SF4hifnE01HId5sQ3jKsbAXyQVg9bM2uV6FR3uXI7uKC1O9jO5JzyFX3DjVM3ixhWRF/
+         RnrR4mVBfY1KKg31Apfsyw3WlIpOilmJKhxGHbmReY8SoC40r0RW/UMYEYm0DZJl7pF7
+         5eNS+CIH9jsl85hLfIX9W+lJY544sYQnBqGAWNPFefVtYAud94MVBItIOl4BNb/sQy13
+         vC1g==
+X-Gm-Message-State: AOJu0YwjJV4tE7HVHVnglJGmshwzAxDv6RC4mGZRu0GqOO8NsIuP3dd0
+	bfae4xYpmaX7ClnCVtA7dheSoOyJPJJqI/YeyuMEpBnB0M749kKNH6gWYILF7SI=
+X-Google-Smtp-Source: AGHT+IFBqbsuic8nP2MwWuKJ+w4SEurLYKAv2kil+qLxRnWAnAWWecQNLDG7JlT7fZw3A+/vtuDkPg==
+X-Received: by 2002:a17:90a:f507:b0:28e:87a4:ebcc with SMTP id cs7-20020a17090af50700b0028e87a4ebccmr788665pjb.4.1706066286535;
+        Tue, 23 Jan 2024 19:18:06 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id db3-20020a17090ad64300b0028e245501e7sm12590429pjb.4.2024.01.23.19.18.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Jan 2024 19:18:06 -0800 (PST)
+Message-ID: <65b0816e.170a0220.f71f0.d192@mx.google.com>
+Date: Tue, 23 Jan 2024 19:18:06 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYCPR01MB10914:EE_|OSYPR01MB5397:EE_
-X-MS-Office365-Filtering-Correlation-Id: 98cca725-8713-4baa-dd43-08dc1c7eea3f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	b4CsXnip7D1lmUztwd0oneRINalJBNi6nYq/0hQZ76PIWqHMMAKkhmTPGWRqB1WFXeRhJurngrI+dDs+GQ+7M/sIs1O3SwUS8xow+4rGcIFpfBfMAVO9HOCGrGmJFNYIyC5ECIqegggwwvZ+cF81HAOQEZ2wwY14/RObVknGBscxs+VazdZ8X1S3oTg9z/Vl5I0qnt8xaKZO5B8MVkFWVuE1QfCTJbRU74z2wyHsHIUPiuIG9rQ2gN9PCLUPCX7VRqVJM5Oi2phSjeq7d0vWkbhUwt++FiRfHuc75aQcgtEzLTdeAAK/Ztw6Mj5UfT9DLQ/hRlbUfVd6fmLSTgRQKuarts+ErHQm/kLDOUO7vBSEci78AbeahwuLHmsC23GSctEzNsH1yeog/wZF9AdlXInloPZxRRH7axg9b60qbcSv2PImR0HFLmIAlD9Uy5oHiHRiR9lAGHuQk93/MqVYLc+srjgrbZ7s3zcoh473Ot3z7xVHhyFCEWs0aBY/ops/pg9RN6QyqyAMA0M+m1aiObZf7njogrGnfJAW9qUrWHKwB/3fL1IefafcrBAtUcQK9KDN+a0f9eAOMeF58ovCstRMbUuvTNy1L05d/vUEaHTQy40NumqJy2FICE5Tms3c
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYCPR01MB10914.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(366004)(136003)(376002)(346002)(396003)(230922051799003)(64100799003)(186009)(1800799012)(451199024)(66946007)(110136005)(2906002)(5660300002)(316002)(66476007)(66556008)(8676002)(8936002)(4326008)(38350700005)(6486002)(38100700002)(86362001)(26005)(36756003)(478600001)(52116002)(83380400001)(41300700001)(6512007)(2616005)(6506007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?a3EV0xyIPqG61zPVi/89RzC5YGFGr4STqgIMFCh/p/yq05SaeNDiTBc0bWLX?=
- =?us-ascii?Q?baT2kWnwpAx0z+CWdMLIqnjMWRX22vAUhNvvEWRKALQIYQXn4uBdCNgrk2WW?=
- =?us-ascii?Q?4LE2+l7tIjeO/6rvJq7TKQcQS6eKKjhpiM2D8n82gwUdtX411AJ73KUMCtIr?=
- =?us-ascii?Q?DmUbnp1kk4vjcteriAc4yZeCmT15LCu8NPL2C47bGAuiQtkclEHnC9oZx55u?=
- =?us-ascii?Q?yLvB+rd1+GQYIH2yChk8WznFgWgijMrdoUqhlY289+HqSabgzYZYYnyqFGh3?=
- =?us-ascii?Q?64rNYfCqqdozuin+H2My3QLYGbEpMFJbs4h3DUfXSLz7T0w7ANiOmiaDV8sl?=
- =?us-ascii?Q?gScVKTS5ChxLYQeCgLrEutQEAjR2fiZN3EXjLlsZkr0CWZOinfxg1AYh6HUD?=
- =?us-ascii?Q?JXYvClnsZRQWtEjw3vR6rN1FpJ3fXzhptJDaS8bFbQz12wfTN1Zx1dhgGfnW?=
- =?us-ascii?Q?2vRrUBs0VG6VAdSbvJE88zKqOZRGWU6blmR54xyF4yZ56H+Gsz+lHSevMVoY?=
- =?us-ascii?Q?h2tiwRTxnV3x5/iHflhacv70XVDMOYNySkzNOtG+mwJLTSJ9keQO46CwwFiW?=
- =?us-ascii?Q?MaNawKmj9TH2F4/SBv/+2N+/L1ibahJoR+1VAKvbzD7BWM8lICZKjp595r3b?=
- =?us-ascii?Q?28Vi3IzNJS9NNfBUqy9EaBbFA/kKg8J5FCpg65iv0cW7stW37wB4a5vtg629?=
- =?us-ascii?Q?yAhQC9/7k52U+OFapiSpuC2P8IEsXtiJ5ZK4BRmO19bh1fVaOmM3VeQcZZox?=
- =?us-ascii?Q?dW0Nu7Mw81h5aaYm2RZXeJ8QNmNYSeyTiJUe+QJKSh2a5XqbJBr66WXa9cuO?=
- =?us-ascii?Q?Iy3DzEjgevCEjZF3EAClMmhOh4+KjJMSioGilAgD7bFClylg7aKUFdiGu1G8?=
- =?us-ascii?Q?qNGmD8aBpiChtT49SSTBgOnFTGhzwdRFvRviANC6PJPrgi3ysJ7akquLqEUc?=
- =?us-ascii?Q?ZM9f6W4WKqmr46UFwGJbnuxctc7AnqSLVitunhcNiPYiia1M5Dn4AkKbjNC7?=
- =?us-ascii?Q?sqkB13M/pKF2v1xGV0Br2sBauBWOKDKfw86PhA9b+hPYPmIy6Cziw19m5se2?=
- =?us-ascii?Q?EPgmSfEb4m6VM0N6HE8DtEAOB9W4mJJg1s3R1cCQ/sFybYN0YmM3aZFoCZp9?=
- =?us-ascii?Q?kh0Z9Vfn5LStJ1+678fL22E9fM2fvHRvhJ2aHf63bpvJXHLYx6KjQZfNdnWH?=
- =?us-ascii?Q?t5/4FinEmQ5yBSNLdHeZkW5x3GX6dF4riENDnXItmI0veSW5uhTas04p7NaL?=
- =?us-ascii?Q?VVUJmZfPEF+MInsmD3SqiZHM8jKKQh+ErHgS9kTG6/W6NHZtgTHxsWpz2Xj2?=
- =?us-ascii?Q?xu0QQ2zYmMeKjJtGTVA8aG/ZfK/JhMlu2yGavew6xRDn6VMq6Th0j4m7fJox?=
- =?us-ascii?Q?UKzEYgExR9FJoSTQEclv8nqg6eTXQurvIjfnIDrM7IMxsdsOjhndSPP04+r+?=
- =?us-ascii?Q?srLLoXQQb5hQMxLofl76OJUXpFVdYgJnvA/ZADe8GawRqxzUxoWQAgl3Vo7B?=
- =?us-ascii?Q?Vy4YIbqw9NeMaQjjvBx4u7COhFXtUbIVsdlSYohz22ClU8HCHtOHsd+fDbQZ?=
- =?us-ascii?Q?lpo+GQmqTFHC7PHCvk+lZyy5XMMm5HkM0lAoqjE00Ht6ovoM6gD5J6mzErcY?=
- =?us-ascii?Q?fzIZslaOyfxaeXBdG5hXaQE=3D?=
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 98cca725-8713-4baa-dd43-08dc1c7eea3f
-X-MS-Exchange-CrossTenant-AuthSource: TYCPR01MB10914.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2024 01:51:00.2724
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jXmTI+40xCGtzf5ELDqkv5XRwET90+UyIYWb93id8PrGPRN30tqYQb+KIFr8bD+gpITO+JHgrOuTehQ/prtosBOJ6th3x9aIO5ySYxL3ySxohF1xT3MWUTr/q/6kpv3H
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSYPR01MB5397
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v6.8-rc1-9-g3d5bdaa27c031
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 8 builds: 2 failed, 6 passed, 2 errors,
+ 40 warnings (v6.8-rc1-9-g3d5bdaa27c031)
+To: rafael@kernel.org, linux-pm@vger.kernel.org,
+ kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Renesas has many SoCs and it has generation/series/model number,
-but these are listed randomly in Kconfig. This patch tidyup it.
+pm/testing build: 8 builds: 2 failed, 6 passed, 2 errors, 40 warnings (v6.8=
+-rc1-9-g3d5bdaa27c031)
 
-Signed-off-by: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+8-rc1-9-g3d5bdaa27c031/
+
+Tree: pm
+Branch: testing
+Git Describe: v6.8-rc1-9-g3d5bdaa27c031
+Git Commit: 3d5bdaa27c031adcd79e46503159fa720ff8535f
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
+
+Build Failures Detected:
+
+i386:
+    i386_defconfig: (gcc-10) FAIL
+
+x86_64:
+    x86_64_defconfig: (gcc-10) FAIL
+
+Errors and Warnings Detected:
+
+arc:
+    haps_hs_smp_defconfig (gcc-10): 2 warnings
+
+arm64:
+    defconfig (gcc-10): 3 warnings
+
+arm:
+    multi_v7_defconfig (gcc-10): 2 warnings
+
+i386:
+    i386_defconfig (gcc-10): 1 error, 1 warning
+
+mips:
+    32r2el_defconfig (gcc-10): 2 warnings
+
+riscv:
+    defconfig (gcc-10): 3 warnings
+
+sparc:
+    sparc64_defconfig (gcc-10): 26 warnings
+
+x86_64:
+    x86_64_defconfig (gcc-10): 1 error, 1 warning
+
+Errors summary:
+
+    1    security/security.c:810:2: error: =E2=80=98memcpy=E2=80=99 offset =
+32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
+    1    arch/x86/include/asm/string_32.h:150:25: error: =E2=80=98__builtin=
+_memcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bou=
+nds]
+
+Warnings summary:
+
+    4    drivers/base/power/runtime.c:1823:24: warning: decrement of a bool=
+ean expression [-Wbool-operation]
+    4    drivers/base/power/runtime.c:1815:24: warning: increment of a bool=
+ean expression [-Wbool-operation]
+    2    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offse=
+t 32 is out of the bounds [0, 0] [-Warray-bounds]
+    2    cc1: all warnings being treated as errors
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =
+=E2=80=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
+rototypes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
+pes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
+prototypes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
+ypes]
+    1    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =
+=E2=80=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype fo=
+r =E2=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for=
+ =E2=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype=
+ for =E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype=
+ for =E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototyp=
+e for =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-protot=
+ypes]
+    1    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototyp=
+e for =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype=
+ for =E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototyp=
+e for =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototy=
+pe for =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype f=
+or =E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype =
+for =E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype =
+for =E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
+    1    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype fo=
+r 'syscall_trace_enter' [-Wmissing-prototypes]
+    1    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype f=
+or 'arc_kprobe_handler' [-Wmissing-prototypes]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    drivers/base/power/runtime.c:1815:24: warning: increment of a boolean e=
+xpression [-Wbool-operation]
+    drivers/base/power/runtime.c:1823:24: warning: decrement of a boolean e=
+xpression [-Wbool-operation]
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section m=
+ismatches
+
+Warnings:
+    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
+is out of the bounds [0, 0] [-Warray-bounds]
+    drivers/base/power/runtime.c:1815:24: warning: increment of a boolean e=
+xpression [-Wbool-operation]
+    drivers/base/power/runtime.c:1823:24: warning: decrement of a boolean e=
+xpression [-Wbool-operation]
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section m=
+ismatches
+
+Warnings:
+    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
+is out of the bounds [0, 0] [-Warray-bounds]
+    drivers/base/power/runtime.c:1815:24: warning: increment of a boolean e=
+xpression [-Wbool-operation]
+    drivers/base/power/runtime.c:1823:24: warning: decrement of a boolean e=
+xpression [-Wbool-operation]
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
+rc_kprobe_handler' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
+ mismatches
+
+Errors:
+    arch/x86/include/asm/string_32.h:150:25: error: =E2=80=98__builtin_memc=
+py=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    drivers/base/power/runtime.c:1815:24: warning: increment of a boolean e=
+xpression [-Wbool-operation]
+    drivers/base/power/runtime.c:1823:24: warning: decrement of a boolean e=
+xpression [-Wbool-operation]
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 26 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype for =
+=E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototype for=
+ =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototype for=
+ =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototype for=
+ =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype for =
+=E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype for =
+=E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype for =
+=E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype for =
+=E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototype fo=
+r =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype for =
+=E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for =E2=
+=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =E2=80=
+=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
+types]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
+ypes]
+    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
+=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
+=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 sec=
+tion mismatches
+
+Errors:
+    security/security.c:810:2: error: =E2=80=98memcpy=E2=80=99 offset 32 is=
+ out of the bounds [0, 0] [-Werror=3Darray-bounds]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
 ---
- drivers/pmdomain/renesas/Kconfig | 88 +++++++++++++++++---------------
- 1 file changed, 46 insertions(+), 42 deletions(-)
-
-diff --git a/drivers/pmdomain/renesas/Kconfig b/drivers/pmdomain/renesas/Kconfig
-index 80bf2cf8b60e..2a27d83c8063 100644
---- a/drivers/pmdomain/renesas/Kconfig
-+++ b/drivers/pmdomain/renesas/Kconfig
-@@ -4,39 +4,34 @@ if SOC_RENESAS
- config SYSC_RCAR
- 	bool "System Controller support for R-Car" if COMPILE_TEST
- 
--config SYSC_RCAR_GEN4
--	bool "System Controller support for R-Car Gen4" if COMPILE_TEST
--
--config SYSC_R8A77995
--	bool "System Controller support for R-Car D3" if COMPILE_TEST
--	select SYSC_RCAR
--
--config SYSC_R8A7794
--	bool "System Controller support for R-Car E2" if COMPILE_TEST
--	select SYSC_RCAR
--
--config SYSC_R8A77990
--	bool "System Controller support for R-Car E3" if COMPILE_TEST
--	select SYSC_RCAR
-+config SYSC_RMOBILE
-+	bool "System Controller support for R-Mobile" if COMPILE_TEST
- 
-+# R-Car Gen1
- config SYSC_R8A7779
- 	bool "System Controller support for R-Car H1" if COMPILE_TEST
- 	select SYSC_RCAR
- 
-+# R-Car Gen2
- config SYSC_R8A7790
- 	bool "System Controller support for R-Car H2" if COMPILE_TEST
- 	select SYSC_RCAR
- 
--config SYSC_R8A7795
--	bool "System Controller support for R-Car H3" if COMPILE_TEST
--	select SYSC_RCAR
--
- config SYSC_R8A7791
- 	bool "System Controller support for R-Car M2-W/N" if COMPILE_TEST
- 	select SYSC_RCAR
- 
--config SYSC_R8A77965
--	bool "System Controller support for R-Car M3-N" if COMPILE_TEST
-+config SYSC_R8A7792
-+	bool "System Controller support for R-Car V2H" if COMPILE_TEST
-+	select SYSC_RCAR
-+
-+config SYSC_R8A7794
-+	bool "System Controller support for R-Car E2" if COMPILE_TEST
-+	select SYSC_RCAR
-+
-+# R-Car Gen3
-+config SYSC_R8A7795
-+	bool "System Controller support for R-Car H3" if COMPILE_TEST
- 	select SYSC_RCAR
- 
- config SYSC_R8A77960
-@@ -47,41 +42,43 @@ config SYSC_R8A77961
- 	bool "System Controller support for R-Car M3-W+" if COMPILE_TEST
- 	select SYSC_RCAR
- 
--config SYSC_R8A779F0
--	bool "System Controller support for R-Car S4-8" if COMPILE_TEST
--	select SYSC_RCAR_GEN4
-+config SYSC_R8A77965
-+	bool "System Controller support for R-Car M3-N" if COMPILE_TEST
-+	select SYSC_RCAR
- 
--config SYSC_R8A7792
--	bool "System Controller support for R-Car V2H" if COMPILE_TEST
-+config SYSC_R8A77970
-+	bool "System Controller support for R-Car V3M" if COMPILE_TEST
- 	select SYSC_RCAR
- 
- config SYSC_R8A77980
- 	bool "System Controller support for R-Car V3H" if COMPILE_TEST
- 	select SYSC_RCAR
- 
--config SYSC_R8A77970
--	bool "System Controller support for R-Car V3M" if COMPILE_TEST
-+config SYSC_R8A77990
-+	bool "System Controller support for R-Car E3" if COMPILE_TEST
-+	select SYSC_RCAR
-+
-+config SYSC_R8A77995
-+	bool "System Controller support for R-Car D3" if COMPILE_TEST
- 	select SYSC_RCAR
- 
- config SYSC_R8A779A0
- 	bool "System Controller support for R-Car V3U" if COMPILE_TEST
- 	select SYSC_RCAR_GEN4
- 
-+# R-Car Gen4
-+config SYSC_RCAR_GEN4
-+	bool "System Controller support for R-Car Gen4" if COMPILE_TEST
-+
-+config SYSC_R8A779F0
-+	bool "System Controller support for R-Car S4-8" if COMPILE_TEST
-+	select SYSC_RCAR_GEN4
-+
- config SYSC_R8A779G0
- 	bool "System Controller support for R-Car V4H" if COMPILE_TEST
- 	select SYSC_RCAR_GEN4
- 
--config SYSC_RMOBILE
--	bool "System Controller support for R-Mobile" if COMPILE_TEST
--
--config SYSC_R8A77470
--	bool "System Controller support for RZ/G1C" if COMPILE_TEST
--	select SYSC_RCAR
--
--config SYSC_R8A7745
--	bool "System Controller support for RZ/G1E" if COMPILE_TEST
--	select SYSC_RCAR
--
-+# RZ/G
- config SYSC_R8A7742
- 	bool "System Controller support for RZ/G1H" if COMPILE_TEST
- 	select SYSC_RCAR
-@@ -90,12 +87,12 @@ config SYSC_R8A7743
- 	bool "System Controller support for RZ/G1M" if COMPILE_TEST
- 	select SYSC_RCAR
- 
--config SYSC_R8A774C0
--	bool "System Controller support for RZ/G2E" if COMPILE_TEST
-+config SYSC_R8A7745
-+	bool "System Controller support for RZ/G1E" if COMPILE_TEST
- 	select SYSC_RCAR
- 
--config SYSC_R8A774E1
--	bool "System Controller support for RZ/G2H" if COMPILE_TEST
-+config SYSC_R8A77470
-+	bool "System Controller support for RZ/G1C" if COMPILE_TEST
- 	select SYSC_RCAR
- 
- config SYSC_R8A774A1
-@@ -106,4 +103,11 @@ config SYSC_R8A774B1
- 	bool "System Controller support for RZ/G2N" if COMPILE_TEST
- 	select SYSC_RCAR
- 
-+config SYSC_R8A774C0
-+	bool "System Controller support for RZ/G2E" if COMPILE_TEST
-+	select SYSC_RCAR
-+
-+config SYSC_R8A774E1
-+	bool "System Controller support for RZ/G2H" if COMPILE_TEST
-+	select SYSC_RCAR
- endif
--- 
-2.25.1
-
+For more info write to <info@kernelci.org>
 
