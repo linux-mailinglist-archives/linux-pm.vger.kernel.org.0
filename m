@@ -1,116 +1,145 @@
-Return-Path: <linux-pm+bounces-2696-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2697-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7233983B31D
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 21:34:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F032583B3CB
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 22:21:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4E761C23607
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 20:34:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9540284179
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 21:21:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E595D133423;
-	Wed, 24 Jan 2024 20:34:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 955371350FA;
+	Wed, 24 Jan 2024 21:21:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="C5JB22Eq"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Mme52Erm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5981164CFE;
-	Wed, 24 Jan 2024 20:34:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D27907E760;
+	Wed, 24 Jan 2024 21:21:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706128481; cv=none; b=W+YKXhQMjB69cbuMU1byctpN4aNDjn97nkI7X7GwHxMn+Z5o7rKjN/mlpFXyScbq2/Xco3spl2zOZpnOD21pVmqzQ0xkX+2IdE9yeogmPVcOXXMIoK1zYAfX/OEwoglO0z3KKq7HohUmBhdM+5jh1b7Mn9tLLj38tXQPYMIlc5c=
+	t=1706131288; cv=none; b=iF8hmDiMo0Ji+eM9Nsjv3R0pTJDOU2eLQJZJLZ0hsLnaGjpoA6SMNZLim+ElFgwm9wxrDdBjqFyAHxa8CJQ3wNf5n6O5s/5bsyyqshKCDAbupvRVlw2tlnXweWyf2UXhRaawNuX66XOnwCI+f+9CgTHaOTDZ7SBRuv5iO9jGsdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706128481; c=relaxed/simple;
-	bh=njWPHFRX9VBUYd2HwT+iNnDCR9j7CQAq4CCN3sSHM5M=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=NgoKaDSqrjOA5GpEbl2JbGgXchnO1xAVC6xzZUmRB7kbzO/qeDOxDdacRE+l4S2ARBnzqqEnlCq40XVkiB3+XT6SeudZu1wq3gwqLOD69UyGOlCunboX3r/kt1ll2XCZmYhwTFZ7SR6MwBL5O5ztwsJhI8BKxPh3jB09NEefIWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=C5JB22Eq; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1706128478;
-	bh=njWPHFRX9VBUYd2HwT+iNnDCR9j7CQAq4CCN3sSHM5M=;
-	h=From:Date:Subject:To:Cc:From;
-	b=C5JB22EqSKntWSOxCynR/3Q7KltjJGBsros94uUbGKsx1dC0xSmAdKdbrUjNOmBtK
-	 /TxEDUHA4qPAfC9Pce4Z19DbgsQhTwCaPv6vY//qvjOjjjazKCkO06tkRpJnT7eYEk
-	 AewFIv1eRaXAYaNbAI0YJ1aMHlZ69Av9QAkdHGVenR0zbBD1GxQ4B33sJbArvSygUz
-	 tkomH6fOW9qRa3SyPWdoJWCki5VTvCr2avwut32LBGfbzp7MHm3HfRx+1JUhEYoa/w
-	 sWYREUhas6l1uIC61K0kVrialRtZL1VHQDD3+bBqU4w/O2vsIXx1I6lXFbpCvpqNGK
-	 veHP2lyYMhOeA==
-Received: from [192.168.0.47] (zone.collabora.co.uk [167.235.23.81])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nfraprado)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 5AFFB37813E9;
-	Wed, 24 Jan 2024 20:34:34 +0000 (UTC)
-From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-Date: Wed, 24 Jan 2024 17:31:43 -0300
-Subject: [PATCH] cpufreq: mediatek-hw: Don't error out if supply is not
- found
+	s=arc-20240116; t=1706131288; c=relaxed/simple;
+	bh=FzOKL9KxZDnA9cvK6swo/MuG4jFcfk0VvlqEQegPZuM=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NwzDoNxCrr864qeHlF53AOVBuvpdSgzOqba+aqBBsLiAH9HHjZOojj+gJ1b2EfNj0Q//YLNbRLPauxjR/k63u8WyprUL4ChJvrdC5TKAcyvIIi0VDeUpFpxnUx2gb3yPBDhCGXTj0tRU3rdE/sb18GyEf2EnwuE5dB+YA+3E6iA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Mme52Erm; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40OKkjkD001981;
+	Wed, 24 Jan 2024 21:21:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	date:from:to:cc:subject:message-id:references:mime-version
+	:content-type:in-reply-to; s=qcppdkim1; bh=NrQMdqBAv+lIUzaRxo00i
+	82mdCZlOLZNAfk2vB4ojS4=; b=Mme52Erm7bRgY2cHMG7zrbWV9VeZlueP72/SI
+	JzCtHwuU1jvIbLmKRsg0RAMQ7t4nsxFzJRFy+ZLB8y5n2MyYgVEiSiHgU4myr+Gu
+	4iCH8fGWtSycVUDtW5gJklU+HyTQ/dZBKVA+eu0Shf9Gv3hg0UOQinH08UMr0iNH
+	dZwPVprAOXP+2tPbYVscUV8RUMgLYWX9TWF1rqXzplwJTYt0lpOA6NGBe3ZXDWUi
+	/3jgraC2txKrPuuessJ9P3r88C+0YHbpF3laifc/xTF5BAvd+HBix5ejLYyfmq6Y
+	prHgL1hxangmbrrqWceKYs6qV3LejrDEEQXHvjxV74F/WPq+Q==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vu81g8b4k-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 24 Jan 2024 21:21:18 +0000 (GMT)
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40OLLHoS012562
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 24 Jan 2024 21:21:17 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Wed, 24 Jan 2024 13:21:17 -0800
+Date: Wed, 24 Jan 2024 13:21:16 -0800
+From: Bjorn Andersson <quic_bjorande@quicinc.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof
+ Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Johan Hovold
+	<johan+linaro@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v3 1/8] dt-bindings: clock: qcom: Allow VDD_GFX supply to
+ GX
+Message-ID: <20240124212116.GH2936378@hu-bjorande-lv.qualcomm.com>
+References: <20240123-sa8295p-gpu-v3-0-d5b4474c8f33@quicinc.com>
+ <20240123-sa8295p-gpu-v3-1-d5b4474c8f33@quicinc.com>
+ <f6844d28-c7c2-4afa-8520-2e62c608930d@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240124-mtk-cpufreq-hw-regulator-enodev-fix-v1-1-6f9fb7275886@collabora.com>
-X-B4-Tracking: v=1; b=H4sIAK5zsWUC/x2NSwqEMBAFryK9tiEJIuNcZXAhpqONTuJ0/IF4d
- 5tZ1qN4dUEmYcrwLi4Q2jlzigq2LKAfuzgQslcGZ1xlrKvwu07YL1sQ+uF4oNCwzd2aBCkmTzs
- GPjHUVuWmfjXegD4tQjr/K5/2vh88GESLdQAAAA==
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, Mark Brown <broonie@kernel.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- kernel@collabora.com, linux-pm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-mediatek@lists.infradead.org, "kernelci.org bot" <bot@kernelci.org>, 
- =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-X-Mailer: b4 0.12.4
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <f6844d28-c7c2-4afa-8520-2e62c608930d@linaro.org>
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: PnLJdRJX2jEfCfQfJoYniqoyj87W6M1A
+X-Proofpoint-ORIG-GUID: PnLJdRJX2jEfCfQfJoYniqoyj87W6M1A
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-24_10,2024-01-24_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1015 lowpriorityscore=0 suspectscore=0 phishscore=0 adultscore=0
+ spamscore=0 malwarescore=0 impostorscore=0 mlxscore=0 mlxlogscore=771
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401190000 definitions=main-2401240154
 
-devm_regulator_get_optional() returns -ENODEV if no supply can be found.
-By introducing its usage, commit 788715b5f21c ("cpufreq: mediatek-hw:
-Wait for CPU supplies before probing") caused the driver to fail probe
-if no supply was present in any of the CPU DT nodes.
+On Wed, Jan 24, 2024 at 07:31:34AM +0100, Krzysztof Kozlowski wrote:
+> On 24/01/2024 05:25, Bjorn Andersson wrote:
+> > +# Allow either power-domains or vdd-gfx-supply, not both
+> > +oneOf:
+> > +  - required:
+> > +      - power-domains
+> > +  - required:
+> > +      - vdd-gfx-supply
+> > +  - not:
+> > +      anyOf:
+> > +        - required:
+> > +            - power-domains
+> > +        - required:
+> > +            - vdd-gfx-supply
+> 
+> I don't fully understand what you want to achieve here. If only "allow
+> either", so not a "require either", then simpler:
+> 
+> https://lore.kernel.org/all/20230118163208.GA117919-robh@kernel.org/
+> 
 
-Use devm_regulator_get() instead since the CPUs do require supplies
-even if not described in the DT. It will gracefully return a dummy
-regulator if none is found in the DT node, allowing probe to succeed.
+As discussed in v2, power-domains is currently an optional property in
+this binding and I'm adding vdd-gfx-supply as an alternative to that.
 
-Fixes: 788715b5f21c ("cpufreq: mediatek-hw: Wait for CPU supplies before probing")
-Reported-by: kernelci.org bot <bot@kernelci.org>
-Closes: https://linux.kernelci.org/test/case/id/65b0b169710edea22852a3fa/
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
- drivers/cpufreq/mediatek-cpufreq-hw.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+As it's optional, barely any of our platforms define the property, so
+requiring this would not be compatible with existing DT source.
 
-diff --git a/drivers/cpufreq/mediatek-cpufreq-hw.c b/drivers/cpufreq/mediatek-cpufreq-hw.c
-index a1aa9385980a..8d097dcddda4 100644
---- a/drivers/cpufreq/mediatek-cpufreq-hw.c
-+++ b/drivers/cpufreq/mediatek-cpufreq-hw.c
-@@ -312,7 +312,7 @@ static int mtk_cpufreq_hw_driver_probe(struct platform_device *pdev)
- 			return dev_err_probe(&pdev->dev, -EPROBE_DEFER,
- 					     "Failed to get cpu%d device\n", cpu);
- 
--		cpu_reg = devm_regulator_get_optional(cpu_dev, "cpu");
-+		cpu_reg = devm_regulator_get(cpu_dev, "cpu");
- 		if (IS_ERR(cpu_reg))
- 			return dev_err_probe(&pdev->dev, PTR_ERR(cpu_reg),
- 					     "CPU%d regulator get failed\n", cpu);
+It's clear that this does not accurately represent the power situation
+for the block, so we should fix this. But I'd prefer to see that as a
+separate task.
 
----
-base-commit: 9ac3ebaef3cc43ecd136911c44f1427286ee5a05
-change-id: 20240124-mtk-cpufreq-hw-regulator-enodev-fix-f614019689d0
 
-Best regards,
--- 
-Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Implementation-wise, we need to figure how to consume multiple
+power-domains in the GPUCC drivers in Linux, because the correct
+definition seems to be to add both CX and GX/GFX domains here - and if
+we just add them to the DT node Linux will break.
 
+Regards,
+Bjorn
 
