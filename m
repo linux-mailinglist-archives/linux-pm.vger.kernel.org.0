@@ -1,51 +1,50 @@
-Return-Path: <linux-pm+bounces-2664-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2665-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A00A83A6DA
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 11:33:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F8D583A6E1
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 11:34:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF55C1C20D94
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 10:33:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A44E1B22DF2
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 10:34:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66C3B6130;
-	Wed, 24 Jan 2024 10:33:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B7DA63B7;
+	Wed, 24 Jan 2024 10:33:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PNWRQZyO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i0KB+q/6"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37715CA69;
-	Wed, 24 Jan 2024 10:33:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1C24F9C8;
+	Wed, 24 Jan 2024 10:33:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706092390; cv=none; b=IQbjjWe6HXer5lE7XkKgMxw6xf49ibT+W9rS7gicRAy5DHm0k49YFkIJ7cMlFu6wGPMzs/zgoegOC06eSOSL9LJBISg4S1dsaHvKpTN0i2PU2eY3ym41G1RlPGf3AkCVhpdmkFsVWUwHFL51yF/UkCK6gO9zPYnKJaDJ0PUocEo=
+	t=1706092438; cv=none; b=fPOZEhoVuRSpCfdMtW8APCw03h0EsR2VA1TSR31esL7GVTq69va8jtPh8jnFXN6vgj2IBhLt8ZxkLE6P3ImBfffo5UdGqNmubi/JL3EX1kztIi7A50OV/koO31EYSWX10gnio7AToRSdrFRBUsXou5Mz/T5JLTebHtvOjkyyshc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706092390; c=relaxed/simple;
-	bh=QD7I+J4Pf8NtWbUrntxxfjNeIlISBQDWP+H6sxsWVZQ=;
+	s=arc-20240116; t=1706092438; c=relaxed/simple;
+	bh=nmVHfsslJlEa808CDBRVtTpeFNG8yq9r7mh8I2w4JCo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VthNXRdB9zfDrdkrtuSZFmpzI3q7Q76xN4iRR1DDvHIAQVwEM9XGrN13jj0Qx3KHKrMuKU29r0tQJjb8C/jsnD3qbAbDgkzBLjRrwaYZfqTzD6hjaKAC8bQJBXRJLzyS01yxZPu6toNh3qGccVpyI3o5z+cI1h3qtHH0wbSjf/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PNWRQZyO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29668C433F1;
-	Wed, 24 Jan 2024 10:33:07 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=WsJhaPg7J66WDt4yurIyRfJM6hTJJ7z9MMiIg8J0gpdxTWWeySU8c5OyKDPIgQDvneTqwcQ9utEn2jx/dUJX5PinxwTedYV2KGrcu4CFMigxoMW2gkCWypNG/GZjMUQXajObG3G/pnmCKZh11oDxs85X4iI5ZT1eioeenr78+Vc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i0KB+q/6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEABAC433F1;
+	Wed, 24 Jan 2024 10:33:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706092388;
-	bh=QD7I+J4Pf8NtWbUrntxxfjNeIlISBQDWP+H6sxsWVZQ=;
+	s=k20201202; t=1706092437;
+	bh=nmVHfsslJlEa808CDBRVtTpeFNG8yq9r7mh8I2w4JCo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PNWRQZyOatwXlBGQvJDsDVJ34Le/H3AxtH/5MDbRKQrDFc6asgcuDrP21wT4Xca2h
-	 ZpOIHK7ecnO6r8ERQL4HLej4pAKEZkuqj/kZBeKEFz9Eblr+SNlCEZT211l3rSmMD+
-	 xWnB2ELNM5qd1AsjupKnzMWT+3yIuACEO1M45ySTroAH5+pFTLLaqauG1A53qgFRrU
-	 yyjXS+/QnDt5byUFx3wG13ulE0AMkK0duU0gyRU04hgPG7pkI8iukDQ5hyn8iX2SQn
-	 vAV6DPKmPY0QQnBVgb4q1vycZ7tBCLJZpCMTjLJEBrsmv85Dac2aWYTl8W5GXmnsGN
-	 fSTXODTkmo98A==
-Date: Wed, 24 Jan 2024 11:33:05 +0100
+	b=i0KB+q/6SiUxzxk92ErNPBerMRIkM9c6KhEQB8eIORKZ4dZUZAhnJQPtWhFRYJ/NC
+	 SJdjWKCG/hBn2UZ1Xb1O5gexJNDEu/efY13RnlsTW9IvbC4DXyrWboO6VqhUTJa5Xp
+	 vSSY7aFLSvtUCOUaY1L2BwKxtVo3uF3UHqwlvkGj++/YQ/yVrbdecaytctfKdGKXtN
+	 AQU+0zaonJ2dVVGXm/GirB/FN7Fe7oIELrBa2801gKJ0PJPg1ElgmW008ZnEFkBK87
+	 lKJ5QcAAquOFvEilaRezr0kRyVc6qUamQca+cFqggWcTySGixuUxJhgYHC51B+AR+M
+	 oeUjWTcnO7mVg==
+Date: Wed, 24 Jan 2024 11:33:53 +0100
 From: Wolfram Sang <wsa@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
-	Michael Turquette <mturquette@baylibre.com>,
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>,
@@ -60,12 +59,11 @@ Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
 	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
 	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	linux-pm@vger.kernel.org
-Subject: Re: [PATCH 02/15] dt-bindings: clock: Add R8A779H0 V4M CPG Core
- Clock Definitions
-Message-ID: <ZbDnYf7x8sHd6bG7@ninjato>
+Subject: Re: [PATCH 03/15] dt-bindings: power: renesas,rcar-sysc: Document
+ R-Car V4M support
+Message-ID: <ZbDnkagFNxREoJ0b@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
 	Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -82,10 +80,7 @@ Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
 	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	linux-pm@vger.kernel.org
 References: <cover.1704726960.git.geert+renesas@glider.be>
- <2e083461752c9d52fdb251ad9071f6111f13c3c5.1704726960.git.geert+renesas@glider.be>
- <ca0cb671-43ce-4bda-aad5-da38bace4132@linaro.org>
- <CAMuHMdUJYH7YhQ65Bh1K8F2earTM60VwBd2=LH2vnGbaGPU53w@mail.gmail.com>
- <f354cfe1-88eb-4daf-aea3-7acd2de5d106@linaro.org>
+ <1196419f3ade9a27b3c7906b6a898376b817601d.1704726960.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -93,50 +88,47 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="JHmIAnmx0irpJ8zR"
+	protocol="application/pgp-signature"; boundary="FJhUHyiCRQsESxxx"
 Content-Disposition: inline
-In-Reply-To: <f354cfe1-88eb-4daf-aea3-7acd2de5d106@linaro.org>
+In-Reply-To: <1196419f3ade9a27b3c7906b6a898376b817601d.1704726960.git.geert+renesas@glider.be>
 
 
---JHmIAnmx0irpJ8zR
+--FJhUHyiCRQsESxxx
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-
-> > For new bindings, or also for existing ones?
-> > Doing the former means there are inconsistencies among different SoCs
-> > in the same family.
+On Mon, Jan 08, 2024 at 04:33:42PM +0100, Geert Uytterhoeven wrote:
+> From: Duy Nguyen <duy.nguyen.rh@renesas.com>
 >=20
-> For the new ones. It's just naming inconsistency which does not cause
-> any issues. Otherwise you never move to vendor,device.h format... which
-> is not that critical, but in the long term brings uniformity.
+> Document support for the System Controller (SYSC) in the R-Car V4M
+> (R8A779H0) SoC.
+>=20
+> Signed-off-by: Duy Nguyen <duy.nguyen.rh@renesas.com>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-I haven't reviewed the patch itself, but for the naming scheme I'd
-suggest to follow Krzysztof's suggestion. If he is OK with this level of
-uniformity, then all is good, I'd say. Converting existing ones sounds
-more messy to me.
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
---JHmIAnmx0irpJ8zR
+--FJhUHyiCRQsESxxx
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWw52EACgkQFA3kzBSg
-Kbayqg//U3URnhB+/r6yDwETdfY9sdnsq0CxUPhFVLCcdNNoIvT4Jr8IBmQcL4Wm
-+9hwQxqN9NyjgFJLHxP7bap9G5yJEGP3Wl9Ca7e9HTQfgvfGIdCrmJW/6nTm7G9s
-P3v9Gx+vnthNdHFTu2ufapgk34pN99A0aa6jDozVDLqxn8cKWAIFTGUv/djRlJEk
-fm+L1nH+l6UZfLXHha5Wz5uM4RzGk1OqWW8wSaYe9Rc06ZX6v86saOyfOy8OiuPX
-xyyO970ozg+Uiv9UqFTPV6shuye6HkIR3SJvL4F1qsPQswT4iMTm6f2Cy6UG9ADZ
-zoqXLtFFeddDwRiVjsbjf4xX1ni/Qo5HYueYNsoHue2o2YZG3w/ZKi6Ev/zgdmZP
-QNQ8zS2IpSo6IIQcbStYtEtVkatu0WgaKrjgXAxHgkL2LEaGGScwyGTrUvkneufD
-XttcM6/Ny6jZxjgWg5o6X5ge6Bo0bLxV/VnMhuZvr5YVS8N8HZq78cQV8lyzLjJO
-zM5Vyc6myAeOVxTUlU2EG97p1lRiOe9ooXDlFAUl/eIDcmuEE/14eGcVA5kjnKOp
-fgWnQ4ASq/U1SpNjte5xkQjbU4KNLG9wQ3xhmtiWF3bk4+9ioExplCQxkWNft/EF
-XGhEiUi5ICVj0KG+ezC3BkM9u6cjlbT4j68wvB9owProSTIJiak=
-=HrJ+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWw55EACgkQFA3kzBSg
+KbZKQBAArGHa6miwlwvA3xvRkafsS5ZBO7YgJw7e2eLNG3sm/fJEnin5j8jt9XCZ
+egRHi1SfUngNaHQgZueFmDlxS343Sf4jkjofPdC9NJMS3JtRf541xd31//XJu+le
+UKwuWadRwjgvhEN16f8s1qW2QYrogtaDZb8uUJbvtvNu8pQVyPmjswN6RGZ9cd8l
+x1LWBGGtiixpo1doZH0n6DwHudXIRbC9/Tfl9hLqeUKnfaXdZhi9XFOM2rfInT8T
++mFDcpoHrqbnNOlwdyCFTBRYGFvTqdMSFZrmzMLVLNnWxvWdgiTw+Qd4i2VkKw78
+WxuTQT6f2SENgPpqhxznoL8sywu980KauqDk+M/LVmIrgyMIaSUyrCsyoaximY5Q
+CdPQLI4zt/8GjLce9XNCam2GF6uie10KNfRR8y7vVFhkRpzowdrR1PzHvv9TMKbO
+n6P77PipI2HBYjE8bAnOMyTBMVjTOl6/yyTm9a2uqJw2PdSbnzzL4vBm3a388/Pb
+3BsJQmnaOaSvSeMwvGQQbxno6JodRXmGz2ouHIv8yFtSLt+na8x0KqN4sq1+N0cK
+JuwvWjPaNT3HcCKT3pGz+BWsiV4b0VVPvcD+PG8A9SIVDguoRmQ4Xd4pI5z9OR2x
+rq7BS/JB8/NdncjMWVcfC1cy8Ck+O9RHDT2Vs34QlSf8n/LzRmg=
+=T0hM
 -----END PGP SIGNATURE-----
 
---JHmIAnmx0irpJ8zR--
+--FJhUHyiCRQsESxxx--
 
