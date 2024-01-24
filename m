@@ -1,125 +1,121 @@
-Return-Path: <linux-pm+bounces-2682-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2689-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F8B683A990
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 13:23:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39EE283A9E4
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 13:35:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B4D9B1F27E9F
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 12:23:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3B9A1F2476A
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 12:35:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 954B665198;
-	Wed, 24 Jan 2024 12:22:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B67877F2D;
+	Wed, 24 Jan 2024 12:34:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="g8yeZPCM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6572D634F6
-	for <linux-pm@vger.kernel.org>; Wed, 24 Jan 2024 12:22:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9208677F04
+	for <linux-pm@vger.kernel.org>; Wed, 24 Jan 2024 12:34:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706098950; cv=none; b=XDgA5m50PM0zoe1gpbzRwr3RxodXsWWGr3j/DBOCBmUIzn3TNZY9gO/iiWGCFrW5lTAvKn8WL3IfGI4/K2MVkiVinyLt3A2afUz137gacy7EUO0jrshs+QZiQ6p91u2QP0xNLeak2h8HlA+I1Jl1Am2bekVVOCOrEVEFVYaemq0=
+	t=1706099663; cv=none; b=NWoVnOUaOojK2xClD5Vah5T6YawNA415rGYXkITrYy00vWovpVrYed538kxGfl/ABgqHOLsfMuHtewaKsxbG0VFg7xNIBc12cDFnimxrsdu8AHSjKvFD1EhbERQ4o3DyHO075VTylkj8m6ZHVCAQT2gKkUXrYI65giaWsCewuvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706098950; c=relaxed/simple;
-	bh=HDAeY4bWfoe9Y+7OHDYHhF+4G8dpj+H9p3pWeswLx5k=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=P110x6owebO3FguGtxMXp0U1cMXu3bnooUXypEyW/suttZ7NdW+9xd71ovkQbyQlu11QHGEWLYGsHtmlyiqU46Ujeop9A7MfBE1rjn0tVIE8sEM1ygHuLjUCcG3SJpP8WFke9xnoj6f/PPEyjrYVIiPKzE9BBFtdWBqEXxGdgqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1rScGd-0007oC-1C; Wed, 24 Jan 2024 13:22:07 +0100
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ore@pengutronix.de>)
-	id 1rScGc-0023Zn-46; Wed, 24 Jan 2024 13:22:06 +0100
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <ore@pengutronix.de>)
-	id 1rScGc-003424-03;
-	Wed, 24 Jan 2024 13:22:06 +0100
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Sebastian Reichel <sre@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
-	kernel@pengutronix.de,
-	linux-kernel@vger.kernel.org,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	=?UTF-8?q?S=C3=B8ren=20Andersen?= <san@skov.dk>
-Subject: [PATCH v2 8/8] thermal: core: Record PSCR before hw_protection_shutdown()
-Date: Wed, 24 Jan 2024 13:22:04 +0100
-Message-Id: <20240124122204.730370-9-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240124122204.730370-1-o.rempel@pengutronix.de>
-References: <20240124122204.730370-1-o.rempel@pengutronix.de>
+	s=arc-20240116; t=1706099663; c=relaxed/simple;
+	bh=jyvSiO7pP8IS2juBo4PIGtSrz/acm4bNYI4ZPwuqEYA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gNS/wzGO6cDbaWS1UKlFk8yFC/xOhN9WJFRBgJwFN3pIThlI2pkFpbM718Me8ZBdwlAhDPLkDyUK7f29ICAsqECHmQpUtYRAFxXzpnKwyLyPTUoo3DF251Ojp7+t5BFevBDNTbZOImIaFa53wJf9CR8ukk8lWPjYQUOirvPLFpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=g8yeZPCM; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5100c4aa08cso1637041e87.2
+        for <linux-pm@vger.kernel.org>; Wed, 24 Jan 2024 04:34:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706099660; x=1706704460; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=P6RopD7J40Mytb9WIDlcCfTBz6ZKZHDbcmtWKYlQzcI=;
+        b=g8yeZPCMoSSl/66Gbay5hM4HuKgGT9RUqr0MHECPOhg12FK2pQ4La74oi6SSo2npgr
+         USSvOt2ST5ZbfDFQTLADgj3Qjy3Fnd4ydkF95jrNSo5ZAGMjM1JODqAdKUKSGV31L0P3
+         IXwe1bceDZuutfMDNbMjZVKtVw66I6MqSli4wLKPTJq0LAbkizOC5Cn3u6G0S66mO4lK
+         +wKXLED9P5vcg0VAug9aidTvcZ2kc0nj0LNJwqt6azSmcc5EFrmeo43st45H/6PAyNeh
+         GOwSw2CzHbhVHjPaerSYJ04MkaPufGSV54/5WWBhAmQmbp9Ya94oefhu8DMuDGIqrCEW
+         Svog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706099660; x=1706704460;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P6RopD7J40Mytb9WIDlcCfTBz6ZKZHDbcmtWKYlQzcI=;
+        b=p0j0IxbxFwrxFkSnODPrXNYQGIytXyBYbHawmItRJ2KsfcVqGBIsbMx70mdinseluE
+         VyjIWDUH77njMSfEtbP9tgxAUPVUGfaHceMp17C1W/EhBBNoP1guNohNw6Ggn5x6QQ8L
+         gQnUuGQuCqtl3ulrXqEoLoCkn85M0NMFajv5S3J81SL9wffOMMghzv+fLeTRtjmzrhTB
+         2k1ulyAWVuv7mcpnE4OhTUsUynKUKqmdqJ98U2kDa8aZqxoumBxxPLHKUWClIfME5lzo
+         bXhyajk6I96ecmh0PLZNhzpWrXoKuZEVeM8TRIHJdMq/l0chpxeL5BLmOHrpEG6jVteG
+         0eRQ==
+X-Gm-Message-State: AOJu0YynoOsRqKubDnCyQe+qUo4JTA0CgmAbb67fVjheJ1Yh+P/qTTk2
+	dnBBZjnRDn4gBuW4k57c1dgo1iW//nAEqwN82c0LfUJGoZpdN86fVuEBpi8Isw6Tc5MLXaNNUJ8
+	8
+X-Google-Smtp-Source: AGHT+IFxrZhUS4GmLbPy+Or25khi6S/3hoZURFv44UJtwh7pvfKXw7sXxdDDR8uIyYRgssXe7kwJ7w==
+X-Received: by 2002:a05:6512:202:b0:510:40a:4cb2 with SMTP id a2-20020a056512020200b00510040a4cb2mr1512683lfo.38.1706099659702;
+        Wed, 24 Jan 2024 04:34:19 -0800 (PST)
+Received: from [172.30.205.123] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
+        by smtp.gmail.com with ESMTPSA id p26-20020a19f01a000000b005100ed58b76sm207756lfc.308.2024.01.24.04.34.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Jan 2024 04:34:19 -0800 (PST)
+Message-ID: <aeae2e69-8407-4d90-9d16-27798e2f3248@linaro.org>
+Date: Wed, 24 Jan 2024 13:34:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] thermal/drivers/tsens: Add suspend to RAM support for
+ tsens
+Content-Language: en-US
+To: Priyansh Jain <quic_priyjain@quicinc.com>,
+ Amit Kucheria <amitk@kernel.org>, Thara Gopinath <thara.gopinath@gmail.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ "Rafael J . Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: quic_manafm@quicinc.com
+References: <20240122100726.16993-1-quic_priyjain@quicinc.com>
+ <548e2f24-a51e-4593-9463-09506488c70e@linaro.org>
+ <f415a8cd-4cae-d7c3-60fc-674b3e660f6b@quicinc.com>
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <f415a8cd-4cae-d7c3-60fc-674b3e660f6b@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Enhance the thermal core to record the Power State Change Reason (PSCR)
-prior to invoking hw_protection_shutdown(). This change integrates the
-PSCR framework with the thermal subsystem, ensuring that reasons for
-power state changes, such as overtemperature events, are stored in a
-dedicated non-volatile memory (NVMEM) cell.
 
-This 'black box' recording is crucial for post-mortem analysis, enabling
-a deeper understanding of system failures and abrupt shutdowns,
-especially in scenarios where PMICs or watchdog timers are incapable of
-logging such events.  The recorded data can be utilized during system
-recovery routines in the bootloader or early kernel stages of subsequent
-boots, significantly enhancing system diagnostics, reliability, and
-debugging capabilities.
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/thermal/thermal_core.c | 3 +++
- 1 file changed, 3 insertions(+)
+On 1/24/24 11:42, Priyansh Jain wrote:
+> 
+> 
+> On 1/22/2024 8:02 PM, Konrad Dybcio wrote:
+>> On 22.01.2024 11:07, Priyansh Jain wrote:
+>>> Add suspend callback support for tsens which disables tsens interrupts
+>>> in suspend to RAM callback.
+>>
+>> Would it not be preferrable to have the "critical overheat", wakeup-
+>> capable interrupts be enabled, even if the system is suspended?
+>>
+> 
+> 
+> As part of suspend to RAM, tsens hardware will be turned off and it cannot generate any interrupt.Also system doesn't want to abort suspend to RAM due to tsens interrupts since system is already going into lowest
+> power state. Hence disabling tsens interrupt during suspend to RAM callback.
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index dfaa6341694a..0511d82351c5 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -16,6 +16,7 @@
- #include <linux/kdev_t.h>
- #include <linux/idr.h>
- #include <linux/thermal.h>
-+#include <linux/pscrr.h>
- #include <linux/reboot.h>
- #include <linux/string.h>
- #include <linux/of.h>
-@@ -329,6 +330,8 @@ static void thermal_zone_device_halt(struct thermal_zone_device *tz, bool shutdo
- 
- 	dev_emerg(&tz->device, "%s: critical temperature reached\n", tz->type);
- 
-+	set_power_state_change_reason(PSCR_OVERTEMPERATURE);
-+
- 	if (shutdown)
- 		hw_protection_shutdown(msg, poweroff_delay_ms);
- 	else
--- 
-2.39.2
+Is that a hardware limitation, or a software design choice? I'm not
+sure I want my phone to have thermal notifications disabled when
+it's suspended.
 
+Konrad
 
