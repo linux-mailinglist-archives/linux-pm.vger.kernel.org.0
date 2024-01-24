@@ -1,109 +1,144 @@
-Return-Path: <linux-pm+bounces-2691-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2692-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9660983A9EE
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 13:36:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A03B83AD34
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 16:25:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA3CD1C21845
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 12:36:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CAF441F236E4
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 15:25:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 372377765E;
-	Wed, 24 Jan 2024 12:35:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8BBB7A721;
+	Wed, 24 Jan 2024 15:25:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mixDwAe9"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="apFh6zJ0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C1F276910
-	for <linux-pm@vger.kernel.org>; Wed, 24 Jan 2024 12:35:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 403E87A707;
+	Wed, 24 Jan 2024 15:25:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706099754; cv=none; b=cAPhoLDeW5SWbKwNhTQt//mpS2X7u+np9+cyOwS4c6VODBY7YQZGYc5suf/BknWMVLOLGMNub026IX5+kWnbzI2jyTDzJIb8F/Rf+zP0fPRF38tRhsWC7cAZcS3NU1WpdPtYcFoOxKN7nQaatYRWdLvS8JmocMOVHawnNADGeD0=
+	t=1706109944; cv=none; b=ZL+safbPAdIrr0y3G/hnY3e8ImadLK9cY9ikIlhjHU4W9foCJknnZGA/KhuS+n3TDzJQR5DTKbwbHvhmlU9HH0opY2tOAwkySTUykvLKdhrT2efkW2mULNGWrraeGQBu+Rjn0wQJVQST0JHDA5uExyamlgxsqYRLQ6S88UVMeZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706099754; c=relaxed/simple;
-	bh=pLgVD7WyIgCYs/WnD6GmQ3oHmu+7tZfoy04+P4DpDZU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uIh/tq1bGXvuXHbW9A/d+pGGox7yUptiJEFxTy2knYcE7qm2HCZigrFYeaWw8Fb7TUZbrb96wJmp4m1BM1/3o6heJNGUF3PuJ7zEDold7VXRbVOipyylfXD98Oi6xgoZEYkBhsam2uJXfcYDzUU9ynfDPlvjK6HB/LOJKz9cY/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mixDwAe9; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-50eabbc3dccso6804101e87.2
-        for <linux-pm@vger.kernel.org>; Wed, 24 Jan 2024 04:35:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706099750; x=1706704550; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MTNcfdZ46DhDQS1PfdxwvcCFPFv6QbUHhAVtqKGltxk=;
-        b=mixDwAe9HfZecm2AU9y0GLnrya598wpZ+qQbWRfZ8eYZ2Cyk4igjkNsa383L5fWMZg
-         o0Na2rSWd9BEe2HYfoASbFAQM5cNtSQxX5FMgLjZzTYdSeFB9qQdWQIxg8rE32FpuJRw
-         6nIAzT4aZ3Tot+yeWtEWD+6DoWNGq9QM7ES/IUlFmO0d6QjWVcnTFzr4gaa9KSyjX539
-         cpLFf3NXdZkwjb1l0SN4JR7QqLTGHQtFGisiWg3BUQlGJytOnA2xKZn0brqB/MK6bYCj
-         E1WrXIYOZNpNaKDktEg3vkbJxUZCeHfRocMungmJu14m0e2a0F7SSQxfLXeHNL52i6Ck
-         fGQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706099750; x=1706704550;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MTNcfdZ46DhDQS1PfdxwvcCFPFv6QbUHhAVtqKGltxk=;
-        b=BQYGeQ0igO++/DWIhChiCIoOTBfbe+QR0CirIai50gKpzXKL7k/hMU22F+lKOKyETd
-         iBDd5wkCqLKuDolAW3gZgd+v++KttECE1Lg+NGk2DLhrHiPE9VPJ8JZt9/B9UD09aUlC
-         wEEfL5Eafi2fGMDVcmPYh+c4423d/a8/+7dGrr1t3vht0XaZYkKyoZkQmdN54EojjRrg
-         IF0+O7yBmRE4eVgfszRQ6mnjCdPEeffdGHkHIgwTUtYcfqczhH673uBQp/nyy8FipKmV
-         23M1isF2dwvcyPYBgASz1oT+nP/82sShWYOpJc/vTcWH8WKeu8WTf8qxWEHhJRt8OWkE
-         zE2g==
-X-Gm-Message-State: AOJu0Yw5uAftOTQr074skXLoYYV4ojAGd0y/7aEsIUUiOWI/IgUpelyZ
-	3dKXhDeozxdGKlOo0vNmwnmP/XLfqjD8iCrcjilkRHOfURWeG9wOBPR9jTv2tWE=
-X-Google-Smtp-Source: AGHT+IEm7tXXCAhpWSFvaPOrGruncb0eF+DHMJ82djxJSAgDaATGdy90bGKiUrTnBBvihqISw7Xd7g==
-X-Received: by 2002:ac2:558d:0:b0:50e:9a0d:d3fb with SMTP id v13-20020ac2558d000000b0050e9a0dd3fbmr1407083lfg.273.1706099750766;
-        Wed, 24 Jan 2024 04:35:50 -0800 (PST)
-Received: from [172.30.205.123] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
-        by smtp.gmail.com with ESMTPSA id p26-20020a19f01a000000b005100ed58b76sm207756lfc.308.2024.01.24.04.35.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 24 Jan 2024 04:35:50 -0800 (PST)
-Message-ID: <7d9d14ce-7db6-4796-98c9-60d1f72fff6a@linaro.org>
-Date: Wed, 24 Jan 2024 13:35:49 +0100
+	s=arc-20240116; t=1706109944; c=relaxed/simple;
+	bh=OQU/+q3vIDCVis27eIKAXr6BMKI4dpGBzkf75gwybr4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Shvda5kUNil6XNK0qHDi25ATKIi0YlOjNKCVClEobZgkyAyxwqzhRLk5SB3510rPpbcVCe7KUx67/uECB9kw0eRMdYIjggTjMYhw8YUmSvqasn4GYWXAZVtqAW3jnjkzSSYMNeSyJQ/chQzbyIsb6CWOgKgD35DvRw6HuzRcbv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=apFh6zJ0; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40OCYpQn005760;
+	Wed, 24 Jan 2024 15:25:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=TKqmN0ivHFHrIW/RN12lAs9vGB/kamk2FcWgpEX3Nh0=; b=ap
+	Fh6zJ0fSqIuVfTIhGxZc3QR1QTbqwRdl0Ob1MTI3YqExSUwSVKhvoHicL09w66sH
+	hBoc34LLrDRjUacu4/3zvUYDcalZmbRCbe4KCpLcGiclbRJFnYVYbVsvEY0kg3VD
+	Oggxh5z0V6raClKgP8L+De6ZKekaJNwrVy1+uJC6eh9JNcTmGL09POxtvY0/TlKk
+	KWbYKkFDvVRN8DeRy2Ta3v85KQ7TmH3j3ZigOsJL9xuCQ1cpjTJQGtbDu1oGUrQq
+	gwy1yntfe9yEArvMSg3qd0kV9GKN4MZ/WFfvcXFRwwCIR6ESnXcB9owe6xtgXyXS
+	BEBRyv2IX6W3zFLlKtQg==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vtmh022xq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 24 Jan 2024 15:25:34 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40OFPYp4030818
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 24 Jan 2024 15:25:34 GMT
+Received: from [10.216.38.76] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 24 Jan
+ 2024 07:25:29 -0800
+Message-ID: <be69e0a6-fdc8-c24b-9beb-adaac4a97776@quicinc.com>
+Date: Wed, 24 Jan 2024 20:55:26 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 8/8] arm64: defconfig: Enable MAX20411 regulator driver
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] thermal/drivers/tsens: Add suspend to RAM support for
+ tsens
 Content-Language: en-US
-To: Bjorn Andersson <quic_bjorande@quicinc.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
- Johan Hovold <johan+linaro@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20240123-sa8295p-gpu-v3-0-d5b4474c8f33@quicinc.com>
- <20240123-sa8295p-gpu-v3-8-d5b4474c8f33@quicinc.com>
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20240123-sa8295p-gpu-v3-8-d5b4474c8f33@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To: Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Amit Kucheria
+	<amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Bjorn
+ Andersson" <andersson@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC: <quic_manafm@quicinc.com>
+References: <20240122100726.16993-1-quic_priyjain@quicinc.com>
+ <548e2f24-a51e-4593-9463-09506488c70e@linaro.org>
+ <f415a8cd-4cae-d7c3-60fc-674b3e660f6b@quicinc.com>
+ <aeae2e69-8407-4d90-9d16-27798e2f3248@linaro.org>
+From: Priyansh Jain <quic_priyjain@quicinc.com>
+In-Reply-To: <aeae2e69-8407-4d90-9d16-27798e2f3248@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: JZpFstnIg1RdHONUyY59S75ploup1Uug
+X-Proofpoint-ORIG-GUID: JZpFstnIg1RdHONUyY59S75ploup1Uug
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-24_06,2024-01-24_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
+ spamscore=0 adultscore=0 malwarescore=0 suspectscore=0 mlxlogscore=417
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 mlxscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401190000 definitions=main-2401240111
 
 
 
-On 1/24/24 05:25, Bjorn Andersson wrote:
-> The Qualcomm SA8295P ADP board uses a max20411 to power the GPU
-> subsystem.
+On 1/24/2024 6:04 PM, Konrad Dybcio wrote:
 > 
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
+> 
+> On 1/24/24 11:42, Priyansh Jain wrote:
+>>
+>>
+>> On 1/22/2024 8:02 PM, Konrad Dybcio wrote:
+>>> On 22.01.2024 11:07, Priyansh Jain wrote:
+>>>> Add suspend callback support for tsens which disables tsens interrupts
+>>>> in suspend to RAM callback.
+>>>
+>>> Would it not be preferrable to have the "critical overheat", wakeup-
+>>> capable interrupts be enabled, even if the system is suspended?
+>>>
+>>
+>>
+>> As part of suspend to RAM, tsens hardware will be turned off and it 
+>> cannot generate any interrupt.Also system doesn't want to abort 
+>> suspend to RAM due to tsens interrupts since system is already going 
+>> into lowest
+>> power state. Hence disabling tsens interrupt during suspend to RAM 
+>> callback.
+> 
+> Is that a hardware limitation, or a software design choice? I'm not
+> sure I want my phone to have thermal notifications disabled when
+> it's suspended.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Konrad
 
-Konrad
+As part of suspend to RAM , entire SOC will be off, this mode (suspend 
+to RAM) is not intended for Mobile product. Tsens interrupts are not
+disabled as part of suspend to idle(suspend mode for mobile).
+
+Regards,
+Priyansh
 
