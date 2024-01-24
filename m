@@ -1,171 +1,147 @@
-Return-Path: <linux-pm+bounces-2671-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2672-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 197E883A711
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 11:43:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1977283A728
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 11:48:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F8141C21ECD
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 10:43:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C5C2D28C8E7
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 10:48:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 921B417C65;
-	Wed, 24 Jan 2024 10:43:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CC5D1947D;
+	Wed, 24 Jan 2024 10:48:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ZdJu8i9z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cDy3LpDW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0AA6199B8;
-	Wed, 24 Jan 2024 10:43:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20D561AAAE;
+	Wed, 24 Jan 2024 10:48:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706092984; cv=none; b=BNoiWS8hvTHLzdYAKBdFNRgXfH6jlM21vWmWQDNOahLPH0SsIpc9SXlWYt94K9IYAt6W0PcBd99opFzhj2U92ui5NISI4cnaLI+fg/9YEgQV9xddVGt8whFhb1N7+QeMHggLnVYYASDhTDGyFtbnW0ELLt3rKTpeIDqjyFB99Y8=
+	t=1706093318; cv=none; b=sDDg5zUMoveOP1/pgwQA+l428DuRFPOkgZAAKryjM5n96v+Cwgrv6AI8WqhuWUp+EV3vK0eyweF4ZMLUDLWL05pjrLP3ju3+MmxjvRfTrmTAQ6zFSpecqvPJgRPapLOYghfFkCABGAlnhrI56oFo9guEmPyfqCxK1a15W+vh48c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706092984; c=relaxed/simple;
-	bh=7kSJ0U2bWClpV/n7S8II5vylc0cHz5m7aSl9hci5/7s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=jRnEbEgknW+szSA8NgJmT2SvqsNHKjdV0nZh/GtGhGM1rbcPlowSTjKOhVVxBQCArzeXuEeeWyd9tHMos/qTU1zzFcTdxW5d81Ml8OhH3DBoLYCXpKbQMMIMEgFBhyLTZBUXGLJYvQjG1/2IiclFpDUpv0FvYJFzZdavtrzCbds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ZdJu8i9z; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40OALwj5015624;
-	Wed, 24 Jan 2024 10:42:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=wEiM2j5nCvmikp4uX0I3tdM3maEln6y3gtRZhMBw3q8=; b=Zd
-	Ju8i9zof3t04VpyXzL/YxFMHqj/OY0HLAlGLLJxgYZZOGUAe3gIUA+GVEw9aqIKC
-	LQ9g+oCTA8XGEM02bca0bQxedRLJkXHqBM34viSTdc0DPwDYDIQE+1UB9jnoJ9sZ
-	+G3UfaxxSa9ezr5A1g5VkdYfXJ1BHFiMaaD2BzFUX857CbV6zhnCSMUMjQ1M7i9B
-	O2pi3xZuoGJvXYsh0KaRBNODov9XpyDD94GSDPcev3fXijTcG15+xeKBIJLaneRg
-	82YmVjcdHEMKhSFJH0v1d24kgDhoe2OEgNbsur6lU6EJqXnsc5ZeI4QTv/F77w16
-	lMuWEUqxvVMSi3+ElVbA==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vtmhdsh9s-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Jan 2024 10:42:54 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40OAgrQg022999
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 24 Jan 2024 10:42:53 GMT
-Received: from [10.218.47.125] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 24 Jan
- 2024 02:42:49 -0800
-Message-ID: <f415a8cd-4cae-d7c3-60fc-674b3e660f6b@quicinc.com>
-Date: Wed, 24 Jan 2024 16:12:46 +0530
+	s=arc-20240116; t=1706093318; c=relaxed/simple;
+	bh=dA9b756dE5TNVjW47hwdr/q7DlseW+eVJMgaVDohXW0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tY3tHRrMb3rd5bmuACYMgkZT6yf4ylAEjoTJ1aZ0F8AqCDO/PLEN+4JfAUIfp3qh1qVK2Vh6COUiI91QQl2TOKcjuhfpIoMDFXKWjcjby/qkyZK3aPsKD7lfAUv8Gn4KF51OwDSX2kap3248jdXtzVXJdHweCG+HqAZ5goIq8So=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cDy3LpDW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F30BC433F1;
+	Wed, 24 Jan 2024 10:48:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706093317;
+	bh=dA9b756dE5TNVjW47hwdr/q7DlseW+eVJMgaVDohXW0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cDy3LpDWRfgV1B0QKPekbAdNagB6INtG+2cpfVX24ZdTJaT8sMI0BosJ5rhu/n3Dr
+	 /k4rmFcW3HpSgHpIMrF5RylW4CzVyfKfD4JZePTKDwJCwo/FJNm0Lp6I825I4i0Nv7
+	 BjP5CKWDRr2kRr8bg+B0gJ/ZlQW3hhRfwGzraaDDCguhjBt/S83FDvFnkTPGjzAThz
+	 s9OxGm1wYBvF2VO2GWc7CEdPm2HuVp86jD+EmOkPRLEd04OlOeZAT4B0YJ2X8TDs0m
+	 e/dyJ1lQhTrfPNHVL4lsHXYWyC3U7o+rlWF1x/RIXt9wmePN0wCVmCUWyWRHWL2lHr
+	 hIsA+FSNwVzAw==
+Date: Wed, 24 Jan 2024 11:48:34 +0100
+From: Wolfram Sang <wsa@kernel.org>
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+	Cong Dang <cong.dang.xn@renesas.com>,
+	Duy Nguyen <duy.nguyen.rh@renesas.com>,
+	Hai Pham <hai.pham.ud@renesas.com>,
+	Linh Phung <linh.phung.jy@renesas.com>,
+	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH 10/15] soc: renesas: Introduce ARCH_RCAR_GEN4
+Message-ID: <ZbDrAh0Wp1yxzy9a@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+	Cong Dang <cong.dang.xn@renesas.com>,
+	Duy Nguyen <duy.nguyen.rh@renesas.com>,
+	Hai Pham <hai.pham.ud@renesas.com>,
+	Linh Phung <linh.phung.jy@renesas.com>,
+	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org
+References: <cover.1704726960.git.geert+renesas@glider.be>
+ <4f4a2dbdb6ba51e151cbdc128da377083b0d850d.1704726960.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] thermal/drivers/tsens: Add suspend to RAM support for
- tsens
-Content-Language: en-US
-To: Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Amit Kucheria
-	<amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Bjorn
- Andersson" <andersson@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC: <quic_manafm@quicinc.com>
-References: <20240122100726.16993-1-quic_priyjain@quicinc.com>
- <548e2f24-a51e-4593-9463-09506488c70e@linaro.org>
-From: Priyansh Jain <quic_priyjain@quicinc.com>
-In-Reply-To: <548e2f24-a51e-4593-9463-09506488c70e@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: YWI7aNZZ2KpX4qIUkiJRaoycbkyH2U8b
-X-Proofpoint-ORIG-GUID: YWI7aNZZ2KpX4qIUkiJRaoycbkyH2U8b
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-24_04,2024-01-24_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- impostorscore=0 mlxscore=0 phishscore=0 suspectscore=0 mlxlogscore=680
- lowpriorityscore=0 clxscore=1015 priorityscore=1501 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2401190000 definitions=main-2401240076
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="0u9aeG4dzSw4b8kX"
+Content-Disposition: inline
+In-Reply-To: <4f4a2dbdb6ba51e151cbdc128da377083b0d850d.1704726960.git.geert+renesas@glider.be>
 
 
+--0u9aeG4dzSw4b8kX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 1/22/2024 8:02 PM, Konrad Dybcio wrote:
-> On 22.01.2024 11:07, Priyansh Jain wrote:
->> Add suspend callback support for tsens which disables tsens interrupts
->> in suspend to RAM callback.
-> 
-> Would it not be preferrable to have the "critical overheat", wakeup-
-> capable interrupts be enabled, even if the system is suspended?
-> 
+On Mon, Jan 08, 2024 at 04:33:49PM +0100, Geert Uytterhoeven wrote:
+> Currently, all Kconfig symbols for R-Car Gen4 SoCs select the
+> ARCH_RCAR_GEN3 SoC family symbol, which might confuse the casual reader.
+>=20
+> Fix this by introducing a new SoC family symbol for R-Car Gen4 SoCs.
+> For now this just selects ARCH_RCAR_GEN3, to avoid duplication, and to
+> relax dependencies.
+>=20
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+
+> Once "[PATCH] i2c: rcar: Prepare for the advent of ARCH_RCAR_GEN4"[1]
+> has been applied, ARCH_RCAR_GEN4 can stop selecting ARCH_RCAR_GEN3.
+
+Oh, that's me :)
+
+> I'm open for suggestions how to improve this.
+> Perhaps factor out common parts into ARCH_RCAR?
+
+I kinda like the situation after this patch. I'd think using ARCH_RCAR
+might hurt readability. Also, if Gen5 needs to modify ARCH_RCAR, then we
+need to fix up old archs. Potential regressions ahead.
 
 
-As part of suspend to RAM, tsens hardware will be turned off and it 
-cannot generate any interrupt.Also system doesn't want to abort suspend 
-to RAM due to tsens interrupts since system is already going into lowest
-power state. Hence disabling tsens interrupt during suspend to RAM callback.
+--0u9aeG4dzSw4b8kX
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Regards,
-Priyansh
+-----BEGIN PGP SIGNATURE-----
 
->> Add resume callback support for tsens which reinitializes tsens hardware
->> and enables back tsens interrupts in resume callback.
->>
->> Signed-off-by: Priyansh Jain <quic_priyjain@quicinc.com>
->> ---
-> 
-> [...]
-> 
-> 
->> +
->> +int tsens_suspend_common(struct tsens_priv *priv)
->> +{
->> +	switch (pm_suspend_target_state) {
->> +	case PM_SUSPEND_MEM:
->> +		if (priv->combo_irq > 0) {
->> +			disable_irq_nosync(priv->combo_irq);
->> +			disable_irq_wake(priv->combo_irq);
->> +		}
->> +
->> +		if (priv->uplow_irq > 0) {
->> +			disable_irq_nosync(priv->uplow_irq);
->> +			disable_irq_wake(priv->uplow_irq);
->> +		}
->> +
->> +		if (priv->crit_irq > 0) {
->> +			disable_irq_nosync(priv->crit_irq);
->> +			disable_irq_wake(priv->crit_irq);
->> +		}
->> +		break;
->> +	default:
->> +		break;
->> +	}
-> 
-> if (pm_suspend_target_state != PM_SUSPEND_MEM)
-> 	return 0;
-> 
-> <rest of the code>
-> 
-> [...]
-> 
->>   
->> +	/* For saving irq number to re-use later */
-> 
-> This is rather self-explanatory
-> 
-> Konrad
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWw6wIACgkQFA3kzBSg
+KbbloBAAs4shQCEFJDBLmp/gsHnCAwRIshO1V1BBOLcLG2SMopji71CDc/gwaBHy
+3myWZYE5uDkp41iE1Y5ioygOxhrLyVQ/34cM+TVAWqfOQP7hfcORU/g3RDq0OU7+
+AmL1y9o4jCQB+QcKaQygi/Q1VzQsPCtw83MZQpNr8/lsc4M4Sv8IBTqiWRq1mvoX
+XhJiKY6rCl+3iZJRTSryUZ9xPlfkejYRc3fTQu4eYIO3yaWF13OrXVmcidwln5Dy
++f9A+wYf3D/vn7vejkdxluccyqhgkvzknOpD3KusM4hvveTjFvpIHMczU4h/nT5M
+La6R0DGWC4UgIo4MGCaOXEgAIl1X4HHosK4fPpNB+b5SYLsN/jVH7XVIH+R7wpXY
+ogrK87uIh472cLcTfmAcY5gjgYelWaGVZ5zMn1GQ9cM+JwPLoGTTHeAsSrXeBFA9
+4+UC+JqP/8QVFWoXCuh6iFY3qtjLfgTFpVfpddEkDmjl8su0tKJIVUKurBfzvGGT
+Kw4/Kd6yNZndVkEWGql2gbMTMxQKxTPqipjnlVbFKWFS+Dv+5D/CaaNilzEf2GWB
+nsgjeAeHCMZfvEiZ1t143nNLnHo4m7Ii/JCrgZWDzFTyzfaLL+uHHkQIa1Wz+Kth
+tPO5lKN1iCSDeaOzxOxg0smIhCYkgXxb1XTaM3RppGT0Barbz4I=
+=3zZ/
+-----END PGP SIGNATURE-----
+
+--0u9aeG4dzSw4b8kX--
 
