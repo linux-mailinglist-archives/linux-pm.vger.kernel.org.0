@@ -1,31 +1,31 @@
-Return-Path: <linux-pm+bounces-2683-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2681-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0140A83A993
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 13:23:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECFC883A991
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 13:23:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 32B031C22058
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 12:23:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2787283CD6
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 12:23:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A452A651A0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99AE56519C;
 	Wed, 24 Jan 2024 12:22:30 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6570F634F5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F51763503
 	for <linux-pm@vger.kernel.org>; Wed, 24 Jan 2024 12:22:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706098950; cv=none; b=PHWtJ+MNowufh4ObxLgORDhIMiwf1F7gieIjUa4p3M7A1qfsFBrKUIlBQqSU+ecnTJNghwHL2Be5IozxSYv903F3WzDIe0FXZj/pF5oOp7MmGxSzcpmnd42zamQIaRoVH2AVHKONcrBdrIZagwQcmwkurmEz7+Yhil2XqZGRoDg=
+	t=1706098950; cv=none; b=pQQd88fG9+xd5gVaHK3vYIfot0N7cVGWZdckc6PUEICQl8zpN3QYStHljnrXCJyCtHyyLd5bjM3Q61EvGqlIpibwbikUJvblSDHnDMrFBXCbDzrGpBA8DVhTfdxc8yPcLbfplyexhgX5rpkRfA6m8AtBLxauj2mbZQhopSk46yk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1706098950; c=relaxed/simple;
-	bh=HHxbDfRuHjBw0BBMrvLJdWgyYMSpJ3v1+tlxqNpDDsA=;
+	bh=viEuHOnCMvFs1FiV9peHFb17kutxKUU/HIZcjaimZ5g=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=hjHEkfo8jvjusqMbQE4ML0KDkUkPylKxHNh/8i3i+a7sc6Kill/ElWfv1GrSjQhwaCVUVFu3op8WgI+VfhzDTPbJFf4u/BkOZCJFtuYLnd7K2gwRFv+6YOVM4i8qfXkKtIDrWOEZD/BOjxX+Z0DGECg5GDgELqmdsdsmKrNUmNw=
+	 MIME-Version; b=o65p2TnrsaU0nsWcRBIu1XaF1zKT1pMRHWNpDqfFs6/siCd5B7gM1acYysef2YwtH1qlKUt41Z1KCkj1SRTtOBuOjV4CYaQO5/cI+rcFFLeBq65bZZKGazBUhpQZKJK1XsUIvXpM2Lk6bgQuC6JdKOsxpeUUm+gqXzu/1ly5iVs=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,15 +33,15 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ore@pengutronix.de>)
-	id 1rScGd-0007o8-1C; Wed, 24 Jan 2024 13:22:07 +0100
+	id 1rScGd-0007o9-1C; Wed, 24 Jan 2024 13:22:07 +0100
 Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <ore@pengutronix.de>)
-	id 1rScGc-0023Ze-1P; Wed, 24 Jan 2024 13:22:06 +0100
+	id 1rScGc-0023Zg-2a; Wed, 24 Jan 2024 13:22:06 +0100
 Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.96)
 	(envelope-from <ore@pengutronix.de>)
-	id 1rScGb-00341O-34;
+	id 1rScGb-00341Y-37;
 	Wed, 24 Jan 2024 13:22:05 +0100
 From: Oleksij Rempel <o.rempel@pengutronix.de>
 To: Sebastian Reichel <sre@kernel.org>,
@@ -61,9 +61,9 @@ Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
 	linux-pm@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	=?UTF-8?q?S=C3=B8ren=20Andersen?= <san@skov.dk>
-Subject: [PATCH v2 4/8] dt-bindings: power: reset: add bindings for NVMEM hardware storing PSCR Data
-Date: Wed, 24 Jan 2024 13:22:00 +0100
-Message-Id: <20240124122204.730370-5-o.rempel@pengutronix.de>
+Subject: [PATCH v2 5/8] nvmem: provide consumer access to cell size metrics
+Date: Wed, 24 Jan 2024 13:22:01 +0100
+Message-Id: <20240124122204.730370-6-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240124122204.730370-1-o.rempel@pengutronix.de>
 References: <20240124122204.730370-1-o.rempel@pengutronix.de>
@@ -79,75 +79,77 @@ X-SA-Exim-Mail-From: ore@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-Add device tree bindings that describe hardware implementations of
-Non-Volatile Memory (NVMEM) used for storing Power State Change Reasons
-(PSCR).
+Add nvmem_cell_get_size() function to provide access to cell size
+metrics. In some cases we may get cell size less as consumer would
+expect it. So, nvmem_cell_write() would fail with incorrect buffer size.
 
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- .../bindings/power/reset/pscrr-nvmem.yaml     | 53 +++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/power/reset/pscrr-nvmem.yaml
+ drivers/nvmem/core.c           | 25 +++++++++++++++++++++++++
+ include/linux/nvmem-consumer.h |  7 +++++++
+ 2 files changed, 32 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/power/reset/pscrr-nvmem.yaml b/Documentation/devicetree/bindings/power/reset/pscrr-nvmem.yaml
-new file mode 100644
-index 000000000000..779920dea283
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/reset/pscrr-nvmem.yaml
-@@ -0,0 +1,53 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/reset/pscrr-nvmem.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 980123fb4dde..a21e5649fcda 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -1790,6 +1790,31 @@ int nvmem_cell_write(struct nvmem_cell *cell, void *buf, size_t len)
+ 
+ EXPORT_SYMBOL_GPL(nvmem_cell_write);
+ 
++/**
++ * nvmem_cell_get_size() - Get the size of a given nvmem cell
++ * @cell: nvmem cell to be queried.
++ * @bytes: Pointer to store the size of the cell in bytes. Can be NULL.
++ * @bits: Pointer to store the size of the cell in bits. Can be NULL.
++ *
++ * Return: 0 on success or negative on failure.
++ */
++int nvmem_cell_get_size(struct nvmem_cell *cell, size_t *bytes, size_t *bits)
++{
++	struct nvmem_cell_entry *entry = cell->entry;
 +
-+title: Generic NVMEM Power State Change Reason Recorder
++	if (!entry->nvmem)
++		return -EINVAL;
 +
-+maintainers:
-+  - Oleksij Rempel <o.rempel@pengutronix.de>
++	if (bytes)
++		*bytes = entry->bytes;
 +
-+description: This binding describes the Non-Volatile Memory (NVMEM) hardware
-+  that stores Power State Change Reasons (PSCR).
++	if (bits)
++		*bits = entry->nbits;
 +
-+allOf:
-+  - $ref: pscrr.yaml#
++	return 0;
++}
++EXPORT_SYMBOL_GPL(nvmem_cell_get_size);
 +
-+properties:
-+  compatible:
-+    const: pscrr-nvmem
+ static int nvmem_cell_read_common(struct device *dev, const char *cell_id,
+ 				  void *val, size_t count)
+ {
+diff --git a/include/linux/nvmem-consumer.h b/include/linux/nvmem-consumer.h
+index 34c0e58dfa26..bcb0e17e415d 100644
+--- a/include/linux/nvmem-consumer.h
++++ b/include/linux/nvmem-consumer.h
+@@ -56,6 +56,7 @@ void nvmem_cell_put(struct nvmem_cell *cell);
+ void devm_nvmem_cell_put(struct device *dev, struct nvmem_cell *cell);
+ void *nvmem_cell_read(struct nvmem_cell *cell, size_t *len);
+ int nvmem_cell_write(struct nvmem_cell *cell, void *buf, size_t len);
++int nvmem_cell_get_size(struct nvmem_cell *cell, size_t *bytes, size_t *bits);
+ int nvmem_cell_read_u8(struct device *dev, const char *cell_id, u8 *val);
+ int nvmem_cell_read_u16(struct device *dev, const char *cell_id, u16 *val);
+ int nvmem_cell_read_u32(struct device *dev, const char *cell_id, u32 *val);
+@@ -128,6 +129,12 @@ static inline int nvmem_cell_write(struct nvmem_cell *cell,
+ 	return -EOPNOTSUPP;
+ }
+ 
++static inline int nvmem_cell_get_size(struct nvmem_cell *cell, size_t *bytes,
++				      size_t *bits)
++{
++	return -EOPNOTSUPP;
++}
 +
-+  nvmem-cells:
-+    description: |
-+      A phandle pointing to the nvmem-cells node where the power state change
-+      reasons are stored.
-+    maxItems: 1
-+
-+  nvmem-cell-names:
-+    items:
-+      - const: pscr
-+
-+  pscr-under-voltage: true
-+  pscr-over-current: true
-+  pscr-regulator-failure: true
-+  pscr-over-temperature: true
-+
-+required:
-+  - compatible
-+  - nvmem-cells
-+  - nvmem-cell-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    power-state-change-reason {
-+      compatible = "pscrr-nvmem";
-+      nvmem-cells = <&pscr_cell>;
-+      nvmem-cell-names = "pscr";
-+      pscr-under-voltage = <1>;
-+      pscr-over-temperature = <2>;
-+    };
-+...
+ static inline int nvmem_cell_read_u8(struct device *dev,
+ 				     const char *cell_id, u8 *val)
+ {
 -- 
 2.39.2
 
