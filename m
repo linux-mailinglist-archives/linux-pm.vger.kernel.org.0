@@ -1,51 +1,50 @@
-Return-Path: <linux-pm+bounces-2666-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2667-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CF0083A6E4
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 11:35:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8265D83A6E8
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 11:35:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5AC5C1C21B10
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 10:35:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 11F741F22140
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 10:35:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51E60CA71;
-	Wed, 24 Jan 2024 10:35:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB6D5DF5D;
+	Wed, 24 Jan 2024 10:35:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IxWDgCKi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pIm0wVRf"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26835FBFD;
-	Wed, 24 Jan 2024 10:35:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACDC7D30E;
+	Wed, 24 Jan 2024 10:35:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706092513; cv=none; b=gIEy2h5PNVC8DAWLCaBMVaOtSbd1S40cpweqYEzq5VGpwLujiX4HxmtYKCaXAuWCKk4bbugdc5EY+hGZJe0XiNRulFEJyqjYairteZrI2yRnHa/29PtHQA4D5WRwQ17+MUxtU+iFEO5BOGjYg5xSJUCRA1MeQNpF14KTafBDEwY=
+	t=1706092545; cv=none; b=V53FAxc6wgE9KEh43W1gIVFCtYrZgPa13BEmqZv6cayAPbyngAfCrlsC29IsOSRJ7GCCfobuZii/G7ky+2P5zVWCv3V6R3ukqI6JAyIi6tia1lRZBjuXflJSz1YwplvRMtmq6nI0v9nZsdBdMD3qq0kSjsfsKsCg8YPRW1V53yM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706092513; c=relaxed/simple;
-	bh=YKiOt4RPcE1+0/nw8KrfU0BwLstTDoGL0RMIhRE8eVQ=;
+	s=arc-20240116; t=1706092545; c=relaxed/simple;
+	bh=F3X6YWhEFf4xbEdg6wHb6lp/B6CwbaKQQ2rX8+R1BqY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pWJ6ZPyCfppAdt4WjWan0jE2uxc1WNc0JkwTwf8qTQP5vV0IIFUBpHeeaXAdiuMxZkUvA+nsPOXP6DhhGtHZmECW0LUYmIetbR91+9xWS5tvw7br1DToE6RzKvcaXydqmFHbb8Cy1WwSks0g+GQ2EgXmpBYedolQTTXGrOZRD9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IxWDgCKi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F03E2C43390;
-	Wed, 24 Jan 2024 10:35:11 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=e4fHGmCQ6Bk2f2NoSY7fhZxrju0J2zLNErz9hxRvh9QSH/85ttO365lqXIHH1cQz2UYIaZiy6v+JndnchCMq3RIUOzHkbS7jWKxnpt1xm5EQO/FVHJ/UfG43p9gXM8yzDbCCvA6EOIdQuRQQmuEeQxjjO3c4wZQTQvnD7MAYHs4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pIm0wVRf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 653C2C433F1;
+	Wed, 24 Jan 2024 10:35:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706092512;
-	bh=YKiOt4RPcE1+0/nw8KrfU0BwLstTDoGL0RMIhRE8eVQ=;
+	s=k20201202; t=1706092545;
+	bh=F3X6YWhEFf4xbEdg6wHb6lp/B6CwbaKQQ2rX8+R1BqY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IxWDgCKipxCwb4IXxEf2J3XbPKsCvbzwKlQQ3dxU/oLF3VlkFjOnwCSymsAyLTEML
-	 Cc5mchTAhhBKo6AABALdYpN+mtJHNtMiWFflHIWZnVQpZmLkL3QdCSm3kUyQHp810W
-	 rbS7pLI/N07tTImVrJcr+e9wAokZdwcdXS0DNs+YxXnUHAgW4Mrm5vR6FzBfTxt0Oa
-	 yJZTReY+tAwEvVnxQGjukRCUdTKIlMQZL8g6ZKuMn3cl4VCSUdRkfWdvNRmTrvUB4T
-	 Nf+HUPhDl1OPmuWPnV3FDzOOjEFqbwP7DaUfktANsw9dQfJ5MRxuTHiQ88jssc6EvL
-	 /ZYpA6qXligGw==
-Date: Wed, 24 Jan 2024 11:35:09 +0100
+	b=pIm0wVRf194CFwnFa8FFkIEoxUxVTH89MLt0FSnX8ilNa1w3On1D6Ln6I6qKOZpVo
+	 wdiJcJW/V2YsMuasW/ob0p7d7/wmbxdmInPV/lcV23lIyK+eqBVCL6sKGF7+dcchjc
+	 mr6j2lQHNN1XUvK5e9Ro8fNClhRH5bI029b9nHHG/fNMuumjBo5wECM38dw4u8bhwG
+	 a1cgNHTPijovh8J1RHEOp7ZE/q5fpqB5rZs8z/ft2LhssQs7ZPT/R1D2uy1EDZ6f+X
+	 5wd1bBBX5LLTVckaM1wUShykK4QPmUv+sCGUhBY/Tk2EVsGBwMpFGnZF1d9d/SWjSq
+	 f4eSYjEnSOMXQ==
+Date: Wed, 24 Jan 2024 11:35:41 +0100
 From: Wolfram Sang <wsa@kernel.org>
-To: Conor Dooley <conor@kernel.org>
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>,
-	Michael Turquette <mturquette@baylibre.com>,
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
 	Conor Dooley <conor+dt@kernel.org>,
@@ -60,11 +59,10 @@ Cc: Geert Uytterhoeven <geert+renesas@glider.be>,
 	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
 	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	linux-pm@vger.kernel.org
-Subject: Re: [PATCH 03/15] dt-bindings: power: renesas,rcar-sysc: Document
- R-Car V4M support
-Message-ID: <ZbDn3aJX3vpmKGCE@ninjato>
+Subject: Re: [PATCH 05/15] dt-bindings: reset: renesas,rst: Document R-Car
+ V4M support
+Message-ID: <ZbDn_Xp38N7q8yqJ@ninjato>
 Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Conor Dooley <conor@kernel.org>,
 	Geert Uytterhoeven <geert+renesas@glider.be>,
 	Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
@@ -82,8 +80,7 @@ Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
 	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	linux-pm@vger.kernel.org
 References: <cover.1704726960.git.geert+renesas@glider.be>
- <1196419f3ade9a27b3c7906b6a898376b817601d.1704726960.git.geert+renesas@glider.be>
- <20240108-usual-opacity-4257f2e55107@spud>
+ <1d35a435db17a240abafb091751255379825b750.1704726960.git.geert+renesas@glider.be>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -91,45 +88,44 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="hXTrRqJ6f27YOBe+"
+	protocol="application/pgp-signature"; boundary="HaIQShsb65ucNv1z"
 Content-Disposition: inline
-In-Reply-To: <20240108-usual-opacity-4257f2e55107@spud>
+In-Reply-To: <1d35a435db17a240abafb091751255379825b750.1704726960.git.geert+renesas@glider.be>
 
 
---hXTrRqJ6f27YOBe+
+--HaIQShsb65ucNv1z
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-
-> >        - renesas,r8a779g0-sysc # R-Car V4H
-> > +      - renesas,r8a779h0-sysc # R-Car V4M
+On Mon, Jan 08, 2024 at 04:33:44PM +0100, Geert Uytterhoeven wrote:
+> Document support for the Reset (RST) module in the Renesas R-Car V4M
+> (R8A779H0) SoC.
 >=20
-> I like that the g0 is the v4h and the h0 is a v4m. Makes complete sense
-> to me!
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Hey, at least the number is constantly increasing! Well, mostly... ;)
+Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
 
---hXTrRqJ6f27YOBe+
+--HaIQShsb65ucNv1z
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWw590ACgkQFA3kzBSg
-KbaENg/7Bux37kSDJC7i7LLUEIT2NVX4R1I7bGEO7PnzPpGQkFfcdI3YKYbH2nJI
-kJs5YVt7GYS7VjGFNtRy7i5WOFsM8UekgP1pvPih9s8gK3G8Kyj5SCdo7I287GfR
-a/qJTzPMQRAdFjBBjYhmiPBHTXwNbGEEIg0bOs61FblK1wuPEAbb+Kc6cByePtoW
-MOjV6Xyq60LQnxYiV6hk6u1+13nshT9zsMMy0LpqauPsHmTHdbVVU1Eih4ktWKtj
-ch5PyjG02u/gSFsObgAbFHTw5RK8cWjNb7kHNqLtbOVnZV6bbMCyVzqHDxnRsqPh
-6Uqz3MWNADh5wpd0frmFCyjJoN/mc9H89bq78dq33u+Yv+hhpWZbp13ZFz6wJjE/
-APcEw0GKISe1LCxQwC62CVEGFmNsc20+3krn+tSVgD1Kt/W7nS6x2N9068o+7pwc
-XA7zR/q++h6nMeayMRSDIqrqj3LmZOWEHLprD//9jQ+00GE/07yPTOcOT73vQm1v
-s2QGXiRPPpsm7bN5Vq2ncREmOzTBfsp3EWmxI3HtGqKksRve9hge9Vk9Iv0Qlw1m
-NbcmFDgHydgde3si03TBoE7Jj2vQuZ5X6s7P9DiN4S25SV17RPhMqKWf1BrKN9XD
-PFjFza8cC62fK4FqQJmdbeC2X+CE6YdU6GET2YmlIOuu7IKqjWo=
-=HcJZ
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWw5/0ACgkQFA3kzBSg
+KbYdig//ZmpqtbvpTpIZh4beHwATQUQXNbR+DXYAjqvd34RtXC9xb3Z+t3CGHFhw
+0hVI93wpA/qlQOuqnrw/rEIrqQgPlMneo/TyyzXWgcQPfBvqGwbwJTOS8P2zlccL
+OLzkoLtSRxcpXNBQi4eLKYeN7HIzWZhNQSgwG8IoK8RDDs/XJdaGRyWQ6tfSi/Vm
+bnwD63xhHgwd4AAFWiOOTWUT3pmLlDq2eralaEuyF1bVVuf3R3fLrnZuD5kw/LAW
+V/ic2Plj98AKJXIhe12pyHMmTg/rFe3AlmwgLPclBbMz9ey6i0+F5DqULK69mX5I
+z/GkdirOw/vjWdQQ7SrvQ2M1PZ/MtfIWXvcCxMSpZflHBPJChGeAkbHkaNac+vsi
+oi/S5gvmFT04ixzErvgUQDL/wG2iX539FpqkqSzjF4ERkJR70QR7priiYeVTOiY/
+a0dFOcU3H2xsQWiXeLZLJQseFxvzgA770mxfmw2H30+dZzikZRMjKWOPIdGuRAOi
+1VkIXO6gP60qgOO/QMhkCnVoM2BX1GnenpBtPuHJB/63oQso0tpKmHcn/MM1Nab9
+FRYxvV5LXhwy0xYqqGAbnk9ZKaoO+TgYdE2hTmNSv9DtEi5wEZnMjDrVqJ2Bb8Ee
+IRKHC9jYR5dB6jlsKPnVXrO8NQxpKjIqOm4hf8Dz1KLWtJYZKXg=
+=gyY+
 -----END PGP SIGNATURE-----
 
---hXTrRqJ6f27YOBe+--
+--HaIQShsb65ucNv1z--
 
