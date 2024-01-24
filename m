@@ -1,132 +1,233 @@
-Return-Path: <linux-pm+bounces-2673-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2674-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76ABC83A72C
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 11:49:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4505A83A730
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 11:51:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2D0221F27AD0
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 10:49:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB29728799F
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 10:50:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E87BE18EBB;
-	Wed, 24 Jan 2024 10:49:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C6BB19473;
+	Wed, 24 Jan 2024 10:50:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a5SmOcLv"
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="n0U1IJKK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA481199A1;
-	Wed, 24 Jan 2024 10:49:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 769BD18EBB;
+	Wed, 24 Jan 2024 10:50:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706093376; cv=none; b=WkdjAI6GQOVmO+YvFvi0nPM0KRI7M7gxo9nUfU/K9jaAhBHAwnETkCbdpI0T/ExT1Y3vUoE02B2nVBHMb/D2GVwhYA3ZnCePB0znxpfbIdR/XflWxlkEnyHEEkRY/C8oMNWNrJR3AFFEaTQXhFCoEN05vsH9so6jBQ1At8BJJ1E=
+	t=1706093454; cv=none; b=kffOEbliCaA+0dxSsCxJqRF0fKiSVoZVcf5dtF6/Beh9BJgV2atKvpNPo1ZZwoieg1+7GdA8B6kI7CKZBNGztMJH1CdpxHUFTCcPWqlJDNGKu3mKyAnSvYVdUi/T1CZK6HfIGJdgENAjbeg1OHFOlQZoSxKIkIMwREkwkptGugw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706093376; c=relaxed/simple;
-	bh=fwRMd+Dxa1ltASNwmQ0LsTQwooXOpibUP36077tMqu4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fvyYgyd1O6EKHLw5mfBm9Lt/IuFDsNiQiI/FeH0DJ6vE7yJ5wFs/byXJR6nnSXFx772wdQ5aKXmMPyv2ns0ciJg0uT4RZXlE/xFI66Bee/SEVTOPMMCfg3RSnvDRBNmwMrYBbvTYdCi5G6WqID6AbG9jGsCd34jbiLb2S+GeySw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a5SmOcLv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78F19C433C7;
-	Wed, 24 Jan 2024 10:49:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706093376;
-	bh=fwRMd+Dxa1ltASNwmQ0LsTQwooXOpibUP36077tMqu4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=a5SmOcLvuiMMc9n5xIkFXW4DTqw42Ev27RYxbbzfgh0tCH4Vxhik8CvCVQMC/WgGj
-	 YK3f7pvVCwtN3qiPS2hLjq6ru4r04B+s00ugobPDV7DdFXRgyUNo5kSQDx/pvQJwB4
-	 f8uPtyXb/4LiCGdc67SQY1UY15kleWPEEKUfBh6Frtka+3slNAR0Z3ft9HIc1sOnDy
-	 D/7U+ad4O40UDo4irSLUvr41kjpoDCpEgxR10wTim5NnnYZoqRkefGY3VLXohfc/ya
-	 nFGKPQwN8Rxi5le0u7gBeM64LHShJnj+xlvTP7Qs/soIEiIDKQCl/n9/JS/70zSaFV
-	 B1+U55VQF2Zpw==
-Date: Wed, 24 Jan 2024 11:49:32 +0100
-From: Wolfram Sang <wsa@kernel.org>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
-	Cong Dang <cong.dang.xn@renesas.com>,
-	Duy Nguyen <duy.nguyen.rh@renesas.com>,
-	Hai Pham <hai.pham.ud@renesas.com>,
-	Linh Phung <linh.phung.jy@renesas.com>,
-	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH 11/15] soc: renesas: Identify R-Car V4M
-Message-ID: <ZbDrPPAN42d4WTdZ@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
-	Cong Dang <cong.dang.xn@renesas.com>,
-	Duy Nguyen <duy.nguyen.rh@renesas.com>,
-	Hai Pham <hai.pham.ud@renesas.com>,
-	Linh Phung <linh.phung.jy@renesas.com>,
-	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org
-References: <cover.1704726960.git.geert+renesas@glider.be>
- <d92add6e71daf88d4f6e689f5097cf1f1addbec8.1704726960.git.geert+renesas@glider.be>
+	s=arc-20240116; t=1706093454; c=relaxed/simple;
+	bh=84MVVmbTH/C8W3safTbo5bn7FIroCOF8HfRHVUg0sUQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ADIwRLnp1sI0WReEws6DAsQN542ESAaITBG9GcHO/p2Dd+eLOFeb4Vv7rWcNRdO0iEAuMb8EXnuriBIhQG3ZDN6KDX3o9bTWdbQOzQ2LY09L4s4c0PsAhT6snPbhLm0OJU+xBTxVRyCmDCliGRnb0FnpkcbmcvFlbzKcoHyYhCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=n0U1IJKK; arc=none smtp.client-ip=93.104.207.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1706093450; x=1737629450;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=aTuEXSlYOiNHEuFuSlJtP0lQIoUAMibD41RptAODArc=;
+  b=n0U1IJKKumuZGyRsgy0/s8GzTc9ZlShsTdueJIct2gQC4XhX7J9WwCOE
+   tRtcZQSyp10JVYASr8gLq5/0AoF1Xh7Y1l+4y2TdFJgGfByOzutUJsgD6
+   3kQXvyfedcjHo4v3ZvImUMqjEtAQO5PRRIL1IbycNaSEmoHfG7dBltZuX
+   ZAebqeviwdFe2Wjs1wraJRYa2GZzZMhnjU5WzrrZrioSe5jtpTgBaMZ6h
+   KtS5jXyQIA90n/PHbXyjVyrKQBC56pTk+lqZJQIl+EpZeLXEM+F2LwFn9
+   PmyVJqI7wM5CMcr6bkjAXuO8iWFJrAbeg2WjYhfWdfbDpRiNJXsPDCEcX
+   A==;
+X-IronPort-AV: E=Sophos;i="6.05,216,1701126000"; 
+   d="scan'208";a="35052777"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 24 Jan 2024 11:50:47 +0100
+Received: from schifferm-ubuntu.tq-net.de (SCHIFFERM-M3.tq-net.de [10.121.49.135])
+	by vtuxmail01.tq-net.de (Postfix) with ESMTPA id EB5A2280075;
+	Wed, 24 Jan 2024 11:50:46 +0100 (CET)
+From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To: Michael Ellerman <mpe@ellerman.id.au>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Nicholas Piggin <npiggin@gmail.com>,
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux@ew.tq-group.com,
+	Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Subject: [PATCH] powerpc: rename SPRN_HID2 define to SPRN_HID2_750FX
+Date: Wed, 24 Jan 2024 11:50:31 +0100
+Message-ID: <20240124105031.45734-1-matthias.schiffer@ew.tq-group.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="YyIUF92PqcFjvfUx"
-Content-Disposition: inline
-In-Reply-To: <d92add6e71daf88d4f6e689f5097cf1f1addbec8.1704726960.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+This register number is hardware-specific, rename it for clarity.
 
---YyIUF92PqcFjvfUx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+FIXME comments are added in a few places where it seems like the wrong
+register is used. As I can't test this, only the rename is done with no
+functional change.
 
-On Mon, Jan 08, 2024 at 04:33:50PM +0100, Geert Uytterhoeven wrote:
-> From: Duy Nguyen <duy.nguyen.rh@renesas.com>
->=20
-> Add support for identifying the R-Car V4M (R8A779H0) SoC.
->=20
-> Signed-off-by: Duy Nguyen <duy.nguyen.rh@renesas.com>
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+---
+ arch/powerpc/include/asm/reg.h               | 2 +-
+ arch/powerpc/kernel/cpu_setup_6xx.S          | 4 ++--
+ arch/powerpc/kvm/book3s_emulate.c            | 4 ++--
+ arch/powerpc/platforms/52xx/lite5200_sleep.S | 6 ++++--
+ arch/powerpc/platforms/83xx/suspend-asm.S    | 6 ++++--
+ drivers/cpufreq/pmac32-cpufreq.c             | 8 ++++----
+ 6 files changed, 17 insertions(+), 13 deletions(-)
 
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+diff --git a/arch/powerpc/include/asm/reg.h b/arch/powerpc/include/asm/reg.h
+index 4ae4ab9090a2..994dfefba98b 100644
+--- a/arch/powerpc/include/asm/reg.h
++++ b/arch/powerpc/include/asm/reg.h
+@@ -615,7 +615,7 @@
+ #define HID1_ABE	(1<<10)		/* 7450 Address Broadcast Enable */
+ #define HID1_PS		(1<<16)		/* 750FX PLL selection */
+ #endif
+-#define SPRN_HID2	0x3F8		/* Hardware Implementation Register 2 */
++#define SPRN_HID2_750FX	0x3F8		/* IBM 750FX HID2 Register */
+ #define SPRN_HID2_GEKKO	0x398		/* Gekko HID2 Register */
+ #define SPRN_IABR	0x3F2	/* Instruction Address Breakpoint Register */
+ #define SPRN_IABR2	0x3FA		/* 83xx */
+diff --git a/arch/powerpc/kernel/cpu_setup_6xx.S b/arch/powerpc/kernel/cpu_setup_6xx.S
+index f29ce3dd6140..4f4a4ce34861 100644
+--- a/arch/powerpc/kernel/cpu_setup_6xx.S
++++ b/arch/powerpc/kernel/cpu_setup_6xx.S
+@@ -382,7 +382,7 @@ _GLOBAL(__save_cpu_setup)
+ 	andi.	r3,r3,0xff00
+ 	cmpwi	cr0,r3,0x0200
+ 	bne	1f
+-	mfspr	r4,SPRN_HID2
++	mfspr	r4,SPRN_HID2_750FX
+ 	stw	r4,CS_HID2(r5)
+ 1:
+ 	mtcr	r7
+@@ -477,7 +477,7 @@ _GLOBAL(__restore_cpu_setup)
+ 	bne	4f
+ 	lwz	r4,CS_HID2(r5)
+ 	rlwinm	r4,r4,0,19,17
+-	mtspr	SPRN_HID2,r4
++	mtspr	SPRN_HID2_750FX,r4
+ 	sync
+ 4:
+ 	lwz	r4,CS_HID1(r5)
+diff --git a/arch/powerpc/kvm/book3s_emulate.c b/arch/powerpc/kvm/book3s_emulate.c
+index 5bbfb2eed127..de126d153328 100644
+--- a/arch/powerpc/kvm/book3s_emulate.c
++++ b/arch/powerpc/kvm/book3s_emulate.c
+@@ -714,7 +714,7 @@ int kvmppc_core_emulate_mtspr_pr(struct kvm_vcpu *vcpu, int sprn, ulong spr_val)
+ 	case SPRN_HID1:
+ 		to_book3s(vcpu)->hid[1] = spr_val;
+ 		break;
+-	case SPRN_HID2:
++	case SPRN_HID2_750FX:
+ 		to_book3s(vcpu)->hid[2] = spr_val;
+ 		break;
+ 	case SPRN_HID2_GEKKO:
+@@ -900,7 +900,7 @@ int kvmppc_core_emulate_mfspr_pr(struct kvm_vcpu *vcpu, int sprn, ulong *spr_val
+ 	case SPRN_HID1:
+ 		*spr_val = to_book3s(vcpu)->hid[1];
+ 		break;
+-	case SPRN_HID2:
++	case SPRN_HID2_750FX:
+ 	case SPRN_HID2_GEKKO:
+ 		*spr_val = to_book3s(vcpu)->hid[2];
+ 		break;
+diff --git a/arch/powerpc/platforms/52xx/lite5200_sleep.S b/arch/powerpc/platforms/52xx/lite5200_sleep.S
+index 0b12647e7b42..0ec2522ee4ad 100644
+--- a/arch/powerpc/platforms/52xx/lite5200_sleep.S
++++ b/arch/powerpc/platforms/52xx/lite5200_sleep.S
+@@ -203,7 +203,8 @@ lite5200_wakeup:
+ 
+ 	/* HIDs, MSR */
+ 	LOAD_SPRN(HID1, 0x19)
+-	LOAD_SPRN(HID2, 0x1a)
++	/* FIXME: Should this use HID2_G2_LE? */
++	LOAD_SPRN(HID2_750FX, 0x1a)
+ 
+ 
+ 	/* address translation is tricky (see turn_on_mmu) */
+@@ -283,7 +284,8 @@ SYM_FUNC_START_LOCAL(save_regs)
+ 
+ 	SAVE_SPRN(HID0, 0x18)
+ 	SAVE_SPRN(HID1, 0x19)
+-	SAVE_SPRN(HID2, 0x1a)
++	/* FIXME: Should this use HID2_G2_LE? */
++	SAVE_SPRN(HID2_750FX, 0x1a)
+ 	mfmsr	r10
+ 	stw	r10, (4*0x1b)(r4)
+ 	/*SAVE_SPRN(LR, 0x1c) have to save it before the call */
+diff --git a/arch/powerpc/platforms/83xx/suspend-asm.S b/arch/powerpc/platforms/83xx/suspend-asm.S
+index bc6bd4d0ae96..6a62ed6082c9 100644
+--- a/arch/powerpc/platforms/83xx/suspend-asm.S
++++ b/arch/powerpc/platforms/83xx/suspend-asm.S
+@@ -68,7 +68,8 @@ _GLOBAL(mpc83xx_enter_deep_sleep)
+ 
+ 	mfspr	r5, SPRN_HID0
+ 	mfspr	r6, SPRN_HID1
+-	mfspr	r7, SPRN_HID2
++	/* FIXME: Should this use SPRN_HID2_G2_LE? */
++	mfspr	r7, SPRN_HID2_750FX
+ 
+ 	stw	r5, SS_HID+0(r3)
+ 	stw	r6, SS_HID+4(r3)
+@@ -396,7 +397,8 @@ mpc83xx_deep_resume:
+ 
+ 	mtspr	SPRN_HID0, r5
+ 	mtspr	SPRN_HID1, r6
+-	mtspr	SPRN_HID2, r7
++	/* FIXME: Should this use SPRN_HID2_G2_LE? */
++	mtspr	SPRN_HID2_750FX, r7
+ 
+ 	lwz	r4, SS_IABR+0(r3)
+ 	lwz	r5, SS_IABR+4(r3)
+diff --git a/drivers/cpufreq/pmac32-cpufreq.c b/drivers/cpufreq/pmac32-cpufreq.c
+index df3567c1e93b..6c9f0888a2a7 100644
+--- a/drivers/cpufreq/pmac32-cpufreq.c
++++ b/drivers/cpufreq/pmac32-cpufreq.c
+@@ -120,9 +120,9 @@ static int cpu_750fx_cpu_speed(int low_speed)
+ 
+ 		/* tweak L2 for high voltage */
+ 		if (has_cpu_l2lve) {
+-			hid2 = mfspr(SPRN_HID2);
++			hid2 = mfspr(SPRN_HID2_750FX);
+ 			hid2 &= ~0x2000;
+-			mtspr(SPRN_HID2, hid2);
++			mtspr(SPRN_HID2_750FX, hid2);
+ 		}
+ 	}
+ #ifdef CONFIG_PPC_BOOK3S_32
+@@ -131,9 +131,9 @@ static int cpu_750fx_cpu_speed(int low_speed)
+ 	if (low_speed == 1) {
+ 		/* tweak L2 for low voltage */
+ 		if (has_cpu_l2lve) {
+-			hid2 = mfspr(SPRN_HID2);
++			hid2 = mfspr(SPRN_HID2_750FX);
+ 			hid2 |= 0x2000;
+-			mtspr(SPRN_HID2, hid2);
++			mtspr(SPRN_HID2_750FX, hid2);
+ 		}
+ 
+ 		/* ramping down, set voltage last */
+-- 
+TQ-Systems GmbH | Mühlstraße 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht München, HRB 105018
+Geschäftsführer: Detlef Schneider, Rüdiger Stahl, Stefan Schneider
+https://www.tq-group.com/
 
-
---YyIUF92PqcFjvfUx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWw6zwACgkQFA3kzBSg
-KbY7Pg//QUUHmqAvTAwdvlhaZ2np5owE54m8mOW7cxhw5OK0FuNn2ftX2yqRNish
-DCraYCsP5nxnBw+XhTjZZJxQpr6yppPGwe1mK2V0Zl+f3k/SQshnQ6gGoCB+jaXN
-hkY7QZy2p5hvFjwHA0LlmiHu04+cQo2CREl47hZWkCl4WiuT1pmuWDvm91UEKiaG
-LreiSwDamWFuW+Akio8a8JFH9vstxTJnAV+lbLXBHyBAZECFMUdiiySDgR/6nYf7
-jY3Df9OX2Jee0AyceLtTcx31c1ja/g4fWLaCcnXc95Cf88PZP498/HBT2B4UYPFL
-GayU4A+VCGPvoKhThCDEM5FwSWayGLtECZdH21nM1PA+Uj8mNksKk7jIbli5FcX9
-5RbKNZUYUdZEZZm6KpAljPL0NeycNl0VUFYvIWr1Rh39B2Vru5P0Gm4gJA0rmRTK
-HaR9hIIUPTOWEMjcU1HznUIk/GazMPUOJ8/zRYkfNoFmE+Pt7yg3quIjyMVeNzTF
-oBZEvQISMsJN9wrqNJ8LbkG6PVkWmVtFRiu1/5hSoIG7holYFvW8hvRbvzzLudSr
-16U+HUfYxqBl3Egh1ZSiKf58VBRmL8bfhuWePvG4pK7MagSBYXZfROFjlViEYXKU
-79aZRQct/Ypvi6AeZKQ3gGi2GFMVgXnu7lyrrCCs4xRpv6ygF00=
-=fgV2
------END PGP SIGNATURE-----
-
---YyIUF92PqcFjvfUx--
 
