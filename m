@@ -1,73 +1,73 @@
-Return-Path: <linux-pm+bounces-2644-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2645-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CE4883A20B
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 07:31:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC61F83A2D9
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 08:25:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 094451F2621D
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 06:31:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 354811F21F2D
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 07:25:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59E8FBE5C;
-	Wed, 24 Jan 2024 06:31:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DD7816429;
+	Wed, 24 Jan 2024 07:25:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZSyyBlZG"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="e2IRNoet"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A15F72F2C
-	for <linux-pm@vger.kernel.org>; Wed, 24 Jan 2024 06:31:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAE091642B
+	for <linux-pm@vger.kernel.org>; Wed, 24 Jan 2024 07:25:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706077900; cv=none; b=sgrlw0zKoyUKpZbXEKrv0zW0SnOeKgkr/H6b7R1SopncW9cb32Ym3zxGCzgPiPsJMe9MUW+NbqIWWLeFH+bqr/0cX0XzGDewapP/jpEHxm3frz6fb98Lsn95LGC8a1FOYWTQMAW90IbmbpKvnwOeCTnQX3eN6tELGeIk+Yge9qg=
+	t=1706081123; cv=none; b=oDSJqSjLktsrp0699OxY56lD2KrdBSVfygtKNH+StKwowO+56x5d5fpu+IX3j4JEDsyrNO8D9DNi42IKrJC25zrPGajuhoQUKmlCmbpIRAsdXmecQCc9iTSU7LT0UUjGHfznPHx5Ce7M3mHB2xLVIvyeonqNgyY+jFlsdaU+tgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706077900; c=relaxed/simple;
-	bh=n0VZEZqh+QAXQRuSThEUXWhSnB7DTGe7KU0DGk9sJ+E=;
+	s=arc-20240116; t=1706081123; c=relaxed/simple;
+	bh=AIukQQBJ/4XCF8WoHZk5ydLR6nAbk7M0ObWxjTdjOes=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pYMf+zhHqmdmxttPvp9jr697WCF3jQ4JIlA/1XR5ojud5awiJJgAfFiRSj1nfr17PTa7GZWcsYEiewFF36v30TtEfTKtuEuPOWkoxvN/KAawmgX+P0S5DdZx+XLPA7fvXKoAOuACDtqw+edmyh85lhayeNn+JLh++XrYx/nBz3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZSyyBlZG; arc=none smtp.client-ip=209.85.218.45
+	 In-Reply-To:Content-Type; b=MoxwM+cwiR0f7cppy8PbdY6EOFVGAwklF7ROJk2Jcd73oOx07/SsBJ3e+M5XGfxJ42EJlBGP9mAPT56JMPr6aOxl7p4gUk/LBcTP40cc56+SlvhBb1e4lujRU52/u/JRG+xWQf8aNsVdLDS+R3SPmMO3MRmAQa/EPhstgHxW4QA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=e2IRNoet; arc=none smtp.client-ip=209.85.218.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a2c179aa5c4so541357966b.0
-        for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 22:31:38 -0800 (PST)
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a2d7e2e7fe0so866268966b.1
+        for <linux-pm@vger.kernel.org>; Tue, 23 Jan 2024 23:25:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706077897; x=1706682697; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1706081120; x=1706685920; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=igkNnJ/apiECVX+hpFRvJ4DCeI4oJB4olHeNgNu9noA=;
-        b=ZSyyBlZGJYVGMcKHb7t1bzmzJEiHgwDash9cy+exzIGucTyced0vy+9Ku0FWW41/5Z
-         WiTTCNhU4rQHPQS58qgTEsfMq1XLxdRWWp0Gdw4Ujm/8QjEpwQsWpO/bNi4KRvwidUr9
-         k1lxh7dUPLC3CbTCgzrEsU8UWLyOTkhG3dBJ00o0CUxjVq8XT678wihbgajPjiJQNveo
-         XiRzFVCwxffZUkieaZtMVznm6SiGSeJX4NFPZDzPCGJIAteIh8HvR8hdJY0KKsuU0t4f
-         +SL3YMF4ypVDAuUGVb/FAFOX36ZinCnAoJ76SpK6lsB6URLKxsrgw/tw1VepTMI1k4RQ
-         NmYg==
+        bh=a8jrcqPgI/3vhSKgHemTJgRZzsqVydzJRui6v8D9poY=;
+        b=e2IRNoetKtfZztuGrvgjwYXPvlQLeLsjSENFgIs1ffUOKEPmwVzox4Z5pqYRNAoAbu
+         UC3FI9WLt/YbGyyS4wYx71KGJKFkgj8WX+m8eMpvt0P3lsAq2CT+JN/Ey+iZe/6Xi+pM
+         bDWSyT2QBRYTm3WVAitx1Ys0OsSDKVUJ+yc8YKFGkQ3DYTdLMjdQZRuULdI/jGaLEtCq
+         109/amc0Y01SJ1YS2jJKiPKiyxWFabPn325WDVBr83NBL2k+BcCExv/F7WO0HRtIeiRl
+         M94h+HN3gEa7AHTgHrRo5ewLZ3hG0O+nJIcdmDgzB7khlySMyjQws3qnnIW+T/9Sj39N
+         b5lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706077897; x=1706682697;
+        d=1e100.net; s=20230601; t=1706081120; x=1706685920;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=igkNnJ/apiECVX+hpFRvJ4DCeI4oJB4olHeNgNu9noA=;
-        b=J013ReG8KhgjRAs+Z3aLGDX216LYI5SZQa6A1moIyHTan3TJywF8rQH9f8yZzJkhtH
-         vBJVBdrQTkH7eBw8e0GyPknEsWUv/JQD4z8RBotf4CNbFto6zZiFzd7MiBUvDW4uEY92
-         /6+LedWXvQDdrd9Id4rxqZ4gF17o2+s4jh7F0UUwlaJUts1zRLDXbKyRMJ6BtZanNlmi
-         w1U4c0ZcSDeUr94QLvcIG7cDp44NBkQDJJeqXgArCjwCGO7VuuI4ir478vL3ObNf3fTC
-         czYEytAnCLtOMDbab6XEWYkeXbZcbi1xjdTayA9s8kDYvazEtBs2LrT+8SFw3wlGwIRf
-         NugA==
-X-Gm-Message-State: AOJu0YwleuLrw/t0e8hjKi81rC/QezI2tvCHLNnby6jgOQ4YZ24OneXz
-	pThH39wnvBx+KqFlsjp7rDpOMDSjhOZ/OWWO0gWlGPa2iuJQBXpcb5R5YC4+QuQ=
-X-Google-Smtp-Source: AGHT+IHMRJdqR+XiiodihlJSSEBex64dzxxRpLmX7jtQO/zEgBtnG8jqPE7hpSlQKohhPfGCy0efXg==
-X-Received: by 2002:a17:907:d388:b0:a30:a7cd:68a5 with SMTP id vh8-20020a170907d38800b00a30a7cd68a5mr677827ejc.87.1706077896793;
-        Tue, 23 Jan 2024 22:31:36 -0800 (PST)
+        bh=a8jrcqPgI/3vhSKgHemTJgRZzsqVydzJRui6v8D9poY=;
+        b=uOw+635Mis7ooCnQecqiOtdOYXGq/da1wfDhNf2FT48uBL1zwtMZc7R/TDMo7zrsKn
+         y336Xpy78BteE5aXIU8DPc5duZCaNLcLOckALa3QYgw7XDztDPrWCW+osCyRvYjxOV3d
+         xwi5ObrjoxhimVLXGtGHYFdvlrK868QOCZCzb8YPCQhApJfcZ/vEcxcr3+LZV2OopURs
+         qRxt67AKdih+ifrBeci6QfAd9nopwKkG1wzOv29WdPUMu/xb6EjtE289SCWuaKcSwREX
+         0Z6pJ3h9tGNtcARlnqGqAz4BWVJBneeU1PPp363INufAMZch7UGPe01dhciHI3xrIQGs
+         werw==
+X-Gm-Message-State: AOJu0YxFxRh9fMksXX/qKN2pSmsAJPWCW8QEltO1jFZ+xk1eBoGq3O1M
+	K68iCoyoB5wSwJu1qnzkK5FD91/HHgw3LUn9TLowsO81cw0pmICdgJ89t8B+pZc=
+X-Google-Smtp-Source: AGHT+IF2w0IOR+JXC8jt+izTDTWD09ku7STu4bgoty/Dh+g0U34bBf+smbNWdjyx6BtSeavBr7MNzw==
+X-Received: by 2002:a17:906:251b:b0:a30:dd59:858e with SMTP id i27-20020a170906251b00b00a30dd59858emr680795ejb.60.1706081119968;
+        Tue, 23 Jan 2024 23:25:19 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.215.66])
-        by smtp.gmail.com with ESMTPSA id k6-20020a170906128600b00a2b0b0fc80esm15004571ejb.193.2024.01.23.22.31.35
+        by smtp.gmail.com with ESMTPSA id e4-20020a170906c00400b00a298adde5a1sm15092803ejz.189.2024.01.23.23.25.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 23 Jan 2024 22:31:36 -0800 (PST)
-Message-ID: <f6844d28-c7c2-4afa-8520-2e62c608930d@linaro.org>
-Date: Wed, 24 Jan 2024 07:31:34 +0100
+        Tue, 23 Jan 2024 23:25:18 -0800 (PST)
+Message-ID: <71290f34-f3e6-4190-af8a-5fea61faedda@linaro.org>
+Date: Wed, 24 Jan 2024 08:25:16 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -75,22 +75,30 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/8] dt-bindings: clock: qcom: Allow VDD_GFX supply to
- GX
+Subject: Re: [PATCH v4 0/6] reset: gpio: ASoC: shared GPIO resets
 Content-Language: en-US
-To: Bjorn Andersson <quic_bjorande@quicinc.com>,
+To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
  Bjorn Andersson <andersson@kernel.org>,
  Konrad Dybcio <konrad.dybcio@linaro.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+ Banajit Goswami <bgoswami@quicinc.com>, Liam Girdwood <lgirdwood@gmail.com>,
+ Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
  Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
- Johan Hovold <johan+linaro@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20240123-sa8295p-gpu-v3-0-d5b4474c8f33@quicinc.com>
- <20240123-sa8295p-gpu-v3-1-d5b4474c8f33@quicinc.com>
+ Conor Dooley <conor+dt@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, Frank Rowand
+ <frowand.list@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
+ Takashi Iwai <tiwai@suse.com>,
+ "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+ "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+ "linux-sound@vger.kernel.org" <linux-sound@vger.kernel.org>,
+ "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>,
+ Sean Anderson <sean.anderson@seco.com>
+References: <20240123141311.220505-1-krzysztof.kozlowski@linaro.org>
+ <6c3e4b71-c92f-4f1e-8435-b5cfb7f47117@alliedtelesis.co.nz>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -136,29 +144,53 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240123-sa8295p-gpu-v3-1-d5b4474c8f33@quicinc.com>
+In-Reply-To: <6c3e4b71-c92f-4f1e-8435-b5cfb7f47117@alliedtelesis.co.nz>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 24/01/2024 05:25, Bjorn Andersson wrote:
-> +# Allow either power-domains or vdd-gfx-supply, not both
-> +oneOf:
-> +  - required:
-> +      - power-domains
-> +  - required:
-> +      - vdd-gfx-supply
-> +  - not:
-> +      anyOf:
-> +        - required:
-> +            - power-domains
-> +        - required:
-> +            - vdd-gfx-supply
+On 23/01/2024 20:28, Chris Packham wrote:
+> 
+> On 24/01/24 03:13, Krzysztof Kozlowski wrote:
+>> Hi,
+>>
+>> Patch #2 (cpufreq: do not open-code of_phandle_args_equal()) and patch #4
+>> (reset: Instantiate reset GPIO controller for shared reset-gpios) depend on OF
+>> change (patch #1).
+>>
+>> Changes in v4
+>> =============
+>> 1. New patches:
+>>     of: add of_phandle_args_equal() helper
+>>     cpufreq: do not open-code of_phandle_args_equal()
+>>
+>> 2. reset-gpio.c:
+>>     - Drop unneeded comment (Bartosz), add Rb tag.
+>>     - Do not assign of_node.
+>>
+>> 3. reset/core.c:
+>>     - Implement most of Bartosz feedback (I responded to one which I did not
+>>       implement) and comments from Philipp.
+>>     - Expect either rcdev->of_args or rcdev->of_node.
+>>     - Drop __reset_gpios_args_match() and use common helper (Philipp).
+>>     - Move declarations of automatic-cleanup variables in
+>>       __reset_add_reset_gpio_lookup() to place of use (Bartosz).
+>>     - Separate gpio_device_get_label() and kstrdup() (Philipp).
+>>     - Correct doc for __reset_add_reset_gpio_device(), rewrite few comments.
+>>     - Drop unneeded "r" variable in __reset_find_rcdev() (Philipp).
+>>     - Drop of_phandle_args initialization in __of_reset_control_get (Philipp).
+>>     - Check if CONFIG_RESET_GPIO is enabled before trying to look up reset-gpios.
+>>
+>> 4. Drop Chris' patch: "i2c: muxes: pca954x: Allow sharing reset GPIO", because
+>>     discussion is on going.
+> 
+> I actually think it would have been OK as-is with your latest change to 
+> return NULL when CONFIG_RESET_GPIO is not enabled. But I'm happy to 
+> submit it independently after this series lands. It'll give me a chance 
+> to do a bit more testing.
 
-I don't fully understand what you want to achieve here. If only "allow
-either", so not a "require either", then simpler:
-
-https://lore.kernel.org/all/20230118163208.GA117919-robh@kernel.org/
-
+Yeah, I wasn't sure if the concerns are really resolved. I think you can
+send your patch separately because there is no clear dependency, so also
+no clear benefits of me taking your patch into this patchset.
 
 Best regards,
 Krzysztof
