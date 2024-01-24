@@ -1,134 +1,171 @@
-Return-Path: <linux-pm+bounces-2670-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2671-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E31C683A70A
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 11:42:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 197E883A711
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 11:43:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4FA1FB2921C
-	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 10:41:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F8141C21ECD
+	for <lists+linux-pm@lfdr.de>; Wed, 24 Jan 2024 10:43:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81CE817741;
-	Wed, 24 Jan 2024 10:41:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 921B417C65;
+	Wed, 24 Jan 2024 10:43:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K1GgWZHo"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ZdJu8i9z"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5341E156E4;
-	Wed, 24 Jan 2024 10:41:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0AA6199B8;
+	Wed, 24 Jan 2024 10:43:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706092910; cv=none; b=opIDwRtGKnpyz9JV2Lc9K4vPJ3R+pS0hboc0HpjsqctXYOfhL7a6NRPEEBn43wZvMxZ1DJrUIkuwOLaKd/VO/nEpzkMC44WgDNovS0d+LQLxk5E0uxeVKLgY/ytUa8iVDv4aqS05oXxPtl/+cgKEGza8u/XycjGfSXcvO1GhERI=
+	t=1706092984; cv=none; b=BNoiWS8hvTHLzdYAKBdFNRgXfH6jlM21vWmWQDNOahLPH0SsIpc9SXlWYt94K9IYAt6W0PcBd99opFzhj2U92ui5NISI4cnaLI+fg/9YEgQV9xddVGt8whFhb1N7+QeMHggLnVYYASDhTDGyFtbnW0ELLt3rKTpeIDqjyFB99Y8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706092910; c=relaxed/simple;
-	bh=VOpDAR9/icTczlTjQajuoNH5r9cQnm2A3HLZ4/ljiH0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vf9XGTfh979+o9LreXI27pB5dnAWEjv2aeDg/Ji07mI06IdUxeLauztye0OWpzJlKj8v9t5vyKdm44XScCV4lxk+sfk04mX/OvoedGlLxHUu3Oiq5COIpNq42hTcLSmxX5XqIsVrk1Mib/+crcyUDVBakQ9udZn23QnXnGzl8C8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K1GgWZHo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C60FC433F1;
-	Wed, 24 Jan 2024 10:41:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706092909;
-	bh=VOpDAR9/icTczlTjQajuoNH5r9cQnm2A3HLZ4/ljiH0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=K1GgWZHoF5aagXH8LM3/qmVZcLHTpf3nuAcKhCO2CJ5XS9CtMmON+YJJ981hOWzPP
-	 ynWgxAeFw/t+RdPAfqdFGUZeioKgrqT4u5a0hohn1m240nsK9txmPiD0vM+P9vfmdK
-	 3K0j+HccPkkm28VLqFkm1APJP59Pq/ZDH8Lgmm+0+QihEx4ACWrQZq8rTzE8Q2FwS2
-	 7AEJy6N4E5L3GeCs3Fitn7TUjtg59KQtaKMcXldSyetWEVmN2nqaOqbk93J7og14Vu
-	 cvwQ5gRaDGzV0xQqfS1RN0UvhL/S9q1xmKi4agMmZaAvSpTqFDuAEjKEHCiCXMFtrz
-	 mgwTz4qA+BRqg==
-Date: Wed, 24 Jan 2024 11:41:46 +0100
-From: Wolfram Sang <wsa@kernel.org>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
-	Cong Dang <cong.dang.xn@renesas.com>,
-	Duy Nguyen <duy.nguyen.rh@renesas.com>,
-	Hai Pham <hai.pham.ud@renesas.com>,
-	Linh Phung <linh.phung.jy@renesas.com>,
-	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH 07/15] clk: renesas: rcar-gen4: Add support for FRQCRC1
-Message-ID: <ZbDpaijWZ-yVWMz1@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
-	Cong Dang <cong.dang.xn@renesas.com>,
-	Duy Nguyen <duy.nguyen.rh@renesas.com>,
-	Hai Pham <hai.pham.ud@renesas.com>,
-	Linh Phung <linh.phung.jy@renesas.com>,
-	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org
-References: <cover.1704726960.git.geert+renesas@glider.be>
- <b7ec45c86c2bd17cf3b3de43194c4821b606e483.1704726960.git.geert+renesas@glider.be>
+	s=arc-20240116; t=1706092984; c=relaxed/simple;
+	bh=7kSJ0U2bWClpV/n7S8II5vylc0cHz5m7aSl9hci5/7s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=jRnEbEgknW+szSA8NgJmT2SvqsNHKjdV0nZh/GtGhGM1rbcPlowSTjKOhVVxBQCArzeXuEeeWyd9tHMos/qTU1zzFcTdxW5d81Ml8OhH3DBoLYCXpKbQMMIMEgFBhyLTZBUXGLJYvQjG1/2IiclFpDUpv0FvYJFzZdavtrzCbds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ZdJu8i9z; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40OALwj5015624;
+	Wed, 24 Jan 2024 10:42:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=wEiM2j5nCvmikp4uX0I3tdM3maEln6y3gtRZhMBw3q8=; b=Zd
+	Ju8i9zof3t04VpyXzL/YxFMHqj/OY0HLAlGLLJxgYZZOGUAe3gIUA+GVEw9aqIKC
+	LQ9g+oCTA8XGEM02bca0bQxedRLJkXHqBM34viSTdc0DPwDYDIQE+1UB9jnoJ9sZ
+	+G3UfaxxSa9ezr5A1g5VkdYfXJ1BHFiMaaD2BzFUX857CbV6zhnCSMUMjQ1M7i9B
+	O2pi3xZuoGJvXYsh0KaRBNODov9XpyDD94GSDPcev3fXijTcG15+xeKBIJLaneRg
+	82YmVjcdHEMKhSFJH0v1d24kgDhoe2OEgNbsur6lU6EJqXnsc5ZeI4QTv/F77w16
+	lMuWEUqxvVMSi3+ElVbA==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vtmhdsh9s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 24 Jan 2024 10:42:54 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40OAgrQg022999
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 24 Jan 2024 10:42:53 GMT
+Received: from [10.218.47.125] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 24 Jan
+ 2024 02:42:49 -0800
+Message-ID: <f415a8cd-4cae-d7c3-60fc-674b3e660f6b@quicinc.com>
+Date: Wed, 24 Jan 2024 16:12:46 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ZLw8yXuJlwt3Ol4k"
-Content-Disposition: inline
-In-Reply-To: <b7ec45c86c2bd17cf3b3de43194c4821b606e483.1704726960.git.geert+renesas@glider.be>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] thermal/drivers/tsens: Add suspend to RAM support for
+ tsens
+Content-Language: en-US
+To: Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Amit Kucheria
+	<amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Bjorn
+ Andersson" <andersson@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC: <quic_manafm@quicinc.com>
+References: <20240122100726.16993-1-quic_priyjain@quicinc.com>
+ <548e2f24-a51e-4593-9463-09506488c70e@linaro.org>
+From: Priyansh Jain <quic_priyjain@quicinc.com>
+In-Reply-To: <548e2f24-a51e-4593-9463-09506488c70e@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: YWI7aNZZ2KpX4qIUkiJRaoycbkyH2U8b
+X-Proofpoint-ORIG-GUID: YWI7aNZZ2KpX4qIUkiJRaoycbkyH2U8b
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-24_04,2024-01-24_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
+ impostorscore=0 mlxscore=0 phishscore=0 suspectscore=0 mlxlogscore=680
+ lowpriorityscore=0 clxscore=1015 priorityscore=1501 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401190000 definitions=main-2401240076
 
 
---ZLw8yXuJlwt3Ol4k
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 08, 2024 at 04:33:46PM +0100, Geert Uytterhoeven wrote:
-> R-Car V4H and V4M have a second Frequency Control Register C.
-> Add support for this by treating bit field offsets beyond 31 as
-> referring to the second register.
->=20
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> ---
-> Tested by enabling CLOCK_ALLOW_WRITE_DEBUGFS and checking the impact of
-> CPU core clk rate on CPU core speed on R-Car V4M.
-
-Reviewed-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+On 1/22/2024 8:02 PM, Konrad Dybcio wrote:
+> On 22.01.2024 11:07, Priyansh Jain wrote:
+>> Add suspend callback support for tsens which disables tsens interrupts
+>> in suspend to RAM callback.
+> 
+> Would it not be preferrable to have the "critical overheat", wakeup-
+> capable interrupts be enabled, even if the system is suspended?
+> 
 
 
---ZLw8yXuJlwt3Ol4k
-Content-Type: application/pgp-signature; name="signature.asc"
+As part of suspend to RAM, tsens hardware will be turned off and it 
+cannot generate any interrupt.Also system doesn't want to abort suspend 
+to RAM due to tsens interrupts since system is already going into lowest
+power state. Hence disabling tsens interrupt during suspend to RAM callback.
 
------BEGIN PGP SIGNATURE-----
+Regards,
+Priyansh
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmWw6WoACgkQFA3kzBSg
-KbYebhAAoNEvcdLcz/baTtGkYrjktAOc54NysQPel8cyihNfSbvLgNXFwa//gR/G
-rlYBhpRRt2AoU+l6UqE13XfRAp2bupQ9lyoR5gcK5C1RbKE7BljT4pATJDTM5rD4
-1iFXFgtufkDF9i8TASIctVot9cCTEnhiCJNOT/Z9tAj2z8RDUVbmzpSLrAX3azLD
-MjAxn+LpjB5hAn2ZvdtG/FiFnm1UlJ4DZT7fuZ2UjRLLHNIw7ZTAi30tAjSWcupp
-zfJ7F4nDr4O/k+aX5GrNfCWAoVeNEHg2V3RcHJp3IYp201LDadmwPRMU3804muHU
-8Ua7VP1hrGdirjRV5G7mI0t6hO7H1tOV1hRvPCQ4EdrNX9BqstqHlOl54BzldzxL
-uVzNk5nZu0QXPbo+yVFXzInyIZURqXRJeLfpFvOsW4DpcvKNbJuDwN++O2jL9kkp
-1OmlVDCGDLB77Q1tLr6Po43ATOSkoCGaPVzSrfNM9n+hk8y5rPqYOcQKe+WzR5bp
-9K7duierjlqmAHCC4gkLtCkky63R8Z8OILkoGCZKX+pXoebPby/KWT6emV+7uG4i
-1IOXXnkDbhuR0OWtqSXZOITpq0hSTgw6Ud/P6dtpZ+P0kypjd7Cmim/XjIt3CQrX
-+cLcCyKTI3D4nQxMDxCM1qkgINRtVHlkEt4Wg3On58xFuaCZ45I=
-=QjEk
------END PGP SIGNATURE-----
-
---ZLw8yXuJlwt3Ol4k--
+>> Add resume callback support for tsens which reinitializes tsens hardware
+>> and enables back tsens interrupts in resume callback.
+>>
+>> Signed-off-by: Priyansh Jain <quic_priyjain@quicinc.com>
+>> ---
+> 
+> [...]
+> 
+> 
+>> +
+>> +int tsens_suspend_common(struct tsens_priv *priv)
+>> +{
+>> +	switch (pm_suspend_target_state) {
+>> +	case PM_SUSPEND_MEM:
+>> +		if (priv->combo_irq > 0) {
+>> +			disable_irq_nosync(priv->combo_irq);
+>> +			disable_irq_wake(priv->combo_irq);
+>> +		}
+>> +
+>> +		if (priv->uplow_irq > 0) {
+>> +			disable_irq_nosync(priv->uplow_irq);
+>> +			disable_irq_wake(priv->uplow_irq);
+>> +		}
+>> +
+>> +		if (priv->crit_irq > 0) {
+>> +			disable_irq_nosync(priv->crit_irq);
+>> +			disable_irq_wake(priv->crit_irq);
+>> +		}
+>> +		break;
+>> +	default:
+>> +		break;
+>> +	}
+> 
+> if (pm_suspend_target_state != PM_SUSPEND_MEM)
+> 	return 0;
+> 
+> <rest of the code>
+> 
+> [...]
+> 
+>>   
+>> +	/* For saving irq number to re-use later */
+> 
+> This is rather self-explanatory
+> 
+> Konrad
 
