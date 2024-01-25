@@ -1,94 +1,176 @@
-Return-Path: <linux-pm+bounces-2739-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2749-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F76D83C646
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 16:17:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0AB883C6EB
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 16:35:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1C991F24277
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 15:17:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 68D3329561B
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 15:35:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3E6A73188;
-	Thu, 25 Jan 2024 15:16:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 745F674E29;
+	Thu, 25 Jan 2024 15:35:04 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [195.130.132.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3366A6EB76;
-	Thu, 25 Jan 2024 15:16:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 893597316C
+	for <linux-pm@vger.kernel.org>; Thu, 25 Jan 2024 15:34:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706195805; cv=none; b=enX7TxHHWpH/r7bVhWyW8eDKJc//J2Nit2x0XTpYxH2GjHyfiSPhuBFwWyA4SnGb8uPFsQHuZNsoi4bIZ1fOIodRsR+HtPjX5juXff5r/Rpz1E36mfIn5pX6VoLk24hiHxAG9cMK6gaDCo1jV+aT2KGc7sWlHzfvhZzRtm/v4xM=
+	t=1706196904; cv=none; b=ua0R7mYsZDFWqQ+yJiswAUPF4o8FE07fmR/3OSH/uIex5iptSn4eOFR7JpvRKUPLlB9iWndVSTI/Tde2J3jywfUqJs31HpcNKf5+JV9DXy/BRujMTOge6mr/Qs5Yz1eV5XczCwMuwajnjZUNNRAXy8lPv3FPPQoAk4G1Cu8qZyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706195805; c=relaxed/simple;
-	bh=ppQpkqkS5Pk9g2RveAtMZHsPA5svTY4M06OVIx8lVU4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DpmuEZ8hRB1DU/i0Iw+wzROOuGgWhPGGVMJPZLiXm+lIT5Rj4NfRoSwI7A7Op9Xu2XCX4u2oVkDM7ucH07mW6QxUrN6P1Y5qCgHvGUDSWnnZEaiHVyWmwoBD2jQwJFZTpwms7u4Vypy82lFp522S3NoDbmcay2t9Zw3JG++pNIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-59584f41f1eso896319eaf.1;
-        Thu, 25 Jan 2024 07:16:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706195803; x=1706800603;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ppQpkqkS5Pk9g2RveAtMZHsPA5svTY4M06OVIx8lVU4=;
-        b=XhclgRZeKJazbGk03RK1S+sOuxqRaIxNPpm/pfAUB2hm0KIxhRY5aMUceL+E7aeQwI
-         wyJ2pTNfjtafBeRC92YQEb3t1UwT5mGAohiEpvadg5kRldU5oNxCm6zVG+MP/gj1wnR6
-         VZi39SuJ/K9c3uyPHzba9VhkGUIzkWYPHN1bYd075r+KQaQszsOVqK1mvtr2pZg9mCv1
-         00UV0JovdyvvBoYUaeLyrtkJF12Q6OD+ulyK6zQBq7eDE5RBqZWHXGdCXCi6YCpLyXVP
-         Ezeqf4XC50swe6cRhrmJvsFMMbrZJEasXHpV8aau5OfJ7Z2bXWd2oEYI7MH8bEtuVxPT
-         Al0A==
-X-Gm-Message-State: AOJu0YwZjv6kc7C018jucQqJgQsxho0CIg9XO02gw+m+TjQcstBpl7+F
-	vYZ4CILeQoQE2u+7AwAkGVHCv9+LJOgSBAbbbybh0wzr9dFgvYseU9jFxv9eKqNXjLsJyw+MowU
-	e3E3mLqRjCCRhQY9kGxXO2YPwfa8=
-X-Google-Smtp-Source: AGHT+IH8IUNVDZ3DGx4u1lJeFJmLJJs3jg2F+GuFGgcnqs9XT6iZ5JelvP0oePboWk5xd2R2jLiJYd7422hsG62DvZM=
-X-Received: by 2002:a05:6820:26c9:b0:599:2b86:993 with SMTP id
- da9-20020a05682026c900b005992b860993mr1911512oob.0.1706195803136; Thu, 25 Jan
- 2024 07:16:43 -0800 (PST)
+	s=arc-20240116; t=1706196904; c=relaxed/simple;
+	bh=v15vasOy5jTU6RKaAc6l/DxvJnBWxYnDy11GfBA+2Fc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=H7rhXAZ9BHTl/Zn6CUkkh7VM3Gk3Da3ziMR4Ozs/7TVj+Bfokjg8fcqSQ5iwptURNW31LZs6QKp6eQcTH5Xbtb6ysK7H3PjA4RwebIfLxxpw2KRXtWxi5DIriGKEP8uSrXLkb67BXK/zSargUksxHXEFMr27SN4XVYXIXDSoAho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:bc9e:fcb8:8aa3:5dc0])
+	by andre.telenet-ops.be with bizsmtp
+	id f3am2B00558agq2013amKN; Thu, 25 Jan 2024 16:34:56 +0100
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1rT1jn-00GUvT-Tx;
+	Thu, 25 Jan 2024 16:34:45 +0100
+Received: from geert by rox.of.borg with local (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1rT1kb-00Fs2H-Qu;
+	Thu, 25 Jan 2024 16:34:45 +0100
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Cong Dang <cong.dang.xn@renesas.com>,
+	Duy Nguyen <duy.nguyen.rh@renesas.com>,
+	Hai Pham <hai.pham.ud@renesas.com>,
+	Linh Phung <linh.phung.jy@renesas.com>,
+	linux-renesas-soc@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH v2 00/15] arm64: renesas: Add R-Car V4M and Gray Hawk Single support
+Date: Thu, 25 Jan 2024 16:34:28 +0100
+Message-Id: <cover.1706194617.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1700488898-12431-1-git-send-email-mihai.carabas@oracle.com> <88356fdc-91f4-4f43-97a5-3da0ce455515@oracle.com>
-In-Reply-To: <88356fdc-91f4-4f43-97a5-3da0ce455515@oracle.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 25 Jan 2024 16:16:31 +0100
-Message-ID: <CAJZ5v0iPEuzwcko2gr+uprKvuGe48GgavB2Q2w3ZQ6E=Lg_g5A@mail.gmail.com>
-Subject: Re: [PATCH v2] Enable haltpoll for arm64
-To: Mihai Carabas <mihai.carabas@oracle.com>
-Cc: linux-arm-kernel@lists.infradead.org, 
-	Peter Zijlstra <peterz@infradead.org>, kvm@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, catalin.marinas@arm.com, will@kernel.org, 
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org, 
-	hpa@zytor.com, pbonzini@redhat.com, wanpengli@tencent.com, 
-	vkuznets@redhat.com, rafael@kernel.org, daniel.lezcano@linaro.org, 
-	akpm@linux-foundation.org, pmladek@suse.com, dianders@chromium.org, 
-	npiggin@gmail.com, rick.p.edgecombe@intel.com, joao.m.martins@oracle.com, 
-	juerg.haefliger@canonical.com, mic@digikod.net, arnd@arndb.de, 
-	ankur.a.arora@oracle.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi,
+	Hi all,
 
-On Thu, Jan 25, 2024 at 3:40=E2=80=AFPM Mihai Carabas <mihai.carabas@oracle=
-.com> wrote:
->
-> Hello,
->
-> How can we move this patchset forward?
+This patch series adds initial support for the Renesas R-Car V4M
+(R8A779G0) SoC and the Renesas Gray Hawk Single development board.
 
-There have been some comments and a tag has been given.
+As both driver code and DTS have hard dependencies on DT binding
+definitions, most patches in this series are supposed to go in through
+the renesas-devel and/or renesas-clk trees, using a shared branch for DT
+binding definitions, as usual.  For the PM domain patches (03, 04, 09),
+Ulf already offered to apply these to his pmdomain tree, and provide an
+immutable "dt" branch, to be pulled in my renesas-devel tree.
 
-Update the series (to address the comments and add the tag where
-applicable) and resend.
+Changes compared to v1[1]:
+  - Add Acked-by, Reviewed-by,
+  - Add vendor-prefix to DT binding definition header file names and
+    update include guards,
+  - Add "board" to compatible comment,
+  - Add missing CP core clock,
+  - Add SoC name to top-level comment.
 
-Thanks!
+For testing, this series can be found at
+https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/log/?h=topic/v4m-gray-hawk-single-v2
+
+Thanks for your comments!
+
+[1] "[PATCH 00/15] arm64: renesas: Add R-Car V4M and Gray Hawk Single
+    support"
+    https://lore.kernel.org/linux-renesas-soc/cover.1704726960.git.geert+renesas@glider.be
+
+Cong Dang (1):
+  clk: renesas: cpg-mssr: Add support for R-Car V4M
+
+Duy Nguyen (6):
+  dt-bindings: clock: Add R8A779H0 V4M CPG Core Clock Definitions
+  dt-bindings: power: renesas,rcar-sysc: Document R-Car V4M support
+  dt-bindings: power: Add r8a779h0 SYSC power domain definitions
+  pmdomain: renesas: r8a779h0-sysc: Add r8a779h0 support
+  soc: renesas: Identify R-Car V4M
+  soc: renesas: rcar-rst: Add support for R-Car V4M
+
+Geert Uytterhoeven (6):
+  dt-bindings: clock: renesas,cpg-mssr: Document R-Car V4M support
+  dt-bindings: reset: renesas,rst: Document R-Car V4M support
+  dt-bindings: soc: renesas: Document R-Car V4M Gray Hawk Single
+  clk: renesas: rcar-gen4: Add support for FRQCRC1
+  soc: renesas: Introduce ARCH_RCAR_GEN4
+  arm64: dts: renesas: Add Gray Hawk Single board support
+
+Hai Pham (1):
+  arm64: dts: renesas: Add Renesas R8A779H0 SoC support
+
+Linh Phung (1):
+  arm64: defconfig: Enable R8A779H0 SoC
+
+ .../bindings/clock/renesas,cpg-mssr.yaml      |   1 +
+ .../bindings/power/renesas,rcar-sysc.yaml     |   1 +
+ .../bindings/reset/renesas,rst.yaml           |   1 +
+ .../bindings/soc/renesas/renesas.yaml         |   6 +
+ arch/arm64/boot/dts/renesas/Makefile          |   2 +
+ .../dts/renesas/r8a779h0-gray-hawk-single.dts |  52 ++++
+ arch/arm64/boot/dts/renesas/r8a779h0.dtsi     | 121 +++++++++
+ arch/arm64/configs/defconfig                  |   1 +
+ drivers/clk/renesas/Kconfig                   |   5 +
+ drivers/clk/renesas/Makefile                  |   1 +
+ drivers/clk/renesas/r8a779h0-cpg-mssr.c       | 241 ++++++++++++++++++
+ drivers/clk/renesas/rcar-gen4-cpg.c           |  10 +-
+ drivers/clk/renesas/renesas-cpg-mssr.c        |   6 +
+ drivers/clk/renesas/renesas-cpg-mssr.h        |   1 +
+ drivers/pmdomain/renesas/Kconfig              |   4 +
+ drivers/pmdomain/renesas/Makefile             |   1 +
+ drivers/pmdomain/renesas/r8a779h0-sysc.c      |  55 ++++
+ drivers/pmdomain/renesas/rcar-gen4-sysc.c     |   3 +
+ drivers/pmdomain/renesas/rcar-gen4-sysc.h     |   1 +
+ drivers/soc/renesas/Kconfig                   |  17 +-
+ drivers/soc/renesas/rcar-rst.c                |   1 +
+ drivers/soc/renesas/renesas-soc.c             |   8 +
+ .../clock/renesas,r8a779h0-cpg-mssr.h         |  96 +++++++
+ .../dt-bindings/power/renesas,r8a779h0-sysc.h |  49 ++++
+ 24 files changed, 679 insertions(+), 5 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/renesas/r8a779h0-gray-hawk-single.dts
+ create mode 100644 arch/arm64/boot/dts/renesas/r8a779h0.dtsi
+ create mode 100644 drivers/clk/renesas/r8a779h0-cpg-mssr.c
+ create mode 100644 drivers/pmdomain/renesas/r8a779h0-sysc.c
+ create mode 100644 include/dt-bindings/clock/renesas,r8a779h0-cpg-mssr.h
+ create mode 100644 include/dt-bindings/power/renesas,r8a779h0-sysc.h
+
+-- 
+2.34.1
+
+Gr{oetje,eeting}s,
+
+						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
 
