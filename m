@@ -1,142 +1,164 @@
-Return-Path: <linux-pm+bounces-2769-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2770-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F87283CC0A
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 20:18:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB8F583CD45
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 21:19:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E4D671F2796F
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 19:18:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CF892890DC
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 20:19:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BC4D13474F;
-	Thu, 25 Jan 2024 19:18:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7387813666B;
+	Thu, 25 Jan 2024 20:19:22 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC909111AA;
-	Thu, 25 Jan 2024 19:18:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6F5313664C;
+	Thu, 25 Jan 2024 20:19:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706210317; cv=none; b=uxqaYXNtSkNMlSYx7dVJjNpuguR8pB/02qUYeJkzlRA2TlVCEq8TRip94auiXD+RJb+ulsg1NvmVzO4hGPZ4PdCAFBJNtlOk7yV4DrjwAiUwZvUBxRrh9HMMubjXfqdGD2jNx8/DrLnfOd5X/B/G14AHeFGehOWqLjFIiICQrHE=
+	t=1706213962; cv=none; b=F+RbDwgmp1wOvf8sLGAu0ApsV44QF/n7PqR9kOoy15RqY/5ydyhlI1kEVmUy8dijIOLJEHDtvO+xcaueRMdg1eWP1UkgvtUA9oPa7vmPnEHF6Q8K+3NQVuAWkD2ClUTKss81D+YVhoaakZ4p4Wzk5PD4NXK2ak9/bU+6CTITkNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706210317; c=relaxed/simple;
-	bh=UraaLLeJ1ju3DnPi61+iDA0jaVSKMl2MoYlsOHXiN9c=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Zt/YS4QnZczIQUF4nAdjAR+HsMGzHQJpyTMHPZvAwRLsIDnQniXtfprHk708tcvX6YsRn9Z54fWJe3aplZZr3NnK4KQJccDRU5j9lvZnrQLaSRAOCHGucuxB3m2cFTRvW6e8G8AInGL0BirVVZ2ACNgplQR5OC9NdKQLbG+Myws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 816901FB;
-	Thu, 25 Jan 2024 11:19:18 -0800 (PST)
-Received: from pluto.. (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D6EAF3F73F;
-	Thu, 25 Jan 2024 11:18:32 -0800 (PST)
-From: Cristian Marussi <cristian.marussi@arm.com>
-To: linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Cristian Marussi <cristian.marussi@arm.com>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH] pmdomain: arm: Fix NULL dereference on scmi_perf_domain removal
-Date: Thu, 25 Jan 2024 19:17:56 +0000
-Message-ID: <20240125191756.868860-1-cristian.marussi@arm.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1706213962; c=relaxed/simple;
+	bh=ipLhhFgZ90F56vmCiTIpx4S2UFI4/MpHlqyOUteNJhE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lg6ZweFIwIiXg1whYwWkAD9lOx+uuAJ9h0YtvskZaZ4dJk8MIgQUbQzmgMN79YnMn4llzM/lhfbkkXEoROuvM6g0Dwo3+WcDfVyWkuYVx89JCNWBlggFZsxXFl+samFjyTtVzrpOBzlwA9IDndRdomUuHmnINHBBx6MwVhnjkGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-214df50177fso14513fac.1;
+        Thu, 25 Jan 2024 12:19:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706213960; x=1706818760;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dvJqcfERuxA2PaIU85t1WCbw/9zN6boVzq5sjthkjTM=;
+        b=gbA3pABPggjlWLNrWqeECoXGlI7BIDDiwaB8WGS8xv8XAVIWNk5zGKXl21cGVp9WK8
+         DxDvCqpT45YVK+t0DzU39i4eWUf1G8qvYv8AXlB1RArUxHvMSZO87UmuARg1tFZBMfrm
+         f1L5DL364J150VPwg7xDaUJZWnFHbD4H+3GUghjB86eQRVEP8ic4xoiE9y3Dxaaq/ueR
+         J2oOpLtkSq8ctl0zj5F3DJqVJHrviabNo0+1BOhzcjUwXiUBHFQuZ0YZOslDuouwwALx
+         rkoNoXNZmDgg7DR48OOmrgHNZDILW56pwOc8moxyqBdlQF6SIhbfBnB9/l8+vp/O3OOp
+         QbnA==
+X-Gm-Message-State: AOJu0Yy/JArVd1Gpurw8YMSUxxzMrHugKA1jh87lz8/Ct4LL2cX+lAhI
+	ORYlqXRzMw6HkNk31V7YEAd6KveO5aNRqXrpsYeYLnnY38Hr6QYQWfL1H1EsWWURBbpGo9QHA1R
+	LS4qH7/5VoXfSCe/ox8eXNoqxiv3NqPjf
+X-Google-Smtp-Source: AGHT+IGWGV0TETbCAHavAE2MNTfYdcxX+qzT+1/hAwhWt3HGJrZmfldHoA/xcoKuNVUB0bzSIGnvbfNpsk1hiVC4oA8=
+X-Received: by 2002:a05:6871:53ca:b0:214:b796:73c with SMTP id
+ hz10-20020a05687153ca00b00214b796073cmr447136oac.5.1706213959875; Thu, 25 Jan
+ 2024 12:19:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <170359668692.1864392.6909734045167510522.stgit@mhiramat.roam.corp.google.com>
+ <170359669607.1864392.5078004271237566637.stgit@mhiramat.roam.corp.google.com>
+ <20240117090706.3522d23763fab9dcea21aee1@kernel.org> <CAJZ5v0gqWRsSGQZp7tz-0Kw6od+fjd_iof4Rj7fkBy80ySkcEQ@mail.gmail.com>
+ <CA+ASDXOwfUrqRDVx_Fi62ERCLRPF+ixD014vE21Sm4mLF_j12A@mail.gmail.com> <20240125094320.13a0844614375deb8bb06db6@kernel.org>
+In-Reply-To: <20240125094320.13a0844614375deb8bb06db6@kernel.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 25 Jan 2024 21:19:07 +0100
+Message-ID: <CAJZ5v0jLLTETrMpXE3h=Q9GyhDEcZH5f7v+yvyxhzhW8yQKyTQ@mail.gmail.com>
+Subject: Re: [PATCH v7] PM: sleep: Expose last succeeded resumed timestamp in sysfs
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Brian Norris <briannorris@chromium.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, Randy Dunlap <rdunlap@infradead.org>, 
+	suleiman@google.com, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On unloading of the scmi_perf_domain module got the below splat, when in
-the DT provided to the system under test the '#power-domain-cells' property
-was missing.
-Indeed, this particular setup causes the probe to bail out early without
-giving any error, so that, then, the removal code is run on unload, but
-without all the expected initialized structures in place.
+On Thu, Jan 25, 2024 at 1:43=E2=80=AFAM Masami Hiramatsu <mhiramat@kernel.o=
+rg> wrote:
+>
+> On Mon, 22 Jan 2024 18:08:22 -0800
+> Brian Norris <briannorris@chromium.org> wrote:
+>
+> > On Fri, Jan 19, 2024 at 1:08=E2=80=AFPM Rafael J. Wysocki <rafael@kerne=
+l.org> wrote:
+> > > On Wed, Jan 17, 2024 at 1:07=E2=80=AFAM Masami Hiramatsu <mhiramat@ke=
+rnel.org> wrote:
+> > > >
+> > > > Gently ping,
+> > > >
+> > > > I would like to know this is enough or I should add more info/updat=
+e.
+> > >
+> > > I still am not sure what this is going to be useful for.
+> > >
+> > > Do you have a specific example?
+> >
+> > Since there seems to be some communication gap here, I'll give it a try=
+.
+> >
+> > First, I'll paste the key phrase of its use case from the cover letter:
+> >
+> >   "we would like to know how long the resume processes are taken in ker=
+nel
+> >   and in user-space"
+> >
+> > This is a "system measurement" question, for use in tests (e.g., in a
+> > test lab for CI or for pre-release testing, where we suspend
+> > Chromebooks, wake them back up, and measure how long the wakeup took)
+> > or for user-reported metrics (e.g., similar statistics from real
+> > users' systems, if they've agreed to automatically report usage
+> > statistics, back to Google). We'd like to know how long it takes for a
+> > system to wake up, so we can detect when there are problems that lead
+> > to a slow system-resume experience. The user experience includes both
+> > time spent in the kernel and time spent after user space has thawed
+> > (and is spending time in potentially complex power and display manager
+> > stacks) before a Chromebook's display lights back up.
+>
+> Thanks Brian for explaining, this is correctly explained how we are
+> using this for measuring resume process duration.
+>
+> > If I understand the whole of Masami's work correctly, I believe we're
+> > taking "timestamps parsed out of dmesg" (or potentially out of ftrace,
+> > trace events, etc.) to measure the kernel side, plus "timestamp
+> > provided here in CLOCK_MONOTONIC" and "timestamp determined in our
+> > power/display managers" to measure user space.
+>
+> Yes, I decided to decouple the kernel and user space because the clock
+> subsystem is adjusted when resuming. So for the kernel, we will use
+> local clock (which is not exposed to user space), and use CLOCK_MONOTONIC
+> for the user space.
 
-Add a check and bail out early on remove too.
+The problem with this split is that you cannot know how much time
+elapses between the "successful kernel resume time" and the time when
+user space gets to resume.
 
-Unable to handle kernel NULL pointer dereference at virtual address 0000000000000008
-Mem abort info:
-   ESR = 0x0000000096000004
-   EC = 0x25: DABT (current EL), IL = 32 bits
-   SET = 0, FnV = 0
-   EA = 0, S1PTW = 0
-   FSC = 0x04: level 0 translation fault
- Data abort info:
-   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
-   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
- user pgtable: 4k pages, 48-bit VAs, pgdp=00000001076e5000
- [0000000000000008] pgd=0000000000000000, p4d=0000000000000000
- Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
- Modules linked in: scmi_perf_domain(-) scmi_module scmi_core
- CPU: 0 PID: 231 Comm: rmmod Not tainted 6.7.0-00084-gb4b1f27d3b83-dirty #15
- Hardware name: linux,dummy-virt (DT)
- pstate: 61400005 (nZCv daif +PAN -UAO -TCO +DIT -SSBS BTYPE=--)
- pc : scmi_perf_domain_remove+0x28/0x70 [scmi_perf_domain]
- lr : scmi_perf_domain_remove+0x28/0x70 [scmi_perf_domain]
- sp : ffff80008393bc10
- x29: ffff80008393bc10 x28: ffff0000875a8000 x27: 0000000000000000
- x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
- x23: ffff00008030c090 x22: ffff00008032d490 x21: ffff80007b287050
- x20: 0000000000000000 x19: ffff00008032d410 x18: 0000000000000000
- x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
- x14: 8ba0696d05013a2f x13: 0000000000000000 x12: 0000000000000002
- x11: 0101010101010101 x10: ffff00008510cff8 x9 : ffff800080a6797c
- x8 : 0101010101010101 x7 : 7f7f7f7f7f7f7f7f x6 : fefefeff6364626d
- x5 : 8080808000000000 x4 : 0000000000000020 x3 : 00000000553a3dc1
- x2 : ffff0000875a8000 x1 : ffff0000875a8000 x0 : ffff800082ffa048
- Call trace:
-  scmi_perf_domain_remove+0x28/0x70 [scmi_perf_domain]
-  scmi_dev_remove+0x28/0x40 [scmi_core]
-  device_remove+0x54/0x90
-  device_release_driver_internal+0x1dc/0x240
-  driver_detach+0x58/0xa8
-  bus_remove_driver+0x78/0x108
-  driver_unregister+0x38/0x70
-  scmi_driver_unregister+0x28/0x180 [scmi_core]
-  scmi_perf_domain_driver_exit+0x18/0xb78 [scmi_perf_domain]
-  __arm64_sys_delete_module+0x1a8/0x2c0
-  invoke_syscall+0x50/0x128
-  el0_svc_common.constprop.0+0x48/0xf0
-  do_el0_svc+0x24/0x38
-  el0_svc+0x34/0xb8
-  el0t_64_sync_handler+0x100/0x130
-  el0t_64_sync+0x190/0x198
- Code: a90153f3 f9403c14 f9414800 955f8a05 (b9400a80)
- ---[ end trace 0000000000000000 ]---
+As of this patch, the kernel timestamp is taken when the kernel is
+about to thaw user space and some user space tasks may start running
+right away.
 
-Cc: Sudeep Holla <sudeep.holla@arm.com>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>
-Fixes: 2af23ceb8624 ("pmdomain: arm: Add the SCMI performance domain")
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
----
-I suppose the probe does NOT bail out with an error because this DT config has
-to be supported, right ?
----
- drivers/pmdomain/arm/scmi_perf_domain.c | 3 +++
- 1 file changed, 3 insertions(+)
+Some other tasks, however, will wait for what happens next in the
+kernel (because it is not done with resuming yet) and some of them
+will wait until explicitly asked to resume by the resume process IIUC.
 
-diff --git a/drivers/pmdomain/arm/scmi_perf_domain.c b/drivers/pmdomain/arm/scmi_perf_domain.c
-index 709bbc448fad..d7ef46ccd9b8 100644
---- a/drivers/pmdomain/arm/scmi_perf_domain.c
-+++ b/drivers/pmdomain/arm/scmi_perf_domain.c
-@@ -159,6 +159,9 @@ static void scmi_perf_domain_remove(struct scmi_device *sdev)
- 	struct genpd_onecell_data *scmi_pd_data = dev_get_drvdata(dev);
- 	int i;
- 
-+	if (!scmi_pd_data)
-+		return;
-+
- 	of_genpd_del_provider(dev->of_node);
- 
- 	for (i = 0; i < scmi_pd_data->num_domains; i++)
--- 
-2.43.0
+Your results depend on which tasks participate in the "user
+experience", so to speak.  If they are the tasks that wait to be
+kicked by the resume process, the kernel timestamp taken as per the
+above is useless for them, because there is quite some stuff that
+happens in the kernel before they will get kicked.
 
+Moreover, some tasks will wait for certain device drivers to get ready
+after the rest of the system resumes and that may still take some more
+time after the kernel has returned to the process driving the system
+suspend-resume.
+
+I'm not sure if there is a single point which can be used as a "user
+space resume start" time for every task, which is why I'm not
+convinced about this patch.
+
+BTW, there is a utility called sleepgraph that measures the kernel
+part of the system suspend-resume.  It does its best to measure it
+very precisely and uses different techniques for that.  Also, it is
+included in the kernel source tree.  Can you please have a look at it
+and see how much there is in common between it and your tools?  Maybe
+there are some interfaces that can be used in common, or maybe it
+could benefit from some interfaces that you are planning to add.
 
