@@ -1,124 +1,124 @@
-Return-Path: <linux-pm+bounces-2757-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2758-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0753583C9AC
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 18:17:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1690783C9C1
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 18:18:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 89E03B25052
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 17:16:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1D0FFB25E63
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 17:18:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC726130E55;
-	Thu, 25 Jan 2024 17:12:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B611D133983;
+	Thu, 25 Jan 2024 17:17:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bU1YdkO+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0381136640
-	for <linux-pm@vger.kernel.org>; Thu, 25 Jan 2024 17:12:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84546481CB;
+	Thu, 25 Jan 2024 17:17:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706202727; cv=none; b=SZEaWu1XEaL4EkSoM2w6SIHxJG//9/WouqH54BIv0zW7BNrRDdh92XXlvTeZFd/OWCV6aTJOUnsz9a+OjBELDsZ0/u5Wes5cf09uVSPYIklvopH8MQiXLbfkx4UAVqN+QoyyPeOip+P3n2QITXV8qfYvrVSw5aR5KUk1ETbsUdo=
+	t=1706203079; cv=none; b=SE682JNk6V7BiLDy0K8Jcss2xrWL9NvSNVUHQ+EzOtTOAfc87Dsin7dfcu7Ldr7wtlWFUdNYvscb3cRrURBTvzg5bybs4adegPFTq3RCADyywjeEDCzK8iS2m9rRNyPBJCoc21n7ie865ekVlcj6IeAQUhhkDLyOTOnkUynOJyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706202727; c=relaxed/simple;
-	bh=NkWD/j8A67rN4utXThlvq4tYQthwoTcWcmrHRVS7C+4=;
+	s=arc-20240116; t=1706203079; c=relaxed/simple;
+	bh=PGjwh8WrgD8mpDJNmLuY2zwV1TrvwjWGmGaOhxyBsGI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qXcQASDOEtYaxn+XymXMDFT+cL144G1BuadqDkRi7QbIMdcHLpSN6MgZm5Rx/OanpB+GeGcO9Ga3NKC1qT6Ntier8/gtb9jXkb2RT+nAaRIuOz2/j+9itCPdnQGVfdAlW6vJSrM+TTtAXlYurcHTh+SCFRgvK38wQLdZKatzIt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1rT3GV-00061z-8M; Thu, 25 Jan 2024 18:11:47 +0100
-Received: from [2a0a:edc0:2:b01:1d::c0] (helo=ptx.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <ore@pengutronix.de>)
-	id 1rT3GU-002KpY-CE; Thu, 25 Jan 2024 18:11:46 +0100
-Received: from ore by ptx.whiteo.stw.pengutronix.de with local (Exim 4.92)
-	(envelope-from <ore@pengutronix.de>)
-	id 1rT3GU-001mwF-9K; Thu, 25 Jan 2024 18:11:46 +0100
-Date: Thu, 25 Jan 2024 18:11:46 +0100
-From: Oleksij Rempel <o.rempel@pengutronix.de>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=dvfMQDYIUIYUvgVzJ4ZGkCXQUUCWBzZv4jJmiWQTdT+AOH1lwjjT8VBE/GVb4j1sUMWHj8RFphW4TQ7+THU+aowOhXn3s8C+tyqbUVpZjdTxEwG8ZgRxuv5GW0Hx6aswqbTDRuAd5VBXkDDsoBM5AMR5493YgaoXFNwklYRiVTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bU1YdkO+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1682C43390;
+	Thu, 25 Jan 2024 17:17:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706203079;
+	bh=PGjwh8WrgD8mpDJNmLuY2zwV1TrvwjWGmGaOhxyBsGI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bU1YdkO+++AKRPkpGE4N7f61XbNLnIpJp00g3YmhwMWb1lvN1BmQbk4hvm8sx3kVs
+	 tDb2Q750OJWsa9QhxUfxXmFrLP8eE7wB0064lmD4ajne1TQw0M6r0F8u+ZkK/px3E6
+	 Mpzje3TuiI4sPCJ7TBufJzl/By9OhH+CDVENz1tsBuxsb4r5Z4FWfadgenhtNY+Sef
+	 ZdvRDeEn6BVqLKL1KhGczXHv9pIY3TvQZEi1rOaRV07APa8Lly+hU3cbo+KTDl6vRQ
+	 yLFYQB2fSNo2GtZVghsMdh48Db2DS5cpzMGIjtnGRyMd3Qo7CWStu/C3PxsWorKcbp
+	 bd8h7zsQRncGQ==
+Date: Thu, 25 Jan 2024 17:17:53 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Mantas Pucka <mantas@8devices.com>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Amit Kucheria <amitk@kernel.org>,
+	Thara Gopinath <thara.gopinath@gmail.com>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
 	Daniel Lezcano <daniel.lezcano@linaro.org>,
 	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	=?utf-8?B?U8O4cmVu?= Andersen <san@skov.dk>
-Subject: Re: [PATCH v2 4/8] dt-bindings: power: reset: add bindings for NVMEM
- hardware storing PSCR Data
-Message-ID: <20240125171146.GC381737@pengutronix.de>
-References: <20240124122204.730370-1-o.rempel@pengutronix.de>
- <20240124122204.730370-5-o.rempel@pengutronix.de>
- <4e14b7c7-7f0a-437b-aa84-20fdc30a2361@linaro.org>
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: thermal: qcom-tsens: add IPQ6018
+ compatible
+Message-ID: <20240125-hazily-scorpion-7047dfd08f7c@spud>
+References: <1706173452-1017-1-git-send-email-mantas@8devices.com>
+ <1706173452-1017-2-git-send-email-mantas@8devices.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="wn8f/nru8b2mI6oI"
 Content-Disposition: inline
-In-Reply-To: <4e14b7c7-7f0a-437b-aa84-20fdc30a2361@linaro.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL: http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+In-Reply-To: <1706173452-1017-2-git-send-email-mantas@8devices.com>
 
-On Thu, Jan 25, 2024 at 11:57:18AM +0100, Krzysztof Kozlowski wrote:
-> On 24/01/2024 13:22, Oleksij Rempel wrote:
-> > Add device tree bindings that describe hardware implementations of
-> > Non-Volatile Memory (NVMEM) used for storing Power State Change Reasons
-> > (PSCR).
-> > +  that stores Power State Change Reasons (PSCR).
-> > +
-> > +allOf:
-> > +  - $ref: pscrr.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: pscrr-nvmem
-> > +
-> 
-> So that's a driver :/. Maybe Rob will like it, but it's a no from me.
-> Please come up with something really suiting DEVICES, not DRIVERS.
 
-If I understand your distinction between 'DEVICES' and 'DRIVERS'
-correctly, 'DEVICES' in the device tree context are meant to represent
-physical hardware components, while 'DRIVERS' refer to software
-abstractions of these components. However, there are numerous device
-tree instances, like software-based implementations for SPI, I2C, or
-GPIO, which could also be interpreted as 'DRIVERS' in the context of
-your email. Similarly, the binding for PSCRR represents functionality not
-fully implemented in hardware but supported by the hardware component of
-NVMEM, akin to how ramoops or other functionalities are represented.
+--wn8f/nru8b2mI6oI
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If I'm misunderstanding your distinction between 'DEVICES' and
-'DRIVERS', please clarify with an example of how a proper binding should
-be implemented for a case like this.
+On Thu, Jan 25, 2024 at 11:04:10AM +0200, Mantas Pucka wrote:
+> IPQ6018 has tsens HW block compatible with IPQ8074.
+>=20
+> Signed-off-by: Mantas Pucka <mantas@8devices.com>
 
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+Cheers,
+Conor.
+
+> ---
+>  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/=
+Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> index 99d9c526c0b6..d6f333a7bcd1 100644
+> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> @@ -76,6 +76,7 @@ properties:
+>        - description: v2 of TSENS with combined interrupt
+>          items:
+>            - enum:
+> +              - qcom,ipq6018-tsens
+>                - qcom,ipq9574-tsens
+>            - const: qcom,ipq8074-tsens
+> =20
+> --=20
+> 2.7.4
+>=20
+
+--wn8f/nru8b2mI6oI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZbKXwQAKCRB4tDGHoIJi
+0iOIAQCdQoZ/kwj/HEaWawVaxBFvf1repCb5Fn7Vs8hxvEsOowEAzwRGYfFjhkzl
+ZFTOTNvJfVytRXRnzi6g6l4Qm2V8bw0=
+=KlOy
+-----END PGP SIGNATURE-----
+
+--wn8f/nru8b2mI6oI--
 
