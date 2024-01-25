@@ -1,164 +1,143 @@
-Return-Path: <linux-pm+bounces-2770-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2771-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB8F583CD45
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 21:19:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BC9083CDED
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 22:00:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CF892890DC
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 20:19:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 231CA1F26852
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 21:00:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7387813666B;
-	Thu, 25 Jan 2024 20:19:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 563791386BB;
+	Thu, 25 Jan 2024 21:00:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="B/GIJejZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6F5313664C;
-	Thu, 25 Jan 2024 20:19:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44FA31386B5;
+	Thu, 25 Jan 2024 21:00:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706213962; cv=none; b=F+RbDwgmp1wOvf8sLGAu0ApsV44QF/n7PqR9kOoy15RqY/5ydyhlI1kEVmUy8dijIOLJEHDtvO+xcaueRMdg1eWP1UkgvtUA9oPa7vmPnEHF6Q8K+3NQVuAWkD2ClUTKss81D+YVhoaakZ4p4Wzk5PD4NXK2ak9/bU+6CTITkNU=
+	t=1706216441; cv=none; b=X15WIUW2wd3033tIAtaIz+0byAZZDVidKG0Vfkiqpy3Anp4rpZuLD0P0GTMz3WWbavZ+IJB04vCjFwlGowblH79ntDWPJMf97OaW78ZBsldVZ9mE5KX2InqZ3160CIaAAtEgI3B/K+KoeIBckjhhXFUAZiZXFKzR8SGb9HWXB24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706213962; c=relaxed/simple;
-	bh=ipLhhFgZ90F56vmCiTIpx4S2UFI4/MpHlqyOUteNJhE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lg6ZweFIwIiXg1whYwWkAD9lOx+uuAJ9h0YtvskZaZ4dJk8MIgQUbQzmgMN79YnMn4llzM/lhfbkkXEoROuvM6g0Dwo3+WcDfVyWkuYVx89JCNWBlggFZsxXFl+samFjyTtVzrpOBzlwA9IDndRdomUuHmnINHBBx6MwVhnjkGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-214df50177fso14513fac.1;
-        Thu, 25 Jan 2024 12:19:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706213960; x=1706818760;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dvJqcfERuxA2PaIU85t1WCbw/9zN6boVzq5sjthkjTM=;
-        b=gbA3pABPggjlWLNrWqeECoXGlI7BIDDiwaB8WGS8xv8XAVIWNk5zGKXl21cGVp9WK8
-         DxDvCqpT45YVK+t0DzU39i4eWUf1G8qvYv8AXlB1RArUxHvMSZO87UmuARg1tFZBMfrm
-         f1L5DL364J150VPwg7xDaUJZWnFHbD4H+3GUghjB86eQRVEP8ic4xoiE9y3Dxaaq/ueR
-         J2oOpLtkSq8ctl0zj5F3DJqVJHrviabNo0+1BOhzcjUwXiUBHFQuZ0YZOslDuouwwALx
-         rkoNoXNZmDgg7DR48OOmrgHNZDILW56pwOc8moxyqBdlQF6SIhbfBnB9/l8+vp/O3OOp
-         QbnA==
-X-Gm-Message-State: AOJu0Yy/JArVd1Gpurw8YMSUxxzMrHugKA1jh87lz8/Ct4LL2cX+lAhI
-	ORYlqXRzMw6HkNk31V7YEAd6KveO5aNRqXrpsYeYLnnY38Hr6QYQWfL1H1EsWWURBbpGo9QHA1R
-	LS4qH7/5VoXfSCe/ox8eXNoqxiv3NqPjf
-X-Google-Smtp-Source: AGHT+IGWGV0TETbCAHavAE2MNTfYdcxX+qzT+1/hAwhWt3HGJrZmfldHoA/xcoKuNVUB0bzSIGnvbfNpsk1hiVC4oA8=
-X-Received: by 2002:a05:6871:53ca:b0:214:b796:73c with SMTP id
- hz10-20020a05687153ca00b00214b796073cmr447136oac.5.1706213959875; Thu, 25 Jan
- 2024 12:19:19 -0800 (PST)
+	s=arc-20240116; t=1706216441; c=relaxed/simple;
+	bh=ok+32FtmVclV0n6TpLijrlAAhb9UWUJRHcgWWrOsCho=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HtggdpC5YK330t2ygwlMuDt+/IWA7Vb30DXSSRLzB5N0iE1GuSMckyM73VrFxqE8tbB34q7p1aj8xpSydetBFJhxIqcdrNib+YPSgaOXfH/CgvVJWAxZTrrrSAL7tGyZHp2OCZagIyO1Ne228hPKMounXenlEAqqjhhr/cE2B0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=B/GIJejZ; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40PITWOx010339;
+	Thu, 25 Jan 2024 21:00:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	date:from:to:cc:subject:message-id:references:mime-version
+	:content-type:in-reply-to; s=qcppdkim1; bh=qYbd+OgO9VT2uIIAAIIiB
+	iDYaYXBdYYPdxEdS1JCPeI=; b=B/GIJejZ46j9qkZmmsAhjANbwmtB4voZO09Ua
+	Vood/zrUeUC+TRVbih2Vuu636SrX6xrLvbMTu+o/V9wWjr83VmMhk/ItDf2z+3Dl
+	kHNSwjDd18NTg14qIH2u/n4hUxJtlQHHSP7X3fiTAg7HA6N8RoRLHNY32D208tx9
+	vNyESANezegWQSbZSotpAG+Z/upV2p/ZNO5PKEuNiKMnK/LOLUnN9A1zi+n83cR5
+	+hFRaxGnc8pjtE2otnyUUz3CJwK7PlgmVM/o2rLvEVtSbfjrP/GRSaOQKe2+A52d
+	SYKmzB6llcv9S4SxCx6ABpKjQ6N+8Jzqx8e2jkssdZJpCDKmw==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vun6w1tfa-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 25 Jan 2024 21:00:18 +0000 (GMT)
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40PL0HWD022504
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 25 Jan 2024 21:00:17 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.40; Thu, 25 Jan 2024 13:00:16 -0800
+Date: Thu, 25 Jan 2024 13:00:15 -0800
+From: Bjorn Andersson <quic_bjorande@quicinc.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof
+ Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Johan Hovold
+	<johan+linaro@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v3 1/8] dt-bindings: clock: qcom: Allow VDD_GFX supply to
+ GX
+Message-ID: <20240125210015.GL2936378@hu-bjorande-lv.qualcomm.com>
+References: <20240123-sa8295p-gpu-v3-0-d5b4474c8f33@quicinc.com>
+ <20240123-sa8295p-gpu-v3-1-d5b4474c8f33@quicinc.com>
+ <f6844d28-c7c2-4afa-8520-2e62c608930d@linaro.org>
+ <20240124212116.GH2936378@hu-bjorande-lv.qualcomm.com>
+ <cc68112f-3863-4f82-b708-7787a4895a88@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <170359668692.1864392.6909734045167510522.stgit@mhiramat.roam.corp.google.com>
- <170359669607.1864392.5078004271237566637.stgit@mhiramat.roam.corp.google.com>
- <20240117090706.3522d23763fab9dcea21aee1@kernel.org> <CAJZ5v0gqWRsSGQZp7tz-0Kw6od+fjd_iof4Rj7fkBy80ySkcEQ@mail.gmail.com>
- <CA+ASDXOwfUrqRDVx_Fi62ERCLRPF+ixD014vE21Sm4mLF_j12A@mail.gmail.com> <20240125094320.13a0844614375deb8bb06db6@kernel.org>
-In-Reply-To: <20240125094320.13a0844614375deb8bb06db6@kernel.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 25 Jan 2024 21:19:07 +0100
-Message-ID: <CAJZ5v0jLLTETrMpXE3h=Q9GyhDEcZH5f7v+yvyxhzhW8yQKyTQ@mail.gmail.com>
-Subject: Re: [PATCH v7] PM: sleep: Expose last succeeded resumed timestamp in sysfs
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Brian Norris <briannorris@chromium.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, Randy Dunlap <rdunlap@infradead.org>, 
-	suleiman@google.com, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <cc68112f-3863-4f82-b708-7787a4895a88@linaro.org>
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: T61nsVoCgfHh9mUrWbMo-vwlSjlVLmgd
+X-Proofpoint-ORIG-GUID: T61nsVoCgfHh9mUrWbMo-vwlSjlVLmgd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-25_13,2024-01-25_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=530
+ lowpriorityscore=0 adultscore=0 spamscore=0 priorityscore=1501 mlxscore=0
+ bulkscore=0 phishscore=0 impostorscore=0 malwarescore=0 suspectscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401190000 definitions=main-2401250150
 
-On Thu, Jan 25, 2024 at 1:43=E2=80=AFAM Masami Hiramatsu <mhiramat@kernel.o=
-rg> wrote:
->
-> On Mon, 22 Jan 2024 18:08:22 -0800
-> Brian Norris <briannorris@chromium.org> wrote:
->
-> > On Fri, Jan 19, 2024 at 1:08=E2=80=AFPM Rafael J. Wysocki <rafael@kerne=
-l.org> wrote:
-> > > On Wed, Jan 17, 2024 at 1:07=E2=80=AFAM Masami Hiramatsu <mhiramat@ke=
-rnel.org> wrote:
-> > > >
-> > > > Gently ping,
-> > > >
-> > > > I would like to know this is enough or I should add more info/updat=
-e.
-> > >
-> > > I still am not sure what this is going to be useful for.
-> > >
-> > > Do you have a specific example?
-> >
-> > Since there seems to be some communication gap here, I'll give it a try=
-.
-> >
-> > First, I'll paste the key phrase of its use case from the cover letter:
-> >
-> >   "we would like to know how long the resume processes are taken in ker=
-nel
-> >   and in user-space"
-> >
-> > This is a "system measurement" question, for use in tests (e.g., in a
-> > test lab for CI or for pre-release testing, where we suspend
-> > Chromebooks, wake them back up, and measure how long the wakeup took)
-> > or for user-reported metrics (e.g., similar statistics from real
-> > users' systems, if they've agreed to automatically report usage
-> > statistics, back to Google). We'd like to know how long it takes for a
-> > system to wake up, so we can detect when there are problems that lead
-> > to a slow system-resume experience. The user experience includes both
-> > time spent in the kernel and time spent after user space has thawed
-> > (and is spending time in potentially complex power and display manager
-> > stacks) before a Chromebook's display lights back up.
->
-> Thanks Brian for explaining, this is correctly explained how we are
-> using this for measuring resume process duration.
->
-> > If I understand the whole of Masami's work correctly, I believe we're
-> > taking "timestamps parsed out of dmesg" (or potentially out of ftrace,
-> > trace events, etc.) to measure the kernel side, plus "timestamp
-> > provided here in CLOCK_MONOTONIC" and "timestamp determined in our
-> > power/display managers" to measure user space.
->
-> Yes, I decided to decouple the kernel and user space because the clock
-> subsystem is adjusted when resuming. So for the kernel, we will use
-> local clock (which is not exposed to user space), and use CLOCK_MONOTONIC
-> for the user space.
+On Thu, Jan 25, 2024 at 08:39:15AM +0100, Krzysztof Kozlowski wrote:
+> On 24/01/2024 22:21, Bjorn Andersson wrote:
+> > On Wed, Jan 24, 2024 at 07:31:34AM +0100, Krzysztof Kozlowski wrote:
+> >> On 24/01/2024 05:25, Bjorn Andersson wrote:
+> >>> +# Allow either power-domains or vdd-gfx-supply, not both
+> >>> +oneOf:
+> >>> +  - required:
+> >>> +      - power-domains
+> >>> +  - required:
+> >>> +      - vdd-gfx-supply
+> >>> +  - not:
+> >>> +      anyOf:
+> >>> +        - required:
+> >>> +            - power-domains
+> >>> +        - required:
+> >>> +            - vdd-gfx-supply
+> >>
+> >> I don't fully understand what you want to achieve here. If only "allow
+> >> either", so not a "require either", then simpler:
+> >>
+> >> https://lore.kernel.org/all/20230118163208.GA117919-robh@kernel.org/
+> >>
+> > 
+> > As discussed in v2, power-domains is currently an optional property in
+> > this binding and I'm adding vdd-gfx-supply as an alternative to that.
+> > 
+> 
+> Then go with Rob's syntax - not:required: Much easier code.
+> 
 
-The problem with this split is that you cannot know how much time
-elapses between the "successful kernel resume time" and the time when
-user space gets to resume.
+I looked at it, but was not able to understand that it expressed my
+desired result. Now I do, and I agree with you, so will update it.
 
-As of this patch, the kernel timestamp is taken when the kernel is
-about to thaw user space and some user space tasks may start running
-right away.
-
-Some other tasks, however, will wait for what happens next in the
-kernel (because it is not done with resuming yet) and some of them
-will wait until explicitly asked to resume by the resume process IIUC.
-
-Your results depend on which tasks participate in the "user
-experience", so to speak.  If they are the tasks that wait to be
-kicked by the resume process, the kernel timestamp taken as per the
-above is useless for them, because there is quite some stuff that
-happens in the kernel before they will get kicked.
-
-Moreover, some tasks will wait for certain device drivers to get ready
-after the rest of the system resumes and that may still take some more
-time after the kernel has returned to the process driving the system
-suspend-resume.
-
-I'm not sure if there is a single point which can be used as a "user
-space resume start" time for every task, which is why I'm not
-convinced about this patch.
-
-BTW, there is a utility called sleepgraph that measures the kernel
-part of the system suspend-resume.  It does its best to measure it
-very precisely and uses different techniques for that.  Also, it is
-included in the kernel source tree.  Can you please have a look at it
-and see how much there is in common between it and your tools?  Maybe
-there are some interfaces that can be used in common, or maybe it
-could benefit from some interfaces that you are planning to add.
+Thanks,
+Bjorn
 
