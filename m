@@ -1,207 +1,142 @@
-Return-Path: <linux-pm+bounces-2768-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2769-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D3BC83CC04
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 20:16:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F87283CC0A
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 20:18:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2EC1C1C2250F
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 19:16:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E4D671F2796F
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 19:18:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5783C134730;
-	Thu, 25 Jan 2024 19:16:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="ai6EcKs1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BC4D13474F;
+	Thu, 25 Jan 2024 19:18:37 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D6C1350E4
-	for <linux-pm@vger.kernel.org>; Thu, 25 Jan 2024 19:16:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC909111AA;
+	Thu, 25 Jan 2024 19:18:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706210172; cv=none; b=oZxaroYMLJJ43lEhiAHS7skQ6Of3A9+57YUcErkPfVqDXhx+hU5xHjcqO4tJRd4PWz9Y9oMSJqAsixX1D2jMSpYfR+f2Ry4hxmiofu0tOGm7fp101m8Ur3xe3FzRRxkLMhy93qsFWmFhP0JSs4IqC93vfJ7CFGAD/hg0iBWh3uk=
+	t=1706210317; cv=none; b=uxqaYXNtSkNMlSYx7dVJjNpuguR8pB/02qUYeJkzlRA2TlVCEq8TRip94auiXD+RJb+ulsg1NvmVzO4hGPZ4PdCAFBJNtlOk7yV4DrjwAiUwZvUBxRrh9HMMubjXfqdGD2jNx8/DrLnfOd5X/B/G14AHeFGehOWqLjFIiICQrHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706210172; c=relaxed/simple;
-	bh=09vrqzF6q+v3GSLa4a6q1J4UdDnckaZNCxxfSutxA6c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Wj5x1cOc1uJB6ydUQk4VUPKunqrIJwqLJsm1EDtjIAiw0YIxdi5KbV9oKig63tiqDHi2edlQF+sHjqvZMOpYYXCvVTVGwJoYzgWleQMvav6k+lsKn4GtrrWbznUqwuV8Jcb2hpAEPgibd9iUrHRToQI0Xrro9g2cn6zBcMlrUW8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=ai6EcKs1; arc=none smtp.client-ip=209.85.208.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2ccec119587so91130991fa.0
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jan 2024 11:16:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech.se; s=google; t=1706210168; x=1706814968; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=OmBqHxoi1/NsICzRv9uA89VCC1IgkS6de7qvx7LzHjs=;
-        b=ai6EcKs1WW3xq8b0KWD5jRFKW2nJKmO6F/YDvtGzm/bel97TTaO6PIP0I65mYKRSpJ
-         GVYWZl5x3d/4odAz4WeIGLpgsxeYQ0bzdfu2FSzpujkpZjOy9GnbUrPTO/FwmyHVk8HP
-         /R0oLb8K5bZUTsbKmPosaPNAYFw78u35EAdg72Wrp2dOjSvu+wB8PwaGrEh+2ZscScSR
-         teFJ++6/b0WPOttrcl8uVQVjkk+HtPbhrOlDDchwfyh1rWGTXHMe5GyKkjRNYmrri1CT
-         I8TrmXxvtwyBMXFuKrDQyswMLdIj4F3v8UN9Xcpi9XdRooS7/V5rkdjwzVdw66BKMLAK
-         jZtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706210168; x=1706814968;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OmBqHxoi1/NsICzRv9uA89VCC1IgkS6de7qvx7LzHjs=;
-        b=KzML0Linf7tGGBTLxqVC72uOJhVoaADa/ndKBBx62iFlxWE9NA3Fv62ruS3B61cUIB
-         g2xOW2w676x4Mb3pNElhE3nnRc98O0lPDtpzux3b5z2pN4rKrMq9fzxMMEipf2HHPmJD
-         Gngf2X2f0fDTiU50Ds4tH0QwRP843J1w3wAFFn79PwINT/HR9aix3RvhcYPwocrzF0CS
-         ssniibY20C9I576OBdDvFnFHOuo+DebzyE3o0rqXXGNWnKrLjeFMm5d0rLmQ6RYxbLpV
-         u9wXVWMsmtaMGXwWviKo5d/dbfHhOl0TtW5TEwiNlb/zJdiKuq4QyqdPkzRTMS/Fko/L
-         Naew==
-X-Gm-Message-State: AOJu0YzmACgWtebehtoLTIzoYmwtf8a4Uw24IoawDE8wYhz+xMcO9u7M
-	DbD1GUpu0UG7g+IkUy+jVvw+t15fAScoER+mqr8LKOrvIhbbqr/ZvEECN4L7PdI=
-X-Google-Smtp-Source: AGHT+IHWEkqNuG86dx3DnIpU6B2Sugfv9OUGOxAvp/LpQrYdwhdsGQTlw3AWwkerWvRzifluFaf/5A==
-X-Received: by 2002:a2e:b556:0:b0:2cf:2fb0:978 with SMTP id a22-20020a2eb556000000b002cf2fb00978mr82751ljn.45.1706210168001;
-        Thu, 25 Jan 2024 11:16:08 -0800 (PST)
-Received: from localhost (h-46-59-36-113.A463.priv.bahnhof.se. [46.59.36.113])
-        by smtp.gmail.com with ESMTPSA id f15-20020a2e918f000000b002cd35d8b018sm356032ljg.113.2024.01.25.11.16.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jan 2024 11:16:07 -0800 (PST)
-Date: Thu, 25 Jan 2024 20:16:06 +0100
-From: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
-	Cong Dang <cong.dang.xn@renesas.com>,
-	Duy Nguyen <duy.nguyen.rh@renesas.com>,
-	Hai Pham <hai.pham.ud@renesas.com>,
-	Linh Phung <linh.phung.jy@renesas.com>,
-	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 14/15] arm64: dts: renesas: Add Gray Hawk Single board
- support
-Message-ID: <20240125191606.GQ4126432@ragnatech.se>
-References: <cover.1706194617.git.geert+renesas@glider.be>
- <b657402113267acd57aece0b4c681b707e704455.1706194617.git.geert+renesas@glider.be>
+	s=arc-20240116; t=1706210317; c=relaxed/simple;
+	bh=UraaLLeJ1ju3DnPi61+iDA0jaVSKMl2MoYlsOHXiN9c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Zt/YS4QnZczIQUF4nAdjAR+HsMGzHQJpyTMHPZvAwRLsIDnQniXtfprHk708tcvX6YsRn9Z54fWJe3aplZZr3NnK4KQJccDRU5j9lvZnrQLaSRAOCHGucuxB3m2cFTRvW6e8G8AInGL0BirVVZ2ACNgplQR5OC9NdKQLbG+Myws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 816901FB;
+	Thu, 25 Jan 2024 11:19:18 -0800 (PST)
+Received: from pluto.. (unknown [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D6EAF3F73F;
+	Thu, 25 Jan 2024 11:18:32 -0800 (PST)
+From: Cristian Marussi <cristian.marussi@arm.com>
+To: linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Cristian Marussi <cristian.marussi@arm.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH] pmdomain: arm: Fix NULL dereference on scmi_perf_domain removal
+Date: Thu, 25 Jan 2024 19:17:56 +0000
+Message-ID: <20240125191756.868860-1-cristian.marussi@arm.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <b657402113267acd57aece0b4c681b707e704455.1706194617.git.geert+renesas@glider.be>
 
-Hi Geert,
+On unloading of the scmi_perf_domain module got the below splat, when in
+the DT provided to the system under test the '#power-domain-cells' property
+was missing.
+Indeed, this particular setup causes the probe to bail out early without
+giving any error, so that, then, the removal code is run on unload, but
+without all the expected initialized structures in place.
 
-On 2024-01-25 16:34:42 +0100, Geert Uytterhoeven wrote:
-> Add initial support for the Renesas Gray Hawk Single board, which is
-> based on the R-Car V4M (R8A779H0) SoC:
->   - Memory,
->   - Crystal oscillators,
->   - Serial console.
-> 
-> Based on the White Hawk Single DTS, and on a patch for the Gray Hawk
-> board stack in the BSP by Hai Pham.
-> 
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Add a check and bail out early on remove too.
 
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Unable to handle kernel NULL pointer dereference at virtual address 0000000000000008
+Mem abort info:
+   ESR = 0x0000000096000004
+   EC = 0x25: DABT (current EL), IL = 32 bits
+   SET = 0, FnV = 0
+   EA = 0, S1PTW = 0
+   FSC = 0x04: level 0 translation fault
+ Data abort info:
+   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
+   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+ user pgtable: 4k pages, 48-bit VAs, pgdp=00000001076e5000
+ [0000000000000008] pgd=0000000000000000, p4d=0000000000000000
+ Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+ Modules linked in: scmi_perf_domain(-) scmi_module scmi_core
+ CPU: 0 PID: 231 Comm: rmmod Not tainted 6.7.0-00084-gb4b1f27d3b83-dirty #15
+ Hardware name: linux,dummy-virt (DT)
+ pstate: 61400005 (nZCv daif +PAN -UAO -TCO +DIT -SSBS BTYPE=--)
+ pc : scmi_perf_domain_remove+0x28/0x70 [scmi_perf_domain]
+ lr : scmi_perf_domain_remove+0x28/0x70 [scmi_perf_domain]
+ sp : ffff80008393bc10
+ x29: ffff80008393bc10 x28: ffff0000875a8000 x27: 0000000000000000
+ x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
+ x23: ffff00008030c090 x22: ffff00008032d490 x21: ffff80007b287050
+ x20: 0000000000000000 x19: ffff00008032d410 x18: 0000000000000000
+ x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+ x14: 8ba0696d05013a2f x13: 0000000000000000 x12: 0000000000000002
+ x11: 0101010101010101 x10: ffff00008510cff8 x9 : ffff800080a6797c
+ x8 : 0101010101010101 x7 : 7f7f7f7f7f7f7f7f x6 : fefefeff6364626d
+ x5 : 8080808000000000 x4 : 0000000000000020 x3 : 00000000553a3dc1
+ x2 : ffff0000875a8000 x1 : ffff0000875a8000 x0 : ffff800082ffa048
+ Call trace:
+  scmi_perf_domain_remove+0x28/0x70 [scmi_perf_domain]
+  scmi_dev_remove+0x28/0x40 [scmi_core]
+  device_remove+0x54/0x90
+  device_release_driver_internal+0x1dc/0x240
+  driver_detach+0x58/0xa8
+  bus_remove_driver+0x78/0x108
+  driver_unregister+0x38/0x70
+  scmi_driver_unregister+0x28/0x180 [scmi_core]
+  scmi_perf_domain_driver_exit+0x18/0xb78 [scmi_perf_domain]
+  __arm64_sys_delete_module+0x1a8/0x2c0
+  invoke_syscall+0x50/0x128
+  el0_svc_common.constprop.0+0x48/0xf0
+  do_el0_svc+0x24/0x38
+  el0_svc+0x34/0xb8
+  el0t_64_sync_handler+0x100/0x130
+  el0t_64_sync+0x190/0x198
+ Code: a90153f3 f9403c14 f9414800 955f8a05 (b9400a80)
+ ---[ end trace 0000000000000000 ]---
 
-> ---
-> v2:
->   - Add SoC name to top-level comment.
-> ---
->  arch/arm64/boot/dts/renesas/Makefile          |  2 +
->  .../dts/renesas/r8a779h0-gray-hawk-single.dts | 52 +++++++++++++++++++
->  2 files changed, 54 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/renesas/r8a779h0-gray-hawk-single.dts
-> 
-> diff --git a/arch/arm64/boot/dts/renesas/Makefile b/arch/arm64/boot/dts/renesas/Makefile
-> index 1d7d69657a1f0559..4c5ac5f02829ff58 100644
-> --- a/arch/arm64/boot/dts/renesas/Makefile
-> +++ b/arch/arm64/boot/dts/renesas/Makefile
-> @@ -86,6 +86,8 @@ dtb-$(CONFIG_ARCH_R8A779G0) += r8a779g0-white-hawk-ard-audio-da7212.dtbo
->  r8a779g0-white-hawk-ard-audio-da7212-dtbs := r8a779g0-white-hawk.dtb r8a779g0-white-hawk-ard-audio-da7212.dtbo
->  dtb-$(CONFIG_ARCH_R8A779G0) += r8a779g0-white-hawk-ard-audio-da7212.dtb
->  
-> +dtb-$(CONFIG_ARCH_R8A779H0) += r8a779h0-gray-hawk-single.dtb
-> +
->  dtb-$(CONFIG_ARCH_R8A77951) += r8a779m1-salvator-xs.dtb
->  r8a779m1-salvator-xs-panel-aa104xd12-dtbs := r8a779m1-salvator-xs.dtb salvator-panel-aa104xd12.dtbo
->  dtb-$(CONFIG_ARCH_R8A77951) += r8a779m1-salvator-xs-panel-aa104xd12.dtb
-> diff --git a/arch/arm64/boot/dts/renesas/r8a779h0-gray-hawk-single.dts b/arch/arm64/boot/dts/renesas/r8a779h0-gray-hawk-single.dts
-> new file mode 100644
-> index 0000000000000000..1ed404712d823871
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/renesas/r8a779h0-gray-hawk-single.dts
-> @@ -0,0 +1,52 @@
-> +// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +/*
-> + * Device Tree Source for the R-Car V4M Gray Hawk Single board
-> + *
-> + * Copyright (C) 2023 Renesas Electronics Corp.
-> + * Copyright (C) 2024 Glider bv
-> + */
-> +
-> +/dts-v1/;
-> +#include "r8a779h0.dtsi"
-> +
-> +/ {
-> +	model = "Renesas Gray Hawk Single board based on r8a779h0";
-> +	compatible = "renesas,gray-hawk-single", "renesas,r8a779h0";
-> +
-> +	aliases {
-> +		serial0 = &hscif0;
-> +	};
-> +
-> +	chosen {
-> +		bootargs = "ignore_loglevel";
-> +		stdout-path = "serial0:921600n8";
-> +	};
-> +
-> +	memory@48000000 {
-> +		device_type = "memory";
-> +		/* first 128MB is reserved for secure area. */
-> +		reg = <0x0 0x48000000 0x0 0x78000000>;
-> +	};
-> +
-> +	memory@480000000 {
-> +		device_type = "memory";
-> +		reg = <0x4 0x80000000 0x1 0x80000000>;
-> +	};
-> +};
-> +
-> +&extal_clk {
-> +	clock-frequency = <16666666>;
-> +};
-> +
-> +&extalr_clk {
-> +	clock-frequency = <32768>;
-> +};
-> +
-> +&hscif0 {
-> +	uart-has-rtscts;
-> +	status = "okay";
-> +};
-> +
-> +&scif_clk {
-> +	clock-frequency = <24000000>;
-> +};
-> -- 
-> 2.34.1
-> 
-> 
+Cc: Sudeep Holla <sudeep.holla@arm.com>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Fixes: 2af23ceb8624 ("pmdomain: arm: Add the SCMI performance domain")
+Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+---
+I suppose the probe does NOT bail out with an error because this DT config has
+to be supported, right ?
+---
+ drivers/pmdomain/arm/scmi_perf_domain.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
+diff --git a/drivers/pmdomain/arm/scmi_perf_domain.c b/drivers/pmdomain/arm/scmi_perf_domain.c
+index 709bbc448fad..d7ef46ccd9b8 100644
+--- a/drivers/pmdomain/arm/scmi_perf_domain.c
++++ b/drivers/pmdomain/arm/scmi_perf_domain.c
+@@ -159,6 +159,9 @@ static void scmi_perf_domain_remove(struct scmi_device *sdev)
+ 	struct genpd_onecell_data *scmi_pd_data = dev_get_drvdata(dev);
+ 	int i;
+ 
++	if (!scmi_pd_data)
++		return;
++
+ 	of_genpd_del_provider(dev->of_node);
+ 
+ 	for (i = 0; i < scmi_pd_data->num_domains; i++)
 -- 
-Kind Regards,
-Niklas Söderlund
+2.43.0
+
 
