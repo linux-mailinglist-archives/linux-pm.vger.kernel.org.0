@@ -1,103 +1,176 @@
-Return-Path: <linux-pm+bounces-2705-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2706-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBD1283B987
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 07:24:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE15783BAD0
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 08:39:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7DA81B23493
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 06:24:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E171E1C2293F
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 07:39:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9350810A24;
-	Thu, 25 Jan 2024 06:24:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7460A12E7F;
+	Thu, 25 Jan 2024 07:39:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Fht7J5sm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26A3410A12;
-	Thu, 25 Jan 2024 06:24:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=222.66.158.135
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC23F12B9A
+	for <linux-pm@vger.kernel.org>; Thu, 25 Jan 2024 07:39:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706163854; cv=none; b=WnafPK1LsZEzIkJKYc9ZfyxdIUWfCcJF8q9Vr19RI53J2UB7QoJjUvzH2mB3df3nMMY1Gg0W4mh5aqNuO7GU5DaX5+2z//3xNnjuNjg48BdGvkGWMDyY6q6uTwSIvOzBVkUA3l5XeHkpmRlF3LYtWeJdP7E5djr4ZDxEuU+T2fY=
+	t=1706168360; cv=none; b=Q7j65jn4pwHBO1XnezM5fXU4JLuncxG+MoSfTlWhz2aG2Z/CAFcArlgwYjb/vxPlAR5MTLPO1KnZ93sW7dHFRtVgu1uZMPoMIhOZ/38M3yGNTXu28FlvUBUY2u63TVcd9ka/vojMQp5k+xoClNzmgc9QAy/wxnUHYkHGCSf2rUI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706163854; c=relaxed/simple;
-	bh=IJnqiJ3su0ULAtCoiKNxfIa4lBJxYdBgJQZXApe+y2A=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EqJV3bUAMVwF7sSDvN7nUgMv2CIUz+o59UxiSKmZCUDAeilO67IsVBH4Aoh2ZvE4NIVEdndPRDEn8hqTc4AcBbjbGXI2Sibm68YafszVWSv6+MObbXcHDJze1cPqrBGGKlpDOoagbSsXAp9Kh14+PngGHnUUi17h/THiR8Tptdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=unisoc.com; spf=pass smtp.mailfrom=unisoc.com; arc=none smtp.client-ip=222.66.158.135
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=unisoc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=unisoc.com
-Received: from dlp.unisoc.com ([10.29.3.86])
-	by SHSQR01.spreadtrum.com with ESMTP id 40P6NZMG074726;
-	Thu, 25 Jan 2024 14:23:35 +0800 (+08)
-	(envelope-from Di.Shen@unisoc.com)
-Received: from SHDLP.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-	by dlp.unisoc.com (SkyGuard) with ESMTPS id 4TL9Z2408Nz2SKBpW;
-	Thu, 25 Jan 2024 14:16:10 +0800 (CST)
-Received: from bj10906pcu1.spreadtrum.com (10.0.73.72) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Thu, 25 Jan 2024 14:23:33 +0800
-From: Di Shen <di.shen@unisoc.com>
-To: <lukasz.luba@arm.com>, <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
-        <rui.zhang@intel.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <xuewen.yan@unisoc.com>, <zhanglyra@gmail.com>, <orsonzhai@gmail.com>,
-        <cindygm567@gmail.com>
-Subject: [PATCH V2] thermal: power_allocator: Avoid overwriting PID coefficients from setup time
-Date: Thu, 25 Jan 2024 14:23:31 +0800
-Message-ID: <20240125062331.28943-1-di.shen@unisoc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <1f8914cb-fc66-4068-8f7c-4d13b2454f7d@arm.com>
-References: <1f8914cb-fc66-4068-8f7c-4d13b2454f7d@arm.com>
+	s=arc-20240116; t=1706168360; c=relaxed/simple;
+	bh=Mw5vEDQv7u4zVkX/DvrsT1kbpOxxCwaGJtvj/Ec3hEI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FT5tFDdr2iIhY6/K/wSj4UGAjPTeBGfvynQDSXqRdp6taS5Mb0FDzUOWv+aGzaFnDYV9zGG1BB6CNLeqSkn06ppwnTDlZbwU1ieBbvx6WnNTjIXazopj1hS//9W6VAh7DbEiGfWjjvZXIetcoRd9CoTVY/f2Xl9Y6u2rH6f8NTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Fht7J5sm; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-40eb033c1b0so45338225e9.2
+        for <linux-pm@vger.kernel.org>; Wed, 24 Jan 2024 23:39:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706168357; x=1706773157; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hH0jMx6UHZTKBifmk34GWSzSdS+/3EcRnn013oRzjRk=;
+        b=Fht7J5sm9m5XGId5hfOY9kb4IU4dwaNyODFNogIMxqx3jhYoLcH88Z0hUsYjTchQE8
+         YbNVyFJfXXhtceqmsuVKgykTUl7mABoaL7e5vZSC0FoPAGpD3gXxi/CmNkChAovZYBjq
+         kZKZS4OnKn7EKzLv2vPfAVlz+BfSmZiPXT48CR5EFGxJq4utO+WYw/Tv0tuoVozcHhpg
+         m1xOkuSPUsyCJ6BRXhSVPvs1errala3rqKqTr0GZ4CcDnVPafE8h/0dh3bE54m0UTWiR
+         A+WhuMmmXfBYmlwKUtwTCvkYQFgR3/QMXSXXnnmcJMQGrUPYVwmiKZD5jCCzNlU1OBTH
+         nSaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706168357; x=1706773157;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hH0jMx6UHZTKBifmk34GWSzSdS+/3EcRnn013oRzjRk=;
+        b=c0ndGdJQVo8F4tM1WRQ/AnmYasa+T7wBWMtUr9/JpuZDPhQjyJyM765nvSJfUjVT6F
+         U8ANMcqe6YDv/t7YhV46LrmsmPXgJXcUsHkXZxF2OyKCmM+FMWKnXZNWkf474L8t2HhN
+         aU+5rLPGaruqdDBaxB/3KHDTYUFwIx8KBGE0TlmkEmteND4LXdgR6ZfwQgzQkaq0vLHI
+         INFgXlUMOmZigDnJfLXOz8pilpRDbiQaKFz5M9aP0dx2Odf13f7Z0/OsR4C3vZ7CDVEl
+         GCmS362EnGlhLgtJHoAweHMueIBe8cSQggaY5P8UXqN70cZOWxiOV0ODl2MuKDnPu7wg
+         DsAQ==
+X-Gm-Message-State: AOJu0YwMcV6U6vX+w80LfGvA20S+zeHRE7Uj33pPP/bJwG8pFRLiJy08
+	CqjxDytpdGgKC5i6B0SpOnO1TbBaqebeYsBSHHTHJQquWQjjFcdTR3vqKyOxcAw=
+X-Google-Smtp-Source: AGHT+IFOytjLNvmjiHVzdf4a427+lqnb2WeSj7VtriuX3UHr11rQpJFezm0gCR++NUoAsyLwbOJbIA==
+X-Received: by 2002:a05:600c:1ca2:b0:40d:60ac:16f1 with SMTP id k34-20020a05600c1ca200b0040d60ac16f1mr244533wms.55.1706168356610;
+        Wed, 24 Jan 2024 23:39:16 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.215.66])
+        by smtp.gmail.com with ESMTPSA id fk15-20020a05600c0ccf00b0040e9f7dadc6sm1539709wmb.25.2024.01.24.23.39.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 24 Jan 2024 23:39:16 -0800 (PST)
+Message-ID: <cc68112f-3863-4f82-b708-7787a4895a88@linaro.org>
+Date: Thu, 25 Jan 2024 08:39:15 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL:SHSQR01.spreadtrum.com 40P6NZMG074726
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/8] dt-bindings: clock: qcom: Allow VDD_GFX supply to
+ GX
+Content-Language: en-US
+To: Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>,
+ Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
+ <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Taniya Das <quic_tdas@quicinc.com>,
+ Johan Hovold <johan+linaro@kernel.org>, linux-arm-msm@vger.kernel.org,
+ linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+References: <20240123-sa8295p-gpu-v3-0-d5b4474c8f33@quicinc.com>
+ <20240123-sa8295p-gpu-v3-1-d5b4474c8f33@quicinc.com>
+ <f6844d28-c7c2-4afa-8520-2e62c608930d@linaro.org>
+ <20240124212116.GH2936378@hu-bjorande-lv.qualcomm.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240124212116.GH2936378@hu-bjorande-lv.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-When the PID coefficients k_* are set via sysfs before the IPA
-algorithm is triggered then the coefficients would be overwritten after
-IPA throttle() is called. The old configuration values might be
-different than the new values estimated by the IPA internal algorithm.
+On 24/01/2024 22:21, Bjorn Andersson wrote:
+> On Wed, Jan 24, 2024 at 07:31:34AM +0100, Krzysztof Kozlowski wrote:
+>> On 24/01/2024 05:25, Bjorn Andersson wrote:
+>>> +# Allow either power-domains or vdd-gfx-supply, not both
+>>> +oneOf:
+>>> +  - required:
+>>> +      - power-domains
+>>> +  - required:
+>>> +      - vdd-gfx-supply
+>>> +  - not:
+>>> +      anyOf:
+>>> +        - required:
+>>> +            - power-domains
+>>> +        - required:
+>>> +            - vdd-gfx-supply
+>>
+>> I don't fully understand what you want to achieve here. If only "allow
+>> either", so not a "require either", then simpler:
+>>
+>> https://lore.kernel.org/all/20230118163208.GA117919-robh@kernel.org/
+>>
+> 
+> As discussed in v2, power-domains is currently an optional property in
+> this binding and I'm adding vdd-gfx-supply as an alternative to that.
+> 
 
-There might be a time delay when this overwriting happens. It
-depends on the thermal zone temperature value. The temperature value
-needs to cross the first trip point value then IPA algorithms start
-operating. Although, the PID coefficients setup time should not be
-affected or linked to any later operating phase and values must not be
-overwritten.
+Then go with Rob's syntax - not:required: Much easier code.
 
-This patch initializes params->sustainable_power when the governor
-binds to thermal zone to avoid overwriting k_*. The basic function won't
-be affected, as the k_* still can be estimated if the sustainable_power
-is modified.
-
-Signed-off-by: Di Shen <di.shen@unisoc.com>
----
- drivers/thermal/gov_power_allocator.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-index 81e061f183ad..1b17dc4c219c 100644
---- a/drivers/thermal/gov_power_allocator.c
-+++ b/drivers/thermal/gov_power_allocator.c
-@@ -711,6 +711,8 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
- 
- 	if (!tz->tzp->sustainable_power)
- 		dev_warn(&tz->device, "power_allocator: sustainable_power will be estimated\n");
-+	else
-+		params->sustainable_power = tz->tzp->sustainable_power;
- 
- 	estimate_pid_constants(tz, tz->tzp->sustainable_power,
- 			       params->trip_switch_on,
--- 
-2.17.1
+Best regards,
+Krzysztof
 
 
