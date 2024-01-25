@@ -1,136 +1,103 @@
-Return-Path: <linux-pm+bounces-2704-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2705-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EAE983B97E
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 07:17:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBD1283B987
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 07:24:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA070283A25
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 06:17:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7DA81B23493
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 06:24:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F8B7101CE;
-	Thu, 25 Jan 2024 06:17:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PScqFAnV"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9350810A24;
+	Thu, 25 Jan 2024 06:24:14 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C0D46FD1
-	for <linux-pm@vger.kernel.org>; Thu, 25 Jan 2024 06:17:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26A3410A12;
+	Thu, 25 Jan 2024 06:24:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=222.66.158.135
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706163463; cv=none; b=Hh1UIPuMOdRZKcnqwaJxXIcYEs4f+VMmDsXF+4bFKpgl6OwL9GmHFqJiD/oK4B4KMby/0EoaRI6SKInDBezEHFZYcx1SAF1huVW2mlSSahZtluGI5CJchR3twJaz13Rd2I9gL4Cns7vevi0ql/fza+TEcaZ14r+cZffNAfKqEgs=
+	t=1706163854; cv=none; b=WnafPK1LsZEzIkJKYc9ZfyxdIUWfCcJF8q9Vr19RI53J2UB7QoJjUvzH2mB3df3nMMY1Gg0W4mh5aqNuO7GU5DaX5+2z//3xNnjuNjg48BdGvkGWMDyY6q6uTwSIvOzBVkUA3l5XeHkpmRlF3LYtWeJdP7E5djr4ZDxEuU+T2fY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706163463; c=relaxed/simple;
-	bh=TMTmOLRtFZlMZPx1/g3mNRs377PZeSOMSx1gsecNnJQ=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UZha6ngI/q+XGYe4klb8OT89/eRwsNxSFvQlLKL2qqXJZ+X4MPDyH4JtMDK3+J6uoIZ+G8xDHBOZWLpiXXcJfpc7ZyI3ET4qhQpwZrOXu98CNu9QvleQ//+/d71h8LE3lBH0yp63zrwW0fx9vzuVxjAMCsij6Q1Oh5OP3ZUqboQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PScqFAnV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8DE76C433B1
-	for <linux-pm@vger.kernel.org>; Thu, 25 Jan 2024 06:17:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706163462;
-	bh=TMTmOLRtFZlMZPx1/g3mNRs377PZeSOMSx1gsecNnJQ=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=PScqFAnVXQEY20TtNZa04g9kr/mlQO5uCqo0uDV7Im/F33FXMoDJN+hO/GXbhuBk9
-	 rLapj7MUyLIA8HRF/CW/ERt4TQXLAFpD30Y0J11DDZRblCapxGE+//zKHgveGKw+MU
-	 d1mt5qgzm+0sQunoHWHs2SfFx5uwueAVg7NiXXnXXSkMTB/cyKmkKUClRF/2C3PEJu
-	 ysbjAXRNBemjmbUktI6WAosk9WoWpsS6nqAJnXqmbiTaI6Ubs8YpZsB2nsJeM5UCQm
-	 Fk/3FKbl9m6cFIv/NbTzlt9N7oUuo3okX2CVomsN7FhfAAy7uLzk72JIxDbJalJ8Cd
-	 gq66+XzBx9khQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 7F830C53BCD; Thu, 25 Jan 2024 06:17:42 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 218171] amd-pstate not loading on zen2 threadripper 3960x
- (trx40
-Date: Thu, 25 Jan 2024 06:17:41 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: Perry.Yuan@amd.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: ANSWERED
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-218171-137361-d0H7D52PUl@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218171-137361@https.bugzilla.kernel.org/>
-References: <bug-218171-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1706163854; c=relaxed/simple;
+	bh=IJnqiJ3su0ULAtCoiKNxfIa4lBJxYdBgJQZXApe+y2A=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=EqJV3bUAMVwF7sSDvN7nUgMv2CIUz+o59UxiSKmZCUDAeilO67IsVBH4Aoh2ZvE4NIVEdndPRDEn8hqTc4AcBbjbGXI2Sibm68YafszVWSv6+MObbXcHDJze1cPqrBGGKlpDOoagbSsXAp9Kh14+PngGHnUUi17h/THiR8Tptdg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=unisoc.com; spf=pass smtp.mailfrom=unisoc.com; arc=none smtp.client-ip=222.66.158.135
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=unisoc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=unisoc.com
+Received: from dlp.unisoc.com ([10.29.3.86])
+	by SHSQR01.spreadtrum.com with ESMTP id 40P6NZMG074726;
+	Thu, 25 Jan 2024 14:23:35 +0800 (+08)
+	(envelope-from Di.Shen@unisoc.com)
+Received: from SHDLP.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
+	by dlp.unisoc.com (SkyGuard) with ESMTPS id 4TL9Z2408Nz2SKBpW;
+	Thu, 25 Jan 2024 14:16:10 +0800 (CST)
+Received: from bj10906pcu1.spreadtrum.com (10.0.73.72) by
+ BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Thu, 25 Jan 2024 14:23:33 +0800
+From: Di Shen <di.shen@unisoc.com>
+To: <lukasz.luba@arm.com>, <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
+        <rui.zhang@intel.com>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <xuewen.yan@unisoc.com>, <zhanglyra@gmail.com>, <orsonzhai@gmail.com>,
+        <cindygm567@gmail.com>
+Subject: [PATCH V2] thermal: power_allocator: Avoid overwriting PID coefficients from setup time
+Date: Thu, 25 Jan 2024 14:23:31 +0800
+Message-ID: <20240125062331.28943-1-di.shen@unisoc.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <1f8914cb-fc66-4068-8f7c-4d13b2454f7d@arm.com>
+References: <1f8914cb-fc66-4068-8f7c-4d13b2454f7d@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain
+X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
+ BJMBX01.spreadtrum.com (10.0.64.7)
+X-MAIL:SHSQR01.spreadtrum.com 40P6NZMG074726
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218171
+When the PID coefficients k_* are set via sysfs before the IPA
+algorithm is triggered then the coefficients would be overwritten after
+IPA throttle() is called. The old configuration values might be
+different than the new values estimated by the IPA internal algorithm.
 
---- Comment #35 from Perry Yuan(AMD) (Perry.Yuan@amd.com) ---
-Created attachment 305776
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D305776&action=3Dedit
-patch to enable amd psate driver for Family 17H
+There might be a time delay when this overwriting happens. It
+depends on the thermal zone temperature value. The temperature value
+needs to cross the first trip point value then IPA algorithms start
+operating. Although, the PID coefficients setup time should not be
+affected or linked to any later operating phase and values must not be
+overwritten.
 
-Hi all,
-Please try this patch on your system, I would like to see if the system BIOS
-still looking for some other fixes.=20
+This patch initializes params->sustainable_power when the governor
+binds to thermal zone to avoid overwriting k_*. The basic function won't
+be affected, as the k_* still can be estimated if the sustainable_power
+is modified.
 
-I am not sure if the pstate driver can be loaded successfully on your system
-with this patch, if CPPC capabilities missing on your system, we still add =
-some
-other fixes on for the broken BIOS.=20
+Signed-off-by: Di Shen <di.shen@unisoc.com>
+---
+ drivers/thermal/gov_power_allocator.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-after you build and boot your system,
-please help to provide below info to me to check the driver status.
+diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+index 81e061f183ad..1b17dc4c219c 100644
+--- a/drivers/thermal/gov_power_allocator.c
++++ b/drivers/thermal/gov_power_allocator.c
+@@ -711,6 +711,8 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
+ 
+ 	if (!tz->tzp->sustainable_power)
+ 		dev_warn(&tz->device, "power_allocator: sustainable_power will be estimated\n");
++	else
++		params->sustainable_power = tz->tzp->sustainable_power;
+ 
+ 	estimate_pid_constants(tz, tz->tzp->sustainable_power,
+ 			       params->trip_switch_on,
+-- 
+2.17.1
 
-# sudo dmidecode -t system
-# sudo cpupower frequency-info
-
-echo "=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3Dnorminal freq=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D"
-cat /sys/devices/system/cpu/cpu*/acpi_cppc/nominal_freq
-
-echo "=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3Dnorminal perf=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D"
-cat /sys/devices/system/cpu/cpu*/acpi_cppc/nominal_perf
-
-echo "=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3Dhighest_perf perf=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D"
-cat /sys/devices/system/cpu/cpu*/acpi_cppc/highest_perf
-
-echo "=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3Dlowest_nonlinear_perf perf=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D"
-cat /sys/devices/system/cpu/cpu*/acpi_cppc/lowest_nonlinear_perf
-
-echo "=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3Dlowest perf=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D"
-cat /sys/devices/system/cpu/cpu*/acpi_cppc/lowest_perf
-
-
-
-
-Perry.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
 
