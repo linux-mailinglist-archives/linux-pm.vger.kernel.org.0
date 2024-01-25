@@ -1,145 +1,118 @@
-Return-Path: <linux-pm+bounces-2702-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2703-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02BF883B628
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 01:43:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67D4883B8D0
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 05:59:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 998FCB21049
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 00:43:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9AA431C23290
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 04:59:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D72EA64E;
-	Thu, 25 Jan 2024 00:43:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDF3A79EA;
+	Thu, 25 Jan 2024 04:58:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZJAGw6T9"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="j+RPm/+r"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B02F9193;
-	Thu, 25 Jan 2024 00:43:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5759D79E1
+	for <linux-pm@vger.kernel.org>; Thu, 25 Jan 2024 04:58:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706143405; cv=none; b=DpricDiJhvEyySDujxrm4FIwDWOwh4a/GwrdKw23udIdPfaHFzenmm9deQo8zo4x/l1F5g8DM0f76f0QIqlVdH9c95Lr8n7rkBJEJbl2S0MNW4Ixcj5KeMOevrV3Q2u6WtnTGUAlT9Nk9Hwko6AGz8X0tOP8RqHRrKl+JjRbejo=
+	t=1706158737; cv=none; b=Fs4wMkZir+/t9R77q80d9O8mnjWBl/B+A8Y0dC9g55xfpyKOc78N3PEs8FjCEQlK57IKKDGEmz/5yoEHu6VTjc+GCyuz7Yej57y06DfuaqDYLVAZ1PwpgfcNP141Vf7TYIw0QXW6c0i+grRucKn6o7CRwbbg87eERWBCtYaBl2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706143405; c=relaxed/simple;
-	bh=YJhrz2YlpRjarNzIZIAgKwyto3BYRf6LeDZBXlnVi1Y=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=rZcrxhNRiNo2NJKpEJGXZ78XwwAdzAVPxsJ87Kg4tWmXQrHet6CHfUDtyw+6gssajMk0La9j/8X6zo+/+CtjsHzYoVRkyEVsRIu6LSr4AytEtq7CIuXoYpVArjQLYlsvcQILbOABngXxETVsimdEQ+PY9O174f0560ZqVOMyuk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZJAGw6T9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7614C433F1;
-	Thu, 25 Jan 2024 00:43:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706143405;
-	bh=YJhrz2YlpRjarNzIZIAgKwyto3BYRf6LeDZBXlnVi1Y=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ZJAGw6T983IlfnB3cj9GYpmNPaSWDuZtHQJNZLxA1qtqCKGbzlYKo+6xKTzQHvTV6
-	 X9hTPFD3ix+q9hM3uXFlSL/OX6A7cRTLgU5CosjfaReV4b5X7qtzQmDs2wiptiYu6t
-	 5VMw/09ob/JwCcJVgPAhb/r4FJlnJ9vFZFcRTxoq7Dm/HPufTjzSe8yVTAnXKZ4FUX
-	 njNCE7lNcchoPnbBpEqe5WanUwJpLYn7HeTj5b7clEyUE25b9wIAodvUQuWieJ/5I0
-	 r4z/zgQ8VnaeA5V4EV3mTBIK6uWFtBngWbAyOi3h8aZEoevj15dmgM6HGb8p638oDN
-	 QDg5eum/QT4/A==
-Date: Thu, 25 Jan 2024 09:43:20 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Brian Norris <briannorris@chromium.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len Brown
- <len.brown@intel.com>, Randy Dunlap <rdunlap@infradead.org>,
- suleiman@google.com, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v7] PM: sleep: Expose last succeeded resumed timestamp
- in sysfs
-Message-Id: <20240125094320.13a0844614375deb8bb06db6@kernel.org>
-In-Reply-To: <CA+ASDXOwfUrqRDVx_Fi62ERCLRPF+ixD014vE21Sm4mLF_j12A@mail.gmail.com>
-References: <170359668692.1864392.6909734045167510522.stgit@mhiramat.roam.corp.google.com>
-	<170359669607.1864392.5078004271237566637.stgit@mhiramat.roam.corp.google.com>
-	<20240117090706.3522d23763fab9dcea21aee1@kernel.org>
-	<CAJZ5v0gqWRsSGQZp7tz-0Kw6od+fjd_iof4Rj7fkBy80ySkcEQ@mail.gmail.com>
-	<CA+ASDXOwfUrqRDVx_Fi62ERCLRPF+ixD014vE21Sm4mLF_j12A@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1706158737; c=relaxed/simple;
+	bh=jKgRaBrera7YyMCh7wCiTuLbZwe0CrLa611g0LvaYg8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O9hDgEDWTCPolQMFEQvLAkEIZAypm0L2j1XkWF1ApdGQZClVJt+zeefDIR/XTZwNBwyJ8waNkXMFTq8jEo9JXi5RI/to/1T86FjxQHo45NltOlRj0Fy9sH16K+iOt3c5dmt8C5GTu5rFCCsOtKd/sxE5eQipfQxOly0gng+iruw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=j+RPm/+r; arc=none smtp.client-ip=209.85.210.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-6e0cc84fe4dso3480451a34.2
+        for <linux-pm@vger.kernel.org>; Wed, 24 Jan 2024 20:58:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706158735; x=1706763535; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=tpo7S81Q6e7picJzGDOqqGEtmvErnEcq2Z13Hltk/j8=;
+        b=j+RPm/+rhD2K5zx8ZglGmSn8BX5eFhM+76hB6UpKniqIwqWvpfXtIDlPikA4IGdyU4
+         iItTN4nJXN8tf1+Vy94QSJdH8/VypVCzeMJMBUA7fjiZrZrXYmLDnuj1cI0gcV++OgNU
+         L4bUBy1KBu1SWwEbp2WlsYBIYU3a0qf/YgWigRFWMxzxETISem0yzm79om7Ww13h8WIj
+         JX58oS0acO+jeLGcy6MK46wdnyIKvz5xo3kx2to1cjbMl834hghBH3iMqujLL2yc6YrD
+         8m7+l1biDiXuUFbtVrgEstFt4JXV0aJLAVpSs/l9kBhnwIKV/FjAzx6P88z/Ho3jB4Dz
+         jerg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706158735; x=1706763535;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tpo7S81Q6e7picJzGDOqqGEtmvErnEcq2Z13Hltk/j8=;
+        b=d5f2eVF9Z/Q06UEldVCG5C5Z5DO579ub8oqSJopW7QjtFcQyDPm4hdVxgH5fZtrz/b
+         lcsOwYgUSB32bY0pojV5Py3cDCBa7e9B2MVYocnHA198Z68tjZpfvugzNXwPoiWM9NAF
+         AaTjucAqBl4ZbiuhBlOzP7lD6p88ia7buoINoIJ85OnHSD2tm0Pt6TJXwipYFNFU7KHI
+         Y/fsUZNi6FmPLp6b1x1xwzyhp5qyiwkGSHU+/FiQAD3HiXNwEwC7b1mHzj6zVwyYhFBs
+         TXY5LBEWfnd7cqmLTuVqgN+A+zzsiudLEUXN2gJ45k31FBiYmTx0BBLs1RME253WHTtJ
+         AEsg==
+X-Gm-Message-State: AOJu0Yx2/JSUKzNENBJh24z17GzbafD4U7BtsRda9RK+cnQu5FaPDYh8
+	Fs86957MFsHJ8fplXnEQK6my31PwrAnrYqPpM3Ener2h8J7Xh9g8OvIM87z7on0=
+X-Google-Smtp-Source: AGHT+IH73ljD+tyH98GgQeFlyFzdp++7wNKTqWqkYp/Jj3Cf3NjheYdC9xQZhkIOcBEa0yaqPJi7jw==
+X-Received: by 2002:a9d:7842:0:b0:6e0:e0e2:9e2d with SMTP id c2-20020a9d7842000000b006e0e0e29e2dmr209980otm.41.1706158735392;
+        Wed, 24 Jan 2024 20:58:55 -0800 (PST)
+Received: from localhost ([122.172.83.95])
+        by smtp.gmail.com with ESMTPSA id t26-20020a63955a000000b005d5a7ddd656sm1109237pgn.36.2024.01.24.20.58.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jan 2024 20:58:54 -0800 (PST)
+Date: Thu, 25 Jan 2024 10:28:52 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
+Cc: Liam Girdwood <lgirdwood@gmail.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Mark Brown <broonie@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	kernel@collabora.com, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	"kernelci.org bot" <bot@kernelci.org>
+Subject: Re: [PATCH] cpufreq: mediatek-hw: Don't error out if supply is not
+ found
+Message-ID: <20240125045852.urocd3yzts5ajmbh@vireshk-i7>
+References: <20240124-mtk-cpufreq-hw-regulator-enodev-fix-v1-1-6f9fb7275886@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240124-mtk-cpufreq-hw-regulator-enodev-fix-v1-1-6f9fb7275886@collabora.com>
 
-On Mon, 22 Jan 2024 18:08:22 -0800
-Brian Norris <briannorris@chromium.org> wrote:
-
-> On Fri, Jan 19, 2024 at 1:08â€¯PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > On Wed, Jan 17, 2024 at 1:07â€¯AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > >
-> > > Gently ping,
-> > >
-> > > I would like to know this is enough or I should add more info/update.
-> >
-> > I still am not sure what this is going to be useful for.
-> >
-> > Do you have a specific example?
+On 24-01-24, 17:31, Nícolas F. R. A. Prado wrote:
+> devm_regulator_get_optional() returns -ENODEV if no supply can be found.
+> By introducing its usage, commit 788715b5f21c ("cpufreq: mediatek-hw:
+> Wait for CPU supplies before probing") caused the driver to fail probe
+> if no supply was present in any of the CPU DT nodes.
 > 
-> Since there seems to be some communication gap here, I'll give it a try.
+> Use devm_regulator_get() instead since the CPUs do require supplies
+> even if not described in the DT. It will gracefully return a dummy
+> regulator if none is found in the DT node, allowing probe to succeed.
 > 
-> First, I'll paste the key phrase of its use case from the cover letter:
-> 
->   "we would like to know how long the resume processes are taken in kernel
->   and in user-space"
-> 
-> This is a "system measurement" question, for use in tests (e.g., in a
-> test lab for CI or for pre-release testing, where we suspend
-> Chromebooks, wake them back up, and measure how long the wakeup took)
-> or for user-reported metrics (e.g., similar statistics from real
-> users' systems, if they've agreed to automatically report usage
-> statistics, back to Google). We'd like to know how long it takes for a
-> system to wake up, so we can detect when there are problems that lead
-> to a slow system-resume experience. The user experience includes both
-> time spent in the kernel and time spent after user space has thawed
-> (and is spending time in potentially complex power and display manager
-> stacks) before a Chromebook's display lights back up.
+> Fixes: 788715b5f21c ("cpufreq: mediatek-hw: Wait for CPU supplies before probing")
+> Reported-by: kernelci.org bot <bot@kernelci.org>
+> Closes: https://linux.kernelci.org/test/case/id/65b0b169710edea22852a3fa/
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> ---
+>  drivers/cpufreq/mediatek-cpufreq-hw.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thanks Brian for explaining, this is correctly explained how we are
-using this for measuring resume process duration.
-
-> If I understand the whole of Masami's work correctly, I believe we're
-> taking "timestamps parsed out of dmesg" (or potentially out of ftrace,
-> trace events, etc.) to measure the kernel side, plus "timestamp
-> provided here in CLOCK_MONOTONIC" and "timestamp determined in our
-> power/display managers" to measure user space.
-
-Yes, I decided to decouple the kernel and user space because the clock
-subsystem is adjusted when resuming. So for the kernel, we will use
-local clock (which is not exposed to user space), and use CLOCK_MONOTONIC
-for the user space.
-
-> Does that make sense? Or are we still missing something "specific" for
-> you? I could give code pointers [1], as it's all open source. But I'm
-> not sure browsing our metric-collection code would help understanding
-> any more than these explanations.
-
-I hope it helps you understand more about this. If you have further
-questions, I will be happy to explain.
-
-> (TBH, this all still seems kinda odd to me, since parsing dmesg isn't
-> a great way to get machine-readable information. But this at least
-> serves to close some gaps in measurement.)
-
-Yeah, if I can add more in the stat, I would like to add another duration
-of the kernel resuming as "last_success_resume_duration". Is that smarter
-solution? Or maybe we also can use ftrace for kernel things. But anyway,
-to measure the user-space things, in user-space, we need a reference point
-of start of resuming.
-
-Thank you,
-
-> 
-> Brian
-> 
-> [1] e.g., https://source.chromium.org/chromiumos/chromiumos/codesearch/+/main:src/platform2/power_manager/powerd/metrics_collector.cc;l=294;drc=ce8075df179c4f8b2f4e4c4df6978d3df665c4d1
-
+Applied. Thanks.
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+viresh
 
