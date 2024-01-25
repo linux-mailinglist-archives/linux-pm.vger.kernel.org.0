@@ -1,73 +1,73 @@
-Return-Path: <linux-pm+bounces-2724-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2725-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7F8F83C045
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 12:08:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCFFF83C065
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 12:11:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 190501C20EFA
-	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 11:08:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5789CB35875
+	for <lists+linux-pm@lfdr.de>; Thu, 25 Jan 2024 11:09:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D43A335EF1;
-	Thu, 25 Jan 2024 10:54:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 509485579F;
+	Thu, 25 Jan 2024 10:57:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Z+MnFA/V"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HByBT7zP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09F8935884
-	for <linux-pm@vger.kernel.org>; Thu, 25 Jan 2024 10:54:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 887EF55C37
+	for <linux-pm@vger.kernel.org>; Thu, 25 Jan 2024 10:57:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706180092; cv=none; b=syCG/McXfIy0GrvAjhRJEGMhg+IPCWgCDc7waP/iujvR0z1J/ZzFcMbq+ejBKFTbaOTLuqABBc6GXs1yMNnvucN6D0btGgsPMla4bdJXW4RdQhHnpeYd/33YPSYc2vUSAotWiwRTcPITZsf3tB/KBsiGIgzSrOV8P0U6kV6us50=
+	t=1706180245; cv=none; b=i4NepZSzP48f1pk/XIxXkXPhsvjh5ZIf/9yd0UqtsRppIfzLYsgsh1tUWw/deTlUcOl3UpDVBt8hgWOkz6EijjB7eykyIO52/boy8+DyucbWgM4VvokrKDe0HtPzxq1rDerJ0+M7kyLFHuKVJpiqlPttXa+DgKapttbRm9kvogo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706180092; c=relaxed/simple;
-	bh=t8AxuzA/9zpfwWK5fZHKjrWuE8goSmnp0i6uLz1/Klc=;
+	s=arc-20240116; t=1706180245; c=relaxed/simple;
+	bh=4qD2CXu8N/6r+864TKXfk3a5vuGTZ4qhXFLEbdOxfK8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pUMT6U5lvoOu290qs4M2WCZkHxqwXiK6epaG8/Qt+pLJcNSpxmDa/hhgf5KW/mlBN3ZdwXGGLAVSPu24cwxa/c4z4I3xJq7kYDI2jgu5PzV7JfsqbPRYA+nnxpdZobRytbOIy7T6MZ0gQAwexbm+1Q6uD391TEF8DPbvV5x1N6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Z+MnFA/V; arc=none smtp.client-ip=209.85.218.41
+	 In-Reply-To:Content-Type; b=LvFth20C0lCoFyz965hNrn52P9Q/Cc1q58MSj+kn00SZ7VSg6v+GzF/+uqJItboBQxMO30zQNBKu1vNVPFCLYVybNGvZALPMQoQRMZp0wcSu4+maFgd1ZwMlrpCuXCksIouRqFaewIBtcRzU+scFKwJPQPMKBF2jDAFtj5B9HdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HByBT7zP; arc=none smtp.client-ip=209.85.208.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a30ed6dbdadso236518166b.1
-        for <linux-pm@vger.kernel.org>; Thu, 25 Jan 2024 02:54:50 -0800 (PST)
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2ccec119587so83909201fa.0
+        for <linux-pm@vger.kernel.org>; Thu, 25 Jan 2024 02:57:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706180089; x=1706784889; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1706180241; x=1706785041; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=1SnYSeTb0hYzYHHRSf92AKyNcLjElkUvUSwPVeKb6gI=;
-        b=Z+MnFA/VfOCBBWbUgxcPrVwZJXLoM+7LxWUi8SU3akYKRjbPiq2LWqr7cESdTnRsmm
-         QGGXhb1gm0U6fw1vyiiF3gI0CEokF/Ht8zC383JEUvSXGWvUAAHkn6pnltblgnmBOxzg
-         gHqqzUDcqTwu1YNdhjmA9GjY7gMVrz05jTPj604xxebsefV2B+qDt0m2Ju0dIuuDH+K0
-         OoEh2qDLwVW/UjaExYhWBrFYXAb5GiNQd4T3LPcvzxzrL2SxyQOK2c/DmtPRdU8F2JZg
-         4HszFISmNokXNUgs+rto+Rhr0qqJ0Zg47nDJ2K53c9noLopgPMPFR1BGuI3K2veUGIde
-         iDDw==
+        bh=HwpguGkqNwgpijlAt2Oe0B1qzP3LlkGTfciVecu4QVQ=;
+        b=HByBT7zPYjtY+36iBWoGVukWS8Ximk4NnYYY1Pb+ydZceB5JLZSaiCoqzO18M2WJom
+         8nIWwA4VQKuWJXVSP0FFTJOZGSMZZ3lti5d3AybG7WzyHCX+LhffhZ8dML9pH6og+jBO
+         hh8W/4FyMj7B2ojY0j1ZOLGuCT6gxvjn73ZzPlCuKniX2cdi8Vna7RyXoaBdPuVlv2s7
+         kOwdjodJ8RJ+bGniJJU5/lLMQr9BialzFE0btoWDVPWfFFZN0zX2lDNc/FfFM/oMvwMG
+         nhSnaqlmPuWmCj1Wp51CEYIDHJ1rAMTdCKkSVyCM4ZqCSVwMwRHct28LDic913UC+a+7
+         HiBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706180089; x=1706784889;
+        d=1e100.net; s=20230601; t=1706180241; x=1706785041;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1SnYSeTb0hYzYHHRSf92AKyNcLjElkUvUSwPVeKb6gI=;
-        b=WIflokBDFFA9VZnmsCGg6P1nAUZpZ/bFnSAVRystIoz4QvJa1tr0dXMmsutFpzUhWZ
-         iRY6N0ONa/K53NCo2tg3n5h8y1XGlRDGBbGRTyODLRr7rtK7P64ZVfNXLJY1BdbfMJcR
-         VgO/vW1O7j13onFkZLCQ+fQAZJq7QSSUIq9scwyT1slWZB4e6eSRtF/sD31fkE0sgKSC
-         XI0zIqTs22FPb4D9VenQ+dyxSW62GeSCFwYaYIIpqKiWwTQozEH4VN3gKrjrBkw0572D
-         k1m/5ly1agrC5NiiNfLsCfJ3so1IaYBFI/HhEyjvSIzPb3aIBeaVDpqoU1BkrEtXxDJ3
-         XlIQ==
-X-Gm-Message-State: AOJu0YxSrFH9240vDhx0qydZxpjL5UhlWYq1eQuI96Qm5lVJ6OHBX4sX
-	nXKdQHdLAJcfhBZEYgW59N5WGrpX4DWKa8Sv6Cto9vitlDbu5bgetOb0GJSX5nk=
-X-Google-Smtp-Source: AGHT+IEdrKzqNwv3GxuZV4kPHbiOvFB7XQGm8daioTpNXYPO7NGJZGkKdWlLDObjIsBipUh4ljtOFQ==
-X-Received: by 2002:a17:906:a891:b0:a2a:3101:c9c7 with SMTP id ha17-20020a170906a89100b00a2a3101c9c7mr428051ejb.123.1706180089168;
-        Thu, 25 Jan 2024 02:54:49 -0800 (PST)
+        bh=HwpguGkqNwgpijlAt2Oe0B1qzP3LlkGTfciVecu4QVQ=;
+        b=oFw5z4p5pt8hFaHC5BXlLoagxEWZtmA/7eLStW7Srx9EW+NG3jo5TPtHdRPaETy1dF
+         eBaDNqN7zu1zYh8tWly/wiwsx3dOjQxmVWH4dbDyZTQ8w7Xw1NLwlZSjP+jbxLp196uE
+         ljjvgpfItu0uU6oDzSpxGiVkBLpWYYgP2FiOF84olBbt1lFizHAm85uX3AeROMlWTcLa
+         2eMiRkGTLIPETYwkjWc52enjj3LHq7QvJmNCpIvMqMRKQ1lDiDsOwaP6vsulaG8+OlJ+
+         q99EF/nKrJ+FLAqrNV9zJuG0i9qn5jv4qUIg0YMh3nK6lbp7GjWkkv5QgR6eFKRXBn41
+         TUGg==
+X-Gm-Message-State: AOJu0Yx10qW4VRJ/4YnYvvhfmtwlg0zM8gxWxMdBC2wFeHK+H0x6/RKp
+	6VJ0GQSHkJKxGs3b2Yc6qtRrPn489lZzw8oxLsF036avfBqY4yGQCGY4039bves=
+X-Google-Smtp-Source: AGHT+IGWm1fEW9w//XlIVmaPmR3FIhXEoLIWxVuRfsxULhe2J7QZD7uMCG5MCVPNBXtBMJ9DTE0kGQ==
+X-Received: by 2002:a05:651c:205c:b0:2cd:7039:e281 with SMTP id t28-20020a05651c205c00b002cd7039e281mr530622ljo.8.1706180241628;
+        Thu, 25 Jan 2024 02:57:21 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.215.66])
-        by smtp.gmail.com with ESMTPSA id o18-20020a1709061d5200b00a26f1f36708sm887106ejh.78.2024.01.25.02.54.47
+        by smtp.gmail.com with ESMTPSA id qu27-20020a170907111b00b00a331d6c0c70sm13878ejb.71.2024.01.25.02.57.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 25 Jan 2024 02:54:48 -0800 (PST)
-Message-ID: <83da19cc-a140-406a-bdac-e6d2bdcc9794@linaro.org>
-Date: Thu, 25 Jan 2024 11:54:46 +0100
+        Thu, 25 Jan 2024 02:57:21 -0800 (PST)
+Message-ID: <4e14b7c7-7f0a-437b-aa84-20fdc30a2361@linaro.org>
+Date: Thu, 25 Jan 2024 11:57:18 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -75,8 +75,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/8] dt-bindings: power: reset: add generic PSCRR
- binding trackers
+Subject: Re: [PATCH v2 4/8] dt-bindings: power: reset: add bindings for NVMEM
+ hardware storing PSCR Data
 Content-Language: en-US
 To: Oleksij Rempel <o.rempel@pengutronix.de>,
  Sebastian Reichel <sre@kernel.org>, Rob Herring <robh+dt@kernel.org>,
@@ -90,7 +90,7 @@ Cc: kernel@pengutronix.de, linux-kernel@vger.kernel.org,
  Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org,
  devicetree@vger.kernel.org, =?UTF-8?Q?S=C3=B8ren_Andersen?= <san@skov.dk>
 References: <20240124122204.730370-1-o.rempel@pengutronix.de>
- <20240124122204.730370-3-o.rempel@pengutronix.de>
+ <20240124122204.730370-5-o.rempel@pengutronix.de>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -136,60 +136,72 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240124122204.730370-3-o.rempel@pengutronix.de>
+In-Reply-To: <20240124122204.730370-5-o.rempel@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 24/01/2024 13:21, Oleksij Rempel wrote:
-> Add binding for Power State Change Reason Recording (PSCRR) subsystem
+On 24/01/2024 13:22, Oleksij Rempel wrote:
+> Add device tree bindings that describe hardware implementations of
+> Non-Volatile Memory (NVMEM) used for storing Power State Change Reasons
+> (PSCR).
+
+A nit, subject: drop second/last, redundant "bindings for". The
+"dt-bindings" prefix is already stating that these are bindings.
+See also:
+https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
+
 > 
 > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 > ---
->  .../bindings/power/reset/pscrr.yaml           | 44 +++++++++++++++++++
->  1 file changed, 44 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/reset/pscrr.yaml
+>  .../bindings/power/reset/pscrr-nvmem.yaml     | 53 +++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/reset/pscrr-nvmem.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/power/reset/pscrr.yaml b/Documentation/devicetree/bindings/power/reset/pscrr.yaml
+> diff --git a/Documentation/devicetree/bindings/power/reset/pscrr-nvmem.yaml b/Documentation/devicetree/bindings/power/reset/pscrr-nvmem.yaml
 > new file mode 100644
-> index 000000000000..c8738b4930fe
+> index 000000000000..779920dea283
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/reset/pscrr.yaml
-> @@ -0,0 +1,44 @@
+> +++ b/Documentation/devicetree/bindings/power/reset/pscrr-nvmem.yaml
+> @@ -0,0 +1,53 @@
 > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/power/reset/pscrr.yaml#
+> +$id: http://devicetree.org/schemas/power/reset/pscrr-nvmem.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: Power State Change Reason (PSCR)
-
-Missing final R?
-
+> +title: Generic NVMEM Power State Change Reason Recorder
 > +
 > +maintainers:
 > +  - Oleksij Rempel <o.rempel@pengutronix.de>
 > +
-> +description: Binding for devices responsible to store reasons for power state
+> +description: This binding describes the Non-Volatile Memory (NVMEM) hardware
 
-Line break after description:
+Same comment and also: describe the hardware, not the binding. s/This
+binding describes/something useful/
 
-> +  changes such as reboot and power-off. Reasons like unknown, under voltage,
-> +  and over temperature are captured for diagnostic or automatic recovery
-> +  purposes.
+> +  that stores Power State Change Reasons (PSCR).
+> +
+> +allOf:
+> +  - $ref: pscrr.yaml#
 > +
 > +properties:
-> +  pscr-under-voltage:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +  compatible:
+> +    const: pscrr-nvmem
+> +
+
+So that's a driver :/. Maybe Rob will like it, but it's a no from me.
+Please come up with something really suiting DEVICES, not DRIVERS.
+
+> +  nvmem-cells:
 > +    description: |
-> +      Value to indicate an under-voltage condition of a system critical
-> +      regulator as the reason for the power state change.
 
-I don't understand how it is supposed to work... unless you wrote
-binding for drivers. For drivers it would make sense, but that's another
-problem: binding is not for drivers.
+Do not need '|' unless you need to preserve formatting.
 
-You also did not present here DTS with any actual device doing this. You
-just added a driver...
+> +      A phandle pointing to the nvmem-cells node where the power state change
+> +      reasons are stored.
+> +    maxItems: 1
+> +
+
 
 Best regards,
 Krzysztof
