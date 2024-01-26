@@ -1,158 +1,136 @@
-Return-Path: <linux-pm+bounces-2794-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2795-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4899283D5A9
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 10:12:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87AD883D5BF
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 10:14:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7B3EDB26324
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 09:12:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A75EB27164
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 09:14:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A0AF6A036;
-	Fri, 26 Jan 2024 08:09:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="PjqguNqE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53F976DCF6;
+	Fri, 26 Jan 2024 08:13:21 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2079.outbound.protection.outlook.com [40.107.237.79])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F396A6A024;
-	Fri, 26 Jan 2024 08:09:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.79
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706256551; cv=fail; b=spYcFKwkdAD35+LSlGlYOCUjbAKYH4PtmhcGCBZABsOLgg6puAo3+d2OUqfyCyi72sdhZQnyJIeB8nukYY4BvVsnH/Sjg0mmct5LZuHcE0O0VKWFvazWaeTvVpm7hG2Hi0YnSrMIWYjMZCDjj4BAegO5zDN3vmd6u1oNIwEYTrQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706256551; c=relaxed/simple;
-	bh=Rca+pkGTOn1V8qBOTuTa2KS/EBSLBggibKR/oeICyDI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hInWy166YIWXzXGXM/fYjc5KRqr4elPGCbgFFeR/BkuXsWSjLjWSXRF6ILAsU19tObPhj3jzs7nx++2hTGUahKxpvVLDbgrTideD1Ecm5gWeHN8onI+WcyDPcJGQDZy/pCOdlzBjl9JlWDGLl6xux7YUDzOf3hYBC0SxvF/+ivQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=PjqguNqE; arc=fail smtp.client-ip=40.107.237.79
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SNxag8Ou7dztMbTVSuTmivMR/7UG8OZPWcTARx4Ut47qO+ZQlyi+yN4JC78nNAVbOA8G5za7FKB1+xLfiqHshQ7O37+o9XmElZzkjvtKegpYcjyQxOqtuFURIEfezRSeOCiI4PQ3P0uutvoBQtyQYbl3ECHMIGOrqlF6T9wTrShjRle+3sAjd6EtLgutHnnTP615wIEcuEYFxME4pFKFl6M7xlV4wLP/iP+jeHabmIXvmoMKMpNUUIxFQO5dFVm1im4ZpqUgwA7l5Z6loR1DCZkJTFnd8rFfFZ/f+LZYwJozXWnfq1uWkPDtKWXeRinxfY4LEwyFIP7HdQPpm59Vng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pW9y79Sp5ovfASU9Wv/i0zw9lUzkOy2sk54Ik1mgXx4=;
- b=f2/GgHkYCYz2g9+t8GBKQ9GwpAVth77MtO3vYqAAdtZ98zBSppU6vmfxx8uWAJ+0FqP0bpq54CJbHAlZ2DskYTJd+b+G6e8tT8pOugfkxc2yNC17ZoOUFSTmHXRe89505q3nzlLmXLd55tRdwxXASUPEUkYOPyf1imPWjDhT7DEckuvmPROh+NLjrpAETYQEdVWT0iVhsbEgsDJlz0g4h0bS5MUFT+SuQ6PKle84/dI6eQqmpSBsKY/YLwbjv+3FVpKiocFsnwyoDGg92DutkXzEa24aBcIxMyhrQV0pZ56l/iJJtHR84vHE8M5wsVBHcZLnkkTe9j1xyakD+B1YFg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pW9y79Sp5ovfASU9Wv/i0zw9lUzkOy2sk54Ik1mgXx4=;
- b=PjqguNqEtrpAmHSR9RjlXUPLVqOdC7uZzNnChBwR1SHaO/UqtFrBbTsq0QC/RKPBnzd6LBumUVsSTreIJl6EXB/H6GdcOr0ZvO+6p5mgIDJmNypBH2TFMTeRxoj+vY1Lg7q/0n4yRb/6sn9CwmM+f9FKalMbXTFg/tMpWalb/ew=
-Received: from SJ0PR13CA0142.namprd13.prod.outlook.com (2603:10b6:a03:2c6::27)
- by DM3PR12MB9391.namprd12.prod.outlook.com (2603:10b6:0:3d::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.27; Fri, 26 Jan
- 2024 08:09:05 +0000
-Received: from CO1PEPF000044F2.namprd05.prod.outlook.com
- (2603:10b6:a03:2c6:cafe::46) by SJ0PR13CA0142.outlook.office365.com
- (2603:10b6:a03:2c6::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.21 via Frontend
- Transport; Fri, 26 Jan 2024 08:09:05 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1PEPF000044F2.mail.protection.outlook.com (10.167.241.72) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7228.16 via Frontend Transport; Fri, 26 Jan 2024 08:09:05 +0000
-Received: from pyuan-Chachani-VN.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Fri, 26 Jan 2024 02:09:01 -0600
-From: Perry Yuan <perry.yuan@amd.com>
-To: <rafael.j.wysocki@intel.com>, <Mario.Limonciello@amd.com>,
-	<viresh.kumar@linaro.org>, <Ray.Huang@amd.com>, <gautham.shenoy@amd.com>,
-	<Borislav.Petkov@amd.com>
-CC: <Alexander.Deucher@amd.com>, <Xinmei.Huang@amd.com>,
-	<Xiaojian.Du@amd.com>, <Li.Meng@amd.com>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH 7/7] Documentation: cpufreq: amd-pstate: introduce the new cpu boost control method
-Date: Fri, 26 Jan 2024 16:08:10 +0800
-Message-ID: <1be9c97cafb1406a607184ea48dcdae883dc4cd0.1706255676.git.perry.yuan@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1706255676.git.perry.yuan@amd.com>
-References: <cover.1706255676.git.perry.yuan@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69DD76D1A8;
+	Fri, 26 Jan 2024 08:13:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706256801; cv=none; b=FO24g7rnSGZ0/hK74YNzuqLG4WZRA8asZcD/cfoMW+MiLdgKG8jF9dXhqb6STRcdWCIh0KPhwt3NjKmUNkxAgKDWjmfnZUZRY5fea/cL+WDTFjOOjfzsJUmEVcj7QYusM8XONjTBRi/w0KrQkBQf+YGRpqmHVQ0P1OFO0F6DNmo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706256801; c=relaxed/simple;
+	bh=weH33ky7oNm3EiJ3aEacbbdeg0oNvXbtDaN1/TiAS3s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SQ2Tw+JzdL7xLFSD8sAFY3mTGObKH0qKvKNesj5qQ3OQyTzC98jkCndzfZINFXjM6BWvkTAymWthr3Eyg5OQz7DxYhbkf/yHGP9xmlfZISbm4F0cTJIusEDGWkUmFbFZ+pX5qC2NXy2SUpk7k1iOgKegEVksxGLB2+ivczyUb84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-602cf7dfeb1so1005567b3.0;
+        Fri, 26 Jan 2024 00:13:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706256798; x=1706861598;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/QB6xsdYCRXR/22GDHbqNHIS69HRzW17anUq6GjF6Pw=;
+        b=Q1EwLQCZG+xzSYkzIp7oPz8fwgG7LYxPU7qFoBX9adZVs1r0PmqkqPwz9u6yZK53iH
+         B88Gbc1oMUV5o2EaYA4+/XTDx+echv/elIH7hdB3ctj1Uxx1TJTwjVixqkborctAdfD+
+         NAa+8cQFcF+s4KfpFAkLCmKirFLiE4UfznDf/zbgBUUeFlc3spIEISDdQikCzccCyt4Y
+         oQT+6mhPYMVF2FusHTkgKr6sQqIv7+LjWQHvM7smqB4210ZKonuv4AW12Ncbif6HGbJF
+         G3bMiMObE7JXKa4UoKWER5kDl5AnY32ChCCxpit90w8ITuPqmBB2GbTFTJhhLHGYeMwK
+         vCeQ==
+X-Gm-Message-State: AOJu0YytcwvQ4Qa5JpmMdwOwB+q4MkVg9c3XZZcIvciHmeo2QIe/Tv5R
+	K9DXD+N5Egtxp4j00WLHUHAgb0ez9pBPq9X9sV2239Nk1+ZQiZ+Ds4BMMtvOxj8=
+X-Google-Smtp-Source: AGHT+IHKaJLdjj9r7u/sJwswtl4eZOWoFKnImF7c4zcTQAewRfjU7c4ipSYXiUnGTRyh5TXG5Py26A==
+X-Received: by 2002:a0d:d489:0:b0:5ff:529c:504d with SMTP id w131-20020a0dd489000000b005ff529c504dmr1021098ywd.79.1706256798157;
+        Fri, 26 Jan 2024 00:13:18 -0800 (PST)
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com. [209.85.128.170])
+        by smtp.gmail.com with ESMTPSA id y192-20020a81a1c9000000b00602ab11425csm228055ywg.81.2024.01.26.00.13.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Jan 2024 00:13:17 -0800 (PST)
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-5ff7a8b5e61so1065777b3.2;
+        Fri, 26 Jan 2024 00:13:17 -0800 (PST)
+X-Received: by 2002:a0d:ea82:0:b0:5ff:30d2:a63c with SMTP id
+ t124-20020a0dea82000000b005ff30d2a63cmr960276ywe.14.1706256796983; Fri, 26
+ Jan 2024 00:13:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000044F2:EE_|DM3PR12MB9391:EE_
-X-MS-Office365-Filtering-Correlation-Id: adc8cd7d-251d-4dc8-04fd-08dc1e461066
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	ox3Dx9HW05YyWO/SQhki4+sYjq7r2yUYypGA9BZ3sNe15iJzGmopSGMIRYxIbF16i/u+p3N77PB5WAOcg2UyMjgAdfGKoqdWbEIttS0kn/YNZxmnambHI9gsWOJFQ7mQr6XVR5udHQjwGN6U3DU5ZM67yRkI5o7W9ia4g9IujYY1VoHoLUwxzxm0Q7JMHcEdUxe+aoJNqoOEpSvmXAVk5VTuTNN6UOx/BcmYhnTAUdojwD/VUfw6N4aHbM+URDa3pBmYncotBcnvshYbXmwO8gTw3n+WhFNzL3kBSNBZraymBm+gX1XnpuT75XHJ7+rAOlxRZe9TUoUtvFYpzG/Yj8fIPn34OTXC4qdkmJMqqkGb+UZpV5elGdFyp/3MYFa73pDEn4cd4D0JKgQfqVNZJYq727TUXofxgC5sqzeamXRS9vEmNr4+gI0a+xgCmHc8Q/V6BzJm9KvUY8nPOFq0iCZUg9c0oDN6rEip3+IM5XZoUSKAvN9AFNNYPOYYHNY0ZPiPF7YUyoFCQ3umWtQS+fnX087n8WABjOLKNpLfn9sBZFLRY0Bga0P9bNY7NBm3eLrn5HUuQoHZV4Yke4DI0Rv4yVEqQIX6SKW4aDYqWq8f5ofbvwodsrxrhNOdXWkib54jII9SbqYEx/FtYxO5dJEnwi61/ahq9hieHXqd7PD6ycf/bNfUHXPG3+ZthP8aEMjl6ZcvBTysGcXqYYeVwkMOWH9JjQ8Bz+e2bqF4FRxcXc0h4EYTpJhN3dZ77feGpK1IDRPXhJPo2te/nyFBjA==
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(376002)(39860400002)(136003)(396003)(346002)(230922051799003)(186009)(1800799012)(64100799003)(82310400011)(451199024)(46966006)(40470700004)(36840700001)(83380400001)(41300700001)(47076005)(426003)(2616005)(16526019)(26005)(336012)(81166007)(36860700001)(4326008)(5660300002)(44832011)(8676002)(8936002)(478600001)(6666004)(2906002)(7696005)(54906003)(70206006)(316002)(70586007)(6636002)(110136005)(82740400003)(356005)(86362001)(36756003)(40480700001)(40460700003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2024 08:09:05.0026
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: adc8cd7d-251d-4dc8-04fd-08dc1e461066
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CO1PEPF000044F2.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PR12MB9391
+References: <cover.1706194617.git.geert+renesas@glider.be> <eed6faa02c628d32676ab8ea0eee636b4ffd6c47.1706194617.git.geert+renesas@glider.be>
+ <20240125184650.GO4126432@ragnatech.se>
+In-Reply-To: <20240125184650.GO4126432@ragnatech.se>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Fri, 26 Jan 2024 09:13:05 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUBPdiSqgkZOs2nddvk_xEVe3m7sZ51XC20Optcp+pVLg@mail.gmail.com>
+Message-ID: <CAMuHMdUBPdiSqgkZOs2nddvk_xEVe3m7sZ51XC20Optcp+pVLg@mail.gmail.com>
+Subject: Re: [PATCH v2 09/15] pmdomain: renesas: r8a779h0-sysc: Add r8a779h0 support
+To: =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Magnus Damm <magnus.damm@gmail.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Cong Dang <cong.dang.xn@renesas.com>, 
+	Duy Nguyen <duy.nguyen.rh@renesas.com>, Hai Pham <hai.pham.ud@renesas.com>, 
+	Linh Phung <linh.phung.jy@renesas.com>, linux-renesas-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Perry Yuan <Perry.Yuan@amd.com>
+Hi Niklas,
 
-Introduce AMD CPU frequency boosting control sysfs entry which userd for
-switching boost on and boost off.
+On Thu, Jan 25, 2024 at 7:46=E2=80=AFPM Niklas S=C3=B6derlund
+<niklas.soderlund@ragnatech.se> wrote:
+> On 2024-01-25 16:34:37 +0100, Geert Uytterhoeven wrote:
+> > From: Duy Nguyen <duy.nguyen.rh@renesas.com>
+> >
+> > Add support for R-Car V4M (R8A779H0) SoC power areas to the R-Car SYSC
+> > driver.
+> >
+> > Signed-off-by: Duy Nguyen <duy.nguyen.rh@renesas.com>
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > ---
+> > v2:
+> >   - Add vendor-prefix to DT binding definition header file.
 
-If core performance boost is disabled while a core is in a boosted P-state,
-the core automatically transitions to the highest performance non-boosted P-state
-The highest perf and frequency will be limited by the setting value.
+> > --- /dev/null
+> > +++ b/drivers/pmdomain/renesas/r8a779h0-sysc.c
+> > @@ -0,0 +1,55 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Renesas R-Car V4M System Controller
+> > + *
+> > + * Copyright (C) 2016-2017 Glider bvba
+>
+> Is 2016-2017 correct? With or without that fixed,
 
-Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
----
- Documentation/admin-guide/pm/amd-pstate.rst | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+That must have been copied from r8a7795-sysc.c...
+As the layout of R-Car V4M is completely different from R-Car H3,
+I will drop that line (with or without reposting).
 
-diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-index 1cf40f69278c..d72dc407c4db 100644
---- a/Documentation/admin-guide/pm/amd-pstate.rst
-+++ b/Documentation/admin-guide/pm/amd-pstate.rst
-@@ -385,6 +385,17 @@ control its functionality at the system level.  They are located in the
-         to the operation mode represented by that string - or to be
-         unregistered in the "disable" case.
- 
-+``cpb_boost``
-+        Specifies whether core performance boost is requested to be enabled or disabled
-+        If core performance boost is disabled while a core is in a boosted P-state, the
-+        core automatically transitions to the highest performance non-boosted P-state.
-+        AMD Core Performance Boost(CPB) is controlled by this new attribute file which
-+        allow user to change all cores frequency boosting state. It supports both
-+        ``active mode`` and ``passive mode`` control with below value write to it.
-+
-+        "0" Disable Core performance Boosting
-+        "1" Enable  Core performance Boosting
-+
- ``cpupower`` tool support for ``amd-pstate``
- ===============================================
- 
--- 
-2.34.1
+> Acked-by: Niklas S=C3=B6derlund <niklas.soderlund+renesas@ragnatech.se>
 
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
