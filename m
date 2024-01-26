@@ -1,73 +1,73 @@
-Return-Path: <linux-pm+bounces-2797-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2798-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C55E483D833
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 11:31:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 533BA83D837
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 11:31:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C6131F287F6
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 10:31:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78F401C2985E
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 10:31:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A15CB1D6A4;
-	Fri, 26 Jan 2024 10:16:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D8291D6A6;
+	Fri, 26 Jan 2024 10:16:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lFc08UVS"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UCYJ/D0h"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044DC1D556
-	for <linux-pm@vger.kernel.org>; Fri, 26 Jan 2024 10:16:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D6761D6AE
+	for <linux-pm@vger.kernel.org>; Fri, 26 Jan 2024 10:16:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706264174; cv=none; b=GNPDekhOV2C/ReZa4yFQDtsoDTM8eiL0/Hl0S/w5ZYASv6YinFC51AtososzCKpynHFkR24h5jmgAxWpUYAocEqlhUvewy7nI+B7qm3eDk/aadGtZ7nmrhb1siCGdubhEzAy1jybvxWvpAejY/Aw9WCcrUjMFV9oaJ29/IK4b8U=
+	t=1706264182; cv=none; b=U3iqdRmHyOQSXkU3IngaCXAGlDt/fsMITy0swQl5uZrs4DvRWVTYN8j6TvhZXHmfXiPlO3v1Dtf2QAAe19hqKl/ZhrKPgbo6Sfd7u4HDvJPRBTg0DOi+IEEDn9z7D7Q5l9lOOe+OGfpOSsHgyn6AhDuZp+JZ9LZG+OT8Wphm3FI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706264174; c=relaxed/simple;
-	bh=r2tD8TfAR7Qevgr/V5++JsGnayiSxUnVUIOR5rC1tF4=;
+	s=arc-20240116; t=1706264182; c=relaxed/simple;
+	bh=6sixhE7yhkWlhTTqjUNHipbSOTsTn2VwhmgcC5z/IDw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IknfARFLf73Clx6UNgEzaAyb6u30Dbw80sjMBiO5z18bo6n3Hi47ev1avr/qti6DqtKT+xYytH25XYQl8TIEBO/FM9pKkgIfl8Z3z+LfXlKQYywhiiJ7R3xdF7HsgSylb6a2epwq9cSpBqKhzpRrlrtAFk50VRpHwj9IvZ3N3R0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lFc08UVS; arc=none smtp.client-ip=209.85.167.50
+	 In-Reply-To:Content-Type; b=L9kdssImby2AZu9aW9Qs9jECFMwYPQNcb/PX83E5aGc3adm5zYtcpXyLNU2euphpzum0LT8t4obNgDE5rkrlzjIdZvMisBy31HODGiV3j5dAvtbeivBXSsCkzXRI+lqa5kJkZmxjzzWJBEPy0ry+a2qsW1o0JpqBHL3MP57yLFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UCYJ/D0h; arc=none smtp.client-ip=209.85.218.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-510221ab3ebso295547e87.1
-        for <linux-pm@vger.kernel.org>; Fri, 26 Jan 2024 02:16:11 -0800 (PST)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a2f22bfb4e6so74796566b.0
+        for <linux-pm@vger.kernel.org>; Fri, 26 Jan 2024 02:16:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706264170; x=1706868970; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1706264178; x=1706868978; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=9il6htOC7lXil9U/x6IrQ9HRc9ukMWp9abNZLoFpHw0=;
-        b=lFc08UVSLlMekAnRaLuVyfdDSh7/nOR+hQ2QF+t0XHT00K+TiPubzGndGjXlz1UGU5
-         JEh6CqqPzV/kQMDvWRlwIZCQjAvj1kTguBi0SFwSjgkEw6jbpcib+/4R2364H9e4RHma
-         MeXYRlUDVPuNPPmIEAOIRp/N5pjV1w2O3pWeNxnmsd89HNNi9MGlnt8GwfOO26Q5l/pV
-         iTMS2Ky98rCfHLsKpdgntO4T8+pIsKbz5nvs/zb7p7dTin4ZX3+NK6UoD/7CUW331rhI
-         jKABbRRxqyudteLuEvULYhebuyNfLvnkiyd4Rj6jEqcxbSjP0ELW+Mq863oTXG/1pSi2
-         Zf5A==
+        bh=y17/GfiMiLTWhtMyJAWwdGTOZF67Y8WYspXys70blEA=;
+        b=UCYJ/D0h9qG8fNzuiMCWPqTrIA+1hUu35ll4+sipAkkWWIXI8o4pGaEyj1TpNLKHhE
+         n76ubQIjx7ZfHk9qbbfhgmnYv1kUOfuB076m5zoWuVQpBIUQcrOjlapxVF4SiMcuTiXo
+         gkV8CrdMNiVugQeTzh8imf+ND+ym+DVjx6edOxJLCd8nb6Mb0TbY3V148XwctPfWJPAe
+         xpKxz/AyUnXzgARQLCQ2wj3pwZvVagzgFsFKi3XLXzLMaEilyCHsi4DGUjj4ivILmes9
+         4t9VdizpFK3l0Gl8VYRvxYz+jNKPYN4FdExEwRde0kkdKcqClSdHQ0D8BQSWyzdS4TXl
+         QMjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706264170; x=1706868970;
+        d=1e100.net; s=20230601; t=1706264178; x=1706868978;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9il6htOC7lXil9U/x6IrQ9HRc9ukMWp9abNZLoFpHw0=;
-        b=IH1addGYfKnsheuAvR7A3G9yKpFwffELlGECbNZ3QN50ooqpC3WAIzcmJt5ctVcusj
-         NuhEK/HWSC5fEnGj4DSA064xwMJ4koGxlToNt1O3n6DQCRNnKN1pV1wXeh0V1LRvLNpE
-         SIZzXPPZOEMZPZ49tO7cGgkP+7diTpcRgGTIapxf0C/356ViJTOKkFXzHKXOwDDwzyBB
-         93UDQ9T0iHNbtiUWgkTKs9sGx0EXCTy4+qwkPBqMtfh88QeAyliJmjFwHnSATQa2pRm1
-         CrbzxBX/IYcgu9YkMXuFhfF7eoxmuR1/c/frtYp7Ggr280BDtIJciZgbtN4yH5Ocm6iU
-         m1vg==
-X-Gm-Message-State: AOJu0Yz2XQTYowOtcVXaTrCBLKv53g4UnZEVS584rf4yNUvQKGF8xzJX
-	6luY7SCvxGprqper/xc3NxU53jrMCI9+tKnc+tvCVQ/q3/dMwCKJ3/PzjvwPy2M=
-X-Google-Smtp-Source: AGHT+IG/g8kU96OQf2OxjPQajc7ISxqWLUXzFtglYIv4Sw9/pU4apUsozNteayYtyXFACCgdwwuUtA==
-X-Received: by 2002:a05:6512:280e:b0:510:1096:5270 with SMTP id cf14-20020a056512280e00b0051010965270mr687070lfb.139.1706264169984;
-        Fri, 26 Jan 2024 02:16:09 -0800 (PST)
+        bh=y17/GfiMiLTWhtMyJAWwdGTOZF67Y8WYspXys70blEA=;
+        b=kQ/g9tLSoyrWGO0kUni3m5GkWKpGA/qfw2UwJARceLD94tsDfl4+bbrM/zisqpCKh1
+         kLfZ6S7PucKSZ5KblBYbJU+BKhiWkEz/9aM+NJDgirfNZq+TYEfjBQp8xTYhxxFAwhrx
+         0hzV5WrLQGv7cko4fpECZJlvmyn0Z7n3Fkz7aYCw1HUbaDIB9jyWDreNw7r+H8KX8B9T
+         MC4ICvTTUHiUTQ0WrZzrWnNvBT6AB6yVlvpgTaJNUz0V/6NSTe86ZzvSBIfqsBo9M2gl
+         DkWF0lpgXHy63R8YlhKqpKImSQpIyYzm7s0XNYOi5fnqlZgSBWNg2pNlrIcNZXLFDGPh
+         y47g==
+X-Gm-Message-State: AOJu0YyMK8A3aJql4n26RMtkbmpdzAdTzCfv73n3A0+yEbE24A7iIXd2
+	ftzkHsO+La0id2MUe+ONw6EmLiXvoJK0i407mDNklzS9IV0C4RGfs3ZyLjW8hH8=
+X-Google-Smtp-Source: AGHT+IH5NaDfT4U8OQmRiWLzSDG80922dQsNTjsH8VXzsYUpwzE/+hQ0IS7cm6eaV6ZuzlSZnz6xJQ==
+X-Received: by 2002:a17:906:1949:b0:a31:59a2:b231 with SMTP id b9-20020a170906194900b00a3159a2b231mr1261798eje.8.1706264177757;
+        Fri, 26 Jan 2024 02:16:17 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.215.66])
-        by smtp.gmail.com with ESMTPSA id sn24-20020a170906629800b00a3040040011sm462787ejc.45.2024.01.26.02.16.07
+        by smtp.gmail.com with ESMTPSA id sn24-20020a170906629800b00a3040040011sm462787ejc.45.2024.01.26.02.16.15
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Jan 2024 02:16:09 -0800 (PST)
-Message-ID: <db9bf8b0-9bba-4d36-890f-f26ea51f0a3f@linaro.org>
-Date: Fri, 26 Jan 2024 11:16:06 +0100
+        Fri, 26 Jan 2024 02:16:17 -0800 (PST)
+Message-ID: <7fbf03f9-32f7-465b-993e-dcd5867d9403@linaro.org>
+Date: Fri, 26 Jan 2024 11:16:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -75,8 +75,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 02/15] dt-bindings: clock: Add R8A779H0 V4M CPG Core
- Clock Definitions
+Subject: Re: [PATCH v2 04/15] dt-bindings: power: Add r8a779h0 SYSC power
+ domain definitions
 Content-Language: en-US
 To: Geert Uytterhoeven <geert+renesas@glider.be>,
  Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
@@ -93,7 +93,7 @@ Cc: Cong Dang <cong.dang.xn@renesas.com>,
  linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
  =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
 References: <cover.1706194617.git.geert+renesas@glider.be>
- <11acbd2a30b58607474e9c32eb798b3a00e85e73.1706194617.git.geert+renesas@glider.be>
+ <c5cbef71178cada761e9da7bcbb6f21334f93ef8.1706194617.git.geert+renesas@glider.be>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -139,24 +139,20 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <11acbd2a30b58607474e9c32eb798b3a00e85e73.1706194617.git.geert+renesas@glider.be>
+In-Reply-To: <c5cbef71178cada761e9da7bcbb6f21334f93ef8.1706194617.git.geert+renesas@glider.be>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 On 25/01/2024 16:34, Geert Uytterhoeven wrote:
 > From: Duy Nguyen <duy.nguyen.rh@renesas.com>
 > 
-> Add all Clock Pulse Generator Core Clock Outputs for the Renesas R-Car
-> V4M (R8A779H0) SoC.
+> Add power domain indices for the Renesas R-Car V4M (R8A779H0) SoC.
 > 
 > Signed-off-by: Duy Nguyen <duy.nguyen.rh@renesas.com>
 > Signed-off-by: Hai Pham <hai.pham.ud@renesas.com>
 > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 > Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 > ---
-> v2:
->   - Add Reviewed-by,
->   - Add vendor-prefix to file name and update include guard.
 
 
 Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
