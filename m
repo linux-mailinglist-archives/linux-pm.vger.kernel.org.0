@@ -1,240 +1,169 @@
-Return-Path: <linux-pm+bounces-2786-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2787-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67A5983D501
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 09:55:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 735F383D594
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 10:10:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C2991C231BB
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 08:55:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DBE931F257E5
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 09:10:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F03F424205;
-	Fri, 26 Jan 2024 07:05:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EFC715E80;
+	Fri, 26 Jan 2024 08:08:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="QD4JrRyN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7F071AACD;
-	Fri, 26 Jan 2024 07:05:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706252757; cv=none; b=ShZAY6bjoQm3NWiChmnx9UvJy+5vesfMllDi3z3Z5vmL54L4u7p3P+XiLyDrlTm31709r0/7HQh/uDv+TVRz/Ucjjcyc5psXectZJ0FP5G82gW9dZpK+QzGinMciaYlQY6wELfeG6OoaXWRLeFMSRquk+EIJ01KEFls6k0WVEmk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706252757; c=relaxed/simple;
-	bh=pcsil5fXr8+VHV+eVDviFFwwRsocY/oapa4amn5QRYY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qZu6X8WPyr2XN2+KdKYJ8q9ApfUrDiSrFYOQGLlEEAop6xnkRSV7UFu6eM0+RD8nh6oErqmPWqY+atAGTVti3w7aqDm4ocoteeCm2eUXYyjaS8aOVDooofzW1zWTPUamskRNk2LyDC2d3+j52JDBESsRjOCvlcI4+xdx1SMIUCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [192.168.0.224] (ip5f5aec07.dynamic.kabel-deutschland.de [95.90.236.7])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 0DFC161E5FE03;
-	Fri, 26 Jan 2024 08:03:18 +0100 (CET)
-Message-ID: <f07333d2-ebb0-4531-a396-8fb3d1daa2c3@molgen.mpg.de>
-Date: Fri, 26 Jan 2024 08:03:17 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5443D134B0;
+	Fri, 26 Jan 2024 08:08:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.40
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706256529; cv=fail; b=gsIn/Oowo6jK5dBE9bRFWaohfvIY/vxk5R5UEkOS2r0xRoXY/hWSP4eSTK4amNh4nn5G7nFLI7iGHlVj0tNzqtBoKOn7GJK7Y01YW2Kl32VK3hbNSTRyJpA8EtgVxRwcKZxqH0LX708IqIgM8qBY7gEtNB5j+jsYd/Ou1bQ7f8g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706256529; c=relaxed/simple;
+	bh=8UAV1Rvk2da0nerHrm0uNXazGBsJPqjm5xMJG2ONr0k=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=C40qd56KVosK+Ay9w+6sOpBKyn6pEtaaphc87HcTU6ZxqBUf59baE6WZaPMhgrA4Pi4h7TzyTpsnE+CzWuGmS+SpRQTxCCqqQZFiDLOD2cwuqnuUQgyOj7scVwKBKK5doHnJXzYp1EOQJjMchx5qiHY2NVI0fAEMNMch3bF9UiE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=QD4JrRyN; arc=fail smtp.client-ip=40.107.236.40
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CI5POUREse0UGV2W4Qdy0r0k7kekQFVokUDeKL9TsRHm2o4rlHaKdwRRolKD6EGUfHyTPxhto3eGYnwbHZi4mP6N+Z1lXEMT5W4tkLmm6SaICDuk5Sr2dDP49dAelkmeoNfEX3usQfXIgy8XluAyQ8dH9o6mt9LvnAXHPY3eRytqXH0DCrnCowvX8h/6tNxSslBOMTSe5JcylTUbhaKkNzI+RPK7qBpuTqfnCPb040S+MHX1jMguhLaNYgRxPTJKne/vhzN14a9rySxbF30Z7jpCkar83EFhzy2VAs/8Kn2bm/TKm08NazgK5xtAxKhc6fu9V5H/iZa5yFqP+ZdRjQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7llw/HJjJQDB4xB7rlbz1hX21PpKFfiujvi4DuMQ8to=;
+ b=gAxCneSzmtQHWjzl/KSyhhzLfAJDfZDWv34B7dlb4j7xy/lzKl3OfnbdzvAYfOdGG0L5D14YHj3PXZpJRaqUooQRTy2ImmabO927k+m0JYpzvjwEaJ6XglQ1520Llt5qwH3HsnIaS1EWWTYZT7AFPVslq+rKcXh8h06vgrJzHf5jrEA6Dk7LXwFMNvkp9iMFqTBd2rR5U7fTKKujwiMK2RUxP8INvQPeSPpfUIjp2+QT+dUz6PNvvLTWq2/g1exQZf8/Si82Fn+uZdLeM/yjCvo6BLC635dTvmdnP7HRUMmhtvkcCp9KtzTmTYRz97r2OTpUE8Vqtt9guejEhpgyZw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7llw/HJjJQDB4xB7rlbz1hX21PpKFfiujvi4DuMQ8to=;
+ b=QD4JrRyNr4K6YEECf3XQYiFPTELUuY2pF1v3wW29hCEDnfHV7Zp1hayMnYs5b2fNCorO0au+BFFhQ6vc7toW06j/34LKCTJw4DwjG5YoZprphXU3eEq+MUvNdD9mL37KSjCy7me/POB1Mb/212dK2dSyH0HXY02NfNOD/IE4mIw=
+Received: from BYAPR01CA0002.prod.exchangelabs.com (2603:10b6:a02:80::15) by
+ CH3PR12MB8971.namprd12.prod.outlook.com (2603:10b6:610:177::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.26; Fri, 26 Jan
+ 2024 08:08:43 +0000
+Received: from CO1PEPF000044F4.namprd05.prod.outlook.com
+ (2603:10b6:a02:80:cafe::f3) by BYAPR01CA0002.outlook.office365.com
+ (2603:10b6:a02:80::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.26 via Frontend
+ Transport; Fri, 26 Jan 2024 08:08:43 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1PEPF000044F4.mail.protection.outlook.com (10.167.241.74) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7228.16 via Frontend Transport; Fri, 26 Jan 2024 08:08:43 +0000
+Received: from pyuan-Chachani-VN.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Fri, 26 Jan 2024 02:08:26 -0600
+From: Perry Yuan <perry.yuan@amd.com>
+To: <rafael.j.wysocki@intel.com>, <Mario.Limonciello@amd.com>,
+	<viresh.kumar@linaro.org>, <Ray.Huang@amd.com>, <gautham.shenoy@amd.com>,
+	<Borislav.Petkov@amd.com>
+CC: <Alexander.Deucher@amd.com>, <Xinmei.Huang@amd.com>,
+	<Xiaojian.Du@amd.com>, <Li.Meng@amd.com>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/7] AMD Pstate Driver Core Performance Boost
+Date: Fri, 26 Jan 2024 16:08:03 +0800
+Message-ID: <cover.1706255676.git.perry.yuan@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: PS/2 keyboard of laptop Dell XPS 13 9360 goes missing after S3
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: linux-input@vger.kernel.org, linux-pm@vger.kernel.org,
- Dell.Client.Kernel@dell.com, regressions@lists.linux.dev,
- linux-kernel@vger.kernel.org
-References: <0aa4a61f-c939-46fe-a572-08022e8931c7@molgen.mpg.de>
- <f27b491c-2f1c-4e68-804c-24eeaa8d10de@redhat.com>
- <0b30c88a-6f0c-447f-a08e-29a2a0256c1b@molgen.mpg.de>
- <dde1bdfe-7877-41bd-b233-03bcdba0e2de@redhat.com>
-Content-Language: en-US
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <dde1bdfe-7877-41bd-b233-03bcdba0e2de@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000044F4:EE_|CH3PR12MB8971:EE_
+X-MS-Office365-Filtering-Correlation-Id: c1457d53-5f7b-4a3a-11df-08dc1e460378
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	H2HulVxBdh9uqnF7lJycMm0lK5UtGzhDwcVPln0Em7gP3Sq3gKg/KmKTy3BKo3Io717v7Y8v9i8FZf4wHsQ6+MXPPI3mAhunJ0u739DDn4eKhzPD+B+UTesno4/D25djrySSxP/pot3akjSv/LFoDR6lqgSKnsYO4DufCjZuevB4Br3dWV0ifiZk8Kiart5RSAGT9SxiRwmaXZIZ5njMcs75CS06p62n+Z0PzGzM9kM1geAbie9jtwWFeMqjiG5xGdh8fjmdOMhXUqj3A1GfJx5QvtZ7YG6D1t5g6lchm1yVQgdowfSkvzl1KOaVyIDmxf0bBXg0HKwmaOLz/aWqZxhxEGvUDWlBQMCR8HqOlkuRgUxms4m8lgkFyd1WZz8WIedMyUkRhT7U4iWXcUKrmjTO9SZqBTeHecUj9NpN2j4OiVxrO7dbtF++2GkwDWukppBzCHz+MpUDJH3QMP9j62WODxdheMusMBvD1YRanZLqR2pDNgK+bI/okapVvY9/dQHvyNslo8AebK9V+Y+BeitYMFIDeSqB9YyO9Piz2PT91gzM8Ibo/TGeJRdbtHNaxmoNcEgEUnqegubNbXCSWZfYUMqp3Krv7Nv7rtOuFQQyjcTGENT4OOkJvSOPRbOKYBgg415Bb4doSZ7K1G66R6CMOXmBkWCJljzVhJBwjkGItawD9AliBfsixvPYoMFF1B3p93mc70rpz3tj/jdHyW5IQP2UBoSGtqIgkkVsq47Fgg8GplhjSXyxnc27FB/YQ1uDjhMVYSv9wKTzJ1mYkA==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(346002)(39860400002)(376002)(396003)(136003)(230922051799003)(82310400011)(64100799003)(186009)(451199024)(1800799012)(46966006)(40470700004)(36840700001)(83380400001)(47076005)(26005)(2616005)(426003)(16526019)(336012)(82740400003)(36860700001)(7696005)(4326008)(8676002)(8936002)(81166007)(54906003)(478600001)(2906002)(44832011)(5660300002)(6636002)(70586007)(6666004)(316002)(70206006)(110136005)(41300700001)(356005)(86362001)(36756003)(40460700003)(40480700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2024 08:08:43.2793
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c1457d53-5f7b-4a3a-11df-08dc1e460378
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CO1PEPF000044F4.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8971
 
-Dear Hans,
+The patchset series add core performance boost feature for AMD pstate
+driver including passisve and active mode support.
 
+User can change core frequency boost control with a new sysfs entry:
 
-Thank you for your reply, and sorry for the delay on my side. I needed 
-to set up an environment to easily build the Linux kernel.
+"/sys/devices/system/cpu/amd_pstate/cpb_boost"
 
+The legancy boost interface has been removed due to the function
+conflict with new cpb_boost which can support actrive and passive mode.
 
-Am 22.01.24 um 14:43 schrieb Hans de Goede:
+1. enable core boost:
+$ sudo bash -c "echo 0 > /sys/devices/system/cpu/amd_pstate/cpb_boost"
+$ lscpu -ae
+CPU NODE SOCKET CORE L1d:L1i:L2:L3 ONLINE    MAXMHZ   MINMHZ      MHZ
+  0    0      0    0 0:0:0:0          yes 4201.0000 400.0000 2983.578
+  1    0      0    1 1:1:1:0          yes 4201.0000 400.0000 2983.578
+  2    0      0    2 2:2:2:0          yes 4201.0000 400.0000 2583.855
+  3    0      0    3 3:3:3:0          yes 4201.0000 400.0000 2983.578
+  4    0      0    4 4:4:4:0          yes 4201.0000 400.0000 2983.578
 
-> On 1/21/24 15:26, Paul Menzel wrote:
-
-[…]
-
->> Am 20.01.24 um 21:26 schrieb Hans de Goede:
->>
->>> On 1/18/24 13:57, Paul Menzel wrote:
->>>> #regzbot introduced v6.6.11..v6.7
->>
->>>> There seems to be a regression in Linux 6.7 on the Dell XPS 13 9360 (Intel i7-7500U).
->>>>
->>>>       [    0.000000] DMI: Dell Inc. XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022
->>>>
->>>> The PS/2 keyboard goes missing after S3 resume¹. The problem does not happen with Linux 6.6.11.
->>>
->>> Thank you for reporting this.
->>>
->>> Can you try adding "i8042.dumbkbd=1" to your kernel commandline?
->>>
->>> This should at least lead to the device not disappearing from
->>>
->>> "sudo libinput list-devices"
->>>
->>> The next question is if the keyboard will still actually
->>> work after suspend/resume with "i8042.dumbkbd=1". If it
->>> stays in the list, but no longer works then there is
->>> a problem with the i8042 controller; or interrupt
->>> delivery to the i8042 controller.
->>>
->>> If "i8042.dumbkbd=1" somehow fully fixes things, then I guess
->>> my atkbd driver fix for other laptop keyboards is somehow
->>> causing issues for yours.
->>
->> Just a quick feedback, that booting with `i8042.dumbkbd=1` seems to fix the issue.
->>
->>> If "i8042.dumbkbd=1" fully fixes things, can you try building
->>> your own 6.7.0 kernel with commit 936e4d49ecbc:
->>>
->>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=936e4d49ecbc8c404790504386e1422b599dec39
->>>
->>> reverted?
->>
->> I am going to try that as soon as possible.
-> 
-> Assuming this was not some one time glitch with 6.7.0,
-> I have prepared a patch hopefully fixing this (1) as well
-> as a follow up fix to address another potential issue which
-> I have noticed.
-
-Unfortunately, it wasn’t just a glitch.
-
-> Can you please give a 6.7.0 (2) kernel with the 2 attached
-> patches added a try ?
-> 
-> I know building kernels can be a bit of work / takes time,
-> sorry. If you are short on time I would prefer testing these 2
-> patches and see if they fix things over trying a plain revert.
-
-Applying both patches on v6.7.1
-
-     $ git log --oneline -3
-     053fa44c0de1 (HEAD -> v6.7.1) Input: atkbd - Do not skip 
-atkbd_deactivate() when skipping ATKBD_CMD_GETID
-     0e0fa0113c7a Input: atkbd - Skip ATKBD_CMD_SETLEDS when skipping 
-ATKBD_CMD_GETID
-     a91fdae50a6d (tag: v6.7.1, stable/linux-6.7.y, origin/linux-6.7.y) 
-Linux 6.7.1
-
-I am unable to reproduce the problem in eight ACPI S3 suspend/resume 
-cycles. The DMAR errors [3] are also gone:
-
-     $ sudo dmesg --level alert,crit,err,warn
-     [    0.065292] MDS CPU bug present and SMT on, data leak possible. 
-See https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/mds.html 
-for more details.
-     [    0.065292] MMIO Stale Data CPU bug present and SMT on, data 
-leak possible. See 
-https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/processor_mmio_stale_data.html 
-for more details.
-     [    0.092064] ENERGY_PERF_BIAS: Set to 'normal', was 'performance'
-     [    0.294522] hpet_acpi_add: no address or irqs in _CRS
-     [    0.345003] i8042: Warning: Keylock active
-     [    1.063807] usb: port power management may be unreliable
-     [    1.178339] device-mapper: core: CONFIG_IMA_DISABLE_HTABLE is 
-disabled. Duplicate IMA measurements will not be recorded in the IMA log.
-     [   37.712916] wmi_bus wmi_bus-PNP0C14:01: WQBC data block query 
-control method not found
-     [   67.307070] warning: `atop' uses wireless extensions which will 
-stop working for Wi-Fi 7 hardware; use nl80211
-     [  141.861803] ACPI Error: AE_BAD_PARAMETER, Returned by Handler 
-for [EmbeddedControl] (20230628/evregion-300)
-     [  141.861808] ACPI Error: Aborting method \_SB.PCI0.LPCB.ECDV.ECR1 
-due to previous error (AE_BAD_PARAMETER) (20230628/psparse-529)
-     [  141.861814] ACPI Error: Aborting method \_SB.PCI0.LPCB.ECDV.ECR2 
-due to previous error (AE_BAD_PARAMETER) (20230628/psparse-529)
-     [  141.861818] ACPI Error: Aborting method \ECRW due to previous 
-error (AE_BAD_PARAMETER) (20230628/psparse-529)
-     [  141.861821] ACPI Error: Aborting method \ECG1 due to previous 
-error (AE_BAD_PARAMETER) (20230628/psparse-529)
-     [  141.861824] ACPI Error: Aborting method \NEVT due to previous 
-error (AE_BAD_PARAMETER) (20230628/psparse-529)
-     [  141.861827] ACPI Error: Aborting method \_SB.PCI0.LPCB.ECDV._Q66 
-due to previous error (AE_BAD_PARAMETER) (20230628/psparse-529)
-
-Please tell me, if I can do anything else.
+2. disabble core boost:
+$ sudo bash -c "echo 1 > /sys/devices/system/cpu/amd_pstate/cpb_boost"
+$ lscpu -ae
+   0    0      0    0 0:0:0:0          yes 5759.0000 400.0000 2983.578
+  1    0      0    1 1:1:1:0          yes 5759.0000 400.0000 2983.578
+  2    0      0    2 2:2:2:0          yes 5759.0000 400.0000 2983.578
+  3    0      0    3 3:3:3:0          yes 5759.0000 400.0000 2983.578
+  4    0      0    4 4:4:4:0          yes 5759.0000 400.0000 2983.578
 
 
-Kind regards,
+The patches have been tested with the AMD 7950X processor and many users
+would like to get core boost control enabled for power saving.
 
-Paul
 
+Perry Yuan (7):
+  cpufreq: amd-pstate: remove set_boost callback for passive mode
+  cpufreq: amd-pstate: initialize new core precision boost state
+  cpufreq: amd-pstate: implement cpb_boost sysfs entry for boost control
+  cpufreq: amd-pstate: fix max_perf calculation for amd_get_max_freq()
+  cpufreq: amd-pstate: fix the MSR highest perf will be reset issue
+    while cpb boost off
+  cpufreq:amd-pstate: add suspend and resume callback for passive mode
+  Documentation: cpufreq: amd-pstate: introduce the new cpu boost
+    control method
 
-> 1) Assuming it is caused by this commit in the first place,
-> which seems likely
-> 
-> 2) 6.8-rc1 has a follow up patch which is squashed into the
-> first patch here, so these patches will only apply cleanly
-> to 6.7.0 .
+ Documentation/admin-guide/pm/amd-pstate.rst |  11 +
+ drivers/cpufreq/amd-pstate.c                | 222 ++++++++++++++++----
+ include/linux/amd-pstate.h                  |   1 -
+ 3 files changed, 194 insertions(+), 40 deletions(-)
 
-[3]: 
-https://lore.kernel.org/all/9a24c335-8ec5-48c9-9bdd-b0dac5ecbca8@molgen.mpg.de/
+-- 
+2.34.1
 
->>>>       [    1.435071] i8042: PNP: PS/2 Controller [PNP0303:PS2K,PNP0f13:PS2M] at 0x60,0x64 irq 1,12
->>>>       [    1.435409] i8042: Warning: Keylock active
->>>>       [    1.437624] serio: i8042 KBD port at 0x60,0x64 irq 1
->>>>       [    1.437631] serio: i8042 AUX port at 0x60,0x64 irq 12
->>>>       […]
->>>>       [    1.439743] input: AT Translated Set 2 keyboard as /devices/platform/i8042/serio0/input/input0
->>>>
->>>>       $ sudo libinput list-devices
->>>>       […]
->>>>       Device:           AT Translated Set 2 keyboard
->>>>       Kernel:           /dev/input/event0
->>>>       Group:            15
->>>>       Seat:             seat0, default
->>>>       Capabilities:     keyboard
->>>>       Tap-to-click:     n/a
->>>>       Tap-and-drag:     n/a
->>>>       Tap drag lock:    n/a
->>>>       Left-handed:      n/a
->>>>       Nat.scrolling:    n/a
->>>>       Middle emulation: n/a
->>>>       Calibration:      n/a
->>>>       Scroll methods:   none
->>>>       Click methods:    none
->>>>       Disable-w-typing: n/a
->>>>       Disable-w-trackpointing: n/a
->>>>       Accel profiles:   n/a
->>>>       Rotation:         0.0
->>>>
->>>> `libinput list-devices` does not list the device after resuming
->>>> from S3. Some of the function keys, like brightness and airplane
->>>> mode keys, still work, as the events are probably transmitted over
->>>> the embedded controller or some other mechanism. An external USB
->>>> keyboard also still works.
->>>>
->>>> I haven’t had time to further analyze this, but wanted to report
->>>> it. No idea
->>>>
->>>>
->>>> Kind regards,
->>>>
->>>> Paul
->>>>
->>>>
->>>> ¹ s2idle is not working correctly on the device, in the sense, that
->>>> energy usage is very high in that state, and the full battery is at
->>>> 20 % after leaving it for eight hours.
 
