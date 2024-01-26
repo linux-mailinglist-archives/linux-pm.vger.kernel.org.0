@@ -1,155 +1,119 @@
-Return-Path: <linux-pm+bounces-2811-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2812-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5202183DE5F
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 17:12:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 051E283DED6
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 17:37:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 70AAE1C21914
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 16:12:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 98BAAB25AF4
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 16:37:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B10351D551;
-	Fri, 26 Jan 2024 16:12:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5599A1D69B;
+	Fri, 26 Jan 2024 16:36:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BeIACOUa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OQ6afYL2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 006391CF92
-	for <linux-pm@vger.kernel.org>; Fri, 26 Jan 2024 16:12:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 314401D699
+	for <linux-pm@vger.kernel.org>; Fri, 26 Jan 2024 16:36:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706285572; cv=none; b=PVASM3xgejDO3MSpyEwvn3HI4meZ8Dp7h5miC6KYkzLu5YaKqwDtihbTgBdDRtAJsw/1gYuLSUsSyWLyRn/GgmWsuJ/yzdeDMv4Q6kUxV+mzIlJq5jo+SsU/vZm07EopNCD4XPk72euj1WiBPTY3GX9Z/u34LRIWWLH9rxk4pCU=
+	t=1706287019; cv=none; b=ewyM4uM4oWrwcb0AAYlzlU6Tdb0ySfPaVR6WQC8VfHkzO+EqT+NoBUU/T3NLjjHDKIbDGkvMyeV7wTMKxOs0ahjkW4rm/+4rzCl2jsMsoc2bBXA5M7++oXrtK12o3asAprQojdcO3LXieQWqdja4+ecu9haPBpqjsUfw4Vz9rtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706285572; c=relaxed/simple;
-	bh=NGUuwyDUt/V8BbgO0Ikz6ekMH3s9pITV7aBg2GJNeyw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IsTApoDbQmShuXnVxFJzgsCofp8UXENrMYcbHxVRo3sqGHt3f/nuAoQkeyJ6ukvrSIj8gFGgYO1FCbil51pNcEswYjytz9kwJOVWDuO2NGo7yc/hRE4Dg4IA+caDxPyxJN6ydD8moPRtquuNxoMXsivBiXgbqkwKfoY/taMdhoQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BeIACOUa; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a298accc440so86554466b.1
-        for <linux-pm@vger.kernel.org>; Fri, 26 Jan 2024 08:12:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706285569; x=1706890369; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lcg3AUd2cqMzWvqXgXxGKA4Vgsv4bHXjz07Z4n2FDK4=;
-        b=BeIACOUaUbltTIQ5Oespza4D2lupH9bhKbTv9eu/2wYoz3ef5Xu/rlOXNsxKaRZOMv
-         r8UlPU8PlPZav4yXbYJA3d7jv4bSQ/Y8r8Vr9ds7yDGG5CiKPNEWLmo8mmX82ZEsIfcG
-         LB80cWn8KkLgwNl/mUI/Ea0RaIZVG98/HCrkMmjMhvCZIxF0J1yiaJUwqA9tua9QUcuO
-         I825pEW+xlDHsUZdl7W0ebBiy78k8pN8PQBZ+voOyHZLRm3W1mPxaG5omgP8rc/vX+b0
-         xV/3jyLSlc9R0nrVsrDoIhh6lHDVRkWAwCXDu62ijRff1Ff7KKI2wayjDlK//vTHVCoO
-         S5Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706285569; x=1706890369;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Lcg3AUd2cqMzWvqXgXxGKA4Vgsv4bHXjz07Z4n2FDK4=;
-        b=ijzlo4QIWeOvXR34XtT21YSd2NpIIoIxPF29byQejwHjF5PyVOjWEkQv4DiAMdPuFh
-         3zJ4xVauH5xLbXfRFqDyjwDst5BXkcTyTGKX/6NhCQy0XJ927cN9rNNXsjgGJkCijNXN
-         597hY3pGxZ5xBhiijZtNT8wcxwN6oucXQW/GMDSluvG7V2NrFG5Nly1QN0TAzqmNg4jo
-         AIQVhmZLDveu105UtHFRKNNq0kIDf3Ho19LGgJW6dxWrzxBdDSWhVFdGmruMC5UwRMjh
-         0v90V0UCuOYIMncEPUfGt3kp9xe/GFqDCCHqjykerepp/NV6mv0gcx3Ug7GTlSNS4GWW
-         scwA==
-X-Gm-Message-State: AOJu0YzUlHAzNe3/0P1rXx9GNefcLKXY15C9y0zPqKHQgCH5QqXbdJgk
-	jC2Hq1xopE12vzomBD6Ku/2OFE8d4+oJggoa58BLyG0IqIyOLxWARl6J/ezXIdy/h5/iz3UKUS/
-	d+YrydGiXZVcUxur5Mg49uTGYOb5UUoFMjp4RMA==
-X-Google-Smtp-Source: AGHT+IFne1/xTwjOzXN0LiDrNgwHDmNg5oG+ktcyzY3HamyfJjBqdydrqWcvun6DTJpyaQxuZu8/43tMMiwe93Fpzl8=
-X-Received: by 2002:a17:906:6d4e:b0:a34:977e:aa7d with SMTP id
- a14-20020a1709066d4e00b00a34977eaa7dmr1633817ejt.70.1706285568955; Fri, 26
- Jan 2024 08:12:48 -0800 (PST)
+	s=arc-20240116; t=1706287019; c=relaxed/simple;
+	bh=RjJpYifouNsJOuy4oP+VV9KSQxxECNDoyQzxQ+h4SlQ=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pR7LXXCamx7UviUM3mjOrWp48+9jgHTck0Ku1Elr5NctHTknS8jbxwVnNeS1zMqD3DdGexXAZIQhRBZdJl4v1Q3k5WMRS4AKmBKrOSIRati/1WGE6woPDJKtdkRKne8llZASIPG4Y89EPH83/+9oUcNNW/z9LFR3JETzx0wFnTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OQ6afYL2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 06DF2C433B1
+	for <linux-pm@vger.kernel.org>; Fri, 26 Jan 2024 16:36:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706287019;
+	bh=RjJpYifouNsJOuy4oP+VV9KSQxxECNDoyQzxQ+h4SlQ=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=OQ6afYL2UEE9gjs7mTiC9sTC2lMMWCMN6VUGhdpuiMuLIbYg2rAXoGKrTljBmNvpv
+	 veF4+ur3KdrOaRuXSFUnWF8mC+6Rld9oLlj/GffpxkJhgp1VdwYvhUiH6/3MxbEuvA
+	 BMOsTm0teW9j1tQiTYb1ALP6FclXbPpbttYt6HrXldQ1EQLIyT1IddGU8bwewuB1LQ
+	 9xTtunJcQ2HA8GrLaBEvCKQexsSc8CmPb16Ju5Km5qGQxMiiKsXf9FgxDib1RgepZw
+	 kwl5zPePtbc0+6vpyQerZ91NCvJmNeX1BeWac8jTGhr22sfUnPjfILdPkNKNSdVHUN
+	 y7DVJM+H3WhxA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id EADDBC53BD0; Fri, 26 Jan 2024 16:36:58 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218171] amd-pstate not loading on zen2 threadripper 3960x
+ (trx40
+Date: Fri, 26 Jan 2024 16:36:58 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: johnypean@gmail.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: ANSWERED
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218171-137361-Z2j32WjQXz@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218171-137361@https.bugzilla.kernel.org/>
+References: <bug-218171-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240105160103.183092-1-ulf.hansson@linaro.org>
-In-Reply-To: <20240105160103.183092-1-ulf.hansson@linaro.org>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Fri, 26 Jan 2024 17:12:12 +0100
-Message-ID: <CAPDyKFoGozKrNrAc0vpnNVuKvnorAuN_fg37DU4j0rq=egJ6Hg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] PM: domains: Add helpers for multi PM domains to
- avoid open-coding
-To: "Rafael J . Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Sudeep Holla <sudeep.holla@arm.com>, Kevin Hilman <khilman@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, linux-pm@vger.kernel.org, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Nikunj Kela <nkela@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, 
-	Stephan Gerhold <stephan@gerhold.net>, Ben Horgan <Ben.Horgan@arm.com>, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-remoteproc@vger.kernel.org, 
-	linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 
-On Fri, 5 Jan 2024 at 17:01, Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> Updates in v2:
->         - Ccing Daniel Baluta and Iuliana Prodan the NXP remoteproc patches to
->         requests help with testing.
->         - Fixed NULL pointer bug in patch1, pointed out by Nikunj.
->         - Added some tested/reviewed-by tags.
->
->
-> Attaching/detaching of a device to multiple PM domains has started to become a
-> common operation for many drivers, typically during ->probe() and ->remove().
-> In most cases, this has lead to lots of boilerplate code in the drivers.
->
-> This series adds a pair of helper functions to manage the attach/detach of a
-> device to its multiple PM domains. Moreover, a couple of drivers have been
-> converted to use the new helpers as a proof of concept.
->
-> Note 1)
-> The changes in the drivers have only been compile tested, while the helpers
-> have been tested along with a couple of local dummy drivers that I have hacked
-> up to model both genpd providers and genpd consumers.
->
-> Note 2)
-> I was struggling to make up mind if we should have a separate helper to attach
-> all available power-domains described in DT, rather than providing "NULL" to the
-> dev_pm_domain_attach_list(). I decided not to, but please let me know if you
-> prefer the other option.
->
-> Note 3)
-> For OPP integration, as a follow up I am striving to make the
-> dev_pm_opp_attach_genpd() redundant. Instead I think we should move towards
-> using dev_pm_opp_set_config()->_opp_set_required_devs(), which would allow us to
-> use the helpers that $subject series is adding.
->
-> Kind regards
-> Ulf Hansson
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218171
 
-Rafael, Greg, do have any objections to this series or would you be
-okay that I queue this up via my pmdomain tree?
+--- Comment #41 from Jan Kosterec (johnypean@gmail.com) ---
+This is grat news. Working flawlessly on:
+Gigabyte TRX40 DESIGNARE
+AMD Ryzen Threadripper 3970X
 
-Kind regards
-Uffe
+Tried it on 6.6.14, amd-pstate=3Dactive (can't use 6.7 yet) and it works gr=
+eat.
+Temperatures are lower while performance is better.
 
->
->
-> Ulf Hansson (5):
->   PM: domains: Add helper functions to attach/detach multiple PM domains
->   remoteproc: imx_dsp_rproc: Convert to
->     dev_pm_domain_attach|detach_list()
->   remoteproc: imx_rproc: Convert to dev_pm_domain_attach|detach_list()
->   remoteproc: qcom_q6v5_adsp: Convert to
->     dev_pm_domain_attach|detach_list()
->   media: venus: Convert to dev_pm_domain_attach|detach_list() for vcodec
->
->  drivers/base/power/common.c                   | 134 +++++++++++++++
->  drivers/media/platform/qcom/venus/core.c      |  12 +-
->  drivers/media/platform/qcom/venus/core.h      |   7 +-
->  .../media/platform/qcom/venus/pm_helpers.c    |  48 ++----
->  drivers/remoteproc/imx_dsp_rproc.c            |  82 +--------
->  drivers/remoteproc/imx_rproc.c                |  73 +-------
->  drivers/remoteproc/qcom_q6v5_adsp.c           | 160 ++++++++----------
->  include/linux/pm_domain.h                     |  38 +++++
->  8 files changed, 289 insertions(+), 265 deletions(-)
->
-> --
-> 2.34.1
+cpupower frequency-info
+analyzing CPU 10:
+driver: amd-pstate-epp
+CPUs which run at the same hardware frequency: 10
+CPUs which need to have their frequency coordinated by software: 10
+maximum transition latency:  Cannot determine or is not supported.
+hardware limits: 550 MHz - 4.55 GHz
+available cpufreq governors: performance powersave
+current policy: frequency should be within 550 MHz and 4.55 GHz.
+The governor "powersave" may decide which speed to use
+within this range.
+current CPU frequency: Unable to call hardware
+current CPU frequency: 4.32 GHz (asserted by call to kernel)
+boost state support:
+Supported: yes
+Active: yes
+AMD PSTATE Highest Performance: 166. Maximum Frequency: 4.55 GHz.
+AMD PSTATE Nominal Performance: 135. Nominal Frequency: 3.70 GHz.
+AMD PSTATE Lowest Non-linear Performance: 64. Lowest Non-linear Frequency: =
+1.75
+GHz.
+AMD PSTATE Lowest Performance: 21. Lowest Frequency: 550 MHz.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
 
