@@ -1,79 +1,70 @@
-Return-Path: <linux-pm+bounces-2802-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2803-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A65183DAE8
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 14:33:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7141F83DD1C
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 16:12:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E37981F24A25
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 13:33:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 258E1285E9D
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 15:12:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E71F1B59E;
-	Fri, 26 Jan 2024 13:33:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBE1718EB2;
+	Fri, 26 Jan 2024 15:12:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eOYTEzaG"
+	dkim=pass (1024-bit key) header.d=ieee.org header.i=@ieee.org header.b="Tf8kk8Qc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B62E31B81A
-	for <linux-pm@vger.kernel.org>; Fri, 26 Jan 2024 13:33:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B4E81CFAD
+	for <linux-pm@vger.kernel.org>; Fri, 26 Jan 2024 15:12:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706275986; cv=none; b=JNziLqfvek8BYZMV1f3ZZ0FZQnvnUTKJg4gs4jMhb7E67qfYJc824VYpyQlXivvn4auqa+Mw86C3QnbNTgIcPNQADgwq0TMa0MOATbXLTUxkIwN/VmcixV8x/FyuNtBjjohIZA8oYmHdzfxULDSkqbuOOwu10LucvxqEcWG0bnU=
+	t=1706281927; cv=none; b=i7RusWQP1MaQMpSgZ7eVRS9rNzGS7UEtuuHyyADIJijvfbCeg1KDfTlly3kfWSTHmTSss1/Ity2fVmlCIfZvvORKYfS1TVLmlMe0jQwxSlkt/iLSFqFazQPoqiiN9KVVoWJlj4+0bZzHEiqEQo7O43Fh9t3FeGpQr7fh7caisDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706275986; c=relaxed/simple;
-	bh=t75+ApVE4O2pChN2R4h66dZ7fB5ab5Ao7eh8CU5ennw=;
+	s=arc-20240116; t=1706281927; c=relaxed/simple;
+	bh=ZAknykhh6i+je3+8AduXaKwQ0/X3ywI2rznDeTP3kAE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QE6/j+ILJxNqmpiibaCyNVGTb16OMwGFXjC8hx1eVJ8tcv1QzXT7J/pum1u7XFm6La1tIURIhGYH3tG7AbGQQLqrTGkyyZ9Lp0l6fK33DDa2Jmmm+Gh+B146Gg5ukGfd6svxUY4FnX44uNNtAJvFZ503UPZq+AVnJVNvktvqoGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eOYTEzaG; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1706275983;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=U3CYoF7To3W2OvR7Q0XItMhTSU3L3ntABi2tsSEqr9s=;
-	b=eOYTEzaGeqDyJTQ0LBWUYDAPoRYW8Ph+FqihlfnJdWpXwZIduNMfWEnFEJRyM+rYeWPq5X
-	4INJp2RtrBgjIICjqQ3DP9vz/IBCOnyg7IcYq9GIDev0nZnQxiWOGSJopaDdDrMY7dF5XZ
-	8sGi1/O6ksStmKMIS1OF0n7/ddU12ag=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-414-rtM-BAbsOE2hflwUthhmeA-1; Fri, 26 Jan 2024 08:33:02 -0500
-X-MC-Unique: rtM-BAbsOE2hflwUthhmeA-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-a2c653c7b35so34464166b.0
-        for <linux-pm@vger.kernel.org>; Fri, 26 Jan 2024 05:33:02 -0800 (PST)
+	 In-Reply-To:Content-Type; b=YnPROtAR0cj+sS1ULrx6IolaehaIYvDrVq8gldZJxiHXRFVpYldta6EEnfPRxv0L9U0MNsjK287H2vKG59avz7YbMm9F6r82gn3+ytGW5CPxjo7R8BTA8PNU6h0F/YFxXKEYUI/m2h3KCYwFE8Sa4Ll4Cv4vxhpQVE3S929Bhng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ieee.org; spf=pass smtp.mailfrom=ieee.org; dkim=pass (1024-bit key) header.d=ieee.org header.i=@ieee.org header.b=Tf8kk8Qc; arc=none smtp.client-ip=209.85.166.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ieee.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ieee.org
+Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-7bfcaa23c57so16553639f.0
+        for <linux-pm@vger.kernel.org>; Fri, 26 Jan 2024 07:12:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ieee.org; s=google; t=1706281924; x=1706886724; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FmAGKlbUHD7/NpuouXn5/t0Fv7r/tBW38trG+EcklCI=;
+        b=Tf8kk8QcqXWgvir1iNWT58kPSMqQMcc31G44n/mghDOr55lgoc8NBuPSl4I+8OZLyN
+         OdhCNgp2NUVNPjqISHDLICpqUM4b6WptAw1L90/YQi4yz9ZDBJUMVd5XfnXkk7/4wdHg
+         LoFURwDHVekXBnPvmekSNF5f0Hq2Z8q/6cq0c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706275981; x=1706880781;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1706281924; x=1706886724;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U3CYoF7To3W2OvR7Q0XItMhTSU3L3ntABi2tsSEqr9s=;
-        b=EbRQMaIrrsL8gnjZDjZZhs3ZveU5cZh/yr3CnSoN0BLDrjTIfsSGcOQMAAuo2QZjZA
-         Vnxl3967+NHVA3m5Zqdi5mvsLe7lFmgRu+wJ5oSEhO4UYuWEhLYGu6rixf/5kfzDfgFW
-         U4Fo2xCTktIniYLssRtY7t7zsWcn7ibHtis+seCNtlAVGdm3E/SQA38uC7hAZ2WF6WSu
-         37zhxLzd5E5kciFjHTuucmo5oGQe2QCHj9q6T9MbPC7l0o2EhfAKbqiLc9iOm39mlZNG
-         g7/wozmPdf49eW7gzXJ/UyoAoEnk2PsIDYYfyEeY0wqvA4NJuYaYN+sKrGas2HXD1IHx
-         sLqQ==
-X-Gm-Message-State: AOJu0Yxb41T+SxtNnYz1t87JM7oQv1asST3aG4tf/MqLb/EciPFJwJ0i
-	DwI6H6XgqdFyCKcBAgP1Tdz4rEvmCq0tb1EpVmd6eVpfaCtinFsayjEQY4GFmoo5PTuiZRhmfe2
-	5gPAQ4GmCwXbz99V/lrX5ktFlMulHjs8UQ3+YvSjoR4oAM9VSBasFkmo/
-X-Received: by 2002:a17:906:1949:b0:a33:604d:2a42 with SMTP id b9-20020a170906194900b00a33604d2a42mr527113eje.25.1706275981143;
-        Fri, 26 Jan 2024 05:33:01 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHhKBLsSu7OcWJcv0AZ4I04EUiwRYyjkq++HEtrw6QvawvzQb9UNe2gW7BIw4ofNgZSMFoQWQ==
-X-Received: by 2002:a17:906:1949:b0:a33:604d:2a42 with SMTP id b9-20020a170906194900b00a33604d2a42mr527109eje.25.1706275980797;
-        Fri, 26 Jan 2024 05:33:00 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id un3-20020a170907cb8300b00a3516240ab3sm118189ejc.215.2024.01.26.05.33.00
+        bh=FmAGKlbUHD7/NpuouXn5/t0Fv7r/tBW38trG+EcklCI=;
+        b=skVBp7QwVr398zTdX4G/b4JoQrOoYD28WBaF0SdcuR9yDauBqLRSSmcf7A8l6Oapgi
+         DsqdnALNNjkkrsCps4k0SIY/oHiLmnWygZMNCB9wHuUG0wfnqUlaiiCbylmte7WZxLZm
+         a+V7XcTy19+i72oeSh4zy2Hi+7eg8YAtfbEgqOB1yfMQikURacuhvrCjvt96sEI/vhaw
+         dNxK7FiGzVDZSWuTBbjj9rGdek0j1zCc80aHeByg/TjYEsaDdw2Z6vWOEFb9nRGL7mKm
+         4t55c9g034NcgDGxVONwcrYjLU2SBbDbWXGL+bvC78JK2uqW0lfSp9bcYXT78RErvrXL
+         QXWg==
+X-Gm-Message-State: AOJu0YwYMOW55KdCsrfOcyYLx9v3EfFWHopbfKGkyQnRtG0mxPGDy8I0
+	pySWel7lGjzh4zGdpb7neJqfJMv2to4f+SZ+E4aT80qxMpoXE85/W52yPoF2uw==
+X-Google-Smtp-Source: AGHT+IFrpj53ocxz4PIP+a6fhHNRuGa1zpehIftPdeKqCH8RZGrYTbgHmY9g2zpssARQH7gl5y/zrA==
+X-Received: by 2002:a5d:9550:0:b0:7be:f7e5:44fc with SMTP id a16-20020a5d9550000000b007bef7e544fcmr2094553ios.21.1706281924568;
+        Fri, 26 Jan 2024 07:12:04 -0800 (PST)
+Received: from [172.22.22.28] (c-98-61-227-136.hsd1.mn.comcast.net. [98.61.227.136])
+        by smtp.googlemail.com with ESMTPSA id c20-20020a056602335400b007bc3f75039dsm395844ioz.29.2024.01.26.07.12.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Jan 2024 05:33:00 -0800 (PST)
-Message-ID: <5f70a174-7f18-43c0-b3a3-b72544a2631b@redhat.com>
-Date: Fri, 26 Jan 2024 14:32:59 +0100
+        Fri, 26 Jan 2024 07:12:04 -0800 (PST)
+Message-ID: <912d4439-86cd-4060-a66d-baba5fa2bdec@ieee.org>
+Date: Fri, 26 Jan 2024 09:12:02 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -81,120 +72,311 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: PS/2 keyboard of laptop Dell XPS 13 9360 goes missing after S3
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: linux-input@vger.kernel.org, linux-pm@vger.kernel.org,
- Dell.Client.Kernel@dell.com, regressions@lists.linux.dev,
- linux-kernel@vger.kernel.org
-References: <0aa4a61f-c939-46fe-a572-08022e8931c7@molgen.mpg.de>
- <f27b491c-2f1c-4e68-804c-24eeaa8d10de@redhat.com>
- <0b30c88a-6f0c-447f-a08e-29a2a0256c1b@molgen.mpg.de>
- <dde1bdfe-7877-41bd-b233-03bcdba0e2de@redhat.com>
- <f07333d2-ebb0-4531-a396-8fb3d1daa2c3@molgen.mpg.de>
-Content-Language: en-US, nl
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <f07333d2-ebb0-4531-a396-8fb3d1daa2c3@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v3 1/2] pm: runtime: Simplify pm_runtime_get_if_active()
+ usage
+Content-Language: en-US
+To: Sakari Ailus <sakari.ailus@linux.intel.com>, linux-pm@vger.kernel.org
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ laurent.pinchart@ideasonboard.com,
+ Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+ Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+ Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>,
+ Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+ David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Lucas De Marchi <lucas.demarchi@intel.com>,
+ =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
+ Paul Elder <paul.elder@ideasonboard.com>, Alex Elder <elder@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Mark Brown <broonie@kernel.org>, dri-devel@lists.freedesktop.org,
+ intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
+ linux-media@vger.kernel.org, netdev@vger.kernel.org,
+ linux-pci@vger.kernel.org, linux-sound@vger.kernel.org
+References: <20240122114121.56752-1-sakari.ailus@linux.intel.com>
+ <20240122114121.56752-2-sakari.ailus@linux.intel.com>
+From: Alex Elder <elder@ieee.org>
+In-Reply-To: <20240122114121.56752-2-sakari.ailus@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Paul,
-
-On 1/26/24 08:03, Paul Menzel wrote:
-> Dear Hans,
+On 1/22/24 5:41 AM, Sakari Ailus wrote:
+> There are two ways to opportunistically increment a device's runtime PM
+> usage count, calling either pm_runtime_get_if_active() or
+> pm_runtime_get_if_in_use(). The former has an argument to tell whether to
+> ignore the usage count or not, and the latter simply calls the former with
+> ign_usage_count set to false. The other users that want to ignore the
+> usage_count will have to explitly set that argument to true which is a bit
+> cumbersome.
 > 
+> To make this function more practical to use, remove the ign_usage_count
+> argument from the function. The main implementation is renamed as
+> pm_runtime_get_conditional().
 > 
-> Thank you for your reply, and sorry for the delay on my side. I needed to set up an environment to easily build the Linux kernel.
+> Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Reviewed-by: Alex Elder <elder@linaro.org> # drivers/net/ipa/ipa_smp2p.c
 
-No problem thank you for testing this.
+I actually intended my "Reviewed-by" to cover the entire patch.  I
+checked every caller and they all looked good to me.
 
-> Am 22.01.24 um 14:43 schrieb Hans de Goede:
+					-Alex
+
+> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Acked-by: Takashi Iwai <tiwai@suse.de> # sound/
+> Reviewed-by: Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com> # drivers/accel/ivpu/
+> Acked-by: Rodrigo Vivi <rodrigo.vivi@intel.com> # drivers/gpu/drm/i915/
+> Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> ---
+>   Documentation/power/runtime_pm.rst      |  5 ++--
+>   drivers/accel/ivpu/ivpu_pm.c            |  2 +-
+>   drivers/base/power/runtime.c            | 10 +++++---
+>   drivers/gpu/drm/i915/intel_runtime_pm.c |  2 +-
+>   drivers/gpu/drm/xe/xe_pm.c              |  2 +-
+>   drivers/media/i2c/ccs/ccs-core.c        |  2 +-
+>   drivers/media/i2c/ov64a40.c             |  2 +-
+>   drivers/media/i2c/thp7312.c             |  2 +-
+>   drivers/net/ipa/ipa_smp2p.c             |  2 +-
+>   drivers/pci/pci.c                       |  2 +-
+>   include/linux/pm_runtime.h              | 32 +++++++++++++++++++++----
+>   sound/hda/hdac_device.c                 |  2 +-
+>   12 files changed, 45 insertions(+), 20 deletions(-)
 > 
->> On 1/21/24 15:26, Paul Menzel wrote:
-> 
-> […]
-> 
->>> Am 20.01.24 um 21:26 schrieb Hans de Goede:
->>>
->>>> On 1/18/24 13:57, Paul Menzel wrote:
->>>>> #regzbot introduced v6.6.11..v6.7
->>>
->>>>> There seems to be a regression in Linux 6.7 on the Dell XPS 13 9360 (Intel i7-7500U).
->>>>>
->>>>>       [    0.000000] DMI: Dell Inc. XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022
->>>>>
->>>>> The PS/2 keyboard goes missing after S3 resume¹. The problem does not happen with Linux 6.6.11.
->>>>
->>>> Thank you for reporting this.
->>>>
->>>> Can you try adding "i8042.dumbkbd=1" to your kernel commandline?
->>>>
->>>> This should at least lead to the device not disappearing from
->>>>
->>>> "sudo libinput list-devices"
->>>>
->>>> The next question is if the keyboard will still actually
->>>> work after suspend/resume with "i8042.dumbkbd=1". If it
->>>> stays in the list, but no longer works then there is
->>>> a problem with the i8042 controller; or interrupt
->>>> delivery to the i8042 controller.
->>>>
->>>> If "i8042.dumbkbd=1" somehow fully fixes things, then I guess
->>>> my atkbd driver fix for other laptop keyboards is somehow
->>>> causing issues for yours.
->>>
->>> Just a quick feedback, that booting with `i8042.dumbkbd=1` seems to fix the issue.
->>>
->>>> If "i8042.dumbkbd=1" fully fixes things, can you try building
->>>> your own 6.7.0 kernel with commit 936e4d49ecbc:
->>>>
->>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=936e4d49ecbc8c404790504386e1422b599dec39
->>>>
->>>> reverted?
->>>
->>> I am going to try that as soon as possible.
->>
->> Assuming this was not some one time glitch with 6.7.0,
->> I have prepared a patch hopefully fixing this (1) as well
->> as a follow up fix to address another potential issue which
->> I have noticed.
-> 
-> Unfortunately, it wasn’t just a glitch.
-> 
->> Can you please give a 6.7.0 (2) kernel with the 2 attached
->> patches added a try ?
->>
->> I know building kernels can be a bit of work / takes time,
->> sorry. If you are short on time I would prefer testing these 2
->> patches and see if they fix things over trying a plain revert.
-> 
-> Applying both patches on v6.7.1
-> 
->     $ git log --oneline -3
->     053fa44c0de1 (HEAD -> v6.7.1) Input: atkbd - Do not skip atkbd_deactivate() when skipping ATKBD_CMD_GETID
->     0e0fa0113c7a Input: atkbd - Skip ATKBD_CMD_SETLEDS when skipping ATKBD_CMD_GETID
->     a91fdae50a6d (tag: v6.7.1, stable/linux-6.7.y, origin/linux-6.7.y) Linux 6.7.1
-> 
-> I am unable to reproduce the problem in eight ACPI S3 suspend/resume cycles. The DMAR errors [3] are also gone:
-
-Thanks.
-
-So thinking more about this I think the DMAR errors are actually the real cause of the issue here, specifically if we replace: f0 with 00 (I guess DMAR uses the high bits for its own purposes) in
-
-`[INTR-REMAP] Request device [f0:1f.0] fault index 0x0`
-
-then the device ID is 00:1f.0 which is the ISA bridge and [INTR-REMAP] errors are known to disable interrupts. The PS/2 controller (which sits behind the ISA bridge) interrupt getting disabled would explain the suspend/resume keyboard issue better then the atkbd.c changes I have been focusing on.
-
-So then the question becomes why does the 6.7.1 kernel not show the DMAR errors. I don't see anything between 6.7.0 and 6.7.1 which explains this. But maybe your local build is using a different configuration which explains this.
-
-Can you try your local 6.7.1 build without my 2 patches? The quickest way to do that would be to run: "git reset --hard HEAD~2" and then re-run the make commandos, this will re-use your previous build so it should be pretty quick.
-
-If things still work after that then the problem is not with the atkbd code.
-
-Regards,
-
-Hans
-
-
-
+> diff --git a/Documentation/power/runtime_pm.rst b/Documentation/power/runtime_pm.rst
+> index 65b86e487afe..da99379071a4 100644
+> --- a/Documentation/power/runtime_pm.rst
+> +++ b/Documentation/power/runtime_pm.rst
+> @@ -396,10 +396,9 @@ drivers/base/power/runtime.c and include/linux/pm_runtime.h:
+>         nonzero, increment the counter and return 1; otherwise return 0 without
+>         changing the counter
+>   
+> -  `int pm_runtime_get_if_active(struct device *dev, bool ign_usage_count);`
+> +  `int pm_runtime_get_if_active(struct device *dev);`
+>       - return -EINVAL if 'power.disable_depth' is nonzero; otherwise, if the
+> -      runtime PM status is RPM_ACTIVE, and either ign_usage_count is true
+> -      or the device's usage_count is non-zero, increment the counter and
+> +      runtime PM status is RPM_ACTIVE, increment the counter and
+>         return 1; otherwise return 0 without changing the counter
+>   
+>     `void pm_runtime_put_noidle(struct device *dev);`
+> diff --git a/drivers/accel/ivpu/ivpu_pm.c b/drivers/accel/ivpu/ivpu_pm.c
+> index 0af8864cb3b5..c6d93c7a1c58 100644
+> --- a/drivers/accel/ivpu/ivpu_pm.c
+> +++ b/drivers/accel/ivpu/ivpu_pm.c
+> @@ -292,7 +292,7 @@ int ivpu_rpm_get_if_active(struct ivpu_device *vdev)
+>   {
+>   	int ret;
+>   
+> -	ret = pm_runtime_get_if_active(vdev->drm.dev, false);
+> +	ret = pm_runtime_get_if_in_use(vdev->drm.dev);
+>   	drm_WARN_ON(&vdev->drm, ret < 0);
+>   
+>   	return ret;
+> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> index 05793c9fbb84..b4cb3f19b0d8 100644
+> --- a/drivers/base/power/runtime.c
+> +++ b/drivers/base/power/runtime.c
+> @@ -1176,7 +1176,7 @@ int __pm_runtime_resume(struct device *dev, int rpmflags)
+>   EXPORT_SYMBOL_GPL(__pm_runtime_resume);
+>   
+>   /**
+> - * pm_runtime_get_if_active - Conditionally bump up device usage counter.
+> + * pm_runtime_get_conditional - Conditionally bump up device usage counter.
+>    * @dev: Device to handle.
+>    * @ign_usage_count: Whether or not to look at the current usage counter value.
+>    *
+> @@ -1196,8 +1196,12 @@ EXPORT_SYMBOL_GPL(__pm_runtime_resume);
+>    *
+>    * The caller is responsible for decrementing the runtime PM usage counter of
+>    * @dev after this function has returned a positive value for it.
+> + *
+> + * This function is not primarily intended for use in drivers, most of which are
+> + * better served by either pm_runtime_get_if_active() or
+> + * pm_runtime_get_if_in_use() instead.
+>    */
+> -int pm_runtime_get_if_active(struct device *dev, bool ign_usage_count)
+> +int pm_runtime_get_conditional(struct device *dev, bool ign_usage_count)
+>   {
+>   	unsigned long flags;
+>   	int retval;
+> @@ -1218,7 +1222,7 @@ int pm_runtime_get_if_active(struct device *dev, bool ign_usage_count)
+>   
+>   	return retval;
+>   }
+> -EXPORT_SYMBOL_GPL(pm_runtime_get_if_active);
+> +EXPORT_SYMBOL_GPL(pm_runtime_get_conditional);
+>   
+>   /**
+>    * __pm_runtime_set_status - Set runtime PM status of a device.
+> diff --git a/drivers/gpu/drm/i915/intel_runtime_pm.c b/drivers/gpu/drm/i915/intel_runtime_pm.c
+> index 860b51b56a92..b5f8abd2a22b 100644
+> --- a/drivers/gpu/drm/i915/intel_runtime_pm.c
+> +++ b/drivers/gpu/drm/i915/intel_runtime_pm.c
+> @@ -246,7 +246,7 @@ static intel_wakeref_t __intel_runtime_pm_get_if_active(struct intel_runtime_pm
+>   		 * function, since the power state is undefined. This applies
+>   		 * atm to the late/early system suspend/resume handlers.
+>   		 */
+> -		if (pm_runtime_get_if_active(rpm->kdev, ignore_usecount) <= 0)
+> +		if (pm_runtime_get_conditional(rpm->kdev, ignore_usecount) <= 0)
+>   			return 0;
+>   	}
+>   
+> diff --git a/drivers/gpu/drm/xe/xe_pm.c b/drivers/gpu/drm/xe/xe_pm.c
+> index b429c2876a76..dd110058bf74 100644
+> --- a/drivers/gpu/drm/xe/xe_pm.c
+> +++ b/drivers/gpu/drm/xe/xe_pm.c
+> @@ -330,7 +330,7 @@ int xe_pm_runtime_put(struct xe_device *xe)
+>   
+>   int xe_pm_runtime_get_if_active(struct xe_device *xe)
+>   {
+> -	return pm_runtime_get_if_active(xe->drm.dev, true);
+> +	return pm_runtime_get_if_active(xe->drm.dev);
+>   }
+>   
+>   void xe_pm_assert_unbounded_bridge(struct xe_device *xe)
+> diff --git a/drivers/media/i2c/ccs/ccs-core.c b/drivers/media/i2c/ccs/ccs-core.c
+> index e21287d50c15..e1ae0f9fad43 100644
+> --- a/drivers/media/i2c/ccs/ccs-core.c
+> +++ b/drivers/media/i2c/ccs/ccs-core.c
+> @@ -674,7 +674,7 @@ static int ccs_set_ctrl(struct v4l2_ctrl *ctrl)
+>   		break;
+>   	}
+>   
+> -	pm_status = pm_runtime_get_if_active(&client->dev, true);
+> +	pm_status = pm_runtime_get_if_active(&client->dev);
+>   	if (!pm_status)
+>   		return 0;
+>   
+> diff --git a/drivers/media/i2c/ov64a40.c b/drivers/media/i2c/ov64a40.c
+> index 4fba4c2cb064..541bf74581d2 100644
+> --- a/drivers/media/i2c/ov64a40.c
+> +++ b/drivers/media/i2c/ov64a40.c
+> @@ -3287,7 +3287,7 @@ static int ov64a40_set_ctrl(struct v4l2_ctrl *ctrl)
+>   					 exp_max, 1, exp_val);
+>   	}
+>   
+> -	pm_status = pm_runtime_get_if_active(ov64a40->dev, true);
+> +	pm_status = pm_runtime_get_if_active(ov64a40->dev);
+>   	if (!pm_status)
+>   		return 0;
+>   
+> diff --git a/drivers/media/i2c/thp7312.c b/drivers/media/i2c/thp7312.c
+> index 2806887514dc..19bd923a7315 100644
+> --- a/drivers/media/i2c/thp7312.c
+> +++ b/drivers/media/i2c/thp7312.c
+> @@ -1052,7 +1052,7 @@ static int thp7312_s_ctrl(struct v4l2_ctrl *ctrl)
+>   	if (ctrl->flags & V4L2_CTRL_FLAG_INACTIVE)
+>   		return -EINVAL;
+>   
+> -	if (!pm_runtime_get_if_active(thp7312->dev, true))
+> +	if (!pm_runtime_get_if_active(thp7312->dev))
+>   		return 0;
+>   
+>   	switch (ctrl->id) {
+> diff --git a/drivers/net/ipa/ipa_smp2p.c b/drivers/net/ipa/ipa_smp2p.c
+> index 5620dc271fac..cbf3d4761ce3 100644
+> --- a/drivers/net/ipa/ipa_smp2p.c
+> +++ b/drivers/net/ipa/ipa_smp2p.c
+> @@ -92,7 +92,7 @@ static void ipa_smp2p_notify(struct ipa_smp2p *smp2p)
+>   		return;
+>   
+>   	dev = &smp2p->ipa->pdev->dev;
+> -	smp2p->power_on = pm_runtime_get_if_active(dev, true) > 0;
+> +	smp2p->power_on = pm_runtime_get_if_active(dev) > 0;
+>   
+>   	/* Signal whether the IPA power is enabled */
+>   	mask = BIT(smp2p->enabled_bit);
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index d8f11a078924..f8293ae71389 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -2510,7 +2510,7 @@ static void pci_pme_list_scan(struct work_struct *work)
+>   			 * If the device is in a low power state it
+>   			 * should not be polled either.
+>   			 */
+> -			pm_status = pm_runtime_get_if_active(dev, true);
+> +			pm_status = pm_runtime_get_if_active(dev);
+>   			if (!pm_status)
+>   				continue;
+>   
+> diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+> index 7c9b35448563..a212b3008ade 100644
+> --- a/include/linux/pm_runtime.h
+> +++ b/include/linux/pm_runtime.h
+> @@ -72,7 +72,8 @@ extern int pm_runtime_force_resume(struct device *dev);
+>   extern int __pm_runtime_idle(struct device *dev, int rpmflags);
+>   extern int __pm_runtime_suspend(struct device *dev, int rpmflags);
+>   extern int __pm_runtime_resume(struct device *dev, int rpmflags);
+> -extern int pm_runtime_get_if_active(struct device *dev, bool ign_usage_count);
+> +extern int pm_runtime_get_conditional(struct device *dev,
+> +					bool ign_usage_count);
+>   extern int pm_schedule_suspend(struct device *dev, unsigned int delay);
+>   extern int __pm_runtime_set_status(struct device *dev, unsigned int status);
+>   extern int pm_runtime_barrier(struct device *dev);
+> @@ -94,16 +95,33 @@ extern void pm_runtime_release_supplier(struct device_link *link);
+>   
+>   extern int devm_pm_runtime_enable(struct device *dev);
+>   
+> +/**
+> + * pm_runtime_get_if_active - Bump up runtime PM usage counter if the device is
+> + *			      in active state
+> + * @dev: Target device.
+> + *
+> + * Increment the runtime PM usage counter of @dev if its runtime PM status is
+> + * %RPM_ACTIVE, in which case it returns 1. If the device is in a different
+> + * state, 0 is returned. -EINVAL is returned if runtime PM is disabled for the
+> + * device.
+> + */
+> +static inline int pm_runtime_get_if_active(struct device *dev)
+> +{
+> +	return pm_runtime_get_conditional(dev, true);
+> +}
+> +
+>   /**
+>    * pm_runtime_get_if_in_use - Conditionally bump up runtime PM usage counter.
+>    * @dev: Target device.
+>    *
+>    * Increment the runtime PM usage counter of @dev if its runtime PM status is
+> - * %RPM_ACTIVE and its runtime PM usage counter is greater than 0.
+> + * %RPM_ACTIVE and its runtime PM usage counter is greater than 0, in which case
+> + * it returns 1. If the device is in a different state or its usage_count is 0,
+> + * 0 is returned. -EINVAL is returned if runtime PM is disabled for the device.
+>    */
+>   static inline int pm_runtime_get_if_in_use(struct device *dev)
+>   {
+> -	return pm_runtime_get_if_active(dev, false);
+> +	return pm_runtime_get_conditional(dev, false);
+>   }
+>   
+>   /**
+> @@ -275,8 +293,12 @@ static inline int pm_runtime_get_if_in_use(struct device *dev)
+>   {
+>   	return -EINVAL;
+>   }
+> -static inline int pm_runtime_get_if_active(struct device *dev,
+> -					   bool ign_usage_count)
+> +static inline int pm_runtime_get_if_active(struct device *dev)
+> +{
+> +	return -EINVAL;
+> +}
+> +static inline int pm_runtime_get_conditional(struct device *dev,
+> +					     bool ign_usage_count)
+>   {
+>   	return -EINVAL;
+>   }
+> diff --git a/sound/hda/hdac_device.c b/sound/hda/hdac_device.c
+> index 7f7b67fe1b65..068c16e52dff 100644
+> --- a/sound/hda/hdac_device.c
+> +++ b/sound/hda/hdac_device.c
+> @@ -612,7 +612,7 @@ EXPORT_SYMBOL_GPL(snd_hdac_power_up_pm);
+>   int snd_hdac_keep_power_up(struct hdac_device *codec)
+>   {
+>   	if (!atomic_inc_not_zero(&codec->in_pm)) {
+> -		int ret = pm_runtime_get_if_active(&codec->dev, true);
+> +		int ret = pm_runtime_get_if_active(&codec->dev);
+>   		if (!ret)
+>   			return -1;
+>   		if (ret < 0)
 
 
