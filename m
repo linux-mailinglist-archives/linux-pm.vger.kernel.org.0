@@ -1,98 +1,113 @@
-Return-Path: <linux-pm+bounces-2816-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2817-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D1F083E192
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 19:31:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42DF483E22D
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 20:08:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D3421B23EE0
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 18:31:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1F7F2816F3
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 19:08:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9451F17BCC;
-	Fri, 26 Jan 2024 18:31:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7ABED2231C;
+	Fri, 26 Jan 2024 19:07:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IwzLJvBc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E2AF210F0;
-	Fri, 26 Jan 2024 18:31:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC1F1CAA1;
+	Fri, 26 Jan 2024 19:07:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706293866; cv=none; b=AAKhTTlJfumQy30YB4wa1gZ3qkEv5y7TSsy8GH2AGToKq+6ofCSh/uuS3LyPtFiL8aEkT7gvlCmTI4kgGyewlqR6IM8ebCeAHkgZv7jsPgqCYv597e1FtNIHJB+zq2ZoGapZWhM8cQZr+FpIfCGuRVVuxdvJ1/h/DKMjuWmrMQU=
+	t=1706296078; cv=none; b=TVUNCIAOYVYm1WGHuzr2BA/2GHPTIC2SV/i+3DSU/8xm+8De8WoDRYf+Zm3jqrausxI6uoZ61/J0jNHaJcD7G0s6BT/x6BLZzUR2JTg/O9dI7GxJxJmNMkFIz1bPeULbYu0nhyawMBXFKL441ijXSSWRUpTWC4VHSv0qPqC85H8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706293866; c=relaxed/simple;
-	bh=ZhSEfHuznS26ympI5OU2fq0Cuf5U8W/L1VhfhnE40wk=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=MbQET/2jKAVT2XvLn3zjUed22j2el3wJUE2bL4T67WMxKwufHG+zyqQEq21QKyGPLLSPqKIzlPaWsjY5B5SNWZsMVIIBJdT7STsKHcDdg3e/d/RFffgh4wuN4Ihd5AyiS8m4j4vuDq4wCNnzaqkO0Zk9sVU1ndQ4uimYBlAxsBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-6e10ce693b6so178875a34.0;
-        Fri, 26 Jan 2024 10:31:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706293864; x=1706898664;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xe2RIiMOWacUU6vJ61NqzqRq1k1AoFwmcf1USPH8WnU=;
-        b=mZZS8Zwy4UoASWDuElJoMnoj9AE664eIFtvYQRV/7KB+WYkCm1mtvBzid1xrIXVhCl
-         cbr3dblltli5grCKXqHbHVWqZYkCMk+sAQdx4VjA0xAPcfBLa7XgWTOWpIKF8Dy7Arlp
-         4d+bHDXs7jgADEdFiB0aMquzbDixK9c065KVxK5UAZRO2+bjTfK6qAyDLt37YKMbyJe2
-         GhULlJc6baXMTvrE+O3X0s4tEdI8UjDNElRD9GxEsZbjqZpj14OM2e8/H2Jj34r/Tasu
-         Or5jucN+700Q1p96cuucdl4ozsSnTy/Y93o+hp8KfZaoKA27Xt3GgmeiRrfj8kU8Uxeu
-         cBXA==
-X-Gm-Message-State: AOJu0YyKIjOOu0wZCigfQWqX7hs5V3yosASZf5jS4rFWDYoLHIXsMuhz
-	NXa6FKo4NQNJO9RnX/wbWf5SMCEvbSOO+0+YgNgNQzSh088i1F41QnhwWC6MG60h42dvreOlb3r
-	tsK0kYpgHqCHV+WBEbRx7yfH+IXzSlkEFLWw=
-X-Google-Smtp-Source: AGHT+IF8ZAmHSgGI1AtGk2IDQ6XCCjmDo/AT4Jrspt+7v6V83d+oB7OCInUPVzb+Njey2SVFGcTvSfSm3xSaQzG+DYw=
-X-Received: by 2002:a05:6870:f10c:b0:204:208c:aa68 with SMTP id
- k12-20020a056870f10c00b00204208caa68mr207725oac.2.1706293864021; Fri, 26 Jan
- 2024 10:31:04 -0800 (PST)
+	s=arc-20240116; t=1706296078; c=relaxed/simple;
+	bh=w76WQZwHmCAgG8Z0pclPra2iK4UcbBg/K6jGmHZCnEM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HUW4DyalskK+o6GpYMUWO5Veau7JdiEhkml0F6OZ1AsLb9TokP1EDzn/xqLFUdR+HiB6AFd55wMKgWPE4Ys9XWy+5HunR1p726enq28BPm5bXMGE6DhpL51DgZZrxhF0zyAXreuVwVHFfIs7Nr7brCI3m7U/u4qtDHfM3/KrwMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IwzLJvBc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAF60C433F1;
+	Fri, 26 Jan 2024 19:07:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1706296078;
+	bh=w76WQZwHmCAgG8Z0pclPra2iK4UcbBg/K6jGmHZCnEM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IwzLJvBczl3h23mDdcH/l2aRInlWzX22xOABe5YWbrm+TbCAV+t2dRCqhjNBo5pEO
+	 mPmcBmFJwcZV6IjpyiIREajMgdq2+x2UETlGXIB2+ADvhNvIaURJLo+uNdrWhOFlaH
+	 X/wE6UHGGZW0vCohl3uSnipjL/ikRQrzmYExy9hY=
+Date: Fri, 26 Jan 2024 11:07:57 -0800
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Kevin Hilman <khilman@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>, linux-pm@vger.kernel.org,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Nikunj Kela <nkela@quicinc.com>,
+	Prasad Sodagudi <psodagud@quicinc.com>,
+	Stephan Gerhold <stephan@gerhold.net>,
+	Ben Horgan <Ben.Horgan@arm.com>, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-remoteproc@vger.kernel.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH v2 0/5] PM: domains: Add helpers for multi PM domains to
+ avoid open-coding
+Message-ID: <2024012649-unblended-earthen-6e17@gregkh>
+References: <20240105160103.183092-1-ulf.hansson@linaro.org>
+ <CAPDyKFoGozKrNrAc0vpnNVuKvnorAuN_fg37DU4j0rq=egJ6Hg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 26 Jan 2024 19:30:52 +0100
-Message-ID: <CAJZ5v0hCuQuyctY9NUXJ8-NGR2PfVmY1y=Ajd936Mh9LnjNg+w@mail.gmail.com>
-Subject: [GIT PULL] Thermal control update for v6.8-rc2
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFoGozKrNrAc0vpnNVuKvnorAuN_fg37DU4j0rq=egJ6Hg@mail.gmail.com>
 
-Hi Linus,
+On Fri, Jan 26, 2024 at 05:12:12PM +0100, Ulf Hansson wrote:
+> On Fri, 5 Jan 2024 at 17:01, Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> >
+> > Updates in v2:
+> >         - Ccing Daniel Baluta and Iuliana Prodan the NXP remoteproc patches to
+> >         requests help with testing.
+> >         - Fixed NULL pointer bug in patch1, pointed out by Nikunj.
+> >         - Added some tested/reviewed-by tags.
+> >
+> >
+> > Attaching/detaching of a device to multiple PM domains has started to become a
+> > common operation for many drivers, typically during ->probe() and ->remove().
+> > In most cases, this has lead to lots of boilerplate code in the drivers.
+> >
+> > This series adds a pair of helper functions to manage the attach/detach of a
+> > device to its multiple PM domains. Moreover, a couple of drivers have been
+> > converted to use the new helpers as a proof of concept.
+> >
+> > Note 1)
+> > The changes in the drivers have only been compile tested, while the helpers
+> > have been tested along with a couple of local dummy drivers that I have hacked
+> > up to model both genpd providers and genpd consumers.
+> >
+> > Note 2)
+> > I was struggling to make up mind if we should have a separate helper to attach
+> > all available power-domains described in DT, rather than providing "NULL" to the
+> > dev_pm_domain_attach_list(). I decided not to, but please let me know if you
+> > prefer the other option.
+> >
+> > Note 3)
+> > For OPP integration, as a follow up I am striving to make the
+> > dev_pm_opp_attach_genpd() redundant. Instead I think we should move towards
+> > using dev_pm_opp_set_config()->_opp_set_required_devs(), which would allow us to
+> > use the helpers that $subject series is adding.
+> >
+> > Kind regards
+> > Ulf Hansson
+> 
+> Rafael, Greg, do have any objections to this series or would you be
+> okay that I queue this up via my pmdomain tree?
 
-Please pull from the tag
-
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- thermal-6.8-rc2
-
-with top-most commit c6a783be82c893c6f124a5853bef2edeaf26dadf
-
- thermal: intel: powerclamp: Remove dead code for target mwait value
-
-on top of commit 6613476e225e090cc9aad49be7fa504e290dd33d
-
- Linux 6.8-rc1
-
-to receive a thermal control update for 6.8-rc2.
-
-This removes some dead code from the Intel powerclamp thermal control
-driver (Srinivas Pandruvada).
-
-Thanks!
-
-
----------------
-
-Srinivas Pandruvada (1):
-      thermal: intel: powerclamp: Remove dead code for target mwait value
-
----------------
-
- drivers/thermal/intel/intel_powerclamp.c | 32 --------------------------------
- 1 file changed, 32 deletions(-)
+I'll defer to Rafael here.
 
