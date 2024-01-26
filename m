@@ -1,133 +1,120 @@
-Return-Path: <linux-pm+bounces-2814-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2815-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F05CA83DFED
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 18:23:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F79183E18C
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 19:29:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1DF1281CBA
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 17:23:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5286C1C21C5C
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 18:29:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 895261EB46;
-	Fri, 26 Jan 2024 17:23:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DGN2MhwY"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 192C820B30;
+	Fri, 26 Jan 2024 18:29:46 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46F8720309;
-	Fri, 26 Jan 2024 17:23:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98690208B4;
+	Fri, 26 Jan 2024 18:29:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706289829; cv=none; b=Co5zhZ5ORxPgU0BIX6jZs5Af9UbA2EwAA0a5FuZFXtS4uETP2Q5k6CsEB+zz0GiHigUoRhwKfoA6UV8Lw/stqIu4eMnod+xZl5b9O6Qc0XFRGeEllT7oq61Uzm0Lainzl062xhKOx3j0uPDSyqsvZ6Pn0+H6Cse/w76i3RYfA7M=
+	t=1706293786; cv=none; b=lgd75tW+2Qk7yhodx5cm6QMAWP55mT6hpp3S9DsTETqPBSTIzGB3MCwqjjNL3oakx4JZLrHIwkrFdPuPI8zXkVTcAOnmYJxvdmLVwgEokE2ko1KhKF2lFMRZ4N/4hMizY2yTZWmz0BNY6NSPep7dB7LL48fDdLgbiurDP6WI0wg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706289829; c=relaxed/simple;
-	bh=tSMX1Ae/bCy8FGpCcBWLPQYfg2LBDt1gaBUpHaOLi0k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GoWVy8kDl7CDf+nGNVTX1nENFY6pMCJxanId3sg9MkTl7VlC1N0/8omrITeqn4pDE1wfMjDdnYgdJUd8oSMUHeF8YmpFmUVo4fmWkvWiOcxqeegaCzlqBo4hqgb5qv+00WK6gq0dHshrmDungGDNRn4xslW+f9iHbo+SsADGiQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DGN2MhwY; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706289828; x=1737825828;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tSMX1Ae/bCy8FGpCcBWLPQYfg2LBDt1gaBUpHaOLi0k=;
-  b=DGN2MhwY1qzdGQQuouBLgsHjbAKjNxJZVCkyR7K+a56/QEpmlAHljgcy
-   8TmhZ/wyano9KvxRn+onRjs3F5ZktguIiFrTVzJvZsmlmUa31YYKuSU6S
-   j+xiEjYRYIbPWqV28jBH6n8JM/mLhzqbje77Qtb87Rp6y8RrM2vOe783X
-   CXm8SHD6/3xym+wv1qh5mzUh8PYZf6BI59nB3pDFF48UZ2vI4u8QxwqTY
-   KwVyEmwVmxBOB7FNbuKN6UbLyyj2fkTliZef6pxF8xmThPQRzG7+JBCn8
-   7G7V+/HURLZvsQNW/HD2s2IX/4R5z+dcM+6nU2Jd40yjtPxjLntATwHsz
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="9900855"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="9900855"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2024 09:23:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10964"; a="960260973"
-X-IronPort-AV: E=Sophos;i="6.05,216,1701158400"; 
-   d="scan'208";a="960260973"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2024 09:23:39 -0800
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id BC8AF11FBD1;
-	Fri, 26 Jan 2024 19:23:36 +0200 (EET)
-Date: Fri, 26 Jan 2024 17:23:36 +0000
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Alex Elder <elder@ieee.org>
-Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	laurent.pinchart@ideasonboard.com,
-	Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Lucas De Marchi <lucas.demarchi@intel.com>,
-	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	Paul Elder <paul.elder@ideasonboard.com>,
-	Alex Elder <elder@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Mark Brown <broonie@kernel.org>, dri-devel@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
-	linux-media@vger.kernel.org, netdev@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-sound@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] pm: runtime: Simplify pm_runtime_get_if_active()
- usage
-Message-ID: <ZbPqmA4GkunkJqb0@kekkonen.localdomain>
-References: <20240122114121.56752-1-sakari.ailus@linux.intel.com>
- <20240122114121.56752-2-sakari.ailus@linux.intel.com>
- <912d4439-86cd-4060-a66d-baba5fa2bdec@ieee.org>
+	s=arc-20240116; t=1706293786; c=relaxed/simple;
+	bh=0IpWNU1MIudpmuKWbGyYaz6Jus1Rape1tUquqhM14RM=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=qh2B0s/6bTZ1w1+21o+NYR6NfOcf+j9FAaGz3Y4gXU8FkaiJfMDoLmb680uGCcuV4PC6yRue8Q5r+3BJU9qfH4E6eRZl+xgA3TkCgHh7oZFgPNLGXtKH8rxop1eDfEeOcoIxUHQEoGsDb44q/1jd2N6R+5/+9zLJlnxUSK4dpcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-3bddceb0540so219545b6e.0;
+        Fri, 26 Jan 2024 10:29:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706293783; x=1706898583;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yHi5U3YMogl4iHy5GsTuj+x0agWS8uDT6CKM5jqaWoU=;
+        b=bHVxK5ThMh4JF73x9fZdORxwb3WOc3NSklhdyjAwkdY42QD5FLovgx9pbhfUyPehRo
+         lLFEkv/lFse3z9pdXYBX/ClwAyxQEAPBU0j2hpZYS1/tR0vsZ+9+vX471k5IYdPk4HPl
+         lVmYWd5m4B2IyHJy5ttwjFDEsM98C7ZZZxMyZkGOhk4AjfLuAN/W/kCefmpO8NG2lb/J
+         IlVj9AUkOQL5PuxyZrsZ/OGUGM79oItPfBg/IUuIFZe6GpLE+kDdCMLfx2YNEHhMvGAi
+         78Oc/NsiHINcuFs0prDXCmoh6rTNvIgc2QcjSAPzYCOlG1YsOH8BNPgZKf0A6vHcIPwj
+         +G8Q==
+X-Gm-Message-State: AOJu0YxBQO2PAThzUnkbTBlDNdlnHTTNSvf/Hc592aC70dG29Ok7w66n
+	tpIOqYZzclWDq6ldmR8YSELuPiDDl9OPuk3Gw9RZgMn0u8TAP5Rrg1K0JAKSEO9RIeNchhNfU3/
+	8pTgksRJgNWF0Fy5BYgePxaDfAAeQ2JwCdW8=
+X-Google-Smtp-Source: AGHT+IGtgItKl22be03Ted0ywcze+yBpNAzfx15LIu+5Nh7XwiJJvMRwQu9bfVdoOir2ygxef3BruexSmUBQxfibX/c=
+X-Received: by 2002:a05:6871:54f:b0:214:2544:bf26 with SMTP id
+ t15-20020a056871054f00b002142544bf26mr176888oal.3.1706293783589; Fri, 26 Jan
+ 2024 10:29:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <912d4439-86cd-4060-a66d-baba5fa2bdec@ieee.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 26 Jan 2024 19:29:32 +0100
+Message-ID: <CAJZ5v0icsP3F31gR2crrA4TrJRiYWFUJSdU36o7nnhpVSGzLRA@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v6.8-rc2
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Alex,
+Hi Linus,
 
-On Fri, Jan 26, 2024 at 09:12:02AM -0600, Alex Elder wrote:
-> On 1/22/24 5:41 AM, Sakari Ailus wrote:
-> > There are two ways to opportunistically increment a device's runtime PM
-> > usage count, calling either pm_runtime_get_if_active() or
-> > pm_runtime_get_if_in_use(). The former has an argument to tell whether to
-> > ignore the usage count or not, and the latter simply calls the former with
-> > ign_usage_count set to false. The other users that want to ignore the
-> > usage_count will have to explitly set that argument to true which is a bit
-> > cumbersome.
-> > 
-> > To make this function more practical to use, remove the ign_usage_count
-> > argument from the function. The main implementation is renamed as
-> > pm_runtime_get_conditional().
-> > 
-> > Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > Reviewed-by: Alex Elder <elder@linaro.org> # drivers/net/ipa/ipa_smp2p.c
-> 
-> I actually intended my "Reviewed-by" to cover the entire patch.  I
-> checked every caller and they all looked good to me.
+Please pull from the tag
 
-Thanks, I'll drop the file name. AFAIR it was just below that file, so I
-added it, but I could be wrong, too.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-6.8-rc2
 
-v5 will also squash the 2nd patch of v4 into this one
-<URL:https://lore.kernel.org/linux-pm/ZbBAWROxRKE8Y8VU@kekkonen.localdomain/T/#m76d34e679e12d8536a20eb29af6e826e2a85a24b>,
-I hope that's fine.
+with top-most commit f3bdd82c5834219a5b272c2310c83aef68667486
 
--- 
-Kind regards,
+ Merge branch 'pm-cpufreq'
 
-Sakari Ailus
+on top of commit 6613476e225e090cc9aad49be7fa504e290dd33d
+
+ Linux 6.8-rc1
+
+to receive power management fixes for 6.8-rc2.
+
+These fix two cpufreq drivers and the cpupower utility.
+
+Specifics:
+
+ - Fix the handling of scaling_max/min_freq sysfs attributes in the AMD
+   P-state cpufreq driver (Mario Limonciello).
+
+ - Make the intel_pstate cpufreq driver avoid unnecessary computation of
+   the HWP performance level corresponding to a given frequency in the
+   cases when it is known already, which also helps to avoid reducing
+   the maximum CPU capacity artificially on some systems (Rafael J.
+   Wysocki).
+
+ - Fix compilation of the cpupower utility when CFLAGS is passed as a
+   make argument for cpupower, but it does not take effect as expected
+   due to mishandling (Stanley Chan).
+
+Thanks!
+
+
+---------------
+
+Mario Limonciello (1):
+      cpufreq/amd-pstate: Fix setting scaling max/min freq values
+
+Rafael J. Wysocki (1):
+      cpufreq: intel_pstate: Refine computation of P-state for given frequency
+
+Stanley Chan (1):
+      tools cpupower bench: Override CFLAGS assignments
+
+---------------
+
+ drivers/cpufreq/amd-pstate.c        |  7 ++---
+ drivers/cpufreq/intel_pstate.c      | 55 +++++++++++++++++++++++--------------
+ tools/power/cpupower/bench/Makefile |  2 +-
+ 3 files changed, 38 insertions(+), 26 deletions(-)
 
