@@ -1,119 +1,143 @@
-Return-Path: <linux-pm+bounces-2812-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2813-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 051E283DED6
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 17:37:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 565E083DF3E
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 17:53:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 98BAAB25AF4
-	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 16:37:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EBAD11F27E8C
+	for <lists+linux-pm@lfdr.de>; Fri, 26 Jan 2024 16:53:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5599A1D69B;
-	Fri, 26 Jan 2024 16:36:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OQ6afYL2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A531C1DDF5;
+	Fri, 26 Jan 2024 16:52:16 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 314401D699
-	for <linux-pm@vger.kernel.org>; Fri, 26 Jan 2024 16:36:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 167B21DFF8
+	for <linux-pm@vger.kernel.org>; Fri, 26 Jan 2024 16:52:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706287019; cv=none; b=ewyM4uM4oWrwcb0AAYlzlU6Tdb0ySfPaVR6WQC8VfHkzO+EqT+NoBUU/T3NLjjHDKIbDGkvMyeV7wTMKxOs0ahjkW4rm/+4rzCl2jsMsoc2bBXA5M7++oXrtK12o3asAprQojdcO3LXieQWqdja4+ecu9haPBpqjsUfw4Vz9rtA=
+	t=1706287936; cv=none; b=btzKFpIAkv7+wGRc7G0aFNIKu+msrMB4IkDZY9Wvs8a6UuyKs/I5TBIKPK/IM1/56U07zx1tZ6WJQpPr1cuuwPhYsmD/auShY5364ogyoH7u2tpWJOm8BrWftziT8Z6lRh3aJ9iuqNl1s6h5RX+2PTp8aTZDvcTy8e6ZXuJbNOI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706287019; c=relaxed/simple;
-	bh=RjJpYifouNsJOuy4oP+VV9KSQxxECNDoyQzxQ+h4SlQ=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pR7LXXCamx7UviUM3mjOrWp48+9jgHTck0Ku1Elr5NctHTknS8jbxwVnNeS1zMqD3DdGexXAZIQhRBZdJl4v1Q3k5WMRS4AKmBKrOSIRati/1WGE6woPDJKtdkRKne8llZASIPG4Y89EPH83/+9oUcNNW/z9LFR3JETzx0wFnTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OQ6afYL2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 06DF2C433B1
-	for <linux-pm@vger.kernel.org>; Fri, 26 Jan 2024 16:36:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706287019;
-	bh=RjJpYifouNsJOuy4oP+VV9KSQxxECNDoyQzxQ+h4SlQ=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=OQ6afYL2UEE9gjs7mTiC9sTC2lMMWCMN6VUGhdpuiMuLIbYg2rAXoGKrTljBmNvpv
-	 veF4+ur3KdrOaRuXSFUnWF8mC+6Rld9oLlj/GffpxkJhgp1VdwYvhUiH6/3MxbEuvA
-	 BMOsTm0teW9j1tQiTYb1ALP6FclXbPpbttYt6HrXldQ1EQLIyT1IddGU8bwewuB1LQ
-	 9xTtunJcQ2HA8GrLaBEvCKQexsSc8CmPb16Ju5Km5qGQxMiiKsXf9FgxDib1RgepZw
-	 kwl5zPePtbc0+6vpyQerZ91NCvJmNeX1BeWac8jTGhr22sfUnPjfILdPkNKNSdVHUN
-	 y7DVJM+H3WhxA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id EADDBC53BD0; Fri, 26 Jan 2024 16:36:58 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 218171] amd-pstate not loading on zen2 threadripper 3960x
- (trx40
-Date: Fri, 26 Jan 2024 16:36:58 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: johnypean@gmail.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: ANSWERED
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218171-137361-Z2j32WjQXz@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218171-137361@https.bugzilla.kernel.org/>
-References: <bug-218171-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1706287936; c=relaxed/simple;
+	bh=W2rg+Qlv7l5DQXS9S0LSqEVQ2IDHN1Raczz6L69DN6U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XspmnceIakT1qY/zF72hEmSvqmlKpK5THp2IoZSNNvLQyaQZ4guQWgsrPfQOXVYGO6nkwc5hP2MzcUeQofBCTKD44SPGtWKatkFApKCM5L4c4I3Mf1FJbiF9io3dCIb2LFe6BbJ24ylpLDnqi/bqT5taQtJ38MA8i6/BD5Two2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1rTPQo-00021k-Um; Fri, 26 Jan 2024 17:51:54 +0100
+Received: from [2a0a:edc0:2:b01:1d::c0] (helo=ptx.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <ore@pengutronix.de>)
+	id 1rTPQn-002YB1-O1; Fri, 26 Jan 2024 17:51:53 +0100
+Received: from ore by ptx.whiteo.stw.pengutronix.de with local (Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1rTPQn-001yTx-Kl; Fri, 26 Jan 2024 17:51:53 +0100
+Date: Fri, 26 Jan 2024 17:51:53 +0100
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: devicetree@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>, linux-kernel@vger.kernel.org,
+	=?utf-8?B?U8O4cmVu?= Andersen <san@skov.dk>,
+	Rob Herring <robh+dt@kernel.org>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	kernel@pengutronix.de, linux-pm@vger.kernel.org,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>
+Subject: Re: [PATCH v2 4/8] dt-bindings: power: reset: add bindings for NVMEM
+ hardware storing PSCR Data
+Message-ID: <20240126165153.GA468528@pengutronix.de>
+References: <20240124122204.730370-1-o.rempel@pengutronix.de>
+ <20240124122204.730370-5-o.rempel@pengutronix.de>
+ <4e14b7c7-7f0a-437b-aa84-20fdc30a2361@linaro.org>
+ <20240125171146.GC381737@pengutronix.de>
+ <58d24ddc-4e8f-4932-ac37-c9a699d36425@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <58d24ddc-4e8f-4932-ac37-c9a699d36425@linaro.org>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218171
+On Fri, Jan 26, 2024 at 10:03:51AM +0100, Krzysztof Kozlowski wrote:
+> On 25/01/2024 18:11, Oleksij Rempel wrote:
+> > On Thu, Jan 25, 2024 at 11:57:18AM +0100, Krzysztof Kozlowski wrote:
+> >> On 24/01/2024 13:22, Oleksij Rempel wrote:
+> >>> Add device tree bindings that describe hardware implementations of
+> >>> Non-Volatile Memory (NVMEM) used for storing Power State Change Reasons
+> >>> (PSCR).
+> >>> +  that stores Power State Change Reasons (PSCR).
+> >>> +
+> >>> +allOf:
+> >>> +  - $ref: pscrr.yaml#
+> >>> +
+> >>> +properties:
+> >>> +  compatible:
+> >>> +    const: pscrr-nvmem
+> >>> +
+> >>
+> >> So that's a driver :/. Maybe Rob will like it, but it's a no from me.
+> >> Please come up with something really suiting DEVICES, not DRIVERS.
+> > 
+> > If I understand your distinction between 'DEVICES' and 'DRIVERS'
+> > correctly, 'DEVICES' in the device tree context are meant to represent
+> > physical hardware components, while 'DRIVERS' refer to software
+> 
+> Yes.
+> 
+> > abstractions of these components. However, there are numerous device
+> > tree instances, like software-based implementations for SPI, I2C, or
+> > GPIO, which could also be interpreted as 'DRIVERS' in the context of
+> 
+> True. Yet they are still for physical interfaces. There is no DTS having
+> some virtual I2C for a board which does not have I2C.
+> 
+> > your email. Similarly, the binding for PSCRR represents functionality not
+> > fully implemented in hardware but supported by the hardware component of
+> > NVMEM, akin to how ramoops or other functionalities are represented.
+> 
+> You don't need a binding for your case. Instantiate it whatever you wish
+> - modprobe for example - and configure through approved kernel
+> interfaces - sysfs for example.
 
---- Comment #41 from Jan Kosterec (johnypean@gmail.com) ---
-This is grat news. Working flawlessly on:
-Gigabyte TRX40 DESIGNARE
-AMD Ryzen Threadripper 3970X
+About using sysfs for the NVMEM cell, it won't work for my needs because
+I have to know about reboot events before the filesystem is ready. So,
+I'm thinking of using a boot parameter for the kernel. It would look
+like this: pscrr-nvmem.nvmem_cell_alias=nvmem-cell0. This way, I can set
+up the NVMEM cell right at the system's start. I'll need to use stable
+NVMEM cell names for this. Is it ok to introduce NVMEM cell aliases in
+the devicetree?
 
-Tried it on 6.6.14, amd-pstate=3Dactive (can't use 6.7 yet) and it works gr=
-eat.
-Temperatures are lower while performance is better.
-
-cpupower frequency-info
-analyzing CPU 10:
-driver: amd-pstate-epp
-CPUs which run at the same hardware frequency: 10
-CPUs which need to have their frequency coordinated by software: 10
-maximum transition latency:  Cannot determine or is not supported.
-hardware limits: 550 MHz - 4.55 GHz
-available cpufreq governors: performance powersave
-current policy: frequency should be within 550 MHz and 4.55 GHz.
-The governor "powersave" may decide which speed to use
-within this range.
-current CPU frequency: Unable to call hardware
-current CPU frequency: 4.32 GHz (asserted by call to kernel)
-boost state support:
-Supported: yes
-Active: yes
-AMD PSTATE Highest Performance: 166. Maximum Frequency: 4.55 GHz.
-AMD PSTATE Nominal Performance: 135. Nominal Frequency: 3.70 GHz.
-AMD PSTATE Lowest Non-linear Performance: 64. Lowest Non-linear Frequency: =
-1.75
-GHz.
-AMD PSTATE Lowest Performance: 21. Lowest Frequency: 550 MHz.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
+Best Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
