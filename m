@@ -1,385 +1,246 @@
-Return-Path: <linux-pm+bounces-2822-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2823-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B61683E8A7
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Jan 2024 01:44:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E62883E8B1
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Jan 2024 01:47:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A08761C22354
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Jan 2024 00:44:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E62C01F21A50
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Jan 2024 00:47:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ACC21FAF;
-	Sat, 27 Jan 2024 00:43:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60C25211C;
+	Sat, 27 Jan 2024 00:47:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PjuKReo6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="amWj1f6P"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F1D18F49
-	for <linux-pm@vger.kernel.org>; Sat, 27 Jan 2024 00:43:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33D8E1FAF
+	for <linux-pm@vger.kernel.org>; Sat, 27 Jan 2024 00:47:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706316220; cv=none; b=gRALpe4gEN2GaBftUpbVvVYmNE4/wNsEWaTDVtCyC94O2COAY5J35yJzUUP+9isqYXTZ5aR5z+uQ0IdUk0eOrVQYm5JhNvWEMmYft5fd66WcBMTxXxsLPdgLL2l+QomAW0k+8wzl6n6KNWks2yEKiHwD0VRiSe5fLxQxRuEoszQ=
+	t=1706316423; cv=none; b=mXOVHDMJfzXmd36lH6fTf5Xxv8Y7YDiuBE/HAsl4Cxl1JwyVIcSPZqxMdeT1AM44TP52xXrkbcviOxynAyuM2DzgLYWzKi+lDM4lGP9JQaHZMxQFNj2Uwg8eWEkrjPvVsr6w/fT+KV8zJAJgolS+mlcf49UItTW6hFCIhoOvJQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706316220; c=relaxed/simple;
-	bh=NcvEgjiiC9dhO/10JdNmADGge4yx5Q6VfAy8AVjWODA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=d36kIHNT5UiXl6tuf/5quYhW72wAERISRVHj9lOzUWky+8YgDcuafMsFOgJisnP6uVoxoaobqYwOWSVQWb5Zu+WrOZcCASxCwYYx7g+knC8fvMm3kQNs1sKKgB4MOI0yg2c1on3SpCGXv58+vnLj0d15E+GA+Sy3D9VKAgXk4D4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidai.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PjuKReo6; arc=none smtp.client-ip=209.85.219.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidai.bounces.google.com
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dc3645c083aso1647957276.2
-        for <linux-pm@vger.kernel.org>; Fri, 26 Jan 2024 16:43:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706316217; x=1706921017; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rVpEyU1ZEIUtuB66OZBKS+wM/IebWFfxC7N5VZ5jlTQ=;
-        b=PjuKReo6Mawf1qc0aM1uvio3gZiQfmDjAB+Tssw+7JMVIGcT7vsPpgTMhZ099OztPc
-         4Lh1c02x5/wl51OPIIqHJW2h+gSd8B/szL62KbF3uQAbZ9KazSJPuDQNSTrPvBIzJ6tQ
-         5MLxbZSvjl+wVQ3pdasNENnqe/78Shek7ugwfazLdQQb00/whRl42a8kqrr1u76ErByE
-         Oayt+Tgfm8MskNlD2SBihoI/EpAIvwX6x2xFlhYdwdBhbD/SRuRTJBeJzlR/0akgx6QD
-         H16BzR4kZnD68h586tMOozCLIUy1YLoSWmRphuCCb/nUVT+rWIn/AU4Xp2gbKdVNQsLH
-         9Q9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706316217; x=1706921017;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rVpEyU1ZEIUtuB66OZBKS+wM/IebWFfxC7N5VZ5jlTQ=;
-        b=IGPt73EMokGmeQjwdgmqVG/0FHonATSy/SK2vINyPK2Lro8L06E5bUpsbZezecb3zq
-         jIXGND5eMmMD2f7Eo40+IhRzx4zqN84X3cmCsu/Yo1qIKbCQlSQuph3tHIetLzpFH+jr
-         GEcXmgcFgyycrFM+vtRG/s6eRPFMrr08+uGK6xOcUrJik9spGnYpCBQnzBN3xAqXXu3N
-         nCcmS8FY1opy2qh4ztC4oZuq1zVNUuEeDfyrkl0Zi00ct+U7YHo1rUk6rki7UG/98gJd
-         Ep0v/vaBTfTlHancGDdrNJOpP9mIMU1oan62VAFfpqPurNSQ5gz1xdrJw3SIqIP5E4xo
-         N9Yw==
-X-Gm-Message-State: AOJu0YxXuazrRDNJgLDtCjr2Da3IYsJeQ51opM8lEmvcy+B5+WJRXxHl
-	RGeeeGudAlAxaQn4qKQoiF+zE7KbiABUTrxU5nlpUF/zEcRRofxzVbw6vt8ac9BsLdAs7YQ2OUG
-	1pLOLYw==
-X-Google-Smtp-Source: AGHT+IE/szBT3vMFudSKm/AaI5aALFjntml/r3QIAjBs49SCBNQLy3ZZ3SM/FAzldN3YhxhaxDGm+OxIWSk5
-X-Received: from davidai2.mtv.corp.google.com ([2620:15c:211:201:d621:88fa:6f6:1b46])
- (user=davidai job=sendgmr) by 2002:a05:6902:2102:b0:dc2:54a9:cbf7 with SMTP
- id dk2-20020a056902210200b00dc254a9cbf7mr340146ybb.13.1706316217535; Fri, 26
- Jan 2024 16:43:37 -0800 (PST)
-Date: Fri, 26 Jan 2024 16:43:16 -0800
-In-Reply-To: <20240127004321.1902477-1-davidai@google.com>
+	s=arc-20240116; t=1706316423; c=relaxed/simple;
+	bh=MZQl+lyidIc6Ytjk7uVe8T2doNbgUajsnsakgGQ86iM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hX1DBihFgjXJhE1hpROgqzgj3Re2X6TijVcIT91vj4jQaxXlg59amBwdWlGAggYHOYsPc3uGrXp0weOlONSvS25N1pQchjq+ySnVTvz7vr79yjGdlqqL1lTKXnx07f81seey4xr2wUh6tk9+1ty2Q3gMjccVN1gw8OYHnM2Rwwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=amWj1f6P; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C00D4C433C7;
+	Sat, 27 Jan 2024 00:47:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706316422;
+	bh=MZQl+lyidIc6Ytjk7uVe8T2doNbgUajsnsakgGQ86iM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=amWj1f6PUp8xKOJHGU+SBkWd/GQFNkq7IZ/SFMtal2sJA5d8slnxYPgf+moXPdZe8
+	 qfFWJ9nK2wCLkUiv3f8O911pvSlVxq8KeeathMYua2JJI2v5B2IzdwygnaV7F02azX
+	 xBMWC/194rFuoiTQOQ+OAsg3p5FmRyq7/m/O61ZgVU1gNK8l4eFtFyNb37BcTWKV+l
+	 N3VcVQ/UNOkBUdiaVeYrm6zaKcQvXxo5s6RHLnB+eYUvYsufr57czH6A8cDTU8sGRm
+	 8AHWq0owX/vG+dh5JEuHEvNNLTvDSBE7k1HW5NdDTzjWWLU62ecEiPuxL/M3Pp5RHd
+	 sOYOi/Poi7qiQ==
+Received: by mercury (Postfix, from userid 1000)
+	id 8E974106A754; Sat, 27 Jan 2024 01:46:59 +0100 (CET)
+Date: Sat, 27 Jan 2024 01:46:59 +0100
+From: Sebastian Reichel <sre@kernel.org>
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 3/3] power: supply: axp288_charger: Add charge-inhibit
+ support
+Message-ID: <m665fuuwj77duku4zsr5a22tn2ml44dh6l4vldypfxeihwipvq@fsh7rigfvgxg>
+References: <20240104183516.312044-1-hdegoede@redhat.com>
+ <20240104183516.312044-3-hdegoede@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240127004321.1902477-1-davidai@google.com>
-X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
-Message-ID: <20240127004321.1902477-3-davidai@google.com>
-Subject: [PATCH v5 2/2] cpufreq: add virtual-cpufreq driver
-From: David Dai <davidai@google.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Sudeep Holla <sudeep.holla@arm.com>, David Dai <davidai@google.com>, 
-	Saravana Kannan <saravanak@google.com>
-Cc: Quentin Perret <qperret@google.com>, Masami Hiramatsu <mhiramat@google.com>, 
-	Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oliver.upton@linux.dev>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Pavan Kondeti <quic_pkondeti@quicinc.com>, Gupta Pankaj <pankaj.gupta@amd.com>, 
-	Mel Gorman <mgorman@suse.de>, kernel-team@android.com, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="hbppt4kgdbhu4jh2"
+Content-Disposition: inline
+In-Reply-To: <20240104183516.312044-3-hdegoede@redhat.com>
 
-Introduce a virtualized cpufreq driver for guest kernels to improve
-performance and power of workloads within VMs.
 
-This driver does two main things:
+--hbppt4kgdbhu4jh2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-1. Sends the frequency of vCPUs as a hint to the host. The host uses the
-hint to schedule the vCPU threads and decide physical CPU frequency.
+Hello Hans,
 
-2. If a VM does not support a virtualized FIE(like AMUs), it queries the
-host CPU frequency by reading a MMIO region of a virtual cpufreq device
-to update the guest's frequency scaling factor periodically. This enables
-accurate Per-Entity Load Tracking for tasks running in the guest.
+On Thu, Jan 04, 2024 at 07:35:16PM +0100, Hans de Goede wrote:
+> Add charge-inhibit support by adding a rw status attribute and
+> inhibiting charging when "Not charging" or "Discharging"
+> is written to it.
+>=20
+> The userspace API with status being writable is a bit weird,
+> but this is already done this way in the following psy drivers:
+> axp20x_battery.c, bq24735-charger.c, bq25980_charger.c, ip5xxx_power.c,
+> rt9467-charger.c, rt9471.c.
 
-Co-developed-by: Saravana Kannan <saravanak@google.com>
-Signed-off-by: Saravana Kannan <saravanak@google.com>
-Signed-off-by: David Dai <davidai@google.com>
----
- drivers/cpufreq/Kconfig           |  15 +++
- drivers/cpufreq/Makefile          |   1 +
- drivers/cpufreq/virtual-cpufreq.c | 209 ++++++++++++++++++++++++++++++
- include/linux/arch_topology.h     |   1 +
- 4 files changed, 226 insertions(+)
- create mode 100644 drivers/cpufreq/virtual-cpufreq.c
+We have since then added a new property for this:
 
-diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
-index 35efb53d5492..f2d37075aa10 100644
---- a/drivers/cpufreq/Kconfig
-+++ b/drivers/cpufreq/Kconfig
-@@ -217,6 +217,21 @@ config CPUFREQ_DT
- 
- 	  If in doubt, say N.
- 
-+config CPUFREQ_VIRT
-+	tristate "Virtual cpufreq driver"
-+	depends on OF
-+	select PM_OPP
-+	help
-+	  This adds a virtualized cpufreq driver for guest kernels that
-+	  read/writes to a MMIO region for a virtualized cpufreq device to
-+	  communicate with the host. It sends frequency updates to the host
-+	  which gets used as a hint to schedule vCPU threads and select CPU
-+	  frequency. If a VM does not support a virtualized FIE such as AMUs,
-+	  it updates the frequency scaling factor by polling host CPU frequency
-+	  to enable accurate Per-Entity Load Tracking for tasks running in the guest.
-+
-+	  If in doubt, say N.
-+
- config CPUFREQ_DT_PLATDEV
- 	tristate "Generic DT based cpufreq platdev driver"
- 	depends on OF
-diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
-index 8d141c71b016..eb72ecdc24db 100644
---- a/drivers/cpufreq/Makefile
-+++ b/drivers/cpufreq/Makefile
-@@ -16,6 +16,7 @@ obj-$(CONFIG_CPU_FREQ_GOV_ATTR_SET)	+= cpufreq_governor_attr_set.o
- 
- obj-$(CONFIG_CPUFREQ_DT)		+= cpufreq-dt.o
- obj-$(CONFIG_CPUFREQ_DT_PLATDEV)	+= cpufreq-dt-platdev.o
-+obj-$(CONFIG_CPUFREQ_VIRT)		+= virtual-cpufreq.o
- 
- # Traces
- CFLAGS_amd-pstate-trace.o               := -I$(src)
-diff --git a/drivers/cpufreq/virtual-cpufreq.c b/drivers/cpufreq/virtual-cpufreq.c
-new file mode 100644
-index 000000000000..0132f430a13e
---- /dev/null
-+++ b/drivers/cpufreq/virtual-cpufreq.c
-@@ -0,0 +1,209 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2023 Google LLC
-+ */
-+
-+#include <linux/arch_topology.h>
-+#include <linux/cpufreq.h>
-+#include <linux/init.h>
-+#include <linux/sched.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of_address.h>
-+#include <linux/of_platform.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_opp.h>
-+#include <linux/slab.h>
-+
-+#define REG_CUR_FREQ_KHZ_OFFSET 0x0
-+#define REG_SET_FREQ_KHZ_OFFSET 0x4
-+#define PER_CPU_OFFSET 0x8
-+
-+static void __iomem *base;
-+
-+static void virt_scale_freq_tick(void)
-+{
-+	int cpu = smp_processor_id();
-+	u32 max_freq = (u32)cpufreq_get_hw_max_freq(cpu);
-+	u64 cur_freq;
-+	unsigned long scale;
-+
-+	cur_freq = (u64)readl_relaxed(base + cpu * PER_CPU_OFFSET
-+			+ REG_CUR_FREQ_KHZ_OFFSET);
-+
-+	cur_freq <<= SCHED_CAPACITY_SHIFT;
-+	scale = (unsigned long)div_u64(cur_freq, max_freq);
-+	scale = min(scale, SCHED_CAPACITY_SCALE);
-+
-+	this_cpu_write(arch_freq_scale, scale);
-+}
-+
-+static struct scale_freq_data virt_sfd = {
-+	.source = SCALE_FREQ_SOURCE_VIRT,
-+	.set_freq_scale = virt_scale_freq_tick,
-+};
-+
-+static unsigned int virt_cpufreq_set_perf(struct cpufreq_policy *policy,
-+					  unsigned int target_freq)
-+{
-+	writel_relaxed(target_freq,
-+		       base + policy->cpu * PER_CPU_OFFSET + REG_SET_FREQ_KHZ_OFFSET);
-+	return 0;
-+}
-+
-+static unsigned int virt_cpufreq_fast_switch(struct cpufreq_policy *policy,
-+					     unsigned int target_freq)
-+{
-+	virt_cpufreq_set_perf(policy, target_freq);
-+	return target_freq;
-+}
-+
-+static int virt_cpufreq_target_index(struct cpufreq_policy *policy,
-+				     unsigned int index)
-+{
-+	return virt_cpufreq_set_perf(policy,
-+				     policy->freq_table[index].frequency);
-+}
-+
-+static int virt_cpufreq_cpu_init(struct cpufreq_policy *policy)
-+{
-+	struct cpufreq_frequency_table *table;
-+	struct device *cpu_dev;
-+	int ret;
-+
-+	cpu_dev = get_cpu_device(policy->cpu);
-+	if (!cpu_dev)
-+		return -ENODEV;
-+
-+	ret = dev_pm_opp_of_add_table(cpu_dev);
-+	if (ret)
-+		return ret;
-+
-+	ret = dev_pm_opp_get_opp_count(cpu_dev);
-+	if (ret <= 0) {
-+		dev_err(cpu_dev, "OPP table can't be empty\n");
-+		return -ENODEV;
-+	}
-+
-+	ret = dev_pm_opp_init_cpufreq_table(cpu_dev, &table);
-+	if (ret) {
-+		dev_err(cpu_dev, "failed to init cpufreq table: %d\n", ret);
-+		return ret;
-+	}
-+
-+	policy->freq_table = table;
-+
-+	/*
-+	 * To simplify and improve latency of handling frequency requests on
-+	 * the host side, this ensures that the vCPU thread triggering the MMIO
-+	 * abort is the same thread whose performance constraints (Ex. uclamp
-+	 * settings) need to be updated. This simplifies the VMM (Virtual
-+	 * Machine Manager) having to find the correct vCPU thread and/or
-+	 * facing permission issues when configuring other threads.
-+	 */
-+	policy->dvfs_possible_from_any_cpu = false;
-+	policy->fast_switch_possible = true;
-+
-+	/*
-+	 * Using the default SCALE_FREQ_SOURCE_CPUFREQ is insufficient since
-+	 * the actual physical CPU frequency may not match requested frequency
-+	 * from the vCPU thread due to frequency update latencies or other
-+	 * inputs to the physical CPU frequency selection. This additional FIE
-+	 * source allows for more accurate freq_scale updates and only takes
-+	 * effect if another FIE source such as AMUs have not been registered.
-+	 */
-+	topology_set_scale_freq_source(&virt_sfd, policy->cpus);
-+
-+	return 0;
-+}
-+
-+static int virt_cpufreq_cpu_exit(struct cpufreq_policy *policy)
-+{
-+	struct device *cpu_dev;
-+
-+	cpu_dev = get_cpu_device(policy->cpu);
-+	if (!cpu_dev)
-+		return -ENODEV;
-+
-+	topology_clear_scale_freq_source(SCALE_FREQ_SOURCE_VIRT, policy->related_cpus);
-+	dev_pm_opp_free_cpufreq_table(cpu_dev, &policy->freq_table);
-+	return 0;
-+}
-+
-+static int virt_cpufreq_online(struct cpufreq_policy *policy)
-+{
-+	/* Nothing to restore. */
-+	return 0;
-+}
-+
-+static int virt_cpufreq_offline(struct cpufreq_policy *policy)
-+{
-+	/* Dummy offline() to avoid exit() being called and freeing resources. */
-+	return 0;
-+}
-+
-+static struct cpufreq_driver cpufreq_virt_driver = {
-+	.name		= "virt-cpufreq",
-+	.init		= virt_cpufreq_cpu_init,
-+	.exit		= virt_cpufreq_cpu_exit,
-+	.online         = virt_cpufreq_online,
-+	.offline        = virt_cpufreq_offline,
-+	.verify		= cpufreq_generic_frequency_table_verify,
-+	.target_index	= virt_cpufreq_target_index,
-+	.fast_switch	= virt_cpufreq_fast_switch,
-+	.attr		= cpufreq_generic_attr,
-+};
-+
-+static int virt_cpufreq_driver_probe(struct platform_device *pdev)
-+{
-+	int ret;
-+
-+	base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(base))
-+		return PTR_ERR(base);
-+
-+	ret = cpufreq_register_driver(&cpufreq_virt_driver);
-+	if (ret) {
-+		dev_err(&pdev->dev, "Virtual CPUFreq driver failed to register: %d\n", ret);
-+		return ret;
-+	}
-+
-+	dev_dbg(&pdev->dev, "Virtual CPUFreq driver initialized\n");
-+	return 0;
-+}
-+
-+static int virt_cpufreq_driver_remove(struct platform_device *pdev)
-+{
-+	cpufreq_unregister_driver(&cpufreq_virt_driver);
-+	return 0;
-+}
-+
-+static const struct of_device_id virt_cpufreq_match[] = {
-+	{ .compatible = "qemu,virtual-cpufreq", .data = NULL},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, virt_cpufreq_match);
-+
-+static struct platform_driver virt_cpufreq_driver = {
-+	.probe = virt_cpufreq_driver_probe,
-+	.remove = virt_cpufreq_driver_remove,
-+	.driver = {
-+		.name = "virt-cpufreq",
-+		.of_match_table = virt_cpufreq_match,
-+	},
-+};
-+
-+static int __init virt_cpufreq_init(void)
-+{
-+	return platform_driver_register(&virt_cpufreq_driver);
-+}
-+postcore_initcall(virt_cpufreq_init);
-+
-+static void __exit virt_cpufreq_exit(void)
-+{
-+	platform_driver_unregister(&virt_cpufreq_driver);
-+}
-+module_exit(virt_cpufreq_exit);
-+
-+MODULE_DESCRIPTION("Virtual cpufreq driver");
-+MODULE_LICENSE("GPL");
-diff --git a/include/linux/arch_topology.h b/include/linux/arch_topology.h
-index a63d61ca55af..fb272b4bf7b1 100644
---- a/include/linux/arch_topology.h
-+++ b/include/linux/arch_topology.h
-@@ -49,6 +49,7 @@ enum scale_freq_source {
- 	SCALE_FREQ_SOURCE_CPUFREQ = 0,
- 	SCALE_FREQ_SOURCE_ARCH,
- 	SCALE_FREQ_SOURCE_CPPC,
-+	SCALE_FREQ_SOURCE_VIRT,
- };
- 
- struct scale_freq_data {
--- 
-2.43.0.429.g432eaa2c6b-goog
+POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR
 
+That can have auto (0), inhibit charge (1) or force discharge (2).
+
+Greetings,
+
+-- Sebastian
+
+> Note on systems with an AXP288 some (about 400mA depending on load)
+> current will be drawn from the battery when charging is disabled
+> even if there is an external power-supply which can provide all
+> the necessary current. So unfortunately one cannot simply disable
+> charging to keep the battery in good health when using a tablet
+> with an AXP288 permanently connected to an external power-supply.
+>=20
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+> ---
+>  drivers/power/supply/axp288_charger.c | 43 +++++++++++++++++++++++++--
+>  1 file changed, 40 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/axp288_charger.c b/drivers/power/supply=
+/axp288_charger.c
+> index a327933cfd6a..351431f3cf0e 100644
+> --- a/drivers/power/supply/axp288_charger.c
+> +++ b/drivers/power/supply/axp288_charger.c
+> @@ -2,7 +2,7 @@
+>  /*
+>   * axp288_charger.c - X-power AXP288 PMIC Charger driver
+>   *
+> - * Copyright (C) 2016-2017 Hans de Goede <hdegoede@redhat.com>
+> + * Copyright (C) 2016-2024 Hans de Goede <hdegoede@redhat.com>
+>   * Copyright (C) 2014 Intel Corporation
+>   * Author: Ramakrishna Pallala <ramakrishna.pallala@intel.com>
+>   */
+> @@ -148,6 +148,8 @@ struct axp288_chrg_info {
+>  	unsigned int op_mode;
+>  	unsigned int backend_control;
+>  	bool valid;
+> +	bool charge_enable;
+> +	bool charge_inhibit;
+>  };
+> =20
+>  static inline int axp288_charger_set_cc(struct axp288_chrg_info *info, i=
+nt cc)
+> @@ -285,9 +287,9 @@ static int axp288_charger_vbus_path_select(struct axp=
+288_chrg_info *info,
+>  	return ret;
+>  }
+> =20
+> -static int axp288_charger_enable_charger(struct axp288_chrg_info *info,
+> -								bool enable)
+> +static int axp288_charger_update_charge_en(struct axp288_chrg_info *info)
+>  {
+> +	bool enable =3D info->charge_enable && !info->charge_inhibit;
+>  	int ret;
+> =20
+>  	if (enable)
+> @@ -302,6 +304,18 @@ static int axp288_charger_enable_charger(struct axp2=
+88_chrg_info *info,
+>  	return ret;
+>  }
+> =20
+> +static int axp288_charger_enable_charger(struct axp288_chrg_info *info, =
+bool enable)
+> +{
+> +	info->charge_enable =3D enable;
+> +	return axp288_charger_update_charge_en(info);
+> +}
+> +
+> +static int axp288_charger_inhibit_charger(struct axp288_chrg_info *info,=
+ bool inhibit)
+> +{
+> +	info->charge_inhibit =3D inhibit;
+> +	return axp288_charger_update_charge_en(info);
+> +}
+> +
+>  static int axp288_get_charger_health(struct axp288_chrg_info *info)
+>  {
+>  	if (!(info->input_status & PS_STAT_VBUS_PRESENT))
+> @@ -327,6 +341,19 @@ static int axp288_charger_usb_set_property(struct po=
+wer_supply *psy,
+> =20
+>  	mutex_lock(&info->lock);
+>  	switch (psp) {
+> +	case POWER_SUPPLY_PROP_STATUS:
+> +		switch (val->intval) {
+> +		case POWER_SUPPLY_STATUS_CHARGING:
+> +			ret =3D axp288_charger_inhibit_charger(info, false);
+> +			break;
+> +		case POWER_SUPPLY_STATUS_DISCHARGING:
+> +		case POWER_SUPPLY_STATUS_NOT_CHARGING:
+> +			ret =3D axp288_charger_inhibit_charger(info, true);
+> +			break;
+> +		default:
+> +			ret =3D -EINVAL;
+> +		}
+> +		break;
+>  	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+>  		scaled_val =3D min(val->intval, info->max_cc);
+>  		scaled_val =3D DIV_ROUND_CLOSEST(scaled_val, 1000);
+> @@ -423,6 +450,14 @@ static int axp288_charger_usb_get_property(struct po=
+wer_supply *psy,
+>  		goto out;
+> =20
+>  	switch (psp) {
+> +	case POWER_SUPPLY_PROP_STATUS:
+> +		if (info->charge_enable && !info->charge_inhibit)
+> +			val->intval =3D POWER_SUPPLY_STATUS_CHARGING;
+> +		else if (info->charge_enable && info->charge_inhibit)
+> +			val->intval =3D POWER_SUPPLY_STATUS_NOT_CHARGING;
+> +		else /* !info->charge_enable && xxx */
+> +			val->intval =3D POWER_SUPPLY_STATUS_DISCHARGING;
+> +		break;
+>  	case POWER_SUPPLY_PROP_PRESENT:
+>  		/* Check for OTG case first */
+>  		if (info->otg.id_short) {
+> @@ -472,6 +507,7 @@ static int axp288_charger_property_is_writeable(struc=
+t power_supply *psy,
+>  	int ret;
+> =20
+>  	switch (psp) {
+> +	case POWER_SUPPLY_PROP_STATUS:
+>  	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+>  	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
+>  	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
+> @@ -485,6 +521,7 @@ static int axp288_charger_property_is_writeable(struc=
+t power_supply *psy,
+>  }
+> =20
+>  static enum power_supply_property axp288_usb_props[] =3D {
+> +	POWER_SUPPLY_PROP_STATUS,
+>  	POWER_SUPPLY_PROP_PRESENT,
+>  	POWER_SUPPLY_PROP_ONLINE,
+>  	POWER_SUPPLY_PROP_TYPE,
+> --=20
+> 2.43.0
+>=20
+>=20
+
+--hbppt4kgdbhu4jh2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmW0UoIACgkQ2O7X88g7
++prUXg/+ILZUuqCWZEeNq20Yn0W5TQRhf/VMgEHEE9VGo70JOhjQM2kXLUmytz7+
+4PpwG4NpOaHvhkfoVb1UzzOlAD/Ztcv2ZwbSIMswMHzs2lwAidvpF/JyXX3Gip2Q
+Z6OJWXEtksAta1W2/j4K8a13Di6YG2yjbUa+f/sYFTjxVQRUaBWZyLIBcH+i50bI
+HDY/UA70lFHGhdK7TTW88HaBYTsmkSUG+7/Pfnj13wGicH1s8FnlE10UO44u9tmq
+mwnrBCZsIXMMfG3CepMgZyA8glgeTXzrF/oNPNJlCqBjtIQuUTYlNmo3L7OMtc3d
+fLKyDeXx/gWgDkrwu/PT1aCyVznZWgLwk2Y551pXrCHx6ggeSqoUDlzbD/oPASRu
+QCUR+ifotzWtXE6E530OeB8v3n+Zt96A+RMgg4YpY+bAp6KIBhCFvwLoAmgckCa4
+J7KvUF99T4tuEXTkEH+M28JJf1pa98A2ZNY1Y+zSIRhrKOaubOpfazcnIGyYLg8h
+21HPP/Ej707ikR9UJ/dtR2LXpD3xLsfSr0s9cqJY2v/CLx5W9Z4F1G0Z95xrUusV
+Sh4rT3Gd2QBlzNmsTOqCK5G+SwtOovjf98FEBkCDIGp5g1/95mxmZa74mZ9mkS86
+5FlZEK6jVLibDYZLDGU2tFaYdbRrsrd/TbKpQDlMn9vROCkMxP0=
+=QPXP
+-----END PGP SIGNATURE-----
+
+--hbppt4kgdbhu4jh2--
 
