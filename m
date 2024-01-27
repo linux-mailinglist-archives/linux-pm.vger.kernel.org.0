@@ -1,176 +1,173 @@
-Return-Path: <linux-pm+bounces-2830-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2831-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 118A683EDFC
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Jan 2024 16:37:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BD7283EF76
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Jan 2024 19:20:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C216F282A88
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Jan 2024 15:37:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B0D531C20B3F
+	for <lists+linux-pm@lfdr.de>; Sat, 27 Jan 2024 18:20:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AF0F25770;
-	Sat, 27 Jan 2024 15:37:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A04CF2D61B;
+	Sat, 27 Jan 2024 18:20:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Nn4e4sJE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EmxeDqHb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7BF3200AB;
-	Sat, 27 Jan 2024 15:37:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 190412D60C;
+	Sat, 27 Jan 2024 18:20:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706369845; cv=none; b=OQtgqhiYjrYMJUoTKfIh6AancUwpDDCS3wDzoHU5Ru0H1dSvGbki7ESMm2N+Al9tf0t2Z6FP2G8tHjkBPdr7c0+qBNfsd/mrBdC/fx1QyRNA8tQsRQzrh0u3MCWdNOhPoSSxlOsDsBF9D/PL9Oqx3FYa8TjCoGztj5bhKNr0//U=
+	t=1706379604; cv=none; b=FvE0SOh8WN2V+H/WzN5bPo1ZiZIsSM/NxmUJE4IuYNLwpsSEWJqcdUii+nY+m11MsseCuvZ1uaezeX0uewdV3U9+9K0WcatsCCrXDqWvGabSiWBrtTzlvjIRIt+DXUJoIHtw2hBNTg0Kns5JmV3HQXtPSbPpB5v9HdvOv7i5Spw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706369845; c=relaxed/simple;
-	bh=yeEb+DX6g1gaZS5hxdUJC6t92mKaMthuJkbpJ+wrn88=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=B5TFVh9sfMdkbMcMt9xOzRnaoFT+puSIJ1bnRySs44J8j6sOS2Q0UxokRYNyEdzFLUpVUudUdjKj3E/Hi+kMyQr14dduBLHxISYH+ZPoafCKcXBLtrC5lGUecxhfKuMS/0Fvt1nnHOb/rNua7kTH1G4bKozmLKUr9DMU2L0zz5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Nn4e4sJE; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40RFM4Lb013249;
-	Sat, 27 Jan 2024 15:37:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=GL6DcGHInWdFEK4wiTfvMS/9wuVoeUooATeGAfyk74g=; b=Nn
-	4e4sJEnhmmnRkWBWJ94KqtJ3coDqiv9jsdQ/J9CbZsmWqGPHxml0MIyfSNyB0msi
-	HoyLVSvR6E8sPw13CFryQh+3fwWllxpYYcicH9ePoZ5XhpCGym1xopAhArC0pkW6
-	uV1ZX1S8C1XeynjrqKXqEc4ZZl9jK2Sv4Yr+Ek8b199oygyDi4auuCig4dsoAUGe
-	pEDMTxlpYZUOfwUeRpRQBWqiFC/F1YSFg6WArP58P1REpow9l3j1wdKoNtiPG2UV
-	PzHlRVZnWu7d2bYdqtb1lzEc3QZorzHpqrAy2R90cnwHXOIXOQJ2dLV0xwPsAMLN
-	WuMAYHMCHcwcvUTJoNNg==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vvswy8phd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 27 Jan 2024 15:37:08 +0000 (GMT)
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-	by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40RFb7ne028845
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 27 Jan 2024 15:37:07 GMT
-Received: from [10.216.45.141] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Sat, 27 Jan
- 2024 07:37:03 -0800
-Message-ID: <1cd754e5-fc5e-bd8b-1d70-8de40c9a85e7@quicinc.com>
-Date: Sat, 27 Jan 2024 21:07:00 +0530
+	s=arc-20240116; t=1706379604; c=relaxed/simple;
+	bh=3qf/Tcsst6PvPX+mtlEE/pY7q7lnHOq8wve0vPMLfeo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DqT1TXqV7eMcVdVg3l+50maIGzOfFiYKD9OQmeDGnWZmKR6J+c7fJepRvm5xtyBUAHVSwMP5GS0J24sCXUgeceN7ujiuasV7u87i+GV+kvAjFtJsrSOOjbCUeM9vLij5EmNqlfpEWv9i+7ZZqe0uKwVOixIW+Q3l6lz2a3wrK68=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EmxeDqHb; arc=none smtp.client-ip=209.85.167.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3bded20a30eso1039593b6e.2;
+        Sat, 27 Jan 2024 10:20:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706379602; x=1706984402; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kItuuplq9gKxvPdah7o7cU5Dr7iTWQBKGEy/GZ0EpAA=;
+        b=EmxeDqHbdY8L9oCWNvovK+t6VQZEyrydRVk4ZfrvIBldHkwnJgsC128O3jSsJmYF7R
+         sCl87tFch/F9yg+QOUe862l6Qn7Or4j1zADzKj54u38zFwMry+kKm46pI9DrnnZB8osA
+         3exQ+NUEVcDDxdR30t3dJpDXDhQgM0sTwnf+n8rxATWkHhJghKsEmgek2DYzgchH4CPw
+         2/w02xgwI/Ycumnfhl1hOFTxhclfgPxBEoXlTWT97JrklpLmIhNbIFDFAXSNa8u83wB3
+         fU3xy79DlE906A8eJb8skCyEgv1BXL8vTyC3wgmcOgdjJ99SiDTsGONAxXJQLmYwxRF3
+         /x/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706379602; x=1706984402;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kItuuplq9gKxvPdah7o7cU5Dr7iTWQBKGEy/GZ0EpAA=;
+        b=jYRQbjW19/aPn0kDHeIskrNPc+L5KtHR2dBb4vwTfmXJRHH0t5h3ABh2zkMjUbr3Um
+         fQJcZpA4KPYHyZtEjMaUgij6DnKo7zJwV+k/TK0SzolIw2z9OVcKD/OiNlFAOW93XPBz
+         GDZikCy8+WmmRwqA1sssZv7RZImJScGDOkJ7gIiUEC8398a3m6wcg0DbVZnKb0RUgWse
+         o3QPK1oR5y33zx+VCT3Ww4Gh3VKxxrs1w/YpjMW3OFX6UN1o9RS01xiOEs9N398mY0J4
+         3CU9OeHDV2NIszsYeUISHus2Ud9hdz3VoeFNz0fkL5SKLLBsIJsmx4Hcr6vkuLJFJeyI
+         f+vQ==
+X-Gm-Message-State: AOJu0Yz6gK/NljxsItH8lxFaILostD3GOF9MY3qEQw4kF4LoyzuYRhye
+	vxFo6EnGtlqjDBAzbIEsu+C3NTsfjf5+YKwQnK2b47/6qGChToKxiJ317oqS97z0qciUJIYu1fH
+	PtVLO7pZTxMaTNQ1TCVpkCIXHVF1oh6P3
+X-Google-Smtp-Source: AGHT+IFc1oQxSjGZOuzX1x2qeYX1xDk1sFjiGxTFRvEsAOq3/96UKF4ekd05GhqbhBiqz8uTRTYTFg+auxUbUoGxSHc=
+X-Received: by 2002:a05:6359:c89:b0:176:707d:4c71 with SMTP id
+ go9-20020a0563590c8900b00176707d4c71mr2398126rwb.15.1706379601425; Sat, 27
+ Jan 2024 10:20:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] thermal/drivers/tsens: Add suspend to RAM support for
- tsens
-To: Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Priyansh Jain
-	<quic_priyjain@quicinc.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath
-	<thara.gopinath@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Rafael J
- . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <",quic_mkshah"@quicinc.com>,
-        ",Raghavendra
- Kakarla" <quic_rkakarla@quicinc.com>
-References: <20240122100726.16993-1-quic_priyjain@quicinc.com>
- <548e2f24-a51e-4593-9463-09506488c70e@linaro.org>
- <f415a8cd-4cae-d7c3-60fc-674b3e660f6b@quicinc.com>
- <aeae2e69-8407-4d90-9d16-27798e2f3248@linaro.org>
- <be69e0a6-fdc8-c24b-9beb-adaac4a97776@quicinc.com>
- <b5ea1c8c-c35d-45e3-9b90-d3dc480f4463@linaro.org>
-From: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-In-Reply-To: <b5ea1c8c-c35d-45e3-9b90-d3dc480f4463@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: GACN8c85PyCVK4Yhzs7Uc5A2ahGGIDp1
-X-Proofpoint-GUID: GACN8c85PyCVK4Yhzs7Uc5A2ahGGIDp1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-25_14,2024-01-25_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- spamscore=0 suspectscore=0 bulkscore=0 phishscore=0 clxscore=1011
- impostorscore=0 mlxlogscore=254 malwarescore=0 mlxscore=0
- lowpriorityscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2401190000 definitions=main-2401270117
+References: <20240106223951.387067-1-aford173@gmail.com> <20240106223951.387067-2-aford173@gmail.com>
+In-Reply-To: <20240106223951.387067-2-aford173@gmail.com>
+From: Adam Ford <aford173@gmail.com>
+Date: Sat, 27 Jan 2024 12:19:50 -0600
+Message-ID: <CAHCN7x+=etco+xEELdf5AyR07sR6c9tTFtsA3K5Dy99qhAZQMg@mail.gmail.com>
+Subject: Re: [PATCH 2/3] pmdomain: imx8mp-blk-ctrl: imx8mp_blk: Add fdcc clock
+ to hdmimix domain
+To: linux-pm@vger.kernel.org
+Cc: Sandor Yu <Sandor.yu@nxp.com>, Jacky Bai <ping.bai@nxp.com>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	NXP Linux Team <linux-imx@nxp.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Lucas Stach <l.stach@pengutronix.de>, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	Marek Vasut <marex@denx.de>, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-+Maulik and Raghavendra
-
-Hi Konrad,
-
-On 1/25/2024 4:38 PM, Konrad Dybcio wrote:
+On Sat, Jan 6, 2024 at 4:40=E2=80=AFPM Adam Ford <aford173@gmail.com> wrote=
+:
 >
+> According to i.MX8MP RM and HDMI ADD, the fdcc clock is part of
+> hdmi rx verification IP that should not enable for HDMI TX.
+> But actually if the clock is disabled before HDMI/LCDIF probe,
+> LCDIF will not get pixel clock from HDMI PHY and print the error
+> logs:
 >
-> On 1/24/24 16:25, Priyansh Jain wrote:
->>
->>
->> On 1/24/2024 6:04 PM, Konrad Dybcio wrote:
->>>
->>>
->>> On 1/24/24 11:42, Priyansh Jain wrote:
->>>>
->>>>
->>>> On 1/22/2024 8:02 PM, Konrad Dybcio wrote:
->>>>> On 22.01.2024 11:07, Priyansh Jain wrote:
->>>>>> Add suspend callback support for tsens which disables tsens 
->>>>>> interrupts
->>>>>> in suspend to RAM callback.
->>>>>
->>>>> Would it not be preferrable to have the "critical overheat", wakeup-
->>>>> capable interrupts be enabled, even if the system is suspended?
->>>>>
->>>>
->>>>
->>>> As part of suspend to RAM, tsens hardware will be turned off and it 
->>>> cannot generate any interrupt.Also system doesn't want to abort 
->>>> suspend to RAM due to tsens interrupts since system is already 
->>>> going into lowest
->>>> power state. Hence disabling tsens interrupt during suspend to RAM 
->>>> callback.
->>>
->>> Is that a hardware limitation, or a software design choice? I'm not
->>> sure I want my phone to have thermal notifications disabled when
->>> it's suspended.
->>
->>> Konrad
->>
->> As part of suspend to RAM , entire SOC will be off,
+> [CRTC:39:crtc-2] vblank wait timed out
+> WARNING: CPU: 2 PID: 9 at drivers/gpu/drm/drm_atomic_helper.c:1634 drm_at=
+omic_helper_wait_for_vblanks.part.0+0x23c/0x260
 >
-> What do you mean by "entire SOC[sic] will be off"? Surely the memory
-> controller must be on to keep refreshing the memory? Are you thinking
-> of suspend-to-disk (hibernation), by chance?
+> Add fdcc clock to LCDIF and HDMI TX power domains to fix the issue.
 
-Yes, Memory will be in self refreshing  mode(Retained). But SOC will be off
+Peng (or anyone from NXP),
 
-and will do cold boot to come out of S2R.
+I borrowed this patch from the NXP down-stream kernel for two reasons:
+ It's in NXP's branch to address an error & move the fdcc clock out of
+the HDMI-tx driver due to questions/feedback that Lucas got on that
+driver.
+
+The FDCC clock isn't well documented, and it seems like it's necessary
+for the HDMI-TX, but I'd like to make sure this is the proper
+solution, and I haven't received any additional feedback.
+Can someone from NXP confirm that really is the proper solution?
+
+thank you,
+
+adam
 
 >
->> this mode (suspend to RAM) is not intended for Mobile product. Tsens 
->> interrupts are not
->> disabled as part of suspend to idle(suspend mode for mobile).
+> Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
+> Reviewed-by: Jacky Bai <ping.bai@nxp.com>
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+> ---
+> The original work was from Sandor on the NXP Down-stream kernel
 >
-> That's clearly untrue, e.g. the PSCI firmware on SM8550 implements
-> PSCI_SYSTEM_SUSPEND, which does S2R.
-
-IIUC, PSCI_SYSTEM_SUSPEND will be enabled only for S2R supported 
-products and will be removed it for others.
-
-Maulik/Raghavendra can comment more
-
+> diff --git a/drivers/pmdomain/imx/imx8mp-blk-ctrl.c b/drivers/pmdomain/im=
+x/imx8mp-blk-ctrl.c
+> index e3203eb6a022..a56f7f92d091 100644
+> --- a/drivers/pmdomain/imx/imx8mp-blk-ctrl.c
+> +++ b/drivers/pmdomain/imx/imx8mp-blk-ctrl.c
+> @@ -55,7 +55,7 @@ struct imx8mp_blk_ctrl_domain_data {
+>         const char *gpc_name;
+>  };
 >
-> Konrad
+> -#define DOMAIN_MAX_CLKS 2
+> +#define DOMAIN_MAX_CLKS 3
+>  #define DOMAIN_MAX_PATHS 3
+>
+>  struct imx8mp_blk_ctrl_domain {
+> @@ -457,8 +457,8 @@ static const struct imx8mp_blk_ctrl_domain_data imx8m=
+p_hdmi_domain_data[] =3D {
+>         },
+>         [IMX8MP_HDMIBLK_PD_LCDIF] =3D {
+>                 .name =3D "hdmiblk-lcdif",
+> -               .clk_names =3D (const char *[]){ "axi", "apb" },
+> -               .num_clks =3D 2,
+> +               .clk_names =3D (const char *[]){ "axi", "apb", "fdcc" },
+> +               .num_clks =3D 3,
+>                 .gpc_name =3D "lcdif",
+>                 .path_names =3D (const char *[]){"lcdif-hdmi"},
+>                 .num_paths =3D 1,
+> @@ -483,8 +483,8 @@ static const struct imx8mp_blk_ctrl_domain_data imx8m=
+p_hdmi_domain_data[] =3D {
+>         },
+>         [IMX8MP_HDMIBLK_PD_HDMI_TX] =3D {
+>                 .name =3D "hdmiblk-hdmi-tx",
+> -               .clk_names =3D (const char *[]){ "apb", "ref_266m" },
+> -               .num_clks =3D 2,
+> +               .clk_names =3D (const char *[]){ "apb", "ref_266m", "fdcc=
+" },
+> +               .num_clks =3D 3,
+>                 .gpc_name =3D "hdmi-tx",
+>         },
+>         [IMX8MP_HDMIBLK_PD_HDMI_TX_PHY] =3D {
+> --
+> 2.43.0
+>
 
