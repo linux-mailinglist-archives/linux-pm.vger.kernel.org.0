@@ -1,97 +1,98 @@
-Return-Path: <linux-pm+bounces-2835-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2836-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9F2083F0B9
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Jan 2024 23:32:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19BB283F2DF
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Jan 2024 03:17:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D6C61F2586D
-	for <lists+linux-pm@lfdr.de>; Sat, 27 Jan 2024 22:32:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C9551C2167A
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Jan 2024 02:17:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 710531B271;
-	Sat, 27 Jan 2024 22:32:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D2AB15C0;
+	Sun, 28 Jan 2024 02:17:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J191FmD4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P89n96jw"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DB56BA2B
-	for <linux-pm@vger.kernel.org>; Sat, 27 Jan 2024 22:32:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE01B4691;
+	Sun, 28 Jan 2024 02:17:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706394733; cv=none; b=XoE01Op9KiGnH72C948rUzLb3sFlbTF+C4WiTLEHAS56OHJlEFP9SZudO09CvEZOREFvqypHgEOF3YkELS25AxW3Lp8KVw7Ip2VmIMADqatqG08HqdWXga5hKtLIIDhtZDCmJs25rZpcD8dsxN0gWvSHss48dBni+9n/XQ7oXGI=
+	t=1706408252; cv=none; b=JtHcNOCMzqQqd5ucd0TKu58ACIMDXBMvrLMLSX2Ph9JzboeIkb3Ssh6I3mJ0V8PjLVnULjVojxcSCnFi/8GlSggvIjGgpSrTSQknhaPEkl11Dnd9PRaAwTyAhZNRgR4cwlGouwHxdJOlpCojpMFN0NOssUPfrxxj4LmSgG32hNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706394733; c=relaxed/simple;
-	bh=Jdx+6FFb3hrDYIi+G5ximVRASxkKgGzOuwCAeDAY0d8=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=jzg4KddKhu4o39p6IcJ1KjWNA2gRJ0LXRXQ9KcdGw86jxY5dS9KRMaYyhoPxC+H9gSbzsM/8w9T62D/+rAlEAQ6xpAvO+gElOaTe/pxA3k0mEuBQnVi0yX0O8wO6qfjERBk/AAWPcd6OtC+TakLic2+F3wgho5FagSAQGMi8weU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J191FmD4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D7A71C43390
-	for <linux-pm@vger.kernel.org>; Sat, 27 Jan 2024 22:32:12 +0000 (UTC)
+	s=arc-20240116; t=1706408252; c=relaxed/simple;
+	bh=xxVp7NYpjNlldmGgdM8f60Ze4BjBtQBCCvdUz28StqQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Glw+//p0XNB5aLhLJUJqiPqiylf8p4n3hlQ80r1Mruz1N2UP093IDaB8VU/4FQpfrEGK5ViW8IJrYDxu06+ZBIuGJm4yWK04TKQv/tRYWK+85UKvNqJIcmJMAvY1/IhoFbELb5I9QN/XDEBOT1M9708Wpz0A/9W3f7xDlMWqaCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P89n96jw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DE83C43399;
+	Sun, 28 Jan 2024 02:17:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706394732;
-	bh=Jdx+6FFb3hrDYIi+G5ximVRASxkKgGzOuwCAeDAY0d8=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=J191FmD4Noc3XZ/VQnnYlZAEYTxUV+/GuiU0pkiRgTZUiKO+byzzDcQJx5CtqB/iX
-	 NlH4oVkAq4ypo/OihVOBLldsF90WLQFIbNVB14Q5Xt1zl7rMYc20DogzdiRKvc/dZL
-	 98TcFEpfeNnW4X3ZINXlO4EFrIpBMfi8gsay0M36R4xmZed8iUK82R/u4oRSvaLMhr
-	 1zJ5g/QDEH+8EkhKTcV8xRGrkyI8ybIrGTt9e6NTMJDYNRrUWpY+mxto7rWBtdCVvk
-	 XLBJ4gjkbwG2y4CuR+/y/9ac6u+XpRSt6jM+svai/uQKp+itpCTUFSX4Pb6sGULKmM
-	 Yt85aKOx8G8EA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id C3B4CC53BCD; Sat, 27 Jan 2024 22:32:12 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 217809] Core frequencies do not float correctly on AMD Ryzen 7
- 5700U when running on battery
-Date: Sat, 27 Jan 2024 22:32:12 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: soren@stoutner.com
-X-Bugzilla-Status: RESOLVED
-X-Bugzilla-Resolution: CODE_FIX
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_status resolution
-Message-ID: <bug-217809-137361-03pPgmKewG@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217809-137361@https.bugzilla.kernel.org/>
-References: <bug-217809-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1706408251;
+	bh=xxVp7NYpjNlldmGgdM8f60Ze4BjBtQBCCvdUz28StqQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=P89n96jwtrnxv8qvYqdzxrWB8EsTZcLJwHKl6FPng8yAqqssqSCisj+/yw+/k0z/e
+	 ciqxEUaYGhFi14Z0aGItT55JFVimuWunla8k07NsCV+k4mE/CTilzRBRKyUbYqqFdY
+	 0X7s1YIhITXvHvd+7QUBsoQ8qrwyEfvCGeUV0ojKvXKxiV169oXiv6xVIVeEacoCU+
+	 ILC6mw6WRkU4oqbzwPUrdQ8D19A54Wp0dnpe2c0fHxqG+SeG2pIv7jwIV4E/C/jkQS
+	 uk1NDCwX3mK0Ixg3BpbOO2RD03VbNEsGb60rU0IeLzNnachhQtwUZqZvgjB4rTpOKW
+	 ICm/+DFEzYv8A==
+From: Bjorn Andersson <andersson@kernel.org>
+To: Georgi Djakov <djakov@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Rajendra Nayak <quic_rjendra@quicinc.com>,
+	Sibi Sankar <quic_sibis@quicinc.com>,
+	Abel Vesa <abel.vesa@linaro.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: Marijn Suijten <marijn.suijten@somainline.org>,
+	linux-arm-msm@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH 0/4] X Elite fixups
+Date: Sat, 27 Jan 2024 20:17:18 -0600
+Message-ID: <170640822838.30820.7116145957430108100.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240102-topic-x1e_fixes-v1-0-70723e08d5f6@linaro.org>
+References: <20240102-topic-x1e_fixes-v1-0-70723e08d5f6@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217809
 
-Soren Stoutner (soren@stoutner.com) changed:
+On Tue, 02 Jan 2024 19:29:46 +0100, Konrad Dybcio wrote:
+> Just a couple of "usual" fixups that slipped through introduction
+> reviews..
+> 
+> p1-2 for icc
+> p3-4 for qcom
+> 
+> 
+> [...]
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-             Status|NEW                         |RESOLVED
-         Resolution|---                         |CODE_FIX
+Applied, thanks!
 
---- Comment #2 from Soren Stoutner (soren@stoutner.com) ---
-This bug was fixed in the 6.5.0 release.  Thank you.
+[1/4] interconnect: qcom: x1e80100: Remove bogus per-RSC BCMs and nodes
+      (no commit info)
+[2/4] dt-bindings: interconnect: Remove bogus interconnect nodes
+      (no commit info)
+[3/4] arm64: dts: qcom: x1e80100: Add missing system-wide PSCI power domain
+      commit: f33767e3cfa5d40d751340dce05d316b3a151041
+[4/4] arm64: dts: qcom: x1e80100: Flush RSC sleep & wake votes
+      commit: 7d62dbd1b3b22ef73ed5a13f416ee21ee61c450b
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
 
