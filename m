@@ -1,149 +1,255 @@
-Return-Path: <linux-pm+bounces-2840-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2841-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BA5083F4B9
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Jan 2024 10:06:43 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BF9383F6A0
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Jan 2024 17:15:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41AF61C2144F
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Jan 2024 09:06:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A0489B20BC6
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Jan 2024 16:15:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D140614A87;
-	Sun, 28 Jan 2024 09:06:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E18D94CE02;
+	Sun, 28 Jan 2024 16:11:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gdnAYuK7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u20FnNq4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D163BDDD2;
-	Sun, 28 Jan 2024 09:06:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B508D4D583;
+	Sun, 28 Jan 2024 16:11:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706432788; cv=none; b=nsU/9yLNXKmbr3OR0A1IAxwutraNo6XfhR30QZx7sQGUHZv+NSGti0aWoZdMaDA984Kle636hrLHaX2uAtD2L7TwYbAyx6BgCTm0qD0aWYSyjiLYZFCjcdxE8qIfglcL9j1p9L21LmROcs3LPW7y1qIwVPdrQTYi+AuMSRH3qmg=
+	t=1706458319; cv=none; b=qFqAY14sKRNL70r22MHlAxwQFlFUloYECUraydqic7FQxLnzvMM8nP15s95RMk/Iyr+PoidX2Kot6yYQl+k6amJvgA+FmHqRjD/0Qj6B1s4QSR5VydryJoKij2GkHFdGAD+Fda5sB/9GrYuJtq6dC1/x+hWtKsnxoQFY5SBc6T8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706432788; c=relaxed/simple;
-	bh=fECoJNI36xhLs+WlNCdEmmGpaXzg+LhNnyvIYrjamVI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eMUkOfdI8mNF2oX0xhkFy+Ej3iQ3FsAzZMQwS3AVSLrcYE0X3BCkrCQv6+DtTaypoStnhZqnYGmnAuenSi0Ht4K7OeDC/jj8OK4bm36R38Q/ThYym/OONScj+APgjWyD1tdS5j/7tYOQ3hSfD5YltM4Ze5N+4mHs/VBV2wWv/V0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gdnAYuK7; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706432787; x=1737968787;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fECoJNI36xhLs+WlNCdEmmGpaXzg+LhNnyvIYrjamVI=;
-  b=gdnAYuK7U2ZW3Gckk/LJR4k+ICIVTDIYYBH57NuLF8+k5zE2+jCRLGcS
-   hOXl9uKd2EP7U7CHsLrSxOCMV3MNe+v90RCzeGvSTaoAf95cg1jNLAjxw
-   u0w/ZJPpyNuirXJ/HKU0E1RcQ+43k5NJui3/P13zRpiav6fjOdodLOBan
-   QBCSqX4hjo+J5MaAC70Liozw5AxjgDiF8WVVdwcbwRvk4FtWnp0i3u1BH
-   MJuMYMbEtD+vtftGlMF9viob0IxQUE1EojSVs5J84byehkbtzUCC4k3uy
-   dvJjId2EAm7dZYKSMCrfdezFpkMywb/9FH+QPeubRHbbDREA8iAzVDXAT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10966"; a="9868501"
-X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
-   d="scan'208";a="9868501"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2024 01:06:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10966"; a="787533230"
-X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
-   d="scan'208";a="787533230"
-Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 28 Jan 2024 01:06:21 -0800
-Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rU17L-0003GQ-1N;
-	Sun, 28 Jan 2024 09:06:19 +0000
-Date: Sun, 28 Jan 2024 17:05:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Oleksij Rempel <o.rempel@pengutronix.de>,
-	Sebastian Reichel <sre@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-	linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	=?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>
-Subject: Re: [PATCH v2 3/8] power: reset: Introduce PSCR Recording Framework
- for Non-Volatile Storage
-Message-ID: <202401281628.Z3E5872D-lkp@intel.com>
-References: <20240124122204.730370-4-o.rempel@pengutronix.de>
+	s=arc-20240116; t=1706458319; c=relaxed/simple;
+	bh=IsjkGq7r2ZRS9Sa1YiAaxwYPtBr+IZGLQatioFb8px0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Q++Hlru30NOoOR4S9z55lGGFVLUKmmslZSUESoY4kR6fDnlTwcgVOvNLZ7xqjD8x9MeqD2vgR5SrUQNXG1A33pccVRcOTp21OsaWEt3TbYb5ZAB9sS6KZCHzDia+N2vl2pVwcnX5xrbO0+oFghn5hVpC25fy+hPchFzGwipG1L8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u20FnNq4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 185C0C433F1;
+	Sun, 28 Jan 2024 16:11:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706458319;
+	bh=IsjkGq7r2ZRS9Sa1YiAaxwYPtBr+IZGLQatioFb8px0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=u20FnNq4nfGWainyZpEgYhzq+QlCJY7mDumZH3XbxFEAYIKOuf2ZzM1vnwzctg3t4
+	 1jsIsrP4nJnGZv84dn5DYETV3VsacEDEIAxfujm92DPM+QMOtYLk4arIRP6l6U5a2x
+	 lV7qHWEA+ZBJFzkYStVz5hojq7KrMX87EGduy6GNQ820n2xT8M7f2iRMKbdAEAlSmL
+	 7IVGkJRdrm/7L/uqUtSnDyNT42weVegpNA7ejv6wd6GPO718xnf+cJfWthuFBtvRYB
+	 Ai2RmGvLSL+IouvtXcStVkqkL5fPeng1D4l4HMJ8RK+BlTpdt9crkq+P/2M4/G3CXq
+	 cIbEbmGQUdBcw==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Luca Weiss <luca.weiss@fairphone.com>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	Sasha Levin <sashal@kernel.org>,
+	andersson@kernel.org,
+	sre@kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.7 15/39] power: supply: qcom_battmgr: Register the power supplies after PDR is up
+Date: Sun, 28 Jan 2024 11:10:35 -0500
+Message-ID: <20240128161130.200783-15-sashal@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240128161130.200783-1-sashal@kernel.org>
+References: <20240128161130.200783-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240124122204.730370-4-o.rempel@pengutronix.de>
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.7.2
+Content-Transfer-Encoding: 8bit
 
-Hi Oleksij,
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-kernel test robot noticed the following build warnings:
+[ Upstream commit b43f7ddc2b7a5a90447d96cb4d3c6d142dd4a810 ]
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on broonie-regulator/for-next rafael-pm/thermal linus/master v6.8-rc1 next-20240125]
-[cannot apply to sre-power-supply/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Currently, a not-yet-entirely-initialized battmgr (e.g. with pd-mapper
+not having yet started or ADSP not being up etc.) results in a couple of
+zombie power supply devices hanging around.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Oleksij-Rempel/power-Extend-power_on_reason-h-for-upcoming-PSCRR-framework/20240124-202833
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20240124122204.730370-4-o.rempel%40pengutronix.de
-patch subject: [PATCH v2 3/8] power: reset: Introduce PSCR Recording Framework for Non-Volatile Storage
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240128/202401281628.Z3E5872D-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240128/202401281628.Z3E5872D-lkp@intel.com/reproduce)
+This is particularly noticeable when trying to suspend the device (even
+s2idle): the PSY-internal thermal zone is inaccessible and returns
+-ENODEV, which causes log spam.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401281628.Z3E5872D-lkp@intel.com/
+Register the power supplies only after we received some notification
+indicating battmgr is ready to take off.
 
-All warnings (new ones prefixed by >>):
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Tested-by: Luca Weiss <luca.weiss@fairphone.com>
+Link: https://lore.kernel.org/r/20231218-topic-battmgr_fixture_attempt-v1-1-6145745f34fe@linaro.org
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/power/supply/qcom_battmgr.c | 109 +++++++++++++++-------------
+ 1 file changed, 60 insertions(+), 49 deletions(-)
 
->> drivers/power/reset/pscrr.c:132:2: warning: label at end of compound statement is a C2x extension [-Wc2x-extensions]
-     132 |         }
-         |         ^
-   1 warning generated.
-
-
-vim +132 drivers/power/reset/pscrr.c
-
-   119	
-   120	static const char *pscr_to_por_string(enum pscr pscr)
-   121	{
-   122		switch (pscr) {
-   123		case PSCR_UNDER_VOLTAGE:
-   124			return POWER_ON_REASON_BROWN_OUT;
-   125		case PSCR_OVER_CURRENT:
-   126			return POWER_ON_REASON_OVER_CURRENT;
-   127		case PSCR_REGULATOR_FAILURE:
-   128			return POWER_ON_REASON_REGULATOR_FAILURE;
-   129		case PSCR_OVERTEMPERATURE:
-   130			return POWER_ON_REASON_OVERTEMPERATURE;
-   131		default:
- > 132		}
-   133	
-   134		return POWER_ON_REASON_UNKNOWN;
-   135	}
-   136	
-
+diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
+index ec163d1bcd18..a12e2a66d516 100644
+--- a/drivers/power/supply/qcom_battmgr.c
++++ b/drivers/power/supply/qcom_battmgr.c
+@@ -282,6 +282,7 @@ struct qcom_battmgr_wireless {
+ 
+ struct qcom_battmgr {
+ 	struct device *dev;
++	struct auxiliary_device *adev;
+ 	struct pmic_glink_client *client;
+ 
+ 	enum qcom_battmgr_variant variant;
+@@ -1293,11 +1294,69 @@ static void qcom_battmgr_enable_worker(struct work_struct *work)
+ 		dev_err(battmgr->dev, "failed to request power notifications\n");
+ }
+ 
++static char *qcom_battmgr_battery[] = { "battery" };
++
++static void qcom_battmgr_register_psy(struct qcom_battmgr *battmgr)
++{
++	struct power_supply_config psy_cfg_supply = {};
++	struct auxiliary_device *adev = battmgr->adev;
++	struct power_supply_config psy_cfg = {};
++	struct device *dev = &adev->dev;
++
++	psy_cfg.drv_data = battmgr;
++	psy_cfg.of_node = adev->dev.of_node;
++
++	psy_cfg_supply.drv_data = battmgr;
++	psy_cfg_supply.of_node = adev->dev.of_node;
++	psy_cfg_supply.supplied_to = qcom_battmgr_battery;
++	psy_cfg_supply.num_supplicants = 1;
++
++	if (battmgr->variant == QCOM_BATTMGR_SC8280XP) {
++		battmgr->bat_psy = devm_power_supply_register(dev, &sc8280xp_bat_psy_desc, &psy_cfg);
++		if (IS_ERR(battmgr->bat_psy))
++			dev_err(dev, "failed to register battery power supply (%ld)\n",
++				PTR_ERR(battmgr->bat_psy));
++
++		battmgr->ac_psy = devm_power_supply_register(dev, &sc8280xp_ac_psy_desc, &psy_cfg_supply);
++		if (IS_ERR(battmgr->ac_psy))
++			dev_err(dev, "failed to register AC power supply (%ld)\n",
++				PTR_ERR(battmgr->ac_psy));
++
++		battmgr->usb_psy = devm_power_supply_register(dev, &sc8280xp_usb_psy_desc, &psy_cfg_supply);
++		if (IS_ERR(battmgr->usb_psy))
++			dev_err(dev, "failed to register USB power supply (%ld)\n",
++				PTR_ERR(battmgr->usb_psy));
++
++		battmgr->wls_psy = devm_power_supply_register(dev, &sc8280xp_wls_psy_desc, &psy_cfg_supply);
++		if (IS_ERR(battmgr->wls_psy))
++			dev_err(dev, "failed to register wireless charing power supply (%ld)\n",
++				PTR_ERR(battmgr->wls_psy));
++	} else {
++		battmgr->bat_psy = devm_power_supply_register(dev, &sm8350_bat_psy_desc, &psy_cfg);
++		if (IS_ERR(battmgr->bat_psy))
++			dev_err(dev, "failed to register battery power supply (%ld)\n",
++				PTR_ERR(battmgr->bat_psy));
++
++		battmgr->usb_psy = devm_power_supply_register(dev, &sm8350_usb_psy_desc, &psy_cfg_supply);
++		if (IS_ERR(battmgr->usb_psy))
++			dev_err(dev, "failed to register USB power supply (%ld)\n",
++				PTR_ERR(battmgr->usb_psy));
++
++		battmgr->wls_psy = devm_power_supply_register(dev, &sm8350_wls_psy_desc, &psy_cfg_supply);
++		if (IS_ERR(battmgr->wls_psy))
++			dev_err(dev, "failed to register wireless charing power supply (%ld)\n",
++				PTR_ERR(battmgr->wls_psy));
++	}
++}
++
+ static void qcom_battmgr_pdr_notify(void *priv, int state)
+ {
+ 	struct qcom_battmgr *battmgr = priv;
+ 
+ 	if (state == SERVREG_SERVICE_STATE_UP) {
++		if (!battmgr->bat_psy)
++			qcom_battmgr_register_psy(battmgr);
++
+ 		battmgr->service_up = true;
+ 		schedule_work(&battmgr->enable_work);
+ 	} else {
+@@ -1312,13 +1371,9 @@ static const struct of_device_id qcom_battmgr_of_variants[] = {
+ 	{}
+ };
+ 
+-static char *qcom_battmgr_battery[] = { "battery" };
+-
+ static int qcom_battmgr_probe(struct auxiliary_device *adev,
+ 			      const struct auxiliary_device_id *id)
+ {
+-	struct power_supply_config psy_cfg_supply = {};
+-	struct power_supply_config psy_cfg = {};
+ 	const struct of_device_id *match;
+ 	struct qcom_battmgr *battmgr;
+ 	struct device *dev = &adev->dev;
+@@ -1328,14 +1383,7 @@ static int qcom_battmgr_probe(struct auxiliary_device *adev,
+ 		return -ENOMEM;
+ 
+ 	battmgr->dev = dev;
+-
+-	psy_cfg.drv_data = battmgr;
+-	psy_cfg.of_node = adev->dev.of_node;
+-
+-	psy_cfg_supply.drv_data = battmgr;
+-	psy_cfg_supply.of_node = adev->dev.of_node;
+-	psy_cfg_supply.supplied_to = qcom_battmgr_battery;
+-	psy_cfg_supply.num_supplicants = 1;
++	battmgr->adev = adev;
+ 
+ 	INIT_WORK(&battmgr->enable_work, qcom_battmgr_enable_worker);
+ 	mutex_init(&battmgr->lock);
+@@ -1347,43 +1395,6 @@ static int qcom_battmgr_probe(struct auxiliary_device *adev,
+ 	else
+ 		battmgr->variant = QCOM_BATTMGR_SM8350;
+ 
+-	if (battmgr->variant == QCOM_BATTMGR_SC8280XP) {
+-		battmgr->bat_psy = devm_power_supply_register(dev, &sc8280xp_bat_psy_desc, &psy_cfg);
+-		if (IS_ERR(battmgr->bat_psy))
+-			return dev_err_probe(dev, PTR_ERR(battmgr->bat_psy),
+-					     "failed to register battery power supply\n");
+-
+-		battmgr->ac_psy = devm_power_supply_register(dev, &sc8280xp_ac_psy_desc, &psy_cfg_supply);
+-		if (IS_ERR(battmgr->ac_psy))
+-			return dev_err_probe(dev, PTR_ERR(battmgr->ac_psy),
+-					     "failed to register AC power supply\n");
+-
+-		battmgr->usb_psy = devm_power_supply_register(dev, &sc8280xp_usb_psy_desc, &psy_cfg_supply);
+-		if (IS_ERR(battmgr->usb_psy))
+-			return dev_err_probe(dev, PTR_ERR(battmgr->usb_psy),
+-					     "failed to register USB power supply\n");
+-
+-		battmgr->wls_psy = devm_power_supply_register(dev, &sc8280xp_wls_psy_desc, &psy_cfg_supply);
+-		if (IS_ERR(battmgr->wls_psy))
+-			return dev_err_probe(dev, PTR_ERR(battmgr->wls_psy),
+-					     "failed to register wireless charing power supply\n");
+-	} else {
+-		battmgr->bat_psy = devm_power_supply_register(dev, &sm8350_bat_psy_desc, &psy_cfg);
+-		if (IS_ERR(battmgr->bat_psy))
+-			return dev_err_probe(dev, PTR_ERR(battmgr->bat_psy),
+-					     "failed to register battery power supply\n");
+-
+-		battmgr->usb_psy = devm_power_supply_register(dev, &sm8350_usb_psy_desc, &psy_cfg_supply);
+-		if (IS_ERR(battmgr->usb_psy))
+-			return dev_err_probe(dev, PTR_ERR(battmgr->usb_psy),
+-					     "failed to register USB power supply\n");
+-
+-		battmgr->wls_psy = devm_power_supply_register(dev, &sm8350_wls_psy_desc, &psy_cfg_supply);
+-		if (IS_ERR(battmgr->wls_psy))
+-			return dev_err_probe(dev, PTR_ERR(battmgr->wls_psy),
+-					     "failed to register wireless charing power supply\n");
+-	}
+-
+ 	battmgr->client = devm_pmic_glink_register_client(dev,
+ 							  PMIC_GLINK_OWNER_BATTMGR,
+ 							  qcom_battmgr_callback,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
 
