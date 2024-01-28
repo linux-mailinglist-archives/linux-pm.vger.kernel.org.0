@@ -1,255 +1,177 @@
-Return-Path: <linux-pm+bounces-2842-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2843-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C318683F71B
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Jan 2024 17:25:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3729F83F835
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Jan 2024 17:51:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75E272899F4
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Jan 2024 16:25:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 640AA1C20FD1
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Jan 2024 16:51:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2243760BBE;
-	Sun, 28 Jan 2024 16:13:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F99EDF59;
+	Sun, 28 Jan 2024 16:22:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pHAf7F2X"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="SkWYpIGT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB72360899;
-	Sun, 28 Jan 2024 16:13:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6363628DDE;
+	Sun, 28 Jan 2024 16:22:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706458417; cv=none; b=kF4PvOlXY8aw/Qgpml3TwegoJEqpz6ZTqn58miG8cRlLKU7SzsyY0v9Z7O4+R9dMws4t0P5oXFa8Ld60zjP9CP6F/Dj5xvRVu1uvNTSxdKQ1LbOuXgAjtW2GrNCLr9uoaOV2E3x4W02g8PFxKmBRJScU1G0qOwKkfQezWA92d8k=
+	t=1706458975; cv=none; b=OfxEfajD5h7h6u34kuG3C0fmdfTWWN0G7mk2xIUz9ZIRBshnYC90HihXY5MPP0ZO51SORaTbCEtrkOczzkUbFvNmRDC3IrpEnJ7puZErlZuXTorAPbkXRym2XErkg/bkWW2Gqmz2yjf8x0kDxyvvUl3Y6Agj8fPG6lZfv1y9A20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706458417; c=relaxed/simple;
-	bh=IsjkGq7r2ZRS9Sa1YiAaxwYPtBr+IZGLQatioFb8px0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=M18TcyQ08w4pjwz/xpEgTVZ93c9C2vBuH2R+zUfayu7h4NS6x0VvZlsUiOABB+G2sckgMq1Y+bwQsQzsfb1d6z1HeJESQmBMgSAGlOn7AH2+7Y4ar+xF2t1mfo+edOyeeR5hGeR7dsVHR6g3KErT90SqPr3MmxHPqcTBqBp1Sog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pHAf7F2X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7672C43390;
-	Sun, 28 Jan 2024 16:13:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706458416;
-	bh=IsjkGq7r2ZRS9Sa1YiAaxwYPtBr+IZGLQatioFb8px0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=pHAf7F2XZZJ9TlQNjtZuAE9fpRHQb8RXZNQZV8uBSk+fLRpdLi3r1RNWTSiCChTit
-	 UIN48gNj6xrRKjqeZg0115cmMj+LOBnAWlcQKieNGEN6q3C4WT8faKMBQliRha3Hpy
-	 CKh6+4EF90m2qCnuHdWEyLhketcRINydx5kHuzLZHHY6xfa+JYYAAWijsWQnt09vYl
-	 Li8bQ4PyK+aivJww3q7gB9z5y3X05kteIISKsU8joSWjbnopHvXSSMhb4DELWBiXxN
-	 1CdN0FhRj7hqydiJkhFdFBSc6+2NNEkCk3hPBqkUU/zkNw1YeKZxvtQ6b6ieM8SYbc
-	 NjeU3Zt/ZilbA==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Luca Weiss <luca.weiss@fairphone.com>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	Sasha Levin <sashal@kernel.org>,
-	andersson@kernel.org,
-	sre@kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 12/31] power: supply: qcom_battmgr: Register the power supplies after PDR is up
-Date: Sun, 28 Jan 2024 11:12:42 -0500
-Message-ID: <20240128161315.201999-12-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240128161315.201999-1-sashal@kernel.org>
-References: <20240128161315.201999-1-sashal@kernel.org>
+	s=arc-20240116; t=1706458975; c=relaxed/simple;
+	bh=vznyjQCwNBtbhgiBWAAfKVKE97uQGRSnyXoBpffD3Zg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=KhySKq1fXBVzfsCLmHuL843qKuI6jAlF6aVzbJ1c9uexw0EiVAIuufFpf4K+3j6pvcK/tQIJj+kjrLKsirIKvALX/GZs/E+xWxxcA8HKuvD8A1iDp4d8sLveD8ju/Aj22xcv2GpqzGkVYIgGPXAJCBt0M/N5Lco07/UeSh4dCxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=SkWYpIGT; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40SFtVFU026312;
+	Sun, 28 Jan 2024 16:22:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=gUvqc5cZxjVm/d9JMnpRBPZHn21Mqzr6wO/oybXwk8g=; b=Sk
+	WYpIGTOjGftn0A82FkurcsWkV/xp7LfNR5F+THYnMudyWOeJzGEGTfGYGVx2dTTc
+	zBZBMSNbsXMxdMim8oeFxP4y45s/Djlmv69QylIHtPGpwlC8ZwtRwg66jeF9XUi8
+	syWk/R8WyIgCR8WqrqQAFqqUpYPrfWL6q0wEZF6WGSJcqdZw0zZQ25u1Uq4cehlr
+	RZmUJfaCTT1lg9PoDasftxcvyiNaMiLcvqku9KUtdIv5T+BHuGKwDlX8E/WSmz/b
+	1UVdB6MFs0CyW1i93V0Ml2cf2h7SuYtQAqz7So3ra/1UilpQKBycLrucEbJ1+Dqa
+	LnbLCTbxsIyf+dhrlxnQ==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3vvruba1hk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 28 Jan 2024 16:22:29 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 40SGMSoq026454
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 28 Jan 2024 16:22:28 GMT
+Received: from [10.216.53.94] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Sun, 28 Jan
+ 2024 08:22:22 -0800
+Message-ID: <8dfb5db7-6da0-4f6f-30ef-8966428e4a1c@quicinc.com>
+Date: Sun, 28 Jan 2024 21:51:57 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.14
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 8/8] sched/pelt: Introduce PELT multiplier
+Content-Language: en-US
+To: Qais Yousef <qyousef@layalina.io>
+CC: Ingo Molnar <mingo@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar
+	<viresh.kumar@linaro.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang
+	<wvw@google.com>,
+        Rick Yiu <rickyiu@google.com>, Chung-Kai Mei
+	<chungkai@google.com>,
+        <quic_anshar@quicinc.com>, <quic_atulpant@quicinc.com>,
+        <quic_shashim@quicinc.com>, <quic_rgottimu@quicinc.com>,
+        <quic_adharmap@quicinc.com>, <quic_kshivnan@quicinc.com>,
+        <quic_pkondeti@quicinc.com>
+References: <20231208002342.367117-1-qyousef@layalina.io>
+ <20231208002342.367117-9-qyousef@layalina.io>
+ <a561029e-993d-726d-18ce-0bc014e6533c@quicinc.com>
+ <20240121000444.ghue2miejmiair6l@airbuntu>
+From: Ashay Jaiswal <quic_ashayj@quicinc.com>
+In-Reply-To: <20240121000444.ghue2miejmiair6l@airbuntu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 7_i7TCGHqRGM89cZxbweJQ6BxzGkhlgH
+X-Proofpoint-GUID: 7_i7TCGHqRGM89cZxbweJQ6BxzGkhlgH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-25_14,2024-01-25_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 mlxlogscore=534 spamscore=0 mlxscore=0 malwarescore=0
+ priorityscore=1501 adultscore=0 suspectscore=0 impostorscore=0
+ phishscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401190000 definitions=main-2401280123
 
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Hello Qais Yousef,
 
-[ Upstream commit b43f7ddc2b7a5a90447d96cb4d3c6d142dd4a810 ]
+Thank you for your response.
 
-Currently, a not-yet-entirely-initialized battmgr (e.g. with pd-mapper
-not having yet started or ADSP not being up etc.) results in a couple of
-zombie power supply devices hanging around.
+On 1/21/2024 5:34 AM, Qais Yousef wrote:
+> Hi Ashay
+> 
+> On 01/20/24 13:22, Ashay Jaiswal wrote:
+>> Hello Qais Yousef,
+>>
+>> We ran few benchmarks with PELT multiplier patch on a Snapdragon 8Gen2
+>> based internal Android device and we are observing significant
+>> improvements with PELT8 configuration compared to PELT32.
+>>
+>> Following are some of the benchmark results with PELT32 and PELT8
+>> configuration:
+>>
+>> +-----------------+---------------+----------------+----------------+
+>> | Test case                       |     PELT32     |     PELT8      |
+>> +-----------------+---------------+----------------+----------------+
+>> |                 |    Overall    |     711543     |     971275     |
+>> |                 +---------------+----------------+----------------+
+>> |                 |    CPU        |     193704     |     224378     |
+>> |                 +---------------+----------------+----------------+
+>> |ANTUTU V9.3.9    |    GPU        |     284650     |     424774     |
+>> |                 +---------------+----------------+----------------+
+>> |                 |    MEM        |     125207     |     160548     |
+>> |                 +---------------+----------------+----------------+
+>> |                 |    UX         |     107982     |     161575     |
+>> +-----------------+---------------+----------------+----------------+
+>> |                 |   Single core |     1170       |     1268       |
+>> |GeekBench V5.4.4 +---------------+----------------+----------------+
+>> |                 |   Multi core  |     2530       |     3797       |
+>> +-----------------+---------------+----------------+----------------+
+>> |                 |    Twitter    |     >50 Janks  |     0          |
+>> |     SCROLL      +---------------+----------------+----------------+
+>> |                 |    Contacts   |     >30 Janks  |     0          |
+>> +-----------------+---------------+----------------+----------------+
+>>
+>> Please let us know if you need any support with running any further
+>> workloads for PELT32/PELT8 experiments, we can help with running the
+>> experiments.
+> 
+> Thanks a lot for the test results. Was this tried with this patch alone or
+> the whole series applied?
+> 
+I have only applied patch8(sched/pelt: Introduce PELT multiplier) for the tests.
 
-This is particularly noticeable when trying to suspend the device (even
-s2idle): the PSY-internal thermal zone is inaccessible and returns
--ENODEV, which causes log spam.
+> Have you tried to tweak each policy response_time_ms introduced in patch
+> 7 instead? With the series applied, boot with PELT8, record the response time
+> values for each policy, then boot back again to PELT32 and use those values.
+> Does this produce similar results?
+> 
+As the device is based on 5.15 kernel, I will try to pull all the 8 patches
+along with the dependency patches on 5.15 and try out the experiments as
+suggested.
 
-Register the power supplies only after we received some notification
-indicating battmgr is ready to take off.
+> You didn't share power numbers which I assume the perf gains are more important
+> than the power cost for you.
+> 
+If possible I will try to collect the power number for future test and share the
+details.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Tested-by: Luca Weiss <luca.weiss@fairphone.com>
-Link: https://lore.kernel.org/r/20231218-topic-battmgr_fixture_attempt-v1-1-6145745f34fe@linaro.org
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/power/supply/qcom_battmgr.c | 109 +++++++++++++++-------------
- 1 file changed, 60 insertions(+), 49 deletions(-)
-
-diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
-index ec163d1bcd18..a12e2a66d516 100644
---- a/drivers/power/supply/qcom_battmgr.c
-+++ b/drivers/power/supply/qcom_battmgr.c
-@@ -282,6 +282,7 @@ struct qcom_battmgr_wireless {
- 
- struct qcom_battmgr {
- 	struct device *dev;
-+	struct auxiliary_device *adev;
- 	struct pmic_glink_client *client;
- 
- 	enum qcom_battmgr_variant variant;
-@@ -1293,11 +1294,69 @@ static void qcom_battmgr_enable_worker(struct work_struct *work)
- 		dev_err(battmgr->dev, "failed to request power notifications\n");
- }
- 
-+static char *qcom_battmgr_battery[] = { "battery" };
-+
-+static void qcom_battmgr_register_psy(struct qcom_battmgr *battmgr)
-+{
-+	struct power_supply_config psy_cfg_supply = {};
-+	struct auxiliary_device *adev = battmgr->adev;
-+	struct power_supply_config psy_cfg = {};
-+	struct device *dev = &adev->dev;
-+
-+	psy_cfg.drv_data = battmgr;
-+	psy_cfg.of_node = adev->dev.of_node;
-+
-+	psy_cfg_supply.drv_data = battmgr;
-+	psy_cfg_supply.of_node = adev->dev.of_node;
-+	psy_cfg_supply.supplied_to = qcom_battmgr_battery;
-+	psy_cfg_supply.num_supplicants = 1;
-+
-+	if (battmgr->variant == QCOM_BATTMGR_SC8280XP) {
-+		battmgr->bat_psy = devm_power_supply_register(dev, &sc8280xp_bat_psy_desc, &psy_cfg);
-+		if (IS_ERR(battmgr->bat_psy))
-+			dev_err(dev, "failed to register battery power supply (%ld)\n",
-+				PTR_ERR(battmgr->bat_psy));
-+
-+		battmgr->ac_psy = devm_power_supply_register(dev, &sc8280xp_ac_psy_desc, &psy_cfg_supply);
-+		if (IS_ERR(battmgr->ac_psy))
-+			dev_err(dev, "failed to register AC power supply (%ld)\n",
-+				PTR_ERR(battmgr->ac_psy));
-+
-+		battmgr->usb_psy = devm_power_supply_register(dev, &sc8280xp_usb_psy_desc, &psy_cfg_supply);
-+		if (IS_ERR(battmgr->usb_psy))
-+			dev_err(dev, "failed to register USB power supply (%ld)\n",
-+				PTR_ERR(battmgr->usb_psy));
-+
-+		battmgr->wls_psy = devm_power_supply_register(dev, &sc8280xp_wls_psy_desc, &psy_cfg_supply);
-+		if (IS_ERR(battmgr->wls_psy))
-+			dev_err(dev, "failed to register wireless charing power supply (%ld)\n",
-+				PTR_ERR(battmgr->wls_psy));
-+	} else {
-+		battmgr->bat_psy = devm_power_supply_register(dev, &sm8350_bat_psy_desc, &psy_cfg);
-+		if (IS_ERR(battmgr->bat_psy))
-+			dev_err(dev, "failed to register battery power supply (%ld)\n",
-+				PTR_ERR(battmgr->bat_psy));
-+
-+		battmgr->usb_psy = devm_power_supply_register(dev, &sm8350_usb_psy_desc, &psy_cfg_supply);
-+		if (IS_ERR(battmgr->usb_psy))
-+			dev_err(dev, "failed to register USB power supply (%ld)\n",
-+				PTR_ERR(battmgr->usb_psy));
-+
-+		battmgr->wls_psy = devm_power_supply_register(dev, &sm8350_wls_psy_desc, &psy_cfg_supply);
-+		if (IS_ERR(battmgr->wls_psy))
-+			dev_err(dev, "failed to register wireless charing power supply (%ld)\n",
-+				PTR_ERR(battmgr->wls_psy));
-+	}
-+}
-+
- static void qcom_battmgr_pdr_notify(void *priv, int state)
- {
- 	struct qcom_battmgr *battmgr = priv;
- 
- 	if (state == SERVREG_SERVICE_STATE_UP) {
-+		if (!battmgr->bat_psy)
-+			qcom_battmgr_register_psy(battmgr);
-+
- 		battmgr->service_up = true;
- 		schedule_work(&battmgr->enable_work);
- 	} else {
-@@ -1312,13 +1371,9 @@ static const struct of_device_id qcom_battmgr_of_variants[] = {
- 	{}
- };
- 
--static char *qcom_battmgr_battery[] = { "battery" };
--
- static int qcom_battmgr_probe(struct auxiliary_device *adev,
- 			      const struct auxiliary_device_id *id)
- {
--	struct power_supply_config psy_cfg_supply = {};
--	struct power_supply_config psy_cfg = {};
- 	const struct of_device_id *match;
- 	struct qcom_battmgr *battmgr;
- 	struct device *dev = &adev->dev;
-@@ -1328,14 +1383,7 @@ static int qcom_battmgr_probe(struct auxiliary_device *adev,
- 		return -ENOMEM;
- 
- 	battmgr->dev = dev;
--
--	psy_cfg.drv_data = battmgr;
--	psy_cfg.of_node = adev->dev.of_node;
--
--	psy_cfg_supply.drv_data = battmgr;
--	psy_cfg_supply.of_node = adev->dev.of_node;
--	psy_cfg_supply.supplied_to = qcom_battmgr_battery;
--	psy_cfg_supply.num_supplicants = 1;
-+	battmgr->adev = adev;
- 
- 	INIT_WORK(&battmgr->enable_work, qcom_battmgr_enable_worker);
- 	mutex_init(&battmgr->lock);
-@@ -1347,43 +1395,6 @@ static int qcom_battmgr_probe(struct auxiliary_device *adev,
- 	else
- 		battmgr->variant = QCOM_BATTMGR_SM8350;
- 
--	if (battmgr->variant == QCOM_BATTMGR_SC8280XP) {
--		battmgr->bat_psy = devm_power_supply_register(dev, &sc8280xp_bat_psy_desc, &psy_cfg);
--		if (IS_ERR(battmgr->bat_psy))
--			return dev_err_probe(dev, PTR_ERR(battmgr->bat_psy),
--					     "failed to register battery power supply\n");
--
--		battmgr->ac_psy = devm_power_supply_register(dev, &sc8280xp_ac_psy_desc, &psy_cfg_supply);
--		if (IS_ERR(battmgr->ac_psy))
--			return dev_err_probe(dev, PTR_ERR(battmgr->ac_psy),
--					     "failed to register AC power supply\n");
--
--		battmgr->usb_psy = devm_power_supply_register(dev, &sc8280xp_usb_psy_desc, &psy_cfg_supply);
--		if (IS_ERR(battmgr->usb_psy))
--			return dev_err_probe(dev, PTR_ERR(battmgr->usb_psy),
--					     "failed to register USB power supply\n");
--
--		battmgr->wls_psy = devm_power_supply_register(dev, &sc8280xp_wls_psy_desc, &psy_cfg_supply);
--		if (IS_ERR(battmgr->wls_psy))
--			return dev_err_probe(dev, PTR_ERR(battmgr->wls_psy),
--					     "failed to register wireless charing power supply\n");
--	} else {
--		battmgr->bat_psy = devm_power_supply_register(dev, &sm8350_bat_psy_desc, &psy_cfg);
--		if (IS_ERR(battmgr->bat_psy))
--			return dev_err_probe(dev, PTR_ERR(battmgr->bat_psy),
--					     "failed to register battery power supply\n");
--
--		battmgr->usb_psy = devm_power_supply_register(dev, &sm8350_usb_psy_desc, &psy_cfg_supply);
--		if (IS_ERR(battmgr->usb_psy))
--			return dev_err_probe(dev, PTR_ERR(battmgr->usb_psy),
--					     "failed to register USB power supply\n");
--
--		battmgr->wls_psy = devm_power_supply_register(dev, &sm8350_wls_psy_desc, &psy_cfg_supply);
--		if (IS_ERR(battmgr->wls_psy))
--			return dev_err_probe(dev, PTR_ERR(battmgr->wls_psy),
--					     "failed to register wireless charing power supply\n");
--	}
--
- 	battmgr->client = devm_pmic_glink_register_client(dev,
- 							  PMIC_GLINK_OWNER_BATTMGR,
- 							  qcom_battmgr_callback,
--- 
-2.43.0
-
+> 
+> Thanks!
+> 
+> --
+> Qais Yousef
 
