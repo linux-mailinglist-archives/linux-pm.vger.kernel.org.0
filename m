@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-2841-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2842-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BF9383F6A0
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Jan 2024 17:15:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C318683F71B
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Jan 2024 17:25:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A0489B20BC6
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Jan 2024 16:15:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75E272899F4
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Jan 2024 16:25:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E18D94CE02;
-	Sun, 28 Jan 2024 16:11:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2243760BBE;
+	Sun, 28 Jan 2024 16:13:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u20FnNq4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pHAf7F2X"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B508D4D583;
-	Sun, 28 Jan 2024 16:11:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB72360899;
+	Sun, 28 Jan 2024 16:13:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706458319; cv=none; b=qFqAY14sKRNL70r22MHlAxwQFlFUloYECUraydqic7FQxLnzvMM8nP15s95RMk/Iyr+PoidX2Kot6yYQl+k6amJvgA+FmHqRjD/0Qj6B1s4QSR5VydryJoKij2GkHFdGAD+Fda5sB/9GrYuJtq6dC1/x+hWtKsnxoQFY5SBc6T8=
+	t=1706458417; cv=none; b=kF4PvOlXY8aw/Qgpml3TwegoJEqpz6ZTqn58miG8cRlLKU7SzsyY0v9Z7O4+R9dMws4t0P5oXFa8Ld60zjP9CP6F/Dj5xvRVu1uvNTSxdKQ1LbOuXgAjtW2GrNCLr9uoaOV2E3x4W02g8PFxKmBRJScU1G0qOwKkfQezWA92d8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706458319; c=relaxed/simple;
+	s=arc-20240116; t=1706458417; c=relaxed/simple;
 	bh=IsjkGq7r2ZRS9Sa1YiAaxwYPtBr+IZGLQatioFb8px0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Q++Hlru30NOoOR4S9z55lGGFVLUKmmslZSUESoY4kR6fDnlTwcgVOvNLZ7xqjD8x9MeqD2vgR5SrUQNXG1A33pccVRcOTp21OsaWEt3TbYb5ZAB9sS6KZCHzDia+N2vl2pVwcnX5xrbO0+oFghn5hVpC25fy+hPchFzGwipG1L8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u20FnNq4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 185C0C433F1;
-	Sun, 28 Jan 2024 16:11:58 +0000 (UTC)
+	 MIME-Version; b=M18TcyQ08w4pjwz/xpEgTVZ93c9C2vBuH2R+zUfayu7h4NS6x0VvZlsUiOABB+G2sckgMq1Y+bwQsQzsfb1d6z1HeJESQmBMgSAGlOn7AH2+7Y4ar+xF2t1mfo+edOyeeR5hGeR7dsVHR6g3KErT90SqPr3MmxHPqcTBqBp1Sog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pHAf7F2X; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7672C43390;
+	Sun, 28 Jan 2024 16:13:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706458319;
+	s=k20201202; t=1706458416;
 	bh=IsjkGq7r2ZRS9Sa1YiAaxwYPtBr+IZGLQatioFb8px0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=u20FnNq4nfGWainyZpEgYhzq+QlCJY7mDumZH3XbxFEAYIKOuf2ZzM1vnwzctg3t4
-	 1jsIsrP4nJnGZv84dn5DYETV3VsacEDEIAxfujm92DPM+QMOtYLk4arIRP6l6U5a2x
-	 lV7qHWEA+ZBJFzkYStVz5hojq7KrMX87EGduy6GNQ820n2xT8M7f2iRMKbdAEAlSmL
-	 7IVGkJRdrm/7L/uqUtSnDyNT42weVegpNA7ejv6wd6GPO718xnf+cJfWthuFBtvRYB
-	 Ai2RmGvLSL+IouvtXcStVkqkL5fPeng1D4l4HMJ8RK+BlTpdt9crkq+P/2M4/G3CXq
-	 cIbEbmGQUdBcw==
+	b=pHAf7F2XZZJ9TlQNjtZuAE9fpRHQb8RXZNQZV8uBSk+fLRpdLi3r1RNWTSiCChTit
+	 UIN48gNj6xrRKjqeZg0115cmMj+LOBnAWlcQKieNGEN6q3C4WT8faKMBQliRha3Hpy
+	 CKh6+4EF90m2qCnuHdWEyLhketcRINydx5kHuzLZHHY6xfa+JYYAAWijsWQnt09vYl
+	 Li8bQ4PyK+aivJww3q7gB9z5y3X05kteIISKsU8joSWjbnopHvXSSMhb4DELWBiXxN
+	 1CdN0FhRj7hqydiJkhFdFBSc6+2NNEkCk3hPBqkUU/zkNw1YeKZxvtQ6b6ieM8SYbc
+	 NjeU3Zt/ZilbA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -52,12 +52,12 @@ Cc: Konrad Dybcio <konrad.dybcio@linaro.org>,
 	sre@kernel.org,
 	linux-arm-msm@vger.kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.7 15/39] power: supply: qcom_battmgr: Register the power supplies after PDR is up
-Date: Sun, 28 Jan 2024 11:10:35 -0500
-Message-ID: <20240128161130.200783-15-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 12/31] power: supply: qcom_battmgr: Register the power supplies after PDR is up
+Date: Sun, 28 Jan 2024 11:12:42 -0500
+Message-ID: <20240128161315.201999-12-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240128161130.200783-1-sashal@kernel.org>
-References: <20240128161130.200783-1-sashal@kernel.org>
+In-Reply-To: <20240128161315.201999-1-sashal@kernel.org>
+References: <20240128161315.201999-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -66,7 +66,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.7.2
+X-stable-base: Linux 6.6.14
 Content-Transfer-Encoding: 8bit
 
 From: Konrad Dybcio <konrad.dybcio@linaro.org>
