@@ -1,150 +1,103 @@
-Return-Path: <linux-pm+bounces-2838-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2839-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BF4F83F460
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Jan 2024 07:39:41 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2AD683F4A2
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Jan 2024 09:39:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E5491C22175
-	for <lists+linux-pm@lfdr.de>; Sun, 28 Jan 2024 06:39:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 68F07B219CE
+	for <lists+linux-pm@lfdr.de>; Sun, 28 Jan 2024 08:39:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C314C8F6E;
-	Sun, 28 Jan 2024 06:39:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B449D53B;
+	Sun, 28 Jan 2024 08:39:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Aiuyh86g"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="KkY1L1xm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1655E6FB8;
-	Sun, 28 Jan 2024 06:39:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.115
+Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0575CDDAB
+	for <linux-pm@vger.kernel.org>; Sun, 28 Jan 2024 08:39:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.26
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706423965; cv=none; b=Bnl4BM7DCLKaXY2MhRA1IePmEMdWq8IPrbemQbUEAXRiDUzVGQh72D10nylfDln07wVK+zkt5Xiv+XRX1qi+MLvu+W7U5w1qkAyImEcTz9xLK9AN+ZrVJSDbUi7Umw5EuNrhOdys0iXUHDq5H2vp9plLSIF1Ex9t+4VxDNPdRfs=
+	t=1706431171; cv=none; b=IvjXvbDdQ3w6YiFl88+ME0IRxrEmdrxivk+kUiLypJlhiC2qV30HlouSuNaqcc9J3jGmEkfzwflsz9xqKXHtoqzAS+4IqtwpJJNd4Ks8WLwp1+J6zFx8fnfTfxWDaAXsIukFqzhlmKiWyOjdD1jrBLfGrFqj54L0H/d9cGAOvAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706423965; c=relaxed/simple;
-	bh=H1uD8Tfwa5qhv4YaJZekukVZDfIZ6McIsLHA44r7WaQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AVIbpjnZvuu9lW0amaLp+rov1SrHJnNzdlqTHF+kQ6Z6DcExRc0G5RrPS7hKJ9Luw2chgkefk2IriSV/EjdTuFbSBg6EeROyl1bYhU8pI0bwEsc50Pq4vYLDIo7Gz61udjS29r2K0rz+M6PQajBYqO4xzxKiSVnf/kte0w63LR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Aiuyh86g; arc=none smtp.client-ip=192.55.52.115
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706423964; x=1737959964;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=H1uD8Tfwa5qhv4YaJZekukVZDfIZ6McIsLHA44r7WaQ=;
-  b=Aiuyh86gI+c00BwP2DW+AlQ0ZsyJTz6eYRsU/aqtTHHCHQi8UDFmB5LL
-   2lTiQItxohTAMzXgHS/8EShffG1bxVHSsz8OyELxHZtwNDkqiBrqn7yyU
-   N1ARcmy6vB8ToZdzhWQ87pObKchj1uXFykaQVs+6/ePktNguTJ5AZswTi
-   v8Y7tYPUf7Mq5ZjxD8ruMp/UBH6RiREe/w1zjM7juVNXQhkU2vj6qy3Ib
-   qd9burMCfLdEDArgUX7CVpa9S4v78ZHqDJVTKH9xEQrNpnXDWZ9t4W+Nw
-   X8u52HAlYV9uwAA4nc0os+S2PdSzoZMeirfSPGRepmWfHh29bVperVvO+
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10966"; a="402391089"
-X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
-   d="scan'208";a="402391089"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2024 22:39:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10966"; a="910733518"
-X-IronPort-AV: E=Sophos;i="6.05,220,1701158400"; 
-   d="scan'208";a="910733518"
-Received: from lkp-server01.sh.intel.com (HELO 370188f8dc87) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 27 Jan 2024 22:39:16 -0800
-Received: from kbuild by 370188f8dc87 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rTyp0-0003AU-1Z;
-	Sun, 28 Jan 2024 06:39:14 +0000
-Date: Sun, 28 Jan 2024 14:38:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Oleksij Rempel <o.rempel@pengutronix.de>,
-	Sebastian Reichel <sre@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-	linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
+	s=arc-20240116; t=1706431171; c=relaxed/simple;
+	bh=8r1VLIdtrkxcint45jps0p80JK8DBAEYsVjKQfZTKcA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uLDLzvqo/fN+WrljQGgf2ZCMoJVJ0jcfs5D2REv9mHvV112C4jb9JT827ESrNIvokl6eq5phN55zkhZEqB12cVyQvh66Dfz91U87CyiKobqIQPKwVjoGMm9ak26P1ACtpaxLVomVfIbTGfqLGYDOVfTxPgzi50RRBHd7pkKHTKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=KkY1L1xm; arc=none smtp.client-ip=80.12.242.26
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from fedora.home ([92.140.202.140])
+	by smtp.orange.fr with ESMTPA
+	id U0gBr3CH8wnxGU0gCrvtYv; Sun, 28 Jan 2024 09:38:20 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1706431100;
+	bh=RvZ5Io0RuJBaQqGXuTB/cV5lrPQkLLFNN0oKaea8T94=;
+	h=From:To:Cc:Subject:Date;
+	b=KkY1L1xm+CslAfCnBetSSorAkB+OaeXBaDHr4YV0PRu1JZB5Sy18yYAWI0OuvejoE
+	 3yheer7k0bQlVvFFjbEDuXIbmoRotWyrxMNWW7Ec601FRIW8wTVOdGABkn69BH9iCh
+	 7HyNoeovoBD7ul9yGBW3W9Tp2IRShtHCquEJOZNo4M/AiKlyOol1dh8MRF+wHc32Ib
+	 YTc2anfLqXfHzeU3Kr38LtT2sWYHe1fJPDAL04XrgyX6GKl1mAzSIKCN6RkfcTrmST
+	 fePLWsovz0bloH1y8a84RQHIPdcyjTj7Bs4/pGsc8bMJNvvsKQgbWOKqpy4q23lwnm
+	 iTzRs1HT1NB+g==
+X-ME-Helo: fedora.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 28 Jan 2024 09:38:20 +0100
+X-ME-IP: 92.140.202.140
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-	=?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>
-Subject: Re: [PATCH v2 6/8] power: reset: add PSCR NVMEM Driver for Recording
- Power State Change Reasons
-Message-ID: <202401281442.zKlRfljS-lkp@intel.com>
-References: <20240124122204.730370-7-o.rempel@pengutronix.de>
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Balsam CHIHI <bchihi@baylibre.com>
+Cc: linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: [PATCH] thermal/drivers/mediatek/lvts_thermal: Fix a memory leak in an error handling path
+Date: Sun, 28 Jan 2024 09:38:10 +0100
+Message-ID: <481d345233862d58c3c305855a93d0dbc2bbae7e.1706431063.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240124122204.730370-7-o.rempel@pengutronix.de>
+Content-Transfer-Encoding: 8bit
 
-Hi Oleksij,
+If devm_krealloc() fails, then 'efuse' is leaking.
+So free it to avoid a leak.
 
-kernel test robot noticed the following build errors:
+Fixes: f5f633b18234 ("thermal/drivers/mediatek: Add the Low Voltage Thermal Sensor driver")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/thermal/mediatek/lvts_thermal.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on broonie-regulator/for-next rafael-pm/thermal linus/master v6.8-rc1 next-20240125]
-[cannot apply to sre-power-supply/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Oleksij-Rempel/power-Extend-power_on_reason-h-for-upcoming-PSCRR-framework/20240124-202833
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20240124122204.730370-7-o.rempel%40pengutronix.de
-patch subject: [PATCH v2 6/8] power: reset: add PSCR NVMEM Driver for Recording Power State Change Reasons
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20240128/202401281442.zKlRfljS-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240128/202401281442.zKlRfljS-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202401281442.zKlRfljS-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/power/reset/pscrr-nvmem.c:53:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      53 |         kfree(buf);
-         |         ^
-   1 error generated.
-
-
-vim +/kfree +53 drivers/power/reset/pscrr-nvmem.c
-
-    39	
-    40	static int pscrr_nvmem_read(struct pscrr_device *pscrr_dev, u32 *magic)
-    41	{
-    42		struct pscrr_nvmem *priv = container_of(pscrr_dev, struct pscrr_nvmem,
-    43							pscrr_dev);
-    44		size_t len;
-    45		void *buf;
-    46	
-    47		buf = nvmem_cell_read(priv->cell, &len);
-    48		if (IS_ERR(buf))
-    49			return PTR_ERR(buf);
-    50	
-    51		*magic = 0;
-    52		memcpy(magic, buf, min(len, sizeof(*magic)));
-  > 53		kfree(buf);
-    54	
-    55		return 0;
-    56	}
-    57	
-
+diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+index 98d9c80bd4c6..fd4bd650c77a 100644
+--- a/drivers/thermal/mediatek/lvts_thermal.c
++++ b/drivers/thermal/mediatek/lvts_thermal.c
+@@ -719,8 +719,10 @@ static int lvts_calibration_read(struct device *dev, struct lvts_domain *lvts_td
+ 
+ 		lvts_td->calib = devm_krealloc(dev, lvts_td->calib,
+ 					       lvts_td->calib_len + len, GFP_KERNEL);
+-		if (!lvts_td->calib)
++		if (!lvts_td->calib) {
++			kfree(efuse);
+ 			return -ENOMEM;
++		}
+ 
+ 		memcpy(lvts_td->calib + lvts_td->calib_len, efuse, len);
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
 
