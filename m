@@ -1,316 +1,232 @@
-Return-Path: <linux-pm+bounces-2876-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2877-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 330478405E7
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 14:03:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB75E8405F2
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 14:04:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 584BC1C224E8
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 13:03:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42B181F223A6
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 13:04:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AE3F627EC;
-	Mon, 29 Jan 2024 13:03:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="euLWzzu0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 380F66169F;
+	Mon, 29 Jan 2024 13:04:02 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C4C66168A;
-	Mon, 29 Jan 2024 13:03:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57795627E5;
+	Mon, 29 Jan 2024 13:03:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706533398; cv=none; b=VQdinqyBD/XHTQK552xe8oyBHTzTWjbclCHc6pqWVyDZEGrp4iGlPS6zZAHp7BXTO2MbsaGkhRPpfHQYXC5cI7sJrIl7AjGiA6ZBXRa/IljUtP5DNJHcaHSFNmK0M5un+a2URTNLD8R4biB/l4DE9uvTHuQtN1fk1rAGS4CN5hs=
+	t=1706533442; cv=none; b=jJjV3NWEqLWsYgcvUYko8/sJNs+W3LbyvN/MipSd2Xb3/CkzmUBJix8MyG1lYJtv78nma+SOqBk38aOr0szq0a1HmJN0ZO1Gn/qpjBmo6pRfrTG2uHesU6MKADlB+fdRljvRNSijJu5/BZr8tO1J0S1a7wrtVqzPRWiO+6k+g7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706533398; c=relaxed/simple;
-	bh=En+o/ta0oprAiI0bv2E8pNpWVrmO8oSUm1ARJDHKlQw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Cc15PRWFAR5GNiL/lF/gDxQuZoJmdVyhXFCE9qsItQQ93JPrXK7k9td6pjhrhSluwxo+5EEdoSsjQFaSgWdkcckqctYg0t/zCnO1aao9smjx5jj+Odv8eBJYXyec0KOnO5DFFaMLOjEebIS0rm2B6gD8khWr1F/cNr7VkvRJmIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=euLWzzu0; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1706533394;
-	bh=En+o/ta0oprAiI0bv2E8pNpWVrmO8oSUm1ARJDHKlQw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=euLWzzu0h9883PFM9+Z7VZSJVKTi0XUrhG47g3Cf6xKbrRrt2dUIFBGfzb11aH4Gw
-	 Tb+RCmfX6qrSi2d+e4ZX12cFt+igISObDjGihrKyu7LA+bX0fY0fhOVn++irF0MnG8
-	 nwFpIaZ/DZCMcWNaoF7RLTSAV0Xb831OgxYy+pa32eRNvW0F8lIQsbLQGWQY+JLnVu
-	 EtWimpSorwB9TNmoqIU5JSVA2koGxQnwEM1+gjOJ9QQFvc3dlPXivvn5+zOcADZnd8
-	 QfSLCfUzadmIO7Sswa/5qmYerDMHr3RR7WL0Ga42W3HQFb3Mn1LG6tTETeRb85g+DF
-	 uqsa5IHj4ZzkQ==
-Received: from mercury (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sre)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 8DEA0378003D;
-	Mon, 29 Jan 2024 13:03:14 +0000 (UTC)
-Received: by mercury (Postfix, from userid 1000)
-	id 28A471063ADA; Mon, 29 Jan 2024 14:03:14 +0100 (CET)
-Date: Mon, 29 Jan 2024 14:03:14 +0100
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Sasha Levin <sashal@kernel.org>
-Cc: linux-kernel@vger.kernel.org, stable@vger.kernel.org, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Luca Weiss <luca.weiss@fairphone.com>, andersson@kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>
-Subject: Re: [PATCH AUTOSEL 6.7 15/39] power: supply: qcom_battmgr: Register
- the power supplies after PDR is up
-Message-ID: <rtghydsz532x6atjeshexkgevqlfxmw5owjexmnczwepeefvlb@gxinnf23tzij>
-References: <20240128161130.200783-1-sashal@kernel.org>
- <20240128161130.200783-15-sashal@kernel.org>
+	s=arc-20240116; t=1706533442; c=relaxed/simple;
+	bh=MW5KypFg1nPfOH+4Z7+YG9/XkLK+cVPVSXFwwG/gf9E=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Hl2CS7t2n56jw+0eeN2dUSa7casXH90d43P9jwfty0SuDl2nEQx4vl2QIh9jVYJYPow71gpQ9jlYCaCd8+r2YZFla0GK4qcDlwLBvpfYCCHdhV15xhKGkRJASD9hYmZ6MkRn6BbHnOOOs1OBIv9aa8R6I8oRSgJTCqe+z6q9cDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4TNpM75yZdz6K9JK;
+	Mon, 29 Jan 2024 21:00:51 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 8F10A140A1B;
+	Mon, 29 Jan 2024 21:03:55 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Mon, 29 Jan
+ 2024 13:03:54 +0000
+Date: Mon, 29 Jan 2024 13:03:54 +0000
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+CC: "Rafael J. Wysocki" <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
+	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-riscv@lists.infradead.org>,
+	<kvmarm@lists.linux.dev>, <x86@kernel.org>,
+	<acpica-devel@lists.linuxfoundation.org>, <linux-csky@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-ia64@vger.kernel.org>,
+	<linux-parisc@vger.kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, <jianyong.wu@arm.com>,
+	<justin.he@arm.com>, James Morse <james.morse@arm.com>,
+	<vishnu@os.amperecomputing.com>, <miguel.luis@oracle.com>
+Subject: Re: [PATCH RFC v3 03/21] ACPI: processor: Register CPUs that are
+ online, but not described in the DSDT
+Message-ID: <20240129130354.0000042b@Huawei.com>
+In-Reply-To: <20240123092725.00004382@Huawei.com>
+References: <ZXmn46ptis59F0CO@shell.armlinux.org.uk>
+	<E1rDOg2-00Dvjk-RI@rmk-PC.armlinux.org.uk>
+	<CAJZ5v0ju1JHgpjuFLHZVs4NZiARG6iBZN_wza6c2e0kDhZjK0w@mail.gmail.com>
+	<ZaURtUvWQyjYfiiO@shell.armlinux.org.uk>
+	<20240122160227.00002d83@Huawei.com>
+	<CAJZ5v0hamuXJ_w-TSmVb=5jGide=Lb7sCjbzzNb_rFuPrvkgxQ@mail.gmail.com>
+	<Za6mHRJVjb6M1mun@shell.armlinux.org.uk>
+	<20240123092725.00004382@Huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="mqekvd7hqabcdj2t"
-Content-Disposition: inline
-In-Reply-To: <20240128161130.200783-15-sashal@kernel.org>
-
-
---mqekvd7hqabcdj2t
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-Hi,
+On Tue, 23 Jan 2024 09:27:25 +0000
+Jonathan Cameron <Jonathan.Cameron@Huawei.com> wrote:
 
-On Sun, Jan 28, 2024 at 11:10:35AM -0500, Sasha Levin wrote:
-> From: Konrad Dybcio <konrad.dybcio@linaro.org>
+> On Mon, 22 Jan 2024 17:30:05 +0000
+> "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
 >=20
-> [ Upstream commit b43f7ddc2b7a5a90447d96cb4d3c6d142dd4a810 ]
+> > On Mon, Jan 22, 2024 at 05:22:46PM +0100, Rafael J. Wysocki wrote: =20
+> > > On Mon, Jan 22, 2024 at 5:02=E2=80=AFPM Jonathan Cameron
+> > > <Jonathan.Cameron@huawei.com> wrote:   =20
+> > > >
+> > > > On Mon, 15 Jan 2024 11:06:29 +0000
+> > > > "Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
+> > > >   =20
+> > > > > On Mon, Dec 18, 2023 at 09:22:03PM +0100, Rafael J. Wysocki wrote=
+:   =20
+> > > > > > On Wed, Dec 13, 2023 at 1:49=E2=80=AFPM Russell King <rmk+kerne=
+l@armlinux.org.uk> wrote:   =20
+> > > > > > >
+> > > > > > > From: James Morse <james.morse@arm.com>
+> > > > > > >
+> > > > > > > ACPI has two descriptions of CPUs, one in the MADT/APIC table=
+, the other
+> > > > > > > in the DSDT. Both are required. (ACPI 6.5's 8.4 "Declaring Pr=
+ocessors"
+> > > > > > > says "Each processor in the system must be declared in the AC=
+PI
+> > > > > > > namespace"). Having two descriptions allows firmware authors =
+to get
+> > > > > > > this wrong.
+> > > > > > >
+> > > > > > > If CPUs are described in the MADT/APIC, they will be brought =
+online
+> > > > > > > early during boot. Once the register_cpu() calls are moved to=
+ ACPI,
+> > > > > > > they will be based on the DSDT description of the CPUs. When =
+CPUs are
+> > > > > > > missing from the DSDT description, they will end up online, b=
+ut not
+> > > > > > > registered.
+> > > > > > >
+> > > > > > > Add a helper that runs after acpi_init() has completed to reg=
+ister
+> > > > > > > CPUs that are online, but weren't found in the DSDT. Any CPU =
+that
+> > > > > > > is registered by this code triggers a firmware-bug warning an=
+d kernel
+> > > > > > > taint.
+> > > > > > >
+> > > > > > > Qemu TCG only describes the first CPU in the DSDT, unless cpu=
+-hotplug
+> > > > > > > is configured.   =20
+> > > > > >
+> > > > > > So why is this a kernel problem?   =20
+> > > > >
+> > > > > So what are you proposing should be the behaviour here? What this
+> > > > > statement seems to be saying is that QEMU as it exists today only
+> > > > > describes the first CPU in DSDT.   =20
+> > > >
+> > > > This confuses me somewhat, because I'm far from sure which machines=
+ this
+> > > > is true for in QEMU.  I'm guessing it's a legacy thing with
+> > > > some old distro version of QEMU - so we'll have to paper over it an=
+yway
+> > > > but for current QEMU I'm not sure it's true.
+> > > >
+> > > > Helpfully there are a bunch of ACPI table tests so I've been checki=
+ng
+> > > > through all the multi CPU cases.
+> > > >
+> > > > CPU hotplug not enabled.
+> > > > pc/DSDT.dimmpxm  - 4x Processor entries.  -smp 4
+> > > > pc/DSDT.acpihmat - 2x Processor entries.  -smp 2
+> > > > q35/DSDT.acpihmat - 2x Processor entries. -smp 2
+> > > > virt/DSDT.acpihmatvirt - 4x ACPI0007 entries -smp 4
+> > > > q35/DSDT.acpihmat-noinitiator - 4 x Processor () entries -smp 4
+> > > > virt/DSDT.topology - 8x ACPI0007 entries
+> > > >
+> > > > I've also looked at the code and we have various types of
+> > > > CPU hotplug on x86 but they all build appropriate numbers of
+> > > > Processor() entries in DSDT.
+> > > > Arm likewise seems to build the right number of ACPI0007 entries
+> > > > (and doesn't yet have CPU HP support).
+> > > >
+> > > > If anyone can add a reference on why this is needed that would be v=
+ery
+> > > > helpful.   =20
+> > >=20
+> > > Yes, it would.
+> > >=20
+> > > Personally, I would prefer to assume that it is not necessary until it
+> > > turns out that (1) there is firmware with this issue actually in use
+> > > and (2) updating the firmware in question to follow the specification
+> > > is not practical.
+> > >=20
+> > > Otherwise, we'd make it easier to ship non-compliant firmware for no
+> > > good reason.   =20
+> >=20
+> > If Salil can't come up with a reason, then I'm in favour of dropping
+> > the patch like already done for patch 2. If the code change serves no
+> > useful purpose, there's no point in making the change.
+> >  =20
 >=20
-> Currently, a not-yet-entirely-initialized battmgr (e.g. with pd-mapper
-> not having yet started or ADSP not being up etc.) results in a couple of
-> zombie power supply devices hanging around.
+> Salil's out today, but I've messaged him to follow up later in the week.
 >=20
-> This is particularly noticeable when trying to suspend the device (even
-> s2idle): the PSY-internal thermal zone is inaccessible and returns
-> -ENODEV, which causes log spam.
+> It 'might' be the odd cold plug path where QEMU half comes up, then extra
+> CPUs are added, then it boots. (used by some orchestration frameworks)
+
+I poked this on x86 - it only applies with hotplug enabled anyway so
+same result as doing the hotplug later - All possible Processor() entries
+already exist in DSDT. Hence this isn't the source of the mysterious
+broken configuration.
+
+If anyone does poke this path, the old discussion between James
+and Salil provides some instructions (mostly the thread is about
+another issue).
+https://op-lists.linaro.org/archives/list/linaro-open-discussions@op-lists.=
+linaro.org/thread/DNAGB2FB5ALVLV2BYWYOCLKGNF77PNXS/
+
+Also on x86 a test involving smp 2,max-cpus=3D4 and adding cpu-id 3
+(so skipping 2) doesn't boot. (this is without Salil's QEMU patches).
+I guess there are some well known rules in there that I don't know about
+and QEMU isn't preventing people shooting themselves in the foot.
+
+As I'm concerned, drop this patch.
+If there are platforms out there doing this wrong they'll surface once
+we get this into more test farms (so linux-next).  If we need this
+'fix' we can apply it when we have a problem firmware to point at.
+
+Thanks,
+
+Jonathan
+
+> I don't have a set up for that and I won't get to creating one today anyw=
+ay
+> (we all love start of the year planning workshops!)
+
 >=20
-> Register the power supplies only after we received some notification
-> indicating battmgr is ready to take off.
+> I've +CC'd a few people have run tests on the various iterations of this
+> work in the past.  Maybe one of them can shed some light on this?
 >=20
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> Tested-by: Luca Weiss <luca.weiss@fairphone.com>
-> Link: https://lore.kernel.org/r/20231218-topic-battmgr_fixture_attempt-v1=
--1-6145745f34fe@linaro.org
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
-
-Please drop it, I have a patch queued reverting this patch.=20
-
--- Sebastian
-
->  drivers/power/supply/qcom_battmgr.c | 109 +++++++++++++++-------------
->  1 file changed, 60 insertions(+), 49 deletions(-)
+> Jonathan
 >=20
-> diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/q=
-com_battmgr.c
-> index ec163d1bcd18..a12e2a66d516 100644
-> --- a/drivers/power/supply/qcom_battmgr.c
-> +++ b/drivers/power/supply/qcom_battmgr.c
-> @@ -282,6 +282,7 @@ struct qcom_battmgr_wireless {
-> =20
->  struct qcom_battmgr {
->  	struct device *dev;
-> +	struct auxiliary_device *adev;
->  	struct pmic_glink_client *client;
-> =20
->  	enum qcom_battmgr_variant variant;
-> @@ -1293,11 +1294,69 @@ static void qcom_battmgr_enable_worker(struct wor=
-k_struct *work)
->  		dev_err(battmgr->dev, "failed to request power notifications\n");
->  }
-> =20
-> +static char *qcom_battmgr_battery[] =3D { "battery" };
-> +
-> +static void qcom_battmgr_register_psy(struct qcom_battmgr *battmgr)
-> +{
-> +	struct power_supply_config psy_cfg_supply =3D {};
-> +	struct auxiliary_device *adev =3D battmgr->adev;
-> +	struct power_supply_config psy_cfg =3D {};
-> +	struct device *dev =3D &adev->dev;
-> +
-> +	psy_cfg.drv_data =3D battmgr;
-> +	psy_cfg.of_node =3D adev->dev.of_node;
-> +
-> +	psy_cfg_supply.drv_data =3D battmgr;
-> +	psy_cfg_supply.of_node =3D adev->dev.of_node;
-> +	psy_cfg_supply.supplied_to =3D qcom_battmgr_battery;
-> +	psy_cfg_supply.num_supplicants =3D 1;
-> +
-> +	if (battmgr->variant =3D=3D QCOM_BATTMGR_SC8280XP) {
-> +		battmgr->bat_psy =3D devm_power_supply_register(dev, &sc8280xp_bat_psy=
-_desc, &psy_cfg);
-> +		if (IS_ERR(battmgr->bat_psy))
-> +			dev_err(dev, "failed to register battery power supply (%ld)\n",
-> +				PTR_ERR(battmgr->bat_psy));
-> +
-> +		battmgr->ac_psy =3D devm_power_supply_register(dev, &sc8280xp_ac_psy_d=
-esc, &psy_cfg_supply);
-> +		if (IS_ERR(battmgr->ac_psy))
-> +			dev_err(dev, "failed to register AC power supply (%ld)\n",
-> +				PTR_ERR(battmgr->ac_psy));
-> +
-> +		battmgr->usb_psy =3D devm_power_supply_register(dev, &sc8280xp_usb_psy=
-_desc, &psy_cfg_supply);
-> +		if (IS_ERR(battmgr->usb_psy))
-> +			dev_err(dev, "failed to register USB power supply (%ld)\n",
-> +				PTR_ERR(battmgr->usb_psy));
-> +
-> +		battmgr->wls_psy =3D devm_power_supply_register(dev, &sc8280xp_wls_psy=
-_desc, &psy_cfg_supply);
-> +		if (IS_ERR(battmgr->wls_psy))
-> +			dev_err(dev, "failed to register wireless charing power supply (%ld)\=
-n",
-> +				PTR_ERR(battmgr->wls_psy));
-> +	} else {
-> +		battmgr->bat_psy =3D devm_power_supply_register(dev, &sm8350_bat_psy_d=
-esc, &psy_cfg);
-> +		if (IS_ERR(battmgr->bat_psy))
-> +			dev_err(dev, "failed to register battery power supply (%ld)\n",
-> +				PTR_ERR(battmgr->bat_psy));
-> +
-> +		battmgr->usb_psy =3D devm_power_supply_register(dev, &sm8350_usb_psy_d=
-esc, &psy_cfg_supply);
-> +		if (IS_ERR(battmgr->usb_psy))
-> +			dev_err(dev, "failed to register USB power supply (%ld)\n",
-> +				PTR_ERR(battmgr->usb_psy));
-> +
-> +		battmgr->wls_psy =3D devm_power_supply_register(dev, &sm8350_wls_psy_d=
-esc, &psy_cfg_supply);
-> +		if (IS_ERR(battmgr->wls_psy))
-> +			dev_err(dev, "failed to register wireless charing power supply (%ld)\=
-n",
-> +				PTR_ERR(battmgr->wls_psy));
-> +	}
-> +}
-> +
->  static void qcom_battmgr_pdr_notify(void *priv, int state)
->  {
->  	struct qcom_battmgr *battmgr =3D priv;
-> =20
->  	if (state =3D=3D SERVREG_SERVICE_STATE_UP) {
-> +		if (!battmgr->bat_psy)
-> +			qcom_battmgr_register_psy(battmgr);
-> +
->  		battmgr->service_up =3D true;
->  		schedule_work(&battmgr->enable_work);
->  	} else {
-> @@ -1312,13 +1371,9 @@ static const struct of_device_id qcom_battmgr_of_v=
-ariants[] =3D {
->  	{}
->  };
-> =20
-> -static char *qcom_battmgr_battery[] =3D { "battery" };
-> -
->  static int qcom_battmgr_probe(struct auxiliary_device *adev,
->  			      const struct auxiliary_device_id *id)
->  {
-> -	struct power_supply_config psy_cfg_supply =3D {};
-> -	struct power_supply_config psy_cfg =3D {};
->  	const struct of_device_id *match;
->  	struct qcom_battmgr *battmgr;
->  	struct device *dev =3D &adev->dev;
-> @@ -1328,14 +1383,7 @@ static int qcom_battmgr_probe(struct auxiliary_dev=
-ice *adev,
->  		return -ENOMEM;
-> =20
->  	battmgr->dev =3D dev;
-> -
-> -	psy_cfg.drv_data =3D battmgr;
-> -	psy_cfg.of_node =3D adev->dev.of_node;
-> -
-> -	psy_cfg_supply.drv_data =3D battmgr;
-> -	psy_cfg_supply.of_node =3D adev->dev.of_node;
-> -	psy_cfg_supply.supplied_to =3D qcom_battmgr_battery;
-> -	psy_cfg_supply.num_supplicants =3D 1;
-> +	battmgr->adev =3D adev;
-> =20
->  	INIT_WORK(&battmgr->enable_work, qcom_battmgr_enable_worker);
->  	mutex_init(&battmgr->lock);
-> @@ -1347,43 +1395,6 @@ static int qcom_battmgr_probe(struct auxiliary_dev=
-ice *adev,
->  	else
->  		battmgr->variant =3D QCOM_BATTMGR_SM8350;
-> =20
-> -	if (battmgr->variant =3D=3D QCOM_BATTMGR_SC8280XP) {
-> -		battmgr->bat_psy =3D devm_power_supply_register(dev, &sc8280xp_bat_psy=
-_desc, &psy_cfg);
-> -		if (IS_ERR(battmgr->bat_psy))
-> -			return dev_err_probe(dev, PTR_ERR(battmgr->bat_psy),
-> -					     "failed to register battery power supply\n");
-> -
-> -		battmgr->ac_psy =3D devm_power_supply_register(dev, &sc8280xp_ac_psy_d=
-esc, &psy_cfg_supply);
-> -		if (IS_ERR(battmgr->ac_psy))
-> -			return dev_err_probe(dev, PTR_ERR(battmgr->ac_psy),
-> -					     "failed to register AC power supply\n");
-> -
-> -		battmgr->usb_psy =3D devm_power_supply_register(dev, &sc8280xp_usb_psy=
-_desc, &psy_cfg_supply);
-> -		if (IS_ERR(battmgr->usb_psy))
-> -			return dev_err_probe(dev, PTR_ERR(battmgr->usb_psy),
-> -					     "failed to register USB power supply\n");
-> -
-> -		battmgr->wls_psy =3D devm_power_supply_register(dev, &sc8280xp_wls_psy=
-_desc, &psy_cfg_supply);
-> -		if (IS_ERR(battmgr->wls_psy))
-> -			return dev_err_probe(dev, PTR_ERR(battmgr->wls_psy),
-> -					     "failed to register wireless charing power supply\n");
-> -	} else {
-> -		battmgr->bat_psy =3D devm_power_supply_register(dev, &sm8350_bat_psy_d=
-esc, &psy_cfg);
-> -		if (IS_ERR(battmgr->bat_psy))
-> -			return dev_err_probe(dev, PTR_ERR(battmgr->bat_psy),
-> -					     "failed to register battery power supply\n");
-> -
-> -		battmgr->usb_psy =3D devm_power_supply_register(dev, &sm8350_usb_psy_d=
-esc, &psy_cfg_supply);
-> -		if (IS_ERR(battmgr->usb_psy))
-> -			return dev_err_probe(dev, PTR_ERR(battmgr->usb_psy),
-> -					     "failed to register USB power supply\n");
-> -
-> -		battmgr->wls_psy =3D devm_power_supply_register(dev, &sm8350_wls_psy_d=
-esc, &psy_cfg_supply);
-> -		if (IS_ERR(battmgr->wls_psy))
-> -			return dev_err_probe(dev, PTR_ERR(battmgr->wls_psy),
-> -					     "failed to register wireless charing power supply\n");
-> -	}
-> -
->  	battmgr->client =3D devm_pmic_glink_register_client(dev,
->  							  PMIC_GLINK_OWNER_BATTMGR,
->  							  qcom_battmgr_callback,
-> --=20
-> 2.43.0
 >=20
+>=20
+>=20
+>=20
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
 
---mqekvd7hqabcdj2t
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmW3ogoACgkQ2O7X88g7
-+pr3VhAAoFg3dDtbbHT5MDapdkU7KcQ+brvQC+RcR+iftwUusNtNBZaqhatssI6q
-silJgqzKQyHJGMsWyY4vnz9J1ukcvtt1ydQc5J80AEPogFUdOdu2Sm5uyUc3pVHg
-cW5bwZK/Y3Hnzn5n2vyKstLBwM8XtZf38hIZ75+5VtUxnrfrETAAwmCXe2/5qCeO
-55bRNOoiylfqjGDXDTIU9xR2e1LIqneq+PFWeYR333fXcdQ2+dTRGiL6qeP6MtsT
-FtKvr+PcYlgLwX+AtQS2/GF6W7WTmN3ldYCbGlY07pfptfmAdE38p5FOvZM88aZb
-7Lt1qKpwl3hZ2CJiV0r0SDbnMyPsPoQ8RyFoIzuqYPiVeJBw2sBAa1Ax65//po0I
-JCgsv6Xilxt6sPr5SdXMqJ7EaNeqqS7wcsUosUq5aLx+/y1rEZluZC/Q9qB9nswT
-+L758Nvyk444LmNOvS3OmmPGW5VPuGl3EpBAsmFJm3OHLSfwrpFZ9wyPQEck+mPG
-b+ov0rqU89+5WpDQR2KML1aGzLNULisGO+F95vtYgWABFChJ+quFe6XlmIyxKomA
-XSHIVerxec78nqTxybcnoP4TG97psejfcSs1T90efIR6i8O5PlEF82azHScTbO56
-ygKk5RM7oCJw3ifhzg7U0SMzkgA4dz9wZnZ7lSJrjTAiRKbRRkA=
-=Ik1F
------END PGP SIGNATURE-----
-
---mqekvd7hqabcdj2t--
 
