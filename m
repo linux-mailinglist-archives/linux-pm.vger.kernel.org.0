@@ -1,40 +1,40 @@
-Return-Path: <linux-pm+bounces-2910-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2911-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 995618411D5
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 19:14:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B99E8411DF
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 19:15:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E9D90B23DEA
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 18:14:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C665F1C220AB
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 18:15:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14A866F080;
-	Mon, 29 Jan 2024 18:14:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCBD96F067;
+	Mon, 29 Jan 2024 18:15:42 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09EAC3F9F3;
-	Mon, 29 Jan 2024 18:14:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D92873F9F3;
+	Mon, 29 Jan 2024 18:15:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706552063; cv=none; b=aUm/mJUvs4dkx2FvRrx5kN2tAudDVWdOgaJmX7XVR7J+Y4kv6RSMdk92EjH0eV/sTyxLpvFysKam5Hh3wLcEargkXlPcAqPMJTptQo+CreP0iH0VRcAkmENPMhw5R4rgY26Tj2foAKcesIRlqJYwzl+gO6l7IZBPinExC2nJg1Q=
+	t=1706552142; cv=none; b=PXNBT9PP16JmCmWNvR3vM5VnI5ZF41f6J2YoOCcgJ1CO8WgE+7xRucxE2+C515CWySWUhsimIuKK4zdz1NzwJt67UqWtDdoA3tXBnpGC0QOsFTjXViS0mhIuM0DR34samTHq9R/RsbBdVqmEOZZPxwKH0Aj0CmMVjMPGqhl3jhs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706552063; c=relaxed/simple;
-	bh=FR/zq4TyESX0ax53xnG03ABJRIASj5fUXtXMj3RQZxo=;
+	s=arc-20240116; t=1706552142; c=relaxed/simple;
+	bh=ewiyKl+qgVhKnM4cIz0AXQmrRLnvvgCR5PofG1HuxlU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TbE0jv1P4Wok2IV1N5AzdKIUzpxfoQqGetUwjcy4SHMcio0xtu0lbpn3ihUQnLJUW/+1eFHgQWxT+cMZfjNxLaC2KpR2QnP7KWBLhVonLxAxSOd8SUpdKU4DEbUtPTgc25koDy149V9Ivm//19MplnJXn0dNyOiweDmlZURYDwQ=
+	 In-Reply-To:Content-Type; b=IGSLbEqsYjOb9SwDHgXgwDttXMv8hDKAIqvorlpRZhB1RPfSWCM9loRj5B7O+fa1K7UolvWjzfsVfujO3tc77gryW5F/m7K4Yda3sErugo0AYip2UfANai3IPLpc6rL7c/GnAnV7u/EXmx1HOu8fX54qx/Dbxaucjim7YiH/E8A=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2CF3FDA7;
-	Mon, 29 Jan 2024 10:15:04 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2CA80DA7;
+	Mon, 29 Jan 2024 10:16:24 -0800 (PST)
 Received: from [192.168.178.6] (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F2EA63F738;
-	Mon, 29 Jan 2024 10:14:17 -0800 (PST)
-Message-ID: <0dce919b-279d-4a34-8641-09d0acec5cf1@arm.com>
-Date: Mon, 29 Jan 2024 19:14:17 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1A9363F738;
+	Mon, 29 Jan 2024 10:15:37 -0800 (PST)
+Message-ID: <1edf0dcc-ca15-49fa-9c42-95e837fc073b@arm.com>
+Date: Mon, 29 Jan 2024 19:15:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,8 +42,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 16/23] powercap/dtpm_cpu: Use new Energy Model
- interface to get table
+Subject: Re: [PATCH v7 22/23] PM: EM: Add em_dev_compute_costs()
 Content-Language: en-US
 To: Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
  linux-pm@vger.kernel.org, rafael@kernel.org
@@ -52,9 +51,9 @@ Cc: rui.zhang@intel.com, amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
  pavel@ucw.cz, mhiramat@kernel.org, qyousef@layalina.io, wvw@google.com,
  xuewen.yan94@gmail.com
 References: <20240117095714.1524808-1-lukasz.luba@arm.com>
- <20240117095714.1524808-17-lukasz.luba@arm.com>
+ <20240117095714.1524808-23-lukasz.luba@arm.com>
 From: Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20240117095714.1524808-17-lukasz.luba@arm.com>
+In-Reply-To: <20240117095714.1524808-23-lukasz.luba@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
@@ -62,30 +61,37 @@ On 17/01/2024 10:57, Lukasz Luba wrote:
 
 [...]
 
->  drivers/powercap/dtpm_cpu.c | 39 +++++++++++++++++++++++++++----------
->  1 file changed, 29 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
-> index 9193c3b8edeb..ee0d1aa3e023 100644
-> --- a/drivers/powercap/dtpm_cpu.c
-> +++ b/drivers/powercap/dtpm_cpu.c
-> @@ -42,6 +42,7 @@ static u64 set_pd_power_limit(struct dtpm *dtpm, u64 power_limit)
->  {
->  	struct dtpm_cpu *dtpm_cpu = to_dtpm_cpu(dtpm);
->  	struct em_perf_domain *pd = em_cpu_get(dtpm_cpu->cpu);
-> +	struct em_perf_state *table;
->  	struct cpumask cpus;
->  	unsigned long freq;
->  	u64 power;
-> @@ -50,20 +51,22 @@ static u64 set_pd_power_limit(struct dtpm *dtpm, u64 power_limit)
->  	cpumask_and(&cpus, cpu_online_mask, to_cpumask(pd->cpus));
->  	nr_cpus = cpumask_weight(&cpus);
+> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+> index e91c8efb5361..104cc2e2aa84 100644
+> --- a/kernel/power/energy_model.c
+> +++ b/kernel/power/energy_model.c
+> @@ -276,6 +276,24 @@ static int em_compute_costs(struct device *dev, struct em_perf_state *table,
+>  	return 0;
+>  }
 >  
-> +	rcu_read_lock();
-> +	table = em_perf_state_from_pd(pd);
+> +/**
+> + * em_dev_compute_costs() - Calculate cost values for new runtime EM table
+> + * @dev		: Device for which the EM table is to be updated
+> + * @table	: The new EM table that is going to get the costs calculated
+> + *
+> + * Calculate the em_perf_state::cost values for new runtime EM table. The
+> + * values are used for EAS during task placement. It also calculates and sets
+> + * the efficiency flag for each performance state. When the function finish
+> + * successfully the EM table is ready to be updated and used by EAS.
+> + *
+> + * Return 0 on success or a proper error in case of failure.
+> + */
+> +int em_dev_compute_costs(struct device *dev, struct em_perf_state *table,
+> +			 int nr_states)
+> +{
+> +	return em_compute_costs(dev, table, NULL, nr_states, 0);
+> +}
+> +
 
-'table' vs. 'perf state(s)' ... another example (compare to comment in
-12/23).
+Still no user of this function in this patch-set so it could be
+introduced with the follow-up patch 'OPP: Add API to update EM after
+adjustment of voltage for OPPs'. Especially now since Viresh and you
+have agreed that this should be part of the EM code as well:
 
-[...]
+https://lkml.kernel.org/r/a42ae8dd-383c-43c0-88b4-101303d6f548@arm.com
 
