@@ -1,69 +1,71 @@
-Return-Path: <linux-pm+bounces-2857-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2858-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2BEA84042E
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 12:52:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29464840432
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 12:52:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78C86B2287E
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 11:52:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 931141F22AC7
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 11:52:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B0805EE7C;
-	Mon, 29 Jan 2024 11:52:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B72D5FEED;
+	Mon, 29 Jan 2024 11:52:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OH9HviHQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yh56MIvr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CE2E5B209
-	for <linux-pm@vger.kernel.org>; Mon, 29 Jan 2024 11:52:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43B9E5D8FD
+	for <linux-pm@vger.kernel.org>; Mon, 29 Jan 2024 11:52:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706529144; cv=none; b=uAgBCysg/XLujTH+PfPRZz/kFrakZZ+4ZauaGhtKufRJtBzrB/Ad3htWllUqNHO0HgYB487nMwg21QHi3YjA/yYlCwdf4ZnO50u/O+14bmsnYui6VHOsUJcVW9X9+Ndt2N3RDE4i2PJgEerKOM8aO+rLF4+Zf5/cVYi90injLic=
+	t=1706529146; cv=none; b=oXY/y9GEvchXXnQHHHpIVrwMNS0s9y9dejv8c0Y7BdVV4vqVxelA1mpV6mQPQl1ZUaNZ/zsi5h626Yn0rHXBaHdX980mI07lSE2vu9Q7pvWXTPyBmeOYP2mdtGoFg/G+NgVefsuFueTMRfhk376EguTvDe9V4BLLVd52nzM67q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706529144; c=relaxed/simple;
-	bh=TevWKR2DSrMzB/VAXnrwgpjtV2WO/i7dhXJ3FYqBRLA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=b5ctedTebUxBs+cucMEmp0FeRorJ1/KG60I0LT4uzaMo9isXtgOb4Se1cxb0h+4VjGnG50cuRWEQvE7Z6Hf1d3iPdpGgMTVEgpkJBh1PAjY1YFq2JyR4hFL8WC+qP2mbbc/nRtQ3LEqpc8VvwY0D/Dq1U3JJO5s48DIt5b30CYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=OH9HviHQ; arc=none smtp.client-ip=209.85.208.178
+	s=arc-20240116; t=1706529146; c=relaxed/simple;
+	bh=pEaaZzWd53CrhjsWjih79Gm0lLf84UYwD3xSD5zEQj4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ZKdHz8y5rpkoLK2P8/NDlxN3qZNUG73YoeyVB7eKr3CxlGrjIR3p83SSEVjGiORBMkI57oDmE4rKbQeZcVtaBybLlb4Oh4LFLSjlTs8CbaTXdkgDcf8V1gaNnL4xilThEFO8H1fqZkUksC8YysvvyWOhkT2E8xunn4UHyAZ/MP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yh56MIvr; arc=none smtp.client-ip=209.85.208.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2cf0390eddbso29679591fa.3
-        for <linux-pm@vger.kernel.org>; Mon, 29 Jan 2024 03:52:22 -0800 (PST)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-55790581457so2826966a12.3
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jan 2024 03:52:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706529140; x=1707133940; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=R/YgAdznIozSs2D/WsWY2hpfyQsPzLBVEOR2iGtuuDw=;
-        b=OH9HviHQWkoyDQT4YvNqrANkRD7RpAirmBuoBJuSOXbhaF1V24XtCDeDMaKuOMGpza
-         lDqDhacP/ihanyKi5G4f00m2tGbxHPTFx5smunBSkdTvrBoABuTn8SJ8EVdx/rVPHXRg
-         Lm9vSniSgtxpXVQl82AvHxaes1TbCG8fbrtyKoz8wmpgh7W/c02XCZxzJf6B4QF3ZvOK
-         aQJKd7f09b7HUcS9TNTYXw8Y9fjBowcIyg0vF1rz+YjITXAFRAjJ6Qf9yLvv5D1OWtYX
-         5MDTWJ4TQ7NfF2b25lWow7dLIwr6K6Ubuf33eHRmTTtWXEptZeMDXRwjPVYY76Nw6CQb
-         gqVA==
+        d=linaro.org; s=google; t=1706529142; x=1707133942; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7u11vGwKEs3fH7gtNpJv3ew33Q7fXCEnCXNY0GONseQ=;
+        b=yh56MIvrIsDDIDVRv+XbFPR1vq7DFcZr2EVOcMGSm8H5VBpT+4FLwgMKgbreCl94KO
+         4+kllBcnF8Tsd/Z7TOsH5z8zzbD4FWMfWiNXja/DLdcEfku4uvC0ldYaRIsBQnfo1Gy/
+         5nzJdHCiRfZ8vXCkwv5QuKhz89AoZ7KLKzGn857jrjih/EOfLQ4MUeCUWhasUfvDSPvb
+         NsdAVSnnjVHjTVwyl6Aj7h8JFbeUGv9hEBae0urfW90XUQ/Pc7ybAZ2EYeqcBh5WH0rc
+         BUxLbc5/yWEZNypMX3EM3sF5x48DAMh74kk8wLIxuESZlSgOetYf92PXnYlJHC7sGQp4
+         sVmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706529140; x=1707133940;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R/YgAdznIozSs2D/WsWY2hpfyQsPzLBVEOR2iGtuuDw=;
-        b=voqXUmrpULAiqwNsY12MyMcTNkjIKLA1iWGYgsLuV7gRkU9ECzDj44L+e5qLglCgUI
-         N1dqcdl2tqG/MVu13fZ6EIsb+H20lew9x4t/ttGcs29EzmprikBa4ciMcxVYsQRwA141
-         SZtsD2s0RyY/gEwb6nGRfWA0c3Tm//3IZq4ihRDoySKWYbvRlxrqotoAHR/eJmN2wW24
-         E+zRv3LnGICperrBGZcFLrvYvJ4FudNjGstjhtCXaMAh2hGMJDzCSC7rTIS5KlNUpAp2
-         UviRtM6M3szL+py03MP/lSuRPk7f0NiqcJlZQC7khkpuMc/LsfvhT4t16b+7INfJT1fX
-         HOHg==
-X-Gm-Message-State: AOJu0Yw/jDtd8WgPtOLzq5opGB4kAaEvQLix+ZcjOA6nwzEeqRfJIw1+
-	EXEO97d3XnKOF5DbBn4DrKDSb8nNrUW39ADrEdJumpZDGhqYvyMvb9VQpzMxPGI=
-X-Google-Smtp-Source: AGHT+IFqjoy3FZxoV9ITWG/DVDbPwIlEmiyp2X8ew7y1z0leblC2o5ktNI6NnAt/yx6tOebUXaknnQ==
-X-Received: by 2002:a05:651c:1986:b0:2cd:7357:58eb with SMTP id bx6-20020a05651c198600b002cd735758ebmr4260461ljb.39.1706529140447;
-        Mon, 29 Jan 2024 03:52:20 -0800 (PST)
+        d=1e100.net; s=20230601; t=1706529142; x=1707133942;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7u11vGwKEs3fH7gtNpJv3ew33Q7fXCEnCXNY0GONseQ=;
+        b=tIi0YBD7AmOYFthBcIlmcDEPF65TT0iGodVKHq4qtyR1VxObDJ5zpTly96G/gvIHHF
+         zCzClYHFwVr5pC0X87sti6EjiYKDoHqWXlTaqM0TcXJICAZZuHtwautc2Uhq1f03x/Rj
+         wBQs24y8/YgFW5hCuGPv+wmmN+vxiv26NcIVnF/RaTsyRyJWYXCfgWQ+S0fTFZwkV12C
+         p9Fasz8G/XeUwuxzeIO7eV6yR7ZnlNz0jTOGfLmFuN7zypu3WXaYAEVcSchNX4J2yacQ
+         d3vAE9by0Dy3TTyW8UlqVfVTd/CrSRZMXjRI7cbqFpOUh+XMIRPPrChXzO22pZTKZi6G
+         MLxw==
+X-Gm-Message-State: AOJu0YyWPb5rkrg9oO63vTS26r2CfHnuWMkJK6SELs/eL6KV4ONOjL+Y
+	ctzHAvEhzJrfkgzGnJYFO6bIRdfW/6vAfreRnJxQtHktSVhYHct9pSJJetp3P8E=
+X-Google-Smtp-Source: AGHT+IFmy3sCvOF6JNQB/p5p+/mn9vblRl4lD4OGfVKlB3WcdWBRMAzyMpmnKg1BqnvigRA+MvIHwg==
+X-Received: by 2002:a05:6402:274b:b0:55e:f866:30dd with SMTP id z11-20020a056402274b00b0055ef86630ddmr2119525edd.12.1706529142419;
+        Mon, 29 Jan 2024 03:52:22 -0800 (PST)
 Received: from krzk-bin.. ([178.197.222.62])
-        by smtp.gmail.com with ESMTPSA id ec19-20020a0564020d5300b0055f29ececeasm19907edb.57.2024.01.29.03.52.18
+        by smtp.gmail.com with ESMTPSA id ec19-20020a0564020d5300b0055f29ececeasm19907edb.57.2024.01.29.03.52.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jan 2024 03:52:19 -0800 (PST)
+        Mon, 29 Jan 2024 03:52:21 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
 	Banajit Goswami <bgoswami@quicinc.com>,
@@ -87,13 +89,13 @@ To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
 	linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Sean Anderson <sean.anderson@seco.com>
-Subject: [PATCH v6 0/6] reset: gpio: ASoC: shared GPIO resets
-Date: Mon, 29 Jan 2024 12:52:10 +0100
-Message-Id: <20240129115216.96479-1-krzysztof.kozlowski@linaro.org>
+	Rob Herring <robh@kernel.org>
+Subject: [PATCH v6 1/6] of: Add of_phandle_args_equal() helper
+Date: Mon, 29 Jan 2024 12:52:11 +0100
+Message-Id: <20240129115216.96479-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240129115216.96479-1-krzysztof.kozlowski@linaro.org>
+References: <20240129115216.96479-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -102,141 +104,46 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+Add a helper comparing two "struct of_phandle_args" to avoid
+reinventing the wheel.
 
-Dependencies / Merging
-======================
-1. Depends on !GPIOLIB stub:
-   https://lore.kernel.org/all/20240125081601.118051-3-krzysztof.kozlowski@linaro.org/
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+Acked-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
 
-2. Patch #2 (cpufreq: do not open-code of_phandle_args_equal()) and patch #4
-   (reset: Instantiate reset GPIO controller for shared reset-gpios) depend on OF
-   change (patch #1).
+Dependency of cpufreq and reset change.
+---
+ include/linux/of.h | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-Changes in v6
-=============
-1. reset/core.c: Add check for number of GPIO cells==2 (Neil).
-2. Add Rb/Ack tags.
-
-Changes in v5
-=============
-1. Minor comments from Philipp: missing cleanup.h, correct indentation of
-   pr_err(), shorten gpio_device_find_by_fwnode() line.
-2. Acks/Rbs.
-
-Changes in v4
-=============
-1. New patches:
-   of: add of_phandle_args_equal() helper
-   cpufreq: do not open-code of_phandle_args_equal()
-
-2. reset-gpio.c:
-   - Drop unneeded comment (Bartosz), add Rb tag.
-   - Do not assign of_node.
-
-3. reset/core.c:
-   - Implement most of Bartosz feedback (I responded to one which I did not
-     implement) and comments from Philipp.
-   - Expect either rcdev->of_args or rcdev->of_node.
-   - Drop __reset_gpios_args_match() and use common helper (Philipp).
-   - Move declarations of automatic-cleanup variables in
-     __reset_add_reset_gpio_lookup() to place of use (Bartosz).
-   - Separate gpio_device_get_label() and kstrdup() (Philipp).
-   - Correct doc for __reset_add_reset_gpio_device(), rewrite few comments.
-   - Drop unneeded "r" variable in __reset_find_rcdev() (Philipp).
-   - Drop of_phandle_args initialization in __of_reset_control_get (Philipp).
-   - Check if CONFIG_RESET_GPIO is enabled before trying to look up reset-gpios.
-
-4. Drop Chris' patch: "i2c: muxes: pca954x: Allow sharing reset GPIO", because
-   discussion is on going.
-
-Changes in v3
-=============
-1. reset-gpio.c:
-  - Add reset_gpio_of_xlate (Philipp).
-  - reset_gpio_of_args_put->reset_gpio_of_node_put (Philipp).
-  - Expect via platdata of_phandle_args.
-  - Do not call device_set_node() to attach itself to reset consumer
-    (the final device).  This was questionable idea in the first place.
-    Bartosz suggested to use GPIO_LOOKUP to solve this.
-
-2. reset/core.c, implement Philipp's feedback. That was a lot:
-  - Commit msg fixes.
-  - Add new platform_device earlier, when reset core found "reset-gpios" but
-    not "resets".
-  - Do not overwrite of_phandle_args.
-  - Expect matching .of_reset_n_cells.
-  - Pass of_phandle_args as platdata to reset-gpio.
-  - Rename reset_gpio_device->reset_gpio_lookup and others. Fix few comments
-    and code cleanup pointed on review.
-  - From Bartosz:
-    Use GPIO_LOOKUP and a lot of cleanup.h in __reset_add_reset_gpio_lookup().
-
-3. Include here Chris' patch: "i2c: muxes: pca954x: Allow sharing reset GPIO".
-
-Changes in v2
-=============
-1. wsa884x.c: add missing return in wsa884x_get_reset(), correct comment.
-2. qcom,wsa8840.yaml: fix oneOf syntax.
-3. reset-gpio.c:
-   - Fix smatch warning on platdata evaluation.
-   - Parse GPIO args and store them in rc.of_args.
-4. reset/core.c:
-   - Revise approach based on Bartosz comments: parse the reset-gpios phandle
-     with arguments, do not use deprecated API and do not rely on gpio_desc
-     pointer.
-   - Create a list of instantiated platform devices to avoid any duplicates.
-   - After creating reset-gpio platform device, try to get new reset controller
-     or return EPROBE_DEFER.
-   - Drop the "cookie" member and add new "of_args" to "struct
-     reset_controller_dev".
-
-Description
-===========
-
-We have at least few cases where hardware engineers decided to use one
-powerdown/shutdown/reset GPIO line for multiple devices:
-
-1. WSA884x (this and previous patch):
-https://lore.kernel.org/all/b7aeda24-d638-45b7-8e30-80d287f498f8@sirena.org.uk/
-2. https://lore.kernel.org/all/20231027033104.1348921-1-chris.packham@alliedtelesis.co.nz/
-3. https://lore.kernel.org/lkml/20191030120440.3699-1-peter.ujfalusi@ti.com/
-4. https://lore.kernel.org/all/20211018234923.1769028-1-sean.anderson@seco.com/
-5. https://social.treehouse.systems/@marcan/111268780311634160
-
-I try to solve my case, hopefuly Chris' (2), partially Sean's (4) and maybe
-Hectors (5), using Rob's suggestion:
-
-https://lore.kernel.org/all/YXi5CUCEi7YmNxXM@robh.at.kernel.org/
-
-Best regards,
-Krzysztof
-
-Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Sean Anderson <sean.anderson@seco.com>
-
-Krzysztof Kozlowski (6):
-  of: Add of_phandle_args_equal() helper
-  cpufreq: do not open-code of_phandle_args_equal()
-  reset: gpio: Add GPIO-based reset controller
-  reset: Instantiate reset GPIO controller for shared reset-gpios
-  ASoC: dt-bindings: qcom,wsa8840: Add reset-gpios for shared line
-  ASoC: codecs: wsa884x: Allow sharing reset GPIO
-
- .../bindings/sound/qcom,wsa8840.yaml          |  11 +-
- MAINTAINERS                                   |   5 +
- drivers/reset/Kconfig                         |   9 +
- drivers/reset/Makefile                        |   1 +
- drivers/reset/core.c                          | 224 +++++++++++++++++-
- drivers/reset/reset-gpio.c                    | 119 ++++++++++
- include/linux/cpufreq.h                       |   3 +-
- include/linux/of.h                            |  16 ++
- include/linux/reset-controller.h              |   4 +
- sound/soc/codecs/wsa884x.c                    |  53 ++++-
- 10 files changed, 419 insertions(+), 26 deletions(-)
- create mode 100644 drivers/reset/reset-gpio.c
-
+diff --git a/include/linux/of.h b/include/linux/of.h
+index 6a9ddf20e79a..85bcc05b278d 100644
+--- a/include/linux/of.h
++++ b/include/linux/of.h
+@@ -1065,6 +1065,22 @@ static inline int of_parse_phandle_with_optional_args(const struct device_node *
+ 					    0, index, out_args);
+ }
+ 
++/**
++ * of_phandle_args_equal() - Compare two of_phandle_args
++ * @a1:		First of_phandle_args to compare
++ * @a2:		Second of_phandle_args to compare
++ *
++ * Return: True if a1 and a2 are the same (same node pointer, same phandle
++ * args), false otherwise.
++ */
++static inline bool of_phandle_args_equal(const struct of_phandle_args *a1,
++					 const struct of_phandle_args *a2)
++{
++	return a1->np == a2->np &&
++	       a1->args_count == a2->args_count &&
++	       !memcmp(a1->args, a2->args, sizeof(a1->args[0]) * a1->args_count);
++}
++
+ /**
+  * of_property_count_u8_elems - Count the number of u8 elements in a property
+  *
 -- 
 2.34.1
 
