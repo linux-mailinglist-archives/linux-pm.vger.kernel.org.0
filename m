@@ -1,71 +1,71 @@
-Return-Path: <linux-pm+bounces-2858-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2859-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29464840432
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 12:52:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DE4D840435
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 12:52:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 931141F22AC7
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 11:52:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0007DB235BD
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 11:52:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B72D5FEED;
-	Mon, 29 Jan 2024 11:52:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D80DC60268;
+	Mon, 29 Jan 2024 11:52:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yh56MIvr"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="q8b5OvvT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43B9E5D8FD
-	for <linux-pm@vger.kernel.org>; Mon, 29 Jan 2024 11:52:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 243AE5FDCB
+	for <linux-pm@vger.kernel.org>; Mon, 29 Jan 2024 11:52:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706529146; cv=none; b=oXY/y9GEvchXXnQHHHpIVrwMNS0s9y9dejv8c0Y7BdVV4vqVxelA1mpV6mQPQl1ZUaNZ/zsi5h626Yn0rHXBaHdX980mI07lSE2vu9Q7pvWXTPyBmeOYP2mdtGoFg/G+NgVefsuFueTMRfhk376EguTvDe9V4BLLVd52nzM67q8=
+	t=1706529147; cv=none; b=bP+1qmUjXf3s6UaPwXpbufEqgTocagllpYMijrwZQw/n4VbB+G1TT4sAw1oCH9Rx4oDxpB+hf6P4OJnb9qGKyiXGhA6lWJbm6P5nvoMa5cp9dRxYkE1EiytTxFtKTf9HJ6NxnXO8wL8wYCS1/e85D8HI6EUTZldzy/8CH8pA/Pk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706529146; c=relaxed/simple;
-	bh=pEaaZzWd53CrhjsWjih79Gm0lLf84UYwD3xSD5zEQj4=;
+	s=arc-20240116; t=1706529147; c=relaxed/simple;
+	bh=OEn344ksEcO/KPuz03HGzt0LbiDtkFUUnDPggKZSm1Y=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZKdHz8y5rpkoLK2P8/NDlxN3qZNUG73YoeyVB7eKr3CxlGrjIR3p83SSEVjGiORBMkI57oDmE4rKbQeZcVtaBybLlb4Oh4LFLSjlTs8CbaTXdkgDcf8V1gaNnL4xilThEFO8H1fqZkUksC8YysvvyWOhkT2E8xunn4UHyAZ/MP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yh56MIvr; arc=none smtp.client-ip=209.85.208.54
+	 MIME-Version; b=WzcZK2QOkY88XjB2omEQyvhP1UcRmVvZP4KZsrh2iPM2QsYWO6kyrPn3JFRVHcOIrXCCSqdm/gpSnp4pRmbz1nPIEJWb/3F+LVTFrEM8Ppe+cpR5SKvumFFQmkq7wFR+Mzh/06d8h9e/tdTtGmj3IrVGrYUTL2Sx7ElxukigRCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=q8b5OvvT; arc=none smtp.client-ip=209.85.208.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-55790581457so2826966a12.3
-        for <linux-pm@vger.kernel.org>; Mon, 29 Jan 2024 03:52:24 -0800 (PST)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-55f19a3ca7aso584300a12.1
+        for <linux-pm@vger.kernel.org>; Mon, 29 Jan 2024 03:52:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706529142; x=1707133942; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1706529144; x=1707133944; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7u11vGwKEs3fH7gtNpJv3ew33Q7fXCEnCXNY0GONseQ=;
-        b=yh56MIvrIsDDIDVRv+XbFPR1vq7DFcZr2EVOcMGSm8H5VBpT+4FLwgMKgbreCl94KO
-         4+kllBcnF8Tsd/Z7TOsH5z8zzbD4FWMfWiNXja/DLdcEfku4uvC0ldYaRIsBQnfo1Gy/
-         5nzJdHCiRfZ8vXCkwv5QuKhz89AoZ7KLKzGn857jrjih/EOfLQ4MUeCUWhasUfvDSPvb
-         NsdAVSnnjVHjTVwyl6Aj7h8JFbeUGv9hEBae0urfW90XUQ/Pc7ybAZ2EYeqcBh5WH0rc
-         BUxLbc5/yWEZNypMX3EM3sF5x48DAMh74kk8wLIxuESZlSgOetYf92PXnYlJHC7sGQp4
-         sVmw==
+        bh=nDGYECsDtIdBMjd3oPDwhe2eE52MgTh9xNyzExOhMAs=;
+        b=q8b5OvvTa9f/RWb3NGXpsnBIN2ZgiYeIVf9OiHYDkvGk3hdMutIWF1EEh0rhj88h/p
+         2qFgExwNkb4oulqKFs6czWzjC3cXWChiC4JqaY9jVxKw357DBmGHT1P0g1AAxWqBJz++
+         OXxva5J+BnhHXYQ4Q93HfBXgCxWOSyp2I9XkdWG4rKz0F2PB35O9EtOcqN/AVGXGQiRx
+         luSDgjkBSCfSE61fay6OFiwbQnqLIPzqXGwqtqpoIKW64LIIAfs0umYxmAKR5V15tB3w
+         GRtsA6znNpxcFUjHdBoGIwkNq3Gck162ZvRj6/ykFJkIZ4K39HwMbOdA+7DLdfDjkd5c
+         sEKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706529142; x=1707133942;
+        d=1e100.net; s=20230601; t=1706529144; x=1707133944;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7u11vGwKEs3fH7gtNpJv3ew33Q7fXCEnCXNY0GONseQ=;
-        b=tIi0YBD7AmOYFthBcIlmcDEPF65TT0iGodVKHq4qtyR1VxObDJ5zpTly96G/gvIHHF
-         zCzClYHFwVr5pC0X87sti6EjiYKDoHqWXlTaqM0TcXJICAZZuHtwautc2Uhq1f03x/Rj
-         wBQs24y8/YgFW5hCuGPv+wmmN+vxiv26NcIVnF/RaTsyRyJWYXCfgWQ+S0fTFZwkV12C
-         p9Fasz8G/XeUwuxzeIO7eV6yR7ZnlNz0jTOGfLmFuN7zypu3WXaYAEVcSchNX4J2yacQ
-         d3vAE9by0Dy3TTyW8UlqVfVTd/CrSRZMXjRI7cbqFpOUh+XMIRPPrChXzO22pZTKZi6G
-         MLxw==
-X-Gm-Message-State: AOJu0YyWPb5rkrg9oO63vTS26r2CfHnuWMkJK6SELs/eL6KV4ONOjL+Y
-	ctzHAvEhzJrfkgzGnJYFO6bIRdfW/6vAfreRnJxQtHktSVhYHct9pSJJetp3P8E=
-X-Google-Smtp-Source: AGHT+IFmy3sCvOF6JNQB/p5p+/mn9vblRl4lD4OGfVKlB3WcdWBRMAzyMpmnKg1BqnvigRA+MvIHwg==
-X-Received: by 2002:a05:6402:274b:b0:55e:f866:30dd with SMTP id z11-20020a056402274b00b0055ef86630ddmr2119525edd.12.1706529142419;
-        Mon, 29 Jan 2024 03:52:22 -0800 (PST)
+        bh=nDGYECsDtIdBMjd3oPDwhe2eE52MgTh9xNyzExOhMAs=;
+        b=T0OPjcXSaogSpkrwmWyKb2s8SOa9PMr8wkNpDaxoll84gqCYQEN2nrThiWSMDHqFpH
+         g3IJUl7rEUCzwzO/6s9tob9SQZ3+iG6Z0eW79/ybq1QBCzJC/HKovOf8HJOdkQ4yzAyp
+         KHvqDL5v4xADVnc/AA9T3GqlESDwhBYc6F2t94Xcj0jsbDb//SOTqdelfIDZdh7gF3gE
+         vwhvhLpf5IoTy7kV368xoBowL9LMZE/OLYPlwokOg+wKicpTFSZEJ+mfOx/0tyKx1yRD
+         OV3covLyJYI6uyjj1qfv2N82j8yTv++9dy21w4NAns8MCzV8nYZRP7OEdXA2WeDnoqIN
+         9iIA==
+X-Gm-Message-State: AOJu0Yx+YiNC6n4KiveAal4ywHoglLeHQ146kvhPCjgnZZJzCv9050xo
+	m23ja9tTpD1N+5RSC9yNlh+l+3WYi6j9M9feTVvQyMsFM70aRQ6BJjqK8x5l/YQ=
+X-Google-Smtp-Source: AGHT+IEQNLjhCr6Kx84OvaKLsougPYvC2/GgEyXcjNLbL1aCexWmd5xdUnkglSvejmamCtxIHbvojw==
+X-Received: by 2002:a05:6402:2711:b0:55e:b30d:d845 with SMTP id y17-20020a056402271100b0055eb30dd845mr6121423edd.17.1706529144550;
+        Mon, 29 Jan 2024 03:52:24 -0800 (PST)
 Received: from krzk-bin.. ([178.197.222.62])
-        by smtp.gmail.com with ESMTPSA id ec19-20020a0564020d5300b0055f29ececeasm19907edb.57.2024.01.29.03.52.20
+        by smtp.gmail.com with ESMTPSA id ec19-20020a0564020d5300b0055f29ececeasm19907edb.57.2024.01.29.03.52.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jan 2024 03:52:21 -0800 (PST)
+        Mon, 29 Jan 2024 03:52:23 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
 	Banajit Goswami <bgoswami@quicinc.com>,
@@ -88,11 +88,10 @@ To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Rob Herring <robh@kernel.org>
-Subject: [PATCH v6 1/6] of: Add of_phandle_args_equal() helper
-Date: Mon, 29 Jan 2024 12:52:11 +0100
-Message-Id: <20240129115216.96479-2-krzysztof.kozlowski@linaro.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v6 2/6] cpufreq: do not open-code of_phandle_args_equal()
+Date: Mon, 29 Jan 2024 12:52:12 +0100
+Message-Id: <20240129115216.96479-3-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240129115216.96479-1-krzysztof.kozlowski@linaro.org>
 References: <20240129115216.96479-1-krzysztof.kozlowski@linaro.org>
@@ -104,46 +103,33 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a helper comparing two "struct of_phandle_args" to avoid
-reinventing the wheel.
+Use newly added of_phandle_args_equal() helper to compare two
+of_phandle_args.
 
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-Acked-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
 
-Dependency of cpufreq and reset change.
+Depends on previous OF change.
 ---
- include/linux/of.h | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ include/linux/cpufreq.h | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/include/linux/of.h b/include/linux/of.h
-index 6a9ddf20e79a..85bcc05b278d 100644
---- a/include/linux/of.h
-+++ b/include/linux/of.h
-@@ -1065,6 +1065,22 @@ static inline int of_parse_phandle_with_optional_args(const struct device_node *
- 					    0, index, out_args);
- }
+diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+index afda5f24d3dd..3cd06dafb04b 100644
+--- a/include/linux/cpufreq.h
++++ b/include/linux/cpufreq.h
+@@ -1149,8 +1149,7 @@ static inline int of_perf_domain_get_sharing_cpumask(int pcpu, const char *list_
+ 		if (ret < 0)
+ 			continue;
  
-+/**
-+ * of_phandle_args_equal() - Compare two of_phandle_args
-+ * @a1:		First of_phandle_args to compare
-+ * @a2:		Second of_phandle_args to compare
-+ *
-+ * Return: True if a1 and a2 are the same (same node pointer, same phandle
-+ * args), false otherwise.
-+ */
-+static inline bool of_phandle_args_equal(const struct of_phandle_args *a1,
-+					 const struct of_phandle_args *a2)
-+{
-+	return a1->np == a2->np &&
-+	       a1->args_count == a2->args_count &&
-+	       !memcmp(a1->args, a2->args, sizeof(a1->args[0]) * a1->args_count);
-+}
-+
- /**
-  * of_property_count_u8_elems - Count the number of u8 elements in a property
-  *
+-		if (pargs->np == args.np && pargs->args_count == args.args_count &&
+-		    !memcmp(pargs->args, args.args, sizeof(args.args[0]) * args.args_count))
++		if (of_phandle_args_equal(pargs, &args))
+ 			cpumask_set_cpu(cpu, cpumask);
+ 
+ 		of_node_put(args.np);
 -- 
 2.34.1
 
