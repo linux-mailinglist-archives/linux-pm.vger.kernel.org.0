@@ -1,49 +1,49 @@
-Return-Path: <linux-pm+bounces-2896-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2893-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E675840BA5
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 17:35:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A8CE840BA1
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 17:35:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9976B1F248FB
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 16:35:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EEA1FB241B7
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 16:35:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88CE215B0E8;
-	Mon, 29 Jan 2024 16:32:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91CD815A4AB;
+	Mon, 29 Jan 2024 16:32:09 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4FB615AACD;
-	Mon, 29 Jan 2024 16:32:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2F5C15AAC5;
+	Mon, 29 Jan 2024 16:32:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706545930; cv=none; b=LmCY/kkC1ESYyScfXSOhsuWliNl2dpH+bP/vpxtd6s7c0SOZSXBScxDMBAVlDpcLjb+69Nw9UgsxN5b/3OpiCVfkZ4dZeNfYxi21nsTOshvfOIg/znLVUFNJLXnIUUztizeY8C+mtpieO9gMVy0U2FuQF10mQavEldXilyTj7yI=
+	t=1706545929; cv=none; b=WA9iUfdnMhd0/lpUtzJqClMhFV6Tdrcrd5PbVe9jL0terz+FtbjC5aO3B3puWzWYduMM1bMUYCJthvCbXqv8CwCqXXxdZ5TiLQHQzlWT4ZRvAL2Ezi9nvMSO/k4h8uMPc/J23TZ/g2Vd9BCqUQuxseEw60TP4goFIbf+0vHQs00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706545930; c=relaxed/simple;
-	bh=7fxQNM1F9gSwYD3pmbV6BTo0di62ynoQFOfMMO14Uo4=;
+	s=arc-20240116; t=1706545929; c=relaxed/simple;
+	bh=TF0P9TEJQ6uWxFofCM9XjL8Cc46UH+Kmrrr9PszlHyw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SCP+0RnSdgqpqxcvtShChS+45ZjB3p/7V0vSAoZ81K4uZ0TiraovnJqg82H2SViq1iqCiE0hoxqxmogIG8YiTR1nd/rhwEPRtNgPrDrVReybGEILmH+JnNWp5OVfKp/N372GPNe1l+0s+GX/OF+Rh4ogbzxCJO7WaNmneP/cYao=
+	 MIME-Version:Content-Type; b=CGGIOW1PEQS+62qSug1Hh9b1/0tMSAljvuOilYc7dDUNV8QQA+zD/cfyuxcqcS5djb1kbUE2gOA6u8h+hHAxJzm533I0c0L+zSMLbr4Z+juKuPbDziWjZsf9YulgP+MZgN8XvTtjoibxABAIFT/o7O288kfAsGO8W67CwoEIlT4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id 6cb907a726e0e30d; Mon, 29 Jan 2024 17:32:00 +0100
+ id caebe9d19cc60e9b; Mon, 29 Jan 2024 17:31:59 +0100
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id B771966975C;
-	Mon, 29 Jan 2024 17:31:59 +0100 (CET)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 00B7166975C;
+	Mon, 29 Jan 2024 17:31:58 +0100 (CET)
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Subject: [PATCH v2 10/10] PM: sleep: Call dpm_async_fn() directly in each suspend phase
-Date: Mon, 29 Jan 2024 17:29:41 +0100
-Message-ID: <2203732.Icojqenx9y@kreacher>
+Subject: [PATCH v2 04/10] PM: sleep: stats: Define suspend_stats next to the code using it
+Date: Mon, 29 Jan 2024 17:30:44 +0100
+Message-ID: <2469144.jE0xQCEvom@kreacher>
 In-Reply-To: <5770175.DvuYhMxLoT@kreacher>
 References: <5770175.DvuYhMxLoT@kreacher>
 Precedence: bulk
@@ -57,190 +57,259 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 195.136.19.94
 X-CLIENT-HOSTNAME: 195.136.19.94
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrfedtgedgjeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepgedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehsthgrnhhishhlrgifrdhgrhhushiikhgrsehlihhnuhigrdhinhhtvghlrdgtohhm
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrfedtgedgjeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepgedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehsthgrnhhishhlrgifrdhgrhhushiikhgrsehlihhnuhigrdhinhhtvghlrdgtohhm
 X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Simplify the system-wide suspend of devices by invoking dpm_async_fn()
-directly from the main loop in each suspend phase instead of using an
-additional wrapper function for running it.
+It is not necessary to define struct suspend_stats in a header file and the
+suspend_stats variable in the core device system-wide PM code.  They both
+can be defined in kernel/power/main.c, next to the sysfs and debugfs code
+accessing suspend_stats, which can be static.
+
+Modify the code in question in accordance with the above observation and
+replace the static inline functions manipulating suspend_stats with
+regular ones defined in kernel/power/main.c.
+
+While at it, move the enum suspend_stat_step to the end of suspend.h which
+is a more suitable place for it.
 
 No intentional functional impact.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
 
-v1 -> v2: No changes.
+v1 -> v2:
+   * Take the modifications of patches [2-3/10] into account.
 
 ---
- drivers/base/power/main.c |   61 ++++++++++++++++++----------------------------
- 1 file changed, 25 insertions(+), 36 deletions(-)
+ drivers/base/power/main.c |    1 
+ include/linux/suspend.h   |   71 +++++++++---------------------------------
+ kernel/power/main.c       |   76 ++++++++++++++++++++++++++++++++++++++--------
+ kernel/power/power.h      |    2 +
+ kernel/power/suspend.c    |    7 ----
+ 5 files changed, 81 insertions(+), 76 deletions(-)
 
+Index: linux-pm/include/linux/suspend.h
+===================================================================
+--- linux-pm.orig/include/linux/suspend.h
++++ linux-pm/include/linux/suspend.h
+@@ -40,62 +40,6 @@ typedef int __bitwise suspend_state_t;
+ #define PM_SUSPEND_MIN		PM_SUSPEND_TO_IDLE
+ #define PM_SUSPEND_MAX		((__force suspend_state_t) 4)
+ 
+-enum suspend_stat_step {
+-	SUSPEND_NONE = 0,
+-	SUSPEND_FREEZE,
+-	SUSPEND_PREPARE,
+-	SUSPEND_SUSPEND,
+-	SUSPEND_SUSPEND_LATE,
+-	SUSPEND_SUSPEND_NOIRQ,
+-	SUSPEND_RESUME_NOIRQ,
+-	SUSPEND_RESUME_EARLY,
+-	SUSPEND_RESUME
+-};
+-
+-#define SUSPEND_NR_STEPS	SUSPEND_RESUME
+-
+-struct suspend_stats {
+-	unsigned int step_failures[SUSPEND_NR_STEPS];
+-	unsigned int success;
+-	unsigned int fail;
+-#define	REC_FAILED_NUM	2
+-	int	last_failed_dev;
+-	char	failed_devs[REC_FAILED_NUM][40];
+-	int	last_failed_errno;
+-	int	errno[REC_FAILED_NUM];
+-	int	last_failed_step;
+-	u64	last_hw_sleep;
+-	u64	total_hw_sleep;
+-	u64	max_hw_sleep;
+-	enum suspend_stat_step	failed_steps[REC_FAILED_NUM];
+-};
+-
+-extern struct suspend_stats suspend_stats;
+-
+-static inline void dpm_save_failed_dev(const char *name)
+-{
+-	strscpy(suspend_stats.failed_devs[suspend_stats.last_failed_dev],
+-		name,
+-		sizeof(suspend_stats.failed_devs[0]));
+-	suspend_stats.last_failed_dev++;
+-	suspend_stats.last_failed_dev %= REC_FAILED_NUM;
+-}
+-
+-static inline void dpm_save_failed_errno(int err)
+-{
+-	suspend_stats.errno[suspend_stats.last_failed_errno] = err;
+-	suspend_stats.last_failed_errno++;
+-	suspend_stats.last_failed_errno %= REC_FAILED_NUM;
+-}
+-
+-static inline void dpm_save_failed_step(enum suspend_stat_step step)
+-{
+-	suspend_stats.step_failures[step-1]++;
+-	suspend_stats.failed_steps[suspend_stats.last_failed_step] = step;
+-	suspend_stats.last_failed_step++;
+-	suspend_stats.last_failed_step %= REC_FAILED_NUM;
+-}
+-
+ /**
+  * struct platform_suspend_ops - Callbacks for managing platform dependent
+  *	system sleep states.
+@@ -623,4 +567,19 @@ static inline void queue_up_suspend_work
+ 
+ #endif /* !CONFIG_PM_AUTOSLEEP */
+ 
++enum suspend_stat_step {
++	SUSPEND_NONE = 0,
++	SUSPEND_FREEZE,
++	SUSPEND_PREPARE,
++	SUSPEND_SUSPEND,
++	SUSPEND_SUSPEND_LATE,
++	SUSPEND_SUSPEND_NOIRQ,
++	SUSPEND_RESUME_NOIRQ,
++	SUSPEND_RESUME_EARLY,
++	SUSPEND_RESUME
++};
++
++void dpm_save_failed_dev(const char *name);
++void dpm_save_failed_step(enum suspend_stat_step step);
++
+ #endif /* _LINUX_SUSPEND_H */
+Index: linux-pm/kernel/power/main.c
+===================================================================
+--- linux-pm.orig/kernel/power/main.c
++++ linux-pm/kernel/power/main.c
+@@ -95,19 +95,6 @@ int unregister_pm_notifier(struct notifi
+ }
+ EXPORT_SYMBOL_GPL(unregister_pm_notifier);
+ 
+-void pm_report_hw_sleep_time(u64 t)
+-{
+-	suspend_stats.last_hw_sleep = t;
+-	suspend_stats.total_hw_sleep += t;
+-}
+-EXPORT_SYMBOL_GPL(pm_report_hw_sleep_time);
+-
+-void pm_report_max_hw_sleep(u64 t)
+-{
+-	suspend_stats.max_hw_sleep = t;
+-}
+-EXPORT_SYMBOL_GPL(pm_report_max_hw_sleep);
+-
+ int pm_notifier_call_chain_robust(unsigned long val_up, unsigned long val_down)
+ {
+ 	int ret;
+@@ -319,6 +306,69 @@ static ssize_t pm_test_store(struct kobj
+ power_attr(pm_test);
+ #endif /* CONFIG_PM_SLEEP_DEBUG */
+ 
++#define SUSPEND_NR_STEPS	SUSPEND_RESUME
++#define REC_FAILED_NUM		2
++
++struct suspend_stats {
++	unsigned int step_failures[SUSPEND_NR_STEPS];
++	unsigned int success;
++	unsigned int fail;
++	int last_failed_dev;
++	char failed_devs[REC_FAILED_NUM][40];
++	int last_failed_errno;
++	int errno[REC_FAILED_NUM];
++	int last_failed_step;
++	u64 last_hw_sleep;
++	u64 total_hw_sleep;
++	u64 max_hw_sleep;
++	enum suspend_stat_step failed_steps[REC_FAILED_NUM];
++};
++
++static struct suspend_stats suspend_stats;
++
++void dpm_save_failed_dev(const char *name)
++{
++	strscpy(suspend_stats.failed_devs[suspend_stats.last_failed_dev],
++		name, sizeof(suspend_stats.failed_devs[0]));
++	suspend_stats.last_failed_dev++;
++	suspend_stats.last_failed_dev %= REC_FAILED_NUM;
++}
++
++void dpm_save_failed_step(enum suspend_stat_step step)
++{
++	suspend_stats.step_failures[step-1]++;
++	suspend_stats.failed_steps[suspend_stats.last_failed_step] = step;
++	suspend_stats.last_failed_step++;
++	suspend_stats.last_failed_step %= REC_FAILED_NUM;
++}
++
++void dpm_save_errno(int err)
++{
++	if (!err) {
++		suspend_stats.success++;
++		return;
++	}
++
++	suspend_stats.fail++;
++
++	suspend_stats.errno[suspend_stats.last_failed_errno] = err;
++	suspend_stats.last_failed_errno++;
++	suspend_stats.last_failed_errno %= REC_FAILED_NUM;
++}
++
++void pm_report_hw_sleep_time(u64 t)
++{
++	suspend_stats.last_hw_sleep = t;
++	suspend_stats.total_hw_sleep += t;
++}
++EXPORT_SYMBOL_GPL(pm_report_hw_sleep_time);
++
++void pm_report_max_hw_sleep(u64 t)
++{
++	suspend_stats.max_hw_sleep = t;
++}
++EXPORT_SYMBOL_GPL(pm_report_max_hw_sleep);
++
+ static const char * const suspend_step_names[] = {
+ 	[SUSPEND_NONE] = "",
+ 	[SUSPEND_FREEZE] = "freeze",
+Index: linux-pm/kernel/power/power.h
+===================================================================
+--- linux-pm.orig/kernel/power/power.h
++++ linux-pm/kernel/power/power.h
+@@ -327,3 +327,5 @@ static inline void pm_sleep_enable_secon
+ 	suspend_enable_secondary_cpus();
+ 	cpuidle_resume();
+ }
++
++void dpm_save_errno(int err);
+Index: linux-pm/kernel/power/suspend.c
+===================================================================
+--- linux-pm.orig/kernel/power/suspend.c
++++ linux-pm/kernel/power/suspend.c
+@@ -616,12 +616,7 @@ int pm_suspend(suspend_state_t state)
+ 
+ 	pr_info("suspend entry (%s)\n", mem_sleep_labels[state]);
+ 	error = enter_state(state);
+-	if (error) {
+-		suspend_stats.fail++;
+-		dpm_save_failed_errno(error);
+-	} else {
+-		suspend_stats.success++;
+-	}
++	dpm_save_errno(error);
+ 	pr_info("suspend exit\n");
+ 	return error;
+ }
 Index: linux-pm/drivers/base/power/main.c
 ===================================================================
 --- linux-pm.orig/drivers/base/power/main.c
 +++ linux-pm/drivers/base/power/main.c
-@@ -1192,7 +1192,7 @@ static void dpm_superior_set_must_resume
- }
+@@ -60,7 +60,6 @@ static LIST_HEAD(dpm_suspended_list);
+ static LIST_HEAD(dpm_late_early_list);
+ static LIST_HEAD(dpm_noirq_list);
  
- /**
-- * __device_suspend_noirq - Execute a "noirq suspend" callback for given device.
-+ * device_suspend_noirq - Execute a "noirq suspend" callback for given device.
-  * @dev: Device to handle.
-  * @state: PM transition of the system being carried out.
-  * @async: If true, the device is being suspended asynchronously.
-@@ -1200,7 +1200,7 @@ static void dpm_superior_set_must_resume
-  * The driver of @dev will not receive interrupts while this function is being
-  * executed.
-  */
--static int __device_suspend_noirq(struct device *dev, pm_message_t state, bool async)
-+static int device_suspend_noirq(struct device *dev, pm_message_t state, bool async)
- {
- 	pm_callback_t callback = NULL;
- 	const char *info = NULL;
-@@ -1277,18 +1277,10 @@ static void async_suspend_noirq(void *da
- {
- 	struct device *dev = data;
- 
--	__device_suspend_noirq(dev, pm_transition, true);
-+	device_suspend_noirq(dev, pm_transition, true);
- 	put_device(dev);
- }
- 
--static int device_suspend_noirq(struct device *dev)
--{
--	if (dpm_async_fn(dev, async_suspend_noirq))
--		return 0;
--
--	return __device_suspend_noirq(dev, pm_transition, false);
--}
--
- static int dpm_noirq_suspend_devices(pm_message_t state)
- {
- 	ktime_t starttime = ktime_get();
-@@ -1305,10 +1297,15 @@ static int dpm_noirq_suspend_devices(pm_
- 		struct device *dev = to_device(dpm_late_early_list.prev);
- 
- 		list_move(&dev->power.entry, &dpm_noirq_list);
-+
-+		if (dpm_async_fn(dev, async_suspend_noirq))
-+			continue;
-+
- 		get_device(dev);
-+
- 		mutex_unlock(&dpm_list_mtx);
- 
--		error = device_suspend_noirq(dev);
-+		error = device_suspend_noirq(dev, state, false);
- 
- 		put_device(dev);
- 
-@@ -1369,14 +1366,14 @@ static void dpm_propagate_wakeup_to_pare
- }
- 
- /**
-- * __device_suspend_late - Execute a "late suspend" callback for given device.
-+ * device_suspend_late - Execute a "late suspend" callback for given device.
-  * @dev: Device to handle.
-  * @state: PM transition of the system being carried out.
-  * @async: If true, the device is being suspended asynchronously.
-  *
-  * Runtime PM is disabled for @dev while this function is being executed.
-  */
--static int __device_suspend_late(struct device *dev, pm_message_t state, bool async)
-+static int device_suspend_late(struct device *dev, pm_message_t state, bool async)
- {
- 	pm_callback_t callback = NULL;
- 	const char *info = NULL;
-@@ -1447,18 +1444,10 @@ static void async_suspend_late(void *dat
- {
- 	struct device *dev = data;
- 
--	__device_suspend_late(dev, pm_transition, true);
-+	device_suspend_late(dev, pm_transition, true);
- 	put_device(dev);
- }
- 
--static int device_suspend_late(struct device *dev)
--{
--	if (dpm_async_fn(dev, async_suspend_late))
--		return 0;
--
--	return __device_suspend_late(dev, pm_transition, false);
--}
--
- /**
-  * dpm_suspend_late - Execute "late suspend" callbacks for all devices.
-  * @state: PM transition of the system being carried out.
-@@ -1481,11 +1470,15 @@ int dpm_suspend_late(pm_message_t state)
- 		struct device *dev = to_device(dpm_suspended_list.prev);
- 
- 		list_move(&dev->power.entry, &dpm_late_early_list);
-+
-+		if (dpm_async_fn(dev, async_suspend_late))
-+			continue;
-+
- 		get_device(dev);
- 
- 		mutex_unlock(&dpm_list_mtx);
- 
--		error = device_suspend_late(dev);
-+		error = device_suspend_late(dev, state, false);
- 
- 		put_device(dev);
- 
-@@ -1582,12 +1575,12 @@ static void dpm_clear_superiors_direct_c
- }
- 
- /**
-- * __device_suspend - Execute "suspend" callbacks for given device.
-+ * device_suspend - Execute "suspend" callbacks for given device.
-  * @dev: Device to handle.
-  * @state: PM transition of the system being carried out.
-  * @async: If true, the device is being suspended asynchronously.
-  */
--static int __device_suspend(struct device *dev, pm_message_t state, bool async)
-+static int device_suspend(struct device *dev, pm_message_t state, bool async)
- {
- 	pm_callback_t callback = NULL;
- 	const char *info = NULL;
-@@ -1716,18 +1709,10 @@ static void async_suspend(void *data, as
- {
- 	struct device *dev = data;
- 
--	__device_suspend(dev, pm_transition, true);
-+	device_suspend(dev, pm_transition, true);
- 	put_device(dev);
- }
- 
--static int device_suspend(struct device *dev)
--{
--	if (dpm_async_fn(dev, async_suspend))
--		return 0;
--
--	return __device_suspend(dev, pm_transition, false);
--}
--
- /**
-  * dpm_suspend - Execute "suspend" callbacks for all non-sysdev devices.
-  * @state: PM transition of the system being carried out.
-@@ -1752,11 +1737,15 @@ int dpm_suspend(pm_message_t state)
- 		struct device *dev = to_device(dpm_prepared_list.prev);
- 
- 		list_move(&dev->power.entry, &dpm_suspended_list);
-+
-+		if (dpm_async_fn(dev, async_suspend))
-+			continue;
-+
- 		get_device(dev);
- 
- 		mutex_unlock(&dpm_list_mtx);
- 
--		error = device_suspend(dev);
-+		error = device_suspend(dev, state, false);
- 
- 		put_device(dev);
+-struct suspend_stats suspend_stats;
+ static DEFINE_MUTEX(dpm_list_mtx);
+ static pm_message_t pm_transition;
  
 
 
