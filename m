@@ -1,154 +1,87 @@
-Return-Path: <linux-pm+bounces-2892-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2897-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C89D3840AAF
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 17:00:02 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B7D5840BA6
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 17:35:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06AD31C22BDC
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 16:00:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CCD12B2438A
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 16:35:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D96D41552F5;
-	Mon, 29 Jan 2024 15:59:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 929F615B0EE;
+	Mon, 29 Jan 2024 16:32:10 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF2C9154C0C;
-	Mon, 29 Jan 2024 15:59:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B72715AABD;
+	Mon, 29 Jan 2024 16:32:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706543997; cv=none; b=sOZpERoKoKJMus3x/z8RgSo74r52NRiS5JMBGG7TZclX2TzH5/st1S/Wz/8k8lJjhbItFqeAN6Ew1B0/XqgTlAGvAQmOhDnyRIQOCsPHDhmPWcS0IUWpn+4JrCKWL0ZXvobAQAVOA7CeJ8Ldi/0r/sodIu6E8CWTWbijQzyxGOM=
+	t=1706545930; cv=none; b=G1fE7oyJc0peM7CWL9AzzU7WWC3uMmg4Q68dAwnUpAwut1CoM+sBEgUMXMWmRTajE5JbP8E3mOvjfDvqfffKSJJHU7688YsdGo/ceZ94oAdGw6VXnUYJeSd89Ai1uXsvnFlfkui28SUTsCCNR7rqw1lgMDzpKgafzX7lr21xAYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706543997; c=relaxed/simple;
-	bh=iul6xK0e4EN46G8goBsLPgIN2sLhocsKXHQYJX65YiU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rOu5kS6s239JFuA/alf5GFD2mI2CV7/dp9DXrJ6AOZEbnlPiqoON84bygKtxjKE0sOEMvOOcrCGk4AJkjUFGMY7hxzxCRM3mp6ffO/ohzIxi6X7Ga1b5QXF7AOLKFa/dRBgM099xPHw7K1H18Fa3/yPTrPSTcBfRWq5fvmgDvyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0027ADA7;
-	Mon, 29 Jan 2024 08:00:39 -0800 (PST)
-Received: from pluto (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 22E3B3F738;
-	Mon, 29 Jan 2024 07:59:53 -0800 (PST)
-Date: Mon, 29 Jan 2024 15:59:50 +0000
-From: Cristian Marussi <cristian.marussi@arm.com>
-To: Sibi Sankar <quic_sibis@quicinc.com>
-Cc: sudeep.holla@arm.com, rafael@kernel.org, viresh.kumar@linaro.org,
-	morten.rasmussen@arm.com, dietmar.eggemann@arm.com,
-	lukasz.luba@arm.com, linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	quic_mdtipton@quicinc.com, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH V2 4/4] cpufreq: scmi: Register for limit change
- notifications
-Message-ID: <ZbfLdvi_sePXiVmM@pluto>
-References: <20240117104116.2055349-1-quic_sibis@quicinc.com>
- <20240117104116.2055349-5-quic_sibis@quicinc.com>
+	s=arc-20240116; t=1706545930; c=relaxed/simple;
+	bh=X8yJX78PRc9PLq39CvJuPfk62qc/DaiPaXVMfh6eyMM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Uz8PfD6jQdBObDZgmIdOzhUQ5TWM5nfhFXSco+GJ+sGchpXvyfS8Cnz6XCQ+ZsiRXT4RJXI+geBtncvH0eiCaEH9uzSEK2VRu7pBMcBSr2zEL7RWPhny36svGtVproZwmG8LJbZARdorjy1zlTfIXyZJkmVxsIFdp11M/OJMWKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
+ id 46298f7f9473cea7; Mon, 29 Jan 2024 17:32:06 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id D765C66975C;
+	Mon, 29 Jan 2024 17:32:05 +0100 (CET)
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+Subject: [PATCH v2 00/10] PM: sleep: Fix up suspend stats handling and clean up core suspend code
+Date: Mon, 29 Jan 2024 17:00:43 +0100
+Message-ID: <5770175.DvuYhMxLoT@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240117104116.2055349-5-quic_sibis@quicinc.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrfedtgedgjeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgeffhfdujeelhfdtgeffkeetudfhtefhhfeiteethfekvefgvdfgfeeikeeigfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeegpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuhhlfhdrhhgrnhhsshhonheslhhinhgrrhhordhorhhgpdhrtghpthhtohepshhtrghnihhslhgrfidrghhruhhsiihk
+ rgeslhhinhhugidrihhnthgvlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
 
-On Wed, Jan 17, 2024 at 04:11:16PM +0530, Sibi Sankar wrote:
-> Register for limit change notifications if supported with the help of
-> perf_notify_support interface and determine the throttled frequency
-> using the perf_freq_xlate to apply HW pressure.
+Hi Everyone,
+
+This is a v2 of
+
+https://lore.kernel.org/linux-pm/5760158.DvuYhMxLoT@kreacher
+
+except for the first two patches that have been queued up for 6.9
+already.
+
+The original series description still applies:
+
+> This series of patches modifies the core system-wide suspend resume of
+> devices to get it more internally consistent (between the suspend and
+> resume parts) and fixes up the handling of suspend statistics in it.
 > 
-> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-> ---
-> 
-> v2:
-> * Export cpufreq_update_pressure and use it directly [Lukasz]
-> 
->  drivers/cpufreq/scmi-cpufreq.c | 42 +++++++++++++++++++++++++++++++++-
->  1 file changed, 41 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-> index 4ee23f4ebf4a..e0aa85764451 100644
-> --- a/drivers/cpufreq/scmi-cpufreq.c
-> +++ b/drivers/cpufreq/scmi-cpufreq.c
-> @@ -25,9 +25,13 @@ struct scmi_data {
->  	int domain_id;
->  	int nr_opp;
->  	struct device *cpu_dev;
-> +	struct cpufreq_policy *policy;
->  	cpumask_var_t opp_shared_cpus;
-> +	struct notifier_block limit_notify_nb;
->  };
->  
-> +const struct scmi_handle *handle;
-> +static struct scmi_device *scmi_dev;
->  static struct scmi_protocol_handle *ph;
->  static const struct scmi_perf_proto_ops *perf_ops;
->  
-> @@ -144,6 +148,22 @@ scmi_get_cpu_power(struct device *cpu_dev, unsigned long *power,
->  	return 0;
->  }
->  
-> +static int scmi_limit_notify_cb(struct notifier_block *nb, unsigned long event, void *data)
-> +{
-> +	unsigned long freq_hz;
-> +	struct scmi_perf_limits_report *limit_notify = data;
-> +	struct scmi_data *priv = container_of(nb, struct scmi_data, limit_notify_nb);
-> +	struct cpufreq_policy *policy = priv->policy;
-> +
-> +	if (perf_ops->perf_freq_xlate(ph, priv->domain_id, limit_notify->range_max, &freq_hz))
-> +		return NOTIFY_OK;
-> +
-> +	policy->max = freq_hz / HZ_PER_KHZ;
-> +	cpufreq_update_pressure(policy);
-> +
-> +	return NOTIFY_OK;
-> +}
-> +
->  static int scmi_cpufreq_init(struct cpufreq_policy *policy)
->  {
->  	int ret, nr_opp, domain;
-> @@ -151,6 +171,7 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
->  	struct device *cpu_dev;
->  	struct scmi_data *priv;
->  	struct cpufreq_frequency_table *freq_table;
-> +	struct scmi_perf_notify_info info = {};
->  
->  	cpu_dev = get_cpu_device(policy->cpu);
->  	if (!cpu_dev) {
-> @@ -250,6 +271,25 @@ static int scmi_cpufreq_init(struct cpufreq_policy *policy)
->  	policy->fast_switch_possible =
->  		perf_ops->fast_switch_possible(ph, domain);
->  
-> +	ret = perf_ops->perf_notify_support(ph, domain, &info);
-> +	if (ret)
-> +		dev_warn(cpu_dev, "failed to get supported notifications: %d\n", ret);
-> +
-> +	if (info.perf_limit_notify) {
-> +		priv->limit_notify_nb.notifier_call = scmi_limit_notify_cb;
-> +		ret = handle->notify_ops->devm_event_notifier_register(scmi_dev, SCMI_PROTOCOL_PERF,
-> +							SCMI_EVENT_PERFORMANCE_LIMITS_CHANGED,
-> +							&domain,
-> +							&priv->limit_notify_nb);
-> +		if (ret) {
-> +			dev_err(cpu_dev, "Error in registering limit change notifier for domain %d\n",
-> +				domain);
-> +			return ret;
-> +		}
+> The functional changes made by it are expected to be limited to the
+> statistics handling part.
 
-Is there a reason to fail completely here if it was not possible to register
-the notifier ? (even though expected to succeed given perf_limit_notify
-was true...)
+and the differences from the v1 are minor.
 
-Maybe a big fat warn that the system perf could be degraded, but
-carrying on ?
+Please refer to individual patch changelogs for details.
 
-Or maybe you have in mind a good reason to fail like you did, so please
-explain in that case in a comment.
+Thanks!
 
-Thanks,
-Cristian
+
+
 
