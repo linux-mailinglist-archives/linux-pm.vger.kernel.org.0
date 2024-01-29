@@ -1,49 +1,49 @@
-Return-Path: <linux-pm+bounces-2903-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2902-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EDC2840BB6
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 17:37:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAAEF840BB4
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 17:37:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A274284AAD
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 16:37:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 56C9D1F21505
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 16:37:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E1A815DBB2;
-	Mon, 29 Jan 2024 16:32:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6994915D5BF;
+	Mon, 29 Jan 2024 16:32:13 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF24E15B99D;
-	Mon, 29 Jan 2024 16:32:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9FE715B0F4;
+	Mon, 29 Jan 2024 16:32:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706545934; cv=none; b=Nv2V+CeK9bUT5vrHLyHBHdg13E1IU33StFQfdkHx7euNj+pG3eufHI5cQvEVdQlQ4YMeHSTAQjRtO0fMprg/wz07tdffuMJf5VKRLC3oR8fJ4J/BFLX+KxWTzMQCoyj+RE+N5Qi0ldnyIpdAVjAfVJpRAxZSa9bFTStC0uG4L5o=
+	t=1706545933; cv=none; b=UJKFDK1VkaxaedpaMFhw6YcLXsLc5GsKGLE6X6rlTakol5M6QeQfjUUJLGuzQbnta1IMqvNLhJBr6hUX9emBdIeEY7u5Y/O91jL09AcrHj79dS1b3aMenlSbwGtdlum3yqCGPahRrdpq2kK47KR+vXYyR3+j7sUZFuJcALr/nQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706545934; c=relaxed/simple;
-	bh=SLYZDfBRj0nJ3TIDw4DlpBNWJI9WE3g0fX18rhc77nY=;
+	s=arc-20240116; t=1706545933; c=relaxed/simple;
+	bh=iyXE7t0eskj3g5+cWmxPvH1tVv8VprKcfE27yahn7mQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QHbwmcSlMvmf14z0zkFLsOiCfxvtfqJXrh0W2a0vgsssbJFVJsIgf/B+p9JiS3BYoA5OaDen99id31jrwOMrgU1DDQiJ7XZ43Px9qOpOyXtpgB6mkIstHe4pFFkmQuE0CUJVmqw3fKFY0fLHL4v+htzgJuJuFa4PwQCXa8zew/0=
+	 MIME-Version:Content-Type; b=FsfR0+9JRt3nNYN1VIOODz0Wwyduxr+1JpMAoVyCohhg1Gk7eAAjqehNQkNOhVq4YFs0B2ezlHoZAi4bOly314P0AKu0ExznrZW/xFjUWDo96VPLMRLOCgulvm1YJwBEWLFUiatW/X+X6g9CLRTeToDlP6fGx5libO8gHV9H1PM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id 2e1f42a0c7c859a6; Mon, 29 Jan 2024 17:32:04 +0100
+ id 3184fcaa49044cda; Mon, 29 Jan 2024 17:32:03 +0100
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id C8DE266975C;
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 233A066975C;
 	Mon, 29 Jan 2024 17:32:03 +0100 (CET)
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Subject: [PATCH v2 03/10] PM: sleep: stats: Use unsigned int for success and failure counters
-Date: Mon, 29 Jan 2024 17:13:14 +0100
-Message-ID: <2941406.e9J7NaK4W3@kreacher>
+Subject: [PATCH v2 05/10] PM: sleep: stats: Call dpm_save_failed_step() at most once per phase
+Date: Mon, 29 Jan 2024 17:24:04 +0100
+Message-ID: <23401570.6Emhk5qWAg@kreacher>
 In-Reply-To: <5770175.DvuYhMxLoT@kreacher>
 References: <5770175.DvuYhMxLoT@kreacher>
 Precedence: bulk
@@ -57,65 +57,109 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 195.136.19.94
 X-CLIENT-HOSTNAME: 195.136.19.94
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrfedtgedgjeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepgedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehsthgrnhhishhlrgifrdhgrhhushiikhgrsehlihhnuhigrdhinhhtvghlrdgtohhm
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrfedtgedgjeelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepgedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehsthgrnhhishhlrgifrdhgrhhushiikhgrsehlihhnuhigrdhinhhtvghlrdgtohhm
 X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Change the type of the "success" and "fail" fields in struct
-suspend_stats to unsigned int, because they cannot be negative.
+If the handling of two or more devices fails in one suspend-resume
+phase, it should be counted once in the statistics which is not
+guaranteed to happen during system-wide resume of devices due to
+the possible asynchronous execution of device callbacks.
 
-No intentional functional impact.
+Address this by using the async_error static variable during system-wide
+device resume to indicate that there has been a device resume error and
+the given suspend-resume phase should be counted as failing.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
 
-v1 -> v2: New patch.
+v1 -> v2: No changes.
 
 ---
- include/linux/suspend.h |    4 ++--
- kernel/power/main.c     |    6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ drivers/base/power/main.c |   20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
-Index: linux-pm/include/linux/suspend.h
+Index: linux-pm/drivers/base/power/main.c
 ===================================================================
---- linux-pm.orig/include/linux/suspend.h
-+++ linux-pm/include/linux/suspend.h
-@@ -56,8 +56,8 @@ enum suspend_stat_step {
+--- linux-pm.orig/drivers/base/power/main.c
++++ linux-pm/drivers/base/power/main.c
+@@ -685,7 +685,7 @@ Out:
+ 	TRACE_RESUME(error);
  
- struct suspend_stats {
- 	unsigned int step_failures[SUSPEND_NR_STEPS];
--	int	success;
--	int	fail;
-+	unsigned int success;
-+	unsigned int fail;
- #define	REC_FAILED_NUM	2
- 	int	last_failed_dev;
- 	char	failed_devs[REC_FAILED_NUM][40];
-Index: linux-pm/kernel/power/main.c
-===================================================================
---- linux-pm.orig/kernel/power/main.c
-+++ linux-pm/kernel/power/main.c
-@@ -339,8 +339,8 @@ static ssize_t _name##_show(struct kobje
- }								\
- static struct kobj_attribute _name = __ATTR_RO(_name)
+ 	if (error) {
+-		dpm_save_failed_step(SUSPEND_RESUME_NOIRQ);
++		async_error = error;
+ 		dpm_save_failed_dev(dev_name(dev));
+ 		pm_dev_err(dev, state, async ? " async noirq" : " noirq", error);
+ 	}
+@@ -705,6 +705,9 @@ static void dpm_noirq_resume_devices(pm_
+ 	ktime_t starttime = ktime_get();
  
--suspend_attr(success, "%d\n");
--suspend_attr(fail, "%d\n");
-+suspend_attr(success, "%u\n");
-+suspend_attr(fail, "%u\n");
- suspend_attr(last_hw_sleep, "%llu\n");
- suspend_attr(total_hw_sleep, "%llu\n");
- suspend_attr(max_hw_sleep, "%llu\n");
-@@ -458,7 +458,7 @@ static int suspend_stats_show(struct seq
- 	last_step = suspend_stats.last_failed_step + REC_FAILED_NUM - 1;
- 	last_step %= REC_FAILED_NUM;
+ 	trace_suspend_resume(TPS("dpm_resume_noirq"), state.event, true);
++
++	async_error = 0;
++
+ 	mutex_lock(&dpm_list_mtx);
+ 	pm_transition = state;
  
--	seq_printf(s, "success: %d\nfail: %d\n",
-+	seq_printf(s, "success: %u\nfail: %u\n",
- 		   suspend_stats.success, suspend_stats.fail);
+@@ -734,6 +737,9 @@ static void dpm_noirq_resume_devices(pm_
+ 	mutex_unlock(&dpm_list_mtx);
+ 	async_synchronize_full();
+ 	dpm_show_time(starttime, state, 0, "noirq");
++	if (async_error)
++		dpm_save_failed_step(SUSPEND_RESUME_NOIRQ);
++
+ 	trace_suspend_resume(TPS("dpm_resume_noirq"), state.event, false);
+ }
  
- 	for (step = SUSPEND_FREEZE; step <= SUSPEND_NR_STEPS; step++)
+@@ -815,7 +821,7 @@ Out:
+ 	complete_all(&dev->power.completion);
+ 
+ 	if (error) {
+-		dpm_save_failed_step(SUSPEND_RESUME_EARLY);
++		async_error = error;
+ 		dpm_save_failed_dev(dev_name(dev));
+ 		pm_dev_err(dev, state, async ? " async early" : " early", error);
+ 	}
+@@ -839,6 +845,9 @@ void dpm_resume_early(pm_message_t state
+ 	ktime_t starttime = ktime_get();
+ 
+ 	trace_suspend_resume(TPS("dpm_resume_early"), state.event, true);
++
++	async_error = 0;
++
+ 	mutex_lock(&dpm_list_mtx);
+ 	pm_transition = state;
+ 
+@@ -868,6 +877,9 @@ void dpm_resume_early(pm_message_t state
+ 	mutex_unlock(&dpm_list_mtx);
+ 	async_synchronize_full();
+ 	dpm_show_time(starttime, state, 0, "early");
++	if (async_error)
++		dpm_save_failed_step(SUSPEND_RESUME_EARLY);
++
+ 	trace_suspend_resume(TPS("dpm_resume_early"), state.event, false);
+ }
+ 
+@@ -971,7 +983,7 @@ static void device_resume(struct device
+ 	TRACE_RESUME(error);
+ 
+ 	if (error) {
+-		dpm_save_failed_step(SUSPEND_RESUME);
++		async_error = error;
+ 		dpm_save_failed_dev(dev_name(dev));
+ 		pm_dev_err(dev, state, async ? " async" : "", error);
+ 	}
+@@ -1030,6 +1042,8 @@ void dpm_resume(pm_message_t state)
+ 	mutex_unlock(&dpm_list_mtx);
+ 	async_synchronize_full();
+ 	dpm_show_time(starttime, state, 0, NULL);
++	if (async_error)
++		dpm_save_failed_step(SUSPEND_RESUME);
+ 
+ 	cpufreq_resume();
+ 	devfreq_resume();
 
 
 
