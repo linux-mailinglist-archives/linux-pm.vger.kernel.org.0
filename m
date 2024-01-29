@@ -1,121 +1,101 @@
-Return-Path: <linux-pm+bounces-2922-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2923-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 958558414A0
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 21:45:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B02578415D5
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 23:37:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5191E288F90
-	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 20:45:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B2A11F252D5
+	for <lists+linux-pm@lfdr.de>; Mon, 29 Jan 2024 22:37:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEE154CB24;
-	Mon, 29 Jan 2024 20:45:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFE485381B;
+	Mon, 29 Jan 2024 22:36:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tcjcd7Mk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 635E37602C;
-	Mon, 29 Jan 2024 20:45:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB8115380F
+	for <linux-pm@vger.kernel.org>; Mon, 29 Jan 2024 22:36:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706561125; cv=none; b=bXAsDBSWKYh0wPnnRWKbX9pQYR8N500GA5QMzkGtq70AD59Qxo0gzrL5v4xswFW8bZDMPENV3WoiDV+ZNyr7pSTH45CZyrTX3RiIupyKQmJHPhVmmM1/c7//uKwkrK8FiYtW1r8PP7hzwfZuq5ChRX9koTrntpDn/COiUZmEd0g=
+	t=1706567776; cv=none; b=b0sh98hB3dmGjpW1ZRr47z5r6iyTSvfJ6x2cfm68v1QnkXXTE2660h5ZKj8xlOBuywHivJPVIX/Qw6iABr1VQIZzyGageVkSnjdvRS1OsflX6zyJJiApQQ39mtdDXzpWl4bBoqEiiMhZuFZ+vW4MXDO1Uqz477Kp64c97xw5i+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706561125; c=relaxed/simple;
-	bh=wH59XtXAzJJua0WPMURILT065bEyBsmYhcbPLahSQXo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TJ54WTWYPAxk9qmmERjv7HMOKewj9A8r2+2ssKmywzXvZ7w/2bgYYOfAgvrf8Vr7pUEs5Q1ExZrlqLHGdL908URbLRW2HtbnA9adygdb0ondKdGLwjmVeTDBN1e9/gOuzHHfXjqOVqw3GrmGRY7vqc8a4M0VNl/6Lrzogqp/PmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-59a1e21b0ebso556783eaf.1;
-        Mon, 29 Jan 2024 12:45:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706561122; x=1707165922;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xvTbQy9VMHt6fnQCY3TVYNEIJh4tIcaNRd3FXe7uHFs=;
-        b=uccwupb73DTrI1WK5X/i8gspTnpHYmHAc5ljB68qc4sxDKZZDMRQs1ahvD01Qnx78E
-         fOwxfLDrSLnVR5U6DYmLcVFS9a8kgYO3IhS0UANkVIuiF4DysA1YBxhx5EEsidz3QWP5
-         kLzH30NGMpoYMgJrbGKT5jCnbE3RFANaw7hO0NywF5jZnM8OyGBwhoxHnbAdnBhFhRaj
-         ggfN71qBXZYWviRezGZvc/IVYVl+7OTVFgkYySicDOXTYWONNNahi1+LkgScDqfXAa0i
-         Mo4uOf7MbIQlibysHPV0gZMp3+PAXvsFhYmTkCKU+NOFa5nGhE3NHZoyDW566jSfls7H
-         w9Uw==
-X-Gm-Message-State: AOJu0YzyRjFcwC4IcvUMmZhSJk2FmZ8X/TXHdiTsPg1S4yxwl2gIRU8Y
-	+Wyc4aiFScFIj0qzTSvscRPgfTSAv0f/OCY9DKyqwQTF22F7Fc+cN8pI1k5oSJgPuIwtrW08nFN
-	Zqrt4I/KeMAVXzBJVyH9dEzZM5WM=
-X-Google-Smtp-Source: AGHT+IGXEdGhYxv86UV6LeFhYgPGovISemJErd0WIwGSlX5M1LIIFf32vuVoDsdxj7oCEiNyT9WxPgWzloe1o7AM1MM=
-X-Received: by 2002:a05:6870:a2c9:b0:210:9749:d377 with SMTP id
- w9-20020a056870a2c900b002109749d377mr8058390oak.2.1706561122709; Mon, 29 Jan
- 2024 12:45:22 -0800 (PST)
+	s=arc-20240116; t=1706567776; c=relaxed/simple;
+	bh=cR7anOlSvTGCejhyiN870D0OtPF+8B5dhk1cIFrLE4k=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=vFs8U+BPTPD6qSBUm8yJ5WvwAbdoPiLjMaEB5RI5XYVLBjGA1V6sEbgAcRklg7fK288ZnQK+R5rDkOkuq6sS/WGXCh6EdRZzkQDZig67INZVIrUf7cFoc3fccxEXpnLDCTQVU8Ovt2r9fOO6s0o8s9XjSjS3SPYa9zDiKGu+CWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tcjcd7Mk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 2CB07C43390
+	for <linux-pm@vger.kernel.org>; Mon, 29 Jan 2024 22:36:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706567776;
+	bh=cR7anOlSvTGCejhyiN870D0OtPF+8B5dhk1cIFrLE4k=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=tcjcd7MksNKMHM/xbG/mgjSFxSpCmdO8qLEfZH3cbUx03PBYgy/ByfOAqSTMpCNFR
+	 aMiRceJ9MvD263eUi3VvBFp4Q4qjmyLm2fQo36TV0V4aYTM5eJElHCMLHV6EGanK2o
+	 USF8QQh7hbO2ipq5yhB4dpDxOjvXUxm/b4qY60SnwQGkA5hfG+0AyfM8rSZhaGmC8R
+	 lznKNNJU22TmsAGpGGs80TeV5GhDVgcxdSBtJjBIjgH/QvotUMw4VI/nYSEQTMt9Tt
+	 RB5ENzumi6MQah8KM76XxmtzbdS8pc/dBBnBKr7EJQy4goMjRteCBYPQxIvFjkkJjf
+	 bcFXJWjVZJ7hQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 1B003C53BD1; Mon, 29 Jan 2024 22:36:16 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 217931] amd-pstate lacks crucial features: CPU frequency and
+ boost control
+Date: Mon, 29 Jan 2024 22:36:15 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: sfjuocekr@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-217931-137361-LqL06QFaSK@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217931-137361@https.bugzilla.kernel.org/>
+References: <bug-217931-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240106191502.29126-1-quic_manafm@quicinc.com>
- <CAJZ5v0gE6eEpALrfxHvCd5TRqjB+v8pffG4CKLTVXiSvuiWhHg@mail.gmail.com>
- <d7b82fc8-0ed8-80b8-9eb8-c77f9277178f@quicinc.com> <CAJZ5v0g4hnRqRCseRnTjfEF+-2=ZT8U9=2m9FODqh3G8eDd=Sw@mail.gmail.com>
- <921c2f90-fb8b-4e70-9e3d-6e185fec03b6@linaro.org> <CAJZ5v0h+93YBsYsA5rOvzp+b3JMGyjUStHA=J8P7ynv+-ym-4g@mail.gmail.com>
- <41b284d7-e31f-48b5-8b21-0dca3e23cb1c@linaro.org> <CAJZ5v0ina=7R6x6Ff=8_rRR9Kkmz2tkojbs_WWCN=JPmzhg+HQ@mail.gmail.com>
- <CAJZ5v0hM9Y+cV7WrEHe6WjzQ0ATnBce4NO1wxvZh=fcLWPkqKA@mail.gmail.com> <a522d8de-c871-4a2e-8b07-d5693abb4a7b@linaro.org>
-In-Reply-To: <a522d8de-c871-4a2e-8b07-d5693abb4a7b@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 29 Jan 2024 21:45:11 +0100
-Message-ID: <CAJZ5v0g=bT4FcVHEOpU1H8EC8648EtDGEEyPL1DuwrU9_W87Zg@mail.gmail.com>
-Subject: Re: [PATCH] thermal/sysfs: Always enable hysteresis write support
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Daniel,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217931
 
-On Mon, Jan 29, 2024 at 6:54=E2=80=AFPM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> Hi Rafael,
->
-> On 29/01/2024 18:07, Rafael J. Wysocki wrote:
->
-> [ ... ]
->
-> >> Index: linux-pm/drivers/thermal/thermal_sysfs.c
-> >> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >> --- linux-pm.orig/drivers/thermal/thermal_sysfs.c
-> >> +++ linux-pm/drivers/thermal/thermal_sysfs.c
-> >> @@ -474,7 +474,8 @@ static int create_trip_attrs(struct ther
-> >>                       tz->trip_hyst_attrs[indx].name;
-> >>           tz->trip_hyst_attrs[indx].attr.attr.mode =3D S_IRUGO;
-> >>           tz->trip_hyst_attrs[indx].attr.show =3D trip_point_hyst_show=
-;
-> >> -        if (tz->ops->set_trip_hyst) {
-> >> +        if (IS_ENABLED(CONFIG_THERMAL_WRITABLE_TRIPS) &&
-> >> +            mask & (1 << indx)) {
-> >>               tz->trip_hyst_attrs[indx].attr.attr.mode |=3D S_IWUSR;
-> >>               tz->trip_hyst_attrs[indx].attr.store =3D
-> >>                       trip_point_hyst_store;
-> >
-> > So it looks like I need to submit this, even though I'm not sure if
-> > anyone cares.
-> >
-> > In any case, I care about consistency.
->
-> Yeah, sorry for the delay. I'll have a look at it tomorrow
+Sjoer van der Ploeg (sfjuocekr@gmail.com) changed:
 
-Thanks!
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |sfjuocekr@gmail.com
 
-Posted here with some additional remarks:
+--- Comment #40 from Sjoer van der Ploeg (sfjuocekr@gmail.com) ---
+Could this be the reason why some CPU's do not boost to their maximum
+frequency, while they are happy to do so on Windows?
 
-https://lore.kernel.org/linux-pm/4565526.LvFx2qVVIh@kreacher/
+For example my 5800X3D never reaches 4550 on Linux, but on Windows it seems=
+ to
+have no problem getting there.
 
-Let's continue the discussion there.
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
 
