@@ -1,155 +1,126 @@
-Return-Path: <linux-pm+bounces-2996-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2997-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 469408427AB
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 16:09:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F941842A74
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 18:06:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79B1E1C220A3
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 15:09:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 507681C23E99
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 17:06:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A321082D71;
-	Tue, 30 Jan 2024 15:08:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BBB712BF01;
+	Tue, 30 Jan 2024 17:06:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="Uy6upPFK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xn0xm2dy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FB1A7E761
-	for <linux-pm@vger.kernel.org>; Tue, 30 Jan 2024 15:08:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FB9382D8C;
+	Tue, 30 Jan 2024 17:06:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706627338; cv=none; b=o5kV4SYC+KvBiwxzkkaxf2lpPB7Dt3/FmXBNLpSLL5+ZM98Ic/e80S04M+SOCMO3YjVDyxSCBI/o1BQvAHrXViSXxK9RzFt4qBaHMguOGX6Ji8pXIt2kPvE+nws3SHUrbScmcy3wTxXgaXJBIqSpa+0HzgDWVbwBDCx1tWmQrGM=
+	t=1706634388; cv=none; b=YKWO1FMdBoDjO0NOD8L84JkYT3gkFcX0UrwuaeoOBgt0xeIAudWrqGkMilrk6X6MzfAZaGRfpoxcZGIz4utQSzyA69mH7/pjskorZGlsOhu8ofdlT1VD6/gf/8LtkrC0/kcuWxX2sEnh7uuaFc8RWsbLFghIn7is41+sNRSnfek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706627338; c=relaxed/simple;
-	bh=h0OTDxBWOisgWB2yRwbr7R3YMVBdajhXN88i633Gm28=;
+	s=arc-20240116; t=1706634388; c=relaxed/simple;
+	bh=W7q1fsdzkaCUOnQPYx3OTuBUZH48Q7ZLU/F8ISrqV3Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VreCwc+BmXgQv85PLCTOIhX0eonGQTW1q9EfwoFYE6kC7E/GWyFXVzX6LNTgZSCkbR2ocSCYHlEnJduym7pkwiFJQQ5lcczdFySNN/6qobP2Bqwvs0rPWdngdgD/pMnpWRqy/Br1gP8gzxp1u8XgR7H52ZH2icG0HDH6vl2IlKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=Uy6upPFK; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-51028acdcf0so5049809e87.0
-        for <linux-pm@vger.kernel.org>; Tue, 30 Jan 2024 07:08:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ragnatech.se; s=google; t=1706627334; x=1707232134; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=aeOs16K1ggzcSxM81rroSW/PgSS9ODAboh/iGfdKq7Y=;
-        b=Uy6upPFKyfMncgV3j33k4kHyf0E5Al+8vVcRar6WOabwFgwL5b+XRM5p46s0N+7uZr
-         3fAaK40Cr8Y1EB4kmK+GAzmN938uKHMwdaZoz5ZBjASko/nZmgy5a375syWK+uSdMdWK
-         YaoBq6Q6YfiJtE0RB07QXIi3MG5TbWThdcJK4bjXRR3RtgcZrC4ve8WXACa/IsTAQ7cE
-         vWVP/0YT9CZBkWbPqswECFAzqPN5lVasHvyflbRnGtYsngppnx4AAKZOtbmO034Useha
-         vyV1KX20Wsv0fjNZSNsqvv+khptlyaVKEeOC+lMuhZ4AIrWmVWk8FmeJhfUuZDNJJpPG
-         cS4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706627334; x=1707232134;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aeOs16K1ggzcSxM81rroSW/PgSS9ODAboh/iGfdKq7Y=;
-        b=gSp3uyMsJHCFSwRyJJk/FugrRgnhlwWNtKHXVUC32y0RNPsWoejAXYgUEfFrBweUpN
-         v3GTGBY1nYKU4SeVBpS2YesyYpScmS13z1vdIMeCTv8n2Kx42En88LzHg5Typ4x7Rmch
-         K6cgOPtlpluCH6n++8k9bqEfbYS8SCD4IFOXYfbUQ8KX3gHjBl0GGiPp6DOUbt+5di3E
-         otO049ZLcOgqTknNMpCatot2kwvYMZ3KVH3SCF9WPi5ZatzE1Si6yz8cCRAmqeDhhVk5
-         EdWj0M0AV+3QFolX6rSGc6pJrXNcHu4jupPTfI2cwTGwraVcEwYQJNZZXVA0iIsCXr0B
-         kOFA==
-X-Gm-Message-State: AOJu0YwYp6Vm5Qnu8+2rCTIKDD2U08jS4r1jh+0gD2aPEoL2VkP7ANna
-	GqcssgHs1RXDUCGs4l+0B+LVhjeeoqkSuwMRwpQQS949ngadxDbPnE9qRBTJc1w=
-X-Google-Smtp-Source: AGHT+IF6B+jmXhpAUXU/JypBmBfGty/Zps7VOXIocvbWg2ZzM+V6LjpS3JB2V6IpNaOfUn05BOgkfw==
-X-Received: by 2002:a05:6512:3764:b0:511:1fb8:a16f with SMTP id z4-20020a056512376400b005111fb8a16fmr928741lft.8.1706627333655;
-        Tue, 30 Jan 2024 07:08:53 -0800 (PST)
-Received: from localhost (h-46-59-36-113.A463.priv.bahnhof.se. [46.59.36.113])
-        by smtp.gmail.com with ESMTPSA id v24-20020ac25618000000b0050f09876c12sm1491359lfd.208.2024.01.30.07.08.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jan 2024 07:08:53 -0800 (PST)
-Date: Tue, 30 Jan 2024 16:08:52 +0100
-From: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: daniel.lezcano@linaro.org, miquel.raynal@bootlin.com, rafael@kernel.org,
-	rui.zhang@intel.com, lukasz.luba@arm.com,
-	support.opensource@diasemi.com, shawnguo@kernel.org,
-	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-	linux-imx@nxp.com, andersson@kernel.org, konrad.dybcio@linaro.org,
-	amitk@kernel.org, thara.gopinath@gmail.com,
-	srinivas.pandruvada@linux.intel.com, baolin.wang@linux.alibaba.com,
-	u.kleine-koenig@pengutronix.de, hayashi.kunihiko@socionext.com,
-	d-gole@ti.com, linus.walleij@linaro.org,
-	DLG-Adam.Ward.opensource@dm.renesas.com, error27@gmail.com,
-	heiko@sntech.de, hdegoede@redhat.com, jernej.skrabec@gmail.com,
-	f.fainelli@gmail.com, bchihi@baylibre.com, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	kernel@collabora.com
-Subject: Re: [PATCH v1 06/18] thermal/drivers/rcar: Migrate to
- thermal_zone_device_register()
-Message-ID: <20240130150852.GB2544372@ragnatech.se>
-References: <20240130111250.185718-1-angelogioacchino.delregno@collabora.com>
- <20240130111250.185718-7-angelogioacchino.delregno@collabora.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=PlwC951+Idn47V7JR0fKQ3cX1N1qPRlfCl9AF6a1hTht4m39t80IHJ/WoRybwuf7f3NZKhr2MtYOVLhSEL6RS7pJUGqRZLMqj5l5lYt/L3ZjoGoncfo4AHwbsO2pArk7nQMdaMd1EWBawLnwo3JRPagjeIKu5FmOvrV7lIvpVY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xn0xm2dy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61880C433F1;
+	Tue, 30 Jan 2024 17:06:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706634387;
+	bh=W7q1fsdzkaCUOnQPYx3OTuBUZH48Q7ZLU/F8ISrqV3Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Xn0xm2dyBaFOijOJCGeNsNaumXj3m4bgdli1OpyA6hzUGSY2J23SJXRTLYmkx6CT2
+	 LwP8PRUlqyobXdzoRrDSQMPHENr4J7m6a62jelmwlqTz2MAEuytStBU5urdHtyXyZV
+	 LnEyX7n05ya7BQR3SOgVQyxPEVTPDujRmm+65JxqHo1GL2Qfqj7mbmq409iGuN1nT5
+	 cECBQ5IswOLmDuolUEQpGDE5GNRGqPIyG94Lk8rAMBhFsp6RbLsyatZJidW2Y12Yit
+	 VSTJ6hbJp9DcHNk2rvGxLmsdWXBiuNI9oQ7lOWxWgBLcm9j7n+Gw1AMu9YHFZMWXY3
+	 TVUVU3QX6tFWg==
+Date: Tue, 30 Jan 2024 11:06:25 -0600
+From: Rob Herring <robh@kernel.org>
+To: David Heidelberg <david@ixit.cz>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: opp: switch inner and outer min/maxItems
+ rules for opp-hz
+Message-ID: <20240130170625.GA1847581-robh@kernel.org>
+References: <20231229191038.247258-1-david@ixit.cz>
+ <2c9e91c7-8588-4260-8f5d-22c822019f62@linaro.org>
+ <20240102235815.GA3700567-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240130111250.185718-7-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20240102235815.GA3700567-robh@kernel.org>
 
-Hi AngeloGioacchino,
-
-Thanks for your work.
-
-On 2024-01-30 12:12:38 +0100, AngeloGioacchino Del Regno wrote:
-> The thermal API has a new thermal_zone_device_register() function which
-> is deprecating the older thermal_zone_device_register_with_trips() and
-> thermal_tripless_zone_device_register().
+On Tue, Jan 02, 2024 at 04:58:15PM -0700, Rob Herring wrote:
+> On Sat, Dec 30, 2023 at 03:17:21PM +0100, Krzysztof Kozlowski wrote:
+> > On 29/12/2023 20:10, David Heidelberg wrote:
+> > > Fixes issue as:
+> > > ```
+> > 
+> > Drop, it's not RST, but commit msg.
+> > 
+> > > arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dtb: opp-table: opp-200000000:opp-hz:0: [200000000, 0, 0, 150000000, 0, 0, 0, 0, 300000000] is too long
+> > > ```
+> > > 
+> > > Fixes: 3cb16ad69bef ("dt-bindings: opp: accept array of frequencies")
+> > > 
+> > > Signed-off-by: David Heidelberg <david@ixit.cz>
+> > > ---
+> > >  Documentation/devicetree/bindings/opp/opp-v2-base.yaml | 5 ++---
+> > >  1 file changed, 2 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+> > > index e2f8f7af3cf4..86d3aa0eb435 100644
+> > > --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+> > > +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
+> > > @@ -55,10 +55,9 @@ patternProperties:
+> > >            to relate the values to their clocks or the order in which the clocks
+> > >            need to be configured and that is left for the implementation
+> > >            specific binding.
+> > > -        minItems: 1
+> > > -        maxItems: 32
+> > >          items:
+> > > -          maxItems: 1
+> > > +          minItems: 1
+> > > +          maxItems: 32
+> > 
+> > This does not look like correct fix. The original code looked fine -
+> > only one item is allowed in each sub-element (array).
 > 
-> Migrate to the new thermal zone device registration function.
+> This one is special being 64-bit values so we have an exception in 
+> property-units.yaml. The constraints here don't get used in decoding the 
+> dtb and the default way of 1 outer element is used.
 > 
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-
-> ---
->  drivers/thermal/rcar_thermal.c | 15 +++++++++++----
->  1 file changed, 11 insertions(+), 4 deletions(-)
+> It doesn't look like opp-hz needs to be a matrix as it is really just an 
+> array. Perhaps it should just be changed to an array type. 
+> Alternatively, adding 'items: { maxItems: 1 }' to the definition in 
+> property-units.yaml fixes the issue as well.
 > 
-> diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
-> index feb848d595fa..7bf9c1611a00 100644
-> --- a/drivers/thermal/rcar_thermal.c
-> +++ b/drivers/thermal/rcar_thermal.c
-> @@ -488,10 +488,17 @@ static int rcar_thermal_probe(struct platform_device *pdev)
->  						dev, i, priv,
->  						&rcar_thermal_zone_ops);
->  		} else {
-> -			priv->zone = thermal_zone_device_register_with_trips(
-> -				"rcar_thermal", trips, ARRAY_SIZE(trips), 0, priv,
-> -						&rcar_thermal_zone_ops, NULL, 0,
-> -						idle);
-> +			struct thermal_zone_device_params tzdp = {
-> +				.tzp = {
-> +					.type = "rcar_thermal",
-> +					.ops = &rcar_thermal_zone_ops,
-> +					.devdata = priv,
-> +					.trips = trips,
-> +					.num_trips = ARRAY_SIZE(trips),
-> +					.polling_delay = idle,
-> +				}
-> +			};
-> +			priv->zone = thermal_zone_device_register(&tzdp);
->  
->  			ret = thermal_zone_device_enable(priv->zone);
->  			if (ret) {
-> -- 
-> 2.43.0
-> 
+> Though we can fix this, I'm looking into if we have other cases where we 
+> need this to work as-is. There's probably some room for improvement in 
+> how matrix dimensions are handled.
 
--- 
-Kind Regards,
-Niklas Söderlund
+I've made some improvements on matrix dimensions, but this one is still 
+an issue. Can you respin this dropping 'items: {maxItems: 1}'. I'm going 
+to change the definition in property-units.yaml to uint64-array.
+
+Rob
 
