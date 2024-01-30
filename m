@@ -1,157 +1,109 @@
-Return-Path: <linux-pm+bounces-3009-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3010-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EC32842D7F
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 21:07:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78AE9842DF7
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 21:37:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7B2FD1F256FD
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 20:07:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB5DE1C2463C
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 20:37:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9216471B3A;
-	Tue, 30 Jan 2024 20:07:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 986A455E57;
+	Tue, 30 Jan 2024 20:37:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=peacevolution.org header.i=@peacevolution.org header.b="FCdLf2bF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6B0A71B35;
-	Tue, 30 Jan 2024 20:07:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from a.peacevolution.org (a.peacevolution.org [206.189.193.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6879D79DDB;
+	Tue, 30 Jan 2024 20:37:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.193.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706645241; cv=none; b=T3htb0XMs2uzYDKOxsDpRyc6/dyCoe4+l499gblkvSz2wyiOpBglN4r0RRYdV6o+x1rIejuPXwX7onSHnwT0KU/4G8ehSB/LzAHkg5wo7PRYpOW03W7javTf8IQ9KIeDFYKirgdrenOZXAconFmBkiC5TLO4F8EoZVQsNW089oo=
+	t=1706647063; cv=none; b=B5VjpBf0dW5tEexYPXSxFM+MNqIDFsB5rrClLep/CCHZa4bi5aZn38RXEjAZZqasFOdqbZZq9Ny2FwJgXEkXzf0lqqFmuKRD9OJGPlU3vkRRs1izQ6Bi/EaFwV1tEenBpvUxL+j6eeDFbp6SW5xapo1REugMmmWYNVxxrD99Uio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706645241; c=relaxed/simple;
-	bh=oIduqgREuG9ns22E1DbTWFEB3RjCn8ZZkVF9cCIgxTA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G/UVmGqASS9J/2Wo+M9jDfKrDxnFF1qOcBwg3lFkHJwqflU3gWC6WxA5so2SGfH/FjR6okCSCvJOFNipi7R4aiHShE+po/mTnJnp+BJIGInh5oDPBI1K9NqJ3pSy3lh6hPWNNmOo4B2SBWbGzT1JCFadKeFgRgsNP5IUqbaYFzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 80F2FDA7;
-	Tue, 30 Jan 2024 12:07:58 -0800 (PST)
-Received: from pluto (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6770B3F762;
-	Tue, 30 Jan 2024 12:07:13 -0800 (PST)
-Date: Tue, 30 Jan 2024 20:07:02 +0000
-From: Cristian Marussi <cristian.marussi@arm.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH] pmdomain: arm: Fix NULL dereference on scmi_perf_domain
- removal
-Message-ID: <ZblW5rt4UtK6KMJD@pluto>
-References: <20240125191756.868860-1-cristian.marussi@arm.com>
- <CAPDyKFpqZf15DFWa8K6RRzSTX70chEVTV8zRgnJ3VStSq_d9UQ@mail.gmail.com>
+	s=arc-20240116; t=1706647063; c=relaxed/simple;
+	bh=42VdHmLmZuT5O6V8Q0K2GarSQjq3zsRvTNhsMQjm5BI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=DRUvygh1qP6mycdWKFluM6ewOzUkhhDOUfJpMh2BaDK1By7xHO0aExO5nFLfaLPzEfUpt3KPtmSzNUTbrLsn2HA/2N6kHvoRXj/lytOm/R0GIcNoEVX7IPNH6bdOsUyhnmXe3jc4OVJFBsAH1RGzfQPdtdSr9evcWVdpM6nuem0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=peacevolution.org; spf=pass smtp.mailfrom=peacevolution.org; dkim=pass (1024-bit key) header.d=peacevolution.org header.i=@peacevolution.org header.b=FCdLf2bF; arc=none smtp.client-ip=206.189.193.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=peacevolution.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=peacevolution.org
+Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
+	by a.peacevolution.org (Postfix) with ESMTPA id 6F80046B74;
+	Tue, 30 Jan 2024 20:37:32 +0000 (UTC)
+From: Aren Moynihan <aren@peacevolution.org>
+To: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: =?UTF-8?q?Ond=C5=99ej=20Jirman?= <megi@xff.cz>,
+	Hans de Goede <j.w.r.degoede@gmail.com>,
+	Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+	Aren Moynihan <aren@peacevolution.org>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Quentin Schulz <quentin.schulz@bootlin.com>,
+	Sebastian Reichel <sre@kernel.org>
+Subject: [PATCH v2 0/5] power: supply: axp20x_usb_power: cleanup input current limit handling
+Date: Tue, 30 Jan 2024 15:27:56 -0500
+Message-ID: <20240130203714.3020464-1-aren@peacevolution.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFpqZf15DFWa8K6RRzSTX70chEVTV8zRgnJ3VStSq_d9UQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spamd-Bar: /
+Authentication-Results: auth=pass smtp.auth=aren@peacevolution.org smtp.mailfrom=aren@peacevolution.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=peacevolution.org;
+	s=dkim; t=1706647053;
+	h=from:subject:date:message-id:to:cc:mime-version:content-type:content-transfer-encoding;
+	bh=CnBNCViJHvy4cEKLBSR8JFJniQcbGnFyzpaAFuYyqxw=;
+	b=FCdLf2bFSk3L24ys482teOv4NVoVkgp4hXsRIVyC5BUHZ8cG2nFh55b0ScOuKuZFTJvYvl
+	xx6gGB7eSX+NQ5R92XAVdibbCIxBAoA0yk8f07JvMTRtTxxohiNwkeW3E7ZqJ7zYOYUDvX
+	uXb6y4TWC3K6SHhtEurSClxGvtrPkZo=
 
-On Tue, Jan 30, 2024 at 02:09:20PM +0100, Ulf Hansson wrote:
-> On Thu, 25 Jan 2024 at 20:18, Cristian Marussi <cristian.marussi@arm.com> wrote:
-> >
-> > On unloading of the scmi_perf_domain module got the below splat, when in
-> > the DT provided to the system under test the '#power-domain-cells' property
-> > was missing.
-> > Indeed, this particular setup causes the probe to bail out early without
-> > giving any error, so that, then, the removal code is run on unload, but
-> > without all the expected initialized structures in place.
-> >
-> > Add a check and bail out early on remove too.
-> 
-> Thanks for spotting this!
-> 
-> >
-> > Unable to handle kernel NULL pointer dereference at virtual address 0000000000000008
-> > Mem abort info:
-> >    ESR = 0x0000000096000004
-> >    EC = 0x25: DABT (current EL), IL = 32 bits
-> >    SET = 0, FnV = 0
-> >    EA = 0, S1PTW = 0
-> >    FSC = 0x04: level 0 translation fault
-> >  Data abort info:
-> >    ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
-> >    CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-> >    GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-> >  user pgtable: 4k pages, 48-bit VAs, pgdp=00000001076e5000
-> >  [0000000000000008] pgd=0000000000000000, p4d=0000000000000000
-> >  Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
-> >  Modules linked in: scmi_perf_domain(-) scmi_module scmi_core
-> >  CPU: 0 PID: 231 Comm: rmmod Not tainted 6.7.0-00084-gb4b1f27d3b83-dirty #15
-> >  Hardware name: linux,dummy-virt (DT)
-> >  pstate: 61400005 (nZCv daif +PAN -UAO -TCO +DIT -SSBS BTYPE=--)
-> >  pc : scmi_perf_domain_remove+0x28/0x70 [scmi_perf_domain]
-> >  lr : scmi_perf_domain_remove+0x28/0x70 [scmi_perf_domain]
-> >  sp : ffff80008393bc10
-> >  x29: ffff80008393bc10 x28: ffff0000875a8000 x27: 0000000000000000
-> >  x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
-> >  x23: ffff00008030c090 x22: ffff00008032d490 x21: ffff80007b287050
-> >  x20: 0000000000000000 x19: ffff00008032d410 x18: 0000000000000000
-> >  x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
-> >  x14: 8ba0696d05013a2f x13: 0000000000000000 x12: 0000000000000002
-> >  x11: 0101010101010101 x10: ffff00008510cff8 x9 : ffff800080a6797c
-> >  x8 : 0101010101010101 x7 : 7f7f7f7f7f7f7f7f x6 : fefefeff6364626d
-> >  x5 : 8080808000000000 x4 : 0000000000000020 x3 : 00000000553a3dc1
-> >  x2 : ffff0000875a8000 x1 : ffff0000875a8000 x0 : ffff800082ffa048
-> >  Call trace:
-> >   scmi_perf_domain_remove+0x28/0x70 [scmi_perf_domain]
-> >   scmi_dev_remove+0x28/0x40 [scmi_core]
-> >   device_remove+0x54/0x90
-> >   device_release_driver_internal+0x1dc/0x240
-> >   driver_detach+0x58/0xa8
-> >   bus_remove_driver+0x78/0x108
-> >   driver_unregister+0x38/0x70
-> >   scmi_driver_unregister+0x28/0x180 [scmi_core]
-> >   scmi_perf_domain_driver_exit+0x18/0xb78 [scmi_perf_domain]
-> >   __arm64_sys_delete_module+0x1a8/0x2c0
-> >   invoke_syscall+0x50/0x128
-> >   el0_svc_common.constprop.0+0x48/0xf0
-> >   do_el0_svc+0x24/0x38
-> >   el0_svc+0x34/0xb8
-> >   el0t_64_sync_handler+0x100/0x130
-> >   el0t_64_sync+0x190/0x198
-> >  Code: a90153f3 f9403c14 f9414800 955f8a05 (b9400a80)
-> >  ---[ end trace 0000000000000000 ]---
-> >
-> > Cc: Sudeep Holla <sudeep.holla@arm.com>
-> > Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> > Fixes: 2af23ceb8624 ("pmdomain: arm: Add the SCMI performance domain")
-> > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> > ---
-> > I suppose the probe does NOT bail out with an error because this DT config has
-> > to be supported, right ?
-> 
-> Actually, no. It's a mistake by me, the probe should bail out with an
-> error code.
->
+Proper handling of the input current limit will be necessary to
+implement usb power delivery on the Pine64 PinePhone. The PinePhone has
+a separate chip (anx7688) that handles usb power delivery (among other
+things), so we will need a way to apply the current limit which that
+negotiates.
 
-Ok. I suppose any old platform like JUNO that missed this will have to
-update their DT to use the new scmi_perf_domain...well it should have
-anyway really, it is just that now it is silently failing.
+The new logic to get/set the input current limit, and get the usb type
+is originally based on code Ondřej Jirman wrote[1], but I have
+significantly refactored it.
 
-> In fact, there is also one additional similar problem in probe, when
-> the number of perf-domains are zero. In that case, we should also
-> return an error code, rather than returning 0.
-> 
-> Would you mind updating the patch to cover both problems - or if you
-> are too busy, just let me know and I can help out.
+While working on this, I also discovered that the axp803 pmic sets a
+current limit of 3A on the usb port without any negotiation if it
+doesn't detect a battery.
 
-No problem, I can do it next week, but regarding the zero domain case,
-I remember I used to do the same on regulator/voltage driver and bail out
-when no domains were found, but we were asked by some customer to support
-instead the very useless and funny case of zero domains for some of their
-testing setup scenarios .. i.e. allowing the driver to load with zero domains
-(and do nothing) and then unload cleanly avoiding harms while unloading ...)
+v1 of this patch can be found at:
+https://lore.kernel.org/lkml/20240121014057.1042466-1-aren@peacevolution.org/
 
-Thoughts about this ? Can fix as you prefer .
+1: https://xff.cz/git/linux/commit/?h=axp-6.7&id=3dcd33dfd1ae58db159427365dcb6d0d2b12f06d
 
-Thanks,
-Cristian
+Changes in v2:
+ - Values less than the lowest supported limit are rounded up instead
+   of returning -EINVAL when setting the input current limit.
+ - Rename existing current_max logic to input_current_limit. This also
+   makes it possible to reuse some of that logic.
+ - Split current limit register and bc race condition fixes into
+   different commits.
+
+Aren Moynihan (5):
+  power: supply: axp20x_usb_power: replace current_max with
+    input_current_limit
+  power: supply: axp20x_usb_power: use correct register for input
+    current limit
+  power: supply: axp20x_usb_power: fix race condition with usb bc
+  power: supply: axp20x_usb_power: enable usb_type reporting
+  power: supply: axp20x_usb_power: set input current limit in probe
+
+ drivers/power/supply/axp20x_usb_power.c | 160 +++++++++++++++++++++---
+ 1 file changed, 144 insertions(+), 16 deletions(-)
+
+-- 
+2.43.0
 
 
