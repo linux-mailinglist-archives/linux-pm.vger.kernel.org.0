@@ -1,228 +1,314 @@
-Return-Path: <linux-pm+bounces-3017-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3018-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72A65842E85
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 22:13:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E5C5842F63
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 23:09:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 977221C253E7
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 21:13:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E7A61F25E0F
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 22:09:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67D5B71B52;
-	Tue, 30 Jan 2024 21:13:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C652D7D414;
+	Tue, 30 Jan 2024 22:09:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JJCyDFs4"
+	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="kr1hv1SP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A38FE78B7F
-	for <linux-pm@vger.kernel.org>; Tue, 30 Jan 2024 21:13:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AADD7D40C
+	for <linux-pm@vger.kernel.org>; Tue, 30 Jan 2024 22:09:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706649209; cv=none; b=jUDjXNk4BqJuzb12TprzwUK20DzpXujaXa+YjqpNrQcmgI84lsDc1p6N9yKN7tLQANyeTVfUZB5yhmZFNuhYCUQhdeCk/usA+8+sbmyblcDUem4DzDZWZJFpzdgH9KBHKv0Rt5vvHOOZGoiqkTt/NPFvL4MhfLPdkl2pSPV3Z2A=
+	t=1706652579; cv=none; b=N+IIK9QTjB7x60QHfG8o4G91Cuz7tiH7glGgWcRtS0VYsFiIOVDOacBtuPGeN5cX5w6OyEKqZnNmjSzbVuY45p760jwUTfN5lDqHh886kX8aG7jpZMMN8osQUmS9maDF9ilB0RLmOFx5GnLDrYvrQ/Jz0oExokWZtQupDU4LeJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706649209; c=relaxed/simple;
-	bh=ZHJXHXKGQq4QT0JPJKhL8rGU8iGOmKQJzj/3a5PEg1s=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=Xcx4f7nnmorF8nKrJshjE90S3USwtxjsa2RUCy2zqX9xv7FqS52Ya2K4F73fsifQUrj4iKIp6UkIBZri8DqQ6fxAO8AaLN/YWgTAQu7USxPhl1Ee+WIarKAQa43gXRVL6CQ5crQFRwPYcAWqzuLrADZdsL9c3YzPCovNQyIJsJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JJCyDFs4; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a2a17f3217aso607560766b.2
-        for <linux-pm@vger.kernel.org>; Tue, 30 Jan 2024 13:13:27 -0800 (PST)
+	s=arc-20240116; t=1706652579; c=relaxed/simple;
+	bh=CgJMFn7wku+na+YduB33o8Ey5aB8CoiOZySPtX3EizM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SNBUGi5t4r0LRtze4d2vFBoovaMB0LttNmZokHovDlAT0dRfCpHb7UrsSkDkgO8qu8gPL8/0MITDi5SNNMr2ED0HakxOIPCXR45E4XmemA+YhxNQMmLtLAIATI7Sb3j++rzhIpXdF5eRdCzFDPoF/uvYv69Ad35b4pYT6AmCBls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=kr1hv1SP; arc=none smtp.client-ip=209.85.167.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-5101cd91017so4997729e87.2
+        for <linux-pm@vger.kernel.org>; Tue, 30 Jan 2024 14:09:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706649206; x=1707254006; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ZHJXHXKGQq4QT0JPJKhL8rGU8iGOmKQJzj/3a5PEg1s=;
-        b=JJCyDFs4oXYPcbdjw9sgHl/WwIq0NvytDTX0q2zRhtOnUB5ogKIHiDJsPohov1T/Av
-         SMAR0rG7x0j669OyO8Dqj/NZy2HrGWmdOloM9twoSXkToQkjDI1iZBaVkqYsLdAzTwaG
-         juARaVmRuGgzYb9fWMEstwIH0oI4AI8k0vLou7umr5Rf1zbWeVlhyjX0W3IXqSaxRnax
-         80xDLdFizbjVvmI33YobQWcrDdSICt16np78bcZtQU72t+DlVtcU/TgK1TkrMpqaYrtf
-         2HMOV3RSX4rYTVHltDaYHsMgR55ySnhCzNvfY6/X+4uxv3+LoX10exxthNK/gaY1g7jt
-         NNlQ==
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1706652575; x=1707257375; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Sa9NIl9o38HhCF5W35qE3UN/MWi6AZoAUggK3dO2Ek=;
+        b=kr1hv1SPZZLOLO+bmFA4CikaQCDlneeDQRlQNJY6y1ON71J2/n8ns+CuS9+lmgALlC
+         AExrFTDZr3UyBPLMberghx+cLu8uWpTSsleMzKrckVl0H7UmpdmSB0byTzSXThYypIF+
+         dzLBGCP4Hn65Hv5I0F4jL3BQYVvHnj6wGxTbOschakov9s5LlZT/0Z7CYOr6BPtiyxwK
+         icaDqqohk2Zatxzs/Av0SxPxQm+tc0Y1nOFck4txI8ylUL8CFDdciWPZ642AZZ+/NHsr
+         rHnXPLuHnoh88jZoLuJtaWXE5ju15VnyyZXYEHl8rXeAPQMx5KoEzy9ibYMDOyAC6cu2
+         +/xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706649206; x=1707254006;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZHJXHXKGQq4QT0JPJKhL8rGU8iGOmKQJzj/3a5PEg1s=;
-        b=JyFL19TdBQ0BS/86C6B6Ei5rEwEA74k79esvmt9tw+k1GWsgTf9dbUK8N+A3eM3qNi
-         9KgxHqMPKSDu04dgYvuGWmZdb1n8jPqIcc3kbXG7T97UrW3kpAXCsEp5H6gIEzmWXita
-         thh9j0WRcpogN7Vbl5OUOojQC6Y+IZUriRKJR8u2KByaGEuOXC4cQw8n8Azl2vtzTqRP
-         9KHNE/inKMzMrZKLr1Iai8I0ee4B7Xq2tCan0YKmGj2hFCxrzHJlFjgEDsz9BODh1WCS
-         ISj8DyBqdBC5uhCGsm3lMsNCbWKKhQH62yW+PAxn+nOJrFyGyiUz/6PyAYPTzP3dXZv6
-         cZGw==
-X-Gm-Message-State: AOJu0YwS1scjSUYgktKGqrxOTVX8zAF1YI4UA+fFuKAFwKyoz3a30O3N
-	2vwdkxFh8QFbJVAcq6DPaWqdYSLuozr0Li0OHQfq0IcMnKE0t31bO4JGRJDizG7hP6BJhA0VAHk
-	u4x3QmDco2QXlEb0AoaBWz+de/YyebfcgoIKm
-X-Google-Smtp-Source: AGHT+IEIMbG/KTe2t6nK37Tse+oNOBKr/g6AT7XHSJbUcz+/TVUnRu5ry7THJn3wsgnzMmKUVfzg8VzGOO8Sxa/Evn8=
-X-Received: by 2002:a17:906:ac8:b0:a36:4031:6d28 with SMTP id
- z8-20020a1709060ac800b00a3640316d28mr1343374ejf.74.1706649205558; Tue, 30 Jan
- 2024 13:13:25 -0800 (PST)
+        d=1e100.net; s=20230601; t=1706652575; x=1707257375;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0Sa9NIl9o38HhCF5W35qE3UN/MWi6AZoAUggK3dO2Ek=;
+        b=PjZXwDD2t9fXhKKvFI6BD1cqHVbeYglCJ/dK00G1gfSUpy+uTLCSNlIYuYN5y7bnbH
+         +aglb/eqOvsvJpoIqnJaMyBlCRS/wxhZkHV+MwpgmA2pUobdOBdGDU1qMtJgdr/UjXgP
+         65W3x26xfJt0eWDNYOFReVwZj5epwB0qrmR9CE5JK+wxsg3YH2LmmfEFgMbmzr5GRhEM
+         JlBqHND6iSIBetCnOnT2wJoxLoCzuskEbATC40R1f9I4eMGhgtNeMq5d89qAEjxYKqbC
+         9dmZJl9bHiuAW6xifdRlVKv4up6Xz4gQCgVwTD1actmAO+IKptpuhr3xr/jvCd5pnJe+
+         z0iQ==
+X-Gm-Message-State: AOJu0Yx8m9mRwg/pTvSDXCS86ivb0QSbmtoRbRwM0KB12j4Dmjfwx9qG
+	Htb6IHZh7PLfEiy+1yIUtMZa5w4hBMEuc9/xc0fvVIhMYrxNApIx2v+iLVF9mHg=
+X-Google-Smtp-Source: AGHT+IFLhL1hqCulNbyoqWstpln+RHYfGX0scj+oQ1Qn/1831yGq+tCMcZ0730Fh+ehsDwy9WRiu2w==
+X-Received: by 2002:a05:6512:3f08:b0:511:1abf:2a6c with SMTP id y8-20020a0565123f0800b005111abf2a6cmr2591441lfa.62.1706652575057;
+        Tue, 30 Jan 2024 14:09:35 -0800 (PST)
+Received: from airbuntu ([213.122.231.14])
+        by smtp.gmail.com with ESMTPSA id k7-20020a05600c1c8700b0040ef3ae26cdsm8878492wms.37.2024.01.30.14.09.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Jan 2024 14:09:34 -0800 (PST)
+Date: Tue, 30 Jan 2024 22:09:32 +0000
+From: Qais Yousef <qyousef@layalina.io>
+To: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+	sudeep.holla@arm.com, rafael@kernel.org, viresh.kumar@linaro.org,
+	agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+	mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+	dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+	mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+	lukasz.luba@arm.com, rui.zhang@intel.com, mhiramat@kernel.org,
+	daniel.lezcano@linaro.org, amit.kachhap@gmail.com, corbet@lwn.net,
+	gregkh@linuxfoundation.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v4 2/5] sched: Take cpufreq feedback into account
+Message-ID: <20240130220932.2wvnscmzqadmsrd2@airbuntu>
+References: <20240109164655.626085-1-vincent.guittot@linaro.org>
+ <20240109164655.626085-3-vincent.guittot@linaro.org>
+ <20240130002652.ipdyqs3sjy6qqt6t@airbuntu>
+ <20240130005028.vbqg27ctmanxsej6@airbuntu>
+ <CAKfTPtCJ9TXRRrCPsTam=uReDtay7dRqBpZCWQkOsbieWTuMbw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Pranav Prasad <pranavpp@google.com>
-Date: Tue, 30 Jan 2024 13:13:14 -0800
-Message-ID: <CACkwYU2PqXouAe9QPSMkE3he9magn2hDfLiKSOC7FBJT6QDPWw@mail.gmail.com>
-Subject: Can ETIME be returned instead of EBUSY in the kernel suspend flow?
-To: rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Kelly Rossmoyer <krossmo@google.com>, John Stultz <jstultz@google.com>
-Content-Type: multipart/mixed; boundary="000000000000a825b70610303b56"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtCJ9TXRRrCPsTam=uReDtay7dRqBpZCWQkOsbieWTuMbw@mail.gmail.com>
 
---000000000000a825b70610303b56
-Content-Type: text/plain; charset="UTF-8"
+On 01/30/24 10:35, Vincent Guittot wrote:
+> On Tue, 30 Jan 2024 at 01:50, Qais Yousef <qyousef@layalina.io> wrote:
+> >
+> > On 01/30/24 00:26, Qais Yousef wrote:
+> > > On 01/09/24 17:46, Vincent Guittot wrote:
+> > > > Aggregate the different pressures applied on the capacity of CPUs and
+> > > > create a new function that returns the actual capacity of the CPU:
+> > > >   get_actual_cpu_capacity()
+> > > >
+> > > > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> > > > Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+> > > > ---
+> > > >  kernel/sched/fair.c | 45 +++++++++++++++++++++++++--------------------
+> > > >  1 file changed, 25 insertions(+), 20 deletions(-)
+> > > >
+> > > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > > > index 9cc20855dc2b..e54bbf8b4936 100644
+> > > > --- a/kernel/sched/fair.c
+> > > > +++ b/kernel/sched/fair.c
+> > > > @@ -4910,13 +4910,22 @@ static inline void util_est_update(struct cfs_rq *cfs_rq,
+> > > >     trace_sched_util_est_se_tp(&p->se);
+> > > >  }
+> > > >
+> > > > +static inline unsigned long get_actual_cpu_capacity(int cpu)
+> > > > +{
+> > > > +   unsigned long capacity = arch_scale_cpu_capacity(cpu);
+> > > > +
+> > > > +   capacity -= max(thermal_load_avg(cpu_rq(cpu)), cpufreq_get_pressure(cpu));
+> > >
+> > > Does cpufreq_get_pressure() reflect thermally throttled frequency, or just the
+> > > policy->max being capped by user etc? I didn't see an update to cpufreq when we
+> > > topology_update_hw_pressure(). Not sure if it'll go through another path.
+> >
+> > It is done via the cooling device. And assume any limitations on freq due to
+> > power etc are assumed to always to cause the policy->max to change.
+> >
+> > (sorry if I missed earlier discussions about this)
+> 
+> I assume that you have answered all your questions.
+> 
+> We have now 2 distinct signals:
+> - hw high freq update which is averaged with PELT and go through
+> topology_update_hw_pressure
+> - cpufreq pressure which is not averaged (including cpufreq cooling
+> device with patch 3)
 
-Hi!
+Yes. I think a comment like suggested below is useful to help keeping the code
+understandable to new comers. But FWIW
 
-I am proposing a patch in which I want to return the errno code ETIME instead of
-EBUSY in enter_state() in the kernel suspend flow. Currently, EBUSY is returned
-when an imminent alarm is pending which is checked in alarmtimer_suspend() in
-alarmtimer.c. The proposed patch series moves the check to enter_state() in
-suspend.c to catch a potential suspend failure early in the suspend
-flow. I want to
-replace EBUSY with ETIME to make it more diagnosable in userspace, and may
-be more appropriate considering a timer is about to expire.
+Reviewed-by: Qais Yousef <qyousef@layalina.io>
 
-I am reaching out to get an opinion from the suspend maintainers if this would
-act as any potential risk in the suspend flow which only has EBUSY, EAGAIN, and
-EINVAL as return error codes currently. The patch of interest is attached with
-this email. Thank you!
-
-Regards,
-Pranav Prasad
-
---000000000000a825b70610303b56
-Content-Type: application/octet-stream; name="Proposed_ETIME_Solution.patch"
-Content-Disposition: attachment; filename="Proposed_ETIME_Solution.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_ls0uhw3c0>
-X-Attachment-Id: f_ls0uhw3c0
-
-RnJvbSA5NWM1YWYwNTNmNWVhMzYzMDMzYTY1YTNkMDA3ZWE4NGIxMGZjMzEzIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBQcmFuYXYgUHJhc2FkIDxwcmFuYXZwcEBnb29nbGUuY29tPgpE
-YXRlOiBNb24sIDI5IEphbiAyMDI0IDIxOjMxOjQ4ICswMDAwClN1YmplY3Q6IFtQQVRDSCAyLzNd
-IGFsYXJtdGltZXIsIFBNOiBzdXNwZW5kOiBFeHBvc2UgYSBmdW5jdGlvbiBmcm9tCiBhbGFybXRp
-bWVyIHRvIHBlcmZvcm0gY2hlY2sgYXQgdGhlIGJlZ2lubmluZyBvZiB0aGUgc3VzcGVuZCBmbG93
-IGluCiBlbnRlcl9zdGF0ZSgpCgpUaGUgYWxhcm10aW1lciBkcml2ZXIgY3VycmVudGx5IGZhaWxz
-IHN1c3BlbmQgYXR0ZW1wdHMgd2hlbiB0aGVyZSBpcyBhbgphbGFybSBwZW5kaW5nIHdpdGhpbiB0
-aGUgbmV4dCBzdXNwZW5kX2NoZWNrX2R1cmF0aW9uX25zIG5hbm9zZWNvbmRzLCBzaW5jZSB0aGUK
-c3lzdGVtIGlzIGV4cGVjdGVkIHRvIHdha2UgdXAgc29vbiBhbnl3YXkuIFRoZSBlbnRpcmUgc3Vz
-cGVuZCBwcm9jZXNzIGlzIGluaXRpYXRlZApldmVuIHRob3VnaCB0aGUgc3lzdGVtIHdpbGwgaW1t
-ZWRpYXRlbHkgYXdha2VuLiBUaGlzIHByb2Nlc3MgaW5jbHVkZXMgc3Vic3RhbnRpYWwKd29yayBi
-ZWZvcmUgdGhlIHN1c3BlbmQgZmFpbHMgYW5kIGFkZGl0aW9uYWwgd29yayBhZnRlcndhcmRzIHRv
-IHVuZG8gdGhlIGZhaWxlZApzdXNwZW5kIHRoYXQgd2FzIGF0dGVtcHRlZC4gVGhlcmVmb3JlIG9u
-IGJhdHRlcnktcG93ZXJlZCBkZXZpY2VzIHRoYXQgaW5pdGlhdGUKc3VzcGVuZCBhdHRlbXB0cyBm
-cm9tIHVzZXJzcGFjZSwgaXQgbWF5IGJlIGFkdmFudGFnZW91cyB0byBiZSBhYmxlIHRvIGZhaWwg
-dGhlCnN1c3BlbmQgZWFybGllciBpbiB0aGUgc3VzcGVuZCBmbG93IHRvIGF2b2lkIHBvd2VyIGNv
-bnN1bXB0aW9uIGluc3RlYWQgb2YKdW5uZWNlc3NhcmlseSBkb2luZyBleHRyYSB3b3JrLiBBcyBv
-bmUgZGF0YSBwb2ludCwgYW4gYW5hbHlzaXMgb2YgYSBzdWJzZXQgb2YKQW5kcm9pZCBkZXZpY2Vz
-IHNob3dlZCB0aGF0IGltbWluZW50IGFsYXJtcyBhY2NvdW50IGZvciByb3VnaGx5IDQwJSBvZiBh
-bGwgc3VzcGVuZApmYWlsdXJlcyBvbiBhdmVyYWdlIGxlYWRpbmcgdG8gdW5uZWNlc3NhcnkgcG93
-ZXIgd2FzdGFnZS4KClRvIGZhY2lsaXRhdGUgdGhpcywgZXhwb3NlIGZ1bmN0aW9uIHRpbWVfY2hl
-Y2tfc3VzcGVuZF9mYWlsKCkgZnJvbSBhbGFybXRpbWVyCnRvIGJlIHVzZWQgYnkgdGhlIHBvd2Vy
-IHN1YnN5c3RlbSB0byBwZXJmb3JtIHRoZSBjaGVjayBlYXJsaWVyIGluIHRoZSBzdXNwZW5kCmZs
-b3cuIFBlcmZvcm0gdGhlIGNoZWNrIGluIGVudGVyX3N0YXRlKCkgYW5kIHJldHVybiBlYXJseSBp
-ZiBhbiBhbGFybSBpcwp0byBiZSBmaXJlZCBpbiB0aGUgbmV4dCBzdXNwZW5kX2NoZWNrX2R1cmF0
-aW9uX25zIG5hbm9zZWNvbmRzLCBmYWlsaW5nCnN1c3BlbmQuCgpDaGFuZ2UtSWQ6IEkwMmQ3ODUz
-ZDBiMDVkOTNiMTIxOTg4ODE4ZjhhODA0NjFiNGEzNThjClNpZ25lZC1vZmYtYnk6IFByYW5hdiBQ
-cmFzYWQgPHByYW5hdnBwQGdvb2dsZS5jb20+ClNpZ25lZC1vZmYtYnk6IEtlbGx5IFJvc3Ntb3ll
-ciA8a3Jvc3Ntb0Bnb29nbGUuY29tPgotLS0KIGluY2x1ZGUvbGludXgvdGltZS5oICAgICB8ICAg
-MSArCiBrZXJuZWwvcG93ZXIvc3VzcGVuZC5jICAgfCAgIDMgKysKIGtlcm5lbC90aW1lL2FsYXJt
-dGltZXIuYyB8IDExMyArKysrKysrKysrKysrKysrKysrKysrKysrKysrLS0tLS0tLS0tLS0KIDMg
-ZmlsZXMgY2hhbmdlZCwgODcgaW5zZXJ0aW9ucygrKSwgMzAgZGVsZXRpb25zKC0pCgpkaWZmIC0t
-Z2l0IGEvaW5jbHVkZS9saW51eC90aW1lLmggYi9pbmNsdWRlL2xpbnV4L3RpbWUuaAppbmRleCAx
-NmNmNDUyMmQ2ZjMuLmFhYjdjNGU1MWUxMSAxMDA2NDQKLS0tIGEvaW5jbHVkZS9saW51eC90aW1l
-LmgKKysrIGIvaW5jbHVkZS9saW51eC90aW1lLmgKQEAgLTU2LDYgKzU2LDcgQEAgc3RydWN0IHRt
-IHsKIH07CiAKIHZvaWQgdGltZTY0X3RvX3RtKHRpbWU2NF90IHRvdGFsc2VjcywgaW50IG9mZnNl
-dCwgc3RydWN0IHRtICpyZXN1bHQpOworaW50IHRpbWVfY2hlY2tfc3VzcGVuZF9mYWlsKHZvaWQp
-OwogCiAjIGluY2x1ZGUgPGxpbnV4L3RpbWUzMi5oPgogCmRpZmYgLS1naXQgYS9rZXJuZWwvcG93
-ZXIvc3VzcGVuZC5jIGIva2VybmVsL3Bvd2VyL3N1c3BlbmQuYwppbmRleCBmYTNiZjE2MWQxM2Yu
-LjdhMDE3NWRhZTBkOSAxMDA2NDQKLS0tIGEva2VybmVsL3Bvd2VyL3N1c3BlbmQuYworKysgYi9r
-ZXJuZWwvcG93ZXIvc3VzcGVuZC5jCkBAIC0yNiw2ICsyNiw3IEBACiAjaW5jbHVkZSA8bGludXgv
-c3VzcGVuZC5oPgogI2luY2x1ZGUgPGxpbnV4L3N5c2NvcmVfb3BzLmg+CiAjaW5jbHVkZSA8bGlu
-dXgvc3dhaXQuaD4KKyNpbmNsdWRlIDxsaW51eC90aW1lLmg+CiAjaW5jbHVkZSA8bGludXgvZnRy
-YWNlLmg+CiAjaW5jbHVkZSA8dHJhY2UvZXZlbnRzL3Bvd2VyLmg+CiAjaW5jbHVkZSA8bGludXgv
-Y29tcGlsZXIuaD4KQEAgLTU2NCw2ICs1NjUsOCBAQCBzdGF0aWMgaW50IGVudGVyX3N0YXRlKHN1
-c3BlbmRfc3RhdGVfdCBzdGF0ZSkKICNlbmRpZgogCX0gZWxzZSBpZiAoIXZhbGlkX3N0YXRlKHN0
-YXRlKSkgewogCQlyZXR1cm4gLUVJTlZBTDsKKwl9IGVsc2UgaWYgKHRpbWVfY2hlY2tfc3VzcGVu
-ZF9mYWlsKCkpIHsKKwkJcmV0dXJuIC1FVElNRTsKIAl9CiAJaWYgKCFtdXRleF90cnlsb2NrKCZz
-eXN0ZW1fdHJhbnNpdGlvbl9tdXRleCkpCiAJCXJldHVybiAtRUJVU1k7CmRpZmYgLS1naXQgYS9r
-ZXJuZWwvdGltZS9hbGFybXRpbWVyLmMgYi9rZXJuZWwvdGltZS9hbGFybXRpbWVyLmMKaW5kZXgg
-ZTVkMmU1NjBiNGMxLi4wODViMWFjZTBjMzEgMTAwNjQ0Ci0tLSBhL2tlcm5lbC90aW1lL2FsYXJt
-dGltZXIuYworKysgYi9rZXJuZWwvdGltZS9hbGFybXRpbWVyLmMKQEAgLTExNSw2ICsxMTUsODQg
-QEAgc3RhdGljIGludCBhbGFybXRpbWVyX3N5c2ZzX2FkZCh2b2lkKQogCXJldHVybiByZXQ7CiB9
-CiAKKy8qKgorICogYWxhcm10aW1lcl9pbml0X3Nvb25lc3QgLSBJbml0aWFsaXplcyBwYXJhbWV0
-ZXJzIHRvIGZpbmQgc29vbmVzdCBhbGFybS4KKyAqIEBtaW46IHB0ciB0byByZWxhdGl2ZSB0aW1l
-IHRvIHRoZSBzb29uZXN0IGFsYXJtIHRvIGV4cGlyZQorICogQGV4cGlyZXM6IHB0ciB0byBhYnNv
-bHV0ZSB0aW1lIG9mIHRoZSBzb29uZXN0IGFsYXJtIHRvIGV4cGlyZQorICogQHR5cGU6IHB0ciB0
-byBhbGFybSB0eXBlCisgKgorICovCitzdGF0aWMgdm9pZCBhbGFybXRpbWVyX2luaXRfc29vbmVz
-dChrdGltZV90ICptaW4sIGt0aW1lX3QgKmV4cGlyZXMsIGludCAqdHlwZSkKK3sKKwl1bnNpZ25l
-ZCBsb25nIGZsYWdzOworCisJc3Bpbl9sb2NrX2lycXNhdmUoJmZyZWV6ZXJfZGVsdGFfbG9jaywg
-ZmxhZ3MpOworCSptaW4gPSBmcmVlemVyX2RlbHRhOworCSpleHBpcmVzID0gZnJlZXplcl9leHBp
-cmVzOworCSp0eXBlID0gZnJlZXplcl9hbGFybXR5cGU7CisJZnJlZXplcl9kZWx0YSA9IDA7CisJ
-c3Bpbl91bmxvY2tfaXJxcmVzdG9yZSgmZnJlZXplcl9kZWx0YV9sb2NrLCBmbGFncyk7Cit9CisK
-Ky8qKgorICogYWxhcm10aW1lcl9nZXRfc29vbmVzdCAtIEZpbmRzIHRoZSBzb29uZXN0IGFsYXJt
-IHRvIGV4cGlyZSBhbW9uZyB0aGUgYWxhcm0gYmFzZXMuCisgKiBAbWluOiBwdHIgdG8gcmVsYXRp
-dmUgdGltZSB0byB0aGUgc29vbmVzdCBhbGFybSB0byBleHBpcmUKKyAqIEBleHBpcmVzOiBwdHIg
-dG8gYWJzb2x1dGUgdGltZSBvZiB0aGUgc29vbmVzdCBhbGFybSB0byBleHBpcmUKKyAqIEB0eXBl
-OiBwdHIgdG8gYWxhcm0gdHlwZQorICoKKyAqLworc3RhdGljIHZvaWQgYWxhcm10aW1lcl9nZXRf
-c29vbmVzdChrdGltZV90ICptaW4sIGt0aW1lX3QgKmV4cGlyZXMsIGludCAqdHlwZSkKK3sKKwlp
-bnQgaTsKKwl1bnNpZ25lZCBsb25nIGZsYWdzOworCisJLyogRmluZCB0aGUgc29vbmVzdCB0aW1l
-ciB0byBleHBpcmUgKi8KKwlmb3IgKGkgPSAwOyBpIDwgQUxBUk1fTlVNVFlQRTsgaSsrKSB7CisJ
-CXN0cnVjdCBhbGFybV9iYXNlICpiYXNlID0gJmFsYXJtX2Jhc2VzW2ldOworCQlzdHJ1Y3QgdGlt
-ZXJxdWV1ZV9ub2RlICpuZXh0OworCQlrdGltZV90IGRlbHRhOworCisJCXNwaW5fbG9ja19pcnFz
-YXZlKCZiYXNlLT5sb2NrLCBmbGFncyk7CisJCW5leHQgPSB0aW1lcnF1ZXVlX2dldG5leHQoJmJh
-c2UtPnRpbWVycXVldWUpOworCQlzcGluX3VubG9ja19pcnFyZXN0b3JlKCZiYXNlLT5sb2NrLCBm
-bGFncyk7CisJCWlmICghbmV4dCkKKwkJCWNvbnRpbnVlOworCQlkZWx0YSA9IGt0aW1lX3N1Yihu
-ZXh0LT5leHBpcmVzLCBiYXNlLT5nZXRfa3RpbWUoKSk7CisJCWlmICghKCptaW4pIHx8IChkZWx0
-YSA8ICptaW4pKSB7CisJCQkqZXhwaXJlcyA9IG5leHQtPmV4cGlyZXM7CisJCQkqbWluID0gZGVs
-dGE7CisJCQkqdHlwZSA9IGk7CisJCX0KKwl9Cit9CisKKy8qKgorICogdGltZV9jaGVja19zdXNw
-ZW5kX2ZhaWwgLSBDaGVjayBpZiBzdXNwZW5kIHNob3VsZCBiZSBmYWlsZWQgZHVlIHRvIGFuCisg
-KiBhbGFybSB3aXRoaW4gdGhlIG5leHQgc3VzcGVuZF9jaGVja19kdXJhdGlvbiBuYW5vc2Vjb25k
-cy4KKyAqCisgKiBSZXR1cm5zIGVycm9yIGlmIHN1c3BlbmQgc2hvdWxkIGJlIGZhaWxlZCwgZWxz
-ZSByZXR1cm5zIDAuCisgKi8KK2ludCB0aW1lX2NoZWNrX3N1c3BlbmRfZmFpbCh2b2lkKQorewor
-CWt0aW1lX3QgbWluLCBleHBpcmVzOworCWludCB0eXBlOworCisJLyogSW5pdGlhbGl6ZSBwYXJh
-bWV0ZXJzIHRvIGZpbmQgc29vbmVzdCB0aW1lciAqLworCWFsYXJtdGltZXJfaW5pdF9zb29uZXN0
-KCZtaW4sICZleHBpcmVzLCAmdHlwZSk7CisKKwkvKiBGaW5kIHRoZSBzb29uZXN0IHRpbWVyIHRv
-IGV4cGlyZSAqLworCWFsYXJtdGltZXJfZ2V0X3Nvb25lc3QoJm1pbiwgJmV4cGlyZXMsICZ0eXBl
-KTsKKworCWlmIChtaW4gPT0gMCkKKwkJcmV0dXJuIDA7CisKKwlpZiAoa3RpbWVfdG9fbnMobWlu
-KSA8IHN1c3BlbmRfY2hlY2tfZHVyYXRpb25fbnMpCisJCXJldHVybiAtRUJVU1k7CisKKwlyZXR1
-cm4gMDsKK30KK0VYUE9SVF9TWU1CT0wodGltZV9jaGVja19zdXNwZW5kX2ZhaWwpOworCiAvKioK
-ICAqIGFsYXJtdGltZXJfZ2V0X3J0Y2RldiAtIFJldHVybiBzZWxlY3RlZCBydGNkZXZpY2UKICAq
-CkBAIC0yOTYsNDkgKzM3NCwyNCBAQCBFWFBPUlRfU1lNQk9MX0dQTChhbGFybV9leHBpcmVzX3Jl
-bWFpbmluZyk7CiBzdGF0aWMgaW50IGFsYXJtdGltZXJfc3VzcGVuZChzdHJ1Y3QgZGV2aWNlICpk
-ZXYpCiB7CiAJa3RpbWVfdCBtaW4sIG5vdywgZXhwaXJlczsKLQlpbnQgaSwgcmV0LCB0eXBlOwor
-CWludCByZXQsIHR5cGU7CiAJc3RydWN0IHJ0Y19kZXZpY2UgKnJ0YzsKLQl1bnNpZ25lZCBsb25n
-IGZsYWdzOwogCXN0cnVjdCBydGNfdGltZSB0bTsKIAotCXNwaW5fbG9ja19pcnFzYXZlKCZmcmVl
-emVyX2RlbHRhX2xvY2ssIGZsYWdzKTsKLQltaW4gPSBmcmVlemVyX2RlbHRhOwotCWV4cGlyZXMg
-PSBmcmVlemVyX2V4cGlyZXM7Ci0JdHlwZSA9IGZyZWV6ZXJfYWxhcm10eXBlOwotCWZyZWV6ZXJf
-ZGVsdGEgPSAwOwotCXNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJmZyZWV6ZXJfZGVsdGFfbG9jaywg
-ZmxhZ3MpOworCS8qIEluaXRpYWxpemUgcGFyYW1ldGVycyB0byBmaW5kIHNvb25lc3QgdGltZXIg
-Ki8KKwlhbGFybXRpbWVyX2luaXRfc29vbmVzdCgmbWluLCAmZXhwaXJlcywgJnR5cGUpOwogCiAJ
-cnRjID0gYWxhcm10aW1lcl9nZXRfcnRjZGV2KCk7CiAJLyogSWYgd2UgaGF2ZSBubyBydGNkZXYs
-IGp1c3QgcmV0dXJuICovCiAJaWYgKCFydGMpCiAJCXJldHVybiAwOwogCi0JLyogRmluZCB0aGUg
-c29vbmVzdCB0aW1lciB0byBleHBpcmUqLwotCWZvciAoaSA9IDA7IGkgPCBBTEFSTV9OVU1UWVBF
-OyBpKyspIHsKLQkJc3RydWN0IGFsYXJtX2Jhc2UgKmJhc2UgPSAmYWxhcm1fYmFzZXNbaV07Ci0J
-CXN0cnVjdCB0aW1lcnF1ZXVlX25vZGUgKm5leHQ7Ci0JCWt0aW1lX3QgZGVsdGE7CisJLyogRmlu
-ZCB0aGUgc29vbmVzdCB0aW1lciB0byBleHBpcmUgKi8KKwlhbGFybXRpbWVyX2dldF9zb29uZXN0
-KCZtaW4sICZleHBpcmVzLCAmdHlwZSk7CiAKLQkJc3Bpbl9sb2NrX2lycXNhdmUoJmJhc2UtPmxv
-Y2ssIGZsYWdzKTsKLQkJbmV4dCA9IHRpbWVycXVldWVfZ2V0bmV4dCgmYmFzZS0+dGltZXJxdWV1
-ZSk7Ci0JCXNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJmJhc2UtPmxvY2ssIGZsYWdzKTsKLQkJaWYg
-KCFuZXh0KQotCQkJY29udGludWU7Ci0JCWRlbHRhID0ga3RpbWVfc3ViKG5leHQtPmV4cGlyZXMs
-IGJhc2UtPmdldF9rdGltZSgpKTsKLQkJaWYgKCFtaW4gfHwgKGRlbHRhIDwgbWluKSkgewotCQkJ
-ZXhwaXJlcyA9IG5leHQtPmV4cGlyZXM7Ci0JCQltaW4gPSBkZWx0YTsKLQkJCXR5cGUgPSBpOwot
-CQl9Ci0JfQogCWlmIChtaW4gPT0gMCkKIAkJcmV0dXJuIDA7CiAKLQlpZiAoa3RpbWVfdG9fbnMo
-bWluKSA8IHN1c3BlbmRfY2hlY2tfZHVyYXRpb25fbnMpIHsKLQkJcG1fd2FrZXVwX2V2ZW50KGRl
-diwgc3VzcGVuZF9jaGVja19kdXJhdGlvbl9ucy9OU0VDX1BFUl9NU0VDKTsKLQkJcmV0dXJuIC1F
-QlVTWTsKLQl9Ci0KIAl0cmFjZV9hbGFybXRpbWVyX3N1c3BlbmQoZXhwaXJlcywgdHlwZSk7CiAK
-IAkvKiBTZXR1cCBhbiBydGMgdGltZXIgdG8gZmlyZSB0aGF0IGZhciBpbiB0aGUgZnV0dXJlICov
-Ci0tIAoyLjQzLjAuNDI5Lmc0MzJlYWEyYzZiLWdvb2cKCg==
---000000000000a825b70610303b56--
+> 
+> >
+> > >
+> > > maxing with thermal_load_avg() will change the behavior below where we used to
+> > > compare against instantaneous pressure. The concern was that it not just can
+> > > appear quickly, but disappear quickly too. thermal_load_avg() will decay
+> > > slowly, no?  This means we'll lose a lot of opportunities for better task
+> > > placement until this decays which can take relatively long time.
+> > >
+> > > So maxing handles the direction where a pressure suddenly appears. But it
+> > > doesn't handle where it disappears.
+> > >
+> > > I suspect your thoughts are that if it was transient then thermal_load_avg()
+> > > should be small anyway - which I think makes sense.
+> > >
+> > > I think we need a comment to explain these nuance differences.
+> > >
+> > > > +
+> > > > +   return capacity;
+> > > > +}
+> > > > +
+> > > >  static inline int util_fits_cpu(unsigned long util,
+> > > >                             unsigned long uclamp_min,
+> > > >                             unsigned long uclamp_max,
+> > > >                             int cpu)
+> > > >  {
+> > > > -   unsigned long capacity_orig, capacity_orig_thermal;
+> > > >     unsigned long capacity = capacity_of(cpu);
+> > > > +   unsigned long capacity_orig;
+> > > >     bool fits, uclamp_max_fits;
+> > > >
+> > > >     /*
+> > > > @@ -4948,7 +4957,6 @@ static inline int util_fits_cpu(unsigned long util,
+> > > >      * goal is to cap the task. So it's okay if it's getting less.
+> > > >      */
+> > > >     capacity_orig = arch_scale_cpu_capacity(cpu);
+> > > > -   capacity_orig_thermal = capacity_orig - arch_scale_thermal_pressure(cpu);
+> > > >
+> > > >     /*
+> > > >      * We want to force a task to fit a cpu as implied by uclamp_max.
+> > > > @@ -5023,7 +5031,8 @@ static inline int util_fits_cpu(unsigned long util,
+> > > >      * handle the case uclamp_min > uclamp_max.
+> > > >      */
+> > > >     uclamp_min = min(uclamp_min, uclamp_max);
+> > > > -   if (fits && (util < uclamp_min) && (uclamp_min > capacity_orig_thermal))
+> > > > +   if (fits && (util < uclamp_min) &&
+> > > > +       (uclamp_min > get_actual_cpu_capacity(cpu)))
+> > > >             return -1;
+> > > >
+> > > >     return fits;
+> > > > @@ -7404,7 +7413,7 @@ select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
+> > > >              * Look for the CPU with best capacity.
+> > > >              */
+> > > >             else if (fits < 0)
+> > > > -                   cpu_cap = arch_scale_cpu_capacity(cpu) - thermal_load_avg(cpu_rq(cpu));
+> > > > +                   cpu_cap = get_actual_cpu_capacity(cpu);
+> > > >
+> > > >             /*
+> > > >              * First, select CPU which fits better (-1 being better than 0).
+> > > > @@ -7897,8 +7906,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+> > > >     struct root_domain *rd = this_rq()->rd;
+> > > >     int cpu, best_energy_cpu, target = -1;
+> > > >     int prev_fits = -1, best_fits = -1;
+> > > > -   unsigned long best_thermal_cap = 0;
+> > > > -   unsigned long prev_thermal_cap = 0;
+> > > > +   unsigned long best_actual_cap = 0;
+> > > > +   unsigned long prev_actual_cap = 0;
+> > > >     struct sched_domain *sd;
+> > > >     struct perf_domain *pd;
+> > > >     struct energy_env eenv;
+> > > > @@ -7928,7 +7937,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+> > > >
+> > > >     for (; pd; pd = pd->next) {
+> > > >             unsigned long util_min = p_util_min, util_max = p_util_max;
+> > > > -           unsigned long cpu_cap, cpu_thermal_cap, util;
+> > > > +           unsigned long cpu_cap, cpu_actual_cap, util;
+> > > >             long prev_spare_cap = -1, max_spare_cap = -1;
+> > > >             unsigned long rq_util_min, rq_util_max;
+> > > >             unsigned long cur_delta, base_energy;
+> > > > @@ -7940,18 +7949,17 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+> > > >             if (cpumask_empty(cpus))
+> > > >                     continue;
+> > > >
+> > > > -           /* Account thermal pressure for the energy estimation */
+> > > > +           /* Account external pressure for the energy estimation */
+> > > >             cpu = cpumask_first(cpus);
+> > > > -           cpu_thermal_cap = arch_scale_cpu_capacity(cpu);
+> > > > -           cpu_thermal_cap -= arch_scale_thermal_pressure(cpu);
+> > > > +           cpu_actual_cap = get_actual_cpu_capacity(cpu);
+> > > >
+> > > > -           eenv.cpu_cap = cpu_thermal_cap;
+> > > > +           eenv.cpu_cap = cpu_actual_cap;
+> > > >             eenv.pd_cap = 0;
+> > > >
+> > > >             for_each_cpu(cpu, cpus) {
+> > > >                     struct rq *rq = cpu_rq(cpu);
+> > > >
+> > > > -                   eenv.pd_cap += cpu_thermal_cap;
+> > > > +                   eenv.pd_cap += cpu_actual_cap;
+> > > >
+> > > >                     if (!cpumask_test_cpu(cpu, sched_domain_span(sd)))
+> > > >                             continue;
+> > > > @@ -8022,7 +8030,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+> > > >                     if (prev_delta < base_energy)
+> > > >                             goto unlock;
+> > > >                     prev_delta -= base_energy;
+> > > > -                   prev_thermal_cap = cpu_thermal_cap;
+> > > > +                   prev_actual_cap = cpu_actual_cap;
+> > > >                     best_delta = min(best_delta, prev_delta);
+> > > >             }
+> > > >
+> > > > @@ -8037,7 +8045,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+> > > >                      * but best energy cpu has better capacity.
+> > > >                      */
+> > > >                     if ((max_fits < 0) &&
+> > > > -                       (cpu_thermal_cap <= best_thermal_cap))
+> > > > +                       (cpu_actual_cap <= best_actual_cap))
+> > > >                             continue;
+> > > >
+> > > >                     cur_delta = compute_energy(&eenv, pd, cpus, p,
+> > > > @@ -8058,14 +8066,14 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+> > > >                     best_delta = cur_delta;
+> > > >                     best_energy_cpu = max_spare_cap_cpu;
+> > > >                     best_fits = max_fits;
+> > > > -                   best_thermal_cap = cpu_thermal_cap;
+> > > > +                   best_actual_cap = cpu_actual_cap;
+> > > >             }
+> > > >     }
+> > > >     rcu_read_unlock();
+> > > >
+> > > >     if ((best_fits > prev_fits) ||
+> > > >         ((best_fits > 0) && (best_delta < prev_delta)) ||
+> > > > -       ((best_fits < 0) && (best_thermal_cap > prev_thermal_cap)))
+> > > > +       ((best_fits < 0) && (best_actual_cap > prev_actual_cap)))
+> > > >             target = best_energy_cpu;
+> > > >
+> > > >     return target;
+> > > > @@ -9441,8 +9449,8 @@ static inline void init_sd_lb_stats(struct sd_lb_stats *sds)
+> > > >
+> > > >  static unsigned long scale_rt_capacity(int cpu)
+> > > >  {
+> > > > +   unsigned long max = get_actual_cpu_capacity(cpu);
+> > > >     struct rq *rq = cpu_rq(cpu);
+> > > > -   unsigned long max = arch_scale_cpu_capacity(cpu);
+> > > >     unsigned long used, free;
+> > > >     unsigned long irq;
+> > > >
+> > > > @@ -9454,12 +9462,9 @@ static unsigned long scale_rt_capacity(int cpu)
+> > > >     /*
+> > > >      * avg_rt.util_avg and avg_dl.util_avg track binary signals
+> > > >      * (running and not running) with weights 0 and 1024 respectively.
+> > > > -    * avg_thermal.load_avg tracks thermal pressure and the weighted
+> > > > -    * average uses the actual delta max capacity(load).
+> > > >      */
+> > > >     used = READ_ONCE(rq->avg_rt.util_avg);
+> > > >     used += READ_ONCE(rq->avg_dl.util_avg);
+> > > > -   used += thermal_load_avg(rq);
+> > > >
+> > > >     if (unlikely(used >= max))
+> > > >             return 1;
+> > > > --
+> > > > 2.34.1
+> > > >
 
