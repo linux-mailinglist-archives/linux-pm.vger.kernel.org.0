@@ -1,267 +1,87 @@
-Return-Path: <linux-pm+bounces-2956-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2957-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A19DA841CC2
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 08:38:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37E12841DE7
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 09:36:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C378A1C25688
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 07:38:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6AE471C280B9
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 08:36:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CF1052F6F;
-	Tue, 30 Jan 2024 07:38:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C49DE56B70;
+	Tue, 30 Jan 2024 08:36:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jdj96ZmL"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="QQ1m6SLd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4750952F93;
-	Tue, 30 Jan 2024 07:38:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 358D856745;
+	Tue, 30 Jan 2024 08:36:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706600307; cv=none; b=GXriqtXewMo7sEh357qWbHilmDjAjbvCvJIl5PjIdjg5/9hzqcq0J7e23CmSrMLUZ+PV4vYNKwCqxqazBOrcYj3drldYyGbMtU7XS8yeSXgeac6+/LY3jlIzwyw3sejQ5TY+4g1a4iK3H77dgQ582SCWgQVZjrBBb6DN4QQVlUE=
+	t=1706603778; cv=none; b=ahF3XF43pVE4L9UQIOEvihgzAUtHuyRBZgBkUIUeV2Rhu+cn2U0vy96sEw2jtMdslRjiypJCzBBE/hw+Hd/xpbJZEU7fZ8gOpwKmBRBtF637kW/+FGMW8GbzqQSR/1IZ678ZRWAnSubqaViuYvWNHHcPrVGqKGqn8HP+DgylF1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706600307; c=relaxed/simple;
-	bh=znyPKd/ZI1h+ecSrM7JeO+wpDKxmEq9nh6DeNAt61OU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qdArU9+pNejV/yYPSXlkRVaMPYtzWbqYpPCnIUK0a+E5hRAWE93mDdUE7uJl0Bk7W6S//nz93o4iD8kFGujmb6NkvDGZ+AVJOOLb9O5iIXCYX4q88Q5tcS7o3Hhfqf1FmNQmJF8UN6Ppys4vDCzcEd9vAyslHLfcRPkyRkjGVag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jdj96ZmL; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706600305; x=1738136305;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=znyPKd/ZI1h+ecSrM7JeO+wpDKxmEq9nh6DeNAt61OU=;
-  b=jdj96ZmLH6Hi514x1/T8agrlbT5v0GWhGRW+r55O2AKglzr5NclS9EIq
-   E7LDgG+tsDDb4XUhN5hXaOkN7QHBUOWmW8wNsHweiEQZ1wfsVJ9qzLSWG
-   orf6fhRIhl0wuRgbkWGIRWD03YEqx433dh7Zjj9/g515Yj/yajPx3MD+Y
-   /8EJlqHjDmP4My720T/y3sqge6oOYqK4Zyn1HWF2TVFvjTcv9nglECC91
-   M+ATuT4wOoo+3YMtwmYt53PHFz/HUf0Zi3H7z0xzCVc380wWLRYv9vJyA
-   MF62ydOFFJW3yErpYuIjCIIZQQyiwWlKpaqy/vwx9zywqAn72y9pD1PuF
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10968"; a="2132020"
-X-IronPort-AV: E=Sophos;i="6.05,707,1701158400"; 
-   d="scan'208";a="2132020"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2024 23:37:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10968"; a="961172875"
-X-IronPort-AV: E=Sophos;i="6.05,707,1701158400"; 
-   d="scan'208";a="961172875"
-Received: from sgruszka-mobl.ger.corp.intel.com (HELO localhost) ([10.252.42.115])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2024 23:37:55 -0800
-Date: Tue, 30 Jan 2024 08:37:53 +0100
-From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Linux PM <linux-pm@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>
-Subject: Re: [PATCH v2 10/10] PM: sleep: Call dpm_async_fn() directly in each
- suspend phase
-Message-ID: <ZbinUdw3Cm58EfkE@linux.intel.com>
-References: <5770175.DvuYhMxLoT@kreacher>
- <2203732.Icojqenx9y@kreacher>
+	s=arc-20240116; t=1706603778; c=relaxed/simple;
+	bh=DPzX8bKF/2fviPf/M2liuaua/0lWQdiOsoNEF2zZ3Kw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tyvR1QSRvLkFccH49Zowt5iFuJDUXQ37xT7KQj9soJZ7j8nrJ6fG95OVI4CftJ2cRsgYMhtXZ3U/c//U4LQJY9A5MN2pgtHybnTNRlWwMlHVjtTtmo+B1CdbIwQtensIjoxoVIiqNmGtEmC7Y040xWtM2gaMhACnlrdfn0VItUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=QQ1m6SLd; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1706603775;
+	bh=DPzX8bKF/2fviPf/M2liuaua/0lWQdiOsoNEF2zZ3Kw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=QQ1m6SLdXWukRY/jHpuZaif7HrnumJY0OTOjXsU4HwmzLA3WaO7HtRytzJIcqztxu
+	 koxbBQ0E6kh7aVFy7PPw1ge3SKfXXR8VDKWego9QPPuQ2fKSDrCtjgPUUp1UcFG32C
+	 oA2Tockeh2++BG9SmsF/1MwNOPDLObfrl/qx9/CNaYnWDA49kvFxSU60zEqI9syhcy
+	 gGR2kQL0NT620VvFoARvoUNH0gZW87uTu1No8VUCAz5xcLq3uCFhAEMZpGZTxxqs5C
+	 kAIm8VFh1p+boVdOMCuLXq0SPgXsToceRwMLTKSLFhtfBkJhq68lGKf4d8ViFpqvuT
+	 JYnJaef/wSMug==
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 885273782076;
+	Tue, 30 Jan 2024 08:36:14 +0000 (UTC)
+Message-ID: <46c05b42-dfc5-439e-9dd2-9c115199ff5f@collabora.com>
+Date: Tue, 30 Jan 2024 09:36:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2203732.Icojqenx9y@kreacher>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] thermal/drivers/mediatek/lvts_thermal: Fix a memory leak
+ in an error handling path
+Content-Language: en-US
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Matthias Brugger
+ <matthias.bgg@gmail.com>, Balsam CHIHI <bchihi@baylibre.com>
+Cc: linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, linux-pm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+References: <481d345233862d58c3c305855a93d0dbc2bbae7e.1706431063.git.christophe.jaillet@wanadoo.fr>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <481d345233862d58c3c305855a93d0dbc2bbae7e.1706431063.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jan 29, 2024 at 05:29:41PM +0100, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Il 28/01/24 09:38, Christophe JAILLET ha scritto:
+> If devm_krealloc() fails, then 'efuse' is leaking.
+> So free it to avoid a leak.
 > 
-> Simplify the system-wide suspend of devices by invoking dpm_async_fn()
-> directly from the main loop in each suspend phase instead of using an
-> additional wrapper function for running it.
-> 
-> No intentional functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+> Fixes: f5f633b18234 ("thermal/drivers/mediatek: Add the Low Voltage Thermal Sensor driver")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-> ---
-> 
-> v1 -> v2: No changes.
-> 
-> ---
->  drivers/base/power/main.c |   61 ++++++++++++++++++----------------------------
->  1 file changed, 25 insertions(+), 36 deletions(-)
-> 
-> Index: linux-pm/drivers/base/power/main.c
-> ===================================================================
-> --- linux-pm.orig/drivers/base/power/main.c
-> +++ linux-pm/drivers/base/power/main.c
-> @@ -1192,7 +1192,7 @@ static void dpm_superior_set_must_resume
->  }
->  
->  /**
-> - * __device_suspend_noirq - Execute a "noirq suspend" callback for given device.
-> + * device_suspend_noirq - Execute a "noirq suspend" callback for given device.
->   * @dev: Device to handle.
->   * @state: PM transition of the system being carried out.
->   * @async: If true, the device is being suspended asynchronously.
-> @@ -1200,7 +1200,7 @@ static void dpm_superior_set_must_resume
->   * The driver of @dev will not receive interrupts while this function is being
->   * executed.
->   */
-> -static int __device_suspend_noirq(struct device *dev, pm_message_t state, bool async)
-> +static int device_suspend_noirq(struct device *dev, pm_message_t state, bool async)
->  {
->  	pm_callback_t callback = NULL;
->  	const char *info = NULL;
-> @@ -1277,18 +1277,10 @@ static void async_suspend_noirq(void *da
->  {
->  	struct device *dev = data;
->  
-> -	__device_suspend_noirq(dev, pm_transition, true);
-> +	device_suspend_noirq(dev, pm_transition, true);
->  	put_device(dev);
->  }
->  
-> -static int device_suspend_noirq(struct device *dev)
-> -{
-> -	if (dpm_async_fn(dev, async_suspend_noirq))
-> -		return 0;
-> -
-> -	return __device_suspend_noirq(dev, pm_transition, false);
-> -}
-> -
->  static int dpm_noirq_suspend_devices(pm_message_t state)
->  {
->  	ktime_t starttime = ktime_get();
-> @@ -1305,10 +1297,15 @@ static int dpm_noirq_suspend_devices(pm_
->  		struct device *dev = to_device(dpm_late_early_list.prev);
->  
->  		list_move(&dev->power.entry, &dpm_noirq_list);
-> +
-> +		if (dpm_async_fn(dev, async_suspend_noirq))
-> +			continue;
-> +
->  		get_device(dev);
-> +
->  		mutex_unlock(&dpm_list_mtx);
->  
-> -		error = device_suspend_noirq(dev);
-> +		error = device_suspend_noirq(dev, state, false);
->  
->  		put_device(dev);
->  
-> @@ -1369,14 +1366,14 @@ static void dpm_propagate_wakeup_to_pare
->  }
->  
->  /**
-> - * __device_suspend_late - Execute a "late suspend" callback for given device.
-> + * device_suspend_late - Execute a "late suspend" callback for given device.
->   * @dev: Device to handle.
->   * @state: PM transition of the system being carried out.
->   * @async: If true, the device is being suspended asynchronously.
->   *
->   * Runtime PM is disabled for @dev while this function is being executed.
->   */
-> -static int __device_suspend_late(struct device *dev, pm_message_t state, bool async)
-> +static int device_suspend_late(struct device *dev, pm_message_t state, bool async)
->  {
->  	pm_callback_t callback = NULL;
->  	const char *info = NULL;
-> @@ -1447,18 +1444,10 @@ static void async_suspend_late(void *dat
->  {
->  	struct device *dev = data;
->  
-> -	__device_suspend_late(dev, pm_transition, true);
-> +	device_suspend_late(dev, pm_transition, true);
->  	put_device(dev);
->  }
->  
-> -static int device_suspend_late(struct device *dev)
-> -{
-> -	if (dpm_async_fn(dev, async_suspend_late))
-> -		return 0;
-> -
-> -	return __device_suspend_late(dev, pm_transition, false);
-> -}
-> -
->  /**
->   * dpm_suspend_late - Execute "late suspend" callbacks for all devices.
->   * @state: PM transition of the system being carried out.
-> @@ -1481,11 +1470,15 @@ int dpm_suspend_late(pm_message_t state)
->  		struct device *dev = to_device(dpm_suspended_list.prev);
->  
->  		list_move(&dev->power.entry, &dpm_late_early_list);
-> +
-> +		if (dpm_async_fn(dev, async_suspend_late))
-> +			continue;
-> +
->  		get_device(dev);
->  
->  		mutex_unlock(&dpm_list_mtx);
->  
-> -		error = device_suspend_late(dev);
-> +		error = device_suspend_late(dev, state, false);
->  
->  		put_device(dev);
->  
-> @@ -1582,12 +1575,12 @@ static void dpm_clear_superiors_direct_c
->  }
->  
->  /**
-> - * __device_suspend - Execute "suspend" callbacks for given device.
-> + * device_suspend - Execute "suspend" callbacks for given device.
->   * @dev: Device to handle.
->   * @state: PM transition of the system being carried out.
->   * @async: If true, the device is being suspended asynchronously.
->   */
-> -static int __device_suspend(struct device *dev, pm_message_t state, bool async)
-> +static int device_suspend(struct device *dev, pm_message_t state, bool async)
->  {
->  	pm_callback_t callback = NULL;
->  	const char *info = NULL;
-> @@ -1716,18 +1709,10 @@ static void async_suspend(void *data, as
->  {
->  	struct device *dev = data;
->  
-> -	__device_suspend(dev, pm_transition, true);
-> +	device_suspend(dev, pm_transition, true);
->  	put_device(dev);
->  }
->  
-> -static int device_suspend(struct device *dev)
-> -{
-> -	if (dpm_async_fn(dev, async_suspend))
-> -		return 0;
-> -
-> -	return __device_suspend(dev, pm_transition, false);
-> -}
-> -
->  /**
->   * dpm_suspend - Execute "suspend" callbacks for all non-sysdev devices.
->   * @state: PM transition of the system being carried out.
-> @@ -1752,11 +1737,15 @@ int dpm_suspend(pm_message_t state)
->  		struct device *dev = to_device(dpm_prepared_list.prev);
->  
->  		list_move(&dev->power.entry, &dpm_suspended_list);
-> +
-> +		if (dpm_async_fn(dev, async_suspend))
-> +			continue;
-> +
->  		get_device(dev);
->  
->  		mutex_unlock(&dpm_list_mtx);
->  
-> -		error = device_suspend(dev);
-> +		error = device_suspend(dev, state, false);
->  
->  		put_device(dev);
->  
-> 
-> 
-> 
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+
 
