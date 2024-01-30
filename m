@@ -1,116 +1,120 @@
-Return-Path: <linux-pm+bounces-2991-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2992-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C88084264D
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 14:41:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BEDA842651
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 14:42:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99842B2AF23
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 13:41:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0CC551C23FAF
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 13:42:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0EC66BB5F;
-	Tue, 30 Jan 2024 13:41:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47BFF6BB5C;
+	Tue, 30 Jan 2024 13:42:25 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F09796BB54;
-	Tue, 30 Jan 2024 13:41:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C959159165;
+	Tue, 30 Jan 2024 13:42:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706622065; cv=none; b=reTrB8BEMGxGe3BjfJXQk19ulA71A6qBjGNi7aIEeuURG5Xy1UtHuLIS2/dED/Zs9D8v8O2yvAHpYptPmOY3E/+Csx6yJ3IBaqzrQXCrJWmyTULe00mXNXEdy76EUnG/u5v9+25fxV1eJFzPaGWFT5vRvzIx+gTB7JUEFiAIoQs=
+	t=1706622145; cv=none; b=Ti+EWyIxCqetDLeJbd8lQgTVyj38TvRUN7O4RlPqEp/DJsBc4x9P7j08LpoaaWNxkbsNjU6yVPil/DrkSC+6+1v790+pGz19cqL13I+/mRYKZ3QwNMHaHWZ47PRMbgj97yPgemqX8t21knXtuMujVA4f2OTajP4DUBGty86Jbzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706622065; c=relaxed/simple;
-	bh=RiNHswsYrPk3kor4Gr8r0ain5u5aP5cCPnQ3TBQxNew=;
+	s=arc-20240116; t=1706622145; c=relaxed/simple;
+	bh=yZIuSbQwmhsNBImBxP16rMMqoK8f4QFDk5EkKtA5CJY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HUdlv6pfrfUr9Tg/zVSlu0qiKVeqoLb+ZOSE436MlgE/wawsBmtVdgUrAX6qdm8Le4s/Qwtdwk0uZiYng4E8s0/oXBY6+i+SOyub+lLhK67nYeFxKP+uv4Tngmk6r8wDczF5wboyopcJK+QyXU9u4kzVVmId5VZ6JYCcK99ZG3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	 To:Cc:Content-Type; b=DP9vFLy0Tj04VBQijdJB7D059fMOYFgfRf+M5feNXW093eRpFFOufUP7iiXKxCY1I5KdW6aVw4HcC+9NgDWarCVbfnj+lIA83JX8DphWUQiB10Uqskkq92pDBFxAzvhzYL9BKlNcSj/WB0cAjtTrc0MujirzCdLCD1WABJRsdiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6ddd19552e6so1922685b3a.1;
-        Tue, 30 Jan 2024 05:41:03 -0800 (PST)
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-59a1f85923aso236658eaf.1;
+        Tue, 30 Jan 2024 05:42:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706622063; x=1707226863;
+        d=1e100.net; s=20230601; t=1706622143; x=1707226943;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=frJDUedpI3YTH8Ki9s8KdkIUfyDUhvcxZMMZkPB9gtA=;
-        b=F25CRAbFZaKg0ABrkpkG4pGRGalgtMoPBOM1itxRvfF2t0VBJLJxta35g/K97lHr5v
-         EPrdPp9cDG8COz7kd/Hf31zCCAoudv9fB+mO0Jkc6lEBMZ1jxuhaPVJnkH96eKDIJiyQ
-         RJ+iDfDWUDBos2+xhet5htR736OjvMdkZAl+FxT+CPEBUDCP9zPT5kVKw9wq8AUPA27V
-         IZUM/mXi3SGfwm3L5N8MnxMqc7W+a+NyWPjGqUJhHXXReFVBkD8iY7fUa8kXRlNiHJ+s
-         GIXUZjdsQEZvSvCEn/itQNwFOZnmL2/UnflioVLDeey8xPFF37FxCGX3C3ZqH+KbozJs
-         IrLw==
-X-Gm-Message-State: AOJu0YzMIB1Wi8VfnEZCp5jtv/SVxVMe8OYn1j6XvwcF+/RmGj8qXj/D
-	Ef7UK2bKf5bFH0N1y6zCO2atRSgof1nGnpqMr5Ec2KxDga4HiiDIbXGYZ+ixk08=
-X-Google-Smtp-Source: AGHT+IHHJCN/DA5nDwh/W1iGS9pLTv+8/BwgtjewsS/JVnv80HpaGXOBEGUKUqWzXskzFujFpvaFKg==
-X-Received: by 2002:a05:6a00:1805:b0:6db:cf34:8a96 with SMTP id y5-20020a056a00180500b006dbcf348a96mr8296734pfa.26.1706622062919;
-        Tue, 30 Jan 2024 05:41:02 -0800 (PST)
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com. [209.85.215.182])
-        by smtp.gmail.com with ESMTPSA id w18-20020a639352000000b005b458aa0541sm8089838pgm.15.2024.01.30.05.41.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Jan 2024 05:41:02 -0800 (PST)
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-5cfd95130c6so2224411a12.1;
-        Tue, 30 Jan 2024 05:41:02 -0800 (PST)
-X-Received: by 2002:a25:b20c:0:b0:dc3:78d1:c5a3 with SMTP id
- i12-20020a25b20c000000b00dc378d1c5a3mr5877288ybj.13.1706621652312; Tue, 30
- Jan 2024 05:34:12 -0800 (PST)
+        bh=sGl++iIA4A9u+4qEV+u6ph09ARs/qmkRzVLAgGs2Okc=;
+        b=BHX7OPApczGexSMZ/ylPW+g01dVce1hK3GYPovVFtF1J3BSrzkfu8msKu8+GEd0Je3
+         WO1rjqV4v3XZ9VA5gjUMQhDwQJw1nf7jetP4oAaSkI95ONisugQCwHAzfIR0nnB824cj
+         oGCTtgycrltt4KlMq09O5HJD096BWS+6KprjnUIzMT0ONhsnZObgMEMZAKeFyTg347aQ
+         tHsPHwy978HMfxjCGIoEu7gJQExaCtH+nDveYEOllrcFYCjz2P6vKcgzMVwulGRwh8b3
+         xZUwbQCnWM2XtaSPHx4jOZumCxVLn74em2Swg6Cy417AoaLNfKh3SMcVrZg4XLF3Ov9k
+         PlrQ==
+X-Forwarded-Encrypted: i=0; AJvYcCWohR6uluzBy/vW9auzuR+vySYZ8bbPg/xSuP7yQUdNJJmKmv61s+1ccuud0O1YoeFdC8fgVpXbOPb/UAcaNQFICEo0a0s1DmgCPRNCfixfMz9Za1h2EEHV7aLJUAzTrvVWa97yUqY=
+X-Gm-Message-State: AOJu0YyKSTAl1tQ0xAVBZ7c99NaDipwjTmNunr3mcmVkMBYLJ+kzfv4i
+	KBfM9pNgqSLFdOyh0x6pyrTWM0E9jofG1rAeR+LVr0qat9WUduTty0oKOJFfxyG2CtoMWk7tDBW
+	XZm4AhII1BfTGk3fB/QJzPjZRnFUHuu3OoN0=
+X-Google-Smtp-Source: AGHT+IGW/gIo/IHhmpwB9vVWiQRFfsVvA0RJeOnRNPHdBsXzjS/Kmjhnfbd60m1A88WTc89VixssY6oxlvg6pwj+4uU=
+X-Received: by 2002:a4a:dc92:0:b0:599:e8ff:66d9 with SMTP id
+ g18-20020a4adc92000000b00599e8ff66d9mr9403802oou.1.1706622142795; Tue, 30 Jan
+ 2024 05:42:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240130111250.185718-1-angelogioacchino.delregno@collabora.com> <20240130111250.185718-7-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20240130111250.185718-7-angelogioacchino.delregno@collabora.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 30 Jan 2024 14:34:01 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXgT0g=0uky9FYDXk=KuC1HjkGEX8sCQdKbUMoBFQKDqQ@mail.gmail.com>
-Message-ID: <CAMuHMdXgT0g=0uky9FYDXk=KuC1HjkGEX8sCQdKbUMoBFQKDqQ@mail.gmail.com>
-Subject: Re: [PATCH v1 06/18] thermal/drivers/rcar: Migrate to thermal_zone_device_register()
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: daniel.lezcano@linaro.org, miquel.raynal@bootlin.com, rafael@kernel.org, 
-	rui.zhang@intel.com, lukasz.luba@arm.com, support.opensource@diasemi.com, 
-	shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, 
-	festevam@gmail.com, linux-imx@nxp.com, andersson@kernel.org, 
-	konrad.dybcio@linaro.org, amitk@kernel.org, thara.gopinath@gmail.com, 
-	niklas.soderlund@ragnatech.se, srinivas.pandruvada@linux.intel.com, 
-	baolin.wang@linux.alibaba.com, u.kleine-koenig@pengutronix.de, 
-	hayashi.kunihiko@socionext.com, d-gole@ti.com, linus.walleij@linaro.org, 
-	DLG-Adam.Ward.opensource@dm.renesas.com, error27@gmail.com, heiko@sntech.de, 
-	hdegoede@redhat.com, jernej.skrabec@gmail.com, f.fainelli@gmail.com, 
-	bchihi@baylibre.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, kernel@collabora.com
+References: <5770175.DvuYhMxLoT@kreacher> <2192653.irdbgypaU6@kreacher> <Zbie+bepNv1xob3J@linux.intel.com>
+In-Reply-To: <Zbie+bepNv1xob3J@linux.intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 30 Jan 2024 14:42:10 +0100
+Message-ID: <CAJZ5v0hwXbtYBLx8EJo3N_SY9RU-63syf=6Q-dCaOh7eXkg-0w@mail.gmail.com>
+Subject: Re: [PATCH v2 02/10] PM: sleep: stats: Use an array of step failure counters
+To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 30, 2024 at 12:15=E2=80=AFPM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
-> The thermal API has a new thermal_zone_device_register() function which
-> is deprecating the older thermal_zone_device_register_with_trips() and
-> thermal_tripless_zone_device_register().
+On Tue, Jan 30, 2024 at 8:02=E2=80=AFAM Stanislaw Gruszka
+<stanislaw.gruszka@linux.intel.com> wrote:
 >
-> Migrate to the new thermal zone device registration function.
+> On Mon, Jan 29, 2024 at 05:11:57PM +0100, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Instead of using a set of individual struct suspend_stats fields
+> > representing suspend step failure counters, use an array of counters
+> > indexed by enum suspend_stat_step for this purpose, which allows
+> > dpm_save_failed_step() to increment the appropriate counter
+> > automatically, so that its callers don't need to do that directly.
+> >
+> > It also allows suspend_stats_show() to carry out a loop over the
+> > counters array to print their values.
+> >
+> > Because the counters cannot become negative, use unsigned int for
+> > representing them.
+> >
+> > The only user-observable impact of this change is a different
+> > ordering of entries in the suspend_stats debugfs file which is not
+> > expected to matter.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >
+> > v1 -> v2:
+> >    * Use one cell less in suspend_stats.step_failures[] to avoid
+> >      introducing an unused array cell (Stanislaw).
+> >
+> > @Stanislaw: This is different from setting SUSPEND_FREEZE to 0, because
+> > that would complicate printing in the sysfs attributes and the debugfs
+> > code, so I've not added the R-by.
 >
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
+> LGTM.
+>
+> Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+>
+> > +     for (step =3D SUSPEND_FREEZE; step <=3D SUSPEND_NR_STEPS; step++)
+> > +             seq_printf(s, "failed_%s: %u\n", suspend_step_names[step]=
+,
+> > +                        suspend_stats.step_failures[step-1]);
+>
+> Consider (in separate patch) removing SUSPEND_NONE from suspend_step_name=
+s[]
+> and use step-1 for it as well.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+SUSPEND_NONE is handy for printing an empty string when there are no
+suspend-resume errors.
 
