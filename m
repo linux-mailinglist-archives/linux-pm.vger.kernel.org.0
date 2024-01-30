@@ -1,126 +1,171 @@
-Return-Path: <linux-pm+bounces-2997-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2998-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F941842A74
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 18:06:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B876842AE6
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 18:28:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 507681C23E99
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 17:06:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 503ED1C25789
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 17:28:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BBB712BF01;
-	Tue, 30 Jan 2024 17:06:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93DB71292DE;
+	Tue, 30 Jan 2024 17:28:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xn0xm2dy"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="krXG7/Lh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FB9382D8C;
-	Tue, 30 Jan 2024 17:06:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 036131292D0
+	for <linux-pm@vger.kernel.org>; Tue, 30 Jan 2024 17:28:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706634388; cv=none; b=YKWO1FMdBoDjO0NOD8L84JkYT3gkFcX0UrwuaeoOBgt0xeIAudWrqGkMilrk6X6MzfAZaGRfpoxcZGIz4utQSzyA69mH7/pjskorZGlsOhu8ofdlT1VD6/gf/8LtkrC0/kcuWxX2sEnh7uuaFc8RWsbLFghIn7is41+sNRSnfek=
+	t=1706635734; cv=none; b=FEoRmTXGUmvn+6HLWkxImObBo15vWLNExuHzA9nUk5J5LpzKHT9ZzlqyuOnxsc3BIg9ynwj9V3lAfCWHtO9DtBT6eq5Lm0YVWReb0rDQvwEY689OMky670iKbD6eXJAIzjsW83xAPx0gZDfxAdyovQDc+xm2v2Yt45YtRJI6P+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706634388; c=relaxed/simple;
-	bh=W7q1fsdzkaCUOnQPYx3OTuBUZH48Q7ZLU/F8ISrqV3Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PlwC951+Idn47V7JR0fKQ3cX1N1qPRlfCl9AF6a1hTht4m39t80IHJ/WoRybwuf7f3NZKhr2MtYOVLhSEL6RS7pJUGqRZLMqj5l5lYt/L3ZjoGoncfo4AHwbsO2pArk7nQMdaMd1EWBawLnwo3JRPagjeIKu5FmOvrV7lIvpVY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xn0xm2dy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61880C433F1;
-	Tue, 30 Jan 2024 17:06:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706634387;
-	bh=W7q1fsdzkaCUOnQPYx3OTuBUZH48Q7ZLU/F8ISrqV3Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Xn0xm2dyBaFOijOJCGeNsNaumXj3m4bgdli1OpyA6hzUGSY2J23SJXRTLYmkx6CT2
-	 LwP8PRUlqyobXdzoRrDSQMPHENr4J7m6a62jelmwlqTz2MAEuytStBU5urdHtyXyZV
-	 LnEyX7n05ya7BQR3SOgVQyxPEVTPDujRmm+65JxqHo1GL2Qfqj7mbmq409iGuN1nT5
-	 cECBQ5IswOLmDuolUEQpGDE5GNRGqPIyG94Lk8rAMBhFsp6RbLsyatZJidW2Y12Yit
-	 VSTJ6hbJp9DcHNk2rvGxLmsdWXBiuNI9oQ7lOWxWgBLcm9j7n+Gw1AMu9YHFZMWXY3
-	 TVUVU3QX6tFWg==
-Date: Tue, 30 Jan 2024 11:06:25 -0600
-From: Rob Herring <robh@kernel.org>
-To: David Heidelberg <david@ixit.cz>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: opp: switch inner and outer min/maxItems
- rules for opp-hz
-Message-ID: <20240130170625.GA1847581-robh@kernel.org>
-References: <20231229191038.247258-1-david@ixit.cz>
- <2c9e91c7-8588-4260-8f5d-22c822019f62@linaro.org>
- <20240102235815.GA3700567-robh@kernel.org>
+	s=arc-20240116; t=1706635734; c=relaxed/simple;
+	bh=14TQ/1zcCqLGdolRK0IcXEJl5bdtA9sEHTihtDnduYQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VFNQMH207IZvpY3PH1Eab/cSCgCcIZym4zt7V6pHV5heIVxqdu3uR9rn3fylBOTgA9TH8acgEwKZ9xidEjbZf/y6ApfkGpZtDSFlZ0Zm4IUxMB8DEzPaRGsT4aViJgSGuOTNxH52av3DKX/4hUtkKecvYJIiJ1cy18/uzN0EpDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=krXG7/Lh; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-5cddc5455aeso2617941a12.1
+        for <linux-pm@vger.kernel.org>; Tue, 30 Jan 2024 09:28:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706635732; x=1707240532; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fZz+3WykNM8556Tzol1mqtpnBeKBTaXu9EkNH0f8s9c=;
+        b=krXG7/LhOyZCCXw1aBfLZE/J8LJmLxFgj1GUWfM4v36DhPcxTkZ1898b3r6iKvR55q
+         AUOScNK4SWlik+35ZJoL6gJcq+jfRY7iAhPAfP81GzynXSTh5vZ1Vda4nmqjQDaziKVU
+         aEnmOvY0sYM02ZhF7OobqW2ohyA4/Cq7LgLKan/oYZpwXnSHi1vYBxLjU+tkrJSJF1yh
+         sUjuc9DRSQAxeUqpx5WCB304WXg3Etzobudy1J6rogRqnNdXg8ePUxawVxdeqB67GnI1
+         BhBNHZPixZ2qO/+MDzyk59nyu5EV4qam2ObDVgpYNkFAqjnJ9IBiLuiJrkzeP7wEQUeq
+         ujQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706635732; x=1707240532;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fZz+3WykNM8556Tzol1mqtpnBeKBTaXu9EkNH0f8s9c=;
+        b=kMf+/nQGHk6zS6af6rIar6Y/VahIxA4BwzElzRkaELua3mDUDbp+GW0ow9/SBR1MwW
+         qKBpZDLJQjeV6JZV+7PYNUiZUIjhRdOwTVIXKEhFcgIJGe4omVWeWb/iwk8MYG8Zcz2s
+         S4tKOO2NDOWwhAxY7UA7R2xNOvC8TosUo7I/e+i7Ysi472y74yCzddXfBeyD162cuYZn
+         sD6CS+ecYHzHthoGa+dMmBEgSFjd3MH36wDyIX6uEQ3vLL4vkz7uGxdLvu0/roOmnlEq
+         qLgLjWildjQIbwhfixc946T/LhnFUbFNClxdsrSLW53XGqhQzFIXCraf5HrLHtQYZBIa
+         WrRQ==
+X-Gm-Message-State: AOJu0YytkCDfxzH4D4xTildVCGCFfK1XJ6mJTMvl7yCpwiXNyYhLQezq
+	guVZDQEV11SDKhIiKNMCsfoIAKZLjW+uf0/OV/CaG0HtnWdfrPlqzeR/7lNxPyDComp5ykU5RKD
+	SdA8ZyL+JSYgQlKFW1qIW5XJDl4TZjO1TzMpInw==
+X-Google-Smtp-Source: AGHT+IFhnTLNnR0RIqoES54tod5OivJXs32LyIzAe5lH54IERWGNOWiPrgUtQZYL8/C6vjjnV6O2Ng/fDqCQzij4xrY=
+X-Received: by 2002:a05:6a20:6e81:b0:199:37ce:2370 with SMTP id
+ gr1-20020a056a206e8100b0019937ce2370mr4431243pzb.23.1706635732296; Tue, 30
+ Jan 2024 09:28:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240102235815.GA3700567-robh@kernel.org>
+References: <20231208002342.367117-1-qyousef@layalina.io> <20231208002342.367117-9-qyousef@layalina.io>
+ <a561029e-993d-726d-18ce-0bc014e6533c@quicinc.com> <20240121000444.ghue2miejmiair6l@airbuntu>
+ <8dfb5db7-6da0-4f6f-30ef-8966428e4a1c@quicinc.com>
+In-Reply-To: <8dfb5db7-6da0-4f6f-30ef-8966428e4a1c@quicinc.com>
+From: Vincent Guittot <vincent.guittot@linaro.org>
+Date: Tue, 30 Jan 2024 18:28:40 +0100
+Message-ID: <CAKfTPtB=nv7DDqTvsdenOg+UNoNFx=f2SLvihHx+CMkeE6NyNA@mail.gmail.com>
+Subject: Re: [PATCH v2 8/8] sched/pelt: Introduce PELT multiplier
+To: Ashay Jaiswal <quic_ashayj@quicinc.com>
+Cc: Qais Yousef <qyousef@layalina.io>, Ingo Molnar <mingo@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>, 
+	Chung-Kai Mei <chungkai@google.com>, quic_anshar@quicinc.com, quic_atulpant@quicinc.com, 
+	quic_shashim@quicinc.com, quic_rgottimu@quicinc.com, 
+	quic_adharmap@quicinc.com, quic_kshivnan@quicinc.com, 
+	quic_pkondeti@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Jan 02, 2024 at 04:58:15PM -0700, Rob Herring wrote:
-> On Sat, Dec 30, 2023 at 03:17:21PM +0100, Krzysztof Kozlowski wrote:
-> > On 29/12/2023 20:10, David Heidelberg wrote:
-> > > Fixes issue as:
-> > > ```
-> > 
-> > Drop, it's not RST, but commit msg.
-> > 
-> > > arch/arm64/boot/dts/qcom/sdm845-oneplus-enchilada.dtb: opp-table: opp-200000000:opp-hz:0: [200000000, 0, 0, 150000000, 0, 0, 0, 0, 300000000] is too long
-> > > ```
-> > > 
-> > > Fixes: 3cb16ad69bef ("dt-bindings: opp: accept array of frequencies")
-> > > 
-> > > Signed-off-by: David Heidelberg <david@ixit.cz>
-> > > ---
-> > >  Documentation/devicetree/bindings/opp/opp-v2-base.yaml | 5 ++---
-> > >  1 file changed, 2 insertions(+), 3 deletions(-)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> > > index e2f8f7af3cf4..86d3aa0eb435 100644
-> > > --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> > > +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
-> > > @@ -55,10 +55,9 @@ patternProperties:
-> > >            to relate the values to their clocks or the order in which the clocks
-> > >            need to be configured and that is left for the implementation
-> > >            specific binding.
-> > > -        minItems: 1
-> > > -        maxItems: 32
-> > >          items:
-> > > -          maxItems: 1
-> > > +          minItems: 1
-> > > +          maxItems: 32
-> > 
-> > This does not look like correct fix. The original code looked fine -
-> > only one item is allowed in each sub-element (array).
-> 
-> This one is special being 64-bit values so we have an exception in 
-> property-units.yaml. The constraints here don't get used in decoding the 
-> dtb and the default way of 1 outer element is used.
-> 
-> It doesn't look like opp-hz needs to be a matrix as it is really just an 
-> array. Perhaps it should just be changed to an array type. 
-> Alternatively, adding 'items: { maxItems: 1 }' to the definition in 
-> property-units.yaml fixes the issue as well.
-> 
-> Though we can fix this, I'm looking into if we have other cases where we 
-> need this to work as-is. There's probably some room for improvement in 
-> how matrix dimensions are handled.
+On Sun, 28 Jan 2024 at 17:22, Ashay Jaiswal <quic_ashayj@quicinc.com> wrote:
+>
+> Hello Qais Yousef,
+>
+> Thank you for your response.
+>
+> On 1/21/2024 5:34 AM, Qais Yousef wrote:
+> > Hi Ashay
+> >
+> > On 01/20/24 13:22, Ashay Jaiswal wrote:
+> >> Hello Qais Yousef,
+> >>
+> >> We ran few benchmarks with PELT multiplier patch on a Snapdragon 8Gen2
+> >> based internal Android device and we are observing significant
+> >> improvements with PELT8 configuration compared to PELT32.
+> >>
+> >> Following are some of the benchmark results with PELT32 and PELT8
+> >> configuration:
+> >>
+> >> +-----------------+---------------+----------------+----------------+
+> >> | Test case                       |     PELT32     |     PELT8      |
+> >> +-----------------+---------------+----------------+----------------+
+> >> |                 |    Overall    |     711543     |     971275     |
+> >> |                 +---------------+----------------+----------------+
+> >> |                 |    CPU        |     193704     |     224378     |
+> >> |                 +---------------+----------------+----------------+
+> >> |ANTUTU V9.3.9    |    GPU        |     284650     |     424774     |
+> >> |                 +---------------+----------------+----------------+
+> >> |                 |    MEM        |     125207     |     160548     |
+> >> |                 +---------------+----------------+----------------+
+> >> |                 |    UX         |     107982     |     161575     |
+> >> +-----------------+---------------+----------------+----------------+
+> >> |                 |   Single core |     1170       |     1268       |
+> >> |GeekBench V5.4.4 +---------------+----------------+----------------+
+> >> |                 |   Multi core  |     2530       |     3797       |
+> >> +-----------------+---------------+----------------+----------------+
+> >> |                 |    Twitter    |     >50 Janks  |     0          |
+> >> |     SCROLL      +---------------+----------------+----------------+
+> >> |                 |    Contacts   |     >30 Janks  |     0          |
+> >> +-----------------+---------------+----------------+----------------+
+> >>
+> >> Please let us know if you need any support with running any further
+> >> workloads for PELT32/PELT8 experiments, we can help with running the
+> >> experiments.
+> >
+> > Thanks a lot for the test results. Was this tried with this patch alone or
+> > the whole series applied?
+> >
+> I have only applied patch8(sched/pelt: Introduce PELT multiplier) for the tests.
+>
+> > Have you tried to tweak each policy response_time_ms introduced in patch
+> > 7 instead? With the series applied, boot with PELT8, record the response time
+> > values for each policy, then boot back again to PELT32 and use those values.
+> > Does this produce similar results?
+> >
+> As the device is based on 5.15 kernel, I will try to pull all the 8 patches
+> along with the dependency patches on 5.15 and try out the experiments as
+> suggested.
 
-I've made some improvements on matrix dimensions, but this one is still 
-an issue. Can you respin this dropping 'items: {maxItems: 1}'. I'm going 
-to change the definition in property-units.yaml to uint64-array.
+Generally speaking, it would be better to compare with the latest
+kernel or at least close and which includes new features added since
+v5.15 (which is more than 2 years old now). I understand that this is
+not always easy or doable but you could be surprised by the benefit of
+some features like [0] merged since v5.15
 
-Rob
+[0] https://lore.kernel.org/lkml/249816c9-c2b5-8016-f9ce-dab7b7d384e4@arm.com/
+
+>
+> > You didn't share power numbers which I assume the perf gains are more important
+> > than the power cost for you.
+> >
+> If possible I will try to collect the power number for future test and share the
+> details.
+>
+> >
+> > Thanks!
+> >
+> > --
+> > Qais Yousef
 
