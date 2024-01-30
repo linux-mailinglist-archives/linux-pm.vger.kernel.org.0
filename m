@@ -1,96 +1,95 @@
-Return-Path: <linux-pm+bounces-2978-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2979-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D71CE8422FE
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 12:28:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B6D08422FF
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 12:28:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D4E9FB304CE
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 11:19:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5FC5287A75
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 11:28:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C63C982D78;
-	Tue, 30 Jan 2024 11:13:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2342B66B47;
+	Tue, 30 Jan 2024 11:28:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="HlU33HM8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T5ZBE44i"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38AE56EB50;
-	Tue, 30 Jan 2024 11:13:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22315657BC;
+	Tue, 30 Jan 2024 11:28:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706613232; cv=none; b=de3e41KbJzTCrRGcIsvKrM9xsWOQw5+8tayIIFiSQmmPcpkw5yp/0s8non8PoE/PuLJyTT6GXUm9fq0mV+TIxMoiAekGjXViBmSJfBzIo9gqxjumNZwoSGa3JsfjxP+diVBZaNaZV8MA6C57ejNjt01K53L79WaY8n6ptMLiGG4=
+	t=1706614100; cv=none; b=WgSlaytZRoTwchKQkxOqmicrF9lCjLZe8im2oOhxX8z4X7huREBCqfyV/Zzu2rrLujnczIVVrdP8qlc0unaPU2OpLMH4PKmmM6sN76xOrWk3urw1gkD2qU7m28sVm4/CgN9CfALunWUXvISbcSsc1TwuKnEfZC6FmCAidG6sGKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706613232; c=relaxed/simple;
-	bh=1MaXaoAlGaux22185ES05zD+Vc6KSQlHot9SWkJLGp0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=m/TtpW19r7WBY8lBgKcbGa/sVEKE1PDQeaiJpBOxQuOiBUbPQfTLJhPxXuP4wFISCSYKQHSaG/DmtCkSrroMqUh+R1XomHpaslMYLMouxDHz49bS1AkK2C+CJDgdLvHUGUrgCUq0qKLsMU+aPEHVIg4p9pbGwMx0qGnw8iDmPVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=HlU33HM8; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1706613229;
-	bh=1MaXaoAlGaux22185ES05zD+Vc6KSQlHot9SWkJLGp0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=HlU33HM8DXvNnHd5pfL0Un12V2JosWoeboB5m/VaZSU7mn27JZRL7n0hOSbYmEV63
-	 nbQXPRYgNnV9Tg09ybHmHOhmVp5umMRDpOApeet2UUjPgeUG/2TZDKp/Kpyz+HgXZG
-	 HjC+6zWpXXGHJzQMPFzdZYEqaqQZxazoLeLlMmgd8mLUOxWzvFSmQESaHg+0Dz/Gh2
-	 HAyBQd2ww0Hzr2aKjZ1depqQEX+Q9jSqA9P+yS8KR91henEbqscmEDj2/qaW9sT9sq
-	 9WWEE88qf6woeJXZQ4+1zKcYguqf9dKIOVMXS0iAcsTnVywM4v2EaqrU0mJlnhEql4
-	 bXn5tAHgulcXA==
-Received: from IcarusMOD.eternityproject.eu (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id CCFE93780FC7;
-	Tue, 30 Jan 2024 11:13:47 +0000 (UTC)
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-To: daniel.lezcano@linaro.org
-Cc: miquel.raynal@bootlin.com,
-	rafael@kernel.org,
-	rui.zhang@intel.com,
-	lukasz.luba@arm.com,
-	support.opensource@diasemi.com,
-	shawnguo@kernel.org,
-	s.hauer@pengutronix.de,
-	kernel@pengutronix.de,
-	festevam@gmail.com,
-	linux-imx@nxp.com,
-	andersson@kernel.org,
-	konrad.dybcio@linaro.org,
-	amitk@kernel.org,
-	thara.gopinath@gmail.com,
-	niklas.soderlund@ragnatech.se,
-	srinivas.pandruvada@linux.intel.com,
-	angelogioacchino.delregno@collabora.com,
-	baolin.wang@linux.alibaba.com,
-	u.kleine-koenig@pengutronix.de,
-	hayashi.kunihiko@socionext.com,
-	d-gole@ti.com,
-	linus.walleij@linaro.org,
-	DLG-Adam.Ward.opensource@dm.renesas.com,
-	error27@gmail.com,
-	heiko@sntech.de,
-	hdegoede@redhat.com,
-	jernej.skrabec@gmail.com,
-	f.fainelli@gmail.com,
-	bchihi@baylibre.com,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	kernel@collabora.com
-Subject: [PATCH v1 18/18] thermal/drivers/int340x: Migrate to thermal_zone_device_register()
-Date: Tue, 30 Jan 2024 12:12:50 +0100
-Message-ID: <20240130111250.185718-19-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240130111250.185718-1-angelogioacchino.delregno@collabora.com>
-References: <20240130111250.185718-1-angelogioacchino.delregno@collabora.com>
+	s=arc-20240116; t=1706614100; c=relaxed/simple;
+	bh=eJL/XKRz5Rj/B0GXTvlJ17kxFpJtQk9pJgOJUKAx18U=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kqw8mrUYo9yC738I4dyiOpTgcKyloCnfBF/QcTJnBQXqNHyVLMulsQMT0drs0cHpm5RXzzcjAovdawJxDMQlQcI8DpO45/KOaCIiezc01wCjZMAUHBem09eOiJ02L8RXlXexWLcXTIrfKzPqcw99I5ELXQRJUqDzIk1mNM4IxTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T5ZBE44i; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706614098; x=1738150098;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=eJL/XKRz5Rj/B0GXTvlJ17kxFpJtQk9pJgOJUKAx18U=;
+  b=T5ZBE44iGwk3VTXEYYj1WQqbzyxBac2kLQWJ6yVkpRtnqCyI3qFmPEcl
+   BBGqWXBdG3ucZ3P6dQV1naXTfPS50lKZT1EcRz0jeL4e/oV0qQlQmTroQ
+   H8ZGGzv8EVK5IBPmjhsNPqrJwl2MvPiOgrTnjmOxWXUAgJ05wQLHY1puN
+   v2RZkpqMgItTTVBkrgjpyosVxarPKfWKUtgGZhwiFIYRvjEVNt6ILhDHT
+   SWdRoM3Q1xjC1dDpgB987VosM7poA2NEOnpXZUWfgdcsnIVzfd5Oj/Xl4
+   LCPB6Hj4yWBL9EkmDg6dL0NqYxTk/6IS4QJD//02Ch8hPdCRa8I0Nnpbf
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10968"; a="24727162"
+X-IronPort-AV: E=Sophos;i="6.05,707,1701158400"; 
+   d="scan'208";a="24727162"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2024 03:28:17 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10968"; a="878410341"
+X-IronPort-AV: E=Sophos;i="6.05,707,1701158400"; 
+   d="scan'208";a="878410341"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jan 2024 03:28:10 -0800
+Received: from svinhufvud.ger.corp.intel.com (localhost [IPv6:::1])
+	by kekkonen.fi.intel.com (Postfix) with ESMTP id 8512811F8D2;
+	Tue, 30 Jan 2024 13:28:05 +0200 (EET)
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: linux-pm@vger.kernel.org
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	laurent.pinchart@ideasonboard.com,
+	Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+	David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Lucas De Marchi <lucas.demarchi@intel.com>,
+	=?UTF-8?q?Thomas=20Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
+	Paul Elder <paul.elder@ideasonboard.com>,
+	Alex Elder <elder@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Mark Brown <broonie@kernel.org>,
+	dri-devel@lists.freedesktop.org,
+	intel-gfx@lists.freedesktop.org,
+	intel-xe@lists.freedesktop.org,
+	linux-media@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	Bjorn Helgaas <helgaas@kernel.org>
+Subject: [PATCH v5 0/2] Small runtime PM API changes
+Date: Tue, 30 Jan 2024 13:28:04 +0200
+Message-Id: <20240130112805.158790-1-sakari.ailus@linux.intel.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -99,63 +98,90 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The thermal API has a new thermal_zone_device_register() function which
-is deprecating the older thermal_zone_device_register_with_trips() and
-thermal_tripless_zone_device_register().
+Hi folks,
 
-Migrate to the new thermal zone device registration function.
+Here's a small but a different set of patches for making two relatively
+minor changes to runtime PM API. I restarted version numbering as this is
+meaningfully different from the previous set.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- .../intel/int340x_thermal/int3400_thermal.c   | 20 +++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+pm_runtime_get_if_active() loses its second argument as it only made sense
+to have ign_usage_count argument true.
 
-diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-index 427d370648d5..d8ca7ed37950 100644
---- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-@@ -536,11 +536,6 @@ static struct thermal_zone_device_ops int3400_thermal_ops = {
- 	.change_mode = int3400_thermal_change_mode,
- };
- 
--static struct thermal_zone_params int3400_thermal_params = {
--	.governor_name = "user_space",
--	.no_hwmon = true,
--};
--
- static void int3400_setup_gddv(struct int3400_thermal_priv *priv)
- {
- 	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
-@@ -572,6 +567,16 @@ static void int3400_setup_gddv(struct int3400_thermal_priv *priv)
- static int int3400_thermal_probe(struct platform_device *pdev)
- {
- 	struct acpi_device *adev = ACPI_COMPANION(&pdev->dev);
-+	struct thermal_zone_device_params tzdp = {
-+		.tzp = {
-+			.type = "INT3400 Thermal",
-+			.no_hwmon = true,
-+			.ops = &int3400_thermal_ops,
-+		}
-+	};
-+	struct thermal_governor_params tgp = {
-+		.governor_name = "user_space"
-+	};
- 	struct int3400_thermal_priv *priv;
- 	int result;
- 
-@@ -609,9 +614,8 @@ static int int3400_thermal_probe(struct platform_device *pdev)
- 
- 	evaluate_odvp(priv);
- 
--	priv->thermal = thermal_tripless_zone_device_register("INT3400 Thermal", priv,
--							      &int3400_thermal_ops,
--							      &int3400_thermal_params);
-+	tzdp.tgp = &tgp;
-+	priv->thermal = thermal_zone_device_register(&tzdp);
- 	if (IS_ERR(priv->thermal)) {
- 		result = PTR_ERR(priv->thermal);
- 		goto free_art_trt;
+The other change is also small but it has an effect on callers:
+pm_runtime_put_autosuspend() will, in the future, be re-purposed to
+include a call to pm_runtime_mark_last_busy() as well. Before this,
+current users of the function are moved to __pm_runtime_put_autosuspend()
+(added by this patchset) which will continue to have the current
+behaviour.
+
+I haven't included the conversion patches in this set as I only want to do
+that once this set has been approved and merged. The tree specific patches
+can be found here, on linux-next master (there are some V4L2 patches
+there, too, please ignore them for now):
+<URL:https://git.kernel.org/pub/scm/linux/kernel/git/sailus/linux-next.git/log/?
+
+Later on, users calling pm_runtime_mark_last_busy() immediately followed
+by __pm_runtime_put_autosuspend() will be switched back to
+pm_runtime_put_autosuspend() once its behaviour change has been done (a
+patch near top of that branch). I'll provide these once the preceding ones
+have been merged.
+
+Comments are welcome.
+
+since v4:
+
+- patch 1: Squash patch 2
+  <URL:https://lists.freedesktop.org/archives/dri-devel/2024-January/438739.html>.
+
+- patch 1: Add to documentation of pm_runtime_get_if_{active,in_use} that
+  if PM runtime is disabled, an error is returned and the usage_count
+  remains unmodified.
+
+- patch 1: Fix spelling of "explicitly" in the commit message.
+
+- Use upper case "PM:" prefix in subject.
+
+since v3:
+
+- patch 1: Drop the previously added documentation on driver use of
+  pm_runtime_get_conditional().
+
+- Add a patch to make pm_runtime_get_conditional() static, including
+  switching i915 to pm_runtime_get_if_{active,in_use}.
+
+since v2:
+
+- Rebase on v6.8-rc1 (no changes).
+
+- Add Rodrigo's Reviewed-by: to the 1st patch.
+
+since v1:
+
+- patch 1: Rename __pm_runtime_get_conditional() as
+  pm_runtime_get_conditional().
+
+- patch 1: Reword documentation on driver use of
+  pm_runtime_get_conditional().
+
+Sakari Ailus (2):
+  PM: runtime: Simplify pm_runtime_get_if_active() usage
+  PM: runtime: Add pm_runtime_put_autosuspend() replacement
+
+ Documentation/power/runtime_pm.rst      | 22 +++++++++-------
+ drivers/accel/ivpu/ivpu_pm.c            |  2 +-
+ drivers/base/power/runtime.c            | 35 +++++++++++++++++++++++--
+ drivers/gpu/drm/i915/intel_runtime_pm.c |  5 +++-
+ drivers/gpu/drm/xe/xe_pm.c              |  2 +-
+ drivers/media/i2c/ccs/ccs-core.c        |  2 +-
+ drivers/media/i2c/ov64a40.c             |  2 +-
+ drivers/media/i2c/thp7312.c             |  2 +-
+ drivers/net/ipa/ipa_smp2p.c             |  2 +-
+ drivers/pci/pci.c                       |  2 +-
+ include/linux/pm_runtime.h              | 30 ++++++++++-----------
+ sound/hda/hdac_device.c                 |  2 +-
+ 12 files changed, 73 insertions(+), 35 deletions(-)
+
 -- 
-2.43.0
+2.39.2
 
 
