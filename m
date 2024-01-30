@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-2964-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2965-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2770B84228E
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 12:16:01 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A373D842290
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 12:16:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9F60FB29755
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 11:14:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B0BB8B2A0AC
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 11:14:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FE4467E93;
-	Tue, 30 Jan 2024 11:13:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 440776A028;
+	Tue, 30 Jan 2024 11:13:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="sqhLf9jG"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ktna+Kv7"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C64B46772E;
-	Tue, 30 Jan 2024 11:13:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D2B367A0B;
+	Tue, 30 Jan 2024 11:13:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706613202; cv=none; b=Elje3v4VWVNvGCRgdoMP+5xkvopBH3xB50kshXwdBFKnBp8YSqC7yYI5uC1WWKftonHkXGuBF8lD4eUxLR2d4iy7rFVivx0sTmSGCLOBg1Hlkvv3/wPdfuc9K3rIdFSyl4Xc35InscJw5y3l07KhXOsF6tWcjD51HKyhmq9kUTs=
+	t=1706613204; cv=none; b=bXUyspxzM9KPy8nVY1IdewpdJrrXVltlhwm+7vRv1ZX+kaEi+46CWckP2854cZIKTLWW++wcGZ5nR+pl5azVCMJB0XbFLtv4KaESd6T0yNh+8dJRdbA9OMHp9bxirSv7Q2tZ8gQUkUimAxTfHvEvw1ohAqfU2emkKy4JJrN5/lU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706613202; c=relaxed/simple;
-	bh=mEtrz7xMtfcpY7sT1iZb5MnMblxKwwvnwtCVasYjkwk=;
+	s=arc-20240116; t=1706613204; c=relaxed/simple;
+	bh=X32Bcgql6uQHTDnzXYAHs6Ep92uAw8IaBvn5qiYUvoE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OUC7sXZshlbygV2lAcoCd0GkEHnJJ+2Vb9tpD9T9ZQ53cZyTp1luf8CiHi97fdKwqzzCH7uKvTCgCIgtxg3NSLv4Zkn69jjUYQAe3oJbSomAe8/emPVGWH2ye3obBb1bMU/QGukXqlO1Ex0ZAaZwbpczl9DmwcZjkWe4+KWRhhc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=sqhLf9jG; arc=none smtp.client-ip=46.235.227.194
+	 MIME-Version; b=oU+ICtqbzYe+y5kq/Z0xJJeC89QeA6P17Awb0PLsczbXjghqFAsGVsDDzBQWGBd94XMDUzZYWU9rhzUEj0eHPz79pAUEz5vq21/XC+uKwW8nMtxVofEEVkxlQos1l/n0rmbRqYaPxYb0rbCQhtzcDsjv+Mlzfx+VdfMK2J1UAik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ktna+Kv7; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1706613198;
-	bh=mEtrz7xMtfcpY7sT1iZb5MnMblxKwwvnwtCVasYjkwk=;
+	s=mail; t=1706613201;
+	bh=X32Bcgql6uQHTDnzXYAHs6Ep92uAw8IaBvn5qiYUvoE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=sqhLf9jG5O6CWF4it6D6pVYOJQpzWwzFvcinU7Zeft6hwYnwmfrXbf+2t1IwFk8Q4
-	 Jf/DV2lzIq8TtyVOjDcTp0VVAG5qi+hTTzkbRf0QyKwjIok6ThM8pHvLWnpvNsRgFk
-	 9p1JDJ62axfSYIM9ZYQ+ZAEDWL4LY4Cuce8GziRGSHzF5hJKHD+X7u9jZEsW6Uo+Ym
-	 9IHotLcKMgZG1zEBtur32SaJD1Kn9v7az07C6sw75agJ6vTBfVRNRLMyzYC4Rxsr6v
-	 HVzu1FoMLTL+swrjIii3lAKVuukF8AM/JeqT8ISdofcYKLc9AwLhlvVJEhkut3blLY
-	 QnEwj6svk9TLA==
+	b=ktna+Kv7gfh7dk/63on+MZmh7HvZIJKzc/m0yfqmwGfo5hx0NNfEha4GXbFQvmHwR
+	 OJ6fj4vz1P+UE5mn5+5GlaDR23qM5foBhIcP5qvh41k44f6y95fFJhmajFqInrtlDl
+	 SEHtJY3yfUyQOELakeI944UolMKSxiqY5VPbIg3KmluUPJkE6Trjr7qcJirhFdsdrW
+	 Gd90I/qARmjUPlohsvCbZMBc9ML05RSKKNkOLDS7TgXhvq7gBX4tJta6QqkFhk1pjU
+	 zHCWcBu6WA9LNkz5OLhfGx4Muwjtzfwnr5khGaOQpMp03aCHRyDV7/s+LS4muL819z
+	 5NFPmb2KLjhGA==
 Received: from IcarusMOD.eternityproject.eu (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id B3B10378208F;
-	Tue, 30 Jan 2024 11:13:16 +0000 (UTC)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id EAED0378208D;
+	Tue, 30 Jan 2024 11:13:18 +0000 (UTC)
 From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 To: daniel.lezcano@linaro.org
 Cc: miquel.raynal@bootlin.com,
@@ -85,9 +85,9 @@ Cc: miquel.raynal@bootlin.com,
 	linux-arm-msm@vger.kernel.org,
 	linux-renesas-soc@vger.kernel.org,
 	kernel@collabora.com
-Subject: [PATCH v1 04/18] thermal/drivers/da9062: Migrate to thermal_zone_device_register()
-Date: Tue, 30 Jan 2024 12:12:36 +0100
-Message-ID: <20240130111250.185718-5-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v1 05/18] thermal/drivers/imx: Migrate to thermal_zone_device_register()
+Date: Tue, 30 Jan 2024 12:12:37 +0100
+Message-ID: <20240130111250.185718-6-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240130111250.185718-1-angelogioacchino.delregno@collabora.com>
 References: <20240130111250.185718-1-angelogioacchino.delregno@collabora.com>
@@ -107,43 +107,48 @@ Migrate to the new thermal zone device registration function.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/thermal/da9062-thermal.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ drivers/thermal/imx_thermal.c | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/thermal/da9062-thermal.c b/drivers/thermal/da9062-thermal.c
-index 160d64913057..13c7a6bc36c4 100644
---- a/drivers/thermal/da9062-thermal.c
-+++ b/drivers/thermal/da9062-thermal.c
-@@ -158,6 +158,13 @@ MODULE_DEVICE_TABLE(of, da9062_compatible_reg_id_table);
+diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+index 7019c4fdd549..16fb49194fb3 100644
+--- a/drivers/thermal/imx_thermal.c
++++ b/drivers/thermal/imx_thermal.c
+@@ -599,6 +599,15 @@ static inline void imx_thermal_unregister_legacy_cooling(struct imx_thermal_data
  
- static int da9062_thermal_probe(struct platform_device *pdev)
+ static int imx_thermal_probe(struct platform_device *pdev)
  {
 +	struct thermal_zone_device_params tzdp = {
 +		.tzp = {
-+			.ops = &da9062_thermal_ops,
-+			.trips = trips,
-+			.num_trips = ARRAY_SIZE(trips),
++			.type = "imx_thermal_zone",
++			.ops = &imx_tz_ops,
++			.mask = BIT(IMX_TRIP_PASSIVE),
++			.passive_delay = IMX_PASSIVE_DELAY,
++			.polling_delay = IMX_POLLING_DELAY,
 +		}
 +	};
- 	struct da9062 *chip = dev_get_drvdata(pdev->dev.parent);
- 	struct da9062_thermal *thermal;
- 	const struct of_device_id *match;
-@@ -196,10 +203,11 @@ static int da9062_thermal_probe(struct platform_device *pdev)
- 	INIT_DELAYED_WORK(&thermal->work, da9062_thermal_poll_on);
- 	mutex_init(&thermal->lock);
+ 	struct imx_thermal_data *data;
+ 	struct regmap *map;
+ 	int measure_freq;
+@@ -696,13 +705,11 @@ static int imx_thermal_probe(struct platform_device *pdev)
+ 		goto legacy_cleanup;
+ 	}
  
--	thermal->zone = thermal_zone_device_register_with_trips(thermal->config->name,
--								trips, ARRAY_SIZE(trips), 0, thermal,
--								&da9062_thermal_ops, NULL, pp_tmp,
--								0);
-+	tzdp.tzp.type = thermal->config->name;
-+	tzdp.tzp.devdata = thermal;
-+	tzdp.tzp.passive_delay = pp_tmp;
+-	data->tz = thermal_zone_device_register_with_trips("imx_thermal_zone",
+-							   trips,
+-							   ARRAY_SIZE(trips),
+-							   BIT(IMX_TRIP_PASSIVE), data,
+-							   &imx_tz_ops, NULL,
+-							   IMX_PASSIVE_DELAY,
+-							   IMX_POLLING_DELAY);
++	tzdp.tzp.devdata = data;
++	tzdp.tzp.trips = &trips;
++	tzdp.tzp.num_trips = ARRAY_SIZE(trips);
 +
-+	thermal->zone = thermal_zone_device_register(&tzdp);
- 	if (IS_ERR(thermal->zone)) {
- 		dev_err(&pdev->dev, "Cannot register thermal zone device\n");
- 		ret = PTR_ERR(thermal->zone);
++	data->tz = thermal_zone_device_register(&tzdp);
+ 	if (IS_ERR(data->tz)) {
+ 		ret = PTR_ERR(data->tz);
+ 		dev_err(&pdev->dev,
 -- 
 2.43.0
 
