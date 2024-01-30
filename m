@@ -1,190 +1,205 @@
-Return-Path: <linux-pm+bounces-2988-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2989-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCFAF8425D2
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 14:10:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C3498425DE
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 14:11:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DF1C2916A2
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 13:10:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC3891F2BAFF
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 13:11:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85BBD6BB3C;
-	Tue, 30 Jan 2024 13:10:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 990566A348;
+	Tue, 30 Jan 2024 13:11:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="loLnwade"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="c9KmOoLe"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F25B360ED3
-	for <linux-pm@vger.kernel.org>; Tue, 30 Jan 2024 13:10:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C60A46A336
+	for <linux-pm@vger.kernel.org>; Tue, 30 Jan 2024 13:11:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706620205; cv=none; b=GI8MP4pZpSgbj9RnHTBH96z5kxuR/szb91uFDcQ7zysUt6KD1toU+IEHm46JNhTmGha5JY6SHKPub/LVqKOD17xlwhFOFZemS6qoMdmxnIG6PAoeIoCiUY4vyMo5/N1srIFuKQ7IfSQWR6VGyhoPYr/9umwWthxuDmPmVoRBflA=
+	t=1706620312; cv=none; b=QGCjW+e26rr8HhpvGweGthlRJZx/oP/AN8+mhl4gGrqY8l4ckIRifBWhvR1oEB59NT0t5MM1W8RXK2Ugr9AjyIQTRlHM4+ffcMFEyqjmP2TiR7l31AOJULrxWS33BGUamct69ZI3EJxsP01yxfyYZZoio67n1kejO36DpHLipBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706620205; c=relaxed/simple;
-	bh=4/LR4FlPqyGgY8vDOPU9zbxtotdGsmFZozHdb0jD0KE=;
+	s=arc-20240116; t=1706620312; c=relaxed/simple;
+	bh=fdsM/RQGHBnGYEyW8iJ1J7nomMb3JP2gqVVCMYkIC8U=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kQYZvLACyWJ5Dtzc44uYIEsuZsAW2SbPrsnR+ti3wsyHQfS2AHvAvXoATSkWD+MH6qZQDG9nrm7s3EbiJBBkdoVsHMj2GlbNoxUc0eredD4dduOQ6YRG8S1mjd5IHiseriGnno6o8Xj/PJc2XW34yLjSPcqHZKcJD2KTUoWGMyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=loLnwade; arc=none smtp.client-ip=209.85.128.178
+	 To:Cc:Content-Type; b=B6wRxXGyyWPlQlhNSR2MAEEZBJcQHPhcyqZ8LMoeRqmw8naSBb1/Aiou0iezJvKfGe8572wWw7Rm7BSGtM7JICaTHvmUJc7kOBIvrwzP1YQ0Ep7dJbhoK3ux4+EZhDUd/ZAUgnFzAFwHYjETW4J1sN2WNbE3k7l1lRKIsbhHcAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=c9KmOoLe; arc=none smtp.client-ip=209.85.219.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-602c714bdbeso29681857b3.1
-        for <linux-pm@vger.kernel.org>; Tue, 30 Jan 2024 05:10:00 -0800 (PST)
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-dbed179f0faso3827481276.1
+        for <linux-pm@vger.kernel.org>; Tue, 30 Jan 2024 05:11:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706620197; x=1707224997; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1706620310; x=1707225110; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cn6tr3K56Ei1Sf/jm4iMFciPE+uwKnz5rDJj/hsfnl0=;
-        b=loLnwadeSRb8t9E7lKtThgZ6LR+ulDJW8u+uLIq3dnv0ZWt2ih5MNrFkwt3TzhadvI
-         wH2kNgDNJuGqZi15xU7V3vaQ1JojvBCn/vNr/DKHD/85eFxspKnPcRsmvLYVg4u7b/aU
-         JF3Eunt0oYrHucyrrGUHIQTWB7VLhA+QPLluRUsyDbS20Fu4pGF+93pdDW7dHDJY+47l
-         hZUpHtrZLYdbkUXyNj8YxlPq0nvmiVbsqyx/bgK7zCZ3qI6bc7zngrpYBOiKfbLbjTqE
-         2P0YudDXU7mftCfTUdVLD/AOsjB5ns6rw9J+i9AcxxNInSL3U9rK+eygnZ8fBM5+4kHz
-         JMdg==
+        bh=0XyRMME8pDr6DjGIF4jnfi9KerBGa4nDHBbrYJypaqI=;
+        b=c9KmOoLeJ4q66kthJuKqgJYyv+BhlYmzp/N74YURr7Otx9tPfBfEzqPK5WJWUZYvZc
+         lPlEW10tZT3HKUH80A6wwMIMMbnd00Pn5GH/tnhOh8zYgVYhN8ZlXAWSAVEZe+7GnDV/
+         UMce7tGhf2bqvUkVirUpQMq+fu0xcPfPpv0eMUWkEl46qQ4r5FxYS408PNh4o3S+XZNc
+         XlxLsIcNxB4aaQBu99YFlso4D6P2fkN9SYBCkWRxZ+Nqtn7AwOlNEsfj+RpA8n8fp0At
+         CrIFuEkn7sSgYTKFLRI+VlzDWzkvoK28cUEFRx4k5Fe0SsF4Q8h3RW/K5SaiF0NjUART
+         iejA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706620197; x=1707224997;
+        d=1e100.net; s=20230601; t=1706620310; x=1707225110;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Cn6tr3K56Ei1Sf/jm4iMFciPE+uwKnz5rDJj/hsfnl0=;
-        b=vGklr3LEU2VdWVAeB5UPdcbYVFOQappd6gx24lzcMX4tlw4w0lbjXX9TrOHENqtrXY
-         e/q2Mhx/UAZLNPuEzpNA60AqkOAX2dtfVxU2Vma5vs7VVgt0yl44vnufcpRFA0MGsr1r
-         wtBVr/m//jRdpK78LI1lZ5u6sBeGB8aeK7uqEl917PXJdkfCR7ij5JAJBAMqSSDeqlIo
-         cAqURVXVFs5zadUgp4hkNmdt8tRyrougTAZ5LknWjmK8jDzqx3Ml2nhAUSDWuaMXk3ge
-         WtNoX98XL/Alx6ajo0+4CbPXxkLm2BSK3HIzmUVpi3tKMEqjxgWqUJONi+we2gGdAOoY
-         63Zg==
-X-Gm-Message-State: AOJu0YyvnlmctaZU5nlkHauMUWbLwPP+42QCU816Ly4TsBZKXWYnHtDh
-	/SiNi5h84szhpnSfPkc37S05JJMfyqu7EI0jV6Nl1OAIYtHRV6J6p/FchO13uozz/nL9WuAKWZu
-	0EJqxIcecfNHUZAFv/J7jSF/WXxc75HjlzWVyGCnQmqDX76eRN74=
-X-Google-Smtp-Source: AGHT+IFxUTfdcZIedBUdrEgcBFlf9mmA/qIvHlQUO1locput6LLOj0LxdZaYNFMa0fj8+nqHpKd9qjfkaiNU8is2C1w=
-X-Received: by 2002:a81:e40a:0:b0:5ff:da8a:753b with SMTP id
- r10-20020a81e40a000000b005ffda8a753bmr530804ywl.50.1706620196847; Tue, 30 Jan
- 2024 05:09:56 -0800 (PST)
+        bh=0XyRMME8pDr6DjGIF4jnfi9KerBGa4nDHBbrYJypaqI=;
+        b=mwssOfDs9dzkIUmOWloebhg3EwGzHWOR0GaN43pfa+AAHLeuK1Wn80AOSDDLIM5LdC
+         vfaUc8KXbixTmdT7g73WRFkhf30SKLTkLJE8JOf+QKlLuoFDenasWzokxnTaQxxsrn+k
+         or/5cRzPvO8ngUErXFBAiUj9PNFcMya02qPQaQ1DZvtY4G9L7sNWlD7GygCc3PfTXf66
+         iMPLp91kmkfiwSkj5YSzlVJR1wndxDSzRbLAEoJ6Idt+lq9MG6tVHfLIz7MAEn7WjHDR
+         ZZ3q3iX2PgvN84Nvj6iG95YrBbuyxzRTJzav74LoRWOByTYgcMWBduFFw/uox2Ht7CC/
+         GjFw==
+X-Gm-Message-State: AOJu0YyuVn05NYZ6b6Uq3s2SgEQNJD1bJiNjoMBLSFBDoH/SO+amqHYt
+	833gDk3qTO9jy+R2Y6xIxUzzbHe36pLD3Fy7LaHh+iWaIGoejjGWVmgPoN5FwBe2xlEjZ9BWq+K
+	q9Aj8okA45lNvLwy0BdGc69SAomzvvxHwa7OMNQ==
+X-Google-Smtp-Source: AGHT+IGVYj01HQ2hq/JifyqWz/KVsf0C8m1IL/EZ4Kf9P5M0gEI5mykk+pshRrPwk2n8TLJtoS1gjHQYx7sx4HZyEhw=
+X-Received: by 2002:a25:2d13:0:b0:dc6:18ba:9b51 with SMTP id
+ t19-20020a252d13000000b00dc618ba9b51mr673573ybt.41.1706620309734; Tue, 30 Jan
+ 2024 05:11:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240125191756.868860-1-cristian.marussi@arm.com>
-In-Reply-To: <20240125191756.868860-1-cristian.marussi@arm.com>
+References: <cover.1706194617.git.geert+renesas@glider.be>
+In-Reply-To: <cover.1706194617.git.geert+renesas@glider.be>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 30 Jan 2024 14:09:20 +0100
-Message-ID: <CAPDyKFpqZf15DFWa8K6RRzSTX70chEVTV8zRgnJ3VStSq_d9UQ@mail.gmail.com>
-Subject: Re: [PATCH] pmdomain: arm: Fix NULL dereference on scmi_perf_domain removal
-To: Cristian Marussi <cristian.marussi@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>
+Date: Tue, 30 Jan 2024 14:11:14 +0100
+Message-ID: <CAPDyKFpxaEUHvKKb+spxV6HG2P2gLx5qM1mLPxJie+PdkmTL4w@mail.gmail.com>
+Subject: Re: [PATCH v2 00/15] arm64: renesas: Add R-Car V4M and Gray Hawk
+ Single support
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Magnus Damm <magnus.damm@gmail.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Cong Dang <cong.dang.xn@renesas.com>, Duy Nguyen <duy.nguyen.rh@renesas.com>, 
+	Hai Pham <hai.pham.ud@renesas.com>, Linh Phung <linh.phung.jy@renesas.com>, 
+	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 25 Jan 2024 at 20:18, Cristian Marussi <cristian.marussi@arm.com> wrote:
+On Thu, 25 Jan 2024 at 16:34, Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
 >
-> On unloading of the scmi_perf_domain module got the below splat, when in
-> the DT provided to the system under test the '#power-domain-cells' property
-> was missing.
-> Indeed, this particular setup causes the probe to bail out early without
-> giving any error, so that, then, the removal code is run on unload, but
-> without all the expected initialized structures in place.
+>         Hi all,
 >
-> Add a check and bail out early on remove too.
+> This patch series adds initial support for the Renesas R-Car V4M
+> (R8A779G0) SoC and the Renesas Gray Hawk Single development board.
+>
+> As both driver code and DTS have hard dependencies on DT binding
+> definitions, most patches in this series are supposed to go in through
+> the renesas-devel and/or renesas-clk trees, using a shared branch for DT
+> binding definitions, as usual.  For the PM domain patches (03, 04, 09),
+> Ulf already offered to apply these to his pmdomain tree, and provide an
+> immutable "dt" branch, to be pulled in my renesas-devel tree.
 
-Thanks for spotting this!
+Patch 3,4 and 9 (I dropped the copyright line in patch9, as pointed
+out by Niklas) applied for next, thanks!
 
->
-> Unable to handle kernel NULL pointer dereference at virtual address 0000000000000008
-> Mem abort info:
->    ESR = 0x0000000096000004
->    EC = 0x25: DABT (current EL), IL = 32 bits
->    SET = 0, FnV = 0
->    EA = 0, S1PTW = 0
->    FSC = 0x04: level 0 translation fault
->  Data abort info:
->    ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
->    CM = 0, WnR = 0, TnD = 0, TagAccess = 0
->    GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
->  user pgtable: 4k pages, 48-bit VAs, pgdp=00000001076e5000
->  [0000000000000008] pgd=0000000000000000, p4d=0000000000000000
->  Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
->  Modules linked in: scmi_perf_domain(-) scmi_module scmi_core
->  CPU: 0 PID: 231 Comm: rmmod Not tainted 6.7.0-00084-gb4b1f27d3b83-dirty #15
->  Hardware name: linux,dummy-virt (DT)
->  pstate: 61400005 (nZCv daif +PAN -UAO -TCO +DIT -SSBS BTYPE=--)
->  pc : scmi_perf_domain_remove+0x28/0x70 [scmi_perf_domain]
->  lr : scmi_perf_domain_remove+0x28/0x70 [scmi_perf_domain]
->  sp : ffff80008393bc10
->  x29: ffff80008393bc10 x28: ffff0000875a8000 x27: 0000000000000000
->  x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
->  x23: ffff00008030c090 x22: ffff00008032d490 x21: ffff80007b287050
->  x20: 0000000000000000 x19: ffff00008032d410 x18: 0000000000000000
->  x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
->  x14: 8ba0696d05013a2f x13: 0000000000000000 x12: 0000000000000002
->  x11: 0101010101010101 x10: ffff00008510cff8 x9 : ffff800080a6797c
->  x8 : 0101010101010101 x7 : 7f7f7f7f7f7f7f7f x6 : fefefeff6364626d
->  x5 : 8080808000000000 x4 : 0000000000000020 x3 : 00000000553a3dc1
->  x2 : ffff0000875a8000 x1 : ffff0000875a8000 x0 : ffff800082ffa048
->  Call trace:
->   scmi_perf_domain_remove+0x28/0x70 [scmi_perf_domain]
->   scmi_dev_remove+0x28/0x40 [scmi_core]
->   device_remove+0x54/0x90
->   device_release_driver_internal+0x1dc/0x240
->   driver_detach+0x58/0xa8
->   bus_remove_driver+0x78/0x108
->   driver_unregister+0x38/0x70
->   scmi_driver_unregister+0x28/0x180 [scmi_core]
->   scmi_perf_domain_driver_exit+0x18/0xb78 [scmi_perf_domain]
->   __arm64_sys_delete_module+0x1a8/0x2c0
->   invoke_syscall+0x50/0x128
->   el0_svc_common.constprop.0+0x48/0xf0
->   do_el0_svc+0x24/0x38
->   el0_svc+0x34/0xb8
->   el0t_64_sync_handler+0x100/0x130
->   el0t_64_sync+0x190/0x198
->  Code: a90153f3 f9403c14 f9414800 955f8a05 (b9400a80)
->  ---[ end trace 0000000000000000 ]---
->
-> Cc: Sudeep Holla <sudeep.holla@arm.com>
-> Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> Fixes: 2af23ceb8624 ("pmdomain: arm: Add the SCMI performance domain")
-> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> ---
-> I suppose the probe does NOT bail out with an error because this DT config has
-> to be supported, right ?
-
-Actually, no. It's a mistake by me, the probe should bail out with an
-error code.
-
-In fact, there is also one additional similar problem in probe, when
-the number of perf-domains are zero. In that case, we should also
-return an error code, rather than returning 0.
-
-Would you mind updating the patch to cover both problems - or if you
-are too busy, just let me know and I can help out.
-
-> ---
->  drivers/pmdomain/arm/scmi_perf_domain.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/pmdomain/arm/scmi_perf_domain.c b/drivers/pmdomain/arm/scmi_perf_domain.c
-> index 709bbc448fad..d7ef46ccd9b8 100644
-> --- a/drivers/pmdomain/arm/scmi_perf_domain.c
-> +++ b/drivers/pmdomain/arm/scmi_perf_domain.c
-> @@ -159,6 +159,9 @@ static void scmi_perf_domain_remove(struct scmi_device *sdev)
->         struct genpd_onecell_data *scmi_pd_data = dev_get_drvdata(dev);
->         int i;
->
-> +       if (!scmi_pd_data)
-> +               return;
-> +
->         of_genpd_del_provider(dev->of_node);
->
->         for (i = 0; i < scmi_pd_data->num_domains; i++)
-> --
-> 2.43.0
->
+Patch 3,4 are also available at the immutable dt branch for you to pull in.
 
 Kind regards
 Uffe
+
+
+
+>
+> Changes compared to v1[1]:
+>   - Add Acked-by, Reviewed-by,
+>   - Add vendor-prefix to DT binding definition header file names and
+>     update include guards,
+>   - Add "board" to compatible comment,
+>   - Add missing CP core clock,
+>   - Add SoC name to top-level comment.
+>
+> For testing, this series can be found at
+> https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git/log/?h=topic/v4m-gray-hawk-single-v2
+>
+> Thanks for your comments!
+>
+> [1] "[PATCH 00/15] arm64: renesas: Add R-Car V4M and Gray Hawk Single
+>     support"
+>     https://lore.kernel.org/linux-renesas-soc/cover.1704726960.git.geert+renesas@glider.be
+>
+> Cong Dang (1):
+>   clk: renesas: cpg-mssr: Add support for R-Car V4M
+>
+> Duy Nguyen (6):
+>   dt-bindings: clock: Add R8A779H0 V4M CPG Core Clock Definitions
+>   dt-bindings: power: renesas,rcar-sysc: Document R-Car V4M support
+>   dt-bindings: power: Add r8a779h0 SYSC power domain definitions
+>   pmdomain: renesas: r8a779h0-sysc: Add r8a779h0 support
+>   soc: renesas: Identify R-Car V4M
+>   soc: renesas: rcar-rst: Add support for R-Car V4M
+>
+> Geert Uytterhoeven (6):
+>   dt-bindings: clock: renesas,cpg-mssr: Document R-Car V4M support
+>   dt-bindings: reset: renesas,rst: Document R-Car V4M support
+>   dt-bindings: soc: renesas: Document R-Car V4M Gray Hawk Single
+>   clk: renesas: rcar-gen4: Add support for FRQCRC1
+>   soc: renesas: Introduce ARCH_RCAR_GEN4
+>   arm64: dts: renesas: Add Gray Hawk Single board support
+>
+> Hai Pham (1):
+>   arm64: dts: renesas: Add Renesas R8A779H0 SoC support
+>
+> Linh Phung (1):
+>   arm64: defconfig: Enable R8A779H0 SoC
+>
+>  .../bindings/clock/renesas,cpg-mssr.yaml      |   1 +
+>  .../bindings/power/renesas,rcar-sysc.yaml     |   1 +
+>  .../bindings/reset/renesas,rst.yaml           |   1 +
+>  .../bindings/soc/renesas/renesas.yaml         |   6 +
+>  arch/arm64/boot/dts/renesas/Makefile          |   2 +
+>  .../dts/renesas/r8a779h0-gray-hawk-single.dts |  52 ++++
+>  arch/arm64/boot/dts/renesas/r8a779h0.dtsi     | 121 +++++++++
+>  arch/arm64/configs/defconfig                  |   1 +
+>  drivers/clk/renesas/Kconfig                   |   5 +
+>  drivers/clk/renesas/Makefile                  |   1 +
+>  drivers/clk/renesas/r8a779h0-cpg-mssr.c       | 241 ++++++++++++++++++
+>  drivers/clk/renesas/rcar-gen4-cpg.c           |  10 +-
+>  drivers/clk/renesas/renesas-cpg-mssr.c        |   6 +
+>  drivers/clk/renesas/renesas-cpg-mssr.h        |   1 +
+>  drivers/pmdomain/renesas/Kconfig              |   4 +
+>  drivers/pmdomain/renesas/Makefile             |   1 +
+>  drivers/pmdomain/renesas/r8a779h0-sysc.c      |  55 ++++
+>  drivers/pmdomain/renesas/rcar-gen4-sysc.c     |   3 +
+>  drivers/pmdomain/renesas/rcar-gen4-sysc.h     |   1 +
+>  drivers/soc/renesas/Kconfig                   |  17 +-
+>  drivers/soc/renesas/rcar-rst.c                |   1 +
+>  drivers/soc/renesas/renesas-soc.c             |   8 +
+>  .../clock/renesas,r8a779h0-cpg-mssr.h         |  96 +++++++
+>  .../dt-bindings/power/renesas,r8a779h0-sysc.h |  49 ++++
+>  24 files changed, 679 insertions(+), 5 deletions(-)
+>  create mode 100644 arch/arm64/boot/dts/renesas/r8a779h0-gray-hawk-single.dts
+>  create mode 100644 arch/arm64/boot/dts/renesas/r8a779h0.dtsi
+>  create mode 100644 drivers/clk/renesas/r8a779h0-cpg-mssr.c
+>  create mode 100644 drivers/pmdomain/renesas/r8a779h0-sysc.c
+>  create mode 100644 include/dt-bindings/clock/renesas,r8a779h0-cpg-mssr.h
+>  create mode 100644 include/dt-bindings/power/renesas,r8a779h0-sysc.h
+>
+> --
+> 2.34.1
+>
+> Gr{oetje,eeting}s,
+>
+>                                                 Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                                             -- Linus Torvalds
 
