@@ -1,128 +1,101 @@
-Return-Path: <linux-pm+bounces-2993-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2994-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC665842697
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 15:03:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFE8B8426B0
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 15:12:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A85F228C214
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 14:03:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5EC9A1F2648B
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 14:12:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DF796D1C8;
-	Tue, 30 Jan 2024 14:03:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C53FB6D1DB;
+	Tue, 30 Jan 2024 14:12:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PuS0KCnV"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GwNTLTQ8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598D26D1A8
-	for <linux-pm@vger.kernel.org>; Tue, 30 Jan 2024 14:03:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B3B867A0A;
+	Tue, 30 Jan 2024 14:12:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706623416; cv=none; b=WtfnvBPqRP0R3tpy6dHPfPvtTnkDKYS5lrBGB8XHsPzM6R1r6oejrvrlkOmSATKRGivwfxnn21/yzdNzhOUNTMpXmWYL6y5wkD8EwF2b+ySCfZYjHifnwpKfwQM5CSwJimC62RL93eBH1TZHMWeXPsQY5byP79kHABx/IzsSU6w=
+	t=1706623926; cv=none; b=ViY73QJNes6+uf/vaiAxiCjAScbcVoHTbo07lQeRdevkg4oSPauCZ+PsFALtYwkwJukaOajWkIlPGzoMEonfSTeLPn8VWfoe9x3Qo1OTvjNITUjyqTUlgZZacLxlas86fAyiZ1Kxg8U48hnOqY7JlIZBaB2Max0f6wNvxK3qyOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706623416; c=relaxed/simple;
-	bh=Bm17Yzvf54lb1ol+6Pnb5XQGR/6x9cBdAENhxlSi6Co=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RONqufKOsje/dUp8nqMxpHotBO57hxFBmtYm4ju2wh+mGpopOfrto3di1yGsVRSXcIbcmhDM5muz6eNCIfBAvl4WX3JoMIJwDLpMQB7pK5EkVJCdY2SKS47/WH66NknIYQSixyYFkDLTSHwBV7nmV0ER84rQzOc3M1uaNYXetgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PuS0KCnV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D74C4C433A6
-	for <linux-pm@vger.kernel.org>; Tue, 30 Jan 2024 14:03:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706623415;
-	bh=Bm17Yzvf54lb1ol+6Pnb5XQGR/6x9cBdAENhxlSi6Co=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=PuS0KCnV4GR2pBmquvk8QF58LbUxZE4NZGZOtnOwEzmWI5qxaqyHBoRhA/WXQ/isd
-	 nrAHvLuMsUUDGqnBnkHn44Xq98/VT2HsvvjD/RhnezR+4KxjKxcZiBwZYEUGVWTX7N
-	 G1RC95lDtkFQcOOEDd11dD/rxXIQeqDqhGzTYEZyxS5TY9F3Yeq+9FaR7WBN0/pFOW
-	 /Wx0orlN8KbhvCifE5IRnKGavwyA8kSLFDDNuIfNPUBVgXDOaq6O3ZkYKK9Bsssohe
-	 C5EjVWQdaCoMIx+6bKv50Vfbk4jjVzSpnavY8TGxisgjdcztcaEq+V3bKDA2ymYVrd
-	 X8pMXS0i5VwAg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id C44E6C53BD2; Tue, 30 Jan 2024 14:03:35 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 217931] amd-pstate lacks crucial features: CPU frequency and
- boost control
-Date: Tue, 30 Jan 2024 14:03:35 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: Perry.Yuan@amd.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217931-137361-JGiQjvZEIu@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217931-137361@https.bugzilla.kernel.org/>
-References: <bug-217931-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1706623926; c=relaxed/simple;
+	bh=zBzQq5IufcMsy/RtjMvFMem+jfEfpWCQ/Zk2VEYzx/0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Kt94JFKY/6hagsnzAflnAsOkNTQJHkVWTCeQJc/PqpU6Et5ZCnwTKkYSyD8O7olOOLPPw4ypc7DPJdQtQnyD7lazcIzI6dKwEv7rpNPp5qBWe1NyCen0CZ0OoU/nvCTlw2Q17OT+UuWMEYAy7nee1sPubTRVCjmF/hF5SKzdv0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GwNTLTQ8; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 8B647E0006;
+	Tue, 30 Jan 2024 14:11:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1706623921;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zBzQq5IufcMsy/RtjMvFMem+jfEfpWCQ/Zk2VEYzx/0=;
+	b=GwNTLTQ8StsesbERh/DoVKvxkf9n8MUZ2ccyF2WyhsNiFwgYwUAQHLjGS62ThSxJ4hOK9U
+	t/DJmfy+voD4JvFp8J5HbJ/M6hZtQNS77efTa5mY4Y96fIU3YioJNoS0Ac/tIpWaQQHOBr
+	N1cwEKKghiGlZ++Kgf4ArRVmPlH1qzKF0fZxhH10RwxaNTwiWnyuMn6Tu6FVMUHpvf57ZJ
+	MeZK6q2BsOkJMrr6cT+nUsEdn5Slgd0HrX9lpkauaRazRvmE9Vh03++0R88zGMdoYCQk9S
+	P06BTI3lsbEfKNKK91VRzvIDPVU8kduotsSln2EynOFm3V/O6l+qKj1Xx1mFTw==
+Date: Tue, 30 Jan 2024 15:11:56 +0100
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
+ lukasz.luba@arm.com, support.opensource@diasemi.com, shawnguo@kernel.org,
+ s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+ linux-imx@nxp.com, andersson@kernel.org, konrad.dybcio@linaro.org,
+ amitk@kernel.org, thara.gopinath@gmail.com, niklas.soderlund@ragnatech.se,
+ srinivas.pandruvada@linux.intel.com, baolin.wang@linux.alibaba.com,
+ u.kleine-koenig@pengutronix.de, hayashi.kunihiko@socionext.com,
+ d-gole@ti.com, linus.walleij@linaro.org,
+ DLG-Adam.Ward.opensource@dm.renesas.com, error27@gmail.com,
+ heiko@sntech.de, hdegoede@redhat.com, jernej.skrabec@gmail.com,
+ f.fainelli@gmail.com, bchihi@baylibre.com, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ kernel@collabora.com
+Subject: Re: [PATCH v1 14/18] thermal/drivers/armada: Migrate to
+ thermal_zone_device_register()
+Message-ID: <20240130151156.720ca0fe@xps-13>
+In-Reply-To: <20240130111250.185718-15-angelogioacchino.delregno@collabora.com>
+References: <20240130111250.185718-1-angelogioacchino.delregno@collabora.com>
+	<20240130111250.185718-15-angelogioacchino.delregno@collabora.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217931
+Hi,
 
---- Comment #41 from Perry Yuan(AMD) (Perry.Yuan@amd.com) ---
-(In reply to Sjoer van der Ploeg from comment #40)
-> Could this be the reason why some CPU's do not boost to their maximum
-> frequency, while they are happy to do so on Windows?
+angelogioacchino.delregno@collabora.com wrote on Tue, 30 Jan 2024
+12:12:46 +0100:
+
+> The thermal API has a new thermal_zone_device_register() function which
+> is deprecating the older thermal_zone_device_register_with_trips() and
+> thermal_tripless_zone_device_register().
 >=20
-> For example my 5800X3D never reaches 4550 on Linux, but on Windows it see=
-ms
-> to have no problem getting there.
+> Migrate to the new thermal zone device registration function.
+>=20
 
-Could you share the output with below commands? then I can check that.
+LGTM
 
-echo "=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3Dnorminal freq=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D"
-cat /sys/devices/system/cpu/cpu*/acpi_cppc/nominal_freq
+Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
 
-echo "=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3Dnorminal perf=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D"
-cat /sys/devices/system/cpu/cpu*/acpi_cppc/nominal_perf
-
-echo "=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3Dhighest_perf perf=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D"
-cat /sys/devices/system/cpu/cpu*/acpi_cppc/highest_perf
-
-echo "=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3Dlowest_nonlinear_perf perf=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D"
-cat /sys/devices/system/cpu/cpu*/acpi_cppc/lowest_nonlinear_perf
-
-echo "=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3Dlowest perf=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D"
-cat /sys/devices/system/cpu/cpu*/acpi_cppc/lowest_perf
-
-echo "=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3Dlowest freq=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D"
-cat /sys/devices/system/cpu/cpu*/acpi_cppc/lowest_freq
-
-Perry.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
+Thanks,
+Miqu=C3=A8l
 
