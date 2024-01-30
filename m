@@ -1,204 +1,155 @@
-Return-Path: <linux-pm+bounces-2995-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2996-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35130842727
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 15:52:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 469408427AB
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 16:09:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B73EE1F28254
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 14:52:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79B1E1C220A3
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 15:09:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA6017CF1E;
-	Tue, 30 Jan 2024 14:52:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A321082D71;
+	Tue, 30 Jan 2024 15:08:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ohmsW/G3"
+	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="Uy6upPFK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3610F4EE;
-	Tue, 30 Jan 2024 14:52:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FB1A7E761
+	for <linux-pm@vger.kernel.org>; Tue, 30 Jan 2024 15:08:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706626322; cv=none; b=qiWHgk//iB0rGQHd8u5fBvygsba2jO7e96/YCxHAD3STzZd249qGi5gWbxZOnXeNgEQSX+XLY/A8AhfNbVsHiKSUbxCatN7nej2r5+IfmYUbrSpDxvzv38CS9pOPjJQuhNatqY7hja5oh7ufMajbJrgZME5K7DxGB82DnjVkSmQ=
+	t=1706627338; cv=none; b=o5kV4SYC+KvBiwxzkkaxf2lpPB7Dt3/FmXBNLpSLL5+ZM98Ic/e80S04M+SOCMO3YjVDyxSCBI/o1BQvAHrXViSXxK9RzFt4qBaHMguOGX6Ji8pXIt2kPvE+nws3SHUrbScmcy3wTxXgaXJBIqSpa+0HzgDWVbwBDCx1tWmQrGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706626322; c=relaxed/simple;
-	bh=9d6ufwDAIf1A0UtOyTYk+Jf/Hs9vxaFZOyONWOgloa4=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=JMaCuTuS7tTpwNg+H4vbTVU/KZKADgEuedi7Ygl65t5vW9/QCA0p+puUmoeLjcaErHnHM+7u37dgk/W3aqwTGlNkMG+eljWz1pCjqpskcZPrqtIpuauBeSQQpID3cbqc2DMZdeAS73aChR1VwWCp5CrioDl48XpwLLdCzQhv2ds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ohmsW/G3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51F70C43390;
-	Tue, 30 Jan 2024 14:52:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706626322;
-	bh=9d6ufwDAIf1A0UtOyTYk+Jf/Hs9vxaFZOyONWOgloa4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ohmsW/G3JEHix0NoZqa8v5nmuoIoh507YfeX6swBcMOh4uOg8VP0o4S75Sz9TDrxM
-	 wwg/A7Bp3fZq2NhoeYjVpAmgbzRP22iiUg8eb74yk5C+xJNtsCco+dqyIQBR+G8yzs
-	 YC0V5n2YZrBGqDvjzVV6fHw1vRDAJtCzk8dAZBxQIzvoT3pVbznwtE8TxLWfCA/DW8
-	 BP2MKHECPidFfPjKJzYQvsQ1VfeywPDkyIvVBQ8mzGjIuEoKnIksltk38Jc4L+OCVR
-	 zeYYP/0m66lzg+QaGo5ctiPKbY5tfZgOtUQexXfiSA4YLlj5tpWM4emI33dLFmIYnw
-	 uQ26W30blw44w==
-Date: Tue, 30 Jan 2024 23:51:57 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Brian Norris <briannorris@chromium.org>, Pavel Machek <pavel@ucw.cz>,
- Len Brown <len.brown@intel.com>, Randy Dunlap <rdunlap@infradead.org>,
- suleiman@google.com, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v7] PM: sleep: Expose last succeeded resumed timestamp
- in sysfs
-Message-Id: <20240130235157.636ee1183e073cfba8d7d0b7@kernel.org>
-In-Reply-To: <CAJZ5v0jLLTETrMpXE3h=Q9GyhDEcZH5f7v+yvyxhzhW8yQKyTQ@mail.gmail.com>
-References: <170359668692.1864392.6909734045167510522.stgit@mhiramat.roam.corp.google.com>
-	<170359669607.1864392.5078004271237566637.stgit@mhiramat.roam.corp.google.com>
-	<20240117090706.3522d23763fab9dcea21aee1@kernel.org>
-	<CAJZ5v0gqWRsSGQZp7tz-0Kw6od+fjd_iof4Rj7fkBy80ySkcEQ@mail.gmail.com>
-	<CA+ASDXOwfUrqRDVx_Fi62ERCLRPF+ixD014vE21Sm4mLF_j12A@mail.gmail.com>
-	<20240125094320.13a0844614375deb8bb06db6@kernel.org>
-	<CAJZ5v0jLLTETrMpXE3h=Q9GyhDEcZH5f7v+yvyxhzhW8yQKyTQ@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1706627338; c=relaxed/simple;
+	bh=h0OTDxBWOisgWB2yRwbr7R3YMVBdajhXN88i633Gm28=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VreCwc+BmXgQv85PLCTOIhX0eonGQTW1q9EfwoFYE6kC7E/GWyFXVzX6LNTgZSCkbR2ocSCYHlEnJduym7pkwiFJQQ5lcczdFySNN/6qobP2Bqwvs0rPWdngdgD/pMnpWRqy/Br1gP8gzxp1u8XgR7H52ZH2icG0HDH6vl2IlKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=Uy6upPFK; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-51028acdcf0so5049809e87.0
+        for <linux-pm@vger.kernel.org>; Tue, 30 Jan 2024 07:08:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech.se; s=google; t=1706627334; x=1707232134; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=aeOs16K1ggzcSxM81rroSW/PgSS9ODAboh/iGfdKq7Y=;
+        b=Uy6upPFKyfMncgV3j33k4kHyf0E5Al+8vVcRar6WOabwFgwL5b+XRM5p46s0N+7uZr
+         3fAaK40Cr8Y1EB4kmK+GAzmN938uKHMwdaZoz5ZBjASko/nZmgy5a375syWK+uSdMdWK
+         YaoBq6Q6YfiJtE0RB07QXIi3MG5TbWThdcJK4bjXRR3RtgcZrC4ve8WXACa/IsTAQ7cE
+         vWVP/0YT9CZBkWbPqswECFAzqPN5lVasHvyflbRnGtYsngppnx4AAKZOtbmO034Useha
+         vyV1KX20Wsv0fjNZSNsqvv+khptlyaVKEeOC+lMuhZ4AIrWmVWk8FmeJhfUuZDNJJpPG
+         cS4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706627334; x=1707232134;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aeOs16K1ggzcSxM81rroSW/PgSS9ODAboh/iGfdKq7Y=;
+        b=gSp3uyMsJHCFSwRyJJk/FugrRgnhlwWNtKHXVUC32y0RNPsWoejAXYgUEfFrBweUpN
+         v3GTGBY1nYKU4SeVBpS2YesyYpScmS13z1vdIMeCTv8n2Kx42En88LzHg5Typ4x7Rmch
+         K6cgOPtlpluCH6n++8k9bqEfbYS8SCD4IFOXYfbUQ8KX3gHjBl0GGiPp6DOUbt+5di3E
+         otO049ZLcOgqTknNMpCatot2kwvYMZ3KVH3SCF9WPi5ZatzE1Si6yz8cCRAmqeDhhVk5
+         EdWj0M0AV+3QFolX6rSGc6pJrXNcHu4jupPTfI2cwTGwraVcEwYQJNZZXVA0iIsCXr0B
+         kOFA==
+X-Gm-Message-State: AOJu0YwYp6Vm5Qnu8+2rCTIKDD2U08jS4r1jh+0gD2aPEoL2VkP7ANna
+	GqcssgHs1RXDUCGs4l+0B+LVhjeeoqkSuwMRwpQQS949ngadxDbPnE9qRBTJc1w=
+X-Google-Smtp-Source: AGHT+IF6B+jmXhpAUXU/JypBmBfGty/Zps7VOXIocvbWg2ZzM+V6LjpS3JB2V6IpNaOfUn05BOgkfw==
+X-Received: by 2002:a05:6512:3764:b0:511:1fb8:a16f with SMTP id z4-20020a056512376400b005111fb8a16fmr928741lft.8.1706627333655;
+        Tue, 30 Jan 2024 07:08:53 -0800 (PST)
+Received: from localhost (h-46-59-36-113.A463.priv.bahnhof.se. [46.59.36.113])
+        by smtp.gmail.com with ESMTPSA id v24-20020ac25618000000b0050f09876c12sm1491359lfd.208.2024.01.30.07.08.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Jan 2024 07:08:53 -0800 (PST)
+Date: Tue, 30 Jan 2024 16:08:52 +0100
+From: Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: daniel.lezcano@linaro.org, miquel.raynal@bootlin.com, rafael@kernel.org,
+	rui.zhang@intel.com, lukasz.luba@arm.com,
+	support.opensource@diasemi.com, shawnguo@kernel.org,
+	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+	linux-imx@nxp.com, andersson@kernel.org, konrad.dybcio@linaro.org,
+	amitk@kernel.org, thara.gopinath@gmail.com,
+	srinivas.pandruvada@linux.intel.com, baolin.wang@linux.alibaba.com,
+	u.kleine-koenig@pengutronix.de, hayashi.kunihiko@socionext.com,
+	d-gole@ti.com, linus.walleij@linaro.org,
+	DLG-Adam.Ward.opensource@dm.renesas.com, error27@gmail.com,
+	heiko@sntech.de, hdegoede@redhat.com, jernej.skrabec@gmail.com,
+	f.fainelli@gmail.com, bchihi@baylibre.com, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	kernel@collabora.com
+Subject: Re: [PATCH v1 06/18] thermal/drivers/rcar: Migrate to
+ thermal_zone_device_register()
+Message-ID: <20240130150852.GB2544372@ragnatech.se>
+References: <20240130111250.185718-1-angelogioacchino.delregno@collabora.com>
+ <20240130111250.185718-7-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240130111250.185718-7-angelogioacchino.delregno@collabora.com>
 
-Hi Rafael,
+Hi AngeloGioacchino,
 
-Thanks for the comment!
+Thanks for your work.
 
-On Thu, 25 Jan 2024 21:19:07 +0100
-"Rafael J. Wysocki" <rafael@kernel.org> wrote:
-
-> On Thu, Jan 25, 2024 at 1:43 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> >
-> > On Mon, 22 Jan 2024 18:08:22 -0800
-> > Brian Norris <briannorris@chromium.org> wrote:
-> >
-> > > On Fri, Jan 19, 2024 at 1:08 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > > On Wed, Jan 17, 2024 at 1:07 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > > > >
-> > > > > Gently ping,
-> > > > >
-> > > > > I would like to know this is enough or I should add more info/update.
-> > > >
-> > > > I still am not sure what this is going to be useful for.
-> > > >
-> > > > Do you have a specific example?
-> > >
-> > > Since there seems to be some communication gap here, I'll give it a try.
-> > >
-> > > First, I'll paste the key phrase of its use case from the cover letter:
-> > >
-> > >   "we would like to know how long the resume processes are taken in kernel
-> > >   and in user-space"
-> > >
-> > > This is a "system measurement" question, for use in tests (e.g., in a
-> > > test lab for CI or for pre-release testing, where we suspend
-> > > Chromebooks, wake them back up, and measure how long the wakeup took)
-> > > or for user-reported metrics (e.g., similar statistics from real
-> > > users' systems, if they've agreed to automatically report usage
-> > > statistics, back to Google). We'd like to know how long it takes for a
-> > > system to wake up, so we can detect when there are problems that lead
-> > > to a slow system-resume experience. The user experience includes both
-> > > time spent in the kernel and time spent after user space has thawed
-> > > (and is spending time in potentially complex power and display manager
-> > > stacks) before a Chromebook's display lights back up.
-> >
-> > Thanks Brian for explaining, this is correctly explained how we are
-> > using this for measuring resume process duration.
-> >
-> > > If I understand the whole of Masami's work correctly, I believe we're
-> > > taking "timestamps parsed out of dmesg" (or potentially out of ftrace,
-> > > trace events, etc.) to measure the kernel side, plus "timestamp
-> > > provided here in CLOCK_MONOTONIC" and "timestamp determined in our
-> > > power/display managers" to measure user space.
-> >
-> > Yes, I decided to decouple the kernel and user space because the clock
-> > subsystem is adjusted when resuming. So for the kernel, we will use
-> > local clock (which is not exposed to user space), and use CLOCK_MONOTONIC
-> > for the user space.
+On 2024-01-30 12:12:38 +0100, AngeloGioacchino Del Regno wrote:
+> The thermal API has a new thermal_zone_device_register() function which
+> is deprecating the older thermal_zone_device_register_with_trips() and
+> thermal_tripless_zone_device_register().
 > 
-> The problem with this split is that you cannot know how much time
-> elapses between the "successful kernel resume time" and the time when
-> user space gets to resume.
-
-Hm, let me check why.
-
+> Migrate to the new thermal zone device registration function.
 > 
-> As of this patch, the kernel timestamp is taken when the kernel is
-> about to thaw user space and some user space tasks may start running
-> right away.
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Yes. But note that this just indicates the time when the "kernel"
-done the resuming process.
+Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
+> ---
+>  drivers/thermal/rcar_thermal.c | 15 +++++++++++----
+>  1 file changed, 11 insertions(+), 4 deletions(-)
 > 
-> Some other tasks, however, will wait for what happens next in the
-> kernel (because it is not done with resuming yet) and some of them
-> will wait until explicitly asked to resume by the resume process IIUC.
-
-Yeah, those will be just restarted and may wait for a signal to e.g.
-re-draw, re-load etc. I think those are a part of user-space resuming.
-
+> diff --git a/drivers/thermal/rcar_thermal.c b/drivers/thermal/rcar_thermal.c
+> index feb848d595fa..7bf9c1611a00 100644
+> --- a/drivers/thermal/rcar_thermal.c
+> +++ b/drivers/thermal/rcar_thermal.c
+> @@ -488,10 +488,17 @@ static int rcar_thermal_probe(struct platform_device *pdev)
+>  						dev, i, priv,
+>  						&rcar_thermal_zone_ops);
+>  		} else {
+> -			priv->zone = thermal_zone_device_register_with_trips(
+> -				"rcar_thermal", trips, ARRAY_SIZE(trips), 0, priv,
+> -						&rcar_thermal_zone_ops, NULL, 0,
+> -						idle);
+> +			struct thermal_zone_device_params tzdp = {
+> +				.tzp = {
+> +					.type = "rcar_thermal",
+> +					.ops = &rcar_thermal_zone_ops,
+> +					.devdata = priv,
+> +					.trips = trips,
+> +					.num_trips = ARRAY_SIZE(trips),
+> +					.polling_delay = idle,
+> +				}
+> +			};
+> +			priv->zone = thermal_zone_device_register(&tzdp);
+>  
+>  			ret = thermal_zone_device_enable(priv->zone);
+>  			if (ret) {
+> -- 
+> 2.43.0
 > 
-> Your results depend on which tasks participate in the "user
-> experience", so to speak.  If they are the tasks that wait to be
-> kicked by the resume process, the kernel timestamp taken as per the
-
-"kicked by the resume process" means thawing the tasks??
-
-> above is useless for them, because there is quite some stuff that
-> happens in the kernel before they will get kicked.
-
-So your point might be, even after the timestamp, some kernel resume
-process will affect? Since the system(kernel+user) resuming state is
-continuously changing in parallel, it is hard to split the kernel
-and user resume process?
-
-> 
-> Moreover, some tasks will wait for certain device drivers to get ready
-> after the rest of the system resumes and that may still take some more
-> time after the kernel has returned to the process driving the system
-> suspend-resume.
-
-Oh, I thought driver resume will be done in the kernel before thawing.
-Of course some wifi/bt etc. will need to be re-connect again. And
-I don't care at this moment.
-
-> 
-> I'm not sure if there is a single point which can be used as a "user
-> space resume start" time for every task, which is why I'm not
-> convinced about this patch.
-
-Ah, OK. Yeah, that is a good point. I also think that is not useful
-for every cases, but we need some reference timestamp when we start
-resuming. And I think this is a better point to do. Of course if we
-observe some delay, we still need more comprehensive tracing not only
-application log, but this is the first step and I think the step we
-can not avoid (because we don't expose the local clock to user space)
-
-> 
-> BTW, there is a utility called sleepgraph that measures the kernel
-> part of the system suspend-resume.  It does its best to measure it
-> very precisely and uses different techniques for that.  Also, it is
-> included in the kernel source tree.  Can you please have a look at it
-> and see how much there is in common between it and your tools?  Maybe
-> there are some interfaces that can be used in common, or maybe it
-> could benefit from some interfaces that you are planning to add.
-
-Thanks for the info!  Yeah we also have some tracing tools (perfetto,
-trace-cmd etc.) for analysis. Note that this timestamp will kick those
-analysis tools if we find any delay based on the timestamp. I mean this
-will be used for "monitoring" the trend but not for precise "analysis".
-
-Thank you,
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Kind Regards,
+Niklas Söderlund
 
