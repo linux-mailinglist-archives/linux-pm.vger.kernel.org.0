@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-2969-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2970-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B1F3842299
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 12:16:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F1ED84229D
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 12:17:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B618E1F27938
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 11:16:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B5522937E6
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 11:17:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17FB06DCF4;
-	Tue, 30 Jan 2024 11:13:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F5D96E2AC;
+	Tue, 30 Jan 2024 11:13:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="tWaiuBHN"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="qPNQW+T2"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7365D6D1C2;
-	Tue, 30 Jan 2024 11:13:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF4166DD09;
+	Tue, 30 Jan 2024 11:13:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706613213; cv=none; b=idnZdRo5ZzvIy01zCX3gB3tmp85ewV8VlQ8+4Mp2CfPGifoAlkrJOwk4HAOXNff2CftbtxNligzgX1VOWOlg9FyBTB9yVDNA1GoqbBCm0tlkIAso97eDZLYSPzuedqzPDms7S/CaqkQ9ryc58C2A5KMcccAzsVFXobBmCqEbUzs=
+	t=1706613215; cv=none; b=ZgBlxaFh11kKCwPQ48q92nK3gRicQO38pYtnHXcNkEnMA+zBep3zeV5WSIo5z2QZJYhrZIwFNWahhRqc7S3f+XAUEQO/82PK8bqiIk/k17JSL0fHk7k5heuG66IFKqgT3WuqT1crTKUst6vObbtLHKIna7E+XrQhkmDbjJfbwlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706613213; c=relaxed/simple;
-	bh=8N3xJcRXf5FIbTK9mPZ0ZQQ16s2NrrH6F3ME5uc5zQE=;
+	s=arc-20240116; t=1706613215; c=relaxed/simple;
+	bh=xF+/wSXIq5fE1Hx9RSY2i9M69cbEXmtjt5ngzeA8uxo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GQS5DZL0appBnpHmLD51H0QB2KhZColBWmle1B/P01nzzBDaHmYvVcaQeUTelU0oTqoagDVqr7zlBdMZeumU6fkaBKWAE7Erb87oQ6nGqETKooh/CtfeLZYrZz9lclNbPehjmQIT53RFRPSZZSdWwIzfchGM943rxoJotKCOliE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=tWaiuBHN; arc=none smtp.client-ip=46.235.227.194
+	 MIME-Version; b=qREj2fU4Okjw9eOl2i0lhkp5CMxDl5ihQBZmI5XfZrPRP1Ef6/KLL2R7SFLEkOGEi7cUBWfXWH2Jox0RkgPzb9q4uE/cnepsKdPdtrHTzFLDOhdBW62HVgfJnYmbnbIVDttneMfkKH43hhwKhiLnPLQbDbRRX3TpM570MYPlqog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=qPNQW+T2; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1706613209;
-	bh=8N3xJcRXf5FIbTK9mPZ0ZQQ16s2NrrH6F3ME5uc5zQE=;
+	s=mail; t=1706613212;
+	bh=xF+/wSXIq5fE1Hx9RSY2i9M69cbEXmtjt5ngzeA8uxo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=tWaiuBHNkYHdwGEZcneAwBntZrHzXW7ISd87Cvuu5+408yDYsOzKNRnEFUUez+XUf
-	 7FwwYW6QEa6WduKNur0YASEp2wWVy8IrRF8cckY7rbHNlPtL6oewASwConO4RSbKi2
-	 jLgQgE0VX03qVmZq5gPx4lPPZ/nZBqNvQpWzZn4AWWaBarl+tzh+ocwt9EkyNHdrEY
-	 QT2nAEUAwZ05ZL99FEYAiaK4fsbjMOFlYQm3IOVsDELaG0H1CPn2GexXNrvyQK1c98
-	 xMBUq03IsVewGMSN/pBHme2dby0PVyhgGMAHR6pdZ1fdkB3LvTxQtQfelJKlHwoXSH
-	 pReTHx90gVLsg==
+	b=qPNQW+T201OxgVKSszDbRWd4p2jvdQZiIVNgD0+YhC88KZXrs8xyKLIoqBhTBe9n9
+	 ZpYyl7yX7PLi3/dqS+rkh8PfILSkQvsk3thd0Lm6P3wr7rdcu04lDun1EqwB4Lx7iq
+	 3G17PLpzNJ6mHBUYU2R3Js8SUe2oK6B0Kve84Ab1n5Uuu1j5wwEiqeFqA2qU1qg+Dw
+	 b8s+24AN+Cw+I/M3KOknDvG04jW9+PTzAOAX6NZ6uojs0pQI8gyapk7lnXJFjP6Oky
+	 txbeThlekjBx0ybhCGCWhXZuBpSGVyBQRzlAcaGvROTGSrICiKWNrOBPXLKHvnVicY
+	 l3EZfinvdpXLw==
 Received: from IcarusMOD.eternityproject.eu (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id E3823378208C;
-	Tue, 30 Jan 2024 11:13:27 +0000 (UTC)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 220C23782084;
+	Tue, 30 Jan 2024 11:13:30 +0000 (UTC)
 From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 To: daniel.lezcano@linaro.org
 Cc: miquel.raynal@bootlin.com,
@@ -85,9 +85,9 @@ Cc: miquel.raynal@bootlin.com,
 	linux-arm-msm@vger.kernel.org,
 	linux-renesas-soc@vger.kernel.org,
 	kernel@collabora.com
-Subject: [PATCH v1 09/18] thermal: intel: quark_dts: Migrate to thermal_zone_device_register()
-Date: Tue, 30 Jan 2024 12:12:41 +0100
-Message-ID: <20240130111250.185718-10-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v1 10/18] thermal: intel: soc_dts_iosf: Migrate to thermal_zone_device_register()
+Date: Tue, 30 Jan 2024 12:12:42 +0100
+Message-ID: <20240130111250.185718-11-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240130111250.185718-1-angelogioacchino.delregno@collabora.com>
 References: <20240130111250.185718-1-angelogioacchino.delregno@collabora.com>
@@ -107,61 +107,51 @@ Migrate to the new thermal zone device registration function.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- .../thermal/intel/intel_quark_dts_thermal.c   | 23 +++++++++++--------
- 1 file changed, 14 insertions(+), 9 deletions(-)
+ drivers/thermal/intel/intel_soc_dts_iosf.c | 24 +++++++++++++++-------
+ 1 file changed, 17 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/thermal/intel/intel_quark_dts_thermal.c b/drivers/thermal/intel/intel_quark_dts_thermal.c
-index 646ca8bd40a9..381a806d5f62 100644
---- a/drivers/thermal/intel/intel_quark_dts_thermal.c
-+++ b/drivers/thermal/intel/intel_quark_dts_thermal.c
-@@ -320,10 +320,16 @@ static void free_soc_dts(struct soc_sensor_entry *aux_entry)
- 
- static struct soc_sensor_entry *alloc_soc_dts(void)
+diff --git a/drivers/thermal/intel/intel_soc_dts_iosf.c b/drivers/thermal/intel/intel_soc_dts_iosf.c
+index d00def3c4703..78dceb117ed8 100644
+--- a/drivers/thermal/intel/intel_soc_dts_iosf.c
++++ b/drivers/thermal/intel/intel_soc_dts_iosf.c
+@@ -220,8 +220,15 @@ static void remove_dts_thermal_zone(struct intel_soc_dts_sensor_entry *dts)
+ static int add_dts_thermal_zone(int id, struct intel_soc_dts_sensor_entry *dts,
+ 				bool critical_trip)
  {
 +	struct thermal_zone_device_params tzdp = {
 +		.tzp = {
-+			.type = "quark_dts",
++			.devdata = dts,
 +			.ops = &tzone_ops,
-+			.polling_delay = polling_delay,
++			.trips = dts->trips,
++			.num_trips = SOC_MAX_DTS_TRIPS,
 +		}
 +	};
- 	struct soc_sensor_entry *aux_entry;
- 	int err;
- 	u32 out;
--	int wr_mask;
- 
- 	aux_entry = kzalloc(sizeof(*aux_entry), GFP_KERNEL);
- 	if (!aux_entry) {
-@@ -339,10 +345,10 @@ static struct soc_sensor_entry *alloc_soc_dts(void)
- 
- 	if (out & QRK_DTS_LOCK_BIT) {
- 		aux_entry->locked = true;
--		wr_mask = QRK_DTS_WR_MASK_CLR;
-+		tzdp.tzp.mask = QRK_DTS_WR_MASK_CLR;
- 	} else {
- 		aux_entry->locked = false;
--		wr_mask = QRK_DTS_WR_MASK_SET;
-+		tzdp.tzp.mask = QRK_DTS_WR_MASK_SET;
+ 	int writable_trip_cnt = SOC_MAX_DTS_TRIPS;
+-	char name[10];
+ 	unsigned long trip;
+ 	int trip_mask;
+ 	unsigned long ptps;
+@@ -253,12 +260,15 @@ static int add_dts_thermal_zone(int id, struct intel_soc_dts_sensor_entry *dts,
+ 			trip_mask &= ~BIT(i / 8);
  	}
- 
- 	/* Store DTS default state if DTS registers are not locked */
-@@ -368,12 +374,11 @@ static struct soc_sensor_entry *alloc_soc_dts(void)
- 	aux_entry->trips[QRK_DTS_ID_TP_HOT].temperature = get_trip_temp(QRK_DTS_ID_TP_HOT);
- 	aux_entry->trips[QRK_DTS_ID_TP_HOT].type = THERMAL_TRIP_HOT;
- 
--	aux_entry->tzone = thermal_zone_device_register_with_trips("quark_dts",
--								   aux_entry->trips,
--								   QRK_MAX_DTS_TRIPS,
--								   wr_mask,
--								   aux_entry, &tzone_ops,
--								   NULL, 0, polling_delay);
-+	tzdp.tzp.devdata = aux_entry;
-+	tzdp.tzp.trips = aux_entry->trips;
-+	tzdp.tzp.num_trips = QRK_MAX_DTS_TRIPS;
+ 	dts->trip_mask = trip_mask;
+-	snprintf(name, sizeof(name), "soc_dts%d", id);
+-	dts->tzone = thermal_zone_device_register_with_trips(name, dts->trips,
+-							     SOC_MAX_DTS_TRIPS,
+-							     trip_mask,
+-							     dts, &tzone_ops,
+-							     NULL, 0, 0);
 +
-+	aux_entry->tzone = thermal_zone_device_register(&tzdp);
- 	if (IS_ERR(aux_entry->tzone)) {
- 		err = PTR_ERR(aux_entry->tzone);
++	tzdp.tzp.type = kasprintf(GFP_KERNEL, "soc_dts%d", id);
++	if (!tzdp.tzp.type)
++		return -ENOMEM;
++
++	tzdp.tzp.mask = trip_mask;
++
++	dts->tzone = thermal_zone_device_register(&tzdp);
++	kfree(tzdp.tzp.type);
+ 	if (IS_ERR(dts->tzone)) {
+ 		ret = PTR_ERR(dts->tzone);
  		goto err_ret;
 -- 
 2.43.0
