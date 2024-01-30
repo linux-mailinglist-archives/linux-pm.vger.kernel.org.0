@@ -1,39 +1,39 @@
-Return-Path: <linux-pm+bounces-3011-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3012-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60FF9842DF9
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 21:38:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44D9E842DFB
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 21:38:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00E2F1F24D8B
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 20:38:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C40DD1F2532A
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 20:38:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BC3171B58;
-	Tue, 30 Jan 2024 20:37:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ED0769E1B;
+	Tue, 30 Jan 2024 20:37:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=peacevolution.org header.i=@peacevolution.org header.b="OLUhxc3O"
+	dkim=pass (1024-bit key) header.d=peacevolution.org header.i=@peacevolution.org header.b="peh0abvS"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from a.peacevolution.org (a.peacevolution.org [206.189.193.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D44571B2C;
-	Tue, 30 Jan 2024 20:37:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 974CC5F555;
+	Tue, 30 Jan 2024 20:37:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=206.189.193.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706647067; cv=none; b=KPwGgNcAmFQe5Sv6cqlwoT+6HKftMvx7/MF5K5f48gwuVvu4z5xpprTZpsScjvr8QFslJd1snirSR3X5ilOcDSqnqpBj800J+Kx1hZ6+1LNAFcB8mjRTjNffZ12QpxALpisV99aSO2N/iueOdsbiBzjiZNiQrryon05myHsgdvA=
+	t=1706647075; cv=none; b=XCoWMkl/v4hm3SdymA+GstQweqwlmVP3USp0Ni2LRMWtWo1sPbC7AG/2GPMLRK30WSinMjuUC6c3YTecj9y944axtPpa5wLwycHnhlAXgwthsiF9+gHmQG8DAaOEBkMV55GqZuN+uRuOJHs3LLNBP2XqBamxmBHUPhrd3ag3iZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706647067; c=relaxed/simple;
-	bh=s8gDv1BRbZ4lq/K0LWRSztHuSeHvlnMI3UYO7zLzfo8=;
+	s=arc-20240116; t=1706647075; c=relaxed/simple;
+	bh=GIUIG7+EEVMTtkYD8ypmqtjqn29llrcgXCn39fpUmBE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=daD2+zszvr250mvjYAc8mCM0MNIZZkbcAYKo3WVJyMEN4LDkiVKZeFb3CmD2L7FjL/m+TeEd6z47bPkq9On8HYI3YNH0rFNeZ2ecYrimSo3Arakh2/3wEqA8tKyQbM7LvZb4tWKt/OYRP3g8T2O2Tsym1XyAlT5Hj0jU0HoPlAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=peacevolution.org; spf=pass smtp.mailfrom=peacevolution.org; dkim=pass (1024-bit key) header.d=peacevolution.org header.i=@peacevolution.org header.b=OLUhxc3O; arc=none smtp.client-ip=206.189.193.133
+	 MIME-Version; b=LCcwests+099a+gZUoptKTeQwDFgrHvaNT3jjzHer1Ttj+e/V9JBlrvoKOCgWMwS8YFGZ/yiqvWmZvqqUO7Jrq5I4Ob6vfr8ClTcaEUnNhnp6cMK6K06oE/K5+a/JzPib2ZjAbTcGuPxECPT/alIw1kU9T9L+Y0tnrGzWGmtlxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=peacevolution.org; spf=pass smtp.mailfrom=peacevolution.org; dkim=pass (1024-bit key) header.d=peacevolution.org header.i=@peacevolution.org header.b=peh0abvS; arc=none smtp.client-ip=206.189.193.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=peacevolution.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=peacevolution.org
 Received: from authenticated-user (PRIMARY_HOSTNAME [PUBLIC_IP])
-	by a.peacevolution.org (Postfix) with ESMTPA id B03E14661E;
-	Tue, 30 Jan 2024 20:37:43 +0000 (UTC)
+	by a.peacevolution.org (Postfix) with ESMTPA id 5F6304661E;
+	Tue, 30 Jan 2024 20:37:52 +0000 (UTC)
 From: Aren Moynihan <aren@peacevolution.org>
 To: linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
@@ -43,9 +43,9 @@ Cc: =?UTF-8?q?Ond=C5=99ej=20Jirman?= <megi@xff.cz>,
 	Aren Moynihan <aren@peacevolution.org>,
 	Chen-Yu Tsai <wens@csie.org>,
 	Sebastian Reichel <sre@kernel.org>
-Subject: [PATCH v2 1/5] power: supply: axp20x_usb_power: replace current_max with input_current_limit
-Date: Tue, 30 Jan 2024 15:27:57 -0500
-Message-ID: <20240130203714.3020464-2-aren@peacevolution.org>
+Subject: [PATCH v2 2/5] power: supply: axp20x_usb_power: use correct register for input current limit
+Date: Tue, 30 Jan 2024 15:27:58 -0500
+Message-ID: <20240130203714.3020464-3-aren@peacevolution.org>
 In-Reply-To: <20240130203714.3020464-1-aren@peacevolution.org>
 References: <20240130203714.3020464-1-aren@peacevolution.org>
 Precedence: bulk
@@ -59,133 +59,125 @@ Authentication-Results: auth=pass smtp.auth=aren@peacevolution.org smtp.mailfrom
 X-Spam-Level: **
 X-Spamd-Bar: ++
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=peacevolution.org;
-	s=dkim; t=1706647064;
+	s=dkim; t=1706647072;
 	h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding:in-reply-to:references;
-	bh=NAxGv9qMri1hf0JDQHUznnkmw1bSeEqz6JkBTbreKjQ=;
-	b=OLUhxc3OTR3e4qs7eMABcduOJHq7KXwvnRR8iPxFsdEXZ4NX+B1gzVzDk2Qqm2xp9fdlzO
-	MJUTRvNGYohFGLGU8kTiMzEcsVg5V3imJotjTz++QWNpa2xHRoSrqb2UxC4ns2B1zJ5mBu
-	LieV+Y1RT8VDeszaAEmhY+rH2caESaI=
+	bh=ivPm1WNR8FbrvYRzWgVfDM6fYhcsm1TJs7pHZ7Ec81E=;
+	b=peh0abvSNH8vlLhCN6FjDCVIefhI1lavzA6yZ4ePRVf9uszqJQl7pvbQas7VjPk5ltE059
+	H8xonDx9V+IngLtipZw7Wa0I/Sg/CThpmn/REyWvz4ZO1WjXMNaR9Vh2jYfcT2wg4ky8rk
+	kkW4T9Lxmb5VrFDjvmmhqu1SPF3Tsis=
 
-The current_max property is supposed to be read-only, and represent the
-maximum current the supply can provide. input_current_limit is the
-limit that is currently set, which is what we have here.
+On the axp803 and axp813 chips register 0x30 bits 0-1 is the default
+current limit that gets applied after the pmic detects a CDP or DCP
+port. The correct field to set is 0x35 bits 4-7.
 
-When determining what value to write to the register, we need to pick a
-reasonable value if the requested limit doesn't exactly match one
-supported by the hardware. If the requested limit is less than the
-lowest value we can set, round up to the lowest value. Otherwise round
-down to the nearest value supported by hardware.
-
-Also add a dev field to the axp20x_usb_power struct, so we can use
-dev_dbg and dev_err in more places.
+This field only has nine values (out of the 16 possible if it used all
+the bits), so introduce a field size variable to take that into account.
 
 Signed-off-by: Aren Moynihan <aren@peacevolution.org>
 ---
 
 Changes in v2:
- - Values less than the lowest supported limit are rounded up instead
-   of returning -EINVAL when setting the input current limit.
+ - Inline get input current logic. It's not that complicated and this
+   helps to illustrate what changed more clearly.
+ - Split into separate commit, it was part of adding the input current
+   limit before.
 
- drivers/power/supply/axp20x_usb_power.c | 29 +++++++++++++++----------
- 1 file changed, 18 insertions(+), 11 deletions(-)
+ drivers/power/supply/axp20x_usb_power.c | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supply/axp20x_usb_power.c
-index e23308ad4cc7..f7f2ac2b7dae 100644
+index f7f2ac2b7dae..923121b23d5f 100644
 --- a/drivers/power/supply/axp20x_usb_power.c
 +++ b/drivers/power/supply/axp20x_usb_power.c
-@@ -59,6 +59,7 @@ struct axp_data {
- };
- 
- struct axp20x_usb_power {
-+	struct device *dev;
- 	struct regmap *regmap;
- 	struct regmap_field *curr_lim_fld;
- 	struct regmap_field *vbus_valid_bit;
-@@ -160,7 +161,7 @@ static int axp20x_usb_power_get_property(struct power_supply *psy,
- 
- 		val->intval = ret * 1700; /* 1 step = 1.7 mV */
- 		return 0;
--	case POWER_SUPPLY_PROP_CURRENT_MAX:
-+	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
- 		ret = regmap_field_read(power->curr_lim_fld, &v);
+@@ -50,6 +50,7 @@ struct axp_data {
+ 	const char * const		*irq_names;
+ 	unsigned int			num_irq_names;
+ 	const int			*curr_lim_table;
++	int				curr_lim_table_size;
+ 	struct reg_field		curr_lim_fld;
+ 	struct reg_field		vbus_valid_bit;
+ 	struct reg_field		vbus_mon_bit;
+@@ -166,7 +167,11 @@ static int axp20x_usb_power_get_property(struct power_supply *psy,
  		if (ret)
  			return ret;
-@@ -256,19 +257,24 @@ static int axp20x_usb_power_set_voltage_min(struct axp20x_usb_power *power,
- 	return -EINVAL;
- }
  
--static int axp20x_usb_power_set_current_max(struct axp20x_usb_power *power, int intval)
-+static int axp20x_usb_power_set_input_current_limit(struct axp20x_usb_power *power,
-+						    int intval)
+-		val->intval = power->axp_data->curr_lim_table[v];
++		if (v < power->axp_data->curr_lim_table_size)
++			val->intval = power->axp_data->curr_lim_table[v];
++		else
++			val->intval = power->axp_data->curr_lim_table[
++				power->axp_data->curr_lim_table_size - 1];
+ 		return 0;
+ 	case POWER_SUPPLY_PROP_CURRENT_NOW:
+ 		if (IS_ENABLED(CONFIG_AXP20X_ADC)) {
+@@ -261,8 +266,7 @@ static int axp20x_usb_power_set_input_current_limit(struct axp20x_usb_power *pow
+ 						    int intval)
  {
-+	unsigned int reg;
- 	const unsigned int max = GENMASK(power->axp_data->curr_lim_fld.msb,
- 					 power->axp_data->curr_lim_fld.lsb);
+ 	unsigned int reg;
+-	const unsigned int max = GENMASK(power->axp_data->curr_lim_fld.msb,
+-					 power->axp_data->curr_lim_fld.lsb);
++	const unsigned int max = power->axp_data->curr_lim_table_size;
  
  	if (intval == -1)
  		return -EINVAL;
- 
--	for (unsigned int i = 0; i <= max; ++i)
--		if (power->axp_data->curr_lim_table[i] == intval)
--			return regmap_field_write(power->curr_lim_fld, i);
-+	for (reg = max - 1; reg > 0; reg--)
-+		if (power->axp_data->curr_lim_table[reg] <= intval)
-+			break;
- 
--	return -EINVAL;
-+	dev_dbg(power->dev, "setting input current limit reg to %d (%d uA), requested %d uA",
-+		reg, power->axp_data->curr_lim_table[reg], intval);
-+
-+	return regmap_field_write(power->curr_lim_fld, reg);
- }
- 
- static int axp20x_usb_power_set_property(struct power_supply *psy,
-@@ -287,8 +293,8 @@ static int axp20x_usb_power_set_property(struct power_supply *psy,
- 	case POWER_SUPPLY_PROP_VOLTAGE_MIN:
- 		return axp20x_usb_power_set_voltage_min(power, val->intval);
- 
--	case POWER_SUPPLY_PROP_CURRENT_MAX:
--		return axp20x_usb_power_set_current_max(power, val->intval);
-+	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-+		return axp20x_usb_power_set_input_current_limit(power, val->intval);
- 
- 	default:
- 		return -EINVAL;
-@@ -313,7 +319,7 @@ static int axp20x_usb_power_prop_writeable(struct power_supply *psy,
- 		return power->vbus_disable_bit != NULL;
- 
- 	return psp == POWER_SUPPLY_PROP_VOLTAGE_MIN ||
--	       psp == POWER_SUPPLY_PROP_CURRENT_MAX;
-+	       psp == POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT;
- }
- 
- static enum power_supply_property axp20x_usb_power_properties[] = {
-@@ -322,7 +328,7 @@ static enum power_supply_property axp20x_usb_power_properties[] = {
- 	POWER_SUPPLY_PROP_ONLINE,
- 	POWER_SUPPLY_PROP_VOLTAGE_MIN,
- 	POWER_SUPPLY_PROP_VOLTAGE_NOW,
--	POWER_SUPPLY_PROP_CURRENT_MAX,
-+	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
- 	POWER_SUPPLY_PROP_CURRENT_NOW,
+@@ -394,10 +398,15 @@ static int axp221_usb_curr_lim_table[] = {
  };
  
-@@ -331,7 +337,7 @@ static enum power_supply_property axp22x_usb_power_properties[] = {
- 	POWER_SUPPLY_PROP_PRESENT,
- 	POWER_SUPPLY_PROP_ONLINE,
- 	POWER_SUPPLY_PROP_VOLTAGE_MIN,
--	POWER_SUPPLY_PROP_CURRENT_MAX,
-+	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
+ static int axp813_usb_curr_lim_table[] = {
++	100000,
++	500000,
+ 	900000,
+ 	1500000,
+ 	2000000,
+ 	2500000,
++	3000000,
++	3500000,
++	4000000,
  };
  
- static const struct power_supply_desc axp20x_usb_power_desc = {
-@@ -558,6 +564,7 @@ static int axp20x_usb_power_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, power);
- 
-+	power->dev = &pdev->dev;
- 	power->axp_data = axp_data;
- 	power->regmap = axp20x->regmap;
- 	power->num_irqs = axp_data->num_irq_names;
+ static const struct axp_data axp192_data = {
+@@ -405,6 +414,7 @@ static const struct axp_data axp192_data = {
+ 	.irq_names	= axp20x_irq_names,
+ 	.num_irq_names	= ARRAY_SIZE(axp20x_irq_names),
+ 	.curr_lim_table = axp192_usb_curr_lim_table,
++	.curr_lim_table_size = ARRAY_SIZE(axp192_usb_curr_lim_table),
+ 	.curr_lim_fld   = REG_FIELD(AXP20X_VBUS_IPSOUT_MGMT, 0, 1),
+ 	.vbus_valid_bit = REG_FIELD(AXP192_USB_OTG_STATUS, 2, 2),
+ 	.vbus_mon_bit   = REG_FIELD(AXP20X_VBUS_MON, 3, 3),
+@@ -415,6 +425,7 @@ static const struct axp_data axp202_data = {
+ 	.irq_names	= axp20x_irq_names,
+ 	.num_irq_names	= ARRAY_SIZE(axp20x_irq_names),
+ 	.curr_lim_table = axp20x_usb_curr_lim_table,
++	.curr_lim_table_size = ARRAY_SIZE(axp20x_usb_curr_lim_table),
+ 	.curr_lim_fld   = REG_FIELD(AXP20X_VBUS_IPSOUT_MGMT, 0, 1),
+ 	.vbus_valid_bit = REG_FIELD(AXP20X_USB_OTG_STATUS, 2, 2),
+ 	.vbus_mon_bit   = REG_FIELD(AXP20X_VBUS_MON, 3, 3),
+@@ -425,6 +436,7 @@ static const struct axp_data axp221_data = {
+ 	.irq_names	= axp22x_irq_names,
+ 	.num_irq_names	= ARRAY_SIZE(axp22x_irq_names),
+ 	.curr_lim_table = axp221_usb_curr_lim_table,
++	.curr_lim_table_size = ARRAY_SIZE(axp221_usb_curr_lim_table),
+ 	.curr_lim_fld   = REG_FIELD(AXP20X_VBUS_IPSOUT_MGMT, 0, 1),
+ 	.vbus_needs_polling = true,
+ };
+@@ -434,6 +446,7 @@ static const struct axp_data axp223_data = {
+ 	.irq_names	= axp22x_irq_names,
+ 	.num_irq_names	= ARRAY_SIZE(axp22x_irq_names),
+ 	.curr_lim_table = axp20x_usb_curr_lim_table,
++	.curr_lim_table_size = ARRAY_SIZE(axp20x_usb_curr_lim_table),
+ 	.curr_lim_fld   = REG_FIELD(AXP20X_VBUS_IPSOUT_MGMT, 0, 1),
+ 	.vbus_needs_polling = true,
+ };
+@@ -443,7 +456,8 @@ static const struct axp_data axp813_data = {
+ 	.irq_names	= axp22x_irq_names,
+ 	.num_irq_names	= ARRAY_SIZE(axp22x_irq_names),
+ 	.curr_lim_table = axp813_usb_curr_lim_table,
+-	.curr_lim_fld   = REG_FIELD(AXP20X_VBUS_IPSOUT_MGMT, 0, 1),
++	.curr_lim_table_size = ARRAY_SIZE(axp813_usb_curr_lim_table),
++	.curr_lim_fld	= REG_FIELD(AXP22X_CHRG_CTRL3, 4, 7),
+ 	.usb_bc_en_bit	= REG_FIELD(AXP288_BC_GLOBAL, 0, 0),
+ 	.vbus_disable_bit = REG_FIELD(AXP20X_VBUS_IPSOUT_MGMT, 7, 7),
+ 	.vbus_needs_polling = true,
 -- 
 2.43.0
 
