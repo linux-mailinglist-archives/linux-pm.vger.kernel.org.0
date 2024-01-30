@@ -1,75 +1,75 @@
-Return-Path: <linux-pm+bounces-2990-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2991-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24927842637
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 14:34:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C88084264D
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 14:41:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D33A9B277E3
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 13:26:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99842B2AF23
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 13:41:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4A036BB34;
-	Tue, 30 Jan 2024 13:26:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0EC66BB5F;
+	Tue, 30 Jan 2024 13:41:05 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8087166B51;
-	Tue, 30 Jan 2024 13:26:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F09796BB54;
+	Tue, 30 Jan 2024 13:41:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706621187; cv=none; b=h6D5osBGsQpBTS3PmZW7D/b3KPqRwiHNjubfadIcVYh8G/8j3ooGXWKuAPgac1ZWSFwhz9web3KD3WSIMp1eSSGoEsvS6tzv5LY7O19afvzhcibkC5QgqDzDom3t5qvskKAXWSWkm+aLMdhKciPYIqw6ReEQ0Rcl+6N5Sh1AXV8=
+	t=1706622065; cv=none; b=reTrB8BEMGxGe3BjfJXQk19ulA71A6qBjGNi7aIEeuURG5Xy1UtHuLIS2/dED/Zs9D8v8O2yvAHpYptPmOY3E/+Csx6yJ3IBaqzrQXCrJWmyTULe00mXNXEdy76EUnG/u5v9+25fxV1eJFzPaGWFT5vRvzIx+gTB7JUEFiAIoQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706621187; c=relaxed/simple;
-	bh=PF8CAVL4rEFi9w1ZE/f1iolLbWvY7zhJk9STs3r80is=;
+	s=arc-20240116; t=1706622065; c=relaxed/simple;
+	bh=RiNHswsYrPk3kor4Gr8r0ain5u5aP5cCPnQ3TBQxNew=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=N0yvkbiH163MfGwzMAG02tBzSRNBrhNVgWY2VMX7Vi1Xw9VcLgPEvZzB7F6rKakLEd8uBrxHvHE/a+HdUytPbSyrrVIPI/OTp7Solbxj+6UKucSm5pkUjqk/E/Zlq9a9WAnZkoPhBeHVxr6+2apCmW9ZB2BcRE/5gyQlPF9EWZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.41
+	 To:Cc:Content-Type; b=HUdlv6pfrfUr9Tg/zVSlu0qiKVeqoLb+ZOSE436MlgE/wawsBmtVdgUrAX6qdm8Le4s/Qwtdwk0uZiYng4E8s0/oXBY6+i+SOyub+lLhK67nYeFxKP+uv4Tngmk6r8wDczF5wboyopcJK+QyXU9u4kzVVmId5VZ6JYCcK99ZG3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-20536d5c5c7so2476396fac.2;
-        Tue, 30 Jan 2024 05:26:25 -0800 (PST)
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6ddd19552e6so1922685b3a.1;
+        Tue, 30 Jan 2024 05:41:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706621184; x=1707225984;
+        d=1e100.net; s=20230601; t=1706622063; x=1707226863;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=twRUHDzS8w4WKfQKLf30GrMRPHMUcxhF058BULLzw1Q=;
-        b=T6Cbm5Ook6mzsNmevwT8X4ViTMwLLVkIH0jpqoJ/aPWw1vluaiHZtpervNJaen8zcm
-         y7Efb7Xb2Vkhub8H6rKHu6MlvhKDuADkh5Rd1patBG8UmmQb/oVO3+1Z2qJNnoEgMIT2
-         oTf2/N+RwjflCSfPRKOkBwD8p4mGUACjTaJnp31A86EFu4bGBcTta8XNs+YgZlIChcjl
-         pOT6mMHsGtLk1gAjOHLN1//0jGexPdprqSjhybqPGBYZ4aKtk6TM6Zp37oG7Lx3CKyII
-         LMpuqCF7v9GGpbGf72DmfkSblZI5nWUaq4MnLvaD3qkA/X0qexTcz8vzqD0hAAMvsnB/
-         8SjA==
-X-Gm-Message-State: AOJu0YwtLR6zeQFQ/D4pXEeu0G868bKNtBkuK1ms1DEUVj2KzvDDxzP7
-	xICod1VpcLWfWNGK0SwPTn0WOkLAMRDK8YUCJKVePsSSac7wozFDKJaZucMj8KY=
-X-Google-Smtp-Source: AGHT+IGgq38bhoeG59BH65Ja8KFWXHL5iTihljLt3Fjpux1S3N8uNoMeFoWUPjhw0kO2fb2gO1QH5A==
-X-Received: by 2002:a05:6871:8191:b0:218:61af:1c75 with SMTP id so17-20020a056871819100b0021861af1c75mr5223962oab.37.1706621184274;
-        Tue, 30 Jan 2024 05:26:24 -0800 (PST)
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com. [209.85.210.41])
-        by smtp.gmail.com with ESMTPSA id n13-20020a9d4d0d000000b006e11d51d04csm1292201otf.18.2024.01.30.05.26.23
+        bh=frJDUedpI3YTH8Ki9s8KdkIUfyDUhvcxZMMZkPB9gtA=;
+        b=F25CRAbFZaKg0ABrkpkG4pGRGalgtMoPBOM1itxRvfF2t0VBJLJxta35g/K97lHr5v
+         EPrdPp9cDG8COz7kd/Hf31zCCAoudv9fB+mO0Jkc6lEBMZ1jxuhaPVJnkH96eKDIJiyQ
+         RJ+iDfDWUDBos2+xhet5htR736OjvMdkZAl+FxT+CPEBUDCP9zPT5kVKw9wq8AUPA27V
+         IZUM/mXi3SGfwm3L5N8MnxMqc7W+a+NyWPjGqUJhHXXReFVBkD8iY7fUa8kXRlNiHJ+s
+         GIXUZjdsQEZvSvCEn/itQNwFOZnmL2/UnflioVLDeey8xPFF37FxCGX3C3ZqH+KbozJs
+         IrLw==
+X-Gm-Message-State: AOJu0YzMIB1Wi8VfnEZCp5jtv/SVxVMe8OYn1j6XvwcF+/RmGj8qXj/D
+	Ef7UK2bKf5bFH0N1y6zCO2atRSgof1nGnpqMr5Ec2KxDga4HiiDIbXGYZ+ixk08=
+X-Google-Smtp-Source: AGHT+IHHJCN/DA5nDwh/W1iGS9pLTv+8/BwgtjewsS/JVnv80HpaGXOBEGUKUqWzXskzFujFpvaFKg==
+X-Received: by 2002:a05:6a00:1805:b0:6db:cf34:8a96 with SMTP id y5-20020a056a00180500b006dbcf348a96mr8296734pfa.26.1706622062919;
+        Tue, 30 Jan 2024 05:41:02 -0800 (PST)
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com. [209.85.215.182])
+        by smtp.gmail.com with ESMTPSA id w18-20020a639352000000b005b458aa0541sm8089838pgm.15.2024.01.30.05.41.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Jan 2024 05:26:23 -0800 (PST)
-Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-6dde5d308c6so2643387a34.0;
-        Tue, 30 Jan 2024 05:26:23 -0800 (PST)
-X-Received: by 2002:a9d:6a8e:0:b0:6dd:e8d5:9afb with SMTP id
- l14-20020a9d6a8e000000b006dde8d59afbmr5897353otq.3.1706621183706; Tue, 30 Jan
- 2024 05:26:23 -0800 (PST)
+        Tue, 30 Jan 2024 05:41:02 -0800 (PST)
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-5cfd95130c6so2224411a12.1;
+        Tue, 30 Jan 2024 05:41:02 -0800 (PST)
+X-Received: by 2002:a25:b20c:0:b0:dc3:78d1:c5a3 with SMTP id
+ i12-20020a25b20c000000b00dc378d1c5a3mr5877288ybj.13.1706621652312; Tue, 30
+ Jan 2024 05:34:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240130111250.185718-1-angelogioacchino.delregno@collabora.com> <20240130111250.185718-3-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20240130111250.185718-3-angelogioacchino.delregno@collabora.com>
+References: <20240130111250.185718-1-angelogioacchino.delregno@collabora.com> <20240130111250.185718-7-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20240130111250.185718-7-angelogioacchino.delregno@collabora.com>
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 30 Jan 2024 14:26:12 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUKXwxAKgtmgMxj+y-8GBWBLWC=ROP31uStTnfLDx6OLQ@mail.gmail.com>
-Message-ID: <CAMuHMdUKXwxAKgtmgMxj+y-8GBWBLWC=ROP31uStTnfLDx6OLQ@mail.gmail.com>
-Subject: Re: [PATCH v1 02/18] thermal: Add new structures and thermal_zone_device_register()
+Date: Tue, 30 Jan 2024 14:34:01 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXgT0g=0uky9FYDXk=KuC1HjkGEX8sCQdKbUMoBFQKDqQ@mail.gmail.com>
+Message-ID: <CAMuHMdXgT0g=0uky9FYDXk=KuC1HjkGEX8sCQdKbUMoBFQKDqQ@mail.gmail.com>
+Subject: Re: [PATCH v1 06/18] thermal/drivers/rcar: Migrate to thermal_zone_device_register()
 To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Cc: daniel.lezcano@linaro.org, miquel.raynal@bootlin.com, rafael@kernel.org, 
 	rui.zhang@intel.com, lukasz.luba@arm.com, support.opensource@diasemi.com, 
@@ -87,58 +87,24 @@ Cc: daniel.lezcano@linaro.org, miquel.raynal@bootlin.com, rafael@kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Angelo,
-
-On Tue, Jan 30, 2024 at 12:13=E2=80=AFPM AngeloGioacchino Del Regno
+On Tue, Jan 30, 2024 at 12:15=E2=80=AFPM AngeloGioacchino Del Regno
 <angelogioacchino.delregno@collabora.com> wrote:
-> In preparation for extending the thermal zone devices to actually
-> have a name and disambiguate thermal zone types/names, and to do
-> a reorganization in thermal_zone_device, add some new Thermal Zone
-> structures:
+> The thermal API has a new thermal_zone_device_register() function which
+> is deprecating the older thermal_zone_device_register_with_trips() and
+> thermal_tripless_zone_device_register().
 >
-> Introduce new thermal_governor_params, thermal_zone_platform_params
-> and thermal_zone_device_params structures which are meant to hold
-> the parameters for thermal zone registration and, in the future, to
-> stop having a catch-all thermal_zone_device structure.
->
-> While at it, also add a new thermal_zone_device_register() function
-> which uses the new structure(s) for registration;
-> the now old functions thermal_tripless_zone_device_register() and
-> thermal_zone_device_register_with_trips() are now advertised as
-> being deprecated and changed to instead act as wrappers around the
-> new thermal_zone_device_register().
+> Migrate to the new thermal zone device registration function.
 >
 > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
 abora.com>
 
-Thanks for your patch!
-
-> ---
->  drivers/thermal/gov_power_allocator.c |  38 +++----
->  drivers/thermal/qcom/tsens.c          |   4 +-
->  drivers/thermal/thermal_core.c        | 146 ++++++++++++++++++--------
->  drivers/thermal/thermal_helpers.c     |   8 +-
->  drivers/thermal/thermal_sysfs.c       |  16 +--
->  include/linux/thermal.h               |  73 +++++++++++--
->  6 files changed, 202 insertions(+), 83 deletions(-)
-
-This also needs an update to the documentation, which still refers to
-the old function removed in commit edd220b33f479cf9 ("thermal: core:
-Drop thermal_zone_device_register()") in v6.6.:
-
-Documentation/driver-api/thermal/power_allocator.rst:`thermal_zone_device_r=
-egister()`
-Documentation/driver-api/thermal/power_allocator.rst:`thermal_zone_device_r=
-egister()`
-(i.e., platform code), then weights
-Documentation/driver-api/thermal/sysfs-api.rst:
-*thermal_zone_device_register(char *type,
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
 Gr{oetje,eeting}s,
 
                         Geert
 
---
+--=20
 Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
 .org
 
