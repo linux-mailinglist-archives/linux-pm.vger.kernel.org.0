@@ -1,153 +1,121 @@
-Return-Path: <linux-pm+bounces-2950-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-2951-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26277841BAD
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 06:59:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CDAD841C44
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 08:02:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A66D91F28261
-	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 05:59:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55B02284AD3
+	for <lists+linux-pm@lfdr.de>; Tue, 30 Jan 2024 07:02:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 903663839D;
-	Tue, 30 Jan 2024 05:57:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EBDE3CF66;
+	Tue, 30 Jan 2024 07:02:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="jnyUtK6i"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kVztop2m"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2046.outbound.protection.outlook.com [40.107.102.46])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA07755E57;
-	Tue, 30 Jan 2024 05:57:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706594242; cv=fail; b=dbDnl+GP0toJtozaaxFD0Yl6yAJRVXAqmLFHBeBBGmOyEE2zHOmQ/L+GXDsFBv/s8qyIvOBT8mA7uxZIFQNyBow5y1l8HZRgWwzIjlAK7zKId9uMC17I2KFIHm4qHrt7ReKSdzIaaVMXLQjgGU28iaI9IYIrtcwDDC6gNdooyPA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706594242; c=relaxed/simple;
-	bh=3ME+v1M95ybXx96nhasNEZ3w22e2BKuPtRJR41vGdaE=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KV5g9Vb18QY35zEbD/EeDgU1rjTD1v6Ra3tL2+DzNqK6Tv0hamclH0KTRZSHIyfnapZ04FObePYXsbBekIMvCB1Cqc+onXHYl2RZSOyt72ObF6+WkL343HWOfgxgH/k4tTEnd+Kj4jjVLmPDsuN4HuJ5gOl1vFA+qPrznRqlBg4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=jnyUtK6i; arc=fail smtp.client-ip=40.107.102.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ixOZ1WQL2F071K07/saPCf0+kcc5Us2pU6yE88S6eiEqtQLkXcv4zcJD8+rQcUe5nxz/tZryPkZbtjxegOfQeS+4iY8LH48mykwr5HCc2miXtlAklc2F2MDjllJdNKfS18qpYg98YMAbBvvyJxrsinW5IVDI04YbVBpi5ADvnqxNQnRb09Mtb8wDup81FB4bzVnSgwbJDRw30ERFN4zC3V/cbEtr0TSFDgmoNfBWHOHUycEvLvtILJHAEeRgbRQiilGTfE3MHmSTsu4sPgOmeOjKfXblf6ysJ44gRTfkPASqTqQztvB00w9FnDQYf4/QP6oWUlWVcGb+NLHqWZJ0xw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/WUTkD0MHNo9tADSWnprHWaLAzSOW0I26nQ+yW648ws=;
- b=DTZeYky/sxI1niYL2NEEq5DYynb3Hv8xARlJTeP1547PJkiLtBkx4x9ZWCqyTOi0e+7RW2jt8wMuZXCzgA+8QunepiClLLvAWSyc8uuOyWD345mA3F+BYSgt/0Asj5RSFGlbh14r96f9yReGnF/VJePPMfT/kamPTV+vZlvxhoeMaSNfjvzRW2nT6OoFDzPiP2a3kIVynH4/snpzxht9z3dsZNEpi+5soESmdc+e6REbf8Yvc6kRlEx1TBP9PuhBQDCrw91abEqd/FsKpyGk76EJrL9OKFF6lRjrMtejNtthymQB5c7Lk5IYDevhobRxVDnC9nJfTHh9ARsX64yJZg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/WUTkD0MHNo9tADSWnprHWaLAzSOW0I26nQ+yW648ws=;
- b=jnyUtK6inEbIZlz9amxC3P9+xs/+kNO1/VF127Lqw1cE6lR3jsqBNLl6nj83L+KrCPBguKB9HrenVbyp/LU/QS+BgIRwf/+AQWV/TCgThszcdYyumbxEMiWZ0leq1f5QTZlMQtrQwSaMrfexe2SOhfCpKj3xHrHxxPxQuEaIwUs=
-Received: from DM6PR04CA0010.namprd04.prod.outlook.com (2603:10b6:5:334::15)
- by PH8PR12MB7374.namprd12.prod.outlook.com (2603:10b6:510:216::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.32; Tue, 30 Jan
- 2024 05:57:17 +0000
-Received: from CY4PEPF0000EDD2.namprd03.prod.outlook.com
- (2603:10b6:5:334:cafe::ca) by DM6PR04CA0010.outlook.office365.com
- (2603:10b6:5:334::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.34 via Frontend
- Transport; Tue, 30 Jan 2024 05:57:16 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000EDD2.mail.protection.outlook.com (10.167.241.206) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7249.19 via Frontend Transport; Tue, 30 Jan 2024 05:57:16 +0000
-Received: from pyuan-Chachani-VN.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Mon, 29 Jan 2024 23:57:11 -0600
-From: Perry Yuan <perry.yuan@amd.com>
-To: <rafael.j.wysocki@intel.com>, <Mario.Limonciello@amd.com>,
-	<Borislav.Petkov@amd.com>, <viresh.kumar@linaro.org>, <Ray.Huang@amd.com>,
-	<gautham.shenoy@amd.com>
-CC: <Alexander.Deucher@amd.com>, <Xinmei.Huang@amd.com>,
-	<Xiaojian.Du@amd.com>, <Li.Meng@amd.com>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH Resend 8/8] tools/power x86_energy_perf_policy: change intel msr functions to be static
-Date: Tue, 30 Jan 2024 13:56:32 +0800
-Message-ID: <6905c6ca13c5cbb513f2bf6c2a937dd228e3fd57.1706592301.git.perry.yuan@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1706592301.git.perry.yuan@amd.com>
-References: <cover.1706592301.git.perry.yuan@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 525DB537E0;
+	Tue, 30 Jan 2024 07:02:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.55.52.120
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706598145; cv=none; b=q/PTmREzEUc71FY5c/oJrCqs0yXLvAhCZ2TwiuqcC1qWFso6v4IMQydni9McrOTgznChzf/A3mok6bYQNtF06Mn/8rGtNQ1jpHPJvCW9giPennhLrMC3gCXmq4NHXyt+mUxGrvNuebzAabiuoJKevvwQQsy5txMR8dWiUi7gJx4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706598145; c=relaxed/simple;
+	bh=FT1jnfuKqKM3F718W+//e/OcgVZxuXQALNqZiQba8qE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jVvpiKr0RHXHhpj+GZsrbBPQrzwCwce7dUT9kOs9OrpbIqHV5mjv22nEvwmOr5q6yRw2cb+wJ7vXhASohdl9fsfbBZ/t+jn9Dgr0wLZVI008Ryfk09hhO7UO4p4P6RybgMzf6PpGkQ6QyljSvN3X+yrcqbqeaPEe5YmjgEdFUYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kVztop2m; arc=none smtp.client-ip=192.55.52.120
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706598142; x=1738134142;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FT1jnfuKqKM3F718W+//e/OcgVZxuXQALNqZiQba8qE=;
+  b=kVztop2mTUYi5IlEweHbjthplAzB5j/gp2r/OzHukWHQzSgULrHGixvw
+   iys2FhtoBZ/QlHEdunFp1WElpRCW0D6sgEOe/8hnKdogoKyrdM++RpVqu
+   9RaWn0EejEa2YS8V+GwOdkv7DpQiOFoiD8XFZpZ9p5Ei+5n260BL3Sh+e
+   JepuIgRHmGr8bvkst5q7W2tBsOpEWpDr9aLhP1Nw/IHhLt7PZwUC0CMNE
+   f8GQcjZbYN4b5xMGMi5UZjUahGPdJxqHNBYrNvA7Xye76H7aGrFeg64YA
+   M98BO3Y8iDLISnYlcZaAg73CBfQHn4yUax/puOqs3hwP5XuwATg5FPThT
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10968"; a="402059455"
+X-IronPort-AV: E=Sophos;i="6.05,707,1701158400"; 
+   d="scan'208";a="402059455"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2024 23:02:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,707,1701158400"; 
+   d="scan'208";a="3714656"
+Received: from sgruszka-mobl.ger.corp.intel.com (HELO localhost) ([10.252.42.115])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2024 23:02:20 -0800
+Date: Tue, 30 Jan 2024 08:02:17 +0100
+From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: [PATCH v2 02/10] PM: sleep: stats: Use an array of step failure
+ counters
+Message-ID: <Zbie+bepNv1xob3J@linux.intel.com>
+References: <5770175.DvuYhMxLoT@kreacher>
+ <2192653.irdbgypaU6@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD2:EE_|PH8PR12MB7374:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9518c57a-5bb1-4720-8843-08dc2158505b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	GdkuThEhOxqlDtRhwoeP1nwnIJzLy0QfyRdGlNkckti58wEvyxJHiif2dnlPEfQ6mVrm6Z1mDtBXujh7ZygPrpqkWP+NfsyLtLFCAdJznogvMQS07XIPpura+Q6Ok/vBeJiWa0DTAHZZ02TAIUYGhwHGuanJ3YNI4MEM/n2TqWJeIdSig2In8JgYrLgbn3pkLhPkDikMJI8X3cnmPPy7f0YMpVZ1+fBSGTSJkBKkjGh10FRuAS6r0tTqqT4kxVEcAzdlThCuMYMj5XzP9TJClgvZVaaEWkJekbbfLQWvqlvUXzISVzja7kVmLBbH6qLxYcGzdA5DaZFu2HqBg1XZPEnGxxOtOT9kybM2d4N2RrKXZ5ArilHx5FduzX+BPE5/PBHOyGMNNG7W9VK8jlbZoLSLq/Oe2mX35WX55+OkLS36xysq/pa1g88bUoWaJn79W84b65gNIi6Jc4oDjDYlC6vyknwa1M2dy+qugG9dCXlMnfhLdSr0TIKXEZ6u5I+oynnzp2bgnvURHx1B7pSGJG7plDkBPObTtf1QUs+hIEMlkWSXE9M0vGbNZ/oVdnve42xoYU7KFwgWR6acS6KTIUjnK6aqFTy74tdXWL4mOr78uLgCPpo+0Sr6SAIkbB50LtTvfT/RQ5Oj/BR976PcDmA5Cwig/z7PIBl0mmJbA/gTF+scglpnJgQwDI0lf6BGWsK4biMkb36VI5rJTb+QexNhT4kmunHHf14WCH90VdPFOjj06f9H57XxUhYVvYtIFDTPaEKSJWASwbexP2Z2hQ==
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(136003)(376002)(396003)(346002)(39860400002)(230922051799003)(1800799012)(82310400011)(186009)(451199024)(64100799003)(36840700001)(40470700004)(46966006)(6636002)(70586007)(47076005)(86362001)(40480700001)(70206006)(110136005)(54906003)(83380400001)(6666004)(2616005)(7696005)(316002)(40460700003)(478600001)(356005)(82740400003)(81166007)(44832011)(26005)(8676002)(36860700001)(16526019)(426003)(8936002)(4326008)(336012)(5660300002)(2906002)(41300700001)(36756003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2024 05:57:16.7688
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9518c57a-5bb1-4720-8843-08dc2158505b
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000EDD2.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7374
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2192653.irdbgypaU6@kreacher>
 
-change the intel_get_msr and intel_put_msr functions to be static.
+On Mon, Jan 29, 2024 at 05:11:57PM +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Instead of using a set of individual struct suspend_stats fields
+> representing suspend step failure counters, use an array of counters
+> indexed by enum suspend_stat_step for this purpose, which allows
+> dpm_save_failed_step() to increment the appropriate counter
+> automatically, so that its callers don't need to do that directly.
+> 
+> It also allows suspend_stats_show() to carry out a loop over the
+> counters array to print their values.
+> 
+> Because the counters cannot become negative, use unsigned int for
+> representing them.
+> 
+> The only user-observable impact of this change is a different
+> ordering of entries in the suspend_stats debugfs file which is not
+> expected to matter.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> v1 -> v2:
+>    * Use one cell less in suspend_stats.step_failures[] to avoid
+>      introducing an unused array cell (Stanislaw).
+> 
+> @Stanislaw: This is different from setting SUSPEND_FREEZE to 0, because
+> that would complicate printing in the sysfs attributes and the debugfs
+> code, so I've not added the R-by.
 
-No functional change intended.
+LGTM.
 
-Signed-off-by: Perry Yuan <perry.yuan@amd.com>
----
- .../power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
 
-diff --git a/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c b/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
-index 845cfedab06e..a5f2f96fa383 100644
---- a/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
-+++ b/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
-@@ -686,7 +686,7 @@ void err_on_hypervisor(void)
- 		    "not supported on this virtual machine");
- }
- 
--int intel_get_msr(int cpu, int offset, unsigned long long *msr)
-+static int intel_get_msr(int cpu, int offset, unsigned long long *msr)
- {
- 	int retval;
- 	char pathname[32];
-@@ -710,7 +710,7 @@ int intel_get_msr(int cpu, int offset, unsigned long long *msr)
- 	return 0;
- }
- 
--int intel_put_msr(int cpu, int offset, unsigned long long new_msr)
-+static int intel_put_msr(int cpu, int offset, unsigned long long new_msr)
- {
- 	char pathname[32];
- 	int retval;
--- 
-2.34.1
+> +	for (step = SUSPEND_FREEZE; step <= SUSPEND_NR_STEPS; step++)
+> +		seq_printf(s, "failed_%s: %u\n", suspend_step_names[step],
+> +			   suspend_stats.step_failures[step-1]);
 
+Consider (in separate patch) removing SUSPEND_NONE from suspend_step_names[]
+and use step-1 for it as well.
+
+Regards
+Stanislaw
 
