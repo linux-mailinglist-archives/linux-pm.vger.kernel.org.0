@@ -1,309 +1,176 @@
-Return-Path: <linux-pm+bounces-3117-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3118-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B53288447D3
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 20:13:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 136ED844876
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 21:10:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5EA3728C731
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 19:13:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9610C286830
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 20:10:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63538182C1;
-	Wed, 31 Jan 2024 19:13:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Tuq3KMKS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D9ED3F8F9;
+	Wed, 31 Jan 2024 20:10:48 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B98E33CFD
-	for <linux-pm@vger.kernel.org>; Wed, 31 Jan 2024 19:13:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C66D03EA8F;
+	Wed, 31 Jan 2024 20:10:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706728406; cv=none; b=Qicrd+z/CydYmx3G2yJxr/0ADCg+w0uGRtuHRSi13a7PMu6QiStnlBaPqyjtrwT0HtbPmaiyLjhND5q8L3Xg1mnA+nOG0aGv4tkvmjfn7hSHAxSlBIwd2StfZeAzvcXv6wwDSrlS2HTH+JWQKs8BuCgIHnPPsgCKJHfBgyByd10=
+	t=1706731848; cv=none; b=nQSPZo9gZxs1/FmOMw3uU0GbfwmbNZsT1hG+goxHXoUsOOgleXkDON/3v78BQwLLKGzNE0hjRSZJjUSp1M+gSpU9Hgwq5ZB/IDyg5Uh39sMTy+w9e7blqkPJy2CIMbe2q8LQ82xzg3hENpN3S+/droOWCzdYbpf+BU19jJfDvnY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706728406; c=relaxed/simple;
-	bh=xrLWYG7caEKCeMiEjBSZqR6qf6vWuiqwu82ZWlcv0kE=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=N3YG8IKzMmCwBNrIvT3Gfosvaj8y5MtjP2gvZMak/8t04ZmuQgjzauXk4lOTjXFsNEHie80xNvsVsc6znnkVhcBvyFt/0ufc7oDC6/PKI5z64PXL4X5sMlYrGr2HOf6IjHF3sZMk7SWS8173eGbTyDEe0aLnLpsYWbSOATqhRuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--pranavpp.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Tuq3KMKS; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--pranavpp.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-5fc6463b0edso1851217b3.0
-        for <linux-pm@vger.kernel.org>; Wed, 31 Jan 2024 11:13:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706728403; x=1707333203; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=MDlCC2r5ivfxMatzw+m44kL9y+ob2qxzmDMpYUeLjRw=;
-        b=Tuq3KMKSAPurWglYCkJ16QugJqJKXzSAvbLhHgHfxd/88rvKq4cFYbsPV0qg2ptH1D
-         xu8+a4C0D8T7Xn+Tz0jcQBvDEpFIPBZ7hUKlFOz2nmd2xs8SVlC7Llsy8rchRL8ClN+U
-         +j3myy2tPrI2gtahh8iZ1Rc0jZnWkwqvfiSRwqz1V3kpBXsoevlagsH82i0Tzv9ulj8q
-         68PDnxIcSlPGlFnIJINRYz4vwmuSk2XYJHGk6iIFofivIPdEuWZjxQ/toBLcFmFpClXs
-         h8VpJ6QowR83M1htBR35TRRoHQA4//pKv5wDZIMSJUIW1eGmFiZANx6pN5T+YLP4v/CJ
-         +UmA==
+	s=arc-20240116; t=1706731848; c=relaxed/simple;
+	bh=yvIIoyXGudofLdak54lnAl5F/PO/NPHcmWDmLeNKAkA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OkezZN/ybu/+ykOZm6gdoiBQGdQPiVnzQfBnZ8jv6tlYnSF/IgvqsgV9bDvtvufZTlJTfTnnJtFgIrezqFQ9zFIPbUtSTRmyyJY1s9IAP2ehYJFSS3+Fq2pjpgtrM7nYgHNHrqxKmN0UO4QjDpYp5XHFSH1rRFmLWtDNO0xBxQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-59a47232667so31024eaf.0;
+        Wed, 31 Jan 2024 12:10:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706728403; x=1707333203;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MDlCC2r5ivfxMatzw+m44kL9y+ob2qxzmDMpYUeLjRw=;
-        b=Teh3VQOP5Ge3fHxGw1YhNkzfIY6XmasnPvhQNIJJA+XFv/Ae9ImED+UPRKzQGN4nvS
-         m+L8mMn/o355ZIDlBK/Fqvp3LZXT6Em/5lqY8WRz/7y4rDv9ehzPaJZafgvO5Ft1d9eb
-         6J9bvJTwlD9Upcz6S9S94ttT2CbAQafnzBWIYCIgKTLo4a+Nc0j+rOhiyRK41U9tyRiX
-         HI7Y32c7OYwr5dSZos9HlVqKnN8a4uVCDlEYG3RsiR8WyFbF8wPfCvxZDZaf+wc4QVBF
-         Sq5PVqz+qO/p7ol3Opa1q0L8t2LK4K5WJKUiCJ2gEL9TIIOPaTU2bklsL1le9NOXQAeS
-         Qg0Q==
-X-Gm-Message-State: AOJu0YxK3f7QH/pufJ8Ly9AYvg5O3lQJGtq3C8UzhVwIeUqXLFoKoXMJ
-	JhDkSloniMpB/dGpnObpNrgYq2/EqGys5zutKagzcks7VqWEtHXqkpq4f5UP779H3v/Kg7y06PN
-	9IxG+sN8FQg==
-X-Google-Smtp-Source: AGHT+IHQhnxNnGms1Lv1v4wRyVmF3tL2yOxMd366sSLLKAcOE2JiiNngkczV4tzp6DA569p1Cc9GWZJKEFW6kA==
-X-Received: from pranav-first.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:390b])
- (user=pranavpp job=sendgmr) by 2002:a05:690c:f94:b0:5fc:548:ca50 with SMTP id
- df20-20020a05690c0f9400b005fc0548ca50mr394574ywb.10.1706728403730; Wed, 31
- Jan 2024 11:13:23 -0800 (PST)
-Date: Wed, 31 Jan 2024 19:13:17 +0000
+        d=1e100.net; s=20230601; t=1706731846; x=1707336646;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a1uAoancuJa/9IhiVCyHhohsMalnFxe6NBsvAk35fzc=;
+        b=OeVzegZCRHxdSZRNpuJU/oo/gYYC+vvSfsqMWhjxRSEtjbSTCSM2vQcKU3kETNen2q
+         /afsTxiVM0BC6EX8PSGBE/33JKl62zj3BujNU5xxmCjyxWlJocoZVNz+Uye7NOWeB7Gq
+         q4oNtjuX8FEToyMDbuii4UrCjIVDExX/9UJaS7CEgX9AQ5HDIIL4eaJCnDCV7liT9o3D
+         l8lYFA1MOZxAL6jnoBoarrdgnsvpCiwc9mYnucBcNFxHvBeLzxdDQy9R/uKpsCZYg5fx
+         xxtxVasU+D6743/sZwASntpYgBZ4CQoviu2IPwo2a0qnNxEMt637vA6+5XGxw/d4PMgY
+         918Q==
+X-Forwarded-Encrypted: i=0; AJvYcCUdv+2Jb/kB+d0BPDE4ATkXXruFoMxB4kn+vaKzhJ2l693H7Qk6/tSnApn9UrH5waTgCGnmDhUCSNNIQ8zlu0iVhcFnbJtkW6GUVgIRvBI6RslQStC8VwcP96djnuXxNujVU4uu2Rk=
+X-Gm-Message-State: AOJu0Yy0O9JcHL/A7ZXMpzSZ3JiC8vGaWKA/MT2S9ZcW0c7vFSY22qW1
+	XmtogEXVnaEvubqSvl6SfjB8NDxMZvujg7dqpKjLjKXzqEDpi1gbyg0Tr7lGTvDTUYn69hHshGV
+	C7jvM/L5z4tjFE7Ow2Gj508kU3t4=
+X-Google-Smtp-Source: AGHT+IHCfXG4/CSj8TyapJXTTLADTLQBjh+rB92N5CLM2HXN4qaRRlGGqGVP2j2UOEnHouTJINBGd8IoEZqiLa79tq8=
+X-Received: by 2002:a4a:a787:0:b0:59c:7c63:928f with SMTP id
+ l7-20020a4aa787000000b0059c7c63928fmr851678oom.0.1706731845812; Wed, 31 Jan
+ 2024 12:10:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
-Message-ID: <20240131191317.2191421-1-pranavpp@google.com>
-Subject: [PATCH] alarmtimer, PM: suspend: Expose a function from
-From: Pranav Prasad <pranavpp@google.com>
-To: rafael@kernel.org, pavel@ucw.cz, linux-pm@vger.kernel.org, 
+MIME-Version: 1.0
+References: <20240131191317.2191421-1-pranavpp@google.com>
+In-Reply-To: <20240131191317.2191421-1-pranavpp@google.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 31 Jan 2024 21:10:34 +0100
+Message-ID: <CAJZ5v0gXsCuVvqynDeuf_NZtyAJ07umx1NUqfFZb25vjNABAfw@mail.gmail.com>
+Subject: Re: [PATCH] alarmtimer, PM: suspend: Expose a function from
+To: Pranav Prasad <pranavpp@google.com>
+Cc: rafael@kernel.org, pavel@ucw.cz, linux-pm@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, krossmo@google.com, jstultz@google.com
-Cc: Pranav Prasad <pranavpp@google.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi!
+On Wed, Jan 31, 2024 at 8:13=E2=80=AFPM Pranav Prasad <pranavpp@google.com>=
+ wrote:
+>
+> Hi!
+>
+> I am proposing a patch in which I want to return the errno code ETIME
+> instead of EBUSY in enter_state() in the kernel suspend flow. Currently,
+> EBUSY is returned  when an imminent alarm is pending which is checked in
+> alarmtimer_suspend() in alarmtimer.c. The proposed patch series moves the
+> check to enter_state() in suspend.c to catch a potential suspend failure
+> early in the suspend flow. I want to replace EBUSY with ETIME to make it
+> more diagnosable in userspace, and may be more appropriate considering a
+> timer is about to expire.
+>
+> I am reaching out to get an opinion from the
+> suspend maintainers if this would act as any potential risk in the suspen=
+d
+> flow which only has EBUSY, EAGAIN, and EINVAL as return error codes
+> currently. This has been developed as part of a patch series, and only th=
+e
+> patch of interest is below this message. Any feedback or insights would b=
+e
+> greatly appreciated.
+>
+> Thank you,
+> Pranav Prasad
+>
+> The alarmtimer driver currently fails suspend attempts when there is an
+> alarm pending within the next suspend_check_duration_ns nanoseconds, sinc=
+e
+> the   system is expected to wake up soon anyway. The entire suspend proce=
+ss
+> is initiated even though the system will immediately awaken. This process
+> includes substantial work before the suspend fails and additional work
+> afterwards to undo the failed suspend that was attempted. Therefore on
+> battery-powered devices that initiate suspend attempts from userspace, it
+> may be advantageous to be able to fail the suspend earlier in the suspend
+> flow to avoid power consumption instead of unnecessarily doing extra work=
+.
+> As one data point, an analysis of a subset of Android devices showed that
+> imminent alarms account for roughly 40% of all suspend failures on averag=
+e
+> leading to unnecessary power wastage.
+>
+> To facilitate this, expose
+> function time_check_suspend_fail() from alarmtimer to be used by the powe=
+r
+> subsystem to perform the check earlier in the suspend flow. Perform the
+> check in enter_state() and return early if an alarm is to be fired in the
+> next suspend_check_duration_ns nanoseconds, failing suspend.
+>
+> Signed-off-by: Pranav Prasad <pranavpp@google.com>
+> Signed-off-by: Kelly Rossmoyer <krossmo@google.com>
+> ---
+>  include/linux/time.h     |   1 +
+>  kernel/power/suspend.c   |   3 ++
+>  kernel/time/alarmtimer.c | 113 ++++++++++++++++++++++++++++-----------
+>  3 files changed, 87 insertions(+), 30 deletions(-)
+>
+> diff --git a/include/linux/time.h b/include/linux/time.h
+> index 16cf4522d6f3..aab7c4e51e11 100644
+> --- a/include/linux/time.h
+> +++ b/include/linux/time.h
+> @@ -56,6 +56,7 @@ struct tm {
+>  };
+>
+>  void time64_to_tm(time64_t totalsecs, int offset, struct tm *result);
+> +int time_check_suspend_fail(void);
+>
+>  # include <linux/time32.h>
+>
+> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> index fa3bf161d13f..7a0175dae0d9 100644
+> --- a/kernel/power/suspend.c
+> +++ b/kernel/power/suspend.c
+> @@ -26,6 +26,7 @@
+>  #include <linux/suspend.h>
+>  #include <linux/syscore_ops.h>
+>  #include <linux/swait.h>
+> +#include <linux/time.h>
+>  #include <linux/ftrace.h>
+>  #include <trace/events/power.h>
+>  #include <linux/compiler.h>
+> @@ -564,6 +565,8 @@ static int enter_state(suspend_state_t state)
+>  #endif
+>         } else if (!valid_state(state)) {
+>                 return -EINVAL;
+> +       } else if (time_check_suspend_fail()) {
+> +               return -ETIME;
 
-I am proposing a patch in which I want to return the errno code ETIME
-instead of EBUSY in enter_state() in the kernel suspend flow. Currently,
-EBUSY is returned  when an imminent alarm is pending which is checked in
-alarmtimer_suspend() in alarmtimer.c. The proposed patch series moves the
-check to enter_state() in suspend.c to catch a potential suspend failure
-early in the suspend flow. I want to replace EBUSY with ETIME to make it
-more diagnosable in userspace, and may be more appropriate considering a
-timer is about to expire.
+This causes a function defined in modular code to be called from
+non-modular code which is an obvious mistake.
 
-I am reaching out to get an opinion from the
-suspend maintainers if this would act as any potential risk in the suspend
-flow which only has EBUSY, EAGAIN, and EINVAL as return error codes
-currently. This has been developed as part of a patch series, and only the
-patch of interest is below this message. Any feedback or insights would be
-greatly appreciated.
+It also makes the generic suspend code call a function defined in a
+random driver, which is a total no-go as far as I am concerned.
 
-Thank you,
-Pranav Prasad
+Why don't you instead define a PM notifier in the alarmtimer driver
+and check if it is going to trigger shortly from there?  PM notifiers
+run before the tasks freezer, so there would be a little difference
+timing-wise and you can return whatever error code you like from
+there.  As an additional benefit, you'd be able to handle hibernation
+in the same way.
 
-The alarmtimer driver currently fails suspend attempts when there is an
-alarm pending within the next suspend_check_duration_ns nanoseconds, since
-the   system is expected to wake up soon anyway. The entire suspend process
-is initiated even though the system will immediately awaken. This process
-includes substantial work before the suspend fails and additional work
-afterwards to undo the failed suspend that was attempted. Therefore on
-battery-powered devices that initiate suspend attempts from userspace, it
-may be advantageous to be able to fail the suspend earlier in the suspend
-flow to avoid power consumption instead of unnecessarily doing extra work.
-As one data point, an analysis of a subset of Android devices showed that
-imminent alarms account for roughly 40% of all suspend failures on average
-leading to unnecessary power wastage.
-
-To facilitate this, expose
-function time_check_suspend_fail() from alarmtimer to be used by the power
-subsystem to perform the check earlier in the suspend flow. Perform the
-check in enter_state() and return early if an alarm is to be fired in the
-next suspend_check_duration_ns nanoseconds, failing suspend.
-
-Signed-off-by: Pranav Prasad <pranavpp@google.com>
-Signed-off-by: Kelly Rossmoyer <krossmo@google.com>
----
- include/linux/time.h     |   1 +
- kernel/power/suspend.c   |   3 ++
- kernel/time/alarmtimer.c | 113 ++++++++++++++++++++++++++++-----------
- 3 files changed, 87 insertions(+), 30 deletions(-)
-
-diff --git a/include/linux/time.h b/include/linux/time.h
-index 16cf4522d6f3..aab7c4e51e11 100644
---- a/include/linux/time.h
-+++ b/include/linux/time.h
-@@ -56,6 +56,7 @@ struct tm {
- };
- 
- void time64_to_tm(time64_t totalsecs, int offset, struct tm *result);
-+int time_check_suspend_fail(void);
- 
- # include <linux/time32.h>
- 
-diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-index fa3bf161d13f..7a0175dae0d9 100644
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -26,6 +26,7 @@
- #include <linux/suspend.h>
- #include <linux/syscore_ops.h>
- #include <linux/swait.h>
-+#include <linux/time.h>
- #include <linux/ftrace.h>
- #include <trace/events/power.h>
- #include <linux/compiler.h>
-@@ -564,6 +565,8 @@ static int enter_state(suspend_state_t state)
- #endif
- 	} else if (!valid_state(state)) {
- 		return -EINVAL;
-+	} else if (time_check_suspend_fail()) {
-+		return -ETIME;
- 	}
- 	if (!mutex_trylock(&system_transition_mutex))
- 		return -EBUSY;
-diff --git a/kernel/time/alarmtimer.c b/kernel/time/alarmtimer.c
-index e5d2e560b4c1..085b1ace0c31 100644
---- a/kernel/time/alarmtimer.c
-+++ b/kernel/time/alarmtimer.c
-@@ -115,6 +115,84 @@ static int alarmtimer_sysfs_add(void)
- 	return ret;
- }
- 
-+/**
-+ * alarmtimer_init_soonest - Initializes parameters to find soonest alarm.
-+ * @min: ptr to relative time to the soonest alarm to expire
-+ * @expires: ptr to absolute time of the soonest alarm to expire
-+ * @type: ptr to alarm type
-+ *
-+ */
-+static void alarmtimer_init_soonest(ktime_t *min, ktime_t *expires, int *type)
-+{
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&freezer_delta_lock, flags);
-+	*min = freezer_delta;
-+	*expires = freezer_expires;
-+	*type = freezer_alarmtype;
-+	freezer_delta = 0;
-+	spin_unlock_irqrestore(&freezer_delta_lock, flags);
-+}
-+
-+/**
-+ * alarmtimer_get_soonest - Finds the soonest alarm to expire among the alarm bases.
-+ * @min: ptr to relative time to the soonest alarm to expire
-+ * @expires: ptr to absolute time of the soonest alarm to expire
-+ * @type: ptr to alarm type
-+ *
-+ */
-+static void alarmtimer_get_soonest(ktime_t *min, ktime_t *expires, int *type)
-+{
-+	int i;
-+	unsigned long flags;
-+
-+	/* Find the soonest timer to expire */
-+	for (i = 0; i < ALARM_NUMTYPE; i++) {
-+		struct alarm_base *base = &alarm_bases[i];
-+		struct timerqueue_node *next;
-+		ktime_t delta;
-+
-+		spin_lock_irqsave(&base->lock, flags);
-+		next = timerqueue_getnext(&base->timerqueue);
-+		spin_unlock_irqrestore(&base->lock, flags);
-+		if (!next)
-+			continue;
-+		delta = ktime_sub(next->expires, base->get_ktime());
-+		if (!(*min) || (delta < *min)) {
-+			*expires = next->expires;
-+			*min = delta;
-+			*type = i;
-+		}
-+	}
-+}
-+
-+/**
-+ * time_check_suspend_fail - Check if suspend should be failed due to an
-+ * alarm within the next suspend_check_duration nanoseconds.
-+ *
-+ * Returns error if suspend should be failed, else returns 0.
-+ */
-+int time_check_suspend_fail(void)
-+{
-+	ktime_t min, expires;
-+	int type;
-+
-+	/* Initialize parameters to find soonest timer */
-+	alarmtimer_init_soonest(&min, &expires, &type);
-+
-+	/* Find the soonest timer to expire */
-+	alarmtimer_get_soonest(&min, &expires, &type);
-+
-+	if (min == 0)
-+		return 0;
-+
-+	if (ktime_to_ns(min) < suspend_check_duration_ns)
-+		return -EBUSY;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL(time_check_suspend_fail);
-+
- /**
-  * alarmtimer_get_rtcdev - Return selected rtcdevice
-  *
-@@ -296,49 +374,24 @@ EXPORT_SYMBOL_GPL(alarm_expires_remaining);
- static int alarmtimer_suspend(struct device *dev)
- {
- 	ktime_t min, now, expires;
--	int i, ret, type;
-+	int ret, type;
- 	struct rtc_device *rtc;
--	unsigned long flags;
- 	struct rtc_time tm;
- 
--	spin_lock_irqsave(&freezer_delta_lock, flags);
--	min = freezer_delta;
--	expires = freezer_expires;
--	type = freezer_alarmtype;
--	freezer_delta = 0;
--	spin_unlock_irqrestore(&freezer_delta_lock, flags);
-+	/* Initialize parameters to find soonest timer */
-+	alarmtimer_init_soonest(&min, &expires, &type);
- 
- 	rtc = alarmtimer_get_rtcdev();
- 	/* If we have no rtcdev, just return */
- 	if (!rtc)
- 		return 0;
- 
--	/* Find the soonest timer to expire*/
--	for (i = 0; i < ALARM_NUMTYPE; i++) {
--		struct alarm_base *base = &alarm_bases[i];
--		struct timerqueue_node *next;
--		ktime_t delta;
-+	/* Find the soonest timer to expire */
-+	alarmtimer_get_soonest(&min, &expires, &type);
- 
--		spin_lock_irqsave(&base->lock, flags);
--		next = timerqueue_getnext(&base->timerqueue);
--		spin_unlock_irqrestore(&base->lock, flags);
--		if (!next)
--			continue;
--		delta = ktime_sub(next->expires, base->get_ktime());
--		if (!min || (delta < min)) {
--			expires = next->expires;
--			min = delta;
--			type = i;
--		}
--	}
- 	if (min == 0)
- 		return 0;
- 
--	if (ktime_to_ns(min) < suspend_check_duration_ns) {
--		pm_wakeup_event(dev, suspend_check_duration_ns/NSEC_PER_MSEC);
--		return -EBUSY;
--	}
--
- 	trace_alarmtimer_suspend(expires, type);
- 
- 	/* Setup an rtc timer to fire that far in the future */
--- 
-2.43.0.429.g432eaa2c6b-goog
-
+Thanks!
 
