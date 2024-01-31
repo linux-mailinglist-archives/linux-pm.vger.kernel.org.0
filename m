@@ -1,127 +1,174 @@
-Return-Path: <linux-pm+bounces-3075-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3076-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FC7C844134
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 15:00:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C72D84417A
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 15:12:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7992B1F27991
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 14:00:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D72C4284D36
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 14:12:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C79580C06;
-	Wed, 31 Jan 2024 13:59:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73BEB82868;
+	Wed, 31 Jan 2024 14:12:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q6039tBd"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="MVZOtlij"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com [209.85.221.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4827380BFC;
-	Wed, 31 Jan 2024 13:59:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBD6680C1D
+	for <linux-pm@vger.kernel.org>; Wed, 31 Jan 2024 14:12:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706709594; cv=none; b=RsG3n0mqIMp/dTtwW2PHkLLi5rBKlJgdsfk3k2BaIWmFjRshSBYrpzMHME8UygUdpc1o2AgORwfDjBNFBnWfflYr9rO6i2SxLurnZQltSD01g+/+dcOTzy2elu63gecUarR8NXfOJQceyhPXYNy/6jEFReliEyar8fZKhx5yprI=
+	t=1706710329; cv=none; b=G4tguxC4h5SBqPvoukDi0cx5+oyx/wRNaDRAg75ao+OyFlZOKCRUjZ0C4b4RUTuNfw9Zk6b0CiFUhTAL+V84y2g5g8rIIe1ST+ZvllmINAb/bLiK3wdyPHw+g0CskFLVH79mYr4OSfzI1hygg6ZR7mzV8EZ6cvJ3yP65RtdXkLM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706709594; c=relaxed/simple;
-	bh=kx7++Nl+g8gUP4P8BUkEMWIMMN6PTKxchtxN+CPVmLk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fY6zbtKWwmAnDHqUDojE5iIt/zaL8BkYYB+Rb7h7p9n/dZTGpnCkw3lk+1G0ZSccy8UXx7Rui/am3bJ5J632kAo8G4vMOmU/Z80YY1QubL5t1XWrR1UlFnV/7Hniui2qf2y6b/0qkpYyEuoPsWAzhTrDgf0Gh3TB0NWU/mlSdbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q6039tBd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7AE4C433F1;
-	Wed, 31 Jan 2024 13:59:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706709593;
-	bh=kx7++Nl+g8gUP4P8BUkEMWIMMN6PTKxchtxN+CPVmLk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=q6039tBd6g6aaJ08HMT328HRmGQ9/vDdtmfqgRCXxQae1xNri1Php+xPYYolOYXO2
-	 jQ4rYZ626C0Eie0xX/22fJCSp75S7+YumvXSITEt2RXClBqXjVqGbPTas2PiIg4cr6
-	 dhYqZP3xXnKjvnC+oSdKuzDFhvBEXZxQejtNbN36vChso2CXRwSqEBa9d8xn22ngjo
-	 jbgR6foNn4IeIdsd0qqCXgf1X3AwGl3Otrpk2/3ofgUQKye7lym1S66RUqkGx4ZxtM
-	 BAndsyZ1MsY12LGTmckU1x67wBdBjxp9YSwuQStPGxEXudQG5P+1UgvkyMU9VP6wR3
-	 zEs1DYzSNuIag==
-Date: Wed, 31 Jan 2024 13:59:45 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Banajit Goswami <bgoswami@quicinc.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Frank Rowand <frowand.list@gmail.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org,
-	linux-sound@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>,
-	Sean Anderson <sean.anderson@seco.com>
-Subject: Re: [PATCH v6 4/6] reset: Instantiate reset GPIO controller for
- shared reset-gpios
-Message-ID: <e693398e-fb18-43c3-83dd-4b517c29fafd@sirena.org.uk>
-References: <20240129115216.96479-1-krzysztof.kozlowski@linaro.org>
- <20240129115216.96479-5-krzysztof.kozlowski@linaro.org>
- <CACRpkdYf4HUaV-Pjr81WjLbzy9zdAnyFWs9gPayPC6-3OjHQwA@mail.gmail.com>
- <CAMRc=Mc1SGLeUOWmKg=fvCdM+RR6FSu2QkFuR17s7L99eRMGug@mail.gmail.com>
- <CACRpkdbaxqTzwL9L02vCpMMdBYsubNP1VkNuJ8mXB_=4E3Kjaw@mail.gmail.com>
- <5ef64082-0b44-4bb2-bd4c-654c96f4a9bb@linaro.org>
- <CACRpkdYa0nj6PK1FecBpQfOfkXhetwRmAyDgWNjJxcf4xgExMA@mail.gmail.com>
+	s=arc-20240116; t=1706710329; c=relaxed/simple;
+	bh=fy67XFG440oNqKNoOyKdiRXwM4wMoj/X9XerGknRkFM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kRXIRXSQr78qin2WXfIYfmfX80UNG5oRlkrwEL73gmDqEym/MeL364/EVi+icMGGrwhH0ZZCVYwCPVm4M95EWkJak8c4dVeTsd5BjSI4LuVViq6drF1RAmgxf7qovoN8SFN6FtjsVLrp+lbNgotYJJmqwQNsd7y+kwrJcNNpvnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=MVZOtlij; arc=none smtp.client-ip=209.85.221.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-vk1-f182.google.com with SMTP id 71dfb90a1353d-4bdb7f016b3so1355464e0c.0
+        for <linux-pm@vger.kernel.org>; Wed, 31 Jan 2024 06:12:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1706710326; x=1707315126; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fy67XFG440oNqKNoOyKdiRXwM4wMoj/X9XerGknRkFM=;
+        b=MVZOtlij2AZ22kc1XCTZWLZ/d/0js7zssLKOlA24s8zen5q3lGG7G5q7IdSPnwtZSB
+         XUZj40mPwU6jNopWsW6w6H49sdsHuUMDhmgR74IkMUgNSv7HYBV9ZVEQ3OF35T9RerlZ
+         CdOy9l5esYmHNqAZWPqoK15kiImPVwzRHteH44iKwyUdF7S2mQkJCxnqEh/OFOBAiu9t
+         yiwqfwhZevpBRKmfbvqa7OX3jVZlBR3DsS18BrHg/xAxVxkHhDskboDF8iOnjECQP/hQ
+         xq/Pfaer6gknZplfImXP1Oxn31CWrSAfEy+iOFa6nQzzkCyqbZC40KN8BqmU7Un3lN9Q
+         uHBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706710326; x=1707315126;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fy67XFG440oNqKNoOyKdiRXwM4wMoj/X9XerGknRkFM=;
+        b=r/xvgkIyCXrbJc56B+EXWu2RL3p7LTt8mlEWT/ArI2PhWxjdZJc9GWBhOnc9q++wNR
+         SYEd9tBHYacgv8+8l5GT82H3F1UDoExPY3nfhDIbHjD9m2Xwz/zUENcgjmyDQ5bJUFfc
+         oNrGDtfAtlBIv550qivJ/Pm3eZQhC6z3lrj3WIhkcjTU7iAt3kIiKa9Y+uLl/FjEyK/y
+         Zx2yDUdD9F5MP/68e3HRsmFXfMmA37usO8hDCJRRFosg+hFRmTLdVrC3NS5XwbJFI/pl
+         3h5UW+pVgX8+tIhqTKY0pHnXac3AL0NdlmxcR4OX9wjMqWg68EW3nRUNRGAkyYnVgRB1
+         ZuVw==
+X-Gm-Message-State: AOJu0Yzd8covRGlg5GjVFmi+uEYXwdFj3JmQhGo+biPTpfIm6RtMmuBg
+	LQBSHMY+QvAlbEoKbo9ZydaxKppMnXmW35xhSWOOXHKpmWZbfS78D8oqFJpYhUo3neLUoclm+hp
+	N35pFb/v/iN0Xn8km5eYCpKILFrbFqDG9Z/6kAw==
+X-Google-Smtp-Source: AGHT+IHw+5LJCo4zP77ngTsk1zmxdOx6fkUQPNqVAurEYXrfnmeT5FR7RaZ6Ra6HK3KzPd2ohkdgXC4v/gfXwwIUBNk=
+X-Received: by 2002:a05:6122:179c:b0:4bd:5328:b20f with SMTP id
+ o28-20020a056122179c00b004bd5328b20fmr1596779vkf.14.1706710326488; Wed, 31
+ Jan 2024 06:12:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="aUBo2xsR6S0y35Fl"
-Content-Disposition: inline
-In-Reply-To: <CACRpkdYa0nj6PK1FecBpQfOfkXhetwRmAyDgWNjJxcf4xgExMA@mail.gmail.com>
-X-Cookie: I will never lie to you.
+References: <20240129115216.96479-1-krzysztof.kozlowski@linaro.org>
+ <20240129115216.96479-5-krzysztof.kozlowski@linaro.org> <CACRpkdYf4HUaV-Pjr81WjLbzy9zdAnyFWs9gPayPC6-3OjHQwA@mail.gmail.com>
+ <CAMRc=Mc1SGLeUOWmKg=fvCdM+RR6FSu2QkFuR17s7L99eRMGug@mail.gmail.com>
+ <CACRpkdbaxqTzwL9L02vCpMMdBYsubNP1VkNuJ8mXB_=4E3Kjaw@mail.gmail.com> <5ef64082-0b44-4bb2-bd4c-654c96f4a9bb@linaro.org>
+In-Reply-To: <5ef64082-0b44-4bb2-bd4c-654c96f4a9bb@linaro.org>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Wed, 31 Jan 2024 15:11:55 +0100
+Message-ID: <CAMRc=MfNNdJzbxsihNd94LhqzhZiL2H2-z=grEFoNmOxpua5JA@mail.gmail.com>
+Subject: Re: [PATCH v6 4/6] reset: Instantiate reset GPIO controller for
+ shared reset-gpios
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, Banajit Goswami <bgoswami@quicinc.com>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Frank Rowand <frowand.list@gmail.com>, 
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org, 
+	linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Chris Packham <chris.packham@alliedtelesis.co.nz>, 
+	Sean Anderson <sean.anderson@seco.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Jan 31, 2024 at 2:32=E2=80=AFPM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 31/01/2024 14:17, Linus Walleij wrote:
+> > On Wed, Jan 31, 2024 at 10:37=E2=80=AFAM Bartosz Golaszewski <brgl@bgde=
+v.pl> wrote:
+> >
+> >> [Me]
+> >>> reset -> virtual "gpio" -> many physical gpios[0..n]
+> >>
+> >> This is a different problem: it supports many users enabling the same
+> >> GPIO (in Krzysztof's patch it's one but could be more if needed) but -
+> >> unlike the broken NONEXCLUSIVE GPIOs in GPIOLIB - it counts the number
+> >> of users and doesn't disable the GPIO for as long as there's at least
+> >> one.
+> >
+> > I don't know if the NONEXCLUSIVE stuff is broken, if you mean reference
+> > counting isn't working on them, then that is by design because they wer=
+e
+> > invented for regulators and such use cases that do their own reference
+> > counting. It's also used for hacks where people need to look up a desc =
+in
+> > a second spot, (perhaps we can fix those better).
+> >
+> > As I say in commit b0ce7b29bfcd090ddba476f45a75ec0a797b048a
+> > "This solution with a special flag is not entirely elegant and should i=
+deally
+> > be replaced by something more careful as this makes it possible for
+> > several consumers to enable/disable the same GPIO line to the left
+> > and right without any consistency."
+> >
+> > I think for regulators (which is the vast majority using it) it isn't b=
+roken
+> > because the regulator reference counting is working.
+> >
+> > So if we solve that problem for reset, we probably should put it in
+> > drivers/gpio/* somewhere so we can reuse the same solution for
+> > regulators and get rid of NONEXCLUSIVE altogether I think?
+> >
+> > The NONEXCLUSIVE stuff was prompted by converting regulators to
+> > gpio descriptors, so it was for the greater good one can say. Or the
+> > lesser evil :( my judgement can be questioned here.
+>
+> I discussed the non-exclusive GPIOs with Bartosz quite a lot, who was
+> Cced since beginning of this patchset, because that was my first
+> approach, which was rejected:
+>
+> https://lore.kernel.org/all/b7aeda24-d638-45b7-8e30-80d287f498f8@sirena.o=
+rg.uk/
+>
+> The non-exclusive GPIO was made explicitly for regulators, so it is
+> working fine there, but it is broken everywhere else, where the drivers
+> do not handle it in sane way as regulator core does.
+>
+> To make it working, either GPIO should be enable-count-aware, to which
+> Bartosz was opposing with talks with me, or the subsystem should mimic
 
---aUBo2xsR6S0y35Fl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+For the record: I'm not 100% opposed to the enable-count-awarness of
+GPIOs but don't want it to be the standard. I'm open for introducing a
+wrapper built around the core, low-level GPIO API but I've just
+dropped a big patchset addressing the access control and serialization
+issues for the GPIO consumer API and I would rather work towards
+making it at least more-or-less correct in the first place before we
+start overcomplicating it again.
 
-On Wed, Jan 31, 2024 at 02:42:17PM +0100, Linus Walleij wrote:
+Bartosz
 
-> I guess it may be an issue that regulators are not using Device Tree
-> exclusively, but also has to deal with a slew of platform_devices:s :/
-> IIRC that was one of the reasons why it looks as it does.
-
-Also ACPI, and this is a long standing binding so we can't change the
-ABI for DT.  We could potentially use a refcounting mechanism provided
-by the GPIO core but we'd need to know when the refcount changes from 0
-to 1 and back, we need to take other actions (inserting delays and
-generating notifications) when it does so I'm not sure how exciting it
-is to factor out the refcount.  I think part of the decision making with
-the current design was that there was likely going to need to be some
-higher level stuff like that in the users so it wasn't clear that trying
-to abstract the reference count away in gpiolib was buying us much.
-
---aUBo2xsR6S0y35Fl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmW6UlEACgkQJNaLcl1U
-h9A+fwf/Uk2jUjqxQFPM7xcqmHsrA9v2ugLGTMHO8Maq0EYtg3qC8iqG/GpGJUfs
-fFgiBMZMuFYRWuVZrFqaDVfH2SjrzVuTwRnzdcc248yp4VxcIw+/6zv7MN5I7+Mz
-drrk+SOW8LQ1/zFdYFCZJ6nTpNpz3gbw6dfYHSsOsXwKXw1uXrjVpsr883NKtWhR
-T7booZIhNa/o4N0KWRG6F3uJtDXp6adazB05Ub4s1FU3bNdajYiU/bXbG2hp01Me
-YNMz64ezvnOBwrVEtGF/CzVUjFy3AesEUbq/RASerWiFsB0OatwnMeNG3/Fn/mLU
-Qna+Cm3/fdqDG1oWpox48rOY47Hy0A==
-=3gvm
------END PGP SIGNATURE-----
-
---aUBo2xsR6S0y35Fl--
+> regulators approach. In some way, my patchset is the second way here -
+> reset framework subsystem being aware of shared GPIO and handles the
+> enable-count, even though it is not using non-exclusive flag.
+>
+> Best regards,
+> Krzysztof
+>
 
