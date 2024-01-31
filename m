@@ -1,232 +1,210 @@
-Return-Path: <linux-pm+bounces-3113-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3114-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46C2284470C
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 19:23:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 227B984475C
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 19:42:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD05E1F234FD
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 18:23:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 478101C20BA9
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 18:42:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4127A12FF95;
-	Wed, 31 Jan 2024 18:23:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WRCR0Nvr"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC06D1E4A9;
+	Wed, 31 Jan 2024 18:42:06 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5744512BEB7
-	for <linux-pm@vger.kernel.org>; Wed, 31 Jan 2024 18:23:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1559020DE8;
+	Wed, 31 Jan 2024 18:42:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706725428; cv=none; b=lJgJZ4D/ecsAe/yKrj/qhbseag3lkD9nBt32mKb8SYIclYUyoS4uXFq7ofIFs3HCBoOJ51CkDGBfDchsDAvmfGnbQrQIqpaEoLV6rXn2aUvdMi6ysh6VUCmj22SkFChrHutir/ASBFoxyxame+Oy6t7dwmF7X2DQN0yDb7RZCqU=
+	t=1706726526; cv=none; b=Ae+VCbWeHMSoaW34xRjyCHJYztBjm8ssEzo+UjRmQ7SOcKUvZQv07XJeXgM4ng2lQGEH91kufzjyM9wObL4R+F3cnquPlf4gH+G6+FnZmM5PiLIj9sbyEyBMwLKtelrH3+3usBxByERqrMBk/1nSr6tRpJLmw5uxVj1Hx7ZGW/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706725428; c=relaxed/simple;
-	bh=4HCr47Vl9ejjJTGVqxYRuHlMCbACMsJs01W7MS7B4yE=;
+	s=arc-20240116; t=1706726526; c=relaxed/simple;
+	bh=LySeV0x9gTWQ9PyXJK3eEnKnNOh6iCuIqoGD9UGdHhg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o4VG2X9dfSGvVX5GrXJkGKt7K2E1FJviPrKVVJt6BvUyIfT0NFwYzwkR2P9CHcd6w4GM/hgfWBrnwPYlrglooOE9NzeqkAWirOXzUzN1s4LifFotArVwrHrZOEdH/9p/5dNNjmYbWaDr/A0+JeibkdLyG0yDumRya34jSuGjCS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WRCR0Nvr; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-55818b7053eso1320a12.0
-        for <linux-pm@vger.kernel.org>; Wed, 31 Jan 2024 10:23:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1706725424; x=1707330224; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=viHzef10mQ/Ow5P/nhdwkaiORLJDs/5vxR6NgT9S6MQ=;
-        b=WRCR0Nvr4E4SFem8QNCrcx00+V9bOor0i69r/PruSbY0rt2Nt80CVas+q5pc77uUPX
-         ttGuKn6VbgR4iLUpDR5DbZJmHHR+9myJ+WMvIbDZnFk7GRJzbLV5dXrzzjX9pHBMaabr
-         gykprDCMHpxFsHpv9md5ca2IVvaDwrmwmj63zKN1HkhF2TD4L+GA9h91uTenlraQUku7
-         57MLY1IgvfEJLoucdqlxA/M1fNqYPuZLc2CPg02yOFVlIS00sbO+J9f+3GbFBMf382td
-         3g0io/0WkhwESio+oqPjBJkWDhSDhXXmv25DFzM+pnK6sJefXxbQ/lR8LPlm4ZssCo3A
-         9tpw==
+	 To:Cc:Content-Type; b=Mmgn6hiT+l1ROLZ0Yg9LQPjx8GzdVEYKasrSyWBicuN0GCHHjNbXRntfAJ+l2Iw/1t82odE1a6uymjG2erqOOc0WqmmzbDXxzCw2VC6eSwk57oxASYWutgGaaZKFAY1aGc0o8utlRfpNaJHhY5J+SUM/DSeGER80WqQbP1rn9yo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-59a24bf7cadso19869eaf.0;
+        Wed, 31 Jan 2024 10:42:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706725424; x=1707330224;
+        d=1e100.net; s=20230601; t=1706726524; x=1707331324;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=viHzef10mQ/Ow5P/nhdwkaiORLJDs/5vxR6NgT9S6MQ=;
-        b=H99qs4CS2+wRwsZGygGHCuhoxkFTnsxTlX5GVPFk26+xUDw2aP3nn1Ivpd9WRHiGm9
-         iqEFr10fxwsBl+KqPjNMoe5nmlkaoEIAi6xcNDWvlNirvPXHOt/TKZY6jZP6g/Smqkqh
-         ihsCeG3JN3BmSsfIuX7FUMCnHnBf+j9hzamE9gkwMthWbGtpddJDTP16/LpqanoZc/8k
-         zIKta20SiZRqZhCCCSdxyJj6UEPVW82unf7OWviDeaYAmqCvxakxLtN4uBZ1q/x99g6C
-         DvCkc2Sf8NCJBmB7cSemU8KZr34sFFEvFPPJeqBWcOrw2yuWyKtr4pVo6ht8NzYQCe06
-         f/BQ==
-X-Gm-Message-State: AOJu0Yzv08cYMzk2G4FNnMZUmW8kJMAi0uXuiSCt9e4VXaAKiKu0vSIo
-	mQZtlcjj9RrbbEDM3ul/eW9FCfflJ08I0bFbJATIjthxaWob1pKB+BpN5UmqRSabmy5sdqb4lvF
-	408yUeOiASeqiwlLwJFG1BLLl44pDKets4c1S
-X-Google-Smtp-Source: AGHT+IEZOW3QqAu7mnXOmcMRt5GjQ873Ib0bNlhUhCJVB0evLECVTZoQsY7Qlsm6r+daSN6IqJif/WFzAH/AHADonQ8=
-X-Received: by 2002:a50:9998:0:b0:55f:9918:dadd with SMTP id
- m24-20020a509998000000b0055f9918daddmr19957edb.2.1706725423409; Wed, 31 Jan
- 2024 10:23:43 -0800 (PST)
+        bh=uSOeo3jssOB/9Y9vgCs4JDfVJ5a4bumlhRKAsN3wcRM=;
+        b=Ch+a5B7Owd6pkTyfNnXnRVg64epI7zVbf0e5kIyCrRn//iWIsbVqYXLInaKfvUhCtk
+         +izOslbShF+drdZxzJc8tAw8u56FlS1HpB2FQqo9h6FMdNJozRjhqra4q4xIAg1Dp1y5
+         Par2vHEmeZ3x+gUCmhNyDbU2SEhoZAeNG6T2ygJQry0ay+s40tHG/Pw/DOrxZbbuInSP
+         23+Lz761FE8tKfRh7jN5O7OOhzB062h8LYV6RwrC6Vl1dAv0G77r1PTQ9xmJXiAuK/mL
+         hwVkQtCHT1LNuFsIIIznWkMFps1RKJGM6TJqAgPBWX94wCjWwcNXInu7bYkFcpSCc0Pz
+         LbGg==
+X-Forwarded-Encrypted: i=0; AJvYcCWv/Gye2nxamke5nLfH1CqvalHo1rZ+sJkUa4w56nBrY3mT7mSkCLFTy8fiOcDbBmp+NR3fN7M3BGKCP0HaWGt46xiTHpq3XowwyEINr2oIjDnnkpJyXvxnJ0zh9XvyqJTd2hYAnuY=
+X-Gm-Message-State: AOJu0YzR3J8yDsSJKTQHhCgQ253PE3f5BEHGiuVs4SEc7hVq0YqejGLQ
+	/GlMuBLNuDP8VE2xt4S7wNF/z+nMxLPLIc0ptr5Sj/AsNUQjzGBQa68G4P3ukh8Uw12/cDkVD+Z
+	OCrQJTCeHtA/5bjn23tyjChWlGmA=
+X-Google-Smtp-Source: AGHT+IH3diaPr7QIWLD8DcKA5QDYMNp8E7NsmoQiYxVUow6cdWfTmUqWHwD37UGbZSFW1GOuCcljlrDj2IODORolaBE=
+X-Received: by 2002:a05:6870:4694:b0:204:5ad3:e6ec with SMTP id
+ a20-20020a056870469400b002045ad3e6ecmr21276oap.4.1706726524073; Wed, 31 Jan
+ 2024 10:42:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240127004321.1902477-1-davidai@google.com> <20240127004321.1902477-2-davidai@google.com>
- <20240131170608.GA1441369-robh@kernel.org>
-In-Reply-To: <20240131170608.GA1441369-robh@kernel.org>
-From: Saravana Kannan <saravanak@google.com>
-Date: Wed, 31 Jan 2024 10:23:03 -0800
-Message-ID: <CAGETcx8S0oS67oMZsPKk6_MGAtygoHEf_LN1gbcNDEBqRJ4PPg@mail.gmail.com>
-Subject: Re: [PATCH v5 1/2] dt-bindings: cpufreq: add virtual cpufreq device
-To: Rob Herring <robh@kernel.org>
-Cc: David Dai <davidai@google.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Sudeep Holla <sudeep.holla@arm.com>, Quentin Perret <qperret@google.com>, 
-	Masami Hiramatsu <mhiramat@google.com>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Pavan Kondeti <quic_pkondeti@quicinc.com>, 
-	Gupta Pankaj <pankaj.gupta@amd.com>, Mel Gorman <mgorman@suse.de>, kernel-team@android.com, 
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+References: <4565526.LvFx2qVVIh@kreacher> <7caf2f4d-d0d5-4622-b290-bb0396547f3c@linaro.org>
+In-Reply-To: <7caf2f4d-d0d5-4622-b290-bb0396547f3c@linaro.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 31 Jan 2024 19:41:52 +0100
+Message-ID: <CAJZ5v0iZ0hyPYB3i6YdbiKueHGWoM3i6mPBnzGL9bB8wFxVSPw@mail.gmail.com>
+Subject: Re: [PATCH v1] thermal: sysfs: Make trip hysteresis writable along
+ with trip temperature
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Zhang Rui <rui.zhang@intel.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 31, 2024 at 9:06=E2=80=AFAM Rob Herring <robh@kernel.org> wrote=
-:
+On Wed, Jan 31, 2024 at 7:18=E2=80=AFPM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
-> On Fri, Jan 26, 2024 at 04:43:15PM -0800, David Dai wrote:
-> > Adding bindings to represent a virtual cpufreq device.
+> On 29/01/2024 21:40, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > >
-> > Virtual machines may expose MMIO regions for a virtual cpufreq device
-> > for guests to read frequency information or to request frequency
-> > selection. The virtual cpufreq device has an individual controller for
-> > each frequency domain. Performance points for a given domain can be
-> > normalized across all domains for ease of allowing for virtual machines
-> > to migrate between hosts.
+> > Trip point temperature can be modified via sysfs if
+> > CONFIG_THERMAL_WRITABLE_TRIPS is enabled and the thermal
+> > zone creator requested that the given trip be writable
+> > in the writable trips mask passed to the registration
+> > function.
 > >
-> > Co-developed-by: Saravana Kannan <saravanak@google.com>
-> > Signed-off-by: Saravana Kannan <saravanak@google.com>
-> > Signed-off-by: David Dai <davidai@google.com>
+> > However, trip point hysteresis is treated differently - it is only
+> > writable if the thermal zone has a .set_trip_hyst() operation defined
+> > and neither CONFIG_THERMAL_WRITABLE_TRIPS, nor the writable trips mask
+> > supplied by the zone creator has any bearing on this.  That is
+> > inconsistent and confusing, and it generally does not meet user
+> > expectations.
+> >
+> > For this reason, modify create_trip_attrs() to handle trip point
+> > hysteresis in the same way as trip point temperature, so they both
+> > are writable at the same time regardless of what trip point operations
+> > are defined for the thermal zone.
+> >
+> > Link: https://lore.kernel.org/linux-pm/20240106191502.29126-1-quic_mana=
+fm@quicinc.com
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > > ---
-> >  .../cpufreq/qemu,cpufreq-virtual.yaml         | 110 ++++++++++++++++++
+> >
+> > Notes:
+> >
+> >   * I don't think that CONFIG_THERMAL_WRITABLE_TRIPS is very useful.
+> >     The only thing controlled by it is whether or not the writable trip
+> >     mask used during registration will have any effect and this is quit=
+e
+> >     confusing.  Some drivers select it for this reason which seems a bi=
+t
+> >     odd to me.
+> >
+> >     Maybe it can be dropped after the patch below?
 >
-> > +    const: qemu,virtual-cpufreq
+> Actually it is used from an userspace daemon to get threshold crossing
+> temperature which is then changed on the fly.
+
+I mean to drop CONFIG_THERMAL_WRITABLE_TRIPS and make the writable
+trip masks used during zone registration always work.  Sorry for the
+confusion.
+
+> Instead of using multiple trip points, they use one where they change
+> the temperature after it crossed the threshold.
 >
-> Well, the filename almost matches the compatible.
+> Usually the userspace tracks slow sensor temperature in order to set a
+> specific set of limitations given a scenario. We are talking here about
+> Android and thermal engines which are platform specific. For example,
+> lower the battery charging speed if there is a game profile.
 >
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +    description:
-> > +      Address and size of region containing frequency controls for eac=
-h of the
-> > +      frequency domains. Regions for each frequency domain is placed
-> > +      contiguously and contain registers for controlling DVFS(Dynamic =
-Frequency
-> > +      and Voltage) characteristics. The size of the region is proporti=
-onal to
-> > +      total number of frequency domains. This device also needs the CP=
-Us to
-> > +      list their OPPs using operating-points-v2 tables. The OPP tables=
- for the
-> > +      CPUs should use normalized "frequency" values where the OPP with=
- the
-> > +      highest performance among all the vCPUs is listed as 1024 KHz. T=
-he rest
-> > +      of the frequencies of all the vCPUs should be normalized based o=
-n their
-> > +      performance relative to that 1024 KHz OPP. This makes it much ea=
-sier to
-> > +      migrate the VM across systems which might have different physica=
-l CPU
-> > +      OPPs.
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    // This example shows a two CPU configuration with a frequency dom=
-ain
-> > +    // for each CPU showing normalized performance points.
-> > +    cpus {
-> > +      #address-cells =3D <1>;
-> > +      #size-cells =3D <0>;
-> > +
-> > +      cpu@0 {
-> > +        compatible =3D "arm,armv8";
-> > +        device_type =3D "cpu";
-> > +        reg =3D <0x0>;
-> > +        operating-points-v2 =3D <&opp_table0>;
-> > +      };
-> > +
-> > +      cpu@1 {
-> > +        compatible =3D "arm,armv8";
-> > +        device_type =3D "cpu";
-> > +        reg =3D <0x0>;
-> > +        operating-points-v2 =3D <&opp_table1>;
-> > +      };
-> > +    };
-> > +
-> > +    opp_table0: opp-table-0 {
-> > +      compatible =3D "operating-points-v2";
-> > +
-> > +      opp64000 { opp-hz =3D /bits/ 64 <64000>; };
+>  From my POV, the thermal framework has been hacked via
+> CONFIG_THERMAL_WRITABLE_TRIPS from userspace to get these threshold
+> notification and to be honest I find that not sane. This should fall in
+> a thermal debug section defaulting to 'no'.
 >
-> opp-64000 is the preferred form.
+> So in some ways in agree with you. We should drop it or make it more
+> debug oriented in order to prevent it to go in production.
 >
-> > +      opp128000 { opp-hz =3D /bits/ 64 <128000>; };
-> > +      opp192000 { opp-hz =3D /bits/ 64 <192000>; };
-> > +      opp256000 { opp-hz =3D /bits/ 64 <256000>; };
-> > +      opp320000 { opp-hz =3D /bits/ 64 <320000>; };
-> > +      opp384000 { opp-hz =3D /bits/ 64 <384000>; };
-> > +      opp425000 { opp-hz =3D /bits/ 64 <425000>; };
-> > +    };
-> > +
-> > +    opp_table1: opp-table-1 {
-> > +      compatible =3D "operating-points-v2";
-> > +
-> > +      opp64000 { opp-hz =3D /bits/ 64 <64000>; };
-> > +      opp128000 { opp-hz =3D /bits/ 64 <128000>; };
-> > +      opp192000 { opp-hz =3D /bits/ 64 <192000>; };
-> > +      opp256000 { opp-hz =3D /bits/ 64 <256000>; };
-> > +      opp320000 { opp-hz =3D /bits/ 64 <320000>; };
-> > +      opp384000 { opp-hz =3D /bits/ 64 <384000>; };
-> > +      opp448000 { opp-hz =3D /bits/ 64 <448000>; };
-> > +      opp512000 { opp-hz =3D /bits/ 64 <512000>; };
-> > +      opp576000 { opp-hz =3D /bits/ 64 <576000>; };
-> > +      opp640000 { opp-hz =3D /bits/ 64 <640000>; };
-> > +      opp704000 { opp-hz =3D /bits/ 64 <704000>; };
-> > +      opp768000 { opp-hz =3D /bits/ 64 <768000>; };
-> > +      opp832000 { opp-hz =3D /bits/ 64 <832000>; };
-> > +      opp896000 { opp-hz =3D /bits/ 64 <896000>; };
-> > +      opp960000 { opp-hz =3D /bits/ 64 <960000>; };
-> > +      opp1024000 { opp-hz =3D /bits/ 64 <1024000>; };
-> > +
-> > +    };
+> But before doing that, we should provide a mechanism to userspace to
+> specify an 'userspace' trip point. However, it is more complex than what
+> it looks because the userspace should be able to specify a group of
+> temperature (and hysteresis) in order to be notified when the boundaries
+> are crossed and those can be dynamic.
 >
-> I don't recall your prior versions having an OPP table. Maybe it was
-> incomplete. You are designing the "h/w" interface. Why don't you make it
-> discoverable or implicit (fixed for the h/w)?
+> I will provide a proposal in a separate thread in order to not pollute
+> the discussion of this one.
+>
+> >   * IMO the writable trips mask itself is quite cumbersome and it would=
+ be
+> >     better to mark individual trips as writable in the trips table pass=
+ed
+> >     during registration.  This would be less prone to mistakes and it
+> >     would allow the code to check whether or not the given trip should
+> >     be writable (root can change sysfs file modes after all).  If I'm n=
+ot
+> >     mistaken, this change should not be very hard to make, although it =
+may
+> >     take some time to switch over all of the relevant drivers from usin=
+g
+> >     the mask.
+>
+> +1 +1 +1
+>
+> I don't think they are so many drivers using this mask. All the drivers
+> tied with a OF initialization are not impacted as the change will be in
+> one site.
 
-We also need the OPP tables to indicate which CPUs are part of the
-same cluster, etc. Don't want to invent a new "protocol" and just use
-existing DT bindings.
+There are a few.  I think around 50% of the
+thermal_zone_device_register_with_trips() callers pass non-empty
+writable trip points masks.
 
-> Do you really need it if the frequency is normalized?
+> > ---
+> >   drivers/thermal/thermal_sysfs.c |    3 ++-
+> >   1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > Index: linux-pm/drivers/thermal/thermal_sysfs.c
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > --- linux-pm.orig/drivers/thermal/thermal_sysfs.c
+> > +++ linux-pm/drivers/thermal/thermal_sysfs.c
+> > @@ -474,7 +474,8 @@ static int create_trip_attrs(struct ther
+> >                                       tz->trip_hyst_attrs[indx].name;
+> >               tz->trip_hyst_attrs[indx].attr.attr.mode =3D S_IRUGO;
+> >               tz->trip_hyst_attrs[indx].attr.show =3D trip_point_hyst_s=
+how;
+> > -             if (tz->ops->set_trip_hyst) {
+> > +             if (IS_ENABLED(v) &&
+>
+>                               ^^^
+>
+> s/v/CONFIG_THERMAL_WRITABLE_TRIPS/ ?
 
-Yeah, we can have little and big CPUs and want to emulate different
-performance levels. So while the Fmax on big is 1024, we still want to
-be able to say little is 425. So we definitely need frequency tables.
+Yes, and I'm not sure what happened here, because my local copy of the
+patch is correct.
 
-> Also, we have "opp-level" for opaque values that aren't Hz.
+I'll send a v2 shortly.
 
-Still want to keep it Hz to be compatible with arch_freq_scale and
-when virtualized CPU perf counters are available.
-
--Saravana
+> > +                 mask & (1 << indx)) {
+> >                       tz->trip_hyst_attrs[indx].attr.attr.mode |=3D S_I=
+WUSR;
+> >                       tz->trip_hyst_attrs[indx].attr.store =3D
+> >                                       trip_point_hyst_store;
+> >
+> >
+> >
+>
+> --
 
