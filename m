@@ -1,309 +1,146 @@
-Return-Path: <linux-pm+bounces-3028-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3029-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5DF88438B7
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 09:21:47 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1C908439DB
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 09:55:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E4BD1F28D74
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 08:21:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 838F3B29B23
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 08:55:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE0C157895;
-	Wed, 31 Jan 2024 08:21:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9FF160DCC;
+	Wed, 31 Jan 2024 08:49:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="udAck43A"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e78gPVkS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF4E56763;
-	Wed, 31 Jan 2024 08:21:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9425A69DF0;
+	Wed, 31 Jan 2024 08:49:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706689301; cv=none; b=rRPY3vBPewNsoOz5jvDxem63uuzCql12X8P9n289DYtY1oxdf6BS/EnrLslH9Z2Onr29JJYiWzT9JcNHQ/yk1ne66GoCm40HSs9GDDKi4UQ+KE9OSJqRLjuomo74qhi8z4SsfApWghDznyO+6YLj7YgD7KeCmVmYgXUzfk49msQ=
+	t=1706690971; cv=none; b=ryhUjxMZR7IBNSBvzish2VZ53PW3r0WdViaDvCy234ioZxhs8ZOecpYbb7pDKO6760ZZjx26QLwROEQDRKRZUt4UBiRfcrSh6F8pgS7ckYHmxsywPaY4WxzaT/WwiaI7TQWjJ6Z7oqBEnM67x/a4LsrUgh6u8Ao4WSj+eKOlIcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706689301; c=relaxed/simple;
-	bh=jnAscI+rbO+rCf//5jY0bWtSH4AFcNwB1T8g144wfes=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Rc2J0bHsAVa4cVKxo69NF17xXjq8tGqvTCoE3g7nzsRSqH/sGpzNhsWc/IH0Dssc9GZtJUe92Qk/f2x8HN+eXrZBirTOmejJtaIZmLI8qcjr35o6v/tZ7Qb0CT/Qi4+woswDwHL15zSJYWM43acn0jkG0rt03vh60u7Pt6ZrcQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=udAck43A; arc=none smtp.client-ip=198.47.19.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 40V8LTPT023251;
-	Wed, 31 Jan 2024 02:21:29 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1706689289;
-	bh=tOU3qILgkt/xTeSyBnZY6LOVJN6KI4+/QJBiXdIF5J8=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=udAck43APlChEoXKBhs/fucrbQfyb+chpMVIcrARxMcgX05otLG46A0mGmCEApi9M
-	 SJyFV4+u8atMxtCU7YsUTdsr7Y+PsRLyrQ0jzQ8EzX9TVz2ma1UyGjAF1seWjxLi4+
-	 NMZZx3QDa4VyOxHD2QHIHelBd/A1VABzsii9b3Jg=
-Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 40V8LTUd015562
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 31 Jan 2024 02:21:29 -0600
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 31
- Jan 2024 02:21:28 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 31 Jan 2024 02:21:28 -0600
-Received: from [172.24.26.29] (lt5cg0025dg6.dhcp.ti.com [172.24.26.29])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 40V8LOlu124092;
-	Wed, 31 Jan 2024 02:21:25 -0600
-Message-ID: <f7995fae-e0ac-4232-9178-814f1638a46c@ti.com>
-Date: Wed, 31 Jan 2024 13:51:24 +0530
+	s=arc-20240116; t=1706690971; c=relaxed/simple;
+	bh=DfZcsWA9ZiJQJnhw+Dlmf+rz4QBaLMOI1TuUkGh7YpY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HcYeZbMw0P3j4Io0ST+Ky7cRUzcVrqoZdrQgwAR9Y+sgs+9PQL1610B6jH6jT/LaqbhQWgyG6q7iNCTblCNw5tfUMd8AbbocPsInLNYt5X/dibSR2zuqVMvViXiqHBIbb6NDI0a6RTzZX+Nu3vcclGSCx1qVy4nbIkLQnAClLz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e78gPVkS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 242BFC433F1;
+	Wed, 31 Jan 2024 08:49:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706690971;
+	bh=DfZcsWA9ZiJQJnhw+Dlmf+rz4QBaLMOI1TuUkGh7YpY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=e78gPVkSswXNVxrTpgc3uqnClcHNOzUx0e+TnHsysfypkrDC7guPj7rnKflIizUtN
+	 NUiJaN1GtNrkmmJLGqaaT0TUv+U5ep074UDrDzt+gZe1LtLowojHTMOeYz001u9gk2
+	 3OUf70GW/bZCCPY+xd4+lf7eExvmEiMYsQltxViaAwgoiOzsvHBQ+RE9Q4pwqwLA6M
+	 CG5xYe5/LHMrt6bP9qs8t1VNW891rQdiDtrsw+NrdI8BT/RAoELujxl2CCMLDWQYKt
+	 Wpb5JnjbQaNrrzW/Xgm+Z2QNPhqQQ7xzgGXms59nifzufP/bOgsIa9W78U0el6J7oH
+	 werrdYsUuNm6w==
+Date: Wed, 31 Jan 2024 08:49:24 +0000
+From: Lee Jones <lee@kernel.org>
+To: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Support Opensource <support.opensource@diasemi.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Steve Twiss <stwiss.opensource@diasemi.com>,
+	"linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	"biju.das.au" <biju.das.au@gmail.com>,
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH v6 0/8] Convert DA906{1,2} bindings to json-schema
+Message-ID: <20240131084924.GD8551@google.com>
+References: <20231214080911.23359-1-biju.das.jz@bp.renesas.com>
+ <170316812973.586675.6248412029985031979.b4-ty@kernel.org>
+ <20231221143318.GH10102@google.com>
+ <TYCPR01MB1126921A54B9260CC33505FCA867E2@TYCPR01MB11269.jpnprd01.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] thermal: k3_j72xx_bandgap: implement suspend/resume
- support
-Content-Language: en-US
-To: Thomas Richard <thomas.richard@bootlin.com>, <rafael@kernel.org>,
-        <daniel.lezcano@linaro.org>
-CC: <rui.zhang@intel.com>, <lukasz.luba@arm.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <thomas.petazzoni@bootlin.com>,
-        <gregory.clement@bootlin.com>, <theo.lebrun@bootlin.com>,
-        <u-kumar1@ti.com>
-References: <20231130164953.2043305-1-thomas.richard@bootlin.com>
- <41a5c85b-073d-4083-be9e-830452f88438@bootlin.com>
-From: "J, KEERTHY" <j-keerthy@ti.com>
-In-Reply-To: <41a5c85b-073d-4083-be9e-830452f88438@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+In-Reply-To: <TYCPR01MB1126921A54B9260CC33505FCA867E2@TYCPR01MB11269.jpnprd01.prod.outlook.com>
 
+On Mon, 29 Jan 2024, Biju Das wrote:
 
-
-On 1/24/2024 2:26 PM, Thomas Richard wrote:
-> Added Keerthy
+> Hi Lee Jones,
 > 
-> On 11/30/23 17:49, Thomas Richard wrote:
->> From: Théo Lebrun <theo.lebrun@bootlin.com>
->>
->> This add suspend-to-ram support.
->>
->> The derived_table is kept-as is, so the resume is only about
->> pm_runtime_* calls and restoring the same registers as the probe.
->>
->> Extract the hardware initialization procedure to a function called at
->> both probe-time & resume-time.
->>
->> The probe-time loop is split in two to ensure doing the hardware
->> initialization before registering thermal zones. That ensures our
->> callbacks cannot be called while in bad state.
-Thomas,
+> > -----Original Message-----
+> > From: Lee Jones <lee@kernel.org>
+> > Sent: Thursday, December 21, 2023 2:33 PM
+> > Subject: Re: [PATCH v6 0/8] Convert DA906{1,2} bindings to json-schema
+> > 
+> > On Thu, 21 Dec 2023, Lee Jones wrote:
+> > 
+> > > On Thu, 14 Dec 2023 08:09:03 +0000, Biju Das wrote:
+> > > > Convert the below bindings to json-schema
+> > > > 1) DA906{1,2} mfd bindings
+> > > > 2) DA906{1,2,3} onkey bindings
+> > > > 3) DA906{1,2,3} thermal bindings
+> > > >
+> > > > Also add fallback for DA9061 watchdog device and document
+> > > > DA9063 watchdog device.
+> > > >
+> > > > [...]
+> > >
+> > > Applied, thanks!
+> > >
+> > > [1/8] dt-bindings: mfd: da9062: Update watchdog description
+> > >       commit: 9e7b13b805bcbe5335c2936d4c7ea0323ac69a81
+> > > [2/8] dt-bindings: watchdog: dlg,da9062-watchdog: Add fallback for
+> > DA9061 watchdog
+> > >       commit: 28d34db7772f18490b52328f04a3bf69ed5390d2
+> > > [3/8] dt-bindings: watchdog: dlg,da9062-watchdog: Document DA9063
+> > watchdog
+> > >       commit: d2a7dbb808870c17cffa2749ea877f61f298d098
+> > > [4/8] dt-bindings: mfd: dlg,da9063: Update watchdog child node
+> > >       commit: d4018547a15a94c7e865b2cef82bff1cd43a32b3
+> > > [5/8] dt-bindings: input: Convert da906{1,2,3} onkey to json-schema
+> > >       commit: db459d3da7bb9c37cb86897c7b321a49f8e40968
+> > > [6/8] dt-bindings: thermal: Convert da906{1,2} thermal to json-schema
+> > >       commit: 998f499c843e360bcd9ee1fe9addc3b5d32f1234
+> > > [7/8] dt-bindings: mfd: dlg,da9063: Sort child devices
+> > >       commit: 2bbf9d2a8e3bc933703dfda87cac953bed458496
+> > > [8/8] dt-bindings: mfd: dlg,da9063: Convert da9062 to json-schema
+> > >       commit: 522225161830f6a93f2aaabda99226c1ffddc8c4
+> > 
+> > Submitted for testing.  Pull-request to follow.
+> 
+> The commit dc805ea058c0e ("MAINTAINERS: rectify entry for DIALOG SEMICONDUCTOR DRIVERS")
+> in mainline will give a conflict for patch#1.
+> 
+> Patch#2 and patch#3 are already in mainline.
+> 
+> 
+> Please let me know if you want me to rebase and resend the patch series
 
-Thanks for adding suspend/resume support.
+That would be helpful, thanks.
 
-FWIW
+Please ensure all of the patches have my:
 
-Acked-by: Keerthy <j-keerthy@ti.com>
+Acked-by: Lee Jones <lee@kernel.org>
 
-- Keerthy
->>
->> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
->> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
->> ---
->>
->> v2:
->> - Fix warnings/errors reported by kernel test robot
->>
->>   drivers/thermal/k3_j72xx_bandgap.c | 112 ++++++++++++++++++++---------
->>   1 file changed, 79 insertions(+), 33 deletions(-)
->>
->> diff --git a/drivers/thermal/k3_j72xx_bandgap.c b/drivers/thermal/k3_j72xx_bandgap.c
->> index c74094a86982..4ad23c8bf73b 100644
->> --- a/drivers/thermal/k3_j72xx_bandgap.c
->> +++ b/drivers/thermal/k3_j72xx_bandgap.c
->> @@ -178,6 +178,7 @@ struct k3_j72xx_bandgap {
->>   	void __iomem *base;
->>   	void __iomem *cfg2_base;
->>   	struct k3_thermal_data *ts_data[K3_VTM_MAX_NUM_TS];
->> +	int cnt;
->>   };
->>   
->>   /* common data structures */
->> @@ -338,24 +339,53 @@ static void print_look_up_table(struct device *dev, int *ref_table)
->>   		dev_dbg(dev, "%d       %d %d\n", i, derived_table[i], ref_table[i]);
->>   }
->>   
->> +static void k3_j72xx_bandgap_init_hw(struct k3_j72xx_bandgap *bgp)
->> +{
->> +	struct k3_thermal_data *data;
->> +	int id, high_max, low_temp;
->> +	u32 val;
->> +
->> +	for (id = 0; id < bgp->cnt; id++) {
->> +		data = bgp->ts_data[id];
->> +		val = readl(bgp->cfg2_base + data->ctrl_offset);
->> +		val |= (K3_VTM_TMPSENS_CTRL_MAXT_OUTRG_EN |
->> +			K3_VTM_TMPSENS_CTRL_SOC |
->> +			K3_VTM_TMPSENS_CTRL_CLRZ | BIT(4));
->> +		writel(val, bgp->cfg2_base + data->ctrl_offset);
->> +	}
->> +
->> +	/*
->> +	 * Program TSHUT thresholds
->> +	 * Step 1: set the thresholds to ~123C and 105C WKUP_VTM_MISC_CTRL2
->> +	 * Step 2: WKUP_VTM_TMPSENS_CTRL_j set the MAXT_OUTRG_EN  bit
->> +	 *         This is already taken care as per of init
->> +	 * Step 3: WKUP_VTM_MISC_CTRL set the ANYMAXT_OUTRG_ALERT_EN  bit
->> +	 */
->> +	high_max = k3_j72xx_bandgap_temp_to_adc_code(MAX_TEMP);
->> +	low_temp = k3_j72xx_bandgap_temp_to_adc_code(COOL_DOWN_TEMP);
->> +
->> +	writel((low_temp << 16) | high_max, bgp->cfg2_base + K3_VTM_MISC_CTRL2_OFFSET);
->> +	mdelay(100);
->> +	writel(K3_VTM_ANYMAXT_OUTRG_ALERT_EN, bgp->cfg2_base + K3_VTM_MISC_CTRL_OFFSET);
->> +}
->> +
->>   struct k3_j72xx_bandgap_data {
->>   	const bool has_errata_i2128;
->>   };
->>   
->>   static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
->>   {
->> -	int ret = 0, cnt, val, id;
->> -	int high_max, low_temp;
->> -	struct resource *res;
->> +	const struct k3_j72xx_bandgap_data *driver_data;
->> +	struct thermal_zone_device *ti_thermal;
->>   	struct device *dev = &pdev->dev;
->> +	bool workaround_needed = false;
->>   	struct k3_j72xx_bandgap *bgp;
->>   	struct k3_thermal_data *data;
->> -	bool workaround_needed = false;
->> -	const struct k3_j72xx_bandgap_data *driver_data;
->> -	struct thermal_zone_device *ti_thermal;
->> -	int *ref_table;
->>   	struct err_values err_vals;
->>   	void __iomem *fuse_base;
->> +	int ret = 0, val, id;
->> +	struct resource *res;
->> +	int *ref_table;
->>   
->>   	const s64 golden_factors[] = {
->>   		-490019999999999936,
->> @@ -422,10 +452,10 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
->>   
->>   	/* Get the sensor count in the VTM */
->>   	val = readl(bgp->base + K3_VTM_DEVINFO_PWR0_OFFSET);
->> -	cnt = val & K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK;
->> -	cnt >>= __ffs(K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK);
->> +	bgp->cnt = val & K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK;
->> +	bgp->cnt >>= __ffs(K3_VTM_DEVINFO_PWR0_TEMPSENS_CT_MASK);
->>   
->> -	data = devm_kcalloc(bgp->dev, cnt, sizeof(*data), GFP_KERNEL);
->> +	data = devm_kcalloc(bgp->dev, bgp->cnt, sizeof(*data), GFP_KERNEL);
->>   	if (!data) {
->>   		ret = -ENOMEM;
->>   		goto err_alloc;
->> @@ -449,8 +479,8 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
->>   	else
->>   		init_table(3, ref_table, pvt_wa_factors);
->>   
->> -	/* Register the thermal sensors */
->> -	for (id = 0; id < cnt; id++) {
->> +	/* Precompute the derived table & fill each thermal sensor struct */
->> +	for (id = 0; id < bgp->cnt; id++) {
->>   		data[id].bgp = bgp;
->>   		data[id].ctrl_offset = K3_VTM_TMPSENS0_CTRL_OFFSET + id * 0x20;
->>   		data[id].stat_offset = data[id].ctrl_offset +
->> @@ -470,13 +500,13 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
->>   		else if (id == 0 && !workaround_needed)
->>   			memcpy(derived_table, ref_table, TABLE_SIZE * 4);
->>   
->> -		val = readl(data[id].bgp->cfg2_base + data[id].ctrl_offset);
->> -		val |= (K3_VTM_TMPSENS_CTRL_MAXT_OUTRG_EN |
->> -			K3_VTM_TMPSENS_CTRL_SOC |
->> -			K3_VTM_TMPSENS_CTRL_CLRZ | BIT(4));
->> -		writel(val, data[id].bgp->cfg2_base + data[id].ctrl_offset);
->> -
->>   		bgp->ts_data[id] = &data[id];
->> +	}
->> +
->> +	k3_j72xx_bandgap_init_hw(bgp);
->> +
->> +	/* Register the thermal sensors */
->> +	for (id = 0; id < bgp->cnt; id++) {
->>   		ti_thermal = devm_thermal_of_zone_register(bgp->dev, id, &data[id],
->>   							   &k3_of_thermal_ops);
->>   		if (IS_ERR(ti_thermal)) {
->> @@ -486,21 +516,7 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
->>   		}
->>   	}
->>   
->> -	/*
->> -	 * Program TSHUT thresholds
->> -	 * Step 1: set the thresholds to ~123C and 105C WKUP_VTM_MISC_CTRL2
->> -	 * Step 2: WKUP_VTM_TMPSENS_CTRL_j set the MAXT_OUTRG_EN  bit
->> -	 *         This is already taken care as per of init
->> -	 * Step 3: WKUP_VTM_MISC_CTRL set the ANYMAXT_OUTRG_ALERT_EN  bit
->> -	 */
->> -	high_max = k3_j72xx_bandgap_temp_to_adc_code(MAX_TEMP);
->> -	low_temp = k3_j72xx_bandgap_temp_to_adc_code(COOL_DOWN_TEMP);
->> -
->> -	writel((low_temp << 16) | high_max, data[0].bgp->cfg2_base +
->> -	       K3_VTM_MISC_CTRL2_OFFSET);
->> -	mdelay(100);
->> -	writel(K3_VTM_ANYMAXT_OUTRG_ALERT_EN, data[0].bgp->cfg2_base +
->> -	       K3_VTM_MISC_CTRL_OFFSET);
->> +	platform_set_drvdata(pdev, bgp);
->>   
->>   	print_look_up_table(dev, ref_table);
->>   	/*
->> @@ -527,6 +543,35 @@ static void k3_j72xx_bandgap_remove(struct platform_device *pdev)
->>   	pm_runtime_disable(&pdev->dev);
->>   }
->>   
->> +static int __maybe_unused k3_j72xx_bandgap_suspend(struct device *dev)
->> +{
->> +	pm_runtime_put_sync(dev);
->> +	pm_runtime_disable(dev);
->> +	return 0;
->> +}
->> +
->> +static int __maybe_unused k3_j72xx_bandgap_resume(struct device *dev)
->> +{
->> +	struct k3_j72xx_bandgap *bgp = dev_get_drvdata(dev);
->> +	int ret;
->> +
->> +	pm_runtime_enable(dev);
->> +	ret = pm_runtime_get_sync(dev);
->> +	if (ret < 0) {
->> +		pm_runtime_put_noidle(dev);
->> +		pm_runtime_disable(dev);
->> +		return ret;
->> +	}
->> +
->> +	k3_j72xx_bandgap_init_hw(bgp);
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct dev_pm_ops k3_j72xx_bandgap_pm_ops = {
->> +	SET_SYSTEM_SLEEP_PM_OPS(k3_j72xx_bandgap_suspend, k3_j72xx_bandgap_resume)
->> +};
->> +
->>   static const struct k3_j72xx_bandgap_data k3_j72xx_bandgap_j721e_data = {
->>   	.has_errata_i2128 = true,
->>   };
->> @@ -554,6 +599,7 @@ static struct platform_driver k3_j72xx_bandgap_sensor_driver = {
->>   	.driver = {
->>   		.name = "k3-j72xx-soc-thermal",
->>   		.of_match_table	= of_k3_j72xx_bandgap_match,
->> +		.pm = &k3_j72xx_bandgap_pm_ops,
->>   	},
->>   };
->>   
+... applied, then I'll know to just apply them again.
+
+-- 
+Lee Jones [李琼斯]
 
