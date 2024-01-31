@@ -1,55 +1,54 @@
-Return-Path: <linux-pm+bounces-3089-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3090-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5821A8443B5
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 17:09:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89EE88443D8
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 17:12:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F999B26AC5
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 16:09:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BABE21C25A4E
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 16:12:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5197712A166;
-	Wed, 31 Jan 2024 16:08:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4B8412BE8C;
+	Wed, 31 Jan 2024 16:12:19 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CA3884A2D;
-	Wed, 31 Jan 2024 16:08:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A21587BAFF;
+	Wed, 31 Jan 2024 16:12:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706717337; cv=none; b=X5dM1BfwUPAt68qWuEqD1FiHbYrL2nfMfRxS4I69E54cxNAW4Rn9KPQbVIWDQJKEXjuvUiT4YklvIO9k/MotSvn8DySKxXn2X2Os6R6gA7n3OWo7YsXVVqjnddklN8xuHrU/Hdc/3CjOE771b4BYr9z1BqHp+GxGkAN0nt0SUlQ=
+	t=1706717539; cv=none; b=tpDMQlhCJpqSD7xaNzfbLUnkFXdPcdG1qQikrYcJ5/tZHblhJ70D3IMTh2eQVVVKFMXlSvi86WbYD4vYiQscVHO+MApNM3Uqon2Csr0xy+/45zlvEW0fKIlBWDng4ey3ylPwGZQVU8sT63AUJo8CuFPpfvqO58iR6TU3jtMWiEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706717337; c=relaxed/simple;
-	bh=MSYUWffMJFbDudCRxBvDmOdHQFu/qboKRVvrratEScw=;
+	s=arc-20240116; t=1706717539; c=relaxed/simple;
+	bh=uOdYXEGnPke7pN6zLY42ifDeRAGGRDtMgqWsQY0vdgQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jKPmpMdWFsUYj57ir2GLWEN4FI1UkfgdktMjCtNaSLBv4cNlDSAFvBpeDalkF/giiHorW234mFPhvn6fYHPlu4lQhmlse7XP5DV7t71q7jFYdhGWB0DKNIDj8/8wltxiQ3xbzgP1wK9Y9jszYiWQbnw8A4UPW3UqxaWPrUeTxwc=
+	 Content-Type:Content-Disposition:In-Reply-To; b=oMDcPUdPkBydmA2O9YBN4JSwmROBBObNbbXKrD/Ah34nGji1ycXmcZ5puXaRyvQdHvC+wsCfDZqLM2t8YPsSJRerKXgWEvyzDs4EEYU6ZL+qfuLcf3rcITiHy12eAYhO1cSn6jMs8PNY40GS8rWRsq665cZTfl9a+FAA8YDjucE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 16949DA7;
-	Wed, 31 Jan 2024 08:09:37 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5DF3EDA7;
+	Wed, 31 Jan 2024 08:13:00 -0800 (PST)
 Received: from bogus (unknown [10.57.78.35])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DD4A03F762;
-	Wed, 31 Jan 2024 08:08:50 -0800 (PST)
-Date: Wed, 31 Jan 2024 16:08:48 +0000
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ED68F3F762;
+	Wed, 31 Jan 2024 08:12:13 -0800 (PST)
+Date: Wed, 31 Jan 2024 16:12:11 +0000
 From: Sudeep Holla <sudeep.holla@arm.com>
-To: Pierre Gondois <pierre.gondois@arm.com>
-Cc: Sibi Sankar <quic_sibis@quicinc.com>, cristian.marussi@arm.com,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	linux-arm-kernel@lists.infradead.org, sboyd@kernel.org,
-	lukasz.luba@arm.com, dietmar.eggemann@arm.com,
-	morten.rasmussen@arm.com, viresh.kumar@linaro.org,
-	rafael@kernel.org, linux-pm@vger.kernel.org,
+To: Sibi Sankar <quic_sibis@quicinc.com>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>, cristian.marussi@arm.com,
+	Sudeep Holla <sudeep.holla@arm.com>, rafael@kernel.org,
+	morten.rasmussen@arm.com, lukasz.luba@arm.com, sboyd@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org, quic_mdtipton@quicinc.com,
 	linux-arm-msm@vger.kernel.org, nm@ti.com
-Subject: Re: [PATCH 2/3] firmware: arm_scmi: Add support for marking certain
- frequencies as boost
-Message-ID: <20240131160848.662dhaoiov3trt4i@bogus>
+Subject: Re: [PATCH 0/3] cpufreq: scmi: Add boost frequency support
+Message-ID: <20240131161211.v3rhwidmdalfdvz7@bogus>
 References: <20240117110443.2060704-1-quic_sibis@quicinc.com>
- <20240117110443.2060704-3-quic_sibis@quicinc.com>
- <e3abe1ab-064f-4a6a-a91d-fe8c91574600@arm.com>
+ <20240123060827.a3vszziftj6pszt3@vireshk-i7>
+ <Za-RtBrSxI-j4Jdx@bogus>
+ <e968092a-dc2b-4351-9489-acf874bbc7b6@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -58,57 +57,21 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e3abe1ab-064f-4a6a-a91d-fe8c91574600@arm.com>
+In-Reply-To: <e968092a-dc2b-4351-9489-acf874bbc7b6@arm.com>
 
-On Wed, Jan 31, 2024 at 03:29:43PM +0100, Pierre Gondois wrote:
-> Hello Sibi,
-> 
-> On 1/17/24 12:04, Sibi Sankar wrote:
-> > All opps above the sustained level/frequency are treated as boost, so mark
-> > them accordingly.
-> > 
-> > Suggested-by: Sudeep Holla <sudeep.holla@arm.com>
-> > Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-> > ---
-> >   drivers/firmware/arm_scmi/perf.c | 11 ++++++++++-
-> >   1 file changed, 10 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/firmware/arm_scmi/perf.c b/drivers/firmware/arm_scmi/perf.c
-> > index e286f04ee6e3..d3fb8c804b3d 100644
-> > --- a/drivers/firmware/arm_scmi/perf.c
-> > +++ b/drivers/firmware/arm_scmi/perf.c
-> > @@ -811,7 +811,7 @@ static int scmi_dvfs_device_opps_add(const struct scmi_protocol_handle *ph,
-> >   				     struct device *dev, u32 domain)
-> >   {
-> >   	int idx, ret;
-> > -	unsigned long freq;
-> > +	unsigned long freq, sustained_freq;
-> >   	struct dev_pm_opp_data data = {};
-> >   	struct perf_dom_info *dom;
-> > @@ -819,12 +819,21 @@ static int scmi_dvfs_device_opps_add(const struct scmi_protocol_handle *ph,
-> >   	if (IS_ERR(dom))
-> >   		return PTR_ERR(dom);
-> > +	if (!dom->level_indexing_mode)
-> > +		sustained_freq = dom->sustained_perf_level * dom->mult_factor;
-> > +	else
-> > +		sustained_freq = dom->sustained_freq_khz * dom->mult_factor;
-> > +
-> >   	for (idx = 0; idx < dom->opp_count; idx++) {
-> >   		if (!dom->level_indexing_mode)
-> >   			freq = dom->opp[idx].perf * dom->mult_factor;
-> >   		else
-> >   			freq = dom->opp[idx].indicative_freq * dom->mult_factor;
-> > +		/* All opps above the sustained level/frequency are treated as boost */
-> > +		if (sustained_freq && freq > sustained_freq)
->
-> It seems the sustained_freq is not optional since SCMI v1.0,
-> is it necessary to check that (sustained_freq != 0) ?
->
+On Wed, Jan 31, 2024 at 04:07:48PM +0100, Dietmar Eggemann wrote:
 
-Technically correct, we don't have to. But since day 1, we checked and
-handled 0 for perf_level specifically to avoid division by zero. I am
-just worried if there are any platforms in the wild with these values as
-0. We can start without the check and add it if someone complains perhaps ?
+[...]
+
+>
+> root@juno:/sys/devices/system/cpu/cpufreq# cat boost policy*/boost
+> 1
+> 0
+> 0
+
+OK I admit, I wasn't aware of this per policy boost flag.
+It must be enabled by default if it has any effect. Otherwise
+it breaks the existing behaviour on all the SCMI based platforms.
 
 -- 
 Regards,
