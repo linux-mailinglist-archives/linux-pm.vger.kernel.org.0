@@ -1,52 +1,54 @@
-Return-Path: <linux-pm+bounces-3047-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3048-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3730843E3F
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 12:25:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DA246843E52
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 12:29:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 86B851F27CE4
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 11:25:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78E231F2A158
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 11:29:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A86B873168;
-	Wed, 31 Jan 2024 11:25:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1796C69D39;
+	Wed, 31 Jan 2024 11:29:03 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F2B067A16;
-	Wed, 31 Jan 2024 11:25:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C50B21E522;
+	Wed, 31 Jan 2024 11:29:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706700315; cv=none; b=DTnn6mis1Zg5B9zsEi3SZ1wsKTn5E0Z4/eolcqht96qESl7n8al1ADd6dBHWTp+z+uEA33bngBRot4Jf0X+QiAA0F28BnryGaDlGPhLgo7Qs8uNpnGToXtGNPAvCsb5gN9WWEVudEmifTF7xfQyQXDG6EJt7J9WbKuksZJ8jjDo=
+	t=1706700543; cv=none; b=KqTMeXJKRrWeXZ7ED4vZA61Dz6KKKqKRAhvkzGzBwCKUeKHgs7jQT8nEVL4r2N3NcQLx8q23R9tcOA3Vc88B6QF8tyvu0sOJim2oFyuCpKqWAqFJtx09enpFRGVnXlKkgpX8+T7cmonbaTj/3NOYbngBIJCC+tzkmfYS43LfCjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706700315; c=relaxed/simple;
-	bh=wzS1Y1fbKl5youA8h5qmv/jE996pLnUuHtJcrrtwbRM=;
+	s=arc-20240116; t=1706700543; c=relaxed/simple;
+	bh=QKraxa4UloPYnJDUngqsppTilrRHPIZbphWIi9YMt/Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HVWibhaiQXfAtdlMQUQalRAkAilOabDTEP3HaC4Iv9/n8vXcfKIM3IgUYuR4Zg9gQ8nWzBdmCsGvZXHFAqsh56r9LWjl6Y2BKkjgeHt6ZjOGDuJiJQt3jBTft93T8oABPzTuqiB8ZgJ1PwKUDnARcYk9KX5rml3Wirg8W6nE8Wk=
+	 Content-Type:Content-Disposition:In-Reply-To; b=RF7r2o7hPuld8mDnVyrEvfJnu/2JMCZ3NaydrMTPnHe5bXy5/Ih13+RqaRZ5tIxUFpWn/1DIdn8LxRrE3GmDvWnz+NYHW4mrSH2itN4dA0h6MIG3U9+7hkJXL+HmacZ9AX/60rpl651o2CUXKno2PsplADSp0wWDCm6oVrfeOz8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 42C65DA7;
-	Wed, 31 Jan 2024 03:25:56 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ABF94DA7;
+	Wed, 31 Jan 2024 03:29:43 -0800 (PST)
 Received: from bogus (unknown [10.57.78.35])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 123C53F762;
-	Wed, 31 Jan 2024 03:25:09 -0800 (PST)
-Date: Wed, 31 Jan 2024 11:25:07 +0000
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7FF973F762;
+	Wed, 31 Jan 2024 03:28:57 -0800 (PST)
+Date: Wed, 31 Jan 2024 11:28:54 +0000
 From: Sudeep Holla <sudeep.holla@arm.com>
-To: Sibi Sankar <quic_sibis@quicinc.com>
-Cc: cristian.marussi@arm.com, rafael@kernel.org, viresh.kumar@linaro.org,
-	Sudeep Holla <sudeep.holla@arm.com>, morten.rasmussen@arm.com,
-	dietmar.eggemann@arm.com, lukasz.luba@arm.com, sboyd@kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, quic_mdtipton@quicinc.com,
-	linux-arm-msm@vger.kernel.org, nm@ti.com
-Subject: Re: [PATCH 2/3] firmware: arm_scmi: Add support for marking certain
- frequencies as boost
-Message-ID: <20240131112507.fu355wnolbsoiqxn@bogus>
-References: <20240117110443.2060704-1-quic_sibis@quicinc.com>
- <20240117110443.2060704-3-quic_sibis@quicinc.com>
+To: Cristian Marussi <cristian.marussi@arm.com>
+Cc: Sibi Sankar <quic_sibis@quicinc.com>, rafael@kernel.org,
+	Sudeep Holla <sudeep.holla@arm.com>, viresh.kumar@linaro.org,
+	morten.rasmussen@arm.com, dietmar.eggemann@arm.com,
+	lukasz.luba@arm.com, linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	quic_mdtipton@quicinc.com, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH V2 1/4] firmware: arm_scmi: Add perf_notify_support
+ interface
+Message-ID: <20240131112854.24euh6c6xgljsj6c@bogus>
+References: <20240117104116.2055349-1-quic_sibis@quicinc.com>
+ <20240117104116.2055349-2-quic_sibis@quicinc.com>
+ <ZbfJN1c9viiLhO1L@pluto>
+ <ZbfhdqBBpjyf3IRI@pluto>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -55,48 +57,36 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240117110443.2060704-3-quic_sibis@quicinc.com>
+In-Reply-To: <ZbfhdqBBpjyf3IRI@pluto>
 
-On Wed, Jan 17, 2024 at 04:34:42PM +0530, Sibi Sankar wrote:
-> All opps above the sustained level/frequency are treated as boost, so mark
-> them accordingly.
+On Mon, Jan 29, 2024 at 05:33:42PM +0000, Cristian Marussi wrote:
+> On Mon, Jan 29, 2024 at 03:50:20PM +0000, Cristian Marussi wrote:
+> > On Wed, Jan 17, 2024 at 04:11:13PM +0530, Sibi Sankar wrote:
+> > > Add a new perf_notify_support interface to the existing perf_ops to export
+> > > info regarding limit/level change notification support.
+> > > 
+> > 
+> > Hi Sibi,
+> > 
+> > as I mentioned previously, in order not to add a needless stream of SCMI
+> > Perf accessors I posted this:
+> > 
+> > https://lore.kernel.org/linux-arm-kernel/20240129151002.1215333-1-cristian.marussi@arm.com/T/#u
+> > 
+> > to expose all the Perf domains infos via the usual info_get(), similarly
+> > to how other SCMI protocols do already.
+> > 
+> > I think that reworking this series on that, you can certainly drop this patch and just
+> > check the _notify booleans on the retrieved domain info.
 > 
-> Suggested-by: Sudeep Holla <sudeep.holla@arm.com>
-> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-> ---
->  drivers/firmware/arm_scmi/perf.c | 11 ++++++++++-
->  1 file changed, 10 insertions(+), 1 deletion(-)
+> Sorry, but hold on with this change, I will probably post an updated version
+> my patch above.
 > 
-> diff --git a/drivers/firmware/arm_scmi/perf.c b/drivers/firmware/arm_scmi/perf.c
-> index e286f04ee6e3..d3fb8c804b3d 100644
-> --- a/drivers/firmware/arm_scmi/perf.c
-> +++ b/drivers/firmware/arm_scmi/perf.c
-> @@ -811,7 +811,7 @@ static int scmi_dvfs_device_opps_add(const struct scmi_protocol_handle *ph,
->  				     struct device *dev, u32 domain)
->  {
->  	int idx, ret;
-> -	unsigned long freq;
-> +	unsigned long freq, sustained_freq;
->  	struct dev_pm_opp_data data = {};
->  	struct perf_dom_info *dom;
->  
-> @@ -819,12 +819,21 @@ static int scmi_dvfs_device_opps_add(const struct scmi_protocol_handle *ph,
->  	if (IS_ERR(dom))
->  		return PTR_ERR(dom);
->  
-> +	if (!dom->level_indexing_mode)
-> +		sustained_freq = dom->sustained_perf_level * dom->mult_factor;
-> +	else
-> +		sustained_freq = dom->sustained_freq_khz * dom->mult_factor;
-> +
 
-Can't we just use dom->sustained_freq_khz * 1000UL in both the cases ?
-
-Other than that this series looks good to me but it would be good to
-explain how you would use this. Since it is enabled by default, do you
-plan to disable boost at time and when ? If it is for thermal reasons,
-why your other series handling thermal and limits notification from the
-firmware not sufficient.
+As discussed in private, I would prefer to avoid exposing all the internals
+to the users of SCMI perf. At the same time may we can do better if we can
+check the availability of notification as part of notification enablement
+from the SCMI driver, I need to think the details yet.
 
 -- 
 Regards,
