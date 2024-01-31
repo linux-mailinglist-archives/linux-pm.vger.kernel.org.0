@@ -1,274 +1,173 @@
-Return-Path: <linux-pm+bounces-3040-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3041-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91F98843B78
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 10:52:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E42B843C8D
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 11:28:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BF8AF1C2649E
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 09:52:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59E5128F9F7
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 10:28:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B63669969;
-	Wed, 31 Jan 2024 09:52:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yzjLKPOU"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32D776DD19;
+	Wed, 31 Jan 2024 10:27:11 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B5269D0E
-	for <linux-pm@vger.kernel.org>; Wed, 31 Jan 2024 09:52:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAF226DD00;
+	Wed, 31 Jan 2024 10:27:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706694769; cv=none; b=rW6ZR/XcbNauHzryC7t41fOM9++EQ+kbpLIjqCtxJ86Ol8J4+fyg/GhmK73xtcAAw43MvbBCH+MP0dmALC6H5uPvmtP74q/Ip8HgGQhscx8I3QAvkLbyC6ZAKzEQLA37BtnDlXhG2Vr3d7wuAtA0cDbAILUIyKTbFMT9lDgLEjY=
+	t=1706696831; cv=none; b=YvKIxNo5LwYmHOrLCktWOlhZaAI735V5s6/sx89qrjcqYjZ1cWWmXGN2zqN224R0x2v1SDPJ8gqcmaCvUdtPOQpMuM3yeSqX8lHcwcAlPkvLMbCb/K6BOEQ0bQSSorqhOG/5z8NRG6KHxNftoVQKzaiKp+XT7eQcdLHVInRcBp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706694769; c=relaxed/simple;
-	bh=fTIfhqGw1d/HJR+aqs5SB6WwWZFYD2zxuQWrfL/S1dw=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=RnScPQ/Lw5vKznrwOUztqih36PwEYlfezzmzCVfcyLhlMOJ8Tmvx9xgMesqkFUg7+pHQfIvEu5/I6Vpuym+xEGV6LSl9ji8cHGnUmE67BbUoln7z3rP+aGF+F/bRhv+DlqA9DZixXAujU/3izv2nsPvVOvIRUKIzdb9q9Vx+WQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yzjLKPOU; arc=none smtp.client-ip=209.85.208.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2d05b06b5f9so20585031fa.3
-        for <linux-pm@vger.kernel.org>; Wed, 31 Jan 2024 01:52:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706694764; x=1707299564; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=vy9ag9vSpz3bXWFEemDbbZ5ICpPB9T59zqDCvXFR710=;
-        b=yzjLKPOUNm3mJDC3SFmHZl1dctH7oKC138Dz3reVC7HoFSUfQlGcHtGgfGNlaeLM9R
-         8fIf789R23hoo6mFHYERKNhPvxvj4nz4I+qII5qTNLjm5FvE3erdHHaT8Y6535qahWvQ
-         lacEcFKS8OgMdomLin3kISR+BBxz//VEqnxPO+DVGNDoTeJ06cJ2FpoPVv2ixzw3QM0J
-         tjRr8VpKJJnkaoFGnGN/HKqck5nS2QtAGLYD6G75Ki5glrUA5HYDgn/UIKfCpSHgxcnB
-         Udj4p7xlhoMSAmqSTxIaiFt5jWQF54cE0PzaP+3SMzMwwGMKkYzzBVUsyGK6uOUDyo2N
-         zwDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706694764; x=1707299564;
-        h=content-transfer-encoding:in-reply-to:autocrypt:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vy9ag9vSpz3bXWFEemDbbZ5ICpPB9T59zqDCvXFR710=;
-        b=cdttY5eETTYoxO6GMkePWMa4VsAAZHy+fJVKGtsKxl1zwmESYojHIQCDb1IbmcwmwR
-         6d4+hp80tzPa/wYovWDM954BLNTZedY1dNYuyNZkUA+Lfg7lwyskphwu4BO2DjgGIFhY
-         xm6OeWyv2luUvRkcbb3C2CJJ3HyPldAcEx9eYn9W7GLKmP+BrNZV2FaoHESFN/Y/uenS
-         /0iHPYc+hJTJcwBci6n6j647ZK3XoFZn5PWla2EEoWBgqjnZ+JNUiYXAqpdzyIirHmT9
-         4hAzZ3EvGvHduRXwOd0aXkN425GAnahqX0ub3FwWTHJouCLQHmxyXbZCyTW1ub5bRzLk
-         Y1Gg==
-X-Gm-Message-State: AOJu0YyrXzmi/OUkeyweWKTxVmGDhKzkZlBQ0gC7pmhrtmfpQjoBvFaY
-	OaBTMSvHkxUmJhPhrtHsvaUvqJvpsgWs1EHpdvv8+/8JjfVeZ5LKc74dBjKgaT0=
-X-Google-Smtp-Source: AGHT+IG6Xu1C1j6SyDZmreNSX8+xfoVcpAMVxiflT3WbYkQ3umBoKf9MN0TWAMy06KSGoLm0U6GKsA==
-X-Received: by 2002:a2e:84cd:0:b0:2cf:2db4:cd84 with SMTP id q13-20020a2e84cd000000b002cf2db4cd84mr772150ljh.49.1706694764460;
-        Wed, 31 Jan 2024 01:52:44 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCVn6dszHl2gPrVUm94CT0J4a9x7kfsAG5Hj3PD80ZzNLeSwkoamvLdSKKTaKtRk6oSlN90EMwaN63rcgt/tJPc5cFZkCN1yV2ChH0Ujbe57KAWr2E2BgTQ2d8dz5W8p6F/2T89v+tEN8rFblqbb8aJVQ07BvyslkrD8XTmmTn4ZnaQICNStWkmmxswOuUqTyApWOFIDmrgvrWer56bdOTO14h8gY/8GJYnVO+ikOw6ggTQajutJj0oH6qYlUNWB6ZmocLNeTufdb/g+wJwpqWCogykXmnfgx3RUFPcKqXKdI/49WbaBVgm/anhAu+K5cH2iwtQj5A7BP4Muuds6wLD+gmohkhr9w6vzNHy6KJtIAVvkkXZfzMVhUSh0kkNRjB5oRltTV4w2/Qgk/8PFwtIF+YnbRSorbmzqxlmTqCl2jTKWpW8ZATL0xI/LSlNQLjy06ON752/jClZj3CCeENZRjv1vnkWskxO15uWAWiz9OvbEZhT8nx8UwUZ2XELt7wN3V489ZXnhTSdzXytxVx4pd/RXSC3Ml84zhUysoaMS0du2ncpX9fB6Fn3D2wJE+SO4EoaXYDyVjRgkb/HnBX9g9F4YfHjIPQDS+LK5nU+ccR5rNYc8TjttcZHfFn5gqHCUx/fPqekaXMt/G7jgBtYHIYly+Zoy63J53TBMZ+lBww7evLpFrdMUYIiI4pwLFcYu2L0MX8s9GtPXIpHrZgw0iILaA58qzlUSevF7S1znTdvBR/GlzgK2K8gY3jz+Q6ioTvisMTIJeKhZIShhZb5/4lJFBqmm4m+SBkQzwsYCmfMKDZeSYbcxAcBlbTasFfeBeW+9dw==
-Received: from [192.168.1.20] ([178.197.222.62])
-        by smtp.gmail.com with ESMTPSA id di11-20020a056402318b00b0055ef0105f2fsm3426803edb.80.2024.01.31.01.52.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Jan 2024 01:52:43 -0800 (PST)
-Message-ID: <3f906732-74b7-4219-88ee-59509bff8459@linaro.org>
-Date: Wed, 31 Jan 2024 10:52:41 +0100
+	s=arc-20240116; t=1706696831; c=relaxed/simple;
+	bh=3tOOKEFDglSKDgxDOhWsj9U4KNMdCRxM9r4EgNb2MZI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mABcI/vTZJa3PxRaQDQDYNYspBNJJYNfYD0AAJHEDM415M6EJI5ycoquGvZ8x3dnqZqT/EV3G+nqT2q/1eR6nN6BhNgTusNbeRtTK6J3Wp5gHYe26ai7NJYIdBPSSiTDbJqSlXfCgkg7JU8HZPS9cVyS+VIicU1d7ddd150fVao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+X-IronPort-AV: E=Sophos;i="6.05,231,1701097200"; 
+   d="scan'208";a="192377752"
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 31 Jan 2024 19:27:06 +0900
+Received: from localhost.localdomain (unknown [10.226.92.227])
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 8E50F41DF0AB;
+	Wed, 31 Jan 2024 19:26:59 +0900 (JST)
+From: Biju Das <biju.das.jz@bp.renesas.com>
+To: Lee Jones <lee@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Biju Das <biju.das.jz@bp.renesas.com>,
+	Support Opensource <support.opensource@diasemi.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Steve Twiss <stwiss.opensource@diasemi.com>,
+	linux-input@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-watchdog@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+	Biju Das <biju.das.au@gmail.com>,
+	linux-renesas-soc@vger.kernel.org
+Subject: [PATCH v6 RESEND 0/6] Convert DA906{1,2} bindings to json-schema
+Date: Wed, 31 Jan 2024 10:26:50 +0000
+Message-Id: <20240131102656.3379-1-biju.das.jz@bp.renesas.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 4/6] reset: Instantiate reset GPIO controller for
- shared reset-gpios
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>,
- Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
- Banajit Goswami <bgoswami@quicinc.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>, Liam Girdwood
- <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, Frank Rowand
- <frowand.list@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
- Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
- linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, Chris Packham <chris.packham@alliedtelesis.co.nz>,
- Sean Anderson <sean.anderson@seco.com>
-References: <20240129115216.96479-1-krzysztof.kozlowski@linaro.org>
- <20240129115216.96479-5-krzysztof.kozlowski@linaro.org>
- <CACRpkdYf4HUaV-Pjr81WjLbzy9zdAnyFWs9gPayPC6-3OjHQwA@mail.gmail.com>
- <6473952d-893d-4591-9bfd-dd983313bee9@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- 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
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <6473952d-893d-4591-9bfd-dd983313bee9@linaro.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 31/01/2024 10:50, Krzysztof Kozlowski wrote:
-> On 31/01/2024 09:57, Linus Walleij wrote:
->> Hi Krzysztof,
->>
->> something is odd with the addresses on this patch, because neither GPIO
-> 
-> Nothing is odd - I use get_maintainers.pl which just don't print your
-> names. I can add your addresses manually, no problem, but don't blame
-> the contributor that get_maintainers.pl has a missing content-regex. If
-> you want to be Cced on usage of GPIOs, you need to be sure that
-> MAINTAINERS file has appropriate pattern.
-> 
-> 
->> maintainer is on CC nor linux-gpio@vger, and it's such a GPIO-related
->> patch. We only saw it through side effects making <linux/gpio/driver.h>
->> optional, as required by this patch.
->>
->> Please also CC Geert Uytterhoeven, the author of the GPIO aggregator.
-> 
-> 
->>
->> i.e. this:
->>> 2. !GPIOLIB stub:
->>>    https://lore.kernel.org/all/20240125081601.118051-3-krzysztof.kozlowski@linaro.org/
->>
->> On Mon, Jan 29, 2024 at 12:53 PM Krzysztof Kozlowski
->> <krzysztof.kozlowski@linaro.org> wrote:
->>
->>> Devices sharing a reset GPIO could use the reset framework for
->>> coordinated handling of that shared GPIO line.  We have several cases of
->>> such needs, at least for Devicetree-based platforms.
->>>
->>> If Devicetree-based device requests a reset line, while "resets"
->>> Devicetree property is missing but there is a "reset-gpios" one,
->>> instantiate a new "reset-gpio" platform device which will handle such
->>> reset line.  This allows seamless handling of such shared reset-gpios
->>> without need of changing Devicetree binding [1].
->>>
->>> To avoid creating multiple "reset-gpio" platform devices, store the
->>> Devicetree "reset-gpios" GPIO specifiers used for new devices on a
->>> linked list.  Later such Devicetree GPIO specifier (phandle to GPIO
->>> controller, GPIO number and GPIO flags) is used to check if reset
->>> controller for given GPIO was already registered.
->>>
->>> If two devices have conflicting "reset-gpios" property, e.g. with
->>> different ACTIVE_xxx flags, this would allow to spawn two separate
->>> "reset-gpio" devices, where the second would fail probing on busy GPIO
->>> request.
->>>
->>> Link: https://lore.kernel.org/all/YXi5CUCEi7YmNxXM@robh.at.kernel.org/ [1]
->>> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
->>> Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
->>> Cc: Sean Anderson <sean.anderson@seco.com>
->>> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> (...)
->>
->> In my naive view, this implements the following:
->>
->> reset -> virtual "gpio" -> many physical gpios[0..n]
-> 
-> It does not, there is no single GPIO here. There is a single reset
-> controller, though, but still multiple GPIOs in DTS.
-> 
->>
->> So if there was already a way in the kernel to map one GPIO to
->> many GPIOs, the framework could just use that with a simple
->> single GPIO?
->>
->> See the bindings in:
->> Documentation/devicetree/bindings/gpio/gpio-delay.yaml
->>
->> This is handled by drivers/gpio/gpio-aggregator.c.
->>
->> This supports a 1-to-1 map: one GPIO in, one GPIO out, same offset.
->> So if that is extended to support 1-to-many, this problem is solved.
-> 
-> It does not match the hardware thus I don't know how to implement it in
-> DTS while keeping the requirement that we are describing hardware, not
-> OS abstractions.
-> 
->>
->> Proposed solution: add a single boolean property such as
->> aggregate-all-gpios; to the gpio-delay node, making it provide
->> one single gpio at offset 0 on the consumer side, and refuse any
->> more consumers.
-> 
-> And how do you solve the reset requirements? The problem is not just to
-> share GPIO. The problem is to share in a way that devices operate
-> properly when they assert/deassert reset.
-> 
->>
->> This will also solve the problem with induced delays on
->> some GPIO lines as I can see was discussed in the bindings,
->> the gpio aggregator already supports that, but it would work
->> fine with a delay being zero as well.
->>
->> This avoids all the hackery with driver stubs etc as well.
-> 
-> 
-> So none of these ideas were posted in previous threads, just because you
-> were not CCed (except one thread)?
-> 
-> https://lore.kernel.org/lkml/20191030120440.3699-1-peter.ujfalusi@ti.com/
-> https://lore.kernel.org/all/9eebec9b-e6fd-4a22-89ea-b434f446e061@linaro.org/
-> https://lore.kernel.org/all/20231018100055.140847-1-krzysztof.kozlowski@linaro.org/
-> https://social.treehouse.systems/@marcan/111268780311634160
-> 
+Convert the below bindings to json-schema
+1) DA906{1,2} mfd bindings
+2) DA906{1,2,3} onkey bindings
+3) DA906{1,2,3} thermal bindings
 
-And here:
+Document missing gpio child node for da9062 and update MAINTAINERS entries.
 
-https://lore.kernel.org/all/CAL_JsqL3oZXJJ5_i4BRGpvWu1X8QFB7OGG=D+zLvvWb=UR1mWg@mail.gmail.com/
-which the place where this idea of using resets appeared. I agree that
-you were not CCed there, but that only means you miss lei filters or
-pattern in MAINTAINERS.
+Merge strategy:
+Since there is binding dependency between input, thermal and MFD
+subsystem. it is decided that this series will go through the MFD tree.
+So once the respective subsystem maintainers, DT and Renesas are happy
+with the patch they can give an ack/rb tag, so that it can be applied to
+MFD tree.
 
-Best regards,
-Krzysztof
+v6->v6 Resend:
+ * Dropped Patch#2 and patch#3 from this series as it hits mainline.
+ * Added Ack from Lee Jones for all the patches.
+ * Fixed merge conflict on MAINTAINERS file for patch#1
+ * Added Rb tag from Conor for patch#6.
+v5->v6:
+ * Added Rb tag from Guenter Roeck for watchdog binding patches.
+ * Updated commit description related to "gpio-controller" and
+   "#gpio-cells" properties defined in parent node.
+ * Added Rb tag from Krzysztof Kozlowski for patch#8.
+v4->v5:
+ * Updated cover letter with merging strategy.
+ * Added fixes tag for patch#1
+ * Added Rb tags from Geert and Krzysztof for patch#1
+ * Added Ack from Conor for patch#1
+ * Added Rb tag from Geert and Ack from Conor for patch#2
+ * Drop items and just use enum as it is easier to read for compatibles.
+ * Retained the tags for patch#2 as it is trivial change.
+ * Added Rb tag from Geert for patch#3
+ * Updated commit header and description by replacing
+   'watchdog property'->'watchdog child node'
+ * Added Rb tag from Geert for patch#4.
+ * Added Rb tag from Krzysztof and Conor for patch#5
+ * Dropped Items, Just enum as it is easier to read compatibles.
+ * Retained tags for patch#5 as the changes are trivial.
+ * Updated commit description for patch#8
+ * Dropped unnecessary ref from gpio child node.
+ * Added gpio-hog pattern property
+ * Moved gpio-controller,gpio-cells above child nodes
+ * Sorted compatible in rtc child node.
+ * Dropped status from example.
+ * Updated the example.
+v3->v4:
+ * Patch#1 is merge of patch#1 from v2 + patch#8 from v2.
+ * Dropped comment for d9061 watchdog fallback
+ * Replaced enum->const for dlg,da9061-watchdog and its fallback.
+ * Restored patch#4 in series 1 and dropped the thermal example
+ * Added Ack from Conor Dooley for da9063 watchdog binding support.
+ * Updated title DA9062/61->DA906{1,2,3} as it supports DA9063.
+ * Retained Rb tag since the changes are trivial.
+ * Added Ack from Conor for updating watchdog property
+ * Dropped link to product information.
+ * Patch#5(onkey) is squashed with patch#6 and patch#9 from v2.
+ * Replaced enum->const for dlg,da9061-onkey and its fallback.
+ * Dropped example
+ * Restored the thermal binding patch from v2.
+ * Dropped example
+ * Replaced enum->const for compatible property.
+ * Added Rb tag from Rob and retained Rb tag as changes are trivial.
+ * Added Ack from Conor Dooley for patch#7.
+ * Split the thermal binding patch separate
+ * Updated the description
+v2->v3:
+ * Updated Maintainer entries for watchdog,onkey and thermal bindings
+ * Fixed bot errors related to MAINTAINERS entry, invalid doc
+   references and thermal examples by merging patch#4. 
+
+v1->v2:
+ Link: https://lore.kernel.org/all/20231201110840.37408-5-biju.das.jz@bp.renesas.com/
+ * DA9062 and DA9061 merged with DA9063
+ * Sorted the child devices
+ * mfd,onkey and thermal are pointing to child bindings
+
+Biju Das (6):
+  dt-bindings: mfd: da9062: Update watchdog description
+  dt-bindings: mfd: dlg,da9063: Update watchdog child node
+  dt-bindings: input: Convert da906{1,2,3} onkey to json-schema
+  dt-bindings: thermal: Convert da906{1,2} thermal to json-schema
+  dt-bindings: mfd: dlg,da9063: Sort child devices
+  dt-bindings: mfd: dlg,da9063: Convert da9062 to json-schema
+
+ .../bindings/input/da9062-onkey.txt           |  47 ----
+ .../bindings/input/dlg,da9062-onkey.yaml      |  38 +++
+ .../devicetree/bindings/mfd/da9062.txt        | 124 ---------
+ .../devicetree/bindings/mfd/dlg,da9063.yaml   | 248 +++++++++++++++---
+ .../bindings/thermal/da9062-thermal.txt       |  36 ---
+ .../bindings/thermal/dlg,da9062-thermal.yaml  |  35 +++
+ MAINTAINERS                                   |   6 +-
+ 7 files changed, 290 insertions(+), 244 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/input/da9062-onkey.txt
+ create mode 100644 Documentation/devicetree/bindings/input/dlg,da9062-onkey.yaml
+ delete mode 100644 Documentation/devicetree/bindings/mfd/da9062.txt
+ delete mode 100644 Documentation/devicetree/bindings/thermal/da9062-thermal.txt
+ create mode 100644 Documentation/devicetree/bindings/thermal/dlg,da9062-thermal.yaml
+
+-- 
+2.39.2
 
 
