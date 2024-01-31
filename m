@@ -1,50 +1,52 @@
-Return-Path: <linux-pm+bounces-3059-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3060-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C797843EB0
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 12:46:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48914843ED8
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 12:53:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F3141C23D87
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 11:46:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DD68DB22A59
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 11:53:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A04576022;
-	Wed, 31 Jan 2024 11:46:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2980E76C7B;
+	Wed, 31 Jan 2024 11:53:12 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ACB274E0D;
-	Wed, 31 Jan 2024 11:46:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0B8E69E08;
+	Wed, 31 Jan 2024 11:53:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706701564; cv=none; b=Vbvq78Dqx42QDSFL6rpn+9shglxCvyRA8+eXelvaHZ7qfVYWfw/vcb3IUqFkbK0xtwVC83lRt0GJV+ijWtyANWgGb5m2WB7uVxRL0EdN3pn07mA5WxxzhMq/9nVqcgbLZ5lgkqHX+DsPvPPooplMzuJytr4DfbOSqj9Q6nYfUIM=
+	t=1706701991; cv=none; b=l7hh7d9NKbJYiRrQgiShXF2LgMyzJ8aZmaHwFRFyuhI45obrWmbNwYrasCnh2s8UisXJGcmsDkdeBnyI25tbMbZdx2AIC2Q+BSeqtGAOSS+zMgchn3n8f5zvS02NNuXrTxJ+t+HVFgBLXKU+f/dhh3zDmkGFh98PQYQM+XLUJSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706701564; c=relaxed/simple;
-	bh=YKwxxEVjTT8reMyzHc/tCez2ZRFnGM3A7kBKxL9R2ig=;
+	s=arc-20240116; t=1706701991; c=relaxed/simple;
+	bh=9VM+eyWUkqOvsQE3IzsAiMOfeUXSINHE8tEah9vrrxs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KV0jB37YqGTwG07YsLxKICypEJ5Ry0I0z7dmfesBV7Ela7rVrcpWGgmNjjCgFzTAxq2UmG0toGIYl7xnICwjOBPDjklOodKxtDm0+iS6pTl900mfhWAj58wCbj0i2JDQJqHpHTm/d84clJfrwQvSpJxHYNEb3cGcSQE8Zb1EtjI=
+	 Content-Type:Content-Disposition:In-Reply-To; b=CqSV2qarcHYvl5FeexPE7r9YrCSIFTnWY0PPZU7vRRXQYDs5OuImr9h9IzuAylI656l2efDz+MzkhQvs7QK64rRrmy+LZHsjrMYcBQC6s8cKYdYbuCOejuGDeyB3+StZd2iD6xAXmTsPHsEBLgc2htYp4kae8l43JKYEWaT4rDw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CF5BCDA7;
-	Wed, 31 Jan 2024 03:46:43 -0800 (PST)
-Received: from pluto (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4AD343F762;
-	Wed, 31 Jan 2024 03:45:58 -0800 (PST)
-Date: Wed, 31 Jan 2024 11:45:47 +0000
-From: Cristian Marussi <cristian.marussi@arm.com>
-To: Sibi Sankar <quic_sibis@quicinc.com>
-Cc: sudeep.holla@arm.com, rafael@kernel.org, viresh.kumar@linaro.org,
-	morten.rasmussen@arm.com, dietmar.eggemann@arm.com,
-	lukasz.luba@arm.com, linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	quic_mdtipton@quicinc.com, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH V2 2/4] firmware: arm_scmi: Add perf_freq_xlate interface
-Message-ID: <Zboy64oByO-BlG6z@pluto>
-References: <20240117104116.2055349-1-quic_sibis@quicinc.com>
- <20240117104116.2055349-3-quic_sibis@quicinc.com>
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 91335DA7;
+	Wed, 31 Jan 2024 03:53:52 -0800 (PST)
+Received: from bogus (unknown [10.57.78.35])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B7BDB3F738;
+	Wed, 31 Jan 2024 03:53:07 -0800 (PST)
+Date: Wed, 31 Jan 2024 11:53:04 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Cristian Marussi <cristian.marussi@arm.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pmdomain: arm: Fix NULL dereference on scmi_perf_domain
+ removal
+Message-ID: <20240131115304.35hmjgq2xbmzw2v4@bogus>
+References: <20240125191756.868860-1-cristian.marussi@arm.com>
+ <CAPDyKFpqZf15DFWa8K6RRzSTX70chEVTV8zRgnJ3VStSq_d9UQ@mail.gmail.com>
+ <ZblW5rt4UtK6KMJD@pluto>
+ <CAPDyKFo_Hg1-hN4Mw0UZSMX2iHRpyKyzyd+Gh5xWn-+2x3Jskg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -53,66 +55,137 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240117104116.2055349-3-quic_sibis@quicinc.com>
+In-Reply-To: <CAPDyKFo_Hg1-hN4Mw0UZSMX2iHRpyKyzyd+Gh5xWn-+2x3Jskg@mail.gmail.com>
 
-On Wed, Jan 17, 2024 at 04:11:14PM +0530, Sibi Sankar wrote:
-> Add a new perf_freq_xlate interface to the existing perf_ops to translate
-> a given perf index to frequency.
+On Wed, Jan 31, 2024 at 12:35:56PM +0100, Ulf Hansson wrote:
+> On Tue, 30 Jan 2024 at 21:07, Cristian Marussi <cristian.marussi@arm.com> wrote:
+> >
+> > On Tue, Jan 30, 2024 at 02:09:20PM +0100, Ulf Hansson wrote:
+> > > On Thu, 25 Jan 2024 at 20:18, Cristian Marussi <cristian.marussi@arm.com> wrote:
+> > > >
+> > > > On unloading of the scmi_perf_domain module got the below splat, when in
+> > > > the DT provided to the system under test the '#power-domain-cells' property
+> > > > was missing.
+> > > > Indeed, this particular setup causes the probe to bail out early without
+> > > > giving any error, so that, then, the removal code is run on unload, but
+> > > > without all the expected initialized structures in place.
+> > > >
+> > > > Add a check and bail out early on remove too.
+> > >
+> > > Thanks for spotting this!
+> > >
+> > > >
+> > > > Unable to handle kernel NULL pointer dereference at virtual address 0000000000000008
+> > > > Mem abort info:
+> > > >    ESR = 0x0000000096000004
+> > > >    EC = 0x25: DABT (current EL), IL = 32 bits
+> > > >    SET = 0, FnV = 0
+> > > >    EA = 0, S1PTW = 0
+> > > >    FSC = 0x04: level 0 translation fault
+> > > >  Data abort info:
+> > > >    ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
+> > > >    CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+> > > >    GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+> > > >  user pgtable: 4k pages, 48-bit VAs, pgdp=00000001076e5000
+> > > >  [0000000000000008] pgd=0000000000000000, p4d=0000000000000000
+> > > >  Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+> > > >  Modules linked in: scmi_perf_domain(-) scmi_module scmi_core
+> > > >  CPU: 0 PID: 231 Comm: rmmod Not tainted 6.7.0-00084-gb4b1f27d3b83-dirty #15
+> > > >  Hardware name: linux,dummy-virt (DT)
+> > > >  pstate: 61400005 (nZCv daif +PAN -UAO -TCO +DIT -SSBS BTYPE=--)
+> > > >  pc : scmi_perf_domain_remove+0x28/0x70 [scmi_perf_domain]
+> > > >  lr : scmi_perf_domain_remove+0x28/0x70 [scmi_perf_domain]
+> > > >  sp : ffff80008393bc10
+> > > >  x29: ffff80008393bc10 x28: ffff0000875a8000 x27: 0000000000000000
+> > > >  x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
+> > > >  x23: ffff00008030c090 x22: ffff00008032d490 x21: ffff80007b287050
+> > > >  x20: 0000000000000000 x19: ffff00008032d410 x18: 0000000000000000
+> > > >  x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+> > > >  x14: 8ba0696d05013a2f x13: 0000000000000000 x12: 0000000000000002
+> > > >  x11: 0101010101010101 x10: ffff00008510cff8 x9 : ffff800080a6797c
+> > > >  x8 : 0101010101010101 x7 : 7f7f7f7f7f7f7f7f x6 : fefefeff6364626d
+> > > >  x5 : 8080808000000000 x4 : 0000000000000020 x3 : 00000000553a3dc1
+> > > >  x2 : ffff0000875a8000 x1 : ffff0000875a8000 x0 : ffff800082ffa048
+> > > >  Call trace:
+> > > >   scmi_perf_domain_remove+0x28/0x70 [scmi_perf_domain]
+> > > >   scmi_dev_remove+0x28/0x40 [scmi_core]
+> > > >   device_remove+0x54/0x90
+> > > >   device_release_driver_internal+0x1dc/0x240
+> > > >   driver_detach+0x58/0xa8
+> > > >   bus_remove_driver+0x78/0x108
+> > > >   driver_unregister+0x38/0x70
+> > > >   scmi_driver_unregister+0x28/0x180 [scmi_core]
+> > > >   scmi_perf_domain_driver_exit+0x18/0xb78 [scmi_perf_domain]
+> > > >   __arm64_sys_delete_module+0x1a8/0x2c0
+> > > >   invoke_syscall+0x50/0x128
+> > > >   el0_svc_common.constprop.0+0x48/0xf0
+> > > >   do_el0_svc+0x24/0x38
+> > > >   el0_svc+0x34/0xb8
+> > > >   el0t_64_sync_handler+0x100/0x130
+> > > >   el0t_64_sync+0x190/0x198
+> > > >  Code: a90153f3 f9403c14 f9414800 955f8a05 (b9400a80)
+> > > >  ---[ end trace 0000000000000000 ]---
+> > > >
+> > > > Cc: Sudeep Holla <sudeep.holla@arm.com>
+> > > > Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> > > > Fixes: 2af23ceb8624 ("pmdomain: arm: Add the SCMI performance domain")
+> > > > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+> > > > ---
+> > > > I suppose the probe does NOT bail out with an error because this DT config has
+> > > > to be supported, right ?
+> > >
+> > > Actually, no. It's a mistake by me, the probe should bail out with an
+> > > error code.
+> > >
+> >
+> > Ok. I suppose any old platform like JUNO that missed this will have to
+> > update their DT to use the new scmi_perf_domain...well it should have
+> > anyway really, it is just that now it is silently failing.
 > 
-> This can be used by the cpufreq driver and framework to determine the
-> throttled frequency from a given perf index and apply HW pressure
-> accordingly.
+> I don't think it's failing. The old binding for SCMI perf (using
+> clock-cells) is still supported the way they were before, which is
+> only for cpufreq.
 > 
-> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
-> ---
+> But, yes you are right, both the DT and the consumer driver would need
+> to be updated to support SCMI perf.
 > 
-> v2:
-> * Rename opp_xlate -> freq_xlate [Viresh]
-> 
->  drivers/firmware/arm_scmi/perf.c | 21 +++++++++++++++++++++
->  include/linux/scmi_protocol.h    |  3 +++
->  2 files changed, 24 insertions(+)
-> 
-> diff --git a/drivers/firmware/arm_scmi/perf.c b/drivers/firmware/arm_scmi/perf.c
-> index ae7681eda276..e286f04ee6e3 100644
-> --- a/drivers/firmware/arm_scmi/perf.c
-> +++ b/drivers/firmware/arm_scmi/perf.c
-> @@ -977,6 +977,26 @@ static int scmi_notify_support(const struct scmi_protocol_handle *ph, u32 domain
->  	return 0;
->  }
->  
-> +static int scmi_perf_freq_xlate(const struct scmi_protocol_handle *ph, u32 domain,
-> +				int idx, unsigned long *freq)
-> +{
-> +	struct perf_dom_info *dom;
-> +
-> +	dom = scmi_perf_domain_lookup(ph, domain);
-> +	if (IS_ERR(dom))
-> +		return PTR_ERR(dom);
-> +
-> +	if (idx >= dom->opp_count)
-> +		return -ERANGE;
-> +
-> +	if (!dom->level_indexing_mode)
-> +		*freq = dom->opp[idx].perf * dom->mult_factor;
-> +	else
-> +		*freq = dom->opp[idx].indicative_freq * dom->mult_factor;
-> +
 
-As said elsewhere the plan would be to change slightly the SCMI core to
-avoid the need for this patch and the previous one (while NOT exposing
-too much Perf info)...
+Not sure if you want to flag an error on platforms that doesn't use this.
+IMO probe succeeding doing nothing seems right. Won't returning the error
+from probe gets flagged as error during boot or module loading though
+it is harmless on the platform since it doesn't use it.
 
-... anyway just looking at the above freq calc logic in this patch, be
-aware that as it stands it seems to me broken, since the idx you use to
-peek into the opp array comes (in the next patch) from the range_max
-carried by the notification and that can be, indeed, a perf_level OR a
-perf_index BUT it is absolutely NOT guaranteed to be an index into the
-opp[] array...so it may work in your case if you have a platform
-defining level or indexes matching the opp[] indexes BUT it is not true
-in general. (but as said, this will be handled by the core and possibly
-this patch dropped...)
+> In fact, there is also one additional similar problem in probe, when
+> the number of perf-domains are zero. In that case, we should also
+> return an error code, rather than returning 0.
+>
+> >
+> > > In fact, there is also one additional similar problem in probe, when
+> > > the number of perf-domains are zero. In that case, we should also
+> > > return an error code, rather than returning 0.
+> > >
+> > > Would you mind updating the patch to cover both problems - or if you
+> > > are too busy, just let me know and I can help out.
+> >
+> > No problem, I can do it next week, but regarding the zero domain case,
+> > I remember I used to do the same on regulator/voltage driver and bail out
+> > when no domains were found, but we were asked by some customer to support
+> > instead the very useless and funny case of zero domains for some of their
+> > testing setup scenarios .. i.e. allowing the driver to load with zero domains
+> > (and do nothing) and then unload cleanly avoiding harms while unloading ...)
+> >
+> > Thoughts about this ? Can fix as you prefer .
+> 
+> In my opinion, there is no point having a module/driver loaded to do
+> nothing. I would prefer to just return an error code.
+> 
 
-Thanks,
-Cristian
+IIRC we had this in one of the driver but there was a request to keep it
+this way as it is useful in SCMI f/w bringup/testing. Not all info/features
+need to be ready. That said I am fine if pmdomain prefers to flag 0 domains
+as error.
+
+-- 
+Regards,
+Sudeep
 
