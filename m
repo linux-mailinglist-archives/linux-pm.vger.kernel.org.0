@@ -1,119 +1,459 @@
-Return-Path: <linux-pm+bounces-3138-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3139-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA77F844AFA
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 23:22:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67743844B38
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 23:48:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8D7E1B26249
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 22:22:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E24A29099D
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 22:48:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAAEE3CF4E;
-	Wed, 31 Jan 2024 22:20:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3B1239FEB;
+	Wed, 31 Jan 2024 22:48:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="KIGUzHmY"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Lg8GqeAR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F0E13B28F;
-	Wed, 31 Jan 2024 22:20:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95D4639FE0;
+	Wed, 31 Jan 2024 22:48:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706739612; cv=none; b=uslnpBgMGdPrJRWfm8HP8m+6PsluCYZIHAXH+6t7ZsfjHwU9aVX98HM5vv3rA2Htva2ogfJKaoL0sPy9xX+c68bwLw9J5tWe/wikZ3jD8IrW0lw48J5RdT3d3xpjk9ai/TcnqZVM50EnF+u2Oxtit30IgT0Aq2kFij0yPPs8W2Q=
+	t=1706741311; cv=none; b=NXcqTw4NLcQwu9N6UCy7/ssIWo1ERdUHuozAAExV0zVxaiknoAGk5MipkDCnEDlVhtauvPJrUws3onWxMuPmc+GRUWvUq8U40QQcit6iJ4PpX93Yj37OvtPmRhaqUr3lfakNn6K8TL7UjLXwztOPsCXGAxeKYoXdqckO+VDA/RA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706739612; c=relaxed/simple;
-	bh=rXrPV1rX3EqBXdZa52TN75oeVdk6hxNfm8/LdtM6FIo=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fDWbthBB3b65E4x6gbthp+5Zt2q6ssgje5pvfCNoXd0NTJMIK/AwHGEQtZA0wL8GTPgns/mFNx5OHGQipf+aqiG3WA9Webh+b+7QrxCbuTCcf66KD75/IenN7OLnDbvzY9Q+uLZ/FCs5SBk2WErUbfpNQHjqJoxh86fLhaJDvP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=KIGUzHmY; arc=none smtp.client-ip=198.47.23.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 40VMK57e060846;
-	Wed, 31 Jan 2024 16:20:05 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1706739605;
-	bh=aR2SBKT0vtJHfYIAGBIrORRoaDBuet+1jfTnks5284s=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=KIGUzHmYtbsMo+e0n0axWUsc8Lwyalx+7VOISM/jtBa/mHsKCbhTetQZEJqb7S/AV
-	 WYfofe+NyGzP+p2hM2Gb6XwCBiH0Xx6vA9Ecz8vZOJ20xPOlMv1TiAkU2USG0Shte/
-	 REW/v4MqUBd8xtoWsDyfsTePF3OU+OJLV8PEq0QE=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 40VMK5YQ100801
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 31 Jan 2024 16:20:05 -0600
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 31
- Jan 2024 16:20:05 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 31 Jan 2024 16:20:05 -0600
-Received: from lelvsmtp5.itg.ti.com ([10.249.42.149])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 40VMJwxE102504;
-	Wed, 31 Jan 2024 16:20:05 -0600
-From: Andrew Davis <afd@ti.com>
-To: Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh
- Shilimkar <ssantosh@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof
- Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Vignesh
- Raghavendra <vigneshr@ti.com>
-CC: <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        Andrew Davis
-	<afd@ti.com>
-Subject: [PATCH 12/12] arm64: dts: ti: k3-j784s4: Add reboot-controller node
-Date: Wed, 31 Jan 2024 16:19:57 -0600
-Message-ID: <20240131221957.213717-13-afd@ti.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240131221957.213717-1-afd@ti.com>
-References: <20240131221957.213717-1-afd@ti.com>
+	s=arc-20240116; t=1706741311; c=relaxed/simple;
+	bh=GA8LHxoaAEo0EwxcrTssv7MBsrZGuVs7qdoQXkq0RQw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=AZYqgKXVUI3NNJ5Tl28cPpstvpPB0EzOfyrBQbdAItI72c/lA184z/XAX5nLUEHJkI6iV8Wykv6/KMM95v0moNe0HPlFq/IYO5CUgbYNIiiThgO75/wq258glu8i4C1DanzvEv6rex7DyJOHLP60Qmh+H+ykPxRLF5W/fIUgW9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Lg8GqeAR; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1706741307;
+	bh=GA8LHxoaAEo0EwxcrTssv7MBsrZGuVs7qdoQXkq0RQw=;
+	h=From:Date:Subject:To:Cc:From;
+	b=Lg8GqeAR4AL2ycD1m/1QC72XWvxhbS2aXksNxnHflZoZ8dQyE2mzeBIa5QUeyd6e1
+	 opxlcl90JnPcXUuQYO4LKkVeoga6UTHGss9SZaj4tuURogSfAJar6JMDdNJudnPPdV
+	 B7TOHAZBUt6P60MwpgrtAUHwc8kykb/xcheBH1LX5/0Yry6F1/YyqfUHNFA0uzTTG4
+	 1hzJSpD9PKHZUndaaNnAaIl7YtrUbKz3l6YndsBHCdIagjId+DU1I0fb82hFqeAVfH
+	 myM4ELhx+8VbaHn/OQiCcidpPAC/l4ownGBd1SDcGbsHfJjlIeoK/alR6SgahVi+UH
+	 eWj1lgBBucCCw==
+Received: from [192.168.1.211] (zone.collabora.co.uk [167.235.23.81])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 1DDDE3781182;
+	Wed, 31 Jan 2024 22:48:25 +0000 (UTC)
+From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
+Date: Wed, 31 Jan 2024 17:48:01 -0500
+Subject: [PATCH] selftests: Add test to verify power supply properties
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Message-Id: <20240131-power-supply-kselftest-v1-1-7ead5645c004@collabora.com>
+X-B4-Tracking: v=1; b=H4sIACDOumUC/x3MTQ5AMBBA4avIrE3SFiGuIhboYEJoOn4j7q6x/
+ BbvPSDkmQTK6AFPBwuvS4COI+jGZhkI2QaDUSZV2hh060keZXduvnESmvuNZMMiSTOlc9u1toU
+ QO089X/+4qt/3A7e03OxoAAAA
+To: Shuah Khan <shuah@kernel.org>, Sebastian Reichel <sre@kernel.org>
+Cc: kernel@collabora.com, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-pm@vger.kernel.org, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>, 
+ =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
+X-Mailer: b4 0.12.4
 
-While PCSI normally handles reboot for K3, this is an available
-fallback in case PCSI reboot fails. Add direct reboot TI-SCI
-node to system-controller.
+Add a kselftest that verifies power supply properties from sysfs and
+uevent. It checks whether they are present, readable and return valid
+values.
 
-Signed-off-by: Andrew Davis <afd@ti.com>
+This initial set of properties is not comprehensive, but rather the ones
+that I was able to validate locally.
+
+Co-developed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 ---
- arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi | 5 +++++
- 1 file changed, 5 insertions(+)
+To give an idea of the output of the test, here's a short (trimmed)
+snippet:
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
-index 3902a921d7e58..6a66de4f6e549 100644
---- a/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi
-@@ -36,6 +36,11 @@ k3_reset: reset-controller {
- 			compatible = "ti,sci-reset";
- 			#reset-cells = <2>;
- 		};
-+
-+		k3_reboot: reboot-controller {
-+			bootph-all;
-+			compatible = "ti,sci-reboot";
-+		};
- 	};
+TAP version 13
+1..33
+ # Testing device BAT0
+ok 21 BAT0.sysfs.voltage_max # SKIP
+ # Reported: '7600000' uV (7.6 V)
+ok 22 BAT0.sysfs.voltage_min_design
+ # Totals: pass:19 fail:0 xfail:0 xpass:0 skip:14 error:0
+
+Some things noticed during the development of this patch which may or
+may not need to be addressed:
+- input_current_limit, input_voltage_limit reported -1 on one of the
+  platforms, despite that value not being described in the ABI doc [1].
+- voltage_min_design, voltage_max_design are missing in the ABI doc,
+  though are mentioned in the rst documentation [2]
+- the scope property is entirely undocumented
+
+[1] Documentation/ABI/testing/sysfs-class-power 
+[2] Documentation/power/power_supply_class.rst 
+---
+ MAINTAINERS                                        |   1 +
+ tools/testing/selftests/Makefile                   |   1 +
+ tools/testing/selftests/power_supply/Makefile      |   4 +
+ tools/testing/selftests/power_supply/helpers.sh    | 178 +++++++++++++++++++++
+ .../power_supply/test_power_supply_properties.sh   | 114 +++++++++++++
+ 5 files changed, 298 insertions(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ad5bec15bf0f..f8f620746934 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17524,6 +17524,7 @@ F:	Documentation/devicetree/bindings/power/supply/
+ F:	drivers/power/supply/
+ F:	include/linux/power/
+ F:	include/linux/power_supply.h
++F:	tools/testing/selftests/power_supply/
  
- 	wkup_conf: bus@43000000 {
+ POWERNV OPERATOR PANEL LCD DISPLAY DRIVER
+ M:	Suraj Jitindar Singh <sjitindarsingh@gmail.com>
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index c5b4574045b3..7e5960cda08c 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -67,6 +67,7 @@ TARGETS += nsfs
+ TARGETS += perf_events
+ TARGETS += pidfd
+ TARGETS += pid_namespace
++TARGETS += power_supply
+ TARGETS += powerpc
+ TARGETS += prctl
+ TARGETS += proc
+diff --git a/tools/testing/selftests/power_supply/Makefile b/tools/testing/selftests/power_supply/Makefile
+new file mode 100644
+index 000000000000..44f0658d3d2e
+--- /dev/null
++++ b/tools/testing/selftests/power_supply/Makefile
+@@ -0,0 +1,4 @@
++TEST_PROGS := test_power_supply_properties.sh
++TEST_FILES := helpers.sh
++
++include ../lib.mk
+diff --git a/tools/testing/selftests/power_supply/helpers.sh b/tools/testing/selftests/power_supply/helpers.sh
+new file mode 100644
+index 000000000000..1ec90d7c9108
+--- /dev/null
++++ b/tools/testing/selftests/power_supply/helpers.sh
+@@ -0,0 +1,178 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++#
++# Copyright (c) 2022, 2024 Collabora Ltd
++SYSFS_SUPPLIES=/sys/class/power_supply
++
++calc() {
++	awk "BEGIN { print $* }";
++}
++
++test_sysfs_prop() {
++	PROP="$1"
++	VALUE="$2" # optional
++
++	PROP_PATH="$SYSFS_SUPPLIES"/"$DEVNAME"/"$PROP"
++	TEST_NAME="$DEVNAME".sysfs."$PROP"
++
++	if [ -z "$VALUE" ]; then
++		ktap_test_result "$TEST_NAME" [ -f "$PROP_PATH" ]
++	else
++		ktap_test_result "$TEST_NAME" grep -q "$VALUE" "$PROP_PATH"
++	fi
++}
++
++to_human_readable_unit() {
++	VALUE="$1"
++	UNIT="$2"
++
++	case "$VALUE" in
++		*[!0-9]* ) return ;; # Not a number
++	esac
++
++	if [ "$UNIT" = "uA" ]; then
++		new_unit="mA"
++		div=1000
++	elif [ "$UNIT" = "uV" ]; then
++		new_unit="V"
++		div=1000000
++	elif [ "$UNIT" = "uAh" ]; then
++		new_unit="Ah"
++		div=1000000
++	elif [ "$UNIT" = "uW" ]; then
++		new_unit="mW"
++		div=1000
++	elif [ "$UNIT" = "uWh" ]; then
++		new_unit="Wh"
++		div=1000000
++	else
++		return
++	fi
++
++	value_converted=$(calc "$VALUE"/"$div")
++	echo "$value_converted" "$new_unit"
++}
++
++_check_sysfs_prop_available() {
++	PROP=$1
++
++	PROP_PATH="$SYSFS_SUPPLIES"/"$DEVNAME"/"$PROP"
++	TEST_NAME="$DEVNAME".sysfs."$PROP"
++
++	if [ ! -e "$PROP_PATH" ] ; then
++		ktap_test_skip "$TEST_NAME"
++		return 1
++	fi
++
++	if ! cat "$PROP_PATH" >/dev/null; then
++		ktap_print_msg "Failed to read"
++		ktap_test_fail "$TEST_NAME"
++		return 1
++	fi
++
++	return 0
++}
++
++test_sysfs_prop_optional() {
++	PROP=$1
++	UNIT=$2 # optional
++
++	TEST_NAME="$DEVNAME".sysfs."$PROP"
++
++	_check_sysfs_prop_available "$PROP" || return
++	DATA=$(cat "$SYSFS_SUPPLIES"/"$DEVNAME"/"$PROP")
++
++	ktap_print_msg "Reported: '$DATA' $UNIT ($(to_human_readable_unit "$DATA" "$UNIT"))"
++	ktap_test_pass "$TEST_NAME"
++}
++
++test_sysfs_prop_optional_range() {
++	PROP=$1
++	MIN=$2
++	MAX=$3
++	UNIT=$4 # optional
++
++	TEST_NAME="$DEVNAME".sysfs."$PROP"
++
++	_check_sysfs_prop_available "$PROP" || return
++	DATA=$(cat "$SYSFS_SUPPLIES"/"$DEVNAME"/"$PROP")
++
++	if [ "$DATA" -lt "$MIN" ] || [ "$DATA" -gt "$MAX" ]; then
++		ktap_print_msg "'$DATA' is out of range (min=$MIN, max=$MAX)"
++		ktap_test_fail "$TEST_NAME"
++	else
++		ktap_print_msg "Reported: '$DATA' $UNIT ($(to_human_readable_unit "$DATA" "$UNIT"))"
++		ktap_test_pass "$TEST_NAME"
++	fi
++}
++
++test_sysfs_prop_optional_list() {
++	PROP=$1
++	LIST=$2
++
++	TEST_NAME="$DEVNAME".sysfs."$PROP"
++
++	_check_sysfs_prop_available "$PROP" || return
++	DATA=$(cat "$SYSFS_SUPPLIES"/"$DEVNAME"/"$PROP")
++
++	valid=0
++
++	OLDIFS=$IFS
++	IFS=","
++	for item in $LIST; do
++		if [ "$DATA" = "$item" ]; then
++			valid=1
++			break
++		fi
++	done
++	if [ "$valid" -eq 1 ]; then
++		ktap_print_msg "Reported: '$DATA'"
++		ktap_test_pass "$TEST_NAME"
++	else
++		ktap_print_msg "'$DATA' is not a valid value for this property"
++		ktap_test_fail "$TEST_NAME"
++	fi
++	IFS=$OLDIFS
++}
++
++dump_file() {
++	FILE="$1"
++	while read -r line; do
++		ktap_print_msg "$line"
++	done < "$FILE"
++}
++
++__test_uevent_prop() {
++	PROP="$1"
++	OPTIONAL="$2"
++	VALUE="$3" # optional
++
++	UEVENT_PATH="$SYSFS_SUPPLIES"/"$DEVNAME"/uevent
++	TEST_NAME="$DEVNAME".uevent."$PROP"
++
++	if ! grep -q "POWER_SUPPLY_$PROP=" "$UEVENT_PATH"; then
++		if [ "$OPTIONAL" -eq 1 ]; then
++			ktap_test_skip "$TEST_NAME"
++		else
++			ktap_print_msg "Missing property"
++			ktap_test_fail "$TEST_NAME"
++		fi
++		return
++	fi
++
++	if ! grep -q "POWER_SUPPLY_$PROP=$VALUE" "$UEVENT_PATH"; then
++		ktap_print_msg "Invalid value for uevent property, dumping..."
++		dump_file "$UEVENT_PATH"
++		ktap_test_fail "$TEST_NAME"
++	else
++		ktap_test_pass "$TEST_NAME"
++	fi
++}
++
++test_uevent_prop() {
++	__test_uevent_prop "$1" 0 "$2"
++}
++
++test_uevent_prop_optional() {
++	__test_uevent_prop "$1" 1 "$2"
++}
+diff --git a/tools/testing/selftests/power_supply/test_power_supply_properties.sh b/tools/testing/selftests/power_supply/test_power_supply_properties.sh
+new file mode 100755
+index 000000000000..df272dfe1d2a
+--- /dev/null
++++ b/tools/testing/selftests/power_supply/test_power_supply_properties.sh
+@@ -0,0 +1,114 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
++#
++# Copyright (c) 2022, 2024 Collabora Ltd
++#
++# This test validates the power supply uAPI: namely, the files in sysfs and
++# lines in uevent that expose the power supply properties.
++#
++# By default all power supplies available are tested. Optionally the name of a
++# power supply can be passed as a parameter to test only that one instead.
++DIR="$(dirname "$(readlink -f "$0")")"
++
++. "${DIR}"/../kselftest/ktap_helpers.sh
++
++. "${DIR}"/helpers.sh
++
++count_tests() {
++	SUPPLIES=$1
++
++	# This needs to be updated every time a new test is added.
++	NUM_TESTS=33
++
++	total_tests=0
++
++	for i in $SUPPLIES; do
++		total_tests=$(("$total_tests" + "$NUM_TESTS"))
++	done
++
++	echo "$total_tests"
++}
++
++ktap_print_header
++
++SYSFS_SUPPLIES=/sys/class/power_supply/
++
++if [ $# -eq 0 ]; then
++	supplies=$(ls "$SYSFS_SUPPLIES")
++else
++	supplies=$1
++fi
++
++ktap_set_plan "$(count_tests "$supplies")"
++
++for DEVNAME in $supplies; do
++	ktap_print_msg Testing device "$DEVNAME"
++
++	if [ ! -d "$SYSFS_SUPPLIES"/"$DEVNAME" ]; then
++		ktap_test_fail "$DEVNAME".exists
++		ktap_exit_fail_msg Device does not exist
++	fi
++
++	ktap_test_pass "$DEVNAME".exists
++
++	test_uevent_prop NAME "$DEVNAME"
++
++	test_sysfs_prop type
++	SUPPLY_TYPE=$(cat "$SYSFS_SUPPLIES"/"$DEVNAME"/type)
++	# This fails on kernels < 5.8 (needs 2ad3d74e3c69f)
++	test_uevent_prop TYPE "$SUPPLY_TYPE"
++
++	test_sysfs_prop_optional usb_type
++
++	test_sysfs_prop_optional_range online 0 2
++	test_sysfs_prop_optional_range present 0 1
++
++	test_sysfs_prop_optional_list status "Unknown","Charging","Discharging","Not charging","Full"
++
++	# Capacity is reported as percentage, thus any value less than 0 and
++	# greater than 100 are not allowed.
++	test_sysfs_prop_optional_range capacity 0 100 "%"
++
++	test_sysfs_prop_optional_list capacity_level "Unknown","Critical","Low","Normal","High","Full"
++
++	test_sysfs_prop_optional model_name
++	test_sysfs_prop_optional manufacturer
++	test_sysfs_prop_optional serial_number
++	test_sysfs_prop_optional_list technology "Unknown","NiMH","Li-ion","Li-poly","LiFe","NiCd","LiMn"
++
++	test_sysfs_prop_optional cycle_count
++
++	test_sysfs_prop_optional_list scope "Unknown","System","Device"
++
++	test_sysfs_prop_optional input_current_limit "uA"
++	test_sysfs_prop_optional input_voltage_limit "uV"
++
++	# Technically the power-supply class does not limit reported values.
++	# E.g. one could expose an RTC backup-battery, which goes below 1.5V or
++	# an electric vehicle battery with over 300V. But most devices do not
++	# have a step-up capable regulator behind the battery and operate with
++	# voltages considered safe to touch, so we limit the allowed range to
++	# 1.8V-60V to catch drivers reporting incorrectly scaled values. E.g. a
++	# common mistake is reporting data in mV instead of µV.
++	test_sysfs_prop_optional_range voltage_now 1800000 60000000 "uV"
++	test_sysfs_prop_optional_range voltage_min 1800000 60000000 "uV"
++	test_sysfs_prop_optional_range voltage_max 1800000 60000000 "uV"
++	test_sysfs_prop_optional_range voltage_min_design 1800000 60000000 "uV"
++	test_sysfs_prop_optional_range voltage_max_design 1800000 60000000 "uV"
++
++	# current based systems
++	test_sysfs_prop_optional current_now "uA"
++	test_sysfs_prop_optional current_max "uA"
++	test_sysfs_prop_optional charge_now "uAh"
++	test_sysfs_prop_optional charge_full "uAh"
++	test_sysfs_prop_optional charge_full_design "uAh"
++
++	# power based systems
++	test_sysfs_prop_optional power_now "uW"
++	test_sysfs_prop_optional energy_now "uWh"
++	test_sysfs_prop_optional energy_full "uWh"
++	test_sysfs_prop_optional energy_full_design "uWh"
++	test_sysfs_prop_optional energy_full_design "uWh"
++done
++
++ktap_finished
+
+---
+base-commit: f6b014bd664b49fe4b9aecd63de4179f81753e42
+change-id: 20240122-power-supply-kselftest-8345017dcbdb
+
+Best regards,
 -- 
-2.39.2
+Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
 
