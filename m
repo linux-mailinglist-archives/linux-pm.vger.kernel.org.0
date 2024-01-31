@@ -1,184 +1,104 @@
-Return-Path: <linux-pm+bounces-3046-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3047-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 768DE843D59
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 11:56:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F3730843E3F
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 12:25:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E076A1F27949
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 10:56:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 86B851F27CE4
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 11:25:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEDEF6A022;
-	Wed, 31 Jan 2024 10:55:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A86B873168;
+	Wed, 31 Jan 2024 11:25:15 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EB4069DF9
-	for <linux-pm@vger.kernel.org>; Wed, 31 Jan 2024 10:55:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.110.167.99
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F2B067A16;
+	Wed, 31 Jan 2024 11:25:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706698534; cv=none; b=hsidrDHIFeAk9dGdXRVduTwT5PgTZKnHOKZnt2n67ZVNeyJ5VjBzf+yHboCyJ0uSq9AZqb9ou6aNRXWoqD+aErn3hkx1zCy9+qWt5nMTQR6AZw4vcJIwTMc44NJVKvdFon1hC2xdjuAHIPf05pMCBsKMdzN3OfSE6q3SlYe9OuA=
+	t=1706700315; cv=none; b=DTnn6mis1Zg5B9zsEi3SZ1wsKTn5E0Z4/eolcqht96qESl7n8al1ADd6dBHWTp+z+uEA33bngBRot4Jf0X+QiAA0F28BnryGaDlGPhLgo7Qs8uNpnGToXtGNPAvCsb5gN9WWEVudEmifTF7xfQyQXDG6EJt7J9WbKuksZJ8jjDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706698534; c=relaxed/simple;
-	bh=aG8P/MkBiA/Gv0nPUKkQbjHE1IRLe9SjeeOS0X57tks=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=SOhk9EG6HUWW0tXK5n50Qg90w+rb8I4sJrgyWuIRxzbDGLl72ICEE6zdsxUvBSSL97x5WEtCA1NgfoOS+EjnDQiVuPN7h3j4XfiPol1khpbqjrusamKNSxYjbAL9+6ASwS9hN8QZyA/Iigo94A13qW697F47COBejuM9Q4atrq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com; spf=pass smtp.mailfrom=zhaoxin.com; arc=none smtp.client-ip=203.110.167.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zhaoxin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zhaoxin.com
-X-ASG-Debug-ID: 1706698529-1eb14e0c7e326a0001-MQbzy6
-Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx2.zhaoxin.com with ESMTP id YFLiBZ57oHCTKoq5 (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Wed, 31 Jan 2024 18:55:29 +0800 (CST)
-X-Barracuda-Envelope-From: TonyWWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX1.zhaoxin.com
- (10.28.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 31 Jan
- 2024 18:55:29 +0800
-Received: from [10.32.57.248] (10.32.57.248) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 31 Jan
- 2024 18:55:26 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
-Message-ID: <7f869bc1-9129-48b2-b0fd-483c790a8d1b@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.32.57.248
-Date: Wed, 31 Jan 2024 18:55:25 +0800
+	s=arc-20240116; t=1706700315; c=relaxed/simple;
+	bh=wzS1Y1fbKl5youA8h5qmv/jE996pLnUuHtJcrrtwbRM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HVWibhaiQXfAtdlMQUQalRAkAilOabDTEP3HaC4Iv9/n8vXcfKIM3IgUYuR4Zg9gQ8nWzBdmCsGvZXHFAqsh56r9LWjl6Y2BKkjgeHt6ZjOGDuJiJQt3jBTft93T8oABPzTuqiB8ZgJ1PwKUDnARcYk9KX5rml3Wirg8W6nE8Wk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 42C65DA7;
+	Wed, 31 Jan 2024 03:25:56 -0800 (PST)
+Received: from bogus (unknown [10.57.78.35])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 123C53F762;
+	Wed, 31 Jan 2024 03:25:09 -0800 (PST)
+Date: Wed, 31 Jan 2024 11:25:07 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Sibi Sankar <quic_sibis@quicinc.com>
+Cc: cristian.marussi@arm.com, rafael@kernel.org, viresh.kumar@linaro.org,
+	Sudeep Holla <sudeep.holla@arm.com>, morten.rasmussen@arm.com,
+	dietmar.eggemann@arm.com, lukasz.luba@arm.com, sboyd@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, quic_mdtipton@quicinc.com,
+	linux-arm-msm@vger.kernel.org, nm@ti.com
+Subject: Re: [PATCH 2/3] firmware: arm_scmi: Add support for marking certain
+ frequencies as boost
+Message-ID: <20240131112507.fu355wnolbsoiqxn@bogus>
+References: <20240117110443.2060704-1-quic_sibis@quicinc.com>
+ <20240117110443.2060704-3-quic_sibis@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] ACPI: cpufreq: Add ITMT support when CPPC enabled for
- Zhaoxin CPUs
-Content-Language: en-US
-X-ASG-Orig-Subj: Re: [PATCH 3/3] ACPI: cpufreq: Add ITMT support when CPPC enabled for
- Zhaoxin CPUs
-To: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-CC: <rafael@kernel.org>, <lenb@kernel.org>, <robert.moore@intel.com>,
-	<linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<acpica-devel@lists.linux.dev>, <tglx@linutronix.de>, <mingo@redhat.com>,
-	<bp@alien8.de>, <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-	<hpa@zytor.com>, <mcgrof@kernel.org>, <peterz@infradead.org>,
-	<j.granados@samsung.com>, <viresh.kumar@linaro.org>,
-	<linux-pm@vger.kernel.org>, <CobeChen@zhaoxin.com>, <TimGuo@zhaoxin.com>,
-	<LeoLiu-oc@zhaoxin.com>, <LindaChai@zhaoxin.com>
-References: <20231228075705.26652-1-TonyWWang-oc@zhaoxin.com>
- <20231228075705.26652-4-TonyWWang-oc@zhaoxin.com>
- <20240117225158.GD13777@ranerica-svr.sc.intel.com>
-From: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
-In-Reply-To: <20240117225158.GD13777@ranerica-svr.sc.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: ZXSHCAS1.zhaoxin.com (10.28.252.161) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Barracuda-Connect: ZXSHMBX1.zhaoxin.com[10.28.252.163]
-X-Barracuda-Start-Time: 1706698529
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 3710
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: -2.02
-X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.120187
-	Rule breakdown below
-	 pts rule name              description
-	---- ---------------------- --------------------------------------------------
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240117110443.2060704-3-quic_sibis@quicinc.com>
 
+On Wed, Jan 17, 2024 at 04:34:42PM +0530, Sibi Sankar wrote:
+> All opps above the sustained level/frequency are treated as boost, so mark
+> them accordingly.
+> 
+> Suggested-by: Sudeep Holla <sudeep.holla@arm.com>
+> Signed-off-by: Sibi Sankar <quic_sibis@quicinc.com>
+> ---
+>  drivers/firmware/arm_scmi/perf.c | 11 ++++++++++-
+>  1 file changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/firmware/arm_scmi/perf.c b/drivers/firmware/arm_scmi/perf.c
+> index e286f04ee6e3..d3fb8c804b3d 100644
+> --- a/drivers/firmware/arm_scmi/perf.c
+> +++ b/drivers/firmware/arm_scmi/perf.c
+> @@ -811,7 +811,7 @@ static int scmi_dvfs_device_opps_add(const struct scmi_protocol_handle *ph,
+>  				     struct device *dev, u32 domain)
+>  {
+>  	int idx, ret;
+> -	unsigned long freq;
+> +	unsigned long freq, sustained_freq;
+>  	struct dev_pm_opp_data data = {};
+>  	struct perf_dom_info *dom;
+>  
+> @@ -819,12 +819,21 @@ static int scmi_dvfs_device_opps_add(const struct scmi_protocol_handle *ph,
+>  	if (IS_ERR(dom))
+>  		return PTR_ERR(dom);
+>  
+> +	if (!dom->level_indexing_mode)
+> +		sustained_freq = dom->sustained_perf_level * dom->mult_factor;
+> +	else
+> +		sustained_freq = dom->sustained_freq_khz * dom->mult_factor;
+> +
 
-On 2024/1/18 06:51, Ricardo Neri wrote:
->
-> [这封邮件来自外部发件人]
->
-> On Thu, Dec 28, 2023 at 03:57:05PM +0800, Tony W Wang-oc wrote:
->> For Zhaoxin CPUs, the cores' highest frequencies may be different, which
->> means that cores may run at different max frequencies,
->>
->> According to ACPI-spec6 chapter 8.4.7, the per-core highest frequency
->> value can be obtained via cppc.
->>
->> The core with the higher frequency have better performance, which can be
->> called as preferred core. And better performance can be achieved by
->> making the scheduler to run tasks on these preferred cores.
->>
->> The cpufreq driver can use the highest frequency value as the prioriy of
->> core to make the scheduler try to get better performace. More specifically,
->> in the acpi-cpufreq driver use cppc_get_highest_perf() to get highest
->> frequency value of each core, use sched_set_itmt_core_prio() to set
->> highest frequency value as core priority, and use sched_set_itmt_support()
->> provided by ITMT to tell the scheduler to favor on the preferred cores.
->>
->> Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
->> ---
->>   drivers/cpufreq/acpi-cpufreq.c | 56 +++++++++++++++++++++++++++++++++-
->>   1 file changed, 55 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
->> index 37f1cdf46d29..f4c1ff9e4bb0 100644
->> --- a/drivers/cpufreq/acpi-cpufreq.c
->> +++ b/drivers/cpufreq/acpi-cpufreq.c
->> @@ -663,8 +663,56 @@ static u64 get_max_boost_ratio(unsigned int cpu)
->>
->>        return div_u64(highest_perf << SCHED_CAPACITY_SHIFT, nominal_perf);
->>   }
->> +
->> +/* The work item is needed to avoid CPU hotplug locking issues */
->> +static void sched_itmt_work_fn(struct work_struct *work)
->> +{
->> +     sched_set_itmt_support();
->> +}
->> +
->> +static DECLARE_WORK(sched_itmt_work, sched_itmt_work_fn);
->> +
->> +static void set_itmt_prio(int cpu)
->> +{
->> +     static bool cppc_highest_perf_diff;
->> +     static struct cpumask core_prior_mask;
->> +     u64 highest_perf;
->> +     static u64 max_highest_perf = 0, min_highest_perf = U64_MAX;
->> +     int ret;
->> +
->> +     ret = cppc_get_highest_perf(cpu, &highest_perf);
->> +     if (ret)
->> +             return;
->> +
->> +     sched_set_itmt_core_prio(highest_perf, cpu);
->> +     cpumask_set_cpu(cpu, &core_prior_mask);
->> +
->> +     if (max_highest_perf <= min_highest_perf) {
->> +             if (highest_perf > max_highest_perf)
->> +                     max_highest_perf = highest_perf;
->> +
->> +             if (highest_perf < min_highest_perf)
->> +                     min_highest_perf = highest_perf;
->> +
->> +             if (max_highest_perf > min_highest_perf) {
->> +                     /*
->> +                      * This code can be run during CPU online under the
->> +                      * CPU hotplug locks, so sched_set_itmt_support()
->> +                      * cannot be called from here.  Queue up a work item
->> +                      * to invoke it.
->> +                      */
->> +                     cppc_highest_perf_diff = true;
->> +             }
->> +     }
->> +
->> +     if (cppc_highest_perf_diff && cpumask_equal(&core_prior_mask, cpu_online_mask)) {
->> +             pr_debug("queue a work to set itmt enabled\n");
->> +             schedule_work(&sched_itmt_work);
->> +     }
->> +}
-> sched_itmt_work and this function is a duplicate of what the intel_pstate
-> driver already does. It might be good if consolidate in a single place
-> if you are going to pursue this approach.
+Can't we just use dom->sustained_freq_khz * 1000UL in both the cases ?
 
-Thanks for your suggestion, will change the patch code in v2.
+Other than that this series looks good to me but it would be good to
+explain how you would use this. Since it is enabled by default, do you
+plan to disable boost at time and when ? If it is for thermal reasons,
+why your other series handling thermal and limits notification from the
+firmware not sufficient.
 
-Sorry for late.
-
+-- 
+Regards,
+Sudeep
 
