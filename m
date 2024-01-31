@@ -1,223 +1,309 @@
-Return-Path: <linux-pm+bounces-3116-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3117-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69D0B8447B3
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 20:02:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B53288447D3
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 20:13:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D25AE1F222B0
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 19:02:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5EA3728C731
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 19:13:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B11593306B;
-	Wed, 31 Jan 2024 19:01:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63538182C1;
+	Wed, 31 Jan 2024 19:13:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Tuq3KMKS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B0E8CA7F;
-	Wed, 31 Jan 2024 19:01:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B98E33CFD
+	for <linux-pm@vger.kernel.org>; Wed, 31 Jan 2024 19:13:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706727718; cv=none; b=ONwJy5kYQaxYVEhedgglOoC62pgv/UFFsTkjB+uNRvuhqGsOzgSNxT5729rmPE+Zp6HPy5Cx3Bp41tyf6YOqh4hZSttpYmPhV/PquQUvD9ahsPFl7kXC19vlAyDoSB7e+6B3vUHKmiX0gPjHNR1nCLx6+uXxflInaWLveKU41fY=
+	t=1706728406; cv=none; b=Qicrd+z/CydYmx3G2yJxr/0ADCg+w0uGRtuHRSi13a7PMu6QiStnlBaPqyjtrwT0HtbPmaiyLjhND5q8L3Xg1mnA+nOG0aGv4tkvmjfn7hSHAxSlBIwd2StfZeAzvcXv6wwDSrlS2HTH+JWQKs8BuCgIHnPPsgCKJHfBgyByd10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706727718; c=relaxed/simple;
-	bh=eQZHF14Plim2/h/HfVCGI8KyzULHq0F0ksaKAy59jYE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AiSJskCz5pE050rv4/+fLA+7ZwJ4g0s1NS0EKv4t+Qih1qKBmNMjWDz64lZMKdZm3q6cDGJbWxUYrgzcZvDAE+QCt/wxBletD9nseQdnFeIp3le5swoC7j4CfLzH8AQM+jDyCCHiQbJF6tLC8mdf1mwXI0A9GBOukj5fO76l5bU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id b6d18a2c6112265a; Wed, 31 Jan 2024 20:01:53 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 59EC066982B;
-	Wed, 31 Jan 2024 20:01:53 +0100 (CET)
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
- Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-Subject:
- Re: [PATCH v1] thermal: sysfs: Make trip hysteresis writable along with trip
- temperature
-Date: Wed, 31 Jan 2024 20:01:53 +0100
-Message-ID: <12386481.O9o76ZdvQC@kreacher>
-In-Reply-To:
- <CAJZ5v0iZ0hyPYB3i6YdbiKueHGWoM3i6mPBnzGL9bB8wFxVSPw@mail.gmail.com>
-References:
- <4565526.LvFx2qVVIh@kreacher>
- <7caf2f4d-d0d5-4622-b290-bb0396547f3c@linaro.org>
- <CAJZ5v0iZ0hyPYB3i6YdbiKueHGWoM3i6mPBnzGL9bB8wFxVSPw@mail.gmail.com>
+	s=arc-20240116; t=1706728406; c=relaxed/simple;
+	bh=xrLWYG7caEKCeMiEjBSZqR6qf6vWuiqwu82ZWlcv0kE=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=N3YG8IKzMmCwBNrIvT3Gfosvaj8y5MtjP2gvZMak/8t04ZmuQgjzauXk4lOTjXFsNEHie80xNvsVsc6znnkVhcBvyFt/0ufc7oDC6/PKI5z64PXL4X5sMlYrGr2HOf6IjHF3sZMk7SWS8173eGbTyDEe0aLnLpsYWbSOATqhRuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--pranavpp.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Tuq3KMKS; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--pranavpp.bounces.google.com
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-5fc6463b0edso1851217b3.0
+        for <linux-pm@vger.kernel.org>; Wed, 31 Jan 2024 11:13:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1706728403; x=1707333203; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=MDlCC2r5ivfxMatzw+m44kL9y+ob2qxzmDMpYUeLjRw=;
+        b=Tuq3KMKSAPurWglYCkJ16QugJqJKXzSAvbLhHgHfxd/88rvKq4cFYbsPV0qg2ptH1D
+         xu8+a4C0D8T7Xn+Tz0jcQBvDEpFIPBZ7hUKlFOz2nmd2xs8SVlC7Llsy8rchRL8ClN+U
+         +j3myy2tPrI2gtahh8iZ1Rc0jZnWkwqvfiSRwqz1V3kpBXsoevlagsH82i0Tzv9ulj8q
+         68PDnxIcSlPGlFnIJINRYz4vwmuSk2XYJHGk6iIFofivIPdEuWZjxQ/toBLcFmFpClXs
+         h8VpJ6QowR83M1htBR35TRRoHQA4//pKv5wDZIMSJUIW1eGmFiZANx6pN5T+YLP4v/CJ
+         +UmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706728403; x=1707333203;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MDlCC2r5ivfxMatzw+m44kL9y+ob2qxzmDMpYUeLjRw=;
+        b=Teh3VQOP5Ge3fHxGw1YhNkzfIY6XmasnPvhQNIJJA+XFv/Ae9ImED+UPRKzQGN4nvS
+         m+L8mMn/o355ZIDlBK/Fqvp3LZXT6Em/5lqY8WRz/7y4rDv9ehzPaJZafgvO5Ft1d9eb
+         6J9bvJTwlD9Upcz6S9S94ttT2CbAQafnzBWIYCIgKTLo4a+Nc0j+rOhiyRK41U9tyRiX
+         HI7Y32c7OYwr5dSZos9HlVqKnN8a4uVCDlEYG3RsiR8WyFbF8wPfCvxZDZaf+wc4QVBF
+         Sq5PVqz+qO/p7ol3Opa1q0L8t2LK4K5WJKUiCJ2gEL9TIIOPaTU2bklsL1le9NOXQAeS
+         Qg0Q==
+X-Gm-Message-State: AOJu0YxK3f7QH/pufJ8Ly9AYvg5O3lQJGtq3C8UzhVwIeUqXLFoKoXMJ
+	JhDkSloniMpB/dGpnObpNrgYq2/EqGys5zutKagzcks7VqWEtHXqkpq4f5UP779H3v/Kg7y06PN
+	9IxG+sN8FQg==
+X-Google-Smtp-Source: AGHT+IHQhnxNnGms1Lv1v4wRyVmF3tL2yOxMd366sSLLKAcOE2JiiNngkczV4tzp6DA569p1Cc9GWZJKEFW6kA==
+X-Received: from pranav-first.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:390b])
+ (user=pranavpp job=sendgmr) by 2002:a05:690c:f94:b0:5fc:548:ca50 with SMTP id
+ df20-20020a05690c0f9400b005fc0548ca50mr394574ywb.10.1706728403730; Wed, 31
+ Jan 2024 11:13:23 -0800 (PST)
+Date: Wed, 31 Jan 2024 19:13:17 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
+Message-ID: <20240131191317.2191421-1-pranavpp@google.com>
+Subject: [PATCH] alarmtimer, PM: suspend: Expose a function from
+From: Pranav Prasad <pranavpp@google.com>
+To: rafael@kernel.org, pavel@ucw.cz, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, krossmo@google.com, jstultz@google.com
+Cc: Pranav Prasad <pranavpp@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrfedtledguddujecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthhqredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeekieelheffleefgffgtdejvdektedtjeefveeugeefvdfhgfduueetiefgieelteenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepkedprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghr
- nhgvlhdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
 
-On Wednesday, January 31, 2024 7:41:52 PM CET Rafael J. Wysocki wrote:
-> On Wed, Jan 31, 2024 at 7:18=E2=80=AFPM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
-> >
-> > On 29/01/2024 21:40, Rafael J. Wysocki wrote:
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > Trip point temperature can be modified via sysfs if
-> > > CONFIG_THERMAL_WRITABLE_TRIPS is enabled and the thermal
-> > > zone creator requested that the given trip be writable
-> > > in the writable trips mask passed to the registration
-> > > function.
-> > >
-> > > However, trip point hysteresis is treated differently - it is only
-> > > writable if the thermal zone has a .set_trip_hyst() operation defined
-> > > and neither CONFIG_THERMAL_WRITABLE_TRIPS, nor the writable trips mask
-> > > supplied by the zone creator has any bearing on this.  That is
-> > > inconsistent and confusing, and it generally does not meet user
-> > > expectations.
-> > >
-> > > For this reason, modify create_trip_attrs() to handle trip point
-> > > hysteresis in the same way as trip point temperature, so they both
-> > > are writable at the same time regardless of what trip point operations
-> > > are defined for the thermal zone.
-> > >
-> > > Link: https://lore.kernel.org/linux-pm/20240106191502.29126-1-quic_ma=
-nafm@quicinc.com
-> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > ---
-> > >
-> > > Notes:
-> > >
-> > >   * I don't think that CONFIG_THERMAL_WRITABLE_TRIPS is very useful.
-> > >     The only thing controlled by it is whether or not the writable tr=
-ip
-> > >     mask used during registration will have any effect and this is qu=
-ite
-> > >     confusing.  Some drivers select it for this reason which seems a =
-bit
-> > >     odd to me.
-> > >
-> > >     Maybe it can be dropped after the patch below?
-> >
-> > Actually it is used from an userspace daemon to get threshold crossing
-> > temperature which is then changed on the fly.
->=20
-> I mean to drop CONFIG_THERMAL_WRITABLE_TRIPS and make the writable
-> trip masks used during zone registration always work.  Sorry for the
-> confusion.
+Hi!
 
-So for the record, this (and note that the symbol is clearly not used as
-intended, because drivers select it and one platform sets it in defconfig):
+I am proposing a patch in which I want to return the errno code ETIME
+instead of EBUSY in enter_state() in the kernel suspend flow. Currently,
+EBUSY is returned  when an imminent alarm is pending which is checked in
+alarmtimer_suspend() in alarmtimer.c. The proposed patch series moves the
+check to enter_state() in suspend.c to catch a potential suspend failure
+early in the suspend flow. I want to replace EBUSY with ETIME to make it
+more diagnosable in userspace, and may be more appropriate considering a
+timer is about to expire.
 
-=2D--
- arch/arm/configs/imx_v6_v7_defconfig |    1 -
- drivers/thermal/Kconfig              |   11 -----------
- drivers/thermal/intel/Kconfig        |    2 --
- drivers/thermal/thermal_sysfs.c      |    8 +++-----
- 4 files changed, 3 insertions(+), 19 deletions(-)
+I am reaching out to get an opinion from the
+suspend maintainers if this would act as any potential risk in the suspend
+flow which only has EBUSY, EAGAIN, and EINVAL as return error codes
+currently. This has been developed as part of a patch series, and only the
+patch of interest is below this message. Any feedback or insights would be
+greatly appreciated.
 
-Index: linux-pm/drivers/thermal/Kconfig
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=2D-- linux-pm.orig/drivers/thermal/Kconfig
-+++ linux-pm/drivers/thermal/Kconfig
-@@ -83,17 +83,6 @@ config THERMAL_OF
- 	  Say 'Y' here if you need to build thermal infrastructure
- 	  based on device tree.
-=20
-=2Dconfig THERMAL_WRITABLE_TRIPS
-=2D	bool "Enable writable trip points"
-=2D	help
-=2D	  This option allows the system integrator to choose whether
-=2D	  trip temperatures can be changed from userspace. The
-=2D	  writable trips need to be specified when setting up the
-=2D	  thermal zone but the choice here takes precedence.
-=2D
-=2D	  Say 'Y' here if you would like to allow userspace tools to
-=2D	  change trip temperatures.
-=2D
- choice
- 	prompt "Default Thermal governor"
- 	default THERMAL_DEFAULT_GOV_STEP_WISE
-Index: linux-pm/drivers/thermal/thermal_sysfs.c
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=2D-- linux-pm.orig/drivers/thermal/thermal_sysfs.c
-+++ linux-pm/drivers/thermal/thermal_sysfs.c
-@@ -458,8 +458,7 @@ static int create_trip_attrs(struct ther
- 						tz->trip_temp_attrs[indx].name;
- 		tz->trip_temp_attrs[indx].attr.attr.mode =3D S_IRUGO;
- 		tz->trip_temp_attrs[indx].attr.show =3D trip_point_temp_show;
-=2D		if (IS_ENABLED(CONFIG_THERMAL_WRITABLE_TRIPS) &&
-=2D		    mask & (1 << indx)) {
-+		if (mask & (1 << indx)) {
- 			tz->trip_temp_attrs[indx].attr.attr.mode |=3D S_IWUSR;
- 			tz->trip_temp_attrs[indx].attr.store =3D
- 							trip_point_temp_store;
-@@ -474,8 +473,7 @@ static int create_trip_attrs(struct ther
- 					tz->trip_hyst_attrs[indx].name;
- 		tz->trip_hyst_attrs[indx].attr.attr.mode =3D S_IRUGO;
- 		tz->trip_hyst_attrs[indx].attr.show =3D trip_point_hyst_show;
-=2D		if (IS_ENABLED(CONFIG_THERMAL_WRITABLE_TRIPS) &&
-=2D		    mask & (1 << indx)) {
-+		if (mask & (1 << indx)) {
- 			tz->trip_hyst_attrs[indx].attr.attr.mode |=3D S_IWUSR;
- 			tz->trip_hyst_attrs[indx].attr.store =3D
- 					trip_point_hyst_store;
-Index: linux-pm/drivers/thermal/intel/Kconfig
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=2D-- linux-pm.orig/drivers/thermal/intel/Kconfig
-+++ linux-pm/drivers/thermal/intel/Kconfig
-@@ -23,7 +23,6 @@ config X86_PKG_TEMP_THERMAL
- 	tristate "X86 package temperature thermal driver"
- 	depends on X86_THERMAL_VECTOR
- 	select THERMAL_GOV_USER_SPACE
-=2D	select THERMAL_WRITABLE_TRIPS
- 	select INTEL_TCC
- 	default m
- 	help
-@@ -47,7 +46,6 @@ config INTEL_SOC_DTS_THERMAL
- 	tristate "Intel SoCs DTS thermal driver"
- 	depends on X86 && PCI && ACPI
- 	select INTEL_SOC_DTS_IOSF_CORE
-=2D	select THERMAL_WRITABLE_TRIPS
- 	help
- 	  Enable this to register Intel SoCs (e.g. Bay Trail) platform digital
- 	  temperature sensor (DTS). These SoCs have two additional DTSs in
-Index: linux-pm/arch/arm/configs/imx_v6_v7_defconfig
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-=2D-- linux-pm.orig/arch/arm/configs/imx_v6_v7_defconfig
-+++ linux-pm/arch/arm/configs/imx_v6_v7_defconfig
-@@ -228,7 +228,6 @@ CONFIG_SENSORS_IIO_HWMON=3Dy
- CONFIG_SENSORS_PWM_FAN=3Dy
- CONFIG_SENSORS_SY7636A=3Dy
- CONFIG_THERMAL_STATISTICS=3Dy
-=2DCONFIG_THERMAL_WRITABLE_TRIPS=3Dy
- CONFIG_CPU_THERMAL=3Dy
- CONFIG_IMX_THERMAL=3Dy
- CONFIG_WATCHDOG=3Dy
+Thank you,
+Pranav Prasad
 
+The alarmtimer driver currently fails suspend attempts when there is an
+alarm pending within the next suspend_check_duration_ns nanoseconds, since
+the   system is expected to wake up soon anyway. The entire suspend process
+is initiated even though the system will immediately awaken. This process
+includes substantial work before the suspend fails and additional work
+afterwards to undo the failed suspend that was attempted. Therefore on
+battery-powered devices that initiate suspend attempts from userspace, it
+may be advantageous to be able to fail the suspend earlier in the suspend
+flow to avoid power consumption instead of unnecessarily doing extra work.
+As one data point, an analysis of a subset of Android devices showed that
+imminent alarms account for roughly 40% of all suspend failures on average
+leading to unnecessary power wastage.
 
+To facilitate this, expose
+function time_check_suspend_fail() from alarmtimer to be used by the power
+subsystem to perform the check earlier in the suspend flow. Perform the
+check in enter_state() and return early if an alarm is to be fired in the
+next suspend_check_duration_ns nanoseconds, failing suspend.
+
+Signed-off-by: Pranav Prasad <pranavpp@google.com>
+Signed-off-by: Kelly Rossmoyer <krossmo@google.com>
+---
+ include/linux/time.h     |   1 +
+ kernel/power/suspend.c   |   3 ++
+ kernel/time/alarmtimer.c | 113 ++++++++++++++++++++++++++++-----------
+ 3 files changed, 87 insertions(+), 30 deletions(-)
+
+diff --git a/include/linux/time.h b/include/linux/time.h
+index 16cf4522d6f3..aab7c4e51e11 100644
+--- a/include/linux/time.h
++++ b/include/linux/time.h
+@@ -56,6 +56,7 @@ struct tm {
+ };
+ 
+ void time64_to_tm(time64_t totalsecs, int offset, struct tm *result);
++int time_check_suspend_fail(void);
+ 
+ # include <linux/time32.h>
+ 
+diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+index fa3bf161d13f..7a0175dae0d9 100644
+--- a/kernel/power/suspend.c
++++ b/kernel/power/suspend.c
+@@ -26,6 +26,7 @@
+ #include <linux/suspend.h>
+ #include <linux/syscore_ops.h>
+ #include <linux/swait.h>
++#include <linux/time.h>
+ #include <linux/ftrace.h>
+ #include <trace/events/power.h>
+ #include <linux/compiler.h>
+@@ -564,6 +565,8 @@ static int enter_state(suspend_state_t state)
+ #endif
+ 	} else if (!valid_state(state)) {
+ 		return -EINVAL;
++	} else if (time_check_suspend_fail()) {
++		return -ETIME;
+ 	}
+ 	if (!mutex_trylock(&system_transition_mutex))
+ 		return -EBUSY;
+diff --git a/kernel/time/alarmtimer.c b/kernel/time/alarmtimer.c
+index e5d2e560b4c1..085b1ace0c31 100644
+--- a/kernel/time/alarmtimer.c
++++ b/kernel/time/alarmtimer.c
+@@ -115,6 +115,84 @@ static int alarmtimer_sysfs_add(void)
+ 	return ret;
+ }
+ 
++/**
++ * alarmtimer_init_soonest - Initializes parameters to find soonest alarm.
++ * @min: ptr to relative time to the soonest alarm to expire
++ * @expires: ptr to absolute time of the soonest alarm to expire
++ * @type: ptr to alarm type
++ *
++ */
++static void alarmtimer_init_soonest(ktime_t *min, ktime_t *expires, int *type)
++{
++	unsigned long flags;
++
++	spin_lock_irqsave(&freezer_delta_lock, flags);
++	*min = freezer_delta;
++	*expires = freezer_expires;
++	*type = freezer_alarmtype;
++	freezer_delta = 0;
++	spin_unlock_irqrestore(&freezer_delta_lock, flags);
++}
++
++/**
++ * alarmtimer_get_soonest - Finds the soonest alarm to expire among the alarm bases.
++ * @min: ptr to relative time to the soonest alarm to expire
++ * @expires: ptr to absolute time of the soonest alarm to expire
++ * @type: ptr to alarm type
++ *
++ */
++static void alarmtimer_get_soonest(ktime_t *min, ktime_t *expires, int *type)
++{
++	int i;
++	unsigned long flags;
++
++	/* Find the soonest timer to expire */
++	for (i = 0; i < ALARM_NUMTYPE; i++) {
++		struct alarm_base *base = &alarm_bases[i];
++		struct timerqueue_node *next;
++		ktime_t delta;
++
++		spin_lock_irqsave(&base->lock, flags);
++		next = timerqueue_getnext(&base->timerqueue);
++		spin_unlock_irqrestore(&base->lock, flags);
++		if (!next)
++			continue;
++		delta = ktime_sub(next->expires, base->get_ktime());
++		if (!(*min) || (delta < *min)) {
++			*expires = next->expires;
++			*min = delta;
++			*type = i;
++		}
++	}
++}
++
++/**
++ * time_check_suspend_fail - Check if suspend should be failed due to an
++ * alarm within the next suspend_check_duration nanoseconds.
++ *
++ * Returns error if suspend should be failed, else returns 0.
++ */
++int time_check_suspend_fail(void)
++{
++	ktime_t min, expires;
++	int type;
++
++	/* Initialize parameters to find soonest timer */
++	alarmtimer_init_soonest(&min, &expires, &type);
++
++	/* Find the soonest timer to expire */
++	alarmtimer_get_soonest(&min, &expires, &type);
++
++	if (min == 0)
++		return 0;
++
++	if (ktime_to_ns(min) < suspend_check_duration_ns)
++		return -EBUSY;
++
++	return 0;
++}
++EXPORT_SYMBOL(time_check_suspend_fail);
++
+ /**
+  * alarmtimer_get_rtcdev - Return selected rtcdevice
+  *
+@@ -296,49 +374,24 @@ EXPORT_SYMBOL_GPL(alarm_expires_remaining);
+ static int alarmtimer_suspend(struct device *dev)
+ {
+ 	ktime_t min, now, expires;
+-	int i, ret, type;
++	int ret, type;
+ 	struct rtc_device *rtc;
+-	unsigned long flags;
+ 	struct rtc_time tm;
+ 
+-	spin_lock_irqsave(&freezer_delta_lock, flags);
+-	min = freezer_delta;
+-	expires = freezer_expires;
+-	type = freezer_alarmtype;
+-	freezer_delta = 0;
+-	spin_unlock_irqrestore(&freezer_delta_lock, flags);
++	/* Initialize parameters to find soonest timer */
++	alarmtimer_init_soonest(&min, &expires, &type);
+ 
+ 	rtc = alarmtimer_get_rtcdev();
+ 	/* If we have no rtcdev, just return */
+ 	if (!rtc)
+ 		return 0;
+ 
+-	/* Find the soonest timer to expire*/
+-	for (i = 0; i < ALARM_NUMTYPE; i++) {
+-		struct alarm_base *base = &alarm_bases[i];
+-		struct timerqueue_node *next;
+-		ktime_t delta;
++	/* Find the soonest timer to expire */
++	alarmtimer_get_soonest(&min, &expires, &type);
+ 
+-		spin_lock_irqsave(&base->lock, flags);
+-		next = timerqueue_getnext(&base->timerqueue);
+-		spin_unlock_irqrestore(&base->lock, flags);
+-		if (!next)
+-			continue;
+-		delta = ktime_sub(next->expires, base->get_ktime());
+-		if (!min || (delta < min)) {
+-			expires = next->expires;
+-			min = delta;
+-			type = i;
+-		}
+-	}
+ 	if (min == 0)
+ 		return 0;
+ 
+-	if (ktime_to_ns(min) < suspend_check_duration_ns) {
+-		pm_wakeup_event(dev, suspend_check_duration_ns/NSEC_PER_MSEC);
+-		return -EBUSY;
+-	}
+-
+ 	trace_alarmtimer_suspend(expires, type);
+ 
+ 	/* Setup an rtc timer to fire that far in the future */
+-- 
+2.43.0.429.g432eaa2c6b-goog
 
 
