@@ -1,72 +1,73 @@
-Return-Path: <linux-pm+bounces-3110-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3111-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D093D84463D
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 18:33:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F2A48446F6
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 19:17:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D9F428AF66
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 17:33:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB4842911D7
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 18:17:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FA0D12DD8C;
-	Wed, 31 Jan 2024 17:33:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C52F12FF8F;
+	Wed, 31 Jan 2024 18:17:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="cn4iXD6s"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="O4jXDrjK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CF0312CDB2
-	for <linux-pm@vger.kernel.org>; Wed, 31 Jan 2024 17:33:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CA9E12CDB8
+	for <linux-pm@vger.kernel.org>; Wed, 31 Jan 2024 18:17:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706722431; cv=none; b=UBmJYk6OcF4M3AjE/qdR33ahDiggI4AIIDXjocCMyDTEq9zRsOH3xmXPcxeKHHwXT0kZiOFkR+ZEdj5rT7Iv3FVBVdy6R/jSo+VA8MuMRX3FL2L2tRX2YN3acjB0zm1wtiUuiKT4cNPYWOM/mnH96KhOmBC6UBbXJrq5b7NAqfY=
+	t=1706725030; cv=none; b=NtnDeOe17aRRis8POF+0AoqiRgvgbdtOgYFPvyvIWFSkBz759B+TK6e5ITYK/zf6ljf6/YDO5e7D0xn+u4cL6K/ZK5OJV/fCQ7r+1jgxMMPCm/lJqLhIQhurKxsnE44epyICk8jvtLiFCnX0BVJsjrCeg0GwOyzxEbowVBxLN0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706722431; c=relaxed/simple;
-	bh=xeJJLuELCxA4Un4EN3eKr3Zt1PgwCcfSrGZzkVcnS/s=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=gjWRa2VKh/YGp/ea9TadYUxjM0JKGiycRCVNEZOsFWz864o+zpcnG43lPXFQv6AtJtz0kF0D7Ynp+a2doewVzWG4Sky+UU/i4QwnXdtp8rwDjknXyWMpKEawM2ihL4SW0crtkM3+ABvo63XqJ2n558tTVr+k/UrtyI2Kj+Pq7vU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=cn4iXD6s; arc=none smtp.client-ip=209.85.216.45
+	s=arc-20240116; t=1706725030; c=relaxed/simple;
+	bh=z4bITG/vuy7xAzV/BbZWOV6N3SBgX5/7Ct45bJRLZUA=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=gQ5ASTiNJyFrF3Q09u2Vl/F5KVkvrBEG1x7a9iMmPNttIF4+07VztMt1sbPhjENbM44+cEu0kikuVfBpLCyKO6LrABiSJ5zkXYvYFtHvwoFS8we/yc8hZ/M8YlwJ9+UWKl38ksA+SEdfcrTX0nfo8/1jxmjMLYBW3GIY1uEyNBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=O4jXDrjK; arc=none smtp.client-ip=209.85.215.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-2907a17fa34so4229826a91.1
-        for <linux-pm@vger.kernel.org>; Wed, 31 Jan 2024 09:33:49 -0800 (PST)
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-5cfd95130c6so59090a12.1
+        for <linux-pm@vger.kernel.org>; Wed, 31 Jan 2024 10:17:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1706722429; x=1707327229; darn=vger.kernel.org;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1706725028; x=1707329828; darn=vger.kernel.org;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=XdtaBZFdIXsvohAKWtKe3r48nBM+7QqWAATGquxdjCM=;
-        b=cn4iXD6sE5q4wgED8TbdRUv0sOHaSjTmLf4ymw3lZ0TyaIn1wGUO3rxVNz4r0/AmQB
-         wJjG5My2bgmsBCweUPyb0fqYo5HhIwKWJ2nskg5OD4PEWYoxwm+OABINt8x16VUohE75
-         5Xwt6w/AwD3xc0hSt+Uq/NyUJarJ1UXzTEpLwJWBI3GwpwvIyj/vRLH8lk9TsIudo9GB
-         fcGuJbnS+XrZAj7IRx8SfxGT1lFTpA5rNZ7qi6NhsmKT0eusrYYyo89pGg5uybttFEQC
-         9pM6rz+UpHjleUY1RRs0B06XyZU5OEkvooo02NN3a3v/oHGOXik1FS8PGfONNlvh0VQk
-         AE5Q==
+        bh=QpX3ERye6CYDqnKOpMC5tFgt9430XBUa1oMXgrBBD0I=;
+        b=O4jXDrjKe+D33CuVsTKjC4QXi1Z5X0ooqCOI3gsgUhNDzhv/ZtiLZCSTEytCmeajTO
+         +1drBI6BULG14WgypE+cYCRuRU4o0nXjBI3FV34OaFCZZ/Br1iAeZqn+1ZbdEMgVJPId
+         DYfatw4JBof8+qTodUxl4Ywc4qUuS5vnxyxUz8pifaaA7hK6H9B7tk1ajIWthGqYVUc3
+         y2ZA8WHRvB3RuuX039oKUh3PchcZmhOnKlUrEWIgyvYDmUqd43mL9YFGFhNyMOLxa7OB
+         QMlCLaIvG8UItIpt8OARurXR0QZEwIkTmZs3fPvDNGZqECNIDUAO49vMs+H7r0t39sPl
+         5B6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706722429; x=1707327229;
+        d=1e100.net; s=20230601; t=1706725028; x=1707329828;
         h=from:to:subject:content-transfer-encoding:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=XdtaBZFdIXsvohAKWtKe3r48nBM+7QqWAATGquxdjCM=;
-        b=aH1/RLCoxILUNaeEL/JNI2t1c938dRk9HwZ67hXVW34zzsDU6B8OheOx4G5h/CnuTU
-         Qhb5ZQ/PI1RJs9SuK2iRhqBHxj8fiBclcCHk9Nsq91ARkP27Lrdyb4+BwHWmQAPdRv5Q
-         8hvrzaKYrmZTdqbK5rOq8vLQ2Suuw2SoDpyBhb5R7uNWVtrQGu7oqEq88P52W5HXvue4
-         jdXdWHyMLhLzZxgUagUV27CcGjeqYEsXct9/79wZZnfQCu1fasRSk4BzdE6VVXedrRBF
-         nREhfgD1kcGOTM+3UR7CWLwmPtNzbYtJ568stbvuTw+QE8KHCkBpkXZVsm/RYPxJKmd9
-         L0lQ==
-X-Gm-Message-State: AOJu0Yzc5lUQvuUyfsWJJ0tnyaoP/zEp8YHc2LBeALa0bmQhc7au+5n0
-	5IpfI/2jpzxawLQf48Z5TyIS3mwBLxq+z2mtj/izOQdiV2IPpWpGtheOVirONjk=
-X-Google-Smtp-Source: AGHT+IGKrNUbFfK1UCx5GssiEYyseIaoPnR3/szKZH8ko+zR2XOd2aTLVYrJJPnr7taNESR7LHJX4A==
-X-Received: by 2002:a17:90a:fd14:b0:295:d006:45f3 with SMTP id cv20-20020a17090afd1400b00295d00645f3mr2322554pjb.3.1706722428739;
-        Wed, 31 Jan 2024 09:33:48 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCWziqZjRxIzVuMJ783sJ/ZQh/CzRoCTte2/+Da6G/mlqToFjOj7QuEubQ3Oj6g0H23OCh7QbBYHvmj8lRbO6jo9iACxcNsn29iD3P+PdE6KTVLQn/VJRnRIvYRU5Q5T0ChlODACkMNYYK050V/0LSlX72EqGZBWEmPVSZ7xB2sm+83hLSt+mONfgfwG
+        bh=QpX3ERye6CYDqnKOpMC5tFgt9430XBUa1oMXgrBBD0I=;
+        b=LrpeYo9EBLzN97WvP6llS0jYLRTpCwJ4uiIr2vHUXIzF5B+LjtuE+nVPPZOYYYOtYW
+         tYOqHpxDhdHndCatvVD8P+6VlHUSBKH3lcfVrJsG9I31fJ3l+61Cgu1/gcLLQwiaFjuD
+         /N6dai0eQjALxEQ6L5ZhVCYnd66/jFSCmyy15rmJUe5JFiC9EHfgmaXNGSIS9lSy64bx
+         PtYmrZJpGIWrct+k4QIzZNT54tTZV5tH+y5uYnH5MWdA2uRNgUOUiA/S2Y9MS80a5iU5
+         qtXbtLuL3c3naj/MeEAa6jDqJKypfghWUgpi6wtqYNhqa55gcFcErLynV1hQJCCD57TY
+         +7AQ==
+X-Gm-Message-State: AOJu0YwW5ks5dKh+gVVV7Gh3ERN5o/ZEUFtprumyupVqvZfGJsa6AlmZ
+	sy5/S5Oj9LhiZZPSHdwz6tG7BlSaCxQOeacFo2BTKuA7l+5Q6DvrMWU1trSy8SNITdC87PuoVAs
+	Y
+X-Google-Smtp-Source: AGHT+IGNat9cHqnRzkur6DvsDOclcWlplsxYs/fkJCFwAgS3qx7/CkzCdyezUy0bc0eUiRdhsG62kQ==
+X-Received: by 2002:a17:90b:e8a:b0:293:f625:1b0b with SMTP id fv10-20020a17090b0e8a00b00293f6251b0bmr2326301pjb.5.1706725027927;
+        Wed, 31 Jan 2024 10:17:07 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCWeozersCXTrvFbQl19mtDhs08KP/ZY8Z0DcIexrcfg0XSsL9lHICtrI8nFiCLp/kRbWolNDEvKBtaWDV00r1UMdjDOQAgUp56DI1U6ZcGdTMmuzK5d+3AccBve8iq+63NvCy7MECRLx+Cv4tTjtRYVWoNjadzfkVtz4f2DnjMIqISpWo2K9BnqoNpW
 Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id sm16-20020a17090b2e5000b00290ae3bf8d1sm1781870pjb.57.2024.01.31.09.33.47
+        by smtp.gmail.com with ESMTPSA id so10-20020a17090b1f8a00b00290701c8623sm1755591pjb.28.2024.01.31.10.17.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Jan 2024 09:33:47 -0800 (PST)
-Message-ID: <65ba847b.170a0220.68da2.5ccd@mx.google.com>
-Date: Wed, 31 Jan 2024 09:33:47 -0800 (PST)
+        Wed, 31 Jan 2024 10:17:07 -0800 (PST)
+Message-ID: <65ba8ea3.170a0220.f03c1.5cd7@mx.google.com>
+Date: Wed, 31 Jan 2024 10:17:07 -0800 (PST)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -78,258 +79,192 @@ Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Tree: pm
 X-Kernelci-Branch: testing
 X-Kernelci-Kernel: v6.8-rc2-7-g7543bfcb6b1a
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 8 builds: 2 failed, 6 passed, 2 errors,
- 32 warnings (v6.8-rc2-7-g7543bfcb6b1a)
+X-Kernelci-Report-Type: test
+Subject: pm/testing baseline: 50 runs, 7 regressions (v6.8-rc2-7-g7543bfcb6b1a)
 To: rafael@kernel.org, linux-pm@vger.kernel.org,
  kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
 From: "kernelci.org bot" <bot@kernelci.org>
 
-pm/testing build: 8 builds: 2 failed, 6 passed, 2 errors, 32 warnings (v6.8=
--rc2-7-g7543bfcb6b1a)
+pm/testing baseline: 50 runs, 7 regressions (v6.8-rc2-7-g7543bfcb6b1a)
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-8-rc2-7-g7543bfcb6b1a/
+Regressions Summary
+-------------------
 
-Tree: pm
-Branch: testing
-Git Describe: v6.8-rc2-7-g7543bfcb6b1a
-Git Commit: 7543bfcb6b1a6cecb3e1df9a1bf864d916e8b40b
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+platform               | arch  | lab         | compiler | defconfig | regre=
+ssions
+-----------------------+-------+-------------+----------+-----------+------=
+------
+kontron-kbox-a-230-ls  | arm64 | lab-kontron | gcc-10   | defconfig | 5    =
+      =
 
-Build Failures Detected:
+kontron-sl28-var3-ads2 | arm64 | lab-kontron | gcc-10   | defconfig | 2    =
+      =
 
-i386:
-    i386_defconfig: (gcc-10) FAIL
 
-x86_64:
-    x86_64_defconfig: (gcc-10) FAIL
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.8-rc2=
+-7-g7543bfcb6b1a/plan/baseline/
 
-Errors and Warnings Detected:
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v6.8-rc2-7-g7543bfcb6b1a
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      7543bfcb6b1a6cecb3e1df9a1bf864d916e8b40b =
 
-arc:
-    haps_hs_smp_defconfig (gcc-10): 2 warnings
 
-arm64:
-    defconfig (gcc-10): 1 warning
 
-arm:
+Test Regressions
+---------------- =
 
-i386:
-    i386_defconfig (gcc-10): 1 error, 1 warning
 
-mips:
 
-riscv:
-    defconfig (gcc-10): 1 warning
+platform               | arch  | lab         | compiler | defconfig | regre=
+ssions
+-----------------------+-------+-------------+----------+-----------+------=
+------
+kontron-kbox-a-230-ls  | arm64 | lab-kontron | gcc-10   | defconfig | 5    =
+      =
 
-sparc:
-    sparc64_defconfig (gcc-10): 26 warnings
 
-x86_64:
-    x86_64_defconfig (gcc-10): 1 error, 1 warning
+  Details:     https://kernelci.org/test/plan/id/65ba847ce39c79018300a04b
 
-Errors summary:
+  Results:     90 PASS, 5 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.8-rc2-7-g7543bfc=
+b6b1a/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.8-rc2-7-g7543bfc=
+b6b1a/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
 
-    1    security/security.c:810:2: error: =E2=80=98memcpy=E2=80=99 offset =
-32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-    1    arch/x86/include/asm/string_32.h:150:25: error: =E2=80=98__builtin=
-_memcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bou=
-nds]
 
-Warnings summary:
 
-    2    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offse=
-t 32 is out of the bounds [0, 0] [-Warray-bounds]
-    2    cc1: all warnings being treated as errors
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    1    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =
-=E2=80=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
-rototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
-pes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
-prototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
-ypes]
-    1    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =
-=E2=80=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype fo=
-r =E2=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for=
- =E2=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype=
- for =E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype=
- for =E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototyp=
-e for =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-protot=
-ypes]
-    1    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototyp=
-e for =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype=
- for =E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototyp=
-e for =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototy=
-pe for =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype f=
-or =E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype =
-for =E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype =
-for =E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
-    1    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype fo=
-r 'syscall_trace_enter' [-Wmissing-prototypes]
-    1    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype f=
-or 'arc_kprobe_handler' [-Wmissing-prototypes]
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/65ba847ce39c79018300a052
+        failing since 7 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e4=
+, first fail: v6.8-rc1-9-g3d5bdaa27c031)
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+    2024-01-31T17:33:23.406244  / # #
+    2024-01-31T17:33:23.508190  export SHELL=3D/bin/sh
+    2024-01-31T17:33:23.508932  #
+    2024-01-31T17:33:23.610465  / # export SHELL=3D/bin/sh. /lava-424636/en=
+vironment
+    2024-01-31T17:33:23.610947  =
 
-Detailed per-defconfig build reports:
+    2024-01-31T17:33:23.712245  / # . /lava-424636/environment/lava-424636/=
+bin/lava-test-runner /lava-424636/1
+    2024-01-31T17:33:23.713455  =
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
+    2024-01-31T17:33:23.758231  / # /lava-424636/bin/lava-test-runner /lava=
+-424636/1
+    2024-01-31T17:33:23.782706  + export 'TESTRUN_ID=3D1_bootrr'
+    2024-01-31T17:33:23.816688  + cd /lava-424636/1/tests/1_bootrr =
 
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
-smatches
+    ... (14 line(s) more)  =
 
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
 
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
-smatches
+  * baseline.bootrr.fsl_enetc-enetc2-probed: https://kernelci.org/test/case=
+/id/65ba847ce39c79018300a056
+        failing since 7 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e4=
+, first fail: v6.8-rc1-9-g3d5bdaa27c031)
 
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
+    2024-01-31T17:33:26.032827  /lava-424636/1/../bin/lava-test-case
+    2024-01-31T17:33:26.059690  <8>[   26.317383] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc2-probed RESULT=3Dfail>   =
 
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
- section mismatches
 
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
-rc_kprobe_handler' [-Wmissing-prototypes]
+  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/65=
+ba847ce39c79018300a058
+        failing since 7 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e4=
+, first fail: v6.8-rc1-9-g3d5bdaa27c031)
 
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
- mismatches
+    2024-01-31T17:33:27.121341  /lava-424636/1/../bin/lava-test-case
+    2024-01-31T17:33:27.147845  <8>[   27.405531] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>   =
 
-Errors:
-    arch/x86/include/asm/string_32.h:150:25: error: =E2=80=98__builtin_memc=
-py=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
 
-Warnings:
-    cc1: all warnings being treated as errors
+  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
+/id/65ba847ce39c79018300a05d
+        failing since 7 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e4=
+, first fail: v6.8-rc1-9-g3d5bdaa27c031)
 
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
+    2024-01-31T17:33:28.380688  /lava-424636/1/../bin/lava-test-case
+    2024-01-31T17:33:28.407807  <8>[   28.665167] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>   =
 
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 26 warnings, 0 =
-section mismatches
 
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype for =
-=E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototype for=
- =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototype for=
- =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for =E2=
-=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototype for=
- =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =E2=80=
-=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
-types]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
-ypes]
-    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype for =
-=E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype for =
-=E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype for =
-=E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype for =
-=E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototype fo=
-r =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype for =
-=E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
-=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
-=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
+  * baseline.bootrr.fsl_enetc-enetc1-probed: https://kernelci.org/test/case=
+/id/65ba847ce39c79018300a05e
+        failing since 7 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e4=
+, first fail: v6.8-rc1-9-g3d5bdaa27c031)
 
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 sec=
-tion mismatches
+    2024-01-31T17:33:29.431189  /lava-424636/1/../bin/lava-test-case
+    2024-01-31T17:33:29.458323  <8>[   29.715652] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc1-probed RESULT=3Dfail>   =
 
-Errors:
-    security/security.c:810:2: error: =E2=80=98memcpy=E2=80=99 offset 32 is=
- out of the bounds [0, 0] [-Werror=3Darray-bounds]
+ =
 
-Warnings:
-    cc1: all warnings being treated as errors
 
----
-For more info write to <info@kernelci.org>
+
+platform               | arch  | lab         | compiler | defconfig | regre=
+ssions
+-----------------------+-------+-------------+----------+-----------+------=
+------
+kontron-sl28-var3-ads2 | arm64 | lab-kontron | gcc-10   | defconfig | 2    =
+      =
+
+
+  Details:     https://kernelci.org/test/plan/id/65ba8468f298ef56bf00a047
+
+  Results:     101 PASS, 2 FAIL, 1 SKIP
+  Full config: defconfig
+  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
+110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.8-rc2-7-g7543bfc=
+b6b1a/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-sl28-var3-ads2.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.8-rc2-7-g7543bfc=
+b6b1a/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-sl28-var3-ads2.ht=
+ml
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230623.0/arm64/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/65ba8468f298ef56bf00a04e
+        failing since 7 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e4=
+, first fail: v6.8-rc1-9-g3d5bdaa27c031)
+
+    2024-01-31T17:33:14.766213  / # #
+    2024-01-31T17:33:14.868030  export SHELL=3D/bin/sh
+    2024-01-31T17:33:14.868400  #
+    2024-01-31T17:33:14.969130  / # export SHELL=3D/bin/sh. /lava-424633/en=
+vironment
+    2024-01-31T17:33:14.969492  =
+
+    2024-01-31T17:33:15.070321  / # . /lava-424633/environment/lava-424633/=
+bin/lava-test-runner /lava-424633/1
+    2024-01-31T17:33:15.071512  =
+
+    2024-01-31T17:33:15.078508  / # /lava-424633/bin/lava-test-runner /lava=
+-424633/1
+    2024-01-31T17:33:15.142135  + export 'TESTRUN_ID=3D1_bootrr'
+    2024-01-31T17:33:15.176385  + cd /lava-424633/1/tests/1_bootrr =
+
+    ... (10 line(s) more)  =
+
+
+  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
+/id/65ba8468f298ef56bf00a061
+        failing since 7 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e4=
+, first fail: v6.8-rc1-9-g3d5bdaa27c031)
+
+    2024-01-31T17:33:18.104952  /lava-424633/1/../bin/lava-test-case
+    2024-01-31T17:33:18.132924  <8>[   27.210095] <LAVA_SIGNAL_TESTCASE TES=
+T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>   =
+
+ =20
 
