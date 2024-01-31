@@ -1,249 +1,174 @@
-Return-Path: <linux-pm+bounces-3036-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3037-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 876CC8439F0
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 09:58:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63190843A1E
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 10:05:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8AD2F1C25A64
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 08:58:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3E291F2F7A3
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 09:05:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90BE57869F;
-	Wed, 31 Jan 2024 08:51:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CF8369D3B;
+	Wed, 31 Jan 2024 08:57:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="jSORXZlm"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZlZoqKvn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2054.outbound.protection.outlook.com [40.107.237.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A59EB7868C;
-	Wed, 31 Jan 2024 08:51:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706691081; cv=fail; b=Q3Y23buzLN/oT75GYOYwxmQqw6uGvlLhj07Wrzn0hQWTfHRwTB+BRROgz6rqjxhDKvRuWU28RLm7ggn4b8IVv9XtYyx7qnZ653VOhmZ0w7o33QcKt/fXIDrIyhVvcCPfRbPtl2YM5qABd7hxeNB6xkdSgieCwquof3QrViCMfHU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706691081; c=relaxed/simple;
-	bh=ohKKIA4xtcilWBTsPJMITM81BtsZ+V41NnNOonRD80k=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XaiINkBalu2uD7bRcYkHIKQRQOXG8iOGUCPhwe9+ePyiolaiXdj8C/vSPHlgg5Fh3LhqTNm6RpBuFf3LYlGPZV251Osg4VUh+ORD+7RIOsIKBp3V5vtQBOR57HJzPR5XqtSXuE7AASkRFEPLtR87Zb94+kxiplENE13z/irJo5k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=jSORXZlm; arc=fail smtp.client-ip=40.107.237.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MMOYUpc19zd0TIDq8AEC/B8K7OFUEXJakORrSM7QW0CZvuW/8AtOYsmd6q5RSLZ3MGh3QojGeeJf+p1cp2xvOmabswEy6I54is3jb2HDZnMDYWWAY1bL1h9NmzSNNFed1gh17vsNJ2VpFow3pXTErXRd+QFoaDrXhXGvXGgw1uy/QLtD3RIABIEF3rk9VBfk/2G6+3YMmmZzjaevFh3Rk1qWwhPXEv8w6CtfZfDCVRT1oJ6C+mnftlFXpMmo17Voh/FqZb1mxMRvXo5+P48qqAv2j9zYYY6wwlc1xNZoFQc2kKbbVCD2dPS4kauA36/5TdLiVcHoKve540cn+Yw7XA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5umN6pS5J9c+mdomfGoF7jCaiSjpCXfrxOMypz1Laqk=;
- b=brRA8qawXh6pf7wgCb3pH3snK2ZYoStxnMgrtQ8GSMCZsIxsgxVuVpMasECfBDV6cLt9gvzacAC+ZjiKSiaImW3RfsbHlnl7oYo4Jchj+mPfMLje06gSaEOH6WJwiLha63USgEPZkSjeEjiUwT2fnW+evwen65jtx0o96ll/KNg2J/QMzcVb6R7aaLtUXDVIM+WhtSMjaJsXKnciElPdt3q082K0fhf4h4gGH7c3dToES9SIqJ7+KEju4vdj/ob6OBTLOmVIONNWfctxOTPxkvWgQxkKREER1EHJUWHUN4HfmuciumVX2zdj6ogAc3ABNogdGHSHQEKseNA80N1U8Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5umN6pS5J9c+mdomfGoF7jCaiSjpCXfrxOMypz1Laqk=;
- b=jSORXZlmYlLubIt+Tih3vyd0ZH07RCCf52jXEE5J1/2RtZkuige/k5nxNkAKcmFoTHXVFNm4t5srNBaHp6+qMGAB5yhY2ogIyYdRgoZJtMI1KhiOOVNQDC7JXz3gkuu3wnadDO0SGEj1JqCYa2irW1aUk4MJbJFLSSrlh6E11A0=
-Received: from CY8P220CA0011.NAMP220.PROD.OUTLOOK.COM (2603:10b6:930:46::28)
- by BL1PR12MB5255.namprd12.prod.outlook.com (2603:10b6:208:315::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.22; Wed, 31 Jan
- 2024 08:51:17 +0000
-Received: from CY4PEPF0000FCC1.namprd03.prod.outlook.com
- (2603:10b6:930:46:cafe::b7) by CY8P220CA0011.outlook.office365.com
- (2603:10b6:930:46::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.22 via Frontend
- Transport; Wed, 31 Jan 2024 08:51:17 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000FCC1.mail.protection.outlook.com (10.167.242.103) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7228.16 via Frontend Transport; Wed, 31 Jan 2024 08:51:17 +0000
-Received: from pyuan-Chachani-VN.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Wed, 31 Jan 2024 02:51:13 -0600
-From: Perry Yuan <perry.yuan@amd.com>
-To: <rafael.j.wysocki@intel.com>, <Mario.Limonciello@amd.com>,
-	<viresh.kumar@linaro.org>, <Ray.Huang@amd.com>, <gautham.shenoy@amd.com>,
-	<Borislav.Petkov@amd.com>
-CC: <Alexander.Deucher@amd.com>, <Xinmei.Huang@amd.com>,
-	<Xiaojian.Du@amd.com>, <Li.Meng@amd.com>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH 6/6] cpufreq:amd-pstate: add quirk for the pstate CPPC capabilities missing
-Date: Wed, 31 Jan 2024 16:50:21 +0800
-Message-ID: <ab45b5a29507460a63d772a0e4b24b83c9b61aa6.1706690577.git.perry.yuan@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1706690577.git.perry.yuan@amd.com>
-References: <cover.1706690577.git.perry.yuan@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D14C569D39
+	for <linux-pm@vger.kernel.org>; Wed, 31 Jan 2024 08:57:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706691435; cv=none; b=ilkVG8u+XUWBRz04pSa6R14yYqVvPBYaBassuE1d4gXX3HwgrSzWRWOCt5QaSBAlHE4L+yvru8W0T0sUlgDIapkDMU9nTx8n0jPpm9NxPMo0of5GOHmwh8N7thOqlfpaJaj4jngdSyrhtrIARW3/s7zjVanoMhBW1n335NiObyY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706691435; c=relaxed/simple;
+	bh=i/0xGVWxmLGZ/l4MKKj0oTxK2I+o2zUxh3bsKs/n+Iw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ficzclbkRI9YKddJBQcwwVY30LbSn+pR3uETtkWnDxsTE4Nnjh+6OZGXLgvg0x6TQ85SO8dSKUJsynPnG7p0TjYii6Wt9PmA3SJ9XYiYEewbx6SByq14tQYJfk3CtoMa7XIn5npZmYM5uVT2BIeObxHYBwzbrjasq41aCxYGvtY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZlZoqKvn; arc=none smtp.client-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-5ff7ec8772dso50473367b3.0
+        for <linux-pm@vger.kernel.org>; Wed, 31 Jan 2024 00:57:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706691432; x=1707296232; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=19iyMKPgVV/OnzcKafV91f/kV0b2fJZ+DHL/skL3AYc=;
+        b=ZlZoqKvnK9OMXxhyDnAHPKZgYrPCtuhp7e1LksxIle5ypFPscvs+hduyajZzs2TsSX
+         RYtsEUu4xAzDEkY49ltoJ7lIGqG7G0rK6numdJxC4EvFci0hvUDp8tpx6A0DUs6i5KDM
+         1eKhPoxhKPrzQgdE5Sbx8fVxdd0T9zA4dLZUHYRnULQpAF0+QagNHE+FNc4uqelEK9nx
+         qA9/80W/aungYw0rIh4aDr26uyquHOWEDT/Tz8/uoZkavhvW27iFUkUhdtfJmgBhtUZi
+         pbKEekHZNNVxIWXfvAWfRHImycGZwF1ggyonJH5IRMLR/Ke0VhT6dhH4rdEjenBJ7KDm
+         gXcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706691432; x=1707296232;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=19iyMKPgVV/OnzcKafV91f/kV0b2fJZ+DHL/skL3AYc=;
+        b=DN0ZM3SqIuXx/fHGX60watOXO13MS8WWh7HpAdZR21YNzTF2NvRFjh71Xsw1ZesfdP
+         wdG42czOZrDoeKqyMZdHzKyNAUUCH1D+qnbZVayh2BzOtcyN4BchmWv69kPtKzbyoQzv
+         EtE3kyd0kJ4faXGbOw9IkGigzt2Asod/H7GvSF2xfe8qQrkTqtvvTBsCsL9a8aOKD2dw
+         xKLqq6dFS3GGNMMGGP04JP/Kr8hcZl0QDUbNZcckW2km1PBbpV4PuoiwFjFsSU7Sx5dF
+         DpSOWgXb0Ao0Jlph/Z7ueRakxeAb1MEx9hEkb0Cyfu49gMy0oPMXTPlLzRrx/IGc8KG3
+         wjzw==
+X-Gm-Message-State: AOJu0YzfWREGx73+sL02KxcA5IiauLqYwGFJg4OpXBOQnP1q/EhkUvX8
+	WuycFcn6uLHZg6bOzXMZql9sMjRWS1R2Tqvve8XOCvGuF9DpFH2v6a8mpYwSPwlBCwJw0/1HDo5
+	2+iSOUHDxuJzf1JgfrB7tDKEYsI0WsCxCRRfzDw==
+X-Google-Smtp-Source: AGHT+IF+kfDZ/YF7mxYh80knn1UBEiVlr7hp7DfiTZ/EqM7NpiukfxSx7V7h2n9hbAXhnmqW7UvF5OBBTxTaOE6Q4vE=
+X-Received: by 2002:a25:7904:0:b0:dc6:7e97:ae62 with SMTP id
+ u4-20020a257904000000b00dc67e97ae62mr1105679ybc.21.1706691431753; Wed, 31 Jan
+ 2024 00:57:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000FCC1:EE_|BL1PR12MB5255:EE_
-X-MS-Office365-Filtering-Correlation-Id: 15a7d7c0-b568-43c2-b3d7-08dc2239c9b0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	IZaqXeeXPS1YCvPgMrjMvoX4xSo+JvM4B8yObD++nb0qJXsA6xiWrCAe0p4BlKER65Pm7Ubzmrp5yNCSRotmgGDartRrl9jp9DyOuxQB5KUbbMzMp7SHhCqOFhfPmoJFpq/hvj9Ed3K3GoThE1oJU+bS3PQFF6SOdseHHFbMfXpDudaqOY4szadEHrnDcjUz1vu5Td+LMEFUbpXCGaAtXtGA/rfHVMpVL0lEWGHHRVJ/BujUgp4Mn6BbkPCjX7hduNy2nZwPFC0p7BLVXgeZiqlzRMykrI/xIKvCAqT6iz4LZ702ajUuOktGGJzlcCXY+uaI/GeyrtFL56r4mQIZfRvIFxoH8tPtAOddGam1w9a6FmBjkc7xAPG0zzzTDAPQ/wHTzU4Yr5hsuhVApmTvPV7bsgI/qpwpUUg6JS3GWD2ie2T2MCzC2slhXLLpPoBFNBfIcxWIs2xr9bh10RnKsn09ChzOrEz5pol8GmwQJa9r7cavsVqnmbUE46BfNAhzhDd96JJa/kbM3pqgLq1mRRLn/v1KNLIB1gDiAjtNHesjFfgPH0Bb5M0Yar3xq14QFuE7D+Kw10opWEbqjI0ciMhtyg17VJ6vQvt9SlI/r8cB+5rRxnD6E1bVoLEZjGRjqP6idN3qLDauCw0zy1gU76EdmKXw6epNclL1QPXodN8kz5O+Q+80dsi5M1W78a6WLk5pQ21OSndWfUDdrxwG+3pyYcOsSWJX1rF8SaQ1Hw4IOU4vYHEFfpmHOOu99n5WnDMVJUsHrEoRqTZqaK7XcQ==
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(376002)(136003)(346002)(396003)(39860400002)(230922051799003)(1800799012)(82310400011)(186009)(64100799003)(451199024)(40470700004)(46966006)(36840700001)(426003)(16526019)(336012)(26005)(2616005)(41300700001)(40460700003)(40480700001)(36860700001)(316002)(6636002)(36756003)(7696005)(478600001)(83380400001)(6666004)(82740400003)(356005)(47076005)(81166007)(54906003)(5660300002)(110136005)(86362001)(70586007)(70206006)(44832011)(4326008)(8676002)(8936002)(2906002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2024 08:51:17.1111
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 15a7d7c0-b568-43c2-b3d7-08dc2239c9b0
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000FCC1.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5255
+References: <20240129115216.96479-1-krzysztof.kozlowski@linaro.org> <20240129115216.96479-5-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20240129115216.96479-5-krzysztof.kozlowski@linaro.org>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Wed, 31 Jan 2024 09:57:00 +0100
+Message-ID: <CACRpkdYf4HUaV-Pjr81WjLbzy9zdAnyFWs9gPayPC6-3OjHQwA@mail.gmail.com>
+Subject: Re: [PATCH v6 4/6] reset: Instantiate reset GPIO controller for
+ shared reset-gpios
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, Banajit Goswami <bgoswami@quicinc.com>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Frank Rowand <frowand.list@gmail.com>, 
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org, 
+	linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Chris Packham <chris.packham@alliedtelesis.co.nz>, 
+	Sean Anderson <sean.anderson@seco.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add quirk table to get CPPC capabilities issue fixed by providing
-correct perf or frequency values while driver loading.
+Hi Krzysztof,
 
-If CPPC capabilities are not defined in the ACPI tables or wrongly
-defined by platform firmware, it needs to use quick to get those
-issues fixed with correct workaround values to make pstate driver
-can be loaded even though there are CPPC capabilities errors.
+something is odd with the addresses on this patch, because neither GPIO
+maintainer is on CC nor linux-gpio@vger, and it's such a GPIO-related
+patch. We only saw it through side effects making <linux/gpio/driver.h>
+optional, as required by this patch.
 
-Signed-off-by: Perry Yuan <perry.yuan@amd.com>
----
- drivers/cpufreq/amd-pstate.c | 51 +++++++++++++++++++++++++++++++-----
- include/linux/amd-pstate.h   |  6 +++++
- 2 files changed, 51 insertions(+), 6 deletions(-)
+Please also CC Geert Uytterhoeven, the author of the GPIO aggregator.
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index eea2e192d748..cbc415af0f08 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -64,6 +64,7 @@ static struct cpufreq_driver amd_pstate_driver;
- static struct cpufreq_driver amd_pstate_epp_driver;
- static int cppc_state = AMD_PSTATE_UNDEFINED;
- static bool cppc_enabled;
-+static struct quirk_entry *quirks;
- 
- /**
-  * struct global_params - Global parameters, mostly tunable via sysfs.
-@@ -121,6 +122,32 @@ static unsigned int epp_values[] = {
- 
- typedef int (*cppc_mode_transition_fn)(int);
- 
-+static struct quirk_entry quirk_amd_7k62 = {
-+	.nominal_freq = 2600,
-+	.lowest_freq = 550,
-+};
-+
-+static int __init dmi_matched(const struct dmi_system_id *dmi)
-+{
-+	quirks = dmi->driver_data;
-+
-+	return 1;
-+}
-+
-+static const struct dmi_system_id amd_pstate_quirks_table[] __initconst = {
-+	{
-+		.callback = dmi_matched,
-+		.ident = "AMD EPYC 7K62",
-+		.matches = {
-+			DMI_MATCH(DMI_PRODUCT_VERSION, "C1"),
-+			DMI_MATCH(DMI_PRODUCT_SERIAL, "FX19911000028"),
-+		},
-+		.driver_data = &quirk_amd_7k62,
-+	},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(dmi, amd_pstate_quirks_table);
-+
- static inline int get_mode_idx_from_str(const char *str, size_t size)
- {
- 	int i;
-@@ -581,13 +608,19 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
- static int amd_get_min_freq(struct amd_cpudata *cpudata)
- {
- 	struct cppc_perf_caps cppc_perf;
-+	u32 lowest_freq;
- 
- 	int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
- 	if (ret)
- 		return ret;
- 
-+	if (quirks && quirks->lowest_freq)
-+		lowest_freq = quirks->lowest_freq;
-+	else
-+		lowest_freq = cppc_perf.lowest_freq;
-+
- 	/* Switch to khz */
--	return cppc_perf.lowest_freq * 1000;
-+	return lowest_freq * 1000;
- }
- 
- static int amd_get_max_freq(struct amd_cpudata *cpudata)
-@@ -619,13 +652,14 @@ static int amd_get_max_freq(struct amd_cpudata *cpudata)
- 
- static int amd_get_nominal_freq(struct amd_cpudata *cpudata)
- {
--	struct cppc_perf_caps cppc_perf;
-+	u32 nominal_freq;
- 
--	int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
--	if (ret)
--		return ret;
-+	if (quirks && quirks->nominal_freq)
-+		nominal_freq = quirks->nominal_freq;
-+	else
-+		nominal_freq = READ_ONCE(cpudata->nominal_freq);
- 
--	return cppc_perf.nominal_freq;
-+	return nominal_freq;
- }
- 
- static int amd_get_lowest_nonlinear_freq(struct amd_cpudata *cpudata)
-@@ -1623,6 +1657,11 @@ static int __init amd_pstate_init(void)
- 	if (cpufreq_get_current_driver())
- 		return -EEXIST;
- 
-+	quirks = NULL;
-+
-+	/* check if this machine need CPPC quirks */
-+	dmi_check_system(amd_pstate_quirks_table);
-+
- 	switch (cppc_state) {
- 	case AMD_PSTATE_UNDEFINED:
- 		/* Disable on the following configs by default:
-diff --git a/include/linux/amd-pstate.h b/include/linux/amd-pstate.h
-index 446394f84606..ea80f961607d 100644
---- a/include/linux/amd-pstate.h
-+++ b/include/linux/amd-pstate.h
-@@ -110,4 +110,10 @@ static const char * const amd_pstate_mode_string[] = {
- 	[AMD_PSTATE_GUIDED]      = "guided",
- 	NULL,
- };
-+
-+struct quirk_entry {
-+	u32 nominal_freq;
-+	u32 lowest_freq;
-+};
-+
- #endif /* _LINUX_AMD_PSTATE_H */
--- 
-2.34.1
+i.e. this:
+> 2. !GPIOLIB stub:
+>    https://lore.kernel.org/all/20240125081601.118051-3-krzysztof.kozlowsk=
+i@linaro.org/
 
+On Mon, Jan 29, 2024 at 12:53=E2=80=AFPM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+
+> Devices sharing a reset GPIO could use the reset framework for
+> coordinated handling of that shared GPIO line.  We have several cases of
+> such needs, at least for Devicetree-based platforms.
+>
+> If Devicetree-based device requests a reset line, while "resets"
+> Devicetree property is missing but there is a "reset-gpios" one,
+> instantiate a new "reset-gpio" platform device which will handle such
+> reset line.  This allows seamless handling of such shared reset-gpios
+> without need of changing Devicetree binding [1].
+>
+> To avoid creating multiple "reset-gpio" platform devices, store the
+> Devicetree "reset-gpios" GPIO specifiers used for new devices on a
+> linked list.  Later such Devicetree GPIO specifier (phandle to GPIO
+> controller, GPIO number and GPIO flags) is used to check if reset
+> controller for given GPIO was already registered.
+>
+> If two devices have conflicting "reset-gpios" property, e.g. with
+> different ACTIVE_xxx flags, this would allow to spawn two separate
+> "reset-gpio" devices, where the second would fail probing on busy GPIO
+> request.
+>
+> Link: https://lore.kernel.org/all/YXi5CUCEi7YmNxXM@robh.at.kernel.org/ [1=
+]
+> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Cc: Sean Anderson <sean.anderson@seco.com>
+> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+(...)
+
+In my naive view, this implements the following:
+
+reset -> virtual "gpio" -> many physical gpios[0..n]
+
+So if there was already a way in the kernel to map one GPIO to
+many GPIOs, the framework could just use that with a simple
+single GPIO?
+
+See the bindings in:
+Documentation/devicetree/bindings/gpio/gpio-delay.yaml
+
+This is handled by drivers/gpio/gpio-aggregator.c.
+
+This supports a 1-to-1 map: one GPIO in, one GPIO out, same offset.
+So if that is extended to support 1-to-many, this problem is solved.
+
+Proposed solution: add a single boolean property such as
+aggregate-all-gpios; to the gpio-delay node, making it provide
+one single gpio at offset 0 on the consumer side, and refuse any
+more consumers.
+
+This will also solve the problem with induced delays on
+some GPIO lines as I can see was discussed in the bindings,
+the gpio aggregator already supports that, but it would work
+fine with a delay being zero as well.
+
+This avoids all the hackery with driver stubs etc as well.
+
+Yours,
+Linus Walleij
 
