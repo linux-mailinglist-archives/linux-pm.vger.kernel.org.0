@@ -1,146 +1,150 @@
-Return-Path: <linux-pm+bounces-3029-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3030-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1C908439DB
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 09:55:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58CD98439E2
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 09:56:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 838F3B29B23
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 08:55:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0FFF6285619
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 08:56:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9FF160DCC;
-	Wed, 31 Jan 2024 08:49:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6231C62A1C;
+	Wed, 31 Jan 2024 08:50:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e78gPVkS"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="zNJpONKb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2064.outbound.protection.outlook.com [40.107.94.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9425A69DF0;
-	Wed, 31 Jan 2024 08:49:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706690971; cv=none; b=ryhUjxMZR7IBNSBvzish2VZ53PW3r0WdViaDvCy234ioZxhs8ZOecpYbb7pDKO6760ZZjx26QLwROEQDRKRZUt4UBiRfcrSh6F8pgS7ckYHmxsywPaY4WxzaT/WwiaI7TQWjJ6Z7oqBEnM67x/a4LsrUgh6u8Ao4WSj+eKOlIcs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706690971; c=relaxed/simple;
-	bh=DfZcsWA9ZiJQJnhw+Dlmf+rz4QBaLMOI1TuUkGh7YpY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HcYeZbMw0P3j4Io0ST+Ky7cRUzcVrqoZdrQgwAR9Y+sgs+9PQL1610B6jH6jT/LaqbhQWgyG6q7iNCTblCNw5tfUMd8AbbocPsInLNYt5X/dibSR2zuqVMvViXiqHBIbb6NDI0a6RTzZX+Nu3vcclGSCx1qVy4nbIkLQnAClLz4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e78gPVkS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 242BFC433F1;
-	Wed, 31 Jan 2024 08:49:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706690971;
-	bh=DfZcsWA9ZiJQJnhw+Dlmf+rz4QBaLMOI1TuUkGh7YpY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=e78gPVkSswXNVxrTpgc3uqnClcHNOzUx0e+TnHsysfypkrDC7guPj7rnKflIizUtN
-	 NUiJaN1GtNrkmmJLGqaaT0TUv+U5ep074UDrDzt+gZe1LtLowojHTMOeYz001u9gk2
-	 3OUf70GW/bZCCPY+xd4+lf7eExvmEiMYsQltxViaAwgoiOzsvHBQ+RE9Q4pwqwLA6M
-	 CG5xYe5/LHMrt6bP9qs8t1VNW891rQdiDtrsw+NrdI8BT/RAoELujxl2CCMLDWQYKt
-	 Wpb5JnjbQaNrrzW/Xgm+Z2QNPhqQQ7xzgGXms59nifzufP/bOgsIa9W78U0el6J7oH
-	 werrdYsUuNm6w==
-Date: Wed, 31 Jan 2024 08:49:24 +0000
-From: Lee Jones <lee@kernel.org>
-To: Biju Das <biju.das.jz@bp.renesas.com>
-Cc: Wim Van Sebroeck <wim@linux-watchdog.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Support Opensource <support.opensource@diasemi.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Steve Twiss <stwiss.opensource@diasemi.com>,
-	"linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	"biju.das.au" <biju.das.au@gmail.com>,
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>
-Subject: Re: [PATCH v6 0/8] Convert DA906{1,2} bindings to json-schema
-Message-ID: <20240131084924.GD8551@google.com>
-References: <20231214080911.23359-1-biju.das.jz@bp.renesas.com>
- <170316812973.586675.6248412029985031979.b4-ty@kernel.org>
- <20231221143318.GH10102@google.com>
- <TYCPR01MB1126921A54B9260CC33505FCA867E2@TYCPR01MB11269.jpnprd01.prod.outlook.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E5E4204B;
+	Wed, 31 Jan 2024 08:50:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.64
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706691042; cv=fail; b=sGUQ+SL9AxAg7JsjtocVN7y0sqsd6OXGV4v+GKYnbZOg3AlT1o+I5Qbugc2IshH7hpEHLidHYe3UKvAn1v2R0CA4qm8EmNnc+/xkO6HjfzdAY600uI1j/8IDqlOuJVo5PErqwzVcRTXg5mIx+A+k3sm9lHiPIaEWonlt2sWmx68=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706691042; c=relaxed/simple;
+	bh=47bmkUd05L2fvMc60yNEXSm/t4/z0xaYx7bf+7D7mU4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=h+ORIw/N8yGs1/gOgqKpRxMSRkIiLHZeN+3zLHFF/D6eMGIdAO0rmC8uStitA8qoB+f+0m1v8Moh0Tr3HEjK8JB9fCL2zN9BA/Qkihq2SCwGL2n23LEK25+vxVYtwHd1A0aMMnvFJhDXVfUpr4pBwuxyNazO1juCv1mIqbZxPKk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=zNJpONKb; arc=fail smtp.client-ip=40.107.94.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SHkVnNqD4WF8qSm4xwRN0blcGaexr/X3E1ixaxd4PXHUZY09xh+sahyQSxH/bnHjUv+2uTnI4k6WLA8juV2uhJNRB1lGKvLx+aP5nZoBFIJQlB3I0d9nryqonxhewzi9tXLmZSe3P0lqCOJmrGRXXa+/IfGrNlmjwZHno1kNhyr+XsRrnwHIQXn8MkkLztoqTF8o//0Iaoj15AfKKiGOSN+gbWohKr5r7Fga1RTIdvABUtaswdNUXC0jrKTtXtZRTTrfPIQgx4f+hEjNNVvkzG7yEa6sN09QbGzS9O1YC84hMxZhnsZaT277lfF/fzu5D/Z4bICfhoKszvCLcQfp9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AkNCRbyiz1pbLO5c0nCyf7uLgZu/3YvIGzBTEIr3CC4=;
+ b=JZ9NSJXO0FRzowmE4apmIudCcD/8r9cXy/eiPLAGVOARzekfbclQIPtRv2A/nt9+hEOh5EOG4RIoprB03KrWNmFrOSznsgUflV2qWzRcRgMdr4uDKhEAPbfTWOEh5BIzmfbrHh+wHcwA4Om5q5erkjFMugA21mqPtzf9hUJJlPaJyhnU+5mJSM3ykATqLBJQ8r/XJYbFQwdhJc++YLgurq9GieplhHYSQpkqey5926Xo391g0rC6F0MTUGULoAPioT1zjsJj6GQMeKvUWAb96nScnSi9rkqENbT/aRuGyZJcEeYR4YJI0gCNA8NUhEbmy9XZPAWjAYBom8NiOdUFpg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AkNCRbyiz1pbLO5c0nCyf7uLgZu/3YvIGzBTEIr3CC4=;
+ b=zNJpONKb8QqJdYNvVqsLVGGeKfZpS9lFtvSBaN4JWkdYqVkBTRAdBroL7nFje/HExwTxNOLZQCJPXwg2vOQtMoOUi9uuz7j8i5fL4z7SN9glGpGbmosg6sn1siDVfqxAtJ/uE1bNF50bGHQgWSv5XzG7TADcS6MrBSf4eV3M0U0=
+Received: from CY5PR15CA0088.namprd15.prod.outlook.com (2603:10b6:930:18::29)
+ by CY8PR12MB8244.namprd12.prod.outlook.com (2603:10b6:930:72::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.34; Wed, 31 Jan
+ 2024 08:50:36 +0000
+Received: from CY4PEPF0000FCC5.namprd03.prod.outlook.com (2603:10b6:930:18::4)
+ by CY5PR15CA0088.outlook.office365.com (2603:10b6:930:18::29) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7249.22 via Frontend Transport; Wed, 31 Jan 2024 08:50:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000FCC5.mail.protection.outlook.com (10.167.242.107) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7181.13 via Frontend Transport; Wed, 31 Jan 2024 08:50:36 +0000
+Received: from pyuan-Chachani-VN.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Wed, 31 Jan 2024 02:50:33 -0600
+From: Perry Yuan <perry.yuan@amd.com>
+To: <rafael.j.wysocki@intel.com>, <Mario.Limonciello@amd.com>,
+	<viresh.kumar@linaro.org>, <Ray.Huang@amd.com>, <gautham.shenoy@amd.com>,
+	<Borislav.Petkov@amd.com>
+CC: <Alexander.Deucher@amd.com>, <Xinmei.Huang@amd.com>,
+	<Xiaojian.Du@amd.com>, <Li.Meng@amd.com>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: [PATCH 0/6] AMD Pstate Fixes And Enhancements
+Date: Wed, 31 Jan 2024 16:50:15 +0800
+Message-ID: <cover.1706690577.git.perry.yuan@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <TYCPR01MB1126921A54B9260CC33505FCA867E2@TYCPR01MB11269.jpnprd01.prod.outlook.com>
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000FCC5:EE_|CY8PR12MB8244:EE_
+X-MS-Office365-Filtering-Correlation-Id: 977e7313-c533-4e7e-5af9-08dc2239b1ab
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	JmSlfwPUvtykcHXBOcIg8H6swxylxsv+k62QntWSzMxzAIa+Tjc/iv8el2AebQA66p+Clt3rngit02mNWxiiUmPmaE/2VQoBXFkdTCSjbV5fX58JVrV0mF3W77sOdBA1tHwNVIK6W5UGCVBv/oLgj7ADicKLcSDmRQrIst7zTGhtBjXzS0Assx8xpf3seO7iM/eugzXzrvfAYxWx7grT1tw6dO3AiTj8JGm8JP11Z/mXhpS3h4LKOsWBrM7VY1MISs9Lc/8mQWIze2pYk+XvUiMbij7EVEfVV/JpOh5+6c3UZ3cUg5ze4/qPdSjFey53gX/bmyKEKvbVWlhKndE5Ze3qf5uviBXw4D+ysBdxZKJ41ylw5mZEkRpDrXXiXVlMJWax3jcV5ExnO0v/u6HDlnrH+wR/79KQpjJN4EsOsaInrYMmbTg0ycts8bk3pN98KxqXQ2nJWG9OYkvMGMJ39jUeeEZwMnzaOc87uzNMwEeCCKTxdKLttcMZpkgOtsVh8QicfMjBz0gG2O+mHD2d2jfGZwHjn792rjBpk2B5+ML0RO966et9pgj0X8c/zdVwlEpYYNPJ06aVm6SFT95HsOaiPwbpgG9XyPq+hMH10fgL9PIqEZjxszn8k1GrlQ9IJWl89kJXCzGFbUHR3aoXH/WiocO464l7eGkEyuW6cBCoglbOp3q4SZ/H4n0mFVd3t5NnYpOi4SIm2KtADyQmRAb7FR08MhKqvMURXIH6+DHtGYLadGDKjhBrF3SEd+Ni2gJqZO35K/KnsA+2UELnuA==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(376002)(136003)(346002)(396003)(230922051799003)(64100799003)(451199024)(82310400011)(1800799012)(186009)(46966006)(36840700001)(40470700004)(40460700003)(40480700001)(426003)(16526019)(26005)(5660300002)(336012)(478600001)(70586007)(70206006)(83380400001)(2906002)(4326008)(7696005)(6666004)(110136005)(316002)(6636002)(54906003)(8676002)(8936002)(2616005)(44832011)(36860700001)(356005)(81166007)(82740400003)(47076005)(86362001)(36756003)(41300700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Jan 2024 08:50:36.8107
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 977e7313-c533-4e7e-5af9-08dc2239b1ab
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000FCC5.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8244
 
-On Mon, 29 Jan 2024, Biju Das wrote:
+The patch series adds some fixes and enhancements to the AMD pstate driver.
+It enables CPPC v2 for certain processors in the family 17H, as requested
+by TR40 processor users who expect improved performance and lower system
+temperature. 
 
-> Hi Lee Jones,
-> 
-> > -----Original Message-----
-> > From: Lee Jones <lee@kernel.org>
-> > Sent: Thursday, December 21, 2023 2:33 PM
-> > Subject: Re: [PATCH v6 0/8] Convert DA906{1,2} bindings to json-schema
-> > 
-> > On Thu, 21 Dec 2023, Lee Jones wrote:
-> > 
-> > > On Thu, 14 Dec 2023 08:09:03 +0000, Biju Das wrote:
-> > > > Convert the below bindings to json-schema
-> > > > 1) DA906{1,2} mfd bindings
-> > > > 2) DA906{1,2,3} onkey bindings
-> > > > 3) DA906{1,2,3} thermal bindings
-> > > >
-> > > > Also add fallback for DA9061 watchdog device and document
-> > > > DA9063 watchdog device.
-> > > >
-> > > > [...]
-> > >
-> > > Applied, thanks!
-> > >
-> > > [1/8] dt-bindings: mfd: da9062: Update watchdog description
-> > >       commit: 9e7b13b805bcbe5335c2936d4c7ea0323ac69a81
-> > > [2/8] dt-bindings: watchdog: dlg,da9062-watchdog: Add fallback for
-> > DA9061 watchdog
-> > >       commit: 28d34db7772f18490b52328f04a3bf69ed5390d2
-> > > [3/8] dt-bindings: watchdog: dlg,da9062-watchdog: Document DA9063
-> > watchdog
-> > >       commit: d2a7dbb808870c17cffa2749ea877f61f298d098
-> > > [4/8] dt-bindings: mfd: dlg,da9063: Update watchdog child node
-> > >       commit: d4018547a15a94c7e865b2cef82bff1cd43a32b3
-> > > [5/8] dt-bindings: input: Convert da906{1,2,3} onkey to json-schema
-> > >       commit: db459d3da7bb9c37cb86897c7b321a49f8e40968
-> > > [6/8] dt-bindings: thermal: Convert da906{1,2} thermal to json-schema
-> > >       commit: 998f499c843e360bcd9ee1fe9addc3b5d32f1234
-> > > [7/8] dt-bindings: mfd: dlg,da9063: Sort child devices
-> > >       commit: 2bbf9d2a8e3bc933703dfda87cac953bed458496
-> > > [8/8] dt-bindings: mfd: dlg,da9063: Convert da9062 to json-schema
-> > >       commit: 522225161830f6a93f2aaabda99226c1ffddc8c4
-> > 
-> > Submitted for testing.  Pull-request to follow.
-> 
-> The commit dc805ea058c0e ("MAINTAINERS: rectify entry for DIALOG SEMICONDUCTOR DRIVERS")
-> in mainline will give a conflict for patch#1.
-> 
-> Patch#2 and patch#3 are already in mainline.
-> 
-> 
-> Please let me know if you want me to rebase and resend the patch series
+Additionally, it fixes the initialization of nominal_freq for each cpudata
+and changes latency and delay values to be read from platform firmware firstly
+for more accurate timing. 
 
-That would be helpful, thanks.
+A new quirk is also added for legacy processors that lack CPPC capabilities,
+which caused the pstate driver to fail loading. 
 
-Please ensure all of the patches have my:
+I would greatly appreciate any feedbacks.
 
-Acked-by: Lee Jones <lee@kernel.org>
+Thank you!
 
-... applied, then I'll know to just apply them again.
+
+Perry Yuan (6):
+  ACPI: CPPC: enable AMD CPPC V2 support for family 17h processors
+  cpufreq:amd-pstate: fix the nominal freq value set
+  cpufreq:amd-pstate: initialize nominal_freq of each cpudata
+  cpufreq:amd-pstate: get pstate transition delay and latency value from
+    ACPI tables
+  cppc_acpi: print error message if CPPC is unsupported
+  cpufreq:amd-pstate: add quirk for the pstate CPPC capabilities missing
+
+ arch/x86/kernel/acpi/cppc.c  |   2 +-
+ drivers/acpi/cppc_acpi.c     |   6 +-
+ drivers/cpufreq/amd-pstate.c | 112 ++++++++++++++++++++++++++++-------
+ include/linux/amd-pstate.h   |   6 ++
+ 4 files changed, 102 insertions(+), 24 deletions(-)
 
 -- 
-Lee Jones [李琼斯]
+2.34.1
+
 
