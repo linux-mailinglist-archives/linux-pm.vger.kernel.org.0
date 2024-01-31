@@ -1,199 +1,190 @@
-Return-Path: <linux-pm+bounces-3105-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3108-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3F9B844594
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 18:07:08 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F2FC84460F
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 18:25:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 497D8B2EE01
-	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 16:57:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0687CB2EEC1
+	for <lists+linux-pm@lfdr.de>; Wed, 31 Jan 2024 17:08:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C320212C54E;
-	Wed, 31 Jan 2024 16:56:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 621DC137C3F;
+	Wed, 31 Jan 2024 17:06:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="rZ+y9KQN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZNCksp1F"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4116012C522;
-	Wed, 31 Jan 2024 16:56:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32C6B13667A;
+	Wed, 31 Jan 2024 17:06:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706720177; cv=none; b=cr4OwY9TWqOSoXFMFQrxpiT5QMeCfYkFkg39OoSXxqydHrsqBPj1y9ouRfqX1yHldnx+1nTGvbiumhLPPRhT1aWm11Csn3wLwdYv4o8DV9yIL5NopPaHsisqu0IqySRy1tiTTlg44TbsEkQcdHFZA+lsYMmJGP1BTB6Wz1ctDwI=
+	t=1706720771; cv=none; b=N2TcAPzIDLiV1cVnQyr84iP0BWkuUvLobclmf0zHSe2M00XdOveg+sd1U0ZtXAgKvfS9BakTZfGqLq9Y3iI3gec2i0liL++2oTdrz9ObBHa9K4oulSAFgtzU/8aXI6YGjVt3Zh0fHx/Dtane6VZax2NCu8BwEku+zdkllPBJeEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706720177; c=relaxed/simple;
-	bh=wqEyR5IykLjkRZWjBqfISdN6LAuQbshQspGGNzb4xB4=;
-	h=In-Reply-To:References:From:To:Cc:Subject:MIME-Version:
-	 Content-Disposition:Content-Type:Message-Id:Date; b=GnU3I8unCQwvB1RqUaDyD/mypXv+VfI4boj/l4H1TVjWMskOn42+zZQjjVePvWl1iuUCrGQ5GhesSDRYmfZb/9MO6c9Z9PKtqC4PK+f5wlrRogH7a3sjyCYJjXuCSbATPFzGuTVlnK/K+bywg/dc9FNiT49sauSxBtDki34D83Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=rZ+y9KQN; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
-	Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
-	In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=f5npkqxZTlvintQfJQR7JFbNovddfzG1yIBSkxo5huM=; b=rZ+y9KQNys/vt6EBJk4R2yPaCi
-	4OKNmwHWIF+OvTh5I/L9c8gwiS0OLuRncsIm3vvJTYzYGyPl24yFVpR090gnimcgSNH4/GiyFcrOL
-	lo7MDovAf/jMcoyctkWeHbWsOhFg1IxstP5eHZd5CdG23fpLnqXRtDHdHfWjdJ3oosl9pHh3hxHZg
-	r2+PFBLmUHdJ4D/F3kO4APh+Oc6e2sTVlnuToDH0/pAkBPVdmJqL+SJY0KZArZMEf0BAplgmV1BIc
-	QZwZ7uqRz3oAg8aTWw8NVtu2aty6N2PFsYTvEqAMD1hsLAhC9AMdtmWwhXCCxy7U0WDeoMRR67yJb
-	aL9h6OEQ==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:33590 helo=rmk-PC.armlinux.org.uk)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <rmk@armlinux.org.uk>)
-	id 1rVDnT-0003WQ-1m;
-	Wed, 31 Jan 2024 16:50:47 +0000
-Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-	id 1rVDnP-0027ZZ-BN; Wed, 31 Jan 2024 16:50:43 +0000
-In-Reply-To: <Zbp5xzmFhKDAgHws@shell.armlinux.org.uk>
-References: <Zbp5xzmFhKDAgHws@shell.armlinux.org.uk>
-From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-To: linux-pm@vger.kernel.org,
-	 loongarch@lists.linux.dev,
-	 linux-acpi@vger.kernel.org,
-	 linux-arch@vger.kernel.org,
-	 linux-kernel@vger.kernel.org,
-	 linux-arm-kernel@lists.infradead.org,
-	 linux-riscv@lists.infradead.org,
-	 kvmarm@lists.linux.dev,
-	 x86@kernel.org,
-	 acpica-devel@lists.linuxfoundation.org,
-	 linux-csky@vger.kernel.org,
-	 linux-doc@vger.kernel.org,
-	 linux-ia64@vger.kernel.org,
-	 linux-parisc@vger.kernel.org
-Cc: Salil Mehta <salil.mehta@huawei.com>,
-	 Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	 jianyong.wu@arm.com,
-	 justin.he@arm.com,
-	 James Morse <james.morse@arm.com>,
-	 Jonathan Cameron <Jonathan.Cameron@Huawei.com>,
-	 "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH RFC v4 13/15] ACPI: add support to (un)register CPUs based on
- the _STA enabled bit
+	s=arc-20240116; t=1706720771; c=relaxed/simple;
+	bh=ZjcrxFg1hnrta7ciPG5Og/joULJ3zKe+MVtOVuq+pr0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=filCBuK8VTWp2gVFqST7/FjUlG++g0Q1aW30KNrq8b+ZfBUvd4jq4D5yII3ad0B5QMAfi3o02toIPxpqkUbDMZhitsy8CYhkGeuyVG/GEjOGquWQgxtdcznawwn8U8j4LM0tyLcpcqIaeEsiZq+/jayhr26+JbZ8CH8uTy87ReA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZNCksp1F; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61BF2C43390;
+	Wed, 31 Jan 2024 17:06:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706720770;
+	bh=ZjcrxFg1hnrta7ciPG5Og/joULJ3zKe+MVtOVuq+pr0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZNCksp1FIgikfdABTYW84TgA6P1C5iULu4a2VZR6q1vG58VseZCVQRDBSZdQCMX/f
+	 7lswsqJ6MVMVjbfO8cUE7qboO46EryZAZmMUdeBfuIaYdSTM4xu1Yxbe5/BBbpAVkR
+	 KN57QNbxEHDNonDBY7HvskRdFB10FSXwFg1A/F1e4oMNHD2xcSQqC5ug2D0qr4XZl1
+	 uVj54Kypmt2lXNZMLRsW9Q1r2/7SU2fEqfX5jt+exTkbw75x5MrtGXEXFx2STsaZGo
+	 WAq+8TAHSrUXbSXpHtt0ixzofwCx7aJma/Bl24kITOxcpqUf7N4hYBKmsP9UdDIfFc
+	 +meoq6tuBNS3A==
+Date: Wed, 31 Jan 2024 11:06:08 -0600
+From: Rob Herring <robh@kernel.org>
+To: David Dai <davidai@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Saravana Kannan <saravanak@google.com>,
+	Quentin Perret <qperret@google.com>,
+	Masami Hiramatsu <mhiramat@google.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Pavan Kondeti <quic_pkondeti@quicinc.com>,
+	Gupta Pankaj <pankaj.gupta@amd.com>, Mel Gorman <mgorman@suse.de>,
+	kernel-team@android.com, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] dt-bindings: cpufreq: add virtual cpufreq device
+Message-ID: <20240131170608.GA1441369-robh@kernel.org>
+References: <20240127004321.1902477-1-davidai@google.com>
+ <20240127004321.1902477-2-davidai@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1rVDnP-0027ZZ-BN@rmk-PC.armlinux.org.uk>
-Sender: Russell King <rmk@armlinux.org.uk>
-Date: Wed, 31 Jan 2024 16:50:43 +0000
+In-Reply-To: <20240127004321.1902477-2-davidai@google.com>
 
-From: James Morse <james.morse@arm.com>
+On Fri, Jan 26, 2024 at 04:43:15PM -0800, David Dai wrote:
+> Adding bindings to represent a virtual cpufreq device.
+> 
+> Virtual machines may expose MMIO regions for a virtual cpufreq device
+> for guests to read frequency information or to request frequency
+> selection. The virtual cpufreq device has an individual controller for
+> each frequency domain. Performance points for a given domain can be
+> normalized across all domains for ease of allowing for virtual machines
+> to migrate between hosts.
+> 
+> Co-developed-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: David Dai <davidai@google.com>
+> ---
+>  .../cpufreq/qemu,cpufreq-virtual.yaml         | 110 ++++++++++++++++++
 
-acpi_processor_get_info() registers all present CPUs. Registering a
-CPU is what creates the sysfs entries and triggers the udev
-notifications.
+> +    const: qemu,virtual-cpufreq
 
-arm64 virtual machines that support 'virtual cpu hotplug' use the
-enabled bit to indicate whether the CPU can be brought online, as
-the existing ACPI tables require all hardware to be described and
-present.
+Well, the filename almost matches the compatible.
 
-If firmware describes a CPU as present, but disabled, skip the
-registration. Such CPUs are present, but can't be brought online for
-whatever reason. (e.g. firmware/hypervisor policy).
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description:
+> +      Address and size of region containing frequency controls for each of the
+> +      frequency domains. Regions for each frequency domain is placed
+> +      contiguously and contain registers for controlling DVFS(Dynamic Frequency
+> +      and Voltage) characteristics. The size of the region is proportional to
+> +      total number of frequency domains. This device also needs the CPUs to
+> +      list their OPPs using operating-points-v2 tables. The OPP tables for the
+> +      CPUs should use normalized "frequency" values where the OPP with the
+> +      highest performance among all the vCPUs is listed as 1024 KHz. The rest
+> +      of the frequencies of all the vCPUs should be normalized based on their
+> +      performance relative to that 1024 KHz OPP. This makes it much easier to
+> +      migrate the VM across systems which might have different physical CPU
+> +      OPPs.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    // This example shows a two CPU configuration with a frequency domain
+> +    // for each CPU showing normalized performance points.
+> +    cpus {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      cpu@0 {
+> +        compatible = "arm,armv8";
+> +        device_type = "cpu";
+> +        reg = <0x0>;
+> +        operating-points-v2 = <&opp_table0>;
+> +      };
+> +
+> +      cpu@1 {
+> +        compatible = "arm,armv8";
+> +        device_type = "cpu";
+> +        reg = <0x0>;
+> +        operating-points-v2 = <&opp_table1>;
+> +      };
+> +    };
+> +
+> +    opp_table0: opp-table-0 {
+> +      compatible = "operating-points-v2";
+> +
+> +      opp64000 { opp-hz = /bits/ 64 <64000>; };
 
-Once firmware sets the enabled bit, the CPU can be registered and
-brought online by user-space. Online CPUs, or CPUs that are missing
-an _STA method must always be registered.
+opp-64000 is the preferred form.
 
-When firmware clears the enabled bit, we need to unregister the CPU
-for symetry. As this is dependent on hotplug CPU being support, and
-arch_unregister_cpu() only exists when hotplug CPU is supported,
-we need to add a check for that configuration symbol.
+> +      opp128000 { opp-hz = /bits/ 64 <128000>; };
+> +      opp192000 { opp-hz = /bits/ 64 <192000>; };
+> +      opp256000 { opp-hz = /bits/ 64 <256000>; };
+> +      opp320000 { opp-hz = /bits/ 64 <320000>; };
+> +      opp384000 { opp-hz = /bits/ 64 <384000>; };
+> +      opp425000 { opp-hz = /bits/ 64 <425000>; };
+> +    };
+> +
+> +    opp_table1: opp-table-1 {
+> +      compatible = "operating-points-v2";
+> +
+> +      opp64000 { opp-hz = /bits/ 64 <64000>; };
+> +      opp128000 { opp-hz = /bits/ 64 <128000>; };
+> +      opp192000 { opp-hz = /bits/ 64 <192000>; };
+> +      opp256000 { opp-hz = /bits/ 64 <256000>; };
+> +      opp320000 { opp-hz = /bits/ 64 <320000>; };
+> +      opp384000 { opp-hz = /bits/ 64 <384000>; };
+> +      opp448000 { opp-hz = /bits/ 64 <448000>; };
+> +      opp512000 { opp-hz = /bits/ 64 <512000>; };
+> +      opp576000 { opp-hz = /bits/ 64 <576000>; };
+> +      opp640000 { opp-hz = /bits/ 64 <640000>; };
+> +      opp704000 { opp-hz = /bits/ 64 <704000>; };
+> +      opp768000 { opp-hz = /bits/ 64 <768000>; };
+> +      opp832000 { opp-hz = /bits/ 64 <832000>; };
+> +      opp896000 { opp-hz = /bits/ 64 <896000>; };
+> +      opp960000 { opp-hz = /bits/ 64 <960000>; };
+> +      opp1024000 { opp-hz = /bits/ 64 <1024000>; };
+> +
+> +    };
 
-Signed-off-by: James Morse <james.morse@arm.com>
-Tested-by: Miguel Luis <miguel.luis@oracle.com>
-Tested-by: Vishnu Pajjuri <vishnu@os.amperecomputing.com>
-Tested-by: Jianyong Wu <jianyong.wu@arm.com>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
----
-Changes since RFC v3 (smaller series):
- * Squash "ACPI: processor: Only call arch_unregister_cpu() if
-   HOTPLUG_CPU is selected" into this patch.
----
- drivers/acpi/acpi_processor.c | 33 +++++++++++++++++++++++++++++++--
- 1 file changed, 31 insertions(+), 2 deletions(-)
+I don't recall your prior versions having an OPP table. Maybe it was 
+incomplete. You are designing the "h/w" interface. Why don't you make it 
+discoverable or implicit (fixed for the h/w)? Do you really need it if 
+the frequency is normalized?
 
-diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.c
-index d1d33e74216c..5e641180c45a 100644
---- a/drivers/acpi/acpi_processor.c
-+++ b/drivers/acpi/acpi_processor.c
-@@ -228,6 +228,32 @@ static int acpi_processor_make_present(struct acpi_processor *pr)
- 	return ret;
- }
- 
-+static int acpi_processor_make_enabled(struct acpi_processor *pr)
-+{
-+	unsigned long long sta;
-+	acpi_status status;
-+	bool present, enabled;
-+
-+	if (!acpi_has_method(pr->handle, "_STA"))
-+		return arch_register_cpu(pr->id);
-+
-+	status = acpi_evaluate_integer(pr->handle, "_STA", NULL, &sta);
-+	if (ACPI_FAILURE(status))
-+		return -ENODEV;
-+
-+	present = sta & ACPI_STA_DEVICE_PRESENT;
-+	enabled = sta & ACPI_STA_DEVICE_ENABLED;
-+
-+	if (cpu_online(pr->id) && (!present || !enabled)) {
-+		pr_err_once(FW_BUG "CPU %u is online, but described as not present or disabled!\n", pr->id);
-+		add_taint(TAINT_FIRMWARE_WORKAROUND, LOCKDEP_STILL_OK);
-+	} else if (!present || !enabled) {
-+		return -ENODEV;
-+	}
-+
-+	return arch_register_cpu(pr->id);
-+}
-+
- static int acpi_processor_get_info(struct acpi_device *device)
- {
- 	union acpi_object object = { 0 };
-@@ -318,7 +344,7 @@ static int acpi_processor_get_info(struct acpi_device *device)
- 	 */
- 	if (!invalid_logical_cpuid(pr->id) && cpu_present(pr->id) &&
- 	    !get_cpu_device(pr->id)) {
--		int ret = arch_register_cpu(pr->id);
-+		int ret = acpi_processor_make_enabled(pr);
- 
- 		if (ret)
- 			return ret;
-@@ -511,7 +537,7 @@ static void acpi_processor_post_eject(struct acpi_device *device)
- 	unsigned long long sta;
- 	acpi_status status;
- 
--	if (!device)
-+	if (!IS_ENABLED(CONFIG_HOTPLUG_CPU) || !device)
- 		return;
- 
- 	pr = acpi_driver_data(device);
-@@ -526,6 +552,9 @@ static void acpi_processor_post_eject(struct acpi_device *device)
- 		acpi_processor_make_not_present(device);
- 		return;
- 	}
-+
-+	if (cpu_present(pr->id) && !(sta & ACPI_STA_DEVICE_ENABLED))
-+		arch_unregister_cpu(pr->id);
- }
- 
- #ifdef CONFIG_ARCH_MIGHT_HAVE_ACPI_PDC
--- 
-2.30.2
+Also, we have "opp-level" for opaque values that aren't Hz.
 
+Rob
 
