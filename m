@@ -1,68 +1,68 @@
-Return-Path: <linux-pm+bounces-3184-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3185-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4B32846009
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 19:35:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF23A846013
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 19:37:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9AF08293380
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 18:35:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1DC17B223CB
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 18:37:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82F7912FB0E;
-	Thu,  1 Feb 2024 18:35:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 484C941757;
+	Thu,  1 Feb 2024 18:37:51 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D712612FB1E;
-	Thu,  1 Feb 2024 18:35:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6FA25B664;
+	Thu,  1 Feb 2024 18:37:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706812521; cv=none; b=MNFezmk4IY2l2DCl335SnZXJyEVG+aIGZk3ucxuLM0tRzjZBf1oJ6CA1KDRCXMVarWo2oASqlE8B84tuMSQkrj/a15wf8aQbNjpEfy4ZZ48vdQhcPpzOwZqjw/fz/sb92OHMekoRr3kaiXB9SBwQpenMrgAQRs9O/PSv/BcJA1U=
+	t=1706812671; cv=none; b=nQVqChmm4ML+5EFsiZ1cqwIXD32e8ikY4XO5Bavql48dUG3Yx/yICExgXnhdVS1dDimRiePntpcfDY3kGHdvHmApciop1B+RncCKPzNyWL/ON3ERVq7xFgwiZKqBVcxTa6tvecplUpDLUByYRhGRhl9/0uRmjBdK7AqxOqev4l8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706812521; c=relaxed/simple;
-	bh=wVEE4o4YbZnycETZF+nnePTwghfVH/i+QCzGYI/C7Yg=;
+	s=arc-20240116; t=1706812671; c=relaxed/simple;
+	bh=PG41l4Cht9QMEnpC7yAAvPEsFDYt68t8qhJ5rj+J5lQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IPuCgYgrfuCm1AKaDX/uz66iBDcDsozszEzcNg+a5fUFrMV/VclNkjmnMgeA9R4CHxMg+F5+ITGk4QpP5kpW40uzc9TsVtLLvDaZVlFVNrkcFinzoKBpH2eE8Uonseu56KuogKwb60H7XSWznqQBLxhHpkWDxbFzGe1MoAbXEaU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.175
+	 To:Cc:Content-Type; b=gKSOgkmoBouJByxQksFANSjSa0TAtUbhuZSSU8uMGl+yehbbq+CeQqDXauc5PdyaSYArw7j3CpD2r560X7KDBgyIh0EFXErEgR7luVfNRV78KvX4JGc1gMyOFDpbjA20G7YWZrrHxyooho9R6XzgjiuhHAJhOESg2yC+Yumnj5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-3bc21303a35so355476b6e.0;
-        Thu, 01 Feb 2024 10:35:19 -0800 (PST)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-218e7bb0034so124326fac.0;
+        Thu, 01 Feb 2024 10:37:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706812519; x=1707417319;
+        d=1e100.net; s=20230601; t=1706812669; x=1707417469;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eZ2QxOAM6wQKlIfCJl9Vqv3s9SEP5nb9j+tik6gXq34=;
-        b=k8FBOBkhReTYkq725gZ8UHcXf4YPkoF2oQsMuorjc5+Ta0OVC33pSTumxkm1LrZOTQ
-         FgKzCLSUga6j9XF3MUpLsi0LqjOYyUS7GsbGRQIxWH6CHbFnFQ4jPJSus5sPhwsY4DEl
-         AlPlaqmxFpB7LF/fCR52QaADkwPlU9mdv30rZlWWD0HbJf3r/vc7HZrKfzBEVkeh9wmn
-         NzHHTn9BcsDT3oyj1IsRdBV0MMtDuhpyDkn9hmIl4WfcG3BH17qeCFbkgg+VMYVTnJ2W
-         brD7KEjwjgWZXl1COdGjPL9RKVLiwfZnCjzgZc7oBaZgkbIgPW8o7CaWCBAtfw5xQZIR
-         gD2Q==
-X-Forwarded-Encrypted: i=0; AJvYcCUZug+fTKeu7vYOl5pIygXBSAYzmV/6N0igik4D+Atkw/weimeKBD3dV22XtwpBONhMvRqKAelll6V+oC6GMc2SscgqpamShrM17vdsJWtjgJKzgqbuqzSzc8w3nV9XlFlipnbNA+WrlcWcqiu0QpivRG+hzG+iHXKCpSBA3e2F4O5d593DSRbUwOVB6lR9B/V8hdtey4E/ROBWx/Tcw/6MPTyoeEY8gPE=
-X-Gm-Message-State: AOJu0YyI9/uHJxi5NLsy0D6ngYGn5s/mGIe6nS3oB8p/+PNuAA1Q0fQC
-	HewcJVH6J09OLf6olvhN8IXhrmujZvomGDIgqYqc8u2ihO1W6LsltFgLSbVhtPEjYoxweni6IpD
-	n0GoN8KD6o1+zji6jtyJ4MHqM0oY=
-X-Google-Smtp-Source: AGHT+IHl7ZfSyZbTn+BWGDtWxJDfxiYL/7G27PGTV4hoHIkYyvlUdRPgeAmUY/ilFubDbzYjf+gZYDcJUx+rdd1MQuI=
-X-Received: by 2002:a05:6870:b6a4:b0:218:d1b7:e8cd with SMTP id
- cy36-20020a056870b6a400b00218d1b7e8cdmr4165119oab.3.1706812518874; Thu, 01
- Feb 2024 10:35:18 -0800 (PST)
+        bh=cmNRHOBZapP/7rlyEo9FipriJMoTfuoLxFmYGEugnDg=;
+        b=ggHYpdjNL63zal2odFQ0Sl3WP8jJRpYVlxL5UIrPoft6Fe1W1Td8EU/bDAB1PV9Aol
+         0KqVywEwUla978LX1rRJulBFnsmEwOAs67+RQkXbpK3vHH/q0gY9QeuzuQDFMULh1KLS
+         KvItSU2//9kr3OxelchArSqxhE0CNlKlRYRh1w+jRdjrtghyw3zdK/0SJFY5aEs+54NQ
+         JB8sEK0vfS1O+ms+VQAtkaem31QCrT95Bs4UEfqs0a+PA0mSlZHCx6zw5pxqg4qtxz8K
+         OjdUk84eJsYRoumNfJi2FtetUaVvdMdaQRk5uQ6dvgMcAK9sZYVFkjPSwCF0uQPHQvVd
+         MFwg==
+X-Gm-Message-State: AOJu0YwHp/3yuEzkbMgGKMGRRMv87WM2leC+EglqF1mxlE8++FO5vBF+
+	TVCaKcF9jU7NuYfIdtyCUaG9vwzpEcZdjG0h05XJdEAl2f9/IVLup6E/mf9n8rB0LwDkabRpHWb
+	2gZigWsvTjzi7L44kksfq7lpy+Xw=
+X-Google-Smtp-Source: AGHT+IGT11Dek5DLe5+fNtg19DcOI9+wbHWnsN4O4W0C/8fEck06WCD8naaCcHI2NkB5AtlA22afByl5AGhGeqVtOh4=
+X-Received: by 2002:a05:6870:c190:b0:218:e279:cd77 with SMTP id
+ h16-20020a056870c19000b00218e279cd77mr3422269oad.2.1706812668653; Thu, 01 Feb
+ 2024 10:37:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240130111250.185718-1-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20240130111250.185718-1-angelogioacchino.delregno@collabora.com>
+References: <20240130111250.185718-1-angelogioacchino.delregno@collabora.com> <20240130111250.185718-2-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20240130111250.185718-2-angelogioacchino.delregno@collabora.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 1 Feb 2024 19:35:07 +0100
-Message-ID: <CAJZ5v0haFEGOjaMC4a8CZbQe+cxFfaB1hD60NkN297NY2TZB5A@mail.gmail.com>
-Subject: Re: [PATCH v1 00/18] Thermal: Part 1 - Introduce new structs and registration
+Date: Thu, 1 Feb 2024 19:37:37 +0100
+Message-ID: <CAJZ5v0hOcS0Fm2-mKWtc1-0ym33XuH=B39GGL9b6MfGSqeERkQ@mail.gmail.com>
+Subject: Re: [PATCH v1 01/18] thermal: core: Change governor name to const
+ char pointer
 To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Cc: daniel.lezcano@linaro.org, miquel.raynal@bootlin.com, rafael@kernel.org, 
 	rui.zhang@intel.com, lukasz.luba@arm.com, support.opensource@diasemi.com, 
@@ -83,72 +83,45 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, Jan 30, 2024 at 12:13=E2=80=AFPM AngeloGioacchino Del Regno
 <angelogioacchino.delregno@collabora.com> wrote:
 >
-> This series is a preparation for a bigger cleanup that will be split in
-> three parts in order to avoid immutable branches on multiple subsystems,
-> as in other parts of this series there will be changes in:
-> - drivers/acpi
-> - drivers/platform/x86
-> - drivers/power/supply
-> - drivers/net/wireless
-> - drivers/net/ethernet
+> All users are already assigning a const char * to the `governor_name`
+> member of struct thermal_zone_params and to the `name` member of
+> struct thermal_governor.
+> Even if users are technically wrong, it just makes more sense to change
+> this member to be a const char pointer instead of doing the other way
+> around.
 >
-> This is the first part which adds new structures and starts reorganizing
-> struct members around, plus, this migrates all of the thermal drivers
-> found in drivers/thermal/ to the new thermal_zone_device_register()
-> function, and advertises that the old registration functions are
-> deprecated and will be removed.
->
-> The reorganization is supposed to be complete (or mostly) but...
->  - struct thermal_zone_platform_params has a temporary name:
->    this is done in order to avoid compile time failures for
->    the drivers outside of drivers/thermal before migrating
->    them to thermal_zone_device_params/thermal_zone_device_register();
->  - struct thermal_zone_params temporarily has two duplicated members,
->    governor_name and no_hwmon;
->
-> Part 2 of this topic will migrate all drivers that are external to
-> drivers/thermal to thermal_zone_device_register(); I will send that
-> part only after part 1 is confirmed to be acceptable, as otherwise
-> I'd be spamming people for no reason :-)
->
-> After all drivers will be migrated to thermal_zone_device_register(),
-> we won't have to care about changing anything outside of drivers/thermal
-> to finish this set of cleanups/changes (and no immutable branches needed)
-> and this means that...
-> Part 3 of this topic will contain the following changes:
->  - thermal_zone_device_register_with_trips() will be removed
->  - thermal_tripless_zone_device_register() will be removed
->  - thermal_zone_params will be renamed to thermal_governor_ipa_params
->    - governor_name, no_hwmon members will be removed
->  - thermal_zone_platform_params will be renamed to thermal_zone_params
->  - Removal of the THERMAL_NAME_LENGTH limitation for `type`
->
-> More scheduled changes, which should end up in part 3 (at least that's
-> my intention), or eventually entirely after this cleanup topic, include:
->  - Introduction of Thermal Zone names
->  - Disambiguation of TZ name and type
->  - Addition of `thermal-zones`, `thermal-zone-names` parsing for
->    devicetrees
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
+abora.com>
 
-You really should start with this, because that's your goal.
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
-It is quite arguable that it can be achieved without making all of the
-changes mentioned above.
+or I can pick it up right away if you want me to do that.
 
+> ---
+>  include/linux/thermal.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> ... Summarizing ...
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index b7a3deb372fd..65d8f92a9a0d 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -214,7 +214,7 @@ struct thermal_zone_device {
+>   * @governor_list:     node in thermal_governor_list (in thermal_core.c)
+>   */
+>  struct thermal_governor {
+> -       char name[THERMAL_NAME_LENGTH];
+> +       const char *name;
+>         int (*bind_to_tz)(struct thermal_zone_device *tz);
+>         void (*unbind_from_tz)(struct thermal_zone_device *tz);
+>         int (*throttle)(struct thermal_zone_device *tz,
+> @@ -226,7 +226,7 @@ struct thermal_governor {
 >
-> Part 1:
->  - Reorganize structures (some temporary names/leftovers)
->  - New registration function, deprecation of old ones
->  - Migration of drivers/thermal drivers to new registration
-
-I kind of see where this is going, but I don't agree with some of the
-changes made.
-
-Let me comment on individual patches (which is not necessarily going
-to happen today or even tomorrow, so let me go through the entire
-series before deciding what to do next).
-
-Thanks!
+>  /* Structure to define Thermal Zone parameters */
+>  struct thermal_zone_params {
+> -       char governor_name[THERMAL_NAME_LENGTH];
+> +       const char *governor_name;
+>
+>         /*
+>          * a boolean to indicate if the thermal to hwmon sysfs interface
+> --
 
