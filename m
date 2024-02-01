@@ -1,127 +1,134 @@
-Return-Path: <linux-pm+bounces-3185-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3186-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF23A846013
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 19:37:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 22833846037
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 19:44:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1DC17B223CB
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 18:37:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 767BFB27DA7
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 18:43:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 484C941757;
-	Thu,  1 Feb 2024 18:37:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F8F57C6EE;
+	Thu,  1 Feb 2024 18:43:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eY+ElGIm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6FA25B664;
-	Thu,  1 Feb 2024 18:37:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61E317E113;
+	Thu,  1 Feb 2024 18:43:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706812671; cv=none; b=nQVqChmm4ML+5EFsiZ1cqwIXD32e8ikY4XO5Bavql48dUG3Yx/yICExgXnhdVS1dDimRiePntpcfDY3kGHdvHmApciop1B+RncCKPzNyWL/ON3ERVq7xFgwiZKqBVcxTa6tvecplUpDLUByYRhGRhl9/0uRmjBdK7AqxOqev4l8=
+	t=1706812985; cv=none; b=r5Uh4xEu3ZYWTRszDUqKrFCo5KEaU6wgap0F8TqAXyu6lpboj8P9A8ALoCuuKx4f01DVnnaoUhpkorgHUAmqeIQ3QB6MTxoUHurbzAAo/ddz2izzVIzV5fHoETux4Mj5C21zcr+JpeBzkjvMd8wXvG0u1ou7pxJa9tHdjp+gNzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706812671; c=relaxed/simple;
-	bh=PG41l4Cht9QMEnpC7yAAvPEsFDYt68t8qhJ5rj+J5lQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gKSOgkmoBouJByxQksFANSjSa0TAtUbhuZSSU8uMGl+yehbbq+CeQqDXauc5PdyaSYArw7j3CpD2r560X7KDBgyIh0EFXErEgR7luVfNRV78KvX4JGc1gMyOFDpbjA20G7YWZrrHxyooho9R6XzgjiuhHAJhOESg2yC+Yumnj5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.160.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-218e7bb0034so124326fac.0;
-        Thu, 01 Feb 2024 10:37:49 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706812669; x=1707417469;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cmNRHOBZapP/7rlyEo9FipriJMoTfuoLxFmYGEugnDg=;
-        b=ggHYpdjNL63zal2odFQ0Sl3WP8jJRpYVlxL5UIrPoft6Fe1W1Td8EU/bDAB1PV9Aol
-         0KqVywEwUla978LX1rRJulBFnsmEwOAs67+RQkXbpK3vHH/q0gY9QeuzuQDFMULh1KLS
-         KvItSU2//9kr3OxelchArSqxhE0CNlKlRYRh1w+jRdjrtghyw3zdK/0SJFY5aEs+54NQ
-         JB8sEK0vfS1O+ms+VQAtkaem31QCrT95Bs4UEfqs0a+PA0mSlZHCx6zw5pxqg4qtxz8K
-         OjdUk84eJsYRoumNfJi2FtetUaVvdMdaQRk5uQ6dvgMcAK9sZYVFkjPSwCF0uQPHQvVd
-         MFwg==
-X-Gm-Message-State: AOJu0YwHp/3yuEzkbMgGKMGRRMv87WM2leC+EglqF1mxlE8++FO5vBF+
-	TVCaKcF9jU7NuYfIdtyCUaG9vwzpEcZdjG0h05XJdEAl2f9/IVLup6E/mf9n8rB0LwDkabRpHWb
-	2gZigWsvTjzi7L44kksfq7lpy+Xw=
-X-Google-Smtp-Source: AGHT+IGT11Dek5DLe5+fNtg19DcOI9+wbHWnsN4O4W0C/8fEck06WCD8naaCcHI2NkB5AtlA22afByl5AGhGeqVtOh4=
-X-Received: by 2002:a05:6870:c190:b0:218:e279:cd77 with SMTP id
- h16-20020a056870c19000b00218e279cd77mr3422269oad.2.1706812668653; Thu, 01 Feb
- 2024 10:37:48 -0800 (PST)
+	s=arc-20240116; t=1706812985; c=relaxed/simple;
+	bh=08WTJYiiiVSXfDqZA54KHPdrHQAZkWse/35hApk4m4E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oTE9MnHfEhtJ1n3Q0xTxqHqLeZNPxncOjvqQtHwsyj4hfZtq8TA5HSN6Bwdfa5eLMqjG08qvYOcDyfqzpPQML/YbrDr5kdTr3MjLEPvT1nSOlhVucF+bnZSm/W914wS2q4ppwuI2GfM1UfnOOBmhMnsHsmOMOS0wHckhiyO2keI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eY+ElGIm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41B8AC433F1;
+	Thu,  1 Feb 2024 18:43:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706812984;
+	bh=08WTJYiiiVSXfDqZA54KHPdrHQAZkWse/35hApk4m4E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eY+ElGImWlNLu57i4LaQK0R+OxW4C/stUbAV9y9nwzPjQYbVIcDqFKs92YNXyF+qD
+	 g+4r2+gyDSgxqJy0rwBLKA7GbIn34H0SExYaOKv2unXJIXQGIOhswlZp+tkE5QcWV/
+	 XKrN3PilkyDzGoi5JPc1Gaw53RPhFq2MIAgwD1owOTnR21pyltGjoZcyHqqxXljVne
+	 CkYBnGHtWNkF6PfTVegva3fxkqlXfKvjg8MXdGA7jf9M1widO+1SE7M+FiY/uV3kV/
+	 2uo/W9+mTgxkRUjqtX8bVl7k6rPHE6otrnC3zJSDAu6QM6KbF4DFlY0MXW8KdgV3Kq
+	 hs9fHDDswpw9g==
+Date: Thu, 1 Feb 2024 18:42:59 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Andrew Davis <afd@ti.com>
+Cc: Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+	Santosh Shilimkar <ssantosh@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 02/12] dt-bindings: arm: keystone: ti-sci: Add
+ reboot-controller child node
+Message-ID: <20240201-jester-gleeful-3ac8f035e0a4@spud>
+References: <20240131221957.213717-1-afd@ti.com>
+ <20240131221957.213717-3-afd@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240130111250.185718-1-angelogioacchino.delregno@collabora.com> <20240130111250.185718-2-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20240130111250.185718-2-angelogioacchino.delregno@collabora.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 1 Feb 2024 19:37:37 +0100
-Message-ID: <CAJZ5v0hOcS0Fm2-mKWtc1-0ym33XuH=B39GGL9b6MfGSqeERkQ@mail.gmail.com>
-Subject: Re: [PATCH v1 01/18] thermal: core: Change governor name to const
- char pointer
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: daniel.lezcano@linaro.org, miquel.raynal@bootlin.com, rafael@kernel.org, 
-	rui.zhang@intel.com, lukasz.luba@arm.com, support.opensource@diasemi.com, 
-	shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, 
-	festevam@gmail.com, linux-imx@nxp.com, andersson@kernel.org, 
-	konrad.dybcio@linaro.org, amitk@kernel.org, thara.gopinath@gmail.com, 
-	niklas.soderlund@ragnatech.se, srinivas.pandruvada@linux.intel.com, 
-	baolin.wang@linux.alibaba.com, u.kleine-koenig@pengutronix.de, 
-	hayashi.kunihiko@socionext.com, d-gole@ti.com, linus.walleij@linaro.org, 
-	DLG-Adam.Ward.opensource@dm.renesas.com, error27@gmail.com, heiko@sntech.de, 
-	hdegoede@redhat.com, jernej.skrabec@gmail.com, f.fainelli@gmail.com, 
-	bchihi@baylibre.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="wEmJWZe8MbdHoMiC"
+Content-Disposition: inline
+In-Reply-To: <20240131221957.213717-3-afd@ti.com>
+
+
+--wEmJWZe8MbdHoMiC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 30, 2024 at 12:13=E2=80=AFPM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> All users are already assigning a const char * to the `governor_name`
-> member of struct thermal_zone_params and to the `name` member of
-> struct thermal_governor.
-> Even if users are technically wrong, it just makes more sense to change
-> this member to be a const char pointer instead of doing the other way
-> around.
->
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
+On Wed, Jan 31, 2024 at 04:19:47PM -0600, Andrew Davis wrote:
+> The TI-SCI firmware supports rebooting the system in addition to the
+> functions already listed here, document child node for the same.
+>=20
+> Signed-off-by: Andrew Davis <afd@ti.com>
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-or I can pick it up right away if you want me to do that.
+Cheers,
+Conor.
 
 > ---
->  include/linux/thermal.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> index b7a3deb372fd..65d8f92a9a0d 100644
-> --- a/include/linux/thermal.h
-> +++ b/include/linux/thermal.h
-> @@ -214,7 +214,7 @@ struct thermal_zone_device {
->   * @governor_list:     node in thermal_governor_list (in thermal_core.c)
->   */
->  struct thermal_governor {
-> -       char name[THERMAL_NAME_LENGTH];
-> +       const char *name;
->         int (*bind_to_tz)(struct thermal_zone_device *tz);
->         void (*unbind_from_tz)(struct thermal_zone_device *tz);
->         int (*throttle)(struct thermal_zone_device *tz,
-> @@ -226,7 +226,7 @@ struct thermal_governor {
->
->  /* Structure to define Thermal Zone parameters */
->  struct thermal_zone_params {
-> -       char governor_name[THERMAL_NAME_LENGTH];
-> +       const char *governor_name;
->
->         /*
->          * a boolean to indicate if the thermal to hwmon sysfs interface
-> --
+>  .../devicetree/bindings/arm/keystone/ti,sci.yaml          | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml b=
+/Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml
+> index c24ad0968f3ef..e392175b33c74 100644
+> --- a/Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml
+> +++ b/Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml
+> @@ -83,6 +83,10 @@ properties:
+>      type: object
+>      $ref: /schemas/reset/ti,sci-reset.yaml#
+> =20
+> +  reboot-controller:
+> +    type: object
+> +    $ref: /schemas/power/reset/ti,sci-reboot.yaml#
+> +
+>  required:
+>    - compatible
+>    - mbox-names
+> @@ -126,4 +130,8 @@ examples:
+>          compatible =3D "ti,sci-reset";
+>          #reset-cells =3D <2>;
+>        };
+> +
+> +      k3_reboot: reboot-controller {
+> +        compatible =3D "ti,sci-reboot";
+> +      };
+>      };
+> --=20
+> 2.39.2
+>=20
+
+--wEmJWZe8MbdHoMiC
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZbvmMwAKCRB4tDGHoIJi
+0s2aAP9oJwCoaFBP/LiIOI1L9NQnqVEqe8nwLeFFqoCC5wnytQEA0xHtdx7CCHLx
+xpLtzML7N+aekuG2qmu4q1raHVY7UgU=
+=+A1E
+-----END PGP SIGNATURE-----
+
+--wEmJWZe8MbdHoMiC--
 
