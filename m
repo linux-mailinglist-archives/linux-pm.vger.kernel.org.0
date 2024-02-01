@@ -1,223 +1,114 @@
-Return-Path: <linux-pm+bounces-3194-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3195-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB905846286
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 22:15:52 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49CCA8462B1
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 22:39:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 73B7AB256A4
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 21:15:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE11DB21B3F
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 21:39:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF6CB3D0A4;
-	Thu,  1 Feb 2024 21:15:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DC7F3D0A4;
+	Thu,  1 Feb 2024 21:39:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="B0yD/cQC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UFC8k55D"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D68E83CF4B;
-	Thu,  1 Feb 2024 21:15:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62D9B2FC29;
+	Thu,  1 Feb 2024 21:39:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706822145; cv=none; b=P/xKQuzcwNP8ztHCWomqDR7IlfJGyzJmcFLYjov9ViM8WzyF9G3bJRYS6ZLHo0vyRsfVcS6Om53xexAdrvqoGkvSf6TTJAAFLMoCzcoax19pYMgslZAYiub3hkP/JK4E4+JqZcA1mFANJOE25jDPdFivpvxbIPIgyvTxJaMzZ5E=
+	t=1706823576; cv=none; b=PE5vrWUj3LOD31mlhdr/F9RvLEwc3vVVje4xA5QtkUn/+cYlY81obks37Sn82uJvyQyhCywFrC03L8SCwCldUpt2Sq00y27X1X3qiuOc9iBmpovcVw1ACe1gNO2c6vbrRDbu+OGSMg2bsFr1i8z/BPy64RyL17LQ5DRUuPCc7+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706822145; c=relaxed/simple;
-	bh=nbPLVcnpXdoLea02k3RQml8nSOfPIsnduWVK4k874jo=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tbpk2WT4woUTkoyxbC52wBEumbxMjNq6OcUafZIO6bSzdx8cHeXPx9Lz7gok5detseC2iTZ98xPTS7dGXVN2B9tYb5pv+4+5P+ftwVdeECQOWGBkGcPpBc9R+UCk/vyBEKpw1LUZM9bmJgB+SADOTQnIwHGcO6DbriJ0UvKFgik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=B0yD/cQC; arc=none smtp.client-ip=198.47.19.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 411LFZbR109972;
-	Thu, 1 Feb 2024 15:15:35 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1706822135;
-	bh=5WfwU34Z/QUv+EUKQFKyqy3U1KXtaKb6FiXT2xQF4ZE=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=B0yD/cQCIJlHgUseRpdYp5HSwIADUq+dS+A1YBLPsJwfgIMX19PelkctcoX5DF63d
-	 Mh/KNUe/Od/Wc7MkuF0fQqgddtCxvyuvgzRJm3oD1+WBup+9hXsxxDJMYs9sH714w8
-	 2PFTbI3DOFHKB9VXT0ar0JFer4TBnp5Fdbzc91fI=
-Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 411LFZoH022138
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 1 Feb 2024 15:15:35 -0600
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 1
- Feb 2024 15:15:35 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 1 Feb 2024 15:15:35 -0600
-Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 411LFYqQ050473;
-	Thu, 1 Feb 2024 15:15:34 -0600
-Date: Thu, 1 Feb 2024 15:15:34 -0600
-From: Nishanth Menon <nm@ti.com>
-To: Andrew Davis <afd@ti.com>
-CC: Tero Kristo <kristo@kernel.org>, Santosh Shilimkar <ssantosh@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 03/12] power: reset: Add TI-SCI reboot driver
-Message-ID: <20240201211534.dv6qu7ila54vqykn@cheating>
-References: <20240131221957.213717-1-afd@ti.com>
- <20240131221957.213717-4-afd@ti.com>
+	s=arc-20240116; t=1706823576; c=relaxed/simple;
+	bh=LNjFvMgTDG23nMl2xYzW0OPkJx61zxz2zju131rD4Vk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=DypCYy5uhbaVajB10NL9Zyq9pcHgidic3q8vluS2GbGE6wTkspJdOpYJVO37MPfcQdXL6VCkhv/miAQsyafpsiRUfQjboL/Yhe05Rsqqg8cfXpI8NJ789HFZQgyGzavW+FxOVU4Xxao7MVYwt//xl5/tPl7I+xicMaxm7bSRqN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UFC8k55D; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1D9BC433C7;
+	Thu,  1 Feb 2024 21:39:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706823575;
+	bh=LNjFvMgTDG23nMl2xYzW0OPkJx61zxz2zju131rD4Vk=;
+	h=Date:From:To:Cc:Subject:From;
+	b=UFC8k55DK/8P4m3dhtK7K99FmGyu8t6JICM6FgTrW0veIb2DN7Uqf/7wQZuekRZdz
+	 Ij82Fw3TmOw0I/NGnQFEXRfWmnOMKXXHj8tJMpMTAK6tawWtP+Ejx2T8Bhd8cpmKPe
+	 Qcw4HDMBOvxnc/WrAUlmsWZXOnRiAjJUStJ6clwdExeMzgptZmbOu/YtSw0JV6xQqk
+	 b15EtFwnRIAORYQLp4enP8Lne+TDFyimqTXSVvCSKDP4QzRDLjpVa+LNzZNMUM3bfv
+	 Sy1fakoy30OTiU1rXPQtOlR55CgpHVSFkbs6tKEomUf93MA9JF7GBZyfLTt5ZVFxaR
+	 ZAzR3LwmjC6OA==
+Received: by mercury (Postfix, from userid 1000)
+	id B24901062449; Thu,  1 Feb 2024 22:39:32 +0100 (CET)
+Date: Thu, 1 Feb 2024 22:39:32 +0100
+From: Sebastian Reichel <sre@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [GIT PULL] power-supply changes for 6.8-rc
+Message-ID: <h5ljtaj5ytq3mdvcqrjak5dq7lrabcl33kx435k7jrufxuapkg@hrnhnok2dwzp>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="q46yyp3xgvov2knt"
 Content-Disposition: inline
-In-Reply-To: <20240131221957.213717-4-afd@ti.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On 16:19-20240131, Andrew Davis wrote:
-> This reboot driver calls into firmware using TI-SCI to reboot the system.
-> We register the handler with low priority as we want PSCI to remain the
-> main way these devices are rebooted. This driver acts as a fallback if
-> PSCI is not able to reboot the system.
-> 
-> Signed-off-by: Andrew Davis <afd@ti.com>
-> ---
->  MAINTAINERS                         |  1 +
->  drivers/power/reset/Kconfig         |  7 ++++
->  drivers/power/reset/Makefile        |  1 +
->  drivers/power/reset/ti-sci-reboot.c | 63 +++++++++++++++++++++++++++++
->  4 files changed, 72 insertions(+)
->  create mode 100644 drivers/power/reset/ti-sci-reboot.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 45983bb174fe4..ee67ea497fc56 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -21758,6 +21758,7 @@ F:	drivers/clk/keystone/sci-clk.c
->  F:	drivers/firmware/ti_sci*
->  F:	drivers/irqchip/irq-ti-sci-inta.c
->  F:	drivers/irqchip/irq-ti-sci-intr.c
-> +F:	drivers/power/reset/ti-sci-reboot.c
->  F:	drivers/reset/reset-ti-sci.c
->  F:	drivers/soc/ti/ti_sci_inta_msi.c
->  F:	drivers/pmdomain/ti/ti_sci_pm_domains.c
-> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
-> index fece990af4a75..d3e91e54cae24 100644
-> --- a/drivers/power/reset/Kconfig
-> +++ b/drivers/power/reset/Kconfig
-> @@ -205,6 +205,13 @@ config POWER_RESET_ST
->  	help
->  	  Reset support for STMicroelectronics boards.
->  
-> +config POWER_RESET_TI_SCI
-> +	tristate "TI System Control Interface (TI-SCI) reboot driver"
-> +	depends on TI_SCI_PROTOCOL
-> +	help
-> +	  This enables the reboot driver support over TI System Control
-> +	  Interface available on some TI's SoCs.
-> +
->  config POWER_RESET_TPS65086
->  	bool "TPS65086 restart driver"
->  	depends on MFD_TPS65086
-> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
-> index a95d1bd275d18..881ca58a43b9c 100644
-> --- a/drivers/power/reset/Makefile
-> +++ b/drivers/power/reset/Makefile
-> @@ -23,6 +23,7 @@ obj-$(CONFIG_POWER_RESET_QNAP) += qnap-poweroff.o
->  obj-$(CONFIG_POWER_RESET_REGULATOR) += regulator-poweroff.o
->  obj-$(CONFIG_POWER_RESET_RESTART) += restart-poweroff.o
->  obj-$(CONFIG_POWER_RESET_ST) += st-poweroff.o
-> +obj-$(CONFIG_POWER_RESET_TI_SCI) += ti-sci-reboot.o
->  obj-$(CONFIG_POWER_RESET_TPS65086) += tps65086-restart.o
->  obj-$(CONFIG_POWER_RESET_VERSATILE) += arm-versatile-reboot.o
->  obj-$(CONFIG_POWER_RESET_VEXPRESS) += vexpress-poweroff.o
-> diff --git a/drivers/power/reset/ti-sci-reboot.c b/drivers/power/reset/ti-sci-reboot.c
-> new file mode 100644
-> index 0000000000000..400bd5d740f8b
-> --- /dev/null
-> +++ b/drivers/power/reset/ti-sci-reboot.c
-> @@ -0,0 +1,63 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Texas Instrument's System Control Interface (TI-SCI) reboot driver
-> + *
-> + * Copyright (C) 2024 Texas Instruments Incorporated - https://www.ti.com/
-> + *	Andrew Davis <afd@ti.com>
-> + */
-> +
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/reboot.h>
-> +
-> +#include <linux/soc/ti/ti_sci_protocol.h>
-> +
-> +static int ti_sci_reboot_handler(struct sys_off_data *data)
-> +{
-> +	const struct ti_sci_handle *sci = data->cb_data;
-> +	const struct ti_sci_core_ops *core_ops = &sci->ops.core_ops;
-> +
-> +	core_ops->reboot_device(sci);
-> +
-> +	return NOTIFY_DONE;
-> +}
-> +
-> +static int ti_sci_reboot_probe(struct platform_device *pdev)
-> +{
-> +	const struct ti_sci_handle *sci;
-> +	int err;
-> +
-> +	sci = devm_ti_sci_get_handle(&pdev->dev);
-> +	if (IS_ERR(sci))
-> +		return PTR_ERR(sci);
-> +
-> +	err = devm_register_sys_off_handler(&pdev->dev,
-> +					    SYS_OFF_MODE_RESTART,
-> +					    SYS_OFF_PRIO_LOW,
-> +					    ti_sci_reboot_handler,
-> +					    (void *)sci);
-> +	if (err)
-> +		return dev_err_probe(&pdev->dev, err, "Cannot register restart handler\n");
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id ti_sci_reboot_of_match[] = {
-> +	{ .compatible = "ti,sci-reboot", },
-> +	{ /* sentinel */ },
-> +};
-> +MODULE_DEVICE_TABLE(of, ti_sci_reboot_of_match);
-> +
-> +static struct platform_driver ti_sci_reboot_driver = {
-> +	.probe = ti_sci_reboot_probe,
-> +	.driver = {
-> +		.name = "ti-sci-reboot",
-> +		.of_match_table = ti_sci_reboot_of_match,
-> +	},
-> +};
-> +module_platform_driver(ti_sci_reboot_driver);
-> +
-> +MODULE_AUTHOR("Andrew Davis <afd@ti.com>");
-> +MODULE_DESCRIPTION("TI System Control Interface (TI SCI) Reboot driver");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.39.2
 
-Will assume the patch to go via Sebastien. Will be good for the dts to
-go via SoC tree. So hoping Sebastien will just pick the driver and
-bindings.
+--q46yyp3xgvov2knt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Reviewed-by: Nishanth Menon <nm@ti.com>
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+Hi Linus,
+
+The following changes since commit 6613476e225e090cc9aad49be7fa504e290dd33d:
+
+  Linux 6.8-rc1 (2024-01-21 14:11:32 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.8-rc
+
+for you to fetch changes up to d0266d7ab1618482d58015d67a5220e590333298:
+
+  Revert "power: supply: qcom_battmgr: Register the power supplies after PDR is up" (2024-01-26 22:45:58 +0100)
+
+----------------------------------------------------------------
+Power Supply Fixes for 6.8 cycle
+
+ * qcom_battmgr: revert broken fix
+
+----------------------------------------------------------------
+Johan Hovold (1):
+      Revert "power: supply: qcom_battmgr: Register the power supplies after PDR is up"
+
+ drivers/power/supply/qcom_battmgr.c | 109 ++++++++++++++++--------------------
+ 1 file changed, 49 insertions(+), 60 deletions(-)
+
+--q46yyp3xgvov2knt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmW8D5QACgkQ2O7X88g7
++poW0g/+OSsOIvOG7fT2UGotbsB4QrHpp3rHI30Kh/+deiRkA3cRM2+0i6Qw9zEs
+vBpRjvoubsoli/GCmUlEsZCasvm5wuRZVJJOYi285/a0bWxObtO9N41I1B3VDAjv
+Iwa+d94aojyjgtiIGQd/GYRwwAIZRB+PYk4e+iWpm/j4fvNeljV43ecJpsfpPKrY
+1ivfNQGkjR6GTf9xIeCgzDf4V4miuTokrZ5P9UnDaigPQJt4EfCSQLfwGVIO2uK+
+6Q4wZNsoj6jvqg6GD69cZBn57bcbl/K6Sb60y7CyTXvBVPHhfNXbH9js5ZKsEbjV
+Qv8QMxgerL4acnZK0sK4FsnQucSjOIYZj7o9vCG7yOlvOFMdcRKrZj63Fy+x4Bek
+zfbL11re6D9Kyh0OSucTQ7Wk0o1h8SyJpaCk4NvmzdC4ZiwFP6k43YDUkl26HBDd
+Dsd7MbfTQRE0+puOdWlsHTDjmm472f271CteKKmgU569YwZNNtasufap3ehA7dJG
+njdlbPXHE2MCWCPNmxIrtjo89Y1sB0D60gv/3uPOQnsIrZhYFSd/Uwwp/t0ROhRt
+Yz1XisYIMExNjslRwMzZHqz0kDmjHtw38VXFNM9uY5/TqYXptW6EVboqvQsHrwTf
+vgDcGQ86vavLRCN0RuFDwnPaBs77dx2P8C68hds78RMVbU3HR8o=
+=VsGn
+-----END PGP SIGNATURE-----
+
+--q46yyp3xgvov2knt--
 
