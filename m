@@ -1,251 +1,107 @@
-Return-Path: <linux-pm+bounces-3153-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3154-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24BF4845433
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 10:38:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FF028454A6
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 10:59:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B4141F24932
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 09:38:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 727FA1C28B1D
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 09:59:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B15415B986;
-	Thu,  1 Feb 2024 09:36:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53A5481AC4;
+	Thu,  1 Feb 2024 09:58:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mlCbJshU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cl/CU+Bt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 874884D9F4;
-	Thu,  1 Feb 2024 09:36:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F95D4DA19
+	for <linux-pm@vger.kernel.org>; Thu,  1 Feb 2024 09:58:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706780175; cv=none; b=IUnY32Sf0zrmDgBv+z0qPg5jH6GK+MZ7Y4OfNIi4pVxLapwZnVi6Ds46Kp+L6530pdI1JjZAaTQN92aXI9n7YYshGtnTbj6aEtU52mB5eYq7WISi0tYMFr5JaVFpsBzYqL8M2JDqZqDIyBhXmqwijAnc0NAeLp97424NUpFwfhc=
+	t=1706781539; cv=none; b=BuWkg3Y49KzHxC+KuhYnDC1OJX6fqr1X1PmAdA+k3F8WrTfKydkioaZLZ7O7nfg9Zp6xbZFrMwLdhZTnsTmJBF1Y0JF7pBZvtEOi7/M6CcPLQE1V6hpx6GF4HI+HGbhBT9mBHVv7A3tAnWJ425lkmHQ+Laeeu52L6ZaW4yIzc3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706780175; c=relaxed/simple;
-	bh=mDE6VJ8DhRRfEQyPHRAPoOs3sRJP6GQ0yAKIbQgDNBs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Jpr82hxcBC4Zb6MR14Few0318exBRPWqWCWPsBbhPsTb2gS8ijozRSnAgeTRBQnjzF7Lc2X/s4BMXv/KKPMKx9FySu8OdMzGZhbXCMjXvFOGF8911eXglRZp21h3Wnxs5NiQgWACNiGjI2hhWSH5w730oGC8VMgoDHmw+zSDJC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mlCbJshU; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706780173; x=1738316173;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mDE6VJ8DhRRfEQyPHRAPoOs3sRJP6GQ0yAKIbQgDNBs=;
-  b=mlCbJshUUkif4ugz92BFBhXXxDZKFZHV0hk31YcpZygQOTVlo0ElPCOs
-   I9eSFLmVRWKxVndjonZ5cnqajk4uowb8J+CfrUkDmUeOKmFuW3p3ma7zv
-   Z5/AsSCkLNHNX5Iv0osfgv72Wfdm3EDdXiIsRtLDt8MyjvtMYLRd37mbd
-   Cmz3R1eENFou3+p3o19BBNNLhZVpzwoLZ7NzG4viBpTgucUKhSACEs61B
-   /LZWHfA0m7pViP8+TsYvDa4QAi6Zz2OA7NFAh/+P0WuFySHjMvOKflyRj
-   e7n/ecJk4p3GgUVZVGsT7PAmvEwfvCTTsa8BLWhoCkv7YiYWJZAhK4tPT
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10969"; a="11224962"
-X-IronPort-AV: E=Sophos;i="6.05,234,1701158400"; 
-   d="scan'208";a="11224962"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2024 01:36:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,234,1701158400"; 
-   d="scan'208";a="30548770"
-Received: from sgruszka-mobl.ger.corp.intel.com (HELO localhost) ([10.252.41.120])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2024 01:36:11 -0800
-Date: Thu, 1 Feb 2024 10:36:07 +0100
-From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pci@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-	Oliver O'Halloran <oohall@gmail.com>,
-	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: Re: [RFC] PCI/AER: Block runtime suspend when handling errors
-Message-ID: <ZbtmB2GXPIwW1fLl@linux.intel.com>
-References: <20240123090016.281252-1-stanislaw.gruszka@linux.intel.com>
- <20240130001436.GA488226@bhelgaas>
+	s=arc-20240116; t=1706781539; c=relaxed/simple;
+	bh=3X3QXiS4V8dsLmTKrn9wtfuO1akHqv0N3QixC5OrP24=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=D5oWDpeXrMzrJLTIx/PlHb2V5sNR5/yAGo3n75MBWSSDSzONvZbjynVfE067EJQdur0uLX+5p+hyvdJ31/sEDNi/MNlVY4SVYo2Cp2pFiXRdoMbqGduN+dYpEK79k4qop/rQIPTT+xgQK1sy99mktWn36yFyeOaPvmyA4p8mHAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cl/CU+Bt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A8E4AC43143
+	for <linux-pm@vger.kernel.org>; Thu,  1 Feb 2024 09:58:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706781538;
+	bh=3X3QXiS4V8dsLmTKrn9wtfuO1akHqv0N3QixC5OrP24=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=cl/CU+BtPNKHuwphTSgvpXnJpSyojwT/vrnjK/DAkXJaRfikMv0ZzG1zONgaLnkRi
+	 K6ysOJlIDf2bqBcYYDWLj3qhHSGOYgNh9ubUflG1uIdbaFvklsuo1J+QcUMUBOzMND
+	 4lC+1yra67VJ2jQnco3IyBQIk9BdsxcDnMKLYZ07vZUXfFNr+Qo2qkKGAzn4CMRHs+
+	 rzZcZs2zgR/+x2MYDjpvGpYHoQXegs57m/BCNktZOyJZ68xJNMYiAYtOnkOWPE89C0
+	 D92DWM0JWdRTeeGo1YJ4NfzpnvC/I34T3tUianxw/JHU+9V8gE09/8lkeQ76Rm7q9b
+	 mH0yGhWuc7khQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 953DDC53BD3; Thu,  1 Feb 2024 09:58:58 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 217931] amd-pstate lacks crucial features: CPU frequency and
+ boost control
+Date: Thu, 01 Feb 2024 09:58:58 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: aros@gmx.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217931-137361-XD7jsT2IOf@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217931-137361@https.bugzilla.kernel.org/>
+References: <bug-217931-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240130001436.GA488226@bhelgaas>
 
-On Mon, Jan 29, 2024 at 06:14:36PM -0600, Bjorn Helgaas wrote:
-> On Tue, Jan 23, 2024 at 10:00:16AM +0100, Stanislaw Gruszka wrote:
-> > PM runtime can be done simultaneously with AER error handling.
-> > Avoid that by using pm_runtime_get_sync() just after pci_dev_get()
-> > and pm_runtime_put() just before pci_dev_put() in AER recovery
-> > procedures.
-> 
-> I guess there must be a general rule here, like "PCI core must use
-> pm_runtime_get_sync() whenever touching the device asynchronously,
-> i.e., when it's doing something unrelated to a call from the driver"?
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217931
 
-Clear rules would be nice, that's for sure.
+--- Comment #46 from Artem S. Tashkinov (aros@gmx.com) ---
+(In reply to Perry Yuan(AMD) from comment #44)
+> cpufreq_freq_attr_ro(amd_pstate_max_freq);
+>=20
+> the sysfs entry is ready only, so it is not allowing to write the new max
+> freq value to it.
+>=20
+> you can try to limit the freq with scaling_max_freq and scaling_min_freq.
 
-> Probably would apply to all subsystem cores, not just PCI.
+Exactly what I did, I set scaling_max_freq for all cores to 4GHz (4000000) =
+- it
+had zero effect.
 
-If they have something similar like AER.
-
-> > I'm not sure about DPC case since I do not see get/put there. It
-> > just call pci_do_recovery() from threaded irq dcd_handler().
-> > I think pm_runtime* should be added to this handler as well.
-> 
-> s/dcd_handler/dpc_handler/
+>=20
+> The boost patches and scaling_max_freq support are not same topics, if the
+> boost patches can work, however scaling_max_freq is not working, we can f=
+ile
+> a new ticket to track that problem.
 >
-> I'm guessing the "threaded" part really doesn't matter; just the fact
-> that this is in response to an interrupt, not something directly
-> called by a driver?
 
-Yes. I added "threaded" just to emphasis that it's safe to add sleeping
-functions there. In context of possible solution, not related to
-the problem itself.
- 
-> > pm_runtime_get_sync() will increase dev->power.usage_count counter to
-> > prevent any rpm actives. When there is suspending pending, it will wait
-> > for it and do the rpm resume. Not sure if that problem, on my testing
-> > I did not encounter issues with that.
-> 
-> Sorry, I didn't catch your meaning here.
-I tired to write two things:
+--=20
+You may reply to this email to add a comment.
 
-First, pm_runtime_get_sync() after exit prevents possibility of
-runtime suspend, so we are sure device will not be powered off
-
-Second, if during pm_runtime_get_sync(), there is pending attempt
-to suspend device, it will be synchronized and device will
-be resumed. This can be problematic as device is in error state.
-But at least from software perspective we should end in device
-being in active state and then we can perform reset of it.
-
-[ Third scenario, i.e device is suspended, and device has to be resumed
-by pm_runtime_get_sync() can not really happen, because we can not
-get error from disabled device. ]
-
-... after writing this I realized that is not true, as we can do
-recovery for several devices on subordinate bus, some of them can
-be rpm suspended, I presume. Need to think more about this case.
-
-> IIUC, you can reproduce the
-> problem with the simultaneous aer_inject and rpm suspend/resume, and
-> this patch fixes it.
-
-Yes.
-
-> But there's some other scenario where you *don't* see the problem?
-
-For example there are no runtime pm related race conditions with
-.probe, .remove , (system) .suspend, .resume. All of those have 
-proper synchronization with runtime pm in the device core.
-
-> > I tested with igc device by doing simultaneous aer_inject and 
-> > rpm suspend/resume via /sys/bus/pci/devices/PCI_ID/power/control
-> > and can reproduce: 
-> > 
-> > [  853.253938] igc 0000:02:00.0: not ready 65535ms after bus reset; giving up
-> > [  853.253973] pcieport 0000:00:1c.2: AER: Root Port link has been reset (-25)
-> > [  853.253996] pcieport 0000:00:1c.2: AER: subordinate device reset failed
-> > [  853.254099] pcieport 0000:00:1c.2: AER: device recovery failed
-> > [  853.254178] igc 0000:02:00.0: Unable to change power state from D3hot to D0, device inaccessible
-> 
-> Drop the timestamps; they don't add to understanding the problem.
-
-Ok.
-
-Regards
-Stanislaw
-> 
-> > The problem disappears when applied this patch.
-> > 
-> > Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-> > ---
-> >  drivers/pci/pcie/aer.c | 8 ++++++++
-> >  drivers/pci/pcie/edr.c | 3 +++
-> >  2 files changed, 11 insertions(+)
-> > 
-> > diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> > index 42a3bd35a3e1..9b56460edc76 100644
-> > --- a/drivers/pci/pcie/aer.c
-> > +++ b/drivers/pci/pcie/aer.c
-> > @@ -23,6 +23,7 @@
-> >  #include <linux/kernel.h>
-> >  #include <linux/errno.h>
-> >  #include <linux/pm.h>
-> > +#include <linux/pm_runtime.h>
-> >  #include <linux/init.h>
-> >  #include <linux/interrupt.h>
-> >  #include <linux/delay.h>
-> > @@ -813,6 +814,7 @@ static int add_error_device(struct aer_err_info *e_info, struct pci_dev *dev)
-> >  {
-> >  	if (e_info->error_dev_num < AER_MAX_MULTI_ERR_DEVICES) {
-> >  		e_info->dev[e_info->error_dev_num] = pci_dev_get(dev);
-> > +		pm_runtime_get_sync(&dev->dev);
-> >  		e_info->error_dev_num++;
-> >  		return 0;
-> >  	}
-> > @@ -1111,6 +1113,8 @@ static void handle_error_source(struct pci_dev *dev, struct aer_err_info *info)
-> >  {
-> >  	cxl_rch_handle_error(dev, info);
-> >  	pci_aer_handle_error(dev, info);
-> > +
-> > +	pm_runtime_put(&dev->dev);
-> >  	pci_dev_put(dev);
-> >  }
-> >  
-> > @@ -1143,6 +1147,8 @@ static void aer_recover_work_func(struct work_struct *work)
-> >  			       PCI_SLOT(entry.devfn), PCI_FUNC(entry.devfn));
-> >  			continue;
-> >  		}
-> > +		pm_runtime_get_sync(&pdev->dev);
-> > +
-> >  		pci_print_aer(pdev, entry.severity, entry.regs);
-> >  		/*
-> >  		 * Memory for aer_capability_regs(entry.regs) is being allocated from the
-> > @@ -1159,6 +1165,8 @@ static void aer_recover_work_func(struct work_struct *work)
-> >  		else if (entry.severity == AER_FATAL)
-> >  			pcie_do_recovery(pdev, pci_channel_io_frozen,
-> >  					 aer_root_reset);
-> > +
-> > +		pm_runtime_put(&pdev->dev);
-> >  		pci_dev_put(pdev);
-> >  	}
-> >  }
-> > diff --git a/drivers/pci/pcie/edr.c b/drivers/pci/pcie/edr.c
-> > index 5f4914d313a1..bd96babd7249 100644
-> > --- a/drivers/pci/pcie/edr.c
-> > +++ b/drivers/pci/pcie/edr.c
-> > @@ -10,6 +10,7 @@
-> >  
-> >  #include <linux/pci.h>
-> >  #include <linux/pci-acpi.h>
-> > +#include <linux/pm_runtime.h>
-> >  
-> >  #include "portdrv.h"
-> >  #include "../pci.h"
-> > @@ -169,6 +170,7 @@ static void edr_handle_event(acpi_handle handle, u32 event, void *data)
-> >  		return;
-> >  	}
-> >  
-> > +	pm_runtime_get_sync(&edev->dev);
-> >  	pci_dbg(pdev, "Reported EDR dev: %s\n", pci_name(edev));
-> >  
-> >  	/* If port does not support DPC, just send the OST */
-> > @@ -209,6 +211,7 @@ static void edr_handle_event(acpi_handle handle, u32 event, void *data)
-> >  		acpi_send_edr_status(pdev, edev, EDR_OST_FAILED);
-> >  	}
-> >  
-> > +	pm_runtime_put(&edev->dev);
-> >  	pci_dev_put(edev);
-> >  }
-> >  
-> > -- 
-> > 2.34.1
-> > 
-> 
+You are receiving this mail because:
+You are the assignee for the bug.=
 
