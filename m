@@ -1,62 +1,62 @@
-Return-Path: <linux-pm+bounces-3193-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3194-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FC3884627F
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 22:14:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB905846286
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 22:15:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A14841F24FDA
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 21:14:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 73B7AB256A4
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 21:15:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 587D33D0A6;
-	Thu,  1 Feb 2024 21:14:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF6CB3D0A4;
+	Thu,  1 Feb 2024 21:15:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="FtacmHPF"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="B0yD/cQC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395CF3CF5D;
-	Thu,  1 Feb 2024 21:14:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D68E83CF4B;
+	Thu,  1 Feb 2024 21:15:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706822056; cv=none; b=ie42kLu35Z7uPXeAClAA8F1I3IRjxpk8KQHRC0UM7c0tPfMXAYmSSOJsa1MFHdKJMhsTmHTxlEIzuPd6jIJBlWV0gqTmVU21ipSegvnJBVii9LbP5yPKvbzMV7MuwcRd7lLFuF7AsjrEvT1X3fZl7NPu4/hn6j57R5Hz6hWmEy8=
+	t=1706822145; cv=none; b=P/xKQuzcwNP8ztHCWomqDR7IlfJGyzJmcFLYjov9ViM8WzyF9G3bJRYS6ZLHo0vyRsfVcS6Om53xexAdrvqoGkvSf6TTJAAFLMoCzcoax19pYMgslZAYiub3hkP/JK4E4+JqZcA1mFANJOE25jDPdFivpvxbIPIgyvTxJaMzZ5E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706822056; c=relaxed/simple;
-	bh=9om5/uHJZU5XBcVgAeZIRJGYJUvAq7Y1kYG+2l1D41M=;
+	s=arc-20240116; t=1706822145; c=relaxed/simple;
+	bh=nbPLVcnpXdoLea02k3RQml8nSOfPIsnduWVK4k874jo=;
 	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NBeZiNzVYKHWfah4OvhbR1U7rgWwEN2oil8yP4mjv+yxeonamhlO7NZMjP8OKo/pM49etRG1uDTQSKK4im61cO693pkYd+4YUtqiuB/ntHxWegywSj3jeqkKgICaVdrgEl2eDnH7lLE7vx3IxxLnTayPDE6gL3xtXtYASzllBrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=FtacmHPF; arc=none smtp.client-ip=198.47.23.248
+	 Content-Type:Content-Disposition:In-Reply-To; b=Tbpk2WT4woUTkoyxbC52wBEumbxMjNq6OcUafZIO6bSzdx8cHeXPx9Lz7gok5detseC2iTZ98xPTS7dGXVN2B9tYb5pv+4+5P+ftwVdeECQOWGBkGcPpBc9R+UCk/vyBEKpw1LUZM9bmJgB+SADOTQnIwHGcO6DbriJ0UvKFgik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=B0yD/cQC; arc=none smtp.client-ip=198.47.19.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 411LE2MV100921;
-	Thu, 1 Feb 2024 15:14:02 -0600
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 411LFZbR109972;
+	Thu, 1 Feb 2024 15:15:35 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1706822043;
-	bh=pEAsrojppbvro419UF7rpGJv30BuKmWk+tcLVk+eenQ=;
+	s=ti-com-17Q1; t=1706822135;
+	bh=5WfwU34Z/QUv+EUKQFKyqy3U1KXtaKb6FiXT2xQF4ZE=;
 	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=FtacmHPF72QEDzuSyCA5vjFHJFnXLWxyY9tnRvzCMGWw3NRVMSDBWE0zfBGXoF9LQ
-	 8PfgLZ1psWpVLNdbjG6iHdb1/LQ6mfXyX6LHvjXva7mK0Cvzq/PKwttPAaT1B7Ue7M
-	 BInzEVk0dUiPuLabIVEwrwHfuofNK1JH8UjHKyqI=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 411LE2kI062853
+	b=B0yD/cQCIJlHgUseRpdYp5HSwIADUq+dS+A1YBLPsJwfgIMX19PelkctcoX5DF63d
+	 Mh/KNUe/Od/Wc7MkuF0fQqgddtCxvyuvgzRJm3oD1+WBup+9hXsxxDJMYs9sH714w8
+	 2PFTbI3DOFHKB9VXT0ar0JFer4TBnp5Fdbzc91fI=
+Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 411LFZoH022138
 	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 1 Feb 2024 15:14:02 -0600
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+	Thu, 1 Feb 2024 15:15:35 -0600
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 1
- Feb 2024 15:14:02 -0600
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ Feb 2024 15:15:35 -0600
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 1 Feb 2024 15:14:02 -0600
+ Frontend Transport; Thu, 1 Feb 2024 15:15:35 -0600
 Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 411LE2ir109903;
-	Thu, 1 Feb 2024 15:14:02 -0600
-Date: Thu, 1 Feb 2024 15:14:02 -0600
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 411LFYqQ050473;
+	Thu, 1 Feb 2024 15:15:34 -0600
+Date: Thu, 1 Feb 2024 15:15:34 -0600
 From: Nishanth Menon <nm@ti.com>
 To: Andrew Davis <afd@ti.com>
 CC: Tero Kristo <kristo@kernel.org>, Santosh Shilimkar <ssantosh@kernel.org>,
@@ -67,9 +67,10 @@ CC: Tero Kristo <kristo@kernel.org>, Santosh Shilimkar <ssantosh@kernel.org>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 00/12] Add TI-SCI reboot driver
-Message-ID: <20240201211402.nldc6x2iosi4fkxq@morbidity>
+Subject: Re: [PATCH 03/12] power: reset: Add TI-SCI reboot driver
+Message-ID: <20240201211534.dv6qu7ila54vqykn@cheating>
 References: <20240131221957.213717-1-afd@ti.com>
+ <20240131221957.213717-4-afd@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,63 +79,143 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20240131221957.213717-1-afd@ti.com>
+In-Reply-To: <20240131221957.213717-4-afd@ti.com>
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
 On 16:19-20240131, Andrew Davis wrote:
-> Hello all,
+> This reboot driver calls into firmware using TI-SCI to reboot the system.
+> We register the handler with low priority as we want PSCI to remain the
+> main way these devices are rebooted. This driver acts as a fallback if
+> PSCI is not able to reboot the system.
 > 
-> While PCSI normally handles reboot for K3, this is an available
-> fallback in case PCSI reboot fails. This driver is registered 
-> with low priority as we want PSCI to remain the main way these
-> devices are rebooted.
-> 
-> The important part is the binding/DT changes. Currently in
-> U-Boot (which use the Linux device trees) we may not have
-> PSCI available yet (pre TF-A) and so we need this node
-> to correctly reboot. Adding this node in U-Boot is one of
-> the last remaining deltas between the two project DT files. 
-> 
-> Thanks,
-> Andrew
-> 
-> Andrew Davis (12):
->   dt-bindings: power: reset: Document ti,sci-reboot compatible
->   dt-bindings: arm: keystone: ti-sci: Add reboot-controller child node
->   power: reset: Add TI-SCI reboot driver
->   arm64: dts: ti: k3-am64: Add reboot-controller node
->   arm64: dts: ti: k3-am62: Add reboot-controller node
->   arm64: dts: ti: k3-am62a: Add reboot-controller node
->   arm64: dts: ti: k3-am62p: Add reboot-controller node
->   arm64: dts: ti: k3-am65: Add reboot-controller node
->   arm64: dts: ti: k3-j7200: Add reboot-controller node
->   arm64: dts: ti: k3-j721e: Add reboot-controller node
->   arm64: dts: ti: k3-j721s2: Add reboot-controller node
->   arm64: dts: ti: k3-j784s4: Add reboot-controller node
-
-Maybe after the driver has been accepted, a defconfig patch(module) might be
-useful?
-
-> 
->  .../bindings/arm/keystone/ti,sci.yaml         |  8 +++
->  .../bindings/power/reset/ti,sci-reboot.yaml   | 33 ++++++++++
->  MAINTAINERS                                   |  2 +
->  arch/arm64/boot/dts/ti/k3-am62-main.dtsi      |  5 ++
->  arch/arm64/boot/dts/ti/k3-am62a-main.dtsi     |  4 ++
->  arch/arm64/boot/dts/ti/k3-am62p-main.dtsi     |  5 ++
->  arch/arm64/boot/dts/ti/k3-am64-main.dtsi      |  5 ++
->  arch/arm64/boot/dts/ti/k3-am65-wakeup.dtsi    |  4 ++
->  .../boot/dts/ti/k3-j7200-mcu-wakeup.dtsi      |  4 ++
->  .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      |  4 ++
->  .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     |  4 ++
->  .../boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi     |  5 ++
->  drivers/power/reset/Kconfig                   |  7 +++
->  drivers/power/reset/Makefile                  |  1 +
->  drivers/power/reset/ti-sci-reboot.c           | 63 +++++++++++++++++++
->  15 files changed, 154 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/reset/ti,sci-reboot.yaml
+> Signed-off-by: Andrew Davis <afd@ti.com>
+> ---
+>  MAINTAINERS                         |  1 +
+>  drivers/power/reset/Kconfig         |  7 ++++
+>  drivers/power/reset/Makefile        |  1 +
+>  drivers/power/reset/ti-sci-reboot.c | 63 +++++++++++++++++++++++++++++
+>  4 files changed, 72 insertions(+)
 >  create mode 100644 drivers/power/reset/ti-sci-reboot.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 45983bb174fe4..ee67ea497fc56 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -21758,6 +21758,7 @@ F:	drivers/clk/keystone/sci-clk.c
+>  F:	drivers/firmware/ti_sci*
+>  F:	drivers/irqchip/irq-ti-sci-inta.c
+>  F:	drivers/irqchip/irq-ti-sci-intr.c
+> +F:	drivers/power/reset/ti-sci-reboot.c
+>  F:	drivers/reset/reset-ti-sci.c
+>  F:	drivers/soc/ti/ti_sci_inta_msi.c
+>  F:	drivers/pmdomain/ti/ti_sci_pm_domains.c
+> diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+> index fece990af4a75..d3e91e54cae24 100644
+> --- a/drivers/power/reset/Kconfig
+> +++ b/drivers/power/reset/Kconfig
+> @@ -205,6 +205,13 @@ config POWER_RESET_ST
+>  	help
+>  	  Reset support for STMicroelectronics boards.
+>  
+> +config POWER_RESET_TI_SCI
+> +	tristate "TI System Control Interface (TI-SCI) reboot driver"
+> +	depends on TI_SCI_PROTOCOL
+> +	help
+> +	  This enables the reboot driver support over TI System Control
+> +	  Interface available on some TI's SoCs.
+> +
+>  config POWER_RESET_TPS65086
+>  	bool "TPS65086 restart driver"
+>  	depends on MFD_TPS65086
+> diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+> index a95d1bd275d18..881ca58a43b9c 100644
+> --- a/drivers/power/reset/Makefile
+> +++ b/drivers/power/reset/Makefile
+> @@ -23,6 +23,7 @@ obj-$(CONFIG_POWER_RESET_QNAP) += qnap-poweroff.o
+>  obj-$(CONFIG_POWER_RESET_REGULATOR) += regulator-poweroff.o
+>  obj-$(CONFIG_POWER_RESET_RESTART) += restart-poweroff.o
+>  obj-$(CONFIG_POWER_RESET_ST) += st-poweroff.o
+> +obj-$(CONFIG_POWER_RESET_TI_SCI) += ti-sci-reboot.o
+>  obj-$(CONFIG_POWER_RESET_TPS65086) += tps65086-restart.o
+>  obj-$(CONFIG_POWER_RESET_VERSATILE) += arm-versatile-reboot.o
+>  obj-$(CONFIG_POWER_RESET_VEXPRESS) += vexpress-poweroff.o
+> diff --git a/drivers/power/reset/ti-sci-reboot.c b/drivers/power/reset/ti-sci-reboot.c
+> new file mode 100644
+> index 0000000000000..400bd5d740f8b
+> --- /dev/null
+> +++ b/drivers/power/reset/ti-sci-reboot.c
+> @@ -0,0 +1,63 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Texas Instrument's System Control Interface (TI-SCI) reboot driver
+> + *
+> + * Copyright (C) 2024 Texas Instruments Incorporated - https://www.ti.com/
+> + *	Andrew Davis <afd@ti.com>
+> + */
+> +
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reboot.h>
+> +
+> +#include <linux/soc/ti/ti_sci_protocol.h>
+> +
+> +static int ti_sci_reboot_handler(struct sys_off_data *data)
+> +{
+> +	const struct ti_sci_handle *sci = data->cb_data;
+> +	const struct ti_sci_core_ops *core_ops = &sci->ops.core_ops;
+> +
+> +	core_ops->reboot_device(sci);
+> +
+> +	return NOTIFY_DONE;
+> +}
+> +
+> +static int ti_sci_reboot_probe(struct platform_device *pdev)
+> +{
+> +	const struct ti_sci_handle *sci;
+> +	int err;
+> +
+> +	sci = devm_ti_sci_get_handle(&pdev->dev);
+> +	if (IS_ERR(sci))
+> +		return PTR_ERR(sci);
+> +
+> +	err = devm_register_sys_off_handler(&pdev->dev,
+> +					    SYS_OFF_MODE_RESTART,
+> +					    SYS_OFF_PRIO_LOW,
+> +					    ti_sci_reboot_handler,
+> +					    (void *)sci);
+> +	if (err)
+> +		return dev_err_probe(&pdev->dev, err, "Cannot register restart handler\n");
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id ti_sci_reboot_of_match[] = {
+> +	{ .compatible = "ti,sci-reboot", },
+> +	{ /* sentinel */ },
+> +};
+> +MODULE_DEVICE_TABLE(of, ti_sci_reboot_of_match);
+> +
+> +static struct platform_driver ti_sci_reboot_driver = {
+> +	.probe = ti_sci_reboot_probe,
+> +	.driver = {
+> +		.name = "ti-sci-reboot",
+> +		.of_match_table = ti_sci_reboot_of_match,
+> +	},
+> +};
+> +module_platform_driver(ti_sci_reboot_driver);
+> +
+> +MODULE_AUTHOR("Andrew Davis <afd@ti.com>");
+> +MODULE_DESCRIPTION("TI System Control Interface (TI SCI) Reboot driver");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.39.2
 
+Will assume the patch to go via Sebastien. Will be good for the dts to
+go via SoC tree. So hoping Sebastien will just pick the driver and
+bindings.
+
+Reviewed-by: Nishanth Menon <nm@ti.com>
 -- 
 Regards,
 Nishanth Menon
