@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-3156-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3157-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82B398456B8
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 13:01:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97DCB8456E6
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 13:07:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DFE04285A51
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 12:01:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D0EF41C228D6
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 12:07:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CC6315CD76;
-	Thu,  1 Feb 2024 12:01:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8695C15F312;
+	Thu,  1 Feb 2024 12:04:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T0QRo4oH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fJJbZH5w"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2567A15D5A3
-	for <linux-pm@vger.kernel.org>; Thu,  1 Feb 2024 12:01:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62E6B15D5CC
+	for <linux-pm@vger.kernel.org>; Thu,  1 Feb 2024 12:04:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706788886; cv=none; b=VaYMQ0iNkXDfIG7viirEv5bXbf19IusdDkNo7oa3cVuhX9hOL5BGR9HSKSaPGa044jVBqsA8/v9H1GjgIlCj9mbPg3UarHzsrvm0hZLvRgmvilqaRmAOn+qWJICdO2BYa5l8nzncuOcs7CFRa5Fap2ixIf7Ey8hc/hSacC24Uis=
+	t=1706789074; cv=none; b=MirRWwFFbUVWGGtRcCWXJAIShlyrA4oRWGkBdb2pUHrkTHuIfXGQ9/F49JV7TQHIIx9OKnL+fSW534e3zsV7dZZIzRF7YcVZQ+A6oGenL7vbHdc8MZYX7pjaCbBb0vjctdOrUfj/qoxvjBq1rUwkaBeWRApQB0E7I4GZvOAxIVk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706788886; c=relaxed/simple;
-	bh=pljrbNa1L1hsH8ig6iwuiy075gM53Pwrej4ODQ+xqiI=;
+	s=arc-20240116; t=1706789074; c=relaxed/simple;
+	bh=+jISuYFvKGzEYPJWPPRkByzdN0OMSevZbBZq/47aatE=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=iD1V6mhTESrNBwA8UYRF9wb2iOFSoycg+VJljMvlhTzVj9BQZ+gbotaYXr3zYCuqnYX8yUsPAAnt+AfcB2+nmtSr6ztvF4TSgoR06P0G3uFML3wgC9YKcKHFnKAWuDFOukB7wsslhPausCt2A3XSYiFKIxd4/4XrOH4Rv+h6qaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T0QRo4oH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9EBC4C433A6
-	for <linux-pm@vger.kernel.org>; Thu,  1 Feb 2024 12:01:25 +0000 (UTC)
+	 Content-Type:MIME-Version; b=XD8yuPoVO/IsQ1nNQqkBBMMaFIxW8aOMOGHXuFZTk8HEI/W+EWHsRHPF264qGJIOKAVabeYDAn3xx1/2sYhwVR3N4uuvtX6b7Pa+PIrrQC6aBna9O0ZfmxpopgTb0eo9a2pLgA7smNzawVhjni/FpdYlnIDx4rrpSahyTGmNWFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fJJbZH5w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E2E77C433B1
+	for <linux-pm@vger.kernel.org>; Thu,  1 Feb 2024 12:04:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706788885;
-	bh=pljrbNa1L1hsH8ig6iwuiy075gM53Pwrej4ODQ+xqiI=;
+	s=k20201202; t=1706789073;
+	bh=+jISuYFvKGzEYPJWPPRkByzdN0OMSevZbBZq/47aatE=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=T0QRo4oHbQzS5BnWx423S2mRjltFBZWtt3oJVFw8cZTUQzxEUvQR2QrOrqd9CNXiQ
-	 dJ2dBC51QqDtDkFiExuB4xyL1ABYlNbJCT6Nf7R4Eg7EnTb7vRGZQuzHC7TxDIE8it
-	 21uv6a771CTPazKblZKD2efUphLtuihCgZAAtmk/PayvhUda2s71GFNfOiCZroEy0u
-	 xji+3K8g/oA9AD8oN5pzZQBplVr73CXULKJtZD3QxFBPeHr1nsuuvN/cgBGieaRx1e
-	 +27HX0acNGqs7Yg6m1UmFT70KBTT2HO3ZI5ep1JlQvT4g+dZhIcvkwGwHpE0m6CtxL
-	 fipt8XPBstong==
+	b=fJJbZH5wQH3WHx75PZ9BnKsfNyQkVo2pCkTIxIUjZdKfLLUFcwEBFt5mgjsVUwpZb
+	 OA1ABOh4vnJr7PvKg6PkSJ7VbUzCZXoeD8SmTK9gkWOE/XpVrTqMKh5YpycB7CbF+H
+	 PVkisCI0PXL+97dFhNBHf0FK9Ld4SqZ0BgeN22no6zdMADgeO/Qn9gQF7/m6D4D/q8
+	 OvCChXtyD08D0wlKb1PUQxsOnqmbsjfMXY8B00AsdGYlqqZVZzd6Jm0myJssIhrLlP
+	 jnGARDq6mhZv6esyrrNG7qAJd1Wc/Sftc8Y94fwehCepVVE+5TRayh+EhfMuVIXk9g
+	 1kWPaEmD/grnA==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 8C01AC4332E; Thu,  1 Feb 2024 12:01:25 +0000 (UTC)
+	id D1244C53BD3; Thu,  1 Feb 2024 12:04:33 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-pm@vger.kernel.org
 Subject: [Bug 217931] amd-pstate lacks crucial features: CPU frequency and
  boost control
-Date: Thu, 01 Feb 2024 12:01:25 +0000
+Date: Thu, 01 Feb 2024 12:04:33 +0000
 X-Bugzilla-Reason: AssignedTo
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: None
@@ -56,14 +56,14 @@ X-Bugzilla-Component: cpufreq
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: high
-X-Bugzilla-Who: mario.limonciello@amd.com
+X-Bugzilla-Who: aros@gmx.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217931-137361-EecOgLBvLi@https.bugzilla.kernel.org/>
+Message-ID: <bug-217931-137361-wqqrVN8Ivc@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-217931-137361@https.bugzilla.kernel.org/>
 References: <bug-217931-137361@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,11 +79,19 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D217931
 
---- Comment #48 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
-Did you pick up
-https://lore.kernel.org/linux-pm/20240119113319.54158-1-mario.limonciello@a=
-md.com/T/#u
-?
+--- Comment #49 from Artem S. Tashkinov (aros@gmx.com) ---
+(In reply to Mario Limonciello (AMD) from comment #48)
+> Did you pick up
+> https://lore.kernel.org/linux-pm/20240119113319.54158-1-mario.
+> limonciello@amd.com/T/#u ?
+
+I'm running 6.7.3 which ostensibly includes it:
+
+commit c794cc65bb3eef3142bbecd48f1fd43f1fa8d478
+Author: Mario Limonciello
+Date:   Fri Jan 19 05:33:19 2024 -0600
+
+    cpufreq/amd-pstate: Fix setting scaling max/min freq values
 
 --=20
 You may reply to this email to add a comment.
