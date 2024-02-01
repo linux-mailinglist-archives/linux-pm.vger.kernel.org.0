@@ -1,47 +1,70 @@
-Return-Path: <linux-pm+bounces-3196-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3197-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33CE78462E2
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 22:51:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D156846300
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 22:55:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CB5FEB22838
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 21:51:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E16531F25489
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 21:55:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7980A3E49B;
-	Thu,  1 Feb 2024 21:51:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 883644652D;
+	Thu,  1 Feb 2024 21:54:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="erXDY+/B"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603F11E4AA;
-	Thu,  1 Feb 2024 21:51:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 555EA4644C;
+	Thu,  1 Feb 2024 21:54:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706824310; cv=none; b=uvhk7qHhBrjMfTepLbQ5J26hgJqkU4CD5oawK8EfqxKh0yuvPZ/WBiwzy4u2KSb0cPRSETNQj93LlhrXkgeYm47dmaSu2LTIOhS2As1cclkIxLK/uxB2weT0Q7wVvI8MU6S9ZG9Rh+pU+CS9VZYY3Ut5dHLLdBwrqLlTCa5GxwQ=
+	t=1706824442; cv=none; b=npG02KNltm4VCj5gp5VHGc3EpUp7CHwwbcOdQ4kZsLe/2mxgMMoR9N+OaXhTtC6VM0mB97xYM0NZqoQyAIwsoocOQxPpJp1pXjsYGl7miFFGwFKFywzyJQwkutFl1bT/e4rWuTK9PIweSOVIh/CXVLCmi5Ee670UpPZfka07iKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706824310; c=relaxed/simple;
-	bh=nYOKeNNCygrvnM3yUPYmsdj07SBNCiT7gBLj9/exBHM=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=SVe/x7oyiPc6uwdg147SY7JUABPJJ95cYfRInVc5zsq3AseodlP9q2NP/yEnLrjJ7c2UMCJLluNcchWstizJomE6I5xiHfVIRUHqOpQiOG/+lQgzVY5yTlBenLqGw69JBiAnI5fCUWx0AKqnLdtJLyUKWknsbM7GcoARENKReCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4100C433F1;
-	Thu,  1 Feb 2024 21:51:49 +0000 (UTC)
-Received: by mercury (Postfix, from userid 1000)
-	id 8D0BB1062449; Thu,  1 Feb 2024 22:51:45 +0100 (CET)
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Sebastian Reichel <sre@kernel.org>, 
- Support Opensource <support.opensource@diasemi.com>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
- Andrew Davis <afd@ti.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20240129190246.73067-1-afd@ti.com>
-References: <20240129190246.73067-1-afd@ti.com>
-Subject: Re: [PATCH v2 0/4] Power supply register with devm
-Message-Id: <170682430554.1254657.9141440535307121291.b4-ty@collabora.com>
-Date: Thu, 01 Feb 2024 22:51:45 +0100
+	s=arc-20240116; t=1706824442; c=relaxed/simple;
+	bh=6HuV3IIZv6Gf48oHjnacch7E8ba8dfFz7iHDkHJ9gJI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZDrDJnAghmbXdTZy87VGZsgzTk9aoUhzyZ25GUHDJXviFznUjL7m/f2B59iCCwB2tkTBR+ZwBdvLD1ozCw/DwEp7BPZsTYjcJsBF25BHyitbdU4JYEK82MjvWOunmYiXgiZo5CO86zD82H0l+MJ6h9UKaRS682tZbKi4U2J1Iq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=erXDY+/B; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B46DFC43390;
+	Thu,  1 Feb 2024 21:54:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706824442;
+	bh=6HuV3IIZv6Gf48oHjnacch7E8ba8dfFz7iHDkHJ9gJI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=erXDY+/Bb93G2WJSSqUUkhCiY/ubBVOs8IA8L4TUx2CHlO8Syb1DeHTebG66YUdxO
+	 REQb3miA8wyyztzLNnF3q144P+9BMBH8lRYVC++miKROrpJvwcWPorNv3/KJVcHEbr
+	 jPrZ3QwKqG1bD56dj6pc9x7udg0/kLuZguSBjM07O5z7ywb3L88N6hi/33ynFulnDo
+	 HXWz0mEGnd73ychg51zppt/MfQhq9Z5fph5Ew01A6ZnmaoJN5Tc9kjnsBUO1Kzl/2+
+	 YPvDOywCGK5b0qS+GqxKEu8itj3BabKtNmblp+EhuEkMNOjJOHW23GImV+bl96zth/
+	 SxhrparPbyZWg==
+From: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Taniya Das <quic_tdas@quicinc.com>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: (subset) [PATCH v4 0/8] arm64: dts: qcom: sa8295p: Enable GPU
+Date: Thu,  1 Feb 2024 15:53:51 -0600
+Message-ID: <170682442869.248329.14691453184149397609.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240125-sa8295p-gpu-v4-0-7011c2a63037@quicinc.com>
+References: <20240125-sa8295p-gpu-v4-0-7011c2a63037@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -49,33 +72,27 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.4
+Content-Transfer-Encoding: 8bit
 
 
-On Mon, 29 Jan 2024 13:02:42 -0600, Andrew Davis wrote:
-> These are the 4 patches that had "unused variable" warnings (thanks kernel
-> test robot). Fixed the warnings and rebased on -next so all taken patches
-> from v1 are dropped.
+On Thu, 25 Jan 2024 13:05:06 -0800, Bjorn Andersson wrote:
+> Due to the different PMIC configuration found in the SA8295P platform,
+> compared to SC8280XP, the VDD_GFX pads are supplied by an dedicated
+> MAX20411 LDO.
 > 
-> Thanks,
-> Andrew
+> Support for expressing the regulator supply is added to the binding, the
+> support for enabling the parent supply for GX is added, the missing
+> gfx.lvl power-domain is dropped, and the DeviceTree is wired up to
+> enable the GPU in this configuration.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/4] power: supply: max14577: Use devm_power_supply_register() helper
-      commit: 99ae075684be3a84a9c20d9541259221d2c01fc8
-[2/4] power: supply: max77693: Use devm_power_supply_register() helper
-      commit: aed93a83a01211270feed78aa5dd5f2d2c76ff82
-[3/4] power: supply: max8925: Use devm_power_supply_register() helper
-      commit: 478a253e466570c4f02cbd7c9386f29dffe4375d
-[4/4] power: supply: wm8350: Use devm_power_supply_register() helper
-      commit: cad1e6df54ca6231a3d1217bc4231d1a7eadbc0c
+[8/8] arm64: defconfig: Enable MAX20411 regulator driver
+      commit: 42945eb663d88471a0c394d9f466401b1a8d791f
 
 Best regards,
 -- 
-Sebastian Reichel <sebastian.reichel@collabora.com>
-
+Bjorn Andersson <andersson@kernel.org>
 
