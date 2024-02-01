@@ -1,145 +1,142 @@
-Return-Path: <linux-pm+bounces-3191-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3193-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03534846172
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 20:52:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FC3884627F
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 22:14:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CA32FB21F16
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 19:52:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A14841F24FDA
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 21:14:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E91D85290;
-	Thu,  1 Feb 2024 19:52:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 587D33D0A6;
+	Thu,  1 Feb 2024 21:14:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="FtacmHPF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EC0843AC7;
-	Thu,  1 Feb 2024 19:52:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395CF3CF5D;
+	Thu,  1 Feb 2024 21:14:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706817129; cv=none; b=iNXZbCq815JhDAzz4Wvj1CDZFmhjy370wFoz47rk8lMBQuXXKYbmkmHqJGuQTYIElqRxfnsO8WEEjy3BBUvhGDacQJtaDizTNSFDZTbQy3zDXmTs9rWyYlpJxYk0k1fG93v6j+Isfr8oLc72Y69AeafykfUJZysbNaLXM0OA1qs=
+	t=1706822056; cv=none; b=ie42kLu35Z7uPXeAClAA8F1I3IRjxpk8KQHRC0UM7c0tPfMXAYmSSOJsa1MFHdKJMhsTmHTxlEIzuPd6jIJBlWV0gqTmVU21ipSegvnJBVii9LbP5yPKvbzMV7MuwcRd7lLFuF7AsjrEvT1X3fZl7NPu4/hn6j57R5Hz6hWmEy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706817129; c=relaxed/simple;
-	bh=Xew4gfla9jXfDUHncBpGBh9XjFEK7ZSm6CBMFGhAqEA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m37LC7QVhCxkQzfCNuMPT1lkNcXeHkq4I+Nnz6k4+VnQ/nfAsCBJ5Wfij6HkSAQNUiURX/qkWStFroctgYjT9RvrisKzXPV8T1B4+oMiozrL+WPj0++scjo5iMHeok0eHtkTnw1RCL57h0hOeu702uxYxj2TXhXMB168G9zCBkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-5958b9cda7aso277826eaf.0;
-        Thu, 01 Feb 2024 11:52:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706817127; x=1707421927;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wBl5ou+TD9Mfvm1lNPShNlGf1pFR7KSH1sVazZHfCoo=;
-        b=TNNH+viGuZzgzeZCrGkeHKnAVu2odmk3BtRhzeh3LmS06uvU2seKKDZLz3sQc3tbsF
-         bcttPTPeYiaeeJTqLVN+vvrUcrAO6iDBH8fRzff6fMS1SmgnemkgqViG7GtjWtBizUgN
-         8chO3mWbXgHlsxtcGnS1WGVfjxTimpj5X5it6dJ3iyjUaMKfNXgwS3kBt07vR10J0AqH
-         Qooz/pTzSF5XwsN5sAaallTLkD38ENyxtHMvb4AqvTVYT6K5b15nZdZOAzrqIB+UomZq
-         kESozfZWjfV2GDN8FxPwYMR3sgSFFxJGCvBzq57ONbwmad++Xss3d3Y21FbQDn+xWPgK
-         5d4w==
-X-Gm-Message-State: AOJu0YzfCVH1BzQ348nm/xSrSzysAv969o1xlbLbju7Y0aQ1SnlZmLNN
-	siQ6lpJUCQsP3wA5q1NjvlKVgOArFOF5mPso00GhOARWCirOGq/Bsn+pfncJkK71YMM8VJJZ1jy
-	hzmgXjSnmsGOSLTvHpuRR1GOf+eY=
-X-Google-Smtp-Source: AGHT+IGIX57rgCOZHcRSzGZQRMQVAH2ftzlN0hg9CMRZtySZdlSrx6EQamzGXxueyqs1l1rdkWQ36d9/JVVygPbihns=
-X-Received: by 2002:a05:6820:2c8a:b0:59a:bfb:f556 with SMTP id
- dx10-20020a0568202c8a00b0059a0bfbf556mr3738842oob.0.1706817127183; Thu, 01
- Feb 2024 11:52:07 -0800 (PST)
+	s=arc-20240116; t=1706822056; c=relaxed/simple;
+	bh=9om5/uHJZU5XBcVgAeZIRJGYJUvAq7Y1kYG+2l1D41M=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NBeZiNzVYKHWfah4OvhbR1U7rgWwEN2oil8yP4mjv+yxeonamhlO7NZMjP8OKo/pM49etRG1uDTQSKK4im61cO693pkYd+4YUtqiuB/ntHxWegywSj3jeqkKgICaVdrgEl2eDnH7lLE7vx3IxxLnTayPDE6gL3xtXtYASzllBrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=FtacmHPF; arc=none smtp.client-ip=198.47.23.248
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 411LE2MV100921;
+	Thu, 1 Feb 2024 15:14:02 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1706822043;
+	bh=pEAsrojppbvro419UF7rpGJv30BuKmWk+tcLVk+eenQ=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=FtacmHPF72QEDzuSyCA5vjFHJFnXLWxyY9tnRvzCMGWw3NRVMSDBWE0zfBGXoF9LQ
+	 8PfgLZ1psWpVLNdbjG6iHdb1/LQ6mfXyX6LHvjXva7mK0Cvzq/PKwttPAaT1B7Ue7M
+	 BInzEVk0dUiPuLabIVEwrwHfuofNK1JH8UjHKyqI=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 411LE2kI062853
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 1 Feb 2024 15:14:02 -0600
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 1
+ Feb 2024 15:14:02 -0600
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 1 Feb 2024 15:14:02 -0600
+Received: from localhost (uda0133052.dhcp.ti.com [128.247.81.232])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 411LE2ir109903;
+	Thu, 1 Feb 2024 15:14:02 -0600
+Date: Thu, 1 Feb 2024 15:14:02 -0600
+From: Nishanth Menon <nm@ti.com>
+To: Andrew Davis <afd@ti.com>
+CC: Tero Kristo <kristo@kernel.org>, Santosh Shilimkar <ssantosh@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski
+	<krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH 00/12] Add TI-SCI reboot driver
+Message-ID: <20240201211402.nldc6x2iosi4fkxq@morbidity>
+References: <20240131221957.213717-1-afd@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240130111250.185718-1-angelogioacchino.delregno@collabora.com> <20240130111250.185718-9-angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20240130111250.185718-9-angelogioacchino.delregno@collabora.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 1 Feb 2024 20:51:56 +0100
-Message-ID: <CAJZ5v0ifn7eg9WrpNF2_PB62gE_BzV2Vx5_k7ebOoZWdQNVWaQ@mail.gmail.com>
-Subject: Re: [PATCH v1 08/18] thermal: intel: pch_thermal: Migrate to thermal_zone_device_register()
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: daniel.lezcano@linaro.org, miquel.raynal@bootlin.com, rafael@kernel.org, 
-	rui.zhang@intel.com, lukasz.luba@arm.com, support.opensource@diasemi.com, 
-	shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, 
-	festevam@gmail.com, linux-imx@nxp.com, andersson@kernel.org, 
-	konrad.dybcio@linaro.org, amitk@kernel.org, thara.gopinath@gmail.com, 
-	niklas.soderlund@ragnatech.se, srinivas.pandruvada@linux.intel.com, 
-	baolin.wang@linux.alibaba.com, u.kleine-koenig@pengutronix.de, 
-	hayashi.kunihiko@socionext.com, d-gole@ti.com, linus.walleij@linaro.org, 
-	DLG-Adam.Ward.opensource@dm.renesas.com, error27@gmail.com, heiko@sntech.de, 
-	hdegoede@redhat.com, jernej.skrabec@gmail.com, f.fainelli@gmail.com, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20240131221957.213717-1-afd@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-On Tue, Jan 30, 2024 at 12:13=E2=80=AFPM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> The thermal API has a new thermal_zone_device_register() function which
-> is deprecating the older thermal_zone_device_register_with_trips() and
-> thermal_tripless_zone_device_register().
->
-> Migrate to the new thermal zone device registration function.
->
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
-> ---
->  drivers/thermal/intel/intel_pch_thermal.c | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/thermal/intel/intel_pch_thermal.c b/drivers/thermal/=
-intel/intel_pch_thermal.c
-> index b3905e34c507..73d7c2ac7dbc 100644
-> --- a/drivers/thermal/intel/intel_pch_thermal.c
-> +++ b/drivers/thermal/intel/intel_pch_thermal.c
-> @@ -160,6 +160,7 @@ static int intel_pch_thermal_probe(struct pci_dev *pd=
-ev,
->                                    const struct pci_device_id *id)
->  {
->         enum pch_board_ids board_id =3D id->driver_data;
-> +       struct thermal_zone_device_params tzdp;
->         struct pch_thermal_device *ptd;
->         int nr_trips =3D 0;
->         u16 trip_temp;
-> @@ -233,10 +234,13 @@ static int intel_pch_thermal_probe(struct pci_dev *=
-pdev,
->
->         nr_trips +=3D pch_wpt_add_acpi_psv_trip(ptd, nr_trips);
->
-> -       ptd->tzd =3D thermal_zone_device_register_with_trips(board_names[=
-board_id],
-> -                                                          ptd->trips, nr=
-_trips,
-> -                                                          0, ptd, &tzd_o=
-ps,
-> -                                                          NULL, 0, 0);
-> +       tzdp.tzp.type =3D board_names[board_id];
-> +       tzdp.tzp.devdata =3D ptd;
-> +       tzdp.tzp.trips =3D ptd->trips;
-> +       tzdp.tzp.num_trips =3D nr_trips;
-> +       tzdp.tzp.ops =3D &tzd_ops;
-> +
-> +       ptd->tzd =3D thermal_zone_device_register(&tzdp);
+On 16:19-20240131, Andrew Davis wrote:
+> Hello all,
+> 
+> While PCSI normally handles reboot for K3, this is an available
+> fallback in case PCSI reboot fails. This driver is registered 
+> with low priority as we want PSCI to remain the main way these
+> devices are rebooted.
+> 
+> The important part is the binding/DT changes. Currently in
+> U-Boot (which use the Linux device trees) we may not have
+> PSCI available yet (pre TF-A) and so we need this node
+> to correctly reboot. Adding this node in U-Boot is one of
+> the last remaining deltas between the two project DT files. 
+> 
+> Thanks,
+> Andrew
+> 
+> Andrew Davis (12):
+>   dt-bindings: power: reset: Document ti,sci-reboot compatible
+>   dt-bindings: arm: keystone: ti-sci: Add reboot-controller child node
+>   power: reset: Add TI-SCI reboot driver
+>   arm64: dts: ti: k3-am64: Add reboot-controller node
+>   arm64: dts: ti: k3-am62: Add reboot-controller node
+>   arm64: dts: ti: k3-am62a: Add reboot-controller node
+>   arm64: dts: ti: k3-am62p: Add reboot-controller node
+>   arm64: dts: ti: k3-am65: Add reboot-controller node
+>   arm64: dts: ti: k3-j7200: Add reboot-controller node
+>   arm64: dts: ti: k3-j721e: Add reboot-controller node
+>   arm64: dts: ti: k3-j721s2: Add reboot-controller node
+>   arm64: dts: ti: k3-j784s4: Add reboot-controller node
 
-IMV, this should be
+Maybe after the driver has been accepted, a defconfig patch(module) might be
+useful?
 
-ptd->tzd =3D thermal_zone_device_register(board_names[board_id],
-ptd->trips, nr_trips, &tzd_ops, ptd, NULL);
+> 
+>  .../bindings/arm/keystone/ti,sci.yaml         |  8 +++
+>  .../bindings/power/reset/ti,sci-reboot.yaml   | 33 ++++++++++
+>  MAINTAINERS                                   |  2 +
+>  arch/arm64/boot/dts/ti/k3-am62-main.dtsi      |  5 ++
+>  arch/arm64/boot/dts/ti/k3-am62a-main.dtsi     |  4 ++
+>  arch/arm64/boot/dts/ti/k3-am62p-main.dtsi     |  5 ++
+>  arch/arm64/boot/dts/ti/k3-am64-main.dtsi      |  5 ++
+>  arch/arm64/boot/dts/ti/k3-am65-wakeup.dtsi    |  4 ++
+>  .../boot/dts/ti/k3-j7200-mcu-wakeup.dtsi      |  4 ++
+>  .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      |  4 ++
+>  .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     |  4 ++
+>  .../boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi     |  5 ++
+>  drivers/power/reset/Kconfig                   |  7 +++
+>  drivers/power/reset/Makefile                  |  1 +
+>  drivers/power/reset/ti-sci-reboot.c           | 63 +++++++++++++++++++
+>  15 files changed, 154 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/reset/ti,sci-reboot.yaml
+>  create mode 100644 drivers/power/reset/ti-sci-reboot.c
 
-and the tzdp variable is not necessary even.
-
-Analogously in the rest of the series (ie. patches [4-18/18]).
-
->         if (IS_ERR(ptd->tzd)) {
->                 dev_err(&pdev->dev, "Failed to register thermal zone %s\n=
-",
->                         board_names[board_id]);
-> --
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
 
