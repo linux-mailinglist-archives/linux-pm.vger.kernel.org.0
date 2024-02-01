@@ -1,155 +1,142 @@
-Return-Path: <linux-pm+bounces-3187-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3192-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 035E1846065
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 19:53:16 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B8D88461AA
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 21:00:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96B951F22AE8
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 18:53:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E1985B2BFF1
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 19:56:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F8B282C64;
-	Thu,  1 Feb 2024 18:53:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D78585289;
+	Thu,  1 Feb 2024 19:56:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mcYN3Bx+"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DTRQ4Hna"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4478E84FA4;
-	Thu,  1 Feb 2024 18:53:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE10E85278
+	for <linux-pm@vger.kernel.org>; Thu,  1 Feb 2024 19:56:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706813587; cv=none; b=G87U21DihpBrqhzL3IWYIrDkFGbij2SHT7s3oDhJg/HbHocbj03c4Bi7S4dZ+ZtmLXVuv5jJO8fENt5SbStBxoLUHoT7E8CVA8sTLB+FEErDC3WHizRQMN6apJ7Kw3YKWls6RDZ42BDHqP64+DM34RjHAsnWL17O2H2YLthMGL8=
+	t=1706817377; cv=none; b=W2YRzMs9m251kVrdWuu/qHgW1pV2ABYwbD/DzeqZzbEsaBwJqx66kSee9zwt1scBNwdb4li/sWujcpLpLDb+vyGDn+6dUh+g/Zr3ebVavPalxYcgkr1w4BbVZ9zS45Y2RX1hh2JANlzW0fOjIB479D/eEsvlxlGS5V6JQSfWA98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706813587; c=relaxed/simple;
-	bh=hn6KWUJsg7QMVb1YKITYVJPIHabhwsJrPCRKqDD8JsQ=;
+	s=arc-20240116; t=1706817377; c=relaxed/simple;
+	bh=TyvARfG5cdiLS3Lx957Ua1EFLe1TpBHS0WmMWNXQHGg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QfIlniwIsZLvd0s455iU/uF6MXbtT4tlnMn1TsBwZ3CrcakfKSnLtwVH5KqWnuuBIaGGBn911xhWJB2xvkOXK91hfEPRgsHz1qCpfjoLCml4P4O8OFVqHQ5EUrR+uJnhQI4UzVLDf0oK8YmUm9jkwkT25amrPrMSZb2I512nMbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mcYN3Bx+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A53CC433F1;
-	Thu,  1 Feb 2024 18:53:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706813587;
-	bh=hn6KWUJsg7QMVb1YKITYVJPIHabhwsJrPCRKqDD8JsQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mcYN3Bx+py4jPwGusxAPSr91dfhPbsysnAALcnrUdj/imtlQVXvZd6kBzCYS8KbJr
-	 +rEACQruYT6OcH+CJOxRsBZV0Kn+8yuQ8fA/tHD6YwJTzjYkPgXTneBmgTdwCnGmv/
-	 OhAhrvkbbK4GoLGg5y5PXQAdRZ/S5ytQ3ro/5r5mAe8bfKx3x4xfFHF/9Q40OpLbdr
-	 l8rrY3yV9LK1deRzEmsNYIkIXNbIoFMfaeUIF2GmVsMV2W6xyujgptOhYfhb6bqbsi
-	 xczhGyV3JSS7Lmfyr+4BxtfXJTCWGtnxbp/UJXCAnMoMPInIfZgNKSCmxeMOaIYaN4
-	 AQt4ZAg3zpisA==
-Date: Thu, 1 Feb 2024 18:53:02 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Andrew Davis <afd@ti.com>
-Cc: Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-	Santosh Shilimkar <ssantosh@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 01/12] dt-bindings: power: reset: Document ti,sci-reboot
- compatible
-Message-ID: <20240201-ambiguous-swan-a927ae8f126f@spud>
-References: <20240131221957.213717-1-afd@ti.com>
- <20240131221957.213717-2-afd@ti.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=InTWaVbt+IAU+dWdH8qX+H8Ug1nMQx1oK8UBjp31EyFXsnkZmATUuNAwC0ooC/V4fRHlFbBIWxWrU0jjmrF5x2eI3aD4pYWDAa5fHPmDaKmjo2MpvP7MHkM/TOQcdpVd/2HNG7Q8hCRaRgZWGtYsbILtcKmLvnD1OT0traoCVSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DTRQ4Hna; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1706817374;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=iN9wTYAiEZqmVZSRGp3IE12Ur++dFYxvXqv8nbWcyFg=;
+	b=DTRQ4Hnaubahspwx54qtR7ubNcdJwXU4sKmDD/SKuTVJ92bACyRN2QF/mLHMqCxK+X8sFm
+	+5hoDjhjXOUgzDAirYLhJoUp9DydRg7ncYio7FxVq8nrBmZJen7XkEh21adiZ6WKM+k+t6
+	elDp2D1qSB9OdS3AJgQCoDQauTbkWiw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-518-2hoVCHGRMSqXp1LTv0T2SA-1; Thu, 01 Feb 2024 14:56:11 -0500
+X-MC-Unique: 2hoVCHGRMSqXp1LTv0T2SA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E92FF8489F7;
+	Thu,  1 Feb 2024 19:56:10 +0000 (UTC)
+Received: from tpad.localdomain (unknown [10.96.133.5])
+	by smtp.corp.redhat.com (Postfix) with ESMTPS id B007A2026D66;
+	Thu,  1 Feb 2024 19:56:10 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+	id CA31C402492AA; Thu,  1 Feb 2024 15:45:01 -0300 (-03)
+Date: Thu, 1 Feb 2024 15:45:01 -0300
+From: Marcelo Tosatti <mtosatti@redhat.com>
+To: Parshuram Sangle <parshuram.sangle@intel.com>
+Cc: rafael@kernel.org, daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, jaishankar.rajendran@intel.com
+Subject: Re: [PATCH] cpuidle: do not shrink guest poll_limit_ns below
+ grow_start
+Message-ID: <ZbvmrdBkeOK71KGg@tpad>
+References: <20240111135950.17016-1-parshuram.sangle@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="qZaAzCjNUu3le7WH"
-Content-Disposition: inline
-In-Reply-To: <20240131221957.213717-2-afd@ti.com>
-
-
---qZaAzCjNUu3le7WH
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240111135950.17016-1-parshuram.sangle@intel.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.4
 
-On Wed, Jan 31, 2024 at 04:19:46PM -0600, Andrew Davis wrote:
-> This calls into the system firmware using TI-SCI to reboot the system.
-> Used as a fallback when PSCI is unable or not available to reboot
-> the system.
->=20
-> Signed-off-by: Andrew Davis <afd@ti.com>
+On Thu, Jan 11, 2024 at 07:29:50PM +0530, Parshuram Sangle wrote:
+> While adjusting guest halt poll limit, grow block starts at
+> guest_halt_poll_grow_start without taking intermediate values.
+> Similar behavior is expected while shrinking the value. This
+> avoids short interval values which are really not required.
+> 
+> VCPU1 trace (guest_halt_poll_shrink equals 2):
+> 
+> VCPU1 grow 10000
+> VCPU1 shrink 5000
+> VCPU1 shrink 2500
+> VCPU1 shrink 1250
+> VCPU1 shrink 625
+> VCPU1 shrink 312
+> VCPU1 shrink 156
+> VCPU1 shrink 78
+> VCPU1 shrink 39
+> VCPU1 shrink 19
+> VCPU1 shrink 9
+> VCPU1 shrink 4
+> 
+> Similar change is done in KVM halt poll flow with below patch:
+> Link: https://lore.kernel.org/kvm/20211006133021.271905-3-sashal@kernel.org/
+> 
+> Co-developed-by: Rajendran Jaishankar <jaishankar.rajendran@intel.com>
+> Signed-off-by: Rajendran Jaishankar <jaishankar.rajendran@intel.com>
+> Signed-off-by: Parshuram Sangle <parshuram.sangle@intel.com>
 > ---
->  .../bindings/power/reset/ti,sci-reboot.yaml   | 33 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 34 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/reset/ti,sci-=
-reboot.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/power/reset/ti,sci-reboot.=
-yaml b/Documentation/devicetree/bindings/power/reset/ti,sci-reboot.yaml
-> new file mode 100644
-> index 0000000000000..aa628be33d122
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/reset/ti,sci-reboot.yaml
-> @@ -0,0 +1,33 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/reset/ti,sci-reboot.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>  drivers/cpuidle/governors/haltpoll.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/cpuidle/governors/haltpoll.c b/drivers/cpuidle/governors/haltpoll.c
+> index 1dff3a52917d..663b7f164d20 100644
+> --- a/drivers/cpuidle/governors/haltpoll.c
+> +++ b/drivers/cpuidle/governors/haltpoll.c
+> @@ -98,10 +98,15 @@ static void adjust_poll_limit(struct cpuidle_device *dev, u64 block_ns)
+>  		unsigned int shrink = guest_halt_poll_shrink;
+>  
+>  		val = dev->poll_limit_ns;
+> -		if (shrink == 0)
+> +		if (shrink == 0) {
+>  			val = 0;
+> -		else
+> +		} else {
+>  			val /= shrink;
+> +			/* Reset value to 0 if shrunk below grow_start */
+> +			if (val < guest_halt_poll_grow_start)
+> +				val = 0;
+> +		}
 > +
-> +title: TI-SCI reboot controller
-> +
-> +maintainers:
-> +  - Andrew Davis <afd@ti.com>
-> +
-> +description: |
-> +  Some TI SoCs contain a system controller (like the Power Management Mi=
-cro
-> +  Controller (PMMC) on Keystone 66AK2G SoC) that are responsible for con=
-trolling
-> +  the state of the various hardware modules present on the SoC. Communic=
-ation
-> +  between the host processor running an OS and the system controller hap=
-pens
-> +  through a protocol called TI System Control Interface (TI-SCI protocol=
-).
-> +
-> +  This reboot controller node uses the TI SCI protocol to perform a devi=
-ce reboot.
-> +
-> +  Must be a child node of the associated TI-SCI system controller node.
-> +
-> +properties:
-> +  compatible:
-> +    const: ti,sci-reboot
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    k3_reboot: reboot-controller {
-> +        compatible =3D "ti,sci-reboot";
-> +    };
+>  		trace_guest_halt_poll_ns_shrink(val, dev->poll_limit_ns);
+>  		dev->poll_limit_ns = val;
+>  	}
+> -- 
+> 2.17.1
+> 
+> 
+> 
 
-I'd drop the example since this has no use standalone and just rely on
-the one in the parent. Otherwise I think this is fine.
+Looks good.
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Reviewed-by: Marcelo Tosatti <mtosatti@redhat.com>
 
---qZaAzCjNUu3le7WH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZbvojgAKCRB4tDGHoIJi
-0lQjAQD9jRgISimwK5XXqRkIOSmfbFMop/J2bMV+Hq0W/jsK4wD/V+Mx0ZYHEweK
-6yVr+pLxeofwsOmv/jSXGp+DcgHJiAo=
-=8HJw
------END PGP SIGNATURE-----
-
---qZaAzCjNUu3le7WH--
 
