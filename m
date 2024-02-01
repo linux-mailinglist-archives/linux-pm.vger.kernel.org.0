@@ -1,128 +1,188 @@
-Return-Path: <linux-pm+bounces-3202-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3203-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0327846495
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 00:50:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4974284649A
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 00:51:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DE8021C21645
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 23:50:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A20B28C0D0
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 23:51:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77C2E47F58;
-	Thu,  1 Feb 2024 23:50:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8001547F65;
+	Thu,  1 Feb 2024 23:51:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="mCmxhQkt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F5EBWuJA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94E0147F52;
-	Thu,  1 Feb 2024 23:50:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4724547F59;
+	Thu,  1 Feb 2024 23:51:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706831413; cv=none; b=csMdWnLCD1R3e7EtDmcy7S7J1PnCbrGJuV07FVljeMv2UxO5aDAhYgxRZSuwueHgjJF5dqDNZZ6jX9H/S9/mJhyDWhBiPWgv//ZHUM43C+gjc6Ug8fsk3dKDOXba6xP4kmRAAp64KqLF9gno03qacIVH7b2KvX8Zj3InK2Xjb+k=
+	t=1706831509; cv=none; b=bX6nH0Ib01G4QJ5Cv9yG9jc4pd7tI5I7SgEK9BpW7KobpjJjRpihgYS3yjllizYD2dUbNN3dZ8OrfDgZiR7TMI9y3kjgVLgUdV72mTwdbfMEhYq2IAu8C3mBosRtQmH9qlGMO0eAquosuhNH/qLrtgZ4N5MRkHBf9dKU8sTM73c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706831413; c=relaxed/simple;
-	bh=uxc7sN1qyLKA8RXd9+usKdpcepmKr7acUGjP2DjQCwk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=t6b7m3zvgkohn37q+7YQVDqc/3AEBqZYLbywlFfqPGZuKBx2XI/Ou0yFbee+aNIF4/hw2Os8xb0CXvRxNNZMoqbHv6aIHOTKTVFKRM1DfCMhUHbYbrglNg+d0lJB4/VVKodzd5B/rxJgUQZjZ4zeJIa0tz72/U03i6sFS7XMkd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=mCmxhQkt; arc=none smtp.client-ip=198.47.19.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 411No1hc022509;
-	Thu, 1 Feb 2024 17:50:01 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1706831401;
-	bh=pA3/cTZ7i/yJAMqa6Cw/IrsmxoD/vopbCB/efVaHv1A=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=mCmxhQktzfBdzUR++y9QJ2gjcZ79F6I+u+Pf0YitUGlLEHDivkEWT4ni+98VkTROB
-	 CbhrQQ3E97J8mAEx5RwCn6zqB6/ZXfOy/02cj74UtdL9/zks8lbpw1N7CX+JSH05A9
-	 wVnRJ67k/awJrKvCbZBV5/1UIsup2/FztgswVVvM=
-Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 411No1h7022823
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 1 Feb 2024 17:50:01 -0600
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 1
- Feb 2024 17:50:01 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 1 Feb 2024 17:50:01 -0600
-Received: from [10.249.42.149] ([10.249.42.149])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 411No0Ns130682;
-	Thu, 1 Feb 2024 17:50:01 -0600
-Message-ID: <6ba87a3f-e2f4-4caf-8d23-aa78caaba45a@ti.com>
-Date: Thu, 1 Feb 2024 17:50:00 -0600
+	s=arc-20240116; t=1706831509; c=relaxed/simple;
+	bh=FOHcufONbN0/pF2GMlGqhXYPYixKrUUq72o/McpHSq0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pRV8y874F6DWGAB9DEH228FpY/4XwUEVWTkfNPYPeb0E77KSsz4R7Bn2auauT33lmOCYipWXAjVw1gJ50QzkhXUN7GXZbixg7ZfA2yL7vPJJSj32NZ5rnKnDTTIEpOjHjiby18RgoYkN6FBFq8dH/MH0I0uWdcf2I/4Jsh+Zu8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F5EBWuJA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08DBEC433C7;
+	Thu,  1 Feb 2024 23:51:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706831508;
+	bh=FOHcufONbN0/pF2GMlGqhXYPYixKrUUq72o/McpHSq0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=F5EBWuJAP/b8dmyCSFJx8XNPEJ5E1M8Dp1GohRlEGSI8SE1/pNUNHLxByQS83YTZp
+	 +kTMEBxol1rAQCSE17sCAq+awsWMGpeaDR22rbUWqjevvacu9rtP/dqQbK4c2WAlck
+	 /DIMSq2Q1PowNjSf4B0a4Lz6ZnwyJ7sgh+MPmabnDX89axYwtvdWdbtVqUqkNQMBsO
+	 4rcJmUTLRz6TjSkVc6KS+oRPiGxp/CycgheXgB3YnOGMo96KTOgRI531EHSZLPwmzt
+	 0WUMDoJSDuCHrb3fFel0qo8oZ1fsVssVEgkGDO2djNy9oUkvYklOLAHbuABdumDvlh
+	 +YVdi/wSh/09g==
+Date: Thu, 1 Feb 2024 17:51:45 -0600
+From: Bjorn Andersson <andersson@kernel.org>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Abel Vesa <abel.vesa@linaro.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
+	Len Brown <len.brown@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Andy Gross <agross@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>, Vikash Garodia <quic_vgarodia@quicinc.com>, 
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	Taniya Das <quic_tdas@quicinc.com>, Jagadeesh Kona <quic_jkona@quicinc.com>, 
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, linux-media@vger.kernel.org
+Subject: Re: Re: [PATCH v4 1/5] PM: domains: Allow devices attached to genpd
+ to be managed by HW
+Message-ID: <l7icfezpajren25545n4cjtqehhividt5b2dxnxgetdsshc3k3@tdws423qdblk>
+References: <20240122-gdsc-hwctrl-v4-0-9061e8a7aa07@linaro.org>
+ <20240122-gdsc-hwctrl-v4-1-9061e8a7aa07@linaro.org>
+ <tax3c6o5qjegy6tv3zbgrd5rencfvypr3zg7twxfrmdngscp74@n44ei3q63g64>
+ <CAPDyKFpdtrWbzNksLoY++aOY7Ltyt1HhtLZo8bj8sQ05-4Sq0g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 02/12] dt-bindings: arm: keystone: ti-sci: Add
- reboot-controller child node
-Content-Language: en-US
-To: Rob Herring <robh@kernel.org>
-CC: Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Santosh
- Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-References: <20240131221957.213717-1-afd@ti.com>
- <20240131221957.213717-3-afd@ti.com>
- <20240201230351.GA1900918-robh@kernel.org>
-From: Andrew Davis <afd@ti.com>
-In-Reply-To: <20240201230351.GA1900918-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFpdtrWbzNksLoY++aOY7Ltyt1HhtLZo8bj8sQ05-4Sq0g@mail.gmail.com>
 
-On 2/1/24 5:03 PM, Rob Herring wrote:
-> On Wed, Jan 31, 2024 at 04:19:47PM -0600, Andrew Davis wrote:
->> The TI-SCI firmware supports rebooting the system in addition to the
->> functions already listed here, document child node for the same.
->>
->> Signed-off-by: Andrew Davis <afd@ti.com>
->> ---
->>   .../devicetree/bindings/arm/keystone/ti,sci.yaml          | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml b/Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml
->> index c24ad0968f3ef..e392175b33c74 100644
->> --- a/Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml
->> +++ b/Documentation/devicetree/bindings/arm/keystone/ti,sci.yaml
->> @@ -83,6 +83,10 @@ properties:
->>       type: object
->>       $ref: /schemas/reset/ti,sci-reset.yaml#
->>   
->> +  reboot-controller:
->> +    type: object
->> +    $ref: /schemas/power/reset/ti,sci-reboot.yaml#
+On Wed, Jan 31, 2024 at 01:12:00PM +0100, Ulf Hansson wrote:
+> On Wed, 31 Jan 2024 at 02:09, Bjorn Andersson <andersson@kernel.org> wrote:
+> >
+> > On Mon, Jan 22, 2024 at 10:47:01AM +0200, Abel Vesa wrote:
+> > > From: Ulf Hansson <ulf.hansson@linaro.org>
+> > >
+> > > Some power-domains may be capable of relying on the HW to control the power
+> > > for a device that's hooked up to it. Typically, for these kinds of
+> > > configurations the consumer driver should be able to change the behavior of
+> > > power domain at runtime, control the power domain in SW mode for certain
+> > > configurations and handover the control to HW mode for other usecases.
+> > >
+> > > To allow a consumer driver to change the behaviour of the PM domain for its
+> > > device, let's provide a new function, dev_pm_genpd_set_hwmode(). Moreover,
+> > > let's add a corresponding optional genpd callback, ->set_hwmode_dev(),
+> > > which the genpd provider should implement if it can support switching
+> > > between HW controlled mode and SW controlled mode. Similarly, add the
+> > > dev_pm_genpd_get_hwmode() to allow consumers to read the current mode and
+> > > its corresponding optional genpd callback, ->get_hwmode_dev(), which the
+> > > genpd provider can also implement for reading back the mode from the
+> > > hardware.
+> > >
+> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > > ---
+> > >  drivers/pmdomain/core.c   | 69 +++++++++++++++++++++++++++++++++++++++++++++++
+> > >  include/linux/pm_domain.h | 17 ++++++++++++
+> > >  2 files changed, 86 insertions(+)
+> > >
+> > > diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+> > > index a1f6cba3ae6c..41b6411d0ef5 100644
+> > > --- a/drivers/pmdomain/core.c
+> > > +++ b/drivers/pmdomain/core.c
+> > > @@ -548,6 +548,75 @@ void dev_pm_genpd_synced_poweroff(struct device *dev)
+> > >  }
+> > >  EXPORT_SYMBOL_GPL(dev_pm_genpd_synced_poweroff);
+> > >
+> > > +/**
+> > > + * dev_pm_genpd_set_hwmode - Set the HW mode for the device and its PM domain.
+> >
+> > This isn't proper kernel-doc
 > 
-> Don't need a ref just for a single property.
-> 
-> But then why do we need a node here at all? Can't you assume reboot
-> support for TI-SCI firmware (i.e. based on the parent node). Then you
-> don't need a DT update to add the feature.
+> Sorry, I didn't quite get that. What is wrong?
 > 
 
-We could yes, but then again we could do the same for all the
-child nodes of this system-controller parent node. Might even
-have been better that way, for now I'm trying to be consistent
-with what is already here (child node per service provided,
-even though the services are always the same).
+https://docs.kernel.org/doc-guide/kernel-doc.html#function-documentation
+says that there should be () after the function name, and below there
+should be a Return:
 
-Andrew
+> >
+> > > + *
+> > > + * @dev: Device for which the HW-mode should be changed.
+> > > + * @enable: Value to set or unset the HW-mode.
+> > > + *
+> > > + * Some PM domains can rely on HW signals to control the power for a device. To
+> > > + * allow a consumer driver to switch the behaviour for its device in runtime,
+> > > + * which may be beneficial from a latency or energy point of view, this function
+> > > + * may be called.
+> > > + *
+> > > + * It is assumed that the users guarantee that the genpd wouldn't be detached
+> > > + * while this routine is getting called.
+> > > + *
+> > > + * Returns 0 on success and negative error values on failures.
+> > > + */
+> > > +int dev_pm_genpd_set_hwmode(struct device *dev, bool enable)
+> > > +{
+> > > +     struct generic_pm_domain *genpd;
+> > > +     int ret = 0;
+> > > +
+> > > +     genpd = dev_to_genpd_safe(dev);
+> > > +     if (!genpd)
+> > > +             return -ENODEV;
+> > > +
+> > > +     if (!genpd->set_hwmode_dev)
+> > > +             return -EOPNOTSUPP;
+> > > +
+> > > +     genpd_lock(genpd);
+> > > +
+> > > +     if (dev_gpd_data(dev)->hw_mode == enable)
+> >
+> > Between this and the gdsc patch, the hw_mode state might not match the
+> > hardware state at boot.
+> >
+> > With hw_mode defaulting to false, your first dev_pm_genpd_set_hwmode(,
+> > false) will not bring control to SW - which might be fatal.
+> 
+> Right, good point.
+> 
+> I think we have two ways to deal with this:
+> 1) If the provider is supporting ->get_hwmode_dev(), we can let
+> genpd_add_device() invoke it to synchronize the state.
 
-> Rob
+I'd suggest that we skip the optimization for now and just let the
+update hit the driver on each call.
+
+> 2) If the provider doesn't support ->get_hwmode_dev() we need to call
+> ->set_hwmode_dev() to allow an initial state to be set.
+> 
+> The question is then, if we need to allow ->get_hwmode_dev() to be
+> optional, if the ->set_hwmode_dev() is supported - or if we can
+> require it. What's your thoughts around this?
+> 
+
+Iiuc this resource can be shared between multiple clients, and we're
+in either case returning the shared state. That would mean a client
+acting upon the returned value, is subject to races.
+
+I'm therefore inclined to say that we shouldn't have a getter, other
+than for debugging purposes, in which case reading the HW-state or
+failing would be reasonable outcomes.
+
+Regards,
+Bjorn
 
