@@ -1,187 +1,154 @@
-Return-Path: <linux-pm+bounces-3183-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3184-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D48A6845F72
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 19:10:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4B32846009
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 19:35:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7B3A9B256F2
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 18:07:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9AF08293380
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 18:35:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A8D484FCF;
-	Thu,  1 Feb 2024 18:01:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="rm1XIA5e"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82F7912FB0E;
+	Thu,  1 Feb 2024 18:35:21 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C77A112B159;
-	Thu,  1 Feb 2024 18:01:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D712612FB1E;
+	Thu,  1 Feb 2024 18:35:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706810506; cv=none; b=SULwPvAo6ZC8A8cqrHKhYGBtg+xYIv7hkVS20UJZPoNpDW3vVta1FsSmHIBimuTuuC79+ScjxBePVSMhLeNn0qWwjNQezqpJZ0O9VifItLAgEMP+5eoIwSL3WI24xTad1RxlMyERaM/o/9YYd6h+d9LlQoRHetSDOqdhrzJGHGM=
+	t=1706812521; cv=none; b=MNFezmk4IY2l2DCl335SnZXJyEVG+aIGZk3ucxuLM0tRzjZBf1oJ6CA1KDRCXMVarWo2oASqlE8B84tuMSQkrj/a15wf8aQbNjpEfy4ZZ48vdQhcPpzOwZqjw/fz/sb92OHMekoRr3kaiXB9SBwQpenMrgAQRs9O/PSv/BcJA1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706810506; c=relaxed/simple;
-	bh=XmOFZVJS2nbpGNUIJRoCh2m3rWFsAgRF8B1pZ3UaoOo=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=d97bJCTXFG+IlJQrCIlUDP/StuyibuGTxC80bzGgGPecbCx3rl3OXhXWwoOGXWA1nx2xc6ye5JCfNmYrx+qsuNKxkwqELRwQoyGzuPbLuYOn1+K/efyg52sfhUbGier6kdi8AMapubAfCnOYhY/AF0lYTO0TPB4A7JPTPkB60I4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=rm1XIA5e; arc=none smtp.client-ip=198.47.23.248
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 411I1ELM051733;
-	Thu, 1 Feb 2024 12:01:14 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1706810474;
-	bh=NIThW8dvWRvWMprZfYkUcAv9QvAIjazC0Wh9+WTdW/k=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=rm1XIA5e4Rd+MaKMZD53SqGG1cTPvCemTrgkowPC2TgVVIYHMHHtJS0ad9yi9KOeb
-	 +tfC+54rcrgXtKzhqOZN0rv/Uf5rfNYE5TuSras9Ff6Qljz95lgsORpI4ZRRY61NYW
-	 4ov56vN26Wgga0dm5uhiXV/+HhxaKBnHfDrHFGHQ=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 411I1Ec2004657
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 1 Feb 2024 12:01:14 -0600
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 1
- Feb 2024 12:01:14 -0600
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 1 Feb 2024 12:01:14 -0600
-Received: from lelvsmtp6.itg.ti.com ([10.249.42.149])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 411I12Gw117221;
-	Thu, 1 Feb 2024 12:01:13 -0600
-From: Andrew Davis <afd@ti.com>
-To: Sebastian Reichel <sre@kernel.org>,
-        Manivannan Sadhasivam
-	<manivannan.sadhasivam@linaro.org>,
-        Cristian Ciocaltea
-	<cristian.ciocaltea@gmail.com>,
-        Florian Fainelli
-	<florian.fainelli@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>, Scott Branden
-	<sbranden@broadcom.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad
- Dybcio <konrad.dybcio@linaro.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-actions@lists.infradead.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, Andrew Davis <afd@ti.com>
-Subject: [PATCH 18/18] power: reset: syscon-poweroff: Use devm_register_sys_off_handler(POWER_OFF)
-Date: Thu, 1 Feb 2024 12:01:02 -0600
-Message-ID: <20240201180102.70395-19-afd@ti.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240201180102.70395-1-afd@ti.com>
-References: <20240201180102.70395-1-afd@ti.com>
+	s=arc-20240116; t=1706812521; c=relaxed/simple;
+	bh=wVEE4o4YbZnycETZF+nnePTwghfVH/i+QCzGYI/C7Yg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IPuCgYgrfuCm1AKaDX/uz66iBDcDsozszEzcNg+a5fUFrMV/VclNkjmnMgeA9R4CHxMg+F5+ITGk4QpP5kpW40uzc9TsVtLLvDaZVlFVNrkcFinzoKBpH2eE8Uonseu56KuogKwb60H7XSWznqQBLxhHpkWDxbFzGe1MoAbXEaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-3bc21303a35so355476b6e.0;
+        Thu, 01 Feb 2024 10:35:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706812519; x=1707417319;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eZ2QxOAM6wQKlIfCJl9Vqv3s9SEP5nb9j+tik6gXq34=;
+        b=k8FBOBkhReTYkq725gZ8UHcXf4YPkoF2oQsMuorjc5+Ta0OVC33pSTumxkm1LrZOTQ
+         FgKzCLSUga6j9XF3MUpLsi0LqjOYyUS7GsbGRQIxWH6CHbFnFQ4jPJSus5sPhwsY4DEl
+         AlPlaqmxFpB7LF/fCR52QaADkwPlU9mdv30rZlWWD0HbJf3r/vc7HZrKfzBEVkeh9wmn
+         NzHHTn9BcsDT3oyj1IsRdBV0MMtDuhpyDkn9hmIl4WfcG3BH17qeCFbkgg+VMYVTnJ2W
+         brD7KEjwjgWZXl1COdGjPL9RKVLiwfZnCjzgZc7oBaZgkbIgPW8o7CaWCBAtfw5xQZIR
+         gD2Q==
+X-Forwarded-Encrypted: i=0; AJvYcCUZug+fTKeu7vYOl5pIygXBSAYzmV/6N0igik4D+Atkw/weimeKBD3dV22XtwpBONhMvRqKAelll6V+oC6GMc2SscgqpamShrM17vdsJWtjgJKzgqbuqzSzc8w3nV9XlFlipnbNA+WrlcWcqiu0QpivRG+hzG+iHXKCpSBA3e2F4O5d593DSRbUwOVB6lR9B/V8hdtey4E/ROBWx/Tcw/6MPTyoeEY8gPE=
+X-Gm-Message-State: AOJu0YyI9/uHJxi5NLsy0D6ngYGn5s/mGIe6nS3oB8p/+PNuAA1Q0fQC
+	HewcJVH6J09OLf6olvhN8IXhrmujZvomGDIgqYqc8u2ihO1W6LsltFgLSbVhtPEjYoxweni6IpD
+	n0GoN8KD6o1+zji6jtyJ4MHqM0oY=
+X-Google-Smtp-Source: AGHT+IHl7ZfSyZbTn+BWGDtWxJDfxiYL/7G27PGTV4hoHIkYyvlUdRPgeAmUY/ilFubDbzYjf+gZYDcJUx+rdd1MQuI=
+X-Received: by 2002:a05:6870:b6a4:b0:218:d1b7:e8cd with SMTP id
+ cy36-20020a056870b6a400b00218d1b7e8cdmr4165119oab.3.1706812518874; Thu, 01
+ Feb 2024 10:35:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <20240130111250.185718-1-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20240130111250.185718-1-angelogioacchino.delregno@collabora.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 1 Feb 2024 19:35:07 +0100
+Message-ID: <CAJZ5v0haFEGOjaMC4a8CZbQe+cxFfaB1hD60NkN297NY2TZB5A@mail.gmail.com>
+Subject: Re: [PATCH v1 00/18] Thermal: Part 1 - Introduce new structs and registration
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: daniel.lezcano@linaro.org, miquel.raynal@bootlin.com, rafael@kernel.org, 
+	rui.zhang@intel.com, lukasz.luba@arm.com, support.opensource@diasemi.com, 
+	shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de, 
+	festevam@gmail.com, linux-imx@nxp.com, andersson@kernel.org, 
+	konrad.dybcio@linaro.org, amitk@kernel.org, thara.gopinath@gmail.com, 
+	niklas.soderlund@ragnatech.se, srinivas.pandruvada@linux.intel.com, 
+	baolin.wang@linux.alibaba.com, u.kleine-koenig@pengutronix.de, 
+	hayashi.kunihiko@socionext.com, d-gole@ti.com, linus.walleij@linaro.org, 
+	DLG-Adam.Ward.opensource@dm.renesas.com, error27@gmail.com, heiko@sntech.de, 
+	hdegoede@redhat.com, jernej.skrabec@gmail.com, f.fainelli@gmail.com, 
+	bchihi@baylibre.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Use device life-cycle managed register function to simplify probe and
-exit paths.
+On Tue, Jan 30, 2024 at 12:13=E2=80=AFPM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> This series is a preparation for a bigger cleanup that will be split in
+> three parts in order to avoid immutable branches on multiple subsystems,
+> as in other parts of this series there will be changes in:
+> - drivers/acpi
+> - drivers/platform/x86
+> - drivers/power/supply
+> - drivers/net/wireless
+> - drivers/net/ethernet
+>
+> This is the first part which adds new structures and starts reorganizing
+> struct members around, plus, this migrates all of the thermal drivers
+> found in drivers/thermal/ to the new thermal_zone_device_register()
+> function, and advertises that the old registration functions are
+> deprecated and will be removed.
+>
+> The reorganization is supposed to be complete (or mostly) but...
+>  - struct thermal_zone_platform_params has a temporary name:
+>    this is done in order to avoid compile time failures for
+>    the drivers outside of drivers/thermal before migrating
+>    them to thermal_zone_device_params/thermal_zone_device_register();
+>  - struct thermal_zone_params temporarily has two duplicated members,
+>    governor_name and no_hwmon;
+>
+> Part 2 of this topic will migrate all drivers that are external to
+> drivers/thermal to thermal_zone_device_register(); I will send that
+> part only after part 1 is confirmed to be acceptable, as otherwise
+> I'd be spamming people for no reason :-)
+>
+> After all drivers will be migrated to thermal_zone_device_register(),
+> we won't have to care about changing anything outside of drivers/thermal
+> to finish this set of cleanups/changes (and no immutable branches needed)
+> and this means that...
+> Part 3 of this topic will contain the following changes:
+>  - thermal_zone_device_register_with_trips() will be removed
+>  - thermal_tripless_zone_device_register() will be removed
+>  - thermal_zone_params will be renamed to thermal_governor_ipa_params
+>    - governor_name, no_hwmon members will be removed
+>  - thermal_zone_platform_params will be renamed to thermal_zone_params
+>  - Removal of the THERMAL_NAME_LENGTH limitation for `type`
+>
+> More scheduled changes, which should end up in part 3 (at least that's
+> my intention), or eventually entirely after this cleanup topic, include:
+>  - Introduction of Thermal Zone names
+>  - Disambiguation of TZ name and type
+>  - Addition of `thermal-zones`, `thermal-zone-names` parsing for
+>    devicetrees
 
-Signed-off-by: Andrew Davis <afd@ti.com>
----
- drivers/power/reset/syscon-poweroff.c | 34 ++++++++++++---------------
- 1 file changed, 15 insertions(+), 19 deletions(-)
+You really should start with this, because that's your goal.
 
-diff --git a/drivers/power/reset/syscon-poweroff.c b/drivers/power/reset/syscon-poweroff.c
-index 4899a019256e8..203936f4c544f 100644
---- a/drivers/power/reset/syscon-poweroff.c
-+++ b/drivers/power/reset/syscon-poweroff.c
-@@ -13,6 +13,7 @@
- #include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/pm.h>
-+#include <linux/reboot.h>
- #include <linux/regmap.h>
- 
- struct syscon_poweroff_data {
-@@ -22,23 +23,30 @@ struct syscon_poweroff_data {
- 	u32 mask;
- };
- 
--static struct syscon_poweroff_data *data;
--
--static void syscon_poweroff(void)
-+static int syscon_poweroff(struct sys_off_data *off_data)
- {
-+	struct syscon_poweroff_data *data = off_data->cb_data;
-+
- 	/* Issue the poweroff */
- 	regmap_update_bits(data->map, data->offset, data->mask, data->value);
- 
- 	mdelay(1000);
- 
- 	pr_emerg("Unable to poweroff system\n");
-+
-+	return NOTIFY_DONE;
- }
- 
- static int syscon_poweroff_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-+	struct syscon_poweroff_data *data;
- 	int mask_err, value_err;
- 
-+	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
- 	data->map = syscon_regmap_lookup_by_phandle(dev->of_node, "regmap");
- 	if (IS_ERR(data->map)) {
- 		data->map = syscon_node_to_regmap(dev->parent->of_node);
-@@ -69,21 +77,10 @@ static int syscon_poweroff_probe(struct platform_device *pdev)
- 		data->mask = 0xFFFFFFFF;
- 	}
- 
--	if (pm_power_off) {
--		dev_err(dev, "pm_power_off already claimed for %ps",
--			pm_power_off);
--		return -EBUSY;
--	}
--
--	pm_power_off = syscon_poweroff;
--
--	return 0;
--}
--
--static void syscon_poweroff_remove(struct platform_device *pdev)
--{
--	if (pm_power_off == syscon_poweroff)
--		pm_power_off = NULL;
-+	return devm_register_sys_off_handler(&pdev->dev,
-+					     SYS_OFF_MODE_POWER_OFF,
-+					     SYS_OFF_PRIO_DEFAULT,
-+					     syscon_poweroff, data);
- }
- 
- static const struct of_device_id syscon_poweroff_of_match[] = {
-@@ -93,7 +90,6 @@ static const struct of_device_id syscon_poweroff_of_match[] = {
- 
- static struct platform_driver syscon_poweroff_driver = {
- 	.probe = syscon_poweroff_probe,
--	.remove_new = syscon_poweroff_remove,
- 	.driver = {
- 		.name = "syscon-poweroff",
- 		.of_match_table = syscon_poweroff_of_match,
--- 
-2.39.2
+It is quite arguable that it can be achieved without making all of the
+changes mentioned above.
 
+>
+> ... Summarizing ...
+>
+> Part 1:
+>  - Reorganize structures (some temporary names/leftovers)
+>  - New registration function, deprecation of old ones
+>  - Migration of drivers/thermal drivers to new registration
+
+I kind of see where this is going, but I don't agree with some of the
+changes made.
+
+Let me comment on individual patches (which is not necessarily going
+to happen today or even tomorrow, so let me go through the entire
+series before deciding what to do next).
+
+Thanks!
 
