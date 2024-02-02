@@ -1,117 +1,100 @@
-Return-Path: <linux-pm+bounces-3207-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3208-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F36D084658F
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 02:49:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6736A846635
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 04:02:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A85D51F24D1F
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 01:49:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B0BE1F25527
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 03:02:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9B61BA24;
-	Fri,  2 Feb 2024 01:49:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6EC3BA4C;
+	Fri,  2 Feb 2024 03:02:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="EIHIbq4M"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TBgy6lid"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10B4A8C08;
-	Fri,  2 Feb 2024 01:48:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 925D9C2CD
+	for <linux-pm@vger.kernel.org>; Fri,  2 Feb 2024 03:02:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706838540; cv=none; b=HfL2xiVnDArHOZ5GKUImaL/mDjk2e6iH8ShUTQESR5187JOtggWOg3MSc1bCDkMJUzD/NITzqvinzDJ8zyzO3MxNfZ3dVjnJFKbVsbJk+mS723GbBaX6QmX1FZZLQH8OQgsreD9ieGnnxAYuI+q2BiIiz+EwpXVEYJeVq79i0ck=
+	t=1706842963; cv=none; b=p6ZsA2x4H6yyuUB3omjGbTGCUN1NrpKeXzpT2v0+m9wQZcatQgdCxORCO9zn2QIrnKN9Gm7SDOYO2uP3iPGHAp/2hAXGA8RVqy5rlG3Ka5JVRW2/S3t2LVGCLcXzLGAaj9I5V0lPPTkAsxE0sZ0DubLXprMq0klEEFr4vHId2I8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706838540; c=relaxed/simple;
-	bh=300mRTpVBKdVL02WYT2MCQqRQRQJwlhnk9YDweXgRH8=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PWLZ441QFhgPpuLOFjWeeF73x4+eoERN1TGjlbbKXv1xlO8X4R9DD7QbmoMEuGndIaPPvgTDz6IL+vhF253kWHw/hlb10UHSubXRARof/nr602w1uB1gENRHkHu2gm+5uQgjgnUr1XpwdR/Hh3OzhMYh5Jc2pxH1YIFop23/HTg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=EIHIbq4M; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 4121cZwl016204;
-	Fri, 2 Feb 2024 01:48:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-type; s=qcppdkim1; bh=E3doFnL1WgDxi/4NsTKz
-	ZqMaAvfcL+TJ+uGrIup/UYY=; b=EIHIbq4MkPG83nIQn762nse5m7IIb3P8TG1V
-	kR568LsUpxJxyg2XtkxRt9OmmnfojJUxo10+lJtan6RoYDAcGoj66lLjpb+0R5By
-	dXgbAJzZ2ylOiXxx9ni+UEHT4WWveD+BQYfic3EOXNXuCsARhTA+kgvV3HOLAR98
-	yrzBdcbmqKdaGim4AZytTR3ParqdNPtwKZmz5eSsSGF/4vVIPnOzDSZGdL8xoZqI
-	qWE9cWfkQZpRbZkLT9CohdTxIS4VyEPNBFH8VpBCcFj6TvEXPprH80mjqvCVk5NQ
-	3fEA11zLuYVLOvWHrCi+muu/vv/5ds1CRqeflYHT7FvWxS14BQ==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w0pwm00kf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 02 Feb 2024 01:48:54 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 4121mrK8011422
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 2 Feb 2024 01:48:53 GMT
-Received: from hu-mdtipton-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Thu, 1 Feb 2024 17:48:52 -0800
-From: Mike Tipton <quic_mdtipton@quicinc.com>
-To: <andersson@kernel.org>, <konrad.dybcio@linaro.org>, <djakov@kernel.org>
-CC: <neil.armstrong@linaro.org>, <quic_rjendra@quicinc.com>,
-        <quic_sibis@quicinc.com>, <abel.vesa@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Mike Tipton <quic_mdtipton@quicinc.com>
-Subject: [PATCH 2/2] interconnect: qcom: x1e80100: Add missing ACV enable_mask
-Date: Thu, 1 Feb 2024 17:48:06 -0800
-Message-ID: <20240202014806.7876-3-quic_mdtipton@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20240202014806.7876-1-quic_mdtipton@quicinc.com>
-References: <20240202014806.7876-1-quic_mdtipton@quicinc.com>
+	s=arc-20240116; t=1706842963; c=relaxed/simple;
+	bh=vw2bk/qb6o6lk1drbLsBBnoISJ18s96FJq9IaPGL56I=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=cGEhY17DtCxObcxbm7JiBwActLwmeviAjlQ9DbFEIZSxnUx+JmAOgDohDg4KKdRU7pJXmGa+GoKaLrJpbHDPDlRtiscTi1lVEL3Wbtw29AjNdIiq0oRzwyKZmCvbHorhWWilz7AmivXCE6rHpBTMr9Ge/s1ZhQlfrrLhiGF72ho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TBgy6lid; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 12348C433A6
+	for <linux-pm@vger.kernel.org>; Fri,  2 Feb 2024 03:02:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706842963;
+	bh=vw2bk/qb6o6lk1drbLsBBnoISJ18s96FJq9IaPGL56I=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=TBgy6lidhnyETjIlWS9jfJo73OT++/WaCTISx8pEQPOX419vVs6STX0Rifu7h3UnH
+	 UQXu2d7lLAsjudtYUuB/+x3kP9PZ6suwTdyTgmTSZbvanuLZ2qFBconb0eE+wVDrwK
+	 gvX0jzzaC7K7BGdMLOhmbjq2w/8DjdNxKviCoi6+nULagPYh/On7Byrx71VXVcnbzC
+	 3aw8SLPmBenL6P/7GrXqAMoikDmfyM3urhTVTQtafSQWv2QIufkA5CwUfdlOli1kYd
+	 0iGU0tZpfBWLLcYON5ODSxjEUpiKwqN+xck4aUMQ1SVgBKuM9GBBg5Sf+a7to2NHxF
+	 3CcvhFDWO4VYA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id F2BD7C53BD5; Fri,  2 Feb 2024 03:02:42 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 217931] amd-pstate lacks crucial features: CPU frequency and
+ boost control
+Date: Fri, 02 Feb 2024 03:02:42 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: Perry.Yuan@amd.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217931-137361-aHMuPJD4mN@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217931-137361@https.bugzilla.kernel.org/>
+References: <bug-217931-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: TaxKVm5y0PbA9-8dDeGpFQB00XXBhTG9
-X-Proofpoint-ORIG-GUID: TaxKVm5y0PbA9-8dDeGpFQB00XXBhTG9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-01_10,2024-01-31_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 phishscore=0 priorityscore=1501 malwarescore=0
- clxscore=1015 bulkscore=0 adultscore=0 mlxscore=0 mlxlogscore=733
- impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2401310000 definitions=main-2402020010
 
-The ACV BCM is voted using bitmasks. Add the proper mask for this
-target.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217931
 
-Fixes: 9f196772841e ("interconnect: qcom: Add X1E80100 interconnect provider driver")
-Signed-off-by: Mike Tipton <quic_mdtipton@quicinc.com>
----
- drivers/interconnect/qcom/x1e80100.c | 1 +
- 1 file changed, 1 insertion(+)
+--- Comment #51 from Perry Yuan(AMD) (Perry.Yuan@amd.com) ---
+(In reply to Artem S. Tashkinov from comment #50)
+> And just in case:
+>=20
+> $ cat /sys/devices/system/cpu/amd_pstate/status
+> active
 
-diff --git a/drivers/interconnect/qcom/x1e80100.c b/drivers/interconnect/qcom/x1e80100.c
-index 5b2de9c3a1d6..281295a9a077 100644
---- a/drivers/interconnect/qcom/x1e80100.c
-+++ b/drivers/interconnect/qcom/x1e80100.c
-@@ -1372,6 +1372,7 @@ static struct qcom_icc_node qns_aggre_usb_south_snoc = {
- 
- static struct qcom_icc_bcm bcm_acv = {
- 	.name = "ACV",
-+	.enable_mask = BIT(3),
- 	.num_nodes = 1,
- 	.nodes = { &ebi },
- };
--- 
-2.17.1
+Got it, thanks for the info.=20
+We will get the scaling_max/min fixed with other patches.
+This ticket is focusing on the boost control feature.
 
+Perry.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
 
