@@ -1,147 +1,166 @@
-Return-Path: <linux-pm+bounces-3215-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3216-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B706846B27
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 09:48:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FF7C846B58
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 09:56:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3974B1C269A5
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 08:48:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B39CDB2A2DE
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 08:56:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 001FC182A7;
-	Fri,  2 Feb 2024 08:47:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D0E76086E;
+	Fri,  2 Feb 2024 08:56:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xZ4Uhek5"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="LydtJng0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2082.outbound.protection.outlook.com [40.107.100.82])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1081F5FDBC
-	for <linux-pm@vger.kernel.org>; Fri,  2 Feb 2024 08:47:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706863658; cv=none; b=pNX9oFZPG0/NoDLBi3OK+5ZcPFxeGQVi+e7loJ/g66yJfS/T6+Yu5hO2xeGHj6PLy+DDwzQjQyy1r6JjPkyukGIRb//nzuAymzexOxV868xgjVa3aAdkDWDu0KH2ebo4XvdrMymDVs6InDchmQgbS6BS2ZNjQeMo5svNDm5brsw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706863658; c=relaxed/simple;
-	bh=1mTopl9VLOGdS2RiO2GLhg5Njwg3uxDYSi6ORPCdnl8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FcS49AONR++0am+RkricH4/Jw4MKtHMN++PDzwUFqZlW2zxMGPPC2zh2iIU2f+mIwQss/DXd4e/b3Fxfwh/pz/NiKv3Vpz6g76RprdbGr/AauLJfNTKRVcnYvxIL4v8JVR/vFNH3pBOwoUCmAYNVVA1DER+VIk7dy3ZEUGlHC/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xZ4Uhek5; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-55a179f5fa1so2522132a12.0
-        for <linux-pm@vger.kernel.org>; Fri, 02 Feb 2024 00:47:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706863655; x=1707468455; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=UU7vpIEOWdL0eNMIVr22ERtNoYOBOT1NOSw2MYNThw4=;
-        b=xZ4Uhek58k5pY8l5zMELIeVhunGnOLnGBMHnT44nn8e27rPCYDrXwohpRFsYxYqLon
-         RppL0hE15kFu4ljI9P91FeOF/3puRgtHJPAf5k3JaPY3q+9PPDdOwc1nEsddOsmUBppw
-         +prDQTOAoGU5e4cTLCLyzcQKPt1hmc0BMoyZUZtQx/Ar35P8sUS2W586lfW+HgXTPrH+
-         RVb7imdfud+irBeQKLj2m7QS40Jtf1mm0AtRN9bYO6K15KxtcXWpcUopHAWcG4CgYwWb
-         pn2QzAgowIHE69qofZbjTZBc/hDlUxePuo67gllbWpU7TGXYHq5Cx6jsfYpfVSBeRAVB
-         03IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706863655; x=1707468455;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UU7vpIEOWdL0eNMIVr22ERtNoYOBOT1NOSw2MYNThw4=;
-        b=Qnlqgw6VydasFdP+VPPiE0NRHCaFRKH6EV1Vbp10zmJvb7zIiIGwuziljJLsrIpYVt
-         OWResIwrdagDCY/mei5xabLP+QO/opqacM+mSEsfMGk5bkPEDC9faNlY2BQZNChWGHCi
-         2Mp8OLkcWeRkcQj6pU4xB7lQbWTyYaKTq9pkASlZ0M06fX6uYGzbWRum/21f3gwDGaCa
-         nWEBn3yYK+L224EdK3UQDgbARTFJbcVZpltihJtTDC8O/IRB/iLkdNIxRoEf1Voi6SkF
-         EwNfGYZqd0rJVeSdYhXHfTp1Ib+dFEx0QIAZSrRKcarJF0mpVsYXoquw48D6bEZtuedX
-         tT7g==
-X-Gm-Message-State: AOJu0YwA7G0C1D+eGL2Hp5IRE6Ve/3hP5AxHL7iDm7+WUVTGCLnMMKGE
-	W1TmZnLVwObqCTXsChvNFXOkmRh9yug9RqU2Bry4zqfY0oNCJzHoAWYgw0s3aTM=
-X-Google-Smtp-Source: AGHT+IGVHVbNZmhYQYVfyePv44qYjb5PPl8mmxSRJulBwcvo1VFvBGlYYT9E3lEzAdxIKl5CLgylgQ==
-X-Received: by 2002:a05:6402:353:b0:55f:84a9:9000 with SMTP id r19-20020a056402035300b0055f84a99000mr4779574edw.3.1706863655200;
-        Fri, 02 Feb 2024 00:47:35 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCV3ZID9R5HJqZMO3+DpWFeR8Cs3JOVwVQMtQGzJeHwx/XILkDBRfT9e8ocmg+df6JmNMfWY0XJmeoYazqDNNcfZRNhnSAMdS+vJ8BJVeNlq2xdHf/XjihNgR4qz5aTcO5JrVxa4N0NcdBqtgQMkt1+/3mUq8yhEvu+Eg7Zn5nLp9ki11iuux4xx0mgc/vdLPefmGSw264NxmD/4qTvxsnE8JLrmTgGCEZRowYpboQfXfQE5HyOSBFZLHcmO6ZkPgOgJTk4ddiTu2NYy7s3HHzxgjixFMmFnEmPwjYq42BwsLIryKiWWY4fN5zYNmACwFV/jMLwKmkSZIhZQS/Wiyvd0HhK+sk8FyUTDCaSnqm313T5S3FMipqbOtARb1X8NxcpV/rqYwj12OlEEKTtu5BvoUXqLvPMwhe0yHPUQjqGZl8IIFjo2zM5Wlu4TkSQnGeXEy2eQoGVaR3ep6jA1PEvFYn+g7xJRXJj5yisSuzJr+VkZETe75l/UDXFlUx1ATxwo4OYCgw+cPcMa1mhO3ShJ5s2JkDqnoKXyClmKAdFvtgbz9aomdQ2PnpFiGPxi9bJ4EVfaQrwQcme3x/qnF28pHtmS5i1mZrUpWEcMwjfm4HqDXbLxffMpY9wTX3XwCQLUX1VPXV1iJcNBUZ4BZZhM8nBNhIUoE6iZbpp9LbpteJ9ftfD6yjg7Ke11jkWMBYimUrvpTYjOGED7VsfsMw5/vDiCDCHzcomytbb87u1unnwqPZ2mS0GI7a5dQjNUSWrT0mkCTktTBA9alkPfeClAQMzJkntduc9ETpnNecdNzoJlNfclm8K7JCQnVaOKBMjzLWHaplwJjYFUz4Us839dlBZ4Gy7kHRJTwBQLuu46fqN2piUGkIkeLtDS8yvbUnS9p7wVZ1mAaq6O+qbHiwUaLy6weSAg5MxrJwLcIVlaG/82XYtsnEr8mNsa9D2wByM/Xn
- XBE0mN8ItoGTxZOt642QrMnqj57B4yBqR46p4bpN3BGxmR6b4mvK0raP/rnLOeuhw8rbd/DP+TV1plHwvguxPPKxfzjE2vbibOkJT67WpWmZy242jHsAhsexEllqmy3gAmQmfI+l/H+FZM606dNfyKeb37eTx5l1rz4a9ciueY2w9ohPXLWWr5J762fPLxWvYYXnbF6ewcWWKP8SK+c8gEJwXoX9oeVFCgTch287/uDO8GtogzppODfJ8oxs7d/f6zuq4xrebdlyJxoqh/ni6J
-Received: from localhost ([102.222.70.76])
-        by smtp.gmail.com with ESMTPSA id ek23-20020a056402371700b0055ff9299f71sm246348edb.46.2024.02.02.00.47.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Feb 2024 00:47:34 -0800 (PST)
-Date: Fri, 2 Feb 2024 11:47:30 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	daniel.lezcano@linaro.org, miquel.raynal@bootlin.com,
-	rui.zhang@intel.com, lukasz.luba@arm.com,
-	support.opensource@diasemi.com, shawnguo@kernel.org,
-	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-	linux-imx@nxp.com, andersson@kernel.org, konrad.dybcio@linaro.org,
-	amitk@kernel.org, thara.gopinath@gmail.com,
-	niklas.soderlund@ragnatech.se, srinivas.pandruvada@linux.intel.com,
-	baolin.wang@linux.alibaba.com, u.kleine-koenig@pengutronix.de,
-	hayashi.kunihiko@socionext.com, d-gole@ti.com,
-	linus.walleij@linaro.org, DLG-Adam.Ward.opensource@dm.renesas.com,
-	error27@gmail.com, heiko@sntech.de, hdegoede@redhat.com,
-	jernej.skrabec@gmail.com, f.fainelli@gmail.com,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCH v1 02/18] thermal: Add new structures and
- thermal_zone_device_register()
-Message-ID: <e4359d2c-e686-4a97-9d21-d10908e9df61@moroto.mountain>
-References: <20240130111250.185718-1-angelogioacchino.delregno@collabora.com>
- <20240130111250.185718-3-angelogioacchino.delregno@collabora.com>
- <CAJZ5v0jzaGpK8LnsFDtjuPoURrwrUgM1Z2QfZhK_FUzDeK3wcw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83E465FF0B;
+	Fri,  2 Feb 2024 08:56:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.100.82
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706864179; cv=fail; b=YtWWEKbM7qO3Ydvxy8brqjWGbeqw5Q7BrWShnL8cuuZAHoDJ5D2+OoBjZ2YpoW61mKWI7F7EAZhsdZUwq0SI1uEDNpfrTnhTzFOzmULJi5Ru3v6UNtAD5Dr+2swy7tF/nGlmuC+5edgJP2xWEXdYz+U1qCRKRkg/lvexhAsM/6Q=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706864179; c=relaxed/simple;
+	bh=JKdj0RPJy/6N5IVDDqCaH5iwCjEHIj7iTr2NbAgvlAo=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=DXwkudw5wHs1qB1WbnTqsb3KGQlv9tCcYa8xfz5/3VH+XCrM4UjLt7QyPtQwRgyrFpcto+FF6m053aWMQabSXvarfcgD0+jQHS0itNuD2Be3dO2UiJvfCugMFTO154wlnib/JdWNkSw18oBqwzmIqYK+iUDpE0+s/LZYHYLSKPo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=LydtJng0; arc=fail smtp.client-ip=40.107.100.82
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Sd/O0+cbexwu2L9XFwsIAwy2aXzGc4L3kVfymOPVpqhyhn8pl42djUwwxQ/k7HvocIqy8kouE8kCXsn3RZ9+OYobmenlAlwTOqj9Hk6pmXbK+MAMit+KpD9wYmy/cOvQQ761ttjlx4gOez+BNJ3l77n+Ho6tv2204U8IOM+IpQ03wIImku3voVr2RvKBzcFc6AhrJqlvcIDYaWhvb3GOdP7LHKHW5o3edlOjRps+irTagr8zhTpEAD4iSZTMk+V6Es18czpuvxek4DogM4RhXyr4HtVcFk5h/rDXnp7iDaORjZVQ1fCJMDq1E76DjIATmVHGE6Qosb9V7GrEfTFbrA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=W5DQuVPGL31ixJ6Ql4gW7mts19jCht6bYp93W0AIIXM=;
+ b=kWImzuoMRzyCo9X/h6MlLgaaJvPPszqKrnhCL78b0qikhI0AL4srDf1rCp2NZOtzZGzWUwfqpLBAth25L6CzCNfc0GRnZ6U8eu47TiUmb0S3pmCbw08H1/Qk+Pt2crb71q4uE8ZhWmI51bKuA2PQn1R2Et9bxOlI+kPkcmZ+TmYuPMjQ3YNet+hcixfaVoWC7hcqRBPrGkgJHu3CEyAxpmWyuoM56OvNah+D/cno+dBtKaO19v15XVSdP2utkJtEyMnNFMUNfATlryDaitexs9oEWP4Wfyy/LW51IZLwg/9dd/0ua8W5xFFmvInVM/eyaoR3tiVys8mMpunY8XAwJQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=W5DQuVPGL31ixJ6Ql4gW7mts19jCht6bYp93W0AIIXM=;
+ b=LydtJng0CTsXu2z0dNax+lZD7XQAVUfig+p9xeuyTghaZCBgv2zh93ytKbQBa7/eSGMN0JelPAmwRIQqswPDYwA8H67ZsE88Np/0ZG/8mdndPlWCVhE27Oi6iPxXTE2xa6/rbcBRI0TlNkvCDgerV8JibbB27d38q5ZbvXiiUSA=
+Received: from CY5PR15CA0254.namprd15.prod.outlook.com (2603:10b6:930:66::28)
+ by LV8PR12MB9271.namprd12.prod.outlook.com (2603:10b6:408:1ff::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.37; Fri, 2 Feb
+ 2024 08:56:14 +0000
+Received: from CY4PEPF0000E9D5.namprd05.prod.outlook.com
+ (2603:10b6:930:66:cafe::72) by CY5PR15CA0254.outlook.office365.com
+ (2603:10b6:930:66::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.29 via Frontend
+ Transport; Fri, 2 Feb 2024 08:56:14 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000E9D5.mail.protection.outlook.com (10.167.241.76) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7249.19 via Frontend Transport; Fri, 2 Feb 2024 08:56:13 +0000
+Received: from pyuan-Chachani-VN.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Fri, 2 Feb 2024 02:56:10 -0600
+From: Perry Yuan <perry.yuan@amd.com>
+To: <rafael.j.wysocki@intel.com>, <Mario.Limonciello@amd.com>,
+	<viresh.kumar@linaro.org>, <Ray.Huang@amd.com>, <gautham.shenoy@amd.com>,
+	<Borislav.Petkov@amd.com>
+CC: <Alexander.Deucher@amd.com>, <Xinmei.Huang@amd.com>,
+	<Xiaojian.Du@amd.com>, <Li.Meng@amd.com>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 0/6] AMD Pstate Fixes And Enhancements
+Date: Fri, 2 Feb 2024 16:55:32 +0800
+Message-ID: <cover.1706863981.git.perry.yuan@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0jzaGpK8LnsFDtjuPoURrwrUgM1Z2QfZhK_FUzDeK3wcw@mail.gmail.com>
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D5:EE_|LV8PR12MB9271:EE_
+X-MS-Office365-Filtering-Correlation-Id: 677fe42a-0b35-49ca-0ffb-08dc23cccf79
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	N+VDIpkV4ejA28V7mCNYBtrKhZfuKoLFMj5YHQyDiCWEfxiJ4J6bjyNZX99W7437rKHS/lceboH7eBVVTmgPZ4eQvP8DMGDHBZvRsp9eyKHGhJjzggb/NUEOce935zODjSpIhQ0F6NUh7bTO7PREuro+f90WnvC6mdR/dxfGIdCdu8KUDi6kjRr5K8aTk3UeBLU1wgrn2vbzVgsvBrh18TF17iadTxJUipW+UiP6lWF+5LtXeZDd1xrNowNnCyCS4JLTDaNhxJpBFcEb0/blAWwoI5+CuTSjrhn+v4mytU1vucQOoL6V+jxooPoj0oMGZAjZ7PEuSLZSQO32QI+6eWAjqa32Sdky2ek/pSROvM5zkQ2Qz46XVfZDUZbxIpBdVWyWtdeQOtOkyVayWODg/zs6ZWW4RbHFLo77oEHWbfKB7TKMKEmctpNnpiD3DKGKTqfZidzvFHRd3rotGjig7ezFmJufu04eloWqV0l3hiBNQzi9ssc9Ew2IG6e9hvtmJs7l+rGaGIwDkyCfO1Hgy1K0i2xOn0XX/H5Lbjf6AvSH2bkQgv8awSL9QqhsUCtJbk0mvzl8sRFNf9lQhwcrO0kSVFhE39oBFdxMFZeNQW6zcVNXAcQbtn07JYH71SBmkbjU6107Dsyxsv3sh6wLSScyNez05C1ZA42ZAoq34hyfaqvRMDprPI/T9W3k4X2/D6l0/LArrb3GlA5RUqYXOQzrQGTfxxrhXcct65/FBcmzkw7O58GO95bwRYiewx/g
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(396003)(376002)(346002)(39860400002)(136003)(230922051799003)(82310400011)(186009)(1800799012)(64100799003)(451199024)(40470700004)(36840700001)(46966006)(40460700003)(40480700001)(478600001)(16526019)(26005)(83380400001)(70206006)(426003)(70586007)(966005)(336012)(2906002)(7696005)(8676002)(54906003)(4326008)(8936002)(110136005)(316002)(6636002)(44832011)(2616005)(6666004)(36860700001)(5660300002)(356005)(82740400003)(81166007)(86362001)(36756003)(47076005)(41300700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Feb 2024 08:56:13.9792
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 677fe42a-0b35-49ca-0ffb-08dc23cccf79
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000E9D5.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9271
 
-On Thu, Feb 01, 2024 at 08:24:15PM +0100, Rafael J. Wysocki wrote:
-> On Tue, Jan 30, 2024 at 12:13 PM AngeloGioacchino Del Regno
-> > diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-> > index 65d8f92a9a0d..7a540b746703 100644
-> > --- a/include/linux/thermal.h
-> > +++ b/include/linux/thermal.h
-> > @@ -149,7 +149,8 @@ struct thermal_cooling_device {
-> >                         passive trip point.
-> >   * @need_update:       if equals 1, thermal_zone_device_update needs to be invoked.
-> >   * @ops:       operations this &thermal_zone_device supports
-> > - * @tzp:       thermal zone parameters
-> > + * @tzp:               Thermal zone parameters
-> > + * @tgp:               Thermal zone governor parameters
-> >   * @governor:  pointer to the governor for this thermal zone
-> >   * @governor_data:     private pointer for governor data
-> >   * @thermal_instances: list of &struct thermal_instance of this thermal zone
-> > @@ -184,7 +185,8 @@ struct thermal_zone_device {
-> >         int prev_high_trip;
-> >         atomic_t need_update;
-> >         struct thermal_zone_device_ops *ops;
-> > -       struct thermal_zone_params *tzp;
-> > +       struct thermal_zone_platform_params *tzp;
-> > +       struct thermal_governor_params *tgp;
-> 
-> I agree with doing a split here, but I'm not sure about moving items
-> from the arg list to struct thermal_zone_platform_params (as mentioned
-> above).
-> 
-> Also the naming is quite inconsistent.  IMO it would be better to call
-> the first pointer "tzpp", rename struct thermal_governor_params to
-> struct thermal_zone_governor_params and call the second pointer
-> "tzgp".
-> 
+The patch series adds some fixes and enhancements to the AMD pstate
+driver.
+It enables CPPC v2 for certain processors in the family 17H, as
+requested
+by TR40 processor users who expect improved performance and lower system
+temperature. 
 
-The names "tzgp" and "tzpp" look almost identical at first glance.
-Could we increase the hamming distance somehow?
+Additionally, it fixes the initialization of nominal_freq for each
+cpudata
+and changes latency and delay values to be read from platform firmware
+firstly
+for more accurate timing. 
 
-regards,
-dan carpenter
+A new quirk is also added for legacy processors that lack CPPC
+capabilities which caused the pstate driver to fail loading. 
+
+I would greatly appreciate any feedbacks.
+
+Thank you!
+
+
+Changes from v1:
+ * pick up the RB flags from Mario
+ * address review comment of patch #6 for amd_get_nominal_freq()
+ * rebased the series to linux-pm/bleeding-edge v6.8.0-rc2
+ * update debug log for patch #5 as Mario suggested.
+ * fix some typos and format problems
+ * tested on 7950X platform
+
+
+V1: https://lore.kernel.org/lkml/63c2b3d7-083a-4daa-ba40-629b3223a92d@mailbox.org/
+
+Perry Yuan (6):
+  ACPI: CPPC: enable AMD CPPC V2 support for family 17h processors
+  cpufreq:amd-pstate: fix the nominal freq value set
+  cpufreq:amd-pstate: initialize nominal_freq of each cpudata
+  cpufreq:amd-pstate: get pstate transition delay and latency value from
+    ACPI tables
+  cppc_acpi: print error message if CPPC is unsupported
+  cpufreq:amd-pstate: add quirk for the pstate CPPC capabilities missing
+
+ arch/x86/kernel/acpi/cppc.c  |   2 +-
+ drivers/acpi/cppc_acpi.c     |   4 +-
+ drivers/cpufreq/amd-pstate.c | 108 +++++++++++++++++++++++++++++------
+ include/linux/amd-pstate.h   |   6 ++
+ 4 files changed, 101 insertions(+), 19 deletions(-)
+
+-- 
+2.34.1
 
 
