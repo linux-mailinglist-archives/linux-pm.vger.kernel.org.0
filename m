@@ -1,140 +1,136 @@
-Return-Path: <linux-pm+bounces-3233-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3234-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5555F846EE7
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 12:30:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E63C846F94
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 12:56:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A85228AABC
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 11:30:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3AF751F25B0F
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 11:56:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D02713DBA8;
-	Fri,  2 Feb 2024 11:30:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 194A113DBBC;
+	Fri,  2 Feb 2024 11:55:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Z2Vb1Ogy"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DgA7bZ9+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52A4D13D51D
-	for <linux-pm@vger.kernel.org>; Fri,  2 Feb 2024 11:30:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AB2B13D509
+	for <linux-pm@vger.kernel.org>; Fri,  2 Feb 2024 11:55:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706873409; cv=none; b=ZCzuTvxrJMtPZTNSpA+204+CqftfGRISIOkxTh+HkX7SZcog0tXAy3zfQD7+cEigd+SOdmbipL05dlQAr6NtShXlWu1wxRjrf6LB7ngIeFCngaVZmc5fU/oi28OpD7URKeEnKcZgvNMQksLlaGt+lwhtKQkqbgyInHFu2nrfcSU=
+	t=1706874956; cv=none; b=SUss6S2E0d59Oo03ByzBDAVvwSevM2l+/WD9FJ9TMKMgpNtrdUi5spwLRY+Zcc+bVPdPmgcQi7H+D4+E8aIpJqvY7DHzHOsATGWdOPEbRch5Te01FaZseEgziRjPgT7NWmSU1un/UnTpdAE9QTtg7F7WRn1ZkkQmckkmNFdjjSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706873409; c=relaxed/simple;
-	bh=V0OKoMdvZrV+RBdBue2YTnk4bGLNdmAzUA2aWpHPnIY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ULvlRpPRUEIRiZTBM0w1bqatQM+oeh0n4EBuLfxcp9KjIGbqoUdRJFnQ8iP/j5uDLDBeolJE4mfSoErUUWG7oi72UyvRkEWTnfwAErlD0dRsX/Cb+uIaos6+f0L0P53kPTZJZ+nh6kwWo+cBIYdrMdndKp0EJ38YXXgbxzQ4auw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Z2Vb1Ogy; arc=none smtp.client-ip=209.85.218.46
+	s=arc-20240116; t=1706874956; c=relaxed/simple;
+	bh=g91Q0ZpDjmQ4/6xXzFZi11gjzFbr5zR/z5qLZgpaD6g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Le6QVuACOz39iR5W877awaNbfCu3sjSMNQ7szHSH3D6LOi54fwKfqY9IuQAp8FHuqhq1zWmfBnCXtCcSQE41X6EF5Fpp8ZA1yJsgThgWM7n6Xf5mCQjHmmI1bX7bJSUFQEAD/b/uxbyWE2xasNRQBFSKvrHgW7+MwPTd2tb2A6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DgA7bZ9+; arc=none smtp.client-ip=209.85.128.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a2a17f3217aso284405866b.2
-        for <linux-pm@vger.kernel.org>; Fri, 02 Feb 2024 03:30:07 -0800 (PST)
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-6041c7aa418so16829137b3.3
+        for <linux-pm@vger.kernel.org>; Fri, 02 Feb 2024 03:55:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706873405; x=1707478205; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GiwgOBtuCAx/IZNAogUYBrsI5jiXrwqvdjzRzsKTUV4=;
-        b=Z2Vb1OgytDxzSPADfljl+McT+IZR0MDt+L9frfyrF+GL3CpTMvFhXPaBWfrhA6z+FU
-         naEgOyHCVEhq0uxBqoOWXKX/1EPuZWyQ7q5NJCcvnz1X3NZOUQ7drNDE8AyenLMddaTC
-         +BGR9K9ueNY85SMJNnaibLu9Eb8TnraybEsV6OImbc7/VYLcmDiTkRvhm9Sie20IwFAv
-         p2lcPBxwt+dE3qWZhR4F9MzIuq4HyKjQW8VnRYGUI2WghrgNAiWeDHq18U0ElsA2f3xS
-         xxSIcrW7BBa0IILu+W3D4zLpcl0SMT5iLgoeyaEv4SzeA4IsEXCv186CUcKziV3l7nCf
-         66Zw==
+        d=linaro.org; s=google; t=1706874953; x=1707479753; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bLJvGiCen2KRi2n5m7Ep7wuSVWa623lasZLXabxFxdA=;
+        b=DgA7bZ9+xyW61kBeWa6Nwpx0WwrcLY0tt9doj6GydTZvVPFLZ7ZhxtUAe3FCyI4HuW
+         2QGmFJdDZ8owu9KkoIuRQ63bNU4aLIuzQfo6dcnBRJ0xapyt4guRIh/Skve99IRNCAPG
+         xohzdeYWNIapan4q7Pu6c3cDAGV6tDxSq0iWHXbGn0U7ci4EWv/d39BWZr39S0VMYZWO
+         rnRqGMH40tGH1c2aeYBd/tougpYfIH/DYdvSnbQIEXqZ2vaL5dTSbNsYMf+33OdKwGIK
+         yf40pKqKCPmjZe1UwET5MZSFCq8TKdl8H7WuhKwh3OZWmClFVeu+NZ7ob1FCvAdVGUk3
+         Z+cQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706873405; x=1707478205;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GiwgOBtuCAx/IZNAogUYBrsI5jiXrwqvdjzRzsKTUV4=;
-        b=EunGfNOPa5HUT3/YzX4083FoBnjriLGCJ7EDIk28ZlcF+76jAmSUNBWHNtiJ4UdPsp
-         2BkseP1HcXCanvQZkLRkrs3WuU37ACAbIVIYC79cINXP7186V9vJXlF3gjRiuI6Qt9dF
-         6k0cUc2EWPCORi+d+T2ITZXCsXpWNNfMtnM0WgCCyjOcPgidGndnGAa8aRlHNuFmpFiA
-         SRMD7ZSHRQJSIdmlWaaHFZDaQsawz8F0kKHYBiKL9xP62X+fT5OIJm/P2nATMTBvw2Mq
-         Jc0xSZQS+XZ9rzHHDBwdJpO5GHeg5Gacws8Tb2yzHXT5XmJWOxShKXTcvU/Tjtiq3eGw
-         mUfQ==
-X-Gm-Message-State: AOJu0YwYdf4CHbo/dgYiGS+ta1nNPosg4pHlxCXp7CMWn3Vhqshdb/3i
-	chHfizqRGy9x7l2DE+7K7Iv00VIqkehL3X6Ijni4dpVmC8MLFpNQBByfMF3yk/4=
-X-Google-Smtp-Source: AGHT+IGLwHpEII18ogQ/FcuuxEZAxQDrR5y7fb3Uxtwj/9dr3IzLj8aY1tlnOvuPgbu5gD8D/ea62g==
-X-Received: by 2002:a17:906:3019:b0:a37:2a73:9730 with SMTP id 25-20020a170906301900b00a372a739730mr22139ejz.57.1706873405510;
-        Fri, 02 Feb 2024 03:30:05 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCXBo8G0Jn+zdEmLW23YXTCN/xiRHIWn61WqM6lcJvJJxOUEOF4P3Jzb9dL2dyc5J9q103WyzsGplEM7mwNy7Gri70ibMXW2FJXESZ0Rzs470lPWJI/Xqm0agyJlQJtv2DnTCiaFTuwoEeS4kgkmGb2ImtBCryLDA4aGmuJtqX3uriu3CW25W8L8qPeapLy9n/WawVtPPzcwhixCKh2EnLsVlaRhyTBndf5z8H7MBTSoD4FBF57cAlq3dBw+Ps2H7VBHQ/lWBKpeh3SuwM+6fqlW39bBcP1+6QRXSUD5tz5JLQLSG1Z46WPZ+zlyd2lyNw33oEthXGc=
-Received: from [192.168.159.104] (037008245233.garwolin.vectranet.pl. [37.8.245.233])
-        by smtp.gmail.com with ESMTPSA id d13-20020a170906640d00b00a35d7b6cb63sm780317ejm.28.2024.02.02.03.30.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Feb 2024 03:30:05 -0800 (PST)
-Message-ID: <9c048fd9-d328-4446-8e86-a3757f7446ae@linaro.org>
-Date: Fri, 2 Feb 2024 12:30:03 +0100
+        d=1e100.net; s=20230601; t=1706874953; x=1707479753;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bLJvGiCen2KRi2n5m7Ep7wuSVWa623lasZLXabxFxdA=;
+        b=PDlG/Q9+qQJId91VqwMojkCK+tB7cPXR9ifXh/6ZkCFUiWKRCt75LBgJ3m6gqQiJjM
+         GqC5CA8OXhgh6u1ywe3BH/Kpc+awqdlXDhFWDR8Fbtv1ap1ChFwDg1HTsNWHiCKYvd3S
+         +jasHV399Vg42mH3iFvizsHKpqHFoH8KJCKxfv9P72nxQJ7P/lZan4OwKKSz8fN4OEll
+         cZ9Xj23dvZHR2IABCbepl3Q5BI1T+3cUoHljdq2XdiWPEJBocS/w5htDEqUpdY13q+DA
+         ebdwTQYhkjdpGr+NGC50OuQqoOBbO5iYf1DyGU+iQ/RGfBZOOJzVvj96vnr//YXMlESd
+         2fhg==
+X-Gm-Message-State: AOJu0YyMaD00oAqWJuskuP8isfMaiv92Uh+Y+eRMkcSxlKm6bjtcXpz/
+	DdEPhBTFD+u7IHRuUXKahQfgIsvzIQPOmvkExeZx3sEYT5ydw58VfiUFBDdgqKqV28ag/tL8MdV
+	L/3fkY/lDEvnbDaqdAMsmfRUPzKTOToHNi2OhedkkXKKaSbh2LLE=
+X-Google-Smtp-Source: AGHT+IGuG87J1tpRztpBCjH78cb2e+f8F3ZKLbi/Mfd0sjd5znLbq3M8sHVCtkIXi/YM1R2Qz/IsLAZiyThdiNwKfqU=
+X-Received: by 2002:a0d:db93:0:b0:5fc:1349:87b8 with SMTP id
+ d141-20020a0ddb93000000b005fc134987b8mr8758213ywe.43.1706874953312; Fri, 02
+ Feb 2024 03:55:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] interconnect: qcom: x1e80100: Add missing ACV
- enable_mask
-Content-Language: en-US
-To: Mike Tipton <quic_mdtipton@quicinc.com>, andersson@kernel.org,
- djakov@kernel.org
-Cc: neil.armstrong@linaro.org, quic_rjendra@quicinc.com,
- quic_sibis@quicinc.com, abel.vesa@linaro.org, linux-arm-msm@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240202014806.7876-1-quic_mdtipton@quicinc.com>
- <20240202014806.7876-3-quic_mdtipton@quicinc.com>
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <20240202014806.7876-3-quic_mdtipton@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240106223951.387067-1-aford173@gmail.com> <20240106223951.387067-2-aford173@gmail.com>
+ <CAPDyKFpx_Xo6Y5yGfuMiV8w3kR2hL6f8t31pKC=91-wEperqjA@mail.gmail.com> <CAHCN7xLqKTAcVpsBYXmzdvSefOnXdXzzrGie7mxkzeJLFKu+Rw@mail.gmail.com>
+In-Reply-To: <CAHCN7xLqKTAcVpsBYXmzdvSefOnXdXzzrGie7mxkzeJLFKu+Rw@mail.gmail.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Fri, 2 Feb 2024 12:55:17 +0100
+Message-ID: <CAPDyKFr9q4mio8cVsZ66PQuvLC_zpxTT_E-QUDRy1Df09DcdtA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] pmdomain: imx8mp-blk-ctrl: imx8mp_blk: Add fdcc clock
+ to hdmimix domain
+To: Adam Ford <aford173@gmail.com>
+Cc: linux-pm@vger.kernel.org, Sandor Yu <Sandor.yu@nxp.com>, 
+	Jacky Bai <ping.bai@nxp.com>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	NXP Linux Team <linux-imx@nxp.com>, Lucas Stach <l.stach@pengutronix.de>, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2.02.2024 02:48, Mike Tipton wrote:
-> The ACV BCM is voted using bitmasks. Add the proper mask for this
-> target.
-> 
-> Fixes: 9f196772841e ("interconnect: qcom: Add X1E80100 interconnect provider driver")
-> Signed-off-by: Mike Tipton <quic_mdtipton@quicinc.com>
-> ---
+On Fri, 2 Feb 2024 at 01:17, Adam Ford <aford173@gmail.com> wrote:
+>
+> On Thu, Feb 1, 2024 at 4:33=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.or=
+g> wrote:
+> >
+> > On Sat, 6 Jan 2024 at 23:40, Adam Ford <aford173@gmail.com> wrote:
+> > >
+> > > According to i.MX8MP RM and HDMI ADD, the fdcc clock is part of
+> > > hdmi rx verification IP that should not enable for HDMI TX.
+> > > But actually if the clock is disabled before HDMI/LCDIF probe,
+> > > LCDIF will not get pixel clock from HDMI PHY and print the error
+> > > logs:
+> > >
+> > > [CRTC:39:crtc-2] vblank wait timed out
+> > > WARNING: CPU: 2 PID: 9 at drivers/gpu/drm/drm_atomic_helper.c:1634 dr=
+m_atomic_helper_wait_for_vblanks.part.0+0x23c/0x260
+> > >
+> > > Add fdcc clock to LCDIF and HDMI TX power domains to fix the issue.
+> > >
+> > > Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
+> > > Reviewed-by: Jacky Bai <ping.bai@nxp.com>
+> > > Signed-off-by: Adam Ford <aford173@gmail.com>
+> >
+> > Just to let you know, this looks good to me and it seems like the NXP
+> > people like this too. What I am waiting for is an ack on the DT patch,
+> > then I am ready to queue this up.
+>
+> What about the bindings?  I'm assuming that Shawn would take the DT
+> through his IMX tree, but I am not sure if I need to resubmit the
+> bindings with a different commit message.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+I am usually trying to help with patch1 and patch2 for pmdomain
+related changes - and I am sharing new/updated DT bindings on an
+immutable "dt" branch. Then Shawn can pull in that branch and apply
+patch3 to his tree.
 
-Konrad
+So, I need an ack on patch1 from some of the DT maintainers to go
+ahead. Unless you want to manage this entirely through Shawn's tree,
+that works too. Just let me know.
+
+[...]
+
+Kind regards
+Uffe
 
