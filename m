@@ -1,192 +1,170 @@
-Return-Path: <linux-pm+bounces-3227-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3228-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CE06846BC6
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 10:22:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3C4A846D21
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 10:59:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5F202969C1
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 09:22:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D50A81C264A3
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 09:59:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8DC777652;
-	Fri,  2 Feb 2024 09:21:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EFCB78689;
+	Fri,  2 Feb 2024 09:58:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="y4448Zhj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3497377637;
-	Fri,  2 Feb 2024 09:21:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88F4F77F2F;
+	Fri,  2 Feb 2024 09:58:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706865680; cv=none; b=VErClbij3pvj4wEBWSz6oL5c7HV7OoMGEY7xvmSVMl7oIpH+11p3EMp4iPBQHSkSuX2KsJjIr8p6+NumYow39NKzje5sDPbc5KniuDZdLOMgIejG/v49wc5l7OSLrx9HuFTve3G0MTjibUnqqiwI6J9Dq9Jtj1FI4FC9u24X7fM=
+	t=1706867908; cv=none; b=DmsKYblcby2220tLGxLT//xbM+8N7mYuALdeUHJmNnhCOeOajPF+y9GtpVKMugWZG6SuQfaPul3/it8F+G3Jb3/hJPlUEoOEW0g1MBtDfex9fpH3VdkIhxGMphWfq74t2BZxYUJ6a5tu36vMYx2SUqRMNMOb3sYIsKeKCdG0XhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706865680; c=relaxed/simple;
-	bh=O6GmnznGee1J1ZEBFNdrhE/ly46AQTTQPmWiAnOmNRg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MEvre0KD4fz9OllPxZ5cSnb0sswU0EKabvFK8p7TdV7MrxaXD3NdoY0e8g/DMV/ueFNMrcDcwlW3UkfRvK6TYXXg16UeqPUgmpTM7tDGK+rbuFV3TIQy1GlnMt35yN6DKiJE2BGNpTjUGuSo6CTzf1fwkTgsQDYaDPWbpsdI4rI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D2E34DA7;
-	Fri,  2 Feb 2024 01:21:59 -0800 (PST)
-Received: from e129154.nice.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 454CC3F5A1;
-	Fri,  2 Feb 2024 01:21:11 -0800 (PST)
-Date: Fri, 2 Feb 2024 10:20:34 +0100
-From: Beata Michalska <beata.michalska@arm.com>
-To: Ionela Voinescu <ionela.voinescu@arm.com>
-Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org, sumitg@nvidia.com, sudeep.holla@arm.covm,
-	will@kernel.org, catalin.marinas@arm.com, viresh.kumar@linaro.org,
-	rafael@kernel.org, yang@os.amperecomputing.com,
-	linux-tegra@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH v2 1/2] arm64: Provide an AMU-based version of
- arch_freq_get_on_cpu
-Message-ID: <Zbyz4mQHLI9aPK6e@e129154.nice.arm.com>
-References: <20231127160838.1403404-2-beata.michalska@arm.com>
- <ZWYDr6JJJzBvsqf0@arm.com>
+	s=arc-20240116; t=1706867908; c=relaxed/simple;
+	bh=3yoKAEkp7fZQnp9uYTICy3qIfHawRJiuCLjeE8sbj0c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YZcx4EOPmUGfBoh+bTkZEQTI1gcmr0oJQgwxl2S9R3aNBt2snuThaZjkQ+CT84OLrW5PKYwRZ/I79Uwovh63Xw/Cp3NYCAKQ1bY5HENA5MwRRWqAjVV/NtHaacWLjwnCCUbtoElhXlbqhVPz3tq6fKeiAOISkxhBCh1CMeT9z74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=y4448Zhj; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1706867898;
+	bh=3yoKAEkp7fZQnp9uYTICy3qIfHawRJiuCLjeE8sbj0c=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=y4448ZhjZZloNj+kMKSQSwoQtCJJUIK9QZLHw0xdMR7nL5vjxTJeatrWdCvunuMap
+	 f2CNLpwG1HV/NJf+mEvNtqf9ikfuYvjEuwOOcavGk1XZSWZDPxQBgoD2YKe414xSMZ
+	 hzSMLKUo89SZVsbxubMAsXQdgULWBzpHRU0vw83mONBd+n2YAkxWwns6Azq9ORN9Gp
+	 u4Oy0NpNOGWihvBslBgNVd440TzQUWfHpxT5+NShhm+kHhGXLbhEsrXa00qFVJ9NeX
+	 6Vg9Y/Zilhu49Zc1SyDjWMHAW0TvvfZneaMAThVws24jH0VXKtLpVWt3pL9OSIesbk
+	 t4TEg7l1hqrXA==
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 5582A3782053;
+	Fri,  2 Feb 2024 09:58:16 +0000 (UTC)
+Message-ID: <923499c2-1a60-42dc-b0e2-3f7d78de9d8a@collabora.com>
+Date: Fri, 2 Feb 2024 10:58:15 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZWYDr6JJJzBvsqf0@arm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 00/18] Thermal: Part 1 - Introduce new structs and
+ registration
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: daniel.lezcano@linaro.org, miquel.raynal@bootlin.com,
+ rui.zhang@intel.com, lukasz.luba@arm.com, support.opensource@diasemi.com,
+ shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+ festevam@gmail.com, linux-imx@nxp.com, andersson@kernel.org,
+ konrad.dybcio@linaro.org, amitk@kernel.org, thara.gopinath@gmail.com,
+ niklas.soderlund@ragnatech.se, srinivas.pandruvada@linux.intel.com,
+ baolin.wang@linux.alibaba.com, u.kleine-koenig@pengutronix.de,
+ hayashi.kunihiko@socionext.com, d-gole@ti.com, linus.walleij@linaro.org,
+ DLG-Adam.Ward.opensource@dm.renesas.com, error27@gmail.com, heiko@sntech.de,
+ hdegoede@redhat.com, jernej.skrabec@gmail.com, f.fainelli@gmail.com,
+ bchihi@baylibre.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org, kernel@collabora.com
+References: <20240130111250.185718-1-angelogioacchino.delregno@collabora.com>
+ <CAJZ5v0haFEGOjaMC4a8CZbQe+cxFfaB1hD60NkN297NY2TZB5A@mail.gmail.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <CAJZ5v0haFEGOjaMC4a8CZbQe+cxFfaB1hD60NkN297NY2TZB5A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 28, 2023 at 03:13:51PM +0000, Ionela Voinescu wrote:
-> Hi Beata,
+Il 01/02/24 19:35, Rafael J. Wysocki ha scritto:
+> On Tue, Jan 30, 2024 at 12:13 PM AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
+>>
+>> This series is a preparation for a bigger cleanup that will be split in
+>> three parts in order to avoid immutable branches on multiple subsystems,
+>> as in other parts of this series there will be changes in:
+>> - drivers/acpi
+>> - drivers/platform/x86
+>> - drivers/power/supply
+>> - drivers/net/wireless
+>> - drivers/net/ethernet
+>>
+>> This is the first part which adds new structures and starts reorganizing
+>> struct members around, plus, this migrates all of the thermal drivers
+>> found in drivers/thermal/ to the new thermal_zone_device_register()
+>> function, and advertises that the old registration functions are
+>> deprecated and will be removed.
+>>
+>> The reorganization is supposed to be complete (or mostly) but...
+>>   - struct thermal_zone_platform_params has a temporary name:
+>>     this is done in order to avoid compile time failures for
+>>     the drivers outside of drivers/thermal before migrating
+>>     them to thermal_zone_device_params/thermal_zone_device_register();
+>>   - struct thermal_zone_params temporarily has two duplicated members,
+>>     governor_name and no_hwmon;
+>>
+>> Part 2 of this topic will migrate all drivers that are external to
+>> drivers/thermal to thermal_zone_device_register(); I will send that
+>> part only after part 1 is confirmed to be acceptable, as otherwise
+>> I'd be spamming people for no reason :-)
+>>
+>> After all drivers will be migrated to thermal_zone_device_register(),
+>> we won't have to care about changing anything outside of drivers/thermal
+>> to finish this set of cleanups/changes (and no immutable branches needed)
+>> and this means that...
+>> Part 3 of this topic will contain the following changes:
+>>   - thermal_zone_device_register_with_trips() will be removed
+>>   - thermal_tripless_zone_device_register() will be removed
+>>   - thermal_zone_params will be renamed to thermal_governor_ipa_params
+>>     - governor_name, no_hwmon members will be removed
+>>   - thermal_zone_platform_params will be renamed to thermal_zone_params
+>>   - Removal of the THERMAL_NAME_LENGTH limitation for `type`
+>>
+>> More scheduled changes, which should end up in part 3 (at least that's
+>> my intention), or eventually entirely after this cleanup topic, include:
+>>   - Introduction of Thermal Zone names
+>>   - Disambiguation of TZ name and type
+>>   - Addition of `thermal-zones`, `thermal-zone-names` parsing for
+>>     devicetrees
 > 
-> On Monday 27 Nov 2023 at 16:08:37 (+0000), Beata Michalska wrote:
-> > With the Frequency Invariance Engine (FIE) being already wired up with
-> > sched tick and making use of relevant (core counter and constant
-> > counter) AMU counters, getting the current frequency for a given CPU
-> > on supported platforms, can be achieved by utilizing the frequency scale
-> > factor which reflects an average CPU frequency for the last tick period
-> > length.
-> > 
-> > Suggested-by: Ionela Voinescu <ionela.voinescu@arm.com>
-> > Signed-off-by: Beata Michalska <beata.michalska@arm.com>
-> > Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-> > ---
-> > 
-> > Notes:
-> >     Due to [1], if merged, there might be a need to modify the patch to
-> >     accommodate changes [1] introduces:
-> >     
-> >     	freq = cpufreq_get_hw_max_freq(cpu) >> SCHED_CAPACITY_SHIFT
-> >     	to
-> >     	freq = per_cpu(capacity_freq_ref, cpu); >> SCHED_CAPACITY_SHIFT
-> >     [1]
-> >     https://lore.kernel.org/linux-arm-kernel/20231121154349.GA1938@willie-the-truck/T/#mcb018d076dbce6f60ed2779634a9b6ffe622641e
-> > 
-> >  arch/arm64/kernel/topology.c | 39 ++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 39 insertions(+)
-> > 
-> > diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-> > index 615c1a20129f..ae2445f6e7da 100644
-> > --- a/arch/arm64/kernel/topology.c
-> > +++ b/arch/arm64/kernel/topology.c
-> > @@ -17,6 +17,7 @@
-> >  #include <linux/cpufreq.h>
-> >  #include <linux/init.h>
-> >  #include <linux/percpu.h>
-> > +#include <linux/sched/isolation.h>
-> >  
-> >  #include <asm/cpu.h>
-> >  #include <asm/cputype.h>
-> > @@ -186,6 +187,44 @@ static void amu_scale_freq_tick(void)
-> >  	this_cpu_write(arch_freq_scale, (unsigned long)scale);
-> >  }
-> >  
-> > +unsigned int arch_freq_get_on_cpu(int cpu)
-> > +{
-> > +	unsigned int freq;
-> > +	u64 scale;
-> > +
-> > +	if (!cpumask_test_cpu(cpu, amu_fie_cpus))
-> > +		return 0;
-> > +
-> > +	/*
-> > +	 * For those CPUs that are in full dynticks mode, try an alternative
-> > +	 * source for the counters (and thus freq scale),
-> > +	 * if available for given policy
-> > +	 */
-> > +	if (!housekeeping_cpu(cpu, HK_TYPE_TICK)) {
-> > +		struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
-> > +		int ref_cpu = nr_cpu_ids;
-> > +
-> > +		if (cpumask_intersects(housekeeping_cpumask(HK_TYPE_TICK),
-> > +				       policy->cpus))
-> > +			ref_cpu = cpumask_nth_and(cpu, policy->cpus,
-> > +						  housekeeping_cpumask(HK_TYPE_TICK));
-> > +		cpufreq_cpu_put(policy);
-> > +		if (ref_cpu >= nr_cpu_ids)
-> > +			return 0;
-> > +		cpu = ref_cpu;
-> > +	}
-> > +
-> > +	/*
-> > +	 * Reversed computation to the one used to determine
-> > +	 * the arch_freq_scale value
-> > +	 * (see amu_scale_freq_tick for details)
-> > +	 */
-> > +	scale = per_cpu(arch_freq_scale, cpu);
+> You really should start with this, because that's your goal.
 > 
-> Any reason for not using arch_scale_freq_capacity() here?
+> It is quite arguable that it can be achieved without making all of the
+> changes mentioned above.
 > 
-> To me it seems a bit nicer to use the "official" function to return the
-> frequency scale factor.
-> 
-Noted.
-> > +	freq = cpufreq_get_hw_max_freq(cpu) >> SCHED_CAPACITY_SHIFT;
-> 
-> Given Vincent's patch at [1] I think here might be best to call
-> arch_scale_freq_ref() instead. That's because the frequency scale factor
-> will use that frequency as the maximum frequency in its calculations and
-> we'd not want to use a different one here.
-> 
-OK.
-> The annoyance is coping with capacity_freq_ref not having been set
-> yet, and that would be easy if capacity_freq_ref was initialized to 0.
-> Luckily with Vincent's changes it can now be 0. I'll comments on his
-> patches and ask him to make this change.
-> 
-> So I think you can safely use arch_scale_freq_ref() here. If
-> arch_scale_freq_ref() returns 0, arch_freq_get_on_cpu() will just return
-> 0 as well.
-> 
-Will do.
-> [1] https://lore.kernel.org/lkml/20231109101438.1139696-8-vincent.guittot@linaro.org/
-> 
-> > +	freq *= scale;
-> 
-> In some scenarios the frequencies visible to cpufreq might not look like
-> actual frequencies, but some scaled abstract performance values. One
-> example is cppc_cpufreq when one does not provide the optional frequency
-> information in the CPC objects but just the performance information.
-> 
-> Therefore the maximum frequency seen here can be quite a small value, so
-> it might be best to do the multiplication first and the shift after that.
-> 
-Right, that was in v1! Must have mixed up things ending with stale data.
-Will address that in the next version - if one is out.
 
----
-BR
-Beata
-> Thanks,
-> Ionela.
+Actually, my initial idea was exactly that... but then there were some
+discussions around it, please check [1] for the thermal-zone-names, and
+[2] for the rest of the discussion.
+
+[1]: https://lore.kernel.org/all/8d42e0f5-b2d2-471b-ada9-79f76c637abe@collabora.com/
+
+[2]: https://lore.kernel.org/all/4dd4ac79-e8bc-4d88-92d6-6061dae42092@collabora.com/
+
+>>
+>> ... Summarizing ...
+>>
+>> Part 1:
+>>   - Reorganize structures (some temporary names/leftovers)
+>>   - New registration function, deprecation of old ones
+>>   - Migration of drivers/thermal drivers to new registration
 > 
-> > +	return freq;
-> > +}
-> > +
-> >  static struct scale_freq_data amu_sfd = {
-> >  	.source = SCALE_FREQ_SOURCE_ARCH,
-> >  	.set_freq_scale = amu_scale_freq_tick,
-> > -- 
-> > 2.25.1
-> > 
+> I kind of see where this is going, but I don't agree with some of the
+> changes made.
+> 
+> Let me comment on individual patches (which is not necessarily going
+> to happen today or even tomorrow, so let me go through the entire
+> series before deciding what to do next).
+> 
+
+Sure, thanks for your feedback!
+
+Cheers,
+Angelo
+
 
