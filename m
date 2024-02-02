@@ -1,188 +1,172 @@
-Return-Path: <linux-pm+bounces-3203-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3204-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4974284649A
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 00:51:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83F108464FA
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 01:18:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A20B28C0D0
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Feb 2024 23:51:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A844A1C23FB9
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 00:18:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8001547F65;
-	Thu,  1 Feb 2024 23:51:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3936E382;
+	Fri,  2 Feb 2024 00:17:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F5EBWuJA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XpTODJeZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4724547F59;
-	Thu,  1 Feb 2024 23:51:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A071B10E5;
+	Fri,  2 Feb 2024 00:17:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706831509; cv=none; b=bX6nH0Ib01G4QJ5Cv9yG9jc4pd7tI5I7SgEK9BpW7KobpjJjRpihgYS3yjllizYD2dUbNN3dZ8OrfDgZiR7TMI9y3kjgVLgUdV72mTwdbfMEhYq2IAu8C3mBosRtQmH9qlGMO0eAquosuhNH/qLrtgZ4N5MRkHBf9dKU8sTM73c=
+	t=1706833077; cv=none; b=frYWH3K5O9esUMcq8yLuy7ZOTXda64z821pJUb7vujLCXNDroucEFjNN+o2qLR6+9GYLbBWJCdiCb3CrhH3cs1OcnqYqZZwBsLSgk0GXE6ElwTAU+LVsCi0gRpiKpI+vDJA1OC21lVftfqHNC0eANgsYuSX3JpGA2r75HuzIlB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706831509; c=relaxed/simple;
-	bh=FOHcufONbN0/pF2GMlGqhXYPYixKrUUq72o/McpHSq0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pRV8y874F6DWGAB9DEH228FpY/4XwUEVWTkfNPYPeb0E77KSsz4R7Bn2auauT33lmOCYipWXAjVw1gJ50QzkhXUN7GXZbixg7ZfA2yL7vPJJSj32NZ5rnKnDTTIEpOjHjiby18RgoYkN6FBFq8dH/MH0I0uWdcf2I/4Jsh+Zu8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F5EBWuJA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08DBEC433C7;
-	Thu,  1 Feb 2024 23:51:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706831508;
-	bh=FOHcufONbN0/pF2GMlGqhXYPYixKrUUq72o/McpHSq0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=F5EBWuJAP/b8dmyCSFJx8XNPEJ5E1M8Dp1GohRlEGSI8SE1/pNUNHLxByQS83YTZp
-	 +kTMEBxol1rAQCSE17sCAq+awsWMGpeaDR22rbUWqjevvacu9rtP/dqQbK4c2WAlck
-	 /DIMSq2Q1PowNjSf4B0a4Lz6ZnwyJ7sgh+MPmabnDX89axYwtvdWdbtVqUqkNQMBsO
-	 4rcJmUTLRz6TjSkVc6KS+oRPiGxp/CycgheXgB3YnOGMo96KTOgRI531EHSZLPwmzt
-	 0WUMDoJSDuCHrb3fFel0qo8oZ1fsVssVEgkGDO2djNy9oUkvYklOLAHbuABdumDvlh
-	 +YVdi/wSh/09g==
-Date: Thu, 1 Feb 2024 17:51:45 -0600
-From: Bjorn Andersson <andersson@kernel.org>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Abel Vesa <abel.vesa@linaro.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
-	Len Brown <len.brown@intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Andy Gross <agross@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>, Vikash Garodia <quic_vgarodia@quicinc.com>, 
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Taniya Das <quic_tdas@quicinc.com>, Jagadeesh Kona <quic_jkona@quicinc.com>, 
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, linux-media@vger.kernel.org
-Subject: Re: Re: [PATCH v4 1/5] PM: domains: Allow devices attached to genpd
- to be managed by HW
-Message-ID: <l7icfezpajren25545n4cjtqehhividt5b2dxnxgetdsshc3k3@tdws423qdblk>
-References: <20240122-gdsc-hwctrl-v4-0-9061e8a7aa07@linaro.org>
- <20240122-gdsc-hwctrl-v4-1-9061e8a7aa07@linaro.org>
- <tax3c6o5qjegy6tv3zbgrd5rencfvypr3zg7twxfrmdngscp74@n44ei3q63g64>
- <CAPDyKFpdtrWbzNksLoY++aOY7Ltyt1HhtLZo8bj8sQ05-4Sq0g@mail.gmail.com>
+	s=arc-20240116; t=1706833077; c=relaxed/simple;
+	bh=k2jB5QQ5ayM1QsazOOOPQP4MmZQKKeAb/Ovz7gtJCYU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OG2GptuEu36yK32z1uoSvXvwBlwits+hDAIIu9vsW11gB2142kt6d8LQEQKVN5WLc8yCNkxfbmV6Yn0eXleM9JT02CQZUW37BH8CvNwZMi08+7US1cpj0hbA6sNVhjsOg5wn4PtK90KJx5KmoWgDqe26g4lLIKWtS9D1En2MJ2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XpTODJeZ; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-5d4d15ec7c5so1435488a12.1;
+        Thu, 01 Feb 2024 16:17:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1706833075; x=1707437875; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=De0VqAzZQlyUqR32McEyDScTzRgzYQCCM/EkMQwWShQ=;
+        b=XpTODJeZx2ObDSb5CZl0TZVLOoPxkvX1Zn6nqwBm3NHa9sMlHoKmAE1dZdAMNDbzAI
+         bkmtGdPB11V7D+U0LtRNra5fO/Y8MSmXVHAEchb8L15kBOBwshWIH67I/pQ1RFjaNs5G
+         pdfdF1SqdxsCQr4OMZmhyqGWCFjxpnIdgfGxY6KzDAa7RMgOR2i5wOOP3lqaSb8iu2Ee
+         TvGzRNMjIS4WDMgeE/jzzq4GphfoHhxeRqSFcDf0b9veOu6dqBHPuT3r7Jh6C4LIgkh7
+         UrsReup9Jd8cW+vemb0VTMZ5ile8E1VW1dtbuIjzG1532virtS26jgqDLmbBZZIHvA5C
+         xUKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706833075; x=1707437875;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=De0VqAzZQlyUqR32McEyDScTzRgzYQCCM/EkMQwWShQ=;
+        b=YaTOXKkM10Itn/p1z/ZgBKrgO7SNFoUIt9gdXXfDn7A352aXUPe8pZoAX3ocT+XS1c
+         JIsPd+BwMpWTLMACYwcrX5q4NAuCBYjNIYSxmDtbPi4Zu9T224P9EaGkrvOIsQDHhIY0
+         kETa0L8m9DUDUEZM8K6BKj+0aaItf8AuzlntbfCa233jmaNszYUsnrvFEMSB5qBdN04Q
+         7Vmh0cNAbzlze1BWSoShHMpaGcBDilxF6s1oR8Aq0depcFbzAu9D8r68V7EDdWkUnIsd
+         +RJRFmvleeC8Zt4yP398jEqLe6Zv1KXYkZqVcwrHFvV/MtFF1c49575/N/0QwpbabNh2
+         6xIQ==
+X-Gm-Message-State: AOJu0Yy/rkKcfT96qFpczOH5U513j1ymG0yIoOR80cObGf8Gi3szEiRC
+	EKonn1ToQAlLNZBm94nE/0aqd2Gacr8ZtZm2MtS7Enx4t1eJWkGxIStvsTAM9AVfRL/sC47xJAI
+	q/nKpdM10pGZQR1h495WI/Mlu37s=
+X-Google-Smtp-Source: AGHT+IEcmeVrBM5Kau+GUw0k5RW62PM8JNo4ZAkPBQ94srraHAG9DfpyENyuu+H+9fFa+ri6+7aDH5bsPcY89GLvCAs=
+X-Received: by 2002:a05:6a21:2c82:b0:19c:9d4d:7d7 with SMTP id
+ ua2-20020a056a212c8200b0019c9d4d07d7mr5802356pzb.41.1706833074745; Thu, 01
+ Feb 2024 16:17:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFpdtrWbzNksLoY++aOY7Ltyt1HhtLZo8bj8sQ05-4Sq0g@mail.gmail.com>
+References: <20240106223951.387067-1-aford173@gmail.com> <20240106223951.387067-2-aford173@gmail.com>
+ <CAPDyKFpx_Xo6Y5yGfuMiV8w3kR2hL6f8t31pKC=91-wEperqjA@mail.gmail.com>
+In-Reply-To: <CAPDyKFpx_Xo6Y5yGfuMiV8w3kR2hL6f8t31pKC=91-wEperqjA@mail.gmail.com>
+From: Adam Ford <aford173@gmail.com>
+Date: Thu, 1 Feb 2024 18:17:43 -0600
+Message-ID: <CAHCN7xLqKTAcVpsBYXmzdvSefOnXdXzzrGie7mxkzeJLFKu+Rw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] pmdomain: imx8mp-blk-ctrl: imx8mp_blk: Add fdcc clock
+ to hdmimix domain
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: linux-pm@vger.kernel.org, Sandor Yu <Sandor.yu@nxp.com>, 
+	Jacky Bai <ping.bai@nxp.com>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	NXP Linux Team <linux-imx@nxp.com>, Lucas Stach <l.stach@pengutronix.de>, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 31, 2024 at 01:12:00PM +0100, Ulf Hansson wrote:
-> On Wed, 31 Jan 2024 at 02:09, Bjorn Andersson <andersson@kernel.org> wrote:
+On Thu, Feb 1, 2024 at 4:33=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org>=
+ wrote:
+>
+> On Sat, 6 Jan 2024 at 23:40, Adam Ford <aford173@gmail.com> wrote:
 > >
-> > On Mon, Jan 22, 2024 at 10:47:01AM +0200, Abel Vesa wrote:
-> > > From: Ulf Hansson <ulf.hansson@linaro.org>
-> > >
-> > > Some power-domains may be capable of relying on the HW to control the power
-> > > for a device that's hooked up to it. Typically, for these kinds of
-> > > configurations the consumer driver should be able to change the behavior of
-> > > power domain at runtime, control the power domain in SW mode for certain
-> > > configurations and handover the control to HW mode for other usecases.
-> > >
-> > > To allow a consumer driver to change the behaviour of the PM domain for its
-> > > device, let's provide a new function, dev_pm_genpd_set_hwmode(). Moreover,
-> > > let's add a corresponding optional genpd callback, ->set_hwmode_dev(),
-> > > which the genpd provider should implement if it can support switching
-> > > between HW controlled mode and SW controlled mode. Similarly, add the
-> > > dev_pm_genpd_get_hwmode() to allow consumers to read the current mode and
-> > > its corresponding optional genpd callback, ->get_hwmode_dev(), which the
-> > > genpd provider can also implement for reading back the mode from the
-> > > hardware.
-> > >
-> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > > ---
-> > >  drivers/pmdomain/core.c   | 69 +++++++++++++++++++++++++++++++++++++++++++++++
-> > >  include/linux/pm_domain.h | 17 ++++++++++++
-> > >  2 files changed, 86 insertions(+)
-> > >
-> > > diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-> > > index a1f6cba3ae6c..41b6411d0ef5 100644
-> > > --- a/drivers/pmdomain/core.c
-> > > +++ b/drivers/pmdomain/core.c
-> > > @@ -548,6 +548,75 @@ void dev_pm_genpd_synced_poweroff(struct device *dev)
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(dev_pm_genpd_synced_poweroff);
-> > >
-> > > +/**
-> > > + * dev_pm_genpd_set_hwmode - Set the HW mode for the device and its PM domain.
+> > According to i.MX8MP RM and HDMI ADD, the fdcc clock is part of
+> > hdmi rx verification IP that should not enable for HDMI TX.
+> > But actually if the clock is disabled before HDMI/LCDIF probe,
+> > LCDIF will not get pixel clock from HDMI PHY and print the error
+> > logs:
 > >
-> > This isn't proper kernel-doc
-> 
-> Sorry, I didn't quite get that. What is wrong?
-> 
-
-https://docs.kernel.org/doc-guide/kernel-doc.html#function-documentation
-says that there should be () after the function name, and below there
-should be a Return:
-
+> > [CRTC:39:crtc-2] vblank wait timed out
+> > WARNING: CPU: 2 PID: 9 at drivers/gpu/drm/drm_atomic_helper.c:1634 drm_=
+atomic_helper_wait_for_vblanks.part.0+0x23c/0x260
 > >
-> > > + *
-> > > + * @dev: Device for which the HW-mode should be changed.
-> > > + * @enable: Value to set or unset the HW-mode.
-> > > + *
-> > > + * Some PM domains can rely on HW signals to control the power for a device. To
-> > > + * allow a consumer driver to switch the behaviour for its device in runtime,
-> > > + * which may be beneficial from a latency or energy point of view, this function
-> > > + * may be called.
-> > > + *
-> > > + * It is assumed that the users guarantee that the genpd wouldn't be detached
-> > > + * while this routine is getting called.
-> > > + *
-> > > + * Returns 0 on success and negative error values on failures.
-> > > + */
-> > > +int dev_pm_genpd_set_hwmode(struct device *dev, bool enable)
-> > > +{
-> > > +     struct generic_pm_domain *genpd;
-> > > +     int ret = 0;
-> > > +
-> > > +     genpd = dev_to_genpd_safe(dev);
-> > > +     if (!genpd)
-> > > +             return -ENODEV;
-> > > +
-> > > +     if (!genpd->set_hwmode_dev)
-> > > +             return -EOPNOTSUPP;
-> > > +
-> > > +     genpd_lock(genpd);
-> > > +
-> > > +     if (dev_gpd_data(dev)->hw_mode == enable)
+> > Add fdcc clock to LCDIF and HDMI TX power domains to fix the issue.
 > >
-> > Between this and the gdsc patch, the hw_mode state might not match the
-> > hardware state at boot.
+> > Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
+> > Reviewed-by: Jacky Bai <ping.bai@nxp.com>
+> > Signed-off-by: Adam Ford <aford173@gmail.com>
+>
+> Just to let you know, this looks good to me and it seems like the NXP
+> people like this too. What I am waiting for is an ack on the DT patch,
+> then I am ready to queue this up.
+
+What about the bindings?  I'm assuming that Shawn would take the DT
+through his IMX tree, but I am not sure if I need to resubmit the
+bindings with a different commit message.
+
+adam
+>
+> Kind regards
+> Uffe
+>
+> > ---
+> > The original work was from Sandor on the NXP Down-stream kernel
 > >
-> > With hw_mode defaulting to false, your first dev_pm_genpd_set_hwmode(,
-> > false) will not bring control to SW - which might be fatal.
-> 
-> Right, good point.
-> 
-> I think we have two ways to deal with this:
-> 1) If the provider is supporting ->get_hwmode_dev(), we can let
-> genpd_add_device() invoke it to synchronize the state.
-
-I'd suggest that we skip the optimization for now and just let the
-update hit the driver on each call.
-
-> 2) If the provider doesn't support ->get_hwmode_dev() we need to call
-> ->set_hwmode_dev() to allow an initial state to be set.
-> 
-> The question is then, if we need to allow ->get_hwmode_dev() to be
-> optional, if the ->set_hwmode_dev() is supported - or if we can
-> require it. What's your thoughts around this?
-> 
-
-Iiuc this resource can be shared between multiple clients, and we're
-in either case returning the shared state. That would mean a client
-acting upon the returned value, is subject to races.
-
-I'm therefore inclined to say that we shouldn't have a getter, other
-than for debugging purposes, in which case reading the HW-state or
-failing would be reasonable outcomes.
-
-Regards,
-Bjorn
+> > diff --git a/drivers/pmdomain/imx/imx8mp-blk-ctrl.c b/drivers/pmdomain/=
+imx/imx8mp-blk-ctrl.c
+> > index e3203eb6a022..a56f7f92d091 100644
+> > --- a/drivers/pmdomain/imx/imx8mp-blk-ctrl.c
+> > +++ b/drivers/pmdomain/imx/imx8mp-blk-ctrl.c
+> > @@ -55,7 +55,7 @@ struct imx8mp_blk_ctrl_domain_data {
+> >         const char *gpc_name;
+> >  };
+> >
+> > -#define DOMAIN_MAX_CLKS 2
+> > +#define DOMAIN_MAX_CLKS 3
+> >  #define DOMAIN_MAX_PATHS 3
+> >
+> >  struct imx8mp_blk_ctrl_domain {
+> > @@ -457,8 +457,8 @@ static const struct imx8mp_blk_ctrl_domain_data imx=
+8mp_hdmi_domain_data[] =3D {
+> >         },
+> >         [IMX8MP_HDMIBLK_PD_LCDIF] =3D {
+> >                 .name =3D "hdmiblk-lcdif",
+> > -               .clk_names =3D (const char *[]){ "axi", "apb" },
+> > -               .num_clks =3D 2,
+> > +               .clk_names =3D (const char *[]){ "axi", "apb", "fdcc" }=
+,
+> > +               .num_clks =3D 3,
+> >                 .gpc_name =3D "lcdif",
+> >                 .path_names =3D (const char *[]){"lcdif-hdmi"},
+> >                 .num_paths =3D 1,
+> > @@ -483,8 +483,8 @@ static const struct imx8mp_blk_ctrl_domain_data imx=
+8mp_hdmi_domain_data[] =3D {
+> >         },
+> >         [IMX8MP_HDMIBLK_PD_HDMI_TX] =3D {
+> >                 .name =3D "hdmiblk-hdmi-tx",
+> > -               .clk_names =3D (const char *[]){ "apb", "ref_266m" },
+> > -               .num_clks =3D 2,
+> > +               .clk_names =3D (const char *[]){ "apb", "ref_266m", "fd=
+cc" },
+> > +               .num_clks =3D 3,
+> >                 .gpc_name =3D "hdmi-tx",
+> >         },
+> >         [IMX8MP_HDMIBLK_PD_HDMI_TX_PHY] =3D {
+> > --
+> > 2.43.0
+> >
 
