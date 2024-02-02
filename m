@@ -1,55 +1,75 @@
-Return-Path: <linux-pm+bounces-3231-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3232-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80DD8846D66
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 11:11:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C24E846EE4
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 12:29:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C7D829184C
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 10:10:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF5E828600E
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 11:29:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35B0378695;
-	Fri,  2 Feb 2024 10:10:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 923BC13DB81;
+	Fri,  2 Feb 2024 11:29:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="SFr2seHN"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="w/usk+jU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84FF57C084;
-	Fri,  2 Feb 2024 10:10:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A041386C4
+	for <linux-pm@vger.kernel.org>; Fri,  2 Feb 2024 11:29:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706868658; cv=none; b=gnfgq7ernueKl2IgZ87BMcFCVkrgCSpdY9SPWTGWEX/QxVJwwskLd9gqFNIXdWgfXyWfjf5sy6wqYFW07vMmZ0051cHWlvF/ceJmlnononcQ64tGD8pQhCS8zJXX6msh24dXp9EYRdaChsVdCU/5zi4qJ8VwE9H2Z4K9qXn65nI=
+	t=1706873390; cv=none; b=nFJtqngueVTIEqoBqhsmEd9pK0sL3Yfh6ewRZEIey2HqvPonZBPYkBJP1owWRoHghPNVwZqVNb1sHrGgeIDTFS2tre2JHJguZi+D5TnEunSM65wu9XAsc4xnvcGbbfoe6aL/yEfJe6XV08yT6XNAZMNV7lpPOD2G3z+y9iWJets=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706868658; c=relaxed/simple;
-	bh=7/NtgM7POVlL/qsd67IvVANnHVtgkkq13BDU1rG2sow=;
+	s=arc-20240116; t=1706873390; c=relaxed/simple;
+	bh=wRaupfdDN5Yzp5ZA3LE137yzB20RBWTUr0WK4RzDf/U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rvVKbfRWzAg4Q588TiQQSFstbavhada7AbdegvSwoj+nIY7TTPbbc7fUOiojhzQlJ+xZXG2uFLFLB3FUrxIO/iAb57a8Tb7BpRTdnPnyMR9oViNI1uhL2icHabgTqe/sLFS+QnRdP698icIfS0ebf65fx/LUZxZxXKDvfdeq5c4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=SFr2seHN; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1706868654;
-	bh=7/NtgM7POVlL/qsd67IvVANnHVtgkkq13BDU1rG2sow=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=SFr2seHNJQQHo9BBuC+NGMGdD/kv3Fz3jTKZu6zsnNCUOGGmA/hubOtnHRcgb8iwr
-	 p4f3XnXa4zlR0UKwQ5q3BGtajbPyfoHSzoN2GMmQ0/kBH4/BkOZXa9oCRFrdkOA/7E
-	 K8farMZWArbqNBLEhGRGcwLcc8mOTAfXykQjpf/hWF9QyRKCF2gCrcE5ijaUkfAf9W
-	 ppn/+P3c7iVuuveYNkLMDGvXe6/j5lkMrqCUcbs65PPCdq8pm2nsROBy3QqPpptgEF
-	 ZfYVajzxHIicOJqFOSBiOgcS2zkLcHpsmZgZHbfH4rjUcFqlqGu9qxfImGGdmnl0Dl
-	 wNJ35d2virISg==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 5875A378047F;
-	Fri,  2 Feb 2024 10:10:52 +0000 (UTC)
-Message-ID: <eec1d1f7-6d8f-46e9-8ce5-4d7319da7d9e@collabora.com>
-Date: Fri, 2 Feb 2024 11:10:51 +0100
+	 In-Reply-To:Content-Type; b=gW9dXgskKj+dfSuIDnQJthq+Pf1F+V+bWBjNZ1A1SvWRhcNKQSh/dL9tr7Efbd1LaGoJU2JIGbiXSRooj33qg/lFiiyniwwQagLx/rEbOUUwAOZ5vTMEmwZuHp8FWZ6yZPE+iuyA4fhbLg1mv9ah3Pleg694pSQDCyIlnAKHNog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=w/usk+jU; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a349ed467d9so254715866b.1
+        for <linux-pm@vger.kernel.org>; Fri, 02 Feb 2024 03:29:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1706873387; x=1707478187; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=boRIbhIBKZr1wj3BiPtZWLlLPrdzfxqCr9dSkCtVISM=;
+        b=w/usk+jUbokAkRjxMZROPVjNqjuW2gvGtyHjKxvECYHF9q1y1o2FHdfpsElMrMuqn+
+         C6ztrbl0tGHUszZ/7DZefVm7L1slfyABDyuNhLgI5Nm0GARIt+PAGG7j8XWFmagSt7Ty
+         IIBPHQaFxMQPz9Q/is5XAXbSZM8dXwXHyRhPzBRKlEWVeUyvGUVr8FGhOK0bBuIEJMSn
+         quFbVptIEsPrwFy3lVWtXbp7sPbUdUrBGIpg+QiHTJAelFfVb1EyRAh2GHiLtWyEc7IF
+         iWnDzyu2Yf7suv93W38oVOZXFpkuKMWoPIdbf0QgF3izt8HxrjbXbG2Kg3flgcOvh2do
+         rR/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1706873387; x=1707478187;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=boRIbhIBKZr1wj3BiPtZWLlLPrdzfxqCr9dSkCtVISM=;
+        b=s3+neVXn1voxld0VnAP2mdv6hjiWZIJPa95QaveLyvJhNT1H3svRnsfM/Cv7bOhLM4
+         h+oVQfJu7CCNielWcXrPwcdtbem7GV6uOuDGdMMyJ6pYiE+YHiyi7NN7PyYB65EGJrtU
+         j8xJs+BYBizwa2HAbtuupwIPvstC1eZZmTlbuw/HCUsZBn78toGQHE4yRVtQ98k8keU4
+         h6hovM4vBHVClV8R86ylazcXm/2LWiU3BVhA/tW/lK38FDVbMraBPnfAENPFCqoIOqhm
+         r4/2M/WTiw6D91j4+6fcuuDo6/pxjaqgY5s6Q5EE4ifSWozhDck/aiRjxsxk33HrgOpR
+         YmuA==
+X-Gm-Message-State: AOJu0YxbY3Bc9KOK6bgON4sLSYrjU/iactpof4AZ8ZlRnHw4Gxvq74Nc
+	6xABTJj2by+WFVsQi9tPTj35mxhu3/NoEBI9qaiDrWdBEhFLqUW758qBbFk+kJk=
+X-Google-Smtp-Source: AGHT+IFaBf85L95iWC6OGD2x0GmQ8sAu3Tcsh8+M6Z8daUVOyjZILdT71xKfi+CZ8rdKWZGWt183/Q==
+X-Received: by 2002:a17:906:2f03:b0:a30:f60b:5985 with SMTP id v3-20020a1709062f0300b00a30f60b5985mr1353352eji.74.1706873387120;
+        Fri, 02 Feb 2024 03:29:47 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCWjhwtk1FyDJmwG/wH+qlEDizFkwhP7Xe2zXNJE0NagxXsoqGh2bL29LllnSsi2K7luOm3x+CQAxQCQAppB6FdXGhX2uxCZrsoTG9jkWyL48YYnEArNEmnmyp5i8w1NHraluJsSMoOlTEKDb0ysqt0Rbp92FXP5Oprw42BxRjuSE1lC4GG2RrDDha4gKZhXSAY9Jq31WRIeWCaWIVyKuFkQxByxcM/9MsfB9kVdZgpfyawZk/cR35sz5Hk82sIT40XeI8SXlr8qCO4ZAEbeuDzlNgPJKhfnd7e8uvjEpqPoXlvp/qV67OlIUF+VFuSAAlU8bum9XbU=
+Received: from [192.168.159.104] (037008245233.garwolin.vectranet.pl. [37.8.245.233])
+        by smtp.gmail.com with ESMTPSA id d13-20020a170906640d00b00a35d7b6cb63sm780317ejm.28.2024.02.02.03.29.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Feb 2024 03:29:46 -0800 (PST)
+Message-ID: <f1b93fad-42a4-4a8c-8373-be910106a104@linaro.org>
+Date: Fri, 2 Feb 2024 12:29:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,95 +77,67 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 08/18] thermal: intel: pch_thermal: Migrate to
- thermal_zone_device_register()
+Subject: Re: [PATCH 1/2] interconnect: qcom: sm8650: Use correct ACV
+ enable_mask
+To: Mike Tipton <quic_mdtipton@quicinc.com>, andersson@kernel.org,
+ djakov@kernel.org
+Cc: neil.armstrong@linaro.org, quic_rjendra@quicinc.com,
+ quic_sibis@quicinc.com, abel.vesa@linaro.org, linux-arm-msm@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20240202014806.7876-1-quic_mdtipton@quicinc.com>
+ <20240202014806.7876-2-quic_mdtipton@quicinc.com>
 Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: daniel.lezcano@linaro.org, miquel.raynal@bootlin.com,
- rui.zhang@intel.com, lukasz.luba@arm.com, support.opensource@diasemi.com,
- shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
- festevam@gmail.com, linux-imx@nxp.com, andersson@kernel.org,
- konrad.dybcio@linaro.org, amitk@kernel.org, thara.gopinath@gmail.com,
- niklas.soderlund@ragnatech.se, srinivas.pandruvada@linux.intel.com,
- baolin.wang@linux.alibaba.com, u.kleine-koenig@pengutronix.de,
- hayashi.kunihiko@socionext.com, d-gole@ti.com, linus.walleij@linaro.org,
- DLG-Adam.Ward.opensource@dm.renesas.com, error27@gmail.com, heiko@sntech.de,
- hdegoede@redhat.com, jernej.skrabec@gmail.com, f.fainelli@gmail.com,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, kernel@collabora.com
-References: <20240130111250.185718-1-angelogioacchino.delregno@collabora.com>
- <20240130111250.185718-9-angelogioacchino.delregno@collabora.com>
- <CAJZ5v0ifn7eg9WrpNF2_PB62gE_BzV2Vx5_k7ebOoZWdQNVWaQ@mail.gmail.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CAJZ5v0ifn7eg9WrpNF2_PB62gE_BzV2Vx5_k7ebOoZWdQNVWaQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <20240202014806.7876-2-quic_mdtipton@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Il 01/02/24 20:51, Rafael J. Wysocki ha scritto:
-> On Tue, Jan 30, 2024 at 12:13 PM AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> wrote:
->>
->> The thermal API has a new thermal_zone_device_register() function which
->> is deprecating the older thermal_zone_device_register_with_trips() and
->> thermal_tripless_zone_device_register().
->>
->> Migrate to the new thermal zone device registration function.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> ---
->>   drivers/thermal/intel/intel_pch_thermal.c | 12 ++++++++----
->>   1 file changed, 8 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/thermal/intel/intel_pch_thermal.c b/drivers/thermal/intel/intel_pch_thermal.c
->> index b3905e34c507..73d7c2ac7dbc 100644
->> --- a/drivers/thermal/intel/intel_pch_thermal.c
->> +++ b/drivers/thermal/intel/intel_pch_thermal.c
->> @@ -160,6 +160,7 @@ static int intel_pch_thermal_probe(struct pci_dev *pdev,
->>                                     const struct pci_device_id *id)
->>   {
->>          enum pch_board_ids board_id = id->driver_data;
->> +       struct thermal_zone_device_params tzdp;
->>          struct pch_thermal_device *ptd;
->>          int nr_trips = 0;
->>          u16 trip_temp;
->> @@ -233,10 +234,13 @@ static int intel_pch_thermal_probe(struct pci_dev *pdev,
->>
->>          nr_trips += pch_wpt_add_acpi_psv_trip(ptd, nr_trips);
->>
->> -       ptd->tzd = thermal_zone_device_register_with_trips(board_names[board_id],
->> -                                                          ptd->trips, nr_trips,
->> -                                                          0, ptd, &tzd_ops,
->> -                                                          NULL, 0, 0);
->> +       tzdp.tzp.type = board_names[board_id];
->> +       tzdp.tzp.devdata = ptd;
->> +       tzdp.tzp.trips = ptd->trips;
->> +       tzdp.tzp.num_trips = nr_trips;
->> +       tzdp.tzp.ops = &tzd_ops;
->> +
->> +       ptd->tzd = thermal_zone_device_register(&tzdp);
+On 2.02.2024 02:48, Mike Tipton wrote:
+> The ACV enable_mask is historically BIT(3), but it's BIT(0) on this
+> target. Fix it.
 > 
-> IMV, this should be
-> 
-> ptd->tzd = thermal_zone_device_register(board_names[board_id],
-> ptd->trips, nr_trips, &tzd_ops, ptd, NULL);
-> 
-> and the tzdp variable is not necessary even.
-> 
+> Fixes: c062bcab5924 ("interconnect: qcom: introduce RPMh Network-On-Chip Interconnect on SM8650 SoC")
+> Signed-off-by: Mike Tipton <quic_mdtipton@quicinc.com>
+> ---
 
-The whole point of thermal_zone_device_register() taking just one parameter was
-that those older functions were taking a bit too many params, and with the
-introduction of Thermal Zone name we'd be adding even more.
+Downstream agrees
 
-For intel_pch_thermal, things are more or less the same, assignments are done there
-line by line... but for most of the others, IMO it's easier and schematized as a
-single stack-initialized structure that could even be constified in the future.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-> Analogously in the rest of the series (ie. patches [4-18/18]).
-> 
->>          if (IS_ERR(ptd->tzd)) {
->>                  dev_err(&pdev->dev, "Failed to register thermal zone %s\n",
->>                          board_names[board_id]);
->> --
-
+Konrad
 
