@@ -1,136 +1,109 @@
-Return-Path: <linux-pm+bounces-3237-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3238-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AC4784712C
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 14:30:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B4128471E6
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 15:29:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D93A928527C
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 13:30:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C1908B29C58
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 14:29:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D96B46448;
-	Fri,  2 Feb 2024 13:30:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6084747A4D;
+	Fri,  2 Feb 2024 14:29:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UNwaRQEp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="umtqzjKp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A875F47772;
-	Fri,  2 Feb 2024 13:30:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A9EC17C77
+	for <linux-pm@vger.kernel.org>; Fri,  2 Feb 2024 14:28:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706880610; cv=none; b=nGVsZeWLmx5EDloBOoCBfcxhoo6bYT2lo3RIEVnuCj0fzK5gpEyePWG8Hl3hZHtHcoDquOqLVzqHmVGfrY4xxaryY3t4+iCAFXuzWitXK82JfQsc/3jRugY1E0UGXrdrT9NVJwOrEQDi5zp834yIf+VZTaz52sQ2hnZh3N8cIdM=
+	t=1706884140; cv=none; b=d/yaDiUa+m+XZLFP9y3Zerp38luId+73/qN0AidDrbRErSBYnayabd02iOrXEqJthV8RysqaytCrL360ZUgIKhfMsLQCFYnfLiMVHIzDoOZNPz1gbEK30JDrYrqyWioomgV+IqV0UFGQyYp27/K/bxLa2omQaY+M6/njpdwEIOk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706880610; c=relaxed/simple;
-	bh=dakj+8/YDKrgFqMkE8JqXt+7c3Xphn1UZs2Lv3Mv6RI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aIzOmpC8WbJqoUtwKLw9OdoRuDl3ZixZM2eYy15YIGQvk//2ZDlW2fV2aJZeyj1mprD241quhkIaFZ/5rpR6oKjFZTMctGtlHZ+5Rs8JSF0JP6WJG9qVZUQ7yf2o3f01HpMXI9VO8bbccf3ZfpgaGpf+b7Ft5kntca0Qo8H+EaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UNwaRQEp; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706880608; x=1738416608;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dakj+8/YDKrgFqMkE8JqXt+7c3Xphn1UZs2Lv3Mv6RI=;
-  b=UNwaRQEp7JzUXzhNrQY5YSHA8R4hY0OZE20aF35fe+lqbP5wBiU9ulfI
-   Y4YqGZZ3xZ91tl5IXdjkZDei8Sqm8bmvIIoIPRT9j6yk7vpWs5YhCl8x0
-   wKaggY8HVdyMzQcxgyXxAJr133etuglqjC4KZZGiM02G0CDHN6ZCF2Pz5
-   wzTAaCrZWIyO4oDTfGP3ys/RfdZZUGHswSpP92lrUljvha7t741wDkJPv
-   UHDZc/3beuhnQ1dHYdZH7+sZE9MulS6e4lqd4lEIxA7K9Vs3iVGAb4hDf
-   KEzRUPYmgdxZwE8gZLXjgBQ3i9hWxy+YJvTyh7K7gE0PKOJLeqo7AnhYm
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="66956"
-X-IronPort-AV: E=Sophos;i="6.05,238,1701158400"; 
-   d="scan'208";a="66956"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 05:30:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,238,1701158400"; 
-   d="scan'208";a="4824879"
-Received: from sgruszka-mobl.ger.corp.intel.com (HELO localhost) ([10.252.59.157])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 05:30:05 -0800
-Date: Fri, 2 Feb 2024 14:00:46 +0100
-From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-To: Jiri Pirko <jiri@resnulli.us>
-Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH 3/3] thermal: intel: hfi: Enable interface only when
- required
-Message-ID: <Zbznft0x7DRWjUTQ@linux.intel.com>
-References: <20240131120535.933424-1-stanislaw.gruszka@linux.intel.com>
- <20240131120535.933424-4-stanislaw.gruszka@linux.intel.com>
- <ZbzhuXbuejM1VLE3@nanopsycho>
+	s=arc-20240116; t=1706884140; c=relaxed/simple;
+	bh=11hd0MdyUcd3HdmwB34NmDsuCWpsRmckMcVWvzSFJgU=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=lrutUuwtJwhIWqyDbZqIdIZrzoEbQ9DiUmn1Lvu6sKEYWe3vP4ADnelI3y9bObz7aO+oVSso1TghxgJsAre3oLB1sOdbTUPcNdTxg9t1RlqgHXo+R1o/CeZk3iB8sCMhTqSrtlI6FQMcZ7BxbI5LTKqVuQcRmm3tS9d63YwCVcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=umtqzjKp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9A4FBC433A6
+	for <linux-pm@vger.kernel.org>; Fri,  2 Feb 2024 14:28:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706884139;
+	bh=11hd0MdyUcd3HdmwB34NmDsuCWpsRmckMcVWvzSFJgU=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=umtqzjKpgz82O/CSV5PjIHIRAHIQcR3MPxWVJVK1aC57b6oVmB4r50Kguw9/oNnHL
+	 96+EWa5ex1TT+X8GAyJif8jQnCpax9f3r0pm4zOhXzLnQDAZ2mmEV5wN4BuyYXN4mI
+	 p3wqi3rKL0na2fpZB/46Z5mY0wmhYoLP9jvF5KuiZ3Ab1Q1Dxeg9ayu/qOltnW2vN8
+	 bHTlxtD9iznRM217OOfqQjpjj0y9/11FngERXe+3fA7eDdJ4Vq9PARgwtXkGAUK0Kc
+	 hucpH7pigfA4iQKKokyq3JPWBxaoLR4W3m8Y/WcAiRWs9OUBe24MfGrHvOiCx/vXmY
+	 YsrdnStYMRuMA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 865AFC4332E; Fri,  2 Feb 2024 14:28:59 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 218171] amd-pstate not loading on zen2 threadripper 3960x
+ (trx40
+Date: Fri, 02 Feb 2024 14:28:59 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: Perry.Yuan@amd.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: ANSWERED
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218171-137361-nV8CZQ18Zg@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218171-137361@https.bugzilla.kernel.org/>
+References: <bug-218171-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZbzhuXbuejM1VLE3@nanopsycho>
 
-On Fri, Feb 02, 2024 at 01:36:09PM +0100, Jiri Pirko wrote:
-> Wed, Jan 31, 2024 at 01:05:35PM CET, stanislaw.gruszka@linux.intel.com wrote:
-> 
-> [...]
-> 
-> 
-> >+static int hfi_netlink_notify(struct notifier_block *nb, unsigned long state,
-> >+			      void *_notify)
-> >+{
-> >+	struct netlink_notify *notify = _notify;
-> >+	struct hfi_instance *hfi_instance;
-> >+	smp_call_func_t func;
-> >+	unsigned int cpu;
-> >+	int i;
-> >+
-> >+	if (notify->protocol != NETLINK_GENERIC)
-> >+		return NOTIFY_DONE;
-> >+
-> >+	switch (state) {
-> >+	case NETLINK_CHANGE:
-> >+	case NETLINK_URELEASE:
-> >+		mutex_lock(&hfi_instance_lock);
-> >+
-> 
-> What's stopping other thread from mangling the listeners here?
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218171
 
-Nothing. But if the listeners will be changed, we will get next notify.
-Serialization by the mutex is needed to assure that the last setting will win,
-so we do not end with HFI disabled when there are listeners or vice versa.
+--- Comment #43 from Perry Yuan(AMD) (Perry.Yuan@amd.com) ---
+(In reply to Gino Badouri from comment #42)
+> Dear Perry Yuan,
+>=20
+> Thanks again for looking into this issue and making the pstate driver
+> compatible.
+>=20
+> https://www.phoronix.com/news/AMD-P-State-Threadripper-3000
 
-> >+		if (thermal_group_has_listeners(THERMAL_GENL_EVENT_GROUP))
-> >+			func = hfi_do_enable;
-> >+		else
-> >+			func = hfi_do_disable;
-> >+
-> >+		for (i = 0; i < max_hfi_instances; i++) {
-> >+			hfi_instance = &hfi_instances[i];
-> >+			if (cpumask_empty(hfi_instance->cpus))
-> >+				continue;
-> >+
-> >+			cpu = cpumask_any(hfi_instance->cpus);
-> >+			smp_call_function_single(cpu, func, hfi_instance, true);
-> >+		}
-> >+
-> >+		mutex_unlock(&hfi_instance_lock);
-> >+		return NOTIFY_OK;
-> >+	}
-> >+
-> >+	return NOTIFY_DONE;
-> >+}
-> 
-> [...]
+You are welcome, glad to see more and more users are using AMD Pstate driver
+and provide feedback to improve the driver compatibility.=20
+
+https://lore.kernel.org/all/cover.1706863981.git.perry.yuan@amd.com/
+
+The patches have been sent to upstream for reviewing.=20
+
+If possible, please help to add test-by flag to the series.
+Thank you all!
+
+
+Perry.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
 
