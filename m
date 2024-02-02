@@ -1,172 +1,117 @@
-Return-Path: <linux-pm+bounces-3210-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3211-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37F01846680
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 04:26:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 267A48466E9
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 05:19:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 468FE1C26901
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 03:26:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ACD341F283B1
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 04:19:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1E7BC2C7;
-	Fri,  2 Feb 2024 03:26:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0D4FDF5D;
+	Fri,  2 Feb 2024 04:19:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lgr1Ory7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BdbHofBP"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB6ADDD0
-	for <linux-pm@vger.kernel.org>; Fri,  2 Feb 2024 03:26:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73CB3E549;
+	Fri,  2 Feb 2024 04:19:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706844369; cv=none; b=lklw/U3qAUJqJy4L0jhv8MITHlr21xa4pu5FDM0QIwFwXtSkk/VOsAIsUW5Er7vFfWCY6SIQDOpjPA1puALD5L2f7Wnz1ddxvz2ZZ116VJrNATO7/15e6M8J48QEqAM2+iyJyVejhnej1pqbRaD3vIkoHOSEhMAhjcqRVKMjCAo=
+	t=1706847558; cv=none; b=QJVjo8VdimQXutv89SVeA8o1XzRtUNRinx2f4+idlk9Q4CThEEZFzUe9sHyEbQgibmNIww+odAVtagRGbzt5b8ILlA2FPxq7I6phpZC4JCkilBbbZ1dRQrJElkdnvE/xkCkUt5FTBrQ6LfYQembXspmgJxLx8zYYKcqjaJ3CFDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706844369; c=relaxed/simple;
-	bh=opVO3sg1NTwnTgadDAIgZ1VLqWV7bNh9u1pNkN4k5oM=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=f9OnoQhw9nK8YAtTbNrj8aQy/+FxnynUfP8BhiN9fvUAjRLidzwEeJrUfh9msELrObIebDwR+Dv0h9q2pZOQkYwTakreCAPsn8rSOYiP0piV4My2apZfuZP2IwhvRTGaAwUog2QDhLdd5tbAvU6AyTyINaUmAIytDzes5DRVBm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lgr1Ory7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 49B26C43390
-	for <linux-pm@vger.kernel.org>; Fri,  2 Feb 2024 03:26:09 +0000 (UTC)
+	s=arc-20240116; t=1706847558; c=relaxed/simple;
+	bh=u3RNVotf+u/sSIA0AiKwHpc1rA1KTzE5j8nZ7SYlHAI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HzN+5sqINoIEHIPtXzkZT8BhOvRgAekr2/m2+5w8yAXRiCtbT/06WMTEoh98TjA6xP1daQARK0h7jVrbKVvUU1eCxcU6Nit5rJ2tabOk10Ye+oA3x+b18W2JvLtkCFlowE9WT+tvpnm7MXx9a+A8UUVoFB5nEtYiDw/JD5bvaoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BdbHofBP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 138D1C433F1;
+	Fri,  2 Feb 2024 04:19:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1706844369;
-	bh=opVO3sg1NTwnTgadDAIgZ1VLqWV7bNh9u1pNkN4k5oM=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=Lgr1Ory7SFEt3jd1CHf/7/c0ltjbXNpczFEITHMIqOCUU0gpalZMGPJd/SO0w5V4s
-	 BfHIvcQuBbrHuNbDZa9RoyCFOFiCZSoR0o7LjiFkZPnYcN3T/pU3malK3H7Gmb6hKB
-	 qXhgeJlJOxyDyqOs0y1nZ/uOXrhZUvtIVvD1plM7bsbswEU7ryukWXmoCd9jTH7QaT
-	 dAH95l7T6WUNSa4Clna3c23lA8cHMrL+LHhEOHyKht+fKtzTD89c46DXz7j4QoDOrI
-	 PBJIWXhgdDDkrlejOqiXx0hP++Kn6xAbaQKnYHc/wsqnUfNm6wNA1/3cbwezm97/8j
-	 hmwOw0dkVw4ow==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 3947AC53BCD; Fri,  2 Feb 2024 03:26:09 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 217931] amd-pstate lacks crucial features: CPU frequency and
- boost control
-Date: Fri, 02 Feb 2024 03:26:08 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: Perry.Yuan@amd.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217931-137361-bD1EUweZHt@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217931-137361@https.bugzilla.kernel.org/>
-References: <bug-217931-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1706847557;
+	bh=u3RNVotf+u/sSIA0AiKwHpc1rA1KTzE5j8nZ7SYlHAI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BdbHofBPLyDEKgksKVQoTno6fQlvfLG+5+xg+BtMsxf6FB7rAGYSC1qRH0Ri7mLhN
+	 5HthX6rDsO6bcBWFkavVBT2tKGDlE7E8lUTZph18c2Iv7gOJuQmkuQg9uq29tAEYjA
+	 NKKoLQleSTAbMcswFelfOtxekIg7NmgDa0Bw7C1W6HUUOagbqKREp9olWX1O3gkXH/
+	 REFHyQHqdWROlTwnLO2yLwHpj1j5mm1PasAQb1FfoPKE1QEML419yPbsFOiM8ee9h9
+	 K0hETD9jQ5bRq28sFjWu5ypwegPF0WCwsItHs3fWf9u2rqHGJObCnU/+GJWvlw74j4
+	 9cOpw34Pid9Ww==
+Date: Thu, 1 Feb 2024 22:19:15 -0600
+From: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] thermal/of: Assume polling-delay(-passive) 0 when
+ absent
+Message-ID: <abgxh5s6e4w65iir2d3oncbwtmhufhg5xtyyukhsrrhe755gam@nhxeqsz35rxb>
+References: <20240125-topic-thermal-v1-0-3c9d4dced138@linaro.org>
+ <20240125-topic-thermal-v1-2-3c9d4dced138@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240125-topic-thermal-v1-2-3c9d4dced138@linaro.org>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217931
+On Thu, Jan 25, 2024 at 01:11:16PM +0100, Konrad Dybcio wrote:
+> Currently, thermal zones associated with providers that have interrupts
+> for signaling hot/critical trips are required to set a polling-delay
+> of 0 to indicate no polling. This feels a bit backwards.
+> 
+> Change the code such that "no polling delay" also means "no polling".
+> 
+> Suggested-by: Bjorn Andersson <andersson@kernel.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
---- Comment #53 from Perry Yuan(AMD) (Perry.Yuan@amd.com) ---
-(In reply to Sjoer van der Ploeg from comment #52)
-> (In reply to Perry Yuan(AMD) from comment #41)
-> > (In reply to Sjoer van der Ploeg from comment #40)
-> > > Could this be the reason why some CPU's do not boost to their maximum
-> > > frequency, while they are happy to do so on Windows?
-> > >=20
-> > > For example my 5800X3D never reaches 4550 on Linux, but on Windows it
-> seems
-> > > to have no problem getting there.
-> >=20
-> > Could you share the output with below commands? then I can check that.
-> >=20
-> > echo "=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3Dnorminal freq=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D"
-> > cat /sys/devices/system/cpu/cpu*/acpi_cppc/nominal_freq
-> >=20
-> > echo "=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3Dnorminal perf=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D"
-> > cat /sys/devices/system/cpu/cpu*/acpi_cppc/nominal_perf
-> >=20
-> > echo "=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3Dhighest_perf perf=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D"
-> > cat /sys/devices/system/cpu/cpu*/acpi_cppc/highest_perf
-> >=20
-> > echo "=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3Dlowest_nonlinear_perf
-> perf=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D"
-> > cat /sys/devices/system/cpu/cpu*/acpi_cppc/lowest_nonlinear_perf
-> >=20
-> > echo "=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3Dlowest perf=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D"
-> > cat /sys/devices/system/cpu/cpu*/acpi_cppc/lowest_perf
-> >=20
-> > echo "=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3Dlowest freq=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D"
-> > cat /sys/devices/system/cpu/cpu*/acpi_cppc/lowest_freq
-> >=20
-> > Perry.
->=20
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3Dnominal freq=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> 3401
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3Dnominal perf=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> 124
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3Dhighest_perf perf=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-> 196
-> 171
-> 196
-> 166
-> 186
-> 181
-> 191
-> 176
-> 171
-> 196
-> 166
-> 186
-> 181
-> 191
-> 196
-> 176
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3Dlowest_nonlinear_perf perf=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D
-> 64
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3Dlowest perf=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> 21
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3Dlowest freq=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> 550
->=20
-> Only removed repeating values
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
 
-How about the output of "lscpu -ae"?
+Regards,
+Bjorn
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
+> ---
+>  drivers/thermal/thermal_of.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> index 4d6c22e0ed85..61bbd42aa2cb 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -225,14 +225,18 @@ static int thermal_of_monitor_init(struct device_node *np, int *delay, int *pdel
+>  	int ret;
+>  
+>  	ret = of_property_read_u32(np, "polling-delay-passive", pdelay);
+> -	if (ret < 0) {
+> -		pr_err("%pOFn: missing polling-delay-passive property\n", np);
+> +	if (ret == -EINVAL) {
+> +		*pdelay = 0;
+> +	} else if (ret < 0) {
+> +		pr_err("%pOFn: Couldn't get polling-delay-passive: %d\n", np, ret);
+>  		return ret;
+>  	}
+>  
+>  	ret = of_property_read_u32(np, "polling-delay", delay);
+> -	if (ret < 0) {
+> -		pr_err("%pOFn: missing polling-delay property\n", np);
+> +	if (ret == -EINVAL) {
+> +		*delay = 0;
+> +	} else if (ret < 0) {
+> +		pr_err("%pOFn: Couldn't get polling-delay: %d\n", np, ret);
+>  		return ret;
+>  	}
+>  
+> 
+> -- 
+> 2.40.1
+> 
 
