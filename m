@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-3229-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3230-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8D91846D36
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 11:01:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9A40846D4D
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 11:04:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D5CC1F21EAA
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 10:01:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E98328D064
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 10:04:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48BA377F10;
-	Fri,  2 Feb 2024 10:01:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8795377634;
+	Fri,  2 Feb 2024 10:04:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="VyfW0C3f"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="IqjrXPRT"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F1C533990;
-	Fri,  2 Feb 2024 10:01:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFFA7487BF;
+	Fri,  2 Feb 2024 10:04:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706868099; cv=none; b=drEzF7mW9DW+l+pDczm1ivOSUBsj3dUfAg46KJbPTV6dc5KtGkQzM0316tWha8pam2emzQmpsXeFaJJmfP8HAwXm7htEZnG/Ku1zrb+o9xUN6dcOGcHKwKhSLIem4rT6hJSkjVHEYHwmqEFocNIHkBSU7N1MXeJvNwRYhsnPMA8=
+	t=1706868285; cv=none; b=odBGZj1nprEFxiMx2zXSfCdc51iTDPdKEBcI/B6T9+hH0LPj+j6kEuWlE4H/Y66kD7ENizz10NfdaBsTWGFsNBGKIYB1g8Jd2A+FDBTy9wJ/98I4QbI/WvyJD4So0msOYQPP3JAJyZm0jMINZdSSCMo8M/Q/Tt99uRSliW8ERVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706868099; c=relaxed/simple;
-	bh=iAeX2V1R4iOUtvH22ZujrykVDWSHb4t4vjjKCuU9whE=;
+	s=arc-20240116; t=1706868285; c=relaxed/simple;
+	bh=G8VN6DuWYyD1MCRfMqLBXot7d9Cgp4lfEnXEDGwQyn8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VQnZWNXK8isXTi5sgUvOAiTiAy8LF3DpQTLmMkCZ56Wu8mwI+b0JgS/KltiOWRA0hVIqdGs45Ez3J1c/BjjN75zaT+xOOAPaH+okeMuZ+m8l4NIy/GbeIBkXMs0VbjmKx8PjCUTvb9GX80qq5c0TJ/ZLJPqxcZuODy3pMXWDJAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=VyfW0C3f; arc=none smtp.client-ip=46.235.227.194
+	 In-Reply-To:Content-Type; b=jktEQsBD4FGZ6iYHsH1Rut/gaMPRdJDIz2BeFMOWSyiR9poHmmfacRX3c2H+6a8/uAlpPmMU5m20/s66/SgRK5Y5YT/L2U0cC870Sfuze7k9j0iSY2OsQmNuYUNUNa6F7mjQlTaJqy6115y/5FovI0owFulEmzc8CflsLH4xsSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=IqjrXPRT; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1706868095;
-	bh=iAeX2V1R4iOUtvH22ZujrykVDWSHb4t4vjjKCuU9whE=;
+	s=mail; t=1706868281;
+	bh=G8VN6DuWYyD1MCRfMqLBXot7d9Cgp4lfEnXEDGwQyn8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VyfW0C3f9keG8ojus4cmEQwMN2EnvI0tIVvsA3Ii/GpmHw52bLje/tXn4xbuY+eoS
-	 4M375eeVut0YoxOaeYzVXArtC5/U294a4MzKp2BRqiawtSK/O7PN1qB1SMv6SkV7tf
-	 aQIW9GsEJsx6T+zqmu9gDz4wpywo0ZNjyZ0DD0cz+Xvx/cFGAirIpynFCE8s7kSFuh
-	 uB4FzeE66vah56gdra09tuqVP3cIRAPUl2ItzW3+kH/DjdI3bj3mrrUOalNqj/Cby+
-	 77J4DT9DLWw6weO8aZDyH80I2FDdSr4pvi7jrhhidNiCaWiK7/QhkdzgIsDZQKzm/O
-	 b3sdnfbEzAvSg==
+	b=IqjrXPRTabQJePD33N1JEYtVFDiMMP1VnUHxXV11bOfrCJGNWg3BfpHXgdhn5tWE7
+	 ufv8t6B9+HtdYavkowk0Ay9SOTxWpv8sefQA6jGL/ku8+yFhy/wYOlDaICt22aTfX7
+	 ot6ywsQAUEvfQnJJ0PzLbViOGiiWaxDXqUS2NhJDADwlHr52eEE+utsjpoEQIa22/0
+	 oEdafAbqhOhCDzvFJQK/EP2AXDwGEa6Pa+udcRoPL5wUNLYfyvNNe8x1+J6QtyZ6Wn
+	 KTnSHGtSY5VPw08fOt9hdi2tzhprN6DsUeDmQ3jlXFGz2eOZdNEdhcT2SZqN0jmExc
+	 5qq6Ot6E6be2A==
 Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 62213378047F;
-	Fri,  2 Feb 2024 10:01:33 +0000 (UTC)
-Message-ID: <6f8021d5-50af-40c5-983e-cd203b1b3683@collabora.com>
-Date: Fri, 2 Feb 2024 11:01:32 +0100
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id ACDEC378047F;
+	Fri,  2 Feb 2024 10:04:39 +0000 (UTC)
+Message-ID: <3e3aa372-cca4-4d3b-81e3-53abe3f384f2@collabora.com>
+Date: Fri, 2 Feb 2024 11:04:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,8 +57,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 01/18] thermal: core: Change governor name to const
- char pointer
+Subject: Re: [PATCH v1 03/18] thermal: Directly use
+ thermal_zone_platform_params for thermal_zone_device
 Content-Language: en-US
 To: "Rafael J. Wysocki" <rafael@kernel.org>
 Cc: daniel.lezcano@linaro.org, miquel.raynal@bootlin.com,
@@ -75,64 +75,49 @@ Cc: daniel.lezcano@linaro.org, miquel.raynal@bootlin.com,
  linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
  linux-renesas-soc@vger.kernel.org, kernel@collabora.com
 References: <20240130111250.185718-1-angelogioacchino.delregno@collabora.com>
- <20240130111250.185718-2-angelogioacchino.delregno@collabora.com>
- <CAJZ5v0hOcS0Fm2-mKWtc1-0ym33XuH=B39GGL9b6MfGSqeERkQ@mail.gmail.com>
+ <20240130111250.185718-4-angelogioacchino.delregno@collabora.com>
+ <CAJZ5v0g6YNDAUxaWK9KfM0tt2x4wqaCap4--UjSauwmfYiEgoA@mail.gmail.com>
 From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CAJZ5v0hOcS0Fm2-mKWtc1-0ym33XuH=B39GGL9b6MfGSqeERkQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0g6YNDAUxaWK9KfM0tt2x4wqaCap4--UjSauwmfYiEgoA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Il 01/02/24 19:37, Rafael J. Wysocki ha scritto:
+Il 01/02/24 20:42, Rafael J. Wysocki ha scritto:
 > On Tue, Jan 30, 2024 at 12:13 PM AngeloGioacchino Del Regno
 > <angelogioacchino.delregno@collabora.com> wrote:
 >>
->> All users are already assigning a const char * to the `governor_name`
->> member of struct thermal_zone_params and to the `name` member of
->> struct thermal_governor.
->> Even if users are technically wrong, it just makes more sense to change
->> this member to be a const char pointer instead of doing the other way
->> around.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>> Remove all duplicate members from thermal_zone_device and directly
+>> use the corresponding ones from struct thermal_zone_platform_params.
 > 
-> Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+> I totally disagree with this approach.
 > 
-> or I can pick it up right away if you want me to do that.
+> It does make sense to store these things in a tz directly.
+> 
+> 1. devdata allows the caller of the thermal zone to get to their own
+> information on it conveniently.  This patch makes it harder.
+> 2. It makes sense to copy type into tz to allow the zone creator to
+> free the string (should they want to do that).
+> 3. It would make sense to copy the contents of the trips[] table to tz
+> to allow the zone creator to free their initial table.  This doesn't
+> happen today, but it is in the works and your patch goes against this.
+> 4. It makes sense to copy num_trips directly to tz, because it is
+> closely related to trips[].
+> 5. It makes sense to copy ops directly into tz, because this will
+> allow zone creators to use const ops for zone registration.  Again,
+> this doesn't happen today, but it is in the works and this patch goes
+> against this.
+> 
+> As far as I'm concerned, this one is a total no-go.
 > 
 
-I appreciate having less patches to carry over with new series versions.
+I'm sad for all the work that went into this - but at the same time I can also
+understand your reasons.
 
-Whatever you can take, please feel free to pick directly :-)
+I'll drop this one then!
 
-Thanks,
+Cheers,
 Angelo
 
->> ---
->>   include/linux/thermal.h | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
->> index b7a3deb372fd..65d8f92a9a0d 100644
->> --- a/include/linux/thermal.h
->> +++ b/include/linux/thermal.h
->> @@ -214,7 +214,7 @@ struct thermal_zone_device {
->>    * @governor_list:     node in thermal_governor_list (in thermal_core.c)
->>    */
->>   struct thermal_governor {
->> -       char name[THERMAL_NAME_LENGTH];
->> +       const char *name;
->>          int (*bind_to_tz)(struct thermal_zone_device *tz);
->>          void (*unbind_from_tz)(struct thermal_zone_device *tz);
->>          int (*throttle)(struct thermal_zone_device *tz,
->> @@ -226,7 +226,7 @@ struct thermal_governor {
->>
->>   /* Structure to define Thermal Zone parameters */
->>   struct thermal_zone_params {
->> -       char governor_name[THERMAL_NAME_LENGTH];
->> +       const char *governor_name;
->>
->>          /*
->>           * a boolean to indicate if the thermal to hwmon sysfs interface
->> --
+> Thanks!
 
 
