@@ -1,119 +1,250 @@
-Return-Path: <linux-pm+bounces-3251-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3253-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2D37847575
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 17:57:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4927C8475AD
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 18:06:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E2DB71C2152B
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 16:57:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1E581F27CCF
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 17:06:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0B711487E4;
-	Fri,  2 Feb 2024 16:57:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBB9714AD06;
+	Fri,  2 Feb 2024 17:04:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iUpUeVEn"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="RSpUTje5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ABC51468E7
-	for <linux-pm@vger.kernel.org>; Fri,  2 Feb 2024 16:57:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C20B1487D9;
+	Fri,  2 Feb 2024 17:04:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706893062; cv=none; b=qMfNgeZ5ss0aHix7Ud/n73JtvU/XET8MSkpRKMWbuS0rp2+DbzJZ8ZaijA8Xzss/hxqz5lahEmTRxjKEQtqh79QstYAnLOsunKKaByZ1Zvit0VqR289SSnv7NhEHqg9ivpw8MekpNOgK/4uQRjza+GaSi2zHWjvOg4frO1Dw6yk=
+	t=1706893468; cv=none; b=l/1Fv94F1wKM5XDx2VrThXvLt5SsQJQtPeA6ceGbcMGhTxQURfnDj8o8jCOZnCungkZSy5eFY0XUf3mSTaLF3BjlwWr9fQzMYeUbgIzVjyyK+omPI8gAqR9IxJN2FnoIhSE9VSb7fIIV1fo6hWOWSYqvuBWwxOny0S536D00pM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706893062; c=relaxed/simple;
-	bh=BTsigi4db6wzD2KxV1kjIqZyumwhMxK2PLRCX71n8lQ=;
+	s=arc-20240116; t=1706893468; c=relaxed/simple;
+	bh=MnvLEjR4ovDLXXBbq+Nz/JHsV5WbpDGbzzKIEnAHaGw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NuTVs2UwYoPiP4Lw+iEDFF3Iu7TFK8SFwz8MQxZrwycbb/zqjwGYE7EREYkIhpSLan745yGLxmjH3f74hOOavppB1Hchqpnjlx+CCVojjF0U0a+4/+lJZtiECST8Se8VCe8Q6omie9LYI8BtyfPMbforp/2YnyaoaryzoRr5Y/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iUpUeVEn; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a29c4bbb2f4so288523366b.1
-        for <linux-pm@vger.kernel.org>; Fri, 02 Feb 2024 08:57:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1706893059; x=1707497859; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pOMmKU2ojRpucv2LvIq5EXqCC2JsZUhlB+SBvo1nc0g=;
-        b=iUpUeVEn1HbE1Sc9LDcHFgMLAzT0Isyx3//JSbFBrfOKOmj+LxUBfvq3UbimJFeUNK
-         FBuFukXs9YTWlFYgXNkx2dPV72ICo7hZ6VEWaEQVMDkEMPdsqnY5CeEGkgmGviIuMu/t
-         BGSMRoUTsD1lcMnqorCJve2GV9eIuE6CaI3hR34msw8fT3NHbH93BfmqZ0sic9fD+Acx
-         0brvc1nnBaL3/1StzXlF5wBxZn255kwS5pXccu02KMli164TOs5z2Ng3yl+Br3eVQvCP
-         uRpYz4Y5q3zgE25jZXq9FFx33D0oIUqO9MkpOqTOFZI5fiIrGKXPTTBlszqZBy0CWr/A
-         mGjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706893059; x=1707497859;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pOMmKU2ojRpucv2LvIq5EXqCC2JsZUhlB+SBvo1nc0g=;
-        b=kVcuqN9TS9cPvqIKlARCbFVAgmLfgS/Cl74c60S5yMCD2KvZjHzHQYxK7GO/SvoptU
-         HmEFfWyIWBpZH6nkfQ/zNkQyVvAiQ97JKKxXRGGZwIhhkp3Lv8AMtP2B3V0sjwdgwAjM
-         DsDjXPDZ1LmUZDxAMOGlP7tWkPrGZKzqZVVfl49/jCqg/OnnWsqu3vp45Y+RhTrfdCMx
-         dOv7BVkRjSWzWOcq5qhTL1YPZx1aVUv0hymTijHNCPpM/isW+6TFJVvqXb0Du19dnWhd
-         GpmCUw+hmvDiZo0NyApb62yYmJGyoP68iAkiJy/h+EjoBF0tBBeHN/QmXONgujUQEMbV
-         qkyQ==
-X-Gm-Message-State: AOJu0Yx+qLZhaXJ1olG/SoeGMeTVchAgD4IBH9tB41dnXnWCbk1nG0eU
-	5iFfavSvu/Vnku3jVRHRgLJN9gb/NOPmlAJsd6x164Vr7nCCtxBmpEev/e0yqbU=
-X-Google-Smtp-Source: AGHT+IGrVNwLvQ7Qd2H25HKvVgps2pgoVubc0Ao0qrH4dAW2aOxdnQVXdvSLRHFLk6kH2p2hCaFBMw==
-X-Received: by 2002:a17:906:6857:b0:a35:5b6:1e0f with SMTP id a23-20020a170906685700b00a3505b61e0fmr6339017ejs.71.1706893059324;
-        Fri, 02 Feb 2024 08:57:39 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCVfrK/V22UF7mLDeAOiCdHIwfUXdKosWBUWCt4q+cZHOIa01WXuHFSjk5yfqdMDUcYBUOWGKOE2WHaIF/jq4KG7QamhuYr+SKJuThfrjl6ScPNl4eHX8O4kGwHwxCFgnArSyQLOMWG+rAtyWhEVWyOypIXREN2cTqjHRqxJbSZafEoO8yCh5mQxgmwNyy0RqhlwityX+YM7R46CPq1FIJLljgPbGJ+HyUh4erULI2RB2jlCdEBYsKjwjjNJiWAlWtwfDOdbZSDIpggWjeZ/ZDo+gs8RVK2k1HJJnqgd4lyj+jVvW8uyovOjoeHIJAvbMtWamA0sljEqkbEG+7Y+5LI=
-Received: from linaro.org ([62.231.97.49])
-        by smtp.gmail.com with ESMTPSA id tb11-20020a1709078b8b00b00a370d76b0b4sm734523ejc.71.2024.02.02.08.57.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Feb 2024 08:57:38 -0800 (PST)
-Date: Fri, 2 Feb 2024 18:57:37 +0200
-From: Abel Vesa <abel.vesa@linaro.org>
-To: Mike Tipton <quic_mdtipton@quicinc.com>
-Cc: andersson@kernel.org, konrad.dybcio@linaro.org, djakov@kernel.org,
-	neil.armstrong@linaro.org, quic_rjendra@quicinc.com,
-	quic_sibis@quicinc.com, linux-arm-msm@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] interconnect: qcom: x1e80100: Add missing ACV
- enable_mask
-Message-ID: <Zb0fASo+PsmAaXaS@linaro.org>
-References: <20240202014806.7876-1-quic_mdtipton@quicinc.com>
- <20240202014806.7876-3-quic_mdtipton@quicinc.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=f131WF5zLf+QtVhi4pE2tFkCDyw/ECAL4HfSomkMjZFsDhXMbccVnjXjLsnE/p45bljpvTBXva1ankr3KRo3FRv4l31rXQKn8wCb54qZ/QNLK/oqCZzWO30hnT/WK56GmU8ZQbv3eMUv7/SZSoC0xY8Zov5UWoPMOzMJwxS4C1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=RSpUTje5; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1706893465;
+	bh=MnvLEjR4ovDLXXBbq+Nz/JHsV5WbpDGbzzKIEnAHaGw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RSpUTje5YoTTrL+THcV1sFyefprReWs8nZZUn10e9gpQT4ZkXNnGvBuiBvV3EpDWy
+	 asJ/P8gVWaaAo6NPSsxeKLSSThRdrbsfcxhGEbGUahShXeO58NOMETD78SLl+8AWvI
+	 8z0AW7zpPzR9jeB59new8pHPazYMIetP0vUAAVBYH9YljpfkFLhNtbUdUIuR9v9q89
+	 vQ6ORSjCj9QRQopTqgGoyfCYkg0345oL4ckDRyf2jvptH0UhD+YgxvvRCkKim52cbx
+	 mw/Ek9lR+ZX17cM/RI2DQC/+ZkhpEpzlzOHOee+4emvH089CbAgqVqjU4f5NUKwMxr
+	 mu4pMXt34LMnA==
+Received: from mercury (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sre)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id C53A03780A0B;
+	Fri,  2 Feb 2024 17:04:24 +0000 (UTC)
+Received: by mercury (Postfix, from userid 1000)
+	id 0E96B10611A5; Fri,  2 Feb 2024 18:04:13 +0100 (CET)
+Date: Fri, 2 Feb 2024 18:04:12 +0100
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Nishanth Menon <nm@ti.com>
+Cc: Andrew Davis <afd@ti.com>, Tero Kristo <kristo@kernel.org>, 
+	Santosh Shilimkar <ssantosh@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Vignesh Raghavendra <vigneshr@ti.com>, linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 03/12] power: reset: Add TI-SCI reboot driver
+Message-ID: <xdrdaasaosjagr35ftb56yszwlrcf5bzpsnui5crut2ii7nu7n@apxciqrwluwr>
+References: <20240131221957.213717-1-afd@ti.com>
+ <20240131221957.213717-4-afd@ti.com>
+ <20240201211534.dv6qu7ila54vqykn@cheating>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="pzni7lzp76a4ycxf"
+Content-Disposition: inline
+In-Reply-To: <20240201211534.dv6qu7ila54vqykn@cheating>
+
+
+--pzni7lzp76a4ycxf
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240202014806.7876-3-quic_mdtipton@quicinc.com>
+Content-Transfer-Encoding: quoted-printable
 
-On 24-02-01 17:48:06, Mike Tipton wrote:
-> The ACV BCM is voted using bitmasks. Add the proper mask for this
-> target.
-> 
-> Fixes: 9f196772841e ("interconnect: qcom: Add X1E80100 interconnect provider driver")
-> Signed-off-by: Mike Tipton <quic_mdtipton@quicinc.com>
+Hi,
 
-Tested-by: Abel Vesa <abel.vesa@linaro.org>
+On Thu, Feb 01, 2024 at 03:15:34PM -0600, Nishanth Menon wrote:
+> On 16:19-20240131, Andrew Davis wrote:
+> > This reboot driver calls into firmware using TI-SCI to reboot the syste=
+m.
+> > We register the handler with low priority as we want PSCI to remain the
+> > main way these devices are rebooted. This driver acts as a fallback if
+> > PSCI is not able to reboot the system.
+> >=20
+> > Signed-off-by: Andrew Davis <afd@ti.com>
+> > ---
+> >  MAINTAINERS                         |  1 +
+> >  drivers/power/reset/Kconfig         |  7 ++++
+> >  drivers/power/reset/Makefile        |  1 +
+> >  drivers/power/reset/ti-sci-reboot.c | 63 +++++++++++++++++++++++++++++
+> >  4 files changed, 72 insertions(+)
+> >  create mode 100644 drivers/power/reset/ti-sci-reboot.c
+> >=20
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 45983bb174fe4..ee67ea497fc56 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -21758,6 +21758,7 @@ F:	drivers/clk/keystone/sci-clk.c
+> >  F:	drivers/firmware/ti_sci*
+> >  F:	drivers/irqchip/irq-ti-sci-inta.c
+> >  F:	drivers/irqchip/irq-ti-sci-intr.c
+> > +F:	drivers/power/reset/ti-sci-reboot.c
+> >  F:	drivers/reset/reset-ti-sci.c
+> >  F:	drivers/soc/ti/ti_sci_inta_msi.c
+> >  F:	drivers/pmdomain/ti/ti_sci_pm_domains.c
+> > diff --git a/drivers/power/reset/Kconfig b/drivers/power/reset/Kconfig
+> > index fece990af4a75..d3e91e54cae24 100644
+> > --- a/drivers/power/reset/Kconfig
+> > +++ b/drivers/power/reset/Kconfig
+> > @@ -205,6 +205,13 @@ config POWER_RESET_ST
+> >  	help
+> >  	  Reset support for STMicroelectronics boards.
+> > =20
+> > +config POWER_RESET_TI_SCI
+> > +	tristate "TI System Control Interface (TI-SCI) reboot driver"
+> > +	depends on TI_SCI_PROTOCOL
+> > +	help
+> > +	  This enables the reboot driver support over TI System Control
+> > +	  Interface available on some TI's SoCs.
+> > +
+> >  config POWER_RESET_TPS65086
+> >  	bool "TPS65086 restart driver"
+> >  	depends on MFD_TPS65086
+> > diff --git a/drivers/power/reset/Makefile b/drivers/power/reset/Makefile
+> > index a95d1bd275d18..881ca58a43b9c 100644
+> > --- a/drivers/power/reset/Makefile
+> > +++ b/drivers/power/reset/Makefile
+> > @@ -23,6 +23,7 @@ obj-$(CONFIG_POWER_RESET_QNAP) +=3D qnap-poweroff.o
+> >  obj-$(CONFIG_POWER_RESET_REGULATOR) +=3D regulator-poweroff.o
+> >  obj-$(CONFIG_POWER_RESET_RESTART) +=3D restart-poweroff.o
+> >  obj-$(CONFIG_POWER_RESET_ST) +=3D st-poweroff.o
+> > +obj-$(CONFIG_POWER_RESET_TI_SCI) +=3D ti-sci-reboot.o
+> >  obj-$(CONFIG_POWER_RESET_TPS65086) +=3D tps65086-restart.o
+> >  obj-$(CONFIG_POWER_RESET_VERSATILE) +=3D arm-versatile-reboot.o
+> >  obj-$(CONFIG_POWER_RESET_VEXPRESS) +=3D vexpress-poweroff.o
+> > diff --git a/drivers/power/reset/ti-sci-reboot.c b/drivers/power/reset/=
+ti-sci-reboot.c
+> > new file mode 100644
+> > index 0000000000000..400bd5d740f8b
+> > --- /dev/null
+> > +++ b/drivers/power/reset/ti-sci-reboot.c
+> > @@ -0,0 +1,63 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Texas Instrument's System Control Interface (TI-SCI) reboot driver
+> > + *
+> > + * Copyright (C) 2024 Texas Instruments Incorporated - https://www.ti.=
+com/
+> > + *	Andrew Davis <afd@ti.com>
+> > + */
+> > +
+> > +#include <linux/mod_devicetable.h>
+> > +#include <linux/module.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/reboot.h>
+> > +
+> > +#include <linux/soc/ti/ti_sci_protocol.h>
+> > +
+> > +static int ti_sci_reboot_handler(struct sys_off_data *data)
+> > +{
+> > +	const struct ti_sci_handle *sci =3D data->cb_data;
+> > +	const struct ti_sci_core_ops *core_ops =3D &sci->ops.core_ops;
+> > +
+> > +	core_ops->reboot_device(sci);
+> > +
+> > +	return NOTIFY_DONE;
+> > +}
+> > +
+> > +static int ti_sci_reboot_probe(struct platform_device *pdev)
+> > +{
+> > +	const struct ti_sci_handle *sci;
+> > +	int err;
+> > +
+> > +	sci =3D devm_ti_sci_get_handle(&pdev->dev);
+> > +	if (IS_ERR(sci))
+> > +		return PTR_ERR(sci);
+> > +
+> > +	err =3D devm_register_sys_off_handler(&pdev->dev,
+> > +					    SYS_OFF_MODE_RESTART,
+> > +					    SYS_OFF_PRIO_LOW,
+> > +					    ti_sci_reboot_handler,
+> > +					    (void *)sci);
+> > +	if (err)
+> > +		return dev_err_probe(&pdev->dev, err, "Cannot register restart handl=
+er\n");
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static const struct of_device_id ti_sci_reboot_of_match[] =3D {
+> > +	{ .compatible =3D "ti,sci-reboot", },
+> > +	{ /* sentinel */ },
+> > +};
+> > +MODULE_DEVICE_TABLE(of, ti_sci_reboot_of_match);
+> > +
+> > +static struct platform_driver ti_sci_reboot_driver =3D {
+> > +	.probe =3D ti_sci_reboot_probe,
+> > +	.driver =3D {
+> > +		.name =3D "ti-sci-reboot",
+> > +		.of_match_table =3D ti_sci_reboot_of_match,
+> > +	},
+> > +};
+> > +module_platform_driver(ti_sci_reboot_driver);
+> > +
+> > +MODULE_AUTHOR("Andrew Davis <afd@ti.com>");
+> > +MODULE_DESCRIPTION("TI System Control Interface (TI SCI) Reboot driver=
+");
+> > +MODULE_LICENSE("GPL");
+> > --=20
+> > 2.39.2
+>=20
+> Will assume the patch to go via Sebastien. Will be good for the dts to
+> go via SoC tree. So hoping Sebastien will just pick the driver and
+> bindings.
 
-> ---
->  drivers/interconnect/qcom/x1e80100.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/interconnect/qcom/x1e80100.c b/drivers/interconnect/qcom/x1e80100.c
-> index 5b2de9c3a1d6..281295a9a077 100644
-> --- a/drivers/interconnect/qcom/x1e80100.c
-> +++ b/drivers/interconnect/qcom/x1e80100.c
-> @@ -1372,6 +1372,7 @@ static struct qcom_icc_node qns_aggre_usb_south_snoc = {
->  
->  static struct qcom_icc_bcm bcm_acv = {
->  	.name = "ACV",
-> +	.enable_mask = BIT(3),
->  	.num_nodes = 1,
->  	.nodes = { &ebi },
->  };
-> -- 
-> 2.17.1
-> 
+I will wait for the DT binding discussion to have settled. The
+driver itself LGTM.
+
+-- Sebastian
+
+--pzni7lzp76a4ycxf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmW9IIMACgkQ2O7X88g7
++poPVhAAhZtyxfQ0GDuYExpKNvR0PJYXbvA6n9jzOfg5v8ocwQoWCAEHxB0Stujq
+W/hnOMJqQ7mPtDTmX3YAvGjak0ZZO8uBU4duj2ygS7szoJ0cOaOGSyDjDgvV2OnH
+Tq+dv1s4P/Ex7bvs+jedaz8HFNK+Bq9YGyc58liCEv8OBWQ9dIkuQ37sA8Bf3HnL
+V32FKMfW/Y640MIJ7J4EvteQPNWgb/UnobKLLQdoXgMHCkdoze3y0RNbDgdbuFvy
+Amo+d/Y5Sachm21BoKKgrrw9/cVjiYl6LDcmPZoRCfNDA39d1HEI2gYovx8oet1z
+eJAkLIA7nYPEKRPYYNObfeYFDSmxlYqE+mx1CGkieDh9qrlYo20bHxrZcjuWhTDV
+ThMUw1wTAw0TwJZPgO4F2X53mmFf5bO5yebayCq0wUawVFqUdePj/KIjZRJCdVjL
+dyhR1djDstBSdOwUCyv1KXltvFDhwrUx4GOFn7HUEmXqwM4kfuy0DeKZKFoagrdY
+RnZaTcXKHof60XZJhkorunklTGMQAese+v8KKlaO+2GvyfD91Cm5BHtecL4nUt1n
+ZVa5mPy+gYX6QcFjQYfwHn5RtApsX195b62wCV6fsZ0m5HxScyvDaClNEaGGqCdH
+2k+f4aNCSyRb52HdgRAf7bajqWe3o6PTfLvxFsnJpIb1s+7RhZw=
+=Qr8y
+-----END PGP SIGNATURE-----
+
+--pzni7lzp76a4ycxf--
 
