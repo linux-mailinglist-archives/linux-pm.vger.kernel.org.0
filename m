@@ -1,159 +1,228 @@
-Return-Path: <linux-pm+bounces-3245-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3246-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5E89847395
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 16:43:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 763BE8473B8
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 16:54:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65D1E1F290EF
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 15:43:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2861B28D6C3
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Feb 2024 15:54:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A26871482F5;
-	Fri,  2 Feb 2024 15:42:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B240146913;
+	Fri,  2 Feb 2024 15:53:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HLLUzUU/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aAhdO6qU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFE7E1482E1;
-	Fri,  2 Feb 2024 15:42:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F4F9179A5;
+	Fri,  2 Feb 2024 15:53:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706888568; cv=none; b=EWwaOC5cTx32G/crm2NEbxQDgakvNu/0+96mujawX1+ZmN6FUno5Yi5RdTDBJEZ5mo2+O8T2WgO/RsNH+PKo6R7wV79WLRrotKXE7txkQJIqLR2c5IK2Xdjoo1cCRiFlAifHVQ0DdzeOeJl+/ViOghI731Sy0o2ZKQ8y/lKG9II=
+	t=1706889235; cv=none; b=sm7JQWjw4usPDb07hdhAgWzWpvGwFB6h4Xy5UetiqJKlS9UYABmn7w6xd7r1Bt5mgGh+Kde6lSBqPkcWwfBuJLsR79FV+NPfD3Ya9xDDf7+7TY4JEMPSFBXr6HI94cTkcoqcrf0OsEEscENIJIcYYFZJP8Co5GkxSPHx7c8F4+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706888568; c=relaxed/simple;
-	bh=i+fwGDOYXUBBa/SmGUmEeeSRO1FqOePL0sfvubTwHA0=;
+	s=arc-20240116; t=1706889235; c=relaxed/simple;
+	bh=6osE97Z/z7Gxj8LhqCXUtj2ISkcMALTMSddp/DORlGM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V9Qaa/qpQNu3eb0YXsn1xasM2enScNLGw7mkRJXQF/tWr4LXWu0DvWD+9qt5GOkq4X6DZ1GRMizGbFxuLzUF+BDSXjoWsMtXzZ4tZ85CZEIWIOUy3KMMhRKd/cumS2SySynTtvKzMyXvQoooggmUWDFDpPiAYVIyX6YMPhEz2Y4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HLLUzUU/; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706888567; x=1738424567;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=i+fwGDOYXUBBa/SmGUmEeeSRO1FqOePL0sfvubTwHA0=;
-  b=HLLUzUU/LNE4ElIFWXxKjRICR8wWGtL4SKzPaWO833kBimDw4Jjloe0M
-   2JsyaHWp8Y/NaaF3Rlit5AcNU4WZzHJztJPiDaZD2rgJOqCvYEze9xieZ
-   bRsaX7yF4Afnuf7NsJ6rSD5nBXLwf4+RObqM6sJkM7Ybb54Xp/GlIcmy+
-   MMcn3wmLdZWmIGgmjQ1ENYnqc0jzAnY1/xhk6apc84tBwoIwMdivQ8B6i
-   Zo73CH3pa8u/WXQzU6bYq0GqigCn2Fj++vNjkmq5eOJEvYgPzEgNURp+k
-   2PYCb7RUPkBsWsMWHEBC2CFJ1/A5bL3eKDPPNijxyhUQ3XVn9dHyS2OMZ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="11543304"
-X-IronPort-AV: E=Sophos;i="6.05,238,1701158400"; 
-   d="scan'208";a="11543304"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 07:42:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,238,1701158400"; 
-   d="scan'208";a="4719672"
-Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 02 Feb 2024 07:42:41 -0800
-Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rVvgd-0003zm-1G;
-	Fri, 02 Feb 2024 15:42:39 +0000
-Date: Fri, 2 Feb 2024 23:42:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Andrew Davis <afd@ti.com>, Sebastian Reichel <sre@kernel.org>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Sean Wang <sean.wang@mediatek.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
-	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, Andrew Davis <afd@ti.com>
-Subject: Re: [PATCH 06/18] power: reset: brcm-kona-reset: Use
- devm_register_sys_off_handler(RESTART)
-Message-ID: <202402022349.daHRuWLB-lkp@intel.com>
-References: <20240201180102.70395-7-afd@ti.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZsT1AVRgAKSc3kGFEiGd8We6xgA0hqv0Gibh5goM0AxnGMp4jg+dMWuipsljKEHybcq6L6WZISMBiE/ozrN3VqJrsILIHeWVn5ta/ONoAB6yMU8I3ecdltrOvBH46j+GC5xW2Wli68nOcabe08GkNKaLKcTcWuZ3m3L09sHdoyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aAhdO6qU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81DA1C433F1;
+	Fri,  2 Feb 2024 15:53:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1706889234;
+	bh=6osE97Z/z7Gxj8LhqCXUtj2ISkcMALTMSddp/DORlGM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aAhdO6qU7hLC6/QErPRe5GWcBngQlTYqestPgbXwlhvqi8JwjWnFCpRicyQLVyU7j
+	 yvU2Z2Ty7TRTzopTOUyy1cffcelgQM26ZZ29UR9/fvmY8/sVUXp+NJcAgnW5pKY1dn
+	 CUp+EHJ53lYZX7Ut3KMHftuoCTf6xIriz6Nl4NdF24POCP/0Tvg+zF3Cl5xs144JIg
+	 mFh83P1kKmjEzayOt2SOA5Iqz/zR2uS0kobXw90p1UOT8PhsVEsDEw4fwau39Hsk/q
+	 HdcKyEhWLWHPDZ5lCv0Kv0DVdnx2RhL7MRo6MQ5u2V/1YUr4LZW6uNmedeFxgKwzq6
+	 ajtbuX0d1AZYA==
+Date: Fri, 2 Feb 2024 09:53:52 -0600
+From: Rob Herring <robh@kernel.org>
+To: Saravana Kannan <saravanak@google.com>
+Cc: David Dai <davidai@google.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Quentin Perret <qperret@google.com>,
+	Masami Hiramatsu <mhiramat@google.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Pavan Kondeti <quic_pkondeti@quicinc.com>,
+	Gupta Pankaj <pankaj.gupta@amd.com>, Mel Gorman <mgorman@suse.de>,
+	kernel-team@android.com, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] dt-bindings: cpufreq: add virtual cpufreq device
+Message-ID: <20240202155352.GA37864-robh@kernel.org>
+References: <20240127004321.1902477-1-davidai@google.com>
+ <20240127004321.1902477-2-davidai@google.com>
+ <20240131170608.GA1441369-robh@kernel.org>
+ <CAGETcx8S0oS67oMZsPKk6_MGAtygoHEf_LN1gbcNDEBqRJ4PPg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240201180102.70395-7-afd@ti.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGETcx8S0oS67oMZsPKk6_MGAtygoHEf_LN1gbcNDEBqRJ4PPg@mail.gmail.com>
 
-Hi Andrew,
+On Wed, Jan 31, 2024 at 10:23:03AM -0800, Saravana Kannan wrote:
+> On Wed, Jan 31, 2024 at 9:06 AM Rob Herring <robh@kernel.org> wrote:
+> >
+> > On Fri, Jan 26, 2024 at 04:43:15PM -0800, David Dai wrote:
+> > > Adding bindings to represent a virtual cpufreq device.
+> > >
+> > > Virtual machines may expose MMIO regions for a virtual cpufreq device
+> > > for guests to read frequency information or to request frequency
+> > > selection. The virtual cpufreq device has an individual controller for
+> > > each frequency domain. Performance points for a given domain can be
+> > > normalized across all domains for ease of allowing for virtual machines
+> > > to migrate between hosts.
+> > >
+> > > Co-developed-by: Saravana Kannan <saravanak@google.com>
+> > > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > > Signed-off-by: David Dai <davidai@google.com>
+> > > ---
+> > >  .../cpufreq/qemu,cpufreq-virtual.yaml         | 110 ++++++++++++++++++
+> >
+> > > +    const: qemu,virtual-cpufreq
+> >
+> > Well, the filename almost matches the compatible.
+> >
+> > > +
+> > > +  reg:
+> > > +    maxItems: 1
+> > > +    description:
+> > > +      Address and size of region containing frequency controls for each of the
+> > > +      frequency domains. Regions for each frequency domain is placed
+> > > +      contiguously and contain registers for controlling DVFS(Dynamic Frequency
+> > > +      and Voltage) characteristics. The size of the region is proportional to
+> > > +      total number of frequency domains. This device also needs the CPUs to
+> > > +      list their OPPs using operating-points-v2 tables. The OPP tables for the
+> > > +      CPUs should use normalized "frequency" values where the OPP with the
+> > > +      highest performance among all the vCPUs is listed as 1024 KHz. The rest
+> > > +      of the frequencies of all the vCPUs should be normalized based on their
+> > > +      performance relative to that 1024 KHz OPP. This makes it much easier to
+> > > +      migrate the VM across systems which might have different physical CPU
+> > > +      OPPs.
+> > > +
+> > > +required:
+> > > +  - compatible
+> > > +  - reg
+> > > +
+> > > +additionalProperties: false
+> > > +
+> > > +examples:
+> > > +  - |
+> > > +    // This example shows a two CPU configuration with a frequency domain
+> > > +    // for each CPU showing normalized performance points.
+> > > +    cpus {
+> > > +      #address-cells = <1>;
+> > > +      #size-cells = <0>;
+> > > +
+> > > +      cpu@0 {
+> > > +        compatible = "arm,armv8";
+> > > +        device_type = "cpu";
+> > > +        reg = <0x0>;
+> > > +        operating-points-v2 = <&opp_table0>;
+> > > +      };
+> > > +
+> > > +      cpu@1 {
+> > > +        compatible = "arm,armv8";
+> > > +        device_type = "cpu";
+> > > +        reg = <0x0>;
+> > > +        operating-points-v2 = <&opp_table1>;
+> > > +      };
+> > > +    };
+> > > +
+> > > +    opp_table0: opp-table-0 {
+> > > +      compatible = "operating-points-v2";
+> > > +
+> > > +      opp64000 { opp-hz = /bits/ 64 <64000>; };
+> >
+> > opp-64000 is the preferred form.
+> >
+> > > +      opp128000 { opp-hz = /bits/ 64 <128000>; };
+> > > +      opp192000 { opp-hz = /bits/ 64 <192000>; };
+> > > +      opp256000 { opp-hz = /bits/ 64 <256000>; };
+> > > +      opp320000 { opp-hz = /bits/ 64 <320000>; };
+> > > +      opp384000 { opp-hz = /bits/ 64 <384000>; };
+> > > +      opp425000 { opp-hz = /bits/ 64 <425000>; };
+> > > +    };
+> > > +
+> > > +    opp_table1: opp-table-1 {
+> > > +      compatible = "operating-points-v2";
+> > > +
+> > > +      opp64000 { opp-hz = /bits/ 64 <64000>; };
+> > > +      opp128000 { opp-hz = /bits/ 64 <128000>; };
+> > > +      opp192000 { opp-hz = /bits/ 64 <192000>; };
+> > > +      opp256000 { opp-hz = /bits/ 64 <256000>; };
+> > > +      opp320000 { opp-hz = /bits/ 64 <320000>; };
+> > > +      opp384000 { opp-hz = /bits/ 64 <384000>; };
+> > > +      opp448000 { opp-hz = /bits/ 64 <448000>; };
+> > > +      opp512000 { opp-hz = /bits/ 64 <512000>; };
+> > > +      opp576000 { opp-hz = /bits/ 64 <576000>; };
+> > > +      opp640000 { opp-hz = /bits/ 64 <640000>; };
+> > > +      opp704000 { opp-hz = /bits/ 64 <704000>; };
+> > > +      opp768000 { opp-hz = /bits/ 64 <768000>; };
+> > > +      opp832000 { opp-hz = /bits/ 64 <832000>; };
+> > > +      opp896000 { opp-hz = /bits/ 64 <896000>; };
+> > > +      opp960000 { opp-hz = /bits/ 64 <960000>; };
+> > > +      opp1024000 { opp-hz = /bits/ 64 <1024000>; };
+> > > +
+> > > +    };
+> >
+> > I don't recall your prior versions having an OPP table. Maybe it was
+> > incomplete. You are designing the "h/w" interface. Why don't you make it
+> > discoverable or implicit (fixed for the h/w)?
+> 
+> We also need the OPP tables to indicate which CPUs are part of the
+> same cluster, etc. Don't want to invent a new "protocol" and just use
+> existing DT bindings.
 
-kernel test robot noticed the following build warnings:
+Topology binding is for that.
 
-[auto build test WARNING on sre-power-supply/for-next]
-[also build test WARNING on mani-mhi/mhi-next soc/for-next linus/master v6.8-rc2 next-20240202]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+What about when x86 and other ACPI systems need to do this too? You 
+define a discoverable interface, then it works regardless of firmware. 
+KVM, Virtio, VFIO, etc. are all their own protocols.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andrew-Davis/power-reset-atc260x-poweroff-Use-devm_register_sys_off_handler-RESTART/20240202-020809
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
-patch link:    https://lore.kernel.org/r/20240201180102.70395-7-afd%40ti.com
-patch subject: [PATCH 06/18] power: reset: brcm-kona-reset: Use devm_register_sys_off_handler(RESTART)
-config: arm-randconfig-r121-20240202 (https://download.01.org/0day-ci/archive/20240202/202402022349.daHRuWLB-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 13.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20240202/202402022349.daHRuWLB-lkp@intel.com/reproduce)
+> > Do you really need it if the frequency is normalized?
+> 
+> Yeah, we can have little and big CPUs and want to emulate different
+> performance levels. So while the Fmax on big is 1024, we still want to
+> be able to say little is 425. So we definitely need frequency tables.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402022349.daHRuWLB-lkp@intel.com/
+You need per CPU Fmax, sure. But all the frequencies? I don't follow why 
+you don't just have a max available capacity and then request the 
+desired capacity. Then the host maps that to an underlying OPP. Why have 
+an intermediate set of fake frequencies?
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/power/reset/brcm-kona-reset.c:18:45: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void [noderef] __iomem *kona_reset_base @@     got void *cb_data @@
-   drivers/power/reset/brcm-kona-reset.c:18:45: sparse:     expected void [noderef] __iomem *kona_reset_base
-   drivers/power/reset/brcm-kona-reset.c:18:45: sparse:     got void *cb_data
->> drivers/power/reset/brcm-kona-reset.c:43:46: sparse: sparse: incorrect type in argument 5 (different address spaces) @@     expected void *cb_data @@     got void [noderef] __iomem *[assigned] kona_reset_base @@
-   drivers/power/reset/brcm-kona-reset.c:43:46: sparse:     expected void *cb_data
-   drivers/power/reset/brcm-kona-reset.c:43:46: sparse:     got void [noderef] __iomem *[assigned] kona_reset_base
+As these are normalized, I guess you are normalizing for capacity as 
+well? Or you are using "capacity-dmips-mhz"? 
 
-vim +18 drivers/power/reset/brcm-kona-reset.c
+I'm also lost how this would work when you migrate and the underlying 
+CPU changes. The DT is fixed.
 
-    15	
-    16	static int kona_reset_handler(struct sys_off_data *data)
-    17	{
-  > 18		void __iomem *kona_reset_base = data->cb_data;
-    19	
-    20		/*
-    21		 * A soft reset is triggered by writing a 0 to bit 0 of the soft reset
-    22		 * register. To write to that register we must first write the password
-    23		 * and the enable bit in the write access enable register.
-    24		 */
-    25		writel((RSTMGR_WR_PASSWORD << RSTMGR_WR_PASSWORD_SHIFT) |
-    26			RSTMGR_WR_ACCESS_ENABLE,
-    27			kona_reset_base + RSTMGR_REG_WR_ACCESS_OFFSET);
-    28		writel(0, kona_reset_base + RSTMGR_REG_CHIP_SOFT_RST_OFFSET);
-    29	
-    30		return NOTIFY_DONE;
-    31	}
-    32	
-    33	static int kona_reset_probe(struct platform_device *pdev)
-    34	{
-    35		void __iomem *kona_reset_base;
-    36	
-    37		kona_reset_base = devm_platform_ioremap_resource(pdev, 0);
-    38		if (IS_ERR(kona_reset_base))
-    39			return PTR_ERR(kona_reset_base);
-    40	
-    41		return devm_register_sys_off_handler(&pdev->dev, SYS_OFF_MODE_RESTART,
-    42						     128, kona_reset_handler,
-  > 43						     kona_reset_base);
-    44	}
-    45	
+> > Also, we have "opp-level" for opaque values that aren't Hz.
+> 
+> Still want to keep it Hz to be compatible with arch_freq_scale and
+> when virtualized CPU perf counters are available.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Seems like no one would want "opp-level" then. Shrug.
+
+Anyway, if Viresh and Marc are fine with all this, I'll shut up.
+
+Rob
 
