@@ -1,154 +1,150 @@
-Return-Path: <linux-pm+bounces-3303-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3304-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4673848674
-	for <lists+linux-pm@lfdr.de>; Sat,  3 Feb 2024 14:15:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BF8E8486D0
+	for <lists+linux-pm@lfdr.de>; Sat,  3 Feb 2024 15:49:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 030001C22DC6
-	for <lists+linux-pm@lfdr.de>; Sat,  3 Feb 2024 13:15:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 53A0E1C215A6
+	for <lists+linux-pm@lfdr.de>; Sat,  3 Feb 2024 14:49:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64DCF5DF2A;
-	Sat,  3 Feb 2024 13:15:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D282C5D8E7;
+	Sat,  3 Feb 2024 14:49:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="rQsgwxIN"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HW0N6jwv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9A385D90F
-	for <linux-pm@vger.kernel.org>; Sat,  3 Feb 2024 13:15:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 028E15DF30
+	for <linux-pm@vger.kernel.org>; Sat,  3 Feb 2024 14:49:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706966133; cv=none; b=eGLmKt50zqqCYCQQywOGVTa0jWyq7+gX2UOsCu9/rtDsZJeUcAyrYhjoGgVh8AZ8pxuIeJyw/iByDeK1mkXqzFdKXqOcgOX8VG/r3+MyAGAwYrWd0BsXz8iLwUCBCDpDRRaqFwsZ06szlK5nKt7N+DPg1uKNyLbB4HSvXm2OHJE=
+	t=1706971767; cv=none; b=VnVCTEaaoNyym6LcRLKz/8vtKXcuzANisj70rOvE6NP57iMymKjWWFXz5CL+ULxaVR8Y62YJqXv7gQ3iwx91C2du7o0ItOV4Zq/ZlBf2gGyhvxCKpzRz5VvAVAZyjZLU4CbFwRjxbghvAEXdaxQl38z9tPzSU6Q6cfNgON+7gyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706966133; c=relaxed/simple;
-	bh=WGVA9p3snKR8ifQ8Y3VDuZRFSJm73lwUChTEJqT7wFk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QA2GHizBVHj2ZjY2njxMovxJupzOclRcTmLOpJhcJ1H9eIM1pOUSjPMkGQ2MtnWuxdCUytRnObc0j9qX/07l3ws5qb2vzsas5X6iouUHI/AG7gfwdhva2Szng01QTHghAjP1YBOz4HtTk0aGpy9qErvRhwd2rIAAYQUao1INxDw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=rQsgwxIN; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a3604697d63so466310166b.3
-        for <linux-pm@vger.kernel.org>; Sat, 03 Feb 2024 05:15:24 -0800 (PST)
+	s=arc-20240116; t=1706971767; c=relaxed/simple;
+	bh=oTGrdNu/Zsgb5ggIIfn5UQgbiGCPFypv12nHJ/gcYps=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=uv32hsYdLbIRezbZXx/+sAqi7SILWNEOMPg3ofcfdUTsfdz3wpniK9PaOmpBnKCaZAfQtxxkehb3RhGcGRKwSG2e0ralrkfGH6A5YOkcWBODOXTIYcDfIkpUsEH0ghZo6kRADt1QQfCHKSg108TSaQP1i93/in9i/vR6sCGW+pM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HW0N6jwv; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-40fd55c7f93so206115e9.1
+        for <linux-pm@vger.kernel.org>; Sat, 03 Feb 2024 06:49:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1706966122; x=1707570922; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=v8j6WuzPOMN7vKFNBjjvslOLE2u2wOdQ2j4qDDS8cBM=;
-        b=rQsgwxINcOcuI82fhH/xG8hkn8AgM0qvA4rrFcDf8pubV+OVdMpC5QUWiDZuvG0Hdp
-         ZRsFl7lqpJpD/OFj6QD1BpuFh20cUkOpXuBe9RfD8otX1NWqereOuWlsYJZEDfp4aPzw
-         T9EsymTncUGa8O3HYbPHQrJibT+t0BY9vwhUNJBZDY5lWep8cvAVvKcmjzBuDbBem6ll
-         5pP7Y+v3hUu3FMVgdSaLyGnefk9ORs8XhiqanWEzbM2A5psBj328ieAMRZk3pi6xb0Xp
-         kDy50Lm7Mm+FBq8VEhOpidvB63j1ZZkh2+7OOflY9iPz5IYfhLcXGEonagpV1cdy8+im
-         TJuw==
+        d=linaro.org; s=google; t=1706971764; x=1707576564; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :references:cc:to:content-language:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+qFWwBr6Hvcn11xuZYjbWXeQeB08RrBU+G+cOZ4qdqQ=;
+        b=HW0N6jwvH8qJkh2GkNG1JGlmYIRFfMEgIgYN3UKtcFeVElAXLEteIL3n2iDIjsydOR
+         9Zpo/rSA3vlKkjIZjWSXDwsQ4mZcv1QoyW9p79ju/9Fd8r7wx9kyVShFBqYYyWPKO44f
+         A8JQuT09UXNSJ4CWpNRYBuw0hvUK8HDfE3hcAcK6NIgnAPDrFYiYzTSuzFZF12qviSBd
+         LdZS/tnnqPiUkd7VPL5HcoPHUoGfTT+gEerMHluWdbY3c9yY1AQuQvTc+jnOqoMaAHFU
+         vmy6JYcLWCa9DKCfsWTnIXGb63IB002Elqepjd04kcVs0BUdLeqHmOOLh6RVjS8gGO2k
+         EO6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706966122; x=1707570922;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=v8j6WuzPOMN7vKFNBjjvslOLE2u2wOdQ2j4qDDS8cBM=;
-        b=WqJ9FMjLe8gi73K6o5uD6xshHbKZdTgIs7U5b1RdozQTjoXH6rkeEaEcPd13hA7ELA
-         2mBk5Y2bq1NxNwrv/vC691HTk613gaKR70LT0Inx01Tykc8vl16D4At0g/GkWT7Fa53D
-         q2IQLAcjfOr5r3qFMK9wTXoD466lDVvVihA6XuiKg/i/xsoGHjGCxBW4pzZVODw1mF8B
-         qqUcviWoFi0Hnq7n7WqACY6ijTRRcXPLz8GFWDioRO7or7JuqHMJAWr5+DAkX6wAlHJi
-         RB+LKPXkmJ2/5CT5hGpqo1sl11yzzR/v9cK3YsSt/FXnTvf6ZyUqaln6xOMnLG65Kk3A
-         N+yw==
-X-Gm-Message-State: AOJu0YwrSX+Gm5xggEwjg4b372obAVYuB8iUNfT+rMnaJyifUeD8CJq/
-	bQRo9iMh5PDSpHY+Dq0r9gpUJB6I2b5JHvLfW57GfZ46BIVsnR6ZXKg/H4Xlyy8=
-X-Google-Smtp-Source: AGHT+IGmepwLZ181zchSTo/szSPJm/J9QkPMXlRe5Ipu8n64rC5/cHFbcchBAin7TrGVnbtJ1N4Z4Q==
-X-Received: by 2002:a17:906:3091:b0:a37:2738:1eab with SMTP id 17-20020a170906309100b00a3727381eabmr1944640ejv.55.1706966122457;
-        Sat, 03 Feb 2024 05:15:22 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCW4MWdKP+LwtpimyOlvEufGj2bkCV95lvxE4Edv1JrFZYRzdPNSKF5+2dt5YzZGBIPdtz7J1X9qzfaxdyN+fB3PI/85vu1ZwfV7hgABRPW9MLcvYfimzHIGJ6IK/hlzpfAgKKriOZXB42UsD8oWRQXcZoGJuuKhtqi5Q+Xa6RYvmt8QUWlzJ1zLcgzngt85CIVWv5rMz2ugzgfdSO+aH80OYuAZorpkqEj9HQF306mUzjrdjF87LZUqMHukNyPPaF8bGysN+p7Pfewp/KnQi6shV3Xp2RKROQh9uFulnbQtf8BvNVLNTquTKRL3kgwiZwlpZ4GKeYfYE30ECMqMGS0HEIr5S28G69PzDLMztm0o5wE7STgjHeuVn79sLQAfGWQ=
-Received: from localhost ([193.47.165.251])
-        by smtp.gmail.com with ESMTPSA id d13-20020a170906640d00b00a35d7b6cb63sm1964400ejm.28.2024.02.03.05.15.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Feb 2024 05:15:21 -0800 (PST)
-Date: Sat, 3 Feb 2024 14:15:19 +0100
-From: Jiri Pirko <jiri@resnulli.us>
-To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH 3/3] thermal: intel: hfi: Enable interface only when
- required
-Message-ID: <Zb48Z408e18QgsAr@nanopsycho>
-References: <20240131120535.933424-1-stanislaw.gruszka@linux.intel.com>
- <20240131120535.933424-4-stanislaw.gruszka@linux.intel.com>
- <ZbzhuXbuejM1VLE3@nanopsycho>
- <Zbznft0x7DRWjUTQ@linux.intel.com>
+        d=1e100.net; s=20230601; t=1706971764; x=1707576564;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :references:cc:to:content-language:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=+qFWwBr6Hvcn11xuZYjbWXeQeB08RrBU+G+cOZ4qdqQ=;
+        b=mZdc3jy5iV22jL7hEYcy2YDewvSWZTLzlq3oOXLWDl3BkISeWiq392oyWdYsSk7f9j
+         8j7K58X4s46ZXWX31ftuF69iuUDv/eJDcNyIvJAjg0HlBK8Lk8+1mMVOQY8nVW5VthZn
+         uqyLmTxeXl5XssIQA+fBhl1k2C00yfajpxiFFOMjICnD50YFlxQQT5CwiwbWNxZ/Jh0g
+         qpBZ/UG1El2xI4tgktPWD8H14qTudraTGT/tEXHPIXhKivHPvgV8SiYjiya5tgKQbLFZ
+         g8gHutZwP2WvAa68Tfb9Yd0HcUUBLvpeQesCJcnU9/2eiyu/Y5NkpMYzfYqZFC9zi+Ob
+         B8DA==
+X-Gm-Message-State: AOJu0YxuqbFTiKuzulj/BupHjGiPivuJe7KFF9P/HLURVdwrWhAfONRl
+	VOYLROJDtCYZQmX2liV0SUmK/tOx0lrDTfIqw5W+2a03Sn8Ira161xx/1T8vwpg=
+X-Google-Smtp-Source: AGHT+IHo6BBy7NFZiI4OHptx/CEW9WTWSLiSa2iHDninGnWOkDM2WUkgsSGWs3zzJp9iGEiIeUVzBA==
+X-Received: by 2002:a05:600c:1910:b0:40f:b5d2:1af2 with SMTP id j16-20020a05600c191000b0040fb5d21af2mr1225981wmq.8.1706971764166;
+        Sat, 03 Feb 2024 06:49:24 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCUFq+EtJ/AX2PUD8zOpsPau+11PSHHbAhSSRTaHftqMPGWhA7X6QJx9wdQABtZ0rsj8KQRaSVEwcYHfyy82/Bk8nDGHHoSXOiHXknFn5r3x6ZqYavhp3dRBreFv6vx4HnMOoqbBNyOjzRUdnaJnno0EobkVmD7g8C0T40nEvN0ntAxNrSmETilwSfDfmV80gGsrghGP8AObT4HQ9uVq2pLh1MotJ/Axx0Jv6ohxFr6tjyrisJ35Rc9dVAT41iFKQvwX/2vNflQOzZW05Xg4a3HEKhWk69fE+hPrJ2k4/Lk2bUpjHzhbpqSk9wYGZnOE9IY5+ipq6DI=
+Received: from ?IPV6:2001:67c:1810:f055:5044:617a:60fb:ed01? ([2001:67c:1810:f055:5044:617a:60fb:ed01])
+        by smtp.gmail.com with ESMTPSA id o11-20020a5d58cb000000b00337d5cd0d8asm4169435wrf.90.2024.02.03.06.49.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 03 Feb 2024 06:49:23 -0800 (PST)
+Message-ID: <6e9030cc-3431-45c5-a7a8-0da02bafab09@linaro.org>
+Date: Sat, 3 Feb 2024 15:49:21 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zbznft0x7DRWjUTQ@linux.intel.com>
+User-Agent: Mozilla Thunderbird
+From: neil.armstrong@linaro.org
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 1/2] interconnect: qcom: sm8650: Use correct ACV
+ enable_mask
+Content-Language: en-US, fr
+To: Mike Tipton <quic_mdtipton@quicinc.com>, andersson@kernel.org,
+ konrad.dybcio@linaro.org, djakov@kernel.org
+Cc: quic_rjendra@quicinc.com, quic_sibis@quicinc.com, abel.vesa@linaro.org,
+ linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240202014806.7876-1-quic_mdtipton@quicinc.com>
+ <20240202014806.7876-2-quic_mdtipton@quicinc.com>
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro Developer Services
+In-Reply-To: <20240202014806.7876-2-quic_mdtipton@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Fri, Feb 02, 2024 at 02:00:46PM CET, stanislaw.gruszka@linux.intel.com wrote:
->On Fri, Feb 02, 2024 at 01:36:09PM +0100, Jiri Pirko wrote:
->> Wed, Jan 31, 2024 at 01:05:35PM CET, stanislaw.gruszka@linux.intel.com wrote:
->> 
->> [...]
->> 
->> 
->> >+static int hfi_netlink_notify(struct notifier_block *nb, unsigned long state,
->> >+			      void *_notify)
->> >+{
->> >+	struct netlink_notify *notify = _notify;
->> >+	struct hfi_instance *hfi_instance;
->> >+	smp_call_func_t func;
->> >+	unsigned int cpu;
->> >+	int i;
->> >+
->> >+	if (notify->protocol != NETLINK_GENERIC)
->> >+		return NOTIFY_DONE;
->> >+
->> >+	switch (state) {
->> >+	case NETLINK_CHANGE:
->> >+	case NETLINK_URELEASE:
->> >+		mutex_lock(&hfi_instance_lock);
->> >+
->> 
->> What's stopping other thread from mangling the listeners here?
->
->Nothing. But if the listeners will be changed, we will get next notify.
->Serialization by the mutex is needed to assure that the last setting will win,
->so we do not end with HFI disabled when there are listeners or vice versa.
+On 02/02/2024 02:48, Mike Tipton wrote:
+> The ACV enable_mask is historically BIT(3), but it's BIT(0) on this
+> target. Fix it.
+> 
+> Fixes: c062bcab5924 ("interconnect: qcom: introduce RPMh Network-On-Chip Interconnect on SM8650 SoC")
+> Signed-off-by: Mike Tipton <quic_mdtipton@quicinc.com>
+> ---
+>   drivers/interconnect/qcom/sm8650.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/interconnect/qcom/sm8650.c b/drivers/interconnect/qcom/sm8650.c
+> index b83de54577b6..b962e6c233ef 100644
+> --- a/drivers/interconnect/qcom/sm8650.c
+> +++ b/drivers/interconnect/qcom/sm8650.c
+> @@ -1160,7 +1160,7 @@ static struct qcom_icc_node qns_gemnoc_sf = {
+>   
+>   static struct qcom_icc_bcm bcm_acv = {
+>   	.name = "ACV",
+> -	.enable_mask = BIT(3),
+> +	.enable_mask = BIT(0),
+>   	.num_nodes = 1,
+>   	.nodes = { &ebi },
+>   };
 
-Okay. Care to put a note somewhere?
+Indeed it changed in the meantime
 
->
->> >+		if (thermal_group_has_listeners(THERMAL_GENL_EVENT_GROUP))
->> >+			func = hfi_do_enable;
->> >+		else
->> >+			func = hfi_do_disable;
->> >+
->> >+		for (i = 0; i < max_hfi_instances; i++) {
->> >+			hfi_instance = &hfi_instances[i];
->> >+			if (cpumask_empty(hfi_instance->cpus))
->> >+				continue;
->> >+
->> >+			cpu = cpumask_any(hfi_instance->cpus);
->> >+			smp_call_function_single(cpu, func, hfi_instance, true);
->> >+		}
->> >+
->> >+		mutex_unlock(&hfi_instance_lock);
->> >+		return NOTIFY_OK;
->> >+	}
->> >+
->> >+	return NOTIFY_DONE;
->> >+}
->> 
->> [...]
->
+
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
 
