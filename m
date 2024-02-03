@@ -1,335 +1,475 @@
-Return-Path: <linux-pm+bounces-3271-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3272-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EBDB84847F
-	for <lists+linux-pm@lfdr.de>; Sat,  3 Feb 2024 09:32:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1122E848492
+	for <lists+linux-pm@lfdr.de>; Sat,  3 Feb 2024 09:59:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 913BC289BF3
-	for <lists+linux-pm@lfdr.de>; Sat,  3 Feb 2024 08:32:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E00221C22B4F
+	for <lists+linux-pm@lfdr.de>; Sat,  3 Feb 2024 08:59:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC4C939FF7;
-	Sat,  3 Feb 2024 08:32:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 765D75C8F9;
+	Sat,  3 Feb 2024 08:59:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="Plm4+Neo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PfZ2yI6x"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A0123EA67
-	for <linux-pm@vger.kernel.org>; Sat,  3 Feb 2024 08:32:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B32D55C8F8;
+	Sat,  3 Feb 2024 08:59:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706949169; cv=none; b=qHn4V3XIbeoFOcaW7ey7CGOLTnP1b6NWzP01m04Fc0RVE+5YX3+KNGIQsGiPuDah4LaZhZCdCU9f3+r8sX7ouNsPwW2FLU4UgK9KTeNZL41zsccHRNawQQDBikfJRciEvMWefqH+hURS4PLn3xl365dQUHVMLJs/E9rPpodV+K4=
+	t=1706950789; cv=none; b=TvHLXgCjY5RbOc9jTQHMbR22Voc9WRhhm8+Yo2KSlIVF91F+yA4amu3Ywq4Bo9e+K3OUgTpvTfV/fNThi1idpEi3knaNu8YKgRNz0qiY/8DuZCIpMFilOHV95cgakSi0Impsgu3dUXw0YdWrorTEnEg7i+aJ7LykmfmvXFXR5rY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706949169; c=relaxed/simple;
-	bh=RyfBChDaa4kS0sOBGyIXpo9nRPirlAzbr08vTVSdX58=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=tVfa3FBYZrTdGOiKXbzyp691mkEl6f6IYowseUv6l0W4pF22164Hc5g+/G7fGnBydlAfy3+ihZlUalp9Q8+0NXprlFlbIaC+29dBDjNbmcArj6NW0kAzYuC1TuGgzqhhVg+9J+1q9pZ6bew4IQLQtv0sVCRrF4JU5BXjdhP5nVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=Plm4+Neo; arc=none smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-5cdbc4334edso2331881a12.3
-        for <linux-pm@vger.kernel.org>; Sat, 03 Feb 2024 00:32:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1706949167; x=1707553967; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=a1HDR036PO2ocsB+5ANA6aD2rAJQI7O38yyNGdP1xmc=;
-        b=Plm4+NeoV+6a0xGLkm7TnbhWx1sm0X0Vm/irZuKGY0PIOsFndyzVb5LqTu4qGGOCGY
-         9tH3DUgCsikUm7HaCVqoGyOZUk85Ibzyg/1Q8xBvRTOT6ZZJ3YZ15FThDypSLGhP/Qza
-         ufo7mP5vpIEGPZJBFj+TMXCqNnZub9kEKnwID5MudVzHYYJu6MQpTmQBLcr8NrPto7uL
-         ccDtbURnBo7X4znX4UhYIb1PhYrkm0GdVLodr1kdsWHm2HJA4cSuSce6hWuhvgJkTUaS
-         QH6NUA3Whn9UxImR1eGROAn/QNlIua+uH4po7ydDexkPDLXmzz6wZyNHY5uowY2+lAVf
-         p9+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706949167; x=1707553967;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a1HDR036PO2ocsB+5ANA6aD2rAJQI7O38yyNGdP1xmc=;
-        b=s6rHf4gV7asEdSJtwXHVPlrBK72UCnYEuTYI0OMyQBG0f3FUsXQ3pY4PB3mQ7c9JYQ
-         kJ4UPjz7+EBB3Jtjeg7/wf0cE5YyXcLyWFjnaPq2KpjKU0JpwadbmX8mvejgMBFgoYJO
-         A57fnZAYTpzjC47m2j9l5yDt/y5ZkvXAZ/IaBEPvugVqyq/yiyWzs10ZnhDIqpnLXBzH
-         DHlL5zr3zVYTi35bky7SfKIA56vdQwFD/kChvQLqluZ+jF1d+DXK+bDgd8PFGY1Ubxiy
-         HsMFZ6i+7xCYzLIEnHhbz6lyMXVUDl/SnVSz6oCvBioB+ZbS6CWQ/+cIY2VGnolQ3IMy
-         oQqQ==
-X-Gm-Message-State: AOJu0Yz6JcIewHlRuAjbyiz3w+Pp20SwOkWxB15H3qmxX6Ed28QEm/LO
-	wJgCxW56bqra0zAbsx3PMaBP8WUNSDdZRALbj8b73V+9tZQXEqAgjUAU1KaFjtE=
-X-Google-Smtp-Source: AGHT+IGOAcO4CndEWZYy25FzGIjSoWfKIASCPP5CMtHQb3Sl3kEo+3mYkXbcjtSYTyhdhkUy8tOVjw==
-X-Received: by 2002:a05:6a00:1caa:b0:6e0:268c:316 with SMTP id y42-20020a056a001caa00b006e0268c0316mr1383136pfw.25.1706949167328;
-        Sat, 03 Feb 2024 00:32:47 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCVcK8RrlVE429ftdnMXbZKWUGjrWJ0VIMpNZW2Vnr+4IUgHDwKAG4G/VmVe4zX2mt4K/ImDVdWbYKAar/bOCPOZLER5VSxu9C/bRkiLkedqnOOR+ENyNWz1v0nTDgHfyAGWze+XdPio66Ha+Ujme1TO1ZhWWiRjeyJnxtr0A12JO+Wyzhz9J6CGElN/
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id w23-20020aa78597000000b006dde44a2d16sm2901039pfn.199.2024.02.03.00.32.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Feb 2024 00:32:46 -0800 (PST)
-Message-ID: <65bdfa2e.a70a0220.74198.b131@mx.google.com>
-Date: Sat, 03 Feb 2024 00:32:46 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1706950789; c=relaxed/simple;
+	bh=LKoakP2uOG96te4ZMtRc1jGGRSz2ihtD5kvp0w2TncE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=YxL8v3jGYOi6q1pEpkNN1h0iPJ9rKHo5hg79KmA9k1VSHNpWrGdqJo6X1idXKx9uALjEBgouD14q25oHQwmjgcGd5VxqL+wDxnKcu2ROYgkvNmLyO0AReflVKIU1qtFayQd9EhQalcT8mE/mxhjpNs/teLPUVdE6b/4IBsgZVso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PfZ2yI6x; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1706950787; x=1738486787;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=LKoakP2uOG96te4ZMtRc1jGGRSz2ihtD5kvp0w2TncE=;
+  b=PfZ2yI6xJ9Q/lKp0aBeAbSeKssOOeR1miVccAsAsJfRCOqeSWavXQ+zS
+   Oi0bZN+zcHgRU8g3Oax/wEIQ8HTyGf6dykvSqdollu49wZ6ymmZasySvV
+   l/EZ9ykHyLTLXHAsj4e4J8nbOWp6SViY/wtGJFGQ14c1DjUGfnxCehRgm
+   jd8Ec5/9lPIRQy5k8XGcW3XmEjeUULhzgbH2t7GQ43B6x3sJ6cMTMzG+s
+   hYL91BjS8xaGgeUUMwNZBrn3e8R5aojEHVkDsH7HuWcavmX4sKdldI8Au
+   0vMpprotlNeB14XpH6qY0lxfVoodnoFE809L2bblBc8va96QTCHve7hWl
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="4131842"
+X-IronPort-AV: E=Sophos;i="6.05,240,1701158400"; 
+   d="scan'208";a="4131842"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2024 00:59:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,240,1701158400"; 
+   d="scan'208";a="291124"
+Received: from liuzhao-optiplex-7080.sh.intel.com ([10.239.160.36])
+  by fmviesa009.fm.intel.com with ESMTP; 03 Feb 2024 00:59:39 -0800
+From: Zhao Liu <zhao1.liu@linux.intel.com>
+To: Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	kvm@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	x86@kernel.org
+Cc: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+	Len Brown <len.brown@intel.com>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Zhenyu Wang <zhenyu.z.wang@intel.com>,
+	Zhuocheng Ding <zhuocheng.ding@intel.com>,
+	Dapeng Mi <dapeng1.mi@intel.com>,
+	Yanting Jiang <yanting.jiang@intel.com>,
+	Yongwei Ma <yongwei.ma@intel.com>,
+	Vineeth Pillai <vineeth@bitbyteword.org>,
+	Suleiman Souhlal <suleiman@google.com>,
+	Masami Hiramatsu <mhiramat@google.com>,
+	David Dai <davidai@google.com>,
+	Saravana Kannan <saravanak@google.com>,
+	Zhao Liu <zhao1.liu@intel.com>
+Subject: [RFC 00/26] Intel Thread Director Virtualization
+Date: Sat,  3 Feb 2024 17:11:48 +0800
+Message-Id: <20240203091214.411862-1-zhao1.liu@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v6.8-rc2-29-gc24c55a0329d1
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 8 builds: 2 failed, 6 passed, 2 errors,
- 32 warnings (v6.8-rc2-29-gc24c55a0329d1)
-To: rafael@kernel.org, linux-pm@vger.kernel.org,
- kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 8bit
 
-pm/testing build: 8 builds: 2 failed, 6 passed, 2 errors, 32 warnings (v6.8=
--rc2-29-gc24c55a0329d1)
+From: Zhao Liu <zhao1.liu@intel.com>
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-8-rc2-29-gc24c55a0329d1/
+Hi list,
 
-Tree: pm
-Branch: testing
-Git Describe: v6.8-rc2-29-gc24c55a0329d1
-Git Commit: c24c55a0329d1c36fc0b8e550427db107aabdfac
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+This is our RFC to virtualize Intel Thread Director (ITD) feature for
+Guest, which is based on Ricardo's patch series about ITD related
+support in HFI driver ("[PATCH 0/9] thermal: intel: hfi: Prework for the
+virtualization of HFI" [1]).
 
-Build Failures Detected:
+In short, the purpose of this patch set is to enable the ITD-based
+scheduling logic in Guest so that Guest can better schedule Guest tasks
+on Intel hybrid platforms.
 
-i386:
-    i386_defconfig: (gcc-10) FAIL
+Currently, ITD is necessary for Windows VMs. Based on ITD virtualization
+support, the Windows 11 Guest could have significant performance
+improvement (for example, on i9-13900K, up to 14%+ improvement on
+3DMARK).
 
-x86_64:
-    x86_64_defconfig: (gcc-10) FAIL
+Our ITD virtualization is not bound to VMs' hybrid topology or vCPUs'
+CPU affinity. However, in our practice, the ITD scheduling optimization
+for win11 VMs works best when combined with hybrid topology and CPU
+affinity (this is related to the specific implementation of Win11
+scheduling). For more details, please see the Section.1.2 "About hybrid
+topology and vCPU pinning".
 
-Errors and Warnings Detected:
+To enable ITD related scheduling optimization in Win11 VM, some other
+thermal related support is also needed (HWP, CPPC), but we could emulate
+it with dummy value in the VMM (We'll also be sending out extra patches
+in the future for these).
 
-arc:
-    haps_hs_smp_defconfig (gcc-10): 2 warnings
+Welcome your feedback!
 
-arm64:
-    defconfig (gcc-10): 1 warning
 
-arm:
+1. Background and Motivation
+============================
 
-i386:
-    i386_defconfig (gcc-10): 1 error, 1 warning
+1.1. Background
+^^^^^^^^^^^^^^^
 
-mips:
+We have the use case to run games in the client Windows VM as the cloud
+gaming solution.
 
-riscv:
-    defconfig (gcc-10): 1 warning
+Gaming VMs are performance-sensitive VMs on Client, so that they usually
+have two characteristics to ensure interactivity and performance:
 
-sparc:
-    sparc64_defconfig (gcc-10): 26 warnings
+i) There will be vCPUs equal to or close to the number of Host pCPUs.
 
-x86_64:
-    x86_64_defconfig (gcc-10): 1 error, 1 warning
+ii) The vCPUs of Gaming VM are often bound to the pCPUs to achieve
+exclusive resources and avoid the overhead of migration.
 
-Errors summary:
+In this case, Host can't provide effective scheduling for Guest, so we
+need to deliver more hardware-assisted scheduling capabilities to Guest
+to enhance Guest's scheduling.
 
-    1    security/security.c:810:2: error: =E2=80=98memcpy=E2=80=99 offset =
-32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-    1    arch/x86/include/asm/string_32.h:150:25: error: =E2=80=98__builtin=
-_memcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bou=
-nds]
+Windows 11 (and future Windows products) is heavily optimized for the
+Intel hybrid platform. To get the best performance, we need to
+virtualize hybrid scheduling features (HFI/ITD) for Windows Guest.
 
-Warnings summary:
 
-    2    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offse=
-t 32 is out of the bounds [0, 0] [-Warray-bounds]
-    2    cc1: all warnings being treated as errors
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    1    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =
-=E2=80=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
-rototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
-pes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
-prototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
-ypes]
-    1    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =
-=E2=80=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype fo=
-r =E2=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for=
- =E2=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype=
- for =E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype=
- for =E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototyp=
-e for =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-protot=
-ypes]
-    1    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototyp=
-e for =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype=
- for =E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototyp=
-e for =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototy=
-pe for =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype f=
-or =E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype =
-for =E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype =
-for =E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
-    1    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype fo=
-r 'syscall_trace_enter' [-Wmissing-prototypes]
-    1    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype f=
-or 'arc_kprobe_handler' [-Wmissing-prototypes]
+1.2. About hybrid topology and vCPU pinning
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+Our ITD virtualization can support most vCPU topologies (except multiple
+packages/dies, see details in 3.5 Restrictions on Guest Topology), and
+can also support the case of non-pinning vCPUs (i.e. it can handle vCPU
+thread migration).
 
-Detailed per-defconfig build reports:
+The following is our performance measuremnt on an i9-13900K machine
+(2995Mhz, 24Cores, 32Thread(8+16) RAM: 14GB (16GB Physical)), with
+iGPU passthrough, running 3DMARK in Win11 Professional Guest:
 
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
 
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
-smatches
+compared with smp topo case       smp topo        smp topo        smp topo      hybrid topo       hybrid topo     hybrid topo     hybrid topo
+                                + affinity      + ITD           + ITD                           + affinity      + ITD           + ITD
+                                                                + affinity                                                      + affinity
+Time Spy - Overall                0.179%        -0.250%           0.179%        -0.107%           0.143%        -0.179%         -0.107%
+Graphics score                    0.124%        -0.249%           0.124%        -0.083%           0.124%        -0.166%         -0.249%
+CPU score                         0.916%        -0.485%           1.149%        -0.076%           0.722%        -0.324%         11.915%
+Fire Strike Extreme - Overall     0.149%         0.000%           0.224%        -1.021%          -3.361%        -1.319%         -3.361%
+Graphics score                    0.100%         0.050%           0.150%        -1.376%          -3.427%        -1.676%         -3.652%
+Physics score                     5.060%         0.759%           0.518%        -2.907%         -10.914%        -0.897%         14.638%
+Combined  score                   0.120%        -0.179%           0.418%         0.060%          -2.929%        -0.179%         -2.809%
+Fire Strike - Overall             0.350%        -0.085%           0.193%        -1.377%          -1.365%        -1.509%         -1.787%
+Graphics score                    0.256%        -0.047%           0.210%        -1.527%          -1.376%        -1.504%         -2.320%
+Physics score                     3.695%        -2.180%           0.629%        -1.581%          -6.846%        -1.444%         14.100%
+Combined  score                   0.415%        -0.128%           0.128%        -0.957%          -1.052%        -1.594%         -0.957%
+CPU Profile Max Threads           1.836%         0.298%           1.786%        -0.069%           1.545%         0.025%          9.472%
+16 Threads                        4.290%         0.989%           3.588%         0.595%           1.580%         0.848%         11.295%
+8 Threads                       -22.632%        -0.602%         -23.167%        -0.988%          -1.345%        -1.340%          8.648%
+4 Threads                       -21.598%         0.449%         -21.429%        -0.817%           1.951%        -0.832%          2.084%
+2 Threads                       -12.912%        -0.014%         -12.006%        -0.481%          -0.609%        -0.595%          1.161%
+1 Threads                        -3.793%        -0.137%          -3.793%        -0.495%          -3.189%        -0.495%          1.154%
 
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
 
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
-smatches
+Based on the above result, we can find exposing only HFI/ITD to win11
+VMs without hybrid topology or CPU affinity (case "smp topo + ITD")
+won't hurt performance, but would also not get any performance
+improvement.
 
-Warnings:
-    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
+Setting both hybrid topology and CPU affinity for ITD, then win11 VMs
+get significate performance improvement (up to 14%+, compared with the
+case setting smp topology without CPU affinity).
 
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
- section mismatches
+Not only the numerical results of 3DMARK, but in practice, there is an
+significate improvement in the frame rate of the games.
 
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
-rc_kprobe_handler' [-Wmissing-prototypes]
+Also, the more powerful the machine, the more significate the
+performance gains!
 
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
- mismatches
+Therefore, the best practice for enabling ITD scheduling optimization
+is to set up both CPU affinity and hybrid topology for win11 Guest while
+enabling our ITD virtualization.
 
-Errors:
-    arch/x86/include/asm/string_32.h:150:25: error: =E2=80=98__builtin_memc=
-py=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
+Our earlier QEMU prototype RFC [2] presented the initial hybrid
+topology support for VMs. And currently our another proposal about
+"QOM topology" [3] has been raised in the QEMU community, which is the
+first step towards the hybrid topology implementation based on QOM
+approach.
 
-Warnings:
-    cc1: all warnings being treated as errors
 
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
+2. Introduction of HFI and ITD
+==============================
 
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 26 warnings, 0 =
-section mismatches
+Intel provides Hardware Feedback Interface (HFI) feature to allow
+hardware to provide guidance to the OS scheduler to perform optimal
+workload scheduling through a hardware feedback interface structure in
+memory [4]. This HFI structure is called HFI table.
 
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype for =
-=E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototype for=
- =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototype for=
- =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototype for=
- =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype for =
-=E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype for =
-=E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype for =
-=E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype for =
-=E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototype fo=
-r =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for =E2=
-=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype for =
-=E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =E2=80=
-=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
-types]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
-ypes]
-    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
-=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
-=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
+For now, the guidance includes performance and energy efficiency
+hints, and it could be update via thermal interrupt as the actual
+operating conditions of the processor change during run time.
 
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 sec=
-tion mismatches
+Intel Thread Director (ITD) feature extends the HFI to provide
+performance and energy efficiency data for advanced classes of
+instructions.
 
-Errors:
-    security/security.c:810:2: error: =E2=80=98memcpy=E2=80=99 offset 32 is=
- out of the bounds [0, 0] [-Werror=3Darray-bounds]
+Since ITD is an extension of HFI, our ITD virtualization also
+virtualizes the native HFI feature.
 
-Warnings:
-    cc1: all warnings being treated as errors
 
+3. Dependencies of ITD
+======================
+
+ITD is a thermal FEATURE that requires:
+* PTM (Package Thermal Management, alias, PTS)
+* HFI (Hardware Feedback Interface)
+
+In order to support the notification mechanism of ITD/HFI dynamic
+update, we also need to add thermal interrupt related support,
+including the following two features:
+* ACPI (Thermal Monitor and Software Controlled Clock Facilities)
+* TM (Thermal Monitor, alias, TM1/ACC)
+
+Therefore, we must also consider support for the emulation of all
+the above dependencies.
+
+
+3.1. ACPI emulation
+^^^^^^^^^^^^^^^^^^^
+
+For both ACPI, we can support it by emulating the RDMSR/WRMSR of the
+associated MSRs and adding the ability to inject thermal interrupts.
+But in fact, we don't really inject termal interrupts into Guest for
+the termal conditions corresponding to ACPI. Here the termal interrupt
+is prepared for the subsequent HFI/ITD.
+
+
+3.2. TM emulation
+^^^^^^^^^^^^^^^^^
+
+TM is a hardware feature and its CPUID bit only indicates the presence
+of the automatic thermal monitoring facilities. For TM, there's no
+interactive interface between OS and hardware, but its flag is one of
+the prerequisites for the OS to enable thermal interrupt.
+
+Thereby, as the support for TM, it is enough for us to expose its CPUID
+flag to Guest.
+
+
+3.3. PTM emulation
+^^^^^^^^^^^^^^^^^^
+
+PTM is a package-scope feature that includes package-level MSR and
+package-level thermal interrupt. Unfortunately, KVM currently only
+supports thread-scope MSR handling, and also doesn't care about the
+specific Guest's topology.
+
+But considering that our purpose of supporting PTM in KVM is to further
+support ITD, and the current platforms with ITD are all 1 package, so we
+emulate the MSRs of the package scope provided by PTM at the VM level.
+
+In this way, the VMM is required to set only one package topology for
+the PTM. In order to alleviate this limitation, we only expose the PTM
+feature bit to Guest when ITD needs to be supported.
+
+
+3.4. HFI emulation
+^^^^^^^^^^^^^^^^^^
+
+ITD is the extension of HFI, so both HFI and ITD depend on HFI table.
+HFI itself is used on the Host for power-related management control, so
+we should only expose HFI to Guest when we need to enable ITD.
+
+HFI also relies on PTM interrupt control, so it also has requirements
+for package topology, and we also emulate HFI (including ITD) at the VM
+level.
+
+In addition, because the HFI driver allocates HFI instances per die,
+this also affects HFI (and ITD) and must limit the Guest to only set one
+die.
+
+
+3.5. Restrictions on Guest Topology
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Due to KVM's incomplete support for MSR topology and the requirement for
+HFI instance management in the kernel, PTM, HFI, and ITD limit the
+topology of the Guest (mainly restricting the topology types created on
+the VMM side).
+
+Therefore, we only expose PTM, HFI, and ITD to userspace when we need to
+support ITD. At the same time, considering that currently, ITD is only
+used on the client platform with 1 package and 1 die, such temporary
+restrictions will not have too much impact.
+
+
+4. Overview of ITD (and HFI) virtualization
+===========================================
+
+The main tasks of ITD (including HFI) virtualization are:
+* maintain a virtual HFI table for VM.
+* inject thermal interrupt when HFI table updates.
+* handle related MSRs' emulation and adjust HFI table based on MSR's
+  control bits.
+* expose ITD/HFI configuration info in related CPUID leaves.
+
+The most important of these is the maintenance of the virtual HFI table.
+Although the HFI table should also be per package, since ITD/HFI related
+MSRs are treated as per VM in KVM, we also treat the virtual HFI table
+as per VM.
+
+
+4.1. HFI table building
+^^^^^^^^^^^^^^^^^^^^^^^
+
+HFI table contains a table header and many table entries. Each table
+entry is identified by an hfi table index, and each CPU corresponds to
+one of the hfi table indexes.
+
+ITD and HFI features both depend on the HFI table, but their HFI table
+are a little different. The HFI table provided by the ITD feature has
+more classes (in terms of more columns in the table) than the HFI table
+of native HFI feature.
+
+The virtual HFI table in KVM is built based on the actual HFI table,
+which is maintained by HFI instance in HFI driver. We extract the HFI
+data of the pCPUs, which vCPUs are running on, to form a virtual HFI
+table.
+
+
+4.2. HFI table index
+^^^^^^^^^^^^^^^^^^^^
+
+There are many entries in the HFI table, and the vCPU will be assigned
+an HFI table index to specify the entry it maps. KVM will fill the
+pCPU's HFI data (the pCPU that vCPU is running on) into the entry
+corresponding to the HFI table index of the vCPU in the vcitual HFI
+table.
+
+This index is set by VMM in CPUID.
+
+
+4.3. HFI table updating
+^^^^^^^^^^^^^^^^^^^^^^^
+
+On some platforms, the HFI table will be dynamically updated with
+thermal interrupts. In order to update the virtual HFI table in time, we
+added the per-VM notifier to the HFI driver to notify KVM to update the
+virtual HFI table for the VM, and then inject thermal interrupt into the
+VM to notify the Guest.
+
+There is another case that needs to update the virtual HFI table, that
+is, when the vCPU is migrated, the pCPU where it is located is changed,
+and the corresponding virtual HFI data should also be updated to the new
+pCPU's data. In this case, in order to reduce overhead, we can only
+update the data of a single vPCU without traversing the entire virtual
+HFI table.
+
+
+5. Patch Summary
+================
+
+Patch 01-03: Prepare the bit definition, the hfi helpers and hfi data
+             structures that KVM needs.
+Patch 04-05: Add the sched_out arch hook and reset the classification
+             history at sched_in()/schedu_out().
+Patch 06-10: Add emulations of ACPI, TM and PTM, mainly about CPUID and
+             related MSRs.
+Patch 11-20: Add the emulation support for HFI, including maintaining
+             the HFI table for VM.
+Patch 21-23: Add the emulation support for ITD, including extending HFI
+             to ITD and passing through the classification MSRs.
+Patch 24-25: Add HRESET emulation support, which is also used by IPC
+             classes feature.
+Patch 26:    Add the brief doc about the per-VM lock - pkg_therm_lock.
+
+
+6. References
+=============
+
+[1]: [PATCH 0/9] thermal: intel: hfi: Prework for the virtualization of HFI
+     https://lore.kernel.org/lkml/20240203040515.23947-1-ricardo.neri-calderon@linux.intel.com/
+[2]: [RFC 00/52] Introduce hybrid CPU topology,
+     https://lore.kernel.org/qemu-devel/20230213095035.158240-1-zhao1.liu@linux.intel.com/
+[3]: [RFC 00/41] qom-topo: Abstract Everything about CPU Topology,
+     https://lore.kernel.org/qemu-devel/20231130144203.2307629-1-zhao1.liu@linux.intel.com/
+[4]: SDM, vol. 3B, section 15.6 HARDWARE FEEDBACK INTERFACE AND INTEL
+     THREAD DIRECTOR
+
+
+Thanks and Best Regards,
+Zhao
 ---
-For more info write to <info@kernelci.org>
+Zhao Liu (17):
+  thermal: Add bit definition for x86 thermal related MSRs
+  KVM: Add kvm_arch_sched_out() hook
+  KVM: x86: Reset hardware history at vCPU's sched_in/out
+  KVM: VMX: Add helpers to handle the writes to MSR's R/O and R/WC0 bits
+  KVM: x86: cpuid: Define CPUID 0x06.eax by kvm_cpu_cap_mask()
+  KVM: VMX: Introduce HFI description structure
+  KVM: VMX: Introduce HFI table index for vCPU
+  KVM: x86: Introduce the HFI dynamic update request and kvm_x86_ops
+  KVM: VMX: Allow to inject thermal interrupt without HFI update
+  KVM: VMX: Emulate HFI related bits in package thermal MSRs
+  KVM: VMX: Emulate the MSRs of HFI feature
+  KVM: x86: Expose HFI feature bit and HFI info in CPUID
+  KVM: VMX: Extend HFI table and MSR emulation to support ITD
+  KVM: VMX: Pass through ITD classification related MSRs to Guest
+  KVM: x86: Expose ITD feature bit and related info in CPUID
+  KVM: VMX: Emulate the MSR of HRESET feature
+  Documentation: KVM: Add description of pkg_therm_lock
+
+Zhuocheng Ding (9):
+  thermal: intel: hfi: Add helpers to build HFI/ITD structures
+  thermal: intel: hfi: Add HFI notifier helpers to notify HFI update
+  KVM: VMX: Emulate ACPI (CPUID.0x01.edx[bit 22]) feature
+  KVM: x86: Expose TM/ACC (CPUID.0x01.edx[bit 29]) feature bit to VM
+  KVM: VMX: Emulate PTM/PTS (CPUID.0x06.eax[bit 6]) feature
+  KVM: VMX: Support virtual HFI table for VM
+  KVM: VMX: Sync update of Host HFI table to Guest
+  KVM: VMX: Update HFI table when vCPU migrates
+  KVM: x86: Expose HRESET feature's CPUID to Guest
+
+ Documentation/virt/kvm/locking.rst  |  13 +-
+ arch/arm64/include/asm/kvm_host.h   |   1 +
+ arch/mips/include/asm/kvm_host.h    |   1 +
+ arch/powerpc/include/asm/kvm_host.h |   1 +
+ arch/riscv/include/asm/kvm_host.h   |   1 +
+ arch/s390/include/asm/kvm_host.h    |   1 +
+ arch/x86/include/asm/hfi.h          |  28 ++
+ arch/x86/include/asm/kvm-x86-ops.h  |   3 +-
+ arch/x86/include/asm/kvm_host.h     |   2 +
+ arch/x86/include/asm/msr-index.h    |  54 +-
+ arch/x86/kvm/cpuid.c                | 201 +++++++-
+ arch/x86/kvm/irq.h                  |   1 +
+ arch/x86/kvm/lapic.c                |   9 +
+ arch/x86/kvm/svm/svm.c              |   8 +
+ arch/x86/kvm/vmx/vmx.c              | 751 +++++++++++++++++++++++++++-
+ arch/x86/kvm/vmx/vmx.h              |  79 ++-
+ arch/x86/kvm/x86.c                  |  18 +
+ drivers/thermal/intel/intel_hfi.c   | 212 +++++++-
+ drivers/thermal/intel/therm_throt.c |   1 -
+ include/linux/kvm_host.h            |   1 +
+ virt/kvm/kvm_main.c                 |   1 +
+ 21 files changed, 1343 insertions(+), 44 deletions(-)
+
+-- 
+2.34.1
+
 
