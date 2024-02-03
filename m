@@ -1,190 +1,162 @@
-Return-Path: <linux-pm+bounces-3269-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3270-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C72084801C
-	for <lists+linux-pm@lfdr.de>; Sat,  3 Feb 2024 05:06:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 023EB8483B9
+	for <lists+linux-pm@lfdr.de>; Sat,  3 Feb 2024 05:33:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF2DD1C22F77
-	for <lists+linux-pm@lfdr.de>; Sat,  3 Feb 2024 04:06:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 353C41C23CDD
+	for <lists+linux-pm@lfdr.de>; Sat,  3 Feb 2024 04:33:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6823716431;
-	Sat,  3 Feb 2024 04:04:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 358B510976;
+	Sat,  3 Feb 2024 04:21:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G5IAEj6c"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ob/JSzh4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D96912B60;
-	Sat,  3 Feb 2024 04:04:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27A22F9E9;
+	Sat,  3 Feb 2024 04:21:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706933051; cv=none; b=CtUy9XbI8Ca8AswS82SpYv478PgkLggsHsLEqKAg1Qyf/8Itq7FJSz3Y5yGumweO/ll/H0n0mkdV4PX/VQtED2GGD86JekZsXMfQHyJJA2Ey1VLKDPLZvoNZHZlCT1V3oHUIQlZTZq7CCNRu9YaQYAPMiZR+j0p/ngXSPSFOt10=
+	t=1706934072; cv=none; b=hGm5cPbLFWPlzDVCn5UQcheK4SpZZpO2Zd3vg27wTqO0BqjQVmTBFyIL1U4dP7tIZQrMtbAc28Oh0YqXh8bm/UFG8yO29ysqx7MVSzPrkq5cUsopb9tZNPa8z0TT2onZBRx51YIiZXF1u86RxJtsPbvXkiuyY+fyZUkeWczIlxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706933051; c=relaxed/simple;
-	bh=jJ7cQQxTyIeHFxzXpC9coCnefq+U00MraPSXDdxbmwE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=X7C3C6MTUjnSsWmhyfQhwtuVFvpuVBR95Cz51MBj/LN2J9X33aNweaHasYbzoeZV0Z4bcQpGeVnsuI9TRuEyxL7A5rXRoCTX9uDN9ujvsJ9NDRJAwRDvXi6mWOjep0kxCkoWxvAGYnemI4xF7QTcPquOn10EZtvZxpxL4tUU19U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G5IAEj6c; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1706934072; c=relaxed/simple;
+	bh=l8fqb95s8syuE8Cx9UHSXoTZx0Bim/EsdxuGX0FstWM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JlrzzMn17WcE2+omPjIlPfNkxA0NKTNLHLUghMgDF/+ZPCZDIVCkqZSTb/VKnsiAkcTvvDhgozch9yumz3cd1MH8jWlq6sQrKln6gcS/fClkKlTsU/YTny3GCO3iEH8tiaaBxfiZHrDHgDMWCSTAXHqk2Pajr47r0Ho/S32GrtQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ob/JSzh4; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1706933050; x=1738469050;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=jJ7cQQxTyIeHFxzXpC9coCnefq+U00MraPSXDdxbmwE=;
-  b=G5IAEj6cyNfUeUb4Eey9F6TvwsSh0P70Rr5op+aWnED/3GZSZn0pTkv3
-   U6TBvVbQwciai1/9scahZgt+hzivyFmPYUGggM5Rrx32RKbzwGO6CV797
-   RQp0Fgf9teXWc88QjI1E82ysmQaArSopOEncD/u0l5e9MAGyT/OB6FeHt
-   IaDx3d07rNP2JMzu2cHvfSCPTmQQLMpGsuXllYe/cfeM/mDW4t2Wee7X3
-   8QK3/ZsNB4N6JWKH6V/a0yRIBNcOzsdF74oBkeA7kUgRtGHO19wHxMmQ+
-   eN96FtO4NYJggKTgg4X09t2UyT1fA+qPIfIz6gA6FiD/A+rlPmtkM5ni1
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="4181429"
+  t=1706934070; x=1738470070;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=l8fqb95s8syuE8Cx9UHSXoTZx0Bim/EsdxuGX0FstWM=;
+  b=Ob/JSzh4WBeKLXmCRYHxj0k/fdIaMYdMwTw8tdPiN6OBBPCRuSofnoie
+   S1W2a9wUCnGYYPfO6jYcARhZ+lqAEe3Gl/OwtWWHAN0hotGLHnFB3Br5M
+   uSESZkJIcczAzGtKcgbjHv7KCE7PkqYcOVU+6oCessqMcJIX9FLyjM09M
+   H54X4/G5CPOSGm16CojGP7Kgr3BWLmXPdbZBuw+Mvp0U6EfYkvPIYVRUA
+   bijxowSmPI5RZbHPi4dCPhNXEwDKRQSAn4UC/xuA/WZS8A+1UpkAlsJsc
+   NAWyQngE3ZSfJtF1sZf1h+y1D2kapn2p27ZvPdM9MLVCDW9BEem6zoVWo
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="11655561"
 X-IronPort-AV: E=Sophos;i="6.05,238,1701158400"; 
-   d="scan'208";a="4181429"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 20:04:06 -0800
+   d="scan'208";a="11655561"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Feb 2024 20:21:09 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10971"; a="823382531"
 X-IronPort-AV: E=Sophos;i="6.05,238,1701158400"; 
-   d="scan'208";a="823382531"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga001.jf.intel.com with ESMTP; 02 Feb 2024 20:04:05 -0800
-From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc: Len Brown <len.brown@intel.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-	Zhao Liu <zhao1.liu@intel.com>,
-	Zhuocheng Ding <zhuocheng.ding@intel.com>,
-	x86@kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-	Zhao Liu <zhao1.liu@linux.intel.com>
-Subject: [PATCH 9/9] x86/cpu: Introduce interface to reset hardware history
-Date: Fri,  2 Feb 2024 20:05:15 -0800
-Message-Id: <20240203040515.23947-10-ricardo.neri-calderon@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20240203040515.23947-1-ricardo.neri-calderon@linux.intel.com>
-References: <20240203040515.23947-1-ricardo.neri-calderon@linux.intel.com>
+   d="scan'208";a="31047732"
+Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 02 Feb 2024 20:21:04 -0800
+Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rW7WX-0004cQ-0G;
+	Sat, 03 Feb 2024 04:21:01 +0000
+Date: Sat, 3 Feb 2024 12:20:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andrew Davis <afd@ti.com>, Sebastian Reichel <sre@kernel.org>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Sean Wang <sean.wang@mediatek.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-actions@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, Andrew Davis <afd@ti.com>
+Subject: Re: [PATCH 09/18] power: reset: rmobile-reset: Use
+ devm_register_sys_off_handler(RESTART)
+Message-ID: <202402031246.nZHDnDnf-lkp@intel.com>
+References: <20240201180102.70395-10-afd@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240201180102.70395-10-afd@ti.com>
 
-KVM needs an interface to reset the history of vCPU at context switch.
-When called, hardware will start the classification of the next task
-from scratch.
+Hi Andrew,
 
-Cc: Len Brown <len.brown@intel.com>
-Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Cc: Zhao Liu <zhao1.liu@linux.intel.com>
-Cc: Zhuocheng Ding <zhuocheng.ding@intel.com>
-Cc: x86@kernel.org
-Cc: linux-pm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
----
-Patch cherry-picked from the IPC classes patchset. Removed calls to
-reset_hardware_history() from context switch. Now KVM will call it
-directly when needed.
----
- * Measurements of the cost of the HRESET instruction
+kernel test robot noticed the following build warnings:
 
-   Methodology:
-   I created a tight loop with interrupts and preemption disabled. I
-   recorded the value of the TSC counter before and after executing
-   HRESET or RDTSC. I repeated the measurement 100,000 times.
-   I performed the experiment using an Alder Lake S system. I set the
-   frequency of the CPUs at a fixed value.
+[auto build test WARNING on sre-power-supply/for-next]
+[also build test WARNING on mani-mhi/mhi-next soc/for-next linus/master v6.8-rc2 next-20240202]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-   The table below compares the cost of HRESET with RDTSC (expressed in
-   the elapsed TSC count). The cost of the two instructions is
-   comparable.
+url:    https://github.com/intel-lab-lkp/linux/commits/Andrew-Davis/power-reset-atc260x-poweroff-Use-devm_register_sys_off_handler-RESTART/20240202-020809
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
+patch link:    https://lore.kernel.org/r/20240201180102.70395-10-afd%40ti.com
+patch subject: [PATCH 09/18] power: reset: rmobile-reset: Use devm_register_sys_off_handler(RESTART)
+config: hexagon-randconfig-r122-20240202 (https://download.01.org/0day-ci/archive/20240203/202402031246.nZHDnDnf-lkp@intel.com/config)
+compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7dd790db8b77c4a833c06632e903dc4f13877a64)
+reproduce: (https://download.01.org/0day-ci/archive/20240203/202402031246.nZHDnDnf-lkp@intel.com/reproduce)
 
-                              PCore      ECore
-        Frequency (GHz)        5.0        3.8
-        HRESET (avg)          28.5       44.7
-        HRESET (stdev %)       3.6        2.3
-        RDTSC  (avg)          25.2       35.7
-        RDTSC  (stdev %)       3.9        2.6
----
- arch/x86/include/asm/hreset.h | 30 ++++++++++++++++++++++++++++++
- arch/x86/kernel/cpu/common.c  |  8 ++++++++
- 2 files changed, 38 insertions(+)
- create mode 100644 arch/x86/include/asm/hreset.h
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402031246.nZHDnDnf-lkp@intel.com/
 
-diff --git a/arch/x86/include/asm/hreset.h b/arch/x86/include/asm/hreset.h
-new file mode 100644
-index 000000000000..d68ca2fb8642
---- /dev/null
-+++ b/arch/x86/include/asm/hreset.h
-@@ -0,0 +1,30 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _ASM_X86_HRESET_H
-+
-+/**
-+ * HRESET - History reset. Available since binutils v2.36.
-+ *
-+ * Request the processor to reset the history of task classification on the
-+ * current logical processor. The history components to be
-+ * reset are specified in %eax. Only bits specified in CPUID(0x20).EBX
-+ * and enabled in the IA32_HRESET_ENABLE MSR can be selected.
-+ *
-+ * The assembly code looks like:
-+ *
-+ *	hreset %eax
-+ *
-+ * The corresponding machine code looks like:
-+ *
-+ *	F3 0F 3A F0 ModRM Imm
-+ *
-+ * The value of ModRM is 0xc0 to specify %eax register addressing.
-+ * The ignored immediate operand is set to 0.
-+ *
-+ * The instruction is documented in the Intel SDM.
-+ */
-+
-+#define __ASM_HRESET  ".byte 0xf3, 0xf, 0x3a, 0xf0, 0xc0, 0x0"
-+
-+void reset_hardware_history(void);
-+
-+#endif /* _ASM_X86_HRESET_H */
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index bce8719b47c9..ab9809520164 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -57,6 +57,7 @@
- #include <asm/mce.h>
- #include <asm/msr.h>
- #include <asm/cacheinfo.h>
-+#include <asm/hreset.h>
- #include <asm/memtype.h>
- #include <asm/microcode.h>
- #include <asm/intel-family.h>
-@@ -383,6 +384,13 @@ static __always_inline void setup_umip(struct cpuinfo_x86 *c)
- 
- static u32 hardware_history_features __ro_after_init;
- 
-+void reset_hardware_history(void)
-+{
-+	asm_inline volatile (ALTERNATIVE("", __ASM_HRESET, X86_FEATURE_HRESET)
-+			     : : "a" (hardware_history_features) : "memory");
-+}
-+EXPORT_SYMBOL(reset_hardware_history);
-+
- static __always_inline void setup_hreset(struct cpuinfo_x86 *c)
- {
- 	if (!cpu_feature_enabled(X86_FEATURE_HRESET))
+sparse warnings: (new ones prefixed by >>)
+>> drivers/power/reset/rmobile-reset.c:24:40: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected void [noderef] __iomem *sysc_base2 @@     got void *cb_data @@
+   drivers/power/reset/rmobile-reset.c:24:40: sparse:     expected void [noderef] __iomem *sysc_base2
+   drivers/power/reset/rmobile-reset.c:24:40: sparse:     got void *cb_data
+>> drivers/power/reset/rmobile-reset.c:45:47: sparse: sparse: incorrect type in argument 5 (different address spaces) @@     expected void *cb_data @@     got void [noderef] __iomem *[assigned] sysc_base2 @@
+   drivers/power/reset/rmobile-reset.c:45:47: sparse:     expected void *cb_data
+   drivers/power/reset/rmobile-reset.c:45:47: sparse:     got void [noderef] __iomem *[assigned] sysc_base2
+
+vim +24 drivers/power/reset/rmobile-reset.c
+
+    21	
+    22	static int rmobile_reset_handler(struct sys_off_data *data)
+    23	{
+  > 24		void __iomem *sysc_base2 = data->cb_data;
+    25	
+    26		/* Let's assume we have acquired the HPB semaphore */
+    27		writel(RESCNT2_PRES, sysc_base2 + RESCNT2);
+    28	
+    29		return NOTIFY_DONE;
+    30	}
+    31	
+    32	static int rmobile_reset_probe(struct platform_device *pdev)
+    33	{
+    34		void __iomem *sysc_base2;
+    35		int error;
+    36	
+    37		sysc_base2 = devm_platform_ioremap_resource(pdev, 0);
+    38		if (IS_ERR(sysc_base2))
+    39			return PTR_ERR(sysc_base2);
+    40	
+    41		error = devm_register_sys_off_handler(&pdev->dev,
+    42						      SYS_OFF_MODE_RESTART,
+    43						      SYS_OFF_PRIO_HIGH,
+    44						      rmobile_reset_handler,
+  > 45						      sysc_base2);
+    46		if (error) {
+    47			dev_err(&pdev->dev,
+    48				"cannot register restart handler (err=%d)\n", error);
+    49			return error;
+    50		}
+    51	
+    52		return 0;
+    53	}
+    54	
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
