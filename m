@@ -1,159 +1,127 @@
-Return-Path: <linux-pm+bounces-3351-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3352-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 443D2848EBC
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Feb 2024 15:57:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20F8F848F8E
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Feb 2024 18:04:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B6A271F2165A
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Feb 2024 14:57:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A880B282EC7
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Feb 2024 17:04:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C2D721340;
-	Sun,  4 Feb 2024 14:57:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=natalenko.name header.i=@natalenko.name header.b="XKCS69bT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6EBB24A11;
+	Sun,  4 Feb 2024 17:04:09 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from prime.voidband.net (prime.voidband.net [199.247.17.104])
+Received: from fgw20-7.mail.saunalahti.fi (fgw20-7.mail.saunalahti.fi [62.142.5.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 717B6224E0;
-	Sun,  4 Feb 2024 14:57:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.247.17.104
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EB9524A04
+	for <linux-pm@vger.kernel.org>; Sun,  4 Feb 2024 17:04:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707058654; cv=none; b=LG9P+kIyO3ThjWoNBj23mjpqk+B3Lrq9Ixb8x48PBvSi251KjhhC07TazK7ybt1ISroUFchAwIcrtKmGT4fsP1FD2EfcQOz7HhTIOyojTrvJo/1aKHTUysHoOAlFIK8joe/E45aUpL1+splTJorHNYM/rAbgBnhSJqnIGMqDN+Q=
+	t=1707066249; cv=none; b=hYGHkSGbvi1kPEbz/47wMLL36Cj6GUIzIhan1IdTZVsuqJpMT9W6g7m7FoIDqNEBaOLz9OgEUtGOFR03UTitxsXf+7wwo/gg+JxqeGMGUdwyUNmTeOvWFNHiwBqJNWSLZYO4cCsnbTr5kROwvFyeMajrhcXEcUBXcLAb502pDm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707058654; c=relaxed/simple;
-	bh=qtx/zQljWlhQqFJyInObMs6jLW9K0bT0vh5OU+K7S4Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=i+IZevcjdvQigcZP8I3n4f6oDcPPtwdL7kEWt4uGo0bOvqCUF5dsml0BLsjB8Q03k0gezdhUEWYk/aIvsd4hcaGBpODndchbh+PkxcPZmhgHK+sySNVsNYcNftVBdPyaTmhbUEa8Ji5p0KDFOzExnJHzedQ3HeYXCEPXCi3PqP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=natalenko.name; spf=pass smtp.mailfrom=natalenko.name; dkim=pass (1024-bit key) header.d=natalenko.name header.i=@natalenko.name header.b=XKCS69bT; arc=none smtp.client-ip=199.247.17.104
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=natalenko.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=natalenko.name
-Received: from spock.localnet (unknown [94.142.239.106])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by prime.voidband.net (Postfix) with ESMTPSA id 15BE86356CC0;
-	Sun,  4 Feb 2024 15:57:28 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-	s=dkim-20170712; t=1707058648;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Brjx5gawkui+LJaaggx7nGzOEtMEOgZdpM2in1GRejw=;
-	b=XKCS69bTM19pV7Y8tGu8Bf711bGsZpYrdVHeZwwUnuCsZVWV9pp3txdwc1llb6djGAWdyo
-	e7wDldRGuMqyamgW9sjDIoJve+nT+LUf1IHd+vuVX9jyQY3FORLCZOeBk3TDtJPJJbC7R+
-	hqJ5TZ7sY312c61mNfDsFnLAbkcMqMk=
-From: Oleksandr Natalenko <oleksandr@natalenko.name>
-To: rafael.j.wysocki@intel.com, Mario.Limonciello@amd.com,
- viresh.kumar@linaro.org, Ray.Huang@amd.com, gautham.shenoy@amd.com,
- Borislav.Petkov@amd.com, Perry Yuan <perry.yuan@amd.com>
-Cc: Alexander.Deucher@amd.com, Xinmei.Huang@amd.com, Xiaojian.Du@amd.com,
- Li.Meng@amd.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject:
- Re: [PATCH v2 6/6] cpufreq: amd-pstate: remove legacy set_boost callback for
- passive mode
-Date: Sun, 04 Feb 2024 15:57:17 +0100
-Message-ID: <4896392.31r3eYUQgx@natalenko.name>
-In-Reply-To:
- <e0746643c781f638c9e9cb8a6d2ceebeeb906f95.1707047943.git.perry.yuan@amd.com>
-References:
- <cover.1707047943.git.perry.yuan@amd.com>
- <e0746643c781f638c9e9cb8a6d2ceebeeb906f95.1707047943.git.perry.yuan@amd.com>
+	s=arc-20240116; t=1707066249; c=relaxed/simple;
+	bh=Hc9tUiOGoKDix4zY3uj/vZxzd566MMLdtIeaQ+DJ8F0=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nNK4auJVW+1St+5eLv4cBHeI0VINTBMqlU/FrG5GLWPgN+Ns95EdQpXIf6RJYvpV38G++hIXoPfECo0UE8z2cW098onCv/a/RPxLS/u89MAUtinmlWmjNvbx8FmQ76HIuQLGAWVu910L+1/LSgPNn6/doDT3TfCmL3vNEeZ7mnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=62.142.5.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
+Received: from localhost (88-113-26-30.elisa-laajakaista.fi [88.113.26.30])
+	by fgw20.mail.saunalahti.fi (Halon) with ESMTP
+	id 61aa5fc3-c37f-11ee-b3cf-005056bd6ce9;
+	Sun, 04 Feb 2024 19:03:58 +0200 (EET)
+From: andy.shevchenko@gmail.com
+Date: Sun, 4 Feb 2024 19:03:56 +0200
+To: Nikita Shubin <nikita.shubin@maquefel.me>
+Cc: Hartley Sweeten <hsweeten@visionengravers.com>,
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Lukasz Majewski <lukma@denx.de>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Andy Shevchenko <andy@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Mark Brown <broonie@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Sergey Shtylyov <s.shtylyov@omp.ru>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Ralf Baechle <ralf@linux-mips.org>,
+	"Wu, Aaron" <Aaron.Wu@analog.com>, Lee Jones <lee@kernel.org>,
+	Olof Johansson <olof@lixom.net>, Niklas Cassel <cassel@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+	dmaengine@vger.kernel.org, linux-watchdog@vger.kernel.org,
+	linux-pwm@vger.kernel.org, linux-spi@vger.kernel.org,
+	netdev@vger.kernel.org, linux-mtd@lists.infradead.org,
+	linux-ide@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-sound@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	Andy Shevchenko <andriy.shevchenko@intel.com>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v7 00/39] ep93xx device tree conversion
+Message-ID: <Zb_DfISgoNyTKWMp@surfacebook.localdomain>
+References: <20240118-ep93xx-v7-0-d953846ae771@maquefel.me>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart4545156.LvFx2qVVIh";
- micalg="pgp-sha256"; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240118-ep93xx-v7-0-d953846ae771@maquefel.me>
 
---nextPart4545156.LvFx2qVVIh
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"; protected-headers="v1"
-From: Oleksandr Natalenko <oleksandr@natalenko.name>
-Date: Sun, 04 Feb 2024 15:57:17 +0100
-Message-ID: <4896392.31r3eYUQgx@natalenko.name>
-MIME-Version: 1.0
+Thu, Jan 18, 2024 at 11:20:43AM +0300, Nikita Shubin kirjoitti:
+> The goal is to recieve ACKs for all patches in series to merge it via Arnd branch.
+> 
+> No major changes since last version (v6) all changes are cometic.
+> 
+> Following patches require attention from Stephen Boyd, as they were converted to aux_dev as suggested:
+> 
+> - ARM: ep93xx: add regmap aux_dev
+> - clk: ep93xx: add DT support for Cirrus EP93xx
+> 
+> Following patches require attention from Vinod Koul:
+> 
+> - dma: cirrus: Convert to DT for Cirrus EP93xx
+> - dma: cirrus: remove platform code
+> 
+> Following patches are dropped:
+> - dt-bindings: wdt: Add ts72xx (pulled requested by Wim Van Sebroeck)
+> 
+> Big Thanks to Andy Shevchenko once again.
 
-Hello.
+You're welcome!
 
-On ned=C4=9Ble 4. =C3=BAnora 2024 13:12:57 CET Perry Yuan wrote:
-> With new freqency boost interface supported, legacy boost control
-> doesn't make sense any more which only support passive mode.
-> so it can remove the legacy set_boost interface from amd-pstate driver
-> in case of there is conflict with new boost control logic.
->=20
-> Signed-off-by: Perry Yuan <perry.yuan@amd.com>
-> ---
->  drivers/cpufreq/amd-pstate.c | 1 -
->  include/linux/amd-pstate.h   | 1 -
->  2 files changed, 2 deletions(-)
->=20
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 02a76b8fb298..4e377efdd4ed 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -1492,7 +1492,6 @@ static struct cpufreq_driver amd_pstate_driver =3D {
->  	.exit		=3D amd_pstate_cpu_exit,
->  	.suspend	=3D amd_pstate_cpu_suspend,
->  	.resume		=3D amd_pstate_cpu_resume,
-> -	.set_boost	=3D amd_pstate_set_boost,
->  	.name		=3D "amd-pstate",
->  	.attr		=3D amd_pstate_attr,
->  };
-> diff --git a/include/linux/amd-pstate.h b/include/linux/amd-pstate.h
-> index 446394f84606..66d939a344b1 100644
-> --- a/include/linux/amd-pstate.h
-> +++ b/include/linux/amd-pstate.h
-> @@ -80,7 +80,6 @@ struct amd_cpudata {
->  	struct amd_aperf_mperf prev;
-> =20
->  	u64	freq;
-> -	bool	boost_supported;
+I have a few minor comments, I believe if you send a new version it will be
+final (at least from my p.o.v.).
 
-This leaves amd_pstate_ut_check_freq() in drivers/cpufreq/amd-pstate-ut.c b=
-roken. Likely, the whole `if (cpudata->boost_supported) {` hunk should be r=
-emoved there too.
-
-Also, in the header file, there's kernel-doc before `struct amd_cpudata`, w=
-here boost_supported is mentioned. It should be removed too then.
-
-> =20
->  	/* EPP feature related attributes*/
->  	s16	epp_policy;
->=20
-
-
-=2D-=20
-Oleksandr Natalenko (post-factum)
---nextPart4545156.LvFx2qVVIh
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEZUOOw5ESFLHZZtOKil/iNcg8M0sFAmW/pc0ACgkQil/iNcg8
-M0urchAAvKYGEpxMWXdVRLbuUMR52vsR6OmsmlA21fkyGhmCg5Dckqxb1fdaXqQ2
-Qz7M1GYLjEzXCxRzQi3IxPjNGp/0wtXycAO1DgvlgHexMydzVYLTsm7cdm29+/UV
-N5SynY1bFiH6cvUEdYcg4Q2ZVorx20cNJ/Dfb8DsqzMBkHx+YWpllT6ZBdasX1Wr
-5RRppw8VuunYXHugWexxXQMGRWC3IAjAj1EiJyswMZwGmiIqMuTUtv3y8ts+mK9w
-7xLQ1lHUdY733C7NvzY0sRYKY1E1INhwX59zZrPUWgjgkGJEBBZIGBWbm6AeAKK0
-SSL2pxyCYOYG/PuEfP20YcO5mL8Tb4Tjzd41sDMBADGAWmeBJnOC0hUrW9OGbu7N
-KB04tSisT6uDgLTbIhaEPjGjhrpwwl0GqWXnHeEq8JGuqJtZwDCTpDd5waZpAD6O
-nzRwZzwXjqR+8kf7vTl3kKRO5BguxnZcH1vS9krPc/2zh3FZeNY1Rau4s6IHTZh6
-q62TkVr1iT3X8vG8Hy9OY+yUnLCylBQTPYVY7h7wgYKbEyhOt/YNRm5U000IeoRY
-y1zxVPH+8N9O+zU9zpCIb5CqxOu9V5Rr/Dt6helF5j7Ebo5Nt7VUZ9E1mM5/56Uc
-m04zzOYmqV2N4Z6haiao9dLRDHFmZS9EmheDARUS2ZXOOhzhkOk=
-=3u7X
------END PGP SIGNATURE-----
-
---nextPart4545156.LvFx2qVVIh--
-
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
 
