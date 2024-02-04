@@ -1,234 +1,291 @@
-Return-Path: <linux-pm+bounces-3334-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3335-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF26D848C6B
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Feb 2024 10:23:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F534848CC1
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Feb 2024 11:23:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 499E2B22572
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Feb 2024 09:23:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B4F081F2238E
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Feb 2024 10:23:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DFED14298;
-	Sun,  4 Feb 2024 09:23:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78F4D1B808;
+	Sun,  4 Feb 2024 10:23:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PPwH+86c"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hg47hjLn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD66E18AF9
-	for <linux-pm@vger.kernel.org>; Sun,  4 Feb 2024 09:23:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C02A1B805;
+	Sun,  4 Feb 2024 10:23:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707038596; cv=none; b=SR2BZAsbPidThUIpsXXe3znINFng96Cp2VpMbG8Sx/RWwzIe5TKUH9pv+vt/6Qt3tysNdXOMu1//wQVA9inb+vBSPIrnpSbBep1KVkPV+0WUaPOR+TxWBCCezEE7bvGcv3Jdijr6Hvy/gNEH9cOCfHCw8peuFF3pA6q8bfA3GL4=
+	t=1707042184; cv=none; b=YYVUHbPYzYtnzwly+8ys1GeQLVjBuObpzbwAIW0vXzuL6l2J9UBPH7zNv36QAfc9K6doNrnjv8jmYc4qJzzgoNsrS0RcII6Zh1jS4t0+8+jJqaqr3IT7rTtcvAAhapsx4FzJQFHxOZXv5cUhufSHiph5LXrzd524O520IPx3wAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707038596; c=relaxed/simple;
-	bh=hdkBNpC196nac8HRBSJaDgng6Wzm9V60GZHBu5bhZIY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SRO7sFCxSXx9LW+I9SpS5KUBPMdRIBuafDYmJLPICyNpyH3Eukmjv0QGEtBL3QBYzK6EmxmQbIz38KE5eR1nzausHRHTXBIRz0BggXQ4HrVuBYx9MI+ofBXqfptC/sgwswpaKQXKrbX2qkBwJLRhCXUITj/ijElAIb8daq4ChDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PPwH+86c; arc=none smtp.client-ip=209.85.219.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-dc6e0fe3195so2718491276.0
-        for <linux-pm@vger.kernel.org>; Sun, 04 Feb 2024 01:23:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707038593; x=1707643393; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/jpuYG+EdQLizy4QqBGZn07wougvdBXcN1e2Mr1rzhc=;
-        b=PPwH+86crE1DWSWWa5l+HMrZyFVXFi2L4Fo5nxjKeMzI4VzgSo1bzdY+VYoqEbG5Uj
-         2g9Hl6fEwCoGQcP7/frW9CNT/2kmlVUpuyrJcG8v21y8iV0y94MSVjuF+kvdHcj/fCYi
-         FYH97i9Pohvt7qKOJpTtXope9UEn8U+Omf/L4rrPsAPefjLdCB5EhK9fno1zAS55kIkA
-         HvgC65pAjGgbHm/TNbUV+ayWKHGZ91h4QKp+zzdZSFjSuBop0FreN5BeNrK4JdeVWvaN
-         lxYA43H8secdIfah0/Mvheg33HAGUIgQBO5YqRHG4YXF7xKdZ+f9d0BiKW0ZoZYWZxb9
-         WKHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707038593; x=1707643393;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/jpuYG+EdQLizy4QqBGZn07wougvdBXcN1e2Mr1rzhc=;
-        b=skTvYq6SgaDR0q5JVME5MW2NbSrAEKiqEBD4365ZEaE1vIDCDRh1vugmB7Q/lfkhkT
-         dyWTA0bLTlf7F1160xEleF4O0sTZLvnpm5JJDq/Ox/6NTtDOdCIk0JTAI2HDa3fPzXav
-         qjslCZL2u6YXml2qYDK4SF9wlXHE7MeIzV2HICCCRvJWqeET4bcoavo8KEMbQ6ChjXcF
-         xVGWc6b9BcVGETtaM3LhOl344Y2TyGg+pv0PjBb7wupsnTVvWFqMyGhH9kc+s9W1GKYZ
-         7EB5WMUp0oCdBVcacYam7UmEmuXccNX5rt8ftPIGuQ4jomQenY70QrQhurTuWaNXs0FA
-         ms9g==
-X-Gm-Message-State: AOJu0YzgTblXNDPhWYmqLhb6Dm1awCLPzBi/AyLlkc6o4BFAQJyjWaQE
-	tlC00wfD3N3+kmlmMVCH40zmS2cK3oa74f+m6zVH3/yfo54A9+5f/gneVJmSoKAxDlmsvurl+64
-	20y0rJ9Zhs+s+mbmZjF/jNq0L0ICGipDv9jaSYQ==
-X-Google-Smtp-Source: AGHT+IH+6aIPxyRh3mvo8zj6LoCTEA2WezKPM1eVxvYBfHARq8vhSf+rEtZZT+MgFJeC0Ki4LzPESO32enuMKM5VVA0=
-X-Received: by 2002:a25:210:0:b0:dc2:48af:bf0c with SMTP id
- 16-20020a250210000000b00dc248afbf0cmr10544490ybc.63.1707038593547; Sun, 04
- Feb 2024 01:23:13 -0800 (PST)
+	s=arc-20240116; t=1707042184; c=relaxed/simple;
+	bh=0zCWK6HdQBfmh3+SGF+GwJXgFP8dMvoTrINLfE+0WAs=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=plMlJLJepWMVyff4cGoqgzevoWyNTBXcefFMYSNsiYjuavVb/Zxr+1FRLlIxLZFYEmhZLon8p63DY/cmciR9YG05fQIjNzrYpnpieYif2+tQ+QnSCejHxsL1yuUtK3Lxa+8LAFj5MuCdW4z+X725lDgzKME9d34sJamTAKw5r88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hg47hjLn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4C1BC43399;
+	Sun,  4 Feb 2024 10:23:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707042183;
+	bh=0zCWK6HdQBfmh3+SGF+GwJXgFP8dMvoTrINLfE+0WAs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Hg47hjLnfaorhta56RniaOneYtEmHv7UKURF5pSmBzgj0lfdkBPbqOaxQvf9isVaN
+	 g2xWLsTMe0GSWatfM0BJmKINm5415AMkgVC/QqANVLnKI/Uik1+bmGvPI6xWEoKgYN
+	 QYihBwPdYJEFuWdzwRNQfCwfWZhqarqOulAO5tLZFLFjS13fWRDct2Qx95RVJAqqpB
+	 nvuqrzttae6Z/O/IWi/uiV1fdeLq9BGGce6a+0L4ChwbWTt68OEsnRCdKb0NUzhHPR
+	 RyQ1h9Pk+WUCqJe5uphaCuGpOqIXthnsWCpBcqewzpJuDQwRDHwHmcOCC+f27Dwoa1
+	 iYZlD71jsESFw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1rWZeO-0009UD-UD;
+	Sun, 04 Feb 2024 10:23:01 +0000
+Date: Sun, 04 Feb 2024 10:23:00 +0000
+Message-ID: <86a5og7cl7.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Rob Herring <robh@kernel.org>
+Cc: Saravana Kannan <saravanak@google.com>,
+	David Dai <davidai@google.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Quentin Perret <qperret@google.com>,
+	Masami Hiramatsu <mhiramat@google.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Pavan Kondeti <quic_pkondeti@quicinc.com>,
+	Gupta Pankaj <pankaj.gupta@amd.com>,
+	Mel Gorman <mgorman@suse.de>,
+	kernel-team@android.com,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] dt-bindings: cpufreq: add virtual cpufreq device
+In-Reply-To: <20240202155352.GA37864-robh@kernel.org>
+References: <20240127004321.1902477-1-davidai@google.com>
+	<20240127004321.1902477-2-davidai@google.com>
+	<20240131170608.GA1441369-robh@kernel.org>
+	<CAGETcx8S0oS67oMZsPKk6_MGAtygoHEf_LN1gbcNDEBqRJ4PPg@mail.gmail.com>
+	<20240202155352.GA37864-robh@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240203165307.7806-1-aford173@gmail.com> <20240203165307.7806-3-aford173@gmail.com>
-In-Reply-To: <20240203165307.7806-3-aford173@gmail.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Sun, 4 Feb 2024 10:23:02 +0100
-Message-ID: <CAA8EJpo4omXogg48urEMzxQ+CA7DNTSf66pA6hoO8wpmtn_-MQ@mail.gmail.com>
-Subject: Re: [PATCH V8 02/12] phy: freescale: add Samsung HDMI PHY
-To: Adam Ford <aford173@gmail.com>
-Cc: linux-arm-kernel@lists.infradead.org, marex@denx.de, 
-	alexander.stein@ew.tq-group.com, frieder.schrempf@kontron.de, 
-	Lucas Stach <l.stach@pengutronix.de>, Andrzej Hajda <andrzej.hajda@intel.com>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, David Airlie <airlied@gmail.com>, 
-	Daniel Vetter <daniel@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	NXP Linux Team <linux-imx@nxp.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Liu Ying <victor.liu@nxp.com>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, dri-devel@lists.freedesktop.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: robh@kernel.org, saravanak@google.com, davidai@google.com, rafael@kernel.org, viresh.kumar@linaro.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, sudeep.holla@arm.com, qperret@google.com, mhiramat@google.com, will@kernel.org, peterz@infradead.org, vincent.guittot@linaro.org, oliver.upton@linux.dev, dietmar.eggemann@arm.com, quic_pkondeti@quicinc.com, pankaj.gupta@amd.com, mgorman@suse.de, kernel-team@android.com, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Sat, 3 Feb 2024 at 17:53, Adam Ford <aford173@gmail.com> wrote:
->
-> From: Lucas Stach <l.stach@pengutronix.de>
->
-> This adds the driver for the Samsung HDMI PHY found on the
-> i.MX8MP SoC.
->
-> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-> Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> ---
-> V4:  Make lookup table hex values lower case.
->
-> V3:  Re-order the Makefile to keep it alphabetical
->      Remove unused defines
->
-> V2:  Fixed some whitespace found from checkpatch
->      Change error handling when enabling apbclk to use dev_err_probe
->      Rebase on Linux-Next
->
->      I (Adam) tried to help move this along, so I took Lucas' patch and
->      attempted to apply fixes based on feedback.  I don't have
->      all the history, so apologies for that.
-> ---
->  drivers/phy/freescale/Kconfig                |    6 +
->  drivers/phy/freescale/Makefile               |    1 +
->  drivers/phy/freescale/phy-fsl-samsung-hdmi.c | 1075 ++++++++++++++++++
->  3 files changed, 1082 insertions(+)
->  create mode 100644 drivers/phy/freescale/phy-fsl-samsung-hdmi.c
->
-> diff --git a/drivers/phy/freescale/Kconfig b/drivers/phy/freescale/Kconfig
-> index 853958fb2c06..5c2b73042dfc 100644
-> --- a/drivers/phy/freescale/Kconfig
-> +++ b/drivers/phy/freescale/Kconfig
-> @@ -35,6 +35,12 @@ config PHY_FSL_IMX8M_PCIE
->           Enable this to add support for the PCIE PHY as found on
->           i.MX8M family of SOCs.
->
-> +config PHY_FSL_SAMSUNG_HDMI_PHY
-> +       tristate "Samsung HDMI PHY support"
-> +       depends on OF && HAS_IOMEM
-> +       help
-> +         Enable this to add support for the Samsung HDMI PHY in i.MX8MP.
-> +
->  endif
->
->  config PHY_FSL_LYNX_28G
-> diff --git a/drivers/phy/freescale/Makefile b/drivers/phy/freescale/Makefile
-> index cedb328bc4d2..79e5f16d3ce8 100644
-> --- a/drivers/phy/freescale/Makefile
-> +++ b/drivers/phy/freescale/Makefile
-> @@ -4,3 +4,4 @@ obj-$(CONFIG_PHY_MIXEL_LVDS_PHY)        += phy-fsl-imx8qm-lvds-phy.o
->  obj-$(CONFIG_PHY_MIXEL_MIPI_DPHY)      += phy-fsl-imx8-mipi-dphy.o
->  obj-$(CONFIG_PHY_FSL_IMX8M_PCIE)       += phy-fsl-imx8m-pcie.o
->  obj-$(CONFIG_PHY_FSL_LYNX_28G)         += phy-fsl-lynx-28g.o
-> +obj-$(CONFIG_PHY_FSL_SAMSUNG_HDMI_PHY)  += phy-fsl-samsung-hdmi.o
-> diff --git a/drivers/phy/freescale/phy-fsl-samsung-hdmi.c b/drivers/phy/freescale/phy-fsl-samsung-hdmi.c
-> new file mode 100644
-> index 000000000000..bf0e2299d00f
-> --- /dev/null
-> +++ b/drivers/phy/freescale/phy-fsl-samsung-hdmi.c
-> @@ -0,0 +1,1075 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * Copyright 2020 NXP
-> + * Copyright 2022 Pengutronix, Lucas Stach <kernel@pengutronix.de>
-> + */
-> +
-> +#include <linux/clk-provider.h>
-> +#include <linux/clk.h>
-> +#include <linux/delay.h>
-> +#include <linux/io.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pm_runtime.h>
-> +
-> +#define PHY_REG_33             0x84
-> +#define  REG33_MODE_SET_DONE   BIT(7)
-> +#define  REG33_FIX_DA          BIT(1)
-> +
-> +#define PHY_REG_34             0x88
-> +#define  REG34_PHY_READY       BIT(7)
-> +#define  REG34_PLL_LOCK                BIT(6)
-> +#define  REG34_PHY_CLK_READY   BIT(5)
-> +
-> +
-> +#define PHY_PLL_REGS_NUM 48
-> +
-> +struct phy_config {
-> +       u32     clk_rate;
-> +       u8 regs[PHY_PLL_REGS_NUM];
-> +};
-> +
-> +const struct phy_config phy_pll_cfg[] = {
-> +       {       22250000, {
-> +                       0x00, 0xd1, 0x4b, 0xf1, 0x89, 0x88, 0x80, 0x40,
-> +                       0x4f, 0x30, 0x33, 0x65, 0x00, 0x15, 0x25, 0x80,
-> +                       0x6c, 0xf2, 0x67, 0x00, 0x10, 0x8f, 0x30, 0x32,
-> +                       0x60, 0x8f, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00,
-> +                       0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-> +                       0x00, 0xe0, 0x83, 0x0f, 0x3e, 0xf8, 0x00, 0x00,
-> +               },
-> +       }, {
-> +               23750000, {
-> +                       0x00, 0xd1, 0x50, 0xf1, 0x86, 0x85, 0x80, 0x40,
-> +                       0x4f, 0x30, 0x33, 0x65, 0x00, 0x03, 0x25, 0x80,
-> +                       0x6c, 0xf2, 0x67, 0x00, 0x10, 0x8f, 0x30, 0x32,
-> +                       0x60, 0x8f, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00,
-> +                       0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-> +                       0x00, 0xe0, 0x83, 0x0f, 0x3e, 0xf8, 0x00, 0x00,
-> +               },
+On Fri, 02 Feb 2024 15:53:52 +0000,
+Rob Herring <robh@kernel.org> wrote:
+>=20
+> On Wed, Jan 31, 2024 at 10:23:03AM -0800, Saravana Kannan wrote:
+> > On Wed, Jan 31, 2024 at 9:06=E2=80=AFAM Rob Herring <robh@kernel.org> w=
+rote:
+> > >
+> > > On Fri, Jan 26, 2024 at 04:43:15PM -0800, David Dai wrote:
+> > > > Adding bindings to represent a virtual cpufreq device.
+> > > >
+> > > > Virtual machines may expose MMIO regions for a virtual cpufreq devi=
+ce
+> > > > for guests to read frequency information or to request frequency
+> > > > selection. The virtual cpufreq device has an individual controller =
+for
+> > > > each frequency domain. Performance points for a given domain can be
+> > > > normalized across all domains for ease of allowing for virtual mach=
+ines
+> > > > to migrate between hosts.
+> > > >
+> > > > Co-developed-by: Saravana Kannan <saravanak@google.com>
+> > > > Signed-off-by: Saravana Kannan <saravanak@google.com>
+> > > > Signed-off-by: David Dai <davidai@google.com>
+> > > > ---
+> > > >  .../cpufreq/qemu,cpufreq-virtual.yaml         | 110 ++++++++++++++=
+++++
+> > >
+> > > > +    const: qemu,virtual-cpufreq
+> > >
+> > > Well, the filename almost matches the compatible.
+> > >
+> > > > +
+> > > > +  reg:
+> > > > +    maxItems: 1
+> > > > +    description:
+> > > > +      Address and size of region containing frequency controls for=
+ each of the
+> > > > +      frequency domains. Regions for each frequency domain is plac=
+ed
+> > > > +      contiguously and contain registers for controlling DVFS(Dyna=
+mic Frequency
+> > > > +      and Voltage) characteristics. The size of the region is prop=
+ortional to
+> > > > +      total number of frequency domains. This device also needs th=
+e CPUs to
+> > > > +      list their OPPs using operating-points-v2 tables. The OPP ta=
+bles for the
+> > > > +      CPUs should use normalized "frequency" values where the OPP =
+with the
+> > > > +      highest performance among all the vCPUs is listed as 1024 KH=
+z. The rest
+> > > > +      of the frequencies of all the vCPUs should be normalized bas=
+ed on their
+> > > > +      performance relative to that 1024 KHz OPP. This makes it muc=
+h easier to
+> > > > +      migrate the VM across systems which might have different phy=
+sical CPU
+> > > > +      OPPs.
+> > > > +
+> > > > +required:
+> > > > +  - compatible
+> > > > +  - reg
+> > > > +
+> > > > +additionalProperties: false
+> > > > +
+> > > > +examples:
+> > > > +  - |
+> > > > +    // This example shows a two CPU configuration with a frequency=
+ domain
+> > > > +    // for each CPU showing normalized performance points.
+> > > > +    cpus {
+> > > > +      #address-cells =3D <1>;
+> > > > +      #size-cells =3D <0>;
+> > > > +
+> > > > +      cpu@0 {
+> > > > +        compatible =3D "arm,armv8";
+> > > > +        device_type =3D "cpu";
+> > > > +        reg =3D <0x0>;
+> > > > +        operating-points-v2 =3D <&opp_table0>;
+> > > > +      };
+> > > > +
+> > > > +      cpu@1 {
+> > > > +        compatible =3D "arm,armv8";
+> > > > +        device_type =3D "cpu";
+> > > > +        reg =3D <0x0>;
+> > > > +        operating-points-v2 =3D <&opp_table1>;
+> > > > +      };
+> > > > +    };
+> > > > +
+> > > > +    opp_table0: opp-table-0 {
+> > > > +      compatible =3D "operating-points-v2";
+> > > > +
+> > > > +      opp64000 { opp-hz =3D /bits/ 64 <64000>; };
+> > >
+> > > opp-64000 is the preferred form.
+> > >
+> > > > +      opp128000 { opp-hz =3D /bits/ 64 <128000>; };
+> > > > +      opp192000 { opp-hz =3D /bits/ 64 <192000>; };
+> > > > +      opp256000 { opp-hz =3D /bits/ 64 <256000>; };
+> > > > +      opp320000 { opp-hz =3D /bits/ 64 <320000>; };
+> > > > +      opp384000 { opp-hz =3D /bits/ 64 <384000>; };
+> > > > +      opp425000 { opp-hz =3D /bits/ 64 <425000>; };
+> > > > +    };
+> > > > +
+> > > > +    opp_table1: opp-table-1 {
+> > > > +      compatible =3D "operating-points-v2";
+> > > > +
+> > > > +      opp64000 { opp-hz =3D /bits/ 64 <64000>; };
+> > > > +      opp128000 { opp-hz =3D /bits/ 64 <128000>; };
+> > > > +      opp192000 { opp-hz =3D /bits/ 64 <192000>; };
+> > > > +      opp256000 { opp-hz =3D /bits/ 64 <256000>; };
+> > > > +      opp320000 { opp-hz =3D /bits/ 64 <320000>; };
+> > > > +      opp384000 { opp-hz =3D /bits/ 64 <384000>; };
+> > > > +      opp448000 { opp-hz =3D /bits/ 64 <448000>; };
+> > > > +      opp512000 { opp-hz =3D /bits/ 64 <512000>; };
+> > > > +      opp576000 { opp-hz =3D /bits/ 64 <576000>; };
+> > > > +      opp640000 { opp-hz =3D /bits/ 64 <640000>; };
+> > > > +      opp704000 { opp-hz =3D /bits/ 64 <704000>; };
+> > > > +      opp768000 { opp-hz =3D /bits/ 64 <768000>; };
+> > > > +      opp832000 { opp-hz =3D /bits/ 64 <832000>; };
+> > > > +      opp896000 { opp-hz =3D /bits/ 64 <896000>; };
+> > > > +      opp960000 { opp-hz =3D /bits/ 64 <960000>; };
+> > > > +      opp1024000 { opp-hz =3D /bits/ 64 <1024000>; };
+> > > > +
+> > > > +    };
+> > >
+> > > I don't recall your prior versions having an OPP table. Maybe it was
+> > > incomplete. You are designing the "h/w" interface. Why don't you make=
+ it
+> > > discoverable or implicit (fixed for the h/w)?
+> >=20
+> > We also need the OPP tables to indicate which CPUs are part of the
+> > same cluster, etc. Don't want to invent a new "protocol" and just use
+> > existing DT bindings.
+>=20
+> Topology binding is for that.
+>=20
+> What about when x86 and other ACPI systems need to do this too? You=20
+> define a discoverable interface, then it works regardless of firmware.=20
+> KVM, Virtio, VFIO, etc. are all their own protocols.
 
-Generally I see that these entries contain a high level of duplication.
-Could you please extract the common part and a rate-dependent part.
-Next, it would be best if instead of writing the register values via
-the rate LUT, the driver could calculate those values.
-This allows us to support other HDMI modes if the need arises at some point.
+Describing the emulated HW in ACPI would seem appropriate to me. We
+are talking about the guest here, so whether this is KVM or not is not
+relevant. If this was actually using any soft of data transfer, using
+virtio would have been acceptable. But given how simple this is,
+piggybacking on virtio is hardly appropriate.
 
-> +       }, {
-> +               24000000, {
-> +                       0x00, 0xd1, 0x50, 0xf0, 0x00, 0x00, 0x80, 0x00,
-> +                       0x4f, 0x30, 0x33, 0x65, 0x00, 0x01, 0x25, 0x80,
-> +                       0x6c, 0xf2, 0x67, 0x00, 0x10, 0x8f, 0x30, 0x32,
-> +                       0x60, 0x8f, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00,
-> +                       0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-> +                       0x00, 0xe0, 0x83, 0x0f, 0x3e, 0xf8, 0x00, 0x00,
-> +               },
+>=20
+> > > Do you really need it if the frequency is normalized?
+> >=20
+> > Yeah, we can have little and big CPUs and want to emulate different
+> > performance levels. So while the Fmax on big is 1024, we still want to
+> > be able to say little is 425. So we definitely need frequency tables.
+>=20
+> You need per CPU Fmax, sure. But all the frequencies? I don't follow why =
 
+> you don't just have a max available capacity and then request the=20
+> desired capacity. Then the host maps that to an underlying OPP. Why have =
 
--- 
-With best wishes
-Dmitry
+> an intermediate set of fake frequencies?
+>=20
+> As these are normalized, I guess you are normalizing for capacity as=20
+> well? Or you are using "capacity-dmips-mhz"?=20
+>=20
+> I'm also lost how this would work when you migrate and the underlying=20
+> CPU changes. The DT is fixed.
+>=20
+> > > Also, we have "opp-level" for opaque values that aren't Hz.
+> >=20
+> > Still want to keep it Hz to be compatible with arch_freq_scale and
+> > when virtualized CPU perf counters are available.
+>=20
+> Seems like no one would want "opp-level" then. Shrug.
+>=20
+> Anyway, if Viresh and Marc are fine with all this, I'll shut up.
+
+Well, I've said it before, and I'll say it again: the use of
+*frequencies* makes no sense. It is a lie (it doesn't describe any
+hardware, physical nor virtual), and doesn't reflect the way the
+emulated cpufreq controller behaves either (since it scales everything
+back to what the host can potentially do)
+
+The closest abstraction we have to this is the unit-less capacity. And
+*that* reflects the way the emulated cpufreq controller works while
+avoiding lying to the guest about some arbitrary frequency.
+
+In practice, this changes nothing to either the code or the behaviour.
+But it changes the binding.
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.
 
