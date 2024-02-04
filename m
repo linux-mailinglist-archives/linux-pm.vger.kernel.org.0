@@ -1,169 +1,137 @@
-Return-Path: <linux-pm+bounces-3332-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3333-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A869848B7A
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Feb 2024 07:23:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFA9C848BD4
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Feb 2024 08:24:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94EDB2836A5
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Feb 2024 06:23:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D2098B20E0A
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Feb 2024 07:24:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 066646FA8;
-	Sun,  4 Feb 2024 06:23:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D069579DF;
+	Sun,  4 Feb 2024 07:24:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NgWahN1w"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VeKjXkch"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA35B8F65;
-	Sun,  4 Feb 2024 06:23:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=134.134.136.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C475B657
+	for <linux-pm@vger.kernel.org>; Sun,  4 Feb 2024 07:24:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707027798; cv=none; b=KUikjr46QvaJHOmQoGdRkMZgO9cw1PKE5Do7I/u9tAj2iMC8S3irpaFGbxATAcbGSGyqCMQG/z2AAYW5pLub1Qj8DgVwLAKk+aIj23q9W7aE1OJbi5qycrSRX49C6qq4uTOWqgHbDqW+ARTXSkQ/u0UMiHpFqPikpIVFTz48mOY=
+	t=1707031457; cv=none; b=A5/I4lq7cFOf9VMRuC2HiT5ov3SnyY4W3u374M3yZXGYnVGnOZMP3QlDWgGiPGfEG5nMQAmi0plrh2HEej31WzGwfqGuyzLwJSHAs15SlbkfwnJxVJFqtnegBZIv3J28tjeMn/059rApwYXNd0KTYYnVAhQ0A5e/p/449XEbSDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707027798; c=relaxed/simple;
-	bh=Cq80qbYXYMeg0Icl1wWN3J9C3RikWjHYAs52vvB2ZLs=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Eb3ukYR+idvDJZAMQmVU1tGpovZ5u1iZ1YCKavD4aRttNNO9vwxxJEtUWorwglu+A+6IOmuv9C7yrOFPLi3u5d16dmEdgLHhJnGgqWk+5po2oCg3ZNJ2oMnv+cwHQfwwShU9cpZjWVP1Fwr7SM98s/6v0YCazj11ysLXOksCXKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NgWahN1w; arc=none smtp.client-ip=134.134.136.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707027796; x=1738563796;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Cq80qbYXYMeg0Icl1wWN3J9C3RikWjHYAs52vvB2ZLs=;
-  b=NgWahN1wAAmscXXt+mI37quAWGLK7H0CSnCXPG3x0ifLC9zyWGdsSEdx
-   3uzGuDPBp40Ia+Fwfh/CfB8pnOEjBfc9gwCIJTNEyqo6oXcGSjrjoudyf
-   vrBrgccoq+rFA6HQwFHHUsNVY1DMeu6lx/pmThkgyysC2FPwjJi1dAj3R
-   2QaJnDMtTtKEycU5VVXQkD3a6Cq05gYpvkg4T8wsvtfmKV4VA6y+Pjqob
-   46iBButhaC8SJhCsnq3j9fBIxmsyHJ3RG/fE88msT3tdcJOmVljdiqbaH
-   3/1dZ3r8pdnEBu4tRw9YECWFwlXsznmqofDBXw0Tm5zi5JXuC2pRRokvs
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10973"; a="394790390"
-X-IronPort-AV: E=Sophos;i="6.05,242,1701158400"; 
-   d="scan'208";a="394790390"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2024 22:23:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10973"; a="932857666"
-X-IronPort-AV: E=Sophos;i="6.05,242,1701158400"; 
-   d="scan'208";a="932857666"
-Received: from lkp-server02.sh.intel.com (HELO 59f4f4cd5935) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 03 Feb 2024 22:23:11 -0800
-Received: from kbuild by 59f4f4cd5935 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rWVuG-00064m-2p;
-	Sun, 04 Feb 2024 06:23:08 +0000
-Date: Sun, 4 Feb 2024 14:22:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-acpi@vger.kernel.org, devel@acpica.org,
-	linux-pm@vger.kernel.org,
-	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [rafael-pm:bleeding-edge 10/36] drivers/char/apm-emulation.c:91:2:
- error: redefinition of enumerator 'SUSPEND_NONE'
-Message-ID: <202402041425.jNvSR8Q1-lkp@intel.com>
+	s=arc-20240116; t=1707031457; c=relaxed/simple;
+	bh=PpXmBZu/ttOrrnuRCVGr3y72VEUBIDGQLIInsAyMWEg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CLWAI3BvltkZCLn1BJCm3wUkBPJ8JjFO1bfRROgaD3xvxhZvLt59T0fQk18kmg1dPFByW9NVLGEYIWDB6rmHuVFSI/1wvi1grMDpucQB4TUZhFXOWxBUrsfXkpweKKB/8AsDjrFLzXd2GNTNkcLQ4CSGP+YdoWda9+x0yA2zffk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VeKjXkch; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1707031455;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mLETy/iNSKfFzyXqJhNJJwR2MY8g0ACyfE+gPoZ7mPo=;
+	b=VeKjXkchSyqeR8Uk0kKugr6DiZGLnfGIUwpVD6SbFcbL6L+oqOlrn9D267s19bBMz23QjJ
+	mpfyCRaACwcCW9J7Rqfy9jPLSHsB5S29pMbRBfMg0YBqwGWHIcWyEtrMfF/JTAS7QbjZyV
+	9KI+prDktkQkcXU9fpaJNiw1G07aOZ0=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-392-J9QbNA0cMnGCtkMEynAW5g-1; Sun, 04 Feb 2024 02:24:13 -0500
+X-MC-Unique: J9QbNA0cMnGCtkMEynAW5g-1
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-33b250a4bd7so792495f8f.3
+        for <linux-pm@vger.kernel.org>; Sat, 03 Feb 2024 23:24:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707031452; x=1707636252;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mLETy/iNSKfFzyXqJhNJJwR2MY8g0ACyfE+gPoZ7mPo=;
+        b=vU6ZMShsM8kHN50iZL2s2Tz9388d6S7YwcoM23g2QHK3REvXfTsAwyFU3GrDWQam9K
+         3M2u3KyCZ6B789OTqnfqTFyMFD2KplA8sr5nhTGChRPsOJ7b8qn4rc6AGvsNAnkE7Y5D
+         jpdwmiXP3GtqZD+DOnPSL0CHRsgHLGwg0d+Mo7GPv5zZNcDj8WqH5NZZ88TbzcxhIvBE
+         58tmNhiHeyjWKAy6MXdbFGrDUdFvxpwkQcr7QV2Sj8XZWfw1YhzO5fuVEe2Mtedoq6+X
+         f4oo88Pzq0m9iPwWOiHRc70GUv9HZuvPSl5CT5T/8LwM4cqn8ze3PSvb+OJ+h/Nv9Qry
+         zlzw==
+X-Gm-Message-State: AOJu0YwBP+1caJchSEgIMJmI5exSm+BF1Ai0WRG1VGmUyaTWcjlpmECj
+	uOKY4r3KGNIV8ldMo2d22JXLcKjH2nOe2obbm5pxzM4Sk+biD86H4nrJQAu9YEvvv6DQQEvAk6p
+	KyAChvLiw1FK8kNOD+uyZ6W/0e77MS0y8dxINl3BJwYvw4aiNFuniWuOVotHGKwra
+X-Received: by 2002:adf:e985:0:b0:33b:2471:9ff5 with SMTP id h5-20020adfe985000000b0033b24719ff5mr3256116wrm.46.1707031451976;
+        Sat, 03 Feb 2024 23:24:11 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGMw5edd8lPXARt8A2JFbHjrwLPmBc12RNW0e5ysvLp152+mHyQquq7fCBabJATf0C76BdENA==
+X-Received: by 2002:adf:e985:0:b0:33b:2471:9ff5 with SMTP id h5-20020adfe985000000b0033b24719ff5mr3256107wrm.46.1707031451643;
+        Sat, 03 Feb 2024 23:24:11 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCXYrNuqjyi5br+xZFq0OWe3dCqS9NovmmPjW6l/DKHV/zC0AYf+MMsBbowh7c60uXqe7pA3mWSNfg7qpg/VCOARIebqG8UH5NF+cMb75FCo5B7KV0QmBpr05KpZiF6N8N9Npi8VsUHmftypKEE2phJwkpeqwHU+G4h69RUxHqJ20WCMNIOuG4B8lWgq+fe9DdMDR8AFr6rxqSNxVX9FM2ZFROG66MzZPbw2t4v2Ov+nHQMEVrXaSPK+cXECpZPbq3f0OKK04z7xF35K6uPfECTJ
+Received: from [192.168.1.149] ([212.76.254.34])
+        by smtp.gmail.com with ESMTPSA id q11-20020a5d574b000000b0033ae4a3b285sm5440377wrw.36.2024.02.03.23.24.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 03 Feb 2024 23:24:11 -0800 (PST)
+Message-ID: <a6093a70-29bf-458d-b981-bcd95af7b472@redhat.com>
+Date: Sun, 4 Feb 2024 08:24:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: + XPS 13 9343
+Content-Language: en-US
+To: Antoine <debian@r2rien.net>
+Cc: Dell.Client.Kernel@dell.com, linux-input@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ pmenzel@molgen.mpg.de, regressions@lists.linux.dev, 1061521@bugs.debian.org
+References: <0aa4a61f-c939-46fe-a572-08022e8931c7@molgen.mpg.de>
+ <f27b491c-2f1c-4e68-804c-24eeaa8d10de@redhat.com>
+ <bc166c19-8da3-cd42-b749-e35eaebe7822@r2rien.net>
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <bc166c19-8da3-cd42-b749-e35eaebe7822@r2rien.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   7f82463a4ec5fd466fa00e93d627b38da5d43ae2
-commit: 0897a442fca735890658fe84ace34bdac0e7bcce [10/36] PM: sleep: stats: Use array of suspend step names
-config: arm-randconfig-001-20240203 (https://download.01.org/0day-ci/archive/20240204/202402041425.jNvSR8Q1-lkp@intel.com/config)
-compiler: clang version 19.0.0git (https://github.com/llvm/llvm-project 7dd790db8b77c4a833c06632e903dc4f13877a64)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240204/202402041425.jNvSR8Q1-lkp@intel.com/reproduce)
+Hi Antoine,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402041425.jNvSR8Q1-lkp@intel.com/
+On 2/3/24 17:16, Antoine wrote:
+> On 1/20/24 21:26, Hans de Goede wrote:
+>> Can you try adding "i8042.dumbkbd=1" to your kernel commandline?
+>>
+>> The next question is if the keyboard will still actually
+>> work after suspend/resume with "i8042.dumbkbd=1". If it
+>> stays in the list, but no longer works
+> 
+> Hi, thanks a lot for taking into account our hardware,
+> just a supplementary feedback:
+> 
+> In my case (Dell XPS 13 9343/i5-5200U):
+> - Dell Inc. XPS 13 9343/0TM99H, BIOS A19 12/24/2018
+> - Linux version 6.6.13-1 (2024-01-20)
+> 
+> commandline with `i8042.dumbkbd=1` fixes the issue,
+> with capslock functional but without led
+> + as a side note, hibernate doesn't trigger any issue
+> 
+> (before getting informed of and testing `i8042.dumbkbd=1`)
+> I had attached logs before/after suspend against 6.6.11 and 6.6.13 :
+> https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1061521#30
+> 
+> I remain at your disposal for any further infos/testing
 
-All errors (new ones prefixed by >>):
+The issue of the kbd on some Dell XPS models no longer
+working after a suspend/resume cycle should be fixed by
+these 2 patches which are on their way to Linus' tree:
 
->> drivers/char/apm-emulation.c:91:2: error: redefinition of enumerator 'SUSPEND_NONE'
-      91 |         SUSPEND_NONE,
-         |         ^
-   include/linux/suspend.h:44:2: note: previous definition is here
-      44 |         SUSPEND_NONE = 0,
-         |         ^
-   drivers/char/apm-emulation.c:319:23: warning: implicit conversion from enumeration type 'enum suspend_stat_step' to different enumeration type 'enum apm_suspend_state' [-Wenum-conversion]
-     319 |                 as->suspend_state = SUSPEND_NONE;
-         |                                   ~ ^~~~~~~~~~~~
-   1 warning and 1 error generated.
+https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git/commit/?h=for-linus&id=683cd8259a9b883a51973511f860976db2550a6e
+https://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git/commit/?h=for-linus&id=9cf6e24c9fbf17e52de9fff07f12be7565ea6d61
 
+Regards,
 
-vim +/SUSPEND_NONE +91 drivers/char/apm-emulation.c
+Hans
 
-7726942fb15edd Ralf Baechle  2007-02-09  50  
-d20a4dca47d2cd Johannes Berg 2008-06-11  51  /*
-d20a4dca47d2cd Johannes Berg 2008-06-11  52   * thread states (for threads using a writable /dev/apm_bios fd):
-d20a4dca47d2cd Johannes Berg 2008-06-11  53   *
-d20a4dca47d2cd Johannes Berg 2008-06-11  54   * SUSPEND_NONE:	nothing happening
-d20a4dca47d2cd Johannes Berg 2008-06-11  55   * SUSPEND_PENDING:	suspend event queued for thread and pending to be read
-d20a4dca47d2cd Johannes Berg 2008-06-11  56   * SUSPEND_READ:	suspend event read, pending acknowledgement
-d20a4dca47d2cd Johannes Berg 2008-06-11  57   * SUSPEND_ACKED:	acknowledgement received from thread (via ioctl),
-d20a4dca47d2cd Johannes Berg 2008-06-11  58   *			waiting for resume
-d20a4dca47d2cd Johannes Berg 2008-06-11  59   * SUSPEND_ACKTO:	acknowledgement timeout
-d20a4dca47d2cd Johannes Berg 2008-06-11  60   * SUSPEND_DONE:	thread had acked suspend and is now notified of
-d20a4dca47d2cd Johannes Berg 2008-06-11  61   *			resume
-d20a4dca47d2cd Johannes Berg 2008-06-11  62   *
-d20a4dca47d2cd Johannes Berg 2008-06-11  63   * SUSPEND_WAIT:	this thread invoked suspend and is waiting for resume
-d20a4dca47d2cd Johannes Berg 2008-06-11  64   *
-d20a4dca47d2cd Johannes Berg 2008-06-11  65   * A thread migrates in one of three paths:
-d20a4dca47d2cd Johannes Berg 2008-06-11  66   *	NONE -1-> PENDING -2-> READ -3-> ACKED -4-> DONE -5-> NONE
-d20a4dca47d2cd Johannes Berg 2008-06-11  67   *				    -6-> ACKTO -7-> NONE
-d20a4dca47d2cd Johannes Berg 2008-06-11  68   *	NONE -8-> WAIT -9-> NONE
-d20a4dca47d2cd Johannes Berg 2008-06-11  69   *
-d20a4dca47d2cd Johannes Berg 2008-06-11  70   * While in PENDING or READ, the thread is accounted for in the
-d20a4dca47d2cd Johannes Berg 2008-06-11  71   * suspend_acks_pending counter.
-d20a4dca47d2cd Johannes Berg 2008-06-11  72   *
-d20a4dca47d2cd Johannes Berg 2008-06-11  73   * The transitions are invoked as follows:
-d20a4dca47d2cd Johannes Berg 2008-06-11  74   *	1: suspend event is signalled from the core PM code
-d20a4dca47d2cd Johannes Berg 2008-06-11  75   *	2: the suspend event is read from the fd by the userspace thread
-d20a4dca47d2cd Johannes Berg 2008-06-11  76   *	3: userspace thread issues the APM_IOC_SUSPEND ioctl (as ack)
-d20a4dca47d2cd Johannes Berg 2008-06-11  77   *	4: core PM code signals that we have resumed
-d20a4dca47d2cd Johannes Berg 2008-06-11  78   *	5: APM_IOC_SUSPEND ioctl returns
-d20a4dca47d2cd Johannes Berg 2008-06-11  79   *
-d20a4dca47d2cd Johannes Berg 2008-06-11  80   *	6: the notifier invoked from the core PM code timed out waiting
-d20a4dca47d2cd Johannes Berg 2008-06-11  81   *	   for all relevant threds to enter ACKED state and puts those
-d20a4dca47d2cd Johannes Berg 2008-06-11  82   *	   that haven't into ACKTO
-d20a4dca47d2cd Johannes Berg 2008-06-11  83   *	7: those threads issue APM_IOC_SUSPEND ioctl too late,
-d20a4dca47d2cd Johannes Berg 2008-06-11  84   *	   get an error
-d20a4dca47d2cd Johannes Berg 2008-06-11  85   *
-d20a4dca47d2cd Johannes Berg 2008-06-11  86   *	8: userspace thread issues the APM_IOC_SUSPEND ioctl (to suspend),
-d20a4dca47d2cd Johannes Berg 2008-06-11  87   *	   ioctl code invokes pm_suspend()
-d20a4dca47d2cd Johannes Berg 2008-06-11  88   *	9: pm_suspend() returns indicating resume
-d20a4dca47d2cd Johannes Berg 2008-06-11  89   */
-d20a4dca47d2cd Johannes Berg 2008-06-11  90  enum apm_suspend_state {
-d20a4dca47d2cd Johannes Berg 2008-06-11 @91  	SUSPEND_NONE,
-d20a4dca47d2cd Johannes Berg 2008-06-11  92  	SUSPEND_PENDING,
-d20a4dca47d2cd Johannes Berg 2008-06-11  93  	SUSPEND_READ,
-d20a4dca47d2cd Johannes Berg 2008-06-11  94  	SUSPEND_ACKED,
-d20a4dca47d2cd Johannes Berg 2008-06-11  95  	SUSPEND_ACKTO,
-d20a4dca47d2cd Johannes Berg 2008-06-11  96  	SUSPEND_WAIT,
-d20a4dca47d2cd Johannes Berg 2008-06-11  97  	SUSPEND_DONE,
-d20a4dca47d2cd Johannes Berg 2008-06-11  98  };
-d20a4dca47d2cd Johannes Berg 2008-06-11  99  
-
-:::::: The code at line 91 was first introduced by commit
-:::::: d20a4dca47d2cd027ed58a13f91b424affd1f449 APM emulation: Notify about all suspend events, not just APM invoked ones (v2)
-
-:::::: TO: Johannes Berg <johannes@sipsolutions.net>
-:::::: CC: Andi Kleen <andi@basil.nowhere.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
