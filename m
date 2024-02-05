@@ -1,74 +1,80 @@
-Return-Path: <linux-pm+bounces-3386-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3387-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC79B849907
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 12:41:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46E76849923
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 12:45:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 377C71F21065
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 11:41:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE41028948C
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 11:45:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 953548467;
-	Mon,  5 Feb 2024 11:41:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AADB018E00;
+	Mon,  5 Feb 2024 11:44:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XFB4YWft"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QARxpV0z"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C648518E00
-	for <linux-pm@vger.kernel.org>; Mon,  5 Feb 2024 11:41:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB03B199B4
+	for <linux-pm@vger.kernel.org>; Mon,  5 Feb 2024 11:43:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707133299; cv=none; b=WRW+qVeW5WJA0cSzcxUitEeNauUq0hwA2zv2ogaGDlG3Gz75a0myTg/gQrEVELjVaLfHXoQCbsow+HGkdZ8UsMnWkDvT83DSTgAb4qmGXN/BNGXSU3huH2Mv1YbEZvTS8KvFx7yRLQYpZkBZinCfEyhc5W8LL/PrgYNfZ67f68I=
+	t=1707133441; cv=none; b=NGYpRvyJXF8LksfKZgWPbRjp3Ve578FsdrqAyznJlLHiBck82wMqTpus4tIdimsCPfekJwTR8ZOlOqYpikP9kkQl8N1H0D7vvON9FFRWyfoDRH06sMVPt2YHGeUoFkYPtehFf5XX2DPmkgPHttXanq/SAO0O1+dlZvgYSrqhc1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707133299; c=relaxed/simple;
-	bh=cawbObaeTNPoPHLs3wzViPvaUp+m9ZRIyvZEw1PShiY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jld2uosSr7sZE+tR1T+b6f5Dnhw7POann5+3JEdnohLGtf7NF9AACP7hjKJO/UWAVuQoH48GQIbKfHeeLaUS+TTnVGN8Wee61hziBD60YTlqkiDdlYHUpekPWoLpRxTt3vHIdr4urcP+kap263NRLUvJryvqxih3IhxLKyNbRaE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XFB4YWft; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a37e69f5610so45832366b.1
-        for <linux-pm@vger.kernel.org>; Mon, 05 Feb 2024 03:41:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707133296; x=1707738096; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JdDNzXnnmgs4CmoJ3xT93XgtQHbqN413J4+6ID4w1fc=;
-        b=XFB4YWftQbbWpmT0ZWLYHPzSR17tOnNmzPWok3Z/prJVg7btxo8lznFgUgPk21i/l4
-         tdSXyKc/k3dvL9/YHzzkkNSxW38lqZFGyM8tDsWRvfXA/P8WoMMUIzmR2DAuAV+Sizb3
-         6mr5PtusOJ6xH//Na+UmGKHtK6WGH5zkj8hwYJIjluZuzeMkYbmKcu2CWHzJS+QjeoAi
-         HYSjG/BH6ybb9ada13cjnluW3J+zhlEbekvcBsZh4CpYLqFWKa7683/Yy7Q15KmOB4L+
-         /0nIRxgSVSrLvmKb642NSQuX4+bdGa3xHdIe/Rsls+JqAgpnPNH4wNdNrnZ+CsWJ3koS
-         JUbw==
+	s=arc-20240116; t=1707133441; c=relaxed/simple;
+	bh=x4zCB2jJPLY//ELhsFJfgp/Hc/wSidVR4/cirg0/D4c=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Qf3IDUvtHJ2J7K9pOBexMDSogOyDuQFp1D+MBrXJpwa7jtZsyXWGqaOPwA53Kr8nru/1iQyfFWaV9t53WamjES/Q2txKnEXSrcI1svPf0XyzuyWQs10fDv4d4ez+5MrUz1e/MPBkHi2r3W+2mJaTFjx6eYCvcuFafEatOCE5drA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QARxpV0z; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1707133438;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bH938qwo42+I5N8TlaiJJi9jSN19vAPRnOWM/iaHMuo=;
+	b=QARxpV0zC1AXfELEfO70VGUle6zqTM2dLm5BqqkSpY1UUiiPDq35Lq79QX96SHgzTjx3n7
+	DNQfdoDc6mLw0VBfBfkRKdiAA2pCq7qRsuvFTGHj0rQhyG6z5S1aGEHAR+77sKp49tsWu2
+	zec/74TdI0BVGls5fD5+o8T0KRYctRI=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-631-Pz51kvORPg21qS9-FsFMbQ-1; Mon, 05 Feb 2024 06:43:57 -0500
+X-MC-Unique: Pz51kvORPg21qS9-FsFMbQ-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-a2f71c83b7eso270666766b.1
+        for <linux-pm@vger.kernel.org>; Mon, 05 Feb 2024 03:43:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707133296; x=1707738096;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1707133436; x=1707738236;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JdDNzXnnmgs4CmoJ3xT93XgtQHbqN413J4+6ID4w1fc=;
-        b=hy0cCZnKP0gh/GBxweeyvrkqDxR+LCrUgsIzBX53IBcf0aErbkBrB2zRstcACXBhMc
-         xgIpmuRrMu8uIxqtte08wxwFWPctq1qX59dKwZ0wpASNGxKbda05so+B3d2O+7IVVsVL
-         12LhAdWburj8BB9fRk1K1emgKmQ+wei+aJ/n58dEoHks71oxQTpgxwz6i02bLxhH6w7/
-         EU+VoX5hZZCJrs/088upTQmEbshFmYvDjMT9avV1GizX42zFdN2HhSq0GlYVVn1iaa/Z
-         rtbeW0Z7zOfJ6y2+eQjjMxYIGhcx9c2B/+ZniEGBd/kvV0RFx2YdERXiKNPpJ6w5ihRI
-         8MQA==
-X-Gm-Message-State: AOJu0YyGBek9hcJb5XpgqK2BsqnEDca0Kt1323H5KiT4QjzoImI72Vnr
-	4wBJwxD2QzeVFAPKrpDthRqECJGasyOP8l2gOPyQaQGQ/+6+at3p+TL/A/px13M=
-X-Google-Smtp-Source: AGHT+IEyGaT1GowqBYI/yEWBSuyvilmzJZdwtRyvCm3j7vrIGTt/Z5+W8p0t37oecuPRpTp1jJPcOg==
-X-Received: by 2002:a17:906:4:b0:a37:2e82:3c4a with SMTP id 4-20020a170906000400b00a372e823c4amr5262475eja.52.1707133295889;
-        Mon, 05 Feb 2024 03:41:35 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCWk2Tsa9AcqE288WYA7nQCODiqIwyfsENZYHM6ugZTYVKR73yYLsjo1KuQvNKEYli/z4wkh7/hPu+bM/QnQ9Z8ZX2QTlAe8Dpq5DiOA2MBHxtbtO8oeYe1yX/K5ktIBGYgKO9cQ5HiHa0mO2YYMZlGd/FSbyl4+APaQRjrFcgPTa1X+0IPEMqbsI8lmihDhvfem+APbn6leQUS9xOzpAkwNXMai8ps/oRQHJw==
-Received: from [192.168.159.104] (037008245233.garwolin.vectranet.pl. [37.8.245.233])
-        by smtp.gmail.com with ESMTPSA id a20-20020a170906671400b00a34d0a865ecsm4177184ejp.163.2024.02.05.03.41.33
+        bh=bH938qwo42+I5N8TlaiJJi9jSN19vAPRnOWM/iaHMuo=;
+        b=W14eVxK+o20B4Yd38Kl/hQy/D2PK/IDBxS70cAd4uHoY0m5svpkkNwuVbHTaK4gXM3
+         xKU7L60PXaNW+SkwFH/kGIy/1UoLmmz2zqgzXSVtR2+jL39mftEgF6vUu0W5GKwTFPqM
+         hB8EtAIECH1Qurj1S3SL5X/a9/Opcr8+oP6C7Qt+LdB7uavNEsQC+RUaP03ecIlq2JQv
+         O3TYrxssGRnKvFNxL+9BLCIhEzBj1w/pkJLR/jMrnmPne0BNgVREjMXIsNWU5YK3nsCJ
+         sJ7YNvo9qPLBBMRuJzbrNefZhBere9DywrZDCf8KpfqoSYb+c2WZW5Rcg/fHa1i9BJfR
+         2ngQ==
+X-Gm-Message-State: AOJu0YzMcMtyr9XUar5y1vUXmMNbAi/T4m6kAJAyF7vCTJXZ2pG8GGRI
+	qV6bOZnrxkJ1x3HEXAKwO5WiK0wyeDWekI578jg6vXu2QBIP5M8brk0MEF48tOy6jKSxQFDV3v+
+	LFNDQGGrKNPiDF+VuIjmzVDLKvcBKgl1ch0WIwUwAanfDUeQPFkqgFT2+vid6hQ3JA4w=
+X-Received: by 2002:a17:906:3019:b0:a37:2a6e:f55e with SMTP id 25-20020a170906301900b00a372a6ef55emr5389664ejz.59.1707133436172;
+        Mon, 05 Feb 2024 03:43:56 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGpTaS8OWHS8oILL+F5TVUEpveugOeQ87e7BjKFvoC3u11XuhRAVJIwtzgmvBkpgJQk0oylRg==
+X-Received: by 2002:a17:906:3019:b0:a37:2a6e:f55e with SMTP id 25-20020a170906301900b00a372a6ef55emr5389649ejz.59.1707133435767;
+        Mon, 05 Feb 2024 03:43:55 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCUNlHGRB5iOsh+IeIb18zeWU5DIgjfZuJJVIAGO/AL4pNzVmXWeVvowhrgD6dn0Umol2WSQJEwwuuoHGzPYjaRM2rzgCj5BRVkLdOcSZxdjA83YgTwx3ZhVXUKs1GQ0AXp5QmqLs2hjm4LLjog/zV3QPwXOx9qr+zwWU19q+Vpns1IJp3i12hgQLYteihYBKWi+LRKvGQ==
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id hu21-20020a170907a09500b00a34b15c5cedsm4288819ejc.170.2024.02.05.03.43.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Feb 2024 03:41:34 -0800 (PST)
-Message-ID: <4cdf9c9c-c4fb-48a2-be17-8191aaecb2fe@linaro.org>
-Date: Mon, 5 Feb 2024 12:41:32 +0100
+        Mon, 05 Feb 2024 03:43:55 -0800 (PST)
+Message-ID: <3d27029b-caef-45a1-88bf-98f78e6d6a61@redhat.com>
+Date: Mon, 5 Feb 2024 12:43:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -76,73 +82,257 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] power: supply: mm8013: implement
- POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR_AVAILABLE
-Content-Language: en-US
+Subject: Re: [PATCH 1/4] power: supply: core: fix charge_behaviour formatting
+Content-Language: en-US, nl
+From: Hans de Goede <hdegoede@redhat.com>
 To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Sebastian Reichel <sre@kernel.org>, Hans de Goede <hdegoede@redhat.com>,
- Konrad Dybcio <konradybcio@kernel.org>
+ Sebastian Reichel <sre@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>
 Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
  Sebastian Reichel <sebastian.reichel@collabora.com>
 References: <20240204-power_supply-charge_behaviour_prop-v1-0-06a20c958f96@weissschuh.net>
- <20240204-power_supply-charge_behaviour_prop-v1-3-06a20c958f96@weissschuh.net>
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <20240204-power_supply-charge_behaviour_prop-v1-3-06a20c958f96@weissschuh.net>
+ <20240204-power_supply-charge_behaviour_prop-v1-1-06a20c958f96@weissschuh.net>
+ <53082075-852f-4698-b354-ed30e7fd2683@redhat.com>
+In-Reply-To: <53082075-852f-4698-b354-ed30e7fd2683@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 4.02.2024 18:26, Thomas Weißschuh wrote:
-> The sysfs is documented to report both the current and all available
-> behaviours. For this POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR_AVAILABLE needs
-> to be implemented.
-> 
-> Note that this changes the format of the sysfs file
-> (to the documented format):
-> 
-> Before: "auto"
-> After:  "[auto] inhibit-charge"
-> 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> ---
+Hi,
 
-LGTM, thanks
+On 2/5/24 10:52, Hans de Goede wrote:
+> Hi Thomas,
+> 
+> Thank you for your patches for this.
+> 
+> On 2/4/24 18:26, Thomas Weißschuh wrote:
+>> This property is documented to have a special format which exposes all
+>> available behaviours and the currently active one at the same time.
+>> For this special format some helpers are provided.
+>>
+>> However the default property logic in power_supply_sysfs.c is not using
+>> the helper and the default logic only prints the currently active
+>> behaviour.
+>>
+>> Adjust power_supply_sysfs.c to follow the documented format.
+>>
+>> There are currently two in-tree drivers exposing charge behaviours:
+>> thinkpad_acpi and mm8013.
+>> thinkpad_acpi is not affected by the change, as it directly uses the
+>> helpers and does not use the power_supply_sysfs.c logic.
+>>
+>> As mm8013 does not implement POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR_AVAILABLE
+>> the new logic will preserve the simple output format in this case.
+>>
+>> Fixes: 1b0b6cc8030d ("power: supply: add charge_behaviour attributes")
+>> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+>> ---
+>>  drivers/power/supply/power_supply_sysfs.c | 32 +++++++++++++++++++++++++++++++
+>>  include/linux/power_supply.h              |  1 +
+>>  2 files changed, 33 insertions(+)
+>>
+>> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+>> index 977611e16373..3680cfc2e908 100644
+>> --- a/drivers/power/supply/power_supply_sysfs.c
+>> +++ b/drivers/power/supply/power_supply_sysfs.c
+>> @@ -271,6 +271,32 @@ static ssize_t power_supply_show_usb_type(struct device *dev,
+>>  	return count;
+>>  }
+>>  
+>> +static ssize_t power_supply_show_charge_behaviour(struct device *dev,
+>> +						  struct power_supply *psy,
+>> +						  struct power_supply_attr *ps_attr,
+>> +						  union power_supply_propval *value,
+>> +						  char *buf)
+>> +{
+>> +	union power_supply_propval available;
+>> +	int ret;
+>> +
+>> +	ret = power_supply_get_property(psy,
+>> +					POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
+>> +					value);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>> +	ret = power_supply_get_property(psy,
+>> +					POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR_AVAILABLE,
+>> +					&available);
+>> +	if (ret == -EINVAL)
+>> +		return sysfs_emit(buf, "%s\n", ps_attr->text_values[value->intval]);
+>> +	else if (ret < 0)
+> 
+> No need for "else if" here since the if above does a return. So you can just do:
+> 
+> 	if (ret < 0)
+> 		return ret;
+> 
+> 
+>> +		return ret;
+>> +
+>> +	return power_supply_charge_behaviour_show(dev, available.intval, value->intval, buf);
+>> +}
+>> +
+>>  static ssize_t power_supply_show_property(struct device *dev,
+>>  					  struct device_attribute *attr,
+>>  					  char *buf) {
+>> @@ -282,6 +308,8 @@ static ssize_t power_supply_show_property(struct device *dev,
+>>  
+>>  	if (psp == POWER_SUPPLY_PROP_TYPE) {
+>>  		value.intval = psy->desc->type;
+>> +	} else if (psp == POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR) {
+>> +		value.intval = -1;
+>>  	} else {
+>>  		ret = power_supply_get_property(psy, psp, &value);
+>>  
+> 
+> I'm not a fan of this, I guess that you are doing this because you do not
+> want to enter this if:
+> 
+>         if (ps_attr->text_values_len > 0 &&
+>             value.intval < ps_attr->text_values_len && value.intval >= 0) {
+>                 return sysfs_emit(buf, "%s\n", ps_attr->text_values[value.intval]);
+>         }
+> 
+> But by doing this you add both the special case of setting value.intval = -1
+> here and you now need to do the power_supply_get_property() which is in the else
+> manually in power_supply_show_charge_behaviour() and the error handling / logging
+> of power_supply_get_property() in power_supply_show_charge_behaviour() is different.
+> 
+> What I think you can (and should) do here instead is move:
+> 
+>         if (ps_attr->text_values_len > 0 &&
+>             value.intval < ps_attr->text_values_len && value.intval >= 0) {
+>                 return sysfs_emit(buf, "%s\n", ps_attr->text_values[value.intval]);
+>         }
+> 
+> into the default case of the switch (psp) {} below it in a preparation patch.
+> 
+> This if is never entered for the 2 non default cases in that switch, so it
+> is safe to move it into the default case, e.g. something like this:
+> 
+> 	default:
+> 	        if (ps_attr->text_values_len > 0 &&
+>         	    value.intval < ps_attr->text_values_len && value.intval >= 0)
+>                 	ret = sysfs_emit(buf, "%s\n", ps_attr->text_values[value.intval]);
+> 		else
+> 			ret = sysfs_emit(buf, "%d\n", value.intval);
+> 
+> I think that also actually makes things a bit cleaner then the current
+> early-exit for printing enum values.
+> 
+> And then in the next patch you can just add:
+> 
+> 	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
+> 		ret = power_supply_show_charge_behaviour(dev, psy, ps_attr,
+> 							 &value, buf);
+> 		break;
+> 
+> Without needing to set intval = -1 and without needing to get the value
+> inside power_supply_show_charge_behaviour() since that will already
+> be done for you then.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+One more note on this. With the suggested preparation patch to move
+the if checking for ps_attr->text_values into the default case,
+you can then also properly turn POWER_SUPPLY_PROP_USB_TYPE into an
+enum too:
 
-Konrad
+diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+index 977611e16373..768df64330f4 100644
+--- a/drivers/power/supply/power_supply_sysfs.c
++++ b/drivers/power/supply/power_supply_sysfs.c
+@@ -209,7 +209,7 @@ static struct power_supply_attr power_supply_attrs[] = {
+ 	POWER_SUPPLY_ATTR(TIME_TO_FULL_NOW),
+ 	POWER_SUPPLY_ATTR(TIME_TO_FULL_AVG),
+ 	POWER_SUPPLY_ENUM_ATTR(TYPE),
+-	POWER_SUPPLY_ATTR(USB_TYPE),
++	POWER_SUPPLY_ENUM_ATTR(USB_TYPE),
+ 	POWER_SUPPLY_ENUM_ATTR(SCOPE),
+ 	POWER_SUPPLY_ATTR(PRECHARGE_CURRENT),
+ 	POWER_SUPPLY_ATTR(CHARGE_TERM_CURRENT),
+
+IOW you can now set ps_attr->text_values* for POWER_SUPPLY_PROP_USB_TYPE
+too, without needing to worry this causing power_supply_show_usb_type()
+no longer to get called.
+
+The reason I'm mentioning this is because power_supply_show_usb_type()
+and power_supply_charge_behaviour_show() show a lot of code-duplication.
+
+And I think that we can have one generic function replacing both
+by using ps_attr->text_values* instead of hardcoding POWER_SUPPLY_USB_TYPE_TEXT
+resp. power_supply_charge_behaviour_show (and yes this contradicts
+my earlier comment on patch 4/4).
+
+Although at a closer look I see now that the usb-types code uses
+a list of supported type enum values in the power_supply_desc,
+where as the charge_behavior code uses a bitmask which you retrieve
+through a new property.
+
+Thinking more about this, I think that adding a fake
+POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR_AVAILABLE property as you do here
+might actually not be the best idea. All the other properties
+are visible in sysfs, so this one is a bit weird. I think it might
+be better to add this info to power_supply_desc like how this is
+done for the usb-types.
+
+And:
+        const enum power_supply_usb_type *usb_types;
+        size_t num_usb_types;
+
+Should probably be converted into a bitmask too. I checked
+and there are not that many users of this.
+
+Once we have that as a bitmask too, we can refactor
+power_supply_show_usb_type() and power_supply_charge_behaviour_show()
+into a single new helper.
+
+But I believe that refactoring:
+
+        const enum power_supply_usb_type *usb_types;
+        size_t num_usb_types;
+
+into a bitmask is out of scope for this series. So I guess
+that for now just add the bitmask of available charge behaviors
+to power_supply_desc rather then making it a fake property
+and then in the future we can do the refactor of usb-type
+to a bitmask and remove the code duplication between
+power_supply_show_usb_type() and power_supply_charge_behaviour_show()
+
+Sebastian, any comments ?
+
+Regards,
+
+Hans
+
+
+
+
+
+
+
+
+
+>> @@ -308,6 +336,10 @@ static ssize_t power_supply_show_property(struct device *dev,
+>>  		ret = power_supply_show_usb_type(dev, psy->desc,
+>>  						&value, buf);
+>>  		break;
+>> +	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
+>> +		ret = power_supply_show_charge_behaviour(dev, psy, ps_attr,
+>> +							 &value, buf);
+>> +		break;
+>>  	case POWER_SUPPLY_PROP_MODEL_NAME ... POWER_SUPPLY_PROP_SERIAL_NUMBER:
+>>  		ret = sysfs_emit(buf, "%s\n", value.strval);
+>>  		break;
+>> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+>> index c0992a77feea..9a6e6b488164 100644
+>> --- a/include/linux/power_supply.h
+>> +++ b/include/linux/power_supply.h
+>> @@ -135,6 +135,7 @@ enum power_supply_property {
+>>  	POWER_SUPPLY_PROP_CHARGE_CONTROL_START_THRESHOLD, /* in percents! */
+>>  	POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD, /* in percents! */
+>>  	POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
+>> +	POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR_AVAILABLE,
+>>  	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
+>>  	POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT,
+>>  	POWER_SUPPLY_PROP_INPUT_POWER_LIMIT,
+>>
+> 
+
 
