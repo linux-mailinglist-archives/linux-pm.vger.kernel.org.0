@@ -1,107 +1,148 @@
-Return-Path: <linux-pm+bounces-3385-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3386-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FD5E8498B3
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 12:22:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC79B849907
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 12:41:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BED68282815
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 11:22:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 377C71F21065
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 11:41:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C69AD17C61;
-	Mon,  5 Feb 2024 11:21:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 953548467;
+	Mon,  5 Feb 2024 11:41:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="MAgVFpPc"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XFB4YWft"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9711518641;
-	Mon,  5 Feb 2024 11:21:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C648518E00
+	for <linux-pm@vger.kernel.org>; Mon,  5 Feb 2024 11:41:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707132118; cv=none; b=QJAbxdpJaKXl2eBFDig14G2Hps8MRPXsiu/g3NYvDVZPqd7DwgwbdY+OEIJfVJYH/RKHhBvesArhuMvvz3CuiKhCrpW/wSoSZUDJ8Updxn2qv6uqV65EhrRmyEy14WYm5S/IzaoFBEeEDGSvWEBvbyRloadeRv97u3WZqwepOik=
+	t=1707133299; cv=none; b=WRW+qVeW5WJA0cSzcxUitEeNauUq0hwA2zv2ogaGDlG3Gz75a0myTg/gQrEVELjVaLfHXoQCbsow+HGkdZ8UsMnWkDvT83DSTgAb4qmGXN/BNGXSU3huH2Mv1YbEZvTS8KvFx7yRLQYpZkBZinCfEyhc5W8LL/PrgYNfZ67f68I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707132118; c=relaxed/simple;
-	bh=6vdRADLmto/3CuW0UJ6BuYaz7DLwN+tvUOa2KNkTtd0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Rdk5c5Cp8k/vN6+sK2M63nMvie0uecJgAZjz4Kbw2tx6iziGWbdhlY20RhCZs/l+ZiENK1stQXtp7+QHCwgkceGj5LuyRgLHitnXB/D+lG917+8AzIzEH2c6bFITYDyhFREsYMNKWw+A73M+mVKia+w47MrOWR5EPJ+fMR1S1Mo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=MAgVFpPc; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1707132110;
-	bh=6vdRADLmto/3CuW0UJ6BuYaz7DLwN+tvUOa2KNkTtd0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MAgVFpPcDvjdp/mDzcBcyI5VATplfjxVibtuzVMZtFNGs8ZQiUV1G4BibKmWbDuUL
-	 hLlgNIrAPVF1aC/bbBR7WzzpXhSzYYb0qaNK3fRGUXUYwouhGGd+dK16QyE3SAAhuf
-	 yEgXJCfGsQCpJa4XF1w/nC/+ITDrqjZs2Z7hKST4=
-Date: Mon, 5 Feb 2024 12:21:45 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: Sebastian Reichel <sre@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: Re: [PATCH 3/4] power: supply: mm8013: implement
- POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR_AVAILABLE
-Message-ID: <569bbc9f-1c34-40c1-a563-e7f6aecf63d5@t-8ch.de>
-References: <20240204-power_supply-charge_behaviour_prop-v1-0-06a20c958f96@weissschuh.net>
- <20240204-power_supply-charge_behaviour_prop-v1-3-06a20c958f96@weissschuh.net>
- <2f244f9f-8796-4cad-8bf8-d0c3411588c1@redhat.com>
+	s=arc-20240116; t=1707133299; c=relaxed/simple;
+	bh=cawbObaeTNPoPHLs3wzViPvaUp+m9ZRIyvZEw1PShiY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jld2uosSr7sZE+tR1T+b6f5Dnhw7POann5+3JEdnohLGtf7NF9AACP7hjKJO/UWAVuQoH48GQIbKfHeeLaUS+TTnVGN8Wee61hziBD60YTlqkiDdlYHUpekPWoLpRxTt3vHIdr4urcP+kap263NRLUvJryvqxih3IhxLKyNbRaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XFB4YWft; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a37e69f5610so45832366b.1
+        for <linux-pm@vger.kernel.org>; Mon, 05 Feb 2024 03:41:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1707133296; x=1707738096; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JdDNzXnnmgs4CmoJ3xT93XgtQHbqN413J4+6ID4w1fc=;
+        b=XFB4YWftQbbWpmT0ZWLYHPzSR17tOnNmzPWok3Z/prJVg7btxo8lznFgUgPk21i/l4
+         tdSXyKc/k3dvL9/YHzzkkNSxW38lqZFGyM8tDsWRvfXA/P8WoMMUIzmR2DAuAV+Sizb3
+         6mr5PtusOJ6xH//Na+UmGKHtK6WGH5zkj8hwYJIjluZuzeMkYbmKcu2CWHzJS+QjeoAi
+         HYSjG/BH6ybb9ada13cjnluW3J+zhlEbekvcBsZh4CpYLqFWKa7683/Yy7Q15KmOB4L+
+         /0nIRxgSVSrLvmKb642NSQuX4+bdGa3xHdIe/Rsls+JqAgpnPNH4wNdNrnZ+CsWJ3koS
+         JUbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707133296; x=1707738096;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JdDNzXnnmgs4CmoJ3xT93XgtQHbqN413J4+6ID4w1fc=;
+        b=hy0cCZnKP0gh/GBxweeyvrkqDxR+LCrUgsIzBX53IBcf0aErbkBrB2zRstcACXBhMc
+         xgIpmuRrMu8uIxqtte08wxwFWPctq1qX59dKwZ0wpASNGxKbda05so+B3d2O+7IVVsVL
+         12LhAdWburj8BB9fRk1K1emgKmQ+wei+aJ/n58dEoHks71oxQTpgxwz6i02bLxhH6w7/
+         EU+VoX5hZZCJrs/088upTQmEbshFmYvDjMT9avV1GizX42zFdN2HhSq0GlYVVn1iaa/Z
+         rtbeW0Z7zOfJ6y2+eQjjMxYIGhcx9c2B/+ZniEGBd/kvV0RFx2YdERXiKNPpJ6w5ihRI
+         8MQA==
+X-Gm-Message-State: AOJu0YyGBek9hcJb5XpgqK2BsqnEDca0Kt1323H5KiT4QjzoImI72Vnr
+	4wBJwxD2QzeVFAPKrpDthRqECJGasyOP8l2gOPyQaQGQ/+6+at3p+TL/A/px13M=
+X-Google-Smtp-Source: AGHT+IEyGaT1GowqBYI/yEWBSuyvilmzJZdwtRyvCm3j7vrIGTt/Z5+W8p0t37oecuPRpTp1jJPcOg==
+X-Received: by 2002:a17:906:4:b0:a37:2e82:3c4a with SMTP id 4-20020a170906000400b00a372e823c4amr5262475eja.52.1707133295889;
+        Mon, 05 Feb 2024 03:41:35 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCWk2Tsa9AcqE288WYA7nQCODiqIwyfsENZYHM6ugZTYVKR73yYLsjo1KuQvNKEYli/z4wkh7/hPu+bM/QnQ9Z8ZX2QTlAe8Dpq5DiOA2MBHxtbtO8oeYe1yX/K5ktIBGYgKO9cQ5HiHa0mO2YYMZlGd/FSbyl4+APaQRjrFcgPTa1X+0IPEMqbsI8lmihDhvfem+APbn6leQUS9xOzpAkwNXMai8ps/oRQHJw==
+Received: from [192.168.159.104] (037008245233.garwolin.vectranet.pl. [37.8.245.233])
+        by smtp.gmail.com with ESMTPSA id a20-20020a170906671400b00a34d0a865ecsm4177184ejp.163.2024.02.05.03.41.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Feb 2024 03:41:34 -0800 (PST)
+Message-ID: <4cdf9c9c-c4fb-48a2-be17-8191aaecb2fe@linaro.org>
+Date: Mon, 5 Feb 2024 12:41:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/4] power: supply: mm8013: implement
+ POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR_AVAILABLE
+Content-Language: en-US
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Sebastian Reichel <sre@kernel.org>, Hans de Goede <hdegoede@redhat.com>,
+ Konrad Dybcio <konradybcio@kernel.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Sebastian Reichel <sebastian.reichel@collabora.com>
+References: <20240204-power_supply-charge_behaviour_prop-v1-0-06a20c958f96@weissschuh.net>
+ <20240204-power_supply-charge_behaviour_prop-v1-3-06a20c958f96@weissschuh.net>
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
+ 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
+ izWDgYvmBE8=
+In-Reply-To: <20240204-power_supply-charge_behaviour_prop-v1-3-06a20c958f96@weissschuh.net>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2f244f9f-8796-4cad-8bf8-d0c3411588c1@redhat.com>
 
-On 2024-02-05 11:00:01+0100, Hans de Goede wrote:
-> Hi,
+On 4.02.2024 18:26, Thomas Weißschuh wrote:
+> The sysfs is documented to report both the current and all available
+> behaviours. For this POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR_AVAILABLE needs
+> to be implemented.
 > 
-> On 2/4/24 18:26, Thomas Weißschuh wrote:
-> > The sysfs is documented to report both the current and all available
-> > behaviours. For this POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR_AVAILABLE needs
-> > to be implemented.
-> > 
-> > Note that this changes the format of the sysfs file
-> > (to the documented format):
-> > 
-> > Before: "auto"
-> > After:  "[auto] inhibit-charge"
-> > 
-> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> Note that this changes the format of the sysfs file
+> (to the documented format):
 > 
-> Changing userspace API like this is never ideal, but given how
-> new the mm8013 driver is and that this brings things inline
-> with the docs I think that this should be fine:
+> Before: "auto"
+> After:  "[auto] inhibit-charge"
+> 
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> ---
 
-I agree that it's unfortunate.
+LGTM, thanks
 
-However looking at the datasheet [0] it seems to me the driver is
-not correctly using the API.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Page 23 documents the flag CHG_INH as follows:
-
-  CHG_INH : Charge Inhibit      When the current is more than or equal to charge
-                                threshold current,
-                                charge inhibit temperature (upper/lower limit) ：1
-                                charge permission temperature or the current is
-                                less than charge threshold current ：0
-
-This is only diagnostic information and not a control-knob, which the API
-was meant for.
-So POWER_SUPPLY_STATUS_NOT_CHARGING seems like the better match.
-
-> [..]
-
-Thomas
-
-
-[0] https://product.minebeamitsumi.com/en/product/category/ics/battery/fuel_gauge/parts/download/__icsFiles/afieldfile/2023/07/12/1_download_01_12.pdf
+Konrad
 
