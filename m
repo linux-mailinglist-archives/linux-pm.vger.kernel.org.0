@@ -1,135 +1,155 @@
-Return-Path: <linux-pm+bounces-3410-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3411-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 701C784A2F7
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 20:01:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4885B84A302
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 20:03:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C8D228B747
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 19:01:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B8D1B1F21FA7
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 19:03:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0C88482DF;
-	Mon,  5 Feb 2024 19:01:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0734A482E5;
+	Mon,  5 Feb 2024 19:02:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xpqYQV7/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95CDA482D1;
-	Mon,  5 Feb 2024 19:01:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1743C481BF
+	for <linux-pm@vger.kernel.org>; Mon,  5 Feb 2024 19:02:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707159693; cv=none; b=mI0fv6mqv5dMK3WauNYev72mUBqgRUOJBh3JFT/TN6dZxS7m9sESL16OjY6DgKw5uGhrepVH+4NYH/yOcT6ZkxnLYx+7CIma5ud05HsSURxk6Kui1pwdRoQjOoxxLBOMeI6Rp20iS2mI76ti2GYr8o6XVJHAIYLUyHqHF3TjGEM=
+	t=1707159725; cv=none; b=kgkf/ja5EVtmp25uLPn+3TU405nVeegDaXcz5t6/2QOAslddpFTfYQavTHyL1vMmBSlbw/inGDYU2O1sOJ1hSlRnvqJaYK7mU8YP/nQ9/fzRcywXTOFz4h1yMe8YMaVqE0KgUqfrmxS983yyP3+LPoHzdHZZw5uGsV6x/qwXD4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707159693; c=relaxed/simple;
-	bh=JEt6XbTrmvG2A0mB2qlMp8TsvpF1cCNngcSPF10KDRU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MFg7rfFZr862OeTALtV53fiTQHGKSWrRXTOgVqlmmiI0cbzQwweq4HMFTYXlsT2T1LTWhMPqjhswyS6Pn9//bglnTeBT+Fd6Av07sGgmB5Wds+fvyqK8y3GcFkEFifi5OTAwVRygN/6EKYzeCq4ToYsg5A0iNA3NzDG98/RDX70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.166.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-363c503de95so5916155ab.2;
-        Mon, 05 Feb 2024 11:01:30 -0800 (PST)
+	s=arc-20240116; t=1707159725; c=relaxed/simple;
+	bh=5lYJPNH7ZdwNpNFjeIRTTlECYjlLU6dsHmfIjFZlzoY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fS0+Eq/dvbu+b5aXb4ZVRczVAw08CtiQD62G6KEMFh5Fh1ode/lHDQ72uC2GG+WhYVO/wEXmN1JqcTD0F0tdj39DlFztGFZ9J/owdk8fSuFjUoa9AeCjwJ0OtNoQ0VSary5BgNSIQobHADPuw8rKLPAfOpjye/dX+dj3RGN6tUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xpqYQV7/; arc=none smtp.client-ip=209.85.208.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2d0512f6e32so57282111fa.1
+        for <linux-pm@vger.kernel.org>; Mon, 05 Feb 2024 11:02:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1707159722; x=1707764522; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QemNO+c45J3TSx6FcSHQfwkZOTsDS0K4Gg9M0rrbiy8=;
+        b=xpqYQV7/Fx5ZDSrBNWO1xZ6JZTOtXuLnksLGI3pwhaFzKaRUsJnINArnPQfb02weyx
+         OMGBpiJ2sgCSnWFW0nluDFKGgIUR5MGgdV3p/taV94iAcPaNiAByrr9OllbviI10WqAT
+         mRyI3wY6RkEQQbzsOuM+sZSfv+tWyrnUdjJJcHjmf9d/FM0GQyD/0SqwIdFjs/e3MT6Q
+         nNgKyEI4yygCg6vEeydlohasLgtV6jtiJlB2cSZ1aWXI4fRg+w4Sdg2v12CP3KlRQpvY
+         S8fh/3QuuqDcVLjFQUQmVgOI+NqnuP2rJ0Icwxwbts0oN+u0pjNlDBOSUKquzr+qJUr1
+         JsFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707159688; x=1707764488;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SeMl68ENlhZta5JKP4MegR68EKrrxCv2fGrCfnFczms=;
-        b=TkGXElW02g1jThTfrV2OKJ1Onpk8lVHstxAYX5yPCP+YyrYxI0Vj8gbQPWEdPZ4KTJ
-         Mm6H6oq/0CW4k6SXRMxVPr42ZN4IipxdJG8PHf/pPqAi1adMlt2Vu6zlFh+Nw2lHLw4l
-         wMeVQoZsMFvomk2VrtMLzA4KRrVUKlHiL1EHaZ4IMUqxqc/fo2N1IrsI+tYjKVMPe0rc
-         1yNgS8Q3Ef1LssBhStbQsMrd7K11FFaNg/f1nCfs1t6ZeH0I3lr+kwgQQvHjxsihTI9K
-         3Il7fxhzmQjLJrVJgBSW+hY/RSQO65E+O9AXP447IlyNf2Y/tUCQfN8cUNgzoeXNI5uY
-         1GJg==
-X-Gm-Message-State: AOJu0YzHg4e/I+fN9F4R3cNhaYSxXO7osXbdHViSJubhlE9KoNdtM2QM
-	1hN5SGqdOg1RLz9bD18YitntpTcwEY6nD3GnsjiIX59YmMT0bQXFiDNetQJ6B0A=
-X-Google-Smtp-Source: AGHT+IGCSsROlSPtHzOpI86hYanv64KOK2bo5Q5Dm3PpFBE7zh7fPUM8mo3lT1twvESxHjj0Ri0I+w==
-X-Received: by 2002:a05:6e02:5b0:b0:363:74dc:8f5e with SMTP id k16-20020a056e0205b000b0036374dc8f5emr733688ils.0.1707159688577;
-        Mon, 05 Feb 2024 11:01:28 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCXzucqZW6b+sCROzIo++3iRO6pl84UBCvPfJsEO4mxxgeZM88CxLvgOZUheCUJI9tiaRyePyDQ/1Hmy5BAVo2gR/qxqR9fjtHcVekPAJMDLT4PxYQMS7Swp37zkIfWR0S9uD7mY/aAHwBQbxuuedy/fkaDW61tKSxnm/XvVS/zZv8Yn/YLzgwo=
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
-        by smtp.gmail.com with ESMTPSA id p193-20020a2574ca000000b00dc701e0bdbcsm95980ybc.44.2024.02.05.11.01.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Feb 2024 11:01:28 -0800 (PST)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-6040d33380cso49188897b3.1;
-        Mon, 05 Feb 2024 11:01:27 -0800 (PST)
-X-Received: by 2002:a0d:e289:0:b0:604:66f1:35d2 with SMTP id
- l131-20020a0de289000000b0060466f135d2mr475419ywe.49.1707159687571; Mon, 05
- Feb 2024 11:01:27 -0800 (PST)
+        d=1e100.net; s=20230601; t=1707159722; x=1707764522;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QemNO+c45J3TSx6FcSHQfwkZOTsDS0K4Gg9M0rrbiy8=;
+        b=HJnioX2dBK0UUec7tIzReGz2w0A07fr+g7OfB3/w1T3e9IAQ6vTWvPagOrpMQMQruD
+         vBxV/0y3iJrm9Q21EJGnE4ePEnD6dwK6XTd3+Vw+u7ETzqMIDQkGac1nLgNjmfIxr8hq
+         ihcKjWUGfTxEZQ/0b6gBufDKuXE0V2Te37vSXlM2r3OoXxeQF/mQqvv/rB20X8DH4MFo
+         urM7v5sxGotVcS77Y4CweXf6bphGn1MD6ASAgKDHMMeAq2DQcLQl3rkrB86Sg/j/X3sZ
+         b4Yf4A8roP39Cvj31BpRMC8vUcHWJpjoqsc5Ll7VA+MBppGq03Cicr0r8lPZf6HTFawz
+         wG6w==
+X-Gm-Message-State: AOJu0Yw0OnpXT1+/+y8z2aGtIyzUdAUfZF+2xvCz7WO3MHbzkFz+wV+e
+	+UMt9wlPfw7AhPrsFsDHqkuD2YB6iS+h/NmP1zNsoadrjHuIwrbW4YHeVsc2vrA=
+X-Google-Smtp-Source: AGHT+IHerr2CNFXSws+9oBTQ1tIV+44SZX35ntb27kGhJN1L9duM9t4b3FiH8V5NKy3Yk6hWqepjXw==
+X-Received: by 2002:a2e:7c07:0:b0:2cf:425b:59ee with SMTP id x7-20020a2e7c07000000b002cf425b59eemr389756ljc.24.1707159722038;
+        Mon, 05 Feb 2024 11:02:02 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCVcIYZUzWXNPe+XZYc2Z0KZG6GhW1LuluhaOzBv2XMMn4xg8oWZ1HePY85qWcd1aAl+zZh9qdSkVkVwP7RCtaMHfxRi++WK+plrBLPs1BtwxF6gt3B5rFlhCqxzOunA4M2I+DIgzbzTvms8wsz26wWuXiA4eT/ghls8DibnNiboj2WgZbICOR8G
+Received: from loic-ThinkPad-T470p.. (74.212-33-141.static.xfiber.net. [212.33.141.74])
+        by smtp.gmail.com with ESMTPSA id y11-20020a2e320b000000b002d085fdb893sm41293ljy.31.2024.02.05.11.02.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Feb 2024 11:02:01 -0800 (PST)
+From: Loic Poulain <loic.poulain@linaro.org>
+To: rafael@kernel.org,
+	len.brown@intel.com,
+	pavel@ucw.cz
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Loic Poulain <loic.poulain@linaro.org>
+Subject: [RESEND PATCH] PM: hibernate: Request 0 CPU latency during image decompression
+Date: Mon,  5 Feb 2024 20:01:57 +0100
+Message-Id: <20240205190157.50278-1-loic.poulain@linaro.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <da6af483-5ee9-45cd-922e-d9d5364674dc@web.de> <CAMuHMdUxn4Ne7kmEfONz8Uk3Why3m9r83GdM5RzTxm_4Gj_a6g@mail.gmail.com>
- <8f011126-c95a-4c71-8bc9-a6b0a5823c96@web.de>
-In-Reply-To: <8f011126-c95a-4c71-8bc9-a6b0a5823c96@web.de>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 5 Feb 2024 20:01:17 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUQLWBQemtgnCHj64wCYAET8J2-MgbisyMChSbh0k0L7w@mail.gmail.com>
-Message-ID: <CAMuHMdUQLWBQemtgnCHj64wCYAET8J2-MgbisyMChSbh0k0L7w@mail.gmail.com>
-Subject: Re: [PATCH] pmdomain: mediatek: Use devm_platform_get_and_ioremap_resource()
- in init_scp()
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org, 
-	Angelo Gioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	=?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	Rob Herring <robh@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi Markus,
+The (SMP) load_image_lzo procedure relies on multiple threads and
+their synchronization for decompressing the hibernate image. for
+performance reasons, it is important to keep the CPUs responsive
+so that the synchronization overhead stays minimal. This overhead
+roughly corresponds to thread wakeup latency, which is linked to
+the CPU idle exit time.
 
-On Mon, Feb 5, 2024 at 6:28=E2=80=AFPM Markus Elfring <Markus.Elfring@web.d=
-e> wrote:
-> >> +++ b/drivers/pmdomain/mediatek/mtk-scpsys.c
-> >> @@ -441,8 +441,7 @@ static struct scp *init_scp(struct platform_device=
- *pdev,
-> >>
-> >>         scp->dev =3D &pdev->dev;
-> >>
-> >> -       res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> >> -       scp->base =3D devm_ioremap_resource(&pdev->dev, res);
-> >> +       scp->base =3D devm_platform_get_and_ioremap_resource(pdev, 0, =
-&res);
-> >
-> > Given res is further unused, please use devm_platform_ioremap_resource(=
-)
-> > instead, and remove the local variable res.
->
-> I got another idea after looking at the implementation of the function
-> =E2=80=9Cdevm_platform_get_and_ioremap_resource=E2=80=9D once more.
-> https://elixir.bootlin.com/linux/v6.8-rc3/source/drivers/base/platform.c#=
-L87
->
-> It seems that it is supported to pass a null pointer for the last paramet=
-er
-> (while this possibility is not mentioned in the interface description so =
-far).
-> How do you think about to benefit from such a design option any more
-> (instead of the determination of a corresponding platform device)?
+By requesting 0 CPU latency, we prevent CPUs to enter their deepest
+idle states, ensuring that they will be as responsive as possible
+during the whole decompression procedure, and by extension improve
+the hibernate resume time (CPU dependent).
 
-Yes, you can pass a NULL pointer as the last parameter.
-And as this is very common, the wrapper devm_platform_ioremap_resource()
-exists.
+On iMX8M mini SoC, that gives a ~40% boost for the decompression time:
+PM: hibernation: Read 365640 kbytes in 1.88 seconds (194.48 MB/s)
+vs
+PM: hibernation: Read 363476 kbytes in 1.26 seconds (288.47 MB/s)
 
-Gr{oetje,eeting}s,
+Note: 40% diff sounds huge, and may point to iMX specific cpuidle
+issue. Anyhow, we know that during this bottleneck procedure, the CPUs
+will be fully dedicated to the decompress task, and must be kept ready
+for it.
 
-                        Geert
+Signed-off-by: Loic Poulain <loic.poulain@linaro.org>
+---
+ kernel/power/swap.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+diff --git a/kernel/power/swap.c b/kernel/power/swap.c
+index f6ebcd00c410..d2cd53497c4e 100644
+--- a/kernel/power/swap.c
++++ b/kernel/power/swap.c
+@@ -22,6 +22,7 @@
+ #include <linux/swap.h>
+ #include <linux/swapops.h>
+ #include <linux/pm.h>
++#include <linux/pm_qos.h>
+ #include <linux/slab.h>
+ #include <linux/lzo.h>
+ #include <linux/vmalloc.h>
+@@ -1180,6 +1181,7 @@ static int load_image_lzo(struct swap_map_handle *handle,
+ 	unsigned char **page = NULL;
+ 	struct dec_data *data = NULL;
+ 	struct crc_data *crc = NULL;
++	struct pm_qos_request qos;
+ 
+ 	hib_init_batch(&hb);
+ 
+@@ -1190,6 +1192,8 @@ static int load_image_lzo(struct swap_map_handle *handle,
+ 	nr_threads = num_online_cpus() - 1;
+ 	nr_threads = clamp_val(nr_threads, 1, LZO_THREADS);
+ 
++	cpu_latency_qos_add_request(&qos, 0);
++
+ 	page = vmalloc(array_size(LZO_MAX_RD_PAGES, sizeof(*page)));
+ 	if (!page) {
+ 		pr_err("Failed to allocate LZO page\n");
+@@ -1470,6 +1474,8 @@ static int load_image_lzo(struct swap_map_handle *handle,
+ 	}
+ 	vfree(page);
+ 
++	cpu_latency_qos_remove_request(&qos);
++
+ 	return ret;
+ }
+ 
+-- 
+2.34.1
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
 
