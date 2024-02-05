@@ -1,246 +1,190 @@
-Return-Path: <linux-pm+bounces-3438-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3445-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93BF684A88F
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 23:06:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BCE984A8D5
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 23:12:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 021801F2432B
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 22:06:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA3621F2FE15
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 22:12:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 243D14F8B5;
-	Mon,  5 Feb 2024 21:21:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B7CD495EC;
+	Mon,  5 Feb 2024 21:54:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="J0a3c7vS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F4BC4F889;
-	Mon,  5 Feb 2024 21:21:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8A2495D6
+	for <linux-pm@vger.kernel.org>; Mon,  5 Feb 2024 21:54:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707168077; cv=none; b=CKR8lsruKGpTsYue9s3m6qJyzE2wQ9ZaBgajIHGv0E7kd7gXLSm4HR6LzeHM0mXaNQMr80WjUos5MfR6D022Ej7/NLZf2e3/lUjiG2YmgpnzUYl0S3zyxQIOUBomaW5ZZitCtuQZgNkfZcediHd0SAvRAoJ+FiRit58KudhR1R8=
+	t=1707170057; cv=none; b=iBB55w9GJxoCPOg/Y6XHVwQIjrlxIwRadcn5G2Mw4E4buT368XbE2LJghPMr3Sv1iPq7q1A9J/APNE4tVO59iV25Tfn7s68uyR/tKHnsIodFZee6++4Rn+IrSFMe3m8evr4tL7YO70ijbSlfHYXvOI7SxIXX73DYfDupk/1OR3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707168077; c=relaxed/simple;
-	bh=jZ9uXCD64qH50wsZKP5sbI/TyNCKkopgUzIG8xh5LwI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=N5KOEVUbz041YPOYJ+YC9lEd2eFAGqH3ukxaQ1fGMki/24j4bbWGbvNlBns4+a+N6UyxH9WM/Se0ag3u7Fjwc3Oorg90JneEaoLmNf+O/gPkeTFJmqXJm0/W5qDRVwoxeP74LOzVOtfXfynYT3I2UuIRMjfPuKVNJzg4kLSnoY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id a17c3d19a7b546d0; Mon, 5 Feb 2024 22:21:06 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 60918669A1B;
-	Mon,  5 Feb 2024 22:21:05 +0100 (CET)
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
- LKML <linux-kernel@vger.kernel.org>, Linux ACPI <linux-acpi@vger.kernel.org>,
- Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Subject:
- [PATCH v1 6/6] thermal: intel: Adjust ops handling during thermal zone
- registration
-Date: Mon, 05 Feb 2024 22:20:32 +0100
-Message-ID: <3284830.aeNJFYEL58@kreacher>
-In-Reply-To: <2728491.mvXUDI8C0e@kreacher>
-References: <2728491.mvXUDI8C0e@kreacher>
+	s=arc-20240116; t=1707170057; c=relaxed/simple;
+	bh=KVLbdtcvvaRSgN5gQozZaogwWueF7opXRhVnd4wm9FM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UFeb5YGLT8KbzjfTAsySR55nolL07snIVX0hhymPkcMLBppsiSwMs7GkCD3RPthIK6fF7ydCVfeE5dtytRw+4cN0h5fa1U4O/1h0dKCHfceGaaemkq1Nty5qUMRP0janQMN/f1kHZAhRqFI8hn3bLcVjq3k6Ve2afRMFFoF1q5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=J0a3c7vS; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-33b189ae5e8so2555156f8f.2
+        for <linux-pm@vger.kernel.org>; Mon, 05 Feb 2024 13:54:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1707170053; x=1707774853; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UJG9p3OAfhgHtIwPepd82NCHlUMu8iwvMVaHA0OKEWc=;
+        b=J0a3c7vSUUdUE77NgNkzaEpveQPd93qe1FG9O/k+BrqA9SSRg/ExeBVgsF5302klSp
+         PgJqe49qqOWijNZnR9nt1dC2SkgxpGvLppq5RBHKyd5itZn8EIWGi8xROS0LLHLLvLWt
+         bGzuxU0wIZ1Cp6xGhm9q6eJqOuaQUwAmKGpwzOLIqDWi5Xs+ZTs9eA9cwv4fhZB+YLsg
+         PP0MGCdhVmi+lJ6W/3bUWQ7q84Bv1p7Xx5e8n5hky9TqFpJrWpnvwamLXnWDvNlZrExd
+         bHpFAgKFffMlHjF1L1OAVpUaYhtQndLnUEOKzWFt2yZaT404FDaj/cStg5I+O0UsPHxq
+         1b7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707170053; x=1707774853;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UJG9p3OAfhgHtIwPepd82NCHlUMu8iwvMVaHA0OKEWc=;
+        b=M0ZETs4ZqmSSmMK0rJwL1jJTGtNqm9QmRm2K5DE1b00yjk5gnI+U6KrIYpmz3UMSjk
+         oFF951WogPysWU+Rtaq0kgsk5frsJhoySVD2LRKgT3RyVWKpELpv1SHJoD1vCEvVRalu
+         UaHwbZwwTegJOmGk5orgBSjBCNg9av8WgjSNEuy9vB9kwDStnSkKQu4p1o5wZo3xq+6X
+         xC7EV3buMYMA7ZZTxxed1LLx8madpgeidJIe9nYURUihzzQytb7McHXpCz+M62iLXH36
+         EkY/tOQsO/7H/Vcp5HgdasFWUcSOPY7K2aWUUr4Wq3jJJ/DX3HSjul/oO0qnnELrYwpc
+         1Unw==
+X-Gm-Message-State: AOJu0YxRXfytnumxfXPCKM8SbaPaA+U16KnTnSKznbOELEEZD/3MSVkw
+	LZsb4xOXwLKKmg+fTs2qzj0fEvZ2/WaUJwstWOiFiNaxJmfzYPCO5n595EE1uxyWeI0Fkmh3UM7
+	V
+X-Google-Smtp-Source: AGHT+IGqUCnla9965GAGUHJeOJCUyaMBeqetovxkgY0647ee/GZDHFAn7XycGxzkeRTzC/j0kyJbyw==
+X-Received: by 2002:adf:a2d1:0:b0:33b:1a3f:a699 with SMTP id t17-20020adfa2d1000000b0033b1a3fa699mr143950wra.62.1707170052774;
+        Mon, 05 Feb 2024 13:54:12 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCUt6XYUS8FSatEDUB8oWqGn0r0F8pDlWUKCOpRxEid5RL4eptqMhEJpB6H3iVATcdhPJpw+62TWpC9YEr6GmCGPyVCAIHuSCWV81+kopFG+pHasoorO86IL8BBDA64tWhINknFhfxOfeQmdc/Hu77Cje0If2gcdSMzDNMcTnxDXy+RweSrhV8dajJLE+z9/7J5Dgw76QZCWKqC2TaWjIlaFzLfZJjjPTfPVz+TQaSJypSonGtobr2PTXIhuXExdY2gh7vic17eFxNaPGN27dKxIY1sFyupLTed7I1c4jQ==
+Received: from airbuntu (host109-154-238-234.range109-154.btcentralplus.com. [109.154.238.234])
+        by smtp.gmail.com with ESMTPSA id b11-20020a5d4b8b000000b0033af9b7db6esm541892wrt.22.2024.02.05.13.54.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Feb 2024 13:54:12 -0800 (PST)
+Date: Mon, 5 Feb 2024 21:54:10 +0000
+From: Qais Yousef <qyousef@layalina.io>
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	Ingo Molnar <mingo@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>
+Subject: Re: [PATCH] cpufreq: Change default transition delay to 2ms
+Message-ID: <20240205215410.3opxw4ty2tpbsgbc@airbuntu>
+References: <20240205022500.2232124-1-qyousef@layalina.io>
+ <326b568d-d460-4a69-9336-28da328ffdcf@arm.com>
+ <20240205120147.ui5zab2b2j4looex@airbuntu>
+ <f782f0d4-99ba-4876-bd20-03aaae20c0e0@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrfedvuddgheehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepledprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghp
- thhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=9 Fuz1=9
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <f782f0d4-99ba-4876-bd20-03aaae20c0e0@arm.com>
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 02/05/24 17:35, Christian Loehle wrote:
+> On 05/02/2024 12:01, Qais Yousef wrote:
+> > Hi Christian
+> > 
+> > On 02/05/24 09:17, Christian Loehle wrote:
+> >> On 05/02/2024 02:25, Qais Yousef wrote:
+> >>> 10ms is too high for today's hardware, even low end ones. This default
+> >>> end up being used a lot on Arm machines at least. Pine64, mac mini and
+> >>> pixel 6 all end up with 10ms rate_limit_us when using schedutil, and
+> >>> it's too high for all of them.
+> >>>
+> >>> Change the default to 2ms which should be 'pessimistic' enough for worst
+> >>> case scenario, but not too high for platforms with fast DVFS hardware.
+> >>>
+> >>> Signed-off-by: Qais Yousef <qyousef@layalina.io>
+> >>> ---
+> >>>  drivers/cpufreq/cpufreq.c | 4 ++--
+> >>>  1 file changed, 2 insertions(+), 2 deletions(-)
+> >>>
+> >>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> >>> index 44db4f59c4cc..8207f7294cb6 100644
+> >>> --- a/drivers/cpufreq/cpufreq.c
+> >>> +++ b/drivers/cpufreq/cpufreq.c
+> >>> @@ -582,11 +582,11 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
+> >>>  		 * for platforms where transition_latency is in milliseconds, it
+> >>>  		 * ends up giving unrealistic values.
+> >>>  		 *
+> >>> -		 * Cap the default transition delay to 10 ms, which seems to be
+> >>> +		 * Cap the default transition delay to 2 ms, which seems to be
+> >>>  		 * a reasonable amount of time after which we should reevaluate
+> >>>  		 * the frequency.
+> >>>  		 */
+> >>> -		return min(latency * LATENCY_MULTIPLIER, (unsigned int)10000);
+> >>> +		return min(latency * LATENCY_MULTIPLIER, (unsigned int)(2*MSEC_PER_SEC));
+> >>>  	}
+> >>>  
+> >>>  	return LATENCY_MULTIPLIER;
+> >>
+> >> Hi Qais,
+> >> as previously mentioned I'm working on improving iowait boost and while I'm not against
+> >> this patch per se it does make iowait boosting more aggressive. ((Doubling limited by rate_limit_us)
+> >> Since the boost is often applied when not useful (for Android e.g. periodic f2fs writebacks),
+> >> this might have some side effects. Please give me a couple of days for verifying any impact,
+> >> or did you do that already?
+> > 
+> > I don't understand the concern, could you elaborate more please?
+> > 
+> > Products already ship with 500us and 1ms which is lower than this 2ms.
+> > 
+> > On my AMD desktop it is already 1ms. And I think I've seen Intel systems
+> > defaulting to 500us or something low too. Ideally cpufreq drivers should set
+> > policy->transition_delay_us; so this path is taken if the driver didn't
+> > populate that. Which seems to be more common than I'd like tbh.
+> 
+> I'm not disagreeing with you on that part. I'm just worried about the side
+> effects w.r.t iowait boosting.
 
-Because thermal zone operations are now stored directly in struct
-thermal_zone_device, thermal zone creators can discard the operations
-structure after the zone registration is complete, or it can be made
-read-only.
+I don't see a reason for that. This value should represent hardware's ability
+to change frequencies. It is not designed for iowait boost. And it being high
+means folks with good hardware are getting crap performance as changing
+frequency once every 10ms with today's bursty workloads means we leave a lot of
+perf on the floor for no good reason. And as I tried to explain, already
+platforms ship with low value as this is how the hardware behaves. We are not
+making iowait boost more aggressive; but bringing the fallback behavior more
+inline to what properly configured platforms behave already today.
 
-Accordingly, make int340x_thermal_zone_add() use a local variable to
-represent thermal zone operations, so it is freed automatically upon the
-function exit, and make the other Intel thermal drivers use const zone
-operations structures.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c         |   26 ++--------
- drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h         |    1 
- drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c |    2 
- drivers/thermal/intel/intel_pch_thermal.c                            |    2 
- drivers/thermal/intel/intel_quark_dts_thermal.c                      |    2 
- drivers/thermal/intel/intel_soc_dts_iosf.c                           |    2 
- drivers/thermal/intel/x86_pkg_temp_thermal.c                         |    2 
- 7 files changed, 11 insertions(+), 26 deletions(-)
-
-Index: linux-pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-+++ linux-pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-@@ -61,12 +61,6 @@ static void int340x_thermal_critical(str
- 	dev_dbg(&zone->device, "%s: critical temperature reached\n", zone->type);
- }
- 
--static struct thermal_zone_device_ops int340x_thermal_zone_ops = {
--	.get_temp       = int340x_thermal_get_zone_temp,
--	.set_trip_temp	= int340x_thermal_set_trip_temp,
--	.critical	= int340x_thermal_critical,
--};
--
- static inline void *int_to_trip_priv(int i)
- {
- 	return (void *)(long)i;
-@@ -126,6 +120,11 @@ static struct thermal_zone_params int340
- struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
- 						     int (*get_temp) (struct thermal_zone_device *, int *))
- {
-+	const struct thermal_zone_device_ops zone_ops = {
-+		.set_trip_temp = int340x_thermal_set_trip_temp,
-+		.critical = int340x_thermal_critical,
-+		.get_temp = get_temp ? get_temp : int340x_thermal_get_zone_temp,
-+	};
- 	struct int34x_thermal_zone *int34x_zone;
- 	struct thermal_trip *zone_trips;
- 	unsigned long long trip_cnt = 0;
-@@ -140,16 +139,6 @@ struct int34x_thermal_zone *int340x_ther
- 
- 	int34x_zone->adev = adev;
- 
--	int34x_zone->ops = kmemdup(&int340x_thermal_zone_ops,
--				   sizeof(int340x_thermal_zone_ops), GFP_KERNEL);
--	if (!int34x_zone->ops) {
--		ret = -ENOMEM;
--		goto err_ops_alloc;
--	}
--
--	if (get_temp)
--		int34x_zone->ops->get_temp = get_temp;
--
- 	status = acpi_evaluate_integer(adev->handle, "PATC", NULL, &trip_cnt);
- 	if (ACPI_SUCCESS(status)) {
- 		int34x_zone->aux_trip_nr = trip_cnt;
-@@ -185,7 +174,7 @@ struct int34x_thermal_zone *int340x_ther
- 							acpi_device_bid(adev),
- 							zone_trips, trip_cnt,
- 							trip_mask, int34x_zone,
--							int34x_zone->ops,
-+							&zone_ops,
- 							&int340x_thermal_params,
- 							0, 0);
- 	kfree(zone_trips);
-@@ -205,8 +194,6 @@ err_enable:
- err_thermal_zone:
- 	acpi_lpat_free_conversion_table(int34x_zone->lpat_table);
- err_trips_alloc:
--	kfree(int34x_zone->ops);
--err_ops_alloc:
- 	kfree(int34x_zone);
- 	return ERR_PTR(ret);
- }
-@@ -216,7 +203,6 @@ void int340x_thermal_zone_remove(struct
- {
- 	thermal_zone_device_unregister(int34x_zone->zone);
- 	acpi_lpat_free_conversion_table(int34x_zone->lpat_table);
--	kfree(int34x_zone->ops);
- 	kfree(int34x_zone);
- }
- EXPORT_SYMBOL_GPL(int340x_thermal_zone_remove);
-Index: linux-pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-+++ linux-pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-@@ -22,7 +22,6 @@ struct int34x_thermal_zone {
- 	struct acpi_device *adev;
- 	int aux_trip_nr;
- 	struct thermal_zone_device *zone;
--	struct thermal_zone_device_ops *ops;
- 	void *priv_data;
- 	struct acpi_lpat_conversion_table *lpat_table;
- };
-Index: linux-pm/drivers/thermal/intel/intel_pch_thermal.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/intel_pch_thermal.c
-+++ linux-pm/drivers/thermal/intel/intel_pch_thermal.c
-@@ -131,7 +131,7 @@ static void pch_critical(struct thermal_
- 		thermal_zone_device_type(tzd));
- }
- 
--static struct thermal_zone_device_ops tzd_ops = {
-+static const struct thermal_zone_device_ops tzd_ops = {
- 	.get_temp = pch_thermal_get_temp,
- 	.critical = pch_critical,
- };
-Index: linux-pm/drivers/thermal/intel/intel_quark_dts_thermal.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/intel_quark_dts_thermal.c
-+++ linux-pm/drivers/thermal/intel/intel_quark_dts_thermal.c
-@@ -292,7 +292,7 @@ static int sys_change_mode(struct therma
- 	return ret;
- }
- 
--static struct thermal_zone_device_ops tzone_ops = {
-+static const struct thermal_zone_device_ops tzone_ops = {
- 	.get_temp = sys_get_curr_temp,
- 	.set_trip_temp = sys_set_trip_temp,
- 	.change_mode = sys_change_mode,
-Index: linux-pm/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-+++ linux-pm/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-@@ -233,7 +233,7 @@ static int get_trip_temp(struct proc_the
- 	return temp;
- }
- 
--static struct thermal_zone_device_ops tzone_ops = {
-+static const struct thermal_zone_device_ops tzone_ops = {
- 	.get_temp = sys_get_curr_temp,
- 	.set_trip_temp	= sys_set_trip_temp,
- };
-Index: linux-pm/drivers/thermal/intel/intel_soc_dts_iosf.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/intel_soc_dts_iosf.c
-+++ linux-pm/drivers/thermal/intel/intel_soc_dts_iosf.c
-@@ -168,7 +168,7 @@ static int sys_get_curr_temp(struct ther
- 	return 0;
- }
- 
--static struct thermal_zone_device_ops tzone_ops = {
-+static const struct thermal_zone_device_ops tzone_ops = {
- 	.get_temp = sys_get_curr_temp,
- 	.set_trip_temp = sys_set_trip_temp,
- };
-Index: linux-pm/drivers/thermal/intel/x86_pkg_temp_thermal.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/x86_pkg_temp_thermal.c
-+++ linux-pm/drivers/thermal/intel/x86_pkg_temp_thermal.c
-@@ -166,7 +166,7 @@ sys_set_trip_temp(struct thermal_zone_de
- }
- 
- /* Thermal zone callback registry */
--static struct thermal_zone_device_ops tzone_ops = {
-+static const struct thermal_zone_device_ops tzone_ops = {
- 	.get_temp = sys_get_curr_temp,
- 	.set_trip_temp = sys_set_trip_temp,
- };
-
-
-
+> 
+> > 
+> > I never run with 10ms. It's too slow. But I had several tests in the past
+> > against 2ms posted for those margin and removal of uclamp-max aggregation
+> > series. Anyway. I ran PCMark storage on Pixel 6 (running mainlinish kernel) and
+> > I see
+> > 
+> > 10ms: 27600
+> > 2ms: 29750
+> 
+> Yes, decreasing the rate limit makes it more aggressive, nothing unexpected here.
+> But let's be frank, the scenarios in which iowait boosting actually shows its
+> biggest benefit you are either doing:
+> - Random Read (small iosize), single-threaded, synchronous IO
+> - anything O_DIRECT
+> and I'd argue more than likely you are doing something wrong if you're actually in
+> such a case in the real world. So I'm much more worried about boosting in scenarios
+> where it doesn't help (e.g. on an Android quite frequently: f2fs page cache writeback).
+> 
+> Decreasing the default transition latency makes (sugov) iowait boosting much more aggressive,
+> so I'm curious if this patch increases power consumption on systems that were at 10ms previously
+> when in non-IO workloads.
+> 
+> Hope that clears that up. Again, not an argument against your change, just being cautious of
+> the potential side effects and if they need some mitigations.
+> 
+> Kind Regards,
+> Christian
 
