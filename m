@@ -1,84 +1,83 @@
-Return-Path: <linux-pm+bounces-3359-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3360-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC621849256
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 03:20:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C3BD784925F
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 03:25:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0C101C2161D
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 02:20:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 01FF61C20A39
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 02:25:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A032917E9;
-	Mon,  5 Feb 2024 02:20:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5377E17EF;
+	Mon,  5 Feb 2024 02:25:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="0ljlF0hX"
+	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="fRTUbibM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2352C945A
-	for <linux-pm@vger.kernel.org>; Mon,  5 Feb 2024 02:20:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 957AEAD22
+	for <linux-pm@vger.kernel.org>; Mon,  5 Feb 2024 02:25:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707099617; cv=none; b=jCFn3aMDFs++DkEr7V0FRhDApGK+F2o1fyxqoachdoJsOaiL6rLTwuNB8prI9BEd0y66Ha2bqyC86PLmsuz2R991LdEFSHwd1rSIANMpFClTV7eK43rL7ishISZSfpR0zyLaRZ3IGkmpoywnQU+Ee+aAQSbqbgZStnBMBGJme4U=
+	t=1707099922; cv=none; b=Ut4nmeVUN3n75m3hLCnsdP5xMZsjerwZ1Hb8Pn1APGB2ZgUn5p7GroYkazIjenc8DUUojNdc+B0UOR4VswaOatsDha4e264ou1o2espjypg3XQHDIbgKNUjJevDja1V0wUjh/jRfgr+1BYo/ftcuEcUFk26uoWnqBSbEadmbz6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707099617; c=relaxed/simple;
-	bh=+Gm5/FRVNIqSgfwLG6CPyYSiHApJbtMFJNODMFhgmEY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Dcb0YVzDlyHWgPdqpo3GI4RvAW6QbM8+Hzx3ungG/ux1eTFTb0KDDaWFxWKdwkNU9RBZ04LdfU9cZurylumvUmiHUaGbns0ZDacK8cWcKMIYRfHRtykCH7HrUEmv4Ny9xJvlpYPWSKQVTldobMTeI4NjE60HucadJniWRhkXyjo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=0ljlF0hX; arc=none smtp.client-ip=209.85.128.43
+	s=arc-20240116; t=1707099922; c=relaxed/simple;
+	bh=8e2ZtlAdrtsfponDxeWJ9SpUMacZnh0zw7mhcfhkb88=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PPY+s3Zm5L9OCFGti9WRkyId54RRmvJdFRs+Vn0gevPuiR5srCFhOSy4getK115ORTqvmUQ9w9OfBAWEzrbJlY7eVfOux3oo1WJsEMY9tB02WnyiEW+V8mkkXTfttvSPdiAUTvUija/NCMvWqbh3XyfYlVr313duZiXRz6t1mVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=fRTUbibM; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-40fdc63f4feso1870825e9.3
-        for <linux-pm@vger.kernel.org>; Sun, 04 Feb 2024 18:20:14 -0800 (PST)
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-40fd6c24812so6763115e9.3
+        for <linux-pm@vger.kernel.org>; Sun, 04 Feb 2024 18:25:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1707099613; x=1707704413; darn=vger.kernel.org;
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1707099919; x=1707704719; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vI17x8NVIjMeQipAli/VEaOzE57qtHLbYyH8WdOAchg=;
-        b=0ljlF0hXt6pnnUB8M/zichPZTgjgVjKobFLF7cxY1kcpxLKsec+XObdZeur07jlGQw
-         Ml0nNJcS3yIHRLmhvgWLJ7/0jPOIyikvcFoM4a6YxuhfzA4yKnaX9t/5PKs5CInMY+20
-         /sH9MsvbogBhqyCOs/dUvNFOKOt2jaMxVcUA8z3ggWCQ6h4UNCjdodaT9SqY+mQZpf7n
-         8c58LguB+57grXaSZCR00WV7KUs8g6UeRbZyCOQwTRSz/vTrcSK317OY1ee/QYJ8vfs5
-         h+9mN1BBndY7H+nDpeG/mcTaHIKOJQbXrZr0lgnSfalJZyHZYshXv9Vb4sxpmbJ+3WiM
-         edcg==
+        bh=w8scmLEsyzGxoS8Gc0uCCvoQDZ8pPxzLZfnYWsrBWUA=;
+        b=fRTUbibMeu8IOUrMBRykoIhEFldewn+85ilF1zECtXHml7+qXISZo251hJoH8xfNzh
+         TXPKKb5S2pxLL3Ma3IBsTqJHpy/kgET4W5W+K6gbYTf27SRwiKdlO2i8G446yHLsypNw
+         gUX0v4qtRp9l9cszG/4Q7R9CgoJpk9mXDQXTAHTYmeXDXCEtSFptgVaDyfpUtpnODQnE
+         DESTYHGgD9lyuR9o5vDzdvS6NdqknKc72fi/6a36cpv95O9iovv3FFV39Y4nB7wRAQ7v
+         N8MUw3FupsX1UgEr+advRah+Equ0o7ElFuRocQ20dwKp27of+ooqpjNbtJdfcm6DQK06
+         uPXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707099613; x=1707704413;
+        d=1e100.net; s=20230601; t=1707099919; x=1707704719;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vI17x8NVIjMeQipAli/VEaOzE57qtHLbYyH8WdOAchg=;
-        b=TWd69VxVztY7BadDumTe15HiZ8IXcunBrTlsGAE2cKRGIra8ZPU4OFX/TLRMpuBq3U
-         PHUXULxtll6kVYBdGMYKBEa3qmiJXPbpbqxDuOABm7JnsVzM76Zd+/ztkbgzxkib8VNf
-         pTEdL0SsiLU9nEFHXWk5mi1O/YN+TaoVh8LqMXI7F7gpw7nsOA9/RuoNUHOV7uURUFC4
-         uW2xjQcvsjX3H41lxLkLKL/tqw6CjPljpg7PMAbZpnq8qSWifQYxof6wlsB9jfmR+LjT
-         blSZC0hJTVg3rLIYmEIa3ReySZp5RsRgGcaD/VNPMLyBhqO813HF7TKqwd/N56WRoSSq
-         3ogg==
-X-Gm-Message-State: AOJu0YzSg2IjH8uoXhITKA1h1iC7il3dbjT0qYweU97upgJT4MaYI7Fb
-	TWJA50c+73+1v24pYIMuz/rfVzjbJJqGT3ZyaBAVR8eUxXKryV5b9DhK6dHTNLJwjrHMhgI3L/M
-	Y
-X-Google-Smtp-Source: AGHT+IGCqtYb4qgZN1VkNtpPuU07LJ45oZV3LYEY28TcsQMJbW71zwTdd8rKaOpj9b4J6zfyHQdEOA==
-X-Received: by 2002:a05:600c:511b:b0:40f:b5d2:1b16 with SMTP id o27-20020a05600c511b00b0040fb5d21b16mr3131031wms.25.1707099613407;
-        Sun, 04 Feb 2024 18:20:13 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCXsEiiGcu+HK5q33+UleB6113bUi1O0AeNouFF7kLCEmVI9poP+qcVQ4nLPu7j7SXaXMEth6FFhIDzKayNF3HeslyXQtRVYmkGkJt1/Kvlw5xyEj6e14/q0ZGDNid5PjdxkvlYHdgRdpoHPa0ms79YyOUR8TT89N1FftNGTmvATaiU+cdRhavvb4f5GoBOAHATEmP8faf4YEvhR+WIM2KLoJdAzPjapFLG14+mmY923vWYA+0cONcW/uSgeDVL5QLRxsjpBSNeNHN4wUb4Cs7shQIYsKc0=
+        bh=w8scmLEsyzGxoS8Gc0uCCvoQDZ8pPxzLZfnYWsrBWUA=;
+        b=JhoGzx5YL/CiTnz+R5e6mbIK6hhb9J94bz+hajXpG2tY9i+GC7bLH9ktRHTQ520D8D
+         uNaV19FFmcRUYLGOqtZiJc7ibiXBAqA5RPlkvPNLEzrvtFe5OjjuOEdVPsl37AszPnW5
+         1s7X3nBEmdd3Y8vmr3QLqsCBwtGMO7zAg+AXLum3+8dPmsXpgWufJPisvds8fzqeWBwn
+         hwlvVDXYTPYe81/5wtcCa+D+SrOWvGVy3mtp+YxrDPbDh0SuQsjE0mZoX6sLIOSPayzY
+         lwS/T8W6ZzyeuGXBvMX1dH51deiqLex+GAjht3ZQhUj+PEJ4BJZ3d+S+WjzKltcFQPMb
+         Ehkg==
+X-Gm-Message-State: AOJu0YyPzySTIU+rUy+BX6nsXypcd3vXpCfa1gyGXj3w5XKfmFU7Jm9A
+	EigBD49hLz/Tbss70S+5KrNZNMN4bb1L/5hJjziBQPr9mx6bvkWIg/zEg7xi87Q=
+X-Google-Smtp-Source: AGHT+IGFgnJsXnfu8s6Z2SS2anOiJGG6PLT0W7S2m34AkU5x9hit1oXft5S64KpZWwFPrOfrnr/llQ==
+X-Received: by 2002:adf:fcc5:0:b0:33a:e2d3:c3ec with SMTP id f5-20020adffcc5000000b0033ae2d3c3ecmr8699060wrs.60.1707099918847;
+        Sun, 04 Feb 2024 18:25:18 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCWXl4Ig7R7yZxUjzj3JEz1+xOHBtc/N6U2uE07YtlDNBfjKKklvgEV4vxbQ56jwyhh77pLVToizjHEmHEO5GhPaz5CcJRivwVUN0f6eS4cHKc26l6Voe21ivkxAD5I42aqMvXKfI7Vo0eAnm7XsW/B4iMjC1eH4Kxz4vXHNo6sfujNOmBYRdyQnLfV0NgYNBCxFA5K/XlfwqyBL91pNrp+GJfNcBjud0Utide8L5Nfsbkl37jQK7n8z1CLggN+HoAI+9rc2oP+tLFOMeP67lwhnevmZHw==
 Received: from airbuntu.. (host109-154-238-234.range109-154.btcentralplus.com. [109.154.238.234])
-        by smtp.gmail.com with ESMTPSA id d10-20020a05600c4c0a00b0040efa7e0ef6sm3156075wmp.1.2024.02.04.18.20.12
+        by smtp.gmail.com with ESMTPSA id x9-20020adff649000000b0033947d7651asm7032099wrp.5.2024.02.04.18.25.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 04 Feb 2024 18:20:13 -0800 (PST)
+        Sun, 04 Feb 2024 18:25:18 -0800 (PST)
 From: Qais Yousef <qyousef@layalina.io>
-To: Ingo Molnar <mingo@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>
 Cc: linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org,
+	Ingo Molnar <mingo@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
 	Qais Yousef <qyousef@layalina.io>
-Subject: [PATCH] sched: cpufreq: Rename map_util_perf to apply_dvfs_headroom
-Date: Mon,  5 Feb 2024 02:20:06 +0000
-Message-Id: <20240205022006.2229877-1-qyousef@layalina.io>
+Subject: [PATCH] cpufreq: Change default transition delay to 2ms
+Date: Mon,  5 Feb 2024 02:25:00 +0000
+Message-Id: <20240205022500.2232124-1-qyousef@layalina.io>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -88,79 +87,37 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-We are providing headroom for the utilization to grow until the next
-decision point to pick the next frequency. Give the function a better
-name and give it some documentation. It is not really mapping anything.
+10ms is too high for today's hardware, even low end ones. This default
+end up being used a lot on Arm machines at least. Pine64, mac mini and
+pixel 6 all end up with 10ms rate_limit_us when using schedutil, and
+it's too high for all of them.
 
-Also move it to sched.h. This function relies on updating util signal
-appropriately to give a headroom to grow. This is more of a scheduler
-functionality than cpufreq. Move it to sched.h where all the other util
-handling code belongs.
+Change the default to 2ms which should be 'pessimistic' enough for worst
+case scenario, but not too high for platforms with fast DVFS hardware.
 
 Signed-off-by: Qais Yousef <qyousef@layalina.io>
 ---
- include/linux/sched/cpufreq.h    |  5 -----
- kernel/sched/cpufreq_schedutil.c |  2 +-
- kernel/sched/sched.h             | 17 +++++++++++++++++
- 3 files changed, 18 insertions(+), 6 deletions(-)
+ drivers/cpufreq/cpufreq.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/sched/cpufreq.h b/include/linux/sched/cpufreq.h
-index bdd31ab93bc5..d01755d3142f 100644
---- a/include/linux/sched/cpufreq.h
-+++ b/include/linux/sched/cpufreq.h
-@@ -28,11 +28,6 @@ static inline unsigned long map_util_freq(unsigned long util,
- {
- 	return freq * util / cap;
- }
--
--static inline unsigned long map_util_perf(unsigned long util)
--{
--	return util + (util >> 2);
--}
- #endif /* CONFIG_CPU_FREQ */
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 44db4f59c4cc..8207f7294cb6 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -582,11 +582,11 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
+ 		 * for platforms where transition_latency is in milliseconds, it
+ 		 * ends up giving unrealistic values.
+ 		 *
+-		 * Cap the default transition delay to 10 ms, which seems to be
++		 * Cap the default transition delay to 2 ms, which seems to be
+ 		 * a reasonable amount of time after which we should reevaluate
+ 		 * the frequency.
+ 		 */
+-		return min(latency * LATENCY_MULTIPLIER, (unsigned int)10000);
++		return min(latency * LATENCY_MULTIPLIER, (unsigned int)(2*MSEC_PER_SEC));
+ 	}
  
- #endif /* _LINUX_SCHED_CPUFREQ_H */
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 95c3c097083e..abbd1ddb0359 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -179,7 +179,7 @@ unsigned long sugov_effective_cpu_perf(int cpu, unsigned long actual,
- 				 unsigned long max)
- {
- 	/* Add dvfs headroom to actual utilization */
--	actual = map_util_perf(actual);
-+	actual = apply_dvfs_headroom(actual);
- 	/* Actually we don't need to target the max performance */
- 	if (actual < max)
- 		max = actual;
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index e58a54bda77d..0da3425200b1 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -3002,6 +3002,23 @@ unsigned long sugov_effective_cpu_perf(int cpu, unsigned long actual,
- 				 unsigned long min,
- 				 unsigned long max);
- 
-+/*
-+ * DVFS decision are made at discrete points. If CPU stays busy, the util will
-+ * continue to grow, which means it could need to run at a higher frequency
-+ * before the next decision point was reached. IOW, we can't follow the util as
-+ * it grows immediately, but there's a delay before we issue a request to go to
-+ * higher frequency. The headroom caters for this delay so the system continues
-+ * to run at adequate performance point.
-+ *
-+ * This function provides enough headroom to provide adequate performance
-+ * assuming the CPU continues to be busy.
-+ *
-+ * At the moment it is a constant multiplication with 1.25.
-+ */
-+static inline unsigned long apply_dvfs_headroom(unsigned long util)
-+{
-+	return util + (util >> 2);
-+}
- 
- /*
-  * Verify the fitness of task @p to run on @cpu taking into account the
+ 	return LATENCY_MULTIPLIER;
 -- 
 2.34.1
 
