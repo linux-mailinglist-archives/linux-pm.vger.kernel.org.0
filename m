@@ -1,258 +1,117 @@
-Return-Path: <linux-pm+bounces-3368-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3369-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3706584948B
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 08:30:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AF268494A2
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 08:38:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C6921C20940
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 07:30:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 57E9A284FED
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 07:38:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1B21D51B;
-	Mon,  5 Feb 2024 07:29:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F9F110A01;
+	Mon,  5 Feb 2024 07:38:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="ez0BbGCl"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="c8c9ZoTf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DD0411705;
-	Mon,  5 Feb 2024 07:29:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C5BFD51B
+	for <linux-pm@vger.kernel.org>; Mon,  5 Feb 2024 07:38:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707118196; cv=none; b=D1bnaN8dnXd2nabydae58+/rbZYgGzimPuzbZqQQAeS48e8vhLBMpVXG5ddEJqVfbhd8QqEMhfGd07WFqeO20D9PTYnzpFSyJ+pvCF0llioFYDdrGLIYDB23dnIFdW4B7Udc+8p8YjTa+/qBT3t5Ki/hNICKPrkCX+F7lbO1LfI=
+	t=1707118699; cv=none; b=cmM9Dsj+TtFr01cgLU2fpnGMkTuoXm17NJ740CFRDD2/tqJqCGrEysne21BG80T8/Dt8jaGxEMk+4sGeK/wzm0KUYeqV4Mko8JwIBeGmYBzBs3etYzyR5U4hln/NyHSSJsXoEt4DP51+tKMBfpoCiBWATXFbVhQ/VG7i/EtKVs4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707118196; c=relaxed/simple;
-	bh=IZhvgO+aMRZPJo3UKnzKhTXhsS/DTCtJV35t4nGc0Qs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pwkqkZ7nYuwfiqKNtGV3k1AJLt9I3Rmbi7CPE9lYhXV8p7yn5LRD/XPDjTEKA7/Hw6B9dykqbDE/Qi2XqFqarH8j+hgpoKUeEqTVY1Hbma1jwBePFZzB4tZebg58k3ocSOAHRXOC9hwyPbeR4rZKAEqUGyQKX+tt4FW/9D5F+iU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=ez0BbGCl; arc=none smtp.client-ip=93.104.207.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+	s=arc-20240116; t=1707118699; c=relaxed/simple;
+	bh=52y/CrfpzJ3Xh30bgq6eajaZLuq7UfJcxxjBggUsG+c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T2eNfSagNOVn2E46Vmpgn+jMgHO6j+8+m+jJPiQELmRrFUd08xOuDSeF93ly+MQLwDhuq3QtwPSgFCe88StOaKiBK64nUVrcVMW5GpmVn7YL/i3n2aacRq89UL4JmEH3NP2iFAXPT5ICB/3ev7uO2PAGGPJBjfO9bZzUIpFwIfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=c8c9ZoTf; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1d93edfa76dso34773285ad.1
+        for <linux-pm@vger.kernel.org>; Sun, 04 Feb 2024 23:38:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1707118193; x=1738654193;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qZcmn/OIlR5Udu+W3cVR16fsRHqzu2hvYW43r3YLp2A=;
-  b=ez0BbGCll9Pen/7SdqNedzo81X3zfnt1bSR84I9noy31uo+1nBBgZCn4
-   /mK0cd4alngDlhceZRSF4X1DFnHNVYomrVtn57EiJ4qYQmmoirx99d5ja
-   3Fhqc7d414JUqcdx9EMAhwe5kewkdQC8KCoUa53cLRBTW7G1YDy2TOgNU
-   nxGwOZur9u23XT0tAmgfZ2Yf/Gr/sYDYZ1CkV3d5/InPVaBNHx9y+UDoD
-   jMLJKFHb7w73RgjQQ1tBBKtCo320OFXG1sJV6uwInHPQdwDbkdzOWadql
-   vCVjImLGxy02yFRGxUqa2LwOYTr6DRRCVGNaw+NFVi7kiI8PmanejFpqa
-   A==;
-X-IronPort-AV: E=Sophos;i="6.05,242,1701126000"; 
-   d="scan'208";a="35238305"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 05 Feb 2024 08:29:50 +0100
-Received: from steina-w.localnet (steina-w.tq-net.de [10.123.53.25])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 013B7280075;
-	Mon,  5 Feb 2024 08:29:49 +0100 (CET)
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-To: linux-arm-kernel@lists.infradead.org, Adam Ford <aford173@gmail.com>
-Cc: marex@denx.de, frieder.schrempf@kontron.de, Lucas Stach <l.stach@pengutronix.de>, Adam Ford <aford173@gmail.com>, Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>, Philipp Zabel <p.zabel@pengutronix.de>, Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
-  Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Liu Ying <victor.liu@nxp.com>, Ulf Hansson <ulf.hansson@linaro.org>, dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH V8 11/12] arm64: dts: imx8mp: add HDMI display pipeline
-Date: Mon, 05 Feb 2024 08:29:50 +0100
-Message-ID: <2924284.e9J7NaK4W3@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20240203165307.7806-12-aford173@gmail.com>
-References: <20240203165307.7806-1-aford173@gmail.com> <20240203165307.7806-12-aford173@gmail.com>
+        d=linaro.org; s=google; t=1707118697; x=1707723497; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WEP2pmkNFzZnlqpvEHga5Kb4ynnO9XIEBYA3Oat6G1g=;
+        b=c8c9ZoTfkp7/7v8b0UowSFGyT7hPEunpHvJL+fbuB4T6G/8Zz5iwBytFbyyRfI4T11
+         N2bMLZYo1Ty7OdAsuzVjS/BhEsJUCTBIfLnE3IQvwB9hR2OSu2M2wNS9cOtAQTq6fU9a
+         AiwbnmRCvUQOSSjNHeH6+zQqATmTmguT82uwWVLHchXNhC/4TsABhfhBZzFnZJzB1CnG
+         ZTCMrZPNs8lLed9xV7tAJgly2msuR/KM+7H5+64pjH7UpDAbpeOesvpj5WEDKacdKLgr
+         NDqC5A1mbpHbpBz3pVcOVrkzAbOpTZZ25eKwUPG23+umddcIXQWnc8Vw7/l+OkVgNutB
+         FQLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707118697; x=1707723497;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WEP2pmkNFzZnlqpvEHga5Kb4ynnO9XIEBYA3Oat6G1g=;
+        b=bbDfi1SahhAWOzWGy/fIxQr4DKyftmDEQa9ui0B0a4+9NazckVYfrgYGL/2mwUdW7y
+         mXP7z8QSFtUJ5eh5ARRZYWW97VqhlZhvAqdTapTp7AvxyKWumiZhTgXVWG23qSwBkoZN
+         sBHNQjWXtrmlgvTpB9hN89+WyXRmGSxFqxZgDRLSG9V7hJEpv6dgQKt5J4sB2Aa4SXXJ
+         KqcG7lcEmxVuEF5pYZplSpLck1X3DnTX87XGXlAoWNxHjVISgTP+wuWadT4EKmTTZINO
+         rICfqeuauWvgNvB3ex2q44EO45eGYEG1uavGMpYwkFCDw3GuZnRZCDJR5uw5arI8/IkU
+         w6tg==
+X-Gm-Message-State: AOJu0YymK72lXQ8egZEhB03b41A4/A1RjT7E9E4H5MFB21lS8pWoJgll
+	wqk4jxqPLn0yBIByPXnBJmAe3XDsEW/NLplUCSix9EpC3aNmcH5tvtOAi2fJaU4=
+X-Google-Smtp-Source: AGHT+IHIPMxdkut02CAeD0jpy2G42WzXmDaMBa0KY2Mu+pdsw6s9EHy2Q/pScdWZ2g+Hh1b2riVbVg==
+X-Received: by 2002:a17:902:c40c:b0:1d9:a6e8:1c8c with SMTP id k12-20020a170902c40c00b001d9a6e81c8cmr5425593plk.15.1707118696685;
+        Sun, 04 Feb 2024 23:38:16 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCWYMMz6O7wshNnmmwb2g2UtuxwSEDKB8eA+JcSYIcn3qzxC3tKql8LoCrB5F01xUl96QuYhs7WYRdN+wWwKYzVDl4eoa+Kt7RMluv0C6fPHf2d+9Vnwup9YNhFdQfKA3XR6o+9/nX6kZavO1Sw2MXhz2mKFGn0kCQswpApauvEdSrKnZTZIQ26okCh0UmrHFMCFM86u3qNdZa5eFwbwLhB7vyIudVmMeSZoJKwiZqj1hRM=
+Received: from localhost ([122.172.83.95])
+        by smtp.gmail.com with ESMTPSA id j21-20020a170902c3d500b001d7610fdb7csm5608811plj.226.2024.02.04.23.38.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Feb 2024 23:38:16 -0800 (PST)
+Date: Mon, 5 Feb 2024 13:08:14 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Lizhe <sensor1010@163.com>
+Cc: vincent.guittot@linaro.org, ilpo.jarvinen@linux.intel.com,
+	rafael@kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq/schedutil: When updating limitations, frequency
+ modulation interval not become invalid.
+Message-ID: <20240205073814.s656yzrv56tecji3@vireshk-i7>
+References: <20240204140928.2865-1-sensor1010@163.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240204140928.2865-1-sensor1010@163.com>
 
-Hi Adam,
+On 04-02-24, 06:09, Lizhe wrote:
+> If the current frequency scaling policy is schedutil.
+> echo schedutil > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+> This would result in an invalid frequency modulation interval.
+> In sugov_limit(), sg_policy->limits_changed is set to true.
 
-thanks for working on this.
+That will only make us do an extra freq change. What's the problem with that ?
 
-Am Samstag, 3. Februar 2024, 17:52:51 CET schrieb Adam Ford:
-> From: Lucas Stach <l.stach@pengutronix.de>
->=20
-> This adds the DT nodes for all the peripherals that make up the
-> HDMI display pipeline.
->=20
-> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-> Signed-off-by: Adam Ford <aford173@gmail.com>
->=20
+> Signed-off-by: Lizhe <sensor1010@163.com>
 > ---
-> V2:  I took this from Lucas' original submission with the following:
->      Removed extra clock from HDMI-TX since it is now part of the
->      power domain
->      Added interrupt-parent to PVI
->      Changed the name of the HDMI tranmitter to fsl,imx8mp-hdmi-tx
->      Added ports to HDMI-tx
-> ---
->  arch/arm64/boot/dts/freescale/imx8mp.dtsi | 94 +++++++++++++++++++++++
->  1 file changed, 94 insertions(+)
->=20
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> b/arch/arm64/boot/dts/freescale/imx8mp.dtsi index
-> 5e51a766f3d9..e84b4f40e570 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> @@ -1412,6 +1412,100 @@ irqsteer_hdmi: interrupt-controller@32fc2000 {
->  				clock-names =3D "ipg";
->  				power-domains =3D <&hdmi_blk_ctrl=20
-IMX8MP_HDMIBLK_PD_IRQSTEER>;
->  			};
-> +
-> +			hdmi_pvi: display-bridge@32fc4000 {
-> +				compatible =3D "fsl,imx8mp-hdmi-pvi";
-> +				reg =3D <0x32fc4000 0x40>;
-> +				interrupt-parent =3D <&irqsteer_hdmi>;
-> +				interrupts =3D <12 IRQ_TYPE_LEVEL_HIGH>;
+>  drivers/cpufreq/cpufreq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 44db4f59c4cc..a0af38fcb7e2 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -2631,7 +2631,7 @@ static int cpufreq_set_policy(struct cpufreq_policy *policy,
+>  
+>  	if (new_gov == policy->governor) {
+>  		pr_debug("governor limits update\n");
+> -		cpufreq_governor_limits(policy);
+> +		cpufreq_policy_apply_limits(policy);
+>  		return 0;
+>  	}
 
-irqsteer_hdmi has #interrupt-cells =3D <1>, so IRQ flags should be removed.=
-=20
-dtbs_check also warns about this.
-
-> +				power-domains =3D <&hdmi_blk_ctrl=20
-IMX8MP_HDMIBLK_PD_PVI>;
-> +
-> +				ports {
-> +					#address-cells =3D <1>;
-> +					#size-cells =3D <0>;
-> +
-> +					port@0 {
-> +						reg =3D <0>;
-> +						pvi_from_lcdif3:=20
-endpoint {
-> +							remote-
-endpoint =3D <&lcdif3_to_pvi>;
-> +						};
-> +					};
-> +
-> +					port@1 {
-> +						reg =3D <1>;
-> +						pvi_to_hdmi_tx:=20
-endpoint {
-> +							remote-
-endpoint =3D <&hdmi_tx_from_pvi>;
-> +						};
-> +					};
-> +				};
-> +			};
-> +
-> +			lcdif3: display-controller@32fc6000 {
-> +				compatible =3D "fsl,imx8mp-lcdif";
-> +				reg =3D <0x32fc6000 0x238>;
-> +				interrupts =3D <8 IRQ_TYPE_LEVEL_HIGH>;
-
-irqsteer_hdmi has #interrupt-cells =3D <1>, so IRQ flags should be removed.=
-=20
-dtbs_check also warns about this.
-
-> +				interrupt-parent =3D <&irqsteer_hdmi>;
-> +				clocks =3D <&hdmi_tx_phy>,
-> +					 <&clk IMX8MP_CLK_HDMI_APB>,
-> +					 <&clk=20
-IMX8MP_CLK_HDMI_ROOT>;
-> +				clock-names =3D "pix", "axi",=20
-"disp_axi";
-> +				power-domains =3D <&hdmi_blk_ctrl=20
-IMX8MP_HDMIBLK_PD_LCDIF>;
-> +
-> +				port {
-> +					lcdif3_to_pvi: endpoint {
-> +						remote-endpoint =3D=20
-<&pvi_from_lcdif3>;
-> +					};
-> +				};
-> +			};
-> +
-> +			hdmi_tx: hdmi@32fd8000 {
-> +				compatible =3D "fsl,imx8mp-hdmi-tx";
-> +				reg =3D <0x32fd8000 0x7eff>;
-> +				interrupts =3D <0 IRQ_TYPE_LEVEL_HIGH>;
-
-irqsteer_hdmi has #interrupt-cells =3D <1>, so IRQ flags should be removed.=
-=20
-dtbs_check also warns about this.
-
-> +				interrupt-parent =3D <&irqsteer_hdmi>;
-> +				clocks =3D <&clk IMX8MP_CLK_HDMI_APB>,
-> +					 <&clk=20
-IMX8MP_CLK_HDMI_REF_266M>,
-> +					 <&clk IMX8MP_CLK_32K>,
-> +					 <&hdmi_tx_phy>;
-> +				clock-names =3D "iahb", "isfr", "cec",=20
-"pix";
-> +				assigned-clocks =3D <&clk=20
-IMX8MP_CLK_HDMI_REF_266M>;
-> +				assigned-clock-parents =3D <&clk=20
-IMX8MP_SYS_PLL1_266M>;
-> +				power-domains =3D <&hdmi_blk_ctrl=20
-IMX8MP_HDMIBLK_PD_HDMI_TX>;
-> +				reg-io-width =3D <1>;
-> +				status =3D "disabled";
-> +
-> +				ports {
-> +					#address-cells =3D <1>;
-> +					#size-cells =3D <0>;
-> +
-> +					port@0 {
-> +						reg =3D <0>;
-> +
-> +						hdmi_tx_from_pvi:=20
-endpoint {
-> +							remote-
-endpoint =3D <&pvi_to_hdmi_tx>;
-> +						};
-> +					};
-> +
-> +					port@1 {
-> +						reg =3D <1>;
-> +						/* Point endpoint=20
-to the HDMI connector */
-> +					};
-> +				};
-> +			};
-> +
-> +			hdmi_tx_phy: phy@32fdff00 {
-> +				compatible =3D "fsl,imx8mp-hdmi-phy";
-> +				reg =3D <0x32fdff00 0x100>;
-> +				clocks =3D <&clk IMX8MP_CLK_HDMI_APB>,
-> +					 <&clk IMX8MP_CLK_HDMI_24M>;
-> +				clock-names =3D "apb", "ref";
-> +				assigned-clocks =3D <&clk=20
-IMX8MP_CLK_HDMI_24M>;
-> +				assigned-clock-parents =3D <&clk=20
-IMX8MP_CLK_24M>;
-> +				power-domains =3D <&hdmi_blk_ctrl=20
-IMX8MP_HDMIBLK_PD_HDMI_TX_PHY>;
-> +				#clock-cells =3D <0>;
-> +				#phy-cells =3D <0>;
-> +				status =3D "disabled";
-> +			};
-
-According to RM these blocks are part of AIPS4, so it should be below=20
-hsio_blk_ctrl.
-
-Best regards,
-Alexander
-
->  		};
->=20
->  		aips5: bus@30c00000 {
-
-
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
-
-
+-- 
+viresh
 
