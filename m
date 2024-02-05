@@ -1,293 +1,272 @@
-Return-Path: <linux-pm+bounces-3382-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3383-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2D388497C4
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 11:28:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64CD584989F
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 12:18:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A2041F23E0A
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 10:28:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDA071F22F0F
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 11:18:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D24281642C;
-	Mon,  5 Feb 2024 10:28:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC1DE17584;
+	Mon,  5 Feb 2024 11:18:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PRT5sYqw"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dXZ+s4FU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10C7F171AE;
-	Mon,  5 Feb 2024 10:28:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A30D018633
+	for <linux-pm@vger.kernel.org>; Mon,  5 Feb 2024 11:18:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707128934; cv=none; b=uMEWPLQmwirT79cM347lmZHz4xrSuNLhpmvE47MkJhTngnF2j9OHbPjELy0Ms0phXhjyB90VzFiekQ0AmxL1GUjkYoeU66+GwNxF5l8ICNNwQ8/2hIiK9Uvs56GAHA8fHOuIHCQ7/XtJB/bH/joBTe5hUb/czesltfW1ZhNxjgo=
+	t=1707131883; cv=none; b=FaOWfHJMk2B2GX9nEHJD/7UKbo0GfLJWaOkzMpjQmZ9Ne3LI3tiVxlhylN9+oKeIgpEzlaUg96r8q594Ehy9Xk21mzN4cxLiZHTRrd6ZfedE52sIm0uPMqRf9fcYai4OwXGMODokcPevhxtVCsE4eTXaBZC54j66/KUtrgTcsxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707128934; c=relaxed/simple;
-	bh=m38cADo9z6VVvxj6P+Fi8aaRnZ09Ugt/ustDOItD5/U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a5r3KUlt6KWUKXN7/ivZpGvzLijuMtkGB5lYe3Htf76vVN+UvVmKQxwSEXyisiRnitOF6YqEz3gYDh6wIvcpbd4Pr4sVcAUwvzevTMvOrGDURSddv2/PxxTY11dVeSA/7vJuvvUR7lp5kMrqZ8D9pGrgmgrMjAesRukL8l/4czk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PRT5sYqw; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707128933; x=1738664933;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=m38cADo9z6VVvxj6P+Fi8aaRnZ09Ugt/ustDOItD5/U=;
-  b=PRT5sYqwukwfWGkE/+VuBUF9XGZRUeFu1ZqJr81mE1R5afKmSzas8j9P
-   5I55Y+LuoI1xqTldPOEKkfP4KCwIvAR3yF/fMcWu7JV5F+oZA4MxphWaF
-   zfRE9z0s9qa8vgjExGkCTM/LmuTEc6924ucBB8zr1wFa2cr+67ML+zBbJ
-   uPdSHJRv5Gl21xqZF/+rJsYa+mIVI/xn3U10ykDhEsi67zB0BqB2h1Xf8
-   kA/NIqm2rrJ62LzlwhUjIODCUlyCbE87jT//YV8WkAapBXrfbYivgAO+y
-   0fSVr9BzRA7QNvc49oiMQiZ/VbhITwkCzbkEfslX+AXeKaBS8NaOXutaL
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10974"; a="11848533"
-X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
-   d="scan'208";a="11848533"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 02:28:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
-   d="scan'208";a="732928"
-Received: from sgruszka-mobl.ger.corp.intel.com (HELO localhost) ([10.252.42.97])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 02:28:49 -0800
-Date: Mon, 5 Feb 2024 11:28:47 +0100
-From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-To: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	Len Brown <len.brown@intel.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Zhao Liu <zhao1.liu@intel.com>,
-	Zhuocheng Ding <zhuocheng.ding@intel.com>, x86@kernel.org,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Zhao Liu <zhao1.liu@linux.intel.com>
-Subject: Re: [PATCH 6/9] thermal: intel: hfi: Enable Intel Thread Director
-Message-ID: <ZcC4Xy9xBtBsCDLq@linux.intel.com>
-References: <20240203040515.23947-1-ricardo.neri-calderon@linux.intel.com>
- <20240203040515.23947-7-ricardo.neri-calderon@linux.intel.com>
+	s=arc-20240116; t=1707131883; c=relaxed/simple;
+	bh=Q7fJYCpHKNTkQs8NaOPVx7xWVjloS+i5rcmJo7vLk24=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Y8Q2qK4qT9KNQZhdoEnd9CbSMWZJDtbA0iM/FIhRscf9nYkks8YqsxxC6iIYe/WT2zTge49NPwrLYdoFhSRScu96ow7XU+bs3VXLbsqMqYMd3LjBfWbdQSUc/l5hhXEhfNoxZQmxm0Ly3EbMszDM2CMfK9MzQbGnF9QJCrKdsQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dXZ+s4FU; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-40fc65783aeso26283525e9.2
+        for <linux-pm@vger.kernel.org>; Mon, 05 Feb 2024 03:18:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1707131880; x=1707736680; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :references:cc:to:content-language:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wTVVkqHijzZLRV63iQKzj80emKWmcf9Z4F1mFCSni24=;
+        b=dXZ+s4FUdQIILdWLpADK1TP/TDZFaGvVeQmFO6LQpKWio77wgc3jCZ2ie+PpY7RQTk
+         VSC+IX7iSKbBhupUTruTZjbnr8wg6rZvYfJuz2CDmDQTPUBC0P6SlRfhdaAW5G4URrLL
+         dCDXyv0CANB24gOykwPHvzqZ6qKwWFCK8z3X/sRTb+DUcbqfdokWplu/28FZU/yjxHRr
+         kZOXov8Um4EfCKhIEDuSy9mNUxXDbOeID+gInLR42tAVogHt3NT5EQHha8YCWXCWtH8W
+         H1uhJb92ZIq13SU1hliqYFKH+rZa/RLrp8+5jmYgAyrIf8uvZ92XzAqO7IHE9t7D6vYg
+         iLYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707131880; x=1707736680;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :references:cc:to:content-language:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=wTVVkqHijzZLRV63iQKzj80emKWmcf9Z4F1mFCSni24=;
+        b=cw5f4yuAqLmGO/y9mVXT7P4J2GXoyZ/GBpec/H0OL/1Nf2gpeWA57VJyNBm8zxc3vC
+         n6Rgh4TzQYsCZJno3RDGifY7bpAJhhzAUghhXZzWRMukbahXJdXJwiVZrXIaMxLQB0Sy
+         h1Uc00NlzVQ6alDL2csOD8O5bCTzm6k9afYlmUK/s3PNdk5c7iMsGtA+juEs8hwlWq/A
+         R7jKQNu8Oj1AJfmt3vhSjer12MxkLSIk0QZZ49hHGsJPQ5bT7PiFaDaPyHWgxBn59Iy5
+         GS9lPcXb9sPQfMQvCvPmo3CPFUky+XJnoJ6RmdXtY6c5wl0GD23XyiR1jCgrIh6gVOJN
+         1wlA==
+X-Gm-Message-State: AOJu0YylZ9HUVVWwvY5WqWlgWharfmRbiDely7esv7/6pnpYqWNe7ymQ
+	IX0x62RsFZwN3IDpni0sPbIZ2j8c7NmskLMYLyV/tPTbSeTHtyJ2aE9XOqxZavU=
+X-Google-Smtp-Source: AGHT+IH1JgJpcUN5DX+ix9JHVVkbb9CbvqrJRhZyoVN4Q4DDxCJA/ojGLv44Q+eRYF25hXNO4EQH4A==
+X-Received: by 2002:a05:600c:1e17:b0:40f:bad2:6f04 with SMTP id ay23-20020a05600c1e1700b0040fbad26f04mr4150206wmb.1.1707131879816;
+        Mon, 05 Feb 2024 03:17:59 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCVupIkaG76QgOgeYgogxcHY6Wv4J6+wWDn3RPgQvIt/ApdU0P86oOlyPGgmIl1sFQPPc25v0Hya2ok6ao0tPqIqp+yJfCy8N2z3z8myB0XpG222QtWD4yKQgJRu5mn4N+xMGR/tW07xxdRrpy0EbioNnzAfYOyvxmk9/D8YxkHm/HydSrYto1qllddTchqda9SdQ2VAUiQMXm4r4Vu8vS4FXaM6w13hoOxmuWB1JiTJ6CJK2tO1HQ91hVyDan3Cn6/zlvV5fgSE9NUnEf92zE9w++4TREusqKVIrTOvs7tZTFQHDeps/BG9WkdIJVW0vpIaCpx0PiQA3cyF820Hv/EMZ6BAwbxUmDzcScYt8NK+Cl7NK1JaZJk+o95UjKWlR/9MYL0jnZgnwHQM/d/X4atexfLuP2BNK4BkTMlBEUUujw3Ey51Tos7oIjCQbrz5LewYJmrJICa6EZ80qVvO0urUvq0koMzYVgJKM98TWdyAoL6LHJBXzC3P4Aw/mq6K+SjqlUQ4qQ06cMWt1BoaptrXqziObqvNb3iaSvKz6ICM0pQdEwkk3T+++RSjeX03L1ZH2upSBOPbXxRGvLeKXUqXXgxRdGjyH+qyk9RjGZmIelfNrHxjrPEGhmFyi93hPbE/EsZrCrOLGGu+Z7PiMD6snmr+fyuBl/He6FRD/jdazQygMZTfpmMdurjbYrn2UDkYFH+TKdJmqv3V1q2Vel5W99gRhJOPKRjpj8deoCFxB6KjTliUFkDdpFN2A+xdgPZ2oqcx5b4wkoMB1yiJeY6oXk8ptfy/7NM8o9AuSqs4b7XsSTu4XFAvh4Uu0ejJ6quSgASp7mJ0ebARqMAHiLOfX71M54CuQcNjb2XQHVPfIljWZQ1X29F7ZpZ5HVFGwA9NnlqPSyEGukt7dW8AmlFVlUGA7pg1hbstovLf+H7mOb+uicKrFS55BqTHfaggzZxaTl
+ /R6UHb48mXbFNNsdP1BZZUML2Vnqu4POnH5UWvRhjpsOUfRfYeghlDJxf026VeDPFUAaW4oix+gpaDV/AnctZtM6KuVyOmmbwwowGhJ95h4nFmoeqNkNHCgy30FDk+fAyY4ZF827uMRa+fzbvdoyncpCq1em39ogTVhxb6JE8cCgvsSkUHPmaJzBDC/C5IxXMuwckHPy8MEpE9Ha/i3w==
+Received: from ?IPV6:2a01:e0a:982:cbb0:bbd9:ac3e:db1d:9662? ([2a01:e0a:982:cbb0:bbd9:ac3e:db1d:9662])
+        by smtp.gmail.com with ESMTPSA id iv15-20020a05600c548f00b0040efd192a95sm8371318wmb.1.2024.02.05.03.17.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Feb 2024 03:17:59 -0800 (PST)
+Message-ID: <fabde8a2-1fab-45bd-8250-898254e0ba8d@linaro.org>
+Date: Mon, 5 Feb 2024 12:17:57 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240203040515.23947-7-ricardo.neri-calderon@linux.intel.com>
+User-Agent: Mozilla Thunderbird
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH V8 09/12] dt-bindings: display: imx: add binding for
+ i.MX8MP HDMI TX
+Content-Language: en-US, fr
+To: Adam Ford <aford173@gmail.com>, linux-arm-kernel@lists.infradead.org
+Cc: marex@denx.de, alexander.stein@ew.tq-group.com,
+ frieder.schrempf@kontron.de, Lucas Stach <l.stach@pengutronix.de>,
+ Andrzej Hajda <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>,
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+ Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Liu Ying <victor.liu@nxp.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+ dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-pm@vger.kernel.org
+References: <20240203165307.7806-1-aford173@gmail.com>
+ <20240203165307.7806-10-aford173@gmail.com>
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro Developer Services
+In-Reply-To: <20240203165307.7806-10-aford173@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Feb 02, 2024 at 08:05:12PM -0800, Ricardo Neri wrote:
-> Enable Intel Thread Director (ITD) from the CPU hotplug callback: globally
-> from CPU0 and then enable the thread-classification hardware in each
-> logical processor individually.
+On 03/02/2024 17:52, Adam Ford wrote:
+> From: Lucas Stach <l.stach@pengutronix.de>
 > 
-> Also, initialize the number of classes supported.
+> The HDMI TX controller on the i.MX8MP SoC is a Synopsys designware IP
+> core with a little bit of SoC integration around it.
 > 
-> Currently, a bare-metal machine does not use ITD, but KVM uses the
-> attributes of the bare-metal machine to virtualize HFI.
+> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+> Signed-off-by: Adam Ford <aford173@gmail.com>
 > 
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-> Cc: Zhao Liu <zhao1.liu@linux.intel.com>
-> Cc: Zhuocheng Ding <zhuocheng.ding@intel.com>
-> Cc: x86@kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com> # intel_hfi.c
-> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 > ---
-> Discussion:
+> V3:  Change name and location to better idenfity as a bridge and
+>       HDMI 2.0a transmitter
 > 
-> This patch conflicts with a patchset from Stanislaw Gruszka to enable HFI
-> only if there are user space entities listening to the thermal netlink
-> events. ITD requires that HFI is enabled to function. ITD needs to be
-> unconditionally enabled for virtual machines.
-
-Why unconditionally? From what I can tell from KVM patches (please correct
-me if I'm wrong) guests need to be modified to utilize HFI/ITD. Do we
-also have to enable HFI/ITD if no such guest run on virtual machine ?
-
-> Options to resolve this conflict include a command-line argument for users
-> wanting to virtualize HFI or a CONFIG_ option for the same effect. QEMU
-> could also learn to listen to thermal netlink event. A blunter option is
-> to unconditionally enable HFI when KVM is enabled at build time.
-
-In general similar principle should be applied - do not enable if not
-needed. We should be able to get information from KVM when there is
-actual need. QEMU registering to thermal events seems to be odd for
-me, and I think there must be better solution.
-
-Regards
-Stanislaw
-
+>       Fix typos and feedback from Rob and added ports.
 > ---
-> Patch cherry-picked from the IPC classes patchset.
-> ---
-> ---
->  arch/x86/include/asm/hfi.h        |  9 ++++++
->  arch/x86/include/asm/msr-index.h  |  6 ++++
->  drivers/thermal/intel/intel_hfi.c | 52 +++++++++++++++++++++++++++++--
->  3 files changed, 65 insertions(+), 2 deletions(-)
+>   .../display/bridge/fsl,imx8mp-hdmi-tx.yaml    | 102 ++++++++++++++++++
+>   1 file changed, 102 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/display/bridge/fsl,imx8mp-hdmi-tx.yaml
 > 
-> diff --git a/arch/x86/include/asm/hfi.h b/arch/x86/include/asm/hfi.h
-> index 02ee56dbaeb6..b7fda3e0e8c8 100644
-> --- a/arch/x86/include/asm/hfi.h
-> +++ b/arch/x86/include/asm/hfi.h
-> @@ -23,6 +23,15 @@ union cpuid6_edx {
->  	u32 full;
->  };
->  
-> +union cpuid6_ecx {
-> +	struct {
-> +		u32	dont_care0:8;
-> +		u32	nr_classes:8;
-> +		u32	dont_care1:16;
-> +	} split;
-> +	u32 full;
-> +};
+> diff --git a/Documentation/devicetree/bindings/display/bridge/fsl,imx8mp-hdmi-tx.yaml b/Documentation/devicetree/bindings/display/bridge/fsl,imx8mp-hdmi-tx.yaml
+> new file mode 100644
+> index 000000000000..3791c9f4ebab
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/bridge/fsl,imx8mp-hdmi-tx.yaml
+> @@ -0,0 +1,102 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/bridge/fsl,imx8mp-hdmi-tx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->  /**
->   * struct hfi_hdr - Header of the HFI table
->   * @perf_updated:	Hardware updated performance capabilities
-> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-> index 46983fb0b5b3..d74932a0778d 100644
-> --- a/arch/x86/include/asm/msr-index.h
-> +++ b/arch/x86/include/asm/msr-index.h
-> @@ -1148,6 +1148,12 @@
->  
->  #define MSR_IA32_HW_FEEDBACK_CONFIG     0x17d1
->  #define HW_FEEDBACK_CONFIG_HFI_ENABLE   BIT_ULL(0)
-> +#define HW_FEEDBACK_CONFIG_ITD_ENABLE   BIT_ULL(1)
+> +title: Freescale i.MX8MP DWC HDMI TX Encoder
 > +
-> +#define MSR_IA32_HW_FEEDBACK_THREAD_CONFIG 0x17d4
-> +#define HW_FEEDBACK_THREAD_CONFIG_ENABLE BIT_ULL(0)
+> +maintainers:
+> +  - Lucas Stach <l.stach@pengutronix.de>
 > +
-> +#define MSR_IA32_HW_FEEDBACK_CHAR       0x17d2
->  
->  /* x2APIC locked status */
->  #define MSR_IA32_XAPIC_DISABLE_STATUS	0xBD
-> diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-> index 3c399f3d059f..b69fa234b317 100644
-> --- a/drivers/thermal/intel/intel_hfi.c
-> +++ b/drivers/thermal/intel/intel_hfi.c
-> @@ -33,6 +33,7 @@
->  #include <linux/percpu-defs.h>
->  #include <linux/printk.h>
->  #include <linux/processor.h>
-> +#include <linux/sched/topology.h>
->  #include <linux/slab.h>
->  #include <linux/spinlock.h>
->  #include <linux/suspend.h>
-> @@ -298,6 +299,10 @@ static void hfi_enable(void)
->  
->  	rdmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
->  	msr_val |= HW_FEEDBACK_CONFIG_HFI_ENABLE;
+> +description:
+> +  The i.MX8MP HDMI transmitter is a Synopsys DesignWare
+> +  HDMI 2.0a TX controller IP.
 > +
-> +	if (cpu_feature_enabled(X86_FEATURE_ITD))
-> +		msr_val |= HW_FEEDBACK_CONFIG_ITD_ENABLE;
+> +allOf:
+> +  - $ref: /schemas/display/bridge/synopsys,dw-hdmi.yaml#
 > +
->  	wrmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
->  }
->  
-> @@ -319,6 +324,10 @@ static void hfi_disable(void)
->  
->  	rdmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
->  	msr_val &= ~HW_FEEDBACK_CONFIG_HFI_ENABLE;
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - fsl,imx8mp-hdmi-tx
 > +
-> +	if (cpu_feature_enabled(X86_FEATURE_ITD))
-> +		msr_val &= ~HW_FEEDBACK_CONFIG_ITD_ENABLE;
+> +  reg-io-width:
+> +    const: 1
 > +
->  	wrmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
->  
->  	/*
-> @@ -337,6 +346,30 @@ static void hfi_disable(void)
->  	}
->  }
->  
-> +static void hfi_enable_itd_classification(void)
-> +{
-> +	u64 msr_val;
+> +  clocks:
+> +    maxItems: 4
 > +
-> +	if (!cpu_feature_enabled(X86_FEATURE_ITD))
-> +		return;
+> +  clock-names:
+> +    items:
+> +      - const: iahb
+> +      - const: isfr
+> +      - const: cec
+> +      - const: pix
 > +
-> +	rdmsrl(MSR_IA32_HW_FEEDBACK_THREAD_CONFIG, msr_val);
-> +	msr_val |= HW_FEEDBACK_THREAD_CONFIG_ENABLE;
-> +	wrmsrl(MSR_IA32_HW_FEEDBACK_THREAD_CONFIG, msr_val);
-> +}
+> +  power-domains:
+> +    maxItems: 1
 > +
-> +static void hfi_disable_itd_classification(void)
-> +{
-> +	u64 msr_val;
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
 > +
-> +	if (!cpu_feature_enabled(X86_FEATURE_ITD))
-> +		return;
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: Parallel RGB input port
 > +
-> +	rdmsrl(MSR_IA32_HW_FEEDBACK_THREAD_CONFIG, msr_val);
-> +	msr_val &= ~HW_FEEDBACK_THREAD_CONFIG_ENABLE;
-> +	wrmsrl(MSR_IA32_HW_FEEDBACK_THREAD_CONFIG, msr_val);
-> +}
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: HDMI output port
 > +
->  /**
->   * intel_hfi_online() - Enable HFI on @cpu
->   * @cpu:	CPU in which the HFI will be enabled
-> @@ -377,6 +410,8 @@ void intel_hfi_online(unsigned int cpu)
->  
->  	init_hfi_cpu_index(info);
->  
-> +	hfi_enable_itd_classification();
+> +    required:
+> +      - port@0
+> +      - port@1
 > +
->  	/*
->  	 * Now check if the HFI instance of the package/die of @cpu has been
->  	 * initialized (by checking its header). In such case, all we have to
-> @@ -460,6 +495,8 @@ void intel_hfi_offline(unsigned int cpu)
->  	if (!hfi_instance->local_table.hdr)
->  		return;
->  
-> +	hfi_disable_itd_classification();
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - interrupts
+> +  - power-domains
+> +  - ports
 > +
->  	mutex_lock(&hfi_instance_lock);
->  	cpumask_clear_cpu(cpu, hfi_instance->cpus);
->  
-> @@ -505,8 +542,14 @@ static __init int hfi_parse_features(void)
->  	 */
->  	hfi_features.class_stride = nr_capabilities;
->  
-> -	/* For now, use only one class of the HFI table */
-> -	hfi_features.nr_classes = 1;
-> +	if (cpu_feature_enabled(X86_FEATURE_ITD)) {
-> +		union cpuid6_ecx ecx;
+> +unevaluatedProperties: false
 > +
-> +		ecx.full = cpuid_ecx(CPUID_HFI_LEAF);
-> +		hfi_features.nr_classes = ecx.split.nr_classes;
-> +	} else {
-> +		hfi_features.nr_classes = 1;
-> +	}
->  
->  	/*
->  	 * The header contains change indications for each supported feature.
-> @@ -535,11 +578,16 @@ static void hfi_do_enable(void)
->  	/* No locking needed. There is no concurrency with CPU online. */
->  	hfi_set_hw_table(hfi_instance);
->  	hfi_enable();
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/imx8mp-clock.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/power/imx8mp-power.h>
 > +
-> +	hfi_enable_itd_classification();
->  }
->  
->  static int hfi_do_disable(void)
->  {
->  	/* No locking needed. There is no concurrency with CPU offline. */
+> +    hdmi@32fd8000 {
+> +        compatible = "fsl,imx8mp-hdmi-tx";
+> +        reg = <0x32fd8000 0x7eff>;
+> +        interrupts = <0 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&clk IMX8MP_CLK_HDMI_APB>,
+> +                 <&clk IMX8MP_CLK_HDMI_REF_266M>,
+> +                 <&clk IMX8MP_CLK_32K>,
+> +                 <&hdmi_tx_phy>;
+> +        clock-names = "iahb", "isfr", "cec", "pix";
+> +        power-domains = <&hdmi_blk_ctrl IMX8MP_HDMIBLK_PD_HDMI_TX>;
+> +        reg-io-width = <1>;
+> +        ports {
+> +           #address-cells = <1>;
+> +           #size-cells = <0>;
+> +           port@0 {
+> +             reg = <0>;
 > +
-> +	hfi_disable_itd_classification();
+> +             hdmi_tx_from_pvi: endpoint {
+> +               remote-endpoint = <&pvi_to_hdmi_tx>;
+> +             };
+> +          };
 > +
->  	hfi_disable();
->  
->  	return 0;
-> -- 
-> 2.25.1
-> 
+> +          port@1 {
+> +            reg = <1>;
+> +              hdmi_tx_out: endpoint {
+> +                remote-endpoint = <&hdmi0_con>;
+> +              };
+> +          };
+> +        };
+> +    };
+
+I'll apply patches 9 & 10 once this one is properly reviewed
+
+Thanks,
+Neil
 
