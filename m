@@ -1,209 +1,144 @@
-Return-Path: <linux-pm+bounces-3364-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3365-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8244E849339
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 06:14:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 851098493A9
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 07:04:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E2661B20CA3
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 05:14:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 34F382826AD
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 06:04:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F16DB674;
-	Mon,  5 Feb 2024 05:13:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 498B6BA38;
+	Mon,  5 Feb 2024 06:04:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="kei2qE6/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01on2102.outbound.protection.outlook.com [40.107.239.102])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2083.outbound.protection.outlook.com [40.107.237.83])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F45BE6F;
-	Mon,  5 Feb 2024 05:13:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.239.102
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65B8010A09;
+	Mon,  5 Feb 2024 06:04:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.83
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707110038; cv=fail; b=kUxBoobBZGLnv9Pjf9Gpywt9s+HTge5CEA1HCnLDVh/1BNu47lcbBZn4noNqbNU0AAR2Qn1mXjMwQaRyB4Ma4UG1xyxeull6nsxHUEuZaiZw5mjlJ72JyF9+nFsGzUeLoA3zRRHkvrNZtSlCS/qK2b6aIqg5X/LM11lHPoyJFdQ=
+	t=1707113058; cv=fail; b=S3mKy2hEXp8agIBPj3xnse6KXnPL/SaaU/mkmwJuhN16OHBxz01w7fETqbCdi+XJt6nb6lc1qtMLndNRIvoYBj2ef/aWKWDrqpnkr5oN8SkMaXlRANSbkMojgmDXPOzMMazLuuKc6Kf8veUT/CL6Q0k+ZcRclhHnrRHR/dYfdSM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707110038; c=relaxed/simple;
-	bh=0B0lcqj+owhpt/ttDtP1oTnHjLJInbPmDN4BVOHjUSw=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=K5QzAKnIWZ899j7NoR0gtVX3jng8gXPLv/0wF8fRGIBZX2ShPd5+pFVoD4qlWa+UYfgt4ckkyc1lsm4Ml3IsPjPhrOuw6LC3mV+tYw72RyOzVCUSDod6kzoTaMqbHyDI+fmpnFl3Krvn9LwqqpSzArHdtRlQJAcsnzH3it29Ew4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io; spf=pass smtp.mailfrom=siliconsignals.io; arc=fail smtp.client-ip=40.107.239.102
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siliconsignals.io
+	s=arc-20240116; t=1707113058; c=relaxed/simple;
+	bh=5bdAiRAk/l152HqTBwD2uoe7FkXNh1INEkyYl9QjsRU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mDE/cW4b15vKew3qnPGdVv+U6/PNuonU07TKTRLbX+d1+Z2ri2/7Nm2fz41tq2hGGOWF+UGO5daJEbJNX43Begtvu1jEPcG04+fBWdRZ/J1hjYRd7R/ZdS4jIeJJiOiYvb9o1ZJYaSH638PxzH+5NJbeSYcfaX4btC0WPjKYaOw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=kei2qE6/; arc=fail smtp.client-ip=40.107.237.83
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IyvL/bKPRPhVdKc8dpGcaOTkhn3k2H+EFdNP1MMPU0c/+WJtSE1MhwJ21r9HZvneyICyHXv4Vi2vX5j2ULqFcHK2LvLyAChOZtROE2ibvqXe2JH5LrAm30meajT6WitcA55X3MopISAgyS9ug/FeBdJewLduDfNpnw6mopcaYA7oIMP4f08k1+CxpuNt+N0OQdF7l5ycPOZpWLonpKAF4kPDdquhihz8clm6Y/yO5fZMC7Yw7F9lNbvlLtKmpJaV5FkuoSNnkPKnuQL7Hw/KQzVBt50sowKewLSynxQQWJ+fl1Lp2kNp+FlQtr9Qdni2sqZVbSu8vUzIpLumsIs6KQ==
+ b=O4GAC7QkUJBTtRcf5bCRibqxTeUp4JB5RfT49vk1EPgKD8t8zZKXQC2VIF95NziuUmeR0m7Hg09vnmu+v04lNt9ntwcN3NvEW0kK+KtKYegF/NdXylP4Zv8rCa/p8L4U80wSUmmwRikMFkkWxp94vw4NgdzIRd2nVB2ZleTL5wqxvmTSEJMM4UNRNTOl1aU1wUjrR+Tpc+jEq3MtOZ2YjUk258w8Bw061y7jm8Fly1IRU+C9UnR+0BFWMRh6E42FpXzhCP/F52194/zBWyL8XhArH3p1IoFJuj592cfux7UOykVEvIkeM+6goheAYvlpCS1v8FItCR5gSfwq0R/YVw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yhD2zerR0naphy4NoxcOd+wGWyxsezBEfX6T6cDvcYA=;
- b=MXNJwaST6AgMUgHWrWIZEPf6B7ovNmxJ1peK4IyFxgljoruPyMgDf64fcYkX7v/UtR9G2SmosXgtz+Do2UW/yccyXUMIb7UyLwYp4eqC/vDj278K6CtqTmjbB/KdTaB3BiYuF0hiH5mX7hmEem/912N7kWtE01b9cqe0rTq/UpVipPSq7Q9Rw78VRM1hJy51ZVlx2crEk/j+yrcayNsbXHlfOxXI+hZs9EEIph9M3zzyO0Uf/Hf7fIZFCgw9oCbYEOgUBf4M5pNV02NxCq+I8in1Wzn8t2CG7LkVDpXhYXLiifei/Y/DwOmt9RwfNp2OIaJar9t9knFUMwgy6v0Akg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siliconsignals.io; dmarc=pass action=none
- header.from=siliconsignals.io; dkim=pass header.d=siliconsignals.io; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siliconsignals.io;
-Received: from MAZPR01MB6957.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:42::6)
- by PNXPR01MB7488.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:ba::9) with
+ bh=t8/TJOxeoX5B1QWRHui5UbGv+vdgRdbntv/9SDefCE0=;
+ b=QpDsaKjAZMclU3aXUbfpNIgRXZF6fmg/saJddRsBRmIuc4DG7zQSF7chtYqkifZYlSLALmPZWGFImu5k5Dlv7Vt2G21onuSdhNAD/59MbzO8xAPfkIqiga7Xq4+Es51bzX3ipChQx974rAysKw2/+ZOyPtPtMGCriXNaYglVywrA+OCDUZWuEJK1mgW64J3iB53urK/+rYMHfkr/2OtuGzVUsZp+ckBJG9XOUSmbUznP9gmnwxpS2tSecXpX/5iG0C+gndsS1FY9CENS/t/WSFB0xOpSUz1qV2ACT0ccJdC5jiTeV87avOeK/enQ7/7mRP5oQm+p623OPw4jQCvJ/w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=t8/TJOxeoX5B1QWRHui5UbGv+vdgRdbntv/9SDefCE0=;
+ b=kei2qE6/y4zujNZW59lKTqs5Z3Z0k78RSy02RN4KaXSTh1gAjpREnTYS4XBP4dgJ/9Pr4eZVp/fjJPD7+3mpw1KCCX7f/au3RD5CU4xLo76sIlmoicdDPNcyRlp90RkpopWAmB/SRPoiOg1VdiILm3TLteNUBlZIx0IWi/VJNfg=
+Received: from MN2PR13CA0019.namprd13.prod.outlook.com (2603:10b6:208:160::32)
+ by MN2PR12MB4359.namprd12.prod.outlook.com (2603:10b6:208:265::24) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.34; Mon, 5 Feb
- 2024 05:13:52 +0000
-Received: from MAZPR01MB6957.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::72b4:8a64:2d93:7cc0]) by MAZPR01MB6957.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::72b4:8a64:2d93:7cc0%4]) with mapi id 15.20.7249.032; Mon, 5 Feb 2024
- 05:13:52 +0000
-From: Bhavin Sharma <bhavin.sharma@siliconsignals.io>
-To: sre@kernel.org,
-	robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	conor+dt@kernel.org
-Cc: Bhavin Sharma <bhavin.sharma@siliconsignals.io>,
-	Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>,
-	linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] dt-bindings: power: supply: st,stc3117
-Date: Mon,  5 Feb 2024 10:43:18 +0530
-Message-Id: <20240205051321.4079933-2-bhavin.sharma@siliconsignals.io>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240205051321.4079933-1-bhavin.sharma@siliconsignals.io>
-References: <20240205051321.4079933-1-bhavin.sharma@siliconsignals.io>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: PN3PR01CA0085.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:9a::21) To MAZPR01MB6957.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:42::6)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7270.14; Mon, 5 Feb
+ 2024 06:04:14 +0000
+Received: from BL02EPF0001A0FC.namprd03.prod.outlook.com
+ (2603:10b6:208:160:cafe::15) by MN2PR13CA0019.outlook.office365.com
+ (2603:10b6:208:160::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.26 via Frontend
+ Transport; Mon, 5 Feb 2024 06:04:13 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF0001A0FC.mail.protection.outlook.com (10.167.242.103) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7249.19 via Frontend Transport; Mon, 5 Feb 2024 06:04:13 +0000
+Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Mon, 5 Feb
+ 2024 00:04:07 -0600
+From: Meng Li <li.meng@amd.com>
+To: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, Borislav Petkov
+	<bpetkov@amd.com>, Huang Rui <ray.huang@amd.com>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<x86@kernel.org>, <linux-acpi@vger.kernel.org>, Shuah Khan
+	<skhan@linuxfoundation.org>, <linux-kselftest@vger.kernel.org>, "Nathan
+ Fontenot" <nathan.fontenot@amd.com>, Deepak Sharma <deepak.sharma@amd.com>,
+	Alex Deucher <alexander.deucher@amd.com>, Mario Limonciello
+	<mario.limonciello@amd.com>, Shimmer Huang <shimmer.huang@amd.com>, "Perry
+ Yuan" <Perry.Yuan@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>, Viresh Kumar
+	<viresh.kumar@linaro.org>, Borislav Petkov <bp@alien8.de>, "Oleksandr
+ Natalenko" <oleksandr@natalenko.name>, Meng Li <li.meng@amd.com>
+Subject: [PATCH] Fix the warning of amd-pstate.rst.
+Date: Mon, 5 Feb 2024 14:03:05 +0800
+Message-ID: <20240205060305.3594942-1-li.meng@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MAZPR01MB6957:EE_|PNXPR01MB7488:EE_
-X-MS-Office365-Filtering-Correlation-Id: e4159f9a-0676-4cca-a6ac-08dc26093e52
+X-MS-TrafficTypeDiagnostic: BL02EPF0001A0FC:EE_|MN2PR12MB4359:EE_
+X-MS-Office365-Filtering-Correlation-Id: 61b640e8-5d4c-405f-8206-08dc2610476e
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	JxTXvFdUjRK+gLaqQr/Dzva+HsT0aDO7ftbG6haTEUYc5Je20wtsT4ZvOougokqCayYnRMWCfyAXdFSWFBvP3Zzv9zLooXY8b4UIjzl/mAYupGZhdEJc/oXzIfwyQuiZGKiLhBzMOIWnpYgPdfXaP9beF0+MP8Dw0RuqtoJopDX+Op0lgYRIKBG/F7x0Z1qSK2qnXrgL+zhKulSSf6oIcHQaWhSISSn1u7I2eXLjlrUlWunFjDRTKE3sqD87QopeQStscCLjiQAMrjZ+MMiUmiPOJIGAsNQHNqplHvBczuBicEuSyrF4xMzpR3vNYmSzMI/rfYbUAYNTQ8Zm6IjL/3abdKeM7JkBVCR0iNmW7ZkZ0azlc9Vkhaa8ETQEj2MrZDu2kKgrbeZVQGAI8plyajH1ssKuE535Hi073QnHJIEMI8IU4oEqhaC81anqqUPw81uAyaGfii+I3RpXd82JNHi9c/hm6fRbKWEtKYZfNzAZqmLyCs2lZKxOJRUOZFjhsWxWboJDdQD2u1kAVNikBfc/yOvYSxiDOu2ZJAn7uOGZLi/uVxtHes2I4hdqKqPlv0LeGUB0D/fYix6i7iCRFPYz7vXu9xNrR6AGh5IoW5M=
+	AFxNiy0LW1mFXxpkKr+hHM+0lryalU3nxP54abietZc4XXzblZhhHXif3p+M1UDIs89FmC3D4k5gdllA7+JR/3mgM8azi98SAIbIAcyrsOaScUPT43dcQPtRjzogui+3vLvZb083ekDwMLZkfLRL44EXUzJIByhFakr4Fz6BPXwwL+PEfCe5sS0sjVVLW0ZXGymEH6Y4QD9wFl3hmyzzUiYAOjpbPBhQmgoVKfoITqkWsOgzyx14ptBWvXr355m24PJyMzKLLKuf1wQUxKJZ1DKUBqzWLv5/P/WpY0AfYU6BtoEYa+I7sXURfrPZKartXm1tPd8Nj2o+PWSaGfux5+l/WTXgcyRNkshdhKvG+i411rn9Pcrmb40H4YRNhieHM/nfNGVyqz2TT7cJZBZJlt/Y2krIp4mq4h8e1oMYbOqyUBQ5JbTWu5vWEQ2JXvq17Ya0xa+T4hKkq3YA7yFm1bd+G0uQOByYqX1EmBNMQrTHqtZtxpLVTLVCZlU1Sacsmbjl5Us09UYXCtSkSNGPtNk6qloiw5j80PXQ1JjMzG6yBMTB6lyD9AX5lN2LRGLn3AvZkuLUoOu8UXRYrd//WUrFnz9jG1qjQ+yfjm+KWoEBKFyRl7dUrHBPtsLFCCU5D2t10AOzxlP5tc7tivxZBH4ezd+uA2l9FlEhjqc5JMC+Xu/WQjgUubUj0pmTmwfqB4R//V4+Lh0ijUmYRryM1eDPmgYPxm2EW08VUlYmoZVyYhkh1qEmI0ghCFaMpMq/rTK6GSVa4vJMkXwvkLBf+Q==
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MAZPR01MB6957.INDPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(346002)(376002)(39830400003)(366004)(136003)(396003)(230922051799003)(230273577357003)(451199024)(64100799003)(186009)(1800799012)(41300700001)(44832011)(5660300002)(2906002)(316002)(66476007)(66556008)(66946007)(54906003)(8676002)(8936002)(38350700005)(36756003)(4326008)(478600001)(26005)(86362001)(6666004)(52116002)(6506007)(6512007)(1076003)(2616005)(83380400001)(6486002)(38100700002)(966005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?jx/H6fAaN/b95fe2REYuTFcOWTu04g6NCkOj9ssQ89LDJFnbKUt85G4O4LLR?=
- =?us-ascii?Q?W50rgLaJanDHgqYUkGGA2TkolBEPOC37dE4NZTB8CmANPGYz7mCvHpnoBqzD?=
- =?us-ascii?Q?TUb4J7WA1cf6s2LfVXOqCIDbDxEDC6mtUxDi8NmvSJ7jyVa9yAi2+fQWSEeg?=
- =?us-ascii?Q?8t3cHEIOhGftQMUJN0Thu7rOtr92NeNo3fcsIE2yp8Tny7tb/yzRRJS9oSJX?=
- =?us-ascii?Q?/4KF4oeXJFwfW6yArhTb2cS6ToVtdPqF+GO0mQHAORsj6v2Yz7dCm6mOrRK8?=
- =?us-ascii?Q?87qvZjRBtGm6snhsa/2FmDpTVniQQIOoomRpxf+ww242MUPsGGc3ScAJb9/M?=
- =?us-ascii?Q?aR8MN0A3DOhdRiwj4gpvROzNGEKra0oZaIm4+uMo3TwY6qsOkIvdZRMQIcXB?=
- =?us-ascii?Q?leEbhhVXcArhcw6NWgEajFdJflcDshMRH2Dw8uUhZMgTcOltf6fy70N25AVZ?=
- =?us-ascii?Q?/1trJTvKz3zmm/VETUX30OKjMKKaqXaOOl4Q6ULD1j3oOlzPz6ygCLvNawrI?=
- =?us-ascii?Q?ss+gnew45NVi6w0Qse59nCUXfyfbiCnfk5HvYNF0xqgG2xXEWGcG+56bMMN+?=
- =?us-ascii?Q?/DO1mWEHCiIeGzBJ9KCBR6109czIJf+6/lrifkOKwmwmThraJt9ncHLNy2ZO?=
- =?us-ascii?Q?351UpU6/5WSQxdZGUn1/cWVrQPeGs9PMsTyIt3W1kNzDYeetEvo5vSkIriO1?=
- =?us-ascii?Q?kZHBL+gZgYT0t7+LK8gFEOztuoGLWkFT0/aQx1JZ74jH+ejenGje9X1+oQuz?=
- =?us-ascii?Q?avc4Wyd56X4S+pRW6VqrvvkyKhAT3muq31OrfK9HXlCXMS8o4MDUTigqlMMR?=
- =?us-ascii?Q?WAOzziCHGtz6vwSLiV36C0wN2XYSTdWMxqu/xhurY6O+iunyyc1QeQ0D5lhC?=
- =?us-ascii?Q?FKSDEo85LhcmXoT1wEjuJBnqPydJ9KD2QOS5vi88RG5mMJizFpJj1Lv4CeRj?=
- =?us-ascii?Q?IgD+u1CmeOMtPNoe7kfbe9hQ4dC53Dvvd15PH4VKY/i0TUFgLXUU5yGx0krg?=
- =?us-ascii?Q?zFoJLc5W4qHCPCDFxMAnnjYXawitJ7QVStj0R77rww4QhMv7fAkBJrXvk7NG?=
- =?us-ascii?Q?vrKMdflhW2lNgth/ogBcyMTtiqN4NY/+4WKsU2SoRinBMovwNII0KtQ1jN/c?=
- =?us-ascii?Q?aA82lWH3Y+2T+YjS3QklG8yQakENM+g8JipgY6ZpfKCAKjChMz9iPT5+k7bZ?=
- =?us-ascii?Q?ZZ+qqU6YNTfo1jWV1y9X7ymIro43V3aaPd4C9iM/QXD1W0TEivGRJzV0BXmf?=
- =?us-ascii?Q?YpJB58U5QoPgGO3vghRaHvnKiXu1HwIMm8BunfnrZageG26QPdmseO3Y4Qto?=
- =?us-ascii?Q?ZIBo85Y9EcpsbXuDw/xCLm/TjbwDZ2JeNk6i+avWR4+I5rJpGLdTnp/olI4P?=
- =?us-ascii?Q?Qls4pCQZG0hRDNxLLfe4SSZ/TYtU5WyUVMlRNlduXlGJze3xJk5TwWoSQyA/?=
- =?us-ascii?Q?rRhcglxflykLJAEQ/EG2vsnbt1k9GB8klmgGL9FfgiZ4L77+1ZURd6Ihy0P2?=
- =?us-ascii?Q?lhOLGvLXciQoG46YsD11yCVf4DJTPAlz3yE3+NDODdm6LKDT76m9n1cwhFPb?=
- =?us-ascii?Q?mR+H0TGcJy1KHHZW3W0jfC55//QO7ckYXwnLgOIFWXLc5v9b04ED8Y2r390M?=
- =?us-ascii?Q?hHMsLXJUPliXQO16hLF86o0=3D?=
-X-OriginatorOrg: siliconsignals.io
-X-MS-Exchange-CrossTenant-Network-Message-Id: e4159f9a-0676-4cca-a6ac-08dc26093e52
-X-MS-Exchange-CrossTenant-AuthSource: MAZPR01MB6957.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2024 05:13:52.2747
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(346002)(39860400002)(376002)(396003)(136003)(230922051799003)(64100799003)(1800799012)(82310400011)(186009)(451199024)(36840700001)(46966006)(40470700004)(110136005)(316002)(6636002)(83380400001)(54906003)(81166007)(82740400003)(356005)(2616005)(26005)(70206006)(7696005)(4326008)(86362001)(2906002)(5660300002)(4744005)(7416002)(70586007)(478600001)(426003)(47076005)(16526019)(1076003)(336012)(8676002)(8936002)(36756003)(40480700001)(40460700003)(36860700001)(41300700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2024 06:04:13.9055
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 7ec5089e-a433-4bd1-a638-82ee62e21d37
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vRq/ElbxWqBJFK8cE2BiQPJOkld8Mql0u7zF1RupEQkJxp2bRVDhY9CrkaMyE0gBC2eib8F11bg4y+ux1TgqSpMJfWivyMxZczYQETI9fUg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PNXPR01MB7488
+X-MS-Exchange-CrossTenant-Network-Message-Id: 61b640e8-5d4c-405f-8206-08dc2610476e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL02EPF0001A0FC.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4359
 
-Signed-off-by: Bhavin Sharma <bhavin.sharma@siliconsignals.io>
+Title under line too short
+
+Signed-off-by: Meng Li <li.meng@amd.com>
 ---
-Changelogs :
+ Documentation/admin-guide/pm/amd-pstate.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-v2 -> v3
-- Resolved DTC warnings and errors
-- Formatted the changelogs
-- Added monitored battery properties
-- Replaced 'additionalProperties' with 'unevaluatedProperties'
-- Replaced '&i2c6' with 'i2c'
-
-v1 -> v2
-- String value is redundantly quoted with any quotes (quoted-strings)
-- Found character '\t' that cannot start any token
----
- .../bindings/power/supply/st,stc3117.yaml     | 49 +++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/power/supply/st,stc3117.yaml
-
-diff --git a/Documentation/devicetree/bindings/power/supply/st,stc3117.yaml b/Documentation/devicetree/bindings/power/supply/st,stc3117.yaml
-new file mode 100644
-index 000000000000..9ab0b0d6b30e
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/supply/st,stc3117.yaml
-@@ -0,0 +1,49 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/supply/st,stc3117.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: STMicroelectronics STC3117 Fuel Gauge Unit Power Supply
-+
-+maintainers:
-+  - Bhavin Sharma <bhavin.sharma@siliconsignals.io>
-+  - Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
-+
-+allOf:
-+  - $ref: power-supply.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - st,stc3117
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    bat: battery {
-+       compatible = "simple-battery";
-+       device-chemistry = "lithium-ion-polymer";
-+       energy-full-design-microwatt-hours = <16800000>;
-+       charge-full-design-microamp-hours = <4000000>;
-+       voltage-min-design-microvolt = <3000000>;
-+    };
-+
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      stc3117@70 {
-+        compatible = "st,stc3117";
-+        reg = <0x70>;
-+        monitored-battery = <&bat>;
-+      };
-+    };
+diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
+index 0a3aa6b8ffd5..1e0d101b020a 100644
+--- a/Documentation/admin-guide/pm/amd-pstate.rst
++++ b/Documentation/admin-guide/pm/amd-pstate.rst
+@@ -381,7 +381,7 @@ driver receives a message with the highest performance change, it will
+ update the core ranking and set the cpu's priority.
+ 
+ ``amd-pstate`` Preferred Core Switch
+-=================================
++=====================================
+ Kernel Parameters
+ -----------------
+ 
 -- 
-2.25.1
+2.34.1
 
 
