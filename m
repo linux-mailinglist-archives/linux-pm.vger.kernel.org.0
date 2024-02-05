@@ -1,156 +1,293 @@
-Return-Path: <linux-pm+bounces-3381-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3382-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62BAD849728
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 11:00:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2D388497C4
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 11:28:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 957841C226D6
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 10:00:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A2041F23E0A
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 10:28:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C123412B87;
-	Mon,  5 Feb 2024 10:00:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D24281642C;
+	Mon,  5 Feb 2024 10:28:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CWVzxJ1A"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PRT5sYqw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AB3512E71
-	for <linux-pm@vger.kernel.org>; Mon,  5 Feb 2024 10:00:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10C7F171AE;
+	Mon,  5 Feb 2024 10:28:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707127209; cv=none; b=J/abKnCSHZxZ1D9j2yWSjwQgDUcozZ1xzYCMyFxWj9cTsYMf+4Ke5MhLf9pZReD5h7AJdKg93MnoKjx5yAttvFnSI3cQn1t9zi1KF6g3Np1HOfh0in6u08nH2lMb5mdsW5cM7YqrRC8c4LSyi4V5LVRYT4XFR3Xgxn+iXu0uwv8=
+	t=1707128934; cv=none; b=uMEWPLQmwirT79cM347lmZHz4xrSuNLhpmvE47MkJhTngnF2j9OHbPjELy0Ms0phXhjyB90VzFiekQ0AmxL1GUjkYoeU66+GwNxF5l8ICNNwQ8/2hIiK9Uvs56GAHA8fHOuIHCQ7/XtJB/bH/joBTe5hUb/czesltfW1ZhNxjgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707127209; c=relaxed/simple;
-	bh=0zwGLQozIm1xLIUb+JT1QR0nH+Sj7un9j5w6FlqwRqA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=L8utjQKyckNmjUvp2GUak5l5Am5YbiK3iJoZuuLXP24fGZaWQxfzQFmHLRC9O2b+VHyx/aKCsgAXsFkUqGN/YD9kAszTF+srAD1MMXItTAa7pmjL0/xEMfZQitsls4YGQEylc6c23OJImpy4LYTvyMxU6OqeQnpJcjg1ySXDLjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CWVzxJ1A; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1707127207;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Y1Gn5QY0RzFz/c12Z/qyBnZZspPbZJTFIJYfZUyz5g0=;
-	b=CWVzxJ1AVY72xH3rVL3Dl3jHSmv3PE4wQ8kYCfG5up20+kegL01Odrtx0I/32OYwR07aFO
-	7WZZSClBPyVFXI0MubUoDyA6miHUKXusEPh27F7TR64HTjqSo3mlSgrSSA5dNgNtwEcQnc
-	55y26klmOyc3SilC7T/sAv+lR9WNlBI=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-164-LspCnZyCPFSiKLyMhNxn9g-1; Mon, 05 Feb 2024 05:00:03 -0500
-X-MC-Unique: LspCnZyCPFSiKLyMhNxn9g-1
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-a2bffe437b5so275026966b.1
-        for <linux-pm@vger.kernel.org>; Mon, 05 Feb 2024 02:00:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707127202; x=1707732002;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y1Gn5QY0RzFz/c12Z/qyBnZZspPbZJTFIJYfZUyz5g0=;
-        b=M2pjJPt8hh2S6KhsnG+aXOH/eQS5j+25L8p5ww9+cEAawLpzd7SeVkAVmeGLVzGLZ5
-         oMSpaYfFnQNekaVczPUBSKfAl3u629MzG0HBYUD0tbwrJIFvBDP1DnFafU8/l4NcQOV2
-         m2cbmj81z8+VKiMaB+a5H/TD7B+/rs6QsvlIVVc5GS7xHKhIsRq7cA0i+kI6RbaACsQN
-         ha4sqqth3gwp+GWF7zXKyo54lEe6dy+FdOhuTAuhj7/3M6dr5BYRaGJ6Pk6IiG71BIjh
-         sWZ2otDVt5lMCeBqfjJo3GjAVl5Gp66k/b5a7StZ58xmhpHDG5KDQA0+1yVqvGLPTnUv
-         Hlgg==
-X-Gm-Message-State: AOJu0Yx5BwLQoiAoFWGgvY8GMJ/ELutUjDSxQvXzjbWRXbXihEg6IuuB
-	eGpR8aFZCZK5JDGLweOwF/uAcIzdcyu5n8oAgCDJiRc4dCs9QS7plHZPbi4hhzNgitEDYrbQimv
-	0ZXWtS9X7aeiFo6hs7kndpdcJ03cR8FBTcuNW+4DzL6Pl1yc/8H4cKLh2
-X-Received: by 2002:a17:906:6c9a:b0:a37:7e9c:17ea with SMTP id s26-20020a1709066c9a00b00a377e9c17eamr2558744ejr.12.1707127202769;
-        Mon, 05 Feb 2024 02:00:02 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFDasoEfxSl3kUGHu4aAoww/p36CcrrtEFIiFCNTq9O7sX/0D5DLggoumkHWtoeIrvXiXZpyQ==
-X-Received: by 2002:a17:906:6c9a:b0:a37:7e9c:17ea with SMTP id s26-20020a1709066c9a00b00a377e9c17eamr2558726ejr.12.1707127202454;
-        Mon, 05 Feb 2024 02:00:02 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCXHkc55LLSsMQmfs5K3PghfD0W5Y6o+ipTZQwDlhI1YPtrAzL/9GF/wwI4wDRsnZ7N0EybIZobE6yyZV2QDLJ7xLHaFKjf1bXNJ5zfk50Yqh6Sh36nzquGVd62Tf95f1E3nFAD4YsvTwAisbkSx6SDQzabBCkMYuSM+ml756DyN1OdwNqPTmYBifwido3Ab2PdlMlD4Nw==
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id a20-20020a170906671400b00a34d0a865ecsm4078151ejp.163.2024.02.05.02.00.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Feb 2024 02:00:01 -0800 (PST)
-Message-ID: <2f244f9f-8796-4cad-8bf8-d0c3411588c1@redhat.com>
-Date: Mon, 5 Feb 2024 11:00:01 +0100
+	s=arc-20240116; t=1707128934; c=relaxed/simple;
+	bh=m38cADo9z6VVvxj6P+Fi8aaRnZ09Ugt/ustDOItD5/U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a5r3KUlt6KWUKXN7/ivZpGvzLijuMtkGB5lYe3Htf76vVN+UvVmKQxwSEXyisiRnitOF6YqEz3gYDh6wIvcpbd4Pr4sVcAUwvzevTMvOrGDURSddv2/PxxTY11dVeSA/7vJuvvUR7lp5kMrqZ8D9pGrgmgrMjAesRukL8l/4czk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PRT5sYqw; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707128933; x=1738664933;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=m38cADo9z6VVvxj6P+Fi8aaRnZ09Ugt/ustDOItD5/U=;
+  b=PRT5sYqwukwfWGkE/+VuBUF9XGZRUeFu1ZqJr81mE1R5afKmSzas8j9P
+   5I55Y+LuoI1xqTldPOEKkfP4KCwIvAR3yF/fMcWu7JV5F+oZA4MxphWaF
+   zfRE9z0s9qa8vgjExGkCTM/LmuTEc6924ucBB8zr1wFa2cr+67ML+zBbJ
+   uPdSHJRv5Gl21xqZF/+rJsYa+mIVI/xn3U10ykDhEsi67zB0BqB2h1Xf8
+   kA/NIqm2rrJ62LzlwhUjIODCUlyCbE87jT//YV8WkAapBXrfbYivgAO+y
+   0fSVr9BzRA7QNvc49oiMQiZ/VbhITwkCzbkEfslX+AXeKaBS8NaOXutaL
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10974"; a="11848533"
+X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
+   d="scan'208";a="11848533"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 02:28:52 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
+   d="scan'208";a="732928"
+Received: from sgruszka-mobl.ger.corp.intel.com (HELO localhost) ([10.252.42.97])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 02:28:49 -0800
+Date: Mon, 5 Feb 2024 11:28:47 +0100
+From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+To: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	Len Brown <len.brown@intel.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Zhao Liu <zhao1.liu@intel.com>,
+	Zhuocheng Ding <zhuocheng.ding@intel.com>, x86@kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Zhao Liu <zhao1.liu@linux.intel.com>
+Subject: Re: [PATCH 6/9] thermal: intel: hfi: Enable Intel Thread Director
+Message-ID: <ZcC4Xy9xBtBsCDLq@linux.intel.com>
+References: <20240203040515.23947-1-ricardo.neri-calderon@linux.intel.com>
+ <20240203040515.23947-7-ricardo.neri-calderon@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] power: supply: mm8013: implement
- POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR_AVAILABLE
-Content-Language: en-US, nl
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Sebastian Reichel <sre@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- Sebastian Reichel <sebastian.reichel@collabora.com>
-References: <20240204-power_supply-charge_behaviour_prop-v1-0-06a20c958f96@weissschuh.net>
- <20240204-power_supply-charge_behaviour_prop-v1-3-06a20c958f96@weissschuh.net>
-From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20240204-power_supply-charge_behaviour_prop-v1-3-06a20c958f96@weissschuh.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240203040515.23947-7-ricardo.neri-calderon@linux.intel.com>
 
-Hi,
-
-On 2/4/24 18:26, Thomas Weißschuh wrote:
-> The sysfs is documented to report both the current and all available
-> behaviours. For this POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR_AVAILABLE needs
-> to be implemented.
+On Fri, Feb 02, 2024 at 08:05:12PM -0800, Ricardo Neri wrote:
+> Enable Intel Thread Director (ITD) from the CPU hotplug callback: globally
+> from CPU0 and then enable the thread-classification hardware in each
+> logical processor individually.
 > 
-> Note that this changes the format of the sysfs file
-> (to the documented format):
+> Also, initialize the number of classes supported.
 > 
-> Before: "auto"
-> After:  "[auto] inhibit-charge"
+> Currently, a bare-metal machine does not use ITD, but KVM uses the
+> attributes of the bare-metal machine to virtualize HFI.
 > 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+> Cc: Zhao Liu <zhao1.liu@linux.intel.com>
+> Cc: Zhuocheng Ding <zhuocheng.ding@intel.com>
+> Cc: x86@kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com> # intel_hfi.c
+> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> ---
+> Discussion:
+> 
+> This patch conflicts with a patchset from Stanislaw Gruszka to enable HFI
+> only if there are user space entities listening to the thermal netlink
+> events. ITD requires that HFI is enabled to function. ITD needs to be
+> unconditionally enabled for virtual machines.
 
-Changing userspace API like this is never ideal, but given how
-new the mm8013 driver is and that this brings things inline
-with the docs I think that this should be fine:
+Why unconditionally? From what I can tell from KVM patches (please correct
+me if I'm wrong) guests need to be modified to utilize HFI/ITD. Do we
+also have to enable HFI/ITD if no such guest run on virtual machine ?
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> Options to resolve this conflict include a command-line argument for users
+> wanting to virtualize HFI or a CONFIG_ option for the same effect. QEMU
+> could also learn to listen to thermal netlink event. A blunter option is
+> to unconditionally enable HFI when KVM is enabled at build time.
 
-Regards,
+In general similar principle should be applied - do not enable if not
+needed. We should be able to get information from KVM when there is
+actual need. QEMU registering to thermal events seems to be odd for
+me, and I think there must be better solution.
 
-Hans
-
-
-
+Regards
+Stanislaw
 
 > ---
->  drivers/power/supply/mm8013.c | 5 +++++
->  1 file changed, 5 insertions(+)
+> Patch cherry-picked from the IPC classes patchset.
+> ---
+> ---
+>  arch/x86/include/asm/hfi.h        |  9 ++++++
+>  arch/x86/include/asm/msr-index.h  |  6 ++++
+>  drivers/thermal/intel/intel_hfi.c | 52 +++++++++++++++++++++++++++++--
+>  3 files changed, 65 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/power/supply/mm8013.c b/drivers/power/supply/mm8013.c
-> index caa272b03564..695df8bd6cb0 100644
-> --- a/drivers/power/supply/mm8013.c
-> +++ b/drivers/power/supply/mm8013.c
-> @@ -72,6 +72,7 @@ static int mm8013_checkdevice(struct mm8013_chip *chip)
->  static enum power_supply_property mm8013_battery_props[] = {
->  	POWER_SUPPLY_PROP_CAPACITY,
->  	POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
-> +	POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR_AVAILABLE,
->  	POWER_SUPPLY_PROP_CHARGE_FULL,
->  	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
->  	POWER_SUPPLY_PROP_CHARGE_NOW,
-> @@ -113,6 +114,10 @@ static int mm8013_get_property(struct power_supply *psy,
->  		else
->  			val->intval = POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO;
->  		break;
-> +	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR_AVAILABLE:
-> +		val->intval = BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO)
-> +			    | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE);
-> +		break;
->  	case POWER_SUPPLY_PROP_CHARGE_FULL:
->  		ret = regmap_read(chip->regmap, REG_FULL_CHARGE_CAPACITY, &regval);
->  		if (ret < 0)
+> diff --git a/arch/x86/include/asm/hfi.h b/arch/x86/include/asm/hfi.h
+> index 02ee56dbaeb6..b7fda3e0e8c8 100644
+> --- a/arch/x86/include/asm/hfi.h
+> +++ b/arch/x86/include/asm/hfi.h
+> @@ -23,6 +23,15 @@ union cpuid6_edx {
+>  	u32 full;
+>  };
+>  
+> +union cpuid6_ecx {
+> +	struct {
+> +		u32	dont_care0:8;
+> +		u32	nr_classes:8;
+> +		u32	dont_care1:16;
+> +	} split;
+> +	u32 full;
+> +};
+> +
+>  /**
+>   * struct hfi_hdr - Header of the HFI table
+>   * @perf_updated:	Hardware updated performance capabilities
+> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+> index 46983fb0b5b3..d74932a0778d 100644
+> --- a/arch/x86/include/asm/msr-index.h
+> +++ b/arch/x86/include/asm/msr-index.h
+> @@ -1148,6 +1148,12 @@
+>  
+>  #define MSR_IA32_HW_FEEDBACK_CONFIG     0x17d1
+>  #define HW_FEEDBACK_CONFIG_HFI_ENABLE   BIT_ULL(0)
+> +#define HW_FEEDBACK_CONFIG_ITD_ENABLE   BIT_ULL(1)
+> +
+> +#define MSR_IA32_HW_FEEDBACK_THREAD_CONFIG 0x17d4
+> +#define HW_FEEDBACK_THREAD_CONFIG_ENABLE BIT_ULL(0)
+> +
+> +#define MSR_IA32_HW_FEEDBACK_CHAR       0x17d2
+>  
+>  /* x2APIC locked status */
+>  #define MSR_IA32_XAPIC_DISABLE_STATUS	0xBD
+> diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+> index 3c399f3d059f..b69fa234b317 100644
+> --- a/drivers/thermal/intel/intel_hfi.c
+> +++ b/drivers/thermal/intel/intel_hfi.c
+> @@ -33,6 +33,7 @@
+>  #include <linux/percpu-defs.h>
+>  #include <linux/printk.h>
+>  #include <linux/processor.h>
+> +#include <linux/sched/topology.h>
+>  #include <linux/slab.h>
+>  #include <linux/spinlock.h>
+>  #include <linux/suspend.h>
+> @@ -298,6 +299,10 @@ static void hfi_enable(void)
+>  
+>  	rdmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
+>  	msr_val |= HW_FEEDBACK_CONFIG_HFI_ENABLE;
+> +
+> +	if (cpu_feature_enabled(X86_FEATURE_ITD))
+> +		msr_val |= HW_FEEDBACK_CONFIG_ITD_ENABLE;
+> +
+>  	wrmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
+>  }
+>  
+> @@ -319,6 +324,10 @@ static void hfi_disable(void)
+>  
+>  	rdmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
+>  	msr_val &= ~HW_FEEDBACK_CONFIG_HFI_ENABLE;
+> +
+> +	if (cpu_feature_enabled(X86_FEATURE_ITD))
+> +		msr_val &= ~HW_FEEDBACK_CONFIG_ITD_ENABLE;
+> +
+>  	wrmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
+>  
+>  	/*
+> @@ -337,6 +346,30 @@ static void hfi_disable(void)
+>  	}
+>  }
+>  
+> +static void hfi_enable_itd_classification(void)
+> +{
+> +	u64 msr_val;
+> +
+> +	if (!cpu_feature_enabled(X86_FEATURE_ITD))
+> +		return;
+> +
+> +	rdmsrl(MSR_IA32_HW_FEEDBACK_THREAD_CONFIG, msr_val);
+> +	msr_val |= HW_FEEDBACK_THREAD_CONFIG_ENABLE;
+> +	wrmsrl(MSR_IA32_HW_FEEDBACK_THREAD_CONFIG, msr_val);
+> +}
+> +
+> +static void hfi_disable_itd_classification(void)
+> +{
+> +	u64 msr_val;
+> +
+> +	if (!cpu_feature_enabled(X86_FEATURE_ITD))
+> +		return;
+> +
+> +	rdmsrl(MSR_IA32_HW_FEEDBACK_THREAD_CONFIG, msr_val);
+> +	msr_val &= ~HW_FEEDBACK_THREAD_CONFIG_ENABLE;
+> +	wrmsrl(MSR_IA32_HW_FEEDBACK_THREAD_CONFIG, msr_val);
+> +}
+> +
+>  /**
+>   * intel_hfi_online() - Enable HFI on @cpu
+>   * @cpu:	CPU in which the HFI will be enabled
+> @@ -377,6 +410,8 @@ void intel_hfi_online(unsigned int cpu)
+>  
+>  	init_hfi_cpu_index(info);
+>  
+> +	hfi_enable_itd_classification();
+> +
+>  	/*
+>  	 * Now check if the HFI instance of the package/die of @cpu has been
+>  	 * initialized (by checking its header). In such case, all we have to
+> @@ -460,6 +495,8 @@ void intel_hfi_offline(unsigned int cpu)
+>  	if (!hfi_instance->local_table.hdr)
+>  		return;
+>  
+> +	hfi_disable_itd_classification();
+> +
+>  	mutex_lock(&hfi_instance_lock);
+>  	cpumask_clear_cpu(cpu, hfi_instance->cpus);
+>  
+> @@ -505,8 +542,14 @@ static __init int hfi_parse_features(void)
+>  	 */
+>  	hfi_features.class_stride = nr_capabilities;
+>  
+> -	/* For now, use only one class of the HFI table */
+> -	hfi_features.nr_classes = 1;
+> +	if (cpu_feature_enabled(X86_FEATURE_ITD)) {
+> +		union cpuid6_ecx ecx;
+> +
+> +		ecx.full = cpuid_ecx(CPUID_HFI_LEAF);
+> +		hfi_features.nr_classes = ecx.split.nr_classes;
+> +	} else {
+> +		hfi_features.nr_classes = 1;
+> +	}
+>  
+>  	/*
+>  	 * The header contains change indications for each supported feature.
+> @@ -535,11 +578,16 @@ static void hfi_do_enable(void)
+>  	/* No locking needed. There is no concurrency with CPU online. */
+>  	hfi_set_hw_table(hfi_instance);
+>  	hfi_enable();
+> +
+> +	hfi_enable_itd_classification();
+>  }
+>  
+>  static int hfi_do_disable(void)
+>  {
+>  	/* No locking needed. There is no concurrency with CPU offline. */
+> +
+> +	hfi_disable_itd_classification();
+> +
+>  	hfi_disable();
+>  
+>  	return 0;
+> -- 
+> 2.25.1
 > 
-
 
