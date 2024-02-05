@@ -1,145 +1,81 @@
-Return-Path: <linux-pm+bounces-3408-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3409-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A98F84A108
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 18:39:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4AED84A283
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 19:38:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DBFC02846AB
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 17:39:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 872BF1F23C88
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 18:38:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71D3445946;
-	Mon,  5 Feb 2024 17:36:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7AED1F93F;
+	Mon,  5 Feb 2024 18:38:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hdWZOVHg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4D5E48786;
-	Mon,  5 Feb 2024 17:35:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4C90482CC;
+	Mon,  5 Feb 2024 18:38:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707154562; cv=none; b=MLFADHAWv/3kojEEpguFC56FbaDH6VR/hySV26ptEZbC1m/kpn+XiXB0AI8l6sVtSWVVCGdtEy/KrPrTNtfYmLm6JEk1YU4YN1LlRoqxRVqBWL+Hro/CLcHy4aDfrefnqSx9vSPe9V5gVFxt3f8Wdvvu9LUPN3qaQWfuUHNwudI=
+	t=1707158280; cv=none; b=W7ktC2RxHQ3LfnuEOSFItU++mrcljY62lovZH6wkj984IQcbl9TH1eo3fyNRnjI+ssYs8Gq9CSc1+TNrFZ5Bpc+QFAh1NAPA4DRPxMReWR3MtXeYWOkDX1yva3nJaeMeVs8BrV/s5w0nZki5aQu+OTzGDewzKDEogOWZrAyFrXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707154562; c=relaxed/simple;
-	bh=y3teXgT1pKfAzEHmNJo3iLNwZ/H7kV889ZteVNjAdqM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ayKxYuI/oGCT/7Cw20gVZjqeqkii9FXyIE0/eD4IRxsu4dkscsARxuoiMbFAFBiTZYSxQMpRI4aeo+B/PoBEAvVJZOb4W9tKLIQdtz34OM8LVX34OIwxQc5CJ+3F7OIVMEngvRMrz6hYIQbjjmx0UMxDqbf4crcZwxlWjW/aMcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0518612FC;
-	Mon,  5 Feb 2024 09:36:42 -0800 (PST)
-Received: from [10.57.47.222] (unknown [10.57.47.222])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 600C73F5A1;
-	Mon,  5 Feb 2024 09:35:57 -0800 (PST)
-Message-ID: <f782f0d4-99ba-4876-bd20-03aaae20c0e0@arm.com>
-Date: Mon, 5 Feb 2024 17:35:55 +0000
+	s=arc-20240116; t=1707158280; c=relaxed/simple;
+	bh=KwFuWmMKdMtUD3SifcTFtEjFlbDRjJdQmm2314Bkh1Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Kkb88/BHe0dQuQZ2gvUl6HXOiVxalxjHDyGVaigwaV+dBjCqTbjMMk6D7fFgbvJIckE/UHR8tMo6nDP9FYO6N9kX0iNgBlPE+C8oN06JWd7Dvkd58Emohiz1OtM2JHBkv9FnrKCyIpc0ZZjAI3AZBKUsCREMLvxK1bCeJEV6+wo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hdWZOVHg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA20FC433C7;
+	Mon,  5 Feb 2024 18:37:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707158280;
+	bh=KwFuWmMKdMtUD3SifcTFtEjFlbDRjJdQmm2314Bkh1Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hdWZOVHgYa4McuTwIMX3ruSsvqnYybA78d052fK8+34bUmF5k7+GKfb1cPwMj6Tpy
+	 gVj58bt+8VRpA7TT/6OVATtNuhGM0RZQXNdZbF/ZWkLbDMr/fIKm1jk3JxAI8KVFdc
+	 eqmpDu8gBapaksk03H/1C7t1YJHY5ZYH65fZ+HP+ddSdkMVycrzGfIcybsNYXMrZFi
+	 jn3X/4Hw6wNvPw6ZBCjILN2VkrWZNAON+9HDIvNdT3lNsse9GP90diKKBeuLPynGZU
+	 lEJTmtUg9mqcV3f9CzjGHqpSS9ty3iL2AOilrMeFfd0dXk7hixwQz769j7XTDu12W3
+	 43iGVFWZpO/8g==
+Date: Mon, 5 Feb 2024 18:37:40 +0000
+From: Rob Herring <robh@kernel.org>
+To: Jeffrey Hugo <quic_jhugo@quicinc.com>
+Cc: linux-kernel@vger.kernel.org, konrad.dybcio@linaro.org,
+	djakov@kernel.org, linux-pm@vger.kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, andersson@kernel.org,
+	quic_okukatla@quicinc.com, devicetree@vger.kernel.org,
+	conor+dt@kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: interconnect: qcom,rpmh: Fix bouncing
+ @codeaurora address
+Message-ID: <170715826040.3958103.13885911803274019580.robh@kernel.org>
+References: <20240202181748.4124411-1-quic_jhugo@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpufreq: Change default transition delay to 2ms
-Content-Language: en-US
-To: Qais Yousef <qyousef@layalina.io>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>
-References: <20240205022500.2232124-1-qyousef@layalina.io>
- <326b568d-d460-4a69-9336-28da328ffdcf@arm.com>
- <20240205120147.ui5zab2b2j4looex@airbuntu>
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <20240205120147.ui5zab2b2j4looex@airbuntu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240202181748.4124411-1-quic_jhugo@quicinc.com>
 
-On 05/02/2024 12:01, Qais Yousef wrote:
-> Hi Christian
+
+On Fri, 02 Feb 2024 11:17:48 -0700, Jeffrey Hugo wrote:
+> The servers for the @codeaurora domain have long been retired and any
+> messages sent there will bounce.  Fix Odelu's address in the binding to
+> match the .mailmap entry so that folks see the correct address when
+> looking at the documentation.
 > 
-> On 02/05/24 09:17, Christian Loehle wrote:
->> On 05/02/2024 02:25, Qais Yousef wrote:
->>> 10ms is too high for today's hardware, even low end ones. This default
->>> end up being used a lot on Arm machines at least. Pine64, mac mini and
->>> pixel 6 all end up with 10ms rate_limit_us when using schedutil, and
->>> it's too high for all of them.
->>>
->>> Change the default to 2ms which should be 'pessimistic' enough for worst
->>> case scenario, but not too high for platforms with fast DVFS hardware.
->>>
->>> Signed-off-by: Qais Yousef <qyousef@layalina.io>
->>> ---
->>>  drivers/cpufreq/cpufreq.c | 4 ++--
->>>  1 file changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
->>> index 44db4f59c4cc..8207f7294cb6 100644
->>> --- a/drivers/cpufreq/cpufreq.c
->>> +++ b/drivers/cpufreq/cpufreq.c
->>> @@ -582,11 +582,11 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
->>>  		 * for platforms where transition_latency is in milliseconds, it
->>>  		 * ends up giving unrealistic values.
->>>  		 *
->>> -		 * Cap the default transition delay to 10 ms, which seems to be
->>> +		 * Cap the default transition delay to 2 ms, which seems to be
->>>  		 * a reasonable amount of time after which we should reevaluate
->>>  		 * the frequency.
->>>  		 */
->>> -		return min(latency * LATENCY_MULTIPLIER, (unsigned int)10000);
->>> +		return min(latency * LATENCY_MULTIPLIER, (unsigned int)(2*MSEC_PER_SEC));
->>>  	}
->>>  
->>>  	return LATENCY_MULTIPLIER;
->>
->> Hi Qais,
->> as previously mentioned I'm working on improving iowait boost and while I'm not against
->> this patch per se it does make iowait boosting more aggressive. ((Doubling limited by rate_limit_us)
->> Since the boost is often applied when not useful (for Android e.g. periodic f2fs writebacks),
->> this might have some side effects. Please give me a couple of days for verifying any impact,
->> or did you do that already?
+> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> I don't understand the concern, could you elaborate more please?
-> 
-> Products already ship with 500us and 1ms which is lower than this 2ms.
-> 
-> On my AMD desktop it is already 1ms. And I think I've seen Intel systems
-> defaulting to 500us or something low too. Ideally cpufreq drivers should set
-> policy->transition_delay_us; so this path is taken if the driver didn't
-> populate that. Which seems to be more common than I'd like tbh.
 
-I'm not disagreeing with you on that part. I'm just worried about the side
-effects w.r.t iowait boosting.
+Acked-by: Rob Herring <robh@kernel.org>
 
-> 
-> I never run with 10ms. It's too slow. But I had several tests in the past
-> against 2ms posted for those margin and removal of uclamp-max aggregation
-> series. Anyway. I ran PCMark storage on Pixel 6 (running mainlinish kernel) and
-> I see
-> 
-> 10ms: 27600
-> 2ms: 29750
-
-Yes, decreasing the rate limit makes it more aggressive, nothing unexpected here.
-But let's be frank, the scenarios in which iowait boosting actually shows its
-biggest benefit you are either doing:
-- Random Read (small iosize), single-threaded, synchronous IO
-- anything O_DIRECT
-and I'd argue more than likely you are doing something wrong if you're actually in
-such a case in the real world. So I'm much more worried about boosting in scenarios
-where it doesn't help (e.g. on an Android quite frequently: f2fs page cache writeback).
-
-Decreasing the default transition latency makes (sugov) iowait boosting much more aggressive,
-so I'm curious if this patch increases power consumption on systems that were at 10ms previously
-when in non-IO workloads.
-
-Hope that clears that up. Again, not an argument against your change, just being cautious of
-the potential side effects and if they need some mitigations.
-
-Kind Regards,
-Christian
 
