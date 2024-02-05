@@ -1,244 +1,246 @@
-Return-Path: <linux-pm+bounces-3372-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3373-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C97A48494C4
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 08:48:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E5B3849535
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 09:17:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE5C61C2185F
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 07:48:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 440F7281F6C
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 08:17:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 053E010A36;
-	Mon,  5 Feb 2024 07:48:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="m1uurVXk"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7FC611199;
+	Mon,  5 Feb 2024 08:17:46 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3757F10A11
-	for <linux-pm@vger.kernel.org>; Mon,  5 Feb 2024 07:48:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98C281118A
+	for <linux-pm@vger.kernel.org>; Mon,  5 Feb 2024 08:17:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707119318; cv=none; b=SQqfsJK8xf8Np4qjLh/0D74sTD333JzDixY4EWXF14RE9Eu3ty4kLxOdUYJ6HyXhbli6uruAC4wedxn8CYiZ0v1MJ4/giX/hO/wRnyy9FIO1duSykyWSY4VNHqegyD5Q6qFlHZWhXY+hQ8N5TaTi2705dIIAzxiXpVJqX2m0RtM=
+	t=1707121066; cv=none; b=g3+JQY9u+f+oLQMcBa1D2iFKz5zQGkYVobgQS3vt5uCyQVymTMsrfnprNQhwCKQY06gZUyY6H/5IiIyXZsuuKAeoTXJrerjQd7XorYQ9I2JP0nb7DXfwi+L3hDTAS7Tu8972JH2JT4gNxwBKLfusGTnS8yA6Ab6oTvhmomXhFyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707119318; c=relaxed/simple;
-	bh=wMUoCmHVAaDGpBDtO1mN7scySuWqd627SunQSIwMcXY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=L77c6lA7NCeU0XB09V/EbxrS7QrcWGImr9XFHTIsWygcrG1alaQ4qxKExBDSBrAWKqxDuXjmRc3XZBI2K8TIiXp96Wc1D5XiZfjn8iCM0L9GbmgNmQcG04uti3HZc4hhzukQkOcMs4lcSDvdiqeh5r39lbESKa6tuBBeaJg+0Wg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=m1uurVXk; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-56002e7118dso2606009a12.0
-        for <linux-pm@vger.kernel.org>; Sun, 04 Feb 2024 23:48:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707119314; x=1707724114; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IxXfXM8mBHOyPEEJE6Y3LTPjVALjmp0awibe0Ro3Iyc=;
-        b=m1uurVXkPLPoyxDEyeq2lqPPg/t1zwpHiPOKO/ETi5VPlQrrqDgigbLBWphrdGA6ye
-         Hd7P0UkUzovjmgACPlbaQrFJYORZwMt1RdK8dnCCk9tgY9vS/8i/I3ZLC3jjiknNG6tQ
-         USEIzTCCK1G7dtO3rOTXUaVEEJI3FLBMcEAUsPMxNorANp2Q59zJlD2vQ9RklTdNI5tg
-         E+OAweGgVe2A6TKXpua00yjvlpAuQQhc2dGTnOmNXlWStXu0+lCJaE3g+DqwpIhSoVPc
-         Isw+1yTP9EWIgzPX8aRtbD0xPoSBGaOLbXuAHO8619terh6v3Z6dxusa6RAq1gkTjgN2
-         j2ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707119314; x=1707724114;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IxXfXM8mBHOyPEEJE6Y3LTPjVALjmp0awibe0Ro3Iyc=;
-        b=qKbDbSWGp+gffplZL8fs4Ru8m431f2aBkApJkN3VZoTWvWsYnY2mdbJiHFGdwkgU7e
-         ftlCmpemjU5GSV8+qY4dUrfaMwJikVLPzezy6mXu/yCd1dvpBu55OEJzJ2F7xXaiTUDe
-         OUI0tuzDHkPpmwRJqhxAFLLoJlgajRtYtJM2PGxTzTsjPaQ4tZxKRI1dWOC1se+SJf5J
-         RZQQIKAsc0FzwX/lyLBzGM2Sw/fsXYhF08Gi9+GqkErbO/jeq0T8U8uMQhL32ujw3nr3
-         +FWICZeks8s8/I8fPEPC9571XzxRE1svcHbTzgzAoNUST1mlR3xcL+weR83bjcputFmF
-         XXPg==
-X-Gm-Message-State: AOJu0Yz9aCHIv9MABDk5tpMh5unHSZ9tQODu4I0xpv2QHn2ErAtKxH3h
-	aF5GwClgdBB0O7EtGJeNj0aF4bhb+Z44zWRSZMvJbzovz7EIc4WyYnetHmjge5vfbs8gLQ6bC4X
-	eOY4=
-X-Google-Smtp-Source: AGHT+IGlBUMGQI5I4F6oHplktugB49kdqMcBdbQmnt8gsyL4F/vKpp0sd9GKbghrIKZLdKcwMXCLNQ==
-X-Received: by 2002:a17:906:32d5:b0:a37:1639:b879 with SMTP id k21-20020a17090632d500b00a371639b879mr4766336ejk.3.1707119314386;
-        Sun, 04 Feb 2024 23:48:34 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCWWBCluFlbbwGHrl442Xwlx1yqDnaZzEr22oL8y1OVaRZNMFQgMqQI209VodyjP3vpBTYk3tH78bz1wDBT6cUG+itE2SP0iGmjgyxOqyQWLivENqe2sFapmEvzoepyOxew4TTAhIIGXgAmrhWiczA8srPU7RewYYgsmtssapjzpu/B1O++2/uOaFhhEUR6FPyajVMWo85hLc8THrtE32zqSL/PTBF+riUH1iCMbZJ4Bh+3rndoOzwxQesH4FTIjM+KtrX1fT/d81g3AFQ5H5ojisiFvY+srJfYgVVHDn5M=
-Received: from [192.168.1.20] ([178.197.222.62])
-        by smtp.gmail.com with ESMTPSA id vw4-20020a170907a70400b00a353d1a19a9sm4001879ejc.191.2024.02.04.23.48.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Feb 2024 23:48:33 -0800 (PST)
-Message-ID: <e7ac77fe-b722-4b88-911c-c8300776370e@linaro.org>
-Date: Mon, 5 Feb 2024 08:48:31 +0100
+	s=arc-20240116; t=1707121066; c=relaxed/simple;
+	bh=YjeiwppDWI6EHvWJrkK1PZ10LNL/Yvg58nfPPxTUDZo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y+gl+5w2g7zCVjDd5LiyH710NM9guigCS+DuPPrrDJfeE7cC3srOWvlytmgwKo1EzIvDvbxQddoPa3GWAvuYURCK4CgN14/QTE4tV746/26P5p0wmmPYcEJhxYeSuo6xwpr1Nb1h4wfP+lOjy/wVIhVN1V7BHW7LETKZkj3Acvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1rWuAM-0004z9-Gn; Mon, 05 Feb 2024 09:17:22 +0100
+Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1rWuAJ-004at0-OU; Mon, 05 Feb 2024 09:17:19 +0100
+Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <mfe@pengutronix.de>)
+	id 1rWuAJ-00Cft2-23;
+	Mon, 05 Feb 2024 09:17:19 +0100
+Date: Mon, 5 Feb 2024 09:17:19 +0100
+From: Marco Felsch <m.felsch@pengutronix.de>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Adam Ford <aford173@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+	Andrzej Hajda <andrzej.hajda@intel.com>, devicetree@vger.kernel.org,
+	alexander.stein@ew.tq-group.com,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	dri-devel@lists.freedesktop.org, frieder.schrempf@kontron.de,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	linux-phy@lists.infradead.org, David Airlie <airlied@gmail.com>,
+	marex@denx.de, Robert Foss <rfoss@kernel.org>,
+	Fabio Estevam <festevam@gmail.com>, linux-pm@vger.kernel.org,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	NXP Linux Team <linux-imx@nxp.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Will Deacon <will@kernel.org>, Jonas Karlman <jonas@kwiboo.se>,
+	Liu Ying <victor.liu@nxp.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	linux-arm-kernel@lists.infradead.org,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Lucas Stach <l.stach@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH V8 02/12] phy: freescale: add Samsung HDMI PHY
+Message-ID: <20240205081719.z2uqa4dwn5ucsymv@pengutronix.de>
+References: <20240203165307.7806-1-aford173@gmail.com>
+ <20240203165307.7806-3-aford173@gmail.com>
+ <CAA8EJpo4omXogg48urEMzxQ+CA7DNTSf66pA6hoO8wpmtn_-MQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] dt-bindings: power: supply: st,stc3117
-Content-Language: en-US
-To: Bhavin Sharma <bhavin.sharma@siliconsignals.io>, sre@kernel.org,
- robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
-Cc: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240205051321.4079933-1-bhavin.sharma@siliconsignals.io>
- <20240205051321.4079933-2-bhavin.sharma@siliconsignals.io>
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzTRLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+wsGUBBMBCgA+FiEE
- m9B+DgxR+NWWd7dUG5NDfTtBYpsFAmI+BxMCGwMFCRRfreEFCwkIBwIGFQoJCAsCBBYCAwEC
- HgECF4AACgkQG5NDfTtBYptgbhAAjAGunRoOTduBeC7V6GGOQMYIT5n3OuDSzG1oZyM4kyvO
- XeodvvYv49/ng473E8ZFhXfrre+c1olbr1A8pnz9vKVQs9JGVa6wwr/6ddH7/yvcaCQnHRPK
- mnXyP2BViBlyDWQ71UC3N12YCoHE2cVmfrn4JeyK/gHCvcW3hUW4i5rMd5M5WZAeiJj3rvYh
- v8WMKDJOtZFXxwaYGbvFJNDdvdTHc2x2fGaWwmXMJn2xs1ZyFAeHQvrp49mS6PBQZzcx0XL5
- cU9ZjhzOZDn6Apv45/C/lUJvPc3lo/pr5cmlOvPq1AsP6/xRXsEFX/SdvdxJ8w9KtGaxdJuf
- rpzLQ8Ht+H0lY2On1duYhmro8WglOypHy+TusYrDEry2qDNlc/bApQKtd9uqyDZ+rx8bGxyY
- qBP6bvsQx5YACI4p8R0J43tSqWwJTP/R5oPRQW2O1Ye1DEcdeyzZfifrQz58aoZrVQq+innR
- aDwu8qDB5UgmMQ7cjDSeAQABdghq7pqrA4P8lkA7qTG+aw8Z21OoAyZdUNm8NWJoQy8m4nUP
- gmeeQPRc0vjp5JkYPgTqwf08cluqO6vQuYL2YmwVBIbO7cE7LNGkPDA3RYMu+zPY9UUi/ln5
- dcKuEStFZ5eqVyqVoZ9eu3RTCGIXAHe1NcfcMT9HT0DPp3+ieTxFx6RjY3kYTGLOwU0EVUNc
- NAEQAM2StBhJERQvgPcbCzjokShn0cRA4q2SvCOvOXD+0KapXMRFE+/PZeDyfv4dEKuCqeh0
- hihSHlaxTzg3TcqUu54w2xYskG8Fq5tg3gm4kh1Gvh1LijIXX99ABA8eHxOGmLPRIBkXHqJY
- oHtCvPc6sYKNM9xbp6I4yF56xVLmHGJ61KaWKf5KKWYgA9kfHufbja7qR0c6H79LIsiYqf92
- H1HNq1WlQpu/fh4/XAAaV1axHFt/dY/2kU05tLMj8GjeQDz1fHas7augL4argt4e+jum3Nwt
- yupodQBxncKAUbzwKcDrPqUFmfRbJ7ARw8491xQHZDsP82JRj4cOJX32sBg8nO2N5OsFJOcd
- 5IE9v6qfllkZDAh1Rb1h6DFYq9dcdPAHl4zOj9EHq99/CpyccOh7SrtWDNFFknCmLpowhct9
- 5ZnlavBrDbOV0W47gO33WkXMFI4il4y1+Bv89979rVYn8aBohEgET41SpyQz7fMkcaZU+ok/
- +HYjC/qfDxT7tjKXqBQEscVODaFicsUkjheOD4BfWEcVUqa+XdUEciwG/SgNyxBZepj41oVq
- FPSVE+Ni2tNrW/e16b8mgXNngHSnbsr6pAIXZH3qFW+4TKPMGZ2rZ6zITrMip+12jgw4mGjy
- 5y06JZvA02rZT2k9aa7i9dUUFggaanI09jNGbRA/ABEBAAHCwXwEGAEKACYCGwwWIQSb0H4O
- DFH41ZZ3t1Qbk0N9O0FimwUCYDzvagUJFF+UtgAKCRAbk0N9O0Fim9JzD/0auoGtUu4mgnna
- oEEpQEOjgT7l9TVuO3Qa/SeH+E0m55y5Fjpp6ZToc481za3xAcxK/BtIX5Wn1mQ6+szfrJQ6
- 59y2io437BeuWIRjQniSxHz1kgtFECiV30yHRgOoQlzUea7FgsnuWdstgfWi6LxstswEzxLZ
- Sj1EqpXYZE4uLjh6dW292sO+j4LEqPYr53hyV4I2LPmptPE9Rb9yCTAbSUlzgjiyyjuXhcwM
- qf3lzsm02y7Ooq+ERVKiJzlvLd9tSe4jRx6Z6LMXhB21fa5DGs/tHAcUF35hSJrvMJzPT/+u
- /oVmYDFZkbLlqs2XpWaVCo2jv8+iHxZZ9FL7F6AHFzqEFdqGnJQqmEApiRqH6b4jRBOgJ+cY
- qc+rJggwMQcJL9F+oDm3wX47nr6jIsEB5ZftdybIzpMZ5V9v45lUwmdnMrSzZVgC4jRGXzsU
- EViBQt2CopXtHtYfPAO5nAkIvKSNp3jmGxZw4aTc5xoAZBLo0OV+Ezo71pg3AYvq0a3/oGRG
- KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
- fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
- D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <20240205051321.4079933-2-bhavin.sharma@siliconsignals.io>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA8EJpo4omXogg48urEMzxQ+CA7DNTSf66pA6hoO8wpmtn_-MQ@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-On 05/02/2024 06:13, Bhavin Sharma wrote:
-> Signed-off-by: Bhavin Sharma <bhavin.sharma@siliconsignals.io>
-
-You cannot have empty commits.
-
-Subject: It's empty? What happened there?
-
-> ---
-> Changelogs :
+On 24-02-04, Dmitry Baryshkov wrote:
+> On Sat, 3 Feb 2024 at 17:53, Adam Ford <aford173@gmail.com> wrote:
+> >
+> > From: Lucas Stach <l.stach@pengutronix.de>
+> >
+> > This adds the driver for the Samsung HDMI PHY found on the
+> > i.MX8MP SoC.
+> >
+> > Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+> > Signed-off-by: Adam Ford <aford173@gmail.com>
+> > Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> > ---
+> > V4:  Make lookup table hex values lower case.
+> >
+> > V3:  Re-order the Makefile to keep it alphabetical
+> >      Remove unused defines
+> >
+> > V2:  Fixed some whitespace found from checkpatch
+> >      Change error handling when enabling apbclk to use dev_err_probe
+> >      Rebase on Linux-Next
+> >
+> >      I (Adam) tried to help move this along, so I took Lucas' patch and
+> >      attempted to apply fixes based on feedback.  I don't have
+> >      all the history, so apologies for that.
+> > ---
+> >  drivers/phy/freescale/Kconfig                |    6 +
+> >  drivers/phy/freescale/Makefile               |    1 +
+> >  drivers/phy/freescale/phy-fsl-samsung-hdmi.c | 1075 ++++++++++++++++++
+> >  3 files changed, 1082 insertions(+)
+> >  create mode 100644 drivers/phy/freescale/phy-fsl-samsung-hdmi.c
+> >
+> > diff --git a/drivers/phy/freescale/Kconfig b/drivers/phy/freescale/Kconfig
+> > index 853958fb2c06..5c2b73042dfc 100644
+> > --- a/drivers/phy/freescale/Kconfig
+> > +++ b/drivers/phy/freescale/Kconfig
+> > @@ -35,6 +35,12 @@ config PHY_FSL_IMX8M_PCIE
+> >           Enable this to add support for the PCIE PHY as found on
+> >           i.MX8M family of SOCs.
+> >
+> > +config PHY_FSL_SAMSUNG_HDMI_PHY
+> > +       tristate "Samsung HDMI PHY support"
+> > +       depends on OF && HAS_IOMEM
+> > +       help
+> > +         Enable this to add support for the Samsung HDMI PHY in i.MX8MP.
+> > +
+> >  endif
+> >
+> >  config PHY_FSL_LYNX_28G
+> > diff --git a/drivers/phy/freescale/Makefile b/drivers/phy/freescale/Makefile
+> > index cedb328bc4d2..79e5f16d3ce8 100644
+> > --- a/drivers/phy/freescale/Makefile
+> > +++ b/drivers/phy/freescale/Makefile
+> > @@ -4,3 +4,4 @@ obj-$(CONFIG_PHY_MIXEL_LVDS_PHY)        += phy-fsl-imx8qm-lvds-phy.o
+> >  obj-$(CONFIG_PHY_MIXEL_MIPI_DPHY)      += phy-fsl-imx8-mipi-dphy.o
+> >  obj-$(CONFIG_PHY_FSL_IMX8M_PCIE)       += phy-fsl-imx8m-pcie.o
+> >  obj-$(CONFIG_PHY_FSL_LYNX_28G)         += phy-fsl-lynx-28g.o
+> > +obj-$(CONFIG_PHY_FSL_SAMSUNG_HDMI_PHY)  += phy-fsl-samsung-hdmi.o
+> > diff --git a/drivers/phy/freescale/phy-fsl-samsung-hdmi.c b/drivers/phy/freescale/phy-fsl-samsung-hdmi.c
+> > new file mode 100644
+> > index 000000000000..bf0e2299d00f
+> > --- /dev/null
+> > +++ b/drivers/phy/freescale/phy-fsl-samsung-hdmi.c
+> > @@ -0,0 +1,1075 @@
+> > +// SPDX-License-Identifier: GPL-2.0+
+> > +/*
+> > + * Copyright 2020 NXP
+> > + * Copyright 2022 Pengutronix, Lucas Stach <kernel@pengutronix.de>
+> > + */
+> > +
+> > +#include <linux/clk-provider.h>
+> > +#include <linux/clk.h>
+> > +#include <linux/delay.h>
+> > +#include <linux/io.h>
+> > +#include <linux/iopoll.h>
+> > +#include <linux/module.h>
+> > +#include <linux/of_device.h>
+> > +#include <linux/of.h>
+> > +#include <linux/platform_device.h>
+> > +#include <linux/pm_runtime.h>
+> > +
+> > +#define PHY_REG_33             0x84
+> > +#define  REG33_MODE_SET_DONE   BIT(7)
+> > +#define  REG33_FIX_DA          BIT(1)
+> > +
+> > +#define PHY_REG_34             0x88
+> > +#define  REG34_PHY_READY       BIT(7)
+> > +#define  REG34_PLL_LOCK                BIT(6)
+> > +#define  REG34_PHY_CLK_READY   BIT(5)
+> > +
+> > +
+> > +#define PHY_PLL_REGS_NUM 48
+> > +
+> > +struct phy_config {
+> > +       u32     clk_rate;
+> > +       u8 regs[PHY_PLL_REGS_NUM];
+> > +};
+> > +
+> > +const struct phy_config phy_pll_cfg[] = {
+> > +       {       22250000, {
+> > +                       0x00, 0xd1, 0x4b, 0xf1, 0x89, 0x88, 0x80, 0x40,
+> > +                       0x4f, 0x30, 0x33, 0x65, 0x00, 0x15, 0x25, 0x80,
+> > +                       0x6c, 0xf2, 0x67, 0x00, 0x10, 0x8f, 0x30, 0x32,
+> > +                       0x60, 0x8f, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00,
+> > +                       0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+> > +                       0x00, 0xe0, 0x83, 0x0f, 0x3e, 0xf8, 0x00, 0x00,
+> > +               },
+> > +       }, {
+> > +               23750000, {
+> > +                       0x00, 0xd1, 0x50, 0xf1, 0x86, 0x85, 0x80, 0x40,
+> > +                       0x4f, 0x30, 0x33, 0x65, 0x00, 0x03, 0x25, 0x80,
+> > +                       0x6c, 0xf2, 0x67, 0x00, 0x10, 0x8f, 0x30, 0x32,
+> > +                       0x60, 0x8f, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00,
+> > +                       0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+> > +                       0x00, 0xe0, 0x83, 0x0f, 0x3e, 0xf8, 0x00, 0x00,
+> > +               },
 > 
-> v2 -> v3
-> - Resolved DTC warnings and errors
-> - Formatted the changelogs
-> - Added monitored battery properties
-> - Replaced 'additionalProperties' with 'unevaluatedProperties'
-> - Replaced '&i2c6' with 'i2c'
+> Generally I see that these entries contain a high level of duplication.
+> Could you please extract the common part and a rate-dependent part.
+> Next, it would be best if instead of writing the register values via
+> the rate LUT, the driver could calculate those values.
+> This allows us to support other HDMI modes if the need arises at some point.
+
+Hi Adam,
+
+can you please have a look at: https://lore.kernel.org/all/4830698.GXAFRqVoOG@steina-w/
+
+there we have fixed this already. Not sure which version you picked for
+your work.
+
+Regards,
+  Marco
+
 > 
-> v1 -> v2
-> - String value is redundantly quoted with any quotes (quoted-strings)
-> - Found character '\t' that cannot start any token
-> ---
-
-Please run scripts/checkpatch.pl and fix reported warnings. Some
-warnings can be ignored, but the code here looks like it needs a fix.
-Feel free to get in touch if the warning is not clear.
-
->  .../bindings/power/supply/st,stc3117.yaml     | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/st,stc3117.yaml
+> > +       }, {
+> > +               24000000, {
+> > +                       0x00, 0xd1, 0x50, 0xf0, 0x00, 0x00, 0x80, 0x00,
+> > +                       0x4f, 0x30, 0x33, 0x65, 0x00, 0x01, 0x25, 0x80,
+> > +                       0x6c, 0xf2, 0x67, 0x00, 0x10, 0x8f, 0x30, 0x32,
+> > +                       0x60, 0x8f, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00,
+> > +                       0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+> > +                       0x00, 0xe0, 0x83, 0x0f, 0x3e, 0xf8, 0x00, 0x00,
+> > +               },
 > 
-> diff --git a/Documentation/devicetree/bindings/power/supply/st,stc3117.yaml b/Documentation/devicetree/bindings/power/supply/st,stc3117.yaml
-> new file mode 100644
-> index 000000000000..9ab0b0d6b30e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/st,stc3117.yaml
-> @@ -0,0 +1,49 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-
-Dual license, just like checkpatch asks.
-
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/supply/st,stc3117.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: STMicroelectronics STC3117 Fuel Gauge Unit Power Supply
-> +
-> +maintainers:
-> +  - Bhavin Sharma <bhavin.sharma@siliconsignals.io>
-> +  - Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
-> +
-> +allOf:
-> +  - $ref: power-supply.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - st,stc3117
-> +
-> +  reg:
-> +    maxItems: 1
-
-Are you going to answer my questions or just ignore them?
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    bat: battery {
-
-Drop node
-
-
-> +       compatible = "simple-battery";
-> +       device-chemistry = "lithium-ion-polymer";
-> +       energy-full-design-microwatt-hours = <16800000>;
-> +       charge-full-design-microamp-hours = <4000000>;
-> +       voltage-min-design-microvolt = <3000000>;
-> +    };
-> +
-> +    i2c {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      stc3117@70 {
-
-Still wrong name.
-
-This is a friendly reminder during the review process.
-
-It seems my or other reviewer's previous comments were not fully
-addressed. Maybe the feedback got lost between the quotes, maybe you
-just forgot to apply it. Please go back to the previous discussion and
-either implement all requested changes or keep discussing them.
-
-Thank you.
-
-
-Best regards,
-Krzysztof
-
+> 
+> -- 
+> With best wishes
+> Dmitry
+> 
+> 
 
