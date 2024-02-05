@@ -1,85 +1,98 @@
-Return-Path: <linux-pm+bounces-3373-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3374-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E5B3849535
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 09:17:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22910849580
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 09:38:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 440F7281F6C
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 08:17:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 55A3A1C22F7A
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 08:38:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7FC611199;
-	Mon,  5 Feb 2024 08:17:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B90411184;
+	Mon,  5 Feb 2024 08:38:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="T+cXlPZd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98C281118A
-	for <linux-pm@vger.kernel.org>; Mon,  5 Feb 2024 08:17:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 734561170A
+	for <linux-pm@vger.kernel.org>; Mon,  5 Feb 2024 08:38:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707121066; cv=none; b=g3+JQY9u+f+oLQMcBa1D2iFKz5zQGkYVobgQS3vt5uCyQVymTMsrfnprNQhwCKQY06gZUyY6H/5IiIyXZsuuKAeoTXJrerjQd7XorYQ9I2JP0nb7DXfwi+L3hDTAS7Tu8972JH2JT4gNxwBKLfusGTnS8yA6Ab6oTvhmomXhFyM=
+	t=1707122314; cv=none; b=CURrhpa9PedQNiTCYWy0g/mUU1UO0brRx7Xz5/rLd3SWyYPHYBNnaXbVXjOdMxKAa4S+Iy6azuRv1W4OMIOazUimAe5mSbQO+r/rUorEfH8gACiPT6UNyEY7bm5RC9eafvuHiFWiZpdG6fRecHQRSN3J6jovHsLXQn5l4jpjYBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707121066; c=relaxed/simple;
-	bh=YjeiwppDWI6EHvWJrkK1PZ10LNL/Yvg58nfPPxTUDZo=;
+	s=arc-20240116; t=1707122314; c=relaxed/simple;
+	bh=3LmgSibEXomUKPO63HkaRhVDpYnceZtyNFTYsQfKJns=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y+gl+5w2g7zCVjDd5LiyH710NM9guigCS+DuPPrrDJfeE7cC3srOWvlytmgwKo1EzIvDvbxQddoPa3GWAvuYURCK4CgN14/QTE4tV746/26P5p0wmmPYcEJhxYeSuo6xwpr1Nb1h4wfP+lOjy/wVIhVN1V7BHW7LETKZkj3Acvw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1rWuAM-0004z9-Gn; Mon, 05 Feb 2024 09:17:22 +0100
-Received: from [2a0a:edc0:2:b01:1d::c5] (helo=pty.whiteo.stw.pengutronix.de)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1rWuAJ-004at0-OU; Mon, 05 Feb 2024 09:17:19 +0100
-Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1rWuAJ-00Cft2-23;
-	Mon, 05 Feb 2024 09:17:19 +0100
-Date: Mon, 5 Feb 2024 09:17:19 +0100
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Adam Ford <aford173@gmail.com>, Ulf Hansson <ulf.hansson@linaro.org>,
-	Andrzej Hajda <andrzej.hajda@intel.com>, devicetree@vger.kernel.org,
-	alexander.stein@ew.tq-group.com,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	dri-devel@lists.freedesktop.org, frieder.schrempf@kontron.de,
+	 Content-Type:Content-Disposition:In-Reply-To; b=n0ATT0du2SRNa0L4IDBxVlAAkedj7ClADf8A70TyHRZwsOdws/uBmCerEHxZGnxYGHNqlAPpy1K+H0saRt4OHQaFsASQnPQlplzvYA29gMmcxoi/7VdBUY9Ccl0ZNRIOgfie/eRvS3yxUm4CxRhKsSVIRXLoMPcjFcDZBhEE/nA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=T+cXlPZd; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1d71cb97937so36460805ad.3
+        for <linux-pm@vger.kernel.org>; Mon, 05 Feb 2024 00:38:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1707122313; x=1707727113; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TzUq0QU1iLhov+1WYKZ5iVgod62Dx1DjglJhN8m0PAE=;
+        b=T+cXlPZd367U7+rLzfZlkoCBnSkX3j5R/RrgiVeGJgG8C/w43zhoKETYv2aOSPbpUR
+         fuAkSK0nhpc/tSA92w9+qQGCuWmNY4xelwxxrIZl8Y1BJiv/FySG3xd+bC0MQTDlKPo5
+         4a3hUMeIwAbNOWggeBW3n58+kYi/xC/31yZPY1gfpomSKtYvg/sSFSIIkqgBw5OXlvqj
+         FKdl3UUJ0Qudk3KRplXnnUMvMziSrF9/NwWq6FmgyyY1f949Zt2VVRPrhCLit6N5ld1s
+         EWqigldIcCxBQ0r3vMFER8gnHFvQet6b0Zc4wLBT1izPvYis0jbJB5y/7snL7h+LjA8T
+         mS1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707122313; x=1707727113;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TzUq0QU1iLhov+1WYKZ5iVgod62Dx1DjglJhN8m0PAE=;
+        b=MtSpT9noh2SYuGPp+coG9GliWsjMMMdhQI9RhC6PNAgIi6b7QRkee7zpN1Bqo4O6qr
+         L8mt1n1xWUzawAlWzRkz/U7YHHcTKlgnwbN2ZM1zWGLqGg0mV9VmltS3eH1MVPsMFqLB
+         Rg68StqEmo+96M82Jv9SMldJEMYRvHrXo3hMYnUv/6CkUVabpTxfwrG0DTC7ZVWCGOpB
+         amftGYXqRbY4tr0Nb8ID1V5fDzpMMCyoXRVN3GvOlOFmtpsCX8UO7ZJAVCCjfYnTBVIX
+         nR2b6KKSpFIAdOewfzg+GFHRoD+fYfhMAjBssAzCXb0XiE2v3e+X0z1rUNXuhezhLojb
+         amWA==
+X-Gm-Message-State: AOJu0YySa3OlFIc6mTLL8NUCBPdAd228laMuh70XE84LdOPwwSMCcTJt
+	7XLOwyZGx4/amU9hOZ+LPR7FnEE/nilMGibAdq4NOgn/Qm30A9350LdHpNea76Y=
+X-Google-Smtp-Source: AGHT+IFlHMcwipPv/5fS9RA0N7CHAoHC9ENOUI7UQ64mLeAdNBX232vnbn/8H284Q02YLTeeS+jlhw==
+X-Received: by 2002:a17:902:e5c7:b0:1d9:7a7a:3d01 with SMTP id u7-20020a170902e5c700b001d97a7a3d01mr7580530plf.23.1707122312801;
+        Mon, 05 Feb 2024 00:38:32 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCXfI2w+6dUAdaog5bJtoPlJM3p3ukBSikiWgzTm8BAqW0h7zGRqU7hx3UCGq7cTibBB8HARSP/XisA0uN+w9+FqdvqdeHJcVO0mfGc7ziQoQyXOZ7grsTx10xaypoxwpyExjkSzrysipLtwsKTy/DbFHWb/pjQ/VaDQNP54POfBXXfc50N8c0dSeCQnnZDV1rQl/GwCcqymS4cy0e+KMRoATbWVS7VNFUoxcTxHrbbl/iJAtaQsCjIaisPJnVzlyGemCHDWDX+U0bniwkNxCWC6gkHYWuSZyKtEMLtsXupZnvMhqwFiXpzivjLHsAd9eAj71NRm/mAc32aaParxZPwNgj6b36hqk6Rd+MaDSLQtzEAjoChdChpKMUkafF8b+2Kd6vQ85HUy8XN6hBQMWrEH9hLIUeY9osriah/T3E2rh5eyHYWHezWPu9gpgkmMdbR3ZteEpUbi3l3AIe4XCcCdNLQgS2msiz/gCyf1/ugvQQLXJHzcA9h/mlNPxgdIzNNUqfRPV1a1hQ46+WgKwIskB+QDnn047Ob6XWdb1Y7zgHlFQU7xr/ipwWjZzunXXHEX2S8lZFGOXlWpI1F/cWzUXZAnprTHQ5/nNf6MUd97ty8YnKrrEpD8adDaa0Z8eps8kNajrf8F46HOl2qu05YBjty2nRwOK4Pm5BIh/OQJAKYudC5xAor0TzHqgedJpd1c66sWfdshOdQ=
+Received: from localhost ([122.172.83.95])
+        by smtp.gmail.com with ESMTPSA id mm4-20020a1709030a0400b001d60a70809bsm5782825plb.168.2024.02.05.00.38.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Feb 2024 00:38:32 -0800 (PST)
+Date: Mon, 5 Feb 2024 14:08:30 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Rob Herring <robh@kernel.org>
+Cc: Saravana Kannan <saravanak@google.com>, David Dai <davidai@google.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
 	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	linux-phy@lists.infradead.org, David Airlie <airlied@gmail.com>,
-	marex@denx.de, Robert Foss <rfoss@kernel.org>,
-	Fabio Estevam <festevam@gmail.com>, linux-pm@vger.kernel.org,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Will Deacon <will@kernel.org>, Jonas Karlman <jonas@kwiboo.se>,
-	Liu Ying <victor.liu@nxp.com>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	linux-arm-kernel@lists.infradead.org,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Lucas Stach <l.stach@pengutronix.de>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH V8 02/12] phy: freescale: add Samsung HDMI PHY
-Message-ID: <20240205081719.z2uqa4dwn5ucsymv@pengutronix.de>
-References: <20240203165307.7806-1-aford173@gmail.com>
- <20240203165307.7806-3-aford173@gmail.com>
- <CAA8EJpo4omXogg48urEMzxQ+CA7DNTSf66pA6hoO8wpmtn_-MQ@mail.gmail.com>
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Quentin Perret <qperret@google.com>,
+	Masami Hiramatsu <mhiramat@google.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Pavan Kondeti <quic_pkondeti@quicinc.com>,
+	Gupta Pankaj <pankaj.gupta@amd.com>, Mel Gorman <mgorman@suse.de>,
+	kernel-team@android.com, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] dt-bindings: cpufreq: add virtual cpufreq device
+Message-ID: <20240205083830.4werub5e76kudjq4@vireshk-i7>
+References: <20240127004321.1902477-1-davidai@google.com>
+ <20240127004321.1902477-2-davidai@google.com>
+ <20240131170608.GA1441369-robh@kernel.org>
+ <CAGETcx8S0oS67oMZsPKk6_MGAtygoHEf_LN1gbcNDEBqRJ4PPg@mail.gmail.com>
+ <20240202155352.GA37864-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -88,159 +101,41 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAA8EJpo4omXogg48urEMzxQ+CA7DNTSf66pA6hoO8wpmtn_-MQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+In-Reply-To: <20240202155352.GA37864-robh@kernel.org>
 
-On 24-02-04, Dmitry Baryshkov wrote:
-> On Sat, 3 Feb 2024 at 17:53, Adam Ford <aford173@gmail.com> wrote:
-> >
-> > From: Lucas Stach <l.stach@pengutronix.de>
-> >
-> > This adds the driver for the Samsung HDMI PHY found on the
-> > i.MX8MP SoC.
-> >
-> > Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-> > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > ---
-> > V4:  Make lookup table hex values lower case.
-> >
-> > V3:  Re-order the Makefile to keep it alphabetical
-> >      Remove unused defines
-> >
-> > V2:  Fixed some whitespace found from checkpatch
-> >      Change error handling when enabling apbclk to use dev_err_probe
-> >      Rebase on Linux-Next
-> >
-> >      I (Adam) tried to help move this along, so I took Lucas' patch and
-> >      attempted to apply fixes based on feedback.  I don't have
-> >      all the history, so apologies for that.
-> > ---
-> >  drivers/phy/freescale/Kconfig                |    6 +
-> >  drivers/phy/freescale/Makefile               |    1 +
-> >  drivers/phy/freescale/phy-fsl-samsung-hdmi.c | 1075 ++++++++++++++++++
-> >  3 files changed, 1082 insertions(+)
-> >  create mode 100644 drivers/phy/freescale/phy-fsl-samsung-hdmi.c
-> >
-> > diff --git a/drivers/phy/freescale/Kconfig b/drivers/phy/freescale/Kconfig
-> > index 853958fb2c06..5c2b73042dfc 100644
-> > --- a/drivers/phy/freescale/Kconfig
-> > +++ b/drivers/phy/freescale/Kconfig
-> > @@ -35,6 +35,12 @@ config PHY_FSL_IMX8M_PCIE
-> >           Enable this to add support for the PCIE PHY as found on
-> >           i.MX8M family of SOCs.
-> >
-> > +config PHY_FSL_SAMSUNG_HDMI_PHY
-> > +       tristate "Samsung HDMI PHY support"
-> > +       depends on OF && HAS_IOMEM
-> > +       help
-> > +         Enable this to add support for the Samsung HDMI PHY in i.MX8MP.
-> > +
-> >  endif
-> >
-> >  config PHY_FSL_LYNX_28G
-> > diff --git a/drivers/phy/freescale/Makefile b/drivers/phy/freescale/Makefile
-> > index cedb328bc4d2..79e5f16d3ce8 100644
-> > --- a/drivers/phy/freescale/Makefile
-> > +++ b/drivers/phy/freescale/Makefile
-> > @@ -4,3 +4,4 @@ obj-$(CONFIG_PHY_MIXEL_LVDS_PHY)        += phy-fsl-imx8qm-lvds-phy.o
-> >  obj-$(CONFIG_PHY_MIXEL_MIPI_DPHY)      += phy-fsl-imx8-mipi-dphy.o
-> >  obj-$(CONFIG_PHY_FSL_IMX8M_PCIE)       += phy-fsl-imx8m-pcie.o
-> >  obj-$(CONFIG_PHY_FSL_LYNX_28G)         += phy-fsl-lynx-28g.o
-> > +obj-$(CONFIG_PHY_FSL_SAMSUNG_HDMI_PHY)  += phy-fsl-samsung-hdmi.o
-> > diff --git a/drivers/phy/freescale/phy-fsl-samsung-hdmi.c b/drivers/phy/freescale/phy-fsl-samsung-hdmi.c
-> > new file mode 100644
-> > index 000000000000..bf0e2299d00f
-> > --- /dev/null
-> > +++ b/drivers/phy/freescale/phy-fsl-samsung-hdmi.c
-> > @@ -0,0 +1,1075 @@
-> > +// SPDX-License-Identifier: GPL-2.0+
-> > +/*
-> > + * Copyright 2020 NXP
-> > + * Copyright 2022 Pengutronix, Lucas Stach <kernel@pengutronix.de>
-> > + */
-> > +
-> > +#include <linux/clk-provider.h>
-> > +#include <linux/clk.h>
-> > +#include <linux/delay.h>
-> > +#include <linux/io.h>
-> > +#include <linux/iopoll.h>
-> > +#include <linux/module.h>
-> > +#include <linux/of_device.h>
-> > +#include <linux/of.h>
-> > +#include <linux/platform_device.h>
-> > +#include <linux/pm_runtime.h>
-> > +
-> > +#define PHY_REG_33             0x84
-> > +#define  REG33_MODE_SET_DONE   BIT(7)
-> > +#define  REG33_FIX_DA          BIT(1)
-> > +
-> > +#define PHY_REG_34             0x88
-> > +#define  REG34_PHY_READY       BIT(7)
-> > +#define  REG34_PLL_LOCK                BIT(6)
-> > +#define  REG34_PHY_CLK_READY   BIT(5)
-> > +
-> > +
-> > +#define PHY_PLL_REGS_NUM 48
-> > +
-> > +struct phy_config {
-> > +       u32     clk_rate;
-> > +       u8 regs[PHY_PLL_REGS_NUM];
-> > +};
-> > +
-> > +const struct phy_config phy_pll_cfg[] = {
-> > +       {       22250000, {
-> > +                       0x00, 0xd1, 0x4b, 0xf1, 0x89, 0x88, 0x80, 0x40,
-> > +                       0x4f, 0x30, 0x33, 0x65, 0x00, 0x15, 0x25, 0x80,
-> > +                       0x6c, 0xf2, 0x67, 0x00, 0x10, 0x8f, 0x30, 0x32,
-> > +                       0x60, 0x8f, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00,
-> > +                       0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-> > +                       0x00, 0xe0, 0x83, 0x0f, 0x3e, 0xf8, 0x00, 0x00,
-> > +               },
-> > +       }, {
-> > +               23750000, {
-> > +                       0x00, 0xd1, 0x50, 0xf1, 0x86, 0x85, 0x80, 0x40,
-> > +                       0x4f, 0x30, 0x33, 0x65, 0x00, 0x03, 0x25, 0x80,
-> > +                       0x6c, 0xf2, 0x67, 0x00, 0x10, 0x8f, 0x30, 0x32,
-> > +                       0x60, 0x8f, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00,
-> > +                       0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-> > +                       0x00, 0xe0, 0x83, 0x0f, 0x3e, 0xf8, 0x00, 0x00,
-> > +               },
+On 02-02-24, 09:53, Rob Herring wrote:
+> On Wed, Jan 31, 2024 at 10:23:03AM -0800, Saravana Kannan wrote:
+> > We also need the OPP tables to indicate which CPUs are part of the
+> > same cluster, etc. Don't want to invent a new "protocol" and just use
+> > existing DT bindings.
 > 
-> Generally I see that these entries contain a high level of duplication.
-> Could you please extract the common part and a rate-dependent part.
-> Next, it would be best if instead of writing the register values via
-> the rate LUT, the driver could calculate those values.
-> This allows us to support other HDMI modes if the need arises at some point.
+> Topology binding is for that.
 
-Hi Adam,
+This one, right ?
 
-can you please have a look at: https://lore.kernel.org/all/4830698.GXAFRqVoOG@steina-w/
+Documentation/devicetree/bindings/dvfs/performance-domain.yaml
 
-there we have fixed this already. Not sure which version you picked for
-your work.
+> You need per CPU Fmax, sure. But all the frequencies? I don't follow why 
+> you don't just have a max available capacity and then request the 
+> desired capacity. Then the host maps that to an underlying OPP. Why have 
+> an intermediate set of fake frequencies?
 
-Regards,
-  Marco
++1
 
+> As these are normalized, I guess you are normalizing for capacity as 
+> well? Or you are using "capacity-dmips-mhz"? 
 > 
-> > +       }, {
-> > +               24000000, {
-> > +                       0x00, 0xd1, 0x50, 0xf0, 0x00, 0x00, 0x80, 0x00,
-> > +                       0x4f, 0x30, 0x33, 0x65, 0x00, 0x01, 0x25, 0x80,
-> > +                       0x6c, 0xf2, 0x67, 0x00, 0x10, 0x8f, 0x30, 0x32,
-> > +                       0x60, 0x8f, 0x00, 0x00, 0x08, 0x00, 0x00, 0x00,
-> > +                       0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-> > +                       0x00, 0xe0, 0x83, 0x0f, 0x3e, 0xf8, 0x00, 0x00,
-> > +               },
+> I'm also lost how this would work when you migrate and the underlying 
+> CPU changes. The DT is fixed.
 > 
-> 
-> -- 
-> With best wishes
-> Dmitry
-> 
-> 
+> > > Also, we have "opp-level" for opaque values that aren't Hz.
+> > 
+> > Still want to keep it Hz to be compatible with arch_freq_scale and
+> > when virtualized CPU perf counters are available.
+
+These are all specific to a driver only, that can be handled easily I guess. I
+don't see a value to using Hz for this to be honest.
+
+-- 
+viresh
 
