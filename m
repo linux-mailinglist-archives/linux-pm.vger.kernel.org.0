@@ -1,80 +1,80 @@
-Return-Path: <linux-pm+bounces-3379-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3380-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96F7E849721
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 10:59:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59400849724
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 10:59:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EA196B28CA6
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 09:58:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78DA01C217C7
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 09:59:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67CB512B9D;
-	Mon,  5 Feb 2024 09:58:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68F07134B1;
+	Mon,  5 Feb 2024 09:59:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Tu9RAwbF"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jMgcCBNT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF537134A6
-	for <linux-pm@vger.kernel.org>; Mon,  5 Feb 2024 09:58:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7072212E70
+	for <linux-pm@vger.kernel.org>; Mon,  5 Feb 2024 09:59:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707127136; cv=none; b=MQ3C7Mk8CXVqXDFKpr5Suh16KHhfJOmRtuQNP1bHAm5H9ZeGKSsnnpnR5/97umhyKqkL/8FJ2RDXBbQ4XV2sevt8pWeQIEAB6b9XMVkE+fYoM9LipQEewA/WmSuXAe26+ser/mhh5ZzMMwHaDRX8zVmt6kCPxpZZeXMcb4yxJgs=
+	t=1707127148; cv=none; b=gvRSYREGz1yU+55M3lb3MBi6fa1lsVckVBQMk97H0dgIqMu+Vz+Ca8Vj0wUUrFiuspFRvvQVuUx4pzoW7XkeSVyU9tLYQ8SMHj/v8fDNiD5tcVJvYUczq/3kLpkD3HpFyklcib/0S67ukKGv+1IA3XyOcrG00M/K0WY6NwYTL6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707127136; c=relaxed/simple;
-	bh=mb1/KcgecyNLcCeUcncjkR6BU0A4oba2K9W561gf2x8=;
+	s=arc-20240116; t=1707127148; c=relaxed/simple;
+	bh=b92Et2DKhcyog6J47YUJMcwyYAegyfdYl6Uh+aPv74A=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HyBhSw/rMXgsS5oFqEH35MkQM3gXI/L/WVwurGck/Md+/JwP7J6TbPad6BxddXlf/XLA1ikZ25wNpvILz8c2Gw3KH4js/TJC8h9ISvC6C146qo+8CcSZabWpu5vZLYgJjUgBmcMJGs+Ye6xuM2EbnRTlyR9/4GKwkVd2aJjO8ok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Tu9RAwbF; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=AeCb07ODv+MBJq8ZvxtRNF77hteIb4jWTk9m6Pach2YXO/uLSogH2Xd5d8WKAXN5fncBuyfRaXIzH50mz18vsISEjMjExJJ5N9RLJHSNbRAaey090JB//ZB5t90I94sZ2J8p6/ahAQJ5K56NgXt9w0e6r+ULqRNCAkiGMKNPzdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jMgcCBNT; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1707127133;
+	s=mimecast20190719; t=1707127144;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Kjvfci9ng+Lg5/KtBL6NJAaxrnR1eQ8Ii0bZQgClIa8=;
-	b=Tu9RAwbFBiERxi18ZVg+bStZWrwaDjkw6fruJyYJ3uSdtvCNlk4EWMzkiDJxfokGBO9+oB
-	+yv9CQ2893KEJj3SAYmuXygMpZh+OD9vHsJBdHOhUfnv51+7unIRdbmAaUiPHCF3G4k4dI
-	6eNNaohWt42viYL671dDNYJFlUbJmEY=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=lwyUnWvLJnNe+bRoKls+n+VgwPZLrmW2ivHplJ0jsYA=;
+	b=jMgcCBNTFv/g6x15aa4HSljlgGqIHXmZCM0pBcDvuZ5Zas3wBuC21iDDcOIBge+Dr68nNc
+	+OhCyWE2y5Shl8mGNtuI3r1SpF4LbuhKlhtiqHix0MtVWQsN1Zc3REhebKFnbzehyDmZrx
+	lv53SEv75NmZ4yKI1RKoqmTuGBo5PbQ=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-542-dQcccxtdNBKqRyMFrxz1ZA-1; Mon, 05 Feb 2024 04:58:52 -0500
-X-MC-Unique: dQcccxtdNBKqRyMFrxz1ZA-1
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-a3158fbb375so270562366b.3
-        for <linux-pm@vger.kernel.org>; Mon, 05 Feb 2024 01:58:51 -0800 (PST)
+ us-mta-567-Hn3KLGPjNM61CVAp5q0knw-1; Mon, 05 Feb 2024 04:59:02 -0500
+X-MC-Unique: Hn3KLGPjNM61CVAp5q0knw-1
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-a358c652e42so217201666b.3
+        for <linux-pm@vger.kernel.org>; Mon, 05 Feb 2024 01:59:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707127131; x=1707731931;
+        d=1e100.net; s=20230601; t=1707127141; x=1707731941;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kjvfci9ng+Lg5/KtBL6NJAaxrnR1eQ8Ii0bZQgClIa8=;
-        b=pStDUvLKwBzs3I3aJ0pXHnwOjI1+cDYYoV1qZezFrbHuS9VpzbUd5oqbFe2TfrHY6V
-         cwJSfLcwb+oHhDfGN5DPjUvQfxTB0YTPoK6RPNkGroGLXuAjZ4lbth6CY6ZuvKnKkHEZ
-         SMXbCwJpqwWEloFW0drRGyzerP/LiZwEdiPxCzEW/XDp5KlR/LUrI71ED7GZ9eaKMyb8
-         SgR72JtlJk5a7qAP63otWHLoy4txTs/vrok6ZczBZPXmmJaf+v8ZeOnXp/hZqDQA970g
-         WePoISbzc1Gaaa4EH2pEozRssOUq8WTTR3aijQ+ss2YCof0VJaH+8IuAB6eA5AXPWH0L
-         61aw==
-X-Gm-Message-State: AOJu0YycC6jHeIy/rA7szeTyv4ICAEltUh5jbWUrzNNmy7VeATFiMsPX
-	nVbGvHC9pcVswRrMgsknh42pd4z68nYMlLNihgvUR/EdDV2YUBUkdGVCo/K6VqsIuTfDWd1Woy4
-	n7ma5dhHt9HuuyKEnVQxE3Fa0hd59SmajDp1NE7ZMbt2YMZxsx4lci+2MN+lkhoaKatI=
-X-Received: by 2002:a17:907:7ea4:b0:a37:3922:8838 with SMTP id qb36-20020a1709077ea400b00a3739228838mr5562128ejc.70.1707127130881;
-        Mon, 05 Feb 2024 01:58:50 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEhrgzDj9wcLEvr6QvzHjHtsXi5ONowJ3C3vvpDSjPlWyjXq0CqHugKN2OKf64ERJaKxqN3Wg==
-X-Received: by 2002:a17:907:7ea4:b0:a37:3922:8838 with SMTP id qb36-20020a1709077ea400b00a3739228838mr5562117ejc.70.1707127130597;
-        Mon, 05 Feb 2024 01:58:50 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCU5fWfVG7eogvLtPNKTrXLM4Y7+jpxTvk2yEmJwepCMZkgDtk3PMd8rVSD4NlnHELDJRedYq/inZbG3Z8cG+/Bd1BFHjI8KEO5fdm+BBIEEHU6BBzSmyZTATANggSet2UoiNXq5qfPQQOQapCoPW31vd47cG2RHLbvHQ0gvou4FrldnLLT+9ReE3D98xTXaV3Vs8IzTag==
+        bh=lwyUnWvLJnNe+bRoKls+n+VgwPZLrmW2ivHplJ0jsYA=;
+        b=cLJASiEpLeO98JUPYwqo/GOu1898B+dhSUnh9cfYI6MIlj6f9BE46VLRwdTTgu6PSz
+         ppNk/R6h77iAOAeVhnEOHA8k0BhxOqcPWYOBKxKD5Nm/iQSUqSJ8QFol90hCE+n9LM6T
+         oKgnD5l4wZcbFL21Tuqiaj9ZdQEGLvG6zXy2VZiFz83wmqnYFmCo+TUVMINZEquxfsI6
+         YmQBWx0a5dqDnYhcmCYFutlJy5KnyvhtLwRXtn9z4x8krUJmHcmbdYKkGcDFqmtlw7iy
+         5h16Gsj3Elk4lWR4LDTJMHC5SMbwL83iO6y9SBb9TmzmZFWh/jdtudaUToOojpn90isC
+         VSUw==
+X-Gm-Message-State: AOJu0YyaARY6LazluSgVLiYOpMVua59NNAcp0jNiYMuQiiwzfJmu5zK/
+	RAlNsCFXudheAU+cD6efUFXjNGNTfKMFEE4s3Uz/FvEP/0Z0KEVzHyJYZdDeEav5YYODa0TmFIe
+	OPfrAirwWcE0ArBBGcostKRN3b5cquAbhcLR/fYH09Ekd0WfwhvSBTC3q
+X-Received: by 2002:a17:906:f45:b0:a36:6c96:3161 with SMTP id h5-20020a1709060f4500b00a366c963161mr6602678ejj.32.1707127141447;
+        Mon, 05 Feb 2024 01:59:01 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFaOuMXQHjbiVv15+3zhGNVefDvpBZQA2OmktX9TqIOWU0uCVEdS/Him5BHzAhb8OfC5Md9qg==
+X-Received: by 2002:a17:906:f45:b0:a36:6c96:3161 with SMTP id h5-20020a1709060f4500b00a366c963161mr6602660ejj.32.1707127141073;
+        Mon, 05 Feb 2024 01:59:01 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCXbmR08Gr4n2NVg2c2voT6qsslhwvbpLNUuX3+9zcQ0UKxxCe2NORxePOnvdjaxqz05hZREihbacA+Hjs9M4ENNvC9Fu959Gz4tG7MmU/kNJsWkTH2EhTzLMrkkKRsFt4vgqHM/LWALD1cvwxq+HGlEj5FkTN7ZxyLHAtox2IZxJ8oPlUZ3/kTdl2DY4iyfgrGcum7Nrw==
 Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id a20-20020a170906671400b00a34d0a865ecsm4078151ejp.163.2024.02.05.01.58.49
+        by smtp.gmail.com with ESMTPSA id a20-20020a170906671400b00a34d0a865ecsm4078151ejp.163.2024.02.05.01.59.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Feb 2024 01:58:50 -0800 (PST)
-Message-ID: <a1035d98-31b3-4926-b7d7-676bf18a4311@redhat.com>
-Date: Mon, 5 Feb 2024 10:58:49 +0100
+        Mon, 05 Feb 2024 01:59:00 -0800 (PST)
+Message-ID: <47253c5e-4ec3-4794-9cd3-c7aeb95fb5c7@redhat.com>
+Date: Mon, 5 Feb 2024 10:59:00 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -82,58 +82,31 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/4] power: supply: core: drop workaround for missing
- POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR_AVAILABLE
+Subject: Re: [PATCH 2/4] power: supply: test-power: implement charge_behaviour
+ property
 Content-Language: en-US, nl
 To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
  Sebastian Reichel <sre@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>
 Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
  Sebastian Reichel <sebastian.reichel@collabora.com>
 References: <20240204-power_supply-charge_behaviour_prop-v1-0-06a20c958f96@weissschuh.net>
- <20240204-power_supply-charge_behaviour_prop-v1-4-06a20c958f96@weissschuh.net>
+ <20240204-power_supply-charge_behaviour_prop-v1-2-06a20c958f96@weissschuh.net>
 From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20240204-power_supply-charge_behaviour_prop-v1-4-06a20c958f96@weissschuh.net>
+In-Reply-To: <20240204-power_supply-charge_behaviour_prop-v1-2-06a20c958f96@weissschuh.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi Thomas,
+Hi,
 
 On 2/4/24 18:26, Thomas Weißschuh wrote:
-> As the mm8013 driver was extended to also report that property the
-> workaround is not needed anymore.
+> To validate the special formatting of the "charge_behaviour" sysfs
+> property add it to the example driver.
 > 
 > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> ---
->  drivers/power/supply/power_supply_sysfs.c | 8 ++------
->  1 file changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-> index 3680cfc2e908..3804a3bbed24 100644
-> --- a/drivers/power/supply/power_supply_sysfs.c
-> +++ b/drivers/power/supply/power_supply_sysfs.c
-> @@ -273,7 +273,6 @@ static ssize_t power_supply_show_usb_type(struct device *dev,
->  
->  static ssize_t power_supply_show_charge_behaviour(struct device *dev,
->  						  struct power_supply *psy,
-> -						  struct power_supply_attr *ps_attr,
->  						  union power_supply_propval *value,
->  						  char *buf)
->  {
-> @@ -289,9 +288,7 @@ static ssize_t power_supply_show_charge_behaviour(struct device *dev,
->  	ret = power_supply_get_property(psy,
->  					POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR_AVAILABLE,
->  					&available);
-> -	if (ret == -EINVAL)
-> -		return sysfs_emit(buf, "%s\n", ps_attr->text_values[value->intval]);
 
-More of a remark on patch 1 really, note that if you use
-POWER_SUPPLY_CHARGE_BEHAVIOUR_TEXT[] here in patch 1, e.g. :
+Thanks, patch looks good to me:
 
-		return sysfs_emit(buf, "%s\n",
-				  POWER_SUPPLY_CHARGE_BEHAVIOUR_TEXT[value->intval]);
-
-then you can omit the ps_attr argument in patch 1 already, which in turn
-will cause this patch to be simpler / smaller.
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
 Regards,
 
@@ -141,23 +114,38 @@ Hans
 
 
 
-
-
-> -	else if (ret < 0)
-> +	if (ret < 0)
->  		return ret;
+> ---
+>  drivers/power/supply/test_power.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/test_power.c
+> index 0d0a77584c5d..4da0420996c9 100644
+> --- a/drivers/power/supply/test_power.c
+> +++ b/drivers/power/supply/test_power.c
+> @@ -123,6 +123,14 @@ static int test_power_get_battery_property(struct power_supply *psy,
+>  	case POWER_SUPPLY_PROP_CURRENT_NOW:
+>  		val->intval = battery_current;
+>  		break;
+> +	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
+> +		val->intval = POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE;
+> +		break;
+> +	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR_AVAILABLE:
+> +		val->intval = BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO)
+> +			    | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE)
+> +			    | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE);
+> +		break;
+>  	default:
+>  		pr_info("%s: some properties deliberately report errors.\n",
+>  			__func__);
+> @@ -156,6 +164,8 @@ static enum power_supply_property test_power_battery_props[] = {
+>  	POWER_SUPPLY_PROP_VOLTAGE_NOW,
+>  	POWER_SUPPLY_PROP_CURRENT_AVG,
+>  	POWER_SUPPLY_PROP_CURRENT_NOW,
+> +	POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR,
+> +	POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR_AVAILABLE,
+>  };
 >  
->  	return power_supply_charge_behaviour_show(dev, available.intval, value->intval, buf);
-> @@ -337,8 +334,7 @@ static ssize_t power_supply_show_property(struct device *dev,
->  						&value, buf);
->  		break;
->  	case POWER_SUPPLY_PROP_CHARGE_BEHAVIOUR:
-> -		ret = power_supply_show_charge_behaviour(dev, psy, ps_attr,
-> -							 &value, buf);
-> +		ret = power_supply_show_charge_behaviour(dev, psy, &value, buf);
->  		break;
->  	case POWER_SUPPLY_PROP_MODEL_NAME ... POWER_SUPPLY_PROP_SERIAL_NUMBER:
->  		ret = sysfs_emit(buf, "%s\n", value.strval);
+>  static char *test_power_ac_supplied_to[] = {
 > 
 
 
