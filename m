@@ -1,137 +1,100 @@
-Return-Path: <linux-pm+bounces-3403-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3404-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28E97849F82
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 17:31:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04DCF849FA0
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 17:39:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B2031C21909
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 16:31:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4DD4283730
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 16:39:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2208B28DD0;
-	Mon,  5 Feb 2024 16:31:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AFDC33CD4;
+	Mon,  5 Feb 2024 16:39:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EapCvRE0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3751E3EA62;
-	Mon,  5 Feb 2024 16:31:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BF2940BE9;
+	Mon,  5 Feb 2024 16:39:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707150703; cv=none; b=VBs40plXJb9YpxTxQnMAw99yjATa0xe2L+zSzzVziLRFAoDyrR0CZ6XBSITEnMQIM1Cb5/c8EYHGTE68+Fhl5kyEyuMPm5nOuuRqKALXj4/7XPqnP0FASRMzcPLwBQXHh9cSjPkLSBbIMou4Bf7t5vviEPeZTxK2++xAAOv173A=
+	t=1707151185; cv=none; b=fUFCeAWCmF79CLj2DqN8fOE8aVilpjTZpzQyKm69zJV5EBQlyrwlvwhbwxvwXyQY3K6GVXh2v9yiVep6tWgimndoT9Y1BOV5r8HXpik9n2T8KKnf0jfjXCnTJq9CwFBSWiB3G+kTLUWuIZyDP8Wz+ya90oSXfEdEk4ekjBAPNNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707150703; c=relaxed/simple;
-	bh=c2Xj0CWK4pM/ZbbTuzimtpxOAlDk7nzXsyyrZD7Y0WI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=p2xGLY5Bgp4Sv9oDGyfVImIE9EZ44p5MLWIBE8i9F5rTgnOUpt4XcX5a04X7by6ABeVD9rdwekNZp6PM3PXP6c3lhQHexVOgYQ9+t7ypo1GZmvwDJkJ27FwtxpcwguIfU++0aCfylfR0ENcd4D8qTicy54UFAKQgWYhV25nthmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-604713c4ee5so3743137b3.0;
-        Mon, 05 Feb 2024 08:31:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707150699; x=1707755499;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jWR3pEGZO6v+mTFVY3DLgK4dPi2tH10vXkils1uXoOQ=;
-        b=vmro6LkE7bsBc4ql/lCSymwIa+BvfwH+PWmxRpgbgIXx9ShRoFXgXX/cv7/NIma/bR
-         AKRLewHx435MYYulxbweY35IlFLzUy0wNqvVAXwUdbQOueiBWWmXy4Dzqf2y0QWW8FNV
-         N4yw73l91MzhP46uTXmUUMRUStv0brBytZAcA3OdJcmN5/L62CIzvSVBc941Gqi5750V
-         mf3dg3BiO4BYLQ5Ylblfvfxpf3cuj/GKW80/Z6KmADFG/V+mAoraHS0QKlPVmpcqm/in
-         wzna7dNTBeMQdV0jts31+KKlx7offTLksvUTZeYZaiLor09alzEX0iBDRY1LLXGBT+PN
-         gv6w==
-X-Gm-Message-State: AOJu0YxfXSh3JyLqDp1enUwoxEqaw5HkhgYPQx1Ll55OhsJIsckI9wN8
-	iUJ8K6QlY4QhrOblNHYcyZhFqwWLjWI6ptLQvi+DtUNdmxZvua1r9abkUjXJXVs=
-X-Google-Smtp-Source: AGHT+IEeSGJonTeidlmtPDtSSITP9K46bqw0zwBsmBOADrZr1YyUdFBHXwT9/GbhB9QF6NtVEuIHRQ==
-X-Received: by 2002:a0d:cb85:0:b0:5ff:5e94:277b with SMTP id n127-20020a0dcb85000000b005ff5e94277bmr52288ywd.45.1707150699086;
-        Mon, 05 Feb 2024 08:31:39 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCUnh8y63D7VD6ktXN5CwkmSN6HIOZVTqxmHZNP8LrQXmIyG1PpxhHhSH2/bl/PJhgKV40KDGZa1na/4JmFR6dWot3aHgR8COEPk2ADbAEeQm4w+f2WN+TakLo+mvRhp//TLeBttivc9j4JlrIIJ1kHEDyKJ6O0q9T82HCN61Y/K47s0OPqGbqg=
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id gu7-20020a05690c458700b0060410ee94a7sm4451ywb.143.2024.02.05.08.31.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Feb 2024 08:31:38 -0800 (PST)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-6040d33380cso47295307b3.1;
-        Mon, 05 Feb 2024 08:31:38 -0800 (PST)
-X-Received: by 2002:a81:57d0:0:b0:603:e86b:cd81 with SMTP id
- l199-20020a8157d0000000b00603e86bcd81mr61909ywb.31.1707150698427; Mon, 05 Feb
- 2024 08:31:38 -0800 (PST)
+	s=arc-20240116; t=1707151185; c=relaxed/simple;
+	bh=vbJaA4bFEq0xaB8nSdUrPFpAPgo9fDn4OpEJB7Tqa4k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bDHnpMlKApfXX7Yl6Y/UA5tax08D8Ols5zpYhfwIvLnUxS/BMOI2LB7yxmliMw3lGKEf/ArLO5og4AqeLg4jWK+nPX2gSO1unKHkiKW7Z8YNAQ2+Y6KQsyASvqAAXKXdTGb5q3zCrXY2DD22NvLqvPUvoCVQbzZwnnmrfKXdloI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EapCvRE0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AB99C433F1;
+	Mon,  5 Feb 2024 16:39:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707151184;
+	bh=vbJaA4bFEq0xaB8nSdUrPFpAPgo9fDn4OpEJB7Tqa4k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EapCvRE0C693RyV4rZwsfX3jguWW+avvhqEyO4J1qIFPZdoYhrZd0riKVTrhZ5/wb
+	 GtahUhLKtsq5QdBYP/1O0j8m/Ilf77Jn3M4efXo/Bmazke2Z+4eRwklBo3b72jxwsN
+	 B8cvEAwSsqKla14Y751cuedoUy1dle+8e5gHURJn7VUu6Yya7cyRudQKTOyfzwv2pr
+	 5gOQbUs9wgcNyNqfOQ+qj6uWRITf87TDDv87I1P5QOFu6ApzPd8EasOV2z4Wv5D8qd
+	 fTqRCfY1A4SYkZ7fPLuv8nOpR6GtiGaUXWyCHfe4z2JZDMdA7JZuOGSTXaRC6WvZwW
+	 TOd1b9X1jqOCA==
+Date: Mon, 5 Feb 2024 16:39:41 +0000
+From: Rob Herring <robh@kernel.org>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Saravana Kannan <saravanak@google.com>, David Dai <davidai@google.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Quentin Perret <qperret@google.com>,
+	Masami Hiramatsu <mhiramat@google.com>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Pavan Kondeti <quic_pkondeti@quicinc.com>,
+	Gupta Pankaj <pankaj.gupta@amd.com>, Mel Gorman <mgorman@suse.de>,
+	kernel-team@android.com, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] dt-bindings: cpufreq: add virtual cpufreq device
+Message-ID: <20240205163941.GA3474226-robh@kernel.org>
+References: <20240127004321.1902477-1-davidai@google.com>
+ <20240127004321.1902477-2-davidai@google.com>
+ <20240131170608.GA1441369-robh@kernel.org>
+ <CAGETcx8S0oS67oMZsPKk6_MGAtygoHEf_LN1gbcNDEBqRJ4PPg@mail.gmail.com>
+ <20240202155352.GA37864-robh@kernel.org>
+ <20240205083830.4werub5e76kudjq4@vireshk-i7>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <da6af483-5ee9-45cd-922e-d9d5364674dc@web.de>
-In-Reply-To: <da6af483-5ee9-45cd-922e-d9d5364674dc@web.de>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 5 Feb 2024 17:31:26 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUxn4Ne7kmEfONz8Uk3Why3m9r83GdM5RzTxm_4Gj_a6g@mail.gmail.com>
-Message-ID: <CAMuHMdUxn4Ne7kmEfONz8Uk3Why3m9r83GdM5RzTxm_4Gj_a6g@mail.gmail.com>
-Subject: Re: [PATCH] pmdomain: mediatek: Use devm_platform_get_and_ioremap_resource()
- in init_scp()
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org, 
-	Angelo Gioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	=?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	Rob Herring <robh@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240205083830.4werub5e76kudjq4@vireshk-i7>
 
-Hi Markus,
+On Mon, Feb 05, 2024 at 02:08:30PM +0530, Viresh Kumar wrote:
+> On 02-02-24, 09:53, Rob Herring wrote:
+> > On Wed, Jan 31, 2024 at 10:23:03AM -0800, Saravana Kannan wrote:
+> > > We also need the OPP tables to indicate which CPUs are part of the
+> > > same cluster, etc. Don't want to invent a new "protocol" and just use
+> > > existing DT bindings.
+> > 
+> > Topology binding is for that.
+> 
+> This one, right ?
+> 
+> Documentation/devicetree/bindings/dvfs/performance-domain.yaml
 
-On Mon, Feb 5, 2024 at 3:23=E2=80=AFPM Markus Elfring <Markus.Elfring@web.d=
-e> wrote:
-> From: Markus Elfring <elfring@users.sourceforge.net>
-> Date: Mon, 5 Feb 2024 15:08:27 +0100
->
-> A wrapper function is available since the commit 890cc39a879906b63912482d=
-fc41944579df2dc6
-> ("drivers: provide devm_platform_get_and_ioremap_resource()").
-> Thus reuse existing functionality instead of keeping duplicate source cod=
-e.
->
-> This issue was detected by using the Coccinelle software.
->
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+No, Documentation/devicetree/bindings/cpu/cpu-topology.txt (or the 
+schema version of it in dtschema)
 
-Thanks for your patch!
+Rob
 
-> --- a/drivers/pmdomain/mediatek/mtk-scpsys.c
-> +++ b/drivers/pmdomain/mediatek/mtk-scpsys.c
-> @@ -441,8 +441,7 @@ static struct scp *init_scp(struct platform_device *p=
-dev,
->
->         scp->dev =3D &pdev->dev;
->
-> -       res =3D platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -       scp->base =3D devm_ioremap_resource(&pdev->dev, res);
-> +       scp->base =3D devm_platform_get_and_ioremap_resource(pdev, 0, &re=
-s);
-
-Given res is further unused, please use devm_platform_ioremap_resource()
-instead, and remove the local variable res.
-
->         if (IS_ERR(scp->base))
->                 return ERR_CAST(scp->base);
->
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
 
