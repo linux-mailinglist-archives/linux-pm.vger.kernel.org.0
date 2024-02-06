@@ -1,112 +1,101 @@
-Return-Path: <linux-pm+bounces-3475-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3476-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA2BC84B192
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 10:48:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A74A84B21A
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 11:11:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98FF92852F4
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 09:48:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B93F9287193
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 10:11:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0BCC12D74F;
-	Tue,  6 Feb 2024 09:48:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 105E712E1C6;
+	Tue,  6 Feb 2024 10:10:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h2Kpo4au"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="cCe7Wzn8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 249FC12D145
-	for <linux-pm@vger.kernel.org>; Tue,  6 Feb 2024 09:48:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5568912EBEA;
+	Tue,  6 Feb 2024 10:10:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707212923; cv=none; b=ir2S2ihHIzzUoSifrvy+ksLUPFRRW0BTaS+WSoUfd1rJRFwvwoLBu0pn2l69REmVYGz44wMhfqLLnSULCclZ3+ClIvbZ4t8ohdBEpvn+LwSpxfdyJqGPTVGAkPE16a8hLgvbEb34j2tmRWEv/0grclOLZTCIOys0a/EDWWNqpsM=
+	t=1707214232; cv=none; b=EE8v0FbkemTKIWz+m5wqSTGItUPmuzh7WD6OEKEs/vX3sfbJBqMSFlmg2N3va1eduWFBphHnvR8/aCZALhSTGj/6LTRSP0lU/KERDs7bl+UaFX/1EhJF9FNtTkd1eZ0PuccfTGsp17J5il2gC1hrUrmkHzC/Lu1TnVE/OoPgsW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707212923; c=relaxed/simple;
-	bh=ZECXte5D6jxim+3xK4HKfAtIsgXPnPOa+pKdouz7m2A=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=UPPzi95PhBCZHO3iDysSpjoHJE1CsQdwTo4c6MMD9QV4eVKHUb65qz6PFVu8P+r0prb1Y0BxhAyiOnOKxPx46Iv0FlbB3xaeCJfKQrCIuLD7GEDRlAORH/OQFrnR1HOZCRUlAUuAEmTq7rEkHjAp5Oh5QcBXZ4jHjyQmq3MTuZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=h2Kpo4au; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1707212920;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZECXte5D6jxim+3xK4HKfAtIsgXPnPOa+pKdouz7m2A=;
-	b=h2Kpo4au8g19SBUWo3a8Cx5lJg6nR1Lh8rSG51SzWkcH+1O1+lR1nyGFoSxBt4m9vtV3QP
-	Kg5aYpyHnrNpMy/c57SJbBdD6CLppMH2y+OAL0+PpRl61/oT+4eA8Zh0MclHuO57A9c6gP
-	DlyPVIrtAhrxvhls6tH6QUp8Jzm6M5U=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-21-FqMIuzPmMrCfYXslqigYSw-1; Tue, 06 Feb 2024 04:48:39 -0500
-X-MC-Unique: FqMIuzPmMrCfYXslqigYSw-1
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7816bea8d28so71322885a.0
-        for <linux-pm@vger.kernel.org>; Tue, 06 Feb 2024 01:48:39 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707212919; x=1707817719;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZECXte5D6jxim+3xK4HKfAtIsgXPnPOa+pKdouz7m2A=;
-        b=DngoibXh48ecA0qv7bS2TBwJaowie4OiXttfrFLbFaJEBUy7qyiV5Ifw2hYR/y525J
-         iBK2iM38kHSBslaMheAu+qAN4itU/cQEF9IaT+co9wDGnkJZVu05B8TzYsVMHjoeCJKS
-         swAxWNQtks0rIdUcTBUzF3vDKQ0zyfxNEuC+waAkxEuv/Rgj2Qyv5EfW7s93AZqjCc2K
-         ZklmdMe+UqNtaSreYDwzZNGGOdk1Sp0I+Um8lVjok265VV4aYseYalybzM1WSel9tUqZ
-         Akzli+tKYACQxVn2mFJ5FgGgvBujwtN6wjap5mZiut3KzJrAseeqRiXM1Q5UUk2POshR
-         /JUA==
-X-Gm-Message-State: AOJu0YzhsJ8fEbz7GWos7GHkKF46mCAiE7E4CFEGQTVXOYSuquE8ZvjK
-	DEbms6yxr3jTGwr0qnfr2JJ2rTNVN+RH8xPRaqBlmuAY8UePybfG6C+WY5nSt0Cr8YcCZSMhdLv
-	5kc3tFJVlby5yKjeE192rQNCGYq3BlN2klRWhHWxsqjZG8tXPsN5uqmqE
-X-Received: by 2002:a05:620a:a0a:b0:785:440c:88d9 with SMTP id i10-20020a05620a0a0a00b00785440c88d9mr3132332qka.26.1707212919043;
-        Tue, 06 Feb 2024 01:48:39 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFVZHwKbOSJItUHx/ikHRtM9wqEPD3H5+QvbQpwtzXtmamlTFpTYFt3g/syo8NgZPxdcW1S0Q==
-X-Received: by 2002:a05:620a:a0a:b0:785:440c:88d9 with SMTP id i10-20020a05620a0a0a00b00785440c88d9mr3132299qka.26.1707212918799;
-        Tue, 06 Feb 2024 01:48:38 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCWrwQH0hQVhe0VPR2hZe1xCBNzOga+tBypyXg9hbQvH1pSJTdI7ZgtdHVcgn6rRQl+DcDxogftvodzYEPMJcaE1n9N7qNBFDS0DzHuY5qac4HvBPl4xY1ZKtO+OG4//zVUqXI6pu9szxT6PbFd+Mg3/Q9NK+yt1QHl673JhfVjN68a+gsIW7JBv8B72s99yHahQdNhMJQCacc10tltod0G851RTWM9eydTsNB65V+244gDRPrxEs38kkuQhc6VsRrfWU8+x+p2KzxN+bFCXjenbh5UvaUgCP/k6wcRaVPZrJmqidM9WzpAXS3w4drJCjsCrAcyPeFlYA3KX3DIPbbrQYBfaanGCJ0r+tQvk66smv+0XgnTtph+0swz1geuaMIoW0VbyW6unIY58owxDU/xoismXsKre7CN8N+hBbz5NFQwr1kx4d9KCg+tBBCw9KWPXRf+Msue1u9Zrurx3kdKYb5j5P+NtCZ28MKScxPbx7tshK/gRorlyHgmpvKz39Q2Wr9OKV7QbVqKcQsTDAwFBNc6/VzBZYuROo9rQkomBdVIQMrxdgleexKu8XRwurJTaACHsWiMlbACtt6c7Aqv5VstSx/I8wnE6bQ==
-Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
-        by smtp.gmail.com with ESMTPSA id vr11-20020a05620a55ab00b007815c25b32bsm764188qkn.35.2024.02.06.01.48.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Feb 2024 01:48:38 -0800 (PST)
-From: Valentin Schneider <vschneid@redhat.com>
-To: Onkarnarth <onkarnath.1@samsung.com>, rafael@kernel.org,
- lenb@kernel.org, bhelgaas@google.com, viresh.kumar@linaro.org,
- mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
- vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
- bsegall@google.com, mgorman@suse.de, bristot@redhat.com
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
- r.thapliyal@samsung.com, maninder1.s@samsung.com, Onkarnath
- <onkarnath.1@samsung.com>
-Subject: Re: [PATCH 2/2] kernel: sched: print errors with %pe for better
- readability of logs
-In-Reply-To: <20240206051120.4173475-2-onkarnath.1@samsung.com>
-References: <20240206051120.4173475-1-onkarnath.1@samsung.com>
- <CGME20240206051402epcas5p2ae3737fc0d71ba1d7a7f8bee90438ff2@epcas5p2.samsung.com>
- <20240206051120.4173475-2-onkarnath.1@samsung.com>
-Date: Tue, 06 Feb 2024 10:48:33 +0100
-Message-ID: <xhsmhh6ilhqj2.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
+	s=arc-20240116; t=1707214232; c=relaxed/simple;
+	bh=c0L7QZYigfyLPmzRjA6nS5GyM2Z1QUEWyvUjNZ0gam8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nz2/3t5fF1FlbvH8WdID/vypbDVXkwJB4E11XIb/nsbWPeCQYYHAq2ykXcEwtv40/QKPG/f5nXJBlA4IhohqIxpwsy5tE6Kwy6mcutNMFh756/roCqSYA3xyEBJigCC+NDcEmJWLsXAs93w9HJNmlLaPxhOeMQv8LZ8iqhAU2ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=cCe7Wzn8; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1707214228;
+	bh=c0L7QZYigfyLPmzRjA6nS5GyM2Z1QUEWyvUjNZ0gam8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=cCe7Wzn8mB/Qc2IlweE/YDlAx4XfeacuEPNZi8O5b3+sWsF5QBYAPAlU8rHBGvUJ5
+	 cdYZNevT/tmv/Z9t+j6a2Jg/g1075A9U8lgYjj5/WGb9cJUz5RLTmRDexmtlovQuH3
+	 h9JcY1hYhAIp2LNyNV1I9F0ENfUFbbHx5uTFbw0zBVJQHyAnKQQVmwcVHuosS2xfEY
+	 aJUB2kf/OqPh4vwKTtBi37VW8i1XMzYjoFndzVRFeDlwFffATcEznXu3JiNaCNloPV
+	 ojLHP6VhrNJvj0jaFYF4XH3rZZPEVIJOMraFGnSkKBIONqH28EdUrgwwP+ysHQZeOG
+	 cV5jZtl/Nr+Ew==
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id A72AA378206B;
+	Tue,  6 Feb 2024 10:10:27 +0000 (UTC)
+Message-ID: <d5998dd4-d582-488e-b3ef-98ea9737dcfb@collabora.com>
+Date: Tue, 6 Feb 2024 11:10:27 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] pmdomain: mediatek: Use
+ devm_platform_ioremap_resource() in init_scp()
+Content-Language: en-US
+To: Markus Elfring <Markus.Elfring@web.de>,
+ Geert Uytterhoeven <geert@linux-m68k.org>,
+ linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Matthias Brugger <matthias.bgg@gmail.com>, Rob Herring <robh@kernel.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Geert Uytterhoeven <geert+renesas@glider.be>
+References: <da6af483-5ee9-45cd-922e-d9d5364674dc@web.de>
+ <CAMuHMdUxn4Ne7kmEfONz8Uk3Why3m9r83GdM5RzTxm_4Gj_a6g@mail.gmail.com>
+ <6e397bf2-1d45-434f-8619-58a737a138e3@web.de>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <6e397bf2-1d45-434f-8619-58a737a138e3@web.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 06/02/24 10:41, Onkarnarth wrote:
-> From: Onkarnath <onkarnath.1@samsung.com>
->
-> instead of printing errros as a number(%ld), it's better to print in string
-> format for better readability of logs.
->
-> Signed-off-by: Onkarnath <onkarnath.1@samsung.com>
+Il 06/02/24 10:21, Markus Elfring ha scritto:
+> From: Markus Elfring <elfring@users.sourceforge.net>
+> Date: Tue, 6 Feb 2024 10:05:34 +0100
+> Subject: [PATCH v2] pmdomain: mediatek: Use devm_platform_ioremap_resource() in init_scp()
+> 
+> A wrapper function is available since the commit 7945f929f1a77a1c8887a97ca07f87626858ff42
+> ("drivers: provide devm_platform_ioremap_resource()").
+> 
+> * Thus reuse existing functionality instead of keeping duplicate source code.
+> 
+> * Delete a local variable which became unnecessary with this refactoring.
+> 
+> 
+> This issue was transformed by using the Coccinelle software.
+> 
+> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
 
-I quick ripgrep tells me this is the only culprit in sched, so:
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Reviewed-by: Valentin Schneider <vschneid@redhat.com>
 
 
