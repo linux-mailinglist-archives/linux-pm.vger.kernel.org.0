@@ -1,60 +1,59 @@
-Return-Path: <linux-pm+bounces-3479-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3480-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71BCB84B689
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 14:36:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F55E84B68D
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 14:36:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 23B2B1F24DC0
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 13:36:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E0CA1F240F0
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 13:36:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71A76131728;
-	Tue,  6 Feb 2024 13:36:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E003131757;
+	Tue,  6 Feb 2024 13:36:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ue8qPz4k"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KHYzRv4Q"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B59F713173C;
-	Tue,  6 Feb 2024 13:36:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC36E131759;
+	Tue,  6 Feb 2024 13:36:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707226580; cv=none; b=H+FaqGLoWEuwTgZJ1U2lMCaT6fcttFO8kKXtkizV7i02VM7jw2FB/OehD/RsKWbva2jOtsAQS/ll3d5vdcA7fsH9YmbMGrPAdXYTXLxJrLO0laE/1jbokDM0OPINUEX+Tx0NpKeET5EAGMfeskZg9r/zs97wvUfUahb2T4SED7k=
+	t=1707226586; cv=none; b=SuE4XC7RCo9PZGgJ3KKdYhz/ktmEKuNYkbSSWPaXc9M5/5rIDb274MucDWMVtcLmbpibpSCXtNTgDGxz4QQkkTsxVAX2VWSzdtLwBKHZ/FP+9LZ+XGj70dRdzF5gS6JwLzdlvWE2heH1+ooseGLpM5astxMwWqSeZhoBXWOUFrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707226580; c=relaxed/simple;
-	bh=QjZXjVU5zeGYyC6/h1CagiovDvB8NikvVqpoMa/P8QU=;
+	s=arc-20240116; t=1707226586; c=relaxed/simple;
+	bh=kAmMJyavNvPzTRs44ZyzWYsAU5uLZugmQuoM8NLaReY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=jySj9SEngEdVd/k/nO2SFdaybN2gg3Htohkfa50yK7shgKYYcHwNwn+lQ/OD4MSBgVVgqPjcegjAHp7KpFywDMPfIet1DDZ/rHFN3T2wF9zl5Ax5z6SJ1OYsiTm5J9DgGO3+A0LoWOJ3+RDcrufkKn3NWbkFfmbUPAO7o116Plg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ue8qPz4k; arc=none smtp.client-ip=192.198.163.16
+	 MIME-Version; b=j/lydwQMwQxQYL/Ike1ElEoebvum7Qf2jWas0Aa++q+Se1eEG01LSM8A6YiNbLbG+6L+FOvPUz4vRRNkmnDtIly7ZGiA0YF7dn9ZYRKgg6pGkZGVdECHqM+tZMx7VNc1tNomNBI18CZhJjRxRYXd3D0Wj6F2GX6K0ByTsehhKUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KHYzRv4Q; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707226579; x=1738762579;
+  t=1707226584; x=1738762584;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=QjZXjVU5zeGYyC6/h1CagiovDvB8NikvVqpoMa/P8QU=;
-  b=Ue8qPz4kNKl4HDRI7WjsJ7fUdfX7XeHfMwJqKNOn23XutnZcyWnwwKmB
-   CN+eORJUM5hLgGlj9xgLds10TFyJt1oS9n9JHqHwGJ5VwCTrMx+HeOAaI
-   vxt04Isk3AmMqIHJjWfYfHGdJFz4FqYC9m13gkFOmWYhuKlwiUrm7tlEL
-   PvxDngeUqnBLRkWp6D6oRxWFkYvcm2p/Z5IEl/puY62g/AFqfezPCjZE4
-   3PpO8gKS6goMxA3YV1OSpQ5w1QCLGGWhzYQfmulU1Y4JBB7KYgYEX/7t6
-   PbR+fdWi4hySngQyn/Z4oVL/+C/loljg2W4IjoLRoEcFTTe5UpyNinFPv
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="1014386"
+  bh=kAmMJyavNvPzTRs44ZyzWYsAU5uLZugmQuoM8NLaReY=;
+  b=KHYzRv4QoB4qNL80xrO0+83v1U6jZqsCdKyknqexiodhCSBbyD9vBJlX
+   nvSk4LZ9MylIhBW4MjNYl0r9g5X/OqdgUh1+DmFZ+/sq+FykzWaR5sc1L
+   RRVhMynn2ewqfDssoxtNvNtzrJZtEZlxOL/ta4+5OSltzhAVYtIVIzkhb
+   3r3IVEHVw1x77mADB8NtUdyOEJY8CPipX/QaqU3X6+2HuOn88RCaVoTap
+   j2l/k6xsovCrATbC83CR6noyi7sRwcoFhla9/ss/qEg/hKyjSLSERAZKi
+   F23Kt1uJWlKEjmJTvTItHlFvSbloxRGjxSz+nGC59L97e5pQ76WuDohOU
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="630559"
 X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
-   d="scan'208";a="1014386"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 05:36:18 -0800
+   d="scan'208";a="630559"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 05:36:24 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="909636858"
 X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
-   d="scan'208";a="909636858"
+   d="scan'208";a="5788684"
 Received: from sgruszka-mobl.ger.corp.intel.com (HELO localhost) ([10.252.60.196])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 05:36:14 -0800
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 05:36:20 -0800
 From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
 To: linux-pm@vger.kernel.org
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -69,9 +68,9 @@ Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Johannes Berg <johannes@sipsolutions.net>,
 	Florian Westphal <fw@strlen.de>,
 	netdev@vger.kernel.org
-Subject: [PATCH v2 1/3] genetlink: Add per family bind/unbind callbacks
-Date: Tue,  6 Feb 2024 14:36:03 +0100
-Message-Id: <20240206133605.1518373-2-stanislaw.gruszka@linux.intel.com>
+Subject: [PATCH v2 2/3] thermal: netlink: Add genetlink bind/unbind notifications
+Date: Tue,  6 Feb 2024 14:36:04 +0100
+Message-Id: <20240206133605.1518373-3-stanislaw.gruszka@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240206133605.1518373-1-stanislaw.gruszka@linux.intel.com>
 References: <20240206133605.1518373-1-stanislaw.gruszka@linux.intel.com>
@@ -83,101 +82,157 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add genetlink family bind()/unbind() callbacks when adding/removing
-multicast group to/from netlink client socket via setsockopt() or
-bind() syscall.
+Introduce a new feature to the thermal netlink framework, enabling the
+registration of sub drivers to receive events via a notifier mechanism.
+Specifically, implement genetlink family bind and unbind callbacks to send
+BIND and UNBIND events.
 
-They can be used to track if consumers of netlink multicast messages
-emerge or disappear. Thus, a client implementing callbacks, can now
-send events only when there are active consumers, preventing unnecessary
-work when none exist.
+The primary purpose of this enhancement is to facilitate the tracking of
+user-space consumers by the intel_hif driver. By leveraging these
+notifications, the driver can determine when consumers are present
+or absent.
 
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
 ---
- include/net/genetlink.h |  4 ++++
- net/netlink/genetlink.c | 33 +++++++++++++++++++++++++++++++++
- 2 files changed, 37 insertions(+)
+ drivers/thermal/thermal_netlink.c | 40 +++++++++++++++++++++++++++----
+ drivers/thermal/thermal_netlink.h | 25 +++++++++++++++++++
+ 2 files changed, 60 insertions(+), 5 deletions(-)
 
-diff --git a/include/net/genetlink.h b/include/net/genetlink.h
-index e61469129402..ecadba836ae5 100644
---- a/include/net/genetlink.h
-+++ b/include/net/genetlink.h
-@@ -41,6 +41,8 @@ struct genl_info;
-  *	do additional, common, filtering and return an error
-  * @post_doit: called after an operation's doit callback, it may
-  *	undo operations done by pre_doit, for example release locks
-+ * @bind: called when family multicast group is added to a netlink socket
-+ * @unbind: called when family multicast group is removed from a netlink socket
-  * @module: pointer to the owning module (set to THIS_MODULE)
-  * @mcgrps: multicast groups used by this family
-  * @n_mcgrps: number of multicast groups
-@@ -84,6 +86,8 @@ struct genl_family {
- 	void			(*post_doit)(const struct genl_split_ops *ops,
- 					     struct sk_buff *skb,
- 					     struct genl_info *info);
-+	int			(*bind)(int mcgrp);
-+	void			(*unbind)(int mcgrp);
- 	const struct genl_ops *	ops;
- 	const struct genl_small_ops *small_ops;
- 	const struct genl_split_ops *split_ops;
-diff --git a/net/netlink/genetlink.c b/net/netlink/genetlink.c
-index 8c7af02f8454..0d1551dadb63 100644
---- a/net/netlink/genetlink.c
-+++ b/net/netlink/genetlink.c
-@@ -1836,6 +1836,9 @@ static int genl_bind(struct net *net, int group)
- 		    !ns_capable(net->user_ns, CAP_SYS_ADMIN))
- 			ret = -EPERM;
+diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
+index 76a231a29654..86c7653a9530 100644
+--- a/drivers/thermal/thermal_netlink.c
++++ b/drivers/thermal/thermal_netlink.c
+@@ -7,17 +7,13 @@
+  * Generic netlink for thermal management framework
+  */
+ #include <linux/module.h>
++#include <linux/notifier.h>
+ #include <linux/kernel.h>
+ #include <net/genetlink.h>
+ #include <uapi/linux/thermal.h>
  
-+		if (family->bind)
-+			family->bind(i);
-+
- 		break;
- 	}
+ #include "thermal_core.h"
  
-@@ -1843,12 +1846,42 @@ static int genl_bind(struct net *net, int group)
+-enum thermal_genl_multicast_groups {
+-	THERMAL_GENL_SAMPLING_GROUP = 0,
+-	THERMAL_GENL_EVENT_GROUP = 1,
+-};
+-
+ static const struct genl_multicast_group thermal_genl_mcgrps[] = {
+ 	[THERMAL_GENL_SAMPLING_GROUP] = { .name = THERMAL_GENL_SAMPLING_GROUP_NAME, },
+ 	[THERMAL_GENL_EVENT_GROUP]  = { .name = THERMAL_GENL_EVENT_GROUP_NAME,  },
+@@ -75,6 +71,7 @@ struct param {
+ typedef int (*cb_t)(struct param *);
+ 
+ static struct genl_family thermal_gnl_family;
++static BLOCKING_NOTIFIER_HEAD(thermal_gnl_chain);
+ 
+ static int thermal_group_has_listeners(enum thermal_genl_multicast_groups group)
+ {
+@@ -645,6 +642,27 @@ static int thermal_genl_cmd_doit(struct sk_buff *skb,
  	return ret;
  }
  
-+static void genl_unbind(struct net *net, int group)
++static int thermal_genl_bind(int mcgrp)
 +{
-+	const struct genl_family *family;
-+	unsigned int id;
++	struct thermal_genl_notify n = { .mcgrp = mcgrp };
 +
-+	down_read(&cb_lock);
++	if (WARN_ON_ONCE(mcgrp > THERMAL_GENL_MAX_GROUP))
++		return -EINVAL;
 +
-+	idr_for_each_entry(&genl_fam_idr, family, id) {
-+		const struct genl_multicast_group *grp;
-+		int i;
-+
-+		if (family->n_mcgrps == 0)
-+			continue;
-+
-+		i = group - family->mcgrp_offset;
-+		if (i < 0 || i >= family->n_mcgrps)
-+			continue;
-+
-+		grp = &family->mcgrps[i];
-+
-+		if (family->unbind)
-+			family->unbind(i);
-+
-+		break;
-+	}
-+
-+	up_read(&cb_lock);
++	blocking_notifier_call_chain(&thermal_gnl_chain, THERMAL_NOTIFY_BIND, &n);
++	return 0;
 +}
 +
- static int __net_init genl_pernet_init(struct net *net)
- {
- 	struct netlink_kernel_cfg cfg = {
- 		.input		= genl_rcv,
- 		.flags		= NL_CFG_F_NONROOT_RECV,
- 		.bind		= genl_bind,
-+		.unbind		= genl_unbind,
- 		.release	= genl_release,
- 	};
++static void thermal_genl_unbind(int mcgrp)
++{
++	struct thermal_genl_notify n = { .mcgrp = mcgrp };
++
++	if (WARN_ON_ONCE(mcgrp > THERMAL_GENL_MAX_GROUP))
++		return;
++
++	blocking_notifier_call_chain(&thermal_gnl_chain, THERMAL_NOTIFY_UNBIND, &n);
++}
++
+ static const struct genl_small_ops thermal_genl_ops[] = {
+ 	{
+ 		.cmd = THERMAL_GENL_CMD_TZ_GET_ID,
+@@ -679,6 +697,8 @@ static struct genl_family thermal_gnl_family __ro_after_init = {
+ 	.version	= THERMAL_GENL_VERSION,
+ 	.maxattr	= THERMAL_GENL_ATTR_MAX,
+ 	.policy		= thermal_genl_policy,
++	.bind		= thermal_genl_bind,
++	.unbind		= thermal_genl_unbind,
+ 	.small_ops	= thermal_genl_ops,
+ 	.n_small_ops	= ARRAY_SIZE(thermal_genl_ops),
+ 	.resv_start_op	= THERMAL_GENL_CMD_CDEV_GET + 1,
+@@ -686,6 +706,16 @@ static struct genl_family thermal_gnl_family __ro_after_init = {
+ 	.n_mcgrps	= ARRAY_SIZE(thermal_genl_mcgrps),
+ };
  
++int thermal_genl_register_notifier(struct notifier_block *nb)
++{
++	return blocking_notifier_chain_register(&thermal_gnl_chain, nb);
++}
++
++int thermal_genl_unregister_notifier(struct notifier_block *nb)
++{
++	return blocking_notifier_chain_unregister(&thermal_gnl_chain, nb);
++}
++
+ int __init thermal_netlink_init(void)
+ {
+ 	return genl_register_family(&thermal_gnl_family);
+diff --git a/drivers/thermal/thermal_netlink.h b/drivers/thermal/thermal_netlink.h
+index 93a927e144d5..69211ece7392 100644
+--- a/drivers/thermal/thermal_netlink.h
++++ b/drivers/thermal/thermal_netlink.h
+@@ -10,6 +10,19 @@ struct thermal_genl_cpu_caps {
+ 	int efficiency;
+ };
+ 
++enum thermal_genl_multicast_groups {
++	THERMAL_GENL_SAMPLING_GROUP = 0,
++	THERMAL_GENL_EVENT_GROUP = 1,
++	THERMAL_GENL_MAX_GROUP = THERMAL_GENL_EVENT_GROUP,
++};
++
++#define THERMAL_NOTIFY_BIND	0
++#define THERMAL_NOTIFY_UNBIND	1
++
++struct thermal_genl_notify {
++	int mcgrp;
++};
++
+ struct thermal_zone_device;
+ struct thermal_trip;
+ struct thermal_cooling_device;
+@@ -18,6 +31,9 @@ struct thermal_cooling_device;
+ #ifdef CONFIG_THERMAL_NETLINK
+ int __init thermal_netlink_init(void);
+ void __init thermal_netlink_exit(void);
++int thermal_genl_register_notifier(struct notifier_block *nb);
++int thermal_genl_unregister_notifier(struct notifier_block *nb);
++
+ int thermal_notify_tz_create(const struct thermal_zone_device *tz);
+ int thermal_notify_tz_delete(const struct thermal_zone_device *tz);
+ int thermal_notify_tz_enable(const struct thermal_zone_device *tz);
+@@ -48,6 +64,15 @@ static inline int thermal_notify_tz_create(const struct thermal_zone_device *tz)
+ 	return 0;
+ }
+ 
++int thermal_genl_register_notifier(struct notifier_block *nb)
++{
++	return 0;
++}
++
++int thermal_genl_unregister_notifier(struct notifier_block *nb)
++{
++	return 0;
++}
+ static inline int thermal_notify_tz_delete(const struct thermal_zone_device *tz)
+ {
+ 	return 0;
 -- 
 2.34.1
 
