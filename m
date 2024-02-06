@@ -1,91 +1,112 @@
-Return-Path: <linux-pm+bounces-3474-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3475-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A059684B163
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 10:36:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA2BC84B192
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 10:48:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D35431C21DDB
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 09:36:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98FF92852F4
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 09:48:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 714E012D15E;
-	Tue,  6 Feb 2024 09:36:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0BCC12D74F;
+	Tue,  6 Feb 2024 09:48:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="aSOH7z1V"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="h2Kpo4au"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00415745D6;
-	Tue,  6 Feb 2024 09:36:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 249FC12D145
+	for <linux-pm@vger.kernel.org>; Tue,  6 Feb 2024 09:48:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707212175; cv=none; b=gqmOa8ya1OqGRk3qXf21ikxFcKktUkUuhPi3NLMzWxH0IFYMzsKPFzpk1OtSpo0F4GHX3a57O5ANlrv51xS5yQ6DCiuXj5qV3SiZOduno9tEpgfgq9+sNNv9KI4rbq4oxH/C1ctMnhnfY6wn/RXezPnx3yFvS4BtB9cajZ5uqoY=
+	t=1707212923; cv=none; b=ir2S2ihHIzzUoSifrvy+ksLUPFRRW0BTaS+WSoUfd1rJRFwvwoLBu0pn2l69REmVYGz44wMhfqLLnSULCclZ3+ClIvbZ4t8ohdBEpvn+LwSpxfdyJqGPTVGAkPE16a8hLgvbEb34j2tmRWEv/0grclOLZTCIOys0a/EDWWNqpsM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707212175; c=relaxed/simple;
-	bh=luROSI1t+DKF5ceyQuKSrABuZSi136QYuZumnfZGPPg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=L1SOTWfhk4QH0pstAtCwz6w9QMafzxYsNCwbGPl7Hi8tIZAGnpdbTBU1e2jFb/xh2MLn9LJcXuPZemQb9HV0mxKMg51FrmCDiEyCeRVYT9iOIS1ixqmTKOc5v0i+Rc96sGdENwC9g2rreQ8OHl8uVLNMwuMTOseiVTL5Bo/mp4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=aSOH7z1V; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1707212172;
-	bh=luROSI1t+DKF5ceyQuKSrABuZSi136QYuZumnfZGPPg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=aSOH7z1VxB4VvzEWSRLptEW7UztO288D3llYuxrHh2Thlop7wogU/Pu/VjRIXOHPM
-	 Wxl1BTS6XbGFlNW4EJYD9MzCDn8xtLo1udQlMQOKamuXHkp+HU2IDgoKh83YTMdzRg
-	 d0DcfOyesV/75xidwWm0mqt76H5oUKrseaTK7eShCQ24pyq/rP5vKS5KwW0AGtGnXl
-	 j9oTT3oS0WE5CpemoNfmQwGpv6pADXLx40vjN0spOmUWVKkGtw+NF0Z8ijD32KAKyU
-	 ZzXMoetCRkDBpUkgQHofJYxKJesC9wknBtNKy4KNNf/fNrveCcHCIAhHoE87Ar8TzY
-	 2Iup6OK0jRrnQ==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 4506E3782051;
-	Tue,  6 Feb 2024 09:36:11 +0000 (UTC)
-Message-ID: <bf4b8c00-cb21-4eae-9bf2-7941dcfae437@collabora.com>
-Date: Tue, 6 Feb 2024 10:36:10 +0100
+	s=arc-20240116; t=1707212923; c=relaxed/simple;
+	bh=ZECXte5D6jxim+3xK4HKfAtIsgXPnPOa+pKdouz7m2A=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=UPPzi95PhBCZHO3iDysSpjoHJE1CsQdwTo4c6MMD9QV4eVKHUb65qz6PFVu8P+r0prb1Y0BxhAyiOnOKxPx46Iv0FlbB3xaeCJfKQrCIuLD7GEDRlAORH/OQFrnR1HOZCRUlAUuAEmTq7rEkHjAp5Oh5QcBXZ4jHjyQmq3MTuZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=h2Kpo4au; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1707212920;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZECXte5D6jxim+3xK4HKfAtIsgXPnPOa+pKdouz7m2A=;
+	b=h2Kpo4au8g19SBUWo3a8Cx5lJg6nR1Lh8rSG51SzWkcH+1O1+lR1nyGFoSxBt4m9vtV3QP
+	Kg5aYpyHnrNpMy/c57SJbBdD6CLppMH2y+OAL0+PpRl61/oT+4eA8Zh0MclHuO57A9c6gP
+	DlyPVIrtAhrxvhls6tH6QUp8Jzm6M5U=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-21-FqMIuzPmMrCfYXslqigYSw-1; Tue, 06 Feb 2024 04:48:39 -0500
+X-MC-Unique: FqMIuzPmMrCfYXslqigYSw-1
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7816bea8d28so71322885a.0
+        for <linux-pm@vger.kernel.org>; Tue, 06 Feb 2024 01:48:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707212919; x=1707817719;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZECXte5D6jxim+3xK4HKfAtIsgXPnPOa+pKdouz7m2A=;
+        b=DngoibXh48ecA0qv7bS2TBwJaowie4OiXttfrFLbFaJEBUy7qyiV5Ifw2hYR/y525J
+         iBK2iM38kHSBslaMheAu+qAN4itU/cQEF9IaT+co9wDGnkJZVu05B8TzYsVMHjoeCJKS
+         swAxWNQtks0rIdUcTBUzF3vDKQ0zyfxNEuC+waAkxEuv/Rgj2Qyv5EfW7s93AZqjCc2K
+         ZklmdMe+UqNtaSreYDwzZNGGOdk1Sp0I+Um8lVjok265VV4aYseYalybzM1WSel9tUqZ
+         Akzli+tKYACQxVn2mFJ5FgGgvBujwtN6wjap5mZiut3KzJrAseeqRiXM1Q5UUk2POshR
+         /JUA==
+X-Gm-Message-State: AOJu0YzhsJ8fEbz7GWos7GHkKF46mCAiE7E4CFEGQTVXOYSuquE8ZvjK
+	DEbms6yxr3jTGwr0qnfr2JJ2rTNVN+RH8xPRaqBlmuAY8UePybfG6C+WY5nSt0Cr8YcCZSMhdLv
+	5kc3tFJVlby5yKjeE192rQNCGYq3BlN2klRWhHWxsqjZG8tXPsN5uqmqE
+X-Received: by 2002:a05:620a:a0a:b0:785:440c:88d9 with SMTP id i10-20020a05620a0a0a00b00785440c88d9mr3132332qka.26.1707212919043;
+        Tue, 06 Feb 2024 01:48:39 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFVZHwKbOSJItUHx/ikHRtM9wqEPD3H5+QvbQpwtzXtmamlTFpTYFt3g/syo8NgZPxdcW1S0Q==
+X-Received: by 2002:a05:620a:a0a:b0:785:440c:88d9 with SMTP id i10-20020a05620a0a0a00b00785440c88d9mr3132299qka.26.1707212918799;
+        Tue, 06 Feb 2024 01:48:38 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCWrwQH0hQVhe0VPR2hZe1xCBNzOga+tBypyXg9hbQvH1pSJTdI7ZgtdHVcgn6rRQl+DcDxogftvodzYEPMJcaE1n9N7qNBFDS0DzHuY5qac4HvBPl4xY1ZKtO+OG4//zVUqXI6pu9szxT6PbFd+Mg3/Q9NK+yt1QHl673JhfVjN68a+gsIW7JBv8B72s99yHahQdNhMJQCacc10tltod0G851RTWM9eydTsNB65V+244gDRPrxEs38kkuQhc6VsRrfWU8+x+p2KzxN+bFCXjenbh5UvaUgCP/k6wcRaVPZrJmqidM9WzpAXS3w4drJCjsCrAcyPeFlYA3KX3DIPbbrQYBfaanGCJ0r+tQvk66smv+0XgnTtph+0swz1geuaMIoW0VbyW6unIY58owxDU/xoismXsKre7CN8N+hBbz5NFQwr1kx4d9KCg+tBBCw9KWPXRf+Msue1u9Zrurx3kdKYb5j5P+NtCZ28MKScxPbx7tshK/gRorlyHgmpvKz39Q2Wr9OKV7QbVqKcQsTDAwFBNc6/VzBZYuROo9rQkomBdVIQMrxdgleexKu8XRwurJTaACHsWiMlbACtt6c7Aqv5VstSx/I8wnE6bQ==
+Received: from vschneid-thinkpadt14sgen2i.remote.csb (213-44-141-166.abo.bbox.fr. [213.44.141.166])
+        by smtp.gmail.com with ESMTPSA id vr11-20020a05620a55ab00b007815c25b32bsm764188qkn.35.2024.02.06.01.48.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Feb 2024 01:48:38 -0800 (PST)
+From: Valentin Schneider <vschneid@redhat.com>
+To: Onkarnarth <onkarnath.1@samsung.com>, rafael@kernel.org,
+ lenb@kernel.org, bhelgaas@google.com, viresh.kumar@linaro.org,
+ mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+ vincent.guittot@linaro.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
+ bsegall@google.com, mgorman@suse.de, bristot@redhat.com
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+ r.thapliyal@samsung.com, maninder1.s@samsung.com, Onkarnath
+ <onkarnath.1@samsung.com>
+Subject: Re: [PATCH 2/2] kernel: sched: print errors with %pe for better
+ readability of logs
+In-Reply-To: <20240206051120.4173475-2-onkarnath.1@samsung.com>
+References: <20240206051120.4173475-1-onkarnath.1@samsung.com>
+ <CGME20240206051402epcas5p2ae3737fc0d71ba1d7a7f8bee90438ff2@epcas5p2.samsung.com>
+ <20240206051120.4173475-2-onkarnath.1@samsung.com>
+Date: Tue, 06 Feb 2024 10:48:33 +0100
+Message-ID: <xhsmhh6ilhqj2.mognet@vschneid-thinkpadt14sgen2i.remote.csb>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 18/19] power: reset: syscon-poweroff: Move device data
- into a struct
-Content-Language: en-US
-To: Andrew Davis <afd@ti.com>, Sebastian Reichel <sre@kernel.org>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
- <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>, Sean Wang
- <sean.wang@mediatek.com>, Matthias Brugger <matthias.bgg@gmail.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-actions@lists.infradead.org, linux-arm-msm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
-References: <20240205194437.180802-1-afd@ti.com>
- <20240205194437.180802-19-afd@ti.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20240205194437.180802-19-afd@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-Il 05/02/24 20:44, Andrew Davis ha scritto:
-> Currently all these device data elements are top level global variables.
-> Move these into a struct. This will be used in the next patch when
-> the global variable usage is removed. Doing this in two steps makes
-> the patches easier to read.
-> 
-> Signed-off-by: Andrew Davis <afd@ti.com>
+On 06/02/24 10:41, Onkarnarth wrote:
+> From: Onkarnath <onkarnath.1@samsung.com>
+>
+> instead of printing errros as a number(%ld), it's better to print in string
+> format for better readability of logs.
+>
+> Signed-off-by: Onkarnath <onkarnath.1@samsung.com>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+I quick ripgrep tells me this is the only culprit in sched, so:
+
+Reviewed-by: Valentin Schneider <vschneid@redhat.com>
 
 
