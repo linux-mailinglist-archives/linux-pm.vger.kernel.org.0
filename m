@@ -1,290 +1,177 @@
-Return-Path: <linux-pm+bounces-3451-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3452-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC6C184AD06
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 04:39:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C09C984AD8E
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 05:35:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A0004B20DCF
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 03:39:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F3031F24C05
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 04:35:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F582745DC;
-	Tue,  6 Feb 2024 03:39:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58B1977F21;
+	Tue,  6 Feb 2024 04:34:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LshS8m0M"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="BlQ+zg1k"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2052.outbound.protection.outlook.com [40.107.102.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B53031EB3A;
-	Tue,  6 Feb 2024 03:39:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707190758; cv=none; b=Vc40o8tzzewyrRAd0irqPBy9UlfM9XRvkpCkBDgj+jjmdU5uZ6NdmEtY1t4saXJ56rDvzdleQm0LK5KEPMi7N7AYutmWilH/LlyjL94ULVMtGgVQa7bATd9V2dhUk27AJrQjO3vs+DTFJOFNzEJTI+7e6IQrAcii8J9lCRssEtc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707190758; c=relaxed/simple;
-	bh=Eg9z6jEW9p/PugjKdtuVlFec6GWtC4u5Fc10RoOmES4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Qc/zmvuSsbFHTWw1bEnZ/qsU/pDlugeOvuRXlJp2qfBjAcN3svWe2l7b2jRf4U+JdohV67wflWMqiRk5mXfVN+Z1blevr/ZmutmC1HjSRiO0ixCcXnJKBTPFunF9KdIjmreU+uJLc/mDXPBJ0kwnBScfs6Ggj288Q08uTjABxUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LshS8m0M; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2906bcae4feso3950234a91.3;
-        Mon, 05 Feb 2024 19:39:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707190756; x=1707795556; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EYjlWLoy2riopH+zlSIcKPkCBJ5S6WcdaC4eCMXtR5k=;
-        b=LshS8m0MHIN/u/1fY2ptq+nTKztGCyRotMOeGwlTbjqwlLBYxRbXfc8/dY5pr+Z7FO
-         F16RFXi3hs6OldQd/ZSlANxPgTh4sMeU+ALAJJHTvKCoKXP3uYeyOhbhOESA4X45kHAx
-         4F6Efm112KxwP4QZHiNfMsR4MtTmb5w+Dyr035c8DVOuHbEvi2g5yUzTFgrHRQPWbyLb
-         09THTKa3be9P6MPgrD/3QFmUjLdB+ZYHDPjHES3KRCKatHVQBZt3mUd0+JpVoEbRHapO
-         JRjaq8us3kGdbcyQDMiD0NaWDrHTQEqvQV09iLmJPUZOrf1rt6tLEhirfRMI9xV1454n
-         H30g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707190756; x=1707795556;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EYjlWLoy2riopH+zlSIcKPkCBJ5S6WcdaC4eCMXtR5k=;
-        b=veXXWeeqxW5SzW9OJnV1K4VDTVQHBtnNqiktDlwuwPw+PvF7A1BvR3Qb4WdGrRnoyw
-         h9HUA730pyY0MRZFwwz7hnwr/b3tpODiCyLObUgoClSJ3XdF6KmyJJ6bfIPHWkM9xE6i
-         kvk7Y1ZHhWIu51y1vyMcujBOMy/3nEeaWjcuif2nxO5pVInP+kr+e1zjtvBCvef2nPf3
-         WwxxmJYnR3g0dhPl7q8DzNB/VUNadvUO0wjMwYXby80sp+5GLodI9qGyIaDXNsT7IO6B
-         14st3bhANe+WMERhkvgP4c7RZF0FEgCu6/0Q7suHlz7qqp1gm+zM6jAE6utrHckWiWhI
-         EEOA==
-X-Gm-Message-State: AOJu0YyMIzLW8Hy3As6yS1vKhRK6vwrUZ7W6xBmUY5ZN//e2tDTYNjU/
-	07ixyizRaTnDnGCjDEhp4rlHGjdH8WSsyBLVaCWQ/5U724qqlKT2Mi7Us1roVxlhoeb88mBsyxQ
-	c5NtyeGTFNoD6csUHQ+b1vMOHnkc=
-X-Google-Smtp-Source: AGHT+IEi3Qu7s8A5yqq9dadRqq+/DNxO2AVwQ1u94+npiHZDRfNlXaJVAhLSodnyi3Tw6RgQjNl4siYPcAtd7AmA2jQ=
-X-Received: by 2002:a17:90a:f195:b0:296:379b:6739 with SMTP id
- bv21-20020a17090af19500b00296379b6739mr1208689pjb.48.1707190755465; Mon, 05
- Feb 2024 19:39:15 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6411254661;
+	Tue,  6 Feb 2024 04:34:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707194091; cv=fail; b=GQPkpTEW314E0gJ/rhjOt8XRxAigqUoe5Ypz28KlLyNnsAfhWr1k+7E1vzaioKsFRCtmLNkajbsfFRqoCXqxi46sDQZGdndn83iGnWxTiQq5ariua5XvwVep9g9O4Pl/fR2N9T5UfVRFs8D71Vr8VKQtMvlJzjYzIwgm/RDe1j0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707194091; c=relaxed/simple;
+	bh=HubZNQzU9aQqod6pV+sudabbJXGtn2Iw4YW5ClCJe4Y=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=XC19ZFTzsdtbWdo7my6UeRhMcQ3h86Gy63fK+NZRbk6gS/Nv8XYbI3KlG5pUkbMB4mohK0PYsvMOE+L5zUijztVHPC1pPHNozvNGk8cU3ICi84xKmLrBb7zivMnlZ3piWEfQqoasbUFART3k/oxro4rK6opkGSIz2kNaLJZCFqU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=BlQ+zg1k; arc=fail smtp.client-ip=40.107.102.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TmpfdxEOxGtQFuuWXqZfhVtWcs2VYluCNOj3zpKJdii4hiPPidELVY3fBfGBxLgsm9gcr91tztmi0Zxjo2v1W7UN/I40rc8hh2wtFxSV3PsilsyRfOJo8qicNwUs9z8Ynk1Vz93Fht2WUZRhmcL9opZI7HGLUIkTGX3EWIzAfJCMq5XgSRrDCumqf60dPrIarw10nT+xAVp4k2FpQ15DvQp22Neb7RdWhccYyEe1x8Khw/dm5h8N58dZRJxvAjEanAWA9Y4ZUTiPEbBJGsU6B1JPl/nvT6H4e9paivUwFGczvWGdvCxt5s4TiUgPF3zqkYOo5o/7mStSIQdU88p7fw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=thPCeUFDDd7hvzNDyz9efuusyMuLpNr4M+MsDfA1DMs=;
+ b=PM7SmID5yQSTFwFx2AGmUTy2qy0Bj2YmKPM1ycGXkn3Moj3t/r93Zee0bRboeCeCNC0nIrFeuBtvh4mREAjXGldTCuTivnSG6LjsZHJZOaOa6hSKa0sHR+mgEW4ULUAwih57NkA5lNyc71YNIDrv++ISXihVu7GTGq7bututG+CVwoe+Xr6YJiIc/gLE8umKRCXt0ZCHZbsazWNNg7AkFPXj9pULfUC5qLQ6ORweXnv0EExxtGoSt6dn9MtmeNWjL8CMDQ3hBRSy9YQJ7/TcqFaeD+m3bXMXgza2oEkDeg7KMN0nMVQOQkTrIzUC/D9imf78N1M1IYfvS/UGa/CItg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=thPCeUFDDd7hvzNDyz9efuusyMuLpNr4M+MsDfA1DMs=;
+ b=BlQ+zg1kFvlZ2nY94zCstBBtg+VMq9v7Fh7xJiridxDw3TE2FoYNklXV6w9WKZJTRS4w1SUJdZtVam3PhoSHoJbyq3XiwmPEU/8gIBosPH3osRx4Nx8dIGxZX+uzunopf660GayoRfxR53MXjGNRVi8yJGtJrIXOaI7kwNVORLE=
+Received: from BN9PR03CA0304.namprd03.prod.outlook.com (2603:10b6:408:112::9)
+ by CH3PR12MB9146.namprd12.prod.outlook.com (2603:10b6:610:19c::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.32; Tue, 6 Feb
+ 2024 04:34:46 +0000
+Received: from BN1PEPF00004685.namprd03.prod.outlook.com
+ (2603:10b6:408:112:cafe::20) by BN9PR03CA0304.outlook.office365.com
+ (2603:10b6:408:112::9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.36 via Frontend
+ Transport; Tue, 6 Feb 2024 04:34:46 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN1PEPF00004685.mail.protection.outlook.com (10.167.243.86) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7249.19 via Frontend Transport; Tue, 6 Feb 2024 04:34:46 +0000
+Received: from pyuan-Chachani-VN.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Mon, 5 Feb 2024 22:34:24 -0600
+From: Perry Yuan <perry.yuan@amd.com>
+To: <rafael.j.wysocki@intel.com>, <Mario.Limonciello@amd.com>,
+	<viresh.kumar@linaro.org>, <Ray.Huang@amd.com>, <gautham.shenoy@amd.com>,
+	<Borislav.Petkov@amd.com>
+CC: <Alexander.Deucher@amd.com>, <Xinmei.Huang@amd.com>,
+	<Xiaojian.Du@amd.com>, <Li.Meng@amd.com>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: [PATCH v4 0/6]  AMD Pstate Fixes And Enhancements
+Date: Tue, 6 Feb 2024 12:33:53 +0800
+Message-ID: <cover.1707193566.git.perry.yuan@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240203165307.7806-1-aford173@gmail.com> <20240203165307.7806-3-aford173@gmail.com>
- <CAA8EJpo4omXogg48urEMzxQ+CA7DNTSf66pA6hoO8wpmtn_-MQ@mail.gmail.com> <20240205081719.z2uqa4dwn5ucsymv@pengutronix.de>
-In-Reply-To: <20240205081719.z2uqa4dwn5ucsymv@pengutronix.de>
-From: Adam Ford <aford173@gmail.com>
-Date: Mon, 5 Feb 2024 21:39:04 -0600
-Message-ID: <CAHCN7x+9pLZZhypgVh8Q3jAxeM6UKJrPCOdjVoszK3XLTh=gBQ@mail.gmail.com>
-Subject: Re: [PATCH V8 02/12] phy: freescale: add Samsung HDMI PHY
-To: Marco Felsch <m.felsch@pengutronix.de>
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Andrzej Hajda <andrzej.hajda@intel.com>, devicetree@vger.kernel.org, 
-	alexander.stein@ew.tq-group.com, Catalin Marinas <catalin.marinas@arm.com>, 
-	dri-devel@lists.freedesktop.org, frieder.schrempf@kontron.de, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, linux-phy@lists.infradead.org, 
-	David Airlie <airlied@gmail.com>, marex@denx.de, Robert Foss <rfoss@kernel.org>, 
-	Fabio Estevam <festevam@gmail.com>, linux-pm@vger.kernel.org, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, NXP Linux Team <linux-imx@nxp.com>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Kishon Vijay Abraham I <kishon@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, Will Deacon <will@kernel.org>, 
-	Jonas Karlman <jonas@kwiboo.se>, Liu Ying <victor.liu@nxp.com>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Rob Herring <robh+dt@kernel.org>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	linux-arm-kernel@lists.infradead.org, 
-	Neil Armstrong <neil.armstrong@linaro.org>, linux-kernel@vger.kernel.org, 
-	Vinod Koul <vkoul@kernel.org>, Daniel Vetter <daniel@ffwll.ch>, Lucas Stach <l.stach@pengutronix.de>, 
-	Shawn Guo <shawnguo@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN1PEPF00004685:EE_|CH3PR12MB9146:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5a84168f-e7bf-41b6-bb82-08dc26ccf294
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	QI3+B7jMwBcU086dhBLyPz3vHVOSJuscEBtJzE0EXQroePZRzKmcekpCB7S+jNZzIzxvDj9Bu9VwaXyYMH83aROcwtS3VJwd+Qakm9iijNHgXlX7jHui0BFLdhJgfRwCCRQ+ABWIdYjInlkNK19jQs3MrUJ8LPRVMKCMfrFs4Q+GeAs324CfzJGbVCcoSmzK/htDr9MXB1Rh/T7TnNYDHEt1vTUQeHc7QKpu4KVXlu5KsfFa73qUD0HqpfuU0yDIVqibfSPQeVPi0rakoFXJtt4zwkj8eoiHG206S4zdqlaV7LMgcFg9t8Mfmzk2/yXJyt5OfC3vxIGFO/JeEm2L9pOb3DgWp4z+eeNn3qWbFI+zW2v2ursYRe4P4f/kvQzuqOHblcGlhv/4Yfd3LKkzrmxOO1D5AKqtrdXr4PE0tK2YwUgxKt9IPQhJBLSY6TkRYPPszWe2nb4NeSfuFDiIjMgyS0Rvl62KucLFOrPHU+vn4dUx5Bs6WwYlXW3oG5q1lNXWtDvvNsdgpdkduK7vFsLH/ptz9J3SemvyR7SiYiVCN6sEk35iwyMyZ/SIuvqm/mPwqVyqiBOdJ1y1adlnnHsNbtCbQXJ/5UXA7ZXvaUnVauobXUF6Abx7wIXtH55qUzMd0p2uLiePPCad6b3UeofOws/3WRXAcnEQ72f72zYZXZe+s77+PcEcVlD07l4hGiBU72OahxCUu3MSc739H47/wDBgL4NF2pWSJUZXZ/DvrtzmgUExsqA29hk2wsD0A1I5Zr3NP4A7uuzJBSB8ZdCkrhv03SGaWxPMpXQzMzc=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(376002)(396003)(136003)(346002)(230922051799003)(1800799012)(451199024)(186009)(64100799003)(82310400011)(40470700004)(46966006)(36840700001)(81166007)(426003)(336012)(40460700003)(16526019)(40480700001)(2616005)(26005)(966005)(478600001)(41300700001)(36860700001)(316002)(6666004)(82740400003)(7696005)(356005)(54906003)(47076005)(86362001)(83380400001)(110136005)(70586007)(5660300002)(70206006)(36756003)(44832011)(4326008)(8936002)(8676002)(6636002)(2906002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2024 04:34:46.4316
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a84168f-e7bf-41b6-bb82-08dc26ccf294
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN1PEPF00004685.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9146
 
-On Mon, Feb 5, 2024 at 2:17=E2=80=AFAM Marco Felsch <m.felsch@pengutronix.d=
-e> wrote:
->
-> On 24-02-04, Dmitry Baryshkov wrote:
-> > On Sat, 3 Feb 2024 at 17:53, Adam Ford <aford173@gmail.com> wrote:
-> > >
-> > > From: Lucas Stach <l.stach@pengutronix.de>
-> > >
-> > > This adds the driver for the Samsung HDMI PHY found on the
-> > > i.MX8MP SoC.
-> > >
-> > > Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-> > > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > > Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > > ---
-> > > V4:  Make lookup table hex values lower case.
-> > >
-> > > V3:  Re-order the Makefile to keep it alphabetical
-> > >      Remove unused defines
-> > >
-> > > V2:  Fixed some whitespace found from checkpatch
-> > >      Change error handling when enabling apbclk to use dev_err_probe
-> > >      Rebase on Linux-Next
-> > >
-> > >      I (Adam) tried to help move this along, so I took Lucas' patch a=
-nd
-> > >      attempted to apply fixes based on feedback.  I don't have
-> > >      all the history, so apologies for that.
-> > > ---
-> > >  drivers/phy/freescale/Kconfig                |    6 +
-> > >  drivers/phy/freescale/Makefile               |    1 +
-> > >  drivers/phy/freescale/phy-fsl-samsung-hdmi.c | 1075 ++++++++++++++++=
-++
-> > >  3 files changed, 1082 insertions(+)
-> > >  create mode 100644 drivers/phy/freescale/phy-fsl-samsung-hdmi.c
-> > >
-> > > diff --git a/drivers/phy/freescale/Kconfig b/drivers/phy/freescale/Kc=
-onfig
-> > > index 853958fb2c06..5c2b73042dfc 100644
-> > > --- a/drivers/phy/freescale/Kconfig
-> > > +++ b/drivers/phy/freescale/Kconfig
-> > > @@ -35,6 +35,12 @@ config PHY_FSL_IMX8M_PCIE
-> > >           Enable this to add support for the PCIE PHY as found on
-> > >           i.MX8M family of SOCs.
-> > >
-> > > +config PHY_FSL_SAMSUNG_HDMI_PHY
-> > > +       tristate "Samsung HDMI PHY support"
-> > > +       depends on OF && HAS_IOMEM
-> > > +       help
-> > > +         Enable this to add support for the Samsung HDMI PHY in i.MX=
-8MP.
-> > > +
-> > >  endif
-> > >
-> > >  config PHY_FSL_LYNX_28G
-> > > diff --git a/drivers/phy/freescale/Makefile b/drivers/phy/freescale/M=
-akefile
-> > > index cedb328bc4d2..79e5f16d3ce8 100644
-> > > --- a/drivers/phy/freescale/Makefile
-> > > +++ b/drivers/phy/freescale/Makefile
-> > > @@ -4,3 +4,4 @@ obj-$(CONFIG_PHY_MIXEL_LVDS_PHY)        +=3D phy-fsl-=
-imx8qm-lvds-phy.o
-> > >  obj-$(CONFIG_PHY_MIXEL_MIPI_DPHY)      +=3D phy-fsl-imx8-mipi-dphy.o
-> > >  obj-$(CONFIG_PHY_FSL_IMX8M_PCIE)       +=3D phy-fsl-imx8m-pcie.o
-> > >  obj-$(CONFIG_PHY_FSL_LYNX_28G)         +=3D phy-fsl-lynx-28g.o
-> > > +obj-$(CONFIG_PHY_FSL_SAMSUNG_HDMI_PHY)  +=3D phy-fsl-samsung-hdmi.o
-> > > diff --git a/drivers/phy/freescale/phy-fsl-samsung-hdmi.c b/drivers/p=
-hy/freescale/phy-fsl-samsung-hdmi.c
-> > > new file mode 100644
-> > > index 000000000000..bf0e2299d00f
-> > > --- /dev/null
-> > > +++ b/drivers/phy/freescale/phy-fsl-samsung-hdmi.c
-> > > @@ -0,0 +1,1075 @@
-> > > +// SPDX-License-Identifier: GPL-2.0+
-> > > +/*
-> > > + * Copyright 2020 NXP
-> > > + * Copyright 2022 Pengutronix, Lucas Stach <kernel@pengutronix.de>
-> > > + */
-> > > +
-> > > +#include <linux/clk-provider.h>
-> > > +#include <linux/clk.h>
-> > > +#include <linux/delay.h>
-> > > +#include <linux/io.h>
-> > > +#include <linux/iopoll.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/of_device.h>
-> > > +#include <linux/of.h>
-> > > +#include <linux/platform_device.h>
-> > > +#include <linux/pm_runtime.h>
-> > > +
-> > > +#define PHY_REG_33             0x84
-> > > +#define  REG33_MODE_SET_DONE   BIT(7)
-> > > +#define  REG33_FIX_DA          BIT(1)
-> > > +
-> > > +#define PHY_REG_34             0x88
-> > > +#define  REG34_PHY_READY       BIT(7)
-> > > +#define  REG34_PLL_LOCK                BIT(6)
-> > > +#define  REG34_PHY_CLK_READY   BIT(5)
-> > > +
-> > > +
-> > > +#define PHY_PLL_REGS_NUM 48
-> > > +
-> > > +struct phy_config {
-> > > +       u32     clk_rate;
-> > > +       u8 regs[PHY_PLL_REGS_NUM];
-> > > +};
-> > > +
-> > > +const struct phy_config phy_pll_cfg[] =3D {
-> > > +       {       22250000, {
-> > > +                       0x00, 0xd1, 0x4b, 0xf1, 0x89, 0x88, 0x80, 0x4=
-0,
-> > > +                       0x4f, 0x30, 0x33, 0x65, 0x00, 0x15, 0x25, 0x8=
-0,
-> > > +                       0x6c, 0xf2, 0x67, 0x00, 0x10, 0x8f, 0x30, 0x3=
-2,
-> > > +                       0x60, 0x8f, 0x00, 0x00, 0x08, 0x00, 0x00, 0x0=
-0,
-> > > +                       0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0=
-0,
-> > > +                       0x00, 0xe0, 0x83, 0x0f, 0x3e, 0xf8, 0x00, 0x0=
-0,
-> > > +               },
-> > > +       }, {
-> > > +               23750000, {
-> > > +                       0x00, 0xd1, 0x50, 0xf1, 0x86, 0x85, 0x80, 0x4=
-0,
-> > > +                       0x4f, 0x30, 0x33, 0x65, 0x00, 0x03, 0x25, 0x8=
-0,
-> > > +                       0x6c, 0xf2, 0x67, 0x00, 0x10, 0x8f, 0x30, 0x3=
-2,
-> > > +                       0x60, 0x8f, 0x00, 0x00, 0x08, 0x00, 0x00, 0x0=
-0,
-> > > +                       0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0=
-0,
-> > > +                       0x00, 0xe0, 0x83, 0x0f, 0x3e, 0xf8, 0x00, 0x0=
-0,
-> > > +               },
-> >
-> > Generally I see that these entries contain a high level of duplication.
-> > Could you please extract the common part and a rate-dependent part.
-> > Next, it would be best if instead of writing the register values via
-> > the rate LUT, the driver could calculate those values.
-> > This allows us to support other HDMI modes if the need arises at some p=
-oint.
->
-> Hi Adam,
->
-> can you please have a look at: https://lore.kernel.org/all/4830698.GXAFRq=
-VoOG@steina-w/
->
-> there we have fixed this already. Not sure which version you picked for
-> your work.
+*** BLURB HERE ***
+The patch series adds some fixes and enhancements to the AMD pstate
+driver.
+It enables CPPC v2 for certain processors in the family 17H, as
+requested
+by TR40 processor users who expect improved performance and lower system
+temperature.
 
-It must have been an earlier version.  I got the list from Fabio, but
-I might have also gotten it mixed up.  I'll look at this version and
-base my series on it and try to address comments others made.  It'll
-likely take me a few days to catch up.
+Additionally, it fixes the initialization of nominal_freq for each
+cpudata
+and changes latency and delay values to be read from platform firmware
+firstly
+for more accurate timing.
 
-thanks for the pointer.
+A new quirk is also added for legacy processors that lack CPPC
+capabilities which caused the pstate driver to fail loading.
 
-adam
->
-> Regards,
->   Marco
->
-> >
-> > > +       }, {
-> > > +               24000000, {
-> > > +                       0x00, 0xd1, 0x50, 0xf0, 0x00, 0x00, 0x80, 0x0=
-0,
-> > > +                       0x4f, 0x30, 0x33, 0x65, 0x00, 0x01, 0x25, 0x8=
-0,
-> > > +                       0x6c, 0xf2, 0x67, 0x00, 0x10, 0x8f, 0x30, 0x3=
-2,
-> > > +                       0x60, 0x8f, 0x00, 0x00, 0x08, 0x00, 0x00, 0x0=
-0,
-> > > +                       0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0=
-0,
-> > > +                       0x00, 0xe0, 0x83, 0x0f, 0x3e, 0xf8, 0x00, 0x0=
-0,
-> > > +               },
-> >
-> >
-> > --
-> > With best wishes
-> > Dmitry
-> >
-> >
+I would greatly appreciate any feedbacks.
+
+Thank you!
+
+Changes from v3:
+ * change quirk matching broken BIOS with family/model ID and Zen2
+   flag to fix the CPPC definition issue
+ * fix typo in quirk
+
+Changes from v2:
+ * change quirk matching to BIOS version and release (Mario)
+ * pick up RB flag from Mario
+
+Changes from v1:
+ * pick up the RB flags from Mario
+ * address review comment of patch #6 for amd_get_nominal_freq()
+ * rebased the series to linux-pm/bleeding-edge v6.8.0-rc2
+ * update debug log for patch #5 as Mario suggested.
+ * fix some typos and format problems
+ * tested on 7950X platform
+
+
+V1: https://lore.kernel.org/lkml/63c2b3d7-083a-4daa-ba40-629b3223a92d@mailbox.org/
+V2: https://lore.kernel.org/all/cover.1706863981.git.perry.yuan@amd.com/
+v3: https://lore.kernel.org/lkml/cover.1707016927.git.perry.yuan@amd.com/
+
+Perry Yuan (6):
+  ACPI: CPPC: enable AMD CPPC V2 support for family 17h processors
+  cpufreq:amd-pstate: fix the nominal freq value set
+  cpufreq:amd-pstate: initialize nominal_freq of each cpudata
+  cpufreq:amd-pstate: get pstate transition delay and latency value from
+    ACPI tables
+  cppc_acpi: print error message if CPPC is unsupported
+  cpufreq:amd-pstate: add quirk for the pstate CPPC capabilities missing
+
+ arch/x86/kernel/acpi/cppc.c  |   2 +-
+ drivers/acpi/cppc_acpi.c     |   4 +-
+ drivers/cpufreq/amd-pstate.c | 118 ++++++++++++++++++++++++++++++-----
+ include/linux/amd-pstate.h   |   6 ++
+ 4 files changed, 111 insertions(+), 19 deletions(-)
+
+-- 
+2.34.1
+
 
