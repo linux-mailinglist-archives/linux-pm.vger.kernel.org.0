@@ -1,159 +1,118 @@
-Return-Path: <linux-pm+bounces-3459-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3461-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CF2B84AE1E
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 06:40:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8967D84AE79
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 07:49:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B37FF1F243CD
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 05:40:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B09F1F24001
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 06:49:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A2F77F467;
-	Tue,  6 Feb 2024 05:40:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 334E6128390;
+	Tue,  6 Feb 2024 06:49:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="fqmBHa2e"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="iuBBtHdq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+Received: from mout.web.de (mout.web.de [212.227.15.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 078AC77F00
-	for <linux-pm@vger.kernel.org>; Tue,  6 Feb 2024 05:40:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ACDB2E3F0;
+	Tue,  6 Feb 2024 06:49:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707198051; cv=none; b=ktQl5kQ3cSL/l/ss5CLlpg9Yhx2tr4rrb+IyPnqJ3/u/hEcFDWKRd3axPr7IYZ0nuAlGZF5sex9JJ0IaLziwUw2TNnBldRQL8sks996NhccF1WkQ1aTwdJrl3F5CUD0aC/E/FfdS9cn+WVuDmGNjWiR6EmzpDUTteeCq8vbClt8=
+	t=1707202143; cv=none; b=aD45PlDi+vcMlYkq53kpjcGrhIUaA5CHGn+f9U4Ed67pJzi5CGwAqsScSIhgjdxUPF4PeFlVWPKerOOWmajQ6eaL/UvZ9H9pqUk2TOhJXDxGZCXfIdppJNPaFTJcxGfjqdf+XA8+vcdYQI28lC6T1HAIIlanu9DwgedYbZcO7PU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707198051; c=relaxed/simple;
-	bh=7kqaAO5rz0MEVvOXWXpuWW96op5KATV3atJvwKX3jyE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:MIME-Version:
-	 Content-Type:References; b=NC7V4a3zdjJ4kj+9X4mBJ5RYz9PxTCi+qO0pmpdQDU3U0ViuprKxnkPvx1GRoVupsmVkMrahvPGdAwW6EzEiC2bsGVgW7PW4hg+t/TtjuyudfSxqLf4ATp8ogrLLEh5Xb5N9HFhTaYhHFMHWvbKWlXAEukvYXfp2WVgAmVli3Ow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=fqmBHa2e; arc=none smtp.client-ip=203.254.224.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20240206054046epoutp0121df51e18959baac4707d6b86a3fff06~xL5QaM4C52876428764epoutp01T
-	for <linux-pm@vger.kernel.org>; Tue,  6 Feb 2024 05:40:46 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20240206054046epoutp0121df51e18959baac4707d6b86a3fff06~xL5QaM4C52876428764epoutp01T
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1707198046;
-	bh=CC2djjTAEnwzIDHn32zkRPNrPPr+7uiinCUTrzq6knI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fqmBHa2eqPQRK4hP6YyVGHLO8kfqovIkqZwKXQS4Qi4IXt7WubXGGwtAW9kBBV9T2
-	 kE+zxwWgJl9+78nxH38ZZnowFuI77aIeduDJJZ/22eTOXp4DNqxW/cOgPC34P9IXkS
-	 uW0ZvCCTYCV5xGmEh1VKTO4kYujDwsh0rfTF9WvA=
-Received: from epsmges5p2new.samsung.com (unknown [182.195.42.74]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-	20240206054046epcas5p17a49d75ee048c41f92d09fea50eae215~xL5PwKSX-1405414054epcas5p1M;
-	Tue,  6 Feb 2024 05:40:46 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-	epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	C1.14.10009.E56C1C56; Tue,  6 Feb 2024 14:40:46 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-	20240206051402epcas5p2ae3737fc0d71ba1d7a7f8bee90438ff2~xLh6J0uhi2514425144epcas5p2j;
-	Tue,  6 Feb 2024 05:14:02 +0000 (GMT)
-Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20240206051402epsmtrp1e846e1dc8329b4db9a0c630751b964a5~xLh6IkgN_1680416804epsmtrp1G;
-	Tue,  6 Feb 2024 05:14:02 +0000 (GMT)
-X-AuditID: b6c32a4a-261fd70000002719-f4-65c1c65e2b6f
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
-	67.64.18939.A10C1C56; Tue,  6 Feb 2024 14:14:02 +0900 (KST)
-Received: from localhost.localdomain (unknown [107.109.224.44]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20240206051358epsmtip2d28793c007873284be3cf44a8dffc8e0~xLh2oJEDX1683016830epsmtip2E;
-	Tue,  6 Feb 2024 05:13:58 +0000 (GMT)
-From: Onkarnarth <onkarnath.1@samsung.com>
-To: rafael@kernel.org, lenb@kernel.org, bhelgaas@google.com,
-	viresh.kumar@linaro.org, mingo@redhat.com, peterz@infradead.org,
-	juri.lelli@redhat.com, vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-	rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-	bristot@redhat.com, vschneid@redhat.com
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-	r.thapliyal@samsung.com, maninder1.s@samsung.com, Onkarnath
-	<onkarnath.1@samsung.com>
-Subject: [PATCH 2/2] kernel: sched: print errors with %pe for better
- readability of logs
-Date: Tue,  6 Feb 2024 10:41:20 +0530
-Message-Id: <20240206051120.4173475-2-onkarnath.1@samsung.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20240206051120.4173475-1-onkarnath.1@samsung.com>
+	s=arc-20240116; t=1707202143; c=relaxed/simple;
+	bh=2lFZZPCNVNZhzbCa5T+MjLLbKaAPsyPoqZFZFvC6rVk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qfA6hF4OGywNCVICZ45jCHnrAzgsqzlx91b7MzXl9LJMzebvPWLiK5m1cP3eetTxCLM3kmyEb6IXRmc++zioDSoHj1HL/Zcucu0oWIFyuplOTJbdondKesQRyVvuidInVz3PFwoJQLZStV6KE56WCNx5Q8EnzCMHXO8p6qupk1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=iuBBtHdq; arc=none smtp.client-ip=212.227.15.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=web.de; s=s29768273;
+	t=1707202098; x=1707806898; i=markus.elfring@web.de;
+	bh=2lFZZPCNVNZhzbCa5T+MjLLbKaAPsyPoqZFZFvC6rVk=;
+	h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:
+	 In-Reply-To;
+	b=iuBBtHdqFjB2sYjgipc1iMpbV22LTAxj/3DgvdYl3uIEJWFxCcYew29Q7bHs/CmC
+	 ebgQQuQha25yh96Yogx11P2ij3Lb8McRD5dIRQK4ItDbAoGjFpa5WbPJI7DjPOg/1
+	 kNsm3eQarO7JkVjzZhvyA8wI9wFgESt0Y8aKqRGy/YVzRcEeLNPcZOMHqrKyWBjG0
+	 0YCkVCT6WtbbqkCazeJ/riTNzaUgSMQi4RYqLGQ+aWDjNToJfE6xtTzMlQxxmYBnu
+	 P6WYaRX6iRu84ODQ39o85UpHHDJ7DQabUN3opJP5eR3MpnSWzy9pzxQz2D7fCtjrT
+	 FLR68XxRgSCaWbQIpQ==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.85.95]) by smtp.web.de (mrweb006
+ [213.165.67.108]) with ESMTPSA (Nemesis) id 1N30ZN-1qs6gh0KuD-013NaD; Tue, 06
+ Feb 2024 07:48:18 +0100
+Message-ID: <8ffda85d-8fc4-4329-ac7c-1afa6c1eaa2e@web.de>
+Date: Tue, 6 Feb 2024 07:48:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrFKsWRmVeSWpSXmKPExsWy7bCmum7csYOpBie6OSyWNGVYXHp8lc1i
-	+stGFounE7YyW9ztn8pisfPhWzaL5fv6GS0u75rDZnF23nE2i8+9RxgtDs9vY7GY/O4Zo8Wl
-	AwuYLFb0fGC1ON57gMli471si7lfpjJb7Ot4wGTRceQbs8XGrx4WW49+Z3cQ9Vgzbw2jR8u+
-	W+weCzaVemxeoeWxaVUnm8eda3vYPN7vu8rm0bdlFaPH5tPVHp83yQVwRXHZpKTmZJalFunb
-	JXBlnN/qUfCEreL7hPUsDYy3WbsYOTgkBEwkrl8s6GLk4hAS2M0o8WbbFeYuRk4g5xOjxLLF
-	LhAJIPvboUVsIAmQholPu6GKdjJK/NpoA1H0hVHi8+1VLCAJNgEtiRl3DjCBJEQEtjBJLLl0
-	kB3EYRY4xyhxY/IWsN3CAlESZzZEgzSwCKhKnJuwhB3E5hWwk3jzo4EFYpu8xMxL39lByjkF
-	7CWmbuaEKBGUODnzCVgJM1BJ89bZzCDjJQSecEj8v/sP6lIXiW27/rFD2MISr45vgbKlJF72
-	t0HZ+RIts2cxQ4KiRuLqU1WIsL3Ek4sLwa5kFtCUWL9LHyIsKzH11DomiLV8Er2/nzBBxHkl
-	dsyDsVUlfk2ZCnW9tMT933OhrvGQ6Lx9mA0SVpMYJf4ufMM2gVFhFpJ3ZiF5ZxbC6gWMzKsY
-	JVMLinPTU4tNC4zyUsv1ihNzi0vz0vWS83M3MYKTo5bXDsaHDz7oHWJk4mA8xCjBwawkwmu2
-	40CqEG9KYmVValF+fFFpTmrxIUZpDhYlcd7XrXNThATSE0tSs1NTC1KLYLJMHJxSDUz+/oey
-	ZfLaHs1JMhJedTm/jPvymd9Fkdt1djSsPlz0UdHByqKhIzxO91LKI1bTqalJ7fXnF1m1qiny
-	vWaQW7j21/a+Qvk7+oEL5NYnZ2vwmratPv353jTRpyuuSMruEXikyVwVeLFHQWTiwTNX/1za
-	KT7JPVQyo/a6kuWkvdZ5n8r+/204/Hs9c8+2tGMvdhxJfsc/9XyGaVbGTedpknUbatfc4Jt7
-	/uXy9dMPV0pw7fed9OsD998lecvefN23vfSFd3Dt60QdN1tGn16+ngV1LpJMYTybe1bvjtA7
-	Zbt9W9kUh6Rl/nXTLKsPyE00+cXjbSj5hv8n1xwtyfnrWnw3/prCePfIme/RMst/8bgosRRn
-	JBpqMRcVJwIAiVfevf0DAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprNIsWRmVeSWpSXmKPExsWy7bCSvK7UgYOpBif+CFgsacqwuPT4KpvF
-	9JeNLBZPJ2xltrjbP5XFYufDt2wWy/f1M1pc3jWHzeLsvONsFp97jzBaHJ7fxmIx+d0zRotL
-	BxYwWazo+cBqcbz3AJPFxnvZFnO/TGW22NfxgMmi48g3ZouNXz0sth79zu4g6rFm3hpGj5Z9
-	t9g9Fmwq9di8Qstj06pONo871/awebzfd5XNo2/LKkaPzaerPT5vkgvgiuKySUnNySxLLdK3
-	S+DKOL/Vo+AJW8X3CetZGhhvs3YxcnJICJhITHzazQxiCwlsZ5Q42qoIEZeW+HR5DjuELSyx
-	8t9zIJsLqOYTo8SjmxvZQBJsAloSM+4cYAJJiAgcY5KY1r+RBcRhFrjCKDHr9DawKmGBCIkD
-	S54zgdgsAqoS5yYsARvLK2An8eZHAwvECnmJmZe+A8U5ODgF7CWmbuaEuMhOovfqNKhyQYmT
-	M5+AlTMDlTdvnc08gVFgFpLULCSpBYxMqxhFUwuKc9NzkwsM9YoTc4tL89L1kvNzNzGC408r
-	aAfjsvV/9Q4xMnEwHmKU4GBWEuE123EgVYg3JbGyKrUoP76oNCe1+BCjNAeLkjivck5nipBA
-	emJJanZqakFqEUyWiYNTqoEpq/NmM5OftMz/pw867l7Kf3x/1fwlpgmF+9fZexnp65TnXOjc
-	0re8VGTX61yT/J3dW7J/TM3U7fl6/WbgjZexYnuNrq6pbBCUD2HZkGa7rtF9WbTjo2QJ6Zat
-	l4u/385/oDAx665bPuORBdvj3M2/Kqxm57eTmZVzyMlxxr3FaRtVF/8Skfcs1j+xS31azuae
-	DXnveAzktzxmY3c+8PSJ47ur20/ObFU+dl8y8YH//Kmf/0ie6Y4TbQpWW++30vmb9DRXycD+
-	M2tbPimmdzvqOPfoVktfEWxn9f7b/vXQGuZnW//GHFpeUt+m9LdVPqaraErArEXr89bEP995
-	4da3xvT+r39FBOLeLp/x+kOnEktxRqKhFnNRcSIANHpWqC4DAAA=
-X-CMS-MailID: 20240206051402epcas5p2ae3737fc0d71ba1d7a7f8bee90438ff2
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-X-CMS-RootMailID: 20240206051402epcas5p2ae3737fc0d71ba1d7a7f8bee90438ff2
-References: <20240206051120.4173475-1-onkarnath.1@samsung.com>
-	<CGME20240206051402epcas5p2ae3737fc0d71ba1d7a7f8bee90438ff2@epcas5p2.samsung.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] pmdomain: mediatek: Use
+ devm_platform_get_and_ioremap_resource() in init_scp()
+To: Geert Uytterhoeven <geert@linux-m68k.org>,
+ linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org,
+ Angelo Gioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Matthias Brugger <matthias.bgg@gmail.com>, Rob Herring <robh@kernel.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>
+Cc: LKML <linux-kernel@vger.kernel.org>
+References: <da6af483-5ee9-45cd-922e-d9d5364674dc@web.de>
+ <CAMuHMdUxn4Ne7kmEfONz8Uk3Why3m9r83GdM5RzTxm_4Gj_a6g@mail.gmail.com>
+ <8f011126-c95a-4c71-8bc9-a6b0a5823c96@web.de>
+ <CAMuHMdUQLWBQemtgnCHj64wCYAET8J2-MgbisyMChSbh0k0L7w@mail.gmail.com>
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <CAMuHMdUQLWBQemtgnCHj64wCYAET8J2-MgbisyMChSbh0k0L7w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:o/3aMV1nQUNLqPKmjne/+7bI2APDOaggdys0QHaQrW0+OKONMkj
+ sbqB6ZmxIPsUzqviRRKqYrOo3CpGDTOwnTZMY0Y6r9FAOqGGz3hMJjedOanCNM0Gn6TS2u0
+ sCfXkd+jN4WNZByF3kKzfTjMGNjfMfaMHrF9rAnF/Ys0KvHM42yTwzsTcgGerrfjFN6MqDZ
+ PqQMjLlgpR61ZYKxM66tg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:7MxG6CeOe7w=;413LJvkTnNOJdKCs/lCykWnD2Kt
+ BQT/UvQT71F5jO2KIRqATDo8w4RUIuLmDApmmtav+YMa3Ji20AeE3JMk1vJlau7eLC0kowAV4
+ /8IRhk0BKXY+UmudkMp4AkAXEcO/sOCnsVJAHPlScYHgQA4fqMGlo5kKsm98BPLy8Zi+z3E00
+ fFF2noJrZssdxBxxo54CTmSZ5NFukL5H1t48QwpFoYrAlfNAiiiisHPo1LwzUu4a5S73U++VC
+ e3Tmv1VpghL2FEvxf5cy30cOzdTGIsHGWfieiBRd7HtnVyBEDn4F13kMK+G3SezR4vJv2X+rH
+ DjhitoPaQkHncYR7tjral7yvnnVEdVyMuj7PIO19TpzsVcObV1aZg3ATqCuiup3aRzl/KxCM5
+ RP8OAxbdLX3kRshzRs+D5RccfWOxbkrZUyqlHbs7cr2yDbjktuR5q8q3meiBLKOL3KsHGaaDM
+ eGgo77a/UhN0Bwt2r3zcFwCIS8GVWKqUXx+ycJggwZN5uv51p9grMQpc4bTSNW6bEMjI6eH9o
+ az2EmGRbt6Znsj2thyYziC7egRaYLBFKoRUKPvTHG8k+upFJUmvWWYs/87gXc34NzjfppYgV5
+ NUJ5XG80ztfLvV4bP5qimen441rNJVSHLA7T06isu0DDd0KBJD6ytPxvJXDsx67STTDaT7XXL
+ 0Jx5yG3N+4c8S8k/dHBwq6KxZe8ObazKVBbLHnrfFzhpyxauE/O/OxA2Rzle5Yia+MCwTrK6Z
+ 1Z6tA9n4I5VcHcdWuBfuSveB8XqnHNiQSM4ovo1q1aO8lN6Bmzbx9erfx8Y2TVO0m3dWmAt/V
+ HTjHOgUjvW1hi6+VUAz7ANL9DJdVtKEgZGsdeKIU7indI=
 
-From: Onkarnath <onkarnath.1@samsung.com>
+=E2=80=A6
+>> I got another idea after looking at the implementation of the function
+>> =E2=80=9Cdevm_platform_get_and_ioremap_resource=E2=80=9D once more.
+>> https://elixir.bootlin.com/linux/v6.8-rc3/source/drivers/base/platform.=
+c#L87
+=E2=80=A6
+> Yes, you can pass a NULL pointer as the last parameter.
 
-instead of printing errros as a number(%ld), it's better to print in string
-format for better readability of logs.
+Would you like to support any approaches which can make interface descript=
+ions clearer
+for such an implementation detail?
 
-Signed-off-by: Onkarnath <onkarnath.1@samsung.com>
----
- kernel/sched/cpufreq_schedutil.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index eece6244f9d2..2c42eaa56fa3 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -671,7 +671,7 @@ static int sugov_kthread_create(struct sugov_policy *sg_policy)
- 				"sugov:%d",
- 				cpumask_first(policy->related_cpus));
- 	if (IS_ERR(thread)) {
--		pr_err("failed to create sugov thread: %ld\n", PTR_ERR(thread));
-+		pr_err("failed to create sugov thread: %pe\n", thread);
- 		return PTR_ERR(thread);
- 	}
- 
--- 
-2.25.1
+> And as this is very common, the wrapper devm_platform_ioremap_resource()=
+ exists.
 
+I find further collateral evolution interesting for the involved parameter=
+ reduction.
+
+Regards,
+Markus
 
