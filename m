@@ -1,134 +1,112 @@
-Return-Path: <linux-pm+bounces-3465-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3466-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC09584AFB7
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 09:15:20 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8501084B0C1
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 10:07:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 792C82862E5
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 08:15:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0FA46B2236F
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 09:07:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 015D812AAEA;
-	Tue,  6 Feb 2024 08:15:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 910BA12CD85;
+	Tue,  6 Feb 2024 09:07:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SifXzZME"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SBZK2Weg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5F112AAD7
-	for <linux-pm@vger.kernel.org>; Tue,  6 Feb 2024 08:15:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B8412C532
+	for <linux-pm@vger.kernel.org>; Tue,  6 Feb 2024 09:07:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707207314; cv=none; b=JYq09ibOntJ59YO/SDEMq2FtOsxvxH7b9wLw67JhmqNy0W7FCkI+XbpEHOvScIo6SIxIoeQ3xNYpOSDNZdvlNgfhK/Uf1nRO5HVi1Y+G8u+8dLuU7LlnLq+rR5qZMKGFq3z/2Y6R73RkHke/d5jHPPrT07LnRxde77F8R3MAAgI=
+	t=1707210434; cv=none; b=Ba0tkvIfOqPI271mNBF7M5G7nnE2fKPk/pzamf69vi8mboUwSBrN7yy2eL37sY8IE1hnK3bL8E86MrUIDucnO2st6yNJ6NOmGBhHriLtnPsjFRdI9hmZccmEzSAOKbK0Ogdp1FNFE7v/3i14wnOIEjU35NcV25poN2hvAvOeumg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707207314; c=relaxed/simple;
-	bh=k80mLjIvTze9I4g8rX1exSAm7QAJel1Yb7apaCxak3g=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=TURWj/iMSJODtoU9lf8vAnIv2920OgziaJbgBVoa+i++AMTpanpsGij0EBwzWH9dAgTZzVye93shhWq2GPhfHKjmpaTn11yI9ASSbC1zUgQzylvsZycHFRPVBtDSBJbG2ocK9US+OHr0NQ8wFPkYIHvCydKrs3SriGmp/esHHlo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SifXzZME; arc=none smtp.client-ip=209.85.128.46
+	s=arc-20240116; t=1707210434; c=relaxed/simple;
+	bh=fnEctsruhnVWmql+TCSz11y0qzJmN4K1EeDPjcx04Vs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UPY2SKr1TVNkLDCqHdkwBrxgyGgE2sTh3miPIkTi0cK57fChbJHmTqlEp/oMjNegeUTKpQOHpende8onIDYNYuSkW7F/FcEdYDZLEwnXIOlYu+kqjPFRn+27y0i9msaYZm8VuiPRPAJoTZiVc/0EqttRt1VP/B+7/eEw3fxY5kk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SBZK2Weg; arc=none smtp.client-ip=209.85.167.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-40fc22f372cso41381385e9.1
-        for <linux-pm@vger.kernel.org>; Tue, 06 Feb 2024 00:15:10 -0800 (PST)
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-511413e52d4so3486911e87.1
+        for <linux-pm@vger.kernel.org>; Tue, 06 Feb 2024 01:07:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707207309; x=1707812109; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=btHhwGxbZA6ve4BPec76cdv8nujipODBvqRCy/GsxP0=;
-        b=SifXzZMEgqsxESslbijXO52LSFbWRVYOQI4KGhtAki2cc/Rln9YkJTH3Izke976QCq
-         bVpGTQMhnWgGfUug2BvBYglrY5V5udpdI13x08Lzne/nh1CFxUfWHmcIdkv9RPRgxOYQ
-         2nnRLH1VmZPNhz8QDPMO8z30MfIC1tNBRwj9AkQcE6eKgx8XH/3Zibg+Xzi46lX7I6oM
-         gXaJNcYpaPbkxxHTQKJExUzGCU0fKAXUDN7eSUD1VrELI7hyl2lfElGHJ+2LPaxlYsCs
-         mTjjfrx063k0zMfAunY4+dIg+gqGCzICemTz9q0j+xNmSgnPpQt+Vxe6MVvgyurItn81
-         JTFw==
+        d=linaro.org; s=google; t=1707210431; x=1707815231; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WM+y+UC/O88KwoIvUP7ztF2oIYBeAuZ8I4kYszkol04=;
+        b=SBZK2WegSlON9KbJe/eaicM2ZG1ZGJwG6v3Is7z/Y3lNWVy/DUigWr9R0a5/guxSLH
+         o9FeA71M266CLNQYKOF4YF9legQYslKW0sx0VtO4ZCo82lsxPFFTbXYXdqfa2guExN2t
+         FBM16eSTsMCjFg5n+duvQ9H55Igk6Mqwlja+RZ784kz+QKFVRG/ehZU6+/hcZpGB4/Gb
+         0tskeTMoi4ZBquo0kkbzH8Zb3ScVUN769CNKp64WIu7zDCMEx8MVMX+gyxMz7sjsovKI
+         IO7asHlDZIbsVK7AkgAWRs2fqK6dzQGqfw3JtlQgB8q6i1MBSzP7lrQjHz/3f6HsxVGd
+         WQFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707207309; x=1707812109;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=btHhwGxbZA6ve4BPec76cdv8nujipODBvqRCy/GsxP0=;
-        b=viDnCGDl3HiJusK7kCkcDTmX5PS91lxTjnSz3evbV3Cw7AEGBQNKud532v0grJ0oPt
-         PGPY8LwaB32qqPNFoGEsrv/dMLtp9VCRxJqFqlvikkPJtIE08VDkT/UTbJFHOQ7K9Jur
-         Rd8T/fh9gs06GDSHr/4aOs5oNzLSw944Hl7GwVuxtZDsWPbGEjUXso2yjflLjfUsykyK
-         zOtHiH5XCnoiNLkWoWEB4siy9ro/WviCkKMNOyMX1xyEqAJ0l/qHKoVOKc8UnbXznVQm
-         WonWgbrxfDHTZDc0y/nJqP7c+0zbo7tdf2cRfjl2kfW0wMZUkmY7BPugdOYfAtfmNzra
-         J2ww==
-X-Gm-Message-State: AOJu0YyNxMaz5tL+3LXYjDWfeGRypMv8eD8oRnapwhxDkCsA//mJz9WK
-	1h6iEf3RFdmmGCxxMCbfah6p4iAPxrMNg1sjd9Sy8pvkEr39WqT31GdGmzAMDbw=
-X-Google-Smtp-Source: AGHT+IHAY0id2rUAFIshnMoMYXgfIfqBfIbwnjGvIxqn8bUK+f7tCiKlPakrEgJpmh+5BOErZSPgrA==
-X-Received: by 2002:a05:600c:5117:b0:40f:de5c:d283 with SMTP id o23-20020a05600c511700b0040fde5cd283mr957164wms.26.1707207308987;
-        Tue, 06 Feb 2024 00:15:08 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCX1hmKw70FzD7bJf7uUXsOKOKjCezkhFYawWz6xg07SYsxhvKv3q3I7MdZBhoJFAtFibPiY+lppQGWokiuhvJpriSDPCGWWvg9GaF5G7QtZAswh1dEJFg8W8CcMgLw1dSmZ7sXXdA/IfouRf7ndIcKbhlB1R8nIejdD7QFT2AuLEXE3QDRtu4Oi4rYDYAk4k0IDcxox5bzKqjI0HOIviksCiIkJYLHVrSo3nhX4vS6IVy1fKzFtFNMSlXsoM56I4rvi+O2xbGRj9kz3KHgEnYGW7BG/cV3dB8Ev9PwSfbQRIl9P27ThziXC2FZVj3+Jlge2Usk9R5sB807bUlqWsXWwVSOiA+sMVqobqtncNIZ7tlODknzocIf9K4Pin07cszcfsLJbcYxqSbHzjY0c2KXCuCElKyD5DbvxRvQth5ycDvE7GscwUWLpoMiCXYRVIqAsx9h1v5Y/xqvcGNdkra6z/tLvTUAGvo+QyfPCuxycSdJTyS8AYc47n3pa0WWh3uDgkfnfNC/HwE59mKN/BA33LBuxc+QNqaNaSnoPU7V56hOr9I8kkJbvLbZgJsa5Cqxe2jlspVAv1UUyjfXZIKAcaOCxtYPOtLxrfQATN8KauuCbNdn3Cm2rIgvzQ79N+KRpG/pYVbHUBQJPMN930iVtdqPu6BgzQo/5vadtYiABOIaTkDm9dxEWzDQ9gc/+UldTJhR77/lR/ab3nMd0CMaqhfoUDxpEm9UR5ywWQkLRcxzPNG9XG+Dtxoc1rqzY2HrQO0GkQQSoccVqaT2mSKOcmKsTnK5UAjicWvXQ+5nzh43HHTJVmXkmCgTn1Jh02bViz58Zh5/ZRwyEZ0FVR+dxOBpX3MuMDv2oTrc9nQullGCLh4UceAncr2COOFpejrRnrvdtoVdbEHEtkwBT9/T1eKNSQFZM9EvfufhNl9ATj7yb93zB3NW1ktFAneBRykJD1w
- huBWIWIirQQa/D77hagZ/LhIx3be1dMivkRxQWPWPFYjSmgBBx4KXysvRNuq0bi2acJDpi+BTqzK+7e5ufYEtNI1pXT54aVeY3fWAnDBMYVlXw1jxRAVFS3xEjM4URX69Ievl8tEmPTD5waLJpGY+w5LuYeqi+2NGkJ0XJkgDLdQY55mg7/dIs0m9u3A==
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id o28-20020adfa11c000000b0033b3ceda5dbsm1440140wro.44.2024.02.06.00.15.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Feb 2024 00:15:08 -0800 (PST)
-From: Neil Armstrong <neil.armstrong@linaro.org>
-To: linux-arm-kernel@lists.infradead.org, Adam Ford <aford173@gmail.com>
-Cc: marex@denx.de, alexander.stein@ew.tq-group.com, 
- frieder.schrempf@kontron.de, Andrzej Hajda <andrzej.hajda@intel.com>, 
- Robert Foss <rfoss@kernel.org>, 
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
- Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
- Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>, 
- Philipp Zabel <p.zabel@pengutronix.de>, Vinod Koul <vkoul@kernel.org>, 
- Kishon Vijay Abraham I <kishon@kernel.org>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- Liu Ying <victor.liu@nxp.com>, Ulf Hansson <ulf.hansson@linaro.org>, 
- Lucas Stach <l.stach@pengutronix.de>, dri-devel@lists.freedesktop.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-phy@lists.infradead.org, linux-pm@vger.kernel.org
-In-Reply-To: <20240203165307.7806-1-aford173@gmail.com>
-References: <20240203165307.7806-1-aford173@gmail.com>
-Subject: Re: (subset) [PATCH V8 00/12] soc: imx8mp: Add support for HDMI
-Message-Id: <170720730748.2682504.5723443718654255772.b4-ty@linaro.org>
-Date: Tue, 06 Feb 2024 09:15:07 +0100
+        d=1e100.net; s=20230601; t=1707210431; x=1707815231;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WM+y+UC/O88KwoIvUP7ztF2oIYBeAuZ8I4kYszkol04=;
+        b=aV+9cwfoep/bGOIY3Tbl+utFY6lFcrju5NOnrsAXS0HODIVirOChcx5e4K5wbkvNx0
+         ALldOp3J5BxWpMDsq66vgTQkuqZUlK2Pyo9EyE9jXp+TFUTjYYOIbonZltQuvEXMl+PW
+         ywPSfvEvt2Hx+yDSQqUKog9+rc0T5QBoOmtFP8IebJrlsDYHrolwtvLWbCSz08/Cw8j4
+         FMqoicBDvxJo3fVwwXFJ10LW0GfjpNlv0dluUxCbTGZXzrny+DkPR9ZNCWiKdHNPJgoI
+         ioQ8HwPDD9XcxfItQgHi50GVcW+UxfknLQyd1i0srAO4uDZjHUPSVE22U80/CyyepS0v
+         TKag==
+X-Gm-Message-State: AOJu0Yxhj6KyXX7VDMim2M93McXlhlUCydHy5eIF/EU5H8Zux34S5fOQ
+	yYsmcRZ+i3QoH2BgNpdaa18bIJ4eRj8fWWjnREBDgIVV4dC8Ez5JMKwKSi1Uhmo=
+X-Google-Smtp-Source: AGHT+IEVtfeRspRLdAyLcxvAk3kbxLTxwqNrCZLbrhzZEIgx06XTFt+w7WRDO3WY1hTQdxiW0zJC/w==
+X-Received: by 2002:a05:6512:b8c:b0:510:1797:14dc with SMTP id b12-20020a0565120b8c00b00510179714dcmr1667466lfv.10.1707210430685;
+        Tue, 06 Feb 2024 01:07:10 -0800 (PST)
+X-Forwarded-Encrypted: i=0; AJvYcCXDy6w5A1fvKBuSP6HcTwk/RZzZolXWXofV2m7S5vm8UINiI5mTxV9ZC0VhTGMIHCiENn328A+ii8rummc2TOQy89Ogc+5iB6YxljMe5ECt6nH0t3KHNEq06or3ZraISdd8DEgTRmdlt01b/Ki255Q9ifXNUA0eDj/q6ARUK+lZp4FYy5dNxDDs42hfwQojg6/2LgtC6VCxyXsmZnHPKi4BWOsjzFzFBGbt81fAfG3eGnHyuAkLbliS6Kj9SryKCs2b3UaL30Daikzqp6CfQU44ETz4YuAkkb8cRpB10UgGFkaS9Jr6H9gw8LiumaL+rjZXBl+kZ6ZaLwWsHfZTj+aogLmXs9bEJsPrqi4qluc8hrhNsoAoxX3yb/AdFuToz+4csCghG60H5XQyixUt
+Received: from [172.30.205.88] (UNUSED.212-182-62-129.lubman.net.pl. [212.182.62.129])
+        by smtp.gmail.com with ESMTPSA id 14-20020ac2484e000000b005114a6cbc4dsm187169lfy.4.2024.02.06.01.07.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Feb 2024 01:07:10 -0800 (PST)
+Message-ID: <8189e50a-290c-494d-af42-a954a5d231ea@linaro.org>
+Date: Tue, 6 Feb 2024 10:07:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/4] Add support for QoS configuration
+To: Odelu Kukatla <quic_okukatla@quicinc.com>, djakov@kernel.org
+Cc: rafael@kernel.org, corbet@lwn.net, linux-pm@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ quic_viveka@quicinc.com, peterz@infradead.org, quic_mdtipton@quicinc.com,
+ linux-arm-msm@vger.kernel.org, krzysztof.kozlowski@linaro.org
+References: <20240205145606.16936-1-quic_okukatla@quicinc.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20240205145606.16936-1-quic_okukatla@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.4
 
-Hi,
 
-On Sat, 03 Feb 2024 10:52:40 -0600, Adam Ford wrote:
-> The i.MX8M Plus has an HDMI controller, but it depends on two
-> other systems, the Parallel Video Interface (PVI) and the
-> HDMI PHY from Samsung. The LCDIF controller generates the display
-> and routes it to the PVI which converts passes the parallel video
-> to the HDMI bridge.  The HDMI system has a corresponding power
-> domain controller whose driver was partially written, but the
-> device tree for it was never applied, so some changes to the
-> power domain should be harmless because they've not really been
-> used yet.
+
+On 2/5/24 15:56, Odelu Kukatla wrote:
+> This series adds QoS support for QNOC type device which can be found on
+> SC7280 platform. It adds support for programming priority,
+> priority forward disable and urgency forwarding. This helps in
+> priortizing the traffic originating from different interconnect masters
+> at NOC(Network On Chip).
 > 
-> [...]
+> Changes in v2:
+>   - Updated regmap_update to make use GENMASK and FIELD_PREP.
+>   - Removed the regmap structure from qcom_icc_node.
+>   - Made qcom_icc_rpmh_configure_qos() static
+>   - Removed qcom_icc_rpmh_map() API, inlined the code in probe
+>     function.
+>   - Updated declarations to reverse christmas tree fashion.
 
-Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next)
+You ignored some of my previous review comments without a response.
 
-[09/12] dt-bindings: display: imx: add binding for i.MX8MP HDMI TX
-        https://cgit.freedesktop.org/drm/drm-misc/commit/?id=8933d29e7703f6f905bc84186b915b0ab4fe03bb
-[10/12] drm/bridge: imx: add bridge wrapper driver for i.MX8MP DWC HDMI
-        https://cgit.freedesktop.org/drm/drm-misc/commit/?id=1f36d634670d8001a45fe2f2dcae546819f9c7d8
-
--- 
-Neil
-
+Konrad
 
