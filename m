@@ -1,185 +1,252 @@
-Return-Path: <linux-pm+bounces-3446-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3447-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C7BD84ABCB
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 02:54:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFF9B84AC2C
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 03:25:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1814A2869F4
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 01:54:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 36C71B23227
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 02:25:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35880322B;
-	Tue,  6 Feb 2024 01:54:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29A8B56B72;
+	Tue,  6 Feb 2024 02:25:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LogcS3LB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eulvNua2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21EE556754;
-	Tue,  6 Feb 2024 01:54:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84BDA56B65;
+	Tue,  6 Feb 2024 02:25:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707184462; cv=none; b=RSw86JvFDFwJlGKJtKlChsRGPsD9I12Pu16Gw52zXf9RE5xrq7ASb9VmUrOsFWfc8j2dzfHA4ayuQFU03dMAm9ahAn6eXgpL/xR49hx/+mTprJRSQknprEJ51bk4h8s+eKmlLgcV6KyfDa2qPxgFX6xdvRU20aN+DlC7hn0oRLc=
+	t=1707186322; cv=none; b=NjpaSBlTyKZk3atKIISugFzYMooJdh4aWhiSIeaX2vbtDMISCyzb5cVrls/X1kjs1CCGU2NymfUEHUF5QICqqGXE4lYXV5YQoURnMyKsI/ambGkyIm5FhnfhFd9uHmiSDdbAgtVZ4fJk4DyIP+RLgJOeexR9UrBLfrlLVCgMB34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707184462; c=relaxed/simple;
-	bh=3VD20WQL3xgexpVKiN8NcOlVno2MagYksB604ZIZyvU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ktkxejuQ8j4OKojek6DmYl8wdG7OIeJfa3tfsNicqA3wpUWkR8hsq4pUC8V7AgJWYfn6u22Ic5Z8uy1ykJWNIUnKJuuB6bEkv6WzuJ+fWUX5j6nuC8F+UCiKruvV6xemuhEA9VYnN3LtVcnHhTosvmd6BBjadbCX4MaJplz0JR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LogcS3LB; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707184460; x=1738720460;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=3VD20WQL3xgexpVKiN8NcOlVno2MagYksB604ZIZyvU=;
-  b=LogcS3LBTm/+GnOu6TUQQK0m+hqwk9/Iylmxw0DVbNMUPrJBdD0p8Rrn
-   Uepxnur3o9ihhO4DovjTMmSI3kJePS+UwSPX6aGDe6HfZ8AQSgjk/UBCi
-   6sDRR3eFovEFMr6JnT+yKA6jZdsocpXzjaQEeEXxZ+ByURdxJsFvzcB0c
-   UfBgDZDIkhsMPFpPQyWURbL4Cw0jQKSS00GUh1cWwfbYKPfzn3Z/yuYlA
-   Y/CmxShqxgB8S7Zl6T4kVGxw9kStP6FWj50invJrPkEAFPF8bor0dgmzR
-   TefMyGYIG8rtt65+hvVNf/11kxJQ2hGY/bLE7ltt8PZiGD+X00K4XSStF
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="12001711"
-X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
-   d="scan'208";a="12001711"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 17:54:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
-   d="scan'208";a="1200612"
-Received: from weizhihu-mobl.ccr.corp.intel.com (HELO rzhang1-mobl7.ccr.corp.intel.com) ([10.254.211.111])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 17:54:18 -0800
-From: Zhang Rui <rui.zhang@intel.com>
-To: rafael.j.wysocki@intel.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	srinivas.pandruvada@intel.com
-Subject: [PATCH] thermal/intel: Fix intel_tcc_get_temp() to support negative CPU temperature
-Date: Tue,  6 Feb 2024 09:54:09 +0800
-Message-Id: <20240206015409.619127-1-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1707186322; c=relaxed/simple;
+	bh=2yKBIlxETrljLtG8bUmHtTTra33h6dhwXZ0T/s0QsmQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qcSjylwcr5BfDfxYu4NojkqZT26p3fI8Xgl29o39RQcCQouBdTHRdL4t8IM8S7bQo2AzoLc8qRTqppF54AeqLNj57f8Fybvn50H4b7V+b/7QDosSsnQTaozm8Huuizw5XI2cN/0OHJ5dnD2icez9ocSpX2jeN40xYTKW6L74jok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eulvNua2; arc=none smtp.client-ip=209.85.167.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3bfcbfbfd92so192855b6e.2;
+        Mon, 05 Feb 2024 18:25:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707186319; x=1707791119; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ri1YQ2hEkTssAKG3opIAud0Ytbj1JVk5Pa/2THbXMCI=;
+        b=eulvNua2W/TazGjHfr5iCCkP5eMGc/mYdI/tLOM7LjOe0a8dcC4YzDfY790JjLuzjC
+         8k8nF3oX9QkD3DBPTD+/xE/qXWKEQOJ65EliXMc/jwyDNZfWfFN+nXeyexw1w01kEnsA
+         gYODTBo8JWVsG5wTQu0NDKbJ5yt8ZI2C6RaGWmqP3OEpElArm0uqmVmnm9kwZVj1hfqJ
+         kAtfJy5D2XL5qGMMfLuaIflc212ZXGpLxfTT2aQ9u7U7sUFTQKWqPxnrLNFdu3EzbDMq
+         yKy9UNQYhza+2APhIGAUE/eHe0rdyFH1VpQhP9CdzzAkJYYAigu4TbeqElsPlragXn4q
+         IUow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707186319; x=1707791119;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ri1YQ2hEkTssAKG3opIAud0Ytbj1JVk5Pa/2THbXMCI=;
+        b=cN/tW8BzNsyKVsMT1D8JKqyQyEqTNivJwKphlmhaEkUnf0uA2QeTRADmJdmYGh54Kx
+         GeOoSAGb/txB3xSWGM+64EhsBxKcqUGDOBgot941GQVT9lsii+NWGZW6B/SFIs4qF/NP
+         73UZZo8RqfEMYo6X4FkNnUAPKqn5LQLRAXqcDEGxTcdJ/+SjKTvLvBe+15UNDFGSrCEJ
+         DO+Puq3H3ymXX9BYuQrHPVf2fBXCN3IJCnuJ5ZtnhPyqpXN7bjd+CheU5NSAlhB5guNJ
+         qS9v2phhwFfp5crk2ZYeSxhy8n6U6EUwGP89LFtk4+XZzWR/L5RRhyUEENXUgkorvvXF
+         4msg==
+X-Gm-Message-State: AOJu0Yybciqbx9EmS8REkdZl5qDEI920uvtN4zJYta3lBANb+C1JNnvW
+	L2bD1MCr8I1GL/3Yh6dxMcoC1Sr4YaiJxz5zIIRtBXgiebqb6rRKVu8Dva9eFoN+H40/HurnwrM
+	XfbRBZ0ctQcg+PawgYWfEE6kuU+c=
+X-Google-Smtp-Source: AGHT+IEVsuie2ylzQj0kySZ8nRKieVfkGo33FysFNzbB3nzkZJlRBk3LZIRL0PZ4oMIKZNDj5ZH6MnaaktdvbHDH3JA=
+X-Received: by 2002:a05:6808:11c8:b0:3be:c4df:6ccf with SMTP id
+ p8-20020a05680811c800b003bec4df6ccfmr1892265oiv.5.1707186319364; Mon, 05 Feb
+ 2024 18:25:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240203165307.7806-1-aford173@gmail.com> <20240203165307.7806-6-aford173@gmail.com>
+ <1880028.tdWV9SEqCh@steina-w>
+In-Reply-To: <1880028.tdWV9SEqCh@steina-w>
+From: Adam Ford <aford173@gmail.com>
+Date: Mon, 5 Feb 2024 20:25:08 -0600
+Message-ID: <CAHCN7xJZ5m1kZwx_9whx7Bv3B4N8mhB1feZUO4PpcosBXe5R2g@mail.gmail.com>
+Subject: Re: [PATCH V8 05/12] arm64: dts: imx8mp: add HDMI power-domains
+To: Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc: linux-arm-kernel@lists.infradead.org, marex@denx.de, 
+	frieder.schrempf@kontron.de, Lucas Stach <l.stach@pengutronix.de>, 
+	Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
+	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	NXP Linux Team <linux-imx@nxp.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Liu Ying <victor.liu@nxp.com>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, dri-devel@lists.freedesktop.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-CPU temperature can be negative in some cases. Thus the negative CPU
-temperature should not be considered as a failure.
+On Mon, Feb 5, 2024 at 1:26=E2=80=AFAM Alexander Stein
+<alexander.stein@ew.tq-group.com> wrote:
+>
+> Hi Adam,
+>
+> thanks for working on this.
+>
+> Am Samstag, 3. Februar 2024, 17:52:45 CET schrieb Adam Ford:
+> > From: Lucas Stach <l.stach@pengutronix.de>
+> >
+> > This adds the PGC and HDMI blk-ctrl nodes providing power control for
+> > HDMI subsystem peripherals.
+> >
+> > Signed-off-by: Adam Ford <aford173@gmail.com>
+> > Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+> > ---
+> > V2:  Add missing power-domains hdcp and hrv
+> > ---
+> >  arch/arm64/boot/dts/freescale/imx8mp.dtsi | 38 +++++++++++++++++++++++
+> >  1 file changed, 38 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> > b/arch/arm64/boot/dts/freescale/imx8mp.dtsi index
+> > 76c73daf546b..5c54073de615 100644
+> > --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> > +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
+> > @@ -836,6 +836,23 @@ pgc_mediamix: power-domain@10 {
+> >                                                        <&clk
+> IMX8MP_CLK_MEDIA_APB_ROOT>;
+> >                                       };
+> >
+> > +                                     pgc_hdmimix: power-
+> domains@14 {
+>
 
-Fix intel_tcc_get_temp() and its users to support negative CPU
-temperature.
+Alexander,
 
-Fixes: a3c1f066e1c5 ("thermal/intel: Introduce Intel TCC library")
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
----
- .../intel/int340x_thermal/processor_thermal_device.c |  8 ++++----
- drivers/thermal/intel/intel_tcc.c                    | 12 ++++++------
- drivers/thermal/intel/x86_pkg_temp_thermal.c         |  8 ++++----
- include/linux/intel_tcc.h                            |  2 +-
- 4 files changed, 15 insertions(+), 15 deletions(-)
+Thanks for the feedback.
 
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-index 649f67fdf345..d75fae7b7ed2 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
-@@ -176,14 +176,14 @@ static int proc_thermal_get_zone_temp(struct thermal_zone_device *zone,
- 					 int *temp)
- {
- 	int cpu;
--	int curr_temp;
-+	int curr_temp, ret;
- 
- 	*temp = 0;
- 
- 	for_each_online_cpu(cpu) {
--		curr_temp = intel_tcc_get_temp(cpu, false);
--		if (curr_temp < 0)
--			return curr_temp;
-+		ret = intel_tcc_get_temp(cpu, &curr_temp, false);
-+		if (ret < 0)
-+			return ret;
- 		if (!*temp || curr_temp > *temp)
- 			*temp = curr_temp;
- 	}
-diff --git a/drivers/thermal/intel/intel_tcc.c b/drivers/thermal/intel/intel_tcc.c
-index 2e5c741c41ca..5e8b7f34b395 100644
---- a/drivers/thermal/intel/intel_tcc.c
-+++ b/drivers/thermal/intel/intel_tcc.c
-@@ -103,18 +103,19 @@ EXPORT_SYMBOL_NS_GPL(intel_tcc_set_offset, INTEL_TCC);
- /**
-  * intel_tcc_get_temp() - returns the current temperature
-  * @cpu: cpu that the MSR should be run on, nagative value means any cpu.
-+ * @temp: pointer to the memory for saving cpu temperature.
-  * @pkg: true: Package Thermal Sensor. false: Core Thermal Sensor.
-  *
-  * Get the current temperature returned by the CPU core/package level
-  * thermal sensor, in degrees C.
-  *
-- * Return: Temperature in degrees C on success, negative error code otherwise.
-+ * Return: 0 on success, negative error code otherwise.
-  */
--int intel_tcc_get_temp(int cpu, bool pkg)
-+int intel_tcc_get_temp(int cpu, int *temp, bool pkg)
- {
- 	u32 low, high;
- 	u32 msr = pkg ? MSR_IA32_PACKAGE_THERM_STATUS : MSR_IA32_THERM_STATUS;
--	int tjmax, temp, err;
-+	int tjmax, err;
- 
- 	tjmax = intel_tcc_get_tjmax(cpu);
- 	if (tjmax < 0)
-@@ -131,9 +132,8 @@ int intel_tcc_get_temp(int cpu, bool pkg)
- 	if (!(low & BIT(31)))
- 		return -ENODATA;
- 
--	temp = tjmax - ((low >> 16) & 0x7f);
-+	*temp = tjmax - ((low >> 16) & 0x7f);
- 
--	/* Do not allow negative CPU temperature */
--	return temp >= 0 ? temp : -ENODATA;
-+	return 0;
- }
- EXPORT_SYMBOL_NS_GPL(intel_tcc_get_temp, INTEL_TCC);
-diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-index 11a7f8108bbb..61c3d450ee60 100644
---- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
-+++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-@@ -108,11 +108,11 @@ static struct zone_device *pkg_temp_thermal_get_dev(unsigned int cpu)
- static int sys_get_curr_temp(struct thermal_zone_device *tzd, int *temp)
- {
- 	struct zone_device *zonedev = thermal_zone_device_priv(tzd);
--	int val;
-+	int val, ret;
- 
--	val = intel_tcc_get_temp(zonedev->cpu, true);
--	if (val < 0)
--		return val;
-+	ret = intel_tcc_get_temp(zonedev->cpu, &val, true);
-+	if (ret < 0)
-+		return ret;
- 
- 	*temp = val * 1000;
- 	pr_debug("sys_get_curr_temp %d\n", *temp);
-diff --git a/include/linux/intel_tcc.h b/include/linux/intel_tcc.h
-index f422612c28d6..8ff8eabb4a98 100644
---- a/include/linux/intel_tcc.h
-+++ b/include/linux/intel_tcc.h
-@@ -13,6 +13,6 @@
- int intel_tcc_get_tjmax(int cpu);
- int intel_tcc_get_offset(int cpu);
- int intel_tcc_set_offset(int cpu, int offset);
--int intel_tcc_get_temp(int cpu, bool pkg);
-+int intel_tcc_get_temp(int cpu, int *temp, bool pkg);
- 
- #endif /* __INTEL_TCC_H__ */
--- 
-2.34.1
+> As per Documentation/devicetree/bindings/power/fsl,imx-gpcv2.yaml the nod=
+e
+> should be called power-domain@.
+>
+> > +                                             #power-domain-
+> cells =3D <0>;
+> > +                                             reg =3D
+> <IMX8MP_POWER_DOMAIN_HDMIMIX>;
+> > +                                             clocks =3D <&clk
+> IMX8MP_CLK_HDMI_ROOT>,
+> > +                                                      <&clk
+> IMX8MP_CLK_HDMI_APB>;
+> > +                                             assigned-clocks =3D
+> <&clk IMX8MP_CLK_HDMI_AXI>,
+> > +
+>   <&clk IMX8MP_CLK_HDMI_APB>;
+> > +                                             assigned-clock-
+> parents =3D <&clk IMX8MP_SYS_PLL2_500M>,
+> > +
+>          <&clk IMX8MP_SYS_PLL1_133M>;
+> > +                                             assigned-clock-
+> rates =3D <500000000>, <133000000>;
+> > +                                     };
+> > +
+> > +                                     pgc_hdmi_phy: power-
+> domains@15 {
+>
+> As per Documentation/devicetree/bindings/power/fsl,imx-gpcv2.yaml the nod=
+e
+> should be called power-domain@.
 
+Whoops.  I totally missed these when I applied them.  I'll have them
+fixed on the next spin.
+>
+> > +                                             #power-domain-
+> cells =3D <0>;
+> > +                                             reg =3D
+> <IMX8MP_POWER_DOMAIN_HDMI_PHY>;
+> > +                                     };
+> > +
+> >                                       pgc_mipi_phy2: power-
+> domain@16 {
+> >                                               #power-domain-
+> cells =3D <0>;
+> >                                               reg =3D
+> <IMX8MP_POWER_DOMAIN_MIPI_PHY2>;
+> > @@ -1361,6 +1378,27 @@ eqos: ethernet@30bf0000 {
+> >                               intf_mode =3D <&gpr 0x4>;
+> >                               status =3D "disabled";
+> >                       };
+> > +
+> > +                     hdmi_blk_ctrl: blk-ctrl@32fc0000 {
+> > +                             compatible =3D "fsl,imx8mp-hdmi-blk-
+> ctrl", "syscon";
+> > +                             reg =3D <0x32fc0000 0x23c>;
+> > +                             clocks =3D <&clk IMX8MP_CLK_HDMI_APB>,
+> > +                                      <&clk
+> IMX8MP_CLK_HDMI_ROOT>,
+> > +                                      <&clk
+> IMX8MP_CLK_HDMI_REF_266M>,
+> > +                                      <&clk IMX8MP_CLK_HDMI_24M>,
+> > +                                      <&clk
+> IMX8MP_CLK_HDMI_FDCC_TST>;
+> > +                             clock-names =3D "apb", "axi",
+> "ref_266m", "ref_24m", "fdcc";
+> > +                             power-domains =3D <&pgc_hdmimix>,
+> <&pgc_hdmimix>,
+> > +                                             <&pgc_hdmimix>,
+> <&pgc_hdmimix>,
+> > +                                             <&pgc_hdmimix>,
+> <&pgc_hdmimix>,
+> > +                                             <&pgc_hdmimix>,
+> <&pgc_hdmi_phy>,
+> > +                                             <&pgc_hdmimix>,
+> <&pgc_hdmimix>;
+> > +                             power-domain-names =3D "bus",
+> "irqsteer", "lcdif",
+> > +                                                  "pai", "pvi",
+> "trng",
+> > +                                                  "hdmi-tx",
+> "hdmi-tx-phy",
+> > +                                                  "hdcp",
+> "hrv";
+> > +                             #power-domain-cells =3D <1>;
+> > +                     };
+> >               };
+> >
+>
+> According to RM this block is part of AIPS4, so it should be below
+> hsio_blk_ctrl.
+
+This is how it was when I got it, but I should have caught it.  Thanks
+for that.  It looks like the subsequent HDMI, IRQ_steerting, LCDIF and
+PHY ones are also out of place.
+
+adam
+>
+> Best regards,
+> Alexander
+>
+> >               aips5: bus@30c00000 {
+>
+>
+> --
+> TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Ge=
+rmany
+> Amtsgericht M=C3=BCnchen, HRB 105018
+> Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan S=
+chneider
+> http://www.tq-group.com/
+>
+>
 
