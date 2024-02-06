@@ -1,140 +1,235 @@
-Return-Path: <linux-pm+bounces-3504-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3505-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0013F84BD53
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 19:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DF98484BD64
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 19:51:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ACB4C28F921
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 18:49:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96BEA28FAA3
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 18:51:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F206DDF59;
-	Tue,  6 Feb 2024 18:45:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64095134CE;
+	Tue,  6 Feb 2024 18:50:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Wczz7y8p"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PWMwKVzY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FDEA200DA
-	for <linux-pm@vger.kernel.org>; Tue,  6 Feb 2024 18:45:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A80F36ABA;
+	Tue,  6 Feb 2024 18:50:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707245107; cv=none; b=ul4RNI7FVcYhOJP54DXfF+vYnbQNAc2pzLb2qFpxAbryGHgmJOeqWvtCeki6to3hX0bxeNZTYIU4U+Bslq2ybhoTxq6anOK1NaFtcazOno8IVlmU8RO303fYlhT8upguMlOZ5CliW4WTc45F0Pi6iKGMLCb0PH6aZDkDBebU4Bg=
+	t=1707245430; cv=none; b=Q2rYTMRyIik6uOjwq1uIdM0TR06yQ9PgCFwqRpRXd2N3+/Mqpza/tYVIvi0Loh9fCUqm9SyRefFkVWCkoQ9VECFaBdiR7X4sJfXG0+y0juUXwhJy9QsPp/fJ3rBv95y+NS84xYMEkiXJv/C4gIZq1Uft9B+fSjji750Yr6bAgdk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707245107; c=relaxed/simple;
-	bh=idoPEl5FVwNrTYpFLCWN9SrGWDsz9Wu0hTAQpxTOGJc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=POIW7XW9IKW9KDpTICpExAZdFceKMC2CYAP2uxbHPgIYUndPG1TegbC2bf3jPYyvadiP2ehamwguASzZe+s4/wjPBllrF1aDQRHpk0pLD8zl4mx2zqyBeTE9j7kFw9ZenFqV2PN/w3/0GrqaqEITR6r2LwzWYAx0ZEoPqAznQ7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Wczz7y8p; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a26ed1e05c7so818766866b.2
-        for <linux-pm@vger.kernel.org>; Tue, 06 Feb 2024 10:45:05 -0800 (PST)
+	s=arc-20240116; t=1707245430; c=relaxed/simple;
+	bh=39JGumuJFV1iKne13aiVpCuPKyWknv6UBw07siBgN2I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dL0Hx8iy5GMrci3sAhih95jyZUkCVSxstJAcQ5UZ/Qh+UgC6HguSftzBGBJ3fuI28Vyjxi+KMFPwSSBl6I3aHwPRNMZaMybViDeef8VzJupMOx5v4BTDWJPZro8r2qp0UXOh6I/ffax6DanUPnxlpjQSHdM64R/WjN/Zuz6vQIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PWMwKVzY; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-6da9c834646so4767500b3a.3;
+        Tue, 06 Feb 2024 10:50:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707245104; x=1707849904; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nzXAJUXwHJ7hSx/xEMC9Uv9BjsFQj7gJIIbI4keCMvI=;
-        b=Wczz7y8pmMm1G4CXWGsVcFztcfmydyDjaoYfviJA7kEbPWOiF7FBwCmwMra19pEXeW
-         /v2SW/pjn4zxfhq5sVQ9zNDDomL9oKp5GEeJxEVwFdAax99qdICe+bNehds+MEAjZy9f
-         nnOpjD77j+nzurFwUsZKlUHGZq2Gl/PBKm8lFt1GSantENkKZkhdCSkP1b0gFpiy/pwC
-         v1O7Q+X4pSS2TuaCYbRfvBDyj4otHyRNSzUIt/2NygcYuh8HX3DP/Z33ja7vhq+ddfh5
-         uq2pW8BGCv5F4cuk3aIAvCYaHrLdKzAGEsf9TVn/0JWv2BtbWad2cRsz4q0Y+7hrN4ed
-         AyrA==
+        d=gmail.com; s=20230601; t=1707245428; x=1707850228; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=04H/P6C7O8nfc1XeC8v5p8UgUl9tQRxBxfBvOdudh+M=;
+        b=PWMwKVzYMAHaNmM1qHdY/I/ZfaFoPMAdtUyP22EhQA28lC9yx1sWJ53nvwkB58h7gt
+         38+Aw2GKH+9v8YTEKPCV/4QWk6leGjuqkvoNBk0wk0KWnSO2OiB/t+IwIw9iSbMkC+/K
+         g8jnVf5rGK1k/emX4RhMLZc+Z7f0y7pbcVr9Q3ayzXsK3fZD/9narSYQsjufIii3DGWX
+         MHkqThoTZy/gpwNz/wTkGZYsEpN4LMsa8u2ti+1+p2VaHDXJmrCa9OySwvXvQ1WnWZxO
+         UFNWVFQ2CfB6XU9VPWXrZTmzR4F0KsDiyJWXgwmO1oLFr6HKvDUnxv+vDa4pn3EZpLS0
+         61LA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707245104; x=1707849904;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nzXAJUXwHJ7hSx/xEMC9Uv9BjsFQj7gJIIbI4keCMvI=;
-        b=gACHAdDBqnFcWyQ30dsxrW0lFw5D8nBnNbIiwCW7telQK6+3r+jfgEWriIlM6w+fYo
-         iSpSj451PAhF1nCNpLzqFAc6dgHsrp4WIo45UHoy3hB54db7tYHM/B4OXvgCo0rbzEJW
-         fLHg+aKVc3tmF3uBdeME6FGvU/dmawG4TZ1HcV5WVb6iBwUBsf2l7SJHclhOn1iT5+TL
-         oMqSOCracT3omIDKrJuL19V5frue0i1e0WuW4UEpTod5bu+h5sqrO6qCC7L1Kqjcit2d
-         jpIYMiuD25nvc9SRIQJGxRlkGM/Y34R+a/LNx2lXkMAgpbQJq85V62rIPVI5jSf+OzYz
-         C1+w==
-X-Gm-Message-State: AOJu0YzHZ3M72Wb+7qJAKySKiAR0G+M8H5IjyZ9Bl9tZbJdNaXO/syj3
-	Qt60WfMZSUrW7pXIJwzomQ/0VMl1UElnxwjbG1vsM3j4jJz5A9Z579CilsbHr2o=
-X-Google-Smtp-Source: AGHT+IHKJZhzG4xTsbwO2KDAhBptB/p+YMr0/6L3XIh1VfcrTzwfM6xQUksE4gkuOCkMlnp8dopofQ==
-X-Received: by 2002:a17:906:a450:b0:a37:b4a9:3d53 with SMTP id cb16-20020a170906a45000b00a37b4a93d53mr2883454ejb.2.1707245104352;
-        Tue, 06 Feb 2024 10:45:04 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCU9KWv0wiP6nJI7zqWKT9pYcoKAUlkIotZm2RWh6IwSYk5XTJOhmjgHmq75G5NotNBrih261uO7UCnEi2ooQPTGUvtxESZtBtBoa4016bSLQ6SqajjxtHYsJCL3YgMw2TxCwk9xDwdNjMTUPstYMAktmmNmHFXdpcTzFcqaTNlVdsaOV/6dfFKM94ompYLt
-Received: from [192.168.192.207] (037008245233.garwolin.vectranet.pl. [37.8.245.233])
-        by smtp.gmail.com with ESMTPSA id h16-20020a17090619d000b00a385535a02asm209216ejd.171.2024.02.06.10.45.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Feb 2024 10:45:04 -0800 (PST)
-Message-ID: <3669bded-aa85-4e16-b990-f42834b10091@linaro.org>
-Date: Tue, 6 Feb 2024 19:45:02 +0100
+        d=1e100.net; s=20230601; t=1707245428; x=1707850228;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=04H/P6C7O8nfc1XeC8v5p8UgUl9tQRxBxfBvOdudh+M=;
+        b=l5SHmYEF30+1KPuX9URI0ho0qv54TVoRaHZ7MbcRAiZKH8ncHXhYegElnsh6Dkd5zR
+         gMqsTYpw+ggc1CRw8jVKDvshAMpRJEBZOdepWIlR1FOb0RtJt3HmthMvzoWuqMmtvFXb
+         X7Kckx9RriwH7BDTD3OlwHLkGLvHPacurewAuf2c3PSlBTxSD+7dwRRNnHY567BFhxr0
+         MohIUCKYn3X3exXAvdeSuUSYmk7R80iss+eWpohCXizkvSqD/Gs/euSIBDctYIu1jMxz
+         Ta+2QAUNK35NUTvzaqpIzA4hn8c3VRV0occGyRR2e4wES78WNcJzqDuGHRv+KChMIPxi
+         QH0g==
+X-Gm-Message-State: AOJu0YzucNdMHq6VOUhxX4b+DgLJZy9aGGmPVnPLGkWN6ZxRixyFjY8c
+	WVtCjTjQYwZK/9XC66pIx4O5w4gRW6q/ggKl3LudeuSRLfZZu3F/8tROEI/8/X368B82BYkd/vO
+	zx6nmmF9ell2nxEo62lw1CJL2PxU=
+X-Google-Smtp-Source: AGHT+IFew76+8/ONbppJJ5WidlzjDP61Dg+kG6gaTcWUbl+84Ejsp+SlpxQLfB/R2PqIEfDeyhbfqm2nzrGeNSGeDLs=
+X-Received: by 2002:a05:6a00:994:b0:6e0:3f2d:4c04 with SMTP id
+ u20-20020a056a00099400b006e03f2d4c04mr433802pfg.23.1707245427825; Tue, 06 Feb
+ 2024 10:50:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] power: supply: mm8013: select REGMAP_I2C
-Content-Language: en-US
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Sebastian Reichel <sre@kernel.org>
-Cc: Sebastian Reichel <sebastian.reichel@collabora.com>,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <20240204-mm8013-regmap-v1-1-7cc6b619b7d3@weissschuh.net>
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <20240204-mm8013-regmap-v1-1-7cc6b619b7d3@weissschuh.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20240203165307.7806-1-aford173@gmail.com> <20240203165307.7806-9-aford173@gmail.com>
+ <20240206170632.GA2183819@dev-arch.thelio-3990X>
+In-Reply-To: <20240206170632.GA2183819@dev-arch.thelio-3990X>
+From: Adam Ford <aford173@gmail.com>
+Date: Tue, 6 Feb 2024 12:50:16 -0600
+Message-ID: <CAHCN7x+Jt8Qfyjxg=TasUgezA3ZDk=6mFZkMyFEwk2Evt-6c5Q@mail.gmail.com>
+Subject: Re: [PATCH V8 08/12] drm/bridge: imx: add driver for HDMI TX Parallel
+ Video Interface
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, marex@denx.de, 
+	alexander.stein@ew.tq-group.com, frieder.schrempf@kontron.de, 
+	Lucas Stach <l.stach@pengutronix.de>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+	Richard Leitner <richard.leitner@skidata.com>, 
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>, Fabio Estevam <festevam@gmail.com>, 
+	Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Robert Foss <rfoss@kernel.org>, Jonas Karlman <jonas@kwiboo.se>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, David Airlie <airlied@gmail.com>, 
+	Daniel Vetter <daniel@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, NXP Linux Team <linux-imx@nxp.com>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Vinod Koul <vkoul@kernel.org>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Liu Ying <victor.liu@nxp.com>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, dri-devel@lists.freedesktop.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-phy@lists.infradead.org, linux-pm@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 4.02.2024 18:30, Thomas Weißschuh wrote:
-> The driver uses regmap APIs so it should make sure they are available.
-> 
-> Fixes: c75f4bf6800b ("power: supply: Introduce MM8013 fuel gauge driver")
-> Cc:  <stable@vger.kernel.org>
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> ---
+On Tue, Feb 6, 2024 at 11:06=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> Hi all,
+>
+> On Sat, Feb 03, 2024 at 10:52:48AM -0600, Adam Ford wrote:
+> > From: Lucas Stach <l.stach@pengutronix.de>
+> >
+> > This IP block is found in the HDMI subsystem of the i.MX8MP SoC. It has=
+ a
+> > full timing generator and can switch between different video sources. O=
+n
+> > the i.MX8MP however the only supported source is the LCDIF. The block
+> > just needs to be powered up and told about the polarity of the video
+> > sync signals to act in bypass mode.
+> >
+> > Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+> > Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com> (v7)
+> > Tested-by: Marek Vasut <marex@denx.de> (v1)
+> > Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com> (v7)
+> > Tested-by: Richard Leitner <richard.leitner@skidata.com> (v2)
+> > Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de> (v2)
+> > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com> (v3)
+> > Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> > Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> > Tested-by: Fabio Estevam <festevam@gmail.com>
+> > Signed-off-by: Adam Ford <aford173@gmail.com>
+>
+> <snip>
+>
+> > diff --git a/drivers/gpu/drm/bridge/imx/imx8mp-hdmi-pvi.c b/drivers/gpu=
+/drm/bridge/imx/imx8mp-hdmi-pvi.c
+> > new file mode 100644
+> > index 000000000000..a76b7669fe8a
+> > --- /dev/null
+> > +++ b/drivers/gpu/drm/bridge/imx/imx8mp-hdmi-pvi.c
+> ...
+> > +static void imx8mp_hdmi_pvi_bridge_enable(struct drm_bridge *bridge,
+> > +                                       struct drm_bridge_state *bridge=
+_state)
+> > +{
+> > +     struct drm_atomic_state *state =3D bridge_state->base.state;
+> > +     struct imx8mp_hdmi_pvi *pvi =3D to_imx8mp_hdmi_pvi(bridge);
+> > +     struct drm_connector_state *conn_state;
+> > +     const struct drm_display_mode *mode;
+> > +     struct drm_crtc_state *crtc_state;
+> > +     struct drm_connector *connector;
+> > +     u32 bus_flags, val;
+> > +
+> > +     connector =3D drm_atomic_get_new_connector_for_encoder(state, bri=
+dge->encoder);
+> > +     conn_state =3D drm_atomic_get_new_connector_state(state, connecto=
+r);
+> > +     crtc_state =3D drm_atomic_get_new_crtc_state(state, conn_state->c=
+rtc);
+> > +
+> > +     if (WARN_ON(pm_runtime_resume_and_get(pvi->dev)))
+> > +             return;
+> > +
+> > +     mode =3D &crtc_state->adjusted_mode;
+> > +
+> > +     val =3D FIELD_PREP(PVI_CTRL_MODE_MASK, PVI_CTRL_MODE_LCDIF) | PVI=
+_CTRL_EN;
+> > +
+> > +     if (mode->flags & DRM_MODE_FLAG_PVSYNC)
+> > +             val |=3D PVI_CTRL_OP_VSYNC_POL | PVI_CTRL_INP_VSYNC_POL;
+> > +
+> > +     if (mode->flags & DRM_MODE_FLAG_PHSYNC)
+> > +             val |=3D PVI_CTRL_OP_HSYNC_POL | PVI_CTRL_INP_HSYNC_POL;
+> > +
+> > +     if (pvi->next_bridge->timings)
+> > +             bus_flags =3D pvi->next_bridge->timings->input_bus_flags;
+> > +     else if (bridge_state)
+> > +             bus_flags =3D bridge_state->input_bus_cfg.flags;
+> > +
+> > +     if (bus_flags & DRM_BUS_FLAG_DE_HIGH)
+> > +             val |=3D PVI_CTRL_OP_DE_POL | PVI_CTRL_INP_DE_POL;
+> > +
+> > +     writel(val, pvi->regs + HTX_PVI_CTRL);
+> > +}
+>
+> Apologies if this has already been reported or fixed, I searched lore
+> and did not find anything. Clang warns (or errors with CONFIG_WERROR=3Dy)
+> for this function:
+>
+>   drivers/gpu/drm/bridge/imx/imx8mp-hdmi-pvi.c:81:11: error: variable 'bu=
+s_flags' is used uninitialized whenever 'if' condition is false [-Werror,-W=
+sometimes-uninitialized]
+>      81 |         else if (bridge_state)
+>         |                  ^~~~~~~~~~~~
+>   drivers/gpu/drm/bridge/imx/imx8mp-hdmi-pvi.c:84:6: note: uninitialized =
+use occurs here
+>      84 |         if (bus_flags & DRM_BUS_FLAG_DE_HIGH)
+>         |             ^~~~~~~~~
+>   drivers/gpu/drm/bridge/imx/imx8mp-hdmi-pvi.c:81:7: note: remove the 'if=
+' if its condition is always true
+>      81 |         else if (bridge_state)
+>         |              ^~~~~~~~~~~~~~~~~
+>      82 |                 bus_flags =3D bridge_state->input_bus_cfg.flags=
+;
+>   drivers/gpu/drm/bridge/imx/imx8mp-hdmi-pvi.c:60:15: note: initialize th=
+e variable 'bus_flags' to silence this warning
+>      60 |         u32 bus_flags, val;
+>         |                      ^
+>         |                       =3D 0
+>   1 error generated.
+>
+> This seems legitimate. If bridge_state can be NULL, should bus_flags be
+> initialized to zero like it suggests or should that 'else if' be turned
+> into a plain 'else'? I am happy to send a patch with that guidance.
 
-Thanks!
+I don't think we can turn the else-if into a blind else, because in
+order to make bus_flags point to bridge_state->input_bus_cfg.flags,
+bridge_state must not be NULL, but we could add an additional else to
+set bus_flags to 0, but I think the simplest thing to do would be to
+set bus_flags =3D 0 at the initialization on line 60 as it suggests.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+If you agree, I can submit a patch later tonight.  I need to fix
+another issue found by the build-bot [1]  to make line 113 return NULL
+instead of 0 anyway.  I figured I could just fix them both at the same
+time.
 
-Konrad
+adam
+
+[1] - https://lore.kernel.org/oe-kbuild-all/202402062134.a6CqAt3s-lkp@intel=
+.com/
+
+>
+> Cheers,
+> Nathan
 
