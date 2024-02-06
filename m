@@ -1,190 +1,185 @@
-Return-Path: <linux-pm+bounces-3445-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3446-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BCE984A8D5
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 23:12:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C7BD84ABCB
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 02:54:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA3621F2FE15
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Feb 2024 22:12:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1814A2869F4
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 01:54:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B7CD495EC;
-	Mon,  5 Feb 2024 21:54:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35880322B;
+	Tue,  6 Feb 2024 01:54:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="J0a3c7vS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LogcS3LB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8A2495D6
-	for <linux-pm@vger.kernel.org>; Mon,  5 Feb 2024 21:54:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21EE556754;
+	Tue,  6 Feb 2024 01:54:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707170057; cv=none; b=iBB55w9GJxoCPOg/Y6XHVwQIjrlxIwRadcn5G2Mw4E4buT368XbE2LJghPMr3Sv1iPq7q1A9J/APNE4tVO59iV25Tfn7s68uyR/tKHnsIodFZee6++4Rn+IrSFMe3m8evr4tL7YO70ijbSlfHYXvOI7SxIXX73DYfDupk/1OR3s=
+	t=1707184462; cv=none; b=RSw86JvFDFwJlGKJtKlChsRGPsD9I12Pu16Gw52zXf9RE5xrq7ASb9VmUrOsFWfc8j2dzfHA4ayuQFU03dMAm9ahAn6eXgpL/xR49hx/+mTprJRSQknprEJ51bk4h8s+eKmlLgcV6KyfDa2qPxgFX6xdvRU20aN+DlC7hn0oRLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707170057; c=relaxed/simple;
-	bh=KVLbdtcvvaRSgN5gQozZaogwWueF7opXRhVnd4wm9FM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UFeb5YGLT8KbzjfTAsySR55nolL07snIVX0hhymPkcMLBppsiSwMs7GkCD3RPthIK6fF7ydCVfeE5dtytRw+4cN0h5fa1U4O/1h0dKCHfceGaaemkq1Nty5qUMRP0janQMN/f1kHZAhRqFI8hn3bLcVjq3k6Ve2afRMFFoF1q5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=J0a3c7vS; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-33b189ae5e8so2555156f8f.2
-        for <linux-pm@vger.kernel.org>; Mon, 05 Feb 2024 13:54:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1707170053; x=1707774853; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UJG9p3OAfhgHtIwPepd82NCHlUMu8iwvMVaHA0OKEWc=;
-        b=J0a3c7vSUUdUE77NgNkzaEpveQPd93qe1FG9O/k+BrqA9SSRg/ExeBVgsF5302klSp
-         PgJqe49qqOWijNZnR9nt1dC2SkgxpGvLppq5RBHKyd5itZn8EIWGi8xROS0LLHLLvLWt
-         bGzuxU0wIZ1Cp6xGhm9q6eJqOuaQUwAmKGpwzOLIqDWi5Xs+ZTs9eA9cwv4fhZB+YLsg
-         PP0MGCdhVmi+lJ6W/3bUWQ7q84Bv1p7Xx5e8n5hky9TqFpJrWpnvwamLXnWDvNlZrExd
-         bHpFAgKFffMlHjF1L1OAVpUaYhtQndLnUEOKzWFt2yZaT404FDaj/cStg5I+O0UsPHxq
-         1b7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707170053; x=1707774853;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UJG9p3OAfhgHtIwPepd82NCHlUMu8iwvMVaHA0OKEWc=;
-        b=M0ZETs4ZqmSSmMK0rJwL1jJTGtNqm9QmRm2K5DE1b00yjk5gnI+U6KrIYpmz3UMSjk
-         oFF951WogPysWU+Rtaq0kgsk5frsJhoySVD2LRKgT3RyVWKpELpv1SHJoD1vCEvVRalu
-         UaHwbZwwTegJOmGk5orgBSjBCNg9av8WgjSNEuy9vB9kwDStnSkKQu4p1o5wZo3xq+6X
-         xC7EV3buMYMA7ZZTxxed1LLx8madpgeidJIe9nYURUihzzQytb7McHXpCz+M62iLXH36
-         EkY/tOQsO/7H/Vcp5HgdasFWUcSOPY7K2aWUUr4Wq3jJJ/DX3HSjul/oO0qnnELrYwpc
-         1Unw==
-X-Gm-Message-State: AOJu0YxRXfytnumxfXPCKM8SbaPaA+U16KnTnSKznbOELEEZD/3MSVkw
-	LZsb4xOXwLKKmg+fTs2qzj0fEvZ2/WaUJwstWOiFiNaxJmfzYPCO5n595EE1uxyWeI0Fkmh3UM7
-	V
-X-Google-Smtp-Source: AGHT+IGqUCnla9965GAGUHJeOJCUyaMBeqetovxkgY0647ee/GZDHFAn7XycGxzkeRTzC/j0kyJbyw==
-X-Received: by 2002:adf:a2d1:0:b0:33b:1a3f:a699 with SMTP id t17-20020adfa2d1000000b0033b1a3fa699mr143950wra.62.1707170052774;
-        Mon, 05 Feb 2024 13:54:12 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCUt6XYUS8FSatEDUB8oWqGn0r0F8pDlWUKCOpRxEid5RL4eptqMhEJpB6H3iVATcdhPJpw+62TWpC9YEr6GmCGPyVCAIHuSCWV81+kopFG+pHasoorO86IL8BBDA64tWhINknFhfxOfeQmdc/Hu77Cje0If2gcdSMzDNMcTnxDXy+RweSrhV8dajJLE+z9/7J5Dgw76QZCWKqC2TaWjIlaFzLfZJjjPTfPVz+TQaSJypSonGtobr2PTXIhuXExdY2gh7vic17eFxNaPGN27dKxIY1sFyupLTed7I1c4jQ==
-Received: from airbuntu (host109-154-238-234.range109-154.btcentralplus.com. [109.154.238.234])
-        by smtp.gmail.com with ESMTPSA id b11-20020a5d4b8b000000b0033af9b7db6esm541892wrt.22.2024.02.05.13.54.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Feb 2024 13:54:12 -0800 (PST)
-Date: Mon, 5 Feb 2024 21:54:10 +0000
-From: Qais Yousef <qyousef@layalina.io>
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	Ingo Molnar <mingo@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>
-Subject: Re: [PATCH] cpufreq: Change default transition delay to 2ms
-Message-ID: <20240205215410.3opxw4ty2tpbsgbc@airbuntu>
-References: <20240205022500.2232124-1-qyousef@layalina.io>
- <326b568d-d460-4a69-9336-28da328ffdcf@arm.com>
- <20240205120147.ui5zab2b2j4looex@airbuntu>
- <f782f0d4-99ba-4876-bd20-03aaae20c0e0@arm.com>
+	s=arc-20240116; t=1707184462; c=relaxed/simple;
+	bh=3VD20WQL3xgexpVKiN8NcOlVno2MagYksB604ZIZyvU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ktkxejuQ8j4OKojek6DmYl8wdG7OIeJfa3tfsNicqA3wpUWkR8hsq4pUC8V7AgJWYfn6u22Ic5Z8uy1ykJWNIUnKJuuB6bEkv6WzuJ+fWUX5j6nuC8F+UCiKruvV6xemuhEA9VYnN3LtVcnHhTosvmd6BBjadbCX4MaJplz0JR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LogcS3LB; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707184460; x=1738720460;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=3VD20WQL3xgexpVKiN8NcOlVno2MagYksB604ZIZyvU=;
+  b=LogcS3LBTm/+GnOu6TUQQK0m+hqwk9/Iylmxw0DVbNMUPrJBdD0p8Rrn
+   Uepxnur3o9ihhO4DovjTMmSI3kJePS+UwSPX6aGDe6HfZ8AQSgjk/UBCi
+   6sDRR3eFovEFMr6JnT+yKA6jZdsocpXzjaQEeEXxZ+ByURdxJsFvzcB0c
+   UfBgDZDIkhsMPFpPQyWURbL4Cw0jQKSS00GUh1cWwfbYKPfzn3Z/yuYlA
+   Y/CmxShqxgB8S7Zl6T4kVGxw9kStP6FWj50invJrPkEAFPF8bor0dgmzR
+   TefMyGYIG8rtt65+hvVNf/11kxJQ2hGY/bLE7ltt8PZiGD+X00K4XSStF
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10975"; a="12001711"
+X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
+   d="scan'208";a="12001711"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 17:54:20 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,245,1701158400"; 
+   d="scan'208";a="1200612"
+Received: from weizhihu-mobl.ccr.corp.intel.com (HELO rzhang1-mobl7.ccr.corp.intel.com) ([10.254.211.111])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2024 17:54:18 -0800
+From: Zhang Rui <rui.zhang@intel.com>
+To: rafael.j.wysocki@intel.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	srinivas.pandruvada@intel.com
+Subject: [PATCH] thermal/intel: Fix intel_tcc_get_temp() to support negative CPU temperature
+Date: Tue,  6 Feb 2024 09:54:09 +0800
+Message-Id: <20240206015409.619127-1-rui.zhang@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <f782f0d4-99ba-4876-bd20-03aaae20c0e0@arm.com>
+Content-Transfer-Encoding: 8bit
 
-On 02/05/24 17:35, Christian Loehle wrote:
-> On 05/02/2024 12:01, Qais Yousef wrote:
-> > Hi Christian
-> > 
-> > On 02/05/24 09:17, Christian Loehle wrote:
-> >> On 05/02/2024 02:25, Qais Yousef wrote:
-> >>> 10ms is too high for today's hardware, even low end ones. This default
-> >>> end up being used a lot on Arm machines at least. Pine64, mac mini and
-> >>> pixel 6 all end up with 10ms rate_limit_us when using schedutil, and
-> >>> it's too high for all of them.
-> >>>
-> >>> Change the default to 2ms which should be 'pessimistic' enough for worst
-> >>> case scenario, but not too high for platforms with fast DVFS hardware.
-> >>>
-> >>> Signed-off-by: Qais Yousef <qyousef@layalina.io>
-> >>> ---
-> >>>  drivers/cpufreq/cpufreq.c | 4 ++--
-> >>>  1 file changed, 2 insertions(+), 2 deletions(-)
-> >>>
-> >>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> >>> index 44db4f59c4cc..8207f7294cb6 100644
-> >>> --- a/drivers/cpufreq/cpufreq.c
-> >>> +++ b/drivers/cpufreq/cpufreq.c
-> >>> @@ -582,11 +582,11 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
-> >>>  		 * for platforms where transition_latency is in milliseconds, it
-> >>>  		 * ends up giving unrealistic values.
-> >>>  		 *
-> >>> -		 * Cap the default transition delay to 10 ms, which seems to be
-> >>> +		 * Cap the default transition delay to 2 ms, which seems to be
-> >>>  		 * a reasonable amount of time after which we should reevaluate
-> >>>  		 * the frequency.
-> >>>  		 */
-> >>> -		return min(latency * LATENCY_MULTIPLIER, (unsigned int)10000);
-> >>> +		return min(latency * LATENCY_MULTIPLIER, (unsigned int)(2*MSEC_PER_SEC));
-> >>>  	}
-> >>>  
-> >>>  	return LATENCY_MULTIPLIER;
-> >>
-> >> Hi Qais,
-> >> as previously mentioned I'm working on improving iowait boost and while I'm not against
-> >> this patch per se it does make iowait boosting more aggressive. ((Doubling limited by rate_limit_us)
-> >> Since the boost is often applied when not useful (for Android e.g. periodic f2fs writebacks),
-> >> this might have some side effects. Please give me a couple of days for verifying any impact,
-> >> or did you do that already?
-> > 
-> > I don't understand the concern, could you elaborate more please?
-> > 
-> > Products already ship with 500us and 1ms which is lower than this 2ms.
-> > 
-> > On my AMD desktop it is already 1ms. And I think I've seen Intel systems
-> > defaulting to 500us or something low too. Ideally cpufreq drivers should set
-> > policy->transition_delay_us; so this path is taken if the driver didn't
-> > populate that. Which seems to be more common than I'd like tbh.
-> 
-> I'm not disagreeing with you on that part. I'm just worried about the side
-> effects w.r.t iowait boosting.
+CPU temperature can be negative in some cases. Thus the negative CPU
+temperature should not be considered as a failure.
 
-I don't see a reason for that. This value should represent hardware's ability
-to change frequencies. It is not designed for iowait boost. And it being high
-means folks with good hardware are getting crap performance as changing
-frequency once every 10ms with today's bursty workloads means we leave a lot of
-perf on the floor for no good reason. And as I tried to explain, already
-platforms ship with low value as this is how the hardware behaves. We are not
-making iowait boost more aggressive; but bringing the fallback behavior more
-inline to what properly configured platforms behave already today.
+Fix intel_tcc_get_temp() and its users to support negative CPU
+temperature.
 
-> 
-> > 
-> > I never run with 10ms. It's too slow. But I had several tests in the past
-> > against 2ms posted for those margin and removal of uclamp-max aggregation
-> > series. Anyway. I ran PCMark storage on Pixel 6 (running mainlinish kernel) and
-> > I see
-> > 
-> > 10ms: 27600
-> > 2ms: 29750
-> 
-> Yes, decreasing the rate limit makes it more aggressive, nothing unexpected here.
-> But let's be frank, the scenarios in which iowait boosting actually shows its
-> biggest benefit you are either doing:
-> - Random Read (small iosize), single-threaded, synchronous IO
-> - anything O_DIRECT
-> and I'd argue more than likely you are doing something wrong if you're actually in
-> such a case in the real world. So I'm much more worried about boosting in scenarios
-> where it doesn't help (e.g. on an Android quite frequently: f2fs page cache writeback).
-> 
-> Decreasing the default transition latency makes (sugov) iowait boosting much more aggressive,
-> so I'm curious if this patch increases power consumption on systems that were at 10ms previously
-> when in non-IO workloads.
-> 
-> Hope that clears that up. Again, not an argument against your change, just being cautious of
-> the potential side effects and if they need some mitigations.
-> 
-> Kind Regards,
-> Christian
+Fixes: a3c1f066e1c5 ("thermal/intel: Introduce Intel TCC library")
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+---
+ .../intel/int340x_thermal/processor_thermal_device.c |  8 ++++----
+ drivers/thermal/intel/intel_tcc.c                    | 12 ++++++------
+ drivers/thermal/intel/x86_pkg_temp_thermal.c         |  8 ++++----
+ include/linux/intel_tcc.h                            |  2 +-
+ 4 files changed, 15 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+index 649f67fdf345..d75fae7b7ed2 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+@@ -176,14 +176,14 @@ static int proc_thermal_get_zone_temp(struct thermal_zone_device *zone,
+ 					 int *temp)
+ {
+ 	int cpu;
+-	int curr_temp;
++	int curr_temp, ret;
+ 
+ 	*temp = 0;
+ 
+ 	for_each_online_cpu(cpu) {
+-		curr_temp = intel_tcc_get_temp(cpu, false);
+-		if (curr_temp < 0)
+-			return curr_temp;
++		ret = intel_tcc_get_temp(cpu, &curr_temp, false);
++		if (ret < 0)
++			return ret;
+ 		if (!*temp || curr_temp > *temp)
+ 			*temp = curr_temp;
+ 	}
+diff --git a/drivers/thermal/intel/intel_tcc.c b/drivers/thermal/intel/intel_tcc.c
+index 2e5c741c41ca..5e8b7f34b395 100644
+--- a/drivers/thermal/intel/intel_tcc.c
++++ b/drivers/thermal/intel/intel_tcc.c
+@@ -103,18 +103,19 @@ EXPORT_SYMBOL_NS_GPL(intel_tcc_set_offset, INTEL_TCC);
+ /**
+  * intel_tcc_get_temp() - returns the current temperature
+  * @cpu: cpu that the MSR should be run on, nagative value means any cpu.
++ * @temp: pointer to the memory for saving cpu temperature.
+  * @pkg: true: Package Thermal Sensor. false: Core Thermal Sensor.
+  *
+  * Get the current temperature returned by the CPU core/package level
+  * thermal sensor, in degrees C.
+  *
+- * Return: Temperature in degrees C on success, negative error code otherwise.
++ * Return: 0 on success, negative error code otherwise.
+  */
+-int intel_tcc_get_temp(int cpu, bool pkg)
++int intel_tcc_get_temp(int cpu, int *temp, bool pkg)
+ {
+ 	u32 low, high;
+ 	u32 msr = pkg ? MSR_IA32_PACKAGE_THERM_STATUS : MSR_IA32_THERM_STATUS;
+-	int tjmax, temp, err;
++	int tjmax, err;
+ 
+ 	tjmax = intel_tcc_get_tjmax(cpu);
+ 	if (tjmax < 0)
+@@ -131,9 +132,8 @@ int intel_tcc_get_temp(int cpu, bool pkg)
+ 	if (!(low & BIT(31)))
+ 		return -ENODATA;
+ 
+-	temp = tjmax - ((low >> 16) & 0x7f);
++	*temp = tjmax - ((low >> 16) & 0x7f);
+ 
+-	/* Do not allow negative CPU temperature */
+-	return temp >= 0 ? temp : -ENODATA;
++	return 0;
+ }
+ EXPORT_SYMBOL_NS_GPL(intel_tcc_get_temp, INTEL_TCC);
+diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c b/drivers/thermal/intel/x86_pkg_temp_thermal.c
+index 11a7f8108bbb..61c3d450ee60 100644
+--- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
++++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
+@@ -108,11 +108,11 @@ static struct zone_device *pkg_temp_thermal_get_dev(unsigned int cpu)
+ static int sys_get_curr_temp(struct thermal_zone_device *tzd, int *temp)
+ {
+ 	struct zone_device *zonedev = thermal_zone_device_priv(tzd);
+-	int val;
++	int val, ret;
+ 
+-	val = intel_tcc_get_temp(zonedev->cpu, true);
+-	if (val < 0)
+-		return val;
++	ret = intel_tcc_get_temp(zonedev->cpu, &val, true);
++	if (ret < 0)
++		return ret;
+ 
+ 	*temp = val * 1000;
+ 	pr_debug("sys_get_curr_temp %d\n", *temp);
+diff --git a/include/linux/intel_tcc.h b/include/linux/intel_tcc.h
+index f422612c28d6..8ff8eabb4a98 100644
+--- a/include/linux/intel_tcc.h
++++ b/include/linux/intel_tcc.h
+@@ -13,6 +13,6 @@
+ int intel_tcc_get_tjmax(int cpu);
+ int intel_tcc_get_offset(int cpu);
+ int intel_tcc_set_offset(int cpu, int offset);
+-int intel_tcc_get_temp(int cpu, bool pkg);
++int intel_tcc_get_temp(int cpu, int *temp, bool pkg);
+ 
+ #endif /* __INTEL_TCC_H__ */
+-- 
+2.34.1
+
 
