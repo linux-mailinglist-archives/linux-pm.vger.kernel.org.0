@@ -1,270 +1,304 @@
-Return-Path: <linux-pm+bounces-3493-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3494-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E87E84B9F3
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 16:44:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7525A84BA06
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 16:46:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 43C9928198E
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 15:44:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2AEB728513D
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 15:46:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99CC713398E;
-	Tue,  6 Feb 2024 15:44:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE8621339AF;
+	Tue,  6 Feb 2024 15:45:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RdKqeKuD"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Oo4xhbWk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2066.outbound.protection.outlook.com [40.107.101.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BAE4133292;
-	Tue,  6 Feb 2024 15:44:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707234254; cv=none; b=Gc2cSUoPWznLKQLCYuP0p4FRqed57WgPZ1xHWNHhdbO7Kdv5pnkqeeFmA1u0p9roCp0tY+KDHHF+FU67RT+oKXeEpA0BCOrR4VZ14ozadSqXBOTh+Aw6GcFgJ5Dby4ye5ODYZicjkKtBN32D1HfR0AtiWLtpOJnh3renrhX+/js=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707234254; c=relaxed/simple;
-	bh=rvnqUpaeyJmgXPiAr92M6ZRL5cnI/ob6JWStk9a+i1c=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=hWLL+eF8lXqmUEJQlgN2atwwT67NLLQ/NK+4xHozvMFvu81TaYRfhZGSEix9bzmjGLZryRldVovJpR38nAkeYktEZvpRCFxCnL6tmbh/xy4c5GqKhrgFxoBd0wBVI8fp5YKY+EhKiud1OwPVDOSi9D9rpFymv2efgsLB8avklpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RdKqeKuD; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707234252; x=1738770252;
-  h=date:from:to:cc:subject:message-id;
-  bh=rvnqUpaeyJmgXPiAr92M6ZRL5cnI/ob6JWStk9a+i1c=;
-  b=RdKqeKuDdOHqnE9cTEhRY0QD8g7J4QbdPgot0+KVkLA65WOZpY8DjU9L
-   zbBFyTlIm4Smmmt+LXfXbhpM9fLXyYqkw/5ZxNWV1Ky0+nNe0DFBK6lYG
-   AV/xGi7ew5T/Mifl2t2W/Y4bKF/uQGCyJWectpWlCjcEaLS25Bq6z2qBh
-   x6cF+MaitHZvHjjukxAC8iwJaz1DStqUkZ6Ji7x3Jo3zXGHGoZBfxqkdu
-   i5bczBCgSB64AspcBnbEnY60Va4uXzsk0INKqr0mt+U+tIhv7Nk3YGovP
-   J3Cv53jLzVwpX9MzymBRxIuEt4Z0/00WBJAhrB9+/eqvNIGAhJBb31zyA
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="660974"
-X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
-   d="scan'208";a="660974"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 07:44:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="909670563"
-X-IronPort-AV: E=Sophos;i="6.05,247,1701158400"; 
-   d="scan'208";a="909670563"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 06 Feb 2024 07:44:09 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rXNcF-0001Xe-1k;
-	Tue, 06 Feb 2024 15:44:07 +0000
-Date: Tue, 06 Feb 2024 23:43:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- d9fc9f690238b2b9c78361f1695ebe02921548e5
-Message-ID: <202402062307.vTcXfgBY-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C263130E30;
+	Tue,  6 Feb 2024 15:45:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.66
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707234355; cv=fail; b=urLbBmxXHPMsDeX7lEfgUVAPBUg2N0TXdGyuZfM3INUJlBLBAS0DZzHG5LuF+/gNqEEoXgBNDd8UdsPQm9kw4JRYL1z0ZvEpO2Uyk3JHBprRUGAfL/QQP8zkKPlro6ZxH7V1e028RTZB+oWHVp28KDR2sjffV8fnTjotU6BxwUM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707234355; c=relaxed/simple;
+	bh=tvEZVM81awavjsa1g3nQL0EvvrzRsFOpMDvWq0rFe0M=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=J4Pc2jktIoM0LRvBnTdna7GVK1wI1g3rTuuY+IUXXscCoA9AB5e0KT5YjyQVIA5BjXyPNmuIodb2hjSw/Aj4U22f5n0WcnufBlnsrRl76lg/HNSkDsGg+JpCX4ZfUPEygVYKQ+Jyt32CAbLlWdsq3mrrPGOXaaCfeOawjrZqkmw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Oo4xhbWk; arc=fail smtp.client-ip=40.107.101.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fmGKdcDqzgb+nk0HKV7IKesxJQ+bJHAcYnm7bYtTDs2WwueMrEPy7aQKwhc2/id/zeIdoUGIqrwe1e/1/T5K16Rj1pZuNCDyMpjKJqX0nqG+ZGkb6iYuqqHRSG57b6JFpPIOoJjNGUVH9ryk7yuTYhYPMPYKw2cUzp5Ne6yKWFEbr/JLExCv/bIIaXhA1o3rNQ6dWBJAyDvXJ3Pjc2AWz5+9k5Psj/9Z721TTWfXrnJ/SFAtUivINNVMK+KPR6wOnyWRpt7gwwsun/dmY1JhERCqlmvRcpmRrUEqaqzYFiX2NHUaWh9KKW2Nh5WmHsen4toJ9KB3DWpRm6c4iR7gFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ifn3ClyEG00ViJ7aB3qDSWWmoXUaazplkaXEB7TZLSE=;
+ b=iWj9v6JuHDtrrf4NIQROjo/uK8OuTY7WR3ThPygcCKVZzvOu+V5S3FL9F39/bJa/N4B+1mgiEGACVlhvQGPgx4iYDABLiwQULWjG7AfKshkDd/NJufmA9Hz3v3fksFWnrfs558j4LJbGwwBBj/pEAC5F5ZNyqkhnP9HEsZB4QTtq5DRQCd6WOgg9Q3ZdlOdTyfcZzgdi4I3PvBoPC964TViDvPrHhWqjPGxFhtlc44hjcobLTy/xnkOkRfCctJTxzU4+iYUjxvzjOLJjsnFnHz1+t5gxVnh0jGXoVfCTfVCj2CCbrbNrNrC3/5AaRVMfU/PbZFwb+ENfmeTCT3fyxA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ifn3ClyEG00ViJ7aB3qDSWWmoXUaazplkaXEB7TZLSE=;
+ b=Oo4xhbWkauG2o7V3pKKHakXqaENANgy+Mlrr3wWXgdzdLMGu+q3KuYrlxzoUSiXQpODVpX+iiHNfp2o3SQCftFPwDXCU9tu8jbri2v8Jd3wLyyth52YTiX/epYNeEO7KY6I0mPeSlI7loN5VXp+7U0DrPW8e7D2cA4lnXONiU98=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by DM6PR12MB4545.namprd12.prod.outlook.com (2603:10b6:5:2a3::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7270.15; Tue, 6 Feb
+ 2024 15:45:50 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::f6d2:541d:5eda:d826]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::f6d2:541d:5eda:d826%5]) with mapi id 15.20.7270.016; Tue, 6 Feb 2024
+ 15:45:49 +0000
+Message-ID: <80c4a2fd-d24b-468c-9aae-1a4ef509babc@amd.com>
+Date: Tue, 6 Feb 2024 09:45:47 -0600
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 6/6] cpufreq:amd-pstate: add quirk for the pstate CPPC
+ capabilities missing
+Content-Language: en-US
+To: Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
+ viresh.kumar@linaro.org, Ray.Huang@amd.com, gautham.shenoy@amd.com,
+ Borislav.Petkov@amd.com
+Cc: Alexander.Deucher@amd.com, Xinmei.Huang@amd.com, Xiaojian.Du@amd.com,
+ Li.Meng@amd.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1707193566.git.perry.yuan@amd.com>
+ <4626a4aff50921be3b7a0345ae51e5aa246504d0.1707193566.git.perry.yuan@amd.com>
+From: Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <4626a4aff50921be3b7a0345ae51e5aa246504d0.1707193566.git.perry.yuan@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN4PR0501CA0119.namprd05.prod.outlook.com
+ (2603:10b6:803:42::36) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DM6PR12MB4545:EE_
+X-MS-Office365-Filtering-Correlation-Id: e5654c96-eb62-4c07-edeb-08dc272ab152
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	jrC6WYyua0ih1IUcSJQpBHU3BEhZDvZcku7XdYvmR9csSWCZpA0IupvWVffpdoShXvS+LBqzRu0YGBMbkSSnFB2e6+U5b+berrEvcpaj6+vC33G7NZijAVY3i+UjJjshDcJP1p/krLIpYMhEq/naZa05dHsUAJix8OeNoBqcMbyytaoif+zDiPeVtOGzc0pUnwgH+FlxllpsKhunEAi8Rq9hAKl+Be7UFR0le6kT5w/Wv+Mz8c5onPdxZFeSuX83iUuF1xl5IrQHMvrHLaBgcylO9I+NWeUukWnSrWLJAuz14+LyKaSa3TvoUkodMoBGOn3VrFCZ+dOcRTvT1a/kFvdaEqF8PpQ95E1RCdnpTXWg52YYL9g1J6KKWyM7ZtqLniGiSvx0qAtMGj8XS4Clex859ygNoLK25VnAvWcgtim2cX9hQ24DG5yrEyj6e+kodZrpz2OeYeW0i33XKRdBZXg81LCBUukhHpJp0gP+bxB0JBEOh3ByxsXMp0VkrECEf+MbpMLRBu/qRHQsL38cYNgRgMR8m9lLkVAMCfYGF7bi2Rri4lOdOmAbX3sahz0a/5RnK09o2fUd+0YlEyUyHqWY/JGIMePs1PG06kv56xXBwfCBLHurJaBb0LCiKaGE3fMGoaLfBcRXcpYJbY8oRg==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(39860400002)(396003)(376002)(366004)(136003)(230922051799003)(1800799012)(451199024)(64100799003)(186009)(2616005)(26005)(31686004)(41300700001)(66476007)(38100700002)(6636002)(316002)(478600001)(53546011)(6512007)(6486002)(83380400001)(6506007)(36756003)(66556008)(66946007)(86362001)(5660300002)(8936002)(4326008)(31696002)(44832011)(2906002)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?aUUxUHJZMDRieEFnVVNOUS9LaDJQK1JjSWdNV0RTcUdBb2U0RitzbE1id014?=
+ =?utf-8?B?NUFFNFpYVVJXYlBmeDNIci9iT2dPQW5LYno4OFRLMUhFUnVqRUdHNVNIY0Qv?=
+ =?utf-8?B?N24wa2xQdXNZK1dTM1V6LzlWb0p1ZlIyNFp6RmZQQWU1c1l6YlJNeUVSdS9M?=
+ =?utf-8?B?dCtPRFJaZjMvNEo1WjFJOW9RNHJxQzFKUmFYSjJRZXNPN3VVYktSdGRxQUM1?=
+ =?utf-8?B?Nm1OeTlOWW1mTy96OURXQWt4b0dwcHJlcUpCcmFoK0p0UWxzNEJrdzVSeXlC?=
+ =?utf-8?B?TGtucTlQYTRZd1A3RHpJUitxdnN1MUhtTURpd2ZoaXZsU2o5bmNqU3RESGYy?=
+ =?utf-8?B?S3ZWeVBuUVpTKzg0Y0pTMWZDeTNkNzY3cnBHTitqYkV2YUNTcTdQZXRXdnBi?=
+ =?utf-8?B?TVoyb08wbSs5dVhQNjUyRUZScldiYjJaYmhqcFFRTHhlalQvTis2K1JqWmJa?=
+ =?utf-8?B?SmwxYmw5SG5jci9xWkxCZXB5eE9UT2JTcTcxQnUvQ3h1cWFWOGpldmVKYXpI?=
+ =?utf-8?B?bG1LZEhtbmFjbUZURWFXaDQvclNrcjdRdTZMWkgyRTJhRlYrKzR0YWxYZldK?=
+ =?utf-8?B?aVdlTTg3TFNGbzBtbXNCYlIrdVNCZ1VLa1l1QVNzb1lCd3hlVE5CL1pIeWg1?=
+ =?utf-8?B?Q214MUdocUZBNDQ4b3BOLzRHV3R6RExpblY0aXJjVHEzVldiZUQ0RmZXSThG?=
+ =?utf-8?B?akh0VkR5cksrQWM0dmhxK2hMbjNvUnFtNlBlU241d0FHbFNMTHNqS2ZCWXkz?=
+ =?utf-8?B?NktDQk56SzBUY0tCSWpFQVVjd0xjMHM0d3kwMXlGSzhLSGFKQVFhU0h3S2l4?=
+ =?utf-8?B?Y1Awa1NlVGoxcGhwSDlFazNnNWJnVG1HT3l2Rmp4NUIyUmVLcGJ3ZmFnQnRn?=
+ =?utf-8?B?SW9VNjhYZ1ROTitCV2ZQUWxBS3FFMUtqQjJPSEtOVUlTMUZzaW9LK0w0eDFJ?=
+ =?utf-8?B?WHBHZlEyS3VGVjQrQkNibEdacmFySlEzT0YybzZBM3Z4QjcwemR2dW01TDhk?=
+ =?utf-8?B?VStDNjFBSTZ1dHd0dXJvZXVOcXFuMUxWVHoyYmNyZjBaTFl3VERiR1RVOGtC?=
+ =?utf-8?B?cWNFckhrYkc2cG9kb3FucXZtSzB3NkhzTCtGNG5LdjBXWi9OZGY1Y3Bwckcv?=
+ =?utf-8?B?dmloT3l3RlZxRUdSQkhadDZsQldDZEtlczdTRnNQa3Y3T0NUTklXUW52eFFL?=
+ =?utf-8?B?ZkZwb1ZGV2lZRDdLbUJ4UUhRUm55am50UzBidVlNNWNydHIrbU04bGljeCsy?=
+ =?utf-8?B?ZFNjQ0NUU0d0MlpDaG12NlNjYitQOEdRWHdFYkJrc1lpeFJlNDhGRE5wTzRX?=
+ =?utf-8?B?bis0WnVDZ3o3TmxNQmtKUjg4N2FraVFOODV0VGRPN1JTazRkUGcwb0ZSemVs?=
+ =?utf-8?B?RzFWNE9XQ0IxbDBDRHpCZEMzTDJ3Zk50MlZCTmV2YUpIMmVoM09rUlRsdXZG?=
+ =?utf-8?B?SlEwN3V5UjJncU4vbC85RTZCV3pCYm9FazdobjRUMjBSbnVzR1VDL2ZhSC9H?=
+ =?utf-8?B?WmExMlh2Nk5uMm50WHZsT29uc2ZHRmJKUmFJMzFSMkIrSkMrRFRIUk8yOVhU?=
+ =?utf-8?B?MEI5WGV0MTlHZGtEVGJ0cUk1SkdKSXJCNEwyb3hsY2t3ZTJtTTJNSDkwZUhz?=
+ =?utf-8?B?ZzVZVWNLeVRYbTE4Q2dmZnFUeXNGOElxSC9mSlRacXR0a1c4bVZaZmwzVWpH?=
+ =?utf-8?B?V1ZmVjNMMGpRdlkvOUx2U0RWTzRnSkc0aFcyYTNYTnVubUgrOHBkSS90YlYw?=
+ =?utf-8?B?cmZnY3lCb0RvOG8rWTBsbkNaOUZTZ3ZHbWtKbndMSGpIRlJRbXhMZWdzVnlP?=
+ =?utf-8?B?TXJldjloSjRpaUs4VE1ZWURyZW5qd1A0S2hqVWtGa3dsUmdBcHNkazNsRFF3?=
+ =?utf-8?B?NmNWUUNCTUxaWjNIcStRem9wRVhLWGtGOTNGdmhiU3FOU2FHeFdFcE15bzc5?=
+ =?utf-8?B?NEZXVnFZU0V0WWRQTGFEUjgyc2Z0d0VLYUUrWnBDRzdhb0tTd0NvbGFHa28r?=
+ =?utf-8?B?VVFkekFjSUlEV2JsMVBVTFV3UUlUVW9RK0tBRlhFWWdvSlpaYWgxRG5xS3M3?=
+ =?utf-8?B?ODJFSG1iTG9pUEVGNXJzUzkrLzNjRXJ3c3h3NE0wekNWbjdKQ1VocFdFRUM0?=
+ =?utf-8?Q?LE5Lu1xkGLDuZRFe0YUZWM3HW?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5654c96-eb62-4c07-edeb-08dc272ab152
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2024 15:45:49.8609
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VMkadMLja2VBeO5XAm1+m5sOg2e8KsvKkUXHMMVmA81wQfmu+OlfFGIfmrRxDwWOIqQonPgZXhP/2x8tvl/Y5A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4545
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: d9fc9f690238b2b9c78361f1695ebe02921548e5  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
+On 2/5/2024 22:33, Perry Yuan wrote:
+> Add quirks table to get CPPC capabilities issue fixed by providing
+> correct perf or frequency values while driver loading.
+> 
+> If CPPC capabilities are not defined in the ACPI tables or wrongly
+> defined by platform firmware, it needs to use quick to get those
+s,quick,a quirk,
+> issues fixed with correct workaround values to make pstate driver
+> can be loaded even though there are CPPC capabilities errors.
+> 
+> The workaround will match the broken BIOS which lack of CPPC capabilities
+> nominal_freq and lowest_freq definition in the ACPI table.
+> 
+> $ cat /sys/devices/system/cpu/cpu0/acpi_cppc/lowest_freq
+> 0
+> $ cat /sys/devices/system/cpu/cpu0/acpi_cppc/nominal_freq
+> 0
+> 
+> Signed-off-by: Perry Yuan <perry.yuan@amd.com>
+> ---
+>   drivers/cpufreq/amd-pstate.c | 59 ++++++++++++++++++++++++++++++++++--
+>   include/linux/amd-pstate.h   |  6 ++++
+>   2 files changed, 63 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 77effc3caf6c..874d8b663790 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -67,6 +67,7 @@ static struct cpufreq_driver amd_pstate_epp_driver;
+>   static int cppc_state = AMD_PSTATE_UNDEFINED;
+>   static bool cppc_enabled;
+>   static bool amd_pstate_prefcore = true;
+> +static struct quirk_entry *quirks;
+>   
+>   /*
+>    * AMD Energy Preference Performance (EPP)
+> @@ -111,6 +112,43 @@ static unsigned int epp_values[] = {
+>   
+>   typedef int (*cppc_mode_transition_fn)(int);
+>   
+> +static struct quirk_entry quirk_amd_7k62 = {
+> +	.nominal_freq = 2600,
+> +	.lowest_freq = 550,
+> +};
+> +
+> +static int __init dmi_matched_7k62_bios_bug(const struct dmi_system_id *dmi)
+> +{
+> +	/**
+> +	 * match the broken bios for family 17h, model 31h processor
+> +	 * broken BIOS lack of nominal_freq and lowest_freq capabilities
+> +	 * definition in ACPI tables
+> +	 */
+> +	if (boot_cpu_data.x86 == 0x17 && boot_cpu_data.x86_model == 0x31 &&
+> +			boot_cpu_has(X86_FEATURE_ZEN2)) {
 
-elapsed time: 1499m
+I think you should use one or the other (17/31) or (X86_FEATURE_ZEN2).
 
-configs tested: 179
-configs skipped: 3
+> +		quirks = dmi->driver_data;
+> +		pr_info("hardware type %s found\n", dmi->ident);
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I think a better message explains what is happening.  For example:
+"Overriding nominal and lowest frequencies for %s\n"
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                     haps_hs_smp_defconfig   gcc  
-arc                   randconfig-001-20240206   gcc  
-arc                   randconfig-002-20240206   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                         bcm2835_defconfig   clang
-arm                          collie_defconfig   gcc  
-arm                                 defconfig   clang
-arm                             mxs_defconfig   clang
-arm                   randconfig-001-20240206   clang
-arm                   randconfig-002-20240206   gcc  
-arm                   randconfig-003-20240206   gcc  
-arm                   randconfig-004-20240206   clang
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240206   gcc  
-arm64                 randconfig-002-20240206   clang
-arm64                 randconfig-003-20240206   gcc  
-arm64                 randconfig-004-20240206   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240206   gcc  
-csky                  randconfig-002-20240206   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240206   clang
-hexagon               randconfig-002-20240206   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240205   clang
-i386         buildonly-randconfig-002-20240205   clang
-i386         buildonly-randconfig-003-20240205   clang
-i386         buildonly-randconfig-004-20240205   clang
-i386         buildonly-randconfig-005-20240205   clang
-i386         buildonly-randconfig-006-20240205   clang
-i386                                defconfig   clang
-i386                  randconfig-001-20240205   clang
-i386                  randconfig-002-20240205   clang
-i386                  randconfig-003-20240205   clang
-i386                  randconfig-004-20240205   gcc  
-i386                  randconfig-005-20240205   clang
-i386                  randconfig-006-20240205   gcc  
-i386                  randconfig-011-20240205   gcc  
-i386                  randconfig-012-20240205   clang
-i386                  randconfig-013-20240205   gcc  
-i386                  randconfig-014-20240205   gcc  
-i386                  randconfig-015-20240205   clang
-i386                  randconfig-016-20240205   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240206   gcc  
-loongarch             randconfig-002-20240206   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                          atari_defconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                            mac_defconfig   gcc  
-m68k                        mvme16x_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                malta_qemu_32r6_defconfig   gcc  
-mips                           mtx1_defconfig   clang
-mips                           rs90_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240206   gcc  
-nios2                 randconfig-002-20240206   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                generic-32bit_defconfig   gcc  
-parisc                randconfig-001-20240206   gcc  
-parisc                randconfig-002-20240206   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                      cm5200_defconfig   clang
-powerpc                     powernv_defconfig   gcc  
-powerpc               randconfig-001-20240206   clang
-powerpc               randconfig-002-20240206   gcc  
-powerpc               randconfig-003-20240206   clang
-powerpc                      tqm8xx_defconfig   clang
-powerpc                      walnut_defconfig   gcc  
-powerpc                         wii_defconfig   gcc  
-powerpc64             randconfig-001-20240206   gcc  
-powerpc64             randconfig-002-20240206   clang
-powerpc64             randconfig-003-20240206   gcc  
-riscv                            alldefconfig   gcc  
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240206   gcc  
-riscv                 randconfig-002-20240206   clang
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240206   clang
-s390                  randconfig-002-20240206   clang
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                    randconfig-001-20240206   gcc  
-sh                    randconfig-002-20240206   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240206   gcc  
-sparc64               randconfig-002-20240206   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                    randconfig-001-20240206   clang
-um                    randconfig-002-20240206   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240206   gcc  
-x86_64       buildonly-randconfig-002-20240206   clang
-x86_64       buildonly-randconfig-003-20240206   gcc  
-x86_64       buildonly-randconfig-004-20240206   gcc  
-x86_64       buildonly-randconfig-005-20240206   gcc  
-x86_64       buildonly-randconfig-006-20240206   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240206   clang
-x86_64                randconfig-002-20240206   clang
-x86_64                randconfig-003-20240206   gcc  
-x86_64                randconfig-004-20240206   gcc  
-x86_64                randconfig-005-20240206   gcc  
-x86_64                randconfig-006-20240206   clang
-x86_64                randconfig-011-20240206   gcc  
-x86_64                randconfig-012-20240206   clang
-x86_64                randconfig-013-20240206   gcc  
-x86_64                randconfig-014-20240206   clang
-x86_64                randconfig-015-20240206   gcc  
-x86_64                randconfig-016-20240206   clang
-x86_64                randconfig-071-20240206   gcc  
-x86_64                randconfig-072-20240206   gcc  
-x86_64                randconfig-073-20240206   gcc  
-x86_64                randconfig-074-20240206   gcc  
-x86_64                randconfig-075-20240206   clang
-x86_64                randconfig-076-20240206   gcc  
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                randconfig-001-20240206   gcc  
-xtensa                randconfig-002-20240206   gcc  
+> +		return 1;
+> +	}
+> +
+> +
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Only need one newline needed here.
+
+> +	return 0;
+> +}
+> +
+> +static const struct dmi_system_id amd_pstate_quirks_table[] __initconst = {
+> +	{
+> +		.callback = dmi_matched_7k62_bios_bug,
+> +		.ident = "AMD EPYC 7K62",
+> +		.matches = {
+> +			DMI_MATCH(DMI_BIOS_VERSION, "5.14"),
+> +			DMI_MATCH(DMI_BIOS_RELEASE, "12/12/2019"),
+> +		},
+> +		.driver_data = &quirk_amd_7k62,
+> +	},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(dmi, amd_pstate_quirks_table);
+> +
+>   static inline int get_mode_idx_from_str(const char *str, size_t size)
+>   {
+>   	int i;
+> @@ -600,13 +638,19 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
+>   static int amd_get_min_freq(struct amd_cpudata *cpudata)
+>   {
+>   	struct cppc_perf_caps cppc_perf;
+> +	u32 lowest_freq;
+>   
+>   	int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
+>   	if (ret)
+>   		return ret;
+>   
+> +	if (quirks && quirks->lowest_freq)
+> +		lowest_freq = quirks->lowest_freq;
+> +	else
+> +		lowest_freq = cppc_perf.lowest_freq;
+> +
+>   	/* Switch to khz */
+> -	return cppc_perf.lowest_freq * 1000;
+> +	return lowest_freq * 1000;
+>   }
+>   
+>   static int amd_get_max_freq(struct amd_cpudata *cpudata)
+> @@ -635,12 +679,18 @@ static int amd_get_max_freq(struct amd_cpudata *cpudata)
+>   static int amd_get_nominal_freq(struct amd_cpudata *cpudata)
+>   {
+>   	struct cppc_perf_caps cppc_perf;
+> +	u32 nominal_freq;
+>   
+>   	int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
+>   	if (ret)
+>   		return ret;
+>   
+> -	return cppc_perf.nominal_freq;
+> +	if (quirks && quirks->nominal_freq)
+> +		nominal_freq = quirks->nominal_freq;
+> +	else
+> +		nominal_freq = cppc_perf.nominal_freq;
+> +
+> +	return nominal_freq;
+>   }
+>   
+>   static int amd_get_lowest_nonlinear_freq(struct amd_cpudata *cpudata)
+> @@ -1672,6 +1722,11 @@ static int __init amd_pstate_init(void)
+>   	if (cpufreq_get_current_driver())
+>   		return -EEXIST;
+>   
+> +	quirks = NULL;
+> +
+> +	/* check if this machine need CPPC quirks */
+> +	dmi_check_system(amd_pstate_quirks_table);
+> +
+>   	switch (cppc_state) {
+>   	case AMD_PSTATE_UNDEFINED:
+>   		/* Disable on the following configs by default:
+> diff --git a/include/linux/amd-pstate.h b/include/linux/amd-pstate.h
+> index d21838835abd..7b2cbb892fd9 100644
+> --- a/include/linux/amd-pstate.h
+> +++ b/include/linux/amd-pstate.h
+> @@ -124,4 +124,10 @@ static const char * const amd_pstate_mode_string[] = {
+>   	[AMD_PSTATE_GUIDED]      = "guided",
+>   	NULL,
+>   };
+> +
+> +struct quirk_entry {
+> +	u32 nominal_freq;
+> +	u32 lowest_freq;
+> +};
+> +
+>   #endif /* _LINUX_AMD_PSTATE_H */
+
 
