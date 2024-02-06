@@ -1,80 +1,78 @@
-Return-Path: <linux-pm+bounces-3498-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3499-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FC1684BC2B
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 18:37:05 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4777C84BC34
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 18:37:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71CB21C22CC1
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 17:37:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DE733B22601
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 17:37:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96394C15B;
-	Tue,  6 Feb 2024 17:34:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D893E56C;
+	Tue,  6 Feb 2024 17:35:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Ei6AcsfA"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="L2xZfaVh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43E66DF49;
-	Tue,  6 Feb 2024 17:34:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BF9ADDAE;
+	Tue,  6 Feb 2024 17:35:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707240894; cv=none; b=LvM+sBJGwSStZVRY5TAuFDOV5f+BRXrfSxjNPeml5ALDCkoBgHkAQ0wfw4dJLjC3y5RQY2cipXMqZbo0xDm5SGqYrvgP9q2l2SeGcw8N3heYCC2er0QKQbder7BIcsyrP/pzsaDN8mVI2tKggEI4T7NV5QbvukwQ62UjXB1YTQE=
+	t=1707240933; cv=none; b=kXVzJnjPpVYeLMuKj3Wu47Jp0txxjbR5lqiVJeqNIMLuSCDaMrA3TQjAXv7j0LzyYrSy3VrZUgTdeBwKxfT5md8/hWANuUg6ZNKmPQ8TgNHSpmjwBTeJfEpalFLfPcbsUStALOoP7mzwxMAxx7qt+2gbYDdXoTdIHJNW+DCmK5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707240894; c=relaxed/simple;
-	bh=EiCtPGcVCaudpVhVA6Gi8lcZa5cPm96eEObaix+UIss=;
+	s=arc-20240116; t=1707240933; c=relaxed/simple;
+	bh=mKEg8NSA+MWEsWOtYemeNPanDj5YdywtPZx/Cs37/D0=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MZZWSJny6GzqMT1b9d22/jEnbMG4yIFiO4mo7+YF2bpqFKTwbwbwnsrow5OhRBc0elocn6sy3TnfQkH1WUpIOMSpDervCVVDlNhd7Gb3IVIui2wL6viKZAALIQg7ZCJbaX5BTuZGgte7nibi6buqVSgzyuQVcd3KYW1LXwMdOIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Ei6AcsfA; arc=none smtp.client-ip=217.70.183.197
+	 MIME-Version:Content-Type; b=K7RctNFXCf3pJzAmX+3cGufqBoLyY3lZQkLOxm147873Zb5u4nWd+/2RDm48V7mnr3z+xsvZzJiUXRuK1Zr0RnY1l1B8VCBJYJnCkUZ54c9ynJkH2HzzDrvwdL/bc2jsjMu4zJ5l3ZPqgE4PsXrIBNEHxas+sixqrFBdC2OHwk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=L2xZfaVh; arc=none smtp.client-ip=217.70.183.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1762D1C0011;
-	Tue,  6 Feb 2024 17:34:44 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 22DE240008;
+	Tue,  6 Feb 2024 17:35:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1707240889;
+	t=1707240923;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=i4B04GY4vnOTHYtk0bhdleBQty1iDee+JlHm0bxvCe0=;
-	b=Ei6AcsfAETxB/nrhVk18gXN9oUwxDHfLz5X36Xq2Pwh6yheQOhj6sB9NpOYUsflquoGoQi
-	71AG7mvafc6Fkipy6fEqxqaEE8/fM3Oi2sb3KOfqN6pyUDTOx40j64/mDpzUggNRT5r+8Q
-	KX3v3ntkm3Os7+mmFporjg4RDrqMFevdv6N8AAZ6YGu28OFWbHxlPehHSS6lHr96RCm4Hh
-	m8CGYQLGUvxG1bdtK0k5xCshvEhIqdummU8poN02NQr0tfbbUjNsTa260QTey+tFsdQkEx
-	9oyPfOdWcGq60T5zRTzEBKsFtK5hT7uvUYRfGWUSEOgEu5Mt9dDHzgJCdjiw6w==
-Date: Tue, 6 Feb 2024 18:34:43 +0100
+	bh=xaoA+WDat1FJlr5cBeBddcywk0i1Oklt1CF1ajVk3kM=;
+	b=L2xZfaVhIHa26kVoZAs1UG/T1TeVIT5oX04AE6DGkHNL1za2UbistMzqLYaIIxVNm0CJ/n
+	emHEOFg1uXnVr6famrQDH1v0K3ggxD28JjNSWSwb96rVRvNd3M/WKOzcE1UchoBl+Zb5sE
+	wIl9l5fkr2RdOLgPs4+9HCWrlkQydC4pv+vUvTT5YGxGAMUnRfu6bOZLrdsu2MZ7o70fzQ
+	KLphmSosUipkmfglqar4JYTOAT476ic+DoKCc5Cw7plSJd63GKv66gtOQO8krLixVGpnt5
+	u/QbJA/otO9hh+ODyrC5glCdsSgqkn1VJPWpqX/RjLEDqYH+nN5sLRMa/kFx7Q==
+Date: Tue, 6 Feb 2024 18:35:17 +0100
 From: Luca Ceresoli <luca.ceresoli@bootlin.com>
 To: Adam Ford <aford173@gmail.com>
 Cc: linux-arm-kernel@lists.infradead.org, marex@denx.de,
  alexander.stein@ew.tq-group.com, frieder.schrempf@kontron.de, Lucas Stach
- <l.stach@pengutronix.de>, Krzysztof Kozlowski
- <krzysztof.kozlowski@linaro.org>, Andrzej Hajda <andrzej.hajda@intel.com>,
- Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
+ <l.stach@pengutronix.de>, Andrzej Hajda <andrzej.hajda@intel.com>, Neil
+ Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
  Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman
- <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, Maarten
- Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
- <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
- <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>,
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam
- <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>, Philipp Zabel
- <p.zabel@pengutronix.de>, Vinod Koul <vkoul@kernel.org>, Kishon Vijay
- Abraham I <kishon@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>, Liu Ying <victor.liu@nxp.com>, Ulf Hansson
- <ulf.hansson@linaro.org>, dri-devel@lists.freedesktop.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH V8 01/12] dt-bindings: phy: add binding for the i.MX8MP
- HDMI PHY
-Message-ID: <20240206183443.000dca1b@booty>
-In-Reply-To: <20240203165307.7806-2-aford173@gmail.com>
+ <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, David Airlie
+ <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Maarten Lankhorst
+ <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
+ Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
+ <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer
+ <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Liu Ying
+ <victor.liu@nxp.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+ dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+ linux-pm@vger.kernel.org
+Subject: Re: [PATCH V8 02/12] phy: freescale: add Samsung HDMI PHY
+Message-ID: <20240206183517.2b9dfb07@booty>
+In-Reply-To: <20240203165307.7806-3-aford173@gmail.com>
 References: <20240203165307.7806-1-aford173@gmail.com>
- <20240203165307.7806-2-aford173@gmail.com>
+ <20240203165307.7806-3-aford173@gmail.com>
 Organization: Bootlin
 X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
@@ -87,18 +85,72 @@ Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 X-GND-Sasl: luca.ceresoli@bootlin.com
 
-On Sat,  3 Feb 2024 10:52:41 -0600
+On Sat,  3 Feb 2024 10:52:42 -0600
 Adam Ford <aford173@gmail.com> wrote:
 
 > From: Lucas Stach <l.stach@pengutronix.de>
 > 
-> Add a DT binding for the HDMI PHY found on the i.MX8MP SoC.
+> This adds the driver for the Samsung HDMI PHY found on the
+> i.MX8MP SoC.
 > 
 > Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
 > Signed-off-by: Adam Ford <aford173@gmail.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+[...]
+
+> +#define PHY_REG_33		0x84
+> +#define  REG33_MODE_SET_DONE	BIT(7)
+> +#define  REG33_FIX_DA		BIT(1)
+> +
+> +#define PHY_REG_34		0x88
+> +#define  REG34_PHY_READY	BIT(7)
+> +#define  REG34_PLL_LOCK		BIT(6)
+> +#define  REG34_PHY_CLK_READY	BIT(5)
+> +
+> +
+
+Nitpick: only one empty line here.
+
+> +#define PHY_PLL_REGS_NUM 48
+
+[...]
+
+> +static int phy_clk_register(struct fsl_samsung_hdmi_phy *phy)
+> +{
+> +	struct device *dev = phy->dev;
+> +	struct device_node *np = dev->of_node;
+> +	struct clk_init_data init;
+> +	const char *parent_name;
+> +	struct clk *phyclk;
+> +	int ret;
+> +
+> +	parent_name = __clk_get_name(phy->refclk);
+> +
+> +	init.parent_names = &parent_name;
+> +	init.num_parents = 1;
+> +	init.flags = 0;
+> +	init.name = "hdmi_pclk";
+> +	init.ops = &phy_clk_ops;
+> +
+> +	phy->hw.init = &init;
+> +
+> +	phyclk = devm_clk_register(dev, &phy->hw);
+> +	if (IS_ERR(phyclk))
+> +		return dev_err_probe(dev, PTR_ERR(phyclk),
+> +				     "failed to register clock\n");
+> +
+> +	ret = of_clk_add_provider(np, of_clk_src_simple_get, phyclk);
+
+Ouch:
+
+> This function is *deprecated*. Use of_clk_add_hw_provider() instead.
+
+Appears as an easy replacement though.
+
+Otherwise looks good.
+
+Luca
 
 -- 
 Luca Ceresoli, Bootlin
