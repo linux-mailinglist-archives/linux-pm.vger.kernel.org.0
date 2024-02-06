@@ -1,133 +1,158 @@
-Return-Path: <linux-pm+bounces-3471-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3472-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63B4A84B12F
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 10:26:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DAB5184B156
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 10:33:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B726BB24C02
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 09:26:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96DF5283C06
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Feb 2024 09:33:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BE7D12D142;
-	Tue,  6 Feb 2024 09:26:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA96C12D144;
+	Tue,  6 Feb 2024 09:33:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="BzSbca5G"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 320AD1EEE7;
-	Tue,  6 Feb 2024 09:26:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A64812D140;
+	Tue,  6 Feb 2024 09:33:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707211582; cv=none; b=NDiguV5Eq70Cibeo4M0BXFj7iJWds2ZLPxKnYz7xSQHtTRVp/trf0FIuS0v83uPeQdGMotI1EehXBaM8suT90eSXa4iDwZm+C5qIM5LKwaBaLYeaTM5plQgXgULsexK3XsF5PySlhUSU7eHzhUX05ZrMxEuFiIG/rChL3aV9H1w=
+	t=1707212032; cv=none; b=IXDfNiyKvc3Qu0TdmK1ldG5FsZEdI0Lqp++QhEt/66G9wBzAy3YZkRd1ouzMnm7oC1JLZc+wdwSMUZc2z5kI6TKoxeyVXq1Ieji1pZJJIOno4jfbV0R4O1rlhGqAT8JGoLyO1gLDXUg2gWOT/3k9tqeGXTvqY2lrGwKEm8f1fHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707211582; c=relaxed/simple;
-	bh=q+ipK9Pdt16bN9JLtiBX6eY547sX3sZjEKdN1uB5Yvo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VfT5FreVgtFrHWpmm6HIUyr74q8A1jL0U2kg3b5dTsQZa6ho8cbKlYhSFTwg6z5MPZHQwC4zyGrDFVLVu88N43BGqHNh4AwxdL3+2xxhyoYu1xvV8pr/R3fwJOVNwJ50d6OicDbBb+jBnvUtdNMqTEeLiVNYL3csruUGLetgfao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-6047cfd1f5cso3215167b3.2;
-        Tue, 06 Feb 2024 01:26:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707211577; x=1707816377;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=z2vNm5vci5F+R+oBGRNTgxDB8K1oVhEs6yL2hE7dnho=;
-        b=uAgEH3PpUNrfU/M/WzHZIB78ozjss/hQbLyEYO19NHwyHhQ3x1MNh6vKC6wXL0tUNp
-         DeNUClA9+nilQohf/ycu+VctiQVEfgcMVBiCIeGaZ91GQjUNVrfbn6ex5waqIK9yyrvT
-         3awLplnKoRKvslCDldOo6ehi4vdhw2Gpyw0AFWXewQDrDWqVeDEVHIycVWFbqygErhjT
-         8qQOZW5xktXA0Lu6RmMVY5jp4SOrZhX+ibGAP6nF1vwTvjG0ChyxF5vgHJ4OUi4yPe8/
-         57arMEpMxKoZrZaAoWjkZqQ3ixq9rSgTEvQMVAZ6vsdw8D6a4t/HuBItOTzIoc1EHjMf
-         4vnw==
-X-Gm-Message-State: AOJu0YwXhpgjGE7ERplug93N4P6ymobhvkhosB9GSUya3jrHXo6rLnsX
-	XBxebcVNTZBLuVl92aAG44HhRsq4TXV2xL3EM0/dteyDruy76Dsk3l4eNGt+Yvg=
-X-Google-Smtp-Source: AGHT+IGNZFJB1YIfcX+PvAZF+1ylnMVGIltLm1w77cEIE4TSPUWmFzXfCMtrUphbvccgsOc9gWv2eg==
-X-Received: by 2002:a81:e80b:0:b0:5e9:dca:1b14 with SMTP id a11-20020a81e80b000000b005e90dca1b14mr1155848ywm.7.1707211577512;
-        Tue, 06 Feb 2024 01:26:17 -0800 (PST)
-X-Forwarded-Encrypted: i=0; AJvYcCWqI8UZILc36CTWWWfDsom+7/v6tMP3pn7xtVfp37v6eqGVI3zW+o0EWT8bb3pNgzgQWhC96QIHrEpg5yVsKgdCQwGKbDCpqMkYS/MHInxWD33L6bsqDHjaB+cWG5GocFvqQfxWPu4k+1G24AeU2RXQL5PZIj17EXEUXCi0FdciF4/innApR70=
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id dt10-20020a05690c250a00b0060409872f1asm392805ywb.100.2024.02.06.01.26.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Feb 2024 01:26:17 -0800 (PST)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-604713c4ee5so10966117b3.0;
-        Tue, 06 Feb 2024 01:26:16 -0800 (PST)
-X-Received: by 2002:a0d:d8c6:0:b0:602:98af:b469 with SMTP id
- a189-20020a0dd8c6000000b0060298afb469mr1143306ywe.9.1707211576249; Tue, 06
- Feb 2024 01:26:16 -0800 (PST)
+	s=arc-20240116; t=1707212032; c=relaxed/simple;
+	bh=fQlylVz2jQb6NzL/+ZmTPkrnm96XO8ophYiGOdTCP8Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LScybBhBUTect1lxJlF4G42nVXdOVNJkxtxo9UD8FQldo300Q3hK8rOywIWtSg0o7DYNw5vQO6YlH9ehQVjVTnILaJ6c7xNc4n4V7mfIYZtWrfE853yJjkAy2bC02q0heAJVbV7pLJMnz3yby4Hlf9H93Veo54IVWqG4hWtE9r8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=BzSbca5G; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1707212029;
+	bh=fQlylVz2jQb6NzL/+ZmTPkrnm96XO8ophYiGOdTCP8Q=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=BzSbca5G9L3dzYbj7Chv/fm/rPCI1A0STw4ZW1zwSCyXp14y9HgLkPOYLVpM4JLxS
+	 kjEVKyTlRDfWrRf83f8oc/+gLNWXUIO4DiC++tRCNHRDQ5QtU9+qdjL9SzoolgrW5j
+	 SrZ/wQd/P4x/XxXV89kmGSIWgZZg19cOi5n/7k3CAgBcLrc5RkFuEuxlIv17V98v6+
+	 NEeD1tVrPf4TdPFaegUu7Gx8YAKbesHL48lb8gW5r4frhrWa9uAKQUOAC6KQxTRWPx
+	 UF5XwORaNQNPvKnzOxpifiwe3ugm+1qeaLJepWPYQeZYVJRLCY8rswdRVCfDXbJry4
+	 y+FoHd6UJQIew==
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 659763782039;
+	Tue,  6 Feb 2024 09:33:48 +0000 (UTC)
+Message-ID: <f5044987-2514-44cf-83d4-0976b37dc683@collabora.com>
+Date: Tue, 6 Feb 2024 10:33:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <da6af483-5ee9-45cd-922e-d9d5364674dc@web.de> <CAMuHMdUxn4Ne7kmEfONz8Uk3Why3m9r83GdM5RzTxm_4Gj_a6g@mail.gmail.com>
- <6e397bf2-1d45-434f-8619-58a737a138e3@web.de>
-In-Reply-To: <6e397bf2-1d45-434f-8619-58a737a138e3@web.de>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 6 Feb 2024 10:26:03 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVWbG6vG4PkbBZ2V+GYbFdnxOgogHUrdBNj4bFYaDafKA@mail.gmail.com>
-Message-ID: <CAMuHMdVWbG6vG4PkbBZ2V+GYbFdnxOgogHUrdBNj4bFYaDafKA@mail.gmail.com>
-Subject: Re: [PATCH v2] pmdomain: mediatek: Use devm_platform_ioremap_resource()
- in init_scp()
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org, 
-	Angelo Gioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	=?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	Rob Herring <robh@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Geert Uytterhoeven <geert+renesas@glider.be>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 11/19] power: reset: mt6323-poweroff: Use
+ devm_register_sys_off_handler(POWER_OFF)
+Content-Language: en-US
+To: Andrew Davis <afd@ti.com>, Sebastian Reichel <sre@kernel.org>,
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
+ Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
+ <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>, Sean Wang
+ <sean.wang@mediatek.com>, Matthias Brugger <matthias.bgg@gmail.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-actions@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+References: <20240205194437.180802-1-afd@ti.com>
+ <20240205194437.180802-12-afd@ti.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20240205194437.180802-12-afd@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Feb 6, 2024 at 10:21=E2=80=AFAM Markus Elfring <Markus.Elfring@web.=
-de> wrote:
-> From: Markus Elfring <elfring@users.sourceforge.net>
-> Date: Tue, 6 Feb 2024 10:05:34 +0100
-> Subject: [PATCH v2] pmdomain: mediatek: Use devm_platform_ioremap_resourc=
-e() in init_scp()
->
-> A wrapper function is available since the commit 7945f929f1a77a1c8887a97c=
-a07f87626858ff42
-> ("drivers: provide devm_platform_ioremap_resource()").
->
-> * Thus reuse existing functionality instead of keeping duplicate source c=
-ode.
->
-> * Delete a local variable which became unnecessary with this refactoring.
->
->
-> This issue was transformed by using the Coccinelle software.
->
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+Il 05/02/24 20:44, Andrew Davis ha scritto:
+> Use device life-cycle managed register function to simplify probe and
+> exit paths.
+> 
+> Signed-off-by: Andrew Davis <afd@ti.com>
 > ---
->
-> v2:
-> The transformation pattern was adjusted based on advices by known contrib=
-utors.
->
-> Examples:
-> * Doug Anderson
-> * Geert Uytterhoeven
-> * Robin Murphy
+>   drivers/power/reset/mt6323-poweroff.c | 28 ++++++++++++++-------------
+>   1 file changed, 15 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/power/reset/mt6323-poweroff.c b/drivers/power/reset/mt6323-poweroff.c
+> index 57a63c0ab7fb7..ca5d11b17ff03 100644
+> --- a/drivers/power/reset/mt6323-poweroff.c
+> +++ b/drivers/power/reset/mt6323-poweroff.c
+> @@ -14,6 +14,7 @@
+>   #include <linux/platform_device.h>
+>   #include <linux/mfd/mt6397/core.h>
+>   #include <linux/mfd/mt6397/rtc.h>
+> +#include <linux/reboot.h>
+>   
+>   struct mt6323_pwrc {
+>   	struct device *dev;
+> @@ -21,11 +22,9 @@ struct mt6323_pwrc {
+>   	u32 base;
+>   };
+>   
+> -static struct mt6323_pwrc *mt_pwrc;
+> -
+> -static void mt6323_do_pwroff(void)
+> +static int mt6323_do_pwroff(struct sys_off_data *data)
+>   {
+> -	struct mt6323_pwrc *pwrc = mt_pwrc;
+> +	struct mt6323_pwrc *pwrc = data->cb_data;
+>   	unsigned int val;
+>   	int ret;
+>   
+> @@ -44,6 +43,8 @@ static void mt6323_do_pwroff(void)
+>   	mdelay(1000);
+>   
+>   	WARN_ONCE(1, "Unable to power off system\n");
+> +
+> +	return NOTIFY_DONE;
+>   }
+>   
+>   static int mt6323_pwrc_probe(struct platform_device *pdev)
+> @@ -51,6 +52,7 @@ static int mt6323_pwrc_probe(struct platform_device *pdev)
+>   	struct mt6397_chip *mt6397_chip = dev_get_drvdata(pdev->dev.parent);
+>   	struct mt6323_pwrc *pwrc;
+>   	struct resource *res;
+> +	int ret;
+>   
+>   	pwrc = devm_kzalloc(&pdev->dev, sizeof(*pwrc), GFP_KERNEL);
+>   	if (!pwrc)
+> @@ -63,19 +65,20 @@ static int mt6323_pwrc_probe(struct platform_device *pdev)
+>   	pwrc->base = res->start;
+>   	pwrc->regmap = mt6397_chip->regmap;
+>   	pwrc->dev = &pdev->dev;
+> -	mt_pwrc = pwrc;
+>   
+> -	pm_power_off = &mt6323_do_pwroff;
+> +	ret = devm_register_sys_off_handler(pwrc->dev,
+> +					    SYS_OFF_MODE_POWER_OFF,
+> +					    SYS_OFF_PRIO_DEFAULT,
+> +					    mt6323_do_pwroff,
+> +					    pwrc);
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+	if (ret)
+		return dev_err_probe(....);
 
-Gr{oetje,eeting}s,
+Regards,
+Angelo
 
-                        Geert
+> +	if (ret) {
+> +		dev_err(pwrc->dev, "failed to register power-off handler: %d\n", ret);
+> +		return ret;
+> +	}
+>   
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
 
