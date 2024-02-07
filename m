@@ -1,127 +1,95 @@
-Return-Path: <linux-pm+bounces-3563-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3567-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 373AF84D1DE
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 19:58:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2090E84D214
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 20:13:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 403401C21DB9
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 18:58:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D6091C229D9
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 19:13:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2186E82D97;
-	Wed,  7 Feb 2024 18:58:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jIM8ZpIc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41CAE126F29;
+	Wed,  7 Feb 2024 19:13:02 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 925AE84FCC;
-	Wed,  7 Feb 2024 18:58:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9D9185954;
+	Wed,  7 Feb 2024 19:12:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707332286; cv=none; b=Rq4UjJU844ewQSkbnNDxBBZIxCj8Sb1oq+m/sNJfF4hllPFnqjMaYrh8k3QNhZirod7J1ZVLkjtfWNJVKZmmRsZ1R1FsNSkGMKFvinjFNmvDjXNg6C1stA9ByxVb/XlT5EZvTY9wKbzAYMKFBoh4sYItXu286wjdGzUgbRsp4Co=
+	t=1707333182; cv=none; b=mXZaUPWeqoyVRPYy7RRGKDA3aVqAGHB6xcsGjgcvk13edL3mfUZdcrO7Y+vWWgqQJulqO8PzDFZDjfUHqFsJiKmuK+RqgXjtgWavAhS7Micfsn2d/mDUk68NWr9q6R8IjbcyQ3DoM7enQsKug9S2j39VLlH/tHE3A5qYHB33PRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707332286; c=relaxed/simple;
-	bh=pAOj+DSJjz+jvCbGKZ44IvbjjglxWKMYA2+il8mYawo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P5ZJXAxPUoIepW2pLV0VpA1xtE5wWp0fTyiDpU688JLgdk+mtAka7BBgp0A3GGRDQpK9QzaxHTCYKrTI3i+aIP0WP+rUZL4nkCLpbzFE6yQwavBYHHlfPC1UQaQXOMQaSeVtNuvPwDMRc1HbgupQ1fPNvPD+yX8GhjjdxxvsINk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jIM8ZpIc; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-5d8b519e438so821915a12.1;
-        Wed, 07 Feb 2024 10:58:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707332284; x=1707937084; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nq0e4pOcA//e/KkGEcUuu94EhWD+e4sWk9MIHyJok5U=;
-        b=jIM8ZpIcVNoZ3L9flfBLte7UlQsJtdJBe85SplOGCbdZ7ajVTyPLE7FjkwniQkt13G
-         f0Dd4Qcm71RyHrWn31P3YrNYxqtF2k8EmBUFfxmEVx96nhm+aldgT3k3DQqzuxHzBE/u
-         ryOzqgFWQEDR3326+uqpDyyFahh7Fu0NV4gWBSEF+v8GJZi6h3/4FrdOZ7g0N9FLIMa2
-         PASlRdMnjlkCsXgIGQ/nhxvaMR++13kVJqNT307ExUppdnx7k3nNTNRzhD/BovOnUSmw
-         6JFGmcYohDkuCkUI7BMYzghCyzh7FDXp2haNXR0MH931qfrX9u/+pToZ8JtZsBQ4R83q
-         Itaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707332284; x=1707937084;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nq0e4pOcA//e/KkGEcUuu94EhWD+e4sWk9MIHyJok5U=;
-        b=BfeaIYJmTqrHzJSoxu0jjIHlq3wbGhsjjcr+Z/SXBdZYg4X5T/ktnQKA6JvWkrrkbg
-         uIbJ8TYGCkw5e8PAcSMiDU0hbrWjk+pwfipreAMC1ar6bcnCLLNHsPZLjjTIuhXRz02s
-         g5KDYDDGTI0l0IHYLk2vlePI3Id2BDLjtVK2uNRCGEbs9Q2SNkq6YC36nOEyrEGKszCk
-         IZJfUMjjNM3bSPT+/o9b2CrOfrkqU7CyEGwHk3SZh/cQDRajiplhzSm8dv7c/iGYze+A
-         Ck5x0+oJUoPtpQxvd3jRBZFZB0hpMUz8ESIJKRkV6zcy003xk0PADw2zXvvLE3ukXn2R
-         Cqpg==
-X-Gm-Message-State: AOJu0Yzz6xJiWILOmHDaduM2gcmnUZZe1qIJ7LNEAYoGRCEJ5mXfu3JS
-	25emQC4m2gmmgJcBfAiyu3dHfx4M2b22VSAo8l9c5IHTPNr/c5K6
-X-Google-Smtp-Source: AGHT+IFrezsfR3ZUFYCsjd3IteHZ8Q9Kx3xJByT+pvxVb2EZlj0Kj4RCrKcGYQOuxSTmjdUAGB7fRg==
-X-Received: by 2002:a05:6a20:e115:b0:19c:6a60:b433 with SMTP id kr21-20020a056a20e11500b0019c6a60b433mr6774647pzb.3.1707332283658;
-        Wed, 07 Feb 2024 10:58:03 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWYuIp9BWufSitnIyIH4En+BA2qY7vSL4td8JDn4aiFmRGgjot/RSULtT7k/Qkvi9ei3uqUbAaBcfR5tRF0kTpUuID7lLqJH0FlPyEeXUnrLUlaRaA0L8m1ntPvwljRgOHp2unUl7Y0rfKs3UD8AsiBblTlEjMyFd/id75DwqTdj54ZYyAobf7hR8+V6x/DRigcFnS09vLtx6RfQp7lH7n8AVpDQtpBYQ0hsOZsAdFQdDt2vx819zc0o+n78DNtg7NwRzgmCGidM+b4zTCmNhjnay+e4Yhrr21bvR5SjXH7Time5rpFw91/etESICon0Q/iQs/tNjJH1EXYiAsY1YJPSa0XpSCirC3b393y0/N98+/j/ljLVVRbmnxrDdM=
-Received: from localhost ([2620:10d:c090:400::4:3c45])
-        by smtp.gmail.com with ESMTPSA id m4-20020a632604000000b005dbe22202fbsm1984724pgm.42.2024.02.07.10.58.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Feb 2024 10:58:03 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date: Wed, 7 Feb 2024 08:58:01 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>,
-	Linux PM <linux-pm@vger.kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>, Naohiro.Aota@wdc.com,
-	kernel-team@meta.com
-Subject: Re: [PATCH v1] PM: sleep: Restore asynchronous device resume
- optimization
-Message-ID: <ZcPSuUBoL_EDvcTF@slm.duckdns.org>
-References: <CGME20240207103144eucas1p16b601a73ff347d2542f8380b25921491@eucas1p1.samsung.com>
- <10423008.nUPlyArG6x@kreacher>
- <708a65cc-79ec-44a6-8454-a93d0f3114c3@samsung.com>
- <CAJZ5v0hn=KgaWn9pwtLsH2a8n61BNxzb1xrNoxUfEi3o9OAZGw@mail.gmail.com>
- <4a043533-009f-4db9-b107-c8374be28d2b@samsung.com>
- <CAJZ5v0hDmwaFEtLc8yDc4cXn2wODXAqATe0+_Hpm9QPODUPMQw@mail.gmail.com>
- <ZcOyW_Q1FC35oxob@slm.duckdns.org>
- <2f125955-8c7c-465c-938c-8768f7ca360b@samsung.com>
+	s=arc-20240116; t=1707333182; c=relaxed/simple;
+	bh=mrBbjhTnXeyV6fjV83s22Ro95nfA5WuWbc6HKUQTVrM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=j++aIRA9daJ1bsDfPA68OYEC1bLsCPPx+5gy0yQkToypzbl3iJN+mQ7dT2b8WTHwPX0NAgJ/E954uU4gprpuSjQeiSvyPIRQC5E5AaUTo5p+ZY8HF2TgyutT6uAv4+9e6PZpUcOvxJSsWIvhzHbXPm5f048tC3qXbS/9BDR4XgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
+ id f148895491a4f1fa; Wed, 7 Feb 2024 20:12:51 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id B4C9D669B2E;
+	Wed,  7 Feb 2024 20:12:50 +0100 (CET)
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: Gregory Greenman <gregory.greenman@intel.com>,
+ Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+ Kalle Valo <kvalo@kernel.org>, Johannes Berg <johannes.berg@intel.com>,
+ linux-wireless@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+Subject: [PATCH v1 0/3] iwlwifi: mvm: Thermal management fixes
+Date: Wed, 07 Feb 2024 20:08:18 +0100
+Message-ID: <1892445.tdWV9SEqCh@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2f125955-8c7c-465c-938c-8768f7ca360b@samsung.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrtddvgdduudelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgeffhfdujeelhfdtgeffkeetudfhtefhhfeiteethfekvefgvdfgfeeikeeigfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeelpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepghhrvghgohhrhidrghhrvggvnhhmrghnsehinhhtvghlrdgtohhmpdhrtghpthhtohepmhhirhhirghmrdhrrggthhgvlhdrkhhorhgvnhgslhhithesihhnthgvlhdrtghomhdprhgtphhtthhopehkvhgrlhhosehk
+ vghrnhgvlhdrohhrghdprhgtphhtthhopehjohhhrghnnhgvshdrsggvrhhgsehinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqfihirhgvlhgvshhssehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=9 Fuz1=9 Fuz2=9
 
-On Wed, Feb 07, 2024 at 07:55:51PM +0100, Marek Szyprowski wrote:
-> On 07.02.2024 17:39, Tejun Heo wrote:
-> > On Wed, Feb 07, 2024 at 12:25:46PM +0100, Rafael J. Wysocki wrote:
-> >> The other one is that what happens during async resume does not meet
-> >> the assumptions of commit 5797b1c18919 (for example, it can easily
-> >> produce a chain of interdependent work items longer than 8) and so it
-> >> breaks things.
-> > Ah, that's fascinating. But aren't CPUs all brought up online before devices
-> > are resumed? If so, the max_active should already be way higher than the
-> > WQ_DFL_MIN_ACTIVE. Also, are these multi node NUMA machines? Otherwise, it
-> > really shouldn't affect anything. One easy way to verify would be just
-> > bumping up WQ_DFL_MIN_ACTIVE and see what happens.
-> 
-> I've increased WQ_DFL_MIN_ACTIVE from 8 to 32 and all the system 
-> suspend/resume issues went away. :)
+Hi Everyone,
 
-Ah, okay, that's surprising. Lemme look at the code again. I gotta be
-missing something.
+There are a few thermal management shortcomings in the iwlwifi driver that are
+addressed by this series.
 
-Thanks.
+First off, the fw_trips_index[] array field in struct iwl_mvm_thermal_device
+is only populated and never read, and the code populating it has problems,
+so patch [1/3] removes it.
 
--- 
-tejun
+Second, iwl_mvm_thermal_zone_register() populates the trip table after passing
+it to thermal_zone_device_register_with_trips() which is too late, because it
+can get used before it is populated.  It also may as well use THERMAL_TEMP_INVALID
+as the "invalid temperature" value.  Both these issues are addressed by patch [2/3].
+
+Finally, iwl_mvm_send_temp_report_ths_cmd() accesses the trip tables used during
+thermal zone registration directly in order to obtain the current trip point
+temperature values, which is not guaranteed to work in the future, because the
+core will store the trips information in its own copy of the trip table - see
+this patch series:
+
+https://lore.kernel.org/linux-pm/2728491.mvXUDI8C0e@kreacher/
+
+If possible, I'd like to route the $subject series through the thermal tree,
+it is requisite for the above one.
+
+Thanks!
+
+
+
 
