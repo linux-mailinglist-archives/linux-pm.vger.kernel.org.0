@@ -1,78 +1,94 @@
-Return-Path: <linux-pm+bounces-3557-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3558-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D840884CEE1
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 17:30:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07C7384CF1D
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 17:40:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3D6C8B248AE
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 16:30:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B86C428E237
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 16:40:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A8E01E532;
-	Wed,  7 Feb 2024 16:30:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4497A5A10B;
+	Wed,  7 Feb 2024 16:40:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="A2fFEHzd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="atUuRV+3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D2A41E498;
-	Wed,  7 Feb 2024 16:30:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A91CF823AF;
+	Wed,  7 Feb 2024 16:39:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707323427; cv=none; b=LxPkpXOUR1MladWZBBctQurC8/KldDri/h9oEYLIHE4iKdY/R5A25unwYjO3CsBLkNTwyuUxqOXyk5QAVCQwH0uQGMuN+hpRIRI/hoeq1teJ3gA4nhTElMGIFMnPo5EEgI8p7Q/fp3QXy391C24mo5rBT91JAKUttVUFVRrBsLY=
+	t=1707324001; cv=none; b=I3N0itenE79l4XpxD3xGlBePSHuN/Ml7p8wG0mXRs0f5w2f8zpmSCIEMcuGb992ZQJiGw1nys1hWlcQ1BqJPwYl6C8rqU96uzpfORQK0+fEMZb5T2Rk0ZttNs9yR4gqaZ2Erd3+ruMKcK0r6mvP+AylI6b/YMLTeMUvQuEaOlRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707323427; c=relaxed/simple;
-	bh=Y3MiFi68RsW2/1W+DBqh4ihCSs9a/UvoIieVZEb0uLk=;
+	s=arc-20240116; t=1707324001; c=relaxed/simple;
+	bh=HytXVEy+ANJziuLYRMygHMgvK7XUKozrB1ii63nKIDI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CAXhMiDpv5SRsABC1FETBx8GwClreX8ok8Cft5iIyphY/HtbgBdyLlnSPZ8/ztBJcoeTRmF76yC+c/3wzk9ocwAnQdR04BhpYdHjZeAj6BHheaEx1x47UnNua5/GsPr7F9yHibvm7x/mJtkoE3odDIP1mxwsqOmc6TYbpQUj+T8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=A2fFEHzd; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=4QIMtO4mEbZ+/EroEk3hCpatB1zGAhkEKqF30slxxyQ=; b=A2fFEHzdmvO0xzVPZ6/FZzSslZ
-	EonrbHtSYj15PeEUv4eTqczy9L+I20OUpaZmadF/jPn/5PY4Jw+6BjtPnVCb2pjR8PIdU8vi3Vkaq
-	mMIVedT5tMGssphNmjCtLGOw0w9F2Gcdk2qVJPv2FPfR3Xw4jeADa3R7Z8crhg4XuXSQFNroJV5PD
-	Ff8CCMy6LsLixGmx8kBcDZmEpEQB09jXTscxD8aTvgQuun4jntr9Fv3qEwk5R04yaupxn4yPNyQNL
-	xVh4Y1WHDAhVHFinyCtYBheNpav4SnU/R9qLPImA0la1mkHZ9ob/eW8Cmfz/JuN4NAGzEEh0JzbZK
-	v1DQs8Lg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:42404)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1rXkoH-0003Ta-2X;
-	Wed, 07 Feb 2024 16:30:05 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1rXkoB-0004im-CW; Wed, 07 Feb 2024 16:29:59 +0000
-Date: Wed, 7 Feb 2024 16:29:59 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Stefan Eichenberger <eichest@gmail.com>,
-	Amit Kucheria <amitk@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Zhang Rui <rui.zhang@intel.com>, Josua Mayer <josua@solid-run.com>,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org, manuel.aebischer@netmodule.com
-Subject: Re: [PATCH 3/3] arm64: dts: armada-ap807: update thermal compatible
-Message-ID: <ZcOwB5xShhRoX5yh@shell.armlinux.org.uk>
-References: <ZIxMYXDCTB7IvsDk@shell.armlinux.org.uk>
- <E1qA7yZ-00Ea50-OC@rmk-PC.armlinux.org.uk>
- <ZcOsjRzE8V73wNtT@eichest-laptop>
- <13ab003d-7449-4d6f-861a-fa2d0c3f4ad2@lunn.ch>
+	 Content-Type:Content-Disposition:In-Reply-To; b=EX5l8Lw8K7S8U9tK9Z/SB4olsKVYWanGVJqNLEDXB7AMe8MnW5sPJfKN0B9pieU5QDyJya8hHYYxG4UiX0fmSe8a9uq5mMFz2bJcs2zEMCL8Hh/p9iiZA/VlR+/ev7P/fQmdybBMAYhusYzacTFGd4rN6MwCYm15lz4aAv7RPw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=atUuRV+3; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6e053b272b0so576707b3a.1;
+        Wed, 07 Feb 2024 08:39:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707323999; x=1707928799; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j8KJtp77wlYWq0w1wOKWzusn/Uo4anw6GXXyl6LfPT0=;
+        b=atUuRV+3tAVwZVHXkydtwEXoqdPUySuMeX3rqfujh6WgMqVhEZc1iMPAaR/NvIvfir
+         Xn0fFFraLNmLReNGoWfoRQtuulWiXXHxdrEqJ7Zlj7FMwWHWTFh/DjLYae1feOEMD7Nx
+         ipVPTftUjkIUPSE1VMXGqs3h6HpL8eSpVbMSrx37MNcJlAmL9sabFSvgfdNMrN8FbwtE
+         qcdSQOWlCrkE1mwSNqYFKivohXr3AgfrByKmHQhUrSBOxoJLDsi3yP4oX4Utvv2oGBvF
+         PFrIpn1ab1dHKQ1zMRm5Elo68GYlKgBs4tAur9LZuKmbAudnDBFO/UFgg4WNaMg7OA+2
+         k/oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707323999; x=1707928799;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j8KJtp77wlYWq0w1wOKWzusn/Uo4anw6GXXyl6LfPT0=;
+        b=I+PPYPNGOIBseNlcfezapkinnc5XLMDScAJCNuU4tC7T1L0DFZYQaVJvL/SotwUwJw
+         EgBYTYw6Q04A+bH4iGs9zF38/A1HH4mdIt5cvpwFfwDX0RG+WVRs30os8YJWaLAnaFa/
+         5zSfdaaZYuzd6drEj7WMka/SPUd3AZFG1oNrYjm6q5126XiTSOW4/ks+mqbv11yPAVv+
+         mOE4jjc9LEE6kvrAvfgJjz6+eCnOBQaxb5PZbtaz2ahXF7WG8wInYxLmNIKeW/B0yl8r
+         7dZ4eWz5A1aolKb3pelugZi2WNcos43m8z6gHvC2+B5i84SzxAvcwrtqiW11Pohgrc0o
+         qV/g==
+X-Gm-Message-State: AOJu0YzvljgNSzYFxehkqK0pri0RQE4wVvf55seIvGyQxrK3jWCTi0Es
+	UQ94t6aMdGWdl9iZC18i/gBz1aOpXswO+TgeQBWvcRSx0gRK+28G
+X-Google-Smtp-Source: AGHT+IFAq40avHsEnwllpRS2lwsNcfUaWNOwO6yJ1fT11VX/WmuNmewsIsd/LJZGXV0o9y90rAImmg==
+X-Received: by 2002:a05:6a21:3d84:b0:19e:54bb:c816 with SMTP id bj4-20020a056a213d8400b0019e54bbc816mr5112767pzc.26.1707323998855;
+        Wed, 07 Feb 2024 08:39:58 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWQeDrFaDqEBUp+0C2KiKLzE4SzQI4acky4EP4AOVn+bZ7T2JRlqjjSB6+K2oS+35zkZVxdHtBxcJBU6Zttd2GZYKHNTxQaihLbhS+5P4wbVgNKCyX41etF6rlbFo0kaLhXbJ5g0v9PlqzQ5GOTnZC2Q1VfnNBPwkyuPRg8YvoDDlOgq/rV5HRXt7OnmcB1IpNRONgGofFyr9bMN3ffeuhxRWUPEiUtveitUTFhPtZW3v0yXi1z4kuXY94iV8Wh9HY1/nY0rfbjap3L0nmmsh4atjlFGByqtWpTka9uDLYQ1r+S3H8G9DGselOqd6zmcx8/IZRM/0S6gvAkE21vwP+T1SZK//atBPsJza4lSNdormGXH5mHwMPt4z/7s8Y=
+Received: from localhost ([2620:10d:c090:400::4:3c45])
+        by smtp.gmail.com with ESMTPSA id du4-20020a056a002b4400b006dddd685bbesm1807115pfb.122.2024.02.07.08.39.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Feb 2024 08:39:57 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date: Wed, 7 Feb 2024 06:39:55 -1000
+From: Tejun Heo <tj@kernel.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	Linux PM <linux-pm@vger.kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>, Naohiro.Aota@wdc.com,
+	kernel-team@meta.com
+Subject: Re: [PATCH v1] PM: sleep: Restore asynchronous device resume
+ optimization
+Message-ID: <ZcOyW_Q1FC35oxob@slm.duckdns.org>
+References: <CGME20240207103144eucas1p16b601a73ff347d2542f8380b25921491@eucas1p1.samsung.com>
+ <10423008.nUPlyArG6x@kreacher>
+ <708a65cc-79ec-44a6-8454-a93d0f3114c3@samsung.com>
+ <CAJZ5v0hn=KgaWn9pwtLsH2a8n61BNxzb1xrNoxUfEi3o9OAZGw@mail.gmail.com>
+ <4a043533-009f-4db9-b107-c8374be28d2b@samsung.com>
+ <CAJZ5v0hDmwaFEtLc8yDc4cXn2wODXAqATe0+_Hpm9QPODUPMQw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -81,50 +97,24 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <13ab003d-7449-4d6f-861a-fa2d0c3f4ad2@lunn.ch>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <CAJZ5v0hDmwaFEtLc8yDc4cXn2wODXAqATe0+_Hpm9QPODUPMQw@mail.gmail.com>
 
-On Wed, Feb 07, 2024 at 05:25:59PM +0100, Andrew Lunn wrote:
-> On Wed, Feb 07, 2024 at 05:15:48PM +0100, Stefan Eichenberger wrote:
-> > Hi Russell and Alex,
-> > 
-> > On Fri, Jun 16, 2023 at 12:50:47PM +0100, Russell King wrote:
-> > > From: Alex Leibovich <alexl@marvell.com>
-> > > 
-> > > Use the correct thermal coefficients for the Armada AP807 dies.
-> > > 
-> > > Signed-off-by: Alex Leibovich <alexl@marvell.com>
-> > > Reviewed-by: Stefan Chulski <stefanc@marvell.com>
-> > > Tested-by: Stefan Chulski <stefanc@marvell.com>
-> > > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> > > ---
-> > >  arch/arm64/boot/dts/marvell/armada-ap807.dtsi | 3 +++
-> > >  1 file changed, 3 insertions(+)
-> > > 
-> > > diff --git a/arch/arm64/boot/dts/marvell/armada-ap807.dtsi b/arch/arm64/boot/dts/marvell/armada-ap807.dtsi
-> > > index 4a23f65d475f..a3328d05fc94 100644
-> > > --- a/arch/arm64/boot/dts/marvell/armada-ap807.dtsi
-> > > +++ b/arch/arm64/boot/dts/marvell/armada-ap807.dtsi
-> > > @@ -33,3 +33,6 @@ &ap_sdhci0 {
-> > >  		     "marvell,armada-ap806-sdhci"; /* Backward compatibility */
-> > >  };
-> > >  
-> > > +&ap_thermal {
-> > > +	compatible = "marvell,armada-ap807-thermal";
-> > > +};
-> > 
-> > While working on some thermal optimizations, our hardware team
-> > discovered that this patch is still missing upstream. Is something
-> > missing or did it get lost?
-> 
-> Patch 1/3 had a change request. Was it ever reposted with the
-> requested change?
+Hello,
 
-I don't think so, it's just another patch series of many that I have
-that's basically low priority, and other stuff probably overrode it
-and I then forgot about it.
+On Wed, Feb 07, 2024 at 12:25:46PM +0100, Rafael J. Wysocki wrote:
+> The other one is that what happens during async resume does not meet
+> the assumptions of commit 5797b1c18919 (for example, it can easily
+> produce a chain of interdependent work items longer than 8) and so it
+> breaks things.
+
+Ah, that's fascinating. But aren't CPUs all brought up online before devices
+are resumed? If so, the max_active should already be way higher than the
+WQ_DFL_MIN_ACTIVE. Also, are these multi node NUMA machines? Otherwise, it
+really shouldn't affect anything. One easy way to verify would be just
+bumping up WQ_DFL_MIN_ACTIVE and see what happens.
+
+Thanks.
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+tejun
 
