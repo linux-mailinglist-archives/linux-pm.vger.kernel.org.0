@@ -1,215 +1,131 @@
-Return-Path: <linux-pm+bounces-3571-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3572-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98EAD84D564
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 23:08:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB85784D571
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 23:09:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 517F728810C
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 22:08:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7EF561F2B5CD
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 22:09:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B22C12A161;
-	Wed,  7 Feb 2024 21:31:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0E1F12AAC7;
+	Wed,  7 Feb 2024 21:35:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="LYKXjOMh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TjDM162x"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C058F12B146
-	for <linux-pm@vger.kernel.org>; Wed,  7 Feb 2024 21:31:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FDDE12882A;
+	Wed,  7 Feb 2024 21:35:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707341466; cv=none; b=abcqmUiNF4MHCtWk4+bgJSB3+GFeK6Jw86XN23vbYezNr++8Dk9MKaIBYAp8GU4xGOxkOXN+3N/e0cHjs5XScOIyXeg1au5guanivmX2P2S2XKp5+sfrXlr5Ff2Ykgi/spLM45H7H7rpLQ83gBM62+G9BBV4iJRQgbg5G6AKD3g=
+	t=1707341759; cv=none; b=dt/TnL7sasXfvo360JDOBrj0eSf8u70r+eZk/YkvTarykBHmjrSKWB6VRJ9CdDzwWb1k0F3qE+xophgl0QfrZOP5n8PbgabRoRWMzky9JHguNT7ViVyRgHw7hRf2eCguoEYeiL/otS1Ogh3gSeINzRH14L9k6PR5CAW06NfhAH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707341466; c=relaxed/simple;
-	bh=cdJe1ztU6E5GZI3pna9qPmlOhh2zb+xFkuJpyM7H3KU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=pdsCjyXHyGBAjW9ndmpieumgdzjVXz7eWOnDR7KmImdiwFGZ0MUtNjilKyDIgRhsITrMKTuKD0F9M0JlUEXerlDFHeMrVo7iGLI/otiqtzYaDdnM9p5F7epnc46O66Lcuisk402xjmTRIlGYGF5Y18MWVbmiVIOVxecPGvsgio4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=LYKXjOMh; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20240207213100euoutp0184c16df38b467bdbf32be2f04eb1af23~xsgM6Osag0350703507euoutp01z
-	for <linux-pm@vger.kernel.org>; Wed,  7 Feb 2024 21:31:00 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20240207213100euoutp0184c16df38b467bdbf32be2f04eb1af23~xsgM6Osag0350703507euoutp01z
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1707341460;
-	bh=giEsucpdNlnWSHysV0Xbof/QdmgFW+LMKr4piMpm4aQ=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=LYKXjOMh89zCve+4r0IWw/2xrPj4B0xDYxsIb2ihkIPg6FbKz7tTaWrsz1rQEovri
-	 c9KVNfKVwVH7zH6CiCxORINfhe+mytFH4r3JV/abmSZKsmRJubazpu2JCoakslKXcl
-	 5CM8bL+hmOgBoYBWsy3U23m5+wVxcLLffTnPoPAc=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-	20240207213100eucas1p18ff344f47d25a7d13a51048eb1945f47~xsgMg8qZN2313223132eucas1p1s;
-	Wed,  7 Feb 2024 21:31:00 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-	eusmges3new.samsung.com (EUCPMTA) with SMTP id 67.46.09552.496F3C56; Wed,  7
-	Feb 2024 21:31:00 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20240207213059eucas1p10a237b3b9208eae12cd75afb55a3e071~xsgLb7sc21776717767eucas1p1i;
-	Wed,  7 Feb 2024 21:30:59 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-	eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20240207213059eusmtrp100bb07f68e681f3b18b1a9aaa030f9a4~xsgLWX7uR1255812558eusmtrp1v;
-	Wed,  7 Feb 2024 21:30:59 +0000 (GMT)
-X-AuditID: cbfec7f5-83dff70000002550-9d-65c3f6948ac3
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-	eusmgms1.samsung.com (EUCPMTA) with SMTP id D3.FF.09146.296F3C56; Wed,  7
-	Feb 2024 21:30:58 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20240207213058eusmtip122feeca1207a4fa13dd66b3a6b1a7c9a~xsgKjtXA03032030320eusmtip1V;
-	Wed,  7 Feb 2024 21:30:58 +0000 (GMT)
-Message-ID: <b4ceab79-3208-419b-9a79-f34540db3f70@samsung.com>
-Date: Wed, 7 Feb 2024 22:30:58 +0100
+	s=arc-20240116; t=1707341759; c=relaxed/simple;
+	bh=Hi8WKTB2SHPguJc94yPFvuzcB+jOfKYMDIOG7OJiqG0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hJXIQ70XmUzZV9LIfAYv+lRuCv6aQMLrl5SIwWKUAbHfq2RzpDefT96Pz5xVTqitPmHRvPs8pnfURaedzR4IaT0FCtcWZMmaAw9F7Ryr896snDquuUdzTm64UlV4hnr/J4InYFWQJkv9ykmWRg5LuNKZkf1qDzDiXV+RXctK/1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TjDM162x; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1d7354ba334so9442885ad.1;
+        Wed, 07 Feb 2024 13:35:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707341756; x=1707946556; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BEz0l2Yktui+FbUn+gXIBN0iRKIGqS5+WthaqhNu9Zo=;
+        b=TjDM162xmRUPmFwQaJLmu+t4MZS/IKG2kEDrNkvAaIKeuSSmCToJIDsYycQcopvx8w
+         hWcTnjtPixuptmvnS7R/4v26iINH8EXkclrDV2HOdd35JhqKv+SE5gBvctE/eV8T8sbn
+         opK8fMymnbp5eEzSRBnasF6Ki6H8aY0OHIAFtgvoNHSgAEdYHsFDZkXxjf+MCam3Mpoq
+         S8Z0YoFAolnj0uDsCOae2I41lvCICbsJdmVsqDRK/NjxCJgyGBhddK+tFL7Ao2R+VQp2
+         cnmAqL9aJcD9FGb9m+LHjChV1aYivwQvLSSFBiDav6Ubd6vtA36iF4kemYI8GOUgpGY1
+         HQGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707341756; x=1707946556;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BEz0l2Yktui+FbUn+gXIBN0iRKIGqS5+WthaqhNu9Zo=;
+        b=vDlMsG7T2ZrtcQcD6xga0/KMY4wLQlbBZefPAwJ8rbac+k8yO6mARa2LOhmVstEcCO
+         Aidn2qa16oDywWuAOw0pFz9t2VaA1j7vNR6ZGAPEdgx7QUdmaZDXhwxi8z70eflFD8T5
+         7sZXUj0eP0ZAgnfbMqwuetPM3mzv1XKKex48Bnnf03iwsIzEmBMIU1CZJ9cH6UYmlc6W
+         qwuHOseawh9aaZsP4MSWLthducy4y3X8vTF9T3KGbPjop/FeA35upDUhCmRrmo8MyzEt
+         s1gEcodZGj6J9dCmFGkSVfZJEjLLmLcTLggUzMARZN9k/6YlPvhYNO5C01yQ0doZROWq
+         TtHw==
+X-Forwarded-Encrypted: i=1; AJvYcCVzNFKkLVe8MMLH+7R+vJjEBxyxyUxUOwLW1F71Q/QTCbVpgrAp8WSe//dGeWFXtpiF9Omt/lJlUaTiBfq3/SVYexVHqB8+flrGzsExJRxd5qJup4ciTxFb/5QntqpRl6N2eMKivyU=
+X-Gm-Message-State: AOJu0YwFVJAlUSDAMlNkAW3TzsG3HxYhrBd3ChYE1GAs9p6Wu3+KdINs
+	u+TuA5A/Aws5jZoJaA14B2jlgJ0eNLKVusZi2MUJjwIN2hs4y8iI
+X-Google-Smtp-Source: AGHT+IHlW28ss/Xeqx89EIojs4+hQi1/0sypdExhbT0Arg+HXWNUfkHvwwm7hcOamuzrJqrnLTlR+Q==
+X-Received: by 2002:a17:903:2582:b0:1d9:c37d:7182 with SMTP id jb2-20020a170903258200b001d9c37d7182mr5692295plb.53.1707341756543;
+        Wed, 07 Feb 2024 13:35:56 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCULypFOwtRQarob0m/v0WdCZw8KY9+25kXEnP14XY3Wd7Y7G/k59LIoEvBuZ+oVTj8nnVxkU4EjItTcrVpQz5p6kdEQwkEGq+T4jQUG6xg43o/HgBJetk5qWsRIeTR3OrUdeAefMtRUVRNTyyPyCpU0Q5cGjDZfIY6aQ/Gx8ZHnF0kKMhy0MLwifBBmw2BYlTe0Dq+RjiMN7xuUesiyWE7Ww5+ZgE2rZ0zoWmAmcQKEVQ9Q6814tKQpkB8MmvMGM4n+LLYzN+7W+oyoiencN1GJ/tvWW+FN/k3kpGCAD0YZOAWWOTvlESFgqxdEE6UlVh0GdLgmiJw7AOgvBdmH6PRkSbmCyrsW16wdZB/by5gLN8CSJLuhB/r3tj4UKPo=
+Received: from localhost ([2620:10d:c090:400::4:3c45])
+        by smtp.gmail.com with ESMTPSA id w13-20020a170902d3cd00b001d8d71b8807sm1953042plb.97.2024.02.07.13.35.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Feb 2024 13:35:56 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date: Wed, 7 Feb 2024 11:35:54 -1000
+From: Tejun Heo <tj@kernel.org>
+To: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	Linux PM <linux-pm@vger.kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>, Naohiro.Aota@wdc.com,
+	kernel-team@meta.com
+Subject: Re: [PATCH v1] PM: sleep: Restore asynchronous device resume
+ optimization
+Message-ID: <ZcP3uiapKGZqw0q5@slm.duckdns.org>
+References: <10423008.nUPlyArG6x@kreacher>
+ <708a65cc-79ec-44a6-8454-a93d0f3114c3@samsung.com>
+ <CAJZ5v0hn=KgaWn9pwtLsH2a8n61BNxzb1xrNoxUfEi3o9OAZGw@mail.gmail.com>
+ <4a043533-009f-4db9-b107-c8374be28d2b@samsung.com>
+ <CAJZ5v0hDmwaFEtLc8yDc4cXn2wODXAqATe0+_Hpm9QPODUPMQw@mail.gmail.com>
+ <ZcOyW_Q1FC35oxob@slm.duckdns.org>
+ <2f125955-8c7c-465c-938c-8768f7ca360b@samsung.com>
+ <ZcPSuUBoL_EDvcTF@slm.duckdns.org>
+ <ZcPelerpp3Rr5YFW@slm.duckdns.org>
+ <b4ceab79-3208-419b-9a79-f34540db3f70@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] PM: sleep: Restore asynchronous device resume
- optimization
-Content-Language: en-US
-To: Tejun Heo <tj@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki"
-	<rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, Ulf Hansson
-	<ulf.hansson@linaro.org>, Nathan Chancellor <nathan@kernel.org>, LKML
-	<linux-kernel@vger.kernel.org>, Stanislaw Gruszka
-	<stanislaw.gruszka@linux.intel.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
-	Naohiro.Aota@wdc.com, kernel-team@meta.com
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <ZcPelerpp3Rr5YFW@slm.duckdns.org>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SbVBMYRT23rv37q21ubboTD52ZpUwbDWMuWiayHCHMWgyZgzD0m2L2szu
-	RvqRJaTEhCI7ZMcIoexsykd2raUWsehjSzbJV2G2mVQUE9pu6N/zPOc85znnnZfCJVYigEpQ
-	aTm1SpEoI70FFdX9z2blfbvPhea8FjH5JZUYY3lxlWTqbp8mme7DDxBz1F5GMJnFH0jmTE8+
-	zjypqSWYrjtGxPy4WIUYe8naSBF7S98iZE2Xs0jW5bxDsoWPVrOOF6ns9YZMAdttmsxmWg9h
-	q6h13uGxXGLCDk4dErHJO77g5RVse9P41E97+pAOZfhmIy8K6Dlw/vs3lI28KQl9CUGn48gw
-	6UFQ+LiD4Ek3guPOAeFfi/HdJ5IvXETQ3PEV40kXgtLCp5inS0xHQI6rHXmwgA6EPTVFiNfH
-	wqNT7wUePI6WQmtzwdBUXzoGvjytIjwYp/2h+f3ZoTl+9CSoP9E2tBNO63AwFhUPGUg6DLLd
-	2aQHe9EhcPd3OcmbpXDDfRr3GIA+5AXtZW9xfu/FYLX0Dd/gC5/t14fxRKg5niPgDZkIDD9b
-	MZ7kItC1NyO+awG4HD8GI6jBiOlw7XYILy+E/eeNhEcG2gea3GP5JXzgWMVJnJfFcPCAhO+e
-	Cnp76b/Ye89r8Vwk0494F/2I+/UjztH/zzUgwWXkz6VokpScZraK2ynXKJI0KSqlfEtykgkN
-	frKaX/bem+jS5y65DWEUsiGgcJmfeO5NKycRxyp2pXHq5I3qlEROY0MTKIHMXxwUK+UktFKh
-	5bZx3HZO/beKUV4BOkzn6w6Iypsv7f/yOip98Ya4oGpn1RJprpzW+FU2rE1o3XtDuOaxLKN3
-	TaS2L6+63DQt3m0ON6Yt9bE861dRJwhnXMKB0pBdkJ8emmqpEndFh3WQQsyye2tw0GGXOtB2
-	d+bmRfZVuUutWBOqa5A/XHcw40PK74LJK0tmt000miOTtQGisk5R98kVsU5HWla6cBz7tmI/
-	k4X3hE8i5nWW3Vu+7V3RguBiYv2sr28+Pm+cYZCaXxnMyjZtnXKMrWVftClOcjSo9RxCV1Yq
-	w0QFMQOLItymUdKWI3GNAx3BF3yiRzsqe4/Ft5XXNkwJDHWtXla8MEO3zBoVY66XG/a+kgk0
-	8YqwGbhao/gD4WFSkNMDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrAIsWRmVeSWpSXmKPExsVy+t/xu7qTvh1ONXh028Ri6trdTBb7Lq5h
-	s7i8aw6bxefeI4wWE49vZrVoX/mUzWLul6nMFmdOX2K1+LhnA6PFr+VHGS2Orw134PbYOesu
-	u8emVZ1sHneu7WHzmHcy0OPcxQqPLVfbWTw+b5LzaD/QzRTAEaVnU5RfWpKqkJFfXGKrFG1o
-	YaRnaGmhZ2RiqWdobB5rZWSqpG9nk5Kak1mWWqRvl6CXMePmaqaCG2IVLxt/MDYwNgt3MXJy
-	SAiYSGx4/JINxBYSWMoo8Wp5OURcRuLktAZWCFtY4s+1Lqia94wSD24rg9i8AnYSPXeeM4LY
-	LAIqEo2nlzJCxAUlTs58wgJiiwrIS9y/NYMdxBYWCJF4ffYo2ExmAXGJW0/mM4HYIgKyElem
-	PQTq5QKKNzFLLP23iwnEERKYwSKxunsV2CQ2AUOJrrcQV3AK6Evs/7+VDWKSmUTX1i5GCFte
-	YvvbOcwTGIVmITlkFpKFs5C0zELSsoCRZRWjSGppcW56brGhXnFibnFpXrpecn7uJkZg1G47
-	9nPzDsZ5rz7qHWJk4mA8xCjBwawkwmu240CqEG9KYmVValF+fFFpTmrxIUZTYGhMZJYSTc4H
-	po28knhDMwNTQxMzSwNTSzNjJXFez4KORCGB9MSS1OzU1ILUIpg+Jg5OqQamKaen7J8nPTPE
-	/WTUbeWauXkigbOkNG4/077rF+d8QSeDVeRYwiuLtTP7W0I26ubFVCbbpT+btvbGtAZVY+M1
-	qx8qzNuifK/t1YPz51Z84ub1y2DcK31LizPA5fHbT9ej+KVOr3rB/bA+dYORsuRd7ZT7oU+O
-	rjvfd8zl9V5nQW1Fj/W/y6u+XEvcLRB91PqwV5J1eo/zhJl+m2pqhLraF01qVLJ7yb4owGTu
-	mTjve3vr4rWFnXXibUoFfFxOXwjlk+TkFq5nZ3bf25Wde0njZ49iiYLsOuvZRd/+7Hl/KuPS
-	95al2kfzgtaEbZ3yr8ZHooJ1W5sAw+GHSd6hM541MDBvCNj6zcD9766WEzxKLMUZiYZazEXF
-	iQAmQFhQYwMAAA==
-X-CMS-MailID: 20240207213059eucas1p10a237b3b9208eae12cd75afb55a3e071
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20240207103144eucas1p16b601a73ff347d2542f8380b25921491
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20240207103144eucas1p16b601a73ff347d2542f8380b25921491
-References: <CGME20240207103144eucas1p16b601a73ff347d2542f8380b25921491@eucas1p1.samsung.com>
-	<10423008.nUPlyArG6x@kreacher>
-	<708a65cc-79ec-44a6-8454-a93d0f3114c3@samsung.com>
-	<CAJZ5v0hn=KgaWn9pwtLsH2a8n61BNxzb1xrNoxUfEi3o9OAZGw@mail.gmail.com>
-	<4a043533-009f-4db9-b107-c8374be28d2b@samsung.com>
-	<CAJZ5v0hDmwaFEtLc8yDc4cXn2wODXAqATe0+_Hpm9QPODUPMQw@mail.gmail.com>
-	<ZcOyW_Q1FC35oxob@slm.duckdns.org>
-	<2f125955-8c7c-465c-938c-8768f7ca360b@samsung.com>
-	<ZcPSuUBoL_EDvcTF@slm.duckdns.org> <ZcPelerpp3Rr5YFW@slm.duckdns.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b4ceab79-3208-419b-9a79-f34540db3f70@samsung.com>
 
-On 07.02.2024 20:48, Tejun Heo wrote:
-> Hello,
->
-> I couldn't reproduce effective max_active being pushed down to min_active
-> across suspend/resume cycles on x86. There gotta be something different.
->
-> - Can you please apply the following patch along with the WQ_DFL_MIN_ACTIVE
->    bump, go through suspend/resume once and report the dmesg?
+Hello,
 
-Here is the relevant part of the log:
+On Wed, Feb 07, 2024 at 10:30:58PM +0100, Marek Szyprowski wrote:
+...
+> Disabling non-boot CPUs ...
+> XXX wq_update_node_max_active: wq=events_unbound off_cpu=1 total=3 range=[32, 512] node[0] node_cpus=3 max=512
+> XXX wq_update_node_max_active: wq=events_unbound off_cpu=2 total=2 range=[32, 512] node[0] node_cpus=2 max=512
+> XXX wq_update_node_max_active: wq=events_unbound off_cpu=3 total=1 range=[32, 512] node[0] node_cpus=1 max=512
+> Enabling non-boot CPUs ...
+> XXX wq_update_node_max_active: wq=events_unbound off_cpu=-1 total=2 range=[32, 512] node[0] node_cpus=2 max=512
+> CPU1 is up
+> XXX wq_update_node_max_active: wq=events_unbound off_cpu=-1 total=3 range=[32, 512] node[0] node_cpus=3 max=512
+> CPU2 is up
+> XXX wq_update_node_max_active: wq=events_unbound off_cpu=-1 total=4 range=[32, 512] node[0] node_cpus=4 max=512
+> CPU3 is up
 
-PM: suspend entry (deep)
-Filesystems sync: 0.004 seconds
-Freezing user space processes
-Freezing user space processes completed (elapsed 0.002 seconds)
-OOM killer disabled.
-Freezing remaining freezable tasks
-Freezing remaining freezable tasks completed (elapsed 0.002 seconds)
-dwc2 12480000.usb: suspending usb gadget g_ether
-dwc2 12480000.usb: new device is full-speed
-smsc95xx 1-2:1.0 eth0: entering SUSPEND2 mode
-wake enabled for irq 97 (gpx3-2)
-usb3503 0-0008: switched to STANDBY mode
-wake enabled for irq 124 (gpx1-3)
-samsung-pinctrl 11000000.pinctrl: Setting external wakeup interrupt 
-mask: 0xfbfff7ff
-Disabling non-boot CPUs ...
-XXX wq_update_node_max_active: wq=events_unbound off_cpu=1 total=3 
-range=[32, 512] node[0] node_cpus=3 max=512
-XXX wq_update_node_max_active: wq=events_unbound off_cpu=2 total=2 
-range=[32, 512] node[0] node_cpus=2 max=512
-XXX wq_update_node_max_active: wq=events_unbound off_cpu=3 total=1 
-range=[32, 512] node[0] node_cpus=1 max=512
-Enabling non-boot CPUs ...
-XXX wq_update_node_max_active: wq=events_unbound off_cpu=-1 total=2 
-range=[32, 512] node[0] node_cpus=2 max=512
-CPU1 is up
-XXX wq_update_node_max_active: wq=events_unbound off_cpu=-1 total=3 
-range=[32, 512] node[0] node_cpus=3 max=512
-CPU2 is up
-XXX wq_update_node_max_active: wq=events_unbound off_cpu=-1 total=4 
-range=[32, 512] node[0] node_cpus=4 max=512
-CPU3 is up
-s3c-i2c 138e0000.i2c: slave address 0x00
-s3c-i2c 138e0000.i2c: bus frequency set to 97 KHz
-s3c-i2c 13870000.i2c: slave address 0x00
-s3c-i2c 13870000.i2c: bus frequency set to 97 KHz
-s3c-i2c 13860000.i2c: slave address 0x00
-s3c-i2c 13860000.i2c: bus frequency set to 390 KHz
-s3c-i2c 13880000.i2c: slave address 0x00
-s3c-i2c 13880000.i2c: bus frequency set to 97 KHz
-s3c2410-wdt 10060000.watchdog: watchdog disabled
-wake disabled for irq 124 (gpx1-3)
-s3c-rtc 10070000.rtc: rtc disabled, re-enabling
-usb3503 0-0008: switched to HUB mode
-wake disabled for irq 97 (gpx3-2)
-usb usb1: root hub lost power or was reset
-usb 1-2: reset high-speed USB device number 2 using exynos-ehci
-smsc95xx 1-2:1.0 eth0: Link is Down
-dwc2 12480000.usb: resuming usb gadget g_ether
-usb 1-3: reset high-speed USB device number 3 using exynos-ehci
-usb 1-3.1: reset high-speed USB device number 4 using exynos-ehci
-OOM killer enabled.
-Restarting tasks ... done.
-random: crng reseeded on system resumption
-PM: suspend exit
+So, the node max_active does stay at 512. The only pwq which uses min_active
+would be the dfl_pwq but I'm not sure why that'd be being used. Can you
+please post the output of `drgn -v vmlinux tools/workqueue/wq_dump.py`?
 
+Thanks.
 
-> ...
-
-Best regards
 -- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+tejun
 
