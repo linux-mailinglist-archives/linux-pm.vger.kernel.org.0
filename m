@@ -1,161 +1,117 @@
-Return-Path: <linux-pm+bounces-3542-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3541-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEEF784C9BE
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 12:40:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7593084C9BA
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 12:40:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2575FB22F25
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 11:40:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EFE38B218D8
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 11:40:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14F571AAD3;
-	Wed,  7 Feb 2024 11:40:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="C13xIH7T"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDE701B597;
+	Wed,  7 Feb 2024 11:40:15 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 885F01A587
-	for <linux-pm@vger.kernel.org>; Wed,  7 Feb 2024 11:40:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A67F719BBA;
+	Wed,  7 Feb 2024 11:40:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707306018; cv=none; b=ZBGvgOYOKZnc6IxFMJBHWm2SyL8yftp878JzdQGdNXsiewcLm0PPgFdYkcC8JssNsaOOHUlmXhf9Nvd9GV68Dx6+p7muHDgKD8EDWPr/AbdlSRD+11uV6498772xUCZRMGge8aH8P1MFxNTHgZlfZ0Y9NXHmOkWTnpA8TOHh7w4=
+	t=1707306015; cv=none; b=CKV/gds3KbB1VeZAnd5goStomhwAs4jdqdiJcMMffMNlK9Ih7HJYxwwv8+meRFaowyG57Jy9a1FvEVJJupG7yDP4FY7tq+L6v0r24Xdm0xhWDbwJLym3lDXmjTLokq2Z7Aiq0MNiicFnDCL69tokAI0M+e1gkhOc26khoiwQie0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707306018; c=relaxed/simple;
-	bh=j2hucPWlt4QARh6EpWCHZVZmiT27JEZfL87REB11SSM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DYtb30wNmWpWkqpApfbvDwJl5KnGRGaRHD/diWGdGgLD48/jS6dW0xmjF6iLXVvyuDDjcfhmFpBDA7ZQJIQG0SUJz7hdtbXpOeC5wgcvZjkCRMCyJgh3UigqPefZ549I4qXbxPDtParDum8268zxeXLFEk7xavMjsQ3oVchumQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=C13xIH7T; arc=none smtp.client-ip=209.85.128.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-5ffdf06e009so5319187b3.3
-        for <linux-pm@vger.kernel.org>; Wed, 07 Feb 2024 03:40:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707306014; x=1707910814; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YGulZCD6+zMcYgPZs795MTY99+l/D3vsNxyEgcJw+h8=;
-        b=C13xIH7T3/Dq+QRnt/A4mqHwsZtbVadlk1ady5NDtyOg0bUlIQUuj/iuVUKH/3lBx9
-         04qGXSf5tWeNVXKzot/q6rHR4zXyxR6mdCeohT/ANOKsAWHhdMn13c0Z0Ms80CG2UU/z
-         esaVWnu4eIbvfKcZj0ITfLhZkJfhtFyW0UdMr6h5jn3PfHts5RlEsf5T9JRQ/zOEZcn5
-         ar5ufFsEaa3pxzXwO3hD982agh6gjma7LJ08B9+wqRVnEHgcOOu0aSLTw1hg/gnTQ7SG
-         OBQeQggZlxzWdf5HXrFmYznwxlbynZV8iBrLkpjzsWxMAhqaUUDNoINV8LNpFo4727lo
-         7aUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707306014; x=1707910814;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YGulZCD6+zMcYgPZs795MTY99+l/D3vsNxyEgcJw+h8=;
-        b=nJWPs6BJS8SB8lMgq6P3AUBO80955f/oTQWspp7A369CpImlcxMWidX6QJnC6qaKy9
-         4HD2HLm59mA4SM0s0dzSrKSPpZqPayOxGU82M4C4u8kigM9mbvCBK7wrFon4q5Fx3WpZ
-         jsy31z7OvX2RzCfjZshlsDLJ5Xv+9Nbs5hCEdqbOeshHjOXVy+dMWlnuMCacuh2p/s8a
-         vcIqzygM3aKuD+xQ7VxhkfIy9ss0cod5ZURclzep0DUaMUSGoAJSCfPF/E+VgdLsDhbK
-         g8h8DM3N/VQrfS6UP3xqwhgkjjonjlSlwbAZ8POhxwy5tvLJs4uBrFYtPMOj1GesHgL/
-         FJWw==
-X-Gm-Message-State: AOJu0YyItNDKCgXLGCR7biB4S5F1HVbZQKnurqoyfrfkVtPLlzOhQ0+4
-	xbOEElmZHZ/9c5GSpArmOZjmlb0LmUbOj5qmLLo0OHINS7AkVMItoGzcGJb0LvOZoEM/qLLqx9x
-	4/Q+Fqiub17QilzMUDPWa79R/lZW3C5wcygwDqA==
-X-Google-Smtp-Source: AGHT+IHcJYp0WTpeyXfA6/v0KQqS2+K+bFf4BMoXAxddY+rgyz/NFtVQ2CSaJeYh5kLZrQX4DemLxRgcf++7/oAjGa4=
-X-Received: by 2002:a81:9b4b:0:b0:604:926b:94a9 with SMTP id
- s72-20020a819b4b000000b00604926b94a9mr1274134ywg.26.1707306014489; Wed, 07
- Feb 2024 03:40:14 -0800 (PST)
+	s=arc-20240116; t=1707306015; c=relaxed/simple;
+	bh=3RxULCQqTCej+mKyEk8otgcgo4i+w98owSqN13Hn9aQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kwfvRJqkzbWwuy6WLxLxIP/6t75Rj0kdrRbx4lLumYeV4DjDcs3di2Hww3fD+QIJIO3KV6K1BQJmnfEA12phl/Qu2agRf9nPuHQyROOooolMpE3t4jTn7sDPUwAleY2fxuxnt/9L6Xp+aAziOQFt4JWjrtaTAd+69QHMOlo102Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8802A1FB;
+	Wed,  7 Feb 2024 03:40:48 -0800 (PST)
+Received: from [10.1.30.29] (e133649.arm.com [10.1.30.29])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4F5803F762;
+	Wed,  7 Feb 2024 03:40:04 -0800 (PST)
+Message-ID: <8e969ccb-888d-43c8-a9a2-d46bad4bf5e8@arm.com>
+Date: Wed, 7 Feb 2024 11:40:03 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240130123951.236243-1-ulf.hansson@linaro.org>
-In-Reply-To: <20240130123951.236243-1-ulf.hansson@linaro.org>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 7 Feb 2024 12:39:38 +0100
-Message-ID: <CAPDyKFruKJhOLRLbxibF3ChDGMcJDvdOmCekRNTDYunbnKgQpw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/5] PM: domains: Add helpers for multi PM domains to
- avoid open-coding
-To: "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Sudeep Holla <sudeep.holla@arm.com>, Kevin Hilman <khilman@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Nikunj Kela <nkela@quicinc.com>, Prasad Sodagudi <psodagud@quicinc.com>, 
-	Stephan Gerhold <stephan@gerhold.net>, Ben Horgan <Ben.Horgan@arm.com>, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-remoteproc@vger.kernel.org, 
-	linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 15/23] PM: EM: Optimize em_cpu_energy() and remove
+ division
+To: Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, rafael@kernel.org
+Cc: dietmar.eggemann@arm.com, rui.zhang@intel.com,
+ amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
+ daniel.lezcano@linaro.org, viresh.kumar@linaro.org, len.brown@intel.com,
+ pavel@ucw.cz, mhiramat@kernel.org, qyousef@layalina.io, wvw@google.com,
+ xuewen.yan94@gmail.com
+References: <20240117095714.1524808-1-lukasz.luba@arm.com>
+ <20240117095714.1524808-16-lukasz.luba@arm.com>
+Content-Language: en-US
+From: Hongyan Xia <hongyan.xia2@arm.com>
+In-Reply-To: <20240117095714.1524808-16-lukasz.luba@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, 30 Jan 2024 at 13:39, Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> Rafael, my plan is queue up this series via my pmdomain tree. Please let me know
-> if you see any issues with that, especially around patch1.
->
-> Updates in v3:
->         - Added tested-by, reviewed-by and suggested-by tags. No other changes
->         have been made.
->
-> Updates in v2:
->         - Ccing Daniel Baluta and Iuliana Prodan the NXP remoteproc patches to
->         requests help with testing.
->         - Fixed NULL pointer bug in patch1, pointed out by Nikunj.
->         - Added some tested/reviewed-by tags.
->
-> Attaching/detaching of a device to multiple PM domains has started to become a
-> common operation for many drivers, typically during ->probe() and ->remove().
-> In most cases, this has lead to lots of boilerplate code in the drivers.
->
-> This series adds a pair of helper functions to manage the attach/detach of a
-> device to its multiple PM domains. Moreover, a couple of drivers have been
-> converted to use the new helpers as a proof of concept.
->
-> Note 1)
-> The changes in the drivers have only been compile tested, while the helpers
-> have been tested along with a couple of local dummy drivers that I have hacked
-> up to model both genpd providers and genpd consumers.
->
-> Note 2)
-> I was struggling to make up mind if we should have a separate helper to attach
-> all available power-domains described in DT, rather than providing "NULL" to the
-> dev_pm_domain_attach_list(). I decided not to, but please let me know if you
-> prefer the other option.
->
-> Note 3)
-> For OPP integration, as a follow up I am striving to make the
-> dev_pm_opp_attach_genpd() redundant. Instead I think we should move towards
-> using dev_pm_opp_set_config()->_opp_set_required_devs(), which would allow us to
-> use the helpers that $subject series is adding.
->
-> Kind regards
-> Ulf Hansson
->
-> Ulf Hansson (5):
->   PM: domains: Add helper functions to attach/detach multiple PM domains
->   remoteproc: imx_dsp_rproc: Convert to
->     dev_pm_domain_attach|detach_list()
->   remoteproc: imx_rproc: Convert to dev_pm_domain_attach|detach_list()
->   remoteproc: qcom_q6v5_adsp: Convert to
->     dev_pm_domain_attach|detach_list()
->   media: venus: Convert to dev_pm_domain_attach|detach_list() for vcodec
->
->  drivers/base/power/common.c                   | 134 +++++++++++++++
->  drivers/media/platform/qcom/venus/core.c      |  12 +-
->  drivers/media/platform/qcom/venus/core.h      |   7 +-
->  .../media/platform/qcom/venus/pm_helpers.c    |  48 ++----
->  drivers/remoteproc/imx_dsp_rproc.c            |  82 +--------
->  drivers/remoteproc/imx_rproc.c                |  73 +-------
->  drivers/remoteproc/qcom_q6v5_adsp.c           | 160 ++++++++----------
->  include/linux/pm_domain.h                     |  38 +++++
->  8 files changed, 289 insertions(+), 265 deletions(-)
->
->
+On 17/01/2024 09:57, Lukasz Luba wrote:
+> The Energy Model (EM) can be modified at runtime which brings new
+> possibilities. The em_cpu_energy() is called by the Energy Aware Scheduler
+> (EAS) in its hot path. The energy calculation uses power value for
+> a given performance state (ps) and the CPU busy time as percentage for that
+> given frequency.
+> 
+> It is possible to avoid the division by 'scale_cpu' at runtime, because
+> EM is updated whenever new max capacity CPU is set in the system.
+> 
+> Use that feature and do the needed division during the calculation of the
+> coefficient 'ps->cost'. That enhanced 'ps->cost' value can be then just
+> multiplied simply by utilization:
+> 
+> pd_nrg = ps->cost * \Sum cpu_util
+> 
+> to get the needed energy for whole Performance Domain (PD).
+> 
+> With this optimization and earlier removal of map_util_freq(), the
+> em_cpu_energy() should run faster on the Big CPU by 1.43x and on the Little
+> CPU by 1.69x (RockPi 4B board).
+> 
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>   include/linux/energy_model.h | 54 ++++++++++--------------------------
+>   kernel/power/energy_model.c  |  7 ++---
+>   2 files changed, 17 insertions(+), 44 deletions(-)
+> 
+> diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
+> index 689d71f6b56f..aabfc26fcd31 100644
+> --- a/include/linux/energy_model.h
+> +++ b/include/linux/energy_model.h
+> [...]
+> @@ -208,8 +206,9 @@ static int em_compute_costs(struct device *dev, struct em_perf_state *table,
+>   				return -EINVAL;
+>   			}
+>   		} else {
+> -			power_res = table[i].power;
+> -			cost = div64_u64(fmax * power_res, table[i].frequency);
+> +			/* increase resolution of 'cost' precision */
+> +			power_res = table[i].power * 10;
 
-I have now applied this to my next branch to my pmdomain tree, to get
-it more tested in linux-next.
+NIT: Does this have to be 10, or something simple like << 3 (* 8) also 
+does the job?
 
-Please let me know if there are objections to this or if any of you
-want to provide an ack/tested/reviewed-by tag, thanks!
+Although compiler these days often are clever enough to convert x * 10 
+into (x << 3) + (x << 1), and this is not on the hot path anyway, so 
+just a NIT.
 
-Kind regards
-Uffe
+> +			cost = power_res / table[i].performance;
+>   		}
+>   
+>   		table[i].cost = cost;
+
+Reviewed-by: Hongyan Xia <hongyan.xia2@arm.com>
 
