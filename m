@@ -1,94 +1,93 @@
-Return-Path: <linux-pm+bounces-3558-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3559-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07C7384CF1D
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 17:40:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98C0684CF3A
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 17:47:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B86C428E237
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 16:40:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0158A28263F
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 16:47:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4497A5A10B;
-	Wed,  7 Feb 2024 16:40:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD103823B7;
+	Wed,  7 Feb 2024 16:47:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="atUuRV+3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h9jcQgDf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A91CF823AF;
-	Wed,  7 Feb 2024 16:39:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 163DB823B5;
+	Wed,  7 Feb 2024 16:47:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707324001; cv=none; b=I3N0itenE79l4XpxD3xGlBePSHuN/Ml7p8wG0mXRs0f5w2f8zpmSCIEMcuGb992ZQJiGw1nys1hWlcQ1BqJPwYl6C8rqU96uzpfORQK0+fEMZb5T2Rk0ZttNs9yR4gqaZ2Erd3+ruMKcK0r6mvP+AylI6b/YMLTeMUvQuEaOlRQ=
+	t=1707324423; cv=none; b=Sx8/xRXb70lP8kCyM0YtZjgpXKtgQcA+RUAVMZyg/ypOwpEyHIvpJsfVaSUwSuHqICuV4nLykSyuxzZ0zNe5I3DatI3fWvTSPa0zYECNZvYwGvx7O0AsWY/JW7+aOFs+DtrnEHZALAjNTH9sY+pVRxb60uqZyG+CjhSSlvfH+Kc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707324001; c=relaxed/simple;
-	bh=HytXVEy+ANJziuLYRMygHMgvK7XUKozrB1ii63nKIDI=;
+	s=arc-20240116; t=1707324423; c=relaxed/simple;
+	bh=ow/h8HMMgjieSvpBo0RQLfojsUZLKxwQxt9Zr8Urlus=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EX5l8Lw8K7S8U9tK9Z/SB4olsKVYWanGVJqNLEDXB7AMe8MnW5sPJfKN0B9pieU5QDyJya8hHYYxG4UiX0fmSe8a9uq5mMFz2bJcs2zEMCL8Hh/p9iiZA/VlR+/ev7P/fQmdybBMAYhusYzacTFGd4rN6MwCYm15lz4aAv7RPw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=atUuRV+3; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=OgllB7QUSyatiFaG7eUI6mNNyiPP1qq0Hur0kGIpaGUNl2HQVG9pedsTs4V/G5FvRdXH5prjv0Hd5U0yJsJonZLdnbXeictBhPJ2nc13DW8gYvP1S/MaLpXUpNZPT6Eh0Et43DPoH9lyooweoJU5U6+lVpSDxR0DlVH2a86gX48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h9jcQgDf; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6e053b272b0so576707b3a.1;
-        Wed, 07 Feb 2024 08:39:59 -0800 (PST)
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3392b045e0aso556159f8f.2;
+        Wed, 07 Feb 2024 08:47:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707323999; x=1707928799; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1707324420; x=1707929220; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j8KJtp77wlYWq0w1wOKWzusn/Uo4anw6GXXyl6LfPT0=;
-        b=atUuRV+3tAVwZVHXkydtwEXoqdPUySuMeX3rqfujh6WgMqVhEZc1iMPAaR/NvIvfir
-         Xn0fFFraLNmLReNGoWfoRQtuulWiXXHxdrEqJ7Zlj7FMwWHWTFh/DjLYae1feOEMD7Nx
-         ipVPTftUjkIUPSE1VMXGqs3h6HpL8eSpVbMSrx37MNcJlAmL9sabFSvgfdNMrN8FbwtE
-         qcdSQOWlCrkE1mwSNqYFKivohXr3AgfrByKmHQhUrSBOxoJLDsi3yP4oX4Utvv2oGBvF
-         PFrIpn1ab1dHKQ1zMRm5Elo68GYlKgBs4tAur9LZuKmbAudnDBFO/UFgg4WNaMg7OA+2
-         k/oA==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LNyBJm271uKZuxLauB8cEdJcYLbaucijNIBqjeZVchI=;
+        b=h9jcQgDfoqKpS83QQgTu4HymBYIl3ImeTjXjWPPpi2VmaEK7NJjXurn5JBitTLBc+y
+         1vX1JMpCKL2KlPeVmnqyJbCLtQEvcbHsqKDlgN1w4M6dhRGcgsjl1q2YWCt//9MzxMtH
+         1ITFNFCedbr5cxMn5lLm11FiA+J5QE+Rcl92Gi4rPOv8N8JTacQrSbmq20J62f0p9u+v
+         11ExE5owH/ixdkRHvS/lIdrVU95A6nCVBPjIpXIELnLmsrePauWs4ZRLoeigtt4icM41
+         vj+8YVDRtxf81ywBh47Snc0G0b/p/icJPbEOTfrwdGdsF5Y4AXfZKof9xOYRNrNNkUhu
+         yMog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707323999; x=1707928799;
+        d=1e100.net; s=20230601; t=1707324420; x=1707929220;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j8KJtp77wlYWq0w1wOKWzusn/Uo4anw6GXXyl6LfPT0=;
-        b=I+PPYPNGOIBseNlcfezapkinnc5XLMDScAJCNuU4tC7T1L0DFZYQaVJvL/SotwUwJw
-         EgBYTYw6Q04A+bH4iGs9zF38/A1HH4mdIt5cvpwFfwDX0RG+WVRs30os8YJWaLAnaFa/
-         5zSfdaaZYuzd6drEj7WMka/SPUd3AZFG1oNrYjm6q5126XiTSOW4/ks+mqbv11yPAVv+
-         mOE4jjc9LEE6kvrAvfgJjz6+eCnOBQaxb5PZbtaz2ahXF7WG8wInYxLmNIKeW/B0yl8r
-         7dZ4eWz5A1aolKb3pelugZi2WNcos43m8z6gHvC2+B5i84SzxAvcwrtqiW11Pohgrc0o
-         qV/g==
-X-Gm-Message-State: AOJu0YzvljgNSzYFxehkqK0pri0RQE4wVvf55seIvGyQxrK3jWCTi0Es
-	UQ94t6aMdGWdl9iZC18i/gBz1aOpXswO+TgeQBWvcRSx0gRK+28G
-X-Google-Smtp-Source: AGHT+IFAq40avHsEnwllpRS2lwsNcfUaWNOwO6yJ1fT11VX/WmuNmewsIsd/LJZGXV0o9y90rAImmg==
-X-Received: by 2002:a05:6a21:3d84:b0:19e:54bb:c816 with SMTP id bj4-20020a056a213d8400b0019e54bbc816mr5112767pzc.26.1707323998855;
-        Wed, 07 Feb 2024 08:39:58 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWQeDrFaDqEBUp+0C2KiKLzE4SzQI4acky4EP4AOVn+bZ7T2JRlqjjSB6+K2oS+35zkZVxdHtBxcJBU6Zttd2GZYKHNTxQaihLbhS+5P4wbVgNKCyX41etF6rlbFo0kaLhXbJ5g0v9PlqzQ5GOTnZC2Q1VfnNBPwkyuPRg8YvoDDlOgq/rV5HRXt7OnmcB1IpNRONgGofFyr9bMN3ffeuhxRWUPEiUtveitUTFhPtZW3v0yXi1z4kuXY94iV8Wh9HY1/nY0rfbjap3L0nmmsh4atjlFGByqtWpTka9uDLYQ1r+S3H8G9DGselOqd6zmcx8/IZRM/0S6gvAkE21vwP+T1SZK//atBPsJza4lSNdormGXH5mHwMPt4z/7s8Y=
-Received: from localhost ([2620:10d:c090:400::4:3c45])
-        by smtp.gmail.com with ESMTPSA id du4-20020a056a002b4400b006dddd685bbesm1807115pfb.122.2024.02.07.08.39.56
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LNyBJm271uKZuxLauB8cEdJcYLbaucijNIBqjeZVchI=;
+        b=fPNEOCs11Syfta2XGpDIMHR4JxZesTpOuvRKFkhAlNlKO4E4jZuGm9MEfxVdemSfBC
+         Z6Dm7ng9YBBwnS9JxzU4DO6K7m/Rg4YNN3slfV1sl5scROueiWWOa/gGPS/o/wVBJQuZ
+         EHAYlnZ2zPRvfHTkIYKgEy5kFbb4uiKuK8E/qweg2QNt2d8+O+qqUtn4+aPbVYCca/OW
+         FW8gMQBovaEWDihHQHlZZo2h5IvHHzcwelcM2OXMowjkxdbEqm2KqPcXJ6oI4ZZpR4HD
+         yIUJOltg6iozHhvsMQYbWYjE+QVjmY8jVapfyrs1hCbU5YUyqfaJK3/DQPoLokIlKq/I
+         3l7A==
+X-Forwarded-Encrypted: i=1; AJvYcCW2hMHMxuobt3FNHtR/Idqx9bvPkUiVD4BI0rQNy7SPzsu8D6/cRXGsaY2yPrQE3raO1HP/AhWqBWTqfDPRfiVy1EwKFwPG4R37muCFqfsl7M/k7WKVNLNUy77tPY81uYhgbRkr
+X-Gm-Message-State: AOJu0YwCvzXSR0qGdutRikXrI2j643P4u0LdIpimZ6vddnF9ChNFtIhq
+	msQvDrNGrJmvJ/uNQiUVpBRDAFNiToDEjZDFkbDiSH5uXpMQ+Xfl
+X-Google-Smtp-Source: AGHT+IHLJL92TguC8sEtCjhxW9AMlDys16cKTdv7JQMHIf6bMiiMlyMp/b/AkkcDwTYaRG486wm0aA==
+X-Received: by 2002:adf:e707:0:b0:33b:153a:de12 with SMTP id c7-20020adfe707000000b0033b153ade12mr4296483wrm.13.1707324420094;
+        Wed, 07 Feb 2024 08:47:00 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWqIu/ontdqSsx+JVBhpOZoQVPeF7HGMkI1l8OZSOezAuCFfeafZ7VwFqKktb++AMgXcsfauN2GbRULJukw/yaAvAlnhgcvVWXVVW6V4rH92t7MlbwG4Yo/SQhJrk2MuVi8Ub8xt5j+XLoeH7NDOdwXMLOg0inuHedvGnYDnmrduFkJjImVzqWbUJjxZYPqApR/Fqkn0pZgGLD2BMo2kFpmgDWT7bc2jJrxDRd+8ToItzRZWloeUkYZMh8Hw8EspilGIhSZsB+rb4fdCw4TZ0Q3SFOO7waQ+c977bTHfVPWH743h4Sj+LivfDm+iIu7QwzWsmoXwWFkb/Zr49OX2/lejz64/1OfX16LTiQFVDWyWcVZjJuBQiiYMlZGhgtZnUMXEEGnHsyYlfdq9JvNaud0K3qSfB0s1NT+rnBswtQkUzOUMdQxFTMxHTruoEifT0abtMOoJAsuUBwNLjCg9HEd+FJgkzevHXtCFsofNd8zaQHP8yfVf2VeRED7YLZIMnUXHFaOgdkyZW+1GX7pJ+D6PbcxGGTG94UxlKXE4c26qBVHzRQ=
+Received: from eichest-laptop ([178.197.195.228])
+        by smtp.gmail.com with ESMTPSA id n15-20020adff08f000000b0033b1c321070sm1871607wro.31.2024.02.07.08.46.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Feb 2024 08:39:57 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date: Wed, 7 Feb 2024 06:39:55 -1000
-From: Tejun Heo <tj@kernel.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>,
-	Linux PM <linux-pm@vger.kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>, Naohiro.Aota@wdc.com,
-	kernel-team@meta.com
-Subject: Re: [PATCH v1] PM: sleep: Restore asynchronous device resume
- optimization
-Message-ID: <ZcOyW_Q1FC35oxob@slm.duckdns.org>
-References: <CGME20240207103144eucas1p16b601a73ff347d2542f8380b25921491@eucas1p1.samsung.com>
- <10423008.nUPlyArG6x@kreacher>
- <708a65cc-79ec-44a6-8454-a93d0f3114c3@samsung.com>
- <CAJZ5v0hn=KgaWn9pwtLsH2a8n61BNxzb1xrNoxUfEi3o9OAZGw@mail.gmail.com>
- <4a043533-009f-4db9-b107-c8374be28d2b@samsung.com>
- <CAJZ5v0hDmwaFEtLc8yDc4cXn2wODXAqATe0+_Hpm9QPODUPMQw@mail.gmail.com>
+        Wed, 07 Feb 2024 08:46:59 -0800 (PST)
+Date: Wed, 7 Feb 2024 17:46:56 +0100
+From: Stefan Eichenberger <eichest@gmail.com>
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc: Andrew Lunn <andrew@lunn.ch>, Amit Kucheria <amitk@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Zhang Rui <rui.zhang@intel.com>, Josua Mayer <josua@solid-run.com>,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org, manuel.aebischer@netmodule.com
+Subject: Re: [PATCH 3/3] arm64: dts: armada-ap807: update thermal compatible
+Message-ID: <ZcO0AAzK+P8sYHdX@eichest-laptop>
+References: <ZIxMYXDCTB7IvsDk@shell.armlinux.org.uk>
+ <E1qA7yZ-00Ea50-OC@rmk-PC.armlinux.org.uk>
+ <ZcOsjRzE8V73wNtT@eichest-laptop>
+ <13ab003d-7449-4d6f-861a-fa2d0c3f4ad2@lunn.ch>
+ <ZcOwB5xShhRoX5yh@shell.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -97,24 +96,27 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hDmwaFEtLc8yDc4cXn2wODXAqATe0+_Hpm9QPODUPMQw@mail.gmail.com>
+In-Reply-To: <ZcOwB5xShhRoX5yh@shell.armlinux.org.uk>
 
-Hello,
+On Wed, Feb 07, 2024 at 04:29:59PM +0000, Russell King (Oracle) wrote:
+> On Wed, Feb 07, 2024 at 05:25:59PM +0100, Andrew Lunn wrote:
+> > > While working on some thermal optimizations, our hardware team
+> > > discovered that this patch is still missing upstream. Is something
+> > > missing or did it get lost?
+> > 
+> > Patch 1/3 had a change request. Was it ever reposted with the
+> > requested change?
 
-On Wed, Feb 07, 2024 at 12:25:46PM +0100, Rafael J. Wysocki wrote:
-> The other one is that what happens during async resume does not meet
-> the assumptions of commit 5797b1c18919 (for example, it can easily
-> produce a chain of interdependent work items longer than 8) and so it
-> breaks things.
+I forgot to mention that the other patches were applied, so it is only
+the one missing without change request.
 
-Ah, that's fascinating. But aren't CPUs all brought up online before devices
-are resumed? If so, the max_active should already be way higher than the
-WQ_DFL_MIN_ACTIVE. Also, are these multi node NUMA machines? Otherwise, it
-really shouldn't affect anything. One easy way to verify would be just
-bumping up WQ_DFL_MIN_ACTIVE and see what happens.
+> 
+> I don't think so, it's just another patch series of many that I have
+> that's basically low priority, and other stuff probably overrode it
+> and I then forgot about it.
 
-Thanks.
+No problem at all, thanks a lot for the feedback.
 
--- 
-tejun
+Regards,
+Stefan
 
