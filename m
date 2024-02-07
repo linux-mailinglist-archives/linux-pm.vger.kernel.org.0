@@ -1,265 +1,285 @@
-Return-Path: <linux-pm+bounces-3517-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3518-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D91C784C2AD
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 03:48:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D326B84C2F9
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 04:17:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6408E1F26F1A
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 02:48:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 038601C217A1
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 03:17:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCA0DFC0B;
-	Wed,  7 Feb 2024 02:47:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07118F9E0;
+	Wed,  7 Feb 2024 03:17:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="X+ZUbVvo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k9AW5i/K"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2074.outbound.protection.outlook.com [40.107.220.74])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CD6A10798;
-	Wed,  7 Feb 2024 02:47:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.74
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707274043; cv=fail; b=kK16pzzFM3cSrWL9BTJVxr8L3PvCWMFeOL7zlKziKCW8F9Vmp+hgR+puu/UhwHdkJjoHyg1115MnMiU+sbtVGYbCMQfpM/Ak29gHywZWNl0e4WSs4H+K4d2RJmjwGcG6E2QaAcQlIWsTx8QSnh2ptETUrsY1bustSsTZxHbZ10w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707274043; c=relaxed/simple;
-	bh=vVLH9Y4avtMqsLpbArkJNPGM2pGlxgMd8pmaoIg1fvA=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=U1+nel/35XDYCd5Sy6Bff9nvbLXMY2Vxi0L5/WCDHyfsbJMYFKsoRTA/iOngPaDc5HotNCktM/9EuQXAYtptBHyNtY1bXexDiyzNnbm4MZvsrjNmFnhAw0B1fCDMq8/ym8Yh6f0SuCheimJ24C16H8GJuFVM0zD47lMwLAv23A8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=X+ZUbVvo; arc=fail smtp.client-ip=40.107.220.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=n0xI5ki0DCoBOiUJXn6fjeVBoqt2IJfIT9rJW8/K8Bbh1fWaGarpK6wWFS+YdwkoDAbPhIgk5pJ7Z/EI7gtCgCYLPIt56IAd4HIjuH1euwYCrGhm36kzDM+7SWfban8dNQTZV+YUmfzf8Ph4b2cad5AsoZyGGn3MIOKL4AN9m86DZOEtnMwp+p3OrJjtAsYFsVuU4KknyrwBQAzvKnJ619wUX6YSS4gykrb7UlAB3elEHL15Fa19gqNDd0RxHMGBzZZcGc9boNbyNIdbR0Wcp5pycFMDbQEE4qZQtZx54RYiDO3LGU+fHldBjWl4Ht0Sp4fcE0UQC8+fq7GWXyUjLQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/3wv2RIN1TAIAbuNVlpm5LnwJYzqinFJq8BTtbH0cP0=;
- b=DMagc/bWV5RfgizDNnJSAB507s557tq6ouLa9dlgDHzeVOcJLGZk4BR5bgx/cQm6vG0qXyJ6y+M8P2SOb/n3odjSg4IKPKdDypR1PuJc8vSN8UbsO8v4iQycarogkxt2tcmucG0yZlKv4NUPOgq5XV5epk7kLUSmmfKGMQXrzR3ADzW9J3GGA8tVi8rRqPegDvuc5nHE/ABvLW/ISc8acMll+pSFt4UPmCCocJhBR7DuXliARWd0V7Sc0QGUiF9/v/QjIQKvmuo5U6jQG909/Gbz7CIp7n6FK1ElpHWoTqmBxFTolbikmDwm9A55EWCYdiI3IKlzWQjlzAu/nlp9EA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/3wv2RIN1TAIAbuNVlpm5LnwJYzqinFJq8BTtbH0cP0=;
- b=X+ZUbVvo7wtqmf61jzrba5jClfwQqgz8kWpUSkF30ooZiNXXO4rd84mpUUuivcpkv6uwLBqyrafLFTAd/b5HVG0bBi1qNXwduQ++VabiXfIXW/b/ib8WBxBihEUoWdX9/0pphYoeBBNdBJkvQEEpsO87KYlNO/Llmr+xLdGQN50=
-Received: from DS7PR07CA0024.namprd07.prod.outlook.com (2603:10b6:5:3af::6) by
- LV2PR12MB5822.namprd12.prod.outlook.com (2603:10b6:408:179::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7249.23; Wed, 7 Feb 2024 02:47:20 +0000
-Received: from DS3PEPF000099DD.namprd04.prod.outlook.com
- (2603:10b6:5:3af:cafe::cc) by DS7PR07CA0024.outlook.office365.com
- (2603:10b6:5:3af::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7249.36 via Frontend
- Transport; Wed, 7 Feb 2024 02:47:19 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DS3PEPF000099DD.mail.protection.outlook.com (10.167.17.199) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7249.19 via Frontend Transport; Wed, 7 Feb 2024 02:47:19 +0000
-Received: from pyuan-Chachani-VN.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Tue, 6 Feb 2024 20:47:14 -0600
-From: Perry Yuan <perry.yuan@amd.com>
-To: <rafael.j.wysocki@intel.com>, <Mario.Limonciello@amd.com>,
-	<viresh.kumar@linaro.org>, <Ray.Huang@amd.com>, <gautham.shenoy@amd.com>,
-	<Borislav.Petkov@amd.com>
-CC: <Alexander.Deucher@amd.com>, <Xinmei.Huang@amd.com>,
-	<Xiaojian.Du@amd.com>, <Li.Meng@amd.com>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH v5 6/6] cpufreq:amd-pstate: add quirk for the pstate CPPC capabilities missing
-Date: Wed, 7 Feb 2024 10:46:15 +0800
-Message-ID: <ea6a2fcf27703d40957a53608d48813cb07f094c.1707273526.git.perry.yuan@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1707273526.git.perry.yuan@amd.com>
-References: <cover.1707273526.git.perry.yuan@amd.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1895D1CAB3;
+	Wed,  7 Feb 2024 03:17:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707275859; cv=none; b=L8NGb49feKz/1IK9dv8vq4GNErdHZKff7owqib4fWe3cPoBL3rf+3wQpDoX5CBsrqubElSnhWONf8w21VFgbHpCVrw4Hz085l6KNMoYLyrDkjMaqtlD6n8smRGbZqy+tEPmZDeXMbpnO7m9oa58lG6Dyc2tI1uq1swRKtAVOkO4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707275859; c=relaxed/simple;
+	bh=UM1c6ee1czq19GX2kBBAW2nsfxfKEYoOdX0v8dDrmiQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DBejCqHRvKykHgFGojiN/4wJEq8xHrmRJKUCgxAaRrnJlSqYyE63LWMFhZXJsL6H8UfdqqFkEUMd71ObQtcQrQIwHAfj+8xsvPKY9zPWbaSaJZg4rekWh9/eDGdznw+o8NfuuLYlSl+UexNvl8KDAzXZcD00DGjofBnmpGKbDfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k9AW5i/K; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707275859; x=1738811859;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=UM1c6ee1czq19GX2kBBAW2nsfxfKEYoOdX0v8dDrmiQ=;
+  b=k9AW5i/KUKkDH9heFfP/0sTbeZWCNIW3/8usaMV2PHHO/vTTehSM4uRu
+   i/sJ56UlQ0SWYeOPsxUroH/wbmWs3KsYIDr58iCuIlcQ8MXPlCiNVOVFS
+   kDb/OV6JjOi6eB35NLTbfGTBJEc/6zNfHrnW2mQ/eZoT2nrhRyUFbu8XX
+   /6pKIBacspw7hrIGSZgklEENIlFpvEykTsykx+2W03zF8Bn+hDcnGeGNN
+   3nQ8kNcARUv3AcHZ+/C0k+zt4NbN+qiDeF2RCD5jcRY04J9zycT+d1VhA
+   th1wxIYGqBBfy2virAW9UknT3pXqcjcizkKOiRqLp16D+TwnKVBTmHG9M
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="12256403"
+X-IronPort-AV: E=Sophos;i="6.05,250,1701158400"; 
+   d="scan'208";a="12256403"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 19:17:38 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,250,1701158400"; 
+   d="scan'208";a="1565836"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 19:17:37 -0800
+Date: Tue, 6 Feb 2024 19:18:54 -0800
+From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jiri Pirko <jiri@resnulli.us>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
+	Zhuocheng Ding <zhuocheng.ding@intel.com>,
+	Zhao Liu <zhao1.liu@intel.com>, zhenyu.z.wang@intel.com
+Subject: Re: [PATCH v2 3/3] thermal: intel: hfi: Enable interface only when
+ required
+Message-ID: <20240207031854.GC19695@ranerica-svr.sc.intel.com>
+References: <20240206133605.1518373-1-stanislaw.gruszka@linux.intel.com>
+ <20240206133605.1518373-4-stanislaw.gruszka@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS3PEPF000099DD:EE_|LV2PR12MB5822:EE_
-X-MS-Office365-Filtering-Correlation-Id: 627705a4-749d-43b0-6a81-08dc27871a87
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	niTCSLM0UbMFOhkurTIO1HsG13qaLziPkVOjZao1P2X1bKQAAQ8zWZqBQWrFuSHRZWEwCL4r+oSX82DFW1wA/xwxCt/J0eCD3Lfzp7uInBnbcuPQ8pFu5jbye7xu7tR5w7WIXjmf79ZR8nVwKZDsUesboiUWoO0qPW01kHISOEkPq3jLm3wvUmXAb0zBG4+OpDvrjoEBcXEtQm0Bhe64iRZbnMyYBNug37aD2dqDEttqQXYQU2YcasqwXWtWP1WxkBcW3w8THh6Ajkg46U1cLjhri36E36rMvetz/F5Ey6Nje5iuf3sdyJ1DfO17IyfyohQ/Bva+lxmrzrdE1KTC08aSyu5dsdbPDY1RbpPBb4LfCfLGm6on7oi79Frb+uukOeuHC1S47ooNlL0D2Mofei5w8QGBzvHkPD126lH19as/qpNWoezxnePv1lr2Hd0UqcVu2YMhWu5DL+uHoFrAOzZKDAUQcU3cvFhMWLbgbeDu+oabV7TIpacasusU+Fj+AyWSc4weBGoyDNgpnPRDOXLLCXmglloTlTBXkpXjOGLMHTccFC35JRDlTOWRunUyTuuKCO43tYNrMtSHHdJ3xsANL4bhU3WA8+0zhSmo2dKWavCxHxvPFQjlwH1gIrlfHOhvQzuHY5ZK3/KTf+q+2HZ8ITR4gvKAKh+C8jpoz9MhdSL3yCF4UQ/yZ4pNHHnyXZqLdaqaYIS/c0utuaxx6P4Eimg+St5NDKTnt8Er0OvUDetQspokXaqkbDQoU4PwZoZaA6KBJU3BRF2IH2iJQA==
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(136003)(346002)(396003)(39860400002)(376002)(230922051799003)(186009)(82310400011)(64100799003)(451199024)(1800799012)(40470700004)(46966006)(36840700001)(40480700001)(40460700003)(41300700001)(83380400001)(82740400003)(86362001)(16526019)(36756003)(70206006)(356005)(26005)(81166007)(2616005)(5660300002)(2906002)(47076005)(6636002)(336012)(54906003)(478600001)(426003)(36860700001)(4326008)(8676002)(70586007)(7696005)(316002)(44832011)(8936002)(110136005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Feb 2024 02:47:19.7355
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 627705a4-749d-43b0-6a81-08dc27871a87
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DS3PEPF000099DD.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5822
+In-Reply-To: <20240206133605.1518373-4-stanislaw.gruszka@linux.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 
-Add quirks table to get CPPC capabilities issue fixed by providing
-correct perf or frequency values while driver loading.
+On Tue, Feb 06, 2024 at 02:36:05PM +0100, Stanislaw Gruszka wrote:
+> Enable and disable hardware feedback interface (HFI) when user space
+> handler is present. For example, enable HFI, when intel-speed-select or
+> Intel Low Power daemon is running and subscribing to thermal netlink
+> events. When user space handlers exit or remove subscription for
+> thermal netlink events, disable HFI.
+> 
+> Summary of changes:
+> 
+> - Register a thermal genetlink notifier
+> 
+> - In the notifier, process THERMAL_NOTIFY_BIND and THERMAL_NOTIFY_UNBIND
+> reason codes to count number of thermal event group netlink multicast
+> clients. If thermal netlink group has any listener enable HFI on all
+> packages. If there are no listener disable HFI on all packages.
+> 
+> - When CPU is online, instead of blindly enabling HFI, check if
+> the thermal netlink group has any listener. This will make sure that
+> HFI is not enabled by default during boot time.
+> 
+> - Actual processing to enable/disable matches what is done in
+> suspend/resume callbacks. Create two functions hfi_do_enable()
+> and hfi_do_disable(), which can be called from  the netlink notifier
+> callback and suspend/resume callbacks.
+> 
+> Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+> ---
+>  drivers/thermal/intel/intel_hfi.c | 95 +++++++++++++++++++++++++++----
+>  1 file changed, 85 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+> index 3b04c6ec4fca..5e1e2b5269b7 100644
+> --- a/drivers/thermal/intel/intel_hfi.c
+> +++ b/drivers/thermal/intel/intel_hfi.c
+> @@ -159,6 +159,7 @@ struct hfi_cpu_info {
+>  static DEFINE_PER_CPU(struct hfi_cpu_info, hfi_cpu_info) = { .index = -1 };
+>  
+>  static int max_hfi_instances;
+> +static int hfi_thermal_clients_num;
 
-If CPPC capabilities are not defined in the ACPI tables or wrongly
-defined by platform firmware, it needs to use quick to get those
-issues fixed with correct workaround values to make pstate driver
-can be loaded even though there are CPPC capabilities errors.
+Perhaps this counter can be generalized for other clients besides netlink.
+KVM could also use it to enable/disable HFI as needed for virtual machines.
 
-The workaround will match the broken BIOS which lack of CPPC capabilities
-nominal_freq and lowest_freq definition in the ACPI table.
+Maybe we should expose a function intel_hfi_toggle(bool enable) or a couple
+of intel_hfi_enable()/intel_hfi_disable() functions. The former would
+increase the counter and enable HFI on all packages. The latter would
+decrease the counter and disable HFI if the counter becomes 0.
 
-$ cat /sys/devices/system/cpu/cpu0/acpi_cppc/lowest_freq
-0
-$ cat /sys/devices/system/cpu/cpu0/acpi_cppc/nominal_freq
-0
+>  static struct hfi_instance *hfi_instances;
+>  
+>  static struct hfi_features hfi_features;
+> @@ -477,8 +478,11 @@ void intel_hfi_online(unsigned int cpu)
+>  enable:
+>  	cpumask_set_cpu(cpu, hfi_instance->cpus);
+>  
+> -	/* Enable this HFI instance if this is its first online CPU. */
+> -	if (cpumask_weight(hfi_instance->cpus) == 1) {
+> +	/*
+> +	 * Enable this HFI instance if this is its first online CPU and
+> +	 * there are user-space clients of thermal events.
+> +	 */
+> +	if (cpumask_weight(hfi_instance->cpus) == 1 && hfi_thermal_clients_num > 0) {
+>  		hfi_set_hw_table(hfi_instance);
+>  		hfi_enable();
+>  	}
+> @@ -573,28 +577,93 @@ static __init int hfi_parse_features(void)
+>  	return 0;
+>  }
+>  
+> -static void hfi_do_enable(void)
+> +/*
+> + * HFI enable/disable run in non-concurrent manner on boot CPU in syscore
+> + * callbacks or under protection of hfi_instance_lock.
+> + */
+> +static void hfi_do_enable(void *ptr)
+> +{
+> +	struct hfi_instance *hfi_instance = ptr;
+> +
+> +	hfi_set_hw_table(hfi_instance);
+> +	hfi_enable();
+> +}
+> +
+> +static void hfi_do_disable(void *ptr)
+> +{
+> +	hfi_disable();
+> +}
+> +
+> +static void hfi_syscore_resume(void)
+>  {
+>  	/* This code runs only on the boot CPU. */
+>  	struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, 0);
+>  	struct hfi_instance *hfi_instance = info->hfi_instance;
+>  
+> -	/* No locking needed. There is no concurrency with CPU online. */
+> -	hfi_set_hw_table(hfi_instance);
+> -	hfi_enable();
+> +	if (hfi_thermal_clients_num > 0)
+> +		hfi_do_enable(hfi_instance);
+>  }
+>  
+> -static int hfi_do_disable(void)
+> +static int hfi_syscore_suspend(void)
+>  {
+> -	/* No locking needed. There is no concurrency with CPU offline. */
+>  	hfi_disable();
+>  
+>  	return 0;
+>  }
+>  
+>  static struct syscore_ops hfi_pm_ops = {
+> -	.resume = hfi_do_enable,
+> -	.suspend = hfi_do_disable,
+> +	.resume = hfi_syscore_resume,
+> +	.suspend = hfi_syscore_suspend,
+> +};
+> +
+> +static int hfi_thermal_notify(struct notifier_block *nb, unsigned long state,
+> +			      void *_notify)
+> +{
+> +	struct thermal_genl_notify *notify = _notify;
+> +	struct hfi_instance *hfi_instance;
+> +	smp_call_func_t func;
+> +	unsigned int cpu;
+> +	int i;
+> +
+> +	if (notify->mcgrp != THERMAL_GENL_EVENT_GROUP)
+> +		return NOTIFY_DONE;
+> +
+> +	if (state != THERMAL_NOTIFY_BIND && state != THERMAL_NOTIFY_UNBIND)
+> +		return NOTIFY_DONE;
+> +
+> +	mutex_lock(&hfi_instance_lock);
+> +
+> +	switch (state) {
+> +	case THERMAL_NOTIFY_BIND:
+> +		hfi_thermal_clients_num++;
+> +		break;
 
-Signed-off-by: Perry Yuan <perry.yuan@amd.com>
----
- drivers/cpufreq/amd-pstate.c | 57 ++++++++++++++++++++++++++++++++++--
- include/linux/amd-pstate.h   |  6 ++++
- 2 files changed, 61 insertions(+), 2 deletions(-)
+Perhaps here you could call intel_hfi_enable()
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 77effc3caf6c..ff4727c22dce 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -67,6 +67,7 @@ static struct cpufreq_driver amd_pstate_epp_driver;
- static int cppc_state = AMD_PSTATE_UNDEFINED;
- static bool cppc_enabled;
- static bool amd_pstate_prefcore = true;
-+static struct quirk_entry *quirks;
- 
- /*
-  * AMD Energy Preference Performance (EPP)
-@@ -111,6 +112,41 @@ static unsigned int epp_values[] = {
- 
- typedef int (*cppc_mode_transition_fn)(int);
- 
-+static struct quirk_entry quirk_amd_7k62 = {
-+	.nominal_freq = 2600,
-+	.lowest_freq = 550,
-+};
-+
-+static int __init dmi_matched_7k62_bios_bug(const struct dmi_system_id *dmi)
-+{
-+	/**
-+	 * match the broken bios for family 17h processor support CPPC V2
-+	 * broken BIOS lack of nominal_freq and lowest_freq capabilities
-+	 * definition in ACPI tables
-+	 */
-+	if (boot_cpu_has(X86_FEATURE_ZEN2)) {
-+		quirks = dmi->driver_data;
-+		pr_info("Overriding nominal and lowest frequencies for %s\n", dmi->ident);
-+		return 1;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct dmi_system_id amd_pstate_quirks_table[] __initconst = {
-+	{
-+		.callback = dmi_matched_7k62_bios_bug,
-+		.ident = "AMD EPYC 7K62",
-+		.matches = {
-+			DMI_MATCH(DMI_BIOS_VERSION, "5.14"),
-+			DMI_MATCH(DMI_BIOS_RELEASE, "12/12/2019"),
-+		},
-+		.driver_data = &quirk_amd_7k62,
-+	},
-+	{}
-+};
-+MODULE_DEVICE_TABLE(dmi, amd_pstate_quirks_table);
-+
- static inline int get_mode_idx_from_str(const char *str, size_t size)
- {
- 	int i;
-@@ -600,13 +636,19 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
- static int amd_get_min_freq(struct amd_cpudata *cpudata)
- {
- 	struct cppc_perf_caps cppc_perf;
-+	u32 lowest_freq;
- 
- 	int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
- 	if (ret)
- 		return ret;
- 
-+	if (quirks && quirks->lowest_freq)
-+		lowest_freq = quirks->lowest_freq;
-+	else
-+		lowest_freq = cppc_perf.lowest_freq;
-+
- 	/* Switch to khz */
--	return cppc_perf.lowest_freq * 1000;
-+	return lowest_freq * 1000;
- }
- 
- static int amd_get_max_freq(struct amd_cpudata *cpudata)
-@@ -635,12 +677,18 @@ static int amd_get_max_freq(struct amd_cpudata *cpudata)
- static int amd_get_nominal_freq(struct amd_cpudata *cpudata)
- {
- 	struct cppc_perf_caps cppc_perf;
-+	u32 nominal_freq;
- 
- 	int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
- 	if (ret)
- 		return ret;
- 
--	return cppc_perf.nominal_freq;
-+	if (quirks && quirks->nominal_freq)
-+		nominal_freq = quirks->nominal_freq;
-+	else
-+		nominal_freq = cppc_perf.nominal_freq;
-+
-+	return nominal_freq;
- }
- 
- static int amd_get_lowest_nonlinear_freq(struct amd_cpudata *cpudata)
-@@ -1672,6 +1720,11 @@ static int __init amd_pstate_init(void)
- 	if (cpufreq_get_current_driver())
- 		return -EEXIST;
- 
-+	quirks = NULL;
-+
-+	/* check if this machine need CPPC quirks */
-+	dmi_check_system(amd_pstate_quirks_table);
-+
- 	switch (cppc_state) {
- 	case AMD_PSTATE_UNDEFINED:
- 		/* Disable on the following configs by default:
-diff --git a/include/linux/amd-pstate.h b/include/linux/amd-pstate.h
-index d21838835abd..7b2cbb892fd9 100644
---- a/include/linux/amd-pstate.h
-+++ b/include/linux/amd-pstate.h
-@@ -124,4 +124,10 @@ static const char * const amd_pstate_mode_string[] = {
- 	[AMD_PSTATE_GUIDED]      = "guided",
- 	NULL,
- };
-+
-+struct quirk_entry {
-+	u32 nominal_freq;
-+	u32 lowest_freq;
-+};
-+
- #endif /* _LINUX_AMD_PSTATE_H */
--- 
-2.34.1
+> +	case THERMAL_NOTIFY_UNBIND:
+> +		hfi_thermal_clients_num--;
+> +		break;
+> +	}
 
+and here intel_hfi_disable().
+
+> +
+> +	if (hfi_thermal_clients_num > 0)
+> +		func = hfi_do_enable;
+> +	else
+> +		func = hfi_do_disable;
+> +
+> +	for (i = 0; i < max_hfi_instances; i++) {
+> +		hfi_instance = &hfi_instances[i];
+> +		if (cpumask_empty(hfi_instance->cpus))
+> +			continue;
+> +
+> +		cpu = cpumask_any(hfi_instance->cpus);
+> +		smp_call_function_single(cpu, func, hfi_instance, true);
+> +	}
+
+This block would go in a helper function.
+
+I know this is beyond the scope of the patchset but it would make the
+logic more generic for other clients to use.
+> +
+> +	mutex_unlock(&hfi_instance_lock);
+> +
+> +	return NOTIFY_OK;
+> +}
+> +
+> +static struct notifier_block hfi_thermal_nb = {
+> +	.notifier_call = hfi_thermal_notify,
+>  };
+>  
+>  void __init intel_hfi_init(void)
+> @@ -628,10 +697,16 @@ void __init intel_hfi_init(void)
+>  	if (!hfi_updates_wq)
+>  		goto err_nomem;
+>  
+> +	if (thermal_genl_register_notifier(&hfi_thermal_nb))
+> +		goto err_nl_notif;
+> +
+>  	register_syscore_ops(&hfi_pm_ops);
+>  
+>  	return;
+>  
+> +err_nl_notif:
+> +	destroy_workqueue(hfi_updates_wq);
+> +
+>  err_nomem:
+>  	for (j = 0; j < i; ++j) {
+>  		hfi_instance = &hfi_instances[j];
+> -- 
+> 2.34.1
+> 
 
