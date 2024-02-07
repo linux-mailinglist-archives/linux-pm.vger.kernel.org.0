@@ -1,42 +1,42 @@
-Return-Path: <linux-pm+bounces-3564-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3566-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5E8584D20C
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 20:13:04 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AC0C84D212
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 20:13:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 62F931F2418D
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 19:13:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 993EEB21EB5
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 19:13:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 544078562A;
-	Wed,  7 Feb 2024 19:12:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92CDB85C78;
+	Wed,  7 Feb 2024 19:13:00 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A098527E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E69C4823B9;
 	Wed,  7 Feb 2024 19:12:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707333179; cv=none; b=dKvqtX9rSfgcABKAag3KNL77Wa+KNrfWvp5fz3aeBhkxaHsS/8WjHraziVMHFf8Qj9oywtOKQYIbWWs7AMCJnvnFxL+cWoPFkUiQ+7ZHNsei1ysOsHGpdmPeT8PO/xIP9Rn/nohsEIL+qiRE3+1HS1zMUCrGyhkKCdJR/HyqLiY=
+	t=1707333180; cv=none; b=tjZ+vMJq9yDxHBH6G5lolc5qLQwNIwi+RV1E7dsj1Sg8N71JbTnte9DAEwnhZQ+chm5wszjxn0Oyk8KBu2AiSTDoYgQfn+sS3gssEXOHWBd/f4tvGIsqRUGrwPovJZCVRg6KWTZuRtMR+qDBmKinkCn2101YNgfVXRhq2pu6LQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707333179; c=relaxed/simple;
-	bh=fEDNq2Er6z2Bo4ZvoiSYDuSkdI3VFvkzx+dgMfUNyCE=;
+	s=arc-20240116; t=1707333180; c=relaxed/simple;
+	bh=AB6u5fg2dweFTMD5jMbAqYepGoUI5YM7pGFRXWYMAfY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ve/8hlHrDdVcwFTYCindN6/eSI/tGJVXqvQ+xvMt6vEyVUkXj7Xk1+zIL8mcQKmxiWAhMM4tyrSdyY6J3DmFo4NL0xR5Ap2XWl5Fa3zjxFs4z1PdOl/UZWYdy5/TRc3GAg4RKJ2pMkiRSt00xUSoEIXoWQVx+GuPgYXwLACdnoc=
+	 MIME-Version:Content-Type; b=N15Hskrnu/aKA+cnsIj0avxPbECiXRzCYLjx7uXysOJ276Kuwy85OyM7MQ0rov/mjPK5UprsDMUrjTD3uB83dgJTOsfxwH8riwT/+o7bNX+aznL7D/vMyqGKkh7aXOCNu4PIxic/mI5mvgU6SDmDo7A6P3SDlZv3RKnm4C01hRM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id 527089a773aed57e; Wed, 7 Feb 2024 20:12:49 +0100
+ id cc3e3f799ac74844; Wed, 7 Feb 2024 20:12:48 +0100
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 0173A669B2E;
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 261B2669B2E;
 	Wed,  7 Feb 2024 20:12:48 +0100 (CET)
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
@@ -47,10 +47,10 @@ Cc: Gregory Greenman <gregory.greenman@intel.com>,
  Daniel Lezcano <daniel.lezcano@linaro.org>,
  Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
 Subject:
- [PATCH v1 2/3] iwlwifi: mvm: Populate trip table before registering thermal
- zone
-Date: Wed, 07 Feb 2024 20:10:24 +0100
-Message-ID: <8346768.T7Z3S40VBb@kreacher>
+ [PATCH v1 3/3] iwlwifi: mvm: Use for_each_thermal_trip() for walking trip
+ points
+Date: Wed, 07 Feb 2024 20:12:38 +0100
+Message-ID: <2270733.iZASKD2KPV@kreacher>
 In-Reply-To: <1892445.tdWV9SEqCh@kreacher>
 References: <1892445.tdWV9SEqCh@kreacher>
 Precedence: bulk
@@ -64,71 +64,98 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 195.136.19.94
 X-CLIENT-HOSTNAME: 195.136.19.94
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrtddvgdduudelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepledprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehgrhgvghhorhihrdhgrhgvvghnmhgrnhesihhnthgvlhdrtghomhdprhgtphhtthhopehmihhrihgrmhdrrhgrtghhvghlrdhkohhrvghnsghlihhtsehinhhtvghlrdgtohhmpdhrtghpthhtohepkhhvrghloheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrtddvgdduudekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepledprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehgrhgvghhorhihrdhgrhgvvghnmhgrnhesihhnthgvlhdrtghomhdprhgtphhtthhopehmihhrihgrmhdrrhgrtghhvghlrdhkohhrvghnsghlihhtsehinhhtvghlrdgtohhmpdhrtghpthhtohepkhhvrghloheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
  jhhohhgrnhhnvghsrdgsvghrghesihhnthgvlhdrtghomhdprhgtphhtthhopehlihhnuhigqdifihhrvghlvghsshesvhhgvghrrdhkvghrnhgvlhdrohhrgh
 X-DCC--Metrics: v370.home.net.pl 1024; Body=9 Fuz1=9 Fuz2=9
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-The trip table in iwl_mvm_thermal_zone_register() is populated after
-passing it to thermal_zone_device_register_with_trips(), so it may be
-accessed (for instance, via sysfs) before it is ready.
+The code walking trip points in iwl_mvm_send_temp_report_ths_cmd()
+reads the trip table passed to thermal_zone_device_register_with_trips()
+in order to get the current trip temperatures, but this is not
+guaranteed to work in the future, because the thermal zone will store
+trip points information internally.
 
-To prevent that from happening, modify the function to populate the
-trip table before calling thermal_zone_device_register_with_trips().
+For this reason, make iwl_mvm_send_temp_report_ths_cmd() use
+for_each_thermal_trip() as appropriate for walking trip points in a
+given thermal zone.
 
-Also make the code use THERMAL_TEMP_INVALID as the "invalid temperature"
-value which is also meaningful for the core.
+No intentional functional impact, but it is requisite for future thermal
+core improvements.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/net/wireless/intel/iwlwifi/mvm/tt.c |   19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+ drivers/net/wireless/intel/iwlwifi/mvm/tt.c |   40 +++++++++++++++++-----------
+ 1 file changed, 25 insertions(+), 15 deletions(-)
 
 Index: linux-pm/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
 ===================================================================
 --- linux-pm.orig/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
 +++ linux-pm/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
-@@ -575,7 +575,7 @@ int iwl_mvm_send_temp_report_ths_cmd(str
+@@ -555,6 +555,22 @@ static int compare_temps(const void *a,
+ 	return ((s16)le16_to_cpu(*(__le16 *)a) -
+ 		(s16)le16_to_cpu(*(__le16 *)b));
+ }
++
++struct iwl_trip_walk_data {
++	__le16 *thresholds;
++	int count;
++};
++
++static int iwl_trip_temp_cb(struct thermal_trip *trip, void *arg)
++{
++	struct iwl_trip_walk_data *twd = arg;
++
++	if (trip->temperature == THERMAL_TEMP_INVALID)
++		return 0;
++
++	twd->thresholds[twd->count++] = cpu_to_le16((s16)(trip->temperature / 1000));
++	return 0;
++}
+ #endif
+ 
+ int iwl_mvm_send_temp_report_ths_cmd(struct iwl_mvm *mvm)
+@@ -562,31 +578,25 @@ int iwl_mvm_send_temp_report_ths_cmd(str
+ 	struct temp_report_ths_cmd cmd = {0};
+ 	int ret;
+ #ifdef CONFIG_THERMAL
+-	int i, idx = 0;
++	struct iwl_trip_walk_data twd = { .thresholds = cmd.thresholds, .count = 0 };
+ 
+ 	lockdep_assert_held(&mvm->mutex);
+ 
+ 	if (!mvm->tz_device.tzone)
+ 		goto send;
+ 
+-	/* The driver holds array of temperature trips that are unsorted
+-	 * and uncompressed, the FW should get it compressed and sorted
++	/*
++	 * The thermal core holds an array of temperature trips that are
++	 * unsorted and uncompressed, the FW should get it compressed and
++	 * sorted.
+ 	 */
  
  	/* compress trips to cmd array, remove uninitialized values*/
- 	for (i = 0; i < IWL_MAX_DTS_TRIPS; i++) {
--		if (mvm->tz_device.trips[i].temperature != INT_MIN) {
-+		if (mvm->tz_device.trips[i].temperature != THERMAL_TEMP_INVALID) {
- 			cmd.thresholds[idx++] =
- 				cpu_to_le16((s16)(mvm->tz_device.trips[i].temperature / 1000));
- 		}
-@@ -675,6 +675,14 @@ static void iwl_mvm_thermal_zone_registe
- 	BUILD_BUG_ON(ARRAY_SIZE(name) >= THERMAL_NAME_LENGTH);
- 
- 	sprintf(name, "iwlwifi_%u", atomic_inc_return(&counter) & 0xFF);
-+	/*
-+	 * 0 is a valid temperature,
-+	 * so initialize the array with S16_MIN which invalid temperature
-+	 */
-+	for (i = 0 ; i < IWL_MAX_DTS_TRIPS; i++) {
-+		mvm->tz_device.trips[i].temperature = THERMAL_TEMP_INVALID;
-+		mvm->tz_device.trips[i].type = THERMAL_TRIP_PASSIVE;
-+	}
- 	mvm->tz_device.tzone = thermal_zone_device_register_with_trips(name,
- 							mvm->tz_device.trips,
- 							IWL_MAX_DTS_TRIPS,
-@@ -693,15 +701,6 @@ static void iwl_mvm_thermal_zone_registe
- 	if (ret) {
- 		IWL_DEBUG_TEMP(mvm, "Failed to enable thermal zone\n");
- 		thermal_zone_device_unregister(mvm->tz_device.tzone);
--		return;
+-	for (i = 0; i < IWL_MAX_DTS_TRIPS; i++) {
+-		if (mvm->tz_device.trips[i].temperature != THERMAL_TEMP_INVALID) {
+-			cmd.thresholds[idx++] =
+-				cpu_to_le16((s16)(mvm->tz_device.trips[i].temperature / 1000));
+-		}
 -	}
+-	cmd.num_temps = cpu_to_le32(idx);
 -
--	/* 0 is a valid temperature,
--	 * so initialize the array with S16_MIN which invalid temperature
--	 */
--	for (i = 0 ; i < IWL_MAX_DTS_TRIPS; i++) {
--		mvm->tz_device.trips[i].temperature = INT_MIN;
--		mvm->tz_device.trips[i].type = THERMAL_TRIP_PASSIVE;
- 	}
- }
+-	if (!idx)
+-		goto send;
++	for_each_thermal_trip(mvm->tz_device.tzone, iwl_trip_temp_cb, &twd);
  
+-	/*sort cmd array*/
+-	sort(cmd.thresholds, idx, sizeof(s16), compare_temps, NULL);
++	cmd.num_temps = cpu_to_le32(twd.count);
++	if (twd.count)
++		sort(cmd.thresholds, twd.count, sizeof(s16), compare_temps, NULL);
+ 
+ send:
+ #endif
 
 
 
