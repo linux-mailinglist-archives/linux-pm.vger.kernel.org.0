@@ -1,126 +1,99 @@
-Return-Path: <linux-pm+bounces-3544-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3545-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4BA4D84C9EC
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 12:49:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F1A384CB2E
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 14:11:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A14A2862C3
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 11:49:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 138801F27E3D
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 13:11:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E99B1B295;
-	Wed,  7 Feb 2024 11:49:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7427378B41;
+	Wed,  7 Feb 2024 13:09:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="ikhlTEK/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 141591D526;
-	Wed,  7 Feb 2024 11:49:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90B1377F0A;
+	Wed,  7 Feb 2024 13:09:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707306546; cv=none; b=exOL+4BuZrSW71SHZPQ+uypMq+LXASQTob65u7aocGN8+WvVDxZQ3Yb+AXAd8z6JzBAvwkR5xbcN0XWgwy9KPf0aAsUrZl8j8R4mipPcroNfOQEjQSherSf9CiV3U2rgAmIBTZdWURpbUpqll9KVQIyPuLISrejNEPvHmeqIBig=
+	t=1707311359; cv=none; b=sT+myDD5JFeIBkAQn1fzO7+aduYokuVasOtedNhwK/Ai1p75NsvnPsIN733SNuGYWz4sqwR5j1H1WuZ+s8rjmaOxYCz0CK/qSzqv5DDJbrQ+Fi51Nvno9qlt0jtQDAXQh7GzPM2lPkjWL24Xtu/Da0npt43wydYkY2TC0dd7jcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707306546; c=relaxed/simple;
-	bh=eyg3T6wfzHyvBXHkXuiAYYUcSdjod3g2AcizLNz1yfE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mv3qtYoTwoPZB8UfVKSc2Fwec0o/BiFgpja+ORlz3MUo/uqikspk9aJeYiTMS9LgEojqqu5FdAAb0WqAjtPFpLhFnGlQLAq+fhDXV2HY8nAnTLiASA7uHCpTYmV6iCzo4BpXB7qlaPvbTS2oqjAgFzXKZQFzRfqAHe2MNM+PbW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8CAB21FB;
-	Wed,  7 Feb 2024 03:49:44 -0800 (PST)
-Received: from [10.57.9.121] (unknown [10.57.9.121])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ACDE43F5A1;
-	Wed,  7 Feb 2024 03:48:59 -0800 (PST)
-Message-ID: <8704d3d2-08ab-4316-8d4b-f9b8f1878a19@arm.com>
-Date: Wed, 7 Feb 2024 11:49:09 +0000
+	s=arc-20240116; t=1707311359; c=relaxed/simple;
+	bh=GWAgaDJ3zdRn3qm1MtZe+axa+R6PJ8fMMxWJrbGg7AQ=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=gitN/5VlSPgv1+2mgTH3p6U6SXDKHcz4XZRYMCXbJng2IgJjJ1xkEpmI7wQIPFMFD9xxkAdJDDlsZ5WsWo2PbHWvE+CIo1MV7YKpNrMs5zMxQqq4Z4CBbpDSQSXi+Sc74K8r+eni8ZnoLah9KrvLvBMSTyvt6ClrytmzIbFAoos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=ikhlTEK/; arc=none smtp.client-ip=80.241.56.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4TVL6W6k3kz9sw2;
+	Wed,  7 Feb 2024 14:09:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1707311347;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=xxONrTvJa5WGKkunFtaEoZBXl9eRExoEHx1SGG+4XXs=;
+	b=ikhlTEK/L4z8v8ELl0gxcfrTW0e38Po69NiBubwHSN+SOYzu5zRmVd9D4U/hu1G0XYYJSW
+	hjBMa7Coevc9BrQTTOhJ3xTSVDZVPp3XlyUvpgRzz5U6MpNkF0dHAQoRfBUHWMKK2ft+Cd
+	4LB5Pw12gbTkPUdPy0X7QL+K9mXqFVZ9Kt8WFw611WHat/vIpxW2WY1n4RTMg4WjBQPsDr
+	azO9ekKjmiqVP80MT92e+I/5DwhDsI8TQmlPsfP//RHz7aAuSF5pN761kasdRNT1GtTFvt
+	ySgUISiYpN+GupU7IYMw4Hmm4H1RDP4xlRvdejGzxN9qBb18Fv52dB0ENVhqfA==
+Message-ID: <41f82085-8ea9-4ffa-a93a-8e39ce0f4c27@mailbox.org>
+Date: Wed, 7 Feb 2024 14:09:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 00/23] Introduce runtime modifiable Energy Model
 Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: dietmar.eggemann@arm.com, linux-pm@vger.kernel.org, rui.zhang@intel.com,
- amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
- daniel.lezcano@linaro.org, viresh.kumar@linaro.org, len.brown@intel.com,
- pavel@ucw.cz, mhiramat@kernel.org, qyousef@layalina.io,
- linux-kernel@vger.kernel.org, wvw@google.com, xuewen.yan94@gmail.com
-References: <20240117095714.1524808-1-lukasz.luba@arm.com>
- <5a38043f-6de3-4038-b1d9-314090e7b44e@arm.com>
- <CAJZ5v0i-U+Sqbb4z1oBcafWyDfQB=zO3+kKwa2ckdMh6mjsMkw@mail.gmail.com>
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0i-U+Sqbb4z1oBcafWyDfQB=zO3+kKwa2ckdMh6mjsMkw@mail.gmail.com>
+To: Huang Rui <ray.huang@amd.com>, Perry Yuan <Perry.Yuan@amd.com>,
+ rafael@kernel.org
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ linux-pm@vger.kernel.org, Oleksandr Natalenko <oleksandr@natalenko.name>
+From: Tor Vic <torvic9@mailbox.org>
+Subject: [PATCH][next] cpufreq: amd-pstate: Fix min_perf assignment in
+ amd_pstate_adjust_perf()
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-MBO-RS-META: 4wcfr81h7xkjb3at6zuheac1jr4e8dqn
+X-MBO-RS-ID: 76e10efaad271e17016
 
+In the function amd_pstate_adjust_perf(), the 'min_perf' variable is set
+to 'highest_perf' instead of 'lowest_perf'.
 
+Fixes: 1d215f0319c2 ("cpufreq: amd-pstate: Add fast switch function for 
+AMD P-State")
+Reported-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+Signed-off-by: Tor Vic <torvic9@mailbox.org>
+---
+IIRC, this was first reported by Oleksandr, hence the 'Reported-by' tag.
+---
+  drivers/cpufreq/amd-pstate.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 2/7/24 10:31, Rafael J. Wysocki wrote:
-> Hi Lukasz,
-> 
-> On Wed, Feb 7, 2024 at 10:15 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> Hi Rafael,
->>
->> On 1/17/24 09:56, Lukasz Luba wrote:
->>> Hi all,
->>>
->>> This patch set adds a new feature which allows to modify Energy Model (EM)
->>> power values at runtime. It will allow to better reflect power model of
->>> a recent SoCs and silicon. Different characteristics of the power usage
->>> can be leveraged and thus better decisions made during task placement in EAS.
->>>
->>
->> [snip]
->>
->>>
->>>
->>> Lukasz Luba (23):
->>>     PM: EM: Add missing newline for the message log
->>>     PM: EM: Extend em_cpufreq_update_efficiencies() argument list
->>>     PM: EM: Find first CPU active while updating OPP efficiency
->>>     PM: EM: Refactor em_pd_get_efficient_state() to be more flexible
->>>     PM: EM: Introduce em_compute_costs()
->>>     PM: EM: Check if the get_cost() callback is present in
->>>       em_compute_costs()
->>>     PM: EM: Split the allocation and initialization of the EM table
->>>     PM: EM: Introduce runtime modifiable table
->>>     PM: EM: Use runtime modified EM for CPUs energy estimation in EAS
->>>     PM: EM: Add functions for memory allocations for new EM tables
->>>     PM: EM: Introduce em_dev_update_perf_domain() for EM updates
->>>     PM: EM: Add em_perf_state_from_pd() to get performance states table
->>>     PM: EM: Add performance field to struct em_perf_state and optimize
->>>     PM: EM: Support late CPUs booting and capacity adjustment
->>>     PM: EM: Optimize em_cpu_energy() and remove division
->>>     powercap/dtpm_cpu: Use new Energy Model interface to get table
->>>     powercap/dtpm_devfreq: Use new Energy Model interface to get table
->>>     drivers/thermal/cpufreq_cooling: Use new Energy Model interface
->>>     drivers/thermal/devfreq_cooling: Use new Energy Model interface
->>>     PM: EM: Change debugfs configuration to use runtime EM table data
->>>     PM: EM: Remove old table
->>>     PM: EM: Add em_dev_compute_costs()
->>>     Documentation: EM: Update with runtime modification design
->>>
->>>    Documentation/power/energy-model.rst | 183 ++++++++++-
->>>    drivers/powercap/dtpm_cpu.c          |  39 ++-
->>>    drivers/powercap/dtpm_devfreq.c      |  34 +-
->>>    drivers/thermal/cpufreq_cooling.c    |  45 ++-
->>>    drivers/thermal/devfreq_cooling.c    |  49 ++-
->>>    include/linux/energy_model.h         | 165 ++++++----
->>>    kernel/power/energy_model.c          | 472 +++++++++++++++++++++++----
->>>    7 files changed, 819 insertions(+), 168 deletions(-)
->>>
->>
->> The patch set went through decent review. If you don't have any issues,
->> I will collect the tags and send the v8 which will be re-based on some
->> recent linux next (or please tell me your preferred branch).
-> 
-> Blease base it on 6.8-rc3.
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index 08e112444c27..aa5e57e27d2b 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -577,7 +577,7 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
+  	if (target_perf < capacity)
+  		des_perf = DIV_ROUND_UP(cap_perf * target_perf, capacity);
 
-OK, thanks
+-	min_perf = READ_ONCE(cpudata->highest_perf);
++	min_perf = READ_ONCE(cpudata->lowest_perf);
+  	if (_min_perf < capacity)
+  		min_perf = DIV_ROUND_UP(cap_perf * _min_perf, capacity);
+
+-- 
+2.43.0
 
