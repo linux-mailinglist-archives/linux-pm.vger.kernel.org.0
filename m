@@ -1,94 +1,110 @@
-Return-Path: <linux-pm+bounces-3560-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3561-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4DE384D12A
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 19:27:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BD9B84D157
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 19:41:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 85311B22E36
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 18:27:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F58328B3C7
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 18:41:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52A2683CAB;
-	Wed,  7 Feb 2024 18:27:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="x3rt6cgJ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9D3E82D97;
+	Wed,  7 Feb 2024 18:41:46 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41BBA54645;
-	Wed,  7 Feb 2024 18:27:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A0AE41C91;
+	Wed,  7 Feb 2024 18:41:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707330429; cv=none; b=SrUl6kP19jmPxVrZZnf//IbWKlP3Ge6j4NhQVLvyOdTq0jcVSv+Z6ZM4ccegtTfhJQZBOWfv7uhGtWV3H8oXDErDXRv7vt49wl6w1VR58qr9pOE4dDNwuEIuCXn2pYjRnoLdOUm9TxjH73IXUa4r3KkhyOQsTYTHUmbYEcU6e6g=
+	t=1707331306; cv=none; b=ZSCEUYRQk++JGzyvRyEtahKqaFL/LeDHiWH2DV4ll0AOVGCGt2+7OiGera8uDi2YqkrG8ewaZsbNr6XuqDC9Tgvj5SDCF0zL/rV2+d+zw9ft3Ibt7AtwELY5XUVaHfKtULfqdxVMCD77oXtJn+7xxjtOg73bjbepZqkstNoGMr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707330429; c=relaxed/simple;
-	bh=p1ujltCiO7Se357FqvLg+IEoA+MNrfIRkGUflqJcyvs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k8SfQ/YCazkmHnn/V5jtEVWMZ4FsUlEjXsAi/MmwLKlma6FzUCwbZmjlFZ/xj6wTMExaa+VSQD7NLQdhc21IOXapYuygLQws+MgA1ggneLGHloYX4maapEfXDFQpU1T23vOXx7SRgxEiZq29THWGnY5UA8gWwtDNfiW6TGi15kc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=x3rt6cgJ; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=Hl/DgXvZgBVzSrTa1EvNhL2NH5ozYGDaYquJZdrGqWc=; b=x3rt6cgJJo1kYd+iobg4tND943
-	g87m+Idp/qPzY5UnWQ5Q9V6rKrG1dxMEm7ntata8dQZvBVl7LRztAZSAn+5idTxdbujU9o+jRueWy
-	2k90xm8nftpetm/5EgZFbxVJfjBYuabbwKpoaaXvJQk8OVBaNkd7dQDDTrY77NxCeWac=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1rXmdK-007F7k-Tu; Wed, 07 Feb 2024 19:26:54 +0100
-Date: Wed, 7 Feb 2024 19:26:54 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Stefan Eichenberger <eichest@gmail.com>
-Cc: "Russell King (Oracle)" <linux@armlinux.org.uk>,
-	Amit Kucheria <amitk@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Rob Herring <robh+dt@kernel.org>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Zhang Rui <rui.zhang@intel.com>, Josua Mayer <josua@solid-run.com>,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org, manuel.aebischer@netmodule.com
-Subject: Re: [PATCH 3/3] arm64: dts: armada-ap807: update thermal compatible
-Message-ID: <d454015d-7c38-4fd8-839f-13d72d041d53@lunn.ch>
-References: <ZIxMYXDCTB7IvsDk@shell.armlinux.org.uk>
- <E1qA7yZ-00Ea50-OC@rmk-PC.armlinux.org.uk>
- <ZcOsjRzE8V73wNtT@eichest-laptop>
- <13ab003d-7449-4d6f-861a-fa2d0c3f4ad2@lunn.ch>
- <ZcOwB5xShhRoX5yh@shell.armlinux.org.uk>
- <ZcO0AAzK+P8sYHdX@eichest-laptop>
+	s=arc-20240116; t=1707331306; c=relaxed/simple;
+	bh=LbVL5RmiqfFAGVDDrMbFn7+nEaeBOAF0DjlcOQRg/aA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UNZP6Ky26GJoyE7pBThcr0OHfhkETN9fdaUKPI9z+bel37cpL+yrkOYV3M6ZbVKwu1U6UEjfXbqaD/svr338IKxLhmscMNpTo4C1cy6XUeS39rQ/jHmBK8vkbdyjCm6eRDplarqmeKR1A2JQx52GhNHi9wrXsAENgEKsg0aIbc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-59cbf204d52so34157eaf.1;
+        Wed, 07 Feb 2024 10:41:44 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707331304; x=1707936104;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7Gw4hg2CsAnVovJphC9v6Pju8JP+Q+4f7seH5ViqG7U=;
+        b=UEdcMQ4Hx0yY/O07RvA4oAuwtJwCYoABQMyYqUEIphQP9vJ8QD90Jgds7yxiq7t5Y0
+         2MikwJLcYglz7VbuynwWEfJDuXCP4NBiPAIw8CPtgUGIyk4Ed3t+96HmzOSU+Kf1bZdr
+         KW5c+JBmumi7SUISSUOsbZ5BJOEs1GXjcKMYNV6WkkVa8rRo302nHQagy0cx6TRszh+F
+         ylFAt51gw3i6dG9POlVDOtTFJ9+JFS87AfEHGBYaBcNj3wYblN3kVrDKQKDjsG5XZs/c
+         HOAXxMWjk7U5SuFPdp2ri2cMzQj/aoI2xavWzCEDOLi9hcfdAfV+BfQxg94ShcekUr6h
+         +cSA==
+X-Forwarded-Encrypted: i=1; AJvYcCWZn1FA8kwUzEW8cvnvr8bi9LCgbPOlpG3GWNDCLBd3LOLFWFravFIUyJ0/ylHfgebfd9ggyPXg5YSoojMlcOrwGujKXW3vFoKQ6bWz/1p6/aWYDAnyvrDoiHciRQTMLZ9MmwOD9YI=
+X-Gm-Message-State: AOJu0Yxa2bFBKFRpKODUyFjlGJRZbl/1eeHrxiY1tXpkHCeGpb4zVf+h
+	pduC8NpsiOFCinGxQMbve0LcCLl9Ry5xYveaT0IpJ4X4cvs9ZWTMdVwXvj8xRAXWrMIgfn2zNj4
+	x1iwVKIIYmZXODK+ckp/OZYeTotk=
+X-Google-Smtp-Source: AGHT+IFCwoySUxsvCRaxKigTHi96KtA8b9mAsRTDbrXUSmgZ36sJ5gi2n+QduvJA4WYqJNfz3K+zYS3V6Cf99mXCIpA=
+X-Received: by 2002:a05:6870:9110:b0:219:75d2:a39b with SMTP id
+ o16-20020a056870911000b0021975d2a39bmr7211911oae.3.1707331304073; Wed, 07 Feb
+ 2024 10:41:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZcO0AAzK+P8sYHdX@eichest-laptop>
+References: <CGME20240207103144eucas1p16b601a73ff347d2542f8380b25921491@eucas1p1.samsung.com>
+ <10423008.nUPlyArG6x@kreacher> <708a65cc-79ec-44a6-8454-a93d0f3114c3@samsung.com>
+ <CAJZ5v0hn=KgaWn9pwtLsH2a8n61BNxzb1xrNoxUfEi3o9OAZGw@mail.gmail.com>
+ <4a043533-009f-4db9-b107-c8374be28d2b@samsung.com> <CAJZ5v0hDmwaFEtLc8yDc4cXn2wODXAqATe0+_Hpm9QPODUPMQw@mail.gmail.com>
+ <ZcOyW_Q1FC35oxob@slm.duckdns.org>
+In-Reply-To: <ZcOyW_Q1FC35oxob@slm.duckdns.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 7 Feb 2024 19:41:32 +0100
+Message-ID: <CAJZ5v0idXY3A=PydQHxA+SxbCnsaXv=6UBoXTeZuZr-Pxsmmiw@mail.gmail.com>
+Subject: Re: [PATCH v1] PM: sleep: Restore asynchronous device resume optimization
+To: Tejun Heo <tj@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Marek Szyprowski <m.szyprowski@samsung.com>, 
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Nathan Chancellor <nathan@kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>, Lai Jiangshan <jiangshanlai@gmail.com>, 
+	Naohiro.Aota@wdc.com, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 07, 2024 at 05:46:56PM +0100, Stefan Eichenberger wrote:
-> On Wed, Feb 07, 2024 at 04:29:59PM +0000, Russell King (Oracle) wrote:
-> > On Wed, Feb 07, 2024 at 05:25:59PM +0100, Andrew Lunn wrote:
-> > > > While working on some thermal optimizations, our hardware team
-> > > > discovered that this patch is still missing upstream. Is something
-> > > > missing or did it get lost?
-> > > 
-> > > Patch 1/3 had a change request. Was it ever reposted with the
-> > > requested change?
-> 
-> I forgot to mention that the other patches were applied, so it is only
-> the one missing without change request.
+On Wed, Feb 7, 2024 at 5:40=E2=80=AFPM Tejun Heo <tj@kernel.org> wrote:
+>
+> Hello,
+>
+> On Wed, Feb 07, 2024 at 12:25:46PM +0100, Rafael J. Wysocki wrote:
+> > The other one is that what happens during async resume does not meet
+> > the assumptions of commit 5797b1c18919 (for example, it can easily
+> > produce a chain of interdependent work items longer than 8) and so it
+> > breaks things.
+>
+> Ah, that's fascinating. But aren't CPUs all brought up online before devi=
+ces
+> are resumed?
 
-Ah. O.K. Repost it to the MVEBU Maintainers.
+They are.
 
-    Andrew
+> If so, the max_active should already be way higher than the
+> WQ_DFL_MIN_ACTIVE. Also, are these multi node NUMA machines?
+
+They aren't.
+
+> Otherwise, it really shouldn't affect anything.
+
+Well, it evidently makes a difference.  I'm wondering what difference
+it can make in that case.
+
+> One easy way to verify would be just bumping up WQ_DFL_MIN_ACTIVE and see=
+ what happens.
+
+Sure.
 
