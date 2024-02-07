@@ -1,243 +1,145 @@
-Return-Path: <linux-pm+bounces-3538-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3539-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A39284C982
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 12:20:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA79B84C993
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 12:26:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5FF14B23515
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 11:20:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EBAFA1C25417
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 11:26:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F2DC19470;
-	Wed,  7 Feb 2024 11:20:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="NpMZnaX2";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="oW8AIcjm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6655218EBF;
+	Wed,  7 Feb 2024 11:26:00 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81A1417BC5;
-	Wed,  7 Feb 2024 11:20:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD569182A7;
+	Wed,  7 Feb 2024 11:25:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707304849; cv=none; b=ezkv+AO+cZDoxcuJ/diaGG9ZX1F9Elian9y405UHsYKjOniAEtMAoRelfnP/tltQw6mo8YiyOHALeoEU1hZy8ER4+GbHxZKVlw1CWPxm2hO4+g6zyLjloxgqQeGSKdqlO+Pz+PHBX28qLxxd0ZZfsLN7HzhPUFdpa62yQzSi3c8=
+	t=1707305160; cv=none; b=roBBLbWIeRfgpyh3CpWsP3kyqngu3Uu+3QrlTgjpA5GdUbduIldbRoTJCoxkTYaLzj6VbK1Xu4i6Cnx/PtNCED+jmIBxApbtJDjfbxZQho5xStADPTU01fH/gC+KrmZCgUx3FHwWWGjyfRP5yggldonCmjPJC2Qv4LLXwiDzgSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707304849; c=relaxed/simple;
-	bh=kNpB21ZQdIylBhThsbGbl7LJYyMCwRLN4v9jaIps8Cc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Y/3yZtShExkuT4GpbhXs2fRIDkUt3hY00xs19xur9RoErfUmWOrZp9tJck8T1FhIg56tEEogO/6CYNAsrQOMY+i+OQGoJ2VDofkkCCiBCMPgD7k7lvKELmgawdUC7XTSDROZsLB3FigViKugFFRYd47nwrUUxcRTo7pPtOU1PEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=NpMZnaX2; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=oW8AIcjm; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1707304845;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Nn2+OBhhtcsxepVa2QjmGAyVRZ+oibsRlzxUMCiG/hw=;
-	b=NpMZnaX2Ehbai+rNXvToJEEVjWWwc83YFiDwnL6F3yFYNP5a9OL3v5TEVXPXGCqFhCd2Ez
-	Y1e55jsHQp8pCUNmm8zD8YJrKtXN3D0G1AS9o1C7awdmahiUtNL6y0LLcESom0QcIzIBfG
-	L+OlvxWDc8lETXW0ZjHCLPIdtl9uDcvJy2FPJpK3R7B0CXTbs6DF8aoMSMy6Wxt6DGt+VA
-	zT8SAqvfnai4V/9UVyfyAV+EJNXLjpOp5Ln3n9gIdGnYNEuEKJKPTGc/dfpWgTwWyHCqna
-	Xv8SSUlc+VmqridlItgRO5qb/ZVDBNWGBhE3SAtIS51Yf6hvwY/qzueUbb8Eyw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1707304845;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Nn2+OBhhtcsxepVa2QjmGAyVRZ+oibsRlzxUMCiG/hw=;
-	b=oW8AIcjmWgOQ6p+XFe4PJk/RX2BJTLEzXI3xN3EtA2Mk1mYHC0lSmWETZhDP6qS8h5eRCM
-	x7WppLdWHTFVymBg==
-To: Pranav Prasad <pranavpp@google.com>, rafael@kernel.org, pavel@ucw.cz,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- krossmo@google.com, jstultz@google.com
-Cc: Pranav Prasad <pranavpp@google.com>
-Subject: Re: [PATCH] alarmtimer, PM: suspend: Expose a function from
-In-Reply-To: <20240131191317.2191421-1-pranavpp@google.com>
-References: <20240131191317.2191421-1-pranavpp@google.com>
-Date: Wed, 07 Feb 2024 12:20:43 +0100
-Message-ID: <87plx8msfo.ffs@tglx>
+	s=arc-20240116; t=1707305160; c=relaxed/simple;
+	bh=DEqwGMp8n98ZhsW4wwr7QH/Pkj0zYA0yYxgzS+mhMXU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gE4ghiY1YpiR3RPxIr5szUaLTpcqLkXNYt0me4krs02qby9V24s2wDOs4OXrGZP0e4ZjnA//oRmN/HhQIFN2csrFLAjgObBTdMNgFaO3C2uc/1oIcGyxCPbhsUVIOfsdnwWXgHlQsHxG+UkOU4OoJ9tyCuulWtra6sQFc3UaylQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-59a134e29d2so82342eaf.0;
+        Wed, 07 Feb 2024 03:25:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707305158; x=1707909958;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xF7A8Ou4hLvdrXlxlvRR6oVHQoHgxTK0xBDoHtLPjsE=;
+        b=grhE64AEwHh9sqP7PjDceIYc0Buzpyg9zsc/gKlzo6ZG7eVI2kcanvwSiV7MZojkSL
+         nTSPPwHLrmWp7VqYEwEVNWSpAPisM8x8IrUyfrn3ruNWjDFlJ/srIW4buiDUwQhs5Dna
+         3gCCKckpVxWR1VYTo4psLyn2XtyylWKvr+cnYgeXPg3kEJPcwUE4rpcAzFhqKNZfMSPR
+         oBcB3szqomQt2Mf4hJr9Jy6I+mI9i/Y2PAtJcs3cTKsUOzDu/2EaA6+RNT/gDzmbdddJ
+         8IiuRdMqWYxAJyQamnm03GEC7n8hA0MmpJ8H3KsaCtdVFMsVsbwRnTULB8mQse8Tghns
+         J05A==
+X-Gm-Message-State: AOJu0Yzjp55/jU0iyp/TcCejCICPrUmAx7vsJTmixAp1Vpva4YGbumu6
+	SXXlT0dVMFhh/W3GP7mANkgv1NnIsaKvsBF0phGq50SFWBpltwY23W7HyRLzxRG3NryfLFjF5YO
+	76w45zB3fe29koKcUZGl+0Y7myH0=
+X-Google-Smtp-Source: AGHT+IEDDn9W+5izm2ttSOZ/C/FhVUXLZIt0B9qRcxRbpr+Ckhn3ZjH2ObSmgN6ODIkt97iDorlOyHwbO+HrwwU3oO4=
+X-Received: by 2002:a4a:e3d5:0:b0:599:fbcc:1c75 with SMTP id
+ m21-20020a4ae3d5000000b00599fbcc1c75mr5667681oov.0.1707305157791; Wed, 07 Feb
+ 2024 03:25:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <CGME20240207103144eucas1p16b601a73ff347d2542f8380b25921491@eucas1p1.samsung.com>
+ <10423008.nUPlyArG6x@kreacher> <708a65cc-79ec-44a6-8454-a93d0f3114c3@samsung.com>
+ <CAJZ5v0hn=KgaWn9pwtLsH2a8n61BNxzb1xrNoxUfEi3o9OAZGw@mail.gmail.com> <4a043533-009f-4db9-b107-c8374be28d2b@samsung.com>
+In-Reply-To: <4a043533-009f-4db9-b107-c8374be28d2b@samsung.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 7 Feb 2024 12:25:46 +0100
+Message-ID: <CAJZ5v0hDmwaFEtLc8yDc4cXn2wODXAqATe0+_Hpm9QPODUPMQw@mail.gmail.com>
+Subject: Re: [PATCH v1] PM: sleep: Restore asynchronous device resume optimization
+To: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
+	Linux PM <linux-pm@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Tejun Heo <tj@kernel.org>, Nathan Chancellor <nathan@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>, Lai Jiangshan <jiangshanlai@gmail.com>, 
+	Naohiro.Aota@wdc.com, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 31 2024 at 19:13, Pranav Prasad wrote:
-> Hi!
+On Wed, Feb 7, 2024 at 12:16=E2=80=AFPM Marek Szyprowski
+<m.szyprowski@samsung.com> wrote:
 >
-> I am proposing a patch in which I want to return the errno code ETIME
-> instead of EBUSY in enter_state() in the kernel suspend flow. Currently,
-> EBUSY is returned  when an imminent alarm is pending which is checked in
-> alarmtimer_suspend() in alarmtimer.c. The proposed patch series moves the
-> check to enter_state() in suspend.c to catch a potential suspend failure
-> early in the suspend flow. I want to replace EBUSY with ETIME to make it
-> more diagnosable in userspace, and may be more appropriate considering a
-> timer is about to expire.
+> On 07.02.2024 11:38, Rafael J. Wysocki wrote:
+> > On Wed, Feb 7, 2024 at 11:31=E2=80=AFAM Marek Szyprowski
+> > <m.szyprowski@samsung.com>  wrote:
+> >> On 09.01.2024 17:59, Rafael J. Wysocki wrote:
+> >>>    From: Rafael J. Wysocki<rafael.j.wysocki@intel.com>
+> >>>
+> >>> Before commit 7839d0078e0d ("PM: sleep: Fix possible deadlocks in cor=
+e
+> >>> system-wide PM code"), the resume of devices that were allowed to res=
+ume
+> >>> asynchronously was scheduled before starting the resume of the other
+> >>> devices, so the former did not have to wait for the latter unless
+> >>> functional dependencies were present.
+> >>>
+> >>> Commit 7839d0078e0d removed that optimization in order to address a
+> >>> correctness issue, but it can be restored with the help of a new devi=
+ce
+> >>> power management flag, so do that now.
+> >>>
+> >>> Signed-off-by: Rafael J. Wysocki<rafael.j.wysocki@intel.com>
+> >>> ---
+> >> This patch finally landed in linux-next some time ago as 3e999770ac1c
+> >> ("PM: sleep: Restore asynchronous device resume optimization"). Recent=
+ly
+> >> I found that it causes a non-trivial interaction with commit
+> >> 5797b1c18919 ("workqueue: Implement system-wide nr_active enforcement
+> >> for unbound workqueues"). Since merge commit 954350a5f8db in linux-nex=
+t
+> >> system suspend/resume fails (board doesn't wake up) on my old Samsung
+> >> Exynos4412-based Odroid-U3 board (ARM 32bit based), which was rock
+> >> stable for last years.
+> >>
+> >> My further investigations confirmed that the mentioned commits are
+> >> responsible for this issue. Each of them separately (3e999770ac1c and
+> >> 5797b1c18919) doesn't trigger any problems. Reverting any of them on t=
+op
+> >> of linux-next (with some additional commit due to code dependencies)
+> >> also fixes/hides the problem.
+> >>
+> >> Let me know if You need more information or tests on the hardware. I'm
+> >> open to help debugging this issue.
+> > If you echo 0 to /sys/power/pm_async before suspending the system,
+> > does it still fail?
 >
-> I am reaching out to get an opinion from the
-> suspend maintainers if this would act as any potential risk in the suspend
-> flow which only has EBUSY, EAGAIN, and EINVAL as return error codes
-> currently. This has been developed as part of a patch series, and only the
-> patch of interest is below this message. Any feedback or insights would be
-> greatly appreciated.
->
-> Thank you,
-> Pranav Prasad
+> In such case it works fine.
 
-Can you please use a cover letter instead of putting random stuff into
-the changelong?
+Thanks for the confirmation.
 
-> The alarmtimer driver currently fails suspend attempts when there is an
-> alarm pending within the next suspend_check_duration_ns nanoseconds, since
-> the   system is expected to wake up soon anyway. The entire suspend process
-> is initiated even though the system will immediately awaken. This process
-> includes substantial work before the suspend fails and additional work
-> afterwards to undo the failed suspend that was attempted. Therefore on
-> battery-powered devices that initiate suspend attempts from userspace, it
-> may be advantageous to be able to fail the suspend earlier in the suspend
-> flow to avoid power consumption instead of unnecessarily doing extra work.
-> As one data point, an analysis of a subset of Android devices showed that
-> imminent alarms account for roughly 40% of all suspend failures on average
-> leading to unnecessary power wastage.
->
-> To facilitate this, expose
-> function time_check_suspend_fail() from alarmtimer to be used by the power
-> subsystem to perform the check earlier in the suspend flow. Perform the
-> check in enter_state() and return early if an alarm is to be fired in the
-> next suspend_check_duration_ns nanoseconds, failing suspend.
->
-> Signed-off-by: Pranav Prasad <pranavpp@google.com>
-> Signed-off-by: Kelly Rossmoyer <krossmo@google.com>
+ It doesn't rely on unbound workqueues then, so that's expected.
 
-This Signed-off-by chain is bogus.
+Now, I think that there are two possibilities.
 
-> +/**
-> + * alarmtimer_init_soonest - Initializes parameters to find soonest alarm.
-> + * @min: ptr to relative time to the soonest alarm to expire
-> + * @expires: ptr to absolute time of the soonest alarm to expire
-> + * @type: ptr to alarm type
-> + *
-> + */
-> +static void alarmtimer_init_soonest(ktime_t *min, ktime_t *expires, int *type)
-> +{
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&freezer_delta_lock, flags);
-> +	*min = freezer_delta;
-> +	*expires = freezer_expires;
-> +	*type = freezer_alarmtype;
-> +	freezer_delta = 0;
-> +	spin_unlock_irqrestore(&freezer_delta_lock, flags);
-> +}
-> +
-> +/**
-> + * alarmtimer_get_soonest - Finds the soonest alarm to expire among the alarm bases.
-> + * @min: ptr to relative time to the soonest alarm to expire
-> + * @expires: ptr to absolute time of the soonest alarm to expire
-> + * @type: ptr to alarm type
-> + *
-> + */
-> +static void alarmtimer_get_soonest(ktime_t *min, ktime_t *expires, int *type)
-> +{
-> +	int i;
-> +	unsigned long flags;
+One is that commit 3e999770ac1c is generally overoptimistic for your
+board and there is a dependency between devices which is not
+represented by a device link, and it causes things to go south when
+they are not done in a specific order.  If that is the case and commit
+5797b1c18919 changes that order, breakage ensues.
 
-https://www.kernel.org/doc/html/latest/process/maintainer-tip.html#variable-declarations
+The other one is that what happens during async resume does not meet
+the assumptions of commit 5797b1c18919 (for example, it can easily
+produce a chain of interdependent work items longer than 8) and so it
+breaks things.
 
-Aside of that 'flags' wants to be in the loop scope.
-
-> +
-> +	/* Find the soonest timer to expire */
-> +	for (i = 0; i < ALARM_NUMTYPE; i++) {
-> +		struct alarm_base *base = &alarm_bases[i];
-> +		struct timerqueue_node *next;
-> +		ktime_t delta;
-> +
-> +		spin_lock_irqsave(&base->lock, flags);
-> +		next = timerqueue_getnext(&base->timerqueue);
-> +		spin_unlock_irqrestore(&base->lock, flags);
-> +		if (!next)
-> +			continue;
-> +		delta = ktime_sub(next->expires, base->get_ktime());
-> +		if (!(*min) || (delta < *min)) {
-
-The inner brackets are pointless
-
-> +			*expires = next->expires;
-> +			*min = delta;
-> +			*type = i;
-> +		}
-> +	}
-> +}
-> +
-> +/**
-> + * time_check_suspend_fail - Check if suspend should be failed due to an
-> + * alarm within the next suspend_check_duration nanoseconds.
-> + *
-> + * Returns error if suspend should be failed, else returns 0.
-> + */
-> +int time_check_suspend_fail(void)
-> +{
-> +	ktime_t min, expires;
-> +	int type;
-
-Why is this unconditional and not checking RTC dev?
-
-> +	/* Initialize parameters to find soonest timer */
-> +	alarmtimer_init_soonest(&min, &expires, &type);
-
-How does that make sense? That function evaluates the freezer state, but
-there is nothing frozen when this is invoked.
-
-> +	/* Find the soonest timer to expire */
-> +	alarmtimer_get_soonest(&min, &expires, &type);
-> +
-> +	if (min == 0)
-> +		return 0;
-> +
-> +	if (ktime_to_ns(min) < suspend_check_duration_ns)
-> +		return -EBUSY;
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL(time_check_suspend_fail);
-
-What is this export for?
-
-> +
->  /**
->   * alarmtimer_get_rtcdev - Return selected rtcdevice
->   *
-> @@ -296,49 +374,24 @@ EXPORT_SYMBOL_GPL(alarm_expires_remaining);
->  static int alarmtimer_suspend(struct device *dev)
->  {
-...
-> +	/* Initialize parameters to find soonest timer */
-> +	alarmtimer_init_soonest(&min, &expires, &type);
-
-This wants to be _after_ the RTC dev check, no?
-
->  	rtc = alarmtimer_get_rtcdev();
->  	/* If we have no rtcdev, just return */
->  	if (!rtc)
->  		return 0;
->  
-> +	/* Find the soonest timer to expire */
-> +	alarmtimer_get_soonest(&min, &expires, &type);
->  
-> -	if (ktime_to_ns(min) < suspend_check_duration_ns) {
-> -		pm_wakeup_event(dev, suspend_check_duration_ns/NSEC_PER_MSEC);
-
-What injects the pm_wakeup_event after this change?
-
-Thanks,
-
-        tglx
+I would still try to use a non-unbound workqueue for the async thing,
+because if it works reliably then, the second possibility will be more
+likely.
 
