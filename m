@@ -1,285 +1,250 @@
-Return-Path: <linux-pm+bounces-3518-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3519-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D326B84C2F9
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 04:17:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9412C84C351
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 04:55:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 038601C217A1
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 03:17:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C6CB287FDD
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 03:55:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07118F9E0;
-	Wed,  7 Feb 2024 03:17:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7807FC1A;
+	Wed,  7 Feb 2024 03:55:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k9AW5i/K"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PVm909qd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1895D1CAB3;
-	Wed,  7 Feb 2024 03:17:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AA8F18B1B;
+	Wed,  7 Feb 2024 03:55:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707275859; cv=none; b=L8NGb49feKz/1IK9dv8vq4GNErdHZKff7owqib4fWe3cPoBL3rf+3wQpDoX5CBsrqubElSnhWONf8w21VFgbHpCVrw4Hz085l6KNMoYLyrDkjMaqtlD6n8smRGbZqy+tEPmZDeXMbpnO7m9oa58lG6Dyc2tI1uq1swRKtAVOkO4=
+	t=1707278105; cv=none; b=jGnsRACt/YOHbUuhWAAo4khKRDgpcovHz17eUcZVu0VdsOvQ6QgW+80utROtdGQ7f9XqaFWlJ+R5RipCE3SrKnNcBYp2LclzPe1wkXGwWU/c2Drv3XAwHMXg6KRVHVRFRwfDmVWmM8af5VkmpHMu+T/JH6pd5vUZnBQxllZUXhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707275859; c=relaxed/simple;
-	bh=UM1c6ee1czq19GX2kBBAW2nsfxfKEYoOdX0v8dDrmiQ=;
+	s=arc-20240116; t=1707278105; c=relaxed/simple;
+	bh=alq/Epsr8DHJ6MiKVlHW4MkuUuZ14dHFXS5+zhvZRtM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DBejCqHRvKykHgFGojiN/4wJEq8xHrmRJKUCgxAaRrnJlSqYyE63LWMFhZXJsL6H8UfdqqFkEUMd71ObQtcQrQIwHAfj+8xsvPKY9zPWbaSaJZg4rekWh9/eDGdznw+o8NfuuLYlSl+UexNvl8KDAzXZcD00DGjofBnmpGKbDfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k9AW5i/K; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707275859; x=1738811859;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=UM1c6ee1czq19GX2kBBAW2nsfxfKEYoOdX0v8dDrmiQ=;
-  b=k9AW5i/KUKkDH9heFfP/0sTbeZWCNIW3/8usaMV2PHHO/vTTehSM4uRu
-   i/sJ56UlQ0SWYeOPsxUroH/wbmWs3KsYIDr58iCuIlcQ8MXPlCiNVOVFS
-   kDb/OV6JjOi6eB35NLTbfGTBJEc/6zNfHrnW2mQ/eZoT2nrhRyUFbu8XX
-   /6pKIBacspw7hrIGSZgklEENIlFpvEykTsykx+2W03zF8Bn+hDcnGeGNN
-   3nQ8kNcARUv3AcHZ+/C0k+zt4NbN+qiDeF2RCD5jcRY04J9zycT+d1VhA
-   th1wxIYGqBBfy2virAW9UknT3pXqcjcizkKOiRqLp16D+TwnKVBTmHG9M
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10976"; a="12256403"
-X-IronPort-AV: E=Sophos;i="6.05,250,1701158400"; 
-   d="scan'208";a="12256403"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 19:17:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,250,1701158400"; 
-   d="scan'208";a="1565836"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2024 19:17:37 -0800
-Date: Tue, 6 Feb 2024 19:18:54 -0800
-From: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
-	Zhuocheng Ding <zhuocheng.ding@intel.com>,
-	Zhao Liu <zhao1.liu@intel.com>, zhenyu.z.wang@intel.com
-Subject: Re: [PATCH v2 3/3] thermal: intel: hfi: Enable interface only when
- required
-Message-ID: <20240207031854.GC19695@ranerica-svr.sc.intel.com>
-References: <20240206133605.1518373-1-stanislaw.gruszka@linux.intel.com>
- <20240206133605.1518373-4-stanislaw.gruszka@linux.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=TEfEG3yvIOllobNE1a1wUSeuZwiYrQNLBpukkv+buqbMzYdopktO3KEbIYapHvis16wCvzlxMY61/6LOWoNysod5e/otjtCIbLMXBFgluQHzP4xPOY0LDfirS1rz2h7DvCMfxDFNg2a2h6Ju6sDWUnlCELLBuNEb2XMep2/19pU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PVm909qd; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6e0518c83c6so165111b3a.0;
+        Tue, 06 Feb 2024 19:55:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707278103; x=1707882903; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JSUyVN+zMp3raBZwXZBWBj6Uh3GxHdSlvMsi0/pJS9o=;
+        b=PVm909qdr5KX/aJqFn5Bp3f9bl/942ea1pcTOLqI7jcaVPFQSWly7veTrs4IWkf97D
+         fwAaXz3k0CU/o6E4vUJkVOdgPiPWyG4OvbXO4kEmAg3cHCikWH1J3ika9vwSH10clwGE
+         5Xyq9jPFoX6Kh2ATGgYTOqjilW6THoTfiKZBQU/K69kYs+/FnhcdLfSjDplkShq/j8Y1
+         ldbY7ajyhEUEo6OIJb+u4Gqfcc1koSJqzcx+DLpvPa53so/3kfNeJ96JxahfFHCgIL1B
+         +B9AuMC1yNytf4PJFXefN3XTmGUyA1G7Ag+QboGYX9GDSisCGQvlMsFM7ALv500WNB1r
+         0iLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707278103; x=1707882903;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JSUyVN+zMp3raBZwXZBWBj6Uh3GxHdSlvMsi0/pJS9o=;
+        b=hUskIdVp6Yps8htHuFtq8ubIXgE9gYuJ8xpEOuryfKcabAvwpcPniKt53z2w73XYvu
+         wMx91gKjk+MPxCsShHkc8aqckheXzBgIwK075icRhTvLtDQVvsW6Dyfp+zHcXrdsYSQP
+         RV7+geX4U5tclXbdIcoiRDhKw+NLrOjbzWwDEjqe2Dxq/Hpsfevk9yX4XAZWOzCM8g57
+         wahR7DjmcZAQnDz3Cz+ZbiZVZBiuobgIpki5d83tdA05r3DyNrvMHkW1mG6+79YcJORN
+         L/vC9TqqRhLftVu2fxeSGfg9uKAC2B36W2VC0mwnwmnRuSHY8Zrv29RcNCjH5XMw+lTO
+         hYXQ==
+X-Gm-Message-State: AOJu0Yyhc7U0/h11wnwEx05SdMoDAjKVZrFydILqBDaELXOVnQpHZGk3
+	kIIh/cs7VAJN5izJ+I88lPWERP4R+5gMXsV9/v1xzAULv+/fL13u
+X-Google-Smtp-Source: AGHT+IE77kv+k+lKKaVFPON9Wzu5mHAhJc9Oql5lwp9BjmydfTLfoVFhv31rzQNN9LT8w5l/k36BSA==
+X-Received: by 2002:a62:cecd:0:b0:6df:f7f3:6197 with SMTP id y196-20020a62cecd000000b006dff7f36197mr1466287pfg.34.1707278103141;
+        Tue, 06 Feb 2024 19:55:03 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVqHuxjtbSzNSU678YJfPEy0Dm3uCr7fqpRRK0RY3PTWJoBpT4vA5ftnW3BwbXhdkawge7zNn0K+3tQtp2TFkKz411lLj2fhOY1tjUhVJwTWX5aBeqr5ZBVVt3JGguGRdiiUftD4gicbv+KrELWBCXyfqg2GJHrdbGoBzSBrRQOMqZh50E5YuVWNg5hpuKKjTVuNo20dkyFzezJHUxSGAMF37r7ev1VDSkT/cbOId3939YqUL8CNTX3WL0IcA2t3WZZOzssTwMVVGieZ7aZzImmZBVpgKivuVX7
+Received: from DESKTOP-KA7F9LU.localdomain ([2406:7400:63:f7c5:bcc2:8f62:f66c:2f62])
+        by smtp.gmail.com with ESMTPSA id z1-20020aa79901000000b006e063fe6b1dsm310759pff.100.2024.02.06.19.55.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Feb 2024 19:55:02 -0800 (PST)
+Date: Wed, 7 Feb 2024 09:24:57 +0530
+From: Vimal Kumar <vimal.kumar32@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+	Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, chinmoyghosh2001@gmail.com,
+	badolevishal1116@gmail.com, mintupatel89@gmail.com
+Subject: Re: [PATCH v4] PM / sleep: Mechanism to find source aborting kernel
+ suspend transition
+Message-ID: <20240207035457.GA19804@DESKTOP-KA7F9LU.localdomain>
+References: <20240205170747.19748-1-vimal.kumar32@gmail.com>
+ <2024020555-usable-hardy-345e@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240206133605.1518373-4-stanislaw.gruszka@linux.intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <2024020555-usable-hardy-345e@gregkh>
 
-On Tue, Feb 06, 2024 at 02:36:05PM +0100, Stanislaw Gruszka wrote:
-> Enable and disable hardware feedback interface (HFI) when user space
-> handler is present. For example, enable HFI, when intel-speed-select or
-> Intel Low Power daemon is running and subscribing to thermal netlink
-> events. When user space handlers exit or remove subscription for
-> thermal netlink events, disable HFI.
+On Mon, Feb 05, 2024 at 07:33:17PM +0000, Greg Kroah-Hartman wrote:
+> On Mon, Feb 05, 2024 at 10:37:45PM +0530, Vimal Kumar wrote:
+> > Sometimes kernel suspend transitions can be aborted unconditionally by
+> > manipulating pm_abort_suspend value using "hard" wakeup triggers or
+> > through "pm_system_wakeup()".
+> > 
+> > There is no way to trace the source path of module or subsystem which
+> > aborted the suspend transitions. This change will create a list of
+> > wakeup sources aborting suspend in progress through "hard" events as
+> > well as subsytems aborting suspend using "pm_system_wakeup()".
+> > 
+> > Example: Existing suspend failure logs:
+> > [  349.708359] PM: Some devices failed to suspend, or early wake event detected
+> > [  350.327842] PM: suspend exit
+> > 
+> > Suspend failure logs with this change:
+> > [  518.761835] PM: Some devices failed to suspend, or early wake event detected
+> > [  519.486939] PM: wakeup source or subsystem uart_suspend_port aborted suspend
+> > [  519.500594] PM: suspend exit
+> > 
+> > Here we can clearly identify the module triggerring abort suspend.
+> > 
+> > Co-developed-by: Chinmoy Ghosh <chinmoyghosh2001@gmail.com>
+> > Signed-off-by: Chinmoy Ghosh <chinmoyghosh2001@gmail.com>
+> > Co-developed-by: Mintu Patel <mintupatel89@gmail.com>
+> > Signed-off-by: Mintu Patel <mintupatel89@gmail.com>
+> > Co-developed-by: Vishal Badole <badolevishal1116@gmail.com>
+> > Signed-off-by: Vishal Badole <badolevishal1116@gmail.com>
+> > Signed-off-by: Vimal Kumar <vimal.kumar32@gmail.com>
+> > ---
+> > Changes in v4:
+> > - Changed GFP_KERNEL flag to GFP_ATOMIC
+> > - Changed mutex_lock to raw_spin_lock
 > 
-> Summary of changes:
+> why raw?
+>
+ As mutex_lock might sleep, we need to use lock that is suitable for usages in atomic context. raw_spin_lock is already being used for other list in
+this driver, so I used the same. If suggested we can switch to spin_lock_irqsave as well.
 > 
-> - Register a thermal genetlink notifier
+> > ---
+> >  drivers/base/power/wakeup.c | 100 +++++++++++++++++++++++++++++++++++-
+> >  1 file changed, 99 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
+> > index a917219feea6..b04794557eef 100644
+> > --- a/drivers/base/power/wakeup.c
+> > +++ b/drivers/base/power/wakeup.c
+> > @@ -73,6 +73,16 @@ static struct wakeup_source deleted_ws = {
+> > 
+> >  static DEFINE_IDA(wakeup_ida);
+> > 
+> > +#ifdef CONFIG_PM_DEBUG
+> > +static DEFINE_RAW_SPINLOCK(pm_abort_suspend_list_lock);
+> > +
+> > +struct pm_abort_suspend_source {
+> > +	struct list_head list;
+> > +	char *source_triggering_abort_suspend;
+> > +};
+> > +static LIST_HEAD(pm_abort_suspend_list);
+> > +#endif
+> > +
+> >  /**
+> >   * wakeup_source_create - Create a struct wakeup_source object.
+> >   * @name: Name of the new wakeup source.
+> > @@ -575,6 +585,54 @@ static void wakeup_source_activate(struct wakeup_source *ws)
+> > 	trace_wakeup_source_activate(ws->name, cec);
+> >  }
+> > 
+> > +#ifdef CONFIG_PM_DEBUG
 > 
-> - In the notifier, process THERMAL_NOTIFY_BIND and THERMAL_NOTIFY_UNBIND
-> reason codes to count number of thermal event group netlink multicast
-> clients. If thermal netlink group has any listener enable HFI on all
-> packages. If there are no listener disable HFI on all packages.
+> Please do not add #ifdef to .c files, this makes this file even messier.
 > 
-> - When CPU is online, instead of blindly enabling HFI, check if
-> the thermal netlink group has any listener. This will make sure that
-> HFI is not enabled by default during boot time.
+> > @@ -590,8 +648,13 @@ static void wakeup_source_report_event(struct wakeup_source *ws, bool hard)
+> > 	if (!ws->active)
+> > 		wakeup_source_activate(ws);
+> > 
+> > -	if (hard)
+> > +	if (hard) {
+> > +#ifdef CONFIG_PM_DEBUG
+> > +		if (pm_suspend_target_state != PM_SUSPEND_ON)
+> > +			pm_abort_suspend_source_add(ws->name);
+> > +#endif
 > 
-> - Actual processing to enable/disable matches what is done in
-> suspend/resume callbacks. Create two functions hfi_do_enable()
-> and hfi_do_disable(), which can be called from  the netlink notifier
-> callback and suspend/resume callbacks.
+> Especially for stuff like this, if you write your .h files properly, no
+> #ifdef are needed.
+>
+ Thanks. We can move it to .h file.
 > 
-> Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-> ---
->  drivers/thermal/intel/intel_hfi.c | 95 +++++++++++++++++++++++++++----
->  1 file changed, 85 insertions(+), 10 deletions(-)
 > 
-> diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-> index 3b04c6ec4fca..5e1e2b5269b7 100644
-> --- a/drivers/thermal/intel/intel_hfi.c
-> +++ b/drivers/thermal/intel/intel_hfi.c
-> @@ -159,6 +159,7 @@ struct hfi_cpu_info {
->  static DEFINE_PER_CPU(struct hfi_cpu_info, hfi_cpu_info) = { .index = -1 };
->  
->  static int max_hfi_instances;
-> +static int hfi_thermal_clients_num;
-
-Perhaps this counter can be generalized for other clients besides netlink.
-KVM could also use it to enable/disable HFI as needed for virtual machines.
-
-Maybe we should expose a function intel_hfi_toggle(bool enable) or a couple
-of intel_hfi_enable()/intel_hfi_disable() functions. The former would
-increase the counter and enable HFI on all packages. The latter would
-decrease the counter and disable HFI if the counter becomes 0.
-
->  static struct hfi_instance *hfi_instances;
->  
->  static struct hfi_features hfi_features;
-> @@ -477,8 +478,11 @@ void intel_hfi_online(unsigned int cpu)
->  enable:
->  	cpumask_set_cpu(cpu, hfi_instance->cpus);
->  
-> -	/* Enable this HFI instance if this is its first online CPU. */
-> -	if (cpumask_weight(hfi_instance->cpus) == 1) {
-> +	/*
-> +	 * Enable this HFI instance if this is its first online CPU and
-> +	 * there are user-space clients of thermal events.
-> +	 */
-> +	if (cpumask_weight(hfi_instance->cpus) == 1 && hfi_thermal_clients_num > 0) {
->  		hfi_set_hw_table(hfi_instance);
->  		hfi_enable();
->  	}
-> @@ -573,28 +577,93 @@ static __init int hfi_parse_features(void)
->  	return 0;
->  }
->  
-> -static void hfi_do_enable(void)
-> +/*
-> + * HFI enable/disable run in non-concurrent manner on boot CPU in syscore
-> + * callbacks or under protection of hfi_instance_lock.
-> + */
-> +static void hfi_do_enable(void *ptr)
-> +{
-> +	struct hfi_instance *hfi_instance = ptr;
-> +
-> +	hfi_set_hw_table(hfi_instance);
-> +	hfi_enable();
-> +}
-> +
-> +static void hfi_do_disable(void *ptr)
-> +{
-> +	hfi_disable();
-> +}
-> +
-> +static void hfi_syscore_resume(void)
->  {
->  	/* This code runs only on the boot CPU. */
->  	struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, 0);
->  	struct hfi_instance *hfi_instance = info->hfi_instance;
->  
-> -	/* No locking needed. There is no concurrency with CPU online. */
-> -	hfi_set_hw_table(hfi_instance);
-> -	hfi_enable();
-> +	if (hfi_thermal_clients_num > 0)
-> +		hfi_do_enable(hfi_instance);
->  }
->  
-> -static int hfi_do_disable(void)
-> +static int hfi_syscore_suspend(void)
->  {
-> -	/* No locking needed. There is no concurrency with CPU offline. */
->  	hfi_disable();
->  
->  	return 0;
->  }
->  
->  static struct syscore_ops hfi_pm_ops = {
-> -	.resume = hfi_do_enable,
-> -	.suspend = hfi_do_disable,
-> +	.resume = hfi_syscore_resume,
-> +	.suspend = hfi_syscore_suspend,
-> +};
-> +
-> +static int hfi_thermal_notify(struct notifier_block *nb, unsigned long state,
-> +			      void *_notify)
-> +{
-> +	struct thermal_genl_notify *notify = _notify;
-> +	struct hfi_instance *hfi_instance;
-> +	smp_call_func_t func;
-> +	unsigned int cpu;
-> +	int i;
-> +
-> +	if (notify->mcgrp != THERMAL_GENL_EVENT_GROUP)
-> +		return NOTIFY_DONE;
-> +
-> +	if (state != THERMAL_NOTIFY_BIND && state != THERMAL_NOTIFY_UNBIND)
-> +		return NOTIFY_DONE;
-> +
-> +	mutex_lock(&hfi_instance_lock);
-> +
-> +	switch (state) {
-> +	case THERMAL_NOTIFY_BIND:
-> +		hfi_thermal_clients_num++;
-> +		break;
-
-Perhaps here you could call intel_hfi_enable()
-
-> +	case THERMAL_NOTIFY_UNBIND:
-> +		hfi_thermal_clients_num--;
-> +		break;
-> +	}
-
-and here intel_hfi_disable().
-
-> +
-> +	if (hfi_thermal_clients_num > 0)
-> +		func = hfi_do_enable;
-> +	else
-> +		func = hfi_do_disable;
-> +
-> +	for (i = 0; i < max_hfi_instances; i++) {
-> +		hfi_instance = &hfi_instances[i];
-> +		if (cpumask_empty(hfi_instance->cpus))
-> +			continue;
-> +
-> +		cpu = cpumask_any(hfi_instance->cpus);
-> +		smp_call_function_single(cpu, func, hfi_instance, true);
-> +	}
-
-This block would go in a helper function.
-
-I know this is beyond the scope of the patchset but it would make the
-logic more generic for other clients to use.
-> +
-> +	mutex_unlock(&hfi_instance_lock);
-> +
-> +	return NOTIFY_OK;
-> +}
-> +
-> +static struct notifier_block hfi_thermal_nb = {
-> +	.notifier_call = hfi_thermal_notify,
->  };
->  
->  void __init intel_hfi_init(void)
-> @@ -628,10 +697,16 @@ void __init intel_hfi_init(void)
->  	if (!hfi_updates_wq)
->  		goto err_nomem;
->  
-> +	if (thermal_genl_register_notifier(&hfi_thermal_nb))
-> +		goto err_nl_notif;
-> +
->  	register_syscore_ops(&hfi_pm_ops);
->  
->  	return;
->  
-> +err_nl_notif:
-> +	destroy_workqueue(hfi_updates_wq);
-> +
->  err_nomem:
->  	for (j = 0; j < i; ++j) {
->  		hfi_instance = &hfi_instances[j];
-> -- 
-> 2.34.1
 > 
+> > 		pm_system_wakeup();
+> > +	}
+> >  }
+> > 
+> >  /**
+> > @@ -893,12 +956,47 @@ bool pm_wakeup_pending(void)
+> > 		pm_print_active_wakeup_sources();
+> > 	}
+> > 
+> > +#ifdef CONFIG_PM_DEBUG
+> > +	if (atomic_read(&pm_abort_suspend) > 0) {
+> > +		struct pm_abort_suspend_source *info;
+> > +
+> > +		raw_spin_lock_irqsave(&pm_abort_suspend_list_lock, flags);
+> > +		list_for_each_entry(info, &pm_abort_suspend_list, list) {
+> > +			pm_pr_dbg("wakeup source or subsystem %s aborted suspend\n",
+> > +					info->source_triggering_abort_suspend);
+> > +		}
+> > +		raw_spin_unlock_irqrestore(&pm_abort_suspend_list_lock, flags);
+> > +		pm_abort_suspend_list_clear();
+> > +	}
+> > +#endif
+> > +
+> > 	return ret || atomic_read(&pm_abort_suspend) > 0;
+> >  }
+> >  EXPORT_SYMBOL_GPL(pm_wakeup_pending);
+> > 
+> >  void pm_system_wakeup(void)
+> >  {
+> > +
+> > +#ifdef CONFIG_PM_DEBUG
+> > +#ifdef CONFIG_DEBUG_INFO
+> > +	if (pm_suspend_target_state != PM_SUSPEND_ON) {
+> > +		char *source_name = kasprintf(GFP_ATOMIC,
+> > +					"%ps",
+> > +					__builtin_return_address(0));
+> > +		if (!source_name)
+> > +			goto exit;
+> > +
+> > +		if (strcmp(source_name, "pm_wakeup_ws_event"))
+> > +			pm_abort_suspend_source_add(source_name);
+> > +
+> > +		kfree(source_name);
+> > +	}
+> > +exit:
+> > +#else
+> > +	if (pm_suspend_target_state != PM_SUSPEND_ON)
+> > +		pm_pr_dbg("Some wakeup source or subsystem aborted suspend\n");
+> > +#endif
+> > +#endif
+> 
+> Would you want to maintain this #ifdef nesting mess for the next 20
+> years?  Please do not do this.
+> 
+ I was hoping if we can remove the "CONFIG_PM_DEBUG" as this functionality can exist by default as well.
+ We can avoid nesting and usage for CONFIG_DEBUG_INFO move to .h files.
+
+ Please share your perspective on this.
+
+
+> thanks,
+> 
+> greg k-h
+
+
+
+Warm Regards,
+Vimal Kumar
+
 
