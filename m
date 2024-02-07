@@ -1,156 +1,125 @@
-Return-Path: <linux-pm+bounces-3531-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3532-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3B0984C852
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 11:11:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AF9884C88C
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 11:25:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F7E01F21F1E
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 10:11:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D7CDD1F21BD4
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Feb 2024 10:25:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D48D1241E6;
-	Wed,  7 Feb 2024 10:11:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FA762555F;
+	Wed,  7 Feb 2024 10:25:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=natalenko.name header.i=@natalenko.name header.b="KyL7oM7i"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Th6daon7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from prime.voidband.net (prime.voidband.net [199.247.17.104])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 334D924B2A;
-	Wed,  7 Feb 2024 10:11:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.247.17.104
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 711702560F;
+	Wed,  7 Feb 2024 10:25:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707300678; cv=none; b=ldXa7Fp0ZdIpjHVqdQi/J4xK6pWdqs7KEMt+R8Q8TAEQvQfYY5aL7TS4dy0/znlTVXPcsqEJtP0ur8uszkV/NfPwR9vBMaQZ4UZtFQQMnDxL7RH5yQXdmt/xo9pQwoVha7DeY6R4mrzs/BnlxPafvUaanx4Sp47YoFuxaqAW7Ec=
+	t=1707301506; cv=none; b=Yg0dCpCBbdQo2FbvmyzOyCOXrWFKdpZJwwbNAQ8vB6Qgug1301px6YRjlbnkBPgTcTXAQpBXLHPvsQmRp9/QMOMWgrM4WSuxXgKz9pthFhopjelSYUc/FbiagfQlbSId+Fs/RmGSU8R4JIiu9FmVhP7XVUqmRvkMSOfOSnDV1hg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707300678; c=relaxed/simple;
-	bh=fy0MuGEeBqq0yRk9q1POmHQUTTNM7NnZ5ogEzRYEj/I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GsWIaYsBulZX1olSOvNYrC4Yoqci3oSRWcJFkFLEMlPaAbQHVMEqaAod0M5BIWHhQ02O4kvJhLfRFjQYHCaqf8DKxJyAcX8XcpT29j8nFqSS1I7gUO/hMCrzj7fU4MNcPdJK+jeGQnUfBibCIsfO92KheOH6vET266IzOZx9q20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=natalenko.name; spf=pass smtp.mailfrom=natalenko.name; dkim=pass (1024-bit key) header.d=natalenko.name header.i=@natalenko.name header.b=KyL7oM7i; arc=none smtp.client-ip=199.247.17.104
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=natalenko.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=natalenko.name
-Received: from spock.localnet (unknown [94.142.239.106])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by prime.voidband.net (Postfix) with ESMTPSA id D1D67635B069;
-	Wed,  7 Feb 2024 11:11:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-	s=dkim-20170712; t=1707300666;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qk89De6FrqTdMkAJYqG4hQmTMMefgxmhKdx6js2QarM=;
-	b=KyL7oM7iafK7DSybwDFdAZAMiJ3ehUyp+BRzcCbLYde4BRADgMdlGp3/4m3KvueGghizKu
-	T0CBG9kR9OpEUCFUfp22+dQ1cirlFfG0ekAzHWklbRNhWJLx1n4TrPnGeXmeCokEA72M6M
-	CNT5dMy4P44VGic0SsjSOmoIvXjKcFo=
-From: Oleksandr Natalenko <oleksandr@natalenko.name>
-To: rafael.j.wysocki@intel.com, Mario.Limonciello@amd.com,
- viresh.kumar@linaro.org, Ray.Huang@amd.com, gautham.shenoy@amd.com,
- Borislav.Petkov@amd.com, Perry Yuan <perry.yuan@amd.com>
-Cc: Alexander.Deucher@amd.com, Xinmei.Huang@amd.com, Xiaojian.Du@amd.com,
- Li.Meng@amd.com, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject:
- Re: [PATCH v3 6/7] cpufreq: amd-pstate: remove legacy set_boost callback for
- passive mode
-Date: Wed, 07 Feb 2024 11:10:52 +0100
-Message-ID: <2887380.mvXUDI8C0e@natalenko.name>
-In-Reply-To:
- <fb14f6e7748f1b872f68eb2549d4e6033f0facbc.1707297581.git.perry.yuan@amd.com>
-References:
- <cover.1707297581.git.perry.yuan@amd.com>
- <fb14f6e7748f1b872f68eb2549d4e6033f0facbc.1707297581.git.perry.yuan@amd.com>
+	s=arc-20240116; t=1707301506; c=relaxed/simple;
+	bh=D58qgJiMO/DYE+PqVkbHRsWSO4cNXHI8fj75RFB7UWA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ihe84Ctd9BogY12XSU9v2Pecytc2NWUSzbQcEu2CEPy3DjO7of8989jH0jBXbm4PNr4biAremi86EGquboC32NoVoUsTP84+Ugbe8kcdEls5MRWjIP3NpXlz/WXBRm1XE7Unxvy1XWWcpUyAe9UIhqnf/XoIwQX+oWs6+/gO+no=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Th6daon7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C307C433C7;
+	Wed,  7 Feb 2024 10:25:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1707301505;
+	bh=D58qgJiMO/DYE+PqVkbHRsWSO4cNXHI8fj75RFB7UWA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Th6daon7zKarFRy/prkw0rx+iDQ6zyhb32PFc2qhw3h4m0X98Y0KS5lcGsI+AmdYK
+	 yjUea/rLkdFqwvoI0O3MHBoVDvN+jB0O0bPKoBSoS0iuvtrJPMMV3BfzLSQaXiH36K
+	 lQ2SYObYO/+mAyHTw3zV1Ws+QE3AKTuIMbvnmm4Y=
+Date: Wed, 7 Feb 2024 10:25:02 +0000
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Vimal Kumar <vimal.kumar32@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+	Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, chinmoyghosh2001@gmail.com,
+	badolevishal1116@gmail.com, mintupatel89@gmail.com
+Subject: Re: [PATCH v4] PM / sleep: Mechanism to find source aborting kernel
+ suspend transition
+Message-ID: <2024020747-grit-splinter-806d@gregkh>
+References: <20240205170747.19748-1-vimal.kumar32@gmail.com>
+ <2024020555-usable-hardy-345e@gregkh>
+ <20240207035457.GA19804@DESKTOP-KA7F9LU.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart12544814.O9o76ZdvQC";
- micalg="pgp-sha256"; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240207035457.GA19804@DESKTOP-KA7F9LU.localdomain>
 
---nextPart12544814.O9o76ZdvQC
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"; protected-headers="v1"
-From: Oleksandr Natalenko <oleksandr@natalenko.name>
-Date: Wed, 07 Feb 2024 11:10:52 +0100
-Message-ID: <2887380.mvXUDI8C0e@natalenko.name>
-MIME-Version: 1.0
+On Wed, Feb 07, 2024 at 09:24:57AM +0530, Vimal Kumar wrote:
+> On Mon, Feb 05, 2024 at 07:33:17PM +0000, Greg Kroah-Hartman wrote:
+> > On Mon, Feb 05, 2024 at 10:37:45PM +0530, Vimal Kumar wrote:
+> > > Sometimes kernel suspend transitions can be aborted unconditionally by
+> > > manipulating pm_abort_suspend value using "hard" wakeup triggers or
+> > > through "pm_system_wakeup()".
+> > > 
+> > > There is no way to trace the source path of module or subsystem which
+> > > aborted the suspend transitions. This change will create a list of
+> > > wakeup sources aborting suspend in progress through "hard" events as
+> > > well as subsytems aborting suspend using "pm_system_wakeup()".
+> > > 
+> > > Example: Existing suspend failure logs:
+> > > [  349.708359] PM: Some devices failed to suspend, or early wake event detected
+> > > [  350.327842] PM: suspend exit
+> > > 
+> > > Suspend failure logs with this change:
+> > > [  518.761835] PM: Some devices failed to suspend, or early wake event detected
+> > > [  519.486939] PM: wakeup source or subsystem uart_suspend_port aborted suspend
+> > > [  519.500594] PM: suspend exit
+> > > 
+> > > Here we can clearly identify the module triggerring abort suspend.
+> > > 
+> > > Co-developed-by: Chinmoy Ghosh <chinmoyghosh2001@gmail.com>
+> > > Signed-off-by: Chinmoy Ghosh <chinmoyghosh2001@gmail.com>
+> > > Co-developed-by: Mintu Patel <mintupatel89@gmail.com>
+> > > Signed-off-by: Mintu Patel <mintupatel89@gmail.com>
+> > > Co-developed-by: Vishal Badole <badolevishal1116@gmail.com>
+> > > Signed-off-by: Vishal Badole <badolevishal1116@gmail.com>
+> > > Signed-off-by: Vimal Kumar <vimal.kumar32@gmail.com>
+> > > ---
+> > > Changes in v4:
+> > > - Changed GFP_KERNEL flag to GFP_ATOMIC
+> > > - Changed mutex_lock to raw_spin_lock
+> > 
+> > why raw?
+> >
+>  As mutex_lock might sleep, we need to use lock that is suitable for usages in atomic context. raw_spin_lock is already being used for other list in
+> this driver, so I used the same. If suggested we can switch to spin_lock_irqsave as well.
 
-Hello.
+You need a really good reason, and a documented one, as to why to use a
+raw spinlock.  If not, please just use a normal one (or irqsave if it
+can be grabbed in irq context.)
 
-On st=C5=99eda 7. =C3=BAnora 2024 10:21:57 CET Perry Yuan wrote:
-> With new freqency boost interface supported, legacy boost control
-> doesn't make sense any more which only support passive mode.
-> so it can remove the legacy set_boost interface from amd-pstate driver
-> in case of there is conflict with new boost control logic.
->=20
-> Signed-off-by: Perry Yuan <perry.yuan@amd.com>
-> ---
->  drivers/cpufreq/amd-pstate.c | 1 -
->  include/linux/amd-pstate.h   | 1 -
->  2 files changed, 2 deletions(-)
->=20
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 35791efc6e88..1dd523db3871 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -1675,7 +1675,6 @@ static struct cpufreq_driver amd_pstate_driver =3D {
->  	.exit		=3D amd_pstate_cpu_exit,
->  	.suspend	=3D amd_pstate_cpu_suspend,
->  	.resume		=3D amd_pstate_cpu_resume,
-> -	.set_boost	=3D amd_pstate_set_boost,
->  	.update_limits	=3D amd_pstate_update_limits,
->  	.name		=3D "amd-pstate",
->  	.attr		=3D amd_pstate_attr,
-> diff --git a/include/linux/amd-pstate.h b/include/linux/amd-pstate.h
-> index 465e9295a60c..ab7ca26974da 100644
-> --- a/include/linux/amd-pstate.h
-> +++ b/include/linux/amd-pstate.h
-> @@ -93,7 +93,6 @@ struct amd_cpudata {
->  	struct amd_aperf_mperf prev;
-> =20
->  	u64	freq;
-> -	bool	boost_supported;
+> > > +exit:
+> > > +#else
+> > > +	if (pm_suspend_target_state != PM_SUSPEND_ON)
+> > > +		pm_pr_dbg("Some wakeup source or subsystem aborted suspend\n");
+> > > +#endif
+> > > +#endif
+> > 
+> > Would you want to maintain this #ifdef nesting mess for the next 20
+> > years?  Please do not do this.
+> > 
+>  I was hoping if we can remove the "CONFIG_PM_DEBUG" as this functionality can exist by default as well.
 
-As a result of this removal the kernel-doc for this struct should be amende=
-d too because even after this patch is applied the `boost_supported` field =
-remains documented.
+Then submit changes for that if that is what you want :)
 
->  	bool	hw_prefcore;
-> =20
->  	/* EPP feature related attributes*/
->=20
+thanks,
 
-
-=2D-=20
-Oleksandr Natalenko (post-factum)
---nextPart12544814.O9o76ZdvQC
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEZUOOw5ESFLHZZtOKil/iNcg8M0sFAmXDVywACgkQil/iNcg8
-M0usJA/8DvFsv4pQV0fQtw4hJh2XYcd5dI7x9P7ACTWNem6eWk5h8r8E50qAAj/i
-mhw1eZ7XKEALojhZPehAs4FBkFSZDKwfj7mO4crwDvBtX4sN+zKQI92YAmxY08fu
-jWzGSL607lbFJosXKQ5AUwj4oFLbntWt3I8sYgY9/7LqiaUbyGf376QIDr2+1aNQ
-i3kcCrALsnN0mFmCXmyc7mJLMDRy41v859TBNVpjprq7GUxdhmp42uLl8n49B3uN
-3P4McJLQ1UGc+mOB64MGMypZcBpPGQdGOF+a+0ijNOuUnLKvGm8vxc4vmZFn/lwF
-HVqhnDdFG5e0i4recu3ExN3n43Ji28pcfFYhfBNlu+ro8b4fypF1ija184fl5w44
-POv5QVTLELrLBGE+lzvigTZip/afLojug6VSGVq+PwSAc6UzB0akJTRXO4p5vNyl
-F1l8wcEhKN0flzJkp0q18hIKDLKr9n+Ja3pr+EDkZPQ3W8Fu3dXBHOg4IDWvyvEC
-C5V5UyU1KDF7S3bEIDj1hgDuHG2rGtCNp5UWhCeIxR5GnI4KXgEU1flOu3Yp3VN8
-f4rTaKJHgwZCC1vmK3QejH762nTxqLuAmQXe728nEjEO9Kbs0pPuY9FUQhLRjf6z
-YRDiGifZxWVomkZbz1ueePf5U3zwH1QtnyZbgVUeTWcyftSGC0w=
-=B1Jv
------END PGP SIGNATURE-----
-
---nextPart12544814.O9o76ZdvQC--
-
-
-
+greg k-h
 
