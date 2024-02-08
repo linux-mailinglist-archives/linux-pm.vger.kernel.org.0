@@ -1,104 +1,130 @@
-Return-Path: <linux-pm+bounces-3598-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3599-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8528A84DDB0
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Feb 2024 11:06:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AC53484DE24
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Feb 2024 11:23:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 361C51F27998
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Feb 2024 10:06:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 612EE1F219E1
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Feb 2024 10:23:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 130C56DCE5;
-	Thu,  8 Feb 2024 10:01:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DB6C6EB6C;
+	Thu,  8 Feb 2024 10:21:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="fGePYv3t"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="MOI1eYpO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDEDC6A8BB;
-	Thu,  8 Feb 2024 10:01:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EFA76EB40;
+	Thu,  8 Feb 2024 10:21:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707386465; cv=none; b=uK5AQbxPuavSsD/OhNhpMjMoaddAIPCAgyg80bAqhguB81zVpXl+1SLKiKi1VjYAktHKYh3r6DxXTW5llgqcFCeOKjudKZ4EP8UcyL4aDBfEUfsR/Q3NizWAaWBjNWpaVAr06C2pD8kPkScsyrH9NKjEM91MK79aLvDp8ymkmtk=
+	t=1707387709; cv=none; b=WaRM2imvntCGvcKlO1I2M8e7t1SeZgH25LmWcsH3T/sshttpfxUziALHT8sKQNWMvgwwuE5rEwnjmxrfaEg67e4uSn4jhvIfSwxXig21/VDTlF327qv5/nN2IyiygoGTpEh6YYEw3++Yht5pPEMDpQK0pjCLDFgVgfxxrrNKMvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707386465; c=relaxed/simple;
-	bh=QdAtsmJAqD21B3GWv8/xJXnL6FFTkI21JTQdzVgWRPA=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=W7aSDGSkBYCAaYjzQ6igrTaGbkzaBUOTj09C9Z+8sk3ggj+zaJk1z2tsRJMF+M9OyTDO4KFH7fkOVMazkVA4WAmn6xzDWT1n2uq+daHba3RWgdHyUIakAQGbT8+Rb9/j0W8GIpHkH4PpHEhJkI33BQ2KUnotp3yLsudDmFKTiyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=fGePYv3t; arc=none smtp.client-ip=80.241.56.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
+	s=arc-20240116; t=1707387709; c=relaxed/simple;
+	bh=qDWuuRBf1xxz5bsMVwW9ZMIy2L8bfUVRk/L4iuIDJfs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O+qZD/GdilQ9g5GP1O+yFry9kniZNeLUZ7Rbt76YpGgESOBzXO+r31tpe93+fakE0YOK6faZYbfiKwAUW4tlLsRgEu+0bGRcpy0VVV1u+wIBo9m5oLAKNgbiRHaZRB/1qOFuY014ayQxtYHJ2c/w8gSVT0H83jffnnnK7oUmP/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=MOI1eYpO; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 9D8F440E0192;
+	Thu,  8 Feb 2024 10:21:42 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id 02oHg6pEHWu9; Thu,  8 Feb 2024 10:21:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1707387700; bh=zDCN9B1OwiFdxzxU1s/nmeWzomSeDzTk/K6y01fn1+c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MOI1eYpOGTSx7CbW83dK6BcrFrDNqsKnW6HW77c8OQMD2MJEA20pI8qfy74hHc3T+
+	 DGTeYmGp2brU1gfv1e7R796eLp/e4xGD40VK4I0P6uI99qlws6xapgNE6tO0Vst1E2
+	 zBZ4w/gwd5b3zo7XcSAdoqh8EwANSfzZcRPGZxdhNhf8c8ZlZmbnN4SNutQ3j4IqQb
+	 gOUrQDhkpUjr/LXvUydObzHOxRt5n5tGFpasOGp7EE0S//RkFzrXatsH875jXebCh0
+	 eoIDx/M4+H29fKGUmVxumOUG+hsCATGiFx08RVbHE09gJabMqZyDjAWnLEbZvcl8Rl
+	 N2Dx9OLdMRUZCj0Y9a1DfUq6CwyF6KscE1Ck8w4GzPAX70RTglga0xEbRZcaPxQbsu
+	 +MUHL/t1dWi+7pAHPifKYyco5C8kXIaImmZtDcOPV7RE3VoKRmstUBn8Uob7F0EOrs
+	 v31b7dXfa0akR3W1iV21xdUml/LHgrFV1C7FQZJbxRUUXcRG+xaejDo1+ejYl4byw9
+	 el1ieyZel11YSqhKfVuOA0SvESjjVCDZUvtSlMxXGnAgXZnGXLAMXcePm4uJgcOjK2
+	 DPgLt9Xhk1rYvKm52Gr5brcqxmh6Y3im6+WhRwV2L0tZC8KQu4dOBhLIsdbJE3sdBs
+	 WDasJ0kU6ncvLiyrnKejIqhg=
+Received: from zn.tnic (pd953021b.dip0.t-ipconnect.de [217.83.2.27])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
 	(No client certificate requested)
-	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4TVstx73VXz9svQ;
-	Thu,  8 Feb 2024 11:00:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1707386458;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Barut0WbxR8ZK4VaiV9eTXhumtMeDqIqqbIXK0ewMac=;
-	b=fGePYv3ttH/RDbDWXPu1vUWKmRBKZee+sonviJghwd/dIEfo1MRnefu3DlYcG5VpO7Mx6Q
-	FUIE+Il+xQVUMGYNSpDRiwaJP+V15RcuUEFe6Bm06Qn9FHrBR1d90PNEcLIo0og/9AVWzt
-	iSdVV3I7L2e6fTT2VUjfYZBQkfE6+yslsspmJUbHVoSbWWUhcdSKdJ2FXsL6/H0ijkqSXb
-	gGii79eWD/rrj1LWGrIPXbT3PJBS3SHxVwjWoVUmTW9B2+uyr/9iMErMF40PdOX6DV8N2C
-	TMP+ZY+54z4sU101e4JOV2fTcNPLhx1yAhIJFlDJCSbI5xPLHpSJcaWJmj67RQ==
-Message-ID: <8eefeeb7-f8e8-49f4-b83c-e67a9e728f41@mailbox.org>
-Date: Thu, 8 Feb 2024 11:00:50 +0100
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4525A40E0196;
+	Thu,  8 Feb 2024 10:21:28 +0000 (UTC)
+Date: Thu, 8 Feb 2024 11:21:22 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Perry Yuan <perry.yuan@amd.com>
+Cc: rafael.j.wysocki@intel.com, Mario.Limonciello@amd.com,
+	viresh.kumar@linaro.org, Ray.Huang@amd.com, gautham.shenoy@amd.com,
+	Alexander.Deucher@amd.com, Xinmei.Huang@amd.com,
+	Xiaojian.Du@amd.com, Li.Meng@amd.com, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 0/6] AMD Pstate Fixes And Enhancements
+Message-ID: <20240208102122.GAZcSrIkbPJfIExdF6@fat_crate.local>
+References: <cover.1707363758.git.perry.yuan@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Language: en-US
-To: Perry Yuan <Perry.Yuan@amd.com>, Huang Rui <ray.huang@amd.com>,
- "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
- Mario Limonciello <mario.limonciello@amd.com>,
- "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- Oleksandr Natalenko <oleksandr@natalenko.name>
-From: Tor Vic <torvic9@mailbox.org>
-Subject: [PATCH v2] cpufreq: amd-pstate: Fix min_perf assignment in
- amd_pstate_adjust_perf()
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-MBO-RS-ID: e587f8e7f120ffd8bfa
-X-MBO-RS-META: nq6zerw71rdaaxdbo5g7f95humxm8hnk
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <cover.1707363758.git.perry.yuan@amd.com>
 
-In the function amd_pstate_adjust_perf(), the 'min_perf' variable is set
-to 'highest_perf' instead of 'lowest_perf'.
+On Thu, Feb 08, 2024 at 11:46:27AM +0800, Perry Yuan wrote:
+> The patch series adds some fixes and enhancements to the AMD pstate
+> driver.
 
-Cc: stable@vger.kernel.org # 6.1+
-Fixes: 1d215f0319c2 ("cpufreq: amd-pstate: Add fast switch function for 
-AMD P-State")
-Reported-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-Reviewed-by: Perry Yuan <Perry.Yuan@amd.com>
-Signed-off-by: Tor Vic <torvic9@mailbox.org>
----
-v1->v2: Add Perry's 'Reviewed-by' and 'Cc: stable' tag
----
-  drivers/cpufreq/amd-pstate.c | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
+Is there any chance you could stop spamming people with your patchset?
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 08e112444c27..aa5e57e27d2b 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -577,7 +577,7 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
-      if (target_perf < capacity)
-          des_perf = DIV_ROUND_UP(cap_perf * target_perf, capacity);
+102625 O T Feb 02                Perry Yuan ( : 12K|) [PATCH v2 0/6] AMD Pstate Fixes And Enhancements
+104232 O T Feb 04                Perry Yuan ( : 12K|) [PATCH v3 0/6] AMD Pstate Fixes And Enhancements
+106714 O T Feb 06                Perry Yuan ( : 12K|) [PATCH v4 0/6]  AMD Pstate Fixes And Enhancements
+107828 O T Feb 07                Perry Yuan ( : 13K|) [PATCH v5 0/6] AMD Pstate Fixes And Enhancements
+108745 N T Feb 08                Perry Yuan ( : 13K|) [PATCH v6 0/6] AMD Pstate Fixes And Enhancements
 
--    min_perf = READ_ONCE(cpudata->highest_perf);
-+    min_perf = READ_ONCE(cpudata->lowest_perf);
-      if (_min_perf < capacity)
-          min_perf = DIV_ROUND_UP(cap_perf * _min_perf, capacity);
+You should send stuff once a week tops, not every other day.
+
+While waiting your can read about it in Documentation/process/submitting-patches.rst
+
+"Don't get discouraged - or impatient
+------------------------------------
+
+After you have submitted your change, be patient and wait.  Reviewers are
+busy people and may not get to your patch right away.
+
+Once upon a time, patches used to disappear into the void without comment,
+but the development process works more smoothly than that now.  You should
+receive comments within a few weeks (typically 2-3); if that does not
+happen, make sure that you have sent your patches to the right place.
+Wait for a minimum of one week before resubmitting or pinging reviewers
+- possibly longer during busy times like merge windows.
+
+It's also ok to resend the patch or the patch series after a couple of
+weeks with the word "RESEND" added to the subject line::
+
+   [PATCH Vx RESEND] sub/sys: Condensed patch summary
+
+Don't add "RESEND" when you are submitting a modified version of your
+patch or patch series - "RESEND" only applies to resubmission of a
+patch or patch series which have not been modified in any way from the
+previous submission."
+
+Thx.
 
 -- 
-2.43.0
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
