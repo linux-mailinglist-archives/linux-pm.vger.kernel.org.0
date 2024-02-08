@@ -1,188 +1,114 @@
-Return-Path: <linux-pm+bounces-3664-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3665-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB3AC84E647
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Feb 2024 18:10:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E834F84E8E4
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Feb 2024 20:26:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 576F3B2AB0F
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Feb 2024 17:10:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 980411F319FF
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Feb 2024 19:26:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EFDD1350D1;
-	Thu,  8 Feb 2024 17:04:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="DFuhy6df"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD4F7374F0;
+	Thu,  8 Feb 2024 19:25:57 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A2A782D61;
-	Thu,  8 Feb 2024 17:04:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57050374EB;
+	Thu,  8 Feb 2024 19:25:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707411890; cv=none; b=uShuCvmYin51CZs3+qWiFpCRo0net2/wekgon+3Wn/UvC8LAugK83u9TQw1Fsn2nhL32efo1rySLh0FQiYMycLHGAzeSgZybqXG0JgJhJEpGCGugOp0NQYK023rhxF7M5OLErhK9RY7JPvDbYQGMKVEaX4JosN6/DSyAq9zEotI=
+	t=1707420357; cv=none; b=YU4wvRo/JxG5ZaTQJtAWLav+m/9KaZjoKbvqxu2bi91eYp9Th3QYqQuxDEOobECKNvBuFAi4tTpG8wxOLs7nhqlZjCvtqc/M40a/H+GAHUtM2X1z1sK1sRjCU4SyJpLfdPW0XQUTcvMWQMLjOWCV26PIJ8tSIpg3L+ffeQZQTYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707411890; c=relaxed/simple;
-	bh=X6xRv8ZmzjUFGThF5eIFsolt+SQ3arFoHgRmBYQ550I=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=p/nSwQSQRiEZAzXB/5dwIPhZpJJVtWtPQNr/OHNDpeC6oRkqMtGssAhgYrV4acysE2ZrhZuTKYipnX5JeGMzEFXBteT6Tt7VpN0P6GSSoTP4GbsYQv29qEuYo/gcKn0+ysnC8PZbZIJ6GqaUygHTAeEeOl2rtgnCXXYhSFGlOdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=DFuhy6df; arc=none smtp.client-ip=198.47.19.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 418H4Pki004982;
-	Thu, 8 Feb 2024 11:04:25 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1707411865;
-	bh=MeE+f3axegAXGv9AlMEePhEt4yt01moBec9QtZ5EkhI=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=DFuhy6dflnTf+UjeWx8yI7a/sW5DIr9cLsKU1BaqzpHDhkjA6wc8HK+LWwNcLBCAA
-	 ZoPWVcawohUwdJDl/SoffeaAP/nXBcmWPtEb1qda/4tmc5fVZhuABwElmFoww1TQKf
-	 72skFySYelSDo9drSgXwCbxsPIU3tuFgtBRmllFk=
-Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 418H4PcI023458
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 8 Feb 2024 11:04:25 -0600
-Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 8
- Feb 2024 11:04:24 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 8 Feb 2024 11:04:24 -0600
-Received: from lelvsmtp5.itg.ti.com ([10.249.42.149])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 418H4B6L091006;
-	Thu, 8 Feb 2024 11:04:24 -0600
-From: Andrew Davis <afd@ti.com>
-To: Sebastian Reichel <sre@kernel.org>,
-        Manivannan Sadhasivam
-	<manivannan.sadhasivam@linaro.org>,
-        Cristian Ciocaltea
-	<cristian.ciocaltea@gmail.com>,
-        Florian Fainelli
-	<florian.fainelli@broadcom.com>,
-        Ray Jui <rjui@broadcom.com>, Scott Branden
-	<sbranden@broadcom.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad
- Dybcio <konrad.dybcio@linaro.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-actions@lists.infradead.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, Andrew Davis <afd@ti.com>
-Subject: [PATCH v3 19/19] power: reset: syscon-poweroff: Use devm_register_sys_off_handler(POWER_OFF)
-Date: Thu, 8 Feb 2024 11:04:10 -0600
-Message-ID: <20240208170410.67975-20-afd@ti.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240208170410.67975-1-afd@ti.com>
-References: <20240208170410.67975-1-afd@ti.com>
+	s=arc-20240116; t=1707420357; c=relaxed/simple;
+	bh=+YxRwLnaWql45Og/uBWyYcb3+6fMBdrqBtTSrgZdyPg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XSOIKdcvFo0VBdVLPLnlzfIosKh8nuKgs4QqG5W6uoxzlpsC0zqeC9Azu5FGAID5Bs3pGDc9D3okhz8McQekGZ7dQYdpz+3ebyXAHkwNwYbCcQh2CXrcTGtG+rpnOPSu0FsipCXNLQoa2j5015UhbxqklEW8YmbbbP176BZ59Is=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-6e2be7b83b2so12068a34.1;
+        Thu, 08 Feb 2024 11:25:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707420355; x=1708025155;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Tb13rhuW8544qF8dDhm649NVENoNwfXmctODywQIT9g=;
+        b=EjvD5wFU+1SSJ94m0sfzv8grdOJCUQz6h+PYY+IIgc8sDbaD3p3VrWBJY4iFDMJ2ZH
+         O16jIX5PJ1SzB+S2QEMgmqKuVbgUT/mop0SUSecJ3mbw50J571WKRPBn7g+GT6FG4CXi
+         u0EnE+ZN2ZdJr9Bv+2u1XtBog33JkAKx4iU7HUGJKaOrzIHSr5E/WYUunmkmulMPQZly
+         T0GG27iYqBkkknBzliBrIPO+Sw8WCipeZBx4l+3k/EKGguwGnp0vyUKKloHLiAhfL+Ah
+         muOwW+7b62njpONr8kBdfvAl7qQqJUZZ5qMpbUOsKW3ydxtoqtuzCrkj7Bj1sP8ceSVi
+         QoEA==
+X-Forwarded-Encrypted: i=1; AJvYcCUb70/dXogFlTqZR74589E+KsK7FNC7Pf7q0UdiamPZCv9qCTf5NNJtilgeAkiDA6p2FLhVCt3MEPWYU61LG1rsH4vuaona3BVMgEhO5IGA6HgrrWCFOSu1aoiP+F4FQhpO0AkAvrPg9TGXMzuDzOLzxWo0pPgroWEqVpiQBoejtbCH
+X-Gm-Message-State: AOJu0Yxuh1EM4+LZAi+nqIlQPgtot73NlCXxrEII2P8ryA+A/PvYH3N0
+	94iJKmKj24Jrb2ceJIWdMM7El2q8yG+VlF7N/xJk1kUxNjOpSh6bcEDbU0pyKchroPpTGPBCmdd
+	1jbZP0Yj3O0x/C/9Owp5ghJBAoYLDVFC7
+X-Google-Smtp-Source: AGHT+IFc86hHi76bIJAGJOwHBORpUhjaiDBoTVniHGjNFTBpmS81Ejjw3qUL6lWrbyu/lSuj+y/tCssE7XkUmp6KBS4=
+X-Received: by 2002:a05:6871:e40b:b0:21a:cf0:2478 with SMTP id
+ py11-20020a056871e40b00b0021a0cf02478mr166961oac.4.1707420355197; Thu, 08 Feb
+ 2024 11:25:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+References: <2728491.mvXUDI8C0e@kreacher> <5762433.DvuYhMxLoT@kreacher> <ZcSPMRH34M5yG/IU@linux.intel.com>
+In-Reply-To: <ZcSPMRH34M5yG/IU@linux.intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 8 Feb 2024 20:25:43 +0100
+Message-ID: <CAJZ5v0jfUKFo-MDVU7i+yvfk=f_65Unat6715S6kuqvRX9eQLA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/6] thermal: core: Store zone trips table in struct thermal_zone_device
+To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Linux ACPI <linux-acpi@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Zhang Rui <rui.zhang@intel.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Use device life-cycle managed register function to simplify probe and
-exit paths.
+On Thu, Feb 8, 2024 at 9:22=E2=80=AFAM Stanislaw Gruszka
+<stanislaw.gruszka@linux.intel.com> wrote:
+>
+> On Mon, Feb 05, 2024 at 10:14:31PM +0100, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > The current code requires thermal zone creators to pass a pointer to a
+> > writable trips table to thermal_zone_device_register_with_trips() and
+> > that trips table is then used by the thermal core going forward.
+> >
+> > Consequently, the callers of thermal_zone_device_register_with_trips()
+> > are required to hold on to the trips table passed to it until the given
+> > thermal zone is unregistered, at which point the trips table can be
+> > freed, but at the same time they are not allowed to access the cells in
+> > that table directly.  This is both error prone and confusing.
+> >
+> > To address it, turn the trips table pointer in struct thermal_zone_devi=
+ce
+> > into a flex array (counted by its num_trips field), allocate it during
+> > thermal zone device allocation and copy the contents of the trips table
+> > supplied by the zone creator (which can be const now) into it.
+> >
+> > This allows the callers of thermal_zone_device_register_with_trips() to
+> > drop their trip tables right after the zone registration.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
 
-Signed-off-by: Andrew Davis <afd@ti.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/power/reset/syscon-poweroff.c | 34 ++++++++++++---------------
- 1 file changed, 15 insertions(+), 19 deletions(-)
+Thanks a lot for all of the reviews, much appreciated, especially
+regarding the Intel drivers changes.
 
-diff --git a/drivers/power/reset/syscon-poweroff.c b/drivers/power/reset/syscon-poweroff.c
-index 4899a019256e8..203936f4c544f 100644
---- a/drivers/power/reset/syscon-poweroff.c
-+++ b/drivers/power/reset/syscon-poweroff.c
-@@ -13,6 +13,7 @@
- #include <linux/of.h>
- #include <linux/platform_device.h>
- #include <linux/pm.h>
-+#include <linux/reboot.h>
- #include <linux/regmap.h>
- 
- struct syscon_poweroff_data {
-@@ -22,23 +23,30 @@ struct syscon_poweroff_data {
- 	u32 mask;
- };
- 
--static struct syscon_poweroff_data *data;
--
--static void syscon_poweroff(void)
-+static int syscon_poweroff(struct sys_off_data *off_data)
- {
-+	struct syscon_poweroff_data *data = off_data->cb_data;
-+
- 	/* Issue the poweroff */
- 	regmap_update_bits(data->map, data->offset, data->mask, data->value);
- 
- 	mdelay(1000);
- 
- 	pr_emerg("Unable to poweroff system\n");
-+
-+	return NOTIFY_DONE;
- }
- 
- static int syscon_poweroff_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-+	struct syscon_poweroff_data *data;
- 	int mask_err, value_err;
- 
-+	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
- 	data->map = syscon_regmap_lookup_by_phandle(dev->of_node, "regmap");
- 	if (IS_ERR(data->map)) {
- 		data->map = syscon_node_to_regmap(dev->parent->of_node);
-@@ -69,21 +77,10 @@ static int syscon_poweroff_probe(struct platform_device *pdev)
- 		data->mask = 0xFFFFFFFF;
- 	}
- 
--	if (pm_power_off) {
--		dev_err(dev, "pm_power_off already claimed for %ps",
--			pm_power_off);
--		return -EBUSY;
--	}
--
--	pm_power_off = syscon_poweroff;
--
--	return 0;
--}
--
--static void syscon_poweroff_remove(struct platform_device *pdev)
--{
--	if (pm_power_off == syscon_poweroff)
--		pm_power_off = NULL;
-+	return devm_register_sys_off_handler(&pdev->dev,
-+					     SYS_OFF_MODE_POWER_OFF,
-+					     SYS_OFF_PRIO_DEFAULT,
-+					     syscon_poweroff, data);
- }
- 
- static const struct of_device_id syscon_poweroff_of_match[] = {
-@@ -93,7 +90,6 @@ static const struct of_device_id syscon_poweroff_of_match[] = {
- 
- static struct platform_driver syscon_poweroff_driver = {
- 	.probe = syscon_poweroff_probe,
--	.remove_new = syscon_poweroff_remove,
- 	.driver = {
- 		.name = "syscon-poweroff",
- 		.of_match_table = syscon_poweroff_of_match,
--- 
-2.39.2
+Unfortunately, this patch series, and the first half of it in
+particular, is somewhat premature, because a couple of thermal drivers
+do unexpected things to their trip point tables and they need to be
+modified to stop accessing the trip tables directly before the core
+can start using internal copies of them.
 
+I'm going to save the tags for the future, however.
 
