@@ -1,308 +1,185 @@
-Return-Path: <linux-pm+bounces-3574-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3575-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F57F84D6D5
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Feb 2024 01:00:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC0EF84D91B
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Feb 2024 04:51:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 840F31C21D54
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Feb 2024 00:00:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7672E283F84
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Feb 2024 03:50:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 264CF173;
-	Thu,  8 Feb 2024 00:00:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDB4D20B29;
+	Thu,  8 Feb 2024 03:50:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="mKXZGZ6l"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="U/WKWA6w"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2084.outbound.protection.outlook.com [40.107.220.84])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30246EC9
-	for <linux-pm@vger.kernel.org>; Thu,  8 Feb 2024 00:00:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707350426; cv=none; b=cZYDH5eKo5xZP1OR+CUXdkdBZrKMAeFUcGGDoqSbmJj0M2FZnpppIM8zS4gq6BxvVLDln82EwbOBK2U4n0K7whv2pwBKPIX3K+jcr268aUrX8mg34tOZJ3b1L4TgzXEyh4YOiURnhx4YrLb0GCnymWdML+51KdQLJ1CO7aR+mBo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707350426; c=relaxed/simple;
-	bh=RmFn9KyOjZ3ejt47qAosjcCaMzybm6duCPb8opsv68M=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=PQLL0UlkttUS8pI47eFgw6Wf4tjfC6oRERaUa4PSMo4QJIJIsGlT0lrCJRLxFkuyeGAWrthVFGZgTc2XDUML0hQN+WEigfw92IOuzXwMCEbpqfQcuTH8QKrykI0g13uA6Qy5sumkpAqCVTrBhDVehsk2TiYKp/ZfV0Y4uEAS+HI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=mKXZGZ6l; arc=none smtp.client-ip=209.85.161.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-5986d902ae6so622610eaf.3
-        for <linux-pm@vger.kernel.org>; Wed, 07 Feb 2024 16:00:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1707350423; x=1707955223; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=VgPxpQHIs6H8a505luO/YYZYedOtJNmw/dL87f5cxmk=;
-        b=mKXZGZ6l4PnLVsTifHmOkq6kEZZaGcjpfHFiEZ2iaHFnORS8ULV+OMrxZarcuIPPDJ
-         u5oXpZi/wl/dB1TrfZoiz2nne97hCg7BsB6eOZfI23MT2B+kjAzi0jvsu41xuaWwdn9L
-         zTxES0yrADE65R+7Mc92sEZ9WcPCDefsUT3H3GGzXjdNQBGBvMQukWJRQLOBaYHyMcwO
-         WEB+2oACUvBkJCXbS91UrezGvy+xYI9aPk3r4xSLYiuefgLcrbYZ/FxtwUIGMZUZ5sQ2
-         wHZHfnj4LOqJwPeycripNHMHqEde77LfNx41zhOsv0t6TLUtmW7PXkRtxFfFL5mxYqkF
-         1gcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707350423; x=1707955223;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VgPxpQHIs6H8a505luO/YYZYedOtJNmw/dL87f5cxmk=;
-        b=n8wPpWwWx06Nas5H/O3DaWQOGXE+1QsjUhihmW7LhuAyPkHXaWB2SfnAMU2LQsLZ4B
-         auNK1AaYfFls0BeDOSvRhUlii9tAPY4GJQHlXFgkbB4642u/I5jGLv+x1uyaLsIha+WZ
-         nEYnobD8BYK2aZHMOOqOLASHpv56C7rRrMT3EOBDzL4ZKhUq/dVT7sOTBiK3jF5XIjLR
-         j2u07YSfuP5VB0cncdqGxxnlxEiyM0l6cApOT7Kbx6Ugwu1jCreQUYTHb6dIP84NZvTx
-         KLIVkgUFb3GoL/pzaBSm9C7LZQ0CSRYqWHZrmO6pCQ9uIUeKijwMGrSPwNmPQ6R3Hg3f
-         +W5w==
-X-Gm-Message-State: AOJu0YwyRsHPme6iQig1KISeNoHR5kyG+513yqqo5up3Efe1Yi+BiZQc
-	hHV/+623aaS0wcQ/KPsk5SXbp6lSS8r0L+kQVLGGB8Yy/GpwkWAwhP0Mw+f4RqGUaz0N9UcenVu
-	isA8=
-X-Google-Smtp-Source: AGHT+IGW/kcutek4rrVRzLwF95JQezgS8uMQYUIr4TNNuYgy67j44Ue8K02GK4o9CAPdESVEKglMiQ==
-X-Received: by 2002:a05:6358:7f17:b0:178:a202:66b1 with SMTP id p23-20020a0563587f1700b00178a20266b1mr5273233rwn.25.1707350423045;
-        Wed, 07 Feb 2024 16:00:23 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCX1qtLRnADUQfDP1OZVDsUrZhnOLQB5DU6NVEHCjnnT5HHOo6WPUIO9qkYxMNmEhzeRAC0Mo1/C/5B+lyOfK98U/MNcBkeK8BzyMYUNTiTg40KiOG7IHs4sovoFS3RAH79icJnSiyyvmrp8qqt7NktINJ3+pdnECtRFUGBkmTH3uQJgoFX2Nb5Mj8Xq
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id r18-20020aa78b92000000b006e04d2be954sm2258114pfd.187.2024.02.07.16.00.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Feb 2024 16:00:22 -0800 (PST)
-Message-ID: <65c41996.a70a0220.d2040.7c8d@mx.google.com>
-Date: Wed, 07 Feb 2024 16:00:22 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FAAA26AEA;
+	Thu,  8 Feb 2024 03:50:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.84
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707364254; cv=fail; b=GWAH5T7y2HUonDn8tz6JdWxWH5ZyV22W1PcLimhb8V9to37ArfmeVfPk9Xf8Ve5XCtuYTJYXlpw3TvIi+x+bkvurIi/kbR2fD7xh7GI8N4jdabxbAoJ+/Px4lOQx+9AfLAndw3R8Db1l128ukA/MomvpAsKRdTmtqQbQ2vuuUWs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707364254; c=relaxed/simple;
+	bh=mF1R+Xse0YZ12BmmCLWxCQZ9w+7fdN0fOdELvVrzDhs=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bz60w0AZ6/3t8cHndNmZjwih5CmRdg7baC1BJ5pPjHSrIbPeFYCUgd72mqGO/cpGLezQqBJZiCxpX2HVJlkxbG36nHgBhIW/O2XiurELv7s5RoKx/spr3e9r7DKoaDcpacrZ4F/sadPPEowkQ6SpW71Vl6+ZrrADaSyXtMGbceg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=U/WKWA6w; arc=fail smtp.client-ip=40.107.220.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=F8oPGZcsEGODn5DI85GsNfpsRtl5Fs03xGknGjmkrvEJm0FQLbLfoO6oM4nj9xLWdRNv5Hlw9+d6+xNzf9PE9/FMrF8/bH9pB9DkTrL2zPK2x5jZybL/LY9wsSk6WnoJERxEQCJipYiY2I1D19e3esZri3vwcXO0WNkfUrKiWwPa40h+HH7jME/a/r5OPvoERdGHhAArERJrHqHnp5igOND1pP3VVB3Ke5CuHELEOilgOAk1zOoyRh3RucTUtVDt61d4uBq38IWBn5ajw6bIkPyW5LY0IBeLCcQJmL2UDps2XZrT5ixf6042UuBUddPiasNOn0ehgIqCfv0wEyKM8w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JhU4oM1vfsXHB8Pbj9j+MboBU+5Ozp0MS+arm8gOzSQ=;
+ b=DYjMH04drX5zy9tF0sGG+t1TGbx1Wjgb+Zn5cRfhVg0Nc2XTp8cc8FLaK7yVCfrd4lxY0zF4zuEu9r/o83feBPnBmxfb+LMhZxtMYbdruoziHlWuIXKIU6rCAViPbdPlFyvO72s2YNdQoxOl9emcLHVCrY+4/1Co0hPzi+SdNcbyW1ZwK15T64Dusl/YqXVWbx+deOC/S5YJE6KPyeMuu4Ku6nV7nO47Jbo+h0/Dyqqa1tl/vujpDBHDZYCpoCxbhq47xYWMRmChHmz/nNpRKrvtgLlBgLAoiz10EnLRYvceEQLuiPwuJ7zINS2mZopUDW9Qxl6qxkTEvbDBYlHtXQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JhU4oM1vfsXHB8Pbj9j+MboBU+5Ozp0MS+arm8gOzSQ=;
+ b=U/WKWA6wUYxLIRzW0I5nXG1lFlpcwt99aSvzLbaqJlHbc7O0mS7YwUiimoisyMmRvXZiO20wQLpt+PXNwRHY1fJEK697r69Fn/EUWj4bS6+Bf8db5vxF4BQrRWpqkdaQzD17P7efQUzcGu+utaVeea2Oi7wQByPfGTJPgdyKtUk=
+Received: from BL1PR13CA0131.namprd13.prod.outlook.com (2603:10b6:208:2bb::16)
+ by PH7PR12MB7377.namprd12.prod.outlook.com (2603:10b6:510:20c::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7270.17; Thu, 8 Feb
+ 2024 03:50:50 +0000
+Received: from BL6PEPF0001AB54.namprd02.prod.outlook.com
+ (2603:10b6:208:2bb:cafe::8d) by BL1PR13CA0131.outlook.office365.com
+ (2603:10b6:208:2bb::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7270.17 via Frontend
+ Transport; Thu, 8 Feb 2024 03:50:50 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL6PEPF0001AB54.mail.protection.outlook.com (10.167.241.6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7249.19 via Frontend Transport; Thu, 8 Feb 2024 03:50:49 +0000
+Received: from pyuan-Chachani-VN.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Wed, 7 Feb 2024 21:50:46 -0600
+From: Perry Yuan <perry.yuan@amd.com>
+To: <rafael.j.wysocki@intel.com>, <Mario.Limonciello@amd.com>,
+	<viresh.kumar@linaro.org>, <Ray.Huang@amd.com>, <gautham.shenoy@amd.com>,
+	<Borislav.Petkov@amd.com>
+CC: <Alexander.Deucher@amd.com>, <Xinmei.Huang@amd.com>,
+	<Xiaojian.Du@amd.com>, <Li.Meng@amd.com>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: [PATCH v6 0/6] AMD Pstate Fixes And Enhancements
+Date: Thu, 8 Feb 2024 11:46:27 +0800
+Message-ID: <cover.1707363758.git.perry.yuan@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v6.8-rc3-33-gda60429b5e6b
-Subject: pm/testing baseline: 52 runs,
- 8 regressions (v6.8-rc3-33-gda60429b5e6b)
-To: rafael@kernel.org, linux-pm@vger.kernel.org,
- kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB54:EE_|PH7PR12MB7377:EE_
+X-MS-Office365-Filtering-Correlation-Id: 114d361b-4da0-4889-525b-08dc285923e4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	NB578bs2Ax94Pdv8bgkRhe3Qy2tmUZcKia/8DrBYEE5GPOcIoW8eTMDcbmdVHgLcSAhMUuMdb4/jtwxaYWYzhNSVQw4wEE17IVCz2DZ2Wxqnvh/LndecGp5/ax3ReFW0V4QQmc0E3Y9hvdl9E3SAZRaqeIj9R+jO84dL9H/8wnNf1YdQXcvo63Rx4RZnj1RCmLjo9SVG4ulyQE0L+StQw5BbKvFV8WkfEjsn4vf48hIDAmTMx7lpj28JrncAZ1V2nNJU8Hh2qb3ocbmtnG/IpbPKIpqSvbrF+LZ73ir7X1wtEjl3OZMfclaPpHfhcY50tsltwM8PbnYIuZKDmMHCaibCfjKTKaLrA5ygaSKpvzR+kOxiG/+Trf9C9R3bqOYjF5Kc1ialXxBSQ/uHYAMLVGaPJ3P1+AALJst2XIyrpE9rPNfd3wmhV498bTcBGbSwONX8vdXtqIAmCCRDM3DYbUoJINmDjIj9mBDPRy8pd7qIhMD08KEDftHT/zR7h2SGWLxPISGF6qQYwy2Z4749+WtSjHGYwk9qiQ7RQVLvqB32qoY+Af+qsfn8OEjqc0YxrfrmzaOi4UC9NrkulgoOBdt7k4evgo0OaAMsNI6U5iZKsKHm3XIv+18PI1ifjj0Z
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(346002)(376002)(39860400002)(396003)(136003)(230922051799003)(186009)(64100799003)(451199024)(1800799012)(82310400011)(46966006)(36840700001)(40470700004)(2906002)(6666004)(83380400001)(86362001)(7696005)(2616005)(426003)(16526019)(26005)(41300700001)(336012)(36756003)(966005)(478600001)(82740400003)(356005)(81166007)(54906003)(316002)(70586007)(70206006)(110136005)(5660300002)(44832011)(4326008)(6636002)(8936002)(8676002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2024 03:50:49.8665
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 114d361b-4da0-4889-525b-08dc285923e4
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL6PEPF0001AB54.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7377
+
+The patch series adds some fixes and enhancements to the AMD pstate
+driver.
+It enables CPPC v2 for certain processors in the family 17H, as
+requested
+by TR40 processor users who expect improved performance and lower system
+temperature.
+
+Additionally, it fixes the initialization of nominal_freq for each
+cpudata
+and changes latency and delay values to be read from platform firmware
+firstly
+for more accurate timing.
+
+A new quirk is also added for legacy processors that lack CPPC
+capabilities which caused the pstate driver to fail loading.
+
+I would greatly appreciate any feedbacks.
+
+Thank you!
+
+Changes from v5:
+ * rebased to linux-pm v6.8
+ * pick up RB flag from for patch 6(Mario)
+
+Changes from v4:
+ * improve the dmi matching rule with zen2 flag only
+
+Changes from v3:
+ * change quirk matching broken BIOS with family/model ID and Zen2
+   flag to fix the CPPC definition issue
+ * fix typo in quirk
+
+Changes from v2:
+ * change quirk matching to BIOS version and release (Mario)
+ * pick up RB flag from Mario
+
+Changes from v1:
+ * pick up the RB flags from Mario
+ * address review comment of patch #6 for amd_get_nominal_freq()
+ * rebased the series to linux-pm/bleeding-edge v6.8.0-rc2
+ * update debug log for patch #5 as Mario suggested.
+ * fix some typos and format problems
+ * tested on 7950X platform
+
+
+V1: https://lore.kernel.org/lkml/63c2b3d7-083a-4daa-ba40-629b3223a92d@mailbox.org/
+V2: https://lore.kernel.org/all/cover.1706863981.git.perry.yuan@amd.com/
+v3: https://lore.kernel.org/lkml/cover.1707016927.git.perry.yuan@amd.com/
+v4: https://lore.kernel.org/lkml/cover.1707193566.git.perry.yuan@amd.com/
+v5: https://lore.kernel.org/lkml/cover.1707273526.git.perry.yuan@amd.com/
+
+Perry Yuan (6):
+  ACPI: CPPC: enable AMD CPPC V2 support for family 17h processors
+  cpufreq:amd-pstate: fix the nominal freq value set
+  cpufreq:amd-pstate: initialize nominal_freq of each cpudata
+  cpufreq:amd-pstate: get pstate transition delay and latency value from
+    ACPI tables
+  cppc_acpi: print error message if CPPC is unsupported
+  cpufreq:amd-pstate: add quirk for the pstate CPPC capabilities missing
+
+ arch/x86/kernel/acpi/cppc.c  |   2 +-
+ drivers/acpi/cppc_acpi.c     |   4 +-
+ drivers/cpufreq/amd-pstate.c | 116 ++++++++++++++++++++++++++++++-----
+ include/linux/amd-pstate.h   |   6 ++
+ 4 files changed, 109 insertions(+), 19 deletions(-)
+
+-- 
+2.34.1
 
-pm/testing baseline: 52 runs, 8 regressions (v6.8-rc3-33-gda60429b5e6b)
-
-Regressions Summary
--------------------
-
-platform               | arch  | lab         | compiler | defconfig | regre=
-ssions
------------------------+-------+-------------+----------+-----------+------=
-------
-kontron-kbox-a-230-ls  | arm64 | lab-kontron | gcc-10   | defconfig | 5    =
-      =
-
-kontron-sl28-var3-ads2 | arm64 | lab-kontron | gcc-10   | defconfig | 2    =
-      =
-
-rk3399-roc-pc          | arm64 | lab-broonie | gcc-10   | defconfig | 1    =
-      =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.8-rc3=
--33-gda60429b5e6b/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v6.8-rc3-33-gda60429b5e6b
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      da60429b5e6b47f941e6ee4366a64b8335df1b27 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform               | arch  | lab         | compiler | defconfig | regre=
-ssions
------------------------+-------+-------------+----------+-----------+------=
-------
-kontron-kbox-a-230-ls  | arm64 | lab-kontron | gcc-10   | defconfig | 5    =
-      =
-
-
-  Details:     https://kernelci.org/test/plan/id/65c40f5f611056f14d8e1e94
-
-  Results:     90 PASS, 5 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.8-rc3-33-gda6042=
-9b5e6b/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.8-rc3-33-gda6042=
-9b5e6b/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.ht=
-ml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/65c40f5f611056f14d8e1e97
-        failing since 14 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
-4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
-
-    2024-02-07T23:16:16.038221  / # #
-    2024-02-07T23:16:16.140242  export SHELL=3D/bin/sh
-    2024-02-07T23:16:16.140969  #
-    2024-02-07T23:16:16.242471  / # export SHELL=3D/bin/sh. /lava-427168/en=
-vironment
-    2024-02-07T23:16:16.243195  =
-
-    2024-02-07T23:16:16.344759  / # . /lava-427168/environment/lava-427168/=
-bin/lava-test-runner /lava-427168/1
-    2024-02-07T23:16:16.345934  =
-
-    2024-02-07T23:16:16.386370  / # /lava-427168/bin/lava-test-runner /lava=
--427168/1
-    2024-02-07T23:16:16.453746  + export 'TESTRUN_ID=3D1_bootrr'
-    2024-02-07T23:16:16.454166  + cd /lava-427168/1/tests/1_bootrr =
-
-    ... (14 line(s) more)  =
-
-
-  * baseline.bootrr.fsl_enetc-enetc2-probed: https://kernelci.org/test/case=
-/id/65c40f5f611056f14d8e1e9b
-        failing since 14 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
-4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
-
-    2024-02-07T23:16:18.666811  /lava-427168/1/../bin/lava-test-case
-    2024-02-07T23:16:18.694970  <8>[   26.225957] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dfsl_enetc-enetc2-probed RESULT=3Dfail>   =
-
-
-  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/65=
-c40f5f611056f14d8e1e9d
-        failing since 14 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
-4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
-
-    2024-02-07T23:16:19.755262  /lava-427168/1/../bin/lava-test-case
-    2024-02-07T23:16:19.781835  <8>[   27.313740] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>   =
-
-
-  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
-/id/65c40f5f611056f14d8e1ea2
-        failing since 14 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
-4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
-
-    2024-02-07T23:16:21.015591  /lava-427168/1/../bin/lava-test-case
-    2024-02-07T23:16:21.042654  <8>[   28.573554] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>   =
-
-
-  * baseline.bootrr.fsl_enetc-enetc1-probed: https://kernelci.org/test/case=
-/id/65c40f5f611056f14d8e1ea3
-        failing since 14 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
-4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
-
-    2024-02-07T23:16:22.065650  /lava-427168/1/../bin/lava-test-case
-    2024-02-07T23:16:22.092729  <8>[   29.624034] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dfsl_enetc-enetc1-probed RESULT=3Dfail>   =
-
- =
-
-
-
-platform               | arch  | lab         | compiler | defconfig | regre=
-ssions
------------------------+-------+-------------+----------+-----------+------=
-------
-kontron-sl28-var3-ads2 | arm64 | lab-kontron | gcc-10   | defconfig | 2    =
-      =
-
-
-  Details:     https://kernelci.org/test/plan/id/65c40f63c99842f5458e1e7f
-
-  Results:     101 PASS, 2 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.8-rc3-33-gda6042=
-9b5e6b/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-sl28-var3-ads2.t=
-xt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.8-rc3-33-gda6042=
-9b5e6b/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-sl28-var3-ads2.h=
-tml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/65c40f63c99842f5458e1e82
-        failing since 14 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
-4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
-
-    2024-02-07T23:16:33.869488  / # #
-    2024-02-07T23:16:33.971737  export SHELL=3D/bin/sh
-    2024-02-07T23:16:33.972447  #
-    2024-02-07T23:16:34.073895  / # export SHELL=3D/bin/sh. /lava-427171/en=
-vironment
-    2024-02-07T23:16:34.074611  =
-
-    2024-02-07T23:16:34.176126  / # . /lava-427171/environment/lava-427171/=
-bin/lava-test-runner /lava-427171/1
-    2024-02-07T23:16:34.177288  =
-
-    2024-02-07T23:16:34.196837  / # /lava-427171/bin/lava-test-runner /lava=
--427171/1
-    2024-02-07T23:16:34.284493  + export 'TESTRUN_ID=3D1_bootrr'
-    2024-02-07T23:16:34.284916  + cd /lava-427171/1/tests/1_bootrr =
-
-    ... (10 line(s) more)  =
-
-
-  * baseline.bootrr.fsl_enetc-enetc0-probed: https://kernelci.org/test/case=
-/id/65c40f63c99842f5458e1e95
-        failing since 14 days (last pass: acpi-6.8-rc1-2-8775-gd8e6ba025f5e=
-4, first fail: v6.8-rc1-9-g3d5bdaa27c031)
-
-    2024-02-07T23:16:37.215028  /lava-427171/1/../bin/lava-test-case
-    2024-02-07T23:16:37.245202  <8>[   27.053043] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dfsl_enetc-enetc0-probed RESULT=3Dfail>   =
-
- =
-
-
-
-platform               | arch  | lab         | compiler | defconfig | regre=
-ssions
------------------------+-------+-------------+----------+-----------+------=
-------
-rk3399-roc-pc          | arm64 | lab-broonie | gcc-10   | defconfig | 1    =
-      =
-
-
-  Details:     https://kernelci.org/test/plan/id/65c4115db6f458fa7c8e1e80
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.8-rc3-33-gda6042=
-9b5e6b/arm64/defconfig/gcc-10/lab-broonie/baseline-rk3399-roc-pc.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.8-rc3-33-gda6042=
-9b5e6b/arm64/defconfig/gcc-10/lab-broonie/baseline-rk3399-roc-pc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230623.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/65c4115db6f458fa7c8e1=
-e81
-        failing since 2 days (last pass: v6.8-rc2-29-gc24c55a0329d1, first =
-fail: v6.8-rc3-31-g7cfffced6d0e) =
-
- =20
 
