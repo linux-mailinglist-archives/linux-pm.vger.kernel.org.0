@@ -1,150 +1,112 @@
-Return-Path: <linux-pm+bounces-3636-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3637-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 248B484E247
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Feb 2024 14:49:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FBB884E24B
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Feb 2024 14:50:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 568761C26B44
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Feb 2024 13:49:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7147C1C26B8F
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Feb 2024 13:50:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1722E76414;
-	Thu,  8 Feb 2024 13:49:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F+hhCHh7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B63976C74;
+	Thu,  8 Feb 2024 13:50:18 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25011762D3;
-	Thu,  8 Feb 2024 13:49:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B76476414;
+	Thu,  8 Feb 2024 13:50:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707400195; cv=none; b=i3pleLpWYzwMgcl0SfBri688De12hWJbvv4uRk7DcjvZghj+bpJspz7TUHEYkc9tX/SeHiOTzHG1i0tchLWQCqnvgY+cK5Zm7czfkxOGBv1rcnos87jSc7tak0oZbk0nm7mW80yAySkyxdfZr2RjXX53jew+DgD2ohMiGmAHnKg=
+	t=1707400218; cv=none; b=hdSeAn9vIp3FUpMDASEU5Z4q+1+g5EZWaK+kGupiN7LP/p+dN0LhcMdCYnvRoTM60mTng3+uPvkPElnDdMA8RD6kcHefjZJmdlzLsohJ2bh7gshqNAFmBtXiA+NtOHymq9p9g0qQUsOqCeBlrq1wlpriAR8CVnSdMA56ZZHCfHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707400195; c=relaxed/simple;
-	bh=NGuRSsB7vUfQqrg7eTKVhId/7xzcLwfkDUNBI99Ae1E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WP/PBtAU/+TqvVpah7zkwYpCmsq/RFoI++jKqKR+12ghzju7M38N3RLVqeWPePKzT/PiPj0Bsz9lYfuT+gIwLVhF5nRyJ32ivnUS1Vh4pNcB/cCS5KwQuRUuzxH7E4oWsqABXuBCeSZcD1d0tjQ9UqFjN5wOReQhpmlCklxF6Jc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F+hhCHh7; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707400193; x=1738936193;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NGuRSsB7vUfQqrg7eTKVhId/7xzcLwfkDUNBI99Ae1E=;
-  b=F+hhCHh7HE/7smRAF/MIWibmqtHZfaBA5khP0o8k4Y2yqlKbcA+6k+ld
-   nLP3IbLvZZFRGLgpSKnCddWPOizosfoD6h6W4NISHoyd10qbYy1C5qLNC
-   8/H/AUt0BtyDaVOv8OYAxzR4xrLeNeI4Fs1DcTfWzK7iEoF/9+FJ1JRkU
-   LzGrQcUoKZ+WjR/WjrztaFfmS4z1aw83nRVcEQD3qzf3tPTA5c2Ky+I9+
-   Azbf8oZ+fLEYvLb61t7YnKJmoYBGRnlp1+rzQKEaxjFu1qru0hc+Kx/VM
-   xjKsmWrUIT1FX3amqlP60+cD6EzmPWvZbQ3PuLDw5CP2sUXRyL6+OIX2D
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10977"; a="1106449"
-X-IronPort-AV: E=Sophos;i="6.05,254,1701158400"; 
-   d="scan'208";a="1106449"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2024 05:49:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,254,1701158400"; 
-   d="scan'208";a="2023060"
-Received: from sgruszka-mobl.ger.corp.intel.com (HELO localhost) ([10.252.43.105])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2024 05:49:50 -0800
-Date: Thu, 8 Feb 2024 14:49:47 +0100
-From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-	Oliver O'Halloran <oohall@gmail.com>,
-	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Subject: Re: [RFC] PCI/AER: Block runtime suspend when handling errors
-Message-ID: <ZcTb+32aciVfGKxH@linux.intel.com>
-References: <20240123090016.281252-1-stanislaw.gruszka@linux.intel.com>
- <20240130001436.GA488226@bhelgaas>
- <ZbtmB2GXPIwW1fLl@linux.intel.com>
- <CAJZ5v0gsojXKwQk4CL9ZpENcFs7X9pywfwNG-_ech5_G8pHRVw@mail.gmail.com>
- <ZcE0wWb6/CGFTKi/@linux.intel.com>
- <CAJZ5v0hLXS1EJZgUPn_i6Sp1RNJ2tH1oJ6AKvAQAM4Um_bwHPA@mail.gmail.com>
- <ZcJSQFF6XCgPjwx/@linux.intel.com>
+	s=arc-20240116; t=1707400218; c=relaxed/simple;
+	bh=k1NNnC+yIkCrCM9yvFPbzgg4mQWnvkfU5Su8+mooQjM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GnSFBKe7p2hNccAgmE/oQaxDmnr+hfef8/OMt93xgXX2W/Yc/9XlBnJU5wQg0KIdFlfe4OJF1Y1BWuBzj7NmT6uoeeUKTjpGWWXFc40JSa7ZMt7D9tu29vTRwWr1HUiTxazr2xs/LIZOK8aKLX+OORb5evBLS84WlWjCR3ojysU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-59ceb5a0593so88779eaf.0;
+        Thu, 08 Feb 2024 05:50:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707400215; x=1708005015;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=k1NNnC+yIkCrCM9yvFPbzgg4mQWnvkfU5Su8+mooQjM=;
+        b=Fkjbx+Oug0yMcSFRCWVJWmt47tqoG7PpIBNN3jR2mGkAvMTajPKII8JuGqrPIc7s1O
+         rY3wRFv9c6smr7mYFFRPgZ5AZK85vojztvQ6LQTN/oAB/6nB6ZKXWPVw0AFSX6P+n/Bz
+         j2TRMmG3SaH8boMCxv2JZKNvPiVYJUfDRymvMyLvqjt2CP3crXQq+bimcjyYqFFOSbfz
+         Kca5B1typT9tvq09mzt/t5ck6mFBG0LUcD4wU4Lr/ZbV3mhwv91R++xhXk9Cr2mSrU6Y
+         +oumcZM/HaRRJWGJcOvNtPlWCtEqWg13kt+6LjZlHaR2cCdeiKAlo7niZkcVu+wRLduN
+         So4g==
+X-Forwarded-Encrypted: i=1; AJvYcCVeBL99d/XNtQa5+ZejZgXIjMWeAyvb9AL1obmKdKenc6wgGUrmTw2X/8gRfuFcal8GHRysVK8RMjxcGyqgu9QFDs1k1rkTDAbuk5Mh6L3jGHFF01AMFvdZjPSURASuUbjiv2PcCnX3iWRNCRjEJAEZRxE0CpuNFaYEKrQS3iYjlEpsJ2fdgw==
+X-Gm-Message-State: AOJu0YzcrtMro2v+A+XQRD0Rl3Tt+HyMy0Z5tx9ZPP/lLSjBN9BsKbjq
+	amV74XDobwUHFgRZrsypRHpjPXGdDat7zNiaquMh13KZ8SCGs3x/958NV9nY7BpsdXTJZ+YfR/o
+	p0kwqKAIoxZio1meVV9cGU0QqjMGHDt+R
+X-Google-Smtp-Source: AGHT+IFrHZbdxODDdLyWqBUxhFjB1P+AqoJNJ1xPFPQDZ/b7oFC9u7YlZf0fX+tEbY98hT/0tcyd3wUvvg2ffkSaTw0=
+X-Received: by 2002:a05:6820:405:b0:59a:bfb:f556 with SMTP id
+ o5-20020a056820040500b0059a0bfbf556mr8799733oou.0.1707400215608; Thu, 08 Feb
+ 2024 05:50:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZcJSQFF6XCgPjwx/@linux.intel.com>
+References: <1892445.tdWV9SEqCh@kreacher> <875xyzh4ah.fsf@kernel.org>
+ <9e740b50d7798b5d01c0a3c9e328ccf90978d30c.camel@sipsolutions.net> <MW5PR11MB58101FBF45EFEC362A8A1E18A3442@MW5PR11MB5810.namprd11.prod.outlook.com>
+In-Reply-To: <MW5PR11MB58101FBF45EFEC362A8A1E18A3442@MW5PR11MB5810.namprd11.prod.outlook.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 8 Feb 2024 14:50:04 +0100
+Message-ID: <CAJZ5v0ixRs0cM0ZMnSY5K7PMcHwiZy5OL3mAMFQ=yTZuHpVr1w@mail.gmail.com>
+Subject: Re: [PATCH v1 0/3] iwlwifi: mvm: Thermal management fixes
+To: "Korenblit, Miriam Rachel" <miriam.rachel.korenblit@intel.com>
+Cc: Johannes Berg <johannes@sipsolutions.net>, Kalle Valo <kvalo@kernel.org>, 
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	"linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 06, 2024 at 04:37:36PM +0100, Stanislaw Gruszka wrote:
-> > > > If this is a real possibility (I mean, device in a low-power state and
-> > > > in an error state at the same time), it would be better to call
-> > > > __pm_runtime_disable(dev, false) instead of pm_runtime_get_sync(), as
-> > > > that would prevent runtime PM from changing the device state.
+On Thu, Feb 8, 2024 at 2:26=E2=80=AFPM Korenblit, Miriam Rachel
+<miriam.rachel.korenblit@intel.com> wrote:
+>
+>
+>
+> > On Thu, 2024-02-08 at 08:13 +0200, Kalle Valo wrote:
+> > > >
+> > > > If possible, I'd like to route the $subject series through the
+> > > > thermal tree, it is requisite for the above one.
 > > >
-> > > __pm_runtime_disable(dev, false) does not work as reliable in my
-> > > test as pm_runtime_get_sync(), the
-> > >
-> > > igc 0000:02:00.0: Unable to change power state from D3hot to D0, device inaccessible
-> > >
-> > > message disappears, but sill have:
-> > >
-> > > igc 0000:02:00.0: not ready 65535ms after bus reset; giving up
-> > > pcieport 0000:00:1c.2: AER: Root Port link has been reset (-25)
-> > > pcieport 0000:00:1c.2: AER: subordinate device reset failed
-> > > pcieport 0000:00:1c.2: AER: device recovery fail
-> > 
-> > But what exactly do you do?
-> > 
-> > (1) __pm_runtime_disable(dev, false)
-> > (2) Check power state
-> >      (a) If D0 (and device runtime-active), proceed
-> >      (b) If > D0, remove power (if possible) and put into D0
-> > 
-> > or something else?
-> 
-> I just did point (1), did not check power state (2).
-> I tested below patch with replaced:
-> 
->   pm_runtime_get_sync -> __pm_runtime_disable(false)
->   pm_runtime_put -> pm_runtime_enable()
-> 
-> I could try to test with (1)+(2), but now sure how do do step (2b),
-> by:
-> 
-> pci_set_power_state(D3cold)
-> pci_set_power_state(D0)
+> > > iwlwifi is getting a lot of patches lately, though I don't know if an=
+y
+> > > of them touch the thermal stuff. But if this patchset goes to the
+> > > thermal I am a bit worried about conflicts.
+> >
+> > Should be OK, I checked now and apart from the trivial change in mvm.h =
+this is
+> > contained in tt.c, which isn't touched (even in our internal feeder tre=
+e) after
+> > commit 0106cce5ad0c ("wifi: iwlwifi: mvm: drop NULL pointer check in
+> > iwl_mvm_tzone_set_trip_temp()").
+> >
+> > But I'll let Miri send an Acked-by to go through your tree, since she's=
+ the
+> > maintainer :-)
+> >
+> > Johannes
+>
+> Hi,
+>
+> This seems fine to go through your tree, as Johannes said, we don't expec=
+t any conflicts.
 
-The problematic case is indeed when after __pm_runtime_disable(), device
-is in D3hot state. In such case we need to do the same operations as
-pci_pm_runtime_resume() does, otherwise AER code is not able to work.
-I think, just doing pm_runtime_get_sync() is better.
+Thank you!
 
-While I'm able to reproduce D3hot & error state using aer_inject
-on the same smae device, more practical case is recovery running on all
-devices connected to a port (else case in pcie_do_recovery 
-type == PCIE_EXP_TYPE* check). On such case some devices can be suspend,
-and from AER code comments I conclude they have to be reset.
-
-> +static int pci_pm_runtime_put(struct pci_dev *pdev, void *data)
-> +{
-> +	pm_runtime_put(&pdev->dev);
-> +	return 0;
-> +}
-> +
-<snip>
-> +
-> +	pci_walk_bridge(bridge, pci_pm_runtime_put, NULL);
-
-This can happen after driver is unbind from device. I had concern about
-that, but after drivers/base/ code examination, seems to be fine do
-do pm_runtime_put() after unbind.
-
-Regards
-Stanislaw
+I'll go ahead and queue it up, then.
 
