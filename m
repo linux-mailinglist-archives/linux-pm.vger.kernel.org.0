@@ -1,202 +1,101 @@
-Return-Path: <linux-pm+bounces-3585-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3586-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D929384D9C3
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Feb 2024 07:07:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CF1B84D9D3
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Feb 2024 07:13:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F15E61C22F2B
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Feb 2024 06:07:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C02711C236A7
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Feb 2024 06:13:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1489867C72;
-	Thu,  8 Feb 2024 06:07:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A302122086;
+	Thu,  8 Feb 2024 06:13:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="DV8Frx95"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p+XQ4ddG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EBA567C59;
-	Thu,  8 Feb 2024 06:07:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707372467; cv=fail; b=u43JPLq7p0S4iK151mLDswUKqcn1lLb8j0NoZm46xtyKV/5NOBxlNsxJdfs4ljzPGW6RHzq0HDPY6CJdPqL5xJvihH/R86N5PVSBFjgjMhZ7T48fi59omHwX3KbJ6L4epdJl68dbxsZ9UVOzHT1auMR8+thXRlxuFl9LXyeAN6E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707372467; c=relaxed/simple;
-	bh=xPCiPZ3r6wB2dAdu9p2HDU+7xjPr+ggrmvwIPK4K71I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=oOjxsvHQa07JuA6GtuQoh0leVRNuctpLuG9PZc/C6+80QK4JTBycUUM/091ANFOp27LVxf6sZzMwtXfFHWG5yJHNq82fKlI3iZHWqL63yqZTV3H8Jc1wGrRa+sFzKwT4tS9gGLzUu0ag1JREX65erUkZ/1zTn0UegbOt4WaVHz8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=DV8Frx95; arc=fail smtp.client-ip=40.107.236.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AiPjeVrB3xI3FwrSE2mTYzQ7+eQZcGINNrwVL+EaNULIMul//cw1jg9DH+sQNDCp2IU/waQuSFgyNFpXMPmav90Jn30q+dU/LMFEB6b7+CEvw9O2whV9dM97TirCjukQPYUPsWNC4U7clepSYouGLnWoTAp+58qfv/uRznnZ1qg5JpHP0t8lHM1EBF2M1/2TOAWJYNySzODUYv3fo0uzOvR501Ce3MAu20O8AtcBfwIt0ppOKr1waEbIoL6MxQpPCZFGztxk/XNRwVlXQouChHlgdCmXrGOiL0UGXAtf0EHClHSX6d02PtMciUj2wXMi5fb3NIgdzCYd5bGfEF9+wA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jJ11YTQjrMDBjiEGjkBRWiXzHIptmO1mcDYFDefNz7Y=;
- b=eeLescEx8A+mHEOeVPpiinWZOPD4eM5gm9nzWfURHoJ0+Ti+LjcfvPFxBpumxTdbYn75myXA3t4PgknoImCj2p6QPV2eem5PZnaqhnvpldi7JtMgRIbRqbhcOhCsiIOXfvTHZ5DxxmKFu2ASSJGCZo+7E9uRbudpxakOBsYpPrC2/oEY8UL9hsJAVfP3xUHx4XL62S24CYrOFM2yVlI7lPdLTWWhJUCkRkvFpka/nw3q6/Ob6x/oyyMOvD+MHCo52BNonV9Thz4uuVmAQdjhGx8qm4wRPwrfGmSTyA6M197hpSEXPhGhfOHICTkWr5+/JHyUd9WD9wX6wBmzTRlVoA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jJ11YTQjrMDBjiEGjkBRWiXzHIptmO1mcDYFDefNz7Y=;
- b=DV8Frx95j3bIKsCtxoboKNlg0VM5Vjwm8UVnYmQ5JyOqlnTdBmpySflSIiyO8bAZXH8YsdLGPjAmS2IJ3h/nzdWUoaQ298fxJUQ9G4JNOOgS5fYlZRyzoZQ8VoSYBp5/ZK826AOyh2myrgd1WryUtMtcD8kBNOJwNcqg/nOWc84=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB8252.namprd12.prod.outlook.com (2603:10b6:8:ee::7) by
- SJ2PR12MB9113.namprd12.prod.outlook.com (2603:10b6:a03:560::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7270.16; Thu, 8 Feb
- 2024 06:07:39 +0000
-Received: from DS7PR12MB8252.namprd12.prod.outlook.com
- ([fe80::80bf:841d:6c75:64de]) by DS7PR12MB8252.namprd12.prod.outlook.com
- ([fe80::80bf:841d:6c75:64de%3]) with mapi id 15.20.7270.016; Thu, 8 Feb 2024
- 06:07:39 +0000
-Date: Thu, 8 Feb 2024 11:37:29 +0530
-From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-To: Perry Yuan <perry.yuan@amd.com>
-Cc: rafael.j.wysocki@intel.com, Mario.Limonciello@amd.com,
-	viresh.kumar@linaro.org, Ray.Huang@amd.com, Borislav.Petkov@amd.com,
-	Alexander.Deucher@amd.com, Xinmei.Huang@amd.com,
-	Xiaojian.Du@amd.com, Li.Meng@amd.com, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 2/6] cpufreq:amd-pstate: fix the nominal freq value set
-Message-ID: <ZcRvoYZKdUEjBUHp@BLR-5CG11610CF.amd.com>
-References: <cover.1707363758.git.perry.yuan@amd.com>
- <ebbe3741501a31b1ffcea208393cdd8929df6455.1707363758.git.perry.yuan@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ebbe3741501a31b1ffcea208393cdd8929df6455.1707363758.git.perry.yuan@amd.com>
-X-ClientProxiedBy: PN2P287CA0009.INDP287.PROD.OUTLOOK.COM
- (2603:1096:c01:21b::19) To DS7PR12MB8252.namprd12.prod.outlook.com
- (2603:10b6:8:ee::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77A8D1B7E4;
+	Thu,  8 Feb 2024 06:13:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707372811; cv=none; b=qgcjipoW2u5D8oWIIW4wrB1VOyZWLBr7qzPj2Q7iGqyFW5SyDTUxJCmrNCSp90O8n/7YMfEV3Vakqk4G5ziPWVbkRb8ZqoVZEopkArFGYc5sJv9a5Y0D/nCLrNF5izLrDmebKgdwX5N8OpHKMZjCyGjVjr+KdqezJBvkRzaoYFQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707372811; c=relaxed/simple;
+	bh=nsCkbUSpn4ND+bMVOeVBw6ofU7yKaK/RS9W+GLDO+A0=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
+	 MIME-Version:Content-Type; b=S3QCLYMPFHEskLB7iL81CFAW2fI/o00wK8hh5IxDb5M17qL2Xy6X/DOX9Ek8YwtVVch3V3g9nP9kZT+n285We0ZC6Xk19vDz+FZcPz8iMrnDATwKsJ/riSL6C4G1gnkuSvi2JqesKIxs1jGWRFNfOS1Vbr7+vhCVP9zxu++B32w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p+XQ4ddG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB152C433C7;
+	Thu,  8 Feb 2024 06:13:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707372810;
+	bh=nsCkbUSpn4ND+bMVOeVBw6ofU7yKaK/RS9W+GLDO+A0=;
+	h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+	b=p+XQ4ddGNkKzd/pkWukSVBmefz9cJUMcZHu94mL8HEGBafi6UHdqxTAKPzJMkKyfV
+	 lIwBHrVTH+HB+3cWxE8ppy0jFMDvmW2gC2wCB7r5iTTCDMmRZoF107Mbv6L2WoxHVg
+	 poYeWZcuvSGCvWQcODOtduX2TqME7Zp1kOyevLRRXWJ18f70kVFrPMYPKrfz7ivROQ
+	 yCGsDW9KusRqQLMhzD8fFEm2oeRXwCEz9vqtve3x6KxkmrRPf9CKjV0toT89vLAAf7
+	 E7V/mRtAhMloK5YX7b3uDnWDtOW0uqDWYr3zIC+sT9bdmu6as17z7KrkFtVPGrv/to
+	 pAH2gZZ/mcaiQ==
+From: Kalle Valo <kvalo@kernel.org>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>,  Gregory Greenman
+ <gregory.greenman@intel.com>,  Miri Korenblit
+ <miriam.rachel.korenblit@intel.com>,  Johannes Berg
+ <johannes.berg@intel.com>,  linux-wireless@vger.kernel.org,  LKML
+ <linux-kernel@vger.kernel.org>,  Daniel Lezcano
+ <daniel.lezcano@linaro.org>,  Stanislaw Gruszka
+ <stanislaw.gruszka@linux.intel.com>
+Subject: Re: [PATCH v1 0/3] iwlwifi: mvm: Thermal management fixes
+References: <1892445.tdWV9SEqCh@kreacher>
+Date: Thu, 08 Feb 2024 08:13:26 +0200
+In-Reply-To: <1892445.tdWV9SEqCh@kreacher> (Rafael J. Wysocki's message of
+	"Wed, 07 Feb 2024 20:08:18 +0100")
+Message-ID: <875xyzh4ah.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB8252:EE_|SJ2PR12MB9113:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3a879a62-af03-4071-4c63-08dc286c40c2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	vFKzBOs9muEy9jT2bzC58u9wWTz65V9gAMnfNOVUjk3KUAlxcAxMuVjojuaCp7YezUmYVZfQwX34kn7hFcuh+X+0EHJpGkC2z57JRerkQgIzZamtXYaTga3W7s/0FhZ3WUeG4BqF375DHk7ojJ5HZwy6rTbqj5ovZD4+IGKGEdaTPuFEWVfRGJX3ANXNp3GHtD9glfN3+sIT7a9mbzJhsprtBIBdz8nhiH1xHuCwccoJU1sb7Vic9h71vePlc/sWEiGUWax+D5TEWM5AF5wXRsoaUwpa8J8lk0G77fFs4uZFTX+GzqLfEGQu6ZODeyxvxAk2jmUOaCwBzgouvngDI0CeuC6PcaIWnPXvXozQRJFhIws5POk+B4MQJRuZox/bD7p+OTMhcbXWhLs8k0zQnM2OAp7AoDkjU6q6xN7s64P6mJ8poy3L8KmWm9Z42A3SPOZ+yMTjmuEitdljxNhA7WG7RwdbkKAxQMJJ2yW8+V/cRvhzQDEhv6N2vc52FFn5zijn+lYaoANaFNRf4f4oq5nU1qDDpqbNdS6jsKpyNtKGsds6hIIayYT7x5YCvcCR
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8252.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(346002)(136003)(396003)(39860400002)(366004)(230922051799003)(1800799012)(451199024)(186009)(64100799003)(2906002)(6666004)(8676002)(8936002)(4326008)(5660300002)(6636002)(316002)(6862004)(66946007)(66476007)(66556008)(6486002)(478600001)(26005)(6512007)(86362001)(41300700001)(6506007)(83380400001)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?I27UkG6PXkpojh3Prdh1XtdycUl3bqPRQsVHHXlkgNhJBQ3rVokOENSb2Oo+?=
- =?us-ascii?Q?zoqz1Vtavj2DTaDDIT49Etxe0OcGMHxCiZ9rZ9KNjzB5me1gHvahvpQxypLm?=
- =?us-ascii?Q?6mW+dUUwq/yfatp5GPn6xNuioxQ0o6O+VTIHJpin1+kZebzkUVo0fPBctnrV?=
- =?us-ascii?Q?UkGclKeHEuEG+2Rlu05G8hSgxRlngUfimZHV0utbNgkvhvIeYmSZ5ZRXZxBj?=
- =?us-ascii?Q?FcAFqkxHKEwAy9t0X0fJWxkBDVYP6WiMQ8ixlvJODQaZHT3/mZE3pKJ3DK2c?=
- =?us-ascii?Q?wcG6yTqseWaqB7AcxzXvfjE9ULoRwBWpHlUQOh6fDoNepq0sjDerlnloIbGB?=
- =?us-ascii?Q?kJEI8bVPVXdyhFYzuhwto8Tzd82gB0za65D00sinN6mvHAlDqTg36OJVsKIx?=
- =?us-ascii?Q?VLpI9PiXQV8Zs5bmwqgDDtH5oCPtyEVT4qFQp8gY5aQRqtP4Vro7c+UWgtTg?=
- =?us-ascii?Q?Q9+4U0ZdQW0U8IDiKyzAUTrUZePA7hN8vz4gG+k1D+PwH8FES64mxDGF0GIm?=
- =?us-ascii?Q?JSiTAOJF/2UF7JG2Ca1jxLu/JWegd9MWPiKhnG1nxADEOop1THss00bNVaC6?=
- =?us-ascii?Q?mR031uKJly9mv7zz8dH45pS+ZnIKa4jchFgQIe5bcQ4U6gd0VBU9MFcRJ2ga?=
- =?us-ascii?Q?bpUXxEPDNaBOZLwTyEe8OFkqTEhc9mqDykz6D77XIkfOO0BQRxRfsWaVo8ci?=
- =?us-ascii?Q?gtBDYVwtmMCOk3dD6Rzh/QPFr4kvezy8CXe1z7vD0zj/Mdx+GQnGuWPeWUPN?=
- =?us-ascii?Q?Eo3DCwJ2glT9YSXb9WS2L4Wds01Ug5kHuqLzCIORuv7rlsbrF+unQ0GywkOg?=
- =?us-ascii?Q?b6R/EOBQDic9ItX0VDKESs3ZXknM1qod4qFycLZfLm8Pq4WLB3DjDBJiRLWF?=
- =?us-ascii?Q?9VeVOR/+kXFVoS7u3ZGsaVIDZsCDTHOc3Uu07au4DnLOWpI9R/waqPSIcrRj?=
- =?us-ascii?Q?rGVGWC6nXMochTQQCcxjU7zlSLU7vt/ZYscweoUXFnPa/AnQaUc2eoG0F1Rj?=
- =?us-ascii?Q?4n2KNNEPSE6FUIZ6noQPaukZNreL3umBuf57W2XjhKrAMAe2h5ms4BgKmhEC?=
- =?us-ascii?Q?g3BM1t6hR7SQYoZgmMCO7bPyVceJ1Qba5yOIbdPsdjPnSx3kjsRtPg51OD/3?=
- =?us-ascii?Q?jdtpIA86uPBT0WxtdTcaK6vXROC1Yqa6dngQEnyxSRr5oYhe5T2fx2hykGQb?=
- =?us-ascii?Q?fyGqZFBT7ZL182b/zNOt743yujfjdcrDIikIa+bKwC5SmCvffoDxsNGp9R+V?=
- =?us-ascii?Q?iu2sev0mnDDRsujSn+Sc0qZ9H3H5p37asRtJ8Wz1eAhFZsXXoVq5APdbTRrH?=
- =?us-ascii?Q?8zcWmVLscotVquNucI541i3/6VtqRTvbWWWH0uP9CjXS0R0UxdCmVr00P6j7?=
- =?us-ascii?Q?9z+emYusW9Ikm8sjryb5pPjhfoHkp9jPJP3QTqorJFDPFTzI8iihzW1q639e?=
- =?us-ascii?Q?ds5zvZJeRWwy3CGwyn1lYNwPAbxFZzm4UeV4oX0b3k+q6cF3JtZazUSJq41E?=
- =?us-ascii?Q?gNd6VFb/Vq9kM+oS5PbWFyDeSUKXotZF6uVGP75YHCouxtSe0ratQhoquijW?=
- =?us-ascii?Q?eOqPteso0KHF773YKaKybyud6SWAh4r7jlkUEL2/?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a879a62-af03-4071-4c63-08dc286c40c2
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8252.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2024 06:07:39.1274
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CGjBVfe2WXUANuuYWCfXKaosaCRxg3iKs7aDPp23CeF9afGPwe1sEZaib+RYz+HU/oN1VJLkHaKllLCFZ8eHsg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9113
+Content-Type: text/plain
 
-On Thu, Feb 08, 2024 at 11:46:29AM +0800, Perry Yuan wrote:
-> Address an untested error where the nominal_freq was returned in KHz
-> instead of the correct MHz units, this oversight led to a wrong
-> nominal_freq set and resued, it will cause the max frequency of core to
-> be initialized with a wrong frequency value.
+"Rafael J. Wysocki" <rjw@rjwysocki.net> writes:
 
-The _CPC object on my Zen2 EPYC server which has CPPC v3, I see :
-            0x00000190,			//LowestFrequency 
-            0x000007D0			//NominalFrequency
-        })
-    }
- 
-where 0x7D0 is 2000 Mhz. Thus the value returend by cppc_perf.nominal_freq is in Mhz.
+> There are a few thermal management shortcomings in the iwlwifi driver that are
+> addressed by this series.
+>
+> First off, the fw_trips_index[] array field in struct iwl_mvm_thermal_device
+> is only populated and never read, and the code populating it has problems,
+> so patch [1/3] removes it.
+>
+> Second, iwl_mvm_thermal_zone_register() populates the trip table after passing
+> it to thermal_zone_device_register_with_trips() which is too late, because it
+> can get used before it is populated.  It also may as well use THERMAL_TEMP_INVALID
+> as the "invalid temperature" value.  Both these issues are addressed by patch [2/3].
+>
+> Finally, iwl_mvm_send_temp_report_ths_cmd() accesses the trip tables used during
+> thermal zone registration directly in order to obtain the current trip point
+> temperature values, which is not guaranteed to work in the future, because the
+> core will store the trips information in its own copy of the trip table - see
+> this patch series:
+>
+> https://lore.kernel.org/linux-pm/2728491.mvXUDI8C0e@kreacher/
+>
+> If possible, I'd like to route the $subject series through the thermal tree,
+> it is requisite for the above one.
 
-In this patch, we are changing making amd_get_nominal_freq() return
-2000 (Mhz) instead of 2000000 (Khz) as it was doing previously.
+iwlwifi is getting a lot of patches lately, though I don't know if any
+of them touch the thermal stuff. But if this patchset goes to the
+thermal I am a bit worried about conflicts.
 
-amd_get_min_freq(), amd_get_max_freq(),
-amd_get_lowest_nonlinear_perf() -all these functions return the
-frequency in Khz units.
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-These functions are used the initialize the value of
-cpudata->max_freq, cpu_data->min_freq, .... all of which are in Khz
-units.
-
-In, amd_pstate_set_boost(), we have:
- 
- 
-	if (state)
-		policy->cpuinfo.max_freq = cpudata->max_freq;  <---- In Khz
-	else
-		policy->cpuinfo.max_freq = cpudata->nominal_freq; <--- Now in Mhz
-
-Since policy->cpuinfo.max_freq is expected to be in Khz, isn't this
-patch introducing an error ? Or perhaps this patch series is based on
-another patchset ?
-
---
-Thanks and Regards
-gautham.
-
- 
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: ec437d71db7 ("cpufreq: amd-pstate: Introduce a new AMD P-State driver to support future processors")
-> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-> Signed-off-by: Perry Yuan <perry.yuan@amd.com>
-> ---
->  drivers/cpufreq/amd-pstate.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 08e112444c27..ac7faa98a450 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -640,8 +640,7 @@ static int amd_get_nominal_freq(struct amd_cpudata *cpudata)
->  	if (ret)
->  		return ret;
->  
-> -	/* Switch to khz */
-> -	return cppc_perf.nominal_freq * 1000;
-> +	return cppc_perf.nominal_freq;
->  }
->  
->  static int amd_get_lowest_nonlinear_freq(struct amd_cpudata *cpudata)
-> -- 
-> 2.34.1
-> 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
