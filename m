@@ -1,111 +1,98 @@
-Return-Path: <linux-pm+bounces-3641-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3642-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42E6B84E3C7
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Feb 2024 16:15:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B10E84E519
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Feb 2024 17:38:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 000962879E1
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Feb 2024 15:15:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C8DA1C21DE2
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Feb 2024 16:38:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BDA07AE53;
-	Thu,  8 Feb 2024 15:15:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54A3E7E771;
+	Thu,  8 Feb 2024 16:37:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LL+WM+UZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A36469300;
-	Thu,  8 Feb 2024 15:15:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DC627D41C;
+	Thu,  8 Feb 2024 16:37:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707405318; cv=none; b=oYweHivszzG3ft5HGjaTpIV/4CJDa2V5qP9Z4HsQ3taekGxh1t2iplcLkT2LRAL53ljckYdfzyCeAPVID6/mji0OTBRTbsy8RJJp+Ya0aIMXjbHdvvVIGO2F1wa4o0jTBqd0NmcHgwMmWEeuZ4ZqKhxJEYTs0pMOAiLkDdfp7D0=
+	t=1707410268; cv=none; b=WHozSSXKPIihgXVXlrh/F4Qlu0+QbVM4HW9G5qKqWR/sO9GUCCLas/PEWEZJFIPIf9pslfdVEnbKWKtIOGcF/uyWRexTyRguvlbdbs4ZwYgMnzdyRmzfCPPcgyUDn7RGBAUMBIHk7moQIURHTuHGQePTQjbuEH3QoOIt14B5JsA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707405318; c=relaxed/simple;
-	bh=uaXPCE0UgqDohZoTiXMgDSzZPVSzV0gUYHhEAYwOJkY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VVsw0zI8+GOkKpuvZ7lzrla9oY7FT2Q/sJxcrNMYlhfXXLK5oe+tnONnc7xuVOHLci1z7I/cGoxLpQKrvpnvDTosZ0GsJDkBq12J7s4aVgPr03sfW7XVcLVF3pT9MBixL4hdeY1wMhJjDTiqrCjKvx1GrfzeC+jZLURRjG56MZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5958d3f2d8aso496513eaf.1;
-        Thu, 08 Feb 2024 07:15:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707405316; x=1708010116;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nOO4/50C1vYVxO/b6f/4WzooRVWOvKCt8xgmYbMBsB8=;
-        b=KVyzl3DMUutA1d6n/HXB00Vvh94qcz3Zi/L/80FHq36S14OmeyLvQuCLNLHkgwh+o9
-         LY0HnBCTU2U+xZnWjjFBNH6Cd0yPy5106yRUUS2OiqgJW40lyBg8Kz7UraLIVXa4yA2h
-         6VnhT/4VJRvdVylXC53HdSC6Yj6WGmbTug6pC9m3bHtS9qW7jpTWFQu/O70d41tWpC5k
-         UDO91tuN8qKYwI0SHG1I4ATSzdIV5x+gW48xepfXQkKF1oUkOo70uXnFUdJYAviEOBZj
-         qLFSlDDbCi+nolXbCbqEmKlJCXtfLTWIeqw4Sgp1OMtavpYpChtPWvJAjdUm+bsPpgkM
-         GdJw==
-X-Forwarded-Encrypted: i=1; AJvYcCWz2Stfh+u2KDB7j2bXATncBjZ7De66eQGdcm5SrmAtzBSlyV0j+yIQ0+1C9a4zE4Tqoh4s2ceADr5epAqgkWbFh0QellNZLde9r89pBXa4sMqkrKDBLeOM66mrJxt0HLUvmpZe8M8=
-X-Gm-Message-State: AOJu0YzjcQvq2ck/qbj/MaDUlazsX5dgrjK/zesy8Di9HwEAdGKP/uBu
-	sAs/9RThJEY0jiRWhZD64qHcemUBZHMwAGYNoz2XR2/nSeVASNfdvng6TxaoXtkd9emIzL86R5D
-	ZGMjWAaut0JKihnhi8pLP6bA5Udk=
-X-Google-Smtp-Source: AGHT+IEQ6eBeCI4dBXCUyb542uh7dJ9HxBxDQC2ZcBtufy22j6lIJ93ZRx0g29QQA0p152YGwoDv9hRP429eQZ6LK5U=
-X-Received: by 2002:a4a:cb8b:0:b0:59c:e48e:50fc with SMTP id
- y11-20020a4acb8b000000b0059ce48e50fcmr8223006ooq.1.1707405315991; Thu, 08 Feb
- 2024 07:15:15 -0800 (PST)
+	s=arc-20240116; t=1707410268; c=relaxed/simple;
+	bh=4ysCRgB5dlb8UEDYItJCrdPvHfgdmur5y3smiOXlH4c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bfWQbbV+KFVRVxjt9fLFF30+KtWQws8LhJkOcc9bytIRG8D1wV/MIseJbM9dwlBwbStEqAtfFxh7eR7ld8kAzVXQskCtLQmel2NaOJdr3UnvfSrZ/S/PhsI2ET7mwO1igObR6zVwqZ/HNCso/eU+wf9fy6+JPc4GeaakqBJSabs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LL+WM+UZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02AA0C433F1;
+	Thu,  8 Feb 2024 16:37:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707410267;
+	bh=4ysCRgB5dlb8UEDYItJCrdPvHfgdmur5y3smiOXlH4c=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LL+WM+UZi+aGiy0bCd1ZH7JTO79zU5GO0XCJNVJlcsRNLR/FpnUMwQUwSlRjnX/sq
+	 Xh+cnrtYmWvn8FjrmWsuxXNoVe65axsafivc/XIjb3lxOZwJ8LgUHVTtoC1mXXeIso
+	 VKPn79SUM1Xw2T2azoAWfXlLa2T8LZSZ4gsMelKRv0vjK+n4/71x0yCSGNz1GcD4sD
+	 nWxryoE0kHU2zle1BF5NWIzUC3a0E+KieMjdW6ezWBhAotxUFioJUHyoETmPqTATCz
+	 BiHlJmSQaEvTctg79FH7twKoItXT9Zx1hPkzeIOntkndp2nOQO6yr2gNqyVK2r/V/B
+	 ohmohzkPgepSQ==
+Date: Thu, 8 Feb 2024 17:37:43 +0100
+From: Frederic Weisbecker <frederic@kernel.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	linux-pm@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH 4/7] cpuidle:
+ s/CPUIDLE_FLAG_POLLING/CPUIDLE_FLAG_POLLING_SOFT
+Message-ID: <ZcUDVxZ3sIOGD6Sn@localhost.localdomain>
+References: <20231124223226.24249-1-frederic@kernel.org>
+ <20231124223226.24249-5-frederic@kernel.org>
+ <CAJZ5v0jBzqa8UVbarJbFDcqyLsMEVYSuCtcxKk6PUSv3TDnUOQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2731410.mvXUDI8C0e@kreacher> <b068b36a-9964-4d32-bb00-227893f9e47e@linaro.org>
-In-Reply-To: <b068b36a-9964-4d32-bb00-227893f9e47e@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 8 Feb 2024 16:15:04 +0100
-Message-ID: <CAJZ5v0jPiHkxL1a7DFU6Km9694PQCwnnk7sRm=mmz1uxhdoNVg@mail.gmail.com>
-Subject: Re: [PATCH v2] thermal: sysfs: Make trip hysteresis writable along
- with trip temperature
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>, 
-	Zhang Rui <rui.zhang@intel.com>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0jBzqa8UVbarJbFDcqyLsMEVYSuCtcxKk6PUSv3TDnUOQ@mail.gmail.com>
 
-On Thu, Feb 8, 2024 at 3:42=E2=80=AFPM Daniel Lezcano <daniel.lezcano@linar=
-o.org> wrote:
->
-> On 31/01/2024 19:44, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Le Tue, Dec 12, 2023 at 02:09:38PM +0100, Rafael J. Wysocki a écrit :
+> On Fri, Nov 24, 2023 at 11:32 PM Frederic Weisbecker
+> <frederic@kernel.org> wrote:
 > >
-> > Trip point temperature can be modified via sysfs if
-> > CONFIG_THERMAL_WRITABLE_TRIPS is enabled and the thermal
-> > zone creator requested that the given trip be writable
-> > in the writable trips mask passed to the registration
-> > function.
-> >
-> > However, trip point hysteresis is treated differently - it is only
-> > writable if the thermal zone has a .set_trip_hyst() operation defined
-> > and neither CONFIG_THERMAL_WRITABLE_TRIPS, nor the writable trips mask
-> > supplied by the zone creator has any bearing on this.  That is
-> > inconsistent and confusing, and it generally does not meet user
-> > expectations.
-> >
-> > For this reason, modify create_trip_attrs() to handle trip point
-> > hysteresis in the same way as trip point temperature, so they both
-> > are writable at the same time regardless of what trip point operations
-> > are defined for the thermal zone.
-> >
-> > Link: https://lore.kernel.org/linux-pm/20240106191502.29126-1-quic_mana=
-fm@quicinc.com
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
->
-> Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> > In order to further distinguish software and hardware TIF_NEED_RESCHED
+> > polling cpuidle states, rename CPUIDLE_FLAG_POLLING to
+> > CPUIDLE_FLAG_POLLING_SOFT before introducing CPUIDLE_FLAG_POLLING_HARD
+> > and tag mwait users with it.
+> 
+> Well, if MWAIT users are the only category that will be tagged with
+> the new flag, it can be called CPUIDLE_FLAG_POLLING_MWAIT or even
+> CPUIDLE_FLAG_MWAIT for that matter and the $subject patch won't be
+> necessary any more AFAICS.
 
-Thanks, but I need to withdraw this one, because there are drivers
-that actively don't want their trip points' hysteresis to be adjusted
-via sysfs, so I'm now working on a patch series that will tackle this
-in a more systematic way.
+Yep.
+
+> 
+> > This will allow cpuidle core to manage TIF_NR_POLLING on behalf of all
+> > kinds of TIF_NEED_RESCHED polling states while keeping a necessary
+> > distinction for the governors between software loops polling on
+> > TIF_NEED_RESCHED and hardware monitored writes to thread flags.
+> 
+> Fair enough, but what about using a different name for the new flag
+> and leaving the old one as is?
+
+Sounds good. Will do.
+
+Thanks!
 
