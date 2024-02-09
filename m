@@ -1,133 +1,181 @@
-Return-Path: <linux-pm+bounces-3674-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3675-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0668984EFF5
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Feb 2024 06:35:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4662584F006
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Feb 2024 06:52:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B814C2889C0
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Feb 2024 05:35:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0CFB28B1EB
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Feb 2024 05:52:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A701B56B87;
-	Fri,  9 Feb 2024 05:35:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A56FB56B7C;
+	Fri,  9 Feb 2024 05:52:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hOHRWBu6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YkhiOva3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FE364F88F;
-	Fri,  9 Feb 2024 05:35:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E554656B86;
+	Fri,  9 Feb 2024 05:52:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707456920; cv=none; b=Gpv38xWLNWc48Ec4UJSB6watLbSJQPmeGkpkNQ823O8n6LQYVcWc5PPQ/3pmC8jY6q3LvGDt8NX7jxAEHV2ug/4UdK8+98wrRIyrQz94DmtEF7RoPgc33Ej9UH0pbEgSvkPJ//D13P5ZhuQIDApiHm9Pw99mMBtVfnTykB2EMJo=
+	t=1707457945; cv=none; b=BL51hmcFqm5vLu49Wg+FIeuaLaoXV43B+Wqa8Tr4YUbCFiE44bMgSHRRgWWmLlu4YPXA7NWz4gWaf+ZRZb0NLqueyBTg6AwYtplZRea4MlRz2vOqgVjFJAN1aFzS4UZ3Da/AWkCx+lNhqesPi5jd9PYT6vApbbpoUi8YeY2GNwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707456920; c=relaxed/simple;
-	bh=KhUdmBsyvqeWDNdN1IUYSknTqQGmjH28s7sp44FAXn4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=QFsyI0IW2obh6nTWNXt7ckbSq/oPqGi2s16cYfwtsOtcIFWflu28OR4x3YvXgwPhx1kiRidEMGuIDAT+63ZYTdekdn5n1mpDa+O7jgFNUDY9YEdFD4XQLc/jJzGoPlBcGidou5giOlLjpfQwCQwo7qEbI/aWjY/KDWC4SUPl6Rs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hOHRWBu6; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707456917; x=1738992917;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=KhUdmBsyvqeWDNdN1IUYSknTqQGmjH28s7sp44FAXn4=;
-  b=hOHRWBu6dfMH435Xfh4w1oS7XnVtaFG7L0FzrckYrxbJuJqeYPebJMH8
-   +q4yV8xoUxOirZptbFQOVzgPqWIR2ROXF95LaoLvPzNy00NUPcrrXv8yN
-   XG5tYOi3dxoK971QGKua5L9kkbwaWYy2bRBvNsGbnSv95MLERIXBz/cC2
-   flDwAx/0HTtmEepmPXf9cJUW7JEnelGGQ+HOsr12zTOMUziFVFb/voUEu
-   aQFbGoyMq/c3rpWHFpt5Vat2FTMbiRx752pZlhvzbE4dKgGZ/1+sG2wuh
-   U4G45za3GxoPMbhQva9vd/oqrkesdlS5llpXomLA/qF1LU62tGH3thxdO
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10978"; a="12453787"
-X-IronPort-AV: E=Sophos;i="6.05,255,1701158400"; 
-   d="scan'208";a="12453787"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2024 21:35:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,255,1701158400"; 
-   d="scan'208";a="32650935"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 08 Feb 2024 21:35:15 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rYJXc-0004Qg-0T;
-	Fri, 09 Feb 2024 05:35:12 +0000
-Date: Fri, 9 Feb 2024 13:34:43 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-acpi@vger.kernel.org, devel@acpica.org,
+	s=arc-20240116; t=1707457945; c=relaxed/simple;
+	bh=gHFWdGJb33J6+jC1gRs0+QcHVDLwUVfle/UXEO8MmAs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=M6kcQp2pYtogcVZYjDE/n7tucmerrJ5dCaLWqP9iBXqsY1qxXNGp+Rs3CaYMkoiuB7mLF7smAr1zNtOP4wqnYc0net4XSV3ACqWmHtCiUWgAOIxL8/58l8lhVKv7be9HbNjv89xq2QlYFOfRnKfNku75D4x8VmLhak1MVazDxg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YkhiOva3; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a26ed1e05c7so69087666b.2;
+        Thu, 08 Feb 2024 21:52:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707457942; x=1708062742; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mf57nKobtsp78hnGcDhJlA31IVpSkcv337k1qnzv71g=;
+        b=YkhiOva3FComFg8AOOwiL6DJim1olIMcovLhOYGqqMIAcCLHF27hGbgcX8qhpKA5Fw
+         04eo92bjsHSYFwRWkw6tIpaQqDYteN8S4CZoySeRjtjCyDiwPa/eh3f5y4p/+K7ytoDt
+         OwhofenBVqwEUrtLRsHJTXrK9XEovEG9l3ml6C/zc4efapzKCtxqaHuhup8Bm81C1Qm2
+         RNgPZDkwnsTvJZw0dcynEy2SX1egRvr0BXybv/NqasuYlrNMkItSihgkdM4KsRjiP2+S
+         hJTHQaH/C24QP++FEn9SARDwaHiPMEsP0oOQASlw8GdGh9L2co/0+lTgEEPegvXTgbvl
+         /Efg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707457942; x=1708062742;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Mf57nKobtsp78hnGcDhJlA31IVpSkcv337k1qnzv71g=;
+        b=sUA/FpE5xx2rvl2r+V5ArEoQ9TWHShGiupDqLxPiK3HZIpx2majhoVckaUc8ttBS8v
+         GHZ+ynVzkxkWBGDphmrP+geeo8Qbs95ig8Mj3OZGapXro3jRToYPeepn7FJFgN0hIWvG
+         KgV5fXKjJZ8TEydNMR1MCxe5SnDRixQG3IB0PKfB21zE/YMoS9M6//AyVR6CGMYAEdUR
+         xkT9w/2+ZwkAtFo7JLKMIkg+Xb/bFKuMq6dxBJ29T4/M61C/XJMFhGb1pgyrjj+o4rBy
+         +DVB7IfDqhZ7ZiWPx1kS2FXklz3t+ixnQID4+YjJlwe4ZzGkWFKYYXXDoP0fqXT2jp0e
+         1x9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUDYc1ovENkyPOU0mMlTQNNDQJSePe6mQEF/0Ogq0tKOabraBQl/lB5g12wHpXntovYbmBGDwieXU3ugrmtTDS0Sz9F3MMiWuZw62QcD03HWmBZNg46q19NkgXhmg7m0L4oVlpx
+X-Gm-Message-State: AOJu0YzGfQd9ahiRun30fucljOlMQeO30uB4M3tGLNG05VjjK4D27Bxu
+	HE5qVOZrRSBDjDvR1c+hQ5ZPuSYKujW9xDiU+w5lllLODgFQyGZ3
+X-Google-Smtp-Source: AGHT+IExdn4j3WLpPkGZHSKFJQSuFHiN82pOOTC6WPoYbiqwyvGkAeQonPfG93G/w/yBTpMA0QcwdA==
+X-Received: by 2002:a17:906:1156:b0:a38:66ef:14d3 with SMTP id i22-20020a170906115600b00a3866ef14d3mr334720eja.13.1707457941890;
+        Thu, 08 Feb 2024 21:52:21 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWjiSfPNrT9WvFt7lXwMCztpAG3PneMTXFgXSZNJO0QyErCoFzz8jHQ97qwEZQzOmh1KGcAgD0kijIEZVJlzrwCHTY1cJan8Z6xfHt2mUHit0t+usAqd3KUFEmaTQOwANRE/62yreyyvM7cOEaIlM6kJ92U2MEDPRe6ChZ3tIxvEYDqI7wMir0jIGjVStl5TusC+nLm1bYM8kcBj4776kpqnsiXeSOcdVpv+AsSezDDFdnMPF/iRgAg9dqdlumnOObL1KP3MRzlLtsYf1R1B0BloXTngqvAtKn/2S+7aC359odNoT1wZe3XCWTItO9WG7R+U91vXs7x/XH/TlyoXPSqbrXxNqb5HTZbtBTFAQKVTzXBrCOo/ZgqTuxnwztu+1fdXRuXEgdQfjDm5ugcsTNEkxMFjXdO/kNcn3tQK/VY0iNtaI5Tun4dE7XFqrdgzRxYxy2liKG6JxhsIix4JMeSS4Fn5v2aieEkWm2q3odDFPcmBAX6e8ZapFSUx4tKsx7nZiZr61zoDh9+Eg2fyfBlKH65lzpcRcQWQ/d/QJ4D/MTHsZe0pOtkliA9Rx/KBjJtEsgOGoVrsjk0GR/LxjChgAap
+Received: from localhost.lan (031011218106.poznan.vectranet.pl. [31.11.218.106])
+        by smtp.gmail.com with ESMTPSA id vk3-20020a170907cbc300b00a37fbee48f8sm404551ejc.133.2024.02.08.21.52.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Feb 2024 21:52:21 -0800 (PST)
+From: =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Cc: Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
 	linux-pm@vger.kernel.org,
-	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Subject: [rafael-pm:bleeding-edge 74/77] drivers/thermal/thermal_of.c:444:34:
- error: initializing 'struct thermal_zone_device_ops *' with an expression of
- incompatible type 'struct thermal_zone_device_ops'; take the address with &
-Message-ID: <202402091355.DUYRncj7-lkp@intel.com>
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+	Daniel Golle <daniel@makrotopia.org>,
+	Sam Shih <sam.shih@mediatek.com>
+Subject: [PATCH V2] dt-bindings: thermal: mediatek,thermal: document AUXADC 32k clock
+Date: Fri,  9 Feb 2024 06:52:03 +0100
+Message-Id: <20240209055203.17144-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.35.3
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   976b96a64c53e1e3d0fa71c97be2bcbe1a64feb1
-commit: c483d4c88bfcd98d7819a722f48edb0adb89c32f [74/77] thermal: core: Store zone ops in struct thermal_zone_device
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20240209/202402091355.DUYRncj7-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240209/202402091355.DUYRncj7-lkp@intel.com/reproduce)
+From: Rafał Miłecki <rafal@milecki.pl>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402091355.DUYRncj7-lkp@intel.com/
+SoCs MT7981 and MT7986 include a newer thermal block (V3) that requires
+enabling one more clock called AUXADC 32k. Require it in binding.
 
-All errors (new ones prefixed by >>):
+Cc: Daniel Golle <daniel@makrotopia.org>
+Cc: Sam Shih <sam.shih@mediatek.com>
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+V2: Disallow "adc_32k" on other chipsets (maxItems: 2)
 
->> drivers/thermal/thermal_of.c:444:34: error: initializing 'struct thermal_zone_device_ops *' with an expression of incompatible type 'struct thermal_zone_device_ops'; take the address with &
-           struct thermal_zone_device_ops *ops = tz->ops;
-                                           ^     ~~~~~~~
-                                                 &
-   1 error generated.
+ .../bindings/thermal/mediatek,thermal.yaml    | 31 +++++++++++++++++--
+ 1 file changed, 28 insertions(+), 3 deletions(-)
 
-
-vim +444 drivers/thermal/thermal_of.c
-
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  432  
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  433  /**
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  434   * thermal_of_zone_unregister - Cleanup the specific allocated ressources
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  435   *
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  436   * This function disables the thermal zone and frees the different
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  437   * ressources allocated specific to the thermal OF.
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  438   *
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  439   * @tz: a pointer to the thermal zone structure
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  440   */
-ac614a9b4c35bf Daniel Lezcano 2023-04-04  441  static void thermal_of_zone_unregister(struct thermal_zone_device *tz)
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  442  {
-8fb5b71ed37dbe Daniel Lezcano 2022-08-09  443  	struct thermal_trip *trips = tz->trips;
-8fb5b71ed37dbe Daniel Lezcano 2022-08-09 @444  	struct thermal_zone_device_ops *ops = tz->ops;
-8fb5b71ed37dbe Daniel Lezcano 2022-08-09  445  
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  446  	thermal_zone_device_disable(tz);
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  447  	thermal_zone_device_unregister(tz);
-8fb5b71ed37dbe Daniel Lezcano 2022-08-09  448  	kfree(trips);
-8fb5b71ed37dbe Daniel Lezcano 2022-08-09  449  	kfree(ops);
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  450  }
-3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  451  
-
-:::::: The code at line 444 was first introduced by commit
-:::::: 8fb5b71ed37dbe469eaa930e2ddc93ec9e305f3c thermal/of: Fix free after use in thermal_of_unregister()
-
-:::::: TO: Daniel Lezcano <daniel.lezcano@linaro.org>
-:::::: CC: Daniel Lezcano <daniel.lezcano@linaro.org>
-
+diff --git a/Documentation/devicetree/bindings/thermal/mediatek,thermal.yaml b/Documentation/devicetree/bindings/thermal/mediatek,thermal.yaml
+index d96a2e32bd8f..e7373d78618c 100644
+--- a/Documentation/devicetree/bindings/thermal/mediatek,thermal.yaml
++++ b/Documentation/devicetree/bindings/thermal/mediatek,thermal.yaml
+@@ -15,9 +15,6 @@ description:
+   controls a mux in the apmixedsys register space via AHB bus accesses, so a
+   phandle to the APMIXEDSYS is also needed.
+ 
+-allOf:
+-  - $ref: thermal-sensor.yaml#
+-
+ properties:
+   compatible:
+     enum:
+@@ -38,14 +35,18 @@ properties:
+     maxItems: 1
+ 
+   clocks:
++    minItems: 2
+     items:
+       - description: Main clock needed for register access
+       - description: The AUXADC clock
++      - description: AUXADC 32k clock
+ 
+   clock-names:
++    minItems: 2
+     items:
+       - const: therm
+       - const: auxadc
++      - const: adc_32k
+ 
+   mediatek,auxadc:
+     $ref: /schemas/types.yaml#/definitions/phandle
+@@ -76,6 +77,30 @@ required:
+   - mediatek,auxadc
+   - mediatek,apmixedsys
+ 
++allOf:
++  - $ref: thermal-sensor.yaml#
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - mediatek,mt7981-thermal
++              - mediatek,mt7986-thermal
++    then:
++      properties:
++        clocks:
++          minItems: 3
++
++        clock-names:
++          minItems: 3
++    else:
++      properties:
++        clocks:
++          maxItems: 2
++
++        clock-names:
++          maxItems: 2
++
+ unevaluatedProperties: false
+ 
+ examples:
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.35.3
+
 
