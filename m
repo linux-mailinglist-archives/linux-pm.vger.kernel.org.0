@@ -1,99 +1,73 @@
-Return-Path: <linux-pm+bounces-3673-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3674-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26FF384EE53
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Feb 2024 01:20:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0668984EFF5
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Feb 2024 06:35:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D21C928120E
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Feb 2024 00:20:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B814C2889C0
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Feb 2024 05:35:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2881936F;
-	Fri,  9 Feb 2024 00:20:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A701B56B87;
+	Fri,  9 Feb 2024 05:35:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FkfkWhys"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hOHRWBu6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A64CA360;
-	Fri,  9 Feb 2024 00:20:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FE364F88F;
+	Fri,  9 Feb 2024 05:35:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707438025; cv=none; b=VWSH8aKPubw4IsWAyRaRNhlyFLmtapHu7Uk2FISGLQFIqUFUSBTsb75NqVJnD1pyo+rhGkkju4L8elbq9NbOKzDgk6Dy2otiQz+0C1LI9HNmK7gQqgEl81PzOwpuzPnVh3bJTXpFy2IMC43i2yMEbuFl14JO+LtfWz221l2twCA=
+	t=1707456920; cv=none; b=Gpv38xWLNWc48Ec4UJSB6watLbSJQPmeGkpkNQ823O8n6LQYVcWc5PPQ/3pmC8jY6q3LvGDt8NX7jxAEHV2ug/4UdK8+98wrRIyrQz94DmtEF7RoPgc33Ej9UH0pbEgSvkPJ//D13P5ZhuQIDApiHm9Pw99mMBtVfnTykB2EMJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707438025; c=relaxed/simple;
-	bh=fQWAOxbdQHOI67uYRWUiLe/DLkQixdHM/rCmFw0lUSw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IWWXs0twq8wNXpIZfq0ksGwMFQut2yKIxMMVG/7I1ihGURXvIOrqIjPDiHvfrKqVtUE2Xtwe6HJcEgZEwX0027bKhZ3z/qmArdao55frT7oCOrdWznIsMk02xV8S5y31gNOIXXo66mXiG/8ncrUtA50eCtMLc7X6ZHU2AyTWpS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FkfkWhys; arc=none smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-5cddfe0cb64so243037a12.0;
-        Thu, 08 Feb 2024 16:20:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707438023; x=1708042823; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qdbUMa7QPeYlxa1Su029+aRrsMhXW6Au1xJECB9csBs=;
-        b=FkfkWhysalDRtusQgYdI/RNRHQW5YLEbtS9XeaIMtLGcmZWAkWIY2gXuRSDzrxS3lU
-         W1709lwW9EcJCewcuqbgHTUMtxjw6jQzxNUApqdvmrxxRhuqZT696DADHu02zGsA2OZO
-         lD5c4shiyKdgL8jk8YFDz56pWe8I0bVSrA12mVya3zN5I7my4CwHY8woDizsL82Kl8hV
-         SVr33np5zrDMC7+jL/1I3GHLyfO+vbobn2BQiXr6ozyL2NXJUsX/Pfssu3+yZTG+kvGO
-         FkecJ779GRlxi2QEeUUGXafdqiJcCzDekNSIGEz7zaP0fb6r3rYuJgFpF4aqAaj0QlH+
-         j4Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707438023; x=1708042823;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qdbUMa7QPeYlxa1Su029+aRrsMhXW6Au1xJECB9csBs=;
-        b=GRHz7JkjB+9hrquDSRuv59ly8+Qej1X9iptaGQo7xnEhfU7rQwZrY1CgEKEq+6/IEa
-         iWGK607IL+XOUgc0RaxBIym2fuL5O+sI1GqRnixFiM60HtIY/HzSsPV/GPosMv5nj1bQ
-         oEuuNpqClE7lrwxRqbMbIL0PpqpbKxwR1RBMac3EgZ8u7xIUFNpfKktdfeI9n0G+uRGW
-         mQW0g7GGAdIAm37QXKrUM4HEORG7RTvUiupQiJY+0dLIu0s/aQDaW2YKbQsFhbGFxmbt
-         x8QrXWPxtZFCBl8seWh8ydTQ6zMFHzFAIIjwELrMJUWrMq62fgWWgCqzGBVjeLei0pAk
-         WSpg==
-X-Forwarded-Encrypted: i=1; AJvYcCXyjIGWYnwVVs4Rjcsjs9DXiMvW+dFPYjPBN/S37P3G6CRXTBIf6T24irbujytxzeN0300er7Tf5rJDiNvln59LBDNyWB4JChF+MFu3b0JtqS4nfneAjmfoDRYqN/i1MSguIjwdzMY=
-X-Gm-Message-State: AOJu0YxzpA+phSjtt7lvU3sICoSNlzKkf3cuiDlYHDxSPWP3IERGwBzv
-	LqjGcIVdbDP0TW5017EtlI0DFKxyuHGzEU4ropZmW2eZgIYyJ8V6
-X-Google-Smtp-Source: AGHT+IHNrMo6YwDPyVjTY4o+I0H0GK9eFo6mEShWLsRp44mLwJXyI2sMJT3S1GF7QoNDZH7h7RZQAQ==
-X-Received: by 2002:a05:6a21:910c:b0:19c:7b2b:6cbf with SMTP id tn12-20020a056a21910c00b0019c7b2b6cbfmr132390pzb.47.1707438022874;
-        Thu, 08 Feb 2024 16:20:22 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWwbMylMOXtZirFccrYiGQ+FeRED7/Iu4gbTGnMDE3n3U9fn1RUWQoe1fMEXn+HYKL3CuID4PZFL+0ON01URiokctgRfflwt27wVQy78VyEz4vh1ur8OEijsm9OvZgWAwQxu8xYRxpnzrS2LrlzZSArGKDk9XXLjx8qAJrQl+QO5E1fVM4cCr9tupQO8ILgT+DfltuI2NHKLEKXmjyVvST/FMHpqJjgDBUGB50/sSF9EgLC6MHMAfPxZea/A7lNiuH+r7BxHNXi/mV2Y8g6j1qwKKb5b6CYHqOD/iVhAkO3BZf6HHRmpBmxmFOsetnyy7+3IjrPoRbGIYj5V9FXnnJraIfzV6rjTpWTMWoHWmhURRuh6FUaQTG3kwvvrJs=
-Received: from localhost ([2620:10d:c090:400::4:3c45])
-        by smtp.gmail.com with ESMTPSA id kn13-20020a170903078d00b001d75c26e857sm341088plb.288.2024.02.08.16.20.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Feb 2024 16:20:22 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date: Thu, 8 Feb 2024 14:20:21 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Marek Szyprowski <m.szyprowski@samsung.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>,
-	Linux PM <linux-pm@vger.kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>, Naohiro.Aota@wdc.com,
-	kernel-team@meta.com
-Subject: Re: [PATCH v1] PM: sleep: Restore asynchronous device resume
- optimization
-Message-ID: <ZcVvxbKOlrWmmyhS@slm.duckdns.org>
-References: <4a043533-009f-4db9-b107-c8374be28d2b@samsung.com>
- <CAJZ5v0hDmwaFEtLc8yDc4cXn2wODXAqATe0+_Hpm9QPODUPMQw@mail.gmail.com>
- <ZcOyW_Q1FC35oxob@slm.duckdns.org>
- <2f125955-8c7c-465c-938c-8768f7ca360b@samsung.com>
- <ZcPSuUBoL_EDvcTF@slm.duckdns.org>
- <ZcPelerpp3Rr5YFW@slm.duckdns.org>
- <b4ceab79-3208-419b-9a79-f34540db3f70@samsung.com>
- <CGME20240207213600eucas1p1615e189e07dd1e96b001c7a187854fce@eucas1p1.samsung.com>
- <ZcP3uiapKGZqw0q5@slm.duckdns.org>
- <8c468452-1b00-438a-b634-eeccc35d9a41@samsung.com>
+	s=arc-20240116; t=1707456920; c=relaxed/simple;
+	bh=KhUdmBsyvqeWDNdN1IUYSknTqQGmjH28s7sp44FAXn4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=QFsyI0IW2obh6nTWNXt7ckbSq/oPqGi2s16cYfwtsOtcIFWflu28OR4x3YvXgwPhx1kiRidEMGuIDAT+63ZYTdekdn5n1mpDa+O7jgFNUDY9YEdFD4XQLc/jJzGoPlBcGidou5giOlLjpfQwCQwo7qEbI/aWjY/KDWC4SUPl6Rs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hOHRWBu6; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707456917; x=1738992917;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KhUdmBsyvqeWDNdN1IUYSknTqQGmjH28s7sp44FAXn4=;
+  b=hOHRWBu6dfMH435Xfh4w1oS7XnVtaFG7L0FzrckYrxbJuJqeYPebJMH8
+   +q4yV8xoUxOirZptbFQOVzgPqWIR2ROXF95LaoLvPzNy00NUPcrrXv8yN
+   XG5tYOi3dxoK971QGKua5L9kkbwaWYy2bRBvNsGbnSv95MLERIXBz/cC2
+   flDwAx/0HTtmEepmPXf9cJUW7JEnelGGQ+HOsr12zTOMUziFVFb/voUEu
+   aQFbGoyMq/c3rpWHFpt5Vat2FTMbiRx752pZlhvzbE4dKgGZ/1+sG2wuh
+   U4G45za3GxoPMbhQva9vd/oqrkesdlS5llpXomLA/qF1LU62tGH3thxdO
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10978"; a="12453787"
+X-IronPort-AV: E=Sophos;i="6.05,255,1701158400"; 
+   d="scan'208";a="12453787"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2024 21:35:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,255,1701158400"; 
+   d="scan'208";a="32650935"
+Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 08 Feb 2024 21:35:15 -0800
+Received: from kbuild by 01f0647817ea with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rYJXc-0004Qg-0T;
+	Fri, 09 Feb 2024 05:35:12 +0000
+Date: Fri, 9 Feb 2024 13:34:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-acpi@vger.kernel.org, devel@acpica.org,
+	linux-pm@vger.kernel.org,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+Subject: [rafael-pm:bleeding-edge 74/77] drivers/thermal/thermal_of.c:444:34:
+ error: initializing 'struct thermal_zone_device_ops *' with an expression of
+ incompatible type 'struct thermal_zone_device_ops'; take the address with &
+Message-ID: <202402091355.DUYRncj7-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -102,27 +76,58 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8c468452-1b00-438a-b634-eeccc35d9a41@samsung.com>
 
-Hello,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   976b96a64c53e1e3d0fa71c97be2bcbe1a64feb1
+commit: c483d4c88bfcd98d7819a722f48edb0adb89c32f [74/77] thermal: core: Store zone ops in struct thermal_zone_device
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20240209/202402091355.DUYRncj7-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240209/202402091355.DUYRncj7-lkp@intel.com/reproduce)
 
-On Thu, Feb 08, 2024 at 08:47:12AM +0100, Marek Szyprowski wrote:
-> I've tried to get drgn running on the test target, but then I've noticed 
-> that it is not possible to run it on ARM 32bit target, as it requires 
-> PROC_KCORE support, which is 'Visible if: PROC_FS [=y] && MMU [=y] && 
-> !ARM [=y]' for some reasons.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402091355.DUYRncj7-lkp@intel.com/
 
-Bummer. I instrumented code on my test setup (x86) and couldn't repro usage
-of the dfl_pwq, unfortuantely.
+All errors (new ones prefixed by >>):
 
-Independent of understanding what's going on with the system_unbound_wq, the
-correct solution seems like using a dedicated workqueue with raised
-min_active. Just posted the patchset to do that:
+>> drivers/thermal/thermal_of.c:444:34: error: initializing 'struct thermal_zone_device_ops *' with an expression of incompatible type 'struct thermal_zone_device_ops'; take the address with &
+           struct thermal_zone_device_ops *ops = tz->ops;
+                                           ^     ~~~~~~~
+                                                 &
+   1 error generated.
 
-  http://lkml.kernel.org/r/ZcVtzJvJCRV5OLM-@slm.duckdns.org
 
-Thanks.
+vim +444 drivers/thermal/thermal_of.c
+
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  432  
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  433  /**
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  434   * thermal_of_zone_unregister - Cleanup the specific allocated ressources
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  435   *
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  436   * This function disables the thermal zone and frees the different
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  437   * ressources allocated specific to the thermal OF.
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  438   *
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  439   * @tz: a pointer to the thermal zone structure
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  440   */
+ac614a9b4c35bf Daniel Lezcano 2023-04-04  441  static void thermal_of_zone_unregister(struct thermal_zone_device *tz)
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  442  {
+8fb5b71ed37dbe Daniel Lezcano 2022-08-09  443  	struct thermal_trip *trips = tz->trips;
+8fb5b71ed37dbe Daniel Lezcano 2022-08-09 @444  	struct thermal_zone_device_ops *ops = tz->ops;
+8fb5b71ed37dbe Daniel Lezcano 2022-08-09  445  
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  446  	thermal_zone_device_disable(tz);
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  447  	thermal_zone_device_unregister(tz);
+8fb5b71ed37dbe Daniel Lezcano 2022-08-09  448  	kfree(trips);
+8fb5b71ed37dbe Daniel Lezcano 2022-08-09  449  	kfree(ops);
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  450  }
+3fd6d6e2b4e80f Daniel Lezcano 2022-08-05  451  
+
+:::::: The code at line 444 was first introduced by commit
+:::::: 8fb5b71ed37dbe469eaa930e2ddc93ec9e305f3c thermal/of: Fix free after use in thermal_of_unregister()
+
+:::::: TO: Daniel Lezcano <daniel.lezcano@linaro.org>
+:::::: CC: Daniel Lezcano <daniel.lezcano@linaro.org>
 
 -- 
-tejun
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
