@@ -1,59 +1,59 @@
-Return-Path: <linux-pm+bounces-3682-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3684-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1694184F506
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Feb 2024 13:06:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 313E484F50C
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Feb 2024 13:08:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 291E6B23DCD
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Feb 2024 12:06:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B556B247EF
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Feb 2024 12:08:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27B1D2E64F;
-	Fri,  9 Feb 2024 12:06:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C364F328B6;
+	Fri,  9 Feb 2024 12:08:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lH1xPH1y"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bhgw5f3L"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B215B2EAE5;
-	Fri,  9 Feb 2024 12:06:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 375BD2E856;
+	Fri,  9 Feb 2024 12:08:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707480409; cv=none; b=MaO7rndPTUOSUQmeJ7VPfl3swO6AfhWNNQACLjBOS0J/B2jxH/uLhhsSSWzcxI2Ozx3W066NFg2sGHZl562z9tu9XycWIHYhlqFMCgQEgZ1YeLUe5MBCX6QTkxZYHzS5u/i+6R0j3OWxff4NhKA0BhgAN2T80IU1cQ8rC5wYmSo=
+	t=1707480489; cv=none; b=ln3DPnPQVpbg6F90Q497z+vBT+8HCu+m4qIzTXeuTxKtX/bDRQ7sURKZDjQVWDxMWboCvMneqZQBxFE1UiveVZnIfyiWSWfNeFiNJYbn8RVQMuF4DxO2BvPm9/BjZqUTGI76CI5RLZ43uhTCIDn/8qb1tpCPMNDIuJdZHtrv1pU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707480409; c=relaxed/simple;
-	bh=mUB42E5zYlBegavQGX67AoSxoH8EjY6FH5y+NA2aTOk=;
+	s=arc-20240116; t=1707480489; c=relaxed/simple;
+	bh=7plR84WWRswcCrnNW4hL+hM3NAlvi40gEEuXirSUnpQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=b+QJ3J3kGW0ZezTqOjM7mbIata6ixJx/9m/YAiVX0HYdcd3mRegssrVyvn1XG20NwEIdeZAlEkHJrLmxK3rKJiTADwE2LzFMG+voxgr5pvflpKNdB7/O0qYOT7CwKkiB0SIVF0hXwgHMv5MD5lpBjOEEIbVLA3s8HsR9Ed7aWi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lH1xPH1y; arc=none smtp.client-ip=192.198.163.14
+	 MIME-Version:Content-Type; b=q9Kk7qziFs45fywvmokf7Hh9xFI99Web+lSBZSMMP6Of4ytu72QZ4281Qn/l8l3kehzqtyWYsQZvVvGJAGohPZS0sbgKWVub0ZcwIzuJGMJ8x5ZiRUltq00c2cEOC+HSNkbD/kK36KeRZtYxVY95p7qVLqIzZ1OvjMQL7R69BXo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bhgw5f3L; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707480404; x=1739016404;
+  t=1707480484; x=1739016484;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=mUB42E5zYlBegavQGX67AoSxoH8EjY6FH5y+NA2aTOk=;
-  b=lH1xPH1ySuL11VxnZUaKLF8lVC2IyYk94uE83vLT4aJ12k3cq/qf8GNq
-   7V5BXdiHXq8RiN/z8BRRUjXHHHUVnuRottr5YkJAu0u0++r9IOm54XbIr
-   ufpBO9TTXEYTg+jXzRVHIUbdkhXcW80w6c2tVhrtZQIz0LBiPFj+fYuZe
-   SVOZmqj8m2/tsSBrZyA6ewXmmygNeFQHQrMMHJNkl/Q2S7pJURjLRL6KO
-   jVlozF03IiNidBmMhqS7N4p84m9InrYHDF3c4pjRCq69Q06Xmvac7j3zX
-   FRxRbhMWQgIVSp5QqN9D9ufGUUAl0jNshaRa8YBSFvkDWKD10chWv1kkl
+  bh=7plR84WWRswcCrnNW4hL+hM3NAlvi40gEEuXirSUnpQ=;
+  b=bhgw5f3L8wO/bUyjOog2WQk+vze6x8cHBbouvy6tH2SY9Qkr1XySIidW
+   c5URnhblQ8OfkqiZ5APWyG1+KQ60Yd/ihc1rx4aZu7V20ZXHcFT1PM60s
+   5hJhmTFDg5aR6WCHIYJt+5SNMLyBS+6eFFM6bckTnRQB2GTBaRr8ex1PI
+   Vem0lz9sRTnfavp7nc3JZadwvhrf7PHrrTwch51tiYuzygL1fl4MvXVtm
+   7WbFpQZfaiG9j6cRBarH2+RXODZbJpp1flvEMjoFCGfyYLg0f3ucMs5Py
+   +BuIpWimXhmRZBpIpY/OnwMJDRSNOWC+bLgOXCxHCBpyGoI5+pcD6+TXo
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10978"; a="1571380"
+X-IronPort-AV: E=McAfee;i="6600,9927,10978"; a="1726871"
 X-IronPort-AV: E=Sophos;i="6.05,256,1701158400"; 
-   d="scan'208";a="1571380"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2024 04:06:43 -0800
+   d="scan'208";a="1726871"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2024 04:06:55 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.05,256,1701158400"; 
-   d="scan'208";a="6574174"
+   d="scan'208";a="32707718"
 Received: from sgruszka-mobl.ger.corp.intel.com (HELO localhost) ([10.252.43.96])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2024 04:06:39 -0800
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2024 04:06:45 -0800
 From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
 To: linux-pm@vger.kernel.org
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -68,9 +68,9 @@ Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Johannes Berg <johannes@sipsolutions.net>,
 	Florian Westphal <fw@strlen.de>,
 	netdev@vger.kernel.org
-Subject: [PATCH v3 2/3] thermal: netlink: Add genetlink bind/unbind notifications
-Date: Fri,  9 Feb 2024 13:06:24 +0100
-Message-Id: <20240209120625.1775017-3-stanislaw.gruszka@linux.intel.com>
+Subject: [PATCH v3 3/3] thermal: intel: hfi: Enable interface only when required
+Date: Fri,  9 Feb 2024 13:06:25 +0100
+Message-Id: <20240209120625.1775017-4-stanislaw.gruszka@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240209120625.1775017-1-stanislaw.gruszka@linux.intel.com>
 References: <20240209120625.1775017-1-stanislaw.gruszka@linux.intel.com>
@@ -80,160 +80,183 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Introduce a new feature to the thermal netlink framework, enabling the
-registration of sub drivers to receive events via a notifier mechanism.
-Specifically, implement genetlink family bind and unbind callbacks to send
-BIND and UNBIND events.
+Enable and disable hardware feedback interface (HFI) when user space
+handler is present. For example, enable HFI, when intel-speed-select or
+Intel Low Power daemon is running and subscribing to thermal netlink
+events. When user space handlers exit or remove subscription for
+thermal netlink events, disable HFI.
 
-The primary purpose of this enhancement is to facilitate the tracking of
-user-space consumers by the intel_hif driver. By leveraging these
-notifications, the driver can determine when consumers are present
-or absent.
+Summary of changes:
 
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
+- Register a thermal genetlink notifier
+
+- In the notifier, process THERMAL_NOTIFY_BIND and THERMAL_NOTIFY_UNBIND
+reason codes to count number of thermal event group netlink multicast
+clients. If thermal netlink group has any listener enable HFI on all
+packages. If there are no listener disable HFI on all packages.
+
+- When CPU is online, instead of blindly enabling HFI, check if
+the thermal netlink group has any listener. This will make sure that
+HFI is not enabled by default during boot time.
+
+- Actual processing to enable/disable matches what is done in
+suspend/resume callbacks. Create two functions hfi_do_enable()
+and hfi_do_disable(), which can be called from  the netlink notifier
+callback and suspend/resume callbacks.
+
 Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
 ---
- drivers/thermal/thermal_netlink.c | 40 +++++++++++++++++++++++++++----
- drivers/thermal/thermal_netlink.h | 25 +++++++++++++++++++
- 2 files changed, 60 insertions(+), 5 deletions(-)
+ drivers/thermal/intel/intel_hfi.c | 95 +++++++++++++++++++++++++++----
+ 1 file changed, 85 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
-index 76a231a29654..86c7653a9530 100644
---- a/drivers/thermal/thermal_netlink.c
-+++ b/drivers/thermal/thermal_netlink.c
-@@ -7,17 +7,13 @@
-  * Generic netlink for thermal management framework
-  */
- #include <linux/module.h>
-+#include <linux/notifier.h>
- #include <linux/kernel.h>
- #include <net/genetlink.h>
- #include <uapi/linux/thermal.h>
+diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+index 3b04c6ec4fca..5e1e2b5269b7 100644
+--- a/drivers/thermal/intel/intel_hfi.c
++++ b/drivers/thermal/intel/intel_hfi.c
+@@ -159,6 +159,7 @@ struct hfi_cpu_info {
+ static DEFINE_PER_CPU(struct hfi_cpu_info, hfi_cpu_info) = { .index = -1 };
  
- #include "thermal_core.h"
+ static int max_hfi_instances;
++static int hfi_thermal_clients_num;
+ static struct hfi_instance *hfi_instances;
  
--enum thermal_genl_multicast_groups {
--	THERMAL_GENL_SAMPLING_GROUP = 0,
--	THERMAL_GENL_EVENT_GROUP = 1,
--};
--
- static const struct genl_multicast_group thermal_genl_mcgrps[] = {
- 	[THERMAL_GENL_SAMPLING_GROUP] = { .name = THERMAL_GENL_SAMPLING_GROUP_NAME, },
- 	[THERMAL_GENL_EVENT_GROUP]  = { .name = THERMAL_GENL_EVENT_GROUP_NAME,  },
-@@ -75,6 +71,7 @@ struct param {
- typedef int (*cb_t)(struct param *);
+ static struct hfi_features hfi_features;
+@@ -477,8 +478,11 @@ void intel_hfi_online(unsigned int cpu)
+ enable:
+ 	cpumask_set_cpu(cpu, hfi_instance->cpus);
  
- static struct genl_family thermal_gnl_family;
-+static BLOCKING_NOTIFIER_HEAD(thermal_gnl_chain);
- 
- static int thermal_group_has_listeners(enum thermal_genl_multicast_groups group)
- {
-@@ -645,6 +642,27 @@ static int thermal_genl_cmd_doit(struct sk_buff *skb,
- 	return ret;
- }
- 
-+static int thermal_genl_bind(int mcgrp)
-+{
-+	struct thermal_genl_notify n = { .mcgrp = mcgrp };
-+
-+	if (WARN_ON_ONCE(mcgrp > THERMAL_GENL_MAX_GROUP))
-+		return -EINVAL;
-+
-+	blocking_notifier_call_chain(&thermal_gnl_chain, THERMAL_NOTIFY_BIND, &n);
-+	return 0;
-+}
-+
-+static void thermal_genl_unbind(int mcgrp)
-+{
-+	struct thermal_genl_notify n = { .mcgrp = mcgrp };
-+
-+	if (WARN_ON_ONCE(mcgrp > THERMAL_GENL_MAX_GROUP))
-+		return;
-+
-+	blocking_notifier_call_chain(&thermal_gnl_chain, THERMAL_NOTIFY_UNBIND, &n);
-+}
-+
- static const struct genl_small_ops thermal_genl_ops[] = {
- 	{
- 		.cmd = THERMAL_GENL_CMD_TZ_GET_ID,
-@@ -679,6 +697,8 @@ static struct genl_family thermal_gnl_family __ro_after_init = {
- 	.version	= THERMAL_GENL_VERSION,
- 	.maxattr	= THERMAL_GENL_ATTR_MAX,
- 	.policy		= thermal_genl_policy,
-+	.bind		= thermal_genl_bind,
-+	.unbind		= thermal_genl_unbind,
- 	.small_ops	= thermal_genl_ops,
- 	.n_small_ops	= ARRAY_SIZE(thermal_genl_ops),
- 	.resv_start_op	= THERMAL_GENL_CMD_CDEV_GET + 1,
-@@ -686,6 +706,16 @@ static struct genl_family thermal_gnl_family __ro_after_init = {
- 	.n_mcgrps	= ARRAY_SIZE(thermal_genl_mcgrps),
- };
- 
-+int thermal_genl_register_notifier(struct notifier_block *nb)
-+{
-+	return blocking_notifier_chain_register(&thermal_gnl_chain, nb);
-+}
-+
-+int thermal_genl_unregister_notifier(struct notifier_block *nb)
-+{
-+	return blocking_notifier_chain_unregister(&thermal_gnl_chain, nb);
-+}
-+
- int __init thermal_netlink_init(void)
- {
- 	return genl_register_family(&thermal_gnl_family);
-diff --git a/drivers/thermal/thermal_netlink.h b/drivers/thermal/thermal_netlink.h
-index 93a927e144d5..69211ece7392 100644
---- a/drivers/thermal/thermal_netlink.h
-+++ b/drivers/thermal/thermal_netlink.h
-@@ -10,6 +10,19 @@ struct thermal_genl_cpu_caps {
- 	int efficiency;
- };
- 
-+enum thermal_genl_multicast_groups {
-+	THERMAL_GENL_SAMPLING_GROUP = 0,
-+	THERMAL_GENL_EVENT_GROUP = 1,
-+	THERMAL_GENL_MAX_GROUP = THERMAL_GENL_EVENT_GROUP,
-+};
-+
-+#define THERMAL_NOTIFY_BIND	0
-+#define THERMAL_NOTIFY_UNBIND	1
-+
-+struct thermal_genl_notify {
-+	int mcgrp;
-+};
-+
- struct thermal_zone_device;
- struct thermal_trip;
- struct thermal_cooling_device;
-@@ -18,6 +31,9 @@ struct thermal_cooling_device;
- #ifdef CONFIG_THERMAL_NETLINK
- int __init thermal_netlink_init(void);
- void __init thermal_netlink_exit(void);
-+int thermal_genl_register_notifier(struct notifier_block *nb);
-+int thermal_genl_unregister_notifier(struct notifier_block *nb);
-+
- int thermal_notify_tz_create(const struct thermal_zone_device *tz);
- int thermal_notify_tz_delete(const struct thermal_zone_device *tz);
- int thermal_notify_tz_enable(const struct thermal_zone_device *tz);
-@@ -48,6 +64,15 @@ static inline int thermal_notify_tz_create(const struct thermal_zone_device *tz)
+-	/* Enable this HFI instance if this is its first online CPU. */
+-	if (cpumask_weight(hfi_instance->cpus) == 1) {
++	/*
++	 * Enable this HFI instance if this is its first online CPU and
++	 * there are user-space clients of thermal events.
++	 */
++	if (cpumask_weight(hfi_instance->cpus) == 1 && hfi_thermal_clients_num > 0) {
+ 		hfi_set_hw_table(hfi_instance);
+ 		hfi_enable();
+ 	}
+@@ -573,28 +577,93 @@ static __init int hfi_parse_features(void)
  	return 0;
  }
  
-+int thermal_genl_register_notifier(struct notifier_block *nb)
+-static void hfi_do_enable(void)
++/*
++ * HFI enable/disable run in non-concurrent manner on boot CPU in syscore
++ * callbacks or under protection of hfi_instance_lock.
++ */
++static void hfi_do_enable(void *ptr)
 +{
-+	return 0;
++	struct hfi_instance *hfi_instance = ptr;
++
++	hfi_set_hw_table(hfi_instance);
++	hfi_enable();
 +}
 +
-+int thermal_genl_unregister_notifier(struct notifier_block *nb)
++static void hfi_do_disable(void *ptr)
 +{
-+	return 0;
++	hfi_disable();
 +}
- static inline int thermal_notify_tz_delete(const struct thermal_zone_device *tz)
++
++static void hfi_syscore_resume(void)
  {
+ 	/* This code runs only on the boot CPU. */
+ 	struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, 0);
+ 	struct hfi_instance *hfi_instance = info->hfi_instance;
+ 
+-	/* No locking needed. There is no concurrency with CPU online. */
+-	hfi_set_hw_table(hfi_instance);
+-	hfi_enable();
++	if (hfi_thermal_clients_num > 0)
++		hfi_do_enable(hfi_instance);
+ }
+ 
+-static int hfi_do_disable(void)
++static int hfi_syscore_suspend(void)
+ {
+-	/* No locking needed. There is no concurrency with CPU offline. */
+ 	hfi_disable();
+ 
  	return 0;
+ }
+ 
+ static struct syscore_ops hfi_pm_ops = {
+-	.resume = hfi_do_enable,
+-	.suspend = hfi_do_disable,
++	.resume = hfi_syscore_resume,
++	.suspend = hfi_syscore_suspend,
++};
++
++static int hfi_thermal_notify(struct notifier_block *nb, unsigned long state,
++			      void *_notify)
++{
++	struct thermal_genl_notify *notify = _notify;
++	struct hfi_instance *hfi_instance;
++	smp_call_func_t func;
++	unsigned int cpu;
++	int i;
++
++	if (notify->mcgrp != THERMAL_GENL_EVENT_GROUP)
++		return NOTIFY_DONE;
++
++	if (state != THERMAL_NOTIFY_BIND && state != THERMAL_NOTIFY_UNBIND)
++		return NOTIFY_DONE;
++
++	mutex_lock(&hfi_instance_lock);
++
++	switch (state) {
++	case THERMAL_NOTIFY_BIND:
++		hfi_thermal_clients_num++;
++		break;
++
++	case THERMAL_NOTIFY_UNBIND:
++		hfi_thermal_clients_num--;
++		break;
++	}
++
++	if (hfi_thermal_clients_num > 0)
++		func = hfi_do_enable;
++	else
++		func = hfi_do_disable;
++
++	for (i = 0; i < max_hfi_instances; i++) {
++		hfi_instance = &hfi_instances[i];
++		if (cpumask_empty(hfi_instance->cpus))
++			continue;
++
++		cpu = cpumask_any(hfi_instance->cpus);
++		smp_call_function_single(cpu, func, hfi_instance, true);
++	}
++
++	mutex_unlock(&hfi_instance_lock);
++
++	return NOTIFY_OK;
++}
++
++static struct notifier_block hfi_thermal_nb = {
++	.notifier_call = hfi_thermal_notify,
+ };
+ 
+ void __init intel_hfi_init(void)
+@@ -628,10 +697,16 @@ void __init intel_hfi_init(void)
+ 	if (!hfi_updates_wq)
+ 		goto err_nomem;
+ 
++	if (thermal_genl_register_notifier(&hfi_thermal_nb))
++		goto err_nl_notif;
++
+ 	register_syscore_ops(&hfi_pm_ops);
+ 
+ 	return;
+ 
++err_nl_notif:
++	destroy_workqueue(hfi_updates_wq);
++
+ err_nomem:
+ 	for (j = 0; j < i; ++j) {
+ 		hfi_instance = &hfi_instances[j];
 -- 
 2.34.1
 
