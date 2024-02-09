@@ -1,263 +1,100 @@
-Return-Path: <linux-pm+bounces-3684-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3685-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 313E484F50C
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Feb 2024 13:08:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EE8D84F532
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Feb 2024 13:32:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B556B247EF
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Feb 2024 12:08:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0AB361F249E2
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Feb 2024 12:32:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C364F328B6;
-	Fri,  9 Feb 2024 12:08:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D231B2E632;
+	Fri,  9 Feb 2024 12:32:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bhgw5f3L"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mRo80Z20"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 375BD2E856;
-	Fri,  9 Feb 2024 12:08:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E20B37145
+	for <linux-pm@vger.kernel.org>; Fri,  9 Feb 2024 12:32:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707480489; cv=none; b=ln3DPnPQVpbg6F90Q497z+vBT+8HCu+m4qIzTXeuTxKtX/bDRQ7sURKZDjQVWDxMWboCvMneqZQBxFE1UiveVZnIfyiWSWfNeFiNJYbn8RVQMuF4DxO2BvPm9/BjZqUTGI76CI5RLZ43uhTCIDn/8qb1tpCPMNDIuJdZHtrv1pU=
+	t=1707481925; cv=none; b=P/SeEhUlndHed9/mrjgc/9n4ZfNm/Z4gZfIyz5XHsELQhUAj0mMPcCBFGbpBhR/JxbOyl5cJ9ofDvf2nR1hLoR7QkLm8zwHdKskWl2YxBy2U8Zqq0PMbk2Gvou/1/vIfn+LlxrO9+ldAGm8iKJRFwaGe37+OzhnDEI7rHKvkFhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707480489; c=relaxed/simple;
-	bh=7plR84WWRswcCrnNW4hL+hM3NAlvi40gEEuXirSUnpQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=q9Kk7qziFs45fywvmokf7Hh9xFI99Web+lSBZSMMP6Of4ytu72QZ4281Qn/l8l3kehzqtyWYsQZvVvGJAGohPZS0sbgKWVub0ZcwIzuJGMJ8x5ZiRUltq00c2cEOC+HSNkbD/kK36KeRZtYxVY95p7qVLqIzZ1OvjMQL7R69BXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bhgw5f3L; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707480484; x=1739016484;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=7plR84WWRswcCrnNW4hL+hM3NAlvi40gEEuXirSUnpQ=;
-  b=bhgw5f3L8wO/bUyjOog2WQk+vze6x8cHBbouvy6tH2SY9Qkr1XySIidW
-   c5URnhblQ8OfkqiZ5APWyG1+KQ60Yd/ihc1rx4aZu7V20ZXHcFT1PM60s
-   5hJhmTFDg5aR6WCHIYJt+5SNMLyBS+6eFFM6bckTnRQB2GTBaRr8ex1PI
-   Vem0lz9sRTnfavp7nc3JZadwvhrf7PHrrTwch51tiYuzygL1fl4MvXVtm
-   7WbFpQZfaiG9j6cRBarH2+RXODZbJpp1flvEMjoFCGfyYLg0f3ucMs5Py
-   +BuIpWimXhmRZBpIpY/OnwMJDRSNOWC+bLgOXCxHCBpyGoI5+pcD6+TXo
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10978"; a="1726871"
-X-IronPort-AV: E=Sophos;i="6.05,256,1701158400"; 
-   d="scan'208";a="1726871"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2024 04:06:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,256,1701158400"; 
-   d="scan'208";a="32707718"
-Received: from sgruszka-mobl.ger.corp.intel.com (HELO localhost) ([10.252.43.96])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2024 04:06:45 -0800
-From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-To: linux-pm@vger.kernel.org
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Florian Westphal <fw@strlen.de>,
-	netdev@vger.kernel.org
-Subject: [PATCH v3 3/3] thermal: intel: hfi: Enable interface only when required
-Date: Fri,  9 Feb 2024 13:06:25 +0100
-Message-Id: <20240209120625.1775017-4-stanislaw.gruszka@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240209120625.1775017-1-stanislaw.gruszka@linux.intel.com>
-References: <20240209120625.1775017-1-stanislaw.gruszka@linux.intel.com>
+	s=arc-20240116; t=1707481925; c=relaxed/simple;
+	bh=vuzeVL8ENhRaU0enciWl9Devo54cDMBpxGGadOWRB6c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=FqmlmkmOQbbY4Tn+7jOJmIx8CtCteYZuiA4MvZaQ1/i51oea/Fy33FHX+Glve8DwkcWSbUMLOulRVmun9Hqq7+MheS3b7RB298MtpsWQD2eoXrh2RkFO2ZdLkSYfiO8uNPGqMT9N/yqmR3xpBfGOaZWSvvYmIXH6IMPuXDTedlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mRo80Z20; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a3566c0309fso104445966b.1
+        for <linux-pm@vger.kernel.org>; Fri, 09 Feb 2024 04:32:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1707481922; x=1708086722; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Or+7TV33UjjLnzKrdJHHM1U4dB+jQLRVi5nUD3I/5qk=;
+        b=mRo80Z20qPeOemXXDzgc9rhxW6fzRqXIKTNTsMtlSyWgvZxiOJPJO+F+PijuiCpnbk
+         jOPK2LQd/eQMr4Eia43AVtrjvZfWT3LLJIKmZHE5GiezyF72LnF/o7zHVOP+iS0+ykZ2
+         6cq9m7JtwG3RjkRzPeVBzYoofkz5WvrFkLMFIi4rf8OiEhmECWHpkxM2O4K3ia5wtQuu
+         AmOX3mMi0G3pcbXQENX6i94z4rKOpLxKFwKmNvZFghI4PaW6oILgnmeWKmKwVOnvS6lc
+         yJfd1nPAdJsbZ7Fgq6MbIIT6VKRBnnyxVs2JTnhjJMavobn7z+7WCQT1z9SCEZXDA4a2
+         ddNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707481922; x=1708086722;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Or+7TV33UjjLnzKrdJHHM1U4dB+jQLRVi5nUD3I/5qk=;
+        b=WUD5iKCGQwTDdcI3OyrGMxki6AYTRzmZAhF1OEFVhstcfXnvDg9W0xZNtjkFmp6qwY
+         kh6HXUEzBMRDkHIGC0XSDgLGn77TUNJIK4gGOZxyobtF4w8YLxpxjiQnBsTDYbOAFGKs
+         QG6IVa5/yC7Xl75QOvqyo6jMiEHW4kKmi8tWETrv2JzgVzBcfV2N1Hqs7ZdBEqblSJqq
+         35wFGgWlvcbGXSaT2XvzoBZoKKW8DSgJ3cqK5x5B6tu1zxQKsr2KVRiw3Rs2yaIGPLhx
+         hayHff5OK02jmqlKheDVZ51feL+TJP0bymijl8xXij636uPJtLNC6EKyGpZHhm3142E6
+         9UhQ==
+X-Gm-Message-State: AOJu0YzKHzUGG6/wyLXVAM4kgS8ldLbUgdfjooB1OKXZC49tTXmEBn0Q
+	yOUf6MB1g6USnnipcoweTqVCyzET/n6I1BkvMnA0sJdAka+rLk2pDvehH+/kT1k=
+X-Google-Smtp-Source: AGHT+IEj752jsa1mlfenpseUAJ3Dy+D08f0ucMRiMLkgNgZPgadQnjiwhwFQMn4/JVjeBV0AQ8fYvw==
+X-Received: by 2002:a17:907:175e:b0:a38:984e:2e5a with SMTP id lf30-20020a170907175e00b00a38984e2e5amr1103863ejc.33.1707481922377;
+        Fri, 09 Feb 2024 04:32:02 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXPWizAxbPQghB/0XjNG9xvU9op6+8x2fIZERWVKdSmy1YWH4cND3733FPafW3b+GXFlR4wI2jCFyHJ8BTZqd5fIByEpOFUd15UyBXvydGs/L0zDoRpHnSVG3HyjN3xutvszptxt+N305dGkaiQKWmD+VuQBspNkbt/MS+jIH6Y3DG/0XfaN3iFcXaan8lVWoq873bZxIJl+BE3M60l5+L62zqBxK5GJw2Ot1tnWy8=
+Received: from [192.168.1.116] (abyl12.neoplus.adsl.tpnet.pl. [83.9.31.12])
+        by smtp.gmail.com with ESMTPSA id cw3-20020a170907160300b00a381ca0e589sm717897ejd.22.2024.02.09.04.32.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Feb 2024 04:32:01 -0800 (PST)
+Message-ID: <d0133a63-51bb-41e9-826e-61495fef419c@linaro.org>
+Date: Fri, 9 Feb 2024 13:31:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/6] interconnect: qcom: constify things
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Bjorn Andersson <andersson@kernel.org>, Georgi Djakov <djakov@kernel.org>,
+ linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240208105056.128448-1-krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20240208105056.128448-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Enable and disable hardware feedback interface (HFI) when user space
-handler is present. For example, enable HFI, when intel-speed-select or
-Intel Low Power daemon is running and subscribing to thermal netlink
-events. When user space handlers exit or remove subscription for
-thermal netlink events, disable HFI.
 
-Summary of changes:
 
-- Register a thermal genetlink notifier
+On 2/8/24 11:50, Krzysztof Kozlowski wrote:
+> Still some things were left non-const.
+> 
 
-- In the notifier, process THERMAL_NOTIFY_BIND and THERMAL_NOTIFY_UNBIND
-reason codes to count number of thermal event group netlink multicast
-clients. If thermal netlink group has any listener enable HFI on all
-packages. If there are no listener disable HFI on all packages.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-- When CPU is online, instead of blindly enabling HFI, check if
-the thermal netlink group has any listener. This will make sure that
-HFI is not enabled by default during boot time.
-
-- Actual processing to enable/disable matches what is done in
-suspend/resume callbacks. Create two functions hfi_do_enable()
-and hfi_do_disable(), which can be called from  the netlink notifier
-callback and suspend/resume callbacks.
-
-Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
----
- drivers/thermal/intel/intel_hfi.c | 95 +++++++++++++++++++++++++++----
- 1 file changed, 85 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-index 3b04c6ec4fca..5e1e2b5269b7 100644
---- a/drivers/thermal/intel/intel_hfi.c
-+++ b/drivers/thermal/intel/intel_hfi.c
-@@ -159,6 +159,7 @@ struct hfi_cpu_info {
- static DEFINE_PER_CPU(struct hfi_cpu_info, hfi_cpu_info) = { .index = -1 };
- 
- static int max_hfi_instances;
-+static int hfi_thermal_clients_num;
- static struct hfi_instance *hfi_instances;
- 
- static struct hfi_features hfi_features;
-@@ -477,8 +478,11 @@ void intel_hfi_online(unsigned int cpu)
- enable:
- 	cpumask_set_cpu(cpu, hfi_instance->cpus);
- 
--	/* Enable this HFI instance if this is its first online CPU. */
--	if (cpumask_weight(hfi_instance->cpus) == 1) {
-+	/*
-+	 * Enable this HFI instance if this is its first online CPU and
-+	 * there are user-space clients of thermal events.
-+	 */
-+	if (cpumask_weight(hfi_instance->cpus) == 1 && hfi_thermal_clients_num > 0) {
- 		hfi_set_hw_table(hfi_instance);
- 		hfi_enable();
- 	}
-@@ -573,28 +577,93 @@ static __init int hfi_parse_features(void)
- 	return 0;
- }
- 
--static void hfi_do_enable(void)
-+/*
-+ * HFI enable/disable run in non-concurrent manner on boot CPU in syscore
-+ * callbacks or under protection of hfi_instance_lock.
-+ */
-+static void hfi_do_enable(void *ptr)
-+{
-+	struct hfi_instance *hfi_instance = ptr;
-+
-+	hfi_set_hw_table(hfi_instance);
-+	hfi_enable();
-+}
-+
-+static void hfi_do_disable(void *ptr)
-+{
-+	hfi_disable();
-+}
-+
-+static void hfi_syscore_resume(void)
- {
- 	/* This code runs only on the boot CPU. */
- 	struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, 0);
- 	struct hfi_instance *hfi_instance = info->hfi_instance;
- 
--	/* No locking needed. There is no concurrency with CPU online. */
--	hfi_set_hw_table(hfi_instance);
--	hfi_enable();
-+	if (hfi_thermal_clients_num > 0)
-+		hfi_do_enable(hfi_instance);
- }
- 
--static int hfi_do_disable(void)
-+static int hfi_syscore_suspend(void)
- {
--	/* No locking needed. There is no concurrency with CPU offline. */
- 	hfi_disable();
- 
- 	return 0;
- }
- 
- static struct syscore_ops hfi_pm_ops = {
--	.resume = hfi_do_enable,
--	.suspend = hfi_do_disable,
-+	.resume = hfi_syscore_resume,
-+	.suspend = hfi_syscore_suspend,
-+};
-+
-+static int hfi_thermal_notify(struct notifier_block *nb, unsigned long state,
-+			      void *_notify)
-+{
-+	struct thermal_genl_notify *notify = _notify;
-+	struct hfi_instance *hfi_instance;
-+	smp_call_func_t func;
-+	unsigned int cpu;
-+	int i;
-+
-+	if (notify->mcgrp != THERMAL_GENL_EVENT_GROUP)
-+		return NOTIFY_DONE;
-+
-+	if (state != THERMAL_NOTIFY_BIND && state != THERMAL_NOTIFY_UNBIND)
-+		return NOTIFY_DONE;
-+
-+	mutex_lock(&hfi_instance_lock);
-+
-+	switch (state) {
-+	case THERMAL_NOTIFY_BIND:
-+		hfi_thermal_clients_num++;
-+		break;
-+
-+	case THERMAL_NOTIFY_UNBIND:
-+		hfi_thermal_clients_num--;
-+		break;
-+	}
-+
-+	if (hfi_thermal_clients_num > 0)
-+		func = hfi_do_enable;
-+	else
-+		func = hfi_do_disable;
-+
-+	for (i = 0; i < max_hfi_instances; i++) {
-+		hfi_instance = &hfi_instances[i];
-+		if (cpumask_empty(hfi_instance->cpus))
-+			continue;
-+
-+		cpu = cpumask_any(hfi_instance->cpus);
-+		smp_call_function_single(cpu, func, hfi_instance, true);
-+	}
-+
-+	mutex_unlock(&hfi_instance_lock);
-+
-+	return NOTIFY_OK;
-+}
-+
-+static struct notifier_block hfi_thermal_nb = {
-+	.notifier_call = hfi_thermal_notify,
- };
- 
- void __init intel_hfi_init(void)
-@@ -628,10 +697,16 @@ void __init intel_hfi_init(void)
- 	if (!hfi_updates_wq)
- 		goto err_nomem;
- 
-+	if (thermal_genl_register_notifier(&hfi_thermal_nb))
-+		goto err_nl_notif;
-+
- 	register_syscore_ops(&hfi_pm_ops);
- 
- 	return;
- 
-+err_nl_notif:
-+	destroy_workqueue(hfi_updates_wq);
-+
- err_nomem:
- 	for (j = 0; j < i; ++j) {
- 		hfi_instance = &hfi_instances[j];
--- 
-2.34.1
-
+Konrad
 
