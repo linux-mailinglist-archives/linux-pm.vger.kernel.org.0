@@ -1,107 +1,177 @@
-Return-Path: <linux-pm+bounces-3712-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3713-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C766284F8C6
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Feb 2024 16:44:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A0A984F8CD
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Feb 2024 16:45:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 695C21F259B7
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Feb 2024 15:44:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F9211F25788
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Feb 2024 15:45:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AE2674E19;
-	Fri,  9 Feb 2024 15:44:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A50A574E24;
+	Fri,  9 Feb 2024 15:45:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="AaE9aeqK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QIUlqcik"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFC5671B3A;
-	Fri,  9 Feb 2024 15:44:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 035F0745C8;
+	Fri,  9 Feb 2024 15:45:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707493446; cv=none; b=J3mmZf7WgDtIwCJjIPxdXjhukJuBLAWQ1RitvmQN3l7SQSAzwM41/+3uqu3PePo4zeKLu030prbBkNaTJ5x1HdvtmWaqc40JTODPoYZ8r0Ob+wb+p9pocjpDwQ1R/xEsyLtklYSBaA6ib05DxEWnfRDsnIq8tarNQAL3gqivq8I=
+	t=1707493509; cv=none; b=G68tDPxh4splpHcxK1KS8Qk95iyjLWI7DHcouYA89p2gwwulAg4JTf38EE6UgVdCpnmbIJTcaRw83vSketMnW0FAneouMfSEAQSzMChOYKZgqCAd/ioxyal8oek6EE3iea/LDY7SAvkl0Ej96WuJ3ZJcGhdlwR+6VehCxm+3fsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707493446; c=relaxed/simple;
-	bh=O4/YM668cDKSHelku3SxggCbwo1G68KwNgmDfW7ur/s=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fvW1Pp6bj0/ZTYU1N8ZbmuiAN/BKCLkFhSQ7WHEg3vHMthz/S9XVJtvGo3tMotaFmnRhVrHmUb/1kCLyFYk/LbQ1rpk/2CVA7GHL2e5TdbQWqXRVL4aY105NlfTrzmxZmr2ATYVO07jYp1XoCv1YPyoqxZKEsy09DtSaE637nBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=AaE9aeqK; arc=none smtp.client-ip=80.241.56.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4TWdSH5lyhz9t4t;
-	Fri,  9 Feb 2024 16:43:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1707493439;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=H8PypmVbsnCrC9vOiFkAsVoG/5dR314vcsbeC6i7o88=;
-	b=AaE9aeqK97OIAPqXITM/NCWrmdwiH365Skq0RD5OcfcCktcP1M/IOXjHDTIqFQvBdVnrOO
-	S0wK0iC1MOogj/Kr6nIPoQKmwpBftXxMjooU4nTMYAk5ZfIT1OSocG9ScUBbbFwj0hJgYo
-	+TJnJFaKu9YgrrE7zgiY5LHaF/mWOgdY39PGseDwJzP96caKY6OgaFNB1W8SRjew0N/7/z
-	t6kkzgwP4YSu+hS9X6YkcyPuaFGPq/AA2jZJHXB3z2/Jz0klkA54QNDC8jnokYSE6rxYOD
-	S7QZA8l6XWicO0+qnR265H8Dle6IVq+3VBwVN06OzQ9ZqlCMSPkJJr4QmaFlug==
-From: Tor Vic <torvic9@mailbox.org>
-To: Perry.Yuan@amd.com,
-	ray.huang@amd.com,
-	gautham.shenoy@amd.com,
-	mario.limonciello@amd.com,
-	rafael.j.wysocki@intel.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Oleksandr Natalenko <oleksandr@natalenko.name>
-Subject: [PATCH v3] cpufreq: amd-pstate: Fix min_perf assignment in amd_pstate_adjust_perf()
-Date: Fri,  9 Feb 2024 16:42:26 +0100
-Message-ID: <20240209154336.7788-1-torvic9@mailbox.org>
-In-Reply-To: <8eefeeb7-f8e8-49f4-b83c-e67a9e728f41@mailbox.org>
-References: <8eefeeb7-f8e8-49f4-b83c-e67a9e728f41@mailbox.org>
+	s=arc-20240116; t=1707493509; c=relaxed/simple;
+	bh=BzgEjFy21abm8ou95D52xk4UJcg0gHu4yXLP7PFRrXs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gd9Xocl6U/D/6lzkNZr8BYN4ePjrCexEFTOvEJVgFJnRz0HorF7Ey7F35NsWD7EJm9ePokMR1JWaiIWk2Z6TSOhzahIgHpc6OaYAEOGFXYJsSX1KSnr//b68wU0lmBKL5wlRWBunaniPB7XMRXf6ah4Lw6pLI/laKCMwXAIZYoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QIUlqcik; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707493508; x=1739029508;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=BzgEjFy21abm8ou95D52xk4UJcg0gHu4yXLP7PFRrXs=;
+  b=QIUlqcikrzXV6ZR+dtfKZJO/KqkEWaEVv8z5k6DHNg1pjYHgyWFkf7P2
+   3QGOIpdc79XMpIcY3f9zI+rnzvNGXa1J8SUM/1N+ttBLQ2xn17LJZFj/r
+   9MTMTcDhWn3hsM5egE31PyNhBdtzSwbZ2I1zEqWHoXJrJfM0R6hdYPvAo
+   jWRkUVJtHoa95ihcpvlPw9poBJ0tLROcUm0vXIukmubxy/nBTY72qzSnV
+   pr2KdVdRVG3xfMpqmPhfJh9gp3fbiSxZ08igZJSMN9v6aBxR1nIM+8Fc0
+   uNQ8QVsAVpXRpQh9rg7iuxsfxA9mZh1Y+NVtJcVUakZKMY0oW0WxB1Rdg
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10979"; a="18863190"
+X-IronPort-AV: E=Sophos;i="6.05,257,1701158400"; 
+   d="scan'208";a="18863190"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2024 07:45:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10979"; a="910744564"
+X-IronPort-AV: E=Sophos;i="6.05,257,1701158400"; 
+   d="scan'208";a="910744564"
+Received: from lesliemu-mobl1.amr.corp.intel.com (HELO [10.209.54.206]) ([10.209.54.206])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2024 07:45:06 -0800
+Message-ID: <64ad8d52-ba67-4156-8e36-7346605bdf48@linux.intel.com>
+Date: Fri, 9 Feb 2024 07:45:05 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-MBO-RS-META: gz74hbj39br16tma89hs5oeudf64gmsk
-X-MBO-RS-ID: 5d468f1bf389e51a998
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] PCI/AER: Block runtime suspend when handling errors
+To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+ Bjorn Helgaas <helgaas@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+ Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+ Oliver O'Halloran <oohall@gmail.com>
+References: <20240209140841.1854711-1-stanislaw.gruszka@linux.intel.com>
+Content-Language: en-US
+From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20240209140841.1854711-1-stanislaw.gruszka@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-In the function amd_pstate_adjust_perf(), the 'min_perf' variable is set
-to 'highest_perf' instead of 'lowest_perf'.
 
-Cc: <stable@vger.kernel.org> # 6.1+
-Fixes: 1d215f0319c2 ("cpufreq: amd-pstate: Add fast switch function for AMD P-State")
-Reported-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-Reviewed-by: Perry Yuan <Perry.Yuan@amd.com>
-Signed-off-by: Tor Vic <torvic9@mailbox.org>
----
-v2->v3: Resend with git, misconfigured mail client borked v2
-v1->v2: Add Perry's 'Reviewed-by' and 'Cc: stable' tag
----
- drivers/cpufreq/amd-pstate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 2/9/24 6:08 AM, Stanislaw Gruszka wrote:
+> PM runtime can be done simultaneously with AER error handling.
+> Avoid that by using pm_runtime_get_sync() before and pm_runtime_put()
+> after reset in pcie_do_recovery() for all recovering devices.
+>
+> pm_runtime_get_sync() will increase dev->power.usage_count counter
+> to prevent any possible future request to runtime suspend a device,
+> as well as resume device is was in D3hot state.
+runtime suspend a device or resume a device that was in D3hot state.
+>
+> I tested with igc device by doing simultaneous aer_inject and
+> rpm suspend/resume via /sys/bus/pci/devices/PCI_ID/power/control
+> and can reproduce:
+>
+> igc 0000:02:00.0: not ready 65535ms after bus reset; giving up
+> pcieport 0000:00:1c.2: AER: Root Port link has been reset (-25)
+> pcieport 0000:00:1c.2: AER: subordinate device reset failed
+> pcieport 0000:00:1c.2: AER: device recovery failed
+> igc 0000:02:00.0: Unable to change power state from D3hot to D0, device inaccessible
+>
+> The problem disappears when applied this patch.
+>
+> Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+> ---
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 08e112444c27..aa5e57e27d2b 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -577,7 +577,7 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
- 	if (target_perf < capacity)
- 		des_perf = DIV_ROUND_UP(cap_perf * target_perf, capacity);
- 
--	min_perf = READ_ONCE(cpudata->highest_perf);
-+	min_perf = READ_ONCE(cpudata->lowest_perf);
- 	if (_min_perf < capacity)
- 		min_perf = DIV_ROUND_UP(cap_perf * _min_perf, capacity);
- 
+since it is a bug fix, may be Cc: stable@vger.kernel.org
+
+Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+> RFC -> v1:
+>  add runtime callbacks to pcie_do_recovery(), this covers DPC case
+>  as well as case of recovering multiple devices under same port.
+>  
+>  drivers/pci/pcie/err.c | 20 ++++++++++++++++++++
+>  1 file changed, 20 insertions(+)
+>
+> diff --git a/drivers/pci/pcie/err.c b/drivers/pci/pcie/err.c
+> index 59c90d04a609..705893b5f7b0 100644
+> --- a/drivers/pci/pcie/err.c
+> +++ b/drivers/pci/pcie/err.c
+> @@ -13,6 +13,7 @@
+>  #define dev_fmt(fmt) "AER: " fmt
+>  
+>  #include <linux/pci.h>
+> +#include <linux/pm_runtime.h>
+>  #include <linux/module.h>
+>  #include <linux/kernel.h>
+>  #include <linux/errno.h>
+> @@ -85,6 +86,18 @@ static int report_error_detected(struct pci_dev *dev,
+>  	return 0;
+>  }
+>  
+> +static int pci_pm_runtime_get_sync(struct pci_dev *pdev, void *data)
+> +{
+> +	pm_runtime_get_sync(&pdev->dev);
+> +	return 0;
+> +}
+> +
+> +static int pci_pm_runtime_put(struct pci_dev *pdev, void *data)
+> +{
+> +	pm_runtime_put(&pdev->dev);
+> +	return 0;
+> +}
+> +
+>  static int report_frozen_detected(struct pci_dev *dev, void *data)
+>  {
+>  	return report_error_detected(dev, pci_channel_io_frozen, data);
+> @@ -207,6 +220,8 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
+>  	else
+>  		bridge = pci_upstream_bridge(dev);
+>  
+> +	pci_walk_bridge(bridge, pci_pm_runtime_get_sync, NULL);
+> +
+>  	pci_dbg(bridge, "broadcast error_detected message\n");
+>  	if (state == pci_channel_io_frozen) {
+>  		pci_walk_bridge(bridge, report_frozen_detected, &status);
+> @@ -251,10 +266,15 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
+>  		pcie_clear_device_status(dev);
+>  		pci_aer_clear_nonfatal_status(dev);
+>  	}
+> +
+> +	pci_walk_bridge(bridge, pci_pm_runtime_put, NULL);
+> +
+>  	pci_info(bridge, "device recovery successful\n");
+>  	return status;
+>  
+>  failed:
+> +	pci_walk_bridge(bridge, pci_pm_runtime_put, NULL);
+> +
+>  	pci_uevent_ers(bridge, PCI_ERS_RESULT_DISCONNECT);
+>  
+>  	/* TODO: Should kernel panic here? */
+
 -- 
-2.43.0
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
 
 
