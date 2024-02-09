@@ -1,177 +1,107 @@
-Return-Path: <linux-pm+bounces-3711-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3712-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 824FB84F8A2
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Feb 2024 16:33:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C766284F8C6
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Feb 2024 16:44:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 23F831F21DAD
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Feb 2024 15:33:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 695C21F259B7
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Feb 2024 15:44:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 498697603A;
-	Fri,  9 Feb 2024 15:33:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AE2674E19;
+	Fri,  9 Feb 2024 15:44:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="azHGWNjl"
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="AaE9aeqK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEAA66F06C;
-	Fri,  9 Feb 2024 15:33:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFC5671B3A;
+	Fri,  9 Feb 2024 15:44:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707492817; cv=none; b=iczNdy8DnLImbVzMmPOnvg5pnBAIHqCzjGn4T30OoNHoy/5YnFlsz6ok4daRkaRiN5aVZwLVEhNd9MSYBLpKCOiwDHoqhjcrOYqZMkExh0GxAdmGxIbrkPlmuLC+zmLzPuH9RgLe8nvk7oGKIGAkeKTwnsDLZ0B6/jMglkRtY6Y=
+	t=1707493446; cv=none; b=J3mmZf7WgDtIwCJjIPxdXjhukJuBLAWQ1RitvmQN3l7SQSAzwM41/+3uqu3PePo4zeKLu030prbBkNaTJ5x1HdvtmWaqc40JTODPoYZ8r0Ob+wb+p9pocjpDwQ1R/xEsyLtklYSBaA6ib05DxEWnfRDsnIq8tarNQAL3gqivq8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707492817; c=relaxed/simple;
-	bh=/uOgL0L6lHM/X3uPQJuyG37nIHjtd74huS+zuipAY6Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=PzxC1j+z4JqJo7xFNCxZ4L1CgyPeqGilaKE5EC6JCdLW9r2bvj0bZi1eb/GzDmgqNbVAtwX3FWiOvQKEixQBQL5shRJOjxWyWmG2WqCiniUZwBn2sS7PpzL70lzwQFGOY4Fez0Yr+Tlf0nFZenxu7EgktcHBMEJuw1tFZXtd/ak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=azHGWNjl; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707492814; x=1739028814;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/uOgL0L6lHM/X3uPQJuyG37nIHjtd74huS+zuipAY6Q=;
-  b=azHGWNjlD1dowvcJa7reAXZh14KdaSGOENE79tip/pgDDhU9HTAQSOjl
-   BwPN8sP+wuCVEB18HSkRePL9DZwRBwoLp8Fxr/vT6e46EZtQEb4fVixK8
-   p3vnrPnyKBcOe0SUxFCyvYheGVAZUQ8mNXRElZXnvW7bhFCCBB6rwqH11
-   d/uYN+ppKCnDtHs3MRdqWgO9VPYosWljS4ZIkGArPkYaFDSx0KA+S0zMe
-   Q+cyhw0Ym0dLDW4qsxNZVK4S2wpG/Hf7HWlmk2e13rhKQ2Z03BKb6INDl
-   mX+JdjA+PYZq0il9hPlM4Y8mYM5xmGRpg8xg03W+Hw6elq0mUtBGUJtl9
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10979"; a="5296851"
-X-IronPort-AV: E=Sophos;i="6.05,257,1701158400"; 
-   d="scan'208";a="5296851"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2024 07:33:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10979"; a="825170553"
-X-IronPort-AV: E=Sophos;i="6.05,257,1701158400"; 
-   d="scan'208";a="825170553"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 09 Feb 2024 07:33:29 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rYSsZ-0004pt-17;
-	Fri, 09 Feb 2024 15:33:27 +0000
-Date: Fri, 9 Feb 2024 23:33:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-	devel@acpica.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge 65/77]
- drivers/thermal/intel/intel_quark_dts_thermal.c:353:17: error: 'trips'
- undeclared
-Message-ID: <202402092329.W4VIvzU0-lkp@intel.com>
+	s=arc-20240116; t=1707493446; c=relaxed/simple;
+	bh=O4/YM668cDKSHelku3SxggCbwo1G68KwNgmDfW7ur/s=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fvW1Pp6bj0/ZTYU1N8ZbmuiAN/BKCLkFhSQ7WHEg3vHMthz/S9XVJtvGo3tMotaFmnRhVrHmUb/1kCLyFYk/LbQ1rpk/2CVA7GHL2e5TdbQWqXRVL4aY105NlfTrzmxZmr2ATYVO07jYp1XoCv1YPyoqxZKEsy09DtSaE637nBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=AaE9aeqK; arc=none smtp.client-ip=80.241.56.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4TWdSH5lyhz9t4t;
+	Fri,  9 Feb 2024 16:43:59 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1707493439;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=H8PypmVbsnCrC9vOiFkAsVoG/5dR314vcsbeC6i7o88=;
+	b=AaE9aeqK97OIAPqXITM/NCWrmdwiH365Skq0RD5OcfcCktcP1M/IOXjHDTIqFQvBdVnrOO
+	S0wK0iC1MOogj/Kr6nIPoQKmwpBftXxMjooU4nTMYAk5ZfIT1OSocG9ScUBbbFwj0hJgYo
+	+TJnJFaKu9YgrrE7zgiY5LHaF/mWOgdY39PGseDwJzP96caKY6OgaFNB1W8SRjew0N/7/z
+	t6kkzgwP4YSu+hS9X6YkcyPuaFGPq/AA2jZJHXB3z2/Jz0klkA54QNDC8jnokYSE6rxYOD
+	S7QZA8l6XWicO0+qnR265H8Dle6IVq+3VBwVN06OzQ9ZqlCMSPkJJr4QmaFlug==
+From: Tor Vic <torvic9@mailbox.org>
+To: Perry.Yuan@amd.com,
+	ray.huang@amd.com,
+	gautham.shenoy@amd.com,
+	mario.limonciello@amd.com,
+	rafael.j.wysocki@intel.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Oleksandr Natalenko <oleksandr@natalenko.name>
+Subject: [PATCH v3] cpufreq: amd-pstate: Fix min_perf assignment in amd_pstate_adjust_perf()
+Date: Fri,  9 Feb 2024 16:42:26 +0100
+Message-ID: <20240209154336.7788-1-torvic9@mailbox.org>
+In-Reply-To: <8eefeeb7-f8e8-49f4-b83c-e67a9e728f41@mailbox.org>
+References: <8eefeeb7-f8e8-49f4-b83c-e67a9e728f41@mailbox.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-MBO-RS-META: gz74hbj39br16tma89hs5oeudf64gmsk
+X-MBO-RS-ID: 5d468f1bf389e51a998
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   2bc44535ed4f6a6013ec53b505c4c381e166f0ce
-commit: fdb07e113a91652cc3adf07a8e1ca7da3445f493 [65/77] thermal: intel: Set THERMAL_TRIP_WRITABLE_TEMP directly
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20240209/202402092329.W4VIvzU0-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240209/202402092329.W4VIvzU0-lkp@intel.com/reproduce)
+In the function amd_pstate_adjust_perf(), the 'min_perf' variable is set
+to 'highest_perf' instead of 'lowest_perf'.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402092329.W4VIvzU0-lkp@intel.com/
+Cc: <stable@vger.kernel.org> # 6.1+
+Fixes: 1d215f0319c2 ("cpufreq: amd-pstate: Add fast switch function for AMD P-State")
+Reported-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+Reviewed-by: Perry Yuan <Perry.Yuan@amd.com>
+Signed-off-by: Tor Vic <torvic9@mailbox.org>
+---
+v2->v3: Resend with git, misconfigured mail client borked v2
+v1->v2: Add Perry's 'Reviewed-by' and 'Cc: stable' tag
+---
+ drivers/cpufreq/amd-pstate.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-All errors (new ones prefixed by >>):
-
-   drivers/thermal/intel/intel_quark_dts_thermal.c: In function 'alloc_soc_dts':
->> drivers/thermal/intel/intel_quark_dts_thermal.c:353:17: error: 'trips' undeclared (first use in this function)
-     353 |                 trips[QRK_DTS_ID_TP_CRITICAL].flags |= THERMAL_TRIP_WRITABLE_TEMP;
-         |                 ^~~~~
-   drivers/thermal/intel/intel_quark_dts_thermal.c:353:17: note: each undeclared identifier is reported only once for each function it appears in
-
-
-vim +/trips +353 drivers/thermal/intel/intel_quark_dts_thermal.c
-
-   316	
-   317	static struct soc_sensor_entry *alloc_soc_dts(void)
-   318	{
-   319		struct soc_sensor_entry *aux_entry;
-   320		int err;
-   321		u32 out;
-   322	
-   323		aux_entry = kzalloc(sizeof(*aux_entry), GFP_KERNEL);
-   324		if (!aux_entry) {
-   325			err = -ENOMEM;
-   326			return ERR_PTR(-ENOMEM);
-   327		}
-   328	
-   329		/* Check if DTS register is locked */
-   330		err = iosf_mbi_read(QRK_MBI_UNIT_RMU, MBI_REG_READ,
-   331				    QRK_DTS_REG_OFFSET_LOCK, &out);
-   332		if (err)
-   333			goto err_ret;
-   334	
-   335		aux_entry->locked = !!(out & QRK_DTS_LOCK_BIT);
-   336	
-   337		/* Store DTS default state if DTS registers are not locked */
-   338		if (!aux_entry->locked) {
-   339			/* Store DTS default enable for restore on exit */
-   340			err = iosf_mbi_read(QRK_MBI_UNIT_RMU, MBI_REG_READ,
-   341					    QRK_DTS_REG_OFFSET_ENABLE,
-   342					    &aux_entry->store_dts_enable);
-   343			if (err)
-   344				goto err_ret;
-   345	
-   346			/* Store DTS default PTPS register for restore on exit */
-   347			err = iosf_mbi_read(QRK_MBI_UNIT_RMU, MBI_REG_READ,
-   348					    QRK_DTS_REG_OFFSET_PTPS,
-   349					    &aux_entry->store_ptps);
-   350			if (err)
-   351				goto err_ret;
-   352	
- > 353			trips[QRK_DTS_ID_TP_CRITICAL].flags |= THERMAL_TRIP_WRITABLE_TEMP;
-   354			trips[QRK_DTS_ID_TP_HOT].flags |= THERMAL_TRIP_WRITABLE_TEMP;
-   355		}
-   356	
-   357		aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].temperature = get_trip_temp(QRK_DTS_ID_TP_CRITICAL);
-   358		aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].type = THERMAL_TRIP_CRITICAL;
-   359	
-   360		aux_entry->trips[QRK_DTS_ID_TP_HOT].temperature = get_trip_temp(QRK_DTS_ID_TP_HOT);
-   361		aux_entry->trips[QRK_DTS_ID_TP_HOT].type = THERMAL_TRIP_HOT;
-   362	
-   363		aux_entry->tzone = thermal_zone_device_register_with_trips("quark_dts",
-   364									   aux_entry->trips,
-   365									   QRK_MAX_DTS_TRIPS,
-   366									   0, aux_entry,
-   367									   &tzone_ops,
-   368									   NULL, 0, polling_delay);
-   369		if (IS_ERR(aux_entry->tzone)) {
-   370			err = PTR_ERR(aux_entry->tzone);
-   371			goto err_ret;
-   372		}
-   373	
-   374		err = thermal_zone_device_enable(aux_entry->tzone);
-   375		if (err)
-   376			goto err_aux_status;
-   377	
-   378		return aux_entry;
-   379	
-   380	err_aux_status:
-   381		thermal_zone_device_unregister(aux_entry->tzone);
-   382	err_ret:
-   383		kfree(aux_entry);
-   384		return ERR_PTR(err);
-   385	}
-   386	
-
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index 08e112444c27..aa5e57e27d2b 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -577,7 +577,7 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
+ 	if (target_perf < capacity)
+ 		des_perf = DIV_ROUND_UP(cap_perf * target_perf, capacity);
+ 
+-	min_perf = READ_ONCE(cpudata->highest_perf);
++	min_perf = READ_ONCE(cpudata->lowest_perf);
+ 	if (_min_perf < capacity)
+ 		min_perf = DIV_ROUND_UP(cap_perf * _min_perf, capacity);
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
 
