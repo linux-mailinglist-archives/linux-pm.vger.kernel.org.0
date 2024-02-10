@@ -1,161 +1,131 @@
-Return-Path: <linux-pm+bounces-3738-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3739-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F0FA8504A1
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Feb 2024 15:13:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 398208504AE
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Feb 2024 15:20:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8EC22B224A4
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Feb 2024 14:13:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E90C0284106
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Feb 2024 14:20:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9BBC54659;
-	Sat, 10 Feb 2024 14:13:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C50B254677;
+	Sat, 10 Feb 2024 14:20:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=z3ntu.xyz header.i=@z3ntu.xyz header.b="7eEW7knG"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XBhSaj4C"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from ahti.lucaweiss.eu (ahti.lucaweiss.eu [128.199.32.197])
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26F4B53E0D;
-	Sat, 10 Feb 2024 14:13:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=128.199.32.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 343BF5467C
+	for <linux-pm@vger.kernel.org>; Sat, 10 Feb 2024 14:20:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707574409; cv=none; b=l8VjquMWK98bGnX6ek7SdO2Qy043aAkU9PVCtOdiZm7f2ggLeALqNImNhqwBFo6VKTZd6XUNFSTj1/HcDPbRhOUyR5d3LNCrfJ9zM6lFhQNBeV0+GHvbu/+nsNWouiH0FHozJieavq3SvjrBJ5N/ClGG6BxQtcme6zJG+77iF3k=
+	t=1707574809; cv=none; b=WfpS9PP1Gl8XCuWfJjnVWZJjhAHDN2E60UT91sx8LtaOuWltfhHL2vvQ1uNh8j1CqT/FvmuWwHY/dUZ9JNhV99TXTX9bT7ebVY1IPCjjUEzsilsOvtVMM6F6TmCl7B8WcKIayFIkluZEmtbzx+2aUowNrQsBEYaRNG3eJRmb9jA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707574409; c=relaxed/simple;
-	bh=pEbjMkaG6aytDHCPfPUMYKbhop5aoAakU84obp67bv8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Pcgr3T0O9nAjCE7IA45cCvO96W1T+EkQF+I4CpbDRCQw/xCdxqEgSAkqQqHTmCgpnju+6g5qlZxDWz51VYoxR8V9bzUrG+nwdD/MeOVgpgDvQOO+w2YKrAOM/FGnbD0ZdpEwhRKkNlUa6/3Hro3ZLUKqak1sa7uJzDfQ9RyNHmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=z3ntu.xyz; spf=pass smtp.mailfrom=z3ntu.xyz; dkim=pass (1024-bit key) header.d=z3ntu.xyz header.i=@z3ntu.xyz header.b=7eEW7knG; arc=none smtp.client-ip=128.199.32.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=z3ntu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=z3ntu.xyz
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=s1;
-	t=1707574399; bh=pEbjMkaG6aytDHCPfPUMYKbhop5aoAakU84obp67bv8=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=7eEW7knG3Kt1XQZsTi0b2jkYMBHrEzKaJa5SRfZoehy1mNBUxZPOXS2y+ARlkUB50
-	 zxa56jZICMKwcoO4qms09bGrpCwezCoEXgMXvZIiCsiup3xnhgDtFnu4M4+S9mfFDa
-	 X81E0fyxtYOa+8w8XTyfeerK9utVDGoMjfAXOHDA=
-From: Luca Weiss <luca@z3ntu.xyz>
-Date: Sat, 10 Feb 2024 15:12:57 +0100
-Subject: [PATCH 3/3] pmdomain: qcom: rpmpd: Add MSM8974PRO+PMA8084 power
- domains
+	s=arc-20240116; t=1707574809; c=relaxed/simple;
+	bh=JJeQNmVoicg69Hf75brIBRYAsZhv3CjVPhVLsH42ruI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jP+BotBqMBKw5rwRpgzs9rXE+X4WZV0EZyoDDQVBmkwf/Nyq3RAIgFfQ6C+yG8DUIMuikqqlxkG0hmw9NC5fLtGWktgqdaP4w3fugKKf+QbUAnCU/ySLOrIK1eVm/MfsvredtRc24Fzur4brlYHDgnwnxQ8tLjSsY81uLyz4Dss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XBhSaj4C; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-561519f8698so1383717a12.0
+        for <linux-pm@vger.kernel.org>; Sat, 10 Feb 2024 06:20:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1707574805; x=1708179605; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=N6tj6pFq4vNzxv9pmKGjL/29KyKA1mP1XyWEer3ObuY=;
+        b=XBhSaj4CXAjOXV16NyhDc4pgZXyEnA2VhtMLrNN9cPHUn8WR5kKf0sDRehUyXGbDmy
+         a/mn5tXPKnx9goTHqdzYbVK2zRBJAfOfEHN5IpzZ35zmklPVbi/IKeNE9dScSqZqq1HK
+         dHC19CdXuOChRYHTqeDuhHrmZnD6XSu/iRkmPgZBIZheBld7LGWUZkzT9rxlAWIkdZUN
+         oGSqsKw4g4/DBm/A6me1XC9FsU+Cg77ZlqJmtCj4uT/nKsKSX75OV2GSjXT3ACgmR05r
+         NAmoR0FJkxvRKaVZiFAItscSWr/rRbTMuCrCimDCYzoYs55PyrcvD+JvY34m1lgExCwZ
+         F/Ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707574805; x=1708179605;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=N6tj6pFq4vNzxv9pmKGjL/29KyKA1mP1XyWEer3ObuY=;
+        b=FFHtQ2PEbIa1grgBJxGPdxHk+cIT6d+E0es2qsKT4yT/xlBlVktegIEPfV/LqGncs8
+         GFOANUkuH+fowet/eWcT+14q9/ZUkaswB6oV2ZdECDlu44iZ0VIbDRdo0Ij1+tXghmTS
+         TOAQhyw5V6OJi9hAdIMtUmCsmUMnM478x4GSW5XTlh9rwj9Yhofck0N9BiD46w/k7unr
+         nFcVH60MUXaYnLivq7dO52nedKmzOUnc80lnfnOugvsJRLXfYav3whytujdAu6Z0nARC
+         dNGDSVskjLjivo7Hr7ObjAG5dr8+zf2G+9fivOl6X1p5H86tcLqhtAh/39jR2Td6Rg6E
+         exZw==
+X-Gm-Message-State: AOJu0YxkuPpjVVlUNaIhgG05Vi0XIggPh0KCqjhFucFzE3e5xXLNDrdu
+	+PqYirfnowE6BXNXrJ9c9Jyo6IQlAskVe5qV9YhijNhQd1F53embmWCtOr1Y/00=
+X-Google-Smtp-Source: AGHT+IFPtR890U93rfcpYVwpr91KR5MSymRvdn1CDR1euSTilFXoiHU6sUJF/yInkfFJsJ6ebqCbCw==
+X-Received: by 2002:a17:906:354a:b0:a3c:6a8:e3c3 with SMTP id s10-20020a170906354a00b00a3c06a8e3c3mr1536823eja.1.1707574805228;
+        Sat, 10 Feb 2024 06:20:05 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXkTG7yeG7cPTgqkNKF6BovSODqqUfJ9vaMapkqosjfge2vXayt2wNQNbYmmSvLMa7+9dm9QaH2CqUVH38jSFCW4D/KfM/+COnty9mxVBphzST5tLhSPhWbkmC7c6/S9iDLwAebDXFpthvXKsdQNIYzS9NcvdsvOKgWdAALamEm+qiwn+SLFp3PttUametEnsOBdC4ko4gvS1efMIFUQ0gO2MMQOBYA2nIsWZXX5SyZyW5kc4AX61eQ137Oa/mVXa2akMKSDHT3H5yG3ryMUgfWWlVHP1v775ueSd2u8dnAyF1gWzu0nLCvfvOgOOO4m3sbT+JXN+8OiYDFBphwiP6YZ4Ks6FJaQ2p/v9SmxUe7E+kHlU7075zhM24dRpZ+zQn6cCMqYCgIQ3zQUPZydq8R2TCnxhOfK64DtLWjIkB6jojqmu8fU3ZGCM9frrx27aUiGtp9J2NZ0Pkt2FBvnFDbilszuAEFt4u16LbrspSx8A==
+Received: from [192.168.1.116] (abyl12.neoplus.adsl.tpnet.pl. [83.9.31.12])
+        by smtp.gmail.com with ESMTPSA id ps2-20020a170906bf4200b00a35a8571419sm1828268ejb.135.2024.02.10.06.20.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 10 Feb 2024 06:20:04 -0800 (PST)
+Message-ID: <18ae7906-5089-42b3-a511-6e301f116e06@linaro.org>
+Date: Sat, 10 Feb 2024 15:19:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240210-msm8974-rpmpd-v1-3-de9355e6842a@z3ntu.xyz>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] pmdomain: qcom: rpmpd: Add MSM8974+PM8841 power
+ domains
+Content-Language: en-US
+To: Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
+ phone-devel@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Stephan Gerhold <stephan@gerhold.net>,
+ =?UTF-8?Q?Matti_Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 References: <20240210-msm8974-rpmpd-v1-0-de9355e6842a@z3ntu.xyz>
-In-Reply-To: <20240210-msm8974-rpmpd-v1-0-de9355e6842a@z3ntu.xyz>
-To: ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org, 
- Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Herring <robh+dt@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
- Conor Dooley <conor+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
- Stephan Gerhold <stephan@gerhold.net>, 
- =?utf-8?q?Matti_Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
- Luca Weiss <luca@z3ntu.xyz>
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2540; i=luca@z3ntu.xyz;
- h=from:subject:message-id; bh=pEbjMkaG6aytDHCPfPUMYKbhop5aoAakU84obp67bv8=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBlx4R9DAmzORdeYJsmHQwKQRAjHJYEVq2+bwQ/T
- nGIpX0bUZeJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCZceEfQAKCRBy2EO4nU3X
- Voi6D/95TvGZpv+6L56HIuBJv4E50X1zBarD4qhAMgxdQdh/qkeBRwI68dhKWRIa7IK4CS4Vmi/
- QZXdFFxCIb6vtX4pWAceyaTVarcPpLW69+PUAws93WTtyeVTvNbs+ujsTZdslfVcjE+7uJPQZah
- gzSMg2QGBG2AmvgScPsyNCaP4hIFWrnfUf7KMKS5hRJx71YMLO+9L7rMUO8/yfgFnI722wJMf2r
- yoT4OE0KpdyfIFVOP7e5maYVEAUFYmm+oo0ZFKPBlPlIadOjhCbVtk2JHz30Jb1j9WbOrSh76Jr
- iegovPxfvv6tbZpOZFNCcNxXcblzFbLdULy5FACgUdoYbu/sZrjwMEBq+U2ogQSrfZFgGCfFVbl
- 3Ah4sYELgzB/OKtTmNvdP8aH/8swUJ84AQfWPeMzt2mdOzex7n+I6NTg9Q+zYRxfzi5EbK7uU0H
- 1Ndy0iw0Alhyrnw43/BzDRD+14PuRZ4nM4sYUZHcyH5kHbfAyULikJCTySkJoFkAwrmwA3T9RPf
- cXmHKTbR90Z5AFuvNxV2fF8fddYR6ywpnQrnBB5XPQGLthJqrqjGq/PPRAv9TxK8AZENJarDYT7
- VWtRFF6OHV0K+LWpvdr0FyHU4ejz41NyPMvEnp28UKLqg08CZNv6AO9sIcD2V0hssYGbHRw+FI7
- o7hvExQLT0/jX3g==
-X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
- fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
+ <20240210-msm8974-rpmpd-v1-2-de9355e6842a@z3ntu.xyz>
+From: Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20240210-msm8974-rpmpd-v1-2-de9355e6842a@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add the power domains CX & GFX found on MSM8974 devices that use PMA8084
-instead of the standard PM8841+PM8941 combo.
 
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
----
- drivers/pmdomain/qcom/rpmpd.c | 41 +++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
 
-diff --git a/drivers/pmdomain/qcom/rpmpd.c b/drivers/pmdomain/qcom/rpmpd.c
-index bb28a7319bed..3cd0d1ad6188 100644
---- a/drivers/pmdomain/qcom/rpmpd.c
-+++ b/drivers/pmdomain/qcom/rpmpd.c
-@@ -252,6 +252,31 @@ static struct rpmpd cx_s2b_vfc = {
- };
- 
- /* G(F)X */
-+static struct rpmpd gfx_s7a_corner_ao;
-+static struct rpmpd gfx_s7a_corner = {
-+	.pd = { .name = "gfx", },
-+	.peer = &gfx_s7a_corner_ao,
-+	.res_type = RPMPD_SMPA,
-+	.res_id = 7,
-+	.key = KEY_CORNER,
-+};
-+
-+static struct rpmpd gfx_s7a_corner_ao = {
-+	.pd = { .name = "gfx_ao", },
-+	.peer = &gfx_s7a_corner,
-+	.active_only = true,
-+	.res_type = RPMPD_SMPA,
-+	.res_id = 7,
-+	.key = KEY_CORNER,
-+};
-+
-+static struct rpmpd gfx_s7a_vfc = {
-+	.pd = { .name = "gfx_vfc", },
-+	.res_type = RPMPD_SMPA,
-+	.res_id = 7,
-+	.key = KEY_FLOOR_CORNER,
-+};
-+
- static struct rpmpd gfx_s2b_corner = {
- 	.pd = { .name = "gfx", },
- 	.res_type = RPMPD_SMPB,
-@@ -728,6 +753,21 @@ static const struct rpmpd_desc msm8974_desc = {
- 	.max_state = MAX_CORNER_RPMPD_STATE,
- };
- 
-+static struct rpmpd *msm8974pro_pma8084_rpmpds[] = {
-+	[MSM8974_VDDCX] =	&cx_s2a_corner,
-+	[MSM8974_VDDCX_AO] =	&cx_s2a_corner_ao,
-+	[MSM8974_VDDCX_VFC] =	&cx_s2a_vfc,
-+	[MSM8974_VDDGFX] =	&gfx_s7a_corner,
-+	[MSM8974_VDDGFX_AO] =	&gfx_s7a_corner_ao,
-+	[MSM8974_VDDGFX_VFC] =	&gfx_s7a_vfc,
-+};
-+
-+static const struct rpmpd_desc msm8974pro_pma8084_desc = {
-+	.rpmpds = msm8974pro_pma8084_rpmpds,
-+	.num_pds = ARRAY_SIZE(msm8974pro_pma8084_rpmpds),
-+	.max_state = MAX_CORNER_RPMPD_STATE,
-+};
-+
- static struct rpmpd *msm8976_rpmpds[] = {
- 	[MSM8976_VDDCX] =	&cx_s2a_lvl,
- 	[MSM8976_VDDCX_AO] =	&cx_s2a_lvl_ao,
-@@ -922,6 +962,7 @@ static const struct of_device_id rpmpd_match_table[] = {
- 	{ .compatible = "qcom,msm8939-rpmpd", .data = &msm8939_desc },
- 	{ .compatible = "qcom,msm8953-rpmpd", .data = &msm8953_desc },
- 	{ .compatible = "qcom,msm8974-rpmpd", .data = &msm8974_desc },
-+	{ .compatible = "qcom,msm8974pro-pma8084-rpmpd", .data = &msm8974pro_pma8084_desc },
- 	{ .compatible = "qcom,msm8976-rpmpd", .data = &msm8976_desc },
- 	{ .compatible = "qcom,msm8994-rpmpd", .data = &msm8994_desc },
- 	{ .compatible = "qcom,msm8996-rpmpd", .data = &msm8996_desc },
+On 2/10/24 15:12, Luca Weiss wrote:
+> Add the power domains CX & GFX found on devices with MSM8974 and PM8841.
+> 
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
 
--- 
-2.43.0
+[...]
 
+> +static struct rpmpd gfx_s4b_corner_ao;
+> +static struct rpmpd gfx_s4b_corner = {
+> +	.pd = { .name = "gfx", },
+> +	.peer = &gfx_s4b_corner_ao,
+> +	.res_type = RPMPD_SMPB,
+> +	.res_id = 4,
+> +	.key = KEY_CORNER,
+> +};
+> +
+> +static struct rpmpd gfx_s4b_corner_ao = {
+> +	.pd = { .name = "gfx_ao", },
+> +	.peer = &gfx_s4b_corner,
+> +	.active_only = true,
+> +	.res_type = RPMPD_SMPB,
+> +	.res_id = 4,
+> +	.key = KEY_CORNER,
+> +};
+
+I don't see a s4b_ao downstream.. Though it's very unfortunate we
+didn't choose to add power-domain-cells or sth and set the bucket
+through that..
+
+Konrad
 
