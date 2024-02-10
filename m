@@ -1,188 +1,135 @@
-Return-Path: <linux-pm+bounces-3749-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3750-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A1718505D7
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Feb 2024 18:59:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CF189850746
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Feb 2024 00:27:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7ED6E1F21503
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Feb 2024 17:59:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 880A51F221DE
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Feb 2024 23:27:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDBC75D48C;
-	Sat, 10 Feb 2024 17:59:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAAE05FEE8;
+	Sat, 10 Feb 2024 23:27:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bRRs7VbZ"
+	dkim=pass (1024-bit key) header.d=xff.cz header.i=@xff.cz header.b="sYqJw+DW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 183AE14010;
-	Sat, 10 Feb 2024 17:59:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392695FDA4;
+	Sat, 10 Feb 2024 23:27:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.181.215.36
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707587976; cv=none; b=ebgWcb1pfgnM2xrk7KS0C/PyJpGzwO49XmCvfoNUgNHmpU4hPAAUkcl3AbA//MOV1ZfNZA/QzOT+R5NFSvFODdDqSS0tma6oHhm8trG89zPkSwQJX9Z7SlyiLM844aFe/l7zt15bqSJAhFtZ4CwNcuTsI4Ldy0g0XwvsHL/VjVg=
+	t=1707607640; cv=none; b=KjkvOsSiAqK4aRuPL9Cbx+GOc/QL89Ra28Sn2x/jOdp/uoNEMjBXHnuLLHEr6/au+5GWO9w+V68j1/IHU4aiChHRfv1bXggkEHL+dX+McR75i7uMDHQcpKTJ1kcy6KMWigZS/8weyKDpCVoLPh72a9gbakRmswi++QyG7ZO0AoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707587976; c=relaxed/simple;
-	bh=ofvYy2DHhC0W7iu8njA+VnVzd7UnOeA0ZueES5hgPgg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=j1dIteN13uIGHLhG/4mS7omfepem3ps56yj+96/756diUlk5g7ZX77BWb0ITs1y/yZoM+sjQYg9pDUXdsyiVpVo8vfvpbHfoGk9l9Nj5Xaro94VsuZp2Fu5K348rE+hFcciThxDvDewyIXfXxNZp25TJRdwA332OWmUKM+n9350=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bRRs7VbZ; arc=none smtp.client-ip=209.85.221.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-33b0e5d1e89so1278738f8f.0;
-        Sat, 10 Feb 2024 09:59:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707587973; x=1708192773; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y4LbC+Fjw1FiZVBj473YjAqVsX4xPnBElsTDNcgK7XY=;
-        b=bRRs7VbZw3dFCWHoY751wmKNBj23EI42RzkpZn7Frb99yROnPAbwwdIHNX3uUmygul
-         tsqkDP7iqSNhKOX0jqaeyZ8mCCVYADBWHKwRnCOKl0zCHdnlVBZmmMOxtCe58mIatKXs
-         RKeHhEZgGIFZIUBstJeSYH/61h3VwePVJDiMCZ4m3N/XwXFYQLI/tioOv7+qUsg5sfsB
-         WYsvLYEYDb9ODOui8Dia9EEbVsAON3pud4a9qI1iGVWwWf43nuBfFUOQG/pGVUMlMW8O
-         FKm60XMzJAABtoYSE1jfAGQUfQ1cKawK59j2swPkvIcQF6XwsOevSRGJ+hxM6zUqeyPf
-         eKog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707587973; x=1708192773;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y4LbC+Fjw1FiZVBj473YjAqVsX4xPnBElsTDNcgK7XY=;
-        b=aZk7mNn0D/48YWiAhndIGW+OXeZG0R+C9Pa1H074FZLBWJhutBQJBEmG9Ilmzc752u
-         3MUC+NWgh0hFZZZOhQb4SMYcAwNBIlML+yGPpglBEgI5aftfhpXDfH5jP6qWAl2plNT6
-         jjNCOhz8zYf0fGhDxC5KH0J2mZd9sw8b9uv1A7z7y+JBjBwVwup5jQjAwHIdAFcD0eoL
-         C4su7NuH5Y2nSgJWNmyqa1i447RSpvi2JMRLdwiX+AqBH1EYw3dLkXDbHGan5mXdap50
-         CZWhEnM1BMm030jLVz0TqsOAfM7ScTzXVy1bGei3p81HpyVRUkBVy76LPepEiJfhAzh1
-         7FjA==
-X-Forwarded-Encrypted: i=1; AJvYcCW6DwUwxu1KSmlycV/LzNG/wY4bj82SYUtNdJBBv5CEpM88X72b0/wKQcKH9xtsVIVfrfbadXILkYMzCepRz8kKvnB2y6GL1EUzzrZD
-X-Gm-Message-State: AOJu0Yx3ybum7MAniyJxz18Q7gOrfl541d/77lgO/HUgroYF6+NnTcqJ
-	zCqPFTYJ1+3LhjHfZ43bnSGYP2C0LQQ4JelVbyk4G73Vcib+6gqW
-X-Google-Smtp-Source: AGHT+IHKG3ngVvh5+jlIe7KX0NSPfgtD3nwMRRrwhdxDEmOY0VnDdE3JKdsk6in3HEyciSKYsvopdw==
-X-Received: by 2002:a5d:5484:0:b0:33b:6585:9ab7 with SMTP id h4-20020a5d5484000000b0033b65859ab7mr1728428wrv.46.1707587973159;
-        Sat, 10 Feb 2024 09:59:33 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWL5kSwQnXePP0J41cu4mwdqXEHw3dVzk3sXBGJHKkokOawu1XZGgMeUtMU6mqgSUd7tvQNQ/pHUCpZQJDGkIAUn4MXXXv2pFrFfpl+53kDhJFUAsZEEQz9bhx9FitABC/HOs0n99XC0vl21hXumks5xogYJ+VEwtcLoeRa2/y2gyAIkxe1FL1oMOqRH7YyRWZD
-Received: from xeon.. ([188.163.112.73])
-        by smtp.gmail.com with ESMTPSA id y1-20020adffa41000000b0033b67f6ec80sm2379920wrr.80.2024.02.10.09.59.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Feb 2024 09:59:32 -0800 (PST)
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 1/1] thermal: thermal-generic-adc: add temperature sensor function
-Date: Sat, 10 Feb 2024 19:59:22 +0200
-Message-Id: <20240210175922.137704-2-clamor95@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20240210175922.137704-1-clamor95@gmail.com>
-References: <20240210175922.137704-1-clamor95@gmail.com>
+	s=arc-20240116; t=1707607640; c=relaxed/simple;
+	bh=/TgjizfIX8xFE594q/OFRPTu9VobMODx7LQ8bttWEUs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dL4BUUeFS9SjEoP1itTRD+7tC8fXxN7VQhaHzJtKmZlzKdGSd8fJmn8bJRl3IzUNJ9BfmyKHl+gJvnFIq3UEVdGDHK+q7xsmRurOGRd6vAplvGkQ+uPp3ceUWADrQcELa6iJHZ3XC2gO7h0EYqR+6V2Fy2wcFjmumwxHtusF1xs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xff.cz; spf=pass smtp.mailfrom=xff.cz; dkim=pass (1024-bit key) header.d=xff.cz header.i=@xff.cz header.b=sYqJw+DW; arc=none smtp.client-ip=195.181.215.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xff.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xff.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
+	t=1707607633; bh=/TgjizfIX8xFE594q/OFRPTu9VobMODx7LQ8bttWEUs=;
+	h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
+	b=sYqJw+DW8VLf/uoAHiG1g2gRy+MIUSJoAeinhzXKo4wHZ7syMVB3++rGEk+940qMG
+	 ow88iS5WER5awo92aW7qyj5/FiqJaCgqney/v2eg4Q459/yiZmz3D4EXZ+QPQKeNAi
+	 0HsN8I+mrWY5GhCDymZLRJLXBYXs6OIvYkyDEjV0=
+Date: Sun, 11 Feb 2024 00:27:12 +0100
+From: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
+To: Aren <aren@peacevolution.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Hans de Goede <j.w.r.degoede@gmail.com>, Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, 
+	Chen-Yu Tsai <wens@csie.org>, Quentin Schulz <quentin.schulz@bootlin.com>, 
+	Sebastian Reichel <sre@kernel.org>
+Subject: Re: [PATCH v2 5/5] power: supply: axp20x_usb_power: set input
+ current limit in probe
+Message-ID: <uktr265th6h4btay765p33zgihuzgafu25rz7npwfm3ojhq2tm@wvrymmf3xtxy>
+Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>, 
+	Aren <aren@peacevolution.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Hans de Goede <j.w.r.degoede@gmail.com>, Aidan MacDonald <aidanmacdonald.0x0@gmail.com>, 
+	Chen-Yu Tsai <wens@csie.org>, Quentin Schulz <quentin.schulz@bootlin.com>, 
+	Sebastian Reichel <sre@kernel.org>
+X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
+ <https://xff.cz/key.txt>
+References: <20240130203714.3020464-1-aren@peacevolution.org>
+ <20240130203714.3020464-6-aren@peacevolution.org>
+ <6nf7h3nc4q7fwrnm4spmgv2sdkczowkfpietcv2tyv4mixkq3b@svxgzkdqnzlq>
+ <hlnzivsmt66icz4bsayv5wtlgbktq355m4qxj532lg4lgeimju@jammw2y6zpha>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <hlnzivsmt66icz4bsayv5wtlgbktq355m4qxj532lg4lgeimju@jammw2y6zpha>
 
-Existing thermal-generic-adc states to be an adc-based thermal
-sensor, which is not entirely true. It provides a thermal sensor
-cell, but it does not provide an IIO sensor cell, which would
-benefit devices that use adc sensors to detect temperature and
-need a custom calibration table.
+On Tue, Jan 30, 2024 at 11:20:29PM -0500, Aren wrote:
+> On Tue, Jan 30, 2024 at 10:13:06PM +0100, Ondřej Jirman wrote:
+> > On Tue, Jan 30, 2024 at 03:28:01PM -0500, Aren Moynihan wrote:
+> > > Unfortunately BC 1.2 detection doesn't seem to be performed without a
+> > > battery, at least I wasn't able to trigger it.
+> > >
+> > > This will be worth revising once we have a driver that can provide a
+> > > signal that USB-PD is in progress and/or finished, but until then I'd
+> > > prefer not take on that complexity.
+> > 
+> > This patch adds complexity and will lead to hard to debug issues for some
+> > people. It certainly did cause issues for me, when I had similar patch in
+> > my tree a while ago, forcing me to drop it.
+> > 
+> > There are other situations you're not considering. Like battery being
+> > very discharged and unable to provide power, while still being detected
+> > and BC1.2 running correctly and successfully when the device is powered
+> > up by being plugged into DCP port (only option of powerup in such a 
+> > scenario).
+> 
+> Oh you're right, I overlooked the case where the battery is very low, in
+> which case bc detection should still be performed (I think, I haven't
+> tested it). This issue this patch is trying to fix doesn't apply in that
+> case, so it should be simple enough to check if the pmic has detected a
+> battery and skip setting the current limit if it has.
+>
+> > Battery is detected at 2.2V and certainly it will not provide any power
+> > if OCV of the battery is anywhere below 3V. See "9.4.5 Battery detection"
+> > in AXP803 datasheet. So you have about 1V range of possible battery voltage
+> > where BC1.2 will work, but you'll force lower the correctly detected current
+> > limit and break boot, because 2.5W is too low for the boot time power surge.
+> > 
+> > The phone will just randomly die halfthrough boot for apparently no reason,
+> > despite being connected to DCP.
+> > 
+> > And also forget Pinephone, there may also be batteryless SBCs using this PMIC
+> > with battery as an option (similar to Quartz64-A - Rockchip SBC, but exactly
+> > this setup with battery capable PMIC in the power path on a normal SBC, with
+> > battery being optional), where this patch will break boot on them, too. I'm
+> > quite confident PMIC relaxing the limit without a battery is meant for such use
+> > cases.
+> 
+> Perhaps it would be better to read the limit from the device tree, that
+> way it could be set higher for a specific board if it needs to draw that
+> much current and be able to boot without a battery? It seems sketchy to
+> default to a current limit significantly higher than what the usb power
+> supply is required to support.
 
-Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
----
- drivers/thermal/thermal-generic-adc.c | 57 ++++++++++++++++++++++++++-
- 1 file changed, 56 insertions(+), 1 deletion(-)
+But is there really an issue? The board may not be using USB power supply.
+It may simply have a barrel jack, like Quartz64-A does. And it will still
+create an issue if you make the new behavior "opt-out" via DT. You can make
+it opt-in if you like.
 
-diff --git a/drivers/thermal/thermal-generic-adc.c b/drivers/thermal/thermal-generic-adc.c
-index 1717e4a19dcb..7e87d928512c 100644
---- a/drivers/thermal/thermal-generic-adc.c
-+++ b/drivers/thermal/thermal-generic-adc.c
-@@ -7,6 +7,7 @@
-  * Author: Laxman Dewangan <ldewangan@nvidia.com>
-  */
- #include <linux/iio/consumer.h>
-+#include <linux/iio/iio.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
-@@ -73,6 +74,60 @@ static const struct thermal_zone_device_ops gadc_thermal_ops = {
- 	.get_temp = gadc_thermal_get_temp,
- };
- 
-+static const struct iio_chan_spec gadc_thermal_iio_channel[] = {
-+	{
-+		.datasheet_name = "temp",
-+		.type = IIO_TEMP,
-+		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),
-+		.indexed = 1,
-+		.channel = 0,
-+	}
-+};
-+
-+static int gadc_thermal_read_raw(struct iio_dev *indio_dev,
-+				 struct iio_chan_spec const *chan,
-+				 int *temp, int *val2, long mask)
-+{
-+	struct gadc_thermal_info *gtinfo = iio_priv(indio_dev);
-+	int ret;
-+
-+	if (mask != IIO_CHAN_INFO_RAW)
-+		return -EINVAL;
-+
-+	ret = gadc_thermal_get_temp(gtinfo->tz_dev, temp);
-+	if (ret < 0)
-+		return ret;
-+
-+	*temp /= 1000;
-+
-+	return IIO_VAL_INT;
-+}
-+
-+static const struct iio_info gadc_thermal_iio_info = {
-+	.read_raw = gadc_thermal_read_raw,
-+};
-+
-+static int gadc_iio_register(struct device *dev, struct gadc_thermal_info *gti)
-+{
-+	struct gadc_thermal_info *gtinfo;
-+	struct iio_dev *indio_dev;
-+
-+	indio_dev = devm_iio_device_alloc(dev, sizeof(struct gadc_thermal_info));
-+	if (!indio_dev)
-+		return -ENOMEM;
-+
-+	gtinfo = iio_priv(indio_dev);
-+	memcpy(gtinfo, gti, sizeof(struct gadc_thermal_info));
-+
-+	indio_dev->name = dev_name(dev);
-+	indio_dev->info = &gadc_thermal_iio_info;
-+	indio_dev->modes = INDIO_DIRECT_MODE;
-+	indio_dev->channels = gadc_thermal_iio_channel;
-+	indio_dev->num_channels = ARRAY_SIZE(gadc_thermal_iio_channel);
-+
-+	return devm_iio_device_register(dev, indio_dev);
-+}
-+
- static int gadc_thermal_read_linear_lookup_table(struct device *dev,
- 						 struct gadc_thermal_info *gti)
- {
-@@ -156,7 +211,7 @@ static int gadc_thermal_probe(struct platform_device *pdev)
- 
- 	devm_thermal_add_hwmon_sysfs(&pdev->dev, gti->tz_dev);
- 
--	return 0;
-+	return gadc_iio_register(&pdev->dev, gti);
- }
- 
- static const struct of_device_id of_adc_thermal_match[] = {
--- 
-2.40.1
+Also in Pinephone case, you'll not really have a case where the battery has
+< 2V not loaded. That's not going to happen. PMIC will shut off at 3V battery
+voltage when loaded. It will not discharge further, and after shutoff battery
+voltage will jump to 3.4V or so, and it will not drop below 2V after that, ever.
+So the battery will pretty much always be detected as long as it's present.
 
+What actual problem have you seen that this patch is trying to solve?
+
+Thank you and kind regards,
+	o.
 
