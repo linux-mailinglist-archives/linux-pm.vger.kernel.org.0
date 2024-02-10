@@ -1,111 +1,102 @@
-Return-Path: <linux-pm+bounces-3747-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3748-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC4598505AB
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Feb 2024 18:19:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 391FC8505D5
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Feb 2024 18:59:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B37B6B21567
-	for <lists+linux-pm@lfdr.de>; Sat, 10 Feb 2024 17:19:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EAF08285B2E
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Feb 2024 17:59:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46CE05CDF8;
-	Sat, 10 Feb 2024 17:19:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 246675D46F;
+	Sat, 10 Feb 2024 17:59:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FHV/hj3K"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WguAaLdT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F9055CDE2
-	for <linux-pm@vger.kernel.org>; Sat, 10 Feb 2024 17:19:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F4E45C5E4;
+	Sat, 10 Feb 2024 17:59:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707585555; cv=none; b=UhBFjyLCQR4YQqVo2sYAQlygsr4L4e1TEihmlC3WSJv12+h+zmj+d8AZr5HfYSZbv/tMy9ju/UoGklAHeWtJJsfWDga6Z4JBTLJr1rtKUr5znb9iSicIwEqEGa3yWZo9v2Xz74z/14efjiKMl2uPRXa7Rc0kRqmHUEKTnLQlMVE=
+	t=1707587976; cv=none; b=dHZFQS1Uy+t8GUPFKHuow2OGto8CAxBxAuXtz74/woD2DNowrjyqPG7yYw/7c4K33fWI1dI/GC375LFBU5sQPzptI08/YtzF61lGrSbYTWr33SzqaIFb/TSAH1kX/RhZWZ6C95ubSW6kRjvdlLn2qByERzep5W4KYwAGSnQPG+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707585555; c=relaxed/simple;
-	bh=NYudsIGjRm27pkmw6NfIzTDAlY58kWaMj/QkAiYov4A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LnAmR9FikTLfH8DsQg5ipLFblcUNCpBNxnLjBZJIA9ZK+mlGpZnpEthPZ7Evx1L+7QB8Z0IDPqCe1shyS0llAT14QcKZcLGdJEL+zii2WLVynHJPVQ116RWAGilVeaEk5hDY4SJAwa1uEFCSgxsUALQtknJkbV7pdZ8n9CPBb44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FHV/hj3K; arc=none smtp.client-ip=209.85.218.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a3566c0309fso230581266b.1
-        for <linux-pm@vger.kernel.org>; Sat, 10 Feb 2024 09:19:12 -0800 (PST)
+	s=arc-20240116; t=1707587976; c=relaxed/simple;
+	bh=b7UI/H5haSYY1vo/GUoMk7Utc7xc6MpgPatIr62cEcM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=sARe1l+lUPHz89ZkuWt43wETIeSnrxldbrDsMfQRCEaDDkZ4fh2in2HfNBuv6HhN1sbzdakzEjmtRrCV3d2xWoRWjeMdOnr2/RaW9Ld5X/LwVxeUP44cVaTDbbQIXktVwdA7ZDXJ3OMC6AGUNwH6ibLr/6uAdkKKvzl/PJEnWWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WguAaLdT; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-33b2fba3176so1123596f8f.0;
+        Sat, 10 Feb 2024 09:59:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707585551; x=1708190351; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UPPfoSPtlGq/Vz0zCl0yTdi8JSgrSbydPmzP0jiNjJM=;
-        b=FHV/hj3KVFn2TW+vxL0Cb08qRLakb9PQaR5QvIMHACKWybvRnsGtagyk8ShF6Ub0NU
-         Pu6wEbWKgYYFJktaUoHe/cVWZubDoCfE4mSEDYMunUWDPuQpvv7f4orxIcgokHNevLAR
-         ZOXvXJuyBTdzaALSyEzjANPj+6rLk52dYyoJtLT6e2q0u7KZ1cvsZLMipoCwWv+Qf6T0
-         gp/VIYRatSJIizSG54747J9SgMjtNJpKitwMYNUvgPQwYXhazGXA8pGHUPLSi1XzacAp
-         fVUTVfkA3SnIcajD2UHzTeGwRqhh0DVHRjKAltlPJW3cTSZPpmef/Hh66l4ZHEHy51lP
-         mZDw==
+        d=gmail.com; s=20230601; t=1707587973; x=1708192773; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=osp7CCpj7xgHrHOQxTuGeNk/XLl6ck22QWyA4VLv4zc=;
+        b=WguAaLdTOrLqsUKNljomO/L5TPQPAMxhD1Qn4dIiF+fo43KFd0RWakU08XMur+GTPB
+         S+3tg64RN9PiKa7SfRGREPoypk0+BX6yWsGpl1XeO2WJ0bIyV+h4suFG7Vs/IOq5IVEL
+         +t5ez8vaIhgHbWd+l3taNozZghgZ5DCmk9MDgmutVboJVp3fVIn22VZJHN4MeGdN8c/Z
+         3DMEjD4x7Y+ud9MxFpyQJqr249FU+2UTx/f3/+pRzYAQFGg2o9RkDpqB4vueB7+KK1EE
+         74wmLGT50RZqSFbXh4D7tX9GmEr68HiUL6dkOCp+S8ndqfMVSKjYx7oW3hu0EVWlCWQB
+         srRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707585551; x=1708190351;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UPPfoSPtlGq/Vz0zCl0yTdi8JSgrSbydPmzP0jiNjJM=;
-        b=XdHN6x13caWLfcZ0DQRqPrzXCalooLikRpJkabW/eUEwrCO5MOaBysdVq6qDuicF5I
-         TGdCpBOxVMJ4/cdMkxq74iJtlh5s7m3owXHpnEWp7RvTQV3rBwo3kHToaOOheLaiI6kO
-         Vj99VTqWjvsIZ/wRphbAjTQfiOygyLCik7I7dUVFAbIc54fAKEIb+k9VegmpDNoAIHWs
-         Y3E+zhyWrqTS0GyOFRe/pfeUvfFwQKiF0VB/4mGkwoZZ+pFWoyXaksRlt+hkO7WcFf55
-         Whk/jzVE6tk5gzsr0Y76oDgejC+jXZ/plRx9UzbBzAka/zAbTVADRE0dOMnu0FUtGInU
-         DGHA==
-X-Forwarded-Encrypted: i=1; AJvYcCWte1f71sDazei7gFAh7pshzv7CtX/OasW43bhoW6lOpBqGFpqyQNC27Knl7aurEskEvR4l1XPLundbJC0fYl4uqCC2qjif35E=
-X-Gm-Message-State: AOJu0Yz2tDvT3qRp3D/+pU3TvZvxjxOiFsaN12Tg2JrvGjalklSUm/Q/
-	UpGB0GIkVmEOWsZEOKvFcPGiuQFYM1i2wMps+Pri4yQjLudufY1EUlOxrynulEQ=
-X-Google-Smtp-Source: AGHT+IGf3lJjgMzTBNliFCNzGITS+DH/YyZWIGQY8pBo91UsuBBfHuCnnxy3Ge1cjbhereUEyz6q3w==
-X-Received: by 2002:a17:907:9858:b0:a3c:2146:a0be with SMTP id jj24-20020a170907985800b00a3c2146a0bemr1531701ejc.70.1707585550785;
-        Sat, 10 Feb 2024 09:19:10 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCV8EHLrQDnCbtgF7aPp4Tys6b9xyplZflPIlITe2JUzkER/f+TZ3YW+1QuqWab1ZqVx1hWI7gDCToCTtN5IveWnTIYJkgjK/tuD7DbIrM+PlbCrnLZb2ZnxXi5br7FA6Ax/fYDYrlQZu9bEpqxG5O0sulZvU/lnBUdb7W1Tn8rqSGvmcLgAj6jYcMvpWcHks1GSDS7Zt83ulZ0qayIbguRXhhwynGXVjfbWcnsGKf40pKXfpjcpUdknyP3YW63EiKCIA5a9HC2soubhCIC4Vt/vWmbkvCl+26UoxHIKYS3bLhfLjNRui/59vNhfCmE4LNF+bPnNy7tuuQstPRFaf1FNnMB+C8muvUhYzK0ZUIQm4PsqHgAb9OTAyEOgDrE5+xBvVCJmRAodWRemSO3U4RYgkSaJv8xpR9XndMFRZf9Hh4CssNMlKU6mEAFaXkX8DY9JvH6oBfVHS8bh5ocXoNJVlRR7LYv6epgKPfXcPQuW2A==
-Received: from [192.168.1.116] (abyl12.neoplus.adsl.tpnet.pl. [83.9.31.12])
-        by smtp.gmail.com with ESMTPSA id ps7-20020a170906bf4700b00a3c5fa1052csm64186ejb.138.2024.02.10.09.19.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 10 Feb 2024 09:19:10 -0800 (PST)
-Message-ID: <7b1a0b84-4a4a-43a4-8698-d22f883e6318@linaro.org>
-Date: Sat, 10 Feb 2024 18:19:09 +0100
+        d=1e100.net; s=20230601; t=1707587973; x=1708192773;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=osp7CCpj7xgHrHOQxTuGeNk/XLl6ck22QWyA4VLv4zc=;
+        b=WJwN17bSv25u++gVT6qD9W9ojXIZLrua6/e0huzYNsyuXruyDbO88BQfLECLSJ/PEc
+         yEl85J+60m69Ikm18JgyzMoV23HOdf23ujIMUr2eB3P+vIvkVEBLcLId8YuJpC2lAURK
+         rgz24YJxr6s68SImqPW/j0dy52khDLc1v6Ye3zYAeEWjfxTFGk+gcJcX5oyzwHH0iYnN
+         SmJ8hWz7P+e9OjBVTDK5HqwLFU4MnVOO963bncMl92fIlsKGESOEtmk2SX+Au3chXF/q
+         ZAhZ95BfzFml0zQpW7xgiIg0Qpche0C9Ja9FOhi/OpRIdpoAxHfHHKOQ/eFLJANk3cp6
+         ICsA==
+X-Gm-Message-State: AOJu0Yz7n6ASlbiN1sSvw2XOP3tzLyrIoHB5C2SKIQteRfNXH2E6wPXg
+	SuPxW/5351H16zbyia4p7JFVYLY5v4PasDHgwyifCXf1pH4SQoUfMaCAO/0j
+X-Google-Smtp-Source: AGHT+IEdkdta0chUIAUDRqSlkSJYm/DXkfJPA8v3QcSfH3jyQfdUdEg4lMfDi7Wuix67XAHqUTPRLQ==
+X-Received: by 2002:adf:d1e6:0:b0:33b:48ee:8a35 with SMTP id g6-20020adfd1e6000000b0033b48ee8a35mr2678618wrd.3.1707587972392;
+        Sat, 10 Feb 2024 09:59:32 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVgu95Gn/n8kkt3GoVsgFbuSIh4J+bkSjnCqbNoE51DN7PD+XasngHdQF/bmPfkgJM/P03tEslVdFii3kuqvi865El7LljteQALZowQ5BlS40I8tees5Iw1APEbazoxFUuXYgdzjHbzCXaJO7Q/FiGxukgtUNHbjSFJ1BOu2xXFSuA79XklPRbFAQxzH650lyfI
+Received: from xeon.. ([188.163.112.73])
+        by smtp.gmail.com with ESMTPSA id y1-20020adffa41000000b0033b67f6ec80sm2379920wrr.80.2024.02.10.09.59.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Feb 2024 09:59:32 -0800 (PST)
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/1] thermal: thermal-generic-adc: add temp sensor function
+Date: Sat, 10 Feb 2024 19:59:21 +0200
+Message-Id: <20240210175922.137704-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] pmdomain: qcom: rpmpd: Add MSM8974PRO+PMA8084
- power domains
-Content-Language: en-US
-To: Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
- phone-devel@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Stephan Gerhold <stephan@gerhold.net>,
- =?UTF-8?Q?Matti_Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20240210-msm8974-rpmpd-v2-0-595e2ff80ea1@z3ntu.xyz>
- <20240210-msm8974-rpmpd-v2-3-595e2ff80ea1@z3ntu.xyz>
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20240210-msm8974-rpmpd-v2-3-595e2ff80ea1@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+Existing thermal-generic-adc states to be an adc-based thermal
+sensor, which is not entirely true. It provides a thermal sensor
+cell, but it does not provide an IIO sensor cell, which would
+benefit devices that use adc sensors to detect temperature and
+need a custom calibration table.
 
+Svyatoslav Ryhel (1):
+  thermal: thermal-generic-adc: add temperature sensor function
 
-On 2/10/24 17:38, Luca Weiss wrote:
-> Add the power domains CX & GFX found on MSM8974 devices that use PMA8084
-> instead of the standard PM8841+PM8941 combo.
-> 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
+ drivers/thermal/thermal-generic-adc.c | 57 ++++++++++++++++++++++++++-
+ 1 file changed, 56 insertions(+), 1 deletion(-)
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+-- 
+2.40.1
 
-Konrad
 
