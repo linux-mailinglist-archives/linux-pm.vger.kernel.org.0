@@ -1,72 +1,72 @@
-Return-Path: <linux-pm+bounces-3752-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3753-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DF818507C6
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Feb 2024 05:40:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93497850824
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Feb 2024 09:41:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B3F37284CA2
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Feb 2024 04:40:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F428282527
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Feb 2024 08:41:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D3037472;
-	Sun, 11 Feb 2024 04:40:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23F8459144;
+	Sun, 11 Feb 2024 08:40:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IsyQ/sBY"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bMSQm0j5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30676168A8;
-	Sun, 11 Feb 2024 04:40:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EB06266A7;
+	Sun, 11 Feb 2024 08:40:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707626452; cv=none; b=i3y7YPFoU3XsOsZJ+5kZ5lSIVOcPOvEy3+HRmMmYDbf1jDBqZhiwjFTpFiFBr/KmuxOKwuK4mM5wrsm1CKsIan2jJ3yBPlVNusKUDYBHFIgbUcGpUFOaf/RFxLs6T8/jHv5XX7dWx1UzT/I8lbRK9qojskPjrSCWhSVLJxh+NKY=
+	t=1707640859; cv=none; b=DHa3YgpJJMIoGDLLK017v0SBkgQ5EqjzXiNGqkZxNgiAiE+9PHEuVUan8LY25l9GBqS9XG/NaBBY30DDXW3hMTfaZqiihE4Xn8KkfYgKbECyk01fWY1NYaTmh1MuA9fxFZW5+ulkDr2qrAjIW3cKzqCGJrtWb9k25Ck0TYojECo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707626452; c=relaxed/simple;
-	bh=CownNAVPfNsIPeF32dr33D4llG6r8gmboNGzmlzbGtQ=;
+	s=arc-20240116; t=1707640859; c=relaxed/simple;
+	bh=DOZoQMVJudY5xOMVrMgK/IsAxz6Av8w9q2VvGcpD2KI=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=ZFdRHqxdoLYfK6UTntqwtOtLfu/XhVrZf5woxFVBzejy5cFt0M2Obr5NtON7ET98Qqqait+Pw2UgILKjZ5659p8QNhfZYj1ADxC4BzMfRlEvBHsv80MkfICL77Gyjvceoo1X5J/lGYRjR7HR67Z2ippTVVXuxwH5GCyvpEOVVHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IsyQ/sBY; arc=none smtp.client-ip=192.198.163.9
+	 Content-Disposition; b=cD3uqPHyhbcMxXy/zK99+z3MCblO/QK3/iz1l2Pw+cA1lxxEVj1xW9tv5MVVLq0GWzS4wePtKAHtH7axBOWCJakzPTvQUqi783Ix/MZ17HfxO67Z+3x97Ux6kGTVqtdfJWHNMn7ZldHVPIC3WG4rBjEhTb0SQb4pP9j7TASzUpI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bMSQm0j5; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707626449; x=1739162449;
+  t=1707640857; x=1739176857;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CownNAVPfNsIPeF32dr33D4llG6r8gmboNGzmlzbGtQ=;
-  b=IsyQ/sBYk6FRbDPFDIfRKSb485fnnKEGc/DPIPX+4/Kt+z4q5mQKBeUo
-   qGJsZuKHck2PIKNebCNzyDQOzDr1+vg/MFqH4oRwi12lJCwIb/z432SCp
-   NkImpaqKVnOI3NWAgo3JAGJrUfSVfOKo4ZHBBLt6eZnMI3lVbON0F9bIf
-   BQTsoZCIBjHqH+A1WVyUTLMmpMgEFss6+xcMKnxN6XDLOvn2iwsMZgQ5Y
-   ho31huRTw50ejr6hNc+7ig5MbmWTL1dvnbOtAtNwRls7ds3gfU5fjAkIE
-   DUx2SAr0qIc1tLXeA+fnH5j2HLZs4NwylT1xACr1WCNsXA4BZEbeKrGXO
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10980"; a="12334777"
+  bh=DOZoQMVJudY5xOMVrMgK/IsAxz6Av8w9q2VvGcpD2KI=;
+  b=bMSQm0j59gF7Op8yPiwlTH+Gnb54/L76LltEa/1d8qmtRQJYPwNzCkqh
+   AzWgINWmu/Wk3t4nbFgAVVF8pDUJBuUb4LaTFd+fPi8IgRlIqzpYis4tb
+   3BGmbvp2i0ryesCV9aY0DgE9f2f3OnnwsykFPhx/AkmjXebY8PyMsePT8
+   YXJSNcPTlEwne1HcNSjlcdwXd/suXjfIUpR/eC/ETtqMXT6w7aDg9Mb8D
+   SxIy+fUaM3fc2Za//C2rcl/lDVaAHWW1xjk6QyGGcjn4Bff/71T6O2tNP
+   x7IOYh89eYV762aDABqR1aPjL5fJN4ltvmbuGYT3oNb1r4Eu7Mw8NIl11
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10980"; a="1764019"
 X-IronPort-AV: E=Sophos;i="6.05,260,1701158400"; 
-   d="scan'208";a="12334777"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2024 20:40:48 -0800
+   d="scan'208";a="1764019"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2024 00:40:56 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.05,260,1701158400"; 
-   d="scan'208";a="33364385"
+   d="scan'208";a="6968075"
 Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 10 Feb 2024 20:40:47 -0800
+  by orviesa003.jf.intel.com with ESMTP; 11 Feb 2024 00:40:54 -0800
 Received: from kbuild by 01f0647817ea with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1rZ1e0-0006KI-1m;
-	Sun, 11 Feb 2024 04:40:44 +0000
-Date: Sun, 11 Feb 2024 12:40:00 +0800
+	id 1rZ5ON-0006Ss-2W;
+	Sun, 11 Feb 2024 08:40:51 +0000
+Date: Sun, 11 Feb 2024 16:40:34 +0800
 From: kernel test robot <lkp@intel.com>
 To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
 	devel@acpica.org, linux-pm@vger.kernel.org,
 	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Subject: drivers/thermal/thermal_of.c:487:24: warning: returning 'long int'
- from a function with return type 'struct thermal_zone_device *' makes
- pointer from integer without a cast
-Message-ID: <202402111258.zSHkL26j-lkp@intel.com>
+Subject: [rafael-pm:bleeding-edge 74/80]
+ drivers/thermal/thermal_core.c:1230:13: warning: the comparison will always
+ evaluate as 'true' for the address of 'trips' will never be NULL
+Message-ID: <202402111655.cJxMGZeM-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,118 +78,73 @@ Content-Disposition: inline
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
 head:   1cc7a914a31bd41feb404b644539a007f99b4f00
-commit: af0c508eaaf052006a183dab9c3a2994615942d1 thermal: core: Store zone ops in struct thermal_zone_device
-date:   13 hours ago
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20240211/202402111258.zSHkL26j-lkp@intel.com/config)
+commit: 888085f258b2e617bfc4548a9907b09f935efcbb [74/80] thermal: core: Store zone trips table in struct thermal_zone_device
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20240211/202402111655.cJxMGZeM-lkp@intel.com/config)
 compiler: sh4-linux-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240211/202402111258.zSHkL26j-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240211/202402111655.cJxMGZeM-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402111258.zSHkL26j-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402111655.cJxMGZeM-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   drivers/thermal/thermal_of.c: In function 'thermal_of_zone_register':
->> drivers/thermal/thermal_of.c:487:24: warning: returning 'long int' from a function with return type 'struct thermal_zone_device *' makes pointer from integer without a cast [-Wint-conversion]
-     487 |                 return PTR_ERR(np);
-         |                        ^~~~~~~~~~~
-   drivers/thermal/thermal_of.c:493:24: warning: returning 'long int' from a function with return type 'struct thermal_zone_device *' makes pointer from integer without a cast [-Wint-conversion]
-     493 |                 return PTR_ERR(trips);
-         |                        ^~~~~~~~~~~~~~
+   drivers/thermal/thermal_core.c: In function 'thermal_zone_get_crit_temp':
+>> drivers/thermal/thermal_core.c:1230:13: warning: the comparison will always evaluate as 'true' for the address of 'trips' will never be NULL [-Waddress]
+    1230 |         if (!tz->trips)
+         |             ^
+   In file included from drivers/thermal/thermal_core.c:18:
+   include/linux/thermal.h:205:29: note: 'trips' declared here
+     205 |         struct thermal_trip trips[] __counted_by(num_trips);
+         |                             ^~~~~
+--
+   drivers/thermal/thermal_trip.c: In function '__thermal_zone_get_trip':
+>> drivers/thermal/thermal_trip.c:125:20: warning: the comparison will always evaluate as 'true' for the address of 'trips' will never be NULL [-Waddress]
+     125 |         if (!tz || !tz->trips || trip_id < 0 || trip_id >= tz->num_trips || !trip)
+         |                    ^
+   In file included from drivers/thermal/thermal_core.h:13,
+                    from drivers/thermal/thermal_trip.c:10:
+   include/linux/thermal.h:205:29: note: 'trips' declared here
+     205 |         struct thermal_trip trips[] __counted_by(num_trips);
+         |                             ^~~~~
 
 
-vim +487 drivers/thermal/thermal_of.c
+vim +1230 drivers/thermal/thermal_core.c
 
-   449	
-   450	/**
-   451	 * thermal_of_zone_register - Register a thermal zone with device node
-   452	 * sensor
-   453	 *
-   454	 * The thermal_of_zone_register() parses a device tree given a device
-   455	 * node sensor and identifier. It searches for the thermal zone
-   456	 * associated to the couple sensor/id and retrieves all the thermal
-   457	 * zone properties and registers new thermal zone with those
-   458	 * properties.
-   459	 *
-   460	 * @sensor: A device node pointer corresponding to the sensor in the device tree
-   461	 * @id: An integer as sensor identifier
-   462	 * @data: A private data to be stored in the thermal zone dedicated private area
-   463	 * @ops: A set of thermal sensor ops
-   464	 *
-   465	 * Return: a valid thermal zone structure pointer on success.
-   466	 * 	- EINVAL: if the device tree thermal description is malformed
-   467	 *	- ENOMEM: if one structure can not be allocated
-   468	 *	- Other negative errors are returned by the underlying called functions
-   469	 */
-   470	static struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor, int id, void *data,
-   471								    const struct thermal_zone_device_ops *ops)
-   472	{
-   473		struct thermal_zone_device_ops of_ops = *ops;
-   474		struct thermal_zone_device *tz;
-   475		struct thermal_trip *trips;
-   476		struct thermal_zone_params tzp = {};
-   477		struct device_node *np;
-   478		const char *action;
-   479		int delay, pdelay;
-   480		int ntrips;
-   481		int ret;
-   482	
-   483		np = of_thermal_zone_find(sensor, id);
-   484		if (IS_ERR(np)) {
-   485			if (PTR_ERR(np) != -ENODEV)
-   486				pr_err("Failed to find thermal zone for %pOFn id=%d\n", sensor, id);
- > 487			return PTR_ERR(np);
-   488		}
-   489	
-   490		trips = thermal_of_trips_init(np, &ntrips);
-   491		if (IS_ERR(trips)) {
-   492			pr_err("Failed to find trip points for %pOFn id=%d\n", sensor, id);
-   493			return PTR_ERR(trips);
-   494		}
-   495	
-   496		ret = thermal_of_monitor_init(np, &delay, &pdelay);
-   497		if (ret) {
-   498			pr_err("Failed to initialize monitoring delays from %pOFn\n", np);
-   499			goto out_kfree_trips;
-   500		}
-   501	
-   502		thermal_of_parameters_init(np, &tzp);
-   503	
-   504		of_ops.bind = thermal_of_bind;
-   505		of_ops.unbind = thermal_of_unbind;
-   506	
-   507		ret = of_property_read_string(np, "critical-action", &action);
-   508		if (!ret)
-   509			if (!of_ops.critical && !strcasecmp(action, "reboot"))
-   510				of_ops.critical = thermal_zone_device_critical_reboot;
-   511	
-   512		tz = thermal_zone_device_register_with_trips(np->name, trips, ntrips,
-   513							     data, &of_ops, &tzp,
-   514							     pdelay, delay);
-   515		if (IS_ERR(tz)) {
-   516			ret = PTR_ERR(tz);
-   517			pr_err("Failed to register thermal zone %pOFn: %d\n", np, ret);
-   518			goto out_kfree_trips;
-   519		}
-   520	
-   521		ret = thermal_zone_device_enable(tz);
-   522		if (ret) {
-   523			pr_err("Failed to enabled thermal zone '%s', id=%d: %d\n",
-   524			       tz->type, tz->id, ret);
-   525			thermal_of_zone_unregister(tz);
-   526			return ERR_PTR(ret);
-   527		}
-   528	
-   529		return tz;
-   530	
-   531	out_kfree_trips:
-   532		kfree(trips);
-   533	
-   534		return ERR_PTR(ret);
-   535	}
-   536	
+e5f2cda61d068e Daniel Lezcano 2022-07-22  1222  
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1223  int thermal_zone_get_crit_temp(struct thermal_zone_device *tz, int *temp)
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1224  {
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1225  	int i, ret = -EINVAL;
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1226  
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1227  	if (tz->ops->get_crit_temp)
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1228  		return tz->ops->get_crit_temp(tz, temp);
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1229  
+7c3d5c20dc169e Daniel Lezcano 2022-10-03 @1230  	if (!tz->trips)
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1231  		return -EINVAL;
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1232  
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1233  	mutex_lock(&tz->lock);
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1234  
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1235  	for (i = 0; i < tz->num_trips; i++) {
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1236  		if (tz->trips[i].type == THERMAL_TRIP_CRITICAL) {
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1237  			*temp = tz->trips[i].temperature;
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1238  			ret = 0;
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1239  			break;
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1240  		}
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1241  	}
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1242  
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1243  	mutex_unlock(&tz->lock);
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1244  
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1245  	return ret;
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1246  }
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1247  EXPORT_SYMBOL_GPL(thermal_zone_get_crit_temp);
+7c3d5c20dc169e Daniel Lezcano 2022-10-03  1248  
+
+:::::: The code at line 1230 was first introduced by commit
+:::::: 7c3d5c20dc169e55064f7f38c1c56cfbc39ee5b2 thermal/core: Add a generic thermal_zone_get_trip() function
+
+:::::: TO: Daniel Lezcano <daniel.lezcano@linaro.org>
+:::::: CC: Daniel Lezcano <daniel.lezcano@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
