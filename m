@@ -1,181 +1,183 @@
-Return-Path: <linux-pm+bounces-3761-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3762-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84B7E850A5A
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Feb 2024 17:44:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6673C850ACA
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Feb 2024 19:20:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A0C711C21C4A
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Feb 2024 16:44:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D40D282BCE
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Feb 2024 18:20:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79B455B669;
-	Sun, 11 Feb 2024 16:43:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A20A45D475;
+	Sun, 11 Feb 2024 18:20:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b="FwWBjo4D"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OEgTWRUh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FFC359149
-	for <linux-pm@vger.kernel.org>; Sun, 11 Feb 2024 16:43:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E24C5D460;
+	Sun, 11 Feb 2024 18:20:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707669839; cv=none; b=J9oL+rECIjyjv9wMBpO5+DKx2A4vz33wPX3U7/EkZTIbCWTeSb8KFQnuTcl+CsTM6JrvLszySbMCJB3CzqFuscr7zr3+O3diagUqzu2qW/T613bXAoL+c7j8FW9x/4PKvjIhAlsq2gKnvSbW/6G5Pt4yYQ75BUMKMev6bO/SmUQ=
+	t=1707675611; cv=none; b=u4BnWhpGd2O13GlPzROSgE6yEUcMW1jOv0kWQh2JZs/h7Ht3snig4rnXZSa9RESWWVxGtlO8GLq0vFLWd/8Lh1hpEy5nKAaR3ipC2ranFb7HqcqxsCe3cxU5fTU/iIk+jZEof6baPX79U/NAOGfWGL7Q536LT/SdWWbM1oY5HUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707669839; c=relaxed/simple;
-	bh=IUsuXjX03NWMrGdlBVw/b0WIQxpF85sr152/0Pzn9ZM=;
-	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
-	 MIME-Version:Content-Type; b=NLcb3V/fTwrbx1SsKyykHmfWaHv9M3B+Ny4qsZtC0un7/c82RU704H6jyJbNQ45n7q7eRzl94awYZVkgJl+oIxK0L71jLufIJM5QF2z5eUzoopZ0DAxHMC8erECoTtH+mZDmezYehrEdm4H9JLxvuQqhYt1Bf1sJgaybgEaVCkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net; spf=pass smtp.mailfrom=telus.net; dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b=FwWBjo4D; arc=none smtp.client-ip=209.85.161.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=telus.net
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-59a94c0fb55so1351875eaf.0
-        for <linux-pm@vger.kernel.org>; Sun, 11 Feb 2024 08:43:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google; t=1707669836; x=1708274636; darn=vger.kernel.org;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IUsuXjX03NWMrGdlBVw/b0WIQxpF85sr152/0Pzn9ZM=;
-        b=FwWBjo4DiDCQQ3+EledAZOY9Qc21srVdj8stoNghQjeJAGZSWh+Y605QnrZiyYLSrq
-         LCULw8OrRM2anIckhc1j8D9h3jf7jDdAMV/XA5DDOU2mZtNLNnG+pVQphAAhb2TVXvuJ
-         r+0mTTP3t2S4K7vnX6CV7CUBjV4+ASvjTCMiK3GL9ANy2I+ss9ehae0494HD9vBgnj1q
-         V7rPyhM6Jc2ywgLYlAlzCzZCKnnF4Kg98sJwQRUQ4m8berbHWnhhR3coWXNE9e/aoA8j
-         Ld3baxIhFio06QQFarAAVuxsr1jQMxeKO415K5KveMLkwkGA7DCfpp5OK1d8nlI12HHf
-         xBoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707669836; x=1708274636;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IUsuXjX03NWMrGdlBVw/b0WIQxpF85sr152/0Pzn9ZM=;
-        b=kOQ9vxq36WrYzkWcdNuC4MHIdoGb3DAzBtAcGFdZDnbKbUFGghbLz7nbbgB7EKd3qy
-         sXTriqO8tuWpreyX05rG7IMwE87KeCQL51XUrU9MYYnqJyyU0Qgfjumx+5CBjiDKG8Bq
-         Y3tmSj3TuugPuKh6zBItRKUPB3Vw+tL0MfZ3LQXKf/PaIdN2NaYDsyvmz/oTIDt0ta22
-         sOW6jLFJi3Cl/2Gz/636+waZjwloEC2qXIpTJt//MOVPg5F9mT8jBVUHODvznF7vw3nE
-         oC0pCdhYq/5gGwsSJgWaIXlrgR0DHH033Yfg+wXvpvHTfE5wFOiSvmM4U5g4YZXwu+o9
-         NhfA==
-X-Forwarded-Encrypted: i=1; AJvYcCXOU00Pwxxq6mn5Qup2B0CUk79Rbb4g0vmJTHtpKrSjKV3Mbm2EYwhwH2uoZIEQRq3+YkHbnP5dLHOmjxlkIeG3xD2kIy4tgkQ=
-X-Gm-Message-State: AOJu0Yz2AsVbuL+jaa0N6ZrllBmpUZME1TjXj9GiWI53W5RLnPxUOqYq
-	L4vTqLgpGn86S/Xh58Hv6IfmqPrTj52mVAgjrDJUbmtzuPo94Ht+YuKx+OygtTY=
-X-Google-Smtp-Source: AGHT+IH+tY7O6WFeho5VnKia8cngNwgyEbGjks7wJwe5NBKvAhQK8uMFWgK7Gf9pOFFoEejPRTeWgA==
-X-Received: by 2002:a05:6358:199e:b0:176:5a5e:4bf9 with SMTP id v30-20020a056358199e00b001765a5e4bf9mr7844088rwn.22.1707669836539;
-        Sun, 11 Feb 2024 08:43:56 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXewZJOIg0FJAFqMImWK4z50DpnckeNc80B+nFTY9O0XMLKaT35n0FyWTxi4rtkQLcFj15j7xZFZxap6rB7UR7583aoC+Uuzy7KNIrC7uUEGmlJGedBkcelNGabjQ0RvmKHrAKKF7K7sCVdDRWr4nbYiu2rJ2GyvgdwBEVKNJjTXkHGV4rXaGEhQ1ezh/Ca
-Received: from DougS18 (s66-183-142-209.bc.hsia.telus.net. [66.183.142.209])
-        by smtp.gmail.com with ESMTPSA id y20-20020a62b514000000b006e08da9c29csm3927793pfe.54.2024.02.11.08.43.55
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 11 Feb 2024 08:43:55 -0800 (PST)
-From: "Doug Smythies" <dsmythies@telus.net>
-To: "'Vincent Guittot'" <vincent.guittot@linaro.org>
-Cc: "'Ingo Molnar'" <mingo@kernel.org>,
-	"'Rafael J. Wysocki'" <rafael@kernel.org>,
-	<linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>,
-	"Doug Smythies" <dsmythies@telus.net>
-References: <002f01da5ba0$49cbf810$dd63e830$@telus.net> <CAKfTPtA-jizig0sh_shmkAMudAxDPYHP0SdanZe=Gc57jVKouQ@mail.gmail.com> <003801da5bae$02d6f550$0884dff0$@telus.net> <CAKfTPtC7pOtb-srrgQLFbTueLLDqHay+GQBm9=sNsnZDg_UYSQ@mail.gmail.com>
-In-Reply-To: <CAKfTPtC7pOtb-srrgQLFbTueLLDqHay+GQBm9=sNsnZDg_UYSQ@mail.gmail.com>
-Subject: RE: sched/cpufreq: Rework schedutil governor performance estimation - Regression bisected
-Date: Sun, 11 Feb 2024 08:43:57 -0800
-Message-ID: <000b01da5d09$8219f900$864deb00$@telus.net>
+	s=arc-20240116; t=1707675611; c=relaxed/simple;
+	bh=oU3+pTwOlDgbtW1/NcvyIj7JX7BmSedhjcnRgv/xZEk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=elkjQ072uqROXwdBwZIUd3Z9CXleMiR7OWwkxPgL7VbJ6/ONwk6CLONG64dru4tNt/fU/PIeLB/G7Rub7Aq2iBFqRL7kXsVHRrjVzl2pEHbZiTmy+qPQG51nwPqxnBYm07ioq9KYVGU73PyAVktpYIA1nBZNWdxeo81/DhtfRrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OEgTWRUh; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707675609; x=1739211609;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oU3+pTwOlDgbtW1/NcvyIj7JX7BmSedhjcnRgv/xZEk=;
+  b=OEgTWRUhm1wtyCSYhYeom2MAimpf3eEWzZRSr2GPaIZe/TPri+IZSwV9
+   IfLfK80zBC4xa/r3cwxXa4lt3WyesG45Ks066wm9SjsnNgIEVYWYoxu+Y
+   k+ZhUUU9fxM0O5ezFeF3QlH6QVUTuyUrwXSlELXzkdlc8uo15Tjodv+4c
+   Zq5+V4ZiuG7TB6vYJlf7954rfWCbvjSC4eAqrHe2Ny1oaUyw38PlryBlh
+   kEp8HRhoEH/mqrgVvNXyjodYcWxtZ+7Cf0pfwGLXubMpj8/r0jpkmy3TU
+   3Gb3Hs7prooyjszQr2YrqwDyydmw7P3gsJ2I1kJh7RK2NdOZG0oyyDF9F
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10981"; a="1501625"
+X-IronPort-AV: E=Sophos;i="6.05,261,1701158400"; 
+   d="scan'208";a="1501625"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2024 10:20:09 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,261,1701158400"; 
+   d="scan'208";a="39856770"
+Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 11 Feb 2024 10:20:05 -0800
+Received: from kbuild by 01f0647817ea with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rZEQs-0006ig-1b;
+	Sun, 11 Feb 2024 18:20:02 +0000
+Date: Mon, 12 Feb 2024 02:19:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
+	Mario.Limonciello@amd.com, viresh.kumar@linaro.org,
+	Ray.Huang@amd.com, gautham.shenoy@amd.com, Borislav.Petkov@amd.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alexander.Deucher@amd.com, Xinmei.Huang@amd.com,
+	Xiaojian.Du@amd.com, Li.Meng@amd.com, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/7] cpufreq: amd-pstate: initialize new core precision
+ boost state
+Message-ID: <202402120216.mjdQyGCs-lkp@intel.com>
+References: <0409d40c500eeb8d4d84ecb028b73f2eee147822.1706255676.git.perry.yuan@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-ca
-Thread-Index: AQHymzO4ho/iLx8gQfQ33x85MlP38AE230H5ATs9P70BGBlhK7C4e+GA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0409d40c500eeb8d4d84ecb028b73f2eee147822.1706255676.git.perry.yuan@amd.com>
 
-On 2024.02.11 05:36 Vincent wrote:
-> On Sat, 10 Feb 2024 at 00:16, Doug Smythies <dsmythies@telus.net> wrote:
->> On 2024.02.09.14:11 Vincent wrote:
->>> On Fri, 9 Feb 2024 at 22:38, Doug Smythies <dsmythies@telus.net> wrote:
->>>>
->>>> I noticed a regression in the 6.8rc series kernels. Bisecting the kernel pointed to:
->>>>
->>>> # first bad commit: [9c0b4bb7f6303c9c4e2e34984c46f5a86478f84d]
->>>> sched/cpufreq: Rework schedutil governor performance estimation
->>>>
->>>> There was previous bisection and suggestion of reversion,
->>>> but I guess it wasn't done in the end. [1]
->>>
->>> This has been fixed with
->>> https://lore.kernel.org/all/170539970061.398.16662091173685476681.tip-bot2@tip-bot2/
->>
->> Okay, thanks. I didn't find that one.
->>
->>>> The regression: reduced maximum CPU frequency is ignored.
+Hi Perry,
 
-Perhaps I should have said "sometimes ignored".
-With a maximum CPU frequency for all CPUs set to 2.4 GHz and
-a 100% load on CPU 5, its frequency was sampled 1000 times:
-28.6% of samples were 2.4 GHz.
-71.4% of samples were 4.8 GHz (the max turbo frequency)
-The results are highly non-repeatable, for example another sample:
-32.8% of samples were 2.4 GHz.
-76.2% of samples were 4.8 GHz
+kernel test robot noticed the following build errors:
 
-Another interesting side note: If load is added to the other CPUs,
-the set maximum CPU frequency is enforced.
+[auto build test ERROR on rafael-pm/acpi-bus]
+[also build test ERROR on v6.8-rc3]
+[cannot apply to rafael-pm/linux-next linus/master rafael-pm/devprop next-20240209]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->>
->>> This seems to be something new.
->>> schedutil doesn't impact the max_freq and it's up to cpufreq driver
->>> select the final freq which should stay within the limits
->>
->> Okay. All I know is this is the commit that caused the regression.
->
-> Could you check if the fix solved your problem ?
+url:    https://github.com/intel-lab-lkp/linux/commits/Perry-Yuan/cpufreq-amd-pstate-remove-set_boost-callback-for-passive-mode/20240126-171412
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-bus
+patch link:    https://lore.kernel.org/r/0409d40c500eeb8d4d84ecb028b73f2eee147822.1706255676.git.perry.yuan%40amd.com
+patch subject: [PATCH 2/7] cpufreq: amd-pstate: initialize new core precision boost state
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20240212/202402120216.mjdQyGCs-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240212/202402120216.mjdQyGCs-lkp@intel.com/reproduce)
 
-Given the tags for that commit:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202402120216.mjdQyGCs-lkp@intel.com/
 
-$ git tag --contains e37617c8e53a
-v6.8-rc1
-v6.8-rc2
-v6.8-rc3
+All errors (new ones prefixed by >>):
 
-It does not solve issue I have raised herein, as it exists in v6.8-rc1 but not v6.7
-
->> I do not know why, but I do wonder if there could any relationship with
->> the old, never fixed, problem of incorrect stale frequencies reported
->> under the same operating conditions. See the V2 note:
->> https://lore.kernel.org/all/001d01d9d3a7$71736f50$545a4df0$@telus.net/
->
-> IIUC the problem is that policy->cur is not used by intel_cpufreq and
-> stays set to the last old/init value.
-
-Yes, exactly.
-
-> Do I get it right that this is only informative ?
-
-I don't know, that is what I was wondering. I do not know if the two issues
-are related or not.
-
-> Normally cpufreq governor checks the new limits and updates current
-> freq if necessary except when fast switch is enabled.
-
->> where I haven't been able to figure out a solution.
-
->>>> Conditions:
->>>> CPU frequency scaling driver: intel_cpufreq (a.k.a intel_pstate in passive mode)
->>>> CPU frequency scaling governor: schedutil
->>>> HWP (HardWare Pstate) control (a.k.a. Intel_speedshift): Enabled
->>>> Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
->>>>
->>>> I did not check any other conditions, i.e. HWP disabled or the acpi-cpufreq driver.
-
-Changing from HWP enabled to HWP disabled, it works properly.
-
-...
-
->>>> [1] https://lore.kernel.org/all/CAKfTPtDCQuJjpi6=zjeWPcLeP+ZY5Dw7XDrZ-LpXqEAAUbXLhA@mail.gmail.com/
+>> drivers/cpufreq/amd-pstate-ut.c:229:16: error: no member named 'boost_supported' in 'struct amd_cpudata'
+     229 |                 if (cpudata->boost_supported) {
+         |                     ~~~~~~~  ^
+   1 error generated.
 
 
+vim +229 drivers/cpufreq/amd-pstate-ut.c
+
+14eb1c96e3a3fd Meng Li        2022-08-17  193  
+14eb1c96e3a3fd Meng Li        2022-08-17  194  /*
+14eb1c96e3a3fd Meng Li        2022-08-17  195   * Check if frequency values are reasonable.
+14eb1c96e3a3fd Meng Li        2022-08-17  196   * max_freq >= nominal_freq > lowest_nonlinear_freq > min_freq > 0
+14eb1c96e3a3fd Meng Li        2022-08-17  197   * check max freq when set support boost mode.
+14eb1c96e3a3fd Meng Li        2022-08-17  198   */
+14eb1c96e3a3fd Meng Li        2022-08-17  199  static void amd_pstate_ut_check_freq(u32 index)
+14eb1c96e3a3fd Meng Li        2022-08-17  200  {
+14eb1c96e3a3fd Meng Li        2022-08-17  201  	int cpu = 0;
+14eb1c96e3a3fd Meng Li        2022-08-17  202  	struct cpufreq_policy *policy = NULL;
+14eb1c96e3a3fd Meng Li        2022-08-17  203  	struct amd_cpudata *cpudata = NULL;
+14eb1c96e3a3fd Meng Li        2022-08-17  204  
+14eb1c96e3a3fd Meng Li        2022-08-17  205  	for_each_possible_cpu(cpu) {
+14eb1c96e3a3fd Meng Li        2022-08-17  206  		policy = cpufreq_cpu_get(cpu);
+14eb1c96e3a3fd Meng Li        2022-08-17  207  		if (!policy)
+14eb1c96e3a3fd Meng Li        2022-08-17  208  			break;
+14eb1c96e3a3fd Meng Li        2022-08-17  209  		cpudata = policy->driver_data;
+14eb1c96e3a3fd Meng Li        2022-08-17  210  
+14eb1c96e3a3fd Meng Li        2022-08-17  211  		if (!((cpudata->max_freq >= cpudata->nominal_freq) &&
+14eb1c96e3a3fd Meng Li        2022-08-17  212  			(cpudata->nominal_freq > cpudata->lowest_nonlinear_freq) &&
+14eb1c96e3a3fd Meng Li        2022-08-17  213  			(cpudata->lowest_nonlinear_freq > cpudata->min_freq) &&
+14eb1c96e3a3fd Meng Li        2022-08-17  214  			(cpudata->min_freq > 0))) {
+14eb1c96e3a3fd Meng Li        2022-08-17  215  			amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_FAIL;
+14eb1c96e3a3fd Meng Li        2022-08-17  216  			pr_err("%s cpu%d max=%d >= nominal=%d > lowest_nonlinear=%d > min=%d > 0, the formula is incorrect!\n",
+14eb1c96e3a3fd Meng Li        2022-08-17  217  				__func__, cpu, cpudata->max_freq, cpudata->nominal_freq,
+14eb1c96e3a3fd Meng Li        2022-08-17  218  				cpudata->lowest_nonlinear_freq, cpudata->min_freq);
+60dd283804479c Swapnil Sapkal 2023-08-18  219  			goto skip_test;
+14eb1c96e3a3fd Meng Li        2022-08-17  220  		}
+14eb1c96e3a3fd Meng Li        2022-08-17  221  
+14eb1c96e3a3fd Meng Li        2022-08-17  222  		if (cpudata->min_freq != policy->min) {
+14eb1c96e3a3fd Meng Li        2022-08-17  223  			amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_FAIL;
+14eb1c96e3a3fd Meng Li        2022-08-17  224  			pr_err("%s cpu%d cpudata_min_freq=%d policy_min=%d, they should be equal!\n",
+14eb1c96e3a3fd Meng Li        2022-08-17  225  				__func__, cpu, cpudata->min_freq, policy->min);
+60dd283804479c Swapnil Sapkal 2023-08-18  226  			goto skip_test;
+14eb1c96e3a3fd Meng Li        2022-08-17  227  		}
+14eb1c96e3a3fd Meng Li        2022-08-17  228  
+14eb1c96e3a3fd Meng Li        2022-08-17 @229  		if (cpudata->boost_supported) {
+14eb1c96e3a3fd Meng Li        2022-08-17  230  			if ((policy->max == cpudata->max_freq) ||
+14eb1c96e3a3fd Meng Li        2022-08-17  231  					(policy->max == cpudata->nominal_freq))
+14eb1c96e3a3fd Meng Li        2022-08-17  232  				amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_PASS;
+14eb1c96e3a3fd Meng Li        2022-08-17  233  			else {
+14eb1c96e3a3fd Meng Li        2022-08-17  234  				amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_FAIL;
+14eb1c96e3a3fd Meng Li        2022-08-17  235  				pr_err("%s cpu%d policy_max=%d should be equal cpu_max=%d or cpu_nominal=%d !\n",
+14eb1c96e3a3fd Meng Li        2022-08-17  236  					__func__, cpu, policy->max, cpudata->max_freq,
+14eb1c96e3a3fd Meng Li        2022-08-17  237  					cpudata->nominal_freq);
+60dd283804479c Swapnil Sapkal 2023-08-18  238  				goto skip_test;
+14eb1c96e3a3fd Meng Li        2022-08-17  239  			}
+14eb1c96e3a3fd Meng Li        2022-08-17  240  		} else {
+14eb1c96e3a3fd Meng Li        2022-08-17  241  			amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_FAIL;
+14eb1c96e3a3fd Meng Li        2022-08-17  242  			pr_err("%s cpu%d must support boost!\n", __func__, cpu);
+60dd283804479c Swapnil Sapkal 2023-08-18  243  			goto skip_test;
+14eb1c96e3a3fd Meng Li        2022-08-17  244  		}
+60dd283804479c Swapnil Sapkal 2023-08-18  245  		cpufreq_cpu_put(policy);
+14eb1c96e3a3fd Meng Li        2022-08-17  246  	}
+14eb1c96e3a3fd Meng Li        2022-08-17  247  
+14eb1c96e3a3fd Meng Li        2022-08-17  248  	amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_PASS;
+60dd283804479c Swapnil Sapkal 2023-08-18  249  	return;
+60dd283804479c Swapnil Sapkal 2023-08-18  250  skip_test:
+60dd283804479c Swapnil Sapkal 2023-08-18  251  	cpufreq_cpu_put(policy);
+14eb1c96e3a3fd Meng Li        2022-08-17  252  }
+14eb1c96e3a3fd Meng Li        2022-08-17  253  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
