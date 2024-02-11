@@ -1,187 +1,159 @@
-Return-Path: <linux-pm+bounces-3757-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3758-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB02685096B
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Feb 2024 14:36:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B5A08509F7
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Feb 2024 16:16:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 61971282369
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Feb 2024 13:36:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B1B41C20BC8
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Feb 2024 15:16:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 326985B20C;
-	Sun, 11 Feb 2024 13:36:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 630E85B663;
+	Sun, 11 Feb 2024 15:16:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MiX72M0V"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Jz4eSga1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2058.outbound.protection.outlook.com [40.107.94.58])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A41A65B1FD
-	for <linux-pm@vger.kernel.org>; Sun, 11 Feb 2024 13:36:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707658576; cv=none; b=bojHKZv5xShEPBnzDul9Gfi/o0/pAd+63ledap4BjbwjIs9vva1APZ1M6NH75YWNMPVrX8shgxe8YZgxYbJrKlXbTg8mkWauazK8hTFECeXnpcU2cBCECJ7BYMrDogYWgdaNbCDmwCh3xPfpmtZMqcJExN09gHEHVy/KI/VfnMc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707658576; c=relaxed/simple;
-	bh=cSC/pimE3Iy+VDI3cTIwQFKtWYnbm3GXqblRGRDLR7g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eS5AS+MwIGRRN9FvnYogzFO/V3u0G4uxF7aSoli6uTM7IbJNw2aXznAivVXu7sst1nOiOaJVYhhMqcoc4bX/zCs/WiJGLrAjuYIpijCnEa7uz90b8ndrEmh5OkUf1MFzY3XyUqJnRgj0PkH0d+jzGWkt3g82CdA+Qqf4oYSZ1fY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MiX72M0V; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2971562c3ceso822801a91.1
-        for <linux-pm@vger.kernel.org>; Sun, 11 Feb 2024 05:36:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707658574; x=1708263374; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WPDq0dQl6dXYIIyP7cnfbKNa6fJRI/QjeeGnYd/0tns=;
-        b=MiX72M0V+/8n2saalHGlDDzxBwnO/wNljNmSPmA3BRnxqlx6fHVRDUFUTuZ2jX8/lT
-         WJEj+yFx8yKmevnuu1N1fhjM+q1Z/WNPYjNXoDrOYKX+FUUA4v+wot+rPv+As3FLwBfv
-         qx/d1UN22MyjcS2xJoiv1rBzsPLV/y2WwmJeuraMVQYT0qVdwzbBBqqusezVkKRV6K80
-         /Dh76mawBwLvK248gXghVIluI2ZRIXfh8TTWYetQ3prMDJGpzSa5r8hAzHvWbDqRjV5P
-         /IKKzG+3te5mRo/9UBI7d4EIuoBJ1uVreSx5LqMr12dji47O1fspZHdxtpDYArmDc7XF
-         +NpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707658574; x=1708263374;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WPDq0dQl6dXYIIyP7cnfbKNa6fJRI/QjeeGnYd/0tns=;
-        b=Kuff/u1ZDjRarXxgLAn3l4nME0cuvSQpUdXZuD7+lvirMa+iXWzbXXmK2mnjerdqxS
-         jKk1MeSdZMxRozCc98oBBzhRc6CZf6mSXW8NRcx9me6amNa8JYz8RtwL8+hlGwsZikF5
-         BY6UPiN2f0Ld5MUEwhlnL39865zVkHkiGzQvcK6NB4n6oR1mHsFRj3u5kaIIsJ/tOBVz
-         giKAoA2EuMWE/8tQ/HhrxivKZyFXvTlyfDGJzYR/hKHh3A+ywqt7Cp+89iEAaQkuK6Ib
-         DaH8j7SdbTixOocRh9YmCltJrzKbk0GIumuMjAqIg5j/0ZokKHOoB2NJjza7in1RtG+S
-         uxRA==
-X-Gm-Message-State: AOJu0YwHmUORujLSU8rH+xTA+x+avukP5zTMJJvBXl9x1/b8aoCoB2gj
-	bfGoYpQXpuCu3ei+QeBD3NXCupM60mlRyoL6ZgcYzg5mrziqpvwwP4/mT/Clbpxk/e5hfwG/wgX
-	lYkkaXXgq8JGGGUoF6nFE8aP91UvDyboKn4gTJg==
-X-Google-Smtp-Source: AGHT+IEClU2JTNSOESKH8zQTkime1Nj7q+tmc3KyT4dIi8A/3zLMDsWMJF5lpa9uN9sNQA+8m/nIRudoQAg4f9aCwhw=
-X-Received: by 2002:a17:90a:7186:b0:295:e149:a0d8 with SMTP id
- i6-20020a17090a718600b00295e149a0d8mr2554378pjk.29.1707658573867; Sun, 11 Feb
- 2024 05:36:13 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15D6C5A102;
+	Sun, 11 Feb 2024 15:16:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.58
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1707664573; cv=fail; b=dvo8GGSbyb1tVQWRglUDuwnaYdK3zNdESGVUpDinip7AQFBWUaXjWmB32J3OsRO4gPs/+xvjWyiOqa535+UsYsryPBIb9SNjYqfIPw3Nf8PsXUHXGYzCCKxfPbA8qulh9du027YyeSM3NsZBrpFb/Yn4qjC+AK0OCBc0aXrf7NY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1707664573; c=relaxed/simple;
+	bh=asrln4JpnlgR8nA7cVBaLkQl0NS+krdUtNTtXifvRdI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=A/PY3aNpcrP08YunzLjtdxc46RTyztr1RsQaISBSF8lNXMj6uFp3FPWWTgtACjwB+wf9s4mooTjiEVyc5SpEjML/LACA8nwfuIV/Xa1UowmbFy48W9C69ekg1RB1VvvSpjVLKEv6xAIGb1Ww9h9o3YmedybDlNz5+kDM/8/tTFQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Jz4eSga1; arc=fail smtp.client-ip=40.107.94.58
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XkKWv2tS3gpWo12R5hffKxyg094ELqFyx3LWw5ufBvscBikj0/3S7I4HJxh+Fv/XcpO/QjJa3G40psvGSGpTe83/9eOHOBfeCH4gujgej9UaSMS9Y6pztzZvQTw0UNrgyMylXEKoagZ/fI5Iq8RQDUJoecs3ITwmJv8LVKhlDzWuwVPqc8uyCf/pGhPGhAwtiuRhLEx1nH2BJ77BuzOXCuWKAhgEvloM/1LG4v+PpyzfgBwu2vv+d2TLqVytWAOBeOA2K8PNNAmAhBPqM+rhXNiLzvp4+DbFnyZM94w6plw8Kz02Q80tBFbUHoq1h3v73jJBjdaByDTfLX5qESWSOg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nVXpO3Ep+KeDx0QGFumYtd/+Xi94x/5NFG3md/xFPkY=;
+ b=eN4Bu8LE6PaPXy2bhZWPxNlrNjDFG6h8Ottiakve4fO66m9GfYroLMW+CqYRCw1o+sRI/n8b/2sOuFTrPeOu6bxK7w3ltpOvYGo7O3ggOUlFBAd1JDqQyxZQS/4CDTiPm3W4HCctF3wsuM9PZO1+95THf8aVYvyjot1EOUpN3cEMebzP/ltMcbeArrTLhr+i82/kj9sTjI6cR/Jj54d42xWcCxMfRqugjHL5AlmuENoQTt6JX+hrRVzfx5R5m9XPRbMgLs3CMSjchk+E6zf0coYzgNfz3c7djhddZr8EFhhw8nm0nZeOvQ4LrJkLmBy41zm65vLemhiSXTTLcKAe+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nVXpO3Ep+KeDx0QGFumYtd/+Xi94x/5NFG3md/xFPkY=;
+ b=Jz4eSga1ITyhreg873TwKPRZIkq/NHIsc1yxMfvbs9sANUH2Qiv7TqzK7fc4zsn6h7DmWKuB2U9eiyzP0PrAZx6jBDwfMyMIntkW9PfaOHPXgNM2lY8Jn8E8to5tMTarz4DZ7NiwVKoFTQjbpqLZiuUXqIQXoL3D4hQLvpuWANcpyYZEIYGSn8TggIXwaqYP8P0LVr6FdEBBN/0+yK/uHgvlVFn3WHvwY1Ntoh2LbTma8/NXX0/PM0mAZNfUSc2bPhG/lgPyMaNxdLFQ0O2p+DIWQQsmaM99dEu90V9vBAEKCuAj/IJ7WXFuYTYK88/UYqY7ALF2tjCs1c8b6rV3Ow==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
+ by BL0PR12MB4993.namprd12.prod.outlook.com (2603:10b6:208:17e::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.18; Sun, 11 Feb
+ 2024 15:16:06 +0000
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::d2ef:be54:ae98:9b8a]) by CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::d2ef:be54:ae98:9b8a%7]) with mapi id 15.20.7292.012; Sun, 11 Feb 2024
+ 15:16:05 +0000
+Date: Sun, 11 Feb 2024 17:16:01 +0200
+From: Ido Schimmel <idosch@nvidia.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Zhang Rui <rui.zhang@intel.com>, netdev@vger.kernel.org,
+	Petr Machata <petrm@nvidia.com>,
+	Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+	linux-wireless@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+Subject: Re: [PATCH v1 5/9] mlxsw: core_thermal: Set
+ THERMAL_TRIP_WRITABLE_TEMP directly
+Message-ID: <ZcjksY_r-5cC0blY@shredder>
+References: <3232442.5fSG56mABF@kreacher>
+ <2206820.Mh6RI2rZIc@kreacher>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2206820.Mh6RI2rZIc@kreacher>
+X-ClientProxiedBy: LO2P123CA0080.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:138::13) To CY5PR12MB6179.namprd12.prod.outlook.com
+ (2603:10b6:930:24::22)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <002f01da5ba0$49cbf810$dd63e830$@telus.net> <CAKfTPtA-jizig0sh_shmkAMudAxDPYHP0SdanZe=Gc57jVKouQ@mail.gmail.com>
- <003801da5bae$02d6f550$0884dff0$@telus.net>
-In-Reply-To: <003801da5bae$02d6f550$0884dff0$@telus.net>
-From: Vincent Guittot <vincent.guittot@linaro.org>
-Date: Sun, 11 Feb 2024 14:36:02 +0100
-Message-ID: <CAKfTPtC7pOtb-srrgQLFbTueLLDqHay+GQBm9=sNsnZDg_UYSQ@mail.gmail.com>
-Subject: Re: sched/cpufreq: Rework schedutil governor performance estimation -
- Regression bisected
-To: Doug Smythies <dsmythies@telus.net>
-Cc: Ingo Molnar <mingo@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|BL0PR12MB4993:EE_
+X-MS-Office365-Filtering-Correlation-Id: 291265dc-4003-43a6-322c-08dc2b145df9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	L9sTilLfEp4Ls5pLW8OXs8x29FNfVj0025M2p+5+jXQy20y1Tm9l1kQN+dc2XBPCAwLjpozVepX+1cBRNAC+k2X294GfwoWPEJdTUI1Ez4/j4+j9KW4tQ3Fc3xCRFAAM00B3iydS4PucltAeLK5sIRB8szMAwmTfz/15BYyKQKAStg7sfjHQUEhClM2ww4StbqWk83iBYwA84zdCcsDZDJPIFO/wJo1BSNBOPvW4g6mePfGIxHd7ocG2lAnV5P7Pa8SM1u9H9G7zNP7T2EeEQdFbF+sFwfiRdVjjBeVHiPqd+12NSqfFtET/n/uvFPruQP7Gj3fvfTRjJ4ELAIRCCCPEfiC+gT7PnfIX2W6Ymo55p0QnoQjV4sbnPq5DOImdFcJVhwC+NWLHafCH72kSkdAVHqoEMQK5/UgATFSR6aVPmLfJPtB71rnvdTlTFHg5mbVf91WoyvQDCqjTrB0BMmqHjhfCYd/zp94W36h/k638Kn5c0/DIyVtNnUkh2wNRG5Ka4S7ZINkXsfkfbsBXBifoc5b0NOyA3SL1SjQ3WnsJA6krbf6cpZSFxCvWpVYk
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(136003)(346002)(39850400004)(396003)(376002)(366004)(230922051799003)(1800799012)(186009)(64100799003)(451199024)(38100700002)(2906002)(4744005)(7416002)(5660300002)(33716001)(86362001)(26005)(6666004)(9686003)(6512007)(6506007)(66556008)(316002)(8676002)(54906003)(6916009)(66946007)(4326008)(66476007)(478600001)(8936002)(6486002)(41300700001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?98Qte6FGpvPz4OC6nFYRmldfsQq3vLTB0lhefHWhENlE9CZj5m2sfrarOaUT?=
+ =?us-ascii?Q?0mpfjT66dQ8jpi5f8cnrFuIouumvCvRktqDfAgavGv4jiWkMydkMnFd6y5Ru?=
+ =?us-ascii?Q?ocy9rj3Kyb+c4e94ezv1BF08MTq5kE+r7s+1vcEtaMKgP+oWz5iG7Cw63z4e?=
+ =?us-ascii?Q?2TJVs7bdXZmT+vg8OQZGHF8RytqIIIY7zrqc+7WKfHVN47eE/23yoeSzXfqY?=
+ =?us-ascii?Q?t7dto+yKXzMUSV+GE0jlb54hzm1zdOnRw9Tg5+KmHPMuLTFoQbszHJfblmmn?=
+ =?us-ascii?Q?WUNn8XuFO95YPwTo2Q7OMOnnqHc1qcPhU3la5KxEvoU5Fi1sle1/O2dGxg2b?=
+ =?us-ascii?Q?Ih2UJm/e5Xgj7itimUQzRa/CcwYgzUbtALfiWi/cGRkEqJXXec28elJ/dXF3?=
+ =?us-ascii?Q?ESonUrcy1kUVDmfwef0/d3hDAP2oP+zdzA6kJ+e3S9w4bgCgzzwr6rlyB6XW?=
+ =?us-ascii?Q?x+rq62h8T2xmUltrpKflHEk/ylzPz3KZTpr2QRgMnHfZtOqR0KRSQsudNrsa?=
+ =?us-ascii?Q?7+Gb/97vOs8AYbt5XxRZkzuU7YPS+YvSPs8xqaRVRa9fTebgQ59IQ5w+QoCO?=
+ =?us-ascii?Q?il9+QPB4hu8FPNg3xGEY4IR1K/36sw93ZIryzO+a2U/b4C4SI0EqkS/6ObFc?=
+ =?us-ascii?Q?8ABhvLNZWBpwbPQyAfM+T3M+dkdybyigYX1omyv6FaZX3CCZi3mhBW8eOL7u?=
+ =?us-ascii?Q?4DInja7IF8lNon9BS8CRgQkfdod6U/+EzxJCNBcC1oDkuZGCOXKZoRqeN1AO?=
+ =?us-ascii?Q?7B09utVjDCi8pYivnSzT5KMkz6zVj3+zVXBiE8Pb6LilCXDRqms4WLBMdiZq?=
+ =?us-ascii?Q?wO947trFnR2I1NYEYy05BOJuv8MOLFEFsnF8PE3ZfaV9zdtyAaiZeKkj0xLD?=
+ =?us-ascii?Q?9kHIR3UtZAFZJj69vOa17zGXr0ZoNUE/ym7ZxgM3w4Pbb9liL0mVVHo+UXx8?=
+ =?us-ascii?Q?0OvpiHUNnqNqZ4yFxTXBvC+VjJXd03zwyLjB7KVB0Raa5rOczUIeKxnqOmJd?=
+ =?us-ascii?Q?652QVi675ltLmHTyg/sM6a+7xSjlL69J8t0agjhKldAm5rC22Hg6B95+Nknc?=
+ =?us-ascii?Q?IqGHZMLpVnXF6mdonZpKATcF/2xiCBQj3Eu2yAdnw+XChb7cKeAK8HGzhgUD?=
+ =?us-ascii?Q?c8qW011g+01o+MInebEOx/3kFrukfP4cS3EAcuOjEDfaH/+t+zd7HLBcAJD1?=
+ =?us-ascii?Q?W3QbcMmlqKaze71xIgClJ9HWVDouIy65srA67MYZ2q81Jcej+GvbMCxfZ4C2?=
+ =?us-ascii?Q?xPy4C+hVlILKKqUep4OaghapmRn6oTUJai/IwfrggLZ6yTYCCzMeWMpgeYKg?=
+ =?us-ascii?Q?lwVh2vuF6oNaxyoqMXQDk16t5RtP9kR6AhNs9l1y5IW8n3IsWKsleSHn5s3n?=
+ =?us-ascii?Q?8nbnJYhKEEWAvIF1iOvuM1e2bVjluVk1uW/BPvezFVP842+hM7U9TOoXsdlL?=
+ =?us-ascii?Q?j6dfdb+BTYDJjarE/p4FFd9oIdDBpXXBjSoPsJfigAX6vzcA6/dT6HOENVXj?=
+ =?us-ascii?Q?h4ftV3RO6NNkC4c46iq/MDdeLSMi94nOayqyFF1+dlLCjrueFDl/tnfd99PE?=
+ =?us-ascii?Q?TUyt3t85AOkch4+q2Eu5LkWWvUenPOvSIC+NiqvY?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 291265dc-4003-43a6-322c-08dc2b145df9
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Feb 2024 15:16:05.7072
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: i6eMQNHD41wPioXWInfh2vvtth3dSDdyYgAK6PkdyB+z0cxj7OBc2P9P4KyjpUST1uElI4RqcYWys5ILfGQvaw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4993
 
-On Sat, 10 Feb 2024 at 00:16, Doug Smythies <dsmythies@telus.net> wrote:
->
-> Hi Vincent,
-> Thank you for your quick reply.
->
-> On 2024.02.09.14:11 Vincent wrote:
-> On Fri, 9 Feb 2024 at 22:38, Doug Smythies <dsmythies@telus.net> wrote:
-> >>
-> >> Hi,
-> >>
-> >> I noticed a regression in the 6.8rc series kernels. Bisecting the kernel pointed to:
-> >>
-> >> # first bad commit: [9c0b4bb7f6303c9c4e2e34984c46f5a86478f84d]
-> >> sched/cpufreq: Rework schedutil governor performance estimation
-> >>
-> >> There was previous bisection and suggestion of reversion,
-> >> but I guess it wasn't done in the end. [1]
-> >
-> > This has been fixed with
-> > https://lore.kernel.org/all/170539970061.398.16662091173685476681.tip-bot2@tip-bot2/
->
-> Okay, thanks. I didn't find that one.
->
-> >> The regression: reduced maximum CPU frequency is ignored.
->
-> > This seems to be something new.
-> > schedutil doesn't impact the max_freq and it's up to cpufreq driver
-> > select the final freq which should stay within the limits
->
-> Okay. All I know is this is the commit that caused the regression.
+On Fri, Feb 09, 2024 at 03:08:43PM +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> It is now possible to flag trip points with THERMAL_TRIP_WRITABLE_TEMP
+> to allow their temperature to be set from user space via sysfs instead
+> of using a nonzero writable trips mask during thermal zone registration,
+> so make the mlxsw code do that.
+> 
+> No intentional functional impact.
+> 
+> Note that this change is requisite for dropping the mask argument from
+> thermal_zone_device_register_with_trips() going forward.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Could you check if the fix solved your problem ?
-
-> I do not know why, but I do wonder if there could any relationship with
-> the old, never fixed, problem of incorrect stale frequencies reported
-> under the same operating conditions. See the V2 note:
-> https://lore.kernel.org/all/001d01d9d3a7$71736f50$545a4df0$@telus.net/
-
-IIUC the problem is that policy->cur is not used by intel_cpufreq and
-stays set to the last old/init value.
-Do I get it right that this is only informative ?
-
-Normally cpufreq governor checks the new limits and updates current
-freq if necessary except when fast switch is enabled.
-
->
-> where I haven't been able to figure out a solution.
->
-> >> Conditions:
-> >> CPU frequency scaling driver: intel_cpufreq (a.k.a intel_pstate in passive mode)
-> >> CPU frequency scaling governor: schedutil
-> >> HWP (HardWare Pstate) control (a.k.a. Intel_speedshift): Enabled
-> >> Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
-> >>
-> >> I did not check any other conditions, i.e. HWP disabled or the acpi-cpufreq driver.
-> >>
-> >> Example: A 100% load on CPU 5.
-> >>
-> >> sudo turbostat --quiet --Summary --show Busy%,Bzy_MHz,IRQ,PkgWatt,PkgTmp,RAMWatt,GFXWatt,CorWatt --interval 15
-> >> Busy%   Bzy_MHz IRQ     PkgTmp  PkgWatt CorWatt GFXWatt RAMWatt
-> >> 8.42    4636    21823   67      28.40   27.56   0.00    2.59
-> >> 8.40    4577    17724   66      27.57   26.73   0.00    2.59
-> >> 8.35    4637    19535   66      28.65   27.81   0.00    2.60
-> >> 8.41    4578    20723   66      27.73   26.89   0.00    2.59
-> >> 8.40    4558    19156   67      27.39   26.55   0.00    2.58
-> >> 8.34    4502    18127   67      26.79   25.96   0.00    2.57
-> >>
-> >> grep . /sys/devices/system/cpu/cpu*/cpufreq/scaling_max_freq
-> >> /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq:2400000
-> >> /sys/devices/system/cpu/cpu10/cpufreq/scaling_max_freq:2400000
-> >> /sys/devices/system/cpu/cpu11/cpufreq/scaling_max_freq:2400000
-> >> /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq:2400000
-> >> /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq:2400000
-> >> /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq:2400000
-> >> /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq:2400000
-> >> /sys/devices/system/cpu/cpu5/cpufreq/scaling_max_freq:2400000
-> >> /sys/devices/system/cpu/cpu6/cpufreq/scaling_max_freq:2400000
-> >> /sys/devices/system/cpu/cpu7/cpufreq/scaling_max_freq:2400000
-> >> /sys/devices/system/cpu/cpu8/cpufreq/scaling_max_freq:2400000
-> >> /sys/devices/system/cpu/cpu9/cpufreq/scaling_max_freq:2400000
-> >>
-> >> grep . /sys/devices/system/cpu/cpu5/cpufreq/*
-> >> /sys/devices/system/cpu/cpu5/cpufreq/affected_cpus:5
-> >> /sys/devices/system/cpu/cpu5/cpufreq/base_frequency:4100000
-> >> /sys/devices/system/cpu/cpu5/cpufreq/cpuinfo_max_freq:4800000
-> >> /sys/devices/system/cpu/cpu5/cpufreq/cpuinfo_min_freq:800000
-> >> /sys/devices/system/cpu/cpu5/cpufreq/cpuinfo_transition_latency:20000
-> >> /sys/devices/system/cpu/cpu5/cpufreq/energy_performance_available_preferences:default performance balance_performance balance_power
-> >> power
-> >> /sys/devices/system/cpu/cpu5/cpufreq/energy_performance_preference:balance_performance
-> >> /sys/devices/system/cpu/cpu5/cpufreq/related_cpus:5
-> >> /sys/devices/system/cpu/cpu5/cpufreq/scaling_available_governors:conservative ondemand userspace powersave performance schedutil
-> >> /sys/devices/system/cpu/cpu5/cpufreq/scaling_cur_freq:4799998
-> >> /sys/devices/system/cpu/cpu5/cpufreq/scaling_driver:intel_cpufreq
-> >> /sys/devices/system/cpu/cpu5/cpufreq/scaling_governor:schedutil
-> >> /sys/devices/system/cpu/cpu5/cpufreq/scaling_max_freq:2400000
-> >> /sys/devices/system/cpu/cpu5/cpufreq/scaling_min_freq:800000
-> >> /sys/devices/system/cpu/cpu5/cpufreq/scaling_setspeed:<unsupported>
-> >>
-> >> [1] https://lore.kernel.org/all/CAKfTPtDCQuJjpi6=zjeWPcLeP+ZY5Dw7XDrZ-LpXqEAAUbXLhA@mail.gmail.com/
->
->
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
 
