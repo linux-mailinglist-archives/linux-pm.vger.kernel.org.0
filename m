@@ -1,187 +1,119 @@
-Return-Path: <linux-pm+bounces-3767-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3768-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B649850D00
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 04:05:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BD7D850D0B
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 04:40:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A2E531C2205B
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 03:05:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 323E1B2255B
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 03:40:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA40E17C2;
-	Mon, 12 Feb 2024 03:05:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D63E34411;
+	Mon, 12 Feb 2024 03:40:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V86Z2Lje"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kl72AWwe"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E336E3C0B;
-	Mon, 12 Feb 2024 03:05:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC7D2F5B;
+	Mon, 12 Feb 2024 03:40:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707707123; cv=none; b=XjhiaAUQvZk1ANhVAI5rFYJNItHGzl5VpXt+TADFkd9VxNc6aHBBV6EAqeM7+PHPpuR8yIMcatk/wSznmlovKOrcGoTlH6YqEUJYXlGO5fidspHgjrNHoAc9Uw5XJaqcK8uyy6iIrbMsznSRD1rPAcYQbLlL3gsTFF36bQtdOl8=
+	t=1707709229; cv=none; b=mD/l+hANrJmf0Qxyp/PWCcWe5kh1zPL027bYbGSClLRKWY7os+me+mqxdbTrLQtZy/JJjFNr3pA9rZEpAqIX1ZU4y8VMOLNhzL4twu3hychKovd8hxlwCIqwD5muSFlVnee7P2Ycd7sl4QGF89zhstY1kzD0R8OaXGwq9jzcPjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707707123; c=relaxed/simple;
-	bh=LJbwCQG5s8jn4AXP4+jfliDtKiD27kZfUu6R0S9TAOE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=HUqC0u9DIlPqiB8QNxQehFbX8OAT1gl2q9WrglElIDR5D3qK9dZZMHN7qqaWyjK8VRZ+y3B/CRrOismirp24aftznZCMqfsBEA/6Wl8KNNjAJ9Wyi2R1N71N6xMiYROck2grSEfSY2TdfLockVns9ZB05azXuCnDRTEu4zd5blQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V86Z2Lje; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707707121; x=1739243121;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LJbwCQG5s8jn4AXP4+jfliDtKiD27kZfUu6R0S9TAOE=;
-  b=V86Z2Lje0lnbpo5ybalhwbuJ4u3TIA+zv9BYOg9YqB0/BDw2BmHpw1JJ
-   SmOFQko+198dk+mcxk5qWFjzgbx9u3hoa7xlRV8UPgc/dlITYM5FLECmC
-   OJo9eXB+wPxedW6LCgxST77pVt/zzANYoSoNCFhDeK/8LHtk9JRst9aXw
-   aMBWaRYyvTNlmKzYWKji+rLzLRgKL2P1pTQKBiY82cTa5luhMAFd1f244
-   ocX9aZ4biSqSnpWMphUpLag3PnUiTidnhHkIwY8xYp3vePE3ZXj8EPLT9
-   2Az8A3EdZVyjlwBxypkScgebveut5D4ylDfhrcx6jyZ9Q86dHysaYmTWl
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10981"; a="1545421"
-X-IronPort-AV: E=Sophos;i="6.05,261,1701158400"; 
-   d="scan'208";a="1545421"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2024 19:05:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.05,261,1701158400"; 
-   d="scan'208";a="2867686"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 11 Feb 2024 19:05:19 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rZMdA-0006sk-1j;
-	Mon, 12 Feb 2024 03:05:16 +0000
-Date: Mon, 12 Feb 2024 11:04:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-	devel@acpica.org, linux-pm@vger.kernel.org,
-	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Subject: [rafael-pm:bleeding-edge 77/80]
- drivers/thermal/thermal_of.c:487:9-16: WARNING: ERR_CAST can be used with np
-Message-ID: <202402121043.uk6ySvwU-lkp@intel.com>
+	s=arc-20240116; t=1707709229; c=relaxed/simple;
+	bh=4tvg+kQRfVajNMUPBhzZ2Fso5DQSlRU9xLQVBU2OJUs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=jQvQrYt9CEH7+ACd59A2ZzwBB+50MvF5aC6NoPihbyQpwPK65lsA8A0wTzI/JQ9+K5jUlQk3KZZoQfjmi37r5wv6RvAhvINIGcdiq+S3/JEA1FcjGPwrfXa3Ytpauqf1hiSfwGAt8WiyrizUf681qcdms7SqGjno5OM+XMlEUCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kl72AWwe; arc=none smtp.client-ip=209.85.161.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-59a45d8ec91so980190eaf.3;
+        Sun, 11 Feb 2024 19:40:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1707709227; x=1708314027; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=m4X5VSvPzK7InvxxfBHcWCSFZJstUqSBqMhbodVXTKs=;
+        b=kl72AWwerg168XMCNKHUkq+p8StOdB3CyI3L+cuoYj9R3oeNoCbfSJQ+NF47SEP+mm
+         kRLCzxht9qdA37UM0rjMAdwvcTj0F2TPleq6kBIw0O5zc4Lr02zQIjOkTlS/Ad5WwQW6
+         pbfN/0msuz5FOx8WGOeFJLvHiz6lrl2X42QkcQmlN0J/3sqzuwP438FOPcuVoQaCy/W4
+         mbqt5F9pXZjGV5GlAb4LFkzNFqOHAW3oIjN93BP+uc/i1hUYfadbM8tLrFSjE0xh/IOc
+         RpwHxGLVmiKrlC8c/dYX7EpdPQLnVbycbB5R8uY9rywmt4bMWZ32uG8GXy1FSVEFHnoK
+         33gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707709227; x=1708314027;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m4X5VSvPzK7InvxxfBHcWCSFZJstUqSBqMhbodVXTKs=;
+        b=llJnpZ+y5erQy3P/60pNtGbw8Nr4WhxaNFGcd4fttxfj+CZPpES9hbOVYLDQnNwOH6
+         3hLoAtZB37vAbP4Vdp0eqyusoXinQ/0khA+dugnue9AbUWQHykeofMk8LY+2JaDzGCpe
+         Py2lHOkZtA+jtjuCZrmBJPUu8+okgDLTun0zqAicC85el1jZe487X1+soxBRUBVzGYTE
+         3nfqmp5YkQa60wwKuXTxhxN9ysFdKdX+Fu+npPq/W/7oATIocOU53p9RR/1oDnEw0Hty
+         jaySjR1BJlID1ZGHflf/RmV9/vEX9dr4MAENTuHotKbF4LskvwFF/lDgLTbmQi2/wSru
+         jAYw==
+X-Gm-Message-State: AOJu0YzePQqgjY8wGTqUB+d35Gj6w328KVK1DdaKxXgJMOxoouS1sdYv
+	fZ6GySFhO9RNntroT36t0mqSqWtQqX526zkjADVa+NSeZblkYa6A
+X-Google-Smtp-Source: AGHT+IFH+mhYBMi/Ks/lsR9PhdJZw8QS3ZAoOOA9o2XK80M9/ZhnOtym6yff9HXWrlIF6b1TD8SG2w==
+X-Received: by 2002:a05:6358:a09c:b0:176:a2d7:850 with SMTP id u28-20020a056358a09c00b00176a2d70850mr8272343rwn.16.1707709227057;
+        Sun, 11 Feb 2024 19:40:27 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUTkFG/ZtI2dPIQZookFRyFPljdUD7FsZFzOvesXJFeGCU1ncjtIcdFG8QEZSxoG5ndrkP5+jfQW14PIGNw9rCwc6OO9Z+fvSKAb8T+YZ9vzM04eHDhl8AOY8mlmWaECGE+o+FXoQnLJsPm8R7WneSiManWVpletrN3u4X1zILJIWiW+NIrO4IcUW67UbyZWA1A
+Received: from mari.. ([2804:431:cfd3:3f64:7da:1321:7c71:86bb])
+        by smtp.gmail.com with ESMTPSA id x186-20020a6263c3000000b006e0521c2156sm4795105pfb.173.2024.02.11.19.40.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 11 Feb 2024 19:40:26 -0800 (PST)
+From: MarileneGarcia <marilene.agarcia@gmail.com>
+To: ray.huang@amd.com,
+	corbet@lwn.net
+Cc: MarileneGarcia <marilene.agarcia@gmail.com>,
+	linux-pm@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v1] Documentation/admin-guide/pm/amd-pstate.rst: fix the warning: Title underline too short.
+Date: Mon, 12 Feb 2024 00:40:15 -0300
+Message-Id: <20240212034015.120697-1-marilene.agarcia@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   f48788def3dc3b44ce2aed41c78692873b23030d
-commit: cced01e7b1ef041514785f311601fa0897eb186e [77/80] thermal: core: Store zone ops in struct thermal_zone_device
-config: x86_64-randconfig-101-20240212 (https://download.01.org/0day-ci/archive/20240212/202402121043.uk6ySvwU-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+There was the following warning when the documentation was generated:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402121043.uk6ySvwU-lkp@intel.com/
+Documentation/admin-guide/pm/amd-pstate.rst:384: WARNING: Title underline too short.
 
-cocci warnings: (new ones prefixed by >>)
->> drivers/thermal/thermal_of.c:487:9-16: WARNING: ERR_CAST can be used with np
->> drivers/thermal/thermal_of.c:493:9-16: WARNING: ERR_CAST can be used with trips
+``amd-pstate`` Preferred Core Switch
+=================================
 
-vim +487 drivers/thermal/thermal_of.c
+Signed-off-by: MarileneGarcia <marilene.agarcia@gmail.com>
+---
+Change:
+Increasing title underline to solve the warning
+Thank you.
 
-   449	
-   450	/**
-   451	 * thermal_of_zone_register - Register a thermal zone with device node
-   452	 * sensor
-   453	 *
-   454	 * The thermal_of_zone_register() parses a device tree given a device
-   455	 * node sensor and identifier. It searches for the thermal zone
-   456	 * associated to the couple sensor/id and retrieves all the thermal
-   457	 * zone properties and registers new thermal zone with those
-   458	 * properties.
-   459	 *
-   460	 * @sensor: A device node pointer corresponding to the sensor in the device tree
-   461	 * @id: An integer as sensor identifier
-   462	 * @data: A private data to be stored in the thermal zone dedicated private area
-   463	 * @ops: A set of thermal sensor ops
-   464	 *
-   465	 * Return: a valid thermal zone structure pointer on success.
-   466	 * 	- EINVAL: if the device tree thermal description is malformed
-   467	 *	- ENOMEM: if one structure can not be allocated
-   468	 *	- Other negative errors are returned by the underlying called functions
-   469	 */
-   470	static struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor, int id, void *data,
-   471								    const struct thermal_zone_device_ops *ops)
-   472	{
-   473		struct thermal_zone_device_ops of_ops = *ops;
-   474		struct thermal_zone_device *tz;
-   475		struct thermal_trip *trips;
-   476		struct thermal_zone_params tzp = {};
-   477		struct device_node *np;
-   478		const char *action;
-   479		int delay, pdelay;
-   480		int ntrips;
-   481		int ret;
-   482	
-   483		np = of_thermal_zone_find(sensor, id);
-   484		if (IS_ERR(np)) {
-   485			if (PTR_ERR(np) != -ENODEV)
-   486				pr_err("Failed to find thermal zone for %pOFn id=%d\n", sensor, id);
- > 487			return ERR_PTR(PTR_ERR(np));
-   488		}
-   489	
-   490		trips = thermal_of_trips_init(np, &ntrips);
-   491		if (IS_ERR(trips)) {
-   492			pr_err("Failed to find trip points for %pOFn id=%d\n", sensor, id);
- > 493			return ERR_PTR(PTR_ERR(trips));
-   494		}
-   495	
-   496		ret = thermal_of_monitor_init(np, &delay, &pdelay);
-   497		if (ret) {
-   498			pr_err("Failed to initialize monitoring delays from %pOFn\n", np);
-   499			goto out_kfree_trips;
-   500		}
-   501	
-   502		thermal_of_parameters_init(np, &tzp);
-   503	
-   504		of_ops.bind = thermal_of_bind;
-   505		of_ops.unbind = thermal_of_unbind;
-   506	
-   507		ret = of_property_read_string(np, "critical-action", &action);
-   508		if (!ret)
-   509			if (!of_ops.critical && !strcasecmp(action, "reboot"))
-   510				of_ops.critical = thermal_zone_device_critical_reboot;
-   511	
-   512		tz = thermal_zone_device_register_with_trips(np->name, trips, ntrips,
-   513							     data, &of_ops, &tzp,
-   514							     pdelay, delay);
-   515		if (IS_ERR(tz)) {
-   516			ret = PTR_ERR(tz);
-   517			pr_err("Failed to register thermal zone %pOFn: %d\n", np, ret);
-   518			goto out_kfree_trips;
-   519		}
-   520	
-   521		ret = thermal_zone_device_enable(tz);
-   522		if (ret) {
-   523			pr_err("Failed to enabled thermal zone '%s', id=%d: %d\n",
-   524			       tz->type, tz->id, ret);
-   525			thermal_of_zone_unregister(tz);
-   526			return ERR_PTR(ret);
-   527		}
-   528	
-   529		return tz;
-   530	
-   531	out_kfree_trips:
-   532		kfree(trips);
-   533	
-   534		return ERR_PTR(ret);
-   535	}
-   536	
+ Documentation/admin-guide/pm/amd-pstate.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
+index 0a3aa6b8ffd5..322488a0b2c9 100644
+--- a/Documentation/admin-guide/pm/amd-pstate.rst
++++ b/Documentation/admin-guide/pm/amd-pstate.rst
+@@ -381,7 +381,7 @@ driver receives a message with the highest performance change, it will
+ update the core ranking and set the cpu's priority.
+ 
+ ``amd-pstate`` Preferred Core Switch
+-=================================
++====================================
+ Kernel Parameters
+ -----------------
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
 
