@@ -1,147 +1,113 @@
-Return-Path: <linux-pm+bounces-3769-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3770-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 314AB850D14
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 04:56:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 430B5850D18
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 05:06:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67C7A284685
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 03:56:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 63A861C2161D
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 04:06:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39FAB4432;
-	Mon, 12 Feb 2024 03:56:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0028D443E;
+	Mon, 12 Feb 2024 04:06:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xdd6t8gu"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="rZsmJ4al"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38EC346A4;
-	Mon, 12 Feb 2024 03:56:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52CBC538D;
+	Mon, 12 Feb 2024 04:06:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707710193; cv=none; b=UDxTRSOOriA3AM4fgzWQEytB5QyXebU38+sgZHt8DlcP7hvOVdvGAnQQhp2z9Sv40t//VBc8IoaiLTosKQVBdD5A2ANHSAqaa8aPpqt0W1HQ5kyHL1IqfZMV6FV9Yk8yjhvp9ol8ZcBboycDx2X3pD2Y4+dQjcXiSj5yTSYX2e0=
+	t=1707710771; cv=none; b=VZobya5cnPeZseXk2IzP33qNi2A7skhJPu4I+JxJxouHwheEUOcxYXeK2b1p7YpoTIXYgRXmfSNB0MCfnanICR0c+zJJSdiNmiE/aohgKz2huEJPEJvXJjWRhHKanWonGoyqp2kvKdzMByzztd8I0nzfnZPlUTttkn3TLxJZ8Ko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707710193; c=relaxed/simple;
-	bh=A4MxOKydhK2D4lZnGkKga+h+MkQ6vwlVIvb/uPDHRP0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=U48P/pNJz2QxuHBXLTB1rshTW8XbpF1YTncLcpPDioDAZfPUoSBZr1Zy7cVcCTD1GdAc3uPd/NjbiHAu1he5V6QaWA4GZQ6NdTUbEhpkl2BPhJ1jex+D2u9yTREJBYRurRftaHZynx05DIScnI/ClTk0oCkRr2xZFUQNINcVkYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Xdd6t8gu; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707710190; x=1739246190;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=A4MxOKydhK2D4lZnGkKga+h+MkQ6vwlVIvb/uPDHRP0=;
-  b=Xdd6t8guKnhOLlkq+SdpRMT7ZakBE78nI+k9cWCiXO3TJ4QQ2moFJ6ir
-   7TTH4LNRprPxdb40mWdk59Y+/JlhpBN082Z7XMu5eIxhTDwPbDRg8XpWA
-   n2fCJPjRu4nLm72xWCUFG1eP+YeKAwEl6uxKCz6qMfy1VTQlobRcfaAnr
-   db/oo/h+miwHjA6WQxmVp5bCqFtOadejlj10qlA1h0T0n0atpMTrJeLNv
-   n52PPB4JY5zh93XB7gRJRkFO6IsXZY5CSR/7MUVu8sk0oZJh7Wm2IFMSf
-   xcRPznMfJpLOQkE/zZ8GP7rHlAJb00xTtLlB2LF7b/WIgp4xbRNhHG8zY
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10981"; a="13046955"
-X-IronPort-AV: E=Sophos;i="6.05,262,1701158400"; 
-   d="scan'208";a="13046955"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2024 19:56:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10981"; a="934982006"
-X-IronPort-AV: E=Sophos;i="6.05,262,1701158400"; 
-   d="scan'208";a="934982006"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 11 Feb 2024 19:56:27 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rZNQf-0006ty-0L;
-	Mon, 12 Feb 2024 03:56:25 +0000
-Date: Mon, 12 Feb 2024 11:55:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lukasz Luba <lukasz.luba@arm.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-	devel@acpica.org, linux-pm@vger.kernel.org,
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>
-Subject: [rafael-pm:testing 44/61] kernel/power/energy_model.c:113:15:
- sparse: sparse: incorrect type in assignment (different address spaces)
-Message-ID: <202402121149.SmoySn7a-lkp@intel.com>
+	s=arc-20240116; t=1707710771; c=relaxed/simple;
+	bh=xBwF96nJOksgK86pKMMz3s/InLBpVQHlNd5e8eTlCaQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DUAC7GAd8BbcuLJprwLzXE1NwRfVh5X2h59qKb1aP/4RSwZ5df3UWufoNfUvJXNdP9oKOM2ZlXpnE6uTd4K44hy+0jxTeH5X1XfFW/h8nCyOCUcVKoNPL4mGH7WbXcJtQLXZlM0S+9qnQb5S/20mWkP/z2ZQkXNugMzUspoM2Fc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=rZsmJ4al; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=N3tkQyZWehu+nsbocXZlYk5thoNPJPA3J/ybSm8Lq1A=; b=rZsmJ4al9ChG8rNpyHqQUOkMee
+	48uLcbXU9mV+sQOejL2xUhRjKDBCFRxAyg4W23l0QBWVNoDh27tmlojG1DEeX8VGTGYyJ7qvBoAzw
+	+pTv23MPNTceru84P4QHMYB28OxvcuZeR3GGOYCiRuzZ+9uWLljnARKQhIblDp5fh8d5LOSqoTBaM
+	nUYHsNq5+/qdHr256wzPqXMX1BoWZ+tepkIPhCIbSEtUNuKCmzDRJEf0GiHCh7EnSEbJguJCSh/Rk
+	ikYWBBUR9S+7OmwovUtGifu9hcDnJrTH7HGPVhpHhTdq7Ik41xbevzEFwMjDB9A+WKr7qWoi1+kR5
+	+shC3b9Q==;
+Received: from [50.53.50.0] (helo=[192.168.254.15])
+	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rZNa1-00000004HWx-1UWn;
+	Mon, 12 Feb 2024 04:06:05 +0000
+Message-ID: <43a8357b-ba05-4cd7-87ba-236c5bb73fd6@infradead.org>
+Date: Sun, 11 Feb 2024 20:06:04 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] Documentation/admin-guide/pm/amd-pstate.rst: fix the
+ warning: Title underline too short.
+Content-Language: en-US
+To: MarileneGarcia <marilene.agarcia@gmail.com>, ray.huang@amd.com,
+ corbet@lwn.net
+Cc: linux-pm@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240212034015.120697-1-marilene.agarcia@gmail.com>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20240212034015.120697-1-marilene.agarcia@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git testing
-head:   c3c4923f2082353762e8f46dec6e3b0f165a1606
-commit: ca0fc871f16f4bef746b5ba814b67afb59119700 [44/61] PM: EM: Introduce runtime modifiable table
-config: x86_64-randconfig-122-20240211 (https://download.01.org/0day-ci/archive/20240212/202402121149.SmoySn7a-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240212/202402121149.SmoySn7a-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402121149.SmoySn7a-lkp@intel.com/
 
-sparse warnings: (new ones prefixed by >>)
->> kernel/power/energy_model.c:113:15: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct em_perf_table [noderef] __rcu *table @@     got struct em_perf_table * @@
-   kernel/power/energy_model.c:113:15: sparse:     expected struct em_perf_table [noderef] __rcu *table
-   kernel/power/energy_model.c:113:15: sparse:     got struct em_perf_table *
->> kernel/power/energy_model.c:114:15: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const *objp @@     got struct em_perf_table [noderef] __rcu *table @@
-   kernel/power/energy_model.c:114:15: sparse:     expected void const *objp
-   kernel/power/energy_model.c:114:15: sparse:     got struct em_perf_table [noderef] __rcu *table
->> kernel/power/energy_model.c:119:19: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct callback_head *head @@     got struct callback_head [noderef] __rcu * @@
-   kernel/power/energy_model.c:119:19: sparse:     expected struct callback_head *head
-   kernel/power/energy_model.c:119:19: sparse:     got struct callback_head [noderef] __rcu *
->> kernel/power/energy_model.c:130:15: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct em_perf_table [noderef] __rcu *table @@     got void * @@
-   kernel/power/energy_model.c:130:15: sparse:     expected struct em_perf_table [noderef] __rcu *table
-   kernel/power/energy_model.c:130:15: sparse:     got void *
-   kernel/power/energy_model.c:195:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got struct em_perf_state [noderef] __rcu * @@
-   kernel/power/energy_model.c:195:9: sparse:     expected void const *
-   kernel/power/energy_model.c:195:9: sparse:     got struct em_perf_state [noderef] __rcu *
-   kernel/power/energy_model.c:195:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got struct em_perf_state [noderef] __rcu * @@
-   kernel/power/energy_model.c:195:9: sparse:     expected void const *
-   kernel/power/energy_model.c:195:9: sparse:     got struct em_perf_state [noderef] __rcu *
-   kernel/power/energy_model.c:195:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *p @@     got struct em_perf_state [noderef] __rcu * @@
-   kernel/power/energy_model.c:195:9: sparse:     expected void *p
-   kernel/power/energy_model.c:195:9: sparse:     got struct em_perf_state [noderef] __rcu *
+On 2/11/24 19:40, MarileneGarcia wrote:
+> There was the following warning when the documentation was generated:
+> 
+> Documentation/admin-guide/pm/amd-pstate.rst:384: WARNING: Title underline too short.
+> 
+> ``amd-pstate`` Preferred Core Switch
+> =================================
+> 
+> Signed-off-by: MarileneGarcia <marilene.agarcia@gmail.com>
+> ---
+> Change:
+> Increasing title underline to solve the warning
+> Thank you.
+> 
+>  Documentation/admin-guide/pm/amd-pstate.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
+> index 0a3aa6b8ffd5..322488a0b2c9 100644
+> --- a/Documentation/admin-guide/pm/amd-pstate.rst
+> +++ b/Documentation/admin-guide/pm/amd-pstate.rst
+> @@ -381,7 +381,7 @@ driver receives a message with the highest performance change, it will
+>  update the core ranking and set the cpu's priority.
+>  
+>  ``amd-pstate`` Preferred Core Switch
+> -=================================
+> +====================================
+>  Kernel Parameters
+>  -----------------
+>  
 
-vim +113 kernel/power/energy_model.c
+Hi,
+This patch:
+https://lore.kernel.org/all/20240205060305.3594942-1-li.meng@amd.com/
 
-   108	
-   109	static void em_destroy_table_rcu(struct rcu_head *rp)
-   110	{
-   111		struct em_perf_table __rcu *table;
-   112	
- > 113		table = container_of(rp, struct em_perf_table, rcu);
- > 114		kfree(table);
-   115	}
-   116	
-   117	static void em_free_table(struct em_perf_table __rcu *table)
-   118	{
- > 119		call_rcu(&table->rcu, em_destroy_table_rcu);
-   120	}
-   121	
-   122	static struct em_perf_table __rcu *
-   123	em_allocate_table(struct em_perf_domain *pd)
-   124	{
-   125		struct em_perf_table __rcu *table;
-   126		int table_size;
-   127	
-   128		table_size = sizeof(struct em_perf_state) * pd->nr_perf_states;
-   129	
- > 130		table = kzalloc(sizeof(*table) + table_size, GFP_KERNEL);
-   131		return table;
-   132	}
-   133	
+has been applied to the docs git tree but apparently has not found its
+way to linux-next yet.
 
+Thanks.
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+#Randy
 
