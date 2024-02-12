@@ -1,141 +1,102 @@
-Return-Path: <linux-pm+bounces-3800-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3801-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71A1485189C
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 17:04:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 729178518AE
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 17:09:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 130BEB216A2
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 16:04:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DD91FB20D07
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 16:09:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C57E3D0A7;
-	Mon, 12 Feb 2024 16:04:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AC1F3D0AB;
+	Mon, 12 Feb 2024 16:09:48 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D7373CF49;
-	Mon, 12 Feb 2024 16:04:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 330343D0AD;
+	Mon, 12 Feb 2024 16:09:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707753852; cv=none; b=Zp+6QLpynLpCYO1ucv10emY3zXcrjjrzqHfZ6Ab1h7hFVhfW73vqQpRMEjfNcANg/UVM//NLW2DEZLTg8bkzxAI1x4gyM/t7EBN7cnDogA8pkKmBNXX8+sq4BP9UZlS29yezNWMcvYC61CpeJ2ZpNU2js6HMRJhiuq8y6Gsb8wE=
+	t=1707754188; cv=none; b=f47BFw/MLXaPCmG21yGiB3DGMVLwnpaa8o2rgn8KRWvi96CYRK3RgXhTZPjopsXWpzHOHbil0WVaSyAfXexK53YD/UyQPFZYScunxTNu4pWgxUtbPtuyGGzr+vW9Gt3DW9xECbTNAHma4ktUuEGsdvj6myHPn49Gs62c04Uhmp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707753852; c=relaxed/simple;
-	bh=PNP72Px6S3AEEfMX7LEV922c1w+0cE2o1GDnrSE2VMs=;
+	s=arc-20240116; t=1707754188; c=relaxed/simple;
+	bh=WSZs8xa+WI8054UfUvFjQl73JxvCck5P/K79KrcpSM0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Lw+8ITj1y9PInDa/FRndc1ruLVQmeHuHPqPAnxHjqWbmAQUg/+R9CGm+N2xdJC5B1IHFvc1FQOIjlRhgbt6J0deIBPQo7TPQIZrAeNpUVkRmT+u32FzyA0w1h9s+gg24W+ebcExcT3W9Pp7p4qwB58zi9BHkTQTkcXKHFKwg8UM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.53
+	 To:Cc:Content-Type; b=g2CoGYntxu/FT/MfHddMDSaDChZXAh9wb22XzJ0XmZC3w4g+AXm2S4xgXYgDLj3wiDieQUg4c5ljQ2yuwv1w4LAEk/oGA/PbFEQBLQ9h2esV/jGR9BVkaTVVs77CCAzxoXXbPbYxX9H8AGUHDk8e2t/Uu05sDmSDnjUi7GBPicE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6e2e48e8588so25443a34.1;
-        Mon, 12 Feb 2024 08:04:11 -0800 (PST)
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-59a24bf7cadso1131234eaf.0;
+        Mon, 12 Feb 2024 08:09:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707753850; x=1708358650;
+        d=1e100.net; s=20230601; t=1707754185; x=1708358985;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=F4581LG9FrG93qfAY82tZ3PZZpo3QUac35GBmxdsylQ=;
-        b=s1F2Bwa3w2eCR/+7z6NvkS2oM1+iapAFCZPh5Pdcg1zbP3yY63AFsA4zVdq6DZ/LT0
-         gs9SFFZmbvaB8f2/wFQpG8/W4em9qt92hV8XmFhWG3XXHRlqlPi2j4qH6eQatmqQZl5x
-         7WH60vvubKmft/O0dywwtnWJIF7wPvSvrlaREaSsCFsZqyLHh6tMLJW+VWm1imbleWCT
-         dVch6SkRdNEX/0SIsBUXTAfr+6PhU1OaiSyvZmV4l9JfxH4evjRteJbS7iIFuDa9wyVi
-         ZhK9rtymQpoTigyE5MZxPEUEIUjqj0JmRW+vsdI2WivXVTxn4SC2T2kx8XPngAxI0uVZ
-         uF8w==
-X-Gm-Message-State: AOJu0Ywz+Box5t7TZKuk+KkzANESFbudA/HJDl/Rgh/O1dUu3t4zgIxu
-	AUQBq0R6awtBzq1F/vQQDA2Eb6FQs7NfsKDMUWJpvDceKRXnhtrruIy3oQv8onjqP2/0/7KP6un
-	dUE8yznUtTOWKQxmGlT+uigZPZ+yzNWRv
-X-Google-Smtp-Source: AGHT+IEwFJdlGU3bgtguTa/hZodZRild+iV5zfGercFm93WqOfQuZFX0obHHFXe5Y1QQXqtFfSZZrkXwWFyQc0J8Bv8=
-X-Received: by 2002:a4a:ce94:0:b0:59a:bfb:f556 with SMTP id
- f20-20020a4ace94000000b0059a0bfbf556mr5719864oos.0.1707753850512; Mon, 12 Feb
- 2024 08:04:10 -0800 (PST)
+        bh=c5e0qLsgbAC04Ea+lUsuUQR8n5Q6fLgOHYw/TRDHBms=;
+        b=UdcRlQbDLVoG2q9YvV7/CTVliZR4GO7YSQ3OCPMoBWFnHyqqAz+BHyZEOb72JmA4qJ
+         4AYgRLwzMVaFrzndlfpYJtAP5wSt9VjGjxwjGtbxvnYZgujb7H+FpWFVowijTUyHi2FL
+         0kP/ov5OojXp1fEtbsg4aCOP7sq0e7vAVPl1c2Lsi1fvQNpciY/0uEQ5iAS0tipxTFo+
+         Kf94K623m6xqPya3PI1wlIeOyhvI2sOWQIElTju0k2TNRRTqYxnsei+wm7xClmuXouXK
+         t9UfJQ772zKkQ/+5faSLVdKPPFBHZIfzMerEub/0OHoZYvp7YvSmoxtda3R0JgW3rsg6
+         xQlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX2ruGcvPgRtfZKuaNysmeE/8MPhPa4RzXZz+Kwbx7bqhwXiur2HuTbTUeTCG1cODPsWrW0uMoVLm6KGYMRV7tq+n2NMF8/fhC+fZ10A+e4Pt06Jp3g7BiKD/jR/jlEFTNFwZh1Q88=
+X-Gm-Message-State: AOJu0Ywytprldsk4YtVqItSGAIkPH4SUvF1G0vOFKFFTGdNRBP2m1Eg5
+	bWVTPGO0zCV3OEcIn5pJKoYjYgQD7e5TTqhx8AImustcxysLgi9n9pRGs3PFDLs7my0M9qw5ZaV
+	jTqruHP58d2r+Cc1M9x1rgthYVrg=
+X-Google-Smtp-Source: AGHT+IFiKd1X5QT/b8mqARYA+9uqMmrsDSU9HFZBpkHGxmWDJQUSetX+LEKcJj8u2LCCtG8xB5vxv4lGuf7M2mVTgOo=
+X-Received: by 2002:a05:6820:1f8e:b0:59c:eb7b:c04e with SMTP id
+ eq14-20020a0568201f8e00b0059ceb7bc04emr5091034oob.1.1707754185267; Mon, 12
+ Feb 2024 08:09:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240111135950.17016-1-parshuram.sangle@intel.com> <ZbvmrdBkeOK71KGg@tpad>
-In-Reply-To: <ZbvmrdBkeOK71KGg@tpad>
+References: <20231219031444.91752-1-bo.ye@mediatek.com> <e23ebdd8-7fbe-435b-a850-0ef18a51b020@collabora.com>
+In-Reply-To: <e23ebdd8-7fbe-435b-a850-0ef18a51b020@collabora.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 12 Feb 2024 17:03:59 +0100
-Message-ID: <CAJZ5v0jyUSWuj0RZg9o2yASZjkxf+X3_J52jiUwQuzeCKN88_w@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: do not shrink guest poll_limit_ns below grow_start
-To: Marcelo Tosatti <mtosatti@redhat.com>, Parshuram Sangle <parshuram.sangle@intel.com>
-Cc: rafael@kernel.org, daniel.lezcano@linaro.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, jaishankar.rajendran@intel.com
+Date: Mon, 12 Feb 2024 17:09:34 +0100
+Message-ID: <CAJZ5v0h=OKnY85EF9Mg1irsSbnea+P9oAQAdQURqjn+6_5s2PQ@mail.gmail.com>
+Subject: Re: [PATCH v2] fix overflow in idle exit_latency
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Bo Ye <bo.ye@mediatek.com>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	yongdong.zhang@mediatek.com, C Cheng <C.Cheng@mediatek.com>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 1, 2024 at 8:56=E2=80=AFPM Marcelo Tosatti <mtosatti@redhat.com=
-> wrote:
+On Tue, Dec 19, 2023 at 11:56=E2=80=AFAM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
 >
-> On Thu, Jan 11, 2024 at 07:29:50PM +0530, Parshuram Sangle wrote:
-> > While adjusting guest halt poll limit, grow block starts at
-> > guest_halt_poll_grow_start without taking intermediate values.
-> > Similar behavior is expected while shrinking the value. This
-> > avoids short interval values which are really not required.
+> Il 19/12/23 04:14, Bo Ye ha scritto:
+> > From: C Cheng <C.Cheng@mediatek.com>
 > >
-> > VCPU1 trace (guest_halt_poll_shrink equals 2):
+> > In detail:
 > >
-> > VCPU1 grow 10000
-> > VCPU1 shrink 5000
-> > VCPU1 shrink 2500
-> > VCPU1 shrink 1250
-> > VCPU1 shrink 625
-> > VCPU1 shrink 312
-> > VCPU1 shrink 156
-> > VCPU1 shrink 78
-> > VCPU1 shrink 39
-> > VCPU1 shrink 19
-> > VCPU1 shrink 9
-> > VCPU1 shrink 4
+> > In C language, when you perform a multiplication operation, if
+> > both operands are of int type, the multiplication operation is
+> > performed on the int type, and then the result is converted to
+> > the target type. This means that if the product of int type
+> > multiplication exceeds the range that int type can represent,
+> >   an overflow will occur even if you store the result in a
+> > variable of int64_t type.
 > >
-> > Similar change is done in KVM halt poll flow with below patch:
-> > Link: https://lore.kernel.org/kvm/20211006133021.271905-3-sashal@kernel=
-.org/
+> > For a multiplication of two int values, it is better to use
+> > mul_u32_u32() rather than s->exit_latency_ns =3D s->exit_latency *
+> > NSEC_PER_USEC to avoid potential overflow happenning.
 > >
-> > Co-developed-by: Rajendran Jaishankar <jaishankar.rajendran@intel.com>
-> > Signed-off-by: Rajendran Jaishankar <jaishankar.rajendran@intel.com>
-> > Signed-off-by: Parshuram Sangle <parshuram.sangle@intel.com>
-> > ---
-> >  drivers/cpuidle/governors/haltpoll.c | 9 +++++++--
-> >  1 file changed, 7 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/cpuidle/governors/haltpoll.c b/drivers/cpuidle/gov=
-ernors/haltpoll.c
-> > index 1dff3a52917d..663b7f164d20 100644
-> > --- a/drivers/cpuidle/governors/haltpoll.c
-> > +++ b/drivers/cpuidle/governors/haltpoll.c
-> > @@ -98,10 +98,15 @@ static void adjust_poll_limit(struct cpuidle_device=
- *dev, u64 block_ns)
-> >               unsigned int shrink =3D guest_halt_poll_shrink;
-> >
-> >               val =3D dev->poll_limit_ns;
-> > -             if (shrink =3D=3D 0)
-> > +             if (shrink =3D=3D 0) {
-> >                       val =3D 0;
-> > -             else
-> > +             } else {
-> >                       val /=3D shrink;
-> > +                     /* Reset value to 0 if shrunk below grow_start */
-> > +                     if (val < guest_halt_poll_grow_start)
-> > +                             val =3D 0;
-> > +             }
-> > +
-> >               trace_guest_halt_poll_ns_shrink(val, dev->poll_limit_ns);
-> >               dev->poll_limit_ns =3D val;
-> >       }
-> > --
-> > 2.17.1
-> >
-> >
-> >
+> > Signed-off-by: C Cheng <C.Cheng@mediatek.com>
+> > Signed-off-by: Bo Ye <bo.ye@mediatek.com>
 >
-> Looks good.
->
-> Reviewed-by: Marcelo Tosatti <mtosatti@redhat.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
+ora.com>
 
-Applied as 6.9 (with a minor change in the subject), thanks!
+Applied as 6.9 material under a different subject (cpuidle: Avoid
+potential overflow in integer multiplication), thanks!
 
