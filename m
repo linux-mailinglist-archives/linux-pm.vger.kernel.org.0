@@ -1,263 +1,170 @@
-Return-Path: <linux-pm+bounces-3806-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3808-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 751568518CE
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 17:17:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD985851920
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 17:28:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CF6EFB21CE7
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 16:16:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E2BD81C21611
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 16:28:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F5383D0DB;
-	Mon, 12 Feb 2024 16:16:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF4463D3B4;
+	Mon, 12 Feb 2024 16:28:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L5BVhsnB"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="gkharXyj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 962D03D0B6;
-	Mon, 12 Feb 2024 16:16:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46BD63D0DD;
+	Mon, 12 Feb 2024 16:28:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707754607; cv=none; b=X06jOD8o0pktG1LETK9Z4n/pQEg9Qou4RilhETK2oG6KE+hA42XtlqZzX7iNQDv2WS0wXK3Ju0Lt3DDhDfszEI793/1T6Nx+tDB8Dkyb+MdOeAKa98+LT5qOM0m73ixOOz0kxZnjsDYQ/1PIHVFI504wGs+0JWhapOjtjPLcPd4=
+	t=1707755327; cv=none; b=S7r5ljifXVPow4nsFuD7vChH+4+vCa/dDTWhVXcahB5xzZt/Y33iCJENMB/l2h+GQMNjJSzy08JPLvGsllllS2lXCluYrutVh0b/n7D64JvFmlpkFEsW38l1f2aZeehoBJ3AOb886uFP3VZWaRKJNveUvfdXK1oMnAeOKmEeX9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707754607; c=relaxed/simple;
-	bh=7plR84WWRswcCrnNW4hL+hM3NAlvi40gEEuXirSUnpQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LzcLOJkQQzFfEveVX9gP1+yQ3PWpcFFbGLDd9qBp63DzTr0xAvFqv731W5oihhd0VBEkFPecBAsq9wa0UrnHBp8rloXey9/XuEn1CyszAkfkidbOL3DeFSd3TegmEkT1lJ9+IWJCpncwBWSkTHMLtHghxwfRCBtBxtdZI6BzZQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L5BVhsnB; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707754606; x=1739290606;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=7plR84WWRswcCrnNW4hL+hM3NAlvi40gEEuXirSUnpQ=;
-  b=L5BVhsnBTwOIWLkbp8En91KZK8fgl5rwZKRNQjBcifOs63BWDdM2yZSV
-   W8n+gDr6qMMJZj4uQG3QAMmtdArq1k/nYnOLa1D74IaMyja5qJavhVJs6
-   GWakUiZpMyj+i3EI8QonHATmpGMOnovB0dIZgXOyc6BJIrHfpmKl8ZXkX
-   5mfuChvm43VoGuuucepZXRTMRkchC9tyNyBvvrb/SMtVQuAzioUrvDwjh
-   y4yw+Ppa3DfjXaSRM/nHVli4ly0H4xrGhmoM1833IQ+wLmugvDPDSV/gb
-   Mfg/9MCa9hxiYWxbLNUbcvVYLY3BILDp8VrdZ+o4pqU+OqAFP7hjbbHwn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="1873202"
-X-IronPort-AV: E=Sophos;i="6.06,264,1705392000"; 
-   d="scan'208";a="1873202"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2024 08:16:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,264,1705392000"; 
-   d="scan'208";a="7258742"
-Received: from sgruszka-mobl.ger.corp.intel.com (HELO localhost) ([10.252.44.2])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2024 08:16:42 -0800
-From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-To: linux-pm@vger.kernel.org
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Florian Westphal <fw@strlen.de>,
-	netdev@vger.kernel.org
-Subject: [PATCH v4 3/3] thermal: intel: hfi: Enable interface only when required
-Date: Mon, 12 Feb 2024 17:16:15 +0100
-Message-Id: <20240212161615.161935-4-stanislaw.gruszka@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240212161615.161935-1-stanislaw.gruszka@linux.intel.com>
-References: <20240212161615.161935-1-stanislaw.gruszka@linux.intel.com>
+	s=arc-20240116; t=1707755327; c=relaxed/simple;
+	bh=I2MpepqswomHCVb5FtmVYpczlffOVMKkP0FDjf0skWM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=HHWjW8iXJOvTt5P6wou6b3aIBIRt8iqnn/HBQu40kRL6PCFhimnTCq0Lgv10MnvYYHxaX6SjewRKN3pDU4dZU9qrgmdOLglq8LFlFzSBXBzoY5NdkXNDPu0c4foF/iA9WOPAjEipq7LKda0jjs0OJ0e+qyz+Rpfmouo6sd5K7Uw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=gkharXyj; arc=none smtp.client-ip=198.47.23.248
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 41CGSXeS045183;
+	Mon, 12 Feb 2024 10:28:33 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1707755313;
+	bh=zXYO7lK1k6ZbLMjJ3atq6vexiEb/Ht/2UM7FiDOlEBw=;
+	h=From:To:CC:Subject:Date;
+	b=gkharXyjdkRePbJdX8y5/s7In1GP+q0Lak59nwSfxcScDtvZML9ASF2/tkje/wPRv
+	 Vo0rNqc2ec9rbBW2HLX35FNsXb7b22AJcBP0edi4pIwbTTR59Eu5jw0qya/4mXHlMk
+	 nVUIZ4GNiULWS7hItIoG5lC8qAX7uPeAIfcg4SX8=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 41CGSXwG008638
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 12 Feb 2024 10:28:33 -0600
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 12
+ Feb 2024 10:28:33 -0600
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 12 Feb 2024 10:28:33 -0600
+Received: from lelvsmtp5.itg.ti.com ([10.249.42.149])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 41CGSWQu090688;
+	Mon, 12 Feb 2024 10:28:32 -0600
+From: Andrew Davis <afd@ti.com>
+To: Sebastian Reichel <sre@kernel.org>,
+        Manivannan Sadhasivam
+	<manivannan.sadhasivam@linaro.org>,
+        Cristian Ciocaltea
+	<cristian.ciocaltea@gmail.com>,
+        Florian Fainelli
+	<florian.fainelli@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>, Scott Branden
+	<sbranden@broadcom.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad
+ Dybcio <konrad.dybcio@linaro.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-actions@lists.infradead.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>, Andrew Davis <afd@ti.com>
+Subject: [PATCH v4 00/19] Remove pm_power_off use in drivers/power/reset
+Date: Mon, 12 Feb 2024 10:28:12 -0600
+Message-ID: <20240212162831.67838-1-afd@ti.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
-Enable and disable hardware feedback interface (HFI) when user space
-handler is present. For example, enable HFI, when intel-speed-select or
-Intel Low Power daemon is running and subscribing to thermal netlink
-events. When user space handlers exit or remove subscription for
-thermal netlink events, disable HFI.
+Hello all,
 
-Summary of changes:
+Use of pm_power_off is considered legacy and should be replaced with
+register_sys_off*(). Same for register_restart_handler(). Do this
+for the drivers/power/reset subsystem for all trivial cases.
 
-- Register a thermal genetlink notifier
+Thanks,
+Andrew
 
-- In the notifier, process THERMAL_NOTIFY_BIND and THERMAL_NOTIFY_UNBIND
-reason codes to count number of thermal event group netlink multicast
-clients. If thermal netlink group has any listener enable HFI on all
-packages. If there are no listener disable HFI on all packages.
+Changes for v4:
+ - Fix sparse warning in [12/19] and [13/19]
+ - Move data allocate from [19/19] to [18/19]
+ - Add review tags in patches [7/19] and [11/19]
+ - Rebase on v6.8-rc4
 
-- When CPU is online, instead of blindly enabling HFI, check if
-the thermal netlink group has any listener. This will make sure that
-HFI is not enabled by default during boot time.
+Changes for v3:
+ - Use dev_err_probe() in patch [11/19]
+ - Add review tags in patches [18/19] and [19/19]
 
-- Actual processing to enable/disable matches what is done in
-suspend/resume callbacks. Create two functions hfi_do_enable()
-and hfi_do_disable(), which can be called from  the netlink notifier
-callback and suspend/resume callbacks.
+Changes for v2:
+ - Fix sparse warning in 7/19 and 10/19
+ - Add new patch fixing an already existing sparse warning (3/19)
+ - Rebase on v6.8-rc3
 
-Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
----
- drivers/thermal/intel/intel_hfi.c | 95 +++++++++++++++++++++++++++----
- 1 file changed, 85 insertions(+), 10 deletions(-)
+Andrew Davis (19):
+  power: reset: atc260x-poweroff: Use
+    devm_register_sys_off_handler(RESTART)
+  power: reset: atc260x-poweroff: Use
+    devm_register_sys_off_handler(POWER_OFF)
+  power: reset: xgene-reboot: Use devm_platform_ioremap_resource()
+    helper
+  power: reset: xgene-reboot: Use devm_register_sys_off_handler(RESTART)
+  power: reset: tps65086-restart: Use
+    devm_register_sys_off_handler(RESTART)
+  power: reset: tps65086-restart: Remove unneeded device data struct
+  power: reset: brcm-kona-reset: Use
+    devm_register_sys_off_handler(RESTART)
+  power: reset: axxia-reset: Use devm_register_sys_off_handler(RESTART)
+  power: reset: rmobile-reset: Use devm_platform_ioremap_resource()
+    helper
+  power: reset: rmobile-reset: Use
+    devm_register_sys_off_handler(RESTART)
+  power: reset: mt6323-poweroff: Use
+    devm_register_sys_off_handler(POWER_OFF)
+  power: reset: msm-poweroff: Use
+    devm_register_sys_off_handler(POWER_OFF)
+  power: reset: msm-poweroff: Use devm_register_sys_off_handler(RESTART)
+  power: reset: regulator-poweroff: Use
+    devm_register_sys_off_handler(POWER_OFF)
+  power: reset: as3722-poweroff: Use
+    devm_register_sys_off_handler(POWER_OFF)
+  power: reset: gemini-poweroff: Use
+    devm_register_sys_off_handler(POWER_OFF)
+  power: reset: restart-poweroff: Use
+    devm_register_sys_off_handler(POWER_OFF)
+  power: reset: syscon-poweroff: Move device data into a struct
+  power: reset: syscon-poweroff: Use
+    devm_register_sys_off_handler(POWER_OFF)
 
-diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-index 3b04c6ec4fca..5e1e2b5269b7 100644
---- a/drivers/thermal/intel/intel_hfi.c
-+++ b/drivers/thermal/intel/intel_hfi.c
-@@ -159,6 +159,7 @@ struct hfi_cpu_info {
- static DEFINE_PER_CPU(struct hfi_cpu_info, hfi_cpu_info) = { .index = -1 };
- 
- static int max_hfi_instances;
-+static int hfi_thermal_clients_num;
- static struct hfi_instance *hfi_instances;
- 
- static struct hfi_features hfi_features;
-@@ -477,8 +478,11 @@ void intel_hfi_online(unsigned int cpu)
- enable:
- 	cpumask_set_cpu(cpu, hfi_instance->cpus);
- 
--	/* Enable this HFI instance if this is its first online CPU. */
--	if (cpumask_weight(hfi_instance->cpus) == 1) {
-+	/*
-+	 * Enable this HFI instance if this is its first online CPU and
-+	 * there are user-space clients of thermal events.
-+	 */
-+	if (cpumask_weight(hfi_instance->cpus) == 1 && hfi_thermal_clients_num > 0) {
- 		hfi_set_hw_table(hfi_instance);
- 		hfi_enable();
- 	}
-@@ -573,28 +577,93 @@ static __init int hfi_parse_features(void)
- 	return 0;
- }
- 
--static void hfi_do_enable(void)
-+/*
-+ * HFI enable/disable run in non-concurrent manner on boot CPU in syscore
-+ * callbacks or under protection of hfi_instance_lock.
-+ */
-+static void hfi_do_enable(void *ptr)
-+{
-+	struct hfi_instance *hfi_instance = ptr;
-+
-+	hfi_set_hw_table(hfi_instance);
-+	hfi_enable();
-+}
-+
-+static void hfi_do_disable(void *ptr)
-+{
-+	hfi_disable();
-+}
-+
-+static void hfi_syscore_resume(void)
- {
- 	/* This code runs only on the boot CPU. */
- 	struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, 0);
- 	struct hfi_instance *hfi_instance = info->hfi_instance;
- 
--	/* No locking needed. There is no concurrency with CPU online. */
--	hfi_set_hw_table(hfi_instance);
--	hfi_enable();
-+	if (hfi_thermal_clients_num > 0)
-+		hfi_do_enable(hfi_instance);
- }
- 
--static int hfi_do_disable(void)
-+static int hfi_syscore_suspend(void)
- {
--	/* No locking needed. There is no concurrency with CPU offline. */
- 	hfi_disable();
- 
- 	return 0;
- }
- 
- static struct syscore_ops hfi_pm_ops = {
--	.resume = hfi_do_enable,
--	.suspend = hfi_do_disable,
-+	.resume = hfi_syscore_resume,
-+	.suspend = hfi_syscore_suspend,
-+};
-+
-+static int hfi_thermal_notify(struct notifier_block *nb, unsigned long state,
-+			      void *_notify)
-+{
-+	struct thermal_genl_notify *notify = _notify;
-+	struct hfi_instance *hfi_instance;
-+	smp_call_func_t func;
-+	unsigned int cpu;
-+	int i;
-+
-+	if (notify->mcgrp != THERMAL_GENL_EVENT_GROUP)
-+		return NOTIFY_DONE;
-+
-+	if (state != THERMAL_NOTIFY_BIND && state != THERMAL_NOTIFY_UNBIND)
-+		return NOTIFY_DONE;
-+
-+	mutex_lock(&hfi_instance_lock);
-+
-+	switch (state) {
-+	case THERMAL_NOTIFY_BIND:
-+		hfi_thermal_clients_num++;
-+		break;
-+
-+	case THERMAL_NOTIFY_UNBIND:
-+		hfi_thermal_clients_num--;
-+		break;
-+	}
-+
-+	if (hfi_thermal_clients_num > 0)
-+		func = hfi_do_enable;
-+	else
-+		func = hfi_do_disable;
-+
-+	for (i = 0; i < max_hfi_instances; i++) {
-+		hfi_instance = &hfi_instances[i];
-+		if (cpumask_empty(hfi_instance->cpus))
-+			continue;
-+
-+		cpu = cpumask_any(hfi_instance->cpus);
-+		smp_call_function_single(cpu, func, hfi_instance, true);
-+	}
-+
-+	mutex_unlock(&hfi_instance_lock);
-+
-+	return NOTIFY_OK;
-+}
-+
-+static struct notifier_block hfi_thermal_nb = {
-+	.notifier_call = hfi_thermal_notify,
- };
- 
- void __init intel_hfi_init(void)
-@@ -628,10 +697,16 @@ void __init intel_hfi_init(void)
- 	if (!hfi_updates_wq)
- 		goto err_nomem;
- 
-+	if (thermal_genl_register_notifier(&hfi_thermal_nb))
-+		goto err_nl_notif;
-+
- 	register_syscore_ops(&hfi_pm_ops);
- 
- 	return;
- 
-+err_nl_notif:
-+	destroy_workqueue(hfi_updates_wq);
-+
- err_nomem:
- 	for (j = 0; j < i; ++j) {
- 		hfi_instance = &hfi_instances[j];
+ drivers/power/reset/as3722-poweroff.c    | 30 ++++-------
+ drivers/power/reset/atc260x-poweroff.c   | 55 ++++++++------------
+ drivers/power/reset/axxia-reset.c        | 16 +++---
+ drivers/power/reset/brcm-kona-reset.c    | 11 ++--
+ drivers/power/reset/gemini-poweroff.c    | 16 +++---
+ drivers/power/reset/msm-poweroff.c       | 21 +++-----
+ drivers/power/reset/mt6323-poweroff.c    | 26 +++++-----
+ drivers/power/reset/regulator-poweroff.c | 36 +++++--------
+ drivers/power/reset/restart-poweroff.c   | 25 +++------
+ drivers/power/reset/rmobile-reset.c      | 35 ++++---------
+ drivers/power/reset/syscon-poweroff.c    | 66 ++++++++++++------------
+ drivers/power/reset/tps65086-restart.c   | 58 ++++-----------------
+ drivers/power/reset/xgene-reboot.c       | 21 +++-----
+ 13 files changed, 150 insertions(+), 266 deletions(-)
+
 -- 
-2.34.1
+2.39.2
 
 
