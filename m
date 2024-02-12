@@ -1,104 +1,109 @@
-Return-Path: <linux-pm+bounces-3775-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3776-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D10F850EAA
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 09:13:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3479F850F26
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 09:54:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6FDE31C215C0
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 08:13:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8E8028207E
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 08:54:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 882466FC9;
-	Mon, 12 Feb 2024 08:13:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0205F9E5;
+	Mon, 12 Feb 2024 08:53:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="acih2wtU"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="1178iJRL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3CD48C11;
-	Mon, 12 Feb 2024 08:13:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 664CBF9D1;
+	Mon, 12 Feb 2024 08:53:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707725593; cv=none; b=Rr6xB9aK1R95NrM/DFmgTR7QT5cPA9jWzEHLKBY8XXLgyLnlrWKyfRRpFVX/2Kr5ZyTcAk2617Myp/hzeBpdZ4JUv1nI2+1s9DU3VodWXCZ0o+unPjEvjGArQ10CSDwHLCk8L4s4orXuYOpUonP4/dyjLD3pkJNrpR6y4eHtBCw=
+	t=1707728039; cv=none; b=Ivj6wQ3v7n0CV/XMMdD9Lc0TeKEtvLFbwcJTs4JcVA1bgd7vn04cbjI2YKIkIBrv669rUPEFxuhcF+XLdbKdLEpe6E1OkWhKLOx+XFaoG6f3xJV6DSgEKE1Fm7TaUjrgBx57eUrYMoVMQ3g/zyD5S4Wd+kmTkdfd52sfxf8CbXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707725593; c=relaxed/simple;
-	bh=XMY8hQUo8ccDb9Sq56m5DaIdv4tVDtGMJ0OG5L9YX9E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pJg9Wl47nNVwwZeAMxzU7K4VqX8uTq6UHWKv3PfnJO1qPa6w+0r1mx8VWoX8Y6pgFf3bXCZpvw1HaIvg5QKzPP31CbG3WemXHukLpCz7vX7jk2dNL2YthTW60pZhOaOFETWA9MGVSF1htI2witUPMmkObFg5K+jEYfwrUZwUkps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=acih2wtU; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707725592; x=1739261592;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XMY8hQUo8ccDb9Sq56m5DaIdv4tVDtGMJ0OG5L9YX9E=;
-  b=acih2wtU9UUlj1Bmr7M853FSCdUcA7hkvWMdZQSO/ctFF2Oiahp65UuM
-   MQxbqbI0MdaKx+TmOEwxkIRqlUUSt0z53yV7hlV9r3BaxY1OC6OpzmPi7
-   3wehA0fC4GCioGLTL9PhCWUdm5RnRtIkuZxY8brf0UaUM/HzzKxpTMZQN
-   +2Xh04JO6f5u0WS9wWW08jAZ9aYeMBb23XnT1JkRbK9ziAFw1zRG/Wc3a
-   o0z9Tw63mWGHjotbjKtgszHCi3P0VQ+ylQ0TajLpI9LloY2Ev4X2EaDJt
-   Pxacfon3judwmAlRck2fcPHeM5W+2PPXuZnv3oLQF4RDPDy8gtD1tzYWx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10981"; a="1843897"
-X-IronPort-AV: E=Sophos;i="6.05,262,1701158400"; 
-   d="scan'208";a="1843897"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2024 00:13:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10981"; a="825748126"
-X-IronPort-AV: E=Sophos;i="6.05,262,1701158400"; 
-   d="scan'208";a="825748126"
-Received: from sgruszka-mobl.ger.corp.intel.com (HELO localhost) ([10.252.62.245])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2024 00:13:08 -0800
-Date: Mon, 12 Feb 2024 09:13:06 +0100
-From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-To: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc: Bjorn Helgaas <helgaas@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>, linux-pci@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-	Oliver O'Halloran <oohall@gmail.com>
-Subject: Re: [PATCH] PCI/AER: Block runtime suspend when handling errors
-Message-ID: <ZcnSgGBjpH3w9ZJa@linux.intel.com>
-References: <20240209140841.1854711-1-stanislaw.gruszka@linux.intel.com>
- <64ad8d52-ba67-4156-8e36-7346605bdf48@linux.intel.com>
+	s=arc-20240116; t=1707728039; c=relaxed/simple;
+	bh=7piWbCGcMV8jXNFfjDe8eSN9IgwzXBxHsFlz7ti4esk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FKTWfH0NRtb4SUUtz17P3gObCVuJ/lVMik/bOLqNu/ofu7z5lhyYb8XbpadEQ1n521Zqxs5iFkp3CcibdhH1Sw4O6KQdJsu+41qKzlXBY67+3mft4E8PVEdkwaPkvIR3RPsl/8k4cKCKs2X5uEmjk7OQaOpEu4ubxXzdOvr8N1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=1178iJRL; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1707728036;
+	bh=7piWbCGcMV8jXNFfjDe8eSN9IgwzXBxHsFlz7ti4esk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=1178iJRLXbbYR8AYKbv5sFIihYAc/ahj51fIrhXgT3ft6izjDupE9LvnKlJxm4Bfp
+	 0VbEIFSQRHHqNZalSc7Vb5i+ezl17azKyJGxU3umGhSgPCi2ELmcmjxUUy+nW91CJ1
+	 H346mHIjZrGLmQRur2D3DuotorEFq31G43LCRFlwQ5mCjlted4dJrqMv8yfNDRu9/Z
+	 7036VddkvHloZF6ysL8jnJklrsPLJUbl8k2gmzpj6nXd8BQHDVVrLX2Q6FsJRdwxsi
+	 7yjn/kmQdhpbIDymTnafGQ25UGYQsoJPoZ1r8oyaP67oHkiAm7HTVGLQBmPr1NevEG
+	 IawYeZ/SLVXJA==
+Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 66A5D378203F;
+	Mon, 12 Feb 2024 08:53:55 +0000 (UTC)
+Message-ID: <cd1350d0-6333-4519-a811-8413080ac92d@collabora.com>
+Date: Mon, 12 Feb 2024 09:53:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <64ad8d52-ba67-4156-8e36-7346605bdf48@linux.intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V2] dt-bindings: thermal: mediatek,thermal: document
+ AUXADC 32k clock
+Content-Language: en-US
+To: =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+ "Rafael J . Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Rob Herring
+ <robh+dt@kernel.org>, Krzysztof Kozlowski
+ <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ Sascha Hauer <s.hauer@pengutronix.de>, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?=
+ <rafal@milecki.pl>, Daniel Golle <daniel@makrotopia.org>,
+ Sam Shih <sam.shih@mediatek.com>
+References: <20240209055203.17144-1-zajec5@gmail.com>
+ <17d143aa-576e-4d67-a0ea-b79f3518b81c@collabora.com>
+ <ddec28a5-8d65-4e52-bb3c-9587acf7bca1@gmail.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <ddec28a5-8d65-4e52-bb3c-9587acf7bca1@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Feb 09, 2024 at 07:45:05AM -0800, Kuppuswamy Sathyanarayanan wrote:
+Il 12/02/24 07:11, Rafał Miłecki ha scritto:
+> On 9.02.2024 10:13, AngeloGioacchino Del Regno wrote:
+>> Il 09/02/24 06:52, Rafał Miłecki ha scritto:
+>>> From: Rafał Miłecki <rafal@milecki.pl>
+>>>
+>>> SoCs MT7981 and MT7986 include a newer thermal block (V3) that requires
+>>> enabling one more clock called AUXADC 32k. Require it in binding.
+>>>
+>>> Cc: Daniel Golle <daniel@makrotopia.org>
+>>> Cc: Sam Shih <sam.shih@mediatek.com>
+>>> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+>>
+>> So, I've made some research on this matter.. and this is a NACK.
 > 
-> On 2/9/24 6:08 AM, Stanislaw Gruszka wrote:
-> > PM runtime can be done simultaneously with AER error handling.
-> > Avoid that by using pm_runtime_get_sync() before and pm_runtime_put()
-> > after reset in pcie_do_recovery() for all recovering devices.
-> >
-> > pm_runtime_get_sync() will increase dev->power.usage_count counter
-> > to prevent any possible future request to runtime suspend a device,
-> > as well as resume device is was in D3hot state.
-> runtime suspend a device or resume a device that was in D3hot state.
+> Well, I can only thank you for the research.
+> 
+> Let's drop this patch. I'll sort out the rest later.
 
-I think "or" is not proper here, since both: resume and prevention
-of suspend are done. I'll reword this way:
+Thank you for bringing that up - this was necessary to clarify this and
+to actually make both of us aware of the mistake in the device trees that
+we have for those SoCs.
 
-pm_runtime_get_sync() will increase dev->power.usage_count counter
-to prevent any possible future request to runtime suspend a device
-It will also resume a device, if it was previously in D3hot state. 
+Take your time, btw, you're doing a great job.
 
-Hope that's clearer.
-
-Thanks
-Stanislaw
-
+Cheers,
+Angelo
 
