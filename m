@@ -1,429 +1,146 @@
-Return-Path: <linux-pm+bounces-3833-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3840-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEF39851D0A
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 19:43:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEBC6851D8B
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 20:04:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A70192829BB
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 18:43:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E19F288922
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 19:04:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9806C45BE7;
-	Mon, 12 Feb 2024 18:42:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B80C4595D;
+	Mon, 12 Feb 2024 19:04:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="y3aN71zO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B7173EA69;
-	Mon, 12 Feb 2024 18:42:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E42345BEF;
+	Mon, 12 Feb 2024 19:04:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707763354; cv=none; b=XAgT33bDxt2F+G2pUDaFpNlV9RYjuGRsGOn4W50DE3z1Hsvj7gqF2Qq5n8v+QrB6zB4vWRys6MMsBMaCn80nbOcfB9zmAAZaMj5ifyxcOr67EMZnNCc1Paf7Azky2fqeHzti5e1Db/tQ2ReWyqN+dWt12Ykdjv/pJFNcVndhAJU=
+	t=1707764675; cv=none; b=pjjKeRT+IV/oogQq9WlF09xQmS7aNx/Riun856CNALVXYScdcfZsFzyNWF1Ee0mt/2FJlWyRwEe0zagmWLPSpwm8vJZYiicEqMs8rUk0TV21qIl/BifrO4glql7rQL4+QOJ6ujB4wgAHO/lKBl6ObQdtsY73U84YGdK/e3W9Mpo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707763354; c=relaxed/simple;
-	bh=LBXPV0kk/xKvcPAc8EQBc6kk4J5lns1cln/E+8e/rD4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Gy29tfV9PbMDsHNMnO9B/v3NoseV2DnDMJezVXftS0NpyaNRItD/UVH1wIdlECBxhgudbIwIdU0IwlRwzl1zSCrG2VgViGEjug8IM0Z1dxdIgfcD9siHmF9TZqH9GdZhrsKkbfjxHEG2zR7bzrVn1pYL6TENf7BQtsDJ/An5pNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id 7615cb272cbf5413; Mon, 12 Feb 2024 19:42:28 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id D22CA669CF2;
-	Mon, 12 Feb 2024 19:42:27 +0100 (CET)
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: Lukasz Luba <lukasz.luba@arm.com>, LKML <linux-kernel@vger.kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Zhang Rui <rui.zhang@intel.com>, netdev@vger.kernel.org,
- Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>,
- Miri Korenblit <miriam.rachel.korenblit@intel.com>,
- linux-wireless@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-Subject: [PATCH v2 9/9] thermal: core: Eliminate writable trip points masks
-Date: Mon, 12 Feb 2024 19:42:14 +0100
-Message-ID: <5913164.MhkbZ0Pkbq@kreacher>
-In-Reply-To: <6017196.lOV4Wx5bFT@kreacher>
-References: <6017196.lOV4Wx5bFT@kreacher>
+	s=arc-20240116; t=1707764675; c=relaxed/simple;
+	bh=vI89LdebZecrlsHELjk1qJUqW5p9P9BrNUGhawfpPSU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YFtTIOGnWMTDdxYaiHR4eXfwWVNbWd5+7i0aQva8M7R/wp8a3cb3YRpZJPTM9efghlv5b8P99QaJ1lXGjgBq++GpDWddwHbjaXFKJi23gTykLvxtPw4qIBIJzltUUFkb38HwSo+aX+XexjWVVkN7aIVMl1atAEmkkLlnv2klUDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=y3aN71zO; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=x5eMkKunWvdfI72+MG0lH8Jec7gbENd3muJV5uM1De0=; b=y3aN71zOtbdIcZhOcHgfVyfHuh
+	kxAQlkrQKV5+2NliW8lMtGXMiwFAOMe9gjKTihd0XwqbGg0RMtfjH5qkM18zyJG7YdsNILmuQcLgU
+	97HVkD0WhM8UocuhGgTMOZ9QIEMfzGcugF962N4X12BhkZUR3U74tVlTac4eL3Qke2ynOT7Z+Cr70
+	uCJmv5wrTrKoNEWi7jKIURrfDQuO9llohhldBCaN/1+RjDcF3y3CIV4u95AgG/xvt9EUTeF/LGPYv
+	9MS4v4m8XdfvUnhI4FYdEWdhuWE8KMH3W2j8/mrLd+Enlnra5r79bDyHD9EQIVcoQY2LhDNCjDVhs
+	RZg/oH3A==;
+Received: from [50.53.50.0] (helo=[192.168.254.15])
+	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1rZbbO-00000006iYa-1OtD;
+	Mon, 12 Feb 2024 19:04:26 +0000
+Message-ID: <1d12e130-d3db-4eb5-a1d0-bc994c97a175@infradead.org>
+Date: Mon, 12 Feb 2024 11:04:24 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudefgdduudegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepudeipdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtohepshht
- rghnihhslhgrfidrghhruhhsiihkrgeslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=16 Fuz1=16 Fuz2=16
-
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-All of the thermal_zone_device_register_with_trips() callers pass zero
-writable trip points masks to it, so drop the mask argument from that
-function and update all of its callers accordingly.
-
-This also removes the artificial trip points per zone limit of 32,
-related to using writable trip points masks.
-
-No intentional functional impact.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-v1 -> v2: Rename trip flag (Stanislaw).
-
----
- drivers/acpi/thermal.c                                               |    2 
- drivers/net/ethernet/chelsio/cxgb4/cxgb4_thermal.c                   |    2 
- drivers/net/ethernet/mellanox/mlxsw/core_thermal.c                   |    3 -
- drivers/net/wireless/intel/iwlwifi/mvm/tt.c                          |    1 
- drivers/platform/x86/acerhdf.c                                       |    2 
- drivers/thermal/da9062-thermal.c                                     |    2 
- drivers/thermal/imx_thermal.c                                        |    2 
- drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c         |    2 
- drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c |    2 
- drivers/thermal/intel/intel_pch_thermal.c                            |    2 
- drivers/thermal/intel/intel_quark_dts_thermal.c                      |    2 
- drivers/thermal/intel/intel_soc_dts_iosf.c                           |    2 
- drivers/thermal/intel/x86_pkg_temp_thermal.c                         |    2 
- drivers/thermal/rcar_thermal.c                                       |    2 
- drivers/thermal/st/st_thermal.c                                      |    2 
- drivers/thermal/thermal_core.c                                       |   30 +---------
- drivers/thermal/thermal_of.c                                         |    2 
- include/linux/thermal.h                                              |    6 --
- 18 files changed, 19 insertions(+), 49 deletions(-)
-
-Index: linux-pm/include/linux/thermal.h
-===================================================================
---- linux-pm.orig/include/linux/thermal.h
-+++ linux-pm/include/linux/thermal.h
-@@ -323,8 +323,7 @@ int thermal_zone_get_crit_temp(struct th
- struct thermal_zone_device *thermal_zone_device_register_with_trips(
- 					const char *type,
- 					struct thermal_trip *trips,
--					int num_trips, int mask,
--					void *devdata,
-+					int num_trips, void *devdata,
- 					struct thermal_zone_device_ops *ops,
- 					const struct thermal_zone_params *tzp,
- 					int passive_delay, int polling_delay);
-@@ -383,8 +382,7 @@ void thermal_zone_device_critical(struct
- static inline struct thermal_zone_device *thermal_zone_device_register_with_trips(
- 					const char *type,
- 					struct thermal_trip *trips,
--					int num_trips, int mask,
--					void *devdata,
-+					int num_trips, void *devdata,
- 					struct thermal_zone_device_ops *ops,
- 					const struct thermal_zone_params *tzp,
- 					int passive_delay, int polling_delay)
-Index: linux-pm/drivers/thermal/thermal_core.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_core.c
-+++ linux-pm/drivers/thermal/thermal_core.c
-@@ -1251,7 +1251,6 @@ EXPORT_SYMBOL_GPL(thermal_zone_get_crit_
-  * @type:	the thermal zone device type
-  * @trips:	a pointer to an array of thermal trips
-  * @num_trips:	the number of trip points the thermal zone support
-- * @mask:	a bit string indicating the writeablility of trip points
-  * @devdata:	private device data
-  * @ops:	standard thermal zone device callbacks
-  * @tzp:	thermal zone platform parameters
-@@ -1272,7 +1271,7 @@ EXPORT_SYMBOL_GPL(thermal_zone_get_crit_
-  * IS_ERR*() helpers.
-  */
- struct thermal_zone_device *
--thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *trips, int num_trips, int mask,
-+thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *trips, int num_trips,
- 					void *devdata, struct thermal_zone_device_ops *ops,
- 					const struct thermal_zone_params *tzp, int passive_delay,
- 					int polling_delay)
-@@ -1293,20 +1292,7 @@ thermal_zone_device_register_with_trips(
- 		return ERR_PTR(-EINVAL);
- 	}
- 
--	/*
--	 * Max trip count can't exceed 31 as the "mask >> num_trips" condition.
--	 * For example, shifting by 32 will result in compiler warning:
--	 * warning: right shift count >= width of type [-Wshift-count- overflow]
--	 *
--	 * Also "mask >> num_trips" will always be true with 32 bit shift.
--	 * E.g. mask = 0x80000000 for trip id 31 to be RW. Then
--	 * mask >> 32 = 0x80000000
--	 * This will result in failure for the below condition.
--	 *
--	 * Check will be true when the bit 31 of the mask is set.
--	 * 32 bit shift will cause overflow of 4 byte integer.
--	 */
--	if (num_trips > (BITS_PER_TYPE(int) - 1) || num_trips < 0 || mask >> num_trips) {
-+	if (num_trips < 0) {
- 		pr_err("Incorrect number of thermal trips\n");
- 		return ERR_PTR(-EINVAL);
- 	}
-@@ -1356,16 +1342,6 @@ thermal_zone_device_register_with_trips(
- 	tz->devdata = devdata;
- 	tz->trips = trips;
- 	tz->num_trips = num_trips;
--	if (num_trips > 0) {
--		struct thermal_trip *trip;
--
--		for_each_trip(tz, trip) {
--			if (mask & 1)
--				trip->flags |= THERMAL_TRIP_FLAG_RW_TEMP;
--
--			mask >>= 1;
--		}
--	}
- 
- 	thermal_set_delay_jiffies(&tz->passive_delay_jiffies, passive_delay);
- 	thermal_set_delay_jiffies(&tz->polling_delay_jiffies, polling_delay);
-@@ -1450,7 +1426,7 @@ struct thermal_zone_device *thermal_trip
- 					struct thermal_zone_device_ops *ops,
- 					const struct thermal_zone_params *tzp)
- {
--	return thermal_zone_device_register_with_trips(type, NULL, 0, 0, devdata,
-+	return thermal_zone_device_register_with_trips(type, NULL, 0, devdata,
- 						       ops, tzp, 0, 0);
- }
- EXPORT_SYMBOL_GPL(thermal_tripless_zone_device_register);
-Index: linux-pm/drivers/acpi/thermal.c
-===================================================================
---- linux-pm.orig/drivers/acpi/thermal.c
-+++ linux-pm/drivers/acpi/thermal.c
-@@ -670,7 +670,7 @@ static int acpi_thermal_register_thermal
- 	tz->thermal_zone = thermal_zone_device_register_with_trips("acpitz",
- 								   tz->trip_table,
- 								   trip_count,
--								   0, tz,
-+								   tz,
- 								   &acpi_thermal_zone_ops,
- 								   NULL,
- 								   passive_delay,
-Index: linux-pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-+++ linux-pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-@@ -184,7 +184,7 @@ struct int34x_thermal_zone *int340x_ther
- 	int34x_zone->zone = thermal_zone_device_register_with_trips(
- 							acpi_device_bid(adev),
- 							zone_trips, trip_cnt,
--							0, int34x_zone,
-+							int34x_zone,
- 							int34x_zone->ops,
- 							&int340x_thermal_params,
- 							0, 0);
-Index: linux-pm/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-+++ linux-pm/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-@@ -291,7 +291,7 @@ static int proc_thermal_pci_probe(struct
- 	psv_trip.temperature = get_trip_temp(pci_info);
- 
- 	pci_info->tzone = thermal_zone_device_register_with_trips("TCPU_PCI", &psv_trip,
--							1, 0, pci_info,
-+							1, pci_info,
- 							&tzone_ops,
- 							&tzone_params, 0, 0);
- 	if (IS_ERR(pci_info->tzone)) {
-Index: linux-pm/drivers/thermal/intel/intel_pch_thermal.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/intel_pch_thermal.c
-+++ linux-pm/drivers/thermal/intel/intel_pch_thermal.c
-@@ -235,7 +235,7 @@ read_trips:
- 
- 	ptd->tzd = thermal_zone_device_register_with_trips(board_names[board_id],
- 							   ptd->trips, nr_trips,
--							   0, ptd, &tzd_ops,
-+							   ptd, &tzd_ops,
- 							   NULL, 0, 0);
- 	if (IS_ERR(ptd->tzd)) {
- 		dev_err(&pdev->dev, "Failed to register thermal zone %s\n",
-Index: linux-pm/drivers/thermal/intel/intel_quark_dts_thermal.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/intel_quark_dts_thermal.c
-+++ linux-pm/drivers/thermal/intel/intel_quark_dts_thermal.c
-@@ -365,7 +365,7 @@ static struct soc_sensor_entry *alloc_so
- 	aux_entry->tzone = thermal_zone_device_register_with_trips("quark_dts",
- 								   trips,
- 								   QRK_MAX_DTS_TRIPS,
--								   0, aux_entry,
-+								   aux_entry,
- 								   &tzone_ops,
- 								   NULL, 0, polling_delay);
- 	if (IS_ERR(aux_entry->tzone)) {
-Index: linux-pm/drivers/thermal/intel/intel_soc_dts_iosf.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/intel_soc_dts_iosf.c
-+++ linux-pm/drivers/thermal/intel/intel_soc_dts_iosf.c
-@@ -229,7 +229,7 @@ static int add_dts_thermal_zone(int id,
- 	snprintf(name, sizeof(name), "soc_dts%d", id);
- 	dts->tzone = thermal_zone_device_register_with_trips(name, dts->trips,
- 							     SOC_MAX_DTS_TRIPS,
--							     0, dts, &tzone_ops,
-+							     dts, &tzone_ops,
- 							     NULL, 0, 0);
- 	if (IS_ERR(dts->tzone)) {
- 		ret = PTR_ERR(dts->tzone);
-Index: linux-pm/drivers/thermal/intel/x86_pkg_temp_thermal.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/x86_pkg_temp_thermal.c
-+++ linux-pm/drivers/thermal/intel/x86_pkg_temp_thermal.c
-@@ -346,7 +346,7 @@ static int pkg_temp_thermal_device_add(u
- 	INIT_DELAYED_WORK(&zonedev->work, pkg_temp_thermal_threshold_work_fn);
- 	zonedev->cpu = cpu;
- 	zonedev->tzone = thermal_zone_device_register_with_trips("x86_pkg_temp",
--			zonedev->trips, thres_count, 0,
-+			zonedev->trips, thres_count,
- 			zonedev, &tzone_ops, &pkg_temp_tz_params, 0, 0);
- 	if (IS_ERR(zonedev->tzone)) {
- 		err = PTR_ERR(zonedev->tzone);
-Index: linux-pm/drivers/thermal/thermal_of.c
-===================================================================
---- linux-pm.orig/drivers/thermal/thermal_of.c
-+++ linux-pm/drivers/thermal/thermal_of.c
-@@ -518,7 +518,7 @@ static struct thermal_zone_device *therm
- 			of_ops->critical = thermal_zone_device_critical_reboot;
- 
- 	tz = thermal_zone_device_register_with_trips(np->name, trips, ntrips,
--						     0, data, of_ops, &tzp,
-+						     data, of_ops, &tzp,
- 						     pdelay, delay);
- 	if (IS_ERR(tz)) {
- 		ret = PTR_ERR(tz);
-Index: linux-pm/drivers/net/ethernet/chelsio/cxgb4/cxgb4_thermal.c
-===================================================================
---- linux-pm.orig/drivers/net/ethernet/chelsio/cxgb4/cxgb4_thermal.c
-+++ linux-pm/drivers/net/ethernet/chelsio/cxgb4/cxgb4_thermal.c
-@@ -60,7 +60,7 @@ int cxgb4_thermal_init(struct adapter *a
- 
- 	snprintf(ch_tz_name, sizeof(ch_tz_name), "cxgb4_%s", adap->name);
- 	ch_thermal->tzdev = thermal_zone_device_register_with_trips(ch_tz_name, &trip, num_trip,
--								    0, adap,
-+								    adap,
- 								    &cxgb4_thermal_ops,
- 								    NULL, 0, 0);
- 	if (IS_ERR(ch_thermal->tzdev)) {
-Index: linux-pm/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
-===================================================================
---- linux-pm.orig/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
-+++ linux-pm/drivers/net/ethernet/mellanox/mlxsw/core_thermal.c
-@@ -423,7 +423,6 @@ mlxsw_thermal_module_tz_init(struct mlxs
- 	module_tz->tzdev = thermal_zone_device_register_with_trips(tz_name,
- 							module_tz->trips,
- 							MLXSW_THERMAL_NUM_TRIPS,
--							0,
- 							module_tz,
- 							&mlxsw_thermal_module_ops,
- 							&mlxsw_thermal_params,
-@@ -551,7 +550,6 @@ mlxsw_thermal_gearbox_tz_init(struct mlx
- 	gearbox_tz->tzdev = thermal_zone_device_register_with_trips(tz_name,
- 						gearbox_tz->trips,
- 						MLXSW_THERMAL_NUM_TRIPS,
--						0,
- 						gearbox_tz,
- 						&mlxsw_thermal_gearbox_ops,
- 						&mlxsw_thermal_params, 0,
-@@ -776,7 +774,6 @@ int mlxsw_thermal_init(struct mlxsw_core
- 	thermal->tzdev = thermal_zone_device_register_with_trips("mlxsw",
- 						      thermal->trips,
- 						      MLXSW_THERMAL_NUM_TRIPS,
--						      0,
- 						      thermal,
- 						      &mlxsw_thermal_ops,
- 						      &mlxsw_thermal_params, 0,
-Index: linux-pm/drivers/platform/x86/acerhdf.c
-===================================================================
---- linux-pm.orig/drivers/platform/x86/acerhdf.c
-+++ linux-pm/drivers/platform/x86/acerhdf.c
-@@ -678,7 +678,7 @@ static int __init acerhdf_register_therm
- 		return -EINVAL;
- 
- 	thz_dev = thermal_zone_device_register_with_trips("acerhdf", trips, ARRAY_SIZE(trips),
--							  0, NULL, &acerhdf_dev_ops,
-+							  NULL, &acerhdf_dev_ops,
- 							  &acerhdf_zone_params, 0,
- 							  (kernelmode) ? interval*1000 : 0);
- 	if (IS_ERR(thz_dev))
-Index: linux-pm/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
-===================================================================
---- linux-pm.orig/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
-+++ linux-pm/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
-@@ -694,7 +694,6 @@ static void iwl_mvm_thermal_zone_registe
- 	mvm->tz_device.tzone = thermal_zone_device_register_with_trips(name,
- 							mvm->tz_device.trips,
- 							IWL_MAX_DTS_TRIPS,
--							0,
- 							mvm, &tzone_ops,
- 							NULL, 0, 0);
- 	if (IS_ERR(mvm->tz_device.tzone)) {
-Index: linux-pm/drivers/thermal/da9062-thermal.c
-===================================================================
---- linux-pm.orig/drivers/thermal/da9062-thermal.c
-+++ linux-pm/drivers/thermal/da9062-thermal.c
-@@ -197,7 +197,7 @@ static int da9062_thermal_probe(struct p
- 	mutex_init(&thermal->lock);
- 
- 	thermal->zone = thermal_zone_device_register_with_trips(thermal->config->name,
--								trips, ARRAY_SIZE(trips), 0, thermal,
-+								trips, ARRAY_SIZE(trips), thermal,
- 								&da9062_thermal_ops, NULL, pp_tmp,
- 								0);
- 	if (IS_ERR(thermal->zone)) {
-Index: linux-pm/drivers/thermal/imx_thermal.c
-===================================================================
---- linux-pm.orig/drivers/thermal/imx_thermal.c
-+++ linux-pm/drivers/thermal/imx_thermal.c
-@@ -700,7 +700,7 @@ static int imx_thermal_probe(struct plat
- 	data->tz = thermal_zone_device_register_with_trips("imx_thermal_zone",
- 							   trips,
- 							   ARRAY_SIZE(trips),
--							   0, data,
-+							   data,
- 							   &imx_tz_ops, NULL,
- 							   IMX_PASSIVE_DELAY,
- 							   IMX_POLLING_DELAY);
-Index: linux-pm/drivers/thermal/rcar_thermal.c
-===================================================================
---- linux-pm.orig/drivers/thermal/rcar_thermal.c
-+++ linux-pm/drivers/thermal/rcar_thermal.c
-@@ -489,7 +489,7 @@ static int rcar_thermal_probe(struct pla
- 						&rcar_thermal_zone_ops);
- 		} else {
- 			priv->zone = thermal_zone_device_register_with_trips(
--				"rcar_thermal", trips, ARRAY_SIZE(trips), 0, priv,
-+				"rcar_thermal", trips, ARRAY_SIZE(trips), priv,
- 						&rcar_thermal_zone_ops, NULL, 0,
- 						idle);
- 
-Index: linux-pm/drivers/thermal/st/st_thermal.c
-===================================================================
---- linux-pm.orig/drivers/thermal/st/st_thermal.c
-+++ linux-pm/drivers/thermal/st/st_thermal.c
-@@ -203,7 +203,7 @@ int st_thermal_register(struct platform_
- 	trip.type = THERMAL_TRIP_CRITICAL;
- 
- 	sensor->thermal_dev =
--		thermal_zone_device_register_with_trips(dev_name(dev), &trip, 1, 0, sensor,
-+		thermal_zone_device_register_with_trips(dev_name(dev), &trip, 1, sensor,
- 							&st_tz_ops, NULL, 0, polling_delay);
- 	if (IS_ERR(sensor->thermal_dev)) {
- 		dev_err(dev, "failed to register thermal zone device\n");
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] PM: hibernate: Support to select compression algorithm
+Content-Language: en-US
+To: Nikhil V <quic_nprakash@quicinc.com>, Pavel Machek <pavel@ucw.cz>,
+ Len Brown <len.brown@intel.com>, Jonathan Corbet <corbet@lwn.net>,
+ "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>, Tejun Heo <tj@kernel.org>,
+ Yan-Jie Wang <yanjiewtw@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
+ "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ quic_pkondeti@quicinc.com, quic_kprasan@quicinc.com,
+ quic_mpilaniy@quicinc.com, quic_shrekk@quicinc.com,
+ mpleshivenkov@google.com, ericyin@google.com
+References: <3776355f920c1af44490e076072f93bafdf128cc.1707740870.git.quic_nprakash@quicinc.com>
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <3776355f920c1af44490e076072f93bafdf128cc.1707740870.git.quic_nprakash@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
 
+On 2/12/24 04:32, Nikhil V wrote:
+> Currently the default compression algorithm is selected based on
+> compile time options. Introduce a module parameter "hibernate.compressor"
+> to override this behaviour.
+> 
+> Different compression algorithms have different characteristics and
+> hibernation may benefit when it uses any of these algorithms, especially
+> when a secondary algorithm(LZ4) offers better decompression speeds over a
+> default algorithm(LZO), which in turn reduces hibernation image restore
+> time.
+> 
+> Users can override the default algorithm in two ways:
+>  1) Passing "hibernate.compressor" as kernel command line parameter.
+>     Usage:
+>     	LZO: hibernate.compressor=lzo
+>     	LZ4: hibernate.compressor=lz4
+> 
+>  2) Specifying the algorithm at runtime.
+>     Usage:
+> 	LZO: echo lzo > /sys/module/hibernate/parameters/compressor
+> 	LZ4: echo lz4 > /sys/module/hibernate/parameters/compressor
+> 
+> Currently LZO and LZ4 are the supported algorithms. LZO is the default
+> compression algorithm used with hibernation.
+> 
+> Signed-off-by: Nikhil V <quic_nprakash@quicinc.com>
+> ---
+> This patch is dependent on the patch series, [1] (patches 1/4 to 3/4).
+> This is picked in linux-next, [2].
+>  [1] https://lore.kernel.org/all/cover.1705927916.git.quic_nprakash@quicinc.com/
+>  [2] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/log/kernel/power?h=next-20240212
+> 
+>  .../admin-guide/kernel-parameters.txt         | 10 ++++
+>  kernel/power/hibernate.c                      | 57 ++++++++++++++++++-
+>  2 files changed, 64 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 31b3a25680d0..522155056645 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -1748,6 +1748,16 @@
+>  				(that will set all pages holding image data
+>  				during restoration read-only).
+>  
+
+Hi,
+Please add something like:
+
+
+> +	hibernate.compressor= 	[HIBERNATION] Compression algorithm to be
+> +				used with hibernation.
+> +				Format: { lzo | lz4 }
+				Default: lzo
+> +
+> +				lzo: Select LZO compression algorithm to
+> +				compress/decompress hibernation image.
+> +
+> +				lz4: Select LZ4 compression algorithm to
+> +				compress/decompress hibernation image.
+> +
+>  	highmem=nn[KMG]	[KNL,BOOT] forces the highmem zone to have an exact
+>  			size of <nn>. This works even on boxes that have no
+>  			highmem otherwise. This also works to reduce highmem
+
+
+thanks.
+-- 
+#Randy
 
