@@ -1,138 +1,139 @@
-Return-Path: <linux-pm+bounces-3772-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3773-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EC89850D89
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 07:31:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D926850D8B
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 07:32:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D5D451F25E71
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 06:31:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C38C1F25FF1
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 06:32:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0B2A23A6;
-	Mon, 12 Feb 2024 06:31:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCD353C2F;
+	Mon, 12 Feb 2024 06:32:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HwtlZkPv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KeZ6oAxh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA2811876
-	for <linux-pm@vger.kernel.org>; Mon, 12 Feb 2024 06:31:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C74AF1876;
+	Mon, 12 Feb 2024 06:32:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707719505; cv=none; b=aY5P5pOT26BGsiTaS3w204Ws1K/Z/do+4YZRVdwOC5Kwpgsxl/XWzREgZfIe0Bbg8R7dQTZrUKnvwDvOuKdOXCGRR5LLRdSvnB84wGYvlnZgto3oBnrsVjzrCmP42YLyUxBMPBecYw/LskUl+NpacBVb2pxNC5XYPiXg2Bi+U6M=
+	t=1707719565; cv=none; b=f8nqdqzXdnynHaKnNrPoFZbYBTXMnzZ2E888e5chuimPgjgKDpByNQdKfNefY42xqve98BknC7529bQIGlMtQontq/fjDpQ6jbIEMBnrPY2v+Wk8oyrjVEvkMtc1DllUWNGbhCqlt5nlgJVQ8Sosm2t/N10JgaPXe3bMSU0Qgh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707719505; c=relaxed/simple;
-	bh=sJW8LTmgKhWrNX5KrZAvVAMpmt+gLvcunNUfU6iGUS4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=mq54Ev9gIGLuuxK4HQSmqiJ8vgR1Ld+CdV7fpptndA0tZpVtkUV3EK4T3cWVIHSelVRt+ctj+EISVgrGEJGZ9px8NawO0UK/sxNXcEDFI+jJHIlzlQTi48FvUITU0fwxzoG8Ltfa7hlUVJb33LtgaOaUGljqVMZ7piqW+Z4ENSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HwtlZkPv; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a3916c1f9b0so373920766b.1
-        for <linux-pm@vger.kernel.org>; Sun, 11 Feb 2024 22:31:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707719502; x=1708324302; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/ZEgPDx+pVY9gu5fSu4FckLKzR0ijYk63QNvpgbllZE=;
-        b=HwtlZkPvxNnUcqCXCIhUbcaWiIA6+2X4x0NVmmBau+bVIlu4N2Mv1n71P65sLeSzix
-         Vu8oV6+5XN5SkgqJKwe9OdGZ/UQTCsk/pzM9wuiCcseKqHQQLtw9pLcPCdYnI0MYI7JH
-         Mevh9LOkiNx+ji3Ldd45hYD7Y7XgIzR/AFCfsxK8+ReFFVNGrBClFttXDWBm9IDuzoAe
-         gQseOiYwVgJf06SLkCqJ/+PbKAXMor6eHU4vb4dHFqS+J9fijTFGeNQ8jX/k8yABl6jy
-         LBRoEspKlRJUislrJh7OAbWoX3tXttLa2Qygrxy5oKQYV3VkiFcjzGSQCWXfDhtxRlCE
-         b9bQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707719502; x=1708324302;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/ZEgPDx+pVY9gu5fSu4FckLKzR0ijYk63QNvpgbllZE=;
-        b=Kl7K3ihNsOsfQZJT/yMAGSRKKwkGt8ViR2IW7qf//HRpXi/tb+XjGAYovwdh5zIsBR
-         F8BWHIeHu7FNEka4HBva+dnyM+7lU9/oHK+DRJwHzAGX9eRHSUG7M/a4r8dQn5r+3cXN
-         LsBK1oGGmbYRJuzErF7fohayh+BNIALHLS05cVFK5ISBVcCrw54w0/qFPV5MuGmaNRcb
-         jJ6F0/8/uJDtiyB+2DjjDguHII2XU2Z1O844aFnv1XBf8Eydp+eb1rD6s/7FSF7ovVwq
-         91sJZs/iBp1MP2MK8BLRqV5g5uQWRVBEpPRKwLja7LmHOMoMyqEg+byH+k80xBbUcEv/
-         mgEA==
-X-Gm-Message-State: AOJu0YzfKBLCQavw8BzXR3dzpPmYauog1IZ1YGYNKljwMUt9X0Iog2yE
-	s8h9qSTd1tlY45t+Gyy/4nNv2zPjEoQefMYTwAYLy32PJS4aPxql13qE8FpPF4g=
-X-Google-Smtp-Source: AGHT+IGP5gA7jOCPbzYKrsDj6WqcYYajyHpuSSHQK6EAZQNkJjiEkER9qHevDuYeDwJ0AFIRmpWe/Q==
-X-Received: by 2002:a17:906:b309:b0:a3c:c8b:f6f7 with SMTP id n9-20020a170906b30900b00a3c0c8bf6f7mr4057700ejz.50.1707719502092;
-        Sun, 11 Feb 2024 22:31:42 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWg4J8jSUyVaw93YuRA6hHihvmscjGYufc/io9m6e9bVZzDfAGGR8/LpzM+yrGYd90+XO0qS+Tj0hAaJmSZ1gf6PdoxWPA2EQM=
-Received: from localhost ([102.222.70.76])
-        by smtp.gmail.com with ESMTPSA id tb12-20020a1709078b8c00b00a3bd53ccbeasm3525501ejc.28.2024.02.11.22.31.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Feb 2024 22:31:41 -0800 (PST)
-Date: Mon, 12 Feb 2024 09:31:37 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: linus.walleij@linaro.org
-Cc: linux-pm@vger.kernel.org
-Subject: [bug report] power: supply_core: Pass pointer to battery info
-Message-ID: <914e1b78-58de-4e63-8179-12c7d24c6836@moroto.mountain>
+	s=arc-20240116; t=1707719565; c=relaxed/simple;
+	bh=WtENbaXqtArIZ1h/ul86KKlsUh8sF5NCgydYyrUusME=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=icVHeoPGZGiRuz1UhSqnuzo1YwDa0h/FR2aFLqlE5wDkoTcG0CRJzJMFUUjJHi73J3wWWRSY2Vj+MmUB5nWQSaOTTCp9ZiIvdWzsIw/SGTvnbvvojDYgB23ljYlKnT47iLZxlujrPDyDYu4zH4lNWFfFRpk1paJB/LaLfqIrADU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=none smtp.mailfrom=ecsmtp.iind.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KeZ6oAxh; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ecsmtp.iind.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707719564; x=1739255564;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=WtENbaXqtArIZ1h/ul86KKlsUh8sF5NCgydYyrUusME=;
+  b=KeZ6oAxh/OFsHP3Hpk3UKglRsnIl0Aq+h/ANK0HNVQ7YfO8i3BZiiqv0
+   KF8inZLt9ZeeeJPMVJpC41yuA/ik4WnjGrTR575psTLTSAbV/vA3Klykm
+   eyJ+uVGlh3ABwyjugCl3pS5gmwJr64QdChhifDPDG9zZTSWWD3ORVfaOL
+   p+zi/AVHITwMQUxiF4lcOwdk+hoSSX2vKSCN8/COdkCGLh0n3HITgpb9d
+   q46HPILfwtfZd7jDbYix/5SbCRKzwDcUrTtDtR4YJR/NzIpJWvttufZso
+   HZHprdb3Db9vr4bBP/lhT5mrhNHgSehhwXm4w966oCObMWWZI4p8ihi/V
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10981"; a="1538558"
+X-IronPort-AV: E=Sophos;i="6.05,262,1701158400"; 
+   d="scan'208";a="1538558"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2024 22:32:44 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,262,1701158400"; 
+   d="scan'208";a="2897133"
+Received: from inesxmail01.iind.intel.com ([10.223.57.40])
+  by orviesa008.jf.intel.com with ESMTP; 11 Feb 2024 22:32:41 -0800
+Received: from inlubt0316.iind.intel.com (inlubt0316.iind.intel.com [10.191.20.213])
+	by inesxmail01.iind.intel.com (Postfix) with ESMTP id 882D01CAEA;
+	Mon, 12 Feb 2024 12:02:39 +0530 (IST)
+Received: by inlubt0316.iind.intel.com (Postfix, from userid 12101951)
+	id 837061600100; Mon, 12 Feb 2024 12:02:39 +0530 (IST)
+From: Raag Jadav <raag.jadav@intel.com>
+To: bhelgaas@google.com,
+	jarkko.nikula@linux.intel.com,
+	mika.westerberg@linux.intel.com,
+	andriy.shevchenko@linux.intel.com,
+	stanislaw.gruszka@linux.intel.com,
+	lukas@wunner.de,
+	rafael@kernel.org,
+	ilpo.jarvinen@linux.intel.com
+Cc: linux-pci@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	gregkh@linuxfoundation.org,
+	sashal@kernel.org,
+	Raag Jadav <raag.jadav@intel.com>
+Subject: [PATCH v1] PCI / PM: Really allow runtime PM without callback functions
+Date: Mon, 12 Feb 2024 12:02:33 +0530
+Message-Id: <20240212063233.5599-1-raag.jadav@intel.com>
+X-Mailer: git-send-email 2.35.3
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Hello Linus Walleij,
+Commit c5eb1190074c ("PCI / PM: Allow runtime PM without callback
+functions") tried to eliminate the need for runtime PM callbacks
+by modifying pci_pm_runtime_suspend() and pci_pm_runtime_resume(),
+but didn't modify pci_pm_runtime_idle() with relevant changes, which
+still returns -ENOSYS if the driver supplies no runtime PM callbacks.
 
-The patch 25fd330370ac: "power: supply_core: Pass pointer to battery
-info" from Dec 15, 2021 (linux-next), leads to the following Smatch
-static checker warning:
+Fix this by modifying pci_pm_runtime_idle() such that it allows PCI
+device power state transitions without runtime PM callbacks.
 
-	drivers/power/supply/bq256xx_charger.c:1595 bq256xx_hw_init()
-	error: uninitialized symbol 'bat_info'.
+ 0)               |  pm_runtime_work() {
+ 0)               |    rpm_idle() {
+ 0)               |      rpm_check_suspend_allowed() {
+ 0)   1.500 us    |        __dev_pm_qos_resume_latency(); /* = 0x7fffffff */
+ 0)   4.840 us    |      } /* rpm_check_suspend_allowed = 0x0 */
+ 0)   1.550 us    |      __rpm_get_callback(); /* = 0xffffffffb4bc84f0 */
+ 0)   1.800 us    |      pci_pm_runtime_idle(); /* = -38 */
+ 0) + 17.070 us   |    } /* rpm_idle = -38 */
+ 0) + 22.450 us   |  } /* pm_runtime_work = -38 */
 
-drivers/power/supply/bq256xx_charger.c
-    1565 static int bq256xx_hw_init(struct bq256xx_device *bq)
-    1566 {
-    1567         struct power_supply_battery_info *bat_info;
-    1568         int wd_reg_val = BQ256XX_WATCHDOG_DIS;
-    1569         int ret = 0;
-    1570         int i;
-    1571 
-    1572         for (i = 0; i < BQ256XX_NUM_WD_VAL; i++) {
-    1573                 if (bq->watchdog_timer == bq256xx_watchdog_time[i]) {
-    1574                         wd_reg_val = i;
-    1575                         break;
-    1576                 }
-    1577                 if (i + 1 < BQ256XX_NUM_WD_VAL &&
-    1578                     bq->watchdog_timer > bq256xx_watchdog_time[i] &&
-    1579                     bq->watchdog_timer < bq256xx_watchdog_time[i + 1])
-    1580                         wd_reg_val = i;
-    1581         }
-    1582         ret = regmap_update_bits(bq->regmap, BQ256XX_CHARGER_CONTROL_1,
-    1583                                  BQ256XX_WATCHDOG_MASK, wd_reg_val <<
-    1584                                                 BQ256XX_WDT_BIT_SHIFT);
-    1585         if (ret)
-    1586                 return ret;
-    1587 
-    1588         ret = power_supply_get_battery_info(bq->charger, &bat_info);
-    1589         if (ret == -ENOMEM)
+Debugged-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Signed-off-by: Raag Jadav <raag.jadav@intel.com>
+Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+---
 
-Only -ENOMEM is handled but it can return a bunch of different errors
-where bat_info is uninitialized and we just introduced another recently.
+This is not marked for linux-stable for the need of extensive testing
+and can be backported after a few releases if no issues are reported.
 
-    1590                 return ret;
-    1591 
-    1592         if (ret) {
-    1593                 dev_warn(bq->dev, "battery info missing, default values will be applied\n");
-    1594 
---> 1595                 bat_info->constant_charge_current_max_ua =
-                         ^^^^^^^^^^
-This used to be bat_info.constant_charge_current_max_ua = ...
+ drivers/pci/pci-driver.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
+diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+index 51ec9e7e784f..bb7f6775b350 100644
+--- a/drivers/pci/pci-driver.c
++++ b/drivers/pci/pci-driver.c
+@@ -1382,10 +1382,7 @@ static int pci_pm_runtime_idle(struct device *dev)
+ 	if (!pci_dev->driver)
+ 		return 0;
+ 
+-	if (!pm)
+-		return -ENOSYS;
+-
+-	if (pm->runtime_idle)
++	if (pm && pm->runtime_idle)
+ 		return pm->runtime_idle(dev);
+ 
+ 	return 0;
+-- 
+2.35.3
 
-    1596                                 bq->chip_info->bq256xx_def_ichg;
-    1597 
-    1598                 bat_info->constant_charge_voltage_max_uv =
-
-regards,
-dan carpenter
 
