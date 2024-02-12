@@ -1,109 +1,119 @@
-Return-Path: <linux-pm+bounces-3776-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3777-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3479F850F26
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 09:54:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44AA7850F39
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 10:00:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8E8028207E
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 08:54:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D56741F216A1
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 09:00:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0205F9E5;
-	Mon, 12 Feb 2024 08:53:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF86D5235;
+	Mon, 12 Feb 2024 09:00:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="1178iJRL"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U/Kiv5GF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 664CBF9D1;
-	Mon, 12 Feb 2024 08:53:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB844FBFC
+	for <linux-pm@vger.kernel.org>; Mon, 12 Feb 2024 09:00:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707728039; cv=none; b=Ivj6wQ3v7n0CV/XMMdD9Lc0TeKEtvLFbwcJTs4JcVA1bgd7vn04cbjI2YKIkIBrv669rUPEFxuhcF+XLdbKdLEpe6E1OkWhKLOx+XFaoG6f3xJV6DSgEKE1Fm7TaUjrgBx57eUrYMoVMQ3g/zyD5S4Wd+kmTkdfd52sfxf8CbXc=
+	t=1707728421; cv=none; b=p/UVfJrMo1CY5NYIoyUcf1hxRupUqanZ6yQ16aXRFTXOpvd+O1K0PtBpJAaZjKyLW9200D1OJ9idrXCXqbGEIAExEweYLFIPTF+vAH/TAQJqBrI+9z+FEOaa07M6LUEvVhtU9bAWwOcCL8PHHx8AcVwUWfstzMtEyqdgZGdwGtw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707728039; c=relaxed/simple;
-	bh=7piWbCGcMV8jXNFfjDe8eSN9IgwzXBxHsFlz7ti4esk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FKTWfH0NRtb4SUUtz17P3gObCVuJ/lVMik/bOLqNu/ofu7z5lhyYb8XbpadEQ1n521Zqxs5iFkp3CcibdhH1Sw4O6KQdJsu+41qKzlXBY67+3mft4E8PVEdkwaPkvIR3RPsl/8k4cKCKs2X5uEmjk7OQaOpEu4ubxXzdOvr8N1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=1178iJRL; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1707728036;
-	bh=7piWbCGcMV8jXNFfjDe8eSN9IgwzXBxHsFlz7ti4esk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=1178iJRLXbbYR8AYKbv5sFIihYAc/ahj51fIrhXgT3ft6izjDupE9LvnKlJxm4Bfp
-	 0VbEIFSQRHHqNZalSc7Vb5i+ezl17azKyJGxU3umGhSgPCi2ELmcmjxUUy+nW91CJ1
-	 H346mHIjZrGLmQRur2D3DuotorEFq31G43LCRFlwQ5mCjlted4dJrqMv8yfNDRu9/Z
-	 7036VddkvHloZF6ysL8jnJklrsPLJUbl8k2gmzpj6nXd8BQHDVVrLX2Q6FsJRdwxsi
-	 7yjn/kmQdhpbIDymTnafGQ25UGYQsoJPoZ1r8oyaP67oHkiAm7HTVGLQBmPr1NevEG
-	 IawYeZ/SLVXJA==
-Received: from [100.113.186.2] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	s=arc-20240116; t=1707728421; c=relaxed/simple;
+	bh=v1Bf09BO5/eogjE+GPtFhZQEgOuybwCpWWW15eOCeFs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ns/q+rTrEb/E0CIUgj/NuWnV7GOXqou7b6T0kay5hW6DA+1HCVW/9msIpSbKojNB1XCCxuuAJCD65f1jOysULpyEX4FZc9wE+LlvVHgchiupQuwegXla9C5nMJct2c3skh2sPwvcriTNmRtaI7vJJzV7AxdGz8/Q9kgktY/9X4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U/Kiv5GF; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1707728418;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=zNWnZWLepCf5/bKiHycs304BQ2YBWV2Wh36u5RzJTeQ=;
+	b=U/Kiv5GFYZ2TnJu2Fy0I9OyQZR+d7cnbT0mUcYHdcZkIcXqTW/Ee8e0LF8cIDEL3JGX3oA
+	gPL0AtdHsF+YSP2HMtZ6QNAaRKnMVFDgxJs5e2HcBroowkc0Ix5VINpG4gC99V48i4iM7c
+	01MfubSyejCIBlw/0GewFGqyzbxaFGA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-25-xSlsM-SKMFKDzNp2s3G1vw-1; Mon, 12 Feb 2024 04:00:16 -0500
+X-MC-Unique: xSlsM-SKMFKDzNp2s3G1vw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 66A5D378203F;
-	Mon, 12 Feb 2024 08:53:55 +0000 (UTC)
-Message-ID: <cd1350d0-6333-4519-a811-8413080ac92d@collabora.com>
-Date: Mon, 12 Feb 2024 09:53:54 +0100
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6836B868A10;
+	Mon, 12 Feb 2024 09:00:16 +0000 (UTC)
+Received: from x1.localdomain.com (unknown [10.39.194.82])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id ABFCF530390;
+	Mon, 12 Feb 2024 09:00:15 +0000 (UTC)
+From: Hans de Goede <hdegoede@redhat.com>
+To: Sebastian Reichel <sre@kernel.org>
+Cc: Hans de Goede <hdegoede@redhat.com>,
+	linux-pm@vger.kernel.org
+Subject: [PATCH] power: supply: axp288_fuel_gauge: Add STCK1A* Intel Compute Sticks to the deny-list
+Date: Mon, 12 Feb 2024 10:00:14 +0100
+Message-ID: <20240212090014.13719-1-hdegoede@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2] dt-bindings: thermal: mediatek,thermal: document
- AUXADC 32k clock
-Content-Language: en-US
-To: =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
- "Rafael J . Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Rob Herring
- <robh+dt@kernel.org>, Krzysztof Kozlowski
- <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>
-Cc: Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- Sascha Hauer <s.hauer@pengutronix.de>, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?=
- <rafal@milecki.pl>, Daniel Golle <daniel@makrotopia.org>,
- Sam Shih <sam.shih@mediatek.com>
-References: <20240209055203.17144-1-zajec5@gmail.com>
- <17d143aa-576e-4d67-a0ea-b79f3518b81c@collabora.com>
- <ddec28a5-8d65-4e52-bb3c-9587acf7bca1@gmail.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <ddec28a5-8d65-4e52-bb3c-9587acf7bca1@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
 
-Il 12/02/24 07:11, Rafał Miłecki ha scritto:
-> On 9.02.2024 10:13, AngeloGioacchino Del Regno wrote:
->> Il 09/02/24 06:52, Rafał Miłecki ha scritto:
->>> From: Rafał Miłecki <rafal@milecki.pl>
->>>
->>> SoCs MT7981 and MT7986 include a newer thermal block (V3) that requires
->>> enabling one more clock called AUXADC 32k. Require it in binding.
->>>
->>> Cc: Daniel Golle <daniel@makrotopia.org>
->>> Cc: Sam Shih <sam.shih@mediatek.com>
->>> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
->>
->> So, I've made some research on this matter.. and this is a NACK.
-> 
-> Well, I can only thank you for the research.
-> 
-> Let's drop this patch. I'll sort out the rest later.
+Besides the existing STK1A* Cherry Trail based Intel Compute Sticks
+already on the deny-list, Intel also made Bay Trail based Compute Sticks
+which have a product name of STCK1A* and wich also report a non
+existing battery with a random battery charge.
 
-Thank you for bringing that up - this was necessary to clarify this and
-to actually make both of us aware of the mistake in the device trees that
-we have for those SoCs.
+Instead of adding 3 new deny-list entries for the 3 variants of the STCK1A*
+sticks consolidate the 2 Cherry Trail STK1AW32SC and STK1A32SC variants
+into a single entry with a partial match for STK1A* and add a single new
+STCK1A* match for the Bay Trail variants.
 
-Take your time, btw, you're doing a great job.
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/power/supply/axp288_fuel_gauge.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-Cheers,
-Angelo
+diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/supply/axp288_fuel_gauge.c
+index 3be6f3b10ea4..967a26096485 100644
+--- a/drivers/power/supply/axp288_fuel_gauge.c
++++ b/drivers/power/supply/axp288_fuel_gauge.c
+@@ -550,18 +550,20 @@ static const struct dmi_system_id axp288_quirks[] = {
+ 		.driver_data = (void *)AXP288_QUIRK_NO_BATTERY,
+ 	},
+ 	{
+-		/* Intel Cherry Trail Compute Stick, Windows version */
++		/* Intel Bay Trail Compute Stick */
+ 		.matches = {
+ 			DMI_MATCH(DMI_SYS_VENDOR, "Intel"),
+-			DMI_MATCH(DMI_PRODUCT_NAME, "STK1AW32SC"),
++			/* Partial match for STCK1A32WFC STCK1A32FC, STCK1A8LFC variants */
++			DMI_MATCH(DMI_PRODUCT_NAME, "STCK1A"),
+ 		},
+ 		.driver_data = (void *)AXP288_QUIRK_NO_BATTERY,
+ 	},
+ 	{
+-		/* Intel Cherry Trail Compute Stick, version without an OS */
++		/* Intel Cherry Trail Compute Stick */
+ 		.matches = {
+ 			DMI_MATCH(DMI_SYS_VENDOR, "Intel"),
+-			DMI_MATCH(DMI_PRODUCT_NAME, "STK1A32SC"),
++			/* Partial match for STK1AW32SC and STK1A32SC variants */
++			DMI_MATCH(DMI_PRODUCT_NAME, "STK1A"),
+ 		},
+ 		.driver_data = (void *)AXP288_QUIRK_NO_BATTERY,
+ 	},
+-- 
+2.43.0
+
 
