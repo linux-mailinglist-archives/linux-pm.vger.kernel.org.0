@@ -1,167 +1,90 @@
-Return-Path: <linux-pm+bounces-3845-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3846-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34410851FAB
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 22:33:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B3108521B7
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 23:48:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 594A51C225D8
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 21:33:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 00BE2B21E5A
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 22:48:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64F364D9E8;
-	Mon, 12 Feb 2024 21:33:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C54144DA1D;
+	Mon, 12 Feb 2024 22:48:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="UYkLqjxT"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="WMEzaMb0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A16AC4EB47
-	for <linux-pm@vger.kernel.org>; Mon, 12 Feb 2024 21:33:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F3604EB23;
+	Mon, 12 Feb 2024 22:48:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707773591; cv=none; b=GxeQoKTZEZDmEPd4/FbCMqwewDiIbHIXCzVbfZXpfPuGNnDa1w2YO7mk/EMCvo7IhGxhBJCrwpsb1xlTwDQYtMpWcBiaHcJqagpIos9KTKNKYRZEKrTXYq7frbsrUem4nhfFR/9EOaYyZYP3v02iHcTukB0Hy8o/Nr4vKrkTYqM=
+	t=1707778111; cv=none; b=J1HUYh2qYjlwsuyU4kkdGH7yDIfm4xFvz20ZPBlV1BBBxnRhsInQhSQY7iY5YQZpzdKohsksun3O6a9wW6b1OESGY9kU9nvlNOtJ/ZaxC/Vfc/7ZlZk7toNUkMZ6M7Pk4WKlqWl8hQeXUNjefUvpYa/rZdV/F9MQZqjErdP1c1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707773591; c=relaxed/simple;
-	bh=UccBZcWyRgHb8CdqI4SfdswhlCvqeiofHLzpJGOSCIM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SwIHUfGsGsPYojLyKGvqeRdFjk5Mk0mwEaCc5XCEA9dJSTkiESTAR0P6otUM9Umo2Eyhihg1SY8iuGlooulqCcHusvmGwhwV2Xp0c222oqgthJc51OsUzjC5mBqvAzPhKTCvwo0MyGb5iC5h2cjNpvStNmsqkf+RDWfGpC8SEGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=UYkLqjxT; arc=none smtp.client-ip=209.85.221.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-4c0215837e2so620770e0c.1
-        for <linux-pm@vger.kernel.org>; Mon, 12 Feb 2024 13:33:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1707773587; x=1708378387; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FJH2iY95UEJbzAWLAhKcrIml1wV+F91i2EVUBYNcdJo=;
-        b=UYkLqjxT9GoSJnOQq93tXQa+t0FQEHckVJXzZ4Jk2drByJPW6AwZFaxvGLKlhTGEFi
-         fIC2RwbEQumys6l1cZt1ESJw6pvC5N7OCy9a717BecKgaHCOBtBM8jDfYvUDUUxC6hXU
-         CcjdrbpP+U3US/7ljiib3qOQfgLiS+PVQrQWCwwuUm+KWCVEynGTYESjb6Es50mKIkFb
-         VYgQM00Qdwc/ULLhUEa24iTyV5/OXUXrzGqzuo+X7Qi34NUFTec7UZjSEX12Js2XUc0C
-         1I0MbGz8i740ZFB+MBT4+S4og+EaSnQsTs8gm+jn1dzEi95J6p7mbRtsXInOnTo3ftYp
-         7Kng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707773587; x=1708378387;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FJH2iY95UEJbzAWLAhKcrIml1wV+F91i2EVUBYNcdJo=;
-        b=oe7rT5x4uk3JoaNtSBH8Av6iWNYhlAkz7Ak6BCFmbNAvz4DzXzb3bAJvIWkoy4TEK1
-         5nyULW+mmhnPQfGCWDfeTRBgWEfu1eMA1QqeV+7e7MC+3Rz3fwdzwqOjiCp8A135cvgK
-         rLsFUXp9NlwzwiiiPSjpi+dkAd7P1qHv7UUPVjTCz6WWhP+WI8INrrgguqfZnCZe84BR
-         f/RQ7d8Ppkf8huSCL6czGTolixaZRMokzfZERan9qhCV4wGuaXCnNTK8VjWUYbRka1w8
-         IGITzEg/75MLjOFgEDKdH/kW/6PC60zsx1cnXB4HUBDyQfB8bg0zdsi7z/gSoTVQTbYi
-         qKmA==
-X-Gm-Message-State: AOJu0YwCwOPEucpAibjZRE2WCGsNrLYKM3k2hGgtg2pI1zqDhBrZpRde
-	UNpoH1It5kmKRgziBAebTSPGJpXHSzSaHfZksGmwkVj739e+HS6n1HN3PJvarYqOp8dUEQubY6E
-	cRaRFbBkjkqTLVQ/MXM0At1uG7lRNUtVbGOKXTw==
-X-Google-Smtp-Source: AGHT+IG9JhWk1ypXImx7gtdukOOrn/OVeJ91OyJ0AaFvoBMaRZsO4e81KwtlPywmU6wMBSTdbrnt6I7BaNpH/6tSHa8=
-X-Received: by 2002:a1f:e7c3:0:b0:4c0:21c4:3a9b with SMTP id
- e186-20020a1fe7c3000000b004c021c43a9bmr4103383vkh.15.1707773587581; Mon, 12
- Feb 2024 13:33:07 -0800 (PST)
+	s=arc-20240116; t=1707778111; c=relaxed/simple;
+	bh=ul5k55UQtWoQXPNcb/0pzT+j7IivOX8sLryDaU7Ct7Q=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=fsHMnuXOm1GiJW94XRWLqSgK7D7ct6WS7sBwSxzKDDnLOP+0p17XLJL2gYIqBR+Rb0CZOb2PxD3JFIFzZHnkseaBS4iKUUo0aOYHGau3n4R5DNTl1hekM0oIUYVNgH7dK7HFJ+k0xANhSCZTwMn0I6tuOFwK4ZPkuBMdf9+3ik4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=WMEzaMb0; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1707778107;
+	bh=ul5k55UQtWoQXPNcb/0pzT+j7IivOX8sLryDaU7Ct7Q=;
+	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+	b=WMEzaMb0jF8d4K8ffKjdIN1T6SfXUyxnsga8j71b2gYgKpEhxOCt3Y89KABX5xqd5
+	 fbv9vpbeOCuIE88lN74M4DIGVF7qczX91bFOdYuqUJllh3/RebXKfkalUjcPJk001/
+	 H8qWuLfeISqog7kruNsqPXPmtA5X2Z9/iRmOSTyS1PkJ67wdaC9kUuvr0xBFRiZBna
+	 Ynz6HJodRV8HLqyLBdP/+4MFIDsEpg0pAbX53t+FPuNza7+oTdUtX3aROyY+K/IdMH
+	 ZQlgFA8zm9WCFUY694biMeLRpjUTDyzRnrXUe5rCtYxsZY9xaWXbgVXvmcY4ziLuk7
+	 rLkrJlA5lSY0Q==
+Received: from [100.115.223.179] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: cristicc)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id D75633780C22;
+	Mon, 12 Feb 2024 22:48:26 +0000 (UTC)
+Message-ID: <ad65ab14-4e23-43ec-aed8-6bfc59dddb51@collabora.com>
+Date: Tue, 13 Feb 2024 00:48:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240129115216.96479-1-krzysztof.kozlowski@linaro.org>
- <20240129115216.96479-5-krzysztof.kozlowski@linaro.org> <CACRpkdbMFHPK0SBSxiZ3FOqChQFCBdOny0yYG--6V+1S=CKgiw@mail.gmail.com>
-In-Reply-To: <CACRpkdbMFHPK0SBSxiZ3FOqChQFCBdOny0yYG--6V+1S=CKgiw@mail.gmail.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Mon, 12 Feb 2024 22:32:56 +0100
-Message-ID: <CAMRc=MeEPvhB1nTwBT5fG7p0G4L2J5FjJfM0GMusQuDnnEN35g@mail.gmail.com>
-Subject: Re: [PATCH v6 4/6] reset: Instantiate reset GPIO controller for
- shared reset-gpios
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, Banajit Goswami <bgoswami@quicinc.com>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Frank Rowand <frowand.list@gmail.com>, 
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org, 
-	linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, Chris Packham <chris.packham@alliedtelesis.co.nz>, 
-	Sean Anderson <sean.anderson@seco.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+Subject: Re: [PATCH v4 01/19] power: reset: atc260x-poweroff: Use
+ devm_register_sys_off_handler(RESTART)
+To: Andrew Davis <afd@ti.com>
+Cc: Sebastian Reichel <sre@kernel.org>,
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ Cristian Ciocaltea <cristian.ciocaltea@gmail.com>,
+ Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
+ <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>, Sean Wang
+ <sean.wang@mediatek.com>, Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-actions@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+References: <20240212162831.67838-1-afd@ti.com>
+ <20240212162831.67838-2-afd@ti.com>
+Content-Language: en-US
+In-Reply-To: <20240212162831.67838-2-afd@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Feb 12, 2024 at 9:48=E2=80=AFPM Linus Walleij <linus.walleij@linaro=
-.org> wrote:
+On 2024/02/12, Andrew Davis wrote:
+> Use device life-cycle managed register function to simplify probe and
+> exit paths.
 >
-> On Mon, Jan 29, 2024 at 12:53=E2=80=AFPM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->
-> > Devices sharing a reset GPIO could use the reset framework for
-> > coordinated handling of that shared GPIO line.  We have several cases o=
-f
-> > such needs, at least for Devicetree-based platforms.
-> >
-> > If Devicetree-based device requests a reset line, while "resets"
-> > Devicetree property is missing but there is a "reset-gpios" one,
-> > instantiate a new "reset-gpio" platform device which will handle such
-> > reset line.  This allows seamless handling of such shared reset-gpios
-> > without need of changing Devicetree binding [1].
-> >
-> > To avoid creating multiple "reset-gpio" platform devices, store the
-> > Devicetree "reset-gpios" GPIO specifiers used for new devices on a
-> > linked list.  Later such Devicetree GPIO specifier (phandle to GPIO
-> > controller, GPIO number and GPIO flags) is used to check if reset
-> > controller for given GPIO was already registered.
-> >
-> > If two devices have conflicting "reset-gpios" property, e.g. with
-> > different ACTIVE_xxx flags, this would allow to spawn two separate
-> > "reset-gpio" devices, where the second would fail probing on busy GPIO
-> > request.
-> >
-> > Link: https://lore.kernel.org/all/YXi5CUCEi7YmNxXM@robh.at.kernel.org/ =
-[1]
-> > Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> > Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> > Cc: Sean Anderson <sean.anderson@seco.com>
-> > Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
->
-> I can't think of anything better, that is reasonable to ask for.
->
-> I feel slightly icky about the way the code reaches into gpiolib, and I t=
-hink
+> Signed-off-by: Andrew Davis <afd@ti.com>
 
-As long as it doesn't include gpiolib.h, I'm fine with it.
-
-> regulators should be able to reuse the code, but unfortunately only the d=
-ay
-> they have no board files left :/
->
-> I do feel the core code handling "reset-gpios" could as well have been
-> used to handle "enable-gpios" in regulators, just that the regulator code
-> has more requirements, and would be really hard to rewrite, and deals
-> with descriptors passed in from drivers instead of centralizing it.
->
-> Like regulators, reset grows core support for handling GPIO for resets
-> which is *long due*, given how common it must be. We really need
-> something like this, and this is certainly elegant enough to do the job.
->
-> Yours,
-> Linus Walleij
-
-Agreed.
-
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-
-I will pick up the stub patches tomorrow and send a tag for Philipp to pull=
-.
-
-Bartosz
+Reviewed-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
 
