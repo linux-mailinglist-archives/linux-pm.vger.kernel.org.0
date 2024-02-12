@@ -1,118 +1,175 @@
-Return-Path: <linux-pm+bounces-3789-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3794-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6D498513BC
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 13:45:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71A4E85171E
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 15:36:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6B636B26358
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 12:45:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAF0A1F21172
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 14:36:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C7DD39FDD;
-	Mon, 12 Feb 2024 12:44:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8D0539FF8;
+	Mon, 12 Feb 2024 14:36:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xdu0P9MN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 076CD3A8C9;
-	Mon, 12 Feb 2024 12:44:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A5223B189;
+	Mon, 12 Feb 2024 14:36:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707741888; cv=none; b=q3SRjbgp+CR0RT9eBUSe+l1rFia/3qGyRJlqlKNibODMBiYOKVbVEgEMk5HSJsF+w0cnl/VIM+G0F5imvuQpmxgBGpMLLsZ+0TsyfLvNdUw2KhUJ1Kh31FQwE4U8Nbsz/47hJkYHUUej2pLnd6NntqK94i07mz3YNLzTARW7xtE=
+	t=1707748604; cv=none; b=IhjG2Ol7jyW7KsDGv015jtOXI+qie04AJgbl5B88UbyFXstZiJLbhvlSaywE1ptZH0sy2YDAtyUm+c843rLKnQhNZVl2bH/oMerfE4BY3W044d/kkw5gEWI8wKrYmD4EiPV9BKwiaPvqwhC5dwtdjG8Kegcd6onjNQ8n+yNf0AU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707741888; c=relaxed/simple;
-	bh=l/7dfJGxFN1vuiXcbvnIb03xHav/j11oYSN+cyDnLuI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CNMPqfjzVXH2XXlmkc9uvgqVe7ZKYFvCyD1qBzVWDIP74v9DDLpMq77VnC8g+KmFuhZSitylATIAvPJoZTAbZgFKm074ou3Qh7Fpli3QQhx6zG+isNN/BaByFaEu3A0NtoXpGF3aWEOdnVP85HiJosIZdhK+wqu/9HnSg9J9jHk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B275EDA7;
-	Mon, 12 Feb 2024 04:45:27 -0800 (PST)
-Received: from pluto (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A2CE33F7BD;
-	Mon, 12 Feb 2024 04:44:44 -0800 (PST)
-Date: Mon, 12 Feb 2024 12:44:42 +0000
-From: Cristian Marussi <cristian.marussi@arm.com>
-To: Sudeep Holla <sudeep.holla@arm.com>,
-	Sibi Sankar <quic_sibis@quicinc.com>
-Cc: viresh.kumar@linaro.org, morten.rasmussen@arm.com, rafael@kernel.org,
-	dietmar.eggemann@arm.com, lukasz.luba@arm.com,
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, quic_mdtipton@quicinc.com,
-	linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH V2 1/4] firmware: arm_scmi: Add perf_notify_support
- interface
-Message-ID: <ZcoSuv7qwexbXy-9@pluto>
-References: <20240117104116.2055349-1-quic_sibis@quicinc.com>
- <20240117104116.2055349-2-quic_sibis@quicinc.com>
- <ZbfJN1c9viiLhO1L@pluto>
- <ZbfhdqBBpjyf3IRI@pluto>
- <20240131112854.24euh6c6xgljsj6c@bogus>
+	s=arc-20240116; t=1707748604; c=relaxed/simple;
+	bh=b8pt0/3786l/uac5Hp7coU7axC73eUNinUyy/qZ+804=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kBR75qrKVWSgCt8+QOfLAyApabRXlyLRo+bDYmO3hLpCQ79mUtY9X8vY2m6dhzQhNtwQc+WQ8OKAFlisEMV7DTNyEM+u2MxtEcmJ3xlHZVu3WxHGBkbCjLho80ZjV/DncxXShT9O+XkN8GhOQtm4u+HHTkmWTUi+WkGUOeqj04o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Xdu0P9MN; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707748602; x=1739284602;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=b8pt0/3786l/uac5Hp7coU7axC73eUNinUyy/qZ+804=;
+  b=Xdu0P9MNkDveOKKFys9m2f19W5O+KrIkoO8RzNUP2Re9EY+WBsgnf+eS
+   tkITH9X9CTpISov2PV/lVFCk1FlnY/dpdRYi7HnBmXJjWwuap0UQsricq
+   Mn5xE7UFhjEDD0CiU7DYHAH7WOT1kH4CvudA0eB04LYDf+UO8gJeTHzib
+   V5jpsSvIC3PBHHp8i0GO3CqOG/CR7RGIevvMH4wGnEl8Ls593TpzRo2Pt
+   XC1lt+3F/Mm+a/WzL2xjJ4ynhPkNQngSfnlrTAQ8S/TbOeZqTLZN48wit
+   5CABO680m/ye9Mgt/Eb08GOeFv0P17El7dSAw5RL91ZHnAOv+ciVYFz6H
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="13101316"
+X-IronPort-AV: E=Sophos;i="6.06,264,1705392000"; 
+   d="scan'208";a="13101316"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2024 06:36:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10981"; a="935084054"
+X-IronPort-AV: E=Sophos;i="6.06,264,1705392000"; 
+   d="scan'208";a="935084054"
+Received: from oelagadx-mobl2.ger.corp.intel.com (HELO localhost) ([10.252.44.2])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2024 06:36:38 -0800
+From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+To: Bjorn Helgaas <helgaas@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-pci@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+	Oliver O'Halloran <oohall@gmail.com>,
+	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [PATCH v3] PCI/AER: Block runtime suspend when handling errors
+Date: Mon, 12 Feb 2024 13:01:35 +0100
+Message-Id: <20240212120135.146068-1-stanislaw.gruszka@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240131112854.24euh6c6xgljsj6c@bogus>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jan 31, 2024 at 11:28:54AM +0000, Sudeep Holla wrote:
-> On Mon, Jan 29, 2024 at 05:33:42PM +0000, Cristian Marussi wrote:
+PM runtime can be done simultaneously with AER error handling.
+Avoid that by using pm_runtime_get_sync() before and pm_runtime_put()
+after reset in pcie_do_recovery() for all recovering devices.
 
-Hi Sibi,
+pm_runtime_get_sync() will increase dev->power.usage_count counter
+to prevent any possible future request to runtime suspend a device.
+It will also resume a device, if it was previously in D3hot state.
 
-> > On Mon, Jan 29, 2024 at 03:50:20PM +0000, Cristian Marussi wrote:
-> > > On Wed, Jan 17, 2024 at 04:11:13PM +0530, Sibi Sankar wrote:
-> > > > Add a new perf_notify_support interface to the existing perf_ops to export
-> > > > info regarding limit/level change notification support.
-> > > > 
-> > > 
-> > > Hi Sibi,
-> > > 
-> > > as I mentioned previously, in order not to add a needless stream of SCMI
-> > > Perf accessors I posted this:
-> > > 
-> > > https://lore.kernel.org/linux-arm-kernel/20240129151002.1215333-1-cristian.marussi@arm.com/T/#u
-> > > 
-> > > to expose all the Perf domains infos via the usual info_get(), similarly
-> > > to how other SCMI protocols do already.
-> > > 
-> > > I think that reworking this series on that, you can certainly drop this patch and just
-> > > check the _notify booleans on the retrieved domain info.
-> > 
-> > Sorry, but hold on with this change, I will probably post an updated version
-> > my patch above.
-> > 
-> 
-> As discussed in private, I would prefer to avoid exposing all the internals
-> to the users of SCMI perf. At the same time may we can do better if we can
-> check the availability of notification as part of notification enablement
-> from the SCMI driver, I need to think the details yet.
-> 
+I tested with igc device by doing simultaneous aer_inject and
+rpm suspend/resume via /sys/bus/pci/devices/PCI_ID/power/control
+and can reproduce:
 
-as previously mentioned, after speaking with Sudeep, I posted a new
-series at [1], that aims to solve your problem with registering
-notifications and looking up reported Perf frequencies in a new way.
+igc 0000:02:00.0: not ready 65535ms after bus reset; giving up
+pcieport 0000:00:1c.2: AER: Root Port link has been reset (-25)
+pcieport 0000:00:1c.2: AER: subordinate device reset failed
+pcieport 0000:00:1c.2: AER: device recovery failed
+igc 0000:02:00.0: Unable to change power state from D3hot to D0, device inaccessible
 
-Using the changes at [1] you should be able to:
+The problem disappears when applied this patch.
 
-- register your notifier without caring to check if the notification
-  is supported, since the SCMI core will take care of checking that and
-  report an error if not supported, without sending any unneeded
-  attempted notification enable message  (so you can drop 1/4 in this
-  series)
+Cc: stable@vger.kernel.org
+Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+---
+ drivers/pci/pcie/err.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-- retrieve the pre-calculated OPPs frequencies from the new extended
-  Perf notifications reports no matter if the system if operating in
-  level_indexing_mode or not. (so you can drop 2/4 in this series)
+RFC -> v1:
+ add runtime callbacks to pcie_do_recovery(), this covers DPC case
+ as well as case of recovering multiple devices under same port.
 
-Thanks,
-Cristian
+v1 -> v2:
+ - add R-b, A-b, cc-stable tags
+ - tweak commit message
 
-[1]: https://lore.kernel.org/linux-arm-kernel/20240212123233.1230090-1-cristian.marussi@arm.com/T/#ma68cefd753e34ba3e1f2d4392e978026a87e1bf8
+v2 -> v3:
+ - fix mangled commit message
+
+diff --git a/drivers/pci/pcie/err.c b/drivers/pci/pcie/err.c
+index 59c90d04a609..705893b5f7b0 100644
+--- a/drivers/pci/pcie/err.c
++++ b/drivers/pci/pcie/err.c
+@@ -13,6 +13,7 @@
+ #define dev_fmt(fmt) "AER: " fmt
+ 
+ #include <linux/pci.h>
++#include <linux/pm_runtime.h>
+ #include <linux/module.h>
+ #include <linux/kernel.h>
+ #include <linux/errno.h>
+@@ -85,6 +86,18 @@ static int report_error_detected(struct pci_dev *dev,
+ 	return 0;
+ }
+ 
++static int pci_pm_runtime_get_sync(struct pci_dev *pdev, void *data)
++{
++	pm_runtime_get_sync(&pdev->dev);
++	return 0;
++}
++
++static int pci_pm_runtime_put(struct pci_dev *pdev, void *data)
++{
++	pm_runtime_put(&pdev->dev);
++	return 0;
++}
++
+ static int report_frozen_detected(struct pci_dev *dev, void *data)
+ {
+ 	return report_error_detected(dev, pci_channel_io_frozen, data);
+@@ -207,6 +220,8 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
+ 	else
+ 		bridge = pci_upstream_bridge(dev);
+ 
++	pci_walk_bridge(bridge, pci_pm_runtime_get_sync, NULL);
++
+ 	pci_dbg(bridge, "broadcast error_detected message\n");
+ 	if (state == pci_channel_io_frozen) {
+ 		pci_walk_bridge(bridge, report_frozen_detected, &status);
+@@ -251,10 +266,15 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
+ 		pcie_clear_device_status(dev);
+ 		pci_aer_clear_nonfatal_status(dev);
+ 	}
++
++	pci_walk_bridge(bridge, pci_pm_runtime_put, NULL);
++
+ 	pci_info(bridge, "device recovery successful\n");
+ 	return status;
+ 
+ failed:
++	pci_walk_bridge(bridge, pci_pm_runtime_put, NULL);
++
+ 	pci_uevent_ers(bridge, PCI_ERS_RESULT_DISCONNECT);
+ 
+ 	/* TODO: Should kernel panic here? */
+-- 
+2.34.1
 
 
