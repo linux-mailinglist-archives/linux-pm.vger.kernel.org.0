@@ -1,115 +1,108 @@
-Return-Path: <linux-pm+bounces-3796-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3797-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3395851851
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 16:42:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5EB1D851863
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 16:48:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E29E287766
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 15:42:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B9B62816D7
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 15:48:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFF173C689;
-	Mon, 12 Feb 2024 15:42:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 507C83CF52;
+	Mon, 12 Feb 2024 15:48:04 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f45.google.com (mail-oo1-f45.google.com [209.85.161.45])
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CFFB3D0C6;
-	Mon, 12 Feb 2024 15:42:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8DCD3C495;
+	Mon, 12 Feb 2024 15:48:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707752522; cv=none; b=CpVLdKWe00UVjnDMRb+qLInqOP6wudEKNZHlOtrD+hyFA4oIZmJTk6X71rdSZo1+PCHYhH0HLd1XgKVAZwfhetGax8kPQL8RZY7gFM1P6fuml/vy+jmMwKg6aSuN5PoUPigJFOq+cK3ohhzGxDLzZiSfc/STCHqQNbjcg4tbSOE=
+	t=1707752884; cv=none; b=h5Mrz1Da7R5SFYxJJbm1pPweRIEXxhpc7tHNrIKGxlP1ZsVO4hf5xq4A4rsiC+LZGDnq5F6ODH8g2WvYfSGbv0c1lO5yI/W6xt+GHhZH7yHL+Kp4MxqrgXBRDG7USQGDfHfzaCyWnNCcuWMKa1iEZDnnsAap3BrXl5gwW35f3h4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707752522; c=relaxed/simple;
-	bh=KDh/hi7bq9l1c37SzjT6niz4jgYaXc6jpGvcu/VGSRY=;
+	s=arc-20240116; t=1707752884; c=relaxed/simple;
+	bh=Be7/SIwQMjRcU5oeA3ToxtFC/uZGDzasgtxIjw2fCjo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QBJ4/e6UoAe1IqYCjxztj4xfCCX2+8KaYAtcv1v72ZTL3ix5hRAosDhjMFZJZ4mbrM4CmN7axY0h7z0RGGjW2A6cB2CH6k/ZfXrY4IzdjIlmlP85GizsrWj//W8dmiN4dxWLpyuM9jDcKmu+AdCmGB9ts2fySCT8GfV3Jk6jRSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.45
+	 To:Cc:Content-Type; b=s9e9LDRXAaEGu8ZCEOT+01AxKNT5fmDSKR2R1a/eQRH4Ga7UecoMkfrSbgUfBDOesavKot5XEM9LQ2GC2n5K0rThmdZxYD91uTLevGvABPUDagyIaVEbsKNzy2DygDJOgKSObhg1dnLo4MUH9KJTog8Vq1jpy0R1RaazWNBn5SM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-59584f41f1eso1389827eaf.1;
-        Mon, 12 Feb 2024 07:42:01 -0800 (PST)
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-59d249f8e57so184271eaf.1;
+        Mon, 12 Feb 2024 07:48:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707752520; x=1708357320;
+        d=1e100.net; s=20230601; t=1707752882; x=1708357682;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GnQ+DX+UZqNrdEuB64oB3UZemVisp0yDZJbqJza8AzE=;
-        b=wGtnvAy0MLrMEvVxwNzWgN8fT/wSQQhXU4QhKLDnKF2HHBnxS3skcU9ay3qLtyyeZf
-         q4h4GpYuLfBTJwFAnFMqgCv5ewVrKSzkJLrxJtXWauE/L/mnT1IGweRfJFKF5hJAxFXY
-         1OhDtFooVtDMLY404MhvGOFhD/idnKSKXzfIpGrriVhkeA1sRQ0gXPYoYZdo5TtUkgVN
-         /ppPVXwldI4A8ln0vlD1efIUBaq66WcxY0V/E4n9YLB754jwBUaYht+66jHekrNIuYot
-         Fod52p+Z0N5dC7uWDvq2DuOSOahXjhCWxaqfSmDuetx0gWEaN2H9+8UgRpK5c34s1L4i
-         CAjA==
-X-Forwarded-Encrypted: i=1; AJvYcCXVPkOeko91YagwhvSAjdV/JSR/g+BiNQET9P3jBwBgfYMfH+d+Y0dxOZS61JjNP3DC9fnujkW87P6uXfh9mc9Q4owcennX9ZW7+czDwXTn3N2qK667+4pXg4uUqg7dpB1OBXqmrtE=
-X-Gm-Message-State: AOJu0YyRb22cDuD6IXWtPQfbyosjBoPhSCUMmEN6aYhIjCeanLDdV052
-	FDci/frLPiwcnmRkjdbSeSH75GD/nyEbm2bXlkhC6+r8E80HOkjvETXRRNzjD3b+wGMR5VVf4BN
-	OvWNsEGUSzWNIFsKFMye/Y8/wq/0=
-X-Google-Smtp-Source: AGHT+IG6J54iAWLm5YCCnmbgxmeODuG0ts8ajxZM15fBAtFD2meyvjhbC98oHV0Zzg6Z+YXsJKngYmXFptmMUzva9cI=
-X-Received: by 2002:a05:6820:2b12:b0:59a:bf5:a0da with SMTP id
- dt18-20020a0568202b1200b0059a0bf5a0damr5093840oob.0.1707752520466; Mon, 12
- Feb 2024 07:42:00 -0800 (PST)
+        bh=+/L6O8C6yOX7T5tLvNgT8mfVyjq/NcCcZ+sJHriik+w=;
+        b=FPqXOMSaQNp1leCXv0YSicYaCZ9GzNIN6r1aaAWqjjXuP1J4Zszftg0UU37T1sRERE
+         yI1zp/NsTkidFfj+cIOh2nAhPdL8++E/EOU2rUeHXAaHGglXMNqyGi2OXl5p3ZvNPgX2
+         0YnVmQ7fu1vZlX1m5/eXytDKLda/pwMMjq1lvtI/EguxXJ4PsT2fi8fn9/RoScA9H6TJ
+         qkp8gZQ2B8JtBitTYc10RxHKXc4S1vcFMxeJbV/+K5m5wxgVWN9o4nkoI4qf1YOBIaCy
+         K5HoT7pcsR8XPpuXAiAusBTV8gqV/FqgYBdwUzDnuBChZh5ED/mg/eM9HKT4sW11rs7G
+         5ZIw==
+X-Forwarded-Encrypted: i=1; AJvYcCVCy93O90Tu/13s62sj+HG2oXJo8QpE4GIuQzawZoMKEtB58UAwZcIR8DaOBxFnYvY+UfbXgPOpEGXkwTUJtKNe+he2q2XJ+OmKTqOnmgIQImWGpswn684maY5QnAQTGHKEmT7mfs6Qw3rWiwUA/2XqpaXpYLMsa9/3RXBiiN+F2LyJIDGn966B1aTZXtuft+NpjuxZ5ba7AYbkZK11QVOr/+zz
+X-Gm-Message-State: AOJu0Yxso8FfzrdH8TdBfkiZG93HYvgSoIuty/g9IlMcR+iRGnfsZKsn
+	fjFZ7kdvMWc221G8DMky0lulp0/nifbHxThkZskA9jnl0JXlooIucLsp6HINmaR0UlPxwXliT15
+	vWcFUX8EOvxKUpIsDPPxrtU7C2kA=
+X-Google-Smtp-Source: AGHT+IGTL+ANY9Z1WiTUMovOS6ysIZX3Uxv342QYPLEI2dcV3vncrS0nHYmuzHom4rfnjZABfejkVl1IaHI99TFW70c=
+X-Received: by 2002:a4a:ca0d:0:b0:599:e8ff:66d9 with SMTP id
+ w13-20020a4aca0d000000b00599e8ff66d9mr5256840ooq.1.1707752881841; Mon, 12 Feb
+ 2024 07:48:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <8eefeeb7-f8e8-49f4-b83c-e67a9e728f41@mailbox.org>
- <20240209154336.7788-1-torvic9@mailbox.org> <d06441c9-db33-4c44-81cd-dc1052f48e43@amd.com>
-In-Reply-To: <d06441c9-db33-4c44-81cd-dc1052f48e43@amd.com>
+References: <20240205060305.3594942-1-li.meng@amd.com>
+In-Reply-To: <20240205060305.3594942-1-li.meng@amd.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 12 Feb 2024 16:41:49 +0100
-Message-ID: <CAJZ5v0hPkOAkWaDFu79RAcyht5r9CK8pwuVpumL5==1D9cFMYQ@mail.gmail.com>
-Subject: Re: [PATCH v3] cpufreq: amd-pstate: Fix min_perf assignment in amd_pstate_adjust_perf()
-To: Mario Limonciello <mario.limonciello@amd.com>, Tor Vic <torvic9@mailbox.org>
-Cc: Perry.Yuan@amd.com, ray.huang@amd.com, gautham.shenoy@amd.com, 
-	rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, Oleksandr Natalenko <oleksandr@natalenko.name>
+Date: Mon, 12 Feb 2024 16:47:49 +0100
+Message-ID: <CAJZ5v0iQqHET2-vqEkLH34_dryP7yLSfkxqfsU2F33yuWkO_jw@mail.gmail.com>
+Subject: Re: [PATCH] Fix the warning of amd-pstate.rst.
+To: Meng Li <li.meng@amd.com>
+Cc: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, Borislav Petkov <bpetkov@amd.com>, 
+	Huang Rui <ray.huang@amd.com>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	x86@kernel.org, linux-acpi@vger.kernel.org, 
+	Shuah Khan <skhan@linuxfoundation.org>, linux-kselftest@vger.kernel.org, 
+	Nathan Fontenot <nathan.fontenot@amd.com>, Deepak Sharma <deepak.sharma@amd.com>, 
+	Alex Deucher <alexander.deucher@amd.com>, Mario Limonciello <mario.limonciello@amd.com>, 
+	Shimmer Huang <shimmer.huang@amd.com>, Perry Yuan <Perry.Yuan@amd.com>, 
+	Xiaojian Du <Xiaojian.Du@amd.com>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Borislav Petkov <bp@alien8.de>, Oleksandr Natalenko <oleksandr@natalenko.name>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 9, 2024 at 4:50=E2=80=AFPM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
+On Mon, Feb 5, 2024 at 7:04=E2=80=AFAM Meng Li <li.meng@amd.com> wrote:
 >
-> On 2/9/2024 09:42, Tor Vic wrote:
-> > In the function amd_pstate_adjust_perf(), the 'min_perf' variable is se=
-t
-> > to 'highest_perf' instead of 'lowest_perf'.
-> >
-> > Cc: <stable@vger.kernel.org> # 6.1+
-> > Fixes: 1d215f0319c2 ("cpufreq: amd-pstate: Add fast switch function for=
- AMD P-State")
-> > Reported-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-> > Reviewed-by: Perry Yuan <Perry.Yuan@amd.com>
-> > Signed-off-by: Tor Vic <torvic9@mailbox.org>
-> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-> > ---
-> > v2->v3: Resend with git, misconfigured mail client borked v2
-> > v1->v2: Add Perry's 'Reviewed-by' and 'Cc: stable' tag
-> > ---
-> >   drivers/cpufreq/amd-pstate.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.=
-c
-> > index 08e112444c27..aa5e57e27d2b 100644
-> > --- a/drivers/cpufreq/amd-pstate.c
-> > +++ b/drivers/cpufreq/amd-pstate.c
-> > @@ -577,7 +577,7 @@ static void amd_pstate_adjust_perf(unsigned int cpu=
-,
-> >       if (target_perf < capacity)
-> >               des_perf =3D DIV_ROUND_UP(cap_perf * target_perf, capacit=
-y);
-> >
-> > -     min_perf =3D READ_ONCE(cpudata->highest_perf);
-> > +     min_perf =3D READ_ONCE(cpudata->lowest_perf);
-> >       if (_min_perf < capacity)
-> >               min_perf =3D DIV_ROUND_UP(cap_perf * _min_perf, capacity)=
-;
-> >
+> Title under line too short
+>
+> Signed-off-by: Meng Li <li.meng@amd.com>
+> ---
+>  Documentation/admin-guide/pm/amd-pstate.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/=
+admin-guide/pm/amd-pstate.rst
+> index 0a3aa6b8ffd5..1e0d101b020a 100644
+> --- a/Documentation/admin-guide/pm/amd-pstate.rst
+> +++ b/Documentation/admin-guide/pm/amd-pstate.rst
+> @@ -381,7 +381,7 @@ driver receives a message with the highest performanc=
+e change, it will
+>  update the core ranking and set the cpu's priority.
+>
+>  ``amd-pstate`` Preferred Core Switch
+> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>  Kernel Parameters
+>  -----------------
+>
+> --
 
-Applied as 6.9 material, thanks!
+Applied as 6.9 material under a revised subject, thanks!
 
