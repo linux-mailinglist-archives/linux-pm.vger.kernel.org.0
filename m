@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-3846-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3847-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B3108521B7
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 23:48:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCE478521CF
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 23:55:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 00BE2B21E5A
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 22:48:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 894461F23159
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 22:55:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C54144DA1D;
-	Mon, 12 Feb 2024 22:48:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6FBA4EB28;
+	Mon, 12 Feb 2024 22:54:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="WMEzaMb0"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="yB1EVfzh"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F3604EB23;
-	Mon, 12 Feb 2024 22:48:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 320654E1D4;
+	Mon, 12 Feb 2024 22:54:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707778111; cv=none; b=J1HUYh2qYjlwsuyU4kkdGH7yDIfm4xFvz20ZPBlV1BBBxnRhsInQhSQY7iY5YQZpzdKohsksun3O6a9wW6b1OESGY9kU9nvlNOtJ/ZaxC/Vfc/7ZlZk7toNUkMZ6M7Pk4WKlqWl8hQeXUNjefUvpYa/rZdV/F9MQZqjErdP1c1Y=
+	t=1707778495; cv=none; b=kwFlWKokrI4oJtWSSLFX28301y0UThqwvRgHKBaspKBk/PHxxNIY7KIfZXJ3/wGVw0aTGPB9mqM8W8AZbsV1sPUA53/0bMr/VmK/MqzR4fPVvag9+H9vqwMUPTivZPfyt3VW15svySy4EtF82qvw2epnUz4ydC//dMwPIwpw0Fo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707778111; c=relaxed/simple;
+	s=arc-20240116; t=1707778495; c=relaxed/simple;
 	bh=ul5k55UQtWoQXPNcb/0pzT+j7IivOX8sLryDaU7Ct7Q=;
 	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=fsHMnuXOm1GiJW94XRWLqSgK7D7ct6WS7sBwSxzKDDnLOP+0p17XLJL2gYIqBR+Rb0CZOb2PxD3JFIFzZHnkseaBS4iKUUo0aOYHGau3n4R5DNTl1hekM0oIUYVNgH7dK7HFJ+k0xANhSCZTwMn0I6tuOFwK4ZPkuBMdf9+3ik4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=WMEzaMb0; arc=none smtp.client-ip=46.235.227.194
+	 In-Reply-To:Content-Type; b=Q9ekgBSDsL7ahLXl5CZJaSv/dX3HbTYA7PKvPq/IZhk45uRH5xhPKWeuLd0If9Q6txcbBX/2E14h8aptcm9OOMcDWdcL80hRFRNF/jrgQkXRr3qTARzb8ZAeUtUV/yk5IozFUVwOuw2D9MPEmclTZcjmg9oXg60NK6NDXyhuWVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=yB1EVfzh; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1707778107;
+	s=mail; t=1707778492;
 	bh=ul5k55UQtWoQXPNcb/0pzT+j7IivOX8sLryDaU7Ct7Q=;
 	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-	b=WMEzaMb0jF8d4K8ffKjdIN1T6SfXUyxnsga8j71b2gYgKpEhxOCt3Y89KABX5xqd5
-	 fbv9vpbeOCuIE88lN74M4DIGVF7qczX91bFOdYuqUJllh3/RebXKfkalUjcPJk001/
-	 H8qWuLfeISqog7kruNsqPXPmtA5X2Z9/iRmOSTyS1PkJ67wdaC9kUuvr0xBFRiZBna
-	 Ynz6HJodRV8HLqyLBdP/+4MFIDsEpg0pAbX53t+FPuNza7+oTdUtX3aROyY+K/IdMH
-	 ZQlgFA8zm9WCFUY694biMeLRpjUTDyzRnrXUe5rCtYxsZY9xaWXbgVXvmcY4ziLuk7
-	 rLkrJlA5lSY0Q==
+	b=yB1EVfzhAXAG+w8ega+dSZ/swCbr2gPUETml6Hex/vwR5/C7CK1G6sWoB/LnAPMA2
+	 q9cQYwIbYH8MAOIJ6fuqH1PTz4iKmpY3lcFeVynIBLGwJ1r4bFiaSTjmQqlEKl/YZN
+	 RKAcC2RMZauWn8f6J6h1Lkmk5q5shIRogie2/NalnQ6DppWXa3Tio9UADKvDzbDwe7
+	 dI6p+Nnj6ngDjxgBNbvlsC4ErC5LvmVYBov+/DO0yNk4mwP30qcThg+h6e2d6xfvsa
+	 eulyaETtXwnXJWxgUNHqrWsO4c8O/tQHkkKkIRw7582s7Te+EJYhow3fUfpdThhjCT
+	 j9xEaqlEFAmGQ==
 Received: from [100.115.223.179] (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: cristicc)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id D75633780C22;
-	Mon, 12 Feb 2024 22:48:26 +0000 (UTC)
-Message-ID: <ad65ab14-4e23-43ec-aed8-6bfc59dddb51@collabora.com>
-Date: Tue, 13 Feb 2024 00:48:26 +0200
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 3DA073782059;
+	Mon, 12 Feb 2024 22:54:51 +0000 (UTC)
+Message-ID: <088b7b48-075f-4e68-9675-38c0e1f4a560@collabora.com>
+Date: Tue, 13 Feb 2024 00:54:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -58,8 +58,8 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 From: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-Subject: Re: [PATCH v4 01/19] power: reset: atc260x-poweroff: Use
- devm_register_sys_off_handler(RESTART)
+Subject: Re: [PATCH v4 02/19] power: reset: atc260x-poweroff: Use
+ devm_register_sys_off_handler(POWER_OFF)
 To: Andrew Davis <afd@ti.com>
 Cc: Sebastian Reichel <sre@kernel.org>,
  Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
@@ -74,9 +74,9 @@ Cc: Sebastian Reichel <sre@kernel.org>,
  linux-actions@lists.infradead.org, linux-arm-msm@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
 References: <20240212162831.67838-1-afd@ti.com>
- <20240212162831.67838-2-afd@ti.com>
+ <20240212162831.67838-3-afd@ti.com>
 Content-Language: en-US
-In-Reply-To: <20240212162831.67838-2-afd@ti.com>
+In-Reply-To: <20240212162831.67838-3-afd@ti.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
