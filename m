@@ -1,65 +1,70 @@
-Return-Path: <linux-pm+bounces-3777-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3778-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44AA7850F39
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 10:00:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 926C7850F67
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 10:12:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D56741F216A1
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 09:00:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 28A24283BE5
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Feb 2024 09:12:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF86D5235;
-	Mon, 12 Feb 2024 09:00:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A5EBFC16;
+	Mon, 12 Feb 2024 09:12:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U/Kiv5GF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K85mfHk6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB844FBFC
-	for <linux-pm@vger.kernel.org>; Mon, 12 Feb 2024 09:00:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D34A4FBFC;
+	Mon, 12 Feb 2024 09:12:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707728421; cv=none; b=p/UVfJrMo1CY5NYIoyUcf1hxRupUqanZ6yQ16aXRFTXOpvd+O1K0PtBpJAaZjKyLW9200D1OJ9idrXCXqbGEIAExEweYLFIPTF+vAH/TAQJqBrI+9z+FEOaa07M6LUEvVhtU9bAWwOcCL8PHHx8AcVwUWfstzMtEyqdgZGdwGtw=
+	t=1707729140; cv=none; b=TgE0J9ovgfWE5Tcy0JimjBRvyUZttRJ2ekJixF5QWn3/O7BkC34BxH6ndYH0WW4iZkBdBqpS/e6emElVOpSkBsNZsVdtTN4I7m/JI87ukJ+GOR70hqgMfDfpTOV6xei493o/8/hssHHsncyz7JxZx6pU5VZrVkznMQl2PShcYi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707728421; c=relaxed/simple;
-	bh=v1Bf09BO5/eogjE+GPtFhZQEgOuybwCpWWW15eOCeFs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ns/q+rTrEb/E0CIUgj/NuWnV7GOXqou7b6T0kay5hW6DA+1HCVW/9msIpSbKojNB1XCCxuuAJCD65f1jOysULpyEX4FZc9wE+LlvVHgchiupQuwegXla9C5nMJct2c3skh2sPwvcriTNmRtaI7vJJzV7AxdGz8/Q9kgktY/9X4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U/Kiv5GF; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1707728418;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=zNWnZWLepCf5/bKiHycs304BQ2YBWV2Wh36u5RzJTeQ=;
-	b=U/Kiv5GFYZ2TnJu2Fy0I9OyQZR+d7cnbT0mUcYHdcZkIcXqTW/Ee8e0LF8cIDEL3JGX3oA
-	gPL0AtdHsF+YSP2HMtZ6QNAaRKnMVFDgxJs5e2HcBroowkc0Ix5VINpG4gC99V48i4iM7c
-	01MfubSyejCIBlw/0GewFGqyzbxaFGA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-25-xSlsM-SKMFKDzNp2s3G1vw-1; Mon, 12 Feb 2024 04:00:16 -0500
-X-MC-Unique: xSlsM-SKMFKDzNp2s3G1vw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6836B868A10;
-	Mon, 12 Feb 2024 09:00:16 +0000 (UTC)
-Received: from x1.localdomain.com (unknown [10.39.194.82])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id ABFCF530390;
-	Mon, 12 Feb 2024 09:00:15 +0000 (UTC)
-From: Hans de Goede <hdegoede@redhat.com>
-To: Sebastian Reichel <sre@kernel.org>
-Cc: Hans de Goede <hdegoede@redhat.com>,
-	linux-pm@vger.kernel.org
-Subject: [PATCH] power: supply: axp288_fuel_gauge: Add STCK1A* Intel Compute Sticks to the deny-list
-Date: Mon, 12 Feb 2024 10:00:14 +0100
-Message-ID: <20240212090014.13719-1-hdegoede@redhat.com>
+	s=arc-20240116; t=1707729140; c=relaxed/simple;
+	bh=hU4JqTgEX1Tz6qm53KazJ+VwpJp+5TGm9hF0fPKSL/k=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=nw0z/BLf+QHw2cFegfeSNBFSrbanOn/Clmgm31BIebBr0mw5jgSrQpojpAFWz00yMZz5aqfj8ote2Vsi1u36lkfbF52kZUELDjJ+CHQZdzQ2899KCTVw6EhLigr/PAudvIG6IiQ/v6prL8obUA3wjMNwxXqrU7Q8J3wtn6oqVcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K85mfHk6; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707729139; x=1739265139;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=hU4JqTgEX1Tz6qm53KazJ+VwpJp+5TGm9hF0fPKSL/k=;
+  b=K85mfHk6MUZ5NLt5pwUk4lHBay+Ehwn4STN0DcHJKjKfcg4Oztx30tkJ
+   qixGhmmKckW1OwQen8IqYfoneOkDwSYjlEuYo3gd0HZH+2HdKI75RVqix
+   9VmkHDTB6BcX9dvguMw7MjLZR1/nV3sX2sQrj7BTKmhQHNi4VD29pidoB
+   oq4WO6eYsBmZICZdIDotqSt3NvrZMN9RuW46c3t0R4uNJ4BgvewBBT/Gw
+   6HxIuO4ll1Qy9yM8U3HGY8BCVrSebjpp36QoAJxDuVYGf2HTIgVbuurkB
+   eV4Yv59tKBpv1nE/Fwp+ikwPvC9NZiSAlK3UKTXkUfmfl06pLJF1gjIiD
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10981"; a="12256147"
+X-IronPort-AV: E=Sophos;i="6.05,262,1701158400"; 
+   d="scan'208";a="12256147"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2024 01:12:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.05,262,1701158400"; 
+   d="scan'208";a="2508051"
+Received: from sgruszka-mobl.ger.corp.intel.com (HELO localhost) ([10.252.62.245])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2024 01:12:15 -0800
+From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+To: Bjorn Helgaas <helgaas@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-pci@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+	Oliver O'Halloran <oohall@gmail.com>,
+	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [PATCH v2] PCI/AER: Block runtime suspend when handling errors
+Date: Mon, 12 Feb 2024 09:31:58 +0100
+Message-Id: <20240212083158.76549-1-stanislaw.gruszka@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -67,53 +72,98 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
 
-Besides the existing STK1A* Cherry Trail based Intel Compute Sticks
-already on the deny-list, Intel also made Bay Trail based Compute Sticks
-which have a product name of STCK1A* and wich also report a non
-existing battery with a random battery charge.
+PM runtime can be done simultaneously with AER error handling.
+Avoid that by using pm_runtime_get_sync() before and pm_runtime_put()
+after reset in pcie_do_recovery() for all recovering devices.
 
-Instead of adding 3 new deny-list entries for the 3 variants of the STCK1A*
-sticks consolidate the 2 Cherry Trail STK1AW32SC and STK1A32SC variants
-into a single entry with a partial match for STK1A* and add a single new
-STCK1A* match for the Bay Trail variants.
+pm_runtime_get_sync() will increase dev->power.usage_count counter                                                                                                                                                                          to prevent any possible future request to runtime suspend a device                                                                                                                                                                          It will also resume a device, if it was previously in D3hot state.
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+I tested with igc device by doing simultaneous aer_inject and
+rpm suspend/resume via /sys/bus/pci/devices/PCI_ID/power/control
+and can reproduce:
+
+igc 0000:02:00.0: not ready 65535ms after bus reset; giving up
+pcieport 0000:00:1c.2: AER: Root Port link has been reset (-25)
+pcieport 0000:00:1c.2: AER: subordinate device reset failed
+pcieport 0000:00:1c.2: AER: device recovery failed
+igc 0000:02:00.0: Unable to change power state from D3hot to D0, device inaccessible
+
+The problem disappears when applied this patch.
+
+Cc: stable@vger.kernel.org
+Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
 ---
- drivers/power/supply/axp288_fuel_gauge.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/pci/pcie/err.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/supply/axp288_fuel_gauge.c
-index 3be6f3b10ea4..967a26096485 100644
---- a/drivers/power/supply/axp288_fuel_gauge.c
-+++ b/drivers/power/supply/axp288_fuel_gauge.c
-@@ -550,18 +550,20 @@ static const struct dmi_system_id axp288_quirks[] = {
- 		.driver_data = (void *)AXP288_QUIRK_NO_BATTERY,
- 	},
- 	{
--		/* Intel Cherry Trail Compute Stick, Windows version */
-+		/* Intel Bay Trail Compute Stick */
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "Intel"),
--			DMI_MATCH(DMI_PRODUCT_NAME, "STK1AW32SC"),
-+			/* Partial match for STCK1A32WFC STCK1A32FC, STCK1A8LFC variants */
-+			DMI_MATCH(DMI_PRODUCT_NAME, "STCK1A"),
- 		},
- 		.driver_data = (void *)AXP288_QUIRK_NO_BATTERY,
- 	},
- 	{
--		/* Intel Cherry Trail Compute Stick, version without an OS */
-+		/* Intel Cherry Trail Compute Stick */
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "Intel"),
--			DMI_MATCH(DMI_PRODUCT_NAME, "STK1A32SC"),
-+			/* Partial match for STK1AW32SC and STK1A32SC variants */
-+			DMI_MATCH(DMI_PRODUCT_NAME, "STK1A"),
- 		},
- 		.driver_data = (void *)AXP288_QUIRK_NO_BATTERY,
- 	},
+RFC -> v1:
+ add runtime callbacks to pcie_do_recovery(), this covers DPC case
+ as well as case of recovering multiple devices under same port.
+
+v1 -> v2:
+ - add R-b, A-b, cc-stable tags
+ - tweak commit message
+
+diff --git a/drivers/pci/pcie/err.c b/drivers/pci/pcie/err.c
+index 59c90d04a609..705893b5f7b0 100644
+--- a/drivers/pci/pcie/err.c
++++ b/drivers/pci/pcie/err.c
+@@ -13,6 +13,7 @@
+ #define dev_fmt(fmt) "AER: " fmt
+ 
+ #include <linux/pci.h>
++#include <linux/pm_runtime.h>
+ #include <linux/module.h>
+ #include <linux/kernel.h>
+ #include <linux/errno.h>
+@@ -85,6 +86,18 @@ static int report_error_detected(struct pci_dev *dev,
+ 	return 0;
+ }
+ 
++static int pci_pm_runtime_get_sync(struct pci_dev *pdev, void *data)
++{
++	pm_runtime_get_sync(&pdev->dev);
++	return 0;
++}
++
++static int pci_pm_runtime_put(struct pci_dev *pdev, void *data)
++{
++	pm_runtime_put(&pdev->dev);
++	return 0;
++}
++
+ static int report_frozen_detected(struct pci_dev *dev, void *data)
+ {
+ 	return report_error_detected(dev, pci_channel_io_frozen, data);
+@@ -207,6 +220,8 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
+ 	else
+ 		bridge = pci_upstream_bridge(dev);
+ 
++	pci_walk_bridge(bridge, pci_pm_runtime_get_sync, NULL);
++
+ 	pci_dbg(bridge, "broadcast error_detected message\n");
+ 	if (state == pci_channel_io_frozen) {
+ 		pci_walk_bridge(bridge, report_frozen_detected, &status);
+@@ -251,10 +266,15 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
+ 		pcie_clear_device_status(dev);
+ 		pci_aer_clear_nonfatal_status(dev);
+ 	}
++
++	pci_walk_bridge(bridge, pci_pm_runtime_put, NULL);
++
+ 	pci_info(bridge, "device recovery successful\n");
+ 	return status;
+ 
+ failed:
++	pci_walk_bridge(bridge, pci_pm_runtime_put, NULL);
++
+ 	pci_uevent_ers(bridge, PCI_ERS_RESULT_DISCONNECT);
+ 
+ 	/* TODO: Should kernel panic here? */
 -- 
-2.43.0
+2.34.1
 
 
