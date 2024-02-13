@@ -1,186 +1,182 @@
-Return-Path: <linux-pm+bounces-3867-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3868-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86265852F46
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 12:28:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DE2285308D
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 13:33:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C5CC1B226C3
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 11:28:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C1C101F24F01
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 12:33:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BD63364C1;
-	Tue, 13 Feb 2024 11:27:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DD1924A1F;
+	Tue, 13 Feb 2024 12:33:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TO3y8Ree"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vzeCD31V"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CDBB38DD1
-	for <linux-pm@vger.kernel.org>; Tue, 13 Feb 2024 11:27:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C61F71EB2D
+	for <linux-pm@vger.kernel.org>; Tue, 13 Feb 2024 12:33:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707823648; cv=none; b=lXqb/AtRFfIzI6LyHO4PxuP03HOiPTzUybxXEAEeqe0JjDLreUvWMT41ByIqOJL6A85bxwMArxoQgrENobiWV/FbE5X3zcW/P1MV6iebqJqbkwS7bWr2zsLludF8Y8d0nRm+3Wi7U2ATFS15D4xEuQwMludWe+FykLuJo3PxXTM=
+	t=1707827627; cv=none; b=kce2YqBsch4N2kNFM4X/qYGJw6lBOUQk+5CAOvZCtbTZoUJjrJilvDx52qEBcAQWxLVG++M0n1Y9n5oxV5hILL9V/9FKd101+kq3+hg2gynGOzi5Aw1rN/joqTnxbrAronC+P0Sci1+jae0jvUc/j5UwNqLRIOmx97frM6Ldbb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707823648; c=relaxed/simple;
-	bh=Kclnb04BY0C4ljJ3zVSxBouZ+rwMgrCaisAJwnrCKhc=;
+	s=arc-20240116; t=1707827627; c=relaxed/simple;
+	bh=/GJ4QFR4osX4gLa51sIA6o5xnM4aOd/oZc5etiXgL0Y=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XzL/mFsvoSB7Fpl/mClXiy+Nzz8MN3kWeaSGdH0nAuPs32yfYmkaEIPufNAN37cEYAE2KIONHUttaT0E55c65TV7MyJwBHASvCq2GfrquGHe6sqZFEHBe/XlTTR7qGoFKL1uhzxMYHpYy+bjtCrP/uB17Lo6DN0imX44Ryh2f7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TO3y8Ree; arc=none smtp.client-ip=209.85.216.53
+	 To:Cc:Content-Type; b=iS6cdkHc8DpLevpmMTobBlEG/ezFS3YCe6jN/l5+h2XHD04vkmMpgnLmtaolyriapFklnM1cgiO6DWUK9S6UMdFNiKEG9t20be7zgltqQD3dXmggUL4Wgo6pMZl5QVDaAA3I2eZTyAwFkj4sSs4HGN6lhFNS1nnQQ748d3XObcQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vzeCD31V; arc=none smtp.client-ip=209.85.128.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-296d24631c0so2378943a91.3
-        for <linux-pm@vger.kernel.org>; Tue, 13 Feb 2024 03:27:26 -0800 (PST)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-60782336a3aso5426037b3.2
+        for <linux-pm@vger.kernel.org>; Tue, 13 Feb 2024 04:33:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1707823646; x=1708428446; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1707827625; x=1708432425; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sxqpdHvCilRcVXHUhBIeUrNxDR9OMFt9/5Rvsq+VzvI=;
-        b=TO3y8ReecrhR1JTYkZ8FMKKvsRLWgimkarfv8IRg5Cg8FQazhqmROAsPHAD9Gjm8Ng
-         NsRFZPPRzcQgv7qss1JWfmt9lvuncHA6fyFmcOQtkZewxfV3ooCSyxwYw6dGbfBd04Ye
-         MTvgG7RUImvulgRaqeY2f3QhBIET121zZ8GR7hrFbG/tkOczYnyWTxl2FooGFJjchZf1
-         rZo9u+FjEvmu8auxnmaxhF4g2aJhqUwk541PYeAy6EPXrxi2XSdCfO4Ol+yCW4fC9g0y
-         mk2NPcR2wyrKa1JuUSeigUm8oKP8bNeVQUCWS661mMf1A7HS9vv8AvNtPD5DKx4YoOAz
-         AO/w==
+        bh=qzyv/WoCMge5Duet8jp2D0QmHRULtMDBTqMNs3hbObU=;
+        b=vzeCD31VJnMqPvGnxfyM0zjd+q61LdAuyZcOHEXVGOeKUIl6drb/xHuV3rwZSyiIB4
+         FlFbbLxFcDHB/nl+iL90KnEBAJxV6pmTSPJGoF5B+1jsCr0n7AskooVRxU7ocwOGY6JS
+         aG+eQM+86Ync6V2D2vvwd3gPTW5wm3EtYC5lbrPePHntv3xtve1hO5jG45OPnSaiCjOQ
+         jQQEDskoz2OWpuHOB0y7LSo4n5NUOL0fBL/sMzgtFYadX2E3h5t3ugW/pWh6BYo5Ci2V
+         l5Cv4948lVddSpvmqk5OmpfDyzFTDvw2GdJnSOEbuaEolwBGynm1Sqomb67Um4vCcME6
+         NgNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707823646; x=1708428446;
+        d=1e100.net; s=20230601; t=1707827625; x=1708432425;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=sxqpdHvCilRcVXHUhBIeUrNxDR9OMFt9/5Rvsq+VzvI=;
-        b=Y48z5j+jtCRC8dfnp3d2fSQIuDyjm5muLH3F5OoKZkOZLhuPqrD4OHsd1mRHMWBmqL
-         +30TsuIaKb6SxEpkqTMhEsqmGa7GWrSjirj+rrRGA/02po3kxNCHRAN0u+9NGNNc0Z/u
-         1YNVNguP2c7sGuWrkmnTw+EKLpPn6vhpUjcQVo4gZOGg4iPHuAgYm5AXnqP1ngtdtva1
-         FfOipHftdgnABkV8YI1UJOTd38H+AU+H71kyYqNRrbA4yuZGu3SsA1S/cnUHpEdBf9+2
-         6QggxRGZ4ZkKNg3Evegtf+JOJ4bTBDDm1aXi6lCzy0LaxyyhKrCZAifjIzjT8U1bg12r
-         jsqA==
-X-Forwarded-Encrypted: i=1; AJvYcCX4BI3iDESR8zT9Ch8jFunLGH3J0oTazrYedB3P5leQbglRJ6xemiGZzbdBIsFvs1fRDz8J1NMS9+rVrVSymktJaH4RNmyZfsk=
-X-Gm-Message-State: AOJu0YwDJur6ax+Y+MTawU/ybDsQ7X1bITPPGA/ehdhjiobCQVBV+d5E
-	kGi+sGG8w9xCKoZUGcvt6cmzBHzFLlE5jVXjtYdTemeRP4NH9M3Qe9qyvFdkZDClazpk3fRflal
-	qT9XLRMqwiNpMo4O91UwKp7wWHQvXzh7GECYSBg==
-X-Google-Smtp-Source: AGHT+IEyEKDl694KOOGPeEdpUjGKo9ifrYbsCOxVohv+90YnyiFic31rEHSQFLvsBzUeW7zed3Qxqs6HuF9kIBx9nBo=
-X-Received: by 2002:a17:90a:d504:b0:293:d50c:b704 with SMTP id
- t4-20020a17090ad50400b00293d50cb704mr5488643pju.19.1707823645870; Tue, 13 Feb
- 2024 03:27:25 -0800 (PST)
+        bh=qzyv/WoCMge5Duet8jp2D0QmHRULtMDBTqMNs3hbObU=;
+        b=xMGVwN6OCF6dKu5xOMF7s7xWjBBErFNGjts3CDDeE6BZ1ghm1FVRsEwwtIJd+vDQhe
+         CemYU6GN2pL57hKQ+zEC6Qr/ruYVMjf35YNh4B+xB91sgz4zJrPO3tWhi4roX4PRvJpW
+         wwyDoOB5ZSPysIX9MB1uzwNR/4dANVsSZ5MKnjsKHTmZWi3Z1bmee4flwmD/3mSfjrlY
+         o6Xvne2ioNPA6kKKlZcdf9BsJEmKjK7ChG3IcXHs6LCOJFMXRnfDXZK40j4tm0KQM7Dg
+         v7aS87uuB7VO59K/wX9Xhph+pqfDXy8BIvIEhTiRcE6un83kpXf6ogh4i1Zfw98wOVk4
+         kTBA==
+X-Forwarded-Encrypted: i=1; AJvYcCUEYehrgOGnkVPUBSDi4ork0VQPhmYJDHq7j1rk4eWGgV+Uv+TRmgqV+f08dqjEa3C0YnFe3hWOuscJxi1pU+kZAGQgf/klVb8=
+X-Gm-Message-State: AOJu0YzfdmpLsXhDr6Hi8dFBUOqs2MbYig7QYfEZRPty0j1J+QOBtIjj
+	lyJfBDitRbN9OxhTCcyN8mvhv0cRMrFYfs/aKEprF3GKhhYtKn3Ja/HV2zbLOOzRJAVwwQrL+QR
+	enMmzjiwEOnqdSab5KVlvHMzvIwlUmpiJSYKiuzpyZk6YVMn5
+X-Google-Smtp-Source: AGHT+IGFyrrSYwBqPLrMhhh9GDxxlSQDKtyfUqNSima8IgUPgwDz9wnrBRv0W0Jygr+WapDaQ19ac613tdC5Q7dXnTI=
+X-Received: by 2002:a05:690c:2f88:b0:607:782e:fdf3 with SMTP id
+ ew8-20020a05690c2f8800b00607782efdf3mr2615924ywb.23.1707827624727; Tue, 13
+ Feb 2024 04:33:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <002f01da5ba0$49cbf810$dd63e830$@telus.net> <CAKfTPtA-jizig0sh_shmkAMudAxDPYHP0SdanZe=Gc57jVKouQ@mail.gmail.com>
- <003801da5bae$02d6f550$0884dff0$@telus.net> <CAKfTPtC7pOtb-srrgQLFbTueLLDqHay+GQBm9=sNsnZDg_UYSQ@mail.gmail.com>
- <000b01da5d09$8219f900$864deb00$@telus.net>
-In-Reply-To: <000b01da5d09$8219f900$864deb00$@telus.net>
-From: Vincent Guittot <vincent.guittot@linaro.org>
-Date: Tue, 13 Feb 2024 12:27:14 +0100
-Message-ID: <CAKfTPtB8v30LzL3EufRqbfcCceS2nQ_2G8ZHuoD5N1_y-pvFbg@mail.gmail.com>
-Subject: Re: sched/cpufreq: Rework schedutil governor performance estimation -
- Regression bisected
-To: Doug Smythies <dsmythies@telus.net>
-Cc: Ingo Molnar <mingo@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+References: <20240125191756.868860-1-cristian.marussi@arm.com>
+In-Reply-To: <20240125191756.868860-1-cristian.marussi@arm.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 13 Feb 2024 13:33:08 +0100
+Message-ID: <CAPDyKFq=35C6CdbsXmkVSgJ=JyxjMM70tfcWURGMntf6h_u0eA@mail.gmail.com>
+Subject: Re: [PATCH] pmdomain: arm: Fix NULL dereference on scmi_perf_domain removal
+To: Cristian Marussi <cristian.marussi@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Sun, 11 Feb 2024 at 17:43, Doug Smythies <dsmythies@telus.net> wrote:
+On Thu, 25 Jan 2024 at 20:18, Cristian Marussi <cristian.marussi@arm.com> wrote:
 >
-> On 2024.02.11 05:36 Vincent wrote:
-> > On Sat, 10 Feb 2024 at 00:16, Doug Smythies <dsmythies@telus.net> wrote:
-> >> On 2024.02.09.14:11 Vincent wrote:
-> >>> On Fri, 9 Feb 2024 at 22:38, Doug Smythies <dsmythies@telus.net> wrote:
-> >>>>
-> >>>> I noticed a regression in the 6.8rc series kernels. Bisecting the kernel pointed to:
-> >>>>
-> >>>> # first bad commit: [9c0b4bb7f6303c9c4e2e34984c46f5a86478f84d]
-> >>>> sched/cpufreq: Rework schedutil governor performance estimation
-> >>>>
-> >>>> There was previous bisection and suggestion of reversion,
-> >>>> but I guess it wasn't done in the end. [1]
-> >>>
-> >>> This has been fixed with
-> >>> https://lore.kernel.org/all/170539970061.398.16662091173685476681.tip-bot2@tip-bot2/
-> >>
-> >> Okay, thanks. I didn't find that one.
-> >>
-> >>>> The regression: reduced maximum CPU frequency is ignored.
+> On unloading of the scmi_perf_domain module got the below splat, when in
+> the DT provided to the system under test the '#power-domain-cells' property
+> was missing.
+> Indeed, this particular setup causes the probe to bail out early without
+> giving any error, so that, then, the removal code is run on unload, but
+> without all the expected initialized structures in place.
 >
-> Perhaps I should have said "sometimes ignored".
-> With a maximum CPU frequency for all CPUs set to 2.4 GHz and
-> a 100% load on CPU 5, its frequency was sampled 1000 times:
-> 28.6% of samples were 2.4 GHz.
-> 71.4% of samples were 4.8 GHz (the max turbo frequency)
-> The results are highly non-repeatable, for example another sample:
-> 32.8% of samples were 2.4 GHz.
-> 76.2% of samples were 4.8 GHz
+> Add a check and bail out early on remove too.
 >
-> Another interesting side note: If load is added to the other CPUs,
-> the set maximum CPU frequency is enforced.
+> Unable to handle kernel NULL pointer dereference at virtual address 0000000000000008
+> Mem abort info:
+>    ESR = 0x0000000096000004
+>    EC = 0x25: DABT (current EL), IL = 32 bits
+>    SET = 0, FnV = 0
+>    EA = 0, S1PTW = 0
+>    FSC = 0x04: level 0 translation fault
+>  Data abort info:
+>    ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
+>    CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+>    GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+>  user pgtable: 4k pages, 48-bit VAs, pgdp=00000001076e5000
+>  [0000000000000008] pgd=0000000000000000, p4d=0000000000000000
+>  Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+>  Modules linked in: scmi_perf_domain(-) scmi_module scmi_core
+>  CPU: 0 PID: 231 Comm: rmmod Not tainted 6.7.0-00084-gb4b1f27d3b83-dirty #15
+>  Hardware name: linux,dummy-virt (DT)
+>  pstate: 61400005 (nZCv daif +PAN -UAO -TCO +DIT -SSBS BTYPE=--)
+>  pc : scmi_perf_domain_remove+0x28/0x70 [scmi_perf_domain]
+>  lr : scmi_perf_domain_remove+0x28/0x70 [scmi_perf_domain]
+>  sp : ffff80008393bc10
+>  x29: ffff80008393bc10 x28: ffff0000875a8000 x27: 0000000000000000
+>  x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
+>  x23: ffff00008030c090 x22: ffff00008032d490 x21: ffff80007b287050
+>  x20: 0000000000000000 x19: ffff00008032d410 x18: 0000000000000000
+>  x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+>  x14: 8ba0696d05013a2f x13: 0000000000000000 x12: 0000000000000002
+>  x11: 0101010101010101 x10: ffff00008510cff8 x9 : ffff800080a6797c
+>  x8 : 0101010101010101 x7 : 7f7f7f7f7f7f7f7f x6 : fefefeff6364626d
+>  x5 : 8080808000000000 x4 : 0000000000000020 x3 : 00000000553a3dc1
+>  x2 : ffff0000875a8000 x1 : ffff0000875a8000 x0 : ffff800082ffa048
+>  Call trace:
+>   scmi_perf_domain_remove+0x28/0x70 [scmi_perf_domain]
+>   scmi_dev_remove+0x28/0x40 [scmi_core]
+>   device_remove+0x54/0x90
+>   device_release_driver_internal+0x1dc/0x240
+>   driver_detach+0x58/0xa8
+>   bus_remove_driver+0x78/0x108
+>   driver_unregister+0x38/0x70
+>   scmi_driver_unregister+0x28/0x180 [scmi_core]
+>   scmi_perf_domain_driver_exit+0x18/0xb78 [scmi_perf_domain]
+>   __arm64_sys_delete_module+0x1a8/0x2c0
+>   invoke_syscall+0x50/0x128
+>   el0_svc_common.constprop.0+0x48/0xf0
+>   do_el0_svc+0x24/0x38
+>   el0_svc+0x34/0xb8
+>   el0t_64_sync_handler+0x100/0x130
+>   el0t_64_sync+0x190/0x198
+>  Code: a90153f3 f9403c14 f9414800 955f8a05 (b9400a80)
+>  ---[ end trace 0000000000000000 ]---
+>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Fixes: 2af23ceb8624 ("pmdomain: arm: Add the SCMI performance domain")
+> Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
 
-Could you trace cpufreq and pstate ? I'd like to understand how
-policy->cur can be changed
-whereas there is this comment in intel_pstate_set_policy():
-        /*
-         * policy->cur is never updated with the intel_pstate driver, but it
-         * is used as a stale frequency value. So, keep it within limits.
-         */
+Applied for fixes - and by amending the commit message a bit,
+according to suggestions from Sudeep, thanks!
 
-but cpufreq_driver_fast_switch() updates it with the freq returned by
-intel_cpufreq_fast_switch()
+Kind regards
+Uffe
 
+
+> ---
+> I suppose the probe does NOT bail out with an error because this DT config has
+> to be supported, right ?
+> ---
+>  drivers/pmdomain/arm/scmi_perf_domain.c | 3 +++
+>  1 file changed, 3 insertions(+)
 >
-> >>
-> >>> This seems to be something new.
-> >>> schedutil doesn't impact the max_freq and it's up to cpufreq driver
-> >>> select the final freq which should stay within the limits
-> >>
-> >> Okay. All I know is this is the commit that caused the regression.
-> >
-> > Could you check if the fix solved your problem ?
+> diff --git a/drivers/pmdomain/arm/scmi_perf_domain.c b/drivers/pmdomain/arm/scmi_perf_domain.c
+> index 709bbc448fad..d7ef46ccd9b8 100644
+> --- a/drivers/pmdomain/arm/scmi_perf_domain.c
+> +++ b/drivers/pmdomain/arm/scmi_perf_domain.c
+> @@ -159,6 +159,9 @@ static void scmi_perf_domain_remove(struct scmi_device *sdev)
+>         struct genpd_onecell_data *scmi_pd_data = dev_get_drvdata(dev);
+>         int i;
 >
-> Given the tags for that commit:
+> +       if (!scmi_pd_data)
+> +               return;
+> +
+>         of_genpd_del_provider(dev->of_node);
 >
-> $ git tag --contains e37617c8e53a
-> v6.8-rc1
-> v6.8-rc2
-> v6.8-rc3
->
-> It does not solve issue I have raised herein, as it exists in v6.8-rc1 but not v6.7
->
-> >> I do not know why, but I do wonder if there could any relationship with
-> >> the old, never fixed, problem of incorrect stale frequencies reported
-> >> under the same operating conditions. See the V2 note:
-> >> https://lore.kernel.org/all/001d01d9d3a7$71736f50$545a4df0$@telus.net/
-> >
-> > IIUC the problem is that policy->cur is not used by intel_cpufreq and
-> > stays set to the last old/init value.
->
-> Yes, exactly.
->
-> > Do I get it right that this is only informative ?
->
-> I don't know, that is what I was wondering. I do not know if the two issues
-> are related or not.
->
-> > Normally cpufreq governor checks the new limits and updates current
-> > freq if necessary except when fast switch is enabled.
->
-> >> where I haven't been able to figure out a solution.
->
-> >>>> Conditions:
-> >>>> CPU frequency scaling driver: intel_cpufreq (a.k.a intel_pstate in passive mode)
-> >>>> CPU frequency scaling governor: schedutil
-> >>>> HWP (HardWare Pstate) control (a.k.a. Intel_speedshift): Enabled
-> >>>> Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
-> >>>>
-> >>>> I did not check any other conditions, i.e. HWP disabled or the acpi-cpufreq driver.
->
-> Changing from HWP enabled to HWP disabled, it works properly.
->
-> ...
->
-> >>>> [1] https://lore.kernel.org/all/CAKfTPtDCQuJjpi6=zjeWPcLeP+ZY5Dw7XDrZ-LpXqEAAUbXLhA@mail.gmail.com/
->
+>         for (i = 0; i < scmi_pd_data->num_domains; i++)
+> --
+> 2.43.0
 >
 
