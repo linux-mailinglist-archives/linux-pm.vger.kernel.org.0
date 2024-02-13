@@ -1,63 +1,63 @@
-Return-Path: <linux-pm+bounces-3874-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3875-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BF3C853142
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 14:05:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0ADBF85314F
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 14:07:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B01128B4CD
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 13:05:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65D57282F83
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 13:07:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 799994BA9A;
-	Tue, 13 Feb 2024 13:05:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69D354F8A8;
+	Tue, 13 Feb 2024 13:07:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="b2qooR8G"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="D/Fmq+vK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C12B3D99E;
-	Tue, 13 Feb 2024 13:05:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 814BE4CB22;
+	Tue, 13 Feb 2024 13:07:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707829522; cv=none; b=TS19QZKbXP2Kqn0F7VA00wG9V+N+H/kUYc6oszQ0YS6NfeHqontd/XByaHd82KX8GOGR6mSVx1SOFfLAmDy/f1YEOjCSitLc2DGSHhvVkrCJkt52KysQoAMLZInHDyx/wvg2CWQrPMdJIrtlZtncXjLDPcw3PzRVectBEyEIrlk=
+	t=1707829642; cv=none; b=GKGAdaE5ApMVsKN/lIFNSGCWXxhRUBPqS4TSc9Z7Qz8G+EqiaPNVOXBbMfNP8e7vAsDtfxZrjacEhfCINahDbtFOqC+JfQzSP4aafqIPz9anYy5bMCnFWxuYc5kwbFdBuktqifEnQu172DsWj6TTOAiKB1HQ0w3SiUmSd9bjkFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707829522; c=relaxed/simple;
-	bh=viMQpHUA0wyuSc0aYpDZXv2P8TIrUTd/nzpVXcOfqVc=;
+	s=arc-20240116; t=1707829642; c=relaxed/simple;
+	bh=bS6YCU50qdUP7pOA+IgMKFXC6b2zvRoa/NpZXX8x3fY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=UgDb+kfIw7/ePcCwBsx2O1A/vjKwqHcKAvOvda3V+vDLuvCImGfddacRvuLweu0jbvbER0PKWw9/ky1ZcUXhfJYYJGz/lEtcp0FHz6LT0tjRPGalq0MmVey5HvbWiRPmQ/FfGsXrv+fns3ZYZTicTecNzXD5jWzldBXunHu2FIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=b2qooR8G; arc=none smtp.client-ip=205.220.168.131
+	 In-Reply-To:Content-Type; b=MRPKaR+IXHrSfKonMNmId+XFpBfHmN7O2DBlR7JTUfg/NLw8uxRMBWUfPfVm3ptk0pEZqDBeBUbU1yq6CDbiTI1NJBgvv9VjxGCo4uLbjqL7N4KpmLpopzjjYr24cz3MZMO3s/ZwIn8QjRNQJy6B1aYQ6q2INPEDr0cvWGKsX4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=D/Fmq+vK; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41DD0ZYg027948;
-	Tue, 13 Feb 2024 13:05:06 GMT
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41D8Em4L026735;
+	Tue, 13 Feb 2024 13:07:05 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	message-id:date:mime-version:subject:to:cc:references:from
 	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=6mOL9PsbxyCYLHe4WBDlAcPGHq/NUHZ80ySMAvSLfSg=; b=b2
-	qooR8GAI+7AxuDb10TLdHXzIlOG6UKGINlldMpmpp6fY/z2M8ewhk5OFsOLQL/oO
-	VVDTxkhaOyFdrlJENeYAL98+HdWSF2hnt6iL84WlRSRLngTPXwRPLTs0mouVP3qr
-	SoPQVQR0eXGnGe7NXoR3nq7mmIJA4G4XphOQcqMBjpsnHYhNe0QKLhTYBowMFiR/
-	TT+IKhlf+fRBA2bpUE23sjmA7JamjQs0zuu0bwsBjq49IIbHIwV6l0QDbNEfE4Vs
-	lHPasbwKSh+Eq+zW80UfuMtxjzcEQMFnRWBEMACTMslbkLeZ/2N7XNCjogChYZ+U
-	PV2MRo3Ski8TPdRqUuTw==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w7gse2ydp-1
+	qcppdkim1; bh=+kAkGk7nkaOH9/Fv65lof5Q3RmI7KRKfx/dcixunyJk=; b=D/
+	Fmq+vK3PyNAUWUOaiUVcJVT2Tu7apumgEJyOOaHwa2LvCLyASelZQhoUmdLSy7L9
+	/IBdUpchVSYYwyarDXuEI9Od8b7aO7F+FQDSueHMAz/BaKMA+SIZ33eeUYYKtRxe
+	S/4F7vzcUWtSpQCrF2wCzW3dloY7Fz9rh2GoUuUCQwdMuFvynbxWT2gufxrMHz0Y
+	nbFXZGE08ZXd68KlFHTmQdxs5ilgX7AEcG9tQJUF+2PidvUlmlUz4KRXAveN2uR5
+	U1sNoehYB8erckBL7CkEUm3+js6eqOYYp2wwo09H1I/8P/IjKABcQS71OmfF1MlO
+	5odo3D+weEBdVO/rltcg==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w7ww5s5m5-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 13 Feb 2024 13:05:06 +0000 (GMT)
+	Tue, 13 Feb 2024 13:07:05 +0000 (GMT)
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41DD554N000608
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41DD731Z018122
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 13 Feb 2024 13:05:05 GMT
+	Tue, 13 Feb 2024 13:07:03 GMT
 Received: from [10.218.5.19] (10.80.80.8) by nalasex01a.na.qualcomm.com
  (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 13 Feb
- 2024 05:04:58 -0800
-Message-ID: <35907177-eecd-4b58-a5da-7186b0f60193@quicinc.com>
-Date: Tue, 13 Feb 2024 18:34:55 +0530
+ 2024 05:06:56 -0800
+Message-ID: <18ac6a8d-09f8-4195-b55e-353d3e80555e@quicinc.com>
+Date: Tue, 13 Feb 2024 18:36:53 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -65,8 +65,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/5] clk: qcom: gdsc: Add set and get hwmode callbacks
- to switch GDSC mode
+Subject: Re: [PATCH v4 5/5] venus: pm_helpers: Use dev_pm_genpd_set_hwmode to
+ switch GDSC mode
 Content-Language: en-US
 To: Bjorn Andersson <andersson@kernel.org>, Abel Vesa <abel.vesa@linaro.org>
 CC: "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -95,220 +95,198 @@ CC: "Rafael J. Wysocki" <rafael@kernel.org>,
         <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
         <linux-media@vger.kernel.org>
 References: <20240122-gdsc-hwctrl-v4-0-9061e8a7aa07@linaro.org>
- <20240122-gdsc-hwctrl-v4-3-9061e8a7aa07@linaro.org>
- <qbqsvxmnl2tuansxzr6u4vqxemw4dzrsvz2ill6qnyxdp5gtji@lsemt4asmsax>
+ <20240122-gdsc-hwctrl-v4-5-9061e8a7aa07@linaro.org>
+ <kxovcqes5pfo2lsdmdi4msaqjjavvnwxbjp3haymeqpsbhnm3i@43nwohjzocj3>
 From: Jagadeesh Kona <quic_jkona@quicinc.com>
-In-Reply-To: <qbqsvxmnl2tuansxzr6u4vqxemw4dzrsvz2ill6qnyxdp5gtji@lsemt4asmsax>
+In-Reply-To: <kxovcqes5pfo2lsdmdi4msaqjjavvnwxbjp3haymeqpsbhnm3i@43nwohjzocj3>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
 X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: rNU6xjxKFa-tBEBWMTsCjmh3A4wydkXb
-X-Proofpoint-ORIG-GUID: rNU6xjxKFa-tBEBWMTsCjmh3A4wydkXb
+X-Proofpoint-GUID: 59IgBWBqwjKEcKTjqlasn98vlkl6cgpp
+X-Proofpoint-ORIG-GUID: 59IgBWBqwjKEcKTjqlasn98vlkl6cgpp
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
  definitions=2024-02-13_06,2024-02-12_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 adultscore=0 spamscore=0 clxscore=1011 phishscore=0
- malwarescore=0 mlxscore=0 bulkscore=0 mlxlogscore=999 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 phishscore=0 mlxlogscore=999 bulkscore=0
+ spamscore=0 adultscore=0 clxscore=1015 lowpriorityscore=0 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2401310000 definitions=main-2402130104
 
 
 
-On 1/31/2024 4:30 AM, Bjorn Andersson wrote:
-> On Mon, Jan 22, 2024 at 10:47:03AM +0200, Abel Vesa wrote:
+On 1/31/2024 6:35 AM, Bjorn Andersson wrote:
+> On Mon, Jan 22, 2024 at 10:47:05AM +0200, Abel Vesa wrote:
 >> From: Jagadeesh Kona <quic_jkona@quicinc.com>
 >>
->> Add support for set and get hwmode callbacks to switch the GDSC between
->> SW and HW modes. Currently, the GDSC is moved to HW control mode
->> using HW_CTRL flag and if this flag is present, GDSC is moved to HW
->> mode as part of GDSC enable itself. The intention is to keep the
->> HW_CTRL flag functionality as is, since many older chipsets still use
->> this flag.
+>> Use dev_pm_genpd_set_hwmode API to switch the vcodec gdsc to SW/HW
+>> modes at runtime based on requirement for venus V6 variants.
+>>
+>> Before the GDSC HWCTL was available to the consumer, the venus driver
+>> needed to somehow keep the power from collapsing while under the driver
+>> control. The only way to do that was to clear the CORE_PWR_DISABLE bit
+>> (in wrapper POWER_CONTROL register) and, respectively, set it back after
+>> the driver control was completed. Now, that there is a way to switch the
+>> GDSC HW/SW control back and forth, the CORE_PWR_DISABLE toggling in
+>> vcodec_control_v4() can be dropped for V6 variants.
 >>
 > 
-> This provides insight into why we end up with both HW_CTRL and
-> HW_CTRL_TRIGGER. This doesn't describe why this change is needed, but
-> rather just an implementation detail.
+> The purpose of this commit is to warrant the need of this new mechanism,
+> but I don't find that it actually describes a problem to be solved.
 > 
->> But consumer drivers also require the GDSC mode to be switched dynamically
->> at runtime based on requirement for certain usecases. Some of these
->> usecases are switching the GDSC to SW mode to keep it ON during the
->> enablement of clocks that are dependent on GDSC and while programming
->> certain configurations that require GDSC to be ON. Introduce a new
->> HW_CTRL_TRIGGER flag to register the set_hwmode_dev and get_hwmode_dev
->> callbacks which allows the consumer drivers to switch the GDSC back and
->> forth between HW/SW modes dynamically at runtime using new
->> dev_pm_genpd_set_hwmode API.
+>> With newer implementation, the mode of vcodec gdsc gets switched only in
+> 
+> Does "With newer implementation" mean "after these patches are applied"?
+> 
+
+Thanks Bjorn for your review!
+
+Yes, after all these patches are applied, will update the commit text to 
+be bit more precise.
+
+>> set_hwmode API and the GDSC should not be switched to HW control mode
+>> before turning off the GDSC, else subsequent GDSC enable may fail, hence
+>> add check to avoid switching the GDSC to HW mode before powering off the
+>> GDSC on V6 variants.
 >>
 > 
-> This still expresses the need for HW_CTRL_TRIGGER in terms of "some
-> drivers need for some use case". We don't need these many words to say:
-> "Introduce HW_CTRL_TRIGGER for client drivers that need it."
+> Is this saying that "if we return the GDSC to HW control after turning
+> off the clocks, it might not be possible to turn it on again"?
 > 
 
-Thanks Bjorn for your review.
+Yes, if the GDSC is left in HW control mode before GDSC disable, the 
+subsequent GDSC enable callback may fail while polling for GDSC status, 
+since HW can keep the GDSC in disabled state.
 
-Sure will update the commit text to be more precise in next series.
 
+> How come? Today this GDSC is operating in HW control mode, before,
+> during and after the clock operation.
 > 
-> I find that it would be useful to document that every time a GDSC is
-> turned on the mode will be switched to SW...
-> 
+
+Currently once GDSC is moved to HW control mode, Venus driver is using 
+it's POWER_CONTROL register to keep the GDSC ON before the clock 
+operations and reset it back after clock operations to handover control 
+back to HW.
+
+And these venus POWER_CONTROL register addresses are not constant and 
+vary from one venus variant to other. With this new API Venus driver can 
+avoid these register writes and use this standard API everywhere to 
+switch the GDSC mode as required.
+
 >> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
 >> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 >> ---
->>   drivers/clk/qcom/gdsc.c | 54 +++++++++++++++++++++++++++++++++++++++++++++++++
->>   drivers/clk/qcom/gdsc.h |  1 +
->>   2 files changed, 55 insertions(+)
+>>   drivers/media/platform/qcom/venus/pm_helpers.c | 23 +++++++++++++----------
+>>   1 file changed, 13 insertions(+), 10 deletions(-)
 >>
->> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
->> index 5358e28122ab..71626eb20101 100644
->> --- a/drivers/clk/qcom/gdsc.c
->> +++ b/drivers/clk/qcom/gdsc.c
->> @@ -363,6 +363,56 @@ static int gdsc_disable(struct generic_pm_domain *domain)
->>   	return 0;
->>   }
+>> diff --git a/drivers/media/platform/qcom/venus/pm_helpers.c b/drivers/media/platform/qcom/venus/pm_helpers.c
+>> index a1b127caa90a..55e8ec3f4ee9 100644
+>> --- a/drivers/media/platform/qcom/venus/pm_helpers.c
+>> +++ b/drivers/media/platform/qcom/venus/pm_helpers.c
+>> @@ -412,10 +412,9 @@ static int vcodec_control_v4(struct venus_core *core, u32 coreid, bool enable)
+>>   	u32 val;
+>>   	int ret;
 >>   
->> +static int gdsc_set_hwmode(struct generic_pm_domain *domain, struct device *dev, bool mode)
->> +{
->> +	struct gdsc *sc = domain_to_gdsc(domain);
->> +	u32 val;
->> +	int ret;
->> +
->> +	if (sc->rsupply && !regulator_is_enabled(sc->rsupply)) {
+>> -	if (IS_V6(core)) {
+>> -		ctrl = core->wrapper_base + WRAPPER_CORE_POWER_CONTROL_V6;
+>> -		stat = core->wrapper_base + WRAPPER_CORE_POWER_STATUS_V6;
+>> -	} else if (coreid == VIDC_CORE_ID_1) {
+>> +	if (IS_V6(core))
+>> +		return dev_pm_genpd_set_hwmode(core->pmdomains[coreid], !enable);
+>> +	else if (coreid == VIDC_CORE_ID_1) {
+>>   		ctrl = core->wrapper_base + WRAPPER_VCODEC0_MMCC_POWER_CONTROL;
+>>   		stat = core->wrapper_base + WRAPPER_VCODEC0_MMCC_POWER_STATUS;
+>>   	} else {
+>> @@ -451,9 +450,11 @@ static int poweroff_coreid(struct venus_core *core, unsigned int coreid_mask)
+>>   
+>>   		vcodec_clks_disable(core, core->vcodec0_clks);
+>>   
+>> -		ret = vcodec_control_v4(core, VIDC_CORE_ID_1, false);
+>> -		if (ret)
+>> -			return ret;
+>> +		if (!IS_V6(core)) {
+>> +			ret = vcodec_control_v4(core, VIDC_CORE_ID_1, false);
 > 
-> Why is this a restriction only for GDSCs supplied by regulators? I don't
-> find anything preventing this API from being called on GDSCs supplied by
-> other genpd instances.
-
+> First I had this expectation that the GDSC will always be in SW control
+> when the GDSC turns on - like the downstream implementation.
 > 
-> Also note that regulator_is_enabled() is racy, in that it tells us if
-> the regulator is currently turned on, not if we're the one holding that
-> vote. As such this might change at any moment - and hence shouldn't be
-> significant here.
->
-Below is the consumer's sequence that switch the GDSC's b/w HW & SW modes:-
-1) Enable the GDSC in SW mode
-2) Enable required clocks
-3) Switch the GDSC to HW mode using dev_pm_genpd_set_hwmode(true)
-4) Usecase start
-5) Usecase end
-6) Switch the GDSC back to SW mode using dev_pm_genpd_set_hwmode(false)
-7) Disable clocks
-8) Disable GDSC
-
-Hence the new API dev_pm_genpd_set_hwmode() will always be called 
-between gdsc_enable() and gdsc_disable(), which ensures GDSC's parent 
-power domain/regulator is ON when this callback is being called. Also, 
-we can remove the above regulator_is_enabled() check as well.
-
->> +		pr_err("Cannot set mode while parent is disabled\n");
->> +		return -EIO;
->> +	}
->> +
->> +	ret = gdsc_hwctrl(sc, mode);
->> +	if (ret)
->> +		return ret;
->> +
->> +	/* Wait for 1usec for mode transition to properly complete */
->> +	udelay(1);
->> +
->> +	if (!mode) {
->> +		ret = regmap_read(sc->regmap, sc->gdscr, &val);
->> +		if (ret)
->> +			return ret;
->> +
->> +		/*
->> +		 * While switching from HW to SW mode, if GDSC is in enabled
->> +		 * state, poll for GDSC to complete the power up.
->> +		 */
+> In this case I felt we should have a similar condition in
+> poweron_coreid() - as there's no point in switching to SW mode when we
+> know we're in SW mode already.
 > 
-> I had to give this some thought, to conclude that this is relevant if HW
-> has the GDSC disabled and we're switching to SW - which would then
-> enable it. I think this comment can be improved slightly, to save the
-> reader the need for figuring out this on their own.
+> 
+> But as I finally realized that this is not the case, I now see that by
+> skipping the transition to HW mode here, dev_pm_genpd_set_hwmode() will
+> find the domain in SW mode, and through
+> 
+>    if (dev_gpd_data(dev)->hw_mode == enable)
+> 
+> Will turn the vcodec_control_v4(, true) into a nop.
+> 
+> So, my first first instinct of feeling that this should be symmetric
+> between poweron/poweroff was reasonable...I think...
 > 
 
-Sure, I will improvise the comment in next series.
+Yes, we can add similar check in poweron_coreid() also to be symmetric 
+but since it will be nop haven't added it. Shall I add similar check in 
+poweron_coreid() as well?
 
->> +		if (!(val & SW_COLLAPSE_MASK))
 > 
-> This not being true, would imply that gdsc_disable() has been called
-> already, in which case there's no guarantee that the parent still
-> supplies power.
-> 
-> In the introduced API power on and hw control are orthogonal states, but
-> not so in this implementation. This need to made clear, to reduce future
-> surprises.
+> I find that this interface does not match the expectations that people
+> will bring from downstream and this example isn't helpful in explaining
+> how to use the new interface.
 > 
 
-Yes, above SW_COLLAPSE_MASK check is also not required and will remove 
-it in next series.
+There are 3 consumers that currently use this HW control mode for 
+GDSC's:- display, camera and display.
 
->> +			return gdsc_poll_status(sc, GDSC_ON);
->> +	}
->> +
->> +	return 0;
->> +}
->> +
->> +static bool gdsc_get_hwmode(struct generic_pm_domain *domain, struct device *dev)
->> +{
->> +	struct gdsc *sc = domain_to_gdsc(domain);
->> +	u32 val;
->> +	int ret;
->> +
->> +	ret = regmap_read(sc->regmap, sc->gdscr, &val);
->> +	if (ret)
->> +		return ret;
->> +
->> +	if (val & HW_CONTROL_MASK)
->> +		return true;
->> +
->> +	return false;
-> 
-> return !!(val & HW_CONTROL_MASK);
-> 
+Display driver is able to operate with GDSC always in HW mode. Camera 
+drivers don't have power saving features enabled on upstream yet and 
+hence not using the HW control mode of GDSC's currently, but will need 
+this API support to enable camera power saving features on upstream.
 
-Sure, will update this in the next series.
+Currently on upstream, only venus driver requires GDSC HW and SW modes 
+switching, and hence added support in this driver to use the new interface.
+
+
+> PS. I trust there's no case whre legacy_binding = true, or that that
+> code path does not need similar workaround?
+> 
+This change is applicable only to sc7280 and sm8250 targets for which 
+legacy_binding will be false.
+
+Thanks,
+Jagadeesh
 
 > Regards,
 > Bjorn
 > 
->> +}
->> +
->>   static int gdsc_init(struct gdsc *sc)
->>   {
->>   	u32 mask, val;
->> @@ -451,6 +501,10 @@ static int gdsc_init(struct gdsc *sc)
->>   		sc->pd.power_off = gdsc_disable;
->>   	if (!sc->pd.power_on)
->>   		sc->pd.power_on = gdsc_enable;
->> +	if (sc->flags & HW_CTRL_TRIGGER) {
->> +		sc->pd.set_hwmode_dev = gdsc_set_hwmode;
->> +		sc->pd.get_hwmode_dev = gdsc_get_hwmode;
->> +	}
+>> +			if (ret)
+>> +				return ret;
+>> +		}
 >>   
->>   	ret = pm_genpd_init(&sc->pd, NULL, !on);
->>   	if (ret)
->> diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
->> index 803512688336..1e2779b823d1 100644
->> --- a/drivers/clk/qcom/gdsc.h
->> +++ b/drivers/clk/qcom/gdsc.h
->> @@ -67,6 +67,7 @@ struct gdsc {
->>   #define ALWAYS_ON	BIT(6)
->>   #define RETAIN_FF_ENABLE	BIT(7)
->>   #define NO_RET_PERIPH	BIT(8)
->> +#define HW_CTRL_TRIGGER	BIT(9)
->>   	struct reset_controller_dev	*rcdev;
->>   	unsigned int			*resets;
->>   	unsigned int			reset_count;
+>>   		ret = pm_runtime_put_sync(core->pmdomains[1]);
+>>   		if (ret < 0)
+>> @@ -467,9 +468,11 @@ static int poweroff_coreid(struct venus_core *core, unsigned int coreid_mask)
+>>   
+>>   		vcodec_clks_disable(core, core->vcodec1_clks);
+>>   
+>> -		ret = vcodec_control_v4(core, VIDC_CORE_ID_2, false);
+>> -		if (ret)
+>> -			return ret;
+>> +		if (!IS_V6(core)) {
+>> +			ret = vcodec_control_v4(core, VIDC_CORE_ID_2, false);
+>> +			if (ret)
+>> +				return ret;
+>> +		}
+>>   
+>>   		ret = pm_runtime_put_sync(core->pmdomains[2]);
+>>   		if (ret < 0)
 >>
 >> -- 
 >> 2.34.1
 >>
-> 
 
