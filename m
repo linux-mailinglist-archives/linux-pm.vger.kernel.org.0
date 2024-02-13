@@ -1,71 +1,87 @@
-Return-Path: <linux-pm+bounces-3863-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3864-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BB37852B58
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 09:40:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5978852C01
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 10:11:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A04D51F23D29
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 08:40:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 92F4B281BF4
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 09:11:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 571BD1864C;
-	Tue, 13 Feb 2024 08:40:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3FB81BDC2;
+	Tue, 13 Feb 2024 09:11:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="budt7rGV"
+	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="tXCiCE5C"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1C7D18654;
-	Tue, 13 Feb 2024 08:40:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED4D2208CB
+	for <linux-pm@vger.kernel.org>; Tue, 13 Feb 2024 09:11:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707813634; cv=none; b=OOfUYlhwHA3zwie6eDMhOpRWjwpgZulSs1smMUZxN+ZFHNgQClLg6Xk0PKq/obSUh5FouW5nrEa6pHB53wtbjOZ1XaseOLWZACBwA5+cv3ixTotfQ3LWdrYWcJJtY+OXMzVFoUMLJosH/0VDiNDpyEz6xz026TEIVs9VF+Usj1Q=
+	t=1707815489; cv=none; b=jdUh4qGYvEeQyZqGOMDN+bJvolsJSRJjKaAOt/sq4hLeAp80uhP9HzgP6FEAhphjjOK3QAsYfQ3UramOhIFWc6UQuZStZ9n3SYO4xbWESAXJh084qiXzmZZfmxJP+vi6/mlWw4+h9Zux0QdYqrG5guk+4QLbCvLDlzGqDYV09QE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707813634; c=relaxed/simple;
-	bh=tp6cuJikOwkd/uSEFgy8YwwuuKYIxq5a+om5uZQlL4Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=EdAzcdT5qnb1DNDieJ83J6q8evvOjoGOKwgynrCjvZKwGLGwMb/0xi8XAbdIZh4vE4Tjhn+VtJF2bRqXWYhqekpMZKnDVNl0zpigJETRTLN2i7KyDlYIyNPnet8rLGmmC2YAMfH5XodfPYeeS6iZoracNOvGF7jhkcWcdapP268=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=budt7rGV; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707813632; x=1739349632;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tp6cuJikOwkd/uSEFgy8YwwuuKYIxq5a+om5uZQlL4Q=;
-  b=budt7rGV0S4HkKFZhordGePSWd3OhJXdRARaE/9yhf+uKqZD9GCfzS0L
-   j3njW6KUXL5RJ0eR16ZdkTr/2ob6xrX1cyo8acrM2nSolaOGfwmczfqYh
-   ObTDooMY9EbJ+26Tw2kngGkUHeLiUgkQBCbNGrMoq3Rm7/3bEV72fGmgq
-   Bp2BnT1VJidy/3Dzzn1AI5UcNp20a0MNscAlA9ExQgRflih/HTMUEvKI9
-   aTuzu0diQILsUcdM/o6P/dCb9Pjig0SssPuqVZPXEeOsik65PX1rJeBxC
-   c8j8qxrWRjqIOI3P5PjhGLwTvpkpnq6XCK+scs3iWgh2B1gzxojguQykR
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="19224856"
-X-IronPort-AV: E=Sophos;i="6.06,156,1705392000"; 
-   d="scan'208";a="19224856"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2024 00:40:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,156,1705392000"; 
-   d="scan'208";a="3146864"
-Received: from lkp-server01.sh.intel.com (HELO 01f0647817ea) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 13 Feb 2024 00:40:30 -0800
-Received: from kbuild by 01f0647817ea with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rZoL5-0007c6-18;
-	Tue, 13 Feb 2024 08:40:27 +0000
-Date: Tue, 13 Feb 2024 16:39:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-	devel@acpica.org, linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge 76/104]
- drivers/thermal/intel/intel_pch_thermal.c:235:52: warning: passing argument
- 2 of 'pch_wpt_add_acpi_psv_trip' makes integer from pointer without a cast
-Message-ID: <202402131654.p66Sf4bH-lkp@intel.com>
+	s=arc-20240116; t=1707815489; c=relaxed/simple;
+	bh=QYQiyRsTrGWOHtI1okoVZVMd1Kpke6P/ScBdN+2bOXk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oVE3DeJzHL9d/xUtOCPf1t/xBMlVm+h6DgbZQkfq5p3I89neC29qwfnnZJPxpE9SalBPX+EuQy6hJrDo/vcLU3R+BvU+u2vG1582DHJYRP/DdRixLYmEpEKl3aQxhirRAsoJZna2G2VVzrIBvBhiV3MegjGe+HzmhbHq/1+Fubo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=tXCiCE5C; arc=none smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2d0c7e6b240so55711471fa.0
+        for <linux-pm@vger.kernel.org>; Tue, 13 Feb 2024 01:11:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1707815486; x=1708420286; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QYQiyRsTrGWOHtI1okoVZVMd1Kpke6P/ScBdN+2bOXk=;
+        b=tXCiCE5CxLEqZR2eZrN6tl3WEiqK0qt8wglzsoM1EU92aM4Jv3bcrBrYHtLtfXfH4/
+         Kr4Iz3AbFIHX7BPV5R5/rapLUCpUhUO9EvTkHWVEbsDf3joxeeFyUSaZRQgXvXGn3EwT
+         33LpXK/vG6WoeAS2JIDobhFHZQ0X/mVt7jGHennBpnSEBNGxRlduBUBECeNcli4Nviqc
+         IUgNnU6RYA4OZmxRghlnSN+zyjCx3WNTkScdU72ZDt9i/6uwBH1v+qI4ndR+4PHq+prr
+         MdiSfGxNeJX36T31T+WR3Qh4vMciKH/uA/KC8ATWAd/9Dssbqa2mZ5VVY8S3NI3pygo6
+         bxbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707815486; x=1708420286;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QYQiyRsTrGWOHtI1okoVZVMd1Kpke6P/ScBdN+2bOXk=;
+        b=mjKe82kNYWXtOdcXUr34hk1eY97MQ0qy5+nGafWgp+36qy1w7gPAIDxEGOFsBpLkFD
+         sJ/Ee1BW8dbQrtwPoOy6M6cs3uZqsxLhkKQnJbrsk6U8cooi2bRszjGlrvK37KRJcBq5
+         pC6/k/plfyVGk0YcyHFYZveGZO7To0Bi9IZwCrb3BuwNoc/2EbeC9LVjgOxbcYILmdQB
+         2QdV3t+uLPBo2pg/Ab2CAgQ6MZX8e96Y/LiZHlgyTFPHN+BL7qPDQ9QvuHWTqmtamd+D
+         1UhRh9aeyTGpjcNa2LCO9Ktj/7ZdKNzToTpAHB/9OaWgIgh57/oEM218TJ4PPHviJRc5
+         EJsg==
+X-Gm-Message-State: AOJu0YyqpcdR3xCmxS2CnuQBBTnmt0bKfIDaeBZr5ELudaQ3lvjOOelM
+	u7DExzRv/Dnfh2SPQrvO4QL2cRDzPwS3kpjpkk+sFwIt0fwHkFBjuLDvWk8HsXQ=
+X-Google-Smtp-Source: AGHT+IEfOhZGwfbkOsKwwmBLCugxWKcTX42O26FHcM6XU6U4oyjFx8gMroMfq5usbHqV4jj7XP5Ohw==
+X-Received: by 2002:a2e:b0d7:0:b0:2d0:cc80:dc94 with SMTP id g23-20020a2eb0d7000000b002d0cc80dc94mr5561352ljl.19.1707815485776;
+        Tue, 13 Feb 2024 01:11:25 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVmoc8ptvo5DnaIeq7BFh1RBW5os2uzwZVwwuUiQGS7mMi+t9gMXhiYebabQgcw9C13HIcU30A54JVKeBVLX/uDmy+b8CPEDHiDg8KMj/C9NesA0wk47k3nW9B4wZT7iSc2G22aDqOe80cnRh3Q+yZyWqjdRr9yRuCV7ZyEb5LfHT+a0func71szcpWob+hPfOxLY6tQp0gaYG27/Fb3g/y1IlVen+XzuKY976WRq3ytTGVaMuEcx7OeJksxM0aIIxZxT33gOI+iQNOlcvIsXZFCVwf6QF23eWPpCq9Z0qM+FE19xcla0FSpwbYMkYx1l8Rb+uC4+Mkpww2mccG66nMadZON6Fa7sc0gK9NtrTT7kW3FzpBuc9YjCLrqSQnD9tHti+9Deq80Sb1T6bE+kR3Vipi9PI6LKfnJp8o2QxQDAvLNyM8d9+HcQ==
+Received: from localhost ([193.47.165.251])
+        by smtp.gmail.com with ESMTPSA id v7-20020a05600c470700b0040fb44a9288sm11022334wmo.48.2024.02.13.01.11.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Feb 2024 01:11:25 -0800 (PST)
+Date: Tue, 13 Feb 2024 10:11:22 +0100
+From: Jiri Pirko <jiri@resnulli.us>
+To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org
+Subject: Re: [PATCH v4 1/3] genetlink: Add per family bind/unbind callbacks
+Message-ID: <ZcsyOsALeuPEwk0T@nanopsycho>
+References: <20240212161615.161935-1-stanislaw.gruszka@linux.intel.com>
+ <20240212161615.161935-2-stanislaw.gruszka@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -74,143 +90,20 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240212161615.161935-2-stanislaw.gruszka@linux.intel.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-head:   536723ad19c051cec0b5fa9793100f26c70b28d0
-commit: 8c6e2196a852052fa1696cfe86d1da366f725b19 [76/104] thermal: intel: Discard trip tables after zone registration
-config: i386-buildonly-randconfig-003-20240213 (https://download.01.org/0day-ci/archive/20240213/202402131654.p66Sf4bH-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240213/202402131654.p66Sf4bH-lkp@intel.com/reproduce)
+Mon, Feb 12, 2024 at 05:16:13PM CET, stanislaw.gruszka@linux.intel.com wrote:
+>Add genetlink family bind()/unbind() callbacks when adding/removing
+>multicast group to/from netlink client socket via setsockopt() or
+>bind() syscall.
+>
+>They can be used to track if consumers of netlink multicast messages
+>emerge or disappear. Thus, a client implementing callbacks, can now
+>send events only when there are active consumers, preventing unnecessary
+>work when none exist.
+>
+>Suggested-by: Jakub Kicinski <kuba@kernel.org>
+>Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202402131654.p66Sf4bH-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/thermal/intel/intel_pch_thermal.c: In function 'intel_pch_thermal_probe':
->> drivers/thermal/intel/intel_pch_thermal.c:235:52: warning: passing argument 2 of 'pch_wpt_add_acpi_psv_trip' makes integer from pointer without a cast [-Wint-conversion]
-     235 |         nr_trips += pch_wpt_add_acpi_psv_trip(ptd, &ptd_trips[nr_trips]);
-         |                                                    ^~~~~~~~~~~~~~~~~~~~
-         |                                                    |
-         |                                                    struct thermal_trip *
-   drivers/thermal/intel/intel_pch_thermal.c:114:74: note: expected 'int' but argument is of type 'struct thermal_trip *'
-     114 | static int pch_wpt_add_acpi_psv_trip(struct pch_thermal_device *ptd, int trip)
-         |                                                                      ~~~~^~~~
-
-
-vim +/pch_wpt_add_acpi_psv_trip +235 drivers/thermal/intel/intel_pch_thermal.c
-
-   158	
-   159	static int intel_pch_thermal_probe(struct pci_dev *pdev,
-   160					   const struct pci_device_id *id)
-   161	{
-   162		struct thermal_trip ptd_trips[PCH_MAX_TRIPS] = { 0 };
-   163		enum pch_board_ids board_id = id->driver_data;
-   164		struct pch_thermal_device *ptd;
-   165		int nr_trips = 0;
-   166		u16 trip_temp;
-   167		u8 tsel;
-   168		int err;
-   169	
-   170		ptd = devm_kzalloc(&pdev->dev, sizeof(*ptd), GFP_KERNEL);
-   171		if (!ptd)
-   172			return -ENOMEM;
-   173	
-   174		pci_set_drvdata(pdev, ptd);
-   175		ptd->pdev = pdev;
-   176	
-   177		err = pci_enable_device(pdev);
-   178		if (err) {
-   179			dev_err(&pdev->dev, "failed to enable pci device\n");
-   180			return err;
-   181		}
-   182	
-   183		err = pci_request_regions(pdev, driver_name);
-   184		if (err) {
-   185			dev_err(&pdev->dev, "failed to request pci region\n");
-   186			goto error_disable;
-   187		}
-   188	
-   189		ptd->hw_base = pci_ioremap_bar(pdev, 0);
-   190		if (!ptd->hw_base) {
-   191			err = -ENOMEM;
-   192			dev_err(&pdev->dev, "failed to map mem base\n");
-   193			goto error_release;
-   194		}
-   195	
-   196		/* Check if BIOS has already enabled thermal sensor */
-   197		if (WPT_TSEL_ETS & readb(ptd->hw_base + WPT_TSEL)) {
-   198			ptd->bios_enabled = true;
-   199			goto read_trips;
-   200		}
-   201	
-   202		tsel = readb(ptd->hw_base + WPT_TSEL);
-   203		/*
-   204		 * When TSEL's Policy Lock-Down bit is 1, TSEL become RO.
-   205		 * If so, thermal sensor cannot enable. Bail out.
-   206		 */
-   207		if (tsel & WPT_TSEL_PLDB) {
-   208			dev_err(&ptd->pdev->dev, "Sensor can't be enabled\n");
-   209			err = -ENODEV;
-   210			goto error_cleanup;
-   211		}
-   212	
-   213		writeb(tsel|WPT_TSEL_ETS, ptd->hw_base + WPT_TSEL);
-   214		if (!(WPT_TSEL_ETS & readb(ptd->hw_base + WPT_TSEL))) {
-   215			dev_err(&ptd->pdev->dev, "Sensor can't be enabled\n");
-   216			err = -ENODEV;
-   217			goto error_cleanup;
-   218		}
-   219	
-   220	read_trips:
-   221		trip_temp = readw(ptd->hw_base + WPT_CTT);
-   222		trip_temp &= 0x1FF;
-   223		if (trip_temp) {
-   224			ptd_trips[nr_trips].temperature = GET_WPT_TEMP(trip_temp);
-   225			ptd_trips[nr_trips++].type = THERMAL_TRIP_CRITICAL;
-   226		}
-   227	
-   228		trip_temp = readw(ptd->hw_base + WPT_PHL);
-   229		trip_temp &= 0x1FF;
-   230		if (trip_temp) {
-   231			ptd_trips[nr_trips].temperature = GET_WPT_TEMP(trip_temp);
-   232			ptd_trips[nr_trips++].type = THERMAL_TRIP_HOT;
-   233		}
-   234	
- > 235		nr_trips += pch_wpt_add_acpi_psv_trip(ptd, &ptd_trips[nr_trips]);
-   236	
-   237		ptd->tzd = thermal_zone_device_register_with_trips(board_names[board_id],
-   238								   ptd_trips, nr_trips,
-   239								   ptd, &tzd_ops,
-   240								   NULL, 0, 0);
-   241		if (IS_ERR(ptd->tzd)) {
-   242			dev_err(&pdev->dev, "Failed to register thermal zone %s\n",
-   243				board_names[board_id]);
-   244			err = PTR_ERR(ptd->tzd);
-   245			goto error_cleanup;
-   246		}
-   247		err = thermal_zone_device_enable(ptd->tzd);
-   248		if (err)
-   249			goto err_unregister;
-   250	
-   251		return 0;
-   252	
-   253	err_unregister:
-   254		thermal_zone_device_unregister(ptd->tzd);
-   255	error_cleanup:
-   256		iounmap(ptd->hw_base);
-   257	error_release:
-   258		pci_release_regions(pdev);
-   259	error_disable:
-   260		pci_disable_device(pdev);
-   261		dev_err(&pdev->dev, "pci device failed to probe\n");
-   262		return err;
-   263	}
-   264	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reviewed-by: Jiri Pirko <jiri@nvidia.com>
 
