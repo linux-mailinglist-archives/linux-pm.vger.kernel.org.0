@@ -1,287 +1,136 @@
-Return-Path: <linux-pm+bounces-3880-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3881-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F45F853272
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 14:59:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C45185327C
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 15:02:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F89F1C224BB
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 13:59:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 088BE1F23FF6
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 14:02:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D74AD56B6A;
-	Tue, 13 Feb 2024 13:59:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 035495674B;
+	Tue, 13 Feb 2024 14:02:25 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365E056B65;
-	Tue, 13 Feb 2024 13:59:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EDA457300;
+	Tue, 13 Feb 2024 14:02:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707832764; cv=none; b=swszHgJRoVdPONRRTJjQNYSgXaA24uu4vckKm4w4QMgzOstW6VE2a2D21dMWNvyLYMmy0Uxz73MVGy253Cfd6TWizxxankmDFQNDCPvLDVPdUgcak2nUn9GwdNY9MU/FgjHbpvVW5TKqrInt7UOvNUmPy2slcI9rLlKJc5398EU=
+	t=1707832944; cv=none; b=twYYh9elI111WATVr4rZ0MAo2jiw1bj35V7/OBhzeTfAW8e08SStGSGGww1UJqK29K4HiDBxSv1ysq0fRFYwkp0lH3iGZhZnPdA/DAVyTV+s0ebp/624KINjOC5prrsnG8OrXIPoG3X/8eS/RvodC4UBhcrp+6xWHgRMMxETmNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707832764; c=relaxed/simple;
-	bh=AFH5mXgYpgm7k1VaeAmR7XOmcIr8m+gl7ANkYB0CJYI=;
+	s=arc-20240116; t=1707832944; c=relaxed/simple;
+	bh=x0qXZH3kJEepjTNqW7t+XjZ668V1LMFYMTAebEXWNck=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Rnl9qpyMQ2TwTQbEO41h0UW4cbChSdQcuL39NjhFmJLHRx/Z58S6PjdjzN0QluQx4ZaqXVmb8rYaFlypf+5UTic8kLgeX/8h/Ce3cjystQr2b0TLyWLfyX7z3UE6+Rk22JVwgucbZl0mr8UxUSYWB1kUbG29PX7qdGTACQvW/IY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.46
+	 To:Cc:Content-Type; b=h5RrGBDxSuokdT17SKziaD5wRtmEA6scshBpOQA4DbOFPB7M1+TQPYW4Ybm54i5w8dc+bE6LgaYlGVOorUQyMvmXxFbqcxyWmkhQUw21L3Fpmh+jxi28hQZFG1X38h2C7b2dTpIJIPSAjcqksXkB75ujxDz5kr+xIa0fxipxKR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-59d29103089so119841eaf.0;
-        Tue, 13 Feb 2024 05:59:23 -0800 (PST)
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-5958d3f2d8aso1797631eaf.1;
+        Tue, 13 Feb 2024 06:02:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707832762; x=1708437562;
+        d=1e100.net; s=20230601; t=1707832942; x=1708437742;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LtLjlT9JbsjIzXWWX8LrQHq6rvO1Du63NHf/SHICIds=;
-        b=AjjcmVRuC33QCJZatlFaIxKuh6pq32iSMZQoHe0uRkWW/PyOIjGYWp0hQn/+U5xEAz
-         O5J5teSY+JsZybAale+CdUWjsNYhIVKAGmW6JxFim9n5tfiroqgIkDqFHifT2DYgkloU
-         t8eS2kXurz/D0pNsvTrZ3XQTD4qbiZsvt/VX8yAdzkff/KBT2FtpPi6/OkTkTy5D5ei8
-         NX7kAI5mLMhKf0rblIcQnNaf9TM9kUnUEGQUg92h/5do8l90Iq61KSAgH/Hf5jgXSdUH
-         KNjNBsAS3Ca8FzPIAD1sjhyPQ5GwBwWHhniSsCwXHQvgXBUPqhmu+Ilcyu1r5eZwtm16
-         bqRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXUy2WGG1FSnNmqbT7nyfHj+Zrc32w3ryRhrYLJVL/UyFWZSjD5HvLP1bJ9kwhRCAfIsVOO/pV7D/z0js09qqFiXNBfG2UZ
-X-Gm-Message-State: AOJu0YyR596b1es09iY8Q1lngExnCYDwkeKm73NZ0tcK/bN5oFA2gQJP
-	MoKQTkC2RKc/ZhQQSByXBgLVe9U3jOqMwhXiKRMTOOpus7l/xu/Iqj3+hxyl89I22o6mInbNjDT
-	UWD5vsWFMNFyJYDVK3lu9/mqL8Gk=
-X-Google-Smtp-Source: AGHT+IEr+CgFXjmG0D1cSHmU1Nn3AjLhgrwPgyZdSrNffcqbKHgcQaT4YBnNpwWH9K3/pSmIsPUk0rmW05Pv8Pgp7K0=
-X-Received: by 2002:a4a:ca0d:0:b0:599:e8ff:66d9 with SMTP id
- w13-20020a4aca0d000000b00599e8ff66d9mr7635483ooq.1.1707832762197; Tue, 13 Feb
- 2024 05:59:22 -0800 (PST)
+        bh=iQZGa2j+slpWb59zzZSHGyPHGPCdHKBm7wfB42qCupU=;
+        b=YM3/MHwIF68deVXJYCINbD05rSO7PzKOS5yhp20NF4ayWcK8SH1ib09bcmwJSeFMyH
+         Z99DgcXXP/ztlegfqxE9+gtlNOt0eIxJI74oqAg+fxTOrayvQXd2afga/VmWygybH7kO
+         f+6svh8cOukPqf0xt2xroAwvnpyy/9tqA1VYPExrP6HneyLqcCzPy2kJj+zpf+dXmvhi
+         20dyEDX5KLuqYXLfBtGzjal14CzCjMNL4MZKGHdKHVxJzTMVzz3IupJUDZeo13rs7vTy
+         O9a50OngkNItp22dNR4N/yIXM8j/0Qj0Rn7m+6nqlKj3KEu6Bm/yHWxpapfopneRZrqO
+         KGCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVfaQ0heVqD1cfbrLFnHQ+Sr/j1SNyGWZDfP7fcnY0QRAdA5+jXux8tKOYeC5InpEzqmIjAl9rlhtiWdTa2GYA38bQQlEbWFKImxDIl9iBw6XtJwArEbv4ML9AqjvJxVeyYXSqWRdjnZ9Wwtpn/6HJ6TxlnodfXo6uUeWjYRowNQB4=
+X-Gm-Message-State: AOJu0YzIkhc130tBrPsOMoMNYUl4JKq+3drhhSDD6Nfwk5gVrProZOUf
+	bTX2UQEj04wkfyNSRyLRZfo2YAOwyTFcRabMQN4tn5OrH6B+7CwOEj84t4cSht393/6iB58YR7O
+	xAEClTlGaaKhf8qYkx1Ww1vq+GiU=
+X-Google-Smtp-Source: AGHT+IGlCzIUVy90I1wgB1ghdkVAqGB1LLuHU6JD1WH51gYXfkk5KAEJ6wLWnOgJSpUCt8Jo6Yli5+jFZcCNNFGvCo8=
+X-Received: by 2002:a05:6820:a8f:b0:59d:6ef2:7b01 with SMTP id
+ de15-20020a0568200a8f00b0059d6ef27b01mr3252579oob.1.1707832942323; Tue, 13
+ Feb 2024 06:02:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240212161615.161935-1-stanislaw.gruszka@linux.intel.com> <20240212161615.161935-4-stanislaw.gruszka@linux.intel.com>
-In-Reply-To: <20240212161615.161935-4-stanislaw.gruszka@linux.intel.com>
+References: <20240212063233.5599-1-raag.jadav@intel.com>
+In-Reply-To: <20240212063233.5599-1-raag.jadav@intel.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 13 Feb 2024 14:59:10 +0100
-Message-ID: <CAJZ5v0jr4Z=ffm9E+eR7p7rQwbCWEP=YHxNbR9VAEwb8-3e3GA@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] thermal: intel: hfi: Enable interface only when required
-To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jiri Pirko <jiri@resnulli.us>, Johannes Berg <johannes@sipsolutions.net>, 
-	Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org
+Date: Tue, 13 Feb 2024 15:02:11 +0100
+Message-ID: <CAJZ5v0huF=T_QH_Vzfmq07x2L_BPdCCdZSKzKOMYY19s37kjOw@mail.gmail.com>
+Subject: Re: [PATCH v1] PCI / PM: Really allow runtime PM without callback functions
+To: Raag Jadav <raag.jadav@intel.com>
+Cc: bhelgaas@google.com, jarkko.nikula@linux.intel.com, 
+	mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com, 
+	stanislaw.gruszka@linux.intel.com, lukas@wunner.de, rafael@kernel.org, 
+	ilpo.jarvinen@linux.intel.com, linux-pci@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	gregkh@linuxfoundation.org, sashal@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 12, 2024 at 5:16=E2=80=AFPM Stanislaw Gruszka
-<stanislaw.gruszka@linux.intel.com> wrote:
+On Mon, Feb 12, 2024 at 7:32=E2=80=AFAM Raag Jadav <raag.jadav@intel.com> w=
+rote:
 >
-> Enable and disable hardware feedback interface (HFI) when user space
-> handler is present. For example, enable HFI, when intel-speed-select or
-> Intel Low Power daemon is running and subscribing to thermal netlink
-> events. When user space handlers exit or remove subscription for
-> thermal netlink events, disable HFI.
+> Commit c5eb1190074c ("PCI / PM: Allow runtime PM without callback
+> functions") tried to eliminate the need for runtime PM callbacks
+> by modifying pci_pm_runtime_suspend() and pci_pm_runtime_resume(),
+> but didn't modify pci_pm_runtime_idle() with relevant changes, which
+> still returns -ENOSYS if the driver supplies no runtime PM callbacks.
 >
-> Summary of changes:
+> Fix this by modifying pci_pm_runtime_idle() such that it allows PCI
+> device power state transitions without runtime PM callbacks.
 >
-> - Register a thermal genetlink notifier
+>  0)               |  pm_runtime_work() {
+>  0)               |    rpm_idle() {
+>  0)               |      rpm_check_suspend_allowed() {
+>  0)   1.500 us    |        __dev_pm_qos_resume_latency(); /* =3D 0x7fffff=
+ff */
+>  0)   4.840 us    |      } /* rpm_check_suspend_allowed =3D 0x0 */
+>  0)   1.550 us    |      __rpm_get_callback(); /* =3D 0xffffffffb4bc84f0 =
+*/
+>  0)   1.800 us    |      pci_pm_runtime_idle(); /* =3D -38 */
+>  0) + 17.070 us   |    } /* rpm_idle =3D -38 */
+>  0) + 22.450 us   |  } /* pm_runtime_work =3D -38 */
 >
-> - In the notifier, process THERMAL_NOTIFY_BIND and THERMAL_NOTIFY_UNBIND
-> reason codes to count number of thermal event group netlink multicast
-> clients. If thermal netlink group has any listener enable HFI on all
-> packages. If there are no listener disable HFI on all packages.
->
-> - When CPU is online, instead of blindly enabling HFI, check if
-> the thermal netlink group has any listener. This will make sure that
-> HFI is not enabled by default during boot time.
->
-> - Actual processing to enable/disable matches what is done in
-> suspend/resume callbacks. Create two functions hfi_do_enable()
-> and hfi_do_disable(), which can be called from  the netlink notifier
-> callback and suspend/resume callbacks.
->
-> Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+> Debugged-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Signed-off-by: Raag Jadav <raag.jadav@intel.com>
+> Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+
 > ---
->  drivers/thermal/intel/intel_hfi.c | 95 +++++++++++++++++++++++++++----
->  1 file changed, 85 insertions(+), 10 deletions(-)
 >
-> diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/in=
-tel_hfi.c
-> index 3b04c6ec4fca..5e1e2b5269b7 100644
-> --- a/drivers/thermal/intel/intel_hfi.c
-> +++ b/drivers/thermal/intel/intel_hfi.c
-> @@ -159,6 +159,7 @@ struct hfi_cpu_info {
->  static DEFINE_PER_CPU(struct hfi_cpu_info, hfi_cpu_info) =3D { .index =
-=3D -1 };
+> This is not marked for linux-stable for the need of extensive testing
+> and can be backported after a few releases if no issues are reported.
 >
->  static int max_hfi_instances;
-> +static int hfi_thermal_clients_num;
->  static struct hfi_instance *hfi_instances;
+>  drivers/pci/pci-driver.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
 >
->  static struct hfi_features hfi_features;
-> @@ -477,8 +478,11 @@ void intel_hfi_online(unsigned int cpu)
->  enable:
->         cpumask_set_cpu(cpu, hfi_instance->cpus);
+> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> index 51ec9e7e784f..bb7f6775b350 100644
+> --- a/drivers/pci/pci-driver.c
+> +++ b/drivers/pci/pci-driver.c
+> @@ -1382,10 +1382,7 @@ static int pci_pm_runtime_idle(struct device *dev)
+>         if (!pci_dev->driver)
+>                 return 0;
 >
-> -       /* Enable this HFI instance if this is its first online CPU. */
-> -       if (cpumask_weight(hfi_instance->cpus) =3D=3D 1) {
-> +       /*
-> +        * Enable this HFI instance if this is its first online CPU and
-> +        * there are user-space clients of thermal events.
-> +        */
-> +       if (cpumask_weight(hfi_instance->cpus) =3D=3D 1 && hfi_thermal_cl=
-ients_num > 0) {
->                 hfi_set_hw_table(hfi_instance);
->                 hfi_enable();
->         }
-> @@ -573,28 +577,93 @@ static __init int hfi_parse_features(void)
->         return 0;
->  }
->
-> -static void hfi_do_enable(void)
-> +/*
-> + * HFI enable/disable run in non-concurrent manner on boot CPU in syscor=
-e
-> + * callbacks or under protection of hfi_instance_lock.
-> + */
-
-In the comment above I would say "If concurrency is not prevented by
-other means, the HFI enable/disable routines must be called under
-hfi_instance_lock." and I would retain the comments below (they don't
-hurt IMO).
-
-> +static void hfi_do_enable(void *ptr)
-
-I would call this hfi_enable_instance().
-
-> +{
-> +       struct hfi_instance *hfi_instance =3D ptr;
-
-Why is this variable needed ro even useful?  prt can be passed
-directly to hfi_set_hw_table().
-
-> +
-> +       hfi_set_hw_table(hfi_instance);
-> +       hfi_enable();
-> +}
-> +
-> +static void hfi_do_disable(void *ptr)
-
-And I'd call this hfi_disable_instance().
-
-> +{
-> +       hfi_disable();
-> +}
-> +
-> +static void hfi_syscore_resume(void)
->  {
->         /* This code runs only on the boot CPU. */
->         struct hfi_cpu_info *info =3D &per_cpu(hfi_cpu_info, 0);
->         struct hfi_instance *hfi_instance =3D info->hfi_instance;
->
-> -       /* No locking needed. There is no concurrency with CPU online. */
-> -       hfi_set_hw_table(hfi_instance);
-> -       hfi_enable();
-> +       if (hfi_thermal_clients_num > 0)
-> +               hfi_do_enable(hfi_instance);
->  }
->
-> -static int hfi_do_disable(void)
-> +static int hfi_syscore_suspend(void)
->  {
-> -       /* No locking needed. There is no concurrency with CPU offline. *=
-/
->         hfi_disable();
+> -       if (!pm)
+> -               return -ENOSYS;
+> -
+> -       if (pm->runtime_idle)
+> +       if (pm && pm->runtime_idle)
+>                 return pm->runtime_idle(dev);
 >
 >         return 0;
->  }
->
->  static struct syscore_ops hfi_pm_ops =3D {
-> -       .resume =3D hfi_do_enable,
-> -       .suspend =3D hfi_do_disable,
-> +       .resume =3D hfi_syscore_resume,
-> +       .suspend =3D hfi_syscore_suspend,
-> +};
-> +
-> +static int hfi_thermal_notify(struct notifier_block *nb, unsigned long s=
-tate,
-> +                             void *_notify)
-> +{
-> +       struct thermal_genl_notify *notify =3D _notify;
-> +       struct hfi_instance *hfi_instance;
-> +       smp_call_func_t func;
-> +       unsigned int cpu;
-> +       int i;
-> +
-> +       if (notify->mcgrp !=3D THERMAL_GENL_EVENT_GROUP)
-> +               return NOTIFY_DONE;
-> +
-> +       if (state !=3D THERMAL_NOTIFY_BIND && state !=3D THERMAL_NOTIFY_U=
-NBIND)
-> +               return NOTIFY_DONE;
-> +
-> +       mutex_lock(&hfi_instance_lock);
-> +
-> +       switch (state) {
-> +       case THERMAL_NOTIFY_BIND:
-> +               hfi_thermal_clients_num++;
-> +               break;
-> +
-> +       case THERMAL_NOTIFY_UNBIND:
-> +               hfi_thermal_clients_num--;
-> +               break;
-> +       }
-> +
-> +       if (hfi_thermal_clients_num > 0)
-> +               func =3D hfi_do_enable;
-> +       else
-> +               func =3D hfi_do_disable;
-> +
-> +       for (i =3D 0; i < max_hfi_instances; i++) {
-> +               hfi_instance =3D &hfi_instances[i];
-> +               if (cpumask_empty(hfi_instance->cpus))
-> +                       continue;
-> +
-> +               cpu =3D cpumask_any(hfi_instance->cpus);
-> +               smp_call_function_single(cpu, func, hfi_instance, true);
-> +       }
-> +
-> +       mutex_unlock(&hfi_instance_lock);
-
-So AFAICS, one instance can be enabled multiple times because of this.
-  I guess that's OK?  In any case, it would be kind of nice to leave a
-note regarding it somewhere here.
-
-> +
-> +       return NOTIFY_OK;
-> +}
-> +
-> +static struct notifier_block hfi_thermal_nb =3D {
-> +       .notifier_call =3D hfi_thermal_notify,
->  };
->
->  void __init intel_hfi_init(void)
-> @@ -628,10 +697,16 @@ void __init intel_hfi_init(void)
->         if (!hfi_updates_wq)
->                 goto err_nomem;
->
-> +       if (thermal_genl_register_notifier(&hfi_thermal_nb))
-> +               goto err_nl_notif;
-
-Is it possible for any clients to be there before the notifier is
-registered?  If not, it would be good to add a comment about it.
-
-> +
->         register_syscore_ops(&hfi_pm_ops);
->
->         return;
->
-> +err_nl_notif:
-> +       destroy_workqueue(hfi_updates_wq);
-> +
->  err_nomem:
->         for (j =3D 0; j < i; ++j) {
->                 hfi_instance =3D &hfi_instances[j];
 > --
+> 2.35.3
+>
+>
 
