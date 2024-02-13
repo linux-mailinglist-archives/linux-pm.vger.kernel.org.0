@@ -1,114 +1,137 @@
-Return-Path: <linux-pm+bounces-3886-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3887-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9F878539FE
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 19:37:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7FE5853BE5
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 21:06:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B4E18B23AD0
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 18:37:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F134282A2D
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 20:06:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 902A4FBF2;
-	Tue, 13 Feb 2024 18:37:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A722608ED;
+	Tue, 13 Feb 2024 20:06:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YzOuvNFC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C578F9CE;
-	Tue, 13 Feb 2024 18:37:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DC8C60B80;
+	Tue, 13 Feb 2024 20:06:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707849458; cv=none; b=DvymZLm+HBRccAyAhD7XM0MZGQ7oitlvYVIwGmIKbBlmXF+XYhJ5pFRp1D5j0miVrKxfX8PuypqXwSpnbPPHWStvKIL6RsQe/teXBgkG8dqC2micSjxKiSF413kcnrgeH1ajMYqhDXUO9Cifw8ozvM4KdZJsWy/sbCyMjlYWeio=
+	t=1707854810; cv=none; b=G1BAwd+jAsqhjQWJ4CD6wZS9r4bhjvmEeJCO4DXOEbMcM1WLVZp1yJFvoRg/b+4WZorzhhdg7QEMP7v5yr+ljrSTKUEsaHYsstbCwmhEVnfRfhzxyNo0zppdpmKJGrS2L9tcfpqrdLOdQ7YXlkIik9rNVVvy6IQUeJZzorisqEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707849458; c=relaxed/simple;
-	bh=Ud9knnaUmsB+E5Qpwy1rObIvxq+nMG0/sBG1OpEs8tk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ka+n3uUOdFe0Pw69pk8Mf9vm3EywbcZ7OxEbhb/9w6PQzLNyNNFzldyPaD59jxRwmGMJXdxFXjPwIUjQFiiULx87FcvctPbDQmCZN95Ob7GelqIm4goDQZHpVboyhDr6eSVvt9osQ++ewbdPOFOxav0kCABZ+HkpiUndlj6RzOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-59584f41f1eso1868140eaf.1;
-        Tue, 13 Feb 2024 10:37:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707849456; x=1708454256;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BuLwfhOx6LB/gNAPQEQzeunr2+RTjrvvERBDyT9II6U=;
-        b=RlqXpbT2XX3dDiPLOTPGfjxfWFqdcrgZuMwkubNSj2TKgWHWN+hGdqd7ak2n/UyWa4
-         VcxNHCbxOiijaX4VA5deZMbfxcpjmBq51xJkxOUJAJN4DIkkYX1O4ywDjG9tmR6uhOrP
-         i3GslMqiCJp1YOlgrjegH2UsjbPbEmRAjRG2J0PPcctOjvX7DQkhXMu4pmVUMFjK8i6i
-         HQjb+jcMBDO4Wo3twR+KmENrDurNmN4UDg20xhfKp7HsptLXGTeeBhKXX3TQKWkCGKbn
-         Wlxqnr2l88Jl+6OSk1AdpEo77xQ+a6ArVR616vgOWwSZ+TzgB6gqr8DVQ/eyloVrGCDB
-         PluQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXHRKg874b/KXWq+E/BOqebBGiBSbA0bNKvEk2Dd9HvcMbA5tNKlHcqJ8Gqc6WNcJrSjxy1V3auB9Hqzi394wjIIU1N8yb+0LNETK+kqna0L6L2PM3Pe58t7iG+STbSZWcMY/WDYpY=
-X-Gm-Message-State: AOJu0Yzm+GEVHk5914/wRrLYEKWECKPLCBpJ95EkfC8SzTglSv6GxQoQ
-	/njbty7zPTxIsqVcj2BGG4kWhrXAziS50GwA9rm6iGeBEasnbncvSX5Yf+k+iUtXCQHRGewlG/a
-	XsqkOHl7TIabPC970iLjaUFjS2nu2Lfzq
-X-Google-Smtp-Source: AGHT+IFSHY0qlhuS1b6Dk1E1q9DBLbsemsy0MfTeKfMJyjRneAaly2xDsoDodakWEpS3z4gynEV+SF2qJLO6/lCCaig=
-X-Received: by 2002:a05:6820:a8f:b0:59a:bf5:a0da with SMTP id
- de15-20020a0568200a8f00b0059a0bf5a0damr526517oob.0.1707849455825; Tue, 13 Feb
- 2024 10:37:35 -0800 (PST)
+	s=arc-20240116; t=1707854810; c=relaxed/simple;
+	bh=RzFf6vbxBZCp7I/zmIIZfylRvNPWVW5m73wNUuf/KTg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=d3KMCNvwsSE0MxQFvdXPjdX8nnsUzGDIA40ztjCz+03ZuE8YKSXy8mAV91tS/nv0hoQI1ASAl46loo4A7l8qMvMfxtQKr7VRGpYg6Il74qYhYEILQVgMyxhDGANYjJEd78Gj43WyhWzBEBOp9HGC+cIxAexOuE/D38KnXqAfZ9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YzOuvNFC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A698DC433F1;
+	Tue, 13 Feb 2024 20:06:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707854810;
+	bh=RzFf6vbxBZCp7I/zmIIZfylRvNPWVW5m73wNUuf/KTg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=YzOuvNFCgNTVxBos7zSGMPQvUzsw6Yv3J3Sg9RgEpq6nzmFjdZXt41tSNXKofGJJP
+	 l51fvJDjrLZmRveZZi53xDZ360E9ZPL5+kcrXOT0g7ca5VMrbqN2uRQ9zYN/fdypsh
+	 ApM62ix+PjJHq29YU0P15tzNLa4doqXtZxnILUuO7qAmIlnm2YpkAC6lOzcT3hDgcv
+	 psDsTv6zjf6Y4E1x3njmPo3t2D5WAN4/5XUM+jgQkLGqA28RlcJw8vWa1wHvudnvik
+	 w1st1rjo2oyZihNQ7g4ggUPY43U8ZU+gPwQlULn8qXTCSlXJjB7+p1PJ0FXJzR8QXH
+	 XiQ0Z6H8NRArA==
+Date: Tue, 13 Feb 2024 14:06:48 -0600
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Raag Jadav <raag.jadav@intel.com>
+Cc: bhelgaas@google.com, jarkko.nikula@linux.intel.com,
+	mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com,
+	stanislaw.gruszka@linux.intel.com, lukas@wunner.de,
+	rafael@kernel.org, ilpo.jarvinen@linux.intel.com,
+	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+	sashal@kernel.org
+Subject: Re: [PATCH v1] PCI / PM: Really allow runtime PM without callback
+ functions
+Message-ID: <20240213200648.GA1219964@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240131113713.74779-1-rui.zhang@intel.com>
-In-Reply-To: <20240131113713.74779-1-rui.zhang@intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 13 Feb 2024 19:37:24 +0100
-Message-ID: <CAJZ5v0jq6G3dfFFZRJq0oGrX3h0R84xVSAvsn6pQqvcJsi=A9w@mail.gmail.com>
-Subject: Re: [PATCH 0/6] powercap: intel_rapl: Fixes and new platform enabling
-To: Zhang Rui <rui.zhang@intel.com>
-Cc: rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240212063233.5599-1-raag.jadav@intel.com>
 
-On Wed, Jan 31, 2024 at 12:37=E2=80=AFPM Zhang Rui <rui.zhang@intel.com> wr=
-ote:
->
-> Patch 1/6 fixes a real bug when MMIO RAPL driver is probed on platforms
-> that are not listed in current CPU model list. IMO, it should be
-> considered as stable material.
->
-> Patch 2/6 fixes a potential racing issue, but I have not reproduced it
-> yet.
->
-> Patch 3/6 ~ 4/6 fix a problem that TPMI RAPL driver probes disabled
-> System (Psys) RAPL Domains.
->
-> Patch 5/6 and 6/6 are two simple CPU model updates to support MSR RAPL
-> on Arrowlake and Lunarlake platforms.
->
-> thanks,
-> rui
->
-> ----------------------------------------------------------------
-> Sumeet Pawnikar (1):
->       powercap: intel_rapl: add support for Arrow Lake
->
-> Zhang Rui (5):
->       powercap: intel_rapl: Fix a NULL pointer reference bug
->       powercap: intel_rapl: Fix locking for TPMI RAPL
->       powercap: intel_rapl_tpmi: Fix a register bug
->       powercap: intel_rapl_tpmi: Fix System Domain probing
->       powercap: intel_rapl: Add support for LNL-M paltform
->
->  drivers/powercap/intel_rapl_common.c               | 36 ++++++++++++++++=
-++++--
->  drivers/powercap/intel_rapl_msr.c                  |  8 ++---
->  drivers/powercap/intel_rapl_tpmi.c                 | 15 +++++++++
->  .../intel/int340x_thermal/processor_thermal_rapl.c |  8 ++---
->  include/linux/intel_rapl.h                         |  6 ++++
->  5 files changed, 62 insertions(+), 11 deletions(-)
+On Mon, Feb 12, 2024 at 12:02:33PM +0530, Raag Jadav wrote:
+> Commit c5eb1190074c ("PCI / PM: Allow runtime PM without callback
+> functions") tried to eliminate the need for runtime PM callbacks
+> by modifying pci_pm_runtime_suspend() and pci_pm_runtime_resume(),
+> but didn't modify pci_pm_runtime_idle() with relevant changes, which
+> still returns -ENOSYS if the driver supplies no runtime PM callbacks.
+> 
+> Fix this by modifying pci_pm_runtime_idle() such that it allows PCI
+> device power state transitions without runtime PM callbacks.
+> 
+>  0)               |  pm_runtime_work() {
+>  0)               |    rpm_idle() {
+>  0)               |      rpm_check_suspend_allowed() {
+>  0)   1.500 us    |        __dev_pm_qos_resume_latency(); /* = 0x7fffffff */
+>  0)   4.840 us    |      } /* rpm_check_suspend_allowed = 0x0 */
+>  0)   1.550 us    |      __rpm_get_callback(); /* = 0xffffffffb4bc84f0 */
+>  0)   1.800 us    |      pci_pm_runtime_idle(); /* = -38 */
+>  0) + 17.070 us   |    } /* rpm_idle = -38 */
+>  0) + 22.450 us   |  } /* pm_runtime_work = -38 */
 
-All applied as 6.9 material with some minor changes in the subject and
-changelogs of the last two patches.
+What is this timing information telling me?
 
-Thanks!
+> Debugged-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+
+Sounds like this resolves a problem report?  Is there a URL we can
+cite?  If not, at least a mention of what the user-visible problem is?
+
+From the c5eb1190074c commit log, it sounds like maybe this allows
+devices to be autosuspended when they previously could not be?
+
+Possibly this should have "Fixes: c5eb1190074c ("PCI / PM: Allow
+runtime PM without callback functions")" since it sounds like it goes
+with it?
+
+> Signed-off-by: Raag Jadav <raag.jadav@intel.com>
+> Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+> ---
+> 
+> This is not marked for linux-stable for the need of extensive testing
+> and can be backported after a few releases if no issues are reported.
+
+If you think this should not get backported to stable, you'll have to
+watch the backports to prevent it.  Lots of stuff gets auto-backported
+even though not explicitly marked for stable.  This comment won't
+prevent it (and won't even appear in the commit log).
+
+>  drivers/pci/pci-driver.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> index 51ec9e7e784f..bb7f6775b350 100644
+> --- a/drivers/pci/pci-driver.c
+> +++ b/drivers/pci/pci-driver.c
+> @@ -1382,10 +1382,7 @@ static int pci_pm_runtime_idle(struct device *dev)
+>  	if (!pci_dev->driver)
+>  		return 0;
+>  
+> -	if (!pm)
+> -		return -ENOSYS;
+> -
+> -	if (pm->runtime_idle)
+> +	if (pm && pm->runtime_idle)
+>  		return pm->runtime_idle(dev);
+>  
+>  	return 0;
+> -- 
+> 2.35.3
+> 
 
