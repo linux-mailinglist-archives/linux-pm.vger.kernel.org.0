@@ -1,117 +1,314 @@
-Return-Path: <linux-pm+bounces-3873-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3874-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E920C8530EC
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 13:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BF3C853142
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 14:05:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A678F285DFD
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 12:50:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B01128B4CD
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 13:05:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80CE2482DA;
-	Tue, 13 Feb 2024 12:49:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 799994BA9A;
+	Tue, 13 Feb 2024 13:05:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="b2qooR8G"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E703F482C5;
-	Tue, 13 Feb 2024 12:49:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C12B3D99E;
+	Tue, 13 Feb 2024 13:05:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707828594; cv=none; b=ErI6OSJhVwQNR1F+uo/Xjpi+2Kg4eosu5MQe+kTeK1SzUPaITPqkIqGNzayl/C0znrg5vBm4TfDzfGCG6gwcfH9NB/JO4OPKmdyE4bDW1dck7TZSo6wppOjVcsxZb7Z4AkAdVLlE8a5Mt8k/uVyiMAttwwVyop9at1B29OwOij0=
+	t=1707829522; cv=none; b=TS19QZKbXP2Kqn0F7VA00wG9V+N+H/kUYc6oszQ0YS6NfeHqontd/XByaHd82KX8GOGR6mSVx1SOFfLAmDy/f1YEOjCSitLc2DGSHhvVkrCJkt52KysQoAMLZInHDyx/wvg2CWQrPMdJIrtlZtncXjLDPcw3PzRVectBEyEIrlk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707828594; c=relaxed/simple;
-	bh=ex3TVzNJN0wCNtO75MDBncMsHfHQsNEWiw0uCMYtP0Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ge55H93akpGblhNxB38oaFeQsvDvGeIlRRk3xoeC/o8A3FfzV31QkhuYvTcaooqsBklEigIMX+ir/UFvVJdLxCvCI248wX4aOLOsT1EwjPu63oUmkaEduaePItlxu2Msi8m0ZIFaIdo1NKMcKCBBS8o+AHeJg3oiQ93sftx4zis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5958d3f2d8aso1780361eaf.1;
-        Tue, 13 Feb 2024 04:49:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707828592; x=1708433392;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7CBaxOaB3YtfOi5TS5qWweacR8xmwIUPPYfPdVBRx/s=;
-        b=RVtMee1L4BU07ZzNeXFF6RiJf0m9FO5Vpe9Inx2ycTk344HdGsKL/pl3Br0cu2CQWi
-         l6H8BZgvtW9yRl6RL2vSv6X89GMo6GALUaAvsiCvbpvps2KMHq73haYfkdRIKFMe6ofz
-         dk9oDiIQ9DQ6AXObMwzlyTHgEnVLLbqDsIIqljCIPrbLcgwqzqN1vU8LUxmi/hZghgb8
-         bU0lTux9Tk+45UrMK3lddilux53zZAm36mw73W7ATDhSwAH50s3EkfWOBGiijDrh5ZKx
-         46fGL+6EjKY+Vd7jGy1e5kgQ+8Rsi0wMHxRHrCPWyFJNEBK/jq/Oesx1OO9dNWc7BsNf
-         ABwg==
-X-Forwarded-Encrypted: i=1; AJvYcCXkaIlZh4QgvXwwvJf85zVanKBo2X5p5GKs8hN5sieFCrNx0etzFLxjMvrLYDpNx9+nm5GLUJLyVhM5zo2SFF6dnOIFn4i65Y/Sys+QomLmYVsrv3dCGtchAIvrY73vE7Rffg417Uw=
-X-Gm-Message-State: AOJu0YwhqfIO54eMGRTX0hLVrrjpzXEoPZqMLL+pHiH5Zcflkt7oMDgc
-	XVv0o3hbyVfiMUfmfS7OnkWHZP+xx8s3X9SCmYS0YlnR3q9N1/h4T5VUW/4vZSBlZkAXI0yy0z3
-	/O8MFx6m/nJm7YaM9omqodJd3HEw=
-X-Google-Smtp-Source: AGHT+IGepfo3mjYQMT/6bLddK5Tf4BA9NDeq2GTv2R5GvwY3wkdkJL7vMUtcZmGcKZMXRXPWGfa++T8qADrKAt9VGpg=
-X-Received: by 2002:a05:6820:a8f:b0:59d:6ef2:7b01 with SMTP id
- de15-20020a0568200a8f00b0059d6ef27b01mr3048157oob.1.1707828591767; Tue, 13
- Feb 2024 04:49:51 -0800 (PST)
+	s=arc-20240116; t=1707829522; c=relaxed/simple;
+	bh=viMQpHUA0wyuSc0aYpDZXv2P8TIrUTd/nzpVXcOfqVc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=UgDb+kfIw7/ePcCwBsx2O1A/vjKwqHcKAvOvda3V+vDLuvCImGfddacRvuLweu0jbvbER0PKWw9/ky1ZcUXhfJYYJGz/lEtcp0FHz6LT0tjRPGalq0MmVey5HvbWiRPmQ/FfGsXrv+fns3ZYZTicTecNzXD5jWzldBXunHu2FIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=b2qooR8G; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41DD0ZYg027948;
+	Tue, 13 Feb 2024 13:05:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=6mOL9PsbxyCYLHe4WBDlAcPGHq/NUHZ80ySMAvSLfSg=; b=b2
+	qooR8GAI+7AxuDb10TLdHXzIlOG6UKGINlldMpmpp6fY/z2M8ewhk5OFsOLQL/oO
+	VVDTxkhaOyFdrlJENeYAL98+HdWSF2hnt6iL84WlRSRLngTPXwRPLTs0mouVP3qr
+	SoPQVQR0eXGnGe7NXoR3nq7mmIJA4G4XphOQcqMBjpsnHYhNe0QKLhTYBowMFiR/
+	TT+IKhlf+fRBA2bpUE23sjmA7JamjQs0zuu0bwsBjq49IIbHIwV6l0QDbNEfE4Vs
+	lHPasbwKSh+Eq+zW80UfuMtxjzcEQMFnRWBEMACTMslbkLeZ/2N7XNCjogChYZ+U
+	PV2MRo3Ski8TPdRqUuTw==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w7gse2ydp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 13 Feb 2024 13:05:06 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41DD554N000608
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 13 Feb 2024 13:05:05 GMT
+Received: from [10.218.5.19] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 13 Feb
+ 2024 05:04:58 -0800
+Message-ID: <35907177-eecd-4b58-a5da-7186b0f60193@quicinc.com>
+Date: Tue, 13 Feb 2024 18:34:55 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240213111600.25269-1-jirislaby@kernel.org>
-In-Reply-To: <20240213111600.25269-1-jirislaby@kernel.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 13 Feb 2024 13:49:39 +0100
-Message-ID: <CAJZ5v0i0C3iPCUaUxfGGd+XjKmh7gY3G1e0uNG4mBm3FEmx8LA@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq/intel_pstate: remove cpudata::prev_cummulative_iowait
-To: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc: rafael@kernel.org, linux-kernel@vger.kernel.org, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Len Brown <lenb@kernel.org>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 3/5] clk: qcom: gdsc: Add set and get hwmode callbacks
+ to switch GDSC mode
+Content-Language: en-US
+To: Bjorn Andersson <andersson@kernel.org>, Abel Vesa <abel.vesa@linaro.org>
+CC: "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman
+	<khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>, Pavel Machek
+	<pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio
+	<konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Stanimir Varbanov
+	<stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Mauro Carvalho Chehab
+	<mchehab@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Dmitry Baryshkov
+	<dmitry.baryshkov@linaro.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-media@vger.kernel.org>
+References: <20240122-gdsc-hwctrl-v4-0-9061e8a7aa07@linaro.org>
+ <20240122-gdsc-hwctrl-v4-3-9061e8a7aa07@linaro.org>
+ <qbqsvxmnl2tuansxzr6u4vqxemw4dzrsvz2ill6qnyxdp5gtji@lsemt4asmsax>
+From: Jagadeesh Kona <quic_jkona@quicinc.com>
+In-Reply-To: <qbqsvxmnl2tuansxzr6u4vqxemw4dzrsvz2ill6qnyxdp5gtji@lsemt4asmsax>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: rNU6xjxKFa-tBEBWMTsCjmh3A4wydkXb
+X-Proofpoint-ORIG-GUID: rNU6xjxKFa-tBEBWMTsCjmh3A4wydkXb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-13_06,2024-02-12_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 adultscore=0 spamscore=0 clxscore=1011 phishscore=0
+ malwarescore=0 mlxscore=0 bulkscore=0 mlxlogscore=999 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401310000 definitions=main-2402130104
 
-On Tue, Feb 13, 2024 at 12:16=E2=80=AFPM Jiri Slaby (SUSE) <jirislaby@kerne=
-l.org> wrote:
->
-> Commit 09c448d3c61f (cpufreq: intel_pstate: Use IOWAIT flag in Atom
-> algorithm) removed the last user of cpudata::prev_cummulative_iowait. So
-> remove the member too.
->
-> Found by https://github.com/jirislaby/clang-struct.
->
-> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: Len Brown <lenb@kernel.org>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: linux-pm@vger.kernel.org
-> ---
->  drivers/cpufreq/intel_pstate.c | 3 ---
->  1 file changed, 3 deletions(-)
->
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstat=
-e.c
-> index ca94e60e705a..5ad3542c0e1e 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -201,8 +201,6 @@ struct global_params {
->   * @prev_aperf:                Last APERF value read from APERF MSR
->   * @prev_mperf:                Last MPERF value read from MPERF MSR
->   * @prev_tsc:          Last timestamp counter (TSC) value
-> - * @prev_cummulative_iowait: IO Wait time difference from last and
-> - *                     current sample
->   * @sample:            Storage for storing last Sample data
->   * @min_perf_ratio:    Minimum capacity in terms of PERF or HWP ratios
->   * @max_perf_ratio:    Maximum capacity in terms of PERF or HWP ratios
-> @@ -241,7 +239,6 @@ struct cpudata {
->         u64     prev_aperf;
->         u64     prev_mperf;
->         u64     prev_tsc;
-> -       u64     prev_cummulative_iowait;
->         struct sample sample;
->         int32_t min_perf_ratio;
->         int32_t max_perf_ratio;
-> --
 
-Applied as 6.9 material, thanks!
+
+On 1/31/2024 4:30 AM, Bjorn Andersson wrote:
+> On Mon, Jan 22, 2024 at 10:47:03AM +0200, Abel Vesa wrote:
+>> From: Jagadeesh Kona <quic_jkona@quicinc.com>
+>>
+>> Add support for set and get hwmode callbacks to switch the GDSC between
+>> SW and HW modes. Currently, the GDSC is moved to HW control mode
+>> using HW_CTRL flag and if this flag is present, GDSC is moved to HW
+>> mode as part of GDSC enable itself. The intention is to keep the
+>> HW_CTRL flag functionality as is, since many older chipsets still use
+>> this flag.
+>>
+> 
+> This provides insight into why we end up with both HW_CTRL and
+> HW_CTRL_TRIGGER. This doesn't describe why this change is needed, but
+> rather just an implementation detail.
+> 
+>> But consumer drivers also require the GDSC mode to be switched dynamically
+>> at runtime based on requirement for certain usecases. Some of these
+>> usecases are switching the GDSC to SW mode to keep it ON during the
+>> enablement of clocks that are dependent on GDSC and while programming
+>> certain configurations that require GDSC to be ON. Introduce a new
+>> HW_CTRL_TRIGGER flag to register the set_hwmode_dev and get_hwmode_dev
+>> callbacks which allows the consumer drivers to switch the GDSC back and
+>> forth between HW/SW modes dynamically at runtime using new
+>> dev_pm_genpd_set_hwmode API.
+>>
+> 
+> This still expresses the need for HW_CTRL_TRIGGER in terms of "some
+> drivers need for some use case". We don't need these many words to say:
+> "Introduce HW_CTRL_TRIGGER for client drivers that need it."
+> 
+
+Thanks Bjorn for your review.
+
+Sure will update the commit text to be more precise in next series.
+
+> 
+> I find that it would be useful to document that every time a GDSC is
+> turned on the mode will be switched to SW...
+> 
+>> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
+>> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+>> ---
+>>   drivers/clk/qcom/gdsc.c | 54 +++++++++++++++++++++++++++++++++++++++++++++++++
+>>   drivers/clk/qcom/gdsc.h |  1 +
+>>   2 files changed, 55 insertions(+)
+>>
+>> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+>> index 5358e28122ab..71626eb20101 100644
+>> --- a/drivers/clk/qcom/gdsc.c
+>> +++ b/drivers/clk/qcom/gdsc.c
+>> @@ -363,6 +363,56 @@ static int gdsc_disable(struct generic_pm_domain *domain)
+>>   	return 0;
+>>   }
+>>   
+>> +static int gdsc_set_hwmode(struct generic_pm_domain *domain, struct device *dev, bool mode)
+>> +{
+>> +	struct gdsc *sc = domain_to_gdsc(domain);
+>> +	u32 val;
+>> +	int ret;
+>> +
+>> +	if (sc->rsupply && !regulator_is_enabled(sc->rsupply)) {
+> 
+> Why is this a restriction only for GDSCs supplied by regulators? I don't
+> find anything preventing this API from being called on GDSCs supplied by
+> other genpd instances.
+
+> 
+> Also note that regulator_is_enabled() is racy, in that it tells us if
+> the regulator is currently turned on, not if we're the one holding that
+> vote. As such this might change at any moment - and hence shouldn't be
+> significant here.
+>
+Below is the consumer's sequence that switch the GDSC's b/w HW & SW modes:-
+1) Enable the GDSC in SW mode
+2) Enable required clocks
+3) Switch the GDSC to HW mode using dev_pm_genpd_set_hwmode(true)
+4) Usecase start
+5) Usecase end
+6) Switch the GDSC back to SW mode using dev_pm_genpd_set_hwmode(false)
+7) Disable clocks
+8) Disable GDSC
+
+Hence the new API dev_pm_genpd_set_hwmode() will always be called 
+between gdsc_enable() and gdsc_disable(), which ensures GDSC's parent 
+power domain/regulator is ON when this callback is being called. Also, 
+we can remove the above regulator_is_enabled() check as well.
+
+>> +		pr_err("Cannot set mode while parent is disabled\n");
+>> +		return -EIO;
+>> +	}
+>> +
+>> +	ret = gdsc_hwctrl(sc, mode);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	/* Wait for 1usec for mode transition to properly complete */
+>> +	udelay(1);
+>> +
+>> +	if (!mode) {
+>> +		ret = regmap_read(sc->regmap, sc->gdscr, &val);
+>> +		if (ret)
+>> +			return ret;
+>> +
+>> +		/*
+>> +		 * While switching from HW to SW mode, if GDSC is in enabled
+>> +		 * state, poll for GDSC to complete the power up.
+>> +		 */
+> 
+> I had to give this some thought, to conclude that this is relevant if HW
+> has the GDSC disabled and we're switching to SW - which would then
+> enable it. I think this comment can be improved slightly, to save the
+> reader the need for figuring out this on their own.
+> 
+
+Sure, I will improvise the comment in next series.
+
+>> +		if (!(val & SW_COLLAPSE_MASK))
+> 
+> This not being true, would imply that gdsc_disable() has been called
+> already, in which case there's no guarantee that the parent still
+> supplies power.
+> 
+> In the introduced API power on and hw control are orthogonal states, but
+> not so in this implementation. This need to made clear, to reduce future
+> surprises.
+> 
+
+Yes, above SW_COLLAPSE_MASK check is also not required and will remove 
+it in next series.
+
+>> +			return gdsc_poll_status(sc, GDSC_ON);
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static bool gdsc_get_hwmode(struct generic_pm_domain *domain, struct device *dev)
+>> +{
+>> +	struct gdsc *sc = domain_to_gdsc(domain);
+>> +	u32 val;
+>> +	int ret;
+>> +
+>> +	ret = regmap_read(sc->regmap, sc->gdscr, &val);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	if (val & HW_CONTROL_MASK)
+>> +		return true;
+>> +
+>> +	return false;
+> 
+> return !!(val & HW_CONTROL_MASK);
+> 
+
+Sure, will update this in the next series.
+
+> Regards,
+> Bjorn
+> 
+>> +}
+>> +
+>>   static int gdsc_init(struct gdsc *sc)
+>>   {
+>>   	u32 mask, val;
+>> @@ -451,6 +501,10 @@ static int gdsc_init(struct gdsc *sc)
+>>   		sc->pd.power_off = gdsc_disable;
+>>   	if (!sc->pd.power_on)
+>>   		sc->pd.power_on = gdsc_enable;
+>> +	if (sc->flags & HW_CTRL_TRIGGER) {
+>> +		sc->pd.set_hwmode_dev = gdsc_set_hwmode;
+>> +		sc->pd.get_hwmode_dev = gdsc_get_hwmode;
+>> +	}
+>>   
+>>   	ret = pm_genpd_init(&sc->pd, NULL, !on);
+>>   	if (ret)
+>> diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
+>> index 803512688336..1e2779b823d1 100644
+>> --- a/drivers/clk/qcom/gdsc.h
+>> +++ b/drivers/clk/qcom/gdsc.h
+>> @@ -67,6 +67,7 @@ struct gdsc {
+>>   #define ALWAYS_ON	BIT(6)
+>>   #define RETAIN_FF_ENABLE	BIT(7)
+>>   #define NO_RET_PERIPH	BIT(8)
+>> +#define HW_CTRL_TRIGGER	BIT(9)
+>>   	struct reset_controller_dev	*rcdev;
+>>   	unsigned int			*resets;
+>>   	unsigned int			reset_count;
+>>
+>> -- 
+>> 2.34.1
+>>
+> 
 
