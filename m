@@ -1,85 +1,121 @@
-Return-Path: <linux-pm+bounces-3849-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3850-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CFF98526DB
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 02:45:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C3C78526F8
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 02:49:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 904391C246F8
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 01:45:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCA921F25CED
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 01:49:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DACB286A6;
-	Tue, 13 Feb 2024 01:07:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lUPhreWH"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2DEC1775A;
+	Tue, 13 Feb 2024 01:30:29 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 360007AE49;
-	Tue, 13 Feb 2024 01:07:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8191714010;
+	Tue, 13 Feb 2024 01:30:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707786422; cv=none; b=l2pAkGcOOb19990X/FyLl8zDD+g0ESi5SfhO9giBgq3kXrIIEHvW7OYB0/deSDdMT32a12/dixspq7C7jibEdxuRnWOysRZCEEL2deKeuwBDgWtsvIxrNw7IYpaWPHeyMR6nWGqZwouudHQImwwXofHsYEbQZ53MHAbIJHw6S08=
+	t=1707787829; cv=none; b=e7Bi0P1VzUiFxDzsVRv/snh/FAL6brTjpnQ01T2Hg1sF8Tq9IyG6YdoKU5jBPguCk5sYJkeym+i515St7R2LOWMG+gyk8adiNZLfn7Wn19YZEP6Sbnb2HzVJfZfcJ9ehexb4MWm3W1iMonv6LbZaq01Tie8ImDmp8DDKhSH/ag4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707786422; c=relaxed/simple;
-	bh=yiRjXWW9vRy8oSt2OY9bdE1LF4uXuy72w5FirZcXiWQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=d3+D0zLKxoe8CDjySdtUley40Er/EXTfpHoFQ2iPSGk6mUR9/Fhb86GUHIESlVusocXfOdUszHElwX9dkvKIKHnvM4STub5OrP5Egp/mjF6i8D3BgPnDv3iARJ3823B4GNApbszIGUoy/NY43pBLlxZRg3HtPWHye0/wrzZDy5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lUPhreWH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 538FDC433F1;
-	Tue, 13 Feb 2024 01:07:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707786421;
-	bh=yiRjXWW9vRy8oSt2OY9bdE1LF4uXuy72w5FirZcXiWQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=lUPhreWHveOFJzchwqyfcv++UOsX7plGbmLF+WVZf9oNBAqWh9YCNx+7dleUmWDcH
-	 UH3AIcmOxwP8nDKZ2PBbVutfPQ/ms3dQhMhSaH91uM+fWKsrqzTW2qsPv/E3F9mSEE
-	 Xsukyr6Zg5nfmmQ/25ML5WFZElcSuYcivNxys2ESwhjac+JZ4FBpKds60Y+MZl3SfR
-	 NG3Wqjr6XFKmQtGcA9GZEwDMjE6dU4Nq1zFjMy/i8cLgVrcEk5FXghgTNdFjY450Bs
-	 yB7KDndZv6c3XZ7SQukkSm1noEKw+NOEik0LsPhA1nJNyt11/4EmpZjv8Qti0ugKNu
-	 lNjUMQEmgYScQ==
-Date: Mon, 12 Feb 2024 17:07:00 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Cc: linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Ricardo Neri
- <ricardo.neri-calderon@linux.intel.com>, Daniel Lezcano
- <daniel.lezcano@linaro.org>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jiri Pirko
- <jiri@resnulli.us>, Johannes Berg <johannes@sipsolutions.net>, Florian
- Westphal <fw@strlen.de>, netdev@vger.kernel.org
-Subject: Re: [PATCH v4 1/3] genetlink: Add per family bind/unbind callbacks
-Message-ID: <20240212170700.4eda9c03@kernel.org>
-In-Reply-To: <20240212161615.161935-2-stanislaw.gruszka@linux.intel.com>
-References: <20240212161615.161935-1-stanislaw.gruszka@linux.intel.com>
-	<20240212161615.161935-2-stanislaw.gruszka@linux.intel.com>
+	s=arc-20240116; t=1707787829; c=relaxed/simple;
+	bh=5YUUpkVeGZf2ULKeV0s8gYOnI9Ho0baFiYcgz1YGhG0=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=oCJt2fUNs23O/PW/fTbIh8khKEtnvSC4rqYqnr834+d5RCtTqAE3ujaA1nzi0QPc4QQAPkkD5p4s0Wjyc9vx4iDUEVlbqrS/xPYv0BFZmcp4bs5lhRtjiLpv5w6OnSfREZ+CUlHDCJv7hbr3KM/MIm1dxOfBl/Bf+aQOX8jZgPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4349C43390;
+	Tue, 13 Feb 2024 01:30:28 +0000 (UTC)
+Received: by mercury (Postfix, from userid 1000)
+	id 9E53A106A041; Tue, 13 Feb 2024 02:30:25 +0100 (CET)
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Sebastian Reichel <sre@kernel.org>, 
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+ Cristian Ciocaltea <cristian.ciocaltea@gmail.com>, 
+ Florian Fainelli <florian.fainelli@broadcom.com>, 
+ Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>, 
+ Sean Wang <sean.wang@mediatek.com>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Andrew Davis <afd@ti.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-actions@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+In-Reply-To: <20240212162831.67838-1-afd@ti.com>
+References: <20240212162831.67838-1-afd@ti.com>
+Subject: Re: [PATCH v4 00/19] Remove pm_power_off use in
+ drivers/power/reset
+Message-Id: <170778782561.1080348.15486414819584613989.b4-ty@collabora.com>
+Date: Tue, 13 Feb 2024 02:30:25 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.4
 
-On Mon, 12 Feb 2024 17:16:13 +0100 Stanislaw Gruszka wrote:
-> Add genetlink family bind()/unbind() callbacks when adding/removing
-> multicast group to/from netlink client socket via setsockopt() or
-> bind() syscall.
-> 
-> They can be used to track if consumers of netlink multicast messages
-> emerge or disappear. Thus, a client implementing callbacks, can now
-> send events only when there are active consumers, preventing unnecessary
-> work when none exist.
-> 
-> Suggested-by: Jakub Kicinski <kuba@kernel.org>
-> Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
 
-LGTM! genetlink code is a bit hot lately, to avoid any conflicts can
-I put the first patch (or all of them) on a shared branch for both
-netdev and PM to pull in? Once the other two patches are reviewed,
-obviously.
+On Mon, 12 Feb 2024 10:28:12 -0600, Andrew Davis wrote:
+> Use of pm_power_off is considered legacy and should be replaced with
+> register_sys_off*(). Same for register_restart_handler(). Do this
+> for the drivers/power/reset subsystem for all trivial cases.
+> 
+> Thanks,
+> Andrew
+> 
+> [...]
+
+Applied, thanks!
+
+[01/19] power: reset: atc260x-poweroff: Use devm_register_sys_off_handler(RESTART)
+        commit: f22e835028902b01915f584d2912cc25a397c84e
+[02/19] power: reset: atc260x-poweroff: Use devm_register_sys_off_handler(POWER_OFF)
+        commit: ab1439b05168dc73539e78d8b3100a0336a83bca
+[03/19] power: reset: xgene-reboot: Use devm_platform_ioremap_resource() helper
+        commit: 7ddfd33c6ee58ee915d09177a7dbac2c5be7b536
+[04/19] power: reset: xgene-reboot: Use devm_register_sys_off_handler(RESTART)
+        commit: 6af1ee028537be0a43ce939eb8f5321096208667
+[05/19] power: reset: tps65086-restart: Use devm_register_sys_off_handler(RESTART)
+        commit: e68b71812ebf385317c5bcf82674c109806be452
+[06/19] power: reset: tps65086-restart: Remove unneeded device data struct
+        commit: 11d2642e14ad022de13f261370ccddd33693c045
+[07/19] power: reset: brcm-kona-reset: Use devm_register_sys_off_handler(RESTART)
+        commit: 45079f206e635a08cba395a08dd3fd7629dbb24d
+[08/19] power: reset: axxia-reset: Use devm_register_sys_off_handler(RESTART)
+        commit: ad8d7b8002a1d3a673f2d6f110b378d137f61037
+[09/19] power: reset: rmobile-reset: Use devm_platform_ioremap_resource() helper
+        commit: 0867276eb12230a5e94ec2b28eba718e76b77eb1
+[10/19] power: reset: rmobile-reset: Use devm_register_sys_off_handler(RESTART)
+        commit: ba1188ea8be80a7bc091073792d404ab54b187b1
+[11/19] power: reset: mt6323-poweroff: Use devm_register_sys_off_handler(POWER_OFF)
+        commit: 6ab9137719a719f39e000aa62887ae25e1194815
+[12/19] power: reset: msm-poweroff: Use devm_register_sys_off_handler(POWER_OFF)
+        commit: b5711ff9171325261a7d6406b3c2b3c7752b6b8a
+[13/19] power: reset: msm-poweroff: Use devm_register_sys_off_handler(RESTART)
+        commit: 00ae86ebf893e0c89a7af6bfd270259e3ded93d1
+[14/19] power: reset: regulator-poweroff: Use devm_register_sys_off_handler(POWER_OFF)
+        commit: 77b61173c2d0ff42e5d609dc1fad137f1229f03b
+[15/19] power: reset: as3722-poweroff: Use devm_register_sys_off_handler(POWER_OFF)
+        commit: 348fde771ce7f5219a73750bd7a0d4c4497b1223
+[16/19] power: reset: gemini-poweroff: Use devm_register_sys_off_handler(POWER_OFF)
+        commit: b6475c3f81c13d6d69113f69a668c96af3a5af51
+[17/19] power: reset: restart-poweroff: Use devm_register_sys_off_handler(POWER_OFF)
+        commit: c3ede0b6f7dd345d8986cb69b861cadb9976782f
+[18/19] power: reset: syscon-poweroff: Move device data into a struct
+        commit: ffa212831289f15a92fe295a371157290619bb8f
+[19/19] power: reset: syscon-poweroff: Use devm_register_sys_off_handler(POWER_OFF)
+        commit: 14c5678720bdee7c5b582839a8dbcffd0c50de5c
+
+Best regards,
+-- 
+Sebastian Reichel <sebastian.reichel@collabora.com>
+
 
