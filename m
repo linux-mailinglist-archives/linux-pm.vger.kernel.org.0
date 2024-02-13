@@ -1,136 +1,184 @@
-Return-Path: <linux-pm+bounces-3881-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3882-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C45185327C
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 15:02:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC0258532A5
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 15:07:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 088BE1F23FF6
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 14:02:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C0511F26A1C
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Feb 2024 14:07:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 035495674B;
-	Tue, 13 Feb 2024 14:02:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A379C56B98;
+	Tue, 13 Feb 2024 14:07:16 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EDA457300;
-	Tue, 13 Feb 2024 14:02:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05BDE56767;
+	Tue, 13 Feb 2024 14:07:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707832944; cv=none; b=twYYh9elI111WATVr4rZ0MAo2jiw1bj35V7/OBhzeTfAW8e08SStGSGGww1UJqK29K4HiDBxSv1ysq0fRFYwkp0lH3iGZhZnPdA/DAVyTV+s0ebp/624KINjOC5prrsnG8OrXIPoG3X/8eS/RvodC4UBhcrp+6xWHgRMMxETmNI=
+	t=1707833236; cv=none; b=A7wwfHVxL38fDT81wuEB6lM4RCRKnQssm8kK17eQKJlg2tKf4XzIw/EQ/Ia1JpG1bLutJ7juEuK47rlO+Fyp2L4u4y8NHADqY6M2ziGj6J2rmnMtaELF4q1OwkqO/B9Eqt/9TuIViCh/g7d/V0EIJ6MrizTUdu1qMh2jOumQ+6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707832944; c=relaxed/simple;
-	bh=x0qXZH3kJEepjTNqW7t+XjZ668V1LMFYMTAebEXWNck=;
+	s=arc-20240116; t=1707833236; c=relaxed/simple;
+	bh=hCy8XKbHlR7uQt0hNNtGeqc9sm+P7YSZ8tDErY2v34Q=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=h5RrGBDxSuokdT17SKziaD5wRtmEA6scshBpOQA4DbOFPB7M1+TQPYW4Ybm54i5w8dc+bE6LgaYlGVOorUQyMvmXxFbqcxyWmkhQUw21L3Fpmh+jxi28hQZFG1X38h2C7b2dTpIJIPSAjcqksXkB75ujxDz5kr+xIa0fxipxKR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.54
+	 To:Cc:Content-Type; b=sCbF/aSIVZXfeujnxOzt5LReJd316ZpxSQC4f737kyaX1sA0/+7vEaVHcoSqVfNmIp+KIh/uviRV3YQB6fPEFPXwMBAAv7eaE915G4qMUZqtbYEyZRIMWPnDy6blun47Ylia1I4GKLVNdWUrMLjngm+nsqoz3duaeDGNBw4lhAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-5958d3f2d8aso1797631eaf.1;
-        Tue, 13 Feb 2024 06:02:23 -0800 (PST)
+Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-3c03fb1d806so141655b6e.0;
+        Tue, 13 Feb 2024 06:07:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707832942; x=1708437742;
+        d=1e100.net; s=20230601; t=1707833234; x=1708438034;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iQZGa2j+slpWb59zzZSHGyPHGPCdHKBm7wfB42qCupU=;
-        b=YM3/MHwIF68deVXJYCINbD05rSO7PzKOS5yhp20NF4ayWcK8SH1ib09bcmwJSeFMyH
-         Z99DgcXXP/ztlegfqxE9+gtlNOt0eIxJI74oqAg+fxTOrayvQXd2afga/VmWygybH7kO
-         f+6svh8cOukPqf0xt2xroAwvnpyy/9tqA1VYPExrP6HneyLqcCzPy2kJj+zpf+dXmvhi
-         20dyEDX5KLuqYXLfBtGzjal14CzCjMNL4MZKGHdKHVxJzTMVzz3IupJUDZeo13rs7vTy
-         O9a50OngkNItp22dNR4N/yIXM8j/0Qj0Rn7m+6nqlKj3KEu6Bm/yHWxpapfopneRZrqO
-         KGCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVfaQ0heVqD1cfbrLFnHQ+Sr/j1SNyGWZDfP7fcnY0QRAdA5+jXux8tKOYeC5InpEzqmIjAl9rlhtiWdTa2GYA38bQQlEbWFKImxDIl9iBw6XtJwArEbv4ML9AqjvJxVeyYXSqWRdjnZ9Wwtpn/6HJ6TxlnodfXo6uUeWjYRowNQB4=
-X-Gm-Message-State: AOJu0YzIkhc130tBrPsOMoMNYUl4JKq+3drhhSDD6Nfwk5gVrProZOUf
-	bTX2UQEj04wkfyNSRyLRZfo2YAOwyTFcRabMQN4tn5OrH6B+7CwOEj84t4cSht393/6iB58YR7O
-	xAEClTlGaaKhf8qYkx1Ww1vq+GiU=
-X-Google-Smtp-Source: AGHT+IGlCzIUVy90I1wgB1ghdkVAqGB1LLuHU6JD1WH51gYXfkk5KAEJ6wLWnOgJSpUCt8Jo6Yli5+jFZcCNNFGvCo8=
-X-Received: by 2002:a05:6820:a8f:b0:59d:6ef2:7b01 with SMTP id
- de15-20020a0568200a8f00b0059d6ef27b01mr3252579oob.1.1707832942323; Tue, 13
- Feb 2024 06:02:22 -0800 (PST)
+        bh=lzEZhYWKOOpUs1fPYieciYVVHUhs9BpFyMBaC1l2dEU=;
+        b=gwAezByA9barWyTtDjUCufYzPODzpppKiTp2Xk27Hb/XUeBfnR2dvUmucGatJsM5c2
+         fp7PX1gIcFrRTPiLnZ+/Y+wfN00bMAxz31oWHPVhoB+pF0K+bFwJ+JmXa52sqRHmChoh
+         sfzrtBy1VGIw8YlIwl7xoJAo0BT4a9oLm7L7NN0JQRnggvvm8nJzw4HasNdEsbArHKqe
+         9aLV+J2bz4T/+yhuYxY6zhCOXNfpT3zlAi8CR7xgvj2ynyIu46sEqqcGqE5rg67lTyvs
+         7/tfqeOaIa4En9hP8UU7OQNrL14aVjAO3DRp64wNCi90mogbvFuJO/4mLHer3PRlaobJ
+         C33w==
+X-Gm-Message-State: AOJu0Yzo9eHh1u8rFCHJzNl93meaM6AkV1hBZl/5EAZUWKUPknpe0XwA
+	8bmP3hV+kWzzW07k1uZyGAXWFXcO43jsWYKD/HPgekRAtiVuu6AwmO/PRxFvwBa2mCXEcsvdVgN
+	M599ojxL11h/qgBCEooOnsD2kp7AA5Uy9
+X-Google-Smtp-Source: AGHT+IFU9zV/V2+8Z/Xgega9DZ8eVpFDVnakZiWISyrS/fAq4AnPSgcwcz+5TJGmeh9nReRKH596xl5InZWQT6+R8VY=
+X-Received: by 2002:a4a:a6cd:0:b0:59c:d8cd:ecee with SMTP id
+ i13-20020a4aa6cd000000b0059cd8cdeceemr8771273oom.1.1707833233837; Tue, 13 Feb
+ 2024 06:07:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240212063233.5599-1-raag.jadav@intel.com>
-In-Reply-To: <20240212063233.5599-1-raag.jadav@intel.com>
+References: <20240210175922.137704-1-clamor95@gmail.com> <20240210175922.137704-2-clamor95@gmail.com>
+In-Reply-To: <20240210175922.137704-2-clamor95@gmail.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 13 Feb 2024 15:02:11 +0100
-Message-ID: <CAJZ5v0huF=T_QH_Vzfmq07x2L_BPdCCdZSKzKOMYY19s37kjOw@mail.gmail.com>
-Subject: Re: [PATCH v1] PCI / PM: Really allow runtime PM without callback functions
-To: Raag Jadav <raag.jadav@intel.com>
-Cc: bhelgaas@google.com, jarkko.nikula@linux.intel.com, 
-	mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com, 
-	stanislaw.gruszka@linux.intel.com, lukas@wunner.de, rafael@kernel.org, 
-	ilpo.jarvinen@linux.intel.com, linux-pci@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	gregkh@linuxfoundation.org, sashal@kernel.org
+Date: Tue, 13 Feb 2024 15:07:02 +0100
+Message-ID: <CAJZ5v0j3f9xKpE0XBNrv33u68zo5fasEP5yQU_K5qU2oz7RwgA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] thermal: thermal-generic-adc: add temperature
+ sensor function
+To: Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 12, 2024 at 7:32=E2=80=AFAM Raag Jadav <raag.jadav@intel.com> w=
-rote:
+On Sat, Feb 10, 2024 at 6:59=E2=80=AFPM Svyatoslav Ryhel <clamor95@gmail.co=
+m> wrote:
 >
-> Commit c5eb1190074c ("PCI / PM: Allow runtime PM without callback
-> functions") tried to eliminate the need for runtime PM callbacks
-> by modifying pci_pm_runtime_suspend() and pci_pm_runtime_resume(),
-> but didn't modify pci_pm_runtime_idle() with relevant changes, which
-> still returns -ENOSYS if the driver supplies no runtime PM callbacks.
->
-> Fix this by modifying pci_pm_runtime_idle() such that it allows PCI
-> device power state transitions without runtime PM callbacks.
->
->  0)               |  pm_runtime_work() {
->  0)               |    rpm_idle() {
->  0)               |      rpm_check_suspend_allowed() {
->  0)   1.500 us    |        __dev_pm_qos_resume_latency(); /* =3D 0x7fffff=
-ff */
->  0)   4.840 us    |      } /* rpm_check_suspend_allowed =3D 0x0 */
->  0)   1.550 us    |      __rpm_get_callback(); /* =3D 0xffffffffb4bc84f0 =
-*/
->  0)   1.800 us    |      pci_pm_runtime_idle(); /* =3D -38 */
->  0) + 17.070 us   |    } /* rpm_idle =3D -38 */
->  0) + 22.450 us   |  } /* pm_runtime_work =3D -38 */
->
-> Debugged-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Signed-off-by: Raag Jadav <raag.jadav@intel.com>
-> Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+> Existing thermal-generic-adc states to be an adc-based thermal
+> sensor, which is not entirely true. It provides a thermal sensor
+> cell, but it does not provide an IIO sensor cell, which would
+> benefit devices that use adc sensors to detect temperature and
+> need a custom calibration table.
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+After reading this changelog and the subject I have to
+reverse-engineer the patch to actually find out what's going on.
 
+In particular, are there any user-visible changes of this and if so,
+what are they?
+
+> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 > ---
+>  drivers/thermal/thermal-generic-adc.c | 57 ++++++++++++++++++++++++++-
+>  1 file changed, 56 insertions(+), 1 deletion(-)
 >
-> This is not marked for linux-stable for the need of extensive testing
-> and can be backported after a few releases if no issues are reported.
+> diff --git a/drivers/thermal/thermal-generic-adc.c b/drivers/thermal/ther=
+mal-generic-adc.c
+> index 1717e4a19dcb..7e87d928512c 100644
+> --- a/drivers/thermal/thermal-generic-adc.c
+> +++ b/drivers/thermal/thermal-generic-adc.c
+> @@ -7,6 +7,7 @@
+>   * Author: Laxman Dewangan <ldewangan@nvidia.com>
+>   */
+>  #include <linux/iio/consumer.h>
+> +#include <linux/iio/iio.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+> @@ -73,6 +74,60 @@ static const struct thermal_zone_device_ops gadc_therm=
+al_ops =3D {
+>         .get_temp =3D gadc_thermal_get_temp,
+>  };
 >
->  drivers/pci/pci-driver.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
+> +static const struct iio_chan_spec gadc_thermal_iio_channel[] =3D {
+> +       {
+> +               .datasheet_name =3D "temp",
+> +               .type =3D IIO_TEMP,
+> +               .info_mask_separate =3D BIT(IIO_CHAN_INFO_RAW),
+> +               .indexed =3D 1,
+> +               .channel =3D 0,
+> +       }
+> +};
+> +
+> +static int gadc_thermal_read_raw(struct iio_dev *indio_dev,
+> +                                struct iio_chan_spec const *chan,
+> +                                int *temp, int *val2, long mask)
+> +{
+> +       struct gadc_thermal_info *gtinfo =3D iio_priv(indio_dev);
+> +       int ret;
+> +
+> +       if (mask !=3D IIO_CHAN_INFO_RAW)
+> +               return -EINVAL;
+> +
+> +       ret =3D gadc_thermal_get_temp(gtinfo->tz_dev, temp);
+> +       if (ret < 0)
+> +               return ret;
+> +
+> +       *temp /=3D 1000;
+> +
+> +       return IIO_VAL_INT;
+> +}
+> +
+> +static const struct iio_info gadc_thermal_iio_info =3D {
+> +       .read_raw =3D gadc_thermal_read_raw,
+> +};
+> +
+> +static int gadc_iio_register(struct device *dev, struct gadc_thermal_inf=
+o *gti)
+> +{
+> +       struct gadc_thermal_info *gtinfo;
+> +       struct iio_dev *indio_dev;
+> +
+> +       indio_dev =3D devm_iio_device_alloc(dev, sizeof(struct gadc_therm=
+al_info));
+> +       if (!indio_dev)
+> +               return -ENOMEM;
+> +
+> +       gtinfo =3D iio_priv(indio_dev);
+> +       memcpy(gtinfo, gti, sizeof(struct gadc_thermal_info));
+> +
+> +       indio_dev->name =3D dev_name(dev);
+> +       indio_dev->info =3D &gadc_thermal_iio_info;
+> +       indio_dev->modes =3D INDIO_DIRECT_MODE;
+> +       indio_dev->channels =3D gadc_thermal_iio_channel;
+> +       indio_dev->num_channels =3D ARRAY_SIZE(gadc_thermal_iio_channel);
+> +
+> +       return devm_iio_device_register(dev, indio_dev);
+> +}
+> +
+>  static int gadc_thermal_read_linear_lookup_table(struct device *dev,
+>                                                  struct gadc_thermal_info=
+ *gti)
+>  {
+> @@ -156,7 +211,7 @@ static int gadc_thermal_probe(struct platform_device =
+*pdev)
 >
-> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-> index 51ec9e7e784f..bb7f6775b350 100644
-> --- a/drivers/pci/pci-driver.c
-> +++ b/drivers/pci/pci-driver.c
-> @@ -1382,10 +1382,7 @@ static int pci_pm_runtime_idle(struct device *dev)
->         if (!pci_dev->driver)
->                 return 0;
+>         devm_thermal_add_hwmon_sysfs(&pdev->dev, gti->tz_dev);
 >
-> -       if (!pm)
-> -               return -ENOSYS;
-> -
-> -       if (pm->runtime_idle)
-> +       if (pm && pm->runtime_idle)
->                 return pm->runtime_idle(dev);
+> -       return 0;
+> +       return gadc_iio_register(&pdev->dev, gti);
+>  }
 >
->         return 0;
+>  static const struct of_device_id of_adc_thermal_match[] =3D {
 > --
-> 2.35.3
->
+> 2.40.1
 >
 
