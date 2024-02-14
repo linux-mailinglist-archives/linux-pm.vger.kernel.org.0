@@ -1,257 +1,145 @@
-Return-Path: <linux-pm+bounces-3897-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3898-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 528CA85438A
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Feb 2024 08:40:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 959C7854419
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Feb 2024 09:36:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 772D61C20F3F
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Feb 2024 07:40:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8FD11C26CC3
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Feb 2024 08:36:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F3C711706;
-	Wed, 14 Feb 2024 07:40:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="dcYux+04"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABA3864D;
+	Wed, 14 Feb 2024 08:35:57 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAD161097D;
-	Wed, 14 Feb 2024 07:40:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48F6F1FB4;
+	Wed, 14 Feb 2024 08:35:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707896426; cv=none; b=EL2F0aWGebCdl0QkJEZQyrL1HmfFdtzQnjJZqAZq3+uV8dYbDppRJPu0HwfFW2+QpF8xyXwxzS0wA0WsweMm0ik2pKmGvC61ZP+gJS40grjZ8EWHD1gzfPfE7G1XKg5v0Yf+tcTkTzFso7+ai3QvLW70HXv+VjQIybSDM6/e2Wc=
+	t=1707899757; cv=none; b=UbFnK8Vi0f5jWtlJEbkEr9DfffSkwpZn4u3oiGmjmb6CA+0j8SHwx6aEvKdiof+f2f2xv2ioGzljcrxu+mhdmrnLOhLr3wZoGBSdC2jmCqyz83CWROp+EAp7T0p0Dm0gvodY5t6TRwUll9Dov9l2z/XZvir96ykV4MzRnjSc8Ac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707896426; c=relaxed/simple;
-	bh=KzHiASEVyPnG6jzWZ/r28DGP8rBbllHelFjSvDOXyoo=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PgmZcyfjR65OSOw9gMd1CFqpiKswlWL6sLzL42v7siD4+6w6S5GYvp07XF/4CY/nhm/kukKFrHnrFjhAyFG5tHr0fVqekMMfPlL9vo+LK7IvVNk2CI0QdPH+Tcca0BvFbzbenoO9ISDACVBzUbXGOoXuBsTwn+RE7bxJGnepAGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=dcYux+04; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41E6skOd019513;
-	Wed, 14 Feb 2024 07:40:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	from:to:cc:subject:date:message-id:mime-version:content-type; s=
-	qcppdkim1; bh=aY7yYKqx+GMyo+VIjJd5KjU/z5idd8ln+YeLlsF79QA=; b=dc
-	Yux+04LlE1GydeENNZ4WFes1s/m/Zcs8ZCbracxjs3PA8XA2pZPUs4f6ukUJHbZq
-	VrSiwI6zdf46KjW13aKocSjCQSCc5txqf9iuPzokSomCmZ1R+A7aw7Pt7WqDdOFP
-	IMC4bkUZ7G3kFRmLdLegeK5RZEXGUs9NoNFibNZPMpkJKEhGjomK+gONbWIqm+SW
-	PuzNo+qTwmBJHObYZYkvBxPYazLnCoxaXbvKq5u26AfYA/s5pu6R2EIP5rQzgZR0
-	15lyiyxaQaGxAIUVw60tjj7sdD52aoDZId61gJ10GqeyR9OnQfJgIC4BDfGrwAB1
-	fiUFc88trz+9SWU7edjQ==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w8j65rmr2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 Feb 2024 07:40:04 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41E7e3lJ031438
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 14 Feb 2024 07:40:03 GMT
-Received: from hu-nprakash-blr.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.40; Tue, 13 Feb 2024 23:39:57 -0800
-From: Nikhil V <quic_nprakash@quicinc.com>
-To: Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        "Jonathan
- Corbet" <corbet@lwn.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-CC: Nikhil V <quic_nprakash@quicinc.com>,
-        "Paul E. McKenney"
-	<paulmck@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Yan-Jie Wang
-	<yanjiewtw@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Peter Zijlstra
-	<peterz@infradead.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Catalin Marinas <catalin.marinas@arm.com>, <linux-doc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <quic_pkondeti@quicinc.com>, <quic_kprasan@quicinc.com>,
-        <quic_mpilaniy@quicinc.com>, <quic_shrekk@quicinc.com>,
-        <mpleshivenkov@google.com>, <ericyin@google.com>
-Subject: [PATCH v2] PM: hibernate: Support to select compression algorithm
-Date: Wed, 14 Feb 2024 13:09:32 +0530
-Message-ID: <db6616c90d0e7de7658708b52ddca729679573bf.1707895925.git.quic_nprakash@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1707899757; c=relaxed/simple;
+	bh=G80kAQT7MwVwK+q1TP/+PTGwSsJM0oWNxYt1TUSDTHI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oF/tTNCVkuinR2elC5/4Ia3A9XIOWXf9w2sIDsePWYG00FGIq4+PZnJQSL3tcmqNUq0ZPBo6arl2LShG74t+ChvI+mWRShkHoGfaP/NjdrE7TIKgB7xemV2HcTCw8qCZULnGriN8LKJWtzu38Y71Y+mfBEFzFQZ2IjAR36IIHP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-6002317a427so47028387b3.2;
+        Wed, 14 Feb 2024 00:35:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707899752; x=1708504552;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qhJlZCcRgqTba1suffIYy/S2Gadkij2N+hd17VddZnM=;
+        b=jJsXIHH49ymdhbGiJixJ1GSrgia1NrYlyFYPK9YnoFrhsKCJugbGNHQ3Ql3iXmld+S
+         ngRbnr4tsfF6C4uUVrdIZFu3Ca5r7i3RmK6sYYXpBbsggDp/0QiUIYF2V5sIyOBBizzo
+         otgOsDuR/ZDJjl5C7H2QA3heL0i5k0YjkkkphbmAsUi3kTRXS6r1ntGWbKV5Pn3vCUWL
+         zqM8GCuyN1X4olwQogNCxH3HTckv++deQqSppuXOotvo2eHzgsdLd1qmWwlK8QhbckcD
+         xp19ANDgL7vycqVnnBT2vPfBkQprOzzk6CB092rpIU0qDKUUVoWZS5kfgOB5L5QZvJvn
+         bqew==
+X-Forwarded-Encrypted: i=1; AJvYcCUzyaCqxu5lUt17dZpJCUa9VkbcB/gdvOQncj89xLJwmha6S8pS5v4Lx8XCtGnBebzAUqIpWSHUu7gRnDVPgzT9luxjKNIDJIXSy9avPwbBEv8QgGaygvL+aW2GNc4gULufQ9CWoeSzHsFzolxKB1N5gZ1yaikBsDqwnvVLdW80aobXcL0tfIzHeU/PCWGdWpt5vPTwrkHDxErSELj+AI4ym74=
+X-Gm-Message-State: AOJu0Yyg34SrO+qm85Ro3xhFkxJgcd27pLXqne+y0o0IquabArU+4v/s
+	IyR5gYhQIB4yBqbQBhhcMWhzIlibZw9/tOvoaM3LwfDm1Z+4V8wKo/zO07RtPIo=
+X-Google-Smtp-Source: AGHT+IH7w6QLIfgNrszxlKE78XNWCSjjYGNraAZ+ea8wcrBoeplhrbDLb1PeWFSNcChTQ9MtT6UNyQ==
+X-Received: by 2002:a81:84c9:0:b0:604:b08c:348d with SMTP id u192-20020a8184c9000000b00604b08c348dmr1615046ywf.1.1707899752108;
+        Wed, 14 Feb 2024 00:35:52 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU3kB/B5WZaBOwFU458Gbikm7YLFToDCMZIMHGgWLNsYimJ2f7WNBDN7+QBURGuTfpBmRxmZn2Zimovo5ZG/7tI4vByX0m3jJ8oP7M2OBERHad12czrvX2DOBLkCRrHqaX1eyTYDSDCp9je9LhimRIAfQ3ONgzN1Cpml6Aeaoy7WWg+4iglDTG2OGKT/SMctbwacGPoAgVAwnXyoD6Ss3sfb3g=
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com. [209.85.219.177])
+        by smtp.gmail.com with ESMTPSA id b81-20020a0dd954000000b006078ad0243csm689386ywe.59.2024.02.14.00.35.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Feb 2024 00:35:51 -0800 (PST)
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-dcc4de7d901so1484144276.0;
+        Wed, 14 Feb 2024 00:35:51 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUqaqHeHdPWCke88qqVKNUCTowy6wOKw/w0Pk0Bsd4JbzaUNGvC5rtcqvpCVJImgluMjXM6TS+bEEgjgAf9hty/YhFGjly7qP19Fw0ajUq3zfsErADyyyvaSCOZUHM7+XCBm+iZ/flNlTQa/VMLhFHKxwvgKAPiHa3fka3XhMv2rIY96bax4SPzciAFnE+lhmMU1Cz4NY4KlKP3GbFTdNWl/mo=
+X-Received: by 2002:a25:c7c9:0:b0:dc6:ff12:1a21 with SMTP id
+ w192-20020a25c7c9000000b00dc6ff121a21mr1674869ybe.31.1707899751143; Wed, 14
+ Feb 2024 00:35:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: V6pO_5SNNUqTnG7XYwyU3jmtg_7VRJYd
-X-Proofpoint-ORIG-GUID: V6pO_5SNNUqTnG7XYwyU3jmtg_7VRJYd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-14_01,2024-02-12_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- priorityscore=1501 bulkscore=0 mlxlogscore=999 malwarescore=0
- clxscore=1015 impostorscore=0 phishscore=0 lowpriorityscore=0 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2401310000 definitions=main-2402140058
+References: <cover.1706194617.git.geert+renesas@glider.be> <CAPDyKFpxaEUHvKKb+spxV6HG2P2gLx5qM1mLPxJie+PdkmTL4w@mail.gmail.com>
+ <CAMuHMdUswhJ3BQLnOQZC7X7qc7SFCqsr9Uy65LfBT_BNWfyhFQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdUswhJ3BQLnOQZC7X7qc7SFCqsr9Uy65LfBT_BNWfyhFQ@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Wed, 14 Feb 2024 09:35:38 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdX1tjgPJ8t+XoASuMvzvSognu7q2=aGfBO8r77JsbR82w@mail.gmail.com>
+Message-ID: <CAMuHMdX1tjgPJ8t+XoASuMvzvSognu7q2=aGfBO8r77JsbR82w@mail.gmail.com>
+Subject: Re: [PATCH v2 00/15] arm64: renesas: Add R-Car V4M and Gray Hawk
+ Single support
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, Magnus Damm <magnus.damm@gmail.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Cong Dang <cong.dang.xn@renesas.com>, Duy Nguyen <duy.nguyen.rh@renesas.com>, 
+	Hai Pham <hai.pham.ud@renesas.com>, Linh Phung <linh.phung.jy@renesas.com>, 
+	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Currently the default compression algorithm is selected based on
-compile time options. Introduce a module parameter "hibernate.compressor"
-to override this behaviour.
+Hi Ulf,
 
-Different compression algorithms have different characteristics and
-hibernation may benefit when it uses any of these algorithms, especially
-when a secondary algorithm(LZ4) offers better decompression speeds over a
-default algorithm(LZO), which in turn reduces hibernation image restore
-time.
+On Wed, Jan 31, 2024 at 3:56=E2=80=AFPM Geert Uytterhoeven <geert@linux-m68=
+k.org> wrote:
+> On Tue, Jan 30, 2024 at 2:11=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.o=
+rg> wrote:
+> > On Thu, 25 Jan 2024 at 16:34, Geert Uytterhoeven
+> > <geert+renesas@glider.be> wrote:
+> > > This patch series adds initial support for the Renesas R-Car V4M
+> > > (R8A779G0) SoC and the Renesas Gray Hawk Single development board.
+> > >
+> > > As both driver code and DTS have hard dependencies on DT binding
+> > > definitions, most patches in this series are supposed to go in throug=
+h
+> > > the renesas-devel and/or renesas-clk trees, using a shared branch for=
+ DT
+> > > binding definitions, as usual.  For the PM domain patches (03, 04, 09=
+),
+> > > Ulf already offered to apply these to his pmdomain tree, and provide =
+an
+> > > immutable "dt" branch, to be pulled in my renesas-devel tree.
+> >
+> > Patch 3,4 and 9 (I dropped the copyright line in patch9, as pointed
+> > out by Niklas) applied for next, thanks!
+> >
+> > Patch 3,4 are also available at the immutable dt branch for you to pull=
+ in.
+>
+> Thank you!
+>
+> I have pulled the immutable branch, added the remaining DT binding
+> definitions, and queued all remaining patches.
 
-Users can override the default algorithm in two ways:
- 1) Passing "hibernate.compressor" as kernel command line parameter.
-    Usage:
-    	LZO: hibernate.compressor=lzo
-    	LZ4: hibernate.compressor=lz4
+It looks like you have applied copies of all commits on the "dt"
+branch to the "next"
+branch, so now there are two copies?
 
- 2) Specifying the algorithm at runtime.
-    Usage:
-	LZO: echo lzo > /sys/module/hibernate/parameters/compressor
-	LZ4: echo lz4 > /sys/module/hibernate/parameters/compressor
+See the output of "git range-diff v6.8-rc1..pmdomain/dt
+v6.8-rc4..pmdomain/next".
 
-Currently LZO and LZ4 are the supported algorithms. LZO is the default
-compression algorithm used with hibernation.
+Gr{oetje,eeting}s,
 
-Signed-off-by: Nikhil V <quic_nprakash@quicinc.com>
----
-This patch is dependent on the patch series, [1] (patches 1/4 to 3/4).
-This is picked in linux-next, [2].
- [1] https://lore.kernel.org/all/cover.1705927916.git.quic_nprakash@quicinc.com/
- [2] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/log/kernel/power?h=next-20240212
+                        Geert
 
-Changes in v2:
- Changes to incorporate suggestions from Randy Dunlap:
-  - Update documentation to specify the default compression algorithm.
- Link to v1:
-  https://lore.kernel.org/all/3776355f920c1af44490e076072f93bafdf128cc.1707740870.git.quic_nprakash@quicinc.com/
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
- .../admin-guide/kernel-parameters.txt         | 11 ++++
- kernel/power/hibernate.c                      | 57 ++++++++++++++++++-
- 2 files changed, 65 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 31b3a25680d0..8f7fb911b2cc 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -1748,6 +1748,17 @@
- 				(that will set all pages holding image data
- 				during restoration read-only).
- 
-+	hibernate.compressor= 	[HIBERNATION] Compression algorithm to be
-+				used with hibernation.
-+				Format: { lzo | lz4 }
-+				Default: lzo
-+
-+				lzo: Select LZO compression algorithm to
-+				compress/decompress hibernation image.
-+
-+				lz4: Select LZ4 compression algorithm to
-+				compress/decompress hibernation image.
-+
- 	highmem=nn[KMG]	[KNL,BOOT] forces the highmem zone to have an exact
- 			size of <nn>. This works even on boxes that have no
- 			highmem otherwise. This also works to reduce highmem
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index 219191d6d0e8..43b1a82e800c 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -47,7 +47,7 @@ dev_t swsusp_resume_device;
- sector_t swsusp_resume_block;
- __visible int in_suspend __nosavedata;
- 
--static const char *default_compressor = CONFIG_HIBERNATION_DEF_COMP;
-+static char hibernate_compressor[CRYPTO_MAX_ALG_NAME] = CONFIG_HIBERNATION_DEF_COMP;
- 
- /*
-  * Compression/decompression algorithm to be used while saving/loading
-@@ -748,7 +748,7 @@ int hibernate(void)
- 	 * Query for the compression algorithm support if compression is enabled.
- 	 */
- 	if (!nocompress) {
--		strscpy(hib_comp_algo, default_compressor, sizeof(hib_comp_algo));
-+		strscpy(hib_comp_algo, hibernate_compressor, sizeof(hib_comp_algo));
- 		if (crypto_has_comp(hib_comp_algo, 0, 0) != 1) {
- 			pr_err("%s compression is not available\n", hib_comp_algo);
- 			return -EOPNOTSUPP;
-@@ -999,7 +999,7 @@ static int software_resume(void)
- 		if (swsusp_header_flags & SF_COMPRESSION_ALG_LZ4)
- 			strscpy(hib_comp_algo, COMPRESSION_ALGO_LZ4, sizeof(hib_comp_algo));
- 		else
--			strscpy(hib_comp_algo, default_compressor, sizeof(hib_comp_algo));
-+			strscpy(hib_comp_algo, COMPRESSION_ALGO_LZO, sizeof(hib_comp_algo));
- 		if (crypto_has_comp(hib_comp_algo, 0, 0) != 1) {
- 			pr_err("%s compression is not available\n", hib_comp_algo);
- 			error = -EOPNOTSUPP;
-@@ -1422,6 +1422,57 @@ static int __init nohibernate_setup(char *str)
- 	return 1;
- }
- 
-+static const char * const comp_alg_enabled[] = {
-+#if IS_ENABLED(CONFIG_CRYPTO_LZO)
-+	COMPRESSION_ALGO_LZO,
-+#endif
-+#if IS_ENABLED(CONFIG_CRYPTO_LZ4)
-+	COMPRESSION_ALGO_LZ4,
-+#endif
-+};
-+
-+static int hibernate_compressor_param_set(const char *compressor,
-+		const struct kernel_param *kp)
-+{
-+	unsigned int sleep_flags;
-+	int index, ret;
-+
-+	sleep_flags = lock_system_sleep();
-+
-+	index = sysfs_match_string(comp_alg_enabled, compressor);
-+	if (index >= 0) {
-+		ret = param_set_copystring(comp_alg_enabled[index], kp);
-+		if (!ret)
-+			strscpy(hib_comp_algo, comp_alg_enabled[index],
-+				sizeof(hib_comp_algo));
-+	} else {
-+		ret = index;
-+	}
-+
-+	unlock_system_sleep(sleep_flags);
-+
-+	if (ret)
-+		pr_debug("Cannot set specified compressor %s\n",
-+			 compressor);
-+
-+	return ret;
-+}
-+
-+static const struct kernel_param_ops hibernate_compressor_param_ops = {
-+	.set    = hibernate_compressor_param_set,
-+	.get    = param_get_string,
-+};
-+
-+static struct kparam_string hibernate_compressor_param_string = {
-+	.maxlen = sizeof(hibernate_compressor),
-+	.string = hibernate_compressor,
-+};
-+
-+module_param_cb(compressor, &hibernate_compressor_param_ops,
-+		&hibernate_compressor_param_string, 0644);
-+MODULE_PARM_DESC(compressor,
-+		 "Compression algorithm to be used with hibernation");
-+
- __setup("noresume", noresume_setup);
- __setup("resume_offset=", resume_offset_setup);
- __setup("resume=", resume_setup);
--- 
-2.17.1
-
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
