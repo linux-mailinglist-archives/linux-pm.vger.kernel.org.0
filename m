@@ -1,39 +1,63 @@
-Return-Path: <linux-pm+bounces-3912-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3913-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECA1B854AA6
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Feb 2024 14:42:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DC93854AF5
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Feb 2024 15:01:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 298E71C2640F
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Feb 2024 13:42:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D807528E1F3
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Feb 2024 14:01:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63EA55475D;
-	Wed, 14 Feb 2024 13:42:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDF8654F88;
+	Wed, 14 Feb 2024 13:59:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ljkXjH4C"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39EE429437;
-	Wed, 14 Feb 2024 13:42:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0011D5C8FE;
+	Wed, 14 Feb 2024 13:59:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707918163; cv=none; b=e6Sn/wYEgjD2z3RD7BkFgsO2M0qOnzxyow7uwakbgiHXbfpBdpfxkL4sLXW7/Q2g2wMNVXmGzTk1FFQUg9ESaIp4A394I+o3BbKBmg/ImILUXBfJM7YZHe0KU7ByirQ8IMhgck7p/cBRKKOwO4nHnkJulCgXwxtKBoYTxYinuuw=
+	t=1707919154; cv=none; b=dNitJRw7i4/1AuTlv25dktPnOAn9KFNMQ28sd+zo8s7hneX2evl2LMTv9dKc3gxfoyCpBLeZPOHLOIrJRfQwG1C6LT+6EHLujzVzQDwz4P+/yX/HIvLZkGJfB15Y+UihSc2R0DY78EH/22Y0cVDz7u/1a7jEGyEFIPw0+R0IViU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707918163; c=relaxed/simple;
-	bh=PEBn0n47Ia0HKmtG+zEzhBaV3c7DqX2s56hV/ieGz6s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VpZpvxCBTlx6tpas8Z6T2FzbZ9djOdt+rTtl9gfKmj8uq5yPdkopHx81930TJx+2PVGMfiarKRiIxbJ0aBVhBdE9Zcs9WrgZzIBNLMjOnTUFKFqnhp8twTacentjPDOwDFTRLrwpt2x4qOatc/cdk1YWXGkNRAUD1xosboUSbxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; arc=none smtp.client-ip=80.237.130.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-	id 1raFX5-00055L-3v; Wed, 14 Feb 2024 14:42:39 +0100
-Message-ID: <43b8150e-17ef-4911-81ed-37a96c73195f@leemhuis.info>
-Date: Wed, 14 Feb 2024 14:42:38 +0100
+	s=arc-20240116; t=1707919154; c=relaxed/simple;
+	bh=gvJJZ/u+oFmJe9o1bdHtO/O/5u2N3evyh8Zop5iY370=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=XjFBcmmXx8L/Xp5ybq9KjVWh7XmwuCo/xhGtLhmMH/jdBNL9j6LuDt0Tgwf4Uq2K+K59apnRFNvlNvkFlSAIOk/G82vFF2tFknogr6GP/30CAtYl+ro81VsZ1ygHOY+oeTfozKFVQ+Uryib5G/OhKnQuN11ggyDFewUhPEuumLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ljkXjH4C; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41EAxMXw001851;
+	Wed, 14 Feb 2024 13:58:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=UsRN04YgdttuRzXuuaPeRfbR90rptVxiln+xXdu7HOM=; b=lj
+	kXjH4CFDMWOxTHHPA+dFro8BHptRBBZHD55vn6e728Un0kpyEwCNNbi3yTPzcfvc
+	Z9frQZ9CfyqnIIhH74EPauBaZ3rDqjUJNFld/Id7QQWQdhQ5wecheYYbd7YbuSDR
+	Mnv2ufEeexLbxdSdavuVptXyzF4txem6Lqui8MwrHw+62A41sesLPlxJFrj2VcPh
+	s0vHwftM3XG+yMIREDFZdXnwGNyuKgGdsBPa+80rkGsDn1Mn+7g3fRmHjY08+67d
+	6JaehgHgm/7Iw/eTsppRD/aYr30qLAWPAjzEPc5R80O6HArRaAlRRfJxViAekSKX
+	MEmdMrhl5CLvunNSykKQ==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w8jn9hb6j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 Feb 2024 13:58:47 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41EDwjva016998
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 Feb 2024 13:58:45 GMT
+Received: from [10.216.19.164] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 14 Feb
+ 2024 05:58:31 -0800
+Message-ID: <e5a5b32c-bc9d-42b7-b1a8-90e22b957915@quicinc.com>
+Date: Wed, 14 Feb 2024 19:28:26 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -41,45 +65,114 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Re: sched/cpufreq: Rework schedutil governor performance estimation -
- Regression bisected
-Content-Language: en-US, de-DE
-To: Linux kernel regressions list <regressions@lists.linux.dev>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <002f01da5ba0$49cbf810$dd63e830$@telus.net>
-From: "Linux regression tracking #adding (Thorsten Leemhuis)"
- <regressions@leemhuis.info>
-In-Reply-To: <002f01da5ba0$49cbf810$dd63e830$@telus.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1707918161;b0bfb5aa;
-X-HE-SMSGID: 1raFX5-00055L-3v
+Subject: Re: [PATCH v3 3/3] iio: adc: Add support for QCOM PMIC5 Gen3 ADC
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: <jic23@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>, <lee@kernel.org>,
+        <andriy.shevchenko@linux.intel.com>, <daniel.lezcano@linaro.org>,
+        <lars@metafoo.de>, <luca@z3ntu.xyz>, <marijn.suijten@somainline.org>,
+        <agross@kernel.org>, <sboyd@kernel.org>, <rafael@kernel.org>,
+        <rui.zhang@intel.com>, <lukasz.luba@arm.com>,
+        <linus.walleij@linaro.org>, <quic_subbaram@quicinc.com>,
+        <quic_collinsd@quicinc.com>, <quic_amelende@quicinc.com>,
+        <quic_kamalw@quicinc.com>, <kernel@quicinc.com>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-arm-msm-owner@vger.kernel.org>, <linux-iio@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <cros-qcom-dts-watchers@chromium.org>
+References: <20231231171237.3322376-1-quic_jprakash@quicinc.com>
+ <20231231171237.3322376-4-quic_jprakash@quicinc.com>
+ <CAA8EJpr4q7pFF44oUjJSWGYKgiUCB_23zVHw6J3a3mwn7cKgyg@mail.gmail.com>
+Content-Language: en-US
+From: Jishnu Prakash <quic_jprakash@quicinc.com>
+In-Reply-To: <CAA8EJpr4q7pFF44oUjJSWGYKgiUCB_23zVHw6J3a3mwn7cKgyg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: jDzhMT2m9_qcniAuUC2Ibd9s1FWU_QVo
+X-Proofpoint-ORIG-GUID: jDzhMT2m9_qcniAuUC2Ibd9s1FWU_QVo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-14_06,2024-02-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ adultscore=0 mlxlogscore=999 bulkscore=0 priorityscore=1501 clxscore=1011
+ phishscore=0 suspectscore=0 malwarescore=0 spamscore=0 mlxscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401310000 definitions=main-2402140108
 
-On 09.02.24 22:38, Doug Smythies wrote:
-> 
-> I noticed a regression in the 6.8rc series kernels. Bisecting the kernel pointed to:
-> 
-> # first bad commit: [9c0b4bb7f6303c9c4e2e34984c46f5a86478f84d]
-> sched/cpufreq: Rework schedutil governor performance estimation
-> 
-> There was previous bisection and suggestion of reversion,
-> but I guess it wasn't done in the end. [1]
-> 
-> The regression: reduced maximum CPU frequency is ignored.
-> 
+Hi Dmitry,
 
-Thanks for the report. To be sure the issue doesn't fall through the
-cracks unnoticed, I'm adding it to regzbot, the Linux kernel regression
-tracking bot:
+On 12/31/2023 11:16 PM, Dmitry Baryshkov wrote:
+> On Sun, 31 Dec 2023 at 19:13, Jishnu Prakash <quic_jprakash@quicinc.com> wrote:
+>> The ADC architecture on PMIC5 Gen3 is similar to that on PMIC5 Gen2,
+>> with all SW communication to ADC going through PMK8550 which
+>> communicates with other PMICs through PBS.
 
-#regzbot ^introduced 9c0b4bb7f6303c9c4e2e34984c46f5a86478f84d
-#regzbot title sched/cpufreq: reduced maximum CPU frequency is ignored.
-#regzbot ignore-activity
+>> +static int adc_tm_register_tzd(struct adc5_chip *adc)
+>> +{
+>> +       unsigned int i, channel;
+>> +       struct thermal_zone_device *tzd;
+>> +
+>> +       for (i = 0; i < adc->nchannels; i++) {
+>> +               channel = V_CHAN(adc->chan_props[i]);
+>> +
+>> +               if (!adc->chan_props[i].adc_tm)
+>> +                       continue;
+>> +               tzd = devm_thermal_of_zone_register(adc->dev, channel,
+>> +                       &adc->chan_props[i], &adc_tm_ops);
+> It is _very_ useful to register a hwmon too by calling
+> devm_thermal_add_hwmon_sysfs(). However this becomes tricky, as this
+> function is not defined in one of the global headers.
+>
+> This actually points out an issue. You have the ADC driver fused
+> together with the thermal driver. Can I suggest using the aux device
+> to split the thermal functionality to the separate driver?
+>
+> This way it would be possible to use the ADC without any thermal
+> monitoring in place.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+
+There are a couple of issues which may make it harder to split the 
+thermal functionality from this driver into an auxiliary driver as you 
+mentioned.
+
+For one, we use the same set of registers (offsets 0x4f-0x55) for both 
+VADC function(requesting an immediate channel reading) and ADC_TM 
+function (setting upper/lower thermal thresholds on a channel). To avoid 
+any race conditions, we would need to share a mutex between the 
+top-level ADC driver and the auxiliary ADC_TM thermal driver to avoid 
+concurrently accessing these or any other shared registers.
+
+In addition, the device has only one interrupt with one interrupt 
+handler, and it gets triggered for both VADC and ADC_TM  events (end of 
+conversion and threshold violation, respectively). The handler checks 
+for both types of event and handles it as required.
+
+For the shared interrupt, we may be able to keep the interrupt handler 
+in the top-level driver and just notify the auxiliary TM driver if a 
+threshold violation is detected. For the shared mutex, I think the 
+auxiliary driver may be able to access the parent driver's mutex, but 
+I'll need to check more for the implementation in both of these cases.
+
+Please let me know if you see any problems with this kind of 
+implementation or if you have any additional comments.
+
+Thanks,
+
+Jishnu
+
+>> +
+>> +               if (IS_ERR(tzd)) {
+>> +                       if (PTR_ERR(tzd) == -ENODEV) {
+>> +                               dev_warn(adc->dev, "thermal sensor on channel %d is not used\n",
+>> +                                        channel);
+>> +                               continue;
+>> +                       }
+>> +
+>>
+>
 
