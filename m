@@ -1,141 +1,114 @@
-Return-Path: <linux-pm+bounces-3902-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3909-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AD5A85476C
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Feb 2024 11:43:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D506E85499F
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Feb 2024 13:51:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8FA881F213BE
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Feb 2024 10:43:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 59F3AB25086
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Feb 2024 12:51:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA08D17C9E;
-	Wed, 14 Feb 2024 10:43:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wgk+GVca"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 968EA54792;
+	Wed, 14 Feb 2024 12:50:09 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD823C2C6;
-	Wed, 14 Feb 2024 10:43:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C936535B4;
+	Wed, 14 Feb 2024 12:50:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707907424; cv=none; b=l1rYz/ZSudG9QmX7UiGmFilCOVkzrBZ6pm/k0r/1R8EEUwRL839v/Sc+E18+oay2eV6yG+mGYwjGf4og346RuBZUqyxUig+lNlR9gbthPDskS3VI2MdP7OmpY6m+xgQpHeACtdAGpjeFi9xadIFVKivmNzfNZQHurbFhIGsS6fc=
+	t=1707915009; cv=none; b=U2jK7zzm0Fw9xg5MTFMmcnjR8DuVObFzsHDM67O5PXi63+d/iscKzzrR6Ou0dpX/5Cp/iaozYcvro+n774MopqzJXGDovqjI+g71junVBOttLhAo4IKxWK665uSHu07hc63RjyYnxmX8kmYT7IdlTjmUY9FWSijEHda6RBCfhGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707907424; c=relaxed/simple;
-	bh=jsUtVeXk9SEIvKEq3azTe0X1RfROgbYT2UhZC0H8aAw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YmnWemI/D97uyQRHNaT7D52iO8yD7sYdHB6+h9E7zOB3mqlMJWZWOEzx9YWMBOsRqv5/KIdxa8r+Kp2nWtFaZfgKv/beH7P+awXorAZbJxewaknKOu7+DqgKDnbVg6yt3xq4lG+Hc38B0ejS2l1Xd+hOude5fP5uVQGO/RsTvKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wgk+GVca; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707907423; x=1739443423;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jsUtVeXk9SEIvKEq3azTe0X1RfROgbYT2UhZC0H8aAw=;
-  b=Wgk+GVcaXJSsVWqyUFwMTzP6a2knQBVbZmNwXRKx1033yg9UBshVKzvx
-   hhTyeN/gkEbLbGRMW/w0rD6ok/PAMlWZwlbp0fTREwbz3ekx5T+CfaLnn
-   w8KwYUjFMHEcnZvO8uDoxq5ZLgpaUcKg7FNlzEgHoRVqYMo7/ja6QhDDQ
-   BlhnKnbN4UTVzTaVs7fW3gSMG5WRn7wJW5GSb6MhqkZsuLVgNL6px4dID
-   aJgYhSZ4zuX70YBupYqClI++mNMWzTx3P1LV/TJX5E7UsXdffYBq5BRre
-   S9mnIaA2OtWJnlBRxDPexVNPRTt2zZxsKMvaCgUoGFyfR2aBweCRvuDLa
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="19358809"
-X-IronPort-AV: E=Sophos;i="6.06,159,1705392000"; 
-   d="scan'208";a="19358809"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2024 02:43:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="935615683"
-X-IronPort-AV: E=Sophos;i="6.06,159,1705392000"; 
-   d="scan'208";a="935615683"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2024 02:43:38 -0800
-Date: Wed, 14 Feb 2024 12:43:35 +0200
-From: Raag Jadav <raag.jadav@intel.com>
-To: Bjorn Helgaas <helgaas@kernel.org>
-Cc: bhelgaas@google.com, jarkko.nikula@linux.intel.com,
-	mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com,
-	stanislaw.gruszka@linux.intel.com, lukas@wunner.de,
-	rafael@kernel.org, ilpo.jarvinen@linux.intel.com,
-	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-	sashal@kernel.org
-Subject: Re: [PATCH v1] PCI / PM: Really allow runtime PM without callback
- functions
-Message-ID: <ZcyZV2q1_QoK43vz@black.fi.intel.com>
-References: <20240212063233.5599-1-raag.jadav@intel.com>
- <20240213200648.GA1219964@bhelgaas>
+	s=arc-20240116; t=1707915009; c=relaxed/simple;
+	bh=E01dX0hF3D+HtqydAJ3tYA9NLjs5Y6+afi+6TvtZ2Bc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=uOUsbV+LDgCT0cgy8fExZ6Na0vr8UBwkdmemB2MTVu+yr/BIWarCmNxi09dLv8mAklVSGTo7H4dfH9KSh5Z7I8//1Kiwte5O5OJ8QWx9gSgLWSg+ynPSmzcRTMmTcgqHSQmkpp4Es8/8qrUHOdvczPpoiSxuUTnQruIM+nesgwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
+ id e7bea7f855a21fc7; Wed, 14 Feb 2024 13:49:59 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id A6B8C669DB7;
+	Wed, 14 Feb 2024 13:49:58 +0100 (CET)
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
+ LKML <linux-kernel@vger.kernel.org>, Linux ACPI <linux-acpi@vger.kernel.org>,
+ Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>
+Subject:
+ [PATCH v2 0/6] thermal: Store trips table and ops in thermal_zone_device
+Date: Wed, 14 Feb 2024 13:25:25 +0100
+Message-ID: <4551531.LvFx2qVVIh@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240213200648.GA1219964@bhelgaas>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudejgdeghecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegfffhudejlefhtdegffekteduhfethffhieettefhkeevgfdvgfefieekiefgheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepudegpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhg
+ vghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=14 Fuz1=14 Fuz2=14
 
-On Tue, Feb 13, 2024 at 02:06:48PM -0600, Bjorn Helgaas wrote:
-> On Mon, Feb 12, 2024 at 12:02:33PM +0530, Raag Jadav wrote:
-> > Commit c5eb1190074c ("PCI / PM: Allow runtime PM without callback
-> > functions") tried to eliminate the need for runtime PM callbacks
-> > by modifying pci_pm_runtime_suspend() and pci_pm_runtime_resume(),
-> > but didn't modify pci_pm_runtime_idle() with relevant changes, which
-> > still returns -ENOSYS if the driver supplies no runtime PM callbacks.
-> > 
-> > Fix this by modifying pci_pm_runtime_idle() such that it allows PCI
-> > device power state transitions without runtime PM callbacks.
-> > 
-> >  0)               |  pm_runtime_work() {
-> >  0)               |    rpm_idle() {
-> >  0)               |      rpm_check_suspend_allowed() {
-> >  0)   1.500 us    |        __dev_pm_qos_resume_latency(); /* = 0x7fffffff */
-> >  0)   4.840 us    |      } /* rpm_check_suspend_allowed = 0x0 */
-> >  0)   1.550 us    |      __rpm_get_callback(); /* = 0xffffffffb4bc84f0 */
-> >  0)   1.800 us    |      pci_pm_runtime_idle(); /* = -38 */
-> >  0) + 17.070 us   |    } /* rpm_idle = -38 */
-> >  0) + 22.450 us   |  } /* pm_runtime_work = -38 */
-> 
-> What is this timing information telling me?
+Hi Everyone,
 
-It's a raw ftrace dump.
+This is an update of
 
-> > Debugged-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> 
-> Sounds like this resolves a problem report?  Is there a URL we can
-> cite?  If not, at least a mention of what the user-visible problem is?
-> 
-> From the c5eb1190074c commit log, it sounds like maybe this allows
-> devices to be autosuspended when they previously could not be?
-> 
-> Possibly this should have "Fixes: c5eb1190074c ("PCI / PM: Allow
-> runtime PM without callback functions")" since it sounds like it goes
-> with it?
+https://lore.kernel.org/linux-pm/2728491.mvXUDI8C0e@kreacher/
 
-As pointed out by Jarkko, it's not a regression. The implementation
-in original commit is incomplete. We discovered it while cleaning
-up another PCI based driver.
+that has been rebased on top of
 
-> > Signed-off-by: Raag Jadav <raag.jadav@intel.com>
-> > Tested-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> > Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-> > ---
-> > 
-> > This is not marked for linux-stable for the need of extensive testing
-> > and can be backported after a few releases if no issues are reported.
-> 
-> If you think this should not get backported to stable, you'll have to
-> watch the backports to prevent it.  Lots of stuff gets auto-backported
-> even though not explicitly marked for stable.  This comment won't
-> prevent it (and won't even appear in the commit log).
+https://lore.kernel.org/linux-pm/6017196.lOV4Wx5bFT@kreacher/
 
-This is why I've added Greg and Sasha here.
+and includes some bug fixes.
 
-Raag
+The original series description still applies:
+
+"This series changes the PM core to copy the trips and zone ops directly
+ into struct thermal_zone_device so as to allow the callers of the zone
+ registration function to discard their own copies of those things after
+ zone registration and/or possibly allocate them as read-only.
+
+ The first patch makes the thermal core create a copy of the trips table which
+ is declared as a flex array to enable additional bounds checking on it.  The
+ next two patches update the ACPI thermal driver and Intel thermal drivers to
+ take benefit of that change.
+
+ In a similar pattern, patch [4/6] makes the thermal core create an internal
+ copy of the zone ops supplied by the zone creator, so as to allow the
+ original ops structure to be discarded after zone registration or allocated
+ as read-only, and the next two patches update the ACPI thermal driver and Intel
+ thermal drivers to actually do that.
+
+ The other thermal drivers need not be changed, although in principle they may
+ be simplified a bit too in the future.
+
+ As usual, please refer to the individual patch changelogs for details."
+
+However, the imx thermal driver is modified by patch [1/6], because it uses its
+local trips table and expects it to contain the current passive trip temperature
+value (as set via sysfs), and the thermal_of driver is modified by patch [4/6],
+because it uses the ops pointer from the thermal zone device to free the ops.
+
+Thanks!
+
+
+
 
