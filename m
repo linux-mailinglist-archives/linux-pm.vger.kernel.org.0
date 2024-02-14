@@ -1,107 +1,186 @@
-Return-Path: <linux-pm+bounces-3894-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3895-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CB7F854326
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Feb 2024 07:59:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BFA1854333
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Feb 2024 08:04:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3FD2E28228E
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Feb 2024 06:59:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C29FD1F283A3
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Feb 2024 07:04:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D88AA111A2;
-	Wed, 14 Feb 2024 06:59:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F086111B5;
+	Wed, 14 Feb 2024 07:04:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gWbPeKK0"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="E+J278Xi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DC2A1119C;
-	Wed, 14 Feb 2024 06:59:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC6BC111A2;
+	Wed, 14 Feb 2024 07:04:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707893956; cv=none; b=iBLBr7YbPeERzOSJ5aTGoofATEh7Mg5sQfIZRNvMSBQddvbqQCchXSK5ddaboHamOLj2yNBcu1r3AsNR4eLPaUuSE8RkHFl7uVonmhMpiQ6nRyOTRhEwKqaK7JhDiKh1J5WobZ5FSMJ4G8UsXSDUjCbnPOzJj+TVpKUDLcyZm7c=
+	t=1707894244; cv=none; b=VJPEL8IfkZXFOu1Q6KvgN7avnna/jVnRGLWOo0FRJzKQngIhoGE/a8LLVxBWwmhikfDolmK5d1R4cU6jPbvYVPguPQtPrEQH8ItRyGEDdWd3neoHNPMJ8VVQEpiif+k56OdCpqCMD/MiHxivq+K8190FQIVjZiHb355TV5ir2Fg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707893956; c=relaxed/simple;
-	bh=NFdrGOtMllbEA7m7PeDgmPLNj3yRtazcQgFg1SMEcSE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uI8jjXfyJNYzT3dJgyoU5F40ly7Ie5adWW78s1a0Hsf6vsmPjlcZ0658gK8pATzHQGQ41f33MKeuhj4ec1dsuXINfDSKuNzzONY7CSWRj+NW0PZTEjkWHg0NZP5a9ZXTYgCtnGdqD7jWHlwXc7nu0h5wFDaNSaJQQyLkFrQimdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gWbPeKK0; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707893955; x=1739429955;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=NFdrGOtMllbEA7m7PeDgmPLNj3yRtazcQgFg1SMEcSE=;
-  b=gWbPeKK0X9rz/xB/iRb0WZAlyN08dVOMUTEx4W83PuyRyAPemyyuLehV
-   IJRcaSFP8mDp+4G1L0ntg8caj8idyLG9ldtJh3Arnc08oyZUkSdeCVLXw
-   ghLmjrj8RcNJIr66APnYItn/sVDnjQQqJ6YqvoSBiRSgK5Pjh/HyLUKZx
-   Wlljiwjp9zxsrmXym+iZ7QD9oYWbk1QzqoHU5/8wcYzneA75VsSosekRJ
-   9M5VtFwr1ET8xtg5sDaIgzMBRm1/ThfuhpzzsH5jJJORmuU/csId/gbNd
-   XKQEu1ttL775igfXmAmif38//F/bSoXMk9JljzSZM1RPLmkLaSvz1nJfy
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="12646627"
-X-IronPort-AV: E=Sophos;i="6.06,159,1705392000"; 
-   d="scan'208";a="12646627"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2024 22:58:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,159,1705392000"; 
-   d="scan'208";a="3429746"
-Received: from jhogande-desk.fi.intel.com (HELO [10.237.72.164]) ([10.237.72.164])
-  by orviesa007.jf.intel.com with ESMTP; 13 Feb 2024 22:58:50 -0800
-Message-ID: <93c77778-fbdc-4345-be8b-04959d1ce929@linux.intel.com>
-Date: Wed, 14 Feb 2024 08:58:48 +0200
+	s=arc-20240116; t=1707894244; c=relaxed/simple;
+	bh=SxDMitXrZdgJSRPQljG5vzYJ75Md+aT0vs0nRf2RU24=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=liSjJYAIxwfB8EPKUJZuKQ7UmR0wEIG9xGyU4U6RUiakjxGjg9PRHxDXpPD7UQkV8fpjpv1JfpmbCtpBUWdIT/JroJT/tQnHBMQraSuYQx4f1Gjq4UO9raLX4K/3lcM3sQa5cV6MdrnacYmR1gNxNZjXJBcImODo0LnBXb4f2jw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=E+J278Xi; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41E6qF7t009288;
+	Wed, 14 Feb 2024 07:03:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=4vd+mtJ0l3WUpTERdyjKbKOw7hhg9weB54kH0ZgtkjA=; b=E+
+	J278XiRzH08ZcigLN/fLyi4G1gSJ4q5igY6h6Xj70c+IKzxREymoZSoIiaVKY4wF
+	h5N0M96bDghF+aY51v+nZyDTBVuBDsXbEUBYEQqO0wuof2DxpfvDdOoQd3u+XVJh
+	yJ5iVrDzK7Fw7sr75uo/vECffdW9uOnEDpkVWwvU+1DH8k3P7XFXE7PMQta4Ux7w
+	da8nGaPkFPG4c+eictBfkSDSLeuzZZ7J/aibA34uRO4xT/3tea1JXWdd0KwC0P8S
+	b0rr0EdIfEFb7+BSmlX7Dz2GKTsiy0M+bJOLuXepDSGtHn2wSe2lURWtdJs7dqwf
+	pNTRp7D8gOvLeV81iDng==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w8k9aggb0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 Feb 2024 07:03:40 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41E73dJ6026441
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 14 Feb 2024 07:03:39 GMT
+Received: from [10.216.25.21] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Tue, 13 Feb
+ 2024 23:03:32 -0800
+Message-ID: <b46e9f4d-4600-d848-7e47-985b013d62b8@quicinc.com>
+Date: Wed, 14 Feb 2024 12:33:29 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] PCI / PM: Really allow runtime PM without callback
- functions
-To: Bjorn Helgaas <helgaas@kernel.org>, Raag Jadav <raag.jadav@intel.com>
-Cc: bhelgaas@google.com, mika.westerberg@linux.intel.com,
- andriy.shevchenko@linux.intel.com, stanislaw.gruszka@linux.intel.com,
- lukas@wunner.de, rafael@kernel.org, ilpo.jarvinen@linux.intel.com,
- linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org, sashal@kernel.org
-References: <20240213200648.GA1219964@bhelgaas>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Subject: Re: [PATCH] PM: hibernate: Support to select compression algorithm
 Content-Language: en-US
-From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <20240213200648.GA1219964@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To: Randy Dunlap <rdunlap@infradead.org>, Pavel Machek <pavel@ucw.cz>,
+        "Len
+ Brown" <len.brown@intel.com>, Jonathan Corbet <corbet@lwn.net>,
+        "Rafael J.
+ Wysocki" <rafael@kernel.org>
+CC: "Paul E. McKenney" <paulmck@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Yan-Jie Wang <yanjiewtw@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Catalin Marinas
+	<catalin.marinas@arm.com>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_kprasan@quicinc.com>, <quic_mpilaniy@quicinc.com>,
+        <quic_shrekk@quicinc.com>, <mpleshivenkov@google.com>,
+        <ericyin@google.com>
+References: <3776355f920c1af44490e076072f93bafdf128cc.1707740870.git.quic_nprakash@quicinc.com>
+ <1d12e130-d3db-4eb5-a1d0-bc994c97a175@infradead.org>
+From: Nikhil V <quic_nprakash@quicinc.com>
+In-Reply-To: <1d12e130-d3db-4eb5-a1d0-bc994c97a175@infradead.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: YMqGurqrgxzdDzqU0XAo_MHM1vPhjtDF
+X-Proofpoint-GUID: YMqGurqrgxzdDzqU0XAo_MHM1vPhjtDF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-13_16,2024-02-12_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxlogscore=999
+ mlxscore=0 spamscore=0 malwarescore=0 phishscore=0 bulkscore=0
+ impostorscore=0 priorityscore=1501 lowpriorityscore=0 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401310000 definitions=main-2402140054
 
-Hi
 
-On 2/13/24 22:06, Bjorn Helgaas wrote:
->> Debugged-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+
+On 2/13/2024 12:34 AM, Randy Dunlap wrote:
 > 
-> Sounds like this resolves a problem report?  Is there a URL we can
-> cite?  If not, at least a mention of what the user-visible problem is?
 > 
->  From the c5eb1190074c commit log, it sounds like maybe this allows
-> devices to be autosuspended when they previously could not be?
+> On 2/12/24 04:32, Nikhil V wrote:
+>> Currently the default compression algorithm is selected based on
+>> compile time options. Introduce a module parameter "hibernate.compressor"
+>> to override this behaviour.
+>>
+>> Different compression algorithms have different characteristics and
+>> hibernation may benefit when it uses any of these algorithms, especially
+>> when a secondary algorithm(LZ4) offers better decompression speeds over a
+>> default algorithm(LZO), which in turn reduces hibernation image restore
+>> time.
+>>
+>> Users can override the default algorithm in two ways:
+>>   1) Passing "hibernate.compressor" as kernel command line parameter.
+>>      Usage:
+>>      	LZO: hibernate.compressor=lzo
+>>      	LZ4: hibernate.compressor=lz4
+>>
+>>   2) Specifying the algorithm at runtime.
+>>      Usage:
+>> 	LZO: echo lzo > /sys/module/hibernate/parameters/compressor
+>> 	LZ4: echo lz4 > /sys/module/hibernate/parameters/compressor
+>>
+>> Currently LZO and LZ4 are the supported algorithms. LZO is the default
+>> compression algorithm used with hibernation.
+>>
+>> Signed-off-by: Nikhil V <quic_nprakash@quicinc.com>
+>> ---
+>> This patch is dependent on the patch series, [1] (patches 1/4 to 3/4).
+>> This is picked in linux-next, [2].
+>>   [1] https://lore.kernel.org/all/cover.1705927916.git.quic_nprakash@quicinc.com/
+>>   [2] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/log/kernel/power?h=next-20240212
+>>
+>>   .../admin-guide/kernel-parameters.txt         | 10 ++++
+>>   kernel/power/hibernate.c                      | 57 ++++++++++++++++++-
+>>   2 files changed, 64 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+>> index 31b3a25680d0..522155056645 100644
+>> --- a/Documentation/admin-guide/kernel-parameters.txt
+>> +++ b/Documentation/admin-guide/kernel-parameters.txt
+>> @@ -1748,6 +1748,16 @@
+>>   				(that will set all pages holding image data
+>>   				during restoration read-only).
+>>   
 > 
-> Possibly this should have "Fixes: c5eb1190074c ("PCI / PM: Allow
-> runtime PM without callback functions")" since it sounds like it goes
-> with it?
+> Hi,
+> Please add something like:
 > 
-I don't think there's known regression but my above commit wasn't 
-complete. Autosuspending works without runtime PM callback as long as 
-the driver has the PM callbacks structure set.
+> 
+>> +	hibernate.compressor= 	[HIBERNATION] Compression algorithm to be
+>> +				used with hibernation.
+>> +				Format: { lzo | lz4 }
+> 				Default: lzo
+>> +
+>> +				lzo: Select LZO compression algorithm to
+>> +				compress/decompress hibernation image.
+>> +
+>> +				lz4: Select LZ4 compression algorithm to
+>> +				compress/decompress hibernation image.
+>> +
+>>   	highmem=nn[KMG]	[KNL,BOOT] forces the highmem zone to have an exact
+>>   			size of <nn>. This works even on boxes that have no
+>>   			highmem otherwise. This also works to reduce highmem
+> 
+> 
+> thanks.
 
-For example the drivers/i2c/busses/i2c-i801.c has system suspend/resume 
-callbacks. I tested this patch by hack-removing them and yes, 
-autosuspend doesn't work without this patch.
+Hi @Randy,
 
-Raag and Mika noticed the issue when cleaning up empty runtime PM 
-callbacks from an another driver which doesn't have any other PM callbacks.
+Will update the documentation as mentioned and send the patch for review.
 
+Thanks,
+Nikhil V
 
