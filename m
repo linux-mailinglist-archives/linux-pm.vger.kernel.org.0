@@ -1,256 +1,117 @@
-Return-Path: <linux-pm+bounces-3903-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3910-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C25FF85498D
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Feb 2024 13:50:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A19CF8549EC
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Feb 2024 14:01:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2793BB21E79
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Feb 2024 12:50:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 40BA7B21AC4
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Feb 2024 13:01:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 039CC52F7B;
-	Wed, 14 Feb 2024 12:50:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7F8752F86;
+	Wed, 14 Feb 2024 13:01:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WgiA1xJc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0023487BC;
-	Wed, 14 Feb 2024 12:50:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3183352F6E;
+	Wed, 14 Feb 2024 13:01:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707915004; cv=none; b=DjwXiE1Ih2UQgSoCZWinVgrS76wa2NzpShiXmzVfV05H1B42xQr6dKf5Js5cnvG+DdcTrsvH6sjZNcaM3SRVsL1IpqtDV35T9/kq3FASbkDfsxldWIzOHwPwJhm1gaUqRu1/6ywvrxRwVzi85vOfDMnr7MTvu+79HB5bVOrnydw=
+	t=1707915698; cv=none; b=gERNn1oOqm/EiDoVoE6m8PXiHv5VkdTjzsbbXwwp0UrPUiguUx1XXDsmkCbPbmwBxMPYNUSbeCMq616AhOtjTvSCo0O7iIXIE8TwVe80ey3YerNIBQS/EuvwdcXN9HHsNyMirDZpRMyVisZEbNywdUD10V53X08xIE58SKX8pVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707915004; c=relaxed/simple;
-	bh=025zc1LDVoUvaWbk7sNmJUJz5pu2gGD8HXd5JAmh5sw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EVUX/bmBImivwZs7AxGGajJ3+uvxlgW0jeLGwqXH1ebk8l9aKIWmwJxeZXmPUWhqBB4m3S1Ms+lN8yZM7da4TxPH+B06OzQQfFdDcsgVpV4YgYybu21hOuHCP4OqweoOai43CEa/d0g6UM+blHXUFuOrY1SOw0tYiGxf08SOgts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
- id 43f8bf5cd5d58855; Wed, 14 Feb 2024 13:49:54 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id B9BB4669DCB;
-	Wed, 14 Feb 2024 13:49:53 +0100 (CET)
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
- LKML <linux-kernel@vger.kernel.org>, Linux ACPI <linux-acpi@vger.kernel.org>,
- Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>
-Subject:
- [PATCH v2 6/6] thermal: intel: Adjust ops handling during thermal zone
- registration
-Date: Wed, 14 Feb 2024 13:49:41 +0100
-Message-ID: <3213551.5fSG56mABF@kreacher>
-In-Reply-To: <4551531.LvFx2qVVIh@kreacher>
-References: <4551531.LvFx2qVVIh@kreacher>
+	s=arc-20240116; t=1707915698; c=relaxed/simple;
+	bh=UTA/0dr5RgWO2sHiI40Q/d9Q5m5+NjUgM/xZY5lfqcA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AJJ+X/6AgClrTPVxll1rZobgee2iGzlYhDybnBbl0yJnNt82v+4Goo9QSH8auJxHlf85ldOFSG2jvXnqn5XuyoW02MUhVhNIKtnsYoff04V8qN3f/i+cSy/wZ+EqPYp56PaBmhe5Oe5JjdsnBTGfJddjx1ZJ5GvR+CiiIHYBSWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WgiA1xJc; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1707915697; x=1739451697;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UTA/0dr5RgWO2sHiI40Q/d9Q5m5+NjUgM/xZY5lfqcA=;
+  b=WgiA1xJcU1VtS51r8hAt2p84H4fEbCz+8FwtheEKCttQPNXpm3kCXXft
+   UQ2wmcndvZGdHyRB1GjpNtVL8GddFzPTCj6U5W6+GRSODpsxVfmlXEOze
+   sEV9CJU2uinr5zopiK0Zgpo+gRB42XGHZiM38kwRlCw71/gCEqI7YbDFS
+   VcRvvsRwVCEbo0JMf6Y1tTU7Jjql6ct2ll/lvqaqyGXS9pbDDyxoAgCiB
+   /Lngyft+pKmNbdnmuGhIXHmmoJ4bwlYkAw4M/CoebxR/+yPJH4X09VEeX
+   Wd82loC61qEA0fh0YY1hJ33mWrt8kwOCSrjD+e759JCoQB0QAV139N/aK
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="1810745"
+X-IronPort-AV: E=Sophos;i="6.06,159,1705392000"; 
+   d="scan'208";a="1810745"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2024 05:01:36 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="912084251"
+X-IronPort-AV: E=Sophos;i="6.06,159,1705392000"; 
+   d="scan'208";a="912084251"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2024 05:01:32 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1raEtG-00000004Ui2-0nGZ;
+	Wed, 14 Feb 2024 15:01:30 +0200
+Date: Wed, 14 Feb 2024 15:01:29 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Raag Jadav <raag.jadav@intel.com>
+Cc: Bjorn Helgaas <helgaas@kernel.org>, bhelgaas@google.com,
+	jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+	stanislaw.gruszka@linux.intel.com, lukas@wunner.de,
+	rafael@kernel.org, ilpo.jarvinen@linux.intel.com,
+	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+	sashal@kernel.org
+Subject: Re: [PATCH v1] PCI / PM: Really allow runtime PM without callback
+ functions
+Message-ID: <Zcy5qZ4rEbpY7ouC@smile.fi.intel.com>
+References: <20240212063233.5599-1-raag.jadav@intel.com>
+ <20240213200648.GA1219964@bhelgaas>
+ <ZcyZV2q1_QoK43vz@black.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrudejgdeggecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopedugedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghp
- thhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=14 Fuz1=14
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZcyZV2q1_QoK43vz@black.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Wed, Feb 14, 2024 at 12:43:35PM +0200, Raag Jadav wrote:
+> On Tue, Feb 13, 2024 at 02:06:48PM -0600, Bjorn Helgaas wrote:
+> > On Mon, Feb 12, 2024 at 12:02:33PM +0530, Raag Jadav wrote:
 
-Because thermal zone operations are now stored directly in struct
-thermal_zone_device, thermal zone creators can discard the operations
-structure after the zone registration is complete, or it can be made
-read-only.
+...
 
-Accordingly, make int340x_thermal_zone_add() use a local variable to
-represent thermal zone operations, so it is freed automatically upon the
-function exit, and make the other Intel thermal drivers use const zone
-operations structures.
+> > >  0)               |  pm_runtime_work() {
+> > >  0)               |    rpm_idle() {
+> > >  0)               |      rpm_check_suspend_allowed() {
+> > >  0)   1.500 us    |        __dev_pm_qos_resume_latency(); /* = 0x7fffffff */
+> > >  0)   4.840 us    |      } /* rpm_check_suspend_allowed = 0x0 */
+> > >  0)   1.550 us    |      __rpm_get_callback(); /* = 0xffffffffb4bc84f0 */
+> > >  0)   1.800 us    |      pci_pm_runtime_idle(); /* = -38 */
+> > >  0) + 17.070 us   |    } /* rpm_idle = -38 */
+> > >  0) + 22.450 us   |  } /* pm_runtime_work = -38 */
+> > 
+> > What is this timing information telling me?
+> 
+> It's a raw ftrace dump.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
----
+(Told ya that people would be surprised with this without seeing how you get
+ this and what fields mean)
 
-v1 -> v2:
-   * Rebase.
-   * Add R-by from Stanislaw.
-
----
- drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c         |   26 ++--------
- drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h         |    1 
- drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c |    2 
- drivers/thermal/intel/intel_pch_thermal.c                            |    2 
- drivers/thermal/intel/intel_quark_dts_thermal.c                      |    2 
- drivers/thermal/intel/intel_soc_dts_iosf.c                           |    2 
- drivers/thermal/intel/x86_pkg_temp_thermal.c                         |    2 
- 7 files changed, 11 insertions(+), 26 deletions(-)
-
-Index: linux-pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-+++ linux-pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-@@ -61,12 +61,6 @@ static void int340x_thermal_critical(str
- 	dev_dbg(&zone->device, "%s: critical temperature reached\n", zone->type);
- }
- 
--static struct thermal_zone_device_ops int340x_thermal_zone_ops = {
--	.get_temp       = int340x_thermal_get_zone_temp,
--	.set_trip_temp	= int340x_thermal_set_trip_temp,
--	.critical	= int340x_thermal_critical,
--};
--
- static inline void *int_to_trip_priv(int i)
- {
- 	return (void *)(long)i;
-@@ -126,6 +120,11 @@ static struct thermal_zone_params int340
- struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
- 						     int (*get_temp) (struct thermal_zone_device *, int *))
- {
-+	const struct thermal_zone_device_ops zone_ops = {
-+		.set_trip_temp = int340x_thermal_set_trip_temp,
-+		.critical = int340x_thermal_critical,
-+		.get_temp = get_temp ? get_temp : int340x_thermal_get_zone_temp,
-+	};
- 	struct int34x_thermal_zone *int34x_zone;
- 	struct thermal_trip *zone_trips;
- 	unsigned long long trip_cnt = 0;
-@@ -139,16 +138,6 @@ struct int34x_thermal_zone *int340x_ther
- 
- 	int34x_zone->adev = adev;
- 
--	int34x_zone->ops = kmemdup(&int340x_thermal_zone_ops,
--				   sizeof(int340x_thermal_zone_ops), GFP_KERNEL);
--	if (!int34x_zone->ops) {
--		ret = -ENOMEM;
--		goto err_ops_alloc;
--	}
--
--	if (get_temp)
--		int34x_zone->ops->get_temp = get_temp;
--
- 	status = acpi_evaluate_integer(adev->handle, "PATC", NULL, &trip_cnt);
- 	if (ACPI_SUCCESS(status))
- 		int34x_zone->aux_trip_nr = trip_cnt;
-@@ -183,7 +172,7 @@ struct int34x_thermal_zone *int340x_ther
- 							acpi_device_bid(adev),
- 							zone_trips, trip_cnt,
- 							int34x_zone,
--							int34x_zone->ops,
-+							&zone_ops,
- 							&int340x_thermal_params,
- 							0, 0);
- 	kfree(zone_trips);
-@@ -203,8 +192,6 @@ err_enable:
- err_thermal_zone:
- 	acpi_lpat_free_conversion_table(int34x_zone->lpat_table);
- err_trips_alloc:
--	kfree(int34x_zone->ops);
--err_ops_alloc:
- 	kfree(int34x_zone);
- 	return ERR_PTR(ret);
- }
-@@ -214,7 +201,6 @@ void int340x_thermal_zone_remove(struct
- {
- 	thermal_zone_device_unregister(int34x_zone->zone);
- 	acpi_lpat_free_conversion_table(int34x_zone->lpat_table);
--	kfree(int34x_zone->ops);
- 	kfree(int34x_zone);
- }
- EXPORT_SYMBOL_GPL(int340x_thermal_zone_remove);
-Index: linux-pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-+++ linux-pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-@@ -22,7 +22,6 @@ struct int34x_thermal_zone {
- 	struct acpi_device *adev;
- 	int aux_trip_nr;
- 	struct thermal_zone_device *zone;
--	struct thermal_zone_device_ops *ops;
- 	void *priv_data;
- 	struct acpi_lpat_conversion_table *lpat_table;
- };
-Index: linux-pm/drivers/thermal/intel/intel_pch_thermal.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/intel_pch_thermal.c
-+++ linux-pm/drivers/thermal/intel/intel_pch_thermal.c
-@@ -132,7 +132,7 @@ static void pch_critical(struct thermal_
- 		thermal_zone_device_type(tzd));
- }
- 
--static struct thermal_zone_device_ops tzd_ops = {
-+static const struct thermal_zone_device_ops tzd_ops = {
- 	.get_temp = pch_thermal_get_temp,
- 	.critical = pch_critical,
- };
-Index: linux-pm/drivers/thermal/intel/intel_quark_dts_thermal.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/intel_quark_dts_thermal.c
-+++ linux-pm/drivers/thermal/intel/intel_quark_dts_thermal.c
-@@ -288,7 +288,7 @@ static int sys_change_mode(struct therma
- 	return ret;
- }
- 
--static struct thermal_zone_device_ops tzone_ops = {
-+static const struct thermal_zone_device_ops tzone_ops = {
- 	.get_temp = sys_get_curr_temp,
- 	.set_trip_temp = sys_set_trip_temp,
- 	.change_mode = sys_change_mode,
-Index: linux-pm/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-+++ linux-pm/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.c
-@@ -233,7 +233,7 @@ static int get_trip_temp(struct proc_the
- 	return temp;
- }
- 
--static struct thermal_zone_device_ops tzone_ops = {
-+static const struct thermal_zone_device_ops tzone_ops = {
- 	.get_temp = sys_get_curr_temp,
- 	.set_trip_temp	= sys_set_trip_temp,
- };
-Index: linux-pm/drivers/thermal/intel/intel_soc_dts_iosf.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/intel_soc_dts_iosf.c
-+++ linux-pm/drivers/thermal/intel/intel_soc_dts_iosf.c
-@@ -168,7 +168,7 @@ static int sys_get_curr_temp(struct ther
- 	return 0;
- }
- 
--static struct thermal_zone_device_ops tzone_ops = {
-+static const struct thermal_zone_device_ops tzone_ops = {
- 	.get_temp = sys_get_curr_temp,
- 	.set_trip_temp = sys_set_trip_temp,
- };
-Index: linux-pm/drivers/thermal/intel/x86_pkg_temp_thermal.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/x86_pkg_temp_thermal.c
-+++ linux-pm/drivers/thermal/intel/x86_pkg_temp_thermal.c
-@@ -166,7 +166,7 @@ sys_set_trip_temp(struct thermal_zone_de
- }
- 
- /* Thermal zone callback registry */
--static struct thermal_zone_device_ops tzone_ops = {
-+static const struct thermal_zone_device_ops tzone_ops = {
- 	.get_temp = sys_get_curr_temp,
- 	.set_trip_temp = sys_set_trip_temp,
- };
-
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
 
