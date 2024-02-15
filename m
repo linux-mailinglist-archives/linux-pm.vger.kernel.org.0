@@ -1,171 +1,149 @@
-Return-Path: <linux-pm+bounces-3957-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3958-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78A868566B6
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 16:00:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6CC28566E1
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 16:06:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0910228B33A
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 15:00:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0584F1C219A8
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 15:06:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4119D132498;
-	Thu, 15 Feb 2024 14:57:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEB5213248E;
+	Thu, 15 Feb 2024 15:06:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lPtIZ+DX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 520DD13173F;
-	Thu, 15 Feb 2024 14:57:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E98D132475;
+	Thu, 15 Feb 2024 15:06:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708009067; cv=none; b=fFWy5pJqhtCu9Tr6wbTbLDOYrgm2Ot1yZrnBBe78lGwZkFAXFx6SFGda43bk5lvac+S9ijN/61YDI9sUMT2Q5giPU/kL2klReUglXUnICKs5UtPAJ//IoQBD2lSIbEKzY+tkx/wmYuxndR3M2QivBduAAhs0K5woRNbqD4OxMdU=
+	t=1708009610; cv=none; b=Jm5XjVPo9YtHyqsjzY1S9nT2zlsPfZhI60flbvUJydO+xdmewxJCn3ruIkpPgRlFC/y2ExrgI3+qNqqPos/3e/u4IyffMilTIxUI0cOSQ2sFfoLpGkBAKwyN2BKRSpmkYSOUAG6XpAi8H3foAAUGAdVgn3B8vY1hVwPhCFvxaUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708009067; c=relaxed/simple;
-	bh=1Gv7+LBoNQLxJ3O3mSHbpiF5DyNS3KBkgKz/fRO/mSE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Nb1pr7DjZzlrjCTJrS8ehvHrq4z+L2S7NLwcAqs8TwpDlWv9Hdld+7cXtbM+t1PQj841Ksq7Z7rI8zCWNlF3Kv4xLGLxoEJMi38DI2OPYsArsw2gvf05/z6qOamAfRPvUwxPqzyC4cccvdNaDRMwXpqZ3BkABOZT++3E32pgNik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B24851FB;
-	Thu, 15 Feb 2024 06:58:18 -0800 (PST)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B27B13F7A6;
-	Thu, 15 Feb 2024 06:57:35 -0800 (PST)
-Message-ID: <265e5f2c-9b45-420f-89b1-44369aeb8418@arm.com>
-Date: Thu, 15 Feb 2024 15:57:34 +0100
+	s=arc-20240116; t=1708009610; c=relaxed/simple;
+	bh=dYgvVx5J6FbrtTz2KxiUN3WJoc9vX9mVpIumVJo3C/0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Se1Ecm0XKPScTQY4y3zbZ+BUsaaumQw4a39GhAgkfTUlFiRmiMeaM4A04wM8ecZNHLVbITHzKOcuxOulpJrbl9bjVq30cJtk2dm8wT8QQlw5bJC6MVPkFz08fu1Nwcm1mKWlOmI/7sdHG/dwz9wnrHbn3/rENQTGyazZ5sR4GCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lPtIZ+DX; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1db51e55023so5931355ad.1;
+        Thu, 15 Feb 2024 07:06:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1708009609; x=1708614409; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wRHZqIOyBrytKgjz2NXJfF7uGwSTiUJd7ozSIo4Rz5Y=;
+        b=lPtIZ+DXzIyzRKv6fL/ZkPhnWJFs9TrMWFgDwUewDEO51ooboeg8SPHCKIf1s+ODyY
+         1XgrZUbr+PwhVjnJoI6cuvFdyS283GxeSzYKfDtp90KOOMMVuQFEvGar0Fg5Y7maJSxp
+         lZB62rWZXePpK1KsPrIsVVrevafyjoesWZYbVckYanFmddgumc+viXjuf9k5ZC8Vl/2m
+         Wg7LXRJMdPZXp5kmOMhNXTZ0XIGyUj2B0nMjpfTcEza54qhGOA3PWnfPrx//UPsJ/TQ3
+         Zfy5PSM+VIQ3GwMvTi3FBLz2tW9+qM0GME0ExTQe3jzfSnLUwDUosBVl224iXZ2qL6GS
+         gK6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708009609; x=1708614409;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wRHZqIOyBrytKgjz2NXJfF7uGwSTiUJd7ozSIo4Rz5Y=;
+        b=U8RgZ6Vd77WR5PwxrR27XoLP6an8adbFot7TGjxUXNsbEcuJJhnQiCfU8sHdzrgWWO
+         10diU1x8/rbPH5HvKGtqKsTr3UxpStIrGfe7+F6VOaU86nUC/Sfge8sx2l0e37uFRyrK
+         mtu/KUeFX72LeDT5yFTAwcmQjg02slqBGGtT6fZV6sI29hrb2VOJ7CxBHcmijMMnE13y
+         psKhXc0grg4lEca2S682bToBelOfSuAiY/G4IEYmtm+QLHnQ40Cvz2n9mZ/CTRYYsy6l
+         SH2UlRBgg1fQ+kLkfq9R7xdbQYISD8tZcK7BTO5qeT7Bhs9HqO2lwyuAn3DAAiuTJKls
+         pE/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXMXxfwKzqJ1MO3OiL0I5K1yIz6aYm+koc2q+MgoOlg0FyJijNWkd0GuAUsXo2teuJ1+fpehuV+txXlFsMFHDhQUMcCLeJQDP0TNPJzSn69zfEmWXKhMbKD7W5qAlqS+03YLhAk4dbf6013OD7Ciio6vTpEVPklmioeFjYAAY8dtvwV
+X-Gm-Message-State: AOJu0YxQqkhjJpK9ctUieWM6fbEedBKiqrr5TIJuDKJJSydysWkB73KW
+	vFiohwpsceutyk0FEk2NsGVrdQw8E8qQUsrlANgTwrfjVdld80+9
+X-Google-Smtp-Source: AGHT+IEblop9x6atphDkcaL7O9OM5+yWMRm/XmJEMDeW45mWdx6pdQdYqGT8NM/WQeUzq7tk9pqffA==
+X-Received: by 2002:a17:902:c948:b0:1da:2b52:52d4 with SMTP id i8-20020a170902c94800b001da2b5252d4mr2938295pla.39.1708009608588;
+        Thu, 15 Feb 2024 07:06:48 -0800 (PST)
+Received: from joaog-nb.. ([152.249.118.214])
+        by smtp.gmail.com with ESMTPSA id u5-20020a17090282c500b001d8aadaa7easm1375987plz.96.2024.02.15.07.06.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Feb 2024 07:06:47 -0800 (PST)
+From: Joao Paulo Goncalves <jpaulo.silvagoncalves@gmail.com>
+To: aford173@gmail.com
+Cc: Laurent.pinchart@ideasonboard.com,
+	airlied@gmail.com,
+	alexander.stein@ew.tq-group.com,
+	andrzej.hajda@intel.com,
+	catalin.marinas@arm.com,
+	conor+dt@kernel.org,
+	daniel@ffwll.ch,
+	devicetree@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	festevam@gmail.com,
+	frieder.schrempf@kontron.de,
+	jernej.skrabec@gmail.com,
+	jonas@kwiboo.se,
+	kernel@pengutronix.de,
+	kishon@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	l.stach@pengutronix.de,
+	linux-arm-kernel@lists.infradead.org,
+	linux-imx@nxp.com,
+	linux-kernel@vger.kernel.org,
+	linux-phy@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	maarten.lankhorst@linux.intel.com,
+	marex@denx.de,
+	mripard@kernel.org,
+	neil.armstrong@linaro.org,
+	p.zabel@pengutronix.de,
+	rfoss@kernel.org,
+	robh+dt@kernel.org,
+	s.hauer@pengutronix.de,
+	shawnguo@kernel.org,
+	tzimmermann@suse.de,
+	ulf.hansson@linaro.org,
+	victor.liu@nxp.com,
+	vkoul@kernel.org,
+	will@kernel.org,
+	Joao Paulo Goncalves <joao.goncalves@toradex.com>
+Subject: Re: [PATCH V8 00/12] soc: imx8mp: Add support for HDMI
+Date: Thu, 15 Feb 2024 12:05:59 -0300
+Message-Id: <20240215150559.287571-1-jpaulo.silvagoncalves@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240203165307.7806-1-aford173@gmail.com>
+References: <20240203165307.7806-1-aford173@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/3] cpufreq: scmi: Add boost frequency support
-Content-Language: en-US
-To: Sibi Sankar <quic_sibis@quicinc.com>, Sudeep Holla
- <sudeep.holla@arm.com>, Viresh Kumar <viresh.kumar@linaro.org>
-Cc: cristian.marussi@arm.com, rafael@kernel.org, morten.rasmussen@arm.com,
- lukasz.luba@arm.com, sboyd@kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- quic_mdtipton@quicinc.com, linux-arm-msm@vger.kernel.org, nm@ti.com
-References: <20240117110443.2060704-1-quic_sibis@quicinc.com>
- <20240123060827.a3vszziftj6pszt3@vireshk-i7> <Za-RtBrSxI-j4Jdx@bogus>
- <e968092a-dc2b-4351-9489-acf874bbc7b6@arm.com>
- <01b3d0ed-3fd3-86c6-7b0f-48d34a5d9ba8@quicinc.com>
-From: Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <01b3d0ed-3fd3-86c6-7b0f-48d34a5d9ba8@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 13/02/2024 08:35, Sibi Sankar wrote:
-> 
-> 
-> On 1/31/24 20:37, Dietmar Eggemann wrote:
->> On 23/01/2024 11:15, Sudeep Holla wrote:
->>> On Tue, Jan 23, 2024 at 11:38:27AM +0530, Viresh Kumar wrote:
->>>> On 17-01-24, 16:34, Sibi Sankar wrote:
+>The i.MX8M Plus has an HDMI controller, but it depends on two
+>other systems, the Parallel Video Interface (PVI) and the
+>HDMI PHY from Samsung. The LCDIF controller generates the display
+>and routes it to the PVI which converts passes the parallel video
+>to the HDMI bridge.  The HDMI system has a corresponding power
+>domain controller whose driver was partially written, but the
+>device tree for it was never applied, so some changes to the
+>power domain should be harmless because they've not really been
+>used yet.
 
-[...]
+>This series is adapted from multiple series from Lucas Stach with
+>edits and suggestions from feedback from various series, but it
+>since it's difficult to use and test them independently,
+>I merged them into on unified series.  The version history is a
+>bit ambiguous since different components were submitted at different
+times and had different amount of retries.  In an effort to merge them
+>I used the highest version attempt.
 
->> root@juno:/sys/devices/system/cpu/cpufreq# cat boost policy*/boost
->> 1
->> 0
->> 0
->>
->> root@juno:/sys/devices/system/cpu/cpufreq# cat
->> policy*/scaling_available_frequencies policy*/scaling_boost_frequencies
->> 450000 575000 700000
->> 450000 625000 800000
->> 775000 850000
->> 950000 1100000
->>
->> If I disable system-wide boost I see the correct influence on
->> 'cpufreq_pressure':
->>
->> root@juno:/sys/devices/system/cpu/cpufreq# echo 0 > boost
->>
->> [  439.466682] cpufreq_update_pressure() cpu=1 cpufreq_pressure=280
->> [  439.472797] cpufreq_update_pressure() cpu=2 cpufreq_pressure=280
->> [  439.478889] cpufreq_update_pressure() cpu=0 cpufreq_pressure=79
->> [  439.484852] cpufreq_update_pressure() cpu=3 cpufreq_pressure=79
->> [  439.490843] cpufreq_update_pressure() cpu=4 cpufreq_pressure=79
->> [  439.499621] cpufreq_update_pressure() cpu=5 cpufreq_pressure=79
->>
->> reflecting the max frequency change from '1100000 to 800000' on CPU1,2
->> and from '850000 to 700000' on CPU0,3-5.
->>
->> root@juno:/sys/devices/system/cpu/cpufreq# echo 1 > boost
->>
->> [ 2722.693113] cpufreq_update_pressure() cpu=1 cpufreq_pressure=0
->> [ 2722.699041] cpufreq_update_pressure() cpu=2 cpufreq_pressure=0
->> [ 2722.704962] cpufreq_update_pressure() cpu=0 cpufreq_pressure=0
->> [ 2722.710842] cpufreq_update_pressure() cpu=3 cpufreq_pressure=0
->> [ 2722.719644] cpufreq_update_pressure() cpu=4 cpufreq_pressure=0
->> [ 2722.728224] cpufreq_update_pressure() cpu=5 cpufreq_pressure=0
->>
->> What doesn't work for me is to disable boost per policy:
->>
->> root@juno:/sys/devices/system/cpu/cpufreq# echo 1 > boost
->> root@juno:/sys/devices/system/cpu/cpufreq# echo 0 > policy0/boost
->> root@juno:/sys/devices/system/cpu/cpufreq# echo 0 > policy1/boost
->>
->> Here I don't see 'cpufreq_pressure' changes.
->>
->> BTW, what's the use case you have in mind for this feature? Is it to cap
->> high OPPs for CPUs in a certain CPUfreq policy?
-> 
-> Yeah, that's exactly the use case for X1E. Boost frequencies defined in
-> the SoC are achievable by only one CPU in a cluster i.e. either the
-> other CPUs in the same cluster should be in low power mode or offline.
-> So it's mostly for book keeping i.e. we wouldn't to intimate incorrectly
-> that the CPUs are running at max possible frequency when it's actually
-> running at a lower frequency.
+Tested-by: Joao Paulo Goncalves <joao.goncalves@toradex.com>
 
-I see.
+Tested on Toradex Verdin-iMX8MP.
 
-What about the issue with the settings of the global and the per-policy
-'boost' file?
+Thanks!
 
-On my Juno-r0 the initial boost values are:
-
-(1) Initial setting:
-
-root@juno:/sys/devices/system/cpu/cpufreq# cat boost policy*/boost
-1
-0
-0
-
-Should they not all be 1 ?
-
-
-(2) Disabling system-wide boost
-
-root@juno:/sys/devices/system/cpu/cpufreq# echo 0 > boost
-
-Here I see 'cpufreq_pressure > 0' for all CPUs.
-
-
-(3) Enabling system-wide boost
-
-root@juno:/sys/devices/system/cpu/cpufreq# echo 1 > boost
-
-And here 'cpufreq_pressure == 0' for all CPUs.
-
-
-(4) Disabling boost for policy0.
-
-root@juno:/sys/devices/system/cpu/cpufreq# echo 0 > policy0/boost
-
-root@juno:/sys/devices/system/cpu/cpufreq# cat boost policy*/boost
-1
-0
-1
-
-Here nothing happened. But I was expecting to see 'cpufreq_pressure > 0'
-for CPUs of policy0:
-
-root@juno:/sys/devices/system/cpu/cpufreq# cat policy0/affected_cpus
-0 3 4 5
+Regards,
+Joao Paulo Goncalves
 
