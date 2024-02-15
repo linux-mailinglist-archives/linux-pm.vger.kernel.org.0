@@ -1,159 +1,110 @@
-Return-Path: <linux-pm+bounces-3954-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3955-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 598098563B1
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 13:52:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C59AD8563EB
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 14:03:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 166BC28A0E4
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 12:52:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 649551F272D1
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 13:03:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DEEF12F391;
-	Thu, 15 Feb 2024 12:51:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E510912F399;
+	Thu, 15 Feb 2024 13:03:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DOvo74tt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [195.130.137.89])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7A5612F36F
-	for <linux-pm@vger.kernel.org>; Thu, 15 Feb 2024 12:51:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.137.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B2AE12BF06
+	for <linux-pm@vger.kernel.org>; Thu, 15 Feb 2024 13:03:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708001492; cv=none; b=Z2WJwn6l3o6CY4jYnI29f+3RH7l2WGrvU3mowJp1idzwcXsnW5ZoZ+C2AIPEENLBXFsqMeZfU4flBFAogDfMYcGIl1M2RxLs36eONe991rEKlKkZori+NHRC3pQf10FkVfdBYRfh66ZeT/v7kQ6VmplQvi9P9cLhAiGIAbDpNCc=
+	t=1708002197; cv=none; b=RP+exhmeWyTPNq6nLvjgNeXMbyW401iAjKxqJO3HQkZJMTL7gR6bVgJvmXx1tpdT30KcnRm10wukRAQqUqTGqqlUoVMVfEB1svBasPdFiB5MjraT/faTN9P2PPHH7Io74PE7rrtuTrpkWe6o9M89XuCmMjq5R+Ouy10+EDki09I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708001492; c=relaxed/simple;
-	bh=numjJyssHCK83ZTxToyLkXAvONvPBcoOdl89HtYTob0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cOdADn/9Mk1Bs3zDUNV3ID7l4W+I0DAzEqnUaYUO2RwXYwUT52SoRZFPx2oi3vI1bgDORGIBGwoUvBsgsXT9fNFVhkqW9dkLXxP5LOHGlg3F2Pfps2XgVQbueivNjROz0//x12ez0wkCDURaXFuL7eCjU22dfTFDPWgO9fNnnss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.137.89
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:ac52:3a54:2a84:d65a])
-	by laurent.telenet-ops.be with bizsmtp
-	id nQrM2B0090LVNSS01QrM3z; Thu, 15 Feb 2024 13:51:21 +0100
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1rabCr-000gwp-Pl;
-	Thu, 15 Feb 2024 13:51:21 +0100
-Received: from geert by rox.of.borg with local (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1rabCz-00HVKe-5H;
-	Thu, 15 Feb 2024 13:51:21 +0100
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH v2] thermal: Drop spaces before TABs
-Date: Thu, 15 Feb 2024 13:51:19 +0100
-Message-Id: <480478a53fd42621e97b2db36e181903cc0f53e3.1708001426.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1708002197; c=relaxed/simple;
+	bh=wvApUvfsPpkye9qYeykoXI5vL0JTgpBbmDj74OcOvPc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DNUo4veQo4TUjb2qtcQ+pKw052oYa8q0ez7AiXQOPBi2AV6fMpZfqAQKYlk6YEjeUsN7ZjrmWAFNCcdyresclGYGh7XYa9Ty/OnMPiyO4gCbpWx2H2yo9VnvKMKb7F129XPE1e+Q4z4EqROBnDSiNf5aV7MrmGZX6xeu4jkepjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DOvo74tt; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-561587ce966so1639662a12.1
+        for <linux-pm@vger.kernel.org>; Thu, 15 Feb 2024 05:03:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1708002194; x=1708606994; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=n8gYmBFcHw+PMY96x5bP3A9cd014PWA82CxsQ116n3w=;
+        b=DOvo74ttYJXFE5QYwDSwhbdcE6tiAKN52LHK4SPzIqCYyP3lq0FQPoYn5LREmZS00n
+         Ia87DTYD02PzLVSg0/u8AL4R2D2sOMCTiQqfux5ad0+aMOAKKrvz0SNmcMwTUfnt+cFJ
+         g9CSRXosQDmO+q4AprRoLPek8JpOVHXC8n3UuZ/SOv8LHg/oYy5biLPTJvqfXmHEHRMZ
+         sbZSQMXT1io0mrzI+bNkaKKOERyc+GWQD6iiwatZlNqw9cOwLf5uAewCjkaIuSib6SEK
+         V/hzwaLCiaWN85VbT35XqceVp52+b+eJXNtEvHkGNdp58nuw1U2C7Ifz7vieoGYGe+fw
+         SVTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708002194; x=1708606994;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=n8gYmBFcHw+PMY96x5bP3A9cd014PWA82CxsQ116n3w=;
+        b=csjkHtNG4wNaArqFFAtC4YkzIiCt4d0ZkESwdA8ry8xEFoavq9uvQUvcW3hTlRmvZP
+         dbIzMYCktbQZRnK4i0RKLL+wFRoyvDP+B6RRbqhSFUPaczdOwcWa43zDRocbyHxnbmAY
+         vKm0O07bEzoPUnv+yDCBZxJsmVAR27zKtxi7wNJc7ELXbNGoY5BH20kSd4PyOmXyn7yE
+         UbsU9CPURZXO9nh1x7BTVNg82nPrbiFzTkNfXSB4WyNDP+x7sLqPO/qQ+HcavW18Zcv0
+         j6Q/6n4lDTwF3WGeRFb9Mpw/whs6TECW8Oa6+kUKkOUclskqUkr7wVvQ1+2D4hiAxRYe
+         fiiw==
+X-Gm-Message-State: AOJu0YzIg1xyLpSrY7mtNnXYpt5wHTlO1itKroXQZZjOSkTMZFcRgYv4
+	oj1bAvWQP2aa82u7klkQrJhVihNqmDVBlS7IwVYWYUtYEoc3NeoKvH64arfqs/cSiPX35avkDhy
+	l
+X-Google-Smtp-Source: AGHT+IEb+RndYySUvLziRX7ktIL1fHsO13e6I5nTzg2PeebZxffYPxzn2nhNVF5dHx9ZFPWdwJfmzA==
+X-Received: by 2002:a05:600c:3591:b0:412:41:bb3d with SMTP id p17-20020a05600c359100b004120041bb3dmr1648825wmq.3.1708002181939;
+        Thu, 15 Feb 2024 05:03:01 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id fc10-20020a05600c524a00b004120c78fc39sm2387969wmb.3.2024.02.15.05.03.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Feb 2024 05:03:01 -0800 (PST)
+Message-ID: <00d0beb5-6800-418d-be1a-89e32b867fb3@linaro.org>
+Date: Thu, 15 Feb 2024 14:03:00 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] thermal: Drop spaces before TABs
+Content-Language: en-US
+To: Geert Uytterhoeven <geert+renesas@glider.be>,
+ "Rafael J . Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <480478a53fd42621e97b2db36e181903cc0f53e3.1708001426.git.geert+renesas@glider.be>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <480478a53fd42621e97b2db36e181903cc0f53e3.1708001426.git.geert+renesas@glider.be>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-There is never a need to have a space before a TAB, but it hurts the
-eyes of vim users.
+On 15/02/2024 13:51, Geert Uytterhoeven wrote:
+> There is never a need to have a space before a TAB, but it hurts the
+> eyes of vim users.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> ---
+> v2:
+>    - Drop change to removed drivers/thermal/st/st_thermal_syscfg.c.
+> ---
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-v2:
-  - Drop change to removed drivers/thermal/st/st_thermal_syscfg.c.
----
- drivers/thermal/Makefile               |  2 +-
- drivers/thermal/st/st_thermal.h        | 18 +++++++++---------
- drivers/thermal/st/st_thermal_memmap.c |  2 +-
- drivers/thermal/thermal_of.c           |  2 +-
- 4 files changed, 12 insertions(+), 12 deletions(-)
+Applied, thanks
 
-diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-index d77d7fe99a84aa3f..5cdf7d68687f43b3 100644
---- a/drivers/thermal/Makefile
-+++ b/drivers/thermal/Makefile
-@@ -43,7 +43,7 @@ obj-$(CONFIG_RCAR_GEN3_THERMAL)	+= rcar_gen3_thermal.o
- obj-$(CONFIG_RZG2L_THERMAL)	+= rzg2l_thermal.o
- obj-$(CONFIG_KIRKWOOD_THERMAL)  += kirkwood_thermal.o
- obj-y				+= samsung/
--obj-$(CONFIG_DOVE_THERMAL)  	+= dove_thermal.o
-+obj-$(CONFIG_DOVE_THERMAL)	+= dove_thermal.o
- obj-$(CONFIG_DB8500_THERMAL)	+= db8500_thermal.o
- obj-$(CONFIG_ARMADA_THERMAL)	+= armada_thermal.o
- obj-$(CONFIG_IMX_THERMAL)	+= imx_thermal.o
-diff --git a/drivers/thermal/st/st_thermal.h b/drivers/thermal/st/st_thermal.h
-index 75a84e6ec6a729bf..8639d9165c9b9d56 100644
---- a/drivers/thermal/st/st_thermal.h
-+++ b/drivers/thermal/st/st_thermal.h
-@@ -38,10 +38,10 @@ struct st_thermal_sensor;
-  *
-  * @power_ctrl:		Function for powering on/off a sensor. Clock to the
-  *			sensor is also controlled from this function.
-- * @alloc_regfields: 	Allocate regmap register fields, specific to a sensor.
-- * @do_memmap_regmap: 	Memory map the thermal register space and init regmap
-+ * @alloc_regfields:	Allocate regmap register fields, specific to a sensor.
-+ * @do_memmap_regmap:	Memory map the thermal register space and init regmap
-  *			instance or find regmap instance.
-- * @register_irq: 	Register an interrupt handler for a sensor.
-+ * @register_irq:	Register an interrupt handler for a sensor.
-  */
- struct st_thermal_sensor_ops {
- 	int (*power_ctrl)(struct st_thermal_sensor *, enum st_thermal_power_state);
-@@ -56,15 +56,15 @@ struct st_thermal_sensor_ops {
-  *
-  * @reg_fields:		Pointer to the regfields array for a sensor.
-  * @sys_compat:		Pointer to the syscon node compatible string.
-- * @ops: 		Pointer to private thermal ops for a sensor.
-- * @calibration_val: 	Default calibration value to be written to the DCORRECT
-+ * @ops:		Pointer to private thermal ops for a sensor.
-+ * @calibration_val:	Default calibration value to be written to the DCORRECT
-  *			register field for a sensor.
-- * @temp_adjust_val: 	Value to be added/subtracted from the data read from
-+ * @temp_adjust_val:	Value to be added/subtracted from the data read from
-  *			the sensor. If value needs to be added please provide a
-  *			positive value and if it is to be subtracted please
-- * 			provide a negative value.
-- * @crit_temp: 		The temperature beyond which the SoC should be shutdown
-- * 			to prevent damage.
-+ *			provide a negative value.
-+ * @crit_temp:		The temperature beyond which the SoC should be shutdown
-+ *			to prevent damage.
-  */
- struct st_thermal_compat_data {
- 	char *sys_compat;
-diff --git a/drivers/thermal/st/st_thermal_memmap.c b/drivers/thermal/st/st_thermal_memmap.c
-index e8cfa83b724a774b..29c2269b0fb35ced 100644
---- a/drivers/thermal/st/st_thermal_memmap.c
-+++ b/drivers/thermal/st/st_thermal_memmap.c
-@@ -27,7 +27,7 @@ static const struct reg_field st_mmap_thermal_regfields[MAX_REGFIELDS] = {
- 	 * written simultaneously for powering on and off the temperature
- 	 * sensor. regmap_update_bits() will be used to update the register.
- 	 */
--	[INT_THRESH_HI]	= REG_FIELD(STIH416_MPE_INT_THRESH, 	0,  7),
-+	[INT_THRESH_HI]	= REG_FIELD(STIH416_MPE_INT_THRESH,	0,  7),
- 	[DCORRECT]	= REG_FIELD(STIH416_MPE_CONF,		5,  9),
- 	[OVERFLOW]	= REG_FIELD(STIH416_MPE_STATUS,		9,  9),
- 	[DATA]		= REG_FIELD(STIH416_MPE_STATUS,		11, 18),
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index 4d6c22e0ed85bf55..c9bee46b48cd0f75 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -463,7 +463,7 @@ static void thermal_of_zone_unregister(struct thermal_zone_device *tz)
-  * @ops: A set of thermal sensor ops
-  *
-  * Return: a valid thermal zone structure pointer on success.
-- * 	- EINVAL: if the device tree thermal description is malformed
-+ *	- EINVAL: if the device tree thermal description is malformed
-  *	- ENOMEM: if one structure can not be allocated
-  *	- Other negative errors are returned by the underlying called functions
-  */
 -- 
-2.34.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
 
