@@ -1,337 +1,171 @@
-Return-Path: <linux-pm+bounces-3956-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3957-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C68008565BF
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 15:18:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78A868566B6
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 16:00:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D3A6BB2D260
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 14:15:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0910228B33A
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 15:00:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B455A131E51;
-	Thu, 15 Feb 2024 14:15:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MIvj6AeL"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4119D132498;
+	Thu, 15 Feb 2024 14:57:47 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76B1712D74D;
-	Thu, 15 Feb 2024 14:15:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 520DD13173F;
+	Thu, 15 Feb 2024 14:57:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708006526; cv=none; b=aGb6ScZsKgWBfNr7/PH21a+kTumdy3YadB2u2urRJ0PGzwiinQw5+19lq/tTclqP1pdASTwomqlaB9Emyvx2mK/VH02NXPttn68Yn4xff4cNBFaoiR+Zb8HMZ1eyZYWK1rvh/aGdezaQtyNvi9t4UeVEcExt1F7pfBwQiy0CuJo=
+	t=1708009067; cv=none; b=fFWy5pJqhtCu9Tr6wbTbLDOYrgm2Ot1yZrnBBe78lGwZkFAXFx6SFGda43bk5lvac+S9ijN/61YDI9sUMT2Q5giPU/kL2klReUglXUnICKs5UtPAJ//IoQBD2lSIbEKzY+tkx/wmYuxndR3M2QivBduAAhs0K5woRNbqD4OxMdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708006526; c=relaxed/simple;
-	bh=FcHteD02PMPntlTNZ7Jd5XPYsanUAkd4u7PiBmK5gA4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=eJKnLTZxd1lbb6Sk5YpRMmZaVoHRbJqMOxaUA5OSJRYgqqLzDXKx8v/C+wLb4AbgTk/Tmljip1rVtzkw9a5IvnfhtdW7/KV114vD5OrgGtOgmMCKcUyA5fOiiQcvJxjsnL4WBrVCblfbQ7qcMlf2AFbc8lpRLeGrOHwDYnOiuf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MIvj6AeL; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708006525; x=1739542525;
-  h=date:from:to:cc:subject:message-id;
-  bh=FcHteD02PMPntlTNZ7Jd5XPYsanUAkd4u7PiBmK5gA4=;
-  b=MIvj6AeLf+ZPzXj6i7bh9haQ7fjlTVdYFx8o2GNeqV0/K51LV+1s9Ahk
-   2+XYAARoXq5xEsp0qwwJ05rI7zIkKiTTiEghqh0QM9zbuB5Wc6vEUUL7z
-   EJK9uH73/1esnrVcE9lblI6cKqK6rR/eFoxRcUpId0TGZYL+cPor9eU47
-   8p+cKWoC1F76H7Dp3BPGDJHb5Rja/+dA0cOWso3hqX1x+BZ6KJL6zDzrq
-   BDjvvPVshacRykF+O/Am4Ilqw1vduZpGq+VmUxaYIFJKpqrJxJV2AnFYF
-   S1N0eIfli95xKQYgDRBEh3wwq8RtO50ueDb+ck+04NgGxCmouE36A7cbM
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10984"; a="5905889"
-X-IronPort-AV: E=Sophos;i="6.06,161,1705392000"; 
-   d="scan'208";a="5905889"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2024 06:15:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,161,1705392000"; 
-   d="scan'208";a="3534543"
-Received: from lkp-server02.sh.intel.com (HELO 3c78fa4d504c) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 15 Feb 2024 06:15:22 -0800
-Received: from kbuild by 3c78fa4d504c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1racVR-0000Ye-0j;
-	Thu, 15 Feb 2024 14:14:54 +0000
-Date: Thu, 15 Feb 2024 22:14:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 3155f8c5dcdd4c1926ee67feebaacdff4797294b
-Message-ID: <202402152212.lodmt6n3-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1708009067; c=relaxed/simple;
+	bh=1Gv7+LBoNQLxJ3O3mSHbpiF5DyNS3KBkgKz/fRO/mSE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Nb1pr7DjZzlrjCTJrS8ehvHrq4z+L2S7NLwcAqs8TwpDlWv9Hdld+7cXtbM+t1PQj841Ksq7Z7rI8zCWNlF3Kv4xLGLxoEJMi38DI2OPYsArsw2gvf05/z6qOamAfRPvUwxPqzyC4cccvdNaDRMwXpqZ3BkABOZT++3E32pgNik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B24851FB;
+	Thu, 15 Feb 2024 06:58:18 -0800 (PST)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B27B13F7A6;
+	Thu, 15 Feb 2024 06:57:35 -0800 (PST)
+Message-ID: <265e5f2c-9b45-420f-89b1-44369aeb8418@arm.com>
+Date: Thu, 15 Feb 2024 15:57:34 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/3] cpufreq: scmi: Add boost frequency support
+Content-Language: en-US
+To: Sibi Sankar <quic_sibis@quicinc.com>, Sudeep Holla
+ <sudeep.holla@arm.com>, Viresh Kumar <viresh.kumar@linaro.org>
+Cc: cristian.marussi@arm.com, rafael@kernel.org, morten.rasmussen@arm.com,
+ lukasz.luba@arm.com, sboyd@kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ quic_mdtipton@quicinc.com, linux-arm-msm@vger.kernel.org, nm@ti.com
+References: <20240117110443.2060704-1-quic_sibis@quicinc.com>
+ <20240123060827.a3vszziftj6pszt3@vireshk-i7> <Za-RtBrSxI-j4Jdx@bogus>
+ <e968092a-dc2b-4351-9489-acf874bbc7b6@arm.com>
+ <01b3d0ed-3fd3-86c6-7b0f-48d34a5d9ba8@quicinc.com>
+From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <01b3d0ed-3fd3-86c6-7b0f-48d34a5d9ba8@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 3155f8c5dcdd4c1926ee67feebaacdff4797294b  Merge branch 'thermal-core-testing' into bleeding-edge
+On 13/02/2024 08:35, Sibi Sankar wrote:
+> 
+> 
+> On 1/31/24 20:37, Dietmar Eggemann wrote:
+>> On 23/01/2024 11:15, Sudeep Holla wrote:
+>>> On Tue, Jan 23, 2024 at 11:38:27AM +0530, Viresh Kumar wrote:
+>>>> On 17-01-24, 16:34, Sibi Sankar wrote:
 
-Warning ids grouped by kconfigs:
+[...]
 
-gcc_recent_errors
-|-- arm64-defconfig
-|   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-|   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-|-- i386-randconfig-r062-20240215
-|   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-|   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-|-- mips-allmodconfig
-|   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-|   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-|-- powerpc-allmodconfig
-|   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-|   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-|-- powerpc-randconfig-001-20240215
-|   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-|   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-|-- sparc-allmodconfig
-|   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-|   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-|-- sparc-allyesconfig
-|   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-|   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-|-- x86_64-buildonly-randconfig-003-20240215
-|   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-|   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-|-- x86_64-buildonly-randconfig-006-20240215
-|   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-|   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-|-- x86_64-randconfig-073-20240215
-|   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-|   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-`-- x86_64-randconfig-074-20240215
-    |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-    `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-clang_recent_errors
-|-- arm64-allyesconfig
-|   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-|   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-|-- i386-buildonly-randconfig-006-20240215
-|   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-|   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-|-- i386-randconfig-003-20240215
-|   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-|   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-|-- i386-randconfig-015-20240215
-|   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-|   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-|-- powerpc-allyesconfig
-|   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-|   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-|-- riscv-allmodconfig
-|   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-|   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-|-- riscv-allyesconfig
-|   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-|   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-|-- x86_64-allmodconfig
-|   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-|   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-|-- x86_64-allyesconfig
-|   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-|   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-`-- x86_64-randconfig-001-20240215
-    |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-    `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
+>> root@juno:/sys/devices/system/cpu/cpufreq# cat boost policy*/boost
+>> 1
+>> 0
+>> 0
+>>
+>> root@juno:/sys/devices/system/cpu/cpufreq# cat
+>> policy*/scaling_available_frequencies policy*/scaling_boost_frequencies
+>> 450000 575000 700000
+>> 450000 625000 800000
+>> 775000 850000
+>> 950000 1100000
+>>
+>> If I disable system-wide boost I see the correct influence on
+>> 'cpufreq_pressure':
+>>
+>> root@juno:/sys/devices/system/cpu/cpufreq# echo 0 > boost
+>>
+>> [  439.466682] cpufreq_update_pressure() cpu=1 cpufreq_pressure=280
+>> [  439.472797] cpufreq_update_pressure() cpu=2 cpufreq_pressure=280
+>> [  439.478889] cpufreq_update_pressure() cpu=0 cpufreq_pressure=79
+>> [  439.484852] cpufreq_update_pressure() cpu=3 cpufreq_pressure=79
+>> [  439.490843] cpufreq_update_pressure() cpu=4 cpufreq_pressure=79
+>> [  439.499621] cpufreq_update_pressure() cpu=5 cpufreq_pressure=79
+>>
+>> reflecting the max frequency change from '1100000 to 800000' on CPU1,2
+>> and from '850000 to 700000' on CPU0,3-5.
+>>
+>> root@juno:/sys/devices/system/cpu/cpufreq# echo 1 > boost
+>>
+>> [ 2722.693113] cpufreq_update_pressure() cpu=1 cpufreq_pressure=0
+>> [ 2722.699041] cpufreq_update_pressure() cpu=2 cpufreq_pressure=0
+>> [ 2722.704962] cpufreq_update_pressure() cpu=0 cpufreq_pressure=0
+>> [ 2722.710842] cpufreq_update_pressure() cpu=3 cpufreq_pressure=0
+>> [ 2722.719644] cpufreq_update_pressure() cpu=4 cpufreq_pressure=0
+>> [ 2722.728224] cpufreq_update_pressure() cpu=5 cpufreq_pressure=0
+>>
+>> What doesn't work for me is to disable boost per policy:
+>>
+>> root@juno:/sys/devices/system/cpu/cpufreq# echo 1 > boost
+>> root@juno:/sys/devices/system/cpu/cpufreq# echo 0 > policy0/boost
+>> root@juno:/sys/devices/system/cpu/cpufreq# echo 0 > policy1/boost
+>>
+>> Here I don't see 'cpufreq_pressure' changes.
+>>
+>> BTW, what's the use case you have in mind for this feature? Is it to cap
+>> high OPPs for CPUs in a certain CPUfreq policy?
+> 
+> Yeah, that's exactly the use case for X1E. Boost frequencies defined in
+> the SoC are achievable by only one CPU in a cluster i.e. either the
+> other CPUs in the same cluster should be in low power mode or offline.
+> So it's mostly for book keeping i.e. we wouldn't to intimate incorrectly
+> that the CPUs are running at max possible frequency when it's actually
+> running at a lower frequency.
 
-elapsed time: 1459m
+I see.
 
-configs tested: 179
-configs skipped: 3
+What about the issue with the settings of the global and the per-policy
+'boost' file?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+On my Juno-r0 the initial boost values are:
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20240215   gcc  
-arc                   randconfig-002-20240215   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                           h3600_defconfig   gcc  
-arm                         orion5x_defconfig   clang
-arm                   randconfig-001-20240215   clang
-arm                   randconfig-002-20240215   gcc  
-arm                   randconfig-003-20240215   gcc  
-arm                   randconfig-004-20240215   gcc  
-arm                        shmobile_defconfig   gcc  
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240215   clang
-arm64                 randconfig-002-20240215   clang
-arm64                 randconfig-003-20240215   gcc  
-arm64                 randconfig-004-20240215   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240215   gcc  
-csky                  randconfig-002-20240215   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240215   clang
-hexagon               randconfig-002-20240215   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240215   clang
-i386         buildonly-randconfig-002-20240215   clang
-i386         buildonly-randconfig-003-20240215   clang
-i386         buildonly-randconfig-004-20240215   clang
-i386         buildonly-randconfig-005-20240215   clang
-i386         buildonly-randconfig-006-20240215   clang
-i386                                defconfig   clang
-i386                  randconfig-001-20240215   gcc  
-i386                  randconfig-002-20240215   gcc  
-i386                  randconfig-003-20240215   clang
-i386                  randconfig-004-20240215   gcc  
-i386                  randconfig-005-20240215   gcc  
-i386                  randconfig-006-20240215   gcc  
-i386                  randconfig-011-20240215   clang
-i386                  randconfig-012-20240215   clang
-i386                  randconfig-013-20240215   gcc  
-i386                  randconfig-014-20240215   gcc  
-i386                  randconfig-015-20240215   clang
-i386                  randconfig-016-20240215   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240215   gcc  
-loongarch             randconfig-002-20240215   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                       m5275evb_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                           ci20_defconfig   clang
-mips                         db1xxx_defconfig   clang
-mips                      fuloong2e_defconfig   gcc  
-mips                     loongson2k_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240215   gcc  
-nios2                 randconfig-002-20240215   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240215   gcc  
-parisc                randconfig-002-20240215   gcc  
-parisc64                            defconfig   gcc  
-powerpc                    adder875_defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                        icon_defconfig   gcc  
-powerpc                  iss476-smp_defconfig   gcc  
-powerpc                       maple_defconfig   clang
-powerpc               randconfig-001-20240215   gcc  
-powerpc               randconfig-002-20240215   clang
-powerpc               randconfig-003-20240215   clang
-powerpc64             randconfig-001-20240215   clang
-powerpc64             randconfig-002-20240215   gcc  
-powerpc64             randconfig-003-20240215   clang
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240215   gcc  
-riscv                 randconfig-002-20240215   gcc  
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240215   clang
-s390                  randconfig-002-20240215   clang
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                          landisk_defconfig   gcc  
-sh                          polaris_defconfig   gcc  
-sh                    randconfig-001-20240215   gcc  
-sh                    randconfig-002-20240215   gcc  
-sh                          rsk7264_defconfig   gcc  
-sh                           se7724_defconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          alldefconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240215   gcc  
-sparc64               randconfig-002-20240215   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                    randconfig-001-20240215   gcc  
-um                    randconfig-002-20240215   gcc  
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240215   clang
-x86_64       buildonly-randconfig-002-20240215   clang
-x86_64       buildonly-randconfig-003-20240215   gcc  
-x86_64       buildonly-randconfig-004-20240215   gcc  
-x86_64       buildonly-randconfig-005-20240215   clang
-x86_64       buildonly-randconfig-006-20240215   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240215   clang
-x86_64                randconfig-002-20240215   clang
-x86_64                randconfig-003-20240215   gcc  
-x86_64                randconfig-004-20240215   clang
-x86_64                randconfig-005-20240215   clang
-x86_64                randconfig-006-20240215   clang
-x86_64                randconfig-011-20240215   gcc  
-x86_64                randconfig-012-20240215   gcc  
-x86_64                randconfig-013-20240215   gcc  
-x86_64                randconfig-014-20240215   gcc  
-x86_64                randconfig-015-20240215   gcc  
-x86_64                randconfig-016-20240215   clang
-x86_64                randconfig-071-20240215   clang
-x86_64                randconfig-072-20240215   clang
-x86_64                randconfig-073-20240215   gcc  
-x86_64                randconfig-074-20240215   gcc  
-x86_64                randconfig-075-20240215   clang
-x86_64                randconfig-076-20240215   gcc  
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                randconfig-001-20240215   gcc  
-xtensa                randconfig-002-20240215   gcc  
+(1) Initial setting:
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+root@juno:/sys/devices/system/cpu/cpufreq# cat boost policy*/boost
+1
+0
+0
+
+Should they not all be 1 ?
+
+
+(2) Disabling system-wide boost
+
+root@juno:/sys/devices/system/cpu/cpufreq# echo 0 > boost
+
+Here I see 'cpufreq_pressure > 0' for all CPUs.
+
+
+(3) Enabling system-wide boost
+
+root@juno:/sys/devices/system/cpu/cpufreq# echo 1 > boost
+
+And here 'cpufreq_pressure == 0' for all CPUs.
+
+
+(4) Disabling boost for policy0.
+
+root@juno:/sys/devices/system/cpu/cpufreq# echo 0 > policy0/boost
+
+root@juno:/sys/devices/system/cpu/cpufreq# cat boost policy*/boost
+1
+0
+1
+
+Here nothing happened. But I was expecting to see 'cpufreq_pressure > 0'
+for CPUs of policy0:
+
+root@juno:/sys/devices/system/cpu/cpufreq# cat policy0/affected_cpus
+0 3 4 5
 
