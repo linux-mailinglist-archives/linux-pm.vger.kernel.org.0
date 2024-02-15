@@ -1,122 +1,201 @@
-Return-Path: <linux-pm+bounces-3927-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3928-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07EF0855414
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Feb 2024 21:35:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C3928558C4
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 02:30:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3AFB21C2825B
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Feb 2024 20:35:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 421C41C214E4
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 01:30:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7C9638F86;
-	Wed, 14 Feb 2024 20:35:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UTYJ8qsH"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCA6C1378;
+	Thu, 15 Feb 2024 01:30:07 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05E6C1DDE7;
-	Wed, 14 Feb 2024 20:35:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D1D41362;
+	Thu, 15 Feb 2024 01:30:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707942947; cv=none; b=qA+rhzi3+MLUXjLVnizC43SII30x3o6WpUGfgy6wHMLi+B7mf6YZOzg+6sF2mOA+XSaE6nkYxuLnMUmidtCSHyQSFdmE0vQw35z2sxgOg3nRsEm2cWnQ0LnCBhPVYgndDYEgjMZB+gnNZUTKCJdG+Ul0DXrqYWy2mTvAaZVmNCU=
+	t=1707960607; cv=none; b=O9Go4FrXXeDe4RsJVv5MZjXnSTA0e5ry+w16NoprBHUeVcwS/SpN3Z3OwC+0g/Bfx8D+dzSgedktHDsupWghzVKvgWKx1E7WbvK6upFDIs54GXl2Zp9BWrHvRbwDbRSkl9h8f0cPsFS//fStQxWr0rPYkpUmpYjlldLhqpcTWbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707942947; c=relaxed/simple;
-	bh=AwNGRr3P6UeHkwkfGk+RMyvN6HM4hjPVJ6icGLILO+M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VKmrAe2tGdwqJitmwgomGpFfZa/o+lhlg4PLaV74Rv4kqr3aaQqyqswQOiKZ4qiuRblakKxq162sy1zt7Cn0ACsbJbXbsRTfAhi0pegf6nNQb5wvVKZRVZX6JVa3V44jyEWlOhT3uNirlJgda+mnod+O1qjhT56S05ekklYA77k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UTYJ8qsH; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5610cc8cc1aso175462a12.1;
-        Wed, 14 Feb 2024 12:35:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1707942944; x=1708547744; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZoK5DDGECT3y2yC/4x+K2eF6VlIMfrM4/DtWMEfIDm0=;
-        b=UTYJ8qsH4s4MNop4dH3rWrTr5ge1/TZOGE0HYQJUu+BRLNRP/B6DN8oQiTNxodLkBe
-         0jmREJQK/17VIENUlKxqWI+kMn1nhvs5RWM7r3gYFX3wfZoZGgTZyvq8dJIiyaEo9Y35
-         3y9OtkZo13RS/ZPnuSefruOOfdCvL8efOgfEsh714ZwbyPBh3X0ZJ4Tl7fOrYGC1xJDq
-         CXd1O2oL7E7r3VT9Kv3UG1pl/+Nb2kX9nzYNPniB2MJe01DQUAetWuwaqF+MCLjwFkHf
-         kLw7zNEBT7KlB9rkSpHCOAi9DyaSW3w9H6YYWNODFJY9dBpvBgnwJvU/7ROEgfEVhF6T
-         tV9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1707942944; x=1708547744;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZoK5DDGECT3y2yC/4x+K2eF6VlIMfrM4/DtWMEfIDm0=;
-        b=Y/80MWuihCm1/0M4JZNEfvCXId2YjtJizOdd1Z1j3J5cIcKg5ozpyLTF/kGXr32fug
-         bKxbeuTynCFeNf+Xi+6cs0uVgu+ZKqT9kd8uTl3sNjUnuOMXXiAqA8q2irO2K8FoS3WZ
-         8IxrWDz75T03NyJKI2R0ZZwrYMUQdORqcjhPQtFAiFPz1xHgv1B+HblIPf7C3HKcmmqV
-         wYfo+lXknI4JrTUpaMXN6OipuDti2V/8E/xhU6Df6wxzcpbYagOtbZpnL8jbF1EK+R9D
-         BV6SqSNNMXgI/8/YP/sYQfNvDk4LVESKVkOAzD49gpAKXHxu6fSbXxFDHCmMNoj2eM1L
-         FIxg==
-X-Forwarded-Encrypted: i=1; AJvYcCUYg90tNju/WOUHaA3NVDN75C+8gcrc7lLZi34+Z1+YJz+tTsromIABT9EuLEdSkfMTfD2C907Iqg29iL/dTnHbQqY8y/i8Yg/ODGlg8hlhHs9pWVMxBO4tfk0EFRCDJtitZK+g
-X-Gm-Message-State: AOJu0Yy1m30Gog8mMztmvZVV0W4VhUutvj4AEkrYuyWanot9rcWDK7Zb
-	+K2QZfvhSxdc818yFqyHTb40h/EQmGTeV502mMae8MTKLYj87o58
-X-Google-Smtp-Source: AGHT+IE+6v6GkktwOFy5sYNfQpUQjHr1S06/NsGtwNn3OxmYTmNEbUvMzaogP/sq4WjmIpKbJQCNrg==
-X-Received: by 2002:a05:6402:2ce:b0:563:7ee0:b865 with SMTP id b14-20020a05640202ce00b005637ee0b865mr1930319edx.15.1707942944090;
-        Wed, 14 Feb 2024 12:35:44 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWNoa72Uu049WhSseEkbY6cpFGS1+Y7YTmDO7b4fU8At5Xq076737IJXdhaU2dEVwGWonzTMEUIlohLFHnCfBszBvLRR4bgUEXZejEEBwU/aRkosYABU9RauERH6+i6yTiQOJXMEmVbRoV1txWhydTAlG8OJpMjdwn5ixSkvsuFa7daogC9HQXDQXrOFO+YEgbK9jUxWdjpxnPdXXy+aNZB2XKSRQ6NlulC2ZhTy/ju2OtUTaMqGhia7Fv1AwMBy2wfIuXXuL9hq9SZYdl6SRFNzybrqP3gl4sskhVFXp5R5FaBcWqhhXg/xoYF6yFUslGtJG9VG+Ueu/vQEoQAvG8ErvJW9jEWSYm/4JA8radzy1/Ml/CmfxGJ/3P1L1xgnGSRsZBBcfqx16o7/CvLrRdshktygZrXw6HwTewDf/IBTbN6l4Dp4/2M/2BqO3mBNoEahyxDAOC4HX+FSJcdpJIlQN5jwvY5bHjNJhUaoAsi7PNwYZllhxUGrb1/tvRKhh2+qSQgFU65ZdnIjDxRJEYFZUB0vIBdrZQzE6i6SZorAzrNvWSKje9VY/+G04TNApmG5UAPTShhfQR/XaEKyd0O/psySHsdeWDKIiSVo7hoLCqhpUi8Ww==
-Received: from jernej-laptop.localnet (86-58-6-171.dynamic.telemach.net. [86.58.6.171])
-        by smtp.gmail.com with ESMTPSA id fe9-20020a056402390900b00561ffe7adb2sm1627977edb.1.2024.02.14.12.35.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Feb 2024 12:35:43 -0800 (PST)
-From: Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To: Vasily Khoruzhick <anarsoul@gmail.com>,
- Yangtao Li <tiny.windzz@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
- Samuel Holland <samuel@sholland.org>, Andre Przywara <andre.przywara@arm.com>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+	s=arc-20240116; t=1707960607; c=relaxed/simple;
+	bh=j4y+oYzFDpLtjS+IP4m5Jl8dpeyTDhYGTff+PyAWbfg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=oCvC5QqJhut6+WLmga2eVHr2Zi6QMAL8nOkgYSLgFAT+alXUH8MwYTnYssPD4uM87YjVwsMi1vuvZw4g6W3qN9rPi37+9kTI3EPNQm+V+I5TWAfV8FiPd7Zx286yZjz++PDMMzNVNytFzRi4ZLv9/SB3D0Y4GX3JsC4V3+fCXGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 394141FB;
+	Wed, 14 Feb 2024 17:30:45 -0800 (PST)
+Received: from minigeek.lan (unknown [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 12C383F762;
+	Wed, 14 Feb 2024 17:30:01 -0800 (PST)
+Date: Thu, 15 Feb 2024 01:28:47 +0000
+From: Andre Przywara <andre.przywara@arm.com>
+To: Jernej =?UTF-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+Cc: Vasily Khoruzhick <anarsoul@gmail.com>, Yangtao Li
+ <tiny.windzz@gmail.com>, Chen-Yu Tsai <wens@csie.org>, Samuel Holland
+ <samuel@sholland.org>, "Rafael J . Wysocki" <rafael@kernel.org>, Daniel
+ Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
  Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Martin Botka <martin.botka@somainline.org>,
- Maksim Kiselev <bigunclemax@gmail.com>,
- Bob McChesney <bob@electricworry.net>, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-sunxi@lists.linux.dev
-Subject:
- Re: [PATCH v4 4/7] thermal: sun8i: extend H6 calibration to support 4 sensors
-Date: Wed, 14 Feb 2024 21:35:42 +0100
-Message-ID: <10416904.nUPlyArG6x@jernej-laptop>
-In-Reply-To: <20240209144221.3602382-5-andre.przywara@arm.com>
-References:
- <20240209144221.3602382-1-andre.przywara@arm.com>
- <20240209144221.3602382-5-andre.przywara@arm.com>
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
+ <conor+dt@kernel.org>, Martin Botka <martin.botka@somainline.org>, Maksim
+ Kiselev <bigunclemax@gmail.com>, Bob McChesney <bob@electricworry.net>,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v4 1/7] soc: sunxi: sram: export register 0 for THS on
+ H616
+Message-ID: <20240215012847.7d0eeda9@minigeek.lan>
+In-Reply-To: <2172811.irdbgypaU6@jernej-laptop>
+References: <20240209144221.3602382-1-andre.przywara@arm.com>
+	<20240209144221.3602382-2-andre.przywara@arm.com>
+	<2172811.irdbgypaU6@jernej-laptop>
+Organization: Arm Ltd.
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Dne petek, 09. februar 2024 ob 15:42:18 CET je Andre Przywara napisal(a):
-> From: Maksim Kiselev <bigunclemax@gmail.com>
-> 
-> The H616 SoC resembles the H6 thermal sensor controller, with a few
-> changes like four sensors.
-> 
-> Extend sun50i_h6_ths_calibrate() function to support calibration of
-> these sensors.
-> 
-> Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
-> Co-developed-by: Martin Botka <martin.botka@somainline.org>
-> Reviewed-by: Andre Przywara <andre.przywara@arm.com>
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+On Wed, 14 Feb 2024 21:29:30 +0100
+Jernej =C5=A0krabec <jernej.skrabec@gmail.com> wrote:
 
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Hi Jernej,
 
-Best regards,
-Jernej
+thanks for having a look and the tags on the other patches!
 
+> Dne petek, 09. februar 2024 ob 15:42:15 CET je Andre Przywara napisal(a):
+> > The Allwinner H616 SoC contains a mysterious bit at register offset 0x0
+> > in the SRAM control block. If bit 16 is set (the reset value), the
+> > temperature readings of the THS are way off, leading to reports about
+> > 200C, at normal ambient temperatures. Clearing this bits brings the
+> > reported values down to reasonable ranges.
+> > The BSP code clears this bit in firmware (U-Boot), and has an explicit
+> > comment about this, but offers no real explanation.
+> >=20
+> > Since we should not rely on firmware settings, allow other code (the THS
+> > driver) to access this register, by exporting it through the already
+> > existing regmap. This mimics what we already do for the LDO control and
+> > the EMAC register. =20
+>=20
+> Are you sure that this bit doesn't control actual SRAM region?
+
+Pretty much so, yes: I did some experiments from U-Boot:
+I filled SRAM C with some pattern, then read this back. Then flipped bit
+16, read again: same result. Then wrote something again and read it
+back: no change. In fact no bits at 0x3000000 had any effect on SRAM
+accessibility, only clearing bit 24 in 0x3000004 made the whole SRAM C
+(0x28000-0x47fff) go read-as-zero/write-ignore, from the CPU side.
+
+I then triggered the THS device, to do temperature readings, but
+this didn't change a single byte in the SRAM regions, with or without
+bit 16 set. It only changed the returned values, at 0x50704c0.
+
+So yes, I am pretty certain there is no SRAM region that gets switched.
+Even if we would want to claim there is: I wouldn't know which
+address values to put into the SRAM DT node.
+
+So I guess it's another example of: oh, we have this spare bit here. Or
+it's some kind of chicken bit? I don't know, and I think the BSP code
+we have seen didn't offer an explanation as well.
+
+Cheers,
+Andre
+>=20
+> Best regards,
+> Jernej
+>=20
+> >=20
+> > Since this bit is in the very same register as the actual SRAM switch,
+> > we need to change the regmap lock to the SRAM lock. Fortunately regmap
+> > has provisions for that, so we just need to hook in there.
+> >=20
+> > Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> > ---
+> >  drivers/soc/sunxi/sunxi_sram.c | 23 +++++++++++++++++++++++
+> >  1 file changed, 23 insertions(+)
+> >=20
+> > diff --git a/drivers/soc/sunxi/sunxi_sram.c b/drivers/soc/sunxi/sunxi_s=
+ram.c
+> > index 4458b2e0562b0..71cdd1b257eeb 100644
+> > --- a/drivers/soc/sunxi/sunxi_sram.c
+> > +++ b/drivers/soc/sunxi/sunxi_sram.c
+> > @@ -287,6 +287,7 @@ EXPORT_SYMBOL(sunxi_sram_release);
+> >  struct sunxi_sramc_variant {
+> >  	int num_emac_clocks;
+> >  	bool has_ldo_ctrl;
+> > +	bool has_ths_offset;
+> >  };
+> > =20
+> >  static const struct sunxi_sramc_variant sun4i_a10_sramc_variant =3D {
+> > @@ -308,8 +309,10 @@ static const struct sunxi_sramc_variant sun50i_a64=
+_sramc_variant =3D {
+> > =20
+> >  static const struct sunxi_sramc_variant sun50i_h616_sramc_variant =3D {
+> >  	.num_emac_clocks =3D 2,
+> > +	.has_ths_offset =3D true,
+> >  };
+> > =20
+> > +#define SUNXI_SRAM_THS_OFFSET_REG	0x0
+> >  #define SUNXI_SRAM_EMAC_CLOCK_REG	0x30
+> >  #define SUNXI_SYS_LDO_CTRL_REG		0x150
+> > =20
+> > @@ -318,6 +321,8 @@ static bool sunxi_sram_regmap_accessible_reg(struct=
+ device *dev,
+> >  {
+> >  	const struct sunxi_sramc_variant *variant =3D dev_get_drvdata(dev);
+> > =20
+> > +	if (reg =3D=3D SUNXI_SRAM_THS_OFFSET_REG && variant->has_ths_offset)
+> > +		return true;
+> >  	if (reg >=3D SUNXI_SRAM_EMAC_CLOCK_REG &&
+> >  	    reg <  SUNXI_SRAM_EMAC_CLOCK_REG + variant->num_emac_clocks * 4)
+> >  		return true;
+> > @@ -327,6 +332,21 @@ static bool sunxi_sram_regmap_accessible_reg(struc=
+t device *dev,
+> >  	return false;
+> >  }
+> > =20
+> > +
+> > +static void sunxi_sram_lock(void *_lock)
+> > +{
+> > +	spinlock_t *lock =3D _lock;
+> > +
+> > +	spin_lock(lock);
+> > +}
+> > +
+> > +static void sunxi_sram_unlock(void *_lock)
+> > +{
+> > +	spinlock_t *lock =3D _lock;
+> > +
+> > +	spin_unlock(lock);
+> > +}
+> > +
+> >  static struct regmap_config sunxi_sram_regmap_config =3D {
+> >  	.reg_bits       =3D 32,
+> >  	.val_bits       =3D 32,
+> > @@ -336,6 +356,9 @@ static struct regmap_config sunxi_sram_regmap_confi=
+g =3D {
+> >  	/* other devices have no business accessing other registers */
+> >  	.readable_reg	=3D sunxi_sram_regmap_accessible_reg,
+> >  	.writeable_reg	=3D sunxi_sram_regmap_accessible_reg,
+> > +	.lock		=3D sunxi_sram_lock,
+> > +	.unlock		=3D sunxi_sram_unlock,
+> > +	.lock_arg	=3D &sram_lock,
+> >  };
+> > =20
+> >  static int __init sunxi_sram_probe(struct platform_device *pdev)
+> >  =20
+>=20
+>=20
+>=20
+>=20
+>=20
 
 
