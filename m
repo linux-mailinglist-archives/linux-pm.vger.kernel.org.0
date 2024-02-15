@@ -1,352 +1,257 @@
-Return-Path: <linux-pm+bounces-3965-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3966-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1DB6856E57
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 21:11:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECAEF856F2F
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 22:18:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3DD69B21369
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 20:11:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6528D1F25064
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 21:18:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F5D413AA35;
-	Thu, 15 Feb 2024 20:10:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFD4313B79F;
+	Thu, 15 Feb 2024 21:18:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jxr7jadZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C21D241A81;
-	Thu, 15 Feb 2024 20:10:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8B5513B2B0;
+	Thu, 15 Feb 2024 21:18:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708027853; cv=none; b=YGFZkw/RsnK/PXvvGZ6Jtzt7/BL23h5pElCyILpUTz27GGMDHqeEfC4MUnmW3oWRVZ7BlQDw96F5Fm2LE8T0Xn2SOfaRg0Z5eDhjeavdrHZqpRp4N+ceAl75PaDcPb2kH1gg1ls6+x06+/iHWWxahuAJmq/1myyOaq7ZdatwKgE=
+	t=1708031892; cv=none; b=FfCnyxE2WZXwHnP5fc/pa8DT9WiS7dYYfNS+B4a5imz3YMLwi8y1onY8Lf8hUr3LNrDH+n+/QiL+OA9cHGNwMjpPVHlQNp1JAsmgmpClhlLxFKL+p/XNcNiJkTJd8/MX+dWIp/asOjP3zBqChtIbhQYhfGqkUa6HW26ZZeKxTfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708027853; c=relaxed/simple;
-	bh=KWacMN9bKt8TXc2E1qM1MQU5P2gj1Hsam/+L01L4dKc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TykVS5OdMk5BbnOKWlkH8tz6sZ8dQlTo8yB+EIzNTEWRphLtucsHyWnDM1qTxuOboP+atylSAaJlikSuAPCsWS2UeEAezgZdv0EieRWBT5Dmhpq0cGHPD4lZAGzMVzwn+5yNXcCijn2/09/00TJATWk6STqYrVPivWcPuNm1VV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+	s=arc-20240116; t=1708031892; c=relaxed/simple;
+	bh=MEKQInLFoLIrFe/RI2hTv8m7ddPPsJ8B+2TSmf/ILvk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OSqAakG1dsZjeYp4/UTNC3zd3m1lEMFnm9/1f+gMHdP0Jjd7Bow8S7f/1EndT3mSJrv3KcHxXCjB18AQH7Magk8nNtoDnn/wEtsZ8HSG5QgYMfXGt6zcg8KSiw/yiayHhcp99+v9sG3fLdg5Mbc6llndehYjimAcvSSHSncUg3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jxr7jadZ; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-59d8455a001so164702eaf.0;
-        Thu, 15 Feb 2024 12:10:51 -0800 (PST)
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-411d715c401so10773375e9.1;
+        Thu, 15 Feb 2024 13:18:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1708031888; x=1708636688; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aS4xTIctADjL/du4nbroj5ubyuOnz8QYFJw0VPl01nY=;
+        b=Jxr7jadZSa3kSBXty2V68AouIcsPcUk15QvVjpCtHXDZSM8FLcp5+F6vc9ROYv7zGY
+         DO76pj21Gzy9EmZlUiHg0fHm3oAsmOhMb5QyNad37VWocWWuIQOE/u+Lbcuz8xsmLno8
+         c6KieYrRmKWykl2yY7p2JCX8fidUXbj8k9TTjgdfWR12AnqQQNaprihkF3Plg7tBsLkr
+         kuOqI6jVRKZ+Qy+7tUtrE+5oZoIo/mLNpJ/V94cbovmwSIMwGow8KGWnZjhjUxXfbL1U
+         3wEv/BpeXx3r1ok4RuCdHPlAiTSMt4mCtimL1h6jvgog7ZFVVoqk7eyiEoHD71Z4mQOM
+         AtKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708027851; x=1708632651;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1708031888; x=1708636688;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=V5QgqQoXz8wizig56vqi0Oac+indEXSPpBlHYNqWGu8=;
-        b=UY3NiuWZk29xW0BRkoQ44vxNCLg/rvszwHUxKby9x63trdrYtydkVvUY1/tZntEDm1
-         MQoWWHZJFbAWEsH8XINTXww38aHxyvyFovq2Y6gwvXmrRZXLdE+71HKA3iix+/cSpkxt
-         k8S6HA1Yt3HlSM0WHdWYwihrK4Ac+1w9Kv4ZJWHiDSrfuLx3XwvpEN+m/We5q1wkDaAv
-         BeoHX7sq5EU1ShxYwk6TBwjNKI5e1F9C86J5/i+TC9rz7ispJxKSzkcpWaQJ8njBm+Xv
-         Y6eV2+dcM9acxfVhvu5MvlLvxShPy1k5R6QJwauZTXiCqPB8EIZRz/TrGx2l6oTCbbUe
-         yZ3w==
-X-Forwarded-Encrypted: i=1; AJvYcCUqeQiV2wpLNTEY3QFABvo47g6vaDGT2Fu9HcTyuuNs+lkHq+HBeGjbqKGUdplB6kRXRBYAENgPLYfbS4vudJHiY/O1R/VtN0EzdZV7XYmrfTfqiiA/zVPzr+p3Sw1kXJDVZO2mLntUR2VjE33rpqAW9E47tEwDsbC5Sp3FcjgZPgGo7oLJCqiVekl6Y2dXcDq7cBC6xMfpKvKt6FDeCQT+gdJSvzQRFO2DN5jtpCmO88UdcH/t111L/N8qO7v3RLEOhoHiTnIkiRakaYhni1YRfJSFrWaL9LWsI9SMNLE2hrHSfQ0adbOZMxJg5NYW6L7OioLQCw==
-X-Gm-Message-State: AOJu0YyIV4HBAGGNY9mQelxNqloQxUZ+6Ov8iWHXXclIA0UUe6wn9L34
-	nfSeVrmGC0vCvBzY/jm9V8TsnNu/1vbjDv3hOwaX1Jkzgrgq/qCJbtblKnVg6AshSS3D6dwOV78
-	6wtCkQ9+gZJvkDti+z0QG1B8Au5g=
-X-Google-Smtp-Source: AGHT+IHkVX1K8sj+CkxR6/GyZWC/g8VGhJA3m1sRCcpy+7lmARmO8dgH6PnptuwtNDNHiVSlDhhEi0CLuZvIHBcTUt0=
-X-Received: by 2002:a05:6820:134d:b0:59f:881f:9318 with SMTP id
- b13-20020a056820134d00b0059f881f9318mr3192843oow.0.1708027850728; Thu, 15 Feb
- 2024 12:10:50 -0800 (PST)
+        bh=aS4xTIctADjL/du4nbroj5ubyuOnz8QYFJw0VPl01nY=;
+        b=VHd44uJWw4szglOFxbwP/OxDp6s0oKvr1mfiBFAzmb63/BPQQFcuH1MNDCHtyC9ykP
+         Bb34QcYWFmQm1GmFW2WFstR21RwRzoKwoOid4TUP7o2DvdIlXDxRAsl+U8gfnWc9EEjC
+         EbhXAfvpjhXGwshPTz7XhxCv/oOWPsYCWBzbS0Lv/nyTIuXqIXSJlZTnI9xpMjx1q8Q3
+         lr4SMgO4Jo74FoFXXnxFGFZzAOGcXjouiBxzgXvu2Afeh+J4MiVeIJsiN6OJpHbhsNg8
+         /1SuLTmkr5eRdD8L9jYSdC6J+Vzlkb6XDmwEVP8d4dnsP4BkogIMhHEM74Q9gC7q8FHA
+         DQ5g==
+X-Forwarded-Encrypted: i=1; AJvYcCVxvst1sUxrzXSgqJRF1uHkEBCRjVB2UYpGKn53RCvswmwB0r6/SSWrQUSgWiOEYBc1cB5vk36OvR72bNv4JzfbNr7+PN44A+autnp3biGbWyRxhu6Bhjx2XyDrOcOHOGoZfbC2
+X-Gm-Message-State: AOJu0YxJUjejH7T20gFkZirqFe7NLIoWGKpza+chJs4i07RRMTlGQd75
+	W8n1N4AFLNMq7ya6V+rH9gfUab4NUlxcDiFL1Ofr2z98hExh6P7Y
+X-Google-Smtp-Source: AGHT+IHp3itPz4qmwUhgnSD35wTOWKCX1VcKqWohIy8udfDUWx+vTB3r1HwCrq2hGaR3wHqzQMg5dQ==
+X-Received: by 2002:a05:600c:3506:b0:412:1f3f:db1b with SMTP id h6-20020a05600c350600b004121f3fdb1bmr1917257wmq.3.1708031887715;
+        Thu, 15 Feb 2024 13:18:07 -0800 (PST)
+Received: from jernej-laptop.localnet (86-58-6-171.dynamic.telemach.net. [86.58.6.171])
+        by smtp.gmail.com with ESMTPSA id z20-20020a05600c221400b0040fddaf9ff4sm271356wml.40.2024.02.15.13.18.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Feb 2024 13:18:07 -0800 (PST)
+From: Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To: Andre Przywara <andre.przywara@arm.com>
+Cc: Vasily Khoruzhick <anarsoul@gmail.com>,
+ Yangtao Li <tiny.windzz@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
+ Samuel Holland <samuel@sholland.org>,
+ "Rafael J . Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Martin Botka <martin.botka@somainline.org>,
+ Maksim Kiselev <bigunclemax@gmail.com>,
+ Bob McChesney <bob@electricworry.net>, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-sunxi@lists.linux.dev
+Subject:
+ Re: [PATCH v4 1/7] soc: sunxi: sram: export register 0 for THS on H616
+Date: Thu, 15 Feb 2024 22:18:05 +0100
+Message-ID: <5752001.DvuYhMxLoT@jernej-laptop>
+In-Reply-To: <20240215012847.7d0eeda9@minigeek.lan>
+References:
+ <20240209144221.3602382-1-andre.przywara@arm.com>
+ <2172811.irdbgypaU6@jernej-laptop> <20240215012847.7d0eeda9@minigeek.lan>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <Zbp5xzmFhKDAgHws@shell.armlinux.org.uk> <E1rVDmP-0027YJ-EW@rmk-PC.armlinux.org.uk>
-In-Reply-To: <E1rVDmP-0027YJ-EW@rmk-PC.armlinux.org.uk>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 15 Feb 2024 21:10:39 +0100
-Message-ID: <CAJZ5v0hY_LXp41WMVPhiLosPe7YVzF38Uz=EhmJqVwqFn==Upw@mail.gmail.com>
-Subject: Re: [PATCH RFC v4 01/15] ACPI: Only enumerate enabled (or functional)
- processor devices
-To: Russell King <rmk+kernel@armlinux.org.uk>
-Cc: linux-pm@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, kvmarm@lists.linux.dev, x86@kernel.org, 
-	acpica-devel@lists.linuxfoundation.org, linux-csky@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-ia64@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, Salil Mehta <salil.mehta@huawei.com>, 
-	Jean-Philippe Brucker <jean-philippe@linaro.org>, jianyong.wu@arm.com, justin.he@arm.com, 
-	James Morse <james.morse@arm.com>, Jonathan Cameron <Jonathan.Cameron@huawei.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Jan 31, 2024 at 5:49=E2=80=AFPM Russell King <rmk+kernel@armlinux.o=
-rg.uk> wrote:
->
-> From: James Morse <james.morse@arm.com>
->
-> Today the ACPI enumeration code 'visits' all devices that are present.
->
-> This is a problem for arm64, where CPUs are always present, but not
-> always enabled. When a device-check occurs because the firmware-policy
-> has changed and a CPU is now enabled, the following error occurs:
-> | acpi ACPI0007:48: Enumeration failure
->
-> This is ultimately because acpi_dev_ready_for_enumeration() returns
-> true for a device that is not enabled. The ACPI Processor driver
-> will not register such CPUs as they are not 'decoding their resources'.
->
-> ACPI allows a device to be functional instead of maintaining the
-> present and enabled bit, but we can't simply check the enabled bit
-> for all devices since firmware can be buggy.
->
-> If ACPI indicates that the device is present and enabled, then all well
-> and good, we can enumate it. However, if the device is present and not
-> enabled, then we also check whether the device is a processor device
-> to limit the impact of this new check to just processor devices.
->
-> This avoids enumerating present && functional processor devices that
-> are not enabled.
->
-> Signed-off-by: James Morse <james.morse@arm.com>
-> Co-developed-by: Rafael J. Wysocki <rjw@rjwysocki.net>
-> Tested-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> ---
-> Changes since RFC v2:
->  * Incorporate comment suggestion by Gavin Shan.
-> Changes since RFC v3:
->  * Fixed "sert" typo.
-> Changes since RFC v3 (smaller series):
->  * Restrict checking the enabled bit to processor devices, update
->    commit comments.
->  * Use Rafael's suggestion in
->    https://lore.kernel.org/r/5760569.DvuYhMxLoT@kreacher
->  * Updated with a fix - see:
->    https://lore.kernel.org/all/Zbe8WQRASx6D6RaG@shell.armlinux.org.uk/
-> ---
->  drivers/acpi/acpi_processor.c | 11 +++++++++
->  drivers/acpi/device_pm.c      |  2 +-
->  drivers/acpi/device_sysfs.c   |  2 +-
->  drivers/acpi/internal.h       |  4 ++-
->  drivers/acpi/property.c       |  2 +-
->  drivers/acpi/scan.c           | 46 +++++++++++++++++++++++++++--------
->  6 files changed, 53 insertions(+), 14 deletions(-)
->
-> diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processor.=
-c
-> index 4fe2ef54088c..cf7c1cca69dd 100644
-> --- a/drivers/acpi/acpi_processor.c
-> +++ b/drivers/acpi/acpi_processor.c
-> @@ -626,6 +626,17 @@ static struct acpi_scan_handler processor_handler =
+Dne =C4=8Detrtek, 15. februar 2024 ob 02:28:47 CET je Andre Przywara napisa=
+l(a):
+> On Wed, 14 Feb 2024 21:29:30 +0100
+> Jernej =C5=A0krabec <jernej.skrabec@gmail.com> wrote:
+>=20
+> Hi Jernej,
+>=20
+> thanks for having a look and the tags on the other patches!
+>=20
+> > Dne petek, 09. februar 2024 ob 15:42:15 CET je Andre Przywara napisal(a=
+):
+> > > The Allwinner H616 SoC contains a mysterious bit at register offset 0=
+x0
+> > > in the SRAM control block. If bit 16 is set (the reset value), the
+> > > temperature readings of the THS are way off, leading to reports about
+> > > 200C, at normal ambient temperatures. Clearing this bits brings the
+> > > reported values down to reasonable ranges.
+> > > The BSP code clears this bit in firmware (U-Boot), and has an explicit
+> > > comment about this, but offers no real explanation.
+> > >=20
+> > > Since we should not rely on firmware settings, allow other code (the =
+THS
+> > > driver) to access this register, by exporting it through the already
+> > > existing regmap. This mimics what we already do for the LDO control a=
+nd
+> > > the EMAC register. =20
+> >=20
+> > Are you sure that this bit doesn't control actual SRAM region?
+>=20
+> Pretty much so, yes: I did some experiments from U-Boot:
+> I filled SRAM C with some pattern, then read this back. Then flipped bit
+> 16, read again: same result. Then wrote something again and read it
+> back: no change. In fact no bits at 0x3000000 had any effect on SRAM
+> accessibility, only clearing bit 24 in 0x3000004 made the whole SRAM C
+> (0x28000-0x47fff) go read-as-zero/write-ignore, from the CPU side.
+>=20
+> I then triggered the THS device, to do temperature readings, but
+> this didn't change a single byte in the SRAM regions, with or without
+> bit 16 set. It only changed the returned values, at 0x50704c0.
+>=20
+> So yes, I am pretty certain there is no SRAM region that gets switched.
+> Even if we would want to claim there is: I wouldn't know which
+> address values to put into the SRAM DT node.
+>=20
+> So I guess it's another example of: oh, we have this spare bit here. Or
+> it's some kind of chicken bit? I don't know, and I think the BSP code
+> we have seen didn't offer an explanation as well.
+>=20
+
+It would be nice to mention this in commit message.
+
+> Cheers,
+> Andre
+> >=20
+> > Best regards,
+> > Jernej
+> >=20
+> > >=20
+> > > Since this bit is in the very same register as the actual SRAM switch,
+> > > we need to change the regmap lock to the SRAM lock. Fortunately regmap
+> > > has provisions for that, so we just need to hook in there.
+> > >=20
+> > > Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+> > > ---
+> > >  drivers/soc/sunxi/sunxi_sram.c | 23 +++++++++++++++++++++++
+> > >  1 file changed, 23 insertions(+)
+> > >=20
+> > > diff --git a/drivers/soc/sunxi/sunxi_sram.c b/drivers/soc/sunxi/sunxi=
+_sram.c
+> > > index 4458b2e0562b0..71cdd1b257eeb 100644
+> > > --- a/drivers/soc/sunxi/sunxi_sram.c
+> > > +++ b/drivers/soc/sunxi/sunxi_sram.c
+> > > @@ -287,6 +287,7 @@ EXPORT_SYMBOL(sunxi_sram_release);
+> > >  struct sunxi_sramc_variant {
+> > >  	int num_emac_clocks;
+> > >  	bool has_ldo_ctrl;
+> > > +	bool has_ths_offset;
+> > >  };
+> > > =20
+> > >  static const struct sunxi_sramc_variant sun4i_a10_sramc_variant =3D {
+> > > @@ -308,8 +309,10 @@ static const struct sunxi_sramc_variant sun50i_a=
+64_sramc_variant =3D {
+> > > =20
+> > >  static const struct sunxi_sramc_variant sun50i_h616_sramc_variant =
 =3D {
->         },
->  };
->
-> +bool acpi_device_is_processor(const struct acpi_device *adev)
-> +{
-> +       if (adev->device_type =3D=3D ACPI_BUS_TYPE_PROCESSOR)
-> +               return true;
-> +
-> +       if (adev->device_type !=3D ACPI_BUS_TYPE_DEVICE)
-> +               return false;
-> +
-> +       return acpi_scan_check_handler(adev, &processor_handler);
-> +}
-> +
->  static int acpi_processor_container_attach(struct acpi_device *dev,
->                                            const struct acpi_device_id *i=
-d)
->  {
-> diff --git a/drivers/acpi/device_pm.c b/drivers/acpi/device_pm.c
-> index 3b4d048c4941..e3c80f3b3b57 100644
-> --- a/drivers/acpi/device_pm.c
-> +++ b/drivers/acpi/device_pm.c
-> @@ -313,7 +313,7 @@ int acpi_bus_init_power(struct acpi_device *device)
->                 return -EINVAL;
->
->         device->power.state =3D ACPI_STATE_UNKNOWN;
-> -       if (!acpi_device_is_present(device)) {
-> +       if (!acpi_dev_ready_for_enumeration(device)) {
->                 device->flags.initialized =3D false;
->                 return -ENXIO;
->         }
-> diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysfs.c
-> index 23373faa35ec..a0256d2493a7 100644
-> --- a/drivers/acpi/device_sysfs.c
-> +++ b/drivers/acpi/device_sysfs.c
-> @@ -141,7 +141,7 @@ static int create_pnp_modalias(const struct acpi_devi=
-ce *acpi_dev, char *modalia
->         struct acpi_hardware_id *id;
->
->         /* Avoid unnecessarily loading modules for non present devices. *=
-/
-> -       if (!acpi_device_is_present(acpi_dev))
-> +       if (!acpi_dev_ready_for_enumeration(acpi_dev))
->                 return 0;
->
->         /*
-> diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
-> index 6588525c45ef..1bc8b6db60c5 100644
-> --- a/drivers/acpi/internal.h
-> +++ b/drivers/acpi/internal.h
-> @@ -62,6 +62,8 @@ void acpi_sysfs_add_hotplug_profile(struct acpi_hotplug=
-_profile *hotplug,
->  int acpi_scan_add_handler_with_hotplug(struct acpi_scan_handler *handler=
-,
->                                        const char *hotplug_profile_name);
->  void acpi_scan_hotplug_enabled(struct acpi_hotplug_profile *hotplug, boo=
-l val);
-> +bool acpi_scan_check_handler(const struct acpi_device *adev,
-> +                            struct acpi_scan_handler *handler);
->
->  #ifdef CONFIG_DEBUG_FS
->  extern struct dentry *acpi_debugfs_dir;
-> @@ -121,7 +123,6 @@ int acpi_device_setup_files(struct acpi_device *dev);
->  void acpi_device_remove_files(struct acpi_device *dev);
->  void acpi_device_add_finalize(struct acpi_device *device);
->  void acpi_free_pnp_ids(struct acpi_device_pnp *pnp);
-> -bool acpi_device_is_present(const struct acpi_device *adev);
->  bool acpi_device_is_battery(struct acpi_device *adev);
->  bool acpi_device_is_first_physical_node(struct acpi_device *adev,
->                                         const struct device *dev);
-> @@ -133,6 +134,7 @@ int acpi_bus_register_early_device(int type);
->  const struct acpi_device *acpi_companion_match(const struct device *dev)=
-;
->  int __acpi_device_uevent_modalias(const struct acpi_device *adev,
->                                   struct kobj_uevent_env *env);
-> +bool acpi_device_is_processor(const struct acpi_device *adev);
->
->  /* ---------------------------------------------------------------------=
------
->                                    Power Resource
-> diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
-> index a6ead5204046..9f8d54038770 100644
-> --- a/drivers/acpi/property.c
-> +++ b/drivers/acpi/property.c
-> @@ -1486,7 +1486,7 @@ static bool acpi_fwnode_device_is_available(const s=
-truct fwnode_handle *fwnode)
->         if (!is_acpi_device_node(fwnode))
->                 return false;
->
-> -       return acpi_device_is_present(to_acpi_device_node(fwnode));
-> +       return acpi_dev_ready_for_enumeration(to_acpi_device_node(fwnode)=
-);
->  }
->
->  static const void *
-> diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-> index e6ed1ba91e5c..fd2e8b3a5749 100644
-> --- a/drivers/acpi/scan.c
-> +++ b/drivers/acpi/scan.c
-> @@ -304,7 +304,7 @@ static int acpi_scan_device_check(struct acpi_device =
-*adev)
->         int error;
->
->         acpi_bus_get_status(adev);
-> -       if (acpi_device_is_present(adev)) {
-> +       if (acpi_dev_ready_for_enumeration(adev)) {
->                 /*
->                  * This function is only called for device objects for wh=
-ich
->                  * matching scan handlers exist.  The only situation in w=
-hich
-> @@ -338,7 +338,7 @@ static int acpi_scan_bus_check(struct acpi_device *ad=
-ev, void *not_used)
->         int error;
->
->         acpi_bus_get_status(adev);
-> -       if (!acpi_device_is_present(adev)) {
-> +       if (!acpi_dev_ready_for_enumeration(adev)) {
->                 acpi_scan_device_not_enumerated(adev);
->                 return 0;
->         }
-> @@ -1917,11 +1917,6 @@ static bool acpi_device_should_be_hidden(acpi_hand=
-le handle)
->         return true;
->  }
->
-> -bool acpi_device_is_present(const struct acpi_device *adev)
-> -{
-> -       return adev->status.present || adev->status.functional;
-> -}
-> -
->  static bool acpi_scan_handler_matching(struct acpi_scan_handler *handler=
-,
->                                        const char *idstr,
->                                        const struct acpi_device_id **matc=
-hid)
-> @@ -1942,6 +1937,18 @@ static bool acpi_scan_handler_matching(struct acpi=
-_scan_handler *handler,
->         return false;
->  }
->
-> +bool acpi_scan_check_handler(const struct acpi_device *adev,
-> +                            struct acpi_scan_handler *handler)
-> +{
-> +       struct acpi_hardware_id *hwid;
-> +
-> +       list_for_each_entry(hwid, &adev->pnp.ids, list)
-> +               if (acpi_scan_handler_matching(handler, hwid->id, NULL))
-> +                       return true;
-> +
-> +       return false;
-> +}
-> +
->  static struct acpi_scan_handler *acpi_scan_match_handler(const char *ids=
-tr,
->                                         const struct acpi_device_id **mat=
-chid)
->  {
-> @@ -2405,16 +2412,35 @@ EXPORT_SYMBOL_GPL(acpi_dev_clear_dependencies);
->   * acpi_dev_ready_for_enumeration - Check if the ACPI device is ready fo=
-r enumeration
->   * @device: Pointer to the &struct acpi_device to check
->   *
-> - * Check if the device is present and has no unmet dependencies.
-> + * Check if the device is functional or enabled and has no unmet depende=
-ncies.
->   *
-> - * Return true if the device is ready for enumeratino. Otherwise, return=
- false.
-> + * Return true if the device is ready for enumeration. Otherwise, return=
- false.
->   */
->  bool acpi_dev_ready_for_enumeration(const struct acpi_device *device)
->  {
->         if (device->flags.honor_deps && device->dep_unmet)
->                 return false;
->
-> -       return acpi_device_is_present(device);
-> +       /*
-> +        * ACPI 6.5's 6.3.7 "_STA (Device Status)" allows firmware to ret=
-urn
-> +        * (!present && functional) for certain types of devices that sho=
-uld be
-> +        * enumerated. Note that the enabled bit should not be set unless=
- the
-> +        * present bit is set.
-> +        *
-> +        * However, limit this only to processor devices to reduce possib=
-le
-> +        * regressions with firmware.
-> +        */
-> +       if (!device->status.present)
-> +               return device->status.functional;
-> +
-> +       /*
-> +        * Fast path - if enabled is set, avoid the more expensive test t=
-o
-> +        * check whether this device is a processor.
-> +        */
-> +       if (device->status.enabled)
-> +               return true;
-> +
-> +       return !acpi_device_is_processor(device);
->  }
->  EXPORT_SYMBOL_GPL(acpi_dev_ready_for_enumeration);
->
-> --
+> > >  	.num_emac_clocks =3D 2,
+> > > +	.has_ths_offset =3D true,
+> > >  };
+> > > =20
+> > > +#define SUNXI_SRAM_THS_OFFSET_REG	0x0
+> > >  #define SUNXI_SRAM_EMAC_CLOCK_REG	0x30
+> > >  #define SUNXI_SYS_LDO_CTRL_REG		0x150
+> > > =20
+> > > @@ -318,6 +321,8 @@ static bool sunxi_sram_regmap_accessible_reg(stru=
+ct device *dev,
+> > >  {
+> > >  	const struct sunxi_sramc_variant *variant =3D dev_get_drvdata(dev);
+> > > =20
+> > > +	if (reg =3D=3D SUNXI_SRAM_THS_OFFSET_REG && variant->has_ths_offset)
+> > > +		return true;
+> > >  	if (reg >=3D SUNXI_SRAM_EMAC_CLOCK_REG &&
+> > >  	    reg <  SUNXI_SRAM_EMAC_CLOCK_REG + variant->num_emac_clocks * 4)
+> > >  		return true;
+> > > @@ -327,6 +332,21 @@ static bool sunxi_sram_regmap_accessible_reg(str=
+uct device *dev,
+> > >  	return false;
+> > >  }
+> > > =20
+> > > +
 
-I can queue this up for 6.9 as it looks like the rest of the series
-will still need some work.  What do you think?
+Nit: superfluous empty line.
+
+Best regards,
+Jernej
+
+> > > +static void sunxi_sram_lock(void *_lock)
+> > > +{
+> > > +	spinlock_t *lock =3D _lock;
+> > > +
+> > > +	spin_lock(lock);
+> > > +}
+> > > +
+> > > +static void sunxi_sram_unlock(void *_lock)
+> > > +{
+> > > +	spinlock_t *lock =3D _lock;
+> > > +
+> > > +	spin_unlock(lock);
+> > > +}
+> > > +
+> > >  static struct regmap_config sunxi_sram_regmap_config =3D {
+> > >  	.reg_bits       =3D 32,
+> > >  	.val_bits       =3D 32,
+> > > @@ -336,6 +356,9 @@ static struct regmap_config sunxi_sram_regmap_con=
+fig =3D {
+> > >  	/* other devices have no business accessing other registers */
+> > >  	.readable_reg	=3D sunxi_sram_regmap_accessible_reg,
+> > >  	.writeable_reg	=3D sunxi_sram_regmap_accessible_reg,
+> > > +	.lock		=3D sunxi_sram_lock,
+> > > +	.unlock		=3D sunxi_sram_unlock,
+> > > +	.lock_arg	=3D &sram_lock,
+> > >  };
+> > > =20
+> > >  static int __init sunxi_sram_probe(struct platform_device *pdev)
+> > >  =20
+> >=20
+> >=20
+> >=20
+> >=20
+> >=20
+>=20
+>=20
+
+
+
+
 
