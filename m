@@ -1,199 +1,155 @@
-Return-Path: <linux-pm+bounces-3947-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3932-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DADC6855D34
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 10:02:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2462855C63
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 09:24:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9197C2820BA
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 09:02:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9AE62284027
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 08:24:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4096813FFB;
-	Thu, 15 Feb 2024 08:58:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86D6F12B87;
+	Thu, 15 Feb 2024 08:24:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="l/9auz30"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Nq3HHa8d"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C6F7219EB;
-	Thu, 15 Feb 2024 08:58:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEDED11CB0
+	for <linux-pm@vger.kernel.org>; Thu, 15 Feb 2024 08:24:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707987507; cv=none; b=gh5iIlZnuHOYJU/b5NxKISPbo13DhAYrFGPbHq7RI6Ot58jbnBSJg7QskIv0c9j5ejxcQw6RfqkAe2eIa7AOHuUyxam1qLPtCBvemwtID8uh7O/j/wRKh+E7K9uLqQN2Cq+yKj1tK0x0jGdKluvYZNqU5YdKqNAaJ+9AHfA7VN8=
+	t=1707985459; cv=none; b=WHSEw5jVGp1cOGJAuHd3o6lHisQ9E3gjMD4klIizOGLJzbk2nNNzp4QIocuoMoC+KELmxGZUhpN8lxdpf26OsWrh/zfhk9ZIz63v2GdNxPDV5I8sN7ER9SsqtLfNkbJ229Ns2RpMqXIMZ3SEZMVIejiYN+lcsXxP3Jl/QpJAmcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707987507; c=relaxed/simple;
-	bh=taIMkmgjssmhEC0ZPe6RFUXMNpIm1p4svqj+IoHOQQ4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=KFdBNGqUKCfUyl9VBj85pNH3eJaxlMDnb328T+AGhV+aha+cfArpTGqeQBhZ7tEqG4VpmVkCa4EYrGvGvFX5N9zSlVN5iKwi0kIANixOE34ujnkseMURWdaBy9CjEHXEXGOU1gDQdSu7D3pC0xWACkJwNh9osTfqaXn7FtRGiss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=l/9auz30; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 41F6icwN032668;
-	Thu, 15 Feb 2024 08:57:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=corp-2023-11-20;
- bh=6KDNlbJKwQaVVi8iZUM/SOJEGq248dU9EixloG0v3NY=;
- b=l/9auz3098bmaqsmPhx4befqpe7lUC7sQOXfkoPnsyctLv1Mn2GvtGrEEonNUz/PRSbK
- vkoPUnDqB5/H1Lk/xiL6Lc4SqkVXy7tfnjLgoenQFTXxoazXYiJbiBRxjYk2nnH5T4Rq
- HhbT71dBV/BV4j2Wes908/FuKQwl6HyKQh0F5RTCQRhT1RuKJgGGBHNKvfC/BScXz9JZ
- 9frLvvg3KxAX9Bl1nZzTkXX4Iwpbgg80Y642hf2JK84tqnFcGXsgTYTi1rVsZuxLisB+
- jF2cGjfsiR8pT25+Oq2XdO/lPWQtElYb/JAjr1I+equ0+Pqtn/ClljB17fD/Pp9uB7oe Mw== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3w91w6sm14-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 15 Feb 2024 08:57:46 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 41F75mac015097;
-	Thu, 15 Feb 2024 08:57:45 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3w5yka73wa-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 15 Feb 2024 08:57:45 +0000
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 41F8vDd5033748;
-	Thu, 15 Feb 2024 08:57:44 GMT
-Received: from mihai.localdomain (ban25x6uut25.us.oracle.com [10.153.73.25])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3w5yka73cg-9;
-	Thu, 15 Feb 2024 08:57:44 +0000
-From: Mihai Carabas <mihai.carabas@oracle.com>
-To: linux-arm-kernel@lists.infradead.org
-Cc: kvm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, catalin.marinas@arm.com, will@kernel.org,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
-        hpa@zytor.com, pbonzini@redhat.com, wanpengli@tencent.com,
-        vkuznets@redhat.com, rafael@kernel.org, daniel.lezcano@linaro.org,
-        akpm@linux-foundation.org, pmladek@suse.com, peterz@infradead.org,
-        dianders@chromium.org, npiggin@gmail.com, rick.p.edgecombe@intel.com,
-        joao.m.martins@oracle.com, juerg.haefliger@canonical.com,
-        mic@digikod.net, mihai.carabas@oracle.com, arnd@arndb.de,
-        ankur.a.arora@oracle.com
-Subject: [PATCH v4 8/8] cpuidle: replace with HAS_CPU_RELAX with HAS_WANTS_IDLE_POLL
-Date: Thu, 15 Feb 2024 09:41:50 +0200
-Message-Id: <1707982910-27680-9-git-send-email-mihai.carabas@oracle.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1707982910-27680-1-git-send-email-mihai.carabas@oracle.com>
-References: <1707982910-27680-1-git-send-email-mihai.carabas@oracle.com>
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-15_08,2024-02-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 bulkscore=0 suspectscore=0
- phishscore=0 adultscore=0 spamscore=0 mlxlogscore=999 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2402150069
-X-Proofpoint-ORIG-GUID: dNXyji989GyJZ4dchNZTScxbHZCJTiW7
-X-Proofpoint-GUID: dNXyji989GyJZ4dchNZTScxbHZCJTiW7
+	s=arc-20240116; t=1707985459; c=relaxed/simple;
+	bh=wnUBH1VhNPx79Exig+hMwiYyDb0NRwe30R1lRnmUHvU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MCla2dh2iNJIVM4A/odgcHPY7CLWppERd0VgMc9KPVjdyDW0g56F+I6ULinaCnPGPzXoSJW4VDuN3WX44Wi4X6/+rVqJsitRSMywYzraTFQjQEjHB7Haa+LJkPBHRlMSCSW13AX6ILk9LArjYYVG6EOCfK+1kke8vLmFMbi4QxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Nq3HHa8d; arc=none smtp.client-ip=209.85.208.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2d0fd07ba8bso6329851fa.1
+        for <linux-pm@vger.kernel.org>; Thu, 15 Feb 2024 00:24:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1707985456; x=1708590256; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=trfg4+xWum33uVUB6CG91+USLu/b7kuYi1txCb8DJCQ=;
+        b=Nq3HHa8dYMZVIBkDryar8Noh33jV/D3gnUSDrskmJgblVFbdVXQumg+Z9tRmw86P4s
+         +saqqTT3Eddz4T+2QnEtRSHYUQ7ivu8tP3e5FrzQNKX5lut7sQl19BgbCkSHRiPyyWkr
+         QS1E+40j6n3nPN6c/5n9DDeHz9L0y9flh6zDBsESyBQm5uXGGrXJMj07hdJVExEP2wgo
+         vVptsoAkcVh+MrN7zQ1Pa+49YgpU6EPnjHXy+CTgawl0CcSYermMgsi8cEc8VlVXWBrm
+         AU2R9FKaGhZph48s1c1nZB85my2JDAH70SuNaLg6SSFUUuyYEiPS5egvEUZK9QW0w38N
+         1Z8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1707985456; x=1708590256;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=trfg4+xWum33uVUB6CG91+USLu/b7kuYi1txCb8DJCQ=;
+        b=i5fm0I6QCcgELuc/i3MIbBJSrDOoe/0DidiTrKM8cKMCOKFCKVyVNzuE81tbdZY2VH
+         01Ad+Z+KG3p6/ochUEhJx7R8GxJTzXza+Cwvo5yPI0NaXNSlvYHPt93jy7/VDs5wSF7y
+         sSlfIz60pmPSB2ETdgnqwl+t5KrmlLQZgN1zGlvvUG4FZsbygEhtEIwxc6dD/MFEKJ0r
+         Rdv8j2E1xd2GexRkxyCmgLiUNeFWNz9eE4MxLeGp6mU9yLQnhboGEuqvgTpTJx0xiugZ
+         ZcXNkID8UvTBTAcKC+dvrQHfWgDt0McgrsZMnayDQ4Q3/a66QUhl7JjbPqiLXDQu9VVX
+         8ikA==
+X-Forwarded-Encrypted: i=1; AJvYcCUvZVp4Ftld3myciaqFexSNz4Rd+JaTIvQqk1WkmPD7HAItyBokxX2D5cUm7AiUDoefK73oKH4IRmdYz0lc5a5wVV/Lgt1XBb8=
+X-Gm-Message-State: AOJu0YzydKpkBFl6Isa+Wn4fcM1LS1VZGi+c9lr6cBk3/4nccDZhf2QQ
+	HNBzvtTo9jjx05PJg6jBIvpf9Gbl9t7DTARodJUETRwuv79dvSSCFvO6m8l4mbk=
+X-Google-Smtp-Source: AGHT+IFB/cl+K8o+EokXbjb+xzVBKV6VljmG+JW9bBjcsAbAP8MBZEpKH7wpdOVZvJhmVzdsaWPCbg==
+X-Received: by 2002:a2e:9a86:0:b0:2d2:f50:5a04 with SMTP id p6-20020a2e9a86000000b002d20f505a04mr124384lji.32.1707985455725;
+        Thu, 15 Feb 2024 00:24:15 -0800 (PST)
+Received: from [192.168.0.22] ([78.10.207.130])
+        by smtp.gmail.com with ESMTPSA id f23-20020a2e9517000000b002d0f3c58e60sm177617ljh.117.2024.02.15.00.24.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Feb 2024 00:24:15 -0800 (PST)
+Message-ID: <98c9d3ce-8a97-499f-b78a-b918a06ec779@linaro.org>
+Date: Thu, 15 Feb 2024 09:24:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] dt-bindings: cpufreq: Add nvmem-cells for chip
+ information
+Content-Language: en-US
+To: Markus Schneider-Pargmann <msp@baylibre.com>,
+ Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Vignesh Raghavendra <vigneshr@ti.com>,
+ Tero Kristo <kristo@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>
+Cc: Andrew Davis <afd@ti.com>, Dhruva Gole <d-gole@ti.com>,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20240206145721.2418893-1-msp@baylibre.com>
+ <20240206145721.2418893-2-msp@baylibre.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240206145721.2418893-2-msp@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Replace ARCH_HAS_CPU_RELAX with ARCH_WANTS_IDLE_POLL for clarity as it controls
-the building of poll_state.
+On 06/02/2024 15:57, Markus Schneider-Pargmann wrote:
+> Add nvmem-cells to describe chip information like chipvariant and
+> chipspeed. If nvmem-cells are used, the syscon property is not necessary
+> anymore.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Acked-by: Andrew Davis <afd@ti.com>
 
-Suggested-by: Will Deacon <will@kernel.org>
-Signed-off-by: Ankur arora <ankur.a.arora@oracle.com>
-Signed-off-by: Mihai Carabas <mihai.carabas@oracle.com>
----
- arch/Kconfig                  | 2 +-
- arch/arm64/Kconfig            | 2 +-
- arch/x86/Kconfig              | 2 +-
- drivers/acpi/processor_idle.c | 4 ++--
- drivers/cpuidle/Makefile      | 2 +-
- include/linux/cpuidle.h       | 2 +-
- 6 files changed, 7 insertions(+), 7 deletions(-)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index 5b2e8a88853c..e7659a3a7d58 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -1363,7 +1363,7 @@ config RELR
- config ARCH_HAS_MEM_ENCRYPT
- 	bool
- 
--config ARCH_HAS_CPU_RELAX
-+config ARCH_WANTS_IDLE_POLL
- 	bool
- 
- config ARCH_HAS_CC_PLATFORM
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index bc628a3165eb..7c963f7c10e4 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -107,7 +107,7 @@ config ARM64
- 	select ARCH_WANT_LD_ORPHAN_WARN
- 	select ARCH_WANTS_NO_INSTR
- 	select ARCH_WANTS_THP_SWAP if ARM64_4K_PAGES
--	select ARCH_HAS_CPU_RELAX
-+	select ARCH_WANTS_IDLE_POLL
- 	select ARCH_HAS_UBSAN_SANITIZE_ALL
- 	select ARM_AMBA
- 	select ARM_ARCH_TIMER
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 8c4312133832..90f5d16be8c0 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -73,7 +73,7 @@ config X86
- 	select ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
- 	select ARCH_HAS_CPU_FINALIZE_INIT
- 	select ARCH_HAS_CPU_PASID		if IOMMU_SVA
--	select ARCH_HAS_CPU_RELAX
-+	select ARCH_WANTS_IDLE_POLL
- 	select ARCH_HAS_CURRENT_STACK_POINTER
- 	select ARCH_HAS_DEBUG_VIRTUAL
- 	select ARCH_HAS_DEBUG_VM_PGTABLE	if !X86_PAE
-diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.c
-index 55437f5e0c3a..6a0a1f16a5c3 100644
---- a/drivers/acpi/processor_idle.c
-+++ b/drivers/acpi/processor_idle.c
-@@ -36,7 +36,7 @@
- #include <asm/cpu.h>
- #endif
- 
--#define ACPI_IDLE_STATE_START	(IS_ENABLED(CONFIG_ARCH_HAS_CPU_RELAX) ? 1 : 0)
-+#define ACPI_IDLE_STATE_START	(IS_ENABLED(CONFIG_ARCH_WANTS_IDLE_POLL) ? 1 : 0)
- 
- static unsigned int max_cstate __read_mostly = ACPI_PROCESSOR_MAX_POWER;
- module_param(max_cstate, uint, 0400);
-@@ -787,7 +787,7 @@ static int acpi_processor_setup_cstates(struct acpi_processor *pr)
- 	if (max_cstate == 0)
- 		max_cstate = 1;
- 
--	if (IS_ENABLED(CONFIG_ARCH_HAS_CPU_RELAX)) {
-+	if (IS_ENABLED(CONFIG_ARCH_WANTS_IDLE_POLL)) {
- 		cpuidle_poll_state_init(drv);
- 		count = 1;
- 	} else {
-diff --git a/drivers/cpuidle/Makefile b/drivers/cpuidle/Makefile
-index d103342b7cfc..23f48d99f0f2 100644
---- a/drivers/cpuidle/Makefile
-+++ b/drivers/cpuidle/Makefile
-@@ -7,7 +7,7 @@ obj-y += cpuidle.o driver.o governor.o sysfs.o governors/
- obj-$(CONFIG_ARCH_NEEDS_CPU_IDLE_COUPLED) += coupled.o
- obj-$(CONFIG_DT_IDLE_STATES)		  += dt_idle_states.o
- obj-$(CONFIG_DT_IDLE_GENPD)		  += dt_idle_genpd.o
--obj-$(CONFIG_ARCH_HAS_CPU_RELAX)	  += poll_state.o
-+obj-$(CONFIG_ARCH_WANTS_IDLE_POLL)	  += poll_state.o
- obj-$(CONFIG_HALTPOLL_CPUIDLE)		  += cpuidle-haltpoll.o
- 
- ##################################################################################
-diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
-index 3183aeb7f5b4..53e55a91d55d 100644
---- a/include/linux/cpuidle.h
-+++ b/include/linux/cpuidle.h
-@@ -275,7 +275,7 @@ static inline void cpuidle_coupled_parallel_barrier(struct cpuidle_device *dev,
- }
- #endif
- 
--#if defined(CONFIG_CPU_IDLE) && defined(CONFIG_ARCH_HAS_CPU_RELAX)
-+#if defined(CONFIG_CPU_IDLE) && defined(CONFIG_ARCH_WANTS_IDLE_POLL)
- void cpuidle_poll_state_init(struct cpuidle_driver *drv);
- #else
- static inline void cpuidle_poll_state_init(struct cpuidle_driver *drv) {}
--- 
-1.8.3.1
+Best regards,
+Krzysztof
 
 
