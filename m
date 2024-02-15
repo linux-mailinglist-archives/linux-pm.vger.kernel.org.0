@@ -1,480 +1,138 @@
-Return-Path: <linux-pm+bounces-3951-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3952-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A14C7855E5F
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 10:40:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39A1A855EA6
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 11:01:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B0421F244B3
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 09:40:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E95D3284B9E
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Feb 2024 10:01:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFA6A17745;
-	Thu, 15 Feb 2024 09:40:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="v+q0Q2s/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20C3D65BC8;
+	Thu, 15 Feb 2024 10:00:57 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC533175AA;
-	Thu, 15 Feb 2024 09:40:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.248
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B686B65BC5;
+	Thu, 15 Feb 2024 10:00:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.237.130.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707990007; cv=none; b=bIl7ISGji6DgA1KTVxj/u6obFxBb4RYWqZvyFzmZKXLxGmy/XKWA3MZlnrDzfavtFYAvombg+FHNrLIijwEjCU8PhWlebWwGdUgxYyJgzMNsvOrckKA32tbnnKh0jOgkd+Tc98VYXHHuXVMggnaRKpVtGbBF4SewG/YCWj5Df2o=
+	t=1707991257; cv=none; b=SbHaQq6Bg6AgnaPw4ZqTU/l0KeB+NNmEnwNYHum/KYFeleHYoJG/DFhVgiOAEQsnv2lnhEuXkjhzPdrUROu9XfZ8H5CjR6U0cYGc4C9GbSnyfkWVGBS1653b08eiiLm7SUGVVOn1+9d/EscnyUWOyV8MZVsCLfcvuTdvT2QwBoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707990007; c=relaxed/simple;
-	bh=9sJ/t8yz8FiGfPdj7FcsLpkudzXIHYEycjw0ff8JTCU=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s0WdDbeeCoKIV439tIWHiOTRlkBL8Z5UUdOa9Aq9OV16YkDU2VYTOOIiE/AUarCfpcU0CSK8cVtfeYzVnTFyh3m2v3I7VU/AD0nnr9BHJjUrWeF/51M9zmevpqE5KWyBJ7vMxDprE/2pH6Y6vXnPtk+fcnrjZ3jf7cFpwa7C880=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=v+q0Q2s/; arc=none smtp.client-ip=198.47.23.248
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-	by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 41F9dvEB082270;
-	Thu, 15 Feb 2024 03:39:57 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1707989997;
-	bh=EkP7vJ1wesG1Us28/BCdSU3PzcUnykpRGLaOIoggQvk=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=v+q0Q2s/2CdX+x43yAzcLcnsSbks5hfFCgAbTTGPaRimY8bJ6r8eVc8OmRgB8azY+
-	 qJJ8V5AbSG0tmrgoqdsxvnSnBwFmPUnMpk3GCQcof8ShDYYuZGU4khPpvEBfETx8uf
-	 VT/oYHLrM0D8Mi35LU7mfcQ1FmaB+/e5hVr+GMHc=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 41F9dvPn120668
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 15 Feb 2024 03:39:57 -0600
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 15
- Feb 2024 03:39:56 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 15 Feb 2024 03:39:56 -0600
-Received: from localhost (dhruva.dhcp.ti.com [172.24.227.68])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 41F9dtrA120656;
-	Thu, 15 Feb 2024 03:39:56 -0600
-Date: Thu, 15 Feb 2024 15:09:55 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-CC: <rafael@kernel.org>, <caleb.connolly@linaro.org>, <lina.iyer@linaro.org>,
-        <lukasz.luba@arm.com>, <quic_manafm@quicinc.com>,
-        <quic_priyjain@quicinc.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <vibhore@ti.com>,
-        <khilman@baylibre.com>
-Subject: Re: [PATCH v1 2/2] PM: QoS: Add a performance QoS
-Message-ID: <20240215093955.mgox2yiaidxh3ktq@dhruva>
-References: <20231213175818.2826876-1-daniel.lezcano@linaro.org>
- <20231213175818.2826876-2-daniel.lezcano@linaro.org>
+	s=arc-20240116; t=1707991257; c=relaxed/simple;
+	bh=aEQWvoXb3fstBlw62tnmDDTFyQZ5jvByM1k8o7XeXJc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CrBAdUOsBHvEWbMqyxTfZgbOLISS+lHOhE2eXXs8yCt+sZGY4ICn2j31ZWOBIOuuaKVVJM5rD/C4WCbNSS6vc0/ed3vovZn+eif+7zQDTcHnfUTGnGxXJ1WX85wYQQLb3giZqrZyRkxc+Bwvu/e7tsqIdExcgGCYNCVNeHA7inY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info; spf=pass smtp.mailfrom=leemhuis.info; arc=none smtp.client-ip=80.237.130.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=leemhuis.info
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=leemhuis.info
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+	by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+	id 1raYXo-00009t-RA; Thu, 15 Feb 2024 11:00:40 +0100
+Message-ID: <9a74676c-0032-4f29-84aa-c91e5ef01aae@leemhuis.info>
+Date: Thu, 15 Feb 2024 11:00:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20231213175818.2826876-2-daniel.lezcano@linaro.org>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] sched/fair: Fix frequency selection for non invariant
+ case
+Content-Language: en-US, de-DE
+To: Greg KH <greg@kroah.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+ Jon Hunter <jonathanh@nvidia.com>, mingo@redhat.com, peterz@infradead.org,
+ juri.lelli@redhat.com, dietmar.eggemann@arm.com, rostedt@goodmis.org,
+ bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+ vschneid@redhat.com, wkarny@gmail.com, qyousef@layalina.io,
+ tglx@linutronix.de, rafael@kernel.org, viresh.kumar@linaro.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+ Thierry Reding <treding@nvidia.com>, Sasha Levin <sashal@nvidia.com>,
+ Laxman Dewangan <ldewangan@nvidia.com>,
+ Shardar Mohammed <smohammed@nvidia.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Linux kernel regressions list <regressions@lists.linux.dev>
+References: <20240114183600.135316-1-vincent.guittot@linaro.org>
+ <6ec54a8f-a602-4f33-96ce-0204f07046e1@nvidia.com>
+ <CAHk-=wgjiVanO4ZS1hy2sfAFTN_pYtQqVQb_g+dbrP34M6xTDw@mail.gmail.com>
+ <CAKfTPtA8W+SijB9D3GtNbC7o_XHUV-umcL6chJQbMDxWeX7exg@mail.gmail.com>
+ <42052f23-d582-4533-a09d-a1de437836b7@leemhuis.info>
+ <2024021545-rise-plot-24c3@gregkh>
+From: Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <2024021545-rise-plot-24c3@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1707991254;5e3a281b;
+X-HE-SMSGID: 1raYXo-00009t-RA
 
-Hi,
-
-On Dec 13, 2023 at 18:58:18 +0100, Daniel Lezcano wrote:
-> Currently cpufreq and devfreq are using the freq QoS to aggregate the
-> requests for frequency ranges.
+On 15.02.24 10:13, Greg KH wrote:
+> On Thu, Feb 15, 2024 at 09:45:01AM +0100, Thorsten Leemhuis wrote:
+>> Linus, what...
+>>
+>> On 14.02.24 18:22, Vincent Guittot wrote:
+>>> On Wed, 14 Feb 2024 at 18:20, Linus Torvalds
+>>> <torvalds@linux-foundation.org> wrote:
+>>>> On Wed, 14 Feb 2024 at 09:12, Jon Hunter <jonathanh@nvidia.com> wrote:
+>>>>> We have also observed a performance degradation on our Tegra platforms
+>>>>> with v6.8-rc1. Unfortunately, the above change does not fix the problem
+>>>>> for us and we are still seeing a performance issue with v6.8-rc4. For
+>>>>> example, running Dhrystone on Tegra234 I am seeing the following ...
+>>>>> [...]
+>>>>> If I revert this change and the following ...
+>>>>>   b3edde44e5d4 ("cpufreq/schedutil: Use a fixed reference frequency")
+>>>>>   f12560779f9d ("sched/cpufreq: Rework iowait boost")
+>>>>>   9c0b4bb7f630 ("sched/cpufreq: Rework schedutil governor
+>>>>> ... then the perf is similar to where it was ...
+>>>>
+>>>> Ok, guys, this whole scheduler / cpufreq rewrite seems to have been
+>>>> completely buggered.
+>>>> [...]
+>>> This should fix it:
+>>> https://lore.kernel.org/lkml/20240117190545.596057-1-vincent.guittot@linaro.org/
+>>
+>> ...do you want me to do in situations like this? I'm asking, as I see
+>> situations like this frequently -- e.g. people reporting problems a
+>> second, third, or fourth time while the fix is already sitting in -next
+>> for a few days.
+>>
+>> Want me to list them in the weekly reports so that you can cherry-pick
+>> them from -next if you want?
 > 
-> However, there are new devices wanting to act not on a frequency range
-> but on a performance index range. Those need also to export to
-> userspace the knob to act on their performance limits.
-> 
-> This change provides a performance limiter QoS based on a minimum /
-> maximum performance values. At init time, the limits of the interval
-> are 0 / 1024. It is up to the backend to convert the 1024 to the
-> maximum performance state. So if the performance must be limited to
-> 50%, it should set to maximum limit to 512 where the backend will end
-> up by converting (max performance index / 2). The same applies for the
-> minimum. Obviously, the min can not be greater than the max.
-> 
->  1. With the example above, if there is a odd number like 5 for the
->  number of performance indexes and we ask for 512 (so 50%), what would
->  be the performance index computed? (5/2=2 or 5/2=3)? (I would say the
->  minimum otherwise we end up with a performance limit greater than
->  what we actually asked for).
-> 
->  2. The conversion from 1024 to a performance index will inevatibly
->  end up to a state above or below the percentage given. Shall it be
->  reflected in the value set? eg. We want to apply a performance limit
->  to be 33% maximum. So it is, 1024 x 0.333333 = 314. If there are 20
->  performance indexes, that will be (20 x 314) / 1024 = 6.13, so index
->  6. Shall we convert this index back to the requested performance
->  limit to (6.13 x 1024) / 20 = 307 ? (So requested is 314 but it is
->  actually 307).
-> 
-> The end goal is to make the freq QoS and perf QoS to co-exist together
-> in the next changes in the different backends. A change of one of the
-> QoS impacts the other. For instance if there are 5 performance states
-> and we set a performance limit to 80%, then the maximum state will 4.
-> 
-> For the long term, when those can co-exist, then we can implement a
-> cooling device based on the performance Qos which will be generic for
-> all devices using this QoS. That will imply the CPUs, the GPUs and any
-> devfreq devices. So devfreq and cpufreq cooling devices can be merged
-> into a single performance cooling device which will be generic for all
-> devices with a performance limit QoS.
-> 
-> In a similar way, in the future, a power QoS could be added also and a
-> power based cooling device. So any device with the energy model and a
-> power capping feature can become a cooling device and the power
-> computation part in the cooling devices will move to the back ends. We
-> will end up with a generic power cooling device compatible with all
-> power capable devices.
-> 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  drivers/base/power/power.h |   2 +
->  drivers/base/power/qos.c   | 158 +++++++++++++++++++++++++-
->  drivers/base/power/sysfs.c |  92 +++++++++++++++
->  include/linux/cpufreq.h    |   2 +
->  include/linux/pm_qos.h     |  42 +++++++
->  kernel/power/qos.c         | 225 +++++++++++++++++++++++++++++++++++++
->  6 files changed, 517 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/base/power/power.h b/drivers/base/power/power.h
-> index 922ed457db19..eb1a77a7a0f4 100644
-> --- a/drivers/base/power/power.h
-> +++ b/drivers/base/power/power.h
-> @@ -78,6 +78,8 @@ extern int pm_qos_sysfs_add_flags(struct device *dev);
->  extern void pm_qos_sysfs_remove_flags(struct device *dev);
->  extern int pm_qos_sysfs_add_latency_tolerance(struct device *dev);
->  extern void pm_qos_sysfs_remove_latency_tolerance(struct device *dev);
-> +extern int pm_qos_sysfs_add_perf_limit(struct device *dev);
-> +extern void pm_qos_sysfs_remove_perf_limit(struct device *dev);
->  extern int dpm_sysfs_change_owner(struct device *dev, kuid_t kuid, kgid_t kgid);
->  
->  #else /* CONFIG_PM */
-> diff --git a/drivers/base/power/qos.c b/drivers/base/power/qos.c
-> index ae0b9d2573ec..a71cff1f8048 100644
-> --- a/drivers/base/power/qos.c
-> +++ b/drivers/base/power/qos.c
-> @@ -128,6 +128,14 @@ s32 dev_pm_qos_read_value(struct device *dev, enum dev_pm_qos_req_type type)
->  		ret = IS_ERR_OR_NULL(qos) ? PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE
->  			: freq_qos_read_value(&qos->freq, FREQ_QOS_MAX);
->  		break;
-> +	case DEV_PM_QOS_MIN_PERF:
-> +		ret =  IS_ERR_OR_NULL(qos) ? PM_QOS_MIN_PERF_DEFAULT_VALUE
-> +			: perf_qos_read_value(&qos->perf, RANGE_QOS_MIN);
-> +		break;
-> +	case DEV_PM_QOS_MAX_PERF:
-> +		ret =  IS_ERR_OR_NULL(qos) ? PM_QOS_MAX_PERF_DEFAULT_VALUE
-> +			: perf_qos_read_value(&qos->perf, RANGE_QOS_MAX);
-> +		break;
->  	default:
->  		WARN_ON(1);
->  		ret = 0;
-> @@ -177,6 +185,10 @@ static int apply_constraint(struct dev_pm_qos_request *req,
->  		ret = pm_qos_update_flags(&qos->flags, &req->data.flr,
->  					  action, value);
->  		break;
-> +	case DEV_PM_QOS_MIN_PERF:
-> +	case DEV_PM_QOS_MAX_PERF:
-> +		ret = perf_qos_apply(&req->data.perf, action, value);
-> +		break;
->  	default:
->  		ret = -EINVAL;
->  	}
-> @@ -223,6 +235,20 @@ static int dev_pm_qos_constraints_allocate(struct device *dev)
->  	c->no_constraint_value = PM_QOS_LATENCY_TOLERANCE_NO_CONSTRAINT;
->  	c->type = PM_QOS_MIN;
->  
-> +	c = &qos->perf.lower_bound;
-> +	plist_head_init(&c->list);
-> +	c->target_value = PM_QOS_MIN_PERF_DEFAULT_VALUE;
-> +	c->default_value = PM_QOS_MIN_PERF_DEFAULT_VALUE;
-> +	c->no_constraint_value = PM_QOS_MIN_PERF_DEFAULT_VALUE;
-> +	c->type = PM_QOS_MAX;
-> +
-> +	c = &qos->perf.upper_bound;
-> +	plist_head_init(&c->list);
-> +	c->target_value = PM_QOS_MAX_PERF_DEFAULT_VALUE;
-> +	c->default_value = PM_QOS_MAX_PERF_DEFAULT_VALUE;
-> +	c->no_constraint_value = PM_QOS_MAX_PERF_DEFAULT_VALUE;
-> +	c->type = PM_QOS_MIN;
-> +
->  	freq_constraints_init(&qos->freq);
->  
->  	INIT_LIST_HEAD(&qos->flags.list);
-> @@ -299,6 +325,20 @@ void dev_pm_qos_constraints_destroy(struct device *dev)
->  		memset(req, 0, sizeof(*req));
->  	}
->  
-> +	c = &qos->perf.lower_bound;
-> +	plist_for_each_entry_safe(req, tmp, &c->list, data.freq.pnode) {
-> +		apply_constraint(req, PM_QOS_REMOVE_REQ,
-> +				 PM_QOS_MIN_PERF_DEFAULT_VALUE);
-> +		memset(req, 0, sizeof(*req));
-> +	}
-> +
-> +	c = &qos->perf.upper_bound;
-> +	plist_for_each_entry_safe(req, tmp, &c->list, data.freq.pnode) {
-> +		apply_constraint(req, PM_QOS_REMOVE_REQ,
-> +				 PM_QOS_MAX_PERF_DEFAULT_VALUE);
-> +		memset(req, 0, sizeof(*req));
-> +	}
-> +	
->  	f = &qos->flags;
->  	list_for_each_entry_safe(req, tmp, &f->list, data.flr.node) {
->  		apply_constraint(req, PM_QOS_REMOVE_REQ, PM_QOS_DEFAULT_VALUE);
-> @@ -349,17 +389,32 @@ static int __dev_pm_qos_add_request(struct device *dev,
->  
->  	req->dev = dev;
->  	req->type = type;
-> -	if (req->type == DEV_PM_QOS_MIN_FREQUENCY)
-> +
-> +	switch (type) {
-> +	case DEV_PM_QOS_MIN_FREQUENCY:
->  		ret = freq_qos_add_request(&dev->power.qos->freq,
->  					   &req->data.freq,
->  					   FREQ_QOS_MIN, value);
-> -	else if (req->type == DEV_PM_QOS_MAX_FREQUENCY)
-> +		break;
-> +	case DEV_PM_QOS_MAX_FREQUENCY:
->  		ret = freq_qos_add_request(&dev->power.qos->freq,
->  					   &req->data.freq,
->  					   FREQ_QOS_MAX, value);
-> -	else
-> +		break;
-> +	case DEV_PM_QOS_MIN_PERF:
-> +		ret = perf_qos_add_request(&dev->power.qos->perf,
-> +					   &req->data.perf,
-> +					   RANGE_QOS_MIN, value);
-> +		break;
-> +	case DEV_PM_QOS_MAX_PERF:
-> +		ret = perf_qos_add_request(&dev->power.qos->perf,
-> +					   &req->data.perf,
-> +					   RANGE_QOS_MAX, value);
-> +		break;
-> +	default:
->  		ret = apply_constraint(req, PM_QOS_ADD_REQ, value);
-> -
-> +		break;
-> +	}
->  	return ret;
->  }
->  
-> @@ -427,6 +482,10 @@ static int __dev_pm_qos_update_request(struct dev_pm_qos_request *req,
->  	case DEV_PM_QOS_MAX_FREQUENCY:
->  		curr_value = req->data.freq.pnode.prio;
->  		break;
-> +	case DEV_PM_QOS_MIN_PERF:
-> +	case DEV_PM_QOS_MAX_PERF:
-> +		curr_value = req->data.perf.pnode.prio;
-> +		break;
->  	case DEV_PM_QOS_FLAGS:
->  		curr_value = req->data.flr.flags;
->  		break;
-> @@ -674,6 +733,14 @@ static void __dev_pm_qos_drop_user_request(struct device *dev,
->  		req = dev->power.qos->flags_req;
->  		dev->power.qos->flags_req = NULL;
->  		break;
-> +	case DEV_PM_QOS_MIN_PERF:
-> +		req = dev->power.qos->perf_min_req;
-> +		dev->power.qos->perf_min_req = NULL;
-> +		break;
-> +	case DEV_PM_QOS_MAX_PERF:
-> +		req = dev->power.qos->perf_max_req;
-> +		dev->power.qos->perf_max_req = NULL;
-> +		break;
->  	default:
->  		WARN_ON(1);
->  		return;
-> @@ -980,3 +1047,86 @@ void dev_pm_qos_hide_latency_tolerance(struct device *dev)
->  	pm_runtime_put(dev);
->  }
->  EXPORT_SYMBOL_GPL(dev_pm_qos_hide_latency_tolerance);
-> +
-> +int dev_pm_qos_expose_perf_limit(struct device *dev)
-> +{
-> +	struct dev_pm_qos_request *req_min;
-> +	struct dev_pm_qos_request *req_max;
-> +	int ret;
-> +
-> +	if (!device_is_registered(dev))
-> +		return -EINVAL;
-> +
-> +	req_min = kzalloc(sizeof(*req_min), GFP_KERNEL);
-> +	if (!req_min)
-> +		return -ENOMEM;
-> +
-> +	req_max = kzalloc(sizeof(*req_max), GFP_KERNEL);
-> +	if (!req_max) {
-> +		kfree(req_min);
-> +		return -ENOMEM;
-> +	}
-> +	
+> Poke the maintainer to get off their butt and submit the pull request to
+> Linus 
 
-Oops, looks like we forgot to run checkpatch ;)
+Well, I did that sometimes and will continue to do so. But some
+maintainers then feel pestered and become annoyed by my efforts -- which
+in the long-term is counter productive, as regression tracking will only
+work well if maintainers and I work well together. That's why I'm a bit
+careful with such things (side note: don't worry, I know that some
+conflict is inevitable -- but I don't have your or Linus standing, so I
+have to choose my fights carefully...).
 
-There are many more errors with these patches and I'd urge you to run
-checkpatch and fix and re-spin.
-Do keep me in CC from next rev.
+I sometimes also got replies along the lines of "we are only at -rc2,
+this can wait till -rc5 or -rc6" -- and I have no quote from Linus at
+hand I can point maintainers to that says something along the lines of
+"if a regression fix was in -next for at least two days, submit it to
+mainline before the next -rc, unless there is a strong reason why that
+particular fix needs more testing" (or whatever he actually wants).
 
-> +	ret = dev_pm_qos_add_request(dev, req_min, DEV_PM_QOS_MIN_PERF,
-> +				     PM_QOS_MIN_PERF_DEFAULT_VALUE);
-> +	if (ret < 0) {
-> +		kfree(req_min);
-> +		kfree(req_max);
-> +		return ret;
-> +	}
-> +
-> +	ret = dev_pm_qos_add_request(dev, req_max, DEV_PM_QOS_MAX_PERF,
-> +				     PM_QOS_MAX_PERF_DEFAULT_VALUE);
-> +	if (ret < 0) {
-> +		dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_MIN_PERF);
-> +		return ret;
-> +	}
-> +
-> +	mutex_lock(&dev_pm_qos_sysfs_mtx);
-> +
-> +	mutex_lock(&dev_pm_qos_mtx);
-> +
-> +	if (IS_ERR_OR_NULL(dev->power.qos))
-> +		ret = -ENODEV;
-> +	else if (dev->power.qos->perf_min_req || dev->power.qos->perf_max_req)
-> +		ret = -EEXIST;
-> +
-> +	if (ret < 0) {
-> +		__dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_MIN_PERF);
-> +		__dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_MAX_PERF);
-> +		mutex_unlock(&dev_pm_qos_mtx);
-> +		goto out;
-> +	}
-> +
-> +	dev->power.qos->perf_min_req = req_min;
-> +	dev->power.qos->perf_max_req = req_max;
-> +
-> +	mutex_unlock(&dev_pm_qos_mtx);
-> +
-> +	ret = pm_qos_sysfs_add_perf_limit(dev);
-> +	if (ret) {
-> +		dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_MIN_PERF);
-> +		dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_MAX_PERF);
-> +	}
-> +out:
-> +	mutex_unlock(&dev_pm_qos_sysfs_mtx);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(dev_pm_qos_expose_perf_limit);
-> +
-> +void dev_pm_qos_hide_perf_limit(struct device *dev)
-> +{
-> +	mutex_lock(&dev_pm_qos_sysfs_mtx);
-> +
-> +	pm_qos_sysfs_remove_perf_limit(dev);
-> +
-> +	mutex_lock(&dev_pm_qos_mtx);
-> +
-> +	__dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_MIN_PERF);
-> +	__dev_pm_qos_drop_user_request(dev, DEV_PM_QOS_MAX_PERF);
-> +	
+> (note, this is me in this case...)
+> I'll get it into the next -rc, sorry for the delay, other things got in
+> the way, my fault.
 
-whitespace.. ^^
+Happens, I don't care too much about this specific event, more about the
+general problem. Especially the -mm tree bugs me sometimes, as I noticed
+that Andrew often lets regression fixes linger in -next for round about
+a week; he furthermore sometimes sends this stuff to Linus on Mondays or
+Tuesdays. Due to that the fixes often miss at least one, sometimes two
+-rcs. That is especially hard to watch if the regression made it to a
+stable kernel and you are waiting for the fix to get mainlined.
 
-> +	mutex_unlock(&dev_pm_qos_mtx);
-> +
-> +	mutex_unlock(&dev_pm_qos_sysfs_mtx);
-> +}
-> +EXPORT_SYMBOL_GPL(dev_pm_qos_hide_perf_limit);
-> diff --git a/drivers/base/power/sysfs.c b/drivers/base/power/sysfs.c
-> index a1474fb67db9..5a45191006c1 100644
-> --- a/drivers/base/power/sysfs.c
-> +++ b/drivers/base/power/sysfs.c
-> @@ -317,6 +317,76 @@ static ssize_t pm_qos_no_power_off_store(struct device *dev,
->  
->  static DEVICE_ATTR_RW(pm_qos_no_power_off);
->  
-> +
-> +static ssize_t pm_qos_perf_limit_min_max_show(struct device *dev,
-> +					      struct device_attribute *attr,
-> +					      char *buf, bool max)
-> +{
-> +	s32 value = dev_pm_qos_read_value(dev, max ? DEV_PM_QOS_MAX_PERF :
-> +					  DEV_PM_QOS_MIN_PERF);
-> +
-> +	return sysfs_emit(buf, "%d\n", value);
-> +}
-> +
-> +static ssize_t pm_qos_perf_limit_min_max_store(struct device *dev,
-> +					       struct device_attribute *attr,
-> +					       const char *buf, size_t n, bool max)
-> +{
-> +	int ret;
-
-Your function return type is ssize_t,  do you want to change the type of
-ret too?
-
-> +	s32 min_value = dev_pm_qos_read_value(dev, DEV_PM_QOS_MIN_PERF);
-> +	s32 max_value = dev_pm_qos_read_value(dev, DEV_PM_QOS_MAX_PERF);
-> +	s32 new_value;
-> +
-> +	if (kstrtoint(buf, 0, &new_value))
-> +		return -EINVAL;
-> +
-> +	if (new_value < PM_QOS_MIN_PERF_DEFAULT_VALUE ||
-> +	    new_value > PM_QOS_MAX_PERF_DEFAULT_VALUE)
-> +		return -EINVAL;
-> +
-> +	if (max && (new_value < min_value))
-> +		return -EINVAL;
-> +
-> +	if (!max && (new_value > max_value))
-> +		return -EINVAL;
-
-No strong opinions, but might help debug better if you print why each
-EINVAL was returned?
-
-> +
-> +	ret = dev_pm_qos_update_request(max ? dev->power.qos->perf_max_req :
-> +					dev->power.qos->perf_min_req, new_value);
-> +
-> +	return ret < 0 ? ret : n;
-> +}
-> +
-> +static ssize_t pm_qos_perf_limit_min_show(struct device *dev,
-> +						 struct device_attribute *attr,
-> +						 char *buf)
-> +{
-> +	return pm_qos_perf_limit_min_max_show(dev, attr, buf, false);
-> +}
-> +
-> +static ssize_t pm_qos_perf_limit_min_store(struct device *dev,
-> +						  struct device_attribute *attr,
-> +						  const char *buf, size_t n)
-> +{
-> +	return pm_qos_perf_limit_min_max_store(dev, attr, buf, n, false);
-> +}
-> +
-> +static ssize_t pm_qos_perf_limit_max_show(struct device *dev,
-> +						 struct device_attribute *attr,
-> +						 char *buf)
-> +{
-> +	return pm_qos_perf_limit_min_max_show(dev, attr, buf, true);
-> +}
-> +
-> +static ssize_t pm_qos_perf_limit_max_store(struct device *dev,
-> +						  struct device_attribute *attr,
-> +						  const char *buf, size_t n)
-> +{
-> +	return pm_qos_perf_limit_min_max_store(dev, attr, buf, n, true);
-> +}
-> +
-> +static DEVICE_ATTR_RW(pm_qos_perf_limit_min);
-> +static DEVICE_ATTR_RW(pm_qos_perf_limit_max);
-> +
-[...]
-
--- 
-Best regards,
-Dhruva Gole <d-gole@ti.com>
+Ciao, Thorsten
 
