@@ -1,74 +1,74 @@
-Return-Path: <linux-pm+bounces-3989-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3990-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE9B3857E3B
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 14:56:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCD9F857E57
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 14:59:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C82A28139F
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 13:56:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2E875B21EB8
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 13:59:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B94EA12C7EE;
-	Fri, 16 Feb 2024 13:56:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0595212C544;
+	Fri, 16 Feb 2024 13:59:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZbU7pXtM"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JAX2HCzv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7FE412C53C
-	for <linux-pm@vger.kernel.org>; Fri, 16 Feb 2024 13:56:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52CC112BF01
+	for <linux-pm@vger.kernel.org>; Fri, 16 Feb 2024 13:59:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708091787; cv=none; b=OyXKd7/QM7UCB9xYQN1BWditIIBb2hwI2/esY8REyTot5HlWVWHaz8RdU79dogr6HjtQ0rnQNgjFxiN2v05sect1v926y8syvVNUYzMKDIHhh84iMPNfELgSJphoDKYa5/DC9x3R3kFhxGKFkd9VCvvM1ziEYKc7viaVmIeiVno=
+	t=1708091979; cv=none; b=iQzJC56xt1+Ht6rdFQP3+B6HH8Cn43PsJS3bSYc+POe0b9QKbmhrEEgIjKxTVQQHmQBHug7F+EacwRaguMkKU/d7GyZlwInppgIndD6o0ET6zJxZPRDQZkwZjio6pEUcIW03ZTPauTHHUFisiU1LQla5Qnpxh0aGFdgSyIYhbp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708091787; c=relaxed/simple;
-	bh=5RmI4IEp4Goh1bTgymsT7lUz8vgYhCy6KcB5Y7BA5sA=;
+	s=arc-20240116; t=1708091979; c=relaxed/simple;
+	bh=nsn4WJyRYAoqJRBTL08AOljR5I6y9oPXYZMXhI3sWy8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=eJfRQKNoRgCJTg+Uzgakjvsu96ZqSnD5xMI+rqCSYRlHSkni6fCaga8jY5GbVgQOc94hbjw0t5IamW3HM1kPM5ZHYcVGXC3nb+zwEscT3t+E8iYLLg0I8mWBnjIDitfzHfaJRLR6RBrXSQOq1aU6hZ1HQ+SF4bmUXS3k573g7os=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZbU7pXtM; arc=none smtp.client-ip=209.85.208.52
+	 In-Reply-To:Content-Type; b=n5iD6MB2seKSPg54zel3Qs1nUCNeuzln2jigpp/eUSjaTLkYFSZIPHQV4nHQ6NFW8mHNwioPdo0IqzVcVBPBx+A6CtIE9K1PWh7lH7UkFDmAUtjM8cftvwc+Cu/cNI5cdNHgS+jwUiAU8cgGgcmOgHaZvaZz8MOBoaxLvBQdlJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JAX2HCzv; arc=none smtp.client-ip=209.85.167.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5640fef9fa6so67393a12.0
-        for <linux-pm@vger.kernel.org>; Fri, 16 Feb 2024 05:56:25 -0800 (PST)
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-51147d0abd1so2330253e87.1
+        for <linux-pm@vger.kernel.org>; Fri, 16 Feb 2024 05:59:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708091784; x=1708696584; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1708091975; x=1708696775; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=mUXYgAIe0stjf/tT87f+iI1UC/+ORo23MBKCKiPj4Ek=;
-        b=ZbU7pXtMem83kPwI7WMMypR8NrCQWh8VkPc0yHFhbAOocR+YCbd1Ma5gfREFVFnyXF
-         L8koTtReF3I89wUH73IV1gGz3PYb6dPmPWxjNr9XkPltxhwUN+3KP+zwYt26okl3AYIQ
-         VGcDXV9YFJ+QsYpPG2Z+P4GOToN6vPZb+Qm0j8Tb6hlqkMowfL4F7I2Z9qFBenZTogF9
-         hnru3XT7jm38uvWCas7lI5aFs84gpJLfxB6GLWN34eS/GoJv5K7ay7MgwWS7iUSIuo3g
-         6lsLb4m1WORjUSovQ9hmPyzuMUO0OVgQzzjCInPSllF7ukB/tx2Q3ZOW5vqZwI7dOX3Y
-         oEGw==
+        bh=D71EMsChqgpWpjB7V99sJeSePiQX0x6TadQ9r4L5xnM=;
+        b=JAX2HCzvMpgXCFxSvbEWfHeSHG/dTNpwzvKjjLs320eMrm8vpXlXmDOk9LRQ2HzFyv
+         2BGtSjhiQWPZ7u3B8GKM1I2REQcr8tm+CWj45jeC/BmMUMXpzi2caVFc/2FC2K7kJJwM
+         3unXqdQyMgYGB834zxLzh5/F2QrrwI7vLkH+m2KY9+sq0+uW5+qDIBP/TZQ+uXpgsr/b
+         +Ac9z3D7B57Jg4elRjGcscFcVE9mRiTQomul8Jorl/tU1qNzl9VQE6gVmyE9lrypzz0s
+         lCW+9rHLgvXJr/9Oyzo0f2SINUUHq/NkPlWI8eihIYMUpF8W/IlOxAbouKPhkRaSzdw1
+         B9sQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708091784; x=1708696584;
+        d=1e100.net; s=20230601; t=1708091975; x=1708696775;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mUXYgAIe0stjf/tT87f+iI1UC/+ORo23MBKCKiPj4Ek=;
-        b=u0FdV8BJmy76c+32/FGSwvOsAN3cozq4lhIq+b5qTSrVEXZ8ZY7myynLB0ApIY64lB
-         ijNKIqK6TgtSjkk2TtIZ8QE3hQim8Cuk7gEuKGJeJsIBIHx+PYJEweqELb/5HHrslYdb
-         FG8KuuRGSVBd4Z3kw72xv8MNWv2G00y7V5WKNKd2fA6Gqbm5XyK1n8Mc847SYhOu2XCC
-         00I/sOgbxwtnKJOtL6UBpfcQbrUn/xDdIRVk+YaVoFVS1E8TlY7bqrxWH9OdUpcrsuQQ
-         ttQCHpKryq5oLzOsO2DOk3AQ8iFDOqgF7JN3GWbu+2zSTq9Z4K8do1GgqPhoDR/kzB2f
-         QNQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUkla8xeGaMal9IupVCkdH0L+O2a8S7s9usuVr6VR3lbX7t0unOdeAQsMIhbxoG6eLpKzlqs6tlYuh+cuDghcsxzHzv2nWMsT0=
-X-Gm-Message-State: AOJu0YyN5xET9l9JYde6NY3vQiSMffBXnYYzrFa40ozxNtRSwYGp8kTF
-	3BDS2ebuLNeWvdJEeAmF6i4O0oQOVf72Fuv+oXxsL+OAnjC15UvqhQiOuRo6hY4=
-X-Google-Smtp-Source: AGHT+IFw1apcnDJqq54rOtL+ZYElfOGT/aFW+lw0ZtKBGyT0Y3NCy7HO8PFgcvnX8LrQnk3I2zjDgg==
-X-Received: by 2002:aa7:d6cb:0:b0:564:4bc:492e with SMTP id x11-20020aa7d6cb000000b0056404bc492emr812754edr.22.1708091784187;
-        Fri, 16 Feb 2024 05:56:24 -0800 (PST)
-Received: from [192.168.192.135] (078088045141.garwolin.vectranet.pl. [78.88.45.141])
-        by smtp.gmail.com with ESMTPSA id u20-20020aa7d894000000b00563a6c9fd71sm1124edq.16.2024.02.16.05.56.21
+        bh=D71EMsChqgpWpjB7V99sJeSePiQX0x6TadQ9r4L5xnM=;
+        b=WilefkUtWRLrDQFIcdG2uZh0CvXah02ymFnyZhEWxt7FzvqJY4e36AAaLGRlmxYC6H
+         8hz9xNjgOTHekCBexExepQ68lNb2zn+0DfJOTbdZP5GGed4Ht0YoYlke+yyd3/PsJCvd
+         LmwcN/aDONVMVIwh0KmUF/aVUoByADQHFRuvUrlB50/2qm7bSBi+x0aVim5oqnNwM9nb
+         kr++h+IT5qwAK4s/XyzkGK+9CVnMQ7UNcq4xFT5hmV3192BlIUn+okjrZIggDxGyxq/D
+         H0Msm3hnvfkykJqZql9m8+DuGppUIx5oRxsvTL1Rg8DQ5k9aEuzejvGlQjtWd557uw/E
+         /zeQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVFpL4Tc6HkgkrAXP70FAzzy/JcD4z6sG8UksGyhv4st3hEygHbnygb8JzBuujxk7qY4tNWqQe2a3Xw0Gu98T0o1jdPmKa32Hs=
+X-Gm-Message-State: AOJu0Yww0q/5oj49iGvFrZyUrdNbQbtO7UjMZ2W68Jrj8BxU11dS+We8
+	IDdj2UoP1dw92cB/akGvYbonoAGNsxREn+n1UGO4mpUZ5+C8nmlI/NhqlkAPzEk=
+X-Google-Smtp-Source: AGHT+IH4ptRMDqJC5CCka/JZVENyvQZCuvbn0+TGGHCLfiuBWb1kx7jW5WGPQuoncr9DcsPtbOvZdg==
+X-Received: by 2002:a05:6512:1589:b0:511:a803:c952 with SMTP id bp9-20020a056512158900b00511a803c952mr4621043lfb.0.1708091975432;
+        Fri, 16 Feb 2024 05:59:35 -0800 (PST)
+Received: from [192.168.0.22] ([78.10.207.130])
+        by smtp.gmail.com with ESMTPSA id tj10-20020a170907c24a00b00a3dd52e7539sm644395ejc.60.2024.02.16.05.59.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Feb 2024 05:56:23 -0800 (PST)
-Message-ID: <84adc2ac-db49-4358-a079-6991c6770a73@linaro.org>
-Date: Fri, 16 Feb 2024 14:56:21 +0100
+        Fri, 16 Feb 2024 05:59:34 -0800 (PST)
+Message-ID: <41e371f1-96f4-45c0-9f65-81ed6924b325@linaro.org>
+Date: Fri, 16 Feb 2024 14:59:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,7 +78,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] interconnect: constify of_phandle_args in xlate
 Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+To: Konrad Dybcio <konrad.dybcio@linaro.org>,
  Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
  <brgl@bgdev.pl>, Georgi Djakov <djakov@kernel.org>,
  Bjorn Andersson <andersson@kernel.org>,
@@ -91,55 +91,89 @@ To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
  linux-arm-msm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org
 References: <20240216135236.129878-1-krzysztof.kozlowski@linaro.org>
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <20240216135236.129878-1-krzysztof.kozlowski@linaro.org>
+ <488cc7dc-f45a-4c9e-b572-e4a6b3202e3e@linaro.org>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <488cc7dc-f45a-4c9e-b572-e4a6b3202e3e@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 16.02.2024 14:52, Krzysztof Kozlowski wrote:
-> The xlate callbacks are supposed to translate of_phandle_args to proper
-> provider without modifying the of_phandle_args.  Make the argument
-> pointer to const for code safety and readability.
+On 16/02/2024 14:55, Konrad Dybcio wrote:
+> On 16.02.2024 14:52, Krzysztof Kozlowski wrote:
+>> The xlate callbacks are supposed to translate of_phandle_args to proper
+>> provider without modifying the of_phandle_args.  Make the argument
+>> pointer to const for code safety and readability.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  drivers/gpio/gpiolib-of.c              |  2 +-
+>>  drivers/interconnect/core.c            |  4 ++--
+>>  drivers/interconnect/qcom/icc-common.c |  3 ++-
+>>  drivers/interconnect/qcom/icc-common.h |  3 ++-
+>>  drivers/interconnect/samsung/exynos.c  |  2 +-
+>>  drivers/memory/tegra/mc.c              |  2 +-
+>>  drivers/memory/tegra/tegra124-emc.c    |  2 +-
+>>  drivers/memory/tegra/tegra124.c        |  2 +-
+>>  drivers/memory/tegra/tegra186-emc.c    |  2 +-
+>>  drivers/memory/tegra/tegra20-emc.c     |  2 +-
+>>  drivers/memory/tegra/tegra20.c         |  2 +-
+>>  drivers/memory/tegra/tegra30-emc.c     |  2 +-
+>>  drivers/memory/tegra/tegra30.c         |  2 +-
+>>  include/linux/interconnect-provider.h  | 11 ++++++-----
+>>  include/soc/tegra/mc.h                 |  7 ++++---
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
+> Ended up being a bit wider than just icc..
+> 
+> Looks sane apart from that
 
-Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Tegra memory controllers are also interconnect providers, so two subsystems.
 
-Konrad
+This patch should go via interconnect tree.
+
+Best regards,
+Krzysztof
+
 
