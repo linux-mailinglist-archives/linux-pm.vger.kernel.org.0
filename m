@@ -1,243 +1,192 @@
-Return-Path: <linux-pm+bounces-3974-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3975-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B95B8578F0
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 10:37:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6945B857A7B
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 11:40:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5804228358C
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 09:37:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F2C52853B4
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 10:40:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43D561B978;
-	Fri, 16 Feb 2024 09:37:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45B01524AF;
+	Fri, 16 Feb 2024 10:40:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="uNUjB6Gw"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="bsjpucCf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9006E1BDCE;
-	Fri, 16 Feb 2024 09:36:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56FBB51C5A;
+	Fri, 16 Feb 2024 10:40:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708076221; cv=none; b=eV0JCAULSM1mhbCaIqS5UxKxmavdBg6ibDnnJLLgA7tGwZF12EvfCFvcuz+g37dyvY+KQUCkPnvLHgYfEc9/S7uoru7DsIz0wV695leTKqqCGR0n4gwqd6MkQKWls/9xn3dk1IrcFUI7pKAJJPfvo/TI+AorONVnJPbdfIHCzMc=
+	t=1708080016; cv=none; b=XOKG/UT3wHLH41Tvn+G0JPOzvuu6F1qARH/I+XstaF+45oEFO8xzHEulPTnv3yNeXPopMwAcEfnZ2YttMwFb3IaBerx2742v+v/yQG90WtyqZdUjFs+tiAsUkV0EJ5GfQYa535U7HfD7UAgavyXkiub/X+Kwz/o6/cTU+WlrJCo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708076221; c=relaxed/simple;
-	bh=FqIG4hQ/2p90XglkBfcZ3NnAeisl+tmJAkWr6NZhF0Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YeaHNi2vczmQWIcfTaNgoPE68Zd1SaAh1ZR8kG5ys2a5nY5j8UaK/fq9EDn4ER86JGkZrD2ezugz6OJ5WWlDZ8dIFhNoM5EfMZ4sGV82CZuzDEt8ly4ZxUOvDqmSpWeQBo61pXQoX8Wzi0xpjGMNXGE8srl6q+X+208iQCz/zl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=uNUjB6Gw; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from pendragon.ideasonboard.com (89-27-53-110.bb.dnainternet.fi [89.27.53.110])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id E8B746B3;
-	Fri, 16 Feb 2024 10:36:51 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1708076212;
-	bh=FqIG4hQ/2p90XglkBfcZ3NnAeisl+tmJAkWr6NZhF0Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uNUjB6Gw3OxkvkHlmGSI/pkrf1LZkc1jpT/X9oJcmmrO5PwnbIe8er7efnoLnnde4
-	 EJCR+DW8RAqM7mraBwyYb41PjGtQ2zQu7cWh/h/nBhV0w0TvfPG5Urbm3zm5QqRtJz
-	 JzCOTixie+sNZIGN5ZidIK9mD6GREBUJXuiNf14Q=
-Date: Fri, 16 Feb 2024 11:37:00 +0200
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc: linux-arm-kernel@lists.infradead.org, dri-devel@lists.freedesktop.org,
-	marex@denx.de, frieder.schrempf@kontron.de,
-	Lucas Stach <l.stach@pengutronix.de>,
-	Adam Ford <aford173@gmail.com>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Robert Foss <rfoss@kernel.org>, Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Liu Ying <victor.liu@nxp.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-pm@vger.kernel.org
-Subject: Re: [PATCH V8 09/12] dt-bindings: display: imx: add binding for
- i.MX8MP HDMI TX
-Message-ID: <20240216093700.GA10584@pendragon.ideasonboard.com>
-References: <20240203165307.7806-1-aford173@gmail.com>
- <20240203165307.7806-10-aford173@gmail.com>
- <5916132.MhkbZ0Pkbq@steina-w>
+	s=arc-20240116; t=1708080016; c=relaxed/simple;
+	bh=lKkTWjc5S0Zeir08AUyREHVP6BXIPt/Pb30uog3d1Xw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=MFg5N9t+jMtLicKIkk7zJMBJ4U9s2ouAL/ZpCmJ4UesjDMRgUOCtWQGZVsjUYE1K2PDEByoGmyXQoKL1kPu05S0YQcdZvkGQqMu+UjaKRDXXl/LxBHjOqB2L0cgGPijTDUOFBlgp6JxtqWbVeTnjmzBWZL67UnPABcVkIOMyXe0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=bsjpucCf; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41G6Kf2o023221;
+	Fri, 16 Feb 2024 10:39:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=bHEy5IZPeB1t6hgx0UtqO2tRKR4Ki3BJPIXU08pxj80=; b=bs
+	jpucCfLbGGmhMT4MFQMTs8uGvEkQWBrw4g4pM8lo9Cvx6EVgUxma2tSPDSpBQoaB
+	vZNHa/Ux7zoSJKJ4rC5PvYzAp8dQd3x5FW0kZtD9vUuX9yZgPO3aOWAqjnhnI2zw
+	x2o+ts2E2thgX92qiC5A7iPJ4EjGgoSw4a0YxipmkCjB5Zw+ZR9Wv1epnkBrVYob
+	VQX+uKofpEG3vQRwhbVn2TZR+9LI4yOpGwKbINegZ1r8zXdLRY6xVzAtHCS/t73t
+	lZtR7CEvf2JYe+hXRj6yDNlNC1CyWXWv9zgdYbAkjnI7lBJ69ckV3enoAkt7NLbq
+	VH7cfI27pvC1VwGJ6riw==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w9xdx8tg2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 Feb 2024 10:39:50 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41GAdn7o014888
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 Feb 2024 10:39:49 GMT
+Received: from [10.218.16.59] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 16 Feb
+ 2024 02:39:38 -0800
+Message-ID: <12723477-aee2-40bc-80f0-a86c16c98988@quicinc.com>
+Date: Fri, 16 Feb 2024 16:09:38 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <5916132.MhkbZ0Pkbq@steina-w>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/3] dt-bindings: iio: adc: Add support for QCOM PMIC5
+ Gen3 ADC
+Content-Language: en-US
+To: Jonathan Cameron <jic23@kernel.org>
+CC: <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <lee@kernel.org>,
+        <andriy.shevchenko@linux.intel.com>, <daniel.lezcano@linaro.org>,
+        <dmitry.baryshkov@linaro.org>, <lars@metafoo.de>, <luca@z3ntu.xyz>,
+        <marijn.suijten@somainline.org>, <agross@kernel.org>,
+        <sboyd@kernel.org>, <rafael@kernel.org>, <rui.zhang@intel.com>,
+        <lukasz.luba@arm.com>, <linus.walleij@linaro.org>,
+        <quic_subbaram@quicinc.com>, <quic_collinsd@quicinc.com>,
+        <quic_amelende@quicinc.com>, <quic_kamalw@quicinc.com>,
+        <kernel@quicinc.com>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-arm-msm-owner@vger.kernel.org>,
+        <linux-iio@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <cros-qcom-dts-watchers@chromium.org>
+References: <20231231171237.3322376-1-quic_jprakash@quicinc.com>
+ <20231231171237.3322376-3-quic_jprakash@quicinc.com>
+ <20240101180209.56e04267@jic23-huawei>
+From: Jishnu Prakash <quic_jprakash@quicinc.com>
+In-Reply-To: <20240101180209.56e04267@jic23-huawei>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: AF-uuHRRXZAu6C46-PBrfZ69SzHtTBto
+X-Proofpoint-GUID: AF-uuHRRXZAu6C46-PBrfZ69SzHtTBto
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-16_08,2024-02-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ suspectscore=0 mlxlogscore=999 adultscore=0 phishscore=0 mlxscore=0
+ clxscore=1015 impostorscore=0 bulkscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401310000 definitions=main-2402160086
 
-On Fri, Feb 16, 2024 at 10:05:26AM +0100, Alexander Stein wrote:
-> Hi all,
-> 
-> Am Samstag, 3. Februar 2024, 17:52:49 CET schrieb Adam Ford:
-> > From: Lucas Stach <l.stach@pengutronix.de>
-> > 
-> > The HDMI TX controller on the i.MX8MP SoC is a Synopsys designware IP
-> > core with a little bit of SoC integration around it.
-> > 
-> > Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-> > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > 
-> > ---
-> > V3:  Change name and location to better idenfity as a bridge and
-> >      HDMI 2.0a transmitter
-> > 
-> >      Fix typos and feedback from Rob and added ports.
-> > ---
-> >  .../display/bridge/fsl,imx8mp-hdmi-tx.yaml    | 102 ++++++++++++++++++
-> >  1 file changed, 102 insertions(+)
-> >  create mode 100644
-> > Documentation/devicetree/bindings/display/bridge/fsl,imx8mp-hdmi-tx.yaml
-> > 
-> > diff --git
-> > a/Documentation/devicetree/bindings/display/bridge/fsl,imx8mp-hdmi-tx.yaml
-> > b/Documentation/devicetree/bindings/display/bridge/fsl,imx8mp-hdmi-tx.yaml
-> > new file mode 100644
-> > index 000000000000..3791c9f4ebab
-> > --- /dev/null
-> > +++
-> > b/Documentation/devicetree/bindings/display/bridge/fsl,imx8mp-hdmi-tx.yaml
-> > @@ -0,0 +1,102 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/display/bridge/fsl,imx8mp-hdmi-tx.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Freescale i.MX8MP DWC HDMI TX Encoder
-> > +
-> > +maintainers:
-> > +  - Lucas Stach <l.stach@pengutronix.de>
-> > +
-> > +description:
-> > +  The i.MX8MP HDMI transmitter is a Synopsys DesignWare
-> > +  HDMI 2.0a TX controller IP.
-> > +
-> > +allOf:
-> > +  - $ref: /schemas/display/bridge/synopsys,dw-hdmi.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - fsl,imx8mp-hdmi-tx
-> > +
-> > +  reg-io-width:
-> > +    const: 1
-> > +
-> > +  clocks:
-> > +    maxItems: 4
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: iahb
-> > +      - const: isfr
-> > +      - const: cec
-> > +      - const: pix
-> > +
-> > +  power-domains:
-> > +    maxItems: 1
-> > +
-> > +  ports:
-> > +    $ref: /schemas/graph.yaml#/properties/ports
-> > +
-> > +    properties:
-> > +      port@0:
-> > +        $ref: /schemas/graph.yaml#/properties/port
-> > +        description: Parallel RGB input port
-> > +
-> > +      port@1:
-> > +        $ref: /schemas/graph.yaml#/properties/port
-> > +        description: HDMI output port
-> > +
-> > +    required:
-> > +      - port@0
-> > +      - port@1
-> 
-> Is this really correct that port@1 is required? AFAICS this host already 
-> supports HPD and DDC by itself, so there is no need for a dedicated HDMI 
-> connector.
+Hi Jonathan,
 
-The chip has an HDMI output, so there's an output port.
+On 1/1/2024 11:32 PM, Jonathan Cameron wrote:
+> On Sun, 31 Dec 2023 22:42:36 +0530
+> Jishnu Prakash <quic_jprakash@quicinc.com> wrote:
+>
+>> For the PMIC5-Gen3 type PMICs, ADC peripheral is present in HW for the
 
-> With the current state of the drivers this output port is completely ignored 
-> anyway. Yet it works for a lot of people.
+>> +
+>> +      label:
+>> +        $ref: /schemas/types.yaml#/definitions/string
+>> +        description: |
+>> +            ADC input of the platform as seen in the schematics.
+>> +            For thermistor inputs connected to generic AMUX or GPIO inputs
+>> +            these can vary across platform for the same pins. Hence select
+>> +            the platform schematics name for this channel.
+> defined in adc.yaml, so should just have a reference to that here.
+>
+>> +
+>> +      qcom,decimation:
+>> +        $ref: /schemas/types.yaml#/definitions/uint32
+>> +        description: |
+>> +            This parameter is used to decrease ADC sampling rate.
+>> +            Quicker measurements can be made by reducing decimation ratio.
+> Why is this in DT rather than as a userspace control?
 
-DT bindings describe the hardware. From a DT point of view, tt's fine
-for drivers to ignore the port (that may or may not be true from a DRM
-point of view, but that's a separate discussion).
 
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - clocks
-> > +  - clock-names
-> > +  - interrupts
-> > +  - power-domains
-> > +  - ports
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/clock/imx8mp-clock.h>
-> > +    #include <dt-bindings/interrupt-controller/irq.h>
-> > +    #include <dt-bindings/power/imx8mp-power.h>
-> > +
-> > +    hdmi@32fd8000 {
-> > +        compatible = "fsl,imx8mp-hdmi-tx";
-> > +        reg = <0x32fd8000 0x7eff>;
-> > +        interrupts = <0 IRQ_TYPE_LEVEL_HIGH>;
-> > +        clocks = <&clk IMX8MP_CLK_HDMI_APB>,
-> > +                 <&clk IMX8MP_CLK_HDMI_REF_266M>,
-> > +                 <&clk IMX8MP_CLK_32K>,
-> > +                 <&hdmi_tx_phy>;
-> > +        clock-names = "iahb", "isfr", "cec", "pix";
-> > +        power-domains = <&hdmi_blk_ctrl IMX8MP_HDMIBLK_PD_HDMI_TX>;
-> > +        reg-io-width = <1>;
-> > +        ports {
-> > +           #address-cells = <1>;
-> > +           #size-cells = <0>;
-> > +           port@0 {
-> > +             reg = <0>;
-> > +
-> > +             hdmi_tx_from_pvi: endpoint {
-> > +               remote-endpoint = <&pvi_to_hdmi_tx>;
-> > +             };
-> > +          };
-> > +
-> > +          port@1 {
-> > +            reg = <1>;
-> > +              hdmi_tx_out: endpoint {
-> > +                remote-endpoint = <&hdmi0_con>;
-> > +              };
-> > +          };
-> > +        };
-> > +    };
+We don't intend this property to be something that can be controlled 
+from userspace - if a client wants to read an ADC channel from 
+userspace, we only intend to provide them the processed value, 
+calculated with a fixed set of ADC properties mentioned in the 
+corresponding channel node in DT.
 
--- 
-Regards,
 
-Laurent Pinchart
+>> +        enum: [ 85, 340, 1360 ]
+>> +        default: 1360
+>> +
+
+>> +
+>> +      qcom,hw-settle-time:
+>> +        $ref: /schemas/types.yaml#/definitions/uint32
+>> +        description: |
+>> +            Time between AMUX getting configured and the ADC starting
+>> +            conversion. The 'hw_settle_time' is an index used from valid values
+>> +            and programmed in hardware to achieve the hardware settling delay.
+>> +        enum: [ 15, 100, 200, 300, 400, 500, 600, 700, 1000, 2000, 4000,
+>> +                8000, 16000, 32000, 64000, 128000 ]
+>> +        default: 15
+> only currently defined for muxes but we have settle-time-us which has benefit of
+> providing the units (which are missing here from the description as well)
+>
+>> +
+>> +      qcom,avg-samples:
+>> +        $ref: /schemas/types.yaml#/definitions/uint32
+>> +        description: |
+>> +            Number of samples to be used for measurement.
+>> +            Averaging provides the option to obtain a single measurement
+>> +            from the ADC that is an average of multiple samples. The value
+>> +            selected is 2^(value).
+> Why is this in dt?  Why not just userspace control (in_voltageX_oversampling_ratio
+>
+> If it needs to be, we do have standard DT bindings for it in adc.yaml
+
+
+avg-samples is also something we don't want the client to modify from 
+userspace. As for using adc.yaml, I think I could use settling-time-us 
+and oversampling-ratio from it for the above two properties.
+
+However, Krzysztof has mentioned in another comment that I should put 
+properties common to ADC5 Gen3 and older QCOM VADC devices in a common 
+schema. If I now try replacing the existing qcom,hw-settle-time and 
+qcom,avg-samples properties with settling-time-us and oversampling-ratio 
+for older devices too, I would have to make several DT changes for 
+existing devices...are you fine with this? Or should I just replace 
+these two properties for ADC5 Gen3?
+
+
+I'll address your other comments in the next patchset.
+
+
+Thanks,
+
+Jishnu
+
 
