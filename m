@@ -1,527 +1,335 @@
-Return-Path: <linux-pm+bounces-4020-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4021-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF21C858A09
-	for <lists+linux-pm@lfdr.de>; Sat, 17 Feb 2024 00:17:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96A41858A3B
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Feb 2024 00:38:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 64DB2286329
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 23:17:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B2BD1F22369
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 23:38:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A9341487FA;
-	Fri, 16 Feb 2024 23:17:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C1C11487F1;
+	Fri, 16 Feb 2024 23:38:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qr/90Hzj"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="Ed383ouV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 354601487C5
-	for <linux-pm@vger.kernel.org>; Fri, 16 Feb 2024 23:17:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63D27135A6F
+	for <linux-pm@vger.kernel.org>; Fri, 16 Feb 2024 23:38:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708125453; cv=none; b=VDFAshatFPW5M7/+FKDXbXRyvi7uWKan9CYw9NbNnZq/RPvAkM22wNQpQUq4QDakRRems4kWYojrCJ4txHiKVfoi3cJP+HkWxFN8K31FLZ2tHzNakKmWSBc/KiCK5MZH7W6WRJzo2YV5JOk+gKsLojxH3D5l7TVVontnQsDb/Rg=
+	t=1708126718; cv=none; b=Q0oShkUhdpOWfxEBENZfprlL+CIszopoPQV5L1aCCRqsmMYr9DUVmtmAQozWI+HoruPjy88yWX5DHrjXHZ96i+GlYNsUoXX+qC0bzeFYaxXlvLLgWr0Om48K1n+ATTihXy50ry7mmHWFReWPtU5YVVeNnRW9AeW9LAlUR/VjZLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708125453; c=relaxed/simple;
-	bh=D9QCOncfBO+QDwhfpsna1yYGN0SAPzAPnCRxq2L50Vs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NgMTeBVO/Y4VRqGHPNNuddNJ2Le+G3q1mGxV1K/RC7zerE0vShx+qhYD5x2O/X9WkgJyzoZsb8zxYBys7j+mEx+AJRvoYq192MxVwEOtvaSZSdZVpimWts4JHcWsuXGPJRp5OetM+MwHbJk2awHz/coNIpg6gvrRyK2Q10hGAc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qr/90Hzj; arc=none smtp.client-ip=209.85.219.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-d9b9adaf291so1166717276.1
-        for <linux-pm@vger.kernel.org>; Fri, 16 Feb 2024 15:17:30 -0800 (PST)
+	s=arc-20240116; t=1708126718; c=relaxed/simple;
+	bh=C2B/WPOkz4hp1VVGLWqzBmUjPU+pOYI9tq2qVuNm4ZQ=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=pM22bMLYjKHXmy6881nhAD1YuuHi6W6DcgoBW70HzQwTxYX/fE9+dO4N7SHwb1dsuk1uzvDOos9zdq+JYGmO+xsp00Zu5gZA1ieVUw2zIKEiIDz93z03haXFtPG10WohAPtP7D4fjVK+KhAsOCykKkNEbzHhmTuXIs48ZvtR5Y8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=Ed383ouV; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6e0eacc5078so2167603b3a.0
+        for <linux-pm@vger.kernel.org>; Fri, 16 Feb 2024 15:38:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708125449; x=1708730249; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mQJK1I7XuB/9ZoSCV7ftUSrSgKzCTMkjrY12cIHhT/4=;
-        b=qr/90Hzj96aXHo+9h1/s2lsiZe5GpkBt4TZLEGK7MgRClGuTYicRBaaSa1PFe7qjYj
-         zUXBMrw3PP9NPPqEuCohno5dssoBhxXnJ3G00qZpqHZFbt+u4ScMm7rNFnyJcVNLN2i9
-         fp1xAr+4h0yfhBG/rbAtzUs787AR6LpC6Ouv6Akl5R+2OaIbbTbRNLCjZlSSXybFlviQ
-         qbfQVFRiZ7S7PygP0m8o+Oip9WyM6BYxAyWT3837QH+NAK48g/9CQKK1UgEOautEv3wm
-         +tG4BcHtV2pQ4WmMwspWRxwCytb9AbxKkmqlh8bkd5YV9Vji+spEkb0OQ/95vCw11HND
-         LOxQ==
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1708126715; x=1708731515; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=lWZ8uSQM6RjrXmVU2diFXqc52s0YY7gRBzBRFj1BrgY=;
+        b=Ed383ouVdz2ctBgaqO4HGcbf+6bXuoRGUOvYbLng6Ahsqo47wdrUZBZpJ7vndF6dFV
+         tpDet6yAd9rHKmRhDKB0w5Aslq7BeaqVsME0iDfW1L0Yd3eq8B/wjgj3fbtO36ucgBWE
+         6ZkrjI4ObFJl8fO7OzFHgoTaGetXEOYbnWTYGInHqUHe/BFYexMm4UKXQRoNT222ojyg
+         kemI5nSphJ1jArGR01HOqXq2ByEwkHnr6kFdBNs1m8gQvLCmvP1tZsnDWP3mNnwqHIdx
+         lHRgKgpve3YGAGYRxnmviTBJ1FO5n7DSicwEQPQd6YYN+VIaVY+q4C6cEwEqOzO4zacV
+         gvaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708125449; x=1708730249;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1708126715; x=1708731515;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=mQJK1I7XuB/9ZoSCV7ftUSrSgKzCTMkjrY12cIHhT/4=;
-        b=kL0L0/80r1dgJUcbSwXGS0dViYDU968SsAYEQIfiXWWmBmugnfm+dTn/dLGVyu+xeR
-         8U9w15N1XpFhCc6Gjw5ocwZrQt57dgmSdGjXBRhgAfQro4/r2hfq4L48xUlcyYYmUzy7
-         Qwi7vyS+QR7wbNaig1UArjDbNFJnJTpO9UqObqCqZKnJGhkSwYbDuIxZ2wuhl+QlvkME
-         i7FtwCpXcO226dLbfXA/qJcVx8hF93JupVPmH7pSqvFoDIY3rmC24Y9ZjMRRzFMyNRrT
-         8YDCCNEItwNJhWGe09oU+yzs1G6fIwmKqaItcN7PwuHENVId201pVW4ZXs9HrCwy7E3i
-         sujg==
-X-Forwarded-Encrypted: i=1; AJvYcCXdhSu0rG6xMZpIf9atBQu1f1ZjNRJfMG1CD1qiol1AWNS1Y+UBAsFxpAGx3irCLtiHtiWQAfsXA7TlZYtnlR6+x6deKoUkORU=
-X-Gm-Message-State: AOJu0YxI337dDT/wfJVdiVqK8hmwKXLI3JnyoXXjUgsn6P0FTACFwdFs
-	xilK8Vn8KPqfndikXpo3Z4E0CK02nnCTO21pTozUrKt6ldR6oM3DOjmtWlNIlrxGLkkehxGwzaG
-	16+cO5wxpK9nXHfZ7SAaVVVfbZlBUIL1vXKa2uQ==
-X-Google-Smtp-Source: AGHT+IGY1HpdOQgLyTXe1oXFmR8TCIAfORjghx01Zhdg2V5HydNh4Ln1oFBM+mldq0g4wVV8ZQne81kOndbIqhzAK1U=
-X-Received: by 2002:a81:91d5:0:b0:607:8475:23 with SMTP id i204-20020a8191d5000000b0060784750023mr6108723ywg.20.1708125449117;
- Fri, 16 Feb 2024 15:17:29 -0800 (PST)
+        bh=lWZ8uSQM6RjrXmVU2diFXqc52s0YY7gRBzBRFj1BrgY=;
+        b=sjJvILFh2iQNhDCcTm5PHaFNnJttHP6TuRcQ2EzdCzeFunjoeh4DHFlQM65TepqpUY
+         hjjZibjAWPe1v/m7A2PD7icpzeLwIvKHSuUDT4UYor2puu5zLNner+nYTi0+pDlPBfYj
+         8wyXKNotBYYtKsc4/O4bWvemNkhRn1XdNXe7drcYKStZfawCquBGa+aDzH4/xMtzwsKL
+         zrSgarReg2gxQEucwoY/rdzQr9n3KmEijcjMU4qOzNVN9tQUEbDAewk0rOlEdH4XSRY8
+         qYR6xXrrOXxszE3KAeEtXIG9p0c0IozS6xymDJae3001YrwncXLcoFFLZZlsN5niNq24
+         ubrA==
+X-Forwarded-Encrypted: i=1; AJvYcCWdRxFF3Ct+eZhgtbv7Qtxrj0LVS/VBmZDk9AlSsZq5w5nLXsTh01F2iWlrYBvdMBCUqbDR/YB789WhDIMurfEmR/llgeKQGGg=
+X-Gm-Message-State: AOJu0YwUCGIZJ8hNUb9y+bv/mIvPk6MST5qj1iUuNW7tvZ0kvzqtpbOG
+	YS88CGPV1rGQXgEtNSNWSZ0igvUuGzK07Z5lXMNHmJ7WQ68chDF4HZAxHV+azRo=
+X-Google-Smtp-Source: AGHT+IEN1DJWIMIvizLy90WZqFrmxFVd3Fo7FNFQdM1RgZBFSQSyWTUVIBBMNHJmPIctjiBc6qzISA==
+X-Received: by 2002:a17:902:bd0a:b0:1d9:4ebd:b94d with SMTP id p10-20020a170902bd0a00b001d94ebdb94dmr6350763pls.55.1708126715533;
+        Fri, 16 Feb 2024 15:38:35 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id m20-20020a170902f21400b001d8f6ae51aasm393867plc.64.2024.02.16.15.38.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Feb 2024 15:38:35 -0800 (PST)
+Message-ID: <65cff1fb.170a0220.3adb6.2f9e@mx.google.com>
+Date: Fri, 16 Feb 2024 15:38:35 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240216203215.40870-1-brgl@bgdev.pl> <20240216203215.40870-17-brgl@bgdev.pl>
-In-Reply-To: <20240216203215.40870-17-brgl@bgdev.pl>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Sat, 17 Feb 2024 01:17:17 +0200
-Message-ID: <CAA8EJpo=LFcw8PbFRvGwd9nS5ECazOHiBMWRsqfEpY-v0iQLLA@mail.gmail.com>
-Subject: Re: [PATCH v5 16/18] power: pwrseq: add a driver for the QCA6390 PMU module
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Marcel Holtmann <marcel@holtmann.org>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Kalle Valo <kvalo@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Saravana Kannan <saravanak@google.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Arnd Bergmann <arnd@arndb.de>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Marek Szyprowski <m.szyprowski@samsung.com>, Alex Elder <elder@linaro.org>, 
-	Srini Kandagatla <srinivas.kandagatla@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Abel Vesa <abel.vesa@linaro.org>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Lukas Wunner <lukas@wunner.de>, linux-bluetooth@vger.kernel.org, 
-	netdev@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: v6.8-rc4-91-g833dbcc88dd9f
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 8 builds: 2 failed, 6 passed, 2 errors,
+ 32 warnings (v6.8-rc4-91-g833dbcc88dd9f)
+To: rafael@kernel.org, linux-pm@vger.kernel.org,
+ kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On Fri, 16 Feb 2024 at 22:33, Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->
-> This adds the power sequencing driver for the QCA6390's PMU module. It
-> uses the pwrseq subsystem and knows how to match the sequencer to the
-> consumer device by verifying the relevant properties and DT layout.
->
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
->  drivers/power/sequencing/Kconfig          |  16 +
->  drivers/power/sequencing/Makefile         |   2 +
->  drivers/power/sequencing/pwrseq-qca6390.c | 353 ++++++++++++++++++++++
->  3 files changed, 371 insertions(+)
->  create mode 100644 drivers/power/sequencing/pwrseq-qca6390.c
->
-> diff --git a/drivers/power/sequencing/Kconfig b/drivers/power/sequencing/Kconfig
-> index ba5732b1dbf8..84ddf3b4ae56 100644
-> --- a/drivers/power/sequencing/Kconfig
-> +++ b/drivers/power/sequencing/Kconfig
-> @@ -10,3 +10,19 @@ menuconfig POWER_SEQUENCING
->           during power-up.
->
->           If unsure, say no.
-> +
-> +if POWER_SEQUENCING
-> +
-> +config POWER_SEQUENCING_QCA6390
-> +       tristate "QCA6390 PMU driver"
-> +       default m if ARCH_QCOM
-> +       help
-> +         Say U here to enable the power sequencing driver for Qualcomm
-> +         QCA6390.
-> +
-> +         The QCA6390 package contains the BT and WLAN modules whose power
-> +         is controlled by the PMU module. As the former two share the power-up
-> +         sequence which is executed by the PMU, this driver is needed for
-> +         correct power control.
-> +
-> +endif
-> diff --git a/drivers/power/sequencing/Makefile b/drivers/power/sequencing/Makefile
-> index dcdf8c0c159e..628345c4e7ae 100644
-> --- a/drivers/power/sequencing/Makefile
-> +++ b/drivers/power/sequencing/Makefile
-> @@ -2,3 +2,5 @@
->
->  obj-$(CONFIG_POWER_SEQUENCING)         += pwrseq-core.o
->  pwrseq-core-y                          := core.o
-> +
-> +obj-$(CONFIG_POWER_SEQUENCING_QCA6390) += pwrseq-qca6390.o
-> diff --git a/drivers/power/sequencing/pwrseq-qca6390.c b/drivers/power/sequencing/pwrseq-qca6390.c
-> new file mode 100644
-> index 000000000000..5f254f9c71d7
-> --- /dev/null
-> +++ b/drivers/power/sequencing/pwrseq-qca6390.c
-> @@ -0,0 +1,353 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2024 Linaro Ltd.
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/device.h>
-> +#include <linux/gpio/consumer.h>
-> +#include <linux/jiffies.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regulator/consumer.h>
-> +#include <linux/pwrseq/provider.h>
-> +#include <linux/string.h>
-> +#include <linux/types.h>
-> +
-> +struct pwrseq_qca6390_vreg {
-> +       const char *name;
-> +       unsigned int load_uA;
-> +};
-> +
-> +struct pwrseq_qca6390_pdata {
-> +       const struct pwrseq_qca6390_vreg *vregs_common;
-> +       size_t num_vregs_common;
-> +       const struct pwrseq_qca6390_vreg *vregs_wlan;
-> +       size_t num_vregs_wlan;
-> +       unsigned int pwup_delay_msec;
-> +};
-> +
-> +struct pwrseq_qca6390_ctx {
-> +       struct pwrseq_device *pwrseq;
-> +       struct device_node *of_node;
-> +       const struct pwrseq_qca6390_pdata *pdata;
-> +       struct regulator_bulk_data *regs_common;
-> +       struct regulator_bulk_data *regs_wlan;
-> +       struct gpio_desc *bt_gpio;
-> +       struct gpio_desc *wlan_gpio;
-> +       unsigned long last_gpio_enable;
-> +};
-> +
-> +static const struct pwrseq_qca6390_vreg pwrseq_qca6390_vregs_common[] = {
-> +       {
-> +               .name = "vddio",
-> +               .load_uA = 20000,
-> +       },
-> +       {
-> +               .name = "vddaon",
-> +               .load_uA = 100000,
-> +       },
-> +       {
-> +               .name = "vddpmu",
-> +               .load_uA = 1250000,
-> +       },
-> +       {
-> +               .name = "vddrfa0p95",
-> +               .load_uA = 200000,
-> +       },
-> +       {
-> +               .name = "vddrfa1p3",
-> +               .load_uA = 400000,
-> +       },
-> +       {
-> +               .name = "vddrfa1p9",
-> +               .load_uA = 400000,
-> +       },
-> +};
-> +
-> +static const struct pwrseq_qca6390_vreg pwrseq_qca6390_vregs_wlan[] = {
-> +       {
-> +               .name = "vddpcie1p3",
-> +               .load_uA = 35000,
-> +       },
-> +       {
-> +               .name = "vddpcie1p9",
-> +               .load_uA = 15000,
-> +       },
-> +};
+pm/testing build: 8 builds: 2 failed, 6 passed, 2 errors, 32 warnings (v6.8=
+-rc4-91-g833dbcc88dd9f)
 
-I thought that we had discussed this already. According to the docs,
-all PMU supplies should be powered on when the chip is being switched
-on, no matter whether it is for the WiFi or for the BT.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+8-rc4-91-g833dbcc88dd9f/
 
-> +
-> +static void pwrseq_qca6390_ensure_gpio_delay(struct pwrseq_qca6390_ctx *ctx)
-> +{
-> +       unsigned long diff_jiffies = jiffies - ctx->last_gpio_enable;
-> +       unsigned int diff_msecs = jiffies_to_msecs(diff_jiffies);
-> +
-> +       if (diff_msecs < 100)
-> +               msleep(100 - diff_msecs);
-> +}
-> +
-> +static const struct pwrseq_qca6390_pdata pwrseq_qca6390_of_data = {
-> +       .vregs_common = pwrseq_qca6390_vregs_common,
-> +       .num_vregs_common = ARRAY_SIZE(pwrseq_qca6390_vregs_common),
-> +       .vregs_wlan = pwrseq_qca6390_vregs_wlan,
-> +       .num_vregs_wlan = ARRAY_SIZE(pwrseq_qca6390_vregs_wlan),
-> +       .pwup_delay_msec = 16,
-> +};
-> +
-> +static int pwrseq_qca6390_vregs_enable(struct pwrseq_device *pwrseq)
-> +{
-> +       struct pwrseq_qca6390_ctx *ctx = pwrseq_device_get_drvdata(pwrseq);
-> +
-> +       return regulator_bulk_enable(ctx->pdata->num_vregs_common,
-> +                                    ctx->regs_common);
-> +}
-> +
-> +static int pwrseq_qca6390_vregs_disable(struct pwrseq_device *pwrseq)
-> +{
-> +       struct pwrseq_qca6390_ctx *ctx = pwrseq_device_get_drvdata(pwrseq);
-> +
-> +       return regulator_bulk_disable(ctx->pdata->num_vregs_common,
-> +                                     ctx->regs_common);
-> +}
-> +
-> +static const struct pwrseq_unit_data pwrseq_qca6390_vregs_unit_data = {
-> +       .name = "regulators-enable",
-> +       .enable = pwrseq_qca6390_vregs_enable,
-> +       .disable = pwrseq_qca6390_vregs_disable,
-> +};
-> +
-> +static const struct pwrseq_unit_data *pwrseq_qca6390_unit_deps[] = {
-> +       &pwrseq_qca6390_vregs_unit_data,
-> +       NULL
-> +};
-> +
-> +static int pwrseq_qca6390_bt_enable(struct pwrseq_device *pwrseq)
-> +{
-> +       struct pwrseq_qca6390_ctx *ctx = pwrseq_device_get_drvdata(pwrseq);
-> +
-> +       pwrseq_qca6390_ensure_gpio_delay(ctx);
-> +       gpiod_set_value_cansleep(ctx->bt_gpio, 1);
-> +       ctx->last_gpio_enable = jiffies;
-> +
-> +       return 0;
-> +}
-> +
-> +static int pwrseq_qca6390_bt_disable(struct pwrseq_device *pwrseq)
-> +{
-> +       struct pwrseq_qca6390_ctx *ctx = pwrseq_device_get_drvdata(pwrseq);
-> +
-> +       gpiod_set_value_cansleep(ctx->bt_gpio, 0);
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct pwrseq_unit_data pwrseq_qca6390_bt_unit_data = {
-> +       .name = "bluetooth-enable",
-> +       .deps = pwrseq_qca6390_unit_deps,
+Tree: pm
+Branch: testing
+Git Describe: v6.8-rc4-91-g833dbcc88dd9f
+Git Commit: 833dbcc88dd9f7c8d3a82200a75cb39f1e35b1ce
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-Can we call corresponding regulator_bulk functions from bt and wlan
-enable/disable? This will save us from building the tree-like
-structures (and possible loops inside that tree).
+Build Failures Detected:
 
-> +       .enable = pwrseq_qca6390_bt_enable,
-> +       .disable = pwrseq_qca6390_bt_disable,
-> +};
-> +
-> +static int pwrseq_qca6390_wlan_enable(struct pwrseq_device *pwrseq)
-> +{
-> +       struct pwrseq_qca6390_ctx *ctx = pwrseq_device_get_drvdata(pwrseq);
-> +       int ret;
-> +
-> +       ret = regulator_bulk_enable(ctx->pdata->num_vregs_wlan, ctx->regs_wlan);
-> +       if (ret)
-> +               return ret;
-> +
-> +       pwrseq_qca6390_ensure_gpio_delay(ctx);
-> +       gpiod_set_value_cansleep(ctx->wlan_gpio, 1);
-> +       ctx->last_gpio_enable = jiffies;
-> +
-> +       return 0;
-> +}
-> +
-> +static int pwrseq_qca6390_wlan_disable(struct pwrseq_device *pwrseq)
-> +{
-> +       struct pwrseq_qca6390_ctx *ctx = pwrseq_device_get_drvdata(pwrseq);
-> +
-> +       gpiod_set_value_cansleep(ctx->wlan_gpio, 0);
-> +
-> +       return regulator_bulk_disable(ctx->pdata->num_vregs_wlan,
-> +                                     ctx->regs_wlan);
-> +}
-> +
-> +static const struct pwrseq_unit_data pwrseq_qca6390_wlan_unit_data = {
-> +       .name = "wlan-enable",
-> +       .deps = pwrseq_qca6390_unit_deps,
-> +       .enable = pwrseq_qca6390_wlan_enable,
-> +       .disable = pwrseq_qca6390_wlan_disable,
-> +};
-> +
-> +static int pwrseq_qca6390_pwup_delay(struct pwrseq_device *pwrseq)
-> +{
-> +       struct pwrseq_qca6390_ctx *ctx = pwrseq_device_get_drvdata(pwrseq);
-> +
-> +       if (ctx->pdata->pwup_delay_msec)
-> +               msleep(ctx->pdata->pwup_delay_msec);
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct pwrseq_target_data pwrseq_qca6390_bt_target_data = {
-> +       .name = "bluetooth",
-> +       .unit = &pwrseq_qca6390_bt_unit_data,
-> +       .post_enable = pwrseq_qca6390_pwup_delay,
-> +};
-> +
-> +static const struct pwrseq_target_data pwrseq_qca6390_wlan_target_data = {
-> +       .name = "wlan",
-> +       .unit = &pwrseq_qca6390_wlan_unit_data,
-> +       .post_enable = pwrseq_qca6390_pwup_delay,
-> +};
-> +
-> +static const struct pwrseq_target_data *pwrseq_qca6390_targets[] = {
-> +       &pwrseq_qca6390_bt_target_data,
-> +       &pwrseq_qca6390_wlan_target_data,
-> +       NULL
-> +};
-> +
-> +static int pwrseq_qca6390_match(struct pwrseq_device *pwrseq,
-> +                               struct device *dev)
-> +{
-> +       struct pwrseq_qca6390_ctx *ctx = pwrseq_device_get_drvdata(pwrseq);
-> +       struct device_node *dev_node = dev->of_node;
-> +
-> +       /*
-> +        * The PMU supplies power to the Bluetooth and WLAN modules. both
-> +        * consume the PMU AON output so check the presence of the
-> +        * 'vddaon-supply' property and whether it leads us to the right
-> +        * device.
-> +        */
-> +       if (!of_property_present(dev_node, "vddaon-supply"))
-> +               return 0;
-> +
-> +       struct device_node *reg_node __free(device_node) =
-> +                       of_parse_phandle(dev_node, "vddaon-supply", 0);
-> +       if (!reg_node)
-> +               return 0;
-> +
-> +       /*
-> +        * `reg_node` is the PMU AON regulator, its parent is the `regulators`
-> +        * node and finally its grandparent is the PMU device node that we're
-> +        * looking for.
-> +        */
-> +       if (!reg_node->parent || !reg_node->parent->parent ||
-> +           reg_node->parent->parent != ctx->of_node)
-> +               return 0;
-> +
-> +       return 1;
-> +}
-> +
-> +static struct regulator_bulk_data *
-> +pwrseq_qca6390_get_regs(struct device *dev, size_t num_regs,
-> +                       const struct pwrseq_qca6390_vreg *pdata)
-> +{
-> +       struct regulator_bulk_data *regs;
-> +       int ret, i;
-> +
-> +       regs = devm_kcalloc(dev, num_regs, sizeof(*regs), GFP_KERNEL);
-> +       if (!regs)
-> +               return ERR_PTR(-ENOMEM);
-> +
-> +       for (i = 0; i < num_regs; i++)
-> +               regs[i].supply = pdata[i].name;
-> +
-> +       ret = devm_regulator_bulk_get(dev, num_regs, regs);
-> +       if (ret < 0)
-> +               return ERR_PTR(ret);
-> +
-> +       for (i = 0; i < num_regs; i++) {
-> +               if (!pdata[i].load_uA)
-> +                       continue;
-> +
-> +               ret = regulator_set_load(regs[i].consumer, pdata[i].load_uA);
-> +               if (ret)
-> +                       return ERR_PTR(ret);
-> +       }
-> +
-> +       return regs;
-> +}
-> +
-> +static int pwrseq_qca6390_probe(struct platform_device *pdev)
-> +{
-> +       struct device *dev = &pdev->dev;
-> +       struct pwrseq_qca6390_ctx *ctx;
-> +       struct pwrseq_config config;
-> +
-> +       ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
-> +       if (!ctx)
-> +               return -ENOMEM;
-> +
-> +       ctx->of_node = dev->of_node;
-> +
-> +       ctx->pdata = of_device_get_match_data(dev);
-> +       if (!ctx->pdata)
-> +               return dev_err_probe(dev, -ENODEV,
-> +                                    "Failed to obtain platform data\n");
-> +
-> +       ctx->regs_common = pwrseq_qca6390_get_regs(dev,
-> +                                                  ctx->pdata->num_vregs_common,
-> +                                                  ctx->pdata->vregs_common);
-> +       if (IS_ERR(ctx->regs_common))
-> +               return dev_err_probe(dev, PTR_ERR(ctx->regs_common),
-> +                                    "Failed to get all regulators\n");
-> +
-> +       ctx->regs_wlan = pwrseq_qca6390_get_regs(dev,
-> +                                                ctx->pdata->num_vregs_wlan,
-> +                                                ctx->pdata->vregs_wlan);
-> +       if (IS_ERR(ctx->regs_wlan))
-> +               return dev_err_probe(dev, PTR_ERR(ctx->regs_wlan),
-> +                                    "Failed to get all regulators\n");
-> +
-> +       ctx->bt_gpio = devm_gpiod_get_optional(dev, "bt-enable", GPIOD_OUT_LOW);
-> +       if (IS_ERR(ctx->bt_gpio))
-> +               return dev_err_probe(dev, PTR_ERR(ctx->bt_gpio),
-> +                                    "Failed to get the Bluetooth enable GPIO\n");
-> +
-> +       ctx->wlan_gpio = devm_gpiod_get_optional(dev, "wlan-enable",
-> +                                                GPIOD_OUT_LOW);
-> +       if (IS_ERR(ctx->wlan_gpio))
-> +               return dev_err_probe(dev, PTR_ERR(ctx->wlan_gpio),
-> +                                    "Failed to get the WLAN enable GPIO\n");
-> +
-> +       memset(&config, 0, sizeof(config));
-> +
-> +       config.parent = dev;
-> +       config.owner = THIS_MODULE;
-> +       config.drvdata = ctx;
-> +       config.match = pwrseq_qca6390_match;
-> +       config.targets = pwrseq_qca6390_targets;
-> +
-> +       ctx->pwrseq = devm_pwrseq_device_register(dev, &config);
-> +       if (IS_ERR(ctx->pwrseq))
-> +               return dev_err_probe(dev, PTR_ERR(ctx->pwrseq),
-> +                                    "Failed to register the power sequencer\n");
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct of_device_id pwrseq_qca6390_of_match[] = {
-> +       {
-> +               .compatible = "qcom,qca6390-pmu",
-> +               .data = &pwrseq_qca6390_of_data,
-> +       },
-> +       { }
-> +};
-> +MODULE_DEVICE_TABLE(of, pwrseq_qca6390_of_match);
-> +
-> +static struct platform_driver pwrseq_qca6390_driver = {
-> +       .driver = {
-> +               .name = "pwrseq-qca6390",
-> +               .of_match_table = pwrseq_qca6390_of_match,
-> +       },
-> +       .probe = pwrseq_qca6390_probe,
-> +};
-> +module_platform_driver(pwrseq_qca6390_driver);
-> +
-> +MODULE_AUTHOR("Bartosz Golaszewski <bartosz.golaszewski@linaro.org>");
-> +MODULE_DESCRIPTION("QCA6390 PMU power sequencing driver");
-> +MODULE_LICENSE("GPL");
-> --
-> 2.40.1
->
+i386:
+    i386_defconfig: (gcc-10) FAIL
 
+x86_64:
+    x86_64_defconfig: (gcc-10) FAIL
 
--- 
-With best wishes
-Dmitry
+Errors and Warnings Detected:
+
+arc:
+    haps_hs_smp_defconfig (gcc-10): 2 warnings
+
+arm64:
+    defconfig (gcc-10): 1 warning
+
+arm:
+
+i386:
+    i386_defconfig (gcc-10): 1 error, 1 warning
+
+mips:
+
+riscv:
+    defconfig (gcc-10): 1 warning
+
+sparc:
+    sparc64_defconfig (gcc-10): 26 warnings
+
+x86_64:
+    x86_64_defconfig (gcc-10): 1 error, 1 warning
+
+Errors summary:
+
+    1    security/security.c:810:2: error: =E2=80=98memcpy=E2=80=99 offset =
+32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
+    1    arch/x86/include/asm/string_32.h:150:25: error: =E2=80=98__builtin=
+_memcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bou=
+nds]
+
+Warnings summary:
+
+    2    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offse=
+t 32 is out of the bounds [0, 0] [-Warray-bounds]
+    2    cc1: all warnings being treated as errors
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =
+=E2=80=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
+rototypes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
+pes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
+prototypes]
+    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
+ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
+ypes]
+    1    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
+type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
+type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =
+=E2=80=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype fo=
+r =E2=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for=
+ =E2=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype=
+ for =E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype=
+ for =E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototyp=
+e for =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-protot=
+ypes]
+    1    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototyp=
+e for =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype=
+ for =E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototyp=
+e for =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototy=
+pe for =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype f=
+or =E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype =
+for =E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
+    1    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype =
+for =E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
+    1    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype fo=
+r 'syscall_trace_enter' [-Wmissing-prototypes]
+    1    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype f=
+or 'arc_kprobe_handler' [-Wmissing-prototypes]
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
+smatches
+
+Warnings:
+    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
+is out of the bounds [0, 0] [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
+smatches
+
+Warnings:
+    security/security.c:810:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
+is out of the bounds [0, 0] [-Warray-bounds]
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
+scall_trace_enter' [-Wmissing-prototypes]
+    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
+rc_kprobe_handler' [-Wmissing-prototypes]
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
+ mismatches
+
+Errors:
+    arch/x86/include/asm/string_32.h:150:25: error: =E2=80=98__builtin_memc=
+py=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 26 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype for =
+=E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototype for=
+ =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototype for=
+ =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototype for=
+ =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype for =
+=E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype for =
+=E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype for =
+=E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype for =
+=E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototype fo=
+r =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype for =
+=E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for =E2=
+=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =E2=80=
+=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
+for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
+for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
+prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
+types]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
+prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
+ypes]
+    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
+=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
+    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
+=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 sec=
+tion mismatches
+
+Errors:
+    security/security.c:810:2: error: =E2=80=98memcpy=E2=80=99 offset 32 is=
+ out of the bounds [0, 0] [-Werror=3Darray-bounds]
+
+Warnings:
+    cc1: all warnings being treated as errors
+
+---
+For more info write to <info@kernelci.org>
 
