@@ -1,137 +1,318 @@
-Return-Path: <linux-pm+bounces-3971-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3972-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DF838575C4
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 06:54:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BA33857747
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 09:16:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A7841F26254
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 05:54:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DBBD280F87
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 08:16:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED86B12E7E;
-	Fri, 16 Feb 2024 05:54:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6894C1CA98;
+	Fri, 16 Feb 2024 08:01:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="FIk2/7ny"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="SRDEsoy8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D8B7134AC
-	for <linux-pm@vger.kernel.org>; Fri, 16 Feb 2024 05:54:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDF9E17591;
+	Fri, 16 Feb 2024 08:01:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708062872; cv=none; b=r1e1z81W1Bi81rzb6E5aNtLAtGPE6ZCZk4ZlBmJR+cC4+10FQzgEm+a2Ql3pdzAL+S+VA4aFb7d4uuVo20IfOgUtqg4qlE45wv76H+fd/JLLVzzI+yvXtmAwREL65xSMeFXfpD2UeDip5qOwWJM+cBdmqr460vuq/+rBdD2FT3Y=
+	t=1708070473; cv=none; b=M/9WhIoWYbuuxfBE8tAsBtcn5uQ/Ul+sGyGwWDlT0jCD/JJOxFarvvNuYCCTswT035DmAXB/WjjJBeVA62h3sisd+jWjPCKpBcrOZoUvtdWghpPOulaxK0UphY39rLH1Y26EBzEAJISR2OpDC9zIkkXoK0afxoltBf0EIjVPMtk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708062872; c=relaxed/simple;
-	bh=q1gtVAj3lvEe8b98I0528UWfo/5v+mmHvNmP7iA02S0=;
-	h=Mime-Version:Subject:From:To:CC:In-Reply-To:Message-ID:Date:
-	 Content-Type:References; b=XDf+Dmj0iKhK+AJh7zxdKBasx4EFIx25SkGfgS5AcKyIcvFKmNxcLIc75Q+Kyi9Uyd6qB1m/9tDI0Y8ITw7b6yBjojXBz52R2HVEpkKFaYqYOqoGZXaJojZhpL18EjUQtFiRsN3L/fzZCzmUIox0nepfbRFib3tHDdu7jDkHEI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=FIk2/7ny; arc=none smtp.client-ip=203.254.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20240216055428epoutp049b3d35fa2eae525bcccb5b29c3d3e75d~0QiEL8qPw3041930419epoutp04x
-	for <linux-pm@vger.kernel.org>; Fri, 16 Feb 2024 05:54:28 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20240216055428epoutp049b3d35fa2eae525bcccb5b29c3d3e75d~0QiEL8qPw3041930419epoutp04x
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1708062868;
-	bh=q1gtVAj3lvEe8b98I0528UWfo/5v+mmHvNmP7iA02S0=;
-	h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-	b=FIk2/7nyuWDMu3XQTesMOFOnCujZ5BveQZ5JTKA5lvjijnPI1i1au2OmHTqGrWORV
-	 fc0+Kr5gqsKMgG+paStP78XKRs8qMtikRo0AK47f0zYA4maf5WCXp58/TBi9OYhQ36
-	 ohNZEvynIRpZOBQWosfRr6lziRKUKmdLdhRcWNq8=
-Received: from epsmges5p3new.samsung.com (unknown [182.195.42.75]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTP id
-	20240216055427epcas5p34f65ef318a454c13df99df12149e1aa7~0QiDdT30g0434004340epcas5p3V;
-	Fri, 16 Feb 2024 05:54:27 +0000 (GMT)
-X-AuditID: b6c32a4b-39fff700000025c8-38-65cef89375a1
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-	epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	3B.F9.09672.398FEC56; Fri, 16 Feb 2024 14:54:27 +0900 (KST)
+	s=arc-20240116; t=1708070473; c=relaxed/simple;
+	bh=8+sMLiLDtkXguOlgQu12cov7zp0Zkez8ofBb7z/DWFY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=oDnSIIzqsy7y082pz0uWVWmnXi4WcpzRtDr1/1Fp3tRIsth30nF7xLps3QxilvkPrwNjI8HXCa9WCRVMwgEJtiYIMPIWKsx4ORsO/ePnVZncnwjYMYtutxASdJx/NgaHrvJwgbyXCJ/x4DN+bESw7qK1FClBmjp+X3V2v23o6Ls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=SRDEsoy8; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41G59cEB010137;
+	Fri, 16 Feb 2024 08:00:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=tqBk8G2oArSxqg6+H9dUVqGQk8Y9DebswvmMPbcPGOk=; b=SR
+	DEsoy8PDY255XJK/JQeLSYNTrH9JZr5fGlw4hucQZa4AU9QkoeglwPfDfk3iU0bT
+	4cRKa5fZhbXztHbadKo7AJVPjWUxS0BOh/A4ddagaQU59xHiWgaRQG5lEZD5qdOP
+	rSJ2fRhYPrzl+DyvLSJnEnoLajg4aMzlmj3//SQJytPCqdKRt10oIS86jLa/v8a8
+	+mqYiaBCFUbb3SWjDFG5SqMXjnNSrSBsotbk2Pm0+WqEd0bD+5LnEfnlevyIqNXa
+	g6s5xJ/klzb/qxeB8aei1SZYYs+cplI9uvkXSmV6ptXQ9CevCFmjqEtC31lKh/bQ
+	mCh+UhLqKaVBT/XWY+Pw==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w9fkfb2er-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 Feb 2024 08:00:47 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41G80jlG009174
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 16 Feb 2024 08:00:45 GMT
+Received: from [10.218.5.19] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 16 Feb
+ 2024 00:00:38 -0800
+Message-ID: <eb758a6c-a3e0-4ee9-bff4-4b62e5530d09@quicinc.com>
+Date: Fri, 16 Feb 2024 13:30:09 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Subject: Re: [PATCH v3 1/2] ACPI: use %pe for better readability of errors
- while printing
-Reply-To: onkarnath.1@samsung.com
-Sender: Onkarnath <onkarnath.1@samsung.com>
-From: Onkarnath <onkarnath.1@samsung.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: "lenb@kernel.org" <lenb@kernel.org>, "bhelgaas@google.com"
-	<bhelgaas@google.com>, "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-	"mingo@redhat.com" <mingo@redhat.com>, "peterz@infradead.org"
-	<peterz@infradead.org>, "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
-	"vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-	"dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>, "rostedt@goodmis.org"
-	<rostedt@goodmis.org>, "bsegall@google.com" <bsegall@google.com>,
-	"mgorman@suse.de" <mgorman@suse.de>, "bristot@redhat.com"
-	<bristot@redhat.com>, "vschneid@redhat.com" <vschneid@redhat.com>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-	"linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>, Rohit Thapliyal
-	<r.thapliyal@samsung.com>, Maninder Singh <maninder1.s@samsung.com>,
-	"helgaas@kernel.org" <helgaas@kernel.org>, Stanislaw Gruszka
-	<stanislaw.gruszka@linux.intel.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <CAJZ5v0gBrc0FctEswQj_JMcZRqoswRgXvBRzT++tseUWBgYJWA@mail.gmail.com>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20240216054540epcms5p3b0b3f97fe4ec4a8126549a579e596910@epcms5p3>
-Date: Fri, 16 Feb 2024 11:15:40 +0530
-X-CMS-MailID: 20240216054540epcms5p3b0b3f97fe4ec4a8126549a579e596910
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrPKsWRmVeSWpSXmKPExsWy7bCmhu7kH+dSDVr3SlssacqwuPT4KpvF
-	9JeNLBZPJ2xltnh1Zi2bxd3+qSwWOx++ZbNYvq+f0eLyrjlsFmfnHWez+Nx7hNHi8Pw2FovJ
-	754xWlw6sIDJ4njvASaLjfeyLeZ+mcpssa/jAZPFxz0bGC06jnxjttj41cNi69Hv7A5iHmvm
-	rWH0aNl3i91jwaZSj80rtDw2repk87hzbQ+bx7yTgR7v911l8+jbsorRY/Ppao/Pm+QCuKO4
-	bFJSczLLUov07RK4Mra9ky+Yy10xu2caewPjR64uRk4OCQETiX/9C1m7GLk4hAR2M0qc7NjI
-	1MXIwcErICjxd4cwSI2wQLTEtAuHmEFsIQFFif2LJ7JDxLUlDk64DRZnE9CU+LP8KVhcBCi+
-	ZNFVsDizwDQOiebvZhC7eCVmtD9lgbClJbYv38oIYnMKBEp8m9cNFReVuLn6LTuM/f7YfEYI
-	W0Si9d5ZZghbUOLBz92MMHPmfFjHCmEXS8w8cgqqpkbi/t25TBC2ucT6JavAZvIK+Eo83H2H
-	HeRFFgFViQt/nCFKXCQeLj7CBHGytsSyha+ZQUqYgd5av0sfokRWYuqpdVAlfBK9v58wwXy1
-	Yx6MrSrxa8pUuA/v/57LBmF7SHw4vpUdEspnGSVeXVvMOIFRYRYioGch2TwLYfMCRuZVjJKp
-	BcW56anFpgXGeanlesWJucWleel6yfm5mxjBaVLLewfjowcf9A4xMnEwHmKU4GBWEuGd1Hsm
-	VYg3JbGyKrUoP76oNCe1+BCjNAeLkjjv69a5KUIC6YklqdmpqQWpRTBZJg5OqQYmQ8Pzn99e
-	ebtc9MLOmD+/dpzzlbo+r888hpUhniln8SF7d96H3oa6O2d8WcfWdTKhJ2DJ1djJdgUHK765
-	zFlz8edb45sZT55fdhC9cftHNFd/wm7H9Uw6Ns+Yn644FCZ9hd9Aa18j1zmhH886t0+aMzXR
-	0eu4V9LTwyd8f3j6OKwxCd0sJd2m94uVefHNBKmZf8Qcas34hZy3b68Je+/9hK1vWsp7t/0/
-	HwZ85bPj5rG+Z5e0Z9K2PYtnazGL33M96Z6/RnvtGaHbcx+xbWL1m9r6dopB4DRhzv0sVR0z
-	jnHeW2N1e8ftmSUBipNj+Sce7V2isjC/tS3QTFH3drer++MlU5Xba5OlDpce4feuV2Ipzkg0
-	1GIuKk4EAC5E5x4CBAAA
-X-CMS-RootMailID: 20240213074430epcas5p4c520bf2cce121cf5fa970eed429231a8
-References: <CAJZ5v0gBrc0FctEswQj_JMcZRqoswRgXvBRzT++tseUWBgYJWA@mail.gmail.com>
-	<20240213074416.2169929-1-onkarnath.1@samsung.com>
-	<CGME20240213074430epcas5p4c520bf2cce121cf5fa970eed429231a8@epcms5p3>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/5] PM: domains: Allow devices attached to genpd to be
+ managed by HW
+To: Ulf Hansson <ulf.hansson@linaro.org>
+CC: Bjorn Andersson <andersson@kernel.org>, Abel Vesa <abel.vesa@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette
+	<mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Stanimir Varbanov
+	<stanimir.k.varbanov@gmail.com>,
+        Vikash Garodia <quic_vgarodia@quicinc.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Mauro Carvalho Chehab
+	<mchehab@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Dmitry Baryshkov
+	<dmitry.baryshkov@linaro.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-media@vger.kernel.org>
+References: <20240122-gdsc-hwctrl-v4-0-9061e8a7aa07@linaro.org>
+ <20240122-gdsc-hwctrl-v4-1-9061e8a7aa07@linaro.org>
+ <tax3c6o5qjegy6tv3zbgrd5rencfvypr3zg7twxfrmdngscp74@n44ei3q63g64>
+ <CAPDyKFpdtrWbzNksLoY++aOY7Ltyt1HhtLZo8bj8sQ05-4Sq0g@mail.gmail.com>
+ <l7icfezpajren25545n4cjtqehhividt5b2dxnxgetdsshc3k3@tdws423qdblk>
+ <CAPDyKFp1vg2+-pHJ_idkdhb_zZUMpq7W17DnCCGj0eTwd4jFbQ@mail.gmail.com>
+ <87b7967f-d8c4-426e-92ed-5a418c702481@quicinc.com>
+ <CAPDyKFqy0osJRTU1mL0Ew_3pnYOe5z20ZWNrew8B6t99UFO0pg@mail.gmail.com>
+ <a1c2641f-80c0-4e6e-9c44-ef7209da97a5@quicinc.com>
+ <CAPDyKFrg_otBETwM9hTOvxkdCPadDYdaxguS5RVJh4wL9NCovA@mail.gmail.com>
+Content-Language: en-US
+From: Jagadeesh Kona <quic_jkona@quicinc.com>
+In-Reply-To: <CAPDyKFrg_otBETwM9hTOvxkdCPadDYdaxguS5RVJh4wL9NCovA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 5dsPSbP5dS2hIh2OMqliEvaHhDJCiW-f
+X-Proofpoint-GUID: 5dsPSbP5dS2hIh2OMqliEvaHhDJCiW-f
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-16_06,2024-02-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ adultscore=0 lowpriorityscore=0 impostorscore=0 mlxlogscore=999
+ spamscore=0 bulkscore=0 suspectscore=0 mlxscore=0 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401310000 definitions=main-2402160064
 
->On Tue, Feb 13, 2024 at 9:20=E2=80=AFAM=20Onkarnarth=20<onkarnath.1=40sams=
-ung.com>=20wrote:=0D=0A>>=0D=0A>>=20From:=20Onkarnath=20<onkarnath.1=40sams=
-ung.com>=0D=0A>>=0D=0A>>=20As=20%pe=20is=20already=20introduced,=20it's=20b=
-etter=20to=20use=20it=20in=20place=20of=20(%ld)=20for=0D=0A>>=20printing=20=
-errors=20in=20logs.=20It=20would=20enhance=20readability=20of=20logs.=0D=0A=
->>=0D=0A>>=20Signed-off-by:=20Maninder=20Singh=20<maninder1.s=40samsung.com=
->=0D=0A>=0D=0A>What=20exactly=20is=20the=20role=20of=20this=20S-o-b?=20=20H=
-as=20the=20person=20helped=20you=20to=0D=0A>develop=20the=20patch=20or=20so=
-mething=20else?=0D=0A>=0D=0A=0D=0AYes=20It=20was=20meant=20for=20Co-develop=
-ed=20tag,=20Because=20We=20are=20working=20collectively=20for=20making=20er=
-rors=20more=20readable=20for=20our=20product=20kernel.(5.4)=0D=0AAnd=20some=
-=20part=20of=20this=20patch=20was=20made=20by=20him.=0D=0A=0D=0AThen=20we=
-=20checked=20that=20it=20is=20also=20suggested=20by=20open=20source=20to=20=
-have=20%pe=20for=20printing=20errors:=0D=0Ahttps://lore.kernel.org/all/9297=
-2476-0b1f-4d0a-9951-af3fc8bc6e65=40suswa.mountain/=0D=0A=0D=0ASo=20I=20prep=
-ared=20same=20changes=20for=20open=20source=20kernel,=20and=20because=20of=
-=20smaller=20patch=20I=20kept=20it=20as=20normal=20signed-off=20tag=20only.=
-=0D=0AIf=20it=20is=20needed=20I=20can=20resend=20with=20Co-developed=20tag.=
-=0D=0A=0D=0AThanks,=0D=0AOnkarnath
+
+
+On 2/15/2024 9:57 PM, Ulf Hansson wrote:
+> On Wed, 14 Feb 2024 at 05:29, Jagadeesh Kona <quic_jkona@quicinc.com> wrote:
+>>
+>>
+>>
+>> On 2/13/2024 7:21 PM, Ulf Hansson wrote:
+>>> On Tue, 13 Feb 2024 at 14:10, Jagadeesh Kona <quic_jkona@quicinc.com> wrote:
+>>>>
+>>>>
+>>>>
+>>>> On 2/2/2024 5:59 PM, Ulf Hansson wrote:
+>>>>> On Fri, 2 Feb 2024 at 00:51, Bjorn Andersson <andersson@kernel.org> wrote:
+>>>>>>
+>>>>>> On Wed, Jan 31, 2024 at 01:12:00PM +0100, Ulf Hansson wrote:
+>>>>>>> On Wed, 31 Jan 2024 at 02:09, Bjorn Andersson <andersson@kernel.org> wrote:
+>>>>>>>>
+>>>>>>>> On Mon, Jan 22, 2024 at 10:47:01AM +0200, Abel Vesa wrote:
+>>>>>>>>> From: Ulf Hansson <ulf.hansson@linaro.org>
+>>>>>>>>>
+>>>>>>>>> Some power-domains may be capable of relying on the HW to control the power
+>>>>>>>>> for a device that's hooked up to it. Typically, for these kinds of
+>>>>>>>>> configurations the consumer driver should be able to change the behavior of
+>>>>>>>>> power domain at runtime, control the power domain in SW mode for certain
+>>>>>>>>> configurations and handover the control to HW mode for other usecases.
+>>>>>>>>>
+>>>>>>>>> To allow a consumer driver to change the behaviour of the PM domain for its
+>>>>>>>>> device, let's provide a new function, dev_pm_genpd_set_hwmode(). Moreover,
+>>>>>>>>> let's add a corresponding optional genpd callback, ->set_hwmode_dev(),
+>>>>>>>>> which the genpd provider should implement if it can support switching
+>>>>>>>>> between HW controlled mode and SW controlled mode. Similarly, add the
+>>>>>>>>> dev_pm_genpd_get_hwmode() to allow consumers to read the current mode and
+>>>>>>>>> its corresponding optional genpd callback, ->get_hwmode_dev(), which the
+>>>>>>>>> genpd provider can also implement for reading back the mode from the
+>>>>>>>>> hardware.
+>>>>>>>>>
+>>>>>>>>> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+>>>>>>>>> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+>>>>>>>>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>>>>>>>>> ---
+>>>>>>>>>     drivers/pmdomain/core.c   | 69 +++++++++++++++++++++++++++++++++++++++++++++++
+>>>>>>>>>     include/linux/pm_domain.h | 17 ++++++++++++
+>>>>>>>>>     2 files changed, 86 insertions(+)
+>>>>>>>>>
+>>>>>>>>> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+>>>>>>>>> index a1f6cba3ae6c..41b6411d0ef5 100644
+>>>>>>>>> --- a/drivers/pmdomain/core.c
+>>>>>>>>> +++ b/drivers/pmdomain/core.c
+>>>>>>>>> @@ -548,6 +548,75 @@ void dev_pm_genpd_synced_poweroff(struct device *dev)
+>>>>>>>>>     }
+>>>>>>>>>     EXPORT_SYMBOL_GPL(dev_pm_genpd_synced_poweroff);
+>>>>>>>>>
+>>>>>>>>> +/**
+>>>>>>>>> + * dev_pm_genpd_set_hwmode - Set the HW mode for the device and its PM domain.
+>>>>>>>>
+>>>>>>>> This isn't proper kernel-doc
+>>>>>>>
+>>>>>>> Sorry, I didn't quite get that. What is wrong?
+>>>>>>>
+>>>>>>
+>>>>>> https://docs.kernel.org/doc-guide/kernel-doc.html#function-documentation
+>>>>>> says that there should be () after the function name, and below there
+>>>>>> should be a Return:
+>>>>>
+>>>>> Thanks for the pointers!
+>>>>>
+>>>>>>
+>>>>>>>>
+>>>>>>>>> + *
+>>>>>>>>> + * @dev: Device for which the HW-mode should be changed.
+>>>>>>>>> + * @enable: Value to set or unset the HW-mode.
+>>>>>>>>> + *
+>>>>>>>>> + * Some PM domains can rely on HW signals to control the power for a device. To
+>>>>>>>>> + * allow a consumer driver to switch the behaviour for its device in runtime,
+>>>>>>>>> + * which may be beneficial from a latency or energy point of view, this function
+>>>>>>>>> + * may be called.
+>>>>>>>>> + *
+>>>>>>>>> + * It is assumed that the users guarantee that the genpd wouldn't be detached
+>>>>>>>>> + * while this routine is getting called.
+>>>>>>>>> + *
+>>>>>>>>> + * Returns 0 on success and negative error values on failures.
+>>>>>>>>> + */
+>>>>>>>>> +int dev_pm_genpd_set_hwmode(struct device *dev, bool enable)
+>>>>>>>>> +{
+>>>>>>>>> +     struct generic_pm_domain *genpd;
+>>>>>>>>> +     int ret = 0;
+>>>>>>>>> +
+>>>>>>>>> +     genpd = dev_to_genpd_safe(dev);
+>>>>>>>>> +     if (!genpd)
+>>>>>>>>> +             return -ENODEV;
+>>>>>>>>> +
+>>>>>>>>> +     if (!genpd->set_hwmode_dev)
+>>>>>>>>> +             return -EOPNOTSUPP;
+>>>>>>>>> +
+>>>>>>>>> +     genpd_lock(genpd);
+>>>>>>>>> +
+>>>>>>>>> +     if (dev_gpd_data(dev)->hw_mode == enable)
+>>>>>>>>
+>>>>>>>> Between this and the gdsc patch, the hw_mode state might not match the
+>>>>>>>> hardware state at boot.
+>>>>>>>>
+>>>>>>>> With hw_mode defaulting to false, your first dev_pm_genpd_set_hwmode(,
+>>>>>>>> false) will not bring control to SW - which might be fatal.
+>>>>>>>
+>>>>>>> Right, good point.
+>>>>>>>
+>>>>>>> I think we have two ways to deal with this:
+>>>>>>> 1) If the provider is supporting ->get_hwmode_dev(), we can let
+>>>>>>> genpd_add_device() invoke it to synchronize the state.
+>>>>>>
+>>>>>> I'd suggest that we skip the optimization for now and just let the
+>>>>>> update hit the driver on each call.
+>>>>>
+>>>>> Okay.
+>>>>>
+>>>>>>
+>>>>>>> 2) If the provider doesn't support ->get_hwmode_dev() we need to call
+>>>>>>> ->set_hwmode_dev() to allow an initial state to be set.
+>>>>>>>
+>>>>>>> The question is then, if we need to allow ->get_hwmode_dev() to be
+>>>>>>> optional, if the ->set_hwmode_dev() is supported - or if we can
+>>>>>>> require it. What's your thoughts around this?
+>>>>>>>
+>>>>>>
+>>>>>> Iiuc this resource can be shared between multiple clients, and we're
+>>>>>> in either case returning the shared state. That would mean a client
+>>>>>> acting upon the returned value, is subject to races.
+>>>>>
+>>>>> Not sure I understand this, but I also don't have in-depth knowledge
+>>>>> of how the HW works.
+>>>>>
+>>>>> Isn't the HW mode set on a per device basis?
+>>>>>
+>>>>>>
+>>>>>> I'm therefore inclined to say that we shouldn't have a getter, other
+>>>>>> than for debugging purposes, in which case reading the HW-state or
+>>>>>> failing would be reasonable outcomes.
+>>>>>
+>>>>> If you only want this for debug purposes, it seems better to keep it
+>>>>> closer to the rpmh code, rather than adding generic callbacks to the
+>>>>> genpd interface.
+>>>>>
+>>>>> So to conclude, you think having a ->set_hwmode_dev() callback should
+>>>>> be sufficient and no caching of the current state?
+>>>>>
+>>>>> Abel, what's your thoughts around this?
+>>>>>
+>>>>
+>>>> We believe it is good to have get_hwmode_dev() callback supported from
+>>>> GenPD, since if multiple devices share a GenPD, and if one device moves
+>>>> the GenPD to HW mode, the other device won't be aware of it and second
+>>>> device's dev_gpd_data(dev)->hw_mode will still be false.
+>>>>
+>>>> If we have this dev_pm_genpd_get_hwmode() API supported and if we assign
+>>>> dev_gpd_data(dev)->hw_mode after getting the mode from get_hwmode_dev()
+>>>> callback, consumer drivers can use this API to sync the actual HW mode
+>>>> of the GenPD.
+>>>
+>>> Hmm, I thought the HW mode was being set on a per device basis, via
+>>> its PM domain. Did I get that wrong?
+>>>
+>>> Are you saying there could be multiple devices sharing the same PM
+>>> domain and thus also sharing the same HW mode? In that case, it sure
+>>> sounds like we have synchronization issues to deal with too.
+>>>
+>>
+>> Sorry my bad, currently we don't have usecase where multiple devices
+>> sharing the same PM domain that have HW control support, so there is no
+>> synchronization issue.
+> 
+> Okay, good!
+> 
+>>
+>> But it would be good to have .get_hwmode_dev() callback for consumer
+>> drivers to query the actual GenPD mode from HW, whenever they require it.
+> 
+> Okay, no objection from my side.
+> 
+> Then the final question is if we need a variable to keep a cache of
+> the current HW mode for each device. Perhaps we should start simple
+> and just always invoke the callbacks from genpd, what do you think?
+> 
+
+Yes, agree, we can remove the variable and just always invoke the 
+callbacks from genpd. But we may need the variable to reflect GenPD
+mode in debugfs genpd_summary, or need to invoke get callback there as 
+well to get the current mode.
+
+Thanks,
+Jagadeesh
+
+> Kind regards
+> Uffe
 
