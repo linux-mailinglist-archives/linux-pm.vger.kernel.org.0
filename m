@@ -1,318 +1,230 @@
-Return-Path: <linux-pm+bounces-3972-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3973-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BA33857747
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 09:16:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 571AA857879
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 10:05:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DBBD280F87
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 08:16:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7363D1C20CA9
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 09:05:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6894C1CA98;
-	Fri, 16 Feb 2024 08:01:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2B9C1B972;
+	Fri, 16 Feb 2024 09:05:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="SRDEsoy8"
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="NfhGZJqI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDF9E17591;
-	Fri, 16 Feb 2024 08:01:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 650351B978;
+	Fri, 16 Feb 2024 09:05:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708070473; cv=none; b=M/9WhIoWYbuuxfBE8tAsBtcn5uQ/Ul+sGyGwWDlT0jCD/JJOxFarvvNuYCCTswT035DmAXB/WjjJBeVA62h3sisd+jWjPCKpBcrOZoUvtdWghpPOulaxK0UphY39rLH1Y26EBzEAJISR2OpDC9zIkkXoK0afxoltBf0EIjVPMtk=
+	t=1708074333; cv=none; b=V1dfyeb8CYRHYvno07OVku+bXyMIPC7Xz0kxNvtSKZ6farirWm7zm3xEZTxKxo7Zvh+Yru2f95n2SqNL6K1dbi60PLDlm0I1C2HFilyuX0HPDqAO8GvDlvIoiBBA3q/lSXRc4hcRhAfm7Rh9OT73FvkpaaLs5oRxjLPNHT9mnuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708070473; c=relaxed/simple;
-	bh=8+sMLiLDtkXguOlgQu12cov7zp0Zkez8ofBb7z/DWFY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=oDnSIIzqsy7y082pz0uWVWmnXi4WcpzRtDr1/1Fp3tRIsth30nF7xLps3QxilvkPrwNjI8HXCa9WCRVMwgEJtiYIMPIWKsx4ORsO/ePnVZncnwjYMYtutxASdJx/NgaHrvJwgbyXCJ/x4DN+bESw7qK1FClBmjp+X3V2v23o6Ls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=SRDEsoy8; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41G59cEB010137;
-	Fri, 16 Feb 2024 08:00:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=tqBk8G2oArSxqg6+H9dUVqGQk8Y9DebswvmMPbcPGOk=; b=SR
-	DEsoy8PDY255XJK/JQeLSYNTrH9JZr5fGlw4hucQZa4AU9QkoeglwPfDfk3iU0bT
-	4cRKa5fZhbXztHbadKo7AJVPjWUxS0BOh/A4ddagaQU59xHiWgaRQG5lEZD5qdOP
-	rSJ2fRhYPrzl+DyvLSJnEnoLajg4aMzlmj3//SQJytPCqdKRt10oIS86jLa/v8a8
-	+mqYiaBCFUbb3SWjDFG5SqMXjnNSrSBsotbk2Pm0+WqEd0bD+5LnEfnlevyIqNXa
-	g6s5xJ/klzb/qxeB8aei1SZYYs+cplI9uvkXSmV6ptXQ9CevCFmjqEtC31lKh/bQ
-	mCh+UhLqKaVBT/XWY+Pw==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3w9fkfb2er-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 16 Feb 2024 08:00:47 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41G80jlG009174
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 16 Feb 2024 08:00:45 GMT
-Received: from [10.218.5.19] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Fri, 16 Feb
- 2024 00:00:38 -0800
-Message-ID: <eb758a6c-a3e0-4ee9-bff4-4b62e5530d09@quicinc.com>
-Date: Fri, 16 Feb 2024 13:30:09 +0530
+	s=arc-20240116; t=1708074333; c=relaxed/simple;
+	bh=b3i9lcb0CgqU/Tao29pcsoyVFjxM+a2TkJlbTzzBGVE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=SYIRxG9aIpiiIwJlgr+boVBAxBZd8cq422enOEPAQDxdXkeqSm4kCPQfHDmsyR+AlsS/I74L1UwHbR+NJ3p6uVUQBM72TCBgVAGJnAIPtWfmhf3IhejY06BEwpnJ8EYXXxdud27LwfEfeuGL9l3D6dmqZ3YCLpejkpWHQTCfK1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=NfhGZJqI; arc=none smtp.client-ip=93.104.207.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1708074330; x=1739610330;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=9vIOGZfDhKu9DGx5o5UYxS0vQjX/6Zu979oLg6n9Etg=;
+  b=NfhGZJqIdAixnWZJbLGuVmX0Ds3WOiW7B06rQtC2uF+MFvZ9rcDKkeP3
+   dT4UhbSibnZyyZ6xHK2Bb07boZVXa1AFGzqLb/Kv7Pq2aLJLM/gyr9muu
+   aHv0hwzF/AeWhz8yc5hwQE4DvAPvRCYvnuNBKt+b8hMy7Siuu+2hbrCyX
+   x6KGt6vkYYgNy4CL1yNH7mwDWphe34GEXgz8K5GU26oGOi6pj/2Pn2+0v
+   fKa2naKzpUmXxJiMgp6HYU6gQvHRGaO75JjOegLyuKUuv157oQ2gCHXRY
+   1kJIX6fvVR2w95Vpjl/teLCAwiN7eypmPik1JEBfKdGlBcjsabnJ4C+Ac
+   w==;
+X-IronPort-AV: E=Sophos;i="6.06,164,1705359600"; 
+   d="scan'208";a="35440531"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 16 Feb 2024 10:05:25 +0100
+Received: from steina-w.localnet (steina-w.tq-net.de [10.123.53.25])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 1BAE5280075;
+	Fri, 16 Feb 2024 10:05:25 +0100 (CET)
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
+To: linux-arm-kernel@lists.infradead.org, dri-devel@lists.freedesktop.org
+Cc: marex@denx.de, frieder.schrempf@kontron.de, Lucas Stach <l.stach@pengutronix.de>, Adam Ford <aford173@gmail.com>, Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>, Philipp Zabel <p.zabel@pengutronix.de>, Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
+  Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Liu Ying <victor.liu@nxp.com>, Ulf Hansson <ulf.hansson@linaro.org>, dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org, linux-pm@vger.kernel.org, Adam Ford <aford173@gmail.com>
+Subject: Re: [PATCH V8 09/12] dt-bindings: display: imx: add binding for i.MX8MP HDMI TX
+Date: Fri, 16 Feb 2024 10:05:26 +0100
+Message-ID: <5916132.MhkbZ0Pkbq@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20240203165307.7806-10-aford173@gmail.com>
+References: <20240203165307.7806-1-aford173@gmail.com> <20240203165307.7806-10-aford173@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/5] PM: domains: Allow devices attached to genpd to be
- managed by HW
-To: Ulf Hansson <ulf.hansson@linaro.org>
-CC: Bjorn Andersson <andersson@kernel.org>, Abel Vesa <abel.vesa@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>,
-        "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette
-	<mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Stanimir Varbanov
-	<stanimir.k.varbanov@gmail.com>,
-        Vikash Garodia <quic_vgarodia@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Mauro Carvalho Chehab
-	<mchehab@kernel.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Dmitry Baryshkov
-	<dmitry.baryshkov@linaro.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-media@vger.kernel.org>
-References: <20240122-gdsc-hwctrl-v4-0-9061e8a7aa07@linaro.org>
- <20240122-gdsc-hwctrl-v4-1-9061e8a7aa07@linaro.org>
- <tax3c6o5qjegy6tv3zbgrd5rencfvypr3zg7twxfrmdngscp74@n44ei3q63g64>
- <CAPDyKFpdtrWbzNksLoY++aOY7Ltyt1HhtLZo8bj8sQ05-4Sq0g@mail.gmail.com>
- <l7icfezpajren25545n4cjtqehhividt5b2dxnxgetdsshc3k3@tdws423qdblk>
- <CAPDyKFp1vg2+-pHJ_idkdhb_zZUMpq7W17DnCCGj0eTwd4jFbQ@mail.gmail.com>
- <87b7967f-d8c4-426e-92ed-5a418c702481@quicinc.com>
- <CAPDyKFqy0osJRTU1mL0Ew_3pnYOe5z20ZWNrew8B6t99UFO0pg@mail.gmail.com>
- <a1c2641f-80c0-4e6e-9c44-ef7209da97a5@quicinc.com>
- <CAPDyKFrg_otBETwM9hTOvxkdCPadDYdaxguS5RVJh4wL9NCovA@mail.gmail.com>
-Content-Language: en-US
-From: Jagadeesh Kona <quic_jkona@quicinc.com>
-In-Reply-To: <CAPDyKFrg_otBETwM9hTOvxkdCPadDYdaxguS5RVJh4wL9NCovA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 5dsPSbP5dS2hIh2OMqliEvaHhDJCiW-f
-X-Proofpoint-GUID: 5dsPSbP5dS2hIh2OMqliEvaHhDJCiW-f
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-16_06,2024-02-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- adultscore=0 lowpriorityscore=0 impostorscore=0 mlxlogscore=999
- spamscore=0 bulkscore=0 suspectscore=0 mlxscore=0 phishscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2401310000 definitions=main-2402160064
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+
+Hi all,
+
+Am Samstag, 3. Februar 2024, 17:52:49 CET schrieb Adam Ford:
+> From: Lucas Stach <l.stach@pengutronix.de>
+>=20
+> The HDMI TX controller on the i.MX8MP SoC is a Synopsys designware IP
+> core with a little bit of SoC integration around it.
+>=20
+> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+>=20
+> ---
+> V3:  Change name and location to better idenfity as a bridge and
+>      HDMI 2.0a transmitter
+>=20
+>      Fix typos and feedback from Rob and added ports.
+> ---
+>  .../display/bridge/fsl,imx8mp-hdmi-tx.yaml    | 102 ++++++++++++++++++
+>  1 file changed, 102 insertions(+)
+>  create mode 100644
+> Documentation/devicetree/bindings/display/bridge/fsl,imx8mp-hdmi-tx.yaml
+>=20
+> diff --git
+> a/Documentation/devicetree/bindings/display/bridge/fsl,imx8mp-hdmi-tx.yaml
+> b/Documentation/devicetree/bindings/display/bridge/fsl,imx8mp-hdmi-tx.yaml
+> new file mode 100644
+> index 000000000000..3791c9f4ebab
+> --- /dev/null
+> +++
+> b/Documentation/devicetree/bindings/display/bridge/fsl,imx8mp-hdmi-tx.yaml
+> @@ -0,0 +1,102 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/bridge/fsl,imx8mp-hdmi-tx.yam=
+l#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Freescale i.MX8MP DWC HDMI TX Encoder
+> +
+> +maintainers:
+> +  - Lucas Stach <l.stach@pengutronix.de>
+> +
+> +description:
+> +  The i.MX8MP HDMI transmitter is a Synopsys DesignWare
+> +  HDMI 2.0a TX controller IP.
+> +
+> +allOf:
+> +  - $ref: /schemas/display/bridge/synopsys,dw-hdmi.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - fsl,imx8mp-hdmi-tx
+> +
+> +  reg-io-width:
+> +    const: 1
+> +
+> +  clocks:
+> +    maxItems: 4
+> +
+> +  clock-names:
+> +    items:
+> +      - const: iahb
+> +      - const: isfr
+> +      - const: cec
+> +      - const: pix
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: Parallel RGB input port
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description: HDMI output port
+> +
+> +    required:
+> +      - port@0
+> +      - port@1
+
+Is this really correct that port@1 is required? AFAICS this host already=20
+supports HPD and DDC by itself, so there is no need for a dedicated HDMI=20
+connector.
+With the current state of the drivers this output port is completely ignore=
+d=20
+anyway. Yet it works for a lot of people.
+
+Best regards,
+Alexander
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - interrupts
+> +  - power-domains
+> +  - ports
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/imx8mp-clock.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/power/imx8mp-power.h>
+> +
+> +    hdmi@32fd8000 {
+> +        compatible =3D "fsl,imx8mp-hdmi-tx";
+> +        reg =3D <0x32fd8000 0x7eff>;
+> +        interrupts =3D <0 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks =3D <&clk IMX8MP_CLK_HDMI_APB>,
+> +                 <&clk IMX8MP_CLK_HDMI_REF_266M>,
+> +                 <&clk IMX8MP_CLK_32K>,
+> +                 <&hdmi_tx_phy>;
+> +        clock-names =3D "iahb", "isfr", "cec", "pix";
+> +        power-domains =3D <&hdmi_blk_ctrl IMX8MP_HDMIBLK_PD_HDMI_TX>;
+> +        reg-io-width =3D <1>;
+> +        ports {
+> +           #address-cells =3D <1>;
+> +           #size-cells =3D <0>;
+> +           port@0 {
+> +             reg =3D <0>;
+> +
+> +             hdmi_tx_from_pvi: endpoint {
+> +               remote-endpoint =3D <&pvi_to_hdmi_tx>;
+> +             };
+> +          };
+> +
+> +          port@1 {
+> +            reg =3D <1>;
+> +              hdmi_tx_out: endpoint {
+> +                remote-endpoint =3D <&hdmi0_con>;
+> +              };
+> +          };
+> +        };
+> +    };
 
 
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
 
-On 2/15/2024 9:57 PM, Ulf Hansson wrote:
-> On Wed, 14 Feb 2024 at 05:29, Jagadeesh Kona <quic_jkona@quicinc.com> wrote:
->>
->>
->>
->> On 2/13/2024 7:21 PM, Ulf Hansson wrote:
->>> On Tue, 13 Feb 2024 at 14:10, Jagadeesh Kona <quic_jkona@quicinc.com> wrote:
->>>>
->>>>
->>>>
->>>> On 2/2/2024 5:59 PM, Ulf Hansson wrote:
->>>>> On Fri, 2 Feb 2024 at 00:51, Bjorn Andersson <andersson@kernel.org> wrote:
->>>>>>
->>>>>> On Wed, Jan 31, 2024 at 01:12:00PM +0100, Ulf Hansson wrote:
->>>>>>> On Wed, 31 Jan 2024 at 02:09, Bjorn Andersson <andersson@kernel.org> wrote:
->>>>>>>>
->>>>>>>> On Mon, Jan 22, 2024 at 10:47:01AM +0200, Abel Vesa wrote:
->>>>>>>>> From: Ulf Hansson <ulf.hansson@linaro.org>
->>>>>>>>>
->>>>>>>>> Some power-domains may be capable of relying on the HW to control the power
->>>>>>>>> for a device that's hooked up to it. Typically, for these kinds of
->>>>>>>>> configurations the consumer driver should be able to change the behavior of
->>>>>>>>> power domain at runtime, control the power domain in SW mode for certain
->>>>>>>>> configurations and handover the control to HW mode for other usecases.
->>>>>>>>>
->>>>>>>>> To allow a consumer driver to change the behaviour of the PM domain for its
->>>>>>>>> device, let's provide a new function, dev_pm_genpd_set_hwmode(). Moreover,
->>>>>>>>> let's add a corresponding optional genpd callback, ->set_hwmode_dev(),
->>>>>>>>> which the genpd provider should implement if it can support switching
->>>>>>>>> between HW controlled mode and SW controlled mode. Similarly, add the
->>>>>>>>> dev_pm_genpd_get_hwmode() to allow consumers to read the current mode and
->>>>>>>>> its corresponding optional genpd callback, ->get_hwmode_dev(), which the
->>>>>>>>> genpd provider can also implement for reading back the mode from the
->>>>>>>>> hardware.
->>>>>>>>>
->>>>>>>>> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
->>>>>>>>> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
->>>>>>>>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->>>>>>>>> ---
->>>>>>>>>     drivers/pmdomain/core.c   | 69 +++++++++++++++++++++++++++++++++++++++++++++++
->>>>>>>>>     include/linux/pm_domain.h | 17 ++++++++++++
->>>>>>>>>     2 files changed, 86 insertions(+)
->>>>>>>>>
->>>>>>>>> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
->>>>>>>>> index a1f6cba3ae6c..41b6411d0ef5 100644
->>>>>>>>> --- a/drivers/pmdomain/core.c
->>>>>>>>> +++ b/drivers/pmdomain/core.c
->>>>>>>>> @@ -548,6 +548,75 @@ void dev_pm_genpd_synced_poweroff(struct device *dev)
->>>>>>>>>     }
->>>>>>>>>     EXPORT_SYMBOL_GPL(dev_pm_genpd_synced_poweroff);
->>>>>>>>>
->>>>>>>>> +/**
->>>>>>>>> + * dev_pm_genpd_set_hwmode - Set the HW mode for the device and its PM domain.
->>>>>>>>
->>>>>>>> This isn't proper kernel-doc
->>>>>>>
->>>>>>> Sorry, I didn't quite get that. What is wrong?
->>>>>>>
->>>>>>
->>>>>> https://docs.kernel.org/doc-guide/kernel-doc.html#function-documentation
->>>>>> says that there should be () after the function name, and below there
->>>>>> should be a Return:
->>>>>
->>>>> Thanks for the pointers!
->>>>>
->>>>>>
->>>>>>>>
->>>>>>>>> + *
->>>>>>>>> + * @dev: Device for which the HW-mode should be changed.
->>>>>>>>> + * @enable: Value to set or unset the HW-mode.
->>>>>>>>> + *
->>>>>>>>> + * Some PM domains can rely on HW signals to control the power for a device. To
->>>>>>>>> + * allow a consumer driver to switch the behaviour for its device in runtime,
->>>>>>>>> + * which may be beneficial from a latency or energy point of view, this function
->>>>>>>>> + * may be called.
->>>>>>>>> + *
->>>>>>>>> + * It is assumed that the users guarantee that the genpd wouldn't be detached
->>>>>>>>> + * while this routine is getting called.
->>>>>>>>> + *
->>>>>>>>> + * Returns 0 on success and negative error values on failures.
->>>>>>>>> + */
->>>>>>>>> +int dev_pm_genpd_set_hwmode(struct device *dev, bool enable)
->>>>>>>>> +{
->>>>>>>>> +     struct generic_pm_domain *genpd;
->>>>>>>>> +     int ret = 0;
->>>>>>>>> +
->>>>>>>>> +     genpd = dev_to_genpd_safe(dev);
->>>>>>>>> +     if (!genpd)
->>>>>>>>> +             return -ENODEV;
->>>>>>>>> +
->>>>>>>>> +     if (!genpd->set_hwmode_dev)
->>>>>>>>> +             return -EOPNOTSUPP;
->>>>>>>>> +
->>>>>>>>> +     genpd_lock(genpd);
->>>>>>>>> +
->>>>>>>>> +     if (dev_gpd_data(dev)->hw_mode == enable)
->>>>>>>>
->>>>>>>> Between this and the gdsc patch, the hw_mode state might not match the
->>>>>>>> hardware state at boot.
->>>>>>>>
->>>>>>>> With hw_mode defaulting to false, your first dev_pm_genpd_set_hwmode(,
->>>>>>>> false) will not bring control to SW - which might be fatal.
->>>>>>>
->>>>>>> Right, good point.
->>>>>>>
->>>>>>> I think we have two ways to deal with this:
->>>>>>> 1) If the provider is supporting ->get_hwmode_dev(), we can let
->>>>>>> genpd_add_device() invoke it to synchronize the state.
->>>>>>
->>>>>> I'd suggest that we skip the optimization for now and just let the
->>>>>> update hit the driver on each call.
->>>>>
->>>>> Okay.
->>>>>
->>>>>>
->>>>>>> 2) If the provider doesn't support ->get_hwmode_dev() we need to call
->>>>>>> ->set_hwmode_dev() to allow an initial state to be set.
->>>>>>>
->>>>>>> The question is then, if we need to allow ->get_hwmode_dev() to be
->>>>>>> optional, if the ->set_hwmode_dev() is supported - or if we can
->>>>>>> require it. What's your thoughts around this?
->>>>>>>
->>>>>>
->>>>>> Iiuc this resource can be shared between multiple clients, and we're
->>>>>> in either case returning the shared state. That would mean a client
->>>>>> acting upon the returned value, is subject to races.
->>>>>
->>>>> Not sure I understand this, but I also don't have in-depth knowledge
->>>>> of how the HW works.
->>>>>
->>>>> Isn't the HW mode set on a per device basis?
->>>>>
->>>>>>
->>>>>> I'm therefore inclined to say that we shouldn't have a getter, other
->>>>>> than for debugging purposes, in which case reading the HW-state or
->>>>>> failing would be reasonable outcomes.
->>>>>
->>>>> If you only want this for debug purposes, it seems better to keep it
->>>>> closer to the rpmh code, rather than adding generic callbacks to the
->>>>> genpd interface.
->>>>>
->>>>> So to conclude, you think having a ->set_hwmode_dev() callback should
->>>>> be sufficient and no caching of the current state?
->>>>>
->>>>> Abel, what's your thoughts around this?
->>>>>
->>>>
->>>> We believe it is good to have get_hwmode_dev() callback supported from
->>>> GenPD, since if multiple devices share a GenPD, and if one device moves
->>>> the GenPD to HW mode, the other device won't be aware of it and second
->>>> device's dev_gpd_data(dev)->hw_mode will still be false.
->>>>
->>>> If we have this dev_pm_genpd_get_hwmode() API supported and if we assign
->>>> dev_gpd_data(dev)->hw_mode after getting the mode from get_hwmode_dev()
->>>> callback, consumer drivers can use this API to sync the actual HW mode
->>>> of the GenPD.
->>>
->>> Hmm, I thought the HW mode was being set on a per device basis, via
->>> its PM domain. Did I get that wrong?
->>>
->>> Are you saying there could be multiple devices sharing the same PM
->>> domain and thus also sharing the same HW mode? In that case, it sure
->>> sounds like we have synchronization issues to deal with too.
->>>
->>
->> Sorry my bad, currently we don't have usecase where multiple devices
->> sharing the same PM domain that have HW control support, so there is no
->> synchronization issue.
-> 
-> Okay, good!
-> 
->>
->> But it would be good to have .get_hwmode_dev() callback for consumer
->> drivers to query the actual GenPD mode from HW, whenever they require it.
-> 
-> Okay, no objection from my side.
-> 
-> Then the final question is if we need a variable to keep a cache of
-> the current HW mode for each device. Perhaps we should start simple
-> and just always invoke the callbacks from genpd, what do you think?
-> 
 
-Yes, agree, we can remove the variable and just always invoke the 
-callbacks from genpd. But we may need the variable to reflect GenPD
-mode in debugfs genpd_summary, or need to invoke get callback there as 
-well to get the current mode.
-
-Thanks,
-Jagadeesh
-
-> Kind regards
-> Uffe
 
