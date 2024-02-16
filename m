@@ -1,122 +1,74 @@
-Return-Path: <linux-pm+bounces-4016-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4017-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4B1B8589C2
-	for <lists+linux-pm@lfdr.de>; Sat, 17 Feb 2024 00:08:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E13588589C4
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Feb 2024 00:08:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 51C74283D96
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 23:08:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 968DB1F25B6D
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 23:08:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8ED914831D;
-	Fri, 16 Feb 2024 23:08:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Ps4L3dEf"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B541B14831A;
+	Fri, 16 Feb 2024 23:08:34 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39BBD38DFE;
-	Fri, 16 Feb 2024 23:07:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D2BE133423
+	for <linux-pm@vger.kernel.org>; Fri, 16 Feb 2024 23:08:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708124880; cv=none; b=ggxjUrU2uI/eAL4iSlMAC4PBilJlHJEdEXVNbwAp0IqFcWqoG3snLS07JSsVjYf6pCNYWIvvjmVk7+n5zeBRqP5QKXrrg0GXfDvyQEijoDM/gfQOkj0pGKxZ1/tYAbc26XwYbD7mJsw7qbpcB3kxw5k5h7UBMln75EUdyOYc5Rw=
+	t=1708124914; cv=none; b=EjRWzPnk3k0vsiu4KhrLqZbNHNQa24TwDz1HUCUUyKYfD56OkUxf5iityJcgAz08R65MBp3NVMnfa8f5wfecQ5PVi/I2ccQ8whSZOl987rx87ol0Py8ObCxfjESR7sLjGKePVl4lpX9/I8BCbVMcV4q4nADQ2DY9nJb57qH4Rt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708124880; c=relaxed/simple;
-	bh=q7ADwbeBXwmo7E9aTVnbzqVj7QgPJRlOcrrBDZiAmdo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KLHxhlfFONj69pD2mkf0b9zdLiYzMEPMG1dFiuHuFKQCSs+0xnq3z1Mv3ETIdtSmLx772Xp60/OrcSrTlkxSdHBHbbj4yThh38rx7mLOzT2CFtSm1cAKigB2+ferBeKNBjyWIKvfXZqpKXQLW6hGW5MsrjxS+qB7O0HAqy+JmVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Ps4L3dEf; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1708124877;
-	bh=q7ADwbeBXwmo7E9aTVnbzqVj7QgPJRlOcrrBDZiAmdo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Ps4L3dEfm8WT/rFjNO3i1cLkclFgUjDwjhKEpFI4fdjWkTmR0JyWaMtjMpYDsXY9l
-	 75Ba7sjCDEp/va0JXt8iaCpyYlXyZrze2ZSKbd3wWQeVdtXroVEMW4DZa0IY8oye7X
-	 fE6QTQbq+Y+7VzbEjjQFzdpKsApI+dEfyJm4m/AuIaj0YrfnpCcpxT359Ujq4inYAV
-	 3lgRo5JBA97/J4Q6asiF4iR2tpU2euJqhJi41ow2b6mPSXeYn4qrdfyxKb+L3jAsks
-	 ZmyWtTUizHFjgjvy1rgw2pHjVAWHQ+lB6xbK0Qsl4CDFn7e0zQTEgYlyE7bMSPmEta
-	 GpBTocr4QPcgA==
-Received: from mercury (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: sre)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 3A8783782042;
-	Fri, 16 Feb 2024 23:07:57 +0000 (UTC)
+	s=arc-20240116; t=1708124914; c=relaxed/simple;
+	bh=Dh7y+97V7NZ9dE1V513f00SwbU7qqRMJs8HYnO2Odqs=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=fvkIBdRaWMS1S6AH6OH6FGXr0FOjES+DIpzGXRjFPfLXD5DoCWI8aHVDaoEh8UzRluTuQ/apuN5Uo+oPkNJ+9/zTqwT0SDaL8zKbJzctiYVEihIVoqy/YnQWXmVu+j7uWZgAnUvAzSbKbNzigSUdDpqUZq8wEupb4mdrY/oXY/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15730C433F1;
+	Fri, 16 Feb 2024 23:08:34 +0000 (UTC)
 Received: by mercury (Postfix, from userid 1000)
-	id B61D71061C38; Sat, 17 Feb 2024 00:07:56 +0100 (CET)
-Date: Sat, 17 Feb 2024 00:07:56 +0100
+	id A29871061C38; Sat, 17 Feb 2024 00:08:31 +0100 (CET)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Bhavin Sharma <bhavin.sharma@siliconsignals.io>
-Cc: "robh+dt@kernel.org" <robh+dt@kernel.org>, 
-	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>, 
-	Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>, "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 1/2] power: supply: Add STC3117 fuel gauge unit driver
-Message-ID: <ed5vkqpi2vipycdpy6fwszowiuk37ltuurqpe6t3yuekxynidc@ad7zvejmu5v5>
-References: <20240205051321.4079933-1-bhavin.sharma@siliconsignals.io>
- <eccj4u6ewr33mlp4xqwx5medeysrjuwof7ntwhm6vypmmkss73@qjbpyw5hj3t7>
- <MAZPR01MB6957FE701F89D83DF57F7402F24C2@MAZPR01MB6957.INDPRD01.PROD.OUTLOOK.COM>
+To: =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
+ Sebastian Reichel <sre@kernel.org>, Hans de Goede <hdegoede@redhat.com>
+Cc: Marek Vasut <marex@denx.de>, linux-pm@vger.kernel.org
+In-Reply-To: <20240215155133.70537-1-hdegoede@redhat.com>
+References: <20240215155133.70537-1-hdegoede@redhat.com>
+Subject: Re: [PATCH] power: supply: bq27xxx-i2c: Do not free non existing
+ IRQ
+Message-Id: <170812491162.1326093.13864794994127552945.b4-ty@collabora.com>
+Date: Sat, 17 Feb 2024 00:08:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ksq33adg27c6w63k"
-Content-Disposition: inline
-In-Reply-To: <MAZPR01MB6957FE701F89D83DF57F7402F24C2@MAZPR01MB6957.INDPRD01.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.4
 
 
---ksq33adg27c6w63k
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Thu, 15 Feb 2024 16:51:33 +0100, Hans de Goede wrote:
+> The bq27xxx i2c-client may not have an IRQ, in which case
+> client->irq will be 0. bq27xxx_battery_i2c_probe() already has
+> an if (client->irq) check wrapping the request_threaded_irq().
+> 
+> But bq27xxx_battery_i2c_remove() unconditionally calls
+> free_irq(client->irq) leading to:
+> 
+> [...]
 
-Hi,
+Applied, thanks!
 
-On Fri, Feb 16, 2024 at 01:34:11PM +0000, Bhavin Sharma wrote:
-> I apologize if I'm mistaken, but I noticed other minimal drivers
-> in the codebase.
+[1/1] power: supply: bq27xxx-i2c: Do not free non existing IRQ
+      commit: 2df70149e73e79783bcbc7db4fa51ecef0e2022c
 
-Please point me to a driver, which just exposes the voltage.
+Best regards,
+-- 
+Sebastian Reichel <sebastian.reichel@collabora.com>
 
-> My understanding is that using a minimal driver shouldn't cause
-> any issues. Additionally, we can easily update this driver at any
-> time, as we're actively updating all other drivers.
-
-So why are you not doing it now? Adding current, state of charge,
-temperature and OCV is trivial. I'm not talking about supporting
-every feature of the chip, but just the bits that are a simple
-mapping between standard power supply properties and a chip
-register.
-
--- Sebastian
-
---ksq33adg27c6w63k
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmXP6sAACgkQ2O7X88g7
-+po5vg//XQHEu60f6Sq5WXycuGpwD2Rrwky4z2q70+qOWfZlOx02RIoQVRPpivS7
-AhINrWWioIm6NeRXCKwpG+6GDCRYnn0fUjM/cIgdRG1rMBClZB2aqeJ+3VdZ51H6
-f+212OtdSeKoHcblWbiHbwAJ4xr0fiV0iKxrAplJUy83l0WMykOjbAnuS5HDymXI
-6JuReyWIdjG/4NfWqGAEOOw6GdQCRBNl/u/BgkWkpKA+stJUcjK7h+2NSkfHdk+y
-zQRX0OUI0wyHA8uMSzk6MxbbWALkvm4o9IYhY36q84iekKG4W+qa6Kzpxk2n96Nq
-9bfmKQbWVEMSQz2ES2sNTjXcE+YO8LyQWZBf6D9MVtlvune4pb30nWFkIkdbd8fV
-YwheuZybikIIpfAmbOiSO2NbCH0l9iHaNcyyTXhpnIh9zylgely8La1EoQsDFwnJ
-w9zhIO/3RSMJITgAvi1nc7Z0rC2nppEMLeTV0tS3lvLU8ioiHbGR57lSMNsA7Shk
-1jF2ebCFHCHG7bZLx3kPtOByJtv/Ln8UiNXQfeNJub3xikQP/ilQbGsVnqr4wly5
-4gEdkXg+5kj4Wub1OafAwYAnVDAqJwVxK5RhUwZ9EK6r/GoH61nyOceby+tk7KL9
-omnEO+kFeYarmfYDirMkj4k43legzBrAozWg8m5zIYL1CpjnlyM=
-=B5bh
------END PGP SIGNATURE-----
-
---ksq33adg27c6w63k--
 
