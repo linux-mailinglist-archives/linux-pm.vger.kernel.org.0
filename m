@@ -1,275 +1,274 @@
-Return-Path: <linux-pm+bounces-3979-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3980-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B85D857BB8
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 12:31:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C152857BEC
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 12:43:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9EE4C1C220BB
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 11:31:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 419A4B207DF
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 11:43:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD90A77F04;
-	Fri, 16 Feb 2024 11:31:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 950B57765E;
+	Fri, 16 Feb 2024 11:42:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IWxBdWfd"
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="aCHzXmcI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 349FD77A0F;
-	Fri, 16 Feb 2024 11:31:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC0FB77F12;
+	Fri, 16 Feb 2024 11:42:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708083085; cv=none; b=kMus4KpsQr2Kxik+vTkrwpIQR4NsuxD1I848M7L3K4mBNRXWw3cQwHre5vqd9g8MtF1O3FkKOo64X0FMp6irI5yxOsqHsZ0iFBJaQNEDUOJ6apfJ18AGg1bDFHwMLZzTqPLhcNtBv4C/zuD0JXYvAAOx2/11oGw/vr+dkN0GnJs=
+	t=1708083775; cv=none; b=QOCwvjiLNRVL+L5vhQIfKXVDs8WLPrmBDJelWksf+fz/0cSx+i1PNCtwkWMjzoHbNXRSm06SyjZi0eO7o4U5jlYEelVF0f+2pYItk+dges454WmRqbuTIimEFOqy2OJdOyMvX/Pp/TnuGTEs5kq9Bc4bO/++4gA2KZupXbi9+Cs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708083085; c=relaxed/simple;
-	bh=YyM2M4MIP+dAfmapZF1grt5im1QDWJvjaaUFj2w6KT0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mNZoqujCp0B1yCWMNrCQY7yFYXpAXv15ZdoMNV8iXGW03DFEwBIKc2kWL/AOL1fcj6x/kj5ICQoSHr74EwOnuqQeW24j24v7B+dYmfstyeQIiceCJHuvm3cZpZND334YS/m3L1otIxDQkS3/+v/t6PwVS3vv1DZ7i/IjCP7TtGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IWxBdWfd; arc=none smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-5cddc5455aeso499450a12.1;
-        Fri, 16 Feb 2024 03:31:23 -0800 (PST)
+	s=arc-20240116; t=1708083775; c=relaxed/simple;
+	bh=ir/2Fmuw0p7JWNzUui20venQobUnV6OhWF5JMo4bd4M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=RXcMoFwxxUwJnTFeA6C0UyUCvGegwVPfFh/iN89AkyDNA8IGLJTnKTQ8dU+QaODQI64CDJjQ9NkIGatWeq5YimxdEalDUxyUNnDE5foYXpIdSkRe6DaqhUaktC4fb6K+tqtDHuEfU/tl5lgZyfcUDrdNctCj74m0XKWq3tjUzB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=aCHzXmcI; arc=none smtp.client-ip=93.104.207.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708083083; x=1708687883; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lyWfSKTdRSu/XPOYIRliEz8xFdTfpgDKmLuvOF0Pin8=;
-        b=IWxBdWfdM7M09CTb26eh1SsZHdZ5O8H6uEHEYMTfm/3UOtqrCAHJd1KgyuJyeNAJiG
-         cGTbCFURophUbdAb0qgFaCqUxURAn0qyf9lxpsGeUXpcfgcyLReJRED+Ja1aQSft54m1
-         xmOHuDFrju/c5F0rI68NpgLUhP9IkevvA0bTxKyo/wt5HEpEu8HLHJ+rCOmprko/x3w4
-         nKKz4mYt8PKgnGgm6D0BzZoYBNII5ajg+cphjhFiw26bwpUqKAH9sHApWRIob5yq1qIZ
-         pn0IYgyaGlww7S8+N8tG6bTGSOjyg2ZzGZVAnr92f/DdCqXrAGE7tuQ9Z4ahHZGk36j4
-         efng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708083083; x=1708687883;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lyWfSKTdRSu/XPOYIRliEz8xFdTfpgDKmLuvOF0Pin8=;
-        b=l3QOxMVjycGN3ivR87AOcAIURajjUYzXt6dFPp9OSPVC5o3Vb340TX13gQ6vE2aORH
-         vUvSWsQP2jUHOzhsyEqCJcJr3/rW/cykOeabBRUrzm7iF5IZ+sf2PXDRmNuNgwllYWnv
-         XGtNpI2vENtrpvrRNPJl/5TDaEbYc6pLE5iS+Rs1dlA0SYnsRYtrYxF6gRPXNmd+dC/Y
-         vOzHM6v7TBqpzJ6UkVhe275P1WUM2Tdph+WDnVKo3uZQ6zcUvCcIkxoDkRbf9LAf1AQE
-         B/uzFPklpbcPtAvadRbsVved984j0O8E21xDL+vWqZdxyT0Bhy5Oa2IaiSn3fY4JnW64
-         5UmQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUKD+x2lyHldfiIzXUbahcKsffQbMapUrWsCrs4osH24vl0hpJmOv4QI5wP0KNu3c2yq2cW8kVPcrfYOIFIKB/jD1fGpH2SmiedMYvYnrXjHm8LT7aZ5L9GxcEaXJ17/Kk0M/Uudn2ROTf0kGaFApChki4ur8fWAPzV0kyeFSGPAisp
-X-Gm-Message-State: AOJu0Yy3kIVdUCFRLv0q/pUuSOQJ8d0/xFv38dC9NPha+lvFD5Wcw+bO
-	utrpECeNz4OLeYoX/7MzZUhW9nmBUUQCWICwMz5QRXsXDJjBVgTtxn3nVw6y9Lkgfjy/lRsHAXv
-	GG6nCdqIy8xwC4JQjAPtjmbzcg+w=
-X-Google-Smtp-Source: AGHT+IEvROAdajvDaGhJmYch+/Aub0Z04uX1ZnjW2ApKdi35HTbO5+Uw3JnvWpTAQ1JVmcbINMpElpvcdSPaIErNnAE=
-X-Received: by 2002:a17:90a:d702:b0:299:273c:7331 with SMTP id
- y2-20020a17090ad70200b00299273c7331mr2771398pju.41.1708083083212; Fri, 16 Feb
- 2024 03:31:23 -0800 (PST)
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1708083771; x=1739619771;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=MD8PpJdyDycq4idMKhBHf1v7B8Lage9uviizqG+a/uo=;
+  b=aCHzXmcIRYE5jUai2ns/GfF/4K7g5olCR6BVXq+cFaFS+4UIKNWsm1J2
+   pXTDiRr9H83quIe4rTeEDuL4dvDtEaXEiXHk3wIEQOjzRQoEMJho3ysGg
+   bPzHJn/SJzIuadO3pmFRpUB/cvsZ/nG7i9SKYG8jAcFhiM3kXZuMJCCMq
+   6uu6Y+NRHBxSQ0b3CouAepushe/uXMmN7nl6i2xV05jwCtnSRObHP7RIq
+   JKeY7UmHpPe399bi6rDjSPZ39c6PpQHeRpqMyD1JIT64+TOKZf6wf2hw+
+   LSIs1xA+FtfMUN5lZEIdYaOEh/W2Oj/ZkPC9nMwIz2smCWgB270pb8V+s
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.06,164,1705359600"; 
+   d="scan'208";a="35445169"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 16 Feb 2024 12:42:47 +0100
+Received: from steina-w.localnet (steina-w.tq-net.de [10.123.53.25])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 687E7280075;
+	Fri, 16 Feb 2024 12:42:47 +0100 (CET)
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
+To: Adam Ford <aford173@gmail.com>
+Cc: linux-arm-kernel@lists.infradead.org, dri-devel@lists.freedesktop.org, marex@denx.de, frieder.schrempf@kontron.de, Lucas Stach <l.stach@pengutronix.de>, Andrzej Hajda <andrzej.hajda@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh+dt@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>, Philipp Zabel <p.zabel@pengutronix.de>, Vinod Koul <vkoul@kernel.org>, Kish
+ on Vijay Abraham I <kishon@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Liu Ying <victor.liu@nxp.com>, Ulf Hansson <ulf.hansson@linaro.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH V8 09/12] dt-bindings: display: imx: add binding for i.MX8MP HDMI TX
+Date: Fri, 16 Feb 2024 12:42:49 +0100
+Message-ID: <2184519.Mh6RI2rZIc@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <CAHCN7x+80iw0PWa4F4dMA=3RRaChNEO534LPACXd6FK0ndAHpw@mail.gmail.com>
+References: <20240203165307.7806-1-aford173@gmail.com> <5916132.MhkbZ0Pkbq@steina-w> <CAHCN7x+80iw0PWa4F4dMA=3RRaChNEO534LPACXd6FK0ndAHpw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240203165307.7806-1-aford173@gmail.com> <20240203165307.7806-10-aford173@gmail.com>
- <5916132.MhkbZ0Pkbq@steina-w>
-In-Reply-To: <5916132.MhkbZ0Pkbq@steina-w>
-From: Adam Ford <aford173@gmail.com>
-Date: Fri, 16 Feb 2024 05:31:12 -0600
-Message-ID: <CAHCN7x+80iw0PWa4F4dMA=3RRaChNEO534LPACXd6FK0ndAHpw@mail.gmail.com>
-Subject: Re: [PATCH V8 09/12] dt-bindings: display: imx: add binding for
- i.MX8MP HDMI TX
-To: Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc: linux-arm-kernel@lists.infradead.org, dri-devel@lists.freedesktop.org, 
-	marex@denx.de, frieder.schrempf@kontron.de, 
-	Lucas Stach <l.stach@pengutronix.de>, Andrzej Hajda <andrzej.hajda@intel.com>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	NXP Linux Team <linux-imx@nxp.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Liu Ying <victor.liu@nxp.com>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Feb 16, 2024 at 3:05=E2=80=AFAM Alexander Stein
-<alexander.stein@ew.tq-group.com> wrote:
->
-> Hi all,
->
-> Am Samstag, 3. Februar 2024, 17:52:49 CET schrieb Adam Ford:
-> > From: Lucas Stach <l.stach@pengutronix.de>
-> >
-> > The HDMI TX controller on the i.MX8MP SoC is a Synopsys designware IP
-> > core with a little bit of SoC integration around it.
-> >
-> > Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-> > Signed-off-by: Adam Ford <aford173@gmail.com>
-> >
-> > ---
-> > V3:  Change name and location to better idenfity as a bridge and
-> >      HDMI 2.0a transmitter
-> >
-> >      Fix typos and feedback from Rob and added ports.
-> > ---
-> >  .../display/bridge/fsl,imx8mp-hdmi-tx.yaml    | 102 ++++++++++++++++++
-> >  1 file changed, 102 insertions(+)
-> >  create mode 100644
-> > Documentation/devicetree/bindings/display/bridge/fsl,imx8mp-hdmi-tx.yam=
-l
-> >
-> > diff --git
-> > a/Documentation/devicetree/bindings/display/bridge/fsl,imx8mp-hdmi-tx.y=
+Am Freitag, 16. Februar 2024, 12:31:12 CET schrieb Adam Ford:
+> On Fri, Feb 16, 2024 at 3:05=E2=80=AFAM Alexander Stein
+>=20
+> <alexander.stein@ew.tq-group.com> wrote:
+> > Hi all,
+> >=20
+> > Am Samstag, 3. Februar 2024, 17:52:49 CET schrieb Adam Ford:
+> > > From: Lucas Stach <l.stach@pengutronix.de>
+> > >=20
+> > > The HDMI TX controller on the i.MX8MP SoC is a Synopsys designware IP
+> > > core with a little bit of SoC integration around it.
+> > >=20
+> > > Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+> > > Signed-off-by: Adam Ford <aford173@gmail.com>
+> > >=20
+> > > ---
+> > > V3:  Change name and location to better idenfity as a bridge and
+> > >=20
+> > >      HDMI 2.0a transmitter
+> > >     =20
+> > >      Fix typos and feedback from Rob and added ports.
+> > >=20
+> > > ---
+> > >=20
+> > >  .../display/bridge/fsl,imx8mp-hdmi-tx.yaml    | 102 ++++++++++++++++=
+++
+> > >  1 file changed, 102 insertions(+)
+> > >  create mode 100644
+> > >=20
+> > > Documentation/devicetree/bindings/display/bridge/fsl,imx8mp-hdmi-tx.y=
 aml
-> > b/Documentation/devicetree/bindings/display/bridge/fsl,imx8mp-hdmi-tx.y=
-aml
-> > new file mode 100644
-> > index 000000000000..3791c9f4ebab
-> > --- /dev/null
-> > +++
-> > b/Documentation/devicetree/bindings/display/bridge/fsl,imx8mp-hdmi-tx.y=
-aml
-> > @@ -0,0 +1,102 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/display/bridge/fsl,imx8mp-hdmi-tx.y=
-aml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Freescale i.MX8MP DWC HDMI TX Encoder
-> > +
-> > +maintainers:
-> > +  - Lucas Stach <l.stach@pengutronix.de>
-> > +
-> > +description:
-> > +  The i.MX8MP HDMI transmitter is a Synopsys DesignWare
-> > +  HDMI 2.0a TX controller IP.
-> > +
-> > +allOf:
-> > +  - $ref: /schemas/display/bridge/synopsys,dw-hdmi.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - fsl,imx8mp-hdmi-tx
-> > +
-> > +  reg-io-width:
-> > +    const: 1
-> > +
-> > +  clocks:
-> > +    maxItems: 4
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: iahb
-> > +      - const: isfr
-> > +      - const: cec
-> > +      - const: pix
-> > +
-> > +  power-domains:
-> > +    maxItems: 1
-> > +
-> > +  ports:
-> > +    $ref: /schemas/graph.yaml#/properties/ports
-> > +
-> > +    properties:
-> > +      port@0:
-> > +        $ref: /schemas/graph.yaml#/properties/port
-> > +        description: Parallel RGB input port
-> > +
-> > +      port@1:
-> > +        $ref: /schemas/graph.yaml#/properties/port
-> > +        description: HDMI output port
-> > +
-> > +    required:
-> > +      - port@0
-> > +      - port@1
->
-> Is this really correct that port@1 is required? AFAICS this host already
-> supports HPD and DDC by itself, so there is no need for a dedicated HDMI
-> connector.
-> With the current state of the drivers this output port is completely igno=
-red
-> anyway. Yet it works for a lot of people.
+> > >=20
+> > > diff --git
+> > > a/Documentation/devicetree/bindings/display/bridge/fsl,imx8mp-hdmi-tx=
+=2Eya
+> > > ml
+> > > b/Documentation/devicetree/bindings/display/bridge/fsl,imx8mp-hdmi-tx=
+=2Eya
+> > > ml
+> > > new file mode 100644
+> > > index 000000000000..3791c9f4ebab
+> > > --- /dev/null
+> > > +++
+> > > b/Documentation/devicetree/bindings/display/bridge/fsl,imx8mp-hdmi-tx=
+=2Eya
+> > > ml
+> > > @@ -0,0 +1,102 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id:
+> > > http://devicetree.org/schemas/display/bridge/fsl,imx8mp-hdmi-tx.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Freescale i.MX8MP DWC HDMI TX Encoder
+> > > +
+> > > +maintainers:
+> > > +  - Lucas Stach <l.stach@pengutronix.de>
+> > > +
+> > > +description:
+> > > +  The i.MX8MP HDMI transmitter is a Synopsys DesignWare
+> > > +  HDMI 2.0a TX controller IP.
+> > > +
+> > > +allOf:
+> > > +  - $ref: /schemas/display/bridge/synopsys,dw-hdmi.yaml#
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - fsl,imx8mp-hdmi-tx
+> > > +
+> > > +  reg-io-width:
+> > > +    const: 1
+> > > +
+> > > +  clocks:
+> > > +    maxItems: 4
+> > > +
+> > > +  clock-names:
+> > > +    items:
+> > > +      - const: iahb
+> > > +      - const: isfr
+> > > +      - const: cec
+> > > +      - const: pix
+> > > +
+> > > +  power-domains:
+> > > +    maxItems: 1
+> > > +
+> > > +  ports:
+> > > +    $ref: /schemas/graph.yaml#/properties/ports
+> > > +
+> > > +    properties:
+> > > +      port@0:
+> > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > +        description: Parallel RGB input port
+> > > +
+> > > +      port@1:
+> > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > +        description: HDMI output port
+> > > +
+> > > +    required:
+> > > +      - port@0
+> > > +      - port@1
+> >=20
+> > Is this really correct that port@1 is required? AFAICS this host already
+> > supports HPD and DDC by itself, so there is no need for a dedicated HDMI
+> > connector.
+> > With the current state of the drivers this output port is completely
+> > ignored anyway. Yet it works for a lot of people.
+>=20
+> One of the feedback responses Lucas got was that it was missing the
+> reference to the HDMI connector, so I added it as a response to that
+> feedback.  I have tried device trees with and without it, and it
+> doesn't impact anything, but It seems like there may be a requirement
+> for it.
 
-One of the feedback responses Lucas got was that it was missing the
-reference to the HDMI connector, so I added it as a response to that
-feedback.  I have tried device trees with and without it, and it
-doesn't impact anything, but It seems like there may be a requirement
-for it.
+Yes, I noticed as well. A specified connector is completely ignored.
+One reason is that dw_hdmi_plat_data.output_port is unsed in drivers/gpu/dr=
+m/
+bridge/imx/imx8mp-hdmi-tx.c. Another one is that without=20
+DRM_BRIDGE_ATTACH_NO_CONNECTOR support in drivers/gpu/drm/mxsfb/lcdif_drv.c=
+=20
+nothing changes.
 
-adam
->
-> Best regards,
-> Alexander
->
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - clocks
-> > +  - clock-names
-> > +  - interrupts
-> > +  - power-domains
-> > +  - ports
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/clock/imx8mp-clock.h>
-> > +    #include <dt-bindings/interrupt-controller/irq.h>
-> > +    #include <dt-bindings/power/imx8mp-power.h>
-> > +
-> > +    hdmi@32fd8000 {
-> > +        compatible =3D "fsl,imx8mp-hdmi-tx";
-> > +        reg =3D <0x32fd8000 0x7eff>;
-> > +        interrupts =3D <0 IRQ_TYPE_LEVEL_HIGH>;
-> > +        clocks =3D <&clk IMX8MP_CLK_HDMI_APB>,
-> > +                 <&clk IMX8MP_CLK_HDMI_REF_266M>,
-> > +                 <&clk IMX8MP_CLK_32K>,
-> > +                 <&hdmi_tx_phy>;
-> > +        clock-names =3D "iahb", "isfr", "cec", "pix";
-> > +        power-domains =3D <&hdmi_blk_ctrl IMX8MP_HDMIBLK_PD_HDMI_TX>;
-> > +        reg-io-width =3D <1>;
-> > +        ports {
-> > +           #address-cells =3D <1>;
-> > +           #size-cells =3D <0>;
-> > +           port@0 {
-> > +             reg =3D <0>;
-> > +
-> > +             hdmi_tx_from_pvi: endpoint {
-> > +               remote-endpoint =3D <&pvi_to_hdmi_tx>;
-> > +             };
-> > +          };
-> > +
-> > +          port@1 {
-> > +            reg =3D <1>;
-> > +              hdmi_tx_out: endpoint {
-> > +                remote-endpoint =3D <&hdmi0_con>;
-> > +              };
-> > +          };
-> > +        };
-> > +    };
->
->
-> --
-> TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Ge=
-rmany
-> Amtsgericht M=C3=BCnchen, HRB 105018
-> Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan S=
-chneider
-> http://www.tq-group.com/
->
->
+Best regards,
+Alexander
+
+> adam
+>=20
+> > Best regards,
+> > Alexander
+> >=20
+> > > +
+> > > +required:
+> > > +  - compatible
+> > > +  - reg
+> > > +  - clocks
+> > > +  - clock-names
+> > > +  - interrupts
+> > > +  - power-domains
+> > > +  - ports
+> > > +
+> > > +unevaluatedProperties: false
+> > > +
+> > > +examples:
+> > > +  - |
+> > > +    #include <dt-bindings/clock/imx8mp-clock.h>
+> > > +    #include <dt-bindings/interrupt-controller/irq.h>
+> > > +    #include <dt-bindings/power/imx8mp-power.h>
+> > > +
+> > > +    hdmi@32fd8000 {
+> > > +        compatible =3D "fsl,imx8mp-hdmi-tx";
+> > > +        reg =3D <0x32fd8000 0x7eff>;
+> > > +        interrupts =3D <0 IRQ_TYPE_LEVEL_HIGH>;
+> > > +        clocks =3D <&clk IMX8MP_CLK_HDMI_APB>,
+> > > +                 <&clk IMX8MP_CLK_HDMI_REF_266M>,
+> > > +                 <&clk IMX8MP_CLK_32K>,
+> > > +                 <&hdmi_tx_phy>;
+> > > +        clock-names =3D "iahb", "isfr", "cec", "pix";
+> > > +        power-domains =3D <&hdmi_blk_ctrl IMX8MP_HDMIBLK_PD_HDMI_TX>;
+> > > +        reg-io-width =3D <1>;
+> > > +        ports {
+> > > +           #address-cells =3D <1>;
+> > > +           #size-cells =3D <0>;
+> > > +           port@0 {
+> > > +             reg =3D <0>;
+> > > +
+> > > +             hdmi_tx_from_pvi: endpoint {
+> > > +               remote-endpoint =3D <&pvi_to_hdmi_tx>;
+> > > +             };
+> > > +          };
+> > > +
+> > > +          port@1 {
+> > > +            reg =3D <1>;
+> > > +              hdmi_tx_out: endpoint {
+> > > +                remote-endpoint =3D <&hdmi0_con>;
+> > > +              };
+> > > +          };
+> > > +        };
+> > > +    };
+> >=20
+> > --
+> > TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, =
+Germany
+> > Amtsgericht M=C3=BCnchen, HRB 105018
+> > Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan=
+ Schneider
+> > http://www.tq-group.com/
+
+
+=2D-=20
+TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Germ=
+any
+Amtsgericht M=C3=BCnchen, HRB 105018
+Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan Sch=
+neider
+http://www.tq-group.com/
+
+
 
