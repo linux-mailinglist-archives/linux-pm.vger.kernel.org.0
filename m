@@ -1,224 +1,146 @@
-Return-Path: <linux-pm+bounces-3983-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3984-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59531857D80
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 14:18:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C070F857DBF
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 14:34:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5581280F05
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 13:18:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D0C6281A25
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 13:34:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9857E129A6F;
-	Fri, 16 Feb 2024 13:18:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nBTgpLcW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FA5412A149;
+	Fri, 16 Feb 2024 13:34:17 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01on2114.outbound.protection.outlook.com [40.107.239.114])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCBA11292F2
-	for <linux-pm@vger.kernel.org>; Fri, 16 Feb 2024 13:18:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708089490; cv=none; b=pPYEzi0fh8ERJ9JpiLn9oQ+eBAMZs4jZmZvDm9qwusVnOhs8aklNY7S8yAO9tDAiirxRYbM9RM/MnpU2fyVb7qHwb09ooL7dNsr38AsIHBdeLvVgw+iPcstYIVrLBI5wCNCg9MIcRFVTj/krr1qw08Dk6BYVRJZWPF6YVlO3itY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708089490; c=relaxed/simple;
-	bh=/H/RhV5vGD/KMCO91KuZqHjmm/UTBivLhxXH1J6/QO4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KY363YAZVoaWXQZpuik9BRRcjLhDWz+YOzRb4IOSXxdUKC9CPps0lifQNiqtOYKqUImPFTIm36FPfrH0+QEERZBaKNQP7QDzkQu8AWN+AhKUcUQhQqWDrYRhsDIMXX9XhOoWK2gDP0l/RqlArMlunO0FzAkZ0k3VGSby89uVdVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nBTgpLcW; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-296b2e44a3cso444728a91.2
-        for <linux-pm@vger.kernel.org>; Fri, 16 Feb 2024 05:18:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708089488; x=1708694288; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jgUO7dxVVRWyGJZaDscwaD0xXaHwHxCegMCZe0+JAOc=;
-        b=nBTgpLcWtgDNC9FYaAmti9GAEcPA6IAEBMSDbl0+h13FryF5/n5RAAHuVCpuYy8mDq
-         tqovl0UwdSBcLXQQoj9XRTHPVhvQ4CpgPKzj9KPZxEUfoWxMco1VBUOnz15RgrTO+YtO
-         Teg5e0g5d3aOA0mETnc+MmgTpmhORkEs6qSUSJ6xx3Zni7sAMBdub6OP/GHF+G4l9478
-         7b++OlOn8gZPUxs0lfamD5g/K97QY2XcSG6h/+GvHJSVAc88l135XZitFClwbfg4Ft0U
-         ZjWiY1F2PnQsGbNtskkK4ngJSX1cioU2N4EWROD/44VY+YsSsGH8AExHpMtrFsKZ9H52
-         eUKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708089488; x=1708694288;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jgUO7dxVVRWyGJZaDscwaD0xXaHwHxCegMCZe0+JAOc=;
-        b=sDO4Ljn2J0Qy8sGUXVrTRb5vVoJkwhB84y8vSs+mkZV/nUORdRa940ZELCi0f9cImP
-         HU/IP7RpAB/j4wrylbBm5sqbqGUEWIc1zld4/eRVuhtmFxhZ1zb3NnpKkXWMI1572aPZ
-         LUWdvg2Yj0BUTqTQ1TMT1j3jZjf2aPjBPaUomnK/Uq3/bp7HiPsopltgAkN88BkP6nOw
-         c2qRGaW8VjgRNqx4xd4pMAq04L1//GAcPVb0XjOCkMnMRLT16pCM4A/SOec8RYKflztL
-         nc9LIo1jS9emPwr3qIng+KQno1UZYbtkQVtGEHTbXtrvGqQuFkIotB2/DPb3qAUpTva7
-         Echg==
-X-Forwarded-Encrypted: i=1; AJvYcCUXypG7k1IztmI7hpTI4gkTz0ZNww9oOZ/6Bgaxwxn4xJNKrU/XlOGmKkWasgMfSPIf+FDMklRwPVnHPlDUQzli9IvnrcfwS5s=
-X-Gm-Message-State: AOJu0YyT81nV6FggBabKjnvCA4eJ6icEvjk9bwFzIpOPPzmpdtwb9Sdz
-	U6ILyxfFQhCK3r5/tPnkyh/+MM3hZ8KoA1d+1Zi1N0rAn+L2TUYzQXxdinOs+WOZyKhzEashCkI
-	SXbRM9rlgCTFKlRJSNkuk2OyPLCQlsHCm8kpKKQ==
-X-Google-Smtp-Source: AGHT+IFMTjOMZcMtdP+Ne2AFbg5itLRY8xwteckg4Is3iv/WCDHyYm1Lt7Yn9nfx/8fh7qVJny0kyuuy8JXPuTwSt3g=
-X-Received: by 2002:a17:90b:1212:b0:296:6ea5:9c92 with SMTP id
- gl18-20020a17090b121200b002966ea59c92mr4401810pjb.15.1708089486639; Fri, 16
- Feb 2024 05:18:06 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DB6F1292E1;
+	Fri, 16 Feb 2024 13:34:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.239.114
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708090457; cv=fail; b=dvLNBN3LyAb7ygxpYb1chQP2Ji4NOEvGIGvyKEpHzNi2KvWJdHfi6CmLnfhX3pNX+ppCBp8S4F/7Fvirk5MBUNC4kLegHo5vKsH+w43kdNEQN2pHyGFtEcKecr0ib1dPn6SZe13vXVb7xO2eIlhCHht4OSw6x+uN1i3/IBrijVI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708090457; c=relaxed/simple;
+	bh=+Es3fDMuhDHNThNqpV3oOYjECsP6ud+HrKzh5m6H4kA=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=Pfx+ZzLQKvslk34Jr1zggPJHX0yed8Ex6EpVWdSAv+sLXLq/cwPj+jgDan1JGbkBiNH2qxheHQC/U5FLlA/5y3Ijevm5wJySohMleLST8K7Zx7+CdaWFYuieduoZFMgLmLbqsCF/pUGc5uE/dBcdtO0xzxZ+5DN0WrDnu5+jDBM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io; spf=pass smtp.mailfrom=siliconsignals.io; arc=fail smtp.client-ip=40.107.239.114
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siliconsignals.io
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TLTgFyRe348nDJy870eXkTO1S6vMA4tgN/2u0aXaocgxUYogYCNCdBg68ATDChhCvfzqH8X8t1sXeCjc1RcCPk3h+EDXasOxQLIJDHhgloRQm05JKFJR43hBtWM7Gjdpk4YY23RPjxGx+vDmvKjHUqBP8wU6NQcY5xlAgOi9pn6mMStHFWBH1sVO446MnSiyc4oAv4O8KiN+5Esz+tQhMhydVJL17Yj+1hekan1Wbei4Xj+wNRuNf0I4JIZR8waIPdod0DgXYZhvd+snkt5+IJl/FrZkdy/NXWM7mpfxWTnlTdcz1QiEbnkJC8xl9U8jk1BUI2bCE3rEYDF0rz+Oeg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+Es3fDMuhDHNThNqpV3oOYjECsP6ud+HrKzh5m6H4kA=;
+ b=JPQXKWAkGaFTYMmdwOiFpJYANq45xmDnMhqeArBBrbpINX7l0JzyR99G9aZ2EKMCy7nKYEBOaK8MctxdXFO18iIm2ApsN4IaO/Ja3otSWmzMyhVRdKOWynwdqAvdSMiRpw4t+4G53bsDgrCA8AO8aVZQ+2Q0jwcIdtU2gPBdawfDjLSwcBgIC7pjuLWrnkHHFFneqbPne1aPAYN3qfpULqoaOdVJQUclZRI4eHMs0e4WNj7RgbNzrYBgCepaHb8epo/PnEZnS9grD+qDxxlAvgdtdbWKARTX6TgonS7B6TyWwVH7027y/dssiP2a3++vxpqr+eaDvtvvhBu25WJ27w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siliconsignals.io; dmarc=pass action=none
+ header.from=siliconsignals.io; dkim=pass header.d=siliconsignals.io; arc=none
+Received: from MAZPR01MB6957.INDPRD01.PROD.OUTLOOK.COM (2603:1096:a01:42::6)
+ by PNZPR01MB4448.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.29; Fri, 16 Feb
+ 2024 13:34:12 +0000
+Received: from MAZPR01MB6957.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::72b4:8a64:2d93:7cc0]) by MAZPR01MB6957.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::72b4:8a64:2d93:7cc0%4]) with mapi id 15.20.7292.026; Fri, 16 Feb 2024
+ 13:34:12 +0000
+From: Bhavin Sharma <bhavin.sharma@siliconsignals.io>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+CC: "robh+dt@kernel.org" <robh+dt@kernel.org>,
+	"krzysztof.kozlowski+dt@linaro.org" <krzysztof.kozlowski+dt@linaro.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>, Hardevsinh Palaniya
+	<hardevsinh.palaniya@siliconsignals.io>, "linux-pm@vger.kernel.org"
+	<linux-pm@vger.kernel.org>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/2] power: supply: Add STC3117 fuel gauge unit driver
+Thread-Topic: [PATCH v3 1/2] power: supply: Add STC3117 fuel gauge unit driver
+Thread-Index: AQHaV/IXnFbpZ+c/F0qcNLK93OyLCbEF4RgAgAcoUVg=
+Date: Fri, 16 Feb 2024 13:34:11 +0000
+Message-ID:
+ <MAZPR01MB6957FE701F89D83DF57F7402F24C2@MAZPR01MB6957.INDPRD01.PROD.OUTLOOK.COM>
+References: <20240205051321.4079933-1-bhavin.sharma@siliconsignals.io>
+ <eccj4u6ewr33mlp4xqwx5medeysrjuwof7ntwhm6vypmmkss73@qjbpyw5hj3t7>
+In-Reply-To: <eccj4u6ewr33mlp4xqwx5medeysrjuwof7ntwhm6vypmmkss73@qjbpyw5hj3t7>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siliconsignals.io;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MAZPR01MB6957:EE_|PNZPR01MB4448:EE_
+x-ms-office365-filtering-correlation-id: e3eaf670-62e7-4849-64e3-08dc2ef3f601
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ mMn7CJIjTQ8InyzcxRBkYRaa2zR4mVlE/lnPiGcRApiVaTO1I7gzw5I6xZH8JzN7ubENMU9ywouY0j2R9bHmbtsEmYd6RZKmjKlPBI47Y1TxOIiGMZn8Q5WHv3dZH2+fW8a7+sRZjBG4fsSr2eczhD8EKZ3SRD8O+j+7tei9zzi6YJUiWaVwb0GzOkNkMTh2jINS26RAh1awpR0oNTC9auRiNzWVM0GL1kG7K+PgEysrm1A9zvGwJL6PucUSLttR99jE+LQN6DaGeO14RlKay5t0XnYMHUJdD02yQQcTLUJiS4VmZsOGuY8sncV10XGrcq4haoSAdVjME2YHwJSqMLxIqu41EZstp/r2PVdxDAkD/7vHS7LxPv9plyBZHsZ4qfkVpHztC9s9bVbtRiq6/6F1W6XLvVgfbWObmuoy63aK0lwCrCT1FckONB32wM8GdukeA/2xLag6mK53vamlrz4UmXyZ1i7q0VVvkxEd0hXVbwlnxHJA+Ne6DMF07z7KMXDz+zrQ3pc3vNNNEdJlu3VeGfHas7XOOJaIZFIWFDO5hy5sanREq+UsjV2ToqjVwHUrhJ03UZsGLTpX9FRmHNegp7D+Fjpr/j6ZEQgpyrNL241vNCB6rZ0Et7neS/Gq
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MAZPR01MB6957.INDPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(376002)(396003)(346002)(366004)(39830400003)(136003)(230922051799003)(451199024)(64100799003)(1800799012)(186009)(122000001)(83380400001)(38100700002)(64756008)(66476007)(66556008)(52536014)(76116006)(66946007)(91956017)(66446008)(8676002)(4326008)(8936002)(2906002)(5660300002)(478600001)(316002)(71200400001)(54906003)(26005)(6506007)(7696005)(9686003)(41300700001)(44832011)(6916009)(38070700009)(33656002)(558084003)(86362001)(55016003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?lqlsQf2kpFo85y+mB1bxeO8g308FId0sHqbJhAROn+jOVScSxbZSjyx5By?=
+ =?iso-8859-1?Q?+aQlkqZ1WgBdHzMHhdbhHkJqKxTYt9S4kgxhR/sAS+7yJqYVUh403zRBPE?=
+ =?iso-8859-1?Q?/aqzMgh3dhppmeWZpB11Mj6gWjMc/IUSAjJ2ppKpPhpKGaQ1UihWaTm4qz?=
+ =?iso-8859-1?Q?uSEwZUdA4dKa3RWnG6WnxXfygzXq91trOO1r427b3kv8PJIb6MdTb7MgVT?=
+ =?iso-8859-1?Q?A9oWau4o3PxZ+fMvlVWoSUm14G+oJg6zEOfwbeFElprTmKuynJVcS92ZwH?=
+ =?iso-8859-1?Q?lt87ercWc8WCK+DUkEmCZdA4NijkoUuIUjFo9kaSaGKhqQOF2HktaSX9lx?=
+ =?iso-8859-1?Q?Dcxl54+HtCyIzZr19xK6piOAPKDNNgaiC59QoRu7fOr2cFfEgSxPbQJnrR?=
+ =?iso-8859-1?Q?cQK5RPPdFEY2yWMlZltyQZwSSnhWrVnkef/VYS5EvETOxkxmv95kKtiOYA?=
+ =?iso-8859-1?Q?rVXZqZP/QS6UO834LgwSnBv29JFnayhiIAUiGTRkB0kq3wpGYsBl3z2FIA?=
+ =?iso-8859-1?Q?ER61sAJws9EkXH55KQSHZP5eaS7lp2Fyg7AqVCgaIqmFnrgypxXvbRKYvQ?=
+ =?iso-8859-1?Q?eC6JoMMB1hMiYurJewzkmbLVtd54IE5G1aj+nN2XkeySjBnVtj3R9qEK/q?=
+ =?iso-8859-1?Q?kTFsdfeBRnROmY5QxCgjZTW0tsWqyjFJM4hisJCM0y/5oyt4ooLwNsLUDs?=
+ =?iso-8859-1?Q?0MVuzIppzTnpzqOK7S2f2LlU2Ng8NWFUYzOdo3rAwVAIOSHDmYXEpRjm4a?=
+ =?iso-8859-1?Q?VODqRsVSkdcTj31ENpDli2sFO4NkBnPPiUhXMaDmsErnuBd/pZ73UmiSO/?=
+ =?iso-8859-1?Q?Xbfs0kCl/+ziu/uox5hAZsHbUQ//fLZh42poOQkRX6McB/mDZ3r/bTC/lj?=
+ =?iso-8859-1?Q?fI/BV/seneFIZ+Bn4hm7CpTUT5/1J2LbcEFCNaYKmj3T5wrbQu5aJYUrph?=
+ =?iso-8859-1?Q?znQBPYxjfcKQAzw2SgFk5hc8YoUdZhqfIQ6show8sUTcIuVPevgQpzB5AB?=
+ =?iso-8859-1?Q?iXIZYqOjjoNAvVWutbKqTH19SIv/cOyavi/04doa3pnLaiIZ4N1bW8lbf4?=
+ =?iso-8859-1?Q?ivAnAgQMCIHMU+81qWx9LjgkUlzkJ7A+RBbsPRHW3K1k4MI2GjqVGaHTtL?=
+ =?iso-8859-1?Q?IEkakQblwl8FzKQ+jj+iSnMaQxVl7H2x+2CHpZKoTun0Xsu2GAhc+d442o?=
+ =?iso-8859-1?Q?IKr2xButA0qAhKJ1A/Vgc+5ICkID7qRoFtY5C+iD9lbwllayO7PTy9yxAm?=
+ =?iso-8859-1?Q?ieclHBq83XRtrI4DawMTcgtwzTtofwsq3YnoUrCIXLPVuCHd6lwSHOhV05?=
+ =?iso-8859-1?Q?qcTEAIqBaKG0Vn729F2coojFas5/pUTwNkWJ8xr98G0jFoIppIhhaHJ3mi?=
+ =?iso-8859-1?Q?zM0bvC2caVym6hVAFtEnnIeN47BCz81X+MxafCvMpFDrwOhN0uoQv7aWVt?=
+ =?iso-8859-1?Q?WXOMO86T2T7ZhKRg+I7m+t1Dml47TFgJo1DkUZUbe5lNXrbU6Mru+olro1?=
+ =?iso-8859-1?Q?ivHeeIA9j24kE0DZv7JJXFoi0I93w7h5EDQ1iV/6GUabpuylfxMAn9ZuWb?=
+ =?iso-8859-1?Q?31cKOY6Cw+fSwZbHNr5d9kmkT8hpuYfsbsPwarlQtdX9iteItU54v7QQ8c?=
+ =?iso-8859-1?Q?8gKV1IEAKWVjbEZs25yNnPhT4b8zP9zt2bxr0W5IoFN2PkxvRMeMk0NA?=
+ =?iso-8859-1?Q?=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <002f01da5ba0$49cbf810$dd63e830$@telus.net> <CAKfTPtA-jizig0sh_shmkAMudAxDPYHP0SdanZe=Gc57jVKouQ@mail.gmail.com>
- <003801da5bae$02d6f550$0884dff0$@telus.net> <CAKfTPtC7pOtb-srrgQLFbTueLLDqHay+GQBm9=sNsnZDg_UYSQ@mail.gmail.com>
- <000b01da5d09$8219f900$864deb00$@telus.net> <CAKfTPtB8v30LzL3EufRqbfcCceS2nQ_2G8ZHuoD5N1_y-pvFbg@mail.gmail.com>
- <001b01da5ea7$86c7a070$9456e150$@telus.net> <CAKfTPtD4Un-A2FcdsvKnNZskG=xH0wrsT3xzaWDs--mQjgZ3rg@mail.gmail.com>
- <003001da6061$bbad1e30$33075a90$@telus.net>
-In-Reply-To: <003001da6061$bbad1e30$33075a90$@telus.net>
-From: Vincent Guittot <vincent.guittot@linaro.org>
-Date: Fri, 16 Feb 2024 14:17:54 +0100
-Message-ID: <CAKfTPtC82YXOw5yYPNkHHyF+DYSG+Ts9OjnwsVjbd_HcUsZQMg@mail.gmail.com>
-Subject: Re: sched/cpufreq: Rework schedutil governor performance estimation -
- Regression bisected
-To: Doug Smythies <dsmythies@telus.net>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Ingo Molnar <mingo@kernel.org>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: siliconsignals.io
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MAZPR01MB6957.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: e3eaf670-62e7-4849-64e3-08dc2ef3f601
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Feb 2024 13:34:11.8627
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 7ec5089e-a433-4bd1-a638-82ee62e21d37
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Tsg5AdBMoxbzJ9F6MAOtGOoyAjUYREC2+HpEroh8t4tg59m3zHEP7gINnudHxAg1OZxjMTgk/vuuTTn0bSfAP5gZlOL9tWgfYdgH8sAxE7Y=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PNZPR01MB4448
 
-Hi Doug,
-
-On Thu, 15 Feb 2024 at 23:53, Doug Smythies <dsmythies@telus.net> wrote:
->
-> Hi Vincent,
->
-> This email thread appears as if it might be moving away from a regression
-> caused by your commit towards a conclusion that your commit exposed
-> a pre-existing bug in the intel_psate.c code.
-
-Ok
-
->
-> Therefore, I have moved Rafael from the C.C. line to the "to" line and
-> added Srinivas.
->
-> On 2024.02.14 07:38 Vincent wrote:
-> > On Tue, 13 Feb 2024 at 19:07, Doug Smythies <dsmythies@telus.net> wrote:
-> >> On 2024.02.13 03:27 Vincent wrote:
-> >>> On Sun, 11 Feb 2024 at 17:43, Doug Smythies <dsmythies@telus.net> wrote:
-> >>>> On 2024.02.11 05:36 Vincent wrote:
-> >>>>> On Sat, 10 Feb 2024 at 00:16, Doug Smythies <dsmythies@telus.net> wrote:
-> >>>>>> On 2024.02.09.14:11 Vincent wrote:
-> >>>>>>> On Fri, 9 Feb 2024 at 22:38, Doug Smythies <dsmythies@telus.net> wrote:
-> >>>>>>>>
-> >>>>>>>> I noticed a regression in the 6.8rc series kernels. Bisecting the kernel pointed to:
-> >>>>>>>>
-> >>>>>>>> # first bad commit: [9c0b4bb7f6303c9c4e2e34984c46f5a86478f84d]
-> >>>>>>>> sched/cpufreq: Rework schedutil governor performance estimation
-> >>>>>>>>
-> >>>>>>>> There was previous bisection and suggestion of reversion,
-> >>>>>>>> but I guess it wasn't done in the end. [1]
-> >>>>>>>
-> >>>>>>> This has been fixed with
-> >>>>>>> https://lore.kernel.org/all/170539970061.398.16662091173685476681.tip-bot2@tip-bot2/
-> >>>>>>
-> >>>>>> Okay, thanks. I didn't find that one.
-> >>>>>>
-> >>>>>>>> The regression: reduced maximum CPU frequency is ignored.
-> >>>>
-> >>>> Perhaps I should have said "sometimes ignored".
-> >>>> With a maximum CPU frequency for all CPUs set to 2.4 GHz and
-> >>>> a 100% load on CPU 5, its frequency was sampled 1000 times:
-> >>>> 28.6% of samples were 2.4 GHz.
-> >>>> 71.4% of samples were 4.8 GHz (the max turbo frequency)
-> >>>> The results are highly non-repeatable, for example another sample:
-> >>>> 32.8% of samples were 2.4 GHz.
-> >>>> 76.2% of samples were 4.8 GHz
-> >>>>
-> >>>> Another interesting side note: If load is added to the other CPUs,
-> >>>> the set maximum CPU frequency is enforced.
-> >>>
-> >>> Could you trace cpufreq and pstate ? I'd like to understand how
-> >>> policy->cur can be changed
-> >>> whereas there is this comment in intel_pstate_set_policy():
-> >>>        /*
-> >>>         * policy->cur is never updated with the intel_pstate driver, but it
-> >>>         * is used as a stale frequency value. So, keep it within limits.
-> >>>         */
-> >>>
-> >>> but cpufreq_driver_fast_switch() updates it with the freq returned by
-> >>> intel_cpufreq_fast_switch()
-> >>
-> >> Perhaps I should submit a patch clarifying that comment.
-> >> It is true for the "intel_pstate" CPU frequency scaling driver but not for the
-> >> "intel_cpufreq" CPU frequency scaling driver, also known as the intel_pstate
-> >> driver in passive mode. Sorry for any confusion.
-> >>
-> >> I ran the intel_pstate_tracer.py during the test and do observe many, but
-> >> not all, CPUs requesting pstate 48 when the max is set to 24.
-> >> The calling request seems to always be via "fast_switch" path.
-> >> The root issue here appears to be a limit clamping problem for that path.
-> >
-> > Yes, I came to a similar conclusion as well. Whatever does schedutil
-> > ask for, it should be clamped by  cpu->max|min_perf_ratio.
->
-> Agreed. And it is not clamping properly under specific conditions.
->
-> > Do you know if you use fast_switch or adjust_perf call back ?
->
-> I am not certain, but I think it uses "adjust_perf" call back.
-> I do know for certain that it never takes the
-> "intel_cpufreq_update_pstate" path
-> and always takes the
-> "intel_cpu_freq_adjust_perf" path.
-
-intel_cpu_freq_adjust_perf is registered as the callback for
-cpufreq->adjust_perf
-
->
-> The problem seems to occur when that function is called with:
-> min_perf = 1024
-> target_perf = 1024
-> capacity = 1024
->
-> Even though cpu->max_perf_ratio is 24, the related HWP MSR,
-> 0x774: IA32_HWP_REQUEST, ends up as 48, 48, 48 for min, max, des.
->
-> This patch appears to fix the issue (still has my debug code and
-> includes a question):
->
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index ca94e60e705a..8f88a04a494b 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -2987,12 +2987,22 @@ static void intel_cpufreq_adjust_perf(unsigned int cpunum,
->         if (min_pstate < cpu->min_perf_ratio)
->                 min_pstate = cpu->min_perf_ratio;
->
-> +//     if (min_pstate > cpu->pstate.max_pstate)   /* needed? I don't know */
-> +//             min_pstate = cpu->pstate.max_pstate;
-> +
-> +       if (min_pstate > cpu->max_perf_ratio)
-> +               min_pstate = cpu->max_perf_ratio;
-> +
->         max_pstate = min(cap_pstate, cpu->max_perf_ratio);
->         if (max_pstate < min_pstate)
->                 max_pstate = min_pstate;
->
->         target_pstate = clamp_t(int, target_pstate, min_pstate, max_pstate);
->
-> +       if((max_pstate > 40) || (max_pstate < 7) || (min_pstate < 7) || min_pstate > 40 || target_pstate > 40){
-> +               pr_debug("Doug: t: %d : min %d : max %d : minp %d : maxp %d : mnperf %lu : tgperf %lu : capacity %lu\n", target_pstate, min_pstate, max_pstate, cpu->min_perf_ratio, cpu->max_perf_ratio, min_perf, target_perf, capacity);
-> +       }
-> +
->         intel_cpufreq_hwp_update(cpu, min_pstate, max_pstate, target_pstate, true);
->
->         cpu->pstate.current_pstate = target_pstate;
->
-> With the patch, I never hit the debug statement if the max CPU frequency is limited to 2.4 GHz,
-> whereas it used to get triggered often.
-> More importantly, the system seems to now behave properly and obey set CPU frequency limits.
->
->
+Hi Sebastian =0A=
+=0A=
+I apologize if I'm mistaken, but I noticed other minimal drivers in the cod=
+ebase. My understanding is that using a minimal driver shouldn't cause any =
+issues. Additionally, we can easily update this driver at any time, as we'r=
+e actively updating all other drivers.=0A=
+=0A=
+Regards,=0A=
+Bhavin Sharma=
 
