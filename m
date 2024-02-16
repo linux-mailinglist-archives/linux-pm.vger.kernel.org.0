@@ -1,70 +1,69 @@
-Return-Path: <linux-pm+bounces-3976-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-3977-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8BDC857A9C
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 11:48:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F3C2857AB8
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 11:53:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E1CB28527C
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 10:48:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0675A286173
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Feb 2024 10:53:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00076535D1;
-	Fri, 16 Feb 2024 10:48:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B69D53E2D;
+	Fri, 16 Feb 2024 10:53:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rPoakCyi"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jJM3HooL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01BA7535C7
-	for <linux-pm@vger.kernel.org>; Fri, 16 Feb 2024 10:48:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BBC85380D
+	for <linux-pm@vger.kernel.org>; Fri, 16 Feb 2024 10:53:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708080522; cv=none; b=O4U21ewfxp9td0MgcKJJWnN6S58i/XPWhPg6hKZkplGKv+hk1qOwy2byaBx0X3mO0avFZjw0jaNDX2sxH+8eRXrnplwzGUUw7rtQT+YX9EcLQmrEddAouwFFSf8d1YGQttqYQAE2m10NxRxUJ8MLcl+faw6MEmXKjLtUObLKTkw=
+	t=1708080790; cv=none; b=C8RLkpM83zBDBo4m5eMd3gJaqQN74ql51dXto2Km8ZTDGjY4pj7X/bjJmnTm9SBaGA3LJFj1zlFguRSZgZWWwv0uPBWZNsPHp7oWwPZVB4xivWf1tvpj3dwkWnDZGBkqpBpCPHpFOi9GCM/yQkkTRT0AGVs2J0d+3t0KbL1HnfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708080522; c=relaxed/simple;
-	bh=MjLtBHGl3EKFZpRSU/O6NS5UxcW+90Ac2k1SucdI/n8=;
+	s=arc-20240116; t=1708080790; c=relaxed/simple;
+	bh=CKeqK7r21z+uPoTSQI7hi75/5L38DmdQ+4Di0ez1Hfw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PLqWh4r2ld1ObrxC4F5Cw5MPY31eMfUvi0OX/8+Asl6K5ZkYgl2onqS8JX7JX/jx9nHh8+mC1vndui2aamV6GF7j+QoBUcLr1AcUvIwzWmpdailSQ8Gbteh3d7FU3BvyjyOnjNaiE++3VNWK0rGas0B6Tbk0JHlCUVxoGUWiBsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rPoakCyi; arc=none smtp.client-ip=209.85.219.181
+	 To:Cc:Content-Type; b=e1qI9pMoXGH6jb6ImfL6DCHEqcU8bwKBCJXqbx1/rWl17x77RLO8ACvagCq3ivoswgdjYwDQtT2xwyyRgdaXMlNcIRvR2GxKV3F+m82U6w0B9qxIuLOE7mPMt+RMHPEsxnT66Hsj13ZEfpXUjb3/bbj1+wjx09MdTtGHjMjIM8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jJM3HooL; arc=none smtp.client-ip=209.85.128.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-dc6d9a8815fso1992714276.3
-        for <linux-pm@vger.kernel.org>; Fri, 16 Feb 2024 02:48:40 -0800 (PST)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-60495209415so18910147b3.3
+        for <linux-pm@vger.kernel.org>; Fri, 16 Feb 2024 02:53:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708080520; x=1708685320; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NKfZzgXFQ7L4hFdgNuI/0C1mifl1ZkgKyzPDgn09DEE=;
-        b=rPoakCyiYJCQvBxIioimrAoV0sl8is25zVnV80e6dBYErmUbypXiu2/MjWIvXWygUt
-         LHaMmrfV44YH1y2OHsooO5+YIRW92Ef7OvYWcTsm4RA9kfVyOoYtu9FRowgVSbvxLn1P
-         M4p2gJgiRydoCXXgRM+EKRQ/K7MB0J26vx9OJu8cIMoJR7ofJtO67W+f4EPXHZTTH3GI
-         bzQF2aDLTtfHYHoG4EBYsrt8W/tZlusf6qOv1kJjhqtc4CpoCfDqDS83OwHGDFPmnAZr
-         jkUhLeAw3a26y6NEAqWdChjDqjDkavt8W7UBwjSDjo95vrfqoGNefdNwVmGLxwq0aKZI
-         gKzw==
+        d=linaro.org; s=google; t=1708080787; x=1708685587; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ioR+BOs7uNOZSKUh7axRAHAnr83qTLsDoKudE97KbMw=;
+        b=jJM3HooLwkn2H1mqigw6VZrmWs3Xh1/KDmQ8UtEbdjQJJOvQN++nURpmn2sSRXcPz3
+         slv1EEuNtSQKkZtgHdVE/4thAaDKKRITlQVCe+FeYZXZe9q3foGLxpJFxMV/sRZMb17N
+         b6Gb43Ynlu83+LOuxqEQZ41DXfc5snKR3bbKFfKsHXUSshNZeDrGAGZRLfOAVtqJWU95
+         BrGVn4vSdB4URDV8CMMJl+NSmObgD87blftM5utBxKV5j96h26pp8+rTRk5cGfaxd22l
+         qg0tlIMg2MIE6igc006ezEnqHD8owJkxoKH7HB/0Sm6Uo8rsHYrYMGeEf1BPeJpzoTqE
+         y5tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708080520; x=1708685320;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NKfZzgXFQ7L4hFdgNuI/0C1mifl1ZkgKyzPDgn09DEE=;
-        b=aEz+pAtq4xPSihZPGsPOlcfVtWnb13psQoNDQX1TiPwFrLiK/ZY8Cb87GzwLm6Xc1E
-         8K8169vVDiYQbIn4nI0991/u1vTvKJKUv7BvNwpexOy9litl8tXPHQfZJkopa5rOvRHq
-         Nzs+9It4qYbR+VrfIx0RmS18HmFRRbBfhRePUX8JddKZ5dRQ0aE0rnGXIt+7rBnjjSit
-         p0rO2PPWdRR7nglrjJxZg8BrJ8NM6un1lq89yipYq/0XBz7MTFnkhz1Zi2WAkxYZNPfh
-         lXbWt8pC6zuA5pWPX1VyVH0wv8ACfuvDcgkXSOpmaua3xN/fXNOPOcOUbWIc+POl6zLl
-         mutQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVladV97JE+YFR8kvv8vrPuK2u+37g7AMP7+XmO/Qb58/l972YLdOAj31a8nkecBhFTg+1lb0R22Rk16NHq4GxBEqoBw42Lvqo=
-X-Gm-Message-State: AOJu0YwuxuHhFRelmDs+58P8N/cN0WIu3ZKmySNyBNnTo4qgDYgI/ZrS
-	a4zcmbL0oQv4VV1x+KuozgkxHqxao30Zl+WBnh5ASOhCyBAXG40iySudCu1fjNUCzO9j1UeZjJf
-	L4DmplSUlWn08uu42u+BjEHVY+zrqzvOIPyALIQ==
-X-Google-Smtp-Source: AGHT+IFbejH6b7sinvG8KhiDdJHrIEdrQqXVLTFHjvll3gtnHa+pgS4X4AFWoxSUSZD0KqtQdIyD2hcJKMWbRbauHEE=
-X-Received: by 2002:a5b:991:0:b0:dc7:32ea:c89f with SMTP id
- c17-20020a5b0991000000b00dc732eac89fmr4951588ybq.15.1708080519834; Fri, 16
- Feb 2024 02:48:39 -0800 (PST)
+        d=1e100.net; s=20230601; t=1708080787; x=1708685587;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ioR+BOs7uNOZSKUh7axRAHAnr83qTLsDoKudE97KbMw=;
+        b=xCyYyJrJzZ+5Z7hsqaFU2oH+68gZomgY35V5eXSss7LlDe4oZEhePu2L5Ihvxseho+
+         vkEyM+EOUYZeWHwD5sMF2r6+RhNP7y736oEM7KrG+OpdmEmk+7P9QKWUzc23XC2xnJtk
+         BkKy2izGX3dvZOVPLdrbHaSBDUCeAXQAsAcZfpg21ACmucjhmBEBu3kiU8u6PCg4hGw+
+         TpXGsfQKJ8V8lLVH0mOSP91i7qwwr6s6cYQPEXjELMBRsrUaH1M0hwv/I2DtXyqsPSL7
+         7AQxCwHZpoSPdilMoCfyIDOToszxZzC0EAbTCTlsQGUx7mK9Qvi2VKoBhkVhkK7FJTqy
+         DvoA==
+X-Forwarded-Encrypted: i=1; AJvYcCXjQlu44tkQB8IqaSmeZM3rHnOyBvwq+NrCZknePEWqFQ1Q7UoKLQwV/gl/077MH/bQ84w5Zm6yGAOlcR29JfcJls4fhfOSx7E=
+X-Gm-Message-State: AOJu0YyIOjkMBOkf1qfVeFMtkQRMZ9nTtcnfhyPoC77YTiCUfs0arqPy
+	vEtbmTh77oIPatjT+DzSRsGNVa3nRmRnYJp4za/We4QHuDan5jwmasTnMCbTM/e+Cwu9jSACJpy
+	U+rZngRIJYWE9Ho/YlbuQvQYspMJ1dyQyMpB6bg==
+X-Google-Smtp-Source: AGHT+IF6mDt5/CS2sOkoqfhoq2OHammoZd8ApmMAVQUfXDA+m1cqykxx6MqPGLglZXNugNWMysOIOFZXv4WUOEk3XEQ=
+X-Received: by 2002:a0d:ccd8:0:b0:607:81e6:e320 with SMTP id
+ o207-20020a0dccd8000000b0060781e6e320mr4287942ywd.16.1708080787250; Fri, 16
+ Feb 2024 02:53:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -72,205 +71,112 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20231231171237.3322376-1-quic_jprakash@quicinc.com>
- <20231231171237.3322376-3-quic_jprakash@quicinc.com> <3f812ffa-ec33-448e-b72a-ce698618a8c1@linaro.org>
- <13f2b558-a50d-44d3-85de-38e230212732@quicinc.com>
-In-Reply-To: <13f2b558-a50d-44d3-85de-38e230212732@quicinc.com>
+ <20231231171237.3322376-4-quic_jprakash@quicinc.com> <CAA8EJpr4q7pFF44oUjJSWGYKgiUCB_23zVHw6J3a3mwn7cKgyg@mail.gmail.com>
+ <e5a5b32c-bc9d-42b7-b1a8-90e22b957915@quicinc.com>
+In-Reply-To: <e5a5b32c-bc9d-42b7-b1a8-90e22b957915@quicinc.com>
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Fri, 16 Feb 2024 12:48:28 +0200
-Message-ID: <CAA8EJppsn2zsAXem-m=9U8izhtAZmVe62xS5qdkwJmFTqV30gA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] dt-bindings: iio: adc: Add support for QCOM PMIC5
- Gen3 ADC
+Date: Fri, 16 Feb 2024 12:52:56 +0200
+Message-ID: <CAA8EJppLZO4zCSDpQskygfm738y=m8BofCR8=3nQEjjggtigUg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] iio: adc: Add support for QCOM PMIC5 Gen3 ADC
 To: Jishnu Prakash <quic_jprakash@quicinc.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, jic23@kernel.org, robh+dt@kernel.org, 
-	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, andersson@kernel.org, 
-	konrad.dybcio@linaro.org, lee@kernel.org, andriy.shevchenko@linux.intel.com, 
-	daniel.lezcano@linaro.org, lars@metafoo.de, luca@z3ntu.xyz, 
-	marijn.suijten@somainline.org, agross@kernel.org, sboyd@kernel.org, 
-	rafael@kernel.org, rui.zhang@intel.com, lukasz.luba@arm.com, 
-	linus.walleij@linaro.org, quic_subbaram@quicinc.com, 
+Cc: jic23@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, 
+	conor+dt@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org, 
+	lee@kernel.org, andriy.shevchenko@linux.intel.com, daniel.lezcano@linaro.org, 
+	lars@metafoo.de, luca@z3ntu.xyz, marijn.suijten@somainline.org, 
+	agross@kernel.org, sboyd@kernel.org, rafael@kernel.org, rui.zhang@intel.com, 
+	lukasz.luba@arm.com, linus.walleij@linaro.org, quic_subbaram@quicinc.com, 
 	quic_collinsd@quicinc.com, quic_amelende@quicinc.com, quic_kamalw@quicinc.com, 
 	kernel@quicinc.com, linux-kernel@vger.kernel.org, 
 	linux-arm-msm@vger.kernel.org, linux-arm-msm-owner@vger.kernel.org, 
 	linux-iio@vger.kernel.org, linux-pm@vger.kernel.org, 
 	devicetree@vger.kernel.org, cros-qcom-dts-watchers@chromium.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Jishnu,
+On Wed, 14 Feb 2024 at 15:58, Jishnu Prakash <quic_jprakash@quicinc.com> wrote:
+>
+> Hi Dmitry,
+>
+> On 12/31/2023 11:16 PM, Dmitry Baryshkov wrote:
+> > On Sun, 31 Dec 2023 at 19:13, Jishnu Prakash <quic_jprakash@quicinc.com> wrote:
+> >> The ADC architecture on PMIC5 Gen3 is similar to that on PMIC5 Gen2,
+> >> with all SW communication to ADC going through PMK8550 which
+> >> communicates with other PMICs through PBS.
+>
+> >> +static int adc_tm_register_tzd(struct adc5_chip *adc)
+> >> +{
+> >> +       unsigned int i, channel;
+> >> +       struct thermal_zone_device *tzd;
+> >> +
+> >> +       for (i = 0; i < adc->nchannels; i++) {
+> >> +               channel = V_CHAN(adc->chan_props[i]);
+> >> +
+> >> +               if (!adc->chan_props[i].adc_tm)
+> >> +                       continue;
+> >> +               tzd = devm_thermal_of_zone_register(adc->dev, channel,
+> >> +                       &adc->chan_props[i], &adc_tm_ops);
+> > It is _very_ useful to register a hwmon too by calling
+> > devm_thermal_add_hwmon_sysfs(). However this becomes tricky, as this
+> > function is not defined in one of the global headers.
+> >
+> > This actually points out an issue. You have the ADC driver fused
+> > together with the thermal driver. Can I suggest using the aux device
+> > to split the thermal functionality to the separate driver?
+> >
+> > This way it would be possible to use the ADC without any thermal
+> > monitoring in place.
+>
+>
+> There are a couple of issues which may make it harder to split the
+> thermal functionality from this driver into an auxiliary driver as you
+> mentioned.
+>
+> For one, we use the same set of registers (offsets 0x4f-0x55) for both
+> VADC function(requesting an immediate channel reading) and ADC_TM
+> function (setting upper/lower thermal thresholds on a channel). To avoid
+> any race conditions, we would need to share a mutex between the
+> top-level ADC driver and the auxiliary ADC_TM thermal driver to avoid
+> concurrently accessing these or any other shared registers.
 
-
-On Fri, 16 Feb 2024 at 12:39, Jishnu Prakash <quic_jprakash@quicinc.com> wr=
-ote:
-
-Please disable sending HTML emails in your email client. It is
-generally frowned upon, it complicates replying, it breaks quotations,
-etc.
-
->
-> Hi Krzysztof,
->
-> On 1/4/2024 1:48 PM, Krzysztof Kozlowski wrote:
->
-> On 31/12/2023 18:12, Jishnu Prakash wrote:
->
-> For the PMIC5-Gen3 type PMICs, ADC peripheral is present in HW for the
-> following PMICs: PMK8550, PM8550, PM8550B and PM8550VX PMICs.
->
-> It is similar to PMIC5-Gen2, with SW communication to ADCs on all PMICs
-> going through PBS(Programmable Boot Sequence) firmware through a single
-> register interface. This interface is implemented on an SDAM (Shared
-> Direct Access Memory) peripheral on the master PMIC PMK8550 rather
-> than a dedicated ADC peripheral.
->
-> Add documentation for PMIC5 Gen3 ADC and macro definitions for ADC
-> channels and virtual channels (combination of ADC channel number and
-> PMIC SID number) per PMIC, to be used by clients of this device.
->
-> Changes since v2:
-> - Moved ADC5 Gen3 documentation into a separate new file.
->
-> Changelog goes under ---.
->
-> Why did you do this? What is the rationale? Sorry, this patchset goes
-> nowhere.
->
->
-> I'll elaborate this more in the next patchset. There are two main reasons=
- for adding this documentation in a new file:
->
-> 1.This device is not exactly like the existing QCOM VADC drivers as it no=
-w combines VADC functionality (reading ADC channel on client request) with =
-ADC_TM functionality (thermal threshold monitoring).
->
-> 2.Adding this device's bindings in the existing qcom,spmi-vadc.yaml file =
-is not possible as it would require updating some of the existing top-level=
- constraints. (for the older devices in that file, "reg" and "interrupts" c=
-an have at most one item, while this device can have more than one item und=
-er these properties.)
->
->
-> Changes since v1:
-> - Updated properties separately for all compatibles to clarify usage
->   of new properties and updates in usage of old properties for ADC5 Gen3.
-> - Avoided updating 'adc7' name to 'adc5 gen2' and just left a comment
->   mentioning this convention.
-> - Used predefined channel IDs in individual PMIC channel definitions
->   instead of numeric IDs.
-> - Addressed other comments from reviewers.
->
->
-> +          per PMIC in the PMIC-specific files in include/dt-bindings/iio=
-/adc.
-> +
-> +      label:
-> +        $ref: /schemas/types.yaml#/definitions/string
->
-> Why do you need it in the first place? Don't you miss some $ref?
->
->
-> This is just meant to show the ADC channel name in DT for our reference. =
-I'll check if I can use adc.yaml, which includes this property already, as =
-a reference in this case.
->
->
-> +        description: |
->
-> Do not need '|' unless you need to preserve formatting. Applies everywher=
-e.
->
->
->
-> +            ADC input of the platform as seen in the schematics.
-> +            For thermistor inputs connected to generic AMUX or GPIO inpu=
-ts
-> +            these can vary across platform for the same pins. Hence sele=
-ct
-> +            the platform schematics name for this channel.
-> +
->
-> +      qcom,adc-tm:
-> +        description: |
-> +            Indicates if ADC_TM monitoring is done on this channel.
-> +            Defined for compatible property "qcom,spmi-adc5-gen3".
-
-You are describing qcom,spmi-adc5-gen3, are you not? So this phrase
-adds nothing.
-
-> +            This is the same functionality as in the existing QCOM ADC_T=
-M
-> +            device, documented at devicetree/bindings/thermal/qcom-spmi-=
-adc-tm5.yaml.
-> +        type: boolean
-> +
->
-> Why do you duplicate entire vadc file? Why it cannot be part of that
-> file? Oh wait, it was in v2.
->
-> You now duplicated a lot of property definitions without clear reason.
-> If this is intention, then you need to put them in common schema.
->
->
-> Many of the properties used for earlier QCOM VADC devices will be used fo=
-r this device too.....do you mean I can add a new schema file (named someth=
-ing like qcom,vadc.yaml) and move common properties into it (like qcom,hw-s=
-ettle-time, qcom,decimation, etc) from this file and qcom,spmi-vadc.yaml?
->
-> Can I do it in the same patch or should it be a separate patch coming bef=
-ore this one ?
-
-I'd say, separate patch. Move first, extend later.
+Just export an API performing this access. No need to export data (aka mutex).
 
 >
+> In addition, the device has only one interrupt with one interrupt
+> handler, and it gets triggered for both VADC and ADC_TM  events (end of
+> conversion and threshold violation, respectively). The handler checks
+> for both types of event and handles it as required.
+
+You can extend auxiliary drivers with the custom callbacks, see
+drivers/base/auxiliary.c .
+I think you can call a callback from ADC_TM driver from your ADC driver.
+
 >
+> For the shared interrupt, we may be able to keep the interrupt handler
+> in the top-level driver and just notify the auxiliary TM driver if a
+> threshold violation is detected. For the shared mutex, I think the
+> auxiliary driver may be able to access the parent driver's mutex, but
+> I'll need to check more for the implementation in both of these cases.
 >
-> diff --git a/include/dt-bindings/iio/adc/qcom,spmi-adc7-smb139x.h b/inclu=
-de/dt-bindings/iio/adc/qcom,spmi-adc7-smb139x.h
->
-> index c0680d1285cf..750a526af2c1 100644
-> --- a/include/dt-bindings/iio/adc/qcom,spmi-adc7-smb139x.h
-> +++ b/include/dt-bindings/iio/adc/qcom,spmi-adc7-smb139x.h
-> @@ -6,7 +6,7 @@
->  #ifndef _DT_BINDINGS_QCOM_SPMI_VADC_SMB139X_H
->  #define _DT_BINDINGS_QCOM_SPMI_VADC_SMB139X_H
->
-> -#include <dt-bindings/iio/qcom,spmi-vadc.h>
-> +#include <dt-bindings/iio/adc/qcom,spmi-vadc.h>
->
-> ? How is it related?
->
->
-> This should have gone into patch 1, I'll fix it in the next patch series.
->
-> I'll address all your other comments in the next patchset.
+> Please let me know if you see any problems with this kind of
+> implementation or if you have any additional comments.
 >
 > Thanks,
 >
 > Jishnu
 >
->
->
->  #define SMB139x_1_ADC7_SMB_TEMP (SMB139x_1_SID << 8 | ADC7_SMB_TEMP)
->  #define SMB139x_1_ADC7_ICHG_SMB (SMB139x_1_SID << 8 | ADC7_ICHG_SMB)
-> diff --git a/include/dt-bindings/iio/adc/qcom,spmi-vadc.h b/include/dt-bi=
-ndings/iio/adc/qcom,spmi-vadc.h
-> index ef07ecd4d585..cfe653d945a4 100644
-> --- a/include/dt-bindings/iio/adc/qcom,spmi-vadc.h
-> +++ b/include/dt-bindings/iio/adc/qcom,spmi-vadc.h
-> @@ -1,6 +1,8 @@
->  /* SPDX-License-Identifier: GPL-2.0 */
->  /*
->   * Copyright (c) 2012-2014,2018,2020 The Linux Foundation. All rights re=
-served.
-> + *
->
-> Drop stray blank line
->
-> Best regards,
-> Krzysztof
->
+> >> +
+> >> +               if (IS_ERR(tzd)) {
+> >> +                       if (PTR_ERR(tzd) == -ENODEV) {
+> >> +                               dev_warn(adc->dev, "thermal sensor on channel %d is not used\n",
+> >> +                                        channel);
+> >> +                               continue;
+> >> +                       }
+> >> +
+> >>
+> >
 
 
---=20
+
+-- 
 With best wishes
 Dmitry
 
