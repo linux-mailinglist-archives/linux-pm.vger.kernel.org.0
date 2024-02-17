@@ -1,137 +1,117 @@
-Return-Path: <linux-pm+bounces-4038-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4039-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D34668592CA
-	for <lists+linux-pm@lfdr.de>; Sat, 17 Feb 2024 21:43:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6D018592F9
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Feb 2024 22:30:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 64127B2107E
-	for <lists+linux-pm@lfdr.de>; Sat, 17 Feb 2024 20:43:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 729B02825C3
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Feb 2024 21:30:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42BD57F49E;
-	Sat, 17 Feb 2024 20:43:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BF7280021;
+	Sat, 17 Feb 2024 21:30:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BAecfohW"
+	dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b="eI7TuNtg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1D26A024;
-	Sat, 17 Feb 2024 20:43:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6BB71E4A8
+	for <linux-pm@vger.kernel.org>; Sat, 17 Feb 2024 21:30:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708202615; cv=none; b=RtcrNlToqbkMeh5eli83DuISnQXC16truZveGemxttsoyQwGjnoCJraY9aZlNKXz9N9kt/7TjAMRofC92WdpmZqNr0QOOhuvn9PAFZKzlj0pM8jn0Rvvix3vwa/bkNffWTw24/L4Yr8lej34AAR+d55IJVSDoF5+MdlODhUYeSg=
+	t=1708205418; cv=none; b=cpJJg3J8Yli7t/hEk1x2AKotLFfd3C1fezxyJaAbkTx5KMK4kvc99Ucqi5aunzvMeUCtfttdZdWUtEsGy1ylMmTAJw0WBRADzFpl48bVW6E6ZKeyHNy6nVYh+IGXUaO+2q505hoS54OQETw3XitRkCb3WwKy6+R8sreeQtGlkAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708202615; c=relaxed/simple;
-	bh=E6LVY0jyOMzyQvE2PHS8poQ7j8DUOqfa7MfcV3PR2qg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B2N9rM4GuUlHGw+bToZMgj9r8XDe2w4mfBzp7CbWCPhe08W18IacNmz+SIoJnD2SgnI4Sp52TJVnXZPr15AlXLXRwj3qPAk527huunPXvVdI38pXnTO4xLpBNL8sb/fnvmzEkN64f3KX9tLrPFriSgV0q2Cz8+/dt/4rjaRtznY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BAecfohW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E08B4C433F1;
-	Sat, 17 Feb 2024 20:43:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708202614;
-	bh=E6LVY0jyOMzyQvE2PHS8poQ7j8DUOqfa7MfcV3PR2qg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BAecfohW+IJqaLkNGE7g8xML4Qs2FKZsau7yveR8TiJ6L3WA76boZ0oXP0914cfWB
-	 uRs0x5kDLFokHV5Cp5HtR0Msj3By0u1iIuTzFn74parSYqAQkBIzwglt6mSlppgWyy
-	 nB548ZQd+sF3xdChKxGAaXDAALtbxnANx3WhMvz8nZmvATSjOep/ocJMCS6i6PDjnK
-	 KXiqtTk+vXLRbVEESgl/RzZNh46pql8L2FJ2BJzpCtqn1SwkYL1HCPvnRpHrlhV9lJ
-	 e30LjKoHTXHWnfq5BKfqAB96du/na1YhLfvkFLMa4ppJEp14/HhdqYxv4OMdKerGyC
-	 Te1x7q1SX0iKA==
-Date: Sat, 17 Feb 2024 20:43:31 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Marcel Holtmann <marcel@holtmann.org>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Kalle Valo <kvalo@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Saravana Kannan <saravanak@google.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Alex Elder <elder@linaro.org>,
-	Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Abel Vesa <abel.vesa@linaro.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Lukas Wunner <lukas@wunner.de>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-wireless@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+	s=arc-20240116; t=1708205418; c=relaxed/simple;
+	bh=oHOAKuTy7J71OhteqliHHPUc4sWlt3H4+04j1XqQTGg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KlvPuXw3lxFHYCS6B5rViBGcRQMFYufrB1h95LYyxywl4rdArYbGXA8teUiN1AW5fbbY/vDYg8AFWT573hAsHsSsFuM9sKilnN9nDjoQUbOBoT+u6xkdjXsD6WDkSoRjgqRR0s4JWqDNhbuBwuKUDS2bsWx0pXc6GXl/+vGAc5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net; spf=pass smtp.mailfrom=telus.net; dkim=pass (2048-bit key) header.d=telus.net header.i=@telus.net header.b=eI7TuNtg; arc=none smtp.client-ip=209.85.210.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=telus.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=telus.net
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-6e2edb28554so629224a34.2
+        for <linux-pm@vger.kernel.org>; Sat, 17 Feb 2024 13:30:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google; t=1708205415; x=1708810215; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=O2TjNiYVkyOnt5bo8I4KiLztzjuw78NyYvMLjikMof0=;
+        b=eI7TuNtgEx7EeRlZ6+A6ndoN5Rt3ObQbScF+xb2faOkiIkPec17KMIpgOibgKfnb/A
+         5OvILmB0I7kRbscJa1/JNPUZshEl4tgyKU7WXDJj21IMEMrPQmFcPsh/G5FDoVaB+FqW
+         /YaG2vzeiWUHJu+jOlY+oFAqNVwwIxBbANlJ5QSwRuGZTIbNZLka5NXFsXauISXpU1Kz
+         RrHfLCOVG5UyaEhHy4qBybdav1l/nlqPbb4WDZqHIgEl2TfD0AEI+FJhTSFVWC8PJTDE
+         HJC//Am+NdlXZJde62EvnbogEOy301ZRn/vIxPn+tCFSLMIgf5uAmjFTZUyXoOhsoSBU
+         8Byw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708205415; x=1708810215;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=O2TjNiYVkyOnt5bo8I4KiLztzjuw78NyYvMLjikMof0=;
+        b=h4OjcIvKyiklki0FJRkNirarWg9jsYYBYwCdwufueMLu1/dUbldfCO13g0OmrtT0IX
+         qvjpJ+sn5fzgBdTX600QL8eMsy/IwfO5R0vikHWrbBGvRhJABtjX5AGA4WUE2hBck9s7
+         SHg/HuGxYYuo7D/Imvmldpe8YblHxF+Ucck2MTzlf3xoD8QcH5mW8iOz1g66K73l9/dc
+         isnFrS6u8AIKD9olkuyzDRNjPy5hpmy2WsxgfxFU1HM2XtdeNlmxtis1aDFyy++KJN6p
+         zvOMwsYcVL4WfP0PAFhh5aKuuatKOT00u4faJ0T5plnr9zmbPqQ8gsmSN2ukEYE8FkFi
+         qQxg==
+X-Forwarded-Encrypted: i=1; AJvYcCXXiLNv78nAgYjduqrh84zyUZiQFnAnDEHE4ujy6TG3u22eI+V9IZbD3Qke5XCfXeuW5wrT25EyNYb5RxyyXQg0H0gune4NRLs=
+X-Gm-Message-State: AOJu0YzIsOA+93rB97hmKkriSEwHT6C5CnKpS0vDOLeEs6UTaN3q6YDE
+	dQL2e85U9ttqYN7hXr25itwG2a94Q0y1VWCpTZSq5S16lVFj7efuyTO+u97Xy4A=
+X-Google-Smtp-Source: AGHT+IGW4XDSRQnU5TqrVNGjd8jmkPOXe9/UfYHAlOzGyGXigM5epRQtoQ/vkhh8yDpNAprzFP48aA==
+X-Received: by 2002:a05:6830:1b6d:b0:6e4:41bb:b30 with SMTP id d13-20020a0568301b6d00b006e441bb0b30mr2472025ote.19.1708205414732;
+        Sat, 17 Feb 2024 13:30:14 -0800 (PST)
+Received: from s19.smythies.com (s66-183-142-209.bc.hsia.telus.net. [66.183.142.209])
+        by smtp.gmail.com with ESMTPSA id bn16-20020a056a00325000b006e0cfe94fc5sm2090721pfb.107.2024.02.17.13.30.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 17 Feb 2024 13:30:14 -0800 (PST)
+From: Doug Smythies <dsmythies@telus.net>
+To: srinivas.pandruvada@linux.intel.com,
+	rafael@kernel.org,
+	lenb@kernel.org
+Cc: linux-kernel@vger.kernel.org,
 	linux-pm@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH v5 03/18] dt-bindings: regulator: describe the PMU module
- of the QCA6390 package
-Message-ID: <ZdEac8I5aI9YLq6A@finisterre.sirena.org.uk>
-References: <20240216203215.40870-1-brgl@bgdev.pl>
- <20240216203215.40870-4-brgl@bgdev.pl>
- <ZdDVNbjv60G9YUNy@finisterre.sirena.org.uk>
- <CAMRc=Mf9Sro4kM_Jn8_v=cyO5PxCp6AnBdeS9XspqVDGKdA_Dg@mail.gmail.com>
+	vincent.guittot@linaro.org,
+	dsmythies@telus.net
+Subject: [PATCH] cpufreq: intel_pstate: fix pstate limits enforcement for adjust_perf call back
+Date: Sat, 17 Feb 2024 13:30:10 -0800
+Message-Id: <20240217213010.2466-1-dsmythies@telus.net>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4JPKTS4lZXvnOqCl"
-Content-Disposition: inline
-In-Reply-To: <CAMRc=Mf9Sro4kM_Jn8_v=cyO5PxCp6AnBdeS9XspqVDGKdA_Dg@mail.gmail.com>
-X-Cookie: You might have mail.
+Content-Transfer-Encoding: 8bit
 
+There is a loophole in pstate limit clamping for the intel_cpufreq CPU
+frequency scaling driver (intel_pstate in passive mode), schedutil CPU
+frequency scaling governor, HWP (HardWare Pstate) control enabled, when
+the adjust_perf call back path is used.
 
---4JPKTS4lZXvnOqCl
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fix it.
 
-On Sat, Feb 17, 2024 at 07:32:16PM +0100, Bartosz Golaszewski wrote:
-> On Sat, Feb 17, 2024 at 4:48=E2=80=AFPM Mark Brown <broonie@kernel.org> w=
-rote:
+Signed-off-by: Doug Smythies <dsmythies@telus.net>
+---
+ drivers/cpufreq/intel_pstate.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> > Please submit patches using subject lines reflecting the style for the
-> > subsystem, this makes it easier for people to identify relevant patches.
-> > Look at what existing commits in the area you're changing are doing and
-> > make sure your subject lines visually resemble what they're doing.
-> > There's no need to resubmit to fix this alone.
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index ca94e60e705a..79619227ea51 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -2987,6 +2987,9 @@ static void intel_cpufreq_adjust_perf(unsigned int cpunum,
+ 	if (min_pstate < cpu->min_perf_ratio)
+ 		min_pstate = cpu->min_perf_ratio;
+ 
++	if (min_pstate > cpu->max_perf_ratio)
++		min_pstate = cpu->max_perf_ratio;
++
+ 	max_pstate = min(cap_pstate, cpu->max_perf_ratio);
+ 	if (max_pstate < min_pstate)
+ 		max_pstate = min_pstate;
+-- 
+2.25.1
 
-> This is quite vague, could you elaborate? I have no idea what is wrong
-> with this patch.
-
-The subject line does not look like the subject line for a regulator
-patch rendering it almost invisible in my inbox.  As you will see if you
-follow the above suggestion and look at other commits to the same area
-you should see that subject lines should start regulator:.
-
---4JPKTS4lZXvnOqCl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXRGnIACgkQJNaLcl1U
-h9Cz7Qf+L7vTsGPGjWXms+ypHuuzrseRY+5tqVWHSXyldocHF3sZ+8P7xcqUzAKl
-OSLoaJD1RINGVTJodBoPBZ8w+8cJW5rYqn2m9fx/cRr+0bS96WUsrGD9HYTkz7VC
-QsORvLoiq2VYhEOaT4dRZxEXAEMgu8wfJ1tpZSFciws/lfvNBcIY0EjI0Nud1tND
-HIXvt3iwCGm0lW+ppB93ZjOZiw4vMMJchH0R3piJ9l4EKvrMGiDYdNb1H2YuINzS
-zq3lBvkkKTsY7oNfocA683WAe7N2l4d4MhUcm0TP4Be2BzuT9nvgZNRFWK/fa90r
-vaY0Cs9mXiyitePpzt2YKY//+qSyLw==
-=9A+9
------END PGP SIGNATURE-----
-
---4JPKTS4lZXvnOqCl--
 
