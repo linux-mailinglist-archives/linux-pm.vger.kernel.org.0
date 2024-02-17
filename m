@@ -1,130 +1,164 @@
-Return-Path: <linux-pm+bounces-4031-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4032-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 253928590A6
-	for <lists+linux-pm@lfdr.de>; Sat, 17 Feb 2024 16:48:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38D9E8591B6
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Feb 2024 19:31:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 588651C21246
-	for <lists+linux-pm@lfdr.de>; Sat, 17 Feb 2024 15:48:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 799891F21969
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Feb 2024 18:31:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F4357C6E5;
-	Sat, 17 Feb 2024 15:48:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6C8C7E0FF;
+	Sat, 17 Feb 2024 18:30:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oai0G6qL"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="q+ZTbwOW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f48.google.com (mail-ua1-f48.google.com [209.85.222.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFF777A735;
-	Sat, 17 Feb 2024 15:48:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD6FE1E4AE
+	for <linux-pm@vger.kernel.org>; Sat, 17 Feb 2024 18:30:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708184889; cv=none; b=WxGTzcF5oDs5kh3oEuN3IgqSCMeEhMQMN1nKGlo45W4gbwIFhdcwTRTXPRpQnWzX6BcGIG5HI4ulzWqzcsd9UFfEJzueZhS8dTXuJmF6T/Pm6jDgIxLO1wrkCvhsRNvNLarrNd/Ml9frqbAwEpMx28PeEnTb7qj3wLl6sUviGB4=
+	t=1708194658; cv=none; b=hVq8xQc3sqj8MBJY8M0Dp7SVkMKhphuFlB2y5mf6Qjzn7NkPXKzTghcJRqsbWPJ6InKNbyocBRc8M2ASg8TtCb4RW2KqM5LR15gbux8kfiUEpircLCJUkzY2L9DvSgeRBUdo75A+mHnRWy3Ccgxr+RPguVQdIK5Tos9dI5prCO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708184889; c=relaxed/simple;
-	bh=n957lHva6zeenMJ+yyB11NqmI51yboi14R4UBuEZ4d4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=untcMPs61c7k1lphGrXn8VbBVg9kAPZIfDIYolFyKww7uwOzwx3RKw05QOVaAlAKZdsUUGZKTlph3jnDS9qvGZ5DQGMQE4eeDwIfuxAW/n7jXSkHscrB1GdeVN5oq3F1pYKL/JYiEEQ6MKlgGjoftEe5YrZDOM6Jxj1qml3VIXQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oai0G6qL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF36CC433F1;
-	Sat, 17 Feb 2024 15:48:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708184888;
-	bh=n957lHva6zeenMJ+yyB11NqmI51yboi14R4UBuEZ4d4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oai0G6qLzbylNPvS6aAPc55ThgalhgPu1SYKajhqffmpQesjJ2OqsAP/JoGNo3voU
-	 TkrvaUuRD2SqntuJ/K01y5d1cfIh36BRU+bkXQuUhLqzj96BRf0TatZ/fIrmiHQBfy
-	 wbMriDgDmlonGvNa5Az+exOwOL+XPPfFp0HKXkzfMTjkjZ8WwpTEqHcf10aTAm5TR1
-	 Axyh29QvnrtErk40PPetNMIw+oj/HTCOjcH+PZHOTdLngCU2zbuqnsd5ZAYgaps59q
-	 PvIb4F6sN53mvYvb7dnp8pd86GrjiYbn0psSCl9KANB/lgGL9B553RwT3SLIshZL/e
-	 JlF0JcX0camYA==
-Date: Sat, 17 Feb 2024 15:48:05 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Marcel Holtmann <marcel@holtmann.org>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Kalle Valo <kvalo@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Saravana Kannan <saravanak@google.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Alex Elder <elder@linaro.org>,
-	Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Abel Vesa <abel.vesa@linaro.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Lukas Wunner <lukas@wunner.de>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-wireless@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH v5 03/18] dt-bindings: regulator: describe the PMU module
- of the QCA6390 package
-Message-ID: <ZdDVNbjv60G9YUNy@finisterre.sirena.org.uk>
-References: <20240216203215.40870-1-brgl@bgdev.pl>
- <20240216203215.40870-4-brgl@bgdev.pl>
+	s=arc-20240116; t=1708194658; c=relaxed/simple;
+	bh=xTu4CwC01bOUIpKw1wk4DHay8JL9daGjNYWi0BvJoFk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=s2poYF6qlhfeMYYcQqgOZbifGs96TvRVX1jcnyGjiCGY3lQOtp+thntBIbReEfRmzNIaOCiCdA+nFmjl9DYugHAYFT3gJNlgzMjtZuJgKPDZ0Y7i6m0VUwoSP89rdPc+LqRYqgUw5yBqB5RLBbplSSjeXNoqfxn5EUOYPNg1TeU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=q+ZTbwOW; arc=none smtp.client-ip=209.85.222.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-ua1-f48.google.com with SMTP id a1e0cc1a2514c-7ce603b9051so937910241.2
+        for <linux-pm@vger.kernel.org>; Sat, 17 Feb 2024 10:30:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1708194655; x=1708799455; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JeWu4dlZldb0QpDIIyWPdxjS/RZoRXziwmFM0VAD7xY=;
+        b=q+ZTbwOWLrtB7LLK3P+2bWMpv7DfIvhgi/2egNQ4e52dlt56kAs4JbMUWCIypEPg3u
+         jaPViUylF4qtQbcTBTyT70G9+UdrSLhxKL21A/9s6yJsxSRyq8xTATGcF88R6HEN/kSI
+         FEcX1CQfyK4WEt+SUb+cFk+6mPzCSgU0ZIWA/kkH614YOW0bApp+lbnisuRUJID+UlaS
+         oOt0Z2o/J2lyYUVPrLC0B6EbShI40Z+7a/Fx8TFCEz+8kcxXF+2Zmg6PaMWL2HnIyTdI
+         P5Fq871GtTT8Z3hp9dz0flsuvXqyvv2rjvK5Pq1zsVljnHdz9MUClSO7sH1Y4x9CWtmk
+         ubmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708194655; x=1708799455;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JeWu4dlZldb0QpDIIyWPdxjS/RZoRXziwmFM0VAD7xY=;
+        b=NBwYIlR9Y4IENzIhJ5oa2el9PCmRwn5LFJox6C7oCdxgm7mNG5zdu6emc+04A2IZ/Y
+         gAOSAtW0oKs2MQLpCN+EmIHy76qJuryvcVUphi2WpJLW2vsaNDBur5UDSLIdCFcbhpsK
+         7X3h7KjvoYJGEKj6nhI8YovL+7cvqmQ6XHtqe8nua6FOsfzBb8ZFniLx4bhf+93gPG13
+         UkFE16P5j/isHD6EAeMc/ukk5Fv99p/uUf3XN0aDnW1cWBjysLTA/IFtemfW3fDHHHgn
+         uaJthrSJl3jgdpmGF2FPd5oY1S/M/QnYVGZveGmkHQrXdLU+aeVcGtWfAjxRUuaEZzmz
+         iooA==
+X-Forwarded-Encrypted: i=1; AJvYcCXhz8HrEBKLndRkAn3a5kqxqiaXbW4PO9WuUvyDsHdj1kJgKr7/vFSpEfKqNiZ+BjOkYMzWxpSsZ1zl9AZmHz18OEADikK81HA=
+X-Gm-Message-State: AOJu0YyTvJBqW00+ITsZd5MS6zrHKHCurRc7VGkhtdQ3fwoX9YhiqgOI
+	NYs/QtvX4qrbiLRFqa8IO6wYpggx1chnZ00BiFsiOj41ILKp4jKelPPCtNxTsV7028+G2FbqlRc
+	ObVLZeZqvYKatCVjoePAt/fBfwt9qwwhIge7JDg==
+X-Google-Smtp-Source: AGHT+IEGwogzVe3juwTbP5wzSPlB4FZp7n7jPtu9uTl+n1AS2iy9ckNua2af79j+lFRcSQmRv5yllrZrWuBKxrsF4JY=
+X-Received: by 2002:a05:6102:3a08:b0:46e:c752:16e7 with SMTP id
+ b8-20020a0561023a0800b0046ec75216e7mr8759486vsu.24.1708194655651; Sat, 17 Feb
+ 2024 10:30:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="XBBFEBnxsUybHGMW"
-Content-Disposition: inline
-In-Reply-To: <20240216203215.40870-4-brgl@bgdev.pl>
-X-Cookie: You might have mail.
-
-
---XBBFEBnxsUybHGMW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20240216203215.40870-1-brgl@bgdev.pl> <20240216203215.40870-7-brgl@bgdev.pl>
+ <87cysvd2er.fsf@kernel.org>
+In-Reply-To: <87cysvd2er.fsf@kernel.org>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Sat, 17 Feb 2024 19:30:44 +0100
+Message-ID: <CAMRc=Md10bNPswsLqdCmqzEmD+QmyZ+Eb4SUWknH-j5kK-speQ@mail.gmail.com>
+Subject: Re: [PATCH v5 06/18] dt-bindings: new: wireless: describe the ath12k
+ PCI module
+To: Kalle Valo <kvalo@kernel.org>
+Cc: Jeff Johnson <quic_jjohnson@quicinc.com>, Marcel Holtmann <marcel@holtmann.org>, 
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, "David S . Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konrad.dybcio@linaro.org>, Liam Girdwood <lgirdwood@gmail.com>, 
+	Mark Brown <broonie@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Saravana Kannan <saravanak@google.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Arnd Bergmann <arnd@arndb.de>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Marek Szyprowski <m.szyprowski@samsung.com>, Alex Elder <elder@linaro.org>, 
+	Srini Kandagatla <srinivas.kandagatla@linaro.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Abel Vesa <abel.vesa@linaro.org>, 
+	Manivannan Sadhasivam <mani@kernel.org>, Lukas Wunner <lukas@wunner.de>, 
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, linux-bluetooth@vger.kernel.org, 
+	netdev@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 16, 2024 at 09:32:00PM +0100, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->=20
-> The QCA6390 package contains discreet modules for WLAN and Bluetooth. They
-> are powered by the Power Management Unit (PMU) that takes inputs from the
-> host and provides LDO outputs. This document describes this module.
+On Sat, Feb 17, 2024 at 7:35=E2=80=AFAM Kalle Valo <kvalo@kernel.org> wrote=
+:
+>
+> Bartosz Golaszewski <brgl@bgdev.pl> writes:
+>
+> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >
+> > Add device-tree bindings for the ATH12K module found in the WCN7850
+> > package.
+> >
+> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> > ---
+> >  .../net/wireless/qcom,ath12k-pci.yaml         | 103 ++++++++++++++++++
+> >  1 file changed, 103 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/net/wireless/qcom=
+,ath12k-pci.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/net/wireless/qcom,ath12k=
+-pci.yaml b/Documentation/devicetree/bindings/net/wireless/qcom,ath12k-pci.=
+yaml
+> > new file mode 100644
+> > index 000000000000..063c576b99a0
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/net/wireless/qcom,ath12k-pci.ya=
+ml
+> > @@ -0,0 +1,103 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +# Copyright (c) 2024 Linaro Limited
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/net/wireless/qcom,ath12k-pci.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Qualcomm Technologies ath12k wireless devices (PCIe)
+> > +
+> > +maintainers:
+> > +  - Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>
+> Jeff and me are the ath12k driver maintainers so shouldn't we listed
+> here as well?
+>
 
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
+Sure will do. I also noticed the subject is wrong, should have been
+"net" not "new".
 
---XBBFEBnxsUybHGMW
-Content-Type: application/pgp-signature; name="signature.asc"
+Also, Jeff is not showing up for ath12k bindings in get_maintainer.pl.
+You could consider adding an N: ath12k entry to MAINTAINERS.
 
------BEGIN PGP SIGNATURE-----
+Bartosz
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXQ1TQACgkQJNaLcl1U
-h9BBnwf+JhH7AG76SVpXm/3RKzqDWuvpMu1DUot/+e5n8hK2kqMFn55zOAN2HEwL
-bZLO+MD8fXjFjLXZQ+4K8xdooNenzvCyvfYuxE8RoyThkbheKCY+m8aQLTlik/R3
-euRIOevSUYqQhYY1q5z5bgAEC6RwQi0sAHYATTbhqBjNi/MogEbXje1VBfStNYEb
-tKWS7Yi/GPw22IXDH8PYurLmAXp9k65N8ajJX7pMcALn/uUvPQZT77TVLjZ4M9yp
-a+0SiBJypHB9nTzWsA89yCH97/kWFYzAoE54vUxuQB4N6l0XgDyTyQIzIJfuNg0F
-h5HG2zP3ZTX/v/CVQjc3Vp4maV3F5Q==
-=r2fB
------END PGP SIGNATURE-----
-
---XBBFEBnxsUybHGMW--
+> Jeff, this reminds me that we should add you to qcom,ath10k.yaml,
+> qcom,ath11k-pci.yaml and qcom,ath11k.yaml as maintainer.
+>
+> --
+> https://patchwork.kernel.org/project/linux-wireless/list/
+>
+> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpa=
+tches
 
