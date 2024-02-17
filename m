@@ -1,75 +1,74 @@
-Return-Path: <linux-pm+bounces-4027-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4028-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BC45858FFF
-	for <lists+linux-pm@lfdr.de>; Sat, 17 Feb 2024 15:14:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C6B94859003
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Feb 2024 15:15:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B20591C21269
-	for <lists+linux-pm@lfdr.de>; Sat, 17 Feb 2024 14:14:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EAEAB1C20B9A
+	for <lists+linux-pm@lfdr.de>; Sat, 17 Feb 2024 14:15:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F7467B3CE;
-	Sat, 17 Feb 2024 14:14:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74A647B3CE;
+	Sat, 17 Feb 2024 14:15:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QqNgnpV2"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OwAzKY75"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A36B7AE76
-	for <linux-pm@vger.kernel.org>; Sat, 17 Feb 2024 14:14:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB33E6A011
+	for <linux-pm@vger.kernel.org>; Sat, 17 Feb 2024 14:15:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708179241; cv=none; b=qnP1JsDocXWuDTXFIqynBhXXKl5iQ8AoVjKKatgONDbjyCZLOEuFAGJMLUtc/9teog/QITRqJz5syyr/yirkjPR3ZLldGmPCu8NEQnpop3eqmxbJLen1nfjMSJDdSR71ij/I26btLr835025v2501DyArL8E8RDrzPTv75GJ+9I=
+	t=1708179307; cv=none; b=BzotedHi1DcOHAVb034863wGexIQAraMf9m2LHMZn2mbHr36sGAc0EPkXgpTnT4OLHGcai6j9hd8ZzWjEZ6QSuZeG0T46MT4NPd1mYUoZBz1lkzhdybp7IDB6NODFJUL+ZlQxWAHOVW1WWdMNrEkhoraz2UE33lgTb0rowTkOb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708179241; c=relaxed/simple;
-	bh=+wZP7vHYk/NnK6kFbVDTg8yyh97qvUTtJQ7tdP43nk8=;
+	s=arc-20240116; t=1708179307; c=relaxed/simple;
+	bh=pTipow7I3Kkeqq3ABEH48dc3Yx9zuR0E7IBfrm3mp3s=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QB8FPTzWBO+tolIbyEgaLbyl8lhZv1ZuBoGYPdpUmbkd5h9x5THLAhKYWoNKNp6xDeTgVt+j3s8nKDO0DNhrOwToXJn7HYoOfVyEkjxYf3c3oSjuw1Wb8dUITWMyst1sT1gHgJczNmZ9FlNx/L9lWrUTahmKXCG5vF0jOdTeAAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QqNgnpV2; arc=none smtp.client-ip=209.85.208.44
+	 In-Reply-To:Content-Type; b=LIT7rOaNEzAzdmNLtlwRiDM7xfQ9fNF9ktdgrayJuusCPyZ2PMJ0HmKNz31er0bDB2Mj0/MykrB3ic4ms52e8/9+jSaPJ1ak6miZt8R4Jkt/YGLywEJ9xy3ZKvb0+k9dLFokOn8MSbtfL7hL3nR1klMSYREGZ1LSRzS/+48si2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=OwAzKY75; arc=none smtp.client-ip=209.85.208.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5643ae47cd3so187647a12.3
-        for <linux-pm@vger.kernel.org>; Sat, 17 Feb 2024 06:13:59 -0800 (PST)
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2d220ad10b3so12483661fa.1
+        for <linux-pm@vger.kernel.org>; Sat, 17 Feb 2024 06:15:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708179238; x=1708784038; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1708179304; x=1708784104; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=8uTOVln7B9LCW+XhdWPc2Gjzczfr4Yu7an/52ckhWw4=;
-        b=QqNgnpV24PRGE7rOQ32M1Gtc5JGI3+a+Jhysf+5zteoqfKZlsnRbj349tt++38Ag5Y
-         PMxAEHHvFjoqALbeeGRNRzp4bYfXnzuKAxOyeC+rhA54LmueBltR6SHBwLdNnleU8S6V
-         3P0n2yElwhjhuPI6fkVje0SVFTWTCFN0mjw9g1HCVVriYvvo0qpL5RueZ/8BRF01BcIf
-         UMI3hsOvjD8sFiF7/qha7TfwhYz2iKnilM8oyH1IoyYgPrq3wsFmbFa5ph96swB1y+ws
-         U+0QhGLWEskpws5v7JwTs9BV8hOZ4McVbHD1Gb7ONF8lkCxx7QCJpYeN238+xFsOXx4h
-         KFxA==
+        bh=tLYfaLXRxxn+y7DbCverDBVIQ3d96X6WrhKz0IJENYs=;
+        b=OwAzKY75HYvgQRsw+2suCW9pb7A4ugndFH3FPMWYb9a8tBpcja7Wa3UTlW23OHy6vu
+         bek8QTyb4cwWFOJV/ZB6xUkKTEPbDsBf8ZukOuXFnKzjIjSqqfl0udwlvLJtubLMz0HF
+         dHg+YFlRJ6ZOOHlCMnjHMK0hp/Hu7jukvElSp92p4SP/EYnwn24s4Ljc9iccN6bY4EeC
+         6mtCJDrooQ5/xWQ/oD9UoC3Py8qUbUCH89hyAn7Db7zjlLmgNHth9KeHS3l1EfQFnNbg
+         JeG8pHSq/oHzU7+aLYkMmx3MWmT9kPChSyJEjM95eEwQViqEVBqSUcfOPWZk5LrSRj1t
+         gcqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708179238; x=1708784038;
+        d=1e100.net; s=20230601; t=1708179304; x=1708784104;
         h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
          :to:content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8uTOVln7B9LCW+XhdWPc2Gjzczfr4Yu7an/52ckhWw4=;
-        b=lpSstII32WVoBjTbQYbD/l4TgHEUcGlZ42yUTuCPgjOlATsSU8+hizlCZG1U2HyINV
-         Uoy89MI2cKgAVjcpj+xfTXnlRUYmWcsrTtdmsPlhWrpz20YbHtp52sVzg8gNYxjYCYK8
-         8TR0wjuEN5MTAclI4joLl2LNWRDV4i4FnSZjGxygotLtBxs759YlIB5lEAQCpZxFMwXI
-         K3ZM1Q8ZaQIHdnRg3ftHX3iEps9Ndao/sg4Pff4qM1zzHsmIx4JpqpxSd0CwAxqpLYe1
-         hKLUvBVg/zoZWozv9b0cxkgsx99Vlrl6iF73R6WA2BIE0n2Xw61IGkuHIArRDonQF9Gf
-         7g1g==
-X-Forwarded-Encrypted: i=1; AJvYcCW3llIdS846aS4K/54ElGVkUxYdT0YXIeteecPjpW0Z5RVhirR/c6LdIcmmIfOLHOGJpjCpD2P01emrSC9mTGs9Jo/VTzOD9f0=
-X-Gm-Message-State: AOJu0Yz4vl7U9JhOclrqhERXvHrJSkU1b+eLG474G9zrSrWTdAyAjygt
-	EZioSsMQteQNW8ZxNYkDUYtf7p4dXGj1wsTGLdYpU8o3ZHtrWvUZ+4kyFqm7Q4KLITJCbENHRM3
-	A
-X-Google-Smtp-Source: AGHT+IEMqq2OOqfNnyYtkZ0A9BgvXFEj64X+pAlq9aoLXx2vdSY1XySLj9qsXAn7vJma7clpn5N9pg==
-X-Received: by 2002:aa7:c48a:0:b0:563:8df4:1b2a with SMTP id m10-20020aa7c48a000000b005638df41b2amr5082857edq.39.1708179238480;
-        Sat, 17 Feb 2024 06:13:58 -0800 (PST)
+        bh=tLYfaLXRxxn+y7DbCverDBVIQ3d96X6WrhKz0IJENYs=;
+        b=v6X9k4Ag5bE0BzTJ6/1FOhCD5cI1Uqc1MY8JgBCUdSlN96g2GG0h2XXhagXG+k3dwX
+         12YZVpLBgOGReSa0Q6TKJLyNVN8PrGO29d5Blz6CqgqAeByZvPmYHFki2gClvR3cO/qi
+         Nt3FB/fiJo0WM7wqi4EUS4osfWqc/3vbY8gvocbeasTd+WsVJQWIlo2GVBYE2LOScMKh
+         94nSuzYWGTWRJS4wLaJQUbMD+0bnDcQiovfXho9FWxSGKDc/JlNJHUoCXeAHMrgGhjJo
+         VREFp2fKde+8SLcpwJSjrw/iePoqecfA2a9+hg2tmZcb9CHct+YSgwim952DsqGIBe5j
+         WbWg==
+X-Forwarded-Encrypted: i=1; AJvYcCUzfJCyk+wIWV92130gzA0LV9GFo3z+5pO15dQcw1jWb9w0pTwyRSJf6BmPwq776LDS/1GvMns2qKeUpd3ddBkQ4vQBEhsfnHQ=
+X-Gm-Message-State: AOJu0Yyq6kKZcaaBWYoBezEeMddOE0NPj9TcJomTASCDeFdXaPFhcMQX
+	5EUcBnde04stG+zNDW5Vh65SSi1VW3+xcUnkAG8CnjamY2GcPMjN1rJmxc/LpzU=
+X-Google-Smtp-Source: AGHT+IFxTeC+cVhA+SrWzETckP9LhB9fnAiUmlnlwCoSNvgQoo+Q9YRkoSSZpwX4FsJh5EAxuSPkkA==
+X-Received: by 2002:a05:6512:2012:b0:511:a908:4dfd with SMTP id a18-20020a056512201200b00511a9084dfdmr5006002lfb.18.1708179304072;
+        Sat, 17 Feb 2024 06:15:04 -0800 (PST)
 Received: from [192.168.0.22] ([78.10.207.130])
-        by smtp.gmail.com with ESMTPSA id g13-20020aa7d1cd000000b00563ec73bbafsm912809edp.46.2024.02.17.06.13.56
+        by smtp.gmail.com with ESMTPSA id g13-20020aa7d1cd000000b00563ec73bbafsm912809edp.46.2024.02.17.06.15.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 17 Feb 2024 06:13:57 -0800 (PST)
-Message-ID: <f52b2d5e-b2b4-48ae-a6a6-fc00c89662d2@linaro.org>
-Date: Sat, 17 Feb 2024 15:13:55 +0100
+        Sat, 17 Feb 2024 06:15:03 -0800 (PST)
+Message-ID: <d79ad5e2-c894-4d22-b0fe-86b2636a46e7@linaro.org>
+Date: Sat, 17 Feb 2024 15:15:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -96,7 +95,7 @@ Cc: lars@metafoo.de, luca@z3ntu.xyz, marijn.suijten@somainline.org,
 References: <20231231171237.3322376-1-quic_jprakash@quicinc.com>
  <20231231171237.3322376-3-quic_jprakash@quicinc.com>
  <3f812ffa-ec33-448e-b72a-ce698618a8c1@linaro.org>
- <13f2b558-a50d-44d3-85de-38e230212732@quicinc.com>
+ <d2f2cb91-983f-48e4-b53a-8af2cd87f3d2@quicinc.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -142,70 +141,18 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <13f2b558-a50d-44d3-85de-38e230212732@quicinc.com>
+In-Reply-To: <d2f2cb91-983f-48e4-b53a-8af2cd87f3d2@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 16/02/2024 11:39, Jishnu Prakash wrote:
+On 16/02/2024 12:44, Jishnu Prakash wrote:
 > Hi Krzysztof,
 > 
-> On 1/4/2024 1:48 PM, Krzysztof Kozlowski wrote:
->> On 31/12/2023 18:12, Jishnu Prakash wrote:
->>> For the PMIC5-Gen3 type PMICs, ADC peripheral is present in HW for the
->>> following PMICs: PMK8550, PM8550, PM8550B and PM8550VX PMICs.
->>>
->>> It is similar to PMIC5-Gen2, with SW communication to ADCs on all PMICs
->>> going through PBS(Programmable Boot Sequence) firmware through a single
->>> register interface. This interface is implemented on an SDAM (Shared
->>> Direct Access Memory) peripheral on the master PMIC PMK8550 rather
->>> than a dedicated ADC peripheral.
->>>
->>> Add documentation for PMIC5 Gen3 ADC and macro definitions for ADC
->>> channels and virtual channels (combination of ADC channel number and
->>> PMIC SID number) per PMIC, to be used by clients of this device.
->>>
->>> Changes since v2:
->>> - Moved ADC5 Gen3 documentation into a separate new file.
->> Changelog goes under ---.
->>
->> Why did you do this? What is the rationale? Sorry, this patchset goes
->> nowhere.
-> 
-> 
-> I'll elaborate this more in the next patchset. There are two main 
-> reasons for adding this documentation in a new file:
+> (Resending this mail for tracking on mailing lists, as it got rejected 
+> from lists the first time due to HTML)
 
-This was more than a month ago? You reply to my comment with 1.5 months
-delay?
-
-Sorry, I am not in the context and I am not going back to it. I have
-many other emails where my questions are addressed faster than 1.5 months.
-
-The patch is not even in my mailbox, long gone.
-Why you are making it so difficult for reviewers?
-
-You will get answers like I am not in context, sorry. Next time don't
-respond after 1.5 months.
-
-
-> 
-> 1.This device is not exactly like the existing QCOM VADC drivers as it 
-> now combines VADC functionality (reading ADC channel on client request) 
-> with ADC_TM functionality (thermal threshold monitoring).
-
-Does no explain touching bindings. Your drivers don't matter for bindings.
-
-> 
-> 2.Adding this device's bindings in the existing qcom,spmi-vadc.yaml file 
-
-No rationale was provided in commit msg.
-
-> is not possible as it would require updating some of the existing 
-> top-level constraints. (for the older devices in that file, "reg" and 
-> "interrupts" can have at most one item, while this device can have more 
-> than one item under these properties.)
-
-How is this a problem?
+I already responded to some other email of yours and I am not going to
+respond twice.
 
 
 Best regards,
