@@ -1,101 +1,72 @@
-Return-Path: <linux-pm+bounces-4044-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4047-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C4088597C1
-	for <lists+linux-pm@lfdr.de>; Sun, 18 Feb 2024 17:15:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA2D88598A2
+	for <lists+linux-pm@lfdr.de>; Sun, 18 Feb 2024 19:47:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93BD3280F1D
-	for <lists+linux-pm@lfdr.de>; Sun, 18 Feb 2024 16:15:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 696C01F21692
+	for <lists+linux-pm@lfdr.de>; Sun, 18 Feb 2024 18:47:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DCE06D1C3;
-	Sun, 18 Feb 2024 16:15:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1E4F6F06C;
+	Sun, 18 Feb 2024 18:47:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iPQCIfzf"
+	dkim=pass (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b="QaGkIg5n";
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b="Y8ltRv6E"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fallback18.i.mail.ru (fallback18.i.mail.ru [79.137.243.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A17FE6D1B7;
-	Sun, 18 Feb 2024 16:15:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D64A01E4A7;
+	Sun, 18 Feb 2024 18:47:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.137.243.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708272909; cv=none; b=HUPcLOnPmpBNYxtDD5dScxHupa+Ibjz2J4pC/zx+b1PlImRdF4Gq4JWpazIcYOFHTXcgTLD5ctQeFCqEh2QbDHkTdPg7HQW2ohP/NZCJZHz/wcgPVOCe6NpdmyRVxYlU9RsvFGfn1KCcO+ANCVNQNf2lmWwXTUP+waThY5Z8vNA=
+	t=1708282062; cv=none; b=fW4j3BnQcXEiEDSPzs4Jo9w7LCe8N7gqYrhmj+i6rqk/zbNzyo/fuhm4wFVQT7AbAbixGPoRoA/0IdNI2FSYDwL5ncFJlpCSfwJyh46KD393uHA6aI4GuZCzwRmNYFecaRsdiLSyREwTPnJOvpUNNeNJlaeMmE8lMiuja/4brmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708272909; c=relaxed/simple;
-	bh=crYDsTu/Q8z/SY44ZdcbWRzwpyUgHxlte4VZaTnPqNc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WgpDXp9bFypaRfk83phGnYVa02EDE385UvON4CJI8ECBt+g44liwfCyRiWq+OG8Sffinp1Ff3LeiolryuKfIY4sUd5A8u83fC6X3iJFy1K9UkFG8MoEP0Dcv7A6cXckAftTBJa8lCzNo7DZ7T6yV+0aAqxcBnXQTjLa1g/+lbeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iPQCIfzf; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1d7393de183so28258685ad.3;
-        Sun, 18 Feb 2024 08:15:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708272907; x=1708877707; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jBEJEQMmiSyOiBfdxdCLolpOwFxsaEhAkf01EcWWZrk=;
-        b=iPQCIfzfexzl3xlBouQKCaBQisZOMcXvBAmxYwSvfEOTRTeZe7LdIIfjiQUB5KIxc2
-         xfS++ZgLTVKA4kNk/82bMSyZfXm5GBg7gEt9J7jHgvMBoNw+/Ynt6f5htYuXPGp8c4gJ
-         2apNm9H2V65kO9j8L5V2Kf5VWAnVEo0fzSM3B63kQ0KKH7hRWWHjykP0c50ZVu6HAbAK
-         D59F0+HPbHooc9vP0HB6OT1p8wmI4i/obyHAb1hHG5v/D4FhgP7kD5Et+JClXw70dM7+
-         TRTXtJg0wGJcMIIEYplbRlAdIVMpChN0uiFuft027zvgZjnou1dLT/RbxcpI4aK1zYav
-         Yg5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708272907; x=1708877707;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jBEJEQMmiSyOiBfdxdCLolpOwFxsaEhAkf01EcWWZrk=;
-        b=BWKBIdGgjEEwJGU3Ef2blr1ofNnB+BXEadkEa0oljjyq033jdSPR/sOt/kPYoU6rUv
-         6/3Kg3kiTLGHvK5131jhKhw9+Yj0yvEncSZfbnoqt9Mz1PNPSXxLJ2pJSqQHGogn7siG
-         wbzQNHfYW54O1Jw7RM1SC87+XRoragR+T9pn7mJyKFiReiBkzX7dHTTU8SilFaleQpPR
-         1BnN0RgHnWLJJk4seUIRH0s6uNxuc/OCAkTc8Inypo2oUGHiobGlggJSOXVpaLkNSKha
-         kYUDUyLXGcFrbGui8BnLhj9V45kCeQe8eBV+ScvBtyFJqhtPZPSpGLYTruQs82T9jvP9
-         H5Aw==
-X-Forwarded-Encrypted: i=1; AJvYcCWoRbflmZMA7gOxYlXDIz74inoiyOZURtqDQVc91kPCfia6vGn11AOHezZU2M8TeTbp6x/ur+roZho/cPqP9w66CI/dBthphp0AVnFFGdDTLfr2FNTb/fcOXYWSUTdmCEibxv1T3rsP3Miq0g4FruUB2fqhMSbCfZh6cCLcx7l/kwjgZ7wH9qFr8xYIzcMR3GYQa5eAIE1ZivTaMrBzrV4FEpUB
-X-Gm-Message-State: AOJu0YxMp5Uce6cguR25qGtzXtzs5IAm4O37FBpnKN6tVOIQJTUoz3wX
-	cUClf8jnzc3zzaJ59lhexw5osTtiYGBrR4YRL4DtPb/W5Zz9hqxo3oxmKv9piVQKqA==
-X-Google-Smtp-Source: AGHT+IF8bGY9SfrUAjKSmDkVGlgnK6BHbIgYWIG3SBNGhP9To0DBE4skKON13Q253wX14A1HBKuO8A==
-X-Received: by 2002:a17:902:ea0e:b0:1db:f371:dca3 with SMTP id s14-20020a170902ea0e00b001dbf371dca3mr496043plg.48.1708272906869;
-        Sun, 18 Feb 2024 08:15:06 -0800 (PST)
-Received: from localhost.localdomain ([2406:3003:2000:500f:a246:8a16:bee7:140f])
-        by smtp.gmail.com with ESMTPSA id je20-20020a170903265400b001db4caef8d6sm2849500plb.161.2024.02.18.08.15.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Feb 2024 08:15:06 -0800 (PST)
-From: Lucas Lee Jing Yi <lucasleeeeeeeee@gmail.com>
-To: rafael@kernel.org
-Cc: Perry.Yuan@amd.com,
-	Xiaojian.Du@amd.com,
-	alexander.deucher@amd.com,
-	bp@alien8.de,
-	deepak.sharma@amd.com,
-	li.meng@amd.com,
-	linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
+	s=arc-20240116; t=1708282062; c=relaxed/simple;
+	bh=ZzpDwJa4K3+r41sklRhJMsnSJw7DbIBjHFPOcVs5fcY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JlhMSIHRsIKJNSb5GDxIP8vWxkti+oIc1hYfU1+dxXSBMhK+oE+iG5csKnT5MhHBtIJnrBQhTICwFhSONKhlgouRWdIdKjHvYTHfyHHYegoM3m6OEQI1SY6EjhF9fu7db2n4aVOpLYRW5uAe1J6fw2agZTVviFcZhjhof3Uc5c8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jiaxyga.com; spf=pass smtp.mailfrom=jiaxyga.com; dkim=pass (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b=QaGkIg5n; dkim=pass (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b=Y8ltRv6E; arc=none smtp.client-ip=79.137.243.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jiaxyga.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jiaxyga.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jiaxyga.com; s=mailru;
+	h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=oJ4HI3fXNLVifEKRkv+30ROKoxZ8SdDtjau/By6D28U=;
+	t=1708282060;x=1708372060; 
+	b=QaGkIg5no8JOga4WGwnYd7lvTxLNZoDn3bMkwFroUUi4wEGRYV11afKm5e4gKFWEQdsa3lVVnILQFLDyshSEPpNRNUkbguPtRPjtP4HJCNCuE3r8SgGFp2wHdwEMP+dOhUpm2IlCylL0KKcd8Eg2rNI/825bkJse6zh/0dz6gew=;
+Received: from [10.12.4.36] (port=57416 helo=smtp59.i.mail.ru)
+	by fallback18.i.mail.ru with esmtp (envelope-from <danila@jiaxyga.com>)
+	id 1rblyH-002TRW-Hw; Sun, 18 Feb 2024 21:33:01 +0300
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jiaxyga.com
+	; s=mailru; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+	Cc:To:From:From:Sender:Reply-To:To:Cc:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive:
+	X-Cloud-Ids:Disposition-Notification-To;
+	bh=oJ4HI3fXNLVifEKRkv+30ROKoxZ8SdDtjau/By6D28U=; t=1708281181; x=1708371181; 
+	b=Y8ltRv6Ee3lonjn5UAjJGBVGylNjtOGQhdtJr2YomFs9UAEsjajH5PX2scHM6/AvhP0J6CCrKuH
+	rG4KgEdfE89Q2vd7hKdozKj11w2FqktAuusS75MVCD/6xl6rize3vlxGgzM34nlfBkf/dI/dw+hj8
+	nsrE0E+B54hYWBvaWuo=;
+Received: by smtp59.i.mail.ru with esmtpa (envelope-from <danila@jiaxyga.com>)
+	id 1rbly2-00000001iw9-246d; Sun, 18 Feb 2024 21:32:47 +0300
+From: Danila Tikhonov <danila@jiaxyga.com>
+To: andersson@kernel.org,
+	konrad.dybcio@linaro.org,
+	djakov@kernel.org,
+	robh@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
 	linux-pm@vger.kernel.org,
-	mario.limonciello@amd.com,
-	nathan.fontenot@amd.com,
-	oleksandr@natalenko.name,
-	rafael.j.wysocki@intel.com,
-	ray.huang@amd.com,
-	shimmer.huang@amd.com,
-	skhan@linuxfoundation.org,
-	viresh.kumar@linaro.org,
-	x86@kernel.org,
-	Lucas Lee Jing Yi <lucasleeeeeeeee@gmail.com>
-Subject: [PATCH] [PATCH] amd_pstate: fix erroneous highest_perf value on some CPUs
-Date: Mon, 19 Feb 2024 00:10:31 +0800
-Message-ID: <20240218161435.38312-2-lucasleeeeeeeee@gmail.com>
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Danila Tikhonov <danila@jiaxyga.com>
+Subject: [PATCH 0/2] Add interconnect support for SM7150 SoC
+Date: Sun, 18 Feb 2024 21:32:37 +0300
+Message-ID: <20240218183239.85319-1-danila@jiaxyga.com>
 X-Mailer: git-send-email 2.43.2
-In-Reply-To: <20240218161435.38312-1-lucasleeeeeeeee@gmail.com>
-References: <CAJZ5v0hRk3tME7yeC+1r0RM4-oPPrnSu2=JCsOshBbJp_Nq2Hg@mail.gmail.com>
- <20240218161435.38312-1-lucasleeeeeeeee@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -103,74 +74,53 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Mailru-Src: smtp
+X-7564579A: 78E4E2B564C1792B
+X-77F55803: 4F1203BC0FB41BD9001F8F2F6BAD2021F4B2298ADA324AF81BB1825BF5AE0A1600894C459B0CD1B98C9EBD09D8BDACF3C7109C2D567B645AB2B869AB8C39342FF215CD5087B8A2F965B98BC17AE4ABE7
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7A179494B5629353BEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006370D3D68FCEFFDD9EA8638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D85E6ECE5FBCF80ABBF545006DEB2F19AEF66D7B8855061AF7CC7F00164DA146DAFE8445B8C89999728AA50765F790063773DCDF0198120BE8389733CBF5DBD5E9C8A9BA7A39EFB766F5D81C698A659EA7CC7F00164DA146DA9985D098DBDEAEC8744B801E316CB65FF6B57BC7E6449061A352F6E88A58FB86F5D81C698A659EA73AA81AA40904B5D9A18204E546F3947C0085B890FD2717DA6136E347CC761E074AD6D5ED66289B523666184CF4C3C14F6136E347CC761E07725E5C173C3A84C3B8066AFCF2BB2551BA3038C0950A5D36B5C8C57E37DE458B330BD67F2E7D9AF16D1867E19FE14079C09775C1D3CA48CFED8438A78DFE0A9E1DD303D21008E298D5E8D9A59859A8B6B372FE9A2E580EFC725E5C173C3A84C31BC2FD6A5287AC5335872C767BF85DA2F004C90652538430E4A6367B16DE6309
+X-C1DE0DAB: 0D63561A33F958A5EBC449AC771117205002B1117B3ED69619A38FAB5AA2C3660E58516B1639A14B823CB91A9FED034534781492E4B8EEADF4F3DF47829F65C7C79554A2A72441328621D336A7BC284946AD531847A6065A535571D14F44ED41
+X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CF05F377F6E0C1461EB10DBCCD48361BBEFA0CB07EC5489145AFDCBFFE1E75A92B760962882471415B34E84B500378195FBCE35CC6DDD33EE04C37877C5488D6FE914199AC9651CD60AF108DC32EA72A8402C26D483E81D6BE72B480F99247062FEE42F474E8A1C6FD34D382445848F2F3
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2bioj3ZJ49a6yxuuN11JQCrtBHw==
+X-Mailru-Sender: 9EB879F2C80682A09F26F806C739498103638563C1357B8A459FBC39F2FFFE83B33547D50490C739EA4BE9FE96A283482C62728BC403A049225EC17F3711B6CF1A6F2E8989E84EC137BFB0221605B344978139F6FA5A77F05FEEDEB644C299C0ED14614B50AE0675
+X-Mras: Ok
+X-7564579A: 646B95376F6C166E
+X-77F55803: 6242723A09DB00B4A77971E4CF73965D9E271BDE2CCB4C0C90205846E38A0579049FFFDB7839CE9E8F5A60B08382AFE37B48B0B2F3D55BE30B510F342DFFD572D0817233229BD881
+X-7FA49CB5: 0D63561A33F958A57A2B3967897D26BDBC493CD0BEA3941A68C4D234F0F740FA8941B15DA834481FA18204E546F3947CA14973FBE0621AE5F6B57BC7E64490618DEB871D839B7333395957E7521B51C2DFABB839C843B9C08941B15DA834481F8AA50765F7900637C1C2752E44B586D5389733CBF5DBD5E9B5C8C57E37DE458BD96E472CDF7238E0725E5C173C3A84C36153467CB5E707FD35872C767BF85DA2F004C90652538430E4A6367B16DE6309
+X-87b9d050: 1
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2bioj3ZJ49a6yxuvSU2GOb5vijQ==
+X-Mailru-MI: 8000000000000800
+X-Mras: Ok
 
-On a Ryzen 7840HS the highest_perf value is 196, not 166 as AMD assumed.
-This leads to the advertised max clock speed to only be 4.35ghz instead of 5.14ghz , leading to a large degradation in performance.
+Add dtbindings and driver support for the Qualcomm SM7150 SoC.
 
-Fix the broken assumption and revert back to the old logic for getting highest_perf.
+To: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+To: Georgi Djakov <djakov@kernel.org>
+To: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Conor Dooley <conor+dt@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
 
-TEST:
-Geekbench 6 Before Patch:
-Single Core:	2325 (-22%)!
-Multi Core:	11335 (-10%)
+Danila Tikhonov (2):
+  dt-bindings: interconnect: Add Qualcomm SM7150 DT bindings
+  interconnect: qcom: Add SM7150 driver support
 
-Geekbench 6 AFTER Patch:
-Single Core:	2635
-Multi Core:	12487
+ .../interconnect/qcom,sm7150-rpmh.yaml        |   88 +
+ drivers/interconnect/qcom/Kconfig             |    9 +
+ drivers/interconnect/qcom/Makefile            |    2 +
+ drivers/interconnect/qcom/sm7150.c            | 1753 +++++++++++++++++
+ drivers/interconnect/qcom/sm7150.h            |  140 ++
+ .../interconnect/qcom,sm7150-rpmh.h           |  150 ++
+ 6 files changed, 2142 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm7150-rpmh.yaml
+ create mode 100644 drivers/interconnect/qcom/sm7150.c
+ create mode 100644 drivers/interconnect/qcom/sm7150.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,sm7150-rpmh.h
 
-Signed-off-by: Lucas Lee Jing Yi <lucasleeeeeeeee@gmail.com>
----
- drivers/cpufreq/amd-pstate.c | 22 ++++++++++------------
- 1 file changed, 10 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 08e112444c27..54df68773620 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -50,7 +50,6 @@
- 
- #define AMD_PSTATE_TRANSITION_LATENCY	20000
- #define AMD_PSTATE_TRANSITION_DELAY	1000
--#define AMD_PSTATE_PREFCORE_THRESHOLD	166
- 
- /*
-  * TODO: We need more time to fine tune processors with shared memory solution
-@@ -299,15 +298,12 @@ static int pstate_init_perf(struct amd_cpudata *cpudata)
- 				     &cap1);
- 	if (ret)
- 		return ret;
--
--	/* For platforms that do not support the preferred core feature, the
--	 * highest_pef may be configured with 166 or 255, to avoid max frequency
--	 * calculated wrongly. we take the AMD_CPPC_HIGHEST_PERF(cap1) value as
--	 * the default max perf.
-+ 
-+	/* Some CPUs have different highest_perf from others, it is safer 
-+	 * to read it than to assume some erroneous value, leading to performance issues.
- 	 */
--	if (cpudata->hw_prefcore)
--		highest_perf = AMD_PSTATE_PREFCORE_THRESHOLD;
--	else
-+	highest_perf = amd_get_highest_perf();
-+	if(highest_perf > AMD_CPPC_HIGHEST_PERF(cap1))
- 		highest_perf = AMD_CPPC_HIGHEST_PERF(cap1);
- 
- 	WRITE_ONCE(cpudata->highest_perf, highest_perf);
-@@ -329,9 +325,11 @@ static int cppc_init_perf(struct amd_cpudata *cpudata)
- 	if (ret)
- 		return ret;
- 
--	if (cpudata->hw_prefcore)
--		highest_perf = AMD_PSTATE_PREFCORE_THRESHOLD;
--	else
-+	/* Some CPUs have different highest_perf from others, it is safer 
-+	 * to read it than to assume some erroneous value, leading to performance issues.
-+	 */
-+	highest_perf = amd_get_highest_perf();
-+	if(highest_perf > cppc_perf.highest_perf)
- 		highest_perf = cppc_perf.highest_perf;
- 
- 	WRITE_ONCE(cpudata->highest_perf, highest_perf);
 -- 
 2.43.2
 
