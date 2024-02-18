@@ -1,212 +1,101 @@
-Return-Path: <linux-pm+bounces-4040-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4041-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A17948595B5
-	for <lists+linux-pm@lfdr.de>; Sun, 18 Feb 2024 09:41:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0D148595E4
+	for <lists+linux-pm@lfdr.de>; Sun, 18 Feb 2024 10:07:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48500282A12
-	for <lists+linux-pm@lfdr.de>; Sun, 18 Feb 2024 08:41:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EDD0C1C2137D
+	for <lists+linux-pm@lfdr.de>; Sun, 18 Feb 2024 09:07:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 994BEEAEB;
-	Sun, 18 Feb 2024 08:41:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF0AE107AA;
+	Sun, 18 Feb 2024 09:07:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="CfENhN4+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EF43149E15;
-	Sun, 18 Feb 2024 08:41:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.236.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75AB3EAFC
+	for <linux-pm@vger.kernel.org>; Sun, 18 Feb 2024 09:07:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708245674; cv=none; b=c+wKjM2L8/KfmpGhsN517074frJzveKKOnM+UJUYBjSxC3hoDMf+uYIL0v7xuaJ+cdQthjLJIg1gbB+vjNvgOz8Nc5rrymm9FQzVdLod2jP13mZVzicNuuJuS1LiMHOBYvqVde9byphtIublrV/E1AcYJ3nLtuWFQUl60K4tfqs=
+	t=1708247221; cv=none; b=UBJXtr6fm5ZDt1lev55uqXsgNTntbawetO1BTzpTchJycoRYgyD+YwpF1hjIwIH2NCt1C3Ty9d248OXHtejb+j3rGT5t+KPtW3zB+0OOwBcZCiJEEOikxYb3iA2V+ZWfqyfRtPGBovHcLCMYKFpQHMOo0hwbFnxM+OYea+2nsuM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708245674; c=relaxed/simple;
-	bh=sMaAPhkoOe/wmvExKDqyxO2hoivL+2zo6774VKxyGTg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bGAdKAoJRmVjs4+rccgZyo+8nWgejlXM00ymKc+bjprQSuRIYu60l45m+UXHDTB+8fqTgIkXcyWJGj35h8iHZHFTM1Bub/x3+kPfaUi6BJNv0ci9ZTDYHEEuXfIIli8FnuKbha1amA97MucE40JmAUy8T7ycNXarn6NHlbRwfdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.236.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
-	by localhost (Postfix) with ESMTP id 4TczfF0yd4z9v8l;
-	Sun, 18 Feb 2024 09:41:09 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-	by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6XKgRyMUJsmE; Sun, 18 Feb 2024 09:41:09 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase1.c-s.fr (Postfix) with ESMTP id 4TczfD722lz9v6V;
-	Sun, 18 Feb 2024 09:41:08 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id E88F28B76C;
-	Sun, 18 Feb 2024 09:41:08 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id QB5cK6e3yLyc; Sun, 18 Feb 2024 09:41:08 +0100 (CET)
-Received: from PO20335.idsi0.si.c-s.fr (unknown [192.168.232.5])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 6EFE68B763;
-	Sun, 18 Feb 2024 09:41:08 +0100 (CET)
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <len.brown@intel.com>,
-	Pavel Machek <pavel@ucw.cz>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Kees Cook <keescook@chromium.org>,
+	s=arc-20240116; t=1708247221; c=relaxed/simple;
+	bh=HFou+Ynhj8r45qIYynVJq3BPxFIXGbuKAoHIGhaH17M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HCS94IVQwQ1f5AOzhQKdgAHMh32ai8XLmDn9uAaDUetLUail8v+/kV3J+fHY/HZA2GAixvJFkkrx4CrVNZuGkrjIpU1f5DEksZL6HSsCNcHEI5/Ti9TL2Mc50H3V6p442xEOBNgdUao3VrXgGnyZZMeKp0HtTPP2u679jbSNqTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=CfENhN4+; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-5c6bd3100fcso1476916a12.3
+        for <linux-pm@vger.kernel.org>; Sun, 18 Feb 2024 01:07:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1708247220; x=1708852020; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+pYjP8Elq30R0i6ycDkBbNUM938GG/2nOBO34J/gBts=;
+        b=CfENhN4+7of4UE9gjPzdZOhi2bMwCVSCAGl3GBKhH6SFsZ3u62gWEJ7wMEaKRfaDW6
+         wphwf1ieqcQmWlzhDt2mCiOwZEouB3WdlTyC+jmN+megcEs8dqAltFuoBSrzJr2MXp1n
+         G2xrB4mxSKP68DMz3akurQweDLE3bw8eeVlwQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708247220; x=1708852020;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+pYjP8Elq30R0i6ycDkBbNUM938GG/2nOBO34J/gBts=;
+        b=XmKSQT+QmOqsZZfkndoQtPEVts0JRVaQx2JMDRz7wjA8BozKvLrJeWfrF9qwTGu251
+         6o/OfsBQ60t3oVUTOGlEGa+56N8lHqlAORqHK2K9fRPA3eMLRtPeS4r918eD+19Qj8/W
+         LhFn9QGBJ+G1Yw4Lku7kfnZd0Egh3gTp+WoA/gVkyMuT8L1MSNDsFY+Va6Mzqg9IaEQH
+         IVgOzg9iivB5tayzubthaTImpRTbaJ+LLKNDrCQkK8ER4OfALdj1G8NEkKBJcD/C2yu3
+         CXKwm5fH62BBgLAfVi32MKUjabZkQWBOVEi2IIYZSRkNm2957iiUFHuyt1ADHcdWQpB/
+         E8rA==
+X-Forwarded-Encrypted: i=1; AJvYcCV87kltQMws3zDlclriyoMIEE7nPxtUznEPKiWEgk+bQLlfl/hFsOcy4oWpb56n/d15dX+fF00D2VP1OJyfV/XFFH3F/wfwhAA=
+X-Gm-Message-State: AOJu0Yw9CEoe2ouWWHepg0hBViP6KV5R5v6LDGrfP0OECJvy4xu9JiKa
+	I97B9ZO2cP7/bJKiWgUlaH56Y5fdMEB9BMKHJsotUJZJEhNnzNbyo3ZIPWo2NA==
+X-Google-Smtp-Source: AGHT+IHE3MbZ/4iRpYOBLF5b91QTfJN5jdx5IDOudYN6UjSGzsBL2ieEcjeoydWDpFek6WFz9QfxRg==
+X-Received: by 2002:a62:cec9:0:b0:6e4:1a29:732f with SMTP id y192-20020a62cec9000000b006e41a29732fmr991819pfg.12.1708247219780;
+        Sun, 18 Feb 2024 01:06:59 -0800 (PST)
+Received: from www.outflux.net ([198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id c18-20020aa78812000000b006e1464e71f9sm495605pfo.47.2024.02.18.01.06.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 18 Feb 2024 01:06:59 -0800 (PST)
+Date: Sun, 18 Feb 2024 01:06:58 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
 	"linux-hardening @ vger . kernel . org" <linux-hardening@vger.kernel.org>
-Subject: [PATCH] PM: hibernate: Don't ignore return from set_memory_ro()
-Date: Sun, 18 Feb 2024 09:40:58 +0100
-Message-ID: <be49c794567f3bd00ae16e91b54fe8cfe6cb4999.1708245599.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.43.0
+Subject: Re: [PATCH] PM: hibernate: Don't ignore return from set_memory_ro()
+Message-ID: <202402180106.25E08136F5@keescook>
+References: <be49c794567f3bd00ae16e91b54fe8cfe6cb4999.1708245599.git.christophe.leroy@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1708245658; l=5282; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=sMaAPhkoOe/wmvExKDqyxO2hoivL+2zo6774VKxyGTg=; b=dL54jghPy4GRYknveendqZEnByR39IMPEL7EcmQgTI845XRsjhQMcxlvWY2uTT8Sly/qmJ7Hl aHPgM8klwleCauLxcHkUrwg6i29FHPt1nhd0d6uhyw23wp5PWyFhrUj
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <be49c794567f3bd00ae16e91b54fe8cfe6cb4999.1708245599.git.christophe.leroy@csgroup.eu>
 
-set_memory_ro() and set_memory_rw() can fail, leaving memory
-unprotected.
+On Sun, Feb 18, 2024 at 09:40:58AM +0100, Christophe Leroy wrote:
+> set_memory_ro() and set_memory_rw() can fail, leaving memory
+> unprotected.
+> 
+> Take the returned value into account and abort in case of
+> failure.
+> 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-Take the returned value into account and abort in case of
-failure.
+More set_memory* consumers! :) Error paths look good to me.
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- kernel/power/power.h    |  2 +-
- kernel/power/snapshot.c | 25 ++++++++++++++++---------
- kernel/power/swap.c     |  8 ++++----
- kernel/power/user.c     |  4 +++-
- 4 files changed, 24 insertions(+), 15 deletions(-)
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-diff --git a/kernel/power/power.h b/kernel/power/power.h
-index 8499a39c62f4..84d235f491a5 100644
---- a/kernel/power/power.h
-+++ b/kernel/power/power.h
-@@ -148,7 +148,7 @@ extern unsigned int snapshot_additional_pages(struct zone *zone);
- extern unsigned long snapshot_get_image_size(void);
- extern int snapshot_read_next(struct snapshot_handle *handle);
- extern int snapshot_write_next(struct snapshot_handle *handle);
--extern void snapshot_write_finalize(struct snapshot_handle *handle);
-+int snapshot_write_finalize(struct snapshot_handle *handle);
- extern int snapshot_image_loaded(struct snapshot_handle *handle);
- 
- extern bool hibernate_acquire(void);
-diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-index 5c96ff067c64..405eddbda4fc 100644
---- a/kernel/power/snapshot.c
-+++ b/kernel/power/snapshot.c
-@@ -58,22 +58,24 @@ static inline void hibernate_restore_protection_end(void)
- 	hibernate_restore_protection_active = false;
- }
- 
--static inline void hibernate_restore_protect_page(void *page_address)
-+static inline int __must_check hibernate_restore_protect_page(void *page_address)
- {
- 	if (hibernate_restore_protection_active)
--		set_memory_ro((unsigned long)page_address, 1);
-+		return set_memory_ro((unsigned long)page_address, 1);
-+	return 0;
- }
- 
--static inline void hibernate_restore_unprotect_page(void *page_address)
-+static inline int hibernate_restore_unprotect_page(void *page_address)
- {
- 	if (hibernate_restore_protection_active)
--		set_memory_rw((unsigned long)page_address, 1);
-+		return set_memory_rw((unsigned long)page_address, 1);
-+	return 0;
- }
- #else
- static inline void hibernate_restore_protection_begin(void) {}
- static inline void hibernate_restore_protection_end(void) {}
--static inline void hibernate_restore_protect_page(void *page_address) {}
--static inline void hibernate_restore_unprotect_page(void *page_address) {}
-+static inline int __must_check hibernate_restore_protect_page(void *page_address) {return 0; }
-+static inline int hibernate_restore_unprotect_page(void *page_address) {return 0; }
- #endif /* CONFIG_STRICT_KERNEL_RWX  && CONFIG_ARCH_HAS_SET_MEMORY */
- 
- 
-@@ -2832,7 +2834,9 @@ int snapshot_write_next(struct snapshot_handle *handle)
- 		}
- 	} else {
- 		copy_last_highmem_page();
--		hibernate_restore_protect_page(handle->buffer);
-+		error = hibernate_restore_protect_page(handle->buffer);
-+		if (error)
-+			return error;
- 		handle->buffer = get_buffer(&orig_bm, &ca);
- 		if (IS_ERR(handle->buffer))
- 			return PTR_ERR(handle->buffer);
-@@ -2858,15 +2862,18 @@ int snapshot_write_next(struct snapshot_handle *handle)
-  * stored in highmem.  Additionally, it recycles bitmap memory that's not
-  * necessary any more.
-  */
--void snapshot_write_finalize(struct snapshot_handle *handle)
-+int snapshot_write_finalize(struct snapshot_handle *handle)
- {
-+	int error;
-+
- 	copy_last_highmem_page();
--	hibernate_restore_protect_page(handle->buffer);
-+	error = hibernate_restore_protect_page(handle->buffer);
- 	/* Do that only if we have loaded the image entirely */
- 	if (handle->cur > 1 && handle->cur > nr_meta_pages + nr_copy_pages + nr_zero_pages) {
- 		memory_bm_recycle(&orig_bm);
- 		free_highmem_data();
- 	}
-+	return error;
- }
- 
- int snapshot_image_loaded(struct snapshot_handle *handle)
-diff --git a/kernel/power/swap.c b/kernel/power/swap.c
-index 6053ddddaf65..b2d708952aae 100644
---- a/kernel/power/swap.c
-+++ b/kernel/power/swap.c
-@@ -1100,8 +1100,8 @@ static int load_image(struct swap_map_handle *handle,
- 		ret = err2;
- 	if (!ret) {
- 		pr_info("Image loading done\n");
--		snapshot_write_finalize(snapshot);
--		if (!snapshot_image_loaded(snapshot))
-+		ret = snapshot_write_finalize(snapshot);
-+		if (!ret && !snapshot_image_loaded(snapshot))
- 			ret = -ENODATA;
- 	}
- 	swsusp_show_speed(start, stop, nr_to_read, "Read");
-@@ -1441,8 +1441,8 @@ static int load_image_lzo(struct swap_map_handle *handle,
- 	stop = ktime_get();
- 	if (!ret) {
- 		pr_info("Image loading done\n");
--		snapshot_write_finalize(snapshot);
--		if (!snapshot_image_loaded(snapshot))
-+		ret = snapshot_write_finalize(snapshot);
-+		if (!ret && !snapshot_image_loaded(snapshot))
- 			ret = -ENODATA;
- 		if (!ret) {
- 			if (swsusp_header->flags & SF_CRC32_MODE) {
-diff --git a/kernel/power/user.c b/kernel/power/user.c
-index 3a4e70366f35..3aa41ba22129 100644
---- a/kernel/power/user.c
-+++ b/kernel/power/user.c
-@@ -317,7 +317,9 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
- 		break;
- 
- 	case SNAPSHOT_ATOMIC_RESTORE:
--		snapshot_write_finalize(&data->handle);
-+		error = snapshot_write_finalize(&data->handle);
-+		if (error)
-+			break;
- 		if (data->mode != O_WRONLY || !data->frozen ||
- 		    !snapshot_image_loaded(&data->handle)) {
- 			error = -EPERM;
 -- 
-2.43.0
-
+Kees Cook
 
