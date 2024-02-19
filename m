@@ -1,38 +1,38 @@
-Return-Path: <linux-pm+bounces-4081-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4082-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D27385A789
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 55FBC85A788
 	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 16:37:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E1732B241AA
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 15:37:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F87128419B
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 15:37:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B1BA383BB;
-	Mon, 19 Feb 2024 15:36:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E6F938F9F;
+	Mon, 19 Feb 2024 15:36:59 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F14AB383BE;
-	Mon, 19 Feb 2024 15:36:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0108383BE;
+	Mon, 19 Feb 2024 15:36:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708357016; cv=none; b=BuPTMm+JaY27DkSKWDGC61qNag7sipQaiVAS8/DI3UpyUTOhyrSrl+oEaHV2c+Ox06z4W7RdTJAjtefvTM9fZHguucIPTKAvmpqwr24CAfr4AIY18cRl3lj2h4cUpWhy9QFr0+ww6veyaEtI4pyFhB1SI72atMVwEXE3t26ysGY=
+	t=1708357019; cv=none; b=iqzbA3+c3cLVeYkiKRJdbJcgGsCSiMaexJPYPgjn3oS62+foP0Ek387pNuP7PlWsAGVsWSv4j4hn812553jlIgIqznzE/PxrbYt5ur3l8RP5lJFtsfBDZMfDvCJOrlFa3HdEKj5Li+CLJWzR64JrYnB8jxwsO9VyM8DEpD/ffEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708357016; c=relaxed/simple;
-	bh=9BRoqOjYYK1JW32X/zyqZjvvKp0quyRrftWlkVlK5ok=;
+	s=arc-20240116; t=1708357019; c=relaxed/simple;
+	bh=tY9bzxyljYD2bqhnC+lbyk9SRKc3xauFDxiotOL9zAQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dwCCdJOYL7XQzXcabfb0qtuZqZHHzF0IV+VNHhvVpCBQQkglwUD5QcltHhgtfMnkxZ9X87haJflX1TJocownRb1TwzzDMBRmAJM4YnH7X2rSMjGV0O4Sf4pLPtX4Iv4yXS6Gv3swLItkM2mbb1UOFTI6h70NxCbjkJ4LjRvWhCk=
+	 MIME-Version; b=dBlRs0S4PiBN4YNYMOGEvv3Erq9YPvprNU7MH/JKR9HNmok+2JQ2tcZx60VihRDMqilBzBIn54iEQJlWpbnnVasxNGmrNQWTnlfrnmqBbf9Bl7LrXtfDfO5g5Fd16ontMoKkItq1ggchNW/UI8nhhVqO9SdaXh106TPoov4+70o=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 14F07FEC;
-	Mon, 19 Feb 2024 07:37:34 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C3D1D1007;
+	Mon, 19 Feb 2024 07:37:36 -0800 (PST)
 Received: from donnerap.arm.com (donnerap.manchester.arm.com [10.32.100.28])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D5DA73F762;
-	Mon, 19 Feb 2024 07:36:51 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 905293F762;
+	Mon, 19 Feb 2024 07:36:54 -0800 (PST)
 From: Andre Przywara <andre.przywara@arm.com>
 To: Vasily Khoruzhick <anarsoul@gmail.com>,
 	Yangtao Li <tiny.windzz@gmail.com>,
@@ -53,9 +53,9 @@ Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
 	devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-sunxi@lists.linux.dev
-Subject: [PATCH v5 3/7] thermal: sun8i: explain unknown H6 register value
-Date: Mon, 19 Feb 2024 15:36:35 +0000
-Message-Id: <20240219153639.179814-4-andre.przywara@arm.com>
+Subject: [PATCH v5 4/7] thermal: sun8i: extend H6 calibration to support 4 sensors
+Date: Mon, 19 Feb 2024 15:36:36 +0000
+Message-Id: <20240219153639.179814-5-andre.przywara@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240219153639.179814-1-andre.przywara@arm.com>
 References: <20240219153639.179814-1-andre.przywara@arm.com>
@@ -67,79 +67,75 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-So far we were ORing in some "unknown" value into the THS control
-register on the Allwinner H6. This part of the register is not explained
-in the H6 manual, but the H616 manual details those bits, and on closer
-inspection the THS IP blocks in both SoCs seem very close:
-- The BSP code for both SoCs writes the same values into THS_CTRL.
-- The reset values of at least the first three registers are the same.
+From: Maksim Kiselev <bigunclemax@gmail.com>
 
-Replace the "unknown" value with its proper meaning: "acquire time",
-most probably the sample part of the sample & hold circuit of the ADC,
-according to its explanation in the H616 manual.
+The H616 SoC resembles the H6 thermal sensor controller, with a few
+changes like four sensors.
 
-No functional change, just a macro rename and adjustment.
+Extend sun50i_h6_ths_calibrate() function to support calibration of
+these sensors.
 
+Co-developed-by: Martin Botka <martin.botka@somainline.org>
+Signed-off-by: Martin Botka <martin.botka@somainline.org>
+Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
+Reviewed-by: Andre Przywara <andre.przywara@arm.com>
 Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 ---
- drivers/thermal/sun8i_thermal.c | 29 ++++++++++++++++-------------
- 1 file changed, 16 insertions(+), 13 deletions(-)
+ drivers/thermal/sun8i_thermal.c | 28 ++++++++++++++++++++--------
+ 1 file changed, 20 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
-index 6a8e386dbc8dc..42bee03c4e507 100644
+index 42bee03c4e507..c919b0fd5e169 100644
 --- a/drivers/thermal/sun8i_thermal.c
 +++ b/drivers/thermal/sun8i_thermal.c
-@@ -50,7 +50,8 @@
- #define SUN8I_THS_CTRL2_T_ACQ1(x)		((GENMASK(15, 0) & (x)) << 16)
- #define SUN8I_THS_DATA_IRQ_STS(x)		BIT(x + 8)
+@@ -222,16 +222,21 @@ static int sun50i_h6_ths_calibrate(struct ths_device *tmdev,
+ 	struct device *dev = tmdev->dev;
+ 	int i, ft_temp;
  
--#define SUN50I_THS_CTRL0_T_ACQ(x)		((GENMASK(15, 0) & (x)) << 16)
-+#define SUN50I_THS_CTRL0_T_ACQ(x)		(GENMASK(15, 0) & ((x) - 1))
-+#define SUN50I_THS_CTRL0_T_SAMPLE_PER(x)	((GENMASK(15, 0) & ((x) - 1)) << 16)
- #define SUN50I_THS_FILTER_EN			BIT(2)
- #define SUN50I_THS_FILTER_TYPE(x)		(GENMASK(1, 0) & (x))
- #define SUN50I_H6_THS_PC_TEMP_PERIOD(x)		((GENMASK(19, 0) & (x)) << 12)
-@@ -410,25 +411,27 @@ static int sun8i_h3_thermal_init(struct ths_device *tmdev)
- 	return 0;
- }
- 
--/*
-- * Without this undocumented value, the returned temperatures would
-- * be higher than real ones by about 20C.
-- */
--#define SUN50I_H6_CTRL0_UNK 0x0000002f
--
- static int sun50i_h6_thermal_init(struct ths_device *tmdev)
- {
- 	int val;
+-	if (!caldata[0] || callen < 2 + 2 * tmdev->chip->sensor_num)
++	if (!caldata[0])
+ 		return -EINVAL;
  
  	/*
--	 * T_acq = 20us
--	 * clkin = 24MHz
--	 *
--	 * x = T_acq * clkin - 1
--	 *   = 479
-+	 * The manual recommends an overall sample frequency of 50 KHz (20us,
-+	 * 480 cycles at 24 MHz), which provides plenty of time for both the
-+	 * acquisition time (>24 cycles) and the actual conversion time
-+	 * (>14 cycles).
-+	 * The lower half of the CTRL register holds the "acquire time", in
-+	 * clock cycles, which the manual recommends to be 2us:
-+	 * 24MHz * 2us = 48 cycles.
-+	 * The high half of THS_CTRL encodes the sample frequency, in clock
-+	 * cycles: 24MHz * 20us = 480 cycles.
-+	 * This is explained in the H616 manual, but apparently wrongly
-+	 * described in the H6 manual, although the BSP code does the same
-+	 * for both SoCs.
- 	 */
- 	regmap_write(tmdev->regmap, SUN50I_THS_CTRL0,
--		     SUN50I_H6_CTRL0_UNK | SUN50I_THS_CTRL0_T_ACQ(479));
-+		     SUN50I_THS_CTRL0_T_ACQ(48) |
-+		     SUN50I_THS_CTRL0_T_SAMPLE_PER(480));
- 	/* average over 4 samples */
- 	regmap_write(tmdev->regmap, SUN50I_H6_THS_MFC,
- 		     SUN50I_THS_FILTER_EN |
+ 	 * efuse layout:
+ 	 *
+-	 *	0   11  16	 32
+-	 *	+-------+-------+-------+
+-	 *	|temp|  |sensor0|sensor1|
+-	 *	+-------+-------+-------+
++	 * 0      11  16     27   32     43   48    57
++	 * +----------+-----------+-----------+-----------+
++	 * |  temp |  |sensor0|   |sensor1|   |sensor2|   |
++	 * +----------+-----------+-----------+-----------+
++	 *                      ^           ^           ^
++	 *                      |           |           |
++	 *                      |           |           sensor3[11:8]
++	 *                      |           sensor3[7:4]
++	 *                      sensor3[3:0]
+ 	 *
+ 	 * The calibration data on the H6 is the ambient temperature and
+ 	 * sensor values that are filled during the factory test stage.
+@@ -244,9 +249,16 @@ static int sun50i_h6_ths_calibrate(struct ths_device *tmdev,
+ 	ft_temp = (caldata[0] & FT_TEMP_MASK) * 100;
+ 
+ 	for (i = 0; i < tmdev->chip->sensor_num; i++) {
+-		int sensor_reg = caldata[i + 1] & TEMP_CALIB_MASK;
+-		int cdata, offset;
+-		int sensor_temp = tmdev->chip->calc_temp(tmdev, i, sensor_reg);
++		int sensor_reg, sensor_temp, cdata, offset;
++
++		if (i == 3)
++			sensor_reg = (caldata[1] >> 12)
++				     | ((caldata[2] >> 12) << 4)
++				     | ((caldata[3] >> 12) << 8);
++		else
++			sensor_reg = caldata[i + 1] & TEMP_CALIB_MASK;
++
++		sensor_temp = tmdev->chip->calc_temp(tmdev, i, sensor_reg);
+ 
+ 		/*
+ 		 * Calibration data is CALIBRATE_DEFAULT - (calculated
 -- 
 2.25.1
 
