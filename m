@@ -1,369 +1,293 @@
-Return-Path: <linux-pm+bounces-4066-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4067-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AD6A85A027
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 10:49:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B15085A084
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 11:06:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 86B221F22F16
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 09:49:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C0B61F2312E
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 10:06:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5AB424B34;
-	Mon, 19 Feb 2024 09:49:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8427D22F13;
+	Mon, 19 Feb 2024 10:06:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="HJ7n9Uip"
+	dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b="o+pdkKRl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2061.outbound.protection.outlook.com [40.107.20.61])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0E7C2560C;
-	Mon, 19 Feb 2024 09:49:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708336146; cv=none; b=EMzI/D7EpSOK+O0WPQav9WZU61ff3O+cYE1GZd4l59GwPirqCVNnw+XJFsmYvzSPVhOpPa8GQsCBTXFXZLVBnNp52AKEBLg4S+SCnhlZyVQCQsgs8u/0gzyP0aMqkijQL+TIdvyQ+5NuZ+Cx1DptW4uGPk643XDQMxRowytkOc4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708336146; c=relaxed/simple;
-	bh=/eCKRkVRj7kxqwcWVvNqhiFlyUIOOWqO9I4aj7/YHfM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=LVm/OpfEEtemTIm7or1D8+E/6ydTF9gglkf5EgEL5jPU4wyoH5UQdl6ak5EyUtAShPlc8LDsSuiGDRQJFy8jAnXKacRu+K4QZq+WQM9AQWwIEwUstlHuC1eVqHMzJOubRmPWvBECxlIixNxz9AWOFgteW4OL0x9y95dksWQCho4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=HJ7n9Uip; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41J8fPrF014557;
-	Mon, 19 Feb 2024 09:48:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=6o2e94fPw47nGwPn62EgcEzG4EtOWh5DScFrQ8Ht47s=; b=HJ
-	7n9Uip9+bqyev3z32V8c+EzdDMWRg+D3sQvWZWAgKM6/cQCMLuD4Khpt47TNq9D9
-	Z51OYZ9OVIEVvPYTUJCmACsy55BLZm81IRPwyRjsCc8EDYXwmpTt2QUjVtjMsk/u
-	1rgo6jkw/rd7hBSM3D9tLUwFuDrwuuxqUm/mbn+cTf8XSd7AhZhECVqccNFxl7xH
-	yF/gfrwmcIbR2fL8P9WTHL2NIiRR7sbX6OIzKRe45/l4kK+m6Yzpif3PfdomLzIb
-	YVbVQ0TD3ZwQOE2+Lq53iinUb8WcEDBR+YagenvKVANFWfQyv0jJX+fux+4/84g8
-	2vTQa3YWDSfeTzKWkXGQ==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wc3pr849w-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 19 Feb 2024 09:48:57 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41J9mvXf012255
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 19 Feb 2024 09:48:57 GMT
-Received: from [10.214.82.119] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 19 Feb
- 2024 01:48:53 -0800
-Message-ID: <fce70468-05fb-4f51-a653-7921dd27bc6b@quicinc.com>
-Date: Mon, 19 Feb 2024 15:18:53 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE67A25601;
+	Mon, 19 Feb 2024 10:06:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.61
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708337189; cv=fail; b=Wo49Dgn2LiZV5R5PqkyBoc81ZuOSwXyzRIotyU4UGhFYoDj10EcOaby0PI7jYYMzeT/P7yzOzRjOFiC8+UeNmF5a8EO4nZz/XsiczwfDAq2FLsvzweMclnizJOtwmy1xhDKHd089tFIs/9LyTQWXKlcEkcwxrugU1mhaI4f5+uQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708337189; c=relaxed/simple;
+	bh=QllKm+DOC1RbYYaWSN5KO3kt7XUxMDQTwy7n0sTeHDo=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WfJ8JhgWlyJAIukXPEjRWbY4eUgndgkXZ+/WIyK1jHuJXho/vWyIe0mCN2inCg3G+7jjQy59hI4Xfw3p4BN1HKS8PBnTfnrha1habMMGbLNZ3nnI3sO2ShDeTaq8PWVViXlUY4fK/wa563/9yXK8/u3WWlgxg5b4WasFURzcOGo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com; spf=pass smtp.mailfrom=axis.com; dkim=pass (1024-bit key) header.d=axis.com header.i=@axis.com header.b=o+pdkKRl; arc=fail smtp.client-ip=40.107.20.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=axis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=axis.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iqn/78Zvsx2ywBBicMI6Nl1xq8+fnLpaRPFUOBjaZSqpoFR7LXMEBqbOralYCCurxofvdP1vZmrp/O86tgWanNt2SvuZ/zRQ05n6wHjijTMvIUCc9bSpn9JEe2FNTUmEfsa/5OUDgIMUD4yxPSWpZiEeTKOSMuP9YrBZYh7Sfo0kIa5DGSWFjOc4HwX6UNYdb8AqOXIKwaLD3YvFdN3gg7TP2RIEf2aB3mqS0yNN5iYIVU68vnKHDyvqCbOvnEOHR/kpC1/zo69ZhM1yN0VBCrj965mMVgZvO2YFHP3MTC//RG9LlMZeX+pVQPeNqEfxuuebRNuqBYiPtbUg+yr3Zg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4s1BDnDuHDBjX0mFYs3eWGmuhP6tZtmlxgTcXFK0frg=;
+ b=njmR1xYDJK1V6t1teStzMXO5NUhIA/vJThkdlhLHbzsPi+buChaz4tacD/zXCBZThtfS7HblF/7qFKkQdmUWT8MWs/bMLhCDt0c8ePItsCXrpl35M3CJ8q/0x6EmAySoTQ0BVGP/1TMKrjvnvVHCL/drMuoXibAqBw4q2iE5vgxcf4Ld799X+LV8sGXi+PQTsu9lXDIbEsggMSVtU4Ckrn01vP6AwR6XFkW7HtK6SBL0eVWj/U5ljVCHxLF7vaWs4hroKBunBO8cmI5goXNWtC4XM+DFWRrd+qD+QjJ2JhwYXjgl9DXTvHHshqANc8kEYYsMpwujhUafQHZomEv09g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
+ 195.60.68.100) smtp.rcpttodomain=kernel.org smtp.mailfrom=axis.com;
+ dmarc=fail (p=none sp=none pct=100) action=none header.from=axis.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axis.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4s1BDnDuHDBjX0mFYs3eWGmuhP6tZtmlxgTcXFK0frg=;
+ b=o+pdkKRl9exbhN+6i1x2I3lOZWFWqbIN0T1irIpk64tqMyJuZSXbWPBOHvCAVkVEbbdPiVql0rtd4ip/SZbK5DkOBADrQ5LdMbCwRy9pnG0ruSrI64yhoJotRBNqop8MESXZEjN2i9sAOHOEeXZpXvFgnRkiQwg1Ks2MoCHeNLI=
+Received: from AS8PR04CA0027.eurprd04.prod.outlook.com (2603:10a6:20b:310::32)
+ by DU0PR02MB8739.eurprd02.prod.outlook.com (2603:10a6:10:3ef::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.38; Mon, 19 Feb
+ 2024 10:06:22 +0000
+Received: from AMS1EPF00000047.eurprd04.prod.outlook.com
+ (2603:10a6:20b:310:cafe::41) by AS8PR04CA0027.outlook.office365.com
+ (2603:10a6:20b:310::32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.34 via Frontend
+ Transport; Mon, 19 Feb 2024 10:06:22 +0000
+X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 195.60.68.100)
+ smtp.mailfrom=axis.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=none header.from=axis.com;
+Received-SPF: Fail (protection.outlook.com: domain of axis.com does not
+ designate 195.60.68.100 as permitted sender) receiver=protection.outlook.com;
+ client-ip=195.60.68.100; helo=mail.axis.com;
+Received: from mail.axis.com (195.60.68.100) by
+ AMS1EPF00000047.mail.protection.outlook.com (10.167.16.135) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7292.25 via Frontend Transport; Mon, 19 Feb 2024 10:06:22 +0000
+Received: from se-mail01w.axis.com (10.20.40.7) by se-mail01w.axis.com
+ (10.20.40.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 19 Feb
+ 2024 11:06:21 +0100
+Received: from se-intmail01x.se.axis.com (10.0.5.60) by se-mail01w.axis.com
+ (10.20.40.7) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Mon, 19 Feb 2024 11:06:21 +0100
+Received: from lnxchenhuiz2.sh.cn.axis.com (lnxchenhuiz2.sh.cn.axis.com [192.168.77.59])
+	by se-intmail01x.se.axis.com (Postfix) with ESMTP id 1D64D146F3;
+	Mon, 19 Feb 2024 11:06:20 +0100 (CET)
+Received: from lnxchenhuiz2.sh.cn.axis.com (localhost [127.0.0.1])
+	by lnxchenhuiz2.sh.cn.axis.com (8.17.1.9/8.17.1.9/Debian-2) with ESMTP id 41JA6J2i048781;
+	Mon, 19 Feb 2024 18:06:19 +0800
+Received: (from chenhuiz@localhost)
+	by lnxchenhuiz2.sh.cn.axis.com (8.17.1.9/8.17.1.9/Submit) id 41JA6JD2048780;
+	Mon, 19 Feb 2024 18:06:19 +0800
+From: Hermes Zhang <Hermes.Zhang@axis.com>
+To: Sebastian Reichel <sre@kernel.org>
+CC: <kernel@axis.com>, Hermes Zhang <Hermes.Zhang@axis.com>,
+	=?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: [PATCH] power: supply: bq27xxx: Introduce parameter to config cache regs
+Date: Mon, 19 Feb 2024 18:05:40 +0800
+Message-ID: <20240219100541.48453-1-Hermes.Zhang@axis.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: interconnect: Add Qualcomm SM7150 DT
- bindings
-Content-Language: en-US
-To: Danila Tikhonov <danila@jiaxyga.com>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <djakov@kernel.org>, <robh@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20240218183239.85319-1-danila@jiaxyga.com>
- <20240218183239.85319-2-danila@jiaxyga.com>
-From: Naman Jain <quic_namajain@quicinc.com>
-In-Reply-To: <20240218183239.85319-2-danila@jiaxyga.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: BGjAMdod1Y68q8xhSstLNGyPnl0bSz3V
-X-Proofpoint-GUID: BGjAMdod1Y68q8xhSstLNGyPnl0bSz3V
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-19_06,2024-02-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
- clxscore=1015 impostorscore=0 spamscore=0 bulkscore=0 adultscore=0
- lowpriorityscore=0 priorityscore=1501 mlxlogscore=999 malwarescore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2401310000 definitions=main-2402190073
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AMS1EPF00000047:EE_|DU0PR02MB8739:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3ed88a4d-816c-45a9-4255-08dc31326ca1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	pSSRNIekvYWDTA0DuVMQUkwqeP8K41pvZFjtvV8CVInNCnt3TKQUBi6rWXBtQg6sFHD/2vAeSwWN0a1HQN2Zo1jyHvAcOAxdbSE6gOMWUFNZh8jUpOtJCFGmoQT6Uh0+mouCfLnf3HOnDeVGSXAJwKrJrkAGLjwntdrRVfyNcKA6zkjqVBevwe4KMI6nplcqKDNlJKYXX8Fguf/ZoQqThy5QLINiAmHEzuXw/KwZJ0MXQw4m/UDPNWxE5H5o6fvpvhmX6u7LUWajX7zv5wmzSwkKi/+MDbhg/kKdhSZBxLzUHzxQuQFHq/sCeWaCNSp8ZxhLiYkWhP6g+DMnAWpXnTbblhvfdlvbvQtlL6amVgOQzCikCsG51Ho3TMGHuqwFSMtLUovd2xB8RnWgZ89RNlAV3d+MyyBwX6LjpALgdAPMEvMCVM4IBJMaARILdzGIKWsJjURy6Dd1N/MohbRDi/pMoQ/k81mSpxj7mo0++EoxZyv/YN2NyDJUPO85gve5HDRP/2TewAY9YnHcddClSXo5BJ/Q+7Nwx15BsdDVKnqh13zG8NvbFq44pP26jcK1Y5Xm/nJyrLN8vpDELQoMQ2SL6nc1mcpfIrrGqwdB1ztcyxNmn669LsF5nyOTeF7nkrLPT+3Hh62BVZ5/+i+Z6juEwbctYpbn4qChZsfMf7Q=
+X-Forefront-Antispam-Report:
+	CIP:195.60.68.100;CTRY:SE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.axis.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(346002)(396003)(136003)(376002)(230922051799003)(82310400011)(186009)(64100799003)(451199024)(1800799012)(36860700004)(46966006)(40470700004)(83380400001)(81166007)(356005)(86362001)(82740400003)(478600001)(316002)(6916009)(42186006)(54906003)(70206006)(70586007)(1076003)(26005)(2616005)(426003)(336012)(6666004)(36756003)(41300700001)(5660300002)(8936002)(4326008)(8676002)(2906002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: axis.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Feb 2024 10:06:22.0088
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3ed88a4d-816c-45a9-4255-08dc31326ca1
+X-MS-Exchange-CrossTenant-Id: 78703d3c-b907-432f-b066-88f7af9ca3af
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=78703d3c-b907-432f-b066-88f7af9ca3af;Ip=[195.60.68.100];Helo=[mail.axis.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AMS1EPF00000047.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR02MB8739
 
-On 2/19/2024 12:02 AM, Danila Tikhonov wrote:
-> The Qualcomm SM7150 platform has several bus fabrics that could be
-> controlled and tuned dynamically according to the bandwidth demand.
+Since all of the regs in the bq27xxx_reg_cache are now cached, a simple
+property read (such as temperature) will need nine I2C transmissions.
+Introduce a new module parameter to enable the reg cache to be configured,
+which decrease the amount of unnecessary I2C transmission and preventing
+the error -16 (EBUSY) happen when working on an I2C bus that is shared by
+many devices.
 
-Please add what you are trying to do with this patch.
+Signed-off-by: Hermes Zhang <Hermes.Zhang@axis.com>
+---
+ drivers/power/supply/bq27xxx_battery.c | 65 +++++++++++++++++++-------
+ include/linux/power/bq27xxx_battery.h  |  9 ++++
+ 2 files changed, 58 insertions(+), 16 deletions(-)
 
-Ref: 
-https://docs.kernel.org/process/submitting-patches.html#describe-your-changes
-
-Regards,
-Naman Jain
-
-> 
-> Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
-> ---
->   .../interconnect/qcom,sm7150-rpmh.yaml        |  88 ++++++++++
->   .../interconnect/qcom,sm7150-rpmh.h           | 150 ++++++++++++++++++
->   2 files changed, 238 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm7150-rpmh.yaml
->   create mode 100644 include/dt-bindings/interconnect/qcom,sm7150-rpmh.h
-> 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sm7150-rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sm7150-rpmh.yaml
-> new file mode 100644
-> index 000000000000..604822ed4adc
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,sm7150-rpmh.yaml
-> @@ -0,0 +1,88 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/interconnect/qcom,sm7150-rpmh.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm RPMh Network-On-Chip Interconnect on SM7150
-> +
-> +maintainers:
-> +  - Danila Tikhonov <danila@jiaxyga.com>
-> +
-> +description: |
-> +  RPMh interconnect providers support system bandwidth requirements through
-> +  RPMh hardware accelerators known as Bus Clock Manager (BCM).
-> +
-> +  See also:: include/dt-bindings/interconnect/qcom,sm7150-rpmh.h
-> +
-> +allOf:
-> +  - $ref: qcom,rpmh-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,sm7150-aggre1-noc
-> +      - qcom,sm7150-aggre2-noc
-> +      - qcom,sm7150-compute-noc
-> +      - qcom,sm7150-config-noc
-> +      - qcom,sm7150-dc-noc
-> +      - qcom,sm7150-gem-noc
-> +      - qcom,sm7150-mc-virt
-> +      - qcom,sm7150-mmss-noc
-> +      - qcom,sm7150-system-noc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#interconnect-cells': true
-> +
-> +# Child node's properties
-> +patternProperties:
-> +  '^interconnect-[0-9]+$':
-> +    type: object
-> +    description:
-> +      The interconnect providers do not have a separate QoS register space,
-> +      but share parent's space.
-> +
-> +    allOf:
-> +      - $ref: qcom,rpmh-common.yaml#
-> +
-> +    properties:
-> +      compatible:
-> +        enum:
-> +          - qcom,sm7150-camnoc-virt
-> +
-> +      '#interconnect-cells': true
-> +
-> +    required:
-> +      - compatible
-> +
-> +    unevaluatedProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    mc_virt: interconnect@1380000 {
-> +        compatible = "qcom,sm7150-mc-virt";
-> +        reg = <0x01380000 0x40000>;
-> +        #interconnect-cells = <2>;
-> +        qcom,bcm-voters = <&apps_bcm_voter>;
-> +    };
-> +
-> +    system_noc: interconnect@1620000 {
-> +        compatible = "qcom,sm7150-system-noc";
-> +        reg = <0x01620000 0x40000>;
-> +        #interconnect-cells = <2>;
-> +        qcom,bcm-voters = <&apps_bcm_voter>;
-> +
-> +        camnoc_virt: interconnect-0 {
-> +            compatible = "qcom,sm7150-camnoc-virt";
-> +            #interconnect-cells = <2>;
-> +            qcom,bcm-voters = <&apps_bcm_voter>;
-> +        };
-> +    };
-> diff --git a/include/dt-bindings/interconnect/qcom,sm7150-rpmh.h b/include/dt-bindings/interconnect/qcom,sm7150-rpmh.h
-> new file mode 100644
-> index 000000000000..1f610eb832aa
-> --- /dev/null
-> +++ b/include/dt-bindings/interconnect/qcom,sm7150-rpmh.h
-> @@ -0,0 +1,150 @@
-> +/* SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause */
-> +/*
-> + * Qualcomm SM7150 interconnect IDs
-> + *
-> + * Copyright (c) 2020, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2024, Danila Tikhonov <danila@jiaxyga.com>
-> + */
-> +
-> +#ifndef __DT_BINDINGS_INTERCONNECT_QCOM_SM7150_H
-> +#define __DT_BINDINGS_INTERCONNECT_QCOM_SM7150_H
-> +
-> +#define MASTER_A1NOC_CFG		0
-> +#define MASTER_QUP_0			1
-> +#define MASTER_TSIF			2
-> +#define MASTER_EMMC			3
-> +#define MASTER_SDCC_2			4
-> +#define MASTER_SDCC_4			5
-> +#define MASTER_UFS_MEM			6
-> +#define A1NOC_SNOC_SLV			7
-> +#define SLAVE_SERVICE_A1NOC		8
-> +
-> +#define MASTER_A2NOC_CFG		0
-> +#define MASTER_QDSS_BAM			1
-> +#define MASTER_QUP_1			2
-> +#define MASTER_CNOC_A2NOC		3
-> +#define MASTER_CRYPTO_CORE_0		4
-> +#define MASTER_IPA			5
-> +#define MASTER_PCIE			6
-> +#define MASTER_QDSS_ETR			7
-> +#define MASTER_USB3			8
-> +#define A2NOC_SNOC_SLV			9
-> +#define SLAVE_ANOC_PCIE_GEM_NOC		10
-> +#define SLAVE_SERVICE_A2NOC		11
-> +
-> +#define MASTER_CAMNOC_HF0_UNCOMP	0
-> +#define MASTER_CAMNOC_RT_UNCOMP		1
-> +#define MASTER_CAMNOC_SF_UNCOMP		2
-> +#define MASTER_CAMNOC_NRT_UNCOMP	3
-> +#define SLAVE_CAMNOC_UNCOMP		4
-> +
-> +#define MASTER_NPU			0
-> +#define SLAVE_CDSP_GEM_NOC		1
-> +
-> +#define MASTER_SPDM			0
-> +#define SNOC_CNOC_MAS			1
-> +#define MASTER_QDSS_DAP			2
-> +#define SLAVE_A1NOC_CFG			3
-> +#define SLAVE_A2NOC_CFG			4
-> +#define SLAVE_AHB2PHY_NORTH		5
-> +#define SLAVE_AHB2PHY_SOUTH		6
-> +#define SLAVE_AHB2PHY_WEST		7
-> +#define SLAVE_AOP			8
-> +#define SLAVE_AOSS			9
-> +#define SLAVE_CAMERA_CFG		10
-> +#define SLAVE_CAMERA_NRT_THROTTLE_CFG	11
-> +#define SLAVE_CAMERA_RT_THROTTLE_CFG	12
-> +#define SLAVE_CLK_CTL			13
-> +#define SLAVE_CDSP_CFG			14
-> +#define SLAVE_RBCPR_CX_CFG		15
-> +#define SLAVE_RBCPR_MX_CFG		16
-> +#define SLAVE_CRYPTO_0_CFG		17
-> +#define SLAVE_CNOC_DDRSS		18
-> +#define SLAVE_DISPLAY_CFG		19
-> +#define SLAVE_DISPLAY_THROTTLE_CFG	20
-> +#define SLAVE_EMMC_CFG			21
-> +#define SLAVE_GLM			22
-> +#define SLAVE_GRAPHICS_3D_CFG		23
-> +#define SLAVE_IMEM_CFG			24
-> +#define SLAVE_IPA_CFG			25
-> +#define SLAVE_CNOC_MNOC_CFG		26
-> +#define SLAVE_PCIE_CFG			27
-> +#define SLAVE_PDM			28
-> +#define SLAVE_PIMEM_CFG			29
-> +#define SLAVE_PRNG			30
-> +#define SLAVE_QDSS_CFG			31
-> +#define SLAVE_QUP_0			32
-> +#define SLAVE_QUP_1			33
-> +#define SLAVE_SDCC_2			34
-> +#define SLAVE_SDCC_4			35
-> +#define SLAVE_SNOC_CFG			36
-> +#define SLAVE_SPDM_WRAPPER		37
-> +#define SLAVE_TCSR			38
-> +#define SLAVE_TLMM_NORTH		39
-> +#define SLAVE_TLMM_SOUTH		40
-> +#define SLAVE_TLMM_WEST			41
-> +#define SLAVE_TSIF			42
-> +#define SLAVE_UFS_MEM_CFG		43
-> +#define SLAVE_USB3			44
-> +#define SLAVE_VENUS_CFG			45
-> +#define SLAVE_VENUS_CVP_THROTTLE_CFG	46
-> +#define SLAVE_VENUS_THROTTLE_CFG	47
-> +#define SLAVE_VSENSE_CTRL_CFG		48
-> +#define SLAVE_CNOC_A2NOC		49
-> +#define SLAVE_SERVICE_CNOC		50
-> +
-> +#define MASTER_CNOC_DC_NOC		0
-> +#define SLAVE_GEM_NOC_CFG		1
-> +#define SLAVE_LLCC_CFG			2
-> +
-> +#define MASTER_AMPSS_M0			0
-> +#define MASTER_SYS_TCU			1
-> +#define MASTER_GEM_NOC_CFG		2
-> +#define MASTER_COMPUTE_NOC		3
-> +#define MASTER_MNOC_HF_MEM_NOC		4
-> +#define MASTER_MNOC_SF_MEM_NOC		5
-> +#define MASTER_GEM_NOC_PCIE_SNOC	6
-> +#define MASTER_SNOC_GC_MEM_NOC		7
-> +#define MASTER_SNOC_SF_MEM_NOC		8
-> +#define MASTER_GRAPHICS_3D		9
-> +#define SLAVE_MSS_PROC_MS_MPU_CFG	10
-> +#define SLAVE_GEM_NOC_SNOC		11
-> +#define SLAVE_LLCC			12
-> +#define SLAVE_SERVICE_GEM_NOC		13
-> +
-> +
-> +#define MASTER_LLCC			0
-> +#define SLAVE_EBI_CH0			1
-> +
-> +#define MASTER_CNOC_MNOC_CFG		0
-> +#define MASTER_CAMNOC_HF0		1
-> +#define MASTER_CAMNOC_NRT		2
-> +#define MASTER_CAMNOC_RT		3
-> +#define MASTER_CAMNOC_SF		4
-> +#define MASTER_MDP_PORT0		5
-> +#define MASTER_MDP_PORT1		6
-> +#define MASTER_ROTATOR			7
-> +#define MASTER_VIDEO_P0			8
-> +#define MASTER_VIDEO_P1			9
-> +#define MASTER_VIDEO_PROC		10
-> +#define SLAVE_MNOC_SF_MEM_NOC		11
-> +#define SLAVE_MNOC_HF_MEM_NOC		12
-> +#define SLAVE_SERVICE_MNOC		13
-> +
-> +#define MASTER_SNOC_CFG			0
-> +#define A1NOC_SNOC_MAS			1
-> +#define A2NOC_SNOC_MAS			2
-> +#define MASTER_GEM_NOC_SNOC		3
-> +#define MASTER_PIMEM			4
-> +#define MASTER_GIC			5
-> +#define SLAVE_APPSS			6
-> +#define SNOC_CNOC_SLV			7
-> +#define SLAVE_SNOC_GEM_NOC_GC		8
-> +#define SLAVE_SNOC_GEM_NOC_SF		9
-> +#define SLAVE_OCIMEM			10
-> +#define SLAVE_PIMEM			11
-> +#define SLAVE_SERVICE_SNOC		12
-> +#define SLAVE_QDSS_STM			13
-> +#define SLAVE_TCU			14
-> +
-> +#endif
+diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
+index 1c4a9d137744..45fd956ec961 100644
+--- a/drivers/power/supply/bq27xxx_battery.c
++++ b/drivers/power/supply/bq27xxx_battery.c
+@@ -1100,6 +1100,11 @@ module_param_cb(poll_interval, &param_ops_poll_interval, &poll_interval, 0644);
+ MODULE_PARM_DESC(poll_interval,
+ 		 "battery poll interval in seconds - 0 disables polling");
+ 
++static unsigned int bq27xxx_cache_mask = 0xFF;
++module_param(bq27xxx_cache_mask, uint, 0644);
++MODULE_PARM_DESC(bq27xxx_cache_mask,
++		 "mask for bq27xxx reg cache - 0 disables reg cache");
++
+ /*
+  * Common code for BQ27xxx devices
+  */
+@@ -1842,21 +1847,29 @@ static void bq27xxx_battery_update_unlocked(struct bq27xxx_device_info *di)
+ 	if ((cache.flags & 0xff) == 0xff)
+ 		cache.flags = -1; /* read error */
+ 	if (cache.flags >= 0) {
+-		cache.temperature = bq27xxx_battery_read_temperature(di);
+-		if (di->regs[BQ27XXX_REG_TTE] != INVALID_REG_ADDR)
++		if (bq27xxx_cache_mask & BQ27XXX_CACHE_TEMP)
++			cache.temperature = bq27xxx_battery_read_temperature(di);
++		if (di->regs[BQ27XXX_REG_TTE] != INVALID_REG_ADDR &&
++			bq27xxx_cache_mask & BQ27XXX_CACHE_TTE)
+ 			cache.time_to_empty = bq27xxx_battery_read_time(di, BQ27XXX_REG_TTE);
+-		if (di->regs[BQ27XXX_REG_TTECP] != INVALID_REG_ADDR)
++		if (di->regs[BQ27XXX_REG_TTECP] != INVALID_REG_ADDR &&
++			bq27xxx_cache_mask & BQ27XXX_CACHE_TTECP)
+ 			cache.time_to_empty_avg = bq27xxx_battery_read_time(di, BQ27XXX_REG_TTECP);
+-		if (di->regs[BQ27XXX_REG_TTF] != INVALID_REG_ADDR)
++		if (di->regs[BQ27XXX_REG_TTF] != INVALID_REG_ADDR &&
++			bq27xxx_cache_mask & BQ27XXX_CACHE_TTF)
+ 			cache.time_to_full = bq27xxx_battery_read_time(di, BQ27XXX_REG_TTF);
+ 
+-		cache.charge_full = bq27xxx_battery_read_fcc(di);
+-		cache.capacity = bq27xxx_battery_read_soc(di);
+-		if (di->regs[BQ27XXX_REG_AE] != INVALID_REG_ADDR)
++		if (bq27xxx_cache_mask & BQ27XXX_CACHE_CHARGE_FULL)
++			cache.charge_full = bq27xxx_battery_read_fcc(di);
++		if (bq27xxx_cache_mask & BQ27XXX_CACHE_CAPACITY)
++			cache.capacity = bq27xxx_battery_read_soc(di);
++		if (di->regs[BQ27XXX_REG_AE] != INVALID_REG_ADDR &&
++			bq27xxx_cache_mask & BQ27XXX_CACHE_ENERGY)
+ 			cache.energy = bq27xxx_battery_read_energy(di);
+ 		di->cache.flags = cache.flags;
+ 		cache.health = bq27xxx_battery_read_health(di);
+-		if (di->regs[BQ27XXX_REG_CYCT] != INVALID_REG_ADDR)
++		if (di->regs[BQ27XXX_REG_CYCT] != INVALID_REG_ADDR &&
++			bq27xxx_cache_mask & BQ27XXX_CACHE_CYCT)
+ 			cache.cycle_count = bq27xxx_battery_read_cyct(di);
+ 
+ 		/*
+@@ -2004,6 +2017,7 @@ static int bq27xxx_battery_get_property(struct power_supply *psy,
+ {
+ 	int ret = 0;
+ 	struct bq27xxx_device_info *di = power_supply_get_drvdata(psy);
++	int tmp;
+ 
+ 	mutex_lock(&di->lock);
+ 	if (time_is_before_jiffies(di->last_update + 5 * HZ))
+@@ -2027,24 +2041,37 @@ static int bq27xxx_battery_get_property(struct power_supply *psy,
+ 		ret = bq27xxx_battery_current_and_status(di, val, NULL, NULL);
+ 		break;
+ 	case POWER_SUPPLY_PROP_CAPACITY:
+-		ret = bq27xxx_simple_value(di->cache.capacity, val);
++		tmp = bq27xxx_cache_mask & BQ27XXX_CACHE_CAPACITY ?
++				di->cache.capacity : bq27xxx_battery_read_soc(di);
++		ret = bq27xxx_simple_value(tmp, val);
+ 		break;
+ 	case POWER_SUPPLY_PROP_CAPACITY_LEVEL:
+ 		ret = bq27xxx_battery_capacity_level(di, val);
+ 		break;
+ 	case POWER_SUPPLY_PROP_TEMP:
+-		ret = bq27xxx_simple_value(di->cache.temperature, val);
++		tmp = bq27xxx_cache_mask & BQ27XXX_CACHE_TEMP ?
++				di->cache.temperature : bq27xxx_battery_read_temperature(di);
++		ret = bq27xxx_simple_value(tmp, val);
+ 		if (ret == 0)
+ 			val->intval -= 2731; /* convert decidegree k to c */
+ 		break;
+ 	case POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW:
+-		ret = bq27xxx_simple_value(di->cache.time_to_empty, val);
++		tmp = bq27xxx_cache_mask & BQ27XXX_CACHE_TTE ?
++				di->cache.time_to_empty :
++				bq27xxx_battery_read_time(di, BQ27XXX_REG_TTE);
++		ret = bq27xxx_simple_value(tmp, val);
+ 		break;
+ 	case POWER_SUPPLY_PROP_TIME_TO_EMPTY_AVG:
+-		ret = bq27xxx_simple_value(di->cache.time_to_empty_avg, val);
++		tmp = bq27xxx_cache_mask & BQ27XXX_CACHE_TTECP ?
++				di->cache.time_to_empty_avg :
++				bq27xxx_battery_read_time(di, BQ27XXX_REG_TTECP);
++		ret = bq27xxx_simple_value(tmp, val);
+ 		break;
+ 	case POWER_SUPPLY_PROP_TIME_TO_FULL_NOW:
+-		ret = bq27xxx_simple_value(di->cache.time_to_full, val);
++		tmp = bq27xxx_cache_mask & BQ27XXX_CACHE_TTF ?
++				di->cache.time_to_full :
++				bq27xxx_battery_read_time(di, BQ27XXX_REG_TTF);
++		ret = bq27xxx_simple_value(tmp, val);
+ 		break;
+ 	case POWER_SUPPLY_PROP_TECHNOLOGY:
+ 		if (di->opts & BQ27XXX_O_MUL_CHEM)
+@@ -2059,7 +2086,9 @@ static int bq27xxx_battery_get_property(struct power_supply *psy,
+ 			ret = bq27xxx_simple_value(bq27xxx_battery_read_rc(di), val);
+ 		break;
+ 	case POWER_SUPPLY_PROP_CHARGE_FULL:
+-		ret = bq27xxx_simple_value(di->cache.charge_full, val);
++		tmp = bq27xxx_cache_mask & BQ27XXX_CACHE_CHARGE_FULL ?
++				di->cache.charge_full : bq27xxx_battery_read_fcc(di);
++		ret = bq27xxx_simple_value(tmp, val);
+ 		break;
+ 	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
+ 		ret = bq27xxx_simple_value(di->charge_design_full, val);
+@@ -2072,10 +2101,14 @@ static int bq27xxx_battery_get_property(struct power_supply *psy,
+ 	case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
+ 		return -EINVAL;
+ 	case POWER_SUPPLY_PROP_CYCLE_COUNT:
+-		ret = bq27xxx_simple_value(di->cache.cycle_count, val);
++		tmp = bq27xxx_cache_mask & BQ27XXX_CACHE_CYCT ?
++				di->cache.cycle_count : bq27xxx_battery_read_cyct(di);
++		ret = bq27xxx_simple_value(tmp, val);
+ 		break;
+ 	case POWER_SUPPLY_PROP_ENERGY_NOW:
+-		ret = bq27xxx_simple_value(di->cache.energy, val);
++		tmp = bq27xxx_cache_mask & BQ27XXX_CACHE_ENERGY ?
++				di->cache.energy : bq27xxx_battery_read_energy(di);
++		ret = bq27xxx_simple_value(tmp, val);
+ 		break;
+ 	case POWER_SUPPLY_PROP_POWER_AVG:
+ 		ret = bq27xxx_battery_pwr_avg(di, val);
+diff --git a/include/linux/power/bq27xxx_battery.h b/include/linux/power/bq27xxx_battery.h
+index 7d8025fb74b7..29d1e7107ee2 100644
+--- a/include/linux/power/bq27xxx_battery.h
++++ b/include/linux/power/bq27xxx_battery.h
+@@ -4,6 +4,15 @@
+ 
+ #include <linux/power_supply.h>
+ 
++#define BQ27XXX_CACHE_TEMP        (1 << 0)
++#define BQ27XXX_CACHE_TTE         (1 << 1)
++#define BQ27XXX_CACHE_TTECP       (1 << 2)
++#define BQ27XXX_CACHE_TTF         (1 << 3)
++#define BQ27XXX_CACHE_CHARGE_FULL (1 << 4)
++#define BQ27XXX_CACHE_CYCT        (1 << 5)
++#define BQ27XXX_CACHE_CAPACITY    (1 << 6)
++#define BQ27XXX_CACHE_ENERGY      (1 << 7)
++
+ enum bq27xxx_chip {
+ 	BQ27000 = 1, /* bq27000, bq27200 */
+ 	BQ27010, /* bq27010, bq27210 */
+-- 
+2.39.2
 
 
