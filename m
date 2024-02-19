@@ -1,200 +1,238 @@
-Return-Path: <linux-pm+bounces-4068-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4069-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91EB385A0B5
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 11:14:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE87385A0F1
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 11:26:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F6201F212B7
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 10:14:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3D52282C8F
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 10:26:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACE722561F;
-	Mon, 19 Feb 2024 10:14:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA58925626;
+	Mon, 19 Feb 2024 10:26:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tzsdwsSQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="J2SZ8TRl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABF132560F
-	for <linux-pm@vger.kernel.org>; Mon, 19 Feb 2024 10:14:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA4BD288DD
+	for <linux-pm@vger.kernel.org>; Mon, 19 Feb 2024 10:26:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708337687; cv=none; b=P+iQ2UQy9dPHSvdGorgK5cs6+PhN+DPxnfS8EjC+KWb0XjOjYQqROeV50hAoE2uR3ewkzyV+9YVPbm0Ssgm9p8q2ZAV8L7FgcEd9nuwd3QngKjb4rLBnpGHrGQsoq8D+E1gUEWlWEBSGBKTOHa0at3N1KkZvAiz7DmPNc2l+i34=
+	t=1708338412; cv=none; b=crV2V9DVc3RbM6F9Hdq+MZsXlQ8CZ2Ual/HupOl0p/nd0+zgQUBRtNXMOl3BhIJtRxWk6UWa4E4jSWxKJBH1Kyi336uDKbXVAU2/XXiISKHckXt83z74+J6EbMXbWb+VMBmP6nVRzvL/n82qxLaaMqk6zBJU+v8+0hx0/T7g0CU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708337687; c=relaxed/simple;
-	bh=/r+Sw8hg1vButQTUTMbULSa/k6wzvq6pq3Hs/SxGJjk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XIfeXZuQ4lYVe3Kon/Ck270SWsCuTQmdVBjhD44Tnffqubs1jKNI88VeXC4Jpa1OoALFcTonGVwiyqlQtKhHOjG/7xpGgxG0gvrT1ySLKnLfpvz2L9yaNBXOl8DEoVyhSfw+ExpZBTaU7jBkAcwWa2mkmwtSSTOdAwgfve+RunU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tzsdwsSQ; arc=none smtp.client-ip=209.85.218.43
+	s=arc-20240116; t=1708338412; c=relaxed/simple;
+	bh=lCcUA04zUjPlqcbDjjJroqxQOZ61QPH+jdJBen0HMLo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mvHGwAYQ5xSByBwqp8VKTs3oX1TyFkOA0dxM46iSVc52rzmM2qoMqV69DAwLBs/BdUz24zHzonQbCBfCEL0u2A1j1HBAJv2rvt4sjC3ErpuHKUldSxdpyBhdpldoDj860mwPrk6lNj0Xk3Lba+Kg8MpUsvbadUKQzrqUtFyqh6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=J2SZ8TRl; arc=none smtp.client-ip=209.85.128.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a3e82664d53so103407666b.3
-        for <linux-pm@vger.kernel.org>; Mon, 19 Feb 2024 02:14:45 -0800 (PST)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-607e54b6cf5so23178817b3.0
+        for <linux-pm@vger.kernel.org>; Mon, 19 Feb 2024 02:26:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708337684; x=1708942484; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+VfvyMz4J9zOLt2R+IkpEvDhJZO2XVen/W32wenUqb0=;
-        b=tzsdwsSQQbOtfSEmK3gWnzUto6z/CAvnGyV4pYLpEyFfsB71j/H7acfZuuCYo/bvoz
-         F4s/sIZCjyq+PMT70/7E2uGMjnle6KaZVVay3F3OPNbYKeJHfgd+yRmCiC+T0xg8F53D
-         K3Q8cCMxA1pHMFmKa/Cr7Gw8WukO0lywWjSkiECwaQB3iF/iTx6vxzMgH9gpNX54uerW
-         deaXoJNJjskwVJitYS0SBQiKcbK6inrF6dDH3Txyf5ZO1MqmUv8W8dFhS3pisPP8fHsH
-         /mNdPvukth2vYU0krmBEJ1qogOz7OHaSVjJE8DC/T3x4Yd5QcU3OOG1WegVszh+CjZKL
-         n4VQ==
+        d=linaro.org; s=google; t=1708338410; x=1708943210; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TmyLIGmDRBMuA9/uAiTaewm8j0zrsoCAkXewuup87r0=;
+        b=J2SZ8TRlXUXjErTvCm7meKfgsK876x8PjR9Lrc9V6qfoVUkCUC4BNRI4xrXnLC/Uee
+         Y8R5YdV5KqE1BIL5V2PIFp3QGWnLdp3LDS1OlZRdKJkASqCNEZdzN8ScB6au+leYAtjI
+         EKsuIHFKb11X4C/iwunFLucXzVsXtIlutqbEBw1+9Ctbt4BDYkuh2U2rhC7ZEv9KYTXj
+         IePMttvXdtYHsE3+ClHNpcrsrVYfeIH4rCK5OVT119AMhEms/2ud9Uyyg4yR9+I1igY2
+         E24p80Jdrk4UrIHyeMr6xvls2gYwklgZXZt1nh2v8XJDQNPjlO2Mc1rRtz3f6qcjK9vS
+         IcKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708337684; x=1708942484;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+VfvyMz4J9zOLt2R+IkpEvDhJZO2XVen/W32wenUqb0=;
-        b=di/0HjgvsAEjlnusdNZ68IgH/rj9azDVlvz6lFF4mjba+YKfp7C7AN/jbQkFhfxm3m
-         OS93lz0IZv+v1kINVE9Xc3k+l/N2iSk9Q/f06k6RWGS0I5lxPNR68EC4UqWQmXZT3m1j
-         K37IFR90olxbPT2SXC5XJT7q4XFDJcGkG8xSjPTBLw5SkTtdhoYiB4FacVbokxCSjrA0
-         FvV7sUZnVhk8sVvLhDQUWNit24p7whMk7n3nmeq041daupUs5rI9Tg0GYGMWBzxRgSU9
-         Iq3BFMAtw45zatQjpmrsTB6wR8sY3Aa7isOb9aObR6+oYE9FUVyf2MgKYPaJxyDi770T
-         Z3DA==
-X-Forwarded-Encrypted: i=1; AJvYcCVcu/AZbGNx7TuUJTJGkwvsVufl7QflhTHhM3wkWntG2p7LuJTXjAxyDZicnNB6gHaT4zAxrIJ5vSXosUBtmg316f3/yoDZKos=
-X-Gm-Message-State: AOJu0Ywy6uC17l0af8+dfiDcqX2v/9IiEeZ0p1L/sj3loS5RMsOQupDO
-	5gavT8TERMtzK84LR488U/v7JM6aGhNdnOCzI0zpL7wjKn2xIBEvPVOk5oujKQI=
-X-Google-Smtp-Source: AGHT+IHWZTCfeNUz+MEa50xtnI28rbL81sZDIymURuniBGN+xM/ptumUPnZs90a7TfVQcwwF9TB/Lw==
-X-Received: by 2002:a17:907:11c2:b0:a3e:88fb:3e23 with SMTP id va2-20020a17090711c200b00a3e88fb3e23mr1886026ejb.7.1708337683999;
-        Mon, 19 Feb 2024 02:14:43 -0800 (PST)
-Received: from [192.168.192.135] (078088045141.garwolin.vectranet.pl. [78.88.45.141])
-        by smtp.gmail.com with ESMTPSA id x19-20020a1709065ad300b00a3e786d8729sm1284360ejs.168.2024.02.19.02.14.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Feb 2024 02:14:43 -0800 (PST)
-Message-ID: <ca2c5b9c-6d8c-42a4-9f27-b60f024c95c2@linaro.org>
-Date: Mon, 19 Feb 2024 11:14:41 +0100
+        d=1e100.net; s=20230601; t=1708338410; x=1708943210;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TmyLIGmDRBMuA9/uAiTaewm8j0zrsoCAkXewuup87r0=;
+        b=B+/GidR+8WMwyi/9TF1WqbXtDh2kC8BFMSAvkdRSCFUx+9QViVwueq5z5Nqc72UOAq
+         4r8lq2AO+7PYH9avkxzNs1JVzM3o43mMAJk9mzfG8ruc0XoR3gPQN2GmRbvjmt6k5llg
+         UlxFfWVAY/pgiIEd0+DUKuH8SKAAh8cvO4yk/5q3BsoZPq5EGjglrDUzop2Mr97ycNOd
+         BGqNmoElEZIA6a05eiTX/eRRjO+qTUQ69l4s3RnnEvChNqRRNhcP7HTdODwANIQpZSJX
+         08MP6tok6P+uclWjifuIMxrbCRGWtdWTBIhwBE6zd3tdyTzKdaET0TleK4Wq2ItrKUBJ
+         YQ1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVRUfDnzMLxDRLmlWPAnh7iYtj/tQ4Ef9CKsJ9ObcJ6vrEHpa6ikrrGVdfH/1YD1cm5+m68GYpY5hS5xCvvluwaUGduKgXsqM4=
+X-Gm-Message-State: AOJu0YyuDxA0Hw8Dr2stUOx0z6KRuY8t+aQfF2in8pt6toy6gQl3wd35
+	MC/akylWXEpLuqfnvpKt6ZbGzz3wURRPSoZgyNeXvHocx70cswfV4hj9ojp3B3FrfOTv4DLrDR2
+	AkkaN8+IxnMCQUJe2qTfvP6bTdIibMBOj1arxyA==
+X-Google-Smtp-Source: AGHT+IH8Xj1z0uS8Qm7X6TratBsLyV3NzUK9GlyrRDCdO1y8h0WcX4ALGme/oMWCWglNot9Mbw3Z17eahBSzxpWPP2s=
+X-Received: by 2002:a81:84cc:0:b0:608:427:bf61 with SMTP id
+ u195-20020a8184cc000000b006080427bf61mr4616175ywf.19.1708338409779; Mon, 19
+ Feb 2024 02:26:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] interconnect: qcom: Add SM7150 driver support
-Content-Language: en-US
-To: Danila Tikhonov <danila@jiaxyga.com>, andersson@kernel.org,
- djakov@kernel.org, robh@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- conor+dt@kernel.org
-Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240218183239.85319-1-danila@jiaxyga.com>
- <20240218183239.85319-3-danila@jiaxyga.com>
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <20240218183239.85319-3-danila@jiaxyga.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20240216203215.40870-1-brgl@bgdev.pl> <CAA8EJppt4-L1RyDeG=1SbbzkTDhLkGcmAbZQeY0S6wGnBbFbvw@mail.gmail.com>
+ <e4cddd9f-9d76-43b7-9091-413f923d27f2@linaro.org> <CAA8EJpp6+2w65o2Bfcr44tE_ircMoON6hvGgyWfvFuh3HamoSQ@mail.gmail.com>
+ <4d2a6f16-bb48-4d4e-b8fd-7e4b14563ffa@linaro.org>
+In-Reply-To: <4d2a6f16-bb48-4d4e-b8fd-7e4b14563ffa@linaro.org>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Mon, 19 Feb 2024 12:26:39 +0200
+Message-ID: <CAA8EJpq=iyOfYzNATRbpqfBaYSdJV1Ao5t2ewLK+wY+vEaFYAQ@mail.gmail.com>
+Subject: Re: [PATCH v5 00/18] power: sequencing: implement the subsystem and
+ add first users
+To: neil.armstrong@linaro.org
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>, Marcel Holtmann <marcel@holtmann.org>, 
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, "David S . Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Kalle Valo <kvalo@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Saravana Kannan <saravanak@google.com>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Arnd Bergmann <arnd@arndb.de>, 
+	Marek Szyprowski <m.szyprowski@samsung.com>, Alex Elder <elder@linaro.org>, 
+	Srini Kandagatla <srinivas.kandagatla@linaro.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Abel Vesa <abel.vesa@linaro.org>, 
+	Manivannan Sadhasivam <mani@kernel.org>, Lukas Wunner <lukas@wunner.de>, linux-bluetooth@vger.kernel.org, 
+	netdev@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On 18.02.2024 19:32, Danila Tikhonov wrote:
-> Add a driver that handles the different NoCs found on SM7150, based on the
-> downstream dtb.
-> 
-> Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
-> ---
+On Mon, 19 Feb 2024 at 11:42, <neil.armstrong@linaro.org> wrote:
+>
+> On 19/02/2024 10:22, Dmitry Baryshkov wrote:
+> > On Mon, 19 Feb 2024 at 10:14, Neil Armstrong <neil.armstrong@linaro.org> wrote:
+> >>
+> >> On 18/02/2024 13:53, Dmitry Baryshkov wrote:
+> >>> On Fri, 16 Feb 2024 at 22:33, Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+> >>>>
+> >>>> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >>>>
+> >>>> First, I'd like to apologize for the somewhat chaotic previous iterations
+> >>>> of this series and improper versioning which was rightfully pointed out
+> >>>> to me. I figured that the scope changed so much that it didn't make sense
+> >>>> to consider previous submissions part of the same series as the original
+> >>>> RFC but others thought otherwise so this one becomes v5 and I'll keep the
+> >>>> versioning going forward.
+> >>>>
+> >>>> This is the summary of the work so far:
+> >>>>
+> >>>> v1: Original RFC:
+> >>>>
+> >>>> https://lore.kernel.org/lkml/20240104130123.37115-1-brgl@bgdev.pl/T/
+> >>>>
+> >>>> v2: First real patch series (should have been PATCH v2) adding what I
+> >>>>       referred to back then as PCI power sequencing:
+> >>>>
+> >>>> https://lore.kernel.org/linux-arm-kernel/2024021413-grumbling-unlivable-c145@gregkh/T/
+> >>>>
+> >>>> v3: RFC for the DT representation of the PMU supplying the WLAN and BT
+> >>>>       modules inside the QCA6391 package (was largely separate from the
+> >>>>       series but probably should have been called PATCH or RFC v3):
+> >>>>
+> >>>> https://lore.kernel.org/all/CAMRc=Mc+GNoi57eTQg71DXkQKjdaoAmCpB=h2ndEpGnmdhVV-Q@mail.gmail.com/T/
+> >>>>
+> >>>> v4: Second attempt at the full series with changed scope (introduction of
+> >>>>       the pwrseq subsystem, should have been RFC v4)
+> >>>>
+> >>>> https://lore.kernel.org/lkml/20240201155532.49707-1-brgl@bgdev.pl/T/
+> >>>>
+> >>>> ===
+> >>>>
+> >>>> With that out of the way, I'd like to get down to explaining the two
+> >>>> problems I'm trying to solve.
+> >>>>
+> >>>> Problem statement #1: Dynamic bus chicken-and-egg problem.
+> >>>>
+> >>>> Certain on-board PCI devices need to be powered up before they are can be
+> >>>> detected but their PCI drivers won't get bound until the device is
+> >>>> powered-up so enabling the relevant resources in the PCI device driver
+> >>>> itself is impossible.
+> >>>>
+> >>>> Problem statement #2: Sharing inter-dependent resources between devices.
+> >>>>
+> >>>> Certain devices that use separate drivers (often on different busses)
+> >>>> share resources (regulators, clocks, etc.). Typically these resources
+> >>>> are reference-counted but in some cases there are additional interactions
+> >>>> between them to consider, for example specific power-up sequence timings.
+> >>>>
+> >>>> ===
+> >>>>
+> >>>> The reason for tackling both of these problems in a single series is the
+> >>>> fact the the platform I'm working on - Qualcomm RB5 - deals with both and
+> >>>> both need to be addressed in order to enable WLAN and Bluetooth support
+> >>>> upstream.
+> >>>>
+> >>>> The on-board WLAN/BT package - QCA6391 - has a Power Management Unit that
+> >>>> takes inputs from the host and exposes LDO outputs consumed by the BT and
+> >>>> WLAN modules which can be powered-up and down independently. However
+> >>>> a delay of 100ms must be respected between enabling the BT- and
+> >>>> WLAN-enable GPIOs[*].
+> >>>>
+> >>>> ===
+> >>>>
+> >>>> This series is logically split into several sections. I'll go
+> >>>> patch-by-patch and explain each step.
+> >>>>
+> >>>> Patch 1/18:
+> >>>>
+> >>>> This is a commit taken from the list by Jonathan Cameron that adds
+> >>>> a __free() helper for OF nodes. Not strictly related to the series but
+> >>>> until said commit ends in next, I need to carry it with this series.
+> >>>>
+> >>>> Patch 2/18:
+> >>>>
+> >>>> This enables the ath12k PCI module in arm64 defconfig as Qualcomm sm8650
+> >>>> and sm8550 reference platforms use it in the WCN7850 module.
+> >>>>
+> >>>> Patches 3/18-6/18:
+> >>>>
+> >>>> These contain all relevant DT bindings changes. We add new documents for
+> >>>> the QCA6390 PMU and ATH12K devices as well as extend the bindings for the
+> >>>> Qualcomm Bluetooth and ATH11K modules with regulators used by them in
+> >>>> QCA6390.
+> >>>>
+> >>>> Patches 7/18-9/18:
+> >>>>
+> >>>> These contain changes to device-tree sources for the three platforms we
+> >>>> work with in this series. As the WCN7850 module doesn't require any
+> >>>> specific timings introducing dependencies between the Bluetooth and WLAN
+> >>>> modules, while the QCA6390 does, we take two different approaches to how
+> >>>> me model them in DT.
+> >>>>
+> >>>> For WCN7850 we hide the existence of the PMU as modeling it is simply not
+> >>>> necessary. The BT and WLAN devices on the device-tree are represented as
+> >>>> consuming the inputs (relevant to the functionality of each) of the PMU
+> >>>> directly.
+> >>>
+> >>> We are describing the hardware. From the hardware point of view, there
+> >>> is a PMU. I think at some point we would really like to describe all
+> >>> Qualcomm/Atheros WiFI+BT units using this PMU approach, including the
+> >>> older ath10k units present on RB3 (WCN3990) and db820c (QCA6174).
+> >>
+> >> While I agree with older WiFi+BT units, I don't think it's needed for
+> >> WCN7850 since BT+WiFi are now designed to be fully independent and PMU is
+> >> transparent.
+> >
+> > I don't see any significant difference between WCN6750/WCN6855 and
+> > WCN7850 from the PMU / power up point of view. Could you please point
+> > me to the difference?
+> >
+>
+> The WCN7850 datasheet clearly states there's not contraint on the WLAN_EN
+> and BT_EN ordering and the only requirement is to have all input regulators
+> up before pulling up WLAN_EN and/or BT_EN.
+>
+> This makes the PMU transparent and BT and WLAN can be described as independent.
 
-Looks rather good, just 3 minor things:
+From the hardware perspective, there is a PMU. It has several LDOs. So
+the device tree should have the same style as the previous
+generations.
 
-
-> +
-> +static const struct of_device_id qnoc_of_match[] = {
-> +	{ .compatible = "qcom,sm7150-aggre1-noc",
-> +	  .data = &sm7150_aggre1_noc},
-
-Please unwrap these and add a space before the closing curly bracket
-
-> +	{ .compatible = "qcom,sm7150-aggre2-noc",
-> +	  .data = &sm7150_aggre2_noc},
-> +	{ .compatible = "qcom,sm7150-camnoc-virt",
-> +	  .data = &sm7150_camnoc_virt},
-> +	{ .compatible = "qcom,sm7150-compute-noc",
-> +	  .data = &sm7150_compute_noc},
-> +	{ .compatible = "qcom,sm7150-config-noc",
-> +	  .data = &sm7150_config_noc},
-> +	{ .compatible = "qcom,sm7150-dc-noc",
-> +	  .data = &sm7150_dc_noc},
-> +	{ .compatible = "qcom,sm7150-gem-noc",
-> +	  .data = &sm7150_gem_noc},
-> +	{ .compatible = "qcom,sm7150-mc-virt",
-> +	  .data = &sm7150_mc_virt},
-> +	{ .compatible = "qcom,sm7150-mmss-noc",
-> +	  .data = &sm7150_mmss_noc},
-> +	{ .compatible = "qcom,sm7150-system-noc",
-> +	  .data = &sm7150_system_noc},
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, qnoc_of_match);
-> +
-> +static struct platform_driver qnoc_driver = {
-> +	.probe = qcom_icc_rpmh_probe,
-> +	.remove_new = qcom_icc_rpmh_remove,
-> +	.driver = {
-> +		.name = "qnoc-sm7150",
-> +		.of_match_table = qnoc_of_match,
-> +		.sync_state = icc_sync_state,
-> +	},
-> +};
-> +module_platform_driver(qnoc_driver);
-
-This is most certainly a bad choice, but at the same time it doesn't
-matter for now.. It's going to be badly delayed anyway, I have some
-fixes in the pipeline. Please change it to core_initcall (which may make
-your boot slower as of torvalds/master, counter-intuitively.. but I will
-surely forget to update this otherwise)
-
-[...]
-
-> +
-> +MODULE_DESCRIPTION("Qualcomm SM7150 NoC driver");
-> +MODULE_LICENSE("GPL");
-> diff --git a/drivers/interconnect/qcom/sm7150.h b/drivers/interconnect/qcom/sm7150.h
-> new file mode 100644
-> index 000000000000..e00a9b0c1279
-> --- /dev/null
-> +++ b/drivers/interconnect/qcom/sm7150.h
-> @@ -0,0 +1,140 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-
-GPL2+BSD3?
-
-Konrad
+-- 
+With best wishes
+Dmitry
 
