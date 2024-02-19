@@ -1,363 +1,138 @@
-Return-Path: <linux-pm+bounces-4064-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4065-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01C8285A014
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 10:45:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C46FD85A024
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 10:49:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 874A52818CE
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 09:45:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 669991F2183C
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 09:49:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A63D924A0A;
-	Mon, 19 Feb 2024 09:45:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5192E24B47;
+	Mon, 19 Feb 2024 09:48:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="A+CKEvVI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AB972375D;
-	Mon, 19 Feb 2024 09:45:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF95E24B2C;
+	Mon, 19 Feb 2024 09:48:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708335918; cv=none; b=vEzQdW/H3kQimOGN401qOJoTrRExSAeUmsLqg+dvezjtuBA5C6fwBPWYqA3zDBKik+tb/eS/ikOS5AmDhB+xomxc43XNRI4OsCpklTaK48uJ4NtoXlrlaXu25/21OwYvJCc4NPRmpcC2LVoiLuLJCIHO7CfR0X2OOSRfkZEOuZ8=
+	t=1708336138; cv=none; b=EJ9YYb/vQJFCBPre3Yt+Jwu21nXbG8dHNMY+kZxC60IT8icldP3I5pCZn/mwKMIopK3S2bUQq8LRgmEB6MI7KZDo+B3LW7tGzd+f0mIESzGI7t6m9Wce9YfE08ccsgZ14fnWQ/g8FyxAy8oveClgssAnyilOIKwz00FTMwHJyf8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708335918; c=relaxed/simple;
-	bh=QJM4j0j0pchCDOEJ6x+rLSknxQZs8Iclh87YDcHRPKc=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Furk+Ji464h3OqbE+qYJZPK9bXtLQTAhVCN48jwEdWbws39q/4N3hoaVHwGyB5aV7KIs5BGbAyIz/VKH/IwaedqJU7kbIwlujbOU1bEtsLsW6l1IVimlZsFtsgaVjhBJOw/wuYG1QRZ/V/DFWv/Ao0Gy9MMppqQTMrtfmKkzxMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4TdcxZ6qlqz6K97K;
-	Mon, 19 Feb 2024 17:41:38 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id E8D83140DDB;
-	Mon, 19 Feb 2024 17:45:11 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Mon, 19 Feb
- 2024 09:45:11 +0000
-Date: Mon, 19 Feb 2024 09:45:10 +0000
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: Russell King <rmk+kernel@armlinux.org.uk>, <linux-pm@vger.kernel.org>,
-	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-riscv@lists.infradead.org>,
-	<kvmarm@lists.linux.dev>, <x86@kernel.org>,
-	<acpica-devel@lists.linuxfoundation.org>, <linux-csky@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-ia64@vger.kernel.org>,
-	<linux-parisc@vger.kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>, <jianyong.wu@arm.com>,
-	<justin.he@arm.com>, James Morse <james.morse@arm.com>
-Subject: Re: [PATCH RFC v4 01/15] ACPI: Only enumerate enabled (or
- functional) processor devices
-Message-ID: <20240219094510.00004843@Huawei.com>
-In-Reply-To: <CAJZ5v0hY_LXp41WMVPhiLosPe7YVzF38Uz=EhmJqVwqFn==Upw@mail.gmail.com>
-References: <Zbp5xzmFhKDAgHws@shell.armlinux.org.uk>
-	<E1rVDmP-0027YJ-EW@rmk-PC.armlinux.org.uk>
-	<CAJZ5v0hY_LXp41WMVPhiLosPe7YVzF38Uz=EhmJqVwqFn==Upw@mail.gmail.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1708336138; c=relaxed/simple;
+	bh=evgpaaD5YWF/NgxUotDyDIZio7JSN3VGvWsj49vaKqw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=TQtMQiuoya6P3awbWbpyXeC4i0RfMxh+r2Odt3lbOna5V8FNy5oM/L4a8tgw+JWnUrfNvlIKJWZNZ9VNXHCQdTPZelNMAtoS3uAlcFp5Q6/HjwO9DZd+FdANrEkLlhznJ7cR36jsBHijvwVEBwvtw5LrE/yzjL86TEgXnl7ZRcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=A+CKEvVI; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41J4exqM030321;
+	Mon, 19 Feb 2024 09:48:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	qcppdkim1; bh=SVEu8MZ3e8dW0QHAXGwR0a6sVaNeklP/z/RmXLz5IUs=; b=A+
+	CKEvVIaa8ho3rxF1rvOPVSOyvm+vyBAxUJ+eAo2/DEXrucnypl3KD6+IAsOh5M0C
+	UFozvQedhgwXadehkIHmKsaro0ny3kqAdN9imHt94DTWtZPphgb4gOo9MmOWmX64
+	spIv+BmTh33eRU/VNd/Jl6pnW7zRLyH4f1vu82t3HkzE0ehKuCxh93Sb2+8a650q
+	AnzyCnD6wBAgc6cyQr71NzBHRDdrf1lRpockXtU8nRudmLtUVBo+ZMNep6T4xQ+u
+	ZRThmilgPqZ9ORzhNyuVtpAHBIeI8J7Mif4QBoeKg3nYOC4JpsNvhSJl2X793WP1
+	Zpeh3+X/3ypwSdJV9fWQ==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wan17kd4f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 19 Feb 2024 09:48:43 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41J9mgxh025919
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 19 Feb 2024 09:48:42 GMT
+Received: from [10.214.82.119] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 19 Feb
+ 2024 01:48:39 -0800
+Message-ID: <7acbf41b-1618-4746-aa1d-e6b700994a03@quicinc.com>
+Date: Mon, 19 Feb 2024 15:18:36 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] Add interconnect support for SM7150 SoC
+To: Danila Tikhonov <danila@jiaxyga.com>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <djakov@kernel.org>, <robh@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
+CC: <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20240218183239.85319-1-danila@jiaxyga.com>
+Content-Language: en-US
+From: Naman Jain <quic_namajain@quicinc.com>
+In-Reply-To: <20240218183239.85319-1-danila@jiaxyga.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: loa4WZeOn44LUvK-4Bqq6_kSfedh7lrW
+X-Proofpoint-GUID: loa4WZeOn44LUvK-4Bqq6_kSfedh7lrW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-02-19_06,2024-02-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
+ spamscore=0 phishscore=0 bulkscore=0 adultscore=0 priorityscore=1501
+ lowpriorityscore=0 suspectscore=0 malwarescore=0 impostorscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2401310000 definitions=main-2402190073
 
-On Thu, 15 Feb 2024 21:10:39 +0100
-"Rafael J. Wysocki" <rafael@kernel.org> wrote:
+On 2/19/2024 12:02 AM, Danila Tikhonov wrote:
+> Add dtbindings and driver support for the Qualcomm SM7150 SoC.
 
-> On Wed, Jan 31, 2024 at 5:49=E2=80=AFPM Russell King <rmk+kernel@armlinux=
-.org.uk> wrote:
-> >
-> > From: James Morse <james.morse@arm.com>
-> >
-> > Today the ACPI enumeration code 'visits' all devices that are present.
-> >
-> > This is a problem for arm64, where CPUs are always present, but not
-> > always enabled. When a device-check occurs because the firmware-policy
-> > has changed and a CPU is now enabled, the following error occurs:
-> > | acpi ACPI0007:48: Enumeration failure
-> >
-> > This is ultimately because acpi_dev_ready_for_enumeration() returns
-> > true for a device that is not enabled. The ACPI Processor driver
-> > will not register such CPUs as they are not 'decoding their resources'.
-> >
-> > ACPI allows a device to be functional instead of maintaining the
-> > present and enabled bit, but we can't simply check the enabled bit
-> > for all devices since firmware can be buggy.
-> >
-> > If ACPI indicates that the device is present and enabled, then all well
-> > and good, we can enumate it. However, if the device is present and not
-> > enabled, then we also check whether the device is a processor device
-> > to limit the impact of this new check to just processor devices.
-> >
-> > This avoids enumerating present && functional processor devices that
-> > are not enabled.
-> >
-> > Signed-off-by: James Morse <james.morse@arm.com>
-> > Co-developed-by: Rafael J. Wysocki <rjw@rjwysocki.net>
-> > Tested-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> > ---
-> > Changes since RFC v2:
-> >  * Incorporate comment suggestion by Gavin Shan.
-> > Changes since RFC v3:
-> >  * Fixed "sert" typo.
-> > Changes since RFC v3 (smaller series):
-> >  * Restrict checking the enabled bit to processor devices, update
-> >    commit comments.
-> >  * Use Rafael's suggestion in
-> >    https://lore.kernel.org/r/5760569.DvuYhMxLoT@kreacher
-> >  * Updated with a fix - see:
-> >    https://lore.kernel.org/all/Zbe8WQRASx6D6RaG@shell.armlinux.org.uk/
-> > ---
-> >  drivers/acpi/acpi_processor.c | 11 +++++++++
-> >  drivers/acpi/device_pm.c      |  2 +-
-> >  drivers/acpi/device_sysfs.c   |  2 +-
-> >  drivers/acpi/internal.h       |  4 ++-
-> >  drivers/acpi/property.c       |  2 +-
-> >  drivers/acpi/scan.c           | 46 +++++++++++++++++++++++++++--------
-> >  6 files changed, 53 insertions(+), 14 deletions(-)
-> >
-> > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_processo=
-r.c
-> > index 4fe2ef54088c..cf7c1cca69dd 100644
-> > --- a/drivers/acpi/acpi_processor.c
-> > +++ b/drivers/acpi/acpi_processor.c
-> > @@ -626,6 +626,17 @@ static struct acpi_scan_handler processor_handler =
-=3D {
-> >         },
-> >  };
-> >
-> > +bool acpi_device_is_processor(const struct acpi_device *adev)
-> > +{
-> > +       if (adev->device_type =3D=3D ACPI_BUS_TYPE_PROCESSOR)
-> > +               return true;
-> > +
-> > +       if (adev->device_type !=3D ACPI_BUS_TYPE_DEVICE)
-> > +               return false;
-> > +
-> > +       return acpi_scan_check_handler(adev, &processor_handler);
-> > +}
-> > +
-> >  static int acpi_processor_container_attach(struct acpi_device *dev,
-> >                                            const struct acpi_device_id =
-*id)
-> >  {
-> > diff --git a/drivers/acpi/device_pm.c b/drivers/acpi/device_pm.c
-> > index 3b4d048c4941..e3c80f3b3b57 100644
-> > --- a/drivers/acpi/device_pm.c
-> > +++ b/drivers/acpi/device_pm.c
-> > @@ -313,7 +313,7 @@ int acpi_bus_init_power(struct acpi_device *device)
-> >                 return -EINVAL;
-> >
-> >         device->power.state =3D ACPI_STATE_UNKNOWN;
-> > -       if (!acpi_device_is_present(device)) {
-> > +       if (!acpi_dev_ready_for_enumeration(device)) {
-> >                 device->flags.initialized =3D false;
-> >                 return -ENXIO;
-> >         }
-> > diff --git a/drivers/acpi/device_sysfs.c b/drivers/acpi/device_sysfs.c
-> > index 23373faa35ec..a0256d2493a7 100644
-> > --- a/drivers/acpi/device_sysfs.c
-> > +++ b/drivers/acpi/device_sysfs.c
-> > @@ -141,7 +141,7 @@ static int create_pnp_modalias(const struct acpi_de=
-vice *acpi_dev, char *modalia
-> >         struct acpi_hardware_id *id;
-> >
-> >         /* Avoid unnecessarily loading modules for non present devices.=
- */
-> > -       if (!acpi_device_is_present(acpi_dev))
-> > +       if (!acpi_dev_ready_for_enumeration(acpi_dev))
-> >                 return 0;
-> >
-> >         /*
-> > diff --git a/drivers/acpi/internal.h b/drivers/acpi/internal.h
-> > index 6588525c45ef..1bc8b6db60c5 100644
-> > --- a/drivers/acpi/internal.h
-> > +++ b/drivers/acpi/internal.h
-> > @@ -62,6 +62,8 @@ void acpi_sysfs_add_hotplug_profile(struct acpi_hotpl=
-ug_profile *hotplug,
-> >  int acpi_scan_add_handler_with_hotplug(struct acpi_scan_handler *handl=
-er,
-> >                                        const char *hotplug_profile_name=
-);
-> >  void acpi_scan_hotplug_enabled(struct acpi_hotplug_profile *hotplug, b=
-ool val);
-> > +bool acpi_scan_check_handler(const struct acpi_device *adev,
-> > +                            struct acpi_scan_handler *handler);
-> >
-> >  #ifdef CONFIG_DEBUG_FS
-> >  extern struct dentry *acpi_debugfs_dir;
-> > @@ -121,7 +123,6 @@ int acpi_device_setup_files(struct acpi_device *dev=
-);
-> >  void acpi_device_remove_files(struct acpi_device *dev);
-> >  void acpi_device_add_finalize(struct acpi_device *device);
-> >  void acpi_free_pnp_ids(struct acpi_device_pnp *pnp);
-> > -bool acpi_device_is_present(const struct acpi_device *adev);
-> >  bool acpi_device_is_battery(struct acpi_device *adev);
-> >  bool acpi_device_is_first_physical_node(struct acpi_device *adev,
-> >                                         const struct device *dev);
-> > @@ -133,6 +134,7 @@ int acpi_bus_register_early_device(int type);
-> >  const struct acpi_device *acpi_companion_match(const struct device *de=
-v);
-> >  int __acpi_device_uevent_modalias(const struct acpi_device *adev,
-> >                                   struct kobj_uevent_env *env);
-> > +bool acpi_device_is_processor(const struct acpi_device *adev);
-> >
-> >  /* -------------------------------------------------------------------=
--------
-> >                                    Power Resource
-> > diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
-> > index a6ead5204046..9f8d54038770 100644
-> > --- a/drivers/acpi/property.c
-> > +++ b/drivers/acpi/property.c
-> > @@ -1486,7 +1486,7 @@ static bool acpi_fwnode_device_is_available(const=
- struct fwnode_handle *fwnode)
-> >         if (!is_acpi_device_node(fwnode))
-> >                 return false;
-> >
-> > -       return acpi_device_is_present(to_acpi_device_node(fwnode));
-> > +       return acpi_dev_ready_for_enumeration(to_acpi_device_node(fwnod=
-e));
-> >  }
-> >
-> >  static const void *
-> > diff --git a/drivers/acpi/scan.c b/drivers/acpi/scan.c
-> > index e6ed1ba91e5c..fd2e8b3a5749 100644
-> > --- a/drivers/acpi/scan.c
-> > +++ b/drivers/acpi/scan.c
-> > @@ -304,7 +304,7 @@ static int acpi_scan_device_check(struct acpi_devic=
-e *adev)
-> >         int error;
-> >
-> >         acpi_bus_get_status(adev);
-> > -       if (acpi_device_is_present(adev)) {
-> > +       if (acpi_dev_ready_for_enumeration(adev)) {
-> >                 /*
-> >                  * This function is only called for device objects for =
-which
-> >                  * matching scan handlers exist.  The only situation in=
- which
-> > @@ -338,7 +338,7 @@ static int acpi_scan_bus_check(struct acpi_device *=
-adev, void *not_used)
-> >         int error;
-> >
-> >         acpi_bus_get_status(adev);
-> > -       if (!acpi_device_is_present(adev)) {
-> > +       if (!acpi_dev_ready_for_enumeration(adev)) {
-> >                 acpi_scan_device_not_enumerated(adev);
-> >                 return 0;
-> >         }
-> > @@ -1917,11 +1917,6 @@ static bool acpi_device_should_be_hidden(acpi_ha=
-ndle handle)
-> >         return true;
-> >  }
-> >
-> > -bool acpi_device_is_present(const struct acpi_device *adev)
-> > -{
-> > -       return adev->status.present || adev->status.functional;
-> > -}
-> > -
-> >  static bool acpi_scan_handler_matching(struct acpi_scan_handler *handl=
-er,
-> >                                        const char *idstr,
-> >                                        const struct acpi_device_id **ma=
-tchid)
-> > @@ -1942,6 +1937,18 @@ static bool acpi_scan_handler_matching(struct ac=
-pi_scan_handler *handler,
-> >         return false;
-> >  }
-> >
-> > +bool acpi_scan_check_handler(const struct acpi_device *adev,
-> > +                            struct acpi_scan_handler *handler)
-> > +{
-> > +       struct acpi_hardware_id *hwid;
-> > +
-> > +       list_for_each_entry(hwid, &adev->pnp.ids, list)
-> > +               if (acpi_scan_handler_matching(handler, hwid->id, NULL))
-> > +                       return true;
-> > +
-> > +       return false;
-> > +}
-> > +
-> >  static struct acpi_scan_handler *acpi_scan_match_handler(const char *i=
-dstr,
-> >                                         const struct acpi_device_id **m=
-atchid)
-> >  {
-> > @@ -2405,16 +2412,35 @@ EXPORT_SYMBOL_GPL(acpi_dev_clear_dependencies);
-> >   * acpi_dev_ready_for_enumeration - Check if the ACPI device is ready =
-for enumeration
-> >   * @device: Pointer to the &struct acpi_device to check
-> >   *
-> > - * Check if the device is present and has no unmet dependencies.
-> > + * Check if the device is functional or enabled and has no unmet depen=
-dencies.
-> >   *
-> > - * Return true if the device is ready for enumeratino. Otherwise, retu=
-rn false.
-> > + * Return true if the device is ready for enumeration. Otherwise, retu=
-rn false.
-> >   */
-> >  bool acpi_dev_ready_for_enumeration(const struct acpi_device *device)
-> >  {
-> >         if (device->flags.honor_deps && device->dep_unmet)
-> >                 return false;
-> >
-> > -       return acpi_device_is_present(device);
-> > +       /*
-> > +        * ACPI 6.5's 6.3.7 "_STA (Device Status)" allows firmware to r=
-eturn
-> > +        * (!present && functional) for certain types of devices that s=
-hould be
-> > +        * enumerated. Note that the enabled bit should not be set unle=
-ss the
-> > +        * present bit is set.
-> > +        *
-> > +        * However, limit this only to processor devices to reduce poss=
-ible
-> > +        * regressions with firmware.
-> > +        */
-> > +       if (!device->status.present)
-> > +               return device->status.functional;
-> > +
-> > +       /*
-> > +        * Fast path - if enabled is set, avoid the more expensive test=
- to
-> > +        * check whether this device is a processor.
-> > +        */
-> > +       if (device->status.enabled)
-> > +               return true;
-> > +
-> > +       return !acpi_device_is_processor(device);
-> >  }
-> >  EXPORT_SYMBOL_GPL(acpi_dev_ready_for_enumeration);
-> >
-> > -- =20
->=20
-> I can queue this up for 6.9 as it looks like the rest of the series
-> will still need some work.  What do you think?
+Nitpick.
+s/dtbindings/dt-bindings
 
-The sooner this goes in the sooner we discover if some of the bios bug
-workarounds we have dropped form the series are in reality necessary
-(i.e. get it into big board test farms).
+Please add that you are adding this support for Interconnect driver. Its
+there in Subject of this patch, but reading above line gives wrong
+impression.
 
-So I'm definitely keen to see this go in for 6.9.
+Regards,
+Naman Jain
 
-Hopefully we can make rapid progress on the rest of the series and
-hammer out which of the remaining subtle differences between
-the two flows are real vs code evolution issues.
+> 
+> To: Bjorn Andersson <andersson@kernel.org>
+> To: Konrad Dybcio <konrad.dybcio@linaro.org>
+> To: Georgi Djakov <djakov@kernel.org>
+> To: Rob Herring <robh@kernel.org>
+> To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> To: Conor Dooley <conor+dt@kernel.org>
+> Cc: linux-arm-msm@vger.kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
+> 
+> Danila Tikhonov (2):
+>    dt-bindings: interconnect: Add Qualcomm SM7150 DT bindings
+>    interconnect: qcom: Add SM7150 driver support
+> 
+>   .../interconnect/qcom,sm7150-rpmh.yaml        |   88 +
+>   drivers/interconnect/qcom/Kconfig             |    9 +
+>   drivers/interconnect/qcom/Makefile            |    2 +
+>   drivers/interconnect/qcom/sm7150.c            | 1753 +++++++++++++++++
+>   drivers/interconnect/qcom/sm7150.h            |  140 ++
+>   .../interconnect/qcom,sm7150-rpmh.h           |  150 ++
+>   6 files changed, 2142 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm7150-rpmh.yaml
+>   create mode 100644 drivers/interconnect/qcom/sm7150.c
+>   create mode 100644 drivers/interconnect/qcom/sm7150.h
+>   create mode 100644 include/dt-bindings/interconnect/qcom,sm7150-rpmh.h
+> 
 
-Jonathan
 
