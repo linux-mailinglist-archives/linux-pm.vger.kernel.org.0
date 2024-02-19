@@ -1,120 +1,154 @@
-Return-Path: <linux-pm+bounces-4076-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4077-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7DC185A3BA
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 13:46:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6DD585A3E6
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 13:54:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 56E2D1F21C32
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 12:46:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 15E79B224C8
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 12:54:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 049C12E835;
-	Mon, 19 Feb 2024 12:46:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0B732C6A7;
+	Mon, 19 Feb 2024 12:54:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IC+jxoSq"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="udQ3cv9J"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com [209.85.222.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A894D32C89
-	for <linux-pm@vger.kernel.org>; Mon, 19 Feb 2024 12:46:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3D562EB1A
+	for <linux-pm@vger.kernel.org>; Mon, 19 Feb 2024 12:54:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708346767; cv=none; b=H5BLEkSDvBDQcDVDjFs6/HGb2QnlLHwnfbOo0cNMiHs/VuItgy5zrFhTm+oHk3TrzrWo2gxp0KEef6zayoishbF2aUA7zaTK879erA8zg9q2wNqIB2xry5F5SLBxTq/7/+Rt4dHNG+mRmi43mCf78clw9eNcx7tDVbfjregvoDw=
+	t=1708347251; cv=none; b=OT0UIIOwldGj0AmG3ahOrNT92Jl1PpLtBzPC2C0WQDDZK92qnctEcYQntEI1beM3cGL9kLsRgE+9jIhbpw+pGmDxjMQtUka4Qee+unhhubdXL2+2DJgELnKNA+RjWGOF6yvljjh1T3a/Rb252mM1MmjEyTnAOincoDml+WiK4hU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708346767; c=relaxed/simple;
-	bh=jeL2ZOTlUeIkpCeDAH2lKJE2fPvqlCgKNxot3hrmlgY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=umJcVazmzbJJOqN0NjAj0EIiGIVAfZ4H/9Xom/0nYLxaCEtliNVEKTbSW8BUXy9/QxyBArEKPz1cjND5DCX+1B66+jFLvkx2jZoKrxCpF9DXn7gw+iVvJiYPCpuHFju1XCf2oMwGSdaQIFwDptHNBG/uRzglZU4DstzBgdZvvsM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IC+jxoSq; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-33d4c0b198aso490140f8f.2
-        for <linux-pm@vger.kernel.org>; Mon, 19 Feb 2024 04:46:03 -0800 (PST)
+	s=arc-20240116; t=1708347251; c=relaxed/simple;
+	bh=sVsdNaxDrQaT+5xLkuNNBvQ4+mZpUehI+ER8LAoDUdY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fTWo7w6r01pF9wJUMHymwOwYByzKqgOTFdVBIMxPZVbNgA+/6ggl0BvL2YvmTCkfi5Fi6vzlxR12Buk8veZKD/SzcgbAzArId+d/PcDoIHA7itV30pZC8Pzhg1Lej1k7AICQRusqkUbwLkSlEbHDnJ99aoBUtFZmWr63xlWj+Q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=udQ3cv9J; arc=none smtp.client-ip=209.85.222.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-ua1-f50.google.com with SMTP id a1e0cc1a2514c-7ce55932330so1251739241.0
+        for <linux-pm@vger.kernel.org>; Mon, 19 Feb 2024 04:54:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708346762; x=1708951562; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mJMfx43L94xYRUCQwWnL1D6+lJ5hrssrm8cUpjHuNMI=;
-        b=IC+jxoSqksGm9VAsG7FalQGokyE5+Ob5qcOSZLSaNgmLhVolCWLm3tR6HreZQGkDg7
-         QxzJ2gpkbTf08G2ha6/CJZCiahCIb5HzN4IsD1fO90q4gBvtCF1wTLxknnNDjNK9ciD5
-         Y7m+Mi6777bPv5aE/Pl4WrD0wxDJ8zu8rl/tQyiMmMn8rLRnCcuo+AScsTwSkTzyswEJ
-         RPuOKes/GGnO+l6tACbALJnVYazoRvt9txHSNGSxhP2DfsSpjODb6zURp7AHR/oyZw66
-         YmzBR8qkkOXYoJ1t5tNKLJt6LnV40rmcGGhSSVCs42bWTFAwjBqBCjPL9esxsDcy1pLC
-         9QeA==
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1708347249; x=1708952049; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sVsdNaxDrQaT+5xLkuNNBvQ4+mZpUehI+ER8LAoDUdY=;
+        b=udQ3cv9JtqKeraoYuLqdfWfwCCI8IqdYdtHNz3famgOyfzEASJbnUbi9Ip4iBFsEfQ
+         Kl8HsjfC+7SkcF9V5ISgTbGDqgyoHJRrjgR0/PfVtTCIysmhpDAH+oe378A755J6JlXM
+         1r94W6myxOuaOuRiIVphSmifjG0c6dN6Ppy0iQ1WbUj5I9pPZilN2tTRygjbg9MKHk3d
+         pnM2uYsVw244oGzm9Y/8g4n35ljis+R+dRxgOYJIEg4XNhXjTDndDIcQhpEsUBMx+Bzb
+         /xqB9GlsDT2n1v4h5B+LoZr03fuAttuy4C4vf+rBZrpUOCRTZoFDTdRI05jcpekZ90R1
+         U54A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708346762; x=1708951562;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mJMfx43L94xYRUCQwWnL1D6+lJ5hrssrm8cUpjHuNMI=;
-        b=CJ/IKDE2067n+LZDbaWCjrr4qPIGclHwFWX+xXQflG0bUxAfM9svfvf/w9LwugiV4o
-         6Le9vXP4SII/APZo0yIkhGqIG8t8mZ8eU2XSmxvQ2xxk1GV0ZPJwn9wWydoIGdip/fxo
-         RzbPHpPiIyEhc+wsfqZdRU1h/geNELzL7HzQVg3M7o85AZeAPP8C+y+Xd7XaPruqHzmj
-         uQtAiitOxgUlPOof8gjcuDAOdSpNtRX8DMFq0qs8uC96zLQIMe0OLoUxXqi6eTcnv4l/
-         tKD+YI1qx5+8Ta60PqlXzqCMXUDgyirM3E71r0xbwCVKo5oDjcITnPlIQFRCShNp8iR9
-         pp5w==
-X-Forwarded-Encrypted: i=1; AJvYcCXWV5IaLV1KGooiAZZjwe/UDG6QMBG2EvrhSBp5Cly85TVgJ0mAyBMrn2+z9/esKaVI6q2hREp2J3+AyS6slT05PSlL6hkzbcY=
-X-Gm-Message-State: AOJu0YwCgY1nHgywxeYIi7DhXEOPy9VHgLUV0X4/+jm3FEihtOe65RnO
-	1NEXdsyDy/6+KW+wSnLT04ldNDRvOH2HIUr0zm9yBnaw24CqL/B0WWgJzxPGMGk=
-X-Google-Smtp-Source: AGHT+IFmwKmBJosde5SFt1ZVVqtpb+4xKhpxMkZOV+tdkL6MRFevW+di1bXhPz8+mCClAXO6HquHvw==
-X-Received: by 2002:a05:6000:1787:b0:33d:56a0:88e7 with SMTP id e7-20020a056000178700b0033d56a088e7mr1560869wrg.46.1708346762093;
-        Mon, 19 Feb 2024 04:46:02 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id x11-20020a5d444b000000b0033b7ce8b496sm10362458wrr.108.2024.02.19.04.46.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Feb 2024 04:46:01 -0800 (PST)
-Message-ID: <f74159ee-d01c-44f0-95dc-aa9ee579d45d@linaro.org>
-Date: Mon, 19 Feb 2024 13:46:01 +0100
+        d=1e100.net; s=20230601; t=1708347249; x=1708952049;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sVsdNaxDrQaT+5xLkuNNBvQ4+mZpUehI+ER8LAoDUdY=;
+        b=QGBBx637+SQe+bEfnR5uHtxcICvlfsEm4+vuMYn3hVFI/U248sxwaqDuDJn2A6TuwP
+         yl8n6s4nVg0Us5jKpOYEJjdZzBqWBMSjF4QsZs0xGICderfY/z51PBT7FxQ3na4AlmPn
+         6PPGo04PeRw/EegBIWjrFjYiJ7BpDjlbUF/CfPjEYFwMSHSjBuQXSVz+K1h0Dp1vQKBG
+         hWTUCvkhLCS2e52AfN863Pjo71WmWjf4SkwnF6MqqSUJ+4WRpH8eXOcl6Md2LopgnGiI
+         SDMZnNErS/PXqjyB8dtWVMBEDoYk/WPnHy6dV8JQLU1nOdLv9klfrz+1gPM1SNoyyBFP
+         EcwA==
+X-Forwarded-Encrypted: i=1; AJvYcCWGW8EKU44iTIj8CVkeDqagCFz+62Q+Zux4S0RKDjCBf8BbGuPje2wpvTdXY1a76UXtRMZq+EixZKA3Qiq/kPSSqGHawDyx+kc=
+X-Gm-Message-State: AOJu0YyLsmOitj+Sg9u9MI+RwNWarllWm7O/AU/VVnDZEY53/Il8h3xt
+	+qGngq+2AyebKkS4XHlv+JHHLZF4hzmasPamgisL1rkEiM6lBLm5I4K93OXoZnOc2V54epnezB9
+	DDJxidy+3sbzYf6BBcfNA8ovffWqi3I+wUHKBiw==
+X-Google-Smtp-Source: AGHT+IHxyvxbs8UNV+RvesaBK90xtZZfu2Xu6HFPB14T7Tm6G1AVsPn3zgxyvNAFZBNi1d1T6kkfRUxMA6fnOOW6aBY=
+X-Received: by 2002:a67:c902:0:b0:46d:2b65:aa16 with SMTP id
+ w2-20020a67c902000000b0046d2b65aa16mr6787860vsk.34.1708347248824; Mon, 19 Feb
+ 2024 04:54:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] dt-bindings: thermal: qoriq-thermal: Adjust
- fsl,tmu-range min/maxItems
-Content-Language: en-US
-To: Fabio Estevam <festevam@gmail.com>
-Cc: robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- conor+dt@kernel.org, linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- Fabio Estevam <festevam@denx.de>
-References: <20240104124952.1975160-1-festevam@gmail.com>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20240104124952.1975160-1-festevam@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240216203215.40870-1-brgl@bgdev.pl> <20240216203215.40870-4-brgl@bgdev.pl>
+ <ZdDVNbjv60G9YUNy@finisterre.sirena.org.uk> <CAMRc=Mf9Sro4kM_Jn8_v=cyO5PxCp6AnBdeS9XspqVDGKdA_Dg@mail.gmail.com>
+ <7c1327c0-d0ea-4797-a5fa-5844ba46bf53@linaro.org>
+In-Reply-To: <7c1327c0-d0ea-4797-a5fa-5844ba46bf53@linaro.org>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Mon, 19 Feb 2024 13:53:57 +0100
+Message-ID: <CAMRc=Me=3HhGc_yZuaEo1TsLbF2R=g+072185_PAh5GmAQ-M7w@mail.gmail.com>
+Subject: Re: [PATCH v5 03/18] dt-bindings: regulator: describe the PMU module
+ of the QCA6390 package
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Mark Brown <broonie@kernel.org>, Marcel Holtmann <marcel@holtmann.org>, 
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, "David S . Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Kalle Valo <kvalo@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Saravana Kannan <saravanak@google.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Arnd Bergmann <arnd@arndb.de>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Marek Szyprowski <m.szyprowski@samsung.com>, Alex Elder <elder@linaro.org>, 
+	Srini Kandagatla <srinivas.kandagatla@linaro.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Abel Vesa <abel.vesa@linaro.org>, 
+	Manivannan Sadhasivam <mani@kernel.org>, Lukas Wunner <lukas@wunner.de>, 
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, linux-bluetooth@vger.kernel.org, 
+	netdev@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 04/01/2024 13:49, Fabio Estevam wrote:
-> From: Fabio Estevam <festevam@denx.de>
-> 
-> The number of fsl,tmu-range entries vary among the several NXP SoCs.
-> 
-> - lx2160a has two fsl,tmu-range entries  (fsl,qoriq-tmu compatible)
-> - imx8mq has four fsl,tmu-range entries. (fsl,imx8mq-tmu compatible)
-> - imx93 has seven fsl,tmu-range entries. (fsl,qoriq-tmu compatible)
-> 
-> Change minItems and maxItems accordingly.
-> 
-> This fixes the following schema warning:
-> 
-> imx93-11x11-evk.dtb: tmu@44482000: fsl,tmu-range: 'oneOf' conditional failed, one must be fixed:
->          [2147483866, 2147483881, 2147483906, 2147483946, 2147484006, 2147484071, 2147484086] is too long
-> 
-> Signed-off-by: Fabio Estevam <festevam@denx.de>
-> ---
+On Mon, Feb 19, 2024 at 8:32=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 17/02/2024 19:32, Bartosz Golaszewski wrote:
+> > On Sat, Feb 17, 2024 at 4:48=E2=80=AFPM Mark Brown <broonie@kernel.org>=
+ wrote:
+> >>
+> >> On Fri, Feb 16, 2024 at 09:32:00PM +0100, Bartosz Golaszewski wrote:
+> >>> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >>>
+> >>> The QCA6390 package contains discreet modules for WLAN and Bluetooth.=
+ They
+> >>> are powered by the Power Management Unit (PMU) that takes inputs from=
+ the
+> >>> host and provides LDO outputs. This document describes this module.
+> >>
+> >> Please submit patches using subject lines reflecting the style for the
+> >> subsystem, this makes it easier for people to identify relevant patche=
+s.
+> >> Look at what existing commits in the area you're changing are doing an=
+d
+> >> make sure your subject lines visually resemble what they're doing.
+> >> There's no need to resubmit to fix this alone.
+> >
+> > Mark,
+> >
+> > This is quite vague, could you elaborate? I have no idea what is wrong
+> > with this patch.
+>
+> Use subject prefixes matching the subsystem. You can get them for
+> example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+> your patch is touching.
+>
+> Best regards,
+> Krzysztof
+>
 
-Applied, thanks
+Yes, I always do. And for Documentation/devicetree/bindings/regulator/
+the subjects are split 50:50 between "dt-bindings: regulator: ..." and
+"regulator: dt-bindings: ...". For Documentation/devicetree/bindings/
+it's overwhelmingly "dt-bindings: <subsystem>: ...". It's the first
+time someone wants me to send a DT bindings patch without
+"dt-bindings" coming first in the subject.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+I mean: I can do it alright but it's not stated anywhere explicitly.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Bartosz
 
