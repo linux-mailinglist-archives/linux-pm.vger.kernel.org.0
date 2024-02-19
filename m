@@ -1,125 +1,179 @@
-Return-Path: <linux-pm+bounces-4074-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4075-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5839585A32F
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 13:27:58 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id F232A85A386
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 13:35:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C5961F211B9
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 12:27:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 617F4B2520F
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 12:35:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1748A2E62A;
-	Mon, 19 Feb 2024 12:27:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CA4931A81;
+	Mon, 19 Feb 2024 12:34:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="T8lK5B3N"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="f7SvxbYa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62F422D638;
-	Mon, 19 Feb 2024 12:27:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B14F2E84E
+	for <linux-pm@vger.kernel.org>; Mon, 19 Feb 2024 12:33:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708345665; cv=none; b=Apsd7vW+b4JD56/4Nw0QkwEu/lNqzEq9PLLhtTNs9Ps4NVuwsDukOL3BGVsFMsEH2NzpIOJ9z9twKe685WStz/RUUI1VnUxao7Rwsx+hG2i0/RA8J+FjlVQ3xbuZQ3ZPqxFTPyYqCqh9H8BcJgQVnCsJkYThjtqmrguIOIyof6g=
+	t=1708346040; cv=none; b=eI9r+t//AhG7o+F5OS4wvIYX8OPu8gSzAXjAEQbGaa8t/PON2LO9DeiMaQNleX3s5PZjA3Xz+0/VPjr37QA1rWe40rA3GBUVG+bQqXuRlAYtkDIHg4iuarZHOyA4w7CKXuxmwz4+uoYVa3aHH9CMhEKgdYQLrrOZhDKgVcwchZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708345665; c=relaxed/simple;
-	bh=QtyAmgyaqBP3Pw2hsyXdaBD838ZNokfapk5FB3vM9do=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=RipRGigIOQng3AF9pNI2Xgb5vrpHNSONFeYl0I4+FStye+xGx6pFdUeWRVKIWmiJk5wQ42kECIum3C7kKEhXx3b4ePIv9Eak8GvxX6WFIrX5jY+eRVRrit9OwSQlogsOHk9E2BDEc4a9QIq28YzlxErftR0BNGPbA0MS6/MT4e0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=T8lK5B3N; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41JAeoK2009496;
-	Mon, 19 Feb 2024 12:27:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=k3n1beUOcmwlqVyyDnDeVwvl4hamR/xvV4h8XQhkusc=; b=T8
-	lK5B3NiIBFlquw+7f0Ai1xSOO8osBXYtKp4T+ObjNl1UqRFzYkTnJ/+keYupjTKI
-	VHKZsm6mKhqJEL6Yz3ZWQ/xrAXdJmb5E2d/xRX/EQarcg7uvyHlPFk0e2gj0RbHA
-	DGuwM7FxdSey225lhGRReIlAXASOGYPWYNRnsaCm01a6YTqU/aRKnAdd4aDtl5hH
-	H/kmP9f1NdSZoO9PqdgMLo0cHOsRAGOqCg9028ldNvyvWfyUahnImGrigTTpWd70
-	9+6oPAPg2qXS7uCSk/c4DC15WorRpypGOzSofjOEoF+B0WOAvRBG0gB43rF6IlXh
-	bCfegwQ2ADRDWvM1zoLQ==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wc5dtr6mx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 19 Feb 2024 12:27:35 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41JCRZLx022733
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 19 Feb 2024 12:27:35 GMT
-Received: from [10.214.82.119] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 19 Feb
- 2024 04:27:31 -0800
-Message-ID: <34734d65-6be7-4fab-98b7-357726751af5@quicinc.com>
-Date: Mon, 19 Feb 2024 17:57:28 +0530
+	s=arc-20240116; t=1708346040; c=relaxed/simple;
+	bh=EfyswbkjFGsreX6zvvh/xGLIF699ZsioDWGcgzOacl8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=l6ZcBjDCoJPCyZzMtkslN8LTgbkFr5Wvty7pa3ddZ4b9APPQXFgcUDwyvimniUZ7xPhZXa7eBzHdBVXRQXDqE9pazBacWkS92aCE1YmJNqMW/H/hRnmVYlCZPK6qsPBNE9XHKqvhqn3EZWtH/tL2F7ej1rJl0q2lnnvmwVSLwQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=f7SvxbYa; arc=none smtp.client-ip=209.85.219.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-dc6d24737d7so3603012276.0
+        for <linux-pm@vger.kernel.org>; Mon, 19 Feb 2024 04:33:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1708346037; x=1708950837; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EfyswbkjFGsreX6zvvh/xGLIF699ZsioDWGcgzOacl8=;
+        b=f7SvxbYapz8Q6xY8ShG4PYzpMxeuML9KOgHMMAP2eVOv40D6nw1X8eNmIB55yscPoR
+         mNFvTfUmZDnvRVHmzmFyYQTyi2rJqWmEHXvNO9AvPv6CJ+kwsfRkYW5QpyPmPx14q6GW
+         m77054HH2xIa260GuwYUAhLtxpWM8ZKs/Xg0kxMQPpZCjggGwl9Ruo0VN+eSuHCxDAbo
+         3ThhqKLAEl81nIq2huqMPtf4tjs37B0b/w+04j+n6oytayQhTKK3kUGoztfMQxk0WHoH
+         s7072BCUVk7BntWRB1B3wlzWQ0f8CvSKaUnFYaSmUlFf5ffvRPPS0gPvoNIpJWdOQt3R
+         Sqnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708346037; x=1708950837;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EfyswbkjFGsreX6zvvh/xGLIF699ZsioDWGcgzOacl8=;
+        b=ta4PE4OyE2zNd2D0gYxoCkougJhjO6nBlmxUh2v4C9wExoGZG93cRYxlfIxIeQxYA0
+         w2HoQ9I30Xdu9b2lXAs4l6VxSwwhtyUYvaTTmBoW94XWcV31OylFUii1chVP8o+2Xeca
+         4VlMM/LY6BaB8J1Dqq6zCOBHOngQEFoHGEFCbacfvihgFuhK3duK/im+kKkYki+AjN7d
+         DY5HsxpABXtTCjPuJZwOeltKIn/tOqRR72YaX4gTW9gFWTEr+8P9EZlihAsnRtjd5GX1
+         K4LHqZnfRUKnRw2hbHUqjHhmq6VhJF1GLd9LSs3gK2PYY7TtXoeVDwZxkQb4XWQPnRIb
+         dJTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVGrkqX1vNUhaYqW+lMD1A8Sw74TA88GA8AuaRfhx02C79GRNv07dQA2/ccLuBbZ41KN8F0bQINng0YIvAFBQ0StRoAHjun9K4=
+X-Gm-Message-State: AOJu0YyOvPvyStn1xbUu+Vjs6LpjT6vlBW34EzQdmYlbCUVUe1+ebJWS
+	HsUFrwnI3i7899tHPGdPzFJDiiBCXJXYZTb/YBoi7zLsQpV9pV36qXG690BJielmH2cVuU6rqJr
+	e4sa1TTjkW6TBDxcvbGu3BoCtZIvJOzil4fzV3g==
+X-Google-Smtp-Source: AGHT+IFW8hhd6M3At62V/9wLITSoPMQHLrtCAz5Offi/bXn5seDzbGyDiAZKXHo0tEWEDjfOFoAQhZeOCTlFpOff0gM=
+X-Received: by 2002:a25:adc9:0:b0:dcd:63f8:ba32 with SMTP id
+ d9-20020a25adc9000000b00dcd63f8ba32mr10169009ybe.65.1708346037293; Mon, 19
+ Feb 2024 04:33:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: interconnect: Add Qualcomm SM7150 DT
- bindings
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Danila Tikhonov
-	<danila@jiaxyga.com>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <djakov@kernel.org>, <robh@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
-CC: <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20240218183239.85319-1-danila@jiaxyga.com>
- <20240218183239.85319-2-danila@jiaxyga.com>
- <fce70468-05fb-4f51-a653-7921dd27bc6b@quicinc.com>
- <f522e679-3543-46ee-8b2d-92e384427382@linaro.org>
-From: Naman Jain <quic_namajain@quicinc.com>
-In-Reply-To: <f522e679-3543-46ee-8b2d-92e384427382@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: FdxgsSP__rrgBzXHnAKkDnCXCpPjd2pP
-X-Proofpoint-GUID: FdxgsSP__rrgBzXHnAKkDnCXCpPjd2pP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-19_08,2024-02-19_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- impostorscore=0 mlxlogscore=805 lowpriorityscore=0 phishscore=0
- spamscore=0 adultscore=0 suspectscore=0 malwarescore=0 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2401310000 definitions=main-2402190093
+References: <20240216203215.40870-1-brgl@bgdev.pl> <CAA8EJppt4-L1RyDeG=1SbbzkTDhLkGcmAbZQeY0S6wGnBbFbvw@mail.gmail.com>
+ <e4cddd9f-9d76-43b7-9091-413f923d27f2@linaro.org> <CAA8EJpp6+2w65o2Bfcr44tE_ircMoON6hvGgyWfvFuh3HamoSQ@mail.gmail.com>
+ <4d2a6f16-bb48-4d4e-b8fd-7e4b14563ffa@linaro.org> <CAA8EJpq=iyOfYzNATRbpqfBaYSdJV1Ao5t2ewLK+wY+vEaFYAQ@mail.gmail.com>
+ <CAMRc=Mfnpusf+mb-CB5S8_p7QwVW6owekC5KcQF0qrR=iOQ=oA@mail.gmail.com>
+In-Reply-To: <CAMRc=Mfnpusf+mb-CB5S8_p7QwVW6owekC5KcQF0qrR=iOQ=oA@mail.gmail.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Mon, 19 Feb 2024 14:33:46 +0200
+Message-ID: <CAA8EJppY7VTrDz3-FMZh2qHoU+JSGUjCVEi5x=OZgNVxQLm3eQ@mail.gmail.com>
+Subject: Re: [PATCH v5 00/18] power: sequencing: implement the subsystem and
+ add first users
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: neil.armstrong@linaro.org, Marcel Holtmann <marcel@holtmann.org>, 
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, "David S . Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Kalle Valo <kvalo@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Saravana Kannan <saravanak@google.com>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Arnd Bergmann <arnd@arndb.de>, 
+	Marek Szyprowski <m.szyprowski@samsung.com>, Alex Elder <elder@linaro.org>, 
+	Srini Kandagatla <srinivas.kandagatla@linaro.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Abel Vesa <abel.vesa@linaro.org>, 
+	Manivannan Sadhasivam <mani@kernel.org>, Lukas Wunner <lukas@wunner.de>, linux-bluetooth@vger.kernel.org, 
+	netdev@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2/19/2024 4:44 PM, Krzysztof Kozlowski wrote:
-> On 19/02/2024 10:48, Naman Jain wrote:
->> On 2/19/2024 12:02 AM, Danila Tikhonov wrote:
->>> The Qualcomm SM7150 platform has several bus fabrics that could be
->>> controlled and tuned dynamically according to the bandwidth demand.
->>
->> Please add what you are trying to do with this patch.
->>
->> Ref:
->> https://docs.kernel.org/process/submitting-patches.html#describe-your-changes
-> 
-> The reason for this change is explained in commit msg, so what exactly
-> are you missing?
-> 
-> Best regards,
-> Krzysztof
-> 
+On Mon, 19 Feb 2024 at 14:23, Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+>
+> On Mon, Feb 19, 2024 at 11:26=E2=80=AFAM Dmitry Baryshkov
+> <dmitry.baryshkov@linaro.org> wrote:
+> >
+>
+> [snip]
+>
+> > > >>>>
+> > > >>>> For WCN7850 we hide the existence of the PMU as modeling it is s=
+imply not
+> > > >>>> necessary. The BT and WLAN devices on the device-tree are repres=
+ented as
+> > > >>>> consuming the inputs (relevant to the functionality of each) of =
+the PMU
+> > > >>>> directly.
+> > > >>>
+> > > >>> We are describing the hardware. From the hardware point of view, =
+there
+> > > >>> is a PMU. I think at some point we would really like to describe =
+all
+> > > >>> Qualcomm/Atheros WiFI+BT units using this PMU approach, including=
+ the
+> > > >>> older ath10k units present on RB3 (WCN3990) and db820c (QCA6174).
+> > > >>
+> > > >> While I agree with older WiFi+BT units, I don't think it's needed =
+for
+> > > >> WCN7850 since BT+WiFi are now designed to be fully independent and=
+ PMU is
+> > > >> transparent.
+> > > >
+> > > > I don't see any significant difference between WCN6750/WCN6855 and
+> > > > WCN7850 from the PMU / power up point of view. Could you please poi=
+nt
+> > > > me to the difference?
+> > > >
+> > >
+> > > The WCN7850 datasheet clearly states there's not contraint on the WLA=
+N_EN
+> > > and BT_EN ordering and the only requirement is to have all input regu=
+lators
+> > > up before pulling up WLAN_EN and/or BT_EN.
+> > >
+> > > This makes the PMU transparent and BT and WLAN can be described as in=
+dependent.
+> >
+> > From the hardware perspective, there is a PMU. It has several LDOs. So
+> > the device tree should have the same style as the previous
+> > generations.
+> >
+>
+> My thinking was this: yes, there is a PMU but describing it has no
+> benefit (unlike QCA6x90). If we do describe, then we'll end up having
+> to use pwrseq here despite it not being needed because now we won't be
+> able to just get regulators from WLAN/BT drivers directly.
+>
+> So I also vote for keeping it this way. Let's go into the package
+> detail only if it's required.
 
-I was under the impression that we should have explained/mentioned the
-subject of this patch in the description of the commit msg. It seems
-that it's not required. Thanks for correcting me.
+The WiFi / BT parts are not powered up by the board regulators. They
+are powered up by the PSU. So we are not describing it in the accurate
+way.
 
-Regards,
-Naman Jain
+Moreover, I think we definitely want to move BT driver to use only the
+pwrseq power up method. Doing it in the other way results in the code
+duplication and possible issues because of the regulator / pwrseq
+taking different code paths.
+
+
+--=20
+With best wishes
+Dmitry
 
