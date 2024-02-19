@@ -1,38 +1,38 @@
-Return-Path: <linux-pm+bounces-4084-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4083-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B316485A78E
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 16:37:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42DBA85A78D
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 16:37:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 532FB1F22006
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 15:37:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED5491F21FDA
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 15:37:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D603C3A8CC;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D77139840;
 	Mon, 19 Feb 2024 15:37:04 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CB8E39AC6;
-	Mon, 19 Feb 2024 15:37:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F254C3A8CC;
+	Mon, 19 Feb 2024 15:37:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708357024; cv=none; b=SU0oUsIHDNyGmC+FS12zi7oZz0cZStC/hQcKh0kOCOGp6t8H9kANa9DOKmIvC3OSOcf0QnBTW72WoRBeC58/Vy8PChg258QisLbji2F3VrQQP5cuIYGyDP+jPOQKz2WI5cJAabYGuPdmZtSy4TxOw1Dodv5gZ2hnqowcPIKM3DU=
+	t=1708357024; cv=none; b=D74bu8/+1+sVdsrd29wOc7aGiJwWoiAWzeyS3/ngHhr24Gg6g2SJ5IDa0Kz+B/HJAlRfgQ8WBVywreooozPHCsyM9PI3Ol/T24+K3C9qQw5PooS0ZVmaA9dNXMxsfxLwrjsFLYwclF+eiT1zEJ1s/6fqhvrjWvUHpDOTcKvyoek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1708357024; c=relaxed/simple;
-	bh=4IoVj7JQ3Zb+xZaIHAa3vEa/dGFnRmv2LKQPw6HAQNQ=;
+	bh=0hZ29kxx9Mb4qhg61qxGVgzS4byClVd7YZBIJ7/33rc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=WsnoqklL3wUs9IXmM6i9O0+l4TD2BTNx4SryWUtUmk5LSkLSHzNmNqiFjp7NwyFCRB1pgnTufjNnBP3v0f8zLwR7Q2GjaPX+EPSjFHbkFBMoAcXQCgqe5m1+b7JVNNUCoHGX6daWJ/wd+xRsc+oS469Dymt/eGKtHwQQ8bvydlU=
+	 MIME-Version; b=THYPjrdV/hiOrQYyHBmsMHmmqVAMckSLuAHr0PETMl+WBL2KwCn8s9zFse3XbpxkIvB77UL/CzQHzv/N44tcWzixVuZvL74BLDM+uhMoh20fWjR1lfuSWS/vfWgSC1uOdBERy4JuXBxj1DYuhossTavl2dPu1LnIVNsQBSwEu4Y=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7E3E21042;
-	Mon, 19 Feb 2024 07:37:39 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3965E1007;
+	Mon, 19 Feb 2024 07:37:42 -0800 (PST)
 Received: from donnerap.arm.com (donnerap.manchester.arm.com [10.32.100.28])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4B15F3F762;
-	Mon, 19 Feb 2024 07:36:57 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 057D53F762;
+	Mon, 19 Feb 2024 07:36:59 -0800 (PST)
 From: Andre Przywara <andre.przywara@arm.com>
 To: Vasily Khoruzhick <anarsoul@gmail.com>,
 	Yangtao Li <tiny.windzz@gmail.com>,
@@ -53,9 +53,9 @@ Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
 	devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-sunxi@lists.linux.dev
-Subject: [PATCH v5 5/7] thermal: sun8i: add SRAM register access code
-Date: Mon, 19 Feb 2024 15:36:37 +0000
-Message-Id: <20240219153639.179814-6-andre.przywara@arm.com>
+Subject: [PATCH v5 6/7] thermal: sun8i: add support for H616 THS controller
+Date: Mon, 19 Feb 2024 15:36:38 +0000
+Message-Id: <20240219153639.179814-7-andre.przywara@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240219153639.179814-1-andre.przywara@arm.com>
 References: <20240219153639.179814-1-andre.przywara@arm.com>
@@ -67,126 +67,52 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Allwinner H616 SoC needs to clear a bit in one register in the SRAM
-controller, to report reasonable temperature values. On reset, bit 16 in
-register 0x3000000 is set, which leads to the driver reporting
-temperatures around 200C. Clearing this bit brings the values down to the
-expected range. The BSP code does a one-time write in U-Boot, with a
-comment just mentioning the effect on the THS, but offering no further
-explanation.
+From: Martin Botka <martin.botka@somainline.org>
 
-To not rely on firmware to set things up for us, add code that queries
-the SRAM controller device via a DT phandle link, then clear just this
-single bit.
+Add support for the thermal sensor found in H616 SoCs, is the same as
+the H6 thermal sensor controller, but with four sensors.
+Also the registers readings are wrong, unless a bit in the first SYS_CFG
+register cleared, so set exercise the SRAM regmap to take care of that.
 
+Signed-off-by: Martin Botka <martin.botka@somainline.org>
 Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 ---
- drivers/thermal/sun8i_thermal.c | 51 +++++++++++++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+ drivers/thermal/sun8i_thermal.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
 diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
-index c919b0fd5e169..c157e4fbf963b 100644
+index c157e4fbf963b..63a7d2df3d6ec 100644
 --- a/drivers/thermal/sun8i_thermal.c
 +++ b/drivers/thermal/sun8i_thermal.c
-@@ -15,6 +15,7 @@
- #include <linux/module.h>
- #include <linux/nvmem-consumer.h>
- #include <linux/of.h>
-+#include <linux/of_platform.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
- #include <linux/reset.h>
-@@ -66,6 +67,7 @@ struct tsensor {
- struct ths_thermal_chip {
- 	bool            has_mod_clk;
- 	bool            has_bus_clk_reset;
-+	bool		needs_sram;
- 	int		sensor_num;
- 	int		offset;
- 	int		scale;
-@@ -83,12 +85,16 @@ struct ths_device {
- 	const struct ths_thermal_chip		*chip;
- 	struct device				*dev;
- 	struct regmap				*regmap;
-+	struct regmap_field			*sram_regmap_field;
- 	struct reset_control			*reset;
- 	struct clk				*bus_clk;
- 	struct clk                              *mod_clk;
- 	struct tsensor				sensor[MAX_SENSOR_NUM];
+@@ -684,6 +684,20 @@ static const struct ths_thermal_chip sun20i_d1_ths = {
+ 	.calc_temp = sun8i_ths_calc_temp,
  };
  
-+/* The H616 needs to have a bit 16 in the SRAM control register cleared. */
-+static const struct reg_field sun8i_ths_sram_reg_field = REG_FIELD(0x0, 16, 16);
++static const struct ths_thermal_chip sun50i_h616_ths = {
++	.sensor_num = 4,
++	.has_bus_clk_reset = true,
++	.needs_sram = true,
++	.ft_deviation = 8000,
++	.offset = 263655,
++	.scale = 810,
++	.temp_data_base = SUN50I_H6_THS_TEMP_DATA,
++	.calibrate = sun50i_h6_ths_calibrate,
++	.init = sun50i_h6_thermal_init,
++	.irq_ack = sun50i_h6_irq_ack,
++	.calc_temp = sun8i_ths_calc_temp,
++};
 +
- /* Temp Unit: millidegree Celsius */
- static int sun8i_ths_calc_temp(struct ths_device *tmdev,
- 			       int id, int reg)
-@@ -337,6 +343,34 @@ static void sun8i_ths_reset_control_assert(void *data)
- 	reset_control_assert(data);
- }
- 
-+static struct regmap *sun8i_ths_get_sram_regmap(struct device_node *node)
-+{
-+	struct device_node *sram_node;
-+	struct platform_device *sram_pdev;
-+	struct regmap *regmap = NULL;
-+
-+	sram_node = of_parse_phandle(node, "allwinner,sram", 0);
-+	if (!sram_node)
-+		return ERR_PTR(-ENODEV);
-+
-+	sram_pdev = of_find_device_by_node(sram_node);
-+	if (!sram_pdev) {
-+		/* platform device might not be probed yet */
-+		regmap = ERR_PTR(-EPROBE_DEFER);
-+		goto out_put_node;
-+	}
-+
-+	/* If no regmap is found then the other device driver is at fault */
-+	regmap = dev_get_regmap(&sram_pdev->dev, NULL);
-+	if (!regmap)
-+		regmap = ERR_PTR(-EINVAL);
-+
-+	platform_device_put(sram_pdev);
-+out_put_node:
-+	of_node_put(sram_node);
-+	return regmap;
-+}
-+
- static int sun8i_ths_resource_init(struct ths_device *tmdev)
- {
- 	struct device *dev = tmdev->dev;
-@@ -381,6 +415,19 @@ static int sun8i_ths_resource_init(struct ths_device *tmdev)
- 	if (ret)
- 		return ret;
- 
-+	if (tmdev->chip->needs_sram) {
-+		struct regmap *regmap;
-+
-+		regmap = sun8i_ths_get_sram_regmap(dev->of_node);
-+		if (IS_ERR(regmap))
-+			return PTR_ERR(regmap);
-+		tmdev->sram_regmap_field = devm_regmap_field_alloc(dev,
-+						      regmap,
-+						      sun8i_ths_sram_reg_field);
-+		if (IS_ERR(tmdev->sram_regmap_field))
-+			return PTR_ERR(tmdev->sram_regmap_field);
-+	}
-+
- 	ret = sun8i_ths_calibrate(tmdev);
- 	if (ret)
- 		return ret;
-@@ -427,6 +474,10 @@ static int sun50i_h6_thermal_init(struct ths_device *tmdev)
- {
- 	int val;
- 
-+	/* The H616 needs to have a bit in the SRAM control register cleared. */
-+	if (tmdev->sram_regmap_field)
-+		regmap_field_write(tmdev->sram_regmap_field, 0);
-+
- 	/*
- 	 * The manual recommends an overall sample frequency of 50 KHz (20us,
- 	 * 480 cycles at 24 MHz), which provides plenty of time for both the
+ static const struct of_device_id of_ths_match[] = {
+ 	{ .compatible = "allwinner,sun8i-a83t-ths", .data = &sun8i_a83t_ths },
+ 	{ .compatible = "allwinner,sun8i-h3-ths", .data = &sun8i_h3_ths },
+@@ -693,6 +707,7 @@ static const struct of_device_id of_ths_match[] = {
+ 	{ .compatible = "allwinner,sun50i-h5-ths", .data = &sun50i_h5_ths },
+ 	{ .compatible = "allwinner,sun50i-h6-ths", .data = &sun50i_h6_ths },
+ 	{ .compatible = "allwinner,sun20i-d1-ths", .data = &sun20i_d1_ths },
++	{ .compatible = "allwinner,sun50i-h616-ths", .data = &sun50i_h616_ths },
+ 	{ /* sentinel */ },
+ };
+ MODULE_DEVICE_TABLE(of, of_ths_match);
 -- 
 2.25.1
 
