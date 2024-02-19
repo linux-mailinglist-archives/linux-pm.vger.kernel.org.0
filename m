@@ -1,217 +1,144 @@
-Return-Path: <linux-pm+bounces-4087-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4088-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1588D85A9C1
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 18:18:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C1D485AA0B
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 18:29:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7DB5B1F22169
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 17:18:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB2E22894EE
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 17:29:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8308F45948;
-	Mon, 19 Feb 2024 17:18:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9655B44C8E;
+	Mon, 19 Feb 2024 17:29:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hqQqDI3U"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GE770cYs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31ABC446D2
-	for <linux-pm@vger.kernel.org>; Mon, 19 Feb 2024 17:18:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66DA425566;
+	Mon, 19 Feb 2024 17:29:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708363116; cv=none; b=Tb8APZH4f+Dr7TKy0/7/1CTkB+GVPWyVJr7wqSoboteNfXTs9nSbtcDEIR653LvhL0VcHMaRRnitdttzEND3jjoZaYF9VvilRxBKS+ZfEGZ4tke3V4KcyJ3yatY0FL2izTwECfWL2jSIt77RUQZ6NrtUKHR6PpfqxzAx3bUbs0Y=
+	t=1708363756; cv=none; b=cYh3KQkt6BD31rHmATOQSnIfbIju7FT21qR4ryRjN+1NO6qKvtYXkqZEnH+chAZMYoOx1smr+Mryg3oVamwR9iaNmws4nCne4uPKlbPTgW0UOMlqi+bHHc8y3lQDL4tT/6Y5N/ngmOeY1mChGMm3A9JYAk8h/dORuHL/lqwGFHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708363116; c=relaxed/simple;
-	bh=YtBsaUyY/Wb1P24PhdovpdBvyLf28UKpe0gDT+2Ldzs=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=V3jB4R7sfp/6CTpYFbYCtgAdgLgaCGwFpxgytIVz2o+EyIprSYEWU6Pp2EaZTxwIfkUobq0tRQ455nNEjwcYRJ8oVjwTk3/SmX3kA42Lnxe6rKjM2gYdZYfDtvvig+4TDQuKYZHVEASgDydFS7vpc0ZYhyWaFgohIuTCw65GUIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hqQqDI3U; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-40fb3b5893eso23972375e9.0
-        for <linux-pm@vger.kernel.org>; Mon, 19 Feb 2024 09:18:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708363111; x=1708967911; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :references:cc:to:content-language:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=u7kZlLXHS08bcdnhY94K2kbmvHbCpRcAmjuD4rUAeN0=;
-        b=hqQqDI3UTvqcM1op56C6Rxsqy2oUu2x4TlZ1k0D/AcnXfFRlvHXlixoiL09wHuY+1K
-         KifV4Hj16GRpLJvi0BOxcXIq4CnWM+xP6YQUHKmBCnO7RE2i5IeI32xKsYbaQNd2b1d1
-         6SdFADJUGBsRib9RmIJVut+ivdi7b1r/F5pQI5XzvCjmj11XUnmfPv8x6/qDKQE/DAI5
-         RH8pNs4O2znG2C3/Nk7P5yKvbyRYz4mAqc4FvTQwDnYzsesCth2md4HFGFE4woDwJUXZ
-         DSCzXRT0gCrNvnEBxcUl3c+yV54GhP1tmfaI7CGTfgLR2/xAkzJRpoxj1z706POhjtCK
-         JnFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708363111; x=1708967911;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :references:cc:to:content-language:subject:reply-to:from:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=u7kZlLXHS08bcdnhY94K2kbmvHbCpRcAmjuD4rUAeN0=;
-        b=aH1fLJ1Dp/wd/mjZlyDTZkuV0KPKyECBvVzgWYKaNpmslY8YN4qUqiqW5cHu7YOSkR
-         0PSUuQzyTRQH5+reUYJUfhlNXsPkKj+tAcRtagKUY2k/NHR9zpH7Jo9YoB5NmcGj/VNg
-         +dp52mCRw8H4t5APRGn4nfNy0vcuZPfUO2DdW4vbo884Mw8SZfTvhKJXeEYYWZL5bc70
-         D9v7fq0ij3BH1BSD5ySYsO25KT5hwqHJqPk/2kY0yz5QfeKeeY0nsP4dzJakU9Dkhemj
-         Qs8IscsB/USApYRJS+m60MFcx/BT5w4xKbx58mwiHPHqrtAsc2Qw/uwcIJb8edL08bEb
-         lkkA==
-X-Forwarded-Encrypted: i=1; AJvYcCVrbpN7CDfYn3JRDkyBNgRMih/4TAqHXkZk/XJo5G6rTS5cnyhMsdTuw0iGDn7kI3Zx0QEdno08iGarJFTg3NbbOpso3q/4tBQ=
-X-Gm-Message-State: AOJu0YzvACpr2m1pnRN+QZgOWKGLAk+lDdP96anoEztpm/byw1KZma3k
-	tCThGs4VxBdhJj4szzYGjqJXPCa7zEmh6lc/EZAv6FhdD1/n7mloXtjt0eEo0UA=
-X-Google-Smtp-Source: AGHT+IG6HApNAr08gNp8EANCLSEDYJY0OEJeO4RN59vBmzRJNnpiIxby3zbW1YTKTzihCko1G1T4UQ==
-X-Received: by 2002:a05:600c:5186:b0:412:6953:fc8c with SMTP id fa6-20020a05600c518600b004126953fc8cmr1379148wmb.23.1708363111460;
-        Mon, 19 Feb 2024 09:18:31 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:fe7f:ff5e:4cf1:97b9? ([2a01:e0a:982:cbb0:fe7f:ff5e:4cf1:97b9])
-        by smtp.gmail.com with ESMTPSA id p17-20020a05600c469100b004120b4c57c9sm12103046wmo.4.2024.02.19.09.18.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Feb 2024 09:18:30 -0800 (PST)
-Message-ID: <b9a31374-8ea9-407e-9ec3-008a95e2b18b@linaro.org>
-Date: Mon, 19 Feb 2024 18:18:28 +0100
+	s=arc-20240116; t=1708363756; c=relaxed/simple;
+	bh=HDOUgL6Y0nc7IvKBPLbbUpZK2qQlAnpDmaaG/SLeRF0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L1iPQzRqBxKR8sx11JYoJR7cScv7h4eJC+a3VZDey26upiybbYNXewKyll/ZgEADvpixsQZvCc49BwAUrLs/kS3HM5bngsDb/MFIRS3bD34zVTKfMAYPl8VdDy6WCOmrZhOSMA40GlXlyzAH/0jTWVr+HiZgFrDNAULfnslSvZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GE770cYs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D434C433F1;
+	Mon, 19 Feb 2024 17:29:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708363756;
+	bh=HDOUgL6Y0nc7IvKBPLbbUpZK2qQlAnpDmaaG/SLeRF0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GE770cYsLQOhGWHmeW4Wg45pDEMxw26SbCB7J9GSGeTl7xQsE9XqhdyPsSDWl1Zx3
+	 GkLul7ypkIJvVGKOnIDIlmwNi8Q+VnTopWh448gGGS5T4pP9gJuH89xqr118L7d1l+
+	 obyKh8WkVuV6gjlzFMVRklxXAY53JPCpTT8xRRQlccCm2IQW+xOklWfRPJqQsSsPKl
+	 jX+pEMjurC+jfEYSlBBVtis0nu2adzeOz5r3PlYClT5iggsaVZ/Iw8rNmvz8fOtJv2
+	 /KGOTaFj8QTc8l5D2mo7mpGYFBC2DwW7mT6IMbPFGcR+H8eiJ7B64HfaZCJtDbhn8w
+	 dXFebOuUKJu9A==
+Date: Mon, 19 Feb 2024 18:29:10 +0100
+From: Lorenzo Pieralisi <lpieralisi@kernel.org>
+To: Maulik Shah <quic_mkshah@quicinc.com>
+Cc: Mark Rutland <mark.rutland@arm.com>, andersson@kernel.org,
+	ulf.hansson@linaro.org, linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org, quic_lsrao@quicinc.com,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] firmware/psci: Move psci_init_system_suspend() to
+ late_initcall()
+Message-ID: <ZdOP5oAwZvEhNAsn@lpieralisi>
+References: <20240219-suspend_ops_late_init-v1-1-6330ca9597fa@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v5 00/18] power: sequencing: implement the subsystem and
- add first users
-Content-Language: en-US, fr
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Marcel Holtmann <marcel@holtmann.org>,
- Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, Kalle Valo <kvalo@kernel.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konrad.dybcio@linaro.org>, Liam Girdwood
- <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Bjorn Helgaas <bhelgaas@google.com>, Saravana Kannan <saravanak@google.com>,
- Geert Uytterhoeven <geert+renesas@glider.be>, Arnd Bergmann <arnd@arndb.de>,
- Marek Szyprowski <m.szyprowski@samsung.com>, Alex Elder <elder@linaro.org>,
- Srini Kandagatla <srinivas.kandagatla@linaro.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Abel Vesa <abel.vesa@linaro.org>, Manivannan Sadhasivam <mani@kernel.org>,
- Lukas Wunner <lukas@wunner.de>, linux-bluetooth@vger.kernel.org,
- netdev@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20240216203215.40870-1-brgl@bgdev.pl>
- <CAA8EJppt4-L1RyDeG=1SbbzkTDhLkGcmAbZQeY0S6wGnBbFbvw@mail.gmail.com>
- <e4cddd9f-9d76-43b7-9091-413f923d27f2@linaro.org>
- <CAA8EJpp6+2w65o2Bfcr44tE_ircMoON6hvGgyWfvFuh3HamoSQ@mail.gmail.com>
- <4d2a6f16-bb48-4d4e-b8fd-7e4b14563ffa@linaro.org>
- <CAA8EJpq=iyOfYzNATRbpqfBaYSdJV1Ao5t2ewLK+wY+vEaFYAQ@mail.gmail.com>
- <CAMRc=Mfnpusf+mb-CB5S8_p7QwVW6owekC5KcQF0qrR=iOQ=oA@mail.gmail.com>
- <CAA8EJppY7VTrDz3-FMZh2qHoU+JSGUjCVEi5x=OZgNVxQLm3eQ@mail.gmail.com>
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro Developer Services
-In-Reply-To: <CAA8EJppY7VTrDz3-FMZh2qHoU+JSGUjCVEi5x=OZgNVxQLm3eQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240219-suspend_ops_late_init-v1-1-6330ca9597fa@quicinc.com>
 
-On 19/02/2024 13:33, Dmitry Baryshkov wrote:
-> On Mon, 19 Feb 2024 at 14:23, Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->>
->> On Mon, Feb 19, 2024 at 11:26 AM Dmitry Baryshkov
->> <dmitry.baryshkov@linaro.org> wrote:
->>>
->>
->> [snip]
->>
->>>>>>>>
->>>>>>>> For WCN7850 we hide the existence of the PMU as modeling it is simply not
->>>>>>>> necessary. The BT and WLAN devices on the device-tree are represented as
->>>>>>>> consuming the inputs (relevant to the functionality of each) of the PMU
->>>>>>>> directly.
->>>>>>>
->>>>>>> We are describing the hardware. From the hardware point of view, there
->>>>>>> is a PMU. I think at some point we would really like to describe all
->>>>>>> Qualcomm/Atheros WiFI+BT units using this PMU approach, including the
->>>>>>> older ath10k units present on RB3 (WCN3990) and db820c (QCA6174).
->>>>>>
->>>>>> While I agree with older WiFi+BT units, I don't think it's needed for
->>>>>> WCN7850 since BT+WiFi are now designed to be fully independent and PMU is
->>>>>> transparent.
->>>>>
->>>>> I don't see any significant difference between WCN6750/WCN6855 and
->>>>> WCN7850 from the PMU / power up point of view. Could you please point
->>>>> me to the difference?
->>>>>
->>>>
->>>> The WCN7850 datasheet clearly states there's not contraint on the WLAN_EN
->>>> and BT_EN ordering and the only requirement is to have all input regulators
->>>> up before pulling up WLAN_EN and/or BT_EN.
->>>>
->>>> This makes the PMU transparent and BT and WLAN can be described as independent.
->>>
->>>  From the hardware perspective, there is a PMU. It has several LDOs. So
->>> the device tree should have the same style as the previous
->>> generations.
->>>
->>
->> My thinking was this: yes, there is a PMU but describing it has no
->> benefit (unlike QCA6x90). If we do describe, then we'll end up having
->> to use pwrseq here despite it not being needed because now we won't be
->> able to just get regulators from WLAN/BT drivers directly.
->>
->> So I also vote for keeping it this way. Let's go into the package
->> detail only if it's required.
+On Mon, Feb 19, 2024 at 03:02:04PM +0530, Maulik Shah wrote:
+> psci_init_system_suspend() invokes suspend_set_ops() very early during
+> bootup even before kernel command line for mem_sleep_default is setup.
+> This leads to kernel command line mem_sleep_default=s2idle not working
+> as mem_sleep_current gets changed to deep via suspend_set_ops() and never
+> changes back to s2idle.
 > 
-> The WiFi / BT parts are not powered up by the board regulators. They
-> are powered up by the PSU. So we are not describing it in the accurate
-> way.
+> Move psci_init_system_suspend() to late_initcall() to make sure kernel
+> command line mem_sleep_default=s2idle sets up s2idle as default suspend
+> mode.
 
-I disagree, the WCN7850 can also be used as a discrete PCIe M.2 card, and in
-this situation the PCIe part is powered with the M.2 slot and the BT side
-is powered separately as we currently do it now.
+Why can't we fix it the other way around, namely enforce
+mem_sleep_current according to the mem_sleep_default command line
+even if suspend_set_ops() was already called ?
 
-So yes there's a PMU, but it's not an always visible hardware part, from the
-SoC PoV, only the separate PCIe and BT subsystems are visible/controllable/powerable.
+Just asking, I am not super keen on using initcalls ordering, it
+looks fragile to me.
 
-Neil
+Thanks,
+Lorenzo
 
+> Fixes: faf7ec4a92c0 ("drivers: firmware: psci: add system suspend support")
+> CC: stable@vger.kernel.org # 5.15+
+> Signed-off-by: Maulik Shah <quic_mkshah@quicinc.com>
+> ---
+>  drivers/firmware/psci/psci.c | 13 ++++++++++---
+>  1 file changed, 10 insertions(+), 3 deletions(-)
 > 
-> Moreover, I think we definitely want to move BT driver to use only the
-> pwrseq power up method. Doing it in the other way results in the code
-> duplication and possible issues because of the regulator / pwrseq
-> taking different code paths.
+> diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+> index d9629ff87861..655a2db70a67 100644
+> --- a/drivers/firmware/psci/psci.c
+> +++ b/drivers/firmware/psci/psci.c
+> @@ -523,18 +523,26 @@ static void __init psci_init_system_reset2(void)
+>  		psci_system_reset2_supported = true;
+>  }
+>  
+> -static void __init psci_init_system_suspend(void)
+> +static int __init psci_init_system_suspend(void)
+>  {
+>  	int ret;
+> +	u32 ver;
+>  
+>  	if (!IS_ENABLED(CONFIG_SUSPEND))
+> -		return;
+> +		return 0;
+> +
+> +	ver = psci_0_2_get_version();
+> +	if (PSCI_VERSION_MAJOR(ver) < 1)
+> +		return 0;
+>  
+>  	ret = psci_features(PSCI_FN_NATIVE(1_0, SYSTEM_SUSPEND));
+>  
+>  	if (ret != PSCI_RET_NOT_SUPPORTED)
+>  		suspend_set_ops(&psci_suspend_ops);
+> +
+> +	return ret;
+>  }
+> +late_initcall(psci_init_system_suspend)
+>  
+>  static void __init psci_init_cpu_suspend(void)
+>  {
+> @@ -651,7 +659,6 @@ static int __init psci_probe(void)
+>  	if (PSCI_VERSION_MAJOR(ver) >= 1) {
+>  		psci_init_smccc();
+>  		psci_init_cpu_suspend();
+> -		psci_init_system_suspend();
+>  		psci_init_system_reset2();
+>  		kvm_init_hyp_services();
+>  	}
 > 
+> ---
+> base-commit: d37e1e4c52bc60578969f391fb81f947c3e83118
+> change-id: 20240219-suspend_ops_late_init-27fb0b15baee
 > 
-
+> Best regards,
+> -- 
+> Maulik Shah <quic_mkshah@quicinc.com>
+> 
 
