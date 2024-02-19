@@ -1,468 +1,163 @@
-Return-Path: <linux-pm+bounces-4072-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4073-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C195785A2FD
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 13:16:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7149785A319
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 13:23:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E691E1C239CB
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 12:16:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2919A281950
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 12:23:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DE332D04B;
-	Mon, 19 Feb 2024 12:16:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1623F2DF9C;
+	Mon, 19 Feb 2024 12:23:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="Y9NlYGWh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com [209.85.222.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 414802D60F;
-	Mon, 19 Feb 2024 12:15:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F3CB2D60C
+	for <linux-pm@vger.kernel.org>; Mon, 19 Feb 2024 12:23:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708344964; cv=none; b=O9m4TxRFRw7EO07yHNXdOHWt9OkZ2UISFRcrYTiTCnLlvi/EBdcXynR3ss1zM6BKBWS68zuS9VdIq7/wCCCRToXorp5KgJLwlX1XdB/EjGA2CfTwhqlH2oyvEGl5q5J6V4lqptrVD6QOrebUTrpIWtjD6ZVT0KRVQz1glNeqKW4=
+	t=1708345406; cv=none; b=mPL38JBSGYDMJ4WM/xtDkvjK+jc9U6Dk5WC8rBzn/iGnDHoXJ/kfjkUMrkwKpp+4AON3xO9frgvlABjas0oMgIk/XBF+pJMjHl4z9Ot4N7RWUUqVsfL2unKCu3eNP9DciGcHFyTWr45USVrO0t1MYc/49jtylCFjPnekqBrS76M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708344964; c=relaxed/simple;
-	bh=Sqdc70AZ/xgpm2VrksAlL9y8pK6v99BEca919OlxJQk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=l8kGhOUSf+CT6Cao69jKBT85qskb5KUo8i7ilfQ45CUHyKPhUZA7lwakazS/EzQJR4bUnFHQoKZjYjBIVMCFlTGToW3UKo5IIU90FGohQLRCw9E14YnfM0OHOlbU8F2+zQV2B3gVQNRyU2dGHED4aDHdnwg5JRoY6kQVwLxZpRk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.17])
-	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4TdhK41vKkz1X2gr;
-	Mon, 19 Feb 2024 20:13:44 +0800 (CST)
-Received: from kwepemm600004.china.huawei.com (unknown [7.193.23.242])
-	by mail.maildlp.com (Postfix) with ESMTPS id B0E881A0172;
-	Mon, 19 Feb 2024 20:15:51 +0800 (CST)
-Received: from [10.67.121.59] (10.67.121.59) by kwepemm600004.china.huawei.com
- (7.193.23.242) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Mon, 19 Feb
- 2024 20:15:50 +0800
-Message-ID: <532d8a81-a42e-f818-332f-2d93acac1e26@huawei.com>
-Date: Mon, 19 Feb 2024 20:15:50 +0800
+	s=arc-20240116; t=1708345406; c=relaxed/simple;
+	bh=JCaGChRGUNtrESJTd6AhgRt3rpjjekNlziPebDsi98o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XlKeTH+cN9AvRTYamjkJQc2is+YoUkxsKYesLCePlb3JvZCl0s+HpW2ktQVaGBVGQacphlAExH8K7WEMfyfuWobBBq8qgnZTnx4fDnrw4Hisz/b5DApYswaFv3scciMgfhOx0o9fmLDAZ3Xz9KHtU2UYaov5ys57CMe3s53uFWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=Y9NlYGWh; arc=none smtp.client-ip=209.85.222.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-7d2a67daa25so2471774241.0
+        for <linux-pm@vger.kernel.org>; Mon, 19 Feb 2024 04:23:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1708345403; x=1708950203; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JCaGChRGUNtrESJTd6AhgRt3rpjjekNlziPebDsi98o=;
+        b=Y9NlYGWhWXkn0m0UTUk43shbgdS0/so9hJzHIpupXqdzTz+Xmpnd/lMlQ5V/72NxJj
+         hmye7oYrHu+8uYbVw8xeaTMnGHu1fMF0ECSFvG21TlGjTsTE5qt8cDdfb4t3wsuYDdvm
+         mBmyjQUDltAfhwFVKD3szLn3HAJmwxAa2ezYFgP7OaANFLxUZGQTZ/gNH+02HKGQRlsc
+         YWNcuan5Ok2mF7fYx7B1tYDgEVm/Y8gW9yxUtTMCLD+ygZpfNkpkd8tRMr0AtjqTthx7
+         2bt3Fyv79se0/xjXCgYB4oak2AORYv8e9hq56azN1/nneY5J2XEFL1VkPWshqDoD8wDM
+         8OFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708345403; x=1708950203;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JCaGChRGUNtrESJTd6AhgRt3rpjjekNlziPebDsi98o=;
+        b=R5RQlYESlJAqzpA4CxHMcX3QuFW8dWPoTGEE5LzTlUD9+b13d1mfLAB93ap4GyuUT5
+         28scx4zcIeIcjuQBM/ukjGlwuvlcm2DxoRbgIealUU/XMB2AL85uKhUyvr5japbRD1Dt
+         ny5OJAv5HpRLiFU5PlUtPQRPV3qz8ckw2mjeJyjqRMrrwTcitMBR1WruaCJFCN9GRY9I
+         ++nF2R14OKAuNvddTG87KlB5NMrlCGVbL8loUtEKWa/CmWDvW1b3Dr6dYJcloOjx0RXU
+         3wjfh3xZttVKSVYI/tW5olykhhz3I7b9xcZq420C449byXQSUA4tXrLo2Ktugk//otv1
+         qYnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWXb+YOnpdcp+LAO7FRwA5/GEixJW9otk0V7TxdUBwPlisGBp4gDPjc49QAeZUBfybJAX7YWj85rlTdexC6JSQf3NuLwSvCf6o=
+X-Gm-Message-State: AOJu0Yz2fODADPH7kwzyLCtJnFWipWhLvonrGibc5PORPhx6t+b7L4JM
+	X54tDnEf8rblTyqpFLolPZwxDYapfo6u/ipOGp7I28mVVT/okhxRFLKF90Jtnl7bfWLPwpzCnhu
+	3DJdBs8VnAiByxg8vY8E4YWmUaGbpoCClkFA91g==
+X-Google-Smtp-Source: AGHT+IF8QcDgkljiNMmo2vfxi+b1NQ85UHBOseDQ8gS3vMihHH6Kd8r7v4M2Q6MY2/Fw/swZFGL2ynq5zcQX6aZeYGo=
+X-Received: by 2002:a05:6102:1142:b0:470:54fa:b37b with SMTP id
+ j2-20020a056102114200b0047054fab37bmr1527000vsg.35.1708345403354; Mon, 19 Feb
+ 2024 04:23:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH] cpufreq: CPPC: Resolve the large frequency discrepancy
- from cpuinfo_cur_freq
-To: Beata Michalska <beata.michalska@arm.com>
-CC: Ionela Voinescu <ionela.voinescu@arm.com>, Vanshidhar Konda
-	<vanshikonda@os.amperecomputing.com>, <linux-kernel@vger.kernel.org>,
-	<linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<rafael@kernel.org>, <sumitg@nvidia.com>, <zengheng4@huawei.com>,
-	<yang@os.amperecomputing.com>, <will@kernel.org>, <sudeep.holla@arm.com>,
-	<liuyonglong@huawei.com>, <zhanjie9@hisilicon.com>,
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-References: <ZZWfJOsDlEXWYHA5@arm.com>
- <9428a1ed-ba4d-1fe6-63e8-11e152bf1f09@huawei.com>
- <lnocwcitdbmgcyhd2dlczgdlhtfw4pfot2br2i3hqscnvr3xgq@nuxlauxum3nr>
- <d0f47e9d-6a58-8b46-89be-b3182abb69f0@huawei.com> <ZZwAmqp6hcmMF8aN@arm.com>
- <6505bdcb-5a5f-cba6-483b-75c51414a9c6@huawei.com>
- <ZaaOQzCpBjmW71xf@e129154.nice.arm.com>
- <a84a9749-97a5-a207-dfd3-8322a5a992d9@huawei.com>
- <Zbyi40XtqbqXm0CL@e129154.nice.arm.com>
- <4f66c62e-b089-a125-5a8d-4a98d4181618@huawei.com>
- <ZcYEjMO7IhSaLAAF@e129154.nice.arm.com>
-From: "lihuisong (C)" <lihuisong@huawei.com>
-In-Reply-To: <ZcYEjMO7IhSaLAAF@e129154.nice.arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600004.china.huawei.com (7.193.23.242)
+References: <20240216203215.40870-1-brgl@bgdev.pl> <CAA8EJppt4-L1RyDeG=1SbbzkTDhLkGcmAbZQeY0S6wGnBbFbvw@mail.gmail.com>
+ <e4cddd9f-9d76-43b7-9091-413f923d27f2@linaro.org> <CAA8EJpp6+2w65o2Bfcr44tE_ircMoON6hvGgyWfvFuh3HamoSQ@mail.gmail.com>
+ <4d2a6f16-bb48-4d4e-b8fd-7e4b14563ffa@linaro.org> <CAA8EJpq=iyOfYzNATRbpqfBaYSdJV1Ao5t2ewLK+wY+vEaFYAQ@mail.gmail.com>
+In-Reply-To: <CAA8EJpq=iyOfYzNATRbpqfBaYSdJV1Ao5t2ewLK+wY+vEaFYAQ@mail.gmail.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Mon, 19 Feb 2024 13:23:12 +0100
+Message-ID: <CAMRc=Mfnpusf+mb-CB5S8_p7QwVW6owekC5KcQF0qrR=iOQ=oA@mail.gmail.com>
+Subject: Re: [PATCH v5 00/18] power: sequencing: implement the subsystem and
+ add first users
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: neil.armstrong@linaro.org, Marcel Holtmann <marcel@holtmann.org>, 
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, "David S . Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Kalle Valo <kvalo@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Saravana Kannan <saravanak@google.com>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Arnd Bergmann <arnd@arndb.de>, 
+	Marek Szyprowski <m.szyprowski@samsung.com>, Alex Elder <elder@linaro.org>, 
+	Srini Kandagatla <srinivas.kandagatla@linaro.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Abel Vesa <abel.vesa@linaro.org>, 
+	Manivannan Sadhasivam <mani@kernel.org>, Lukas Wunner <lukas@wunner.de>, linux-bluetooth@vger.kernel.org, 
+	netdev@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, Feb 19, 2024 at 11:26=E2=80=AFAM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
 
-在 2024/2/9 18:55, Beata Michalska 写道:
-> On Tue, Feb 06, 2024 at 04:02:15PM +0800, lihuisong (C) wrote:
->> 在 2024/2/2 16:08, Beata Michalska 写道:
->>> On Wed, Jan 17, 2024 at 05:18:40PM +0800, lihuisong (C) wrote:
->>>
->>> Hi ,
->>>
->>> Again, apologies for delay,
->>>
->>>> Hi,
->>>>
->>>> 在 2024/1/16 22:10, Beata Michalska 写道:
->>>>> Hi,
->>>>>
->>>>> Apologies for jumping in so late....
->>>>>
->>>>> On Wed, Jan 10, 2024 at 03:09:48PM +0800, lihuisong (C) wrote:
->>>>>> Hi Ionela,
->>>>>>
->>>>>> 在 2024/1/8 22:03, Ionela Voinescu 写道:
->>>>>>> Hi,
->>>>>>>
->>>>>>> On Friday 05 Jan 2024 at 15:04:47 (+0800), lihuisong (C) wrote:
->>>>>>>> Hi Vanshi,
->>>>>>>>
->>>>>>>> 在 2024/1/5 8:48, Vanshidhar Konda 写道:
->>>>>>>>> On Thu, Jan 04, 2024 at 05:36:51PM +0800, lihuisong (C) wrote:
->>>>>>>>>> 在 2024/1/4 1:53, Ionela Voinescu 写道:
->>>>>>>>>>> Hi,
->>>>>>>>>>>
->>>>>>>>>>> On Tuesday 12 Dec 2023 at 15:26:17 (+0800), Huisong Li wrote:
->>>>>>>>>>>> Many developers found that the cpu current frequency is greater than
->>>>>>>>>>>> the maximum frequency of the platform, please see [1], [2] and [3].
->>>>>>>>>>>>
->>>>>>>>>>>> In the scenarios with high memory access pressure, the patch [1] has
->>>>>>>>>>>> proved the significant latency of cpc_read() which is used to obtain
->>>>>>>>>>>> delivered and reference performance counter cause an absurd frequency.
->>>>>>>>>>>> The sampling interval for this counters is very critical and
->>>>>>>>>>>> is expected
->>>>>>>>>>>> to be equal. However, the different latency of cpc_read() has a direct
->>>>>>>>>>>> impact on their sampling interval.
->>>>>>>>>>>>
->>>>>>>>>>> Would this [1] alternative solution work for you?
->>>>>>>>>> It would work for me AFAICS.
->>>>>>>>>> Because the "arch_freq_scale" is also from AMU core and constant
->>>>>>>>>> counter, and read together.
->>>>>>>>>> But, from their discuss line, it seems that there are some tricky
->>>>>>>>>> points to clarify or consider.
->>>>>>>>> I think the changes in [1] would work better when CPUs may be idle. With
->>>>>>>>> this
->>>>>>>>> patch we would have to wake any core that is in idle state to read the
->>>>>>>>> AMU
->>>>>>>>> counters. Worst case, if core 0 is trying to read the CPU frequency of
->>>>>>>>> all
->>>>>>>>> cores, it may need to wake up all the other cores to read the AMU
->>>>>>>>> counters.
->>>>>>>>     From the approach in [1], if all CPUs (one or more cores) under one policy
->>>>>>>> are idle, they still cannot be obtained the CPU frequency, right?
->>>>>>>> In this case, the [1] API will return 0 and have to back to call
->>>>>>>> cpufreq_driver->get() for cpuinfo_cur_freq.
->>>>>>>> Then we still need to face the issue this patch mentioned.
->>>>>>> With the implementation at [1], arch_freq_get_on_cpu() will not return 0
->>>>>>> for idle CPUs and the get() callback will not be called to wake up the
->>>>>>> CPUs.
->>>>>> Right, arch_freq_get_on_cpu() will not return 0 for idle CPUs.
->>>>>> However, for no-housekeeping CPUs, it will return 0 and have to call get()
->>>>>> callback, right?
->>>>>>> Worst case, arch_freq_get_on_cpu() will return a frequency based on the
->>>>>>> AMU counter values obtained on the last tick on that CPU. But if that CPU
->>>>>>> is not a housekeeping CPU, a housekeeping CPU in the same policy will be
->>>>>>> selected, as it would have had a more recent tick, and therefore a more
->>>>>>> recent frequency value for the domain.
->>>>>> But this frequency is from the last tick,
->>>>>> this last tick is probably a long time ago and it doesn't update
->>>>>> 'arch_freq_scale' for some reasons like CPU dile.
->>>>>> In addition, I'm not sure if there is possible that amu_scale_freq_tick() is
->>>>>> executed delayed under high stress case.
->>>>>> It also have an impact on the accuracy of the cpu frequency we query.
->>>>>>> I understand that the frequency returned here will not be up to date,
->>>>>>> but there's no proper frequency feedback for an idle CPU. If one only
->>>>>>> wakes up a CPU to sample counters, before the CPU goes back to sleep,
->>>>>>> the obtained frequency feedback is meaningless.
->>>>>>>
->>>>>>>>> For systems with 128 cores or more, this could be very expensive and
->>>>>>>>> happen
->>>>>>>>> very frequently.
->>>>>>>>>
->>>>>>>>> AFAICS, the approach in [1] would avoid this cost.
->>>>>>>> But the CPU frequency is just an average value for the last tick period
->>>>>>>> instead of the current one the CPU actually runs at.
->>>>>>>> In addition, there are some conditions to use 'arch_freq_scale' in this
->>>>>>>> approach.
->>>>>>> What are the conditions you are referring to?
->>>>>> It depends on the housekeeping CPUs.
->>>>>>>> So I'm not sure if this approach can entirely cover the frequency
->>>>>>>> discrepancy issue.
->>>>>>> Unfortunately there is no perfect frequency feedback. By the time you
->>>>>>> observe/use the value of scaling_cur_freq/cpuinfo_cur_freq, the frequency
->>>>>>> of the CPU might have already changed. Therefore, an average value might
->>>>>>> be a better indication of the recent performance level of a CPU.
->>>>>> An average value for CPU frequency is ok. It may be better if it has not any
->>>>>> delaying.
->>>>>>
->>>>>> The original implementation for cpuinfo_cur_freq can more reflect their
->>>>>> meaning in the user-guide [1]. The user-guide said:
->>>>>> "cpuinfo_cur_freq : Current frequency of the CPU as obtained from the
->>>>>> hardware, in KHz.
->>>>>> This is the frequency the CPU actually runs at."
->>>>>>
->>>>>>
->>>>>> [1]https://www.kernel.org/doc/Documentation/cpu-freq/user-guide.txt
->>>>>>
->>>>>>> Would you be able to test [1] on your platform and usecase?
->>>>>> I has tested it on my platform (CPU number: 64, SMT: off and CPU base
->>>>>> frequency: 2.7GHz).
->>>>>> Accoding to the testing result,
->>>>>> 1> I found that patch [1] and [2] cannot cover the no housekeeping CPUs.
->>>>>> They still have to face the large frequency discrepancy issue my patch
->>>>>> mentioned.
->>>>>> 2> Additionally, the frequency value of all CPUs are almost the same by
->>>>>> using the 'arch_freq_scale' factor way. I'm not sure if it is ok.
->>>>>>
->>>>>> The patch [1] has been modified silightly as below:
->>>>>> -->
->>>>>> @@ -1756,7 +1756,10 @@ static unsigned int
->>>>>> cpufreq_verify_current_freq(struct cpufreq_policy *policy, b
->>>>>>     {
->>>>>>            unsigned int new_freq;
->>>>>>
->>>>>> -       new_freq = cpufreq_driver->get(policy->cpu);
->>>>>> +       new_freq = arch_freq_get_on_cpu(policy->cpu);
->>>>>> +       if (!new_freq)
->>>>>> +               new_freq = cpufreq_driver->get(policy->cpu);
->>>>>> +
->>>>> As pointed out this change will not make it to the next version of the patch.
->>>>> So I'd say you can safely ignore it and assume that arch_freq_get_on_cpu will
->>>>> only be wired for sysfs nodes for scaling_cur_freq/cpuinfo_cur_freq
->>>>>>            if (!new_freq)
->>>>>>                    return 0;
->>>>>>
->>>>>> And the result is as follows:
->>>>>> *case 1:**No setting the nohz_full and cpufreq use performance governor*
->>>>>> *--> Step1: *read 'cpuinfo_cur_freq' in no pressure
->>>>>>      0: 2699264     2: 2699264     4: 2699264     6: 2699264
->>>>>>      8: 2696628    10: 2696628    12: 2696628    14: 2699264
->>>>>>     16: 2699264    18: 2696628    20: 2699264    22: 2696628
->>>>>>     24: 2699264    26: 2696628    28: 2699264    30: 2696628
->>>>>>     32: 2696628    34: 2696628    36: 2696628    38: 2696628
->>>>>>     40: 2699264    42: 2699264    44: 2696628    46: 2696628
->>>>>>     48: 2696628    50: 2699264    52: 2699264    54: 2696628
->>>>>>     56: 2696628    58: 2696628    60: 2696628    62: 2696628
->>>>>>     64: 2696628    66: 2699264    68: 2696628    70: 2696628
->>>>>>     72: 2699264    74: 2696628    76: 2696628    78: 2699264
->>>>>>     80: 2696628    82: 2696628    84: 2699264    86: 2696628
->>>>>>     88: 2696628    90: 2696628    92: 2696628    94: 2699264
->>>>>>     96: 2696628    98: 2699264   100: 2699264   102: 2696628
->>>>>> 104: 2699264   106: 2699264   108: 2699264   110: 2696628
->>>>>> 112: 2699264   114: 2699264   116: 2699264   118: 2699264
->>>>>> 120: 2696628   122: 2699264   124: 2696628   126: 2699264
->>>>>> Note: the frequency of all CPUs are almost the same.
->>>>> Were you expecting smth else ?
->>>> The frequency of each CPU might have a different value.
->>>> All value of all CPUs is the same under high pressure.
->>>> I don't know what the phenomenon is on other platform.
->>>> Do you know who else tested it?
->>> So I might have rushed a bit with my previous comment/question: apologies for
->>> that.
->>> The numbers above: those are on a fairly idle/lightly loaded system right?
->> Yes.
->>> Would you mind having another go with just the arch_freq_get_on_cpu
->>> implementation beign added and dropping the changes in the cpufreq and
->> All my tests are done when cpufreq policy is "performance" and OS isn't on a
->> high load.
->> Reading "scaling_cur_freq" or "scaling_cur_freq" for each physical core on
->> platform
->>
->> The testing result for "cpuinfo_cur_freq" with your changes on a fairly idle
->> and high loaded system can also be found in this thread.
->> *A: the result with your changes*
->> --> Reading "scaling_cur_freq"
->>    0: 2688720     2: 2696628     4: 2699264     6: 2696628
->>    8: 2699264    10: 2696628    12: 2699264    14: 2699264
->>   16: 2699264    18: 2696628    20: 2696628    22: 2696628
->>   24: 2699264    26: 2696628    28: 2696628    30: 2696628
->>   32: 2699264    34: 2691356    36: 2696628    38: 2699264
->>   40: 2699264    42: 2696628    44: 2696628    46: 2699264
->>   48: 2699264    50: 2696628    52: 2696628    54: 2696628
->>   56: 2696628    58: 2699264    60: 2691356    62: 2696628
->>   64: 2696628    66: 2696628    68: 2696628    70: 2696628
->>   72: 2696628    74: 2696628    76: 2699264    78: 2696628
->>   80: 2696628    82: 2696628    84: 2699264    86: 2696628
->>   88: 2625456    90: 2696628    92: 2699264    94: 2696628
->>   96: 2696628    98: 2696628   100: 2699264   102: 2699264
->> 104: 2699264   106: 2696628   108: 2699264   110: 2696628
->> 112: 2699264   114: 2699264   116: 2696628   118: 2696628
->> 120: 2696628   122: 2699264   124: 2696628   126: 2696628
->> -->Reading  "cpuinfo_cur_freq"
->>    0: 2696628     2: 2696628     4: 2699264     6: 2688720
->>    8: 2699264    10: 2700000    12: 2696628    14: 2698322
->>   16: 2699264    18: 2699264    20: 2696628    22: 2699264
->>   24: 2699264    26: 2699264    28: 2699264    30: 2699264
->>   32: 2699264    34: 2693992    36: 2696628    38: 2696628
->>   40: 2699264    42: 2699264    44: 2699264    46: 2696628
->>   48: 2696628    50: 2699264    52: 2696628    54: 2696628
->>   56: 2699264    58: 2699264    60: 2696628    62: 2699264
->>   64: 2696628    66: 2699264    68: 2696628    70: 2699264
->>   72: 2696628    74: 2696628    76: 2696628    78: 2693992
->>   80: 2696628    82: 2696628    84: 2696628    86: 2696628
->>   88: 2696628    90: 2699264    92: 2696628    94: 2699264
->>   96: 2699264    98: 2696628   100: 2699264   102: 2699264
->> 104: 2691356   106: 2699264   108: 2699264   110: 2699264
->> 112: 2699264   114: 2696628   116: 2699264   118: 2699264
->> 120: 2696628   122: 2696628   124: 2696628   126: 2696628
->>
->> *B: the result without your changes*
->> -->Reading "scaling_cur_freq"
->>    0: 2698245     2: 2706690     4: 2699649     6: 2702105
->>    8: 2704362    10: 2697993    12: 2701672    14: 2704362
->>   16: 2701052    18: 2701052    20: 2694385    22: 2699650
->>   24: 2706802    26: 2702389    28: 2698299    30: 2698299
->>   32: 2697333    34: 2697993    36: 2701337    38: 2699328
->>   40: 2700330    42: 2700330    44: 2698019    46: 2697697
->>   48: 2699659    50: 2701700    52: 2703401    54: 2701700
->>   56: 2704013    58: 2697658    60: 2695000    62: 2697666
->>   64: 2697902    66: 2701052    68: 2698245    70: 2695789
->>   72: 2701315    74: 2696655    76: 2693666    78: 2695317
->>   80: 2704912    82: 2699649    84: 2698245    86: 2695454
->>   88: 2697966    90: 2697959    92: 2699319    94: 2700680
->>   96: 2695317    98: 2698996   100: 2700000   102: 2700334
->> 104: 2701320   106: 2695065   108: 2700986   110: 2703960
->> 112: 2697635   114: 2704421   116: 2700680   118: 2702040
->> 120: 2700334   122: 2697993   124: 2700334   126: 2705351
->> -->Reading "cpuinfo_cur_freq"
->>    0: 2696853     2: 2695454     4: 2699649     6: 2706993
->>    8: 2706060    10: 2704362    12: 2704362    14: 2697658
->>   16: 2707719    18: 2697192    20: 2702456    22: 2699650
->>   24: 2705782    26: 2698299    28: 2703061    30: 2705802
->>   32: 2700000    34: 2700671    36: 2701337    38: 2697658
->>   40: 2700330    42: 2700330    44: 2699672    46: 2697697
->>   48: 2703061    50: 2696610    52: 2692542    54: 2704406
->>   56: 2695317    58: 2699331    60: 2698996    62: 2702675
->>   64: 2704912    66: 2703859    68: 2699649    70: 2698596
->>   72: 2703908    74: 2703355    76: 2697658    78: 2695317
->>   80: 2702105    82: 2707719    84: 2702105    86: 2699649
->>   88: 2697966    90: 2691525    92: 2701700    94: 2700680
->>   96: 2695317    98: 2698996   100: 2698666   102: 2700334
->> 104: 2690429   106: 2707590   108: 2700986   110: 2701320
->> 112: 2696283   114: 2692881   116: 2697627   118: 2704421
->> 120: 2698996   122: 2696321   124: 2696655   126: 2695000
->>
-> So in both cases : whether you use arch_freq_get_on_cpu or not
-> (so with and without the patch) you get roughly the same frequencies
-> on all cores - or am I missing smth from the dump above ?
-The changes in "with/without your changes" I said is your patch 
-intruduced arch_freq_get_on_cpu.
-I just test them according to your requesting.
-> And those are reflecting max freq you have provided earlier (?)
-I know it is an average frequency for the last tickfor using 
-arch_freq_get_on_cpu.
-I have no any doubt that the freq is maximum value on performance governor.
-I just want to say the difference between having or not having your patch.
-The frequency values of all cores from cpuinfo_cur_freq and
-scaling_cur_freq are almost the same if use this arch_freq_get_on_cpu on 
-my platform.
-However, the frequency values of all cores are different if doesn't use 
-this arch_freq_get_on_cpu and just use .get().
-> Note that the arch_freq_get_on_cpu will return an average frequency for
-> the last tick, so even if your system is roughly idle with your performance
-> governor those numbers make sense (some/most of the cores might be idle
-> but you will see the last freq the core was running at before going to idle).
-> I do not think there is an agreement what should be shown for idle core when
-> querying their freq through sysfs. Showing last known freq makes sense, even
-> more than waking up core just to try to get one.
-I'm not opposed to using frequency scale factor to get CPU frequency. 
-But it better be okay.
+[snip]
+
+> > >>>>
+> > >>>> For WCN7850 we hide the existence of the PMU as modeling it is sim=
+ply not
+> > >>>> necessary. The BT and WLAN devices on the device-tree are represen=
+ted as
+> > >>>> consuming the inputs (relevant to the functionality of each) of th=
+e PMU
+> > >>>> directly.
+> > >>>
+> > >>> We are describing the hardware. From the hardware point of view, th=
+ere
+> > >>> is a PMU. I think at some point we would really like to describe al=
+l
+> > >>> Qualcomm/Atheros WiFI+BT units using this PMU approach, including t=
+he
+> > >>> older ath10k units present on RB3 (WCN3990) and db820c (QCA6174).
+> > >>
+> > >> While I agree with older WiFi+BT units, I don't think it's needed fo=
+r
+> > >> WCN7850 since BT+WiFi are now designed to be fully independent and P=
+MU is
+> > >> transparent.
+> > >
+> > > I don't see any significant difference between WCN6750/WCN6855 and
+> > > WCN7850 from the PMU / power up point of view. Could you please point
+> > > me to the difference?
+> > >
+> >
+> > The WCN7850 datasheet clearly states there's not contraint on the WLAN_=
+EN
+> > and BT_EN ordering and the only requirement is to have all input regula=
+tors
+> > up before pulling up WLAN_EN and/or BT_EN.
+> >
+> > This makes the PMU transparent and BT and WLAN can be described as inde=
+pendent.
 >
-> @Ionela: Please jump in if I got things wrong.
+> From the hardware perspective, there is a PMU. It has several LDOs. So
+> the device tree should have the same style as the previous
+> generations.
 >
->>> then read 'scaling_cur_freq', doing several reads in some intervals ?
->> It seems that above phenomenon has not a lot to do with reading intervals.
->>> The change has been tested on RD-N2 model (Neoverse N2 ref platform),
->>> it has also been discussed here [1]
->> I doesn't get the testing result on this platform in its thread.
-> It might be missing exact numbers but the conclusions should be here [1]
->
->>>>>> *--> Step 2: *read 'cpuinfo_cur_freq' in the high memory access pressure.
->>>>>>      0: 2696628     2: 2696628     4: 2696628     6: 2696628
->>>>>>      8: 2696628    10: 2696628    12: 2696628    14: 2696628
->>>>>>     16: 2696628    18: 2696628    20: 2696628    22: 2696628
->>>>>>     24: 2696628    26: 2696628    28: 2696628    30: 2696628
->>>>>>     32: 2696628    34: 2696628    36: 2696628    38: 2696628
->>>>>>     40: 2696628    42: 2696628    44: 2696628    46: 2696628
->>>>>>     48: 2696628    50: 2696628    52: 2696628    54: 2696628
->>>>>>     56: 2696628    58: 2696628    60: 2696628    62: 2696628
->>>>>>     64: 2696628    66: 2696628    68: 2696628    70: 2696628
->>>>>>     72: 2696628    74: 2696628    76: 2696628    78: 2696628
->>>>>>     80: 2696628    82: 2696628    84: 2696628    86: 2696628
->>>>>>     88: 2696628    90: 2696628    92: 2696628    94: 2696628
->>>>>>     96: 2696628    98: 2696628   100: 2696628   102: 2696628
->>>>>> 104: 2696628   106: 2696628   108: 2696628   110: 2696628
->>>>>> 112: 2696628   114: 2696628   116: 2696628   118: 2696628
->>>>>> 120: 2696628   122: 2696628   124: 2696628   126: 2696628
->>>>>>
->>>>>> *Case 2: setting nohz_full and cpufreq use ondemand governor*
->>>>>> There is "isolcpus=1-10,41-50 nohz_full=1-10,41-50 rcu_nocbs=1-10,41-50" in
->>>>>> /proc/cmdline.
->>>>> Right, so if I remember correctly nohz_full implies rcu_nocbs, so no need to
->>>>> set that one.
->>>>> Now, afair, isolcpus will make the selected CPUs to disappear from the
->>>>> schedulers view (no balancing, no migrating), so unless you affine smth
->>>>> explicitly to those CPUs, you will not see much of an activity there.
->>>> Correct.
->>>>> Need to double check though as it has been a while ...
->>>>>> *--> Step 1: *setting ondemand governor to all policy and query
->>>>>> 'cpuinfo_cur_freq' in no pressure case.
->>>>>> And the frequency of CPUs all are about 400MHz.
->>>>>> *--> Step 2:* read 'cpuinfo_cur_freq' in the high memory access pressure.
->>>>>> The high memory access pressure is from the command: "stress-ng -c 64
->>>>>> --cpu-load 100% --taskset 0-63"
->>>>> I'm not entirely convinced that this will affine to isolated cpus, especially
->>>>> that the affinity mask spans all available cpus. If that is the case, no wonder
->>>>> your isolated cpus are getting wasted being idle. But I would have to double
->>>>> check how this is being handled.
->>>>>> The result:
->>>>>>     0: 2696628     1:  400000     2:  400000     3:  400909
->>>>>>     4:  400000     5:  400000     6:  400000     7:  400000
->>>>>>     8:  400000     9:  400000    10:  400600    11: 2696628
->>>>>> 12: 2696628    13: 2696628    14: 2696628    15: 2696628
->>>>>> 16: 2696628    17: 2696628    18: 2696628    19: 2696628
->>>>>> 20: 2696628    21: 2696628    22: 2696628    23: 2696628
->>>>>> 24: 2696628    25: 2696628    26: 2696628    27: 2696628
->>>>>> 28: 2696628    29: 2696628    30: 2696628    31: 2696628
->>>>>> 32: 2696628    33: 2696628    34: 2696628    35: 2696628
->>>>>> 36: 2696628    37: 2696628    38: 2696628    39: 2696628
->>>>>> 40: 2696628    41:  400000    42:  400000    43:  400000
->>>>>> 44:  400000    45:  398847    46:  400000    47:  400000
->>>>>> 48:  400000    49:  400000    50:  400000    51: 2696628
->>>>>> 52: 2696628    53: 2696628    54: 2696628    55: 2696628
->>>>>> 56: 2696628    57: 2696628    58: 2696628    59: 2696628
->>>>>> 60: 2696628    61: 2696628    62: 2696628    63: 2699264
->>>>>>
->>>>>> Note:
->>>>>> (1) The frequency of 1-10 and 41-50 CPUs work on the lowest frequency.
->>>>>>         It turned out that nohz full was already work.
->>>>>>         I guess that stress-ng cannot use the CPU in the range of nohz full.
->>>>>>         Because the CPU frequency will be increased to 2.7G by binding CPU to
->>>>>> other application.
->>>>>> (2) The frequency of the nohz full core is calculated by get() callback
->>>>>> according to ftrace.
->>>>> It is as there is no sched tick on those, and apparently there is nothing
->>>>> running on them either.
->>>> Yes.
->>>> If we select your approach and the above phenomenon is normal,
->>>> the large frequency discrepancy issue can be resolved for CPUs with sched
->>>> tick by the way.
->>>> But the nohz full cores still have to face this issue. So this patch is also
->>>> needed.
->>>>
->>> Yes, nohz cores full have to be handled by the cpufreq driver.
->> Correct. So we still have to face the issue in this patch and push this
->> patch.
->> Beata, would you please review this patch?
-> Just to clarify for my benefit (apologies but I do have to contex switch
-> pretty often these days): by reviewing this patch do you mean:
-> 1) review your changes (if so I think there are few comments already to be
-> addressed, but I can try to have another look)
-Currently, the main comments is that my patch will wake up CPU to get 
-frequency.
-BTW, the core's always been wakened up to get the frequency for FFH way 
-in cppc_acpi. please see cpc_read_ffh().
-So it may be acceptable. After all, we don't query CPU frequency very often.
-But your patch doesn't meet the non-housekeeping cpus.
-> 2) review changes for AMU-based arch_freq_get_on_cpu ?
->
-> *note: I will still try to have a look at the non-housekeeping cpus case
-I am very much hope that this issue my patch mentioned can be resolved ASAP.
-So what's your plan about non-housekeeping cpus case?
->
-> ---
-> [1] https://lore.kernel.org/lkml/691d3eb2-cd93-f0fc-a7a4-2a8c0d44262c@nvidia.com/
-> ---
->
-> BR
-> Beata
->>
->> /Huisong
-> [...]
-> .
+
+My thinking was this: yes, there is a PMU but describing it has no
+benefit (unlike QCA6x90). If we do describe, then we'll end up having
+to use pwrseq here despite it not being needed because now we won't be
+able to just get regulators from WLAN/BT drivers directly.
+
+So I also vote for keeping it this way. Let's go into the package
+detail only if it's required.
+
+Bartosz
 
