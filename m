@@ -1,147 +1,198 @@
-Return-Path: <linux-pm+bounces-4049-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4050-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF5B28598E1
-	for <lists+linux-pm@lfdr.de>; Sun, 18 Feb 2024 20:05:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21204859A43
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 02:03:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 544321F21A2E
-	for <lists+linux-pm@lfdr.de>; Sun, 18 Feb 2024 19:05:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 20D94281440
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 01:03:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 114C1762FB;
-	Sun, 18 Feb 2024 19:02:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AABC653;
+	Mon, 19 Feb 2024 01:03:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b="v/e7TXsW"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="SDLSmo2w"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp51.i.mail.ru (smtp51.i.mail.ru [95.163.41.87])
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2077.outbound.protection.outlook.com [40.107.94.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53B88762E6;
-	Sun, 18 Feb 2024 19:02:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.163.41.87
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708282947; cv=none; b=mU01sxBoU5NKroc7CuEPxcF9zjBZ1OBKTNuv6cebIOucGHtN+g2dZcmHCylGqAF040Zgubjs56U4jcCTYU9DL90VcDc0ZWhIYqULysgZsV8m56O7+QhPCh54Hf5QP14QpNuNMjeQL75yJJ44v2LUqky6FPIbb/HyxKmgB6cDsyA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708282947; c=relaxed/simple;
-	bh=MPy55ZzVwuk6ZdokMpIXxx6MJ1fFy+bWbM3XgqQNUPo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mIzQwi8+QTgRGFli39RkRdlk0efmVi8GOu5shSyHBJMQVdPGQOQLU3DYuOHIDLByCi/edE4pcgoqrYOkh5W/rMeYkZMxKkb7RuDhTCoGgid6G2R+33TsY8CBHruFsjB81mMzRoY4FP79WBG0RxIgTpEvbbpKG3oG9sKf8+HApDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jiaxyga.com; spf=pass smtp.mailfrom=jiaxyga.com; dkim=pass (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b=v/e7TXsW; arc=none smtp.client-ip=95.163.41.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jiaxyga.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jiaxyga.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jiaxyga.com
-	; s=mailru; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:Sender:Reply-To:To
-	:Cc:Content-Type:Content-Transfer-Encoding:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-	List-Archive:X-Cloud-Ids:Disposition-Notification-To;
-	bh=Dv460ZlQ97OmwroioSKtYAU8JJFINtgRb2khYHPg7d4=; t=1708282944; x=1708372944; 
-	b=v/e7TXsWNJCkul/YFZrdyM+UilUU1SfxGlhbynObBF7/URhTp+axjp+EelekblltFih7Go7bkcu
-	LD5J9OMlWhrfXIMLHqN5BCr7oziPWy6GRHmv85L9HNgxh64lJDxanAAWeNb624+RsMvan6+uph0hz
-	SvEBUy57F2b+sS+tAQI=;
-Received: by smtp51.i.mail.ru with esmtpa (envelope-from <danila@jiaxyga.com>)
-	id 1rbmQf-000000060EP-2jjW; Sun, 18 Feb 2024 22:02:22 +0300
-Message-ID: <3488e5a4-df70-4ecb-a860-af2e13650347@jiaxyga.com>
-Date: Sun, 18 Feb 2024 22:02:20 +0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E295163;
+	Mon, 19 Feb 2024 01:03:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.77
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708304583; cv=fail; b=VWrhnGNWRAhoFy5BQdLJTJQy1Ub9TvCcfT9A6ZEqtMDGFXyDZb3oB+p3w9qkSACcHFNXInjsom8VNnSX0mY27t+/UGwrel3cFN1PaNZdIq4IBqFfGbdlBF/fxzatnXS4S9W9xHO+ObAmS29GKUAfXW8cxD9y8VDEQ0ks4ssRw9I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708304583; c=relaxed/simple;
+	bh=/yWmIkPNVrHeu9cDAyvqnzafmZUGRZj+ZrcVjlEX4ts=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=jk9ZQCHxsf4338udxgL5ikMziEJTT8A7/ZGK6c9GSARFq5uZE4xHt2ZyfAs/FNt36Vt9B25Ntu/2sD+SW8mg3Z1aB1XUfQJpt37ClVv8+deop6+bVVaYlbuHHSFcGQc+C+XQwtqHS49SLGu0SwwJmsY+CU/jVTrfus8WzRDDRMc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=SDLSmo2w; arc=fail smtp.client-ip=40.107.94.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=R0OUR9MgwpqWSXyCFsX4ySL2PJEzZLNmYYgfwrbpqBqbngFkSSBZg/r1RLihl3uqp0OXlnnBNYyHDxk7HsOdpfEkwNH1oKds0r8kW+0vzmLBSFDCmb9Wh4+cRA7EPVNj/GJm1OId3mcXFp0nMQlt1A7xWSXbMX3hpQ/lKeQf7wrVzEDONfVvllt5bs7I3Rr+PTrWHulNPx6N8zRGSyN3VuY+UkHc6LDE1Zu5ey0eol4gXUUynRNvuVW3jcx43OwMaPdLSczbwPxnDEHtvgDQ2RQeYlEyZvfo2xzZ2IDS6YvHEXWApkhXzCEo0ItV/MSY70aj0ED3gKHOAIue52VmQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/yWmIkPNVrHeu9cDAyvqnzafmZUGRZj+ZrcVjlEX4ts=;
+ b=N0ZXeYgzgTLR37RCtpvILycXpVXvEVj4DJNHhmgPb/R0sDNYrZ7Tpw0PvMJRxN44jhri8Vp60sbT0vXIfphT+thRaTrzW3L4jPUTLCMKMKWu4ZcdjWLWksqElhilTbVz0pUrk4v+pZLV9bNCFxSYaEJGWCGbWdpUABpEG98uTPSU65kdQE79DtEBFzeMnfl2w3J5d/BiobtfPFOC9VxtFNTHrNhQj1ZcyedjxQDQWG1lUfvKLMM4XJsISm1H1B+/smqRrqXvTvkOV6ebI5yo1pwQIaCK5AsFh/FMjWOxfZbkSXovYlJUdwyJoPoHFGMILZ1rBWMQQetSnKSo7xU14Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/yWmIkPNVrHeu9cDAyvqnzafmZUGRZj+ZrcVjlEX4ts=;
+ b=SDLSmo2wKMy3G0wdRwRnhCraAm/jxNX8gnGggCpNAwm8tmbqI55M+kYHLffplKdw/UeL32Eleo3IxfFEDHxPkwDC4EbFXe8wNlT5w3Z7eM/orLAd0ZW6YMptEphytZLa5W5O+2b4MR+dceIMV5vPFgv8J7/Xln4hX9ezKy+BQrs=
+Received: from DM4PR12MB6351.namprd12.prod.outlook.com (2603:10b6:8:a2::6) by
+ MW6PR12MB8833.namprd12.prod.outlook.com (2603:10b6:303:23f::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.17; Mon, 19 Feb
+ 2024 01:02:58 +0000
+Received: from DM4PR12MB6351.namprd12.prod.outlook.com
+ ([fe80::1b3:8ca1:e95b:22e5]) by DM4PR12MB6351.namprd12.prod.outlook.com
+ ([fe80::1b3:8ca1:e95b:22e5%6]) with mapi id 15.20.7292.022; Mon, 19 Feb 2024
+ 01:02:58 +0000
+From: "Meng, Li (Jassmine)" <Li.Meng@amd.com>
+To: Lucas Lee Jing Yi <lucasleeeeeeeee@gmail.com>, "rafael@kernel.org"
+	<rafael@kernel.org>
+CC: "Yuan, Perry" <Perry.Yuan@amd.com>, "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+	"Deucher, Alexander" <Alexander.Deucher@amd.com>, "bp@alien8.de"
+	<bp@alien8.de>, "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, "Limonciello, Mario"
+	<Mario.Limonciello@amd.com>, "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+	"oleksandr@natalenko.name" <oleksandr@natalenko.name>,
+	"rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>, "Huang, Ray"
+	<Ray.Huang@amd.com>, "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+	"viresh.kumar@linaro.org" <viresh.kumar@linaro.org>, "x86@kernel.org"
+	<x86@kernel.org>
+Subject: RE: [PATCH V14 0/7] amd-pstate preferred core
+Thread-Topic: [PATCH V14 0/7] amd-pstate preferred core
+Thread-Index: AQHaSrao7cru5/jeHkCV0sSINFqsALDw90UAgAAEPICAAwoUAIAcbvkAgACUhQA=
+Date: Mon, 19 Feb 2024 01:02:58 +0000
+Message-ID:
+ <DM4PR12MB6351F882F2AC0AF0E4F2CA22F7512@DM4PR12MB6351.namprd12.prod.outlook.com>
+References:
+ <CAJZ5v0hRk3tME7yeC+1r0RM4-oPPrnSu2=JCsOshBbJp_Nq2Hg@mail.gmail.com>
+ <20240218161435.38312-1-lucasleeeeeeeee@gmail.com>
+In-Reply-To: <20240218161435.38312-1-lucasleeeeeeeee@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=c5a92805-7f4b-4203-85a0-0f6b08bc26ce;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2024-02-19T01:02:04Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR12MB6351:EE_|MW6PR12MB8833:EE_
+x-ms-office365-filtering-correlation-id: 693e7da5-3a40-4cf2-254c-08dc30e68336
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ YyYJId9hyxaMKtYGaGOHG/cY3uwBFMuA9YBQuY2RGY6RQ8/m0mPopcMmSr5baTKurcHv4/l3CgBFbW49DajDeMYzveMSbUtdkcVQgvhNHEq+BShKVQVy+qW4LjSCve3E8cwqjdSvrHcgiPHnXwELUfshW5vBwI13KFDsrSpYJj0lr46d8hm3+sd9DLZliLt0q9JrZPLAcarx8lVEicpTyRBsPec/rBG9fqZ2miqdyEJHsdz8YBHKGBVTVqvnxdyrR7kpiKIGs7OrrW63bLAeidxt8T3ZB6uqGxFkdesUa5fHmGVobsZK33ZjQkIR/6kvapH4uzowiIwiFibF+ZvO+4n+0bs3VP8iU9OHTgQGhDAlJ+KOkb1fv3TK7TYips8CSSdfAsolOjlTnwFORwWN26MWXoK4X0w1hTTC45TNKqnaXA5vOuR8cL5AzzQCzG4pKla5mUJEm6nsLQrNu0dVf7mgf4PrO8KGJ2dV/XAkvlT7Wjd7I8l53S6uYcfYyA+MlBYch/dVXBwsbIELY9WYXZcXbGOrUznuQvUAL6BQm2xAeX65go0gbWe7gghnyMKDGGPzlknCyjpbFKG+BdW34ZFst3GcFttqVFUmJtREHH94tBOo7p8o5GZVlp1+T4dz
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6351.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(136003)(366004)(396003)(39860400002)(376002)(230273577357003)(230922051799003)(1800799012)(64100799003)(186009)(451199024)(110136005)(316002)(54906003)(41300700001)(55016003)(7416002)(2906002)(66476007)(66556008)(66946007)(76116006)(5660300002)(4326008)(8676002)(8936002)(83380400001)(86362001)(52536014)(71200400001)(478600001)(9686003)(66446008)(38070700009)(53546011)(6506007)(7696005)(26005)(64756008)(38100700002)(33656002)(122000001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?BR8Pvx/EnunxnE6DKiuwNJQG2DL+jI4yvNC7nWKgD4sCHM2hK2CdTJfzZ4Vh?=
+ =?us-ascii?Q?9vZDrbceWsuh0eG57rQK+6gJRV38oldBBOzol8Gmw4It1P4VsC89UqXNj9uh?=
+ =?us-ascii?Q?DnGuP2lf5onrxE4wN8Zvij8f/CNWQyOp+r7h8bkXrIhwVln7uxq5iedVhKPa?=
+ =?us-ascii?Q?4qdvwV1pKeVe8th7WXQL62Mr61ugNHpVFRpd9RJaAXAYT9Kr1qzAJ43Kn5Wc?=
+ =?us-ascii?Q?EOIHga/YduZOwnXlCvIDrTQCmYCXcCRFXA2S+ua8Vw6hbUlkdnQsxp0DIPtK?=
+ =?us-ascii?Q?w5R8OszIRvgkMFTKGENZ+1iaC3dBa13RDxnbOgXnLpYujCLffl9QDL8ufcDp?=
+ =?us-ascii?Q?T36ROfxtXw1e0kArFddd4jHzViTeES+ZDf+RniUXOfR9oeQEuuXVfq1Wfyxq?=
+ =?us-ascii?Q?NwOq0kNa5CQM64B2/sTAQwn+zNlHfsMaLia98uvbEggASp33oQOKzr0LmNQo?=
+ =?us-ascii?Q?wPCAp4e0fF6TNsA5FOnuanUqnOamZXeE74eA2zo6PYSg2umJZNb/t0T2YY0c?=
+ =?us-ascii?Q?j5iI6LSUH0ICcz4ORbJLt37gJ0ToQkgs9unAKtfLHmguGozVXR1uxa25WEar?=
+ =?us-ascii?Q?iMII6G3xTLAgPzhYpKNg+6RaHA0YA/5RA97rvcYhRczfBU9zZwRUkKgS7Jss?=
+ =?us-ascii?Q?G46e6dvrivq02DhyQogjyrRi4cviaeAoKdamz0iZKpxnKcXorRXxMnvY1MF4?=
+ =?us-ascii?Q?H5AjoPkB802z5q5u0TRq9p+w1Gw9bbwM+LIJjH20NtUYAnmQG4FdQizzoi1i?=
+ =?us-ascii?Q?pAjgSXbIEnP1TWDIlwC0L7RT1Ciwx77ShOKtFrY9br+3j+PqY6giQLdND7yW?=
+ =?us-ascii?Q?Gz6t/YZ30NKGwVlGvSN7YDD8Bc1fKeRYNWw/3Os0klBoV9oTwAUMHPrqf24w?=
+ =?us-ascii?Q?i1TLWG4XNatJECkf5Y6DIAtNqD2oGkjcjkyjzl8b22Fpj1NJqK1+iIJJfYDu?=
+ =?us-ascii?Q?Ou4eVzQgNmNBnZpLYMMcA2ZQYaFvAHLAgVFh3LcLcfVDdBD5ufuQ/x52vivA?=
+ =?us-ascii?Q?smPzE33UHQ4IEbqVmAP50xc4q7BrbH4qDFIDWShLwH+HgH7GMQtDBWdpnY4m?=
+ =?us-ascii?Q?0FNapaaeE90xhDw970zVb0iY2xQSQ3Q4j/G0uI2aRbiIljVcjZZZ67FmcGw9?=
+ =?us-ascii?Q?ShFW1hB7xqa/pZMXYW+2jyXUB2wI61z9evBw2wwWHIc0vDryijMp9Cm7HOe8?=
+ =?us-ascii?Q?ZFCE+aiv4bmfAi2oYu/yeKSYi53zjF/4yWaa13HES6AZECuqSMjPYcEl1zVp?=
+ =?us-ascii?Q?CUaiI7yf7gbgmqG+6x1Vg3BVoZ00OTWxB5xArdc/BgkQhIN6I8qNArmej57s?=
+ =?us-ascii?Q?Z5o5Je+SCQ1sOrFG1OH5i07u07HTd111w3VmmJt9YClESln10fMoLl5sN/8F?=
+ =?us-ascii?Q?YPWHUUG+J5lLKScTvMPd8YvOfY9PrV9ySn5OuZTuutMsM3Z1buPRq8eAXxmY?=
+ =?us-ascii?Q?BJhkn19oYlTHmDH1qDaVNtBFlXueUIR/pEVNOaCKRhbWhUEeLqpLLUTpWlni?=
+ =?us-ascii?Q?eFcZbd4TJWM3rYUTAGI1+nvgrFKuEm8CCgIX92xfPi8Yun1cS80rsluEHNSS?=
+ =?us-ascii?Q?EsFYc3/bvSDgFyco8r4=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: interconnect: Add Qualcomm SM7150 DT
- bindings
-Content-Language: en-US
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
- andersson@kernel.org, konrad.dybcio@linaro.org, djakov@kernel.org,
- robh@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
-Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240218183239.85319-1-danila@jiaxyga.com>
- <20240218183239.85319-2-danila@jiaxyga.com>
- <d3a4c6f9-e24a-446c-acbf-75519f6782fb@linaro.org>
-From: Danila Tikhonov <danila@jiaxyga.com>
-In-Reply-To: <d3a4c6f9-e24a-446c-acbf-75519f6782fb@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Authentication-Results: smtp51.i.mail.ru; auth=pass smtp.auth=danila@jiaxyga.com smtp.mailfrom=danila@jiaxyga.com
-X-Mailru-Src: smtp
-X-7564579A: B8F34718100C35BD
-X-77F55803: 4F1203BC0FB41BD9001F8F2F6BAD2021A4088691FB60B4B8D975C14E9881615F00894C459B0CD1B92394FC7D9BFA397E70880960CAF89B404B673AB2AD4824D32C116307F3699030E2602FFE9E909B31
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE74AE62C7A8488879AEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637560334CFC131571A8638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D8414839C36918184D58A440450CF716AFA8D91C1CAC9AE40FCC7F00164DA146DAFE8445B8C89999728AA50765F7900637BA939FD1B3BAB99B389733CBF5DBD5E9C8A9BA7A39EFB766F5D81C698A659EA7CC7F00164DA146DA9985D098DBDEAEC8989FD0BDF65E50FBF6B57BC7E6449061A352F6E88A58FB86F5D81C698A659EA73AA81AA40904B5D9A18204E546F3947CBFD98ABA943BD70B6136E347CC761E074AD6D5ED66289B523666184CF4C3C14F6136E347CC761E07725E5C173C3A84C3DAEA9A8D61B93628BA3038C0950A5D36B5C8C57E37DE458B330BD67F2E7D9AF16D1867E19FE14079C09775C1D3CA48CF17B107DEF921CE791DD303D21008E298D5E8D9A59859A8B6B372FE9A2E580EFC725E5C173C3A84C3677AC51C039AA0BA35872C767BF85DA2F004C90652538430E4A6367B16DE6309
-X-C1DE0DAB: 0D63561A33F958A59B276F08D6B4F3BF5002B1117B3ED696B42F3BCFECD18A6E1A1B8FE1FED62FE8823CB91A9FED034534781492E4B8EEAD4ECBDE8281F904F9BDAD6C7F3747799A
-X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CF4597CC689EA0662196306A66DC0F9619D43E0CF7FD10A0E65544EEC935690B21673DC415E80A8BD934E84B500378195F27ED41A69D94F0FCC6CE93AC2CCEFDBFFAAA099578CB8531AF108DC32EA72A8402C26D483E81D6BE72B480F99247062FEE42F474E8A1C6FD34D382445848F2F3
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2bioj3ZJ49a6yxuv9hg0w1JFMKA==
-X-Mailru-Sender: 9EB879F2C80682A09F26F806C7394981FC72C712BCB9BF3E9B464708D7791FD718B604B8A66A9623E1A6888D7145A9F92C62728BC403A049225EC17F3711B6CF1A6F2E8989E84EC137BFB0221605B344978139F6FA5A77F05FEEDEB644C299C0ED14614B50AE0675
-X-Mras: Ok
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6351.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 693e7da5-3a40-4cf2-254c-08dc30e68336
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Feb 2024 01:02:58.1514
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pNWXtYPb3LSqewl561V5cuCc1BDullAALoeJ1jK/yojbBBi79xwIlGOpWevmlYeBElOV1/LhbvV0LUPbvTY6vw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB8833
 
-I removed compatible duplicates from qcom,rpmh-common.yaml. No more
-warnings. I also followed your advice regarding the name of the child
-node. Maybe something else?
+[AMD Official Use Only - General]
 
----
-Best wishes
-Danila
+Hi :
+Thanks.
+I will check this issue and fix it as soon as possible.
 
-On 2/18/24 21:52, Krzysztof Kozlowski wrote:
-> On 18/02/2024 19:32, Danila Tikhonov wrote:
->> The Qualcomm SM7150 platform has several bus fabrics that could be
->> controlled and tuned dynamically according to the bandwidth demand.
->>
->> Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
->> ---
->>   .../interconnect/qcom,sm7150-rpmh.yaml        |  88 ++++++++++
->>   .../interconnect/qcom,sm7150-rpmh.h           | 150 ++++++++++++++++++
->>   2 files changed, 238 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm7150-rpmh.yaml
->>   create mode 100644 include/dt-bindings/interconnect/qcom,sm7150-rpmh.h
->>
->> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sm7150-rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sm7150-rpmh.yaml
->> new file mode 100644
->> index 000000000000..604822ed4adc
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/interconnect/qcom,sm7150-rpmh.yaml
->> @@ -0,0 +1,88 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/interconnect/qcom,sm7150-rpmh.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Qualcomm RPMh Network-On-Chip Interconnect on SM7150
->> +
->> +maintainers:
->> +  - Danila Tikhonov <danila@jiaxyga.com>
->> +
->> +description: |
->> +  RPMh interconnect providers support system bandwidth requirements through
->> +  RPMh hardware accelerators known as Bus Clock Manager (BCM).
->> +
->> +  See also:: include/dt-bindings/interconnect/qcom,sm7150-rpmh.h
->> +
->> +allOf:
->> +  - $ref: qcom,rpmh-common.yaml#
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - qcom,sm7150-aggre1-noc
->> +      - qcom,sm7150-aggre2-noc
->> +      - qcom,sm7150-compute-noc
->> +      - qcom,sm7150-config-noc
->> +      - qcom,sm7150-dc-noc
->> +      - qcom,sm7150-gem-noc
->> +      - qcom,sm7150-mc-virt
->> +      - qcom,sm7150-mmss-noc
->> +      - qcom,sm7150-system-noc
-> I don't see how you resolved the warning we talked about on IRC.
+> -----Original Message-----
+> From: Lucas Lee Jing Yi <lucasleeeeeeeee@gmail.com>
+> Sent: Monday, February 19, 2024 12:11 AM
+> To: rafael@kernel.org
+> Cc: Yuan, Perry <Perry.Yuan@amd.com>; Du, Xiaojian
+> <Xiaojian.Du@amd.com>; Deucher, Alexander
+> <Alexander.Deucher@amd.com>; bp@alien8.de; Sharma, Deepak
+> <Deepak.Sharma@amd.com>; Meng, Li (Jassmine) <Li.Meng@amd.com>;
+> linux-acpi@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
+> kselftest@vger.kernel.org; linux-pm@vger.kernel.org; Limonciello, Mario
+> <Mario.Limonciello@amd.com>; Fontenot, Nathan
+> <Nathan.Fontenot@amd.com>; oleksandr@natalenko.name;
+> rafael.j.wysocki@intel.com; Huang, Ray <Ray.Huang@amd.com>; Huang,
+> Shimmer <Shimmer.Huang@amd.com>; skhan@linuxfoundation.org;
+> viresh.kumar@linaro.org; x86@kernel.org
+> Subject: Re: [PATCH V14 0/7] amd-pstate preferred core
 >
-> Best regards,
-> Krzysztof
+> Caution: This message originated from an External Source. Use proper
+> caution when opening attachments, clicking links, or responding.
 >
-
+>
+> Dear all,
+> I have found an issue with the patchset when applying on 6.7, leading to =
+a
+> large degradation in performance.
+>
+> On my 7840HS on *STOCK* 6.7 highest_perf is reported as 196, not 166 as
+> assumed in the patchset. Applying the patchset causes highest_perf to be
+> misreported and hence a misreported maximum frequency as well, at
+> 4.35GHz instead of 5.14GHz, leading to the degradation in performance.
+> However, On my 5950X, highest_perf is indeed reported as 166 before and
+> after applying the patchset.
+>
+> Hence, I propose the following patch (should be attached).
+>
+> I do apologize for any mistakes as I am new to this and this is my first =
+email on
+> the mailing list.
+>
+> Cheers!
+> Lucas
 
