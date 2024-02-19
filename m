@@ -1,38 +1,38 @@
-Return-Path: <linux-pm+bounces-4079-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4080-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B82A885A783
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 16:36:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 960CA85A785
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 16:36:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7538D28419B
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 15:36:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C341C1C21FC9
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Feb 2024 15:36:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BED1383AB;
-	Mon, 19 Feb 2024 15:36:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C175539AD5;
+	Mon, 19 Feb 2024 15:36:53 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D70239840;
-	Mon, 19 Feb 2024 15:36:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BCF039840;
+	Mon, 19 Feb 2024 15:36:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708357011; cv=none; b=VWpOOD3o48TriaTpSRWodopJGtwXBCKas1RIf+kC5uKp3ciyh19wAPBUG/YRvHhl2mL3giVz351KfyPS4rKQpJTTaX8sRBadUom39OMINnVj6XY6LajSOfhCl733KbmMoUEEFkbsmcbvVs4o8ad38dFzY95oR8grf+OsjZxPwME=
+	t=1708357013; cv=none; b=mm+s3jUWNcAoljFcVThBGM4EyljpuPEXzPtc9X//SsnIUf9PEpjll1C3z7KbBIqiamVTVHUXZ6oGvXIMRkdm/wDpc9q2mrSHImMo1eVBE3EoPK7Ndf0Al1icrj6qxGGjGe0PYtUOJnSllxKrnCqBWQfdb4aAqAvDVmh2c7Rt34A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708357011; c=relaxed/simple;
-	bh=FnjwIrCiUegrhGJ9QPXF/0eEn7GLU+V188gyihnPQWY=;
+	s=arc-20240116; t=1708357013; c=relaxed/simple;
+	bh=/MEcMiGKCbf3yYUzt/GsZWLM7re4x3gIcacqQZ5kJmM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=uFZN3X840gUoVMaFu1jOJ3wykJDCLZJqthiIzBKd9MPMVcBSj1IRupByiI7v8rYSPavQAC799eoDp8xdEirq/s4EXLkqLEg/TsmK77OFHdolMuWmsa0szFJhi3cxEamFvY1o4DLoOB+o/kEUwXhqMcAfWUNeWpG+tNAu368Ey2o=
+	 MIME-Version; b=O8Ag167fITkGOBQ0d5xwh1dOl0R+yZP7OAdxEDjgQc5WivM6FvXIKVlVFc+1H9mTATIhcSwmZtTOZZ/wdO3D473PoBhndYGNZ4XcemKW70/VTBKA5ZuIjZfPILwMsv0rqJkg0benzXuVASXuhrupem6ZApJezBZDIIgxB66JhlA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A031A1007;
-	Mon, 19 Feb 2024 07:37:28 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5A7911042;
+	Mon, 19 Feb 2024 07:37:31 -0800 (PST)
 Received: from donnerap.arm.com (donnerap.manchester.arm.com [10.32.100.28])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6C3A03F762;
-	Mon, 19 Feb 2024 07:36:46 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 274EC3F762;
+	Mon, 19 Feb 2024 07:36:49 -0800 (PST)
 From: Andre Przywara <andre.przywara@arm.com>
 To: Vasily Khoruzhick <anarsoul@gmail.com>,
 	Yangtao Li <tiny.windzz@gmail.com>,
@@ -53,9 +53,9 @@ Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
 	devicetree@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-sunxi@lists.linux.dev
-Subject: [PATCH v5 1/7] soc: sunxi: sram: export register 0 for THS on H616
-Date: Mon, 19 Feb 2024 15:36:33 +0000
-Message-Id: <20240219153639.179814-2-andre.przywara@arm.com>
+Subject: [PATCH v5 2/7] dt-bindings: thermal: sun8i: Add H616 THS controller
+Date: Mon, 19 Feb 2024 15:36:34 +0000
+Message-Id: <20240219153639.179814-3-andre.przywara@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20240219153639.179814-1-andre.przywara@arm.com>
 References: <20240219153639.179814-1-andre.przywara@arm.com>
@@ -67,98 +67,93 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Allwinner H616 SoC contains a mysterious bit at register offset 0x0
-in the SRAM control block. If bit 16 is set (the reset value), the
-temperature readings of the THS are way off, leading to reports about
-200C, at normal ambient temperatures. Clearing this bits brings the
-reported values down to the expected values.
-The BSP code clears this bit in firmware (U-Boot), and has an explicit
-comment about this, but offers no real explanation.
+From: Martin Botka <martin.botka@somainline.org>
 
-Experiments in U-Boot show that register 0x0 has no effect on the SRAM C
-visibility: all tested bit settings still allow full read and write
-access by the CPU to the whole of SRAM C. Only bit 24 of the register at
-offset 0x4 makes all of SRAM C inaccessible by the CPU. So modelling
-the THS switch functionality as an SRAM region would not reflect reality.
+This controller is similar to the H6, but covers four sensors and uses
+slightly different calibration methods.
+Also the H616 requires to poke a bit in the SYS_CFG register range for
+correct operation, so add a phandle property to point there.
 
-Since we should not rely on firmware settings, allow other code (the THS
-driver) to access this register, by exporting it through the already
-existing regmap. This mimics what we already do for the LDO control and
-the EMAC register.
-
-To avoid concurrent accesses to the same register at the same time, by
-the SRAM switch code and the regmap code, use the same lock to protect
-the access. The regmap subsystem allows to use an existing lock, so we
-just need to hook in there.
-
+Signed-off-by: Martin Botka <martin.botka@somainline.org>
 Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/soc/sunxi/sunxi_sram.c | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ .../thermal/allwinner,sun8i-a83t-ths.yaml     | 34 +++++++++++++------
+ 1 file changed, 23 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/soc/sunxi/sunxi_sram.c b/drivers/soc/sunxi/sunxi_sram.c
-index 4458b2e0562b0..6eb6cf06278e6 100644
---- a/drivers/soc/sunxi/sunxi_sram.c
-+++ b/drivers/soc/sunxi/sunxi_sram.c
-@@ -287,6 +287,7 @@ EXPORT_SYMBOL(sunxi_sram_release);
- struct sunxi_sramc_variant {
- 	int num_emac_clocks;
- 	bool has_ldo_ctrl;
-+	bool has_ths_offset;
- };
+diff --git a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
+index 9b2272a9ec15d..6b3aea6d73b07 100644
+--- a/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
++++ b/Documentation/devicetree/bindings/thermal/allwinner,sun8i-a83t-ths.yaml
+@@ -21,6 +21,7 @@ properties:
+       - allwinner,sun50i-a100-ths
+       - allwinner,sun50i-h5-ths
+       - allwinner,sun50i-h6-ths
++      - allwinner,sun50i-h616-ths
  
- static const struct sunxi_sramc_variant sun4i_a10_sramc_variant = {
-@@ -308,8 +309,10 @@ static const struct sunxi_sramc_variant sun50i_a64_sramc_variant = {
+   clocks:
+     minItems: 1
+@@ -50,6 +51,10 @@ properties:
+   nvmem-cell-names:
+     const: calibration
  
- static const struct sunxi_sramc_variant sun50i_h616_sramc_variant = {
- 	.num_emac_clocks = 2,
-+	.has_ths_offset = true,
- };
- 
-+#define SUNXI_SRAM_THS_OFFSET_REG	0x0
- #define SUNXI_SRAM_EMAC_CLOCK_REG	0x30
- #define SUNXI_SYS_LDO_CTRL_REG		0x150
- 
-@@ -318,6 +321,8 @@ static bool sunxi_sram_regmap_accessible_reg(struct device *dev,
- {
- 	const struct sunxi_sramc_variant *variant = dev_get_drvdata(dev);
- 
-+	if (reg == SUNXI_SRAM_THS_OFFSET_REG && variant->has_ths_offset)
-+		return true;
- 	if (reg >= SUNXI_SRAM_EMAC_CLOCK_REG &&
- 	    reg <  SUNXI_SRAM_EMAC_CLOCK_REG + variant->num_emac_clocks * 4)
- 		return true;
-@@ -327,6 +332,20 @@ static bool sunxi_sram_regmap_accessible_reg(struct device *dev,
- 	return false;
- }
- 
-+static void sunxi_sram_lock(void *_lock)
-+{
-+	spinlock_t *lock = _lock;
++  allwinner,sram:
++    maxItems: 1
++    description: phandle to device controlling temperate offset SYS_CFG register
 +
-+	spin_lock(lock);
-+}
-+
-+static void sunxi_sram_unlock(void *_lock)
-+{
-+	spinlock_t *lock = _lock;
-+
-+	spin_unlock(lock);
-+}
-+
- static struct regmap_config sunxi_sram_regmap_config = {
- 	.reg_bits       = 32,
- 	.val_bits       = 32,
-@@ -336,6 +355,9 @@ static struct regmap_config sunxi_sram_regmap_config = {
- 	/* other devices have no business accessing other registers */
- 	.readable_reg	= sunxi_sram_regmap_accessible_reg,
- 	.writeable_reg	= sunxi_sram_regmap_accessible_reg,
-+	.lock		= sunxi_sram_lock,
-+	.unlock		= sunxi_sram_unlock,
-+	.lock_arg	= &sram_lock,
- };
+   # See Documentation/devicetree/bindings/thermal/thermal-sensor.yaml for details
+   "#thermal-sensor-cells":
+     enum:
+@@ -65,6 +70,7 @@ allOf:
+               - allwinner,sun20i-d1-ths
+               - allwinner,sun50i-a100-ths
+               - allwinner,sun50i-h6-ths
++              - allwinner,sun50i-h616-ths
  
- static int __init sunxi_sram_probe(struct platform_device *pdev)
+     then:
+       properties:
+@@ -82,6 +88,17 @@ allOf:
+         clock-names:
+           minItems: 2
+ 
++  - if:
++      not:
++        properties:
++          compatible:
++            contains:
++              const: allwinner,sun50i-h616-ths
++
++    then:
++      properties:
++        allwinner,sram: false
++
+   - if:
+       properties:
+         compatible:
+@@ -101,17 +118,12 @@ allOf:
+           const: 1
+ 
+   - if:
+-      properties:
+-        compatible:
+-          contains:
+-            enum:
+-              - allwinner,sun8i-h3-ths
+-              - allwinner,sun8i-r40-ths
+-              - allwinner,sun20i-d1-ths
+-              - allwinner,sun50i-a64-ths
+-              - allwinner,sun50i-a100-ths
+-              - allwinner,sun50i-h5-ths
+-              - allwinner,sun50i-h6-ths
++      not:
++        properties:
++          compatible:
++            contains:
++              enum:
++                - allwinner,sun8i-a83t-ths
+ 
+     then:
+       required:
 -- 
 2.25.1
 
