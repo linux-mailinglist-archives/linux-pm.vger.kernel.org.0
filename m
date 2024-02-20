@@ -1,262 +1,174 @@
-Return-Path: <linux-pm+bounces-4104-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4105-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D819185B3DB
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 08:23:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FEEB85B422
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 08:43:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 082251C21A0A
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 07:23:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C22741C225F1
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 07:43:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08E075A4CB;
-	Tue, 20 Feb 2024 07:23:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D4B25A795;
+	Tue, 20 Feb 2024 07:43:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="c4PngH8T"
+	dkim=pass (2048-bit key) header.d=xiaomi-corp-partner-google-com.20230601.gappssmtp.com header.i=@xiaomi-corp-partner-google-com.20230601.gappssmtp.com header.b="Dr1/KEpu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2075.outbound.protection.outlook.com [40.107.93.75])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E10105A781;
-	Tue, 20 Feb 2024 07:23:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.75
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708413793; cv=fail; b=eZAsTLFcfw5fmRO0SWTF6wiOSKRROuS5O8VU9o/gv2vLNow4q35FEviUZq0DH1gavgcQeROuri2HNMekWWkzU1RsnUcV6mWM0mFs4tT+Y7bAm5Xz/+smwyCmttA2XRbyhC7Ps6GgarUGMaE8rHlFyKvsr05BiMjVsRcMO8eK8Wo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708413793; c=relaxed/simple;
-	bh=kadGgJtVhLaCj25u4P41WccEyOFrecEaPui9wSEzivI=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=HldGrXyUfp4EBVPLtqziV346uRWwdtZe/kK3TEvqis89HWhdKHfOmdfzgij+btEaw6zJDTUImpn4OqgpuH0tg8+HnxVjpsIPiazBByTYGFFExWxZltoyOwJpC7JRgMFAM3tSzlkyR2RMXo/R4lW9eq4TDH9rhSceX3WDFHVvU2w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=c4PngH8T; arc=fail smtp.client-ip=40.107.93.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HjOHyUgIJPjS6VCE1kgzdeUcItMa+ypfSrvFr/2ezox32eePlkqIbVDH0mizJRi+XFh3jFFRpUFDZvJBL7/K64pNdfsTEgIFzDH35Y6zD7Y4YcC9eYNnLXnnZyGs3x5x95kBYxgS+idz/ToqdD0zGF4CC7P+aNKhzFO//KvK2kfB2slo/5o/k8TorAMWQV+sNFIC77AB5H0uKBAhxi8UAvlMZ7Tzkcy7C24s+4WtrccE1d4RPcq3T6AllHoynYYHQZ+6UgOYzxv2SFkYXWdkJg+DzKPS0v9iqQJ70pPdC91AVHTWU3OayGNBVi+lWwcDjzJZF3u3/4EWhTn9vVYWWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=U98VeIF5LkYwlQVGLh1sNZtj/ozVgnb76RfPpJFbczg=;
- b=Uv5JHwrByPtpCdomQzbxZ99A77s7qHCaY1QsHrY/9EVE95k4CIgS5oAJtvSW8byO6t9MSAdBuQr1EdY5b+8N6xOZjvYoi4BPioGI6ntYqBGndbP2Lmjp0FAMEID0DJ8MY3uVYpBsPbVo12joIDQtKZosOGh4A/+PUcv/0vsMP6vBOH6L2TUOh0nULTXVJwqxNVg36cFY8N0XlRzT1mcuIQTpYxByzCM8tNZOixEkq0UJEnDkExfXpxHb85NxtI7ynHwmoHB4mjxEX02bgj7aLcn57zWWNLXKHsnEg2pEBCBsSQeZmydnwCDF4c8T6wPlGFVKoRyAkWCO2+mqrGOtsQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U98VeIF5LkYwlQVGLh1sNZtj/ozVgnb76RfPpJFbczg=;
- b=c4PngH8TEUK9BuSwMlpkQvlx7Grcv1pzmPNhtwz8MZbs3z+16GoOztTS/O10a95jY1Kvq4T7m9wuJuLyVTGSqxZ2JcQPQrmj3o8AXw76osnZXSplytsSWkDWXzH1oeDVXCLQLML3EIRN7zHorwS4FSjOx2aUNHEpz1w9/npIdWU=
-Received: from DM4PR12MB6351.namprd12.prod.outlook.com (2603:10b6:8:a2::6) by
- PH8PR12MB6722.namprd12.prod.outlook.com (2603:10b6:510:1cd::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.19; Tue, 20 Feb
- 2024 07:23:09 +0000
-Received: from DM4PR12MB6351.namprd12.prod.outlook.com
- ([fe80::1b3:8ca1:e95b:22e5]) by DM4PR12MB6351.namprd12.prod.outlook.com
- ([fe80::1b3:8ca1:e95b:22e5%6]) with mapi id 15.20.7292.022; Tue, 20 Feb 2024
- 07:23:09 +0000
-From: "Meng, Li (Jassmine)" <Li.Meng@amd.com>
-To: Lucas Lee Jing Yi <lucasleeeeeeeee@gmail.com>, "rafael@kernel.org"
-	<rafael@kernel.org>
-CC: "Yuan, Perry" <Perry.Yuan@amd.com>, "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-	"Deucher, Alexander" <Alexander.Deucher@amd.com>, "bp@alien8.de"
-	<bp@alien8.de>, "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, "Limonciello, Mario"
-	<Mario.Limonciello@amd.com>, "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-	"oleksandr@natalenko.name" <oleksandr@natalenko.name>,
-	"rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>, "Huang, Ray"
-	<Ray.Huang@amd.com>, "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
-	"viresh.kumar@linaro.org" <viresh.kumar@linaro.org>, "x86@kernel.org"
-	<x86@kernel.org>
-Subject: RE: [PATCH] [PATCH] amd_pstate: fix erroneous highest_perf value on
- some CPUs
-Thread-Topic: [PATCH] [PATCH] amd_pstate: fix erroneous highest_perf value on
- some CPUs
-Thread-Index: AQHaYoWn0TWdRH4q1EizfAdgioooG7ES1hWg
-Date: Tue, 20 Feb 2024 07:23:09 +0000
-Message-ID:
- <DM4PR12MB63518FB49F94A8445D32780AF7502@DM4PR12MB6351.namprd12.prod.outlook.com>
-References:
- <CAJZ5v0hRk3tME7yeC+1r0RM4-oPPrnSu2=JCsOshBbJp_Nq2Hg@mail.gmail.com>
- <20240218161435.38312-1-lucasleeeeeeeee@gmail.com>
- <20240218161435.38312-2-lucasleeeeeeeee@gmail.com>
-In-Reply-To: <20240218161435.38312-2-lucasleeeeeeeee@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=8fdc9162-ecd9-4e7d-9570-7dc9c919dcee;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2024-02-20T07:22:30Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR12MB6351:EE_|PH8PR12MB6722:EE_
-x-ms-office365-filtering-correlation-id: 57c22e72-c87a-42b7-aeb0-08dc31e4ca09
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info:
- 56d2scx72z5zsmDTev9Q2dCvDNaPGh+ADPEY7Ft6MRJfrQ/76x19CIrsEv/Spz8akSzoPGifXWZMEKbYtdEhPX8TSFaAcci4H7TMA7zhisKZMYQnutUnotRJZMho33zrsLN1TWd5UiUYGCMMSbEdHU5tEN1vA0jMERUtkRjsl9TmusaK4lrqZPVvwu4cNHvJDcl0kyu6P8VyLocS8/XfThpAciGNsyu9EOqlc1HQ70gTtJK8EHjip+idmRPN6JbuXf3zNRzK4EP+HNFRGQveIKJ54uAxA82KJ8PglKFu8TrjaS0AsCbNgG38aMZ1Xt2EJ7Ov7rdjY1411wrXtvFctfJ59GHjs6lF7uhAMkU+CLnwXh3kFqV8fNjMO6Selq+JVcnLzoyjy821nugpywTPZe+B+Y+aL0ORx4AXLZ+X1W34pQ0Nt+v4VoL7mEyheOqPYErtKf3GtlzlsFS5Z0/wjKOV3fz3OrrWerk5ZCmHIzcnraSeP5A1kOh7PklTJSs9ZMHU87riHTOKnwIVujauBCz2wCF6Qw4yG7WoJwFpv5hkyZP2Agb7RzKRw7f9mQKCVj45fLYwZKVgDy+11GeoySlkBzsi2mHeJIIk57WeWuq6xlpLxcwbvXpwpFX0qWBZ
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6351.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(230273577357003)(38070700009);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?IRVxHL8YIQdK3xGSFYWUSbPa9nHX/UXZv2wx4MvBggDx7Cm+pBse/R3iuSHv?=
- =?us-ascii?Q?2OXldHT2+mHCtaoPr1Fsxw3dDZFpb3uaR8V1EHWmbL3+XPh7mkuglylDsgvm?=
- =?us-ascii?Q?42uwb5aEP9rr95gPn+1JvPUatAuuT3bflUDXxE5KMFxGVUlTQ5k+toc7FOS8?=
- =?us-ascii?Q?B//X4U3A4QYLs5Chf0/4KP8bBMRYICiATShtcjbL8oRMlGHObfW1h4RF5N1k?=
- =?us-ascii?Q?cXXzIXVw4yVqSjjVsFwLi2s47LDgglsh4GNvsn4oZ3ZLkfQbr3GOBulQiFLH?=
- =?us-ascii?Q?MrDmXRF+S4j2ZvkacsaXeaEo17pnhJOoxhphD5eP0hrBAvho1SgshdWPmHC9?=
- =?us-ascii?Q?vZOG3VWKBsPpDcjrdPN/o2zE9J89RfZ9lotGb8uvnp7WmQeNueNjbgARwQee?=
- =?us-ascii?Q?1skrm97oLpM5OdfhnloP6TUQ6QcQRIt9UQaLd2oiKGr052S6U6ipFx/oo+xD?=
- =?us-ascii?Q?k6VCbNOVhZtlBtzOi96eOatAJZSpGrMNAe0vNiZZt2l29Id/+e9QhIyiw5DI?=
- =?us-ascii?Q?iDe1u3bTDwegepEDkK8F2Wo/OHz4reDnHXcXww0UOnI/oNi6UiGFsJ8oNdd2?=
- =?us-ascii?Q?OMGwBojxpBIoqPCBL+9ip9fdFfeJLjLTgrCp+iYG175ZdGtL0TUZfHdA1WMC?=
- =?us-ascii?Q?FT41NolloTwn48Z4vLwY/WgMQ0H+yJKTQB0oOGHTarkqLuednIgVHCOQq80/?=
- =?us-ascii?Q?WsQGD3+LcjRfr5pop9ukK2cS4bMTi4NAnN3xAbh/Qz9zwHcC4mN/MK8ol9uw?=
- =?us-ascii?Q?I9WtaG8+W5r6boE4J0lfE/kubZxW+jUwytwyClc2y6IokgaMXiRIJNyXwtdk?=
- =?us-ascii?Q?gOE3qSb7Jt5V0de7tROl6+E1NKs/a014mFlwPVBeVi+rletj8p167KLKorRB?=
- =?us-ascii?Q?+n8Im9ECg6OPvStsC/BhAW50okEVLEKxluQt+HuYUCtObDa60hjy9XtTorz7?=
- =?us-ascii?Q?FyfNBOw8WSZ/CTIVxkWUHW6mflzwk1hXiRmY18Ta607BimBq0Lwm9huuoOOG?=
- =?us-ascii?Q?eM9J85LbCOGCjECLqHZLCyWLxy3ca3faONvv3YQ068KYQoSJee62nIAaT3In?=
- =?us-ascii?Q?LC2+TTofQhUnKYMELIK5gvTWMiiDnROzPe1ZJ9yOlg3s04MprYPp8l9t15Ri?=
- =?us-ascii?Q?qdZ+AeTsYK9JKzwzBodp/ahJXBDiWOuG8jZJvb2aKmMhoNzsa+mSVy7Jvf7d?=
- =?us-ascii?Q?WA9NPdUpTnHPv+t3nYiYCUqB0e4VJtQqAb5b7KMPIliUyRCJ7c3vCEK4GUtu?=
- =?us-ascii?Q?iAEwD809uyeHneVq2IGpMqnh+p6bggAhPYsCX/AlmsIT7/UTR3YBRNKbBA92?=
- =?us-ascii?Q?31DLU5eof6x/FyGeFfcuDno3xDY+ddKrK/dCmEPXbIkleEvSPwatf79Gt9wB?=
- =?us-ascii?Q?KdSOtorNe3C8/F7i4HHirBemIIjKO4nh4tDFdTUHcJoGwvBTBhB2xi9SD+KK?=
- =?us-ascii?Q?emCbJdnRDla2D2i3f8A2Yn4jnLzgEc3lVQcM9udlU3IDYq7gUDtHT7ZRKBqm?=
- =?us-ascii?Q?NO9GGI/A3tC1++4cOwbt18lLiu2BuClM57u7w0qWQUoSvpIU5JYH7PD2wPyD?=
- =?us-ascii?Q?4Cx1M/NNPGdV7Ev46NU=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B52C45A0F6
+	for <linux-pm@vger.kernel.org>; Tue, 20 Feb 2024 07:43:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708414996; cv=none; b=N1X+fJlg6wOl379f5mExfVkMXOpDOPcIR6b5OnVXFg/hsRUWidl3KVC/8ywQUegrvjmRrsFafWFUI5G3//8rPWhVnMxXENRWEux6rPoA3RoywyoB6p8qxnFD8IR21bIimYEw+fIKdPChyaRQ0GApbKoT7oUy6U2f6Sd36mLg6e4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708414996; c=relaxed/simple;
+	bh=rv5wc++x90d6SuMHSDmSnfkE40CpmmCdSITZKOMxFeU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P5DORHNvQoLv6MQ5SwtBW1rBgW8H3sMewOwhTGXcTsWT8lCG9iGRnxAEGIV41l2UZzkaTe3dWgyh0ryn04VIqAokjil+OVVrRlFKG6aGC2ur2DRvxGYnAyllNFvA+FAyu+WoyEwOcriAdncC/mSDdHedzvYkTb4SAV2ED+Nu3hw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xiaomi.corp-partner.google.com; spf=pass smtp.mailfrom=xiaomi.corp-partner.google.com; dkim=pass (2048-bit key) header.d=xiaomi-corp-partner-google-com.20230601.gappssmtp.com header.i=@xiaomi-corp-partner-google-com.20230601.gappssmtp.com header.b=Dr1/KEpu; arc=none smtp.client-ip=209.85.219.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xiaomi.corp-partner.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xiaomi.corp-partner.google.com
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-dc6e080c1f0so4664998276.2
+        for <linux-pm@vger.kernel.org>; Mon, 19 Feb 2024 23:43:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=xiaomi-corp-partner-google-com.20230601.gappssmtp.com; s=20230601; t=1708414993; x=1709019793; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kzt93vSNIrGDzyg1PIPtvFGU0T9v/8rtMnoi2x6SDHA=;
+        b=Dr1/KEpu+xeWthawGJ086i63x4PcgCnNQXLgRMW35w4jHUa+vV9x/60ckV1cqBVX+U
+         qTqRu9jh+ElPYI7JgBZnffENBcIC5HztJiiwT59RdRmAB2qbcuoiLIPQOx3ztHmbqtYD
+         YRKa2ECXLp70yvZx/ySAtTh/SyZptdp2P5FH+yYfzsm7s5zwTwMEyDJ6G64NydIKSLgB
+         Ahi5hV55pd1wkuuCIehG1wmSlCCCAPDe4pjII8Y8jghnJXOQ4zq9LLRHoO0M5qGHA55z
+         He1VtMecCLx9D/9xQ/+qjMBmVBbEiF3Fo+GMsZ8PlZJGNtRXP82CjKqjZrFEwpMDJcHg
+         Jy+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708414993; x=1709019793;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kzt93vSNIrGDzyg1PIPtvFGU0T9v/8rtMnoi2x6SDHA=;
+        b=ecr6s3wOeZ2ooLnQUoqXZ2yqfBMR4m2DUS2wMisY7yQ2IM3omnxhZBZR/2ucv4zBY6
+         x2Z6av4ZtFR3PHlAZGQ2DXyM9GLFFei4BXqaxeknEdpT+BdyEEUMOBmUXlf5gO/w15jq
+         zm17D10XzH8UYSQ/yA30AV7KRNeDOT4GfcKwO4XdKFCMUOpzuQZmSVz6T/0fJ3elCbKz
+         QOQPw3mUMSSm6OpbVHqS1tE0jneXHYy1+UxnXiqQDS7oIqso6fjZao/n6gceXd+8fZ5F
+         5A2CaTRCGpXLKW1B5m+F0QNP2Z1ULbsW5lFhBe2+ax+3nZsrLYfMljswBbbg9ci4Smbm
+         lFVQ==
+X-Gm-Message-State: AOJu0Yw38pCiIU5KRxaiK+oPlxCq7iyULiqc9cpN9mgBAolDPb1OeRQ2
+	ysWfRAqH98+jC9hL/IS9llvsTn5iVz0v8MjA6ofhPs88yoKTSfDvocVdMWIWk8A=
+X-Google-Smtp-Source: AGHT+IHEI4eWS8vyoRA1SVegw4028sjC2JWNJGV+rbCloBe8jQQA4Rz32K2MCOW+qaNR5deWLFwKog==
+X-Received: by 2002:a25:268b:0:b0:dcc:1dc4:15e4 with SMTP id m133-20020a25268b000000b00dcc1dc415e4mr13015975ybm.47.1708414993731;
+        Mon, 19 Feb 2024 23:43:13 -0800 (PST)
+Received: from xuyingfeng-OptiPlex-7080.mioffice.cn ([2408:8607:1b00:8:b27b:25ff:fe2a:187f])
+        by smtp.gmail.com with ESMTPSA id x18-20020a25ac92000000b00dc6e1cc7f9bsm1809085ybi.53.2024.02.19.23.43.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Feb 2024 23:43:13 -0800 (PST)
+From: Rumeng Wang <wangrumeng@xiaomi.corp-partner.google.com>
+To: djakov@kernel.org
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	fengqi@xiaomi.com,
+	xuyingfeng@xiaomi.com,
+	wangrumeng <wangrumeng@xiaomi.corp-partner.google.com>
+Subject: [PATCH] interconnect:Replace mutex with rt_mutex for icc_bw_lock
+Date: Tue, 20 Feb 2024 15:43:00 +0800
+Message-ID: <20240220074300.10805-1-wangrumeng@xiaomi.corp-partner.google.com>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6351.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 57c22e72-c87a-42b7-aeb0-08dc31e4ca09
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Feb 2024 07:23:09.1235
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Tx7R6sZw1X+lnNjSCwz08LQiLf6rZLSOoPGZJ5oNBaj2lFog0VPSwWv5CPYFFCqu1Y6nZsVa+gUC3r/JfLH+1g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6722
+Content-Transfer-Encoding: 8bit
 
-[AMD Official Use Only - General]
+From: wangrumeng <wangrumeng@xiaomi.corp-partner.google.com>
 
-Hi Lucas:
+Replace existing mutex with rt_mutex to prevent priority inversion
+between clients, which can cause unacceptable delays in some cases.
 
-> -----Original Message-----
-> From: Lucas Lee Jing Yi <lucasleeeeeeeee@gmail.com>
-> Sent: Monday, February 19, 2024 12:11 AM
-> To: rafael@kernel.org
-> Cc: Yuan, Perry <Perry.Yuan@amd.com>; Du, Xiaojian
-> <Xiaojian.Du@amd.com>; Deucher, Alexander
-> <Alexander.Deucher@amd.com>; bp@alien8.de; Sharma, Deepak
-> <Deepak.Sharma@amd.com>; Meng, Li (Jassmine) <Li.Meng@amd.com>;
-> linux-acpi@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
-> kselftest@vger.kernel.org; linux-pm@vger.kernel.org; Limonciello, Mario
-> <Mario.Limonciello@amd.com>; Fontenot, Nathan
-> <Nathan.Fontenot@amd.com>; oleksandr@natalenko.name;
-> rafael.j.wysocki@intel.com; Huang, Ray <Ray.Huang@amd.com>; Huang,
-> Shimmer <Shimmer.Huang@amd.com>; skhan@linuxfoundation.org;
-> viresh.kumar@linaro.org; x86@kernel.org; Lucas Lee Jing Yi
-> <lucasleeeeeeeee@gmail.com>
-> Subject: [PATCH] [PATCH] amd_pstate: fix erroneous highest_perf value on
-> some CPUs
->
-> Caution: This message originated from an External Source. Use proper
-> caution when opening attachments, clicking links, or responding.
->
->
-> On a Ryzen 7840HS the highest_perf value is 196, not 166 as AMD assumed.
-> This leads to the advertised max clock speed to only be 4.35ghz instead o=
-f
-> 5.14ghz , leading to a large degradation in performance.
->
-> Fix the broken assumption and revert back to the old logic for getting
-> highest_perf.
->
-> TEST:
-> Geekbench 6 Before Patch:
-> Single Core:    2325 (-22%)!
-> Multi Core:     11335 (-10%)
->
-> Geekbench 6 AFTER Patch:
-> Single Core:    2635
-> Multi Core:     12487
->
-> Signed-off-by: Lucas Lee Jing Yi <lucasleeeeeeeee@gmail.com>
-> ---
->  drivers/cpufreq/amd-pstate.c | 22 ++++++++++------------
->  1 file changed, 10 insertions(+), 12 deletions(-)
->
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 08e112444c27..54df68773620 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -50,7 +50,6 @@
->
->  #define AMD_PSTATE_TRANSITION_LATENCY  20000
->  #define AMD_PSTATE_TRANSITION_DELAY    1000
-> -#define AMD_PSTATE_PREFCORE_THRESHOLD  166
->
->  /*
->   * TODO: We need more time to fine tune processors with shared memory
-> solution @@ -299,15 +298,12 @@ static int pstate_init_perf(struct
-> amd_cpudata *cpudata)
->                                      &cap1);
->         if (ret)
->                 return ret;
-> -
-> -       /* For platforms that do not support the preferred core feature, =
-the
-> -        * highest_pef may be configured with 166 or 255, to avoid max
-> frequency
-> -        * calculated wrongly. we take the AMD_CPPC_HIGHEST_PERF(cap1)
-> value as
-> -        * the default max perf.
-> +
-> +       /* Some CPUs have different highest_perf from others, it is safer
-> +        * to read it than to assume some erroneous value, leading to
-> performance issues.
->          */
-> -       if (cpudata->hw_prefcore)
-> -               highest_perf =3D AMD_PSTATE_PREFCORE_THRESHOLD;
-> -       else
-> +       highest_perf =3D amd_get_highest_perf();
-> +       if(highest_perf > AMD_CPPC_HIGHEST_PERF(cap1))
->                 highest_perf =3D AMD_CPPC_HIGHEST_PERF(cap1);
->
->         WRITE_ONCE(cpudata->highest_perf, highest_perf); @@ -329,9 +325,1=
-1
-> @@ static int cppc_init_perf(struct amd_cpudata *cpudata)
->         if (ret)
->                 return ret;
->
-> -       if (cpudata->hw_prefcore)
-> -               highest_perf =3D AMD_PSTATE_PREFCORE_THRESHOLD;
-> -       else
-> +       /* Some CPUs have different highest_perf from others, it is safer
-> +        * to read it than to assume some erroneous value, leading to
-> performance issues.
-> +        */
-> +       highest_perf =3D amd_get_highest_perf();
-> +       if(highest_perf > cppc_perf.highest_perf)
->                 highest_perf =3D cppc_perf.highest_perf;
->
->         WRITE_ONCE(cpudata->highest_perf, highest_perf);
-> --
-> 2.43.2
-[Meng, Li (Jassmine)]
-Reviewed-by: Li Meng < li.meng@amd.com>
+Signed-off-by: wangrumeng <wangrumeng@xiaomi.corp-partner.google.com>
+---
+ drivers/interconnect/core.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+index 50bac2d79d9b..467d42cc7e49 100644
+--- a/drivers/interconnect/core.c
++++ b/drivers/interconnect/core.c
+@@ -14,6 +14,7 @@
+ #include <linux/interconnect-provider.h>
+ #include <linux/list.h>
+ #include <linux/mutex.h>
++#include <linux/rtmutex.h>
+ #include <linux/slab.h>
+ #include <linux/of.h>
+ #include <linux/overflow.h>
+@@ -28,7 +29,7 @@ static LIST_HEAD(icc_providers);
+ static int providers_count;
+ static bool synced_state;
+ static DEFINE_MUTEX(icc_lock);
+-static DEFINE_MUTEX(icc_bw_lock);
++static DEFINE_RT_MUTEX(icc_bw_lock);
+ static struct dentry *icc_debugfs_dir;
+ 
+ static void icc_summary_show_one(struct seq_file *s, struct icc_node *n)
+@@ -698,7 +699,7 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
+ 	if (WARN_ON(IS_ERR(path) || !path->num_nodes))
+ 		return -EINVAL;
+ 
+-	mutex_lock(&icc_bw_lock);
++	rt_mutex_lock(&icc_bw_lock);
+ 
+ 	old_avg = path->reqs[0].avg_bw;
+ 	old_peak = path->reqs[0].peak_bw;
+@@ -730,7 +731,7 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
+ 		apply_constraints(path);
+ 	}
+ 
+-	mutex_unlock(&icc_bw_lock);
++	rt_mutex_unlock(&icc_bw_lock);
+ 
+ 	trace_icc_set_bw_end(path, ret);
+ 
+@@ -939,7 +940,7 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
+ 		return;
+ 
+ 	mutex_lock(&icc_lock);
+-	mutex_lock(&icc_bw_lock);
++	rt_mutex_lock(&icc_bw_lock);
+ 
+ 	node->provider = provider;
+ 	list_add_tail(&node->node_list, &provider->nodes);
+@@ -968,7 +969,7 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
+ 	node->avg_bw = 0;
+ 	node->peak_bw = 0;
+ 
+-	mutex_unlock(&icc_bw_lock);
++	rt_mutex_unlock(&icc_bw_lock);
+ 	mutex_unlock(&icc_lock);
+ }
+ EXPORT_SYMBOL_GPL(icc_node_add);
+@@ -1094,7 +1095,7 @@ void icc_sync_state(struct device *dev)
+ 		return;
+ 
+ 	mutex_lock(&icc_lock);
+-	mutex_lock(&icc_bw_lock);
++	rt_mutex_lock(&icc_bw_lock);
+ 	synced_state = true;
+ 	list_for_each_entry(p, &icc_providers, provider_list) {
+ 		dev_dbg(p->dev, "interconnect provider is in synced state\n");
+@@ -1107,7 +1108,7 @@ void icc_sync_state(struct device *dev)
+ 			}
+ 		}
+ 	}
+-	mutex_unlock(&icc_bw_lock);
++	rt_mutex_unlock(&icc_bw_lock);
+ 	mutex_unlock(&icc_lock);
+ }
+ EXPORT_SYMBOL_GPL(icc_sync_state);
+-- 
+2.43.2
+
 
