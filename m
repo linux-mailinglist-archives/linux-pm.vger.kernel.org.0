@@ -1,253 +1,193 @@
-Return-Path: <linux-pm+bounces-4143-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4144-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8445185C14F
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 17:27:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DEB685C168
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 17:30:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1420E1F21AA3
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 16:27:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 816DD1C237B6
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 16:30:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BEF778B79;
-	Tue, 20 Feb 2024 16:24:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5417768E9;
+	Tue, 20 Feb 2024 16:30:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Frt2OeGC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AF0A78B6B;
-	Tue, 20 Feb 2024 16:24:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B7B7640E
+	for <linux-pm@vger.kernel.org>; Tue, 20 Feb 2024 16:30:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708446255; cv=none; b=PyiebT/xvHKe2LvQWAsKIaJsjQl/HHXOux5ice/QZwDW3vBIS/NjFQ1u7a8j4fX/2DbqDEHVgh1aluXAcf+v79CJRYk0il4FHr+NF3G6vfhtCzXWvCvtme3rrxyq4KihTWvZTTwGlh8gq6x+FcL0UhITfnCQ0a48dcFklcZW0Xc=
+	t=1708446633; cv=none; b=iITDa63rbNr8vAMXWNUiDKfae+L7z0T076mmySiMqd/ho/1ziq6CV9zbDPnyS8pCB+m0l56g8wCcMTOsZ6FseaDf5bvYh6ZIEph0xgVx3NTYMdPMwLFthp+/bAkdn+wYQPN8uv+Jv+AVCAuWr8xYzLh0ir8j++o12atV3/3++aI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708446255; c=relaxed/simple;
-	bh=X1LmlBpp9/hB3Wl48tFmyVRbajeTNCx4reU1tnbF/qg=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sIQ8NmtzidtZOc4ClQwhBtiqD4TkubBUbjuOglT3UEc9IjT+wWaBygarDXaoKBvTBfx6Dtwqpxv+vgJxJfp778XjMZkXv+3ScsvhKHztpI7x7FIzG+VsUNaFu0uUNufQBJyVA48qFViyfpC6NjyOfc9gavkC8zfWjevlEjnWH+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4TfPkb0bShz6J9dD;
-	Wed, 21 Feb 2024 00:19:51 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
-	by mail.maildlp.com (Postfix) with ESMTPS id 6B52E1400DD;
-	Wed, 21 Feb 2024 00:24:08 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 20 Feb
- 2024 16:24:07 +0000
-Date: Tue, 20 Feb 2024 16:24:06 +0000
-From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-CC: "Rafael J. Wysocki" <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
-	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-riscv@lists.infradead.org>,
-	<kvmarm@lists.linux.dev>, <x86@kernel.org>,
-	<acpica-devel@lists.linuxfoundation.org>, <linux-csky@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-ia64@vger.kernel.org>,
-	<linux-parisc@vger.kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>, <jianyong.wu@arm.com>,
-	<justin.he@arm.com>, James Morse <james.morse@arm.com>
-Subject: Re: [PATCH RFC v4 02/15] ACPI: processor: Register all CPUs from
- acpi_processor_get_info()
-Message-ID: <20240220162406.00005b59@Huawei.com>
-In-Reply-To: <ZdTBtt0oR6Q1RcAB@shell.armlinux.org.uk>
-References: <Zbp5xzmFhKDAgHws@shell.armlinux.org.uk>
-	<E1rVDmU-0027YP-Jz@rmk-PC.armlinux.org.uk>
-	<CAJZ5v0iiJpUWq5GMSnKFWQTzn_bdwoQz9m=hDaXNg4Lj_ePF4g@mail.gmail.com>
-	<ZdSMk93c1I6x973h@shell.armlinux.org.uk>
-	<ZdTBtt0oR6Q1RcAB@shell.armlinux.org.uk>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+	s=arc-20240116; t=1708446633; c=relaxed/simple;
+	bh=1fXyq6cAuoEnamSFWTgvyvNEMlThUpp3Kff1Mcr9tDc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nXHJ0YDQg8kOoBkdE3SpEbzR3BKkh5WGfMnNX9S4CmdCJpzKw6t+hjEd/gEPSWQPxiw18DrNCvbJ0ani1lrjV4d60P/kYhyaVzow/jdewuZdggt70M2okeJdjRugXbreeMQOkbtLY6o0xMMdrGnUk14ITvISfgx70g7sN/JMqOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Frt2OeGC; arc=none smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-607d8506099so54215537b3.0
+        for <linux-pm@vger.kernel.org>; Tue, 20 Feb 2024 08:30:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1708446631; x=1709051431; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6+xYMPVEaZiTF2DZys9U3HRcGSv7XVsfb8mgJa/NGLI=;
+        b=Frt2OeGCPYMZZuQPQyFE68yD+YIxzvZdQ3pZBp5iJav5PPOREnbCJnQulZlmFllt0h
+         ACi9chRg+BWeOXJI7DV+N39NWDsBjk76obVbGx0iaP66LVx/+9l4fPfRSJxbU/l4sPWM
+         8ZwqDmO81618wM6IHemuEuV6QaEyxlypN7FtS2Y0kdDYcboXIq6AXRFeEjUVOk+XSbML
+         7izskhU1GJrAVbQJgqgEIIP5wAO0Zh4qIhydzdK0kLBx83/K8OLcCJ0SPcxbfWy/SuUI
+         aHYIvwMPKuRKjlO5c8FRezwk9ckNDr/2AD1Vk7BLdIU/fPQcs+6lfYH54M2nEMSvox2G
+         LkbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708446631; x=1709051431;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6+xYMPVEaZiTF2DZys9U3HRcGSv7XVsfb8mgJa/NGLI=;
+        b=FydFI7T59y6ax91zY7UrgZn2A9A/3Di0a0vt2pVNU++d6C1MLoEnGX8v3ICu2ZvhLV
+         9TbI0D2en06haqTjsZc+hylQ12IMSRTKQECA6vSYgoQm6yb2YwR+vZlvV9zV8RM5WyP+
+         uvDNlm1SsuO+Zn4Q589StD+wmw5zLytxPu8JmNh0SC675oTsmVveWNgPIv4wTPMSPFi4
+         9HBNvFN2tCWbDgSUuSIqGLYPYvaCAkWK9EqEafO8yoPoDjExFben/5oBjNFWzfL+Kd/L
+         a5QYFqfLO6hTEypGgvA1WqooPsNH+l2VfE90vIn3Wgd9Stqn156Dot/HDqhmHXshGWod
+         BIBA==
+X-Forwarded-Encrypted: i=1; AJvYcCWNVkGkGJuuu13FaAfRZOeHxoUNpqYInwy7xXNbRfiEFDQyIT6XOqOVihsALx0USY50vy5pRZctsfirHeqnuob04/WDhTJ09Lo=
+X-Gm-Message-State: AOJu0YyzVTmmXfEF7cyAoLl0qijDv6RtRU1xLRbXiR0Agpj3eF0DOiwV
+	oCrd1JnIscjNHdh/oFP8VaEp22qf0gZLb5eH+5C1KWj+nsxaMQWY5LC0K1ckSlxU794b+jDYo/J
+	TdscPDab3Y+G4Fupy4f/rN9LLt6LUMjtsnKmPCw==
+X-Google-Smtp-Source: AGHT+IFDa01ZVzEZiS8s0O26WczezIZBh59zgBpRUtt9QCMKZfbnmrqIUOMg6EBt7uBSs9R0KGrlYwTH8vjmTDt3sAU=
+X-Received: by 2002:a81:490e:0:b0:608:ba5:729d with SMTP id
+ w14-20020a81490e000000b006080ba5729dmr9159540ywa.19.1708446630739; Tue, 20
+ Feb 2024 08:30:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+References: <20240216203215.40870-1-brgl@bgdev.pl> <20240216203215.40870-10-brgl@bgdev.pl>
+ <48164f18-34d0-4053-a416-2bb63aaae74b@sirena.org.uk> <CAMRc=Md7ymMTmF1OkydewF5C32jDNy0V+su7pcJPHKto6VLjLg@mail.gmail.com>
+ <8e392aed-b5f7-486b-b5c0-5568e13796ec@sirena.org.uk> <CAMRc=MeAXEyV47nDO_WPQqEQxSYFWTrwVPAtLghkfONj56FGVA@mail.gmail.com>
+In-Reply-To: <CAMRc=MeAXEyV47nDO_WPQqEQxSYFWTrwVPAtLghkfONj56FGVA@mail.gmail.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Tue, 20 Feb 2024 18:30:19 +0200
+Message-ID: <CAA8EJppzkuH=YTAHuJ3Og2RLHB93PSas004UDvpqepYbGepVPg@mail.gmail.com>
+Subject: Re: [PATCH v5 09/18] arm64: dts: qcom: qrb5165-rb5: model the PMU of
+ the QCA6391
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Mark Brown <broonie@kernel.org>, Marcel Holtmann <marcel@holtmann.org>, 
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, "David S . Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Kalle Valo <kvalo@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+	Saravana Kannan <saravanak@google.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Arnd Bergmann <arnd@arndb.de>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Marek Szyprowski <m.szyprowski@samsung.com>, Alex Elder <elder@linaro.org>, 
+	Srini Kandagatla <srinivas.kandagatla@linaro.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Abel Vesa <abel.vesa@linaro.org>, 
+	Manivannan Sadhasivam <mani@kernel.org>, Lukas Wunner <lukas@wunner.de>, linux-bluetooth@vger.kernel.org, 
+	netdev@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
 
-On Tue, 20 Feb 2024 15:13:58 +0000
-"Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
+On Tue, 20 Feb 2024 at 13:16, Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+>
+> On Mon, Feb 19, 2024 at 8:59=E2=80=AFPM Mark Brown <broonie@kernel.org> w=
+rote:
+> >
+> > On Mon, Feb 19, 2024 at 07:48:20PM +0100, Bartosz Golaszewski wrote:
+> > > On Mon, Feb 19, 2024 at 7:03=E2=80=AFPM Mark Brown <broonie@kernel.or=
+g> wrote:
+> > > > On Fri, Feb 16, 2024 at 09:32:06PM +0100, Bartosz Golaszewski wrote=
+:
+> >
+> > > > > +                     vreg_pmu_aon_0p59: ldo1 {
+> > > > > +                             regulator-name =3D "vreg_pmu_aon_0p=
+59";
+> > > > > +                             regulator-min-microvolt =3D <540000=
+>;
+> > > > > +                             regulator-max-microvolt =3D <840000=
+>;
+> > > > > +                     };
+> >
+> > > > That's a *very* wide voltage range for a supply that's got a name e=
+nding
+>
+> Because it's an error, it should have been 640000. Thanks for spotting it=
+.
 
-> On Tue, Feb 20, 2024 at 11:27:15AM +0000, Russell King (Oracle) wrote:
-> > On Thu, Feb 15, 2024 at 08:22:29PM +0100, Rafael J. Wysocki wrote: =20
-> > > On Wed, Jan 31, 2024 at 5:50=E2=80=AFPM Russell King <rmk+kernel@arml=
-inux.org.uk> wrote: =20
-> > > > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_proc=
-essor.c
-> > > > index cf7c1cca69dd..a68c475cdea5 100644
-> > > > --- a/drivers/acpi/acpi_processor.c
-> > > > +++ b/drivers/acpi/acpi_processor.c
-> > > > @@ -314,6 +314,18 @@ static int acpi_processor_get_info(struct acpi=
-_device *device)
-> > > >                         cpufreq_add_device("acpi-cpufreq");
-> > > >         }
-> > > >
-> > > > +       /*
-> > > > +        * Register CPUs that are present. get_cpu_device() is used=
- to skip
-> > > > +        * duplicate CPU descriptions from firmware.
-> > > > +        */
-> > > > +       if (!invalid_logical_cpuid(pr->id) && cpu_present(pr->id) &&
-> > > > +           !get_cpu_device(pr->id)) {
-> > > > +               int ret =3D arch_register_cpu(pr->id);
-> > > > +
-> > > > +               if (ret)
-> > > > +                       return ret;
-> > > > +       }
-> > > > +
-> > > >         /*
-> > > >          *  Extra Processor objects may be enumerated on MP systems=
- with
-> > > >          *  less than the max # of CPUs. They should be ignored _if=
-f =20
-> > >=20
-> > > This is interesting, because right below there is the following code:
-> > >=20
-> > >     if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
-> > >         int ret =3D acpi_processor_hotadd_init(pr);
-> > >=20
-> > >         if (ret)
-> > >             return ret;
-> > >     }
-> > >=20
-> > > and acpi_processor_hotadd_init() essentially calls arch_register_cpu()
-> > > with some extra things around it (more about that below).
-> > >=20
-> > > I do realize that acpi_processor_hotadd_init() is defined under
-> > > CONFIG_ACPI_HOTPLUG_CPU, so for the sake of the argument let's
-> > > consider an architecture where CONFIG_ACPI_HOTPLUG_CPU is set.
-> > >=20
-> > > So why are the two conditionals that almost contradict each other both
-> > > needed?  It looks like the new code could be combined with
-> > > acpi_processor_hotadd_init() to do the right thing in all cases.
-> > >=20
-> > > Now, acpi_processor_hotadd_init() does some extra things that look
-> > > like they should be done by the new code too.
-> > >=20
-> > > 1. It checks invalid_phys_cpuid() which appears to be a good idea to =
-me.
-> > >=20
-> > > 2. It uses locking around arch_register_cpu() which doesn't seem
-> > > unreasonable either.
-> > >=20
-> > > 3. It calls acpi_map_cpu() and I'm not sure why this is not done by
-> > > the new code.
-> > >=20
-> > > The only thing that can be dropped from it is the _STA check AFAICS,
-> > > because acpi_processor_add() won't even be called if the CPU is not
-> > > present (and not enabled after the first patch).
-> > >=20
-> > > So why does the code not do 1 - 3 above? =20
-> >=20
-> > Honestly, I'm out of my depth with this and can't answer your
-> > questions - and I really don't want to try fiddling with this code
-> > because it's just too icky (even in its current form in mainline)
-> > to be understandable to anyone who hasn't gained a detailed knowledge
-> > of this code.
-> >=20
-> > It's going to require a lot of analysis - how acpi_map_cpuid() behaves
-> > in all circumstances, what this means for invalid_logical_cpuid() and
-> > invalid_phys_cpuid(), what paths will be taken in each case. This code
-> > is already just too hairy for someone who isn't an experienced ACPI
-> > hacker to be able to follow and I don't see an obvious way to make it
-> > more readable.
-> >=20
-> > James' additions make it even more complex and less readable. =20
->=20
-> As an illustration of the problems I'm having here, I was just writing
-> a reply to this with a suggestion of transforming this code ultimately
-> to:
->=20
-> 	if (!get_cpu_device(pr->id)) {
-> 		int ret;
->=20
-> 		if (!invalid_logical_cpuid(pr->id) && cpu_present(pr->id))
-> 			ret =3D acpi_processor_make_enabled(pr);
-> 		else
-> 			ret =3D acpi_processor_make_present(pr);
->=20
-> 		if (ret)
-> 			return ret;
-> 	}
->=20
-> (acpi_processor_make_present() would be acpi_processor_hotadd_init()
-> and acpi_processor_make_enabled() would be arch_register_cpu() at this
-> point.)
->=20
-> Then I realised that's a bad idea - because we really need to check
-> that pr->id is valid before calling get_cpu_device() on it, so this
-> won't work. That leaves us with:
->=20
-> 	int ret;
->=20
-> 	if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
-> 		/* x86 et.al. path */
-> 		ret =3D acpi_processor_make_present(pr);
-> 	} else if (!get_cpu_device(pr->id)) {
-> 		/* Arm64 path */
-> 		ret =3D acpi_processor_make_enabled(pr);
-> 	} else {
-> 		ret =3D 0;
-> 	}
->=20
-> 	if (ret)
-> 		return ret;
->=20
-> Now, the next transformation would be to move !get_cpu_device(pr->id)
-> into acpi_processor_make_enabled() which would eliminate one of those
-> if() legs.
->=20
-> Now, if we want to somehow make the call to arch_regster_cpu() common
-> in these two paths, the next question is what are the _precise_
-> semantics of acpi_map_cpu(), particularly with respect to it
-> modifying pr->id. Is it guaranteed to always give the same result
-> for the same processor described in ACPI? What acpi_map_cpu() anyway,
-> I can find no documentation for it.
->=20
-> Then there's the question whether calling acpi_unmap_cpu() should be
-> done on the failure path if arch_register_cpu() fails, which is done
-> for the x86 path but not the Arm64 path. Should it be done for the
-> Arm64 path? I've no idea, but as Arm64 doesn't implement either of
-> these two functions, I guess they could be stubbed out and thus be
-> no-ops - but then we open a hole where if pr->id is invalid, we
-> end up passing that invalid value to arch_register_cpu() which I'm
-> quite sure will explode with a negative CPU number.
->=20
-> So, to my mind, what you're effectively asking for is a total rewrite
-> of all the code in and called by acpi_processor_get_info()... and that
-> is not something I am willing to do (because it's too far outside of
-> my knowledge area.)
->=20
-> As I said in my reply to patch 1, I think your comments on patch 2
-> make Arm64 vcpu hotplug unachievable in a reasonable time frame, and
-> certainly outside the bounds of what I can do to progress this.
->=20
-> So, at this point I'm going to stand down from further participation
-> with this patch set as I believe I've reached the limit of what I can
-> do to progress it.
->=20
+According to the datasheet, VDD08_PMU_AON_O goes up to 0.85V then down
+to 0.59V, which is the working voltage.
 
-Thanks for your hard work on this Russell - we have moved forwards.
+VDD08_PMU_RFA_CMN is normally at 0.8V, but goes to 0.4V during sleep.
 
-Short of anyone else stepping up I'll pick this up with
-the help of some my colleagues. As such I'm keen on getting patch
-1 upstream ASAP so that we can exclude the need for some of the
-other workarounds from earlier versions of this series (the ones
-dropped before now).
-
-We will need a little time to get up to speed on the current status
-and discussion points Russell raises above.
-
-Jonathan
+>
+> > > > in _0_p59 which sounds a lot like it should be fixed at 0.59V.
+> > > > Similarly for a bunch of the other supplies, and I'm not seeing any
+> > > > evidence that the consumers do any voltage changes here?  There doe=
+sn't
+> > > > appear to be any logic here, I'm not convinced these are validated =
+or
+> > > > safe constraints.
+> >
+> > > No, the users don't request any regulators (or rather: software
+> > > representations thereof) because - as per the cover letter - no
+> > > regulators are created by the PMU driver. This is what is physically
+> > > on the board - as the schematics and the datasheet define it. I took
+> >
+> > The above makes no sense.  How can constraints be "what is physically o=
+n
+> > the board", particularly variable constrants when there isn't even a
+> > consumer?  What values are you taking from which documentation?
+> >
+>
+> The operating conditions for PMU outputs. I took them from a
+> confidential datasheet. There's a table for input constraints and
+> possible output values.
+>
+> And what do you mean by there not being any consumers? The WLAN and BT
+> *are* the consumers.
+>
+> > The cover letter and binding both claimed (buried after large amounts o=
+f
+> > changelog) that these PMUs were exposing regulators to consumers and th=
+e
+> > DTS puports to do exactly that...
+> >
+>
+> Yes, but I'm not sure what the question is.
+>
+> > > the values from the docs verbatim. In C, we create a power sequencing
+> > > provider which doesn't use the regulator framework at all.
+> >
+> > For something that doesn't use the regulator framework at all what
+> > appears to be a provider in patch 16 ("power: pwrseq: add a driver for
+> > the QCA6390 PMU module") seems to have a lot of regualtor API calls?
+>
+> This driver is a power sequencing *provider* but also a regulator
+> *consumer*. It gets regulators from the host and exposes a power
+> sequencer to *its* consumers (WLAN and BT). On DT it exposes
+> regulators (LDO outputs of the PMU) but we don't instantiate them in
+> C.
+>
+> Bart
 
 
+
+--=20
+With best wishes
+Dmitry
 
