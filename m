@@ -1,84 +1,85 @@
-Return-Path: <linux-pm+bounces-4129-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4130-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65F0785BDEE
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 14:58:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B30885BDF5
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 14:58:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A85E1C20A51
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 13:58:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E7BFE28ADC9
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 13:58:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF20A6A359;
-	Tue, 20 Feb 2024 13:57:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5887B6A8A7;
+	Tue, 20 Feb 2024 13:58:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="Z4PjYgrT"
+	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="YD0GOg8o"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76135F875
-	for <linux-pm@vger.kernel.org>; Tue, 20 Feb 2024 13:57:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD2B6A32C
+	for <linux-pm@vger.kernel.org>; Tue, 20 Feb 2024 13:58:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708437470; cv=none; b=I5BAVSDqCPVm0vcNGyuVAa7yhBF7u4U+0IP1uD87BVljnMeWI/n72Xw+V3mcjlYgawmS0E8vCxJStAJnz6RfCjiAwlASLRGVlN3ZgPm2zoO/5nCOSSACqmn13ZIXIzQd1E3m4DDaoa6rbfUHJqF9K8kBHBh9q9TIh9Rg8OSFVzE=
+	t=1708437513; cv=none; b=We/z+M5qM6pQjbVp5T2eFnGcqabAc1eF56xi7+6ANZUZ9yrBXG8P9Q8eyYMggn+Y8PHFJ8vau3YlvCKBzMWYDa9rgDkJBwz4Il7How4fUiMPs8JSoVfRe4CAKN69KeXFe2UlN88NVfkTzqxiZX4lfHlC/yeTRJi51G4jzVAwYzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708437470; c=relaxed/simple;
-	bh=eKFE7ixr+z9DCFBk5T0AINAAtRILUz3VbnLZA8f10bo=;
+	s=arc-20240116; t=1708437513; c=relaxed/simple;
+	bh=BoxnzxQC/c4gl7Bj8WGMe/ITa9TT35V3+eTrZOEVWfc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UtabWAHZiII/FnaKpq5NUJ/7u/SCSB/jtNuxZUc6e82QPQE2XO3L2pz+HrxufeQNYADjQgntVtGmHsfNgzZt5GZm394ywgyXW3nFM05naCdCCNTzvR0SzfgfdZAgq0mfMj6r3KWnHQEqkA0WKljilETVhIsadgddvwosShwwTIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=Z4PjYgrT; arc=none smtp.client-ip=209.85.128.52
+	 Content-Type:Content-Disposition:In-Reply-To; b=MltTRBJK0s+rHFcYWkIha+4oSJLL/VQNuKDKOrL2ns4Tk+96yUzjIv4ASxifuNPgtA9w0zHHm3D2mp7T9mq3TXRfJGasJ3CMy4+P+ZkvY7nn/1kwazdgAWRdXLNGCCMMOlmYS9HvuzeBVhW34iaAijPIwZFNcaURozpFbsiy518=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=YD0GOg8o; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-41270d3ce26so2659625e9.2
-        for <linux-pm@vger.kernel.org>; Tue, 20 Feb 2024 05:57:48 -0800 (PST)
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-412698ac6f9so9901245e9.0
+        for <linux-pm@vger.kernel.org>; Tue, 20 Feb 2024 05:58:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1708437467; x=1709042267; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AI5Avz0WDOYWyiRhPfNRydtZ2zETZ/BjR+NeiTklUgk=;
-        b=Z4PjYgrTObZKGaP/9+0LPZhBwYkewccMEtkcjkSfHOGvVq9KimuM9T7orMvixulWXi
-         NDnVZeootN34yOGCgnGVKTmo1S7uvLMTSvvrTj/VEHbNjtrjrL//smoRyjP2VEw6989L
-         NhdmAhYJiN0e4ZpsvVGXCn08MDHFVyVPNo6F9w8urb+ctNtoyu6fPQlCEuCVfSmAP1RI
-         zwNxe9jWbvUQ8wODItDy2bGwYkOWai3b2i2r8/03XlLyN6JpFBlnQlMKk1nZA9EutHPM
-         1IFUuE1zbq36PJvRzXY+RrIuF3NxPJWY/KtMsL/oVuCqDa0EETIkS4qV18ifpbPoMngh
-         N7vA==
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1708437510; x=1709042310; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=QRfMYkyP1Z8eQDMkqJr/zSgdS64E6BSeGEZqSZMFz+o=;
+        b=YD0GOg8omvZH0YAFiB0lZoS5Pk/WphVe3goM9ertu+ISo3zjnENaG1oezF661Xg1Ae
+         kAz3ygg+FNF775NS3mRzuENGMg0GCIqQtNTB3JBO+G0QQY1ZPWPZ57MDJxRWhJFIpL4X
+         r1WGOR6/zeu8mRSSmmEWWL+LSXB4m2HcI4eyDb+6fCCN0PX5e1Stuj4qeas0xvKfGNSO
+         an7s55X1PxuXL3z4IdFdaUZKazSX1o8BG+hfcNg5R6Jqjk4u7wT+BZXC9bJ2Euf4kjQd
+         7768UVc8dW45Js6yRtFD+FuFFkHZBvDcgyQY1yJut7pPVS1V1cHiBOpYeq2qtjPhxWZH
+         5l3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708437467; x=1709042267;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AI5Avz0WDOYWyiRhPfNRydtZ2zETZ/BjR+NeiTklUgk=;
-        b=YXsljCYHp5aHTagwKBvDD2ZPI+AtWIa52PSSOECtoIC1G8HI7dA7Wyyn8kKKHWDD3k
-         D+SL/LUEidDc5rY+ntW3iIZx955tkFmNk05MM30qoZJU/d7nyO1FUFgR1HHQXlx9z0JB
-         w087wsGWDcO1vhERUHarTN1UavQoGK8OPcrM9Odlss7xP1yI9D3dxDfW/RcELZM1FIWl
-         6sXcaPCuykL9JBt8JkBsWDkjWB23qqst7XECkgxySxxhJSsGjpsuUoVXp7q1FLdDFE0t
-         6dUjKVrIAir+/O9CzV7liMjn/DtK7pTP/4BUaoLeTr5tSQQ1BjvhqCr5JGiVtUIMji5s
-         MHhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVsqE1zLTJbJ1T1VMCiTHcOHj69a9hG5kuArQTaDyxjNRLrkARmCSo+gxFcXd/32mQgPEctmAz0naDUitQ5VD1MkiLBmiIyAho=
-X-Gm-Message-State: AOJu0YxMFFQ+G3vlvwJEyBR7vLnLWudx0dA+KuCDbFNho0mu7Zoe9u4v
-	tITlpNU1pEHmIrzdl4wChfqgP1yv6/81cg6/3pBeYSydvbkXGT2ks9w/xlkFask=
-X-Google-Smtp-Source: AGHT+IGu4MHtjPKYxRddQnBmeScsZCXVcJ+5xOoO0OEEfqtZRzKqYaxENLsFi0GhZwHaQmb0CApxug==
-X-Received: by 2002:adf:f50a:0:b0:33d:14be:a6eb with SMTP id q10-20020adff50a000000b0033d14bea6ebmr8567955wro.45.1708437467042;
-        Tue, 20 Feb 2024 05:57:47 -0800 (PST)
+        d=1e100.net; s=20230601; t=1708437510; x=1709042310;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QRfMYkyP1Z8eQDMkqJr/zSgdS64E6BSeGEZqSZMFz+o=;
+        b=iaw7FplEvyQJ0s/TuUAK7WWSMPIQNhyo5OkcpBN8CwYjxmYKoeIthUGZipFdQqiCcC
+         4bbricpKWEGBO65u/kP4vFrYJxsGRmkLCRIQYQK4Y8zObJQMDc1zlf+XQLZy9HKwjut3
+         SK5eEsFzYr+H59QvvRbxbXs0JJ1uxcYFJQCOylaqD5SX2rmJQxG0NJjWEm3W/tMtuU9I
+         f29jLT6csgBvqc6E97hTMOV3rmEErt2jpxKk71Dp31xKY6TE/NihO2AiQzSaepkpCwYT
+         LqboWWBa6dFAOmztFBmtQdmL429wHSMpFql6lqRXDzaAEU4yQyLcY0TsciJeRWFJnke2
+         fT7A==
+X-Forwarded-Encrypted: i=1; AJvYcCVKkMxj/RneR+C9yw2jPsxbt7ewwHgqKgD6opQbVV83J270IuHT1hoGF7qOM1tpWwxY3hYqKgBDpFHIxIK9oF2CLnrRRYQZCJc=
+X-Gm-Message-State: AOJu0Yz7WA2ia8P+K12eHbs8vczpGFxs+xmF4Kxno3w0hYLir79qmgdK
+	L/JiDkozLHyCcMWJaBMTYnTb53pZtwREtKg0QBcqw/pTc0qkfMlsMHMrhtUDRg8=
+X-Google-Smtp-Source: AGHT+IH6ma22oVCmGr3xQps11+oZUP5InQd+J+z6fviZUJ0QQXUGMMdCcf/RyGerWxqnEX1lzMyVXQ==
+X-Received: by 2002:a05:600c:35d3:b0:412:6c39:1ddc with SMTP id r19-20020a05600c35d300b004126c391ddcmr2880917wmq.17.1708437509860;
+        Tue, 20 Feb 2024 05:58:29 -0800 (PST)
 Received: from airbuntu ([87.127.96.170])
-        by smtp.gmail.com with ESMTPSA id i13-20020a5d55cd000000b0033b198efbedsm13474007wrw.15.2024.02.20.05.57.46
+        by smtp.gmail.com with ESMTPSA id x11-20020a5d444b000000b0033b7ce8b496sm13678266wrr.108.2024.02.20.05.58.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Feb 2024 05:57:46 -0800 (PST)
-Date: Tue, 20 Feb 2024 13:57:45 +0000
+        Tue, 20 Feb 2024 05:58:29 -0800 (PST)
+Date: Tue, 20 Feb 2024 13:58:28 +0000
 From: Qais Yousef <qyousef@layalina.io>
-To: Vincent Guittot <vincent.guittot@linaro.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
 Cc: Ingo Molnar <mingo@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
 	Viresh Kumar <viresh.kumar@linaro.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
 	Dietmar Eggemann <dietmar.eggemann@arm.com>,
 	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Subject: Re: [PATCH] sched: cpufreq: Rename map_util_perf to
  apply_dvfs_headroom
-Message-ID: <20240220135745.h5mlvutle6wn6eim@airbuntu>
+Message-ID: <20240220135828.t4dhy5tmfrsrzn6y@airbuntu>
 References: <20240205022006.2229877-1-qyousef@layalina.io>
- <CAKfTPtBoapJtwD3DByd06CE07MD3eGhfJVyZ01cRLyKLO8fJ7w@mail.gmail.com>
+ <CAJZ5v0g68atmQAbKFdm1bhp_Uvw6+C9SnJp9jZK0vEHA4mX7bw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -87,39 +88,17 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAKfTPtBoapJtwD3DByd06CE07MD3eGhfJVyZ01cRLyKLO8fJ7w@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0g68atmQAbKFdm1bhp_Uvw6+C9SnJp9jZK0vEHA4mX7bw@mail.gmail.com>
 
-On 02/14/24 08:32, Vincent Guittot wrote:
-> On Mon, 5 Feb 2024 at 03:20, Qais Yousef <qyousef@layalina.io> wrote:
+On 02/12/24 16:54, Rafael J. Wysocki wrote:
+> On Mon, Feb 5, 2024 at 3:20 AM Qais Yousef <qyousef@layalina.io> wrote:
 > >
 > > We are providing headroom for the utilization to grow until the next
 > > decision point to pick the next frequency. Give the function a better
 > > name and give it some documentation. It is not really mapping anything.
-> 
-> The renaming makes sense.
-> 
 > >
 > > Also move it to sched.h. This function relies on updating util signal
-> 
-> I don't see the benefit of moving it the sched.h as it is only used by
-> cpufreq_schedutil()
-
-Hehe what's for me the reason to move it for you it's the reason not to :-)
-
-(I believe you meant cpufreq_schedutil.c)
-
-It doesn't make sense outside of schedutil, does it? I can't see it being
-suitable for consumption by other governors for example as it is not generic
-enough.
-
-And the headroom definition needs to evolve. And the tight coupling to util
-which is a scheduler internal metric will make it hard once it's part of
-cpufreq. The headroom IMO is a property of the governor.
-
-We can defer the moving for now if you insist. But I think it's inevitable?
-
-> 
-> 
 > > appropriately to give a headroom to grow. This is more of a scheduler
 > > functionality than cpufreq. Move it to sched.h where all the other util
 > > handling code belongs.
@@ -189,6 +168,10 @@ We can defer the moving for now if you insist. But I think it's inevitable?
 > >  /*
 > >   * Verify the fitness of task @p to run on @cpu taking into account the
 > > --
-> > 2.34.1
-> >
+> 
+> This touches sched.h, so I'd prefer it to go in via tip and
+> 
+> Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+
+Thanks
 
