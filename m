@@ -1,162 +1,145 @@
-Return-Path: <linux-pm+bounces-4112-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4113-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4B8F85BAAD
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 12:35:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 562DA85BB22
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 12:57:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 648751F2418B
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 11:35:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9ADF1F24C14
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 11:57:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0FAA664DB;
-	Tue, 20 Feb 2024 11:35:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A296F67C61;
+	Tue, 20 Feb 2024 11:57:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BxLgIDWp"
+	dkim=pass (2048-bit key) header.d=trvn.ru header.i=@trvn.ru header.b="4xbaCJOa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B823B664CB;
-	Tue, 20 Feb 2024 11:35:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6587F67C4E;
+	Tue, 20 Feb 2024 11:57:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.87.146.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708428912; cv=none; b=awkZpBRFBAqX2VOhHuB3JfsXGZ6NM9qb8UNV/p4HX5DSc7ShGdDebfYpKC+zQZ+CmXmFO9sqqK1VFwLs5xAKW9EfjhpI/qBOpAcgey3U+9S4ybD53cqgDEFmz3W3M/0Rb/qplRH0mhrQ6fmPov/EuNyJLmTlV7z3JficAg9iP+s=
+	t=1708430249; cv=none; b=jml5pmye5EHh7Wg6PTWaQNTyEpWCnVwi07Vc4xJCKrmnAd4ZmO2eCXYqD2ilseE46ITayym16uusv9BXomsA3tkkjQqRGE9yhcGEvesIW1iNij9wbsMCPYVUn0WAeRUIOKEo4qGDEou/5VrhT/u7l2OscGQ4VwMOv5np336Iikg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708428912; c=relaxed/simple;
-	bh=g+BwWIsDALTdEILafk/ZJXkguL1Tffup+cePcQBqNpA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dhp/sug/qE5bY+1r0zOj7l7VLXY3muIFeimdkQiKU781Y5n5udvddJ/i4XytvAZw4WSIktO2sVCpHvVQ5q1bKjB308OWPgv7ytmCGJlGQfqSdnZofSsCxEPIGmVvVbITZ8N/vxQmF4sd0LBrC+/TUiCKnqieu4HSJaRI0wXXud8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BxLgIDWp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF98AC433F1;
-	Tue, 20 Feb 2024 11:35:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708428912;
-	bh=g+BwWIsDALTdEILafk/ZJXkguL1Tffup+cePcQBqNpA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=BxLgIDWp33lBMiv/zh/ilTuRxvoZuYbroWyEeRjxfS1bOUxaHuEQ+hUACmhb14O5E
-	 hgxLlGc2sZxkaS103n/PajbOL/y9uXATGSSyWGP4/FTgG7zKczm5PuMsdruaewGqfm
-	 R21lEnZgg/lHPeyLc0yNHh7gNQPwCfsJAvNGU8yCDyog+UA77Ljnq7KyLg5i1QA2KR
-	 SI0Z96QWKrqu/ONZrgaNOqqykz+hkyR43Z4X0JUpMkux5xsPV633N0Y7HXjeal6E91
-	 2u2GGgxQoXVfZYVmYHBlm+hhxY8flDSrJP5oItmIwdal1uu1q/PPgVcOyQvVpHX7Pv
-	 oioFLHh6Hg5bg==
-Message-ID: <4c3f9f52-cd56-4d20-a44d-bfca0b2e3b7e@kernel.org>
-Date: Tue, 20 Feb 2024 13:35:07 +0200
+	s=arc-20240116; t=1708430249; c=relaxed/simple;
+	bh=RMDhUfhGZeArDSgF3ihV+uEwJ9e6YTGsJuPN6ZlFYfo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=g7r1fguv8zfqBlBo31YpZBpj4NMOf1RR8HGDfsHT7qj8i3X4SyHOIO/VyywfM8zr/NJ3NPWyiM/qeYCa1bbwCSRZkpKCFvqsGb6QEzngFAzAxaEmj5TMTcqWbHhz8SD3qky01wv95HWstaKY241/6YVqQjWJnzHCddZa3Bz/vks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=trvn.ru; spf=pass smtp.mailfrom=trvn.ru; dkim=pass (2048-bit key) header.d=trvn.ru header.i=@trvn.ru header.b=4xbaCJOa; arc=none smtp.client-ip=194.87.146.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=trvn.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trvn.ru
+Received: from authenticated-user (box.trvn.ru [194.87.146.52])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+	(No client certificate requested)
+	by box.trvn.ru (Postfix) with ESMTPSA id AA1EF40387;
+	Tue, 20 Feb 2024 16:57:17 +0500 (+05)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
+	t=1708430238; bh=RMDhUfhGZeArDSgF3ihV+uEwJ9e6YTGsJuPN6ZlFYfo=;
+	h=From:Subject:Date:To:Cc:From;
+	b=4xbaCJOaovGOd/+tOZYgcpLOjpmu7qofuJpWg/BQ/2OUzYVgDpoGPrTKUeZ3tDhAU
+	 0mgybVFk54nlnXw1ivfHPW5jYi3CoFyeQdE46Zn+k+7gDuwqSKvwp6cOhCrKw9vFMI
+	 3mVdhWOfrW6LV/gQNQKWrdPEcXap0QH9pjZJzlw/6g/LFfwP6uHh/umJCZvdRKMcGq
+	 A+oGcmLQqtCGroRrf2yOjZB7rtmJ2dQDQG4qAjk5tr4IR43AcuZgDZdhF1UE9GkFcb
+	 SqaMxJiXnCZqFYBlWaD7JpSgKW8hexV+CIkdp68IC2VVkytTitqgrZYCAjzq9+gn7/
+	 oH4gwpEeMcHtA==
+From: Nikita Travkin <nikita@trvn.ru>
+Subject: [PATCH v3 0/3] power: supply: Acer Aspire 1 embedded controller
+Date: Tue, 20 Feb 2024 16:57:11 +0500
+Message-Id: <20240220-aspire1-ec-v3-0-02cb139a4931@trvn.ru>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] interconnect:Replace mutex with rt_mutex for icc_bw_lock
-Content-Language: en-US
-To: Rumeng Wang <wangrumeng@xiaomi.corp-partner.google.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- fengqi@xiaomi.com, xuyingfeng@xiaomi.com
-References: <20240220074300.10805-1-wangrumeng@xiaomi.corp-partner.google.com>
-From: Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20240220074300.10805-1-wangrumeng@xiaomi.corp-partner.google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJeT1GUC/1XMQQ6CMBCF4auYWVvTGZQGV97DuBiGUboB0mKjI
+ dzdQmLE5XvJ/00QNXiNcN5NEDT56Psuj2K/A2m5e6jxTd5AlgokWxqOgw+KRsWUddGQsCA7ghw
+ MQe/+tWLXW96tj2Mf3qudcHm/jNsyCY01NVeKQuSsdZcxpO4QnrAgiTYh0l9IORQ+Vidly47lF
+ 87z/AFsS4Mh2wAAAA==
+To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, cros-qcom-dts-watchers@chromium.org, 
+ Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konrad.dybcio@linaro.org>, Rob Herring <robh@kernel.org>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+ Nikita Travkin <nikita@trvn.ru>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2172; i=nikita@trvn.ru;
+ h=from:subject:message-id; bh=RMDhUfhGZeArDSgF3ihV+uEwJ9e6YTGsJuPN6ZlFYfo=;
+ b=owEBbQKS/ZANAwAIAUMc7O4oGb91AcsmYgBl1JOaHlnQv5HkaeWvoA8Eb7/agVmUR11TCkWGZ
+ z0AJuWPbAiJAjMEAAEIAB0WIQTAhK9UUj+qg34uxUdDHOzuKBm/dQUCZdSTmgAKCRBDHOzuKBm/
+ dSaHD/4vK0CrKhObBMgsUN4WbMEmOT31itMTdjzS9oWl5rROkXvarhv/AKED12zI+CcmOl2pDsS
+ iSJREUYk3q0KccBWNna1quTVNBSqiLWwBUENZJprbu3mb9b5qWiPGNkENJsXFpkW2LExTvSO+pW
+ T5+C9oQY81iwZ63t34zQS/0ZE9XMUkCP+n/DD3UrwL+6ma0mfRs22GNZG1gsufuWR6UTV79tgfO
+ 7aWIrzgwtNU2PKRDIn9rWaoWDa7xGnayobdnc8KXck/1fKo42Y0ug3DpODpqsNyfOwO+R289xgv
+ pbg2zOXN01FWpEJ5ebhlp+eTMY9cEHvATUOtrr3jVRCkFxApAA92xlQ3OgAr0q7sasGA/g8Megy
+ lkQQiCqW3ohfUEcaI1APVT45R+t3agJPOeMLBEP1EI8QVp+LR5xRecRbg7axNxp6qqTnOz+hMMc
+ ME0I1UtDGGu4Wr1K4fibi6CVtEyt7t2Z7X3otZxjitJUAjRU6ejEdyYcgmWMPa3Zp9HkkaiCLJg
+ ciAVyxxfuvbnht1NBoD+DNaFFnr2cT32ZXv8f3i9ccnMMmaZloIJy65i6NFfvtcZebcZtTebjks
+ ltHRpCED+rE9qRGd0GdTiI+rtKyHUEm+gbiK9RvPmv4W0ME1GvhJTwlFuzpMFJJKGTT8YksDYEd
+ tvnjjMbJtPzpiFg==
+X-Developer-Key: i=nikita@trvn.ru; a=openpgp;
+ fpr=C084AF54523FAA837E2EC547431CECEE2819BF75
 
-Hello,
+The laptop contains an embedded controller that provides a set of
+features:
 
-On 20.02.24 9:43, Rumeng Wang wrote:
-> From: wangrumeng <wangrumeng@xiaomi.corp-partner.google.com>
-> 
-> Replace existing mutex with rt_mutex to prevent priority inversion
-> between clients, which can cause unacceptable delays in some cases.
-> 
-> Signed-off-by: wangrumeng <wangrumeng@xiaomi.corp-partner.google.com>
+- Battery and charger monitoring
+- USB Type-C DP alt mode HPD monitoring
+- Lid status detection
+- Small amount of keyboard configuration*
 
-A similar patch [1] has been posted some time ago. Please check the review
-comments.
+[*] The keyboard is handled by the same EC but it has a dedicated i2c
+bus and is already enabled. This port only provides fn key behavior
+configuration.
 
-Thanks,
-Georgi
+Unfortunately, while all this functionality is implemented in ACPI, it's
+currently not possible to use ACPI to boot Linux on such Qualcomm
+devices. Thus this series implements and enables a new driver that
+provides support for the EC features.
 
-[1] https://lore.kernel.org/all/20220906191423.30109-1-quic_mdtipton@quicinc.com/
+The EC would be one of the last pieces to get almost full support for the
+Acer Aspire 1 laptop in the upstream Linux kernel.
 
-> ---
->   drivers/interconnect/core.c | 15 ++++++++-------
->   1 file changed, 8 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-> index 50bac2d79d9b..467d42cc7e49 100644
-> --- a/drivers/interconnect/core.c
-> +++ b/drivers/interconnect/core.c
-> @@ -14,6 +14,7 @@
->   #include <linux/interconnect-provider.h>
->   #include <linux/list.h>
->   #include <linux/mutex.h>
-> +#include <linux/rtmutex.h>
->   #include <linux/slab.h>
->   #include <linux/of.h>
->   #include <linux/overflow.h>
-> @@ -28,7 +29,7 @@ static LIST_HEAD(icc_providers);
->   static int providers_count;
->   static bool synced_state;
->   static DEFINE_MUTEX(icc_lock);
-> -static DEFINE_MUTEX(icc_bw_lock);
-> +static DEFINE_RT_MUTEX(icc_bw_lock);
->   static struct dentry *icc_debugfs_dir;
->   
->   static void icc_summary_show_one(struct seq_file *s, struct icc_node *n)
-> @@ -698,7 +699,7 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
->   	if (WARN_ON(IS_ERR(path) || !path->num_nodes))
->   		return -EINVAL;
->   
-> -	mutex_lock(&icc_bw_lock);
-> +	rt_mutex_lock(&icc_bw_lock);
->   
->   	old_avg = path->reqs[0].avg_bw;
->   	old_peak = path->reqs[0].peak_bw;
-> @@ -730,7 +731,7 @@ int icc_set_bw(struct icc_path *path, u32 avg_bw, u32 peak_bw)
->   		apply_constraints(path);
->   	}
->   
-> -	mutex_unlock(&icc_bw_lock);
-> +	rt_mutex_unlock(&icc_bw_lock);
->   
->   	trace_icc_set_bw_end(path, ret);
->   
-> @@ -939,7 +940,7 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
->   		return;
->   
->   	mutex_lock(&icc_lock);
-> -	mutex_lock(&icc_bw_lock);
-> +	rt_mutex_lock(&icc_bw_lock);
->   
->   	node->provider = provider;
->   	list_add_tail(&node->node_list, &provider->nodes);
-> @@ -968,7 +969,7 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
->   	node->avg_bw = 0;
->   	node->peak_bw = 0;
->   
-> -	mutex_unlock(&icc_bw_lock);
-> +	rt_mutex_unlock(&icc_bw_lock);
->   	mutex_unlock(&icc_lock);
->   }
->   EXPORT_SYMBOL_GPL(icc_node_add);
-> @@ -1094,7 +1095,7 @@ void icc_sync_state(struct device *dev)
->   		return;
->   
->   	mutex_lock(&icc_lock);
-> -	mutex_lock(&icc_bw_lock);
-> +	rt_mutex_lock(&icc_bw_lock);
->   	synced_state = true;
->   	list_for_each_entry(p, &icc_providers, provider_list) {
->   		dev_dbg(p->dev, "interconnect provider is in synced state\n");
-> @@ -1107,7 +1108,7 @@ void icc_sync_state(struct device *dev)
->   			}
->   		}
->   	}
-> -	mutex_unlock(&icc_bw_lock);
-> +	rt_mutex_unlock(&icc_bw_lock);
->   	mutex_unlock(&icc_lock);
->   }
->   EXPORT_SYMBOL_GPL(icc_sync_state);
+This series is similar to the EC driver for Lenovo Yoga C630, proposed
+in [1] but seemingly never followed up...
+
+[1] https://lore.kernel.org/all/20230205152809.2233436-1-dmitry.baryshkov@linaro.org/
+
+Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+---
+Changes in v3:
+- Supress warning on few no-op events.
+- Invert the fn key behavior (Rob, Conor)
+- Link to v2: https://lore.kernel.org/r/20231212-aspire1-ec-v2-0-ca495ea0a7ac@trvn.ru
+
+Changes in v2:
+- Drop incorrectly allowed reg in the ec connector binding (Krzysztof)
+- Minor style changes (Konrad)
+- Link to v1: https://lore.kernel.org/r/20231207-aspire1-ec-v1-0-ba9e1c227007@trvn.ru
+
+---
+Nikita Travkin (3):
+      dt-bindings: power: supply: Add Acer Aspire 1 EC
+      power: supply: Add Acer Aspire 1 embedded controller driver
+      arm64: dts: qcom: acer-aspire1: Add embedded controller
+
+ .../bindings/power/supply/acer,aspire1-ec.yaml     |  69 ++++
+ arch/arm64/boot/dts/qcom/sc7180-acer-aspire1.dts   |  40 +-
+ drivers/power/supply/Kconfig                       |  14 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/acer-aspire1-ec.c             | 453 +++++++++++++++++++++
+ 5 files changed, 576 insertions(+), 1 deletion(-)
+---
+base-commit: 2d5c7b7eb345249cb34d42cbc2b97b4c57ea944e
+change-id: 20231206-aspire1-ec-6b3d2cac1a72
+
+Best regards,
+-- 
+Nikita Travkin <nikita@trvn.ru>
 
 
