@@ -1,184 +1,196 @@
-Return-Path: <linux-pm+bounces-4165-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4166-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67F7E85C3AD
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 19:39:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C386F85C3B4
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 19:41:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C41E1C21F39
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 18:39:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F36871C21D49
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 18:41:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6529E12A179;
-	Tue, 20 Feb 2024 18:39:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E99AB12FF7E;
+	Tue, 20 Feb 2024 18:41:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="TdHKfil9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I6yoiswL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A2F376049;
-	Tue, 20 Feb 2024 18:39:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA2FA12F5AA;
+	Tue, 20 Feb 2024 18:41:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708454367; cv=none; b=IfFb2YDm/ISEcdvX4M3f+PoeKBUsadzTZjj1cE73V99fcKO3EKtfzPwGK+wYWACl/m7Uri41qyeRlmPoflW5EnMpcq5Qckzk2VPkYuI4Wm3hqPC4hemC+v2jI+2HWuSQEFDbXJxY89+N7p8fMR5LSu5APAMJ51xiIZT6+E650cU=
+	t=1708454471; cv=none; b=jK2kfH6Gy2azKb8Qo7v2ITcr0Ra4Od1VxAb5jtlsufLdjf2zsWMp/2bOBs7jA2JIxdJn4XXCcpmgkhaemndtAMKBNZABBoNQ76hGGN6R52oFVcnhtRuNXPqfbz1Yk+fkrfNWjkJ4JlhcOCTF+MuBSjKa5v7P2k6Y4KWN+rDU1hU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708454367; c=relaxed/simple;
-	bh=RLMGiWwHO3wu/d8qyryVub6v27yu2bfWSyVW8TUtiX4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=e5H9DaX8g2HGAeJRVLcoSzVL6yL0aIzI/iNhNOzWdhpVJHQhvIUsqCymeFSOtMOkda1fGLD0S1jfg7L5tqcBHZX8mqNP0JW8Vd9AVjYXB4jNKt1L/0KYztsgKJ2IsN7Vy3NVWW0Gne+e5EE7HzqJN5rIHc3Zh0QxhlOQMuguiUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=TdHKfil9; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6e3ffafa708so2736609b3a.1;
-        Tue, 20 Feb 2024 10:39:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708454365; x=1709059165;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:dkim-signature:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FE+/W9O0z0Se+agZSQ5edJ7WLn5M+Kf6aszL/I8gUdM=;
-        b=oog1HqygCFWNNzFVhru6BGhbY70Ct22TMp8bCE2cFeZnWNDVWsA3HOD1boNLl9lFdf
-         DEi+Nct1cd6bzCaJ2hDnQd24aH/p1IjfHLuoRoHXf5aPRA49+8kL/dJgnVoq/GU3oOCQ
-         sTnOEfRNPlsvRySBED+yqit/p5u0l/7CtxbW47cGuckxS3azbT6qUXbPlEaba+cPVKxC
-         eJNg6ZK6lxIX18PswyyyzOQWnJo9dF0fi5Bua1hjEWpcFtP6bNOQGZwS/v87T7eG3bNC
-         EZF9V6Uu5PCVy1L/q25DDLUpwHabm0wfAE7vAdZInSNYUZrTE+jUAUKEL152wu0saB3o
-         xdKA==
-X-Forwarded-Encrypted: i=1; AJvYcCU8V/or59mltuf4U/lvCPzjinhyekM8+rDqEOgQGnlLLxi6KHX73w8HYuLMhamvB4kRBCS//G6q1/5ukro11Gx4TPrnbLEs5tIbsheU
-X-Gm-Message-State: AOJu0YztYgMcPlmIsu9LtJXWDMcsNYdUQQu1UJL/q4yo/heUvUiM7fAA
-	tzzyBYMLfMYcpBf8VmiSss/j8I14wt0JjLyOFJ6xXdItUUK8WAuiTI/m+zscwmuWIg==
-X-Google-Smtp-Source: AGHT+IEqTlDv7o2qtWX3Uzih5W9hnWyS/hJkNg9+LTeH3IqK3bclya5cceU19RTa4UZc4qpQ1SzGNA==
-X-Received: by 2002:a05:6a00:13a2:b0:6e4:79af:78dd with SMTP id t34-20020a056a0013a200b006e479af78ddmr3685083pfg.10.1708454364525;
-        Tue, 20 Feb 2024 10:39:24 -0800 (PST)
-Received: from mail.marliere.net ([24.199.118.162])
-        by smtp.gmail.com with ESMTPSA id o23-20020a056a001b5700b006e466369645sm3951370pfv.132.2024.02.20.10.39.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Feb 2024 10:39:23 -0800 (PST)
-From: "Ricardo B. Marliere" <ricardo@marliere.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
-	s=2024; t=1708454362;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=FE+/W9O0z0Se+agZSQ5edJ7WLn5M+Kf6aszL/I8gUdM=;
-	b=TdHKfil9rRmNE+dAusoHFKjfpzN3rXJeRMWQw9q1i+MBujn0GEoLySbzY8/8ljh2X0KvRg
-	UDCMUAfwKcnOCnE+ugkKBGxKJfR/DDIHg1/CiIBeAWhcp6OlCo6kiJc5b+aSgA4hBL7uLq
-	xXFQZeGs+1ocBFV7YktdAL+7pqM/z8cB51ucHBPDiE0cddRrzjxZJ0++6tKVgZdOOYbwYP
-	vTmMz3qjSnYBd71Ndv6/JLi+QPs1K0rhIfLW3h2eC0caZrG0+70FZIFV57iAgscKQBNqL+
-	UpM8n2e6lIVzZyFouYHCT/cdMJckN5KtsVaz/DKebYcgAEFFiNhL2rSbaMdNgw==
-Authentication-Results: ORIGINATING;
-	auth=pass smtp.auth=ricardo@marliere.net smtp.mailfrom=ricardo@marliere.net
-Date: Tue, 20 Feb 2024 15:40:06 -0300
-Subject: [PATCH] power: supply: sysfs: constify the struct device_type
- usage
+	s=arc-20240116; t=1708454471; c=relaxed/simple;
+	bh=15wVNh60n0mKgmlzygAoNpmkEvxBvaqNjKfNeAsjQ4w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ueb46aWJ3x00zNeV1FVSzKmGyY6RPudqvvngIULgg11YRZoJ7mvp7JoxtY/LYQj23h86zQ3wiG9nRurKXOZTiVNkypuNuzyZlWYIi6JxStYH7skOlAkvKdpymXP0TusQxUw8W0CRCGqHZ48DKo5E3cVzf6+VQ6eUGe7tBVj4kpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I6yoiswL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4B2AC433F1;
+	Tue, 20 Feb 2024 18:41:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708454471;
+	bh=15wVNh60n0mKgmlzygAoNpmkEvxBvaqNjKfNeAsjQ4w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=I6yoiswLuwvRkTOyHtca4QBI0nxQq61xnDFGgF7WkbRQhu0MCSk8+YurXOGrdIiMl
+	 3d5XPZ2nvg4A7VQjpqyNT995DJFhhfoW2gQKyrdhURCr+NNitthjAHKDQRccYbqH1B
+	 /t9BEYBB+YUfEE87SvH+CPIhYMKMy6KWPiDinKDiyTU7f5dB/o6FU4Q/7xt9V12D88
+	 SVpDh/lkadi34h2cIfqSiewK74H6QYjNthXd5VwPI4r5TazIMDnqQbrBuo5BECsrxi
+	 gj0kd9p7/av53ieW5iBv48Xs/P8gZcj/EXu/1tZYkg9+JSk7Ofg4lON/xG1wSFGDu7
+	 IU94Fw4NbtDbg==
+Date: Tue, 20 Feb 2024 18:41:06 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Nikita Travkin <nikita@trvn.ru>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	cros-qcom-dts-watchers@chromium.org, Andy Gross <agross@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Rob Herring <robh@kernel.org>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] dt-bindings: power: supply: Add Acer Aspire 1 EC
+Message-ID: <20240220-splinter-jackpot-ac1571af5b2d@spud>
+References: <20240220-aspire1-ec-v3-0-02cb139a4931@trvn.ru>
+ <20240220-aspire1-ec-v3-1-02cb139a4931@trvn.ru>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240220-device_cleanup-power-v1-1-e2b9e0cea072@marliere.net>
-X-B4-Tracking: v=1; b=H4sIAAXy1GUC/x2M2wqAIBAFfyX2OUGtiPqViDDbaiFUlC4g/nvW4
- 3DmTISAnjBAX0TweFEgazKIsgC9K7MhoyUzSC5rLiVnS5Y0TvpAZU7HnL3RM161TfftehaQr87
- jSs+fHcaUXp14iX1mAAAA
-To: Sebastian Reichel <sre@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Ricardo B. Marliere" <ricardo@marliere.net>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2865; i=ricardo@marliere.net;
- h=from:subject:message-id; bh=RLMGiWwHO3wu/d8qyryVub6v27yu2bfWSyVW8TUtiX4=;
- b=owEBbQKS/ZANAwAKAckLinxjhlimAcsmYgBl1PIH8wC8dNgBQ8wGo+ymYdpnemsRFJ+kshlDL
- OB1mg3zKkCJAjMEAAEKAB0WIQQDCo6eQk7jwGVXh+HJC4p8Y4ZYpgUCZdTyBwAKCRDJC4p8Y4ZY
- psSSEACmiBWM5y1nQ1hSMVEZgiU1WcFUzmciOnfOgHhEWV6W6xvxnpwlEpFSbObG5O/zWiuA785
- bbvLkA9S22fTLRWztRy4trsWKFznqJrrFXVIdkqd7/iS9zjSkk1iv/dpUyJk+ZbZqnhQ62pBNYW
- Us9zDOWS7kDUaVoA+T694obh9r5gvWYT3SP96mDNdDy6qj198OwCqFDNenRUWSRwbb44bWaqXN/
- hwXwqCLdmp68utTuHgK9jKaf9y28URMikZ6JI1QIj013tIDr5O6sn0cbChcIF+Ww2BoNx1yHqcJ
- fWbifk1cVLTx5FeApvwWKNbbchCOuS1SjKdGXc31btklUDXQzmOZOzStOABFQazLGYLjIpPfaFH
- JEA1HODuxgoAwt/xi073pY3ncYR5X2frz/UgVciVz8B/j2Noks+elVTS0XH7S1soL6BAqSXlCMt
- 6oPXBQxKOpcRQ9TIRxNAqp1LV4xbAzJiAJZzfwjY1NkaMmboAYbh9wllFDt8kV7iUUZ+E8om9KU
- ttsZ6TXBcq3rPQQ5kIt7AJ61paXvT5X8ncd0GHZrAZ+eH7DxU68cyTNentUH0e+sYyLOiswmGwP
- aZLOcsAt1Y9dXUCU0IlIY79uqJA+MRmtIJiJFZhT57WipVL8btnTug8ica4LSqagSqOXdEsCi1A
- L6QjQCxHCsBThkQ==
-X-Developer-Key: i=ricardo@marliere.net; a=openpgp;
- fpr=030A8E9E424EE3C0655787E1C90B8A7C638658A6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="NyfVgNR6xsvZmS5r"
+Content-Disposition: inline
+In-Reply-To: <20240220-aspire1-ec-v3-1-02cb139a4931@trvn.ru>
 
-Since commit aed65af1cc2f ("drivers: make device_type const"), the driver
-core can properly handle constant struct device_type. Move the
-power_supply_dev_type variable to be a constant structure as well, placing
-it into read-only memory which can not be modified at runtime.
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
----
- drivers/power/supply/power_supply.h       | 4 ++--
- drivers/power/supply/power_supply_core.c  | 2 +-
- drivers/power/supply/power_supply_sysfs.c | 9 ++++++---
- 3 files changed, 9 insertions(+), 6 deletions(-)
+--NyfVgNR6xsvZmS5r
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/power/supply/power_supply.h b/drivers/power/supply/power_supply.h
-index 645eee4d6b6a..d547dbe5676f 100644
---- a/drivers/power/supply/power_supply.h
-+++ b/drivers/power/supply/power_supply.h
-@@ -15,12 +15,12 @@ struct power_supply;
- 
- #ifdef CONFIG_SYSFS
- 
--extern void power_supply_init_attrs(struct device_type *dev_type);
-+extern void power_supply_init_attrs(const struct device_type *dev_type);
- extern int power_supply_uevent(const struct device *dev, struct kobj_uevent_env *env);
- 
- #else
- 
--static inline void power_supply_init_attrs(struct device_type *dev_type) {}
-+static inline void power_supply_init_attrs(const struct device_type *dev_type) {}
- #define power_supply_uevent NULL
- 
- #endif /* CONFIG_SYSFS */
-diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-index ecef35ac3b7e..fda21cf4111c 100644
---- a/drivers/power/supply/power_supply_core.c
-+++ b/drivers/power/supply/power_supply_core.c
-@@ -31,7 +31,7 @@ EXPORT_SYMBOL_GPL(power_supply_class);
- 
- static BLOCKING_NOTIFIER_HEAD(power_supply_notifier);
- 
--static struct device_type power_supply_dev_type;
-+static const struct device_type power_supply_dev_type;
- 
- #define POWER_SUPPLY_DEFERRED_REGISTER_TIME	msecs_to_jiffies(10)
- 
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-index 977611e16373..ed365ca54c90 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -399,12 +399,15 @@ static const struct attribute_group *power_supply_attr_groups[] = {
- 	NULL,
- };
- 
--void power_supply_init_attrs(struct device_type *dev_type)
-+static const struct device_type power_supply_dev_type = {
-+	.name = "power_supply",
-+	.groups = power_supply_attr_groups,
-+};
-+
-+void power_supply_init_attrs(const struct device_type *dev_type)
- {
- 	int i;
- 
--	dev_type->groups = power_supply_attr_groups;
--
- 	for (i = 0; i < ARRAY_SIZE(power_supply_attrs); i++) {
- 		struct device_attribute *attr;
- 
+Rob,
 
----
-base-commit: a9b254892ce1a447b06c5019cbf0e9caeb48c138
-change-id: 20240220-device_cleanup-power-037594022cb1
+On Tue, Feb 20, 2024 at 04:57:12PM +0500, Nikita Travkin wrote:
+> Add binding for the EC found in the Acer Aspire 1 laptop.
+>=20
+> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+> ---
+>  .../bindings/power/supply/acer,aspire1-ec.yaml     | 69 ++++++++++++++++=
+++++++
+>  1 file changed, 69 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/power/supply/acer,aspire1-=
+ec.yaml b/Documentation/devicetree/bindings/power/supply/acer,aspire1-ec.ya=
+ml
+> new file mode 100644
+> index 000000000000..984cf19cf806
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/supply/acer,aspire1-ec.yaml
+> @@ -0,0 +1,69 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/supply/acer,aspire1-ec.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Acer Aspire 1 Embedded Controller
+> +
+> +maintainers:
+> +  - Nikita Travkin <nikita@trvn.ru>
+> +
+> +description:
+> +  The Acer Aspire 1 laptop uses an embedded controller to control battery
+> +  and charging as well as to provide a set of misc features such as the
+> +  laptop lid status and HPD events for the USB Type-C DP alt mode.
+> +
+> +properties:
+> +  compatible:
+> +    const: acer,aspire1-ec
+> +
+> +  reg:
+> +    const: 0x76
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  acer,fn-selects-media-keys:
+> +    description: Configure the keyboard layout to invert the Fn key.
+> +      By default the function row of the keyboard inputs media keys
+> +      (i.e Vol-Up) when Fn is not pressed. With this option set, pressing
+> +      the key without Fn would input function keys (i.e. F11). The
+> +      firmware may choose to add this property when user selects the fn
+> +      mode in the firmware setup utility.
+> +    type: boolean
 
-Best regards,
--- 
-Ricardo B. Marliere <ricardo@marliere.net>
+We both had some comments on this property, and Nikita tried to follow
+up on yours (which was much more substantive than mine) but got no
+response:
+https://lore.kernel.org/all/20231214220210.GA988134-robh@kernel.org/
 
+Reading what you said, I'm not entirely sure what you were looking for,
+my guess is that you were wanted something controllable from userspace,
+but I'm not sure how you figured that should work where the firmware
+alone is able to control this.
+
+Cheers,
+Conor.
+
+> +
+> +  connector:
+> +    $ref: /schemas/connector/usb-connector.yaml#
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |+
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
+> +        #address-cells =3D <1>;
+> +        #size-cells =3D <0>;
+> +
+> +        embedded-controller@76 {
+> +            compatible =3D "acer,aspire1-ec";
+> +            reg =3D <0x76>;
+> +
+> +            interrupts-extended =3D <&tlmm 30 IRQ_TYPE_LEVEL_LOW>;
+> +
+> +            connector {
+> +                compatible =3D "usb-c-connector";
+> +
+> +                port {
+> +                    ec_dp_in: endpoint {
+> +                        remote-endpoint =3D <&mdss_dp_out>;
+> +                    };
+> +                };
+> +            };
+> +        };
+> +    };
+>=20
+> --=20
+> 2.43.0
+>=20
+
+--NyfVgNR6xsvZmS5r
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZdTyQgAKCRB4tDGHoIJi
+0uv6AP9Hs2QQv/YYHGYhhHhpqKqfT4EvP4wIJ2I3XnFPTLp7TAEAlyyHmfzBrCjD
+AgFzbLCEjTAQEJtMRKbH3EJ7Q9jMRwk=
+=2TYU
+-----END PGP SIGNATURE-----
+
+--NyfVgNR6xsvZmS5r--
 
