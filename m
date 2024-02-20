@@ -1,153 +1,239 @@
-Return-Path: <linux-pm+bounces-4172-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4173-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16C9085C8EE
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 22:27:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 377A685CADE
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 23:41:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C18D11F2239C
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 21:27:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B5371C20DD3
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 22:41:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4966C151CED;
-	Tue, 20 Feb 2024 21:27:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48B15154445;
+	Tue, 20 Feb 2024 22:40:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GUlQs/IX"
+	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="oydsPNWT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 808BA151CD6
-	for <linux-pm@vger.kernel.org>; Tue, 20 Feb 2024 21:27:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61CDA153BE6;
+	Tue, 20 Feb 2024 22:40:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708464446; cv=none; b=ksDEh0RLGLgvgGtVK1DuL11eHZElg+c5El36ST4qeFMSj54wbcK1zf2rwEKdEFJ86cC6C+bMZQdV/sLCXso8vBha3FwfaF/u7dPxUjMUb0qCuUq7j/WoHkn8kNbi3ydBdTsoDdRlncqBWeyysZigEL72ADAsWGk3R5oipPOrKoo=
+	t=1708468846; cv=none; b=gdnNeDMwkKI9zgSiTOJlrq3yct5EcGn8P5L+Es8NvSCIx4s6ZKyvIVRGHMVzMtpnTr59AfE77XHQLJpGHmjbo0ZvsxtqDxy1ECz95Ss9dEiptWUeRVpKEBlyAClZO0JxFZ8sM/rBA74ynsEpcJqmxh7z3iqDNcYh8Vf2LPps704=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708464446; c=relaxed/simple;
-	bh=mihNVPdkAjT4yMtBvR/DOp64MRkHVFRDihgFw37lvKA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=D4dML/4MnX3AW6aqksid6vqLBIoim9OLs30D9jxlik5ufnY5o1LsVXWidNvVUo2YvNd3Yrvav8dbV5R8yTxwlYwYlnNzmbLdWTmyz+vgwMcieGDxNsJTtC/i0qzaJkZouqQ8lBIzRfFxJ81t7FAt2jiFCUWP2E6r2WQws021IHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GUlQs/IX; arc=none smtp.client-ip=209.85.208.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2d23a5a7c18so29457781fa.2
-        for <linux-pm@vger.kernel.org>; Tue, 20 Feb 2024 13:27:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708464443; x=1709069243; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hk72E6PCYMAJefDGHAelMphfYnvgFhyOXizcDeLOSm0=;
-        b=GUlQs/IXhN0obOK9PAEl+s4R3MoSr9WYSsk//AuT49ZtE0TH44grIwQyuogA+tsw74
-         QOdh3pmw+p4FbunvctcsnE5y1e2OYGYxfSJ8SVEiNs+zjNjJ5k5TeBtCK5k7M0DM+nkY
-         dM0da1b398tx0x14OnD4kWO5hbaLFZ9LlGi+X725XUfNm7JYa6sjJi6wEMBPlfiMj60t
-         PthELhKkqQf8XmJBm691EGudgv+F0sA48nuC8Mt8S5TwX1SjT0KiL94ZviFJT+Xg8hKf
-         xTTFdp0qnmCOqTiEfgugyutVqGiDk5f7MiulgAgZ7G0usby909rc/RXkzfOmHgy5VytP
-         m5pw==
+	s=arc-20240116; t=1708468846; c=relaxed/simple;
+	bh=lcQ6tPFPA8ZPIIU2M50ETdjk/mv23gTBbEC2JUwD5Lk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=tvA9XfHBAPyVA8yfkt+MwMJqOkZJ/1hHyNaVaSzX+3WDInbjvaqFjAVuoX2c6guOV12aNSeaGuzuEZRMjOqZ4gwZz38gmNgP/5K4JKZ+bg/xqoGoxINWpR97s/g/L1G6Boi+HgDxcARnwLz6woaGxx1zRfJtMdcpPIZl3gYNzc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=oydsPNWT; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=marliere.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-295c67ab2ccso4305031a91.1;
+        Tue, 20 Feb 2024 14:40:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708464443; x=1709069243;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
-         :to:content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hk72E6PCYMAJefDGHAelMphfYnvgFhyOXizcDeLOSm0=;
-        b=wDEYkkv88uggSRsJyFy3qA10vqR6s65agbyObQRA7pLxC1HzbfileG6IOj2PrZ5zwQ
-         JGfqBdYuqX771BOGOuM4hc3zTf1iA8JubKNhVIgEhLoC0e9yVtlMFsxQRnT3rzyn3VR3
-         ppWToFvZWo9+l0rmXALH6lcdj6rdR0g6bP7J/92zK85T5UOuD+q12eTuxsGJCD/78lMb
-         0HywEG2ET8dJ5PD6iY1BD/GqQ+R5JIIXs/gr4OOsLW8R9f5Y82BAJIZh4CdOBpzwx7wV
-         BFaPdSUdHPYj6yGYwp59tUeLI8hVzqa/syNl4+B9RDoZegeAe7BCKrgJ5dNUjA49Rocx
-         hCRw==
-X-Gm-Message-State: AOJu0Yy1BjrSi4PjRv2VJBSblx1d0QD5ZMAK9ZO0udbjWIfjn+/Y6JzN
-	jxPpkRiRdku2yRrZ6en3UlYwPeckKgOhSneW67e/JsatveCe5YvSVzvtz8u2xPY=
-X-Google-Smtp-Source: AGHT+IENDNFngqWBM1CHA3TPkwpJRypYzZ5TnrACPHbsfAJQJ+XLDbhOvzx2B6RpuMTFGpSm8xTBbA==
-X-Received: by 2002:a05:6512:31c5:b0:512:b773:2800 with SMTP id j5-20020a05651231c500b00512b7732800mr5224409lfe.34.1708464441698;
-        Tue, 20 Feb 2024 13:27:21 -0800 (PST)
-Received: from [192.168.192.135] (078088045141.garwolin.vectranet.pl. [78.88.45.141])
-        by smtp.gmail.com with ESMTPSA id f18-20020a193812000000b00512cf7f4454sm55907lfa.129.2024.02.20.13.27.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Feb 2024 13:27:21 -0800 (PST)
-Message-ID: <f3ae0fac-c117-4261-890e-d8953f7e9d1e@linaro.org>
-Date: Tue, 20 Feb 2024 22:27:18 +0100
+        d=1e100.net; s=20230601; t=1708468843; x=1709073643;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:dkim-signature:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ce2p+U1CVerp7eft6EXnwNDofuNiEGCs5Ue3VZIDbv4=;
+        b=PSfASWo3Q/Sj411s3qJ0HDllqPKiajpHcq5gsLdpJ6o7OL2PRZDVaz16l/OkdmymU6
+         elRMagKU49t97XLVTzHZ4fRHl/9zlreRnuTU3bWBZ/kRiCyVYD6tUPHZhRJNzY8vSeyl
+         Obra6MwyXkbHLYQvMzrZ2eEhNXfjVBIcLhxAWS9m4NRpQDavR7FGuV4hRcdaOcKovPLS
+         T8/w1qBMQ9qICCjuaD6O8Ma+sMjtrvAaBc1cQuNs5dHhGCHFmWLLuT3m9CWnBlNd4+3K
+         EF3zGqi2+9FqAeQAs5rIc9EjqCStTTX4rfJ2KnLXXjsKK/8o/JpacjiqYnQE3zULDvWb
+         /oaQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVpPCrzmgwExWARgwMlu9WicxtANOSIpFv+bauTO5rAxrv9k3e5bHRAMkIP+zu4B2j8/vgsHOuq9rNgRR6iZrnXV4y98P8lvv/VPmVJ
+X-Gm-Message-State: AOJu0YypYGqnM8+h+myU/jQ6n3ABKIwaigcw6jQGhJ7EDjXbLdAsAsPf
+	gTeqbswBWqb7CqyKT0PoykuJKmLnluVJwgygtHFjimgzNB8iNkN27Z5VXl76wyM=
+X-Google-Smtp-Source: AGHT+IHjOq1j4GahfnZuxOTFxxyNhCB0oID6il9I+p8tq/vUY90rah5UASvrvQQPgM+5+bAYs/aiYQ==
+X-Received: by 2002:a17:90a:3482:b0:299:3990:4e11 with SMTP id p2-20020a17090a348200b0029939904e11mr10986196pjb.34.1708468843402;
+        Tue, 20 Feb 2024 14:40:43 -0800 (PST)
+Received: from mail.marliere.net ([24.199.118.162])
+        by smtp.gmail.com with ESMTPSA id dj16-20020a17090ad2d000b0029955fe814asm182488pjb.21.2024.02.20.14.40.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Feb 2024 14:40:42 -0800 (PST)
+From: "Ricardo B. Marliere" <ricardo@marliere.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
+	s=2024; t=1708468841;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Ce2p+U1CVerp7eft6EXnwNDofuNiEGCs5Ue3VZIDbv4=;
+	b=oydsPNWT6etjwfZi/jfuSZlFXl22LM/nYeXTC7r0mNwxm4ZY+fpMsWT/w36+dahb3AWhTb
+	qZIibcRL/XraIF9/9BUojmgD/yPaokkACB7i7lZlO9XrfztoY074FcupIpb7mMMmUPIBPJ
+	yYoNUmbbufmghKrP6v/yQ11TpJ5qaVYrXBJdtIZkCooWC516ME0xrkwYgvl19VmfBkHXEm
+	z/SRhkVCpCKXozT5TDSvCt8Nee/Mp/462FpuiyoKs8dvkA+8QqfE2/lvY1zzzr2ZeJji60
+	uPO/LQKr30YYZwh/mHKCU+hNP16qh2WxVpmoloUUwOREUScDakI8aEo9pwpVqg==
+Authentication-Results: ORIGINATING;
+	auth=pass smtp.auth=ricardo@marliere.net smtp.mailfrom=ricardo@marliere.net
+Date: Tue, 20 Feb 2024 19:41:26 -0300
+Subject: [PATCH] power: supply: core: make power_supply_class constant
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/3] arm64: dts: qcom: acer-aspire1: Add embedded
- controller
-Content-Language: en-US
-To: Nikita Travkin <nikita@trvn.ru>, Sebastian Reichel <sre@kernel.org>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>, cros-qcom-dts-watchers@chromium.org,
- Andy Gross <agross@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Rob Herring <robh@kernel.org>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20240220-aspire1-ec-v3-0-02cb139a4931@trvn.ru>
- <20240220-aspire1-ec-v3-3-02cb139a4931@trvn.ru>
-From: Konrad Dybcio <konrad.dybcio@linaro.org>
-Autocrypt: addr=konrad.dybcio@linaro.org; keydata=
- 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
- izWDgYvmBE8=
-In-Reply-To: <20240220-aspire1-ec-v3-3-02cb139a4931@trvn.ru>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20240220-class_cleanup-power-v1-1-9ef579404351@marliere.net>
+X-B4-Tracking: v=1; b=H4sIAJUq1WUC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDIyMD3eScxOLi+OSc1MS80gLdgvzy1CJdQxMzCwMjQ0tzU+MUJaDOgqL
+ UtMwKsKnRsbW1AI2hB0ZlAAAA
+To: Sebastian Reichel <sre@kernel.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ "Ricardo B. Marliere" <ricardo@marliere.net>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5088; i=ricardo@marliere.net;
+ h=from:subject:message-id; bh=lcQ6tPFPA8ZPIIU2M50ETdjk/mv23gTBbEC2JUwD5Lk=;
+ b=owEBbQKS/ZANAwAKAckLinxjhlimAcsmYgBl1SqXboxLcsoUmejaMbZfVptUH57xyJd/HCqQc
+ BHN9TIe4xOJAjMEAAEKAB0WIQQDCo6eQk7jwGVXh+HJC4p8Y4ZYpgUCZdUqlwAKCRDJC4p8Y4ZY
+ pkFoEACI+TUug3sFPm8/vVqr3MTthY9IR5GfMxjPk0XBWiWYbEaFUl3tF/69klWu1/us2vwp+pz
+ GNHtNRfWBot6hoXK13YVMzO5bw1FuSak6dZ59XKWu1hxAp7cRGezDk0WPE5sgofSfFaL0/X6iF0
+ RvycvUvmoOzXbE/JKE90BJtH36mFGT8/Jmnmo13JH9FR86JMcAaa8WZowox2Iop2AK6os89ndPx
+ z/4WmN/Cy02TijHbjNRxoggEx8M6/dfFpldXhiNRfMS8yGUJp2q0YUj23ZH031WZU40A3bxf6//
+ 8NMH5Qakt/wxDnUSaPTozuO59htYfq310ZcEmcl95uglbxE/QvWyD4gCY23c1S6JKp/+Z7U0U3J
+ V2cRh2KiwvN6RvfNXaxdsP8kmJA9sHS4H9TcVx12szW2w823K+LZFV03K0qgl5pHuC56NMHQj5s
+ h5YzqvKcBota/FuiwkZt81M8GAfx6Age/esil1GAtsNzIxiZrvtSfjr5MwlPCidtFClrUMuAjof
+ pPfqWeDHSinXK9eMEz2kuU0DFwqnioXp3ipkBcpZCetUKYLxgyUxgwN0zMUXwIOREiBCoJ4GFQZ
+ UaC+q/1B8bVUHjKV4tb1IydXKXkFTuVfJnn9ii2HCYlUcqZUSunPXKC3+Q3fmvx1fKTV29UTDdM
+ uzrZzcDqvk0VzQw==
+X-Developer-Key: i=ricardo@marliere.net; a=openpgp;
+ fpr=030A8E9E424EE3C0655787E1C90B8A7C638658A6
 
-On 20.02.2024 12:57, Nikita Travkin wrote:
-> The laptop contains an embedded controller that provides a set of
-> features:
-> 
-> - Battery and charger monitoring
-> - USB Type-C DP alt mode HPD monitoring
-> - Lid status detection
-> - Small amount of keyboard configuration*
-> 
-> [*] The keyboard is handled by the same EC but it has a dedicated i2c
-> bus and is already enabled. This port only provides fn key behavior
-> configuration.
-> 
-> Add the EC to the device tree and describe the relationship between the
-> EC-managed type-c port and the SoC DisplayPort.
-> 
-> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
-> ---
+Since commit 43a7206b0963 ("driver core: class: make class_register() take
+a const *"), the driver core allows for struct class to be in read-only
+memory, so move the power_supply_class structure to be declared at build
+time placing it into read-only memory, instead of having to be dynamically
+allocated at boot time.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
+---
+ drivers/power/supply/power_supply_core.c | 28 ++++++++++++++++------------
+ include/linux/power_supply.h             |  2 +-
+ 2 files changed, 17 insertions(+), 13 deletions(-)
 
-Konrad
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index ecef35ac3b7e..f13372e88589 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -26,7 +26,10 @@
+ #include "samsung-sdi-battery.h"
+ 
+ /* exported for the APM Power driver, APM emulation */
+-struct class *power_supply_class;
++const struct class power_supply_class = {
++	.name = "power_supply",
++	.dev_uevent = power_supply_uevent,
++};
+ EXPORT_SYMBOL_GPL(power_supply_class);
+ 
+ static BLOCKING_NOTIFIER_HEAD(power_supply_notifier);
+@@ -93,7 +96,7 @@ static void power_supply_changed_work(struct work_struct *work)
+ 	if (likely(psy->changed)) {
+ 		psy->changed = false;
+ 		spin_unlock_irqrestore(&psy->changed_lock, flags);
+-		class_for_each_device(power_supply_class, NULL, psy,
++		class_for_each_device(&power_supply_class, NULL, psy,
+ 				      __power_supply_changed_work);
+ 		power_supply_update_leds(psy);
+ 		blocking_notifier_call_chain(&power_supply_notifier,
+@@ -329,7 +332,7 @@ int power_supply_am_i_supplied(struct power_supply *psy)
+ 	struct psy_am_i_supplied_data data = { psy, 0 };
+ 	int error;
+ 
+-	error = class_for_each_device(power_supply_class, NULL, &data,
++	error = class_for_each_device(&power_supply_class, NULL, &data,
+ 				      __power_supply_am_i_supplied);
+ 
+ 	dev_dbg(&psy->dev, "%s count %u err %d\n", __func__, data.count, error);
+@@ -365,7 +368,7 @@ int power_supply_is_system_supplied(void)
+ 	int error;
+ 	unsigned int count = 0;
+ 
+-	error = class_for_each_device(power_supply_class, NULL, &count,
++	error = class_for_each_device(&power_supply_class, NULL, &count,
+ 				      __power_supply_is_system_supplied);
+ 
+ 	/*
+@@ -412,7 +415,7 @@ int power_supply_get_property_from_supplier(struct power_supply *psy,
+ 	 * This function is not intended for use with a supply with multiple
+ 	 * suppliers, we simply pick the first supply to report the psp.
+ 	 */
+-	ret = class_for_each_device(power_supply_class, NULL, &data,
++	ret = class_for_each_device(&power_supply_class, NULL, &data,
+ 				    __power_supply_get_supplier_property);
+ 	if (ret < 0)
+ 		return ret;
+@@ -458,7 +461,7 @@ static int power_supply_match_device_by_name(struct device *dev, const void *dat
+ struct power_supply *power_supply_get_by_name(const char *name)
+ {
+ 	struct power_supply *psy = NULL;
+-	struct device *dev = class_find_device(power_supply_class, NULL, name,
++	struct device *dev = class_find_device(&power_supply_class, NULL, name,
+ 					power_supply_match_device_by_name);
+ 
+ 	if (dev) {
+@@ -1369,7 +1372,7 @@ __power_supply_register(struct device *parent,
+ 
+ 	device_initialize(dev);
+ 
+-	dev->class = power_supply_class;
++	dev->class = &power_supply_class;
+ 	dev->type = &power_supply_dev_type;
+ 	dev->parent = parent;
+ 	dev->release = power_supply_dev_release;
+@@ -1617,12 +1620,13 @@ EXPORT_SYMBOL_GPL(power_supply_get_drvdata);
+ 
+ static int __init power_supply_class_init(void)
+ {
+-	power_supply_class = class_create("power_supply");
++	int err;
++
++	err = class_register(&power_supply_class);
+ 
+-	if (IS_ERR(power_supply_class))
+-		return PTR_ERR(power_supply_class);
++	if (err)
++		return err;
+ 
+-	power_supply_class->dev_uevent = power_supply_uevent;
+ 	power_supply_init_attrs(&power_supply_dev_type);
+ 
+ 	return 0;
+@@ -1630,7 +1634,7 @@ static int __init power_supply_class_init(void)
+ 
+ static void __exit power_supply_class_exit(void)
+ {
+-	class_destroy(power_supply_class);
++	class_unregister(&power_supply_class);
+ }
+ 
+ subsys_initcall(power_supply_class_init);
+diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+index c0992a77feea..514f652de64d 100644
+--- a/include/linux/power_supply.h
++++ b/include/linux/power_supply.h
+@@ -895,7 +895,7 @@ extern int power_supply_powers(struct power_supply *psy, struct device *dev);
+ 
+ extern void *power_supply_get_drvdata(struct power_supply *psy);
+ /* For APM emulation, think legacy userspace. */
+-extern struct class *power_supply_class;
++extern const struct class power_supply_class;
+ 
+ static inline bool power_supply_is_amp_property(enum power_supply_property psp)
+ {
+
+---
+base-commit: a9b254892ce1a447b06c5019cbf0e9caeb48c138
+change-id: 20240220-class_cleanup-power-14680219753d
+
+Best regards,
+-- 
+Ricardo B. Marliere <ricardo@marliere.net>
+
 
