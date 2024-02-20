@@ -1,147 +1,197 @@
-Return-Path: <linux-pm+bounces-4131-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4132-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75F2585BE46
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 15:11:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 602D785BEAC
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 15:22:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 32A09286CA1
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 14:11:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0A4A1F24766
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 14:22:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E6156D1B4;
-	Tue, 20 Feb 2024 14:10:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 190196BB20;
+	Tue, 20 Feb 2024 14:22:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cm+Ya5Ji"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hppiNdG/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4E0F6A8D4;
-	Tue, 20 Feb 2024 14:10:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E1406A8D4
+	for <linux-pm@vger.kernel.org>; Tue, 20 Feb 2024 14:22:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708438221; cv=none; b=SfCJvjhmEv/24NHtse3Whxp91YKtEkfvI9tfGWcTETxAeWlx13cPwrBLn+JzYrdPkFxe1Y9eL5Edr7TT1bYP0P67GzjV6EH9tg6MO+zGqSbuyOTZR4hju9pU96yK7d+z0LoWEtwJ9FZ2zY8KmqIW/gNdbmD7jrMfqYuviI/jSU0=
+	t=1708438936; cv=none; b=SEn4XwdjXvTydqnYbRLRSRcODqLFWWbBmAIixOEG2LxDbqGz1gtUX7o4lCrLzYc8UnphupJYu2iUUXnlMuCibO9uYyLLTRRLzgGynlD5LhnPh5TIhpRkV22kz+UvJmu1rbuSAQdqtNm/Fsi3jWtcIn2pDtyM/VCqZ7bm5Jx807U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708438221; c=relaxed/simple;
-	bh=g7ySRq9wVICEx9Nd4Soq3zjb4oVL4tzga3/RC80p8tc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HSMnk5cBN3q5JBkBNX0jfyxO3YEmsc09CgcPtfnWMVziXxLS+IO++VFiq3TNRNLLGEMUpDBOvpDFGWQzLDOcw7vZlwErcmx9BLnVofAkIBvCLa0KeU+/RxRYITylSSDGN+sr7pRw9eoFufjju3G/xdmaWEWoox0tZIW5wPPKgQ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cm+Ya5Ji; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5179AC433F1;
-	Tue, 20 Feb 2024 14:10:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1708438220;
-	bh=g7ySRq9wVICEx9Nd4Soq3zjb4oVL4tzga3/RC80p8tc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cm+Ya5Ji9GWuHNAxfrcQd6I2ujiAInEXe/P3+PNGgSDevGXudNsGp2V/3RLHBAkOb
-	 Ba9WTxCWVLl5wNyIFI4isq41BwQY+vRFVznQv40iE2Mz4cXSOSaEEuPFNrBM9mP7Ll
-	 gBEkLKc7/vdpkvoOL2rNssVDZ9ummVyHIwQnQLEWcnBBcItGLQv9h+mYGWVHx0rI0z
-	 4u3MnFOxXyv/m2m3D4ZxSbmZmOyZB3oeeOUualsoBByc0Op1jKoXwTfyE2/kLi8W9p
-	 WV0cx5GH2DGpGrV4Zsnd6iOd2lLEsTSdXMln0WEGAqKiD6c0CEkl5McDMxQDvMGKU9
-	 4UF370a9im90A==
-Date: Tue, 20 Feb 2024 14:10:10 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Marcel Holtmann <marcel@holtmann.org>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>, Kalle Valo <kvalo@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Saravana Kannan <saravanak@google.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Alex Elder <elder@linaro.org>,
-	Srini Kandagatla <srinivas.kandagatla@linaro.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Abel Vesa <abel.vesa@linaro.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Lukas Wunner <lukas@wunner.de>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-wireless@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH v5 09/18] arm64: dts: qcom: qrb5165-rb5: model the PMU of
- the QCA6391
-Message-ID: <4586127e-d224-48cd-9e56-a06a4a9d46bc@sirena.org.uk>
-References: <20240216203215.40870-1-brgl@bgdev.pl>
- <20240216203215.40870-10-brgl@bgdev.pl>
- <48164f18-34d0-4053-a416-2bb63aaae74b@sirena.org.uk>
- <CAMRc=Md7ymMTmF1OkydewF5C32jDNy0V+su7pcJPHKto6VLjLg@mail.gmail.com>
- <8e392aed-b5f7-486b-b5c0-5568e13796ec@sirena.org.uk>
- <CAMRc=MeAXEyV47nDO_WPQqEQxSYFWTrwVPAtLghkfONj56FGVA@mail.gmail.com>
- <5a3f5e1b-8162-4619-a10b-d4711afe533b@sirena.org.uk>
- <CAMRc=MdTub4u0dm5PgTQPnYPuR=SRnh=ympEZqo_UyrQDrQw6w@mail.gmail.com>
- <f72723f3-f5c5-4c16-a257-e5f57c4f9e73@sirena.org.uk>
- <CAMRc=McFCauVwpATbVqCOtpyP_buKQDiN0OdZP9EfXmc3CgSUA@mail.gmail.com>
+	s=arc-20240116; t=1708438936; c=relaxed/simple;
+	bh=jAw2zftbgBAJKSrekDaII6VYyxCwwnVK69YNBjgCFjw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ja6KUhgN2FxOHJhaSGLYoLsw5177WKdCqZFgKIn5Z8uLkq3aTvMHmGCS+INaBGUq+X/txSd1sOVZqufnfH7Cll81xMD0RA8RFIDD8CeI15sSeQNboKL2mnT4wvFJ57+2/YjQKAuEzyEvHitLDDCJ7ygD8w9MBU8m8bcbzXkwueM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hppiNdG/; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-295c8b795e2so3081552a91.0
+        for <linux-pm@vger.kernel.org>; Tue, 20 Feb 2024 06:22:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1708438934; x=1709043734; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KBoCun9C06tVXA8wZQBtoO6pNvn7N0rtBPsUqAq+yXE=;
+        b=hppiNdG/2PZVg4ZIIrL8BrJr9fE5V4CPQm4nFkptDD6Fmw5sWN8/sabT37ghC4AZJT
+         8lEe2bd+Pf4Q0cqhkMjPRH940ppBZdP/YdRTx3MXvq5p7iGQuB8M4ivMXAtrKADyY/ME
+         lAl5jJ083XbeFWSiLquBmu1j9EHZiMjZ3D49f64qd2xL/oGQkbKP7ugKpgfKCT0mbqMl
+         U/xlwXA9oSXsUbyPXK+ur4EqWG4z6aN0qP+RpMS8LAPWwomCnC3n6b70l4McTEhkM6Du
+         5f3/L+AMfNfQ/oFQrwbOhoDUri9+NHvlWlFdqidlpxS1Jee9WLejFYKJUrR6BVOSG9JH
+         knYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708438934; x=1709043734;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KBoCun9C06tVXA8wZQBtoO6pNvn7N0rtBPsUqAq+yXE=;
+        b=DJ0icyjeNTuH1CHSutedBnTeBYJebZ+VbEflv7wJMJtUhn1JC/d50JgoZJOQ7PGiw+
+         Z5p/cP0uQwAcqNtQZk/G4PG4uy4WJu3GouensDg1bam0s2v+J58pSsQSEdQ/NyPnilUo
+         OI8u3ydpkXqKvT6m07S+T6o+cmg+A0qGKBm0ZQPQ/VQl9toz4+IaQ9hun0F5Uz4yXaLf
+         QVdOdgEefLUrQ1viVeuKh0PuqaNTliEV/QUIl2l6CF7UOhjQnnN99zS/h+rEhcVWlQq6
+         zxRQRVBFZaCbVt7MencnwGDva/YaKVjOtkWMCBiBGLEH1OsPKb8j9gC3iE3SJN80KULF
+         QV9g==
+X-Forwarded-Encrypted: i=1; AJvYcCUJpuLxRfl4085KC3K9BGTFrUDd4ERdrXgANGtrskzVR5Qi4ObBzhgCUF+S20XvKDsVXTO4t6jasSyQTWPHe7rf9Ys8TyGiBxM=
+X-Gm-Message-State: AOJu0YweNp3OOuQHT/ditaFkYMc6JGUq9r0KtKP5GgNGbteJp3pKwuG6
+	NrOHpqvkH6XRoUv76bqYQTSUPGF1vF5GOKFD7e8U0uUY7W9Meo3Z/oiI9pSFxRtce6JR43IKMmf
+	z5JnUzkeUyu3trTo7tJTV3BNPjvh6sZz9VdakDg==
+X-Google-Smtp-Source: AGHT+IFvO5zHZP2am1JSDTjIy5GjXf4oDweY/JpnM+jBH/YIWxTOWYQqtadZC/X+MVB9tx0aiSAWQYW5bjgZOemKtn4=
+X-Received: by 2002:a17:90b:3555:b0:299:b570:bbd6 with SMTP id
+ lt21-20020a17090b355500b00299b570bbd6mr3792421pjb.28.1708438933728; Tue, 20
+ Feb 2024 06:22:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="p0M6Ter5LD+PPlml"
-Content-Disposition: inline
-In-Reply-To: <CAMRc=McFCauVwpATbVqCOtpyP_buKQDiN0OdZP9EfXmc3CgSUA@mail.gmail.com>
-X-Cookie: E = MC ** 2 +- 3db
+References: <20240205022006.2229877-1-qyousef@layalina.io> <CAKfTPtBoapJtwD3DByd06CE07MD3eGhfJVyZ01cRLyKLO8fJ7w@mail.gmail.com>
+ <20240220135745.h5mlvutle6wn6eim@airbuntu>
+In-Reply-To: <20240220135745.h5mlvutle6wn6eim@airbuntu>
+From: Vincent Guittot <vincent.guittot@linaro.org>
+Date: Tue, 20 Feb 2024 15:22:01 +0100
+Message-ID: <CAKfTPtDC0w-gdb15pmCDr7tS9gmTeT4qAugTSviO+g9KebNvzA@mail.gmail.com>
+Subject: Re: [PATCH] sched: cpufreq: Rename map_util_perf to apply_dvfs_headroom
+To: Qais Yousef <qyousef@layalina.io>
+Cc: Ingo Molnar <mingo@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+On Tue, 20 Feb 2024 at 14:57, Qais Yousef <qyousef@layalina.io> wrote:
+>
+> On 02/14/24 08:32, Vincent Guittot wrote:
+> > On Mon, 5 Feb 2024 at 03:20, Qais Yousef <qyousef@layalina.io> wrote:
+> > >
+> > > We are providing headroom for the utilization to grow until the next
+> > > decision point to pick the next frequency. Give the function a better
+> > > name and give it some documentation. It is not really mapping anything.
+> >
+> > The renaming makes sense.
+> >
+> > >
+> > > Also move it to sched.h. This function relies on updating util signal
+> >
+> > I don't see the benefit of moving it the sched.h as it is only used by
+> > cpufreq_schedutil()
+>
+> Hehe what's for me the reason to move it for you it's the reason not to :-)
+>
+> (I believe you meant cpufreq_schedutil.c)
+>
+> It doesn't make sense outside of schedutil, does it? I can't see it being
+> suitable for consumption by other governors for example as it is not generic
+> enough.
+>
+> And the headroom definition needs to evolve. And the tight coupling to util
+> which is a scheduler internal metric will make it hard once it's part of
+> cpufreq. The headroom IMO is a property of the governor.
 
---p0M6Ter5LD+PPlml
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In this case make it part of cpufreq_schedutil.c if this is the
+governor that can use it. I don't like sched.h because It gives the
+impression that scheduler can play with it whereas it's a property of
+the cpufreq governor
 
-On Tue, Feb 20, 2024 at 02:51:25PM +0100, Bartosz Golaszewski wrote:
-> On Tue, Feb 20, 2024 at 2:48=E2=80=AFPM Mark Brown <broonie@kernel.org> w=
-rote:
-
-> > It is generally a bad sign if there is a voltage range specified on a
-> > regulator that's not got any indication that the voltage is going to be
-> > actively managed, especially in situations like with several of the
-> > supplies the DT was specifying where there are clear indications that
-> > the supply is intended to be fixed voltage (or cases where every single
-> > supply has a voltage range which would be highly unusual).  Looking at
-> > the consumers might provide an explanation for such unusual and likely
-> > incorrect constraints, and the lack of any consumers in conjunction with
-> > other warning signs reenforces those warning signs.
-
-> What do you recommend? No values at all in these regulators as it's
-> the PMU which will manage those on its own once powered up by the host
-> PMIC?
-
-Unless something is actively going to change the voltages at runtime
-or Linux needs to set a specific voltage (in which case minimum and
-maximum should be identical) there should be nothing specified.
-
---p0M6Ter5LD+PPlml
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXUssEACgkQJNaLcl1U
-h9A0+wf/dGVyaWOokSvLac7cy6ae2h/0zXhHIFK5iPDauJFh4S4DJ+qgYNXMraAH
-Qv+OqeeDPmQZXSaVoSyeKyMhkn1i3MkxEeeUu3X4+RghPyRlA6UtcRYaXStSG0+U
-dHZFqeoyVrQ4SnZhGRbLOIsO/dvjGtc7wQSglhml5ppRwEd8ma5IJhghT5PMiKf5
-OqfbYKGn23QiTY6VqzzN13jC//ei6do3rutMY3EJ4U1wVR0mh27NHPRaZ04OVuyI
-OBHICQ95FB+Rfd3rxNd9oquHi7GAzVnGBoYpyIgiswvNVuv0wEkkjBgKVq3rFPmk
-Rj3zpctth3R9C7ObzByJhLuNcuzoPQ==
-=pG1x
------END PGP SIGNATURE-----
-
---p0M6Ter5LD+PPlml--
+>
+> We can defer the moving for now if you insist. But I think it's inevitable?
+>
+> >
+> >
+> > > appropriately to give a headroom to grow. This is more of a scheduler
+> > > functionality than cpufreq. Move it to sched.h where all the other util
+> > > handling code belongs.
+> > >
+> > > Signed-off-by: Qais Yousef <qyousef@layalina.io>
+> > > ---
+> > >  include/linux/sched/cpufreq.h    |  5 -----
+> > >  kernel/sched/cpufreq_schedutil.c |  2 +-
+> > >  kernel/sched/sched.h             | 17 +++++++++++++++++
+> > >  3 files changed, 18 insertions(+), 6 deletions(-)
+> > >
+> > > diff --git a/include/linux/sched/cpufreq.h b/include/linux/sched/cpufreq.h
+> > > index bdd31ab93bc5..d01755d3142f 100644
+> > > --- a/include/linux/sched/cpufreq.h
+> > > +++ b/include/linux/sched/cpufreq.h
+> > > @@ -28,11 +28,6 @@ static inline unsigned long map_util_freq(unsigned long util,
+> > >  {
+> > >         return freq * util / cap;
+> > >  }
+> > > -
+> > > -static inline unsigned long map_util_perf(unsigned long util)
+> > > -{
+> > > -       return util + (util >> 2);
+> > > -}
+> > >  #endif /* CONFIG_CPU_FREQ */
+> > >
+> > >  #endif /* _LINUX_SCHED_CPUFREQ_H */
+> > > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> > > index 95c3c097083e..abbd1ddb0359 100644
+> > > --- a/kernel/sched/cpufreq_schedutil.c
+> > > +++ b/kernel/sched/cpufreq_schedutil.c
+> > > @@ -179,7 +179,7 @@ unsigned long sugov_effective_cpu_perf(int cpu, unsigned long actual,
+> > >                                  unsigned long max)
+> > >  {
+> > >         /* Add dvfs headroom to actual utilization */
+> > > -       actual = map_util_perf(actual);
+> > > +       actual = apply_dvfs_headroom(actual);
+> > >         /* Actually we don't need to target the max performance */
+> > >         if (actual < max)
+> > >                 max = actual;
+> > > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> > > index e58a54bda77d..0da3425200b1 100644
+> > > --- a/kernel/sched/sched.h
+> > > +++ b/kernel/sched/sched.h
+> > > @@ -3002,6 +3002,23 @@ unsigned long sugov_effective_cpu_perf(int cpu, unsigned long actual,
+> > >                                  unsigned long min,
+> > >                                  unsigned long max);
+> > >
+> > > +/*
+> > > + * DVFS decision are made at discrete points. If CPU stays busy, the util will
+> > > + * continue to grow, which means it could need to run at a higher frequency
+> > > + * before the next decision point was reached. IOW, we can't follow the util as
+> > > + * it grows immediately, but there's a delay before we issue a request to go to
+> > > + * higher frequency. The headroom caters for this delay so the system continues
+> > > + * to run at adequate performance point.
+> > > + *
+> > > + * This function provides enough headroom to provide adequate performance
+> > > + * assuming the CPU continues to be busy.
+> > > + *
+> > > + * At the moment it is a constant multiplication with 1.25.
+> > > + */
+> > > +static inline unsigned long apply_dvfs_headroom(unsigned long util)
+> > > +{
+> > > +       return util + (util >> 2);
+> > > +}
+> > >
+> > >  /*
+> > >   * Verify the fitness of task @p to run on @cpu taking into account the
+> > > --
+> > > 2.34.1
+> > >
 
