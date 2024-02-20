@@ -1,144 +1,154 @@
-Return-Path: <linux-pm+bounces-4100-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4101-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 488A085B270
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 06:49:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65B3A85B28E
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 07:00:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49E301C212CA
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 05:49:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E4051C225A2
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 06:00:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DF5056B96;
-	Tue, 20 Feb 2024 05:49:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EC3157320;
+	Tue, 20 Feb 2024 06:00:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="aduYe9JK"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Yysu/Cl+"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2078.outbound.protection.outlook.com [40.107.93.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B4AD45942;
-	Tue, 20 Feb 2024 05:49:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708408150; cv=none; b=MvlDosZQaMUWvAoBwiPNdqAsMOysVSIInpapcJaT1F8Ig3D/gQNsrvBWrQySs+vXx7fnuCW6jd21L4appkjUGQRGD41Hj46jXE5z3BovAQYrOBu5f7dybKSnm9GLhgG/3/A9twG+e7hh2iO3sVXGObVPOYJf0d/W8AR5KU7q8Sg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708408150; c=relaxed/simple;
-	bh=yEyXcMjJfCC4sirxjRTolR1gpd9nzLskW++Kz50YlZ4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Y/blRpzfeKZlyusX6BENOFhDSTaqsUeONDJFnqXkckTtt0ygDz4fHRDOw2WINdU3z9yVwh8S2eqjV/BZAix6I7EHWTtO6NyLZ19+TlHKqxsJQaZI7tilDPj37TR02vXwlAb8ZrfG8us3gFhFn64tKZASwhwRRGNp3QX59MGZ0U4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=aduYe9JK; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 41K4SYH6030421;
-	Tue, 20 Feb 2024 05:48:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=
-	qcppdkim1; bh=6iLzWXnZbSKEXQ4L81Zd+B5q/JwdxAsNq6BxDPHyTPE=; b=ad
-	uYe9JKVV9w9rzk9nBstl6ZyWGxO656xnVgWHx/rTqlPztEhQYfqqoxb9PmqZJKCF
-	OK6P0+wPFSaAeh+gDLfGGncNUSlHCFzYfq1wvwO2Ybw9pVkGj9YvJMY4v0wbfFW9
-	OO0kXeDso73M5IUTRSQxMtwQYE8uPvtyOGhioCZX8qkXQQrW9beblyQCK4ebbRrR
-	G99kGiMb5HWRnJztEIfLW1++ZFtotBho+3jXnGviGdxop67uRlal7NDajxjEEFqZ
-	N/rLdzoKATmsRlg2UGvimIEcjRLuPyv1xfwj0ykKndjyhgcnjXaQ1HjAaId2b+E8
-	rPIkGh1+qw/AkJS7gdNA==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3wckv9g80w-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Feb 2024 05:48:46 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 41K5mjqF013268
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Feb 2024 05:48:45 GMT
-Received: from [10.217.198.224] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 19 Feb
- 2024 21:48:42 -0800
-Message-ID: <dc16acc1-6ad1-4a81-8eeb-aadaf837ff2c@quicinc.com>
-Date: Tue, 20 Feb 2024 11:18:39 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC6F357302;
+	Tue, 20 Feb 2024 06:00:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.78
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708408849; cv=fail; b=VHoWckGEW2zmzZ4j4P66A3GIs65LJWBzTc66fzuDnK0fVwWlNkwS/BFsgTXkldihbStyGTMWaoMCDgbuQs4J6kyEnQLoeiR5PcCNdYSw+JxsvHStsHGrfKm23awR49A3up5/ruwK+QgHQ5IzVzcUD45CeP2NLzZlsYPeYd1pvMc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708408849; c=relaxed/simple;
+	bh=G4Tc+7Zb3w+pmvhaBq+QwaDIX9/OWcq55Yha3Uk8pl4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BM7SR8YfLJvTWHsdijH8tn7KYHIKOu0n3HEOTjSwJPdzRSDV6YKxzT2DhrjXsLq7JDCP8ftlBnHbjZoaw+r2QVgK80hnBsMxeKFr1HmqOO5etA57MbYWTOzpRajNeKSRwdE25IuWO/og0n66r3PHXsXouLq2oXM43Kzjzin3QSY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Yysu/Cl+; arc=fail smtp.client-ip=40.107.93.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cK9gmoKms6cI2QK+ep22w2yNCQ3af4jD0O6Nr5qstbu9bHgO3qaGIdXeAG4HGOVmkc/6ZLeK8QEIh7DAmnSCJnNuwcVhyXzUD2LApOtvB4gnP0YVpBN/nPnuK2qBH1zhdWCUnJ/hiX4dfsmZ2xY9nusbNf93UCLRpaLiaI0GRQOqewLcpAADdrS/QVhPogPxxX9NXFpzPbSs0GnMo4KGXSOFev95WZRcqKZ3Z4A9AaTDRDvLqN/EUz1wuAIDxfNAkdmFN6TS513f/WFsPAtH32GvplK3ExenOI+inqYmG18KMREaMPoQVhIMbHX13sQG2p9iGkAqGr0nI0shhQ80Pg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bHn3iXH7UVdNTmCEfhrVhu0TnsY4LxYdcTCsJr0bNbg=;
+ b=KOQ9AGtzG5s94uoWHJbyT0ows+7f6XynC3CAeZACahRedNxDz48WPIPH1Nc1zSeEjsxENu4roxPDAKvDqmY6LwiR2sO+FqH/I/FhiVd7DANlybvVfy5qrFX6r7y3MrGyON1qi6ZJBeEo1K0dTcUium5mMmrbPc3Mts++wNr6nA/Fz3dYsZGG8Pzhuashhe0CZyMK1fI3yoFaAZk9bfI6IJUgJ/GukzZhg+VVV8HUmCCr4i+XavOfeo1+olhIY5JIvDWZcqogiB2tp46U6J5IQLf1vs8OcgCi4PLp7mzrwpMc3RNcuK1zG5y4qo791iVzL8/UBQFtPeYTe+9g0o6IZg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bHn3iXH7UVdNTmCEfhrVhu0TnsY4LxYdcTCsJr0bNbg=;
+ b=Yysu/Cl+nCRnYxV7om0gB59rED1W/MjqXFiESrV+R1io64HnbeeW085NP+wLOpSRaim2rqKACajdPEvDSLj4kBr+owkZK/QkBRTHNrNvB3xvsqv5Ewta+0GLV16IUNR/9/PXinL2y+/hu6n1E4geNpHJk/pzjgGmeJv05GJRcqc=
+Received: from CH5P222CA0002.NAMP222.PROD.OUTLOOK.COM (2603:10b6:610:1ee::22)
+ by BN9PR12MB5339.namprd12.prod.outlook.com (2603:10b6:408:104::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.20; Tue, 20 Feb
+ 2024 06:00:45 +0000
+Received: from CH3PEPF0000000D.namprd04.prod.outlook.com
+ (2603:10b6:610:1ee:cafe::85) by CH5P222CA0002.outlook.office365.com
+ (2603:10b6:610:1ee::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.40 via Frontend
+ Transport; Tue, 20 Feb 2024 06:00:45 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CH3PEPF0000000D.mail.protection.outlook.com (10.167.244.43) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7292.25 via Frontend Transport; Tue, 20 Feb 2024 06:00:45 +0000
+Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 20 Feb
+ 2024 00:00:41 -0600
+From: Meng Li <li.meng@amd.com>
+To: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, Huang Rui
+	<ray.huang@amd.com>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<x86@kernel.org>, <linux-acpi@vger.kernel.org>, Shuah Khan
+	<skhan@linuxfoundation.org>, <linux-kselftest@vger.kernel.org>, "Nathan
+ Fontenot" <nathan.fontenot@amd.com>, Deepak Sharma <deepak.sharma@amd.com>,
+	Alex Deucher <alexander.deucher@amd.com>, Mario Limonciello
+	<mario.limonciello@amd.com>, Shimmer Huang <shimmer.huang@amd.com>, "Perry
+ Yuan" <Perry.Yuan@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>, Viresh Kumar
+	<viresh.kumar@linaro.org>, Borislav Petkov <bp@alien8.de>, Meng Li
+	<li.meng@amd.com>
+Subject: [RESEND PATCH] selftests/overlayfs: fix compilation error in overlayfs
+Date: Tue, 20 Feb 2024 13:59:40 +0800
+Message-ID: <20240220055940.3563308-1-li.meng@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] firmware/psci: Move psci_init_system_suspend() to
- late_initcall()
-To: Lorenzo Pieralisi <lpieralisi@kernel.org>
-CC: Mark Rutland <mark.rutland@arm.com>, <andersson@kernel.org>,
-        <ulf.hansson@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-pm@vger.kernel.org>, <quic_lsrao@quicinc.com>,
-        <stable@vger.kernel.org>
-References: <20240219-suspend_ops_late_init-v1-1-6330ca9597fa@quicinc.com>
- <ZdOP5oAwZvEhNAsn@lpieralisi>
-Content-Language: en-US
-From: "Maulik Shah (mkshah)" <quic_mkshah@quicinc.com>
-In-Reply-To: <ZdOP5oAwZvEhNAsn@lpieralisi>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: l7mW_oF9zN_5fAmK4DoZu7ghd3zl5fUE
-X-Proofpoint-GUID: l7mW_oF9zN_5fAmK4DoZu7ghd3zl5fUE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1011,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-02-20_04,2024-02-19_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 lowpriorityscore=0 phishscore=0 clxscore=1015 adultscore=0
- mlxlogscore=999 impostorscore=0 suspectscore=0 malwarescore=0 spamscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2401310000 definitions=main-2402200040
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PEPF0000000D:EE_|BN9PR12MB5339:EE_
+X-MS-Office365-Filtering-Correlation-Id: f21f3f58-9515-410a-608e-08dc31d9474f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	NKD70da/Md+FtySDEGKpzKK/L8cSQZtjuLV2gmAPNtNSGnXSdQNqw/2+WCCXHhp3obrBguPvlu1isleWHp2ZTiw776Gcw98VhT+FHxXpZ2/JSJiy+kikCQ/GwhvdA89XA3tMnJkwu2MLO9PgAzMYuL3fDKw6RcgAtwfMvnWlQGmLYDqABx8+ed9Mehs21wacec1FdnLVWMpkFX3XHVfwBKuAMm7HfFtLrSqD+vZyrA9i8EuS54bhigGpzIpUPEeH5B6r+nFeJSjuFIpx1FH47JkwXbZrtdxg08rObM1vyJ+JRD02ZC82t01xF5jRFZO80QZ0D4Jy9rKR7zOVjgeNPVSNMmf8Ww5nkAe9ZScPn1pIO0fEvBd8LHU9zrbot83l4apJjkT6ouwyau4riTo45TtPsT5TySdzV9PXR4mt5bwnpb3L1xhgomIpt52jcrEaW1mocjYM5aUQv6S+kRqtg0vZbymRsenJyEzAFMl5cuAJWjwBhBEh8ceIUdWisseKS71N/Lzu6Rkk0XHtnroRuWmLYp5iYbLG33RRe/nQ0tu92tjGLd+tMfBG67l5KdHVs2p/sjERiu43QgIvNqaMbSKOcWJi7Dt08PxG+9GUuXmDqjUdLAlIW/chGihStrMPEeHa4H5t1z52Kz3+xowOYnR66vw6tCM5VVdJ8hGOQ8c=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(36860700004)(46966006)(40470700004);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Feb 2024 06:00:45.3191
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f21f3f58-9515-410a-608e-08dc31d9474f
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH3PEPF0000000D.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5339
 
+make -C tools/testing/selftests, compiling dev_in_maps fail.
+In file included from dev_in_maps.c:10:
+/usr/include/x86_64-linux-gnu/sys/mount.h:35:3: error: expected identifier before numeric constant
+   35 |   MS_RDONLY = 1,                /* Mount read-only.  */
+      |   ^~~~~~~~~
 
+That sys/mount.h has to be included before linux/mount.h.
 
-On 2/19/2024 10:59 PM, Lorenzo Pieralisi wrote:
-> On Mon, Feb 19, 2024 at 03:02:04PM +0530, Maulik Shah wrote:
->> psci_init_system_suspend() invokes suspend_set_ops() very early during
->> bootup even before kernel command line for mem_sleep_default is setup.
->> This leads to kernel command line mem_sleep_default=s2idle not working
->> as mem_sleep_current gets changed to deep via suspend_set_ops() and never
->> changes back to s2idle.
->>
->> Move psci_init_system_suspend() to late_initcall() to make sure kernel
->> command line mem_sleep_default=s2idle sets up s2idle as default suspend
->> mode.
-> 
-> Why can't we fix it the other way around, namely enforce
-> mem_sleep_current according to the mem_sleep_default command line
-> even if suspend_set_ops() was already called ?
+Signed-off-by: Meng Li <li.meng@amd.com>
+---
+ tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-yes, this may be fixed other way also and i did not implement other way 
-since mem_sleep_default_setup() only update mem_sleep_default and to 
-avoid this race, it needs to also need to update mem_sleep_current along
-with it. Below change also resolves the issue.
+diff --git a/tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c b/tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c
+index e19ab0e85709..871a0923c06e 100644
+--- a/tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c
++++ b/tools/testing/selftests/filesystems/overlayfs/dev_in_maps.c
+@@ -7,11 +7,11 @@
+ 
+ #include <linux/unistd.h>
+ #include <linux/types.h>
+-#include <linux/mount.h>
+ #include <sys/syscall.h>
+ #include <sys/stat.h>
+ #include <sys/mount.h>
+ #include <sys/mman.h>
++#include <linux/mount.h>
+ #include <sched.h>
+ #include <fcntl.h>
+ 
+-- 
+2.34.1
 
---- a/kernel/power/suspend.c
-+++ b/kernel/power/suspend.c
-@@ -192,6 +192,7 @@ static int __init mem_sleep_default_setup(char *str)
-                 if (mem_sleep_labels[state] &&
-                     !strcmp(str, mem_sleep_labels[state])) {
-                         mem_sleep_default = state;
-+                       mem_sleep_current = state;
-                         break;
-                 }
-
-however it may be erasing thin line between mem_sleep_default v/s 
-mem_sleep_current as both gets updated while set up of mem_sleep_default.
-
-if this change looks Ok, i can send v2 with it.
-
-> 
-> Just asking, I am not super keen on using initcalls ordering, it
-> looks fragile to me.
-
-i agree with above.
-
-Thanks,
-Maulik
 
