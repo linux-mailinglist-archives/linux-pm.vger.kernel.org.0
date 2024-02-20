@@ -1,361 +1,262 @@
-Return-Path: <linux-pm+bounces-4103-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4104-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3050385B3D6
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 08:22:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D819185B3DB
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 08:23:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 82AFAB2387A
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 07:22:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 082251C21A0A
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 07:23:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 271845A4D5;
-	Tue, 20 Feb 2024 07:22:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08E075A4CB;
+	Tue, 20 Feb 2024 07:23:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="shXeenAW"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="c4PngH8T"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2075.outbound.protection.outlook.com [40.107.93.75])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D1AD5A7AE
-	for <linux-pm@vger.kernel.org>; Tue, 20 Feb 2024 07:22:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708413743; cv=none; b=M7mX0Db9Yj2khHeVLkILoUe6ZPOFcK+/nmepMp2L9Lbu40y1L5iZzvaMefRDtb7i4O5biFIYge1ByH7w8AfhCH2fQbkZPqMrMYOgQXMOXLG4BRe0x7LyBYluq1DlzpCEmukUHh5Qj5H2vytFjnFvrZ9540rvmxtXEs/wszP5284=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708413743; c=relaxed/simple;
-	bh=LGEekiMz1MuQlgMUTzt2/pfYsfBxAob5BHRAMdbsDgI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Az4FBjbq7KMev+cj+3EVbQ1Vxc9joz6ihfldT1YNDdCgScBN+QWMkI869hnM+0yA0/ymrGYngvnsZSzxnZiZD8YszU0QSxQpl9CX+LM8u+Gg3AN1TKpZudTB2Gq1xPKi3+CjSt8b0DHPjJPtFw82KybV51UYnCE+9f+su9O17kQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=shXeenAW; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4127077ee20so402935e9.1
-        for <linux-pm@vger.kernel.org>; Mon, 19 Feb 2024 23:22:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708413738; x=1709018538; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BIo3+G26RYj97IhyrbqNGg5wn0wlq5Qdvj0YBvaCoZM=;
-        b=shXeenAWqhQ0Dm97VY8EHi/2doq9IkSZWL8UYDkXF97mD4VeJDSMMgg3KR4DX9S8jB
-         5omLtcfQTuFsYrrlU9ST5w6Hi9BENZ0sXd4I4mT5UTjf4MjCltQvhlOaQvIHC/wrY2Ab
-         0LfI/HSu6eoGh3A30AzpKbNqiWqf472PrgsqUSvrul9HgcK61z15dXtk6pAy5CGFb81c
-         l1OHOtBdfQ0DrrXec0sjBGg5OsPzBbWt3R3YNuvc2HznVRFyt5qeSYzOslVCUsDT3o9S
-         LAQc7G3sCtyVWAalfqclB8iedqufD/4ZG67Y3XNYuVgQSdFi4BXPfrVBA8sYrBJ+PflH
-         7HMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708413738; x=1709018538;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BIo3+G26RYj97IhyrbqNGg5wn0wlq5Qdvj0YBvaCoZM=;
-        b=lg68a1FMgyavX86NN3VwWI2n6/swuv1HW1K+F0VCh9N/1F5pSZN5BGkjAjL/tZWz1n
-         QnfGAwUKjoooSsO38G/W4qrj3kys3vd2ZX7+DT2AJFxvarh4YgZwsaTL6IfW11mYkdyw
-         599leQdV9+giF7qIfIi1GiKEvQ2c513etKlaAZjYijAqDYAmBKOQ1WIZw/P/yETkAiWE
-         l1UnfJdltjFfZqBpyUyXYhYFiEVcAx7n1NBBikvkBjijcbW0xd6xr0PNQpX0SyNkm1u1
-         nwoiGsoa3Uiitrj0Hb4RT5SAXqnvJyVXX+m+my3n5uvTg9M8vacLDdt9Bz0lVfIN2lzH
-         TBNA==
-X-Forwarded-Encrypted: i=1; AJvYcCVgC2jWWTUKtt32w0LtEMHdNcoay5zk9L14FHXxaLh8fJVQfBI7mcMue5MU1jJ4pAllNTTrCA1QenT7GJQJySM9IWDQBGk3E5A=
-X-Gm-Message-State: AOJu0YwC6ILk2oQHIxHB5Z20U9qDOMIeV3nmq5AqIue6ZD22GhjNWZ9A
-	57zw4GcDsBtEGIak5+/ZXbVnUtfoTZuukkFQNQJRKRjgk5e/mjNcpzNxiRJPkvg=
-X-Google-Smtp-Source: AGHT+IFsiqErb4YdGF8aE7+74ruUZ+0bGR7/Jcn7dJsjwREy1wAfV5T5SYZ5Qe7idjSIi0rak2+F+g==
-X-Received: by 2002:a5d:62cc:0:b0:33d:3ad2:67ae with SMTP id o12-20020a5d62cc000000b0033d3ad267aemr5015404wrv.57.1708413738557;
-        Mon, 19 Feb 2024 23:22:18 -0800 (PST)
-Received: from krzk-bin.. ([178.197.222.116])
-        by smtp.gmail.com with ESMTPSA id m17-20020a5d4a11000000b0033cf4e47496sm12424045wrq.51.2024.02.19.23.22.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Feb 2024 23:22:18 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Georgi Djakov <djakov@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	=?UTF-8?q?Artur=20=C5=9Awigo=C5=84?= <a.swigon@samsung.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-tegra@vger.kernel.org
-Cc: Thierry Reding <treding@nvidia.com>
-Subject: [PATCH v2] interconnect: constify of_phandle_args in xlate
-Date: Tue, 20 Feb 2024 08:22:13 +0100
-Message-Id: <20240220072213.35779-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E10105A781;
+	Tue, 20 Feb 2024 07:23:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.75
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708413793; cv=fail; b=eZAsTLFcfw5fmRO0SWTF6wiOSKRROuS5O8VU9o/gv2vLNow4q35FEviUZq0DH1gavgcQeROuri2HNMekWWkzU1RsnUcV6mWM0mFs4tT+Y7bAm5Xz/+smwyCmttA2XRbyhC7Ps6GgarUGMaE8rHlFyKvsr05BiMjVsRcMO8eK8Wo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708413793; c=relaxed/simple;
+	bh=kadGgJtVhLaCj25u4P41WccEyOFrecEaPui9wSEzivI=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=HldGrXyUfp4EBVPLtqziV346uRWwdtZe/kK3TEvqis89HWhdKHfOmdfzgij+btEaw6zJDTUImpn4OqgpuH0tg8+HnxVjpsIPiazBByTYGFFExWxZltoyOwJpC7JRgMFAM3tSzlkyR2RMXo/R4lW9eq4TDH9rhSceX3WDFHVvU2w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=c4PngH8T; arc=fail smtp.client-ip=40.107.93.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HjOHyUgIJPjS6VCE1kgzdeUcItMa+ypfSrvFr/2ezox32eePlkqIbVDH0mizJRi+XFh3jFFRpUFDZvJBL7/K64pNdfsTEgIFzDH35Y6zD7Y4YcC9eYNnLXnnZyGs3x5x95kBYxgS+idz/ToqdD0zGF4CC7P+aNKhzFO//KvK2kfB2slo/5o/k8TorAMWQV+sNFIC77AB5H0uKBAhxi8UAvlMZ7Tzkcy7C24s+4WtrccE1d4RPcq3T6AllHoynYYHQZ+6UgOYzxv2SFkYXWdkJg+DzKPS0v9iqQJ70pPdC91AVHTWU3OayGNBVi+lWwcDjzJZF3u3/4EWhTn9vVYWWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=U98VeIF5LkYwlQVGLh1sNZtj/ozVgnb76RfPpJFbczg=;
+ b=Uv5JHwrByPtpCdomQzbxZ99A77s7qHCaY1QsHrY/9EVE95k4CIgS5oAJtvSW8byO6t9MSAdBuQr1EdY5b+8N6xOZjvYoi4BPioGI6ntYqBGndbP2Lmjp0FAMEID0DJ8MY3uVYpBsPbVo12joIDQtKZosOGh4A/+PUcv/0vsMP6vBOH6L2TUOh0nULTXVJwqxNVg36cFY8N0XlRzT1mcuIQTpYxByzCM8tNZOixEkq0UJEnDkExfXpxHb85NxtI7ynHwmoHB4mjxEX02bgj7aLcn57zWWNLXKHsnEg2pEBCBsSQeZmydnwCDF4c8T6wPlGFVKoRyAkWCO2+mqrGOtsQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=U98VeIF5LkYwlQVGLh1sNZtj/ozVgnb76RfPpJFbczg=;
+ b=c4PngH8TEUK9BuSwMlpkQvlx7Grcv1pzmPNhtwz8MZbs3z+16GoOztTS/O10a95jY1Kvq4T7m9wuJuLyVTGSqxZ2JcQPQrmj3o8AXw76osnZXSplytsSWkDWXzH1oeDVXCLQLML3EIRN7zHorwS4FSjOx2aUNHEpz1w9/npIdWU=
+Received: from DM4PR12MB6351.namprd12.prod.outlook.com (2603:10b6:8:a2::6) by
+ PH8PR12MB6722.namprd12.prod.outlook.com (2603:10b6:510:1cd::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7316.19; Tue, 20 Feb
+ 2024 07:23:09 +0000
+Received: from DM4PR12MB6351.namprd12.prod.outlook.com
+ ([fe80::1b3:8ca1:e95b:22e5]) by DM4PR12MB6351.namprd12.prod.outlook.com
+ ([fe80::1b3:8ca1:e95b:22e5%6]) with mapi id 15.20.7292.022; Tue, 20 Feb 2024
+ 07:23:09 +0000
+From: "Meng, Li (Jassmine)" <Li.Meng@amd.com>
+To: Lucas Lee Jing Yi <lucasleeeeeeeee@gmail.com>, "rafael@kernel.org"
+	<rafael@kernel.org>
+CC: "Yuan, Perry" <Perry.Yuan@amd.com>, "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+	"Deucher, Alexander" <Alexander.Deucher@amd.com>, "bp@alien8.de"
+	<bp@alien8.de>, "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, "Limonciello, Mario"
+	<Mario.Limonciello@amd.com>, "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+	"oleksandr@natalenko.name" <oleksandr@natalenko.name>,
+	"rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>, "Huang, Ray"
+	<Ray.Huang@amd.com>, "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+	"viresh.kumar@linaro.org" <viresh.kumar@linaro.org>, "x86@kernel.org"
+	<x86@kernel.org>
+Subject: RE: [PATCH] [PATCH] amd_pstate: fix erroneous highest_perf value on
+ some CPUs
+Thread-Topic: [PATCH] [PATCH] amd_pstate: fix erroneous highest_perf value on
+ some CPUs
+Thread-Index: AQHaYoWn0TWdRH4q1EizfAdgioooG7ES1hWg
+Date: Tue, 20 Feb 2024 07:23:09 +0000
+Message-ID:
+ <DM4PR12MB63518FB49F94A8445D32780AF7502@DM4PR12MB6351.namprd12.prod.outlook.com>
+References:
+ <CAJZ5v0hRk3tME7yeC+1r0RM4-oPPrnSu2=JCsOshBbJp_Nq2Hg@mail.gmail.com>
+ <20240218161435.38312-1-lucasleeeeeeeee@gmail.com>
+ <20240218161435.38312-2-lucasleeeeeeeee@gmail.com>
+In-Reply-To: <20240218161435.38312-2-lucasleeeeeeeee@gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=8fdc9162-ecd9-4e7d-9570-7dc9c919dcee;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2024-02-20T07:22:30Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR12MB6351:EE_|PH8PR12MB6722:EE_
+x-ms-office365-filtering-correlation-id: 57c22e72-c87a-42b7-aeb0-08dc31e4ca09
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ 56d2scx72z5zsmDTev9Q2dCvDNaPGh+ADPEY7Ft6MRJfrQ/76x19CIrsEv/Spz8akSzoPGifXWZMEKbYtdEhPX8TSFaAcci4H7TMA7zhisKZMYQnutUnotRJZMho33zrsLN1TWd5UiUYGCMMSbEdHU5tEN1vA0jMERUtkRjsl9TmusaK4lrqZPVvwu4cNHvJDcl0kyu6P8VyLocS8/XfThpAciGNsyu9EOqlc1HQ70gTtJK8EHjip+idmRPN6JbuXf3zNRzK4EP+HNFRGQveIKJ54uAxA82KJ8PglKFu8TrjaS0AsCbNgG38aMZ1Xt2EJ7Ov7rdjY1411wrXtvFctfJ59GHjs6lF7uhAMkU+CLnwXh3kFqV8fNjMO6Selq+JVcnLzoyjy821nugpywTPZe+B+Y+aL0ORx4AXLZ+X1W34pQ0Nt+v4VoL7mEyheOqPYErtKf3GtlzlsFS5Z0/wjKOV3fz3OrrWerk5ZCmHIzcnraSeP5A1kOh7PklTJSs9ZMHU87riHTOKnwIVujauBCz2wCF6Qw4yG7WoJwFpv5hkyZP2Agb7RzKRw7f9mQKCVj45fLYwZKVgDy+11GeoySlkBzsi2mHeJIIk57WeWuq6xlpLxcwbvXpwpFX0qWBZ
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6351.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(230273577357003)(38070700009);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?IRVxHL8YIQdK3xGSFYWUSbPa9nHX/UXZv2wx4MvBggDx7Cm+pBse/R3iuSHv?=
+ =?us-ascii?Q?2OXldHT2+mHCtaoPr1Fsxw3dDZFpb3uaR8V1EHWmbL3+XPh7mkuglylDsgvm?=
+ =?us-ascii?Q?42uwb5aEP9rr95gPn+1JvPUatAuuT3bflUDXxE5KMFxGVUlTQ5k+toc7FOS8?=
+ =?us-ascii?Q?B//X4U3A4QYLs5Chf0/4KP8bBMRYICiATShtcjbL8oRMlGHObfW1h4RF5N1k?=
+ =?us-ascii?Q?cXXzIXVw4yVqSjjVsFwLi2s47LDgglsh4GNvsn4oZ3ZLkfQbr3GOBulQiFLH?=
+ =?us-ascii?Q?MrDmXRF+S4j2ZvkacsaXeaEo17pnhJOoxhphD5eP0hrBAvho1SgshdWPmHC9?=
+ =?us-ascii?Q?vZOG3VWKBsPpDcjrdPN/o2zE9J89RfZ9lotGb8uvnp7WmQeNueNjbgARwQee?=
+ =?us-ascii?Q?1skrm97oLpM5OdfhnloP6TUQ6QcQRIt9UQaLd2oiKGr052S6U6ipFx/oo+xD?=
+ =?us-ascii?Q?k6VCbNOVhZtlBtzOi96eOatAJZSpGrMNAe0vNiZZt2l29Id/+e9QhIyiw5DI?=
+ =?us-ascii?Q?iDe1u3bTDwegepEDkK8F2Wo/OHz4reDnHXcXww0UOnI/oNi6UiGFsJ8oNdd2?=
+ =?us-ascii?Q?OMGwBojxpBIoqPCBL+9ip9fdFfeJLjLTgrCp+iYG175ZdGtL0TUZfHdA1WMC?=
+ =?us-ascii?Q?FT41NolloTwn48Z4vLwY/WgMQ0H+yJKTQB0oOGHTarkqLuednIgVHCOQq80/?=
+ =?us-ascii?Q?WsQGD3+LcjRfr5pop9ukK2cS4bMTi4NAnN3xAbh/Qz9zwHcC4mN/MK8ol9uw?=
+ =?us-ascii?Q?I9WtaG8+W5r6boE4J0lfE/kubZxW+jUwytwyClc2y6IokgaMXiRIJNyXwtdk?=
+ =?us-ascii?Q?gOE3qSb7Jt5V0de7tROl6+E1NKs/a014mFlwPVBeVi+rletj8p167KLKorRB?=
+ =?us-ascii?Q?+n8Im9ECg6OPvStsC/BhAW50okEVLEKxluQt+HuYUCtObDa60hjy9XtTorz7?=
+ =?us-ascii?Q?FyfNBOw8WSZ/CTIVxkWUHW6mflzwk1hXiRmY18Ta607BimBq0Lwm9huuoOOG?=
+ =?us-ascii?Q?eM9J85LbCOGCjECLqHZLCyWLxy3ca3faONvv3YQ068KYQoSJee62nIAaT3In?=
+ =?us-ascii?Q?LC2+TTofQhUnKYMELIK5gvTWMiiDnROzPe1ZJ9yOlg3s04MprYPp8l9t15Ri?=
+ =?us-ascii?Q?qdZ+AeTsYK9JKzwzBodp/ahJXBDiWOuG8jZJvb2aKmMhoNzsa+mSVy7Jvf7d?=
+ =?us-ascii?Q?WA9NPdUpTnHPv+t3nYiYCUqB0e4VJtQqAb5b7KMPIliUyRCJ7c3vCEK4GUtu?=
+ =?us-ascii?Q?iAEwD809uyeHneVq2IGpMqnh+p6bggAhPYsCX/AlmsIT7/UTR3YBRNKbBA92?=
+ =?us-ascii?Q?31DLU5eof6x/FyGeFfcuDno3xDY+ddKrK/dCmEPXbIkleEvSPwatf79Gt9wB?=
+ =?us-ascii?Q?KdSOtorNe3C8/F7i4HHirBemIIjKO4nh4tDFdTUHcJoGwvBTBhB2xi9SD+KK?=
+ =?us-ascii?Q?emCbJdnRDla2D2i3f8A2Yn4jnLzgEc3lVQcM9udlU3IDYq7gUDtHT7ZRKBqm?=
+ =?us-ascii?Q?NO9GGI/A3tC1++4cOwbt18lLiu2BuClM57u7w0qWQUoSvpIU5JYH7PD2wPyD?=
+ =?us-ascii?Q?4Cx1M/NNPGdV7Ev46NU=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6351.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 57c22e72-c87a-42b7-aeb0-08dc31e4ca09
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Feb 2024 07:23:09.1235
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Tx7R6sZw1X+lnNjSCwz08LQiLf6rZLSOoPGZJ5oNBaj2lFog0VPSwWv5CPYFFCqu1Y6nZsVa+gUC3r/JfLH+1g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6722
 
-The xlate callbacks are supposed to translate of_phandle_args to proper
-provider without modifying the of_phandle_args.  Make the argument
-pointer to const for code safety and readability.
+[AMD Official Use Only - General]
 
-Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Acked-by: Thierry Reding <treding@nvidia.com> # Tegra
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hi Lucas:
 
----
-
-Changes in v2:
-1. Drop unrelated gpiolib changes (Konrad, Thierry).
-2. Add tags.
----
- drivers/interconnect/core.c            |  4 ++--
- drivers/interconnect/qcom/icc-common.c |  3 ++-
- drivers/interconnect/qcom/icc-common.h |  3 ++-
- drivers/interconnect/samsung/exynos.c  |  2 +-
- drivers/memory/tegra/mc.c              |  2 +-
- drivers/memory/tegra/tegra124-emc.c    |  2 +-
- drivers/memory/tegra/tegra124.c        |  2 +-
- drivers/memory/tegra/tegra186-emc.c    |  2 +-
- drivers/memory/tegra/tegra20-emc.c     |  2 +-
- drivers/memory/tegra/tegra20.c         |  2 +-
- drivers/memory/tegra/tegra30-emc.c     |  2 +-
- drivers/memory/tegra/tegra30.c         |  2 +-
- include/linux/interconnect-provider.h  | 11 ++++++-----
- include/soc/tegra/mc.h                 |  7 ++++---
- 14 files changed, 25 insertions(+), 21 deletions(-)
-
-diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-index 50bac2d79d9b..5d1010cafed8 100644
---- a/drivers/interconnect/core.c
-+++ b/drivers/interconnect/core.c
-@@ -343,7 +343,7 @@ EXPORT_SYMBOL_GPL(icc_std_aggregate);
-  * an array of icc nodes specified in the icc_onecell_data struct when
-  * registering the provider.
-  */
--struct icc_node *of_icc_xlate_onecell(struct of_phandle_args *spec,
-+struct icc_node *of_icc_xlate_onecell(const struct of_phandle_args *spec,
- 				      void *data)
- {
- 	struct icc_onecell_data *icc_data = data;
-@@ -368,7 +368,7 @@ EXPORT_SYMBOL_GPL(of_icc_xlate_onecell);
-  * Returns a valid pointer to struct icc_node_data on success or ERR_PTR()
-  * on failure.
-  */
--struct icc_node_data *of_icc_get_from_provider(struct of_phandle_args *spec)
-+struct icc_node_data *of_icc_get_from_provider(const struct of_phandle_args *spec)
- {
- 	struct icc_node *node = ERR_PTR(-EPROBE_DEFER);
- 	struct icc_node_data *data = NULL;
-diff --git a/drivers/interconnect/qcom/icc-common.c b/drivers/interconnect/qcom/icc-common.c
-index f27f4fdc4531..9b9ee113f172 100644
---- a/drivers/interconnect/qcom/icc-common.c
-+++ b/drivers/interconnect/qcom/icc-common.c
-@@ -9,7 +9,8 @@
- 
- #include "icc-common.h"
- 
--struct icc_node_data *qcom_icc_xlate_extended(struct of_phandle_args *spec, void *data)
-+struct icc_node_data *qcom_icc_xlate_extended(const struct of_phandle_args *spec,
-+					      void *data)
- {
- 	struct icc_node_data *ndata;
- 	struct icc_node *node;
-diff --git a/drivers/interconnect/qcom/icc-common.h b/drivers/interconnect/qcom/icc-common.h
-index 33bb2c38dff3..21c39b163948 100644
---- a/drivers/interconnect/qcom/icc-common.h
-+++ b/drivers/interconnect/qcom/icc-common.h
-@@ -8,6 +8,7 @@
- 
- #include <linux/interconnect-provider.h>
- 
--struct icc_node_data *qcom_icc_xlate_extended(struct of_phandle_args *spec, void *data);
-+struct icc_node_data *qcom_icc_xlate_extended(const struct of_phandle_args *spec,
-+					      void *data);
- 
- #endif
-diff --git a/drivers/interconnect/samsung/exynos.c b/drivers/interconnect/samsung/exynos.c
-index 1ba14cb45d5a..c9e5361e17c5 100644
---- a/drivers/interconnect/samsung/exynos.c
-+++ b/drivers/interconnect/samsung/exynos.c
-@@ -82,7 +82,7 @@ static int exynos_generic_icc_set(struct icc_node *src, struct icc_node *dst)
- 	return 0;
- }
- 
--static struct icc_node *exynos_generic_icc_xlate(struct of_phandle_args *spec,
-+static struct icc_node *exynos_generic_icc_xlate(const struct of_phandle_args *spec,
- 						 void *data)
- {
- 	struct exynos_icc_priv *priv = data;
-diff --git a/drivers/memory/tegra/mc.c b/drivers/memory/tegra/mc.c
-index a083921a8968..224b488794e5 100644
---- a/drivers/memory/tegra/mc.c
-+++ b/drivers/memory/tegra/mc.c
-@@ -755,7 +755,7 @@ const char *const tegra_mc_error_names[8] = {
- 	[6] = "SMMU translation error",
- };
- 
--struct icc_node *tegra_mc_icc_xlate(struct of_phandle_args *spec, void *data)
-+struct icc_node *tegra_mc_icc_xlate(const struct of_phandle_args *spec, void *data)
- {
- 	struct tegra_mc *mc = icc_provider_to_tegra_mc(data);
- 	struct icc_node *node;
-diff --git a/drivers/memory/tegra/tegra124-emc.c b/drivers/memory/tegra/tegra124-emc.c
-index 00ed2b6a0d1b..47c0c19e13fd 100644
---- a/drivers/memory/tegra/tegra124-emc.c
-+++ b/drivers/memory/tegra/tegra124-emc.c
-@@ -1285,7 +1285,7 @@ to_tegra_emc_provider(struct icc_provider *provider)
- }
- 
- static struct icc_node_data *
--emc_of_icc_xlate_extended(struct of_phandle_args *spec, void *data)
-+emc_of_icc_xlate_extended(const struct of_phandle_args *spec, void *data)
- {
- 	struct icc_provider *provider = data;
- 	struct icc_node_data *ndata;
-diff --git a/drivers/memory/tegra/tegra124.c b/drivers/memory/tegra/tegra124.c
-index 470b7dbab2c2..9d7393e19f12 100644
---- a/drivers/memory/tegra/tegra124.c
-+++ b/drivers/memory/tegra/tegra124.c
-@@ -1170,7 +1170,7 @@ static int tegra124_mc_icc_aggreate(struct icc_node *node, u32 tag, u32 avg_bw,
- }
- 
- static struct icc_node_data *
--tegra124_mc_of_icc_xlate_extended(struct of_phandle_args *spec, void *data)
-+tegra124_mc_of_icc_xlate_extended(const struct of_phandle_args *spec, void *data)
- {
- 	struct tegra_mc *mc = icc_provider_to_tegra_mc(data);
- 	const struct tegra_mc_client *client;
-diff --git a/drivers/memory/tegra/tegra186-emc.c b/drivers/memory/tegra/tegra186-emc.c
-index fcd4aea48bda..57d9ae12fcfe 100644
---- a/drivers/memory/tegra/tegra186-emc.c
-+++ b/drivers/memory/tegra/tegra186-emc.c
-@@ -236,7 +236,7 @@ static int tegra_emc_icc_set_bw(struct icc_node *src, struct icc_node *dst)
- }
- 
- static struct icc_node *
--tegra_emc_of_icc_xlate(struct of_phandle_args *spec, void *data)
-+tegra_emc_of_icc_xlate(const struct of_phandle_args *spec, void *data)
- {
- 	struct icc_provider *provider = data;
- 	struct icc_node *node;
-diff --git a/drivers/memory/tegra/tegra20-emc.c b/drivers/memory/tegra/tegra20-emc.c
-index fd595c851a27..97cf59523b0b 100644
---- a/drivers/memory/tegra/tegra20-emc.c
-+++ b/drivers/memory/tegra/tegra20-emc.c
-@@ -950,7 +950,7 @@ to_tegra_emc_provider(struct icc_provider *provider)
- }
- 
- static struct icc_node_data *
--emc_of_icc_xlate_extended(struct of_phandle_args *spec, void *data)
-+emc_of_icc_xlate_extended(const struct of_phandle_args *spec, void *data)
- {
- 	struct icc_provider *provider = data;
- 	struct icc_node_data *ndata;
-diff --git a/drivers/memory/tegra/tegra20.c b/drivers/memory/tegra/tegra20.c
-index aa4b97d5e732..a3022e715dee 100644
---- a/drivers/memory/tegra/tegra20.c
-+++ b/drivers/memory/tegra/tegra20.c
-@@ -390,7 +390,7 @@ static int tegra20_mc_icc_aggreate(struct icc_node *node, u32 tag, u32 avg_bw,
- }
- 
- static struct icc_node_data *
--tegra20_mc_of_icc_xlate_extended(struct of_phandle_args *spec, void *data)
-+tegra20_mc_of_icc_xlate_extended(const struct of_phandle_args *spec, void *data)
- {
- 	struct tegra_mc *mc = icc_provider_to_tegra_mc(data);
- 	unsigned int i, idx = spec->args[0];
-diff --git a/drivers/memory/tegra/tegra30-emc.c b/drivers/memory/tegra/tegra30-emc.c
-index 9eae25c57ec6..d7b0a23c2d7d 100644
---- a/drivers/memory/tegra/tegra30-emc.c
-+++ b/drivers/memory/tegra/tegra30-emc.c
-@@ -1468,7 +1468,7 @@ to_tegra_emc_provider(struct icc_provider *provider)
- }
- 
- static struct icc_node_data *
--emc_of_icc_xlate_extended(struct of_phandle_args *spec, void *data)
-+emc_of_icc_xlate_extended(const struct of_phandle_args *spec, void *data)
- {
- 	struct icc_provider *provider = data;
- 	struct icc_node_data *ndata;
-diff --git a/drivers/memory/tegra/tegra30.c b/drivers/memory/tegra/tegra30.c
-index 06f8b35e0a14..d3e685c8431f 100644
---- a/drivers/memory/tegra/tegra30.c
-+++ b/drivers/memory/tegra/tegra30.c
-@@ -1332,7 +1332,7 @@ static int tegra30_mc_icc_aggreate(struct icc_node *node, u32 tag, u32 avg_bw,
- }
- 
- static struct icc_node_data *
--tegra30_mc_of_icc_xlate_extended(struct of_phandle_args *spec, void *data)
-+tegra30_mc_of_icc_xlate_extended(const struct of_phandle_args *spec, void *data)
- {
- 	struct tegra_mc *mc = icc_provider_to_tegra_mc(data);
- 	const struct tegra_mc_client *client;
-diff --git a/include/linux/interconnect-provider.h b/include/linux/interconnect-provider.h
-index 7ba183f221f1..f5aef8784692 100644
---- a/include/linux/interconnect-provider.h
-+++ b/include/linux/interconnect-provider.h
-@@ -36,7 +36,7 @@ struct icc_onecell_data {
- 	struct icc_node *nodes[] __counted_by(num_nodes);
- };
- 
--struct icc_node *of_icc_xlate_onecell(struct of_phandle_args *spec,
-+struct icc_node *of_icc_xlate_onecell(const struct of_phandle_args *spec,
- 				      void *data);
- 
- /**
-@@ -65,8 +65,9 @@ struct icc_provider {
- 			 u32 peak_bw, u32 *agg_avg, u32 *agg_peak);
- 	void (*pre_aggregate)(struct icc_node *node);
- 	int (*get_bw)(struct icc_node *node, u32 *avg, u32 *peak);
--	struct icc_node* (*xlate)(struct of_phandle_args *spec, void *data);
--	struct icc_node_data* (*xlate_extended)(struct of_phandle_args *spec, void *data);
-+	struct icc_node* (*xlate)(const struct of_phandle_args *spec, void *data);
-+	struct icc_node_data* (*xlate_extended)(const struct of_phandle_args *spec,
-+						void *data);
- 	struct device		*dev;
- 	int			users;
- 	bool			inter_set;
-@@ -124,7 +125,7 @@ int icc_nodes_remove(struct icc_provider *provider);
- void icc_provider_init(struct icc_provider *provider);
- int icc_provider_register(struct icc_provider *provider);
- void icc_provider_deregister(struct icc_provider *provider);
--struct icc_node_data *of_icc_get_from_provider(struct of_phandle_args *spec);
-+struct icc_node_data *of_icc_get_from_provider(const struct of_phandle_args *spec);
- void icc_sync_state(struct device *dev);
- 
- #else
-@@ -171,7 +172,7 @@ static inline int icc_provider_register(struct icc_provider *provider)
- 
- static inline void icc_provider_deregister(struct icc_provider *provider) { }
- 
--static inline struct icc_node_data *of_icc_get_from_provider(struct of_phandle_args *spec)
-+static inline struct icc_node_data *of_icc_get_from_provider(const struct of_phandle_args *spec)
- {
- 	return ERR_PTR(-ENOTSUPP);
- }
-diff --git a/include/soc/tegra/mc.h b/include/soc/tegra/mc.h
-index af1d73a7f0cd..6ee4c59db620 100644
---- a/include/soc/tegra/mc.h
-+++ b/include/soc/tegra/mc.h
-@@ -146,13 +146,14 @@ struct tegra_mc_icc_ops {
- 	int (*set)(struct icc_node *src, struct icc_node *dst);
- 	int (*aggregate)(struct icc_node *node, u32 tag, u32 avg_bw,
- 			 u32 peak_bw, u32 *agg_avg, u32 *agg_peak);
--	struct icc_node* (*xlate)(struct of_phandle_args *spec, void *data);
--	struct icc_node_data *(*xlate_extended)(struct of_phandle_args *spec,
-+	struct icc_node* (*xlate)(const struct of_phandle_args *spec, void *data);
-+	struct icc_node_data *(*xlate_extended)(const struct of_phandle_args *spec,
- 						void *data);
- 	int (*get_bw)(struct icc_node *node, u32 *avg, u32 *peak);
- };
- 
--struct icc_node *tegra_mc_icc_xlate(struct of_phandle_args *spec, void *data);
-+struct icc_node *tegra_mc_icc_xlate(const struct of_phandle_args *spec,
-+				    void *data);
- extern const struct tegra_mc_icc_ops tegra_mc_icc_ops;
- 
- struct tegra_mc_ops {
--- 
-2.34.1
-
+> -----Original Message-----
+> From: Lucas Lee Jing Yi <lucasleeeeeeeee@gmail.com>
+> Sent: Monday, February 19, 2024 12:11 AM
+> To: rafael@kernel.org
+> Cc: Yuan, Perry <Perry.Yuan@amd.com>; Du, Xiaojian
+> <Xiaojian.Du@amd.com>; Deucher, Alexander
+> <Alexander.Deucher@amd.com>; bp@alien8.de; Sharma, Deepak
+> <Deepak.Sharma@amd.com>; Meng, Li (Jassmine) <Li.Meng@amd.com>;
+> linux-acpi@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
+> kselftest@vger.kernel.org; linux-pm@vger.kernel.org; Limonciello, Mario
+> <Mario.Limonciello@amd.com>; Fontenot, Nathan
+> <Nathan.Fontenot@amd.com>; oleksandr@natalenko.name;
+> rafael.j.wysocki@intel.com; Huang, Ray <Ray.Huang@amd.com>; Huang,
+> Shimmer <Shimmer.Huang@amd.com>; skhan@linuxfoundation.org;
+> viresh.kumar@linaro.org; x86@kernel.org; Lucas Lee Jing Yi
+> <lucasleeeeeeeee@gmail.com>
+> Subject: [PATCH] [PATCH] amd_pstate: fix erroneous highest_perf value on
+> some CPUs
+>
+> Caution: This message originated from an External Source. Use proper
+> caution when opening attachments, clicking links, or responding.
+>
+>
+> On a Ryzen 7840HS the highest_perf value is 196, not 166 as AMD assumed.
+> This leads to the advertised max clock speed to only be 4.35ghz instead o=
+f
+> 5.14ghz , leading to a large degradation in performance.
+>
+> Fix the broken assumption and revert back to the old logic for getting
+> highest_perf.
+>
+> TEST:
+> Geekbench 6 Before Patch:
+> Single Core:    2325 (-22%)!
+> Multi Core:     11335 (-10%)
+>
+> Geekbench 6 AFTER Patch:
+> Single Core:    2635
+> Multi Core:     12487
+>
+> Signed-off-by: Lucas Lee Jing Yi <lucasleeeeeeeee@gmail.com>
+> ---
+>  drivers/cpufreq/amd-pstate.c | 22 ++++++++++------------
+>  1 file changed, 10 insertions(+), 12 deletions(-)
+>
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 08e112444c27..54df68773620 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -50,7 +50,6 @@
+>
+>  #define AMD_PSTATE_TRANSITION_LATENCY  20000
+>  #define AMD_PSTATE_TRANSITION_DELAY    1000
+> -#define AMD_PSTATE_PREFCORE_THRESHOLD  166
+>
+>  /*
+>   * TODO: We need more time to fine tune processors with shared memory
+> solution @@ -299,15 +298,12 @@ static int pstate_init_perf(struct
+> amd_cpudata *cpudata)
+>                                      &cap1);
+>         if (ret)
+>                 return ret;
+> -
+> -       /* For platforms that do not support the preferred core feature, =
+the
+> -        * highest_pef may be configured with 166 or 255, to avoid max
+> frequency
+> -        * calculated wrongly. we take the AMD_CPPC_HIGHEST_PERF(cap1)
+> value as
+> -        * the default max perf.
+> +
+> +       /* Some CPUs have different highest_perf from others, it is safer
+> +        * to read it than to assume some erroneous value, leading to
+> performance issues.
+>          */
+> -       if (cpudata->hw_prefcore)
+> -               highest_perf =3D AMD_PSTATE_PREFCORE_THRESHOLD;
+> -       else
+> +       highest_perf =3D amd_get_highest_perf();
+> +       if(highest_perf > AMD_CPPC_HIGHEST_PERF(cap1))
+>                 highest_perf =3D AMD_CPPC_HIGHEST_PERF(cap1);
+>
+>         WRITE_ONCE(cpudata->highest_perf, highest_perf); @@ -329,9 +325,1=
+1
+> @@ static int cppc_init_perf(struct amd_cpudata *cpudata)
+>         if (ret)
+>                 return ret;
+>
+> -       if (cpudata->hw_prefcore)
+> -               highest_perf =3D AMD_PSTATE_PREFCORE_THRESHOLD;
+> -       else
+> +       /* Some CPUs have different highest_perf from others, it is safer
+> +        * to read it than to assume some erroneous value, leading to
+> performance issues.
+> +        */
+> +       highest_perf =3D amd_get_highest_perf();
+> +       if(highest_perf > cppc_perf.highest_perf)
+>                 highest_perf =3D cppc_perf.highest_perf;
+>
+>         WRITE_ONCE(cpudata->highest_perf, highest_perf);
+> --
+> 2.43.2
+[Meng, Li (Jassmine)]
+Reviewed-by: Li Meng < li.meng@amd.com>
 
