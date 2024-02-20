@@ -1,336 +1,253 @@
-Return-Path: <linux-pm+bounces-4142-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4143-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91F5085C0E9
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 17:15:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8445185C14F
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 17:27:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B65081C236C9
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 16:15:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1420E1F21AA3
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 16:27:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55A8276901;
-	Tue, 20 Feb 2024 16:15:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="Meqlmx7c"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BEF778B79;
+	Tue, 20 Feb 2024 16:24:15 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FE01763E6
-	for <linux-pm@vger.kernel.org>; Tue, 20 Feb 2024 16:15:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AF0A78B6B;
+	Tue, 20 Feb 2024 16:24:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708445729; cv=none; b=ofLsxTGLgDxgtg1LrIXGFaPjn/XVN/2s7+Tz2PD+TFLSdO1M46HRBr35/7KOhw1hC8bK4F3tph1eJi9foNBt5dlpPuO4NwEd4qyrmTepsJExdon4aZb6w9z2Sf0gwj4TLRdcjoFj5xMYLmyknLJ2sG/4wHI43zxeu9bqsGVIgUM=
+	t=1708446255; cv=none; b=PyiebT/xvHKe2LvQWAsKIaJsjQl/HHXOux5ice/QZwDW3vBIS/NjFQ1u7a8j4fX/2DbqDEHVgh1aluXAcf+v79CJRYk0il4FHr+NF3G6vfhtCzXWvCvtme3rrxyq4KihTWvZTTwGlh8gq6x+FcL0UhITfnCQ0a48dcFklcZW0Xc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708445729; c=relaxed/simple;
-	bh=W5lRbzdR9nXm+rlHNA2uedArT+vUyQR784E1U6uy2CQ=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=svptenwC5mHF58scrkYJQG/ON5RSNkjHZ7dS0Emze5HwWnCwCoCEzj7bwEZ1kFm6n5Caub7FjE3gVS7ityF+qZm9wRFpRiSXfth2uDZxUmQX14bSocUklV6xbaJNcBE5srvTIgIM1Mw/pNoS5aytCaw60PP5YEssKF3YNua3BNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=Meqlmx7c; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-299372abcfeso2774337a91.1
-        for <linux-pm@vger.kernel.org>; Tue, 20 Feb 2024 08:15:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1708445720; x=1709050520; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=4g++Nwzh4+mkyGHaQcjmLc5ay605Z1sZ1IHGNs1jd/8=;
-        b=Meqlmx7cyJK5tjLSp5VAboUd3ltWV63LUBsjTCymTPAqUFdMcSPMgm0qWwq6Woefcp
-         wWMkv+q+X7wJEE/6zK4H5wE7QzdCLPCkDE5wzFTj/QLpJWVgwWlZGdNb0JO3Guyax7ew
-         kSaNn3crsJx/NZrtnzIKJ200GQxDSWudSenrqEqT12DOOpTuTQxZaabEEATp9+IdEG65
-         6g6ZrjaMv41qNi3QmCmI57OQ2gB2SVS7YX9JxGcyn8+T9Bw5ZLiLVJJDK4Crx55WhMfi
-         XnU0Hcft3JVi00K5QUrT8JGv9VRRGVPQSZgvUJLXTtXKD30Ar+GchrIxizgU9rFu+Jho
-         TDDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708445720; x=1709050520;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4g++Nwzh4+mkyGHaQcjmLc5ay605Z1sZ1IHGNs1jd/8=;
-        b=r22l/wEVFn3ZlJZ8V0XlxIazrRJwNaEjpt3VbUYDEcJt/w0clFtWXYSV65Saa+iG3E
-         NJ6Rt/IUJW97NHl/ID+wwJSPtGrwHym5ZpqxlHMZca+ABe7IoJ/MH2DtG3vgKvANWMyf
-         mZzzpmgA9rajZcW2+wv7pP8uWJEUr831l/c9vZG9yE1aotH2KCrbCisXBxtYipOQw70G
-         XoRtpOMXr+1i5RFJDKXNomkC5UKaj3Lsv/hsLxzwLeSqj3Z4Ge3nP0QUsG/5kl3IqOUI
-         1Auh300/aqVI1ValJQeIXvLT4bN76T49Ol7o6P5R1sz3K7o7c4Xlo+YaB9yv+3+7a+0k
-         wLKw==
-X-Forwarded-Encrypted: i=1; AJvYcCUrkdsYefTgXgaRIygH9XJHTNNOE6hIX+7LchzOEqIuVFSzY3oWYOoDCVqC/+Xz+HAV3s0i1EyBJuTeSCKcq8r54C8ZWcyadag=
-X-Gm-Message-State: AOJu0Yx7Ph/zVJzWx8aYj3L3JRHoakzQwpZQbL6QBnfpNk2k1VbUkhJ8
-	GnWNdWH+15YuxpZnyG7WTXZd8fmnWlCXpQV1hG1vukNF3kjh/RARBMf2eb8RrJGmB/nNX3qqjW+
-	snEw=
-X-Google-Smtp-Source: AGHT+IGTompXcQpuBKaDXe0BpJ+gGPtM0nqmH/O4VqF+bqK7T7wP9hYmnD0PmKaGSH0jSo2swwteTg==
-X-Received: by 2002:a17:90b:1d01:b0:298:c104:1eb8 with SMTP id on1-20020a17090b1d0100b00298c1041eb8mr2425251pjb.19.1708445720192;
-        Tue, 20 Feb 2024 08:15:20 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id k10-20020a17090a9d8a00b002997a5eea5bsm5756595pjp.31.2024.02.20.08.15.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Feb 2024 08:15:19 -0800 (PST)
-Message-ID: <65d4d017.170a0220.2e95c.0902@mx.google.com>
-Date: Tue, 20 Feb 2024 08:15:19 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1708446255; c=relaxed/simple;
+	bh=X1LmlBpp9/hB3Wl48tFmyVRbajeTNCx4reU1tnbF/qg=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sIQ8NmtzidtZOc4ClQwhBtiqD4TkubBUbjuOglT3UEc9IjT+wWaBygarDXaoKBvTBfx6Dtwqpxv+vgJxJfp778XjMZkXv+3ScsvhKHztpI7x7FIzG+VsUNaFu0uUNufQBJyVA48qFViyfpC6NjyOfc9gavkC8zfWjevlEjnWH+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=Huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4TfPkb0bShz6J9dD;
+	Wed, 21 Feb 2024 00:19:51 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (unknown [7.191.163.240])
+	by mail.maildlp.com (Postfix) with ESMTPS id 6B52E1400DD;
+	Wed, 21 Feb 2024 00:24:08 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 20 Feb
+ 2024 16:24:07 +0000
+Date: Tue, 20 Feb 2024 16:24:06 +0000
+From: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+CC: "Rafael J. Wysocki" <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
+	<loongarch@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-riscv@lists.infradead.org>,
+	<kvmarm@lists.linux.dev>, <x86@kernel.org>,
+	<acpica-devel@lists.linuxfoundation.org>, <linux-csky@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-ia64@vger.kernel.org>,
+	<linux-parisc@vger.kernel.org>, Salil Mehta <salil.mehta@huawei.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>, <jianyong.wu@arm.com>,
+	<justin.he@arm.com>, James Morse <james.morse@arm.com>
+Subject: Re: [PATCH RFC v4 02/15] ACPI: processor: Register all CPUs from
+ acpi_processor_get_info()
+Message-ID: <20240220162406.00005b59@Huawei.com>
+In-Reply-To: <ZdTBtt0oR6Q1RcAB@shell.armlinux.org.uk>
+References: <Zbp5xzmFhKDAgHws@shell.armlinux.org.uk>
+	<E1rVDmU-0027YP-Jz@rmk-PC.armlinux.org.uk>
+	<CAJZ5v0iiJpUWq5GMSnKFWQTzn_bdwoQz9m=hDaXNg4Lj_ePF4g@mail.gmail.com>
+	<ZdSMk93c1I6x973h@shell.armlinux.org.uk>
+	<ZdTBtt0oR6Q1RcAB@shell.armlinux.org.uk>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v6.8-rc5-92-g4cb5c331c4dfd
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 8 builds: 2 failed, 6 passed, 2 errors,
- 32 warnings (v6.8-rc5-92-g4cb5c331c4dfd)
-To: rafael@kernel.org, linux-pm@vger.kernel.org,
- kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From: "kernelci.org bot" <bot@kernelci.org>
+X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 
-pm/testing build: 8 builds: 2 failed, 6 passed, 2 errors, 32 warnings (v6.8=
--rc5-92-g4cb5c331c4dfd)
+On Tue, 20 Feb 2024 15:13:58 +0000
+"Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-8-rc5-92-g4cb5c331c4dfd/
+> On Tue, Feb 20, 2024 at 11:27:15AM +0000, Russell King (Oracle) wrote:
+> > On Thu, Feb 15, 2024 at 08:22:29PM +0100, Rafael J. Wysocki wrote: =20
+> > > On Wed, Jan 31, 2024 at 5:50=E2=80=AFPM Russell King <rmk+kernel@arml=
+inux.org.uk> wrote: =20
+> > > > diff --git a/drivers/acpi/acpi_processor.c b/drivers/acpi/acpi_proc=
+essor.c
+> > > > index cf7c1cca69dd..a68c475cdea5 100644
+> > > > --- a/drivers/acpi/acpi_processor.c
+> > > > +++ b/drivers/acpi/acpi_processor.c
+> > > > @@ -314,6 +314,18 @@ static int acpi_processor_get_info(struct acpi=
+_device *device)
+> > > >                         cpufreq_add_device("acpi-cpufreq");
+> > > >         }
+> > > >
+> > > > +       /*
+> > > > +        * Register CPUs that are present. get_cpu_device() is used=
+ to skip
+> > > > +        * duplicate CPU descriptions from firmware.
+> > > > +        */
+> > > > +       if (!invalid_logical_cpuid(pr->id) && cpu_present(pr->id) &&
+> > > > +           !get_cpu_device(pr->id)) {
+> > > > +               int ret =3D arch_register_cpu(pr->id);
+> > > > +
+> > > > +               if (ret)
+> > > > +                       return ret;
+> > > > +       }
+> > > > +
+> > > >         /*
+> > > >          *  Extra Processor objects may be enumerated on MP systems=
+ with
+> > > >          *  less than the max # of CPUs. They should be ignored _if=
+f =20
+> > >=20
+> > > This is interesting, because right below there is the following code:
+> > >=20
+> > >     if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
+> > >         int ret =3D acpi_processor_hotadd_init(pr);
+> > >=20
+> > >         if (ret)
+> > >             return ret;
+> > >     }
+> > >=20
+> > > and acpi_processor_hotadd_init() essentially calls arch_register_cpu()
+> > > with some extra things around it (more about that below).
+> > >=20
+> > > I do realize that acpi_processor_hotadd_init() is defined under
+> > > CONFIG_ACPI_HOTPLUG_CPU, so for the sake of the argument let's
+> > > consider an architecture where CONFIG_ACPI_HOTPLUG_CPU is set.
+> > >=20
+> > > So why are the two conditionals that almost contradict each other both
+> > > needed?  It looks like the new code could be combined with
+> > > acpi_processor_hotadd_init() to do the right thing in all cases.
+> > >=20
+> > > Now, acpi_processor_hotadd_init() does some extra things that look
+> > > like they should be done by the new code too.
+> > >=20
+> > > 1. It checks invalid_phys_cpuid() which appears to be a good idea to =
+me.
+> > >=20
+> > > 2. It uses locking around arch_register_cpu() which doesn't seem
+> > > unreasonable either.
+> > >=20
+> > > 3. It calls acpi_map_cpu() and I'm not sure why this is not done by
+> > > the new code.
+> > >=20
+> > > The only thing that can be dropped from it is the _STA check AFAICS,
+> > > because acpi_processor_add() won't even be called if the CPU is not
+> > > present (and not enabled after the first patch).
+> > >=20
+> > > So why does the code not do 1 - 3 above? =20
+> >=20
+> > Honestly, I'm out of my depth with this and can't answer your
+> > questions - and I really don't want to try fiddling with this code
+> > because it's just too icky (even in its current form in mainline)
+> > to be understandable to anyone who hasn't gained a detailed knowledge
+> > of this code.
+> >=20
+> > It's going to require a lot of analysis - how acpi_map_cpuid() behaves
+> > in all circumstances, what this means for invalid_logical_cpuid() and
+> > invalid_phys_cpuid(), what paths will be taken in each case. This code
+> > is already just too hairy for someone who isn't an experienced ACPI
+> > hacker to be able to follow and I don't see an obvious way to make it
+> > more readable.
+> >=20
+> > James' additions make it even more complex and less readable. =20
+>=20
+> As an illustration of the problems I'm having here, I was just writing
+> a reply to this with a suggestion of transforming this code ultimately
+> to:
+>=20
+> 	if (!get_cpu_device(pr->id)) {
+> 		int ret;
+>=20
+> 		if (!invalid_logical_cpuid(pr->id) && cpu_present(pr->id))
+> 			ret =3D acpi_processor_make_enabled(pr);
+> 		else
+> 			ret =3D acpi_processor_make_present(pr);
+>=20
+> 		if (ret)
+> 			return ret;
+> 	}
+>=20
+> (acpi_processor_make_present() would be acpi_processor_hotadd_init()
+> and acpi_processor_make_enabled() would be arch_register_cpu() at this
+> point.)
+>=20
+> Then I realised that's a bad idea - because we really need to check
+> that pr->id is valid before calling get_cpu_device() on it, so this
+> won't work. That leaves us with:
+>=20
+> 	int ret;
+>=20
+> 	if (invalid_logical_cpuid(pr->id) || !cpu_present(pr->id)) {
+> 		/* x86 et.al. path */
+> 		ret =3D acpi_processor_make_present(pr);
+> 	} else if (!get_cpu_device(pr->id)) {
+> 		/* Arm64 path */
+> 		ret =3D acpi_processor_make_enabled(pr);
+> 	} else {
+> 		ret =3D 0;
+> 	}
+>=20
+> 	if (ret)
+> 		return ret;
+>=20
+> Now, the next transformation would be to move !get_cpu_device(pr->id)
+> into acpi_processor_make_enabled() which would eliminate one of those
+> if() legs.
+>=20
+> Now, if we want to somehow make the call to arch_regster_cpu() common
+> in these two paths, the next question is what are the _precise_
+> semantics of acpi_map_cpu(), particularly with respect to it
+> modifying pr->id. Is it guaranteed to always give the same result
+> for the same processor described in ACPI? What acpi_map_cpu() anyway,
+> I can find no documentation for it.
+>=20
+> Then there's the question whether calling acpi_unmap_cpu() should be
+> done on the failure path if arch_register_cpu() fails, which is done
+> for the x86 path but not the Arm64 path. Should it be done for the
+> Arm64 path? I've no idea, but as Arm64 doesn't implement either of
+> these two functions, I guess they could be stubbed out and thus be
+> no-ops - but then we open a hole where if pr->id is invalid, we
+> end up passing that invalid value to arch_register_cpu() which I'm
+> quite sure will explode with a negative CPU number.
+>=20
+> So, to my mind, what you're effectively asking for is a total rewrite
+> of all the code in and called by acpi_processor_get_info()... and that
+> is not something I am willing to do (because it's too far outside of
+> my knowledge area.)
+>=20
+> As I said in my reply to patch 1, I think your comments on patch 2
+> make Arm64 vcpu hotplug unachievable in a reasonable time frame, and
+> certainly outside the bounds of what I can do to progress this.
+>=20
+> So, at this point I'm going to stand down from further participation
+> with this patch set as I believe I've reached the limit of what I can
+> do to progress it.
+>=20
 
-Tree: pm
-Branch: testing
-Git Describe: v6.8-rc5-92-g4cb5c331c4dfd
-Git Commit: 4cb5c331c4dfd553077664717ed061ecc8d2a0f7
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+Thanks for your hard work on this Russell - we have moved forwards.
 
-Build Failures Detected:
+Short of anyone else stepping up I'll pick this up with
+the help of some my colleagues. As such I'm keen on getting patch
+1 upstream ASAP so that we can exclude the need for some of the
+other workarounds from earlier versions of this series (the ones
+dropped before now).
 
-i386:
-    i386_defconfig: (gcc-10) FAIL
+We will need a little time to get up to speed on the current status
+and discussion points Russell raises above.
 
-x86_64:
-    x86_64_defconfig: (gcc-10) FAIL
+Jonathan
 
-Errors and Warnings Detected:
 
-arc:
-    haps_hs_smp_defconfig (gcc-10): 2 warnings
-
-arm64:
-    defconfig (gcc-10): 1 warning
-
-arm:
-
-i386:
-    i386_defconfig (gcc-10): 1 error, 1 warning
-
-mips:
-
-riscv:
-    defconfig (gcc-10): 1 warning
-
-sparc:
-    sparc64_defconfig (gcc-10): 26 warnings
-
-x86_64:
-    x86_64_defconfig (gcc-10): 1 error, 1 warning
-
-Errors summary:
-
-    1    security/security.c:811:2: error: =E2=80=98memcpy=E2=80=99 offset =
-32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-    1    arch/x86/include/asm/string_32.h:150:25: error: =E2=80=98__builtin=
-_memcpy=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bou=
-nds]
-
-Warnings summary:
-
-    2    security/security.c:811:2: warning: =E2=80=98memcpy=E2=80=99 offse=
-t 32 is out of the bounds [0, 0] [-Warray-bounds]
-    2    cc1: all warnings being treated as errors
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    1    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =
-=E2=80=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-p=
-rototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototy=
-pes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-=
-prototypes]
-    1    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no prev=
-ious prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-protot=
-ypes]
-    1    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous proto=
-type for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous proto=
-type for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =
-=E2=80=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype fo=
-r =E2=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for=
- =E2=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype=
- for =E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype=
- for =E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototyp=
-e for =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-protot=
-ypes]
-    1    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototyp=
-e for =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype=
- for =E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototyp=
-e for =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototy=
-pe for =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype f=
-or =E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype =
-for =E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
-    1    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype =
-for =E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
-    1    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype fo=
-r 'syscall_trace_enter' [-Wmissing-prototypes]
-    1    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype f=
-or 'arc_kprobe_handler' [-Wmissing-prototypes]
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
-smatches
-
-Warnings:
-    security/security.c:811:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
-smatches
-
-Warnings:
-    security/security.c:811:2: warning: =E2=80=98memcpy=E2=80=99 offset 32 =
-is out of the bounds [0, 0] [-Warray-bounds]
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
- section mismatches
-
-Warnings:
-    arch/arc/kernel/ptrace.c:342:16: warning: no previous prototype for 'sy=
-scall_trace_enter' [-Wmissing-prototypes]
-    arch/arc/kernel/kprobes.c:193:15: warning: no previous prototype for 'a=
-rc_kprobe_handler' [-Wmissing-prototypes]
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 section=
- mismatches
-
-Errors:
-    arch/x86/include/asm/string_32.h:150:25: error: =E2=80=98__builtin_memc=
-py=E2=80=99 offset 32 is out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 26 warnings, 0 =
-section mismatches
-
-Warnings:
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    arch/sparc/kernel/traps_64.c:253:6: warning: no previous prototype for =
-=E2=80=98is_no_fault_exception=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/traps_64.c:2035:6: warning: no previous prototype for=
- =E2=80=98do_mcd_err=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/traps_64.c:2153:6: warning: no previous prototype for=
- =E2=80=98sun4v_nonresum_error_user_handled=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/setup_64.c:602:13: warning: no previous prototype for=
- =E2=80=98alloc_irqstack_bootmem=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/time_64.c:880:20: warning: no previous prototype for =
-=E2=80=98sched_clock=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:124:21: warning: no previous prototype for =
-=E2=80=98find_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:156:21: warning: no previous prototype for =
-=E2=80=98alloc_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/adi_64.c:299:6: warning: no previous prototype for =
-=E2=80=98del_tag_store=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/pci_sun4v.c:259:15: warning: no previous prototype fo=
-r =E2=80=98dma_4v_iotsb_bind=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/kernel/uprobes.c:237:17: warning: no previous prototype for =
-=E2=80=98uprobe_trap=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/mm/init_64.c:2644:6: warning: no previous prototype for =E2=
-=80=98vmemmap_free=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vma.c:246:12: warning: no previous prototype for =E2=80=
-=98init_vdso_image=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:254:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:282:1: warning: no previous prototype =
-for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:307:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vclock_gettime.c:343:1: warning: no previous prototype =
-for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:254:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:282:1: warning: no previous =
-prototype for =E2=80=98__vdso_clock_gettime_stick=E2=80=99 [-Wmissing-proto=
-types]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:307:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/vdso/vdso32/../vclock_gettime.c:343:1: warning: no previous =
-prototype for =E2=80=98__vdso_gettimeofday_stick=E2=80=99 [-Wmissing-protot=
-ypes]
-    arch/sparc/prom/misc_64.c:165:5: warning: no previous prototype for =E2=
-=80=98prom_get_mmu_ihandle=E2=80=99 [-Wmissing-prototypes]
-    arch/sparc/prom/p1275.c:52:6: warning: no previous prototype for =E2=80=
-=98prom_cif_init=E2=80=99 [-Wmissing-prototypes]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 FAIL, 1 error, 1 warning, 0 sec=
-tion mismatches
-
-Errors:
-    security/security.c:811:2: error: =E2=80=98memcpy=E2=80=99 offset 32 is=
- out of the bounds [0, 0] [-Werror=3Darray-bounds]
-
-Warnings:
-    cc1: all warnings being treated as errors
-
----
-For more info write to <info@kernelci.org>
 
