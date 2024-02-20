@@ -1,151 +1,170 @@
-Return-Path: <linux-pm+bounces-4162-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4163-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A44E385C30A
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 18:54:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1239E85C35A
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 19:08:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 445161F24B05
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 17:54:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 34BE51C214D9
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Feb 2024 18:08:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D11778661;
-	Tue, 20 Feb 2024 17:54:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B1FD77F33;
+	Tue, 20 Feb 2024 18:08:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="dqDmFqmf"
+	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="uzZeHjVd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com [209.85.222.44])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5374C77650
-	for <linux-pm@vger.kernel.org>; Tue, 20 Feb 2024 17:53:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C56806D1A8
+	for <linux-pm@vger.kernel.org>; Tue, 20 Feb 2024 18:08:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708451641; cv=none; b=vFXOK36gNm/1kQspkjY8hdndsKHrnx+m7YUnP2ZEigZEVhxRXp73AHPoXdFNNOFrLpanjqyTlAzdGz4+qDLgzEC/zCPrdSOkpKrfzv0snvZnwZ5h2XWlR4gBf67jH4TRrEy9hPQ4CfnS0zKRcsfGIBdGbqrYb0RRlaIv/DVuwl8=
+	t=1708452510; cv=none; b=FNAkKp4iF9vWU9aydx7AUJqy6dZCWmpH9c3UAmBQ96t6ZK+gaCY+G6aY78Oj1f1aF6o38EfjGQXE16SJ9ky4H2/LPTSm69PcnpbX+5ECASRKHNvXyLnqH4P9QkwYP2YLRqtSaAWMWni7O6+kTd11XDToBE/kWxv4oan2nbg567Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708451641; c=relaxed/simple;
-	bh=d38oaY+K+spNFRP/qOIWiTuNObZ5xOckG4uBJUP/Mnw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pL10BaAffLdRyZDrBqV0uZYVxWx+91Puw3rAhRPFE+pM+BkKHDzhiS3sAWkHyn+AQTV9L5SrsABjSgaGOknGF9cx6AMaqkXSer7c6XhC+lkSNbCh7HybuMdH2sUYWCpyp6xkghV1CDj0lNWc3wExQD+mfR7lO9mlLl+WNvPnkwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=dqDmFqmf; arc=none smtp.client-ip=209.85.222.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-ua1-f44.google.com with SMTP id a1e0cc1a2514c-7d5c514944fso2987052241.1
-        for <linux-pm@vger.kernel.org>; Tue, 20 Feb 2024 09:53:59 -0800 (PST)
+	s=arc-20240116; t=1708452510; c=relaxed/simple;
+	bh=Ii6ohLTbl9rTv5KRVUQJpae0ArE5eca5skPA3gXkdno=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kkvAZNz61TGwMha6me/Ko2bg29WN0HCPB/RJTgjzIYJ6q2CA/UoMZ6/YZ/yUde1ri00h0ODnsZ9aPeYlmehDXuUq+TOG7lBkOKvG4yQp1iqEdNU1xbGewPX12q+kiEPos10EZdXbjOk9PqIgsoPlOiVDLDrL1KR/RoOSe5SqiKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=uzZeHjVd; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-a3f1bf03722so63006366b.1
+        for <linux-pm@vger.kernel.org>; Tue, 20 Feb 2024 10:08:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1708451638; x=1709056438; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4DriMqP4qiEsOx9DUXcwZZJ3R+6NkNBQrlsXuZW2fRw=;
-        b=dqDmFqmf/boXSO3XLftzEpiYyOHCamaX0F53wcY4GQpiuQW/2vzcNdtROqhIDlmaNi
-         41o8Nq1nyOrvoLTIL/A3cIMQYXmTq2Cjxsvyk3NK7hnVBlMFTjhSAGVAurwdgztdwqeW
-         jVt2HdNK35jY7M80Pawdx8zCXwTpkxi3BoUuVDYfpb+UCAn6zAOXbk1Rfe/IksHmfhmQ
-         oXt/2Ch2k7erVEf5RIDIoaIW8yY1cCjQYXfObTdvxtwV8chIeWUY5YmCQak9EDtS7KxH
-         haS60yiEvpExLTaT/E7j/g0EV7s1tdqQxtTdRgSV6FL8RIUCHzQTPmYA/1Xdy57iHOop
-         P2gA==
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1708452506; x=1709057306; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HQYn2Qo6PtaFVnQpAuclGekLK37G8lvuP7kYmeLo6SY=;
+        b=uzZeHjVdmMe1YIss9g0Yjc07lTxdjRcGX1pwQqjCII5EbmdNiNB9D3aMId4ztpa3mE
+         fth4CPcf0MWY8UIx30dkpOVNY8Je1u8AMS4I54+Imbzvs9gTkultFUqQYmvdrz3UJBQM
+         79wT9PBmFw4ZBRT81s94yV3W2h4sHnynH0orIdd91lDckDYQqMebGE9qxmfvPWTMAb34
+         GrJwlmLU93lxydWrc64QAGnrUnNuyDor3KrJo7HIYSxVQ8Rc/P21Yi9n06dISKTemLA2
+         Z4Mza+3ACIt3IfRwHle/FtzWsNf6oK2TOAyNWRzB6a7d0JW4L0dI6XRTUK/Oeu8OE+5m
+         a3TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708451638; x=1709056438;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4DriMqP4qiEsOx9DUXcwZZJ3R+6NkNBQrlsXuZW2fRw=;
-        b=lXnxM9Ebi1ZauQ3WIbm/AX/kdOHsK18HYaTrlxKpNPB0NWMMzsVchKXhi03PAPrJ2h
-         bcWiKLzQ0p1AWXOHqQwilwk+nmCmZSiti8PghY4DHUrBaxARGnVG8ChFBNPSfLBZepNO
-         yEGXgi9vhOLQayMrrxvZaihGvgaGpBBK5Q3ThVU91zPIqS/0bxidAvQa4IqOKMlLEIC1
-         mF3LxXmpHQ3ZJ3bqvg0MVugVfxpQEkI61HMPUyLpzT8p8lGTS/Xji795ElNpHR+e9kod
-         X+I4SShN7vkZtjSh8VFObdfKon9fJ2Y8w3CjuzpdxR9D14xu+PEB9WD7uYLdN+Ws0OX0
-         3Iuw==
-X-Forwarded-Encrypted: i=1; AJvYcCUyTsekFtlk65RkwwJ82ahrksdKLmoJ7+1qPMItsBP9JtuHt6X/39PhNqCsoLrMU68hYdXXEHZsfNFyQks8RmkNrFneogWKqnU=
-X-Gm-Message-State: AOJu0Yw4Y3QOt3FAJI6euCs6fgmbIdFU4p2xdg6uWSMtPTzS51i7zZNG
-	7f89mbdn7Q7gmPpZ1Gv8Pm4h4qa+ofPgxN1pTOmsJcOkt6DrAwEcvgiTcH9/ZHqGVUj7I0kxzMo
-	Sh8wqSx9cAVFZj3JNuMP2Gc9+X/LeiloT4jmssQ==
-X-Google-Smtp-Source: AGHT+IEAXD4s0vfCLOf3dGv178kSWMvcITercQToZ5Xpgu/ylirbyvBE31sO5fq4v2ZZE2g252F6KNSh/laLzVqmd+s=
-X-Received: by 2002:a05:6102:2436:b0:470:51da:3adc with SMTP id
- l22-20020a056102243600b0047051da3adcmr4445513vsi.10.1708451638124; Tue, 20
- Feb 2024 09:53:58 -0800 (PST)
+        d=1e100.net; s=20230601; t=1708452506; x=1709057306;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HQYn2Qo6PtaFVnQpAuclGekLK37G8lvuP7kYmeLo6SY=;
+        b=JczMxwNatXyi9+Bs0RvRsW+szEUEkSLEsti6wYwzt+zRLycZJdOn7XjzBUHBrTDMYJ
+         bVSV6pnR2A5rvXHfLJ6Uu7nR9+rqhy/nMLrnrlMvmTN/rn31qPiwuekMoW434KheWFsA
+         Sr2MCSYLi2pAmiceyxw06v5kgV7M4oT0OEz27S89SrrNuNCuKiMdllfZb/LTrJXL4MSp
+         MA8r7KgMZ140NbOaiEO0Bl3mY9Or9rNBTj1S8WuzAXE/3jDuoXvppHPyZuN72upVTorg
+         wYAo/0N3khAkoPPe2JXo5ZI/lbtlpBD1MRuO1H34qjh/uqeBZuC9PogZ+bDmJ4c/yGri
+         yHpg==
+X-Forwarded-Encrypted: i=1; AJvYcCXED/1ZJ1FYAk/E8UQg1eh05uIhBCHk7ZYYktc0lQeg4Ch6jR3l3j7EH2iiZd37cQWGpkEOljYuCxMICULXYR4GgvywhYs3Nc8=
+X-Gm-Message-State: AOJu0YxeQSFDsloSS1uniQ3h61ahiWu2opGXLu3k4vg9DCuz1pJtgeq9
+	btL7B6MXvxXZ4aRin3oM0TXtZ/uBoJbdzWKwxf30EwLGDIriNJKCsyO9jYwj4wc=
+X-Google-Smtp-Source: AGHT+IEEGYlDJUbgD5RmdTOL2p1zojXRXui9l0d9+6OqRLvHJ8tVrPR0lV+boQkXNXpSuTksDNuT1Q==
+X-Received: by 2002:a17:906:d7b7:b0:a3f:2167:63d9 with SMTP id pk23-20020a170906d7b700b00a3f216763d9mr589037ejb.16.1708452505998;
+        Tue, 20 Feb 2024 10:08:25 -0800 (PST)
+Received: from airbuntu.. (host109-154-46-208.range109-154.btcentralplus.com. [109.154.46.208])
+        by smtp.gmail.com with ESMTPSA id g14-20020a170906594e00b00a3edde33e7esm1274501ejr.99.2024.02.20.10.08.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Feb 2024 10:08:25 -0800 (PST)
+From: Qais Yousef <qyousef@layalina.io>
+To: Ingo Molnar <mingo@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Qais Yousef <qyousef@layalina.io>
+Subject: [PATCH v2] sched: cpufreq: Rename map_util_perf to sugov_apply_dvfs_headroom
+Date: Tue, 20 Feb 2024 18:08:20 +0000
+Message-Id: <20240220180820.2597581-1-qyousef@layalina.io>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240216203215.40870-1-brgl@bgdev.pl> <20240216203215.40870-10-brgl@bgdev.pl>
- <48164f18-34d0-4053-a416-2bb63aaae74b@sirena.org.uk> <CAMRc=Md7ymMTmF1OkydewF5C32jDNy0V+su7pcJPHKto6VLjLg@mail.gmail.com>
- <8e392aed-b5f7-486b-b5c0-5568e13796ec@sirena.org.uk> <CAMRc=MeAXEyV47nDO_WPQqEQxSYFWTrwVPAtLghkfONj56FGVA@mail.gmail.com>
- <CAA8EJppzkuH=YTAHuJ3Og2RLHB93PSas004UDvpqepYbGepVPg@mail.gmail.com>
-In-Reply-To: <CAA8EJppzkuH=YTAHuJ3Og2RLHB93PSas004UDvpqepYbGepVPg@mail.gmail.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Tue, 20 Feb 2024 18:53:46 +0100
-Message-ID: <CAMRc=MfXkG1bqGrtFWpoZo3fTY49TvU3sHOnX-zc2kjUiRfp3w@mail.gmail.com>
-Subject: Re: [PATCH v5 09/18] arm64: dts: qcom: qrb5165-rb5: model the PMU of
- the QCA6391
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Mark Brown <broonie@kernel.org>, Marcel Holtmann <marcel@holtmann.org>, 
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, "David S . Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Kalle Valo <kvalo@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Saravana Kannan <saravanak@google.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Arnd Bergmann <arnd@arndb.de>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Marek Szyprowski <m.szyprowski@samsung.com>, Alex Elder <elder@linaro.org>, 
-	Srini Kandagatla <srinivas.kandagatla@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Abel Vesa <abel.vesa@linaro.org>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Lukas Wunner <lukas@wunner.de>, linux-bluetooth@vger.kernel.org, 
-	netdev@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Feb 20, 2024 at 5:30=E2=80=AFPM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On Tue, 20 Feb 2024 at 13:16, Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> >
-> > On Mon, Feb 19, 2024 at 8:59=E2=80=AFPM Mark Brown <broonie@kernel.org>=
- wrote:
-> > >
-> > > On Mon, Feb 19, 2024 at 07:48:20PM +0100, Bartosz Golaszewski wrote:
-> > > > On Mon, Feb 19, 2024 at 7:03=E2=80=AFPM Mark Brown <broonie@kernel.=
-org> wrote:
-> > > > > On Fri, Feb 16, 2024 at 09:32:06PM +0100, Bartosz Golaszewski wro=
-te:
-> > >
-> > > > > > +                     vreg_pmu_aon_0p59: ldo1 {
-> > > > > > +                             regulator-name =3D "vreg_pmu_aon_=
-0p59";
-> > > > > > +                             regulator-min-microvolt =3D <5400=
-00>;
-> > > > > > +                             regulator-max-microvolt =3D <8400=
-00>;
-> > > > > > +                     };
-> > >
-> > > > > That's a *very* wide voltage range for a supply that's got a name=
- ending
-> >
-> > Because it's an error, it should have been 640000. Thanks for spotting =
-it.
->
-> According to the datasheet, VDD08_PMU_AON_O goes up to 0.85V then down
-> to 0.59V, which is the working voltage.
->
+We are providing headroom for the utilization to grow until the next
+decision point to pick the next frequency. Give the function a better
+name and give it some documentation. It is not really mapping anything.
 
-Hmm indeed this is what figure 3.4 says but table 3-2 says the maximum is 0=
-.64V.
+Also move it to cpufreq_schedutil.c. This function relies on updating
+util signal appropriately to give a headroom to grow. This is tied to
+schedutil and scheduler and not something that can be shared with other
+governors.
 
-> VDD08_PMU_RFA_CMN is normally at 0.8V, but goes to 0.4V during sleep.
->
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+Signed-off-by: Qais Yousef <qyousef@layalina.io>
+---
 
-Again figure 3.4 and table 3-2 disagree unless I'm missing something.
+Changes in v2:
 
-Bart
+	1. Add Acked-by from Viresh and Raphael (Thanks!)
+	2. Move the function to cpufreq_schedutil.c instead of sched.h
+	3. Name space the function with sugov_ to indicate it is special to
+	   this governor only and not generic.
 
-[snip]
+ include/linux/sched/cpufreq.h    |  5 -----
+ kernel/sched/cpufreq_schedutil.c | 20 +++++++++++++++++++-
+ 2 files changed, 19 insertions(+), 6 deletions(-)
+
+diff --git a/include/linux/sched/cpufreq.h b/include/linux/sched/cpufreq.h
+index bdd31ab93bc5..d01755d3142f 100644
+--- a/include/linux/sched/cpufreq.h
++++ b/include/linux/sched/cpufreq.h
+@@ -28,11 +28,6 @@ static inline unsigned long map_util_freq(unsigned long util,
+ {
+ 	return freq * util / cap;
+ }
+-
+-static inline unsigned long map_util_perf(unsigned long util)
+-{
+-	return util + (util >> 2);
+-}
+ #endif /* CONFIG_CPU_FREQ */
+ 
+ #endif /* _LINUX_SCHED_CPUFREQ_H */
+diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+index eece6244f9d2..575df3599813 100644
+--- a/kernel/sched/cpufreq_schedutil.c
++++ b/kernel/sched/cpufreq_schedutil.c
+@@ -178,12 +178,30 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
+ 	return cpufreq_driver_resolve_freq(policy, freq);
+ }
+ 
++/*
++ * DVFS decision are made at discrete points. If CPU stays busy, the util will
++ * continue to grow, which means it could need to run at a higher frequency
++ * before the next decision point was reached. IOW, we can't follow the util as
++ * it grows immediately, but there's a delay before we issue a request to go to
++ * higher frequency. The headroom caters for this delay so the system continues
++ * to run at adequate performance point.
++ *
++ * This function provides enough headroom to provide adequate performance
++ * assuming the CPU continues to be busy.
++ *
++ * At the moment it is a constant multiplication with 1.25.
++ */
++static inline unsigned long sugov_apply_dvfs_headroom(unsigned long util)
++{
++	return util + (util >> 2);
++}
++
+ unsigned long sugov_effective_cpu_perf(int cpu, unsigned long actual,
+ 				 unsigned long min,
+ 				 unsigned long max)
+ {
+ 	/* Add dvfs headroom to actual utilization */
+-	actual = map_util_perf(actual);
++	actual = sugov_apply_dvfs_headroom(actual);
+ 	/* Actually we don't need to target the max performance */
+ 	if (actual < max)
+ 		max = actual;
+-- 
+2.34.1
+
 
