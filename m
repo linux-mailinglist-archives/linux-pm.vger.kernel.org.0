@@ -1,115 +1,184 @@
-Return-Path: <linux-pm+bounces-4189-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4190-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A64A85D6D0
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 12:26:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 291F885D6D7
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 12:29:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B5F61C21A0D
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 11:26:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 93578B21099
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 11:29:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D172C3FE2C;
-	Wed, 21 Feb 2024 11:26:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 960963FE4B;
+	Wed, 21 Feb 2024 11:29:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kKB4l2+6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 652F3405F4
-	for <linux-pm@vger.kernel.org>; Wed, 21 Feb 2024 11:26:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C05A93FE31
+	for <linux-pm@vger.kernel.org>; Wed, 21 Feb 2024 11:28:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708514805; cv=none; b=OiQjTbLYmWIxFmo8NCaRMiDbrAjMPTPzz/RD5js5hFIqL/Qf359y1Ug9jQo0kmAhE1AbqYRcU7AbozAVTr6EbcE0QmT8VQLxfExtgN5yjcC/jt1poQqh0Qeam7js9WE1iVGDeQ17bAXl8y0tuqwQjCAbGKJGI0tb/zr0BRsQWKI=
+	t=1708514940; cv=none; b=HJFTqtiMmNHcghD8lSzHAt9C3FzcrOOOb5plTEOmRrJtSZeviEcKOPw8KM60G1HmGc2kCpRkNATg7uasBP4VQ6Mt/5mmU13t9ZZjcSZEAyGckJKhzvZUy5uUJEJTvQoH4wleg5goO0e9VcNrIIMAQL/Go6S6fbnP1DZQTYWm/Zs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708514805; c=relaxed/simple;
-	bh=0b8SeCdjbW0gI8qK6TzdaaI5mEtgC9wamMalUHNEG2o=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=LEerf/HEBYyxeoaNFaE1ylbMTua5yuVklqAGV5xP4uxNArJZUZA8WWLEp2ygNcjMF2KAH3nf507bPISRfVbNeDNj/s+2tsuqBeMJNrWk0MC202OEEwwEGmw6jT7uB+N+M6yyPR39WBugrKlxAd586Edj7H0DcZpiICplUGIcVQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rckk2-0008Rw-D4; Wed, 21 Feb 2024 12:26:22 +0100
-Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rckjz-0021oc-6E; Wed, 21 Feb 2024 12:26:19 +0100
-Received: from pza by lupine with local (Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1rckjz-0005aF-0M;
-	Wed, 21 Feb 2024 12:26:19 +0100
-Message-ID: <38fda6619769da7240517982adfe734cb653ff5e.camel@pengutronix.de>
-Subject: Re: [PATCH v6 0/6] reset: gpio: ASoC: shared GPIO resets
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, Banajit Goswami
- <bgoswami@quicinc.com>, Bjorn Andersson <andersson@kernel.org>, Konrad
- Dybcio <konrad.dybcio@linaro.org>, Liam Girdwood <lgirdwood@gmail.com>,
- Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley
- <conor+dt@kernel.org>,  "Rafael J. Wysocki" <rafael@kernel.org>, Viresh
- Kumar <viresh.kumar@linaro.org>, Frank Rowand <frowand.list@gmail.com>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- alsa-devel@alsa-project.org, linux-arm-msm@vger.kernel.org, 
- linux-sound@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, Chris Packham
- <chris.packham@alliedtelesis.co.nz>, Bartosz Golaszewski <brgl@bgdev.pl>, 
- Sean Anderson <sean.anderson@seco.com>
-Date: Wed, 21 Feb 2024 12:26:19 +0100
-In-Reply-To: <7ae0567d-e5d3-4e00-98f7-5139d5879f75@linaro.org>
-References: <20240129115216.96479-1-krzysztof.kozlowski@linaro.org>
-	 <7ae0567d-e5d3-4e00-98f7-5139d5879f75@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	s=arc-20240116; t=1708514940; c=relaxed/simple;
+	bh=BjGIujGy9uSMg0+odNuhrXa2WVNxB9nXwF3n59nK/8U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WSnAbjvoMrzKJyIEi8AgVV6DeL5b/TuNp53sb4EqXFELSxVk+HNZ03Q8/rUxaOD44tQLxDLtBaWjyae0jeuQvOudg/KqLzBHVct0FExRRe+GFDctF0IxyuRMFRsIVpbdGERBXhlmLOgCaDC6ik5k+Rv7JzugiNe8ERP7N9AVFEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kKB4l2+6; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-55a179f5fa1so8756187a12.0
+        for <linux-pm@vger.kernel.org>; Wed, 21 Feb 2024 03:28:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1708514937; x=1709119737; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2uGxM6/2SBSUObOeQvfq+UUzJjduE352bGJGnjX6fsE=;
+        b=kKB4l2+6FcqZjafbPNYurORxzdc7MRADyUrh86i84E+++GV8E+WBOxgfe5uBxgCfLp
+         t8NIY7B54R5tISXnuSZDrcMihz1xNcIColFC/2/WcIFYouVO3/aTV9kq6MtZEpMXsvws
+         gMZzh1Q2umrKVwdEC9Nf9xb8rKA5WujDzlLYvmwbZYiR0qI2bl6G566LAurDRe5wvV4m
+         ve3pIWRfY/xnx+A0FT63IPnjh91UfXqGhY6szLGtzSMIb4d8PQS1BYQCS2+DNp12ehKL
+         C7pkNE1+PhjEJf/3XKhBvKU1LRej8FiXBxbgP3USjZTcvwx37DV/059NC7BX/1v5NUxE
+         Gi/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708514937; x=1709119737;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2uGxM6/2SBSUObOeQvfq+UUzJjduE352bGJGnjX6fsE=;
+        b=urHz0OJFhccj6lRZHz7fSg12+X/W3Lg8JrZRz6cbu6Fj1t9/Lz/yRbbDnz3e52kX+B
+         y2p2IbbdliqWooDpUOGHaCeEptRefuuS82Wvd+H5qOMfrzX3Vt6zILeZQIocUk/c93qC
+         PqCjcXApjidpUvVptebBPdi8XW87ul2Js9WH9u6fSgaxgvn4y7Girntrx4qU7Tf1M/vo
+         Pg3/iDORR0kn3PNfbr2Bwp+B7tc11/cSS2qqWmBg3zLkMJx+QsiH6S8QNyM51xkWTDOx
+         zCEwaIw4hPEoMpL6vYUf7Q7Mp4c/+WxsyBRVTGRdyw/E79n/0RTWzuKOW/WOvHgj3mRL
+         psvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUbH1eCJpqmO2yIq+qHtmfCV/oKrF0UdQA2PaUPSjoK/wKpzGwUAjczjwYPoHUWEfRJZBW2yrxp8D4BVwlzydd2ZOSk8x+HS2w=
+X-Gm-Message-State: AOJu0YxKWyqsU9mMevdmp7r/TSrmF0GcV3gwwzd/gAk04lDgob6t7DIo
+	aOV+NFiSDie/zoCHqWMDMfeUo1WoEAPXNetTGearXBgFXqG8gaT1jPQF3sDTaTc=
+X-Google-Smtp-Source: AGHT+IE8f05kjIs1GFUfpAE7y5v4uZt32V2qW4SkS1HxgQGj/Qg7yQT+m4IIlCUguY/jruvL7rEulw==
+X-Received: by 2002:a05:6402:7c9:b0:564:e278:60d2 with SMTP id u9-20020a05640207c900b00564e27860d2mr2016147edy.2.1708514937117;
+        Wed, 21 Feb 2024 03:28:57 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.222.116])
+        by smtp.gmail.com with ESMTPSA id f23-20020a50a6d7000000b0056392b7d85fsm4812255edc.9.2024.02.21.03.28.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Feb 2024 03:28:56 -0800 (PST)
+Message-ID: <474d45ca-6d1a-49e1-a408-6e7c2244ff37@linaro.org>
+Date: Wed, 21 Feb 2024 12:28:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 0/6] reset: gpio: ASoC: shared GPIO resets
+Content-Language: en-US
+To: Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+ Banajit Goswami <bgoswami@quicinc.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konrad.dybcio@linaro.org>, Liam Girdwood
+ <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, Frank Rowand
+ <frowand.list@gmail.com>, Jaroslav Kysela <perex@perex.cz>,
+ Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+ linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, Chris Packham <chris.packham@alliedtelesis.co.nz>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Sean Anderson <sean.anderson@seco.com>
+References: <20240129115216.96479-1-krzysztof.kozlowski@linaro.org>
+ <7ae0567d-e5d3-4e00-98f7-5139d5879f75@linaro.org>
+ <38fda6619769da7240517982adfe734cb653ff5e.camel@pengutronix.de>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <38fda6619769da7240517982adfe734cb653ff5e.camel@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Krzysztof,
+On 21/02/2024 12:26, Philipp Zabel wrote:
+> Hi Krzysztof,
+> 
+> On Mi, 2024-02-21 at 10:44 +0100, Krzysztof Kozlowski wrote:
+>> On 29/01/2024 12:52, Krzysztof Kozlowski wrote:
+>>> Hi,
+>>>
+>>> Dependencies / Merging
+>>> ======================
+>>> 1. Depends on !GPIOLIB stub:
+>>>    https://lore.kernel.org/all/20240125081601.118051-3-krzysztof.kozlowski@linaro.org/
+>>>
+>>> 2. Patch #2 (cpufreq: do not open-code of_phandle_args_equal()) and patch #4
+>>>    (reset: Instantiate reset GPIO controller for shared reset-gpios) depend on OF
+>>>    change (patch #1).
+>>
+>>
+>> Hi Philipp,
+>>
+>> I got acks from GPIO folks. The also provided stable tag with dependency:
+>> https://lore.kernel.org/all/20240213101000.16700-1-brgl@bgdev.pl/
+>> (which BTW already is in mainline, so you could just merge Linus' tree
+>> into your next branch)
+> 
+> Thanks.
+> 
+>> Can you take entire patchset?
+> 
+> I've picked up 1-4. Patches 5-6 can go independently via ASoC, right?
 
-On Mi, 2024-02-21 at 10:44 +0100, Krzysztof Kozlowski wrote:
-> On 29/01/2024 12:52, Krzysztof Kozlowski wrote:
-> > Hi,
-> >=20
-> > Dependencies / Merging
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > 1. Depends on !GPIOLIB stub:
-> >    https://lore.kernel.org/all/20240125081601.118051-3-krzysztof.kozlow=
-ski@linaro.org/
-> >=20
-> > 2. Patch #2 (cpufreq: do not open-code of_phandle_args_equal()) and pat=
-ch #4
-> >    (reset: Instantiate reset GPIO controller for shared reset-gpios) de=
-pend on OF
-> >    change (patch #1).
->=20
->=20
-> Hi Philipp,
->=20
-> I got acks from GPIO folks. The also provided stable tag with dependency:
-> https://lore.kernel.org/all/20240213101000.16700-1-brgl@bgdev.pl/
-> (which BTW already is in mainline, so you could just merge Linus' tree
-> into your next branch)
+Yes, thanks.
 
-Thanks.
+Best regards,
+Krzysztof
 
-> Can you take entire patchset?
-
-I've picked up 1-4. Patches 5-6 can go independently via ASoC, right?
-
-regards
-Philipp
 
