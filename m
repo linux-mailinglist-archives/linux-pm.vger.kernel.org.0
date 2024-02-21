@@ -1,127 +1,93 @@
-Return-Path: <linux-pm+bounces-4196-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4197-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7890085DEC1
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 15:21:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15FE585DF38
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 15:25:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B92D1F249ED
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 14:21:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 43BBA1C225E0
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 14:25:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDB9E7BB16;
-	Wed, 21 Feb 2024 14:21:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69F9569962;
+	Wed, 21 Feb 2024 14:25:49 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F25A4C62;
-	Wed, 21 Feb 2024 14:21:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22DFB7C0A4;
+	Wed, 21 Feb 2024 14:25:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708525300; cv=none; b=BPTqcgdOq7wNygizetmd6pYQTKvxeg5IiMVxx+ZHSgdwTTvcCzoLVpovdsEzz17oX86SJAxYTlf71haDa4D8ZspElBUP/fhTOohlrhw21dbJ/aRtfmNzGhOPvemJCXkuKXvpgeoqfefOA5Nnc6f3Fc8ugstD9HezEZ4OtkEMSfA=
+	t=1708525549; cv=none; b=TiFWRRVt07IsJeLHsP9Fx2woT3mytjtn8hRhemS9FKvbOZF0MKnIBCy80m6+bB9rLLG4uGcRmBBPQJEeB1Q+A4DUHMJdlWqKM7VjOKjKIpDS4TCWp9H/E2XrLG8Buc+1LyKL8gwvjLh0B+tTkP/9thMxHFw4CB3CHcyEExKOBlQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708525300; c=relaxed/simple;
-	bh=YwsNhLos5IF+HpOc8CL35aaw3xRztGJyd0Rg4VH16iw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PvHzb3BfaFEJWFiC3ZxATSWopg4iotpihYSLrmjfatUBXcvKPVGLaP8KRFuTEWZSgQOt0mX5cBzrE6S7RyklvKkkpG6LbeOPSAlBlr2LDsc3DA9okgzMHx6fnIKH1YjtrmfLz/xLOYeGVVHqlf8A28MmGyl3nebHfRNxQC9oFPY=
+	s=arc-20240116; t=1708525549; c=relaxed/simple;
+	bh=FN17hH5gkQQBYlZx2WhO542GI/gzqDhOeYOvKF8ZGgA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=NyPMEs6HcY6d5004+HpvdUckW/8WRri0YXi92ojUHHB0ooIVi3z3ke272BurSGk2yNVuP8WVTvKHQh5vBLpIBae7rq3GeVgoqxwtnKA64Kr5p0kThHLIgK0SU4T6G0x+J96UtF9QYH3ZD3cuQxgt5YSh8xXqSOtCWjBMl81hqaY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7722FFEC;
-	Wed, 21 Feb 2024 06:22:16 -0800 (PST)
-Received: from [10.57.11.178] (unknown [10.57.11.178])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1A67F3F762;
-	Wed, 21 Feb 2024 06:21:36 -0800 (PST)
-Message-ID: <08ab3e7b-c9af-4c07-bff9-1ae64f298eae@arm.com>
-Date: Wed, 21 Feb 2024 14:21:52 +0000
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0F6B31007;
+	Wed, 21 Feb 2024 06:26:25 -0800 (PST)
+Received: from e129166.arm.com (unknown [10.57.11.178])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 88D793F762;
+	Wed, 21 Feb 2024 06:25:45 -0800 (PST)
+From: Lukasz Luba <lukasz.luba@arm.com>
+To: linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	rafael@kernel.org
+Cc: lukasz.luba@arm.com,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH] PM: EM: Fix nr_states warnings in static checks
+Date: Wed, 21 Feb 2024 14:25:50 +0000
+Message-Id: <20240221142550.1814055-1-lukasz.luba@arm.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 18e0452b740e01daf1abb498116ad89716bfd5bc
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: kernel test robot <lkp@intel.com>, linux-acpi@vger.kernel.org,
- devel@acpica.org, linux-pm@vger.kernel.org
-References: <202402211643.99kLO5dl-lkp@intel.com>
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <202402211643.99kLO5dl-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Rafael,
+During the static checks nr_states has been mentioned by the kernel test
+robot. Fix the warning in those 2 places.
 
-On 2/21/24 08:16, kernel test robot wrote:
-> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-> branch HEAD: 18e0452b740e01daf1abb498116ad89716bfd5bc  Merge branch 'acpi-scan' into bleeding-edge
-> 
-> Warning ids grouped by kconfigs:
-> 
-> gcc_recent_errors
-> |-- arm64-defconfig
-> |   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-> |   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-> |-- arm64-randconfig-001-20240221
-> |   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-> |   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-> |-- i386-allmodconfig
-> |   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-> |   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-> |-- i386-allyesconfig
-> |   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-> |   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-> |-- i386-buildonly-randconfig-006-20240221
-> |   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-> |   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-> |-- i386-randconfig-015-20240221
-> |   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-> |   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-> |-- i386-randconfig-141-20240221
-> |   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-> |   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-> |-- mips-allyesconfig
-> |   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-> |   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-> |-- powerpc64-randconfig-002-20240221
-> |   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-> |   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-> |-- powerpc64-randconfig-003-20240221
-> |   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-> |   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-> |-- sparc64-randconfig-002-20240221
-> |   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-> |   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-> `-- x86_64-buildonly-randconfig-002-20240221
->      |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
->      `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-> clang_recent_errors
-> |-- i386-randconfig-014-20240221
-> |   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-> |   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-> |-- riscv-allmodconfig
-> |   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-> |   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-> |-- riscv-allyesconfig
-> |   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-> |   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-> |-- x86_64-allmodconfig
-> |   |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
-> |   `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-> `-- x86_64-allyesconfig
->      |-- kernel-power-energy_model.c:warning:Function-parameter-or-struct-member-nr_states-not-described-in-em_dev_compute_costs
->      `-- kernel-power-energy_model.c:warning:variable-nr_states-set-but-not-used
-> 
-> elapsed time: 726m
-> 
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+---
+ kernel/power/energy_model.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-I have figured out the 2 places which trigger this. I'm going to send
-a small patch to calm down those static checks.
+diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+index 7101fa3fa0c0..b686ac0345bd 100644
+--- a/kernel/power/energy_model.c
++++ b/kernel/power/energy_model.c
+@@ -280,6 +280,7 @@ static int em_compute_costs(struct device *dev, struct em_perf_state *table,
+  * em_dev_compute_costs() - Calculate cost values for new runtime EM table
+  * @dev		: Device for which the EM table is to be updated
+  * @table	: The new EM table that is going to get the costs calculated
++ * @nr_states	: Number of performance states
+  *
+  * Calculate the em_perf_state::cost values for new runtime EM table. The
+  * values are used for EAS during task placement. It also calculates and sets
+@@ -728,7 +729,6 @@ static void em_check_capacity_update(void)
+ 		struct cpufreq_policy *policy;
+ 		unsigned long em_max_perf;
+ 		struct device *dev;
+-		int nr_states;
+ 
+ 		if (cpumask_test_cpu(cpu, cpu_done_mask))
+ 			continue;
+@@ -749,7 +749,6 @@ static void em_check_capacity_update(void)
+ 		cpumask_or(cpu_done_mask, cpu_done_mask,
+ 			   em_span_cpus(pd));
+ 
+-		nr_states = pd->nr_perf_states;
+ 		cpu_capacity = arch_scale_cpu_capacity(cpu);
+ 
+ 		rcu_read_lock();
+-- 
+2.25.1
 
-Regards,
-Lukasz
 
