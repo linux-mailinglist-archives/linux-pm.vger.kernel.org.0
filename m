@@ -1,83 +1,290 @@
-Return-Path: <linux-pm+bounces-4214-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4215-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C271E85EBE3
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 23:36:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92CB985EC73
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 00:03:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 63F43B2292F
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 22:36:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CED69B254C6
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 23:03:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 473973B2B6;
-	Wed, 21 Feb 2024 22:36:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C1A580602;
+	Wed, 21 Feb 2024 23:03:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="ttd0uWL/"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="bqKB/5lk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FB34EC5;
-	Wed, 21 Feb 2024 22:36:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FCB345C10;
+	Wed, 21 Feb 2024 23:03:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708555012; cv=none; b=inSZv6N1I4SMR5UtXmvrUISbpQKKV2skjqnn4z/QLI0+sWfNR21CITRAnd25U5ges+e7AkkLPdMdtezi+is4H6Snm/HgMd/0pM+e3ObB77ydLFbW1nO4xGDxPAS+uz8zwCdnux1xNzhmeG2RiizhTJ+yZzchxsSHTJNTvIYxO6c=
+	t=1708556592; cv=none; b=kKjnd0qd5UZ0mucwsNOCDfe60LFlda/Fa8oBcify0SE1fZpvaENRGxEGkgDmWquLC6oHRS22v9adAYLVOyKfhld76ZiXG6Nk9mMY6abNboAaQV6bWzT6kl2i5nETW/GZv3rn/rU2vPS0Ekk+Bg7mXH3eWLqPN/L1zAm40r0TtPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708555012; c=relaxed/simple;
-	bh=1DlCMsm9Uoa6uGuW9HYEKY5OHTI8oAijmibPIeN5aEE=;
+	s=arc-20240116; t=1708556592; c=relaxed/simple;
+	bh=/RTLu8RFVdJEHJ6Fo0ixe7wxNGOxb5qgH8oQaEBnxRg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tHocYNxhT2rtH5doNBZQGkINO8qvhsqE7GzC565gyRpkh5mwlDB4ybXvIHTTpf5G8ZTAvFcCOd45EHLC3NKWvrePRnBSvPHH3ZtBU8WCEuf1ICD9sXqGog8l5gzmAcXVXIo72O+Ng0I8/75yf/yHUAzzEQR5S6Z+OuTtS+4zqmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=ttd0uWL/; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=+DUC9Ol77HyNFU3nLRrnMQQ7bRbYxwVbPzMRC3bl3iU=; b=ttd0uWL/7GDlNBMREPucoEQUUI
-	7xtjioQo7PLDh6I7TXwyRrlID5zprEJOlSO1E5qphV/bAZV4MEll/4egqGVWwgOpcjNVqnIcQ+IQN
-	RCLrYZ6ttiIbMg1cBJ0TlydnVPYiMLvdrTTFSQrUm3YL+Td8pUeDNvkPzNA4TnxdbJ5M=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1rcvD2-008OrM-Fa; Wed, 21 Feb 2024 23:37:00 +0100
-Date: Wed, 21 Feb 2024 23:37:00 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: "A. Sverdlin" <alexander.sverdlin@siemens.com>
-Cc: linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC] power: reset: restart-poweroff: convert to module
-Message-ID: <f8e3a66f-20a3-4819-ab1b-d0f163a2e95f@lunn.ch>
-References: <20240221174610.3560775-1-alexander.sverdlin@siemens.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=AKHRQliXDQl2XWX4/SdGr043jzll7eVrUyh68ONa/KcvQPrHAO/F7kPHgyoEskYO18yvHX0GkoFCh0DrZizDaqe+0em+cfHxuZm9b8u/a+PPyxi5quskfbb2SMENDR2o15TMH6YUMnFjACjBhIck+FlvzJEgrDQ+3kEDgHZR6M8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=bqKB/5lk; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1708556585;
+	bh=/RTLu8RFVdJEHJ6Fo0ixe7wxNGOxb5qgH8oQaEBnxRg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bqKB/5lk9opF6B9vtX5SYpzs1pf0Uoq1NK5pnW1jYs9By74d9SczCDRmI9MzvM1+D
+	 uLv9ivSP/HqCPd2p0sg4D3APl7DqaU4gi4koAmbsSFimrHTBQrMo7i4racJwQQZpur
+	 FIYxKIE3HyeJq+hSq+L079lknmruR/kS7+kceqQxkP8DV6ENR4ZpNINC/DuRuR7A57
+	 jRsWJdVPFES3/K0lZGbRGZrYk4GEeYqO3Ip2Lvu8fwq0KHxthfisgtvCRqtd2HstZ8
+	 MRxbpGfDyCSEOhRkqdo4sC/MlzOXsZh/RdUVG0hvwFRVH4zG1+RTdePoSr7E6fHlH5
+	 /tRpWZR0x3Vtg==
+Received: from mercury (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sre)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id E867837813B6;
+	Wed, 21 Feb 2024 23:03:04 +0000 (UTC)
+Received: by mercury (Postfix, from userid 1000)
+	id 5855A106B79D; Thu, 22 Feb 2024 00:03:04 +0100 (CET)
+Date: Thu, 22 Feb 2024 00:03:04 +0100
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Hermes Zhang <Hermes.Zhang@axis.com>
+Cc: kernel@axis.com, Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: bq27xxx: Introduce parameter to config
+ cache regs
+Message-ID: <eh34cvorgnrw4v5a6emzjk2p6om2ybkn627bpmh775z4ubw63h@nbxgpm767u4x>
+References: <20240219100541.48453-1-Hermes.Zhang@axis.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="etcymyffg5nozqxs"
+Content-Disposition: inline
+In-Reply-To: <20240219100541.48453-1-Hermes.Zhang@axis.com>
+
+
+--etcymyffg5nozqxs
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240221174610.3560775-1-alexander.sverdlin@siemens.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 21, 2024 at 06:46:07PM +0100, A. Sverdlin wrote:
-> From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
-> 
-> The necessity of having a fake platform device for a generic, platform
-> independent functionality is not obvious.
-> Some platforms requre device tree modification for this, some would require
-> ACPI tables modification, while functionality may be useful even to
-> end-users without required expertise. Convert the platform driver to
-> a simple module.
-> 
-> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
+Hi,
+
+On Mon, Feb 19, 2024 at 06:05:40PM +0800, Hermes Zhang wrote:
+> Since all of the regs in the bq27xxx_reg_cache are now cached, a simple
+> property read (such as temperature) will need nine I2C transmissions.
+> Introduce a new module parameter to enable the reg cache to be configured,
+> which decrease the amount of unnecessary I2C transmission and preventing
+> the error -16 (EBUSY) happen when working on an I2C bus that is shared by
+> many devices.
+
+So the problem is not the caching, but the grouping. So instead
+of adding this hack, please change the code to do the caching
+per register. That way you can just keep the caching enabled and
+don't need any custom module parameters.
+
+-- Sebastian
+
+> Signed-off-by: Hermes Zhang <Hermes.Zhang@axis.com>
 > ---
-> This RFC is merely to understand if this approach would be accepted.
-> Converting to "tristate" could follow or preceed this patch.
+>  drivers/power/supply/bq27xxx_battery.c | 65 +++++++++++++++++++-------
+>  include/linux/power/bq27xxx_battery.h  |  9 ++++
+>  2 files changed, 58 insertions(+), 16 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/suppl=
+y/bq27xxx_battery.c
+> index 1c4a9d137744..45fd956ec961 100644
+> --- a/drivers/power/supply/bq27xxx_battery.c
+> +++ b/drivers/power/supply/bq27xxx_battery.c
+> @@ -1100,6 +1100,11 @@ module_param_cb(poll_interval, &param_ops_poll_int=
+erval, &poll_interval, 0644);
+>  MODULE_PARM_DESC(poll_interval,
+>  		 "battery poll interval in seconds - 0 disables polling");
+> =20
+> +static unsigned int bq27xxx_cache_mask =3D 0xFF;
+> +module_param(bq27xxx_cache_mask, uint, 0644);
+> +MODULE_PARM_DESC(bq27xxx_cache_mask,
+> +		 "mask for bq27xxx reg cache - 0 disables reg cache");
+> +
+>  /*
+>   * Common code for BQ27xxx devices
+>   */
+> @@ -1842,21 +1847,29 @@ static void bq27xxx_battery_update_unlocked(struc=
+t bq27xxx_device_info *di)
+>  	if ((cache.flags & 0xff) =3D=3D 0xff)
+>  		cache.flags =3D -1; /* read error */
+>  	if (cache.flags >=3D 0) {
+> -		cache.temperature =3D bq27xxx_battery_read_temperature(di);
+> -		if (di->regs[BQ27XXX_REG_TTE] !=3D INVALID_REG_ADDR)
+> +		if (bq27xxx_cache_mask & BQ27XXX_CACHE_TEMP)
+> +			cache.temperature =3D bq27xxx_battery_read_temperature(di);
+> +		if (di->regs[BQ27XXX_REG_TTE] !=3D INVALID_REG_ADDR &&
+> +			bq27xxx_cache_mask & BQ27XXX_CACHE_TTE)
+>  			cache.time_to_empty =3D bq27xxx_battery_read_time(di, BQ27XXX_REG_TTE=
+);
+> -		if (di->regs[BQ27XXX_REG_TTECP] !=3D INVALID_REG_ADDR)
+> +		if (di->regs[BQ27XXX_REG_TTECP] !=3D INVALID_REG_ADDR &&
+> +			bq27xxx_cache_mask & BQ27XXX_CACHE_TTECP)
+>  			cache.time_to_empty_avg =3D bq27xxx_battery_read_time(di, BQ27XXX_REG=
+_TTECP);
+> -		if (di->regs[BQ27XXX_REG_TTF] !=3D INVALID_REG_ADDR)
+> +		if (di->regs[BQ27XXX_REG_TTF] !=3D INVALID_REG_ADDR &&
+> +			bq27xxx_cache_mask & BQ27XXX_CACHE_TTF)
+>  			cache.time_to_full =3D bq27xxx_battery_read_time(di, BQ27XXX_REG_TTF);
+> =20
+> -		cache.charge_full =3D bq27xxx_battery_read_fcc(di);
+> -		cache.capacity =3D bq27xxx_battery_read_soc(di);
+> -		if (di->regs[BQ27XXX_REG_AE] !=3D INVALID_REG_ADDR)
+> +		if (bq27xxx_cache_mask & BQ27XXX_CACHE_CHARGE_FULL)
+> +			cache.charge_full =3D bq27xxx_battery_read_fcc(di);
+> +		if (bq27xxx_cache_mask & BQ27XXX_CACHE_CAPACITY)
+> +			cache.capacity =3D bq27xxx_battery_read_soc(di);
+> +		if (di->regs[BQ27XXX_REG_AE] !=3D INVALID_REG_ADDR &&
+> +			bq27xxx_cache_mask & BQ27XXX_CACHE_ENERGY)
+>  			cache.energy =3D bq27xxx_battery_read_energy(di);
+>  		di->cache.flags =3D cache.flags;
+>  		cache.health =3D bq27xxx_battery_read_health(di);
+> -		if (di->regs[BQ27XXX_REG_CYCT] !=3D INVALID_REG_ADDR)
+> +		if (di->regs[BQ27XXX_REG_CYCT] !=3D INVALID_REG_ADDR &&
+> +			bq27xxx_cache_mask & BQ27XXX_CACHE_CYCT)
+>  			cache.cycle_count =3D bq27xxx_battery_read_cyct(di);
+> =20
+>  		/*
+> @@ -2004,6 +2017,7 @@ static int bq27xxx_battery_get_property(struct powe=
+r_supply *psy,
+>  {
+>  	int ret =3D 0;
+>  	struct bq27xxx_device_info *di =3D power_supply_get_drvdata(psy);
+> +	int tmp;
+> =20
+>  	mutex_lock(&di->lock);
+>  	if (time_is_before_jiffies(di->last_update + 5 * HZ))
+> @@ -2027,24 +2041,37 @@ static int bq27xxx_battery_get_property(struct po=
+wer_supply *psy,
+>  		ret =3D bq27xxx_battery_current_and_status(di, val, NULL, NULL);
+>  		break;
+>  	case POWER_SUPPLY_PROP_CAPACITY:
+> -		ret =3D bq27xxx_simple_value(di->cache.capacity, val);
+> +		tmp =3D bq27xxx_cache_mask & BQ27XXX_CACHE_CAPACITY ?
+> +				di->cache.capacity : bq27xxx_battery_read_soc(di);
+> +		ret =3D bq27xxx_simple_value(tmp, val);
+>  		break;
+>  	case POWER_SUPPLY_PROP_CAPACITY_LEVEL:
+>  		ret =3D bq27xxx_battery_capacity_level(di, val);
+>  		break;
+>  	case POWER_SUPPLY_PROP_TEMP:
+> -		ret =3D bq27xxx_simple_value(di->cache.temperature, val);
+> +		tmp =3D bq27xxx_cache_mask & BQ27XXX_CACHE_TEMP ?
+> +				di->cache.temperature : bq27xxx_battery_read_temperature(di);
+> +		ret =3D bq27xxx_simple_value(tmp, val);
+>  		if (ret =3D=3D 0)
+>  			val->intval -=3D 2731; /* convert decidegree k to c */
+>  		break;
+>  	case POWER_SUPPLY_PROP_TIME_TO_EMPTY_NOW:
+> -		ret =3D bq27xxx_simple_value(di->cache.time_to_empty, val);
+> +		tmp =3D bq27xxx_cache_mask & BQ27XXX_CACHE_TTE ?
+> +				di->cache.time_to_empty :
+> +				bq27xxx_battery_read_time(di, BQ27XXX_REG_TTE);
+> +		ret =3D bq27xxx_simple_value(tmp, val);
+>  		break;
+>  	case POWER_SUPPLY_PROP_TIME_TO_EMPTY_AVG:
+> -		ret =3D bq27xxx_simple_value(di->cache.time_to_empty_avg, val);
+> +		tmp =3D bq27xxx_cache_mask & BQ27XXX_CACHE_TTECP ?
+> +				di->cache.time_to_empty_avg :
+> +				bq27xxx_battery_read_time(di, BQ27XXX_REG_TTECP);
+> +		ret =3D bq27xxx_simple_value(tmp, val);
+>  		break;
+>  	case POWER_SUPPLY_PROP_TIME_TO_FULL_NOW:
+> -		ret =3D bq27xxx_simple_value(di->cache.time_to_full, val);
+> +		tmp =3D bq27xxx_cache_mask & BQ27XXX_CACHE_TTF ?
+> +				di->cache.time_to_full :
+> +				bq27xxx_battery_read_time(di, BQ27XXX_REG_TTF);
+> +		ret =3D bq27xxx_simple_value(tmp, val);
+>  		break;
+>  	case POWER_SUPPLY_PROP_TECHNOLOGY:
+>  		if (di->opts & BQ27XXX_O_MUL_CHEM)
+> @@ -2059,7 +2086,9 @@ static int bq27xxx_battery_get_property(struct powe=
+r_supply *psy,
+>  			ret =3D bq27xxx_simple_value(bq27xxx_battery_read_rc(di), val);
+>  		break;
+>  	case POWER_SUPPLY_PROP_CHARGE_FULL:
+> -		ret =3D bq27xxx_simple_value(di->cache.charge_full, val);
+> +		tmp =3D bq27xxx_cache_mask & BQ27XXX_CACHE_CHARGE_FULL ?
+> +				di->cache.charge_full : bq27xxx_battery_read_fcc(di);
+> +		ret =3D bq27xxx_simple_value(tmp, val);
+>  		break;
+>  	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
+>  		ret =3D bq27xxx_simple_value(di->charge_design_full, val);
+> @@ -2072,10 +2101,14 @@ static int bq27xxx_battery_get_property(struct po=
+wer_supply *psy,
+>  	case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
+>  		return -EINVAL;
+>  	case POWER_SUPPLY_PROP_CYCLE_COUNT:
+> -		ret =3D bq27xxx_simple_value(di->cache.cycle_count, val);
+> +		tmp =3D bq27xxx_cache_mask & BQ27XXX_CACHE_CYCT ?
+> +				di->cache.cycle_count : bq27xxx_battery_read_cyct(di);
+> +		ret =3D bq27xxx_simple_value(tmp, val);
+>  		break;
+>  	case POWER_SUPPLY_PROP_ENERGY_NOW:
+> -		ret =3D bq27xxx_simple_value(di->cache.energy, val);
+> +		tmp =3D bq27xxx_cache_mask & BQ27XXX_CACHE_ENERGY ?
+> +				di->cache.energy : bq27xxx_battery_read_energy(di);
+> +		ret =3D bq27xxx_simple_value(tmp, val);
+>  		break;
+>  	case POWER_SUPPLY_PROP_POWER_AVG:
+>  		ret =3D bq27xxx_battery_pwr_avg(di, val);
+> diff --git a/include/linux/power/bq27xxx_battery.h b/include/linux/power/=
+bq27xxx_battery.h
+> index 7d8025fb74b7..29d1e7107ee2 100644
+> --- a/include/linux/power/bq27xxx_battery.h
+> +++ b/include/linux/power/bq27xxx_battery.h
+> @@ -4,6 +4,15 @@
+> =20
+>  #include <linux/power_supply.h>
+> =20
+> +#define BQ27XXX_CACHE_TEMP        (1 << 0)
+> +#define BQ27XXX_CACHE_TTE         (1 << 1)
+> +#define BQ27XXX_CACHE_TTECP       (1 << 2)
+> +#define BQ27XXX_CACHE_TTF         (1 << 3)
+> +#define BQ27XXX_CACHE_CHARGE_FULL (1 << 4)
+> +#define BQ27XXX_CACHE_CYCT        (1 << 5)
+> +#define BQ27XXX_CACHE_CAPACITY    (1 << 6)
+> +#define BQ27XXX_CACHE_ENERGY      (1 << 7)
+> +
+>  enum bq27xxx_chip {
+>  	BQ27000 =3D 1, /* bq27000, bq27200 */
+>  	BQ27010, /* bq27010, bq27210 */
+> --=20
+> 2.39.2
+>=20
 
-So that is you use case here? Why do you want to be able to just load
-this driver, without using DT to indicate it is needed by the
-hardware?
+--etcymyffg5nozqxs
+Content-Type: application/pgp-signature; name="signature.asc"
 
-    Andrew
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmXWgSQACgkQ2O7X88g7
++pqsxg/+JbgwLQmo/hQbU/0QO09thmP+DAw0JHCQvEUPYxnazue/ChsRQiT1DSr7
+3/DcgQFFryCDpCrffQrmXdSvFWDSilGvcPNnIfnCtn0HIl/isnvnY4G4oivWagmy
+0fgTHyXX0sms79cA7MoCkHQe9EjC7eZMB5V38fuk4rM7i22XmdcIHnbkcAmoFl0h
+CTUGlkKHzmlJrUvRiwZnNQciLvPW7clW1R1iQx0wfQZFmrAOToHLer71W9w1I47P
+3tECL4vh4PJ52sEAwo+8fcwfUEbOHzXkTF50XP47Koi/hKvUzPBVCssdQpSps2IO
+YEygD7sztfUZuVxLXf/PPt1EN4mrhUkwy//9gxd3vvcMgUdL9yxnteeQib4vquTn
+Wd91nAeX+1RUKwwMgCop2g8MCEhS6T73QddYPTwjloA5Cy1YZ7BjGNAW10MhZ2eT
+rZjsDBbSm6jn/OJBKYislJ5ehpZO91Hel3ROL+snGpwtbs5W5AmOr9H5Q95M65ry
+elxwVkingUSLuQ9y8aJf/8vSCukTkw99wIpkGsYpTpfGbEIcAuXwWs5W6lgqbNGE
+jLCt8A+bHPORybThSim2xPFi3SkZxM42y+QLX5JBs71QcZTImTZx7UlC66mLZYQq
+3hT/8/5XbdIqA3j6BVg6UEd0ifthYBQ5y6WO4v8fN9qDbHcHNVM=
+=TLx6
+-----END PGP SIGNATURE-----
+
+--etcymyffg5nozqxs--
 
