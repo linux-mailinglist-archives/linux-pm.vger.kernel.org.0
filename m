@@ -1,40 +1,74 @@
-Return-Path: <linux-pm+bounces-4194-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4195-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E13685DA7A
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 14:32:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E720285DB98
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 14:43:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC63A286383
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 13:32:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 15D201C22CFD
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 13:43:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A395B7E593;
-	Wed, 21 Feb 2024 13:28:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2194E1E4B2;
+	Wed, 21 Feb 2024 13:43:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dvNXThfx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E73C6762C1;
-	Wed, 21 Feb 2024 13:28:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 415A177A03
+	for <linux-pm@vger.kernel.org>; Wed, 21 Feb 2024 13:43:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708522121; cv=none; b=ChVxc5FeQ9+JBq+vkiFwuKvrUoOP0s1cmiJcqyKNCpKQXOnebi/VWh9GkP4vgbdS9/IlPSbGMYz3zH+O4oQ3ge92Ja5OchtcxqvEaevaOhf7KfHPQPOBSsLpqT4ZKlT6sTgqXq3tbCJUH9JskbWxUPJGbIzb0ehrYaQFobILGWA=
+	t=1708522984; cv=none; b=hLAYdhhbofEk5BudmL73cK+bqY/9l0mI7dzfgMDkJabOFMCmABILPlQD4iDbzEzelB30FUTFsZlMAqD1g7maF4qR5bmG11g42TeMywSvKhOJMWY97qjtAbKyN9EkI1g+kLGIXH/VJJwEaprw4YmOMpuPATTYSrQPN/Br87ttf+A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708522121; c=relaxed/simple;
-	bh=jcM7Y8plT+9yKZcGSc7nmPeNy9idDPzXx63Ses56ZJk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
-	 In-Reply-To:Content-Type; b=Lw9eWAaP8elQO9gCGBmpqE4E6QhHoCF9Q7LsllObyimR0lXMtInELo3jsRN4oi4J1rMBEbgE4FZi9d8MectE0CTfCaA4/Jtcs7ujglBB7Obf1BGmDQdqsMe942/ilosSrIl14Z0bv6EM+V60NcXxrVDEeuWqvx76joDF1/OZ2hw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2AA85FEC;
-	Wed, 21 Feb 2024 05:29:16 -0800 (PST)
-Received: from [10.57.11.178] (unknown [10.57.11.178])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 95FE63F762;
-	Wed, 21 Feb 2024 05:28:32 -0800 (PST)
-Message-ID: <4e9603e9-4127-43f1-92be-6c2b59ff2fe0@arm.com>
-Date: Wed, 21 Feb 2024 13:28:48 +0000
+	s=arc-20240116; t=1708522984; c=relaxed/simple;
+	bh=KtKHMB+AnFiN2hMpH33PDEt8M2iVNeq3woqfEVtP35k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=t4zaigXsbq4p4/5O/h14KMaZ7Coj+Vsi5+IPLyDP3ZoEjbMWl7NdAizH+WXoXaZ9IUWi50YHRMNQ7JoIxSHgSWpuONQXpJXMR3mQqugw1EKZrd5qXpKDXAjjgsSENPZae8Pzn5gTx3Yq/MReAaAXMqoP6n3m602QB0G//JVSphI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dvNXThfx; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-512d8950e3dso86027e87.2
+        for <linux-pm@vger.kernel.org>; Wed, 21 Feb 2024 05:43:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1708522980; x=1709127780; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VyIS/2L8+m5oM2lTsyXu4+jS9x+VJzqAj+pH6cNaLbM=;
+        b=dvNXThfxoRN4MZSIJGxHdMH7bLZjIvCs2mMvhD5qao3jmn2ywq3bddB8sRxrHJNChM
+         LH+WWjVYvAtzdMZTntCKuCIW0w05Wq0qapq3yOTe6YfQOyRKhjTAGj2RRFAQfUD2sbLF
+         gsByoRak1gieh81g6wwfAuMvK4k5e0s4OOeyHfrrqkfkEfjWuxt2MbNqbG7iQRyhq1IU
+         GE5zVseBogPnaRh5q19IeasfT6ZVthH0WAZSOWkb6BZ/2IeTRLLB8V9h3cU3/XoZPiUA
+         AYRNsoA8UltVX5pc5KbQLci0F6JVluC5MsX6ThefTZ1s78QKnxO1NOEZ2Xo0dAZKVypC
+         /zWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708522980; x=1709127780;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VyIS/2L8+m5oM2lTsyXu4+jS9x+VJzqAj+pH6cNaLbM=;
+        b=Ul33MA4ME1yzPyRTeO+BA0MhTc3IoUvoxFsCPyf1vx2p/fdYENItdaocS+ZW9UZA+1
+         TvZj9AZWqFRLR5DqyNrFVgQuxAnKMj9etzg9FAp2WLU6TatNp7k5UdipKzAU2olcFDX0
+         cMzg+nEUKCxe/LR01fSQEyugofAy5y8DNvjNuIWjv+9n9QdqZmGF6KYIMQsoybBy2P4b
+         Vv7s+eTc5qFyWePM6SaRuf4dSXFBexu6OudJ8l/iDn6m5PUf3gtUWAVj+ln9B3N0YxTc
+         PAAogzrBjnXm84YdbLETPCLrDIDs3wH72YK2D0Tq3LgN0xrpD+DdbLhha1Huro7XYPM8
+         eHNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXJeGd2CQR8AfbSDKuUIp82yMswe0HvvzfyJx0Ud1M9SzbDpvd5bN/KhbI0nKvHbro/VJZp9eAaQuUKG4PSBp2YvyIKPp4+u68=
+X-Gm-Message-State: AOJu0YwKE6bWWVEsueUofyA7Nhe0lZc473vx8XVn06y2ZSFcGO/ChXle
+	IYt/UL+u8BtuI376qoUtETK3leG9zotLahjFNhTlFwqVCG9KB8IaW9VB3OJpP+k=
+X-Google-Smtp-Source: AGHT+IHOWBy5vI8L+McUQWzkr4WjG9Pwa2JqIcYkMXVa8hcxQTu10e+H1VsUu3eKDfb+vZFAR5oB7w==
+X-Received: by 2002:a05:6512:124f:b0:512:8d8f:db7a with SMTP id fb15-20020a056512124f00b005128d8fdb7amr14181112lfb.65.1708522980437;
+        Wed, 21 Feb 2024 05:43:00 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id m12-20020a5d4a0c000000b0033b60bad2fcsm16875973wrq.113.2024.02.21.05.42.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Feb 2024 05:42:59 -0800 (PST)
+Message-ID: <13c957a9-6021-46a7-9243-b3658c26a333@linaro.org>
+Date: Wed, 21 Feb 2024 14:42:58 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,102 +76,76 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/5] Rework system pressure interface to the scheduler
+Subject: Re: [PATCH v5 0/7] add support for H616 thermal system
 Content-Language: en-US
-To: Vincent Guittot <vincent.guittot@linaro.org>
-References: <20240220145947.1107937-1-vincent.guittot@linaro.org>
-Cc: konrad.dybcio@linaro.org, mhiramat@kernel.org, agross@kernel.org,
- rafael@kernel.org, sudeep.holla@arm.com, will@kernel.org,
- linux@armlinux.org.uk, bristot@redhat.com, mgorman@suse.de,
- bsegall@google.com, rostedt@goodmis.org, andersson@kernel.org,
- dietmar.eggemann@arm.com, juri.lelli@redhat.com, mingo@redhat.com,
- linux-pm@vger.kernel.org, catalin.marinas@arm.com,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- corbet@lwn.net, amit.kachhap@gmail.com, daniel.lezcano@linaro.org,
- peterz@infradead.org, linux-arm-msm@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- gregkh@linuxfoundation.org, vschneid@redhat.com, rui.zhang@intel.com,
- viresh.kumar@linaro.org
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20240220145947.1107937-1-vincent.guittot@linaro.org>
+To: Andre Przywara <andre.przywara@arm.com>,
+ Vasily Khoruzhick <anarsoul@gmail.com>, Yangtao Li <tiny.windzz@gmail.com>,
+ Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Samuel Holland <samuel@sholland.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Zhang Rui
+ <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+ Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Martin Botka <martin.botka@somainline.org>,
+ Maksim Kiselev <bigunclemax@gmail.com>, Bob McChesney
+ <bob@electricworry.net>, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-sunxi@lists.linux.dev
+References: <20240219153639.179814-1-andre.przywara@arm.com>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20240219153639.179814-1-andre.przywara@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Vincent,
+On 19/02/2024 16:36, Andre Przywara wrote:
+> Hi,
+> 
+> this is v5 of this series originally by Martin, only some cosmetic
+> changes this time, for instance  mentioning experiments with the SRAM
+> controller registers to confirm that it's not an SRAM region which fixes
+> the temperature reporting issue.
+> See the Changelog below for more details.
+> ==================
+> 
+> This series introduces support for the thermal sensors in the Allwinner
+> H616 SoCs, which includes its siblings H618 and T507. The actual
+> temperature reading turns out to be very similar to the H6 SoC, just
+> with support for two more sensors. One nasty complication is caused
+> by reports about temperatures above 200C, which are related to the
+> firmware being run (because the vendor U-Boot contains a hack avoiding
+> this problem). Some investigation and digging in BSP code later
+> we identified that bit 16 in register 0x3000000 (SYS_CFG) needs to be
+> cleared for the raw temperature register values to contain reasonable
+> values.
+> To achieve this, patch 1/7 exports this very register from the already
+> existing SRAM/syscon device. Patch 5/7 then adds code to the thermal
+> driver to find that device via a new DT property, and query its regmap
+> to clear bit 16 in there.
+> Patch 4/7 reworks the existing H6 calibration function to become
+> compatible with the H616, many thanks to Maksim for figuring this out.
+> This makes the actual enablement patch 6/7 very easy.
+> 
+> The rest of the patches are straightforward and build on Martin's
+> original work, with some simplifications, resulting in more code sharing.
+> 
+> Please have a look!
 
-On 2/20/24 14:59, Vincent Guittot wrote:
-> Following the consolidation and cleanup of CPU capacity in [1], this serie
-> reworks how the scheduler gets the pressures on CPUs. We need to take into
-> account all pressures applied by cpufreq on the compute capacity of a CPU
-> for dozens of ms or more and not only cpufreq cooling device or HW
-> mitigiations. We split the pressure applied on CPU's capacity in 2 parts:
-> - one from cpufreq and freq_qos
-> - one from HW high freq mitigiation.
-> 
-> The next step will be to add a dedicated interface for long standing
-> capping of the CPU capacity (i.e. for seconds or more) like the
-> scaling_max_freq of cpufreq sysfs. The latter is already taken into
-> account by this serie but as a temporary pressure which is not always the
-> best choice when we know that it will happen for seconds or more.
-> 
-> [1] https://lore.kernel.org/lkml/20231211104855.558096-1-vincent.guittot@linaro.org/
-> 
-> Change since v4:
-> - Add READ_ONCE() in cpufreq_get_pressure()
-> - Add ack and reviewed tags
-> 
-> Change since v3:
-> - Fix uninitialized variables in cpufreq_update_pressure()
-> 
-> Change since v2:
-> - Rework cpufreq_update_pressure()
-> 
-> Change since v1:
-> - Use struct cpufreq_policy as parameter of cpufreq_update_pressure()
-> - Fix typos and comments
-> - Make sched_thermal_decay_shift boot param as deprecated
-> 
-> Vincent Guittot (5):
->    cpufreq: Add a cpufreq pressure feedback for the scheduler
->    sched: Take cpufreq feedback into account
->    thermal/cpufreq: Remove arch_update_thermal_pressure()
->    sched: Rename arch_update_thermal_pressure into
->      arch_update_hw_pressure
->    sched/pelt: Remove shift of thermal clock
-> 
->   .../admin-guide/kernel-parameters.txt         |  1 +
->   arch/arm/include/asm/topology.h               |  6 +-
->   arch/arm64/include/asm/topology.h             |  6 +-
->   drivers/base/arch_topology.c                  | 26 ++++----
->   drivers/cpufreq/cpufreq.c                     | 36 +++++++++++
->   drivers/cpufreq/qcom-cpufreq-hw.c             |  4 +-
->   drivers/thermal/cpufreq_cooling.c             |  3 -
->   include/linux/arch_topology.h                 |  8 +--
->   include/linux/cpufreq.h                       | 10 +++
->   include/linux/sched/topology.h                |  8 +--
->   .../{thermal_pressure.h => hw_pressure.h}     | 14 ++---
->   include/trace/events/sched.h                  |  2 +-
->   init/Kconfig                                  | 12 ++--
->   kernel/sched/core.c                           |  8 +--
->   kernel/sched/fair.c                           | 63 +++++++++----------
->   kernel/sched/pelt.c                           | 18 +++---
->   kernel/sched/pelt.h                           | 16 ++---
->   kernel/sched/sched.h                          | 22 +------
->   18 files changed, 144 insertions(+), 119 deletions(-)
->   rename include/trace/events/{thermal_pressure.h => hw_pressure.h} (55%)
-> 
+Thanks for the detailed explanation.
 
+I'm willing to pick the patches 1-6 and let the last one to go through 
+the allwinner tree.
 
-The code looks good and works as expected. The time delays in those
-old mechanisms that were important to me are good now. The boost is
-handled, cpufreq capping from sysfs - all good. Also the last patch
-which removes the shift and makes it obsolete. Thanks!
+However I need the blessing from the different designed maintainers for 
+the thermal driver and from the sunxi_sram
 
-Feel free to add to all patches:
+Thanks
 
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-Tested-by: Lukasz Luba <lukasz.luba@arm.com>
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Regards,
-Lukasz
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
 
