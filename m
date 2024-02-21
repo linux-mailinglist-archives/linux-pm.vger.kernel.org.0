@@ -1,75 +1,74 @@
-Return-Path: <linux-pm+bounces-4179-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4180-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6AE785D102
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 08:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F38E385D11E
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 08:19:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 731B51F26A85
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 07:13:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 801761F27687
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 07:19:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 131C52C18E;
-	Wed, 21 Feb 2024 07:13:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CC5B3A8DE;
+	Wed, 21 Feb 2024 07:19:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LKLBM+pF"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PvWkElj5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02E863A26E
-	for <linux-pm@vger.kernel.org>; Wed, 21 Feb 2024 07:13:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6598A3A8C1
+	for <linux-pm@vger.kernel.org>; Wed, 21 Feb 2024 07:19:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708499633; cv=none; b=PoIY+hpKQTggfiDfIgP2POUiAkMj0fNm8HVkrOVtJwsRnoLR7C5y2/S2qCDC0GMtX28oKqN3q+hpTYv07KvRbbFflthA6mbvnHFmMgxHuBkKKWnGbGTM7PmK3SY5aFP2npmIdJ8xgg3+sSIfEAITow97tumqv9iklDGtxroQRk0=
+	t=1708499961; cv=none; b=QiaD6m/j6lq4cg8p5plA6PD1kLhkcH2+qXKLuqCr7Jk6NHGYR9Wt356J0kzPL5uv6eGMoSvz9hTb7B2k9nrag37z5D0YMSNi8cqvVn9Np1HnnTtKULoCBoIJqv2eLrEUDol3uL3R7mIsyX/48cPtZ5pSugXeNHCtwjKHimD33LA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708499633; c=relaxed/simple;
-	bh=sm7aYXSJG8Hcgc7YVjS0YUnjzNl03wLN6NHSIs+5RfU=;
+	s=arc-20240116; t=1708499961; c=relaxed/simple;
+	bh=FpSzc/ULvmybbFen93pqpymAOq0L/uqCZruUCXdcO9U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qp6jkE7EO9kskoDcCBZOBhpjaX1GQ+mxwGsank/x0BeMyIdEgZKqx5PISPnWjdI3O8MXxmUdRmVy3jXAeBc7j8Gj4oab3kkmMoCMhjM6kftAbeY43xqK3aNuRsTGVF+u0izoN27gDm4jZ0YRsM+kRKIkIj2Q/bgenyezo8U4kwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LKLBM+pF; arc=none smtp.client-ip=209.85.218.52
+	 In-Reply-To:Content-Type; b=AxiFi6giu7gnCM/1n72jOu9l5nsTBPfJ12akFH9shsfhLn8sZf9usj8pHh3vnIWtbLLgnJHX/DW8rNsN3Qh09ZUoLoBEk5EcL9Zo3PCWCEwmexnXsumKWtGoGTCfL3pSGnbULILvWiD4gePTRRKnrxx+qSr54dM3ovf46OTT80o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PvWkElj5; arc=none smtp.client-ip=209.85.208.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a3f4464c48dso20702066b.3
-        for <linux-pm@vger.kernel.org>; Tue, 20 Feb 2024 23:13:50 -0800 (PST)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-564d9b0e96dso1647089a12.2
+        for <linux-pm@vger.kernel.org>; Tue, 20 Feb 2024 23:19:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708499629; x=1709104429; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lj6G8JZlNb0ydBBYXexPWzfMBPbLnVkovsLWtWCOKI8=;
-        b=LKLBM+pFNxwep6TEu6aufC1mQdsP4V1Lu9aIgqbIpb47ne5TNfD9t8SPj/3PkJ+886
-         /uW2pi1hrc4yuIq2vEgBq1qleSU+s7XRujjYq0PsKPeMv9qQ4pIKXC0DYOW3zz4Pzl8e
-         FIYL9xHUAQOKgR7LaLOscrQ0ITwVUtiwyTIRamX+bHfjGzwE1DCusTEHN33r0B/0Ai45
-         cwe3ERjdQBBLrJTTxRn9DdWu9v+umS4R4M8EYIIZjTBTmZYf2NwSvoxQE9pckZDkxOeN
-         uGXkGLAI0DchQLLpnmowMPNLRxRNdCSQLy/aYhjGnYua1OcMFc29ygKkzvPLm1Gj4XD9
-         uF2g==
+        d=linaro.org; s=google; t=1708499958; x=1709104758; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7DsXkNm/a06dOSvB/DAXcgIlUfR6UQeZosO9CYoPE5s=;
+        b=PvWkElj5v64WZ5qZiBV1dcZbtEOq+LUw1R6HbucxcwqcrKYpM5iS0+PWBiqoLpJAOy
+         f0MOMa3hLUgXF2sSM5lyRpBHYdf++HFGo1psn1kiLoNB5zXeynglf6gHZGLvA+UetivO
+         IceHWvAVr55UfrauBtfx3bCECTH/emwWWBkND4GxuucGlmWCn2n4SzbN+4P7p03qfSWB
+         PT+pNfhTl3gddm979g8/ZwRGuZH4n83/QsFBEReHoKdBUlNS4/9CS3zy1SxGK2ODA/MD
+         yeF8Ikxj1QPoTLK/563+zq6U88zrQTVeJG2YZ+NYM+lITeCS86GscgssSA+yqaqgXqAM
+         jHTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708499629; x=1709104429;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Lj6G8JZlNb0ydBBYXexPWzfMBPbLnVkovsLWtWCOKI8=;
-        b=fOjtDCK78aeetFdHLCkD4V6RuMOCwWE++RLb4mK+6i1AJ3sTIKk96W7XdEnfM9xSjA
-         Jqf7/0an7eEmpE6+agoPZo/Hy3oo0dVktBwRSKR8SUZubYybuMe952I/HF+Q7uHFzQGV
-         w/NvDkD9CD19nYtRcEOjCBJCwZafzv1DfGkJ4ZxkGiiXRXm4B5q1Te4x0Sx8CheSiS/y
-         4ZUuugUkGnDM6x3bdUsMzcjDqxiZTB1qshVhVrXkLTspoK+O+Atm4ykCCPblMz14Bf4J
-         pbCBSMJdae9E+b5ruuv8YjllDlXKMVutnutr2DH3ES516KIyh1tm+KRV494xEJY9KAqN
-         5jaQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWdoweDgzz5o25qINV4ZfXh5qDPMMmPzOsDNYaypuWHYJkMK0q3Suod3uQPGPhQlTuxWSXxt+JjyF7kFzb3UzUdtNQ4BHiZw8E=
-X-Gm-Message-State: AOJu0YyTki0l7pGi3svIpqSdjhdAcpSGD8/6sgu3nabsQm1e5dz1Z2n1
-	byRKd9FVtnj/zQqrVC5u9Z9tt5AFaEidP0E3z+G7y3FpKpaKXN/ug2mzOzvKAik=
-X-Google-Smtp-Source: AGHT+IGMgyZUNqmxcjMbb7mMKrPL7LtX9airZjvk8iggZudIU2hMGM0jsJm7YuVneGwLQlAFnz1fKw==
-X-Received: by 2002:a17:906:bc86:b0:a3e:389b:caa3 with SMTP id lv6-20020a170906bc8600b00a3e389bcaa3mr9013178ejb.53.1708499629371;
-        Tue, 20 Feb 2024 23:13:49 -0800 (PST)
+        d=1e100.net; s=20230601; t=1708499958; x=1709104758;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7DsXkNm/a06dOSvB/DAXcgIlUfR6UQeZosO9CYoPE5s=;
+        b=B/Iw5/wBGQtQ9nQyg0YcAL5lvbh8NEFn8/Jk7kTfTPp91V6MWFmWDU50zK6lnwI9a3
+         ygl8s+6CcCELYjJU8wK1e1a6Vn1Q6wz9CwpuWOEAF0MD8TqEEM5lIFcjQ7Wp+VGU8bp4
+         sGwdwRN/sFF+09ER9V2hJt1z7R4aG9ai83VaQph7IQYEfGQR3AysmzmM4uf5jIdONFpk
+         nCyTW4WYbzPcWn7QvqkJ3wDIdaRkPWe1YFOF+eS+4ZkiTLbVGmjYt/30wobCpzbCOQAL
+         HhzwmeCDTGSf+NINsWvaBIdyN3pWJqPhwC2Jf7AFCC7amP3hRhLHxGbKtnoF7qOiHDgg
+         B5sw==
+X-Forwarded-Encrypted: i=1; AJvYcCWrqVSkBtkJTOwEk00+RU+jJwNE9g6DTl8iLEgM2nGr0L2C5dp8qL8o3DGOpO8RwGMjmq8itsZ140ZPb9YK+RL//1JXuWmZ0Z0=
+X-Gm-Message-State: AOJu0Yz40iiEOG6GyfdREXX+wPx0LZY9M0RZoNj192ta0pKCI/MJIbVi
+	IRVFxrKuyFa2uhSn5zyfpiHnMN4DNXpbScA9sNEEbhW50wqnIo8Y7gGyOp67AX0=
+X-Google-Smtp-Source: AGHT+IEZORZ8nfJo15O+GNR1nZluGd+MjprHCLUWhw0uH1DXD508rb4uNBFikxFtGZLNsWs1xXLUTg==
+X-Received: by 2002:a17:906:26ca:b0:a3e:ed41:1403 with SMTP id u10-20020a17090626ca00b00a3eed411403mr3527569ejc.27.1708499957738;
+        Tue, 20 Feb 2024 23:19:17 -0800 (PST)
 Received: from [192.168.1.20] ([178.197.222.116])
-        by smtp.gmail.com with ESMTPSA id g16-20020a170906c19000b00a3cee88ddc7sm4742557ejz.147.2024.02.20.23.13.47
+        by smtp.gmail.com with ESMTPSA id s8-20020a170906168800b00a3e7a2d9ac4sm3172817ejd.6.2024.02.20.23.19.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Feb 2024 23:13:48 -0800 (PST)
-Message-ID: <6c4bdd9f-6b1f-43a0-9baa-7c1eedd46f76@linaro.org>
-Date: Wed, 21 Feb 2024 08:13:46 +0100
+        Tue, 20 Feb 2024 23:19:17 -0800 (PST)
+Message-ID: <d3dc9a41-4738-4634-9a98-fefcf418f552@linaro.org>
+Date: Wed, 21 Feb 2024 08:19:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -77,22 +76,28 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] interconnect: constify of_phandle_args in xlate
-To: Alim Akhtar <alim.akhtar@samsung.com>, 'Georgi Djakov'
- <djakov@kernel.org>, 'Bjorn Andersson' <andersson@kernel.org>,
- 'Konrad Dybcio' <konrad.dybcio@linaro.org>,
- 'Sylwester Nawrocki' <s.nawrocki@samsung.com>,
- =?UTF-8?B?J0FydHVyIMWad2lnb8WEJw==?= <a.swigon@samsung.com>,
- 'Thierry Reding' <thierry.reding@gmail.com>,
- 'Jonathan Hunter' <jonathanh@nvidia.com>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-samsung-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-tegra@vger.kernel.org
-Cc: 'Thierry Reding' <treding@nvidia.com>
-References: <CGME20240220072224epcas5p4ff60556b0b5632abfc44d2b8ad932b8f@epcas5p4.samsung.com>
- <20240220072213.35779-1-krzysztof.kozlowski@linaro.org>
- <1d9b01da63f6$daeb0170$90c10450$@samsung.com>
+Subject: Re: [PATCH v3 2/3] dt-bindings: iio: adc: Add support for QCOM PMIC5
+ Gen3 ADC
 Content-Language: en-US
+To: Jishnu Prakash <quic_jprakash@quicinc.com>, jic23@kernel.org,
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+ andersson@kernel.org, konrad.dybcio@linaro.org, lee@kernel.org,
+ andriy.shevchenko@linux.intel.com, daniel.lezcano@linaro.org,
+ dmitry.baryshkov@linaro.org
+Cc: lars@metafoo.de, luca@z3ntu.xyz, marijn.suijten@somainline.org,
+ agross@kernel.org, sboyd@kernel.org, rafael@kernel.org, rui.zhang@intel.com,
+ lukasz.luba@arm.com, linus.walleij@linaro.org, quic_subbaram@quicinc.com,
+ quic_collinsd@quicinc.com, quic_amelende@quicinc.com,
+ quic_kamalw@quicinc.com, kernel@quicinc.com, linux-kernel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-arm-msm-owner@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, cros-qcom-dts-watchers@chromium.org
+References: <20231231171237.3322376-1-quic_jprakash@quicinc.com>
+ <20231231171237.3322376-3-quic_jprakash@quicinc.com>
+ <3f812ffa-ec33-448e-b72a-ce698618a8c1@linaro.org>
+ <13f2b558-a50d-44d3-85de-38e230212732@quicinc.com>
+ <f52b2d5e-b2b4-48ae-a6a6-fc00c89662d2@linaro.org>
+ <0b9e807d-e0ca-411c-9a2b-3d804bdf168c@quicinc.com>
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -138,68 +143,125 @@ Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
  KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
  fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
  D2GYIS41Kv4Isx2dEFh+/Q==
-In-Reply-To: <1d9b01da63f6$daeb0170$90c10450$@samsung.com>
+In-Reply-To: <0b9e807d-e0ca-411c-9a2b-3d804bdf168c@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 20/02/2024 13:18, Alim Akhtar wrote:
+On 21/02/2024 06:36, Jishnu Prakash wrote:
+> Hi Krzysztof,
 > 
-> 
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Sent: Tuesday, February 20, 2024 12:52 PM
->> To: Georgi Djakov <djakov@kernel.org>; Bjorn Andersson
->> <andersson@kernel.org>; Konrad Dybcio <konrad.dybcio@linaro.org>;
->> Sylwester Nawrocki <s.nawrocki@samsung.com>; Artur Świgoń
->> <a.swigon@samsung.com>; Krzysztof Kozlowski
->> <krzysztof.kozlowski@linaro.org>; Alim Akhtar
->> <alim.akhtar@samsung.com>; Thierry Reding <thierry.reding@gmail.com>;
->> Jonathan Hunter <jonathanh@nvidia.com>; linux-pm@vger.kernel.org;
->> linux-kernel@vger.kernel.org; linux-arm-msm@vger.kernel.org; linux-
->> samsung-soc@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
->> tegra@vger.kernel.org
->> Cc: Thierry Reding <treding@nvidia.com>
->> Subject: [PATCH v2] interconnect: constify of_phandle_args in xlate
+> On 2/17/2024 7:43 PM, Krzysztof Kozlowski wrote:
+>> On 16/02/2024 11:39, Jishnu Prakash wrote:
+>>> Hi Krzysztof,
+>>>
+>>> On 1/4/2024 1:48 PM, Krzysztof Kozlowski wrote:
+>>>> On 31/12/2023 18:12, Jishnu Prakash wrote:
+>>>>> For the PMIC5-Gen3 type PMICs, ADC peripheral is present in HW for the
+>>>>> following PMICs: PMK8550, PM8550, PM8550B and PM8550VX PMICs.
+>>>>>
+>>>>> It is similar to PMIC5-Gen2, with SW communication to ADCs on all PMICs
+>>>>> going through PBS(Programmable Boot Sequence) firmware through a single
+>>>>> register interface. This interface is implemented on an SDAM (Shared
+>>>>> Direct Access Memory) peripheral on the master PMIC PMK8550 rather
+>>>>> than a dedicated ADC peripheral.
+>>>>>
+>>>>> Add documentation for PMIC5 Gen3 ADC and macro definitions for ADC
+>>>>> channels and virtual channels (combination of ADC channel number and
+>>>>> PMIC SID number) per PMIC, to be used by clients of this device.
+>>>>>
+>>>>> Changes since v2:
+>>>>> - Moved ADC5 Gen3 documentation into a separate new file.
+>>>> Changelog goes under ---.
+>>>>
+>>>> Why did you do this? What is the rationale? Sorry, this patchset goes
+>>>> nowhere.
+>>>
+>>>
+>>> I'll elaborate this more in the next patchset. There are two main
+>>> reasons for adding this documentation in a new file:
 >>
->> The xlate callbacks are supposed to translate of_phandle_args to proper
->> provider without modifying the of_phandle_args.  Make the argument
->> pointer to const for code safety and readability.
+>> This was more than a month ago? You reply to my comment with 1.5 months
+>> delay?
 >>
->> Acked-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> Acked-by: Thierry Reding <treding@nvidia.com> # Tegra
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Sorry, I am not in the context and I am not going back to it. I have
+>> many other emails where my questions are addressed faster than 1.5 months.
 >>
->> ---
+>> The patch is not even in my mailbox, long gone.
+>> Why you are making it so difficult for reviewers?
 >>
->> Changes in v2:
->> 1. Drop unrelated gpiolib changes (Konrad, Thierry).
->> 2. Add tags.
->> ---
->>  drivers/interconnect/core.c            |  4 ++--
->>  drivers/interconnect/qcom/icc-common.c |  3 ++-
->> drivers/interconnect/qcom/icc-common.h |  3 ++-
->> drivers/interconnect/samsung/exynos.c  |  2 +-
->>  drivers/memory/tegra/mc.c              |  2 +-
->>  drivers/memory/tegra/tegra124-emc.c    |  2 +-
->>  drivers/memory/tegra/tegra124.c        |  2 +-
->>  drivers/memory/tegra/tegra186-emc.c    |  2 +-
->>  drivers/memory/tegra/tegra20-emc.c     |  2 +-
->>  drivers/memory/tegra/tegra20.c         |  2 +-
->>  drivers/memory/tegra/tegra30-emc.c     |  2 +-
->>  drivers/memory/tegra/tegra30.c         |  2 +-
->>  include/linux/interconnect-provider.h  | 11 ++++++-----
->>  include/soc/tegra/mc.h                 |  7 ++++---
->>  14 files changed, 25 insertions(+), 21 deletions(-)
+>> You will get answers like I am not in context, sorry. Next time don't
+>> respond after 1.5 months.
 >>
 > 
-> For Samsung/Exynos
-> Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+> You're right - I'll do my best to get back to review comments in a 
+> reasonable time frame.
+> 
+>>
+>>>
+>>> 1.This device is not exactly like the existing QCOM VADC drivers as it
+>>> now combines VADC functionality (reading ADC channel on client request)
+>>> with ADC_TM functionality (thermal threshold monitoring).
+>>
+>> Does no explain touching bindings. Your drivers don't matter for bindings.
+>>
+>>>
+>>> 2.Adding this device's bindings in the existing qcom,spmi-vadc.yaml file
+>>
+>> No rationale was provided in commit msg.
+>>
+>>> is not possible as it would require updating some of the existing
+>>> top-level constraints. (for the older devices in that file, "reg" and
+>>> "interrupts" can have at most one item, while this device can have more
+>>> than one item under these properties.)
+>>
+> 
+>> How is this a problem?
+> 
+> In qcom,spmi-vadc.yaml, we have the following top-level constraints for 
+> the "reg" and "interrupts" properties:
+> 
+>    reg:
+>      maxItems: 1
+> 
+>    interrupts:
+>      maxItems: 1
+> 
+> For the ADC5 Gen3 device being added now, these constraints cannot be 
+> followed always, as there may be more than one peripheral under one 
+> device instance, each with a corresponding interrupt. For example, the 
+> above properties could be like this for a ADC5 Gen3 device:
+> 
+>      reg = <0x9000>, <0x9100>;
+>      interrupts = <0x0 0x90 0x1 IRQ_TYPE_EDGE_RISING>,
+>                   <0x0 0x91 0x1 IRQ_TYPE_EDGE_RISING>;
+> 
+> 
+> I could not overwrite the top-level constraints for the new device 
+> "qcom,spmi-adc5-gen3" alone in qcom,spmi-vadc.yaml, so I tried to remove 
+> the constraints from the top level and add them back conditionally for 
+> all the device types separately, but you told me not to remove them 
+> (full message: 
+> https://lore.kernel.org/linux-iio/832053f4-bd5d-4e58-81bb-1a8188e7f364@linaro.org/)
 
-Review tags are per patch. You probably meant Acked-by.
-https://elixir.bootlin.com/linux/v6.8-rc5/source/Documentation/process/submitting-patches.rst#L544
+Because top-level widest constraints must stay, but it is not a problem.
+Most of the multi-device bindings work like this. Dozen of Qualcomm. Why
+you cannot do this the same way we do for all Qualcomm devices?
 
-What is there anyway to review in Samsung? Adding one const in one driver?
+> 
+> Since these constraints cannot be modified for a specific new device or 
 
+???
+
+> removed, I think the only way to accommodate this new device is to add 
+> it in its own new file.
+> 
+> Is this a sufficient justification for adding this documentation in a 
+> new file or do you have any other suggestions?
+
+I already gave you the suggestions and you ignored them. Do like we are
+doing for all other drivers. Don't re-invent stuff. Either this fits to
+existing schema or come with common schema (and then provide rationale
+why it does not fit to existing one).
 
 Best regards,
 Krzysztof
