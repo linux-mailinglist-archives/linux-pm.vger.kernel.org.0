@@ -1,64 +1,63 @@
-Return-Path: <linux-pm+bounces-4210-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4211-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C01FD85E938
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 21:46:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 415E985E967
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 22:01:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E33D01C21C85
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 20:46:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC28E1F22A50
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 21:01:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 680F73C488;
-	Wed, 21 Feb 2024 20:46:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAB0E83CDF;
+	Wed, 21 Feb 2024 21:01:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="0iJYRMXo"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="sqwl/7W5"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D21C3A1DB;
-	Wed, 21 Feb 2024 20:46:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 241DC3A1DB;
+	Wed, 21 Feb 2024 21:01:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708548376; cv=none; b=qnCuROjyb3m7jiSoMvqwNFPFw/jgnOsRrz4g/Xy7wVwnx6rJ0g5DihunyhYLCD4LHXKWWIled9TOksMgyYy4SvFmfab7nfm9GhjQuwHDYBH7SISIH5nfud5IEZa52vuIPxAZfVsbbcxmfM3DhaXOpaXIjIGQiMM/fQEdkXz56Zc=
+	t=1708549308; cv=none; b=WoCxHnS9QUJtv08kXurhcTCAfPZrgVvHnXrBhJjjgGNBc4DVvbhpB//EtZDlL6c9pQFsrhZPjpwoptFy0a4FnL6x2WnQMBLZd0pE0PE72Ixb2m/6GLbPf2WwK+XSzHbuGEY7KZwCbTQ3GI9TzSMdUZ5Uo20tmkeQCAr5hIAxl8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708548376; c=relaxed/simple;
-	bh=fpV5ky7lMoyvm1atC6aW4rCMiwckfAJjMGBrT51JBJU=;
+	s=arc-20240116; t=1708549308; c=relaxed/simple;
+	bh=Jm7n6ceOcN3/8GnH75DbFvxJ5tu1Wec/SZqvsq6sawg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OL95rNI3O+Vu6VvzThNo5AtOaQUQdFTld56rjBTyeiC+hFxJLrOebEzU8P/7ElrlX3ym+YTx+Yo+Ip8iZ7WPouk2Xuiuqx9r2Tb4ioo0KEP+NbY1MyDZjBt0KpTGAZTz8RyS5XkiROJesaPBOe0/RepXJ7dNm2newXFBD7LsVH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=0iJYRMXo; arc=none smtp.client-ip=46.235.227.194
+	 Content-Type:Content-Disposition:In-Reply-To; b=oigUp4fg4m1SxQ6l1S/b9UuWsdVHwyQyjQS95U1VvbNVOCh1ux/zg6uJ3GE2miczn2L3sqKDSUks315JWMBLpmrQBfXVxEmQsdXjgFHhapDHebt2xJPnky22oTWKNk3tsRrK5kZbVkCNKp9mpx0MYoLzqwlFPCDBBFH3p6LKc0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=sqwl/7W5; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1708548372;
-	bh=fpV5ky7lMoyvm1atC6aW4rCMiwckfAJjMGBrT51JBJU=;
+	s=mail; t=1708549305;
+	bh=Jm7n6ceOcN3/8GnH75DbFvxJ5tu1Wec/SZqvsq6sawg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=0iJYRMXoIKB3NGokmW0d/875EGgMcR71P8VpX0RYgACHF7IcRhZiML37xybADlzB8
-	 YaLCbPUlF48Nk86/yDsxbJl+09Q+XnoA9iz6nWbOT1awgdS5SqzqrGTXr/FnTmIyS3
-	 RRFfAhD8jpREkecl0oTvZ/IjpkAZRNaut40oYnTbBdBfj9iHx+/qegLYqtSHrHyV2d
-	 gGgqe8NOAfCPtvTA5uiR4KWJUowl3gwOXe2KKtamiDFdBG/eGMuLe4/hPe4n6fL2oy
-	 LFgVjip0zzuIon4s9cKTTQ6r23F7gpgO6mGgsqtEZTYSGymZqYfqaiWEyu4UK7LSI1
-	 lykD8p3mTiMyA==
+	b=sqwl/7W5xlE4BDN7XWthiGk3lJ9Dxzf9/2vx0H9qbbUMA396W/E7LGyhDN2P9TX+K
+	 c9AVq8x//3XMAJBZhewqOYQo4ofQJjmVVdgr5025O+vTW/cNYLOR1ncwQizRkXe0kE
+	 e4aG41h24TTQtX4QENM6cKYgFaXJxMmVvXMhLoKkcsRz+qT5KaWYqGfEuP/IWaQrqW
+	 8mkbDxHku/Vpt+YvZ+hcHYO8clXRyFEVqjhjCHEfp/JO8zubzq4xyfuVx2ELCxO/gl
+	 8NNv2YEuKj5QcrnvRGEfxcTYt44bw2g82kdiQPCTXNRe9i+7jE7ydirN1DeLz8r7QY
+	 OrCnxNzGC/ErA==
 Received: from mercury (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(No client certificate requested)
 	(Authenticated sender: sre)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id AC2F337820D2;
-	Wed, 21 Feb 2024 20:46:12 +0000 (UTC)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 454A437820D2;
+	Wed, 21 Feb 2024 21:01:45 +0000 (UTC)
 Received: by mercury (Postfix, from userid 1000)
-	id 19B34106043F; Wed, 21 Feb 2024 21:46:12 +0100 (CET)
-Date: Wed, 21 Feb 2024 21:46:11 +0100
+	id AFF94106043F; Wed, 21 Feb 2024 22:01:44 +0100 (CET)
+Date: Wed, 21 Feb 2024 22:01:44 +0100
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: "Ricardo B. Marliere" <ricardo@marliere.net>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] power: supply: sysfs: constify the struct device_type
- usage
-Message-ID: <j2boiqkk7fwexefgwxoytk2gdx4an5snfm4bjtflnr7wwxf5yj@g5dcmcaor453>
-References: <20240220-device_cleanup-power-v1-1-e2b9e0cea072@marliere.net>
+To: "A. Sverdlin" <alexander.sverdlin@siemens.com>
+Cc: linux-pm@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC] power: reset: restart-poweroff: convert to module
+Message-ID: <75ljt3czi7ve3nqaqb52lezxlqu2o5wpxeivlbe2gwlg2vjd6s@q54nzrsondtu>
+References: <20240221174610.3560775-1-alexander.sverdlin@siemens.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -66,137 +65,119 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ahfpfiswpxb2tavb"
+	protocol="application/pgp-signature"; boundary="3q6sgkglmk7n5vqu"
 Content-Disposition: inline
-In-Reply-To: <20240220-device_cleanup-power-v1-1-e2b9e0cea072@marliere.net>
+In-Reply-To: <20240221174610.3560775-1-alexander.sverdlin@siemens.com>
 
 
---ahfpfiswpxb2tavb
+--3q6sgkglmk7n5vqu
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Tue, Feb 20, 2024 at 03:40:06PM -0300, Ricardo B. Marliere wrote:
-> Since commit aed65af1cc2f ("drivers: make device_type const"), the driver
-> core can properly handle constant struct device_type. Move the
-> power_supply_dev_type variable to be a constant structure as well, placing
-> it into read-only memory which can not be modified at runtime.
+On Wed, Feb 21, 2024 at 06:46:07PM +0100, A. Sverdlin wrote:
+> From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
 >=20
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Ricardo B. Marliere <ricardo@marliere.net>
+> The necessity of having a fake platform device for a generic, platform
+> independent functionality is not obvious.
+> Some platforms requre device tree modification for this, some would requi=
+re
+> ACPI tables modification, while functionality may be useful even to
+> end-users without required expertise. Convert the platform driver to
+> a simple module.
+>=20
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
 > ---
->  drivers/power/supply/power_supply.h       | 4 ++--
->  drivers/power/supply/power_supply_core.c  | 2 +-
->  drivers/power/supply/power_supply_sysfs.c | 9 ++++++---
->  3 files changed, 9 insertions(+), 6 deletions(-)
->=20
-> diff --git a/drivers/power/supply/power_supply.h b/drivers/power/supply/p=
-ower_supply.h
-> index 645eee4d6b6a..d547dbe5676f 100644
-> --- a/drivers/power/supply/power_supply.h
-> +++ b/drivers/power/supply/power_supply.h
-> @@ -15,12 +15,12 @@ struct power_supply;
-> =20
->  #ifdef CONFIG_SYSFS
-> =20
-> -extern void power_supply_init_attrs(struct device_type *dev_type);
-> +extern void power_supply_init_attrs(const struct device_type *dev_type);
->  extern int power_supply_uevent(const struct device *dev, struct kobj_uev=
-ent_env *env);
-> =20
->  #else
-> =20
-> -static inline void power_supply_init_attrs(struct device_type *dev_type)=
- {}
-> +static inline void power_supply_init_attrs(const struct device_type *dev=
-_type) {}
->  #define power_supply_uevent NULL
-> =20
->  #endif /* CONFIG_SYSFS */
-> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/sup=
-ply/power_supply_core.c
-> index ecef35ac3b7e..fda21cf4111c 100644
-> --- a/drivers/power/supply/power_supply_core.c
-> +++ b/drivers/power/supply/power_supply_core.c
-> @@ -31,7 +31,7 @@ EXPORT_SYMBOL_GPL(power_supply_class);
-> =20
->  static BLOCKING_NOTIFIER_HEAD(power_supply_notifier);
-> =20
-> -static struct device_type power_supply_dev_type;
-> +static const struct device_type power_supply_dev_type;
+> This RFC is merely to understand if this approach would be accepted.
+> Converting to "tristate" could follow or preceed this patch.
 
-This creates an empty struct, which is being used in this file...
+1. You cannot easily make this tristate, because of machine_restart().
+2. This is already using module_platform_driver(), so this has
+   nothing to do with making it a module like the subject suggests.
+3. This no longer applies, since the driver is now properly using
+   devm_register_sys_off_handler instead of pm_power_off.
+4. It's intentional, that a device needs to be described. This is
+   _not_ meant as a general purpose poweroff driver. It's intended
+   to be used with bootloader support, which keeps the system off
+   as described in the comment at the start of the file.
 
-> =20
->  #define POWER_SUPPLY_DEFERRED_REGISTER_TIME	msecs_to_jiffies(10)
-> =20
-> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/su=
-pply/power_supply_sysfs.c
-> index 977611e16373..ed365ca54c90 100644
-> --- a/drivers/power/supply/power_supply_sysfs.c
-> +++ b/drivers/power/supply/power_supply_sysfs.c
-> @@ -399,12 +399,15 @@ static const struct attribute_group *power_supply_a=
-ttr_groups[] =3D {
->  	NULL,
->  };
-> =20
-> -void power_supply_init_attrs(struct device_type *dev_type)
-> +static const struct device_type power_supply_dev_type =3D {
-> +	.name =3D "power_supply",
-> +	.groups =3D power_supply_attr_groups,
-> +};
-
-=2E.. and this creates the correct one in power_supply_sysfs.c, but it
-is not being used at all. Maybe get some sleep and/or read again
-what 'static' means for a global variable?
-
-> +void power_supply_init_attrs(const struct device_type *dev_type)
->  {
-
-This function no longer uses dev_type argument, so you can remove
-it.
+So: NAK
 
 -- Sebastian
 
->  	int i;
+> diff --git a/drivers/power/reset/restart-poweroff.c b/drivers/power/reset=
+/restart-poweroff.c
+> index 28f1822db1626..e1d94109f6823 100644
+> --- a/drivers/power/reset/restart-poweroff.c
+> +++ b/drivers/power/reset/restart-poweroff.c
+> @@ -20,7 +20,7 @@ static void restart_poweroff_do_poweroff(void)
+>  	machine_restart(NULL);
+>  }
 > =20
-> -	dev_type->groups =3D power_supply_attr_groups;
+> -static int restart_poweroff_probe(struct platform_device *pdev)
+> +static int __init restart_poweroff_init(void)
+>  {
+>  	/* If a pm_power_off function has already been added, leave it alone */
+>  	if (pm_power_off !=3D NULL) {
+> @@ -33,12 +33,10 @@ static int restart_poweroff_probe(struct platform_dev=
+ice *pdev)
+>  	return 0;
+>  }
+> =20
+> -static int restart_poweroff_remove(struct platform_device *pdev)
+> +static void __exit restart_poweroff_exit(void)
+>  {
+>  	if (pm_power_off =3D=3D &restart_poweroff_do_poweroff)
+>  		pm_power_off =3D NULL;
 > -
-
->  	for (i =3D 0; i < ARRAY_SIZE(power_supply_attrs); i++) {
->  		struct device_attribute *attr;
+> -	return 0;
+>  }
 > =20
->=20
-> ---
-> base-commit: a9b254892ce1a447b06c5019cbf0e9caeb48c138
-> change-id: 20240220-device_cleanup-power-037594022cb1
->=20
-> Best regards,
+>  static const struct of_device_id of_restart_poweroff_match[] =3D {
+> @@ -47,15 +45,8 @@ static const struct of_device_id of_restart_poweroff_m=
+atch[] =3D {
+>  };
+>  MODULE_DEVICE_TABLE(of, of_restart_poweroff_match);
+> =20
+> -static struct platform_driver restart_poweroff_driver =3D {
+> -	.probe =3D restart_poweroff_probe,
+> -	.remove =3D restart_poweroff_remove,
+> -	.driver =3D {
+> -		.name =3D "poweroff-restart",
+> -		.of_match_table =3D of_restart_poweroff_match,
+> -	},
+> -};
+> -module_platform_driver(restart_poweroff_driver);
+> +module_init(restart_poweroff_init);
+> +module_exit(restart_poweroff_exit);
+> =20
+>  MODULE_AUTHOR("Andrew Lunn <andrew@lunn.ch");
+>  MODULE_DESCRIPTION("restart poweroff driver");
 > --=20
-> Ricardo B. Marliere <ricardo@marliere.net>
+> 2.43.0
 >=20
 
---ahfpfiswpxb2tavb
+--3q6sgkglmk7n5vqu
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmXWYQgACgkQ2O7X88g7
-+prJgA//UGuZMDjweESCobtCRrcWlGAoUv/DMA3MArsEdQ1X+aUGDTKUTtpwDXBi
-NmkjNgC65NdU6H99YqNB9bAl5ylzgjZMc85Xm7yKaQbV63FZ8iUWJh1l5C9ZsrFP
-1erbjhSGkO9ofWeREuiTo/juUNAkliPaZA2ySj239tAON02pVzl+Nr4lkn42sAAZ
-FVNvoPOoYxOgz4sowjf8kaUr+hVa4Vp8GpT6uqClVtlcxTzBYUk8kgw3BUrUCv/j
-BZ2Sw7qRM8S1MJ3gw0mPVPLC8WpIiwHnwFdw/RgKgY0zqDmiwIJpSFIgHTjhMeIf
-iVI5lRSF8vHIoOnqkB+2ttnJlkYamJVWWqqw/7GxZnLGX8gdK+lSMyx2EFYVSYi7
-SYT9h3wOjKC0Y5thj0F9gz6aKGCQwBcP8EHnVktOxYv9Yj8cUg19HmnLZ3iOh1Lq
-12WmUUySIaiv9DQ6mzo+dHKQsaFCc4dAjsUaTVVqjx2JGARvLCVZJidZ243k+DLE
-ASAX1zbYlgA76mySvygMoA4r7nVwb4KFmoFMhp6SmCLhIIaGchI3aJWdrVEi9yNL
-mlKWXaZzym2sCBhmf3G89S7PiZKLc7HcE5j17ruXmJv8yPO9rFTSvR8MOpnH3aoK
-h+90IGbqP01elsuRd/M8X5egX6iLFvf/NPL5UqEt39HHGQhzi/w=
-=Jo0N
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmXWZKwACgkQ2O7X88g7
++pqegg/+NsgK3lSsW8+BxUMAhXzCRTyGzWp0xmMAJ8pVgq0fBdn4IG/JUe8yTknm
+mzdtmWWqmrMQBOUXZ32lwD/nugScKBkVZd9INv1O6CV+lgfq7S5zTOtmux7S9Jgu
+uVGKKM4v6rDpXvauWjenWUwj6F0A7vPXcGCGKY9mqf4v4ze7Vpaj7FySPSOa/fur
+/rZw5pMPaTNHwGXiLUkI0ptCNVA8WnXBlkKYIkPsHbNN4c4Zmoqlx9lgROBBx0h7
+ptIZ039+svq6V22lxH5clWWnGfH7oW6Cgkj7tCNpmn5/1glXxvsR0MwpHWfE11F8
+Lk4+JpbKgD9mEdSPE9niiLBAkE1/Des/k9bb+PsuKXpt9DjP6Bstku6aaQ9FT+nX
+qU3HXjrxB1+L8z7vHKiTVY7qvsx6yWO5mKAey0+Sk9u+cMNDXGug6+QO/+mmF/O+
+PNR6n+BRSTDpKSdtvEb8nUdZGPNIikNKIT9AKX/V94h8eXVyABql+OPknSP8CS30
+oeTuh4YjlJzW48IaGUVFUZTqMTqQDfQ/U0B614KF0F+aqZjY+nipAcYu33MRYzzL
+Kg+twNccclnZR591CGQbHAeL6CCqFGXJ1h9ZbVR4e/6oC3RAnMFn8++5la/Gn87H
+kNXEh8YtDgZXzud5LpASZOKMjuqLwwG0c41ooAEfSFfLVsHnwDM=
+=/bxz
 -----END PGP SIGNATURE-----
 
---ahfpfiswpxb2tavb--
+--3q6sgkglmk7n5vqu--
 
