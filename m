@@ -1,101 +1,54 @@
-Return-Path: <linux-pm+bounces-4203-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4204-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53AB785E480
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 18:24:16 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0843D85E4DB
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 18:46:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 764A61C21999
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 17:24:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8CC5DB22AA1
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 17:46:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97E4A83CAE;
-	Wed, 21 Feb 2024 17:24:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1169483CDB;
+	Wed, 21 Feb 2024 17:46:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iFPdqD7r"
+	dkim=pass (1024-bit key) header.d=siemens.com header.i=alexander.sverdlin@siemens.com header.b="i5NBYVK8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mta-64-228.siemens.flowmailer.net (mta-64-228.siemens.flowmailer.net [185.136.64.228])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BD8E7F7EA;
-	Wed, 21 Feb 2024 17:24:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE65F83CCC
+	for <linux-pm@vger.kernel.org>; Wed, 21 Feb 2024 17:46:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.64.228
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708536247; cv=none; b=BqrLuvgKsZzfcV+U8FYxceDRYHc3g+YbuF75zLX13banCzi+VAFrZKSUwKsXndFXfrq+/FUWkP7FxZFhZnpckwJSfLhofJxgORkZ1h4/oi07wKYdC15rF2akznRipid49X4SgOsLW/Sf7I419pf9Nt6pMkvxYnpLZXCasA5EWu0=
+	t=1708537584; cv=none; b=T1HH2lsrN5aAYRgj63qroRH6AL61yr6vvcJPCodSlspt69fIx/L0eH1dAFwaJqPjpJ9NSryK1Mg+Q1Ii3XIyuHAXPaq2YM+bsWB2OJ95WCRNsWHE2voHacGkgOBF9GZfZkxKjnPRAulL1wnjKcb/6VxeYdUoNfx2Iv/lYofBTzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708536247; c=relaxed/simple;
-	bh=2gSFdXQslCcELEmt27ii408bUhhDY+Jb6gfi1b9Tkpc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tdo6W0XccmEg/0dnwx/cJUIUdx3XfEurMmwHqCqwAvzU7WquNxoPMPjTrBoTkcmCpkQ+qiSl8KqSW8c34uSFbbTTKj0ilCVQ97Wt3mN2uUR4uPtgafkBn0UG8YKgRJdCIN+oQcDQ3QqnZncX5HDfrSNqnTkVv7zB8Am+zuCsZR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iFPdqD7r; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6e46e07ff07so2234161b3a.3;
-        Wed, 21 Feb 2024 09:24:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1708536245; x=1709141045; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OsPQKiy0Sm1aIRngHvDF4ALP8VICeSJz60rKu9HhQtM=;
-        b=iFPdqD7rJlhrdq1rZ2iIIM5fne7PalZ2RGwItbpXO49N3kwHAKkWz6svs94iRLkwMy
-         2nezhgz+L4XY+OCuLARTO1g991lMf5PPy3pkWHs83O/IIgaXYMwNETn6fJx+6VXo9l2H
-         Pp5vvf2c/wWbCDqAbHjWkaDgTswvWcrlbsV6J6DvIprIAuX8LVIzmW+F3tKKfjO7Vu3i
-         eSUPXtM5ixQV1m890sTJa9Li4x9G0auLdYzMeg5mB5n/foBSgzf3hj79Y8hFTM6qCrES
-         Snt6MqjXPM1xKBu2sKu8NNCUBw7urrnJqy3t66xcxerT6+XsxFCifYVrBVWWrMI2Nq8h
-         DNTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708536245; x=1709141045;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OsPQKiy0Sm1aIRngHvDF4ALP8VICeSJz60rKu9HhQtM=;
-        b=aonDHotImSBWkv6MystKNGAVJjK1/99Zu/XJmxSqBtWLy1TLOrpTPHxM3Nnty+knja
-         0lmHJZHZ2T3+QQWgWZoA62q3Abz27zmyIhmC5mWCB78fOwDToHOZ2Oi1TSElSX/zOSyc
-         k48G60oqCxb1RTbsIsFuFA2lAx2To7mnp7I4iK3s4V7mrdJdOlQWZln5r3OwM+vNoFtq
-         Y9zpov0T4S4eJZrfmBLlc2NZdMbUVgAQ7LjOtjqif2CEI92w+JkDkkuoPwXbOxX/vz/E
-         9EJnt1vav+Orj0VbE3tYtGJDt7epitprVvbfHKNn9fIQrmj3Fzqzvu6j7SVXgTxzzxmJ
-         37YA==
-X-Forwarded-Encrypted: i=1; AJvYcCXqOyPnp/b2kx3yexoNxY1SCZGW0hal5rjuI4eopNUlDZhoZ/f0n01bGpv+Z2s1XLlC4yH5FZt7KzezWk3oR4i76V4HACX9zubUuZE79JMnN38gI7kyxohqubAmm5VxgGGsOUwqNIOK1CRl9pHbhGer8bZh0K2vby6NN14kfCAET2Retnl+f4VdOswFIXW9GOfXqwT+Rtm7TUn4ZpVeOI83T5wd
-X-Gm-Message-State: AOJu0YxutujlJBX/VerlDNOvD3kFmvya9bUZgiu1xYM+T52g6kYiHWEA
-	LRWHRrWNw9fKbxo1jRgGy3U3YkdKlef4nRhZxiQuA06yO9xwZcRoqrqtylK5A4JsMQ==
-X-Google-Smtp-Source: AGHT+IE2pFiY338XU8TevuAvOfaaljl4D74mPTJNZR7osicnvccdCwPz3FojZy2vOUYswhqDgFHi5g==
-X-Received: by 2002:a05:6a00:a88:b0:6e0:f3f4:8da9 with SMTP id b8-20020a056a000a8800b006e0f3f48da9mr24499791pfl.4.1708536245357;
-        Wed, 21 Feb 2024 09:24:05 -0800 (PST)
-Received: from localhost.localdomain ([2406:3003:2000:500f:a246:8a16:bee7:140f])
-        by smtp.gmail.com with ESMTPSA id fn15-20020a056a002fcf00b006e324e33ab8sm8640356pfb.218.2024.02.21.09.24.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Feb 2024 09:24:05 -0800 (PST)
-From: Lucas Lee Jing Yi <lucasleeeeeeeee@gmail.com>
-To: oleksandr@natalenko.name
-Cc: Perry.Yuan@amd.com,
-	Xiaojian.Du@amd.com,
-	alexander.deucher@amd.com,
-	bp@alien8.de,
-	deepak.sharma@amd.com,
-	li.meng@amd.com,
-	linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	lucasleeeeeeeee@gmail.com,
-	mario.limonciello@amd.com,
-	nathan.fontenot@amd.com,
-	rafael.j.wysocki@intel.com,
-	rafael@kernel.org,
-	ray.huang@amd.com,
-	shimmer.huang@amd.com,
-	skhan@linuxfoundation.org,
-	viresh.kumar@linaro.org,
-	x86@kernel.org
-Subject: [PATCH] [PATCH] amd_pstate: fix erroneous highest_perf value on some CPUs
-Date: Thu, 22 Feb 2024 01:19:15 +0800
-Message-ID: <20240221172404.99765-2-lucasleeeeeeeee@gmail.com>
-X-Mailer: git-send-email 2.43.2
-In-Reply-To: <20240221172404.99765-1-lucasleeeeeeeee@gmail.com>
-References: <3868832.mvXUDI8C0e@natalenko.name>
- <20240221172404.99765-1-lucasleeeeeeeee@gmail.com>
+	s=arc-20240116; t=1708537584; c=relaxed/simple;
+	bh=KkqUbvzPYYth3SxM0r3QYQIpl9bISqSyQeqsj9hxl4w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=COBzhnsmBD7XrD7GpVip1BuaHNaB/t7yF/8Viymbl6afUKBLEwfx56LEraIxYxYDbG3f5ydSpLNTZhMi5Hsrd7YW4LE3JIopCkFo2kKdhj5OVsYfGlIne2GC2XlL4DaHTCFgQN4qm0EKqEABf8T/8zniLF+iybGpWoC4p1XdPqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (1024-bit key) header.d=siemens.com header.i=alexander.sverdlin@siemens.com header.b=i5NBYVK8; arc=none smtp.client-ip=185.136.64.228
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
+Received: by mta-64-228.siemens.flowmailer.net with ESMTPSA id 20240221174617ff83f1eedd27a99406
+        for <linux-pm@vger.kernel.org>;
+        Wed, 21 Feb 2024 18:46:17 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=alexander.sverdlin@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=mKsBfKzbS6MQdlGwzOPn+j3onsmhYJkKuuKue8WTjX0=;
+ b=i5NBYVK815X3qgokYN5At6yAlMWY0QXGzxusIZKPKlHzg2DxypD4P2LqqpaIBX7C3fpxLH
+ hFVrUs50RnANhG0Hlu8Qv0OjN12Xwq+ZfVFQDVVPj9GmfhdnnSUgBeM70xA3OVkSKjg3c1dN
+ xZTG+zDgSG6uAk/TaNGLx624vbyow=;
+From: "A. Sverdlin" <alexander.sverdlin@siemens.com>
+To: linux-pm@vger.kernel.org
+Cc: Alexander Sverdlin <alexander.sverdlin@siemens.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Sebastian Reichel <sre@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH RFC] power: reset: restart-poweroff: convert to module
+Date: Wed, 21 Feb 2024 18:46:07 +0100
+Message-ID: <20240221174610.3560775-1-alexander.sverdlin@siemens.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -103,77 +56,69 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-456497:519-21489:flowmailer
 
-On a Ryzen 7840HS the highest_perf value is 196, not 166 as AMD assumed.
-This leads to the advertised max clock speed to only be 4.35ghz
-instead of 5.14ghz leading to a large degradation in performance.
+From: Alexander Sverdlin <alexander.sverdlin@siemens.com>
 
-Fix the broken assumption and revert back to the old logic for
-getting highest_perf.
+The necessity of having a fake platform device for a generic, platform
+independent functionality is not obvious.
+Some platforms requre device tree modification for this, some would require
+ACPI tables modification, while functionality may be useful even to
+end-users without required expertise. Convert the platform driver to
+a simple module.
 
-TEST:
-Geekbench 6 Before Patch:
-Single Core:	2325 (-22%)!
-Multi Core:	11335 (-10%)
-
-Geekbench 6 AFTER Patch:
-Single Core:	2635
-Multi Core:	12487
-
-Signed-off-by: Lucas Lee Jing Yi <lucasleeeeeeeee@gmail.com>
+Signed-off-by: Alexander Sverdlin <alexander.sverdlin@siemens.com>
 ---
- drivers/cpufreq/amd-pstate.c | 22 ++++++++++------------
- 1 file changed, 10 insertions(+), 12 deletions(-)
+This RFC is merely to understand if this approach would be accepted.
+Converting to "tristate" could follow or preceed this patch.
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 08e112444c27..54df68773620 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -50,7 +50,6 @@
+diff --git a/drivers/power/reset/restart-poweroff.c b/drivers/power/reset/restart-poweroff.c
+index 28f1822db1626..e1d94109f6823 100644
+--- a/drivers/power/reset/restart-poweroff.c
++++ b/drivers/power/reset/restart-poweroff.c
+@@ -20,7 +20,7 @@ static void restart_poweroff_do_poweroff(void)
+ 	machine_restart(NULL);
+ }
  
- #define AMD_PSTATE_TRANSITION_LATENCY	20000
- #define AMD_PSTATE_TRANSITION_DELAY	1000
--#define AMD_PSTATE_PREFCORE_THRESHOLD	166
+-static int restart_poweroff_probe(struct platform_device *pdev)
++static int __init restart_poweroff_init(void)
+ {
+ 	/* If a pm_power_off function has already been added, leave it alone */
+ 	if (pm_power_off != NULL) {
+@@ -33,12 +33,10 @@ static int restart_poweroff_probe(struct platform_device *pdev)
+ 	return 0;
+ }
  
- /*
-  * TODO: We need more time to fine tune processors with shared memory solution
-@@ -299,15 +298,12 @@ static int pstate_init_perf(struct amd_cpudata *cpudata)
- 				     &cap1);
- 	if (ret)
- 		return ret;
+-static int restart_poweroff_remove(struct platform_device *pdev)
++static void __exit restart_poweroff_exit(void)
+ {
+ 	if (pm_power_off == &restart_poweroff_do_poweroff)
+ 		pm_power_off = NULL;
 -
--	/* For platforms that do not support the preferred core feature, the
--	 * highest_pef may be configured with 166 or 255, to avoid max frequency
--	 * calculated wrongly. we take the AMD_CPPC_HIGHEST_PERF(cap1) value as
--	 * the default max perf.
-+
-+	/* Some CPUs have different highest_perf from others, it is safer
-+	 * to read it than to assume some erroneous value, leading to performance issues.
- 	 */
--	if (cpudata->hw_prefcore)
--		highest_perf = AMD_PSTATE_PREFCORE_THRESHOLD;
--	else
-+	highest_perf = amd_get_highest_perf();
-+	if (highest_perf > AMD_CPPC_HIGHEST_PERF(cap1))
- 		highest_perf = AMD_CPPC_HIGHEST_PERF(cap1);
+-	return 0;
+ }
  
- 	WRITE_ONCE(cpudata->highest_perf, highest_perf);
-@@ -329,9 +325,11 @@ static int cppc_init_perf(struct amd_cpudata *cpudata)
- 	if (ret)
- 		return ret;
+ static const struct of_device_id of_restart_poweroff_match[] = {
+@@ -47,15 +45,8 @@ static const struct of_device_id of_restart_poweroff_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, of_restart_poweroff_match);
  
--	if (cpudata->hw_prefcore)
--		highest_perf = AMD_PSTATE_PREFCORE_THRESHOLD;
--	else
-+	/* Some CPUs have different highest_perf from others, it is safer
-+	 * to read it than to assume some erroneous value, leading to performance issues.
-+	 */
-+	highest_perf = amd_get_highest_perf();
-+	if (highest_perf > cppc_perf.highest_perf)
- 		highest_perf = cppc_perf.highest_perf;
+-static struct platform_driver restart_poweroff_driver = {
+-	.probe = restart_poweroff_probe,
+-	.remove = restart_poweroff_remove,
+-	.driver = {
+-		.name = "poweroff-restart",
+-		.of_match_table = of_restart_poweroff_match,
+-	},
+-};
+-module_platform_driver(restart_poweroff_driver);
++module_init(restart_poweroff_init);
++module_exit(restart_poweroff_exit);
  
- 	WRITE_ONCE(cpudata->highest_perf, highest_perf);
+ MODULE_AUTHOR("Andrew Lunn <andrew@lunn.ch");
+ MODULE_DESCRIPTION("restart poweroff driver");
 -- 
-2.43.2
+2.43.0
 
 
