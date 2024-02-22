@@ -1,292 +1,274 @@
-Return-Path: <linux-pm+bounces-4246-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4247-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66AA885F8A0
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 13:50:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9837985F92A
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 14:10:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C9EF21F21FC4
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 12:50:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BBF601C20DF0
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 13:10:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C0B612E1C6;
-	Thu, 22 Feb 2024 12:50:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="LKLzS/CH"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14DDC12F5B5;
+	Thu, 22 Feb 2024 13:10:17 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vs1-f42.google.com (mail-vs1-f42.google.com [209.85.217.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A1E441C64
-	for <linux-pm@vger.kernel.org>; Thu, 22 Feb 2024 12:50:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3627C3C480;
+	Thu, 22 Feb 2024 13:10:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708606254; cv=none; b=d8LLDLP8iP/NLM6dmn6jEJQtME00Ftpfu+JUXp2OdhbKxH8hpdmCOMZpmy+lLZJFcoXQdPWX2DYz9bS9JrAxIYxPOFkklrUCjD6RTVt6g3jkUQAagyUcr2HPSw9hadeaU48Mh0MvpdUyIO8llq5qNQ4NLDm1uPy6a2SdsbSL67s=
+	t=1708607417; cv=none; b=YBknTdN2iGfOBnbZSBIA2h/0rkK7U2q/gqCQuNDFRsow2u8ieN1WwoIq395ci82J0tZjh0oia0nqnJf61EHm53Ic8zNgHQ5diXwPt0RmpoF7ZRhjhH2NC9O0IEfNASwaM+djYkvCBFS126IpJ2jGqNUwNJHTI9NLz4pD5BvzEnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708606254; c=relaxed/simple;
-	bh=D/Rv64Y5sXOy1hNvU3YRveE5JBFKjHlveZT/G/uvFqU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=s9I0NdhzuX9JkP3yUoWlpYHWPuKgyMf7HHIZ2TJk0eQl3mB7GqhUU1f+iU7xpFRPEZxGcj7OcJ9d+Z7SnA+YMg9E84c74EEl5ZL1VRj4xFqAJfxFAAr5Y1LRklpXcmNv3ru68aaswal57ECMTnEZPYXrusUrZXyFEqGnPHoCI/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=LKLzS/CH; arc=none smtp.client-ip=209.85.217.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-vs1-f42.google.com with SMTP id ada2fe7eead31-4703e4d53b6so436453137.1
-        for <linux-pm@vger.kernel.org>; Thu, 22 Feb 2024 04:50:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1708606252; x=1709211052; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W1FTSWWbKgvLwm17WUy3ABhI4j9ElVgmuDBNeAXwxPE=;
-        b=LKLzS/CHlY6j3aQfqyPsc5py+kJ8OsywTj+C1GxUa56NtwFEvXEZbAN73hjDfs1u61
-         rBd9Lm5HciyVN4GLjzgUzwv2yx8nxETNIrEgbi6MJDDaCFEdgYM4yNFAruQMLhWpbtar
-         zcGx76yKl/kZS2u3/qZinz5CsdOtwdvaAWSWpkn+2hfbSxSBLM4jGydIsoU8SOS+6agt
-         wBgmDNTBmDDU3Oi6mwWc9zccq4gRgGtrS9+JTkElLL2qudbn3RnC0EdvjUuChsV+k/CJ
-         PwLS9dPXcbkz/E6aBRNXbw4fuWFFA8nI/15r2IDMKUrvHRM6vPOabtIr66OoNtNL+5Of
-         bjvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708606252; x=1709211052;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=W1FTSWWbKgvLwm17WUy3ABhI4j9ElVgmuDBNeAXwxPE=;
-        b=h8NjYBhNpTd/oK3c4dVTTbdLxTCsRf0MPuOlyWTOZ48RsXXtvhLlxs7b0Yor0jdFAm
-         vp4XESq0aJTtTM96fU0m2Iks+n256l8v0zt5k6zaL68wzNUTGDPzNKbs5291wah09/HN
-         zyCF0ncazG2VV425JOyn1QM7osRAWM9M+Fsc4bWBE2vdmkJS1kFRRzyQW6Fy7+qE3WL6
-         A1Cwleo5y7BLOocVOmN9YFKbEIOkF5ow3w4Fjfx0thIBpE/Wj6ZRidvrd7Ccw5nfqRL/
-         Q0o+OTPMYpL8/wws7AbYjpj/LZ+wdO3wSLW+XylEA8tlML1dE6QNkfr0JxtG8ioCLyvC
-         mkyw==
-X-Forwarded-Encrypted: i=1; AJvYcCVtsQiRuz11nclkYQp58WvHeiNdH/qN6Gfho0I1hSagvfcB7JjBdl818rXR8ERJppJo+bvrKKN136o+dbDNe+yGpwIQbNeaAho=
-X-Gm-Message-State: AOJu0YzcduNuhcSHViU7jDm1wat9s0a5iZ3ZZMs/FQ1rcjuDrbnj+a2V
-	m6qEkFvo19yi5AsrAWya/kXRhN1myL8ingdTuMB/AbR2Hon7GWACWJLx6EdzPeFhPb1hMXTOgiQ
-	2ShuAE6bHXdTaZm6PXPSIrR6vFmV/hZxel43vKw==
-X-Google-Smtp-Source: AGHT+IE1dv1EwDAd6TX1lQGq6n3XBsSY4vP2JhDCLl+t1UgliKtkx4suismK+MOv4dm7qGwschM/R4BLzbUnH1NzkV8=
-X-Received: by 2002:a05:6102:dc8:b0:470:4043:8f21 with SMTP id
- e8-20020a0561020dc800b0047040438f21mr1890402vst.11.1708606252028; Thu, 22 Feb
- 2024 04:50:52 -0800 (PST)
+	s=arc-20240116; t=1708607417; c=relaxed/simple;
+	bh=ZzftmtglKci0zpgxoEpyBLyNZWJSrRUbiNCxtC/QWAg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=IDcD8uLCI/SEcOdu3D/eq9qxb7YGiJ+2dHTEl4Ybk5dc8QW74ysM+lYKSEm+T0/x2Tvko311PeVB9xBGSetmhQvddXnP3T+vcVlhzZPGO0jpAmNX9CdUATObTjEFUZesTawAcczCl3lLULe/5icrjs4nSweBgrK9LO1Uch4HNjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.4.0)
+ id 7883e718e97da4f2; Thu, 22 Feb 2024 14:10:09 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 3DE6466A2D4;
+	Thu, 22 Feb 2024 14:10:09 +0100 (CET)
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
+ LKML <linux-kernel@vger.kernel.org>, Linux ACPI <linux-acpi@vger.kernel.org>,
+ Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>
+Subject:
+ [PATCH v2.1 1/6] thermal: core: Store zone trips table in struct
+ thermal_zone_device
+Date: Thu, 22 Feb 2024 14:10:09 +0100
+Message-ID: <12405371.O9o76ZdvQC@kreacher>
+In-Reply-To: <1883976.tdWV9SEqCh@kreacher>
+References: <4551531.LvFx2qVVIh@kreacher> <1883976.tdWV9SEqCh@kreacher>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240216203215.40870-1-brgl@bgdev.pl> <CAA8EJppt4-L1RyDeG=1SbbzkTDhLkGcmAbZQeY0S6wGnBbFbvw@mail.gmail.com>
- <e4cddd9f-9d76-43b7-9091-413f923d27f2@linaro.org> <CAA8EJpp6+2w65o2Bfcr44tE_ircMoON6hvGgyWfvFuh3HamoSQ@mail.gmail.com>
- <4d2a6f16-bb48-4d4e-b8fd-7e4b14563ffa@linaro.org> <CAA8EJpq=iyOfYzNATRbpqfBaYSdJV1Ao5t2ewLK+wY+vEaFYAQ@mail.gmail.com>
- <CAMRc=Mfnpusf+mb-CB5S8_p7QwVW6owekC5KcQF0qrR=iOQ=oA@mail.gmail.com>
- <CAA8EJppY7VTrDz3-FMZh2qHoU+JSGUjCVEi5x=OZgNVxQLm3eQ@mail.gmail.com>
- <b9a31374-8ea9-407e-9ec3-008a95e2b18b@linaro.org> <CAA8EJppWY8c-pF75WaMadWtEuaAyCc5A1VLEq=JmB2Ngzk-zyw@mail.gmail.com>
- <CAMRc=Md6SoXukoGb4bW-CSYgjpO4RL+0Uu3tYrZzgSgVtFH6Sw@mail.gmail.com>
- <CAA8EJprUM6=ZqTwWLB8rW8WRDqwncafa-szSsTvPQCOOSXUn_w@mail.gmail.com>
- <CAMRc=Metemd=24t0RJw-O9Z0-cg4mESouOfvMVLs_rJDCwRBPQ@mail.gmail.com> <CAA8EJprJTj7o0ATrQbF_38tW+kLspF1nBySg+_y_RWmadVnV9A@mail.gmail.com>
-In-Reply-To: <CAA8EJprJTj7o0ATrQbF_38tW+kLspF1nBySg+_y_RWmadVnV9A@mail.gmail.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Thu, 22 Feb 2024 13:50:40 +0100
-Message-ID: <CAMRc=MfkQuaJ3FnVwbVKQRQEgmJKbZh7SJoK3Kbmb5ebzE2rKA@mail.gmail.com>
-Subject: Re: [PATCH v5 00/18] power: sequencing: implement the subsystem and
- add first users
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Rob Herring <robh@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>
-Cc: neil.armstrong@linaro.org, Marcel Holtmann <marcel@holtmann.org>, 
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, "David S . Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Kalle Valo <kvalo@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konrad.dybcio@linaro.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Saravana Kannan <saravanak@google.com>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Arnd Bergmann <arnd@arndb.de>, Marek Szyprowski <m.szyprowski@samsung.com>, Alex Elder <elder@linaro.org>, 
-	Srini Kandagatla <srinivas.kandagatla@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Abel Vesa <abel.vesa@linaro.org>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Lukas Wunner <lukas@wunner.de>, linux-bluetooth@vger.kernel.org, 
-	netdev@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvledrfeeggdegjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopedugedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghp
+ thhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=14 Fuz1=14 Fuz2=14
 
-On Thu, Feb 22, 2024 at 1:47=E2=80=AFPM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On Thu, 22 Feb 2024 at 14:27, Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> >
-> > On Thu, Feb 22, 2024 at 12:27=E2=80=AFPM Dmitry Baryshkov
-> > <dmitry.baryshkov@linaro.org> wrote:
-> > >
-> > > On Thu, 22 Feb 2024 at 13:00, Bartosz Golaszewski <brgl@bgdev.pl> wro=
-te:
-> > > >
-> > > > On Mon, Feb 19, 2024 at 11:21=E2=80=AFPM Dmitry Baryshkov
-> > > > <dmitry.baryshkov@linaro.org> wrote:
-> > > > >
-> > > > > On Mon, 19 Feb 2024 at 19:18, <neil.armstrong@linaro.org> wrote:
-> > > > > >
-> > > > > > On 19/02/2024 13:33, Dmitry Baryshkov wrote:
-> > > > > > > On Mon, 19 Feb 2024 at 14:23, Bartosz Golaszewski <brgl@bgdev=
-.pl> wrote:
-> > > > > > >>
-> > > > > > >> On Mon, Feb 19, 2024 at 11:26=E2=80=AFAM Dmitry Baryshkov
-> > > > > > >> <dmitry.baryshkov@linaro.org> wrote:
-> > > > > > >>>
-> > > > > > >>
-> > > > > > >> [snip]
-> > > > > > >>
-> > > > > > >>>>>>>>
-> > > > > > >>>>>>>> For WCN7850 we hide the existence of the PMU as modeli=
-ng it is simply not
-> > > > > > >>>>>>>> necessary. The BT and WLAN devices on the device-tree =
-are represented as
-> > > > > > >>>>>>>> consuming the inputs (relevant to the functionality of=
- each) of the PMU
-> > > > > > >>>>>>>> directly.
-> > > > > > >>>>>>>
-> > > > > > >>>>>>> We are describing the hardware. From the hardware point=
- of view, there
-> > > > > > >>>>>>> is a PMU. I think at some point we would really like to=
- describe all
-> > > > > > >>>>>>> Qualcomm/Atheros WiFI+BT units using this PMU approach,=
- including the
-> > > > > > >>>>>>> older ath10k units present on RB3 (WCN3990) and db820c =
-(QCA6174).
-> > > > > > >>>>>>
-> > > > > > >>>>>> While I agree with older WiFi+BT units, I don't think it=
-'s needed for
-> > > > > > >>>>>> WCN7850 since BT+WiFi are now designed to be fully indep=
-endent and PMU is
-> > > > > > >>>>>> transparent.
-> > > > > > >>>>>
-> > > > > > >>>>> I don't see any significant difference between WCN6750/WC=
-N6855 and
-> > > > > > >>>>> WCN7850 from the PMU / power up point of view. Could you =
-please point
-> > > > > > >>>>> me to the difference?
-> > > > > > >>>>>
-> > > > > > >>>>
-> > > > > > >>>> The WCN7850 datasheet clearly states there's not contraint=
- on the WLAN_EN
-> > > > > > >>>> and BT_EN ordering and the only requirement is to have all=
- input regulators
-> > > > > > >>>> up before pulling up WLAN_EN and/or BT_EN.
-> > > > > > >>>>
-> > > > > > >>>> This makes the PMU transparent and BT and WLAN can be desc=
-ribed as independent.
-> > > > > > >>>
-> > > > > > >>>  From the hardware perspective, there is a PMU. It has seve=
-ral LDOs. So
-> > > > > > >>> the device tree should have the same style as the previous
-> > > > > > >>> generations.
-> > > > > > >>>
-> > > > > > >>
-> > > > > > >> My thinking was this: yes, there is a PMU but describing it =
-has no
-> > > > > > >> benefit (unlike QCA6x90). If we do describe, then we'll end =
-up having
-> > > > > > >> to use pwrseq here despite it not being needed because now w=
-e won't be
-> > > > > > >> able to just get regulators from WLAN/BT drivers directly.
-> > > > > > >>
-> > > > > > >> So I also vote for keeping it this way. Let's go into the pa=
-ckage
-> > > > > > >> detail only if it's required.
-> > > > > > >
-> > > > > > > The WiFi / BT parts are not powered up by the board regulator=
-s. They
-> > > > > > > are powered up by the PSU. So we are not describing it in the=
- accurate
-> > > > > > > way.
-> > > > > >
-> > > > > > I disagree, the WCN7850 can also be used as a discrete PCIe M.2=
- card, and in
-> > > > > > this situation the PCIe part is powered with the M.2 slot and t=
-he BT side
-> > > > > > is powered separately as we currently do it now.
-> > > > >
-> > > > > QCA6390 can also be used as a discrete M.2 card.
-> > > > >
-> > > > > > So yes there's a PMU, but it's not an always visible hardware p=
-art, from the
-> > > > > > SoC PoV, only the separate PCIe and BT subsystems are visible/c=
-ontrollable/powerable.
-> > > > >
-> > > > > From the hardware point:
-> > > > > - There is a PMU
-> > > > > - The PMU is connected to the board supplies
-> > > > > - Both WiFi and BT parts are connected to the PMU
-> > > > > - The BT_EN / WLAN_EN pins are not connected to the PMU
-> > > > >
-> > > > > So, not representing the PMU in the device tree is a simplificati=
-on.
-> > > > >
-> > > >
-> > > > What about the existing WLAN and BT users of similar packages? We
-> > > > would have to deprecate a lot of existing bindings. I don't think i=
-t's
-> > > > worth it.
-> > >
-> > > We have bindings that are not reflecting the hardware. So yes, we
-> > > should gradually update them once the powerseq is merged.
-> > >
-> > > > The WCN7850 is already described in bindings as consuming what is P=
-MUs
-> > > > inputs and not its outputs.
-> > >
-> > > So do WCN6855 and QCA6391 BlueTooth parts.
-> > >
-> >
-> > That is not true for the latter, this series is adding regulators for i=
-t.
->
-> But the bindings exist already, so you still have to extend it,
-> deprecating regulator-less bindings.
->
-> Bartosz, I really don't understand what is the issue there. There is a
-> PMU. As such it should be represented in the DT and it can be handled
-> by the same driver as you are adding for QCA6390.
->
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-The issue is that we'll pull in the pwrseq subsystem for WCN7850 which
-clearly does not require it in practice.
+The current code expects thermal zone creators to pass a pointer to a
+writable trips table to thermal_zone_device_register_with_trips() and
+that trips table is then used by the thermal core going forward.
 
-I'd like to hear Krzysztof, Conor or Rob chime in here and make the
-decision on how to proceed.
+Consequently, the callers of thermal_zone_device_register_with_trips()
+are required to hold on to the trips table passed to it until the given
+thermal zone is unregistered, at which point the trips table can be
+freed, but at the same time they are not expected to access that table
+directly.  This is both error prone and confusing.
 
-Bart
+To address it, turn the trips table pointer in struct thermal_zone_device
+into a flex array (counted by its num_trips field), allocate it during
+thermal zone device allocation and copy the contents of the trips table
+supplied by the zone creator (which can be const now) into it, which
+will allow the callers of thermal_zone_device_register_with_trips() to
+drop their trip tables right after the zone registration.
 
-> >
-> > Bart
-> >
-> > > >
-> > > > Bart
-> > > >
-> > > > > >
-> > > > > > Neil
-> > > > > >
-> > > > > > >
-> > > > > > > Moreover, I think we definitely want to move BT driver to use=
- only the
-> > > > > > > pwrseq power up method. Doing it in the other way results in =
-the code
-> > > > > > > duplication and possible issues because of the regulator / pw=
-rseq
-> > > > > > > taking different code paths.
-> > > > >
-> > > > > --
-> > > > > With best wishes
-> > > > > Dmitry
-> > >
-> > >
-> > >
-> > > --
-> > > With best wishes
-> > > Dmitry
->
->
->
-> --
-> With best wishes
-> Dmitry
+This requires the imx thermal driver to be adjusted to store the new
+temperature in its internal trips table in imx_set_trip_temp(), because
+it will be separate from the core's trips table now and it has to be
+explicitly kept in sync with the latter.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+
+v2 -> v2.1:
+   * Remove the trips table freeing from thermal_of (Daniel).
+   * Add R-by from Daniel.
+
+v1 -> v2:
+   * Rebase.
+   * Drop all of the redundant trips[] checks against NULL.
+   * Add imx change to still allow it to use its local trips table.
+   * Add R-by from Stanislaw (which is still applicable IMV).
+
+---
+ drivers/thermal/imx_thermal.c  |    1 +
+ drivers/thermal/thermal_core.c |   17 ++++++++---------
+ drivers/thermal/thermal_of.c   |    2 --
+ drivers/thermal/thermal_trip.c |    2 +-
+ include/linux/thermal.h        |   10 +++++-----
+ 5 files changed, 15 insertions(+), 17 deletions(-)
+
+Index: linux-pm/include/linux/thermal.h
+===================================================================
+--- linux-pm.orig/include/linux/thermal.h
++++ linux-pm/include/linux/thermal.h
+@@ -137,7 +137,6 @@ struct thermal_cooling_device {
+  * @trip_hyst_attrs:	attributes for trip points for sysfs: trip hysteresis
+  * @mode:		current mode of this thermal zone
+  * @devdata:	private pointer for device private data
+- * @trips:	an array of struct thermal_trip
+  * @num_trips:	number of trip points the thermal zone supports
+  * @passive_delay_jiffies: number of jiffies to wait between polls when
+  *			performing passive cooling.
+@@ -167,6 +166,7 @@ struct thermal_cooling_device {
+  * @poll_queue:	delayed work for polling
+  * @notify_event: Last notification event
+  * @suspended: thermal zone suspend indicator
++ * @trips:	array of struct thermal_trip objects
+  */
+ struct thermal_zone_device {
+ 	int id;
+@@ -179,7 +179,6 @@ struct thermal_zone_device {
+ 	struct thermal_attr *trip_hyst_attrs;
+ 	enum thermal_device_mode mode;
+ 	void *devdata;
+-	struct thermal_trip *trips;
+ 	int num_trips;
+ 	unsigned long passive_delay_jiffies;
+ 	unsigned long polling_delay_jiffies;
+@@ -200,10 +199,11 @@ struct thermal_zone_device {
+ 	struct list_head node;
+ 	struct delayed_work poll_queue;
+ 	enum thermal_notify_event notify_event;
++	bool suspended;
+ #ifdef CONFIG_THERMAL_DEBUGFS
+ 	struct thermal_debugfs *debugfs;
+ #endif
+-	bool suspended;
++	struct thermal_trip trips[] __counted_by(num_trips);
+ };
+ 
+ /**
+@@ -322,7 +322,7 @@ int thermal_zone_get_crit_temp(struct th
+ #ifdef CONFIG_THERMAL
+ struct thermal_zone_device *thermal_zone_device_register_with_trips(
+ 					const char *type,
+-					struct thermal_trip *trips,
++					const struct thermal_trip *trips,
+ 					int num_trips, void *devdata,
+ 					struct thermal_zone_device_ops *ops,
+ 					const struct thermal_zone_params *tzp,
+@@ -381,7 +381,7 @@ void thermal_zone_device_critical(struct
+ #else
+ static inline struct thermal_zone_device *thermal_zone_device_register_with_trips(
+ 					const char *type,
+-					struct thermal_trip *trips,
++					const struct thermal_trip *trips,
+ 					int num_trips, void *devdata,
+ 					struct thermal_zone_device_ops *ops,
+ 					const struct thermal_zone_params *tzp,
+Index: linux-pm/drivers/thermal/thermal_core.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_core.c
++++ linux-pm/drivers/thermal/thermal_core.c
+@@ -1227,9 +1227,6 @@ int thermal_zone_get_crit_temp(struct th
+ 	if (tz->ops->get_crit_temp)
+ 		return tz->ops->get_crit_temp(tz, temp);
+ 
+-	if (!tz->trips)
+-		return -EINVAL;
+-
+ 	mutex_lock(&tz->lock);
+ 
+ 	for (i = 0; i < tz->num_trips; i++) {
+@@ -1271,10 +1268,12 @@ EXPORT_SYMBOL_GPL(thermal_zone_get_crit_
+  * IS_ERR*() helpers.
+  */
+ struct thermal_zone_device *
+-thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *trips, int num_trips,
+-					void *devdata, struct thermal_zone_device_ops *ops,
+-					const struct thermal_zone_params *tzp, int passive_delay,
+-					int polling_delay)
++thermal_zone_device_register_with_trips(const char *type,
++					const struct thermal_trip *trips,
++					int num_trips, void *devdata,
++					struct thermal_zone_device_ops *ops,
++					const struct thermal_zone_params *tzp,
++					int passive_delay, int polling_delay)
+ {
+ 	struct thermal_zone_device *tz;
+ 	int id;
+@@ -1308,7 +1307,7 @@ thermal_zone_device_register_with_trips(
+ 	if (!thermal_class)
+ 		return ERR_PTR(-ENODEV);
+ 
+-	tz = kzalloc(sizeof(*tz), GFP_KERNEL);
++	tz = kzalloc(struct_size(tz, trips, num_trips), GFP_KERNEL);
+ 	if (!tz)
+ 		return ERR_PTR(-ENOMEM);
+ 
+@@ -1340,7 +1339,7 @@ thermal_zone_device_register_with_trips(
+ 	tz->ops = ops;
+ 	tz->device.class = thermal_class;
+ 	tz->devdata = devdata;
+-	tz->trips = trips;
++	memcpy(tz->trips, trips, num_trips * sizeof(*trips));
+ 	tz->num_trips = num_trips;
+ 
+ 	thermal_set_delay_jiffies(&tz->passive_delay_jiffies, passive_delay);
+Index: linux-pm/drivers/thermal/imx_thermal.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/imx_thermal.c
++++ linux-pm/drivers/thermal/imx_thermal.c
+@@ -355,6 +355,7 @@ static int imx_set_trip_temp(struct ther
+ 		return -EINVAL;
+ 
+ 	imx_set_alarm_temp(data, temp);
++	trips[IMX_TRIP_PASSIVE].temperature = temp;
+ 
+ 	pm_runtime_put(data->dev);
+ 
+Index: linux-pm/drivers/thermal/thermal_trip.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_trip.c
++++ linux-pm/drivers/thermal/thermal_trip.c
+@@ -122,7 +122,7 @@ void __thermal_zone_set_trips(struct the
+ int __thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
+ 			    struct thermal_trip *trip)
+ {
+-	if (!tz || !tz->trips || trip_id < 0 || trip_id >= tz->num_trips || !trip)
++	if (!tz || trip_id < 0 || trip_id >= tz->num_trips || !trip)
+ 		return -EINVAL;
+ 
+ 	*trip = tz->trips[trip_id];
+Index: linux-pm/drivers/thermal/thermal_of.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_of.c
++++ linux-pm/drivers/thermal/thermal_of.c
+@@ -440,12 +440,10 @@ static int thermal_of_unbind(struct ther
+  */
+ static void thermal_of_zone_unregister(struct thermal_zone_device *tz)
+ {
+-	struct thermal_trip *trips = tz->trips;
+ 	struct thermal_zone_device_ops *ops = tz->ops;
+ 
+ 	thermal_zone_device_disable(tz);
+ 	thermal_zone_device_unregister(tz);
+-	kfree(trips);
+ 	kfree(ops);
+ }
+ 
+
+
+
 
