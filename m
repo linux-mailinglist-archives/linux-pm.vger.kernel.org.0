@@ -1,87 +1,144 @@
-Return-Path: <linux-pm+bounces-4300-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4301-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B9F8860273
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 20:17:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBD19860295
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 20:23:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EBF21286076
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 19:17:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 098D71C23FEB
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 19:23:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCA3A548E4;
-	Thu, 22 Feb 2024 19:17:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1A9A548EE;
+	Thu, 22 Feb 2024 19:23:04 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A2C014B806;
-	Thu, 22 Feb 2024 19:17:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1054B548E4;
+	Thu, 22 Feb 2024 19:23:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708629448; cv=none; b=Q9mkoefjZYLbgaCkbcuSsCYuIYlqTUlWLV3CdfH+I4HOyrEQLlOqnU5e5oDJpHt0bsKYnjmNw72M4iuwkC8IZiaQ0QjAHoZHRUEGqFFINLXu5FhUb99SEan4Pd5Bs+adEOdaThgQQQzHCgMStC+CqMUmR/Ti/TdNcVJy5tO6xmg=
+	t=1708629784; cv=none; b=jBEZRf8KCtrbg49aMRr9C04ug+mtRxe2cBW5DeOldGNKQLHU+DfEGtKeM2QCeC6zZSQWleBmdDoJ1bOmBiUU5fXM1Myaxw90L2II0o3D5hbFCYkSNvoE+wWW2Ivnd6s948NVetK3wwOOuH7Ary8sHYYh+9Ts3bqUEYO5aIa5nbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708629448; c=relaxed/simple;
-	bh=+FiBqcXwDF9fGxhHJbMzAYdObJ5OOnA70ZVAeJXyLA8=;
+	s=arc-20240116; t=1708629784; c=relaxed/simple;
+	bh=mkKKAfHtBpwBbPprScKSODOOY3UF1wXLfYJ4H8sAKXg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=i8EQImM4/+CD6+AJK/m4KDjnKnyMiG4vFYnruKab8+iWTW3vHzTMIrWzIcAHJ0GvzxjzCHzZBRA5N8RKOZ2s/VgMzkBUqoaAtvmw9146cWD1UxrGZpfRzxl9uk5mIbmD4DzDQLIkIBzSaZ4uwR4UDzuxHKf+yXTt8jDvr88vV2E=
+	 To:Cc:Content-Type; b=iLhvzCGybDGnmXc+YEDIJ3txR7C4pbuVdnVlrOpgYzA3kPasddijr3wff+C/b6HzLf+aqQB6PL2kSEBxmQTCHN+75b+N2bHyRgRYaWXqCf/rY9N0UavhmIG803tZoYaPAeC51Y3jy9g/203Mmv2lye9qdsKW8Ar0eAfW1gw+/kA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-59fc31c57easo31928eaf.1;
-        Thu, 22 Feb 2024 11:17:27 -0800 (PST)
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-59fcf83f92fso18903eaf.1;
+        Thu, 22 Feb 2024 11:23:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708629446; x=1709234246;
+        d=1e100.net; s=20230601; t=1708629782; x=1709234582;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=e+MI/2w5WnJcHnloELfo/rW+YJoUZtVrxFZeibGDU28=;
-        b=W8FzwdbFC4l4WyyoUz7nW9NFw+1YidVpNOMaayvdbyQWmerSiFfZ6TfKd+Jg1I4DH6
-         UUTtiEgeyYNdYNVeWd7lG8Y3K+sGglgDme+vbvzUB0q8YL5cmqhl2FsLkYCZTX1TXA2e
-         n54+NESvRbmY7VPPW5Po+FkKvr8hAYyJOiyQCXtlLFMBUvuIKgrmgsSzaxSehEPLGLNj
-         F/XDxcdxykm943JqcFHHrXotwtnZnbyacPBisL2c048nx8AAdpLqrm2ZpOGc1N7eq0D6
-         x/jn4PJnQawJ++841whB4mgyqU0of7PZ1oBhhWBdVs6pUV7Vv6hOw44NLsrcgB51SOSk
-         eFfA==
-X-Forwarded-Encrypted: i=1; AJvYcCUMv2kP40toRnU8cIUaBbQYIELjcC8KOcRJZ0W1N4WUODxT2sn5jmRdQ9/424vStnBYHBzJB9nVFiEe08ouZxgQqwa3cekHxgRGvIyYgMs3uJzvfByALd13jgysfv2Ka4DwXqwbYB8=
-X-Gm-Message-State: AOJu0YztV9npwhQXrpmM7ATlCTqeqN57Ul2uhn4+F1PqISdduqNs1b0E
-	DUHjiFaZa31mlB26HflzDhMlFwQWK3E3HUmTRlnjvKLoZWVHRESCnsqE8JcEIUC+WseD48sQt8p
-	7zDFxyVEqVOdZaRxfBZfb+dLvfoE=
-X-Google-Smtp-Source: AGHT+IFETqTxyymobg4G3kxWlo3QRK4ETgfxmYBKmgd4i8xiITql8RhI3Th+w49RAhhZK5Bf6qmRVS0YCu7d31z0FA0=
-X-Received: by 2002:a05:6820:134d:b0:59f:881f:9318 with SMTP id
- b13-20020a056820134d00b0059f881f9318mr27299418oow.0.1708629446618; Thu, 22
- Feb 2024 11:17:26 -0800 (PST)
+        bh=e28EWGdFZkXU/vK65K9Hm+51B7EZKRDZ9oBW2jH53Mg=;
+        b=Av6SFYnJRBfPmKhD4Ayi+YsT5O3JSrZjs/SowQvu66wc8BSDPK3juxW9o9e7uPmlnU
+         +bmXTCBLn1uVR9q5ql0hOgWNNQ2lIAtql0LKrvWBxXusiLDoLAi73FtH7NjEcwvwdUsr
+         PyPZ7yS0/kSF3NGHUKku6UZu8THp3rQqeSNAavnx1H8gzrF3/Tw4xour8X05cKSqQyLW
+         uE4u+msJLTQJO44PeHlCbqksrkycPh+WrECUN18Gznv3jPJuRAa45l88bOhzgtIVyvgA
+         miZm0o2Utl7K2sAgefGLkX4r/1/zenU+BRBv5lpVjMWhClDzhB0aA9v71FrRuyQbCPQs
+         Onww==
+X-Forwarded-Encrypted: i=1; AJvYcCVA7xFflWvVx9DrXfYdmlkzMXOU4HsvYEEm9V58Y/E+bQJZ6bTUgmEymEh5z9dO/sZVQIL7fGACPgaeFtbURjO4/yyKNX80CfJWwEytYFu2YUPBn6uSIrUfM9pV24x4OMvfAAnsYal52ELY6uUmcfwttUrctkZHLP4C7GZZLh4=
+X-Gm-Message-State: AOJu0YyLHaz3xLcbX/OwxcECf5dMvAHFztP1jQ2H8GPFe2Xa5XSIN4Iw
+	FH3WrASz6ugKFAMlTlGu5ycf6pzrFY+Mi0O5IaMAPa78CmsX0Ood4cX6dYd8DRZMLMCZskPsbB5
+	lkdBudNTfwTOJkyjaYCDo7L0cVqD+Vn2f
+X-Google-Smtp-Source: AGHT+IEfvmDzLHmh4lI0wnu+VW3GpToyWGUFp65c2Z+kPgYDwRnXt/CiRpdE76fuL7CbBioI5YEsYzV+bPDuwKYH3P0=
+X-Received: by 2002:a4a:e89a:0:b0:5a0:168b:d91 with SMTP id
+ g26-20020a4ae89a000000b005a0168b0d91mr5096155ooe.1.1708629782093; Thu, 22 Feb
+ 2024 11:23:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240220022607.485129-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20240220022607.485129-1-srinivas.pandruvada@linux.intel.com>
+References: <20240222083515.1065025-1-quic_kshivnan@quicinc.com>
+In-Reply-To: <20240222083515.1065025-1-quic_kshivnan@quicinc.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 22 Feb 2024 20:17:15 +0100
-Message-ID: <CAJZ5v0gC9fvUH89U7L4L_mKzhAAWF0Xi4So9iHwxVoea7NdYuw@mail.gmail.com>
-Subject: Re: [PATCH 0/2] cpufreq: intel_pstate: Update Meteor Lake EPPs
-To: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: rafael@kernel.org, viresh.kumar@linaro.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+Date: Thu, 22 Feb 2024 20:22:51 +0100
+Message-ID: <CAJZ5v0gDeCbQ5rGOfCdpsVUpAsq3L=9DoLFChHc5=Zdq9Jc_7g@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: Limit resolving a frequency to policy min/max
+To: Shivnandan Kumar <quic_kshivnan@quicinc.com>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, kernel@quicinc.com, quic_pkondeti@quicinc.com, 
+	quic_namajain@quicinc.com, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 20, 2024 at 3:26=E2=80=AFAM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
+On Thu, Feb 22, 2024 at 9:35=E2=80=AFAM Shivnandan Kumar
+<quic_kshivnan@quicinc.com> wrote:
 >
-> Add feature to update all EPPs and update Meteor Lake EPP values.
+> Resolving a frequency to an efficient one should not transgress policy->m=
+ax
+> (which can be set for thermal reason) and policy->min. Currently there is
+> possibility where scaling_cur_freq can exceed scaling_max_freq when
+> scaling_max_freq is inefficient frequency. Add additional check to ensure
+> that resolving a frequency will respect policy->min/max.
 >
-> Srinivas Pandruvada (2):
->   cpufreq: intel_pstate: Allow model specific EPPs
->   cpufreq: intel_pstate: Update default EPPs for Meteor Lake
+> Fixes: 1f39fa0dccff ("cpufreq: Introducing CPUFREQ_RELATION_E")
+> Signed-off-by: Shivnandan Kumar <quic_kshivnan@quicinc.com>
+> ---
+>  include/linux/cpufreq.h | 18 +++++++++++++++++-
+>  1 file changed, 17 insertions(+), 1 deletion(-)
 >
->  drivers/cpufreq/intel_pstate.c | 43 +++++++++++++++++++++++++++++-----
->  1 file changed, 37 insertions(+), 6 deletions(-)
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index afda5f24d3dd..42d98b576a36 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -1021,6 +1021,19 @@ static inline int cpufreq_table_find_index_c(struc=
+t cpufreq_policy *policy,
+>                                                    efficiencies);
+>  }
 >
+> +static inline bool cpufreq_table_index_is_in_limits(struct cpufreq_polic=
+y *policy,
+> +                                                   int idx)
+
+This is not really about the index only, but about the frequency at
+that index too, so I'd call the function differently.
+
+> +{
+> +       unsigned int freq;
+> +
+> +       if (idx < 0)
+> +               return false;
+> +
+> +       freq =3D policy->freq_table[idx].frequency;
+> +
+> +       return (freq =3D=3D clamp_val(freq, policy->min, policy->max));
+
+Redundant outer parens.
+
+> +}
+> +
+>  static inline int cpufreq_frequency_table_target(struct cpufreq_policy *=
+policy,
+>                                                  unsigned int target_freq=
+,
+>                                                  unsigned int relation)
+> @@ -1054,7 +1067,10 @@ static inline int cpufreq_frequency_table_target(s=
+truct cpufreq_policy *policy,
+>                 return 0;
+>         }
+>
+> -       if (idx < 0 && efficiencies) {
+> +       /*
+> +        * Limit frequency index to honor policy->min/max
+> +        */
+
+This comment need not be multi-line.
+
+> +       if (!cpufreq_table_index_is_in_limits(policy, idx) && efficiencie=
+s) {
+>                 efficiencies =3D false;
+>                 goto retry;
+>         }
 > --
 
-Both patches in the series applied as 6.9 material, thanks!
+Thanks!
 
