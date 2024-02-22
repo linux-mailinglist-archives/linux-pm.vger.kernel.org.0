@@ -1,246 +1,318 @@
-Return-Path: <linux-pm+bounces-4240-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4241-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0318F85F6BB
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 12:27:20 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 848B285F794
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 12:56:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6EE631F22A89
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 11:27:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DE11EB2494F
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 11:56:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAECB4438F;
-	Thu, 22 Feb 2024 11:27:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E9484597F;
+	Thu, 22 Feb 2024 11:56:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zaq/4x0y"
+	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="wUR2NHZn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C00F741211
-	for <linux-pm@vger.kernel.org>; Thu, 22 Feb 2024 11:27:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D40F541775
+	for <linux-pm@vger.kernel.org>; Thu, 22 Feb 2024 11:56:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708601233; cv=none; b=s1L3jTklC2Cwf7UutS/iIqbJHRD5dQSfFZW/8rQ1z5t1+L0HMazbcJ+sHbBfWT35f4CmDDakipiYIu07f8IAB+4J6krMQj55++ZtQgK5FoYYvN+JhZeTByZaIpidxe34Z7z2Vk7PlVVHExLA0O+sYWJIijZOcd3d/OcnFsFvYAc=
+	t=1708602964; cv=none; b=Ly5S0IQcpJSiC5gIG5R+5/M3fJjcObYXQ6JWXyDFqq66LJJdbD8uYOsB+l/1aP4ig8pa2dbC6+IRNmR3uumOUEF9FDb19UmAe2VmeRZ+mTJ9umS9/aiyGJ7r++PclCtcgZNIlirnnaehnKpRR5O6ZlMZPnNkADuUWRn+ucV/1jQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708601233; c=relaxed/simple;
-	bh=+rgLuw5oSwBFP4Ow0ptZ3qnTpUGqMbW5KK1t7j5QRoQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uw0toxyEt8akAeMbEmDIUBbxFlgvkoKB+bzzq8HpAgGyM5CcsgXko93cTn8O1BCOpnY/9jiPNp37gaz5rvcKMzQXa+kHkEuy0YxE6fTUls8lwG5q4cmP9vC1W8hEf2L6euu6ZxpwCzpoK3DUSlhwVRicQtu8jfLvHOhlpTe1iA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zaq/4x0y; arc=none smtp.client-ip=209.85.219.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-dc74e33fe1bso7467148276.0
-        for <linux-pm@vger.kernel.org>; Thu, 22 Feb 2024 03:27:11 -0800 (PST)
+	s=arc-20240116; t=1708602964; c=relaxed/simple;
+	bh=MTZib+sgUdCfxTYPSm0rjTzkXr3P5gse+DQK51tCwZ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PjpZygoV2h/cNt6wY+DvNjCkaBg4b5IYl1QX3nXGfO4wrRFk7SheR3T6l1ksujeq4Y74taFamIEfZUVCiv7kSBtSqDyjV3NuqI542jF0V4ZREw0h+sLfJ/WrDJi0IXO35m6+2lqm/QA2e0ZhdEEMUQ49YXEzoQ8hpZoHIDkbhGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=wUR2NHZn; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-41241f64c6bso12427965e9.0
+        for <linux-pm@vger.kernel.org>; Thu, 22 Feb 2024 03:56:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708601231; x=1709206031; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R4xgDZb1P7EFUwoTHIn2hJ0tMWxsP/j125TvtkH/GhA=;
-        b=zaq/4x0ykWlKc5A8P5W1u0NUMpBUrOqgSSDgort8rcxCKF8F6BJjpUU9NipTLJJ/Yw
-         sN4+bQmEE9Jd2T1dpQ79bw8yCZK9uWufoIVtgOfneHwsXfZI0rZKB6uyevtxL3enTRiP
-         cZXan2Yb9KiNM/qu4zgWVlXssBsvuiYg/jbwy4wZh/iHayf7BPGAfBRcBoR7k3MHfuE0
-         Nh6gyzaff2GF8TqaaCgQ+yPoyQSpBeb3ynA+1wgSgagnxjT0LSy3ZvPo9F5kN4I8o2pa
-         IIwEuPa3ufDK+FeMnI9RSCZdpZy/iczYHYAbiZTeScFHqrtNwq8Te+yYBHwGAl/705aY
-         Dylg==
+        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1708602960; x=1709207760; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=pH9lFW9jwuISEJE0s5Q/XzAjg92dbYZszfc5ss0kQCs=;
+        b=wUR2NHZnkMub0lt2borWpnMa8DHZNWLQ8aq7MG+28u+iIRnN7+XA5qpvnY144NDDoD
+         99jNJKCxquTvaDpHXsG1Y95P3xlOv63apAPT7uDCs7y3pCU69uDv5xUX1bVwdQyCalI5
+         HRVcR0A8IZ0kpHaVLjE9Jn4uM5gRgdVzECAl/Y5cSGAoB8K2UOmxg9BU7GTk+ZejAa0m
+         n3VzTH+1n7CpMGwJMw/zI4AswURaAvP2poi+nlIiz5p2+fPgU3XfvEeQckJ5PMTHC/fa
+         jd9dAnFI0WkX8nKpux3feZ6hGmzflH3wDEg/4zCrrh0oxovs7tzKFCHlVpvYfTueNFST
+         opxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708601231; x=1709206031;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=R4xgDZb1P7EFUwoTHIn2hJ0tMWxsP/j125TvtkH/GhA=;
-        b=fsSAs6+2w9c7G1Q4vNSpygI/ZMAJE/xENWmoBWLc04EA+QXOWDPFLCxq0+kdlInO3L
-         966rzKU0dbdREElBZ8kDcndLmPxbhwmBZvIx7dkYIOgh3zWyfZ5/5szs2fRMsLZFwzvj
-         kOf2gGmXIi+Ek21JTStL8Rvg3mp1hI9jTuDGo90gTzEciwu6tMTPFi58loXmzUeQSoSs
-         4X0cx30xTKTW0pNQJIaRRBRLLSAGZvot+S8WIdZoPC//lXzOmMGtPbq8WC15K0dg57kT
-         6CGq2EwDLoNtosS+eBqqOtwf3d3yviYR9ruU7AuD2I3uZauzOiDWNNetFU5e5eTeKD6F
-         PFwA==
-X-Forwarded-Encrypted: i=1; AJvYcCUkq6lXH81EPswsceuxC8k7WKmXOFs8jBFqcp6QIxLSFmH/7RQcwMK4PI3rUP6GEoN7HeyGg9h20E4og5iesmul5YyFPIdTca0=
-X-Gm-Message-State: AOJu0YyHM4FBqCY9qnLAbit6tZ37eccpz1QYPuKl/A5zdsyb+6mKxnFk
-	6MvZMW+qUjBF1oaHBSO6L0XNqyw4T0tfaQye2v0TpEOLiFn94Pzia0ZdmpXzUhybzwc0aTKe7Dj
-	a02mZH1POJO0ziuM74TikI6XiJ9mLSQGzHqytoQ==
-X-Google-Smtp-Source: AGHT+IGAH9HKM2JNlJGtqlBg9xAVeOcNDcSSfQGB4O1issqL+64giDGxV3EK2ifXD1JwfWN2ZGYk5wlqfAYXwHW/w3g=
-X-Received: by 2002:a25:1184:0:b0:dc6:aed5:718a with SMTP id
- 126-20020a251184000000b00dc6aed5718amr1758467ybr.26.1708601230793; Thu, 22
- Feb 2024 03:27:10 -0800 (PST)
+        d=1e100.net; s=20230601; t=1708602960; x=1709207760;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pH9lFW9jwuISEJE0s5Q/XzAjg92dbYZszfc5ss0kQCs=;
+        b=iiC1ZVV7hEB5jKepi6K5NS5Xsyric1RAshPw9PpeG/Fzv28Wh3PvZZPcmelRKnSo8c
+         pH0e2XnqwBtalGndTYez8WjS4PGe4zDDpGqi8g5cHbPe78XXfzm0Q4jkg4ZhQXWxf7F1
+         jkKUNc1PcmXlmzj0sYOYvMpwo2eL5cVSSdcxHrzeR5x7267as23KTtKdBKHnuArzJ/9r
+         3tjmIGHc1XvQPqZ2O6GpvvJEzBPT6BOfl0fgS2n9fymKb3xVj463vAk5CbiTqu1Ln/2W
+         p9B9ecAOhQPXRcvS9iZRbiOVrxjtaQABwlczYciqVvsLubOv9iRSbRwYHsO2Yak3c+ee
+         2uGg==
+X-Forwarded-Encrypted: i=1; AJvYcCUyMvEnl2Fz/aMlWJb74nIMTLTCj0JovIeAq3YplWOb1UK2o4HxIDpvyL6cAXr5smvWfwOqBN3MYpuBqmKB1fkADKdkeRGiiz8=
+X-Gm-Message-State: AOJu0Yzr4x8P78RM18IKjsnd5s2RhrwzSAfl6mi8aq1gVUKTVHysM7yi
+	8uq2Qm3T6hClT/QMqi2qWqg6mMgCjzddn7mJscvGYDfj6yLf2FgUiptSbteIo00rhd9YyUkjtLV
+	K
+X-Google-Smtp-Source: AGHT+IFgKJndOp77uaoINQOnBlVIC/bKv5sQ5fttkGBD2lASIeWzNh+11TuyThxhaKVUQ+eAMq2MXg==
+X-Received: by 2002:a05:600c:45c9:b0:412:7b4d:b22a with SMTP id s9-20020a05600c45c900b004127b4db22amr1558164wmo.19.1708602959926;
+        Thu, 22 Feb 2024 03:55:59 -0800 (PST)
+Received: from airbuntu (host109-154-46-208.range109-154.btcentralplus.com. [109.154.46.208])
+        by smtp.gmail.com with ESMTPSA id x4-20020adff644000000b0033b792ed609sm20233903wrp.91.2024.02.22.03.55.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Feb 2024 03:55:59 -0800 (PST)
+Date: Thu, 22 Feb 2024 11:55:57 +0000
+From: Qais Yousef <qyousef@layalina.io>
+To: Pierre Gondois <pierre.gondois@arm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	Ingo Molnar <mingo@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Christian.Loehle@arm.com
+Subject: Re: [PATCH] cpufreq: Change default transition delay to 2ms
+Message-ID: <20240222115557.blnm4uulkxnorrl4@airbuntu>
+References: <20240205022500.2232124-1-qyousef@layalina.io>
+ <20240205074514.kiolurpounokalum@vireshk-i7>
+ <CAJZ5v0j2rA-+Jpdv6OZ_ymiqh0+RGzmJBNncKGBwuxO3PxgSKA@mail.gmail.com>
+ <ca000b2d-b552-43cb-8807-0a5f1450c6a2@arm.com>
+ <20240220135037.qriyapwrznz2wdni@airbuntu>
+ <d58de550-0ce1-4af9-9e2d-dedd5e73c797@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240216203215.40870-1-brgl@bgdev.pl> <CAA8EJppt4-L1RyDeG=1SbbzkTDhLkGcmAbZQeY0S6wGnBbFbvw@mail.gmail.com>
- <e4cddd9f-9d76-43b7-9091-413f923d27f2@linaro.org> <CAA8EJpp6+2w65o2Bfcr44tE_ircMoON6hvGgyWfvFuh3HamoSQ@mail.gmail.com>
- <4d2a6f16-bb48-4d4e-b8fd-7e4b14563ffa@linaro.org> <CAA8EJpq=iyOfYzNATRbpqfBaYSdJV1Ao5t2ewLK+wY+vEaFYAQ@mail.gmail.com>
- <CAMRc=Mfnpusf+mb-CB5S8_p7QwVW6owekC5KcQF0qrR=iOQ=oA@mail.gmail.com>
- <CAA8EJppY7VTrDz3-FMZh2qHoU+JSGUjCVEi5x=OZgNVxQLm3eQ@mail.gmail.com>
- <b9a31374-8ea9-407e-9ec3-008a95e2b18b@linaro.org> <CAA8EJppWY8c-pF75WaMadWtEuaAyCc5A1VLEq=JmB2Ngzk-zyw@mail.gmail.com>
- <CAMRc=Md6SoXukoGb4bW-CSYgjpO4RL+0Uu3tYrZzgSgVtFH6Sw@mail.gmail.com>
-In-Reply-To: <CAMRc=Md6SoXukoGb4bW-CSYgjpO4RL+0Uu3tYrZzgSgVtFH6Sw@mail.gmail.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Thu, 22 Feb 2024 13:26:59 +0200
-Message-ID: <CAA8EJprUM6=ZqTwWLB8rW8WRDqwncafa-szSsTvPQCOOSXUn_w@mail.gmail.com>
-Subject: Re: [PATCH v5 00/18] power: sequencing: implement the subsystem and
- add first users
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: neil.armstrong@linaro.org, Marcel Holtmann <marcel@holtmann.org>, 
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, "David S . Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Kalle Valo <kvalo@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Saravana Kannan <saravanak@google.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Arnd Bergmann <arnd@arndb.de>, 
-	Marek Szyprowski <m.szyprowski@samsung.com>, Alex Elder <elder@linaro.org>, 
-	Srini Kandagatla <srinivas.kandagatla@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Abel Vesa <abel.vesa@linaro.org>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Lukas Wunner <lukas@wunner.de>, linux-bluetooth@vger.kernel.org, 
-	netdev@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d58de550-0ce1-4af9-9e2d-dedd5e73c797@arm.com>
 
-On Thu, 22 Feb 2024 at 13:00, Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->
-> On Mon, Feb 19, 2024 at 11:21=E2=80=AFPM Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> wrote:
-> >
-> > On Mon, 19 Feb 2024 at 19:18, <neil.armstrong@linaro.org> wrote:
-> > >
-> > > On 19/02/2024 13:33, Dmitry Baryshkov wrote:
-> > > > On Mon, 19 Feb 2024 at 14:23, Bartosz Golaszewski <brgl@bgdev.pl> w=
-rote:
-> > > >>
-> > > >> On Mon, Feb 19, 2024 at 11:26=E2=80=AFAM Dmitry Baryshkov
-> > > >> <dmitry.baryshkov@linaro.org> wrote:
-> > > >>>
-> > > >>
-> > > >> [snip]
-> > > >>
-> > > >>>>>>>>
-> > > >>>>>>>> For WCN7850 we hide the existence of the PMU as modeling it =
-is simply not
-> > > >>>>>>>> necessary. The BT and WLAN devices on the device-tree are re=
-presented as
-> > > >>>>>>>> consuming the inputs (relevant to the functionality of each)=
- of the PMU
-> > > >>>>>>>> directly.
-> > > >>>>>>>
-> > > >>>>>>> We are describing the hardware. From the hardware point of vi=
-ew, there
-> > > >>>>>>> is a PMU. I think at some point we would really like to descr=
-ibe all
-> > > >>>>>>> Qualcomm/Atheros WiFI+BT units using this PMU approach, inclu=
-ding the
-> > > >>>>>>> older ath10k units present on RB3 (WCN3990) and db820c (QCA61=
-74).
-> > > >>>>>>
-> > > >>>>>> While I agree with older WiFi+BT units, I don't think it's nee=
-ded for
-> > > >>>>>> WCN7850 since BT+WiFi are now designed to be fully independent=
- and PMU is
-> > > >>>>>> transparent.
-> > > >>>>>
-> > > >>>>> I don't see any significant difference between WCN6750/WCN6855 =
-and
-> > > >>>>> WCN7850 from the PMU / power up point of view. Could you please=
- point
-> > > >>>>> me to the difference?
-> > > >>>>>
-> > > >>>>
-> > > >>>> The WCN7850 datasheet clearly states there's not contraint on th=
-e WLAN_EN
-> > > >>>> and BT_EN ordering and the only requirement is to have all input=
- regulators
-> > > >>>> up before pulling up WLAN_EN and/or BT_EN.
-> > > >>>>
-> > > >>>> This makes the PMU transparent and BT and WLAN can be described =
-as independent.
-> > > >>>
-> > > >>>  From the hardware perspective, there is a PMU. It has several LD=
-Os. So
-> > > >>> the device tree should have the same style as the previous
-> > > >>> generations.
-> > > >>>
-> > > >>
-> > > >> My thinking was this: yes, there is a PMU but describing it has no
-> > > >> benefit (unlike QCA6x90). If we do describe, then we'll end up hav=
-ing
-> > > >> to use pwrseq here despite it not being needed because now we won'=
-t be
-> > > >> able to just get regulators from WLAN/BT drivers directly.
-> > > >>
-> > > >> So I also vote for keeping it this way. Let's go into the package
-> > > >> detail only if it's required.
-> > > >
-> > > > The WiFi / BT parts are not powered up by the board regulators. The=
-y
-> > > > are powered up by the PSU. So we are not describing it in the accur=
-ate
-> > > > way.
-> > >
-> > > I disagree, the WCN7850 can also be used as a discrete PCIe M.2 card,=
- and in
-> > > this situation the PCIe part is powered with the M.2 slot and the BT =
-side
-> > > is powered separately as we currently do it now.
-> >
-> > QCA6390 can also be used as a discrete M.2 card.
-> >
-> > > So yes there's a PMU, but it's not an always visible hardware part, f=
-rom the
-> > > SoC PoV, only the separate PCIe and BT subsystems are visible/control=
-lable/powerable.
-> >
-> > From the hardware point:
-> > - There is a PMU
-> > - The PMU is connected to the board supplies
-> > - Both WiFi and BT parts are connected to the PMU
-> > - The BT_EN / WLAN_EN pins are not connected to the PMU
-> >
-> > So, not representing the PMU in the device tree is a simplification.
-> >
->
-> What about the existing WLAN and BT users of similar packages? We
-> would have to deprecate a lot of existing bindings. I don't think it's
-> worth it.
+On 02/20/24 18:38, Pierre Gondois wrote:
+> Hello Qais,
+> 
+> I added some other remarks,
+> 
+> On 2/20/24 14:50, Qais Yousef wrote:
+> > On 02/14/24 10:19, Pierre Gondois wrote:
+> > > Hello,
+> > > 
+> > > On 2/12/24 16:53, Rafael J. Wysocki wrote:
+> > > > On Mon, Feb 5, 2024 at 8:45 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > > > > 
+> > > > > On 05-02-24, 02:25, Qais Yousef wrote:
+> > > > > > 10ms is too high for today's hardware, even low end ones. This default
+> > > > > > end up being used a lot on Arm machines at least. Pine64, mac mini and
+> > > > > > pixel 6 all end up with 10ms rate_limit_us when using schedutil, and
+> > > > > > it's too high for all of them.
+> > > > > > 
+> > > > > > Change the default to 2ms which should be 'pessimistic' enough for worst
+> > > > > > case scenario, but not too high for platforms with fast DVFS hardware.
+> > > > > > 
+> > > > > > Signed-off-by: Qais Yousef <qyousef@layalina.io>
+> > > > > > ---
+> > > > > >    drivers/cpufreq/cpufreq.c | 4 ++--
+> > > > > >    1 file changed, 2 insertions(+), 2 deletions(-)
+> > > > > > 
+> > > > > > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > > > > > index 44db4f59c4cc..8207f7294cb6 100644
+> > > > > > --- a/drivers/cpufreq/cpufreq.c
+> > > > > > +++ b/drivers/cpufreq/cpufreq.c
+> > > > > > @@ -582,11 +582,11 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
+> > > > > >                  * for platforms where transition_latency is in milliseconds, it
+> > > > > >                  * ends up giving unrealistic values.
+> > > > > >                  *
+> > > > > > -              * Cap the default transition delay to 10 ms, which seems to be
+> > > > > > +              * Cap the default transition delay to 2 ms, which seems to be
+> > > > > >                  * a reasonable amount of time after which we should reevaluate
+> > > > > >                  * the frequency.
+> > > > > >                  */
+> > > > > > -             return min(latency * LATENCY_MULTIPLIER, (unsigned int)10000);
+> > > > > > +             return min(latency * LATENCY_MULTIPLIER, (unsigned int)(2*MSEC_PER_SEC));
+> > > > > 
+> > > > > Please add spaces around '*'.
+> > > > > 
+> > > > > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> > > > 
+> > > > I've adjusted the whitespace as suggested above and applied the patch
+> > > > as 5.9 material.
+> > > > 
+> > > > Thanks!
+> > > > 
+> > > 
+> > > To add some numbers, on a Juno-r2, with latency measured between the frequency
+> > > request on the kernel side and the SCP actually making the frequency update.
+> > > 
+> > > The SCP is the firmware responsible of making the frequency updates. It receives
+> > > the kernel requests and coordinate them/make the actual changes. The SCP also has
+> > > a mechanism called 'fast channel' (FC) where the kernel writes the requested
+> > > frequency to a memory area shared with the SCP. Every 4ms, the SCP polls/reads
+> > > these memory area and make the required modifications.
+> > > 
+> > > Latency values (in ms)
+> > > Workload:
+> > > Idle system, during ~30s
+> > > +---------------------------------------+
+> > > |       |   Without FC  |      With FC  |
+> > > +-------+---------------+---------------+
+> > > | count |       1663    |        1102   |
+> > > | mean  |          2.92 |          2.10 |
+> > > | std   |          1.90 |          1.58 |
+> > > | min   |          0.21 |          0.00 |
+> > > | 25%   |          1.64 |          0.91 |
+> > > | 50%   |          2.57 |          1.68 |
+> > > | 75%   |          3.66 |          2.97 |
+> > > | max   |         14.37 |         13.50 |
+> > > +-------+---------------+---------------+
+> > > 
+> > > Latency values (in ms)
+> > > Workload:
+> > > One 1% task per CPU, period = 32ms. This allows to wake up the CPU
+> > > every 32ms and send more requests/give more work to the SCP. Indeed
+> > > the SCP is also responsible of idle state transitions.
+> > > Test duration ~=30s.
+> > > +---------------------------------------+
+> > > |       |   Without FC  |      With FC  |
+> > > +-------+---------------+---------------+
+> > > | count |       1629    |       1446    |
+> > > | mean  |          3.23 |          2.31 |
+> > > | std   |          2.40 |          1.73 |
+> > > | min   |          0.05 |          0.02 |
+> > > | 25%   |          1.91 |          0.98 |
+> > > | 50%   |          2.65 |          2.00 |
+> > > | 75%   |          3.65 |          3.23 |
+> > > | max   |         20.56 |         16.73 |
+> > > +-------+---------------+---------------+
+> > > 
+> > > ---
+> 
+> 1.
+> With this patch, platforms like the Juno which:
+> - don't set a `transition_delay_us`
+> - have a high `transition_latency` (> 1ms)
+> can request freq. changes every 2ms.
+> 
+> If a platform has a `transition_latency` > 2ms, this means:
+>   `transition_latency` > `transition_delay_us`
+> I.e. a second freq. requests might be emitted before the first one
+> will be completed. On the Juno, this doesn't cause any 'real' issue
+> as the SCMI/mailbox mechanism works well, but this doesn't seem
+> correct.
+> If the util of CPUs is in between OPPs (i.e. freq. changes are often
+> required), the Juno:
+> - sends a freq. request
+> - waits for completion and schedules another task in the meantime
+> - upon completion, immediately sends a new freq.
+> 
+> I think that the following should be respected/checked:
+> - `transition_latency` < `transition_delay_us`
+> (it might also make sense to have, with K being any factor:)
+> - `transition_latency` * K < `transition_delay_us`
 
-We have bindings that are not reflecting the hardware. So yes, we
-should gradually update them once the powerseq is merged.
+Makes sense. How about this? I am not sure it is better to multiply with
+a factor if the platform is already slow. Even the current 1000 multiply factor
+is high but this is a territory I am not ready to step into yet.
 
-> The WCN7850 is already described in bindings as consuming what is PMUs
-> inputs and not its outputs.
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 66cef33c4ec7..68a5ba24a5e0 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -576,6 +576,15 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
 
-So do WCN6855 and QCA6391 BlueTooth parts.
+        latency = policy->cpuinfo.transition_latency / NSEC_PER_USEC;
+        if (latency) {
++               unsigned int max_delay_us = 2 * MSEC_PER_SEC;;
++
++               /*
++                * If the platform already has high transition_latency, use it
++                * as-is.
++                */
++               if (latency > max_delay_us)
++                       return latency;
++
+                /*
+                 * For platforms that can change the frequency very fast (< 10
+                 * us), the above formula gives a decent transition delay. But
+@@ -586,7 +595,7 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
+                 * a reasonable amount of time after which we should reevaluate
+                 * the frequency.
+                 */
+-               return min(latency * LATENCY_MULTIPLIER, (unsigned int)(2 * MSEC_PER_SEC));
++               return min(latency * LATENCY_MULTIPLIER, max_delay_us);
+        }
 
->
-> Bart
->
-> > >
-> > > Neil
-> > >
-> > > >
-> > > > Moreover, I think we definitely want to move BT driver to use only =
-the
-> > > > pwrseq power up method. Doing it in the other way results in the co=
-de
-> > > > duplication and possible issues because of the regulator / pwrseq
-> > > > taking different code paths.
-> >
-> > --
-> > With best wishes
-> > Dmitry
+        return LATENCY_MULTIPLIER;
+
+> 
+> 
+> 2.
+> There are references to the 10ms values at other places in the code:
+> 
+> include/linux/cpufreq.h
+>  * ondemand governor will work on any processor with transition latency <= 10ms,
+
+Not sure this one needs updating. Especially with the change above which means
+10ms could theoretically happen. But if there are suggestions happy to take
+them.
+
+> 
+> drivers/cpufreq/cpufreq.c
+>  * For platforms that can change the frequency very fast (< 10
+>  * us), the above formula gives a decent transition delay. But
+> -> the 10us value matches 10ms = 10us * LATENCY_MULTIPLIER
+
+I can't find this one.
+
+> 
+> Documentation/admin-guide/pm/cpufreq.rst
+>  Typically, it is set to values of the order of 10000 (10 ms).  Its
+>  default value is equal to the value of ``cpuinfo_transition_latency``
+
+I am not sure about this one. It refers to cpuinfo_transition_latency not the
+delay and uses a formula to calculate it based on that.
+
+Seems the paragraph needs updating in general to reflect other changes?
+
+> 
+> 
+> 3.
+> There seems to be a dependency of the conservative/ondemand governors
+> over the the value returned by `cpufreq_policy_transition_delay_us()`:
+> 
+> drivers/cpufreq/cpufreq_governor.c
+>   dbs_data->sampling_rate = max_t(unsigned int,
+>     CPUFREQ_DBS_MIN_SAMPLING_INTERVAL,            // = 2 * tick period = 8ms
+>     cpufreq_policy_transition_delay_us(policy));  // [1]: val <= 2ms
+> 
+> [1]
+> if `transition_latency` is not set and `transition_delay_us` is,
+> which is the case for the Juno.
+> 
+> The `sampling_rate` is, FYIU, the period used to evaluate the ratio
+> of the idle/busy time, and if necessary increase/decrease the freq.
+> 
+> This patch will likely reduce this sampling rate from 10ms -> 8ms
+> (if `cpufreq_policy_transition_delay_us()`` now returns 2ms for some
+> platforms). This is not much, but just wanted to note it.
+
+I don't think this is a problem as tick being 1ms is common and
+transition_delay_us is not 10ms on all platforms. On my amd system it is 1ms
+and on another intel i5 it is 5ms. So it should have already been coping with
+various combination.
 
 
+Thanks!
 
---=20
-With best wishes
-Dmitry
+--
+Qais Yousef
 
