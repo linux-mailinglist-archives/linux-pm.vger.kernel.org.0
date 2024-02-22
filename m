@@ -1,40 +1,76 @@
-Return-Path: <linux-pm+bounces-4272-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4273-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E53185FC17
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 16:16:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED71585FC43
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 16:25:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E8973B21DAE
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 15:16:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4DFF286F7A
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 15:24:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9125148FE6;
-	Thu, 22 Feb 2024 15:16:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8F6314AD19;
+	Thu, 22 Feb 2024 15:24:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZCZchb6Q"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD3A839FC7;
-	Thu, 22 Feb 2024 15:15:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEDDE1474AC;
+	Thu, 22 Feb 2024 15:24:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708614960; cv=none; b=j3E5Z/LX+18JOPBoZn1Yed6uCQJXVfYmvUEPXCYOyrJqwRYWI2j7rnK+3nzJOh9CeauSauZXYuMBl9dcI++IWSXJkCb+d1sxscvpsvEVPr0ALHi8TIFq2M3P3cHR3u4yHYXBjPAENHbp9ojbN6y7espbKmMlCVsK/yzYV6dg6Tc=
+	t=1708615496; cv=none; b=XmpYMV4PboRlktWkYtkJ/subzUXHsTmF6PQtswI9TjEdV9qeJVRA+t3+KgniTUpQReTf/28Fesr6CpYSBDbCLnhOD1sIP3DWnbRhJ7gVnymrMQPXAmFxupT/xYuOUMd2GxCo2XYjZSxg8xaAR9/nwyy/im8zbXDxsvE3lGwm+Vg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708614960; c=relaxed/simple;
-	bh=otYPKTPd7/zTl6iVWDsNqqY51tRHvqA2q9CRonb3pTY=;
+	s=arc-20240116; t=1708615496; c=relaxed/simple;
+	bh=PIuBPcgaPYP64DROgSWdjJBcFxfi8DMAGUUPjPDY8KU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KoBeLIC3bIt8+QGQe5AvT6vgCOgHMfcxop3JvWMHP7y4L2uiEcOlxQUY1AWOZ/R5IADUrevlAkPsjVzpdxbUaDaSOIXtH+NmnQFvOY4UWc8LbMfioNl2opcGNDAqSLiE4wcw9+z7JxZ6aJicqlHIG8QocWnItpuz5+yC3qd1/Wo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1C846DA7;
-	Thu, 22 Feb 2024 07:16:35 -0800 (PST)
-Received: from [10.57.50.6] (unknown [10.57.50.6])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2B5A73F762;
-	Thu, 22 Feb 2024 07:15:54 -0800 (PST)
-Message-ID: <f4c3f028-b93e-4658-af28-ac2123203d68@arm.com>
-Date: Thu, 22 Feb 2024 16:15:52 +0100
+	 In-Reply-To:Content-Type; b=uLvclCvy+teZbDuR69K9PzkpJjnrj8a3zo1m/ueY5+XliOpxWIoTV7P9UAHg1Sh9mbiT+GOQQTO2zZ902zKZx/RLicWUECMCWRy4hLvuBOnQRcIOov62u7rAQ49iYLGIT8NdzDOpLUwjIrRTfdgC2RCiepZ+4YKm3zSjoJsxEE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZCZchb6Q; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6e3ffafa708so5249118b3a.1;
+        Thu, 22 Feb 2024 07:24:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1708615494; x=1709220294; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=aXQfNeMLkgL8vNtlootrbSOlal3IIy+GDwI0MRVyyC8=;
+        b=ZCZchb6QwRsqlA09Bjp8kQCk+ufUG9+Q7TP+ksBUC0Kj6UY0+RrrL6qTRtBX+Fx9Vc
+         Jo4h+SnoKgOGzbVNdWhc4BRBO8oCmuGzVxCuDS9qUcar8pyAtPkB3H/kWL+zq7XDJNr7
+         Ubf7doBX338beOpmN5XxDuK/A1QLtWmrXaQ8iGAxJ7xg1dwwO5oUGa6jjmJJWBT3dTnq
+         mQm0mB3VwhFPUul/8StkxCjT0ABL/uaDjNFoADJGlb6K6xdVdLF49pCa1lr3KrVR/qBo
+         a0ZbqCsDz6EcjUFqSqlwoBXJHBlfkgfLWAIJcMwjfUwKa+vroPbppbmlEpmw87glennm
+         pVYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708615494; x=1709220294;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aXQfNeMLkgL8vNtlootrbSOlal3IIy+GDwI0MRVyyC8=;
+        b=mjZRZ1rm6sX8lW1twirzsCUuvdksgdvha3oAS56wcaN8jkDMd+4Ep2fOKKJmNymhR7
+         Cwp0YN3hMAvvr7dhXFGSb13phLNCUQ/SMAGp1hOVePaIKhsGqf5xknxl7yShkqT30dPW
+         xqHmnXMk6ZVz2ROmsaVtcQS/37RwM4Y1yPk3KNoovcWI4HBSZUrINfalTmKvjmQyBUnv
+         od2JDeKnGRU/pvGF1r0abZB1bjkCULxvpRCtr7MHmdQrWg57cGU/Ct3E7MeLM6b0nBNw
+         OAYhJr9D1Llk0vjMzr1hdhgykxTdvR1YlEEtQvfA7SuLU4YvwFoIR9vyJuoQbZ8WdKcV
+         /mFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXy6q+uzbA7a8luup9CwrG1D6svzy0fpZuazU46T9/EAyA3arogiQ+stuibvKE8W5KNSD6jSRYYIyRz76cj8FlqU+lFMIHWDO9wWCOQSPRdJZ/Tm4FJicrv0kuXr30XOEEh7EVGP/WBqLawEd3ikugg0ojifP8qRdhaDcW05Mp+6i7n8s3+3mnRpEnHzRfNgRkyxK/jE01uj+KYXRzv3s5iNTFqQlAHUsaIL5CkOqMyMiXo01jC/KIVuewL
+X-Gm-Message-State: AOJu0YwuQ1l4i0ecFOJ7mDz64dl3hDth0ch1mmqkG9XvOPF8xrvWWPem
+	9VB/3/DvkPY03Sq+kUIET2FVYLTi8NORE1WqvChLvn4wWeuSjCpo
+X-Google-Smtp-Source: AGHT+IFOCTi3dMlzjGviA7Kz3InAm5islYUdD+oRHJxhgo5nOUg6H4x7H8pBurwv2VMO/+nCHiFKIQ==
+X-Received: by 2002:a05:6a21:3994:b0:19c:a4d3:2041 with SMTP id ad20-20020a056a21399400b0019ca4d32041mr31039509pzc.42.1708615494137;
+        Thu, 22 Feb 2024 07:24:54 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b2-20020aa78ec2000000b006e4d2cbcac8sm998069pfr.94.2024.02.22.07.24.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Feb 2024 07:24:53 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4a545c16-7518-49d2-b158-7fcabe3508c5@roeck-us.net>
+Date: Thu, 22 Feb 2024 07:24:52 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,298 +78,424 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpufreq: Change default transition delay to 2ms
+Subject: Re: [PATCH 1/2] devm-helpers: Add resource managed version of mutex
+ init
 Content-Language: en-US
-To: Qais Yousef <qyousef@layalina.io>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
- Viresh Kumar <viresh.kumar@linaro.org>, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>, Christian.Loehle@arm.com
-References: <20240205022500.2232124-1-qyousef@layalina.io>
- <20240205074514.kiolurpounokalum@vireshk-i7>
- <CAJZ5v0j2rA-+Jpdv6OZ_ymiqh0+RGzmJBNncKGBwuxO3PxgSKA@mail.gmail.com>
- <ca000b2d-b552-43cb-8807-0a5f1450c6a2@arm.com>
- <20240220135037.qriyapwrznz2wdni@airbuntu>
- <d58de550-0ce1-4af9-9e2d-dedd5e73c797@arm.com>
- <20240222115557.blnm4uulkxnorrl4@airbuntu>
-From: Pierre Gondois <pierre.gondois@arm.com>
-In-Reply-To: <20240222115557.blnm4uulkxnorrl4@airbuntu>
+To: =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
+ linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+ Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>,
+ Lucas De Marchi <lucas.demarchi@intel.com>, Oded Gabbay
+ <ogabbay@kernel.org>, =?UTF-8?Q?Thomas_Hellstr=C3=B6m?=
+ <thomas.hellstrom@linux.intel.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Aleksandr Mezin <mezin.alexander@gmail.com>, Jean Delvare
+ <jdelvare@suse.com>, Pavel Machek <pavel@ucw.cz>, Lee Jones
+ <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ linux-gpio@vger.kernel.org, intel-xe@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+ linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+References: <20240222145838.12916-1-kabel@kernel.org>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20240222145838.12916-1-kabel@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Hello Qais,
-
-On 2/22/24 12:55, Qais Yousef wrote:
-> On 02/20/24 18:38, Pierre Gondois wrote:
->> Hello Qais,
->>
->> I added some other remarks,
->>
->> On 2/20/24 14:50, Qais Yousef wrote:
->>> On 02/14/24 10:19, Pierre Gondois wrote:
->>>> Hello,
->>>>
->>>> On 2/12/24 16:53, Rafael J. Wysocki wrote:
->>>>> On Mon, Feb 5, 2024 at 8:45 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->>>>>>
->>>>>> On 05-02-24, 02:25, Qais Yousef wrote:
->>>>>>> 10ms is too high for today's hardware, even low end ones. This default
->>>>>>> end up being used a lot on Arm machines at least. Pine64, mac mini and
->>>>>>> pixel 6 all end up with 10ms rate_limit_us when using schedutil, and
->>>>>>> it's too high for all of them.
->>>>>>>
->>>>>>> Change the default to 2ms which should be 'pessimistic' enough for worst
->>>>>>> case scenario, but not too high for platforms with fast DVFS hardware.
->>>>>>>
->>>>>>> Signed-off-by: Qais Yousef <qyousef@layalina.io>
->>>>>>> ---
->>>>>>>     drivers/cpufreq/cpufreq.c | 4 ++--
->>>>>>>     1 file changed, 2 insertions(+), 2 deletions(-)
->>>>>>>
->>>>>>> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
->>>>>>> index 44db4f59c4cc..8207f7294cb6 100644
->>>>>>> --- a/drivers/cpufreq/cpufreq.c
->>>>>>> +++ b/drivers/cpufreq/cpufreq.c
->>>>>>> @@ -582,11 +582,11 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
->>>>>>>                   * for platforms where transition_latency is in milliseconds, it
->>>>>>>                   * ends up giving unrealistic values.
->>>>>>>                   *
->>>>>>> -              * Cap the default transition delay to 10 ms, which seems to be
->>>>>>> +              * Cap the default transition delay to 2 ms, which seems to be
->>>>>>>                   * a reasonable amount of time after which we should reevaluate
->>>>>>>                   * the frequency.
->>>>>>>                   */
->>>>>>> -             return min(latency * LATENCY_MULTIPLIER, (unsigned int)10000);
->>>>>>> +             return min(latency * LATENCY_MULTIPLIER, (unsigned int)(2*MSEC_PER_SEC));
->>>>>>
->>>>>> Please add spaces around '*'.
->>>>>>
->>>>>> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
->>>>>
->>>>> I've adjusted the whitespace as suggested above and applied the patch
->>>>> as 5.9 material.
->>>>>
->>>>> Thanks!
->>>>>
->>>>
->>>> To add some numbers, on a Juno-r2, with latency measured between the frequency
->>>> request on the kernel side and the SCP actually making the frequency update.
->>>>
->>>> The SCP is the firmware responsible of making the frequency updates. It receives
->>>> the kernel requests and coordinate them/make the actual changes. The SCP also has
->>>> a mechanism called 'fast channel' (FC) where the kernel writes the requested
->>>> frequency to a memory area shared with the SCP. Every 4ms, the SCP polls/reads
->>>> these memory area and make the required modifications.
->>>>
->>>> Latency values (in ms)
->>>> Workload:
->>>> Idle system, during ~30s
->>>> +---------------------------------------+
->>>> |       |   Without FC  |      With FC  |
->>>> +-------+---------------+---------------+
->>>> | count |       1663    |        1102   |
->>>> | mean  |          2.92 |          2.10 |
->>>> | std   |          1.90 |          1.58 |
->>>> | min   |          0.21 |          0.00 |
->>>> | 25%   |          1.64 |          0.91 |
->>>> | 50%   |          2.57 |          1.68 |
->>>> | 75%   |          3.66 |          2.97 |
->>>> | max   |         14.37 |         13.50 |
->>>> +-------+---------------+---------------+
->>>>
->>>> Latency values (in ms)
->>>> Workload:
->>>> One 1% task per CPU, period = 32ms. This allows to wake up the CPU
->>>> every 32ms and send more requests/give more work to the SCP. Indeed
->>>> the SCP is also responsible of idle state transitions.
->>>> Test duration ~=30s.
->>>> +---------------------------------------+
->>>> |       |   Without FC  |      With FC  |
->>>> +-------+---------------+---------------+
->>>> | count |       1629    |       1446    |
->>>> | mean  |          3.23 |          2.31 |
->>>> | std   |          2.40 |          1.73 |
->>>> | min   |          0.05 |          0.02 |
->>>> | 25%   |          1.91 |          0.98 |
->>>> | 50%   |          2.65 |          2.00 |
->>>> | 75%   |          3.65 |          3.23 |
->>>> | max   |         20.56 |         16.73 |
->>>> +-------+---------------+---------------+
->>>>
->>>> ---
->>
->> 1.
->> With this patch, platforms like the Juno which:
->> - don't set a `transition_delay_us`
->> - have a high `transition_latency` (> 1ms)
->> can request freq. changes every 2ms.
->>
->> If a platform has a `transition_latency` > 2ms, this means:
->>    `transition_latency` > `transition_delay_us`
->> I.e. a second freq. requests might be emitted before the first one
->> will be completed. On the Juno, this doesn't cause any 'real' issue
->> as the SCMI/mailbox mechanism works well, but this doesn't seem
->> correct.
->> If the util of CPUs is in between OPPs (i.e. freq. changes are often
->> required), the Juno:
->> - sends a freq. request
->> - waits for completion and schedules another task in the meantime
->> - upon completion, immediately sends a new freq.
->>
->> I think that the following should be respected/checked:
->> - `transition_latency` < `transition_delay_us`
->> (it might also make sense to have, with K being any factor:)
->> - `transition_latency` * K < `transition_delay_us`
+On 2/22/24 06:58, Marek Behún wrote:
+> A few drivers are doing resource-managed mutex initialization by
+> implementing ad-hoc one-liner mutex dropping functions and using them
+> with devm_add_action_or_reset(). Help drivers avoid these repeated
+> one-liners by adding managed version of mutex initialization.
 > 
-> Makes sense. How about this? I am not sure it is better to multiply with
-> a factor if the platform is already slow. Even the current 1000 multiply factor
-> is high but this is a territory I am not ready to step into yet.
+> Use the new function devm_mutex_init() in the following drivers:
+>    drivers/gpio/gpio-pisosr.c
+>    drivers/gpio/gpio-sim.c
+>    drivers/gpu/drm/xe/xe_hwmon.c
+>    drivers/hwmon/nzxt-smart2.c
+>    drivers/leds/leds-is31fl319x.c
+>    drivers/power/supply/mt6370-charger.c
+>    drivers/power/supply/rt9467-charger.c
 > 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 66cef33c4ec7..68a5ba24a5e0 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -576,6 +576,15 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
+> Signed-off-by: Marek Behún <kabel@kernel.org>
+> ---
+>   drivers/gpio/gpio-pisosr.c            |  9 ++-----
+>   drivers/gpio/gpio-sim.c               | 12 ++--------
+>   drivers/gpu/drm/xe/xe_hwmon.c         | 11 ++-------
+>   drivers/hwmon/nzxt-smart2.c           |  9 ++-----
+>   drivers/leds/leds-is31fl319x.c        |  9 ++-----
+>   drivers/power/supply/mt6370-charger.c | 11 +--------
+>   drivers/power/supply/rt9467-charger.c | 34 ++++-----------------------
+>   include/linux/devm-helpers.h          | 32 +++++++++++++++++++++++++
+>   8 files changed, 47 insertions(+), 80 deletions(-)
 > 
->          latency = policy->cpuinfo.transition_latency / NSEC_PER_USEC;
->          if (latency) {
-> +               unsigned int max_delay_us = 2 * MSEC_PER_SEC;;
+> diff --git a/drivers/gpio/gpio-pisosr.c b/drivers/gpio/gpio-pisosr.c
+> index e3013e778e15..dddbf37e855f 100644
+> --- a/drivers/gpio/gpio-pisosr.c
+> +++ b/drivers/gpio/gpio-pisosr.c
+> @@ -7,6 +7,7 @@
+>   #include <linux/bitmap.h>
+>   #include <linux/bitops.h>
+>   #include <linux/delay.h>
+> +#include <linux/devm-helpers.h>
+>   #include <linux/gpio/consumer.h>
+>   #include <linux/gpio/driver.h>
+>   #include <linux/module.h>
+> @@ -116,11 +117,6 @@ static const struct gpio_chip template_chip = {
+>   	.can_sleep		= true,
+>   };
+>   
+> -static void pisosr_mutex_destroy(void *lock)
+> -{
+> -	mutex_destroy(lock);
+> -}
+> -
+>   static int pisosr_gpio_probe(struct spi_device *spi)
+>   {
+>   	struct device *dev = &spi->dev;
+> @@ -147,8 +143,7 @@ static int pisosr_gpio_probe(struct spi_device *spi)
+>   		return dev_err_probe(dev, PTR_ERR(gpio->load_gpio),
+>   				     "Unable to allocate load GPIO\n");
+>   
+> -	mutex_init(&gpio->lock);
+> -	ret = devm_add_action_or_reset(dev, pisosr_mutex_destroy, &gpio->lock);
+> +	ret = devm_mutex_init(dev, &gpio->lock);
+>   	if (ret)
+>   		return ret;
+>   
+> diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
+> index c4106e37e6db..fcfcaa4efe70 100644
+> --- a/drivers/gpio/gpio-sim.c
+> +++ b/drivers/gpio/gpio-sim.c
+> @@ -12,6 +12,7 @@
+>   #include <linux/completion.h>
+>   #include <linux/configfs.h>
+>   #include <linux/device.h>
+> +#include <linux/devm-helpers.h>
+>   #include <linux/err.h>
+>   #include <linux/gpio/consumer.h>
+>   #include <linux/gpio/driver.h>
+> @@ -307,13 +308,6 @@ static ssize_t gpio_sim_sysfs_pull_store(struct device *dev,
+>   	return len;
+>   }
+>   
+> -static void gpio_sim_mutex_destroy(void *data)
+> -{
+> -	struct mutex *lock = data;
+> -
+> -	mutex_destroy(lock);
+> -}
+> -
+>   static void gpio_sim_put_device(void *data)
+>   {
+>   	struct device *dev = data;
+> @@ -457,9 +451,7 @@ static int gpio_sim_add_bank(struct fwnode_handle *swnode, struct device *dev)
+>   	if (ret)
+>   		return ret;
+>   
+> -	mutex_init(&chip->lock);
+> -	ret = devm_add_action_or_reset(dev, gpio_sim_mutex_destroy,
+> -				       &chip->lock);
+> +	ret = devm_mutex_init(dev, &chip->lock);
+>   	if (ret)
+>   		return ret;
+>   
+> diff --git a/drivers/gpu/drm/xe/xe_hwmon.c b/drivers/gpu/drm/xe/xe_hwmon.c
+> index 174ed2185481..bb88ae1c196c 100644
+> --- a/drivers/gpu/drm/xe/xe_hwmon.c
+> +++ b/drivers/gpu/drm/xe/xe_hwmon.c
+> @@ -3,6 +3,7 @@
+>    * Copyright © 2023 Intel Corporation
+>    */
+>   
+> +#include <linux/devm-helpers.h>
+>   #include <linux/hwmon-sysfs.h>
+>   #include <linux/hwmon.h>
+>   #include <linux/types.h>
+> @@ -729,13 +730,6 @@ xe_hwmon_get_preregistration_info(struct xe_device *xe)
+>   		xe_hwmon_energy_get(hwmon, &energy);
+>   }
+>   
+> -static void xe_hwmon_mutex_destroy(void *arg)
+> -{
+> -	struct xe_hwmon *hwmon = arg;
+> -
+> -	mutex_destroy(&hwmon->hwmon_lock);
+> -}
+> -
+>   void xe_hwmon_register(struct xe_device *xe)
+>   {
+>   	struct device *dev = xe->drm.dev;
+> @@ -751,8 +745,7 @@ void xe_hwmon_register(struct xe_device *xe)
+>   
+>   	xe->hwmon = hwmon;
+>   
+> -	mutex_init(&hwmon->hwmon_lock);
+> -	if (devm_add_action_or_reset(dev, xe_hwmon_mutex_destroy, hwmon))
+> +	if (devm_mutex_init(dev, &hwmon->hwmon_lock))
+>   		return;
+>   
+>   	/* primary GT to access device level properties */
+> diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
+> index 7aa586eb74be..00bc89607673 100644
+> --- a/drivers/hwmon/nzxt-smart2.c
+> +++ b/drivers/hwmon/nzxt-smart2.c
+> @@ -5,6 +5,7 @@
+>    * Copyright (c) 2021 Aleksandr Mezin
+>    */
+>   
+> +#include <linux/devm-helpers.h>
+>   #include <linux/hid.h>
+>   #include <linux/hwmon.h>
+>   #include <linux/math.h>
+> @@ -721,11 +722,6 @@ static int __maybe_unused nzxt_smart2_hid_reset_resume(struct hid_device *hdev)
+>   	return init_device(drvdata, drvdata->update_interval);
+>   }
+>   
+> -static void mutex_fini(void *lock)
+> -{
+> -	mutex_destroy(lock);
+> -}
+> -
+>   static int nzxt_smart2_hid_probe(struct hid_device *hdev,
+>   				 const struct hid_device_id *id)
+>   {
+> @@ -741,8 +737,7 @@ static int nzxt_smart2_hid_probe(struct hid_device *hdev,
+>   
+>   	init_waitqueue_head(&drvdata->wq);
+>   
+> -	mutex_init(&drvdata->mutex);
+> -	ret = devm_add_action_or_reset(&hdev->dev, mutex_fini, &drvdata->mutex);
+> +	ret = devm_mutex_init(&hdev->dev, &drvdata->mutex);
+>   	if (ret)
+>   		return ret;
+>   
+> diff --git a/drivers/leds/leds-is31fl319x.c b/drivers/leds/leds-is31fl319x.c
+> index 66c65741202e..e9d7cf6a386c 100644
+> --- a/drivers/leds/leds-is31fl319x.c
+> +++ b/drivers/leds/leds-is31fl319x.c
+> @@ -8,6 +8,7 @@
+>    * effect LEDs.
+>    */
+>   
+> +#include <linux/devm-helpers.h>
+>   #include <linux/err.h>
+>   #include <linux/i2c.h>
+>   #include <linux/leds.h>
+> @@ -495,11 +496,6 @@ static inline int is31fl3196_db_to_gain(u32 dezibel)
+>   	return dezibel / IS31FL3196_AUDIO_GAIN_DB_STEP;
+>   }
+>   
+> -static void is31f1319x_mutex_destroy(void *lock)
+> -{
+> -	mutex_destroy(lock);
+> -}
+> -
+>   static int is31fl319x_probe(struct i2c_client *client)
+>   {
+>   	struct is31fl319x_chip *is31;
+> @@ -515,8 +511,7 @@ static int is31fl319x_probe(struct i2c_client *client)
+>   	if (!is31)
+>   		return -ENOMEM;
+>   
+> -	mutex_init(&is31->lock);
+> -	err = devm_add_action_or_reset(dev, is31f1319x_mutex_destroy, &is31->lock);
+> +	err = devm_mutex_init(dev, &is31->lock);
+>   	if (err)
+>   		return err;
+>   
+> diff --git a/drivers/power/supply/mt6370-charger.c b/drivers/power/supply/mt6370-charger.c
+> index e24fce087d80..fa0517d0352d 100644
+> --- a/drivers/power/supply/mt6370-charger.c
+> +++ b/drivers/power/supply/mt6370-charger.c
+> @@ -766,13 +766,6 @@ static int mt6370_chg_init_psy(struct mt6370_priv *priv)
+>   	return PTR_ERR_OR_ZERO(priv->psy);
+>   }
+>   
+> -static void mt6370_chg_destroy_attach_lock(void *data)
+> -{
+> -	struct mutex *attach_lock = data;
+> -
+> -	mutex_destroy(attach_lock);
+> -}
+> -
+>   static void mt6370_chg_destroy_wq(void *data)
+>   {
+>   	struct workqueue_struct *wq = data;
+> @@ -900,9 +893,7 @@ static int mt6370_chg_probe(struct platform_device *pdev)
+>   	if (ret)
+>   		return dev_err_probe(dev, ret, "Failed to init psy\n");
+>   
+> -	mutex_init(&priv->attach_lock);
+> -	ret = devm_add_action_or_reset(dev, mt6370_chg_destroy_attach_lock,
+> -				       &priv->attach_lock);
+> +	ret = devm_mutex_init(dev, &priv->attach_lock);
+>   	if (ret)
+>   		return dev_err_probe(dev, ret, "Failed to init attach lock\n");
+>   
+> diff --git a/drivers/power/supply/rt9467-charger.c b/drivers/power/supply/rt9467-charger.c
+> index fdfdc83ab045..84f07c22077f 100644
+> --- a/drivers/power/supply/rt9467-charger.c
+> +++ b/drivers/power/supply/rt9467-charger.c
+> @@ -10,6 +10,7 @@
+>   #include <linux/bitfield.h>
+>   #include <linux/completion.h>
+>   #include <linux/delay.h>
+> +#include <linux/devm-helpers.h>
+>   #include <linux/gpio/consumer.h>
+>   #include <linux/i2c.h>
+>   #include <linux/interrupt.h>
+> @@ -1149,27 +1150,6 @@ static int rt9467_reset_chip(struct rt9467_chg_data *data)
+>   	return regmap_field_write(data->rm_field[F_RST], 1);
+>   }
+>   
+> -static void rt9467_chg_destroy_adc_lock(void *data)
+> -{
+> -	struct mutex *adc_lock = data;
+> -
+> -	mutex_destroy(adc_lock);
+> -}
+> -
+> -static void rt9467_chg_destroy_attach_lock(void *data)
+> -{
+> -	struct mutex *attach_lock = data;
+> -
+> -	mutex_destroy(attach_lock);
+> -}
+> -
+> -static void rt9467_chg_destroy_ichg_ieoc_lock(void *data)
+> -{
+> -	struct mutex *ichg_ieoc_lock = data;
+> -
+> -	mutex_destroy(ichg_ieoc_lock);
+> -}
+> -
+>   static void rt9467_chg_complete_aicl_done(void *data)
+>   {
+>   	struct completion *aicl_done = data;
+> @@ -1222,21 +1202,15 @@ static int rt9467_charger_probe(struct i2c_client *i2c)
+>   	if (ret)
+>   		return dev_err_probe(dev, ret, "Failed to add irq chip\n");
+>   
+> -	mutex_init(&data->adc_lock);
+> -	ret = devm_add_action_or_reset(dev, rt9467_chg_destroy_adc_lock,
+> -				       &data->adc_lock);
+> +	ret = devm_mutex_init(dev, &data->adc_lock);
+>   	if (ret)
+>   		return dev_err_probe(dev, ret, "Failed to init ADC lock\n");
+>   
+> -	mutex_init(&data->attach_lock);
+> -	ret = devm_add_action_or_reset(dev, rt9467_chg_destroy_attach_lock,
+> -				       &data->attach_lock);
+> +	ret = devm_mutex_init(dev, &data->attach_lock);
+>   	if (ret)
+>   		return dev_err_probe(dev, ret, "Failed to init attach lock\n");
+>   
+> -	mutex_init(&data->ichg_ieoc_lock);
+> -	ret = devm_add_action_or_reset(dev, rt9467_chg_destroy_ichg_ieoc_lock,
+> -				       &data->ichg_ieoc_lock);
+> +	ret = devm_mutex_init(dev, &data->ichg_ieoc_lock);
+>   	if (ret)
+>   		return dev_err_probe(dev, ret, "Failed to init ICHG/IEOC lock\n");
+>   
+> diff --git a/include/linux/devm-helpers.h b/include/linux/devm-helpers.h
+> index 74891802200d..70640fb96117 100644
+> --- a/include/linux/devm-helpers.h
+> +++ b/include/linux/devm-helpers.h
+> @@ -24,6 +24,8 @@
+>    */
+>   
+>   #include <linux/device.h>
+> +#include <linux/kconfig.h>
+> +#include <linux/mutex.h>
+>   #include <linux/workqueue.h>
+>   
+>   static inline void devm_delayed_work_drop(void *res)
+> @@ -76,4 +78,34 @@ static inline int devm_work_autocancel(struct device *dev,
+>   	return devm_add_action(dev, devm_work_drop, w);
+>   }
+>   
+> +static inline void devm_mutex_drop(void *res)
+> +{
+> +	mutex_destroy(res);
+> +}
 > +
-> +               /*
-> +                * If the platform already has high transition_latency, use it
-> +                * as-is.
-> +                */
-> +               if (latency > max_delay_us)
-[1]  return min(latency, 10ms);
-> +                       return latency;
+> +/**
+> + * devm_mutex_init - Resource managed mutex initialization
+> + * @dev:	Device which lifetime mutex is bound to
+> + * @lock:	Mutex to be initialized (and automatically destroyed)
+> + *
+> + * Initialize mutex which is automatically destroyed when driver is detached.
+> + * A few drivers initialize mutexes which they want destroyed before driver is
+> + * detached, for debugging purposes.
+> + * devm_mutex_init() can be used to omit the explicit mutex_destroy() call when
+> + * driver is detached.
+> + */
+> +static inline int devm_mutex_init(struct device *dev, struct mutex *lock)
+> +{
+> +	mutex_init(lock);
 > +
->                  /*
->                   * For platforms that can change the frequency very fast (< 10
->                   * us), the above formula gives a decent transition delay. But
-> @@ -586,7 +595,7 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
->                   * a reasonable amount of time after which we should reevaluate
->                   * the frequency.
->                   */
-> -               return min(latency * LATENCY_MULTIPLIER, (unsigned int)(2 * MSEC_PER_SEC));
-> +               return min(latency * LATENCY_MULTIPLIER, max_delay_us);
->          }
-> 
->          return LATENCY_MULTIPLIER;
-> 
+> +	/*
+> +	 * mutex_destroy() is an empty function if CONFIG_DEBUG_MUTEXES is
+> +	 * disabled. No need to allocate an action in that case.
+> +	 */
+> +	if (IS_ENABLED(CONFIG_DEBUG_MUTEXES))
+> +		return devm_add_action_or_reset(dev, devm_mutex_drop, lock);
+> +	else
 
-A policy with these values:
-- transition_delay_us = 0
-- transition_latency = 30ms
-would get a transition_delay of 30ms I think.
+else after return is unnecessary.
 
-Maybe it would be better to default to the old value in this case [1].
-
----
-
-Also a note that on the Pixel6 I have, transition_latency=5ms,
-so the platform's policies would end up with transition_delay=5ms
-
-
->>
->>
->> 2.
->> There are references to the 10ms values at other places in the code:
->>
->> include/linux/cpufreq.h
->>   * ondemand governor will work on any processor with transition latency <= 10ms,
-> 
-> Not sure this one needs updating. Especially with the change above which means
-> 10ms could theoretically happen. But if there are suggestions happy to take
-> them.
-
-a.
-LATENCY_MULTIPLIER introduction:
-112124ab0a9f ("[CPUFREQ] ondemand/conservative: sanitize sampling_rate restrictions")
-
-b.
-max_transition_latency removal:
-ed4676e25463 ("cpufreq: Replace "max_transition_latency" with "dynamic_switching"")
-
-c.
-dynamic_switching removal:
-9a2a9ebc0a75 ("cpufreq: Introduce governor flags")
-
-The value could be removed independently from this patch indeed, as this is not
-related to cpufreq_policy_transition_delay_us() since b.
-
-
-> 
->>
->> drivers/cpufreq/cpufreq.c
->>   * For platforms that can change the frequency very fast (< 10
->>   * us), the above formula gives a decent transition delay. But
->> -> the 10us value matches 10ms = 10us * LATENCY_MULTIPLIER
-> 
-> I can't find this one.
-
-It's in cpufreq_policy_transition_delay_us(),
-   "the 10us value matches 10ms = 10us * LATENCY_MULTIPLIER"
-is a sentence I wrote, the comment to modify would be:
-"""
-* For platforms that can change the frequency very fast (< 10
-* us), the above formula gives a decent transition delay. But
-"""
-
-> 
->>
->> Documentation/admin-guide/pm/cpufreq.rst
->>   Typically, it is set to values of the order of 10000 (10 ms).  Its
->>   default value is equal to the value of ``cpuinfo_transition_latency``
-> 
-> I am not sure about this one. It refers to cpuinfo_transition_latency not the
-> delay and uses a formula to calculate it based on that.
-> 
-> Seems the paragraph needs updating in general to reflect other changes?
-
-aa7519af450d ("cpufreq: Use transition_delay_us for legacy governors as well")
-
-The cpufreq_policy_transition_delay_us() was introduced there and integrates the
-10ms value related to this paragraph.
-
----
-
-I assume that if we keep the 10ms value in the code, it should be ok to let
-the comment as is. I'll send a patch to remove the first one as it can be
-done independently.
-
-> 
->>
->>
->> 3.
->> There seems to be a dependency of the conservative/ondemand governors
->> over the the value returned by `cpufreq_policy_transition_delay_us()`:
->>
->> drivers/cpufreq/cpufreq_governor.c
->>    dbs_data->sampling_rate = max_t(unsigned int,
->>      CPUFREQ_DBS_MIN_SAMPLING_INTERVAL,            // = 2 * tick period = 8ms
->>      cpufreq_policy_transition_delay_us(policy));  // [1]: val <= 2ms
->>
->> [1]
->> if `transition_latency` is not set and `transition_delay_us` is,
->> which is the case for the Juno.
->>
->> The `sampling_rate` is, FYIU, the period used to evaluate the ratio
->> of the idle/busy time, and if necessary increase/decrease the freq.
->>
->> This patch will likely reduce this sampling rate from 10ms -> 8ms
->> (if `cpufreq_policy_transition_delay_us()`` now returns 2ms for some
->> platforms). This is not much, but just wanted to note it.
-> 
-> I don't think this is a problem as tick being 1ms is common and
-> transition_delay_us is not 10ms on all platforms. On my amd system it is 1ms
-> and on another intel i5 it is 5ms. So it should have already been coping with
-> various combination.
-
-Ok right,
-
-Regards,
-Pierre
+> +		return 0;
+> +}
+> +
+>   #endif
 
 
