@@ -1,143 +1,188 @@
-Return-Path: <linux-pm+bounces-4279-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4280-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0ADA85FCB2
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 16:41:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F0F2285FCEF
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 16:47:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7FDD4288008
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 15:41:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A929628CFAB
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 15:47:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3451414F9F6;
-	Thu, 22 Feb 2024 15:40:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA23414AD14;
+	Thu, 22 Feb 2024 15:47:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="prTh+oj8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O7v7TkIZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4162D14C586
-	for <linux-pm@vger.kernel.org>; Thu, 22 Feb 2024 15:39:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF3914AD30;
+	Thu, 22 Feb 2024 15:47:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708616402; cv=none; b=S46ny/WRAFw1a+BKLICjrmFm4e3Q9R/f5Y8o1TV2aMvGKS3zaIOyvgF9qLcnBOdn8GLBtpJ5DE2/SQyuI9yoCqdQ41ZjfF/gDxVZo6wPEEzapGwnSupdLVwUw6XsLw/OFL+b2wbB0i8iTf1QFGIw3V67laAO5CD8eMPXRfDBj+M=
+	t=1708616846; cv=none; b=cw26SAU7ODgwyGz9xk13zB0I9AoPPzfFXI6xaTGd9tvlFqN50WVJTVVRnycx+WqoZxPh6GmaPgDrEO53cRMHkeZdMG6o4qNCtIZ1+HX2XOccfKHUZ6zA+5wFswxWWxCYKo+g43sC4k9XudyhBU7GamQoc1njYxDxWoPJrTACiMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708616402; c=relaxed/simple;
-	bh=irUaaTgSHl9McK+IT2Ipld7BjAvthbn+fFnbtiJW/dk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WOUfecT0Je0pmmlBmM75bKf2tOK1DIAmVPy2Cy4p4u9uC4ICpeMz8plv40hYBvg6BSqoEZ/ab4pVwMSkVjreYW8KfGYUSgYNxiNPgOtO4qCAGasnQDMHEXjO6a5P/KV+YtvzOYuyguU8QAjetXNCgIcIH8d+Rd4JVGU35H390rU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=prTh+oj8; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-512b84bdaf1so5896073e87.1
-        for <linux-pm@vger.kernel.org>; Thu, 22 Feb 2024 07:39:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708616397; x=1709221197; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=c1npCLJELsPSC1JsXp5VaFpN9TsOulzmiEht9MHB0lk=;
-        b=prTh+oj83tNb8/rX1g5my1Cv2cx4hoVfk1RyWnVChP8jt0Diog2uFzZDeNQBlpcRHn
-         HPbKkYZaBUJWX5vo9k8ay8dW0A1DhGP9PFbuL7iaGv4S6qdWADLvX/aB+T4JtC76HvrE
-         OFTxb55rM5Ke1hUpMk/IT1bxs9n+/w/JRqVSF/w9bA3isnW/oifNhomq6uvWWnbQkhU3
-         RgY4PNLZ8pNhi785w532Y/9mNcm5zVYmBtVg+dkUFMe48eIHO4ND8yw2gAWk2RTX9r2z
-         CruoXDNG5XmOJC30hkNkVR4t4aGAYyZfMVx0JMLUvDS5u/o/KKT7W74lMhMx15P0yGJS
-         j1cg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708616397; x=1709221197;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=c1npCLJELsPSC1JsXp5VaFpN9TsOulzmiEht9MHB0lk=;
-        b=mJdP8raFCxh6lzLCpdjiEC17mnOSLdLXI6MDRzpvUrfsW7W8LsIbPHJL3Vvya0WLrk
-         q2zoPRZ5fn7JOJnbzVfoLHSeqxDM3X3EVYCaaGMR5mdcw4DtYzYvdbivhnyHcPXGtQd6
-         VxRoZcg8ld4qbSgvdJkQrNVfvvRBITEWVdlXNhJ98UkRuTWkswgr3IM9pbxxE+D4Lhgi
-         CVO8egcmaIuHbOj54fxJBRACBlMOPOV4sFCKa0dw9Bk3xRUGuYWnt7F/Z06Wqy9eiClo
-         gpaoPyYerjzEjuLboashXh1XfmCmQMr8KqR9CRXkT5GrOfvzw5rkY0iMlAwlgIO0GUbx
-         F9Lg==
-X-Forwarded-Encrypted: i=1; AJvYcCUvGwbyTRuxoGy13yZ8oQQoxpwo2W9xW3CESn8tvpvi7dxuSk2NzzgWmvMzwy7Hs8uE+rZvFUKB19tneWs9a8ZxXrnt+heJFY4=
-X-Gm-Message-State: AOJu0YyKvwPT2PuvanEcIFN8A1IIsfJ0C0s+2sPC8zLfgDQmkgHQWiLp
-	dKzrz2tMYCZzEnwITdjtTxgfYRRh+4A+1QOw7SUzH8WYutpUcvJpT1Y1nlGwWT0=
-X-Google-Smtp-Source: AGHT+IF5oA+zj1hJdLGm59l4SglX5mVSDyz7ZtNxq7Z4/wQ0vArID2KuXJIuLjHr2LPtjtbbTxicyw==
-X-Received: by 2002:a05:6512:3d8d:b0:512:be44:656f with SMTP id k13-20020a0565123d8d00b00512be44656fmr8689020lfv.63.1708616397318;
-        Thu, 22 Feb 2024 07:39:57 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id u11-20020a5d468b000000b0033d4adb3ebbsm14270878wrq.26.2024.02.22.07.39.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Feb 2024 07:39:56 -0800 (PST)
-Message-ID: <4eda4893-8db5-47f0-8566-ecf379e987c7@linaro.org>
-Date: Thu, 22 Feb 2024 16:39:55 +0100
+	s=arc-20240116; t=1708616846; c=relaxed/simple;
+	bh=Md4in/HQ6lUKnOOyLDQIjm6+ZUBjqPPwCh2NiQF13q8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=owDHaVpqeb62iC384CwacLTYkxg1BwS5xGYP91zflCRkvty/+tQQYkmdhrev+KLQIJcWgs2Ekpu2mKRzGC51DAmst2Ihaya9C2Cv3irYWOslMrdzBvYa1XXHv9gDEiVRtYOOTxKmuiG1VhR2Mmh1Jo0wC7g17uVf/WGJukJb8dg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O7v7TkIZ; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708616846; x=1740152846;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Md4in/HQ6lUKnOOyLDQIjm6+ZUBjqPPwCh2NiQF13q8=;
+  b=O7v7TkIZ21lvkzrOOydJaVXbb0xOmd3EeYe+Jom9CwxQ8WkcJTgxjv7g
+   aaSFvxf4rYGuvOx6pxRA4IC2BCxncMHiAhGsMxFK4RfK9IS18ve3kx4Yw
+   KvTAXlDEdliEHxv/sc5QbqLY6maRna6MXkiMF09sq5MI2RYlDiTcPS/qO
+   jm+/GjzDXvnl446GhvdW9vSHF13oLD70GQ3v6Fd1/+XoyBwyW88gxY+oE
+   BzOuqIEuEfL5XsjeALXF585mULSI1GYcbji8h0mfEyfOZ/Y+vPtg3Xulv
+   CZOEY6H1tKY3R4vYNPhbB4auL9N/CiIIZleXTewU8GYKKH5TfLh2w+0QV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="2764323"
+X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
+   d="scan'208";a="2764323"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 07:47:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
+   d="scan'208";a="5908495"
+Received: from sgruszka-mobl.ger.corp.intel.com (HELO localhost) ([10.252.46.166])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 07:47:21 -0800
+Date: Thu, 22 Feb 2024 16:47:18 +0100
+From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-pm@vger.kernel.org,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jiri Pirko <jiri@resnulli.us>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org
+Subject: Re: [PATCH v4 2/3] thermal: netlink: Add genetlink bind/unbind
+ notifications
+Message-ID: <ZddshlCHwsDTFSYL@linux.intel.com>
+References: <20240212161615.161935-1-stanislaw.gruszka@linux.intel.com>
+ <20240212161615.161935-3-stanislaw.gruszka@linux.intel.com>
+ <CAJZ5v0hTsXjre_StGizrmUx1JUkzKr9K9KLiHrsvicivMO2Odw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2.2 1/6] thermal: core: Store zone trips table in struct
- thermal_zone_device
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Linux ACPI <linux-acpi@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
- Zhang Rui <rui.zhang@intel.com>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>
-References: <4551531.LvFx2qVVIh@kreacher> <1883976.tdWV9SEqCh@kreacher>
- <12406375.O9o76ZdvQC@kreacher>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <12406375.O9o76ZdvQC@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0hTsXjre_StGizrmUx1JUkzKr9K9KLiHrsvicivMO2Odw@mail.gmail.com>
 
-On 22/02/2024 14:52, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Tue, Feb 13, 2024 at 02:24:56PM +0100, Rafael J. Wysocki wrote:
+> On Mon, Feb 12, 2024 at 5:16 PM Stanislaw Gruszka
+> <stanislaw.gruszka@linux.intel.com> wrote:
+> >
+> > Introduce a new feature to the thermal netlink framework, enabling the
+> > registration of sub drivers to receive events via a notifier mechanism.
+> > Specifically, implement genetlink family bind and unbind callbacks to send
+> > BIND and UNBIND events.
+> >
+> > The primary purpose of this enhancement is to facilitate the tracking of
+> > user-space consumers by the intel_hif driver.
 > 
-> The current code expects thermal zone creators to pass a pointer to a
-> writable trips table to thermal_zone_device_register_with_trips() and
-> that trips table is then used by the thermal core going forward.
-> 
-> Consequently, the callers of thermal_zone_device_register_with_trips()
-> are required to hold on to the trips table passed to it until the given
-> thermal zone is unregistered, at which point the trips table can be
-> freed, but at the same time they are not expected to access that table
-> directly.  This is both error prone and confusing.
-> 
-> To address it, turn the trips table pointer in struct thermal_zone_device
-> into a flex array (counted by its num_trips field), allocate it during
-> thermal zone device allocation and copy the contents of the trips table
-> supplied by the zone creator (which can be const now) into it, which
-> will allow the callers of thermal_zone_device_register_with_trips() to
-> drop their trip tables right after the zone registration.
-> 
-> This requires the imx thermal driver to be adjusted to store the new
-> temperature in its internal trips table in imx_set_trip_temp(), because
-> it will be separate from the core's trips table now and it has to be
-> explicitly kept in sync with the latter.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Reviewed-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-> Reviewed-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
-> 
-> v2.1 -> v2.2:
->     * Add missing kfree(trips) to thermal_of_zone_register() (Daniel).
+> This should be intel_hfi.  Or better, Intel HFI.
 
-OK for me
+Will change in next revision.
 
+> > By leveraging these
+> > notifications, the driver can determine when consumers are present
+> > or absent.
+> >
+> > Suggested-by: Jakub Kicinski <kuba@kernel.org>
+> > Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+> > ---
+> >  drivers/thermal/thermal_netlink.c | 40 +++++++++++++++++++++++++++----
+> >  drivers/thermal/thermal_netlink.h | 26 ++++++++++++++++++++
+> >  2 files changed, 61 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
+> > index 76a231a29654..86c7653a9530 100644
+> > --- a/drivers/thermal/thermal_netlink.c
+> > +++ b/drivers/thermal/thermal_netlink.c
+> > @@ -7,17 +7,13 @@
+> >   * Generic netlink for thermal management framework
+> >   */
+> >  #include <linux/module.h>
+> > +#include <linux/notifier.h>
+> >  #include <linux/kernel.h>
+> >  #include <net/genetlink.h>
+> >  #include <uapi/linux/thermal.h>
+> >
+> >  #include "thermal_core.h"
+> >
+> > -enum thermal_genl_multicast_groups {
+> > -       THERMAL_GENL_SAMPLING_GROUP = 0,
+> > -       THERMAL_GENL_EVENT_GROUP = 1,
+> > -};
+> > -
+> >  static const struct genl_multicast_group thermal_genl_mcgrps[] = {
+> 
+> There are enough characters per code line to spell "multicast_groups"
+> here (and analogously below).
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Not sure what you mean, change thermal_genl_mcgrps to thermal_genl_multicast_groups ?
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+I could change that, but it's not really related to the changes in this patch,
+so perhaps in separate patch.
 
+Additionally "mcgrps" are more consistent with genl_family fields i.e:
+
+      .mcgrps         = thermal_genl_mcgrps,
+      .n_mcgrps       = ARRAY_SIZE(thermal_genl_mcgrps), 
+
+> >         [THERMAL_GENL_SAMPLING_GROUP] = { .name = THERMAL_GENL_SAMPLING_GROUP_NAME, },
+> >         [THERMAL_GENL_EVENT_GROUP]  = { .name = THERMAL_GENL_EVENT_GROUP_NAME,  },
+> > @@ -75,6 +71,7 @@ struct param {
+> >  typedef int (*cb_t)(struct param *);
+> >
+> >  static struct genl_family thermal_gnl_family;
+> > +static BLOCKING_NOTIFIER_HEAD(thermal_gnl_chain);
+> 
+> thermal_genl_chain ?
+> 
+> It would be more consistent with the rest of the naming.
+
+Ok, will change. Additionally in separate patch thermal_gnl_family for consistency.
+
+> >  static int thermal_group_has_listeners(enum thermal_genl_multicast_groups group)
+> >  {
+> > @@ -645,6 +642,27 @@ static int thermal_genl_cmd_doit(struct sk_buff *skb,
+> >         return ret;
+> >  }
+> >
+> > +static int thermal_genl_bind(int mcgrp)
+> > +{
+> > +       struct thermal_genl_notify n = { .mcgrp = mcgrp };
+> > +
+> > +       if (WARN_ON_ONCE(mcgrp > THERMAL_GENL_MAX_GROUP))
+> > +               return -EINVAL;
+> 
+> pr_warn_once() would be better IMO.  At least it would not crash the
+> kernel configured with "panic on warn".
+
+"panic on warn" is generic WARN_* issue at any place where WARN_* are used.
+And I would say, crash is desired behaviour for those who use the option
+to catch bugs. And mcgrp bigger than THERMAL_GENL_MAX_GROUP is definitely
+a bug. Additionally pr_warn_once() does not print call trace, so I think
+WARN_ON_ONCE() is more proper. But if really you prefer pr_warn_once()
+I can change.
+
+Regards
+Stanislaw
 
