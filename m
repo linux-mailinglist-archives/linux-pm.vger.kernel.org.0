@@ -1,256 +1,101 @@
-Return-Path: <linux-pm+bounces-4295-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4296-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0786F86021A
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 20:04:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BC2B860246
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 20:08:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B8F81C2600F
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 19:04:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA4E81F265E5
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 19:08:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B801B38FB2;
-	Thu, 22 Feb 2024 19:04:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A62714B825;
+	Thu, 22 Feb 2024 19:07:11 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 048991E892;
-	Thu, 22 Feb 2024 19:04:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1838548F1
+	for <linux-pm@vger.kernel.org>; Thu, 22 Feb 2024 19:06:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708628677; cv=none; b=sDFoQZQSuII3WotWYLykdVFwyA4cc+f9NAaIPreCbOOZfQwlriTSPV/6KJRgpwXi1Iz4/FYCnsBW335BAHCANQI/QpVjkqdlMr8woJU8vUHH1FC7tv8ocRy4kmzQGUdxHfvSHA2jEsEq2+vo6mdnfS3tvgmQ7eHLgULR6i8ib5s=
+	t=1708628831; cv=none; b=tg/BhMsDmVojzgAYx0h+oHLq30UFZWoyzt7E/PRQX6f3HlkFQvA13PqA+aBvXFoyWHvyaEwlObGW6O6Lv3Trek6pA+JrUkj1YViIK/RsZ/GFcgrvJYmovoQN1zysx9AyYp0rPTIU5BogMtMgGoC+fqIHcaHwMOmDkbzqLfFz2Iw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708628677; c=relaxed/simple;
-	bh=Hyf9XBUFJSWplKcsdD5bVfC2Vm6PoE3r6Y1cEsPSsgI=;
+	s=arc-20240116; t=1708628831; c=relaxed/simple;
+	bh=cB2qXfRawhQ0ImXEMhf82WzVWw9qVHBRCHumqTQkgo0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UQyLOIs3un2VrsffUCkr5M3CJXiByq2x4Q7gKevjEo0FQ5KkY9ICy//2tjXr9k77/iBNEhvTC7v7mZjZR0VNr1uARI1eP38HfOonRWZSr2h2lngQshLK09itbdmByv4LxCRXl8CAecSmCC+A1GlD7lqhT9l0a1rXQwk7DJpkjzw=
+	 To:Cc:Content-Type; b=MCYAY1kpCIkbJN9K+s5L+nDpDBvChWNyhHxBQOYJmEvpAPZwzOPV+xPDY51IqqvvecmcVRwAKewPSorFB7E0Mem39o53ZHCA5K1ecf+jrlI2kWWSXixvwEISYLErbOcoY3kvjhoCr25MZD2W/MHmZb4VaMk3RdEyhorRpLaTCpE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-59f9045d18dso13351eaf.0;
-        Thu, 22 Feb 2024 11:04:35 -0800 (PST)
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5a0333a9779so35086eaf.0
+        for <linux-pm@vger.kernel.org>; Thu, 22 Feb 2024 11:06:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708628675; x=1709233475;
+        d=1e100.net; s=20230601; t=1708628809; x=1709233609;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FTwO65sg0aGmGtYjpmCSGn3QMI62fbB0yNxoEusEEgM=;
-        b=hKhY0MqseMju68rHVjkwUr1VpswDlb/IFd8wDhjyFCicQXSuxQA4AThBARF/xlxpCA
-         hHSL+XYKARz3pm0/F9tCFDCBPvLa6tnii8onaRasaEQ48RaYfQCz7SlXZ3AIcL560QzN
-         bKtQIiIXwvapNFcS3V+FuXTOGt4QhcwmF3Dmp/dH5GRKs9+ucGOr5GjBUdsWOq9nQWni
-         S+2unDBAY5Lj6CINrWhAFpgGlnkJPG+HcZ42enAGBbokmUaDoFvumk0txH67xNkBYrvo
-         ooHatxIPx1Qo9bfM2jJV57GSfpzu5iKK8dyXvsHGm0PifcVBVMFk1pbvil6Cd8Iv9UNk
-         3kyA==
-X-Forwarded-Encrypted: i=1; AJvYcCWbdx28WfuG3YjJ7lso4g0uxllYPT39crfw/cg7G/Hl13v977zcZCfNUJX4y1onrvrDy3XGmSsHZTcW+dSPZ8lTRz0qFPs7yggOMqSrihGMAZnFkFYcmUtPRU7EkEStHR53ik8aGu0bGICRc5Jb6mlY99+c1FUrX19KeGRnxJDBn2c=
-X-Gm-Message-State: AOJu0Yy1IhIfIXcFk6mbKWmBrYbZwtkk1X/uhvlCVZ/QcigPTgRrKihq
-	/z2kU7R/tzeRJYJKiuDc5MzZajb+dUfbEJnbeP3pEd0rH5J5tt3p32nMbflI+on4whOmH0KxpwQ
-	rI/6sAEMGv0PbZM/pwzUYlTokwWY=
-X-Google-Smtp-Source: AGHT+IHrhaKFggbS/LOCudwzMdpGnXQGEzl5H3Au+AI3s1upIQr/0vGwklLHZlwyU/bw+GiuHzuWZ2U/ZvdO2Ko+L4E=
-X-Received: by 2002:a05:6820:305:b0:5a0:1c1e:a8c2 with SMTP id
- l5-20020a056820030500b005a01c1ea8c2mr4912128ooe.0.1708628674922; Thu, 22 Feb
- 2024 11:04:34 -0800 (PST)
+        bh=gklgZW4oqGYX/xbPlBQ/wXJoAVtaEV/8KzYR+to7xns=;
+        b=EHhjfc3cV1ykrCmrEfdHnLG0YhEwsNF7GazRHfBxPxv38mAypeRU9jxnWaZWAjVBdR
+         +zkdhFFIZ0WX8vQuaaYsnSRppeiluKOjjldbye/NHS8LIaFy3GdXYD7cMnbvVy1r2wvV
+         abbkHjsHoRU4M/ezLk8lFR97F1DY4WhLn45bQVDiU8wmVsaeKbVVO0MNGnx3kEYPjoOv
+         G1+o8EhxOC510g6I7cv6dbAoUYlSm9XKmGDcm1Mh4J9Q7LywL+sP7yxU6gqyg/XUY9mE
+         Afk+/RbIy5uw4pto3GVPRdZJKxU0hDBinXXKibz9f9ajAXN6L882zzP5QPpw4xW05xIq
+         mCRA==
+X-Forwarded-Encrypted: i=1; AJvYcCVh6Nf0WPfa9WRxSNAatpNppcnQFDKJZ9ThmGxAR5+kACPD/bO8MWX7FHrikhA5YxzzeynonlIq40UcExblMmdjPxalzUu8KUQ=
+X-Gm-Message-State: AOJu0YzVdmSDyxTlfNinpakQAKqvyORvfkNPe5Hjfb0Aio5t5xiFfZUb
+	rKx+oKst+5mtEndQoPCaqg8sQFK7nLuu6SfbqLNaEINWlSt2wNITB8733pnkgotDAaHPEqB0CIR
+	k7quqxBQJAX57bb5PEyA3jGnn3d8=
+X-Google-Smtp-Source: AGHT+IEdkHxO0SJS5bAqcjl1m8uQR+tVMWI58sbnu3DmUX8eAk4P24m9eNimmjoy9dOFIYQk1lEJUzj/UDNW6OSeLuk=
+X-Received: by 2002:a05:6820:134d:b0:59f:881f:9318 with SMTP id
+ b13-20020a056820134d00b0059f881f9318mr27267002oow.0.1708628809096; Thu, 22
+ Feb 2024 11:06:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <db6616c90d0e7de7658708b52ddca729679573bf.1707895925.git.quic_nprakash@quicinc.com>
-In-Reply-To: <db6616c90d0e7de7658708b52ddca729679573bf.1707895925.git.quic_nprakash@quicinc.com>
+References: <20240214001956.3087944-1-samasth.norway.ananda@oracle.com>
+In-Reply-To: <20240214001956.3087944-1-samasth.norway.ananda@oracle.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 22 Feb 2024 20:04:23 +0100
-Message-ID: <CAJZ5v0iMsqCguCWytVZugVN15z6+zrNiSSuK3XPSO8Oqdh3N8A@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: hibernate: Support to select compression algorithm
-To: Nikhil V <quic_nprakash@quicinc.com>
-Cc: Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, Jonathan Corbet <corbet@lwn.net>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Yan-Jie Wang <yanjiewtw@gmail.com>, Randy Dunlap <rdunlap@infradead.org>, 
-	Peter Zijlstra <peterz@infradead.org>, "Steven Rostedt (Google)" <rostedt@goodmis.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	quic_pkondeti@quicinc.com, quic_kprasan@quicinc.com, 
-	quic_mpilaniy@quicinc.com, quic_shrekk@quicinc.com, mpleshivenkov@google.com, 
-	ericyin@google.com
+Date: Thu, 22 Feb 2024 20:06:38 +0100
+Message-ID: <CAJZ5v0g7iN3nfP+2mYk-Zsa00_LLzeQHo7rYCsgnnMNk4QkjZQ@mail.gmail.com>
+Subject: Re: [PATCH ] tools/power x86_energy_perf_policy: Fix file leak in get_pkg_num()
+To: Samasth Norway Ananda <samasth.norway.ananda@oracle.com>
+Cc: lenb@kernel.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 14, 2024 at 8:40=E2=80=AFAM Nikhil V <quic_nprakash@quicinc.com=
-> wrote:
+On Wed, Feb 14, 2024 at 1:20=E2=80=AFAM Samasth Norway Ananda
+<samasth.norway.ananda@oracle.com> wrote:
 >
-> Currently the default compression algorithm is selected based on
-> compile time options. Introduce a module parameter "hibernate.compressor"
-> to override this behaviour.
+> In function get_pkg_num() if fopen_or_die() succeeds it returns a file
+> pointer to be used. But fclose() is never called before returning from
+> the function.
 >
-> Different compression algorithms have different characteristics and
-> hibernation may benefit when it uses any of these algorithms, especially
-> when a secondary algorithm(LZ4) offers better decompression speeds over a
-> default algorithm(LZO), which in turn reduces hibernation image restore
-> time.
->
-> Users can override the default algorithm in two ways:
->  1) Passing "hibernate.compressor" as kernel command line parameter.
->     Usage:
->         LZO: hibernate.compressor=3Dlzo
->         LZ4: hibernate.compressor=3Dlz4
->
->  2) Specifying the algorithm at runtime.
->     Usage:
->         LZO: echo lzo > /sys/module/hibernate/parameters/compressor
->         LZ4: echo lz4 > /sys/module/hibernate/parameters/compressor
->
-> Currently LZO and LZ4 are the supported algorithms. LZO is the default
-> compression algorithm used with hibernation.
->
-> Signed-off-by: Nikhil V <quic_nprakash@quicinc.com>
+> Signed-off-by: Samasth Norway Ananda <samasth.norway.ananda@oracle.com>
 > ---
-> This patch is dependent on the patch series, [1] (patches 1/4 to 3/4).
-> This is picked in linux-next, [2].
->  [1] https://lore.kernel.org/all/cover.1705927916.git.quic_nprakash@quici=
-nc.com/
->  [2] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/=
-log/kernel/power?h=3Dnext-20240212
+> Found this error through static analysis. This has only been compile
+> tested.
+> ---
+>  tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c | 1 +
+>  1 file changed, 1 insertion(+)
 >
-> Changes in v2:
->  Changes to incorporate suggestions from Randy Dunlap:
->   - Update documentation to specify the default compression algorithm.
->  Link to v1:
->   https://lore.kernel.org/all/3776355f920c1af44490e076072f93bafdf128cc.17=
-07740870.git.quic_nprakash@quicinc.com/
->
->  .../admin-guide/kernel-parameters.txt         | 11 ++++
->  kernel/power/hibernate.c                      | 57 ++++++++++++++++++-
->  2 files changed, 65 insertions(+), 3 deletions(-)
->
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentat=
-ion/admin-guide/kernel-parameters.txt
-> index 31b3a25680d0..8f7fb911b2cc 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -1748,6 +1748,17 @@
->                                 (that will set all pages holding image da=
-ta
->                                 during restoration read-only).
->
-> +       hibernate.compressor=3D   [HIBERNATION] Compression algorithm to =
-be
-> +                               used with hibernation.
-> +                               Format: { lzo | lz4 }
-> +                               Default: lzo
-> +
-> +                               lzo: Select LZO compression algorithm to
-> +                               compress/decompress hibernation image.
-> +
-> +                               lz4: Select LZ4 compression algorithm to
-> +                               compress/decompress hibernation image.
-> +
->         highmem=3Dnn[KMG] [KNL,BOOT] forces the highmem zone to have an e=
-xact
->                         size of <nn>. This works even on boxes that have =
-no
->                         highmem otherwise. This also works to reduce high=
-mem
-> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-> index 219191d6d0e8..43b1a82e800c 100644
-> --- a/kernel/power/hibernate.c
-> +++ b/kernel/power/hibernate.c
-> @@ -47,7 +47,7 @@ dev_t swsusp_resume_device;
->  sector_t swsusp_resume_block;
->  __visible int in_suspend __nosavedata;
->
-> -static const char *default_compressor =3D CONFIG_HIBERNATION_DEF_COMP;
-> +static char hibernate_compressor[CRYPTO_MAX_ALG_NAME] =3D CONFIG_HIBERNA=
-TION_DEF_COMP;
->
->  /*
->   * Compression/decompression algorithm to be used while saving/loading
-> @@ -748,7 +748,7 @@ int hibernate(void)
->          * Query for the compression algorithm support if compression is =
-enabled.
->          */
->         if (!nocompress) {
-> -               strscpy(hib_comp_algo, default_compressor, sizeof(hib_com=
-p_algo));
-> +               strscpy(hib_comp_algo, hibernate_compressor, sizeof(hib_c=
-omp_algo));
->                 if (crypto_has_comp(hib_comp_algo, 0, 0) !=3D 1) {
->                         pr_err("%s compression is not available\n", hib_c=
-omp_algo);
->                         return -EOPNOTSUPP;
-> @@ -999,7 +999,7 @@ static int software_resume(void)
->                 if (swsusp_header_flags & SF_COMPRESSION_ALG_LZ4)
->                         strscpy(hib_comp_algo, COMPRESSION_ALGO_LZ4, size=
-of(hib_comp_algo));
->                 else
-> -                       strscpy(hib_comp_algo, default_compressor, sizeof=
-(hib_comp_algo));
-> +                       strscpy(hib_comp_algo, COMPRESSION_ALGO_LZO, size=
-of(hib_comp_algo));
->                 if (crypto_has_comp(hib_comp_algo, 0, 0) !=3D 1) {
->                         pr_err("%s compression is not available\n", hib_c=
-omp_algo);
->                         error =3D -EOPNOTSUPP;
-> @@ -1422,6 +1422,57 @@ static int __init nohibernate_setup(char *str)
->         return 1;
+> diff --git a/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_polic=
+y.c b/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
+> index 5fd9e594079c..ebda9c366b2b 100644
+> --- a/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
+> +++ b/tools/power/x86/x86_energy_perf_policy/x86_energy_perf_policy.c
+> @@ -1241,6 +1241,7 @@ unsigned int get_pkg_num(int cpu)
+>         retval =3D fscanf(fp, "%d\n", &pkg);
+>         if (retval !=3D 1)
+>                 errx(1, "%s: failed to parse", pathname);
+> +       fclose(fp);
+>         return pkg;
 >  }
 >
-> +static const char * const comp_alg_enabled[] =3D {
-> +#if IS_ENABLED(CONFIG_CRYPTO_LZO)
-> +       COMPRESSION_ALGO_LZO,
-> +#endif
-> +#if IS_ENABLED(CONFIG_CRYPTO_LZ4)
-> +       COMPRESSION_ALGO_LZ4,
-> +#endif
-> +};
-> +
-> +static int hibernate_compressor_param_set(const char *compressor,
-> +               const struct kernel_param *kp)
-> +{
-> +       unsigned int sleep_flags;
-> +       int index, ret;
-> +
-> +       sleep_flags =3D lock_system_sleep();
-> +
-> +       index =3D sysfs_match_string(comp_alg_enabled, compressor);
-> +       if (index >=3D 0) {
-> +               ret =3D param_set_copystring(comp_alg_enabled[index], kp)=
-;
-> +               if (!ret)
-> +                       strscpy(hib_comp_algo, comp_alg_enabled[index],
-> +                               sizeof(hib_comp_algo));
-> +       } else {
-> +               ret =3D index;
-> +       }
-> +
-> +       unlock_system_sleep(sleep_flags);
-> +
-> +       if (ret)
-> +               pr_debug("Cannot set specified compressor %s\n",
-> +                        compressor);
-> +
-> +       return ret;
-> +}
-> +
-> +static const struct kernel_param_ops hibernate_compressor_param_ops =3D =
-{
-> +       .set    =3D hibernate_compressor_param_set,
-> +       .get    =3D param_get_string,
-> +};
-> +
-> +static struct kparam_string hibernate_compressor_param_string =3D {
-> +       .maxlen =3D sizeof(hibernate_compressor),
-> +       .string =3D hibernate_compressor,
-> +};
-> +
-> +module_param_cb(compressor, &hibernate_compressor_param_ops,
-> +               &hibernate_compressor_param_string, 0644);
-> +MODULE_PARM_DESC(compressor,
-> +                "Compression algorithm to be used with hibernation");
-> +
->  __setup("noresume", noresume_setup);
->  __setup("resume_offset=3D", resume_offset_setup);
->  __setup("resume=3D", resume_setup);
 > --
 
 Applied as 6.9 material, thanks!
