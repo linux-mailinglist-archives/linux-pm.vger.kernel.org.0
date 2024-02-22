@@ -1,247 +1,445 @@
-Return-Path: <linux-pm+bounces-4285-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4286-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB5D785FDD4
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 17:15:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6B5B85FE55
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 17:44:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F21691C2186F
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 16:15:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2D100B28E7B
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 16:44:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF5791534EE;
-	Thu, 22 Feb 2024 16:13:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F44F153BCD;
+	Thu, 22 Feb 2024 16:44:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l+Q5o+ta"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3AE01509B4;
-	Thu, 22 Feb 2024 16:13:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D71FB153511;
+	Thu, 22 Feb 2024 16:44:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708618436; cv=none; b=Re+IGLLPiSgIYrLQZBFAYiWnY5vASCXX69UDL562+H4M43ovG+jaG123oon/i1QN9qqzBP1Q1ORtny8NZxA82Y2bvnjVRn1yOJXLlnIus3dIBNdiPx5+FmWgQDZr0ie8lIQpUSlHtuXN7IpgQhRuL+rQNqRObfrHQ4DpiwSLSgM=
+	t=1708620259; cv=none; b=Qfnhpt7+yK20OSoq3E0DgKGLFm2UHOSIbQGJSy1FMfSWuo6ABi1tGExiDInhn98XqPs9NSpgeKc/+50ZZ/6Eq48nY1hQcYYc9Gqy5BES0lpzmEgQaeI0nwJBtpmPpywOC6hX57IY8JoKF7lK2LgPup/i0GTlwVGTXmWx7BnZL4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708618436; c=relaxed/simple;
-	bh=xLTXZ6Bxgt5ETszVJtzS1FY0pNctpGeWh88l/gFNDvs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VDQBOdXHoP5OblqdSM0D+JCUHAdTQBLaBYzWI9FSRS7jvthcjab9U7JFv6cxRKut31/OQ7XbFx8lZNrkyc4/1yl8X0GU74BTKwFeMf4PtS4ofmsrYCMW8URpmWMm5Je8taQObI+iBl/Zb0YFXoBgXQX6PsS5R2iMPyLTkYiqmis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-6e45f7c63f4so249037a34.1;
-        Thu, 22 Feb 2024 08:13:54 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708618434; x=1709223234;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U7kywycVUYnMKGOh8phoPBRqxepGp2IOpF8EYijVPTo=;
-        b=EFBx3wQy2hU038vCQHvAuiMWkNfw/uNlXhseRTrN7FuITwfJXh5GMaiCTjSwsD5/jq
-         SuPtYONAwPYjBQ4WXoq1UGRvg0OQIAulAQUKXk73dueqH55j9ZvomEiSDJt94i1T9nGR
-         t/OuNPWhFK0jySaH7bLdtJ0Fg/Xek99Jv9FWUM/kyppgJuuCcCeQZwrX5dJfbPaamk9l
-         3EkCkwqIqcBGCYX1sLLqcdGytIqIQPNpq+Kbm68Ptclby5dV3LgqFUANHETt+yrnf9iX
-         cfyHt7WEbKYFjzhpXJe3QP0XGLbBGPUGMXxAfk5A8MpIrRBVbP3uyuBHvCsrpX5YG65a
-         K+WA==
-X-Forwarded-Encrypted: i=1; AJvYcCUNL2zoVBcS4i6LPpdfhaziKdS4NRqhCX2YqvxWRHk8/YCkgP77TMaN7oBq/rZHOZMu4rDa+n5UraQS3QmG8d4BejpCPgneiNOycSF2gr1ndJoBC1dp6UAJB+6Xf1seB0oV/XbbrlzEMf3o40aO2vcmkg+czJg2wQo958sohJPWgRaA1n9TAh+AwfRtXZj/A2GYTRyNhcKtE448cQrHXA==
-X-Gm-Message-State: AOJu0Yxr9ZIAyDG1Vc0SWabrq9H232XkjS3cxpcMUjIcR8EDB4m212VG
-	LRyiS90BNYgl/W2ZY6eYTqJZm6g0uv9T0GQlr/W/fj39nFODEbOy7n1+6JlJ1U8ayW1/dzzLNmk
-	fC6mfcNMbJKlhS2kKDo7yPpKfQrM=
-X-Google-Smtp-Source: AGHT+IElkHO4h3c6WWghois3wiU/qlbtAodvC+rzPTHM2+ADVw24psp0/zEmR6tv+Yp2vnmYYvcIM6jx6Tuv9eYN/Lw=
-X-Received: by 2002:a4a:a886:0:b0:5a0:396d:2489 with SMTP id
- q6-20020a4aa886000000b005a0396d2489mr872892oom.1.1708618434009; Thu, 22 Feb
- 2024 08:13:54 -0800 (PST)
+	s=arc-20240116; t=1708620259; c=relaxed/simple;
+	bh=hzQJmorMTV5rdTl82QUGox6zoC899///hh48jdQr9E4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YoCZ7uqvExr7aDPJ1m2aykT6T4dWnQZyhhqrnsH4YRgF/RPbDZMNPWXai3LfqZNDNDy3HJzWJHCixEOVC7uqgWPOu1iI55kY3kpmFgIQ0hQ/iDGK+OwIci36s99FqJGWiiq/ogjHpFhMk/PNjFCDa1qlr++9JicKfaT79cUuJcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l+Q5o+ta; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1708620257; x=1740156257;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=hzQJmorMTV5rdTl82QUGox6zoC899///hh48jdQr9E4=;
+  b=l+Q5o+tatMPS9g1/wykNMJAzM/lb2GlbBL5kZGpwLbgllcsvwVRypG4X
+   VyO9oA2X6AqjMPbjSJKnlDyZfFSC2ri9eyhneAHO2Nm4BsKwBcv7JSmzE
+   izCgQow/aMkd7aU9PyRbnfAiwc/DNCMXvfNbljMXZsBFtaAp87N6HcIRZ
+   WP2xaxXU3rOhQJWj+hVVlWr+8YUayj/3fGIyZtoqjS16+cKFoB72QRDJY
+   65o88BGGB9gK7i61Ut7h58Kr+47Z+KjEIerqXZXr26ABozWlbpYp33uRC
+   6Yl61s+GX7CIozLPyBY0TXBnDSnUxX4qYgNH+DJ9RHuPH8eFTIALOg8pN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="2718264"
+X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
+   d="scan'208";a="2718264"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 08:44:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
+   d="scan'208";a="10289434"
+Received: from mhaehnex-mobl1.ger.corp.intel.com (HELO [10.252.2.135]) ([10.252.2.135])
+  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 08:44:10 -0800
+Message-ID: <03e62bcf-137c-4947-8f34-0cbfcba92a30@intel.com>
+Date: Thu, 22 Feb 2024 16:44:06 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <6017196.lOV4Wx5bFT@kreacher> <2173914.irdbgypaU6@kreacher>
- <59e8fd70-5ba6-4256-9127-bd5e76e6bc99@linaro.org> <CAJZ5v0gcK7mQgDTHqo3PYT10sKqJJvu6JP0BLEHG6m0HzUKyCA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0gcK7mQgDTHqo3PYT10sKqJJvu6JP0BLEHG6m0HzUKyCA@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 22 Feb 2024 17:13:42 +0100
-Message-ID: <CAJZ5v0j6LWGnUfB6fbgHTXFOJ=n857ZSxqbd3u-5_FAVnbhXoQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/9] thermal: core: Add flags to struct thermal_trip
-To: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	Lukasz Luba <lukasz.luba@arm.com>, LKML <linux-kernel@vger.kernel.org>, 
-	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>, 
-	netdev@vger.kernel.org, Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>, 
-	Miri Korenblit <miriam.rachel.korenblit@intel.com>, linux-wireless@vger.kernel.org, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] devm-helpers: Add resource managed version of mutex
+ init
+Content-Language: en-GB
+To: =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
+ linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+ Matti Vaittinen <mazziesaccount@gmail.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>,
+ Lucas De Marchi <lucas.demarchi@intel.com>, Oded Gabbay
+ <ogabbay@kernel.org>, =?UTF-8?Q?Thomas_Hellstr=C3=B6m?=
+ <thomas.hellstrom@linux.intel.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+ Aleksandr Mezin <mezin.alexander@gmail.com>, Jean Delvare
+ <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+ Sebastian Reichel <sre@kernel.org>, Matthias Brugger
+ <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ linux-gpio@vger.kernel.org, intel-xe@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
+ linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+References: <20240222145838.12916-1-kabel@kernel.org>
+From: Matthew Auld <matthew.auld@intel.com>
+In-Reply-To: <20240222145838.12916-1-kabel@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Feb 22, 2024 at 4:51=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
->
-> On Thu, Feb 22, 2024 at 3:36=E2=80=AFPM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
-> >
-> > On 12/02/2024 19:31, Rafael J. Wysocki wrote:
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > In order to allow thermal zone creators to specify the writability of
-> > > trip point temperature and hysteresis on a per-trip basis, add a flag=
-s
-> > > field to struct thermal_trip and define flags to represent the desire=
-d
-> > > trip properties.
-> > >
-> > > Also make thermal_zone_device_register_with_trips() set the
-> > > THERMAL_TRIP_FLAG_RW_TEMP flag for all trips covered by the writable
-> > > trips mask passed to it and modify the thermal sysfs code to look at
-> > > the trip flags instead of using the writable trips mask directly or
-> > > checking the presence of the .set_trip_hyst() zone callback.
-> > >
-> > > Additionally, make trip_point_temp_store() and trip_point_hyst_store(=
-)
-> > > fail with an error code if the trip passed to one of them has
-> > > THERMAL_TRIP_FLAG_RW_TEMP or THERMAL_TRIP_FLAG_RW_HYST,
-> > > respectively, clear in its flags.
-> > >
-> > > No intentional functional impact.
-> > >
-> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > ---
-> > >
-> > > v1 -> v2:
-> > >     * Rename trip flags (Stanislaw).
-> > >
-> > > ---
-> > >   drivers/thermal/thermal_core.c  |   12 +++++++++++-
-> > >   drivers/thermal/thermal_core.h  |    2 +-
-> > >   drivers/thermal/thermal_sysfs.c |   28 +++++++++++++++++++---------
-> > >   include/linux/thermal.h         |    7 +++++++
-> > >   4 files changed, 38 insertions(+), 11 deletions(-)
-> > >
-> > > Index: linux-pm/include/linux/thermal.h
-> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > --- linux-pm.orig/include/linux/thermal.h
-> > > +++ linux-pm/include/linux/thermal.h
-> > > @@ -64,15 +64,23 @@ enum thermal_notify_event {
-> > >    * @threshold: trip crossing notification threshold miliCelsius
-> > >    * @type: trip point type
-> > >    * @priv: pointer to driver data associated with this trip
-> > > + * @flags: flags representing binary properties of the trip
-> > >    */
-> > >   struct thermal_trip {
-> > >       int temperature;
-> > >       int hysteresis;
-> > >       int threshold;
-> > >       enum thermal_trip_type type;
-> > > +     u8 flags;
-> > >       void *priv;
-> > >   };
-> > >
-> > > +#define THERMAL_TRIP_FLAG_RW_TEMP    BIT(0)
-> > > +#define THERMAL_TRIP_FLAG_RW_HYST    BIT(1)
-> > > +
-> > > +#define THERMAL_TRIP_FLAG_MASK_RW    (THERMAL_TRIP_FLAG_RW_TEMP | \
-> > > +                                      THERMAL_TRIP_FLAG_RW_HYST)
-> >
-> > What about THERMAL_TRIP_FLAG_RW instead ?
->
-> Fine with me.
->
-> > >   struct thermal_zone_device_ops {
-> > >       int (*bind) (struct thermal_zone_device *,
-> > >                    struct thermal_cooling_device *);
-> > > Index: linux-pm/drivers/thermal/thermal_core.c
-> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > --- linux-pm.orig/drivers/thermal/thermal_core.c
-> > > +++ linux-pm/drivers/thermal/thermal_core.c
-> > > @@ -1356,13 +1356,23 @@ thermal_zone_device_register_with_trips(
-> > >       tz->devdata =3D devdata;
-> > >       tz->trips =3D trips;
-> > >       tz->num_trips =3D num_trips;
-> > > +     if (num_trips > 0) {
-> >
-> > Is this check really necessary?
->
-> No, it isn't.
->
-> > for_each_trip() should exit immediately if there is no trip points.
->
-> Right.
->
-> > > +             struct thermal_trip *trip;
-> > > +
-> > > +             for_each_trip(tz, trip) {
-> > > +                     if (mask & 1)
-> > > +                             trip->flags |=3D THERMAL_TRIP_FLAG_RW_T=
-EMP;
-> > > +
-> > > +                     mask >>=3D 1;
-> > > +             }
-> > > +     }
-> > >
-> > >       thermal_set_delay_jiffies(&tz->passive_delay_jiffies, passive_d=
-elay);
-> > >       thermal_set_delay_jiffies(&tz->polling_delay_jiffies, polling_d=
-elay);
-> > >
-> > >       /* sys I/F */
-> > >       /* Add nodes that are always present via .groups */
-> > > -     result =3D thermal_zone_create_device_groups(tz, mask);
-> > > +     result =3D thermal_zone_create_device_groups(tz);
-> > >       if (result)
-> > >               goto remove_id;
-> > >
-> > > Index: linux-pm/drivers/thermal/thermal_core.h
-> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > --- linux-pm.orig/drivers/thermal/thermal_core.h
-> > > +++ linux-pm/drivers/thermal/thermal_core.h
-> > > @@ -131,7 +131,7 @@ void thermal_zone_trip_updated(struct th
-> > >   int __thermal_zone_get_temp(struct thermal_zone_device *tz, int *te=
-mp);
-> > >
-> > >   /* sysfs I/F */
-> > > -int thermal_zone_create_device_groups(struct thermal_zone_device *, =
-int);
-> > > +int thermal_zone_create_device_groups(struct thermal_zone_device *tz=
-);
-> > >   void thermal_zone_destroy_device_groups(struct thermal_zone_device =
-*);
-> > >   void thermal_cooling_device_setup_sysfs(struct thermal_cooling_devi=
-ce *);
-> > >   void thermal_cooling_device_destroy_sysfs(struct thermal_cooling_de=
-vice *cdev);
-> > > Index: linux-pm/drivers/thermal/thermal_sysfs.c
-> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > > --- linux-pm.orig/drivers/thermal/thermal_sysfs.c
-> > > +++ linux-pm/drivers/thermal/thermal_sysfs.c
-> > > @@ -122,6 +122,11 @@ trip_point_temp_store(struct device *dev
-> > >
-> > >       trip =3D &tz->trips[trip_id];
-> > >
-> > > +     if (!(trip->flags & THERMAL_TRIP_FLAG_RW_TEMP)) {
-> > > +             ret =3D -EPERM;
-> > > +             goto unlock;
-> > > +     }
-> >
-> > Does it really happen?
-> >
-> > If the sysfs file is created with the right permission regarding the
-> > trip->flags then this condition can never be true.
->
-> But the permissions can be changed after the file has been created, can't=
- they?
+On 22/02/2024 14:58, Marek Behún wrote:
+> A few drivers are doing resource-managed mutex initialization by
+> implementing ad-hoc one-liner mutex dropping functions and using them
+> with devm_add_action_or_reset(). Help drivers avoid these repeated
+> one-liners by adding managed version of mutex initialization.
+> 
+> Use the new function devm_mutex_init() in the following drivers:
+>    drivers/gpio/gpio-pisosr.c
+>    drivers/gpio/gpio-sim.c
+>    drivers/gpu/drm/xe/xe_hwmon.c
+>    drivers/hwmon/nzxt-smart2.c
+>    drivers/leds/leds-is31fl319x.c
+>    drivers/power/supply/mt6370-charger.c
+>    drivers/power/supply/rt9467-charger.c
+> 
+> Signed-off-by: Marek Behún <kabel@kernel.org>
+> ---
+>   drivers/gpio/gpio-pisosr.c            |  9 ++-----
+>   drivers/gpio/gpio-sim.c               | 12 ++--------
+>   drivers/gpu/drm/xe/xe_hwmon.c         | 11 ++-------
+>   drivers/hwmon/nzxt-smart2.c           |  9 ++-----
+>   drivers/leds/leds-is31fl319x.c        |  9 ++-----
+>   drivers/power/supply/mt6370-charger.c | 11 +--------
+>   drivers/power/supply/rt9467-charger.c | 34 ++++-----------------------
+>   include/linux/devm-helpers.h          | 32 +++++++++++++++++++++++++
+>   8 files changed, 47 insertions(+), 80 deletions(-)
+> 
+> diff --git a/drivers/gpio/gpio-pisosr.c b/drivers/gpio/gpio-pisosr.c
+> index e3013e778e15..dddbf37e855f 100644
+> --- a/drivers/gpio/gpio-pisosr.c
+> +++ b/drivers/gpio/gpio-pisosr.c
+> @@ -7,6 +7,7 @@
+>   #include <linux/bitmap.h>
+>   #include <linux/bitops.h>
+>   #include <linux/delay.h>
+> +#include <linux/devm-helpers.h>
+>   #include <linux/gpio/consumer.h>
+>   #include <linux/gpio/driver.h>
+>   #include <linux/module.h>
+> @@ -116,11 +117,6 @@ static const struct gpio_chip template_chip = {
+>   	.can_sleep		= true,
+>   };
+>   
+> -static void pisosr_mutex_destroy(void *lock)
+> -{
+> -	mutex_destroy(lock);
+> -}
+> -
+>   static int pisosr_gpio_probe(struct spi_device *spi)
+>   {
+>   	struct device *dev = &spi->dev;
+> @@ -147,8 +143,7 @@ static int pisosr_gpio_probe(struct spi_device *spi)
+>   		return dev_err_probe(dev, PTR_ERR(gpio->load_gpio),
+>   				     "Unable to allocate load GPIO\n");
+>   
+> -	mutex_init(&gpio->lock);
+> -	ret = devm_add_action_or_reset(dev, pisosr_mutex_destroy, &gpio->lock);
+> +	ret = devm_mutex_init(dev, &gpio->lock);
+>   	if (ret)
+>   		return ret;
+>   
+> diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
+> index c4106e37e6db..fcfcaa4efe70 100644
+> --- a/drivers/gpio/gpio-sim.c
+> +++ b/drivers/gpio/gpio-sim.c
+> @@ -12,6 +12,7 @@
+>   #include <linux/completion.h>
+>   #include <linux/configfs.h>
+>   #include <linux/device.h>
+> +#include <linux/devm-helpers.h>
+>   #include <linux/err.h>
+>   #include <linux/gpio/consumer.h>
+>   #include <linux/gpio/driver.h>
+> @@ -307,13 +308,6 @@ static ssize_t gpio_sim_sysfs_pull_store(struct device *dev,
+>   	return len;
+>   }
+>   
+> -static void gpio_sim_mutex_destroy(void *data)
+> -{
+> -	struct mutex *lock = data;
+> -
+> -	mutex_destroy(lock);
+> -}
+> -
+>   static void gpio_sim_put_device(void *data)
+>   {
+>   	struct device *dev = data;
+> @@ -457,9 +451,7 @@ static int gpio_sim_add_bank(struct fwnode_handle *swnode, struct device *dev)
+>   	if (ret)
+>   		return ret;
+>   
+> -	mutex_init(&chip->lock);
+> -	ret = devm_add_action_or_reset(dev, gpio_sim_mutex_destroy,
+> -				       &chip->lock);
+> +	ret = devm_mutex_init(dev, &chip->lock);
+>   	if (ret)
+>   		return ret;
+>   
+> diff --git a/drivers/gpu/drm/xe/xe_hwmon.c b/drivers/gpu/drm/xe/xe_hwmon.c
+> index 174ed2185481..bb88ae1c196c 100644
+> --- a/drivers/gpu/drm/xe/xe_hwmon.c
+> +++ b/drivers/gpu/drm/xe/xe_hwmon.c
+> @@ -3,6 +3,7 @@
+>    * Copyright © 2023 Intel Corporation
+>    */
+>   
+> +#include <linux/devm-helpers.h>
+>   #include <linux/hwmon-sysfs.h>
+>   #include <linux/hwmon.h>
+>   #include <linux/types.h>
+> @@ -729,13 +730,6 @@ xe_hwmon_get_preregistration_info(struct xe_device *xe)
+>   		xe_hwmon_energy_get(hwmon, &energy);
+>   }
+>   
+> -static void xe_hwmon_mutex_destroy(void *arg)
+> -{
+> -	struct xe_hwmon *hwmon = arg;
+> -
+> -	mutex_destroy(&hwmon->hwmon_lock);
+> -}
+> -
+>   void xe_hwmon_register(struct xe_device *xe)
+>   {
+>   	struct device *dev = xe->drm.dev;
+> @@ -751,8 +745,7 @@ void xe_hwmon_register(struct xe_device *xe)
+>   
+>   	xe->hwmon = hwmon;
+>   
+> -	mutex_init(&hwmon->hwmon_lock);
+> -	if (devm_add_action_or_reset(dev, xe_hwmon_mutex_destroy, hwmon))
+> +	if (devm_mutex_init(dev, &hwmon->hwmon_lock))
+>   		return;
+>   
+>   	/* primary GT to access device level properties */
+> diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
+> index 7aa586eb74be..00bc89607673 100644
+> --- a/drivers/hwmon/nzxt-smart2.c
+> +++ b/drivers/hwmon/nzxt-smart2.c
+> @@ -5,6 +5,7 @@
+>    * Copyright (c) 2021 Aleksandr Mezin
+>    */
+>   
+> +#include <linux/devm-helpers.h>
+>   #include <linux/hid.h>
+>   #include <linux/hwmon.h>
+>   #include <linux/math.h>
+> @@ -721,11 +722,6 @@ static int __maybe_unused nzxt_smart2_hid_reset_resume(struct hid_device *hdev)
+>   	return init_device(drvdata, drvdata->update_interval);
+>   }
+>   
+> -static void mutex_fini(void *lock)
+> -{
+> -	mutex_destroy(lock);
+> -}
+> -
+>   static int nzxt_smart2_hid_probe(struct hid_device *hdev,
+>   				 const struct hid_device_id *id)
+>   {
+> @@ -741,8 +737,7 @@ static int nzxt_smart2_hid_probe(struct hid_device *hdev,
+>   
+>   	init_waitqueue_head(&drvdata->wq);
+>   
+> -	mutex_init(&drvdata->mutex);
+> -	ret = devm_add_action_or_reset(&hdev->dev, mutex_fini, &drvdata->mutex);
+> +	ret = devm_mutex_init(&hdev->dev, &drvdata->mutex);
+>   	if (ret)
+>   		return ret;
+>   
+> diff --git a/drivers/leds/leds-is31fl319x.c b/drivers/leds/leds-is31fl319x.c
+> index 66c65741202e..e9d7cf6a386c 100644
+> --- a/drivers/leds/leds-is31fl319x.c
+> +++ b/drivers/leds/leds-is31fl319x.c
+> @@ -8,6 +8,7 @@
+>    * effect LEDs.
+>    */
+>   
+> +#include <linux/devm-helpers.h>
+>   #include <linux/err.h>
+>   #include <linux/i2c.h>
+>   #include <linux/leds.h>
+> @@ -495,11 +496,6 @@ static inline int is31fl3196_db_to_gain(u32 dezibel)
+>   	return dezibel / IS31FL3196_AUDIO_GAIN_DB_STEP;
+>   }
+>   
+> -static void is31f1319x_mutex_destroy(void *lock)
+> -{
+> -	mutex_destroy(lock);
+> -}
+> -
+>   static int is31fl319x_probe(struct i2c_client *client)
+>   {
+>   	struct is31fl319x_chip *is31;
+> @@ -515,8 +511,7 @@ static int is31fl319x_probe(struct i2c_client *client)
+>   	if (!is31)
+>   		return -ENOMEM;
+>   
+> -	mutex_init(&is31->lock);
+> -	err = devm_add_action_or_reset(dev, is31f1319x_mutex_destroy, &is31->lock);
+> +	err = devm_mutex_init(dev, &is31->lock);
+>   	if (err)
+>   		return err;
+>   
+> diff --git a/drivers/power/supply/mt6370-charger.c b/drivers/power/supply/mt6370-charger.c
+> index e24fce087d80..fa0517d0352d 100644
+> --- a/drivers/power/supply/mt6370-charger.c
+> +++ b/drivers/power/supply/mt6370-charger.c
+> @@ -766,13 +766,6 @@ static int mt6370_chg_init_psy(struct mt6370_priv *priv)
+>   	return PTR_ERR_OR_ZERO(priv->psy);
+>   }
+>   
+> -static void mt6370_chg_destroy_attach_lock(void *data)
+> -{
+> -	struct mutex *attach_lock = data;
+> -
+> -	mutex_destroy(attach_lock);
+> -}
+> -
+>   static void mt6370_chg_destroy_wq(void *data)
+>   {
+>   	struct workqueue_struct *wq = data;
+> @@ -900,9 +893,7 @@ static int mt6370_chg_probe(struct platform_device *pdev)
+>   	if (ret)
+>   		return dev_err_probe(dev, ret, "Failed to init psy\n");
+>   
+> -	mutex_init(&priv->attach_lock);
+> -	ret = devm_add_action_or_reset(dev, mt6370_chg_destroy_attach_lock,
+> -				       &priv->attach_lock);
+> +	ret = devm_mutex_init(dev, &priv->attach_lock);
+>   	if (ret)
+>   		return dev_err_probe(dev, ret, "Failed to init attach lock\n");
+>   
+> diff --git a/drivers/power/supply/rt9467-charger.c b/drivers/power/supply/rt9467-charger.c
+> index fdfdc83ab045..84f07c22077f 100644
+> --- a/drivers/power/supply/rt9467-charger.c
+> +++ b/drivers/power/supply/rt9467-charger.c
+> @@ -10,6 +10,7 @@
+>   #include <linux/bitfield.h>
+>   #include <linux/completion.h>
+>   #include <linux/delay.h>
+> +#include <linux/devm-helpers.h>
+>   #include <linux/gpio/consumer.h>
+>   #include <linux/i2c.h>
+>   #include <linux/interrupt.h>
+> @@ -1149,27 +1150,6 @@ static int rt9467_reset_chip(struct rt9467_chg_data *data)
+>   	return regmap_field_write(data->rm_field[F_RST], 1);
+>   }
+>   
+> -static void rt9467_chg_destroy_adc_lock(void *data)
+> -{
+> -	struct mutex *adc_lock = data;
+> -
+> -	mutex_destroy(adc_lock);
+> -}
+> -
+> -static void rt9467_chg_destroy_attach_lock(void *data)
+> -{
+> -	struct mutex *attach_lock = data;
+> -
+> -	mutex_destroy(attach_lock);
+> -}
+> -
+> -static void rt9467_chg_destroy_ichg_ieoc_lock(void *data)
+> -{
+> -	struct mutex *ichg_ieoc_lock = data;
+> -
+> -	mutex_destroy(ichg_ieoc_lock);
+> -}
+> -
+>   static void rt9467_chg_complete_aicl_done(void *data)
+>   {
+>   	struct completion *aicl_done = data;
+> @@ -1222,21 +1202,15 @@ static int rt9467_charger_probe(struct i2c_client *i2c)
+>   	if (ret)
+>   		return dev_err_probe(dev, ret, "Failed to add irq chip\n");
+>   
+> -	mutex_init(&data->adc_lock);
+> -	ret = devm_add_action_or_reset(dev, rt9467_chg_destroy_adc_lock,
+> -				       &data->adc_lock);
+> +	ret = devm_mutex_init(dev, &data->adc_lock);
+>   	if (ret)
+>   		return dev_err_probe(dev, ret, "Failed to init ADC lock\n");
+>   
+> -	mutex_init(&data->attach_lock);
+> -	ret = devm_add_action_or_reset(dev, rt9467_chg_destroy_attach_lock,
+> -				       &data->attach_lock);
+> +	ret = devm_mutex_init(dev, &data->attach_lock);
+>   	if (ret)
+>   		return dev_err_probe(dev, ret, "Failed to init attach lock\n");
+>   
+> -	mutex_init(&data->ichg_ieoc_lock);
+> -	ret = devm_add_action_or_reset(dev, rt9467_chg_destroy_ichg_ieoc_lock,
+> -				       &data->ichg_ieoc_lock);
+> +	ret = devm_mutex_init(dev, &data->ichg_ieoc_lock);
+>   	if (ret)
+>   		return dev_err_probe(dev, ret, "Failed to init ICHG/IEOC lock\n");
+>   
+> diff --git a/include/linux/devm-helpers.h b/include/linux/devm-helpers.h
+> index 74891802200d..70640fb96117 100644
+> --- a/include/linux/devm-helpers.h
+> +++ b/include/linux/devm-helpers.h
+> @@ -24,6 +24,8 @@
+>    */
+>   
+>   #include <linux/device.h>
+> +#include <linux/kconfig.h>
+> +#include <linux/mutex.h>
+>   #include <linux/workqueue.h>
+>   
+>   static inline void devm_delayed_work_drop(void *res)
+> @@ -76,4 +78,34 @@ static inline int devm_work_autocancel(struct device *dev,
+>   	return devm_add_action(dev, devm_work_drop, w);
+>   }
+>   
+> +static inline void devm_mutex_drop(void *res)
+> +{
+> +	mutex_destroy(res);
+> +}
+> +
+> +/**
+> + * devm_mutex_init - Resource managed mutex initialization
+> + * @dev:	Device which lifetime mutex is bound to
+> + * @lock:	Mutex to be initialized (and automatically destroyed)
+> + *
+> + * Initialize mutex which is automatically destroyed when driver is detached.
+> + * A few drivers initialize mutexes which they want destroyed before driver is
+> + * detached, for debugging purposes.
+> + * devm_mutex_init() can be used to omit the explicit mutex_destroy() call when
+> + * driver is detached.
+> + */
+> +static inline int devm_mutex_init(struct device *dev, struct mutex *lock)
+> +{
+> +	mutex_init(lock);
 
-Even so, the .store() callback will not be set then anyway.
+Do you know if this this needs __always_inline? The static lockdep key 
+in mutex_init() should be different for each caller class. See 
+c21f11d182c2 ("drm: fix drmm_mutex_init()").
 
-I'll send an update of this patch.
+> +
+> +	/*
+> +	 * mutex_destroy() is an empty function if CONFIG_DEBUG_MUTEXES is
+> +	 * disabled. No need to allocate an action in that case.
+> +	 */
+> +	if (IS_ENABLED(CONFIG_DEBUG_MUTEXES))
+> +		return devm_add_action_or_reset(dev, devm_mutex_drop, lock);
+> +	else
+> +		return 0;
+> +}
+> +
+>   #endif
 
