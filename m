@@ -1,445 +1,209 @@
-Return-Path: <linux-pm+bounces-4286-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4287-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6B5B85FE55
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 17:44:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05FDB85FE7D
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 17:53:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2D100B28E7B
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 16:44:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6FEF11F28297
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 16:53:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F44F153BCD;
-	Thu, 22 Feb 2024 16:44:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2921C154C14;
+	Thu, 22 Feb 2024 16:53:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l+Q5o+ta"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OsAYKguc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D71FB153511;
-	Thu, 22 Feb 2024 16:44:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E72B153BC9;
+	Thu, 22 Feb 2024 16:53:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708620259; cv=none; b=Qfnhpt7+yK20OSoq3E0DgKGLFm2UHOSIbQGJSy1FMfSWuo6ABi1tGExiDInhn98XqPs9NSpgeKc/+50ZZ/6Eq48nY1hQcYYc9Gqy5BES0lpzmEgQaeI0nwJBtpmPpywOC6hX57IY8JoKF7lK2LgPup/i0GTlwVGTXmWx7BnZL4o=
+	t=1708620810; cv=none; b=o1XUrtn4IOj5ONruiW8/9DMfrH1UmgtLfgbV9fnFmbc7Cwg07ebO4OieRfiAHdPH4HZsj1u+E0BJudyZULu8m2bQ0OBpKpVOgKDluzhGKszwuAYDVW7L4TxFsOwzn5pMgnilfDkvH0e5S/e7FdUUG5ydJtYxvaSr7oShhDJNMRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708620259; c=relaxed/simple;
-	bh=hzQJmorMTV5rdTl82QUGox6zoC899///hh48jdQr9E4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YoCZ7uqvExr7aDPJ1m2aykT6T4dWnQZyhhqrnsH4YRgF/RPbDZMNPWXai3LfqZNDNDy3HJzWJHCixEOVC7uqgWPOu1iI55kY3kpmFgIQ0hQ/iDGK+OwIci36s99FqJGWiiq/ogjHpFhMk/PNjFCDa1qlr++9JicKfaT79cUuJcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l+Q5o+ta; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1708620810; c=relaxed/simple;
+	bh=GgB+0sR+hVs/OpW1fVcFMH3VWjcA3C9BjntTmlpSW5w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N7bizM0hXDyuduaKvn2ntUT9aHq+HnUI+BiwsIbhonCKr5tNedGp1TVni8tCZB2ElUv7Z31URnNenKzqfQGA2XllCb/g2XipoDukAORUssc8T57qcIbr4qKetr/64cG4/sK5oNPK0qKDGRT6FTe3ro0L+HNFxQBdz+mFvuAYtJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OsAYKguc; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708620257; x=1740156257;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=hzQJmorMTV5rdTl82QUGox6zoC899///hh48jdQr9E4=;
-  b=l+Q5o+tatMPS9g1/wykNMJAzM/lb2GlbBL5kZGpwLbgllcsvwVRypG4X
-   VyO9oA2X6AqjMPbjSJKnlDyZfFSC2ri9eyhneAHO2Nm4BsKwBcv7JSmzE
-   izCgQow/aMkd7aU9PyRbnfAiwc/DNCMXvfNbljMXZsBFtaAp87N6HcIRZ
-   WP2xaxXU3rOhQJWj+hVVlWr+8YUayj/3fGIyZtoqjS16+cKFoB72QRDJY
-   65o88BGGB9gK7i61Ut7h58Kr+47Z+KjEIerqXZXr26ABozWlbpYp33uRC
-   6Yl61s+GX7CIozLPyBY0TXBnDSnUxX4qYgNH+DJ9RHuPH8eFTIALOg8pN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="2718264"
+  t=1708620808; x=1740156808;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GgB+0sR+hVs/OpW1fVcFMH3VWjcA3C9BjntTmlpSW5w=;
+  b=OsAYKguc32xbp+GXovAD25ZtSLVZpmnbvZkv+58q12K1nvuYF9MwOiVm
+   JzuEu0aTOUOzixFRPb8O7xQTIrBol/Q7HtQXM9YrPx4drhRYgmaTVa+f+
+   CkIm7xZdJxvLmv8EDyOVXc6Vk7kY/+RGnITQrljBziZv02jnBtqeQThCI
+   1N4Hz+Ckwf9qCvj8vohWfE87mZKVFszhp+PkMFzyRJbJa1yJyTpARoanH
+   uQUwiC9sgM6CKKDJwyQgv94bc6PENgz+KKlx3njMv0gwux4pCZNuLXzjg
+   L+gZr0wNAu+7yOzPkJsbSxvDwJK7Y9hLIMYnTQHPCgFZPR2xqQ9HbFKcn
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="6639348"
 X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
-   d="scan'208";a="2718264"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 08:44:16 -0800
+   d="scan'208";a="6639348"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 08:53:27 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
-   d="scan'208";a="10289434"
-Received: from mhaehnex-mobl1.ger.corp.intel.com (HELO [10.252.2.135]) ([10.252.2.135])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 08:44:10 -0800
-Message-ID: <03e62bcf-137c-4947-8f34-0cbfcba92a30@intel.com>
-Date: Thu, 22 Feb 2024 16:44:06 +0000
+   d="scan'208";a="10126866"
+Received: from sgruszka-mobl.ger.corp.intel.com (HELO localhost) ([10.252.46.166])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 08:53:24 -0800
+Date: Thu, 22 Feb 2024 17:53:21 +0100
+From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-pm@vger.kernel.org,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Jiri Pirko <jiri@resnulli.us>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org
+Subject: Re: [PATCH v4 3/3] thermal: intel: hfi: Enable interface only when
+ required
+Message-ID: <Zdd8AT5+6oLX4eCk@linux.intel.com>
+References: <20240212161615.161935-1-stanislaw.gruszka@linux.intel.com>
+ <20240212161615.161935-4-stanislaw.gruszka@linux.intel.com>
+ <CAJZ5v0jr4Z=ffm9E+eR7p7rQwbCWEP=YHxNbR9VAEwb8-3e3GA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] devm-helpers: Add resource managed version of mutex
- init
-Content-Language: en-GB
-To: =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
- linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
- Matti Vaittinen <mazziesaccount@gmail.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>,
- Lucas De Marchi <lucas.demarchi@intel.com>, Oded Gabbay
- <ogabbay@kernel.org>, =?UTF-8?Q?Thomas_Hellstr=C3=B6m?=
- <thomas.hellstrom@linux.intel.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Aleksandr Mezin <mezin.alexander@gmail.com>, Jean Delvare
- <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
- Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
- Sebastian Reichel <sre@kernel.org>, Matthias Brugger
- <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- linux-gpio@vger.kernel.org, intel-xe@lists.freedesktop.org,
- dri-devel@lists.freedesktop.org, linux-hwmon@vger.kernel.org,
- linux-leds@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
-References: <20240222145838.12916-1-kabel@kernel.org>
-From: Matthew Auld <matthew.auld@intel.com>
-In-Reply-To: <20240222145838.12916-1-kabel@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0jr4Z=ffm9E+eR7p7rQwbCWEP=YHxNbR9VAEwb8-3e3GA@mail.gmail.com>
 
-On 22/02/2024 14:58, Marek Behún wrote:
-> A few drivers are doing resource-managed mutex initialization by
-> implementing ad-hoc one-liner mutex dropping functions and using them
-> with devm_add_action_or_reset(). Help drivers avoid these repeated
-> one-liners by adding managed version of mutex initialization.
+On Tue, Feb 13, 2024 at 02:59:10PM +0100, Rafael J. Wysocki wrote:
+> > -static void hfi_do_enable(void)
+> > +/*
+> > + * HFI enable/disable run in non-concurrent manner on boot CPU in syscore
+> > + * callbacks or under protection of hfi_instance_lock.
+> > + */
 > 
-> Use the new function devm_mutex_init() in the following drivers:
->    drivers/gpio/gpio-pisosr.c
->    drivers/gpio/gpio-sim.c
->    drivers/gpu/drm/xe/xe_hwmon.c
->    drivers/hwmon/nzxt-smart2.c
->    drivers/leds/leds-is31fl319x.c
->    drivers/power/supply/mt6370-charger.c
->    drivers/power/supply/rt9467-charger.c
-> 
-> Signed-off-by: Marek Behún <kabel@kernel.org>
-> ---
->   drivers/gpio/gpio-pisosr.c            |  9 ++-----
->   drivers/gpio/gpio-sim.c               | 12 ++--------
->   drivers/gpu/drm/xe/xe_hwmon.c         | 11 ++-------
->   drivers/hwmon/nzxt-smart2.c           |  9 ++-----
->   drivers/leds/leds-is31fl319x.c        |  9 ++-----
->   drivers/power/supply/mt6370-charger.c | 11 +--------
->   drivers/power/supply/rt9467-charger.c | 34 ++++-----------------------
->   include/linux/devm-helpers.h          | 32 +++++++++++++++++++++++++
->   8 files changed, 47 insertions(+), 80 deletions(-)
-> 
-> diff --git a/drivers/gpio/gpio-pisosr.c b/drivers/gpio/gpio-pisosr.c
-> index e3013e778e15..dddbf37e855f 100644
-> --- a/drivers/gpio/gpio-pisosr.c
-> +++ b/drivers/gpio/gpio-pisosr.c
-> @@ -7,6 +7,7 @@
->   #include <linux/bitmap.h>
->   #include <linux/bitops.h>
->   #include <linux/delay.h>
-> +#include <linux/devm-helpers.h>
->   #include <linux/gpio/consumer.h>
->   #include <linux/gpio/driver.h>
->   #include <linux/module.h>
-> @@ -116,11 +117,6 @@ static const struct gpio_chip template_chip = {
->   	.can_sleep		= true,
->   };
->   
-> -static void pisosr_mutex_destroy(void *lock)
-> -{
-> -	mutex_destroy(lock);
-> -}
-> -
->   static int pisosr_gpio_probe(struct spi_device *spi)
->   {
->   	struct device *dev = &spi->dev;
-> @@ -147,8 +143,7 @@ static int pisosr_gpio_probe(struct spi_device *spi)
->   		return dev_err_probe(dev, PTR_ERR(gpio->load_gpio),
->   				     "Unable to allocate load GPIO\n");
->   
-> -	mutex_init(&gpio->lock);
-> -	ret = devm_add_action_or_reset(dev, pisosr_mutex_destroy, &gpio->lock);
-> +	ret = devm_mutex_init(dev, &gpio->lock);
->   	if (ret)
->   		return ret;
->   
-> diff --git a/drivers/gpio/gpio-sim.c b/drivers/gpio/gpio-sim.c
-> index c4106e37e6db..fcfcaa4efe70 100644
-> --- a/drivers/gpio/gpio-sim.c
-> +++ b/drivers/gpio/gpio-sim.c
-> @@ -12,6 +12,7 @@
->   #include <linux/completion.h>
->   #include <linux/configfs.h>
->   #include <linux/device.h>
-> +#include <linux/devm-helpers.h>
->   #include <linux/err.h>
->   #include <linux/gpio/consumer.h>
->   #include <linux/gpio/driver.h>
-> @@ -307,13 +308,6 @@ static ssize_t gpio_sim_sysfs_pull_store(struct device *dev,
->   	return len;
->   }
->   
-> -static void gpio_sim_mutex_destroy(void *data)
-> -{
-> -	struct mutex *lock = data;
-> -
-> -	mutex_destroy(lock);
-> -}
-> -
->   static void gpio_sim_put_device(void *data)
->   {
->   	struct device *dev = data;
-> @@ -457,9 +451,7 @@ static int gpio_sim_add_bank(struct fwnode_handle *swnode, struct device *dev)
->   	if (ret)
->   		return ret;
->   
-> -	mutex_init(&chip->lock);
-> -	ret = devm_add_action_or_reset(dev, gpio_sim_mutex_destroy,
-> -				       &chip->lock);
-> +	ret = devm_mutex_init(dev, &chip->lock);
->   	if (ret)
->   		return ret;
->   
-> diff --git a/drivers/gpu/drm/xe/xe_hwmon.c b/drivers/gpu/drm/xe/xe_hwmon.c
-> index 174ed2185481..bb88ae1c196c 100644
-> --- a/drivers/gpu/drm/xe/xe_hwmon.c
-> +++ b/drivers/gpu/drm/xe/xe_hwmon.c
-> @@ -3,6 +3,7 @@
->    * Copyright © 2023 Intel Corporation
->    */
->   
-> +#include <linux/devm-helpers.h>
->   #include <linux/hwmon-sysfs.h>
->   #include <linux/hwmon.h>
->   #include <linux/types.h>
-> @@ -729,13 +730,6 @@ xe_hwmon_get_preregistration_info(struct xe_device *xe)
->   		xe_hwmon_energy_get(hwmon, &energy);
->   }
->   
-> -static void xe_hwmon_mutex_destroy(void *arg)
-> -{
-> -	struct xe_hwmon *hwmon = arg;
-> -
-> -	mutex_destroy(&hwmon->hwmon_lock);
-> -}
-> -
->   void xe_hwmon_register(struct xe_device *xe)
->   {
->   	struct device *dev = xe->drm.dev;
-> @@ -751,8 +745,7 @@ void xe_hwmon_register(struct xe_device *xe)
->   
->   	xe->hwmon = hwmon;
->   
-> -	mutex_init(&hwmon->hwmon_lock);
-> -	if (devm_add_action_or_reset(dev, xe_hwmon_mutex_destroy, hwmon))
-> +	if (devm_mutex_init(dev, &hwmon->hwmon_lock))
->   		return;
->   
->   	/* primary GT to access device level properties */
-> diff --git a/drivers/hwmon/nzxt-smart2.c b/drivers/hwmon/nzxt-smart2.c
-> index 7aa586eb74be..00bc89607673 100644
-> --- a/drivers/hwmon/nzxt-smart2.c
-> +++ b/drivers/hwmon/nzxt-smart2.c
-> @@ -5,6 +5,7 @@
->    * Copyright (c) 2021 Aleksandr Mezin
->    */
->   
-> +#include <linux/devm-helpers.h>
->   #include <linux/hid.h>
->   #include <linux/hwmon.h>
->   #include <linux/math.h>
-> @@ -721,11 +722,6 @@ static int __maybe_unused nzxt_smart2_hid_reset_resume(struct hid_device *hdev)
->   	return init_device(drvdata, drvdata->update_interval);
->   }
->   
-> -static void mutex_fini(void *lock)
-> -{
-> -	mutex_destroy(lock);
-> -}
-> -
->   static int nzxt_smart2_hid_probe(struct hid_device *hdev,
->   				 const struct hid_device_id *id)
->   {
-> @@ -741,8 +737,7 @@ static int nzxt_smart2_hid_probe(struct hid_device *hdev,
->   
->   	init_waitqueue_head(&drvdata->wq);
->   
-> -	mutex_init(&drvdata->mutex);
-> -	ret = devm_add_action_or_reset(&hdev->dev, mutex_fini, &drvdata->mutex);
-> +	ret = devm_mutex_init(&hdev->dev, &drvdata->mutex);
->   	if (ret)
->   		return ret;
->   
-> diff --git a/drivers/leds/leds-is31fl319x.c b/drivers/leds/leds-is31fl319x.c
-> index 66c65741202e..e9d7cf6a386c 100644
-> --- a/drivers/leds/leds-is31fl319x.c
-> +++ b/drivers/leds/leds-is31fl319x.c
-> @@ -8,6 +8,7 @@
->    * effect LEDs.
->    */
->   
-> +#include <linux/devm-helpers.h>
->   #include <linux/err.h>
->   #include <linux/i2c.h>
->   #include <linux/leds.h>
-> @@ -495,11 +496,6 @@ static inline int is31fl3196_db_to_gain(u32 dezibel)
->   	return dezibel / IS31FL3196_AUDIO_GAIN_DB_STEP;
->   }
->   
-> -static void is31f1319x_mutex_destroy(void *lock)
-> -{
-> -	mutex_destroy(lock);
-> -}
-> -
->   static int is31fl319x_probe(struct i2c_client *client)
->   {
->   	struct is31fl319x_chip *is31;
-> @@ -515,8 +511,7 @@ static int is31fl319x_probe(struct i2c_client *client)
->   	if (!is31)
->   		return -ENOMEM;
->   
-> -	mutex_init(&is31->lock);
-> -	err = devm_add_action_or_reset(dev, is31f1319x_mutex_destroy, &is31->lock);
-> +	err = devm_mutex_init(dev, &is31->lock);
->   	if (err)
->   		return err;
->   
-> diff --git a/drivers/power/supply/mt6370-charger.c b/drivers/power/supply/mt6370-charger.c
-> index e24fce087d80..fa0517d0352d 100644
-> --- a/drivers/power/supply/mt6370-charger.c
-> +++ b/drivers/power/supply/mt6370-charger.c
-> @@ -766,13 +766,6 @@ static int mt6370_chg_init_psy(struct mt6370_priv *priv)
->   	return PTR_ERR_OR_ZERO(priv->psy);
->   }
->   
-> -static void mt6370_chg_destroy_attach_lock(void *data)
-> -{
-> -	struct mutex *attach_lock = data;
-> -
-> -	mutex_destroy(attach_lock);
-> -}
-> -
->   static void mt6370_chg_destroy_wq(void *data)
->   {
->   	struct workqueue_struct *wq = data;
-> @@ -900,9 +893,7 @@ static int mt6370_chg_probe(struct platform_device *pdev)
->   	if (ret)
->   		return dev_err_probe(dev, ret, "Failed to init psy\n");
->   
-> -	mutex_init(&priv->attach_lock);
-> -	ret = devm_add_action_or_reset(dev, mt6370_chg_destroy_attach_lock,
-> -				       &priv->attach_lock);
-> +	ret = devm_mutex_init(dev, &priv->attach_lock);
->   	if (ret)
->   		return dev_err_probe(dev, ret, "Failed to init attach lock\n");
->   
-> diff --git a/drivers/power/supply/rt9467-charger.c b/drivers/power/supply/rt9467-charger.c
-> index fdfdc83ab045..84f07c22077f 100644
-> --- a/drivers/power/supply/rt9467-charger.c
-> +++ b/drivers/power/supply/rt9467-charger.c
-> @@ -10,6 +10,7 @@
->   #include <linux/bitfield.h>
->   #include <linux/completion.h>
->   #include <linux/delay.h>
-> +#include <linux/devm-helpers.h>
->   #include <linux/gpio/consumer.h>
->   #include <linux/i2c.h>
->   #include <linux/interrupt.h>
-> @@ -1149,27 +1150,6 @@ static int rt9467_reset_chip(struct rt9467_chg_data *data)
->   	return regmap_field_write(data->rm_field[F_RST], 1);
->   }
->   
-> -static void rt9467_chg_destroy_adc_lock(void *data)
-> -{
-> -	struct mutex *adc_lock = data;
-> -
-> -	mutex_destroy(adc_lock);
-> -}
-> -
-> -static void rt9467_chg_destroy_attach_lock(void *data)
-> -{
-> -	struct mutex *attach_lock = data;
-> -
-> -	mutex_destroy(attach_lock);
-> -}
-> -
-> -static void rt9467_chg_destroy_ichg_ieoc_lock(void *data)
-> -{
-> -	struct mutex *ichg_ieoc_lock = data;
-> -
-> -	mutex_destroy(ichg_ieoc_lock);
-> -}
-> -
->   static void rt9467_chg_complete_aicl_done(void *data)
->   {
->   	struct completion *aicl_done = data;
-> @@ -1222,21 +1202,15 @@ static int rt9467_charger_probe(struct i2c_client *i2c)
->   	if (ret)
->   		return dev_err_probe(dev, ret, "Failed to add irq chip\n");
->   
-> -	mutex_init(&data->adc_lock);
-> -	ret = devm_add_action_or_reset(dev, rt9467_chg_destroy_adc_lock,
-> -				       &data->adc_lock);
-> +	ret = devm_mutex_init(dev, &data->adc_lock);
->   	if (ret)
->   		return dev_err_probe(dev, ret, "Failed to init ADC lock\n");
->   
-> -	mutex_init(&data->attach_lock);
-> -	ret = devm_add_action_or_reset(dev, rt9467_chg_destroy_attach_lock,
-> -				       &data->attach_lock);
-> +	ret = devm_mutex_init(dev, &data->attach_lock);
->   	if (ret)
->   		return dev_err_probe(dev, ret, "Failed to init attach lock\n");
->   
-> -	mutex_init(&data->ichg_ieoc_lock);
-> -	ret = devm_add_action_or_reset(dev, rt9467_chg_destroy_ichg_ieoc_lock,
-> -				       &data->ichg_ieoc_lock);
-> +	ret = devm_mutex_init(dev, &data->ichg_ieoc_lock);
->   	if (ret)
->   		return dev_err_probe(dev, ret, "Failed to init ICHG/IEOC lock\n");
->   
-> diff --git a/include/linux/devm-helpers.h b/include/linux/devm-helpers.h
-> index 74891802200d..70640fb96117 100644
-> --- a/include/linux/devm-helpers.h
-> +++ b/include/linux/devm-helpers.h
-> @@ -24,6 +24,8 @@
->    */
->   
->   #include <linux/device.h>
-> +#include <linux/kconfig.h>
-> +#include <linux/mutex.h>
->   #include <linux/workqueue.h>
->   
->   static inline void devm_delayed_work_drop(void *res)
-> @@ -76,4 +78,34 @@ static inline int devm_work_autocancel(struct device *dev,
->   	return devm_add_action(dev, devm_work_drop, w);
->   }
->   
-> +static inline void devm_mutex_drop(void *res)
-> +{
-> +	mutex_destroy(res);
-> +}
-> +
-> +/**
-> + * devm_mutex_init - Resource managed mutex initialization
-> + * @dev:	Device which lifetime mutex is bound to
-> + * @lock:	Mutex to be initialized (and automatically destroyed)
-> + *
-> + * Initialize mutex which is automatically destroyed when driver is detached.
-> + * A few drivers initialize mutexes which they want destroyed before driver is
-> + * detached, for debugging purposes.
-> + * devm_mutex_init() can be used to omit the explicit mutex_destroy() call when
-> + * driver is detached.
-> + */
-> +static inline int devm_mutex_init(struct device *dev, struct mutex *lock)
-> +{
-> +	mutex_init(lock);
+> In the comment above I would say "If concurrency is not prevented by
+> other means, the HFI enable/disable routines must be called under
+> hfi_instance_lock." 
 
-Do you know if this this needs __always_inline? The static lockdep key 
-in mutex_init() should be different for each caller class. See 
-c21f11d182c2 ("drm: fix drmm_mutex_init()").
+Ok. Will reword this way.
 
-> +
-> +	/*
-> +	 * mutex_destroy() is an empty function if CONFIG_DEBUG_MUTEXES is
-> +	 * disabled. No need to allocate an action in that case.
-> +	 */
-> +	if (IS_ENABLED(CONFIG_DEBUG_MUTEXES))
-> +		return devm_add_action_or_reset(dev, devm_mutex_drop, lock);
-> +	else
-> +		return 0;
-> +}
-> +
->   #endif
+> and I would retain the comments below (they don't
+> hurt IMO).
+
+I found those comments somewhat confusing. FWICT at worst
+what can happen when enable/resume race CPU online and
+disable/suspend race with CPU offline is enable twice
+or disable twice. What I think is fine, though plan to
+check this (see below).
+
+> > +static void hfi_do_enable(void *ptr)
+> 
+> I would call this hfi_enable_instance().
+> 
+> > +{
+> > +       struct hfi_instance *hfi_instance = ptr;
+> 
+> Why is this variable needed ro even useful?  prt can be passed
+> directly to hfi_set_hw_table().
+
+Ok, will remove it.
+
+> > +
+> > +       hfi_set_hw_table(hfi_instance);
+> > +       hfi_enable();
+> > +}
+> > +
+> > +static void hfi_do_disable(void *ptr)
+> 
+> And I'd call this hfi_disable_instance().
+
+Ok.
+
+> > +static int hfi_thermal_notify(struct notifier_block *nb, unsigned long state,
+> > +                             void *_notify)
+> > +{
+> > +       struct thermal_genl_notify *notify = _notify;
+> > +       struct hfi_instance *hfi_instance;
+> > +       smp_call_func_t func;
+> > +       unsigned int cpu;
+> > +       int i;
+> > +
+> > +       if (notify->mcgrp != THERMAL_GENL_EVENT_GROUP)
+> > +               return NOTIFY_DONE;
+> > +
+> > +       if (state != THERMAL_NOTIFY_BIND && state != THERMAL_NOTIFY_UNBIND)
+> > +               return NOTIFY_DONE;
+> > +
+> > +       mutex_lock(&hfi_instance_lock);
+> > +
+> > +       switch (state) {
+> > +       case THERMAL_NOTIFY_BIND:
+> > +               hfi_thermal_clients_num++;
+> > +               break;
+> > +
+> > +       case THERMAL_NOTIFY_UNBIND:
+> > +               hfi_thermal_clients_num--;
+> > +               break;
+> > +       }
+> > +
+> > +       if (hfi_thermal_clients_num > 0)
+> > +               func = hfi_do_enable;
+> > +       else
+> > +               func = hfi_do_disable;
+> > +
+> > +       for (i = 0; i < max_hfi_instances; i++) {
+> > +               hfi_instance = &hfi_instances[i];
+> > +               if (cpumask_empty(hfi_instance->cpus))
+> > +                       continue;
+> > +
+> > +               cpu = cpumask_any(hfi_instance->cpus);
+> > +               smp_call_function_single(cpu, func, hfi_instance, true);
+> > +       }
+> > +
+> > +       mutex_unlock(&hfi_instance_lock);
+> 
+> So AFAICS, one instance can be enabled multiple times because of this.
+>   I guess that's OK?  In any case, it would be kind of nice to leave a
+> note regarding it somewhere here.
+
+It's write the same values to the same registers. So I think this 
+should be fine. However after your comment I start to think there
+perhaps could be some side-effect of writing the registers.
+I'll double check (previously I verified that double enable works,
+but only on MTL) or eventually rearrange code to do not enable already
+enabled interface.
+
+> > +
+> > +       return NOTIFY_OK;
+> > +}
+> > +
+> > +static struct notifier_block hfi_thermal_nb = {
+> > +       .notifier_call = hfi_thermal_notify,
+> >  };
+> >
+> >  void __init intel_hfi_init(void)
+> > @@ -628,10 +697,16 @@ void __init intel_hfi_init(void)
+> >         if (!hfi_updates_wq)
+> >                 goto err_nomem;
+> >
+> > +       if (thermal_genl_register_notifier(&hfi_thermal_nb))
+> > +               goto err_nl_notif;
+> 
+> Is it possible for any clients to be there before the notifier is
+> registered?  If not, it would be good to add a comment about it.
+
+HFI is build-in so it's started before any user space. I added note about that
+in the cover letter but indeed it should be comment in the code. Will fix.  
+
+Regards
+Stanislaw
 
