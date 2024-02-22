@@ -1,188 +1,235 @@
-Return-Path: <linux-pm+bounces-4280-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4281-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0F2285FCEF
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 16:47:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E83F85FD0E
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 16:52:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A929628CFAB
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 15:47:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D514289C91
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 15:52:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA23414AD14;
-	Thu, 22 Feb 2024 15:47:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O7v7TkIZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C04814E2DF;
+	Thu, 22 Feb 2024 15:52:02 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF3914AD30;
-	Thu, 22 Feb 2024 15:47:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82DF414D44C;
+	Thu, 22 Feb 2024 15:52:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708616846; cv=none; b=cw26SAU7ODgwyGz9xk13zB0I9AoPPzfFXI6xaTGd9tvlFqN50WVJTVVRnycx+WqoZxPh6GmaPgDrEO53cRMHkeZdMG6o4qNCtIZ1+HX2XOccfKHUZ6zA+5wFswxWWxCYKo+g43sC4k9XudyhBU7GamQoc1njYxDxWoPJrTACiMo=
+	t=1708617122; cv=none; b=HEsFlezRUoAGR96r5QSzdVPblD9JNA3f4X5j54bbo55G5RDHs6JElZlzUyDs1TweRLkVIOHSP2N2LJdZSTytBYEnwLMszf9r82KLdu2fJZLVEi5VDUgYGwAstiuKirg/wILq3lWIqYHVIVCmF1WwgiayxZIpakGwKv3kkhG7zPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708616846; c=relaxed/simple;
-	bh=Md4in/HQ6lUKnOOyLDQIjm6+ZUBjqPPwCh2NiQF13q8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=owDHaVpqeb62iC384CwacLTYkxg1BwS5xGYP91zflCRkvty/+tQQYkmdhrev+KLQIJcWgs2Ekpu2mKRzGC51DAmst2Ihaya9C2Cv3irYWOslMrdzBvYa1XXHv9gDEiVRtYOOTxKmuiG1VhR2Mmh1Jo0wC7g17uVf/WGJukJb8dg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O7v7TkIZ; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708616846; x=1740152846;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Md4in/HQ6lUKnOOyLDQIjm6+ZUBjqPPwCh2NiQF13q8=;
-  b=O7v7TkIZ21lvkzrOOydJaVXbb0xOmd3EeYe+Jom9CwxQ8WkcJTgxjv7g
-   aaSFvxf4rYGuvOx6pxRA4IC2BCxncMHiAhGsMxFK4RfK9IS18ve3kx4Yw
-   KvTAXlDEdliEHxv/sc5QbqLY6maRna6MXkiMF09sq5MI2RYlDiTcPS/qO
-   jm+/GjzDXvnl446GhvdW9vSHF13oLD70GQ3v6Fd1/+XoyBwyW88gxY+oE
-   BzOuqIEuEfL5XsjeALXF585mULSI1GYcbji8h0mfEyfOZ/Y+vPtg3Xulv
-   CZOEY6H1tKY3R4vYNPhbB4auL9N/CiIIZleXTewU8GYKKH5TfLh2w+0QV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="2764323"
-X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
-   d="scan'208";a="2764323"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 07:47:25 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
-   d="scan'208";a="5908495"
-Received: from sgruszka-mobl.ger.corp.intel.com (HELO localhost) ([10.252.46.166])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 07:47:21 -0800
-Date: Thu, 22 Feb 2024 16:47:18 +0100
-From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org
-Subject: Re: [PATCH v4 2/3] thermal: netlink: Add genetlink bind/unbind
- notifications
-Message-ID: <ZddshlCHwsDTFSYL@linux.intel.com>
-References: <20240212161615.161935-1-stanislaw.gruszka@linux.intel.com>
- <20240212161615.161935-3-stanislaw.gruszka@linux.intel.com>
- <CAJZ5v0hTsXjre_StGizrmUx1JUkzKr9K9KLiHrsvicivMO2Odw@mail.gmail.com>
+	s=arc-20240116; t=1708617122; c=relaxed/simple;
+	bh=mkjHm/NVb9a2uWxajb0Ouni221Gr7rVjOELDkF29fVA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZE3xZLSFmtAHo6LCIscKbvt9kC+jCsigqxp0t/FeBWUcE4xLpTqYpfU1iMm0JP7bAahfNWQR7pPxUUIptSl/zD3jJqNdcYMjUm/68I7kkivJlz24GRUkmCWN3XtHbNio7TTUMDwRWjGGtI04Loj8Dpb5e/Kw9ASGLXIMFXrE8As=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-59fc31c57easo1527784eaf.1;
+        Thu, 22 Feb 2024 07:52:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708617119; x=1709221919;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EUugHfDLSgSDL3uT41o5vUaHZB8bMJCbk674TlEy4XU=;
+        b=Jlxa8s7xcT0sSWUi3ODwaDJnpLVOX+Bo5CY3s1G6yy0yPJ4tC7CAbC4hxAThUPUJ9k
+         efOBwGW+xw6xXLXDBGfbLWWfg2K/BUVrlwWmsUl/UmfeKNVc/1XHG+VtFwisCl/JT4XY
+         rHHce+hGgqqLh3JwR/cPesbk3kRRxkl2wRtwYuRnnEaSHl9VEuvm4M7m88ZY/lqZN4Hi
+         5xT6VpSdkthr9W6tdrAyheh/HiVeUqXTBD9GpHEf1v2ZJ0fmcnQz8eH1MzXE0c3n/IeE
+         3gGFRtJEtMqLKzr8qupyXb6YSfL4cQwxRevFpNhppJm8c7fyMnsVAy3406anOM0tDMIA
+         xr4w==
+X-Forwarded-Encrypted: i=1; AJvYcCVPC0G+SDbcijMirqbHeLZx0LH7fl25y6d8ZBoRZNve3KkS58q7gCd8GXywXeoIa7IAWTHKK37pyhrlavbIDdWH5hTcRZBBPciCOdDLASF+1oWJiw5jw7pc/ZxeE8oPsf2u15lwBYaxQqrGAjXylbToJ94yK+WNaLEiifR01sbezCspR4NujKFQsCazdFo88d6Xg7tQmbInEVuODg4WjQ==
+X-Gm-Message-State: AOJu0Yyp1OJu1XTFbsilRyw4S3Y/e5Zgh8YFuQaNO7a98Av4AkEs5CKi
+	byDeLFOtmVXlV3mVwI/3T/xc8iKBUKDoEZ9i7IbDNKVxRZpusPim+7ccQR5IK0vBCA+XhPyCyUZ
+	fFJFjNn/dVHJDAhPDfx1a5zrjcIw=
+X-Google-Smtp-Source: AGHT+IHyxSwW1kmoq+/lgG2oeRQLzRN0uhtfVW3o6WiFkJW1sEH+QD0jVJCqboDpe1GdciaHyQ4u2pOwGUSHa1V7YoM=
+X-Received: by 2002:a05:6820:2993:b0:5a0:3c8a:4940 with SMTP id
+ dq19-20020a056820299300b005a03c8a4940mr162267oob.1.1708617119517; Thu, 22 Feb
+ 2024 07:51:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0hTsXjre_StGizrmUx1JUkzKr9K9KLiHrsvicivMO2Odw@mail.gmail.com>
+References: <6017196.lOV4Wx5bFT@kreacher> <2173914.irdbgypaU6@kreacher> <59e8fd70-5ba6-4256-9127-bd5e76e6bc99@linaro.org>
+In-Reply-To: <59e8fd70-5ba6-4256-9127-bd5e76e6bc99@linaro.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 22 Feb 2024 16:51:48 +0100
+Message-ID: <CAJZ5v0gcK7mQgDTHqo3PYT10sKqJJvu6JP0BLEHG6m0HzUKyCA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/9] thermal: core: Add flags to struct thermal_trip
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	Lukasz Luba <lukasz.luba@arm.com>, LKML <linux-kernel@vger.kernel.org>, 
+	Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>, 
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Zhang Rui <rui.zhang@intel.com>, 
+	netdev@vger.kernel.org, Ido Schimmel <idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>, 
+	Miri Korenblit <miriam.rachel.korenblit@intel.com>, linux-wireless@vger.kernel.org, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 13, 2024 at 02:24:56PM +0100, Rafael J. Wysocki wrote:
-> On Mon, Feb 12, 2024 at 5:16 PM Stanislaw Gruszka
-> <stanislaw.gruszka@linux.intel.com> wrote:
+On Thu, Feb 22, 2024 at 3:36=E2=80=AFPM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On 12/02/2024 19:31, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > >
-> > Introduce a new feature to the thermal netlink framework, enabling the
-> > registration of sub drivers to receive events via a notifier mechanism.
-> > Specifically, implement genetlink family bind and unbind callbacks to send
-> > BIND and UNBIND events.
+> > In order to allow thermal zone creators to specify the writability of
+> > trip point temperature and hysteresis on a per-trip basis, add a flags
+> > field to struct thermal_trip and define flags to represent the desired
+> > trip properties.
 > >
-> > The primary purpose of this enhancement is to facilitate the tracking of
-> > user-space consumers by the intel_hif driver.
-> 
-> This should be intel_hfi.  Or better, Intel HFI.
-
-Will change in next revision.
-
-> > By leveraging these
-> > notifications, the driver can determine when consumers are present
-> > or absent.
+> > Also make thermal_zone_device_register_with_trips() set the
+> > THERMAL_TRIP_FLAG_RW_TEMP flag for all trips covered by the writable
+> > trips mask passed to it and modify the thermal sysfs code to look at
+> > the trip flags instead of using the writable trips mask directly or
+> > checking the presence of the .set_trip_hyst() zone callback.
 > >
-> > Suggested-by: Jakub Kicinski <kuba@kernel.org>
-> > Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+> > Additionally, make trip_point_temp_store() and trip_point_hyst_store()
+> > fail with an error code if the trip passed to one of them has
+> > THERMAL_TRIP_FLAG_RW_TEMP or THERMAL_TRIP_FLAG_RW_HYST,
+> > respectively, clear in its flags.
+> >
+> > No intentional functional impact.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > > ---
-> >  drivers/thermal/thermal_netlink.c | 40 +++++++++++++++++++++++++++----
-> >  drivers/thermal/thermal_netlink.h | 26 ++++++++++++++++++++
-> >  2 files changed, 61 insertions(+), 5 deletions(-)
 > >
-> > diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
-> > index 76a231a29654..86c7653a9530 100644
-> > --- a/drivers/thermal/thermal_netlink.c
-> > +++ b/drivers/thermal/thermal_netlink.c
-> > @@ -7,17 +7,13 @@
-> >   * Generic netlink for thermal management framework
-> >   */
-> >  #include <linux/module.h>
-> > +#include <linux/notifier.h>
-> >  #include <linux/kernel.h>
-> >  #include <net/genetlink.h>
-> >  #include <uapi/linux/thermal.h>
+> > v1 -> v2:
+> >     * Rename trip flags (Stanislaw).
 > >
-> >  #include "thermal_core.h"
+> > ---
+> >   drivers/thermal/thermal_core.c  |   12 +++++++++++-
+> >   drivers/thermal/thermal_core.h  |    2 +-
+> >   drivers/thermal/thermal_sysfs.c |   28 +++++++++++++++++++---------
+> >   include/linux/thermal.h         |    7 +++++++
+> >   4 files changed, 38 insertions(+), 11 deletions(-)
 > >
-> > -enum thermal_genl_multicast_groups {
-> > -       THERMAL_GENL_SAMPLING_GROUP = 0,
-> > -       THERMAL_GENL_EVENT_GROUP = 1,
-> > -};
-> > -
-> >  static const struct genl_multicast_group thermal_genl_mcgrps[] = {
-> 
-> There are enough characters per code line to spell "multicast_groups"
-> here (and analogously below).
-
-Not sure what you mean, change thermal_genl_mcgrps to thermal_genl_multicast_groups ?
-
-I could change that, but it's not really related to the changes in this patch,
-so perhaps in separate patch.
-
-Additionally "mcgrps" are more consistent with genl_family fields i.e:
-
-      .mcgrps         = thermal_genl_mcgrps,
-      .n_mcgrps       = ARRAY_SIZE(thermal_genl_mcgrps), 
-
-> >         [THERMAL_GENL_SAMPLING_GROUP] = { .name = THERMAL_GENL_SAMPLING_GROUP_NAME, },
-> >         [THERMAL_GENL_EVENT_GROUP]  = { .name = THERMAL_GENL_EVENT_GROUP_NAME,  },
-> > @@ -75,6 +71,7 @@ struct param {
-> >  typedef int (*cb_t)(struct param *);
+> > Index: linux-pm/include/linux/thermal.h
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > --- linux-pm.orig/include/linux/thermal.h
+> > +++ linux-pm/include/linux/thermal.h
+> > @@ -64,15 +64,23 @@ enum thermal_notify_event {
+> >    * @threshold: trip crossing notification threshold miliCelsius
+> >    * @type: trip point type
+> >    * @priv: pointer to driver data associated with this trip
+> > + * @flags: flags representing binary properties of the trip
+> >    */
+> >   struct thermal_trip {
+> >       int temperature;
+> >       int hysteresis;
+> >       int threshold;
+> >       enum thermal_trip_type type;
+> > +     u8 flags;
+> >       void *priv;
+> >   };
 > >
-> >  static struct genl_family thermal_gnl_family;
-> > +static BLOCKING_NOTIFIER_HEAD(thermal_gnl_chain);
-> 
-> thermal_genl_chain ?
-> 
-> It would be more consistent with the rest of the naming.
-
-Ok, will change. Additionally in separate patch thermal_gnl_family for consistency.
-
-> >  static int thermal_group_has_listeners(enum thermal_genl_multicast_groups group)
-> >  {
-> > @@ -645,6 +642,27 @@ static int thermal_genl_cmd_doit(struct sk_buff *skb,
-> >         return ret;
-> >  }
-> >
-> > +static int thermal_genl_bind(int mcgrp)
-> > +{
-> > +       struct thermal_genl_notify n = { .mcgrp = mcgrp };
+> > +#define THERMAL_TRIP_FLAG_RW_TEMP    BIT(0)
+> > +#define THERMAL_TRIP_FLAG_RW_HYST    BIT(1)
 > > +
-> > +       if (WARN_ON_ONCE(mcgrp > THERMAL_GENL_MAX_GROUP))
-> > +               return -EINVAL;
-> 
-> pr_warn_once() would be better IMO.  At least it would not crash the
-> kernel configured with "panic on warn".
+> > +#define THERMAL_TRIP_FLAG_MASK_RW    (THERMAL_TRIP_FLAG_RW_TEMP | \
+> > +                                      THERMAL_TRIP_FLAG_RW_HYST)
+>
+> What about THERMAL_TRIP_FLAG_RW instead ?
 
-"panic on warn" is generic WARN_* issue at any place where WARN_* are used.
-And I would say, crash is desired behaviour for those who use the option
-to catch bugs. And mcgrp bigger than THERMAL_GENL_MAX_GROUP is definitely
-a bug. Additionally pr_warn_once() does not print call trace, so I think
-WARN_ON_ONCE() is more proper. But if really you prefer pr_warn_once()
-I can change.
+Fine with me.
 
-Regards
-Stanislaw
+> >   struct thermal_zone_device_ops {
+> >       int (*bind) (struct thermal_zone_device *,
+> >                    struct thermal_cooling_device *);
+> > Index: linux-pm/drivers/thermal/thermal_core.c
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > --- linux-pm.orig/drivers/thermal/thermal_core.c
+> > +++ linux-pm/drivers/thermal/thermal_core.c
+> > @@ -1356,13 +1356,23 @@ thermal_zone_device_register_with_trips(
+> >       tz->devdata =3D devdata;
+> >       tz->trips =3D trips;
+> >       tz->num_trips =3D num_trips;
+> > +     if (num_trips > 0) {
+>
+> Is this check really necessary?
+
+No, it isn't.
+
+> for_each_trip() should exit immediately if there is no trip points.
+
+Right.
+
+> > +             struct thermal_trip *trip;
+> > +
+> > +             for_each_trip(tz, trip) {
+> > +                     if (mask & 1)
+> > +                             trip->flags |=3D THERMAL_TRIP_FLAG_RW_TEM=
+P;
+> > +
+> > +                     mask >>=3D 1;
+> > +             }
+> > +     }
+> >
+> >       thermal_set_delay_jiffies(&tz->passive_delay_jiffies, passive_del=
+ay);
+> >       thermal_set_delay_jiffies(&tz->polling_delay_jiffies, polling_del=
+ay);
+> >
+> >       /* sys I/F */
+> >       /* Add nodes that are always present via .groups */
+> > -     result =3D thermal_zone_create_device_groups(tz, mask);
+> > +     result =3D thermal_zone_create_device_groups(tz);
+> >       if (result)
+> >               goto remove_id;
+> >
+> > Index: linux-pm/drivers/thermal/thermal_core.h
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > --- linux-pm.orig/drivers/thermal/thermal_core.h
+> > +++ linux-pm/drivers/thermal/thermal_core.h
+> > @@ -131,7 +131,7 @@ void thermal_zone_trip_updated(struct th
+> >   int __thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp=
+);
+> >
+> >   /* sysfs I/F */
+> > -int thermal_zone_create_device_groups(struct thermal_zone_device *, in=
+t);
+> > +int thermal_zone_create_device_groups(struct thermal_zone_device *tz);
+> >   void thermal_zone_destroy_device_groups(struct thermal_zone_device *)=
+;
+> >   void thermal_cooling_device_setup_sysfs(struct thermal_cooling_device=
+ *);
+> >   void thermal_cooling_device_destroy_sysfs(struct thermal_cooling_devi=
+ce *cdev);
+> > Index: linux-pm/drivers/thermal/thermal_sysfs.c
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > --- linux-pm.orig/drivers/thermal/thermal_sysfs.c
+> > +++ linux-pm/drivers/thermal/thermal_sysfs.c
+> > @@ -122,6 +122,11 @@ trip_point_temp_store(struct device *dev
+> >
+> >       trip =3D &tz->trips[trip_id];
+> >
+> > +     if (!(trip->flags & THERMAL_TRIP_FLAG_RW_TEMP)) {
+> > +             ret =3D -EPERM;
+> > +             goto unlock;
+> > +     }
+>
+> Does it really happen?
+>
+> If the sysfs file is created with the right permission regarding the
+> trip->flags then this condition can never be true.
+
+But the permissions can be changed after the file has been created, can't t=
+hey?
 
