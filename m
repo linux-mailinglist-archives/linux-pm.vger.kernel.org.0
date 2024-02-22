@@ -1,135 +1,133 @@
-Return-Path: <linux-pm+bounces-4249-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4250-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F0CB85F9C1
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 14:27:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89E2885F9FB
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 14:38:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F0081C24930
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 13:27:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A759B21B67
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 13:38:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDAB8134750;
-	Thu, 22 Feb 2024 13:27:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 385CD1339B8;
+	Thu, 22 Feb 2024 13:38:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="lI/NOJ4L"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Wmnz7T4V"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0064B133284
-	for <linux-pm@vger.kernel.org>; Thu, 22 Feb 2024 13:27:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F80912FF73
+	for <linux-pm@vger.kernel.org>; Thu, 22 Feb 2024 13:38:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708608433; cv=none; b=jODVSQo2Fsp0Ge2JX/m6j87kyTjklOe4fuAfvzzCm5Lu0xU7r3yFnn9sMDDSlaOiyHa/7nMzI3NiKY20+9muC9344fIDHU68ocPzICaFZmvEPgCyxMUxOBZ7/bwJ377LFzhND6s5FxNWICt4mm8SlR6qpzCzQZRcSfTaTA8LHXc=
+	t=1708609111; cv=none; b=QvJofyemFZSZ74vUZpRikDLeoPn1Ezq+Vyl+hV/XJpTG9rhE/d2jsFUPR2cLObQXtSo5C0Z7jI91pZQ2i8gqpuaXeXeuEnm94B6vkEROdedIsjVEmV0iujfBPJnV9pT+vE+NnkN4angCIDN0D8NHNYNrE8hIcSrVU+YiFxpOIqM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708608433; c=relaxed/simple;
-	bh=snpGyI7YNE/Sro06+yGoEFaZBAn/Q00Q5PkCi6CMdMw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Np2hzowmSN8msX0zQLmqLi3djn1vGVNNKvrpEA958WwSx/SB8hmTCD1NHx72/zs6W9Bg+kU3U1Ryqrqnc3QfVIROwvDbWQPpGkb679yqyLpdg495epUkwytkh6ySfVeEPRVpPNVSotYHFY5sVM3z7ADT94l9mxZ8xXprf53Fxew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=lI/NOJ4L; arc=none smtp.client-ip=209.85.222.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-7cedcea89a0so4924117241.1
-        for <linux-pm@vger.kernel.org>; Thu, 22 Feb 2024 05:27:11 -0800 (PST)
+	s=arc-20240116; t=1708609111; c=relaxed/simple;
+	bh=dnP6Na2KFoHfi/00jkUuH2sx/m/bitJm1og9b7z1FOg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WYtK4hs0iFI2fd043GEZPPhhXObX+m4w7nT7LIJiVOuFCe+cOZCwIzku6Qo8fWq0B9rUE4UIMbEiK2jzh9JFWymS0b/5+IuIOJxzK0KY2owNxij7MVVJ1CzU22Z5H61N/mUk2WjyB89oLoG03QeBf0C5BoEE9g7jz7uT4tWXcw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Wmnz7T4V; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-41282f05409so4989195e9.0
+        for <linux-pm@vger.kernel.org>; Thu, 22 Feb 2024 05:38:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1708608431; x=1709213231; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=snpGyI7YNE/Sro06+yGoEFaZBAn/Q00Q5PkCi6CMdMw=;
-        b=lI/NOJ4Lt8pYoAkCV7uSez40ysyo/fZizj5Qyb2djhe7NH5YUXKKSW0jZtpbvQiBRj
-         yQN5k+eopYB6SrpNnjW+fxBdV/g0k2i5WzfWhfQpMl0uHcTvuvGH8CcswGRysRwYFPwA
-         mbyLrMF6eal2fpxQN3ZEza6kApGnbiqPPFp5Maxvp41hX6pm7o5BAHWvUsz5W5g3CZaX
-         WDhJU6879r1E6Kcv+CDTzHI/YSIwOto/F9O0tj7Yp+QGnEGt8VxwU0D7P2GtQCpyOI24
-         DtCzXXi2/P0otU+jF/4hb4M7t3i4g4K6Gh/pzEZoIg3gMOWX0K5gkTMpOSVfctybvLEi
-         ct/g==
+        d=linaro.org; s=google; t=1708609108; x=1709213908; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u0eeSj0Rbo8Tyxk9+gjLQ2yol07l3Rs5IcpVi8aXUFs=;
+        b=Wmnz7T4VTWdXNdsRdQiQsuAII/BAIrrgq0uXxoTvioFxQ1mCZ0fDhOdD+0gHBPArHe
+         tncRF9DTSzxJiVgzWoLXyiZyDIOmyPp8EUXmeFF7dAiMdlkAziEc7dXeZGqbe6nStSPY
+         vJqT2bI5l/FmAld0YUUEzyUo2p/30a/Yly0hY3ukr2J1IXoL2vywHEEgS4A4yVLg381d
+         IvWbhiKNI/7MNElA3eEn9P5EZ7HbXoU8ouVO9jUydurw9tukPnhxZYndciUS8GYlNiwI
+         PYmOlQpp/ADsZJcTeLs1NFzmD0xlPMa44nsfmhJutmmhW1u6T0PoBKacHvM8y4gRxhUD
+         pGuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708608431; x=1709213231;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=snpGyI7YNE/Sro06+yGoEFaZBAn/Q00Q5PkCi6CMdMw=;
-        b=UxGqNzLVqqDHnHiepQR2CzTAExbrQHBfW2N6TZNtjG5TjvMCHaDs4celHFWk59pCLE
-         bBWIS3dOml0R0jL6Had4xjm6hq5LACjt6ZIulTs9i5a5rCPt6T+Kv+bXAp6waWXsjWm4
-         FznpHOaQiTwY3DX+ztOxZacLdSieV0D2ADpBS9CaCP81ziBFFjgwzsX1ASTzgPPiDeWF
-         5kCmZl9JxlZnajG6RavRQM9Cytc5j5nN7EaguOcwTdC+MAY796/1VJ3LskiQVWzA3h4o
-         b3bDjP5w5I2hJeDcRx+6CpDz8WlOoAJ/4Nd3H0WVicz5hKKN9I70NBYW3RvR6BAk4J6G
-         QtFA==
-X-Forwarded-Encrypted: i=1; AJvYcCVJ49JRZr3lgqcsUUK2KXLUE87ije1eZ61/owcNnv/978AXmDK+ZMFpNsmoc1ZF9grrG4frSxMlBe3DxHR+Y8t/lRs557sPqfw=
-X-Gm-Message-State: AOJu0YzQCRAAYug/Lgx0riCBKi/HT+uz6SkmSiq0NNNOX+0zznednUiF
-	RbCDtzfB4ZYjRPRhN18u/kOJPFA/KXHVvmBismZcJjQkpTKOjkUncMLXpvXFaqy35vWg8sDC15e
-	siAUBvygix10ZTa4OkVD+iDrkXVON2EXQof13nQ==
-X-Google-Smtp-Source: AGHT+IGZke8GPxuTnIFkoutjIP1dxFF56tGFJbVOgH1doqRbM8ENn6+k7HWpy/CEfw0YnaYPzOd9wrML9VZzcB0ao6s=
-X-Received: by 2002:a67:f9c9:0:b0:470:492d:672e with SMTP id
- c9-20020a67f9c9000000b00470492d672emr11912352vsq.9.1708608430904; Thu, 22 Feb
- 2024 05:27:10 -0800 (PST)
+        d=1e100.net; s=20230601; t=1708609108; x=1709213908;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u0eeSj0Rbo8Tyxk9+gjLQ2yol07l3Rs5IcpVi8aXUFs=;
+        b=iJrX4EtH5zx4hj6abR1R9/OHwI1rQeYsP7NZCZAGxDev0rCKy0RfTGq/i8Bka1Ridq
+         PS1r9Ms86pvjD2EeIxBfOpMa3p6FQUE15COzULCegWjH2uu3ms0ExI1Mbs0KK37weInt
+         KQE9hBQB625qeEhVmqa20zSQ3UxiXzppS7t5wKyX9XUDES6ecAHBQDW8NxfgPt6WbKK3
+         N1byupPKRKG+kZQ91KM+TyG3xiDwrhQrJtdsTqSJZdb7gP6b01Y9YI1k3I/rDBlg1b2f
+         HusJOT3VYkOo+2U1pUTSFCyoEYKwwX0TAZ3QrhnE4XV6x1bmPmYHUnutGWBgpviUi2PQ
+         iUVw==
+X-Forwarded-Encrypted: i=1; AJvYcCVE+AZ7rIcj9zldplppMOaqR4xuR+ZatYIsUE5Kxc5R9vqTUYsYkkYXed/Tf2BtqisJ8VYKqnrICzK2qi3G8MHxPkPbFNVNHO8=
+X-Gm-Message-State: AOJu0Ywkk+Ed/6SUec/PIlR+gNVEoAUSU95CoSnc7AAJSaiENKUHkjTs
+	mzvzn6/6wC9Nok6iUpUG14GvzowwOAN75HeoGJrrhULVJ4GAig8P47oSAJnpYFQ=
+X-Google-Smtp-Source: AGHT+IG891wIGj3n6n+q1STkih4LzXtpjLUJ07Dpm8f6+K69gfvd5F6o5ICUx3SMCN+wGTidEMMoCg==
+X-Received: by 2002:a05:600c:a03:b0:410:deab:96bf with SMTP id z3-20020a05600c0a0300b00410deab96bfmr15301794wmp.22.1708609107670;
+        Thu, 22 Feb 2024 05:38:27 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id 11-20020a05600c228b00b0041288122af0sm95586wmf.0.2024.02.22.05.38.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Feb 2024 05:38:27 -0800 (PST)
+Message-ID: <0de4fb24-8e33-4c2b-b6a6-d9e8a7b358bd@linaro.org>
+Date: Thu, 22 Feb 2024 14:38:26 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240216203215.40870-1-brgl@bgdev.pl> <20240216203215.40870-15-brgl@bgdev.pl>
- <d5d603dc-ec66-4e21-aa41-3b25557f1fb7@sirena.org.uk> <CAMRc=MeUjKPS3ANE6=7WZ3kbbGAdyE8HeXFN=75Jp-pVyBaWrQ@mail.gmail.com>
- <ea08a286-ff53-4d58-ae41-38cca151508c@sirena.org.uk> <17bbd9ae-0282-430e-947b-e6fb08c53af7@linaro.org>
- <53f0956f-ee64-4bd6-b44f-cbebafd42e46@sirena.org.uk> <CAMRc=MedCX_TGGawMhr39oXtJPF4pOQF=Jh2z4uXkOxwhfJWRw@mail.gmail.com>
- <52fba837-989b-4213-8af7-f02cd8cb48c8@sirena.org.uk> <CAMRc=MeF7xVjRKetg1A3MNO4yMasPA2GC7MLCBrOiwO5UBv6LA@mail.gmail.com>
- <68e401c6-6e59-4c35-8f05-40f6c5eb6849@sirena.org.uk>
-In-Reply-To: <68e401c6-6e59-4c35-8f05-40f6c5eb6849@sirena.org.uk>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Thu, 22 Feb 2024 14:26:59 +0100
-Message-ID: <CAMRc=Mfi6wgGSsH=pS68-GFWZwHB98YnH4+6LiBFprTEHntdcQ@mail.gmail.com>
-Subject: Re: [PATCH v5 14/18] PCI/pwrctl: add a power control driver for WCN7850
-To: Mark Brown <broonie@kernel.org>
-Cc: Konrad Dybcio <konrad.dybcio@linaro.org>, Marcel Holtmann <marcel@holtmann.org>, 
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, "David S . Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Kalle Valo <kvalo@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Saravana Kannan <saravanak@google.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Arnd Bergmann <arnd@arndb.de>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Alex Elder <elder@linaro.org>, Srini Kandagatla <srinivas.kandagatla@linaro.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Abel Vesa <abel.vesa@linaro.org>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Lukas Wunner <lukas@wunner.de>, 
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, linux-bluetooth@vger.kernel.org, 
-	netdev@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-pci@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2.1 1/6] thermal: core: Store zone trips table in struct
+ thermal_zone_device
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Linux ACPI <linux-acpi@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
+ Zhang Rui <rui.zhang@intel.com>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, NXP Linux Team <linux-imx@nxp.com>
+References: <4551531.LvFx2qVVIh@kreacher> <1883976.tdWV9SEqCh@kreacher>
+ <12405371.O9o76ZdvQC@kreacher>
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <12405371.O9o76ZdvQC@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Feb 22, 2024 at 2:15=E2=80=AFPM Mark Brown <broonie@kernel.org> wro=
-te:
->
-> On Thu, Feb 22, 2024 at 01:26:59PM +0100, Bartosz Golaszewski wrote:
-> > On Thu, Feb 22, 2024 at 1:21=E2=80=AFPM Mark Brown <broonie@kernel.org>=
- wrote:
-> > > On Thu, Feb 22, 2024 at 10:22:50AM +0100, Bartosz Golaszewski wrote:
->
-> > > > Removing it would be out of scope for this series and I don't reall=
-y
-> > > > want to introduce any undefined behavior when doing a big developme=
-nt
-> > > > like that. I'll think about it separately.
->
-> > > This is new code?
->
-> > It's a new driver but Qualcomm standard has been to provide the load
-> > values. If it's really unnecessary then maybe let's consider it
-> > separately and possibly rework globally?
->
-> That doesn't seem a great reason to add more instances of this - it's
-> more instances that need to be removed later, and somewhere else people
-> can cut'n'paste from to introduce new usage.
+On 22/02/2024 14:10, Rafael J. Wysocki wrote:
 
-Ok, whatever, I'll drop these until they're needed.
+[ ... ]
 
-Bartosz
+> Index: linux-pm/drivers/thermal/thermal_of.c
+> ===================================================================
+> --- linux-pm.orig/drivers/thermal/thermal_of.c
+> +++ linux-pm/drivers/thermal/thermal_of.c
+> @@ -440,12 +440,10 @@ static int thermal_of_unbind(struct ther
+>    */
+>   static void thermal_of_zone_unregister(struct thermal_zone_device *tz)
+>   {
+> -	struct thermal_trip *trips = tz->trips;
+>   	struct thermal_zone_device_ops *ops = tz->ops;
+>   
+>   	thermal_zone_device_disable(tz);
+>   	thermal_zone_device_unregister(tz);
+> -	kfree(trips);
+
+thermal_of_zone_register() must free the allocated trip points after 
+registering the thermal zone.
+
+>   	kfree(ops);
+>   }
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
 
