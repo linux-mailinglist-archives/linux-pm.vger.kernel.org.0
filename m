@@ -1,168 +1,182 @@
-Return-Path: <linux-pm+bounces-4219-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4220-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6BB785ED33
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 00:41:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6CA985F1D4
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 08:16:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E58461C21DF6
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Feb 2024 23:41:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3877CB219FC
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 07:16:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DBC512B14D;
-	Wed, 21 Feb 2024 23:41:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 694BB12E40;
+	Thu, 22 Feb 2024 07:16:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="1sMr8aT3"
+	dkim=pass (2048-bit key) header.d=siemens.com header.i=@siemens.com header.b="ssrbw1bR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2078.outbound.protection.outlook.com [40.107.13.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C0C381726;
-	Wed, 21 Feb 2024 23:41:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708558898; cv=none; b=JXBgzLaXk8/zhmqK0O/70Le/QQ6e/8HJ6dmtDeJ0NLqS5zPtT2kT8JuhLlhPGG53oe3+EwLXjMdUaJKlTxaKne0mLInfGSX919u9RrKm3smPPN/5ORedlLzMU5cH0YMDFJd3G0W7SqiNSFLqKzUAz2dH4SzrpxnFcmHTwWHVUi0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708558898; c=relaxed/simple;
-	bh=iQaEr7S3VpVXo/LTfo0BTyUn3+bsPhj9s7jvrhfynZY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oMeyT+FrywafKq5chJxPxzh8B5X23O00SLuhxButT4B47cbGj3fFxZm+9rvQesct+rd9egiCFvC+BArW9fnK7AMA8PgATRR477Sfct8S/XJBcL+68ddFLid6GRlXE/gZM5BGMFmNggeOt74uxji0DkfadBcfuaa5xa7LFqTbgtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=1sMr8aT3; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1708558895;
-	bh=iQaEr7S3VpVXo/LTfo0BTyUn3+bsPhj9s7jvrhfynZY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=1sMr8aT3mWNWbsBwlqmia8bEG592+tCdO/2HLfrb5QjlY+o3byLY7hkJl+HTs1juc
-	 LFYaj8MvJM7FSo74UjgYJ1M7uBinz8JcacJ7/JtqTNEhhKMSEWtsnuj3AyZs31d2TT
-	 HsnKsERttVu/EKpgPnYgoJ/zURsd+3ltmtw0C5eCNviaiwOuLWllC3Q8ZQYLdZmkN9
-	 1nH7n+jt0k969brjBjMAHMX70Hnjz94hOOn7f/ZyuuLjQPsfYmpk3OdZi8bOgK5MfY
-	 kekzOZRByL6KjVM3K1DC6nk0KgxOBAxy6VXjtOiqBvidpMj4rfdAJIiSx9RzkU3l03
-	 Iwic1dbD5/w2g==
-Received: from mercury (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: sre)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 394943782082;
-	Wed, 21 Feb 2024 23:41:35 +0000 (UTC)
-Received: by mercury (Postfix, from userid 1000)
-	id A5A2D106B79D; Thu, 22 Feb 2024 00:41:34 +0100 (CET)
-Date: Thu, 22 Feb 2024 00:41:34 +0100
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Nikita Travkin <nikita@trvn.ru>
-Cc: Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	cros-qcom-dts-watchers@chromium.org, Andy Gross <agross@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konrad.dybcio@linaro.org>, 
-	Rob Herring <robh@kernel.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v3 2/3] power: supply: Add Acer Aspire 1 embedded
- controller driver
-Message-ID: <qoidm5wujjbeoc2hlraky26wuwmuaxi2atyl6ehovhvffdbfeh@g5gunqdei45m>
-References: <20240220-aspire1-ec-v3-0-02cb139a4931@trvn.ru>
- <20240220-aspire1-ec-v3-2-02cb139a4931@trvn.ru>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FFC3748F;
+	Thu, 22 Feb 2024 07:16:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.13.78
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708586187; cv=fail; b=MjHPCKLmU/U8zWKaQABEnU4y9+gTjluA+5aa1cRFpiwJOZH0fp3xxfH8iTrdLv0RGaGpZtM44WjBIEpa/J12YQWGMEPz3hWjBaFGz8bwa+HFW87fjUroZBXrTrtjYRPKN+FkVMHlw6jpOlCd316Ie6AEkXM/Uld937Z0+uqk6Ww=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708586187; c=relaxed/simple;
+	bh=kHI1xJcOy6sXKqLp3vEwZwdPZiZ7T1R7yRRqLJXu18c=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=eStRmykkC4As4FAA4Ba7IlMqxv8uKt2COOJdrQVA5sCiNrXejWpUUdF86TmISUVcsTAc7ZoNTG3VT/sFTJkT62RZusKORgG8k4Pk683ozyI0czE2nlvR1zrifT5iy/I1jABScDyJZg334Wpz7zRJq9nDsyav4AscXBAGrlxkdVI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=@siemens.com header.b=ssrbw1bR; arc=fail smtp.client-ip=40.107.13.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siemens.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DNiIy/xhhxyAmX8ny57tgDIFEN+yxbKS5W1Boq/skSc4WMYnpf/u+4mbZ1XheGdCy7yujtd6bFtX8ElnENPn1lRg1nIcA7ZJoAtzMzTamUy6/ZgSXy1gMLXxFAwhqpXysfttul8xYRbMRIGoiQsxX+Y8Jg8BlZIUVTXiJXkEswRLRVi/fegT1nbdTSAJ+hrFfCdpu3HziflS1Q9nMAG4DTNtD5oVHcTtzitOqVfKasWGL6EkEaM4G/FphccH6QSfulbU7Rp1prGi5yklNUMRyuGJ9wwJcNIMEsJwe1/H16YW2cWw2AbukTQfYsafopcbFBFH8zv+Xjr2KnUrictd2A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kHI1xJcOy6sXKqLp3vEwZwdPZiZ7T1R7yRRqLJXu18c=;
+ b=jDgp1Bnxt8uVBxtDXcQdeTjgmTJYdONbDRjqWmpG1UnElhqviKJFCnUNL4yufhzytGfY9trWvozQnelQQPipXfLp2baTC9XTJ+5Qjrntd+eqJ9dAUWGnSWqulvZroPQdj2APK+nvRkW6aZiTiFl8BrT0k4pk+RLjSoElTX3/XmPW04ITJPxcFBANLlK1eN/kMk8qP/IUx4UD6mR8gj/qSyv00PZuSnmc0L5548a37j5ZsYFwPiaUI1Bj5WQshXraoG3CgP/lLpxo2qSWPufq76/eceBg60bkmbkvwl7xda/qcA9n5atdAuqX/2EG5K4v2BbqgKSWd7WpIeYZXYY/pA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kHI1xJcOy6sXKqLp3vEwZwdPZiZ7T1R7yRRqLJXu18c=;
+ b=ssrbw1bRQCeWHspdGv0+IzkZUhOcn0l+JTYoe/EbBjIO/lvKoaBWwMNdAHQZYJP4/NfqvcJzRPLLdFlU4txjjZLfNniOwVqr3JvaLKqrK5v2rJ/TsPbkVHT8mZmZLEJ5BqnqLbIjX5FZyUHyFDYr9H/lQdb7T5RGjHC3emctiVSjw8XfmAVGKfVXsOGRT55SxwacluG9MORxzIgMot3JQm5Iqm5aND2Qt9oIZ1X6Q7LWFUM8Fd4oWPWnEFD2cdb6S0urX98UK6COgpcrgFAdZtnfD1eJpcFNT2OGr544ndxglLgQ/SEQ2i6LTkTACfCbHaozCRmlxnBt2gLcqtP27w==
+Received: from AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:5b6::22)
+ by AS4PR10MB5718.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:4f4::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.31; Thu, 22 Feb
+ 2024 07:16:20 +0000
+Received: from AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::89d3:24a6:587e:51f]) by AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::89d3:24a6:587e:51f%4]) with mapi id 15.20.7292.036; Thu, 22 Feb 2024
+ 07:16:20 +0000
+From: "Sverdlin, Alexander" <alexander.sverdlin@siemens.com>
+To: "andrew@lunn.ch" <andrew@lunn.ch>
+CC: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, "sre@kernel.org"
+	<sre@kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RFC] power: reset: restart-poweroff: convert to module
+Thread-Topic: [PATCH RFC] power: reset: restart-poweroff: convert to module
+Thread-Index: AQHaZO3fdSvNdjfmzUuXjfeFOMKscbEVV64AgACchoA=
+Date: Thu, 22 Feb 2024 07:16:20 +0000
+Message-ID: <35e30e3260f6669b28dcdde6ea58f480eac3db91.camel@siemens.com>
+References: <20240221174610.3560775-1-alexander.sverdlin@siemens.com>
+	 <6964c19f-6ffb-4d9a-bc02-ffaf52aa23b5@lunn.ch>
+In-Reply-To: <6964c19f-6ffb-4d9a-bc02-ffaf52aa23b5@lunn.ch>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siemens.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AS8PR10MB6867:EE_|AS4PR10MB5718:EE_
+x-ms-office365-filtering-correlation-id: 30624b71-6a18-47a1-28a4-08dc33762b33
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ UDfaq2h0Mc7WrSuB3wWdKSxZko09vf+KMRo2vamgLeybaffmON6VLz5KSG+O5kmHwfKV8T5IOc3hGVu6rQYxvjM6IXdlavB/UJF/cTDvrce9w13vtAblCpyQVhQLZiuwEJ41qtFYShnPHgmGYsCFag1qXIgeI8EjiSrQkAPFu751HRUX1G7n1aEfPXanX+78vfdXlw10zAHurVnfIMjb+4/8pxnfM1ritpKezmO+zqn8bURGeqTZFrRDlGpcSlf29wexOVxYp8XlgRayefMp6I4FG6Rej5OE2S3fO7HmrtAC1d7GoGTZegIsAMQNy3Pil9L705AnjjFhaVez4yIVo7vAOjtTM3vYclUE+zlLEgmsCOL1y5XPWobYDChXhi+z0Zv6sJmQN8pibHU7yXM/Dn8LznodXmDCQuneiNmZPw2tpAz6DnCGaoNjvqBk7bhvzvWziYVlkMKaq7w1U8S4cqY85vfnjBqQr6rZyMnL9zS3oGguHVfpsfinBVWsoGcdfeQhaZ/qjBWBz9g049gGJM771xYb/MGUH9ZeYijWc+KKLiyk5dHtf96dWs8dfvBUweRhFudEujlbv037wy3zLkS0C7UohxFgc2m7XTENGWQ=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(38070700009);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?SWh3TDlvb1pPMW9OSkdEM21wWWhNUytqK2pxQzNwSmErZkZ1bC9hdXgrTElH?=
+ =?utf-8?B?UEZrSUgxZmdxN1RCaXJqcU0wQUEvN2gyU1Q5VmkwMWhPZkYxaUpXUUZvSUIy?=
+ =?utf-8?B?QmoxTXQxNkVnTGdZL0xBektoL3NwaFZVUW5UM2c5QnI4M3g4RHVKVTBiMWNp?=
+ =?utf-8?B?cTVzbFpFbll1UnBnNjUvWTRmaVdPSjBlQ2RFei94ZmtPdTBrN0FTVGg5NGV5?=
+ =?utf-8?B?eUFWRCsxRGR3aExRY1ZabjNWTGdVL05qS0NaNjJ0RkhQemF0VDNBVjVTNzFW?=
+ =?utf-8?B?QmxUcUpCTkREblp6REtCb010a1FRN3B2M3FyRnlZTUdPVU9mR0dJNm9WMWc4?=
+ =?utf-8?B?U3ppTHQ4STVtUU55ZWtONWV0RTdHblprRERKK1BpemE5V05SRFlVcUNwaVNZ?=
+ =?utf-8?B?L3JTMkpmYW9BZjAyeHNPWU1yTTBMRUhLZWt5SUlWczQxOG9uaHRadnBUVUd5?=
+ =?utf-8?B?ZW9lak9KNEgrclM5ZENaSHlBcW1sSUplaDlPbjk0TnBVc1RZWFhRZDZlT0ZT?=
+ =?utf-8?B?L2lWdklXZUFFVjdnZk1uM2FyNVluM2FVdUZGaEZydk8ydEIrQUZSVmkzZ1lV?=
+ =?utf-8?B?Rk5WUE8zcGtVN3VLeEdIMmYwZmU3eEh6dDQ3ajNYaUV2bU0xdTNGcXhFNFJa?=
+ =?utf-8?B?cHJZYWsvRXk0TVhkSThOZDZ0Y3RhUytpVlZ0NFdZWkF2M05BYnVKNFFRVE1k?=
+ =?utf-8?B?ZXRXRzg3c2RaTHl1VTZESjBRbTk2bVI5Z2RESmtJdHFybk5tc0U5T0EyVmpG?=
+ =?utf-8?B?YlE3ZWlhRldIRm5TQlV4TTd5c283SXRQVWxpZnIvaGM5TEp2TDhIT1BmUkl5?=
+ =?utf-8?B?REl2MkdQOHBXY09vMEFZdWJFeURrM084bmt0V1lHejF4WXJwM0QrZ3pEcy9R?=
+ =?utf-8?B?QWFHNEJUN29IK2gvQ2FYQU1MR3U4TExxRUtqYWtVZ2JZaXJ5eDlrVzNEVVN5?=
+ =?utf-8?B?VmVtUThISlVoZForZnJML0FVQktNQVhCZTNxdllCVEY0RHJTVnlrL3ZWY0FZ?=
+ =?utf-8?B?ZFQycXpFaUp2L3pZZnZPMTBwRmVJdWVsVUh6L2tEYkxiejBDWWJuaEZwc1J2?=
+ =?utf-8?B?eXlBZG01anZJUjAvL21lSFZFL3pFdW5lN0lBeVJrR3JqVjNoWGRhVUVvYVZ0?=
+ =?utf-8?B?dkNIbzk1emtRTDhiRGJJRFBjZ0kwKytUTmhZOUY1QnREU1RwME1VTlZKZDlo?=
+ =?utf-8?B?blpzdnNTNjF5cGRwbGFDa0ZXNUJmZVN1emZzaGVBbldTZ1N5VVRRaGl1V2sz?=
+ =?utf-8?B?TC8rSnp5VElMeTQyK0hlRWVacDhzZHluOUplSGZJZkNmaWVvUmJIaVhNVTdI?=
+ =?utf-8?B?MEtESytGTkNCWWpzT1A5Qm91M2o4NHRIb2pTbWZJOU95anoxeFNZQXpTSjJv?=
+ =?utf-8?B?K1NBTG1BMytURkE0dStEVGVJWmt4VkZ2blpVMHdIVkgwd0NTTDRiMkltZGpN?=
+ =?utf-8?B?OUJtbmhFbks4RCt3OTZyVVNsTmNoSnZPSkV0U253M0lGK1hUWEtzbVpoY3cx?=
+ =?utf-8?B?aUlvWnRRVkdCVzI1SUZEVFpqUUZnVU42VE4zMlNpaFRTa1N2WjRaL1NZQVBR?=
+ =?utf-8?B?N0wraXJOZ0RPOTJZQ215Tk5wb1pZdDZFRyt6U3FuVThQRDdTNkY5dS9lcGFz?=
+ =?utf-8?B?MENQeWEveDNkT0x1WFkzQUVoQjJnQ1pnZlRtM3lEQWtiK2NPaGhNZEVhWmFv?=
+ =?utf-8?B?VFJJc1FvQ2NtczNIaGRFQkUrSUhDQUdidllyd1U5bHRLVzhnWkoxQnVlVEsv?=
+ =?utf-8?B?WXZrODNHZHRnQ1Flek9rS0o3bFRMNmhsWEFqU0NmVnRWQlg0ZnByU3Bib1Bm?=
+ =?utf-8?B?MzQ5NTdzRmN2NEdvUmRDN3EyN1JYa0diVUZBT2FYWXJCcW1EK1JQU1V0Vm1z?=
+ =?utf-8?B?OCtqc2EyajFDbjI2ZmxBRG9ZOEZoMjl0N0RzcHArU2tvT2dwS0pzVlZBNEJJ?=
+ =?utf-8?B?MVNBNnFObExoMXYwSlZ4c0RyYm5tdm1WOHBLSHhpRkFwRlkxZU9HMXc4c3Nr?=
+ =?utf-8?B?OEt1cXFZQ0xyakswWUt5RjJCYjRUV1VuTW9GM3k2YVh2UnIrWlp2a3BUREdR?=
+ =?utf-8?B?REk2ZTkwSWZjMnlYb3pxYlJxTllHdTNCS1FkWGN2REw4V0pqeU55V0w1US9X?=
+ =?utf-8?B?ZDFtRkZTRWtrUjVNeDUySEZyOXBLYXVJTmUvaUVGZWhZRk1qR2pZVUp6cXMr?=
+ =?utf-8?Q?5vD1utDZff0gO27rFo6t3O0=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <09DC6181FFFCC94EBC90FC024C6376BC@EURPRD10.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="5pumrq45zgvzlhw7"
-Content-Disposition: inline
-In-Reply-To: <20240220-aspire1-ec-v3-2-02cb139a4931@trvn.ru>
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR10MB6867.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 30624b71-6a18-47a1-28a4-08dc33762b33
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Feb 2024 07:16:20.3141
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: pjZ5ace5ohv8isIByyrlXHktgp9zyhoQtKnph3eM9kQ4RdokyQADBKvrN9h5MEMPXYOMxlKKfQOW0DJwFFtR0pwJz8rqslId4ozU6MejZhQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR10MB5718
 
-
---5pumrq45zgvzlhw7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Tue, Feb 20, 2024 at 04:57:13PM +0500, Nikita Travkin wrote:
-> Acer Aspire 1 is a Snapdragon 7c based laptop. It uses an embedded
-> controller to control the charging and battery management, as well as to
-> perform a set of misc functions.
->=20
-> Unfortunately, while all this functionality is implemented in ACPI, it's
-> currently not possible to use ACPI to boot Linux on such Qualcomm
-> devices. To allow Linux to still support the features provided by EC,
-> this driver reimplments the relevant ACPI parts. This allows us to boot
-> the laptop with Device Tree and retain all the features.
->=20
-> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
-> ---
->  drivers/power/supply/Kconfig           |  14 +
->  drivers/power/supply/Makefile          |   1 +
->  drivers/power/supply/acer-aspire1-ec.c | 453 +++++++++++++++++++++++++++=
-++++++
-
-I think this belongs into drivers/platform, as it handles all bits of
-the EC.
-
-[...]
-
->  3 files changed, 468 insertions(+)
->=20
-> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-> index 3e31375491d5..e91a3acecb41 100644
-> --- a/drivers/power/supply/Kconfig
-> +++ b/drivers/power/supply/Kconfig
-> @@ -985,4 +985,18 @@ config FUEL_GAUGE_MM8013
->  	  the state of charge, temperature, cycle count, actual and design
->  	  capacity, etc.
-> =20
-> +config EC_ACER_ASPIRE1
-> +	tristate "Acer Aspire 1 Emedded Controller driver"
-> +	depends on I2C
-> +	depends on DRM
-> +	help
-> +	  Say Y here to enable the EC driver for the (Snapdragon-based)
-> +	  Acer Aspire 1 laptop. The EC handles battery and charging
-> +	  monitoring as well as some misc functions like the lid sensor
-> +	  and USB Type-C DP HPD events.
-> +
-> +	  This driver provides battery and AC status support for the mentioned
-
-I did not see any AC status bits?
-
-> [...]
-
-> +	case POWER_SUPPLY_PROP_PRESENT:
-> +		val->intval =3D 1;
-
-You have an unused ASPIRE_EC_FG_FLAG_PRESENT, that looks like it
-should be used here?
-
-> [...]
-
-Otherwise the power-supply bits LGTM.
-
--- Sebastian
-
---5pumrq45zgvzlhw7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmXWiicACgkQ2O7X88g7
-+pphEQ//QfRfqFF/XjDaJi9b+8RjH14PfIoll6uD3p5mDEZNt2uUHj0OD6amERqW
-f/oEuh3OIdGda/XOQAVsF3hB6R0odh1oU9g2h5O5ibcITedbJylsuMKXxn27OmCg
-6pStiMBuNB9RQjrhqjF3THVfqkcyqilW0seTVoqXNq2B1UT2fOT+KKgUaUMt2dj3
-jYdAyiza9GywL+bPk2fnEjygNH2tU6YpEDO7p2BYHu4jG066S+sCntaAfS9GYlOm
-DRfXUxmWlQuV2J9eJto1dbKaqgCCVl5aHmK16no5kpJy1YaStzi/c4ZebHJkVfUz
-/SRFPXUWySirture+1EAL5jj8d52eBJOa9Bm7Nn6VhWnNmrZ+3tLjUK9MQY6Adn3
-yCcFi/kmK+rDxBOqzC3FFjQACpH7TYe6cXREqjH45ItqClPOghvPXJNYs0B/RjKv
-ZWERkRZKqP0GfDNZhhYWvmNxNBlX9/psgWfGdOQauvmi99jdIDy9rOGvuqBvMoG2
-M6wFQBnp/hjVJqbuFZhWTHx5dq1Bnz6TRUsd0Lk6xwWs04bzEaD/dND7WE0JGO6W
-VZBqdLdcFO7UvyyQAAY4BB4qqhORN5kwucm3dZQOtHQqrtmJ8JkC0Ysmyyvp3wJZ
-fJYww9pNBQ7sV3nylsuvpFd2ocziNoesdhIp2Phkd5p0Pdk1Z+c=
-=5HBY
------END PGP SIGNATURE-----
-
---5pumrq45zgvzlhw7--
+T24gV2VkLCAyMDI0LTAyLTIxIGF0IDIyOjU2ICswMTAwLCBBbmRyZXcgTHVubiB3cm90ZToNCj4g
+PiBAQCAtNDcsMTUgKzQ1LDggQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBvZl9kZXZpY2VfaWQgb2Zf
+cmVzdGFydF9wb3dlcm9mZl9tYXRjaFtdID0gew0KPiA+IMKgIH07DQo+ID4gwqAgTU9EVUxFX0RF
+VklDRV9UQUJMRShvZiwgb2ZfcmVzdGFydF9wb3dlcm9mZl9tYXRjaCk7DQo+ID4gwqAgDQo+ID4g
+LXN0YXRpYyBzdHJ1Y3QgcGxhdGZvcm1fZHJpdmVyIHJlc3RhcnRfcG93ZXJvZmZfZHJpdmVyID0g
+ew0KPiA+IC3CoMKgwqDCoMKgwqDCoC5wcm9iZSA9IHJlc3RhcnRfcG93ZXJvZmZfcHJvYmUsDQo+
+ID4gLcKgwqDCoMKgwqDCoMKgLnJlbW92ZSA9IHJlc3RhcnRfcG93ZXJvZmZfcmVtb3ZlLA0KPiA+
+IC3CoMKgwqDCoMKgwqDCoC5kcml2ZXIgPSB7DQo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoC5uYW1lID0gInBvd2Vyb2ZmLXJlc3RhcnQiLA0KPiA+IC3CoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAub2ZfbWF0Y2hfdGFibGUgPSBvZl9yZXN0YXJ0X3Bvd2Vyb2ZmX21hdGNo
+LA0KPiA+IC3CoMKgwqDCoMKgwqDCoH0sDQo+ID4gLX07DQo+IA0KPiBvZl9yZXN0YXJ0X3Bvd2Vy
+b2ZmX21hdGNoIG5vdyBzZWVtcyB0byBiZSBkaXNjb25uZWN0ZWQgZnJvbSB0aGUNCj4gZHJpdmVy
+Lg0KPiANCj4ga2lya3dvb2QtbGlua3N0YXRpb24uZHRzaTrCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgY29tcGF0aWJsZSA9ICJyZXN0YXJ0LXBvd2Vyb2ZmIjsNCj4ga2lya3dvb2QtbHN4bC5k
+dHNpOsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY29tcGF0aWJsZSA9ICJyZXN0YXJ0LXBvd2Vy
+b2ZmIjsNCj4gb3Jpb241eC1saW5rc3RhdGlvbi5kdHNpOsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoGNvbXBhdGlibGUgPSAicmVzdGFydC1wb3dlcm9mZiI7DQo+IG9yaW9uNXgtbHN3c2ds
+LmR0czrCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNvbXBhdGlibGUgPSAicmVzdGFydC1wb3dl
+cm9mZiI7DQo+IA0KPiBIb3cgZG8gdGhlc2UgZGV2aWNlcyBnZXQgdGhpcyBkcml2ZXIgbG9hZGVk
+Pw0KPiANCj4gVGhpcyBhcHBlYXJzIHRvIGJlIGFub3RoZXIgcmVhc29uIHRvIE5BQ0sgaXQuDQoN
+ClRoYXQncyB3aHkgTU9EVUxFX0RFVklDRV9UQUJMRSgpIHdhcyBwcmVzZXJ2ZWQgZm9yIGJhY2t3
+YXJkcyBjb21wYXRpYmlsaXR5LA0KYmVjYXVzZSAqbG9hZGluZyogaGFwcGVucyB2aWEgTU9EVUxF
+X0RFVklDRV9UQUJMRSgpLiBCdXQgSSBkaWRuJ3QgcmVhbGl6ZQ0KaXQgd2FzIG5ldmVyIGJ1aWxk
+YWJsZSBhcyBtb2R1bGUgYXMgU2ViYXN0aWFuIHBvaW50ZWQgb3V0LCBiZWNhdXNlIG9mDQptYWNo
+aW5lX3Jlc3RhcnQoKS4NCg0KRm9yIHlvdXIgdXNlIGNhc2UgaXQgd291bGQgY29udGludWUgdG8g
+d29yayBhcyBiZWZvcmUgSSBiZWxpZXZlLCBqdXN0DQp0aGUgY2FsbGJhY2sgd291bGQgYmUgaW5z
+dGFsbGVkIGJlY2F1c2Ugb2YgdGhlIGZhY3QgdGhlIGNvZGUNCndhcyBjb21waWxlZC1pbiwgbm90
+IGJlY2F1c2UgdGhlcmUgd2FzIGEgZmFrZSBwbGF0Zm9ybSBkZXZpY2UuDQoNCkkgYWxzbyBkaWRu
+J3QgdW5kZXJzdGFuZCB3aGF0IGlzIHNvIHNwZWNpYWwgYWJvdXQgYm9vdGxvYWRlciBzdXBwb3J0
+DQpmb3IgdGhpcyBmdW5jdGlvbmFsaXR5IGlmIG5vIGRhdGEgaXMgcGFzc2VkIHRvIHRoZSBib290
+bG9hZGVyLg0KQWZ0ZXIgQVJNLXNwZWNpZmljcyB3YXMgcmVtb3ZlZCBmcm9tIHRoZSBjb2RlIHF1
+aXRlIHNvbWUgdGltZSBhZ28NCmFueSBwbGF0Zm9ybSBjb3VsZCByZS11c2UgdGhlIGNvZGUgZm9y
+IHRoZSBkZXBsb3ltZW50cyB3aGljaCBtZWFudA0KdG8gYmUgImFsd2F5cyBvbiIuDQoNCkJ1dCBJ
+ZiB0aGUgcmVzaXN0YW5jZSBpcyBzbyBzZXJpb3VzLCBzbyBiZSBpdC4NCg0KLS0gDQpBbGV4YW5k
+ZXIgU3ZlcmRsaW4NClNpZW1lbnMgQUcNCnd3dy5zaWVtZW5zLmNvbQ0K
 
