@@ -1,318 +1,143 @@
-Return-Path: <linux-pm+bounces-4241-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4242-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 848B285F794
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 12:56:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23F3685F7FF
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 13:21:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DE11EB2494F
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 11:56:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 555921C21C91
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 12:21:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E9484597F;
-	Thu, 22 Feb 2024 11:56:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84275605D3;
+	Thu, 22 Feb 2024 12:21:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b="wUR2NHZn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vais+w7d"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D40F541775
-	for <linux-pm@vger.kernel.org>; Thu, 22 Feb 2024 11:56:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4075355C28;
+	Thu, 22 Feb 2024 12:21:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708602964; cv=none; b=Ly5S0IQcpJSiC5gIG5R+5/M3fJjcObYXQ6JWXyDFqq66LJJdbD8uYOsB+l/1aP4ig8pa2dbC6+IRNmR3uumOUEF9FDb19UmAe2VmeRZ+mTJ9umS9/aiyGJ7r++PclCtcgZNIlirnnaehnKpRR5O6ZlMZPnNkADuUWRn+ucV/1jQ=
+	t=1708604507; cv=none; b=Z8xJ3xZsVFNTHO/YjKKJzrpI6I9tzF6C7tuoZDhAe6lzSZrXpsLN4nI+fVZWJlhR25OY08R6zTg0uhsjBKDZUY3U2aQ3JfqHhOmThqn3wqCXsYljwak89oYSqDoXk9Y/gh1e7iCC4+UpYUUMeYR9NEbyadX218spl5A9DgFtqNg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708602964; c=relaxed/simple;
-	bh=MTZib+sgUdCfxTYPSm0rjTzkXr3P5gse+DQK51tCwZ8=;
+	s=arc-20240116; t=1708604507; c=relaxed/simple;
+	bh=EqZbzaH/qaB7a7IKc6JYTdatq4CHgvMWc4c4mJHW2hE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PjpZygoV2h/cNt6wY+DvNjCkaBg4b5IYl1QX3nXGfO4wrRFk7SheR3T6l1ksujeq4Y74taFamIEfZUVCiv7kSBtSqDyjV3NuqI542jF0V4ZREw0h+sLfJ/WrDJi0IXO35m6+2lqm/QA2e0ZhdEEMUQ49YXEzoQ8hpZoHIDkbhGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io; spf=pass smtp.mailfrom=layalina.io; dkim=pass (2048-bit key) header.d=layalina-io.20230601.gappssmtp.com header.i=@layalina-io.20230601.gappssmtp.com header.b=wUR2NHZn; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=layalina.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=layalina.io
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-41241f64c6bso12427965e9.0
-        for <linux-pm@vger.kernel.org>; Thu, 22 Feb 2024 03:56:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20230601.gappssmtp.com; s=20230601; t=1708602960; x=1709207760; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=pH9lFW9jwuISEJE0s5Q/XzAjg92dbYZszfc5ss0kQCs=;
-        b=wUR2NHZnkMub0lt2borWpnMa8DHZNWLQ8aq7MG+28u+iIRnN7+XA5qpvnY144NDDoD
-         99jNJKCxquTvaDpHXsG1Y95P3xlOv63apAPT7uDCs7y3pCU69uDv5xUX1bVwdQyCalI5
-         HRVcR0A8IZ0kpHaVLjE9Jn4uM5gRgdVzECAl/Y5cSGAoB8K2UOmxg9BU7GTk+ZejAa0m
-         n3VzTH+1n7CpMGwJMw/zI4AswURaAvP2poi+nlIiz5p2+fPgU3XfvEeQckJ5PMTHC/fa
-         jd9dAnFI0WkX8nKpux3feZ6hGmzflH3wDEg/4zCrrh0oxovs7tzKFCHlVpvYfTueNFST
-         opxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708602960; x=1709207760;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pH9lFW9jwuISEJE0s5Q/XzAjg92dbYZszfc5ss0kQCs=;
-        b=iiC1ZVV7hEB5jKepi6K5NS5Xsyric1RAshPw9PpeG/Fzv28Wh3PvZZPcmelRKnSo8c
-         pH0e2XnqwBtalGndTYez8WjS4PGe4zDDpGqi8g5cHbPe78XXfzm0Q4jkg4ZhQXWxf7F1
-         jkKUNc1PcmXlmzj0sYOYvMpwo2eL5cVSSdcxHrzeR5x7267as23KTtKdBKHnuArzJ/9r
-         3tjmIGHc1XvQPqZ2O6GpvvJEzBPT6BOfl0fgS2n9fymKb3xVj463vAk5CbiTqu1Ln/2W
-         p9B9ecAOhQPXRcvS9iZRbiOVrxjtaQABwlczYciqVvsLubOv9iRSbRwYHsO2Yak3c+ee
-         2uGg==
-X-Forwarded-Encrypted: i=1; AJvYcCUyMvEnl2Fz/aMlWJb74nIMTLTCj0JovIeAq3YplWOb1UK2o4HxIDpvyL6cAXr5smvWfwOqBN3MYpuBqmKB1fkADKdkeRGiiz8=
-X-Gm-Message-State: AOJu0Yzr4x8P78RM18IKjsnd5s2RhrwzSAfl6mi8aq1gVUKTVHysM7yi
-	8uq2Qm3T6hClT/QMqi2qWqg6mMgCjzddn7mJscvGYDfj6yLf2FgUiptSbteIo00rhd9YyUkjtLV
-	K
-X-Google-Smtp-Source: AGHT+IFgKJndOp77uaoINQOnBlVIC/bKv5sQ5fttkGBD2lASIeWzNh+11TuyThxhaKVUQ+eAMq2MXg==
-X-Received: by 2002:a05:600c:45c9:b0:412:7b4d:b22a with SMTP id s9-20020a05600c45c900b004127b4db22amr1558164wmo.19.1708602959926;
-        Thu, 22 Feb 2024 03:55:59 -0800 (PST)
-Received: from airbuntu (host109-154-46-208.range109-154.btcentralplus.com. [109.154.46.208])
-        by smtp.gmail.com with ESMTPSA id x4-20020adff644000000b0033b792ed609sm20233903wrp.91.2024.02.22.03.55.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Feb 2024 03:55:59 -0800 (PST)
-Date: Thu, 22 Feb 2024 11:55:57 +0000
-From: Qais Yousef <qyousef@layalina.io>
-To: Pierre Gondois <pierre.gondois@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	Ingo Molnar <mingo@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Christian.Loehle@arm.com
-Subject: Re: [PATCH] cpufreq: Change default transition delay to 2ms
-Message-ID: <20240222115557.blnm4uulkxnorrl4@airbuntu>
-References: <20240205022500.2232124-1-qyousef@layalina.io>
- <20240205074514.kiolurpounokalum@vireshk-i7>
- <CAJZ5v0j2rA-+Jpdv6OZ_ymiqh0+RGzmJBNncKGBwuxO3PxgSKA@mail.gmail.com>
- <ca000b2d-b552-43cb-8807-0a5f1450c6a2@arm.com>
- <20240220135037.qriyapwrznz2wdni@airbuntu>
- <d58de550-0ce1-4af9-9e2d-dedd5e73c797@arm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=IVjtJUg6NUJ5CM35VO8VXbepV/5gVRPM799nC637htVLwp30Vkr29y/MxlWFwdiSyuCIcyUTmm5daNeBhwbSODwh+31ZU6djOzVTj1djWdL/445r0Pdcb6xfvt069m5WRnr/qTz2ihDF0JX0b434506R7vM0Iwz7SQsrMo9lsK0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vais+w7d; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81E0DC433C7;
+	Thu, 22 Feb 2024 12:21:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1708604506;
+	bh=EqZbzaH/qaB7a7IKc6JYTdatq4CHgvMWc4c4mJHW2hE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Vais+w7dVBc+Xk4EvckzPmvM6a/2KjvGzm2VDrn7oZd6lT1sMCuOcX1qDb2PMDCEW
+	 IZALOUfq5R7czopyD6Q8n/kouh0W3vDg13fw2wPev+9aOxAzv5iSFTj01WlgeRtm8q
+	 rfrlSSvGHi8dMfB4nzhaZ81mQagcgNVTDsSzCfY3Yk76RiQvI4C+1mW9qVZN85sa5q
+	 Uz3u+hqODk6ps05MFS1CAhRh/TkO/5AAWb5UNCazW0O8MTp8aD1OJpRyMUiaGn3Rcm
+	 lv9vU3NJ1hmnoVZQ4RN+226xKHklRHGaTs1CBXAw5vmIXparkNzLdJs/W+pgHBWnYG
+	 hT7MEcGskAyYw==
+Date: Thu, 22 Feb 2024 12:21:36 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Konrad Dybcio <konrad.dybcio@linaro.org>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>, Kalle Valo <kvalo@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	Saravana Kannan <saravanak@google.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Alex Elder <elder@linaro.org>,
+	Srini Kandagatla <srinivas.kandagatla@linaro.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Abel Vesa <abel.vesa@linaro.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Lukas Wunner <lukas@wunner.de>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-wireless@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH v5 14/18] PCI/pwrctl: add a power control driver for
+ WCN7850
+Message-ID: <52fba837-989b-4213-8af7-f02cd8cb48c8@sirena.org.uk>
+References: <20240216203215.40870-1-brgl@bgdev.pl>
+ <20240216203215.40870-15-brgl@bgdev.pl>
+ <d5d603dc-ec66-4e21-aa41-3b25557f1fb7@sirena.org.uk>
+ <CAMRc=MeUjKPS3ANE6=7WZ3kbbGAdyE8HeXFN=75Jp-pVyBaWrQ@mail.gmail.com>
+ <ea08a286-ff53-4d58-ae41-38cca151508c@sirena.org.uk>
+ <17bbd9ae-0282-430e-947b-e6fb08c53af7@linaro.org>
+ <53f0956f-ee64-4bd6-b44f-cbebafd42e46@sirena.org.uk>
+ <CAMRc=MedCX_TGGawMhr39oXtJPF4pOQF=Jh2z4uXkOxwhfJWRw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="M/jaeVyfzRnxNsGp"
+Content-Disposition: inline
+In-Reply-To: <CAMRc=MedCX_TGGawMhr39oXtJPF4pOQF=Jh2z4uXkOxwhfJWRw@mail.gmail.com>
+X-Cookie: I have accepted Provolone into my life!
+
+
+--M/jaeVyfzRnxNsGp
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d58de550-0ce1-4af9-9e2d-dedd5e73c797@arm.com>
+Content-Transfer-Encoding: quoted-printable
 
-On 02/20/24 18:38, Pierre Gondois wrote:
-> Hello Qais,
-> 
-> I added some other remarks,
-> 
-> On 2/20/24 14:50, Qais Yousef wrote:
-> > On 02/14/24 10:19, Pierre Gondois wrote:
-> > > Hello,
-> > > 
-> > > On 2/12/24 16:53, Rafael J. Wysocki wrote:
-> > > > On Mon, Feb 5, 2024 at 8:45 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > > > > 
-> > > > > On 05-02-24, 02:25, Qais Yousef wrote:
-> > > > > > 10ms is too high for today's hardware, even low end ones. This default
-> > > > > > end up being used a lot on Arm machines at least. Pine64, mac mini and
-> > > > > > pixel 6 all end up with 10ms rate_limit_us when using schedutil, and
-> > > > > > it's too high for all of them.
-> > > > > > 
-> > > > > > Change the default to 2ms which should be 'pessimistic' enough for worst
-> > > > > > case scenario, but not too high for platforms with fast DVFS hardware.
-> > > > > > 
-> > > > > > Signed-off-by: Qais Yousef <qyousef@layalina.io>
-> > > > > > ---
-> > > > > >    drivers/cpufreq/cpufreq.c | 4 ++--
-> > > > > >    1 file changed, 2 insertions(+), 2 deletions(-)
-> > > > > > 
-> > > > > > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > > > > > index 44db4f59c4cc..8207f7294cb6 100644
-> > > > > > --- a/drivers/cpufreq/cpufreq.c
-> > > > > > +++ b/drivers/cpufreq/cpufreq.c
-> > > > > > @@ -582,11 +582,11 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
-> > > > > >                  * for platforms where transition_latency is in milliseconds, it
-> > > > > >                  * ends up giving unrealistic values.
-> > > > > >                  *
-> > > > > > -              * Cap the default transition delay to 10 ms, which seems to be
-> > > > > > +              * Cap the default transition delay to 2 ms, which seems to be
-> > > > > >                  * a reasonable amount of time after which we should reevaluate
-> > > > > >                  * the frequency.
-> > > > > >                  */
-> > > > > > -             return min(latency * LATENCY_MULTIPLIER, (unsigned int)10000);
-> > > > > > +             return min(latency * LATENCY_MULTIPLIER, (unsigned int)(2*MSEC_PER_SEC));
-> > > > > 
-> > > > > Please add spaces around '*'.
-> > > > > 
-> > > > > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> > > > 
-> > > > I've adjusted the whitespace as suggested above and applied the patch
-> > > > as 5.9 material.
-> > > > 
-> > > > Thanks!
-> > > > 
-> > > 
-> > > To add some numbers, on a Juno-r2, with latency measured between the frequency
-> > > request on the kernel side and the SCP actually making the frequency update.
-> > > 
-> > > The SCP is the firmware responsible of making the frequency updates. It receives
-> > > the kernel requests and coordinate them/make the actual changes. The SCP also has
-> > > a mechanism called 'fast channel' (FC) where the kernel writes the requested
-> > > frequency to a memory area shared with the SCP. Every 4ms, the SCP polls/reads
-> > > these memory area and make the required modifications.
-> > > 
-> > > Latency values (in ms)
-> > > Workload:
-> > > Idle system, during ~30s
-> > > +---------------------------------------+
-> > > |       |   Without FC  |      With FC  |
-> > > +-------+---------------+---------------+
-> > > | count |       1663    |        1102   |
-> > > | mean  |          2.92 |          2.10 |
-> > > | std   |          1.90 |          1.58 |
-> > > | min   |          0.21 |          0.00 |
-> > > | 25%   |          1.64 |          0.91 |
-> > > | 50%   |          2.57 |          1.68 |
-> > > | 75%   |          3.66 |          2.97 |
-> > > | max   |         14.37 |         13.50 |
-> > > +-------+---------------+---------------+
-> > > 
-> > > Latency values (in ms)
-> > > Workload:
-> > > One 1% task per CPU, period = 32ms. This allows to wake up the CPU
-> > > every 32ms and send more requests/give more work to the SCP. Indeed
-> > > the SCP is also responsible of idle state transitions.
-> > > Test duration ~=30s.
-> > > +---------------------------------------+
-> > > |       |   Without FC  |      With FC  |
-> > > +-------+---------------+---------------+
-> > > | count |       1629    |       1446    |
-> > > | mean  |          3.23 |          2.31 |
-> > > | std   |          2.40 |          1.73 |
-> > > | min   |          0.05 |          0.02 |
-> > > | 25%   |          1.91 |          0.98 |
-> > > | 50%   |          2.65 |          2.00 |
-> > > | 75%   |          3.65 |          3.23 |
-> > > | max   |         20.56 |         16.73 |
-> > > +-------+---------------+---------------+
-> > > 
-> > > ---
-> 
-> 1.
-> With this patch, platforms like the Juno which:
-> - don't set a `transition_delay_us`
-> - have a high `transition_latency` (> 1ms)
-> can request freq. changes every 2ms.
-> 
-> If a platform has a `transition_latency` > 2ms, this means:
->   `transition_latency` > `transition_delay_us`
-> I.e. a second freq. requests might be emitted before the first one
-> will be completed. On the Juno, this doesn't cause any 'real' issue
-> as the SCMI/mailbox mechanism works well, but this doesn't seem
-> correct.
-> If the util of CPUs is in between OPPs (i.e. freq. changes are often
-> required), the Juno:
-> - sends a freq. request
-> - waits for completion and schedules another task in the meantime
-> - upon completion, immediately sends a new freq.
-> 
-> I think that the following should be respected/checked:
-> - `transition_latency` < `transition_delay_us`
-> (it might also make sense to have, with K being any factor:)
-> - `transition_latency` * K < `transition_delay_us`
+On Thu, Feb 22, 2024 at 10:22:50AM +0100, Bartosz Golaszewski wrote:
+> On Wed, Feb 21, 2024 at 12:44=E2=80=AFAM Mark Brown <broonie@kernel.org> =
+wrote:
 
-Makes sense. How about this? I am not sure it is better to multiply with
-a factor if the platform is already slow. Even the current 1000 multiply factor
-is high but this is a territory I am not ready to step into yet.
+> > Yes, that's the theory - I just question if it actually does something
+> > useful in practice.  Between regulators getting more and more able to
+> > figure out mode switching autonomously based on load monitoring and them
+> > getting more efficient it's become very unclear if this actually
+> > accomplishes anything, the only usage is the Qualcomm stuff and that's
+> > all really unsophisticated and has an air of something that's being
+> > cut'n'pasted forwards rather than delivering practical results.  There
+> > is some value at ultra low loads, but that's more for suspend modes than
+> > for actual use.
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 66cef33c4ec7..68a5ba24a5e0 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -576,6 +576,15 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
+> Removing it would be out of scope for this series and I don't really
+> want to introduce any undefined behavior when doing a big development
+> like that. I'll think about it separately.
 
-        latency = policy->cpuinfo.transition_latency / NSEC_PER_USEC;
-        if (latency) {
-+               unsigned int max_delay_us = 2 * MSEC_PER_SEC;;
-+
-+               /*
-+                * If the platform already has high transition_latency, use it
-+                * as-is.
-+                */
-+               if (latency > max_delay_us)
-+                       return latency;
-+
-                /*
-                 * For platforms that can change the frequency very fast (< 10
-                 * us), the above formula gives a decent transition delay. But
-@@ -586,7 +595,7 @@ unsigned int cpufreq_policy_transition_delay_us(struct cpufreq_policy *policy)
-                 * a reasonable amount of time after which we should reevaluate
-                 * the frequency.
-                 */
--               return min(latency * LATENCY_MULTIPLIER, (unsigned int)(2 * MSEC_PER_SEC));
-+               return min(latency * LATENCY_MULTIPLIER, max_delay_us);
-        }
+This is new code?
 
-        return LATENCY_MULTIPLIER;
+--M/jaeVyfzRnxNsGp
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 
-> 
-> 2.
-> There are references to the 10ms values at other places in the code:
-> 
-> include/linux/cpufreq.h
->  * ondemand governor will work on any processor with transition latency <= 10ms,
+-----BEGIN PGP SIGNATURE-----
 
-Not sure this one needs updating. Especially with the change above which means
-10ms could theoretically happen. But if there are suggestions happy to take
-them.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmXXPE8ACgkQJNaLcl1U
+h9CIHwf/XP89jkt/tlGa4jICwu1iztzFqaiTJkTcvJjUXga/U61RNmUVRGfMlGTs
+NbXYJFbdHP6Rz6ClY+/Ws+p1AsrvAOj18ufykhqOSOf5OBAsi8Lzeex5WSN0LZKs
+iT7v2mfE45b+lM8yTNapT0z3KoAKh9QWJHmohYHG+cJadqgoYuv8zZfPVWIBJhFD
+I6jZ37EHzRJ5t9CgmJBA84tQojwDT3sie2EuZQ+wTGvaPloUU3LJuAv+ZF5LMsIi
+o+kwTHP7xgkb5VD9I6EcO70CHkzvwSKLXzuhvEB4jGlrWNXjL7ZYjPyoruUMbtrS
+LRRnFjVnLkvTL1/Jg1GArsnIQd7Xow==
+=UdGL
+-----END PGP SIGNATURE-----
 
-> 
-> drivers/cpufreq/cpufreq.c
->  * For platforms that can change the frequency very fast (< 10
->  * us), the above formula gives a decent transition delay. But
-> -> the 10us value matches 10ms = 10us * LATENCY_MULTIPLIER
-
-I can't find this one.
-
-> 
-> Documentation/admin-guide/pm/cpufreq.rst
->  Typically, it is set to values of the order of 10000 (10 ms).  Its
->  default value is equal to the value of ``cpuinfo_transition_latency``
-
-I am not sure about this one. It refers to cpuinfo_transition_latency not the
-delay and uses a formula to calculate it based on that.
-
-Seems the paragraph needs updating in general to reflect other changes?
-
-> 
-> 
-> 3.
-> There seems to be a dependency of the conservative/ondemand governors
-> over the the value returned by `cpufreq_policy_transition_delay_us()`:
-> 
-> drivers/cpufreq/cpufreq_governor.c
->   dbs_data->sampling_rate = max_t(unsigned int,
->     CPUFREQ_DBS_MIN_SAMPLING_INTERVAL,            // = 2 * tick period = 8ms
->     cpufreq_policy_transition_delay_us(policy));  // [1]: val <= 2ms
-> 
-> [1]
-> if `transition_latency` is not set and `transition_delay_us` is,
-> which is the case for the Juno.
-> 
-> The `sampling_rate` is, FYIU, the period used to evaluate the ratio
-> of the idle/busy time, and if necessary increase/decrease the freq.
-> 
-> This patch will likely reduce this sampling rate from 10ms -> 8ms
-> (if `cpufreq_policy_transition_delay_us()`` now returns 2ms for some
-> platforms). This is not much, but just wanted to note it.
-
-I don't think this is a problem as tick being 1ms is common and
-transition_delay_us is not 10ms on all platforms. On my amd system it is 1ms
-and on another intel i5 it is 5ms. So it should have already been coping with
-various combination.
-
-
-Thanks!
-
---
-Qais Yousef
+--M/jaeVyfzRnxNsGp--
 
