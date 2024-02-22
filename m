@@ -1,147 +1,257 @@
-Return-Path: <linux-pm+bounces-4294-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4295-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E30858601EB
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 19:53:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0786F86021A
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 20:04:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98A3328E781
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 18:53:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B8F81C2600F
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 19:04:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7D5954906;
-	Thu, 22 Feb 2024 18:44:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KbhIOVaB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B801B38FB2;
+	Thu, 22 Feb 2024 19:04:37 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97472548FF
-	for <linux-pm@vger.kernel.org>; Thu, 22 Feb 2024 18:44:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 048991E892;
+	Thu, 22 Feb 2024 19:04:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708627457; cv=none; b=gn787m1D/e392zR8YCXOAZL0zHU3BjMZp3z2V8Tm1sS7u9hZsVDE09q5Q+0M3bCwhKnMHa/9znpv04cgPcIUiQaJnLDxy4dT+7g2xQnEbKn9OOZNvJBZSSO4au9QXeF8bnr405wdWlAlf5wwtL6AV93BcBBy32npAsmPpQkM64U=
+	t=1708628677; cv=none; b=sDFoQZQSuII3WotWYLykdVFwyA4cc+f9NAaIPreCbOOZfQwlriTSPV/6KJRgpwXi1Iz4/FYCnsBW335BAHCANQI/QpVjkqdlMr8woJU8vUHH1FC7tv8ocRy4kmzQGUdxHfvSHA2jEsEq2+vo6mdnfS3tvgmQ7eHLgULR6i8ib5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708627457; c=relaxed/simple;
-	bh=1Tw8s+DClYHUogHJhbrGvBp/2kXGIQUYNPE/2LdOkdE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mUwohnEx/aS1OyOigk/oLPP5ZuuStf4GGzLcjYBi523AzoAIUY3cpCf5UqQVWmHSSL89I14roDtl1KAV0IePX1IUuZbnGWZfugpDv2vORSwd6IfqDHbLPxrfHRnl5oeTuCcvOs7dhVS5WBh8NxP5vAOWUUe41JznOI8TDoqPoKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KbhIOVaB; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3392b045e0aso27095f8f.2
-        for <linux-pm@vger.kernel.org>; Thu, 22 Feb 2024 10:44:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1708627454; x=1709232254; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pBKdIE0MqGxWNqgnCMzfW9UY12c2Cp9wReUt3CTynV8=;
-        b=KbhIOVaBac+9oUYHkmSxMGjrcMjQiwDvEZECITafVGqAv0wOyszb/cTgtVgUY78cR1
-         gqJYOxIqu927WOOIJFUGH8a68EY45JoBPal0UOdMLXcG6QraQcZntKvTz/KyMj2gisdJ
-         0qiqTjGS/SA5wfv/FyyrJH2jlU2lSAyBCMLHhOnY6s5Xxe0J5AQDuKfQPEHtgp390Am6
-         WVhfFlAOXmhZoQiiu9zjLdCitR+62MIOcliVQRkdsGZEOL70OPKLmAF3mFLtcZ60swzj
-         0Ez/vJywihsjcJiM1o3YV7+c4+2/LTRDY/m2tnyIJMJZ5o1SI9fSBToQXrQOYqGhm2GS
-         UIYA==
+	s=arc-20240116; t=1708628677; c=relaxed/simple;
+	bh=Hyf9XBUFJSWplKcsdD5bVfC2Vm6PoE3r6Y1cEsPSsgI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UQyLOIs3un2VrsffUCkr5M3CJXiByq2x4Q7gKevjEo0FQ5KkY9ICy//2tjXr9k77/iBNEhvTC7v7mZjZR0VNr1uARI1eP38HfOonRWZSr2h2lngQshLK09itbdmByv4LxCRXl8CAecSmCC+A1GlD7lqhT9l0a1rXQwk7DJpkjzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.161.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-59f9045d18dso13351eaf.0;
+        Thu, 22 Feb 2024 11:04:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708627454; x=1709232254;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pBKdIE0MqGxWNqgnCMzfW9UY12c2Cp9wReUt3CTynV8=;
-        b=WDNCSWquv2RCFQGqlNYg0Z9VCK1jrINR256ChZkKIdtBc+jjSbmthS+Nis/rF3NIOA
-         9AjSKeC2UkUwPT5PGiHrX7xKaWoRER3tKgvjpop641k8CLlHPU9Mk2Hr7EFrVPc8/QCF
-         uGVlMzbmlYIHcu1aXj2m7BsEt4VTVAYU9igbgQ2TiJnyNp5q2VkoFiDNXW5AdqBmU5XW
-         F14JcvVTFWiDD8YtZXF2nBU9Bpf4EGg+ERez2EVgel/br4mE/00xPdeOygkRNuygV484
-         zQkopoZBed+NBgsuszyPe0PFisO1fiWTBjHukTt2E9rup17U74VfX0LYH/FtSTzz3AB2
-         A6dA==
-X-Forwarded-Encrypted: i=1; AJvYcCWyjv/6EoQQV+RU5+vKAU8N/va3KYe2XE3GN2amjwvtoomnfI66Z4HjcB6Gk1PQJ4dqjfZkhFYMiLi9U/od0cKDPEU/We0k7Gw=
-X-Gm-Message-State: AOJu0YxzT8CUrf9j39vgXgp4U7PMKLuJVR5Wtzk1qWy2IwEH8PCFBpFt
-	JOBMnOnlZiax/Pk3VCzSH72WsIIwuRUp5hDNF5Hnep7VLYTurCet7bzS9lgl57o=
-X-Google-Smtp-Source: AGHT+IGFxuTSliDPqku8YICfE8X0xSWjseqmFo4felniOL36LbKB9BcJX2RKD9QRRp8hCWOrEoiodQ==
-X-Received: by 2002:a5d:448f:0:b0:33d:35ef:ac2e with SMTP id j15-20020a5d448f000000b0033d35efac2emr15938wrq.17.1708627454014;
-        Thu, 22 Feb 2024 10:44:14 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id k3-20020a056000004300b0033b79d385f6sm21179398wrx.47.2024.02.22.10.44.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Feb 2024 10:44:13 -0800 (PST)
-Message-ID: <dcd115fd-dc38-4f48-8485-9e4d64f53b4a@linaro.org>
-Date: Thu, 22 Feb 2024 19:44:12 +0100
+        d=1e100.net; s=20230601; t=1708628675; x=1709233475;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FTwO65sg0aGmGtYjpmCSGn3QMI62fbB0yNxoEusEEgM=;
+        b=hKhY0MqseMju68rHVjkwUr1VpswDlb/IFd8wDhjyFCicQXSuxQA4AThBARF/xlxpCA
+         hHSL+XYKARz3pm0/F9tCFDCBPvLa6tnii8onaRasaEQ48RaYfQCz7SlXZ3AIcL560QzN
+         bKtQIiIXwvapNFcS3V+FuXTOGt4QhcwmF3Dmp/dH5GRKs9+ucGOr5GjBUdsWOq9nQWni
+         S+2unDBAY5Lj6CINrWhAFpgGlnkJPG+HcZ42enAGBbokmUaDoFvumk0txH67xNkBYrvo
+         ooHatxIPx1Qo9bfM2jJV57GSfpzu5iKK8dyXvsHGm0PifcVBVMFk1pbvil6Cd8Iv9UNk
+         3kyA==
+X-Forwarded-Encrypted: i=1; AJvYcCWbdx28WfuG3YjJ7lso4g0uxllYPT39crfw/cg7G/Hl13v977zcZCfNUJX4y1onrvrDy3XGmSsHZTcW+dSPZ8lTRz0qFPs7yggOMqSrihGMAZnFkFYcmUtPRU7EkEStHR53ik8aGu0bGICRc5Jb6mlY99+c1FUrX19KeGRnxJDBn2c=
+X-Gm-Message-State: AOJu0Yy1IhIfIXcFk6mbKWmBrYbZwtkk1X/uhvlCVZ/QcigPTgRrKihq
+	/z2kU7R/tzeRJYJKiuDc5MzZajb+dUfbEJnbeP3pEd0rH5J5tt3p32nMbflI+on4whOmH0KxpwQ
+	rI/6sAEMGv0PbZM/pwzUYlTokwWY=
+X-Google-Smtp-Source: AGHT+IHrhaKFggbS/LOCudwzMdpGnXQGEzl5H3Au+AI3s1upIQr/0vGwklLHZlwyU/bw+GiuHzuWZ2U/ZvdO2Ko+L4E=
+X-Received: by 2002:a05:6820:305:b0:5a0:1c1e:a8c2 with SMTP id
+ l5-20020a056820030500b005a01c1ea8c2mr4912128ooe.0.1708628674922; Thu, 22 Feb
+ 2024 11:04:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/7] soc: sunxi: sram: export register 0 for THS on
- H616
-Content-Language: en-US
-To: =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>,
- Vasily Khoruzhick <anarsoul@gmail.com>, Yangtao Li <tiny.windzz@gmail.com>,
- Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
- Andre Przywara <andre.przywara@arm.com>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Zhang Rui
- <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
- Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Martin Botka <martin.botka@somainline.org>,
- Maksim Kiselev <bigunclemax@gmail.com>, Bob McChesney
- <bob@electricworry.net>, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-sunxi@lists.linux.dev
-References: <20240219153639.179814-1-andre.przywara@arm.com>
- <20240219153639.179814-2-andre.przywara@arm.com>
- <2717467.mvXUDI8C0e@jernej-laptop>
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <2717467.mvXUDI8C0e@jernej-laptop>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <db6616c90d0e7de7658708b52ddca729679573bf.1707895925.git.quic_nprakash@quicinc.com>
+In-Reply-To: <db6616c90d0e7de7658708b52ddca729679573bf.1707895925.git.quic_nprakash@quicinc.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 22 Feb 2024 20:04:23 +0100
+Message-ID: <CAJZ5v0iMsqCguCWytVZugVN15z6+zrNiSSuK3XPSO8Oqdh3N8A@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: hibernate: Support to select compression algorithm
+To: Nikhil V <quic_nprakash@quicinc.com>
+Cc: Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, Jonathan Corbet <corbet@lwn.net>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, Tejun Heo <tj@kernel.org>, 
+	Yan-Jie Wang <yanjiewtw@gmail.com>, Randy Dunlap <rdunlap@infradead.org>, 
+	Peter Zijlstra <peterz@infradead.org>, "Steven Rostedt (Google)" <rostedt@goodmis.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	quic_pkondeti@quicinc.com, quic_kprasan@quicinc.com, 
+	quic_mpilaniy@quicinc.com, quic_shrekk@quicinc.com, mpleshivenkov@google.com, 
+	ericyin@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 22/02/2024 19:26, Jernej Škrabec wrote:
-> Dne ponedeljek, 19. februar 2024 ob 16:36:33 CET je Andre Przywara napisal(a):
->> The Allwinner H616 SoC contains a mysterious bit at register offset 0x0
->> in the SRAM control block. If bit 16 is set (the reset value), the
->> temperature readings of the THS are way off, leading to reports about
->> 200C, at normal ambient temperatures. Clearing this bits brings the
->> reported values down to the expected values.
->> The BSP code clears this bit in firmware (U-Boot), and has an explicit
->> comment about this, but offers no real explanation.
->>
->> Experiments in U-Boot show that register 0x0 has no effect on the SRAM C
->> visibility: all tested bit settings still allow full read and write
->> access by the CPU to the whole of SRAM C. Only bit 24 of the register at
->> offset 0x4 makes all of SRAM C inaccessible by the CPU. So modelling
->> the THS switch functionality as an SRAM region would not reflect reality.
->>
->> Since we should not rely on firmware settings, allow other code (the THS
->> driver) to access this register, by exporting it through the already
->> existing regmap. This mimics what we already do for the LDO control and
->> the EMAC register.
->>
->> To avoid concurrent accesses to the same register at the same time, by
->> the SRAM switch code and the regmap code, use the same lock to protect
->> the access. The regmap subsystem allows to use an existing lock, so we
->> just need to hook in there.
->>
->> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> 
-> Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> 
-> I guess this one goes through sunxi tree, right?
+On Wed, Feb 14, 2024 at 8:40=E2=80=AFAM Nikhil V <quic_nprakash@quicinc.com=
+> wrote:
+>
+> Currently the default compression algorithm is selected based on
+> compile time options. Introduce a module parameter "hibernate.compressor"
+> to override this behaviour.
+>
+> Different compression algorithms have different characteristics and
+> hibernation may benefit when it uses any of these algorithms, especially
+> when a secondary algorithm(LZ4) offers better decompression speeds over a
+> default algorithm(LZO), which in turn reduces hibernation image restore
+> time.
+>
+> Users can override the default algorithm in two ways:
+>  1) Passing "hibernate.compressor" as kernel command line parameter.
+>     Usage:
+>         LZO: hibernate.compressor=3Dlzo
+>         LZ4: hibernate.compressor=3Dlz4
+>
+>  2) Specifying the algorithm at runtime.
+>     Usage:
+>         LZO: echo lzo > /sys/module/hibernate/parameters/compressor
+>         LZ4: echo lz4 > /sys/module/hibernate/parameters/compressor
+>
+> Currently LZO and LZ4 are the supported algorithms. LZO is the default
+> compression algorithm used with hibernation.
+>
+> Signed-off-by: Nikhil V <quic_nprakash@quicinc.com>
+> ---
+> This patch is dependent on the patch series, [1] (patches 1/4 to 3/4).
+> This is picked in linux-next, [2].
+>  [1] https://lore.kernel.org/all/cover.1705927916.git.quic_nprakash@quici=
+nc.com/
+>  [2] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/=
+log/kernel/power?h=3Dnext-20240212
+>
+> Changes in v2:
+>  Changes to incorporate suggestions from Randy Dunlap:
+>   - Update documentation to specify the default compression algorithm.
+>  Link to v1:
+>   https://lore.kernel.org/all/3776355f920c1af44490e076072f93bafdf128cc.17=
+07740870.git.quic_nprakash@quicinc.com/
+>
+>  .../admin-guide/kernel-parameters.txt         | 11 ++++
+>  kernel/power/hibernate.c                      | 57 ++++++++++++++++++-
+>  2 files changed, 65 insertions(+), 3 deletions(-)
+>
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentat=
+ion/admin-guide/kernel-parameters.txt
+> index 31b3a25680d0..8f7fb911b2cc 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -1748,6 +1748,17 @@
+>                                 (that will set all pages holding image da=
+ta
+>                                 during restoration read-only).
+>
+> +       hibernate.compressor=3D   [HIBERNATION] Compression algorithm to =
+be
+> +                               used with hibernation.
+> +                               Format: { lzo | lz4 }
+> +                               Default: lzo
+> +
+> +                               lzo: Select LZO compression algorithm to
+> +                               compress/decompress hibernation image.
+> +
+> +                               lz4: Select LZ4 compression algorithm to
+> +                               compress/decompress hibernation image.
+> +
+>         highmem=3Dnn[KMG] [KNL,BOOT] forces the highmem zone to have an e=
+xact
+>                         size of <nn>. This works even on boxes that have =
+no
+>                         highmem otherwise. This also works to reduce high=
+mem
+> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+> index 219191d6d0e8..43b1a82e800c 100644
+> --- a/kernel/power/hibernate.c
+> +++ b/kernel/power/hibernate.c
+> @@ -47,7 +47,7 @@ dev_t swsusp_resume_device;
+>  sector_t swsusp_resume_block;
+>  __visible int in_suspend __nosavedata;
+>
+> -static const char *default_compressor =3D CONFIG_HIBERNATION_DEF_COMP;
+> +static char hibernate_compressor[CRYPTO_MAX_ALG_NAME] =3D CONFIG_HIBERNA=
+TION_DEF_COMP;
+>
+>  /*
+>   * Compression/decompression algorithm to be used while saving/loading
+> @@ -748,7 +748,7 @@ int hibernate(void)
+>          * Query for the compression algorithm support if compression is =
+enabled.
+>          */
+>         if (!nocompress) {
+> -               strscpy(hib_comp_algo, default_compressor, sizeof(hib_com=
+p_algo));
+> +               strscpy(hib_comp_algo, hibernate_compressor, sizeof(hib_c=
+omp_algo));
+>                 if (crypto_has_comp(hib_comp_algo, 0, 0) !=3D 1) {
+>                         pr_err("%s compression is not available\n", hib_c=
+omp_algo);
+>                         return -EOPNOTSUPP;
+> @@ -999,7 +999,7 @@ static int software_resume(void)
+>                 if (swsusp_header_flags & SF_COMPRESSION_ALG_LZ4)
+>                         strscpy(hib_comp_algo, COMPRESSION_ALGO_LZ4, size=
+of(hib_comp_algo));
+>                 else
+> -                       strscpy(hib_comp_algo, default_compressor, sizeof=
+(hib_comp_algo));
+> +                       strscpy(hib_comp_algo, COMPRESSION_ALGO_LZO, size=
+of(hib_comp_algo));
+>                 if (crypto_has_comp(hib_comp_algo, 0, 0) !=3D 1) {
+>                         pr_err("%s compression is not available\n", hib_c=
+omp_algo);
+>                         error =3D -EOPNOTSUPP;
+> @@ -1422,6 +1422,57 @@ static int __init nohibernate_setup(char *str)
+>         return 1;
+>  }
+>
+> +static const char * const comp_alg_enabled[] =3D {
+> +#if IS_ENABLED(CONFIG_CRYPTO_LZO)
+> +       COMPRESSION_ALGO_LZO,
+> +#endif
+> +#if IS_ENABLED(CONFIG_CRYPTO_LZ4)
+> +       COMPRESSION_ALGO_LZ4,
+> +#endif
+> +};
+> +
+> +static int hibernate_compressor_param_set(const char *compressor,
+> +               const struct kernel_param *kp)
+> +{
+> +       unsigned int sleep_flags;
+> +       int index, ret;
+> +
+> +       sleep_flags =3D lock_system_sleep();
+> +
+> +       index =3D sysfs_match_string(comp_alg_enabled, compressor);
+> +       if (index >=3D 0) {
+> +               ret =3D param_set_copystring(comp_alg_enabled[index], kp)=
+;
+> +               if (!ret)
+> +                       strscpy(hib_comp_algo, comp_alg_enabled[index],
+> +                               sizeof(hib_comp_algo));
+> +       } else {
+> +               ret =3D index;
+> +       }
+> +
+> +       unlock_system_sleep(sleep_flags);
+> +
+> +       if (ret)
+> +               pr_debug("Cannot set specified compressor %s\n",
+> +                        compressor);
+> +
+> +       return ret;
+> +}
+> +
+> +static const struct kernel_param_ops hibernate_compressor_param_ops =3D =
+{
+> +       .set    =3D hibernate_compressor_param_set,
+> +       .get    =3D param_get_string,
+> +};
+> +
+> +static struct kparam_string hibernate_compressor_param_string =3D {
+> +       .maxlen =3D sizeof(hibernate_compressor),
+> +       .string =3D hibernate_compressor,
+> +};
+> +
+> +module_param_cb(compressor, &hibernate_compressor_param_ops,
+> +               &hibernate_compressor_param_string, 0644);
+> +MODULE_PARM_DESC(compressor,
+> +                "Compression algorithm to be used with hibernation");
+> +
+>  __setup("noresume", noresume_setup);
+>  __setup("resume_offset=3D", resume_offset_setup);
+>  __setup("resume=3D", resume_setup);
+> --
 
-I'll pick this patch along with the patch 2-6, so through the thermal 
-tree. The patch 7/7 will go indeed via the sunxi tree
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Applied as 6.9 material, thanks!
 
