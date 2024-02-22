@@ -1,209 +1,121 @@
-Return-Path: <linux-pm+bounces-4287-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-4288-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05FDB85FE7D
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 17:53:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B3C5985FFDF
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 18:43:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6FEF11F28297
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 16:53:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 542461F2892F
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Feb 2024 17:43:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2921C154C14;
-	Thu, 22 Feb 2024 16:53:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E612157E74;
+	Thu, 22 Feb 2024 17:43:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OsAYKguc"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b="BiO1UabS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp35.i.mail.ru (smtp35.i.mail.ru [95.163.41.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E72B153BC9;
-	Thu, 22 Feb 2024 16:53:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F255E155A5D;
+	Thu, 22 Feb 2024 17:43:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.163.41.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708620810; cv=none; b=o1XUrtn4IOj5ONruiW8/9DMfrH1UmgtLfgbV9fnFmbc7Cwg07ebO4OieRfiAHdPH4HZsj1u+E0BJudyZULu8m2bQ0OBpKpVOgKDluzhGKszwuAYDVW7L4TxFsOwzn5pMgnilfDkvH0e5S/e7FdUUG5ydJtYxvaSr7oShhDJNMRs=
+	t=1708623786; cv=none; b=nMNH/5TsNEYKHPCIRkwqX0Z5XJIfMOKb2hAWeXQstbOGUXSS55aTKqGmZTAXkg050QBWYP+HwqnOHW7iYEEYXBdY5oh7soEXcrECu/u3LAYLgtJoIcdP6eH9rlexpw8l/1AosFlK76ASLfy3gvMCvuElC7ZYfpM7HcR7gh5VGVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708620810; c=relaxed/simple;
-	bh=GgB+0sR+hVs/OpW1fVcFMH3VWjcA3C9BjntTmlpSW5w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N7bizM0hXDyuduaKvn2ntUT9aHq+HnUI+BiwsIbhonCKr5tNedGp1TVni8tCZB2ElUv7Z31URnNenKzqfQGA2XllCb/g2XipoDukAORUssc8T57qcIbr4qKetr/64cG4/sK5oNPK0qKDGRT6FTe3ro0L+HNFxQBdz+mFvuAYtJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OsAYKguc; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708620808; x=1740156808;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GgB+0sR+hVs/OpW1fVcFMH3VWjcA3C9BjntTmlpSW5w=;
-  b=OsAYKguc32xbp+GXovAD25ZtSLVZpmnbvZkv+58q12K1nvuYF9MwOiVm
-   JzuEu0aTOUOzixFRPb8O7xQTIrBol/Q7HtQXM9YrPx4drhRYgmaTVa+f+
-   CkIm7xZdJxvLmv8EDyOVXc6Vk7kY/+RGnITQrljBziZv02jnBtqeQThCI
-   1N4Hz+Ckwf9qCvj8vohWfE87mZKVFszhp+PkMFzyRJbJa1yJyTpARoanH
-   uQUwiC9sgM6CKKDJwyQgv94bc6PENgz+KKlx3njMv0gwux4pCZNuLXzjg
-   L+gZr0wNAu+7yOzPkJsbSxvDwJK7Y9hLIMYnTQHPCgFZPR2xqQ9HbFKcn
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10992"; a="6639348"
-X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
-   d="scan'208";a="6639348"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 08:53:27 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.06,179,1705392000"; 
-   d="scan'208";a="10126866"
-Received: from sgruszka-mobl.ger.corp.intel.com (HELO localhost) ([10.252.46.166])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2024 08:53:24 -0800
-Date: Thu, 22 Feb 2024 17:53:21 +0100
-From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] thermal: intel: hfi: Enable interface only when
- required
-Message-ID: <Zdd8AT5+6oLX4eCk@linux.intel.com>
-References: <20240212161615.161935-1-stanislaw.gruszka@linux.intel.com>
- <20240212161615.161935-4-stanislaw.gruszka@linux.intel.com>
- <CAJZ5v0jr4Z=ffm9E+eR7p7rQwbCWEP=YHxNbR9VAEwb8-3e3GA@mail.gmail.com>
+	s=arc-20240116; t=1708623786; c=relaxed/simple;
+	bh=WIVrwDsBbPzNaMTb/dnHv/LOTju4W7kM0gkxzAbBHjE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Kh02kaervwlX/M84H9C1vHgnRa2OxPGNK/VPZtGVGLA/8HQVxTlVOXlkjwt/5tkniIRY6SLxZP5lkNitjQAyDKKd1GyZ3Imsxms/iC2Xxm3bubEL+vI56R2G4yIOoNPBj98jnn/g983/huld2/Cyig8+dvk5Fs/vVlTQ+MztneM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jiaxyga.com; spf=pass smtp.mailfrom=jiaxyga.com; dkim=pass (1024-bit key) header.d=jiaxyga.com header.i=@jiaxyga.com header.b=BiO1UabS; arc=none smtp.client-ip=95.163.41.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jiaxyga.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jiaxyga.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=jiaxyga.com
+	; s=mailru; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+	Cc:To:From:From:Sender:Reply-To:To:Cc:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive:
+	X-Cloud-Ids:Disposition-Notification-To;
+	bh=1TenuOkcG5evzoXACnxDUOLvNvTUV6mwDyHgHdTFX6U=; t=1708623783; x=1708713783; 
+	b=BiO1UabS3WtRHwzHu4jq4ZVGUYECgnHMUVqxYDATusNP3DUuvn+bRnJsyFZ/MDN5Ld9AHWzxFQF
+	Zw2d6ViRaz76hbC5od3dhoRbNAWw1VGREahFUlwP4VKydrpU+lqzj285p4BpkuGXUoyBw0DbRuVyN
+	8BFRUQhLkIzsaGGYEWo=;
+Received: by smtp35.i.mail.ru with esmtpa (envelope-from <danila@jiaxyga.com>)
+	id 1rdD5x-0000000BMIH-1gOl; Thu, 22 Feb 2024 20:42:54 +0300
+From: Danila Tikhonov <danila@jiaxyga.com>
+To: andersson@kernel.org,
+	konrad.dybcio@linaro.org,
+	djakov@kernel.org,
+	robh@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org,
+	conor+dt@kernel.org
+Cc: linux-arm-msm@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Danila Tikhonov <danila@jiaxyga.com>
+Subject: [PATCH v2 0/2]  Add interconnect support for SM7150 SoC
+Date: Thu, 22 Feb 2024 20:42:48 +0300
+Message-ID: <20240222174250.80493-1-danila@jiaxyga.com>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0jr4Z=ffm9E+eR7p7rQwbCWEP=YHxNbR9VAEwb8-3e3GA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+Authentication-Results: smtp35.i.mail.ru; auth=pass smtp.auth=danila@jiaxyga.com smtp.mailfrom=danila@jiaxyga.com
+X-Mailru-Src: smtp
+X-7564579A: EEAE043A70213CC8
+X-77F55803: 4F1203BC0FB41BD9A0539DA8B638EEE24480D7EFA423187C2F2D41C068758ED8182A05F5380850404C228DA9ACA6FE275F91DB108F9063E233594132A326AF8B58F75731F803AB97B13BC05B40DCEAA5A7398ABDDC9FB8BB
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE72E2D36A15E1833D8EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F790063764BF1E09E94CC6278638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D8EF89892920D8F9F2E3BE5448EA843F6215E66FA7512B0D92CC7F00164DA146DAFE8445B8C89999728AA50765F7900637A359038F01FFAF82389733CBF5DBD5E9C8A9BA7A39EFB766F5D81C698A659EA7CC7F00164DA146DA9985D098DBDEAEC878444BBB7636F62AF6B57BC7E6449061A352F6E88A58FB86F5D81C698A659EA73AA81AA40904B5D9A18204E546F3947C6A1CB4668A9CA5FAAD7EC71F1DB884274AD6D5ED66289B523666184CF4C3C14F6136E347CC761E07725E5C173C3A84C3056D5A8E4C6B598EBA3038C0950A5D36B5C8C57E37DE458B330BD67F2E7D9AF16D1867E19FE14079C09775C1D3CA48CF17B107DEF921CE791DD303D21008E298D5E8D9A59859A8B6B372FE9A2E580EFC725E5C173C3A84C3CD42BCEBB57B85E635872C767BF85DA2F004C90652538430E4A6367B16DE6309
+X-C1DE0DAB: 0D63561A33F958A5D26ACACEAAE7E4505002B1117B3ED6969193E638BD89DD93D57BAD45EC4C5DE1823CB91A9FED034534781492E4B8EEADF12279BA039A6965C79554A2A72441328621D336A7BC284946AD531847A6065A535571D14F44ED41
+X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CFD2B247E9CF04F14960109914BCFAB4729AE3539482CB76B6A0CA6D78E6D66DEADDCE95BB4BF576A60C89D780EEF94DBEEA0DBE6432E8D8EFDEAC876D50C401A62B426FFEA59737B1AF108DC32EA72A8402C26D483E81D6BE72B480F99247062FEE42F474E8A1C6FD34D382445848F2F3
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojjw0udeJQYBTEXJUu31OKJw==
+X-Mailru-Sender: 9EB879F2C80682A09F26F806C7394981B30287F184E31E97BC5A20191D90C84F23187A5E454F60C90BEC391E8E0905FF2C62728BC403A049225EC17F3711B6CF1A6F2E8989E84EC137BFB0221605B344978139F6FA5A77F05FEEDEB644C299C0ED14614B50AE0675
+X-Mras: Ok
 
-On Tue, Feb 13, 2024 at 02:59:10PM +0100, Rafael J. Wysocki wrote:
-> > -static void hfi_do_enable(void)
-> > +/*
-> > + * HFI enable/disable run in non-concurrent manner on boot CPU in syscore
-> > + * callbacks or under protection of hfi_instance_lock.
-> > + */
-> 
-> In the comment above I would say "If concurrency is not prevented by
-> other means, the HFI enable/disable routines must be called under
-> hfi_instance_lock." 
+Add dtbindings and driver support for the Qualcomm SM7150 SoC.
 
-Ok. Will reword this way.
+Changes in v2:
+- dt-bindings: Drop "'#interconnect-cells': true"
+- driver: Unwrap qnoc_of_match entities and add a space before the closing
+curly bracket (Konrad)
+- driver: Use core_initcall instead of module_platform_driver (Konrad)
+- Link to v1:
+https://lore.kernel.org/all/20240218183239.85319-1-danila@jiaxyga.com/
 
-> and I would retain the comments below (they don't
-> hurt IMO).
+To: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+To: Georgi Djakov <djakov@kernel.org>
+To: Rob Herring <robh@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Conor Dooley <conor+dt@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
 
-I found those comments somewhat confusing. FWICT at worst
-what can happen when enable/resume race CPU online and
-disable/suspend race with CPU offline is enable twice
-or disable twice. What I think is fine, though plan to
-check this (see below).
+Danila Tikhonov (2):
+  dt-bindings: interconnect: Add Qualcomm SM7150 DT bindings
+  interconnect: qcom: Add SM7150 driver support
 
-> > +static void hfi_do_enable(void *ptr)
-> 
-> I would call this hfi_enable_instance().
-> 
-> > +{
-> > +       struct hfi_instance *hfi_instance = ptr;
-> 
-> Why is this variable needed ro even useful?  prt can be passed
-> directly to hfi_set_hw_table().
+ .../interconnect/qcom,sm7150-rpmh.yaml        |   84 +
+ drivers/interconnect/qcom/Kconfig             |    9 +
+ drivers/interconnect/qcom/Makefile            |    2 +
+ drivers/interconnect/qcom/sm7150.c            | 1754 +++++++++++++++++
+ drivers/interconnect/qcom/sm7150.h            |  140 ++
+ .../interconnect/qcom,sm7150-rpmh.h           |  150 ++
+ 6 files changed, 2139 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm7150-rpmh.yaml
+ create mode 100644 drivers/interconnect/qcom/sm7150.c
+ create mode 100644 drivers/interconnect/qcom/sm7150.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,sm7150-rpmh.h
 
-Ok, will remove it.
+-- 
+2.43.2
 
-> > +
-> > +       hfi_set_hw_table(hfi_instance);
-> > +       hfi_enable();
-> > +}
-> > +
-> > +static void hfi_do_disable(void *ptr)
-> 
-> And I'd call this hfi_disable_instance().
-
-Ok.
-
-> > +static int hfi_thermal_notify(struct notifier_block *nb, unsigned long state,
-> > +                             void *_notify)
-> > +{
-> > +       struct thermal_genl_notify *notify = _notify;
-> > +       struct hfi_instance *hfi_instance;
-> > +       smp_call_func_t func;
-> > +       unsigned int cpu;
-> > +       int i;
-> > +
-> > +       if (notify->mcgrp != THERMAL_GENL_EVENT_GROUP)
-> > +               return NOTIFY_DONE;
-> > +
-> > +       if (state != THERMAL_NOTIFY_BIND && state != THERMAL_NOTIFY_UNBIND)
-> > +               return NOTIFY_DONE;
-> > +
-> > +       mutex_lock(&hfi_instance_lock);
-> > +
-> > +       switch (state) {
-> > +       case THERMAL_NOTIFY_BIND:
-> > +               hfi_thermal_clients_num++;
-> > +               break;
-> > +
-> > +       case THERMAL_NOTIFY_UNBIND:
-> > +               hfi_thermal_clients_num--;
-> > +               break;
-> > +       }
-> > +
-> > +       if (hfi_thermal_clients_num > 0)
-> > +               func = hfi_do_enable;
-> > +       else
-> > +               func = hfi_do_disable;
-> > +
-> > +       for (i = 0; i < max_hfi_instances; i++) {
-> > +               hfi_instance = &hfi_instances[i];
-> > +               if (cpumask_empty(hfi_instance->cpus))
-> > +                       continue;
-> > +
-> > +               cpu = cpumask_any(hfi_instance->cpus);
-> > +               smp_call_function_single(cpu, func, hfi_instance, true);
-> > +       }
-> > +
-> > +       mutex_unlock(&hfi_instance_lock);
-> 
-> So AFAICS, one instance can be enabled multiple times because of this.
->   I guess that's OK?  In any case, it would be kind of nice to leave a
-> note regarding it somewhere here.
-
-It's write the same values to the same registers. So I think this 
-should be fine. However after your comment I start to think there
-perhaps could be some side-effect of writing the registers.
-I'll double check (previously I verified that double enable works,
-but only on MTL) or eventually rearrange code to do not enable already
-enabled interface.
-
-> > +
-> > +       return NOTIFY_OK;
-> > +}
-> > +
-> > +static struct notifier_block hfi_thermal_nb = {
-> > +       .notifier_call = hfi_thermal_notify,
-> >  };
-> >
-> >  void __init intel_hfi_init(void)
-> > @@ -628,10 +697,16 @@ void __init intel_hfi_init(void)
-> >         if (!hfi_updates_wq)
-> >                 goto err_nomem;
-> >
-> > +       if (thermal_genl_register_notifier(&hfi_thermal_nb))
-> > +               goto err_nl_notif;
-> 
-> Is it possible for any clients to be there before the notifier is
-> registered?  If not, it would be good to add a comment about it.
-
-HFI is build-in so it's started before any user space. I added note about that
-in the cover letter but indeed it should be comment in the code. Will fix.  
-
-Regards
-Stanislaw
 
